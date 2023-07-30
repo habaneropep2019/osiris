@@ -1,56 +1,75 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qpngio.cpp   2.3.2   edited 2001-03-19 $
 **
 ** Implementation of PNG QImage IOHandler
 **
 ** Created : 970521
 **
-** Copyright (C) 1992-1998 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-2008 Trolltech ASA.  All rights reserved.
 **
-** This file is part of the kernel module of the Qt GUI Toolkit.
+** This file is part of the kernel module of the TQt GUI Toolkit.
 **
-** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
-** LICENSE.QPL included in the packaging of this file.
+** This file is a modified version of the file included with TQt GUI Toolkit.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** This file may be used under the terms of the GNU General
+** Public License versions 2.0 or 3.0 as published by the Free
+** Software Foundation and appearing in the files LICENSE.GPL2
+** and LICENSE.GPL3 included in the packaging of this file.
+** Alternatively you may (at your option) use any later version
+** of the GNU General Public License if such license has been
+** publicly approved by Trolltech ASA (or its successors, if any)
+** and the KDE Free Qt Foundation.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses may use this file in accordance with the Qt Commercial License
-** Agreement provided with the Software.
+** Please review the following information to ensure GNU General
+** Public Licensing requirements will be met:
+** http://trolltech.com/products/qt/licenses/licensing/opensource/.
+** If you are unsure which license is appropriate for your use, please
+** review the following information:
+** http://trolltech.com/products/qt/licenses/licensing/licensingoverview
+** or contact the sales department at sales@trolltech.com.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+** This file may be used under the terms of the Q Public License as
+** defined by Trolltech ASA and appearing in the file LICENSE.QPL
+** included in the packaging of this file.  Licensees holding valid Qt
+** Commercial licenses may use this file in accordance with the Qt
+** Commercial License Agreement provided with the Software.
 **
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
+** This file is provided "AS IS" with NO WARRANTY OF ANY KIND,
+** INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR
+** A PARTICULAR PURPOSE. Trolltech reserves all rights not granted
+** herein.
 **
 **********************************************************************/
 
-#include "qfeatures.h"
+/****************************************************************************
+** This is a modified version of qpngio.cpp, adapted from the Trinity
+** Desktop Environment's Qt3 fork, known as Qt.
+**********************************************************************/
+
+#include "qpngio.h"
 
 #ifndef QT_NO_IMAGEIO_PNG
 
-#include "qimage.h"
 #include "qasyncimageio.h"
 #include "qiodevice.h"
-#include "qpngio.h"
 
 #include <png.h>
+#if PNG_LIBPNG_VER>=10500
+#include <zlib.h>
+#endif /* LIBPNG 1.5 */
+
+
+#ifdef Q_OS_TEMP
+#define CALLBACK_CALL_TYPE	__cdecl
+#else
+#define CALLBACK_CALL_TYPE
+#endif
+
 
 /*
   All PNG files load to the minimal QImage equivalent.
 
   All QImage formats output to reasonably efficient PNG equivalents.
-  Never to greyscale.
+  Never to grayscale.
 */
 
 #if defined(Q_C_CALLBACKS)
@@ -58,7 +77,7 @@ extern "C" {
 #endif
 
 static
-void iod_read_fn(png_structp png_ptr, png_bytep data, png_size_t length)
+void CALLBACK_CALL_TYPE iod_read_fn(png_structp png_ptr, png_bytep data, png_size_t length)
 {
     QImageIO* iio = (QImageIO*)png_get_io_ptr(png_ptr);
     QIODevice* in = iio->ioDevice();
@@ -75,7 +94,7 @@ void iod_read_fn(png_structp png_ptr, png_bytep data, png_size_t length)
 
 
 static
-void qpiw_write_fn( png_structp png_ptr, png_bytep data, png_size_t length )
+void CALLBACK_CALL_TYPE qpiw_write_fn( png_structp png_ptr, png_bytep data, png_size_t length )
 {
     QPNGImageWriter* qpiw = (QPNGImageWriter*)png_get_io_ptr( png_ptr );
     QIODevice* out = qpiw->device();
@@ -89,7 +108,7 @@ void qpiw_write_fn( png_structp png_ptr, png_bytep data, png_size_t length )
 
 
 static
-void qpiw_flush_fn( png_structp png_ptr )
+void CALLBACK_CALL_TYPE qpiw_flush_fn( png_structp png_ptr )
 {
     QPNGImageWriter* qpiw = (QPNGImageWriter*)png_get_io_ptr( png_ptr );
     QIODevice* out = qpiw->device();
@@ -102,18 +121,12 @@ void qpiw_flush_fn( png_structp png_ptr )
 #endif
 
 static
-void setup_qt( QImage& image, png_structp png_ptr, png_infop info_ptr )
+void setup_qt( QImage& image, png_structp png_ptr, png_infop info_ptr, float screen_gamma=0.0 )
 {
-    if ( png_get_valid(png_ptr, info_ptr, PNG_INFO_gAMA) ) {
+    if ( screen_gamma != 0.0 && png_get_valid(png_ptr, info_ptr, PNG_INFO_gAMA) ) {
 	double file_gamma;
 	png_get_gAMA(png_ptr, info_ptr, &file_gamma);
-#if defined(_OS_MAC_)
-	// a good guess for Mac systems
-	png_set_gamma( png_ptr, 1.7, file_gamma );
-#else
-	// a good guess for PC monitors in a bright office or a dim room
-	png_set_gamma( png_ptr, 2.2, file_gamma );
-#endif
+	png_set_gamma( png_ptr, screen_gamma, file_gamma );
     }
 
     png_uint_32 width;
@@ -123,14 +136,48 @@ void setup_qt( QImage& image, png_structp png_ptr, png_infop info_ptr )
     png_get_IHDR(png_ptr, info_ptr, &width, &height, &bit_depth, &color_type,
 	0, 0, 0);
 
+#if PNG_LIBPNG_VER>=10500
+    png_colorp info_ptr_palette = NULL;
+    int info_ptr_num_palette = 0;
+    if (png_get_valid(png_ptr, info_ptr, PNG_INFO_PLTE)) {
+	png_get_PLTE(png_ptr, info_ptr, &info_ptr_palette, &info_ptr_num_palette);
+    }
+
+    png_bytep info_ptr_trans_alpha = NULL;
+    int info_ptr_num_trans = 0;
+    png_color_16p info_ptr_trans_color = NULL;
+
+    if (png_get_valid(png_ptr, info_ptr, PNG_INFO_tRNS)) {
+	png_get_tRNS(png_ptr, info_ptr, &info_ptr_trans_alpha, &info_ptr_num_trans, &info_ptr_trans_color);
+    }
+#endif /* LIBPNG 1.5 */
+
     if ( color_type == PNG_COLOR_TYPE_GRAY ) {
-	// Black & White or 8-bit greyscale
+	// Black & White or 8-bit grayscale
+#if PNG_LIBPNG_VER>=10500
+	if ( bit_depth == 1 && png_get_channels(png_ptr, info_ptr) == 1 ) {
+#else /* LIBPNG 1.5 */
 	if ( bit_depth == 1 && info_ptr->channels == 1 ) {
+#endif /* LIBPNG 1.5 */
 	    png_set_invert_mono( png_ptr );
 	    png_read_update_info( png_ptr, info_ptr );
-	    image.create( width, height, 1, 2, QImage::BigEndian );
+	    if (!image.create( width, height, 1, 2, QImage::BigEndian ))
+		return;
 	    image.setColor( 1, qRgb(0,0,0) );
 	    image.setColor( 0, qRgb(255,255,255) );
+	} else if (bit_depth == 16 && png_get_valid(png_ptr, info_ptr, PNG_INFO_tRNS)) {
+	    png_set_expand(png_ptr);
+	    png_set_strip_16(png_ptr);
+	    png_set_gray_to_rgb(png_ptr);
+
+	    if (!image.create(width, height, 32))
+		return;
+	    image.setAlphaBuffer(TRUE);
+
+	    if (QImage::systemByteOrder() == QImage::BigEndian)
+		png_set_swap_alpha(png_ptr);
+
+	    png_read_update_info(png_ptr, info_ptr);
 	} else {
 	    if ( bit_depth == 16 )
 		png_set_strip_16(png_ptr);
@@ -138,24 +185,33 @@ void setup_qt( QImage& image, png_structp png_ptr, png_infop info_ptr )
 		png_set_packing(png_ptr);
 	    int ncols = bit_depth < 8 ? 1 << bit_depth : 256;
 	    png_read_update_info(png_ptr, info_ptr);
-	    image.create(width, height, 8, ncols);
+	    if (!image.create(width, height, 8, ncols))
+		return;
 	    for (int i=0; i<ncols; i++) {
 		int c = i*255/(ncols-1);
 		image.setColor( i, qRgba(c,c,c,0xff) );
 	    }
 	    if ( png_get_valid(png_ptr, info_ptr, PNG_INFO_tRNS) ) {
-		int g = info_ptr->trans_values.gray;
-		if ( bit_depth > 8 ) {
-		    // transparency support disabled for now
-		} else {
-		    image.setAlphaBuffer( TRUE );
-		    image.setColor(g, RGB_MASK & image.color(g));
+#if PNG_LIBPNG_VER>=10500
+		const int g = info_ptr_trans_color->gray;
+#elif PNG_LIBPNG_VER>=10400
+		const int g = info_ptr->trans_color.gray;
+#else
+		const int g = info_ptr->trans_values.gray;
+#endif
+		if (g < ncols) {
+		    image.setAlphaBuffer(TRUE);
+		    image.setColor(g, image.color(g) & RGB_MASK);
 		}
 	    }
 	}
     } else if ( color_type == PNG_COLOR_TYPE_PALETTE
      && png_get_valid(png_ptr, info_ptr, PNG_INFO_PLTE)
+#if PNG_LIBPNG_VER>=10500
+     && info_ptr_num_palette <= 256 )
+#else /* LIBPNG 1.5 */
      && info_ptr->num_palette <= 256 )
+#endif /* LIBPNG 1.5 */
     {
 	// 1-bit and 8-bit color
 	if ( bit_depth != 1 )
@@ -163,27 +219,55 @@ void setup_qt( QImage& image, png_structp png_ptr, png_infop info_ptr )
 	png_read_update_info( png_ptr, info_ptr );
 	png_get_IHDR(png_ptr, info_ptr,
 	    &width, &height, &bit_depth, &color_type, 0, 0, 0);
-	image.create(width, height, bit_depth, info_ptr->num_palette,
-	    QImage::BigEndian);
+#if PNG_LIBPNG_VER>=10500
+	if (!image.create(width, height, bit_depth, info_ptr_num_palette,
+#else /* LIBPNG 1.5 */
+	if (!image.create(width, height, bit_depth, info_ptr->num_palette,
+#endif /* LIBPNG 1.5 */
+	    QImage::BigEndian))
+	    return;
 	int i = 0;
 	if ( png_get_valid(png_ptr, info_ptr, PNG_INFO_tRNS) ) {
 	    image.setAlphaBuffer( TRUE );
+
+#if PNG_LIBPNG_VER>=10500
+	    while ( i < info_ptr_num_trans ) {
+		image.setColor(i, qRgba(
+		    info_ptr_palette[i].red,
+		    info_ptr_palette[i].green,
+		    info_ptr_palette[i].blue,
+#else /* LIBPNG 1.5 */
 	    while ( i < info_ptr->num_trans ) {
 		image.setColor(i, qRgba(
 		    info_ptr->palette[i].red,
 		    info_ptr->palette[i].green,
 		    info_ptr->palette[i].blue,
+#endif /* LIBPNG 1.5 */
+#if PNG_LIBPNG_VER>=10500
+		    info_ptr_trans_alpha[i]
+#elif PNG_LIBPNG_VER>=10400
+		    info_ptr->trans_alpha[i]
+#else
 		    info_ptr->trans[i]
+#endif
 		    )
 		);
 		i++;
 	    }
 	}
+#if PNG_LIBPNG_VER>=10500
+	while ( i < info_ptr_num_palette ) {
+	    image.setColor(i, qRgba(
+		info_ptr_palette[i].red,
+		info_ptr_palette[i].green,
+		info_ptr_palette[i].blue,
+#else /* LIBPNG 1.5 */
 	while ( i < info_ptr->num_palette ) {
 	    image.setColor(i, qRgba(
 		info_ptr->palette[i].red,
 		info_ptr->palette[i].green,
 		info_ptr->palette[i].blue,
+#endif /* LIBPNG 1.5 */
 		0xff
 		)
 	    );
@@ -199,7 +283,8 @@ void setup_qt( QImage& image, png_structp png_ptr, png_infop info_ptr )
 	if ( color_type == PNG_COLOR_TYPE_GRAY_ALPHA )
 	    png_set_gray_to_rgb(png_ptr);
 
-	image.create(width, height, 32);
+	if (!image.create(width, height, 32))
+	    return;
 
 	// Only add filler if no alpha, or we can get 5 channel data.
 	if (!(color_type & PNG_COLOR_MASK_ALPHA)
@@ -229,7 +314,7 @@ void setup_qt( QImage& image, png_structp png_ptr, png_infop info_ptr )
 #if defined(Q_C_CALLBACKS)
 extern "C" {
 #endif
-static void qt_png_warning(png_structp /*png_ptr*/, png_const_charp message)
+static void CALLBACK_CALL_TYPE qt_png_warning(png_structp /*png_ptr*/, png_const_charp message)
 {
     qWarning("libpng warning: %s", message);
 }
@@ -253,7 +338,7 @@ void read_png_image(QImageIO* iio)
 	return;
     }
 
-    png_set_error_fn(png_ptr, 0, 0, &qt_png_warning);
+    png_set_error_fn(png_ptr, 0, 0, qt_png_warning);
 
     info_ptr = png_create_info_struct(png_ptr);
     if (!info_ptr) {
@@ -269,7 +354,11 @@ void read_png_image(QImageIO* iio)
 	return;
     }
 
+#if PNG_LIBPNG_VER>=10500
+    if (setjmp(png_jmpbuf(png_ptr))) {
+#else /* LIBPNG 1.5 */
     if (setjmp(png_ptr->jmpbuf)) {
+#endif /* LIBPNG 1.5 */
 	png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
 	iio->setStatus(-4);
 	return;
@@ -280,6 +369,11 @@ void read_png_image(QImageIO* iio)
 
     QImage image;
     setup_qt(image, png_ptr, info_ptr);
+    if (image.isNull()) {
+	png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
+	iio->setStatus(-5);
+	return;
+    }
 
     png_uint_32 width;
     png_uint_32 height;
@@ -301,9 +395,15 @@ void read_png_image(QImageIO* iio)
 png_get_valid(png_ptr, info_ptr, PNG_INFO_tRNS)
     if (image.depth()==32 && png_get_valid(png_ptr, info_ptr, PNG_INFO_tRNS)) {
 	QRgb trans = 0xFF000000 | qRgb(
+#if PNG_LIBPNG_VER>=10400
+	      (info_ptr->trans_color.red << 8 >> bit_depth)&0xff,
+	      (info_ptr->trans_color.green << 8 >> bit_depth)&0xff,
+	      (info_ptr->trans_color.blue << 8 >> bit_depth)&0xff);
+#else
 	      (info_ptr->trans_values.red << 8 >> bit_depth)&0xff,
 	      (info_ptr->trans_values.green << 8 >> bit_depth)&0xff,
 	      (info_ptr->trans_values.blue << 8 >> bit_depth)&0xff);
+#endif
 	for (uint y=0; y<height; y++) {
 	    for (uint x=0; x<info_ptr->width; x++) {
 		if (((uint**)jt)[y][x] == trans) {
@@ -318,7 +418,35 @@ png_get_valid(png_ptr, info_ptr, PNG_INFO_tRNS)
     image.setDotsPerMeterX(png_get_x_pixels_per_meter(png_ptr,info_ptr));
     image.setDotsPerMeterY(png_get_y_pixels_per_meter(png_ptr,info_ptr));
 
+#ifndef QT_NO_IMAGE_TEXT
+    png_textp text_ptr;
+    int num_text=0;
+    png_get_text(png_ptr,info_ptr,&text_ptr,&num_text);
+    while (num_text--) {
+	image.setText(text_ptr->key,0,text_ptr->text);
+	text_ptr++;
+    }
+#endif
+
     delete [] row_pointers;
+
+    if ( image.hasAlphaBuffer() ) {
+	// Many PNG files lie (eg. from PhotoShop). Fortunately this loop will
+	// usually be quick to find those that tell the truth.
+	QRgb* c;
+	int n;
+	if (image.depth()==32) {
+	    c = (QRgb*)image.bits();
+	    n = image.bytesPerLine() * image.height() / 4;
+	} else {
+	    c = image.colorTable();
+	    n = image.numColors();
+	}
+	while ( n-- && qAlpha(*c++)==0xff )
+	    ;
+	if ( n<0 ) // LIAR!
+	    image.setAlphaBuffer(FALSE);
+    }
 
     iio->setImage(image);
 
@@ -333,7 +461,8 @@ QPNGImageWriter::QPNGImageWriter(QIODevice* iod) :
     frames_written(0),
     disposal(Unspecified),
     looping(-1),
-    ms_delay(-1)
+    ms_delay(-1),
+    gamma(0.0)
 {
 }
 
@@ -354,6 +483,11 @@ void QPNGImageWriter::setLooping(int loops)
 void QPNGImageWriter::setFrameDelay(int msecs)
 {
     ms_delay = msecs;
+}
+
+void QPNGImageWriter::setGamma(float g)
+{
+    gamma = g;
 }
 
 
@@ -392,11 +526,11 @@ bool QPNGImageWriter::writeImage(const QImage& image, int off_x, int off_y)
     return writeImage(image, -1, off_x, off_y);
 }
 
-bool QPNGImageWriter::writeImage(const QImage& image, int quality, int off_x, int off_y)
+bool QPNGImageWriter::writeImage(const QImage& image, int quality_in, int off_x_in, int off_y_in)
 {
     QPoint offset = image.offset();
-    off_x += offset.x();
-    off_y += offset.y();
+    int off_x = off_x_in + offset.x();
+    int off_y = off_y_in + offset.y();
 
     png_structp png_ptr;
     png_infop info_ptr;
@@ -407,7 +541,7 @@ bool QPNGImageWriter::writeImage(const QImage& image, int quality, int off_x, in
 	return FALSE;
     }
 
-    png_set_error_fn(png_ptr, 0, 0, &qt_png_warning);
+    png_set_error_fn(png_ptr, 0, 0, qt_png_warning);
 
     info_ptr = png_create_info_struct(png_ptr);
     if (!info_ptr) {
@@ -415,14 +549,19 @@ bool QPNGImageWriter::writeImage(const QImage& image, int quality, int off_x, in
 	return FALSE;
     }
 
+#if PNG_LIBPNG_VER>=10500
+    if (setjmp(png_jmpbuf(png_ptr))) {
+#else /* LIBPNG 1.5 */
     if (setjmp(png_ptr->jmpbuf)) {
+#endif /* LIBPNG 1.5 */
 	png_destroy_write_struct(&png_ptr, &info_ptr);
 	return FALSE;
     }
 
+    int quality = quality_in;
     if (quality >= 0) {
 	if (quality > 9) {
-#if defined(CHECK_RANGE)
+#if defined(QT_CHECK_RANGE)
 	    qWarning( "PNG: Quality %d out of range", quality );
 #endif
 	    quality = 9;
@@ -430,12 +569,11 @@ bool QPNGImageWriter::writeImage(const QImage& image, int quality, int off_x, in
 	png_set_compression_level(png_ptr, quality);
     }
 
-    png_set_write_fn(png_ptr, (void*)this, qpiw_write_fn, qpiw_flush_fn);
+    if (gamma != 0.0) {
+	png_set_gAMA(png_ptr, info_ptr, 1.0/gamma);
+    }
 
-    info_ptr->channels =
-	(image.depth() == 32)
-	    ? (image.hasAlphaBuffer() ? 4 : 3)
-	    : 1;
+    png_set_write_fn(png_ptr, (void*)this, qpiw_write_fn, qpiw_flush_fn);
 
     png_set_IHDR(png_ptr, info_ptr, image.width(), image.height(),
 	image.depth() == 1 ? 1 : 8 /* per channel */,
@@ -445,16 +583,21 @@ bool QPNGImageWriter::writeImage(const QImage& image, int quality, int off_x, in
 		: PNG_COLOR_TYPE_RGB
 	    : PNG_COLOR_TYPE_PALETTE, 0, 0, 0);
 
-
+#if PNG_LIBPNG_VER>=10500
+    png_color_8 sig_bit;
+    sig_bit.red = 8;
+    sig_bit.green = 8;
+    sig_bit.blue = 8;
+    png_set_sBIT(png_ptr, info_ptr, &sig_bit);
+#else /* LIBPNG 1.5 */
     //png_set_sBIT(png_ptr, info_ptr, 8);
     info_ptr->sig_bit.red = 8;
     info_ptr->sig_bit.green = 8;
     info_ptr->sig_bit.blue = 8;
+#endif /* LIBPNG 1.5 */
 
-#if 0 // libpng takes care of this.
-    if (image.depth() == 1 && image.bitOrder() == QImage::BigEndian)
+    if (image.depth() == 1 && image.bitOrder() == QImage::LittleEndian)
        png_set_packswap(png_ptr);
-#endif
 
     png_colorp palette = 0;
     png_bytep copy_trans = 0;
@@ -465,11 +608,22 @@ bool QPNGImageWriter::writeImage(const QImage& image, int quality, int off_x, in
 	png_set_PLTE(png_ptr, info_ptr, palette, num_palette);
 	int* trans = new int[num_palette];
 	int num_trans = 0;
+#if PNG_LIBPNG_VER>=10500
+	png_colorp info_ptr_palette = NULL;
+	int tmp;
+	png_get_PLTE(png_ptr, info_ptr, &info_ptr_palette, &tmp);
+#endif /* LIBPNG 1.5 */
 	for (int i=0; i<num_palette; i++) {
 	    QRgb rgb=image.color(i);
+#if PNG_LIBPNG_VER>=10500
+	    info_ptr_palette[i].red = qRed(rgb);
+	    info_ptr_palette[i].green = qGreen(rgb);
+	    info_ptr_palette[i].blue = qBlue(rgb);
+#else /* LIBPNG 1.5 */
 	    info_ptr->palette[i].red = qRed(rgb);
 	    info_ptr->palette[i].green = qGreen(rgb);
 	    info_ptr->palette[i].blue = qBlue(rgb);
+#endif /* LIBPNG 1.5 */
 	    if (image.hasAlphaBuffer()) {
 		trans[i] = rgb >> 24;
 		if (trans[i] < 255) {
@@ -477,17 +631,27 @@ bool QPNGImageWriter::writeImage(const QImage& image, int quality, int off_x, in
 		}
 	    }
 	}
+#if PNG_LIBPNG_VER>=10500
+	png_set_PLTE(png_ptr, info_ptr, info_ptr_palette, num_palette);
+#endif /* LIBPNG 1.5 */
 	if (num_trans) {
 	    copy_trans = new png_byte[num_trans];
 	    for (int i=0; i<num_trans; i++)
 		copy_trans[i] = trans[i];
 	    png_set_tRNS(png_ptr, info_ptr, copy_trans, num_trans, 0);
 	}
-	delete trans;
+	delete [] trans;
     }
 
     if ( image.hasAlphaBuffer() ) {
+#if PNG_LIBPNG_VER>=10500
+        png_color_8p sig_bit;
+        png_get_sBIT(png_ptr, info_ptr, &sig_bit);
+        sig_bit->alpha = 8;
+        png_set_sBIT(png_ptr, info_ptr, sig_bit);
+#else /* LIBPNG 1.5 */
 	info_ptr->sig_bit.alpha = 8;
+#endif /* LIBPNG 1.5 */
     }
 
     // Swap ARGB to RGBA (normal PNG format) before saving on
@@ -579,44 +743,55 @@ bool QPNGImageWriter::writeImage(const QImage& image, int quality, int off_x, in
     return TRUE;
 }
 
-static
-void write_png_image(QImageIO* iio)
-{
-    QPNGImageWriter writer(iio->ioDevice());
-    int quality = -1;
-    if ( iio->parameters() ) {
-	bool ok = FALSE;
-	int iq = QString::fromLatin1( iio->parameters() ).toInt( &ok );
-	if ( ok && iq >= 0 ) {
-	    if ( iq > 100) {
-#if defined(CHECK_RANGE)
-		qWarning( "PNG: Quality %d out of range", iq );
-#endif
-		iq = 100;
-	    }
-	    quality = (100-iq) * 9 / 91; // map [0,100] -> [9,0]
-	}
+    static
+    void write_png_image(QImageIO* iio)
+    {
+        QPNGImageWriter writer(iio->ioDevice());
+        int quality = -1;
+        if ( iio->parameters() ) {
+    	bool ok = FALSE;
+    	int iq = QString::fromLatin1( iio->parameters() ).toInt( &ok );
+    	if ( ok && iq >= 0 ) {
+    	    if ( iq > 100) {
+    #if defined(CHECK_RANGE)
+    		qWarning( "PNG: Quality %d out of range", iq );
+    #endif
+    		iq = 100;
+    	    }
+    	    quality = (100-iq) * 9 / 91; // map [0,100] -> [9,0]
+    	}
+        }
+        if ( writer.writeImage(iio->image(), quality) )
+    	iio->setStatus(0);
+        else
+    	iio->setStatus(-1);
     }
-    if ( writer.writeImage(iio->image(), quality) )
-	iio->setStatus(0);
-    else
-	iio->setStatus(-1);
-}
 
-// NOT REVISED
+
 /*!
-  \class QPNGImagePacker qpngio.h
-  \brief Creates well-compressed PNG animations.
+    \class QPNGImagePacker qpngio.h
+    \brief The QPNGImagePacker class creates well-compressed PNG animations.
 
-  By using transparency, QPNGImagePacker allows you to build a PNG image
-  from a sequence of QImages.
+    \ingroup images
+    \ingroup graphics
+
+    By using transparency, QPNGImagePacker allows you to build a PNG
+    image from a sequence of QImages.
+
+    Images are added using packImage().
 */
 
 
 /*!
-  Create an image packer that writes PNG data to \a iod, using a
-  \a storage_depth bit encoding (use 8 or 32, depending on the
-  desired quality and compression requirements).
+    Creates an image packer that writes PNG data to IO device \a iod
+    using a \a storage_depth bit encoding (use 8 or 32, depending on
+    the desired quality and compression requirements).
+
+    If the image needs to be modified to fit in a lower-resolution
+    result (e.g. converting from 32-bit to 8-bit), use the \a
+    conversionflags to specify how you'd prefer this to happen.
+
+    \sa Qt::ImageConversionFlags
 */
 QPNGImagePacker::QPNGImagePacker(QIODevice* iod, int storage_depth,
 	int conversionflags) :
@@ -628,9 +803,10 @@ QPNGImagePacker::QPNGImagePacker(QIODevice* iod, int storage_depth,
 }
 
 /*!
-  Align pixel differences to \a x pixels.  For example, using 8 can
-  improve playback on certain hardware.  Normally the default of 1-pixel
-  alignment (ie. no alignment) gives bets compression and performance.
+    Aligns pixel differences to \a x pixels. For example, using 8 can
+    improve playback on certain hardware. Normally the default of
+    1-pixel alignment (i.e. no alignment) gives better compression and
+    performance.
 */
 void QPNGImagePacker::setPixelAlignment(int x)
 {
@@ -638,8 +814,9 @@ void QPNGImagePacker::setPixelAlignment(int x)
 }
 
 /*!
-  Add the image \a img to the PNG animation, analyzing the differences
-  between this and the previous image to improve compression.
+    Adds the image \a img to the PNG animation, analyzing the
+    differences between this and the previous image to improve
+    compression.
 */
 bool QPNGImagePacker::packImage(const QImage& img)
 {
@@ -765,7 +942,7 @@ bool QPNGImagePacker::packImage(const QImage& img)
 
 #ifndef QT_NO_ASYNC_IMAGE_IO
 
-class Q_EXPORT QPNGFormat : public QImageFormat {
+class QPNGFormat : public QImageFormat {
 public:
     QPNGFormat();
     virtual ~QPNGFormat();
@@ -777,8 +954,8 @@ public:
     void row(png_structp png_ptr, png_bytep new_row,
 		png_uint_32 row_num, int pass);
     void end(png_structp png_ptr, png_infop info);
-#ifdef PNG_USER_CHUNK_SUPPORTED
-    int user_chunk(png_structp png_ptr, png_infop info,
+#ifdef PNG_USER_CHUNKS_SUPPORTED
+    int user_chunk(png_structp png_ptr,
 	    png_bytep data, png_uint_32 length);
 #endif
 
@@ -799,55 +976,59 @@ private:
     int unused_data;
 };
 
-class Q_EXPORT QPNGFormatType : public QImageFormatType
+class QPNGFormatType : public QImageFormatType
 {
     QImageFormat* decoderFor(const uchar* buffer, int length);
     const char* formatName() const;
 };
 
 
-/*!
+/*
   \class QPNGFormat qpngio.h
-  \brief Incremental image decoder for PNG image format.
+  \brief The QPNGFormat class provides an incremental image decoder for PNG
+  image format.
 
   \ingroup images
+  \ingroup graphics
 
   This subclass of QImageFormat decodes PNG format images,
   including animated PNGs.
 
-  Animated PNG images are standard PNG images.  The PNG standard
+  Animated PNG images are standard PNG images. The PNG standard
   defines two extension chunks that are useful for animations:
 
-  <dl>
-   <dt>gIFg - GIF-like Graphic Control Extension
-    <dd>Includes frame disposal, user input flag (we ignore this),
+  \list
+    \i gIFg - GIF-like Graphic Control Extension.
+     This includes frame disposal, user input flag (we ignore this),
 	    and inter-frame delay.
-   <dt>gIFx - GIF-like Application Extension
-    <dd>Multi-purpose, but we just use the Netscape extension
+   \i gIFx - GIF-like Application Extension.
+    This is multi-purpose, but we just use the Netscape extension
 	    which specifies looping.
-  </dl>
+  \endlist
 
   The subimages usually contain a offset chunk (oFFs) but need not.
 
-  The first image defines the "screen" size.  Any subsequent image that
+  The first image defines the "screen" size. Any subsequent image that
   doesn't fit is clipped.
-
-TODO: decide on this point.  gIFg gives disposal types, so it can be done.
+*/
+/* ###TODO: decide on this point. gIFg gives disposal types, so it can be done.
   All images paste (\e not composite, just place all-channel copying)
   over the previous image to produce a subsequent frame.
 */
 
-/*!
+/*
   \class QPNGFormatType qasyncimageio.h
-  \brief Incremental image decoder for PNG image format.
+  \brief The QPNGFormatType class provides an incremental image decoder
+  for PNG image format.
 
   \ingroup images
+  \ingroup graphics
   \ingroup io
 
-  This subclass of QImageFormatType recognizes PNG
-  format images, creating a QPNGFormat when required.  An instance
-  of this class is created automatically before any other factories,
-  so you should have no need for such objects.
+  This subclass of QImageFormatType recognizes PNG format images, creating
+  a QPNGFormat when required. An instance of this class is created
+  automatically before any other factories, so you should have no need for
+  such objects.
 */
 
 QImageFormat* QPNGFormatType::decoderFor(
@@ -871,20 +1052,19 @@ const char* QPNGFormatType::formatName() const
     return "PNG";
 }
 
-
 #if defined(Q_C_CALLBACKS)
 extern "C" {
 #endif
 
 static void
-info_callback(png_structp png_ptr, png_infop info)
+CALLBACK_CALL_TYPE info_callback(png_structp png_ptr, png_infop info)
 {
     QPNGFormat* that = (QPNGFormat*)png_get_progressive_ptr(png_ptr);
     that->info(png_ptr,info);
 }
 
 static void
-row_callback(png_structp png_ptr, png_bytep new_row,
+CALLBACK_CALL_TYPE row_callback(png_structp png_ptr, png_bytep new_row,
    png_uint_32 row_num, int pass)
 {
     QPNGFormat* that = (QPNGFormat*)png_get_progressive_ptr(png_ptr);
@@ -892,20 +1072,22 @@ row_callback(png_structp png_ptr, png_bytep new_row,
 }
 
 static void
-end_callback(png_structp png_ptr, png_infop info)
+CALLBACK_CALL_TYPE end_callback(png_structp png_ptr, png_infop info)
 {
     QPNGFormat* that = (QPNGFormat*)png_get_progressive_ptr(png_ptr);
     that->end(png_ptr,info);
 }
 
-#ifdef PNG_USER_CHUNK_SUPPORTED
+#if 0
+#ifdef PNG_USER_CHUNKS_SUPPORTED
 static int
-user_chunk_callback(png_structp png_ptr, png_infop info,
-	    png_bytep data, png_uint_32 length)
+CALLBACK_CALL_TYPE user_chunk_callback(png_structp png_ptr,
+         png_unknown_chunkp chunk)
 {
     QPNGFormat* that = (QPNGFormat*)png_get_progressive_ptr(png_ptr);
-    return that->user_chunk(png_ptr,info,data,length);
+    return that->user_chunk(png_ptr,chunk->data,chunk->size);
 }
+#endif
 #endif
 
 #if defined(Q_C_CALLBACKS)
@@ -914,7 +1096,7 @@ user_chunk_callback(png_structp png_ptr, png_infop info,
 
 
 /*!
-  Constructs a QPNGFormat.
+    Constructs a QPNGFormat object.
 */
 QPNGFormat::QPNGFormat()
 {
@@ -928,7 +1110,7 @@ QPNGFormat::QPNGFormat()
 
 
 /*!
-  Destructs a QPNGFormat.
+    Destroys a QPNGFormat object.
 */
 QPNGFormat::~QPNGFormat()
 {
@@ -938,9 +1120,9 @@ QPNGFormat::~QPNGFormat()
 
 
 /*!
-  This function decodes some data into image changes.
+    This function decodes some data into image changes.
 
-  Returns the number of bytes consumed.
+    Returns the number of bytes consumed.
 */
 int QPNGFormat::decode(QImage& img, QImageConsumer* cons,
 	const uchar* buffer, int length)
@@ -956,7 +1138,7 @@ int QPNGFormat::decode(QImage& img, QImageConsumer* cons,
 		return -1;
 	}
 
-	png_set_error_fn(png_ptr, 0, 0, &qt_png_warning);
+	png_set_error_fn(png_ptr, 0, 0, qt_png_warning);
 	png_set_compression_level(png_ptr, 9);
 
 	info_ptr = png_create_info_struct(png_ptr);
@@ -966,7 +1148,11 @@ int QPNGFormat::decode(QImage& img, QImageConsumer* cons,
 	    return -1;
 	}
 
+#if PNG_LIBPNG_VER>=10500
+	if (setjmp(png_jmpbuf(png_ptr))) {
+#else /* LIBPNG 1.5 */
 	if (setjmp((png_ptr)->jmpbuf)) {
+#endif /* LIBPNG 1.5 */
 	    png_destroy_read_struct(&png_ptr, &info_ptr, 0);
 	    image = 0;
 	    return -1;
@@ -975,8 +1161,11 @@ int QPNGFormat::decode(QImage& img, QImageConsumer* cons,
 	png_set_progressive_read_fn(png_ptr, (void *)this,
 	                            info_callback, row_callback, end_callback);
 
-#ifdef PNG_USER_CHUNK_SUPPORTED
-	png_set_user_chunk_fn(png_ptr, user_chunk_callback);
+#ifdef PNG_USER_CHUNKS_SUPPORTED
+	// Can't do this yet. libpng has a crash bug with unknown (user) chunks.
+	// Warwick has sent them a patch.
+	// png_set_read_user_chunk_fn(png_ptr, 0, user_chunk_callback);
+	// png_set_keep_unknown_chunks(png_ptr, 2/*HANDLE_CHUNK_IF_SAFE*/, 0, 0);
 #endif
 
 	if ( state != MovieStart && *buffer != 0211 ) {
@@ -989,8 +1178,12 @@ int QPNGFormat::decode(QImage& img, QImageConsumer* cons,
     }
 
     if ( !png_ptr ) return 0;
-    
+
+#if PNG_LIBPNG_VER>=10500
+    if (setjmp(png_jmpbuf(png_ptr))) {
+#else /* LIBPNG 1.5 */
     if (setjmp(png_ptr->jmpbuf)) {
+#endif /* LIBPNG 1.5 */
 	png_destroy_read_struct(&png_ptr, &info_ptr, 0);
 	image = 0;
 	state = MovieStart;
@@ -1048,12 +1241,18 @@ void QPNGFormat::end(png_structp png, png_infop info)
 #endif
     QRect r(0,0,image->width(),image->height());
     consumer->frameDone(QPoint(offx,offy),r);
+    consumer->end();
     state = FrameStart;
-    unused_data = png->buffer_size; // Since libpng doesn't tell us
+#if PNG_LIBPNG_VER>=10500
+    unused_data = png_process_data_pause(png, 0);
+#else /* LIBPNG 1.5 */
+    unused_data = (int)png->buffer_size; // Since libpng doesn't tell us
+#endif /* LIBPNG 1.5 */
 }
 
-#ifdef PNG_USER_CHUNK_SUPPORTED
+#ifdef PNG_USER_CHUNKS_SUPPORTED
 
+/*
 #ifndef QT_NO_IMAGE_TEXT
 static bool skip(png_uint_32& max, png_bytep& data)
 {
@@ -1068,8 +1267,9 @@ static bool skip(png_uint_32& max, png_bytep& data)
     return TRUE;
 }
 #endif
+*/
 
-int QPNGFormat::user_chunk(png_structp png, png_infop,
+int QPNGFormat::user_chunk(png_structp png,
 	    png_bytep data, png_uint_32 length)
 {
 #if 0 // NOT SUPPORTED: experimental PNG animation.
@@ -1091,9 +1291,18 @@ int QPNGFormat::user_chunk(png_structp png, png_infop,
 	    return 1;
 	}
     }
+#else
+    Q_UNUSED( png )
+    Q_UNUSED( data )
+    Q_UNUSED( length )
 #endif
 
 #ifndef QT_NO_IMAGE_TEXT
+    /*
+
+    libpng now supports this chunk.
+
+
     if ( 0==qstrcmp((char*)png->chunk_name, "iTXt") && length>=6 ) {
 	const char* keyword = (const char*)data;
 	if ( !skip(length,data) ) return 0;
@@ -1114,6 +1323,7 @@ int QPNGFormat::user_chunk(png_structp png, png_infop,
 	    return 1;
 	}
     }
+    */
 #endif
 
     return 0;
@@ -1125,6 +1335,7 @@ static QPNGFormatType* globalPngFormatTypeObject = 0;
 
 #endif // QT_NO_ASYNC_IMAGE_IO
 
+static bool done = FALSE;
 void qCleanupPngIO()
 {
 #ifndef QT_NO_ASYNC_IMAGE_IO
@@ -1133,11 +1344,11 @@ void qCleanupPngIO()
 	globalPngFormatTypeObject = 0;
     }
 #endif
+    done = FALSE;
 }
 
 void qInitPngIO()
 {
-    static bool done = FALSE;
     if ( !done ) {
 	done = TRUE;
 	QImageIO::defineIOHandler( "PNG", "^.PNG\r", 0, read_png_image,

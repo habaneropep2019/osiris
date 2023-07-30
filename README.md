@@ -59,6 +59,21 @@ Osiris is extremely lean on a modern computer, takes very little time to compile
 
 At a minimum, to run Osiris, you'll need a Pentium 133mhz or better CPU, 64mb of RAM, 10-100MB of disk space, an X11 Window System of at least revision 7 (XFree86 4.0+ should also likely work but is untested). To build Osiris, you'll probably want at least a Pentium II 233Mhz CPU and more than 64MB of RAM, although this isn't necessarily required. FreeType2, Zlib, libjpeg, XFT, XKB and probably some more libraries are required.
 
+| Library | Minimum Supported Version | Recommended Version |
+| --- | --- | --- |
+| libpng | 1.6.0 | 1.6.40 |
+| zlib | 1.2.13 | 1.2.13 |
+
+#### A note about older libpng and zlib versions
+
+Osiris has been ported to modern libpng. There was an API change some time ago, and Qt2 was never ported to it, probably because the change occurred after Qt2's lifecycle had ended. That being said, using the new libpng with a version of zlib that is too old will cause warnings about `libpng error: bad parameters to zlib`. Using a newer version of zlib at compile time will fix this error.
+
+FWIW, libpng says it needs zlib 1.0.4 or later. However, even zlib 1.1.3 will cause errors. You **should** be using zlib 1.2.13 or later.
+
+#### A note about formerly included 3rd party libraries
+
+Qt2 originally kept copies of 3rd party libraries libpng and zlib. Osiris no longer does, as this can result in terribly out of date versions of these libraries, or other issues arising from mismatches. You should be able to use the libraries provided by your distribution.
+
 #### What about Unix ports?
 
 A lot of ports to other platforms are inherited from the original Qt code. These should still work on 2000-era versions. They have not been tested. We plan to work on ensuring these ports still work on at least a limited subset of non-Linux platforms in the modern world, however, this work has not been completed yet. You are welcome to try building Osiris on other platforms and submit patches here to fix the ports as needed (or add new platform ports).

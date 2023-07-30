@@ -291,8 +291,8 @@ GIF=yes
 OPENGL=auto
 THREAD=yes
 SM=no
-ZLIB=yes
-LIBPNG=yes
+ZLIB=no
+LIBPNG=no
 JPEG=yes
 MNG=no
 NAS_SOUND=no
@@ -384,18 +384,6 @@ while [ -n "$1" ]; do
 	;;
    -thread)
        THREAD=yes
-	;;
-   -qt-zlib)
-       ZLIB=yes
-	;;
-   -system-zlib)
-       ZLIB=no
-	;;
-   -qt-libpng)
-       LIBPNG=yes
-	;;
-   -system-libpng)
-       LIBPNG=no
 	;;
    -no-mng)
        MNG=no
@@ -1171,14 +1159,6 @@ each option:
 
  *  -no-thread ......... Do not compile with Threading Support
     -thread ............ Compile with Threading Support
-
- *  -qt-zlib ........... Use the zlib bundled with Qt.
-    -system-zlib ....... Use a zlib from the operating system
-                         http://www.info-zip.org/pub/infozip/zlib
-
- *  -qt-libpng ......... Use the libpng bundled with Qt.
-    -system-libpng ..... Use a libpng from the operating system.
-                         See http://www.libpng.org/pub/png
 
  *  -no-mng ............ Do not compile in MNG I/O support.
     -system-libmng ..... Use libmng from the operating system.
