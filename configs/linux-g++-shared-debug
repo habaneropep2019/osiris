@@ -5,7 +5,7 @@ SYSCONF_CC		= gcc
 DASHCROSS		= 
 
 # Compiling with support libraries
-SYSCONF_CXXFLAGS_X11	= -I/usr/X11R6/include
+SYSCONF_CXXFLAGS_X11	= -I/usr/X11R6/include -I/usr/include/freetype2
 SYSCONF_CXXFLAGS_QT	= -I$(OSIRISDIR)/include
 SYSCONF_CXXFLAGS_OPENGL	= -I/usr/X11R6/include
 
@@ -43,7 +43,7 @@ SYSCONF_LFLAGS_SHOBJ	= -shared
 SYSCONF_CFLAGS_THREAD	= -D_REENTRANT
 SYSCONF_CXXFLAGS_THREAD	= -D_REENTRANT
 SYSCONF_LFLAGS_THREAD	= 
-SYSCONF_LIBS_THREAD	=  -lpthread
+SYSCONF_LIBS_THREAD	=  -pthread
 
 # Meta-object compiler
 SYSCONF_MOC		= $(OSIRISDIR)/bin/moc

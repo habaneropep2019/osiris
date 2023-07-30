@@ -70,3 +70,9 @@ Osiris does not have any clue about Wayland - it hadn't even been thought of whe
 #### What about Python3 bindings?
 
 None available *yet*, sorry! It's on the to-do list somewhere.
+
+## Buildling and debugging
+
+#### Debugging
+
+You can enable the debug build during `configure` using the flag -debug. You should also build using the `-j1` make flag when debugging otherwise the wall of text can be hard to sort through.

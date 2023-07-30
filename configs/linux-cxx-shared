@@ -5,7 +5,7 @@ SYSCONF_CC		= ccc
 DASHCROSS		= 
 
 # Compiling with support libraries
-SYSCONF_CXXFLAGS_X11	= -I/usr/X11R6/include
+SYSCONF_CXXFLAGS_X11	= -I/usr/X11R6/include -I/usr/include/freetype2
 SYSCONF_CXXFLAGS_QT	= -I$(OSIRISDIR)/include
 SYSCONF_CXXFLAGS_OPENGL	= -I/usr/X11R6/include
 
