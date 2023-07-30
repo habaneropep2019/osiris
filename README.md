@@ -57,7 +57,7 @@ Osiris requires a Linux system running a X Windows System. The GNU autotools sys
 
 Osiris is extremely lean on a modern computer, takes very little time to compile, and is not resource intensive while running.
 
-At a minimum, to run Osiris, you'll need a Pentium 133mhz or better CPU, 64mb of RAM, 10-100MB of disk space, an X11 Window System of at least revision 7 (XFree86 4.0+ should also likely work but is untested). To build Osiris, you'll probably want at least a Pentium II 233Mhz CPU and more than 64MB of RAM, although this isn't necessarily required.
+At a minimum, to run Osiris, you'll need a Pentium 133mhz or better CPU, 64mb of RAM, 10-100MB of disk space, an X11 Window System of at least revision 7 (XFree86 4.0+ should also likely work but is untested). To build Osiris, you'll probably want at least a Pentium II 233Mhz CPU and more than 64MB of RAM, although this isn't necessarily required. FreeType2, Zlib, libjpeg, XFT, XKB and probably some more libraries are required.
 
 #### What about Unix ports?
 
@@ -72,6 +72,27 @@ Osiris does not have any clue about Wayland - it hadn't even been thought of whe
 None available *yet*, sorry! It's on the to-do list somewhere.
 
 ## Buildling and debugging
+
+#### Building a release version on Linux platforms
+
+You probably need to be root for this.
+
+Extract the source to the directory you wish to install to. `/opt/osiris` is the recommended location. Use extreme caution when installing to /usr/local/ or any other location.
+
+Set the needed environment variables. Usually adding the following to your `.profile`, logging out, and logging back in again is sufficient. This should be done for both root _and_ any local users who will be using Osiris.
+
+`OSIRISDIR=/opt/osiris`
+
+`PATH=$OSIRISDIR/bin:$PATH`
+
+`MANPATH=$OSIRISDIR/doc/man:$MANPATH`
+
+`LD_LIBRARY_PATH=$OSIRISDIR/lib:$LD_LIBRARY_PATH`
+
+
+`export OSIRISDIR PATH MANPATH LD_LIBRARY_PATH`
+
+In most cases, you should be able to just run `./configure`, followed by `make`. Paralell builds have been tested and are supported. You can add `-jX`, where `X` is the number of threads you wish to use to compile, to your make command. For example, on a dual-core processor, you could use `make -j2`.
 
 #### Debugging
 
