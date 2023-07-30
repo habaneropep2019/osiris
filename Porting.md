@@ -1,35 +1,28 @@
-		    PORTING Qt TO OTHER PLATFORMS
+# Porting Osiris to other platforms
 
-Read this file if you want to port Qt to a new platform or C++
-compiler.  If you come across any problems, feel free to send mail to
-qt-bugs@trolltech.com.
+A brief overview of porting Osiris to other platforms. Bug reports should be submitted to the Osiris project, _not_ Qt!
 
-			     REQUIREMENTS
+This is based on the original PORTING file included with Qt 2.3.2.
 
-The new platform needs Xlib for X11R5 or newer.  Motif is not required.
+# REQUIREMENTS
+
+The new platform needs Xlib for X11R7 or newer.  Motif should not be used.
 If it is not a Unix system (for instance VMS) things may get complicated.
 Porting to other Unixes is generally straight-forward.
 
-Qt requires that your C++ compiler supports multiple inheritance and
+Osiris requires that your C++ compiler supports multiple inheritance and
 templates. The compiler must recognize the .cpp extension.  Exception
 handling and RTTI (Run-Time Type Information) are not required.
 Expect problems with old CFront-based compilers.
 
-			       PATCHES
+# PATCHES
 
-Please send us the patches you had to make so we can add them to the
-code base; then we can support the new platform in an orderly manner. 
-(We want Qt to run on as many platforms as possible, but _not_ if that
-involves incompatible patches for the same platform floating around the
-net.)
+Patches and bug reports are more than welcome. Please submit them on the Osiris project's website, currently [here](https://centre.libranext.com/libranext/osiris)
 
-Further, we would like to have copies of all Qt-related files on
-ftp.trolltech.com.
-
-			 PORTING INSTRUCTIONS
+# PORTING INSTRUCTIONS
 
 In the configs/ directory you will find several build configuration
-files for all platforms supported by Qt.  Start off with one the
+files for all platforms previously support by Qt.  Start off with one the
 existing files in configs/, rename it, and change it manually to
 fit your system.  For example you may copy
 	configs/solaris-cc-shared-debug
@@ -44,13 +37,12 @@ detect it's probably a good idea to add a _CC_whatever_ too (even
 though you don't need it at once).  There are also some size-dependent
 types (Q_UINT32 and so on), make sure they're right for your system.
 
-Some compilers emit bad warnings when they compile Qt.  If yours does,
-and the code in Qt is sane, please use a #pragma or two to shut your
+Some compilers emit bad warnings when they compile Osiris.  If yours does,
+and the code in Osiris is sane, please use a #pragma or two to shut your
 compiler up.  (This is a good reason for wanting the _CC_whatever_
 define above.) Alternatively try using compiler option flags.
 
-Make a unified diff (diff -u) and send the patch and the configuration
-files to qt-bugs@trolltech.com.
+You can then make a merge request on the Osiris project site and we'll work to include it in the next release.
 
 For most Unix varieties, that's all.  Some may need some include file
-tweaks.  Good luck, and again, feel free to send mail to qt-bugs@trolltech.com.
+tweaks.

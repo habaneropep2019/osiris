@@ -1,3 +1,16 @@
+# Osiris supported platforms
+
+Currently supported platforms are:
+
+| Platforms | |
+| --- | --- |
+| linux-g++ | linux-cxx |
+
+
+
+
+# Qt 2.3.2 legacy information
+
 Before you build the Qt library and example programs, you must run the
 "configure" script to set the platform information and other build
 settings.  You can use the -platform option to specify the operating
