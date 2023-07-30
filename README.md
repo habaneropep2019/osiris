@@ -10,6 +10,16 @@ Osiris is actually a fork of the Qt toolkit, from version 2.3.2. Osiris should m
 
 Osiris was previously part of ZFreeKit.
 
+#### But why not use modern Qt?
+
+Good question. If you're asking that, chances are that you SHOULD use modern Qt. Qt6 is a masterful toolkit. It's high-quality, robust, and the documentation is second to none. Osiris is not meant to be a competitor nor a replacement for modern Qt. 
+
+Fun fact: If you've traversed the code, you'd be surprised to find that more code thatn you'd expect from legacy Qt versions is still present in modern versions. No need to fix what isn't broken.
+
+#### But why Osiris?
+
+Osiris is based on Qt2, which is a much improved version from Qt1. It also is extremely lightweight and small by todays standards. It helps revive legacy programs for historical and nostalgic purposes, and where every bit of performance and size is important, Osiris delivers a standard set of tools to build GUIs without a bunch of extra features. It's simple, but complete, and stupidly fast and lean. Plus most of the codebase has **decades** of real-world use so it's for the most part tried and true.
+
 ## Disclaimer
 
 Osiris is **not** in any way, form, or shape affiliated with or supported by Trolltech, Nokia, Digia, the Free KDE Foundation, or the Qt Company. Osiris is a fork of the Qt toolkit, originally developed by Trolltech. Osiris is the _upstream_ of Osiris, meaning that bug reports, patches, etc., should be directed here to the Osiris project _not_ to the Qt bug tracker (or other Qt services). Some references to Qt either remain because they have not been replaced, need to remain for credit/copyright purposes, or for other functional reasons.
@@ -40,3 +50,23 @@ The QPL is an open-source free software license. However, it requires modificati
 #### About using Osiris under a Qt commercial license
 
 The Osiris project nor Libranext Computer Systems play any part in the commerical licensing of Qt. Please refer to your specific license and/or contract terms. We can not help you with that. The vanilla source code can be found here as the first commit of code, or the tag Qt2.3.2-vanilla. Later commits may introduce files and/or changes that are not available under a Qt commercial license. It is your responsibility to audit source code to ensure license compatability. We do not provide support or licensing for any Qt products, and are not affiliated with Qt in any way.
+
+## System Requirements
+
+Osiris requires a Linux system running a X Windows System. The GNU autotools system and the standard set of GNU development tools are required to build (make, gcc, g++, byacc, flex, etc.). Osiris will run on either 32-bit or 64-bit x86 systems. Other processors have not been tested. Compiling using clang has not been tested and is not currently supported, but will be implemented for at least Linux platforms in the future.
+
+Osiris is extremely lean on a modern computer, takes very little time to compile, and is not resource intensive while running.
+
+At a minimum, to run Osiris, you'll need a Pentium 133mhz or better CPU, 64mb of RAM, 10-100MB of disk space, an X11 Window System of at least revision 7 (XFree86 4.0+ should also likely work but is untested). To build Osiris, you'll probably want at least a Pentium II 233Mhz CPU and more than 64MB of RAM, although this isn't necessarily required.
+
+#### What about Unix ports?
+
+A lot of ports to other platforms are inherited from the original Qt code. These should still work on 2000-era versions. They have not been tested. We plan to work on ensuring these ports still work on at least a limited subset of non-Linux platforms in the modern world, however, this work has not been completed yet. You are welcome to try building Osiris on other platforms and submit patches here to fix the ports as needed (or add new platform ports).
+
+#### What about Wayland support?
+
+Osiris does not have any clue about Wayland - it hadn't even been thought of when Qt2.3.2 was mainstream. Most applications using Osiris _should_ theoretically run on XWayland, although I've not tested it yet. It's possible that I'll add Wayland support to Osiris at some point. It's certainly on the to-do list, althought a bit lower for now. Again, patches and bug reports are absolutely welcome!
+
+#### What about Python3 bindings?
+
+None available _yet_, sorry! It's on the to-do list somewhere.
