@@ -69,4 +69,4 @@ Osiris does not have any clue about Wayland - it hadn't even been thought of whe
 
 #### What about Python3 bindings?
 
-None available _yet_, sorry! It's on the to-do list somewhere.
+None available *yet*, sorry! It's on the to-do list somewhere.
