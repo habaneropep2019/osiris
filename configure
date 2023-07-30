@@ -6,7 +6,7 @@
 #
 
 # To remove the need for the first test, do this:
-# QTDIR=`pwd` export QTDIR
+# OSIRISDIR=`pwd` export OSIRISDIR
 
 relpath=`dirname $0`
 relpath=`(cd $relpath; pwd)`
@@ -18,17 +18,17 @@ then
 else
 
 touch .test.qt.
-if [ '!' -f ${QTDIR}/.test.qt. ];
+if [ '!' -f ${OSIRISDIR}/.test.qt. ];
 then
     rm .test.qt.
     echo
     echo
-    echo '   The environment variable $QTDIR is not set correctly. It is currently'
-    echo '   set to "'$QTDIR'", but it should be set to this directory,'
+    echo '   The environment variable $OSIRISDIR is not set correctly. It is currently'
+    echo '   set to "'$OSIRISDIR'", but it should be set to this directory,'
     echo '   which is "'`pwd`'".'
     echo
-    echo '   Please read the INSTALL file for instructions on how to set $QTDIR'
-    echo '   correctly. If you have set $QTDIR in your .profile or .login, you '
+    echo '   Please read the INSTALL file for instructions on how to set $OSIRISDIR'
+    echo '   correctly. If you have set $OSIRISDIR in your .profile or .login, you '
     echo '   will need to log out and log in again to make the setting effective.'
     echo
     echo
@@ -1309,11 +1309,11 @@ EOF
 fi
 if [ "x$ZLIB" = "xyes" ]
 then
-    I_FLAGS="${I_FLAGS} -I\$(QTDIR)/src/3rdparty/zlib"
+    I_FLAGS="${I_FLAGS} -I\$(OSIRISDIR)/src/3rdparty/zlib"
 fi
 if [ "x$LIBPNG" = "xyes" ]
 then
-    I_FLAGS="${I_FLAGS} -I\$(QTDIR)/src/3rdparty/libpng"
+    I_FLAGS="${I_FLAGS} -I\$(OSIRISDIR)/src/3rdparty/libpng"
 fi
 
 [ "x$SM" = "xyes" ] && QT_LIBS="${QT_LIBS} -lSM -lICE"
@@ -1390,7 +1390,7 @@ QT_MODULE_OBJ      =$QT_MODOBJ $QT_SUBLIBS
 EOF
 
 
-QTDIR='$(QTDIR)'
+OSIRISDIR='$(OSIRISDIR)'
 
 
 # Give feedback...
@@ -1589,7 +1589,7 @@ EOF
     fi
 done
 
-if echo $LD_LIBRARY_PATH | grep >/dev/null $QTDIR/lib
+if echo $LD_LIBRARY_PATH | grep >/dev/null $OSIRISDIR/lib
 then
     if grep >/dev/null SYSCONF_RPATH $XCONFIG
     then
@@ -1598,7 +1598,7 @@ then
 	if [ -n "$FROMMAKE" ]
 	then
 	    echo
-	    echo "WARNING: \$LD_LIBRARY_PATH does not contain \$QTDIR/lib"
+	    echo "WARNING: \$LD_LIBRARY_PATH does not contain \$OSIRISDIR/lib"
 	    echo "         many platforms require this."
 	    echo
 	fi

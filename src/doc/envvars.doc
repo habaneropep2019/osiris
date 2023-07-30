@@ -58,9 +58,9 @@ should be a multiple of 90 degrees rotation specified as Rot<x>,
 for instance Transformed:Rot90.
 
 <p>
-QTDIR
+OSIRISDIR
 If defined tells Qt/Embedded to where to find its fonts - fontdir
-should be in $QTDIR/etc/fonts/. If undefined it's assumed to be
+should be in $OSIRISDIR/etc/fonts/. If undefined it's assumed to be
 /usr/local/qt-embedded
 
 <p>

@@ -97,7 +97,7 @@ Usually a device such as the Cassiopeia would have a shell, configured as the
 Qt/Embedded server, that allows client applications to be launched.
 For the purposes of this tutorial, we will write a simple application that
 serves as the Qt/Embedded server and client.  A more complete Qt/Embbeded
-server can be found in $QTDIR/examples/compact.
+server can be found in $OSIRISDIR/examples/compact.
 <p>
 The application that we will write is a simple note pad.  It will allow
 notes to be created, viewed and deleted.  Since the Cassiopeia doesn't have
@@ -109,7 +109,7 @@ Our note pad user interface is very simple.  It consists of a toolbar with
 "New" and "Delete" buttons, a combo box to select the note to view and
 an editing area.
 <p>
-Take a moment to browse the source code for Note Pad in $QTDIR/examples/notepad/.
+Take a moment to browse the source code for Note Pad in $OSIRISDIR/examples/notepad/.
 The code is quite simple, but there are some things worth noting:
 
 <ol>
@@ -134,7 +134,7 @@ included in the compact demo, so we use this.
 <h3>Creating a suitable Qt/Embedded Library</h3>
 
 Since our application is quite simple we can remove some unneeded features
-from Qt/Embedded.  Edit $QTDIR/src/tools/qconfig.h and disable unneeded
+from Qt/Embedded.  Edit $OSIRISDIR/src/tools/qconfig.h and disable unneeded
 features as follows:
 <p>
 <pre>
@@ -177,10 +177,10 @@ that can be disabled.  This leaves us with a small set of widgets and
 dialogs necessary for our application.  Cross-compile the library for the mips
 target on the x86 platform:
 <pre>
-    cd $QTDIR
+    cd $OSIRISDIR
     ./configure -xplatform linux-mips-g++ -platform linux-x86-g++
     make
-    mipsel-linux-strip $QTDIR/lib/libqt.so.2.2.0
+    mipsel-linux-strip $OSIRISDIR/lib/libqt.so.2.2.0
 </pre>
 The library is stripped to conserve ramdisk space.
 
@@ -212,7 +212,7 @@ Copy the Qt/Embedded library to the ramdisk /lib directory and make the
 necessary links:
 <pre>
     cd /mnt/ramdisk/lib
-    cp $QTDIR/lib/libqt.so.2.2.0 .
+    cp $OSIRISDIR/lib/libqt.so.2.2.0 .
     ln -s libqt.so.2.2.0 libqt.so.2.2
     ln -s libqt.so.2.2.0 libqt.so.2
 </pre>
@@ -231,7 +231,7 @@ When the kernel boots it looks for several files to run.  In order to have
 our application run when the kernel boots, we rename it to /bin/sh.  A /tmp
 directory is also used by Qt/Embedded:
 <pre>
-    cp $QTDIR/examples/notepad/notepad /mnt/ramdisk/bin/sh
+    cp $OSIRISDIR/examples/notepad/notepad /mnt/ramdisk/bin/sh
     mkdir /mnt/ramdisk/tmp
     umount /mnt/ramdisk
 </pre>

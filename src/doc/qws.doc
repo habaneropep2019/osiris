@@ -57,7 +57,7 @@ to be modified for other platforms.
 
 <pre>
 	cd ~/qt-<i>version</i>
-	export QTDIR=~/qt-<i>version</i>
+	export OSIRISDIR=~/qt-<i>version</i>
 	./configure
 	make
 </pre>
@@ -302,7 +302,7 @@ Unicode font uses over 1Mb of memory.
 <h2>The font definition file</h2>
 
 When Qt/Embedded applications run, they look for a file called
-<tt>$QTDIR/etc/fonts/fontdir</tt> or
+<tt>$OSIRISDIR/etc/fonts/fontdir</tt> or
 <tt>/usr/local/qt-embedded/etc/fonts/fontdir</tt>. This file defines the
 fonts available to the application. It has the following format:
 
@@ -390,17 +390,17 @@ framebuffer you can use the
 <a href="qvfb-qws.html">Qt/Embedded virtual framebuffer</a>.
 <p>
 Change to a Linux console and select an example to run, e.g. examples/widgets.
-Make sure $QTDIR is set to the directory where you installed Qt/Embedded
-and add the $QTDIR/lib directory to $LD_LIBRARY_PATH, e.g.:
+Make sure $OSIRISDIR is set to the directory where you installed Qt/Embedded
+and add the $OSIRISDIR/lib directory to $LD_LIBRARY_PATH, e.g.:
 <pre>
-export QTDIR=$HOME/qt-<i>version</i>
-export LD_LIBRARY_PATH=$QTDIR/lib:$LD_LIBRARY_PATH
+export OSIRISDIR=$HOME/qt-<i>version</i>
+export LD_LIBRARY_PATH=$OSIRISDIR/lib:$LD_LIBRARY_PATH
 </pre>
 <p>
 Run the application with the <i>-qws</i> option:
 <p>
 <pre>
-cd $QTDIR/examples/widgets
+cd $OSIRISDIR/examples/widgets
 ./widgets -qws
 </pre>
 <p>
@@ -544,7 +544,7 @@ knowledge of Qt/Embedded.
 
 The Qt/Embedded release contains an example touch panel handler in the
 class QCustomTPanelHandlerPrivate, located in the file
-<tt>$QTDIR/src/kernel/qwsmouse_qws.cpp</tt>. It is protected by<tt>#ifdef
+<tt>$OSIRISDIR/src/kernel/qwsmouse_qws.cpp</tt>. It is protected by<tt>#ifdef
 QWS_CUSTOMTOUCHPANEL</tt>.
 
 The example reads data from /dev/ts with the following format:

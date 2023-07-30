@@ -51,8 +51,8 @@ Client classes:
 <p>
 QFontManager
   There is one of these per application. At application startup time
-it reads the font definition file from $QTDIR/etc/fonts/fontdir
-(or /usr/local/etc/qt-embedded/fonts/fontdir if QTDIR is undefined). It keeps
+it reads the font definition file from $OSIRISDIR/etc/fonts/fontdir
+(or /usr/local/etc/qt-embedded/fonts/fontdir if OSIRISDIR is undefined). It keeps
 track of all font information and holds a cache of rendered fonts.
 It also creates the font factories - QFontManager::QFontManager is the place
 to add constructors for new factories. It provides a high-level interface

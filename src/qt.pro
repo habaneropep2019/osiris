@@ -90,7 +90,7 @@ cups:DEFINES += QT_CUPS_SUPPORT
 cups:LIBS += -lcups
 
 mng:LIBS	+= -lmng -ljpeg
-#mng:LIBS	+= -L$(QTDIR)/src/3rdparty/libmng -lmng -ljpeg
+#mng:LIBS	+= -L$(OSIRISDIR)/src/3rdparty/libmng -lmng -ljpeg
 
 #DEFINES	+= QT_NO_ASCII_CAST
 #DEFINES	+= QT_NO_CAST_ASCII

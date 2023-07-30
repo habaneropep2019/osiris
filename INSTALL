@@ -25,7 +25,7 @@ where you choose to install Qt.
     depending on your shell) in your home directory. (Create the
     file if it is not there already.)
 
-	QTDIR		   - wherever you installed Qt
+	OSIRISDIR		   - wherever you installed Qt
 	PATH		   - to locate the moc program and other Qt tools
 	MANPATH 	   - to access the Qt man pages
 	LD_LIBRARY_PATH	   - for the shared Qt library
@@ -35,22 +35,22 @@ where you choose to install Qt.
     In .profile (if your shell is bash, ksh, zsh or sh), add the
     following lines:
 
-	QTDIR=/usr/local/qt
-	PATH=$QTDIR/bin:$PATH
-	MANPATH=$QTDIR/doc/man:$MANPATH
-	LD_LIBRARY_PATH=$QTDIR/lib:$LD_LIBRARY_PATH
+	OSIRISDIR=/usr/local/qt
+	PATH=$OSIRISDIR/bin:$PATH
+	MANPATH=$OSIRISDIR/doc/man:$MANPATH
+	LD_LIBRARY_PATH=$OSIRISDIR/lib:$LD_LIBRARY_PATH
 
-	export QTDIR PATH MANPATH LD_LIBRARY_PATH
+	export OSIRISDIR PATH MANPATH LD_LIBRARY_PATH
 
     In .login (in case your shell is csh or tcsh), add the following lines:
 
-	setenv QTDIR /usr/local/qt
-	setenv PATH $QTDIR/bin:$PATH
-	setenv MANPATH $QTDIR/doc/man:$MANPATH
-	setenv LD_LIBRARY_PATH $QTDIR/lib:$LD_LIBRARY_PATH
+	setenv OSIRISDIR /usr/local/qt
+	setenv PATH $OSIRISDIR/bin:$PATH
+	setenv MANPATH $OSIRISDIR/doc/man:$MANPATH
+	setenv LD_LIBRARY_PATH $OSIRISDIR/lib:$LD_LIBRARY_PATH
 
     After you have done this, you will need to login again, or
-    re-source the profile before continuing, so that at least $QTDIR
+    re-source the profile before continuing, so that at least $OSIRISDIR
     is set.  The installation will give an error message and not
     proceed otherwise.
 

@@ -24,7 +24,7 @@ int main( int argc, char ** argv )
     if (argc > 1)
         home = argv[1];
     else
-        home = QString(getenv("QTDIR")) + "/doc/html/index.html";
+        home = QString(getenv("OSIRISDIR")) + "/doc/html/index.html";
 
     
     HelpWindow *help = new HelpWindow(home, ".", 0, "help viewer");

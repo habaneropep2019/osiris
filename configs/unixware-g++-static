@@ -6,7 +6,7 @@ DASHCROSS		=
 
 # Compiling with support libraries
 SYSCONF_CXXFLAGS_X11	= 
-SYSCONF_CXXFLAGS_QT	= -I$(QTDIR)/include
+SYSCONF_CXXFLAGS_QT	= -I$(OSIRISDIR)/include
 SYSCONF_CXXFLAGS_OPENGL	= 
 
 # Compiling YACC output
@@ -22,7 +22,7 @@ SYSCONF_RPATH_OPENGL	=
 SYSCONF_LFLAGS_X11	= -L/usr/X/lib
 SYSCONF_LIBS_X11	= -lXext -lX11 -lsocket -lnsl -lm
 # Qt, Qt+OpenGL
-SYSCONF_LFLAGS_QT	= -L$(QTDIR)/lib
+SYSCONF_LFLAGS_QT	= -L$(OSIRISDIR)/lib
 SYSCONF_LIBS_QT		= -lqt$(QT_THREAD_SUFFIX)
 SYSCONF_LIBS_QT_OPENGL	= 
 # OpenGL
@@ -46,10 +46,10 @@ SYSCONF_LFLAGS_THREAD	=
 # SYSCONF_LIBS_THREAD	= ???
 
 # Meta-object compiler
-SYSCONF_MOC		= $(QTDIR)/bin/moc
+SYSCONF_MOC		= $(OSIRISDIR)/bin/moc
 
 # UI compiler
-SYSCONF_UIC		= $(QTDIR)/bin/uic
+SYSCONF_UIC		= $(OSIRISDIR)/bin/uic
 
 # Linking shared libraries
 #   - Build the $(TARGET) library, eg. lib$(TARGET).so.2.2.2

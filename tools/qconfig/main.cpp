@@ -138,7 +138,7 @@ void Main::save()
 
 void Main::testAll()
 {
-    QString qtdir = getenv("QTDIR");
+    QString qtdir = getenv("OSIRISDIR");
     chdir((qtdir+"/src").ascii());
     QString c;
     for (QStringList::ConstIterator it = choices.begin(); it != choices.end(); ++it)
@@ -350,7 +350,7 @@ int main(int argc, char** argv)
 {
     QApplication app(argc,argv);
     Main m;
-    QString qtdir = getenv("QTDIR");
+    QString qtdir = getenv("OSIRISDIR");
     QString qfeatures = qtdir + "/include/qfeatures.h";
     QString qconfig = qtdir + "/include/qconfig.h";
     for (int i=1; i<argc; i++) {
