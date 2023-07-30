@@ -510,7 +510,7 @@ void QXmlNamespaceSupport::pushContext()
 void QXmlNamespaceSupport::popContext()
 {
     if( !nsStack.isEmpty() )
-	ns = nsStack.pop();
+	ns = nsStack.pop2();
 }
 
 /*!
@@ -2499,7 +2499,7 @@ bool QXmlSimpleReader::parseElementEmptyTag( bool &, QString &uri, QString &lnam
 		goto error;
 	    }
 	    // ... followed by endElement...
-	    if ( !contentHnd->endElement( uri, lname, tags.pop() ) ) {
+	    if ( !contentHnd->endElement( uri, lname, tags.pop2() ) ) {
 		goto error;
 	    }
 	    // ... followed by endPrefixMapping
@@ -2523,12 +2523,12 @@ bool QXmlSimpleReader::parseElementEmptyTag( bool &, QString &uri, QString &lnam
 		goto error;
 	    }
 	    // ... followed by endElement
-	    if ( !contentHnd->endElement( "","",tags.pop() ) ) {
+	    if ( !contentHnd->endElement( "","",tags.pop2() ) ) {
 		goto error;
 	    }
 	}
     } else {
-	tags.pop();
+	tags.pop2();
 	d->namespaceSupport.popContext();
     }
     return TRUE;
@@ -2544,7 +2544,7 @@ bool QXmlSimpleReader::parseElementETagBegin2()
 {
 
     // pop the stack and compare it with the name
-    if ( tags.pop() != name() ) {
+    if ( tags.pop2() != name() ) {
 	d->error = XMLERR_TAGMISMATCH;
 	return FALSE;
     }
