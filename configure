@@ -1269,23 +1269,9 @@ all:
 	@echo "(not building threaded Qt)"
 EOF
 fi
-if [ "x$ZLIB" = "xyes" ]
-then
-    I_FLAGS="${I_FLAGS} -I\$(OSIRISDIR)/src/3rdparty/zlib"
-fi
-if [ "x$LIBPNG" = "xyes" ]
-then
-    I_FLAGS="${I_FLAGS} -I\$(OSIRISDIR)/src/3rdparty/libpng"
-fi
 
 [ "x$SM" = "xyes" ] && QT_LIBS="${QT_LIBS} -lSM -lICE"
 [ "x$XFT" = "xyes" ] && QT_LIBS="${QT_LIBS} -lXft"
-if [ -z "$EMB" -o "$SHARED" = no ]
-then
-    [ "x$LIBPNG" = "xyes" ] && QT_MODOBJ=$QT_MODOBJ' $(PNG_OBJECTS)'
-    [ "x$ZLIB" = "xyes" ] && QT_MODOBJ=$QT_MODOBJ' $(ZLIB_OBJECTS)'
-    [ "x$FT" = "xyes" ] && QT_MODOBJ=$QT_MODOBJ' $(FT_OBJECTS)'
-fi
 chmod +w src/tools/qmodules.h
 cat >src/tools/qmodules.h << EOF
 // These modules are licensed to $Licensee
