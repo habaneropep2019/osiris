@@ -6,6 +6,10 @@
 
 - Imported compile-time fixes from ZFreeKit
 - Renamed QTDIR environment variable to OSIRISDIR to avoid some complications on systems with newer and/or existing Qt installations.
+- Removed legacy mostly proprietary *nix platforms that likely will never be supported by Osiris.
+- Fixed some issues with the configure script that also checks for some of the needed libraries
+- Fixed an issue with FreeType2 during build
+- Changed from -lpthread to -pthread as -lpthread is deprecated
 
 # Legacy Qt Changelogs
 
