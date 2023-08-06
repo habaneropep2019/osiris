@@ -2,7 +2,9 @@
 
 # Osiris releases
 
-#### Osiris 1.0
+#### Osiris 2.4.0
+
+Osiris 2.4.0 is a fork of Qt 2.3.2. This is a bugfix and security fix release. Osiris is mostly source-compatible. It is likely not binary compatible.
 
 - Imported compile-time fixes from ZFreeKit
 - Renamed QTDIR environment variable to OSIRISDIR to avoid some complications on systems with newer and/or existing Qt installations.
@@ -10,6 +12,16 @@
 - Fixed some issues with the configure script that also checks for some of the needed libraries
 - Fixed an issue with FreeType2 during build
 - Changed from -lpthread to -pthread as -lpthread is deprecated
+- Removed src/3rdparty from source tree
+- Removed support for bundled zlib and libpng - now uses only the system version
+- Changed compiler/linker flags to correctly use system zlib
+- Changed the About Qt dialog message in qmessagebox.cpp
+- Changed QT_VERSION_STR to OSIRIS_VERSION_STR
+- Changed QT_VERSION to OSIRIS_VERSION
+- Added information in Porting.md relevant to moving from Qt2.x to Osiris
+- You can and should use oVersion instead of qVersion when writing new programs. oVersion will always return a version equal to or greater than 2.4.0
+- Bumped QT_VERSION, OSIRIS_VERSION to 240, QT_VERSION_STR and OSIRIS_VERSION_STR to 2.4.0
+- Updated documentation to show oVersion as being the newer example to use.
 
 # Legacy Qt Changelogs
 

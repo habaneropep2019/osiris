@@ -107,7 +107,7 @@ typedef void * MSG;
 
 #if defined(_WS_X11_)
 
-#if QT_VERSION > 290
+#if OSIRIS_VERSION > 290
 #error "define WId and friends to ulong always"
 #endif
 

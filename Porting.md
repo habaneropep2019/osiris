@@ -1,10 +1,24 @@
+# Porting Qt 1.x/2.x applications to Osiris 2.4.0
+
+## Changes
+
+- `QT_VERSION_STR` is now `OSIRIS_VERSION_STR`
+- `QT_VERSION` is now `OSIRIS_VERSION`
+- `qVersion` should be replaced with `oVersion`
+
+- Osiris is incrementing the Qt version number - so the last release of Qt2 was 2.3.2. Osiris starts off with 2.4.0 and moves on in the 2.x line. This avoids potential problems with newer Qt applications.
+
+## Notes on porting from Qt 1.x to Osiris 2.4.0
+
+Most information in the Qt 2.3.2 HTML documentation is still correct. You should follow it as if you were porting from Qt1 to Qt2, with the changes noted above kept in mind.
+
 # Porting Osiris to other platforms
 
 A brief overview of porting Osiris to other platforms. Bug reports should be submitted to the Osiris project, _not_ Qt!
 
 This is based on the original PORTING file included with Qt 2.3.2.
 
-# REQUIREMENTS
+## REQUIREMENTS
 
 The new platform needs Xlib for X11R7 or newer.  Motif should not be used.
 If it is not a Unix system (for instance VMS) things may get complicated.
@@ -15,11 +29,11 @@ templates. The compiler must recognize the .cpp extension.  Exception
 handling and RTTI (Run-Time Type Information) are not required.
 Expect problems with old CFront-based compilers.
 
-# PATCHES
+## PATCHES
 
 Patches and bug reports are more than welcome. Please submit them on the Osiris project's website, currently [here](https://centre.libranext.com/libranext/osiris)
 
-# PORTING INSTRUCTIONS
+## PORTING INSTRUCTIONS
 
 In the configs/ directory you will find several build configuration
 files for all platforms previously support by Qt.  Start off with one the

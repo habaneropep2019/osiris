@@ -6207,7 +6207,7 @@ void QPSPrinter::emitHeader( bool finished )
     QString title = printer->docName();
     QString creator = printer->creator();
     if ( !creator )                             // default creator
-        creator = QString::fromLatin1("Qt " QT_VERSION_STR);
+        creator = QString::fromLatin1("Qt " OSIRIS_VERSION_STR);
     d->realDevice = new QFile();
     (void)((QFile *)d->realDevice)->open( IO_WriteOnly, d->fd );
     stream.setDevice( d->realDevice );

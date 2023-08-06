@@ -6,7 +6,7 @@ Osiris is a graphical toolkit for X11-based Linux and Unix platforms.
 
 ## About
 
-Osiris is actually a fork of the Qt toolkit, from version 2.3.2. Osiris should maintain source compatability with Qt 2.3.2 (with the exception of some naming conventions potentially changing). This means that you can compile legacy applications built originally for Qt2 using Osiris. In addition, porting from Qt1 takes very little work.
+Osiris is actually a fork of the Qt toolkit, from version 2.3.2. Osiris is mostly source copmatible (but not binary compatible) with Qt 2.3.2 (with the exception of some naming conventions potentially changing). This means that you can compile legacy applications built originally for Qt2 using Osiris. In addition, porting from Qt1 takes very little work.
 
 Osiris was previously part of ZFreeKit.
 
@@ -80,7 +80,9 @@ A lot of ports to other platforms are inherited from the original Qt code. These
 
 #### What about Wayland support?
 
-Osiris does not have any clue about Wayland - it hadn't even been thought of when Qt2.3.2 was mainstream. Most applications using Osiris _should_ theoretically run on XWayland, although I've not tested it yet. It's possible that I'll add Wayland support to Osiris at some point. It's certainly on the to-do list, althought a bit lower for now. Again, patches and bug reports are absolutely welcome!
+Osiris does not have any clue about Wayland - it hadn't even been thought of when Qt2.3.2 was mainstream. Limited testing has been done to confirm that applications at least start and display under XWayland. Clipboard functionality is all but guaranteed to **not** work under XWayland, and this isn't a Wayland bug either.
+
+I'd like to eventually get a working native Wayland backend, but it's low on the list right now. I'll gladly accept patches or bug reports however.
 
 #### What about Python3 bindings?
 

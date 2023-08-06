@@ -1959,7 +1959,7 @@ void QPainter::drawPixmap( const QPoint &p, const QPixmap &pm )
     drawPixmap( p.x(), p.y(), pm, 0, 0, pm.width(), pm.height() );
 }
 
-#if QT_VERSION >= 300
+#if OSIRIS_VERSION >= 300
 #error "Merge QPainter::drawImage()'s by default conversion_flags=0"
 #endif
 

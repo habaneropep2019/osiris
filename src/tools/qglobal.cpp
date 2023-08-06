@@ -48,11 +48,24 @@
   \relates QApplication
   Returns the Qt version number for the library, typically "1.30"
   or "2.1.0".
+  This is kept for compatibility purposes only. New applications
+  should be using oVersion().
 */
 
 const char *qVersion()
 {
-    return QT_VERSION_STR;
+    return OSIRIS_VERSION_STR;
+}
+
+/*!
+  \relates QApplication
+  Returns the Osiris version number for the library.
+  This value will always be 2.4.0 or greater.
+*/
+
+const char *oVersion()
+{
+    return OSIRIS_VERSION_STR;
 }
 
 
