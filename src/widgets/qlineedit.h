@@ -84,7 +84,7 @@ public:
     enum	EchoMode { Normal, NoEcho, Password };
     virtual void setEchoMode( EchoMode );
     EchoMode 	echoMode() const;
-#if QT_VERSION >= 300
+#if OSIRIS_VERSION >= 300
 #error "Make setReadOnly virtual"
 #endif
     void setReadOnly( bool );

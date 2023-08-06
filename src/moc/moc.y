@@ -2845,7 +2845,7 @@ void generateClass()		      // generate C++ source code for a class
 	    predef_call_func = 0;
 	}
 	if ( !predef_call_func && !included_list_stuff ) {
-	    // yes we need it, because otherwise QT_VERSION may not be defined
+	    // yes we need it, because otherwise OSIRIS_VERSION may not be defined
 	    fprintf( out, "\n#include <%sqobjectdefs.h>\n", (const char*)qtPath );
 	    fprintf( out, "#include <%sqsignalslotimp.h>\n", (const char*)qtPath );
 	    included_list_stuff = TRUE;

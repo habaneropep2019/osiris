@@ -1759,12 +1759,12 @@ void QScrollView::moveContents(int x, int y)
     d->hideOrShowAll(this, TRUE );
 }
 
-#if QT_VERSION >= 300
+#if OSIRIS_VERSION >= 300
 #error "Should rename contents{X,Y,Width,Height} to viewport{...}"
 // Because it's the viewport rectangle that is "moving", not the contents.
 #endif
 
-#if QT_VERSION >= 300
+#if OSIRIS_VERSION >= 300
 #error "Should rename contents{X,Y,Width,Height} to viewport{...}"
 // Because it's the viewport rectangle that is "moving", not the contents.
 #endif

@@ -659,7 +659,7 @@ void QSpinBox::valueChange()
 
 void QSpinBox::rangeChange()
 {
-#if QT_VERSION >= 300
+#if OSIRIS_VERSION >= 300
 #error "Use a virtual function."
 #endif
     if ( validate->inherits( "QIntValidator" ) )
