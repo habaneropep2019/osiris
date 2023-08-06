@@ -14,10 +14,15 @@ The table below shows what features are tested and/or supported on various platf
 | **Static builds**  | ✅             | 💤              | 💤              | 💤 🔜 3️⃣       |
 | **Shared builds**  | ✅             | 🕑              | 🕑              | 🕑 🔜 3️⃣       |
 | **Examples**       | ✅             | 🕑              | 🕑              | 🕑              |
+| **X11 support**       | ✅             | 🕑              | 🕑              | 🕑              |
+| **XWayland support**       | 🛠️             | 🕑              | 🕑              | 🕑              |
+| **Wayland backend**       | 🔜 2️⃣          | 🚫              | 🚫              | 🚫              |
+| **GGE backend**       | 🔜 3️⃣            | 🚫              | 🚫              | 🚫              |
 
 
 **Legend:**  
 ✅ Tested working  
+🛠️ Tested, partially working or not all functionality was tested, but the most important functionality was working  
 ⚠️ Not implemented  
 ❌ Tested and not working  
 🕑 Should be supported, but not tested  
