@@ -42,18 +42,25 @@
 #include "qlist.h"
 #endif // QT_H
 
-
+/*
+ * The following code was changed to use code by Helio Chissini de Castro
+ * via https://invent.kde.org/sandsmark/qt2/-/commit/cce92573703747f5002874f580cc8bd941873b4b
+ * The licensing notice on the reference file is the same as this file.
+ */
 template<class type> class Q_EXPORT QSortedList : public QList<type>
 {
 public:
     QSortedList() {}
     QSortedList( const QSortedList<type> &l ) : QList<type>(l) {}
-    ~QSortedList() { clear(); }
+    ~QSortedList() { QGList::clear(); }
     QSortedList<type> &operator=(const QSortedList<type> &l)
       { return (QSortedList<type>&)QList<type>::operator=(l); }
 
     virtual int compareItems( QCollection::Item s1, QCollection::Item s2 )
       { if ( *((type*)s1) == *((type*)s2) ) return 0; return ( *((type*)s1) < *((type*)s2) ? -1 : 1 ); }
 };
+/*
+ * End copied code
+ */
 
 #endif

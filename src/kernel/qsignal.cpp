@@ -106,7 +106,7 @@ QMetaObject *QSignal::metaObj = 0;
 
 
 
-#if QT_VERSION >= 300
+#if OSIRIS_VERSION >= 300
 #error "Move to QSignal body"
 #endif
 

@@ -4,9 +4,12 @@
 #
 # Copyright 1999-2001 Trolltech AS.  All rights reserved.
 #
+# Some additions Copyright (C) 2021, 2023 Alec Bloss.
+# These additions are released under the GNU GPLv2 and the SADL2.
+# You can determine these sections by the prefix #AB# and the suffix #@AB@#.
 
 # To remove the need for the first test, do this:
-# QTDIR=`pwd` export QTDIR
+# OSIRISDIR=`pwd` export OSIRISDIR
 
 relpath=`dirname $0`
 relpath=`(cd $relpath; pwd)`
@@ -18,17 +21,17 @@ then
 else
 
 touch .test.qt.
-if [ '!' -f ${QTDIR}/.test.qt. ];
+if [ '!' -f ${OSIRISDIR}/.test.qt. ];
 then
     rm .test.qt.
     echo
     echo
-    echo '   The environment variable $QTDIR is not set correctly. It is currently'
-    echo '   set to "'$QTDIR'", but it should be set to this directory,'
+    echo '   The environment variable $OSIRISDIR is not set correctly. It is currently'
+    echo '   set to "'$OSIRISDIR'", but it should be set to this directory,'
     echo '   which is "'`pwd`'".'
     echo
-    echo '   Please read the INSTALL file for instructions on how to set $QTDIR'
-    echo '   correctly. If you have set $QTDIR in your .profile or .login, you '
+    echo '   Please read the INSTALL file for instructions on how to set $OSIRISDIR'
+    echo '   correctly. If you have set $OSIRISDIR in your .profile or .login, you '
     echo '   will need to log out and log in again to make the setting effective.'
     echo
     echo
@@ -50,6 +53,51 @@ else
 	exit 1
     fi
 fi
+
+#AB#
+
+# Check for X11 Libraries
+if [ -z `find /usr/include/X11 -name Xlib.h` ]
+	then
+		echo "FATAL: No Xlib.h found in /usr/include/X11 or its subdirectories."
+		echo "You may be missing libx11-dev."
+		exit 1
+	else
+		echo "INFO: Found Xlib at `find /usr/include/X11 -name Xlib.h`"
+fi
+
+if [ -z `find /usr/include/X11 -name shape.h` ]
+	then
+		echo "FATAL: No shape.h found in /usr/include/X11 or its subdirectories."
+		echo "You may be missing libXext-dev."
+		exit 1
+	else
+		echo "INFO: Found libXext at `find /usr/include/X11 -name shape.h`"
+fi
+
+if [ -z `find /usr/include/X11/Xft -name Xft.h` ]
+	then
+		echo "FATAL: No Xft.h found in /usr/include/X11/Xft or its subdirectories."
+		echo "You may be missing libXext-dev."
+		exit 1
+	else
+		echo "INFO: Found libXext at `find /usr/include/X11/Xft -name shape.h`"
+fi
+
+# Check for GGE libraries
+if [ ! -e /opt/gge/kernel ]
+	then
+		echo "INFO: No GGE kernel found. Not enabling."
+	else
+		echo "INFO: GGE kernel found. Enabling General Graphics Engine Support."
+		OSIRIS_GGEdev=yes
+fi
+
+# Create lib directory
+
+mkdir $OSIRISDIR/lib
+
+#@AB@#
 
 # Check licensed modules
 MODULES=`$MAKE -f src/Makefile.in listallmodules`
@@ -79,7 +127,8 @@ then
     while true
     do
 	echo
-	echo "This is the Qt$EMB Free Edition."
+	echo "This is the Osiris open-source toolkit."
+	echo "Osiris is a fork of Qt version 2.3.2."
 	echo
 	if [ -n "$EMB" ]
 	then
@@ -89,8 +138,11 @@ then
 	else
 	    echo "You are licensed to use this software under the terms of either"
 	    echo "the Q Public License (QPL) or the GNU General Public License (GPL)."
+	    echo "Some portions may also be licensed under the Libranext Software and"
+	    echo "Development License, version 2 (SADL2)."
 	    echo
 	    echo "Type 'Q' to view the Q Public License."
+	    echo "Type 'S' to view the SADL2 License."
 	fi
 	echo "Type 'G' to view the GNU General Public License."
 	echo "Type 'yes' to accept this license offer."
@@ -110,12 +162,15 @@ then
 		exit 0
 	    elif [ "$acceptance" = G -o "$acceptance" = g ]
 	    then
-		more LICENSE.GPL
+		less LICENSE.GPL
+		elif [ "$acceptance" = S -o "$acceptance" = s ]
+	    then
+		less LICENSE.SADL2
 	    elif [ "$acceptance" = Q -o "$acceptance" = q ]
 	    then
 		if [ -z "$EMB" ]
 		then
-		    more LICENSE.QPL
+		    less LICENSE.QPL
 		fi
 	    fi
 	fi
@@ -201,7 +256,7 @@ else
 	    fi
 	done
     else
-	echo "The LICENSE, LICENSE.QPL, or LICENSE.GPL file shipped with"
+	echo "The LICENSE, LICENSE.QPL, LICENSE.GPL, or LICENSE.SADL2 file shipped with"
 	echo "this software has disappeared."
 	echo
 	echo "Sorry, you are not licensed to use this software."
@@ -232,17 +287,17 @@ GPLUSPLUS_EXCEPTIONS=default
 VERBOSE=no
 DEBUG=no
 SHARED=yes
-GIF=no
+GIF=yes
 OPENGL=auto
-THREAD=auto
-SM=auto
-ZLIB=yes
-LIBPNG=yes
-JPEG=no
+THREAD=yes
+SM=no
+ZLIB=no
+LIBPNG=no
+JPEG=yes
 MNG=no
 NAS_SOUND=no
-XFT=auto
-XKB=auto
+XFT=yes
+XKB=yes
 I_FLAGS=
 L_FLAGS=
 R_FLAGS=
@@ -329,18 +384,6 @@ while [ -n "$1" ]; do
 	;;
    -thread)
        THREAD=yes
-	;;
-   -qt-zlib)
-       ZLIB=yes
-	;;
-   -system-zlib)
-       ZLIB=no
-	;;
-   -qt-libpng)
-       LIBPNG=yes
-	;;
-   -system-libpng)
-       LIBPNG=no
 	;;
    -no-mng)
        MNG=no
@@ -448,47 +491,15 @@ then
 	esac
     else
 	##### Generate?  Look in configs/?
-	PLATFORMS="aix-g++ aix-xlc bsdi-g++ dgux-g++ dynix-g++ freebsd-g++
-	    hpux-acc hpux-cc hpux-g++ hpux-n64 hpux-o64 hurd-g++
-	    irix-64 irix-g++ irix-n32 irix-o32 linux-cxx linux-g++ linux-kcc
-	    netbsd-g++ openbsd-g++ osf1-cxx osf1-g++ qnx-rtp-g++ sco-g++
-	    solaris-cc-gcc solaris-cc solaris-64 solaris-g++ sunos-g++
-	    ultrix-g++ unixware-g++ unixware7-cc unixware7-g++"
+	PLATFORMS="freebsd-g++ hurd-g++ linux-cxx linux-g++
+	    netbsd-g++ openbsd-g++ solaris-cc-gcc solaris-cc solaris-64 solaris-g++ sunos-g++"
     fi
 
     PLATFORM_NOTES=""
 
     case "$UNAME_SYSTEM:$UNAME_RELEASE" in
-     AIX*)
-        #PLATFORM=aix-g++
-	PLATFORM=aix-xlc
-	PLATFORM_NOTES="
-	    - Also available: aix-g++
-	"
-	;;
-     QNX:*)
-	#PLATFORM=qnx-g++
-        MODULES=`echo $MODULES | sed -e 's/opengl//'`
-        OPENGL=no
-	PLATFORM=qnx-rtp-g++
-	PLATFORM_NOTES="
-	    - Experimental support only!
-        "
-	;;
      GNU:*)
 	PLATFORM=hurd-g++
-	;;
-     BSD/OS:*|BSD/386:*)
-	PLATFORM=bsdi-g++
-	;;
-     dgux:*)
-	PLATFORM=dgux-g++
-	;;
-     dynix:*)
-	PLATFORM=dynix-g++
-	;;
-     ULTRIX:*)
-	PLATFORM=ultrix-g++
 	;;
      FreeBSD:*)
 	PLATFORM=freebsd-g++
@@ -498,34 +509,6 @@ then
 	;;
      NetBSD:*)
 	PLATFORM=netbsd-g++
-	;;
-     IRIX64:*)
-	PLATFORM=irix-64
-	;;
-     IRIX:*)
-	#PLATFORM=irix-g++
-	PLATFORM=irix-n32
-	#PLATFORM=irix-o32
-	PLATFORM_NOTES="
-	    - Also available for IRIX: irix-64 irix-g++ irix-o32
-	"
-	;;
-     HP-UX:*)
-	#PLATFORM=hpux-acc
-	#PLATFORM=hpux-cc
-	#PLATFORM=hpux-n64
-	#PLATFORM=hpux-o64
-	PLATFORM=hpux-g++
-	PLATFORM_NOTES="
-	    - Also available for HP-UX: hpux-acc hpux-cc hpux-n64 hpux-o64
-	"
-	;;
-     OSF1:*)
-	PLATFORM=osf1-cxx
-	#PLATFORM=osf1-g++
-	PLATFORM_NOTES="
-	    - Also available for OSF1: osf1-g++
-	"
 	;;
      Linux:*)
 	PLATFORM=linux-${ARCH}g++
@@ -540,19 +523,6 @@ then
 	;;
      SunOS:4*)
 	PLATFORM=sunos-g++
-	;;
-     UNIX_SV:4.2*)
-	PLATFORM=unixware-g++
-	;;
-     UnixWare:5*)
-	PLATFORM=unixware7-cc
-	#PLATFORM=unixware7-g++
-	PLATFORM_NOTES="
-	    - Also available for UnixWare:5: unixware7-g++
-	"
-	;;
-     *:3.2)
-	PLATFORM=sco-g++
 	;;
      *)
 	if [ "$HELP" != "yes" ]; then
@@ -1190,14 +1160,6 @@ each option:
  *  -no-thread ......... Do not compile with Threading Support
     -thread ............ Compile with Threading Support
 
- *  -qt-zlib ........... Use the zlib bundled with Qt.
-    -system-zlib ....... Use a zlib from the operating system
-                         http://www.info-zip.org/pub/infozip/zlib
-
- *  -qt-libpng ......... Use the libpng bundled with Qt.
-    -system-libpng ..... Use a libpng from the operating system.
-                         See http://www.libpng.org/pub/png
-
  *  -no-mng ............ Do not compile in MNG I/O support.
     -system-libmng ..... Use libmng from the operating system.
                          See http://www.libmng.com
@@ -1307,23 +1269,9 @@ all:
 	@echo "(not building threaded Qt)"
 EOF
 fi
-if [ "x$ZLIB" = "xyes" ]
-then
-    I_FLAGS="${I_FLAGS} -I\$(QTDIR)/src/3rdparty/zlib"
-fi
-if [ "x$LIBPNG" = "xyes" ]
-then
-    I_FLAGS="${I_FLAGS} -I\$(QTDIR)/src/3rdparty/libpng"
-fi
 
 [ "x$SM" = "xyes" ] && QT_LIBS="${QT_LIBS} -lSM -lICE"
 [ "x$XFT" = "xyes" ] && QT_LIBS="${QT_LIBS} -lXft"
-if [ -z "$EMB" -o "$SHARED" = no ]
-then
-    [ "x$LIBPNG" = "xyes" ] && QT_MODOBJ=$QT_MODOBJ' $(PNG_OBJECTS)'
-    [ "x$ZLIB" = "xyes" ] && QT_MODOBJ=$QT_MODOBJ' $(ZLIB_OBJECTS)'
-    [ "x$FT" = "xyes" ] && QT_MODOBJ=$QT_MODOBJ' $(FT_OBJECTS)'
-fi
 chmod +w src/tools/qmodules.h
 cat >src/tools/qmodules.h << EOF
 // These modules are licensed to $Licensee
@@ -1390,7 +1338,7 @@ QT_MODULE_OBJ      =$QT_MODOBJ $QT_SUBLIBS
 EOF
 
 
-QTDIR='$(QTDIR)'
+OSIRISDIR='$(OSIRISDIR)'
 
 
 # Give feedback...
@@ -1589,7 +1537,7 @@ EOF
     fi
 done
 
-if echo $LD_LIBRARY_PATH | grep >/dev/null $QTDIR/lib
+if echo $LD_LIBRARY_PATH | grep >/dev/null $OSIRISDIR/lib
 then
     if grep >/dev/null SYSCONF_RPATH $XCONFIG
     then
@@ -1598,7 +1546,7 @@ then
 	if [ -n "$FROMMAKE" ]
 	then
 	    echo
-	    echo "WARNING: \$LD_LIBRARY_PATH does not contain \$QTDIR/lib"
+	    echo "WARNING: \$LD_LIBRARY_PATH does not contain \$OSIRISDIR/lib"
 	    echo "         many platforms require this."
 	    echo
 	fi

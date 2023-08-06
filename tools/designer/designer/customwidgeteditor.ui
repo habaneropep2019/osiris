@@ -213,7 +213,7 @@
             <property>
                 <name>whatsThis</name>
                 <string>&lt;b&gt;Load Descriptions&lt;/b&gt;&lt;p&gt;Loads a file which contains descriptions of custom widgets, so that these custom widgets can be used in the Qt Designer.&lt;/p&gt;
-&lt;p&gt;As it is a lot of work to type in all the information for custom widgets, you should check the tool createcw which you can find in $QTDIR/tools/designer/tools/createcw. Using that tool you can create custom widget description files for your custom widgets without the need of typing in all that information. For more information about that see the README file in that directory&lt;/p&gt;</string>
+&lt;p&gt;As it is a lot of work to type in all the information for custom widgets, you should check the tool createcw which you can find in $OSIRISDIR/tools/designer/tools/createcw. Using that tool you can create custom widget description files for your custom widgets without the need of typing in all that information. For more information about that see the README file in that directory&lt;/p&gt;</string>
             </property>
         </widget>
         <widget row="4"  column="1" >

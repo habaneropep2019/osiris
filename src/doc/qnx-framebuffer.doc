@@ -6,7 +6,7 @@
 There are quite a few additional environment variables that
 need to be set.
 
-LD_LIBRARY_PATH=/lib/dll::$(QTDIR)/lib:$(LD_LIBRARY_PATH)
+LD_LIBRARY_PATH=/lib/dll::$(OSIRISDIR)/lib:$(LD_LIBRARY_PATH)
 CVSDIR should be set to the directory where you checked out the
 gddk.
 

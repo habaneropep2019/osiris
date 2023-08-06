@@ -309,8 +309,8 @@ void QTextBrowser::backward()
 {
     if ( d->stack.count() <= 1)
 	return;
-    d->forwardStack.push( d->stack.pop() );
-    setSource( d->stack.pop() );
+    d->forwardStack.push( d->stack.pop2() );
+    setSource( d->stack.pop2() );
     emit forwardAvailable( TRUE );
 }
 
@@ -324,7 +324,7 @@ void QTextBrowser::forward()
 {
     if ( d->forwardStack.isEmpty() )
 	return;
-    setSource( d->forwardStack.pop() );
+    setSource( d->forwardStack.pop2() );
     emit forwardAvailable( !d->forwardStack.isEmpty() );
 }
 

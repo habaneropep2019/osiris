@@ -14722,12 +14722,20 @@ int QString::compare( const QString& s ) const
     return ucstrcmp(*this,s);
 }
 
+/*
+ * The following code was changed to use code by Martin Tobias Holmedahl Sandsmark
+ * via https://invent.kde.org/sandsmark/qt2/-/commit/42dece323c9978f74ab6a27584aacc28437da9e4#3ebcf5305c7814d88d1bee8c83b5c08b1640b21f
+ * The licensing notice on the reference file is the same as this file.
+ */
 bool operator==( const QString &s1, const QString &s2 )
 {
     return (s1.length() == s2.length()) && s1.isNull() == s2.isNull() &&
-	   (memcmp((char*)s1.unicode(),(char*)s2.unicode(),
-		   s1.length()*sizeof(QChar)) ==0);
+	   ((s1.isNull() || (memcmp((char*)s1.unicode(),(char*)s2.unicode(),
+		   s1.length()*sizeof(QChar)) ==0)));
 }
+/*
+ * End copied code
+ */
 
 bool operator!=( const QString &s1, const QString &s2 )
 { return !(s1==s2); }

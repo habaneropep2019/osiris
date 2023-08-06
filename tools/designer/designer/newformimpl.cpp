@@ -31,7 +31,7 @@
 
 static QString templatePath( const QString &t )
 {
-    QString path = getenv( "QTDIR" );
+    QString path = getenv( "OSIRISDIR" );
     if ( !path.isNull() ) {
 	path.append("/tools/designer/templates");
 	if ( QFileInfo( path ).exists() )

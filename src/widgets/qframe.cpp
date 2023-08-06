@@ -154,7 +154,7 @@
 */
 
 
-#if (QT_VERSION > 298)
+#if (OSIRIS_VERSION > 298)
 #error "get rid of allowLines for good"
 #endif
 

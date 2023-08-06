@@ -50,7 +50,7 @@ static QGLFormat* qgl_default_overlay_format = 0;
 
 const char *qGLVersion()
 {
-    qObsolete( 0, "qGLVersion", "qVersion" );
+    qObsolete( 0, "qGLVersion", "oVersion" );
     return QGL_VERSION_STR;
 }
 

@@ -39,8 +39,8 @@
 #define QGLOBAL_H
 
 
-#define QT_VERSION	232
-#define QT_VERSION_STR	"2.3.2"
+#define OSIRIS_VERSION	240
+#define OSIRIS_VERSION_STR	"2.4.0"
 
 
 //
@@ -360,7 +360,7 @@
 #define Q_HAS_BOOL_TYPE
 #endif
 
-#if (QT_VERSION >= 300)
+#if (OSIRIS_VERSION >= 300)
 #error "Use an enum for bool"
 #endif
 
@@ -493,6 +493,7 @@ extern bool qt_winunicode;
 //
 
 Q_EXPORT const char *qVersion();
+Q_EXPORT const char *oVersion();
 Q_EXPORT bool qSysInfo( int *wordSize, bool *bigEndian );
 
 

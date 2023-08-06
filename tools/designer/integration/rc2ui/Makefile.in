@@ -14,7 +14,7 @@ UIC	=	$(SYSCONF_UIC)
 
 ####### Target
 
-DESTDIR = $(QTDIR)/bin/
+DESTDIR = $(OSIRISDIR)/bin/
 VER_MAJ = 1
 VER_MIN = 0
 VER_PATCH = 0

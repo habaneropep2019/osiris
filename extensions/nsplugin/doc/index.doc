@@ -34,7 +34,7 @@ WWW browser supporting the same protocol.
  <li>Download the
     <a href="http://home.netscape.com/comprod/development_partners/plugin_api/index.html">
     Plugin SDK from Netscape</a>, and copy the following files from there to
-    <tt>$QTDIR/extensions/nsplugin/src</tt> :
+    <tt>$OSIRISDIR/extensions/nsplugin/src</tt> :
     <multicol cols=2>
     <ul>
 	<li>common/npwin.cpp

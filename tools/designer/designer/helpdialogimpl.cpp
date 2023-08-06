@@ -569,9 +569,9 @@ void HelpDialog::insertContents()
     delete lst;
 
 
-    QString manualdir = QString( getenv( "QTDIR" ) ) + "/tools/designer/manual/book1.html";
+    QString manualdir = QString( getenv( "OSIRISDIR" ) ) + "/tools/designer/manual/book1.html";
     if ( !QFile::exists( manualdir ) )
-	manualdir = QString( getenv( "QTDIR" ) ) + "/doc/html/designer/book1.html";
+	manualdir = QString( getenv( "OSIRISDIR" ) ) + "/doc/html/designer/book1.html";
     QFile file( manualdir );
     if ( !file.open( IO_ReadOnly ) )
 	return;

@@ -2845,7 +2845,7 @@ void generateClass()		      // generate C++ source code for a class
 	    predef_call_func = 0;
 	}
 	if ( !predef_call_func && !included_list_stuff ) {
-	    // yes we need it, because otherwise QT_VERSION may not be defined
+	    // yes we need it, because otherwise OSIRIS_VERSION may not be defined
 	    fprintf( out, "\n#include <%sqobjectdefs.h>\n", (const char*)qtPath );
 	    fprintf( out, "#include <%sqsignalslotimp.h>\n", (const char*)qtPath );
 	    included_list_stuff = TRUE;
@@ -2894,11 +2894,13 @@ void generateClass()		      // generate C++ source code for a class
 	}
 	fprintf( out, "    QConnectionListIt it(*clist);\n" );
 	fprintf( out, "    QConnection   *c;\n" );
-	fprintf( out, "    QSenderObject *object;\n" );
+	// Bug fixes for single line below this comment imported from https://invent.kde.org/sandsmark/qt2/-/commit/3a0c5d71d20ea5b3d001a6d4c2cf2e1f1646f14b credit to Martin Tobias Holmedahl Sandsmark
+	fprintf( out, "    QObject *object;\n" );
 	fprintf( out, "    while ( (c=it.current()) ) {\n" );
 	fprintf( out, "\t++it;\n" );
-	fprintf( out, "\tobject = (QSenderObject*)c->object();\n" );
-	fprintf( out, "\tobject->setSender( this );\n" );
+	// Bug fixes for the next two lines below this comment imported from https://invent.kde.org/sandsmark/qt2/-/commit/3a0c5d71d20ea5b3d001a6d4c2cf2e1f1646f14b credit to Martin Tobias Holmedahl Sandsmark
+	fprintf( out, "\tobject = c->object();\n" );
+	fprintf( out, "\tQSenderObject::setSenderSafe( this, c->object() );\n" );
 	if ( nargs ) {
 	    fprintf( out, "\tswitch ( c->numArgs() ) {\n" );
 	    for ( i=0; i<=nargs; i++ ) {

@@ -6,7 +6,7 @@ Osiris is a graphical toolkit for X11-based Linux and Unix platforms.
 
 ## About
 
-Osiris is actually a fork of the Qt toolkit, from version 2.3.2. Osiris should maintain source compatability with Qt 2.3.2 (with the exception of some naming conventions potentially changing). This means that you can compile legacy applications built originally for Qt2 using Osiris. In addition, porting from Qt1 takes very little work.
+Osiris is actually a fork of the Qt toolkit, from version 2.3.2. Osiris is mostly source copmatible (but not binary compatible) with Qt 2.3.2 (with the exception of some naming conventions potentially changing). This means that you can compile legacy applications built originally for Qt2 using Osiris. In addition, porting from Qt1 takes very little work.
 
 Osiris was previously part of ZFreeKit.
 
@@ -57,7 +57,22 @@ Osiris requires a Linux system running a X Windows System. The GNU autotools sys
 
 Osiris is extremely lean on a modern computer, takes very little time to compile, and is not resource intensive while running.
 
-At a minimum, to run Osiris, you'll need a Pentium 133mhz or better CPU, 64mb of RAM, 10-100MB of disk space, an X11 Window System of at least revision 7 (XFree86 4.0+ should also likely work but is untested). To build Osiris, you'll probably want at least a Pentium II 233Mhz CPU and more than 64MB of RAM, although this isn't necessarily required.
+At a minimum, to run Osiris, you'll need a Pentium 133mhz or better CPU, 64mb of RAM, 10-100MB of disk space, an X11 Window System of at least revision 7 (XFree86 4.0+ should also likely work but is untested). To build Osiris, you'll probably want at least a Pentium II 233Mhz CPU and more than 64MB of RAM, although this isn't necessarily required. FreeType2, Zlib, libjpeg, XFT, XKB and probably some more libraries are required.
+
+| Library | Minimum Supported Version | Recommended Version |
+| --- | --- | --- |
+| libpng | 1.6.0 | 1.6.40 |
+| zlib | 1.2.13 | 1.2.13 |
+
+#### A note about older libpng and zlib versions
+
+Osiris has been ported to modern libpng. There was an API change some time ago, and Qt2 was never ported to it, probably because the change occurred after Qt2's lifecycle had ended. That being said, using the new libpng with a version of zlib that is too old will cause warnings about `libpng error: bad parameters to zlib`. Using a newer version of zlib at compile time will fix this error.
+
+FWIW, libpng says it needs zlib 1.0.4 or later. However, even zlib 1.1.3 will cause errors. You **should** be using zlib 1.2.13 or later.
+
+#### A note about formerly included 3rd party libraries
+
+Qt2 originally kept copies of 3rd party libraries libpng and zlib. Osiris no longer does, as this can result in terribly out of date versions of these libraries, or other issues arising from mismatches. You should be able to use the libraries provided by your distribution.
 
 #### What about Unix ports?
 
@@ -65,8 +80,46 @@ A lot of ports to other platforms are inherited from the original Qt code. These
 
 #### What about Wayland support?
 
-Osiris does not have any clue about Wayland - it hadn't even been thought of when Qt2.3.2 was mainstream. Most applications using Osiris _should_ theoretically run on XWayland, although I've not tested it yet. It's possible that I'll add Wayland support to Osiris at some point. It's certainly on the to-do list, althought a bit lower for now. Again, patches and bug reports are absolutely welcome!
+Osiris does not have any clue about Wayland - it hadn't even been thought of when Qt2.3.2 was mainstream. Limited testing has been done to confirm that applications at least start and display under XWayland. Clipboard functionality is all but guaranteed to **not** work under XWayland, and this isn't a Wayland bug either.
+
+I'd like to eventually get a working native Wayland backend, but it's low on the list right now. I'll gladly accept patches or bug reports however.
 
 #### What about Python3 bindings?
 
-None available _yet_, sorry! It's on the to-do list somewhere.
+None available *yet*, sorry! It's on the to-do list somewhere.
+
+## Buildling and debugging
+
+#### Building a release version on Linux platforms
+
+You probably need to be root for this.
+
+Extract the source to the directory you wish to install to. `/opt/osiris` is the recommended location. Use extreme caution when installing to /usr/local/ or any other location.
+
+Set the needed environment variables. Usually adding the following to your `.profile`, logging out, and logging back in again is sufficient. This should be done for both root _and_ any local users who will be using Osiris.
+
+`OSIRISDIR=/opt/osiris`
+
+`PATH=$OSIRISDIR/bin:$PATH`
+
+`MANPATH=$OSIRISDIR/doc/man:$MANPATH`
+
+`LD_LIBRARY_PATH=$OSIRISDIR/lib:$LD_LIBRARY_PATH`
+
+
+`export OSIRISDIR PATH MANPATH LD_LIBRARY_PATH`
+
+In most cases, you should be able to just run `./configure`, followed by `make`. Paralell builds have been tested and are supported. You can add `-jX`, where `X` is the number of threads you wish to use to compile, to your make command. For example, on a dual-core processor, you could use `make -j2`.
+
+#### Debugging
+
+You can enable the debug build during `configure` using the flag -debug. You should also build using the `-j1` make flag when debugging otherwise the wall of text can be hard to sort through.
+
+## Credits
+
+Credits to the following are due because they have either contributed directly to Osiris, or their fixes were imported.
+
+- Martin Tobias Holmedahl Sandsmark
+- Robert McIsaac
+- Helio Chissini de Castro
+- The Trinity Desktop Environment project

@@ -277,8 +277,16 @@ inline bool QCString::isNull() const
 inline bool QCString::isEmpty() const
 { return data() == 0 || *data() == '\0'; }
 
+/*
+ * The following code was changed to use code by Martin Tobias Holmedahl Sandsmark
+ * via https://invent.kde.org/sandsmark/qt2/-/commit/33030661efa9bc563cc3d6cf6a3aa5420bca03f2
+ * The licensing notice on the reference file is the same as this file.
+ */
 inline uint QCString::length() const
-{ return qstrlen( data() ); }
+{ return strnlen( data(), size() ); }
+/*
+ * End copied code
+ */
 
 inline bool QCString::truncate( uint pos )
 { return resize(pos+1); }

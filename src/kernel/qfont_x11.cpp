@@ -1165,7 +1165,15 @@ void QFont::initFontInfo() const
         char *family;
         int slant_value;
         int weight_value;
-        int fixed_pitch;
+        /*
+         * The following code was changed to use code by Martin Tobias Holmedahl Sandsmark
+         * via https://invent.kde.org/sandsmark/qt2/-/commit/750f30c69b4a4f322b6a44b624941d68d4264e23
+         * The licensing notice on the reference file is the same as this file.
+         */
+        int fixed_pitch = 0;
+        /*
+         * End copied code
+         */
         XftPatternGetString (pattern, XFT_FAMILY, 0, &family);
         XftPatternGetInteger (pattern, XFT_SLANT, 0, &slant_value);
         XftPatternGetInteger (pattern, XFT_WEIGHT, 0, &weight_value);

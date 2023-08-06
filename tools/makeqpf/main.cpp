@@ -118,7 +118,7 @@ public:
 	view->addColumn("Weight");
 	view->addColumn("Style");
 	setCentralWidget(view);
-	QString fontdir = QString(getenv("QTDIR")) + "/etc/fonts";
+	QString fontdir = QString(getenv("OSIRISDIR")) + "/etc/fonts";
 	readFontDir(fontdir);
 
 	connect(view,SIGNAL(selectionChanged(QListViewItem*)),

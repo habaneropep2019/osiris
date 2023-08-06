@@ -49,7 +49,7 @@ void Table::initTable()
     // read all QTtsource and header files in one list
     QStringList all;
     int i = 0;
-    QString qtdir = getenv( "QTDIR" );
+    QString qtdir = getenv( "OSIRISDIR" );
     while ( dirs[ i ] ) {
 	QDir dir( qtdir + "/src/" + dirs[ i ] );
 	QStringList lst = dir.entryList( "*.cpp; *.h" );

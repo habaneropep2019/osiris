@@ -6,7 +6,7 @@ DASHCROSS		=
 
 # Compiling with support libraries
 SYSCONF_CXXFLAGS_X11	= -I/usr/openwin/include
-SYSCONF_CXXFLAGS_QT	= -I$(QTDIR)/include
+SYSCONF_CXXFLAGS_QT	= -I$(OSIRISDIR)/include
 SYSCONF_CXXFLAGS_OPENGL	= 
 
 # Compiling YACC output
@@ -14,7 +14,7 @@ SYSCONF_CXXFLAGS_YACC     =
 
 # Linking with support libraries
 SYSCONF_RPATH_X11	= -R/usr/openwin/lib
-SYSCONF_RPATH_QT	= -R$(QTDIR)/lib
+SYSCONF_RPATH_QT	= -R$(OSIRISDIR)/lib
 SYSCONF_RPATH_OPENGL	= 
 
 # Linking with support libraries
@@ -22,7 +22,7 @@ SYSCONF_RPATH_OPENGL	=
 SYSCONF_LFLAGS_X11	= -L/usr/openwin/lib
 SYSCONF_LIBS_X11	= -lXext -lX11 -lm -lresolv -lsocket -lnsl
 # Qt, Qt+OpenGL
-SYSCONF_LFLAGS_QT	= -L$(QTDIR)/lib
+SYSCONF_LFLAGS_QT	= -L$(OSIRISDIR)/lib
 SYSCONF_LIBS_QT		= -lqt$(QT_THREAD_SUFFIX)
 SYSCONF_LIBS_QT_OPENGL	= 
 # OpenGL
@@ -46,17 +46,17 @@ SYSCONF_LFLAGS_THREAD	= -mt
 SYSCONF_LIBS_THREAD	=  -lthread
 
 # Meta-object compiler
-SYSCONF_MOC		= $(QTDIR)/bin/moc
+SYSCONF_MOC		= $(OSIRISDIR)/bin/moc
 
 # UI compiler
-SYSCONF_UIC		= $(QTDIR)/bin/uic
+SYSCONF_UIC		= $(OSIRISDIR)/bin/uic
 
 # Linking shared libraries
 #   - Build the $(TARGET) library, eg. lib$(TARGET).so.2.2.2
 #   - Place target in $(DESTDIR) - which has a trailing /
 #   - Usually needs to incorporate $(VER_MAJ), $(VER_MIN) and $(VER_PATCH)
 #
-SYSCONF_LINK_SHLIB	= CC -R$(QTDIR)/lib:/usr/openwin/lib
+SYSCONF_LINK_SHLIB	= CC -R$(OSIRISDIR)/lib:/usr/openwin/lib
 SYSCONF_LINK_TARGET_SHARED	= lib$(TARGET).so.$(VER_MAJ).$(VER_MIN).$(VER_PATCH)
 SYSCONF_LINK_LIB_SHARED	=  $(SYSCONF_LINK_SHLIB) -G -h $(TARGET1)  \
 				     $(LFLAGS) -o $(SYSCONF_LINK_TARGET_SHARED) \

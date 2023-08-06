@@ -104,7 +104,7 @@ INTERFACES	= listboxeditor.ui \
 		
 TARGET		= designer
 INCLUDEPATH	= ../shared ../util ../../../src/3rdparty/zlib/ $(KDEDIR)/include
-unix:LIBS		+= -L$(QTDIR)/lib -lqutil -L$(KDEDIR)/lib -lkdecore -lkdeui -lDCOP
-win32:LIBS	+= $(QTDIR)/lib/qutil.lib
+unix:LIBS		+= -L$(OSIRISDIR)/lib -lqutil -L$(KDEDIR)/lib -lkdecore -lkdeui -lDCOP
+win32:LIBS	+= $(OSIRISDIR)/lib/qutil.lib
 DEFINES		+= DESIGNER HAVE_KDE
-DESTDIR		= $(QTDIR)/bin
+DESTDIR		= $(OSIRISDIR)/bin

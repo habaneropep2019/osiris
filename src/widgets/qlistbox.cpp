@@ -3455,7 +3455,7 @@ QRect QListBox::itemRect( QListBoxItem *item ) const
 }
 
 
-#if QT_VERSION >= 300
+#if OSIRIS_VERSION >= 300
 #error "Return c so the user knows where it goes"
 #endif
 /*!
@@ -3487,7 +3487,7 @@ void QListBox::inSort( const QListBoxItem * lbi )
 }
 
 
-#if QT_VERSION >= 300
+#if OSIRIS_VERSION >= 300
 #error "Return result so the user knows where it goes"
 #endif
 /*!

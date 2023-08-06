@@ -8,13 +8,13 @@ CC	=	$(SYSCONF_CC) $(QT_C_MT)
 CFLAGS	=	$(SYSCONF_CFLAGS) -DDESIGNER -DHAVE_KDE
 INCPATH =	-I../shared -I../util -I../../../src/3rdparty/zlib -I$(KDEDIR)/include
 LFLAGS	=	$(SYSCONF_LFLAGS_QT) $(SYSCONF_RPATH_QT) $(SYSCONF_LFLAGS) $(QT_LFLAGS_MT)
-LIBS	=	$(SUBLIBS) -L$(QTDIR)/lib -lqutil -L$(KDEDIR)/lib -lkdecore -lkdeui -lDCOP $(SYSCONF_LIBS_QT) $(SYSCONF_LIBS) $(SYSCONF_LIBS_QTAPP)
+LIBS	=	$(SUBLIBS) -L$(OSIRISDIR)/lib -lqutil -L$(KDEDIR)/lib -lkdecore -lkdeui -lDCOP $(SYSCONF_LIBS_QT) $(SYSCONF_LIBS) $(SYSCONF_LIBS_QTAPP)
 MOC	=	$(SYSCONF_MOC)
 UIC	=	$(SYSCONF_UIC)
 
 ####### Target
 
-DESTDIR = $(QTDIR)/bin/
+DESTDIR = $(OSIRISDIR)/bin/
 VER_MAJ = 1
 VER_MIN = 0
 VER_PATCH = 0

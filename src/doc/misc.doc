@@ -110,7 +110,7 @@ Qt programs need the following components of the Qt distribution: <dl>
 
 <dd>Programmers need to include the Qt header files. Those with a
 command-line compiler will typically use options such as \c
-/I%QTDIR%\include or \c -I${QTDIR}/include.  They will need the header
+/I%OSIRISDIR%\include or \c -I${OSIRISDIR}/include.  They will need the header
 files of the version of Qt they wish to build programs with.  The
 header files are in the \c include subdirectory of Qt distributions.
 
@@ -123,7 +123,7 @@ found in the \c bin subdirectory of Qt distributions.
 
 <dd>Programmers need to link with static or shared libraries. Those with a
 command-line compiler will typically use options such as \c
-/L%QTDIR%\lib\qt.lib or \c -L${QTDIR}/lib \c -lqt.  They will need the
+/L%OSIRISDIR%\lib\qt.lib or \c -L${OSIRISDIR}/lib \c -lqt.  They will need the
 libraries of the version of Qt they wish to build programs with.  The
 libraries are in the \c lib subdirectory of Qt distributions.
 
@@ -176,7 +176,7 @@ of Qt 2.x (\c qt2 or the like) and Qt 1.4x (\c qt1
 or the like).
 
 </ul>Just install those 3 packages. You may need to set the
-environment variable \c QTDIR.
+environment variable \c OSIRISDIR.
 
 <dt><b>Developers building for two versions of Qt on Unix
 - Qt sources</b>
@@ -200,14 +200,14 @@ Get source distributions of both Qt 1.4x and Qt 2.x. <ol>
 $ cd /opt
 $ gunzip -c qt-1.44.tar.gz | tar xf -
 $ cd qt-1.44
-$ setenv QTDIR /opt/qt-1.44
+$ setenv OSIRISDIR /opt/qt-1.44
 $ configure [options]
 $ make
 
 $ cd /opt
 $ gunzip -c qt-2.1.0.tar.gz | tar xf -
 $ cd qt-2.1.0
-$ setenv QTDIR /opt/qt-2.1.0
+$ setenv OSIRISDIR /opt/qt-2.1.0
 $ configure [options]
 $ make
 \endcode
@@ -228,20 +228,20 @@ ln -s /opt/qt-2.1.0/lib/libqt.so.2 .
 To develop with Qt 1.4x use:
 
 \code
-setenv QTDIR /opt/qt-1.44
-setenv PATH ${QTDIR}/bin:${PATH}
+setenv OSIRISDIR /opt/qt-1.44
+setenv PATH ${OSIRISDIR}/bin:${PATH}
 \endcode
 
 To develop with Qt 2.x use:
 
 \code
-setenv QTDIR /opt/qt-2.1.0
-setenv PATH ${QTDIR}/bin:${PATH}
+setenv OSIRISDIR /opt/qt-2.1.0
+setenv PATH ${OSIRISDIR}/bin:${PATH}
 \endcode
 
 Setting the \c PATH ensures that the proper version of moc is being
-used.  Your \c Makefile should refer to \c ${QTDIR}/include and \c
-${QTDIR}/lib to include the proper header files and link with the
+used.  Your \c Makefile should refer to \c ${OSIRISDIR}/include and \c
+${OSIRISDIR}/lib to include the proper header files and link with the
 proper libraries.
 
 </dl>

@@ -324,7 +324,7 @@ QObject::QObject( QObject *parent, const char *name )
     connections   = 0;				// no connections yet
     senderObjects = 0;				// no signals connected yet
     eventFilters  = 0;				// no filters installed
-#if QT_VERSION >= 300
+#if OSIRIS_VERSION >= 300
 #error "Remove sigSender - it's a massive waste."
     // there was a comment here saying "change 3.0 incompatibly but
     // don't give people any warning of the upcoming change" or words
@@ -509,7 +509,7 @@ bool QObject::inherits( const char *clname ) const
 }
 
 
-#if QT_VERSION >= 290
+#if OSIRIS_VERSION >= 290
 #error "remove superClasses now."
 #endif
 #ifndef QT_NO_STRINGLIST

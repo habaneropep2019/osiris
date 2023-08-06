@@ -1362,7 +1362,9 @@ Examples:
 life/main.cpp progress/progress.cpp tictac/main.cpp
 .)l
 .SH "const char * qVersion ()"
-Returns the Qt version number for the library, typically "1.30" or "2.1.0".
+You should use oVersion instead! Returns the Qt version number for the library, typically "1.30" or "2.1.0".
+.SH "const char * oVersion ()"
+Returns the Osiris version number for the library, always 2.4.0 or greater.
 .SH "void qAddPostRoutine (Q_CleanUpFunction p)"
 Adds a global routine that will be called from the QApplication destructor. This function is normally used to add cleanup routines for program-wide functionality.
 .PP

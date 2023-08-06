@@ -6,7 +6,7 @@
 SHELL=/bin/sh
 
 init: FORCE
-	@$(MAKE) QTDIR=`pwd` all
+	@$(MAKE) OSIRISDIR=`pwd` all
 
 all: symlinks  src-moc src-mt sub-src sub-tools sub-tutorial sub-examples
 	@echo
@@ -14,7 +14,7 @@ all: symlinks  src-moc src-mt sub-src sub-tools sub-tutorial sub-examples
 	@echo "The Qt examples are built in the directories in ./examples"
 	@echo "The Qt tutorials are built in the directories in ./tutorial"
 	@echo
-	@echo 'Note: be sure to set $$QTDIR to point to here or to wherever'
+	@echo 'Note: be sure to set $$OSIRISDIR to point to here or to wherever'
 	@echo '      you move these directories.'
 	@echo
 	@echo "Enjoy!   - the Trolltech team"

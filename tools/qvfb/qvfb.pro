@@ -6,5 +6,5 @@ SOURCES		= qvfb.cpp qvfbview.cpp qvfbratedlg.cpp \
 		  main.cpp qanimationwriter.cpp skin.cpp
 INTERFACES	= config.ui
 TARGET		= qvfb
-INCLUDEPATH	+= $(QTDIR)/src/3rdparty/libpng
+INCLUDEPATH	+= $(OSIRISDIR)/src/3rdparty/libpng
 DEPENDPATH	= ../../include

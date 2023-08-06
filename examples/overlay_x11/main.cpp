@@ -29,7 +29,7 @@ QColor findOverlayTransparentColor()
     Visual* appVisual;
 
     // The static methods are called 'App' in Qt 2.x
-#if QT_VERSION < 200
+#if OSIRIS_VERSION < 200
     appDisplay = QPaintDevice::x__Display();
     appVisual = (Visual*)QPaintDevice::x11Visual();
 #else
