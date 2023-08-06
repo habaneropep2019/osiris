@@ -232,6 +232,15 @@ class Q_EXPORT QSenderObject : public QObject		// object for sending signals
 {
 public:
     void setSender( QObject *s ) { sigSender=s; }
+    /*
+     * The following code was changed to use code by Martin Tobias Holmedahl Sandsmark
+     * via https://invent.kde.org/sandsmark/qt2/-/commit/750f30c69b4a4f322b6a44b624941d68d4264e23
+     * The licensing notice on the reference file is the same as this file.
+     */
+    static void setSenderSafe( QObject *s, QObject *r ) { r->sigSender=s; }
+    /*
+     * End copied code
+     */
 };
 
 #ifdef QT_NO_TRANSLATION

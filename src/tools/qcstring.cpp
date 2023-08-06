@@ -611,6 +611,11 @@ bool QCString::resize( uint len )
   your application.
 */
 
+/*
+ * The following code was changed to use code by Martin Tobias Holmedahl Sandsmark
+ * via https://invent.kde.org/sandsmark/qt2/-/commit/33030661efa9bc563cc3d6cf6a3aa5420bca03f2
+ * The licensing notice on the reference file is the same as this file.
+ */
 QCString &QCString::sprintf( const char *format, ... )
 {
     detach();
@@ -618,12 +623,14 @@ QCString &QCString::sprintf( const char *format, ... )
     va_start( ap, format );
     if ( size() < 256 )
 	QByteArray::resize( 256 );		// make string big enough
-    vsprintf( data(), format, ap );
+    vsnprintf( data(), size(), format, ap );
     resize( qstrlen(data()) + 1 );		// truncate
     va_end( ap );
     return *this;
 }
-
+/*
+ * End copied code
+ */
 
 /*!
   Fills the string with \e len bytes of value \e c, followed by a

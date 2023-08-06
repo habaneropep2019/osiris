@@ -22,6 +22,7 @@ Osiris 2.4.0 is a fork of Qt 2.3.2. This is a bugfix and security fix release. O
 - You can and should use oVersion instead of qVersion when writing new programs. oVersion will always return a version equal to or greater than 2.4.0
 - Bumped QT_VERSION, OSIRIS_VERSION to 240, QT_VERSION_STR and OSIRIS_VERSION_STR to 2.4.0
 - Updated documentation to show oVersion as being the newer example to use.
+- Import some bugfixes from invent.kde.org, credits to Martin Tobias Holmedahl Sandsmark and Helio Chissini de Castro. Note: The invent.kde.org copy of Qt2 uses CMake, and is mostly an update to Qt 2.3.2 to get it running on a modern system. This is true for Osiris as well, but Osiris aims to add some new functionality that will likely not be added to the KDE Invent repository. In addition, we plan to switch to Meson, IF we switch build systems. Not saying their version is bad, because it is not. Just different purposes for the different copies, but doesn't mean code can't be shared either.
 
 # Legacy Qt Changelogs
 

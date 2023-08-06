@@ -114,3 +114,12 @@ In most cases, you should be able to just run `./configure`, followed by `make`.
 #### Debugging
 
 You can enable the debug build during `configure` using the flag -debug. You should also build using the `-j1` make flag when debugging otherwise the wall of text can be hard to sort through.
+
+## Credits
+
+Credits to the following are due because they have either contributed directly to Osiris, or their fixes were imported.
+
+- Martin Tobias Holmedahl Sandsmark
+- Robert McIsaac
+- Helio Chissini de Castro
+- The Trinity Desktop Environment project

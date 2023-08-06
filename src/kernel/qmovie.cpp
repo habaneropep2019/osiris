@@ -220,6 +220,15 @@ QMovieFilePrivate::QMovieFilePrivate(QDataSource* src, QMovie* movie, int bufsiz
     frametimer = new QTimer(this);
     pump = src ? new QDataPump(src, this) : 0;
     QObject::connect(frametimer, SIGNAL(timeout()), this, SLOT(refresh()));
+    /*
+     * The following code was changed to use code by Martin Tobias Holmedahl Sandsmark
+     * via https://invent.kde.org/sandsmark/qt2/-/commit/750f30c69b4a4f322b6a44b624941d68d4264e23
+     * The licensing notice on the reference file is the same as this file.
+     */
+    dirty_cache = FALSE;
+    /*
+     * End copied code
+     */
     source = src;
     buffer = 0;
     decoder = 0;
