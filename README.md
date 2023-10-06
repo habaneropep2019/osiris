@@ -6,7 +6,7 @@ Osiris is a graphical toolkit for X11-based Linux and Unix platforms.
 
 ## About
 
-Osiris is actually a fork of the Qt toolkit, from version 2.3.2. Osiris is mostly source copmatible (but not binary compatible) with Qt 2.3.2 (with the exception of some naming conventions potentially changing). This means that you can compile legacy applications built originally for Qt2 using Osiris. In addition, porting from Qt1 takes very little work.
+Osiris is actually a fork of the Qt toolkit, from version 2.3.2. Osiris is mostly source compatible (but not binary compatible) with Qt 2.3.2 (with the exception of some naming conventions potentially changing). This means that you can compile legacy applications built originally for Qt2 using Osiris. In addition, porting from Qt1 takes very little work.
 
 Osiris was previously part of ZFreeKit.
 
@@ -53,7 +53,7 @@ The Osiris project nor Libranext Computer Systems play any part in the commerica
 
 ## System Requirements
 
-Osiris requires a Linux system running a X Windows System. The GNU autotools system and the standard set of GNU development tools are required to build (make, gcc, g++, byacc, flex, etc.). Osiris will run on either 32-bit or 64-bit x86 systems. Other processors have not been tested. Compiling using clang has not been tested and is not currently supported, but will be implemented for at least Linux platforms in the future.
+Osiris requires a Linux system running a X Windows System. G++ and Clang++ are supported. Osiris will run on either 32-bit or 64-bit x86 systems. Other processors have not been tested. The configure script will automatically enabled Clang++ support if Clang is detected.
 
 Osiris is extremely lean on a modern computer, takes very little time to compile, and is not resource intensive while running.
 
