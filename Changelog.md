@@ -6,7 +6,7 @@
 
 Osiris 2.4.1 is a maintenance release.
 
-- Added experimental support for Clang/Clang++. Clang is automatically used if detected. Should work with Clang 14+
+- Added support for Clang/Clang++. Clang is automatically used if detected. Should work with Clang 14+
 - Fixed examples/httpd: main() missing type specifier (should have been int, none present)
 - Removed the need for the environment variable OSIRISDIR in the configure script, making it easier to use
 
