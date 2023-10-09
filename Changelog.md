@@ -4,11 +4,14 @@
 
 #### Osiris 2.4.1
 
-Osiris 2.4.1 is a maintenance release.
+Osiris 2.4.1 is a maintenance release. As a reminder, Osiris is a fork of Qt version 2.3.2. Osiris 2.4.1 is the second Osiris release since the fork. It should be largely source compatible for applications written for Qt2. It is likely not binary compatible. In other words, you'll likely have to recompile your application against Osiris. Application binaries that were compiled for Qt2 likely cannot 'drop in' click and run with Osiris without first recompiling them.
 
 - Added support for Clang/Clang++. Clang is automatically used if detected. Should work with Clang 14+
 - Fixed examples/httpd: main() missing type specifier (should have been int, none present)
 - Removed the need for the environment variable OSIRISDIR in the configure script, making it easier to use
+- Removed configs for long obsolete platforms and platforms that have no planned support in Osiris.
+- Added stub mention of Wayland in qglobal
+- Bumped OSIRIS_VER and OSIRIS_VER_STR to reflect new Osiris release 2.4.1
 
 #### Osiris 2.4.0
 

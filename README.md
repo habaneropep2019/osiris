@@ -6,13 +6,13 @@ Osiris is a graphical toolkit for X11-based Linux and Unix platforms.
 
 ## About
 
-Osiris is actually a fork of the Qt toolkit, from version 2.3.2. Osiris is mostly source compatible (but not binary compatible) with Qt 2.3.2 (with the exception of some naming conventions potentially changing). This means that you can compile legacy applications built originally for Qt2 using Osiris. In addition, porting from Qt1 takes very little work.
+Osiris is actually a fork of the Qt toolkit, from version 2.3.2. Osiris is largely source compatible (but not binary compatible) with Qt 2.3.2 (with the exception of some naming conventions potentially changing). This means that you can compile legacy applications built originally for Qt2 using Osiris. In addition, porting from Qt1 takes very little work.
 
 Osiris was previously part of ZFreeKit.
 
 #### But why not use modern Qt?
 
-Good question. If you're asking that, chances are that you SHOULD use modern Qt. Qt6 is a masterful toolkit. It's high-quality, robust, and the documentation is second to none. Osiris is not meant to be a competitor nor a replacement for modern Qt. 
+Good question. If you're asking that, chances are that you SHOULD use modern Qt. Qt6 is a masterful toolkit. It's high-quality, robust, and the documentation is second to none. Osiris is not meant to be a competitor nor a replacement for modern Qt.
 
 Fun fact: If you've traversed the code, you'd be surprised to find that more code thatn you'd expect from legacy Qt versions is still present in modern versions. No need to fix what isn't broken.
 
@@ -24,7 +24,7 @@ Osiris is based on Qt2, which is a much improved version from Qt1. It also is ex
 
 Osiris is **not** in any way, form, or shape affiliated with or supported by Trolltech, Nokia, Digia, the Free KDE Foundation, or the Qt Company. Osiris is a fork of the Qt toolkit, originally developed by Trolltech. Osiris is the _upstream_ of Osiris, meaning that bug reports, patches, etc., should be directed here to the Osiris project _not_ to the Qt bug tracker (or other Qt services). Some references to Qt either remain because they have not been replaced, need to remain for credit/copyright purposes, or for other functional reasons.
 
-Osiris is provided **WITHOUT** any warranty or guarantee of any kind, either express or implied. The Osiris project, Libranext Computer Systems, contribtors, and copyright holders expressly disclaim any liability with the use of or distribution of this software.
+Osiris is provided **WITHOUT** any warranty or guarantee of any kind, either express or implied. The Osiris project, Libranext Computer Systems, contributors, and copyright holders expressly disclaim any liability with the use of or distribution of this software.
 
 
 ## A note about security
@@ -94,7 +94,7 @@ None available *yet*, sorry! It's on the to-do list somewhere.
 
 You probably need to be root for this.
 
-Extract the source to the directory you wish to install to. `/opt/osiris` is the recommended location. Use extreme caution when installing to /usr/local/ or any other location.
+Extract the source to the directory you wish to install to. `/opt/osiris` is the recommended location. Use extreme caution when installing to /usr/local/ or any other location. **New for Osiris 2.4.1:** The configure script will assume the current working directory is both the source tree and the directory to install to. `$OSIRISDIR` does not need to be set for `configure` to work anymore. However, it should still be set in your `.profile` as instructed below.
 
 Set the needed environment variables. Usually adding the following to your `.profile`, logging out, and logging back in again is sufficient. This should be done for both root _and_ any local users who will be using Osiris.
 
