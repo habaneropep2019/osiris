@@ -2,13 +2,15 @@
 
 The table below shows what features are tested and/or supported on various platforms. The configure script should correctly pick your platform most of the time.
 
-| **Feature**        | **linux-g++** | **freebsd-g++** | **solaris-g++** | **illumos-g++** |
+| **Feature**        | **linux** | **freebsd** | **solaris** | **illumos** |
 |--------------------|---------------|-----------------|-----------------|-----------------|
 | **Debug builds**   | ✅             | 🕑              | 🕑              | 🔜 3️⃣          |
 | **Thread support** | ✅             | 💤              | ❌               | ❌ 🔜 3️⃣        |
 | **Modern libpng**  | ✅             | 🕑              | 🕑              | 🕑 🔜 3️⃣       |
 | **Modern zlib**    | ✅             | 🕑              | 🕑              | 🕑 🔜 3️⃣       |
 | **64-bit builds**  | ✅             | 🕑              | 🕑              | 🕑 🔜 3️⃣       |
+| **Clang++ support**| ✅             | ⚠️              | ⚠️              | ⚠️             |
+| **G++ support**    | ✅             | 🕑              | 🕑              | 🕑             |
 | **Designer**       | ✅             | 🕑              | 🕑              | 🕑 🔜 3️⃣       |
 | **libjpeg**        | ✅             | 🕑              | 🕑              | 🕑 🔜 3️⃣       |
 | **Static builds**  | ✅             | 💤              | 💤              | 💤 🔜 3️⃣       |
