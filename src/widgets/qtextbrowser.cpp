@@ -224,11 +224,11 @@ void QTextBrowser::setSource(const QString& name)
     }
 
     int stackCount = d->stack.count();
-    if ( d->stack.top() == url )
+    if ( stackCount > 0 && d->stack.top() == url )
 	stackCount--;
     emit backwardAvailable( stackCount > 0 );
     stackCount = d->forwardStack.count();
-    if ( d->forwardStack.top() == url )
+    if ( stackCount > 0 && d->forwardStack.top() == url )
 	stackCount--;
     emit forwardAvailable( stackCount > 0 );
 
