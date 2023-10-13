@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qcursor_x11.cpp,v 2.24 1999/05/23 20:28:20 agulbra Exp $
+** $Id: qcursor_x11.cpp,v 2.24.2.1 1999/08/10 14:26:18 paul Exp $
 **
 ** Implementation of QCursor class for X11
 **
@@ -80,6 +80,8 @@ QCursorData::~QCursorData()
 static const int cursors = 14;
 static QCursor cursorTable[cursors];
 
+static const int arrowCursorIdx = 0;
+
 QT_STATIC_CONST_IMPL QCursor & Qt::arrowCursor = cursorTable[0];
 QT_STATIC_CONST_IMPL QCursor & Qt::upArrowCursor = cursorTable[1];
 QT_STATIC_CONST_IMPL QCursor & Qt::crossCursor = cursorTable[2];
@@ -148,7 +150,7 @@ QCursor::QCursor()
 	}
 	initialize();
     }
-    QCursor* c = (QCursor *)&Qt::arrowCursor;
+    QCursor* c = &cursorTable[arrowCursorIdx];
     c->data->ref();
     data = c->data;
 }
@@ -165,7 +167,7 @@ QCursor::QCursor( int shape )			// cursor with shape
 	initialize();
     QCursor *c = find_cur( shape );
     if ( !c )					// not found
-	c = (QCursor *)&Qt::arrowCursor;	//   then use arrowCursor
+	c = &cursorTable[arrowCursorIdx];	//   then use arrowCursor
     c->data->ref();
     data = c->data;
 }
@@ -181,7 +183,7 @@ void QCursor::setBitmap( const QBitmap &bitmap, const QBitmap &mask,
 #if defined(CHECK_NULL)
 	qWarning( "QCursor: Cannot create bitmap cursor; invalid bitmap(s)" );
 #endif
-	QCursor *c = (QCursor *)&Qt::arrowCursor;
+	QCursor *c = &cursorTable[arrowCursorIdx];
 	c->data->ref();
 	data = c->data;
 	return;
@@ -274,7 +276,7 @@ void QCursor::setShape( int shape )
 	initialize();
     QCursor *c = find_cur( shape );		// find one of the global ones
     if ( !c )					// not found
-	c = (QCursor *)&Qt::arrowCursor;	//   then use arrowCursor
+	c = &cursorTable[arrowCursorIdx];	//   then use arrowCursor
     c->data->ref();
     if ( data->deref() )			// make shallow copy
 	delete data;

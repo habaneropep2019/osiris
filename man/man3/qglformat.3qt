@@ -1,4 +1,4 @@
-.TH QGLFormat 3qt "20 July 1999" "Troll Tech AS" \" -*- nroff -*-
+.TH QGLFormat 3qt "24 September 1999" "Troll Tech AS" \" -*- nroff -*-
 .\" Copyright 1992-1999 Troll Tech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -20,7 +20,7 @@ Inherits QGL.
 .BI "\fBQGLFormat\fR ()"
 .br
 .ti -1c
-.BI "\fBQGLFormat\fR ( int options )"
+.BI "\fBQGLFormat\fR ( int " "options" ", int " "plane" " = 0 )"
 .br
 .ti -1c
 .BI "bool \fBdoubleBuffer\fR () const"
@@ -71,6 +71,18 @@ Inherits QGL.
 .BI "void \fBsetDirectRendering\fR ( bool enable )"
 .br
 .ti -1c
+.BI "bool \fBhasOverlay\fR () const"
+.br
+.ti -1c
+.BI "void \fBsetOverlay\fR ( bool enable )"
+.br
+.ti -1c
+.BI "int \fBplane\fR () const"
+.br
+.ti -1c
+.BI "void \fBsetPlane\fR ( int plane )"
+.br
+.ti -1c
 .BI "void \fBsetOption\fR ( FormatOption opt )"
 .br
 .ti -1c
@@ -86,7 +98,16 @@ Inherits QGL.
 .BI "void \fBsetDefaultFormat\fR ( const QGLFormat & f )"
 .br
 .ti -1c
+.BI "QGLFormat \fBdefaultOverlayFormat\fR ()"
+.br
+.ti -1c
+.BI "void \fBsetDefaultOverlayFormat\fR ( const QGLFormat & f )"
+.br
+.ti -1c
 .BI "bool \fBhasOpenGL\fR ()"
+.br
+.ti -1c
+.BI "bool \fBhasOpenGLOverlays\fR ()"
 .br
 .in -1c
 .SH RELATED FUNCTION DOCUMENTATION
@@ -117,7 +138,11 @@ Stencil buffer.
 .TP
 Stereo buffers.
 .TP
-Direct rendering..
+Direct rendering.
+.TP
+Presence of an overlay.
+.TP
+The plane of an overlay format.
 .PP
 You create and tell a QGLFormat object what rendering options you want from an OpenGL rendering context.
 .PP
@@ -142,34 +167,30 @@ Or you can specify the desired format when creating an object of your QGLWidget 
 .br
     QGLFormat f;
 .br
-    f.setDoubleBuffer( FALSE );
+    f.setDoubleBuffer( FALSE );                 // I want single buffer
 .br
-    f.setDirectRendering( FALSE );
+    f.setDirectRendering( FALSE );              // I want software rendering
 .br
     MyGLWidget* myWidget = new MyGLWidget( f, ... );
 .fi
 .PP
-You can even set the format for an already existing QGLWidget:
+After the widget has been created, you can test which of the requested features the system was able to provide:
 .PP
 .nf
 .br
-    MyGLWidget *w;
-.br
-      ...
-.br
     QGLFormat f;
 .br
-    f.setAlpha( TRUE );
+    f.setOverlay( TRUE );
 .br
     f.setStereo( TRUE );
 .br
-    w->setFormat( f );
+    MyGLWidget* myWidget = new MyGLWidget( f, ... );
 .br
     if ( !w->format().stereo() ) {
 .br
         // ok, goggles off
 .br
-        if ( !w->format().alpha() ) {
+        if ( !w->format().hasOverlay() ) {
 .br
             qFatal( "Cool hardware wanted" );
 .br
@@ -198,7 +219,11 @@ Stencil buffer: Disabled.
 Stereo: Disabled.
 .TP
 Direct rendering: Enabled.
-.SH "QGLFormat::QGLFormat ( int options )"
+.TP
+Overlay: Disabled.
+.TP
+Plane: 0 (i.e. normal plane).
+.SH "QGLFormat::QGLFormat ( int options, int plane = 0 )"
 Creates a QGLFormat object that is a copy of the current application default format.
 .PP
 If \fIoptions\fR is not 0, this copy will be modified by these format options. The \fIoptions\fR parameter must be FormatOption values OR'ed together.
@@ -247,6 +272,32 @@ Returns the default QGLFormat for the application. All QGLWidgets that are creat
 If no special default format has been set using setDefaultFormat(), the default format is the same as that created with QGLFormat().
 .PP
 See also: setDefaultFormat().
+.SH "QGLFormat QGLFormat::defaultOverlayFormat () \fC[static]\fR"
+Returns the default QGLFormat for overlay contexts.
+.PP
+The factory default overlay format is:
+.TP
+Double buffer: Disabled.
+.TP
+Depth buffer: Disabled.
+.TP
+RGBA: Disabled (i.e. color index enabled).
+.TP
+Alpha channel: Disabled.
+.TP
+Accumulator buffer: Disabled.
+.TP
+Stencil buffer: Disabled.
+.TP
+Stereo: Disabled.
+.TP
+Direct rendering: Enabled.
+.TP
+Overlay: Disabled.
+.TP
+Plane: 1 (i.e. first overlay plane).
+.PP
+See also: setDefaultFormat().
 .SH "bool QGLFormat::depth () const"
 Returns TRUE if the depth buffer is enabled, otherwise FALSE. The depth buffer is enabled by default.
 .PP
@@ -263,6 +314,22 @@ Returns TRUE if double buffering is enabled, otherwise FALSE. Double buffering i
 See also: setDoubleBuffer().
 .SH "bool QGLFormat::hasOpenGL () \fC[static]\fR"
 Returns TRUE if the window system has any OpenGL support, otherwise FALSE.
+.PP
+Note: This function may not be called until the QApplication object has been created.
+.SH "bool QGLFormat::hasOpenGLOverlays () \fC[static]\fR"
+Returns TRUE if the window system supports OpenGL overlays, otherwise FALSE.
+.PP
+Note: This function may not be called until the QApplication object has been created.
+.SH "bool QGLFormat::hasOverlay () const"
+Returns TRUE if overlay plane is enabled, otherwise FALSE.
+.PP
+Overlay is disabled by default.
+.PP
+See also: setOverlay().
+.SH "int QGLFormat::plane () const"
+Returns the plane of this format. Default for normal formats is 0, which means the normal plane; default for overlay formats is 1, which is the first overlay plane.
+.PP
+See also: setPlane().
 .SH "bool QGLFormat::rgba () const"
 Returns TRUE if RGBA color mode is set, or FALSE if color index mode is set. The default color mode is RGBA.
 .PP
@@ -298,6 +365,46 @@ Sets a new default QGLFormat for the application. For example, to set single buf
 .fi
 .PP
 See also: defaultFormat().
+.SH "void QGLFormat::setDefaultOverlayFormat ( const QGLFormat & f ) \fC[static]\fR"
+Sets a new default QGLFormat for overlay contexts. This format is used whenever a QGLWidget is created with a format with hasOverlay() enabled.
+.PP
+For example, to get a double buffered overlay contexts (if available), the code can do:
+.PP
+.nf
+.br
+    QGLFormat f = QGLFormat::defaultOverlayFormat();
+.br
+    f.setDoubleBuffer( TRUE );
+.br
+    QGLFormat::setDefaultOverlayFormat( f );
+.fi
+.PP
+As ususal, you can test after the widget creation whether the underlying OpenGL system was able to provide the requested specification:
+.PP
+.nf
+.br
+    // (...continued from above)
+.br
+    MyGLWidget* myWidget = new MyGLWidget( QGLFormat( QGL::HasOverlay ), ... );
+.br
+    if ( myWidget->format().hasOverlay() ) {
+.br
+      // Yes, we got an overlay, let's check _its_ format:
+.br
+      QGLContext* olContext = myWidget->overlayContext();
+.br
+      if ( olContext->format().doubleBuffer() )
+.br
+         ; // yes, we got a double buffered overlay
+.br
+      else
+.br
+         ; // no, only single buffered overlays were available
+.br
+    }
+.fi
+.PP
+See also: defaultOverlayFormat().
 .SH "void QGLFormat::setDepth ( bool enable )"
 Enables the depth buffer if \fIenable\fR is TRUE, or disables it if \fIenable\fR is FALSE.
 .PP
@@ -326,6 +433,18 @@ See also: doubleBuffer(), QGLContext::swapBuffers() and QGLWidget::swapBuffers()
 Sets the option \fIopt.\fR
 .PP
 See also: testOption().
+.SH "void QGLFormat::setOverlay ( bool enable )"
+Enables an overlay plane if \fIenable\fR is TRUE; otherwise disables it.
+.PP
+Enabling the overlay plane will cause QGLWidget to create an additional context in an overlay plane. See the QGLWidget documentation for further information.
+.PP
+See also: hasOverlay().
+.SH "void QGLFormat::setPlane ( int plane )"
+Sets the requested plane. 0 is the normal plane, 1 is the first overlay plane, 2 is the second overlay plane, etc., and -1, -2, etc. are underlay planes.
+.PP
+Note that, in contrast to the other format specifications, the plane specifications will be matched exactly. Thus, if you specify a plane that the underlying OpenGL system cannot provide, an invalid QGLWidget will be created.
+.PP
+See also: plane().
 .SH "void QGLFormat::setRgba ( bool enable )"
 Sets RGBA mode if \fIenable\fR is TRUE, or color index mode if \fIenable\fR is FALSE.
 .PP

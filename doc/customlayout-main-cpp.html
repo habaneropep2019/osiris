@@ -9,7 +9,7 @@ body { background: white; color: black; }
 </head><body bgcolor="#ffffff">
 
 <a href=index.html><img width=122 height=65 src=qtlogo.png alt="Qt logo" align=left border=0></a>
-<center><img src=dochead.png width=448 height=23></center>
+<center><img src=dochead.png width=472 height=27></center>
 <br clear=all>
 
 <h1 align=center>Customized Layoutmanager</h1><br clear="all">
@@ -329,7 +329,7 @@ private:
   Implementation of the Border-Layout:
 
   <pre>/****************************************************************************
-** &#36;Id&#58; border.cpp,v 1.5 1999/06/21 13:58:40 reggie Exp $
+** &#36;Id&#58; border.cpp,v 1.5.2.1 1999/09/01 06:19:50 aavit Exp $
 **
 ** Implementing your own layout: flow example
 **
@@ -462,7 +462,7 @@ void <a name="359"></a>BorderLayout::doLayout( const QRect &amp;rect, bool /*tes
 
     BorderLayoutIterator it = BorderLayoutIterator( &amp;list );
     BorderLayoutStruct *o;
-    BorderLayoutStruct *center = 0L;
+    BorderLayoutStruct *center = 0;
     while ( ( o = it.currentStruct() ) != 0 ) {
         ++it;
 
@@ -811,5 +811,5 @@ int main( int argc, char **argv )
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.0.1</div>
+<td align="right"><div align="right">Qt version 2.0.2</div>
 </table></div></address></body></html>

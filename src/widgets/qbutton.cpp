@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qbutton.cpp,v 2.95.2.1 1999/07/02 18:20:23 paul Exp $
+** $Id: qbutton.cpp,v 2.95.2.2 1999/09/14 08:12:12 aavit Exp $
 **
 ** Implementation of QButton widget class
 **
@@ -713,10 +713,10 @@ bool QButton::focusNextPrevChild( bool next )
 	     w->isEnabledToTLW() )
 	    candidate = w;
 	w = next ? f->prev() : f->next();
-    } while( w && !(candidate && w==startingPoint) );
+    } while( w && !(candidate || w==startingPoint) );
 
     if ( !candidate )
-	return QButton::focusNextPrevChild( next );
+	return QWidget::focusNextPrevChild( next );
 
     candidate->setFocus();
     return TRUE;

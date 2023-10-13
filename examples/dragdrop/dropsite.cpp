@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: dropsite.cpp,v 1.3 1999/06/11 18:17:47 warwick Exp $
+** $Id: dropsite.cpp,v 1.3.2.1 1999/08/20 12:51:22 paul Exp $
 **
 ** Drop site example implementation
 **
@@ -39,6 +39,8 @@ void DropSite::dragMoveEvent( QDragMoveEvent * /*e*/ )
 
 void DropSite::dragEnterEvent( QDragEnterEvent *e )
 {
+    if ( e->source() == this )
+	return; //woraround
     // Check if you want the drag...
     if ( SecretDrag::canDecode( e )
       || QTextDrag::canDecode( e )

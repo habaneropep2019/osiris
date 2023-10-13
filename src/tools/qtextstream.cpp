@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qtextstream.cpp,v 2.85.2.1 1999/07/13 19:59:11 warwick Exp $
+** $Id: qtextstream.cpp,v 2.85.2.3 1999/08/20 13:53:55 paul Exp $
 **
 ** Implementation of QTextStream class
 **
@@ -732,7 +732,7 @@ QTextStream &QTextStream::writeBlock( const char* p, uint len )
 	delete [] u;
     } else {
 	for (uint i=0; i<len; i++)
-	    ts_putc( p[i] );
+	    ts_putc( (uchar)p[i] );
     }
     return *this;
 }
@@ -1363,10 +1363,10 @@ QString QTextStream::read()
 QTextStream &QTextStream::operator<<( char c )
 {
     CHECK_STREAM_PRECOND
-    ts_putc( c );
+    unsigned char uc = (unsigned char) c;
+    ts_putc( uc );
     return *this;
 }
-
 
 QTextStream &QTextStream::output_int( int format, ulong n, bool neg )
 {

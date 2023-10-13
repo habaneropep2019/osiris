@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qdir.cpp,v 2.62 1999/06/23 22:11:56 agulbra Exp $
+** $Id: qdir.cpp,v 2.62.2.1 1999/08/30 11:58:33 aavit Exp $
 **
 ** Implementation of QDir class
 **
@@ -1107,12 +1107,12 @@ bool QDir::rename( const QString &name, const QString &newName,
 		     QFile::encodeName(fn2) ) == 0;
 #else
     if ( qt_winunicode ) {
-	TCHAR* t2 = (TCHAR*)qt_winTchar_new(fn1);
+	TCHAR* t2 = (TCHAR*)qt_winTchar_new(fn2);
 	bool r = _trename((const TCHAR*)qt_winTchar(fn1,TRUE), t2) == 0;
 	delete [] t2;
 	return r;
     } else {
-	return rename(qt_win95Name(fn1), qt_win95Name(fn2)) == 0;
+	return ::rename(qt_win95Name(fn1), qt_win95Name(fn2)) == 0;
     }
 #endif
 }

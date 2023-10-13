@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: ab_centralwidget.h,v 1.1 1999/06/03 10:08:55 warwick Exp $
+** $Id: ab_centralwidget.h,v 1.1.2.1 1999/09/01 06:19:47 aavit Exp $
 **
 ** Copyright ( C ) 1992-1999 Troll Tech AS.  All rights reserved.
 **
@@ -27,7 +27,7 @@ class ABCentralWidget : public QWidget
     Q_OBJECT
 
 public:
-    ABCentralWidget( QWidget *parent, const char *name = 0L );
+    ABCentralWidget( QWidget *parent, const char *name = 0 );
 
     void save( const QString &filename );
     void load( const QString &filename );

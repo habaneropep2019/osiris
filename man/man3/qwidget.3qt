@@ -1,4 +1,4 @@
-.TH QWidget 3qt "20 July 1999" "Troll Tech AS" \" -*- nroff -*-
+.TH QWidget 3qt "24 September 1999" "Troll Tech AS" \" -*- nroff -*-
 .\" Copyright 1992-1999 Troll Tech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -1991,6 +1991,8 @@ An enabled widget receives keyboard and mouse events; a disabled widget does not
 Some widgets display themselves differently when they are disabled. For example a button might draw its label grayed out.
 .PP
 See also: isEnabled(), QKeyEvent and QMouseEvent.
+.PP
+Reimplemented in QScrollView.
 .SH "void QWidget::setFRect ( const QRect & r ) \fC[virtual protected]\fR"
 For internal use only.
 .SH "void QWidget::setFixedHeight ( int h )"
@@ -2080,7 +2082,7 @@ See also: font(), fontChange(), fontInfo(), fontMetrics() and setFontPropagation
 .PP
 Examples:
 .(l
-grapher/grapher.cpp
+grapher/grapher.cpp xform/xform.cpp
 .)l
 .PP
 Reimplemented in QWizard, QTabDialog and QPopupMenu.
@@ -2112,7 +2114,7 @@ See also: geometry(), move(), resize(), moveEvent(), resizeEvent(), minimumSize(
 .PP
 Examples:
 .(l
-xform/xform.cpp cursor/cursor.cpp drawdemo/drawdemo.cpp popup/popup.cpp qmag/qmag.cpp
+xform/xform.cpp drawdemo/drawdemo.cpp popup/popup.cpp qmag/qmag.cpp
 .)l
 .PP
 Reimplemented in QDialog.

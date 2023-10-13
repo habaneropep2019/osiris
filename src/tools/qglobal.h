@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qglobal.h,v 2.95.2.1 1999/07/01 07:56:08 warwick Exp $
+** $Id: qglobal.h,v 2.95.2.3 1999/09/07 07:43:36 hanord Exp $
 **
 ** Global type declarations and definitions
 **
@@ -27,8 +27,8 @@
 #define QGLOBAL_H
 
 
-#define QT_VERSION	201
-#define QT_VERSION_STR	"2.0.1"
+#define QT_VERSION	202
+#define QT_VERSION_STR	"2.0.2"
 
 
 //
@@ -254,7 +254,10 @@
 #define Q_TEMPLATEDLL
 #undef  Q_DISABLE_COPY		/* avoid unresolved externals */
 #endif
-#endif // _OS_WIN32_
+#else // ! _OS_WIN32_
+#undef QT_MAKEDLL		/* ignore these for other platforms */
+#undef QT_DLL
+#endif
 
 #ifndef Q_EXPORT
 #define Q_EXPORT

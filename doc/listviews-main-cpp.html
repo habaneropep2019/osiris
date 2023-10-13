@@ -9,7 +9,7 @@ body { background: white; color: black; }
 </head><body bgcolor="#ffffff">
 
 <a href=index.html><img width=122 height=65 src=qtlogo.png alt="Qt logo" align=left border=0></a>
-<center><img src=dochead.png width=448 height=23></center>
+<center><img src=dochead.png width=472 height=27></center>
 <br clear=all>
 
 <h1 align=center>Listviews</h1><br clear="all">
@@ -194,7 +194,7 @@ protected slots:
   Implementation:
 
   <pre>/****************************************************************************
-** &#36;Id&#58; listviews.cpp,v 1.4 1999/06/21 18:53:30 reggie Exp $
+** &#36;Id&#58; listviews.cpp,v 1.4.2.1 1999/09/01 06:19:53 aavit Exp $
 **
 ** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
@@ -343,7 +343,7 @@ void <a name="69"></a>ListViews::initFolders()
     for ( unsigned int i = 1; i &lt; 20; i++ ) {
         <a href="qstring.html">QString</a> str;
         str.<a href="qstring.html#2eb9bc">sprintf</a>( "Folder %d", i );
-        Folder *f = new Folder( 0L, str );
+        Folder *f = new Folder( 0, str );
         for ( unsigned int j = 1; j &lt; 5; j++ ) {
             <a href="qstring.html">QString</a> str2;
             str2.<a href="qstring.html#2eb9bc">sprintf</a>( "Sub Folder %d", j );
@@ -454,5 +454,5 @@ int main( int argc, char **argv )
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.0.1</div>
+<td align="right"><div align="right">Qt version 2.0.2</div>
 </table></div></address></body></html>

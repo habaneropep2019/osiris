@@ -1,4 +1,4 @@
-.TH QGLWidget 3qt "20 July 1999" "Troll Tech AS" \" -*- nroff -*-
+.TH QGLWidget 3qt "24 September 1999" "Troll Tech AS" \" -*- nroff -*-
 .\" Copyright 1992-1999 Troll Tech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -26,10 +26,10 @@ Inherits QWidget and QGL.
 .BI "\fB~QGLWidget\fR ()"
 .br
 .ti -1c
-.BI "void \fBqglColor\fR ( const QColor & c )"
+.BI "void \fBqglColor\fR ( const QColor & c ) const"
 .br
 .ti -1c
-.BI "void \fBqglClearColor\fR ( const QColor & c )"
+.BI "void \fBqglClearColor\fR ( const QColor & c ) const"
 .br
 .ti -1c
 .BI "bool \fBisValid\fR () const"
@@ -61,11 +61,20 @@ Inherits QWidget and QGL.
 .ti -1c
 .BI "virtual QPixmap \fBrenderPixmap\fR ( int " "w" " = 0, int " "h" " = 0, bool " "useContext" " = FALSE )"
 .br
+.ti -1c
+.BI "virtual void \fBmakeOverlayCurrent\fR ()"
+.br
+.ti -1c
+.BI "const QGLContext* \fBoverlayContext\fR () const"
+.br
 .in -1c
 .SS "Public Slots"
 .in +1c
 .ti -1c
 .BI "virtual void \fBupdateGL\fR ()"
+.br
+.ti -1c
+.BI "virtual void \fBupdateOverlayGL\fR ()"
 .br
 .in -1c
 .SS "Protected Members"
@@ -74,10 +83,19 @@ Inherits QWidget and QGL.
 .BI "virtual void \fBinitializeGL\fR ()"
 .br
 .ti -1c
+.BI "virtual void \fBresizeGL\fR ( int " "w" ", int h )"
+.br
+.ti -1c
 .BI "virtual void \fBpaintGL\fR ()"
 .br
 .ti -1c
-.BI "virtual void \fBresizeGL\fR ( int " "w" ", int h )"
+.BI "virtual void \fBinitializeOverlayGL\fR ()"
+.br
+.ti -1c
+.BI "virtual void \fBresizeOverlayGL\fR ( int " "w" ", int h )"
+.br
+.ti -1c
+.BI "virtual void \fBpaintOverlayGL\fR ()"
 .br
 .ti -1c
 .BI "void \fBsetAutoBufferSwap\fR ( bool on )"
@@ -205,6 +223,22 @@ When paintGL(), resizeGL() or initializeGL() is called, your widget's OpenGL ren
 QGLWidget provides advanced functions for requesting a new display format, and you can even set a new rendering context.
 .PP
 You can achieve sharing of OpenGL display lists between QGLWidgets, see the documentation of the QGLWidget constructors for details.
+.PP
+\fBAbout Overlays:\fR The QGLWidget can create a GL overlay context in addition to the normal context, if overlays are supported by the underlying system.
+.PP
+If you want to use overlays, you specify it in the format. (Note: Overlay must be requested in the format passed to the QGLWidget constructor; it cannot be added later with setFormat() or setContext()). Your GL widget should also implement some or all of these virtual methods:
+.TP
+paintOverlayGL()
+.TP
+resizeOverlayGL()
+.TP
+initializeOverlayGL()
+.PP
+These methods work in the same way as the normal paintGL() & al. functions, only that they will be called when with the overlay context made current. You can explicitly make the overlay context current by using makeOverlayCurrent(), and you can access the overlay context directly (e.g. to ask for its transparent color) by calling overlayContext().
+.PP
+Note: QGLWidget overlay support is currently implemented only for the X11 window system. The Windows implementation is experimental.
+.PP
+Note: On X servers where the default visual is in an overlay plane, non-GL Qt windows can also be used for overlays; see the "overlay_x11" example program for details.
 .SH MEMBER FUNCTION DOCUMENTATION
 .SH "QGLWidget::QGLWidget ( QWidget * parent=0, const char * name=0, const QGLWidget * shareWidget = 0, WFlags f=0 )"
 Constructs an OpenGL widget with a \fIparent\fR widget and a \fIname.\fR
@@ -239,7 +273,7 @@ Returns TRUE if the widget is doing automatic GL buffer swapping.
 .PP
 See also: setAutoBufferSwap().
 .SH "const QGLContext * QGLWidget::context () const"
-Returns the current context.
+Returns the context of this widget.
 .PP
 See also: setContext().
 .SH "bool QGLWidget::doubleBuffer () const"
@@ -260,6 +294,12 @@ This virtual function is called one time before the first call to paintGL() or r
 This function should take care of setting any required OpenGL context rendering flags, defining display lists, etc.
 .PP
 There is no need to call makeCurrent() because this has already been done when this function is called.
+.SH "void QGLWidget::initializeOverlayGL () \fC[virtual protected]\fR"
+This virtual function is used in the same manner as initializeGL(), only for the widget's overlay context instead of the widget's main context. That is, initializeOverlayGL() is called one time before the first call to paintOverlayGL() or resizeOverlayGL(). Reimplement it in a subclass.
+.PP
+This function should take care of setting any required OpenGL context rendering flags, defining display lists, etc., for the overlay context.
+.PP
+There is no need to call makeOverlayCurrent() because this has already been done when this function is called.
 .SH "bool QGLWidget::isSharing () const"
 Returns TRUE if display list sharing with another QGLWidget was requested in the constructor, and the GL system was able to provide it. The GL system may fail to provide display list sharing if the two QGLWidgets use different formats.
 .PP
@@ -268,22 +308,36 @@ See also: format().
 Returns TRUE if the widget has a valid GL rendering context. A widget will be invalid if the system has no OpenGL support
 .SH "void QGLWidget::makeCurrent () \fC[virtual]\fR"
 Makes this widget the current widget for OpenGL operations. I.e. makes this widget's rendering context the current OpenGL rendering context.
+.SH "void QGLWidget::makeOverlayCurrent () \fC[virtual]\fR"
+Makes the overlay context of this widget current. Use this if you need to issue OpenGL commands to the overlay context outside of initializeOverlayGL(), resizeOverlayGL() and paintOverlayGL().
+.PP
+Does nothing if this widget has no overlay.
+.PP
+See also: makeCurrent().
+.SH "const QGLContext* QGLWidget::overlayContext () const"
+Returns the overlay context of this widget, or 0 if this widget has no overlay.
+.PP
+See also: context().
 .SH "void QGLWidget::paintEvent ( QPaintEvent * ) \fC[virtual protected]\fR"
-Handles paint events. Will cause the virtual paintGL() fucntion to be called, initializing first as necessary.
+Handles paint events. Will cause the virtual paintGL() function to be called, initializing first as necessary.
 .PP
 Reimplemented from QWidget.
 .SH "void QGLWidget::paintGL () \fC[virtual protected]\fR"
 This virtual function is called whenever the widget needs to be painted. Reimplement it in a subclass.
 .PP
 There is no need to call makeCurrent() because this has already been done when this function is called.
-.SH "void QGLWidget::qglClearColor ( const QColor & c )"
-Convenience function for specifying the clearing color to OpenGL. Calls glClearColor (in RGBA mode) or glClearIndex (in color-index mode) with the color \fIc.\fR
+.SH "void QGLWidget::paintOverlayGL () \fC[virtual protected]\fR"
+This virtual function is used in the same manner as paintGL(), only for the widget's overlay context instead of the widget's main context. That is, paintOverlayGL() is called whenever the widget's overlay needs to be painted. Reimplement it in a subclass.
 .PP
-See also: qglColor() and QColor.
-.SH "void QGLWidget::qglColor ( const QColor & c )"
-Convenience function for specifying a drawing color to OpenGL. Calls glColor3 (in RGBA mode) or glIndex (in color-index mode) with the color \fIc.\fR
+There is no need to call makeOverlayCurrentCurrent() because this has already been done when this function is called.
+.SH "void QGLWidget::qglClearColor ( const QColor & c ) const"
+Convenience function for specifying the clearing color to OpenGL. Calls glClearColor (in RGBA mode) or glClearIndex (in color-index mode) with the color \fIc.\fR Applies to the current GL context.
 .PP
-See also: qglClearColor() and QColor.
+See also: qglColor(), QGLContext::currentContext() and QColor.
+.SH "void QGLWidget::qglColor ( const QColor & c ) const"
+Convenience function for specifying a drawing color to OpenGL. Calls glColor3 (in RGBA mode) or glIndex (in color-index mode) with the color \fIc.\fR Applies to the current GL context.
+.PP
+See also: qglClearColor(), QGLContext::currentContext() and QColor.
 .SH "QPixmap QGLWidget::renderPixmap ( int w = 0, int h = 0, bool useContext = FALSE ) \fC[virtual]\fR"
 Renders the current scene on a pixmap and returns it.
 .PP
@@ -294,6 +348,8 @@ This method will create a pixmap and a temporary QGLContext to render on it. The
 The size of the pixmap will be width \fIw\fR and height \fIh.\fR If any of those are 0 (the default), the pixmap will have the same size as the widget.
 .PP
 If \fIuseContext\fR is TRUE, this method will try to be more efficient by using the existing GL context to render the pixmap. The default is FALSE. Use only if you know what you are doing.
+.PP
+Any overlay is not rendered to the pixmap.
 .PP
 Bugs and limitations:
 .TP
@@ -306,6 +362,10 @@ Reimplemented from QWidget.
 This virtual function is called whenever the widget has been resized. Reimplement it in a subclass.
 .PP
 There is no need to call makeCurrent() because this has already been done when this function is called.
+.SH "void QGLWidget::resizeOverlayGL ( int, int ) \fC[virtual protected]\fR"
+This virtual function is used in the same manner as paintGL(), only for the widget's overlay context instead of the widget's main context. That is, resizeOverlayGL() is called whenever the widget has been resized. Reimplement it in a subclass.
+.PP
+There is no need to call makeOverlayCurrentCurrent() because this has already been done when this function is called.
 .SH "void QGLWidget::setAutoBufferSwap ( bool on ) \fC[protected]\fR"
 Turns on or off the automatic GL buffer swapping. If on, and the widget is using a double-buffered format, the background and foreground GL buffers will automatically be swapped after each time the paintGL() function has been called.
 .PP
@@ -340,6 +400,10 @@ Normally, there is no need to explicitly call this function, because it is done 
 See also: doubleBuffer(), setAutoBufferSwap() and QGLFormat::setDoubleBuffer().
 .SH "void QGLWidget::updateGL () \fC[virtual slot]\fR"
 Updates the widget by calling glDraw().
+.SH "void QGLWidget::updateOverlayGL () \fC[virtual slot]\fR"
+Updates the widget's overlay (if any). Will cause the virtual
+function paintOverlayGL() to be executed, initializing first as
+necessary.
 .SH "SEE ALSO"
 .BR http://www.troll.no/qt/qglwidget.html
 .SH COPYRIGHT

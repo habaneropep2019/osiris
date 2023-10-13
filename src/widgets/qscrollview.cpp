@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qscrollview.cpp,v 2.112.2.1 1999/07/13 19:59:30 warwick Exp $
+** $Id: qscrollview.cpp,v 2.112.2.2 1999/08/31 11:45:16 reggie Exp $
 **
 ** Implementation of QScrollView class
 **
@@ -911,6 +911,19 @@ void QScrollView::removeChild(QWidget* child)
 
     QSVChildRec *r = d->rec(child);
     if ( r ) d->deleteChildRec( r );
+}
+
+/*!
+  \reimp
+*/
+
+void QScrollView::setEnabled( bool enable )
+{
+    if ( enable != isEnabled() ) {
+	viewport()->setEnabled( enable );
+	viewport()->repaint( FALSE );
+    }
+    QFrame::setEnabled( enable );
 }
 
 /*!

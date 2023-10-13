@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qapplication.cpp,v 2.184.2.3 1999/07/13 19:58:44 warwick Exp $
+** $Id: qapplication.cpp,v 2.184.2.6 1999/09/13 19:09:14 paul Exp $
 **
 ** Implementation of QApplication class
 **
@@ -516,6 +516,10 @@ void QApplication::initialize( int argc, char **argv )
 
 QApplication::~QApplication()
 {
+    if ( desktopWidget ) {
+	delete desktopWidget;
+	desktopWidget = 0;
+    }
     is_app_closing = TRUE;
     QWidget::destroyMapper();
     destroy_palettes();
@@ -832,33 +836,32 @@ QPalette QApplication::palette(const QWidget* w)
   \sa QWidget::setPalette(), palette(), QStyle::polish()
 */
 
-void QApplication::setPalette( const QPalette &palette, bool updateAllWidgets, const char* className )
+void QApplication::setPalette( const QPalette &palette, bool updateAllWidgets,
+			       const char* className )
 {
-    QPalette* pal = new QPalette( palette );
-
+    QPalette pal = palette;
     if ( !startingUp() )
-	qApp->style().polish( *pal );
+	qApp->style().polish( pal );	// NB: non-const reference
 
 
-    if (!className) {
+    if ( !className ) {
 	if ( !app_pal ) {
-	    app_pal = new QPalette( palette );
+	    app_pal = new QPalette( pal );
 	    CHECK_PTR( app_pal );
 	}
 	else {
-	    *app_pal = palette;
+	    *app_pal = pal;
 	}
 	delete app_palettes;
 	app_palettes = 0;
     }
     else {
-	if (!app_palettes){
+	if ( !app_palettes ) {
 	    app_palettes = new QAsciiDict<QPalette>;
 	    CHECK_PTR( app_palettes );
 	    app_palettes->setAutoDelete( TRUE );
 	}
-	CHECK_PTR( pal );
-	app_palettes->insert(className, pal);
+	app_palettes->insert( className, new QPalette( pal ) );
     }
     if ( updateAllWidgets && is_app_running && !is_app_closing ) {
 	QWidgetIntDictIt it( *((QWidgetIntDict*)QWidget::mapper) );
@@ -901,8 +904,8 @@ QFont QApplication::font( const QWidget* w )
 	}
     }
     if ( !app_font ) {
-        app_font = new QFont( "Helvtica" );
-        CHECK_PTR( app_font );
+	app_font = new QFont( "Helvetica" );
+	CHECK_PTR( app_font );
     }
     return *app_font;
 }
@@ -1944,6 +1947,19 @@ int QApplication::enter_loop()
 void QApplication::exit_loop()
 {
     app_exit_loop = TRUE;
+}
+
+
+/*!
+  Returns the current loop level
+  \sa enter_loop(), exit_loop()
+*/
+ 
+int QApplication::loopLevel() const
+{
+ 
+    return loop_level;
+ 
 }
 
 

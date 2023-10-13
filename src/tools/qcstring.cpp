@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qcstring.cpp,v 2.10 1999/06/16 09:56:27 agulbra Exp $
+** $Id: qcstring.cpp,v 2.10.2.1 1999/08/12 11:05:34 aavit Exp $
 **
 ** Implementation of extended char array operations, and QByteArray and
 ** QCString classes
@@ -983,7 +983,7 @@ QCString QCString::leftJustify( uint width, char fill, bool truncate ) const
   If the length of the string exceeds \e width and \e truncate is FALSE,
   then the returned string is a copy of the string.
   If the length of the string exceeds \e width and \e truncate is TRUE,
-  then the returned string is a right(\e width).
+  then the returned string is a left(\e width).
 
   Example:
   \code

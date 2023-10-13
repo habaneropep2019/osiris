@@ -1,4 +1,4 @@
-.TH QSpinBox 3qt "20 July 1999" "Troll Tech AS" \" -*- nroff -*-
+.TH QSpinBox 3qt "24 September 1999" "Troll Tech AS" \" -*- nroff -*-
 .\" Copyright 1992-1999 Troll Tech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -207,7 +207,7 @@ Override this function in in a subclass if you want a specialized spin box, hand
 .PP
 See also: updateDisplay() and mapTextToValue().
 .SH "QString QSpinBox::prefix () const \fC[virtual]\fR"
-Returns the currently set prefix, or 0 if no prefix is currently set.
+Returns the currently set prefix, or a null string if no prefix is currently set.
 .PP
 See also: setPrefix(), setSuffix() and suffix().
 .SH "void QSpinBox::rangeChange () \fC[virtual protected]\fR"
@@ -221,7 +221,7 @@ Reimplemented for internal reasons; the API is not affected.
 .SH "void QSpinBox::setPrefix ( const QString & text ) \fC[virtual slot]\fR"
 Sets the prefix to \fItext.\fR The prefix is prepended to the start of the displayed value. Typical use is to indicate the unit of measurement to the user.
 .PP
-To turn off the prefix display, call this function with 0 or an empty string as parameter. The default is no prefix.
+To turn off the prefix display, call this function with an empty string as parameter. The default is no prefix.
 .PP
 See also: prefix(), setSuffix() and suffix().
 .SH "void QSpinBox::setSpecialValueText ( const QString & text ) \fC[virtual]\fR"
@@ -242,13 +242,13 @@ The user will then be able to choose a margin width from 0-20 millimeters, or se
 .PP
 Neither prefix nor suffix, if set, are added to the special-value text when displayed.
 .PP
-To turn off the special-value text display, call this function with 0 or an empty string as parameter. The default is no special-value text, i.e. the numeric value is shown as usual.
+To turn off the special-value text display, call this function with an empty string as parameter. The default is no special-value text, i.e. the numeric value is shown as usual.
 .PP
 See also: specialValueText().
 .SH "void QSpinBox::setSuffix ( const QString & text ) \fC[virtual slot]\fR"
 Sets the suffix to \fItext.\fR The suffix is appended to the end of the displayed value. Typical use is to indicate the unit of measurement to the user.
 .PP
-To turn off the suffix display, call this function with 0 or an empty string as parameter. The default is no suffix.
+To turn off the suffix display, call this function with an empty string as parameter. The default is no suffix.
 .PP
 See also: suffix(), setPrefix() and prefix().
 .SH "void QSpinBox::setValidator ( const QValidator * v ) \fC[virtual]\fR"
@@ -286,7 +286,7 @@ Reimplemented for internal reasons; the API is not affected.
 .PP
 Reimplemented from QWidget.
 .SH "QString QSpinBox::suffix () const \fC[virtual]\fR"
-Returns the currently set suffix, or 0 if no suffix is currently set.
+Returns the currently set suffix, or a null string if no suffix is currently set.
 .PP
 See also: setSuffix(), setPrefix() and suffix().
 .SH "QString QSpinBox::text () const"

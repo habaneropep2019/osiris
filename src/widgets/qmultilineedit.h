@@ -1,5 +1,5 @@
 /**********************************************************************
-** $Id: qmultilineedit.h,v 1.16.2.2 1999/07/13 19:59:26 warwick Exp $
+** $Id: qmultilineedit.h,v 1.16.2.3 1999/08/12 09:29:19 paul Exp $
 **
 ** Definition of QMultiLineEdit widget class
 **
@@ -38,7 +38,6 @@ class QValidator;
 class Q_EXPORT QMultiLineEdit : public QTableView
 {
     Q_OBJECT
-    Q_BUILDER( "Texteditor", "qmultilineedit.xpm", DefaultInspector )
 public:
     QMultiLineEdit( QWidget *parent=0, const char *name=0 );
    ~QMultiLineEdit();
@@ -89,7 +88,6 @@ public:
     int hMargin() const;
     virtual void setSelection( int row_from, int col_from, int row_to, int col_t );
 
-q_properties:
     bool	autoUpdate()	const;
     virtual void	setAutoUpdate( bool );
 

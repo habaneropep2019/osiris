@@ -14,8 +14,8 @@ MOC	=	$(SYSCONF_MOC)
 ####### Target
 
 DESTDIR = ../../../lib/
-VER_MAJ = 1
-VER_MIN = 0
+VER_MAJ = 4
+VER_MIN = 2
 VER_PATCH = 0
 TARGET	= qgl
 TARGET1 = lib$(TARGET).so.$(VER_MAJ)
@@ -23,9 +23,12 @@ TARGET1 = lib$(TARGET).so.$(VER_MAJ)
 ####### Files
 
 HEADERS =	../../../include/qgl.h
-SOURCES =	qgl.cpp
-OBJECTS =	qgl.o
-SRCMOC	=	moc_qgl.cpp
+SOURCES =	qgl.cpp \
+		qgl_x11.cpp
+OBJECTS =	qgl.o \
+		qgl_x11.o
+SRCMOC	=	moc_qgl.cpp \
+		qgl_x11.moc
 OBJMOC	=	moc_qgl.o
 
 ####### Implicit rules
@@ -68,6 +71,10 @@ clean:
 qgl.o: qgl.cpp \
 		qgl.h
 
+qgl_x11.o: qgl_x11.cpp \
+		qgl_x11.moc \
+		qgl.h
+
 moc_qgl.o: moc_qgl.cpp \
 		../../../include/qgl.h \
 		../../../include/qwidget.h \
@@ -108,4 +115,7 @@ moc_qgl.o: moc_qgl.cpp \
 
 moc_qgl.cpp: ../../../include/qgl.h
 	$(MOC) ../../../include/qgl.h -o moc_qgl.cpp
+
+qgl_x11.moc: qgl_x11.cpp
+	$(MOC) qgl_x11.cpp -o qgl_x11.moc
 

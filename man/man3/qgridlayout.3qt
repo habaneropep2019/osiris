@@ -1,4 +1,4 @@
-.TH QGridLayout 3qt "20 July 1999" "Troll Tech AS" \" -*- nroff -*-
+.TH QGridLayout 3qt "24 September 1999" "Troll Tech AS" \" -*- nroff -*-
 .\" Copyright 1992-1999 Troll Tech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -140,7 +140,7 @@ See also the Layout Overview documentation.
 .PP
 Examples:
 .(l
-layout/layout.cpp rot13/rot13.cpp
+cursor/cursor.cpp layout/layout.cpp rot13/rot13.cpp
 .)l
 .SH MEMBER FUNCTION DOCUMENTATION
 .SH "QGridLayout::QGridLayout ( QLayout * parentLayout, int nRows, int nCols, int space = -1, const char * name=0 )"
@@ -182,7 +182,7 @@ A non-zero alignment indicates that the widget should not grow to fill the avail
 .PP
 Examples:
 .(l
-layout/layout.cpp
+cursor/cursor.cpp layout/layout.cpp
 .)l
 .SH "void QGridLayout::addRowSpacing ( int row, int minsize )"
 Sets the minimum height of \fIrow\fR to \fIminsize\fR pixels.
@@ -197,7 +197,7 @@ Note 2: The alignment parameter is interpreted more aggressively than in previou
 .PP
 Examples:
 .(l
-layout/layout.cpp rot13/rot13.cpp
+cursor/cursor.cpp layout/layout.cpp rot13/rot13.cpp
 .)l
 .SH "void QGridLayout::expand ( int nRows, int nCols )"
 Expands this grid so that it will have \fInRows\fR rows and \fInCols\fR columns. Will not shrink the grid. You should not need to call this function, as QGridLayout expands automatically as new items are inserted.

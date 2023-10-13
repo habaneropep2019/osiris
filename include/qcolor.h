@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qcolor.h,v 2.25 1999/05/12 15:29:26 paul Exp $
+** $Id: qcolor.h,v 2.25.2.1 1999/08/10 14:26:16 paul Exp $
 **
 ** Definition of QColor class
 **
@@ -29,7 +29,6 @@
 #ifndef QT_H
 #include "qwindowdefs.h"
 #endif // QT_H
-
 
 const QRgb  RGB_DIRTY	= 0x80000000;		// flags unset color
 const QRgb  RGB_INVALID = 0x40000000;		// flags invalid color
@@ -124,6 +123,7 @@ public:
 private:
     void   setSystemNamedColor( const QString& name );
     static void initGlobalColors();
+    static QColor* globalColors();
     static bool color_init;
     static bool globals_init;
     static bool lazy_alloc;

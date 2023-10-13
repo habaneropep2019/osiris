@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qtextcodec.cpp,v 1.71.2.3 1999/07/13 19:59:10 warwick Exp $
+** $Id: qtextcodec.cpp,v 1.71.2.7 1999/09/06 07:28:34 hanord Exp $
 **
 ** Implementation of QTextCodec class
 **
@@ -171,7 +171,7 @@ QString QTextStatelessDecoder::toUnicode(const char* chars, int len)
   bytes.  For such an encoding, you will need to implement
   <dl>
    <dt> \c QTextDecoder* makeDecoder() const
-    <dd>Return a QTextDecoder that remembers incomplete multibyte 
+    <dd>Return a QTextDecoder that remembers incomplete multibyte
 	sequence prefixes or other required state.
   </dl>
   If the encoding does \e not require state, you should implement:
@@ -426,7 +426,7 @@ static const char * iso8859_2locales[] = {
     "sk_SK", "sl", "sl_CS", "sl_SI", "slovak", "slovene", "sr_SP", 0 };
 
 static const char * iso8859_5locales[] = {
-    "bg", "bg_BG", "bulgarian", "mk", "mk_MK", /*"ru",*/ "ru_RU", "ru_SU",
+    "bg", "bg_BG", "bulgarian", "mk", "mk_MK", /*"ru",*/ "ru_RU", /*"ru_SU",*/
     "russian", "sp", "sp_YU", 0 };
 
 // This is NOT CORRECT.  But so many Russians use this rather than the
@@ -440,7 +440,7 @@ static const char * iso8859_5locales[] = {
 // ru_RU.KOI8-R
 //
 static const char * koi8_rlocales[] = {
-    "ru", 0 };
+    "ru", "ru_SU", 0 };
 
 static const char * iso8859_6locales[] = {
     "ar_AA", "ar_SA", "arabic", 0 };
@@ -490,10 +490,17 @@ QTextCodec* QTextCodec::codecForLocale()
     char * p = lang ? strchr( lang, '.' ) : 0;
     if ( !p || *p != '.' ) {
 	// Some versions of setlocale return encoding, others not.
-	if ( lang )
-	    delete [] lang;
-	lang = qstrdup( setlocale( LC_CTYPE, 0 ) );
-	p = lang ? strchr( lang, '.' ) : 0;
+	char *ctype = qstrdup( setlocale( LC_CTYPE, 0 ) );
+	// Some Linux distributions have broken locales which will return
+	// "C" for LC_CTYPE
+	if ( strcmp( ctype, "C" ) == 0 ) {
+	    delete [] ctype;
+	} else {
+	    if ( lang )
+		delete [] lang;
+	    lang = ctype;
+	    p = lang ? strchr( lang, '.' ) : 0;
+	}
     }
 
     if( p && *p == '.' ) {
@@ -1007,7 +1014,7 @@ public:
 	if ( from_unicode_page_multibyte ) {
 	    for (int i=0; i<256; i++)
 		if (from_unicode_page_multibyte[i])
-		    for (int j=0; j<256; i++)
+		    for (int j=0; j<256; j++)
 			if (from_unicode_page_multibyte[i][j])
 			    delete [] from_unicode_page_multibyte[i][j];
 	}

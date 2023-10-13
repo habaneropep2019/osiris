@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: listviews.cpp,v 1.4 1999/06/21 18:53:30 reggie Exp $
+** $Id: listviews.cpp,v 1.4.2.1 1999/09/01 06:19:53 aavit Exp $
 **
 ** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
@@ -148,7 +148,7 @@ void ListViews::initFolders()
     for ( unsigned int i = 1; i < 20; i++ ) {
         QString str;
         str.sprintf( "Folder %d", i );
-        Folder *f = new Folder( 0L, str );
+        Folder *f = new Folder( 0, str );
         for ( unsigned int j = 1; j < 5; j++ ) {
             QString str2;
             str2.sprintf( "Sub Folder %d", j );

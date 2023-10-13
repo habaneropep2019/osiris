@@ -1,4 +1,4 @@
-.TH QFile 3qt "20 July 1999" "Troll Tech AS" \" -*- nroff -*-
+.TH QFile 3qt "24 September 1999" "Troll Tech AS" \" -*- nroff -*-
 .\" Copyright 1992-1999 Troll Tech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -205,7 +205,7 @@ Reimplemented from QIODevice.
 .SH "void QFile::close () \fC[virtual]\fR"
 Closes an open file.
 .PP
-The file is closed even if it was opened with an existing file handle or a file descriptor, \fIexcept\fR that stdin, stdout and stderr are never closed.
+The file is not closed if it was opened with an existing file handle. If the existing file handle is a \fCFILE*,\fR the file is flushed. If the existing file handle is an \fCint\fR file descriptor, nothing is done to the file.
 .PP
 Some "write-behind" filesystems may report an unspecified error on closing the file. These errors only indiciate that something may have gone wrong since the previous open(). In such a case status() reports IO_UnspecifiedError after close(), otherwise IO_Ok.
 .PP
@@ -223,7 +223,7 @@ By default, this function converts to the local 8-bit encoding determined by the
 .PP
 The conversion scheme can be changed using setEncodingFunction(). This might be useful if you wish to give the user an option to store in filenames in UTF-8, etc., but beware that such filenames would probably then be unrecognizable when seen by other programs.
 .PP
-See also: decodedName().
+See also: decodeName().
 .SH "bool QFile::exists () const"
 Returns TRUE if this file exists, otherwise FALSE.
 .PP
@@ -384,7 +384,7 @@ Removes the file \fIfileName.\fR Returns TRUE if successful, otherwise FALSE.
 .SH "void QFile::setDecodingFunction ( DecoderFn f ) \fC[static]\fR"
 Sets the function for decoding 8-bit filenames. The default uses the locale-specific 8-bit encoding.
 .PP
-See also: encodeName() and decodedName().
+See also: encodeName() and decodeName().
 .SH "void QFile::setEncodingFunction ( EncoderFn f ) \fC[static]\fR"
 Sets the function for encoding Unicode filenames. The default encodes in the locale-specific 8-bit encoding.
 .PP

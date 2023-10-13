@@ -1,5 +1,5 @@
 /**********************************************************************
-** $Id: qpsprinter.cpp,v 2.74.2.1 1999/07/16 13:41:01 agulbra Exp $
+** $Id: qpsprinter.cpp,v 2.74.2.5 1999/09/14 12:08:16 paul Exp $
 **
 ** Implementation of QPSPrinter class
 **
@@ -124,6 +124,62 @@ static const char *ps_header[] = {
 "    } if",
 "} D",
 "",
+"/BF {",				// brush fill
+"    BSt 9 ge BSt 14 le and",		// valid brush pattern?
+"    {",
+"     GS",
+"     WFi { clip } { eoclip } ifelse",
+"     defM SM",
+"     pathbbox",			// left upper right lower
+"     3 index 3 index translate",
+"     4 2 roll",			// right lower left upper
+"     3 2 roll",			// right left upper lower
+"     exch",				// left right lower upper
+"     sub /h ED",
+"     sub /w ED",
+"     OMo {",
+"	  NP",
+"	  0 0 MT",
+"	  0 h RL",
+"	  w 0 RL",
+"	  0 h neg RL",
+"	  CP",
+"	  BkCol SC",
+"	  fill",
+"     } if",
+"     BCol SC",
+"     0.3 SW",
+"     BSt 9 eq BSt 11 eq or",		// horiz or cross pattern
+"     { 0 4 h",				// draw horiz lines !!! alignment
+"       { NP dup 0 exch MT w exch LT S } for",
+"     } if",
+"     BSt 10 eq BSt 11 eq or",		// vert or cross pattern
+"     { 0 4 w",				// draw vert lines !!! alignment
+"       { NP dup 0 MT h LT S } for",
+"     } if",
+"     BSt 12 eq BSt 14 eq or",		// F-diag or diag cross
+"     { w h gt",
+"       { 0 6 w h add",
+"	{ NP dup h MT h sub 0 LT S } for }",
+"       { 0 6 w h add",
+"	 { NP dup w exch MT w add 0 exch LT S } for } ifelse",
+"     } if",
+"     BSt 13 eq BSt 14 eq or",		// B-diag or diag cross
+"     { w h gt",
+"       { 0 6 w h add",
+"	 { NP dup 0 MT h sub h LT S } for }",
+"       { 0 6 w h add",
+"	 { NP dup 0 exch MT w add w exch LT S } for } ifelse",
+"     } if",
+"     GR",
+"    } if",
+"} D",
+"",
+"",
+"/BDArr[",				// Brush dense patterns:
+"    0.94 0.88 0.63 0.50 0.37 0.12 0.6",
+"] d",
+"",
 "/QF {",				// fill command
 "    GS",
 "    BSt 2 ge BSt 8 le and",		// dense pattern?
@@ -145,10 +201,6 @@ static const char *ps_header[] = {
 "    { BCol SC WFi { fill } { eofill } ifelse } if",
 "    GR",
 "} D",
-"",
-"/BDArr[",				// Brush dense patterns:
-"    0.94 0.88 0.63 0.50 0.37 0.12 0.6",
-"] d",
 "",
 "", // for arc
 "/mat matrix d",
@@ -276,10 +328,11 @@ static const char *ps_header[] = {
 "	 /ry2 ry 2 mul d",
 "	 NP",
 "	 x rx add y MT",
-"	 x w add rx2 sub y		 rx2 ry2 90  -90 ARC",
-"	 x w add rx2 sub y h add ry2 sub rx2 ry2 0   -90 ARC",
-"	 x		 y h add ry2 sub rx2 ry2 270 -90 ARC",
-"	 x		 y		 rx2 ry2 180 -90 ARC",
+"	 x		 y		 rx2 ry2 180 -90",
+"	 x		 y h add ry2 sub rx2 ry2 270 -90",
+"	 x w add rx2 sub y h add ry2 sub rx2 ry2 0   -90",
+"	 x w add rx2 sub y		 rx2 ry2 90  -90",
+"	 ARC ARC ARC ARC",
 "	 CP",
 "	 QF",
 "	 QS",
@@ -407,57 +460,6 @@ static const char *ps_header[] = {
 "    show",
 "} D",
 "",
-"",
-"/BF {",				// brush fill
-"    BSt 9 ge BSt 14 le and",		// valid brush pattern?
-"    {",
-"     GS",
-"     WFi { clip } { eoclip } ifelse",
-"     defM SM",
-"     pathbbox",			// left upper right lower
-"     3 index 3 index translate",
-"     4 2 roll",			// right lower left upper
-"     3 2 roll",			// right left upper lower
-"     exch",				// left right lower upper
-"     sub /h ED",
-"     sub /w ED",
-"     OMo {",
-"	  NP",
-"	  0 0 MT",
-"	  0 h RL",
-"	  w 0 RL",
-"	  0 h neg RL",
-"	  CP",
-"	  BkCol SC",
-"	  fill",
-"     } if",
-"     BCol SC",
-"     0.3 SW",
-"     BSt 9 eq BSt 11 eq or",		// horiz or cross pattern
-"     { 0 4 h",				// draw horiz lines !!! alignment
-"       { NP dup 0 exch MT w exch LT S } for",
-"     } if",
-"     BSt 10 eq BSt 11 eq or",		// vert or cross pattern
-"     { 0 4 w",				// draw vert lines !!! alignment
-"       { NP dup 0 MT h LT S } for",
-"     } if",
-"     BSt 12 eq BSt 14 eq or",		// F-diag or diag cross
-"     { w h gt",
-"       { 0 6 w h add",
-"	{ NP dup h MT h sub 0 LT S } for }",
-"       { 0 6 w h add",
-"	 { NP dup w exch MT w add 0 exch LT S } for } ifelse",
-"     } if",
-"     BSt 13 eq BSt 14 eq or",		// B-diag or diag cross
-"     { w h gt",
-"       { 0 6 w h add",
-"	 { NP dup 0 MT h sub h LT S } for }",
-"       { 0 6 w h add",
-"	 { NP dup 0 exch MT w add w exch LT S } for } ifelse",
-"     } if",
-"     GR",
-"    } if",
-"} D",
 "",
 "", // slower implementation than the old one, but strippable by stripHeader
 "/sl D0",
@@ -2239,10 +2241,10 @@ static void ps_dumpPixmapData( QTextStream &stream, QImage img,
 
 #define POINT(index)	XCOORD(p[index].point->x()) << ' ' <<		\
 			YCOORD(p[index].point->y()) << ' '
-#define RECT(index)	XCOORD(p[index].rect->x())  << ' ' <<		\
-			YCOORD(p[index].rect->y())  << ' ' <<		\
-			WIDTH (p[index].rect->width())	<< ' ' <<	\
-			HEIGHT(p[index].rect->height()) << ' '
+#define RECT(index)	XCOORD(p[index].rect->normalize().x())  << ' ' <<     \
+			YCOORD(p[index].rect->normalize().y())  << ' ' <<     \
+			WIDTH (p[index].rect->normalize().width()) << ' ' <<  \
+			HEIGHT(p[index].rect->normalize().height()) << ' '
 #define INT_ARG(index)	p[index].ival << ' '
 #define COLOR(x)	(x).red()   << ' ' <<	\
 			(x).green() << ' ' <<	\
@@ -2400,13 +2402,14 @@ bool QPSPrinter::cmd( int c , QPainter *paint, QPDevCmdParam *p )
 	break;
     case PdcDrawText2:
 	if ( !p[1].str->isEmpty() ) {
-	    // #### Unicode ignored
+	    // #### Local 8-bit only; other Unicode ignored
 
-	    char * tmp = new char[ p[1].str->length() * 2 + 2 ];
+         QCString tmpC=p[1].str->local8Bit();
+	 char *tmp = new char[tmpC.length()*2 + 2];
 #if defined(CHECK_NULL)
 	    CHECK_PTR( tmp );
 #endif
-	    const char* from = p[1].str->ascii();
+	    const char* from = (const char*)tmpC;
 	    char * to = tmp;
 	    while ( *from ) {
 		if ( *from == '\\' || *from == '(' || *from == ')' )
@@ -2843,7 +2846,7 @@ void QPSPrinter::emitHeader( bool finished )
 	       << " translate 1 -1 scale/defM matrix CM d\n";
     } else {
 	QPaintDeviceMetrics m( printer );
-	stream << "% " << m.heightMM() << "*" << m.widthMM() 
+	stream << "% " << m.heightMM() << "*" << m.widthMM()
 	       << " mm (landscape)\n90 rotate 1 -1 scale/defM matrix CM d\n";
     }
 

@@ -1,5 +1,5 @@
 /**********************************************************************
-** $Id: qlabel.cpp,v 2.88 1999/06/22 03:25:30 ettrich Exp $
+** $Id: qlabel.cpp,v 2.88.2.1 1999/08/31 13:53:16 aavit Exp $
 **
 ** Implementation of QLabel widget class
 **
@@ -513,10 +513,10 @@ QSize QLabel::sizeForWidth( int w ) const
 	if ( w < 0 ) {
 	    w = 1000;
 	    doc->setWidth(&p,w);
-	    w = int(sqrt(5*doc->height()/3*doc->widthUsed()));
+	    w = int(sqrt((float)(5*doc->height()/3*doc->widthUsed())));
 	    doc->setWidth(&p,w);
 	    if ( w*3 < 5*doc->height() ) {
-		w = int(sqrt(6*doc->height()/3*doc->widthUsed()));
+		w = int(sqrt((float)(6*doc->height()/3*doc->widthUsed())));
 	    }
 	} else {
 	    w -= 2*frameWidth();

@@ -108,5 +108,7 @@ cursor.o: cursor.cpp \
 		../../include/qasciidict.h \
 		../../include/qgdict.h \
 		../../include/qtranslator.h \
-		../../include/qintdict.h
+		../../include/qintdict.h \
+		../../include/qlayout.h \
+		../../include/qabstractlayout.h
 

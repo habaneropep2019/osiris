@@ -212,6 +212,9 @@ then
 	;;
      dgux:*)
 	PLATFORM=dgux-g++
+	PLATFORM_NOTES="
+	    - WARNING: DG/ux not supported correctly in this version of Qt.
+	"
 	;;
      ULTRIX:*)
 	PLATFORM=ultrix-g++
@@ -259,7 +262,6 @@ then
 	#PLATFORM=solaris-g++
 	PLATFORM=solaris-cc
 	PLATFORM_NOTES="
-	    - Sun C++ 5 is not supported (it is too buggy)
 	    - To mix GNU C and SunPRO C++, add -platform solaris-cc-gcc
 	"
 	;;

@@ -1,4 +1,4 @@
-.TH QApplication 3qt "20 July 1999" "Troll Tech AS" \" -*- nroff -*-
+.TH QApplication 3qt "24 September 1999" "Troll Tech AS" \" -*- nroff -*-
 .\" Copyright 1992-1999 Troll Tech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -65,6 +65,9 @@ Inherited by QXtApplication.
 .br
 .ti -1c
 .BI "void \fBexit_loop\fR ()"
+.br
+.ti -1c
+.BI "int \fBloopLevel\fR () const"
 .br
 .ti -1c
 .BI "virtual bool \fBnotify\fR ( QObject *, QEvent * )"
@@ -700,6 +703,10 @@ The signal is very useful when your application has many top level widgets but n
 For convenience, transient toplevel widgets such as popup menus and dialogs are omitted.
 .PP
 See also: mainWidget(), topLevelWidgets(), QWidget::isTopLevel() and QWidget::close().
+.SH "int QApplication::loopLevel () const"
+Returns the current loop level
+.PP
+See also: enter_loop() and exit_loop().
 .SH "QWidget * QApplication::mainWidget () const"
 Returns the main application widget, or 0 if there is not a defined main widget.
 .PP

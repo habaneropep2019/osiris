@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qfileiconview.cpp,v 1.5.2.1 1999/06/30 14:00:04 warwick Exp $
+** $Id: qfileiconview.cpp,v 1.5.2.2 1999/09/01 06:19:56 aavit Exp $
 **
 ** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
@@ -311,7 +311,7 @@ void QtFileIconViewItem::dropped( QMimeSource *mime )
                         "To\n\n"
                         "   %1" ).arg( filename() );
 
-        QMessageBox::information( 0L, "Copy", str, "Not Implemented" );
+        QMessageBox::information( 0, "Copy", str, "Not Implemented" );
     }
 }
 
@@ -453,7 +453,7 @@ void QtFileIconView::itemDoubleClicked( QtIconViewItem *i )
 QDragObject *QtFileIconView::dragObject()
 {
     if ( !currentItem() )
-        return 0L;
+        return 0;
 
     QStrList lst;
     lst.setAutoDelete( FALSE );

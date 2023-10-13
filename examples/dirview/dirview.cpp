@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: dirview.cpp,v 1.2.2.1 1999/07/13 20:00:16 warwick Exp $
+** $Id: dirview.cpp,v 1.2.2.2 1999/09/01 06:19:51 aavit Exp $
 **
 ** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
@@ -244,8 +244,8 @@ QString Directory::text( int column ) const
  *****************************************************************************/
 
 DirectoryView::DirectoryView( QWidget *parent, const char *name, bool sdo )
-    : QListView( parent, name ), dirsOnly( sdo ), oldCurrent( 0L ),
-      dropItem( 0L ), autoopen_timer( this ), mousePressed( FALSE ), autoscroll_timer( this )
+    : QListView( parent, name ), dirsOnly( sdo ), oldCurrent( 0 ),
+      dropItem( 0 ), autoopen_timer( this ), mousePressed( FALSE ), autoscroll_timer( this )
 {
     connect( this, SIGNAL( doubleClicked( QListViewItem * ) ),
              this, SLOT( slotFolderSelected( QListViewItem * ) ) );
@@ -386,7 +386,7 @@ void DirectoryView::contentsDragMoveEvent( QDragMoveEvent *e )
     } else {
         e->ignore();
         autoopen_timer.stop();
-        dropItem = 0L;
+        dropItem = 0;
     }
 }
 
@@ -394,7 +394,7 @@ void DirectoryView::contentsDragLeaveEvent( QDragLeaveEvent * )
 {
     autoopen_timer.stop();
     stopAutoScroll();
-    dropItem = 0L;
+    dropItem = 0;
 
     setCurrentItem( oldCurrent );
     setSelected( oldCurrent, TRUE );

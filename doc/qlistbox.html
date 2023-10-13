@@ -7,7 +7,7 @@ body { background: white; color: black; }
 </head><body bgcolor="#ffffff">
 
 <a href=index.html><img width=122 height=65 src=qtlogo.png alt="Qt logo" align=left border=0></a>
-<center><img src=dochead.png width=448 height=23></center>
+<center><img src=dochead.png width=472 height=27></center>
 <br clear=all>
 
 <h1 align=center>QListBox Class Reference</h1><br clear="all">
@@ -172,8 +172,9 @@ using the new objects; most things can be done using the indexes too
 but unfortunately not everything.
 <p>Each item in a QListBox contains a QListBoxItem.  One of the items
 can be the current item.  The <a href="qlistbox.html#2053cf">highlighted</a>() signal is emitted when
-the user highlights a new current item; <a href="qlistbox.html#1b97be">selected</a>() is emitted when
-the user double-clicks on an item or presses return when an item is
+a new item gets highlighted, e.g. because the user clicks on it or
+<a href="qlistbox.html#ed56da">QListBox::setCurrentItem</a>() is called. The <a href="qlistbox.html#1b97be">selected</a>() signal is emitted
+when the user double-clicks on an item or presses return when an item is
 highlighted.
 <p>If the user does not select anything, no signals are emitted and
 <a href="qlistbox.html#5636a4">currentItem</a>() returns -1.
@@ -593,7 +594,7 @@ FALSE if all the columns have the same width.
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.troll.no">www.troll.no</a>):<br>
 <form method=post action="http://www.troll.no/search.cgi">
-<input type=hidden name="version" value="2.0.1"><nobr>
+<input type=hidden name="version" value="2.0.2"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -601,5 +602,5 @@ copyright &copy; 1995-99
 <a href="http://www.troll.no">Troll Tech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.0.1</div>
+<td align="right"><div align="right">Qt version 2.0.2</div>
 </table></div></address></body></html>

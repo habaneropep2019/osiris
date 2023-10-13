@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qwidget_x11.cpp,v 2.235.2.6 1999/07/19 17:23:21 warwick Exp $
+** $Id: qwidget_x11.cpp,v 2.235.2.8 1999/09/09 08:56:42 eiriken Exp $
 **
 ** Implementation of QWidget and QWindow classes for X11
 **
@@ -480,7 +480,7 @@ void QWidget::reparent( QWidget *parent, WFlags f, const QPoint &p,
 	QObjectListIt it( *chlist );
 	QObject *obj;
 	while ( (obj=it.current()) ) {
-	    if ( obj->isWidgetType() ) {
+	    if ( obj->isWidgetType() && !((QWidget*)obj)->isTopLevel() ) {
 		QWidget *w = (QWidget *)obj;
 		XReparentWindow( x11Display(), w->winId(), winId(),
 				 w->geometry().x(), w->geometry().y() );
@@ -599,7 +599,8 @@ static XFontSet fixed_fontset = 0; // leaked once
 static
 void cleanup_ffs()
 {
-    XFreeFontSet(QPaintDevice::x11AppDisplay(), fixed_fontset);
+    if ( fixed_fontset )
+	XFreeFontSet(QPaintDevice::x11AppDisplay(), fixed_fontset);
     fixed_fontset = 0;
 }
 

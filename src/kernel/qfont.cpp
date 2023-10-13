@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qfont.cpp,v 2.80.2.2 1999/07/13 19:58:50 warwick Exp $
+** $Id: qfont.cpp,v 2.80.2.3 1999/09/14 15:06:17 arnt Exp $
 **
 ** Implementation of QFont, QFontMetrics and QFontInfo classes
 **
@@ -1292,6 +1292,10 @@ QDataStream &operator>>( QDataStream &s, QFont &f )
   QFontMetrics member functions
  *****************************************************************************/
 
+// invariant: this list contains pointers to ALL QFontMetrics objects
+// with non-null painter pointers, and no other objects.  Callers of
+// these functions must maintain this invariant.
+
 typedef QList<QFontMetrics> QFontMetricsList;
 static QFontMetricsList *fm_list = 0;
 
@@ -1301,8 +1305,8 @@ static void cleanupFontMetricsList()
     fm_list = 0;
 }
 
-static void insertFontMetrics( QFontMetrics *fm )
-{
+
+static void insertFontMetrics( QFontMetrics *fm ) {
     if ( !fm_list ) {
 	fm_list = new QFontMetricsList;
 	CHECK_PTR( fm_list );
@@ -1331,12 +1335,15 @@ static void removeFontMetrics( QFontMetrics *fm )
 void QFontMetrics::reset( const QPainter *painter )
 {
     if ( fm_list ) {
-	QFontMetrics *fm = fm_list->first();
-	while ( fm ) {
-	    if ( fm->painter == painter )
+	QListIterator<QFontMetrics> it( *fm_list );
+	QFontMetrics * fm;
+	while( (fm=it.current()) != 0 ) {
+	    ++it;
+	    if ( fm->painter == painter ) {
 		fm->painter = 0;		// detach from painter
-	    fm = fm_list->next();
+		removeFontMetrics( fm );
 	}
+    }
     }
 }
 
@@ -1600,6 +1607,10 @@ QSize QFontMetrics::size( int flgs, const QString &str, int len, int tabstops,
   QFontInfo member functions
  *****************************************************************************/
 
+// invariant: this list contains pointers to ALL QFontInfo objects
+// with non-null painter pointers, and no other objects.  Callers of
+// these functions must maintain this invariant.
+
 typedef QList<QFontInfo> QFontInfoList;
 static QFontInfoList *fi_list = 0;
 
@@ -1639,11 +1650,14 @@ static void removeFontInfo( QFontInfo *fi )
 void QFontInfo::reset( const QPainter *painter )
 {
     if ( fi_list ) {
-	QFontInfo *fi = fi_list->first();
-	while ( fi ) {
-	    if ( fi->painter == painter )
+	QListIterator<QFontInfo> it( *fi_list );
+	QFontInfo * fi;
+	while( (fi=it.current()) != 0 ) {
+	    ++it;
+	    if ( fi->painter == painter ) {
 		fi->painter = 0;		// detach from painter
-	    fi = fi_list->next();
+		removeFontInfo( fi );
+	    }
 	}
     }
 }

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: glbox.cpp,v 1.3 1999/06/16 11:26:34 aavit Exp $
+** $Id: glbox.cpp,v 1.3.2.1 1999/09/08 08:30:40 aavit Exp $
 **
 ** Implementation of GLBox
 ** This is a simple QGLWidget displaying a box
@@ -13,6 +13,9 @@
 
 #include "glbox.h"
 
+#if defined(_CC_MSVC_)
+#pragma warning(disable:4305) // init: truncation from const double to float
+#endif
 
 /*!
   Create a GLBox widget

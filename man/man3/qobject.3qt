@@ -1,4 +1,4 @@
-.TH QObject 3qt "20 July 1999" "Troll Tech AS" \" -*- nroff -*-
+.TH QObject 3qt "24 September 1999" "Troll Tech AS" \" -*- nroff -*-
 .\" Copyright 1992-1999 Troll Tech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -14,7 +14,7 @@ QObject \- The base class of all Qt objects that can deal with signals, slots an
 .PP
 Inherits Qt.
 .PP
-Inherited by QAccel, QApplication, QClipboard, QDataPump, QDragManager, QDragObject, QFileIconProvider, QLayout, QNPInstance, QSenderObject, QSessionManager, QSignal, QSignalMapper, QSocketNotifier, QStyle, QStyleSheet, QTimer, QToolTipGroup, QTranslator, QValidator and QWidget.
+Inherited by QAccel, QApplication, QClipboard, QDataPump, QDragManager, QDragObject, QFileIconProvider, QLayout, QNPInstance, QSenderObject, QServerSocket, QSessionManager, QSignal, QSignalMapper, QSocket, QSocketNotifier, QStyle, QStyleSheet, QTimer, QToolTipGroup, QTranslator, QValidator and QWidget.
 .PP
 .SS "Public Members"
 .in +1c
@@ -915,7 +915,7 @@ See also: timerEvent(), killTimer() and killTimers().
 .PP
 Examples:
 .(l
-xform/xform.cpp qmag/qmag.cpp forever/forever.cpp
+qmag/qmag.cpp forever/forever.cpp
 .)l
 .SH "void QObject::staticMetaObject () \fC[static protected]\fR"
 The functionality of initMetaObject(), provided as a static function.
@@ -928,16 +928,11 @@ QTimer provides a higher-level interface to the timer functionality, and also mo
 .PP
 See also: startTimer(), killTimer(), killTimers() and event().
 .PP
-Reimplemented in QPopupMenu and QMultiLineEdit.
+Reimplemented in QSocket, QPopupMenu and QMultiLineEdit.
 .SH "QString QObject::tr ( const char * text ) \fC[static]\fR"
 Returns a translated version of \fItext,\fR or \fItext\fR if there is no appropriate translated version. All QObject subclasses which use the Q_OBJECT macro have an overridden version of this.
 .PP
 See also: QApplication::translate().
-.PP
-Examples:
-.(l
-xform/xform.cpp
-.)l
 .SH RELATED FUNCTION DOCUMENTATION
 .SH "void * qt_find_obj_child (QObject * parent, const char * type, const char * name)"
 Returns a pointer to the child named \fIname\fR of QObject \fIparent\fR which inherits type \fItype.\fR

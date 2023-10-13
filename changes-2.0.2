@@ -1,0 +1,134 @@
+Changes in Qt 2.0.2
+-------------------
+
+Qt 2.0.2 is a bugfix release, source and binary compatible with Qt
+2.0 and Qt 2.0.1.  While all changes are behind the API, some bugfixes
+may cause differences in runtime behaviour - such fixes are marked in
+yellow with a "*".
+
+
+General improvements
+--------------------
+QAccel operator> disambiguated
+
+QFileDialog layout improvements
+
+Several memory leaks removed
+
+PNG alpha channel problem on big-endian machines fixed
+
+QWidget closeEvent() can be ignore()d for main widget
+
+QString operator==() distinguishes between null and empty string
+
+QString memory allocation fix for 64-bit machines. Fixes
+	"moc" segfault.
+
+QTextStream fixes for signed char 
+
+QButton::focusNextPrevChild() lockup fixed
+
+QDateTime day 0/month 0 are not acceptable
+
+QFile::close() on a file that was opened with an existing file does not
+	set IO_UnspecifiedError
+
+QGroupBox setTitle() works with layout
+
+QLCDNumber reduced flicker
+
+QLineEdit bugfixes
+
+QListBox bugfixes
+
+QListView bugfixes
+
+QMainWindow toolbar layout fix
+
+*QMultiLineEdit midButton in readOnly mode does not cause paste()
+
+*QPopupMenu emits activated(int) before triggering the slot connected to
+	the menu item. This avoids problems when connecting to a slot
+	that causes the popup to be deleted.
+
+*QPushButton::sizeHint() for buttons with pixmaps in Windows style is fixed
+
+QScrollBar slider handle keeps inside its boundaries
+
+QScrollView setEnabled() works properly
+
+QSlider position groove correctly when TickmarksAbove
+
+QSpinBox null string/empty string cleanup
+
+QSplitter in non-opaque mode works properly after reparent()
+
+Fixed missing documentation.
+
+Xt extension
+------------
+Event doubling bug fixed 
+
+Server lockup bug fixed.
+
+
+
+OpenGL Extension
+----------------
+
+Overlay support added (Windows implementation still experimental).
+
+Other improvements; see extensions/opengl/CHANGES file
+
+
+Windows-specific fixes
+----------------------
+
+Mouse move events sent to the right widget. (Also fixes tooltips in dialogs)
+
+QFont::setPixelSize() gives correct size 
+   and pixelSize() returns the correct value.
+
+QPainter font size and clipping bugs fixed
+
+Make system improvements for Borland C++
+
+QColor 256-color mode (ManyColor) fix
+
+QCursor mask fix for predefined cursors
+
+QPaintDevice can now bitBlt to and from a special paint device
+             called QInternal::System
+
+QDir::rename() fixed
+
+Mouse press outside popup is no longer sent to widgets blocked by 
+modal dialogs.
+
+Fixes for Cygnus compiler
+
+
+X11-specific fixes
+------------------
+
+QWidget fixed reparenting of widgets with top-level children
+
+HP-UX compilation improved
+
+DG/UX g++ compilation improved
+
+QTextCodec tries harder to find charset for broken locales 
+
+Russian non-standard locale "ru_SU" now means KOI8 charset
+
+QColor allocation speedup
+
+HP-UX segfault on exit fixed
+
+Printing:
+  DrawRoundRect fixed
+  removed Postscript crash 
+  use local character encoding for printing, instead of Latin1
+
+Font matching improved
+

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: border.cpp,v 1.5 1999/06/21 13:58:40 reggie Exp $
+** $Id: border.cpp,v 1.5.2.1 1999/09/01 06:19:50 aavit Exp $
 **
 ** Implementing your own layout: flow example
 **
@@ -133,7 +133,7 @@ void BorderLayout::doLayout( const QRect &rect, bool /*testonly*/ )
 
     BorderLayoutIterator it = BorderLayoutIterator( &list );
     BorderLayoutStruct *o;
-    BorderLayoutStruct *center = 0L;
+    BorderLayoutStruct *center = 0;
     while ( ( o = it.currentStruct() ) != 0 ) {
         ++it;
 

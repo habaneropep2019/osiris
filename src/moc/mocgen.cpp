@@ -1,6 +1,5 @@
 #ifndef lint
-/*static char yysccsid[] = "from: @(#)yaccpar	1.9 (Berkeley) 02/21/93";*/
-static char yyrcsid[] = "$Id: skeleton.c,v 1.4 1993/12/21 18:45:32 jtc Exp $";
+static char yysccsid[] = "@(#)yaccpar	1.9 (Berkeley) 02/21/93";
 #endif
 #define YYBYACC 1
 #define YYMAJOR 1
@@ -107,7 +106,7 @@ typedef union {
     ArgList    *arg_list;
     Argument   *arg;
 } YYSTYPE;
-#line 111 "y.tab.c"
+#line 110 "y.tab.c"
 #define CHAR_VAL 257
 #define INT_VAL 258
 #define DOUBLE_VAL 259
@@ -1852,17 +1851,13 @@ void addMember( char m )
     tmpFunc  = new Function;
     CHECK_PTR( tmpFunc );
 }
-#line 1856 "y.tab.c"
+#line 1855 "y.tab.c"
 #define YYABORT goto yyabort
 #define YYREJECT goto yyabort
 #define YYACCEPT goto yyaccept
 #define YYERROR goto yyerrlab
 int
-#if defined(__STDC__)
-yyparse(void)
-#else
 yyparse()
-#endif
 {
     register int yym, yyn, yystate;
 #if YYDEBUG
@@ -1886,7 +1881,7 @@ yyparse()
     *yyssp = yystate = 0;
 
 yyloop:
-    if ((yyn = yydefred[yystate]) != 0) goto yyreduce;
+    if (yyn = yydefred[yystate]) goto yyreduce;
     if (yychar < 0)
     {
         if ((yychar = yylex()) < 0) yychar = 0;
@@ -1926,6 +1921,10 @@ yyloop:
         goto yyreduce;
     }
     if (yyerrflag) goto yyinrecovery;
+#ifdef lint
+    goto yynewerror;
+#endif
+yynewerror:
     yyerror("syntax error");
 #ifdef lint
     goto yyerrlab;
@@ -2716,7 +2715,7 @@ case 263:
 #line 828 "moc.y"
 {BEGIN QT_DEF; }
 break;
-#line 2720 "y.tab.c"
+#line 2719 "y.tab.c"
     }
     yyssp -= yym;
     yystate = *yyssp;

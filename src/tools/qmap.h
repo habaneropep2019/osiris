@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qmap.h,v 1.21.2.2 1999/07/16 06:37:18 weis Exp $
+** $Id: qmap.h,v 1.21.2.4 1999/09/21 18:00:17 paul Exp $
 **
 ** Definition of QMap class
 **
@@ -443,7 +443,7 @@ public:
 	    }
 	}
 	// Really bigger ?
-	if ( j.node->key < k )
+	if ( (j.node->key) < k )
 	    return insert(x, y, k );
 	// We are going to replace a node
 	return j;
@@ -578,7 +578,7 @@ QDataStream& operator>>( QDataStream& s, QMap<Key,T>& m ) {
 template<class Key, class T>
 QDataStream& operator<<( QDataStream& s, const QMap<Key,T>& m ) {
     s << m.count();
-    QMap<Key,T>::ConstIterator it = m.begin();
+    QMapConstIterator<Key,T> it = m.begin();
     for( ; it != m.end(); ++it )
 	s << it.key() << it.data();
     return s;

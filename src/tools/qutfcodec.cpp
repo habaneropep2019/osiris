@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qutfcodec.cpp,v 1.11 1999/06/19 16:26:56 agulbra Exp $
+** $Id: qutfcodec.cpp,v 1.11.2.1 1999/08/12 11:06:13 aavit Exp $
 **
 ** Implementation of QEucCodec class
 **
@@ -33,7 +33,7 @@ int QUtf8Codec::mibEnum() const
 QCString QUtf8Codec::fromUnicode(const QString& uc, int& len_in_out) const
 {
     int l = QMIN((int)uc.length(),len_in_out);
-    int rlen = l*2+1;
+    int rlen = l*3+1;
     QCString rstr(rlen);
     uchar* cursor = (uchar*)rstr.data();
     for (int i=0; i<l; i++) {

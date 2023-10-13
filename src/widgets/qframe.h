@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qframe.h,v 2.20 1999/06/08 20:39:37 ettrich Exp $
+** $Id: qframe.h,v 2.20.2.1 1999/08/12 09:29:17 paul Exp $
 **
 ** Definition of QFrame widget class
 **
@@ -51,7 +51,6 @@ public:
     QSize	sizeHint() const;
     QSizePolicy sizePolicy() const;
 
-q_properties:
     enum Shape { NoFrame  = 0,				// no frame
 		 Box	  = 0x0001,			// rectangular box
 		 Panel    = 0x0002,			// rectangular panel

@@ -9,7 +9,7 @@ body { background: white; color: black; }
 </head><body bgcolor="#ffffff">
 
 <a href=index.html><img width=122 height=65 src=qtlogo.png alt="Qt logo" align=left border=0></a>
-<center><img src=dochead.png width=448 height=23></center>
+<center><img src=dochead.png width=472 height=27></center>
 <br clear=all>
 
 <h1 align=center>Transformed Graphics Demo</h1><br clear="all">
@@ -21,7 +21,7 @@ body { background: white; color: black; }
 
   Implementation:
 <pre>/****************************************************************************
-** &#36;Id&#58; xform.cpp,v 1.7 1999/06/21 13:58:48 reggie Exp $
+** &#36;Id&#58; xform.cpp,v 1.7.2.1 1999/09/22 10:59:36 eiriken Exp $
 **
 ** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
@@ -59,7 +59,7 @@ class XFormControl : public QFrame, public ModeNames
 {
     Q_OBJECT
 public:
-    XFormControl( <a name="QWidget"></a><a href="qwidget.html">QWidget</a> *parent=0, const char *name=0 );
+    XFormControl( const QFont &amp;initialFont, QWidget *parent=0, const char *name=0 );
    ~XFormControl() {}
 
     <a name="QWMatrix"></a><a href="qwmatrix.html">QWMatrix</a> matrix();
@@ -90,6 +90,7 @@ private:
     <a name="QRadioButton"></a><a href="qradiobutton.html">QRadioButton</a> *rb_txt;              // Radio button for text
     <a href="qradiobutton.html">QRadioButton</a> *rb_img;              // Radio button for image
     <a href="qradiobutton.html">QRadioButton</a> *rb_pic;              // Radio button for picture
+    <a name="QFont"></a><a href="qfont.html">QFont</a> currentFont;
 };
 
 /*
@@ -101,7 +102,7 @@ class ShowXForm : public QWidget, public ModeNames
 {
     Q_OBJECT
 public:
-    ShowXForm( <a href="qwidget.html">QWidget</a> *parent=0, const char *name=0 );
+    ShowXForm( const QFont &amp;f, QWidget *parent=0, const char *name=0 );
    ~ShowXForm() {}
     void showIt();                      // (Re)displays text or pixmap
 
@@ -124,9 +125,11 @@ private:
     Mode      m;
 };
 
-XFormControl::XFormControl( <a href="qwidget.html">QWidget</a> *parent, const char *name )
+XFormControl::XFormControl( const QFont &amp;initialFont,
+                            <a name="QWidget"></a><a href="qwidget.html">QWidget</a> *parent, const char *name )
         : <a name="QFrame"></a><a href="qframe.html">QFrame</a>( parent, name )
 {
+    currentFont = initialFont;
     mode = Image;
 
     rotLCD      = new <a href="qlcdnumber.html">QLCDNumber</a>( 4, this, "rotateLCD" );
@@ -149,7 +152,7 @@ XFormControl::XFormControl( <a href="qwidget.html">QWidget</a> *parent, const ch
     rotS-&gt;<a href="qwidget.html#8e0197">setGeometry</a>( 10, 80, 100, 15 );
     rotS-&gt;<a name="setRange"></a><a href="qrangecontrol.html#0337f8">setRange</a>( -180, 180 );
     rotS-&gt;<a name="setValue"></a><a href="qslider.html#c5cce4">setValue</a>( 0 );
-    <a name="connect"></a><a href="qobject.html#c2d209">connect</a>( rotS, SIGNAL(valueChanged(int)), SLOT(<a name="newMtx"></a><a href="#132">newMtx</a>()) );
+    connect( rotS, SIGNAL(valueChanged(int)), SLOT(newMtx()) );
 
     shearLCD-&gt;<a href="qwidget.html#8e0197">setGeometry</a>( 10, 105, 100, 60 );
     shearLCD-&gt;<a href="qlcdnumber.html#0eaac4">display</a>( "0.00" );
@@ -157,11 +160,11 @@ XFormControl::XFormControl( <a href="qwidget.html">QWidget</a> *parent, const ch
     shearS-&gt;<a href="qwidget.html#8e0197">setGeometry</a>( 10, 175, 100, 15 );
     shearS-&gt;<a href="qrangecontrol.html#0337f8">setRange</a>( -25, 25 );
     shearS-&gt;<a href="qslider.html#c5cce4">setValue</a>( 0 );
-    <a href="qobject.html#c2d209">connect</a>( shearS, SIGNAL(valueChanged(int)), SLOT(<a href=#132>newMtx</a>()) );
+    connect( shearS, SIGNAL(valueChanged(int)), SLOT(newMtx()) );
 
     mirror-&gt;<a href="qwidget.html#8e0197">setGeometry</a>( 10, 200, 100, 15 );
-    mirror-&gt;<a name="setText"></a><a href="qbutton.html#58c887">setText</a>( <a name="tr"></a><a href="qobject.html#44b4c1">tr</a>("Mirror") );
-    <a href="qobject.html#c2d209">connect</a>( mirror, SIGNAL(clicked()), SLOT(<a href=#132>newMtx</a>()) );
+    mirror-&gt;<a name="setText"></a><a href="qbutton.html#58c887">setText</a>( tr("Mirror") );
+    connect( mirror, SIGNAL(clicked()), SLOT(newMtx()) );
 
     <a name="QButtonGroup"></a><a href="qbuttongroup.html">QButtonGroup</a> *bg = new <a href="qbuttongroup.html">QButtonGroup</a>(this);
     bg-&gt;<a name="hide"></a><a href="qwidget.html#bc7c6a">hide</a>();
@@ -169,37 +172,37 @@ XFormControl::XFormControl( <a href="qwidget.html">QWidget</a> *parent, const ch
     bg-&gt;<a href="qbuttongroup.html#067bec">insert</a>(rb_img,1);
     bg-&gt;<a href="qbuttongroup.html#067bec">insert</a>(rb_pic,2);
     rb_txt-&gt;<a href="qwidget.html#8e0197">setGeometry</a>( 10, 220, 100, 15 );
-    rb_txt-&gt;<a href="qbutton.html#58c887">setText</a>( <a href="qobject.html#44b4c1">tr</a>("Text") );
+    rb_txt-&gt;<a href="qbutton.html#58c887">setText</a>( tr("Text") );
     rb_img-&gt;<a href="qwidget.html#8e0197">setGeometry</a>( 10, 235, 100, 15 );
-    rb_img-&gt;<a href="qbutton.html#58c887">setText</a>( <a href="qobject.html#44b4c1">tr</a>("Image") );
+    rb_img-&gt;<a href="qbutton.html#58c887">setText</a>( tr("Image") );
     rb_img-&gt;<a name="setChecked"></a><a href="qradiobutton.html#11e2e3">setChecked</a>(TRUE);
     rb_pic-&gt;<a href="qwidget.html#8e0197">setGeometry</a>( 10, 250, 100, 15 );
-    rb_pic-&gt;<a href="qbutton.html#58c887">setText</a>( <a href="qobject.html#44b4c1">tr</a>("Picture") );
-    <a href="qobject.html#c2d209">connect</a>( bg, SIGNAL(clicked(int)), SLOT(<a name="changeMode"></a><a href="#137">changeMode</a>(int)) );
+    rb_pic-&gt;<a href="qbutton.html#58c887">setText</a>( tr("Picture") );
+    connect( bg, SIGNAL(clicked(int)), SLOT(changeMode(int)) );
 
     textEd-&gt;<a href="qwidget.html#8e0197">setGeometry</a>( 10, 275, 100, 20 );
     textEd-&gt;<a name="setText"></a><a href="qlineedit.html#b85aa3">setText</a>( "Troll" );
-    <a href="qobject.html#c2d209">connect</a>( textEd, SIGNAL(textChanged(const QString&amp;)),
-                     SLOT(<a name="newTxt"></a><a href="#133">newTxt</a>(const QString&amp;)) );
+    connect( textEd, SIGNAL(textChanged(const QString&amp;)),
+                     SLOT(newTxt(const QString&amp;)) );
 
     f-&gt;setGeometry( 10, 305, 100, 20 );
-    f-&gt;setText( <a href="qobject.html#44b4c1">tr</a>("Select font...") );
-    <a href="qobject.html#c2d209">connect</a>( f, SIGNAL(clicked()), SLOT(<a name="selectFont"></a><a href="#135">selectFont</a>()) );
+    f-&gt;setText( tr("Select font...") );
+    connect( f, SIGNAL(clicked()), SLOT(selectFont()) );
 
     magS = new <a href="qslider.html">QSlider</a>( QSlider::Horizontal, this,
                            "magnifySlider" );
     magS-&gt;<a href="qwidget.html#8e0197">setGeometry</a>( 10, 375, 100, 15 );
     magS-&gt;<a href="qrangecontrol.html#0337f8">setRange</a>( 0, 800 );
-    <a href="qobject.html#c2d209">connect</a>( magS, SIGNAL(valueChanged(int)), SLOT(<a href=#132>newMtx</a>()) );
+    connect( magS, SIGNAL(valueChanged(int)), SLOT(newMtx()) );
     magS-&gt;<a href="qslider.html#c5cce4">setValue</a>( 0 );
     magLCD = new <a href="qlcdnumber.html">QLCDNumber</a>( 4,this, "shearLCD" );
     magLCD-&gt;<a href="qwidget.html#8e0197">setGeometry</a>( 10, 305, 100, 60 );
     magLCD-&gt;<a href="qlcdnumber.html#0eaac4">display</a>( "100" );
-    <a href="qobject.html#c2d209">connect</a>( magS, SIGNAL(valueChanged(int)), magLCD, SLOT(display(int)));
+    connect( magS, SIGNAL(valueChanged(int)), magLCD, SLOT(display(int)));
 
-    <a href=#137>changeMode</a>(Image);
+    changeMode(Image);
 
-    <a name="startTimer"></a><a href="qobject.html#906d99">startTimer</a>(20); // start an initial animation
+    startTimer(20); // start an initial animation
 }
 
 void <a name="131"></a>XFormControl::timerEvent(<a href="qtimerevent.html">QTimerEvent</a>*)
@@ -225,7 +228,7 @@ void <a name="132"></a>XFormControl::newMtx()
 void <a name="133"></a>XFormControl::newTxt(const QString&amp; s)
 {
     emit newText(s);
-    <a href=#137>changeMode</a>(Text);
+    <a name="changeMode"></a><a href="#137">changeMode</a>(Text);
 }
 
 /*
@@ -264,9 +267,11 @@ void <a name="133"></a>XFormControl::newTxt(const QString&amp; s)
 void <a name="135"></a>XFormControl::selectFont()
 {
     bool ok;
-    <a name="QFont"></a><a href="qfont.html">QFont</a> f = QFontDialog::getFont( &amp;ok );
-    if ( ok )
+    <a href="qfont.html">QFont</a> f = QFontDialog::getFont( &amp;ok, currentFont );
+    if ( ok ) {
+        currentFont = f;
         <a name="fontSelected"></a><a href="#136">fontSelected</a>( f );
+    }
 }
 
 void <a name="136"></a>XFormControl::fontSelected( const QFont &amp;font )
@@ -284,7 +289,7 @@ void <a name="137"></a>XFormControl::changeMode(int m)
     mode = (Mode)m;
 
     emit newMode( m );
-    <a href=#132>newMtx</a>();
+    <a name="newMtx"></a><a href="#132">newMtx</a>();
     if ( mode == Text ) {
         magS-&gt;<a href="qwidget.html#bc7c6a">hide</a>();
         magLCD-&gt;<a href="qwidget.html#bc7c6a">hide</a>();
@@ -302,10 +307,11 @@ void <a name="137"></a>XFormControl::changeMode(int m)
     qApp-&gt;flushX();
 }
 
-ShowXForm::ShowXForm( <a href="qwidget.html">QWidget</a> *parent, const char *name )
+ShowXForm::ShowXForm( const QFont &amp;initialFont,
+                      <a href="qwidget.html">QWidget</a> *parent, const char *name )
         : <a href="qwidget.html">QWidget</a>( parent, name, WResizeNoErase )
 {
-    <a name="setFont"></a><a href="#126">setFont</a>( <a href="qfont.html">QFont</a>( "Charter", 48, QFont::Bold ) );
+    <a name="setFont"></a><a href="qwidget.html#dde00b">setFont</a>( initialFont );
     <a name="setBackgroundColor"></a><a href="qwidget.html#721b7d">setBackgroundColor</a>( white );
     m = Text;
     eraseRect = QRect( 0, 0, 0, 0 );
@@ -482,13 +488,15 @@ void <a name="121"></a>XFormCenter::newMode( int m )
 XFormCenter::XFormCenter( <a href="qwidget.html">QWidget</a> *parent, const char *name )
     : <a href="qwidget.html">QWidget</a>( parent, name )
 {
-    sx = new ShowXForm(this);
+    <a href="qfont.html">QFont</a> f( "Charter", 36, QFont::Bold );
+
+    sx = new ShowXForm( f, this );
     sx-&gt;<a name="move"></a><a href="qwidget.html#958bbe">move</a>( 120, 0 );             // the size is set by resizeEvent
-    xc = new XFormControl(this);
+    xc = new XFormControl( f, this );
     xc-&gt;<a name="move"></a><a href="qwidget.html#8b0010">move</a>( 0, 0 );               // the size is set by resizeEvent
     xc-&gt;<a name="setFrameStyle"></a><a href="qframe.html#c0d758">setFrameStyle</a>( QFrame::Box | QFrame::Sunken );
     xc-&gt;<a name="setLineWidth"></a><a href="qframe.html#bffeeb">setLineWidth</a>( 2 );
-    <a href="qobject.html#c2d209">connect</a>( xc, SIGNAL(newText(const QString&amp;)), sx,
+    <a name="connect"></a><a href="qobject.html#c2d209">connect</a>( xc, SIGNAL(newText(const QString&amp;)), sx,
                  SLOT(setText(const QString&amp;)) );
     <a href="qobject.html#c2d209">connect</a>( xc, SIGNAL(newMatrix(<a href="qwmatrix.html">QWMatrix</a>)),
              sx, SLOT(setMatrix(<a href="qwmatrix.html">QWMatrix</a>)) );
@@ -517,5 +525,5 @@ int main( int argc, char **argv )
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.0.1</div>
+<td align="right"><div align="right">Qt version 2.0.2</div>
 </table></div></address></body></html>

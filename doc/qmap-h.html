@@ -9,7 +9,7 @@ body { background: white; color: black; }
 </head><body bgcolor="#ffffff">
 
 <a href=index.html><img width=122 height=65 src=qtlogo.png alt="Qt logo" align=left border=0></a>
-<center><img src=dochead.png width=448 height=23></center>
+<center><img src=dochead.png width=472 height=27></center>
 <br clear=all>
 
 <h1 align=center>qmap.h</h1><br clear="all">
@@ -19,7 +19,7 @@ remains with Troll Tech.
 <hr>
 <pre>
 /****************************************************************************
-** &#36;Id&#58; qmap.h,v 1.21.2.2 1999/07/16 06:37:18 weis Exp $
+** &#36;Id&#58; qmap.h,v 1.21.2.4 1999/09/21 18:00:17 paul Exp $
 **
 ** Definition of QMap class
 **
@@ -463,7 +463,7 @@ public:
             }
         }
         // Really bigger ?
-        if ( j.node-&gt;key &lt; k )
+        if ( (j.node-&gt;key) &lt; k )
             return insert(x, y, k );
         // We are going to replace a node
         return j;
@@ -598,7 +598,7 @@ QDataStream&amp; operator&gt;&gt;( QDataStream&amp; s, QMap&lt;Key,T&gt;&amp; m 
 template&lt;class Key, class T&gt;
 QDataStream&amp; operator&lt;&lt;( QDataStream&amp; s, const QMap&lt;Key,T&gt;&amp; m ) {
     s &lt;&lt; m.count();
-    QMap&lt;Key,T&gt;::ConstIterator it = m.begin();
+    QMapConstIterator&lt;Key,T&gt; it = m.begin();
     for( ; it != m.end(); ++it )
         s &lt;&lt; it.key() &lt;&lt; it.data();
     return s;
@@ -611,5 +611,5 @@ QDataStream&amp; operator&lt;&lt;( QDataStream&amp; s, const QMap&lt;Key,T&gt;&a
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.0.1</div>
+<td align="right"><div align="right">Qt version 2.0.2</div>
 </table></div></address></body></html>

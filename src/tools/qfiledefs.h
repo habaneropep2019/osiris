@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qfiledefs.h,v 2.12 1999/04/28 09:58:41 aavit Exp $
+** $Id: qfiledefs.h,v 2.12.2.1 1999/09/03 07:44:38 hanord Exp $
 **
 **		      ***   INTERNAL HEADER FILE   ***
 **
@@ -46,6 +46,9 @@
 # if defined(__CYGWIN32__)
 #  include <dirent.h>
 #  include <unistd.h>
+#  if !defined(UNIX)
+#   define UNIX
+#  endif
 # else
 #  include <io.h>
 #  if !defined(_CC_MWERKS_)

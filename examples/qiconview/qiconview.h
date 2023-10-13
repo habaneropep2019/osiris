@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qiconview.h,v 1.3 1999/06/10 13:29:46 reggie Exp $
+** $Id: qiconview.h,v 1.3.2.1 1999/09/01 06:19:58 aavit Exp $
 **
 ** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
@@ -50,7 +50,7 @@ public:
         : QDragObject( source, name )  {}
 
     virtual const char *format( int )  const
-    { return 0L; }
+    { return 0; }
 
     virtual QByteArray encodedData( const char * )  const
     { return QByteArray(); }
@@ -212,7 +212,7 @@ public:
     QtIconView( QWidget *parent = 0, const char *name = 0 );
     virtual ~QtIconView();
 
-    virtual void insertItem( QtIconViewItem *item, QtIconViewItem *after = 0L );
+    virtual void insertItem( QtIconViewItem *item, QtIconViewItem *after = 0 );
     virtual void removeItem( QtIconViewItem *item );
 
     virtual int index( QtIconViewItem *item );

@@ -1,6 +1,6 @@
 # Compiling
 SYSCONF_CXX		= aCC
-SYSCONF_CC		= aCC
+SYSCONF_CC		= cc
 
 # Compiling with support libraries
 SYSCONF_CXXFLAGS_X11	= -I/usr/include/X11R6
@@ -54,7 +54,7 @@ SYSCONF_LINK_LIB_STATIC	= rm -f $(DESTDIR)$(SYSCONF_LINK_TARGET_STATIC) ; \
 				 $(SYSCONF_AR) $(DESTDIR)$(SYSCONF_LINK_TARGET_STATIC) $(OBJECTS) $(OBJMOC) 
 # Compiling application source
 SYSCONF_CXXFLAGS	= -w -D__STRICT_ANSI__ -g
-SYSCONF_CFLAGS		= -w -D__STRICT_ANSI__ -g
+SYSCONF_CFLAGS		= -Ae -w -g
 # Compiling library source
 SYSCONF_CXXFLAGS_LIB	= +Z
 SYSCONF_CFLAGS_LIB	= +Z

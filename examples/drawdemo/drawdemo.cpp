@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: drawdemo.cpp,v 1.3 1999/06/11 18:17:48 warwick Exp $
+** $Id: drawdemo.cpp,v 1.3.2.1 1999/09/09 12:36:19 aavit Exp $
 **
 ** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
@@ -107,6 +107,8 @@ void drawShapes( QPainter *p )
 
 void drawPathText( QPainter *p )
 {
+    p->setWindow( 0, 0, 400, 300 );
+
     QPointArray a( 4 );
     a.setPoint( 0, 100,200 );
     a.setPoint( 1, 150,75 );
@@ -117,8 +119,8 @@ void drawPathText( QPainter *p )
     p->setPen( Qt::lightGray );			// set light gray pen
     p->drawPolyline( a );			// draw Bezier point array
 
-    p->setFont( QFont("Times",24) );		// set fast font
-    p->setPen( Qt::black );				// set black pen
+    p->setFont( QFont( "Times", 24 ) );		// set fast font
+    p->setPen( Qt::black );			// set black pen
 
     const char *text = "Troll Tech AS";
 

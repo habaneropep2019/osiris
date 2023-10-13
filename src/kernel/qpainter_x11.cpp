@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qpainter_x11.cpp,v 2.113 1999/06/22 20:12:35 paul Exp $
+** $Id: qpainter_x11.cpp,v 2.113.2.2 1999/09/02 15:05:35 hanord Exp $
 **
 ** Implementation of QPainter class for X11
 **
@@ -41,6 +41,7 @@
  */
 static QRegion* paintEventClipRegion = 0;
 static QPaintDevice* paintEventDevice = 0;
+
 void qt_set_paintevent_clipping( QPaintDevice* dev, const QRegion& region)
 {
     if ( !paintEventClipRegion )
@@ -49,6 +50,7 @@ void qt_set_paintevent_clipping( QPaintDevice* dev, const QRegion& region)
 	*paintEventClipRegion = region;
     paintEventDevice = dev;
 }
+
 void qt_clear_paintevent_clipping()
 {
     delete paintEventClipRegion;
@@ -242,6 +244,7 @@ static void free_gc( Display *dpy, GC gc, bool privateGC = FALSE )
 		XSetClipMask( dpy, gc, None );	// make it reusable
 		XSetFunction( dpy, gc, GXcopy );
 		XSetFillStyle( dpy, gc, FillSolid );
+		XSetTSOrigin( dpy, gc, 0, 0 );
 		return;
 	    }
 	    p++;

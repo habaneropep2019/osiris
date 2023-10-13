@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: main.cpp,v 1.2 1999/06/24 19:54:52 paul Exp $
+** $Id: main.cpp,v 1.2.2.1 1999/09/01 06:20:00 aavit Exp $
 **
 ** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
@@ -17,7 +17,7 @@ int main( int argc, char **argv )
 
     QApplication a( argc, argv );
 
-    TabDialog tabdialog( 0L, "tabdialog", QString( argc < 2 ? "." : argv[1] ) );
+    TabDialog tabdialog( 0, "tabdialog", QString( argc < 2 ? "." : argv[1] ) );
     tabdialog.resize( 450, 350 );
     tabdialog.setCaption( "Example for a Tabbed Dialog" );
     a.setMainWidget( &tabdialog );

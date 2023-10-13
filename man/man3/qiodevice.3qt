@@ -1,4 +1,4 @@
-.TH QIODevice 3qt "20 July 1999" "Troll Tech AS" \" -*- nroff -*-
+.TH QIODevice 3qt "24 September 1999" "Troll Tech AS" \" -*- nroff -*-
 .\" Copyright 1992-1999 Troll Tech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -12,7 +12,7 @@ QIODevice \- The base class of I/O devices
 .PP
 \fC#include <qiodevice.h>\fR
 .PP
-Inherited by QBuffer and QFile.
+Inherited by QBuffer, QFile, QSocket and QSocketDevice.
 .PP
 .SS "Public Members"
 .in +1c
@@ -216,7 +216,7 @@ Virtual function that sets the I/O device index to \fIpos.\fR
 .PP
 See also: size().
 .PP
-Reimplemented in QFile and QBuffer.
+Reimplemented in QSocketDevice, QSocket, QFile and QBuffer.
 .SH "int QIODevice::at () const \fC[virtual]\fR"
 Virtual function that returns the current I/O device index.
 .PP
@@ -224,11 +224,11 @@ This index is the data read/write head of the I/O device.
 .PP
 See also: size().
 .PP
-Reimplemented in QFile and QBuffer.
+Reimplemented in QFile, QBuffer, QSocket and QSocketDevice.
 .SH "bool QIODevice::atEnd () const \fC[virtual]\fR"
 Virtual function that returns TRUE if the I/O device index is at the end of the input.
 .PP
-Reimplemented in QFile.
+Reimplemented in QSocketDevice, QFile and QSocket.
 .SH "void QIODevice::close () \fC[virtual]\fR"
 Closes the I/O device.
 .PP
@@ -236,7 +236,7 @@ This virtual function must be reimplemented by all subclasses.
 .PP
 See also: open().
 .PP
-Reimplemented in QFile and QBuffer.
+Reimplemented in QSocketDevice, QFile, QSocket and QBuffer.
 .SH "int QIODevice::flags () const"
 Returns the current I/O device flags setting.
 .PP
@@ -248,7 +248,7 @@ Flushes an open I/O device.
 .PP
 This virtual function must be reimplemented by all subclasses.
 .PP
-Reimplemented in QBuffer and QFile.
+Reimplemented in QBuffer, QSocketDevice, QFile and QSocket.
 .SH "int QIODevice::getch () \fC[virtual]\fR"
 Reads a single byte/character from the I/O device.
 .PP
@@ -258,7 +258,7 @@ This virtual function must be reimplemented by all subclasses.
 .PP
 See also: putch() and ungetch().
 .PP
-Reimplemented in QFile and QBuffer.
+Reimplemented in QSocketDevice, QSocket, QFile and QBuffer.
 .SH "bool QIODevice::isAsynchronous () const"
 Returns TRUE if the I/O device is a asynchronous device, otherwise FALSE.
 .PP
@@ -342,7 +342,7 @@ This virtual function must be reimplemented by all subclasses.
 .PP
 See also: close().
 .PP
-Reimplemented in QBuffer and QFile.
+Reimplemented in QSocketDevice, QSocket, QBuffer and QFile.
 .SH "int QIODevice::putch ( int ch ) \fC[virtual]\fR"
 Writes the character \fIch\fR to the I/O device.
 .PP
@@ -352,7 +352,7 @@ This virtual function must be reimplemented by all subclasses.
 .PP
 See also: getch() and ungetch().
 .PP
-Reimplemented in QFile and QBuffer.
+Reimplemented in QSocketDevice, QSocket, QFile and QBuffer.
 .SH "QByteArray QIODevice::readAll ()"
 This convenience function returns all of the remaining data in the device. Note that this only works for <em>direct access</em> devices, such as QFile.
 .SH "int QIODevice::readBlock ( char * data, uint maxlen ) \fC[virtual]\fR"
@@ -362,7 +362,7 @@ This virtual function must be reimplemented by all subclasses.
 .PP
 See also: writeBlock().
 .PP
-Reimplemented in QBuffer and QFile.
+Reimplemented in QSocket, QBuffer, QSocketDevice and QFile.
 .SH "int QIODevice::readLine ( char * data, uint maxlen ) \fC[virtual]\fR"
 Reads a line of text, up to \fImaxlen\fR bytes including a terminating \\0. If there is a newline at the end if the line, it is not stripped.
 .PP
@@ -396,7 +396,7 @@ Virtual function that returns the size of the I/O device.
 .PP
 See also: at().
 .PP
-Reimplemented in QFile and QBuffer.
+Reimplemented in QSocket, QSocketDevice, QFile and QBuffer.
 .SH "int QIODevice::state () const"
 Returns bits OR'ed together that specify the current state.
 .PP
@@ -440,7 +440,7 @@ This virtual function must be reimplemented by all subclasses.
 .PP
 See also: getch() and putch().
 .PP
-Reimplemented in QBuffer and QFile.
+Reimplemented in QBuffer, QFile, QSocketDevice and QSocket.
 .SH "int QIODevice::writeBlock ( const QByteArray & data )"
 This convenience function is the same as calling writeBlock( data.data(), data.size() ).
 .SH "int QIODevice::writeBlock ( const char * data, uint len ) \fC[virtual]\fR"
@@ -450,7 +450,7 @@ This virtual function must be reimplemented by all subclasses.
 .PP
 See also: readBlock().
 .PP
-Reimplemented in QBuffer and QFile.
+Reimplemented in QBuffer, QSocketDevice, QFile and QSocket.
 .SH "SEE ALSO"
 .BR http://www.troll.no/qt/qiodevice.html
 .SH COPYRIGHT

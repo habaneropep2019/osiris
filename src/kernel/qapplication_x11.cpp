@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qapplication_x11.cpp,v 2.352.2.11 1999/07/20 01:33:23 weis Exp $
+** $Id: qapplication_x11.cpp,v 2.352.2.16 1999/09/23 09:49:05 hanord Exp $
 **
 ** Implementation of X11 startup routines and event handling
 **
@@ -50,6 +50,9 @@
 #include "qvaluelist.h"
 #include "qdict.h"
 #include <stdlib.h>
+#ifdef QT_SM_SUPPORT
+#include <pwd.h>
+#endif
 #include <ctype.h>
 #include <locale.h>
 #include <errno.h>
@@ -2212,21 +2215,25 @@ int QApplication::x11ProcessEvent( XEvent* event )
     }
 
     if ( !widget ) {				// don't know this window
-	if ( (widget=(QETWidget*)QApplication::activePopupWidget()) )
-	    {
- 		// Danger - make sure we don't lock the server
- 		switch ( event->type ) {
- 		case ButtonPress:
- 		case ButtonRelease:
- 		case XKeyPress:
- 		case XKeyRelease:
- 		    widget->close();
- 		    return 1;
- 		}
-	    } else {
-		void qt_np_process_foreign_event(XEvent*); // in qnpsupport.cpp
-		qt_np_process_foreign_event( event );
-	    }
+	QWidget* popup = QApplication::activePopupWidget();
+	if ( popup ) {
+	    // Danger - make sure we don't lock the server
+	    switch ( event->type ) {
+	    case ButtonPress:
+	    case ButtonRelease:
+	    case XKeyPress:
+	    case XKeyRelease:
+		do {
+		    popup->close();
+		    if ( qApp->activePopupWidget() == popup )
+			popup->hide();
+		} while ( (popup = qApp->activePopupWidget()) );
+		return 1;
+            }
+	} else {
+	    void qt_np_process_foreign_event(XEvent*); // in qnpsupport.cpp
+	    qt_np_process_foreign_event( event );
+	}
 	return -1;
     }
 
@@ -2322,6 +2329,8 @@ int QApplication::x11ProcessEvent( XEvent* event )
 
     case EnterNotify:			// enter window
     case LeaveNotify: {			// leave window
+	if ( QWidget::mouseGrabber()  && widget != QWidget::mouseGrabber() )
+	    break;
 	qt_x_clipboardtime = event->xcrossing.time;
 	if ( event->xcrossing.detail == NotifyNormal )
 	    widget->translateMouseEvent( event ); //we don't get MotionNotify
@@ -3728,7 +3737,8 @@ bool QETWidget::translateKeyEvent( const XEvent *event, bool grab )
 	    }
 	    if (!XCheckTypedWindowEvent(dpy,event->xkey.window,XKeyPress,
 					&evPress))
-		break;
+		XPutBackEvent(dpy, &evRelease);
+	    break;
 	    if ( evPress.xkey.keycode != event->xkey.keycode ||
 		 evRelease.xkey.time != evPress.xkey.time){
 		XPutBackEvent(dpy, &evRelease);
@@ -3982,8 +3992,8 @@ bool QETWidget::translateConfigEvent( const XEvent *event )
     int y = event->xconfigure.y;
 
     if (event->xconfigure.send_event ||
-	( extra && extra->topextra && 
-	  ( extra->topextra->parentWinId == None || 
+	( extra && extra->topextra &&
+	  ( extra->topextra->parentWinId == None ||
 	    extra->topextra->parentWinId == appRootWin ) ) ) {
 	// nothing to do, x and y is correct
     } else {
@@ -4389,7 +4399,9 @@ static void sm_performSaveYourself( QSessionManager* sm )
     // tell the session manager about our program in best POSIX style
     sm_setProperty( SmProgram, QString( qApp->argv()[0] ) );
     // tell the session manager about our user as well.
-    sm_setProperty( SmUserID, QString::fromLatin1( getlogin() ) );
+    struct passwd* entry = getpwuid( geteuid() );
+    if ( entry )
+	sm_setProperty( SmUserID, QString::fromLatin1( entry->pw_name ) );
 
     // generate a restart and discard command that makes sense
     QStringList restart;
@@ -4577,8 +4589,8 @@ QSessionManager::QSessionManager( QApplication * app, QString &session )
 				       &cb,
 				       prevId,
 				       &myId,
-				       256,
-				       (char*)&cerror );
+				       255,
+				       cerror );
 
     d->sessionId = QString::fromLatin1( myId );
     ::free( myId ); // it was allocated by C

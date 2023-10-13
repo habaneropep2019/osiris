@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta name="robots" content="noindex"><title>Qt 2.0 - Porting</title></head><body bgcolor="#ffffff">
 <p>
 <a href=index.html><img width=122 height=65 src=qtlogo.png alt="Qt logo" align=left border=0></a>
-<center><img src=dochead.png width=448 height=23></center>
+<center><img src=dochead.png width=472 height=27></center>
 <br clear=all>
 <p>
 <h1 align=center> Porting to Qt 2.0 </h1><br clear="all">
@@ -66,7 +66,8 @@ in the collective conscious that is the Qt Developer Community!
  <li><b><a href=#Namespace>Namespace</a></b>
  <li><b><a href=#Virtual>Virtual Functions</a></b>
  <li><b><a href=#Collection>Collection classes</a></b>
- <li><b><a href=#DebugVsRelease>Miscellaneous</a></b>
+ <li><b><a href=#DefaultParent>No Default 0 Parent Widget</a></b>
+ <li><b><a href=#DebugVsRelease>Debug vs. Release</a></b>
 <p>
  <li><b><a href=#QApplication>QApplication</a></b>
  <li><b><a href=#QClipboard>QClipboard</a></b>
@@ -123,6 +124,26 @@ Compiling with -DQT1COMPATIBILITY will help you get going with Qt 2.0
 - it allows all the old "dirty namespace" identifiers from Qt 1.x to
 continue working.  Without it, you'll get compile errors that can
 easily be fixed by searching this page for the clean identifiers.
+<p>
+<h3><a name=DefaultParent>No Default 0 Parent Widget</a></h3>
+<p>
+In Qt 1.x, all widget constructors were defined with a default value
+of 0 for the parent widget. However, only the main window of the
+application should be created with a 0 parent, all other widgets
+should have parents. Having the 0 default made it too simple to create
+bugs by forgetting to specify the parent of non-mainwindow
+widgets. Such widgets would typically never be deleted (causing memory
+leaks), and they would become top-level widgets, confusing the window
+managers. Therefore, in Qt 2.0 the 0 default parent has been removed
+for the widget classes that are not likely to be used as main windows.
+<p>
+Note also that programs no longer need (or should) use 0 parent just
+to indicate that a widget should be top-level. See
+<pre> <a href="qwidget.html#08e823">QWidget::isTopLevel</a>()
+</pre>
+ for details. See also the notes about
+<a href=#QMenuData>QPopupMenu</a> and <a href=#QDialog>QDialog</a>
+below.
 <p>
 <h3><a name=Virtual>Virtual Functions</a></h3>
 <p> Some virtual functions have changed signature in Qt 2.0.
@@ -206,7 +227,6 @@ functionality in Qt 2.0, the following steps are required:
             using Perl.  Convert usage of char[] for temporary string
             building to QString (much software already uses QString for
             this purpose as it offers many more facilities).
-            ##### shoudl we provide a script?
 <p>
             If you find that you are mixing usage of QCString, QString,
             and QByteArray, this causes lots of unnecessary copying and
@@ -608,10 +628,10 @@ movie was set, you might have trouble.  This is unlikely.
 <p> The semantics of the parent pointer changed for non-modal dialogs:
 In Qt-2.x, dialogs are always toplevel windows. The parent, however,
 takes the ownership of the dialog, i.e. it will delete the dialog at
-destruction. Furthermore, the window system will be able to tell
-that both the dialog and the parent belong together. Some X11 window
-managers will for instance provide a common taskbar entry in that
-case.
+destruction if it has not been explicitly deleted
+already. Furthermore, the window system will be able to tell that both
+the dialog and the parent belong together. Some X11 window managers
+will for instance provide a common taskbar entry in that case.
 <p>
 If the dialog belongs to a toplevel main window
 of your application, pass this main window as parent to the dialog's
@@ -673,6 +693,9 @@ QFont::substitutions()</tt>.
 <p> Calling resize(0,0) or resize(1,1) will no longer work magically.
 Remove all such calls. The default size of toplevel widgets will be their
 <a href="qwidget.html#290bcd">sizeHint()</a>.
+<p> The default implementation of QWidget::sizeHint() will no longer
+return just an invalid size; if the widget has a layout, it will return
+the layout's preferrered size.
 <p> The special maximum MaximumHeight/Width is now QWIDGETSIZE_MAX,
 not QCOORD_MAX.
 <p> <a href="qboxlayout.html#219265">QBoxLayout::addWidget()</a>
@@ -708,6 +731,9 @@ viewportMousePressEvent(),
 viewportMouseDoubleClickEvent(), viewportMouseMoveEvent(), or
 viewportMouseReleaseEvent() respectively.  New code will usually override
 contentsMousePressEvent() etc.
+<p>The signal QListView::selectionChanged(QListViewItem *) can now be
+emitted with a null pointer as parameter. Programs that use the
+argument without checking for 0, may crash.
 <p>
 <h3><a name=QMultiLineEdit>QMultiLineEdit</a></h3>
 <p>
@@ -1003,5 +1029,5 @@ compile just the same anyway).  This list is provided for completeness.
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.0.1</div>
+<td align="right"><div align="right">Qt version 2.0.2</div>
 </table></div></address></body></html>

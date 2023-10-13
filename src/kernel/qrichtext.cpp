@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qrichtext.cpp,v 2.27.2.2 1999/07/13 19:58:57 warwick Exp $
+** $Id: qrichtext.cpp,v 2.27.2.3 1999/09/24 09:01:17 hanord Exp $
 **
 ** Implementation of the Qt classes dealing with rich text
 **
@@ -561,7 +561,7 @@ void QTextRow::draw( QPainter* p, int obx, int oby, int ox, int oy, int cx, int 
 		// Get rid of garbage at last of line (\n etc. at visible
 		// on Windows. ### Matthias: Fix in parser?
  		int len = s.length();
- 		if ( len > 0 && s[len-1] < (char)32 ) {
+ 		while ( len > 0 && s[len-1] < (char)32 ) {
  		   len--;
  		}
 		p->drawText(tx+obx-ox, y+oby-oy+base, s, len);
@@ -2216,23 +2216,23 @@ QMap<QCString, QChar> *htmlMap()
     if ( !html_map ){
 	html_map = new QMap<QCString, QChar>;
 	qAddPostRoutine( qt_cleanup_html_map );
-  	html_map->insert("lt", '<');
-  	html_map->insert("gt", '>');
-  	html_map->insert("amp", '&');
-  	html_map->insert("nbsp", 0x00a0U);
-  	html_map->insert("aring", 'å');
-  	html_map->insert("oslash", 'ø');
-  	html_map->insert("ouml", 'ö');
-  	html_map->insert("auml", 'ä');
-  	html_map->insert("uuml", 'ü');
-  	html_map->insert("Ouml", 'Ö');
-  	html_map->insert("Auml", 'Ä');
-  	html_map->insert("Uuml", 'Ü');
-  	html_map->insert("szlig", 'ß');
-  	html_map->insert("copy", '©');
-  	html_map->insert("deg", '°');
-  	html_map->insert("micro", 'µ');
-  	html_map->insert("plusmn", '±');
+	html_map->insert("lt", '<');
+	html_map->insert("gt", '>');
+	html_map->insert("amp", '&');
+	html_map->insert("nbsp", 0x00a0U);
+	html_map->insert("aring", 0x00e5U);
+	html_map->insert("oslash", 0x00f8U);
+	html_map->insert("ouml", 0x00f6U);
+	html_map->insert("auml", 0x00e4U);
+	html_map->insert("uuml", 0x00fcU);
+	html_map->insert("Ouml", 0x00d6U);
+	html_map->insert("Auml", 0x00c4U);
+	html_map->insert("Uuml", 0x00dcU);
+	html_map->insert("szlig", 0x00dfU);
+	html_map->insert("copy", 0x00a9U);
+	html_map->insert("deg", 0x00b0U);
+	html_map->insert("micro", 0x00b5U);
+	html_map->insert("plusmn", 0x00b1U);                                   
     }
     return html_map;
 }

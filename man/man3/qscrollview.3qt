@@ -1,4 +1,4 @@
-.TH QScrollView 3qt "20 July 1999" "Troll Tech AS" \" -*- nroff -*-
+.TH QScrollView 3qt "24 September 1999" "Troll Tech AS" \" -*- nroff -*-
 .\" Copyright 1992-1999 Troll Tech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -173,6 +173,9 @@ Inherited by QListBox, QListView and QTextView.
 .br
 .ti -1c
 .BI "void \fBupdateScrollBars\fR ()"
+.br
+.ti -1c
+.BI "virtual void \fBsetEnabled\fR ( bool enable )"
 .br
 .in -1c
 .SS "Signals"
@@ -677,6 +680,10 @@ Examples:
 .(l
 scrollview/scrollview.cpp
 .)l
+.SH "void QScrollView::setEnabled ( bool enable ) \fC[virtual slot]\fR"
+Reimplemented for internal reasons; the API is not affected.
+.PP
+Reimplemented from QWidget.
 .SH "void QScrollView::setHBarGeometry ( QScrollBar & hbar, int x, int y, int w, int h ) \fC[virtual protected]\fR"
 Called when the horizontal scrollbar geometry changes. This is provided as a protected function so that subclasses can do interesting things like providing extra buttons in some of the space normally used by the scrollbars.
 .PP

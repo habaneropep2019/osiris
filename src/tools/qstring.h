@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qstring.h,v 2.89.2.1 1999/07/07 17:16:04 warwick Exp $
+** $Id: qstring.h,v 2.89.2.3 1999/08/31 13:25:36 aavit Exp $
 **
 ** Definition of the QString class, extended char array operations,
 ** and QByteArray and QCString classes
@@ -247,8 +247,8 @@ struct Q_EXPORT QStringData : public QShared {
 	unicode(0), ascii(0), len(0), maxl(0), dirtyascii(0) { ref(); }
     QStringData(QChar *u, uint l, uint m) :
 	unicode(u), ascii(0), len(l), maxl(m), dirtyascii(0) { }
-    ~QStringData() { if ( unicode ) delete [] unicode;
-	      if ( ascii ) delete [] ascii; }
+    ~QStringData() { if ( unicode ) delete[] ((char*)unicode);
+                     if ( ascii ) delete[] ascii; }
     void deleteSelf();
     QChar *unicode;
     char *ascii;

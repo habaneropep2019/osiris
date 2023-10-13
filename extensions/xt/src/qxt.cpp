@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qxt.cpp,v 1.8.2.1 1999/07/02 23:07:00 ettrich Exp $
+** $Id: qxt.cpp,v 1.8.2.2 1999/09/13 19:07:46 paul Exp $
 **
 ** Implementation of Qt extension classes for Xt/Motif support.
 **
@@ -112,23 +112,23 @@ typedef struct _QWidgetRec {
 static
 void reparentChildrenOf(QWidget* parent)
 {
-    
+
     if ( !parent->children() )
 	return; // nothing to do
-    
+
     for ( QObjectListIt it( *parent->children() ); it.current(); ++it ) {
 	if ( it.current()->isWidgetType() ) {
 	    QWidget* widget = (QWidget*)it.current();
-	    XReparentWindow( qt_xdisplay(), 
+	    XReparentWindow( qt_xdisplay(),
 			     widget->winId(),
-			     parent->winId(), 
+			     parent->winId(),
 			     widget->x(),
 			     widget->y() );
 	    if ( widget->isVisible() )
 		XMapWindow( qt_xdisplay(), widget->winId() );
 	}
     }
-    
+
 }
 
 void qwidget_realize(
@@ -223,7 +223,7 @@ static
 void np_event_proc( XEvent* e )
 {
     Widget xtw = XtWindowToWidget( e->xany.display, e->xany.window );
-    if ( xtw ) {
+    if ( xtw && qApp->loopLevel() > 0 ) {
 	// Allow Xt to process the event
 	qt_np_cascade_event_handler[e->type]( e );
     }
@@ -421,12 +421,12 @@ QXtWidget::QXtWidget(const char* name, Widget parent, bool managed) :
   Use this constructor to utilize Xt or Motif widgets in a Qt
   application.  The QXtWidget looks and behaves
   like the Xt class, but can be used like any QWidget.
-  
+
   Note that Xt requires that the most toplevel Xt widget is a shell.
   That means, if \a parent is a QXtWidget, the \a widget_class can be
   of any kind. If there isn't a parent or the parent is just a normal
   QWidget, \a widget_class should be something like \c
-  topLevelShellWidgetClass. 
+  topLevelShellWidgetClass.
 
   If the \a managed parameter is TRUE and \a parent in not NULL,
   XtManageChild it used to manage the child.

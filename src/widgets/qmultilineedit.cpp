@@ -1,5 +1,5 @@
 /**********************************************************************
-** $Id: qmultilineedit.cpp,v 1.60.2.3 1999/07/15 11:52:36 weis Exp $
+** $Id: qmultilineedit.cpp,v 1.60.2.5 1999/09/22 11:03:21 paul Exp $
 **
 ** Definition of QMultiLineEdit widget class
 **
@@ -1925,7 +1925,7 @@ void QMultiLineEdit::mouseReleaseEvent( QMouseEvent *e )
 	copy();
 #endif
 
-    if ( e->button() == MidButton ) {
+    if ( e->button() == MidButton && !readOnly ) {
 #if defined(_WS_X11_)
 	paste();		// Will repaint the cursor line.
 #else
@@ -2228,8 +2228,13 @@ void QMultiLineEdit::newMark( int posx, int posy, bool /*copy*/ )
     cursorX    = posx;
     cursorY    = posy;
     markIsOn = ( markDragX != markAnchorX ||  markDragY != markAnchorY );
+#if defined(_WS_X11_)
     if ( echoMode() == Normal )
 	this->copy();
+#else
+    if ( style() == MotifStyle && echoMode() == Normal )
+	this->copy();
+#endif
 }
 
 bool QMultiLineEdit::beforeMark( int posx, int posy ) const
@@ -2285,8 +2290,13 @@ void QMultiLineEdit::markWord( int posx, int posy )
     markDragX = i;
     markDragY = posy;
     markIsOn = ( markDragX != markAnchorX ||  markDragY != markAnchorY );
+#if defined(_WS_X11_)
     if ( echoMode() == Normal )
 	copy();
+#else
+    if ( style() == MotifStyle && echoMode() == Normal )
+	copy();
+#endif
 }
 
 /*!

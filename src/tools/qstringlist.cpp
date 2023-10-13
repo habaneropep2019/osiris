@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qstringlist.cpp,v 1.11.2.2 1999/07/13 19:59:09 warwick Exp $
+** $Id: qstringlist.cpp,v 1.11.2.3 1999/09/20 09:37:47 paul Exp $
 **
 ** Implementation of QStringList
 **
@@ -58,7 +58,7 @@
 	
 	// print it out
 	for ( QStringList::Iterator it = list.begin(); it != list.end(); ++it ) {
-	    printf( "%s \n", it->latin1() );
+	    printf( "%s \n", (*it).latin1() );
 	}
   \endcode
 

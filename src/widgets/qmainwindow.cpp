@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qmainwindow.cpp,v 2.70.2.3 1999/07/13 19:59:24 warwick Exp $
+** $Id: qmainwindow.cpp,v 2.70.2.4 1999/09/06 16:33:33 paul Exp $
 **
 ** Implementation of QMainWindow class
 **
@@ -290,8 +290,8 @@ int QToolLayout::layoutItems( const QRect &r, bool testonly )
 	if ( !next || idx > start && linew + nsh.width() > r.width() ) {
 	    //linebreak
 	    if ( !testonly ) {
-		int right = fill ? r.right() : linew - spacing();
-		qGeomCalc( *array, start, idx-start, r.left(), right,
+		int width = fill ? r.width() : linew - spacing();
+		qGeomCalc( *array, start, idx-start, r.left(), width,
 			   spacing() );
 		for ( int i = start; i < idx; i++ ) {
 		    QRect g( (*array)[i].pos,
@@ -600,7 +600,7 @@ void QMainWindow::addToolBar( QToolBar * toolBar,
 	toolBar->mw->removeToolBar( toolBar );
 	toolBar->mw = this;
     }
-    
+
     setDockEnabled( edge, TRUE );
 
     QMainWindowPrivate::ToolBarDock * dl = 0;

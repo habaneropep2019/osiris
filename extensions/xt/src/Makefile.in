@@ -25,8 +25,8 @@ TARGET1 = lib$(TARGET).so.$(VER_MAJ)
 HEADERS =	../../../include/qxt.h
 SOURCES =	qxt.cpp
 OBJECTS =	qxt.o
-SRCMOC	=	moc_qxt.cpp
-OBJMOC	=	moc_qxt.o
+SRCMOC	=	../../../include/moc_qxt.cpp
+OBJMOC	=	../../../include/moc_qxt.o
 
 ####### Implicit rules
 
@@ -68,7 +68,7 @@ clean:
 qxt.o: qxt.cpp \
 		qxt.h
 
-moc_qxt.o: moc_qxt.cpp \
+../../../include/moc_qxt.o: ../../../include/moc_qxt.cpp \
 		../../../include/qxt.h \
 		../../../include/qapplication.h \
 		../../../include/qwidget.h \
@@ -109,8 +109,7 @@ moc_qxt.o: moc_qxt.cpp \
 		../../../include/qgdict.h \
 		../../../include/qtranslator.h \
 		../../../include/qintdict.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_qxt.o moc_qxt.cpp
 
-moc_qxt.cpp: ../../../include/qxt.h
-	$(MOC) ../../../include/qxt.h -o moc_qxt.cpp
+../../../include/moc_qxt.cpp: ../../../include/qxt.h
+	$(MOC) ../../../include/qxt.h -o ../../../include/moc_qxt.cpp
 

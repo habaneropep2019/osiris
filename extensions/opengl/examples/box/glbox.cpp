@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: glbox.cpp,v 1.5 1999/06/16 11:26:32 aavit Exp $
+** $Id: glbox.cpp,v 1.5.2.1 1999/09/08 08:30:38 aavit Exp $
 **
 ** Implementation of GLBox
 ** This is a simple QGLWidget displaying an openGL wireframe box
@@ -11,6 +11,9 @@
 
 #include "glbox.h"
 
+#if defined(_CC_MSVC_)
+#pragma warning(disable:4305) // init: truncation from const double to float
+#endif
 
 /*!
   Create a GLBox widget

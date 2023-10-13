@@ -1,5 +1,5 @@
 /**********************************************************************
-** $Id: qgroupbox.h,v 2.20.2.1 1999/07/07 08:59:02 paul Exp $
+** $Id: qgroupbox.h,v 2.20.2.3 1999/08/18 17:19:23 paul Exp $
 **
 ** Definition of QGroupBox widget class
 **
@@ -48,7 +48,6 @@ public:
 
     virtual void setColumnLayout(int columns, Orientation o);
 
-q_properties:
     QString title() const { return str; }
     virtual void setTitle( const QString &);
 
@@ -69,6 +68,7 @@ private:
     void init();
     void calculateFrame();
     void insertWid( QWidget* _w );
+    void setTextSpacer();
 
     QString str;
     int align;

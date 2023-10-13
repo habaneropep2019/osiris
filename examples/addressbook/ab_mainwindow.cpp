@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: ab_mainwindow.cpp,v 1.1 1999/06/03 10:08:55 warwick Exp $
+** $Id: ab_mainwindow.cpp,v 1.1.2.1 1999/09/01 06:19:48 aavit Exp $
 **
 ** Copyright ( C ) 1992-1999 Troll Tech AS.  All rights reserved.
 **
@@ -21,7 +21,7 @@
 #include <qfiledialog.h>
 
 ABMainWindow::ABMainWindow()
-    : QMainWindow( 0L, "example addressbook application" ),
+    : QMainWindow( 0, "example addressbook application" ),
       filename( QString::null )
 {
     setupMenuBar();

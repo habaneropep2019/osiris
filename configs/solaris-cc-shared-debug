@@ -27,7 +27,7 @@ SYSCONF_LIBS_YACC	=
 # Linking applications
 SYSCONF_LINK		= CC
 SYSCONF_LFLAGS		= 
-SYSCONF_LIBS		= -lC
+SYSCONF_LIBS		= 
 
 # Link flags shared objects
 SYSCONF_LFLAGS_SHOBJ	= -G -h $(TARGET1)

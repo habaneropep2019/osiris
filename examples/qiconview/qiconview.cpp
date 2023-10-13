@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qiconview.cpp,v 1.6.2.1 1999/07/02 12:43:31 paul Exp $
+** $Id: qiconview.cpp,v 1.6.2.2 1999/09/01 06:19:57 aavit Exp $
 **
 ** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
@@ -125,8 +125,8 @@ void QtIconViewItemLineEdit::keyPressEvent( QKeyEvent *e )
 
 QtIconViewItem::QtIconViewItem( QtIconView *parent )
     : view( parent ), itemText(), itemIcon( QPixmap( unknown ) ),
-      prev( 0L ), next( 0L ), allow_rename( TRUE ), allow_drag( TRUE ), allow_drop( TRUE ),
-      selected( FALSE ), selectable( TRUE ), fm( 0L ), renameBox( 0L )
+      prev( 0 ), next( 0 ), allow_rename( TRUE ), allow_drag( TRUE ), allow_drop( TRUE ),
+      selected( FALSE ), selectable( TRUE ), fm( 0 ), renameBox( 0 )
 {
     if ( view ) {
         fm = new QFontMetrics( view->font() );
@@ -141,8 +141,8 @@ QtIconViewItem::QtIconViewItem( QtIconView *parent )
 
 QtIconViewItem::QtIconViewItem( QtIconView *parent, QtIconViewItem *after )
     : view( parent ), itemText(), itemIcon( QPixmap( unknown ) ),
-      prev( 0L ), next( after ), allow_rename( TRUE ), allow_drag( TRUE ), allow_drop( TRUE ),
-      selected( FALSE ), selectable( TRUE ), fm( 0L ), renameBox( 0L )
+      prev( 0 ), next( after ), allow_rename( TRUE ), allow_drag( TRUE ), allow_drop( TRUE ),
+      selected( FALSE ), selectable( TRUE ), fm( 0 ), renameBox( 0 )
 {
     if ( view ) {
         fm = new QFontMetrics( view->font() );
@@ -157,8 +157,8 @@ QtIconViewItem::QtIconViewItem( QtIconView *parent, QtIconViewItem *after )
 
 QtIconViewItem::QtIconViewItem( QtIconView *parent, const QString &text )
     : view( parent ), itemText( text ), itemIcon( QPixmap( unknown ) ),
-      prev( 0L ), next( 0L ), allow_rename( TRUE ), allow_drag( TRUE ), allow_drop( TRUE ),
-      selected( FALSE ), selectable( TRUE ), fm( 0L ), renameBox( 0L )
+      prev( 0 ), next( 0 ), allow_rename( TRUE ), allow_drag( TRUE ), allow_drop( TRUE ),
+      selected( FALSE ), selectable( TRUE ), fm( 0 ), renameBox( 0 )
 {
     if ( view ) {
         fm = new QFontMetrics( view->font() );
@@ -173,8 +173,8 @@ QtIconViewItem::QtIconViewItem( QtIconView *parent, const QString &text )
 
 QtIconViewItem::QtIconViewItem( QtIconView *parent, QtIconViewItem *after, const QString &text )
     : view( parent ), itemText( text ), itemIcon( QPixmap( unknown ) ),
-      prev( 0L ), next( after ), allow_rename( TRUE ), allow_drag( TRUE ), allow_drop( TRUE ),
-      selected( FALSE ), selectable( TRUE ), fm( 0L ), renameBox( 0L )
+      prev( 0 ), next( after ), allow_rename( TRUE ), allow_drag( TRUE ), allow_drop( TRUE ),
+      selected( FALSE ), selectable( TRUE ), fm( 0 ), renameBox( 0 )
 {
     if ( view ) {
         fm = new QFontMetrics( view->font() );
@@ -189,8 +189,8 @@ QtIconViewItem::QtIconViewItem( QtIconView *parent, QtIconViewItem *after, const
 
 QtIconViewItem::QtIconViewItem( QtIconView *parent, const QString &text, const QIconSet &icon )
     : view( parent ), itemText( text ), itemIcon( icon ),
-      prev( 0L ), next( 0L ), allow_rename( TRUE ), allow_drag( TRUE ), allow_drop( TRUE ),
-      selected( FALSE ), selectable( TRUE ), fm( 0L ), renameBox( 0L )
+      prev( 0 ), next( 0 ), allow_rename( TRUE ), allow_drag( TRUE ), allow_drop( TRUE ),
+      selected( FALSE ), selectable( TRUE ), fm( 0 ), renameBox( 0 )
 {
     if ( view ) {
         fm = new QFontMetrics( view->font() );
@@ -205,8 +205,8 @@ QtIconViewItem::QtIconViewItem( QtIconView *parent, const QString &text, const Q
 
 QtIconViewItem::QtIconViewItem( QtIconView *parent, QtIconViewItem *after, const QString &text, const QIconSet &icon )
     : view( parent ), itemText( text ), itemIcon( icon ),
-      prev( 0L ), next( after ), allow_rename( TRUE ), allow_drag( TRUE ), allow_drop( TRUE ),
-      selected( FALSE ), selectable( TRUE ), fm( 0L ), renameBox( 0L )
+      prev( 0 ), next( after ), allow_rename( TRUE ), allow_drag( TRUE ), allow_drop( TRUE ),
+      selected( FALSE ), selectable( TRUE ), fm( 0 ), renameBox( 0 )
 {
     if ( view ) {
         fm = new QFontMetrics( view->font() );
@@ -469,7 +469,7 @@ bool QtIconViewItem::acceptDrop( QMimeSource * )
 
 QDragObject *QtIconViewItem::dragObject()
 {
-    return 0L;
+    return 0;
 }
 
 void QtIconViewItem::rename()
@@ -511,7 +511,7 @@ void QtIconViewItem::removeRenameBox()
         return;
 
     delete renameBox;
-    renameBox = 0L;
+    renameBox = 0;
     view->viewport()->setFocusProxy( view );
     view->setFocus();
 }
@@ -708,17 +708,17 @@ QtIconView::QtIconView( QWidget *parent, const char *name )
     : QScrollView( parent, name, WNorthWestGravity )
 {
     d = new QtIconViewPrivate;
-    d->firstItem = 0L;
-    d->lastItem = 0L;
+    d->firstItem = 0;
+    d->lastItem = 0;
     d->count = 0;
     d->mode = QIconSet::Automatic;
     d->mousePressed = FALSE;
     d->selectionMode = Single;
-    d->currentItem = 0L;
-    d->rubber = 0L;
-    d->scrollTimer = 0L;
+    d->currentItem = 0;
+    d->rubber = 0;
+    d->scrollTimer = 0;
     d->startDrag = FALSE;
-    d->tmpCurrentItem = 0L;
+    d->tmpCurrentItem = 0;
     d->rastX = d->rastY = -1;
     d->spacing = 5;
     d->cleared = FALSE;
@@ -748,8 +748,8 @@ void QtIconView::insertItem( QtIconViewItem *item, QtIconViewItem *after )
 
     if ( !d->firstItem ) {
         d->firstItem = d->lastItem = item;
-        item->prev = 0L;
-        item->next = 0L;
+        item->prev = 0;
+        item->next = 0;
     } else {
         if ( !after || after == d->lastItem ) {
             d->lastItem->next = item;
@@ -922,7 +922,7 @@ void QtIconView::doAutoScroll()
                     this, SLOT( doAutoScroll() ) );
         d->scrollTimer->stop();
         delete d->scrollTimer;
-        d->scrollTimer = 0L;
+        d->scrollTimer = 0;
     }
 
 }
@@ -977,14 +977,14 @@ QtIconView::SelectionMode QtIconView::selectionMode()
 QtIconViewItem *QtIconView::findItem( const QPoint &pos )
 {
     if ( !d->firstItem )
-        return 0L;
+        return 0;
 
     QtIconViewItem *item = d->firstItem;
     for ( ; item; item = item->next )
         if ( item->contains( pos ) )
             return item;
 
-    return 0L;
+    return 0;
 }
 
 void QtIconView::selectAll( bool select )
@@ -1026,10 +1026,10 @@ void QtIconView::clear()
     }
 
     d->count = 0;
-    d->firstItem = 0L;
-    d->lastItem = 0L;
-    setCurrentItem( 0L );
-    d->tmpCurrentItem = 0L;
+    d->firstItem = 0;
+    d->lastItem = 0;
+    setCurrentItem( 0 );
+    d->tmpCurrentItem = 0;
 
     setContentsPos( 0, 0 );
     resizeContents( viewport()->width(), viewport()->height() );
@@ -1108,7 +1108,7 @@ void QtIconView::contentsMousePressEvent( QMouseEvent *e )
         if ( !d->currentItem && d->selectionMode != Single ) {
             if ( d->rubber )
                 delete d->rubber;
-            d->rubber = 0L;
+            d->rubber = 0;
             d->rubber = new QRect( e->x(), e->y(), 0, 0 );
 
             if ( d->selectionMode == StrictMulti && !( e->state() & ControlButton ) )
@@ -1142,14 +1142,14 @@ void QtIconView::contentsMouseReleaseEvent( QMouseEvent * )
         p.end();
 
         delete d->rubber;
-        d->rubber = 0L;
+        d->rubber = 0;
     }
 
     if ( d->scrollTimer ) {
         disconnect( d->scrollTimer, SIGNAL( timeout() ), this, SLOT( doAutoScroll() ) );
         d->scrollTimer->stop();
         delete d->scrollTimer;
-        d->scrollTimer = 0L;
+        d->scrollTimer = 0;
     }
 }
 
@@ -1183,7 +1183,7 @@ void QtIconView::contentsMouseDoubleClickEvent( QMouseEvent *e )
 
 void QtIconView::contentsDragEnterEvent( QDragEnterEvent * )
 {
-    d->tmpCurrentItem = 0L;
+    d->tmpCurrentItem = 0;
 }
 
 void QtIconView::contentsDragMoveEvent( QDragMoveEvent *e )
@@ -1192,7 +1192,7 @@ void QtIconView::contentsDragMoveEvent( QDragMoveEvent *e )
         repaintItem( d->tmpCurrentItem );
 
     QtIconViewItem *old = d->tmpCurrentItem;
-    d->tmpCurrentItem = 0L;
+    d->tmpCurrentItem = 0;
 
     QtIconViewItem *item = findItem( e->pos() );
 
@@ -1228,7 +1228,7 @@ void QtIconView::contentsDragLeaveEvent( QDragLeaveEvent * )
         d->tmpCurrentItem->dragLeft();
     }
 
-    d->tmpCurrentItem = 0L;
+    d->tmpCurrentItem = 0;
 }
 
 void QtIconView::contentsDropEvent( QDropEvent *e )
@@ -1437,7 +1437,7 @@ void QtIconView::drawRubber( QPainter *p )
 QDragObject *QtIconView::dragObject()
 {
     if ( !d->currentItem )
-        return 0L;
+        return 0;
 
     QtIconViewItemDrag *drag = new QtIconViewItemDrag( viewport() );
     drag->setPixmap( QPixmap( d->currentItem->icon().pixmap( d->mode, QIconSet::Normal ) ),

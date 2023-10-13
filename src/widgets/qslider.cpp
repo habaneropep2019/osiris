@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qslider.cpp,v 2.92 1999/06/22 13:59:06 paul Exp $
+** $Id: qslider.cpp,v 2.92.2.1 1999/07/23 11:10:52 paul Exp $
 **
 ** Implementation of QSlider class
 **
@@ -460,7 +460,7 @@ void QSlider::paintEvent( QPaintEvent * )
     const QRect & sliderR = sliderRect();
     const QColorGroup & g = colorGroup();
     {
-	int mid = tickOffset + thickness()/2;
+	int mid = thickness()/2;
 	if ( ticks & Above )
 	    mid += style().sliderLength() / 8;
 	if ( ticks & Below )

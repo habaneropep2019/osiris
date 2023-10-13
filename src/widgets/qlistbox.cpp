@@ -1,5 +1,5 @@
 /**********************************************************************
-** $Id: qlistbox.cpp,v 2.205.2.5 1999/07/13 19:59:21 warwick Exp $
+** $Id: qlistbox.cpp,v 2.205.2.9 1999/09/22 19:00:09 reggie Exp $
 **
 ** Implementation of QListBox widget class
 **
@@ -469,8 +469,9 @@ int QListBoxPixmap::width( const QListBox* ) const
 
   Each item in a QListBox contains a QListBoxItem.  One of the items
   can be the current item.  The highlighted() signal is emitted when
-  the user highlights a new current item; selected() is emitted when
-  the user double-clicks on an item or presses return when an item is
+  a new item gets highlighted, e.g. because the user clicks on it or
+  QListBox::setCurrentItem() is called. The selected() signal is emitted
+  when the user double-clicks on an item or presses return when an item is
   highlighted.
 
   If the user does not select anything, no signals are emitted and
@@ -908,6 +909,14 @@ void QListBox::clear()
         i = n;
     }
     d->count = 0;
+    d->numRows = 1;
+    d->numColumns = 1;
+    d->currentRow = 0;
+    d->currentColumn = 0;
+    d->mousePressRow = -1;
+    d->mousePressColumn = -1;
+    d->mouseMoveRow = -1;
+    d->mouseMoveColumn = -1;
     triggerUpdate( TRUE );
 }
 
@@ -2306,6 +2315,12 @@ QListBoxItem * QListBox::itemAt( QPoint p ) const
     while ( row < numRows() &&
 	   y > d->rowPos[row] )
 	row++;
+
+    int nr = numRows();
+    if ( nr > 0 &&
+	 y > d->rowPos[ nr - 1 ] + d->rowPos[ nr ] - d->rowPos[ nr - 1 ] )
+	return 0;
+
     if ( row && y < d->rowPos[row] )
 	row--;
 
@@ -2653,7 +2668,7 @@ int QListBox::itemHeight( int index ) const
     if ( index >= (int)count() || index < 0 )
 	return 0;
     int r = index % numRows();
-    return d->columnPos[r+1] - d->columnPos[r];
+    return d->rowPos[r+1] - d->rowPos[r];
 }
 
 

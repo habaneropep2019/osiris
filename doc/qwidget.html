@@ -7,7 +7,7 @@ body { background: white; color: black; }
 </head><body bgcolor="#ffffff">
 
 <a href=index.html><img width=122 height=65 src=qtlogo.png alt="Qt logo" align=left border=0></a>
-<center><img src=dochead.png width=448 height=23></center>
+<center><img src=dochead.png width=472 height=27></center>
 <br clear=all>
 
 <h1 align=center>QWidget Class Reference</h1><br clear="all">
@@ -1736,6 +1736,7 @@ events only when it is in focus.
 <p>Some widgets display themselves differently when they are disabled.
 For example a button might draw its label grayed out.
 <p>See also:  <a href="qwidget.html#9c6351">isEnabled</a>(), <a href="qkeyevent.html">QKeyEvent</a> and <a href="qmouseevent.html">QMouseEvent</a>.
+<p>Reimplemented in <a href="qscrollview.html#528522">QScrollView</a>.
 <h3 class="fn">void <a name="0e671b"></a>QWidget::setFRect ( const <a href="qrect.html">QRect</a> &amp; r ) <code>[virtual protected]</code></h3>
 <p>For internal use only.
 <h3 class="fn">void <a name="44675b"></a>QWidget::setFixedHeight ( int h )</h3>
@@ -1821,6 +1822,7 @@ is <em>SameChildren.</em>
 <p>See also:  <a href="qwidget.html#3a7237">font</a>(), <a href="qwidget.html#570a8f">fontChange</a>(), <a href="qwidget.html#a6423a">fontInfo</a>(), <a href="qwidget.html#d0d02b">fontMetrics</a>() and <a href="qwidget.html#20f893">setFontPropagation</a>().
 <p>Examples:
  <a href="grapher-grapher-cpp.html#setFont">grapher/grapher.cpp</a>
+ <a href="xform-xform-cpp.html#setFont">xform/xform.cpp</a>
 <p>Reimplemented in <a href="qwizard.html#1bf9b5">QWizard</a>, <a href="qtabdialog.html#ce795f">QTabDialog</a> and <a href="qpopupmenu.html#9d582f">QPopupMenu</a>.
 <h3 class="fn">void <a name="26de4b"></a>QWidget::setFont ( const <a href="qfont.html">QFont</a> &amp; font, bool fixed )</h3>
 <p>Like setFont(const <a href="qfont.html">QFont</a>&) but has an additional flag to
@@ -1851,7 +1853,6 @@ you may see infinite recursion.
 <p>See also:  <a href="qwidget.html#745b48">geometry</a>(), <a href="qwidget.html#958bbe">move</a>(), <a href="qwidget.html#9775bb">resize</a>(), <a href="qwidget.html#be1a92">moveEvent</a>(), <a href="qwidget.html#28c156">resizeEvent</a>(), <a href="qwidget.html#5ac2ae">minimumSize</a>() and <a href="qwidget.html#b77871">maximumSize</a>().
 <p>Examples:
  <a href="xform-xform-cpp.html#setGeometry">xform/xform.cpp</a>
- <a href="cursor-cursor-cpp.html#setGeometry">cursor/cursor.cpp</a>
  <a href="drawdemo-drawdemo-cpp.html#setGeometry">drawdemo/drawdemo.cpp</a>
  <a href="popup-popup-cpp.html#setGeometry">popup/popup.cpp</a>
  <a href="qmag-qmag-cpp.html#setGeometry">qmag/qmag.cpp</a>
@@ -2250,7 +2251,7 @@ widget and including the window frame.
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.troll.no">www.troll.no</a>):<br>
 <form method=post action="http://www.troll.no/search.cgi">
-<input type=hidden name="version" value="2.0.1"><nobr>
+<input type=hidden name="version" value="2.0.2"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -2258,5 +2259,5 @@ copyright &copy; 1995-99
 <a href="http://www.troll.no">Troll Tech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.0.1</div>
+<td align="right"><div align="right">Qt version 2.0.2</div>
 </table></div></address></body></html>

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qsplitter.cpp,v 1.75.2.2 1999/07/13 19:59:31 warwick Exp $
+** $Id: qsplitter.cpp,v 1.75.2.3 1999/09/14 09:52:26 paul Exp $
 **
 **  Splitter widget
 **
@@ -425,6 +425,8 @@ bool QSplitter::event( QEvent *e )
 {
     if ( e->type() == QEvent::LayoutHint )
 	recalc( isVisible() );
+    if ( e->type() == QEvent::Show && !testWFlags( WPaintUnclipped ) )
+	setWFlags( WPaintUnclipped ); //reparent clears widget flags, work around it
     return QWidget::event( e );
 }
 
@@ -739,7 +741,7 @@ void QSplitter::recalc( bool update )
 */
 
 /*!
-  Sets resize mode of \a w to \a mode. 
+  Sets resize mode of \a w to \a mode.
 
   \sa ResizeMode
 */

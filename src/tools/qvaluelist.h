@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qvaluelist.h,v 1.24.2.2 1999/07/13 19:59:14 warwick Exp $
+** $Id: qvaluelist.h,v 1.24.2.3 1999/09/07 15:02:01 aavit Exp $
 **
 ** Definition of QValueList class
 **
@@ -400,7 +400,7 @@ protected:
 };
 
 template<class T>
-QDataStream& operator>>( QDataStream& s, QValueList<T>& l )
+inline QDataStream& operator>>( QDataStream& s, QValueList<T>& l )
 {
     l.clear();
     uint c;
@@ -415,7 +415,7 @@ QDataStream& operator>>( QDataStream& s, QValueList<T>& l )
 }
 
 template<class T>
-QDataStream& operator<<( QDataStream& s, const QValueList<T>& l )
+inline QDataStream& operator<<( QDataStream& s, const QValueList<T>& l )
 {
     s << l.count();
     QValueListConstIterator<T> it = l.begin();

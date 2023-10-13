@@ -1,4 +1,4 @@
-.TH QGLContext 3qt "20 July 1999" "Troll Tech AS" \" -*- nroff -*-
+.TH QGLContext 3qt "24 September 1999" "Troll Tech AS" \" -*- nroff -*-
 .\" Copyright 1992-1999 Troll Tech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -49,6 +49,15 @@ Inherits QGL.
 .ti -1c
 .BI "QPaintDevice* \fBdevice\fR () const"
 .br
+.ti -1c
+.BI "QColor \fBoverlayTransparentColor\fR () const"
+.br
+.in -1c
+.SS "Static Public Members"
+.in +1c
+.ti -1c
+.BI "const QGLContext* \fBcurrentContext\fR ()"
+.br
 .in -1c
 .SS "Protected Members"
 .in +1c
@@ -72,6 +81,9 @@ Inherits QGL.
 .br
 .ti -1c
 .BI "void \fBsetInitialized\fR ( bool on )"
+.br
+.ti -1c
+.BI "uint \fBcolorIndex\fR ( const QColor & c ) const"
 .br
 .in -1c
 .SH DESCRIPTION
@@ -99,6 +111,8 @@ This semi-internal function is called by create(). It creates a system-dependent
 \fBX11\fR: Calls chooseVisual() which finds an appropriate X visual.
 .PP
 choosePixelFormat() and chooseVisual() can be reimplemented in a subclass if you need to choose a very custom context.
+.SH "uint QGLContext::colorIndex ( const QColor & c ) const \fC[protected]\fR"
+For internal use only.
 .SH "bool QGLContext::create ( const QGLContext * shareContext = 0 ) \fC[virtual]\fR"
 Creates the GL context. Returns TRUE if it was successful in creating a GL rendering context on the paint device specified in the constructor, otherwise FALSE is returned (the context is invalid).
 .PP
@@ -109,6 +123,10 @@ If \fIshareContext\fR points to a valid QGLContext, this method will try to esta
 \fBImplementation note:\fR Initialization of C++ class members usually takes place in the class constructor. QGLContext is an exception because it must be simple to customize. The virtual functions chooseContext() (and chooseVisual() for X11) can be reimplemented in a subclass to select a particular context. The trouble is that virtual functions are not properly called during construction (which is indeed correct C++), hence we need a create() function.
 .PP
 See also: chooseContext(), format() and isValid().
+.SH "const QGLContext* QGLContext::currentContext () \fC[static]\fR"
+Returns the current context, i.e. the context to which any OpenGL commands will currently be directed to. Returns 0 if no context is current.
+.PP
+See also: makeCurrent().
 .SH "QPaintDevice* QGLContext::device () const"
 Returns the paint device set for this context.
 .PP
@@ -131,6 +149,12 @@ Returns TRUE if display list sharing with another context was requested in the c
 Returns TRUE if a GL rendering context has been successfully created.
 .SH "void QGLContext::makeCurrent () \fC[virtual]\fR"
 Makes this context the current OpenGL rendering context. All GL functions you call operate on this context until another context is made current.
+.SH "QColor QGLContext::overlayTransparentColor () const"
+If this context is a valid context in an overlay plane, returns the plane's transparent color. Otherwise returns an invalid color.
+.PP
+The returned color's pixel value is the index of the transparent color in the colormap of the overlay plane. The color's RGB values are meaningless, of course.
+.PP
+The returned QColor object will generally only work as expected when passed as the argument to QGLWidget::qglColor() or QGLWidget::qglClearColor(). Under certain circumstances it can also be used to draw transparent graphics with a QPainter; see the "overlay_x11" example for details.
 .SH "void QGLContext::reset () \fC[virtual]\fR"
 Resets the context and makes it invalid.
 .PP

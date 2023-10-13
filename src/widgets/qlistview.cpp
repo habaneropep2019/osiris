@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qlistview.cpp,v 2.276.2.6 1999/07/17 03:47:37 ettrich Exp $
+** $Id: qlistview.cpp,v 2.276.2.12 1999/09/20 10:32:21 reggie Exp $
 **
 ** Implementation of QListView widget class
 **
@@ -1046,8 +1046,8 @@ void QListViewItem::setText( int column, const QString &text )
 	return;
 
     l->text = text;
-    if ( parent() )
-	parent()->lsc = Unsorted;
+//     if ( parent() )
+// 	parent()->lsc = Unsorted;
     widthChanged( column );
     repaint();
 }
@@ -1261,7 +1261,7 @@ void QListViewItem::paintBranches( QPainter * p, const QColorGroup & cg,
 	if ( (child->expandable || child->childCount()) &&
 	     (child->height() > 0) ) {
 	    // needs a box
-	    p->setPen( cg.dark() );
+	    p->setPen( cg.foreground() );
 	    p->drawRect( bx-4, linebot-4, 9, 9 );
 	    p->setPen( cg.foreground() ); // ### windows uses black
 	    if ( s == WindowsStyle ) {
@@ -1373,6 +1373,7 @@ void QListViewItem::paintBranches( QPainter * p, const QColorGroup & cg,
 	}
     } else {
 	int line; // index into dotlines
+	p->setPen( cg.foreground() );
 	for( line = 0; line < c; line += 2 ) {
 	    p->drawLine( dotlines[line].x(), dotlines[line].y(),
 			 dotlines[line+1].x(), dotlines[line+1].y() );
@@ -1761,10 +1762,12 @@ void QListView::drawContentsOffset( QPainter * p, int ox, int oy,
 	     d->allColumnsShowFocus ) {
 	    p->save();
 	    int x = -contentsX();
-        int w = header()->cellPos( header()->count() - 1 ) +
-                header()->cellSize( header()->count() - 1 );
+	    int w = header()->cellPos( header()->count() - 1 ) +
+		    header()->cellSize( header()->count() - 1 );
 	
 	    r.setRect( x, current->y - oy, w, ih );
+	    if ( d->h->mapToActual( 0 ) == 0 )
+		r.setLeft( r.left() + current->l * treeStepSize() );
 	    //WINDOWSBUG### should use this
 	    //p->setClipRegion( p->clipRegion().intersect(QRegion(r)) );
 	    current->i->paintFocus( p, colorGroup(), r );
@@ -2171,7 +2174,7 @@ void QListView::updateContents()
 	return;
     // ### this function is probably very inefficient, and it is also
     // ### central to the smooth operation of QListView.  need fixing.
-    viewport()->update();
+    viewport()->repaint( FALSE );
     updateGeometries();
     ensureItemVisible( d->focusItem );
 }
@@ -2204,9 +2207,16 @@ void QListView::updateGeometries()
 void QListView::handleSizeChange( int section, int os, int ns )
 {
     viewport()->setUpdatesEnabled( FALSE );
+    int sx = horizontalScrollBar()->value();
     updateGeometries();
+    bool fullRepaint = sx != horizontalScrollBar()->value();
     viewport()->setUpdatesEnabled( TRUE );
-    
+
+    if ( fullRepaint ) {
+	viewport()->repaint( FALSE );
+	return;
+    }
+
     int actual = d->h->mapToActual( section );
     int dx = ns - os;
     int left = d->h->cellPos( actual ) - contentsX() + d->h->cellSize( actual );
@@ -2215,10 +2225,11 @@ void QListView::handleSizeChange( int section, int os, int ns )
     if ( left < visibleWidth() )
 	viewport()->scroll( dx, 0, QRect( left, 0, visibleWidth() - left, visibleHeight() ) );
     viewport()->repaint( left-4, 0, 4, visibleHeight(), FALSE ); // border between the items
-    
-    if ( columnAlignment( actual ) != AlignLeft )
-	viewport()->repaint( d->h->cellPos( actual ) - contentsX(), 0, 
+
+    if ( columnAlignment( section ) != AlignLeft )
+	viewport()->repaint( d->h->cellPos( actual ) - contentsX(), 0,
 			     d->h->cellSize( actual ), visibleHeight() );
+
 }
 
 
@@ -4428,9 +4439,19 @@ QListViewItemIterator &QListViewItemIterator::operator++()
         return *this;
     }
 
-    curr = curr->parent();
-    if ( curr )
-        curr = curr->nextSibling();
+    QListViewItem *p = curr->parent();
+    bool found = FALSE;
+    while ( p ) {
+	if ( p->nextSibling() ) {
+	    curr = p->nextSibling();
+	    found = TRUE;
+	    break;
+	}
+	p = p->parent();
+    }
+
+    if ( !found )
+	curr = 0;
 
     return *this;
 }

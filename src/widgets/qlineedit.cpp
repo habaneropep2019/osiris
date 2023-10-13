@@ -1,5 +1,5 @@
 /**********************************************************************
-** $Id: qlineedit.cpp,v 2.172.2.3 1999/07/13 19:59:20 warwick Exp $
+** $Id: qlineedit.cpp,v 2.172.2.6 1999/09/22 11:03:33 eiriken Exp $
 **
 ** Implementation of QLineEdit widget class
 **
@@ -183,6 +183,7 @@ void QLineEdit::init()
     setKeyCompression( TRUE );
     alignmentFlag = Qt::AlignLeft;
     setAcceptDrops( TRUE );
+    ed = FALSE;
 }
 
 
@@ -481,6 +482,7 @@ void QLineEdit::keyPressEvent( QKeyEvent *e )
 void QLineEdit::focusInEvent( QFocusEvent * )
 {
     d->pmDirty = TRUE;
+    cursorOn = FALSE;
     blinkOn();
 }
 
@@ -1340,7 +1342,8 @@ void QLineEdit::setEnabled( bool e )
 
 void QLineEdit::setFont( const QFont & f )
 {
-    d->pmDirty = TRUE;
+    d->pmDirty     = TRUE;
+    d->offsetDirty = TRUE;
     QWidget::setFont( f );
 }
 

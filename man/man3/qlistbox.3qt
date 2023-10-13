@@ -1,4 +1,4 @@
-.TH QListBox 3qt "20 July 1999" "Troll Tech AS" \" -*- nroff -*-
+.TH QListBox 3qt "24 September 1999" "Troll Tech AS" \" -*- nroff -*-
 .\" Copyright 1992-1999 Troll Tech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -316,7 +316,7 @@ The list of items can be arbitrarily big; if necessary, QListBox adds scroll bar
 .PP
 The list box items can be accessed both as QListBoxItem objects (recommended) and using integer indexes (the original QListBox implementation used an array of strings internally, and the API still supports this mode of operation). Everything can be done using the new objects; most things can be done using the indexes too but unfortunately not everything.
 .PP
-Each item in a QListBox contains a QListBoxItem. One of the items can be the current item. The highlighted() signal is emitted when the user highlights a new current item; selected() is emitted when the user double-clicks on an item or presses return when an item is highlighted.
+Each item in a QListBox contains a QListBoxItem. One of the items can be the current item. The highlighted() signal is emitted when a new item gets highlighted, e.g. because the user clicks on it or QListBox::setCurrentItem() is called. The selected() signal is emitted when the user double-clicks on an item or presses return when an item is highlighted.
 .PP
 If the user does not select anything, no signals are emitted and currentItem() returns -1.
 .PP

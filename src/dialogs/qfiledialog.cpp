@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qfiledialog.cpp,v 2.188.2.8 1999/07/13 19:08:41 reggie Exp $
+** $Id: qfiledialog.cpp,v 2.188.2.13 1999/09/22 18:59:54 reggie Exp $
 **
 ** Implementation of QFileDialog class
 **
@@ -669,13 +669,14 @@ QString QFileDialogPrivate::File::text( int column ) const
         } else {
             return d->special;
         }
-    case 3:
-	{
+    case 3: {
 	    QDateTime epoch;
 	    epoch.setTime_t( 0 );
 	    char a[256];
 	    time_t t1 = epoch.secsTo( info.lastModified() );
 	    struct tm * t2 = ::localtime( &t1 );
+	    if ( t2->tm_hour != info.lastModified().time().hour() )
+		t2->tm_hour = info.lastModified().time().hour();
 	    // use a static const char here, so that egcs will not see
 	    // the formatting string and give an incorrect warning.
 	    if ( t2 && strftime( a, 255, egcsWorkaround, t2 ) > 0 )
@@ -827,6 +828,7 @@ static QString findNewFolderName( const QDir &dir )
 	    return fname;
 	++i;
     }
+    return QString::null; // Never happens, satisfy the compiler.
 }
 
 /*!
@@ -1027,16 +1029,16 @@ void QFileDialog::init()
     connect( d->modeButtons, SIGNAL(clicked(int)),
              d->stack, SLOT(raiseWidget(int)) );
 
-    d->detailView = new QPushButton( this, "list view" );
-    QToolTip::add( d->detailView, tr( "Detail View" ) );
-    d->detailView->setPixmap( *detailViewIcon );
-    d->detailView->setToggleButton( TRUE );
-    d->stack->addWidget( files, d->modeButtons->insert( d->detailView ) );
     d->mcView = new QPushButton( this, "mclistbox view" );
     QToolTip::add( d->mcView, tr( "List View" ) );
     d->mcView->setPixmap( *multiColumnListViewIcon );
     d->mcView->setToggleButton( TRUE );
     d->stack->addWidget( d->moreFiles, d->modeButtons->insert( d->mcView ) );
+    d->detailView = new QPushButton( this, "list view" );
+    QToolTip::add( d->detailView, tr( "Detail View" ) );
+    d->detailView->setPixmap( *detailViewIcon );
+    d->detailView->setToggleButton( TRUE );
+    d->stack->addWidget( files, d->modeButtons->insert( d->detailView ) );
 
     connect( d->detailView, SIGNAL( clicked() ),
              d->moreFiles, SLOT( cancelRename() ) );
@@ -1068,9 +1070,8 @@ void QFileDialog::init()
     h->addSpacing( 8 );
     h->addWidget( d->newFolder );
     h->addSpacing( 8 );
-    h->addWidget( d->detailView );
     h->addWidget( d->mcView );
-    h->addSpacing( 16 );
+    h->addWidget( d->detailView );
 
     d->topLevelLayout->addWidget( d->stack, 3 );
 
@@ -1100,9 +1101,9 @@ void QFileDialog::init()
 
     setTabOrder( d->paths, d->cdToParent );
     setTabOrder( d->cdToParent, d->newFolder );
-    setTabOrder( d->newFolder, d->detailView );
-    setTabOrder( d->detailView, d->mcView );
-    setTabOrder( d->mcView, d->moreFiles );
+    setTabOrder( d->newFolder, d->mcView );
+    setTabOrder( d->mcView, d->detailView );
+    setTabOrder( d->detailView, d->moreFiles );
     setTabOrder( d->moreFiles, files );
     setTabOrder( files, nameEdit );
     setTabOrder( nameEdit, d->types );
@@ -1129,7 +1130,7 @@ void QFileDialog::init()
         resize( 420, 236 );
     } else {
         QSize s( files->sizeHint() );
-        s = QSize( s.width() + 250, s.height() + 82 );
+        s = QSize( s.width() + 300, s.height() + 82 );
 
         if ( s.width() * 3 > QApplication::desktop()->width() * 2 )
             s.setWidth( QApplication::desktop()->width() * 2 / 3 );
@@ -1569,8 +1570,10 @@ void QFileDialog::okClicked()
         QListViewItem * i = files->firstChild();
         while( i && !i->isSelected() )
             i = i->nextSibling();
-        if ( i )
+	if ( i ) {
             accept();
+	    return;
+	}
     }
 
     // If selection is valid, return it, else try
@@ -1697,7 +1700,7 @@ void QFileDialog::updateGeometries()
         t = d->extraLabel->sizeHint();
         RM;
     }
-    d->pathL->setFixedSize( r );
+    d->pathL->setFixedSize( d->pathL->sizeHint() );
     d->fileL->setFixedSize( r );
     d->typeL->setFixedSize( r );
     if ( d->extraLabel )

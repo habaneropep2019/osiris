@@ -1,4 +1,4 @@
-.TH QCString 3qt "20 July 1999" "Troll Tech AS" \" -*- nroff -*-
+.TH QCString 3qt "24 September 1999" "Troll Tech AS" \" -*- nroff -*-
 .\" Copyright 1992-1999 Troll Tech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -638,7 +638,7 @@ See also: left() and mid().
 .SH "QCString QCString::rightJustify ( uint width, char fill=' ', bool truncate=FALSE ) const"
 Returns a string of length \fIwidth\fR (plus '\\0') that contains pad characters followed by the string.
 .PP
-If the length of the string exceeds \fIwidth\fR and \fItruncate\fR is FALSE, then the returned string is a copy of the string. If the length of the string exceeds \fIwidth\fR and \fItruncate\fR is TRUE, then the returned string is a right(\fIwidth).\fR
+If the length of the string exceeds \fIwidth\fR and \fItruncate\fR is FALSE, then the returned string is a copy of the string. If the length of the string exceeds \fIwidth\fR and \fItruncate\fR is TRUE, then the returned string is a left(\fIwidth).\fR
 .PP
 Example:
 .PP

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qfileinfo.cpp,v 2.32.2.1 1999/07/08 10:55:59 paul Exp $
+** $Id: qfileinfo.cpp,v 2.32.2.2 1999/08/25 15:37:12 hanord Exp $
 **
 ** Implementation of QFileInfo class
 **
@@ -46,7 +46,7 @@
 #endif
 
 #if defined(_OS_WIN32_)
-#include <qt_windows.h>
+#include <windows.h>
 #include <direct.h>
 #include <tchar.h>
 #endif

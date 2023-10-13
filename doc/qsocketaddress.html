@@ -1,0 +1,89 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta name="robots" content="noindex,noarchive">
+<title>Qt Toolkit - QSocketAddress Class</title><style type="text/css"><!--
+h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
+a:link { text-decoration: none; }
+body { background: white; color: black; }
+--></style>
+</head><body bgcolor="#ffffff">
+
+<a href=index.html><img width=122 height=65 src=qtlogo.png alt="Qt logo" align=left border=0></a>
+<center><img src=dochead.png width=472 height=27></center>
+<br clear=all>
+
+<h1 align=center>QSocketAddress Class Reference</h1><br clear="all">
+<p>
+QSocketAddress provides a port number and an IP address.
+<a href="#details">More...</a>
+<p>
+<code>#include &lt;<a href="qsocketdevice-h.html">qsocketdevice.h</a>&gt;</code>
+<p><a href="qsocketaddress-members.html">List of all member functions.</a>
+<h2>Public Members</h2>
+<ul>
+<li><span class="fn"><a href="#b05219"><b>QSocketAddress</b></a> () </span>
+<li><span class="fn"><a href="#896197"><b>QSocketAddress</b></a> ( int port, uint ip4Addr=0 ) </span>
+<li><span class="fn"><a href="#6f0769"><b>QSocketAddress</b></a> ( const QSocketAddress &amp; ) </span>
+<li><span class="fn"><a href="#3d7583"><b>~QSocketAddress</b></a> () </span>
+<li><span class="fn">QSocketAddress&amp; <a href="#9a7a54"><b>operator=</b></a> ( const QSocketAddress &amp; ) </span>
+<li><span class="fn">int <a href="#c404b8"><b>port</b></a> () const</span>
+<li><span class="fn">uint <a href="#1ac27b"><b>ip4Addr</b></a> () const</span>
+<li><span class="fn">QString <a href="#39de8f"><b>ip4AddrString</b></a> () const</span>
+<li><span class="fn">bool <a href="#1a987b"><b>operator==</b></a> ( const QSocketAddress &amp; ) </span>
+</ul>
+<h2>Protected Members</h2>
+<ul>
+<li><span class="fn">void* <b>data</b> () const</span>
+<li><span class="fn">int <b>length</b> () const</span>
+<li><span class="fn">void <b>setData</b> ( void *, int ) </span>
+</ul>
+<hr><h2><a name="details"></a>Detailed Description</h2>
+QSocketAddress provides a port number and an IP address.
+<p>
+This class contains a port number and an IP address in a
+platform-independent manner.  QSocketAddress is normally used with the
+classes QSocketDevice and <a href="qsocket.html">QSocket</a> to set up a server or to connect to a
+host.
+<p>See also:  <a href="qsocket.html">QSocket</a> and QSocketDevice.
+
+<hr><h2>Member Function Documentation</h2>
+<h3 class="fn"><a name="b05219"></a>QSocketAddress::QSocketAddress ()</h3>
+<p>Creates a socket address object with the port number 0 and IP address
+0.0.0.0.
+<h3 class="fn"><a name="6f0769"></a>QSocketAddress::QSocketAddress ( const QSocketAddress &amp; a )</h3>
+<p>Creates a copy of another socket address.
+<h3 class="fn"><a name="896197"></a>QSocketAddress::QSocketAddress ( int port, uint ip4Addr=0 )</h3>
+<p>Creates a socket address object with a specified port number and IP
+address.
+<h3 class="fn"><a name="3d7583"></a>QSocketAddress::~QSocketAddress ()</h3>
+<p>Destroys the socket address object.
+<h3 class="fn">uint <a name="1ac27b"></a>QSocketAddress::ip4Addr () const</h3>
+<p>Returns the IP address as a number.
+<p>For example, if the address is 127.0.0.1, the returned value is
+2130706433 (hex: 7f000001).
+<p>See also:  <a href="qsocketaddress.html#39de8f">ip4AddrString</a>().
+<h3 class="fn"><a href="qstring.html">QString</a> <a name="39de8f"></a>QSocketAddress::ip4AddrString () const</h3>
+<p>Returns the IP address as a string.
+<p>For example, if the address is 2130706433 (hex: 7f000001), the
+returned string is "127.0.0.1".
+<p>See also:  <a href="qsocketaddress.html#1ac27b">ip4Addr</a>().
+<h3 class="fn">QSocketAddress &amp; <a name="9a7a54"></a>QSocketAddress::operator= ( const QSocketAddress &amp; a )</h3>
+<p>Assigns another socket address object <em>a</em> to this object and
+returns a referense to this object.
+<h3 class="fn">bool <a name="1a987b"></a>QSocketAddress::operator== ( const QSocketAddress &amp; a )</h3>
+<p>Returns TRUE if this socket address is identical to <em>a,</em> or FALSE
+if they are different.
+<h3 class="fn">int <a name="c404b8"></a>QSocketAddress::port () const</h3>
+<p>Returns the port number.
+<hr><p>
+Search the documentation, FAQ, qt-interest archive and more (uses
+<a href="http://www.troll.no">www.troll.no</a>):<br>
+<form method=post action="http://www.troll.no/search.cgi">
+<input type=hidden name="version" value="2.0.2"><nobr>
+<input size="50" name="search"><input type=submit value="Search">
+</nobr></form><hr><p>
+This file is part of the <a href="index.html">Qt toolkit</a>,
+copyright &copy; 1995-99
+<a href="http://www.troll.no">Troll Tech</a>, all rights reserved.<p><address><hr><div align="center">
+<table width="100%" cellspacing="0" border="0"><tr>
+<td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.0.2</div>
+</table></div></address></body></html>

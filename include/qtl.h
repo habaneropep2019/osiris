@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qtl.h,v 1.11.2.2 1999/07/20 01:33:24 weis Exp $
+** $Id: qtl.h,v 1.11.2.4 1999/09/07 15:02:00 aavit Exp $
 **
 ** Definition of Qt template library classes
 **
@@ -25,8 +25,8 @@
 #ifndef QTL_H
 #define QTL_H
 
-#include <qtextstream.h>
-#include <qstring.h>
+#include "qtextstream.h"
+#include "qstring.h"
 
 
 template <class T>
@@ -113,7 +113,7 @@ inline void qBubbleSort( Container &c )
 
 
 template <class HeapValue>
-void qHeapSortPushDown( HeapValue* heap, uint first, uint last )
+inline void qHeapSortPushDown( HeapValue* heap, uint first, uint last )
 {
     uint r = first;
     while( r <= last/2 ) {
@@ -144,7 +144,7 @@ void qHeapSortPushDown( HeapValue* heap, uint first, uint last )
 
 
 template <class InputIterator, class Value>
-void qHeapSortHelper( InputIterator b, InputIterator e, Value, uint n )
+inline void qHeapSortHelper( InputIterator b, InputIterator e, Value, uint n )
 {
     // Create the heap
     InputIterator insert = b;

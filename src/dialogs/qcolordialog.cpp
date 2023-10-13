@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qcolordialog.cpp,v 1.14 1999/06/16 02:22:10 warwick Exp $
+** $Id: qcolordialog.cpp,v 1.14.2.1 1999/09/23 12:41:23 paul Exp $
 **
 ** Implementation of QColorDialog class
 **
@@ -386,6 +386,7 @@ void QColorShowLabel::drawContents( QPainter *p )
 QColorShower::QColorShower( QWidget *parent, const char *name )
     :QWidget( parent, name)
 {
+    curCol = qRgb( 0,0,0 );
     QGridLayout *gl = new QGridLayout( this, 1, 1, 6 );
     lab = new QColorShowLabel( this );
     lab->setMinimumWidth( 60 ); //###

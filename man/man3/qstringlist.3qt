@@ -1,4 +1,4 @@
-.TH QStringList 3qt "20 July 1999" "Troll Tech AS" \" -*- nroff -*-
+.TH QStringList 3qt "24 September 1999" "Troll Tech AS" \" -*- nroff -*-
 .\" Copyright 1992-1999 Troll Tech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -61,7 +61,7 @@ Example:
 .br
         for ( QStringList::Iterator it = list.begin(); it != list.end(); ++it ) {
 .br
-            printf( "%s \\n", it->latin1() );
+            printf( "%s \\n", (*it).latin1() );
 .br
         }
 .fi

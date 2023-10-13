@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qnp.cpp,v 1.31 1999/06/16 20:04:50 agulbra Exp $
+** $Id: qnp.cpp,v 1.31.2.1 1999/09/24 08:45:24 paul Exp $
 **
 ** Implementation of Qt extension classes for Netscape Plugin support.
 **
@@ -61,7 +61,6 @@
 #endif
 #include <qfile.h>
 #include <qpainter.h>
-#include <qpaintdevicedefs.h>
 
 #include "qnp.h"
 

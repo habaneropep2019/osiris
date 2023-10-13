@@ -1,4 +1,4 @@
-.TH QGroupBox 3qt "20 July 1999" "Troll Tech AS" \" -*- nroff -*-
+.TH QGroupBox 3qt "24 September 1999" "Troll Tech AS" \" -*- nroff -*-
 .\" Copyright 1992-1999 Troll Tech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -34,7 +34,7 @@ Inherited by QButtonGroup, QHGroupBox and QVGroupBox.
 .BI "virtual void \fBsetColumnLayout\fR ( int " "columns" ", Orientation o )"
 .br
 .ti -1c
-.BI "q_properties: QString \fBtitle\fR () const"
+.BI "QString \fBtitle\fR () const"
 .br
 .ti -1c
 .BI "virtual void \fBsetTitle\fR ( const QString & )"
@@ -125,6 +125,8 @@ Sets the group box title text to \fItitle,\fR and add a focus-change accelerator
 .br
     g->setTitle( "&User information" );
 .fi
+.SH "QString QGroupBox::title () const"
+Returns the group box title text.
 .SH "SEE ALSO"
 .BR http://www.troll.no/qt/qgroupbox.html
 .SH COPYRIGHT

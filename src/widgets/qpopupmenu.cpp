@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qpopupmenu.cpp,v 2.160.2.1 1999/07/13 19:59:27 warwick Exp $
+** $Id: qpopupmenu.cpp,v 2.160.2.3 1999/09/02 08:57:58 paul Exp $
 **
 ** Implementation of QPopupMenu class
 **
@@ -347,9 +347,9 @@ void QPopupMenu::accelActivated( int id )
 {
     QMenuItem *mi = findItem( id );
     if ( mi && mi->isEnabled() ) {
-	if ( mi->signal() ) // activate signal
-	    mi->signal()->activate();
 	actSig( mi->id() );
+	if ( mi->signal() )
+	    mi->signal()->activate();
     }
 }
 
@@ -879,9 +879,9 @@ void QPopupMenu::mouseReleaseEvent( QMouseEvent *e )
 	} else {				// normal menu item
 	    byeMenuBar();			// deactivate menu bar
 	    if ( mi->isEnabled() ) {
-		if ( mi->signal() && !b ) // activate signal
-		    mi->signal()->activate();
 		actSig( mi->id(), b );
+		if ( mi->signal() && !b )
+		    mi->signal()->activate();
 	    }
 	}
     } else {
@@ -1027,9 +1027,9 @@ void QPopupMenu::keyPressEvent( QKeyEvent *e )
 	    byeMenuBar();
 	    bool b = QWhatsThis::inWhatsThisMode();
 	    if ( mi->isEnabled() || b ) {
-		if ( mi->signal() && !b ) // activate signal
-		    mi->signal()->activate();
 		actSig( mi->id(), b );
+		if ( mi->signal() && !b )
+		    mi->signal()->activate();
 	    }
 	}
 	break;
@@ -1080,9 +1080,9 @@ void QPopupMenu::keyPressEvent( QKeyEvent *e )
 		byeMenuBar();
 		bool b = QWhatsThis::inWhatsThisMode();
 		if ( mi->isEnabled() || b ) {
-		    if ( mi->signal() && !b  ) // activate signal
-			mi->signal()->activate();
 		    actSig( mi->id(), b );
+		    if ( mi->signal() && !b  )
+			mi->signal()->activate();
 		}
 	    }
 	}
@@ -1300,8 +1300,8 @@ void QPopupMenu::connectModal( QPopupMenu* receiver, bool doConnect )
     while ( (mi=it.current()) ) {
         ++it;
         if ( mi->popup() && mi->popup() != receiver
-	     && mi->popup()->connectModalRecursionSafety != doConnect ) //avoid circularity
-            mi->popup()->connectModal( receiver, doConnect );
+	     && (bool)(mi->popup()->connectModalRecursionSafety) != doConnect )
+	    mi->popup()->connectModal( receiver, doConnect ); //avoid circular
     }
 }
 

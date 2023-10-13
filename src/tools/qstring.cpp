@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qstring.cpp,v 2.166.2.5 1999/07/12 19:40:23 warwick Exp $
+** $Id: qstring.cpp,v 2.166.2.12 1999/09/21 17:07:08 hanord Exp $
 **
 ** Implementation of the QString class and related Unicode functions
 **
@@ -9545,6 +9545,10 @@ int ucstrcmp( const QString &as, const QString &bs )
     const QChar *b = bs.unicode();
     if ( a == b )
 	return 0;
+    if ( a == 0 )
+       return 1;
+    if ( b == 0 )
+       return -1;
     int l=QMIN(as.length(),bs.length());
     while ( l-- && *a == *b )
 	a++,b++;
@@ -9615,11 +9619,11 @@ int ucstrnicmp( const QChar *a, const QChar *b, int l )
   Returns the row (most significant byte) of the Unicode character.
 */
 /*!
-  \fn uchar& QChar::cell () 
+  \fn uchar& QChar::cell ()
   Returns a reference to the cell (least significant byte) of the Unicode character.
 */
 /*!
-  \fn uchar& QChar::row () 
+  \fn uchar& QChar::row ()
   Returns a reference to the row (most significant byte) of the Unicode character.
 */
 
@@ -10313,6 +10317,13 @@ QString QString::visual(int index, int len)
 }
 
 
+// These macros are used for efficient allocation of QChar strings.
+// IMPORTANT! If you change these, make sure you also change the 
+// "delete unicode" statement in ~QStringData() in qstring.h correspondingly!
+
+#define QT_ALLOC_QCHAR_VEC( N ) (QChar*) new char[ 2*( N ) ]
+#define QT_DELETE_QCHAR_VEC( P ) delete[] ((char*)( P ))
+
 
 /*!
   This utility function converts the 8-bit string
@@ -10327,7 +10338,22 @@ QChar* QString::asciiToUnicode( const QByteArray& ba, uint* len )
     while ( l < (int)ba.size() && ba[l] )
 	l++;
     char* str = ba.data();
-    QChar *uc = (QChar*)new char[ l*sizeof(QChar) ];
+    QChar *uc = new QChar[ l ];	  // Can't use macro, since function is public
+    QChar *result = uc;
+    if ( len )
+	*len = l;
+    while (l--)
+	*uc++ = *str++;
+    return result;
+}
+
+static QChar* internalAsciiToUnicode( const QByteArray& ba, uint* len )
+{
+    int l = 0;
+    while ( l < (int)ba.size() && ba[l] )
+	l++;
+    char* str = ba.data();
+    QChar *uc = QT_ALLOC_QCHAR_VEC( l );
     QChar *result = uc;
     if ( len )
 	*len = l;
@@ -10344,7 +10370,7 @@ QChar* QString::asciiToUnicode( const QByteArray& ba, uint* len )
   The caller is responsible for deleting the return value with delete[].
 */
 
-QChar* QString::asciiToUnicode(const char *str, uint* len, uint maxlen )
+QChar* QString::asciiToUnicode( const char *str, uint* len, uint maxlen )
 {
     QChar* result = 0;
     uint l = 0;
@@ -10356,7 +10382,31 @@ QChar* QString::asciiToUnicode(const char *str, uint* len, uint maxlen )
 	    // Faster?
 	    l = strlen(str);
 	}
-	QChar *uc = (QChar*)new char[ l*sizeof(QChar) ];
+	QChar *uc = new QChar[ l ]; // Can't use macro since function is public
+	result = uc;
+	uint i = l;
+	while ( i-- )
+	    *uc++ = *str++;
+    }
+    if ( len )
+	*len = l;
+    return result;
+}
+
+static QChar* internalAsciiToUnicode( const char *str, uint* len,
+				      uint maxlen = (uint)-1 )
+{
+    QChar* result = 0;
+    uint l = 0;
+    if ( str ) {
+	if ( maxlen != (uint)-1 ) {
+	    while (str[l] && l < maxlen)
+		l++;
+	} else {
+	    // Faster?
+	    l = strlen(str);
+	}
+	QChar *uc = QT_ALLOC_QCHAR_VEC( l );
 	result = uc;
 	uint i = l;
 	while ( i-- )
@@ -10481,7 +10531,7 @@ void Q_EXPORT qt_qstring_stats()
 */
 QString::QString( QChar ch )
 {
-    d = new QStringData(new QChar[1],1,1);
+    d = new QStringData( QT_ALLOC_QCHAR_VEC( 1 ), 1, 1 );
     d->unicode[0] = ch;
 }
 
@@ -10511,7 +10561,7 @@ QString::QString( int size, bool /*dummy*/ )
 	Q2HELPER(stat_construct_int++);
 	int l = size;
 	Q2HELPER(stat_construct_int_size+=l);
-	QChar* uc = (QChar*)new char[ l*sizeof(QChar) ];
+	QChar* uc = QT_ALLOC_QCHAR_VEC( l );
 	d = new QStringData( uc, 0, l );
     } else {
 	Q2HELPER(stat_construct_null++);
@@ -10529,7 +10579,7 @@ QString::QString( const QByteArray& ba )
 {
     Q2HELPER(stat_construct_ba++);
     uint l;
-    QChar *uc = asciiToUnicode(ba,&l);
+    QChar *uc = internalAsciiToUnicode(ba,&l);
     d = new QStringData(uc,l,l);
 }
 
@@ -10542,9 +10592,14 @@ QString::QString( const QByteArray& ba )
 
 QString::QString( const QChar* unicode, uint length )
 {
-    QChar* uc = (QChar*)new char[ length*sizeof(QChar) ];
+  if ( !unicode ) {
+    d = shared_null ? shared_null : makeSharedNull();
+  }
+  else {
+    QChar* uc = QT_ALLOC_QCHAR_VEC( length );
     memcpy(uc, unicode, length*sizeof(QChar));
     d = new QStringData(uc,length,length);
+  }
 }
 
 /*!
@@ -10568,7 +10623,7 @@ QString::QString( const char *str )
 {
     Q2HELPER(stat_construct_charstar++);
     uint l;
-    QChar *uc = asciiToUnicode(str,&l);
+    QChar *uc = internalAsciiToUnicode(str,&l);
     Q2HELPER(stat_construct_charstar_size+=l);
     d = new QStringData(uc,l,l);
 }
@@ -10627,7 +10682,7 @@ QString &QString::operator=( const QCString& cs )
 {
     deref();
     uint l;
-    QChar *uc = asciiToUnicode(cs,&l);
+    QChar *uc = internalAsciiToUnicode(cs,&l);
     d = new QStringData(uc,l,l);
     return *this;
 }
@@ -10645,7 +10700,7 @@ QString &QString::operator=( const char *str )
 {
     deref();
     uint l;
-    QChar *uc = asciiToUnicode(str,&l);
+    QChar *uc = internalAsciiToUnicode(str,&l);
     d = new QStringData(uc,l,l);
     return *this;
 }
@@ -10733,7 +10788,7 @@ void QString::setLength( uint newLen )
 	uint newMax = 4;
 	while ( newMax < newLen )
 	    newMax *= 2;
-	QChar* nd = (QChar*)new char[newMax*sizeof(QChar)];
+	QChar* nd = QT_ALLOC_QCHAR_VEC( newMax );
 	uint len = QMIN( d->len, newLen );
 	if ( d->unicode )
 	    memcpy( nd, d->unicode, sizeof(QChar)*len );
@@ -11105,7 +11160,7 @@ void QString::fill( QChar c, int len )
 	*this = "";
     } else {
 	deref();
-	QChar * nd = (QChar*)new char[ len*sizeof(QChar) ];
+	QChar * nd = QT_ALLOC_QCHAR_VEC( len );
 	d = new QStringData(nd,len,len);
 	while (len--) *nd++ = c;
     }
@@ -11481,7 +11536,7 @@ QString QString::leftJustify( uint width, QChar fill, bool truncate ) const
   If the length of the string exceeds \a width and \a truncate is FALSE,
   then the returned string is a copy of the string.
   If the length of the string exceeds \a width and \a truncate is TRUE,
-  then the returned string is a right(\a width).
+  then the returned string is a left(\a width).
 
   Example:
   \code
@@ -11690,10 +11745,10 @@ QString &QString::insert( uint index, const QChar* s, uint len )
     int df = d->unicode - s;
     if ( df >= 0 && (uint)df < d->maxl ) {
 	// Part of me - take a copy.
-	QChar *tmp = (QChar*)new char[ len*sizeof(QChar) ];
+	QChar *tmp = QT_ALLOC_QCHAR_VEC( len );
 	memcpy(tmp,s,len*sizeof(QChar));
 	insert(index,tmp,len);
-	delete[] tmp;
+	QT_DELETE_QCHAR_VEC( tmp );
 	return *this;
     }
 
@@ -11827,10 +11882,10 @@ QString &QString::replace( uint index, uint len, const QChar* s, uint slen )
 	int df = d->unicode - s;
 	if ( df >= 0 && (uint)df < d->maxl ) {
 	    // Part of me - take a copy.
-	    QChar *tmp = (QChar*)new char[ slen*sizeof(QChar) ];
+	    QChar *tmp = QT_ALLOC_QCHAR_VEC( slen );
 	    memcpy(tmp,s,slen*sizeof(QChar));
 	    replace(index,len,tmp,slen);
-	    delete[] tmp;
+	    QT_DELETE_QCHAR_VEC( tmp );
 	    return *this;
 	}
 
@@ -12572,9 +12627,9 @@ QString QString::fromLatin1(const char* chars, int len)
     uint l;
     QChar *uc;
     if ( len < 0 ) {
-	uc = asciiToUnicode(chars,&l);
+	uc = internalAsciiToUnicode(chars,&l);
     } else {
-	uc = asciiToUnicode(chars,&l,len);
+	uc = internalAsciiToUnicode(chars,&l,len);
     }
     return QString(new QStringData(uc,l,l), TRUE);
 }
@@ -12822,7 +12877,7 @@ int QString::compare( const QString& s ) const
 
 bool operator==( const QString &s1, const QString &s2 )
 {
-    return (s1.length() == s2.length()) &&
+    return (s1.length() == s2.length()) && s1.isNull() == s2.isNull() &&
 	   (memcmp((char*)s1.unicode(),(char*)s2.unicode(),s1.length()*2) ==0);
 }
 
@@ -12887,6 +12942,7 @@ bool operator>=( const char *s1, const QString &s2 )
   \fn bool operator==( const QString &s1, const QString &s2 )
   \relates QString
   Returns TRUE if the two strings are equal, or FALSE if they are different.
+  A null string is different from an empty, non-null string.  
 
   Equivalent to <code>strcmp(s1,s2) == 0</code>.
 */
@@ -13063,7 +13119,7 @@ QConstString::QConstString( QChar* unicode, uint length ) :
 QConstString::~QConstString()
 {
     if ( d->count > 1 ) {
-        QChar* cp = (QChar*)new char[ d->len*sizeof(QChar) ];
+        QChar* cp = QT_ALLOC_QCHAR_VEC( d->len );
         memcpy( cp, d->unicode, d->len*sizeof(QChar) );
         d->unicode = cp;
     } else {
@@ -13194,6 +13250,8 @@ QCString qt_winQString2MB( const QString& s, int uclen )
 // WATCH OUT: mblen must include the NUL (or just use -1)
 QString qt_winMB2QString( const char* mb, int mblen )
 {
+    if ( !mb || !mblen )
+        return QString();
     const int wclen_auto = 4096;
     WCHAR wc_auto[wclen_auto];
     int wclen = wclen_auto;
@@ -13219,6 +13277,8 @@ QString qt_winMB2QString( const char* mb, int mblen )
 	    break;
 	}
     }
+    if ( len <= 0 )
+      return QString();
     QString s( (QChar*)wc, len-1 ); // len-1: we don't want terminator
     if ( wc != wc_auto )
 	delete [] wc;

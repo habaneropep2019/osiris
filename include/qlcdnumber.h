@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qlcdnumber.h,v 2.20 1999/04/28 09:59:59 aavit Exp $
+** $Id: qlcdnumber.h,v 2.20.2.1 1999/08/12 11:06:41 aavit Exp $
 **
 ** Definition of QLCDNumber class
 **
@@ -84,10 +84,13 @@ protected:
 private:
     void    init();
     void    internalDisplay( const QString &);
-    void    internalSetString( const QString& s, const QBitArray* newPoints );
-    void    drawString( const QString &, QPainter &, QBitArray * = 0 ) const;
-    void    drawDigit( const QPoint &, QPainter &, int, char ) const;
-    void    drawSegment( const QPoint &, char, QPainter &, int ) const;
+    void    internalSetString( const QString& s );
+    void    drawString( const QString& s, QPainter &, QBitArray * = 0,
+			bool = TRUE );
+    //void    drawString( const QString &, QPainter &, QBitArray * = 0 ) const;
+    void    drawDigit( const QPoint &, QPainter &, int, char,
+		       char = ' ' );
+    void    drawSegment( const QPoint &, char, QPainter &, int, bool = FALSE );
 
     int	    ndigits;
     double  val;

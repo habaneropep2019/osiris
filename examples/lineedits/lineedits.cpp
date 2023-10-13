@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: lineedits.cpp,v 1.3 1999/06/09 09:54:22 reggie Exp $
+** $Id: lineedits.cpp,v 1.3.2.1 1999/09/01 06:19:52 aavit Exp $
 **
 ** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
@@ -126,7 +126,7 @@ void LineEdits::slotValidatorChanged( int i )
 {
     switch ( i ) {
     case 0:
-	lined2->setValidator( 0L );
+	lined2->setValidator( 0 );
         break;
     case 1:
 	lined2->setValidator( new QIntValidator( lined2 ) );

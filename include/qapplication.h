@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qapplication.h,v 2.77 1999/06/23 17:53:20 ettrich Exp $
+** $Id: qapplication.h,v 2.77.2.2 1999/09/13 19:09:13 paul Exp $
 **
 ** Definition of QApplication class
 **
@@ -113,6 +113,7 @@ public:
     void	     processOneEvent();
     int		     enter_loop();
     void	     exit_loop();
+    int		     loopLevel() const;
     static void	     exit( int retcode=0 );
 
     static bool	     sendEvent( QObject *receiver, QEvent *event );
@@ -150,10 +151,6 @@ public:
     static void 	setDoubleClickInterval( int );
     static int 	doubleClickInterval();
 
-#if defined(_WS_WIN_)
-    static WindowsVersion winVersion();
-#endif
-
 #if defined(_WS_MAC_)
     virtual bool     macEventFilter( MSG * );
 #elif defined(_WS_WIN_)
@@ -165,7 +162,9 @@ public:
 #endif
 
 #if defined(_WS_WIN_)
+    static WindowsVersion winVersion();
     void	     winFocus( QWidget *, bool );
+    static void	     winMouseButtonUp();
 #endif
 
 

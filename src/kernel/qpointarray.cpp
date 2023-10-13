@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qpointarray.cpp,v 2.27 1999/05/23 20:28:43 agulbra Exp $
+** $Id: qpointarray.cpp,v 2.27.2.1 1999/09/01 10:49:34 aavit Exp $
 **
 ** Implementation of QPointArray class
 **
@@ -63,8 +63,6 @@ const double Q_PI   = 3.14159265358979323846;   // pi
   and works with shallow copies by default.
 */
 
-uint QPointArray::splen = 0;
-void* QPointArray::sp = 0;
 
 /*****************************************************************************
   QPointArray member functions
@@ -950,6 +948,16 @@ QDataStream &operator>>( QDataStream &s, QPointArray &a )
     return s;
 }
 
+
+
+
+struct QShortPoint {			// Binary compatible with XPoint
+    short x, y;
+};
+
+uint QPointArray::splen = 0;
+void* QPointArray::sp = 0;		// Really a QShortPoint*
+
 /*!
   \internal
 
@@ -961,9 +969,6 @@ QDataStream &operator>>( QDataStream &s, QPointArray &a )
 
 void* QPointArray::shortPoints( int index, int nPoints ) const
 {
-    typedef struct {
-	short x, y;
-    } x11Point;
 
     if ( isNull() || !nPoints )
 	return 0;
@@ -972,11 +977,11 @@ void* QPointArray::shortPoints( int index, int nPoints ) const
     uint i = nPoints < 0 ? size() : nPoints;
     if ( splen < i ) {
 	if ( sp )
-	    delete[] sp;
-	sp = new x11Point[i];
+	    delete[] ((QShortPoint*)sp);
+	sp = new QShortPoint[i];
 	splen = i;
     }
-    x11Point* ps = (x11Point*)sp;
+    QShortPoint* ps = (QShortPoint*)sp;
     while ( i-- ) {
 	ps->x = (short)p->x();
 	ps->y = (short)p->y();
@@ -996,7 +1001,7 @@ void* QPointArray::shortPoints( int index, int nPoints ) const
 void QPointArray::cleanBuffers()
 {
     if ( sp )
-	delete[] sp;
+	delete[] ((QShortPoint*)sp);
     sp = 0;
     splen = 0;
 }

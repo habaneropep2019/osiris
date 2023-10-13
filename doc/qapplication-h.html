@@ -9,7 +9,7 @@ body { background: white; color: black; }
 </head><body bgcolor="#ffffff">
 
 <a href=index.html><img width=122 height=65 src=qtlogo.png alt="Qt logo" align=left border=0></a>
-<center><img src=dochead.png width=448 height=23></center>
+<center><img src=dochead.png width=472 height=27></center>
 <br clear=all>
 
 <h1 align=center>qapplication.h</h1><br clear="all">
@@ -19,7 +19,7 @@ remains with Troll Tech.
 <hr>
 <pre>
 /****************************************************************************
-** &#36;Id&#58; qapplication.h,v 2.77 1999/06/23 17:53:20 ettrich Exp $
+** &#36;Id&#58; qapplication.h,v 2.77.2.2 1999/09/13 19:09:13 paul Exp $
 **
 ** Definition of QApplication class
 **
@@ -133,6 +133,7 @@ public:
     void             processOneEvent();
     int              enter_loop();
     void             exit_loop();
+    int              loopLevel() const;
     static void      exit( int retcode=0 );
 
     static bool      sendEvent( QObject *receiver, QEvent *event );
@@ -170,10 +171,6 @@ public:
     static void         setDoubleClickInterval( int );
     static int  doubleClickInterval();
 
-#if defined(_WS_WIN_)
-    static WindowsVersion winVersion();
-#endif
-
 #if defined(_WS_MAC_)
     virtual bool     macEventFilter( MSG * );
 #elif defined(_WS_WIN_)
@@ -185,7 +182,9 @@ public:
 #endif
 
 #if defined(_WS_WIN_)
+    static WindowsVersion winVersion();
     void             winFocus( QWidget *, bool );
+    static void      winMouseButtonUp();
 #endif
 
 
@@ -358,5 +357,5 @@ inline bool QApplication::sendEvent( QObject *receiver, QEvent *event )
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.0.1</div>
+<td align="right"><div align="right">Qt version 2.0.2</div>
 </table></div></address></body></html>

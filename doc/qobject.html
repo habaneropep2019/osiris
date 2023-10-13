@@ -7,7 +7,7 @@ body { background: white; color: black; }
 </head><body bgcolor="#ffffff">
 
 <a href=index.html><img width=122 height=65 src=qtlogo.png alt="Qt logo" align=left border=0></a>
-<center><img src=dochead.png width=448 height=23></center>
+<center><img src=dochead.png width=472 height=27></center>
 <br clear=all>
 
 <h1 align=center>QObject Class Reference</h1><br clear="all">
@@ -18,7 +18,7 @@ The QObject class is the base class of all Qt objects that can deal with signals
 <code>#include &lt;<a href="qobject-h.html">qobject.h</a>&gt;</code>
 <p>
 Inherits <a href="qt.html">Qt</a>.
-<p>Inherited by <a href="qaccel.html">QAccel</a>, <a href="qapplication.html">QApplication</a>, <a href="qclipboard.html">QClipboard</a>, <a href="qdatapump.html">QDataPump</a>, QDragManager, <a href="qdragobject.html">QDragObject</a>, <a href="qfileiconprovider.html">QFileIconProvider</a>, <a href="qlayout.html">QLayout</a>, <a href="qnpinstance.html">QNPInstance</a>, QSenderObject, <a href="qsessionmanager.html">QSessionManager</a>, <a href="qsignal.html">QSignal</a>, <a href="qsignalmapper.html">QSignalMapper</a>, <a href="qsocketnotifier.html">QSocketNotifier</a>, <a href="qstyle.html">QStyle</a>, <a href="qstylesheet.html">QStyleSheet</a>, <a href="qtimer.html">QTimer</a>, <a href="qtooltipgroup.html">QToolTipGroup</a>, <a href="qtranslator.html">QTranslator</a>, <a href="qvalidator.html">QValidator</a> and <a href="qwidget.html">QWidget</a>.
+<p>Inherited by <a href="qaccel.html">QAccel</a>, <a href="qapplication.html">QApplication</a>, <a href="qclipboard.html">QClipboard</a>, <a href="qdatapump.html">QDataPump</a>, QDragManager, <a href="qdragobject.html">QDragObject</a>, <a href="qfileiconprovider.html">QFileIconProvider</a>, <a href="qlayout.html">QLayout</a>, <a href="qnpinstance.html">QNPInstance</a>, QSenderObject, <a href="qserversocket.html">QServerSocket</a>, <a href="qsessionmanager.html">QSessionManager</a>, <a href="qsignal.html">QSignal</a>, <a href="qsignalmapper.html">QSignalMapper</a>, <a href="qsocket.html">QSocket</a>, <a href="qsocketnotifier.html">QSocketNotifier</a>, <a href="qstyle.html">QStyle</a>, <a href="qstylesheet.html">QStyleSheet</a>, <a href="qtimer.html">QTimer</a>, <a href="qtooltipgroup.html">QToolTipGroup</a>, <a href="qtranslator.html">QTranslator</a>, <a href="qvalidator.html">QValidator</a> and <a href="qwidget.html">QWidget</a>.
 <p><a href="qobject-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
@@ -653,7 +653,6 @@ handle 1 millisecond intervals.
 one-shot timers and timer signals instead of events.
 <p>See also:  <a href="qobject.html#cc83af">timerEvent</a>(), <a href="qobject.html#f5e328">killTimer</a>() and <a href="qobject.html#66592d">killTimers</a>().
 <p>Examples:
- <a href="xform-xform-cpp.html#startTimer">xform/xform.cpp</a>
  <a href="qmag-qmag-cpp.html#startTimer">qmag/qmag.cpp</a>
  <a href="forever-forever-cpp.html#startTimer">forever/forever.cpp</a>
 <h3 class="fn">void <a name="659a8d"></a>QObject::staticMetaObject () <code>[static protected]</code></h3>
@@ -669,15 +668,13 @@ timer events for the object.
 <p><a href="qtimer.html">QTimer</a> provides a higher-level interface to the timer functionality,
 and also more general information about timers.
 <p>See also:  <a href="qobject.html#906d99">startTimer</a>(), <a href="qobject.html#f5e328">killTimer</a>(), <a href="qobject.html#66592d">killTimers</a>() and <a href="qobject.html#c8b023">event</a>().
-<p>Reimplemented in <a href="qpopupmenu.html#3ff1d5">QPopupMenu</a> and <a href="qmultilineedit.html#0cf52b">QMultiLineEdit</a>.
+<p>Reimplemented in <a href="qsocket.html#5c6246">QSocket</a>, <a href="qpopupmenu.html#3ff1d5">QPopupMenu</a> and <a href="qmultilineedit.html#0cf52b">QMultiLineEdit</a>.
 <h3 class="fn"><a href="qstring.html">QString</a> <a name="44b4c1"></a>QObject::tr ( const char * text ) <code>[static]</code></h3>
 <p>Returns a translated version of <em>text,</em> or <em>text</em> if there is
 no appropriate translated version.  All QObject subclasses which use the
 <a href="metaobjects.html">Q_OBJECT macro</a> have an overridden
 version of this.
 <p>See also:  <a href="qapplication.html#69aff6">QApplication::translate</a>().
-<p>Examples:
- <a href="xform-xform-cpp.html#tr">xform/xform.cpp</a>
 <hr><h2>Related Functions</h2>
 <h3>void * <a name="487bf1"></a>qt_find_obj_child (QObject * parent, const char * type, const char * name)</h3>
 <p>Returns a pointer to the child named <em>name</em> of QObject <em>parent</em>
@@ -693,7 +690,7 @@ which inherits type <em>type.</em>
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.troll.no">www.troll.no</a>):<br>
 <form method=post action="http://www.troll.no/search.cgi">
-<input type=hidden name="version" value="2.0.1"><nobr>
+<input type=hidden name="version" value="2.0.2"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -701,5 +698,5 @@ copyright &copy; 1995-99
 <a href="http://www.troll.no">Troll Tech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.0.1</div>
+<td align="right"><div align="right">Qt version 2.0.2</div>
 </table></div></address></body></html>

@@ -16,7 +16,7 @@ MOC	=	$(SYSCONF_MOC)
 DESTDIR = ../lib/
 VER_MAJ = 2
 VER_MIN = 0
-VER_PATCH = 1
+VER_PATCH = 2
 TARGET	= qt
 TARGET1 = lib$(TARGET).so.$(VER_MAJ)
 
@@ -1632,11 +1632,7 @@ tools/qfile.o: tools/qfile.cpp \
 		tools/qgarray.h \
 		tools/qshared.h \
 		tools/qstring.h \
-		tools/qfiledefs.h \
-		kernel/qt_windows.h \
-		kernel/qwindowdefs.h \
-		kernel/qobjectdefs.h \
-		kernel/qnamespace.h
+		tools/qfiledefs.h
 
 tools/qfileinfo.o: tools/qfileinfo.cpp \
 		tools/qglobal.h \
@@ -1655,11 +1651,7 @@ tools/qfileinfo.o: tools/qfileinfo.cpp \
 		tools/qlist.h \
 		tools/qglist.h \
 		tools/qcollection.h \
-		tools/qdatastream.h \
-		kernel/qt_windows.h \
-		kernel/qwindowdefs.h \
-		kernel/qobjectdefs.h \
-		kernel/qnamespace.h
+		tools/qdatastream.h
 
 tools/qgarray.o: tools/qgarray.cpp \
 		tools/qgarray.h \
@@ -2998,7 +2990,8 @@ kernel/qpainter.o: kernel/qpainter.cpp \
 		kernel/qsizepolicy.h \
 		kernel/qimage.h \
 		tools/qstrlist.h \
-		kernel/qpaintdevicemetrics.h
+		kernel/qpaintdevicemetrics.h \
+		kernel/qt_windows.h
 
 kernel/qpalette.o: kernel/qpalette.cpp \
 		kernel/qpalette.h \

@@ -1,4 +1,4 @@
-.TH QPushButton 3qt "20 July 1999" "Troll Tech AS" \" -*- nroff -*-
+.TH QPushButton 3qt "24 September 1999" "Troll Tech AS" \" -*- nroff -*-
 .\" Copyright 1992-1999 Troll Tech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -47,7 +47,7 @@ Inherits QButton.
 .BI "virtual void \fBsetGeometry\fR ( const QRect & )"
 .br
 .ti -1c
-.BI "q_properties: virtual void \fBsetToggleButton\fR ( bool )"
+.BI "virtual void \fBsetToggleButton\fR ( bool )"
 .br
 .ti -1c
 .BI "bool \fBautoDefault\fR () const"
@@ -195,11 +195,11 @@ An auto-default button becomes the default push button automatically when it rec
 .PP
 See also: autoDefault() and setDefault().
 .SH "void QPushButton::setDefault ( bool enable ) \fC[virtual]\fR"
-Sets the button to be the default button if \fIenable\fR is TRUE, or to be a normal button if \fIenable\fR is FALSE.
+Sets this button to be the current default button of a dialog if \fIenable\fR is TRUE, or to be a normal button if \fIenable\fR is FALSE.
 .PP
-A default push button in a dialog emits the QButton::clicked() signal if the user presses the Enter key. Only one push button in the dialog can be default.
+The current default button gets clicked when the user presses the "Enter" key, independently of which widget in the dialog currently has the keyboard input focus. Only one push button can at any time be the default button.
 .PP
-Default push buttons are only allowed in dialogs.
+The default button behaviour is only provided in dialogs. Buttons can always be clicked from the keyboard by pressing the spacebar whern the button has focus.
 .PP
 See also: isDefault(), setAutoDefault() and QDialog.
 .SH "void QPushButton::setGeometry ( const QRect & r ) \fC[virtual]\fR"
@@ -221,6 +221,17 @@ See also: isMenuButton().
 Switches a toggle button on if \fIenable\fR is TRUE or off if \fIenable\fR is FALSE.
 .PP
 See also: isOn(), toggle(), toggled() and isToggleButton().
+.PP
+Examples:
+.(l
+qmag/qmag.cpp
+.)l
+.SH "void QPushButton::setToggleButton ( bool enable ) \fC[virtual]\fR"
+Makes the push button a toggle button if \fIenable\fR is TRUE, or a normal push button if \fIenable\fR is FALSE.
+.PP
+Toggle buttons have an on/off state similar to check boxes. A push button is initially not a toggle button.
+.PP
+See also: setOn(), toggle(), isToggleButton() and toggled().
 .PP
 Examples:
 .(l

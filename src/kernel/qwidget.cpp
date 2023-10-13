@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qwidget.cpp,v 2.310.2.2 1999/07/13 19:59:01 warwick Exp $
+** $Id: qwidget.cpp,v 2.310.2.3 1999/08/23 13:20:33 hanord Exp $
 **
 ** Implementation of QWidget class
 **
@@ -589,7 +589,10 @@ QWidget::QWidget( QWidget *parent, const char *name, WFlags f )
     if ( isTopLevel() ) {
 	QFocusData *fd = focusData( TRUE );
 	if ( fd->focusWidgets.findRef(this) < 0 )
- 	    fd->focusWidgets.append( this );
+	    fd->focusWidgets.append( this );
+    } else {
+	if ( !parentWidget()->isEnabled() )
+	    setWState( WState_Disabled );
     }
 }
 
@@ -3051,28 +3054,25 @@ bool QWidget::close( bool alsoDelete )
 {
     WId	 id	= winId();
     bool isMain = qApp->mainWidget() == this;
-    bool checkLastWindowClosed = isTopLevel() && !isPopup() && !testWFlags( WStyle_Dialog );
+    bool checkLastWindowClosed = isTopLevel() && !isPopup() &&
+				 !testWFlags(WStyle_Dialog);
     QCloseEvent e;
     bool accept = QApplication::sendEvent( this, &e );
     if ( !QWidget::find(id) ) {			// widget was deleted
 	accept = TRUE;
-    }
-    else {
+    } else {
 	if ( accept ) {
 	    hide();
 	    if ( alsoDelete || testWFlags(WDestructiveClose) )
 		delete this;
 	}
     }
-
-    if ( isMain )
-	qApp->quit();
-
     if ( accept && checkLastWindowClosed ) {	// last window closed?
 	if ( qApp->receivers(SIGNAL(lastWindowClosed())) && noMoreToplevels() )
 	    emit qApp->lastWindowClosed();
+	if ( isMain )
+	    qApp->quit();
     }
-
     return accept;
 }
 

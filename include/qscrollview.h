@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qscrollview.h,v 2.44 1999/06/22 13:59:05 paul Exp $
+** $Id: qscrollview.h,v 2.44.2.1 1999/08/31 11:45:17 reggie Exp $
 **
 ** Definition of QScrollView class
 **
@@ -107,6 +107,7 @@ public slots:
     void	center(int x, int y, float xmargin, float ymargin);
 
     void	updateScrollBars();
+    void 	setEnabled( bool enable );
 
 protected:
     void	resizeEvent(QResizeEvent*);

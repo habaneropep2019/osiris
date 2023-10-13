@@ -1,4 +1,4 @@
-.TH QFrame 3qt "20 July 1999" "Troll Tech AS" \" -*- nroff -*-
+.TH QFrame 3qt "24 September 1999" "Troll Tech AS" \" -*- nroff -*-
 .\" Copyright 1992-1999 Troll Tech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -38,6 +38,9 @@ Inherited by QGrid, QGroupBox, QHBox, QLCDNumber, QLabel, QMenuBar, QPopupMenu, 
 .br
 .ti -1c
 .BI "virtual QSizePolicy \fBsizePolicy\fR () const"
+.br
+.ti -1c
+.BI "enum \fBShape\fR { NoFrame = 0, Box = 0x0001, Panel = 0x0002, WinPanel = 0x0003, HLine = 0x0004, VLine = 0x0005, StyledPanel = 0x0006, PopupPanel = 0x0007, MShape = 0x000f }"
 .br
 .ti -1c
 .BI "enum \fBShadow\fR { Plain = 0x0010, Raised = 0x0020, Sunken = 0x0030, MShadow = 0x00f0 }"

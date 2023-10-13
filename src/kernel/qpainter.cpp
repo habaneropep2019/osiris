@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qpainter.cpp,v 2.92.2.6 1999/07/19 05:32:19 aavit Exp $
+** $Id: qpainter.cpp,v 2.92.2.10 1999/09/24 09:05:57 hanord Exp $
 **
 ** Implementation of QPainter, QPen and QBrush classes
 **
@@ -31,8 +31,13 @@
 #include "qimage.h"
 #include "qpaintdevicemetrics.h"
 #include <stdlib.h>
+#if defined(_WS_WIN_)
+#include "qt_windows.h"
+#endif
+
 
 typedef QStack<QWMatrix> QWMatrixStack;
+
 
 /*!
   \class QPainter qpainter.h
@@ -1931,7 +1936,7 @@ void QPainter::drawText( int x, int y, int w, int h, int tf,
 	}
     }
 
-    const QFontMetrics & fm = fontMetrics();		// get font metrics
+    const QFontMetrics & fm = fontMetrics();	// get font metrics
 
     qt_format_text(fm, x, y, w, h, tf, str, len, brect,
 		   tabstops, tabarray, tabarraylen, internal, this);
@@ -2342,7 +2347,6 @@ void qt_format_text( const QFontMetrics& fm, int x, int y, int w, int h,
 
 
 /*!
-
   Returns the bounding rectangle of the aligned text that would be
   printed with the corresponding drawText() function (the first \e len
   characters from \e str).  The drawing, and hence the bounding

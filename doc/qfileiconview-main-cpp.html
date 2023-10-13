@@ -9,7 +9,7 @@ body { background: white; color: black; }
 </head><body bgcolor="#ffffff">
 
 <a href=index.html><img width=122 height=65 src=qtlogo.png alt="Qt logo" align=left border=0></a>
-<center><img src=dochead.png width=448 height=23></center>
+<center><img src=dochead.png width=472 height=27></center>
 <br clear=all>
 
 <h1 align=center>Simple Filemanager</h1><br clear="all">
@@ -149,7 +149,7 @@ protected:
   Implementation of the fileiconview:
 
   <pre>/****************************************************************************
-** &#36;Id&#58; qfileiconview.cpp,v 1.5.2.1 1999/06/30 14:00:04 warwick Exp $
+** &#36;Id&#58; qfileiconview.cpp,v 1.5.2.2 1999/09/01 06:19:56 aavit Exp $
 **
 ** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
@@ -459,7 +459,7 @@ void QtFileIconViewItem::dropped( <a href="qmimesource.html">QMimeSource</a> *mi
                         "To\n\n"
                         "   %1" ).arg( filename() );
 
-        <a href="qmessagebox.html#2e454b">QMessageBox::information</a>( 0L, "Copy", str, "Not Implemented" );
+        <a href="qmessagebox.html#2e454b">QMessageBox::information</a>( 0, "Copy", str, "Not Implemented" );
     }
 }
 
@@ -601,7 +601,7 @@ void QtFileIconView::itemDoubleClicked( QtIconViewItem *i )
 <a href="qdragobject.html">QDragObject</a> *QtFileIconView::dragObject()
 {
     if ( !currentItem() )
-        return 0L;
+        return 0;
 
     <a href="qstrlist.html">QStrList</a> lst;
     lst.<a href="qcollection.html#a3fc3c">setAutoDelete</a>( FALSE );
@@ -1026,5 +1026,5 @@ int main( int argc, char **argv )
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.0.1</div>
+<td align="right"><div align="right">Qt version 2.0.2</div>
 </table></div></address></body></html>

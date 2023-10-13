@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qfile.cpp,v 2.49 1999/06/10 14:47:57 warwick Exp $
+** $Id: qfile.cpp,v 2.49.2.2 1999/09/03 07:45:54 hanord Exp $
 **
 ** Implementation of QFile class
 **
@@ -36,14 +36,14 @@
 #include "qfiledefs.h"
 
 #if defined(_OS_WIN32_)
-#include <qt_windows.h>
+#include <windows.h>
 #include <direct.h>
 #include <tchar.h>
 
 QCString qt_win95Name(const QString s)
 {
     if ( s[0] == '/' && s[1] == '/' ) {
- 	// Win95 cannot handle slash-slash needs slosh-slosh. 
+	// Win95 cannot handle slash-slash needs slosh-slosh.
 	QString ss(s);
 	ss[0] = '\\';
 	ss[1] = '\\';
@@ -187,9 +187,9 @@ bool qt_file_access( const QString& fn, int t )
 {
     if ( fn.isEmpty() )
 	return FALSE;
-#if defined (UNIX) || defined(__CYGWIN32__)
+#if defined (UNIX)
     return ACCESS( QFile::encodeName(fn), t ) == 0;
-#else
+#elif defined(_OS_WIN32_)
     if ( qt_winunicode ) {
 	return _taccess((TCHAR*)qt_winTchar(fn,TRUE), t) == 0;
     } else {
@@ -240,13 +240,13 @@ bool QFile::remove( const QString &fileName )
 {
     if ( fileName.isEmpty() ) {
 #if defined(CHECK_NULL)
-        qWarning( "QFile::remove: Empty or NULL file name" );
+	qWarning( "QFile::remove: Empty or null file name" );
 #endif
-        return FALSE;
+	return FALSE;
     }
 #if defined(UNIX)
     return unlink( QFile::encodeName(fileName) ) == 0;	// unlink more common in UNIX
-#else
+#elif defined(_OS_WIN32_)
     // use standard ANSI remove
     if ( qt_winunicode ) {
 	return _tremove((const TCHAR*)qt_winTchar(fileName,TRUE)) == 0;
@@ -369,7 +369,7 @@ bool QFile::open( int m )
 #endif
 #if defined(UNIX)
 	fd = OPEN( QFile::encodeName(fn), oflags, 0666 );
-#else
+#elif defined(_OS_WIN32_)
 	if ( qt_winunicode ) {
 	    fd = _topen((const TCHAR*)qt_winTchar(fn,TRUE), oflags, 0666 );
 	} else {
@@ -416,7 +416,7 @@ bool QFile::open( int m )
 	while (1) { // At most twice
 #if defined(UNIX)
 	    fh = fopen( QFile::encodeName(fn), perm2 );
-#else
+#elif defined(_OS_WIN32_)
 	    if ( qt_winunicode ) {
 		TCHAR tperm2[4];
 		tperm2[0] = perm2[0];
@@ -555,9 +555,10 @@ bool QFile::open( int m, int f )
 /*!
   Closes an open file.
 
-  The file is closed even if it was opened with an existing file
-  handle or a file descriptor, \e except that stdin, stdout and stderr
-  are never closed.
+  The file is not closed if it was opened with an existing file handle.
+  If the existing file handle is a \c FILE*, the file is flushed.
+  If the existing file handle is an \c int file descriptor, nothing
+  is done to the file.
 
   Some "write-behind" filesystems may report an unspecified error on
   closing the file. These errors only indiciate that something may
@@ -571,14 +572,14 @@ void QFile::close()
 {
     bool ok = FALSE;
     if ( isOpen() ) {				// file is not open
-	if ( fh ) {					// buffered file
+	if ( fh ) {				// buffered file
 	    if ( ext_f )
-		fflush( fh );			// cannot close
+		ok = fflush( fh ) != -1;	// flush instead of closing
 	    else
 		ok = fclose( fh ) != -1;
-	} else {					// raw file
+	} else {				// raw file
 	    if ( ext_f )
-		;					// cannot close
+		ok = TRUE;			// cannot close
 	    else
 		ok = CLOSE( fd ) != -1;
 	}
@@ -617,7 +618,7 @@ uint QFile::size() const
     else {
 #if defined (UNIX)
 	STAT( QFile::encodeName(fn), &st );
-#else
+#elif defined(_OS_WIN32_)
 	if ( qt_winunicode ) {
 	    _tstat((const TCHAR*)qt_winTchar(fn,TRUE), &st);
 	} else {
@@ -897,7 +898,7 @@ int QFile::getch()
 	return EOF;
     }
 #endif
-    
+
     int ch;
 
     if ( !ungetchBuffer.isEmpty() ) {
@@ -906,7 +907,7 @@ int QFile::getch()
 	ungetchBuffer.truncate( len - 1 );
 	return ch;
     }
-    
+
     if ( isRaw() ) {				// raw file (inefficient)
 	char buf[1];
 	ch = readBlock( buf, 1 ) == 1 ? buf[0] : EOF;
@@ -980,13 +981,13 @@ int QFile::ungetch( int ch )
 #endif
     if ( ch == EOF )				// cannot unget EOF
 	return ch;
-    
+
     if ( isSequentialAccess() && !fh) {
 	// pipe or similar => we cannot ungetch, so do it manually
 	ungetchBuffer +=ch;
 	return ch;
     }
-    
+
     if ( isRaw() ) {				// raw file (very inefficient)
 	char buf[1];
 	at( ioIndex-1 );
@@ -1053,8 +1054,9 @@ static QFile::EncoderFn encoder = locale_encoder;
   store in filenames in UTF-8, etc., but beware that such filenames
   would probably then be unrecognizable when seen by other programs.
 
-  \sa decodedName().
+  \sa decodeName()
 */
+
 QCString QFile::encodeName( const QString &fileName )
 {
     return (*encoder)(fileName);
@@ -1093,8 +1095,9 @@ QString QFile::decodeName( const QCString &localFileName )
   Sets the function for decoding 8-bit filenames.
   The default uses the locale-specific 8-bit encoding.
 
-  \sa encodeName(), decodedName()
+  \sa encodeName(), decodeName()
 */
+
 void QFile::setDecodingFunction( DecoderFn f )
 {
     decoder = f;
