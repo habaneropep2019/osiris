@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: qt/examples/movies/main.cpp   2.3.2   edited 2001-06-12 $
+** $Id: main.cpp,v 1.3 1999/06/17 19:46:38 paul Exp $
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -210,6 +210,8 @@ int main(int argc, char **argv)
 {
     QApplication a(argc, argv);
 
+    QApplication::setFont(QFont("Helvetica"));
+
     if (argc > 1) {
         // Commandline mode - show movies given on the command line
         //
@@ -218,7 +220,7 @@ int main(int argc, char **argv)
                                   Qt::WDestructiveClose);
         QObject::connect(qApp, SIGNAL(lastWindowClosed()), qApp, SLOT(quit()));
     } else {
-        // "GUI" mode - open a chooser for movies
+        // GUI mode - open a chooser for movies
         //
         MovieStarter* fd = new MovieStarter(".");
         fd->show();
@@ -232,8 +234,9 @@ int main(int argc, char **argv)
             "control-left-click to Step 10,\n"
             "right-click to Unpause\n\n"
             "Windows may be resized to enlarge movie.", 0 );
-        help->setCaption( "Qt Examples - Movies" );
-        help->setIndent( 10 );
+        help->setCaption("movies - Help");
+        help->setIndent(10);
+        help->adjustSize();
         help->show();
     }
 

@@ -1,0 +1,120 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><meta name="robots" content="noindex,noarchive"><title>
+Qt Toolkit - qvalidator.h include file
+</title><style type="text/css"><!--
+h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
+a:link { text-decoration: none; }
+body { background: white; color: black; }
+--></style>
+</head><body bgcolor="#ffffff">
+
+<a href=index.html><img width=122 height=65 src=qtlogo.png alt="Qt logo" align=left border=0></a>
+<center><img src=dochead.png width=448 height=23></center>
+<br clear=all>
+
+<h1 align=center>qvalidator.h</h1><br clear="all">
+This is the verbatim text of the qvalidator.h include file.  It is
+provided only for illustration; the copyright
+remains with Troll Tech.
+<hr>
+<pre>
+/****************************************************************************
+** &#36;Id&#58; qvalidator.h,v 2.17 1999/04/28 10:00:56 aavit Exp $
+**
+** Definition of validator classes.
+**
+** Created : 970610
+**
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+**
+** This file is part of the Qt GUI Toolkit.
+**
+** This file may be distributed under the terms of the Q Public License
+** as defined by Troll Tech AS of Norway and appearing in the file
+** LICENSE.QPL included in the packaging of this file.
+**
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
+**
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
+**
+*****************************************************************************/
+
+#ifndef QVALIDATOR_H
+#define QVALIDATOR_H
+
+#ifndef QT_H
+#include "qobject.h"
+#include "qstring.h"
+#endif // QT_H
+
+
+class Q_EXPORT <a href="qvalidator.html">QValidator</a>: public QObject
+{
+    Q_OBJECT
+public:
+    QValidator( QWidget * parent, const char *name = 0 );
+    ~QValidator();
+
+    enum State { Invalid, Valid, Acceptable };
+
+    virtual State validate( QString &amp;, int &amp; ) const = 0;
+    virtual void fixup( QString &amp; ) const;
+};
+
+
+class Q_EXPORT <a href="qintvalidator.html">QIntValidator</a>: public QValidator
+{
+    Q_OBJECT
+public:
+    QIntValidator( QWidget * parent, const char *name = 0 );
+    QIntValidator( int bottom, int top,
+                   QWidget * parent, const char *name = 0 );
+    ~QIntValidator();
+
+    QValidator::State validate( QString &amp;, int &amp; ) const;
+
+    virtual void setRange( int bottom, int top );
+
+    int bottom() const { return b; }
+    int top() const { return t; }
+
+private:
+    int b, t;
+};
+
+
+class Q_EXPORT <a href="qdoublevalidator.html">QDoubleValidator</a>: public QValidator
+{
+    Q_OBJECT
+public:
+    QDoubleValidator( QWidget * parent, const char *name = 0 );
+    QDoubleValidator( double bottom, double top, int decimals,
+                      QWidget * parent, const char *name = 0 );
+    ~QDoubleValidator();
+
+    QValidator::State validate( QString &amp;, int &amp; ) const;
+
+    virtual void setRange( double bottom, double top, int decimals = 0 );
+
+    double bottom() const { return b; }
+    double top() const { return t; }
+    int decimals() const { return d; }
+
+private:
+    double b, t;
+    int d;
+};
+
+
+#endif // QVALIDATOR_H
+
+</pre>
+<p><address><hr><div align="center">
+<table width="100%" cellspacing="0" border="0"><tr>
+<td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.00</div>
+</table></div></address></body></html>

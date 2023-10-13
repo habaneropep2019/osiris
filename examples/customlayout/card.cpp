@@ -1,12 +1,9 @@
 /****************************************************************************
-** $Id: qt/examples/customlayout/card.cpp   2.3.2   edited 2001-01-26 $
+** $Id: card.cpp,v 1.3 1999/06/16 15:49:28 paul Exp $
 **
 ** Implementing your own layout: flow example
 **
-** Copyright (C) 1996 by Trolltech AS.  All rights reserved.
-**
-** This file is part of an example program for Qt.  This example
-** program may be used, distributed and modified without limitation.
+** Copyright (C) 1996 by Troll Tech AS.  All rights reserved.
 **
 *****************************************************************************/
 
@@ -59,9 +56,9 @@ void CardLayout::addItem(  QLayoutItem *item  )
     list.append( item );
 }
 
-void CardLayout::setGeometry( const QRect &rct )
+void CardLayout::setGeometry( const QRect &rect )
 {
-    QLayout::setGeometry( rct );
+    QLayout::setGeometry( rect );
 
     QListIterator<QLayoutItem> it( list );
     if ( it.count() == 0 )
@@ -71,12 +68,12 @@ void CardLayout::setGeometry( const QRect &rct )
 
     int i = 0;
 
-    int w = rct.width() - ( list.count() - 1 ) * spacing();
-    int h = rct.height() - ( list.count() - 1 ) * spacing();
+    int w = rect.width() - ( list.count() - 1 ) * spacing();
+    int h = rect.height() - ( list.count() - 1 ) * spacing();
 
     while ( ( o=it.current() ) != 0 ) {
         ++it;
-        QRect geom( rct.x() + i * spacing(), rct.y() + i * spacing(),
+        QRect geom( rect.x() + i * spacing(), rect.y() + i * spacing(),
                     w, h  );
         o->setGeometry(  geom  );
         ++i;

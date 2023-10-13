@@ -1,18 +1,18 @@
 /****************************************************************
 **
-** Definition of LCDRange class, Qt tutorial 8
+** Definition of LCDRange class, Qt tutorial 10
 **
 ****************************************************************/
 
 #ifndef LCDRANGE_H
 #define LCDRANGE_H
 
-#include <qvbox.h>
+#include <qwidget.h>
 
-class QSlider;
+class QScrollBar;
 
 
-class LCDRange : public QVBox
+class LCDRange : public QWidget
 {
     Q_OBJECT
 public:
@@ -28,7 +28,7 @@ signals:
     void valueChanged( int );
 
 private:
-    QSlider  *slider;
+    QScrollBar  *sBar;
 };
 
 

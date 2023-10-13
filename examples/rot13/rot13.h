@@ -1,16 +1,13 @@
 /****************************************************************************
-** $Id: qt/examples/rot13/rot13.h   2.3.2   edited 2001-01-26 $
+** $Id: rot13.h,v 1.1 1999/06/03 10:08:56 warwick Exp $
 **
 ** Definition of something or other
 **
 ** Created : 979899
 **
-** Copyright (C) 1997 by Trolltech AS.  All rights reserved.
+** Copyright (C) 1997 by Troll Tech AS.  All rights reserved.
 **
-** This file is part of an example program for Qt.  This example
-** program may be used, distributed and modified without limitation.
-**
-*****************************************************************************/
+****************************************************************************/
 
 #ifndef ROT13_H
 #define ROT13_H

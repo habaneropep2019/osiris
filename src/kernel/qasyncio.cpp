@@ -1,48 +1,33 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qasyncio.cpp   2.3.2   edited 2001-01-26 $
+** $Id: qasyncio.cpp,v 1.18 1999/05/23 20:28:10 agulbra Exp $
 **
 ** Implementation of asynchronous I/O classes
 **
 ** Created : 970617
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
-** This file is part of the kernel module of the Qt GUI Toolkit.
+** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses may use this file in accordance with the Qt Commercial License
-** Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
+*****************************************************************************/
 
 #include "qasyncio.h"
 #include "qiodevice.h"
 #include "qtimer.h"
 #include <stdlib.h>
 
-#ifndef QT_NO_ASYNC_IO
-
-// NOT REVISED
 /*!
   \class QAsyncIO qasyncio.h
   \brief Encapsulates I/O asynchronicity.
@@ -51,12 +36,13 @@
   mechanism to allow large files or slow data sources to be processed
   without using large amounts of memory, or blocking the user interface.
 
-  This facility is used in Qt to drive animated images.  See QImageConsumer.
+  This facility is used in Qt to drive animated images.  See QImageConsumer
+  and QImageSource.
 */
 
 
 /*!
-  Destructs the async IO object.
+  Destroys the async IO object.
 */
 QAsyncIO::~QAsyncIO()
 {
@@ -84,7 +70,7 @@ void QAsyncIO::ready()
 
 /*!
   \class QDataSink qasyncio.h
-  \brief The QDataSink class is an asynchronous consumer of data.
+  \brief A QDataSink is an asynchronous consumer of data.
 
   A data sink is an object which receives data from some source in an
   asynchronous manner.  This means that at some time not determined by
@@ -129,7 +115,7 @@ void QDataSink::maybeReady()
 
 /*!
   \class QDataSource qasyncio.h
-  \brief The QDataSource class is an asynchronous producer of data.
+  \brief A QDataSource is an asynchronous producer of data.
 
   A data source is an object which provides data from some source in an
   asynchronous manner.  This means that at some time not determined by
@@ -164,7 +150,7 @@ void QDataSource::maybeReady()
   it to the given data sink.  The count will be no more than the amount
   indicated by the most recent call to readyToSend().  The source must
   use all the provided data, and the sink will be prepared to accept at
-  least this much data.
+  least this much data.  
 */
 
 /*!
@@ -182,7 +168,7 @@ bool QDataSource::rewindable() const
   is TRUE, then the data source must take measures to allow the rewind()
   function to subsequently operate as described.  If rewindable() is FALSE,
   the function should call QDataSource::enableRewind(), which aborts with
-  a qFatal() error.
+  a fatal() error.
 
   For example, a network connection may choose to utilize a disk cache
   of input only if rewinding is enabled before the first buffer-full of
@@ -205,7 +191,7 @@ void QDataSource::rewind()
 
 /*!
   \class QIODeviceSource qasyncio.h
-  \brief The QIODeviceSource class is a QDataSource that draws data from a QIODevice
+  \brief A QIODeviceSource is a QDataSource that draws data from a QIODevice
 
   This class encapsulates retrieving data from a QIODevice (such as a QFile).
 */
@@ -227,7 +213,7 @@ QIODeviceSource::QIODeviceSource(QIODevice* device, int buffer_size) :
 }
 
 /*!
-  Destructs the QIODeviceSource, deleting the QIODevice from which it was
+  Destroys the QIODeviceSource, deleting the QIODevice from which it was
   constructed.
 */
 QIODeviceSource::~QIODeviceSource()
@@ -273,7 +259,7 @@ void QIODeviceSource::enableRewind(bool on)
     rew = on;
 }
 
-/*!
+/*
   Calls reset() on the QIODevice.
 */
 void QIODeviceSource::rewind()
@@ -304,7 +290,7 @@ void QIODeviceSource::rewind()
 */
 
 /*!
-  Constructs a QDataPump to move data from a given \a data_source
+  Creates a QDataPump to move data from a given \a data_source
   to a given \a data_sink.
 */
 QDataPump::QDataPump(QDataSource* data_source, QDataSink* data_sink) :
@@ -335,7 +321,7 @@ void QDataPump::tryToPump()
     }
     interval = 0;
     if (supply < 0) {
-	// All done (until source signals change in readiness)
+	// All done (until source signals change in readiness) 
 	sink->eof();
 	return;
     }
@@ -345,6 +331,3 @@ void QDataPump::tryToPump()
 
     timer.start(0, TRUE);
 }
-
-#endif // QT_NO_ASYNC_IO
-

@@ -1,39 +1,27 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qlcdnumber.h   2.3.2   edited 2001-01-26 $
+** $Id: qlcdnumber.h,v 2.20 1999/04/28 09:59:59 aavit Exp $
 **
 ** Definition of QLCDNumber class
 **
 ** Created : 940518
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
-** This file is part of the widgets module of the Qt GUI Toolkit.
+** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses may use this file in accordance with the Qt Commercial License
-** Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
+*****************************************************************************/
 
 #ifndef QLCDNUMBER_H
 #define QLCDNUMBER_H
@@ -43,22 +31,12 @@
 #include "qbitarray.h"
 #endif // QT_H
 
-#ifndef QT_NO_LCDNUMBER
-
 
 class QLCDNumberPrivate;
 
 class Q_EXPORT QLCDNumber : public QFrame		// LCD number widget
 {
     Q_OBJECT
-    Q_ENUMS( Mode SegmentStyle )
-    Q_PROPERTY( bool smallDecimalPoint READ smallDecimalPoint WRITE setSmallDecimalPoint )
-    Q_PROPERTY( int numDigits READ numDigits WRITE setNumDigits )
-    Q_PROPERTY( Mode mode READ mode WRITE setMode )
-    Q_PROPERTY( SegmentStyle segmentStyle READ segmentStyle WRITE setSegmentStyle )
-    Q_PROPERTY( double value READ value WRITE display )
-    Q_PROPERTY( int intValue READ intValue WRITE display )
-
 public:
     QLCDNumber( QWidget *parent=0, const char *name=0 );
     QLCDNumber( uint numDigits, QWidget *parent=0, const char *name=0 );
@@ -106,13 +84,10 @@ protected:
 private:
     void    init();
     void    internalDisplay( const QString &);
-    void    internalSetString( const QString& s );
-    void    drawString( const QString& s, QPainter &, QBitArray * = 0,
-			bool = TRUE );
-    //void    drawString( const QString &, QPainter &, QBitArray * = 0 ) const;
-    void    drawDigit( const QPoint &, QPainter &, int, char,
-		       char = ' ' );
-    void    drawSegment( const QPoint &, char, QPainter &, int, bool = FALSE );
+    void    internalSetString( const QString& s, const QBitArray* newPoints );
+    void    drawString( const QString &, QPainter &, QBitArray * = 0 ) const;
+    void    drawDigit( const QPoint &, QPainter &, int, char ) const;
+    void    drawSegment( const QPoint &, char, QPainter &, int ) const;
 
     int	    ndigits;
     double  val;
@@ -137,7 +112,5 @@ inline bool QLCDNumber::smallDecimalPoint() const
 inline int QLCDNumber::numDigits() const
 { return ndigits; }
 
-
-#endif // QT_NO_LCDNUMBER
 
 #endif // QLCDNUMBER_H

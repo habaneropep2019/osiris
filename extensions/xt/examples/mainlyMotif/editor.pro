@@ -1,6 +1,5 @@
 TEMPLATE	= app
-CONFIG		+= qt release
+CONFIG		= qt warn_on release
 HEADERS		= 
 SOURCES		= editor.cpp
-LIBS		= -lqxt -lXm -lXt
 TARGET		= editor

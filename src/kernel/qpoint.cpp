@@ -1,45 +1,32 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qpoint.cpp   2.3.2   edited 2001-01-26 $
+** $Id: qpoint.cpp,v 2.16 1999/05/31 10:26:48 warwick Exp $
 **
 ** Implementation of QPoint class
 **
 ** Created : 931028
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
-** This file is part of the kernel module of the Qt GUI Toolkit.
+** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses may use this file in accordance with the Qt Commercial License
-** Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
+*****************************************************************************/
 
 #include "qpoint.h"
 #include "qdatastream.h"
 
 
-// REVISED: paul
 /*!
   \class QPoint qpoint.h
   \brief The QPoint class defines a point in the plane.
@@ -48,41 +35,21 @@
 
   A point is specified by an x coordinate and a y coordinate.
 
-  The coordinate type is \c QCOORD (a 32-bit integer).
-  The minimum value of \c QCOORD is \c QCOORD_MIN (-2147483648) and the maximum
-  value is  \c QCOORD_MAX (2147483647).
+  The coordinate type is QCOORD (defined in qwindowdefs.h as \c int).
+  The minimum value of QCOORD is QCOORD_MIN (-2147483648) and the maximum
+  value is  QCOORD_MAX (2147483647).
 
-  The coordinates are accessed by the functions x() and y(), they can
-  be set by setX() and setY(), or by the reference functions rx() and ry().
-  
-  Given a point \e p, the following statements are all equivalent:
-  \code
-     p.setX( p.x() + 1 );
-     p += QPoint( 1, 0 );
-     p.rx()++;
-  \endcode
-  
-  
-  A QPoint can also be used as a vector.  Addition and subtraction of
-  QPoint are defined as for vectors (each component is added
-  separately). You can divide or multiply a QPoint by an \c int or a
-  \c double. The function manhattanLength() gives an inexpensive
-  approximation to the length of the QPoint interpreted as a vector.
+  We have defined many operator functions that make arithmetic on points
+  simple and intuitive.
 
   Example:
   \code
-     //QPoint oldPos is defined somewhere else 
-     MyWidget::mouseMoveEvent( QMouseEvent *e )
-     {
-        QPoint vector = e->pos() - oldPos;
-	if ( vector.manhattanLength() > 3 )
-	   ... //mouse has moved more than 3 pixels since oldPos
-     }
+    QPoint p(  1, 2 );
+    QPoint q( -8, 5 );
+    QPoint r(  9, 7 );
+    QPoint x = 2*p + (q-r)*5.5 - (r+p/1.5);
   \endcode
-  
-  QPoints can be compared for equality or inequality, and they can be
-  written to and read from a QStream.
-  
+
   \sa QSize, QRect
 */
 
@@ -93,12 +60,12 @@
 
 /*!
   \fn QPoint::QPoint()
-  Constructs a point with coordinates (0,0) (isNull() returns TRUE).
+  Constructs a point (0,0) (a \link QPoint::isNull() null point\endlink).
 */
 
 /*!
   \fn QPoint::QPoint( int xpos, int ypos )
-  Constructs a point with the x value  \a xpos and y value \a ypos.
+  Constructs a point with the x value  \e xpos and y value \e ypos.
 */
 
 /*!
@@ -109,25 +76,25 @@
 /*!
   \fn int QPoint::x() const
   Returns the x coordinate of the point.
-  \sa setX() y()
+  \sa y()
 */
 
 /*!
   \fn int QPoint::y() const
   Returns the y coordinate of the point.
-  \sa setY() x()
+  \sa x()
 */
 
 /*!
   \fn void QPoint::setX( int x )
-  Sets the x coordinate of the point to \a x.
-  \sa x() setY()
+  Sets the x coordinate of the point to \e x.
+  \sa setY()
 */
 
 /*!
   \fn void QPoint::setY( int y )
-  Sets the y coordinate of the point to \a y.
-  \sa y() setX()
+  Sets the y coordinate of the point to \e y.
+  \sa setX()
 */
 
 
@@ -164,7 +131,7 @@
 
 /*!
   \fn QPoint &QPoint::operator+=( const QPoint &p )
-  Adds \a p to the point and returns a reference to this point.
+  Adds \e p to the point and returns a reference to this point.
 
   Example:
   \code
@@ -176,7 +143,7 @@
 
 /*!
   \fn QPoint &QPoint::operator-=( const QPoint &p )
-  Subtracts \a p from the point and returns a reference to this point.
+  Subtracts \e p from the point and returns a reference to this point.
 
   Example:
   \code
@@ -188,7 +155,7 @@
 
 /*!
   \fn QPoint &QPoint::operator*=( int c )
-  Multiplies both x and y with \a c, and return a reference to this point.
+  Multiplies both x and y with \e c, and return a reference to this point.
 
   Example:
   \code
@@ -199,7 +166,7 @@
 
 /*!
   \fn QPoint &QPoint::operator*=( double c )
-  Multiplies both x and y with \a c, and return a reference to this point.
+  Multiplies both x and y with \e c, and return a reference to this point.
 
   Example:
   \code
@@ -214,72 +181,64 @@
 /*!
   \fn bool operator==( const QPoint &p1, const QPoint &p2 )
   \relates QPoint
-  Returns TRUE if \a p1 and \a p2 are equal, or FALSE if they are different.
+  Returns TRUE if \e p1 and \e p2 are equal, or FALSE if they are different.
 */
 
 /*!
   \fn bool operator!=( const QPoint &p1, const QPoint &p2 )
   \relates QPoint
-  Returns TRUE if \a p1 and \a p2 are different, or FALSE if they are equal.
+  Returns TRUE if \e p1 and \e p2 are different, or FALSE if they are equal.
 */
 
 /*!
   \fn QPoint operator+( const QPoint &p1, const QPoint &p2 )
   \relates QPoint
-  Returns the sum of \a p1 and \a p2; each component is added separately.
+  Returns the sum of \e p1 and \e p2; each component is added separately.
 */
 
 /*!
   \fn QPoint operator-( const QPoint &p1, const QPoint &p2 )
   \relates QPoint
-  Returns \a p2 subtracted from \a p1; each component is
+  Returns \e p2 subtracted from \e p1; each component is
   subtracted separately.
 */
 
 /*!
   \fn QPoint operator*( const QPoint &p, int c )
   \relates QPoint
-  Returns the QPoint formed by multiplying both components of \a p
-  by \a c.
+  Multiplies both of \e p's components by \e c and returns the result.
 */
 
 /*!
   \fn QPoint operator*( int c, const QPoint &p )
   \relates QPoint
-  Returns the QPoint formed by multiplying both components of \a p
-  by \a c.
+  Multiplies both of \e p's components by \e c and returns the result.
 */
 
 /*!
   \fn QPoint operator*( const QPoint &p, double c )
   \relates QPoint
-  Returns the QPoint formed by multiplying both components of \a p
-  by \a c.
-
-  Note that the result is truncated.
+  Multiplies both of \e p's components by \e c and returns the
+  result.
 */
 
 /*!
   \fn QPoint operator*( double c, const QPoint &p )
   \relates QPoint
-  Returns the QPoint formed by multiplying both components of \a p
-  by \a c.
-
-  Note that the result is truncated.
+  Multiplies both of \e p's components by \e c and returns the
+  result.
 */
 
 /*!
-  \fn QPoint operator-( const QPoint &p ) 
-  \relates QPoint 
-  
-  Returns the QPoint formed by changing the sign of both components of
-  \a p, equivalent to <code>QPoint(0,0) - p</code>.
+  \fn QPoint operator-( const QPoint &p )
+  \relates QPoint
+  Returns \e p where x and y have opposite signs.
 */
 
 /*!
   \fn QPoint &QPoint::operator/=( int c )
 
-  Divides both x and y by \a c, and return a reference to this point.
+  Divides both x and y by \e c, and return a reference to this point.
 
   Example:
   \code
@@ -291,7 +250,7 @@
 /*!
   \fn QPoint &QPoint::operator/=( double c )
 
-  Divides both x and y by \a c, and return a reference to this point.
+  Divides both x and y by \e c, and return a reference to this point.
 
   Example:
   \code
@@ -305,16 +264,14 @@
 /*!
   \fn QPoint operator/( const QPoint &p, int c )
   \relates QPoint
-  Returns the QPoint formed by dividing both components of \a p
-  by \a c.
+  Divides both of \e p's components by \e c and returns the result.
 */
 
 /*!
   \fn QPoint operator/( const QPoint &p, double c )
   \relates QPoint
 
-  Returns the QPoint formed by dividing both components of \a p
-  by \a c.
+  Divides both of \e p's components by \e c and returns the result.
 
   Note that the result is truncated.
 */
@@ -331,12 +288,12 @@ void QPoint::warningDivByZero()
 /*****************************************************************************
   QPoint stream functions
  *****************************************************************************/
-#ifndef QT_NO_DATASTREAM
+
 /*!
   \relates QPoint
   Writes a QPoint to the stream and returns a reference to the stream.
 
-  \sa \link datastreamformat.html Format of the QDataStream operators \endlink
+  Serialization format: [x (Q_INT32), y (Q_INT32)].
 */
 
 QDataStream &operator<<( QDataStream &s, const QPoint &p )
@@ -351,8 +308,6 @@ QDataStream &operator<<( QDataStream &s, const QPoint &p )
 /*!
   \relates QPoint
   Reads a QPoint from the stream and returns a reference to the stream.
-
-  \sa \link datastreamformat.html Format of the QDataStream operators \endlink
 */
 
 QDataStream &operator>>( QDataStream &s, QPoint &p )
@@ -369,7 +324,7 @@ QDataStream &operator>>( QDataStream &s, QPoint &p )
     }
     return s;
 }
-#endif // QT_NO_DATASTREAM
+
 /*!
   Returns the sum of the absolute values of x() and y(), traditionally
   known as the "Manhattan length" of the vector from the origin to the

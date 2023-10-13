@@ -1,87 +1,45 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qcheckbox.cpp   2.3.2   edited 2001-04-18 $
+** $Id: qcheckbox.cpp,v 2.52 1999/06/18 01:37:59 ettrich Exp $
 **
 ** Implementation of QCheckBox class
 **
 ** Created : 940222
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
-** This file is part of the widgets module of the Qt GUI Toolkit.
+** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses may use this file in accordance with the Qt Commercial License
-** Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
+*****************************************************************************/
 
 #include "qcheckbox.h"
-#ifndef QT_NO_CHECKBOX
 #include "qpainter.h"
 #include "qdrawutil.h"
 #include "qpixmap.h"
 #include "qpixmapcache.h"
 #include "qbitmap.h"
 #include "qtextstream.h"
-#include "qapplication.h"
 
-// NOT REVISED
 /*!
   \class QCheckBox qcheckbox.h
   \brief The QCheckBox widget provides a check box with a text label.
 
-  \ingroup basic
+  \ingroup realwidgets
 
-  QCheckBox and QRadioButton are both option buttons. That is, they
-  can be switched on (checked) or off (unchecked). The classes differ
-  in how the choices for the user are restricted. Radio buttons define
-  a "one of many" choice, while check-boxes provide "many of many"
-  choices.
-
-  While it is technically possible to implement radio-behaviour with
-  check boxes and vice versa, it's strongly recommended to stick with
-  the well-known semantics. Otherwise your users would be pretty
-  confused.
-
-  Use QButtonGroup to group check-buttons visually.
-
-  Whenver a check box is checked or cleared, it emits the signal
-  toggled(). Connect to this signal if you want to trigger an action
-  each time the box changes state. Otherwise, use isChecked() to query
-  whether or not a particular check box is selected.
-
-  In addition to the usual checked and unchecked states, QCheckBox
-  optionally provides a third state to indicate "no change".  This is
-  useful whenever you need to give the user the option of neither
-  setting nor unsetting an option. If you need that third state,
-  enable it with setTristate() and use state() to query the current
-  toggle state. When a tristate box changes state, it emits the
-  stateChanged() signal.
-
-  \important text, setText, text, pixmap, setPixmap, accel, setAccel,
-  isToggleButton, setDown, isDown, isOn, state, autoRepeat,
-  isExclusiveToggle, group, setAutoRepeat, toggle, pressed, released,
-  clicked, toggled, state stateChanged
+  QCheckBox and QRadioButton are both toggle buttons, but a check box
+  represents an independent switch that can be on (checked) or off
+  (unchecked).
 
   <img src=qchkbox-m.png> <img src=qchkbox-w.png>
 
@@ -98,10 +56,9 @@
 */
 
 QCheckBox::QCheckBox( QWidget *parent, const char *name )
-	: QButton( parent, name, WRepaintNoErase | WResizeNoErase | WMouseNoMask )
+	: QButton( parent, name, WResizeNoErase | WMouseNoMask )
 {
     setToggleButton( TRUE );
-    setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Fixed ) );
 }
 
 /*!
@@ -111,11 +68,10 @@ QCheckBox::QCheckBox( QWidget *parent, const char *name )
 */
 
 QCheckBox::QCheckBox( const QString &text, QWidget *parent, const char *name )
-	: QButton( parent, name, WRepaintNoErase | WResizeNoErase | WMouseNoMask )
+	: QButton( parent, name, WResizeNoErase | WMouseNoMask )
 {
     setText( text );
     setToggleButton( TRUE );
-    setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Fixed ) );
 }
 
 
@@ -144,30 +100,17 @@ void QCheckBox::setNoChange()
 }
 
 /*!
-  Makes the check box a tristate check box if \a y is TRUE.  A tristate
-  check box provides an additional state NoChange.
+  Makes the checkbox a tristate checkbox if \a y is TRUE.  A tristate
+  checkbox is useful when you need to give the use the option of
+  neither setting nor unsetting an option, for example choosing Italic
+  or non-Italic when the selected text is partially Italic and partially
+  not.
 
-  Use tristate check boxes whenever you need to give the user the
-  option of neither setting nor unsetting an option. A typical example
-  is the "Italic" check box in the font dialog of a word processor
-  when the marked text is partially Italic and partially not.
-
-  \sa isTristate(), setNoChange() stateChanged(), state()
+  \sa setNoChange() stateChanged()
 */
 void QCheckBox::setTristate(bool y)
 {
     setToggleType( y ? Tristate : Toggle );
-}
-
-/*!
-  Returns TRUE if the checkbox is a tristate checkbox. Otherwise returns
-  FALSE.
-
-  \sa setTristate()
-*/
-bool QCheckBox::isTristate() const
-{
-    return toggleType() == Tristate;
 }
 
 static int extraWidth( int gs )
@@ -179,13 +122,15 @@ static int extraWidth( int gs )
 }
 
 
-/*!\reimp
+/*!
+  Returns a size which fits the contents of the check box.
 */
+
 QSize QCheckBox::sizeHint() const
 {
     // Any more complex, and we will use style().itemRect()
     // NB: QCheckBox::sizeHint() is similar
-    constPolish();
+
     QSize sz;
     if (pixmap()) {
 	sz = pixmap()->size();
@@ -198,12 +143,14 @@ QSize QCheckBox::sizeHint() const
 	sz.setHeight( bmsz.height() );
 
     return sz + QSize( bmsz.width() + (style()==MotifStyle ? 1 : 0)
-	+ (text().isEmpty() ? 0 : 4 + extraWidth(gs)),
-	4 ).expandedTo( QApplication::globalStrut() );
+			+ (text().isEmpty() ? 0 : 4 + extraWidth(gs)),
+			4 );
 }
 
 
-/*!\reimp
+/*!
+  Draws the check box.  Calls drawButtonLabel() to draw the content.
+  \sa drawButtonLabel()
 */
 
 void QCheckBox::drawButton( QPainter *paint )
@@ -217,14 +164,9 @@ void QCheckBox::drawButton( QPainter *paint )
     QSize lsz = fm.size(ShowPrefix, text());
     QSize sz = style().indicatorSize();
     x = gs == MotifStyle ? 1 : 0;
-    if ( text().isEmpty() )
-	x += 1;
     y = (height() - lsz.height() + fm.height() - sz.height())/2;
 
-#ifndef QT_NO_TEXTSTREAM
 #define SAVE_CHECKBOX_PIXMAPS
-#endif
-
 #if defined(SAVE_CHECKBOX_PIXMAPS)
     QString pmkey;				// pixmap key
     int kf = 0;
@@ -232,11 +174,8 @@ void QCheckBox::drawButton( QPainter *paint )
 	kf |= 1;
     if ( isEnabled() )
 	kf |= 2;
-    if ( hasFocus() )
-	kf |= 4;				// active vs. normal colorgroup
-    kf |= state() << 3;
-    QTextOStream os(&pmkey);
-    os << "$qt_check_" << style().className() << "_"
+    kf |= state() << 2;
+    QTextOStream(&pmkey) << "$qt_check_" << style().className() << "_"
 			 << palette().serialNumber() << "_" << kf;
     QPixmap *pm = QPixmapCache::find( pmkey );
     if ( pm ) {					// pixmap exists
@@ -263,14 +202,6 @@ void QCheckBox::drawButton( QPainter *paint )
 #if defined(SAVE_CHECKBOX_PIXMAPS)
     if ( use_pm ) {
 	pmpaint.end();
-	if ( backgroundPixmap() || backgroundMode() == X11ParentRelative ) {
-	    QBitmap bm( pm->size() );
-	    bm.fill( color0 );
-	    pmpaint.begin( &bm );
-	    style().drawIndicatorMask( &pmpaint, 0, 0, bm.width(), bm.height(), isOn() );
-	    pmpaint.end();
-	    pm->setMask( bm );
-	}
 	p = paint;				// draw in default device
 	p->drawPixmap( wx, wy, *pm );
 	if (!QPixmapCache::insert(pmkey, pm) )	// save in cache
@@ -282,8 +213,11 @@ void QCheckBox::drawButton( QPainter *paint )
 }
 
 
-/*!\reimp
+/*!
+  Draws the check box label.
+  \sa drawButton()
 */
+
 void QCheckBox::drawButtonLabel( QPainter *p )
 {
     int x, y, w, h;
@@ -310,22 +244,10 @@ void QCheckBox::drawButtonLabel( QPainter *p )
 	br.setBottom( br.bottom()+2);
 	br = br.intersect( QRect(0,0,width(),height()) );
 
-	if ( !text().isEmpty() )
-	    style().drawFocusRect(p, br, colorGroup());
-	else {
-	    br.setRight( br.left() );
-	    br.setLeft( br.left()-16 );
-	    br.setTop( br.top() );
-	    br.setBottom( br.bottom() );
-	    style().drawFocusRect( p, br, colorGroup() );
-	}
-
+	style().drawFocusRect(p, br, colorGroup());
     }
 }
 
-/*!
-  \reimp
-*/
 void QCheckBox::resizeEvent( QResizeEvent* )
 {
     int x, w, h;
@@ -345,55 +267,46 @@ void QCheckBox::resizeEvent( QResizeEvent* )
 	updateMask();
 }
 
-/*!
-  \reimp
-*/
 void QCheckBox::updateMask()
 {
+
     QBitmap bm(width(),height());
-    bm.fill(color0);
-    QPainter p( &bm, this );
-    int x, y, w, h;
-    GUIStyle gs = style().guiStyle();
-    QFontMetrics fm = fontMetrics();
-    QSize lsz = fm.size(ShowPrefix, text());
-    QSize sz = style().indicatorSize();
-    y = 0;
-    x = sz.width() + extraWidth(gs);
-    w = width() - x;
-    h = height();
+    {
+	int x, y, w, h;
+	GUIStyle gs = style().guiStyle();
+	bm.fill(color0);
+	QPainter p( &bm, this );
 
-    QColorGroup cg(color1,color1,color1,color1,color1,color1,color1,color1,color0);
-
-    style().drawItem( &p, x, y, w, h,
-		      AlignLeft|AlignVCenter|ShowPrefix,
-		      cg, TRUE,
-		      pixmap(), text() );
-    x = 0;
-    y = (height() - lsz.height() + fm.height() - sz.height())/2;
+	QColorGroup cg(color1,color1,color1,color1,color1,color1,color1,color1, color0);
+	QFontMetrics fm = fontMetrics();
+	QSize lsz = fm.size(ShowPrefix, text());
+	QSize sz = style().indicatorSize();
+	x = gs == MotifStyle ? 1 : 0;
+	y = (height() - lsz.height() + fm.height() - sz.height())/2;
 	
-    style().drawIndicatorMask(&p, x, y, sz.width(), sz.height(), state() );
+	style().drawIndicatorMask(&p, x, y, sz.width(), sz.height(), state() );
 
-    if ( hasFocus() ) {
+	sz = style().indicatorSize();
 	y = 0;
-	x = sz.width() + extraWidth(gs);
-	QRect br = style().itemRect( &p, x, y, w, h,
-				     AlignLeft|AlignVCenter|ShowPrefix,
-				     isEnabled(),
-				     pixmap(), text() );
-	br.setLeft( br.left()-3 );
-	br.setRight( br.right()+2 );
-	br.setTop( br.top()-2 );
-	br.setBottom( br.bottom()+2 );
-	br = br.intersect( QRect(0,0,width(),height()) );
+	x = sz.width() + extraWidth( gs );
+	w = width() - x;
+	h = height();
+	style().drawItem( &p, x, y, w, h,
+			  AlignLeft|AlignVCenter|ShowPrefix,
+			  cg, TRUE,
+			  pixmap(), text() );
 
-	if ( !text().isEmpty() )
-	    style().drawFocusRect( &p, br, cg );
-	else {
-	    br.setRight( br.left() );
-	    br.setLeft( br.left()-17 );
-	    br.setTop( br.top() );
-	    br.setBottom( br.bottom() );
+	if ( hasFocus() ) {
+	    QRect br = style().itemRect( &p, x, y, w, h,
+					 AlignLeft|AlignVCenter|ShowPrefix,
+					 isEnabled(),
+					 pixmap(), text() );
+	    br.setLeft( br.left()-3 );
+	    br.setRight( br.right()+2 );
+	    br.setTop( br.top()-2 );
+	    br.setBottom( br.bottom()+2);
+	    br = br.intersect( QRect(0,0,width(),height()) );
+
 	    style().drawFocusRect( &p, br, cg );
 	}
     }
@@ -401,11 +314,12 @@ void QCheckBox::updateMask()
 }
 
 
-/*!\reimp
+/*!
+  Specifies that this widget may stretch horizontally, but is fixed
+  vertically.
 */
+
 QSizePolicy QCheckBox::sizePolicy() const
 {
-    //### removeme 3.0
-    return QWidget::sizePolicy();
+    return QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Fixed );
 }
-#endif

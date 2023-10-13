@@ -1,39 +1,27 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qpaintdevice.h   2.3.2   edited 2001-01-26 $
+** $Id: qpaintdevice.h,v 2.27 1999/06/24 20:13:35 warwick Exp $
 **
 ** Definition of QPaintDevice class
 **
 ** Created : 940721
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
-** This file is part of the kernel module of the Qt GUI Toolkit.
+** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses may use this file in accordance with the Qt Commercial License
-** Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
+*****************************************************************************/
 
 #ifndef QPAINTDEVICE_H
 #define QPAINTDEVICE_H
@@ -43,10 +31,6 @@
 #include "qrect.h"
 #endif // QT_H
 
-#if defined(_WS_QWS_)
-class QWSDisplay;
-class QGfx;
-#endif
 
 class QIODevice;
 class QString;
@@ -91,10 +75,6 @@ public:
     HDC		handle() const;
 #elif defined(_WS_X11_)
     HANDLE	handle() const;
-#elif defined(_WS_MAC_)
-    HANDLE      handle() const;
-#elif defined(_WS_QWS_)
-    HANDLE      handle() const;
 #endif
 
 #if defined(_WS_X11_)
@@ -117,15 +97,6 @@ public:
     static bool     x11AppDefaultColormap();
     static void    *x11AppVisual();
     static bool	    x11AppDefaultVisual();
-    static void	    x11SetAppDpiX(int);
-    static void	    x11SetAppDpiY(int);
-#endif
-
-#if defined(_WS_QWS_)
-    static QWSDisplay *qwsDisplay();
-    virtual unsigned char * scanLine(int) const;
-    virtual int bytesPerLine() const;
-    virtual QGfx * graphicsContext(bool clip_children=TRUE) const;
 #endif
 
     enum PDevCmd {
@@ -194,11 +165,6 @@ protected:
     void		 copyX11Data( const QPaintDevice * );
     virtual void	 setX11Data( const QPaintDeviceX11Data* );
     QPaintDeviceX11Data* getX11Data( bool def=FALSE ) const;
-#elif defined(_WS_MAC_)
-    void * hd;
-    virtual void fixport();
-#elif defined(_WS_QWS_)
-    HANDLE hd;
 #endif
 
     virtual bool cmd( int, QPainter *, QPDevCmdParam * );

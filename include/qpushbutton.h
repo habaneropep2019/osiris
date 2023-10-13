@@ -1,68 +1,43 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qpushbutton.h   2.3.2   edited 2001-01-26 $
+** $Id: qpushbutton.h,v 2.25 1999/06/10 20:06:22 agulbra Exp $
 **
 ** Definition of QPushButton class
 **
 ** Created : 940221
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
-** This file is part of the widgets module of the Qt GUI Toolkit.
+** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses may use this file in accordance with the Qt Commercial License
-** Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
+*****************************************************************************/
 
 #ifndef QPUSHBUTTON_H
 #define QPUSHBUTTON_H
 
 #ifndef QT_H
 #include "qbutton.h"
-#include "qiconset.h"
 #endif // QT_H
 
-#ifndef QT_NO_PUSHBUTTON
 
 class Q_EXPORT QPushButton : public QButton
 {
     Q_OBJECT
-
-    Q_PROPERTY( bool autoDefault READ autoDefault WRITE setAutoDefault )
-    Q_PROPERTY( bool default READ isDefault WRITE setDefault )
-    Q_PROPERTY( bool menuButton READ isMenuButton )
-    Q_PROPERTY( QIconSet iconSet READ iconSet WRITE setIconSet )
-
-    Q_OVERRIDE( bool toggleButton WRITE setToggleButton )
-    Q_OVERRIDE( bool on WRITE setOn )
-    Q_PROPERTY( bool flat READ isFlat WRITE setFlat )
-
+    Q_BUILDER( "A simple button", "qpushbutton.xpm", DefaultInspector )
 public:
     QPushButton( QWidget *parent, const char *name=0 );
     QPushButton( const QString &text, QWidget *parent, const char* name=0 );
-    QPushButton( const QIconSet& icon, const QString &text, QWidget *parent, const char* name=0 );
-    ~QPushButton();
 
     QSize	sizeHint() const;
     QSizePolicy sizePolicy() const;
@@ -72,10 +47,10 @@ public:
     void	resize( int w, int h );
     void	resize( const QSize & );
     virtual void setGeometry( int x, int y, int w, int h );
-
     virtual void setGeometry( const QRect & );
 
-    virtual void setToggleButton( bool ); //### fjern virtual 3.0
+q_properties:
+    virtual void setToggleButton( bool );
 
     bool	autoDefault()	const	{ return autoDefButton; }
     virtual void setAutoDefault( bool autoDef );
@@ -84,15 +59,6 @@ public:
 
     virtual void setIsMenuButton( bool );
     bool	isMenuButton() const;
-
-    void setPopup( QPopupMenu* popup );
-    QPopupMenu* popup() const;
-
-    void setIconSet( const QIconSet& );
-    QIconSet* iconSet() const;
-
-    void setFlat( bool );
-    bool isFlat() const;
 
 public slots:
     virtual void setOn( bool );
@@ -107,17 +73,14 @@ protected:
     void	resizeEvent( QResizeEvent * );
     void	updateMask();
 
-private slots:
-    void popupPressed();
-
 private:
     void	init();
 
     uint	autoDefButton	: 1;
     uint	defButton	: 1;
-    uint	flt		: 1;
-    uint	reserved		: 1; // UNUSED
-    uint	lastEnabled	: 1; // UNUSED
+    uint	lastDown	: 1;
+    uint	lastDef		: 1;
+    uint	lastEnabled	: 1;
     uint	hasMenuArrow	: 1;
 
     friend class QDialog;
@@ -129,7 +92,5 @@ private:	// Disabled copy constructor and operator=
 #endif
 };
 
-
-#endif // QT_NO_PUSHBUTTON
 
 #endif // QPUSHBUTTON_H

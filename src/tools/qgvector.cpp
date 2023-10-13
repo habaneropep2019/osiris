@@ -1,39 +1,27 @@
 /****************************************************************************
-** $Id: qt/src/tools/qgvector.cpp   2.3.2   edited 2001-10-14 $
+** $Id: qgvector.cpp,v 2.17 1999/05/23 20:29:20 agulbra Exp $
 **
 ** Implementation of QGVector class
 **
 ** Created : 930907
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
-** This file is part of the tools module of the Qt GUI Toolkit.
+** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses may use this file in accordance with the Qt Commercial License
-** Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
+*****************************************************************************/
 
 #define	 QGVECTOR_CPP
 #include "qgvector.h"
@@ -56,71 +44,15 @@
 #define DONT_USE_REALLOC			// comment to use realloc()
 #endif
 
-// NOT REVISED
-
-/*!
-  \class QGVector qgvector.h
-
-  \brief The QGVector class is an internal class for implementing Qt
-  collection classes.
-
-  QGVector is a strictly internal class that acts as a base class for
-  the QVector collection class.
-
-  QGVector has some virtual functions that may be reimplemented in
-  subclasses to customize behavior.
-
-  <ul>
-  <li> compareItems() compares two collection/vector items.
-  <li> read() reads a collection/vector item from a QDataStream.
-  <li> write() writes a collection/vector item to a QDataStream.
-  </ul>
-*/
 
 /*****************************************************************************
   Default implementation of virtual functions
  *****************************************************************************/
 
-/*!
-  This virtual function compares two list items.
-
-  Returns:
-  <ul>
-  <li> 0 if \a item1 == \a item2
-  <li> non-zero if \a item1 != \a item2
-  </ul>
-
-  This function returns \e int rather than \e bool so that
-  reimplementations can return one of three values and use it to sort
-  by:
-
-  <ul>
-  <li> 0 if \e item1 == \e item2
-  <li> \> 0 (positive integer) if \a item1 \> \a item2
-  <li> \< 0 (negative integer) if \a item1 \< \a item2
-  </ul>
-
-  The QVector::sort() and QVector::bsearch() functions require that
-  compareItems() is implemented as described here.
-
-  This function should not modify the vector because some const
-  functions call compareItems().
-*/
-
 int QGVector::compareItems( Item d1, Item d2 )
 {
     return d1 != d2;				// compare pointers
 }
-
-#ifndef QT_NO_DATASTREAM
-/*!
-  Reads a collection/vector item from the stream \a s and returns a reference
-  to the stream.
-
-  The default implementation sets \e item to 0.
-
-  \sa write()
-*/
 
 QDataStream &QGVector::read( QDataStream &s, Item &d )
 {						// read item from stream
@@ -128,28 +60,15 @@ QDataStream &QGVector::read( QDataStream &s, Item &d )
     return s;
 }
 
-/*!
-  Writes a collection/vector item to the stream \a s and returns a reference
-  to the stream.
-
-  The default implementation does nothing.
-
-  \sa read()
-*/
-
 QDataStream &QGVector::write( QDataStream &s, Item ) const
 {						// write item to stream
     return s;
 }
-#endif // QT_NO_DATASTREAM
+
 
 /*****************************************************************************
   QGVector member functions
  *****************************************************************************/
-
-/*!
-  \internal
-*/
 
 QGVector::QGVector()				// create empty vector
 {
@@ -157,9 +76,6 @@ QGVector::QGVector()				// create empty vector
     len = numItems = 0;
 }
 
-/*!
-  \internal
-*/
 QGVector::QGVector( uint size )			// create vectors with nullptrs
 {
     len = size;
@@ -173,34 +89,18 @@ QGVector::QGVector( uint size )			// create vectors with nullptrs
     memset( (void*)vec, 0, len*sizeof(Item) );	// fill with nulls
 }
 
-/*!
-  \internal
-*/
-
 QGVector::QGVector( const QGVector &a )		// make copy of other vector
     : QCollection( a )
 {
     len = a.len;
     numItems = a.numItems;
-    if ( len == 0 ) {
-	vec = 0;
-	return;
-    }
-    vec = NEW( Item, len );
+    vec = NEW(Item,len);
     CHECK_PTR( vec );
-    for ( uint i = 0; i < len; i++ ) {
-	if ( a.vec[i] ) {
-	    vec[i] = newItem( a.vec[i] );
-	    CHECK_PTR( vec[i] );
-	} else {
-	    vec[i] = 0;
-	}
+    for ( uint i=0; i<len; i++ ) {
+	vec[i] = a.vec[i] ? newItem( a.vec[i] ) : 0;
+	CHECK_PTR( vec[i] );
     }
 }
-
-/*!
-  \internal
-*/
 
 QGVector::~QGVector()
 {
@@ -208,56 +108,20 @@ QGVector::~QGVector()
 }
 
 
-/*!
-  \internal
-*/
-
 QGVector& QGVector::operator=( const QGVector &v )
-{
-    clear();
+{						// assign from other vector
+    clear();					// first delete old vector
     len = v.len;
     numItems = v.numItems;
-    if ( len == 0 ) {
-	vec = 0;
-	return *this;
-    }
-    vec = NEW( Item, len );
+    vec = NEW(Item,len);				// create new vector
     CHECK_PTR( vec );
-    for ( uint i = 0; i < len; i++ ) {
-	if ( v.vec[i] ) {
-	    vec[i] = newItem( v.vec[i] );
-	    CHECK_PTR( vec[i] );
-	} else {
-	    vec[i] = 0;
-	}
+    for ( uint i=0; i<len; i++ ) {		// copy elements
+	vec[i] = v.vec[i] ? newItem( v.vec[i] ) : 0;
+	CHECK_PTR( vec[i] );
     }
     return *this;
 }
 
-
-/*!
-  \fn Item *QGVector::data() const
-  \internal
-*/
-
-/*!
-  \fn uint QGVector::size() const
-  \internal
-*/
-
-/*!
-  \fn uint QGVector::count() const
-  \internal
-*/
-
-/*!
-  \fn Item QGVector::at( uint index ) const
-  \internal
-*/
-
-/*!
-  \internal
-*/
 
 bool QGVector::insert( uint index, Item d )	// insert item at index
 {
@@ -282,10 +146,6 @@ bool QGVector::insert( uint index, Item d )	// insert item at index
     return TRUE;
 }
 
-/*!
-  \internal
-*/
-
 bool QGVector::remove( uint index )		// remove item at index
 {
 #if defined(CHECK_RANGE)
@@ -301,10 +161,6 @@ bool QGVector::remove( uint index )		// remove item at index
     }
     return TRUE;
 }
-
-/*!
-  \internal
-*/
 
 QCollection::Item QGVector::take( uint index )		// take out item
 {
@@ -322,10 +178,6 @@ QCollection::Item QGVector::take( uint index )		// take out item
 }
 
 
-/*!
-  \internal
-*/
-
 void QGVector::clear()				// clear vector
 {
     if ( vec ) {
@@ -338,10 +190,6 @@ void QGVector::clear()				// clear vector
 	len = numItems = 0;
     }
 }
-
-/*!
-  \internal
-*/
 
 bool QGVector::resize( uint newsize )		// resize array
 {
@@ -365,11 +213,6 @@ bool QGVector::resize( uint newsize )		// resize array
 	    return TRUE;
 	}
 #if defined(DONT_USE_REALLOC)
-	if ( newsize == 0 ) {
-	    DELETE(vec);
-	    vec = 0;
-	    return FALSE;
-	}
 	Item *newvec = NEW(Item,newsize);		// manual realloc
 	memcpy( newvec, vec, (len < newsize ? len : newsize)*sizeof(Item) );
 	DELETE(vec);
@@ -390,10 +233,6 @@ bool QGVector::resize( uint newsize )		// resize array
     return TRUE;
 }
 
-
-/*!
-  \internal
-*/
 
 bool QGVector::fill( Item d, int flen )		// resize and fill vector
 {
@@ -424,10 +263,6 @@ static int cmp_vec( const void *n1, const void *n2 )
 #endif
 
 
-/*!
-  \internal
-*/
-
 void QGVector::sort()				// sort vector
 {
     if ( count() == 0 )				// no elements
@@ -435,7 +270,7 @@ void QGVector::sort()				// sort vector
     register Item *start = &vec[0];
     register Item *end	= &vec[len-1];
     Item tmp;
-    for (;;) {				// put all zero elements behind
+    while ( TRUE ) {				// put all zero elements behind
 	while ( start < end && *start != 0 )
 	    start++;
 	while ( end > start && *end == 0 )
@@ -453,10 +288,6 @@ void QGVector::sort()				// sort vector
     sort_vec = 0;
 }
 
-/*!
-  \internal
-*/
-
 int QGVector::bsearch( Item d ) const		// binary search; when sorted
 {
     if ( !len )
@@ -469,8 +300,7 @@ int QGVector::bsearch( Item d ) const		// binary search; when sorted
     }
     int n1 = 0;
     int n2 = len - 1;
-    int mid = 0;
-    bool found = FALSE;
+    int mid;
     while ( n1 <= n2 ) {
 	int  res;
 	mid = (n1 + n2)/2;
@@ -482,23 +312,12 @@ int QGVector::bsearch( Item d ) const		// binary search; when sorted
 	    n2 = mid - 1;
 	else if ( res > 0 )
 	    n1 = mid + 1;
-	else {					// found it
-	    found = TRUE;
-	    break;
-	}
+	else					// found it
+	    return mid;
     }
-    if ( !found )
-	return -1;
-    // search to first of equal items
-    while ( (mid - 1 >= 0) && !((QGVector*)this)->compareItems(d, vec[mid-1]) )
-	mid--;
-    return mid;
+    return -1;
 }
 
-
-/*!
-  \internal
-*/
 
 int QGVector::findRef( Item d, uint index) const // find exact item in vector
 {
@@ -514,10 +333,6 @@ int QGVector::findRef( Item d, uint index) const // find exact item in vector
     }
     return -1;
 }
-
-/*!
-  \internal
-*/
 
 int QGVector::find( Item d, uint index ) const	// find equal item in vector
 {
@@ -536,10 +351,6 @@ int QGVector::find( Item d, uint index ) const	// find equal item in vector
     return -1;
 }
 
-/*!
-  \internal
-*/
-
 uint QGVector::containsRef( Item d ) const	// get number of exact matches
 {
     uint count = 0;
@@ -549,10 +360,6 @@ uint QGVector::containsRef( Item d ) const	// get number of exact matches
     }
     return count;
 }
-
-/*!
-  \internal
-*/
 
 uint QGVector::contains( Item d ) const		// get number of equal matches
 {
@@ -567,10 +374,6 @@ uint QGVector::contains( Item d ) const		// get number of equal matches
 }
 
 
-/*!
-  \internal
-*/
-
 bool QGVector::insertExpand( uint index, Item d )// insert and grow if necessary
 {
     if ( index >= len ) {
@@ -581,10 +384,6 @@ bool QGVector::insertExpand( uint index, Item d )// insert and grow if necessary
     return TRUE;
 }
 
-
-/*!
-  \internal
-*/
 
 void QGVector::toList( QGList *list ) const	// store items in list
 {
@@ -609,7 +408,7 @@ void QGVector::warningIndexRange( uint i )
 /*****************************************************************************
   QGVector stream functions
  *****************************************************************************/
-#ifndef QT_NO_DATASTREAM
+
 QDataStream &operator>>( QDataStream &s, QGVector &vec )
 {						// read vector
     return vec.read( s );
@@ -619,10 +418,6 @@ QDataStream &operator<<( QDataStream &s, const QGVector &vec )
 {						// write vector
     return vec.write( s );
 }
-
-/*!
-  \internal
-*/
 
 QDataStream &QGVector::read( QDataStream &s )	// read vector from stream
 {
@@ -641,10 +436,6 @@ QDataStream &QGVector::read( QDataStream &s )	// read vector from stream
     return s;
 }
 
-/*!
-  \internal
-*/
-
 QDataStream &QGVector::write( QDataStream &s ) const
 {						// write vector to stream
     uint num = count();
@@ -656,4 +447,3 @@ QDataStream &QGVector::write( QDataStream &s ) const
     }
     return s;
 }
-#endif // QT_NO_DATASTREAM

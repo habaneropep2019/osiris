@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: qt/examples/rangecontrols/rangecontrols.cpp   2.3.2   edited 2001-01-26 $
+** $Id: rangecontrols.cpp,v 1.1 1999/06/03 10:08:56 warwick Exp $
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -11,12 +11,12 @@
 #include "rangecontrols.h"
 
 #include <qhbox.h>
+//#include <qdial.h>
 #include <qlcdnumber.h>
 #include <qspinbox.h>
 #include <qlabel.h>
 #include <qstring.h>
 #include <qslider.h>
-#include <qcheckbox.h>
 
 #include <limits.h>
 
@@ -24,6 +24,15 @@ RangeControls::RangeControls( QWidget *parent, const char *name )
     : QVBox( parent, name )
 {
     QHBox *row1 = new QHBox( this );
+
+    // QDial will be back right after the 2.0 release
+    
+    //QVBox *cell1 = new QVBox( row1 );
+    //cell1->setFrameStyle( QFrame::WinPanel | QFrame::Sunken );
+    //cell1->setMargin( 10 );
+    //QDial *dial = new QDial( -5, 20, 1, 0, cell1 );
+    //QLCDNumber *lcd1 = new QLCDNumber( 3, cell1 );
+    //connect( dial, SIGNAL( valueChanged( int ) ), lcd1, SLOT( display( int ) ) );
 
     QVBox *cell2 = new QVBox( row1 );
     cell2->setMargin( 10 );
@@ -58,7 +67,6 @@ RangeControls::RangeControls( QWidget *parent, const char *name )
     QSlider *hslider = new QSlider( 0, 64, 1, 33, Qt::Horizontal, cell3 );
     QLCDNumber *lcd2 = new QLCDNumber( 2, cell3 );
     lcd2->display( 33 );
-    lcd2->setSegmentStyle( QLCDNumber::Filled );
     connect( hslider, SIGNAL( valueChanged( int ) ), lcd2, SLOT( display( int ) ) );
 
     QHBox *cell4 = new QHBox( row2 );

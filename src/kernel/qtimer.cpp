@@ -1,46 +1,33 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qtimer.cpp   2.3.2   edited 2001-05-11 $
+** $Id: qtimer.cpp,v 2.15 1999/04/28 09:57:57 aavit Exp $
 **
 ** Implementation of QTimer class
 **
 ** Created : 931111
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
-** This file is part of the kernel module of the Qt GUI Toolkit.
+** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses may use this file in accordance with the Qt Commercial License
-** Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
+*****************************************************************************/
 
 #include "qtimer.h"
 #include "qsignal.h"
 #include "qobjectlist.h"
 #include "qobjectdict.h"
 
-// NOT REVISED
 /*!
   \class QTimer qtimer.h
   \brief The QTimer class provides timer signals and single-shot timers.
@@ -66,7 +53,7 @@
 
   As a special case, a QTimer with timeout 0 times out as soon as all
   the events in the window system's event queue have been processed.
-
+  
   This can be used to do heavy work while providing a snappy
   user interface: \code
     QTimer *t = new QTimer( myObject );
@@ -106,12 +93,13 @@ const int INV_TIMER = -1;			// invalid timer id
 */
 
 QTimer::QTimer( QObject *parent, const char *name )
-    : QObject( parent, name ), id(INV_TIMER), single(FALSE)
+    : QObject( parent, name )
 {
+    id = INV_TIMER;
 }
 
 /*!
-  Destructs the timer.
+  Destroys the timer.
 */
 
 QTimer::~QTimer()
@@ -146,8 +134,6 @@ QTimer::~QTimer()
 
 int QTimer::start( int msec, bool sshot )
 {
-    if ( id >=0 && !msec && single && sshot)
-	return id;
     if ( id != INV_TIMER )			// stop running timer
 	stop();
     single = sshot;
@@ -188,8 +174,10 @@ void QTimer::stop()
 }
 
 
-/*!\reimp
+/*!
+  Handles timer events.	 Emits timeout() when a timer event is received.
 */
+
 bool QTimer::event( QEvent *e )
 {
     if ( e->type() != QEvent::Timer )		// ignore all other events
@@ -239,8 +227,8 @@ private:
     int	    timerId;
 };
 
-extern int  qStartTimer( int interval, QObject *obj ); // implemented in qapp_xxx.cpp
-extern bool qKillTimer( int id );
+int  qStartTimer( int interval, QObject *obj ); // implemented in qapp_xxx.cpp
+bool qKillTimer( int id );
 
 bool QSingleShotTimer::start( int msec, QObject *r, const char *m )
 {

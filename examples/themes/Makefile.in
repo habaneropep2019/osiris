@@ -2,31 +2,29 @@
 
 ####### Compiler, tools and options
 
-CXX	=	$(SYSCONF_CXX) $(QT_CXX_MT)
+CXX	=	$(SYSCONF_CXX)
 CXXFLAGS=	$(SYSCONF_CXXFLAGS_QT) $(SYSCONF_CXXFLAGS)
-CC	=	$(SYSCONF_CC) $(QT_C_MT)
+CC	=	$(SYSCONF_CC)
 CFLAGS	=	$(SYSCONF_CFLAGS)
 INCPATH =	
-LFLAGS	=	$(SYSCONF_LFLAGS_QT) $(SYSCONF_RPATH_QT) $(SYSCONF_LFLAGS) $(QT_LFLAGS_MT)
-LIBS	=	$(SUBLIBS) $(SYSCONF_LIBS_QT) $(SYSCONF_LIBS) $(SYSCONF_LIBS_QTAPP)
+LFLAGS	=	$(SYSCONF_LFLAGS_QT) $(SYSCONF_LFLAGS_X11) $(SYSCONF_LFLAGS)
+LIBS	=	$(SYSCONF_LIBS_QT) $(SYSCONF_LIBS_X11) $(SYSCONF_LIBS)
 MOC	=	$(SYSCONF_MOC)
-UIC	=	$(SYSCONF_UIC)
 
 ####### Target
 
 DESTDIR = ./
 VER_MAJ = 1
 VER_MIN = 0
-VER_PATCH = 0
 TARGET	= themes
 TARGET1 = lib$(TARGET).so.$(VER_MAJ)
 
 ####### Files
 
 HEADERS =	themes.h \
-		../buttongroups/buttongroups.h \
+		../buttons_groups/buttons_groups.h \
 		../lineedits/lineedits.h \
-		../listboxcombo/listboxcombo.h \
+		../listbox_combo/listbox_combo.h \
 		../checklists/checklists.h \
 		../progressbar/progressbar.h \
 		../rangecontrols/rangecontrols.h \
@@ -35,9 +33,9 @@ HEADERS =	themes.h \
 		methal.h
 SOURCES =	themes.cpp \
 		main.cpp \
-		../buttongroups/buttongroups.cpp \
+		../buttons_groups/buttons_groups.cpp \
 		../lineedits/lineedits.cpp \
-		../listboxcombo/listboxcombo.cpp \
+		../listbox_combo/listbox_combo.cpp \
 		../checklists/checklists.cpp \
 		../progressbar/progressbar.cpp \
 		../rangecontrols/rangecontrols.cpp \
@@ -46,35 +44,31 @@ SOURCES =	themes.cpp \
 		metal.cpp
 OBJECTS =	themes.o \
 		main.o \
-		../buttongroups/buttongroups.o \
+		../buttons_groups/buttons_groups.o \
 		../lineedits/lineedits.o \
-		../listboxcombo/listboxcombo.o \
+		../listbox_combo/listbox_combo.o \
 		../checklists/checklists.o \
 		../progressbar/progressbar.o \
 		../rangecontrols/rangecontrols.o \
 		../richtext/richtext.o \
 		wood.o \
 		metal.o
-INTERFACES =    
-UICDECLS =      
-UICIMPLS =      
 SRCMOC	=	moc_themes.cpp \
-		../buttongroups/moc_buttongroups.cpp \
+		../buttons_groups/moc_buttons_groups.cpp \
 		../lineedits/moc_lineedits.cpp \
-		../listboxcombo/moc_listboxcombo.cpp \
+		../listbox_combo/moc_listbox_combo.cpp \
 		../checklists/moc_checklists.cpp \
 		../progressbar/moc_progressbar.cpp \
 		../rangecontrols/moc_rangecontrols.cpp \
 		../richtext/moc_richtext.cpp
 OBJMOC	=	moc_themes.o \
-		../buttongroups/moc_buttongroups.o \
+		../buttons_groups/moc_buttons_groups.o \
 		../lineedits/moc_lineedits.o \
-		../listboxcombo/moc_listboxcombo.o \
+		../listbox_combo/moc_listbox_combo.o \
 		../checklists/moc_checklists.o \
 		../progressbar/moc_progressbar.o \
 		../rangecontrols/moc_rangecontrols.o \
 		../richtext/moc_richtext.o
-
 
 ####### Implicit rules
 
@@ -97,11 +91,10 @@ OBJMOC	=	moc_themes.o \
 
 ####### Build rules
 
-
 all: $(DESTDIR)$(TARGET)
 
-$(DESTDIR)$(TARGET): $(UICDECLS) $(OBJECTS) $(OBJMOC) $(SUBLIBS)
-	$(SYSCONF_LINK) $(LFLAGS) -o $(DESTDIR)$(TARGET) $(OBJECTS) $(OBJMOC) $(LIBS)
+$(DESTDIR)$(TARGET): $(OBJECTS) $(OBJMOC) 
+	$(SYSCONF_LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(OBJMOC) $(LIBS)
 
 moc: $(SRCMOC)
 
@@ -109,33 +102,8 @@ tmake:
 	tmake themes.pro
 
 clean:
-	-rm -f $(OBJECTS) $(OBJMOC) $(SRCMOC) $(UICIMPLS) $(UICDECLS)
+	-rm -f $(OBJECTS) $(OBJMOC) $(SRCMOC)
 	-rm -f *~ core
-	-rm -f allmoc.cpp
-
-####### Extension Modules
-
-listpromodules:
-	@echo 
-
-listallmodules:
-	@echo 
-
-listaddonpromodules:
-	@echo 
-
-listaddonentmodules:
-	@echo 
-
-
-REQUIRES=full-config
-
-####### Sub-libraries
-
-
-###### Combined headers
-
-
 
 ####### Compile
 
@@ -146,8 +114,6 @@ themes.o: themes.cpp \
 		../../include/qwindowdefs.h \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
-		../../include/qfeatures.h \
-		../../include/qconfig.h \
 		../../include/qstring.h \
 		../../include/qcstring.h \
 		../../include/qarray.h \
@@ -168,7 +134,6 @@ themes.o: themes.cpp \
 		../../include/qvaluelist.h \
 		../../include/qdatastream.h \
 		../../include/qiodevice.h \
-		../../include/qregexp.h \
 		../../include/qpaintdevice.h \
 		../../include/qpalette.h \
 		../../include/qcolor.h \
@@ -180,19 +145,18 @@ themes.o: themes.cpp \
 		../../include/qstyle.h \
 		../../include/qsizepolicy.h \
 		wood.h \
-		../../include/qwindowsstyle.h \
+		../../include/qmotifstyle.h \
 		../../include/qcommonstyle.h \
 		metal.h \
-		../buttongroups/buttongroups.h \
-		../lineedits/lineedits.h \
-		../../include/qgroupbox.h \
-		../../include/qframe.h \
-		../listboxcombo/listboxcombo.h \
+		../../include/qwindowsstyle.h \
+		../buttons_groups/buttons_groups.h \
 		../../include/qvbox.h \
 		../../include/qhbox.h \
+		../../include/qframe.h \
+		../lineedits/lineedits.h \
+		../listbox_combo/listbox_combo.h \
 		../checklists/checklists.h \
 		../progressbar/progressbar.h \
-		../../include/qbuttongroup.h \
 		../../include/qtimer.h \
 		../rangecontrols/rangecontrols.h \
 		../richtext/richtext.h \
@@ -211,8 +175,6 @@ themes.o: themes.cpp \
 		../../include/qmessagebox.h \
 		../../include/qdialog.h \
 		../../include/qplatinumstyle.h \
-		../../include/qmotifstyle.h \
-		../../include/qmotifplusstyle.h \
 		../../include/qcdestyle.h
 
 main.o: main.cpp \
@@ -221,8 +183,6 @@ main.o: main.cpp \
 		../../include/qwindowdefs.h \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
-		../../include/qfeatures.h \
-		../../include/qconfig.h \
 		../../include/qstring.h \
 		../../include/qcstring.h \
 		../../include/qarray.h \
@@ -243,7 +203,6 @@ main.o: main.cpp \
 		../../include/qvaluelist.h \
 		../../include/qdatastream.h \
 		../../include/qiodevice.h \
-		../../include/qregexp.h \
 		../../include/qpaintdevice.h \
 		../../include/qpalette.h \
 		../../include/qcolor.h \
@@ -264,116 +223,14 @@ main.o: main.cpp \
 		../../include/qmainwindow.h \
 		metal.h
 
-../buttongroups/buttongroups.o: ../buttongroups/buttongroups.cpp \
-		../buttongroups/buttongroups.h \
-		../../include/qwidget.h \
-		../../include/qwindowdefs.h \
-		../../include/qobjectdefs.h \
-		../../include/qglobal.h \
-		../../include/qfeatures.h \
-		../../include/qconfig.h \
-		../../include/qstring.h \
-		../../include/qcstring.h \
-		../../include/qarray.h \
-		../../include/qgarray.h \
-		../../include/qshared.h \
-		../../include/qnamespace.h \
-		../../include/qobject.h \
-		../../include/qevent.h \
-		../../include/qregion.h \
-		../../include/qrect.h \
-		../../include/qsize.h \
-		../../include/qpoint.h \
-		../../include/qmime.h \
-		../../include/qlist.h \
-		../../include/qglist.h \
-		../../include/qcollection.h \
-		../../include/qstringlist.h \
-		../../include/qvaluelist.h \
-		../../include/qdatastream.h \
-		../../include/qiodevice.h \
-		../../include/qregexp.h \
-		../../include/qpaintdevice.h \
-		../../include/qpalette.h \
-		../../include/qcolor.h \
-		../../include/qbrush.h \
-		../../include/qcursor.h \
-		../../include/qfont.h \
-		../../include/qfontmetrics.h \
-		../../include/qfontinfo.h \
-		../../include/qstyle.h \
-		../../include/qsizepolicy.h \
-		../../include/qbuttongroup.h \
-		../../include/qgroupbox.h \
-		../../include/qframe.h \
-		../../include/qlayout.h \
-		../../include/qabstractlayout.h \
-		../../include/qradiobutton.h \
-		../../include/qbutton.h \
-		../../include/qcheckbox.h \
-		../../include/qpushbutton.h \
-		../../include/qiconset.h \
-		../../include/qpixmap.h
-
-../lineedits/lineedits.o: ../lineedits/lineedits.cpp \
-		../lineedits/lineedits.h \
-		../../include/qgroupbox.h \
-		../../include/qframe.h \
-		../../include/qwidget.h \
-		../../include/qwindowdefs.h \
-		../../include/qobjectdefs.h \
-		../../include/qglobal.h \
-		../../include/qfeatures.h \
-		../../include/qconfig.h \
-		../../include/qstring.h \
-		../../include/qcstring.h \
-		../../include/qarray.h \
-		../../include/qgarray.h \
-		../../include/qshared.h \
-		../../include/qnamespace.h \
-		../../include/qobject.h \
-		../../include/qevent.h \
-		../../include/qregion.h \
-		../../include/qrect.h \
-		../../include/qsize.h \
-		../../include/qpoint.h \
-		../../include/qmime.h \
-		../../include/qlist.h \
-		../../include/qglist.h \
-		../../include/qcollection.h \
-		../../include/qstringlist.h \
-		../../include/qvaluelist.h \
-		../../include/qdatastream.h \
-		../../include/qiodevice.h \
-		../../include/qregexp.h \
-		../../include/qpaintdevice.h \
-		../../include/qpalette.h \
-		../../include/qcolor.h \
-		../../include/qbrush.h \
-		../../include/qcursor.h \
-		../../include/qfont.h \
-		../../include/qfontmetrics.h \
-		../../include/qfontinfo.h \
-		../../include/qstyle.h \
-		../../include/qsizepolicy.h \
-		../../include/qlineedit.h \
-		../../include/qcombobox.h \
-		../../include/qvalidator.h \
-		../../include/qlabel.h \
-		../../include/qlayout.h \
-		../../include/qabstractlayout.h \
-		../../include/qhbox.h
-
-../listboxcombo/listboxcombo.o: ../listboxcombo/listboxcombo.cpp \
-		../listboxcombo/listboxcombo.h \
+../buttons_groups/buttons_groups.o: ../buttons_groups/buttons_groups.cpp \
+		../buttons_groups/buttons_groups.h \
 		../../include/qvbox.h \
 		../../include/qhbox.h \
 		../../include/qwidget.h \
 		../../include/qwindowdefs.h \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
-		../../include/qfeatures.h \
-		../../include/qconfig.h \
 		../../include/qstring.h \
 		../../include/qcstring.h \
 		../../include/qarray.h \
@@ -394,7 +251,96 @@ main.o: main.cpp \
 		../../include/qvaluelist.h \
 		../../include/qdatastream.h \
 		../../include/qiodevice.h \
-		../../include/qregexp.h \
+		../../include/qpaintdevice.h \
+		../../include/qpalette.h \
+		../../include/qcolor.h \
+		../../include/qbrush.h \
+		../../include/qcursor.h \
+		../../include/qfont.h \
+		../../include/qfontmetrics.h \
+		../../include/qfontinfo.h \
+		../../include/qstyle.h \
+		../../include/qsizepolicy.h \
+		../../include/qframe.h \
+		../../include/qbuttongroup.h \
+		../../include/qgroupbox.h \
+		../../include/qradiobutton.h \
+		../../include/qbutton.h \
+		../../include/qcheckbox.h \
+		../../include/qpushbutton.h
+
+../lineedits/lineedits.o: ../lineedits/lineedits.cpp \
+		../lineedits/lineedits.h \
+		../../include/qvbox.h \
+		../../include/qhbox.h \
+		../../include/qwidget.h \
+		../../include/qwindowdefs.h \
+		../../include/qobjectdefs.h \
+		../../include/qglobal.h \
+		../../include/qstring.h \
+		../../include/qcstring.h \
+		../../include/qarray.h \
+		../../include/qgarray.h \
+		../../include/qshared.h \
+		../../include/qnamespace.h \
+		../../include/qobject.h \
+		../../include/qevent.h \
+		../../include/qregion.h \
+		../../include/qrect.h \
+		../../include/qsize.h \
+		../../include/qpoint.h \
+		../../include/qmime.h \
+		../../include/qlist.h \
+		../../include/qglist.h \
+		../../include/qcollection.h \
+		../../include/qstringlist.h \
+		../../include/qvaluelist.h \
+		../../include/qdatastream.h \
+		../../include/qiodevice.h \
+		../../include/qpaintdevice.h \
+		../../include/qpalette.h \
+		../../include/qcolor.h \
+		../../include/qbrush.h \
+		../../include/qcursor.h \
+		../../include/qfont.h \
+		../../include/qfontmetrics.h \
+		../../include/qfontinfo.h \
+		../../include/qstyle.h \
+		../../include/qsizepolicy.h \
+		../../include/qframe.h \
+		../../include/qlineedit.h \
+		../../include/qcombobox.h \
+		../../include/qvalidator.h \
+		../../include/qlabel.h
+
+../listbox_combo/listbox_combo.o: ../listbox_combo/listbox_combo.cpp \
+		../listbox_combo/listbox_combo.h \
+		../../include/qvbox.h \
+		../../include/qhbox.h \
+		../../include/qwidget.h \
+		../../include/qwindowdefs.h \
+		../../include/qobjectdefs.h \
+		../../include/qglobal.h \
+		../../include/qstring.h \
+		../../include/qcstring.h \
+		../../include/qarray.h \
+		../../include/qgarray.h \
+		../../include/qshared.h \
+		../../include/qnamespace.h \
+		../../include/qobject.h \
+		../../include/qevent.h \
+		../../include/qregion.h \
+		../../include/qrect.h \
+		../../include/qsize.h \
+		../../include/qpoint.h \
+		../../include/qmime.h \
+		../../include/qlist.h \
+		../../include/qglist.h \
+		../../include/qcollection.h \
+		../../include/qstringlist.h \
+		../../include/qvaluelist.h \
+		../../include/qdatastream.h \
+		../../include/qiodevice.h \
 		../../include/qpaintdevice.h \
 		../../include/qpalette.h \
 		../../include/qcolor.h \
@@ -420,19 +366,15 @@ main.o: main.cpp \
 		../../include/qtimer.h \
 		../../include/qpushbutton.h \
 		../../include/qbutton.h \
-		../../include/qiconset.h \
-		../../include/qlabel.h \
-		../../include/qimage.h \
-		../../include/qstrlist.h
+		../../include/qlabel.h
 
 ../checklists/checklists.o: ../checklists/checklists.cpp \
 		../checklists/checklists.h \
+		../../include/qhbox.h \
 		../../include/qwidget.h \
 		../../include/qwindowdefs.h \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
-		../../include/qfeatures.h \
-		../../include/qconfig.h \
 		../../include/qstring.h \
 		../../include/qcstring.h \
 		../../include/qarray.h \
@@ -453,7 +395,6 @@ main.o: main.cpp \
 		../../include/qvaluelist.h \
 		../../include/qdatastream.h \
 		../../include/qiodevice.h \
-		../../include/qregexp.h \
 		../../include/qpaintdevice.h \
 		../../include/qpalette.h \
 		../../include/qcolor.h \
@@ -464,9 +405,9 @@ main.o: main.cpp \
 		../../include/qfontinfo.h \
 		../../include/qstyle.h \
 		../../include/qsizepolicy.h \
+		../../include/qframe.h \
 		../../include/qlistview.h \
 		../../include/qscrollview.h \
-		../../include/qframe.h \
 		../../include/qscrollbar.h \
 		../../include/qrangecontrol.h \
 		../../include/qdrawutil.h \
@@ -475,26 +416,18 @@ main.o: main.cpp \
 		../../include/qpointarray.h \
 		../../include/qwmatrix.h \
 		../../include/qvbox.h \
-		../../include/qhbox.h \
 		../../include/qlabel.h \
 		../../include/qpushbutton.h \
-		../../include/qbutton.h \
-		../../include/qiconset.h \
-		../../include/qpixmap.h \
-		../../include/qlayout.h \
-		../../include/qabstractlayout.h
+		../../include/qbutton.h
 
 ../progressbar/progressbar.o: ../progressbar/progressbar.cpp \
 		../progressbar/progressbar.h \
-		../../include/qbuttongroup.h \
-		../../include/qgroupbox.h \
-		../../include/qframe.h \
+		../../include/qvbox.h \
+		../../include/qhbox.h \
 		../../include/qwidget.h \
 		../../include/qwindowdefs.h \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
-		../../include/qfeatures.h \
-		../../include/qconfig.h \
 		../../include/qstring.h \
 		../../include/qcstring.h \
 		../../include/qarray.h \
@@ -515,7 +448,6 @@ main.o: main.cpp \
 		../../include/qvaluelist.h \
 		../../include/qdatastream.h \
 		../../include/qiodevice.h \
-		../../include/qregexp.h \
 		../../include/qpaintdevice.h \
 		../../include/qpalette.h \
 		../../include/qcolor.h \
@@ -526,15 +458,14 @@ main.o: main.cpp \
 		../../include/qfontinfo.h \
 		../../include/qstyle.h \
 		../../include/qsizepolicy.h \
+		../../include/qframe.h \
 		../../include/qtimer.h \
 		../../include/qradiobutton.h \
 		../../include/qbutton.h \
 		../../include/qpushbutton.h \
-		../../include/qiconset.h \
-		../../include/qpixmap.h \
 		../../include/qprogressbar.h \
-		../../include/qlayout.h \
-		../../include/qabstractlayout.h
+		../../include/qbuttongroup.h \
+		../../include/qgroupbox.h
 
 ../rangecontrols/rangecontrols.o: ../rangecontrols/rangecontrols.cpp \
 		../rangecontrols/rangecontrols.h \
@@ -544,8 +475,6 @@ main.o: main.cpp \
 		../../include/qwindowdefs.h \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
-		../../include/qfeatures.h \
-		../../include/qconfig.h \
 		../../include/qstring.h \
 		../../include/qcstring.h \
 		../../include/qarray.h \
@@ -566,7 +495,6 @@ main.o: main.cpp \
 		../../include/qvaluelist.h \
 		../../include/qdatastream.h \
 		../../include/qiodevice.h \
-		../../include/qregexp.h \
 		../../include/qpaintdevice.h \
 		../../include/qpalette.h \
 		../../include/qcolor.h \
@@ -583,9 +511,7 @@ main.o: main.cpp \
 		../../include/qspinbox.h \
 		../../include/qrangecontrol.h \
 		../../include/qlabel.h \
-		../../include/qslider.h \
-		../../include/qcheckbox.h \
-		../../include/qbutton.h
+		../../include/qslider.h
 
 ../richtext/richtext.o: ../richtext/richtext.cpp \
 		../richtext/richtext.h \
@@ -595,8 +521,6 @@ main.o: main.cpp \
 		../../include/qwindowdefs.h \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
-		../../include/qfeatures.h \
-		../../include/qconfig.h \
 		../../include/qstring.h \
 		../../include/qcstring.h \
 		../../include/qarray.h \
@@ -617,7 +541,6 @@ main.o: main.cpp \
 		../../include/qvaluelist.h \
 		../../include/qdatastream.h \
 		../../include/qiodevice.h \
-		../../include/qregexp.h \
 		../../include/qpaintdevice.h \
 		../../include/qpalette.h \
 		../../include/qcolor.h \
@@ -631,9 +554,8 @@ main.o: main.cpp \
 		../../include/qframe.h \
 		../../include/qpushbutton.h \
 		../../include/qbutton.h \
-		../../include/qiconset.h \
-		../../include/qpixmap.h \
 		../../include/qtextview.h \
+		../../include/qpixmap.h \
 		../../include/qscrollview.h \
 		../../include/qscrollbar.h \
 		../../include/qrangecontrol.h \
@@ -650,14 +572,12 @@ main.o: main.cpp \
 
 wood.o: wood.cpp \
 		wood.h \
-		../../include/qwindowsstyle.h \
+		../../include/qmotifstyle.h \
 		../../include/qcommonstyle.h \
 		../../include/qstyle.h \
 		../../include/qwindowdefs.h \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
-		../../include/qfeatures.h \
-		../../include/qconfig.h \
 		../../include/qstring.h \
 		../../include/qcstring.h \
 		../../include/qarray.h \
@@ -678,7 +598,6 @@ wood.o: wood.cpp \
 		../../include/qvaluelist.h \
 		../../include/qdatastream.h \
 		../../include/qiodevice.h \
-		../../include/qregexp.h \
 		../../include/qpalette.h \
 		../../include/qcolor.h \
 		../../include/qbrush.h \
@@ -706,7 +625,6 @@ wood.o: wood.cpp \
 		../../include/qstrlist.h \
 		../../include/qpushbutton.h \
 		../../include/qbutton.h \
-		../../include/qiconset.h \
 		../../include/qrangecontrol.h \
 		../../include/qscrollbar.h
 
@@ -718,8 +636,6 @@ metal.o: metal.cpp \
 		../../include/qwindowdefs.h \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
-		../../include/qfeatures.h \
-		../../include/qconfig.h \
 		../../include/qstring.h \
 		../../include/qcstring.h \
 		../../include/qarray.h \
@@ -740,7 +656,6 @@ metal.o: metal.cpp \
 		../../include/qvaluelist.h \
 		../../include/qdatastream.h \
 		../../include/qiodevice.h \
-		../../include/qregexp.h \
 		../../include/qpalette.h \
 		../../include/qcolor.h \
 		../../include/qbrush.h \
@@ -768,12 +683,12 @@ metal.o: metal.cpp \
 		../../include/qstrlist.h \
 		../../include/qpushbutton.h \
 		../../include/qbutton.h \
-		../../include/qiconset.h \
 		../../include/qrangecontrol.h \
 		../../include/qscrollbar.h \
+		metal.xpm \
 		stonedark.xpm \
-		stone1.xpm \
-		marble.xpm
+		stonebright.xpm \
+		stone1.xpm
 
 moc_themes.o: moc_themes.cpp \
 		themes.h \
@@ -782,8 +697,6 @@ moc_themes.o: moc_themes.cpp \
 		../../include/qwindowdefs.h \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
-		../../include/qfeatures.h \
-		../../include/qconfig.h \
 		../../include/qstring.h \
 		../../include/qcstring.h \
 		../../include/qarray.h \
@@ -804,7 +717,6 @@ moc_themes.o: moc_themes.cpp \
 		../../include/qvaluelist.h \
 		../../include/qdatastream.h \
 		../../include/qiodevice.h \
-		../../include/qregexp.h \
 		../../include/qpaintdevice.h \
 		../../include/qpalette.h \
 		../../include/qcolor.h \
@@ -816,98 +728,14 @@ moc_themes.o: moc_themes.cpp \
 		../../include/qstyle.h \
 		../../include/qsizepolicy.h
 
-../buttongroups/moc_buttongroups.o: ../buttongroups/moc_buttongroups.cpp \
-		../buttongroups/buttongroups.h \
-		../../include/qwidget.h \
-		../../include/qwindowdefs.h \
-		../../include/qobjectdefs.h \
-		../../include/qglobal.h \
-		../../include/qfeatures.h \
-		../../include/qconfig.h \
-		../../include/qstring.h \
-		../../include/qcstring.h \
-		../../include/qarray.h \
-		../../include/qgarray.h \
-		../../include/qshared.h \
-		../../include/qnamespace.h \
-		../../include/qobject.h \
-		../../include/qevent.h \
-		../../include/qregion.h \
-		../../include/qrect.h \
-		../../include/qsize.h \
-		../../include/qpoint.h \
-		../../include/qmime.h \
-		../../include/qlist.h \
-		../../include/qglist.h \
-		../../include/qcollection.h \
-		../../include/qstringlist.h \
-		../../include/qvaluelist.h \
-		../../include/qdatastream.h \
-		../../include/qiodevice.h \
-		../../include/qregexp.h \
-		../../include/qpaintdevice.h \
-		../../include/qpalette.h \
-		../../include/qcolor.h \
-		../../include/qbrush.h \
-		../../include/qcursor.h \
-		../../include/qfont.h \
-		../../include/qfontmetrics.h \
-		../../include/qfontinfo.h \
-		../../include/qstyle.h \
-		../../include/qsizepolicy.h
-
-../lineedits/moc_lineedits.o: ../lineedits/moc_lineedits.cpp \
-		../lineedits/lineedits.h \
-		../../include/qgroupbox.h \
-		../../include/qframe.h \
-		../../include/qwidget.h \
-		../../include/qwindowdefs.h \
-		../../include/qobjectdefs.h \
-		../../include/qglobal.h \
-		../../include/qfeatures.h \
-		../../include/qconfig.h \
-		../../include/qstring.h \
-		../../include/qcstring.h \
-		../../include/qarray.h \
-		../../include/qgarray.h \
-		../../include/qshared.h \
-		../../include/qnamespace.h \
-		../../include/qobject.h \
-		../../include/qevent.h \
-		../../include/qregion.h \
-		../../include/qrect.h \
-		../../include/qsize.h \
-		../../include/qpoint.h \
-		../../include/qmime.h \
-		../../include/qlist.h \
-		../../include/qglist.h \
-		../../include/qcollection.h \
-		../../include/qstringlist.h \
-		../../include/qvaluelist.h \
-		../../include/qdatastream.h \
-		../../include/qiodevice.h \
-		../../include/qregexp.h \
-		../../include/qpaintdevice.h \
-		../../include/qpalette.h \
-		../../include/qcolor.h \
-		../../include/qbrush.h \
-		../../include/qcursor.h \
-		../../include/qfont.h \
-		../../include/qfontmetrics.h \
-		../../include/qfontinfo.h \
-		../../include/qstyle.h \
-		../../include/qsizepolicy.h
-
-../listboxcombo/moc_listboxcombo.o: ../listboxcombo/moc_listboxcombo.cpp \
-		../listboxcombo/listboxcombo.h \
+../buttons_groups/moc_buttons_groups.o: ../buttons_groups/moc_buttons_groups.cpp \
+		../buttons_groups/buttons_groups.h \
 		../../include/qvbox.h \
 		../../include/qhbox.h \
 		../../include/qwidget.h \
 		../../include/qwindowdefs.h \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
-		../../include/qfeatures.h \
-		../../include/qconfig.h \
 		../../include/qstring.h \
 		../../include/qcstring.h \
 		../../include/qarray.h \
@@ -928,7 +756,86 @@ moc_themes.o: moc_themes.cpp \
 		../../include/qvaluelist.h \
 		../../include/qdatastream.h \
 		../../include/qiodevice.h \
-		../../include/qregexp.h \
+		../../include/qpaintdevice.h \
+		../../include/qpalette.h \
+		../../include/qcolor.h \
+		../../include/qbrush.h \
+		../../include/qcursor.h \
+		../../include/qfont.h \
+		../../include/qfontmetrics.h \
+		../../include/qfontinfo.h \
+		../../include/qstyle.h \
+		../../include/qsizepolicy.h \
+		../../include/qframe.h
+
+../lineedits/moc_lineedits.o: ../lineedits/moc_lineedits.cpp \
+		../lineedits/lineedits.h \
+		../../include/qvbox.h \
+		../../include/qhbox.h \
+		../../include/qwidget.h \
+		../../include/qwindowdefs.h \
+		../../include/qobjectdefs.h \
+		../../include/qglobal.h \
+		../../include/qstring.h \
+		../../include/qcstring.h \
+		../../include/qarray.h \
+		../../include/qgarray.h \
+		../../include/qshared.h \
+		../../include/qnamespace.h \
+		../../include/qobject.h \
+		../../include/qevent.h \
+		../../include/qregion.h \
+		../../include/qrect.h \
+		../../include/qsize.h \
+		../../include/qpoint.h \
+		../../include/qmime.h \
+		../../include/qlist.h \
+		../../include/qglist.h \
+		../../include/qcollection.h \
+		../../include/qstringlist.h \
+		../../include/qvaluelist.h \
+		../../include/qdatastream.h \
+		../../include/qiodevice.h \
+		../../include/qpaintdevice.h \
+		../../include/qpalette.h \
+		../../include/qcolor.h \
+		../../include/qbrush.h \
+		../../include/qcursor.h \
+		../../include/qfont.h \
+		../../include/qfontmetrics.h \
+		../../include/qfontinfo.h \
+		../../include/qstyle.h \
+		../../include/qsizepolicy.h \
+		../../include/qframe.h
+
+../listbox_combo/moc_listbox_combo.o: ../listbox_combo/moc_listbox_combo.cpp \
+		../listbox_combo/listbox_combo.h \
+		../../include/qvbox.h \
+		../../include/qhbox.h \
+		../../include/qwidget.h \
+		../../include/qwindowdefs.h \
+		../../include/qobjectdefs.h \
+		../../include/qglobal.h \
+		../../include/qstring.h \
+		../../include/qcstring.h \
+		../../include/qarray.h \
+		../../include/qgarray.h \
+		../../include/qshared.h \
+		../../include/qnamespace.h \
+		../../include/qobject.h \
+		../../include/qevent.h \
+		../../include/qregion.h \
+		../../include/qrect.h \
+		../../include/qsize.h \
+		../../include/qpoint.h \
+		../../include/qmime.h \
+		../../include/qlist.h \
+		../../include/qglist.h \
+		../../include/qcollection.h \
+		../../include/qstringlist.h \
+		../../include/qvaluelist.h \
+		../../include/qdatastream.h \
+		../../include/qiodevice.h \
 		../../include/qpaintdevice.h \
 		../../include/qpalette.h \
 		../../include/qcolor.h \
@@ -943,12 +850,11 @@ moc_themes.o: moc_themes.cpp \
 
 ../checklists/moc_checklists.o: ../checklists/moc_checklists.cpp \
 		../checklists/checklists.h \
+		../../include/qhbox.h \
 		../../include/qwidget.h \
 		../../include/qwindowdefs.h \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
-		../../include/qfeatures.h \
-		../../include/qconfig.h \
 		../../include/qstring.h \
 		../../include/qcstring.h \
 		../../include/qarray.h \
@@ -969,50 +875,6 @@ moc_themes.o: moc_themes.cpp \
 		../../include/qvaluelist.h \
 		../../include/qdatastream.h \
 		../../include/qiodevice.h \
-		../../include/qregexp.h \
-		../../include/qpaintdevice.h \
-		../../include/qpalette.h \
-		../../include/qcolor.h \
-		../../include/qbrush.h \
-		../../include/qcursor.h \
-		../../include/qfont.h \
-		../../include/qfontmetrics.h \
-		../../include/qfontinfo.h \
-		../../include/qstyle.h \
-		../../include/qsizepolicy.h
-
-../progressbar/moc_progressbar.o: ../progressbar/moc_progressbar.cpp \
-		../progressbar/progressbar.h \
-		../../include/qbuttongroup.h \
-		../../include/qgroupbox.h \
-		../../include/qframe.h \
-		../../include/qwidget.h \
-		../../include/qwindowdefs.h \
-		../../include/qobjectdefs.h \
-		../../include/qglobal.h \
-		../../include/qfeatures.h \
-		../../include/qconfig.h \
-		../../include/qstring.h \
-		../../include/qcstring.h \
-		../../include/qarray.h \
-		../../include/qgarray.h \
-		../../include/qshared.h \
-		../../include/qnamespace.h \
-		../../include/qobject.h \
-		../../include/qevent.h \
-		../../include/qregion.h \
-		../../include/qrect.h \
-		../../include/qsize.h \
-		../../include/qpoint.h \
-		../../include/qmime.h \
-		../../include/qlist.h \
-		../../include/qglist.h \
-		../../include/qcollection.h \
-		../../include/qstringlist.h \
-		../../include/qvaluelist.h \
-		../../include/qdatastream.h \
-		../../include/qiodevice.h \
-		../../include/qregexp.h \
 		../../include/qpaintdevice.h \
 		../../include/qpalette.h \
 		../../include/qcolor.h \
@@ -1023,18 +885,16 @@ moc_themes.o: moc_themes.cpp \
 		../../include/qfontinfo.h \
 		../../include/qstyle.h \
 		../../include/qsizepolicy.h \
-		../../include/qtimer.h
+		../../include/qframe.h
 
-../rangecontrols/moc_rangecontrols.o: ../rangecontrols/moc_rangecontrols.cpp \
-		../rangecontrols/rangecontrols.h \
+../progressbar/moc_progressbar.o: ../progressbar/moc_progressbar.cpp \
+		../progressbar/progressbar.h \
 		../../include/qvbox.h \
 		../../include/qhbox.h \
 		../../include/qwidget.h \
 		../../include/qwindowdefs.h \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
-		../../include/qfeatures.h \
-		../../include/qconfig.h \
 		../../include/qstring.h \
 		../../include/qcstring.h \
 		../../include/qarray.h \
@@ -1055,7 +915,47 @@ moc_themes.o: moc_themes.cpp \
 		../../include/qvaluelist.h \
 		../../include/qdatastream.h \
 		../../include/qiodevice.h \
-		../../include/qregexp.h \
+		../../include/qpaintdevice.h \
+		../../include/qpalette.h \
+		../../include/qcolor.h \
+		../../include/qbrush.h \
+		../../include/qcursor.h \
+		../../include/qfont.h \
+		../../include/qfontmetrics.h \
+		../../include/qfontinfo.h \
+		../../include/qstyle.h \
+		../../include/qsizepolicy.h \
+		../../include/qframe.h \
+		../../include/qtimer.h
+
+../rangecontrols/moc_rangecontrols.o: ../rangecontrols/moc_rangecontrols.cpp \
+		../rangecontrols/rangecontrols.h \
+		../../include/qvbox.h \
+		../../include/qhbox.h \
+		../../include/qwidget.h \
+		../../include/qwindowdefs.h \
+		../../include/qobjectdefs.h \
+		../../include/qglobal.h \
+		../../include/qstring.h \
+		../../include/qcstring.h \
+		../../include/qarray.h \
+		../../include/qgarray.h \
+		../../include/qshared.h \
+		../../include/qnamespace.h \
+		../../include/qobject.h \
+		../../include/qevent.h \
+		../../include/qregion.h \
+		../../include/qrect.h \
+		../../include/qsize.h \
+		../../include/qpoint.h \
+		../../include/qmime.h \
+		../../include/qlist.h \
+		../../include/qglist.h \
+		../../include/qcollection.h \
+		../../include/qstringlist.h \
+		../../include/qvaluelist.h \
+		../../include/qdatastream.h \
+		../../include/qiodevice.h \
 		../../include/qpaintdevice.h \
 		../../include/qpalette.h \
 		../../include/qcolor.h \
@@ -1076,8 +976,6 @@ moc_themes.o: moc_themes.cpp \
 		../../include/qwindowdefs.h \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
-		../../include/qfeatures.h \
-		../../include/qconfig.h \
 		../../include/qstring.h \
 		../../include/qcstring.h \
 		../../include/qarray.h \
@@ -1098,7 +996,6 @@ moc_themes.o: moc_themes.cpp \
 		../../include/qvaluelist.h \
 		../../include/qdatastream.h \
 		../../include/qiodevice.h \
-		../../include/qregexp.h \
 		../../include/qpaintdevice.h \
 		../../include/qpalette.h \
 		../../include/qcolor.h \
@@ -1114,14 +1011,14 @@ moc_themes.o: moc_themes.cpp \
 moc_themes.cpp: themes.h
 	$(MOC) themes.h -o moc_themes.cpp
 
-../buttongroups/moc_buttongroups.cpp: ../buttongroups/buttongroups.h
-	$(MOC) ../buttongroups/buttongroups.h -o ../buttongroups/moc_buttongroups.cpp
+../buttons_groups/moc_buttons_groups.cpp: ../buttons_groups/buttons_groups.h
+	$(MOC) ../buttons_groups/buttons_groups.h -o ../buttons_groups/moc_buttons_groups.cpp
 
 ../lineedits/moc_lineedits.cpp: ../lineedits/lineedits.h
 	$(MOC) ../lineedits/lineedits.h -o ../lineedits/moc_lineedits.cpp
 
-../listboxcombo/moc_listboxcombo.cpp: ../listboxcombo/listboxcombo.h
-	$(MOC) ../listboxcombo/listboxcombo.h -o ../listboxcombo/moc_listboxcombo.cpp
+../listbox_combo/moc_listbox_combo.cpp: ../listbox_combo/listbox_combo.h
+	$(MOC) ../listbox_combo/listbox_combo.h -o ../listbox_combo/moc_listbox_combo.cpp
 
 ../checklists/moc_checklists.cpp: ../checklists/checklists.h
 	$(MOC) ../checklists/checklists.h -o ../checklists/moc_checklists.cpp
@@ -1134,5 +1031,4 @@ moc_themes.cpp: themes.h
 
 ../richtext/moc_richtext.cpp: ../richtext/richtext.h
 	$(MOC) ../richtext/richtext.h -o ../richtext/moc_richtext.cpp
-
 

@@ -1,12 +1,9 @@
 /****************************************************************************
-** $Id: qt/examples/customlayout/main.cpp   2.3.2   edited 2001-06-12 $
+** $Id: main.cpp,v 1.2 1999/06/10 08:09:09 aavit Exp $
 **
 ** Main for custom layout example
 **
-** Copyright (C) 1996 by Trolltech AS.  All rights reserved.
-**
-** This file is part of an example program for Qt.  This example
-** program may be used, distributed and modified without limitation.
+** Copyright (C) 1996 by Troll Tech AS.  All rights reserved.
 **
 *****************************************************************************/
 
@@ -44,18 +41,14 @@ int main( int argc, char **argv )
 
     BorderLayout *large = new BorderLayout( wid );
     large->setSpacing( 5 );
-    large->addWidget( new QPushButton( "North", wid ), BorderLayout::North );
     large->addWidget( new QPushButton( "West", wid ), BorderLayout::West );
+    large->addWidget( new QPushButton( "East", wid ), BorderLayout::East );
+    large->addWidget( new QPushButton( "South", wid ), BorderLayout::South );
+    large->addWidget( new QPushButton( "North", wid ), BorderLayout::North );
     QMultiLineEdit* m = new QMultiLineEdit( wid );
     m->setText( "Central\nWidget" );
     large->addWidget( m, BorderLayout::Center );
-    QWidget *east1 = new QPushButton( "East", wid );
-    large->addWidget( east1, BorderLayout::East );
-    QWidget *east2 = new QPushButton( "East 2", wid );
-    large->addWidget( east2 , BorderLayout::East );
-    large->addWidget( new QPushButton( "South", wid ), BorderLayout::South );
-    //Left-to-right tab order looks better:
-    QWidget::setTabOrder( east2, east1 );
+    large->addWidget( new QPushButton( "East 2", wid ), BorderLayout::East );
     gm->addWidget( wid );
 
 
@@ -89,7 +82,6 @@ int main( int argc, char **argv )
     s->setAlignment( Qt::AlignVCenter | Qt::AlignHCenter );
     gm->addWidget( s );
     a.setMainWidget( f );
-    f->setCaption("Qt Example - Custom Layout");
     f->show();
 
     int result = a.exec();

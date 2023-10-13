@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta name="robots" content="noindex,noarchive">
+<title>Qt Toolkit - QSimpleRichText Class</title><style type="text/css"><!--
+h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
+a:link { text-decoration: none; }
+body { background: white; color: black; }
+--></style>
+</head><body bgcolor="#ffffff">
+
+<a href=index.html><img width=122 height=65 src=qtlogo.png alt="Qt logo" align=left border=0></a>
+<center><img src=dochead.png width=448 height=23></center>
+<br clear=all>
+
+<h1 align=center>QSimpleRichText Class Reference</h1><br clear="all">
+<p>
+A small displayable piece of rich text.
+<a href="#details">More...</a>
+<p>
+<code>#include &lt;<a href="qsimplerichtext-h.html">qsimplerichtext.h</a>&gt;</code>
+<p><a href="qsimplerichtext-members.html">List of all member functions.</a>
+<h2>Public Members</h2>
+<ul>
+<li><span class="fn"><a href="#d7553e"><b>QSimpleRichText</b></a> ( const QString &amp; text, const QFont &amp; fnt = QApplication::font (), const QString &amp; context = QString::null, const QStyleSheet * s = 0) </span>
+<li><span class="fn"><a href="#6465ab"><b>~QSimpleRichText</b></a> () </span>
+<li><span class="fn">void <a href="#e3bbe2"><b>setWidth</b></a> ( QPainter *, int ) </span>
+<li><span class="fn">int <a href="#41b4a7"><b>width</b></a> () const</span>
+<li><span class="fn">int <a href="#a83750"><b>widthUsed</b></a> () const</span>
+<li><span class="fn">int <a href="#844389"><b>height</b></a> () const</span>
+<li><span class="fn">void <a href="#876616"><b>draw</b></a> ( QPainter *, int x, int y, const QRegion &amp; clipRegion, const QPalette &amp; pal, const QBrush * paper = 0 ) const</span>
+<li><span class="fn">void <a href="#e7ba53"><b>draw</b></a> ( QPainter *, int x, int y, const QRegion &amp; clipRegion, const QColorGroup &amp; cg, const QBrush * paper = 0 ) const</span>
+<li><span class="fn">QString <a href="#3f4301"><b>context</b></a> () const</span>
+<li><span class="fn">QString <a href="#0070d5"><b>anchor</b></a> ( QPainter * p, const QPoint &amp; pos ) </span>
+</ul>
+<hr><h2><a name="details"></a>Detailed Description</h2>
+A small displayable piece of rich text.
+<p>
+This class encapsulates simple richt text usage where a string is
+interpretted as richt text and can be drawn. This is in particular
+useful if you want to display some rich text in a custom widget.
+<p>Once created, the rich text object can be queried for its <a href="qsimplerichtext.html#41b4a7">width</a>(),
+<a href="qsimplerichtext.html#844389">height</a>() and the actual width used ( see <a href="qsimplerichtext.html#a83750">widthUsed</a>() ). And, most
+certainly, it can be drawn on any given <a href="qpainter.html">QPainter</a> with <a href="qsimplerichtext.html#876616">draw</a>().  By
+using <a href="qsimplerichtext.html#0070d5">anchor</a>(), it is possible to use QSimpleRichText to implement
+some kind of hypertext or active text facilities as well.
+<p>Changes other than resizing with <a href="qsimplerichtext.html#e3bbe2">setWidth</a>() cannot be made. If the
+contents is supposed to change, just throw the rich text object away
+and make a new one with the new contents.
+<p>For large documents, see <a href="qtextview.html">QTextView</a> or <a href="qtextbrowser.html">QTextBrowser</a>.
+
+<hr><h2>Member Function Documentation</h2>
+<h3 class="fn"><a name="d7553e"></a>QSimpleRichText::QSimpleRichText ( const <a href="qstring.html">QString</a> &amp; text, const <a href="qfont.html">QFont</a> &amp; fnt = QApplication::font (), const <a href="qstring.html">QString</a> &amp; context = QString::null, const <a href="qstylesheet.html">QStyleSheet</a> * s = 0)</h3>
+<p>Constructs a QSimpleRichText from the rich text string  <em>text.</em>
+<p>If a font <em>fnt</em> is specified, this font will be used as basis for
+the text rendering. When using rich text rendering on a certain
+widget <em>w,</em> you would regularily specify the widget's font as shown in
+the following code example:
+<p><pre>  <a href="qsimplerichtext.html">QSimpleRichText</a>* t = new <a href="qsimplerichtext.html">QSimpleRichText</a>( contents, w-&gt;font() );
+</pre>
+<p>If not font has been specified, the application's default font is used.
+<p><em>context</em> is the optional context of the document. This becomes
+important if <em>text</em> contains relative references, for example
+within image tags. QSimpleRichText always uses the default mime
+source factory (see <a href="qmimesourcefactory.html#28c4d9">QMimeSourceFactory::defaultFactory</a>() ) to
+resolve those references. The context will then be used to calculate
+the absolute path. See <a href="qmimesourcefactory.html#6a086a">QMimeSourceFactory::makeAbsolute</a>() for
+details.
+<p><em>s</em> is an optional stylesheet. If it is 0, the default style sheet
+will be used (see <a href="qstylesheet.html#9d69e9">QStyleSheet::defaultSheet</a>() ).
+<h3 class="fn"><a name="6465ab"></a>QSimpleRichText::~QSimpleRichText ()</h3>
+<p>Destructs the document, freeing memory.
+<h3 class="fn"><a href="qstring.html">QString</a> <a name="0070d5"></a>QSimpleRichText::anchor ( <a href="qpainter.html">QPainter</a> * p, const <a href="qpoint.html">QPoint</a> &amp; pos )</h3>
+<p>Returns the anchor at the requested position. The <a href="qpainter.html">QPainter</a> is needed for font size
+calculations. An empty string is returned if no anchor is specified for this certain
+position.
+<h3 class="fn"><a href="qstring.html">QString</a> <a name="3f4301"></a>QSimpleRichText::context () const</h3>
+<p>Returns the context of the rich text document. If no context has been specified
+in the constructor, a null string is returned.
+<h3 class="fn">void <a name="e7ba53"></a>QSimpleRichText::draw ( <a href="qpainter.html">QPainter</a> * p, int x, int y, const <a href="qregion.html">QRegion</a> &amp; clipRegion, const <a href="qcolorgroup.html">QColorGroup</a> &amp; cg, const <a href="qbrush.html">QBrush</a> * paper = 0 ) const</h3>
+<p>Draws the formatted text with <em>p,</em> at position (<em>x,\a</em> y), clipped
+to <em>clipRegion.</em>  Colors from the <em>cg</em> are used as
+needed, and if not 0, *<em>paper</em> is used as the background brush.
+<p>Note that the display code is highly optimized to reduce flicker, so
+passing a brush for <em>paper</em> is preferrable to simply clearing the area
+to be painted and then calling this without a brush.
+<p>This is a convenience function if there's no palette but just a
+cologroup available. If you have a palette, pass this instead of <em>cg.</em>
+<h3 class="fn">void <a name="876616"></a>QSimpleRichText::draw ( <a href="qpainter.html">QPainter</a> * p, int x, int y, const <a href="qregion.html">QRegion</a> &amp; clipRegion, const <a href="qpalette.html">QPalette</a> &amp; pal, const <a href="qbrush.html">QBrush</a> * paper = 0 ) const</h3>
+<p>Draws the formatted text with <em>p,</em> at position (<em>x,\a</em> y), clipped
+to <em>clipRegion.</em>  Colors from the palette <em>pal</em> are used as
+needed, and if not 0, *<em>paper</em> is used as the background brush.
+<p>Note that the display code is highly optimized to reduce flicker, so
+passing a brush for <em>paper</em> is preferrable to simply clearing the area
+to be painted and then calling this without a brush.
+<h3 class="fn">int <a name="844389"></a>QSimpleRichText::height () const</h3>
+<p>Returns the height of the document, in pixels.
+<p>See also:  <a href="qsimplerichtext.html#e3bbe2">setWidth</a>().
+<h3 class="fn">void <a name="e3bbe2"></a>QSimpleRichText::setWidth ( <a href="qpainter.html">QPainter</a> * p, int w )</h3>
+<p>Sets the width of the document to <em>w</em> pixels, recalculating the layout
+as if it were to be drawn with <em>p.</em>
+<p>See also:  <a href="qsimplerichtext.html#844389">height</a>().
+<h3 class="fn">int <a name="41b4a7"></a>QSimpleRichText::width () const</h3>
+<p>Returns the set width of the document, in pixels.
+<p>See also:  <a href="qsimplerichtext.html#a83750">widthUsed</a>().
+<h3 class="fn">int <a name="a83750"></a>QSimpleRichText::widthUsed () const</h3>
+<p>Returns the width in pixels that is actually used by the document.
+This can be smaller or wider than the set width.
+<p>It may be wider, for example, if the text contains images or
+non-breakable words that are already wider than the available
+space. It's smaller when the document only consists of lines that do
+not fill the width completely.
+<p>See also:  <a href="qsimplerichtext.html#41b4a7">width</a>().
+<hr><p>
+Search the documentation, FAQ, qt-interest archive and more (uses
+<a href="http://www.troll.no">www.troll.no</a>):<br>
+<form method=post action="http://www.troll.no/search.cgi">
+<input type=hidden name="version" value="2.00"><nobr>
+<input size="50" name="search"><input type=submit value="Search">
+</nobr></form><hr><p>
+This file is part of the <a href="index.html">Qt toolkit</a>,
+copyright &copy; 1995-99
+<a href="http://www.troll.no">Troll Tech</a>, all rights reserved.<p><address><hr><div align="center">
+<table width="100%" cellspacing="0" border="0"><tr>
+<td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.00</div>
+</table></div></address></body></html>

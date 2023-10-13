@@ -1,40 +1,28 @@
 /****************************************************************************
-** $Id: qt/src/tools/qstring.h   2.3.2   edited 2001-04-03 $
+** $Id: qstring.h,v 2.89 1999/06/15 12:00:54 warwick Exp $
 **
-** Definition of the QString class, and related Unicode
-** functions.
+** Definition of the QString class, extended char array operations,
+** and QByteArray and QCString classes
 **
 ** Created : 920609
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
-** This file is part of the tools module of the Qt GUI Toolkit.
+** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses may use this file in accordance with the Qt Commercial License
-** Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
+*****************************************************************************/
 
 #ifndef QSTRING_H
 #define QSTRING_H
@@ -54,70 +42,81 @@ class QCharRef;
 
 class Q_EXPORT QChar {
 public:
-    QChar();
-    QChar( char c );
-    QChar( uchar c );
-    QChar( uchar c, uchar r );
-    QChar( const QChar& c );
-    QChar( ushort rc );
-    QChar( short rc );
-    QChar( uint rc );
-    QChar( int rc );
+    // The alternatives just avoid order-of-construction warnings.
+#if defined(_WS_X11_) || defined(_OS_WIN32_BYTESWAP_)
+    QChar() : rw(0), cl(0) { }
+    QChar( char c ) : rw(0), cl(c) { }
+    QChar( uchar c ) : rw(0), cl(c) { }
+    QChar( uchar c, uchar r ) : rw(r), cl(c) { }
+    QChar( const QChar& c ) : rw(c.rw), cl(c.cl) { }
+    QChar( ushort rc ) : rw((rc>>8)&0xff), cl(rc&0xff) { }
+    QChar( short rc ) : rw((rc>>8)&0xff), cl(rc&0xff) { }
+    QChar( uint rc ) : rw((rc>>8)&0xff), cl(rc&0xff) { }
+    QChar( int rc ) : rw((rc>>8)&0xff), cl(rc&0xff) { }
+#else
+    QChar() : cl(0), rw(0) { }
+    QChar( char c ) : cl(c), rw(0) { }
+    QChar( uchar c ) : cl(c), rw(0) { }
+    QChar( uchar c, uchar r ) : cl(c), rw(r) { }
+    QChar( const QChar& c ) : cl(c.cl), rw(c.rw) { }
+    QChar( ushort rc ) : cl(rc&0xff), rw((rc>>8)&0xff) { }
+    QChar( short rc ) : cl(rc&0xff), rw((rc>>8)&0xff) { }
+    QChar( uint rc ) : cl(rc&0xff), rw((rc>>8)&0xff) { }
+    QChar( int rc ) : cl(rc&0xff), rw((rc>>8)&0xff) { }
+#endif
 
     QT_STATIC_CONST QChar null;            // 0000
     QT_STATIC_CONST QChar replacement;     // FFFD
     QT_STATIC_CONST QChar byteOrderMark;     // FEFF
     QT_STATIC_CONST QChar byteOrderSwapped;     // FFFE
-    QT_STATIC_CONST QChar nbsp;            // 00A0
 
     // Unicode information
 
     enum Category
     {
-	NoCategory,
+      NoCategory,
 
-	Mark_NonSpacing,	  //   Mn
-	Mark_SpacingCombining,	  //   Mc
-	Mark_Enclosing,		  //   Me
+      Mark_NonSpacing,	    //   Mn
+      Mark_SpacingCombining,//   Mc
+      Mark_Enclosing,	    //   Me
 
-	Number_DecimalDigit,	  //   Nd
-	Number_Letter,		  //   Nl
-	Number_Other,		  //   No
+      Number_DecimalDigit,   //   Nd
+      Number_Letter,	    //   Nl
+      Number_Other,	    //   No
 
-	Separator_Space,	  //   Zs
-	Separator_Line,		  //   Zl
-	Separator_Paragraph,	  //   Zp
+      Separator_Space,	    //   Zs
+      Separator_Line,	    //   Zl
+      Separator_Paragraph,  //   Zp
 
-	Other_Control,		  //   Cc
-	Other_Format,		  //   Cf
-	Other_Surrogate,	  //   Cs
-	Other_PrivateUse,	  //   Co
-	Other_NotAssigned,	  //   Cn
+      Other_Control,	    //   Cc
+      Other_Format,	    //   Cf
+      Other_Surrogate,	    //   Cs
+      Other_PrivateUse,	    //   Co
+      Other_NotAssigned,    //   Cn
 
-	Letter_Uppercase,	  //   Lu
-	Letter_Lowercase,	  //   Ll
-	Letter_Titlecase,	  //   Lt
-	Letter_Modifier,	  //   Lm
-	Letter_Other,		  //   Lo
+      Letter_Uppercase,	    //   Lu
+      Letter_Lowercase,	    //   Ll
+      Letter_Titlecase,	    //   Lt
+      Letter_Modifier,	    //   Lm
+      Letter_Other,	    //   Lo
 
-	Punctuation_Connector,	  //   Pc
-	Punctuation_Dask,	  //   Pd
-	Punctuation_Open,	  //   Ps
-	Punctuation_Close,	  //   Pe
-	Punctuation_InitialQuote, //   Pi
-	Punctuation_FinalQuote,	  //   Pf
-	Punctuation_Other,	  //   Po
+      Punctuation_Connector,//   Pc
+      Punctuation_Dask,	    //   Pd
+      Punctuation_Open,	    //   Ps
+      Punctuation_Close,    //   Pe
+      Punctuation_InitialQuote,	//   Pi
+      Punctuation_FinalQuote,	//   Pf
+      Punctuation_Other,    //   Po
 
-	Symbol_Math,		  //   Sm
-	Symbol_Currency,	  //   Sc
-	Symbol_Modifier,	  //   Sk
-	Symbol_Other		  //   So
+      Symbol_Math,	    //   Sm
+      Symbol_Currency,	    //   Sc
+      Symbol_Modifier,	    //   Sk
+      Symbol_Other	    //   So
     };
 
     enum Direction
     {
-	DirL, DirR, DirEN, DirES, DirET, DirAN, DirCS, DirB, DirS, DirWS, DirON,
-	DirLRE, DirLRO, DirAL, DirRLE, DirRLO, DirPDF, DirNSM, DirBN
+      DirL, DirR, DirEN, DirES, DirET, DirAN, DirCS, DirB, DirS, DirWS, DirON
     };
 
     enum Decomposition
@@ -129,10 +128,19 @@ public:
 
     enum Joining
     {
-	OtherJoining, Dual, Right, Center
+      OtherJoining, Dual, Right, Center, Unknown
     };
 
     // ****** WHEN ADDING FUNCTIONS, CONSIDER ADDING TO QCharRef TOO
+
+    bool isNull() const { return unicode()==0; }
+    bool isPrint() const;
+    bool isPunct() const;
+    bool isSpace() const;
+    bool isMark() const;
+    bool isLetter() const;
+    bool isNumber() const;
+    bool isDigit() const;
 
     int digitValue() const;
     QChar lower() const;
@@ -142,26 +150,14 @@ public:
     Direction direction() const;
     Joining joining() const;
     bool mirrored() const;
-    QChar mirroredChar() const;
     QString decomposition() const;
     Decomposition decompositionTag() const;
 
     char latin1() const { return rw ? 0 : cl; }
     ushort unicode() const { return (rw << 8) | cl; }
 #ifndef QT_NO_CAST_ASCII
-    // like all ifdef'd code this is undocumented
     operator char() const { return latin1(); }
 #endif
-
-    bool isNull() const { return unicode()==0; }
-    bool isPrint() const;
-    bool isPunct() const;
-    bool isSpace() const;
-    bool isMark() const;
-    bool isLetter() const;
-    bool isNumber() const;
-    bool isLetterOrNumber() const;
-    bool isDigit() const;
 
     uchar& cell() { return cl; }
     uchar& row() { return rw; }
@@ -170,151 +166,69 @@ public:
 
     static bool networkOrdered() { return (int)net_ordered == 1; }
 
-    friend inline int operator==( char ch, QChar c );
-    friend inline int operator==( QChar c, char ch );
-    friend inline int operator==( QChar c1, QChar c2 );
-    friend inline int operator!=( QChar c1, QChar c2 );
-    friend inline int operator!=( char ch, QChar c );
-    friend inline int operator!=( QChar c, char ch );
-    friend inline int operator<=( QChar c, char ch );
-    friend inline int operator<=( char ch, QChar c );
-    friend inline int operator<=( QChar c1, QChar c2 );
-
 private:
-#if defined(_WS_X11_) || defined(_OS_WIN32_BYTESWAP_) || defined( _WS_QWS_ )
+#if defined(_WS_X11_) || defined(_OS_WIN32_BYTESWAP_)
     // XChar2b on X11, ushort on _OS_WIN32_BYTESWAP_
-    //### QWS must be defined on a platform by platform basis
     uchar rw;
     uchar cl;
-#if defined(QT_QSTRING_UCS_4)
-    ushort grp;
-#endif
     enum { net_ordered = 1 };
 #else
     // ushort on _OS_WIN32_
     uchar cl;
     uchar rw;
-#if defined(QT_QSTRING_UCS_4)
-    ushort grp;
-#endif
     enum { net_ordered = 0 };
 #endif
-} Q_PACKED;
-
-inline QChar::QChar()
-{
-    rw = 0; cl = 0;
-#ifdef QT_QSTRING_UCS_4
-    grp = 0;
-#endif
-}
-inline QChar::QChar( char c )
-{
-    rw = 0; cl = (uchar)c;
-#ifdef QT_QSTRING_UCS_4
-    grp = 0;
-#endif
-}
-inline QChar::QChar( uchar c )
-{
-    rw = 0; cl = c;
-#ifdef QT_QSTRING_UCS_4
-    grp = 0;
-#endif
-}
-inline QChar::QChar( uchar c, uchar r )
-{
-    rw = r; cl = c;
-#ifdef QT_QSTRING_UCS_4
-    grp = 0;
-#endif
-}
-inline QChar::QChar( const QChar& c )
-{
-    rw = c.rw; cl = c.cl;
-#ifdef QT_QSTRING_UCS_4
-    grp = 0;
-#endif
-}
-inline QChar::QChar( ushort rc )
-{
-    rw = (uchar)((rc>>8)&0xff); cl = (uchar)(rc&0xff);
-#ifdef QT_QSTRING_UCS_4
-    grp = 0;
-#endif
-}
-inline QChar::QChar( short rc )
-{
-    rw = (uchar)((rc>>8)&0xff); cl = (uchar)(rc&0xff);
-#ifdef QT_QSTRING_UCS_4
-    grp = 0;
-#endif
-}
-inline QChar::QChar( uint rc )
-{
-    rw = (uchar)((rc>>8)&0xff); cl = (uchar)(rc&0xff);
-#ifdef QT_QSTRING_UCS_4
-    grp = 0;
-#endif
-}
-inline QChar::QChar( int rc )
-{
-    rw = (uchar)((rc>>8)&0xff); cl = (uchar)(rc&0xff);
-#ifdef QT_QSTRING_UCS_4
-    grp = 0;
-#endif
-}
-
+};
 
 inline int operator==( char ch, QChar c )
 {
-    return ch == c.cl && !c.rw;
+    return ch == c.cell() && !c.row();
 }
 
 inline int operator==( QChar c, char ch )
 {
-    return ch == c.cl && !c.rw;
+    return ch == c.cell() && !c.row();
 }
 
 inline int operator==( QChar c1, QChar c2 )
 {
-    return c1.cl == c2.cl
-	&& c1.rw == c2.rw;
+    return c1.cell() == c2.cell()
+	&& c1.row() == c2.row();
 }
 
 inline int operator!=( QChar c1, QChar c2 )
 {
-    return c1.cl != c2.cl
-	|| c1.rw != c2.rw;
+    return c1.cell() != c2.cell()
+	|| c1.row() != c2.row();
 }
 
 inline int operator!=( char ch, QChar c )
 {
-    return ch != c.cl || c.rw;
+    return ch != c.cell() || c.row();
 }
 
 inline int operator!=( QChar c, char ch )
 {
-    return ch != c.cl || c.rw;
+    return ch != c.cell() || c.row();
 }
 
 inline int operator<=( QChar c, char ch )
 {
-    return !(ch < c.cl || c.rw);
+    return !(ch < c.cell() || c.row());
 }
 
 inline int operator<=( char ch, QChar c )
 {
-    return ch <= c.cl || c.rw;
+    return ch <= c.cell() || c.row();
 }
 
 inline int operator<=( QChar c1, QChar c2 )
 {
-    return c1.rw > c2.rw
+    return c1.row() > c2.row()
 	? FALSE
-	: c1.rw < c2.rw
+	: c1.row() < c2.row()
 	    ? TRUE
-	    : c1.cl <= c2.cl;
+	    : c1.cell() <= c2.cell();
 }
 
 inline int operator>=( QChar c, char ch ) { return ch <= c; }
@@ -333,10 +247,8 @@ struct Q_EXPORT QStringData : public QShared {
 	unicode(0), ascii(0), len(0), maxl(0), dirtyascii(0) { ref(); }
     QStringData(QChar *u, uint l, uint m) :
 	unicode(u), ascii(0), len(l), maxl(m), dirtyascii(0) { }
-
-    ~QStringData() { if ( unicode ) delete[] ((char*)unicode);
-                     if ( ascii ) delete[] ascii; }
-
+    ~QStringData() { if ( unicode ) delete [] unicode;
+	      if ( ascii ) delete [] ascii; }
     void deleteSelf();
     QChar *unicode;
     char *ascii;
@@ -346,26 +258,27 @@ struct Q_EXPORT QStringData : public QShared {
 };
 
 
+
 class Q_EXPORT QString
 {
 public:
     QString();					// make null string
-    QString( QChar );				// one-char string
+    QString( QChar );			// one-char string
     QString( const QString & );			// impl-shared copy
     QString( const QByteArray& );		// deep copy
     QString( const QChar* unicode, uint length ); // deep copy
 #ifndef QT_NO_CAST_ASCII
     QString( const char *str );			// deep copy
 #endif
-    ~QString();
+    inline ~QString();
 
     QString    &operator=( const QString & );	// impl-shared copy
 #ifndef QT_NO_CAST_ASCII
     QString    &operator=( const char * );	// deep copy
 #endif
     QString    &operator=( const QCString& );	// deep copy
-    QString    &operator=( QChar c );
-    QString    &operator=( char c );
+    QString    &operator=( QChar c ) { return *this = QString(c); }
+    QString    &operator=( char c ) { return *this = QString(QChar(c)); }
 
     QT_STATIC_CONST QString null;
 
@@ -373,10 +286,6 @@ public:
     bool	isEmpty()	const;
     uint	length()	const;
     void	truncate( uint pos );
-
-#if QT_VERSION >= 300
-#error "fill() Should return *this, or QChar constructor should take count=1"
-#endif
     void	fill( QChar c, int len = -1 );
 
     QString	copy()	const;
@@ -393,24 +302,28 @@ public:
     QString arg(double a, int fieldwidth=0, char fmt='g', int prec=-1) const;
 
     QString    &sprintf( const char* format, ... )
-#if defined(_CC_GNU_) && !defined(__INSURE__)
+#if defined(_CC_GNU_)
 	__attribute__ ((format (printf, 2, 3)))
 #endif
 	;
 
     int		find( QChar c, int index=0, bool cs=TRUE ) const;
-    int		find( char c, int index=0, bool cs=TRUE ) const;
+    int		find( char c, int index=0, bool cs=TRUE ) const
+		    { return find(QChar(c), index, cs); }
     int		find( const QString &str, int index=0, bool cs=TRUE ) const;
     int		find( const QRegExp &, int index=0 ) const;
 #ifndef QT_NO_CAST_ASCII
-    int		find( const char* str, int index=0 ) const;
+    int		find( const char* str, int index=0 ) const
+		    { return find(QString::fromLatin1(str), index); }
 #endif
     int		findRev( QChar c, int index=-1, bool cs=TRUE) const;
-    int		findRev( char c, int index=-1, bool cs=TRUE) const;
+    int		findRev( char c, int index=-1, bool cs=TRUE) const
+		    { return findRev( QChar(c), index, cs ); }
     int		findRev( const QString &str, int index=-1, bool cs=TRUE) const;
     int		findRev( const QRegExp &, int index=-1 ) const;
 #ifndef QT_NO_CAST_ASCII
-    int		findRev( const char* str, int index=-1 ) const;
+    int		findRev( const char* str, int index=-1 ) const
+		    { return findRev(QString::fromLatin1(str), index); }
 #endif
     int		contains( QChar c, bool cs=TRUE ) const;
     int		contains( char c, bool cs=TRUE ) const
@@ -439,10 +352,8 @@ public:
     QString    &insert( uint index, QChar );
     QString    &insert( uint index, char c ) { return insert(index,QChar(c)); }
     QString    &append( char );
-    QString    &append( QChar );
     QString    &append( const QString & );
     QString    &prepend( char );
-    QString    &prepend( QChar );
     QString    &prepend( const QString & );
     QString    &remove( uint index, uint len );
     QString    &replace( uint index, uint len, const QString & );
@@ -466,7 +377,7 @@ public:
     QString    &setNum( ulong, int base=10 );
     QString    &setNum( float, char f='g', int prec=6 );
     QString    &setNum( double, char f='g', int prec=6 );
-
+    
     static QString number( long, int base=10 );
     static QString number( ulong, int base=10);
     static QString number( int, int base=10 );
@@ -500,10 +411,8 @@ public:
     const char* ascii() const;
     const char* latin1() const;
     static QString fromLatin1(const char*, int len=-1);
-#ifndef QT_NO_TEXTCODEC
     QCString utf8() const;
     static QString fromUtf8(const char*, int len=-1);
-#endif
     QCString local8Bit() const;
     static QString fromLocal8Bit(const char*, int len=-1);
     bool operator!() const;
@@ -511,17 +420,12 @@ public:
     operator const char *() const { return latin1(); }
 #endif
 
-    QString &setUnicode( const QChar* unicode, uint len );
-    QString &setUnicodeCodes( const ushort* unicode_as_ushorts, uint len );
-    QString &setLatin1( const char*, int len=-1 );
-
     int compare( const QString& s ) const;
     static int compare( const QString& s1, const QString& s2 )
 	{ return s1.compare(s2); }
 
-#ifndef QT_NO_DATASTREAM
     friend Q_EXPORT QDataStream &operator>>( QDataStream &, QString & );
-#endif
+
     // new functions for BiDi
     void compose();
     QChar::Direction basicDirection();
@@ -531,10 +435,8 @@ public:
     const char* data() const { return latin1(); }
 #endif
 
-    bool startsWith( const QString& ) const;
-
 private:
-    QString( int size, bool /*dummy*/ );	// allocate size incl. \0
+    QString( int size, bool dummy );		// allocate size incl. \0
 
     void deref();
     void real_detach();
@@ -563,11 +465,6 @@ class Q_EXPORT QCharRef {
 public:
     // Most QChar operations repeated here...
 
-    // all this is not documented: We just say "like QChar" and let it be.
-#if 1
-    ushort unicode() const { return s.constref(p).unicode(); }
-    char latin1() const { return s.constref(p).latin1(); }
-
     // An operator= for each QChar cast constructor...
     QCharRef operator=(char c ) { s.ref(p)=c; return *this; }
     QCharRef operator=(uchar c ) { s.ref(p)=c; return *this; }
@@ -581,6 +478,9 @@ public:
     operator QChar () const { return s.constref(p); }
 
     // each function...
+    ushort unicode() const { return s.constref(p).unicode(); }
+    char latin1() const { return s.constref(p).latin1(); }
+
     bool isNull() const { return unicode()==0; }
     bool isPrint() const { return s.constref(p).isPrint(); }
     bool isPunct() const { return s.constref(p).isPunct(); }
@@ -588,7 +488,6 @@ public:
     bool isMark() const { return s.constref(p).isMark(); }
     bool isLetter() const { return s.constref(p).isLetter(); }
     bool isNumber() const { return s.constref(p).isNumber(); }
-    bool isLetterOrNumber() { return s.constref(p).isLetterOrNumber(); }
     bool isDigit() const { return s.constref(p).isDigit(); }
 
     int digitValue() const { return s.constref(p).digitValue(); }
@@ -599,14 +498,12 @@ public:
     QChar::Direction direction() const { return s.constref(p).direction(); }
     QChar::Joining joining() const { return s.constref(p).joining(); }
     bool mirrored() const { return s.constref(p).mirrored(); }
-    QChar mirroredChar() const { return s.constref(p).mirroredChar(); }
     QString decomposition() const { return s.constref(p).decomposition(); }
     QChar::Decomposition decompositionTag() const { return s.constref(p).decompositionTag(); }
 
     // Not the non-const ones of these.
     uchar cell() const { return s.constref(p).cell(); }
     uchar row() const { return s.constref(p).row(); }
-#endif
 };
 
 inline QCharRef QString::at( uint i ) { return QCharRef(this,i); }
@@ -624,10 +521,10 @@ public:
 /*****************************************************************************
   QString stream functions
  *****************************************************************************/
-#ifndef QT_NO_DATASTREAM
+
 Q_EXPORT QDataStream &operator<<( QDataStream &, const QString & );
 Q_EXPORT QDataStream &operator>>( QDataStream &, QString & );
-#endif
+
 
 /*****************************************************************************
   QString inline functions
@@ -646,18 +543,16 @@ inline QString::QString() :
 //
 inline QString::~QString()
 {
-    if ( d->deref() ) {
-	if ( d == shared_null )
-	    shared_null = 0;
+    if ( d->deref() )
 	d->deleteSelf();
-    }
 }
 
-inline QString &QString::operator=( QChar c )
-{ return *this = QString(c); }
 
-inline QString &QString::operator=( char c )
-{ return *this = QString(QChar(c)); }
+//inline QString &QString::operator=( const QString &s )
+//{ return (const QString &)assign( s ); }
+
+//inline QString &QString::operator=( const char *str )
+//{ return (const QString &)duplicate( str, strlen(str)+1 ); }
 
 inline bool QString::isNull() const
 { return unicode() == 0; }
@@ -677,17 +572,11 @@ inline QString QString::copy() const
 inline QString &QString::prepend( const QString & s )
 { return insert(0,s); }
 
-inline QString &QString::prepend( QChar c )
-{ return insert(0,c); }
-
 inline QString &QString::prepend( char c )
 { return insert(0,c); }
 
 inline QString &QString::append( const QString & s )
 { return operator+=(s); }
-
-inline QString &QString::append( QChar c )
-{ return operator+=(c); }
 
 inline QString &QString::append( char c )
 { return operator+=(c); }
@@ -719,20 +608,6 @@ inline QString QString::arg(short a, int fieldwidth, int base) const
 inline QString QString::arg(ushort a, int fieldwidth, int base) const
 { return arg((ulong)a, fieldwidth, base); }
 
-inline int QString::find( char c, int index, bool cs ) const
-{ return find(QChar(c), index, cs); }
-
-inline int QString::findRev( char c, int index, bool cs) const
-{ return findRev( QChar(c), index, cs ); }
-
-
-#ifndef QT_NO_CAST_ASCII
-inline int QString::find( const char* str, int index ) const
-{ return find(QString::fromLatin1(str), index); }
-
-inline int QString::findRev( const char* str, int index ) const
-{ return findRev(QString::fromLatin1(str), index); }
-#endif
 
 
 /*****************************************************************************

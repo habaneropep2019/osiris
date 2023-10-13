@@ -1,0 +1,308 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta name="robots" content="noindex,noarchive">
+<title>Qt Toolkit - QStyle Class</title><style type="text/css"><!--
+h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
+a:link { text-decoration: none; }
+body { background: white; color: black; }
+--></style>
+</head><body bgcolor="#ffffff">
+
+<a href=index.html><img width=122 height=65 src=qtlogo.png alt="Qt logo" align=left border=0></a>
+<center><img src=dochead.png width=448 height=23></center>
+<br clear=all>
+
+<h1 align=center>QStyle Class Reference</h1><br clear="all">
+<p>
+Encapsulates common Look and Feel of a GUI.
+<a href="#details">More...</a>
+<p>
+<code>#include &lt;<a href="qstyle-h.html">qstyle.h</a>&gt;</code>
+<p>
+Inherits <a href="qobject.html">QObject</a>.
+<p>Inherited by <a href="qcommonstyle.html">QCommonStyle</a>.
+<p><a href="qstyle-members.html">List of all member functions.</a>
+<h2>Public Members</h2>
+<ul>
+<li><span class="fn">virtual <a href="#8dc97e"><b>~QStyle</b></a> () </span>
+<li><span class="fn">GUIStyle <a href="#373117"><b>guiStyle</b></a> () const</span>
+<li><span class="fn">virtual void <a href="#dff902"><b>polish</b></a> ( QWidget * ) </span>
+<li><span class="fn">virtual void <a href="#a9e34a"><b>unPolish</b></a> ( QWidget * ) </span>
+<li><span class="fn">virtual void <a href="#e4606f"><b>polish</b></a> ( QApplication * ) </span>
+<li><span class="fn">virtual void <a href="#66dbbf"><b>unPolish</b></a> ( QApplication * ) </span>
+<li><span class="fn">virtual void <a href="#45065e"><b>polish</b></a> ( QPalette &amp; ) </span>
+<li><span class="fn">virtual QRect <a href="#8a6e92"><b>itemRect</b></a> ( QPainter * p, int x, int y, int w, int h, int flags, bool enabled, const QPixmap * pixmap, const QString &amp; text, int len=-1 ) </span>
+<li><span class="fn">virtual void <a href="#16585d"><b>drawItem</b></a> ( QPainter * p, int x, int y, int w, int h, int flags, const QColorGroup &amp; g, bool enabled, const QPixmap * pixmap, const QString &amp; text, int len=-1, const QColor * penColor = 0 ) </span>
+<li><span class="fn">virtual void <a href="#8ad22d"><b>drawSeparator</b></a> ( QPainter * p, int x1, int y1, int x2, int y2, const QColorGroup &amp; g, bool sunken = TRUE, int lineWidth = 1, int midLineWidth = 0 ) </span>
+<li><span class="fn">virtual void <a href="#57a289"><b>drawRect</b></a> ( QPainter * p, int x, int y, int w, int h, const QColor &amp;, int lineWidth = 1, const QBrush * fill = 0 ) </span>
+<li><span class="fn">virtual void <a href="#cfdc48"><b>drawRectStrong</b></a> ( QPainter * p, int x, int y, int w, int h, const QColorGroup &amp;, bool sunken=FALSE, int lineWidth = 1, int midLineWidth = 0, const QBrush * fill = 0 ) </span>
+<li><span class="fn">virtual void <a href="#864576"><b>drawButton</b></a> ( QPainter * p, int x, int y, int w, int h, const QColorGroup &amp; g, bool sunken = FALSE, const QBrush * fill = 0 ) </span>
+<li><span class="fn">virtual QRect <a href="#159da3"><b>buttonRect</b></a> ( int x, int y, int w, int h ) </span>
+<li><span class="fn">virtual void <a href="#da4c15"><b>drawButtonMask</b></a> ( QPainter * p, int x, int y, int w, int h ) </span>
+<li><span class="fn">virtual void <a href="#49015f"><b>drawBevelButton</b></a> ( QPainter * p, int x, int y, int w, int h, const QColorGroup &amp; g, bool sunken = FALSE, const QBrush * fill = 0 ) </span>
+<li><span class="fn">virtual void <a href="#4c6e10"><b>drawToolButton</b></a> ( QPainter * p, int x, int y, int w, int h, const QColorGroup &amp; g, bool sunken = FALSE, const QBrush * fill = 0 ) </span>
+<li><span class="fn">virtual void <a href="#46bc88"><b>drawPanel</b></a> ( QPainter * p, int x, int y, int w, int h, const QColorGroup &amp;, bool sunken=FALSE, int lineWidth = 1, const QBrush * fill = 0 ) </span>
+<li><span class="fn">virtual void <a href="#a815a3"><b>drawPopupPanel</b></a> ( QPainter * p, int x, int y, int w, int h, const QColorGroup &amp;, int lineWidth = 2, const QBrush * fill = 0 ) </span>
+<li><span class="fn">virtual void <a href="#456f43"><b>drawArrow</b></a> ( QPainter * p, Qt::ArrowType type, bool down, int x, int y, int w, int h, const QColorGroup &amp; g, bool enabled, const QBrush * fill = 0 ) </span>
+<li><span class="fn">virtual QSize <a href="#4a80ef"><b>exclusiveIndicatorSize</b></a> () const</span>
+<li><span class="fn">virtual void <a href="#dc5fc7"><b>drawExclusiveIndicator</b></a> ( QPainter * p, int x, int y, int w, int h, const QColorGroup &amp; g, bool on, bool down = FALSE, bool enabled = TRUE ) </span>
+<li><span class="fn">virtual void <a href="#c8a183"><b>drawExclusiveIndicatorMask</b></a> ( QPainter * p, int x, int y, int w, int h, bool on ) </span>
+<li><span class="fn">virtual QSize <a href="#9081f5"><b>indicatorSize</b></a> () const</span>
+<li><span class="fn">virtual void <a href="#26ad2f"><b>drawIndicator</b></a> ( QPainter * p, int x, int y, int w, int h, const QColorGroup &amp; g, int state, bool down = FALSE, bool enabled = TRUE ) </span>
+<li><span class="fn">virtual void <a href="#607b71"><b>drawIndicatorMask</b></a> ( QPainter * p, int x, int y, int w, int h, int state ) </span>
+<li><span class="fn">virtual void <a href="#efbcb0"><b>drawFocusRect</b></a> ( QPainter *, const QRect &amp;, const QColorGroup &amp;, const QColor * bg = 0, bool = FALSE ) </span>
+<li><span class="fn">virtual void <a href="#a34836"><b>drawComboButton</b></a> ( QPainter * p, int x, int y, int w, int h, const QColorGroup &amp; g, bool sunken = FALSE, bool editable = FALSE, bool enabled = TRUE, const QBrush * fill = 0 ) </span>
+<li><span class="fn">virtual QRect <a href="#126ddf"><b>comboButtonRect</b></a> ( int x, int y, int w, int h ) </span>
+<li><span class="fn">virtual QRect <a href="#9610e3"><b>comboButtonFocusRect</b></a> ( int x, int y, int w, int h ) </span>
+<li><span class="fn">virtual void <a href="#50f933"><b>drawComboButtonMask</b></a> ( QPainter * p, int x, int y, int w, int h ) </span>
+<li><span class="fn">virtual void <a href="#c1fef1"><b>drawPushButton</b></a> ( QPushButton * btn, QPainter * p ) </span>
+<li><span class="fn">virtual void <a href="#efd13f"><b>drawPushButtonLabel</b></a> ( QPushButton * btn, QPainter * p ) </span>
+<li><span class="fn">virtual void <a href="#8c0395"><b>getButtonShift</b></a> ( int &amp; x, int &amp; y ) </span>
+<li><span class="fn">virtual int <a href="#36cce5"><b>defaultFrameWidth</b></a> () const</span>
+<li><span class="fn">virtual void <a href="#ac70b8"><b>tabbarMetrics</b></a> ( const QTabBar *, int &amp;, int &amp;, int &amp; ) </span>
+<li><span class="fn">virtual void <a href="#4c83a5"><b>drawTab</b></a> ( QPainter *, const QTabBar *, QTab *, bool selected ) </span>
+<li><span class="fn">virtual void <a href="#238e32"><b>drawTabMask</b></a> ( QPainter *, const QTabBar *, QTab *, bool selected ) </span>
+<li><span class="fn">enum <b>ScrollControl</b> { AddLine = 0x1, SubLine = 0x2, AddPage = 0x4, SubPage = 0x8, First = 0x10, Last = 0x20, Slider = 0x40, NoScroll = 0x80 }</span>
+<li><span class="fn">virtual void <a href="#0a6e65"><b>scrollBarMetrics</b></a> ( const QScrollBar *, int &amp;, int &amp;, int &amp;, int &amp; ) </span>
+<li><span class="fn">virtual void <a href="#b563ef"><b>drawScrollBarControls</b></a> ( QPainter *, const QScrollBar *, int sliderStart, uint controls, uint activeControl ) </span>
+<li><span class="fn">virtual ScrollControl <b>scrollBarPointOver</b> ( const QScrollBar *, int sliderStart, const QPoint &amp; ) </span>
+<li><span class="fn">virtual int <a href="#be27f5"><b>sliderLength</b></a> () const</span>
+<li><span class="fn">virtual void <a href="#de3f78"><b>drawSlider</b></a> ( QPainter * p, int x, int y, int w, int h, const QColorGroup &amp; g, Orientation, bool tickAbove, bool tickBelow ) </span>
+<li><span class="fn">virtual void <a href="#1ba90d"><b>drawSliderMask</b></a> ( QPainter * p, int x, int y, int w, int h, Orientation, bool tickAbove, bool tickBelow ) </span>
+<li><span class="fn">virtual void <a href="#f4f947"><b>drawSliderGroove</b></a> ( QPainter * p, int x, int y, int w, int h, const QColorGroup &amp; g, QCOORD c, Orientation ) </span>
+<li><span class="fn">virtual void <a href="#e57f72"><b>drawSliderGrooveMask</b></a> ( QPainter * p, int x, int y, int w, int h, QCOORD c, Orientation ) </span>
+<li><span class="fn">virtual int <a href="#c9b46f"><b>maximumSliderDragDistance</b></a> () const</span>
+<li><span class="fn">virtual int <a href="#73c0f4"><b>splitterWidth</b></a> () const</span>
+<li><span class="fn">virtual void <a href="#b2fcc8"><b>drawSplitter</b></a> ( QPainter * p, int x, int y, int w, int h, const QColorGroup &amp; g, Orientation ) </span>
+<li><span class="fn">virtual void <b>drawCheckMark</b> ( QPainter * p, int x, int y, int w, int h, const QColorGroup &amp; g, bool act, bool dis ) </span>
+<li><span class="fn">virtual void <b>polishPopupMenu</b> ( QPopupMenu * ) </span>
+<li><span class="fn">virtual int <a href="#e5ceb7"><b>extraPopupMenuItemWidth</b></a> ( bool checkable, int maxpmw, QMenuItem * mi, const QFontMetrics &amp; fm ) </span>
+<li><span class="fn">virtual int <b>popupSubmenuIndicatorWidth</b> ( const QFontMetrics &amp; fm ) </span>
+<li><span class="fn">virtual int <b>popupMenuItemHeight</b> ( bool checkable, QMenuItem * mi, const QFontMetrics &amp; fm ) </span>
+<li><span class="fn">virtual void <b>drawPopupMenuItem</b> ( QPainter * p, bool checkable, int maxpmw, int tab, QMenuItem * mi, const QPalette &amp; pal, bool act, bool enabled, int x, int y, int w, int h ) </span>
+</ul>
+<hr><h2><a name="details"></a>Detailed Description</h2>
+Encapsulates common Look and Feel of a GUI.
+<p>
+While it is not possible to fully enumerate the look of graphic elements
+and the feel of widgets in a GUI, a large number of elements are common
+to many widgets.  The QStyle class allows the look of these elements to
+be modified across all widgets that use the QStyle methods.  It also
+provides two feel options - Motif and Windows.
+<p>In previous versions of Qt, the look and feel option for widgets
+was specified by a single value - the GUIStyle.  Starting with
+Qt 2.0, this notion has been expanded to allow the look to be
+specified by virtual drawing functions.
+<p>Derived classes may override some or all of the drawing functions
+to modify the look of all widgets which utilize those functions.
+<p>Examples:
+ <a href="themes-main-cpp.html#QStyle">themes/main.cpp</a>
+
+<hr><h2>Member Function Documentation</h2>
+<h3 class="fn"><a name="8dc97e"></a>QStyle::~QStyle () <code>[virtual]</code></h3>
+<p>Destructs the style.
+<h3 class="fn"><a href="qrect.html">QRect</a> <a name="159da3"></a>QStyle::buttonRect ( int x, int y, int w, int h ) <code>[virtual]</code></h3>
+<p>Returns the rectangle available for contents in a push
+button. Usually this is the entire rectangle but it may also be
+smaller when you think about rounded buttons.
+<p>Reimplemented in <a href="qplatinumstyle.html#048933">QPlatinumStyle</a>.
+<h3 class="fn"><a href="qrect.html">QRect</a> <a name="9610e3"></a>QStyle::comboButtonFocusRect ( int x, int y, int w, int h ) <code>[virtual]</code></h3>
+<p>Returns the rectangle used to draw the the focus rectangle in a combo box.
+<p>Reimplemented in <a href="qplatinumstyle.html#431d46">QPlatinumStyle</a>, <a href="qcommonstyle.html#957aa8">QCommonStyle</a> and <a href="qwindowsstyle.html#5ab529">QWindowsStyle</a>.
+<h3 class="fn"><a href="qrect.html">QRect</a> <a name="126ddf"></a>QStyle::comboButtonRect ( int x, int y, int w, int h ) <code>[virtual]</code></h3>
+<p>Returns the rectangle available for contents in a combo box
+button. Usually this is the entire rectangle without the nifty menu
+indicator, but it may also be smaller when you think about rounded
+buttons.
+<p>Reimplemented in <a href="qwindowsstyle.html#343747">QWindowsStyle</a>, <a href="qcommonstyle.html#9faf65">QCommonStyle</a> and <a href="qplatinumstyle.html#ba3d1e">QPlatinumStyle</a>.
+<h3 class="fn">int <a name="36cce5"></a>QStyle::defaultFrameWidth () const <code>[virtual]</code></h3>
+<p>The default frame width, usually 2.
+<p>Reimplemented in <a href="qcommonstyle.html#93d4f1">QCommonStyle</a> and <a href="qcdestyle.html#f8e819">QCDEStyle</a>.
+<h3 class="fn">void <a name="456f43"></a>QStyle::drawArrow ( <a href="qpainter.html">QPainter</a> * p, Qt::ArrowType type, bool down, int x, int y, int w, int h, const <a href="qcolorgroup.html">QColorGroup</a> &amp; g, bool enabled, const <a href="qbrush.html">QBrush</a> * fill = 0 ) <code>[virtual]</code></h3>
+<p>Draws a button indicating direction.
+<h3 class="fn">void <a name="49015f"></a>QStyle::drawBevelButton ( <a href="qpainter.html">QPainter</a> *, int, int, int, int, const <a href="qcolorgroup.html">QColorGroup</a> &amp;, bool = FALSE, const <a href="qbrush.html">QBrush</a> * = 0 ) <code>[virtual]</code></h3>
+<p>Draws a press-sensitive shape in the style of a bevel button.
+<p>Reimplemented in <a href="qmotifstyle.html#39ea93">QMotifStyle</a>, <a href="qwindowsstyle.html#d8d18d">QWindowsStyle</a> and <a href="qplatinumstyle.html#6a92c5">QPlatinumStyle</a>.
+<h3 class="fn">void <a name="864576"></a>QStyle::drawButton ( <a href="qpainter.html">QPainter</a> *, int, int, int, int, const <a href="qcolorgroup.html">QColorGroup</a> &amp;, bool = FALSE, const <a href="qbrush.html">QBrush</a> * = 0 ) <code>[virtual]</code></h3>
+<p>Draws a press-sensitive shape in the style of a full featured  push button.
+<p>Reimplemented in <a href="qplatinumstyle.html#86449b">QPlatinumStyle</a>, <a href="qmotifstyle.html#12d920">QMotifStyle</a> and <a href="qwindowsstyle.html#eccec8">QWindowsStyle</a>.
+<h3 class="fn">void <a name="da4c15"></a>QStyle::drawButtonMask ( <a href="qpainter.html">QPainter</a> *, int, int, int, int ) <code>[virtual]</code></h3>
+<p>Draw the mask of a pushbutton. Useful if a rounded pushbuttons needs
+to be transparent because the style uses a fancy background pixmap.
+<h3 class="fn">void <a name="a34836"></a>QStyle::drawComboButton ( <a href="qpainter.html">QPainter</a> * p, int x, int y, int w, int h, const <a href="qcolorgroup.html">QColorGroup</a> &amp; g, bool sunken = FALSE, bool editable = FALSE, bool enabled = TRUE, const <a href="qbrush.html">QBrush</a> * fill = 0 ) <code>[virtual]</code></h3>
+<p>Draws a press-sensitive shape in the style of a combo box or menu button.
+<p>Reimplemented in <a href="qplatinumstyle.html#2e207e">QPlatinumStyle</a>, <a href="qwindowsstyle.html#5a9d21">QWindowsStyle</a> and <a href="qcommonstyle.html#12020a">QCommonStyle</a>.
+<h3 class="fn">void <a name="50f933"></a>QStyle::drawComboButtonMask ( <a href="qpainter.html">QPainter</a> * p, int x, int y, int w, int h ) <code>[virtual]</code></h3>
+<p>Draw the mask of a combo box button. Useful if a rounded buttons
+needs to be transparent because the style uses a fancy background
+pixmap.
+<p>Reimplemented in <a href="qcommonstyle.html#1e7e35">QCommonStyle</a>.
+<h3 class="fn">void <a name="dc5fc7"></a>QStyle::drawExclusiveIndicator ( <a href="qpainter.html">QPainter</a> *, int x, int y, int w, int h, const <a href="qcolorgroup.html">QColorGroup</a> &amp;, bool on, bool down = FALSE, bool enabled = TRUE ) <code>[virtual]</code></h3>
+<p>Draws a mark indicating the state of an exclusive choice.
+<p>Reimplemented in <a href="qwindowsstyle.html#df8053">QWindowsStyle</a>, <a href="qmotifstyle.html#e94888">QMotifStyle</a>, <a href="qplatinumstyle.html#d6dece">QPlatinumStyle</a> and <a href="qcdestyle.html#608ede">QCDEStyle</a>.
+<h3 class="fn">void <a name="c8a183"></a>QStyle::drawExclusiveIndicatorMask ( <a href="qpainter.html">QPainter</a> * p, int x, int y, int w, int h, bool ) <code>[virtual]</code></h3>
+<p>Draws the mask of a mark indicating the state of an exclusive choice.
+<p>Reimplemented in <a href="qmotifstyle.html#69eeb2">QMotifStyle</a> and <a href="qwindowsstyle.html#5eb244">QWindowsStyle</a>.
+<h3 class="fn">void <a name="efbcb0"></a>QStyle::drawFocusRect ( <a href="qpainter.html">QPainter</a> * p, const <a href="qrect.html">QRect</a> &amp; r, const <a href="qcolorgroup.html">QColorGroup</a> &amp; g, const <a href="qcolor.html">QColor</a> * = 0, bool atBorder = FALSE ) <code>[virtual]</code></h3>
+<p>Draws a mark indicating keyboard focus is on <em>r. atBorder</em>
+indicates whether the focus rectangle is at the border of an item
+(for example an item in a listbox). Certain styles (Motif style as
+the most prominent example) might have to shrink the rectangle a bit
+in that case to ensure that the focus rectangle is visible at all.
+<p>Reimplemented in <a href="qwindowsstyle.html#153389">QWindowsStyle</a> and <a href="qmotifstyle.html#1a30e7">QMotifStyle</a>.
+<h3 class="fn">void <a name="26ad2f"></a>QStyle::drawIndicator ( <a href="qpainter.html">QPainter</a> *, int, int, int, int, const <a href="qcolorgroup.html">QColorGroup</a> &amp;, int state, bool = FALSE, bool = TRUE ) <code>[virtual]</code></h3>
+<p>Draws a mark indicating the state of a choice.
+<p>Reimplemented in <a href="qcdestyle.html#dfa1c7">QCDEStyle</a>, <a href="qmotifstyle.html#5d7f8c">QMotifStyle</a>, <a href="qplatinumstyle.html#6312ab">QPlatinumStyle</a> and <a href="qwindowsstyle.html#16093e">QWindowsStyle</a>.
+<h3 class="fn">void <a name="607b71"></a>QStyle::drawIndicatorMask ( <a href="qpainter.html">QPainter</a> * p, int x, int y, int w, int h, int ) <code>[virtual]</code></h3>
+<p>Draws the mask of a mark indicating the state of a choice.
+<p>Reimplemented in <a href="qplatinumstyle.html#c550dc">QPlatinumStyle</a>.
+<h3 class="fn">void <a name="16585d"></a>QStyle::drawItem ( <a href="qpainter.html">QPainter</a> * p, int x, int y, int w, int h, int flags, const <a href="qcolorgroup.html">QColorGroup</a> &amp; g, bool enabled, const <a href="qpixmap.html">QPixmap</a> * pixmap, const <a href="qstring.html">QString</a> &amp; text, int len=-1, const <a href="qcolor.html">QColor</a> * penColor = 0 ) <code>[virtual]</code></h3>
+<p>Draw text or a pixmap in an area.
+<h3 class="fn">void <a name="46bc88"></a>QStyle::drawPanel ( <a href="qpainter.html">QPainter</a> * p, int x, int y, int w, int h, const <a href="qcolorgroup.html">QColorGroup</a> &amp; g, bool sunken=FALSE, int lineWidth = 1, const <a href="qbrush.html">QBrush</a> * fill = 0 ) <code>[virtual]</code></h3>
+<p>Draws a panel to separate parts of the visual interface.
+<p>Reimplemented in <a href="qwindowsstyle.html#2f3d48">QWindowsStyle</a>.
+<h3 class="fn">void <a name="a815a3"></a>QStyle::drawPopupPanel ( <a href="qpainter.html">QPainter</a> * p, int x, int y, int w, int h, const <a href="qcolorgroup.html">QColorGroup</a> &amp; cg, int lineWidth = 2, const <a href="qbrush.html">QBrush</a> * fill = 0 ) <code>[virtual]</code></h3>
+<p>Draws a panel suitable as frame for popup windows.
+<p>Reimplemented in <a href="qwindowsstyle.html#5e4f7b">QWindowsStyle</a> and <a href="qplatinumstyle.html#2633f0">QPlatinumStyle</a>.
+<h3 class="fn">void <a name="c1fef1"></a>QStyle::drawPushButton ( <a href="qpushbutton.html">QPushButton</a> *, <a href="qpainter.html">QPainter</a> * ) <code>[virtual]</code></h3>
+<p>Draws a pushbutton. This function will normally call <a href="qstyle.html#864576">drawButton</a>()
+with arguments according to the current state of the pushbutton.
+<p>See also:  <a href="qstyle.html#efd13f">drawPushButtonLabel</a>() and <a href="qpushbutton.html#64b0ff">QPushButton::drawButton</a>().
+<p>Reimplemented in <a href="qplatinumstyle.html#f7bd19">QPlatinumStyle</a>, <a href="qmotifstyle.html#7ea169">QMotifStyle</a> and <a href="qwindowsstyle.html#1920eb">QWindowsStyle</a>.
+<h3 class="fn">void <a name="efd13f"></a>QStyle::drawPushButtonLabel ( <a href="qpushbutton.html">QPushButton</a> *, <a href="qpainter.html">QPainter</a> * ) <code>[virtual]</code></h3>
+<p>Draws the label of a pushbutton. This function will normally call
+<a href="qstyle.html#16585d">drawItem</a>() with arguments according to the current state of the
+pushbutton.
+<p>See also:  <a href="qstyle.html#c1fef1">drawPushButton</a>() and <a href="qpushbutton.html#b2ee67">QPushButton::drawButtonLabel</a>().
+<p>Reimplemented in <a href="qcommonstyle.html#7eef53">QCommonStyle</a> and <a href="qplatinumstyle.html#7ab64e">QPlatinumStyle</a>.
+<h3 class="fn">void <a name="57a289"></a>QStyle::drawRect ( <a href="qpainter.html">QPainter</a> * p, int x, int y, int w, int h, const <a href="qcolor.html">QColor</a> &amp; c, int lineWidth = 1, const <a href="qbrush.html">QBrush</a> * fill = 0 ) <code>[virtual]</code></h3>
+<p>Draws a simple rectangle to separate parts of the visual interface.
+<h3 class="fn">void <a name="cfdc48"></a>QStyle::drawRectStrong ( <a href="qpainter.html">QPainter</a> * p, int x, int y, int w, int h, const <a href="qcolorgroup.html">QColorGroup</a> &amp; g, bool sunken=FALSE, int lineWidth = 1, int midLineWidth = 0, const <a href="qbrush.html">QBrush</a> * fill = 0 ) <code>[virtual]</code></h3>
+<p>Draws an emphasized rectangle to strongly separate parts of the visual interface.
+<h3 class="fn">void <a name="b563ef"></a>QStyle::drawScrollBarControls ( <a href="qpainter.html">QPainter</a> *, const <a href="qscrollbar.html">QScrollBar</a> *, int sliderStart, uint controls, uint activeControl ) <code>[virtual]</code></h3>
+<p>Draws the given scrollbar. Used internally by QScrollbar.
+<p>The controls are either ADD_LINE, SUB_LINE, ADD_PAGE, SUB_PAGE,
+FIRST, LAST, SLIDER or NONE
+<p>Controls is a combination of these, activeControl is the control
+currently pressed down.
+<p>Reimplemented in <a href="qplatinumstyle.html#883a90">QPlatinumStyle</a>, <a href="qmotifstyle.html#9e6276">QMotifStyle</a> and <a href="qwindowsstyle.html#71a4ec">QWindowsStyle</a>.
+<h3 class="fn">void <a name="8ad22d"></a>QStyle::drawSeparator ( <a href="qpainter.html">QPainter</a> * p, int x1, int y1, int x2, int y2, const <a href="qcolorgroup.html">QColorGroup</a> &amp; g, bool sunken = TRUE, int lineWidth = 1, int midLineWidth = 0 ) <code>[virtual]</code></h3>
+<p>Draws a line to separate parts of the visual interface.
+<h3 class="fn">void <a name="de3f78"></a>QStyle::drawSlider ( <a href="qpainter.html">QPainter</a> * p, int x, int y, int w, int h, const <a href="qcolorgroup.html">QColorGroup</a> &amp; g, <a href="qt.html#Orientation">Orientation</a>, bool tickAbove, bool tickBelow ) <code>[virtual]</code></h3>
+<p>Draws a slider.
+<p>Reimplemented in <a href="qplatinumstyle.html#e37184">QPlatinumStyle</a>, <a href="qmotifstyle.html#9579fd">QMotifStyle</a> and <a href="qwindowsstyle.html#17e755">QWindowsStyle</a>.
+<h3 class="fn">void <a name="f4f947"></a>QStyle::drawSliderGroove ( <a href="qpainter.html">QPainter</a> * p, int x, int y, int w, int h, const <a href="qcolorgroup.html">QColorGroup</a> &amp; g, QCOORD c, <a href="qt.html#Orientation">Orientation</a> ) <code>[virtual]</code></h3>
+<p>Draws a slider groove.
+<p>Reimplemented in <a href="qwindowsstyle.html#f8f327">QWindowsStyle</a>, <a href="qplatinumstyle.html#46eb4f">QPlatinumStyle</a> and <a href="qmotifstyle.html#013e15">QMotifStyle</a>.
+<h3 class="fn">void <a name="e57f72"></a>QStyle::drawSliderGrooveMask ( <a href="qpainter.html">QPainter</a> * p, int x, int y, int w, int h, QCOORD c, <a href="qt.html#Orientation">Orientation</a> ) <code>[virtual]</code></h3>
+<p>Draws the mask of a slider groove.
+<p>Reimplemented in <a href="qcommonstyle.html#2898f9">QCommonStyle</a>.
+<h3 class="fn">void <a name="1ba90d"></a>QStyle::drawSliderMask ( <a href="qpainter.html">QPainter</a> * p, int x, int y, int w, int h, <a href="qt.html#Orientation">Orientation</a>, bool, bool ) <code>[virtual]</code></h3>
+<p>Draws the mask of a slider.
+<p>Reimplemented in <a href="qwindowsstyle.html#e6468e">QWindowsStyle</a> and <a href="qcommonstyle.html#189109">QCommonStyle</a>.
+<h3 class="fn">void <a name="b2fcc8"></a>QStyle::drawSplitter ( <a href="qpainter.html">QPainter</a> * p, int x, int y, int w, int h, const <a href="qcolorgroup.html">QColorGroup</a> &amp; g, <a href="qt.html#Orientation">Orientation</a> orient ) <code>[virtual]</code></h3>
+<p>Draws a splitter handle in the rectangle described by <em>x, y, w, h</em> using painter <em>p</em> and color group <em>g.</em> The orientation
+is <em>orient.</em>
+<p>See also:  <a href="qstyle.html#73c0f4">splitterWidth</a>().
+<p>Reimplemented in <a href="qmotifstyle.html#8f1384">QMotifStyle</a> and <a href="qwindowsstyle.html#b1f4df">QWindowsStyle</a>.
+<h3 class="fn">void <a name="4c83a5"></a>QStyle::drawTab ( <a href="qpainter.html">QPainter</a> * p, const <a href="qtabbar.html">QTabBar</a> * tb, <a href="qtab.html">QTab</a> * t, bool selected ) <code>[virtual]</code></h3>
+<p>TODO.
+<p>Reimplemented in <a href="qmotifstyle.html#fa8397">QMotifStyle</a>, <a href="qwindowsstyle.html#c1bada">QWindowsStyle</a> and <a href="qcommonstyle.html#68a66c">QCommonStyle</a>.
+<h3 class="fn">void <a name="238e32"></a>QStyle::drawTabMask ( <a href="qpainter.html">QPainter</a> * p, const <a href="qtabbar.html">QTabBar</a> * tb, <a href="qtab.html">QTab</a> * t, bool selected ) <code>[virtual]</code></h3>
+<p>TODO.
+<p>Reimplemented in <a href="qwindowsstyle.html#38671a">QWindowsStyle</a>, <a href="qmotifstyle.html#2e3c16">QMotifStyle</a> and <a href="qcommonstyle.html#a53f94">QCommonStyle</a>.
+<h3 class="fn">void <a name="4c6e10"></a>QStyle::drawToolButton ( <a href="qpainter.html">QPainter</a> * p, int x, int y, int w, int h, const <a href="qcolorgroup.html">QColorGroup</a> &amp; g, bool sunken = FALSE, const <a href="qbrush.html">QBrush</a> * fill = 0 ) <code>[virtual]</code></h3>
+<p>Draws a press-sensitive shape in the style of a toolbar button
+<p>The default implementation calls <a href="qstyle.html#49015f">drawBevelButton</a>()
+<p>See also:  <a href="qstyle.html#49015f">drawBevelButton</a>().
+<h3 class="fn"><a href="qsize.html">QSize</a> <a name="4a80ef"></a>QStyle::exclusiveIndicatorSize () const <code>[virtual]</code></h3>
+<p>Returns the size of the mark used to indicate exclusive choice.
+<p>Reimplemented in <a href="qplatinumstyle.html#d18618">QPlatinumStyle</a>, <a href="qmotifstyle.html#560f08">QMotifStyle</a> and <a href="qwindowsstyle.html#29deca">QWindowsStyle</a>.
+<h3 class="fn">int <a name="e5ceb7"></a>QStyle::extraPopupMenuItemWidth ( bool checkable, int maxpmw, QMenuItem * mi, const <a href="qfontmetrics.html">QFontMetrics</a> &amp; fm ) <code>[virtual]</code></h3>
+<p>Returns the extra width of a menu item <em>mi,</em> that means all extra
+pixels besides the space the menu item text requires. <em>checkable</em>
+defines, whether the menu has a check column. <em>maxpmw</em> is the
+maximium width of all iconsets within a check column and <em>fm</em>
+defines the font metrics used to draw the label. This is
+particulary useful to calculate a suitable size for a submenu
+indicator or the column separation, including the tab column used to
+indicate item accelerators.
+<p>Reimplemented in <a href="qplatinumstyle.html#3cf424">QPlatinumStyle</a> and <a href="qwindowsstyle.html#0af58a">QWindowsStyle</a>.
+<h3 class="fn">void <a name="8c0395"></a>QStyle::getButtonShift ( int &amp; x, int &amp; y ) <code>[virtual]</code></h3>
+<p>Some GUI styles shift the contents of a button when the button is down.
+The default implementation returns 0 for both x and y.
+<p>Reimplemented in <a href="qwindowsstyle.html#d9c952">QWindowsStyle</a> and <a href="qcommonstyle.html#737715">QCommonStyle</a>.
+<h3 class="fn">GUIStyle <a name="373117"></a>QStyle::guiStyle () const</h3>
+<p>Returns an indicator to the additional "feel" component of a
+style. Current supported values are Windows and Motif.
+<h3 class="fn"><a href="qsize.html">QSize</a> <a name="9081f5"></a>QStyle::indicatorSize () const <code>[virtual]</code></h3>
+<p>Returns the size of the mark used to indicate choice.
+<p>Reimplemented in <a href="qplatinumstyle.html#18d6cf">QPlatinumStyle</a>, <a href="qwindowsstyle.html#085482">QWindowsStyle</a> and <a href="qmotifstyle.html#08c3da">QMotifStyle</a>.
+<h3 class="fn"><a href="qrect.html">QRect</a> <a name="8a6e92"></a>QStyle::itemRect ( <a href="qpainter.html">QPainter</a> * p, int x, int y, int w, int h, int flags, bool enabled, const <a href="qpixmap.html">QPixmap</a> * pixmap, const <a href="qstring.html">QString</a> &amp; text, int len=-1 ) <code>[virtual]</code></h3>
+<p>Returns the appropriate area within a rectangle in which to
+draw text or a pixmap.
+<h3 class="fn">int <a name="c9b46f"></a>QStyle::maximumSliderDragDistance () const <code>[virtual]</code></h3>
+<p>Some feels require the scrollbar or other sliders to jump back to
+the original position when the mouse pointer is too far away while
+dragging.
+<p>This behavior can be customized with this function. The default is -1
+(no jump back) while Windows requires 20 (weird jump back).
+<p>Reimplemented in <a href="qplatinumstyle.html#495ca3">QPlatinumStyle</a>, <a href="qcommonstyle.html#86217a">QCommonStyle</a> and <a href="qwindowsstyle.html#3255b7">QWindowsStyle</a>.
+<h3 class="fn">void <a name="e4606f"></a>QStyle::polish ( <a href="qapplication.html">QApplication</a> * ) <code>[virtual]</code></h3>
+<p>Late initialization of the <a href="qapplication.html">QApplication</a> object.
+<p>See also:  unPolish.
+<p>Reimplemented in <a href="qmotifstyle.html#bced3c">QMotifStyle</a>.
+<h3 class="fn">void <a name="45065e"></a>QStyle::polish ( <a href="qpalette.html">QPalette</a> &amp; ) <code>[virtual]</code></h3>
+<p>The style may have certain requirements for color palettes.  In this
+function it has the chance to change the palette according to these
+requirements.
+<p>See also:  unPolish, <a href="qpalette.html">QPalette</a> and <a href="qapplication.html#9604e2">QApplication::setPalette</a>().
+<h3 class="fn">void <a name="dff902"></a>QStyle::polish ( <a href="qwidget.html">QWidget</a> * ) <code>[virtual]</code></h3>
+<p>Initializes the appearance of a widget.
+<p>This function is called for every widget, after it has been fully
+created just <em>before</em> it is shown the very first time.
+<p>Reasonable actions in this function might be to set the
+<a href="qwidget.html#500633"></a> of the widget
+and the background pixmap, for example.  Unreasonable use
+would be setting the geometry!
+<p>The <a href="qobject.html#ac17a9">QWidget::inherits</a>() function may provide enough information to
+allow class-specific customizations.  But be careful not to hard-code
+things too much, as new QStyle sub-classes will be expected to work
+reasonably with all current <em>and future</em> widgets.
+<p>See also:  <a href="qstyle.html#66dbbf">unPolish</a>(<a href="qwidget.html">QWidget</a>*).
+<h3 class="fn">void <a name="0a6e65"></a>QStyle::scrollBarMetrics ( const <a href="qscrollbar.html">QScrollBar</a> *, int &amp;, int &amp;, int &amp;, int &amp; ) <code>[virtual]</code></h3>
+<p>Returns the metrics of the passed scrollbar: sliderMin, sliderMax,
+sliderLength and buttonDim.
+<p>Reimplemented in <a href="qplatinumstyle.html#83ed69">QPlatinumStyle</a>, <a href="qwindowsstyle.html#3c54eb">QWindowsStyle</a> and <a href="qmotifstyle.html#5e4323">QMotifStyle</a>.
+<h3 class="fn">int <a name="be27f5"></a>QStyle::sliderLength () const <code>[virtual]</code></h3>
+<p>The length of a slider.
+<p>Reimplemented in <a href="qplatinumstyle.html#df582e">QPlatinumStyle</a>, <a href="qmotifstyle.html#39c8e4">QMotifStyle</a> and <a href="qwindowsstyle.html#54c4d6">QWindowsStyle</a>.
+<h3 class="fn">int <a name="73c0f4"></a>QStyle::splitterWidth () const <code>[virtual]</code></h3>
+<p>Returns the width of a splitter handle.
+<p>See also:  <a href="qstyle.html#b2fcc8">drawSplitter</a>().
+<p>Reimplemented in <a href="qmotifstyle.html#4a8888">QMotifStyle</a> and <a href="qwindowsstyle.html#3cd6c9">QWindowsStyle</a>.
+<h3 class="fn">void <a name="ac70b8"></a>QStyle::tabbarMetrics ( const <a href="qtabbar.html">QTabBar</a> * t, int &amp; hframe, int &amp; vframe, int &amp; overlap ) <code>[virtual]</code></h3>
+<p>TODO.
+<p>Reimplemented in <a href="qmotifstyle.html#62cfc0">QMotifStyle</a>, <a href="qwindowsstyle.html#247390">QWindowsStyle</a> and <a href="qcommonstyle.html#19554c">QCommonStyle</a>.
+<h3 class="fn">void <a name="66dbbf"></a>QStyle::unPolish ( <a href="qapplication.html">QApplication</a> * ) <code>[virtual]</code></h3>
+<p>Redo the application polish
+<p>See also:  polish.
+<h3 class="fn">void <a name="a9e34a"></a>QStyle::unPolish ( <a href="qwidget.html">QWidget</a> * ) <code>[virtual]</code></h3>
+<p>Undos the initializataion of a widget's appearance
+<p>This function is the counterpart to polish. Is is called for every
+polished widget when the style is dynamically changed. The former
+style has to un-polish its settings before the new style can polish
+them again.
+<p>See also:  <a href="qstyle.html#45065e">polish</a>(<a href="qwidget.html">QWidget</a>*).
+<hr><p>
+Search the documentation, FAQ, qt-interest archive and more (uses
+<a href="http://www.troll.no">www.troll.no</a>):<br>
+<form method=post action="http://www.troll.no/search.cgi">
+<input type=hidden name="version" value="2.00"><nobr>
+<input size="50" name="search"><input type=submit value="Search">
+</nobr></form><hr><p>
+This file is part of the <a href="index.html">Qt toolkit</a>,
+copyright &copy; 1995-99
+<a href="http://www.troll.no">Troll Tech</a>, all rights reserved.<p><address><hr><div align="center">
+<table width="100%" cellspacing="0" border="0"><tr>
+<td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.00</div>
+</table></div></address></body></html>

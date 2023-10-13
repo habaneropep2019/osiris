@@ -1,39 +1,27 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qmenudata.h   2.3.2   edited 2001-01-26 $
+** $Id: qmenudata.h,v 2.33 1999/06/17 20:07:42 agulbra Exp $
 **
 ** Definition of QMenuData class
 **
 ** Created : 941128
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
-** This file is part of the widgets module of the Qt GUI Toolkit.
+** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses may use this file in accordance with the Qt Commercial License
-** Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
+*****************************************************************************/
 
 #ifndef QMENUDATA_H
 #define QMENUDATA_H
@@ -47,19 +35,14 @@
 
 #endif // QT_H
 
-#ifndef QT_NO_MENUDATA
-
 class QPopupMenu;
 class QMenuDataData;
-class QObject;
 
 #if defined(INCLUDE_MENUITEM_DEF)
 
 #include "qstring.h"
 #include "qsignal.h"
-#include "qfont.h"
 
-class QCustomMenuItem;
 class QMenuItemData;
 
 class Q_EXPORT QMenuItem			// internal menu item class
@@ -75,8 +58,6 @@ public:
     QString	whatsThis()	const	{ return whatsthis_data; }
     QPixmap    *pixmap()	const	{ return pixmap_data; }
     QPopupMenu *popup()		const	{ return popup_menu; }
-    QWidget *widget()		const	{ return widget_item; }
-    QCustomMenuItem *custom()	const;
     int		key()		const	{ return accel_key; }
     QSignal    *signal()	const	{ return signal_data; }
     bool	isSeparator()	const	{ return is_separator; }
@@ -95,7 +76,7 @@ private:
     QString	whatsthis_data;			// item Whats This help text
     QPixmap    *pixmap_data;			// item pixmap
     QPopupMenu *popup_menu;			// item popup menu
-    QWidget    *widget_item;				// widget menu item
+    QWidget    *widget;				// widget menu item
     int		accel_key;			// accelerator key (state|ascii)
     QSignal    *signal_data;			// connection
     uint	is_separator : 1;		// separator flag
@@ -103,8 +84,6 @@ private:
     uint	is_checked   : 1;		// checked flag
     uint	is_dirty     : 1;		// dirty (update) flag
     QMenuItemData* d;
-
-    QMenuItemData* extra();
 
 private:	// Disabled copy constructor and operator=
 #if defined(Q_DISABLE_COPY)
@@ -124,21 +103,6 @@ class QMenuItemList;
 class QPixmap;
 
 #endif // INCLUDE_MENUITEM_TEXT
-
-
-
-class Q_EXPORT QCustomMenuItem : public Qt
-{
-public:
-    QCustomMenuItem();
-    virtual ~QCustomMenuItem();
-    virtual bool fullSpan() const;
-    virtual bool isSeparator() const;
-    virtual void setFont( const QFont& font );
-    virtual void paint( QPainter* p, const QColorGroup& cg, bool act,
-			bool enabled, int x, int y, int w, int h ) = 0;
-    virtual QSize sizeHint() = 0;
-};
 
 
 class Q_EXPORT QMenuData			// menu data class
@@ -190,13 +154,9 @@ public:
 			    const QPixmap &pixmap, QPopupMenu *popup,
 			    int id=-1, int index=-1 );
 
-    int		insertItem( QWidget* widget, int id=-1, int index=-1 );
-
-    int		insertItem( const QIconSet& icon, QCustomMenuItem* custom, int id=-1, int index=-1 );
-    int		insertItem( QCustomMenuItem* custom, int id=-1, int index=-1 );
 
 
-    int		insertSeparator( int index=-1 );
+    void	insertSeparator( int index=-1 );
 
     void	removeItem( int id )		{ removeItemAt(indexOf(id)); }
     void	removeItemAt( int index );
@@ -240,13 +200,8 @@ public:
     bool	disconnectItem( int id,
 				const QObject *receiver, const char* member );
 
-    bool	setItemParameter( int id, int param );
-    int	itemParameter( int id ) const;
-
     QMenuItem  *findItem( int id )	const;
     QMenuItem  *findItem( int id, QMenuData ** parent )	const;
-
-    void activateItemAt( int index );
 
 protected:
     int		   actItem;
@@ -257,7 +212,6 @@ protected:
     uint	   badSize	: 1;
     uint	   mouseBtDn	: 1;
     uint	avoid_circularity : 1;
-    uint 	actItemDown : 1;
     virtual void   menuContentsChanged();
     virtual void   menuStateChanged();
     virtual void   menuInsPopup( QPopupMenu * );
@@ -267,7 +221,7 @@ protected:
 
 private:
     int		insertAny( const QString *, const QPixmap *, QPopupMenu *,
-			   const QIconSet*, int, int, QWidget* = 0, QCustomMenuItem* = 0);
+			   const QIconSet*, int, int );
     void	removePopup( QPopupMenu * );
     virtual void	setAllDirty( bool );
     void	changeItemIconSet( int id, const QIconSet &icon );
@@ -281,7 +235,5 @@ private:	// Disabled copy constructor and operator=
 #endif
 };
 
-
-#endif // QT_NO_MENUDATA
 
 #endif // QMENUDATA_H

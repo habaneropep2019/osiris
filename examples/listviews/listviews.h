@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: qt/examples/listviews/listviews.h   2.3.2   edited 2001-01-26 $
+** $Id: listviews.h,v 1.3 1999/06/21 07:01:37 reggie Exp $
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -23,7 +23,6 @@ class QLabel;
 class QPainter;
 class QColorGroup;
 class QObjectList;
-class QPopupMenu;
 
 // -----------------------------------------------------------------
 
@@ -31,7 +30,7 @@ class MessageHeader
 {
 public:
     MessageHeader( const QString &_sender, const QString &_subject, const QDateTime &_datetime )
-	: msender( _sender ), msubject( _subject ), mdatetime( _datetime )
+        : msender( _sender ), msubject( _subject ), mdatetime( _datetime )
     {}
 
     MessageHeader( const MessageHeader &mh );
@@ -53,14 +52,14 @@ class Message
 {
 public:
     enum State { Read = 0,
-		 Unread};
+                 Unread};
 
     Message( const MessageHeader &mh, const QString &_body )
-	: mheader( mh ), mbody( _body ), mstate( Unread )
+        : mheader( mh ), mbody( _body ), mstate( Unread )
     {}
 
     Message( const Message &m )
-	: mheader( m.mheader ), mbody( m.mbody ), mstate( m.mstate )
+        : mheader( m.mheader ), mbody( m.mbody ), mstate( m.mstate )
     {}
 
     MessageHeader header() { return mheader; }
@@ -126,7 +125,7 @@ public:
     MessageListItem( QListView *parent, Message *m );
 
     virtual void paintCell( QPainter *p, const QColorGroup &cg,
-			    int column, int width, int alignment );
+                           int column, int width, int alignment );
 
     Message *message() { return myMessage; }
 
@@ -153,14 +152,12 @@ protected:
 
     QListView *messages, *folders;
     QLabel *message;
-    QPopupMenu* menu;
 
     QList<Folder> lstFolders;
 
 protected slots:
     void slotFolderChanged( QListViewItem* );
-    void slotMessageChanged();
-    void slotRMB( QListViewItem*, const QPoint &, int );
+    void slotMessageChanged( QListViewItem* );
 
 };
 

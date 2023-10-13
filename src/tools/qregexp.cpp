@@ -1,79 +1,59 @@
 /****************************************************************************
-** $Id: qt/src/tools/qregexp.cpp   2.3.2   edited 2001-10-14 $
+** $Id: qregexp.cpp,v 2.32 1999/06/10 14:48:04 warwick Exp $
 **
 ** Implementation of QRegExp class
 **
 ** Created : 950126
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
-** This file is part of the tools module of the Qt GUI Toolkit.
+** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses may use this file in accordance with the Qt Commercial License
-** Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
+*****************************************************************************/
 
 #include "qregexp.h"
 #include <ctype.h>
 #include <stdlib.h>
 
-// NOT REVISED
 /*!
   \class QRegExp qregexp.h
   \ingroup tools
   \ingroup misc
-  \brief The QRegExp class provides pattern matching using regular
-  expressions or wildcards.
+  \brief The QRegExp class provides pattern matching using regular expressions or wildcards.
 
+  
   QRegExp knows these regexp primitives:
   <ul plain>
   <li><dfn>c</dfn> matches the character 'c'
   <li><dfn>.</dfn> matches any character
-  <li><dfn>^</dfn> matches start of input
+  <li><dfn>^</dfn> matches start of input (except [^x] which matches NOT [x])
   <li><dfn>$</dfn>  matches end of input
-  <li><dfn>[]</dfn> matches a defined set of characters - see below.
+  <li><dfn>[]</dfn> matches a set of characters, for example [a-z0-9_]
   <li><dfn>a*</dfn> matches a sequence of zero or more a's
   <li><dfn>a+</dfn> matches a sequence of one or more a's
   <li><dfn>a?</dfn> matches an optional a
-  <li><dfn>\c</dfn> escape code for matching special characters such
-  as \, [, *, +, . etc.
+  <li><dfn>\c</dfn> escape code for matching special characters like \, [, *, +, . etc.
+  <li><dfn>\b</dfn> matches the BELL character (7)
   <li><dfn>\t</dfn> matches the TAB character (9)
   <li><dfn>\n</dfn> matches newline (10)
   <li><dfn>\r</dfn> matches return (13)
-  <li><dfn>\s</dfn> matches a white space (defined as any character
-  for which QChar::isSpace() returns TRUE. This includes at least
-  ASCII characters 9 (TAB), 10 (LF), 11 (VT), 12(FF), 13 (CR) and 32
-  (Space)).
-  <li><dfn>\d</dfn> matches a digit (defined as any character for
-  which QChar::isDigit() returns TRUE. This includes at least ASCII
-  characters '0'-'9').
-  <li><dfn>\x1f6b</dfn> matches the character with unicode point U1f6b
-  (hexadecimal 1f6b). \x0012 will match the ASCII/Latin1 character
-  0x12 (18 decimal, 12 hexadecimal).
-  <li><dfn>\022</dfn> matches the ASCII/Latin1 character 022 (18
-  decimal, 22 octal).
+  <li><dfn>\s</dfn> matches white space (defined as any character
+  where QChar::isSpace() returns TRUE. This includes ASCII characters
+  9 (TAB), 10 (LF), 11 (VT), 12(FF), 13 (CR), and 32 (Space)).
+  <li><dfn>\x12</dfn> matches the character 0x12 (18 decimal, 12 hexadecimal).
+  <li><dfn>\022</dfn> matches the character 022 (18 decimal, 22 octal).
   </ul>
 
   In wildcard mode, it only knows four primitives:
@@ -81,43 +61,22 @@
   <li><dfn>c</dfn> matches the character 'c'
   <li><dfn>?</dfn> matches any character
   <li><dfn>*</dfn> matches any sequence of characters
-  <li><dfn>[]</dfn> matches a defined set of characters - see below.
+  <li><dfn>[]</dfn> matches a defined set of characters,
+    e.g. [a-zA-Z0-9\.] matches upper and lower case ASCII letters, digits,
+    and dot, and [^z] matches everything except lower-case z.
   </ul>
 
   QRegExp supports Unicode both in the pattern strings and in the
   strings to be matched.
 
-  When writing regular expressions in C++ code, remember that C++
-  processes \ characters.  So in order to match e.g. a "." character,
-  you must write "\\." in C++ source, not "\.".
+  When writing regular expressions in C++ code, remember that the C++
+  preprocessor processes \ characters.  So in order to match e.g. a "."
+  character, you must write "\\." in C++ source, not "\.".
 
-  A character set matches a defined set of characters. For example,
-  [BSD] matches any of 'B', 'D' and 'S'. Within a character set, the
-  special characters '.', '*', '?', '^', '$', '+' and '[' lose their
-  special meanings. The following special characters apply:
-  <ul plain>
-  <li><dfn>^</dfn> When placed first in the list, changes the
-  character set to match any character \e not in the list. To include
-  the character '^' itself in the set, escape it or place it anywhere
-  but first.
-  <li><dfn>-</dfn> Defines a range of characters. To include the
-  character '-' itself in the set, escape it or place it last.
-  <li><dfn>]</dfn> Ends the character set definition. To include the
-  character ']' itself in the set, escape it or place it first (but
-  after the negation operator '^', if present)
-  </ul>
-  Thus, [a-zA-Z0-9.] matches upper and lower case ASCII letters,
-  digits and dot; and [^\s] matches everything except white space.
-
-  \bug Case insensitive matching is not supported for non-ASCII/Latin1
-  (non-8bit) characters. Any character with a non-zero QChar.row() is
+  \bug Case insensitive matching is not supported for non-ASCII
+  (non-8bit) characters. Any charcter with a non-zero QChar.row() is
   matched case sensitively even if the QRegExp is in case insensitive
   mode.
-
-  \note In Qt 3.0, the language of regular expressions will contain
-  five more special characters, namely '(', ')', '{', '|' and '}'. To
-  ease porting, it's a good idea to escape these characters with a
-  backslash in all the regular expressions you'll write from now on.
 */
 
 
@@ -129,15 +88,14 @@
 // uint no:	1		2		3		...
 // value:	CCL | n		from | to	from | to
 //
-// where n is the (16-bit) number of following range definitions and
+// where n is the (16-bit) number of following range definitions, and
 // from and to define the ranges inclusive. from <= to is always true,
 // otherwise it is a built-in charclass (Pxx, eg \s - PWS). Single
 // characters in the class are coded as from==to.  Negated classes
 // (e.g. [^a-z]) use CCN instead of CCL.
 
 const uint END	= 0x00000000;
-const uint PWS	= 0x10010000;		// predef charclass: whitespace (\s)
-const uint PDG	= 0x10020000;		// predef charclass: digit (\d)
+const uint PWS	= 0x10010000;		// predef whitespace charclass \s
 const uint CCL	= 0x20010000;		// character class	[]
 const uint CCN	= 0x20020000;		// neg character class	[^]
 const uint CHR	= 0x40000000;		// character
@@ -216,7 +174,7 @@ QRegExp::QRegExp( const QRegExp &r )
 }
 
 /*!
-  Destructs the regular expression and cleans up its internal data.
+  Destroys the regular expression and cleans up its internal data.
 */
 
 QRegExp::~QRegExp()
@@ -240,9 +198,6 @@ QRegExp &QRegExp::operator=( const QRegExp &r )
 }
 
 /*!
-  \obsolete
-  Consider using setPattern() instead of this method.
-
   Sets the pattern string to \e pattern and returns a reference to this regexp.
   The case sensitivity or wildcard options do not change.
 */
@@ -302,7 +257,7 @@ bool QRegExp::operator==( const QRegExp &r ) const
   instead of plain text.
 
   For example, "qr*.cpp" matches the string "qregexp.cpp" in wildcard mode,
-  but not "qicpp" (which would be matched in normal mode).
+  but not "qicpp" (which will be matched in normal mode).
 
   \sa wildcard()
 */
@@ -348,10 +303,71 @@ void QRegExp::setCaseSensitive( bool enable )
 
 
 /*!
-  \fn void QRegExp::setPattern(const QString & pattern)
-  Sets the pattern string to \a pattern and returns a reference to this regexp.
-  The case sensitivity or wildcard options do not change.
+  Attempts to match in \e str, starting from position \e index.
+  Returns the position of the match, or -1 if there was no match.
+
+  If \e len is not a null pointer, the length of the match is stored in
+  \e *len.
+
+  If \e indexIsStart is TRUE (the default), the position \e index in
+  the string will match the start-of-input primitive (^) in the
+  regexp, if present. Otherwise, position 0 in \e str will match.
+
+  Example:
+  \code
+    QRegExp r("[0-9]*\\.[0-9]+");		// matches floating point
+    int len;
+    r.match("pi = 3.1416", 0, &len);		// returns 5, len == 6
+  \endcode
 */
+
+int QRegExp::match( const QString &str, int index, int *len,
+		    bool indexIsStart ) const
+{
+    if ( !isValid() || isEmpty() )
+	return -1;
+    if ( str.length() < (uint)index )
+	return -1;
+    const QChar *start = str.unicode();
+    const QChar *p = start + index;
+    uint pl = str.length() - index;
+    uint *d  = rxdata;
+    const QChar *ep = 0;
+
+    if ( *d == BOL ) {				// match from beginning of line
+	ep = matchstr( d, p, pl, indexIsStart ? p : start );
+    } else {
+	if ( *d & CHR ) {
+	    QChar c( *d );
+	    if ( !cs && !c.row() ) {		// case sensitive, # only 8bit
+		while ( pl && ( p->row() || tolower(p->cell()) != c.cell() ) ) {
+		    p++;
+		    pl--;
+		}
+	    } else {				// case insensitive
+		while ( pl && *p != c ) {
+		    p++;
+		    pl--;
+		}
+	    }
+	}
+	while ( pl ) {				// regular match
+	    if ( (ep=matchstr(d,p,pl, indexIsStart ? start+index : start )) )
+		break;
+	    p++;
+	    pl--;
+	}
+    }
+    if ( ep ) {					// match
+	if ( len )
+	    *len = ep - p;
+	return (int)(p - start);		// return index
+    } else {					// no match
+	if ( len )
+	    *len = 0;
+	return -1;
+    }
+}
 
 static inline bool iswordchar( int x )
 {
@@ -364,25 +380,23 @@ static inline bool iswordchar( int x )
   Match character class
 */
 
-static bool matchcharclass( uint *rxd, QChar c )
+bool matchcharclass( uint *rxd, QChar c )
 {
     uint *d = rxd;
     uint clcode = *d & MCD;
     bool neg = clcode == CCN;
     if ( clcode != CCL && clcode != CCN)
-	qWarning("QRegExp: Internal error, please report to qt-bugs@trolltech.com");
+	qWarning("QRegExp: Internal error, please report to qt-bugs@troll.no");
     uint numFields = *d & MVL;
     uint cval = (((uint)(c.row())) << 8) | ((uint)c.cell());
     bool found = FALSE;
     for ( int i = 0; i < (int)numFields; i++ ) {
 	d++;
-	if ( *d == PWS && c.isSpace() ) {
-	    found = TRUE;
-	    break;
-	}
-	if ( *d == PDG && c.isDigit() ) {
-	    found = TRUE;
-	    break;
+	if ( *d == PWS ) {
+	    if ( c.isSpace() ) {
+		found = TRUE;
+		break;
+	    }
 	}
 	else {
 	    uint from = ( *d & MCD ) >> 16;
@@ -397,16 +411,15 @@ static bool matchcharclass( uint *rxd, QChar c )
 }
 
 
-
-/*
-  Internal: Recursively match string.
+/*!
+  \internal
+  Recursively match string.
 */
 
-static int matchstring( uint *rxd, const QChar *str, uint strlength,
-			const QChar *bol, bool cs )
+const QChar *QRegExp::matchstr( uint *rxd, const QChar *str, uint strlength,
+				const QChar *bol ) const
 {
     const QChar *p = str;
-    const QChar *start = p;
     uint pl = strlength;
     uint *d = rxd;
 
@@ -414,16 +427,16 @@ static int matchstring( uint *rxd, const QChar *str, uint strlength,
     while ( *d ) {
 	if ( *d & CHR ) {			// match char
 	    if ( !pl )
-		return -1;
+		return 0;
 	    QChar c( *d );
 	    if ( !cs && !c.row() ) {		// case insensitive, #Only 8bit
 		if ( p->row() || tolower(p->cell()) != c.cell() )
-		    return -1;
+		    return 0;
 		p++;
 		pl--;
 	    } else {				// case insensitive
 		if ( *p != c )
-		    return -1;
+		    return 0;
 		p++;
 		pl--;
 	    }
@@ -431,9 +444,9 @@ static int matchstring( uint *rxd, const QChar *str, uint strlength,
 	}
 	else if ( *d & MCC ) {			// match char class
 	    if ( !pl )
-		return -1;
+		return 0;
 	    if ( !matchcharclass( d, *p ) )
-		return -1;
+		return 0;
 	    p++;
 	    pl--;
 	    d += (*d & MVL) + 1;
@@ -441,37 +454,31 @@ static int matchstring( uint *rxd, const QChar *str, uint strlength,
 	else switch ( *d++ ) {
 	    case PWS:				// match whitespace
 		if ( !pl || !p->isSpace() )
-		    return -1;
-		p++;
-		pl--;
-		break;
-	    case PDG:				// match digits
-		if ( !pl || !p->isDigit() )
-		    return -1;
+		    return 0;
 		p++;
 		pl--;
 		break;
 	    case ANY:				// match anything
 		if ( !pl )
-		    return -1;
+		    return 0;
 		p++;
 		pl--;
 		break;
 	    case BOL:				// match beginning of line
 		if ( p != bol )
-		    return -1;
+		    return 0;
 		break;
 	    case EOL:				// match end of line
 		if ( pl )
-		    return -1;
+		    return 0;
 		break;
 	    case BOW:				// match beginning of word
 		if ( !iswordchar(*p) || (p > bol && iswordchar(*(p-1)) ) )
-		    return -1;
+		    return 0;
 		break;
 	    case EOW:				// match end of word
 		if ( iswordchar(*p) || p == bol || !iswordchar(*(p-1)) )
-		    return -1;
+		    return 0;
 		break;
 	    case CLO:				// Kleene closure
 		{
@@ -501,14 +508,7 @@ static int matchstring( uint *rxd, const QChar *str, uint strlength,
 		}
 		else if ( *d == PWS ) {
 		    while ( pl && p->isSpace() ) {
-			p++;
-			pl--;
-		    }
-		    d++;
-		}
-		else if ( *d == PDG ) {
-		    while ( pl && p->isDigit() ) {
-			p++;
+			p ++;
 			pl--;
 		    }
 		    d++;
@@ -519,20 +519,18 @@ static int matchstring( uint *rxd, const QChar *str, uint strlength,
 		    d++;
 		}
 		else {
-		    return -1;			// error
+		    return 0;			// error
 		}
 		d++;				// skip CLO's END
+		const QChar *end;
 		while ( p >= first_p ) {	// go backwards
-		    int end = matchstring( d, p, pl, bol, cs );
-		    if ( end >= 0 )
-			return ( p - start ) + end;
-		    if ( !p )
-			return -1;
+		    if ( (end = matchstr(d,p,pl,bol)) )
+			return end;
 		    --p;
 		    ++pl;
 		}
 		}
-		return -1;
+		return 0;
 	    case OPT:				// optional closure
 		{
 		const QChar *first_p = p;
@@ -566,13 +564,6 @@ static int matchstring( uint *rxd, const QChar *str, uint strlength,
 		    }
 		    d++;
 		}
-		else if ( *d == PDG ) {
-		    if ( pl && p->isDigit() ) {
-			p++;
-			pl--;
-		    }
-		    d++;
-		}
 		else if ( *d == ANY ) {
 		    if ( pl ) {
 			p++;
@@ -581,122 +572,26 @@ static int matchstring( uint *rxd, const QChar *str, uint strlength,
 		    d++;
 		}
 		else {
-		    return -1;			// error
+		    return 0;			// error
 		}
 		d++;				// skip OPT's END
+		const QChar *end;
 		while ( p >= first_p ) {	// go backwards
-		    int end = matchstring( d, p, pl, bol, cs );
-		    if ( end >= 0 )
-			return ( p - start ) + end;
-		    if ( !p )
-			return -1;
+		    if ( (end = matchstr(d,p,pl,bol)) )
+			return end;
 		    --p;
 		    ++pl;
 		}
 		}
-		return -1;
+		return 0;
 
 	    default:				// error
-		return -1;
+		return 0;
 	}
     }
-    return p - start;
+    return p;
 }
 
-
-/*!
-  \internal
-  Recursively match string.
-*/
-
-// This is obsolete now, but since it is protected (not private), it
-// is still implemented on the off-chance that somebody has made a
-// class derived from QRegExp and calls this directly.
-// Qt 3.0: Remove this?
-
-
-const QChar *QRegExp::matchstr( uint *rxd, const QChar *str, uint strlength,
-				const QChar *bol ) const
-{
-    int len = matchstring( rxd, str, strlength, bol, cs );
-    if ( len < 0 )
-	return 0;
-    return str + len;
-}
-
-/*!
-  Attempts to match in \e str, starting from position \e index.
-  Returns the position of the match, or -1 if there was no match.
-
-  If \e len is not a null pointer, the length of the match is stored in
-  \e *len.
-
-  If \e indexIsStart is TRUE (the default), the position \e index in
-  the string will match the start-of-input primitive (^) in the
-  regexp, if present. Otherwise, position 0 in \e str will match.
-
-  Example:
-  \code
-    QRegExp r("[0-9]*\\.[0-9]+");		// matches floating point
-    int len;
-    r.match("pi = 3.1416", 0, &len);		// returns 5, len == 6
-  \endcode
-
-  \note In Qt 3.0, this function will be replaced by find().
-*/
-
-int QRegExp::match( const QString &str, int index, int *len,
-		    bool indexIsStart ) const
-{
-    if ( !isValid() || isEmpty() )
-	return -1;
-    if ( str.length() < (uint)index )
-	return -1;
-    const QChar *start = str.unicode();
-    const QChar *p = start + index;
-    uint pl = str.length() - index;
-    uint *d  = rxdata;
-    int ep = -1;
-
-    if ( *d == BOL ) {				// match from beginning of line
-	ep = matchstring( d, p, pl, indexIsStart ? p : start, cs );
-    } else {
-	if ( *d & CHR ) {
-	    QChar c( *d );
-	    if ( !cs && !c.row() ) {		// case sensitive, # only 8bit
-		while ( pl && ( p->row() || tolower(p->cell()) != c.cell() ) ) {
-		    p++;
-		    pl--;
-		}
-	    } else {				// case insensitive
-		while ( pl && *p != c ) {
-		    p++;
-		    pl--;
-		}
-	    }
-	}
-	for (;;) {				// regular match
-	    ep = matchstring( d, p, pl, indexIsStart ? start+index : start, cs );
-	    if ( ep >= 0 )
-		break;
-	    if ( !pl )
-		break;
-	    p++;
-	    pl--;
-	}
-    }
-    if ( len )
-	*len = ep >= 0 ? ep : 0;      // No match -> 0, for historical reasons
-    return ep >= 0 ? (int)(p - start) : -1;		// return index;
-}
-
-/*! \fn int QRegExp::find( const QString& str, int index )
-
-  Attempts to match in \e str, starting from position \e index.
-  Returns the position of the match, or -1 if there was no match.
-
-  \sa match()
-*/
 
 //
 // Translate wildcard pattern to standard regexp pattern.
@@ -770,7 +665,6 @@ static uint char_val( const QChar **str, uint *strlength )   // get char value
 	    case 'r':  v = '\r';  break;	// return
 	    case 't':  v = '\t';  break;	// tab
 	    case 's':  v = PWS; break;		// whitespace charclass
-	    case 'd':  v = PDG; break;		// digit charclass
 	    case '<':  v = BOW; break;		// word beginning matcher
 	    case '>':  v = EOW; break;		// word ending matcher
 
@@ -798,7 +692,7 @@ static uint char_val( const QChar **str, uint *strlength )   // get char value
 		if ( ch >= '0' && ch <= '7' ) {	//octal code
 		    len--;
 		    for ( i = 0; (i < 3) && pl; i++ ) {	// up to 3 oct digits
-			c = (char)*p;
+			c = tolower((char)*p);
 			if ( c >= '0' && c <= '7' ) {
 			    v <<= 3;
 			    v += c - '0';
@@ -849,8 +743,6 @@ static uint *dump( uint *p )
 		p++;
 		if ( *p == PWS )
 		    qDebug( "\t\tPWS" );
-		else if ( *p == PDG )
-		    qDebug( "\t\tPDG" );
 		else {
 		    uint from = ( *p & MCD ) >> 16;
 		    uint to = *p & MVL;
@@ -865,9 +757,6 @@ static uint *dump( uint *p )
 	else switch ( *p++ ) {
 	    case PWS:
 		qDebug( "\tPWS" );
-		break;
-	    case PDG:
-		qDebug( "\tPDG" );
 		break;
 	    case BOL:
 		qDebug( "\tBOL" );
@@ -1012,9 +901,8 @@ void QRegExp::compile()
 			error = PatSyntax;
 			return;
 		    }
-		    bool nextIsEscaped = ( (char)*p == '\\' );
 		    cch = char_val( &p, &pl );
-		    if ( cch == (uint)']' && !nextIsEscaped )
+		    if ( cch == (uint)']' )
 			break;
 		    if ( !pl ) {		// End, should have seen ']'
 			error = PatSyntax;

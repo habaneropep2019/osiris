@@ -1,12 +1,9 @@
 /****************************************************************************
-** $Id: qt/examples/customlayout/flow.cpp   2.3.2   edited 2001-01-26 $
+** $Id: flow.cpp,v 1.4 1999/06/21 13:58:42 reggie Exp $
 **
 ** Implementing your own layout: flow example
 **
-** Copyright (C) 1996 by Trolltech AS.  All rights reserved.
-**
-** This file is part of an example program for Qt.  This example
-** program may be used, distributed and modified without limitation.
+** Copyright (C) 1996 by Troll Tech AS.  All rights reserved.
 **
 *****************************************************************************/
 

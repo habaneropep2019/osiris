@@ -6,6 +6,7 @@
 
 #include <qapplication.h>
 #include <qpushbutton.h>
+#include <qscrollbar.h>
 #include <qlcdnumber.h>
 #include <qfont.h>
 #include <qlayout.h>
@@ -14,7 +15,7 @@
 #include "cannon.h"
 
 
-class MyWidget: public QWidget
+class MyWidget : public QWidget
 {
 public:
     MyWidget( QWidget *parent=0, const char *name=0 );
@@ -24,23 +25,26 @@ public:
 MyWidget::MyWidget( QWidget *parent, const char *name )
         : QWidget( parent, name )
 {
-    QPushButton *quit = new QPushButton( "&Quit", this, "quit" );
+    setMinimumSize( 500, 355 );
+
+    QPushButton *quit = new QPushButton( "Quit", this, "quit" );
     quit->setFont( QFont( "Times", 18, QFont::Bold ) );
 
     connect( quit, SIGNAL(clicked()), qApp, SLOT(quit()) );
 
-    LCDRange *angle = new LCDRange( this, "angle" );
+    LCDRange *angle  = new LCDRange( this, "angle" );
     angle->setRange( 5, 70 );
 
     LCDRange *force  = new LCDRange( this, "force" );
     force->setRange( 10, 50 );
 
     CannonField *cannonField = new CannonField( this, "cannonField" );
+    cannonField->setBackgroundColor( QColor( 250, 250, 200) );
 
     connect( angle, SIGNAL(valueChanged(int)),
 	     cannonField, SLOT(setAngle(int)) );
     connect( cannonField, SIGNAL(angleChanged(int)),
-	     angle, SLOT(setValue(int)) );
+	     angle,SLOT(setValue(int)) );
 
     connect( force, SIGNAL(valueChanged(int)),
 	     cannonField, SLOT(setForce(int)) );
@@ -59,7 +63,6 @@ MyWidget::MyWidget( QWidget *parent, const char *name )
 
     angle->setValue( 60 );
     force->setValue( 25 );
-    angle->setFocus();
 }
 
 int main( int argc, char **argv )

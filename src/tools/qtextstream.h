@@ -1,39 +1,27 @@
 /****************************************************************************
-** $Id: qt/src/tools/qtextstream.h   2.3.2   edited 2001-01-26 $
+** $Id: qtextstream.h,v 2.41 1999/06/08 18:42:05 aavit Exp $
 **
 ** Definition of QTextStream class
 **
 ** Created : 940922
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
-** This file is part of the tools module of the Qt GUI Toolkit.
+** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses may use this file in accordance with the Qt Commercial License
-** Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
+*****************************************************************************/
 
 #ifndef QTEXTSTREAM_H
 #define QTEXTSTREAM_H
@@ -43,24 +31,17 @@
 #include "qstring.h"
 #include <stdio.h>
 #endif // QT_H
-
-#ifndef QT_NO_TEXTSTREAM
 class QTextCodec;
 class QTextDecoder;
-
-class QTextStreamPrivate;
 
 class Q_EXPORT QTextStream				// text stream class
 {
 public:
     enum Encoding { Locale, Latin1, Unicode, UnicodeNetworkOrder,
-		    UnicodeReverse, RawUnicode, UnicodeUTF8 };
+		    UnicodeReverse, RawUnicode };
 
     void	setEncoding( Encoding );
-#ifndef QT_NO_TEXTCODEC
     void	setCodec( QTextCodec* );
-#endif
-
     //    Encoding encoding() const { return cmode; }
 
     QTextStream();
@@ -92,7 +73,6 @@ public:
     QTextStream &operator>>( QString & );
     QTextStream &operator>>( QCString & );
 
-    QTextStream &operator<<( QChar );
     QTextStream &operator<<( char );
     QTextStream &operator<<( signed short );
     QTextStream &operator<<( unsigned short );
@@ -164,7 +144,7 @@ private:
     bool	 fstrm;
     bool	 owndev;
     QTextCodec 	*mapper;
-    QTextStreamPrivate * d;
+    QTextDecoder *decoder;		//???
     QChar	ungetcBuf;
     bool	latin1;
     bool 	internalOrder;
@@ -174,7 +154,6 @@ private:
     QChar	eat_ws();
     void	ts_ungetc( QChar );
     QChar	ts_getc();
-    uint	ts_getbuf( QChar*, uint );
     void	ts_putc(int);
     void	ts_putc(QChar);
     bool	ts_isspace(QChar);
@@ -262,11 +241,6 @@ inline int QTextStream::precision() const
 inline int QTextStream::precision( int p )
 { int oldp = fprec;  fprec = p;	 return oldp;  }
 
-/*!
-  Returns one character from the stream, or EOF.
-*/
-inline QChar QTextStream::ts_getc()
-{ QChar r; return ( ts_getbuf( &r,1 ) == 1 ? r : QChar((ushort)0xffff) ); }
 
 /*****************************************************************************
   QTextStream manipulators
@@ -302,32 +276,6 @@ Q_EXPORT QTextStream &flush( QTextStream &s );	// flush output
 Q_EXPORT QTextStream &ws( QTextStream &s );	// eat whitespace on input
 Q_EXPORT QTextStream &reset( QTextStream &s );	// set default flags
 
-Q_EXPORT inline QTSManip qSetW( int w )
-{
-    QTSMFI func = &QTextStream::width;
-    return QTSManip(func,w);
-}
-
-Q_EXPORT inline QTSManip qSetFill( int f )
-{
-    QTSMFI func = &QTextStream::fill;
-    return QTSManip(func,f);
-}
-
-Q_EXPORT inline QTSManip qSetPrecision( int p )
-{
-    QTSMFI func = &QTextStream::precision;
-    return QTSManip(func,p);
-}
-
-
-#ifndef QT_ALTERNATE_QTSMANIP
-
-// These will go away in Qt 3.0, as they conflict with std libs
-//
-// If you get conflicts now, #define QT_ALTERNATE_QTSMANIP before
-// including this file.
-
 Q_EXPORT inline QTSManip setw( int w )
 {
     QTSMFI func = &QTextStream::width;
@@ -345,7 +293,6 @@ Q_EXPORT inline QTSManip setprecision( int p )
     QTSMFI func = &QTextStream::precision;
     return QTSManip(func,p);
 }
-#endif
 
-#endif // QT_NO_TEXTSTREAM
+
 #endif // QTEXTSTREAM_H

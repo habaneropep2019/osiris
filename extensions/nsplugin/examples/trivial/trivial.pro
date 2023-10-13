@@ -1,9 +1,9 @@
 TEMPLATE	= app
-CONFIG		+= qt dll release
+CONFIG		= qt dll release
 HEADERS		= 
 SOURCES		= trivial.cpp
-unix:LIBS	= -lqnp -lXt
-win32:LIBS	= $(OSIRISDIR)/lib/qnp.lib
+unix:TMAKE_LIBS = -L$(QTDIR)/lib -lqnp -lXt -lm
+win32:LIBS	= $(QTDIR)/lib/qnp.lib
 DEF_FILE	= trivial.def
 RC_FILE		= trivial.rc
 TARGET      	= trivial

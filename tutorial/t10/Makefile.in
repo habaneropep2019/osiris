@@ -2,22 +2,20 @@
 
 ####### Compiler, tools and options
 
-CXX	=	$(SYSCONF_CXX) $(QT_CXX_MT)
+CXX	=	$(SYSCONF_CXX)
 CXXFLAGS=	$(SYSCONF_CXXFLAGS_QT) $(SYSCONF_CXXFLAGS)
-CC	=	$(SYSCONF_CC) $(QT_C_MT)
+CC	=	$(SYSCONF_CC)
 CFLAGS	=	$(SYSCONF_CFLAGS)
 INCPATH =	
-LFLAGS	=	$(SYSCONF_LFLAGS_QT) $(SYSCONF_RPATH_QT) $(SYSCONF_LFLAGS) $(QT_LFLAGS_MT)
-LIBS	=	$(SUBLIBS) $(SYSCONF_LIBS_QT) $(SYSCONF_LIBS) $(SYSCONF_LIBS_QTAPP)
+LFLAGS	=	$(SYSCONF_LFLAGS_QT) $(SYSCONF_LFLAGS_X11) $(SYSCONF_LFLAGS)
+LIBS	=	$(SYSCONF_LIBS_QT) $(SYSCONF_LIBS_X11) $(SYSCONF_LIBS)
 MOC	=	$(SYSCONF_MOC)
-UIC	=	$(SYSCONF_UIC)
 
 ####### Target
 
 DESTDIR = ./
 VER_MAJ = 1
 VER_MIN = 0
-VER_PATCH = 0
 TARGET	= t10
 TARGET1 = lib$(TARGET).so.$(VER_MAJ)
 
@@ -31,14 +29,10 @@ SOURCES =	cannon.cpp \
 OBJECTS =	cannon.o \
 		lcdrange.o \
 		main.o
-INTERFACES =    
-UICDECLS =      
-UICIMPLS =      
 SRCMOC	=	moc_cannon.cpp \
 		moc_lcdrange.cpp
 OBJMOC	=	moc_cannon.o \
 		moc_lcdrange.o
-
 
 ####### Implicit rules
 
@@ -61,11 +55,10 @@ OBJMOC	=	moc_cannon.o \
 
 ####### Build rules
 
-
 all: $(DESTDIR)$(TARGET)
 
-$(DESTDIR)$(TARGET): $(UICDECLS) $(OBJECTS) $(OBJMOC) $(SUBLIBS)
-	$(SYSCONF_LINK) $(LFLAGS) -o $(DESTDIR)$(TARGET) $(OBJECTS) $(OBJMOC) $(LIBS)
+$(DESTDIR)$(TARGET): $(OBJECTS) $(OBJMOC) 
+	$(SYSCONF_LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(OBJMOC) $(LIBS)
 
 moc: $(SRCMOC)
 
@@ -73,33 +66,8 @@ tmake:
 	tmake t10.pro
 
 clean:
-	-rm -f $(OBJECTS) $(OBJMOC) $(SRCMOC) $(UICIMPLS) $(UICDECLS)
+	-rm -f $(OBJECTS) $(OBJMOC) $(SRCMOC)
 	-rm -f *~ core
-	-rm -f allmoc.cpp
-
-####### Extension Modules
-
-listpromodules:
-	@echo 
-
-listallmodules:
-	@echo 
-
-listaddonpromodules:
-	@echo 
-
-listaddonentmodules:
-	@echo 
-
-
-REQUIRES=full-config
-
-####### Sub-libraries
-
-
-###### Combined headers
-
-
 
 ####### Compile
 
@@ -124,5 +92,4 @@ moc_cannon.cpp: cannon.h
 
 moc_lcdrange.cpp: lcdrange.h
 	$(MOC) lcdrange.h -o moc_lcdrange.cpp
-
 

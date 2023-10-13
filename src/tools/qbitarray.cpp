@@ -1,39 +1,27 @@
 /****************************************************************************
-** $Id: qt/src/tools/qbitarray.cpp   2.3.2   edited 2001-01-26 $
+** $Id: qbitarray.cpp,v 2.12 1999/05/23 20:29:04 agulbra Exp $
 **
 ** Implementation of QBitArray class
 **
 ** Created : 940118
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
-** This file is part of the tools module of the Qt GUI Toolkit.
+** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses may use this file in accordance with the Qt Commercial License
-** Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
+*****************************************************************************/
 
 #include "qbitarray.h"
 #include "qdatastream.h"
@@ -41,7 +29,6 @@
 #define SHBLOCK	 ((bitarr_data*)(sharedBlock()))
 
 
-// NOT REVISED
 /*!
   \class QBitVal qbitarray.h
   \brief The QBitVal class is an internal class, used with QBitArray.
@@ -51,27 +38,27 @@
 */
 
 /*!
-  \fn QBitVal::QBitVal (QBitArray* a, uint i)
+  \fn QBitVal::QBitVal (QBitArray* a, uint i) 
 
   Constructs a reference to an element in a QBitArray.  This is
-  what QBitArray::operator[] constructs its return value with.
+  what QBitArray::operator[] contructs its return value with.
 */
 
 /*!
-  \fn QBitVal::operator int()
+  \fn QBitVal::operator int() 
 
   Returns the value referenced by the QBitVal.
 */
 
 /*!
-  \fn QBitVal& QBitVal::operator= (const QBitVal& v)
+  \fn QBitVal& QBitVal::operator= (const QBitVal& v) 
 
   Sets the value referenced by the QBitVal to that referenced by another
   QBitVal.
 */
 
 /*!
-  \fn QBitVal& QBitVal::operator= (bool v)
+  \fn QBitVal& QBitVal::operator= (int v) 
 
   Sets the value referenced by the QBitVal.
 */
@@ -128,7 +115,7 @@ QBitArray::QBitArray() : QByteArray( 0, 0 )
 }
 
 /*!
-  Constructs a bit array of \a size bits. The bits are uninitialized.
+  Constructs a bit array of \e size bits. The bits are uninitialized.
 */
 
 QBitArray::QBitArray( uint size ) : QByteArray( 0, 0 )
@@ -142,12 +129,12 @@ QBitArray::QBitArray( uint size ) : QByteArray( 0, 0 )
 
 /*!
   \fn QBitArray::QBitArray( const QBitArray &a )
-  Constructs a shallow copy of \a a.
+  Constructs a shallow copy of \e a.
 */
 
 /*!
   \fn QBitArray &QBitArray::operator=( const QBitArray &a )
-  Assigns a shallow copy of \a a to this bit array and returns a reference
+  Assigns a shallow copy of \e a to this bit array and returns a reference
   to this array.
 */
 
@@ -170,7 +157,7 @@ void QBitArray::pad0()
 */
 
 /*!
-  Resizes the bit array to \a size bits.
+  Resizes the bit array to \e size bits.
   Returns TRUE if the bit array could be resized.
 
   When expanding the bit array, the new bits will be uninitialized.
@@ -194,11 +181,11 @@ bool QBitArray::resize( uint size )
 
 
 /*!
-  Fills the bit array with \a v (1's if \a v is TRUE, or 0's if \a v is FALSE).
+  Fills the bit array with \e v (1's if \e v is TRUE, or 0's if \e v is FALSE).
 
-  Will resize the bit array to \a size bits if \a size is nonnegative.
+  Will resize the bit array to \e size bits if \e size is nonnegative.
 
-  Returns FALSE if a nonnegative \a size was specified and if the bit array
+  Returns FALSE if a nonnegative \e size was specified and if the bit array
   could not be resized, otherwise returns TRUE.
 
   \sa resize()
@@ -252,7 +239,7 @@ QBitArray QBitArray::copy() const
 
 
 /*!
-  Returns TRUE if the bit at position \a index is set.
+  Returns TRUE if the bit at position \e index is set.
   \sa setBit(), clearBit()
 */
 
@@ -264,12 +251,12 @@ bool QBitArray::testBit( uint index ) const
 	return FALSE;
     }
 #endif
-    return (*(data()+(index>>3)) & (1 << (index & 7))) != 0;
+    return *(data()+(index>>3)) & (1 << (index & 7));
 }
 
 /*!
-  Sets the bit at position \a index (sets it to 1).
-  \sa clearBit() toggleBit()
+  Sets the bit at position \e index (sets it to 1).
+  \sa clearBit(), toggleBit()
 */
 
 void QBitArray::setBit( uint index )
@@ -285,7 +272,7 @@ void QBitArray::setBit( uint index )
 
 /*!
   \fn void QBitArray::setBit( uint index, bool value )
-  Sets the bit at position \a index to \a value.
+  Sets the bit at position \e index to \e value.
 
   Equivalent to:
   \code
@@ -295,11 +282,11 @@ void QBitArray::setBit( uint index )
 	clearBit( index );
   \endcode
 
-  \sa clearBit() toggleBit()
+  \sa clearBit(), toggleBit()
 */
 
 /*!
-  Clears the bit at position \a index (sets it to 0).
+  Clears the bit at position \e index (sets it to 0).
   \sa setBit(), toggleBit()
 */
 
@@ -315,7 +302,7 @@ void QBitArray::clearBit( uint index )
 }
 
 /*!
-  Toggles the bit at position \a index.
+  Toggles the bit at position \e index.
 
   If the previous value was 0, the new value will be 1.	 If the previous
   value was 1, the new value will be 0.
@@ -341,8 +328,8 @@ bool QBitArray::toggleBit( uint index )
 
 /*!
   \fn bool QBitArray::at( uint index ) const
-  Returns the value (0 or 1) of the bit at position \a index.
-  \sa operator[]()
+  Returns the value (0 or 1) of the bit at position \e index.
+  \sa operator[]
 */
 
 /*!
@@ -365,25 +352,21 @@ bool QBitArray::toggleBit( uint index )
   \sa at()
 */
 
-/*!
-  \fn bool QBitArray::operator[]( int index ) const
-  Implements the [] operator for constant bit arrays.
-*/
-
 
 /*!
-  Performs the AND operation between all bits in this bit array and \a a.
+  Performs the AND operation between all bits in this bit array and \e a.
   Returns a reference to this bit array.
 
-  The result has the length of the longest bit array of the two, with the bits
-  missing from the shortest array taken as 0.
+  The two bit arrays must have the same size.  The debug library will
+  warn you if they aren't, the production library blithely ignores the
+  problem.
 
   Example:
   \code
-    QBitArray a( 3 ), b( 2 );
-    a[0] = 1;  a[1] = 0;  a[2] = 1;     // a = [1 0 1]
-    b[0] = 1;  b[1] = 0;                // b = [1 0]
-    a &= b;                             // a = [1 0 0]
+    QBitArray a(3), b(3);
+    a[0] = 1;  a[1] = 0;	a[2] = 1;	// a = [1 0 1]
+    b[0] = 0;  b[1] = 0;	b[2] = 1;	// b = [0 0 1]
+    a &= b;					// a = [0 0 1]
   \endcode
 
   \sa operator|=(), operator^=(), operator~()
@@ -391,31 +374,34 @@ bool QBitArray::toggleBit( uint index )
 
 QBitArray &QBitArray::operator&=( const QBitArray &a )
 {
-    resize( QMAX(size(), a.size()) );
-    register uchar *a1 = (uchar *)data();
-    register uchar *a2 = (uchar *)a.data();
-    int n = QMIN( QByteArray::size(), a.QByteArray::size() );
-    int p = QMAX( QByteArray::size(), a.QByteArray::size() ) - n;
-    while ( n-- > 0 )
-	*a1++ &= *a2++;
-    while ( p-- > 0 )
-	*a1++ = 0;
+    if ( size() == a.size() ) {			// must have same length
+	register uchar *a1 = (uchar *)data();
+	register uchar *a2 = (uchar *)a.data();
+	int n = QByteArray::size();
+	while ( --n >= 0 )
+	    *a1++ &= *a2++;
+    }
+#if defined(CHECK_RANGE)
+    else
+	qWarning( "QBitArray::operator&=: Bit arrays have different size" );
+#endif
     return *this;
 }
 
 /*!
-  Performs the OR operation between all bits in this bit array and \a a.
+  Performs the OR operation between all bits in this bit array and \e a.
   Returns a reference to this bit array.
 
-  The result has the length of the longest bit array of the two, with the bits
-  missing from the shortest array taken as 0.
+  The two bit arrays must have the same size.  The debug library will
+  warn you if they aren't, the production library blithely ignores the
+  problem.
 
   Example:
   \code
-    QBitArray a( 3 ), b( 2 );
-    a[0] = 1;  a[1] = 0;  a[2] = 1;     // a = [1 0 1]
-    b[0] = 1;  b[1] = 0;                // b = [1 0]
-    a |= b;                             // a = [1 0 1]
+    QBitArray a(3), b(3);
+    a[0] = 1;  a[1] = 0;	a[2] = 1;	// a = [1 0 1]
+    b[0] = 0;  b[1] = 0;	b[2] = 1;	// b = [0 0 1]
+    a |= b;					// a = [1 0 1]
   \endcode
 
   \sa operator&=(), operator^=(), operator~()
@@ -423,28 +409,34 @@ QBitArray &QBitArray::operator&=( const QBitArray &a )
 
 QBitArray &QBitArray::operator|=( const QBitArray &a )
 {
-    resize( QMAX(size(), a.size()) );
-    register uchar *a1 = (uchar *)data();
-    register uchar *a2 = (uchar *)a.data();
-    int n = QMIN( QByteArray::size(), a.QByteArray::size() );
-    while ( n-- > 0 )
-	*a1++ |= *a2++;
+    if ( size() == a.size() ) {			// must have same length
+	register uchar *a1 = (uchar *)data();
+	register uchar *a2 = (uchar *)a.data();
+	int n = QByteArray::size();
+	while ( --n >= 0 )
+	    *a1++ |= *a2++;
+    }
+#if defined(CHECK_RANGE)
+    else
+	qWarning( "QBitArray::operator|=: Bit arrays have different size" );
+#endif
     return *this;
 }
 
 /*!
-  Performs the XOR operation between all bits in this bit array and \a a.
+  Performs the XOR operation between all bits in this bit array and \e a.
   Returns a reference to this bit array.
 
-  The result has the length of the longest bit array of the two, with the bits
-  missing from the shortest array taken as 0.
+  The two bit arrays must have the same size.  The debug library will
+  warn you if they aren't, the production library blithely ignores the
+  problem.
 
   Example:
   \code
-    QBitArray a( 3 ), b( 2 );
-    a[0] = 1;  a[1] = 0;  a[2] = 1;     // a = [1 0 1]
-    b[0] = 1;  b[1] = 0;                // b = [1 0]
-    a ^= b;                             // a = [0 0 1]
+    QBitArray a(3), b(3);
+    a[0] = 1;  a[1] = 0;	a[2] = 1;	// a = [1 0 1]
+    b[0] = 0;  b[1] = 0;	b[2] = 1;	// b = [0 0 1]
+    a ^= b;					// a = [1 0 0]
   \endcode
 
   \sa operator&=(), operator|=(), operator~()
@@ -452,12 +444,17 @@ QBitArray &QBitArray::operator|=( const QBitArray &a )
 
 QBitArray &QBitArray::operator^=( const QBitArray &a )
 {
-    resize( QMAX(size(), a.size()) );
-    register uchar *a1 = (uchar *)data();
-    register uchar *a2 = (uchar *)a.data();
-    int n = QMIN( QByteArray::size(), a.QByteArray::size() );
-    while ( n-- > 0 )
-	*a1++ ^= *a2++;
+    if ( size() == a.size() ) {			// must have same length
+	register uchar *a1 = (uchar *)data();
+	register uchar *a2 = (uchar *)a.data();
+	int n = QByteArray::size();
+	while ( --n >= 0 )
+	    *a1++ ^= *a2++;
+    }
+#if defined(CHECK_RANGE)
+    else
+	qWarning( "QBitArray::operator^=: Bit arrays have different size" );
+#endif
     return *this;
 }
 
@@ -466,9 +463,9 @@ QBitArray &QBitArray::operator^=( const QBitArray &a )
 
   Example:
   \code
-    QBitArray a( 3 ), b;
+    QBitArray a(3);
     a[0] = 1;  a[1] = 0; a[2] = 1;	// a = [1 0 1]
-    b = ~a;				// b = [0 1 0]
+    QBitArray b = ~a;			// b = [0 1 0]
   \endcode
 */
 
@@ -487,7 +484,7 @@ QBitArray QBitArray::operator~() const
 
 /*!
   \relates QBitArray
-  Returns the AND result between the bit arrays \a a1 and \a a2.
+  Returns the AND result between the bit arrays \e a1 and \e a2.
   \sa QBitArray::operator&=()
 */
 
@@ -500,7 +497,7 @@ QBitArray operator&( const QBitArray &a1, const QBitArray &a2 )
 
 /*!
   \relates QBitArray
-  Returns the OR result between the bit arrays \a a1 and \a a2.
+  Returns the OR result between the bit arrays \e a1 and \e a2.
   \sa QBitArray::operator|=()
 */
 
@@ -513,7 +510,7 @@ QBitArray operator|( const QBitArray &a1, const QBitArray &a2 )
 
 /*!
   \relates QBitArray
-  Returns the XOR result between the bit arrays \a a1 and \a a2.
+  Returns the XOR result between the bit arrays \e a1 and \e a2.
   \sa QBitArray::operator^()
 */
 
@@ -525,33 +522,6 @@ QBitArray operator^( const QBitArray &a1, const QBitArray &a2 )
 }
 
 
-/*! \enum QBitArray::array_data
-
-  \warning This will be renamed in the next major release of Qt.  Until
-  then it is undocumented and we recommend against its use.
-
-  \internal
-
-  ### 3.0 rename ###
-*/
-
-
-/*! \fn QBitArray::array_data * QBitArray::newData()
-
-  Returns data specific to QBitArray that extends what QGArray provides.
-  \internal
-  QCollection mechanism for allowing extra/different data.
-*/
-
-
-/*! \fn void  QBitArray::deleteData ( array_data * d )
-
-  Deletes data specific to QBitArray that extended what QGArray provided.
-  \internal
-  QCollection mechanism for allowing extra/different data.
-*/
-
-
 /*****************************************************************************
   QBitArray stream functions
  *****************************************************************************/
@@ -560,12 +530,16 @@ QBitArray operator^( const QBitArray &a1, const QBitArray &a2 )
   \relates QBitArray
   Writes a bit array to a stream.
 
-  \sa \link datastreamformat.html Format of the QDataStream operators \endlink
+  Serialization format:
+  <ol>
+  <li> The array size (UINT32)
+  <li> The array bits, (size+7)/8 bytes
+  </ol>
 */
-#ifndef QT_NO_DATASTREAM
+
 QDataStream &operator<<( QDataStream &s, const QBitArray &a )
 {
-    Q_UINT32 len = a.size();
+    UINT32 len = a.size();
     s << len;					// write size of array
     if ( len > 0 )				// write data
 	s.writeRawBytes( a.data(), a.QByteArray::size() );
@@ -575,13 +549,11 @@ QDataStream &operator<<( QDataStream &s, const QBitArray &a )
 /*!
   \relates QBitArray
   Reads a bit array from a stream.
-
-  \sa \link datastreamformat.html Format of the QDataStream operators \endlink
 */
 
 QDataStream &operator>>( QDataStream &s, QBitArray &a )
 {
-    Q_UINT32 len;
+    UINT32 len;
     s >> len;					// read size of array
     if ( !a.resize( (uint)len ) ) {		// resize array
 #if defined(CHECK_NULL)
@@ -593,5 +565,3 @@ QDataStream &operator>>( QDataStream &s, QBitArray &a )
 	s.readRawBytes( a.data(), a.QByteArray::size() );
     return s;
 }
-
-#endif // QT_NO_DATASTREAM

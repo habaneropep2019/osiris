@@ -1,39 +1,27 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qaccel.h   2.3.2   edited 2001-01-26 $
+** $Id: qaccel.h,v 2.24 1999/06/15 22:15:24 warwick Exp $
 **
 ** Definition of QAccel class
 **
 ** Created : 950419
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
-** This file is part of the kernel module of the Qt GUI Toolkit.
+** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses may use this file in accordance with the Qt Commercial License
-** Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
+*****************************************************************************/
 
 #ifndef QACCEL_H
 #define QACCEL_H
@@ -42,7 +30,7 @@
 #include "qobject.h"
 #endif // QT_H
 
-#ifndef QT_NO_ACCEL
+
 class QAccelPrivate;				// internal class
 
 
@@ -51,7 +39,6 @@ class Q_EXPORT QAccel : public QObject			// accelerator class
     Q_OBJECT
 public:
     QAccel( QWidget *parent, const char *name=0 );
-    QAccel( QWidget* watch, QObject *parent, const char *name=0 );
     ~QAccel();
 
     bool	isEnabled() const;
@@ -75,7 +62,7 @@ public:
 				const QObject *receiver, const char* member );
 
     void	repairEventFilter();
-
+    
     void setWhatsThis( int id, const QString& );
     QString whatsThis( int id ) const;
     void setIgnoreWhatsThis( bool );
@@ -91,6 +78,9 @@ signals:
 protected:
     bool	eventFilter( QObject *, QEvent * );
 
+private slots:
+    void	tlwDestroyed();
+
 private:
     QAccelPrivate * d;
 
@@ -101,5 +91,5 @@ private:	// Disabled copy constructor and operator=
 #endif
 };
 
-#endif // QT_NO_ACCEL
+
 #endif // QACCEL_H

@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: qt/examples/progressbar/progressbar.cpp   2.3.2   edited 2001-01-26 $
+** $Id: progressbar.cpp,v 1.1 1999/06/03 10:08:55 warwick Exp $
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -13,7 +13,7 @@
 #include <qradiobutton.h>
 #include <qpushbutton.h>
 #include <qprogressbar.h>
-#include <qlayout.h>
+#include <qbuttongroup.h>
 
 /*
  * Constructor
@@ -22,37 +22,25 @@
  */
 
 ProgressBar::ProgressBar( QWidget *parent, const char *name )
-    : QButtonGroup( 0, Horizontal, "Progress Bar", parent, name ), timer()
+    : QVBox( parent, name ), timer()
 {
     setMargin( 10 );
 
-    QGridLayout* toplayout = new QGridLayout( layout(), 2, 2, 5);
- 
-    setRadioButtonExclusive( TRUE );
+    // Create a radiobutton-exclusive Buttongroup which aligns its childs in two columns
+    QButtonGroup *bg = new QButtonGroup( 2, QGroupBox::Horizontal, this );
+    bg->setRadioButtonExclusive( TRUE );
 
     // insert three radiobuttons which the user can use
     // to set the speed of the progress and two pushbuttons
     // to start/pause/continue and reset the progress 
-    slow = new QRadioButton( "&Slow", this );
-    normal = new QRadioButton( "&Normal", this );
-    fast = new QRadioButton( "&Fast", this );
-    QVBoxLayout* vb1 = new QVBoxLayout;
-    toplayout->addLayout( vb1, 0, 0 );
-    vb1->addWidget( slow );
-    vb1->addWidget( normal );
-    vb1->addWidget( fast );
+    slow = new QRadioButton( "&Slow", bg );
+    start = new QPushButton( "S&tart", bg );
+    normal = new QRadioButton( "&Normal", bg );
+    reset = new QPushButton( "&Reset", bg );
+    fast = new QRadioButton( "&Fast", bg );
 
-    // two push buttons, one for start, for for reset.
-    start = new QPushButton( "&Start", this );
-    reset = new QPushButton( "&Reset", this );
-    QVBoxLayout* vb2 = new QVBoxLayout;
-    toplayout->addLayout( vb2, 0, 1 );
-    vb2->addWidget( start );
-    vb2->addWidget( reset );
-    
     // Create the progressbar
     progress = new QProgressBar( 100, this );
-    toplayout->addMultiCellWidget( progress, 1, 1, 0, 1 );
 
     // connect the clicked() SIGNALs of the pushbuttons to SLOTs
     connect( start, SIGNAL( clicked() ), this, SLOT( slotStart() ) );
@@ -63,11 +51,6 @@ ProgressBar::ProgressBar( QWidget *parent, const char *name )
 
     // Let's start with normal speed...
     normal->setChecked( TRUE );
-    
-    
-    // some contraints
-    start->setFixedWidth( 80 );
-    setMinimumWidth( 300 );
 }
 
 /*

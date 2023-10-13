@@ -1,0 +1,258 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><meta name="robots" content="noindex,noarchive"><title>
+Qt Toolkit - checklists/main.cpp example file
+</title><style type="text/css"><!--
+h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
+a:link { text-decoration: none; }
+body { background: white; color: black; }
+--></style>
+</head><body bgcolor="#ffffff">
+
+<a href=index.html><img width=122 height=65 src=qtlogo.png alt="Qt logo" align=left border=0></a>
+<center><img src=dochead.png width=448 height=23></center>
+<br clear=all>
+
+<h1 align=center>Listviews with Checkable Items</h1><br clear="all">
+
+  This example program shows how to use Listviews with different types of
+  checkable Items.
+
+  <hr>
+
+  Header file:
+
+  <pre>/****************************************************************************
+** &#36;Id&#58; checklists.h,v 1.1 1999/06/03 10:08:55 warwick Exp $
+**
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+**
+** This file is part of an example program for Qt.  This example
+** program may be used, distributed and modified without limitation.
+**
+*****************************************************************************/
+
+#ifndef CHECKLISTS_H
+#define CHECKLISTS_H
+
+#include &lt;<a href="qhbox-h.html">qhbox.h</a>&gt;
+
+class QListView;
+class QLabel;
+
+class CheckLists : public QHBox
+{
+    Q_OBJECT
+
+public:
+    CheckLists( <a href="qwidget.html">QWidget</a> *parent = 0, const char *name = 0 );
+
+protected:
+    <a href="qlistview.html">QListView</a> *lv1, *lv2;
+    <a href="qlabel.html">QLabel</a> *label;
+
+protected slots:
+    void copy1to2();
+    void copy2to3();
+
+};
+
+#endif
+</pre>
+
+
+  <hr>
+
+  Implementation:
+
+  <pre>/****************************************************************************
+** &#36;Id&#58; checklists.cpp,v 1.2 1999/06/11 18:17:46 warwick Exp $
+**
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+**
+** This file is part of an example program for Qt.  This example
+** program may be used, distributed and modified without limitation.
+**
+*****************************************************************************/
+
+#include "checklists.h"
+
+#include &lt;<a href="qlistview-h.html">qlistview.h</a>&gt;
+#include &lt;<a href="qvbox-h.html">qvbox.h</a>&gt;
+#include &lt;<a href="qlabel-h.html">qlabel.h</a>&gt;
+#include &lt;<a href="qlist-h.html">qlist.h</a>&gt;
+#include &lt;<a href="qstring-h.html">qstring.h</a>&gt;
+#include &lt;<a href="qpushbutton-h.html">qpushbutton.h</a>&gt;
+
+/*
+ * Constructor
+ * 
+ * Create all child widgets of the CheckList Widget
+ */
+
+CheckLists::CheckLists( <a href="qwidget.html">QWidget</a> *parent, const char *name )
+    : <a href="qhbox.html">QHBox</a>( parent, name )
+{
+    <a href="qframe.html#ab991e">setMargin</a>( 5 );
+
+    // create a widget which layouts its childs in a column
+    <a href="qvbox.html">QVBox</a> *vbox1 = new <a href="qvbox.html">QVBox</a>( this );
+    vbox1-&gt;<a href="qframe.html#ab991e">setMargin</a>( 5 );
+
+    // First child: a Label
+    (void)new <a href="qlabel.html">QLabel</a>( "Check some items!", vbox1 );
+
+    // Second child: the ListView
+    lv1 = new <a href="qlistview.html">QListView</a>( vbox1 );
+    lv1-&gt;addColumn( "Items" );
+    lv1-&gt;setRootIsDecorated( TRUE );
+
+    // create a list with 4 ListViewItems which will be parent items of other ListViewItems
+    <a href="qlist.html">QList</a>&lt;<a href="qlistviewitem.html">QListViewItem</a>&gt; parentList;
+    parentList.<a href="qcollection.html#a3fc3c">setAutoDelete</a>( FALSE );
+
+    parentList.<a href="qlist.html#687e74">append</a>( new QListViewItem( lv1, "Parent Item 1" ) );
+    parentList.<a href="qlist.html#687e74">append</a>( new QListViewItem( lv1, "Parent Item 2" ) );
+    parentList.<a href="qlist.html#687e74">append</a>( new QListViewItem( lv1, "Parent Item 3" ) );
+    parentList.<a href="qlist.html#687e74">append</a>( new QListViewItem( lv1, "Parent Item 4" ) );
+
+    <a href="qlistviewitem.html">QListViewItem</a> *item = 0;
+    unsigned int num;
+    // go through the list of parent items...
+    for ( item = parentList.<a href="qlist.html#df743c">first</a>(), num = 1; item; item-&gt;<a href="qlistviewitem.html#2862d2">setOpen</a>( TRUE ), item = parentList.<a href="qlist.html#b39e6b">next</a>(), num++ )
+        // ...and create 5 checkable child ListViewItems for each parent item
+        for ( unsigned int i = 1; i &lt;= 5; i++ )
+            (void)new <a href="qchecklistitem.html">QCheckListItem</a>( item, QString( "%1. Child of Parent %2" ).arg( i ).arg( num ), QCheckListItem::CheckBox );
+
+    // Create another widget for layouting
+    <a href="qvbox.html">QVBox</a> *tmp = new <a href="qvbox.html">QVBox</a>( this );
+    tmp-&gt;<a href="qframe.html#ab991e">setMargin</a>( 5 );
+
+    // create a pushbutton
+    <a href="qpushbutton.html">QPushButton</a> *copy1 = new <a href="qpushbutton.html">QPushButton</a>( "  -&gt;  ", tmp );
+    copy1-&gt;<a href="qwidget.html#4aaf24">setMaximumWidth</a>( copy1-&gt;<a href="qpushbutton.html#d91732">sizeHint</a>().width() );
+    tmp-&gt;<a href="qwidget.html#4aaf24">setMaximumWidth</a>( copy1-&gt;<a href="qwidget.html#eed845">maximumWidth</a>() + 10 );
+    // connect the SIGNAL clicked() of the pushbutton with the SLOT copy1to2()
+    <a href="qobject.html#c2d209">connect</a>( copy1, SIGNAL( clicked() ), this, SLOT( <a href=#102>copy1to2</a>() ) );
+
+    // another widget for layouting
+    <a href="qvbox.html">QVBox</a> *vbox2 = new <a href="qvbox.html">QVBox</a>( this );
+    vbox2-&gt;<a href="qframe.html#ab991e">setMargin</a>( 5 );
+
+    // and another label
+    (void)new <a href="qlabel.html">QLabel</a>( "Check one item!", vbox2 );
+
+    // create the second listview
+    lv2 = new <a href="qlistview.html">QListView</a>( vbox2 );
+    lv2-&gt;addColumn( "Items" );
+    lv2-&gt;setRootIsDecorated( TRUE );
+
+    // another widget needed for layouting only
+    tmp = new <a href="qvbox.html">QVBox</a>( this );
+    tmp-&gt;<a href="qframe.html#ab991e">setMargin</a>( 5 );
+
+    // create another pushbutton...
+    <a href="qpushbutton.html">QPushButton</a> *copy2 = new <a href="qpushbutton.html">QPushButton</a>( "  -&gt;  ", tmp );
+    copy2-&gt;<a href="qwidget.html#4aaf24">setMaximumWidth</a>( copy2-&gt;<a href="qpushbutton.html#d91732">sizeHint</a>().width() );
+    tmp-&gt;<a href="qwidget.html#4aaf24">setMaximumWidth</a>( copy2-&gt;<a href="qwidget.html#eed845">maximumWidth</a>() + 10 );
+    // ...and connect its clicked() SIGNAL to the copy2to3() SLOT
+    <a href="qobject.html#c2d209">connect</a>( copy2, SIGNAL( clicked() ), this, SLOT( <a href=#103>copy2to3</a>() ) );
+
+    tmp = new <a href="qvbox.html">QVBox</a>( this );
+    tmp-&gt;<a href="qframe.html#ab991e">setMargin</a>( 5 );
+
+    // and create a label which will be at the right of the window
+    label = new <a href="qlabel.html">QLabel</a>( "No Item yet...", tmp );
+}
+
+/*
+ * SLOT copy1to2()
+ *
+ * Copies all checked ListViewItems from the first ListView to
+ * the second one, and inserts them as Radio-ListViewItem.
+ */
+
+void <a name="102"></a>CheckLists::copy1to2()
+{
+    // create an iterator which operates on the first ListView
+    <a href="qlistviewitemiterator.html">QListViewItemIterator</a> it( lv1 );
+
+    lv2-&gt;clear();
+
+    // Insert first a controller Item into the second ListView. Always if Radio-ListViewItems
+    // are inserted into a Listview, the parent item of these MUST be a controller Item!
+    <a href="qchecklistitem.html">QCheckListItem</a> *item = new <a href="qchecklistitem.html">QCheckListItem</a>( lv2, "Controller", QCheckListItem::Controller );
+    item-&gt;<a href="qlistviewitem.html#2862d2">setOpen</a>( TRUE );
+
+    // iterate through the first ListView...
+    for ( ; it.<a href="qlistviewitemiterator.html#42e4b3">current</a>(); ++it )
+        // ...check state of childs, and...
+        if ( it.<a href="qlistviewitemiterator.html#42e4b3">current</a>()-&gt;parent() )
+            // ...if the item is checked...
+            if ( ( (<a href="qchecklistitem.html">QCheckListItem</a>*)it.<a href="qlistviewitemiterator.html#42e4b3">current</a>() )-&gt;isOn() )
+                // ...insert a Radio-ListViewItem with the same text into the second ListView
+                (void)new <a href="qchecklistitem.html">QCheckListItem</a>( item, it.<a href="qlistviewitemiterator.html#42e4b3">current</a>()-&gt;text( 0 ), QCheckListItem::RadioButton );
+
+    if ( item-&gt;<a href="qlistviewitem.html#f22182">firstChild</a>() )
+        ( ( <a href="qchecklistitem.html">QCheckListItem</a>* )item-&gt;<a href="qlistviewitem.html#f22182">firstChild</a>() )-&gt;setOn( TRUE );
+}
+
+/*
+ * SLOT copy2to3()
+ *
+ * Copies the checked item of the second ListView into the
+ * Label at the right.
+ */
+
+void <a name="103"></a>CheckLists::copy2to3()
+{
+    // create an iterator which operates on the second ListView
+    <a href="qlistviewitemiterator.html">QListViewItemIterator</a> it( lv2 );
+
+    label-&gt;setText( "No Item checked" );
+
+    // iterate through the second ListView...
+    for ( ; it.<a href="qlistviewitemiterator.html#42e4b3">current</a>(); ++it )
+        // ...check state of childs, and...
+        if ( it.<a href="qlistviewitemiterator.html#42e4b3">current</a>()-&gt;parent() )
+            // ...if the item is checked...
+            if ( ( (<a href="qchecklistitem.html">QCheckListItem</a>*)it.<a href="qlistviewitemiterator.html#42e4b3">current</a>() )-&gt;isOn() )
+                // ...set the text of the item to the label 
+                label-&gt;setText( it.<a href="qlistviewitemiterator.html#42e4b3">current</a>()-&gt;text( 0 ) );
+}
+</pre>
+
+
+  <hr>
+
+  Main:
+<pre>/****************************************************************************
+** &#36;Id&#58; main.cpp,v 1.1 1999/06/03 10:08:55 warwick Exp $
+**
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+**
+** This file is part of an example program for Qt.  This example
+** program may be used, distributed and modified without limitation.
+**
+*****************************************************************************/
+
+#include "checklists.h"
+#include &lt;<a name="qapplication.h"></a><a href="qapplication-h.html">qapplication.h</a>&gt;
+
+int main( int argc, char **argv )
+{
+    <a name="QApplication"></a><a href="qapplication.html">QApplication</a> a( argc, argv );
+
+    CheckLists checklists;
+    checklists.<a name="resize"></a><a href="qwidget.html#9ff9d8">resize</a>( 650, 350 );
+    checklists.<a name="setCaption"></a><a href="qwidget.html#d4f007">setCaption</a>( "CheckList Examples" );
+    a.<a name="setMainWidget"></a><a href="qapplication.html#11c921">setMainWidget</a>( &amp;checklists );
+    checklists.<a name="show"></a><a href="qwidget.html#ccc8f7">show</a>();
+
+    return a.<a name="exec"></a><a href="qapplication.html#7076af">exec</a>();
+}
+</pre>
+<p><address><hr><div align="center">
+<table width="100%" cellspacing="0" border="0"><tr>
+<td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.00</div>
+</table></div></address></body></html>

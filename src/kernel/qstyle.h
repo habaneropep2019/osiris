@@ -1,39 +1,28 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qstyle.h   2.3.2   edited 2001-01-26 $
+** $Id: qstyle.h,v 1.33 1999/06/11 19:36:30 warwick Exp $
 **
 ** Definition of QStyle class
 **
 ** Created : 980616
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
-** This file is part of the kernel module of the Qt GUI Toolkit.
+** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses may use this file in accordance with the Qt Commercial License
-** Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
+*****************************************************************************/
+
 #ifndef QSTYLE_H
 #define QSTYLE_H
 
@@ -42,7 +31,6 @@
 #include "qobject.h"
 #endif // QT_H
 
-#ifndef QT_NO_STYLE
 class QButton;
 class QPushButton;
 class QScrollBar;
@@ -50,7 +38,6 @@ class QTabBar;
 class QTab;
 class QPopupMenu;
 class QMenuItem;
-class QToolButton;
 
 class Q_EXPORT QStyle: public QObject
 {
@@ -61,9 +48,12 @@ private:
     QStyle(GUIStyle);
     QStyle();
     friend class QCommonStyle;
-
 public:
     virtual ~QStyle();
+
+
+
+
 
 #ifndef QT_NO_COMPAT
     operator GUIStyle() const { return gs; }
@@ -85,8 +75,7 @@ public:
 
     virtual QRect itemRect( QPainter *p, int x, int y, int w, int h,
 		    int flags, bool enabled,
-		    const QPixmap *pixmap,
-		    const QString& text, int len=-1 ); // ### const 3.0
+		    const QPixmap *pixmap, const QString& text, int len=-1 );
 
     virtual void drawItem( QPainter *p, int x, int y, int w, int h,
 		    int flags, const QColorGroup &g, bool enabled,
@@ -111,29 +100,24 @@ public:
 		     const QColorGroup &g, bool sunken = FALSE,
 		     const QBrush *fill = 0 ) = 0;
 
-    virtual QRect buttonRect( int x, int y, int w, int h); // ### const 3.0
+    virtual QRect buttonRect( int x, int y, int w, int h);
 
     virtual void drawButtonMask( QPainter *p, int x, int y, int w, int h);
-
+			
     virtual void drawBevelButton( QPainter *p, int x, int y, int w, int h,
 		     const QColorGroup &g, bool sunken = FALSE,
 		     const QBrush *fill = 0 ) = 0;
 
-    QRect bevelButtonRect( int x, int y, int w, int h); // ### virtual/const 3.0
-
     virtual void drawToolButton( QPainter *p, int x, int y, int w, int h,
 		     const QColorGroup &g, bool sunken = FALSE,
 		     const QBrush *fill = 0 );
-    void drawToolButton( QToolButton* btn, QPainter *p); // ##### virtual in 3.0
-
-    QRect toolButtonRect(  int x, int y, int w, int h); // ### virtual/const 3.0
 
     virtual void drawPanel( QPainter *p, int x, int y, int w, int h,
 		    const QColorGroup &, bool sunken=FALSE,
 		    int lineWidth = 1, const QBrush *fill = 0 );
 
     virtual void drawPopupPanel( QPainter *p, int x, int y, int w, int h,
-				 const QColorGroup &,  int lineWidth = 2,
+				 const QColorGroup &,  int lineWidth = 2, 
 				 const QBrush *fill = 0 );
 
     virtual void drawArrow( QPainter *p, Qt::ArrowType type, bool down,
@@ -167,42 +151,34 @@ public:
 				  bool editable = FALSE,
 				  bool enabled = TRUE,
 				  const QBrush *fill = 0 ) = 0;
-    virtual QRect comboButtonRect( int x, int y,
-		    int w, int h) = 0; // ### const 3.0
-    virtual QRect comboButtonFocusRect( int x, int y,
-		    int w, int h) = 0; // ### const 3.0
+    virtual QRect comboButtonRect( int x, int y, int w, int h) = 0;
+    virtual QRect comboButtonFocusRect( int x, int y, int w, int h) = 0;
 
     virtual void drawComboButtonMask( QPainter *p, int x, int y, int w, int h) = 0;
 
+
     // push buttons
     virtual void drawPushButton( QPushButton* btn, QPainter *p) = 0;
-    // virtual void drawPushButtonMask(QPushButton *btn, QPainter *p) = 0; // missing, add 3.0
     virtual void drawPushButtonLabel( QPushButton* btn, QPainter *p) = 0;
-    QRect pushButtonContentsRect( QPushButton* btn ); // ### virtual/const 3.0
-    int menuButtonIndicatorWidth( int h ); // ### virtual/const 3.0
-    virtual void getButtonShift( int &x, int &y) = 0; // ### const 3.0
+
+    virtual void getButtonShift( int &x, int &y) = 0;
 
     // frame
     virtual int defaultFrameWidth() const = 0;
 
     // tabbars
-    virtual void tabbarMetrics( const QTabBar*,
-		    int&, int&, int& ) = 0; // ### const 3.0
+    virtual void tabbarMetrics( const QTabBar*, int&, int&, int& ) = 0;
     virtual void drawTab( QPainter*, const QTabBar*, QTab*, bool selected ) = 0;
     virtual void drawTabMask( QPainter*, const QTabBar*, QTab*, bool selected ) = 0;
 
     // scrollbars
     enum ScrollControl { AddLine = 0x1 , SubLine  = 0x2 , AddPage = 0x4,
-			 SubPage = 0x8 , First = 0x10, Last = 0x20,
+			 SubPage = 0x8 , First    = 0x10, Last	  = 0x20,
 			 Slider  = 0x40, NoScroll = 0x80 };
 
-    virtual void scrollBarMetrics( const QScrollBar*,
-		    int&, int&, int&, int&) = 0; // ### const 3.0
-    virtual void drawScrollBarControls( QPainter*,  const QScrollBar*,
-					int sliderStart, uint controls,
-					uint activeControl ) = 0;
-    virtual ScrollControl scrollBarPointOver( const QScrollBar*,
-					int sliderStart, const QPoint& ) = 0;
+    virtual void scrollBarMetrics( const QScrollBar*, int&, int&, int&, int&) = 0;
+    virtual void drawScrollBarControls( QPainter*,  const QScrollBar*, int sliderStart, uint controls, uint activeControl ) = 0;
+    virtual ScrollControl scrollBarPointOver( const QScrollBar*, int sliderStart, const QPoint& ) = 0;
 
     // sliders
     virtual int sliderLength() const = 0;
@@ -235,48 +211,15 @@ public:
 				bool act, bool dis ) = 0;
     virtual void polishPopupMenu( QPopupMenu* ) = 0;
 
-    virtual int extraPopupMenuItemWidth( bool checkable, int maxpmw,
-				QMenuItem* mi,
-				const QFontMetrics& fm  ) = 0; // ### const 3.0
-    virtual int popupSubmenuIndicatorWidth(
-				const QFontMetrics& fm  ) = 0; // ### const 3.0
-    virtual int popupMenuItemHeight( bool checkable,
-				QMenuItem* mi,
-				const QFontMetrics& fm  ) = 0; // ### const 3.0
-    virtual void drawPopupMenuItem( QPainter* p, bool checkable,
-				    int maxpmw, int tab, QMenuItem* mi,
+    virtual int extraPopupMenuItemWidth( bool checkable, int maxpmw, QMenuItem* mi, const QFontMetrics& fm  ) = 0;
+    virtual int popupSubmenuIndicatorWidth( const QFontMetrics& fm  ) = 0;
+    virtual int popupMenuItemHeight( bool checkable, QMenuItem* mi, const QFontMetrics& fm  ) = 0;
+    virtual void drawPopupMenuItem( QPainter* p, bool checkable, int maxpmw, int tab, QMenuItem* mi,
 				    const QPalette& pal,
-				    bool act, bool enabled,
-				    int x, int y, int w, int h) = 0;
-    void drawMenuBarItem( QPainter* p, int x, int y, int w, int h, //### virtual in 3.0
-				    QMenuItem* mi, QColorGroup& g,
-				    bool enabled, bool active );
+				    bool act, bool enabled, int x, int y, int w, int h) = 0;
 
-    // Binary compatibility contortions, to become virtual in 3.0
-    QSize scrollBarExtent(); // ### const 3.0
-    int buttonDefaultIndicatorWidth() const;
-    int buttonMargin() const; // ### virtual 3.0
-    int toolBarHandleExtent() const; // ### virtual 3.0
-    int toolBarHandleExtend() const; // obsolete
-    int sliderThickness() const ; // ### virtual 3.0
-    void drawToolBarHandle( QPainter *p, const QRect &r,
-			    Qt::Orientation orientation,
-			    bool highlight, const QColorGroup &cg,
-			    bool drawBorder = FALSE ); // ### virtual 3.0
-
-protected:
-    void setScrollBarExtent( int w, int h=-1 ); // ### remove 3.0
-    void setButtonDefaultIndicatorWidth( int w ); // ### remove 3.0
-    void setButtonMargin( int w ); // ### remove 3.0
-    void setSliderThickness(int t); // ### remove 3.0
-
-
-private:	// Disabled copy constructor and operator=
-#if defined(Q_DISABLE_COPY)
-    QStyle( const QStyle & );
-    QStyle& operator=( const QStyle & );
-#endif
 };
 
-#endif // QT_NO_STYLE
+
+
 #endif // QSTYLE_H

@@ -1,5 +1,5 @@
 TEMPLATE	= app
-CONFIG		+= qt warn_on release
+CONFIG		= qt warn_on release
 HEADERS		= gtetrix.h \
 		  qdragapp.h \
 		  qtetrix.h \
@@ -13,4 +13,3 @@ SOURCES		= gtetrix.cpp \
 		  tpiece.cpp
 TARGET		= tetrix
 DEPENDPATH=../../include
-REQUIRES=small-config

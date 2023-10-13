@@ -1,37 +1,25 @@
 /****************************************************************************
-** $Id: qt/doc/qasciicache.doc   2.3.2   edited 2001-01-26 $
+** $Id: qasciicache.doc,v 2.1 1999/06/23 18:48:00 hanord Exp $
 **
 ** QAsciiCache and QAsciiCacheIterator class documentation
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses may use this file in accordance with the Qt Commercial License
-** Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
+*****************************************************************************/
 
 
 /*****************************************************************************
@@ -190,15 +178,13 @@
 /*!
   \fn bool QAsciiCache::insert( const char *k, const type *d, int c, int p )
 
-  Inserts the item \a d into the cache with key \a k and cost \a
-  c. Returns TRUE if it is successful and FALSE if it fails.
+  Inserts the item \a d into the cache with key \a k, cost \c and
+  priority \a p, and returns TRUE if it is successful and FALSE if it
+  fails.
 
   The cache's size is limited, and if the total cost is too high,
-  QAsciiCache will remove old, least-used items until there is room
-  for this new item.
-
-  The parameter \a p is internal and should be left at the default
-  value (0).
+  QAsciiCache will remove old, least-used items until there is room for this
+  new item.
 
   \warning If this function returns FALSE, you must delete \a d
   yourself.  Additionally, be very careful about using \a d after
@@ -256,7 +242,7 @@
 /*!
   \fn type *QAsciiCache::find( const char *k, bool ref ) const
 
-  Returns the item associated with \a k, or null if the key does not
+  Returns the item associated with \ k, or null if the key does not
   exist in the cache.  If \a ref is TRUE (the default), the item is
   moved to the front of the LRU list.
 
@@ -278,13 +264,6 @@
   \sa find()
 */
 
-/*!
-  \fn void QAsciiCache::statistics() const
-
-  A debug-only utility function. Prints out cache usage, hit/miss, and
-  distribution information using qDebug(). This function does nothing
-  in the release library.
-*/
 
 /*****************************************************************************
   QAsciiCacheIterator documentation
@@ -361,26 +340,6 @@
 
   Returns TRUE if the cache is empty, i.e. count() == 0, otherwise
   FALSE.  \sa count()
-*/
-
-/*!
-  \fn bool QAsciiCacheIterator::atFirst() const
-
-  Returns TRUE if the iterator points to the first item in the
-  cache. Note that this refers to the iterator's arbitrary ordering,
-  not to the cache's internal LRU list.
-
-  \sa toFirst(), atLast()
-*/
-
-/*!
-  \fn bool QAsciiCacheIterator::atLast() const
-
-  Returns TRUE if the iterator points to the last item in the
-  cache. Note that this refers to the iterator's arbitrary ordering,
-  not to the cache's internal LRU list.
-
-  \sa toLast(), atFirst()
 */
 
 /*!

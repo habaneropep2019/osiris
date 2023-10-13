@@ -1,39 +1,27 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qpainter.h   2.3.2   edited 2001-04-25 $
+** $Id: qpainter.h,v 2.48 1999/06/18 13:37:03 hanord Exp $
 **
 ** Definition of QPainter class
 **
 ** Created : 940112
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
-** This file is part of the kernel module of the Qt GUI Toolkit.
+** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses may use this file in accordance with the Qt Commercial License
-** Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
+*****************************************************************************/
 
 #ifndef QPAINTER_H
 #define QPAINTER_H
@@ -51,7 +39,7 @@
 #include "qwmatrix.h"
 #endif // QT_H
 
-class QGfx;
+
 class QTextCodec;
 
 
@@ -67,10 +55,6 @@ public:
     bool	begin( const QPaintDevice *, const QWidget * );
     bool	end();
     QPaintDevice *device() const;
-
-#ifdef _WS_QWS_
-    QGfx * internalGfx();
-#endif
 
     static void redirect( QPaintDevice *pdev, QPaintDevice *replacement );
 
@@ -95,7 +79,6 @@ public:
     void	setBrush( const QBrush & );
     void	setBrush( BrushStyle );
     void	setBrush( const QColor & );
-    QPoint	pos() const;
 
   // Drawing attributes/modes
 
@@ -114,11 +97,8 @@ public:
 //    PaintUnit unit()	       const;		// get set painter unit
 //    void	setUnit( PaintUnit );		// NOT IMPLEMENTED!!!
 
-    bool	hasViewXForm() const;
-    bool	hasWorldXForm() const;
-
-#ifndef QT_NO_TRANSFORMATIONS
     void	setViewXForm( bool );		// set xform on/off
+    bool	hasViewXForm() const;
     QRect	window()       const;		// get window
     void	setWindow( const QRect & );	// set window
     void	setWindow( int x, int y, int w, int h );
@@ -127,17 +107,19 @@ public:
     void	setViewport( int x, int y, int w, int h );
 
     void	setWorldXForm( bool );		// set world xform on/off
+    bool	hasWorldXForm() const;
     const QWMatrix &worldMatrix() const;	// get/set world xform matrix
     void	setWorldMatrix( const QWMatrix &, bool combine=FALSE );
 
     void	saveWorldMatrix();
     void	restoreWorldMatrix();
 
+
+    void	translate( double dx, double dy );
     void	scale( double sx, double sy );
     void	shear( double sh, double sv );
     void	rotate( double a );
-#endif
-    void	translate( double dx, double dy );
+
     void	resetXForm();
 
     QPoint	xForm( const QPoint & ) const;	// map virtual -> device
@@ -180,8 +162,6 @@ public:
 				  const QColor &bgColor );
     void	drawRoundRect( int x, int y, int w, int h, int, int );
     void	drawRoundRect( const QRect &, int, int );
-    void	drawRoundRect( int x, int y, int w, int h );
-    void	drawRoundRect( const QRect & );
     void	drawEllipse( int x, int y, int w, int h );
     void	drawEllipse( const QRect & );
     void	drawArc( int x, int y, int w, int h, int a, int alen );
@@ -204,20 +184,15 @@ public:
     void	drawPixmap( const QPoint &, const QPixmap & );
     void	drawImage( int x, int y, const QImage &,
 			   int sx=0, int sy=0, int sw=-1, int sh=-1 );
-    void	drawImage( const QPoint &, const QImage &, const QRect &sr );
+    void	drawImage( const QPoint &, const QImage &,
+			   const QRect &sr );
     void	drawImage( const QPoint &, const QImage & );
-    void	drawImage( int x, int y, const QImage &,
-			   int sx, int sy, int sw, int sh, int conversion_flags );
-    void	drawImage( const QPoint &, const QImage &, const QRect &sr, int conversion_flags );
-    void	drawImage( const QPoint &, const QImage &, int conversion_flags );
     void	drawTiledPixmap( int x, int y, int w, int h, const QPixmap &,
 				 int sx=0, int sy=0 );
     void	drawTiledPixmap( const QRect &, const QPixmap &,
 				 const QPoint & );
     void	drawTiledPixmap( const QRect &, const QPixmap & );
-#ifndef QT_NO_PICTURE
     void	drawPicture( const QPicture & );
-#endif
 
     void	fillRect( int x, int y, int w, int h, const QBrush & );
     void	fillRect( const QRect &, const QBrush & );
@@ -249,14 +224,11 @@ public:
     int	       *tabArray() const;
     void	setTabArray( int * );
 
-    // Other functions
-
 #if defined(_WS_WIN_)
     HDC		handle() const;
 #elif defined(_WS_X11_)
     HANDLE	handle() const;
 #endif
-
 
     static void initialize();
     static void cleanup();
@@ -266,10 +238,8 @@ private:
     void	updateFont();
     void	updatePen();
     void	updateBrush();
-#ifndef QT_NO_TRANSFORMATIONS
     void	updateXForm();
     void	updateInvXForm();
-#endif
     void	map( int, int, int *rx, int *ry ) const;
     void	map( int, int, int, int, int *, int *, int *, int * ) const;
     void	mapInv( int, int, int *, int * ) const;
@@ -282,7 +252,7 @@ private:
 	   VxF=0x10, WxF=0x20, ClipOn=0x40, SafePolygon=0x80, MonoDev=0x100,
 	   DirtyFont=0x200, DirtyPen=0x400, DirtyBrush=0x800,
 	   RGBColor=0x1000, FontMet=0x2000, FontInf=0x4000, CtorBegin=0x8000,
-           UsePrivateCx=0x10000, VolatileDC=0x20000, PaintEventClipOn=0x40000 };
+           UsePrivateCx = 0x10000 };
     uint	flags;
     bool	testf( uint b ) const { return (flags&b)!=0; }
     void	setf( uint b )	{ flags |= b; }
@@ -305,7 +275,6 @@ private:
     int		tabarraylen;
 
     // Transformations
-#ifndef QT_NO_TRANSFORMATIONS
     QCOORD	wx, wy, ww, wh;
     QCOORD	vx, vy, vw, vh;
     QWMatrix	wxmat;
@@ -331,13 +300,6 @@ private:
 
     int		txop;
     bool	txinv;
-
-#else
-    // even without transformations we still have translations
-    int		xlatex;
-    int		xlatey;
-#endif
-
     void       *penRef;				// pen cache ref
     void       *brushRef;			// brush cache ref
     void       *ps_stack;
@@ -346,19 +308,24 @@ private:
 
 protected:
 #if defined(_WS_WIN_)
-    QT_WIN_PAINTER_MEMBERS
+    HDC		hdc;				// device context
+    HPEN	hpen;				// current pen
+    HBRUSH	hbrush;				// current brush
+    HBITMAP	hbrushbm;			// current brush bitmap
+    HFONT	hfont;				// current font
+    HPALETTE	holdpal;
+    void       *textmet;			// text metrics
+    uint	pixmapBrush : 1;
+    uint	nocolBrush  : 1;
+    uint	killFont    : 1;
+    void       *textMetric();
+    void	nativeXForm( bool );
 #elif defined(_WS_X11_)
     Display    *dpy;				// current display
     WId		hd;				// handle to drawable
     GC		gc;				// graphics context (standard)
     GC		gc_brush;			// graphics contect for brush
     QPoint	curPt;				// current point
-#elif defined(_WS_MAC_)
-    int penx;
-    int peny;
-    void * hd;
-#elif defined(_WS_QWS_)
-    QGfx * gfx;
 #endif
     friend class QFontMetrics;
     friend class QFontInfo;
@@ -387,6 +354,16 @@ inline QPaintDevice *QPainter::device() const
 inline bool QPainter::isActive() const
 {
     return testf(IsActive);
+}
+
+inline QFontMetrics QPainter::fontMetrics() const
+{
+    return QFontMetrics(this);
+}
+
+inline QFontInfo QPainter::fontInfo() const
+{
+    return QFontInfo(this);
 }
 
 inline const QFont &QPainter::font() const
@@ -433,20 +410,12 @@ inline const QPoint &QPainter::brushOrigin() const
 
 inline bool QPainter::hasViewXForm() const
 {
-#ifndef QT_NO_TRANSFORMATIONS
     return testf(VxF);
-#else
-    return xlatex || xlatey;
-#endif
 }
 
 inline bool QPainter::hasWorldXForm() const
 {
-#ifndef QT_NO_TRANSFORMATIONS
     return testf(WxF);
-#else
-    return xlatex || xlatey;
-#endif
 }
 
 inline bool QPainter::hasClipping() const
@@ -486,7 +455,6 @@ inline void QPainter::setBrushOrigin( const QPoint &p )
     setBrushOrigin( p.x(), p.y() );
 }
 
-#ifndef QT_NO_TRANSFORMATIONS
 inline void QPainter::setWindow( const QRect &r )
 {
     setWindow( r.x(), r.y(), r.width(), r.height() );
@@ -496,7 +464,6 @@ inline void QPainter::setViewport( const QRect &r )
 {
     setViewport( r.x(), r.y(), r.width(), r.height() );
 }
-#endif
 
 inline void QPainter::setClipRect( int x, int y, int w, int h )
 {
@@ -542,21 +509,6 @@ inline void QPainter::drawRoundRect( const QRect &r, int xRnd, int yRnd )
 {
     drawRoundRect( r.x(), r.y(), r.width(), r.height(), xRnd, yRnd );
 }
-
-inline void QPainter::drawRoundRect( const QRect &r )
-{
-    // ### Qt 3.0 make one func. with def. args.
-    drawRoundRect( r.x(), r.y(), r.width(), r.height(), 25, 25 );
-}
-
-inline void QPainter::drawRoundRect( int x, int y, int w, int h )
-{
-    // ### Qt 3.0 make one func. with def. args.
-    drawRoundRect( x, y, w, h, 25, 25 );
-}
-
-
-
 
 inline void QPainter::drawEllipse( const QRect &r )
 {
@@ -643,11 +595,5 @@ inline void *QPainter::textMetric()
 }
 #endif
 
-#if defined(_WS_QWS_)
-inline QGfx * QPainter::internalGfx()
-{
-    return gfx;
-}
-#endif
 
 #endif // QPAINTER_H

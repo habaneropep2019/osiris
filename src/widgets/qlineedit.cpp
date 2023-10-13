@@ -1,42 +1,29 @@
 /**********************************************************************
-** $Id: qt/src/widgets/qlineedit.cpp   2.3.2   edited 2001-10-19 $
+** $Id: qlineedit.cpp,v 2.172 1999/06/23 17:53:25 ettrich Exp $
 **
 ** Implementation of QLineEdit widget class
 **
 ** Created : 941011
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
-** This file is part of the widgets module of the Qt GUI Toolkit.
+** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses may use this file in accordance with the Qt Commercial License
-** Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
+*****************************************************************************/
 
 #include "qlineedit.h"
-#ifndef QT_NO_LINEEDIT
 #include "qpainter.h"
 #include "qdrawutil.h"
 #include "qfontmetrics.h"
@@ -46,99 +33,56 @@
 #include "qvalidator.h"
 #include "qdragobject.h"
 #include "qtimer.h"
-#include "qpopupmenu.h"
-#include "qstringlist.h"
-#include "qguardedptr.h"
+
 #include <ctype.h>
-
-
-struct QLineEditUndoItem
-{
-    QLineEditUndoItem(){pos=0;};
-    QLineEditUndoItem( const QString& s, int p )
-	: str(s),pos(p){}
-#if defined(Q_FULL_TEMPLATE_INSTANTIATION)
-    bool operator==( const QLineEditUndoItem& ) const { return FALSE; }
-#endif
-    QString str;
-    int pos;
-};
-
-enum {
-    IdUndo,
-    IdRedo,
-#ifndef QT_NO_CLIPBOARD
-    IdCut,
-    IdCopy,
-    IdPaste,
-#endif
-    IdClear,
-    IdSelectAll
-};
 
 struct QLineEditPrivate {
     QLineEditPrivate( QLineEdit * l ):
-	frame(TRUE), mode(QLineEdit::Normal),
-	readonly(FALSE), validator( 0 ),
+	frame(TRUE), mode(QLineEdit::Normal), validator( 0 ),
 	pm(0), pmDirty( TRUE ),
 	blinkTimer( l, "QLineEdit blink timer" ),
 	dragTimer( l, "QLineEdit drag timer" ),
-	dndTimer( l, "DnD Timer" ),
-	inDoubleClick( FALSE ), offsetDirty( FALSE ),
-	undo(TRUE), needundo( FALSE ), ignoreUndoWithDel( FALSE ),
-	mousePressed( FALSE ), dnd_primed( FALSE ), passwordChar( '*' ) {}
+	inDoubleClick( FALSE ) {}
 
     bool frame;
     QLineEdit::EchoMode mode;
-    bool readonly;
     const QValidator * validator;
     QPixmap * pm;
     bool pmDirty;
     QTimer blinkTimer;
-    QTimer dragTimer, dndTimer;
+    QTimer dragTimer;
     QRect cursorRepaintRect;
     bool inDoubleClick;
-    bool offsetDirty;
-    QValueList<QLineEditUndoItem> undoList;
-    QValueList<QLineEditUndoItem> redoList;
-    bool undo;
-    bool needundo;
-    bool ignoreUndoWithDel;
-    bool mousePressed;
-    QPoint dnd_startpos;
-    bool dnd_primed;
-    QChar passwordChar;
 };
 
 
-// REVISED: arnt
 /*!
   \class QLineEdit qlineedit.h
 
-  \brief The QLineEdit widget is a one-line text editor.
+  \brief The QLineEdit widget is a simple line editor for inputting text.
 
-  \ingroup basic
+  \ingroup realwidgets
 
-  A line edit allows the user to enter and edit a single line of
-  plain text, with a useful collection of editing functions, including
-  undo & redo, cut & paste, and drag & drop.
-
-  By changing the echoMode() of a line edit it can also be used
-  as a "write-only" field, for inputs such as passwords.
-
-  The length of the field can be constrained to a maxLength(),
-  or the value can be arbitrarily constrained by setting a validator().
-
-  A closely related class is QMultiLineEdit which allows multi-line
-  editing.
+  \define QLineEdit::EchoMode
 
   The default QLineEdit object has its own frame as specified by the
   Windows/Motif style guides, you can turn off the frame by calling
   setFrame( FALSE ).
 
-  The default key bindings are described in keyPressEvent().
-  A right-mouse-button menu presents a number of the editing commands
-  to the user.
+  It draws the text using its own \link QColorGroup color group:
+  \endlink \link QColorGroup::text() colorGroup().text() \endlink on
+  \link QColorGroup::base() colorGroup().base(). \endlink  The cursor
+  and frame use other colors from same color group, of course.
+
+  QLineEdit can display the content of itself in three ways, depending
+  on the current \link setEchoMode() echo mode. \endlink The echo
+  modes available are: <ul> <li> \c Normal - display characters as
+  they are entered.  This is the default. <li> \c NoEcho - do not
+  display anything. <li> \c Password - display asterisks instead of
+  the characters actually entered. </ul>
+
+  The default key bindings are described in keyPressEvent(); they cannot
+  be customized except by inheriting the class.
 
   <img src=qlined-m.png> <img src=qlined-w.png>
 
@@ -148,27 +92,9 @@ struct QLineEditPrivate {
 */
 
 
-/*! \enum QLineEdit::EchoMode
-
-  This enum type describes how QLineEdit displays its
-  contents.  The defined values are:
-  <ul>
-  <li> \c Normal - display characters as they are entered.  This is
-	the default.
-  <li> \c NoEcho - do not display anything. This may be appropriate
-	for passwords where even the length of the password should
-	be kept secret.
-  <li> \c Password - display asterisks instead of the characters
-	actually entered.
-  </ul>
-
-  \sa setEchoMode() echoMode() QMultiLineEdit::EchoMode
-*/
-
-
 /*!
   \fn void QLineEdit::textChanged( const QString& )
-  This signal is emitted every time the text changes.
+  This signal is emitted every time the text has changed.
   The argument is the new text.
 */
 
@@ -177,31 +103,28 @@ static const int scrollTime = 40;		// mark text scroll time
 
 
 /*!
-  Constructs a line edit with no text.
+  Constructs a line editor with an empty edit buffer.
 
-  The maximum text length is set to 32767 characters.
+  The cursor position is set to the start of the line, the maximum buffer
+  size to 32767 characters, and the buffer contents to "".
 
   The \e parent and \e name arguments are sent to the QWidget constructor.
-
-  \sa setText(), setMaxLength()
 */
 
 QLineEdit::QLineEdit( QWidget *parent, const char *name )
-    : QWidget( parent, name, WRepaintNoErase )
+    : QWidget( parent, name )
 {
     init();
 }
 
 
 /*!
-  Constructs a line edit containing the text \a contents.
+  Constructs a line editor whose edit buffer starts out as \a contents.
 
-  The cursor position is set to the end of the line and the maximum text
-  length to 32767 characters.
+  The cursor position is set to the end of the line and the maximum buffer
+  size to 32767 characters.
 
   The \e parent and \e name arguments are sent to the QWidget constructor.
-
-  \sa text(), setMaxLength()
 */
 
 QLineEdit::QLineEdit( const QString & contents,
@@ -214,7 +137,7 @@ QLineEdit::QLineEdit( const QString & contents,
 
 
 /*!
-  Destructs the line edit.
+  Destroys the line editor.
 */
 
 QLineEdit::~QLineEdit()
@@ -232,12 +155,8 @@ void QLineEdit::init()
     d = new QLineEditPrivate( this );
     connect( &d->blinkTimer, SIGNAL(timeout()),
 	     this, SLOT(blinkSlot()) );
-#ifndef QT_NO_DRAGANDDROP
     connect( &d->dragTimer, SIGNAL(timeout()),
 	     this, SLOT(dragScrollSlot()) );
-    connect( &d->dndTimer, SIGNAL(timeout()),
-	     this, SLOT(doDrag()) );
-#endif
     cursorPos = 0;
     offset = 0;
     maxLen = 32767;
@@ -248,25 +167,19 @@ void QLineEdit::init()
     scrollingLeft = FALSE;
     tbuf = QString::fromLatin1("");
     setFocusPolicy( StrongFocus );
-#ifndef QT_NO_CURSOR
     setCursor( ibeamCursor );
-#endif
     setBackgroundMode( PaletteBase );
     setKeyCompression( TRUE );
     alignmentFlag = Qt::AlignLeft;
     setAcceptDrops( TRUE );
-    //   Specifies that this widget can use more, but is able to survive on
-    //   less, horizontal space; and is fixed vertically.
-    setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed ) );
-    ed = FALSE;
 }
 
 
 /*!
-  Sets the line edit text to \e text, clears the selection and moves
+  Sets the line editor text to \e text, clears the selection and moves
   the cursor to the end of the line.
 
-  If necessary the text is truncated to maxLength().
+  If necessary the text is truncated to fit maxLength().
 
   \sa text()
 */
@@ -282,18 +195,11 @@ void QLineEdit::setText( const QString &text )
     markAnchor = 0;
     markDrag = 0;
     end( FALSE );
-#ifndef QT_NO_VALIDATOR
     if ( validator() )
 	(void)validator()->validate( tbuf, cursorPos );
-#endif
     d->pmDirty = TRUE;
 
-    update();
-    if ( d->undo ) {
-	d->undoList.clear();
-	d->redoList.clear();
-	d->needundo = TRUE;
-     }
+    repaint( FALSE );
     if ( oldText != tbuf )
 	emit textChanged( tbuf );
 }
@@ -301,9 +207,9 @@ void QLineEdit::setText( const QString &text )
 
 /*!
   Selects all text (i.e. marks it) and moves the cursor to the
-  end. This is useful when a default value has been inserted,
-  since if the user types before clicking on the widget the
-  selected text will be erased.
+  end. Useful when a default value has been inserted. If the user
+  types before clicking on the widget the selected text will be
+  erased.
 */
 
 void QLineEdit::selectAll()
@@ -326,7 +232,7 @@ void QLineEdit::deselect()
 
 
 /*!
-  Returns the text in the line.
+  Returns the text currently in the line.
   \sa setText()
 */
 
@@ -337,11 +243,11 @@ QString QLineEdit::text() const
 
 
 
-/*!  Returns the text that is displayed.  This is normally
+/*!  Returns the text that's currently displayed.  This is normally
 the same as text(), but can be e.g. "*****" if EchoMode is Password or
 "" if it is NoEcho.
 
-\sa setEchoMode() text() EchoMode
+\sa setEchoMode() text()
 */
 
 QString QLineEdit::displayText() const
@@ -356,7 +262,7 @@ QString QLineEdit::displayText() const
 	res = QString::fromLatin1("");
 	break;
     case Password:
-	res.fill( d->passwordChar, tbuf.length() );
+	res.fill( '*', tbuf.length() );
 	break;
     }
     return res;
@@ -367,8 +273,6 @@ QString QLineEdit::displayText() const
 /*!
   Returns TRUE if part of the text has been marked by the user (e.g. by
   clicking and dragging).
-
-  \sa markedText()
 */
 
 bool QLineEdit::hasMarkedText() const
@@ -389,7 +293,7 @@ QString QLineEdit::markedText() const
 }
 
 /*!
-  Returns the maximum permitted length of the text in the editor.
+  Returns the current maximum length of the text in the editor.
   \sa setMaxLength()
 */
 
@@ -400,7 +304,7 @@ int QLineEdit::maxLength() const
 
 /*!
   Set the maximum length of the text in the editor.  If the text is
-  too long, it is chopped off at the limit. Any marked text will
+  currently too long, it is chopped off at the limit. Any marked text will
   be unmarked.	The cursor position is set to 0 and the first part of the
   string is shown. \sa maxLength().
 */
@@ -416,7 +320,7 @@ void QLineEdit::setMaxLength( int m )
     }
     setCursorPosition( 0 );
     if ( d->pmDirty )
-	update();
+	repaint( FALSE );
 }
 
 /*!
@@ -426,40 +330,32 @@ void QLineEdit::setMaxLength( int m )
 
 
 /*!
-  Converts a key press into a line edit action.
+  The key press event handler converts a key press to some line editor
+  action.
 
-  If return or enter is pressed and the current text is valid (or can be
-  \link QValidator::fixup() made valid\endlink by the validator),
-  the signal returnPressed is emitted.
+  If return or enter is pressed and the current text is valid (or if
+  the validator can \link QValidator::fixup() make the text
+  valid\endlink), the signal returnPressed is emitted.
 
-  The default key bindings are:
+  Here are the default key bindings:
   <ul>
-  <li><i> Left Arrow </i> Move the cursor one character leftwards.
-  <li><i> Right Arrow </i> Move the cursor one character rightwards.
-  <li><i> Backspace </i> Delete the character to the left of the cursor.
-  <li><i> Home </i> Move the cursor to the beginning of the line.
-  <li><i> End </i> Move the cursor to the end of the line.
-  <li><i> Delete </i> Delete the character to the right of the cursor.
-  <li><i> Shift - Left Arrow </i> Move and mark text one character leftwards.
-  <li><i> Shift - Right Arrow </i> Move and mark text one character rightwards.
-  <li><i> Control-A </i> Move the cursor to the beginning of the line.
-  <li><i> Control-B </i> Move the cursor one character leftwards.
+  <li><i> Left Arrow </i> Move the cursor one character leftwards
+  <li><i> Right Arrow </i> Move the cursor one character rightwards
+  <li><i> Backspace </i> Delete the character to the left of the cursor
+  <li><i> Home </i> Move the cursor to the beginning of the line
+  <li><i> End </i>	 Move the cursor to the end of the line
+  <li><i> Delete </i> Delete the character to the right of the cursor
+  <li><i> Shift - Left Arrow </i> Mark text one character leftwards
+  <li><i> Shift - Right Arrow </i> Mark text one character rightwards
+  <li><i> Control-A </i> Move the cursor to the beginning of the line
+  <li><i> Control-B </i> Move the cursor one character leftwards
   <li><i> Control-C </i> Copy the marked text to the clipboard.
-  <li><i> Control-D </i> Delete the character to the right of the cursor.
-  <li><i> Control-E </i> Move the cursor to the end of the line.
-  <li><i> Control-F </i> Move the cursor one character rightwards.
-  <li><i> Control-H </i> Delete the character to the left of the cursor.
-  <li><i> Control-K </i> Delete to end of line
+  <li><i> Control-D </i> Delete the character to the right of the cursor
+  <li><i> Control-E </i> Move the cursor to the end of the line
+  <li><i> Control-F </i> Move the cursor one character rightwards
+  <li><i> Control-H </i> Delete the character to the left of the cursor
   <li><i> Control-V </i> Paste the clipboard text into line edit.
-  <li><i> Control-X </i> Move the marked text to the clipboard.
-  <li><i> Control-Z </i> Undo the last operation.
-  <li><i> Control-Y </i> Redo the last undone operation.
-  </ul>
-  In addition, the following key bindings are used on Windows:
-  <ul>
-  <li><i> Shift - Delete </i> Cut the marked text, copy to clipboard
-  <li><i> Shift - Insert </i> Paste the clipboard text into line edit
-  <li><i> Control - Insert </i> Copy the marked text to the clipboard
+  <li><i> Control-X </i> Cut the marked text, copy to clipboard.
   </ul>
 
   All other keys with valid ASCII codes insert themselves into the line.
@@ -468,44 +364,24 @@ void QLineEdit::setMaxLength( int m )
 void QLineEdit::keyPressEvent( QKeyEvent *e )
 {
     if ( e->key() == Key_Enter || e->key() == Key_Return ) {
-#ifdef QT_NO_VALIDATOR
-	emit returnPressed();
-	e->ignore();
-#else
 	const QValidator * v = validator();
 	if ( !v || v->validate( tbuf, cursorPos ) == QValidator::Acceptable ) {
 	    emit returnPressed();
-	    e->ignore();
-	}
-	else if ( v ) {
-	    QString old( tbuf );
+	} else if ( v ) {
 	    v->fixup( tbuf );
-	    if ( old != tbuf ) {
-		d->pmDirty = TRUE;
-		if ( cursorPos > (int)tbuf.length() )
-		    cursorPos = tbuf.length();
-		update();
-	    }
 	    if ( v->validate( tbuf, cursorPos ) == QValidator::Acceptable )
 		emit returnPressed();
-	    e->ignore();
 	}
-#endif
+	e->ignore();
 	return;
     }
-    if ( !d->readonly ) {
-	QString t = e->text();
-	if ( !t.isEmpty() && (!e->ascii() || e->ascii()>=32) &&
-	     e->key() != Key_Delete &&
-	     e->key() != Key_Backspace ) {
-	    insert( t );
-	    return;
-	}
+    QString t = e->text();
+    if ( !t.isEmpty() && (!e->ascii() || e->ascii()>=32) &&
+	 e->key() != Key_Delete &&
+	 e->key() != Key_Backspace ) {
+	insert( t );
+	return;
     }
-    bool needundo = d->needundo;
-    d->needundo = TRUE;
-    bool ignoreUndoWithDel = d->ignoreUndoWithDel;
-    d->ignoreUndoWithDel = FALSE;
     int unknown = 0;
     if ( e->state() & ControlButton ) {
 	switch ( e->key() ) {
@@ -515,16 +391,11 @@ void QLineEdit::keyPressEvent( QKeyEvent *e )
 	case Key_B:
 	    cursorLeft( e->state() & ShiftButton );
 	    break;
-#ifndef QT_NO_CLIPBOARD
 	case Key_C:
 	    copy();
 	    break;
-#endif
 	case Key_D:
-	    if ( !d->readonly ) {
-		d->ignoreUndoWithDel = ignoreUndoWithDel;
-		del();
-	    }
+	    del();
 	    break;
 	case Key_E:
 	    end( e->state() & ShiftButton );
@@ -533,52 +404,29 @@ void QLineEdit::keyPressEvent( QKeyEvent *e )
 	    cursorRight( e->state() & ShiftButton );
 	    break;
 	case Key_H:
-	    if ( !d->readonly ) {
-		d->ignoreUndoWithDel = ignoreUndoWithDel;
-		backspace();
-	    }
+	    backspace();
 	    break;
 	case Key_K:
-	    if ( !d->readonly && cursorPos < (int)tbuf.length() ) {
+	    if ( cursorPos < (int)tbuf.length() ) {
 		QString t( tbuf );
-		if ( d->undoList.isEmpty() || d->undoList.last().str != tbuf ) {
-		    d->undoList += QLineEditUndoItem(tbuf, cursorPos );
-		    d->redoList.clear();
-		}
 		t.truncate( cursorPos );
 		validateAndSet( t, cursorPos, cursorPos, cursorPos );
 	    }
 	    break;
-#ifndef QT_NO_CLIPBOARD
 	case Key_V:
-	    if ( !d->readonly )
-		insert( QApplication::clipboard()->text() );
+	    insert( QApplication::clipboard()->text() );
 	    break;
 	case Key_X:
-	    if ( !d->readonly && hasMarkedText() && echoMode() == Normal ) {
+	    if ( hasMarkedText() && echoMode() == Normal ) {
 		copy();
 		del();
 	    }
 	    break;
-#if defined (_WS_WIN_)
-	case Key_Insert:
-	    copy();
-	    break;
-#endif
-#endif
 	case Key_Right:
 	    cursorWordForward( e->state() & ShiftButton );
 	    break;
 	case Key_Left:
 	    cursorWordBackward( e->state() & ShiftButton );
-	    break;
-	case Key_Z:
-	    if ( !d->readonly )
-		undoInternal();
-	    break;
-	case Key_Y:
-	    if ( !d->readonly )
-		redoInternal();
 	    break;
 	default:
 	    unknown++;
@@ -592,10 +440,7 @@ void QLineEdit::keyPressEvent( QKeyEvent *e )
 	    cursorRight( e->state() & ShiftButton );
 	    break;
 	case Key_Backspace:
-	    if ( !d->readonly ) {
-		d->ignoreUndoWithDel = ignoreUndoWithDel;
-		backspace();
-	    }
+	    backspace();
 	    break;
 	case Key_Home:
 	    home( e->state() & ShiftButton );
@@ -604,114 +449,75 @@ void QLineEdit::keyPressEvent( QKeyEvent *e )
 	    end( e->state() & ShiftButton );
 	    break;
 	case Key_Delete:
-	    if ( !d->readonly ) {
-#if defined (_WS_WIN_)
-		if ( e->state() & ShiftButton ) {
-		    cut();
-		    break;
-		}
-#endif
-		d->ignoreUndoWithDel = ignoreUndoWithDel;
-		del();
-	    }
+	    del();
 	    break;
-#if defined (_WS_WIN_)
-	case Key_Insert:
-	    if ( !d->readonly && e->state() & ShiftButton )
-		paste();
-	    else
-		unknown++;
-	    break;
-#endif
-	case Key_F14: // Undo key on Sun keyboards
-	    if ( !d->readonly )
-		undoInternal();
-	    break;
-#ifndef QT_NO_CLIPBOARD
-	case Key_F16: // Copy key on Sun keyboards
-	    copy();
-	    break;
-	case Key_F18: // Paste key on Sun keyboards
-	    if ( !d->readonly )
-		insert( QApplication::clipboard()->text() );
-	    break;
-	case Key_F20: // Cut key on Sun keyboards
-	    if ( !d->readonly && hasMarkedText() && echoMode() == Normal ) {
-		copy();
-		del();
-	    }
-	    break;
-#endif
 	default:
 	    unknown++;
 	}
     }
 
     if ( unknown ) {				// unknown key
-	d->needundo = needundo;
 	e->ignore();
 	return;
     }
 }
 
 
-/*!\reimp
+/*!
+  Handles the cursor blinking.
 */
 
-void QLineEdit::focusInEvent( QFocusEvent * e)
+void QLineEdit::focusInEvent( QFocusEvent * )
 {
     d->pmDirty = TRUE;
-    cursorOn = FALSE;
     blinkOn();
-    if ( e->reason() == QFocusEvent::Tab )
-	selectAll();
-    d->pmDirty = TRUE;
-    repaint( FALSE );
 }
 
 
-/*!\reimp
+/*!
+  Handles the cursor blinking and selection copying.
 */
 
-void QLineEdit::focusOutEvent( QFocusEvent * e )
+void QLineEdit::focusOutEvent( QFocusEvent * )
 {
-    if ( e->reason() != QFocusEvent::ActiveWindow
-	 && e->reason() != QFocusEvent::Popup )
-	deselect();
+    if ( style() == WindowsStyle ) {
+#if defined(_WS_X11_)
+	// X11 users are very accustomed to "auto-copy"
+	copy();
+#endif
+	if ( focusWidget() != this || qApp->focusWidget() == 0 ||
+	     qApp->focusWidget()->topLevelWidget() != topLevelWidget() )
+	    deselect();
+    }
     d->dragTimer.stop();
     if ( cursorOn )
 	blinkSlot();
-    d->pmDirty = TRUE;
-    repaint( FALSE );
 }
 
-/*!\reimp
+/*!
+  Handles selection copying.
 */
 void QLineEdit::leaveEvent( QEvent * )
 {
+#if defined(_WS_X11_)
+    if ( style() == WindowsStyle )
+	copy(); // X11 users are very accustomed to "auto-copy"
+#endif
 }
 
 
-/*!\reimp
+/*!
+  Handles paint events for the line editor.
 */
 
 void QLineEdit::paintEvent( QPaintEvent *e )
 {
-    if ( d->offsetDirty )
-	updateOffset();
     if ( !d->pm || d->pmDirty ) {
 	makePixmap();
-	if ( d->pm->isNull() ) {
-	    delete d->pm;
-	    d->pm = 0;
-	    return;
-	}
-
 	QPainter p( d->pm, this );
 
 	const QColorGroup & g = colorGroup();
-	QBrush bg = g.brush((isEnabled()) ? QColorGroup::Base :
-			    QColorGroup::Background);
+	QColor bg = isEnabled() ? g.base() : g.background();
 	QFontMetrics fm = fontMetrics();
 	int markBegin = minMark();
 	int markEnd = maxMark();
@@ -734,7 +540,7 @@ void QLineEdit::paintEvent( QPaintEvent *e )
 	    p.drawText( x, y, before );
 	}
 	x += w;
-
+	
 	w = fm.width( marked );
 	if ( x < d->pm->width() && x + w >= 0 ) {
 	    p.fillRect( x, y-fm.ascent()-1, w, fm.height()+2,
@@ -743,17 +549,17 @@ void QLineEdit::paintEvent( QPaintEvent *e )
 	    p.drawText( x, y, marked );
 	}
 	x += w;
-
+	
 	w = fm.width( after );
 	if ( x < d->pm->width() && x + w >= 0 ) {
 	    p.setPen( g.text() );
 	    p.drawText( x, y, after );
 	}
 	// ... x += w;
+	
+	p.setPen( g.foreground() );
 
-	p.setPen( g.text() );
-
-	d->cursorRepaintRect.setTop( y + frameW() - fm.ascent() );
+	d->cursorRepaintRect.setTop( y + (frame() ? 2 : 0) - fm.ascent() );
 	d->cursorRepaintRect.setHeight( fm.height() );
 	d->pmDirty = FALSE;
     }
@@ -761,16 +567,15 @@ void QLineEdit::paintEvent( QPaintEvent *e )
     QPainter p( this );
 
     if ( frame() ) {
-	style().drawPanel( &p, 0, 0, width(), height(), colorGroup(),
-			   TRUE, style().defaultFrameWidth() );
-	p.drawPixmap( frameW(), frameW(), *d->pm );
+	style().drawPanel( &p, 0, 0, width(), height(), colorGroup(), TRUE, style().defaultFrameWidth() );
+	p.drawPixmap( 2, 2, *d->pm );
     } else {
 	p.drawPixmap( 0, 0, *d->pm );
     }
 
     if ( hasFocus() ) {
 	d->cursorRepaintRect
-	    = QRect( offset + frameW() +
+	    = QRect( offset + (frame() ? 2 : 0 ) +
 		     fontMetrics().width( displayText().left( cursorPos ) ),
 		     d->cursorRepaintRect.top(),
 		     5, d->cursorRepaintRect.height() );
@@ -778,9 +583,7 @@ void QLineEdit::paintEvent( QPaintEvent *e )
 	int curYTop = d->cursorRepaintRect.y();
 	int curYBot = d->cursorRepaintRect.bottom();
 	int curXPos = d->cursorRepaintRect.x() + 2;
-	if ( !d->readonly && cursorOn &&
-	     d->cursorRepaintRect.intersects( e->rect() ) ) {
-	    p.setPen( colorGroup().text() );
+	if ( cursorOn && d->cursorRepaintRect.intersects( e->rect() ) ) {
 	    p.drawLine( curXPos, curYTop, curXPos, curYBot );
 	    if ( style() != WindowsStyle ) {
 		p.drawLine( curXPos - 2, curYTop, curXPos + 2, curYTop );
@@ -798,193 +601,56 @@ void QLineEdit::paintEvent( QPaintEvent *e )
 }
 
 
-/*!\reimp
+/*!
+  Handles resize events for this widget.
 */
 
 void QLineEdit::resizeEvent( QResizeEvent * )
 {
     delete d->pm;
     d->pm = 0;
-    offset = 0;
-    updateOffset();
 }
 
 
-/*! \reimp
+/*!
+  Handles mouse press events for this widget.
 */
-bool QLineEdit::event( QEvent * e )
-{
-    if ( e->type() == QEvent::AccelOverride && !d->readonly ) {
-	QKeyEvent* ke = (QKeyEvent*) e;
-	if ( ke->state() == NoButton ) {
-	    if ( ke->key() < Key_Escape ) {
-		ke->accept();
-	    } else {
-		switch ( ke->key() ) {
-  		case Key_Delete:
-  		case Key_Home:
-  		case Key_End:
-  		case Key_Backspace:
-  		    ke->accept();
- 		default:
-  		    break;
-  		}
-	    }
-	} else if ( ke->state() & ControlButton ) {
-	    switch ( ke->key() ) {
-// Those are too frequently used for application functionality
-/*	    case Key_A:	
-	    case Key_B:
-	    case Key_D:
-	    case Key_E:
-	    case Key_F:
-	    case Key_H:
-	    case Key_K:
-*/
-	    case Key_C:
-	    case Key_V:
-	    case Key_X:	    
-	    case Key_Y:
-	    case Key_Z:	    
-	    case Key_Left:
-	    case Key_Right:
-#if defined (_WS_WIN_)
-	    case Key_Insert:
-#endif
-		ke->accept();
-	    default:
-		break;
-	    }
-	}
-    }
-    return QWidget::event( e );
-}
 
-
-/*! \reimp
-*/
 void QLineEdit::mousePressEvent( QMouseEvent *e )
 {
-    d->dnd_startpos = e->pos();
-    d->dnd_primed = FALSE;
-#ifndef QT_NO_POPUPMENU
-    if ( e->button() == RightButton ) {
-	QGuardedPtr<QPopupMenu> popup = new QPopupMenu( this );
-	int id[ 7 ];
-	id[ IdUndo ] = popup->insertItem( tr( "Undo" ) );
-	id[ IdRedo ] = popup->insertItem( tr( "Redo" ) );
-	popup->insertSeparator();
-#ifndef QT_NO_CLIPBOARD
-	id[ IdCut ] = popup->insertItem( tr( "Cut" ) );
-	id[ IdCopy ] = popup->insertItem( tr( "Copy" ) );
-	id[ IdPaste ] = popup->insertItem( tr( "Paste" ) );
-#endif
-	id[ IdClear ] = popup->insertItem( tr( "Clear" ) );
-	popup->insertSeparator();
-	id[ IdSelectAll ] = popup->insertItem( tr( "Select All" ) );
-	popup->setItemEnabled( id[ IdUndo ],
-				  !this->d->readonly && !this->d->undoList.isEmpty() );
-	popup->setItemEnabled( id[ IdRedo ],
-				  !this->d->readonly && !this->d->redoList.isEmpty() );
-#ifndef QT_NO_CLIPBOARD
-	popup->setItemEnabled( id[ IdCut ],
-				  !this->d->readonly && !this->d->readonly && hasMarkedText() );
-	popup->setItemEnabled( id[ IdCopy ], hasMarkedText() );
-	popup->setItemEnabled( id[ IdPaste ],
-				  !this->d->readonly
-				  && (bool)QApplication::clipboard()->text().length() );
-#endif
-	popup->setItemEnabled( id[ IdClear ],
-				  !this->d->readonly && (bool)text().length() );
-	int allSelected = minMark() == 0 && maxMark() == (int)text().length();
-	popup->setItemEnabled( id[ IdSelectAll ],
-				  (bool)text().length() && !allSelected );
-
-	int r = popup->exec( e->globalPos() );
-	delete (QPopupMenu *) popup;
-
-	if ( r == id[ IdUndo ] )
-	    undoInternal();
-	else if ( r == id[ IdRedo ] )
-	    redoInternal();
-#ifndef QT_NO_CLIPBOARD
-	else if ( r == id[ IdCut ] )
-	    cut();
-	else if ( r == id[ IdCopy ] )
-	    copy();
-	else if ( r == id[ IdPaste ] )
-	    paste();
-#endif
-	else if ( r == id[ IdClear ] )
-	    clear();
-	else if ( r == id[ IdSelectAll ] )
-	    selectAll();
-	return;
-    }
-#endif //QT_NO_POPUPMENU
     d->inDoubleClick = FALSE;
     int newCP = xPosToCursorPos( e->pos().x() );
     int m1 = minMark();
     int m2 = maxMark();
-#ifndef QT_NO_DRAGANDDROP
-    if ( hasMarkedText() && echoMode() == Normal && !( e->state() & ShiftButton ) &&
+    if ( hasMarkedText() && echoMode() == Normal &&
 	 e->button() == LeftButton && m1 < newCP && m2 > newCP ) {
-	d->dndTimer.start( QApplication::startDragTime(), TRUE );
-	d->dnd_primed = TRUE;
+	QTextDrag *tdo = new QTextDrag( markedText(), this );
+	if ( tdo->drag() ) {
+	    // ##### Delete original (but check if it went to me)
+	}
 	return;
     }
-#endif
 
     m1 = QMIN( m1, cursorPos );
     m2 = QMAX( m2, cursorPos );
-    dragScrolling = FALSE;
-    if ( e->state() & ShiftButton ) {
-	newMark( newCP, FALSE );
-    } else {
-	markDrag = newCP;
-	markAnchor = newCP;
-	newMark( newCP, FALSE );
-    }
+    markAnchor = newCP;
+    newMark( markAnchor, FALSE );
     repaintArea( m1, m2 );
-    d->mousePressed = TRUE;
+    dragScrolling = FALSE;
 }
 
-#ifndef QT_NO_DRAGANDDROP
 
-/*
-  \internal
+/*!
+  Handles mouse move events for the line editor, primarily for
+  marking text.
 */
 
-void QLineEdit::doDrag()
-{
-    d->dnd_primed = FALSE;
-    QTextDrag *tdo = new QTextDrag( markedText(), this );
-    tdo->drag();
-}
-
-#endif // QT_NO_DRAGANDDROP
-
-/*!\reimp
-*/
 void QLineEdit::mouseMoveEvent( QMouseEvent *e )
 {
-#ifndef QT_NO_DRAGANDDROP
-    if ( d->dndTimer.isActive() ) {
-	d->dndTimer.stop();
-	return;
-    }
-
-    if ( d->dnd_primed ) {
-	if ( ( d->dnd_startpos - e->pos() ).manhattanLength() > QApplication::startDragDistance() )
-	    doDrag();
-	return;
-    }
-#endif
-
     if ( !(e->state() & LeftButton) )
 	return;
 
-    int margin = frame() ? frameW()*2 : 2;
+    int margin = frame() ? 4 : 2;
 
     if ( e->pos().x() < margin || e->pos().x() > width() - margin ) {
 	if ( !dragScrolling ) {
@@ -1005,34 +671,26 @@ void QLineEdit::mouseMoveEvent( QMouseEvent *e )
     }
 }
 
-/*!\reimp
+/*!
+  Handles mouse release events for this widget.
 */
+
 void QLineEdit::mouseReleaseEvent( QMouseEvent * e )
 {
     dragScrolling = FALSE;
-    d->dnd_primed = FALSE;
-    if ( d->dndTimer.isActive() ) {
-	d->dndTimer.stop();
-	int ncp = xPosToCursorPos( e->pos().x() );
-	setSelection( ncp, 0 );
-	setCursorPosition( ncp );
-	return;
-    }
     if ( d->inDoubleClick ) {
 	d->inDoubleClick = FALSE;
 	return;
     }
 
-    if ( !d->mousePressed )
-	return;
-    d->mousePressed = FALSE;
-
-#ifndef QT_NO_CLIPBOARD
 #if defined(_WS_X11_)
     copy();
+#else
+    if ( style() == MotifStyle )
+	copy();
 #endif
 
-    if ( !d->readonly && e->button() == MidButton ) {
+    if ( e->button() == MidButton ) {
 #if defined(_WS_X11_)
 	insert( QApplication::clipboard()->text() );
 #else
@@ -1041,12 +699,11 @@ void QLineEdit::mouseReleaseEvent( QMouseEvent * e )
 #endif
 	return;
     }
-#endif
 
     if ( e->button() != LeftButton )
 	return;
 
-    int margin = frame() ? frameW()*2 : 2;
+    int margin = frame() ? 4 : 2;
     if ( !QRect( margin, margin,
 		 width() - 2*margin,
 		 height() - 2*margin ).contains( e->pos() ) )
@@ -1059,16 +716,16 @@ void QLineEdit::mouseReleaseEvent( QMouseEvent * e )
 }
 
 
-/*!\reimp
+/*!
+  Handles mouse double click events for this widget.
 */
+
 void QLineEdit::mouseDoubleClickEvent( QMouseEvent * )
 {
     d->inDoubleClick = TRUE;
     dragScrolling = FALSE;
-    if ( echoMode() == Password )
-	selectAll();
-    else
-	markWord( cursorPos );
+
+    markWord( cursorPos );
 }
 
 /*!
@@ -1092,8 +749,7 @@ void QLineEdit::cursorRight( bool mark, int steps )
     cp = QMAX( cp, 0 );
     cp = QMIN( cp, (int)tbuf.length() );
     if ( cp == cursorPos ) {
-	if ( !mark )
-	    deselect();
+	// nothing
     } else if ( mark ) {
 	newMark( cp );
 	blinkOn();
@@ -1104,7 +760,7 @@ void QLineEdit::cursorRight( bool mark, int steps )
 }
 
 /*!
-  Deletes the character to the left of the text cursor and moves the
+  Deletes the character on the left side of the text cursor and moves the
   cursor one position to the left. If a text has been marked by the user
   (e.g. by clicking and dragging) the cursor will be put at the beginning
   of the marked text and the marked text will be removed.  \sa del()
@@ -1115,12 +771,6 @@ void QLineEdit::backspace()
     if ( hasMarkedText() ) {
 	del();
     } else if ( cursorPos > 0 ) {
-	if ( d->undo && d->needundo && !d->ignoreUndoWithDel ) {
-	    if ( d->undoList.isEmpty() || d->undoList.last().str != tbuf ) {
-		d->undoList += QLineEditUndoItem(tbuf, cursorPos );
-		d->redoList.clear();
-	    }
-	}
 	cursorLeft( FALSE );
 	del();
     }
@@ -1135,21 +785,14 @@ void QLineEdit::backspace()
 
 void QLineEdit::del()
 {
-    QString test( tbuf);
-    d->ignoreUndoWithDel = TRUE;
-    if ( d->undo && ( (d->needundo && !d->ignoreUndoWithDel) || hasMarkedText() ) ) {
-	if ( d->undoList.isEmpty() || d->undoList.last().str != tbuf ) {
-	    d->undoList += QLineEditUndoItem(tbuf, cursorPos );
-	    d->redoList.clear();
-	}
-    }
+    QString test( tbuf.copy() );
 
     if ( hasMarkedText() ) {
 	test.remove( minMark(), maxMark() - minMark() );
 	validateAndSet( test, minMark(), minMark(), minMark() );
     } else if ( cursorPos != (int)tbuf.length() ) {
 	test.remove( cursorPos, 1 );
-	validateAndSet( test, cursorPos, 0, 0 );
+	validateAndSet( test, minMark(), minMark(), minMark() );
     }
 }
 
@@ -1183,12 +826,8 @@ void QLineEdit::newMark( int pos, bool c )
 	d->pmDirty = TRUE;
     markDrag = pos;
     setCursorPosition( pos );
-#ifndef QT_NO_CLIPBOARD
-#if defined(_WS_X11_)
-    if ( c )
+    if ( c && style() == MotifStyle )
 	copy();
-#endif
-#endif
 }
 
 
@@ -1211,17 +850,13 @@ void QLineEdit::markWord( int pos )
     int newDrag = i;
     setSelection( newAnchor, newDrag - newAnchor );
 
-#ifndef QT_NO_CLIPBOARD
-#if defined(_WS_X11_)
-    copy();
-#endif
-#endif
+    if ( style() == MotifStyle )
+	copy();
 }
 
-#ifndef QT_NO_CLIPBOARD
 
 /*! Copies the marked text to the clipboard, if there is any and
-  if echoMode() is Normal.
+  echoMode() is Normal.
 
   \sa cut() paste()
 */
@@ -1236,6 +871,7 @@ void QLineEdit::copy() const
 		 this, SLOT(clipboardChanged()) );
     }
 }
+
 
 /*!
   Inserts the clipboard's text at the cursor position, deleting any
@@ -1271,31 +907,25 @@ void QLineEdit::cut()
     }
 }
 
-#endif
-
 /*!
-  Sets the alignment of the line edit. Possible Values are Qt::AlignLeft,
-  Qt::AlignRight and Qt::Align(H)Center - see Qt::AlignmentFlags.
+  Sets the alignment of the line editor. Possible Values are Qt::AlignLeft,
+  Qt::AlignRight and Qt::AlignCenter.
   \sa alignment()
 */
 void QLineEdit::setAlignment( int flag ){
-    if ( flag == alignmentFlag )
-	return;
     if ( flag == Qt::AlignRight ||
 	 flag == Qt::AlignCenter ||
-	 flag == Qt::AlignHCenter ||
 	 flag == Qt::AlignLeft ) {
 	alignmentFlag = flag;
 	updateOffset();
-	update();
     }
 }
 
 /*!
-  Returns the alignment of the line edit. Possible Values
-  are Qt::AlignLeft, Qt::AlignRight and Qt::Align(H)Center.
+  Returns the current alignment of the line editor. Possible Values
+  are Qt::AlignLeft, Qt::AlignRight and Qt::AlignCenter.
 
-  \sa setAlignment(), Qt::AlignmentFlags
+  \sa setAlignment()
 */
 
 int QLineEdit::alignment() const
@@ -1321,7 +951,7 @@ void QLineEdit::clipboardChanged()
 
 int QLineEdit::lastCharVisible() const
 {
-    int tDispWidth = width() - (frameW()*2 + 4);
+    int tDispWidth = width() - (frame() ? 8 : 4);
     return xPosToCursorPos( tDispWidth );
 }
 
@@ -1339,13 +969,13 @@ int QLineEdit::maxMark() const
 
 
 
-/*!  Sets the line edit to draw itself inside a frame if \a
+/*!  Sets the line edit to draw itself inside a two-pixel frame if \a
   enable is TRUE, and to draw itself without any frame if \a enable is
   FALSE.
 
   The default is TRUE.
 
-  \sa frame()
+  \sa frame() QComboBox
 */
 
 void QLineEdit::setFrame( bool enable )
@@ -1356,7 +986,6 @@ void QLineEdit::setFrame( bool enable )
     d->frame = enable;
     d->pmDirty = TRUE;
     updateOffset();
-    update();
 }
 
 
@@ -1373,28 +1002,18 @@ bool QLineEdit::frame() const
     return d ? d->frame : TRUE;
 }
 
-int QLineEdit::frameW() const
-{
-    return frame() ? style().defaultFrameWidth() : 0;
-}
 
 /*!  Sets the echo mode of the line edit widget.
 
-  The echo modes available are:
-  <ul>
-  <li> \c Normal - display characters as they are entered.  This is
-	the default.
-  <li> \c NoEcho - do not display anything. This may be appropriate
-	for passwords where even the length of the password should
-	be kept secret.
-  <li> \c Password - display asterisks instead of the characters
-	actually entered.
-  </ul>
+  The echo modes available are: <ul> <li> \c Normal - display
+  characters as they are entered.  This is the default. <li> \c NoEcho
+  - do not display anything. <li> \c Password - display asterisks
+  instead of the characters actually entered. </ul>
 
-  The widget's display, and the ability to copy or drag the
-  text is affected by this setting.
+  It is always possible to cut and paste any marked text; only the
+  widget's own display is affected.
 
-  \sa echoMode() EchoMode displayText()
+  \sa echoMode()
 */
 
 void QLineEdit::setEchoMode( EchoMode mode )
@@ -1405,62 +1024,39 @@ void QLineEdit::setEchoMode( EchoMode mode )
     d->mode = mode;
     d->pmDirty = TRUE;
     updateOffset();
-    update();
 }
 
 
 /*!
-  Returns the echo mode of the line edit.
+  Returns the current echo mode of the line edit.
 
-  \sa setEchoMode() EchoMode
+  \sa setEchoMode()
 */
 
 QLineEdit::EchoMode QLineEdit::echoMode() const
 {
-    return d->mode;
-}
-
-/*!
-  Enables or disables read-only mode, where the user can cut-and-paste
-  or drag-and-drop the text, but cannot edit it.
-  They never see a cursor in this case.
-
-  \sa setEnabled(), isReadOnly()
-*/
-void QLineEdit::setReadOnly( bool enable )
-{
-    d->readonly = enable;
-}
-
-/*!
-  Returns whether the line-edit is read-only.
-  \sa setReadOnly()
-*/
-bool QLineEdit::isReadOnly() const
-{
-    return d->readonly;
+    return d ? d->mode : Normal;
 }
 
 
-
 /*!
-  Returns a recommended size for the widget.
+  Returns a size which fits the contents of the line edit.
 
-  The width returned is enough for a few characters, typically 15 to 20.
+  The width returned tends to be enough for about 15-20 characters.
 */
+
 QSize QLineEdit::sizeHint() const
 {
-    constPolish();
     QFontMetrics fm( font() );
     int h = fm.height();
     int w = fm.width( 'x' ) * 17; // "some"
     if ( frame() ) {
-	h += 4 + frameW()*2;
+	h += 8;
 	if ( style() == WindowsStyle && h < 26 )
 	    h = 22;
-	return QSize( w + 4 + frameW()*2, h ).expandedTo( QApplication::globalStrut() );
+	return QSize( w + 8, h );
     } else {
-	return QSize( w + 4, h + 4 ).expandedTo( QApplication::globalStrut() );
+	return QSize( w + 4, h + 4 );
     }
 }
 
@@ -1469,20 +1065,19 @@ QSize QLineEdit::sizeHint() const
 /*!
   Returns a minimum size for the line edit.
 
-  The width returned is enough for at least one character.
+  The width returned tends to be enough for one character.
 */
 
 QSize QLineEdit::minimumSizeHint() const
 {
-    constPolish();
     QFontMetrics fm( font() );
     int h = fm.height();
     int w = fm.maxWidth();
     if ( frame() ) {
-	h += 4 + frameW()*2;
+	h += 8;
 	if ( style() == WindowsStyle && h < 26 )
 	    h = 22;
-	return QSize( w + 4 + frameW()*2, h );
+	return QSize( w + 8, h );
     } else {
 	return QSize( w + 4, h + 4 );
     }
@@ -1490,24 +1085,26 @@ QSize QLineEdit::minimumSizeHint() const
 
 
 
-/*!\reimp
+/*!
+  Specifies that this widget can use more, but is able to survive on
+  less, horizontal space; and is fixed vertically.
 */
+
 QSizePolicy QLineEdit::sizePolicy() const
 {
-    //### removeme 3.0
-    return QWidget::sizePolicy();
+    return QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
 }
 
 
 /*!
-  Sets this line edit to accept input only as accepted by \a v,
-  allowing arbitrary constraints on the text which the user can edit.
+  Sets this line edit to accept input only as accepted by \a v.
 
-  If \a v == 0, remove the current input validator.  The default
+  If \a v == 0, remove the currently set input validator.  The default
   is no input validator (ie. any input is accepted up to maxLength()).
 
   \sa validator() QValidator
 */
+
 
 void QLineEdit::setValidator( const QValidator * v )
 {
@@ -1517,8 +1114,6 @@ void QLineEdit::setValidator( const QValidator * v )
 /*!
   Returns a pointer to the current input validator, or 0 if no
   validator has been set.
-
-  \sa setValidator()
 */
 
 const QValidator * QLineEdit::validator() const
@@ -1534,34 +1129,21 @@ void QLineEdit::clearValidator()
     setValidator( 0 );
 }
 
-#ifndef QT_NO_DRAGANDDROP
 
-/*! \reimp
-*/
+
 void QLineEdit::dragEnterEvent( QDragEnterEvent *e )
 {
-    if ( !d->readonly && QTextDrag::canDecode(e) )
+    if ( QTextDrag::canDecode(e) )
 	e->accept( rect() );
 }
 
 
-/*!\reimp
-*/
 void QLineEdit::dropEvent( QDropEvent *e )
 {
     QString str;
-    QCString plain = "plain";
-
-    // try text/plain
-    bool decoded = QTextDrag::decode(e, str, plain);
-    // otherwise we'll accept any kind of text (like text/uri-list)
-    if (! decoded) decoded = QTextDrag::decode(e, str);
-
-    if ( !d->readonly && decoded) {
-	if ( e->source() == this && hasMarkedText() )
-	    del();
+    if ( QTextDrag::decode( e, str ) ) {
 	if ( !hasMarkedText() )
-	    setCursorPosition( xPosToCursorPos(e->pos().x()) );
+	    setCursorPosition( e->pos().x() );
 	insert( str );
 	e->accept();
     } else {
@@ -1569,7 +1151,6 @@ void QLineEdit::dropEvent( QDropEvent *e )
     }
 }
 
-#endif // QT_NO_DRAGANDDROP
 
 /*!  This private slot handles cursor blinking. */
 
@@ -1608,7 +1189,7 @@ void QLineEdit::dragScrollSlot()
   edit and FALSE if it doesn't.
 
   Linebreaks in \a newText are converted to spaces, and it is
-  truncated to maxLength() before testing its validity.
+  truncated to maxLength() if necessary before testing its validity.
 
   Repaints and emits textChanged() if appropriate.
 */
@@ -1622,19 +1203,19 @@ bool QLineEdit::validateAndSet( const QString &newText, int newPos,
 	    t[(int)i] = ' ';
     }
     t.truncate( maxLength() );
-#ifndef QT_NO_VALIDATOR
+
     const QValidator * v = validator();
 
     if ( v && v->validate( t, newPos ) == QValidator::Invalid &&
 	 v->validate( tbuf, cursorPos ) != QValidator::Invalid ) {
 	return FALSE;
     }
-#endif
+
     bool tc = ( t != tbuf );
 
     // okay, it succeeded
     if ( newMarkDrag != markDrag ||
-	 newMarkAnchor != markAnchor ||
+	 newMarkAnchor |! markAnchor ||
 	 newPos != cursorPos ||
 	 tc ) {
 	int minP = QMIN( cursorPos, minMark() );
@@ -1655,9 +1236,6 @@ bool QLineEdit::validateAndSet( const QString &newText, int newPos,
 	    maxP = t.length();
 	tbuf = t;
 
-	if ( cursorPos < (int)text().length() && maxP < (int)text().length() )
-	    maxP = text().length();
-
 	repaintArea( minP, maxP );
     }
     if ( tc ) {
@@ -1668,7 +1246,7 @@ bool QLineEdit::validateAndSet( const QString &newText, int newPos,
 }
 
 
-/*!  Removes any selected text, inserts \a newText,
+/*!  Removes any currently selected text, inserts \a newText,
   validates the result and if it is valid, sets it as the new contents
   of the line edit.
 
@@ -1677,22 +1255,15 @@ bool QLineEdit::validateAndSet( const QString &newText, int newPos,
 void QLineEdit::insert( const QString &newText )
 {
     QString t( newText );
-    if ( t.isEmpty() && !hasMarkedText() )
+    if ( t.isEmpty() )
 	return;
 
     for ( int i=0; i<(int)t.length(); i++ )
 	if ( t[i] < ' ' )  // unprintable/linefeed becomes space
 	    t[i] = ' ';
 
-    QString test( tbuf );
+    QString test( tbuf.copy() );
     int cp = cursorPos;
-    if ( d->undo && ( d->needundo || hasMarkedText() ) ) {
-	if ( d->undoList.isEmpty() || d->undoList.last().str != tbuf ) {
-	    d->undoList += QLineEditUndoItem(tbuf, cursorPos );
-	    d->redoList.clear();
-	    d->needundo = FALSE;
-	}
-    }
     if ( hasMarkedText() ) {
 	test.remove( minMark(), maxMark() - minMark() );
 	cp = minMark();
@@ -1721,18 +1292,13 @@ void QLineEdit::repaintArea( int from, int to )
     }
 
     d->pmDirty = TRUE;
-    int old = offset;
-    if ( d->offsetDirty || cursorPos >= a && cursorPos <= b )
+    if ( cursorPos >= a && cursorPos <= b )
 	updateOffset();
-    if ( !d->pmDirty ) {
+    if ( !d->pmDirty )
 	return;
-    } else if ( old != offset ) {
-	repaint( FALSE );
-	return;
-    }
 
     QFontMetrics fm = fontMetrics();
-    int x = fm.width( buf.left( a ) ) + offset - 2 + frameW();
+    int x = fm.width( buf.left( a ) ) + offset - 2 + (frame() ? 2 : 0);
     QRect r( x, 0, fm.width( buf.mid( a, b-a ) ) + 5, height() );
     r = r.intersect( rect() );
     if ( !r.isValid() )
@@ -1747,6 +1313,8 @@ void QLineEdit::repaintArea( int from, int to )
 
 void QLineEdit::setEnabled( bool e )
 {
+    if ( e == isEnabled() )
+	return;
     d->pmDirty = TRUE;
     QWidget::setEnabled( e );
 }
@@ -1756,13 +1324,12 @@ void QLineEdit::setEnabled( bool e )
 
 void QLineEdit::setFont( const QFont & f )
 {
-    d->pmDirty     = TRUE;
-    d->offsetDirty = TRUE;
+    d->pmDirty = TRUE;
     QWidget::setFont( f );
 }
 
 
-/*!  Syntactic sugar for setText( "" ), provided to match no-argument
+/*!  Syntax sugar for setText( "" ), provided to match no-argument
   signals.
 */
 
@@ -1788,8 +1355,8 @@ void QLineEdit::setSelection( int start, int length )
 }
 
 
-/*!  Sets the cursor position for this line edit to \a newPos and
-  repaints accordingly.  \sa cursorPosition() */
+/*!  Set the cursor position for this line edit to \a newPos and
+  repaint accordingly.  \sa cursorPosition() */
 
 void QLineEdit::setCursorPosition( int newPos )
 {
@@ -1845,9 +1412,9 @@ void QLineEdit::setEdited( bool on )
 
 /*!  Returns the edited flag of the line edit.  If this returns FALSE,
 the line edit's contents have not been changed since the construction
-of the QLineEdit (or the last call to either setText() or setEdited( FALSE ),
-if any).  If it returns true, the contents have been edited, or
-setEdited( TRUE ) has been called.
+of the QLineEdit (or the last call to setEdited( FALSE ), if any).  If
+it returns true, the contents have been edited, or setEdited( TRUE )
+has been called.
 
 \sa setEdited()
 */
@@ -1890,20 +1457,23 @@ void QLineEdit::cursorWordBackward( bool mark )
 
 
 void QLineEdit::updateOffset()
-{ // must not call repaint() - paintEvent() calls this
-    if ( !isVisible() ) {
-	d->offsetDirty = TRUE;
+{
+    if ( !isVisible() )
 	return;
-    }
-    d->offsetDirty = FALSE;
+
     makePixmap();
     QFontMetrics fm = fontMetrics();
     int textWidth = fm.width( displayText() )+4;
     int w = d->pm->width();
     int old = offset;
 
-    if ( textWidth > w ) {
+    // there are five cases, so we consider each in turn.
+    if ( textWidth < 5 ) {
+	// nothing is to be drawn.  okay.
+	offset = 0;
+    } else if ( textWidth > w ) {
 	// may need to scroll.
+
 	QString dt = displayText();
 	dt += QString::fromLatin1( "  " );
 	dt = dt.left( cursorPos + 2 );
@@ -1913,27 +1483,22 @@ void QLineEdit::updateOffset()
 	    offset = -fm.width( dt.left( cursorPos - 2 ) );
 	else if ( fm.width( dt ) + offset > w )
 	    offset = w - fm.width( dt );
+    } else if ( alignmentFlag == Qt::AlignRight ) {
+	// right-aligned text, space for all of it
+	offset = w - textWidth;
+    } else if ( alignmentFlag == Qt::AlignCenter ) {
+	// center-aligned text, space for all of it
+	offset = (w - textWidth)/2;
     } else {
-	if ( textWidth < 5 ) {
-	    // nothing is to be drawn.  okay.
-	    textWidth = QMIN( 5, w );
-	}
-	if ( alignmentFlag == Qt::AlignRight ) {
-	    // right-aligned text, space for all of it
-	    offset = w - textWidth;
-	} else if ( alignmentFlag == Qt::AlignCenter || alignmentFlag == Qt::AlignHCenter ) {
-	    // center-aligned text, space for all of it
-	    offset = (w - textWidth)/2;
-	} else {
-	    // default: left-aligned, space for all of it
-	    offset = 0;
-	}
+	// default: left-aligned, space for all of it.
+	offset = 0;
     }
 
     if ( old == offset && !d->pmDirty )
 	return;
 
     d->pmDirty = TRUE;
+    repaint( FALSE );
 }
 
 
@@ -1948,7 +1513,7 @@ int QLineEdit::xPosToCursorPos( int goalx ) const
     int i = 0;
     QFontMetrics fm = fontMetrics();
     QString s = displayText();
-    goalx -= (frameW() + 2);
+    goalx -= (frame() ? 4 : 2);
 
     while( i < (int) s.length() ) {
 	x2 = x1 + fm.width( s[i] );
@@ -1968,8 +1533,7 @@ void QLineEdit::blinkOn()
     if ( !hasFocus() )
 	return;
 
-    d->blinkTimer.start( cursorOn?QApplication::cursorFlashTime() / 2 : 0, TRUE );
-    blinkSlot();
+    d->blinkTimer.start( cursorOn?QApplication::cursorFlashTime()/2:0, TRUE );
 }
 
 
@@ -1977,69 +1541,6 @@ void QLineEdit::makePixmap() const
 {
     if ( d->pm )
 	return;
-
-    QSize s( width() - frameW()*2, height() - frameW()*2 );
-    if ( s.width() < 0 )
-	s.setWidth( 0 );
-    if ( s.height() < 0 )
-	s.setHeight( 0 );
-    d->pm = new QPixmap( s );
+    d->pm = new QPixmap(frame()?QSize(width()-4,height()-4):size());
     d->pmDirty = TRUE;
 }
-
-
-void QLineEdit::undoInternal()
-{
-    if ( d->undoList.isEmpty() )
-	return;
-    d->undo = FALSE;
-
-    d->redoList += QLineEditUndoItem(tbuf, cursorPos );
-    setText( d->undoList.last().str );
-    setCursorPosition( d->undoList.last().pos );
-    markAnchor = cursorPos;
-    d->undoList.remove( d->undoList.fromLast() );
-    if ( d->undoList.count() > 10 )
-	d->undoList.remove( d->undoList.begin() );
-    d->undo = TRUE;
-    d->needundo = TRUE;
-}
-
-void QLineEdit::redoInternal()
-{
-    if ( d->redoList.isEmpty() )
-	return;
-    d->undo = FALSE;
-    d->undoList += QLineEditUndoItem(tbuf, cursorPos );
-    setText( d->redoList.last().str );
-    setCursorPosition( d->redoList.last().pos );
-    markAnchor = cursorPos;
-    d->redoList.remove( d->redoList.fromLast() );
-    d->undo = TRUE;
-    d->needundo = TRUE;
-}
-#endif
-
-
-#if defined(Q_INCOMPATIBLE_3_0_ADDONS)
-bool QLineEdit::getSelection( int *start, int *end )
-{
-    if( !hasMarkedText() )
-	return false;
-
-    *start = minMark();
-    *end = maxMark();
-    return true;
-}
-
-void QLineEdit::setPasswordChar( QChar c )
-{
-    d->passwordChar = c;
-}
-
-QChar QLineEdit::passwordChar() const
-{
-    return d->passwordChar;
-}
-
-#endif

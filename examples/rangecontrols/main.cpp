@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: qt/examples/rangecontrols/main.cpp   2.3.2   edited 2001-06-12 $
+** $Id: main.cpp,v 1.1 1999/06/03 10:08:56 warwick Exp $
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -17,7 +17,7 @@ int main( int argc, char **argv )
 
     RangeControls rangecontrols;
     rangecontrols.resize( 500, 300 );
-    rangecontrols.setCaption( "Qt Example - Range Control Widgets" );
+    rangecontrols.setCaption( "Examples for Range Control Widgets" );
     a.setMainWidget( &rangecontrols );
     rangecontrols.show();
 

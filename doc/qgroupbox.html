@@ -1,0 +1,63 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta name="robots" content="noindex,noarchive">
+<title>Qt Toolkit - QGroupBox Class</title><style type="text/css"><!--
+h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
+a:link { text-decoration: none; }
+body { background: white; color: black; }
+--></style>
+</head><body bgcolor="#ffffff">
+
+<a href=index.html><img width=122 height=65 src=qtlogo.png alt="Qt logo" align=left border=0></a>
+<center><img src=dochead.png width=448 height=23></center>
+<br clear=all>
+
+<h1 align=center>QGroupBox Class Reference</h1><br clear="all">
+<p>
+The QGroupBox widget provides a group box frame with a title.
+<a href="#details">More...</a>
+<p>
+<code>#include &lt;<a href="qgroupbox-h.html">qgroupbox.h</a>&gt;</code>
+<p>
+Inherits <a href="qframe.html">QFrame</a>.
+<p>Inherited by <a href="qbuttongroup.html">QButtonGroup</a>, <a href="qhgroupbox.html">QHGroupBox</a> and <a href="qvgroupbox.html">QVGroupBox</a>.
+<p><a href="qgroupbox-members.html">List of all member functions.</a>
+<h2>Protected Members</h2>
+<ul>
+<li><span class="fn">virtual void <a href="qobject.html#5c5734"><b>childEvent</b></a> ( QChildEvent * ) </span>
+<li><span class="fn">virtual void <a href="#c087b8"><b>resizeEvent</b></a> ( QResizeEvent * ) </span>
+<li><span class="fn">virtual void <a href="#5dc458"><b>paintEvent</b></a> ( QPaintEvent * ) </span>
+<li><span class="fn">virtual void <a href="qframe.html#cd23a1"><b>updateMask</b></a> () </span>
+</ul>
+<hr><h2><a name="details"></a>Detailed Description</h2>
+The QGroupBox widget provides a group box frame with a title.
+<p>
+The intended use of a group box is to show that a number of widgets
+(i.e. child widgets) are logically related.  <a href="qprintdialog.html">QPrintDialog</a> is a good
+example; each of its three panes is one group box.
+<p>By default, the group's <a href="qwidget.html#dde00b">setFont</a>() and <a href="qwidget.html#379ca0">setPalette</a>() functions do not
+change the appearance of the widgets it contains, but you can use
+<a href="qwidget.html#20f893">setFontPropagation</a>() and <a href="qwidget.html#938cdd">setPalettePropagation</a>() to change that.
+<p>Qt also provides a more specialized group box, <a href="qbuttongroup.html">QButtonGroup</a>, that is
+very useful for organizing buttons in a group.
+<p><img src=qgrpbox-m.png> <img src=qgrpbox-w.png>
+
+<hr><h2>Member Function Documentation</h2>
+<h3 class="fn">void <a name="5dc458"></a>QGroupBox::paintEvent ( <a href="qpaintevent.html">QPaintEvent</a> * event ) <code>[virtual protected]</code></h3>
+<p>Handles paint events for the group box.
+<p>Reimplemented from <a href="qwidget.html#ef2069">QWidget.</a>
+<h3 class="fn">void <a name="c087b8"></a>QGroupBox::resizeEvent ( <a href="qresizeevent.html">QResizeEvent</a> * e ) <code>[virtual protected]</code></h3>
+<p>Reimplemented for internal reasons; the API is not affected.
+<p>Reimplemented from <a href="qwidget.html#28c156">QWidget.</a>
+<hr><p>
+Search the documentation, FAQ, qt-interest archive and more (uses
+<a href="http://www.troll.no">www.troll.no</a>):<br>
+<form method=post action="http://www.troll.no/search.cgi">
+<input type=hidden name="version" value="2.00"><nobr>
+<input size="50" name="search"><input type=submit value="Search">
+</nobr></form><hr><p>
+This file is part of the <a href="index.html">Qt toolkit</a>,
+copyright &copy; 1995-99
+<a href="http://www.troll.no">Troll Tech</a>, all rights reserved.<p><address><hr><div align="center">
+<table width="100%" cellspacing="0" border="0"><tr>
+<td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.00</div>
+</table></div></address></body></html>

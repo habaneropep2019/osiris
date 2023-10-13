@@ -1,10 +1,9 @@
 TEMPLATE	= app
-CONFIG		+= qt warn_on release
-HEADERS		= centralwidget.h \
-		  mainwindow.h
-SOURCES		= centralwidget.cpp \
-		  main.cpp \
-		  mainwindow.cpp
+CONFIG		= qt warn_on release
+HEADERS		= ab_centralwidget.h \
+		  ab_mainwindow.h
+SOURCES		= ab_centralwidget.cpp \
+		  ab_mainwindow.cpp \
+		  main.cpp
 TARGET		= addressbook
 DEPENDPATH=../../include
-REQUIRES=full-config

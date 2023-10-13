@@ -1,37 +1,25 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qtooltip.h   2.3.2   edited 2001-01-26 $
+** $Id: qtooltip.h,v 2.26 1999/04/28 10:00:53 aavit Exp $
 **
 ** Definition of Tool Tips (or Balloon Help) for any widget or rectangle
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
-** This file is part of the widgets module of the Qt GUI Toolkit.
+** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses may use this file in accordance with the Qt Commercial License
-** Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
+*****************************************************************************/
 
 #ifndef QTOOLTIP_H
 #define QTOOLTIP_H
@@ -41,45 +29,31 @@
 #include "qtimer.h"
 #endif // QT_H
 
-#ifndef QT_NO_TOOLTIP
-
 
 class QTipManager;
 class QLabel;
-class QIconViewToolTip;
+
 
 class Q_EXPORT QToolTipGroup: public QObject
 {
     Q_OBJECT
-    Q_PROPERTY( bool delay READ delay WRITE setDelay )
-    Q_PROPERTY( bool enabled READ enabled WRITE setEnabled )
-
 public:
     QToolTipGroup( QObject *parent, const char *name = 0 );
    ~QToolTipGroup();
 
     bool delay() const;
-    bool enabled() const;
 
 public slots:
     void setDelay( bool );
-    void setEnabled( bool );
 
 signals:
     void showTip( const QString &);
     void removeTip();
 
 private:
-    uint del:1;
-    uint ena:1;
+    bool d;
 
     friend class QTipManager;
-
-private:	// Disabled copy constructor and operator=
-#if defined(Q_DISABLE_COPY)
-    QToolTipGroup( const QToolTipGroup & );
-    QToolTipGroup& operator=( const QToolTipGroup & );
-#endif
 };
 
 
@@ -98,15 +72,10 @@ public:
 		     QToolTipGroup *, const QString& );
     static void remove( QWidget *, const QRect & );
 
-    static void hide();
-
     static QFont    font();
     static void	    setFont( const QFont & );
     static QPalette palette();
     static void	    setPalette( const QPalette & );
-
-    static void	    setEnabled( bool );
-    static bool	    enabled();
 
 protected:
     virtual void maybeTip( const QPoint & ) = 0;
@@ -119,7 +88,6 @@ public:
     QToolTipGroup *group()	  const { return g; }
 
 private:
-    void    tip( const QRect &, const QRect &, const QString &);
     QWidget	    *p;
     QToolTipGroup   *g;
     static QFont    *ttFont;
@@ -129,10 +97,7 @@ private:
     static void cleanup();
 
     friend class QTipManager;
-    friend class QIconViewToolTip;
 };
 
-
-#endif // QT_NO_TOOLTIP
 
 #endif // QTOOLTIP_H

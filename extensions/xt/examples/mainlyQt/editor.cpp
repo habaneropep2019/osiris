@@ -1,12 +1,7 @@
 #include "qxt.h"
-#include <qmainwindow.h>
 #include <qmultilineedit.h>
 #include <qpainter.h>
 #include <qmessagebox.h>
-#include <qpopupmenu.h>
-#include <qmenubar.h>
-#include <qsplitter.h>
-#include <X11/IntrinsicP.h>
 #include <X11/Shell.h>
 #include <X11/StringDefs.h>
 #include <X11/Xaw/AsciiText.h>
@@ -19,47 +14,41 @@ static const char* XTEDMSG =
 
 
 class EncapsulatedXtWidget : public QXtWidget {
-    Widget editor;
 public:
-    EncapsulatedXtWidget(QWidget* parent) :
-	QXtWidget( "shell", topLevelShellWidgetClass, parent )
+    EncapsulatedXtWidget(QXtWidget* parent) :
+	QXtWidget("editor", asciiTextWidgetClass, parent)
     {
- 	Arg args[20];
- 	Cardinal nargs=0;
- 	XtSetArg(args[nargs], XtNeditType, XawtextEdit); nargs++;
- 	XtSetArg(args[nargs], XtNstring, XTEDMSG);       nargs++;
- 	editor = XtCreateWidget( "editor", asciiTextWidgetClass, xtWidget(), args, nargs);
-	XtRealizeWidget( editor );
- 	XtMapWidget( editor );
-    }
-    void resizeEvent( QResizeEvent* e )
-    {
-	QXtWidget::resizeEvent( e );
- 	XtResizeWidget( editor, width(), height(), 2 );
+	Arg args[20];
+	Cardinal nargs=0;
+	XtSetArg(args[nargs], XtNeditType, XawtextEdit); nargs++;
+	XtSetArg(args[nargs], XtNstring, XTEDMSG);       nargs++;
+	XtSetValues(xtWidget(), args, nargs);
+	XtMapWidget(xtWidget());
     }
 };
 
-
-class TwoEditors : public QMainWindow {
+class TwoEditors : public QXtWidget {
     QMultiLineEdit* qtchild;
     EncapsulatedXtWidget* xtchild;
 
 public:
     TwoEditors() :
-	QMainWindow( 0, "mainWindow")
+	QXtWidget("editors", topLevelShellWidgetClass, 0, 0, 0, FALSE)
     {
-	QPopupMenu* file = new QPopupMenu( this );
-	file->insertItem("E&xit", qApp, SLOT( quit() ) );
-	menuBar()->insertItem( "&File", file );
-	statusBar();
-	QSplitter* splitter = new QSplitter( this );
-	splitter->setOpaqueResize( TRUE );
-	setCentralWidget( splitter );
-	xtchild = new EncapsulatedXtWidget( splitter );
-	qtchild = new QMultiLineEdit( splitter );
+	qtchild = new QMultiLineEdit(this);
 	qtchild->setText(QTEDMSG);
+	xtchild = new EncapsulatedXtWidget(this);
     }
 
+    void resizeEvent(QResizeEvent*)
+    {
+	int marg = 10;
+	int w = (width()-marg*3)/2;
+	int h = height()-marg*2;
+
+	qtchild->setGeometry(marg,marg,w,h);
+	xtchild->setGeometry(marg+w+marg,marg,w,h);
+    }
 };
 
 main(int argc, char** argv)

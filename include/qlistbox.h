@@ -1,39 +1,27 @@
 /**********************************************************************
-** $Id: qt/src/widgets/qlistbox.h   2.3.2   edited 2001-01-26 $
+** $Id: qlistbox.h,v 2.54 1999/06/22 13:58:59 paul Exp $
 **
 ** Definition of QListBox widget class
 **
 ** Created : 941121
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
-** This file is part of the widgets module of the Qt GUI Toolkit.
+** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses may use this file in accordance with the Qt Commercial License
-** Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
+*****************************************************************************/
 
 #ifndef QLISTBOX_H
 #define QLISTBOX_H
@@ -43,8 +31,6 @@
 #include "qpixmap.h"
 #include "qtimer.h"
 #endif // QT_H
-
-#ifndef QT_NO_LISTBOX
 
 
 class QListBoxPrivate;
@@ -56,25 +42,7 @@ class QStringList;
 
 class Q_EXPORT QListBox : public QScrollView
 {
-    friend class QListBoxItem;
-    friend class QListBoxPrivate;
-
     Q_OBJECT
-    Q_ENUMS( SelectionMode LayoutMode )
-    Q_PROPERTY( uint count READ count )
-    Q_PROPERTY( int numItemsVisible READ numItemsVisible )
-    Q_PROPERTY( int currentItem READ currentItem WRITE setCurrentItem DESIGNABLE false )
-    Q_PROPERTY( QString currentText READ currentText )
-    Q_PROPERTY( int topItem READ topItem WRITE setTopItem DESIGNABLE false )
-    Q_PROPERTY( SelectionMode selectionMode READ selectionMode WRITE setSelectionMode )
-    Q_PROPERTY( bool multiSelection READ isMultiSelection WRITE setMultiSelection DESIGNABLE false )
-    Q_PROPERTY( LayoutMode columnMode READ columnMode WRITE setColumnMode )
-    Q_PROPERTY( LayoutMode rowMode READ rowMode WRITE setRowMode )
-    Q_PROPERTY( int numColumns READ numColumns )
-    Q_PROPERTY( int numRows READ numRows )
-    Q_PROPERTY( bool variableWidth READ variableWidth WRITE setVariableWidth )
-    Q_PROPERTY( bool variableHeight READ variableHeight WRITE setVariableHeight )
-	
 public:
     QListBox( QWidget *parent=0, const char *name=0, WFlags f=0  );
    ~QListBox();
@@ -90,10 +58,8 @@ public:
 			int numStrings=-1, int index=-1 );
 
     void insertItem( const QListBoxItem *, int index=-1 );
-    void insertItem( const QListBoxItem *, const QListBoxItem *after );
     void insertItem( const QString &text, int index=-1 );
     void insertItem( const QPixmap &pixmap, int index=-1 );
-    void insertItem( const QPixmap &pixmap, const QString &text, int index=-1 );
 
     void removeItem( int index );
     void clear();
@@ -104,14 +70,12 @@ public:
     void changeItem( const QListBoxItem *, int index );
     void changeItem( const QString &text, int index );
     void changeItem( const QPixmap &pixmap, int index );
-    void changeItem( const QPixmap &pixmap, const QString &text, int index );
 
     void takeItem( const QListBoxItem * );
 
     int numItemsVisible() const;
 
     int currentItem() const;
-    QString currentText() const { return text(currentItem()); }
     virtual void setCurrentItem( int index );
     virtual void setCurrentItem( QListBoxItem * );
     void centerCurrentItem() { ensureCurrentVisible(); }
@@ -121,7 +85,7 @@ public:
 
     long maxItemWidth() const;
 
-    enum SelectionMode { Single, Multi, Extended, NoSelection };
+    enum SelectionMode { Single, Multi, Extended };
     virtual void setSelectionMode( SelectionMode );
     SelectionMode selectionMode() const;
 
@@ -138,7 +102,6 @@ public:
 
     QListBoxItem *item( int index ) const;
     int index( const QListBoxItem * ) const;
-    QListBoxItem *findItem( const QString &text ) const;
 
     void triggerUpdate( bool doLayout );
 
@@ -199,15 +162,9 @@ public:
 
     QRect itemRect( QListBoxItem *item ) const;
 
-    QListBoxItem *firstItem() const;
-
-    void sort( bool ascending = TRUE );
-
 public slots:
     virtual void ensureCurrentVisible();
     virtual void clearSelection();
-    void selectAll( bool select ); // ###### make virtual
-    void invertSelection(); // ######### make virtual
 
 signals:
     void highlighted( int index );
@@ -218,22 +175,6 @@ signals:
     void selected( QListBoxItem * );
 
     void selectionChanged();
-    void selectionChanged( QListBoxItem * );
-    void currentChanged( QListBoxItem * );
-    void clicked( QListBoxItem * );
-    void clicked( QListBoxItem *, const QPoint & );
-    void pressed( QListBoxItem * );
-    void pressed( QListBoxItem *, const QPoint & );
-
-    void doubleClicked( QListBoxItem * );
-    void returnPressed( QListBoxItem * );
-    void rightButtonClicked( QListBoxItem *, const QPoint & );
-    void rightButtonPressed( QListBoxItem *, const QPoint & );
-    void mouseButtonPressed( int, QListBoxItem*, const QPoint& );
-    void mouseButtonClicked( int, QListBoxItem*, const QPoint& );
-
-    void onItem( QListBoxItem *item );
-    void onViewport();
 
 protected:
     void viewportMousePressEvent( QMouseEvent * );
@@ -262,8 +203,8 @@ protected:
     virtual void paintCell( QPainter *, int row, int col );
 
     void toggleCurrentItem();
-    bool isRubberSelecting() const;
 
+    void updateVector();
     void doLayout() const;
 
 #ifndef QT_NO_COMPAT // obsolete, provided for source compatibility
@@ -271,23 +212,15 @@ protected:
     int findItem( int yPos ) const {return index(itemAt(QPoint(0,yPos)));}
 #endif
 
-protected slots:
-    void clearInputString();
-
 private slots:
     void refreshSlot();
     void doAutoScroll();
-    void adjustItems();
 
 private:
     void tryGeometry( int, int ) const;
     int currentRow() const;
     int currentColumn() const;
     void updateSelection();
-    void drawRubber();
-    void doRubberSelection( const QRect &old, const QRect &rubber );
-    void handleItemChange( QListBoxItem *old, bool shift, bool control );
-    void selectRange( QListBoxItem *from, QListBoxItem *to, bool invert, bool includeFirst, bool clearSel = FALSE );
 
     void emitChangedSignal( bool );
 
@@ -309,8 +242,7 @@ private:	// Disabled copy constructor and operator=
 class Q_EXPORT QListBoxItem
 {
 public:
-    QListBoxItem( QListBox* listbox = 0 );
-    QListBoxItem( QListBox* listbox, QListBoxItem *after );
+    QListBoxItem( QListBox* listbox = 0);
     virtual ~QListBoxItem();
 
     virtual QString text() const;
@@ -320,32 +252,21 @@ public:
     virtual int	 width( const QListBox * )  const;
 
     bool selected() const { return s; }
-    bool current() const;
 
     QListBox *listBox() const;
-
-    void setSelectable( bool b );
-    bool isSelectable() const;
-
-    QListBoxItem *next() const;
-    QListBoxItem *prev() const;
 
 protected:
     virtual void paint( QPainter * ) = 0;
     virtual void setText( const QString &text ) { txt = text; }
-    void setCustomHighlighting( bool );
 
 private:
     QString txt;
     uint s:1;
     uint dirty:1;
-    uint custom_highlight : 1;
     int x, y;
     QListBoxItem * p, * n;
     QListBox* lbox;
     friend class QListBox;
-    friend class QListBoxPrivate;
-    friend class QComboBox;
 
 private:	// Disabled copy constructor and operator=
 #if defined(Q_DISABLE_COPY)
@@ -360,7 +281,6 @@ class Q_EXPORT QListBoxText : public QListBoxItem
 public:
     QListBoxText( QListBox* listbox, const QString & text=QString::null );
     QListBoxText( const QString & text=QString::null );
-    QListBoxText( QListBox* listbox, const QString & text, QListBoxItem *after );
    ~QListBoxText();
 
     int	 height( const QListBox * ) const;
@@ -382,10 +302,6 @@ class Q_EXPORT QListBoxPixmap : public QListBoxItem
 public:
     QListBoxPixmap( QListBox* listbox, const QPixmap & );
     QListBoxPixmap( const QPixmap & );
-    QListBoxPixmap( QListBox* listbox, const QPixmap & pix, QListBoxItem *after );
-    QListBoxPixmap( QListBox* listbox, const QPixmap &, const QString& );
-    QListBoxPixmap( const QPixmap &, const QString& );
-    QListBoxPixmap( QListBox* listbox, const QPixmap & pix, const QString&, QListBoxItem *after );
    ~QListBoxPixmap();
 
     const QPixmap *pixmap() const { return &pm; }
@@ -405,7 +321,5 @@ private:	// Disabled copy constructor and operator=
 #endif
 };
 
-
-#endif // QT_NO_LISTBOX
 
 #endif // QLISTBOX_H

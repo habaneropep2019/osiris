@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: qt/examples/forever/forever.cpp   2.3.2   edited 2001-10-18 $
+** $Id: forever.cpp,v 1.2 1999/06/03 01:44:33 warwick Exp $
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -44,11 +44,27 @@ Forever::Forever( QWidget *parent, const char *name )
 void Forever::updateCaption()
 {
     QString s;
-    s.sprintf( "Qt Example - Forever - %d rectangles/second", rectangles );
+    s.sprintf( "forever - %d rectangles/second", rectangles );
     rectangles = 0;
     setCaption( s );
 }
 
+
+//
+// Handles paint events for the Forever widget.
+//
+
+void Forever::paintEvent( QPaintEvent * )
+{
+    QPainter paint( this );			// painter object
+    paint.setWindow( 0, 0, 1024, 1024 );	// define coordinate system
+    paint.setPen( NoPen );			// do not draw outline
+    paint.setBrush( colors[rand() % numColors]);// set random brush color
+    QPoint p1( rand()&1023, rand()&1023 );	// p1 = top left
+    QPoint p2( rand()&1023, rand()&1023 );	// p2 = bottom right
+    QRect r( p1, p2 );
+    paint.drawRect( r );			// draw filled rectangle
+}
 
 //
 // Handles timer events for the Forever widget.
@@ -56,18 +72,8 @@ void Forever::updateCaption()
 
 void Forever::timerEvent( QTimerEvent * )
 {
-    QPainter paint( this );			// painter object
-    paint.setPen( NoPen );			// do not draw outline
-    int w = width();
-    int h = height();
-    if( w <= 0 || h <= 0 ) 
-	return;
     for ( int i=0; i<100; i++ ) {
-	paint.setBrush( colors[i % numColors]); // set random brush color
-	QPoint p1( rand()%w, rand()%h );	// p1 = top left
-	QPoint p2( rand()%w, rand()%h );	// p2 = bottom right
-	QRect r( p1, p2 );
-	paint.drawRect( r );			// draw filled rectangle
+	repaint( FALSE );			// repaint, don't erase
 	rectangles++;
     }
 }
@@ -82,7 +88,6 @@ int main( int argc, char **argv )
     QApplication a( argc, argv );		// create application object
     Forever always;				// create widget
     a.setMainWidget( &always );			// set as main widget
-    always.setCaption("Qt Example - Forever");
     always.show();				// show widget
     return a.exec();				// run event loop
 }

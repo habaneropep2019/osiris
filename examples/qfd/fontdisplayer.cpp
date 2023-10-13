@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: qt/examples/qfd/fontdisplayer.cpp   2.3.2   edited 2001-01-26 $
+** $Id: fontdisplayer.cpp,v 1.2 1999/06/24 20:23:05 warwick Exp $
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -61,8 +61,6 @@ void FontRowTable::paintEvent( QPaintEvent* e )
     QColor body(255,255,192);
     QColor negative(255,192,192);
     QColor positive(192,192,255);
-    QColor rnegative(255,128,128);
-    QColor rpositive(128,128,255);
 
     for (int j = minj; j<=maxj; j++) {
 	for (int i = mini; i<=maxi; i++) {
@@ -83,12 +81,11 @@ void FontRowTable::paintEvent( QPaintEvent* e )
 		    p.fillRect(x,y,w,-h,body);
 		    if ( w ) {
 			if ( l ) {
-			    p.fillRect(x+(l>0?0:l), y-h/2, abs(l),-h/2,
-				       l < 0 ? negative : positive);
+			    p.fillRect(x+(l>0?0:l),
+				y,abs(l),-h/2,l < 0 ? negative : positive);
 			}
 			if ( r ) {
-			    p.fillRect(x+w-(r>0?r:0),y+2, abs(r),-h/2,
-				       r < 0 ? rnegative : rpositive);
+			    p.fillRect(x+w+(r>0?-1:0),y,-r,-h/2,r < 0 ? negative : positive);
 			}
 		    }
 		    QString s;

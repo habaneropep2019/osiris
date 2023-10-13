@@ -1,14 +1,14 @@
 /****************************************************************************
-** $Id: qt/extensions/nsplugin/doc/examples.doc   2.3.2   edited 2001-02-23 $
+** $Id: examples.doc,v 1.8 1999/06/16 20:04:47 agulbra Exp $
 **
 ** Documentation for the examples
 **
-** Copyright (C) 1995-1997 by Trolltech AS.  All rights reserved.
+** Copyright (C) 1995-1997 by Troll Tech AS.  All rights reserved.
 **
 *****************************************************************************/
 
 #if defined(DEBUG)
-static char ident[] = "$Id: qt/extensions/nsplugin/doc/examples.doc   2.3.2   edited 2001-02-23 $";
+static char ident[] = "$Id: examples.doc,v 1.8 1999/06/16 20:04:47 agulbra Exp $";
 #endif
 
 
@@ -21,7 +21,7 @@ static char ident[] = "$Id: qt/extensions/nsplugin/doc/examples.doc   2.3.2   ed
   and QNPInstance::write() functions.
   <p>
   To build the example, you must first build the
-  <a href=nsplugin.html>Qt Netscape Plugin Extension</a> library.
+  <a href=xt.html>Qt Netscape Plugin Extension</a> library.
   Then type <tt>make</tt> in <tt>extensions/nsplugin/examples/grapher/</tt>
   and copy the resulting <tt>grapher.so</tt> or <tt>npgrapher.dll</tt>
   to the Plugins directory of your WWW browser.
@@ -30,7 +30,7 @@ static char ident[] = "$Id: qt/extensions/nsplugin/doc/examples.doc   2.3.2   ed
     graphstyle=pie fontfamily=times fontsize=18>
   <p>
   The text file it accepts as input has a title line, then
-  a sequence of lines with a number, then a string.  The
+  a sequence of lines with an number then a string.  The
   plugin displays a pie chart of the numbers, each segment
   labelled by the associated string.  The user can select
   a bar chart view of the same data by selecting from the
@@ -48,7 +48,7 @@ static char ident[] = "$Id: qt/extensions/nsplugin/doc/examples.doc   2.3.2   ed
 </pre>
 </small>
   Note that some HTML arguments (which we have capitalized here)
-  are interpreted by the browser, while others are used by the
+  are interpretted by the browser, while others are used by the
   plugin.
 
 <br clear>
@@ -82,6 +82,8 @@ num label
   function.
   <p>
   To build the example, you must first build the
+  <a href=http://www.troll.no/qtimage/>Qt Image Extension library</a>
+  and of course the
   <a href=nsplugin.html>Qt Netscape Plugin Extension</a> library.
   Then type <tt>make</tt> in <tt>extensions/nsplugin/examples/qtimage/</tt>
   and copy the resulting <tt>qtimage.so</tt> or <tt>npqtimage.dll</tt>

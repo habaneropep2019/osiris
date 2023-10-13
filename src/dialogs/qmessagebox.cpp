@@ -1,51 +1,33 @@
 /****************************************************************************
-** $Id: qt/src/dialogs/qmessagebox.cpp   2.3.2   edited 2001-10-21 $
+** $Id: qmessagebox.cpp,v 2.85 1999/06/22 15:28:27 agulbra Exp $
 **
 ** Implementation of QMessageBox class
 **
 ** Created : 950503
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
-** This file is part of the dialogs module of the Qt GUI Toolkit.
+** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses may use this file in accordance with the Qt Commercial License
-** Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
+*****************************************************************************/
 
 #include "qmessagebox.h"
-
-#ifndef QT_NO_MESSAGEBOX
-
 #include "qlabel.h"
 #include "qpushbutton.h"
 #include "qimage.h"
 #include "qapplication.h"
-#if defined QT_NON_COMMERCIAL
-#include "qnc_win.h"
-#endif
 
 // Message box icons, from page 210 of the Windows style guide.
 
@@ -54,7 +36,7 @@
 // using but a lot of people still use, is left out.
 
 /* XPM */
-static const char * const information_xpm[]={
+static const char* information_xpm[]={
 "32 32 5 1",
 ". c None",
 "c c #000000",
@@ -94,7 +76,7 @@ static const char * const information_xpm[]={
 "..................***...........",
 "...................**..........."};
 /* XPM */
-static const char* const warning_xpm[]={
+static const char* warning_xpm[]={
 "32 32 4 1",
 ". c None",
 "a c #ffff00",
@@ -133,7 +115,7 @@ static const char* const warning_xpm[]={
 "....bbbbbbbbbbbbbbbbbbbbbbbbbbb.",
 ".....bbbbbbbbbbbbbbbbbbbbbbbbb.."};
 /* XPM */
-static const char* const critical_xpm[]={
+static const char* critical_xpm[]={
 "32 32 4 1",
 ". c None",
 "a c #999999",
@@ -171,154 +153,37 @@ static const char* const critical_xpm[]={
 ".........aa********aaaaa........",
 "...........aaaaaaaaaaa..........",
 ".............aaaaaaa............"};
+#define QT_END_TEXT qt_dialog_default_key
 
 
-// the Qt logo, for aboutQt
-/* XPM */
-static const char * const qtlogo_xpm[] = {
-/* width height ncolors chars_per_pixel */
-"50 50 17 1",
-/* colors */
-"  c #000000",
-". c #495808",
-"X c #2A3304",
-"o c #242B04",
-"O c #030401",
-"+ c #9EC011",
-"@ c #93B310",
-"# c #748E0C",
-"$ c #A2C511",
-"% c #8BA90E",
-"& c #99BA10",
-"* c #060701",
-"= c #181D02",
-"- c #212804",
-"; c #61770A",
-": c #0B0D01",
-"/ c None",
-/* pixels */
-"/$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$/",
-"$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$",
-"$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$",
-"$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$",
-"$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$",
-"$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$",
-"$$$$$$$$$$$$$$$$$$$$$$$+++$$$$$$$$$$$$$$$$$$$$$$$$",
-"$$$$$$$$$$$$$$$$$$$@;.o=::=o.;@$$$$$$$$$$$$$$$$$$$",
-"$$$$$$$$$$$$$$$$+#X*         **X#+$$$$$$$$$$$$$$$$",
-"$$$$$$$$$$$$$$$#oO*         O  **o#+$$$$$$$$$$$$$$",
-"$$$$$$$$$$$$$&.* OO              O*.&$$$$$$$$$$$$$",
-"$$$$$$$$$$$$@XOO            * OO    X&$$$$$$$$$$$$",
-"$$$$$$$$$$$@XO OO  O  **:::OOO OOO   X@$$$$$$$$$$$",
-"$$$$$$$$$$&XO      O-;#@++@%.oOO      X&$$$$$$$$$$",
-"$$$$$$$$$$.O  :  *-#+$$$$$$$$+#- : O O*.$$$$$$$$$$",
-"$$$$$$$$$#*OO  O*.&$$$$$$$$$$$$+.OOOO **#$$$$$$$$$",
-"$$$$$$$$+-OO O *;$$$$$$$$$$$&$$$$;*     o+$$$$$$$$",
-"$$$$$$$$#O*  O .+$$$$$$$$$$@X;$$$+.O    *#$$$$$$$$",
-"$$$$$$$$X*    -&$$$$$$$$$$@- :;$$$&-    OX$$$$$$$$",
-"$$$$$$$@*O  *O#$$$$$$$$$$@oOO**;$$$#    O*%$$$$$$$",
-"$$$$$$$;     -+$$$$$$$$$@o O OO ;+$$-O   *;$$$$$$$",
-"$$$$$$$.     ;$$$$$$$$$@-OO OO  X&$$;O    .$$$$$$$",
-"$$$$$$$o    *#$$$$$$$$@o  O O O-@$$$#O   *o$$$$$$$",
-"$$$$$$+=    *@$$$$$$$@o* OO   -@$$$$&:    =$$$$$$$",
-"$$$$$$+:    :+$$$$$$@-      *-@$$$$$$:    :+$$$$$$",
-"$$$$$$+:    :+$$$$$@o* O    *-@$$$$$$:    :+$$$$$$",
-"$$$$$$$=    :@$$$$@o*OOO      -@$$$$@:    =+$$$$$$",
-"$$$$$$$-    O%$$$@o* O O    O O-@$$$#*   OX$$$$$$$",
-"$$$$$$$. O *O;$$&o O*O* *O      -@$$;    O.$$$$$$$",
-"$$$$$$$;*   Oo+$$;O*O:OO--      Oo@+=    *;$$$$$$$",
-"$$$$$$$@*  O O#$$$;*OOOo@@-O     Oo;O*  **@$$$$$$$",
-"$$$$$$$$X* OOO-+$$$;O o@$$@-    O O     OX$$$$$$$$",
-"$$$$$$$$#*  * O.$$$$;X@$$$$@-O O        O#$$$$$$$$",
-"$$$$$$$$+oO O OO.+$$+&$$$$$$@-O         o+$$$$$$$$",
-"$$$$$$$$$#*    **.&$$$$$$$$$$@o      OO:#$$$$$$$$$",
-"$$$$$$$$$+.   O* O-#+$$$$$$$$+;O    OOO:@$$$$$$$$$",
-"$$$$$$$$$$&X  *O    -;#@++@#;=O    O    -@$$$$$$$$",
-"$$$$$$$$$$$&X O     O*O::::O      OO    Oo@$$$$$$$",
-"$$$$$$$$$$$$@XOO                  OO    O*X+$$$$$$",
-"$$$$$$$$$$$$$&.*       **  O      ::    *:#$$$$$$$",
-"$$$$$$$$$$$$$$$#o*OO       O    Oo#@-OOO=#$$$$$$$$",
-"$$$$$$$$$$$$$$$$+#X:* *     O**X#+$$@-*:#$$$$$$$$$",
-"$$$$$$$$$$$$$$$$$$$%;.o=::=o.#@$$$$$$@X#$$$$$$$$$$",
-"$$$$$$$$$$$$$$$$$$$$$$$$+++$$$$$$$$$$$+$$$$$$$$$$$",
-"$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$",
-"$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$",
-"$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$",
-"$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$",
-"$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$",
-"/$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$/",
-};
-
-
-
-
-// BEING REVISED: paul
 /*!
-\class QMessageBox qmessagebox.h
-\brief Displays a brief message, an icon, and some buttons.
-\ingroup dialogs
+  \class QMessageBox qmessagebox.h
+  \brief Displays a brief message, an icon, and some buttons.
+  \ingroup dialogs
 
-A message box is a modal dialog that displays an icon, a text and up to
-three push buttons.  It's used for simple messages and questions.
+  A message box is a modal dialog that displays an icon, a text and up to
+  three push buttons.  It's used for simple messages and questions.
 
-QMessageBox provides a range of different messages, arranged roughly
-along two axes: Severity and complexity.
+  QMessageBox provides a range of different messages, arranged roughly
+  along two axes: Severity and complexity.
 
-Severity is
-<ul>
-<li> \c Information - for message boxes that are part of normal operation
-<li> \c Warning - for message boxes that tell the user about unusual errors
-<li> \c Critical - as Warning, but for critical errors
-</ul>
+  Severity is
+  <ul>
+  <li> \c Information - for message boxes that are part of normal operation,
+  <li> \c Warning - for message boxes that tell the user about errors
+  or ask the user how to fix an error, or
+  <li> \c Critical - as Warning, but for critical errors.
+  </ul>
+  The message box has a different icon for each of the severity levels.
 
-The message box has a different icon for each of the severity levels.
-
-
-Complexity is one button (Ok) for a simple messages, or two or even
-three buttons for questions.
-
-There are static functions that let you do most of the common jobs,
-for example:
-
-If a program is unable to find a supporting file, but can do perfectly
-well without:
-
-\code
-  QMessageBox::information( this, "Application name",
-                            "Unable to find the user preferences file.\n"
-			    "The factory default will be used instead." );
-\endcode
-
-warning() can be used to tell the user about unusual errors, or
-errors which can't be easily fixed:
-
-\code
-  switch( QMessageBox::warning( this, "Application name",
-                                "Could not connect to the <mumble> server.\n"
-      			  "This program can't function correctly "
-      			  "without the server.\n\n",
-      			  "Try again", "Quit", 0,
-      			  0, 1 );
-  case 0: // Try again or Enter
-      // try again
-      break;
-  case 1: // Quit or Escape
-      // exit
-      break;
-  }
-\endcode
-
-    Finally,
+  Complexity is one button (Ok, sometimes Dismiss for Motif
+  applications) for a simple messages, or two or even three buttons
+  for questions.
 
   The text part of all message box messages can be either rich text or
   plain text. If you specify a rich text formatted string, it will be
   rendered using the default stylesheet. See
-  QStyleSheet::defaultSheet() for details. With certain strings that
-  contain XML meta characters, the auto-rich text detection may fail,
-  interpreting plain text falsely as rich text. In these rare cases,
-  use QStyleSheet::convertFromPlainText() to convert your plain text
-  string to a visually equivalent rich text string or set the text
-  format explicitly with setTextFormat().
+  QStyleSheet::defaultSheet() for details.
 
   Here are some examples of how to use the static member functions.
   After these examples you will find an overview of the non-static
@@ -366,6 +231,25 @@ errors which can't be easily fixed:
   recommends.  The Escape button cancels the entire Exit operation,
   and Enter/Return saves the document and exits.
 
+  warning() can be used to tell the user about unusual errors, or
+  errors which can't be easily fixed:
+
+  \code
+    switch( QMessageBox::warning( this, "Application name here",
+                                  "Could not connect to the <mumble> server.\n"
+				  "This program can't function correctly "
+				  "without the server.\n\n",
+				  "Try again", "Quit", 0,
+				  0, 1 );
+    case 0: // Try again or Enter
+        // try again
+	break;
+    case 1: // Quit or Escape
+        // exit
+	break;
+    }
+  \endcode
+
   Disk full errors are unusual (in a perfect world, they are) and they
   certainly can be hard to correct.  This example uses predefined buttons
   instead of hardcoded button texts:
@@ -393,9 +277,9 @@ errors which can't be easily fixed:
 
   \code
     QMessageBox::critical( 0, "Application name here",
-                           QString("An internal error occurred. Please ") +
-			   "call technical support at 123456789 and report\n"+
-			   "these numbers:\n\n" + errorDetails +
+                           QString("An internal error occured. Please call ") +
+			   "technical support at 123456789 and report these\n"+
+			   "numbers:\n\n" + errorDetails +
 			   "\n\n<Application> will now exit." );
   \endcode
 
@@ -485,19 +369,6 @@ errors which can't be easily fixed:
 */
 
 
-/*!
-  \enum QMessageBox::Icon
-
-  This type includes the following values:
-  <ul>
-  <li> \c QMessageBox::NoIcon
-  <li> \c QMessageBox::Information
-  <li> \c QMessageBox::Warning
-  <li> \c QMessageBox::Critical
-  </ul>
-*/
-
-
 struct QMBData {
     QMBData(QMessageBox* parent) :
 	iconLabel( parent, "icon" )
@@ -533,6 +404,20 @@ static const char *mb_texts[] = {
 };
 
 
+// Internal class - don't touch
+
+class QMessageBoxLabel : public QLabel
+{
+    Q_OBJECT
+public:
+    QMessageBoxLabel(QWidget *parent=0, const char *name=0)
+	: QLabel( parent, name )
+	{
+	}
+
+};
+
+
 /*!
   Constructs a message box with no text and a button with the text "OK".
 
@@ -544,13 +429,8 @@ static const char *mb_texts[] = {
 */
 
 QMessageBox::QMessageBox( QWidget *parent, const char *name )
-    : QDialog( parent, name, TRUE, WStyle_Customize | WStyle_DialogBorder | WStyle_Title | WStyle_SysMenu )
+    : QDialog( parent, name, TRUE )
 {
-    if ( parent && parent->icon() && !parent->icon()->isNull() )
-	QDialog::setIcon( *parent->icon() );
-    else if ( qApp->mainWidget() && qApp->mainWidget()->icon() && !qApp->mainWidget()->icon()->isNull() )
-	QDialog::setIcon( *qApp->mainWidget()->icon() );
-
     init( Ok, 0, 0 );
 }
 
@@ -569,7 +449,6 @@ QMessageBox::QMessageBox( QWidget *parent, const char *name )
 
   Each button can have one of the following values:
   <ul>
-  <li>\c QMessageBox::NoButton
   <li>\c QMessageBox::Ok
   <li>\c QMessageBox::Cancel
   <li>\c QMessageBox::Yes
@@ -578,9 +457,6 @@ QMessageBox::QMessageBox( QWidget *parent, const char *name )
   <li>\c QMessageBox::Retry
   <li>\c QMessageBox::Ignore
   </ul>
-
-  Use QMessageBox::NoButton for the later parameters to have less than
-  three buttons in your message box.
 
   One of the buttons can be combined with the \c QMessageBox::Default flag
   to make a default button.
@@ -618,13 +494,8 @@ QMessageBox::QMessageBox( const QString& caption,
 			  int button0, int button1, int button2,
 			  QWidget *parent, const char *name,
 			  bool modal, WFlags f )
-    : QDialog( parent, name, modal, f | WStyle_Customize | WStyle_DialogBorder | WStyle_Title | WStyle_SysMenu )
+    : QDialog( parent, name, modal, f )
 {
-    if ( parent && parent->icon() && !parent->icon()->isNull() )
-	QDialog::setIcon( *parent->icon() );
-    else if ( qApp->mainWidget() && qApp->mainWidget()->icon() && !qApp->mainWidget()->icon()->isNull() )
-	QDialog::setIcon( *qApp->mainWidget()->icon() );
-
     init( button0, button1, button2 );
     setCaption( caption );
     setText( text );
@@ -633,7 +504,7 @@ QMessageBox::QMessageBox( const QString& caption,
 
 
 /*!
-  Destructs the message box.
+  Destroys the message box.
 */
 
 QMessageBox::~QMessageBox()
@@ -641,55 +512,16 @@ QMessageBox::~QMessageBox()
     delete mbd;
 }
 
-static QString * translatedTextAboutQt = 0;
 
 void QMessageBox::init( int button0, int button1, int button2 )
 {
-    if ( !translatedTextAboutQt ) {
-	translatedTextAboutQt = new QString;
-
-#if defined(QT_NON_COMMERCIAL)
-    QT_NC_MSGBOX
-#else
-	*translatedTextAboutQt
-	    = tr( "<h3>About Osiris</h3>"
-		  "<p>This program uses Osiris version 2.4.1, a multiplatform C++ "
-		  "GUI toolkit based on Qt 2.3.2 from Trolltech. "
-		  "Osiris runs on *nix systems using the X11 windowing system.</p>"
-		  "<p>See <tt>https://centre.libranext.com/libranext/osiris/</tt> for more "
-		  "information.</p>" );
-#endif
-
-#ifdef QT_NO_RICHTEXT
-	QString plain;
-	bool on=TRUE;
-	for (int i=0; i<translatedTextAboutQt->length(); i++) {
-	    char ch = translatedTextAboutQt->at(i).latin1();
-	    switch ( ch ) {
-	     case '<': on=FALSE; break;
-	     case '>': on=TRUE; break;
-	     default:
-		if ( on )
-		    plain += translatedTextAboutQt->at(i);
-		else if ( ch == 'p' || ch == '3' )
-		    plain += '\n';
-	    }
-	}
-	*translatedTextAboutQt = plain;
-#endif
-    }
-    label = new QLabel( this, "text" );
+    label = new QMessageBoxLabel( this, "text" );
     CHECK_PTR( label );
-
-#ifdef QT_NO_RICHTEXT
-    label->setAlignment( AlignLeft|WordBreak );
-#else
     label->setAlignment( AlignLeft );
-#endif
 
     if ( (button2 && !button1) || (button1 && !button0) ) {
 #if defined(CHECK_RANGE)
-	qWarning( "QMessageBox: Inconsistent button parameters" );
+	::warning( "QMessageBox: Inconsistent button parameters" );
 #endif
 	button0 = button1 = button2 = 0;
     }
@@ -707,7 +539,7 @@ void QMessageBox::init( int button0, int button1, int button2 )
 	if ( (b & Default) ) {
 	    if ( mbd->defButton >= 0 ) {
 #if defined(CHECK_RANGE)
-		qWarning( "QMessageBox: There can be at most one "
+		::warning( "QMessageBox: There can be at most one "
 			   "default button" );
 #endif
 	    } else {
@@ -717,7 +549,7 @@ void QMessageBox::init( int button0, int button1, int button2 )
 	if ( (b & Escape) ) {
 	    if ( mbd->escButton >= 0 ) {
 #if defined(CHECK_RANGE)
-		qWarning( "QMessageBox: There can be at most one "
+		::warning( "QMessageBox: There can be at most one "
 			   "escape button" );
 #endif
 	    } else {
@@ -730,13 +562,13 @@ void QMessageBox::init( int button0, int button1, int button2 )
 		b = Ok;
 	} else if ( b < 0 || b > LastButton ) {
 #if defined(CHECK_RANGE)
-	    qWarning( "QMessageBox: Invalid button specifier" );
+	    ::warning( "QMessageBox: Invalid button specifier" );
 #endif
 	    b = Ok;
 	} else {
 	    if ( i > 0 && mbd->button[i-1] == 0 ) {
 #if defined(CHECK_RANGE)
-		qWarning( "QMessageBox: Inconsistent button parameters; "
+		::warning( "QMessageBox: Inconsistent button parameters; "
 			   "button %d defined but not button %d",
 			   i+1, i );
 #endif
@@ -804,7 +636,7 @@ void QMessageBox::resizeButtons()
   Returns the message box text currently set, or a
   \link QString::operator!() null string\endlink
   if no text has been set.
-  \sa setText(), textFormat()
+  \sa setText()
 */
 
 QString QMessageBox::text() const
@@ -814,19 +646,25 @@ QString QMessageBox::text() const
 
 /*!
   Sets the message box text to be displayed.
-
-  \a text will be interpreted either as a plain text or as a rich
-  text, depending on the text format setting; see setTextFormat(). The
-  default setting is \c AutoText, i.e. the message box will try to
-  auto-detect the format of \a text.
-
-  \sa text(), setTextFormat()
+  \sa text()
 */
 
 void QMessageBox::setText( const QString &text )
 {
     label->setText( text );
 }
+
+/*!
+  \enum QMessageBox::Icon
+
+  This type includes the following values:
+  <ul>
+  <li> \c QMessageBox::NoIcon
+  <li> \c QMessageBox::Information
+  <li> \c QMessageBox::Warning
+  <li> \c QMessageBox::Critical
+  </ul>
+*/
 
 /*!
   Returns the icon of the message box.
@@ -856,7 +694,7 @@ QMessageBox::Icon QMessageBox::icon() const
 
   \sa icon(), setIconPixmap(), iconPixmap()
 */
-//#### Bad API (see QWidget::setIcon). Should be setMessageIcon in 3.0 (same for setIconPixmap and friends)
+
 void QMessageBox::setIcon( Icon icon )
 {
     setIconPixmap( standardIcon(icon, style()) );
@@ -870,44 +708,44 @@ void QMessageBox::setIcon( Icon icon )
 
 QPixmap QMessageBox::standardIcon( Icon icon, GUIStyle style )
 {
-    const char * const * xpm_data;
+    const char **xpm_data;
     switch ( icon ) {
-    case Information:
-	xpm_data = information_xpm;
-	break;
-    case Warning:
-	xpm_data = warning_xpm;
-	break;
-    case Critical:
-	xpm_data = critical_xpm;
-	break;
-    default:
-	xpm_data = 0;
+	case Information:
+	    xpm_data = information_xpm;
+	    break;
+	case Warning:
+	    xpm_data = warning_xpm;
+	    break;
+	case Critical:
+	    xpm_data = critical_xpm;
+	    break;
+	default:
+	    xpm_data = 0;	
     }
     QPixmap pm;
     if ( xpm_data ) {
-	QImage image( (const char **) xpm_data);
+	QImage image(xpm_data);
 	if ( style == MotifStyle ) {
-	    // All that color looks ugly in Motif
+	    // All that colour looks ugly in Motif
 	    QColorGroup g = QApplication::palette().normal();
 	    switch ( icon ) {
-	    case Information:
+	      case Information:
 		image.setColor( 2, 0xff000000 | g.dark().rgb() );
 		image.setColor( 3, 0xff000000 | g.base().rgb() );
 		image.setColor( 4, 0xff000000 | g.text().rgb() );
 		break;
-	    case Warning:
+	      case Warning:
 		image.setColor( 1, 0xff000000 | g.base().rgb() );
 		image.setColor( 2, 0xff000000 | g.text().rgb() );
 		image.setColor( 3, 0xff000000 | g.dark().rgb() );
 		break;
-	    case Critical:
+	      case Critical:
 		image.setColor( 1, 0xff000000 | g.dark().rgb() );
 		image.setColor( 2, 0xff000000 | g.text().rgb() );
 		image.setColor( 3, 0xff000000 | g.base().rgb() );
 	        break;
-	    default:
-		break; // Can't happen
+	      default:
+		; // Can't happen
 	    }
 	}
 	pm.convertFromImage(image);
@@ -1006,106 +844,85 @@ void QMessageBox::buttonClicked()
   This function will not be called if the message box has been explicitly
   resized before showing it.
 */
+
 void QMessageBox::adjustSize()
 {
-    if ( !testWState(WState_Polished) )
-	polish();
-    resizeButtons();
-    label->adjustSize();
-    QSize labelSize( label->size() );
-    int n  = mbd->numButtons;
-    int bw = mbd->buttonSize.width();
-    int bh = mbd->buttonSize.height();
-    int border = bh/2 - style().buttonDefaultIndicatorWidth();
-    if ( border <= 0 )
+    int i;
+    QSize smax = mbd->buttonSize;
+    int border = smax.height()/2;
+    if ( border == 0 )
 	border = 10;
-    int btn_spacing = 7;
-    if ( style() == MotifStyle )
-	btn_spacing = border;
-    int buttons = mbd->numButtons * bw + (n-1) * btn_spacing;
-    int h = bh;
-    if ( labelSize.height() )
-	h += labelSize.height() + 3*border;
+    else if ( style() == MotifStyle )
+	border += 6;
+    for ( i=0; i<mbd->numButtons; i++ )
+	mbd->pb[i]->resize( smax );
+    label->adjustSize();
+    int bw = mbd->numButtons * smax.width() + (mbd->numButtons-1)*border;
+    int w = QMAX( bw, label->width() ) + 2*border;
+    int h = smax.height();
+    if ( label->height() )
+	h += label->height() + 3*border;
     else
 	h += 2*border;
-    int lmargin = 0;
     if ( mbd->iconLabel.pixmap() && mbd->iconLabel.pixmap()->width() )  {
 	mbd->iconLabel.adjustSize();
-	lmargin += mbd->iconLabel.width() + border;
-	if ( h < mbd->iconLabel.height() + 3*border + bh )
-	    h = mbd->iconLabel.height() + 3*border + bh;
+	w += mbd->iconLabel.pixmap()->width() + border;
+	if ( h < mbd->iconLabel.pixmap()->height() + 3*border + smax.height() )
+	    h = mbd->iconLabel.pixmap()->height() + 3*border + smax.height();
     }
-    int w = QMAX( buttons, labelSize.width() + lmargin ) + 2*border;
-
-#if defined(_WS_QWS_)
-    // who commited QMessagebox? It really should use Layout. This way
-    // we do not even have a proper minimum size we could take into
-    // acount. ####
-    extern QRect qt_maxWindowRect;
-    QSize s( w, h );
-    s = s.boundedTo( qt_maxWindowRect.size() );
-    if ( s.width() < w && label->sizePolicy().hasHeightForWidth() ) {
-	resize( s );
-	QApplication::sendPostedEvents( this, QEvent::Resize );
-	s.rheight() += label->heightForWidth( label->width() ) - label->height();
-	s = s.boundedTo( qt_maxWindowRect.size() );
-    }
-    resize( s );
-#else
-    resize( w, h );
-#endif
-    setMinimumSize( size() );
+    resize( w, h );	
 }
 
 
-/*!\reimp
+/*!
+  Handles resize events for the message box.
 */
+
 void QMessageBox::resizeEvent( QResizeEvent * )
 {
     int i;
     int n  = mbd->numButtons;
     int bw = mbd->buttonSize.width();
     int bh = mbd->buttonSize.height();
-    int border = bh/2 - style().buttonDefaultIndicatorWidth();
-    if ( border <= 0 )
+    int border = bh/2;
+    if ( border == 0 )
 	border = 10;
-    int btn_spacing = 7;
-    if ( style() == MotifStyle )
-	btn_spacing = border;
+    else if ( style() == MotifStyle )
+	border += 6;
     int lmargin = 0;
     mbd->iconLabel.adjustSize();
     mbd->iconLabel.move( border, border );
     if ( mbd->iconLabel.pixmap() && mbd->iconLabel.pixmap()->width() )
-	lmargin += mbd->iconLabel.width() + border;
+	lmargin += mbd->iconLabel.pixmap()->width() + border;
+//     label->move( (width() + lmargin)/2 - label->width()/2,
+// 		 (height() - border - bh - label->height()) / 2 );
     label->setGeometry( lmargin+border,
 			border,
 			width() - lmargin -2*border,
 			height() - 3*border - bh );
-    int extra_space = (width() - bw*n - 2*border - (n-1)*btn_spacing);
-    if ( style() == MotifStyle )
-	for ( i=0; i<n; i++ )
-	    mbd->pb[i]->move( border + i*bw + i*btn_spacing + extra_space*(i+1)/(n+1),
-			      height() - border - bh );
-    else
-	for ( i=0; i<n; i++ )
-	    mbd->pb[i]->move( border + i*bw + extra_space/2 + i*btn_spacing,
-			      height() - border - bh );
+    int space = (width() - bw*n)/(n+1);
+    for ( i=0; i<n; i++ ) {
+	mbd->pb[i]->move( space*(i+1)+bw*i,
+			  height() - border - bh );
+    }
 }
 
 
-/*!\reimp
+/*!
+  Handles key press events for the message box.
 */
+
 void QMessageBox::keyPressEvent( QKeyEvent *e )
 {
     if ( e->key() == Key_Escape ) {
 	if ( mbd->escButton >= 0 ) {
 	    QPushButton *pb = mbd->pb[mbd->escButton];
 	    pb->animateClick();
-	    e->accept();
-	    return;
 	}
+	e->accept();
+    } else {
+	QDialog::keyPressEvent( e );
     }
-    QDialog::keyPressEvent( e );
 }
 
 
@@ -1308,19 +1125,14 @@ static int textBox( QWidget *parent, QMessageBox::Icon severity,
 				       parent, "information" );
     CHECK_PTR( mb );
     if ( button0Text.isEmpty() )
-	mb->setButtonText( 1, QMessageBox::tr(mb_texts[QMessageBox::Ok]) );
+	mb->setButtonText( 1, mb_texts[ QMessageBox::Ok ] );
     else
 	mb->setButtonText( 1, button0Text );
     if ( b[1] )
 	mb->setButtonText( 2, button1Text );
     if ( b[2] )
 	mb->setButtonText( 3, button2Text );
-
-#ifndef QT_NO_CURSOR
-    mb->setCursor( Qt::arrowCursor );
-#endif
     int reply = mb->exec();
-
     delete mb;
     return reply-1;
 }
@@ -1331,9 +1143,8 @@ static int textBox( QWidget *parent, QMessageBox::Icon severity,
   1-3 buttons.  Returns the number of the button that was clicked
   (0, 1 or 2).
 
-  \a button0Text is the text of the first button and is optional.  If
-  \a button0Text is not supplied, "OK" (translated) will be used.
-  \a button1Text is the text of the second button and is optional.
+  \a button0Text is the text of the first button and must be present,
+  \a button1Text is the text of the second button and is optional, and
   \a button2Text is the text of the third button and is optional.  \a
   defaultbuttonNumber (0-2) is the index of the default button;
   pressing Return or Enter is the same as clicking the default button.
@@ -1369,8 +1180,7 @@ int QMessageBox::information( QWidget *parent, const QString &caption,
   1-3 buttons.  Returns the number of the button that was clicked
   (0, 1 or 2).
 
-  \a button0Text is the text of the first button and is optional.  If
-  \a button0Text is not supplied, "OK" (translated) will be used.
+  \a button0Text is the text of the first button and must be present,
   \a button1Text is the text of the second button and is optional, and
   \a button2Text is the text of the third button and is optional.  \a
   defaultbuttonNumber (0-2) is the index of the default button;
@@ -1407,8 +1217,7 @@ int QMessageBox::warning( QWidget *parent, const QString &caption,
   1-3 buttons.  Returns the number of the button that was clicked
   (0, 1 or 2).
 
-  \a button0Text is the text of the first button and is optional.  If
-  \a button0Text is not supplied, "OK" (translated) will be used.
+  \a button0Text is the text of the first button and must be present,
   \a button1Text is the text of the second button and is optional, and
   \a button2Text is the text of the third button and is optional.  \a
   defaultbuttonNumber (0-2) is the index of the default button;
@@ -1440,6 +1249,18 @@ int QMessageBox::critical( QWidget *parent, const QString &caption,
 }
 
 
+static const char *textAboutQt =
+"<h3>This program is developed with Qt, the multi-platform C++ GUI toolkit.</h3>"
+"<p>Qt version running with this application: <tt>%1</tt></p>"
+"<p>Qt is a product of <b>Troll Tech AS </b>(http://www.troll.no).</p>"
+"<p>Qt is available under two different licenses:</p>"
+"<ul><li>The Free Edition, which may be used free of charge to develop"
+"  Free Software on the X Window System.</li>"
+"<li>The Professional Edition, which may be used to develop commercial"
+"  software on both X and Microsoft Windows.</li></ul>";
+void QT_END_TEXT() { QMessageBox::aboutQt(0,"E" "g" "g"); }
+
+
 /*!
   Displays a simple message box about Qt, with window caption \a
   caption and optionally centered over \a parent.  The message includes
@@ -1451,39 +1272,37 @@ int QMessageBox::critical( QWidget *parent, const QString &caption,
 
 void QMessageBox::aboutQt( QWidget *parent, const QString &caption )
 {
-    QString c = caption;
-    if ( c.isNull() )
-	c = "About Qt";
-    QMessageBox *mb = new QMessageBox( parent, "about qt" );
-    mb->setCaption( caption.isNull()?QString::fromLatin1("About Qt"):caption );
-    mb->setText( *translatedTextAboutQt );
-    QPixmap pm;
-    QImage logo( (const char **)qtlogo_xpm);
-    if ( qGray(mb->palette().active().text().rgb()) >
-         qGray(mb->palette().active().base().rgb()) )
-    {
-	// light on dark, adjust some colors
-	logo.setColor( 0,0xFFffffff);
-	logo.setColor( 1,0xFF666666);
-	logo.setColor( 2,0xFFcccc66);
-	logo.setColor( 4,0xFFcccccc);
-	logo.setColor( 6,0xFFffff66);
-	logo.setColor( 7,0xFF999999);
-	logo.setColor( 8,0xFF3333FF);
-	logo.setColor( 9,0xFFffff33);
-	logo.setColor(11,0xFFcccc99);
-    }
-    if ( pm.convertFromImage( logo ) )
-	mb->setIconPixmap( pm );
-    mb->setButtonText( 0, tr("OK") );
-    if ( mb->mbd && mb->mbd->pb[0] ) {
-	mb->mbd->pb[0]->setAutoDefault( TRUE );
-	mb->mbd->pb[0]->setFocusPolicy( QWidget::StrongFocus );
-	mb->mbd->pb[0]->setDefault( TRUE );
-	mb->mbd->pb[0]->setFocus();
-    }
-    mb->exec();
+    information( parent, caption.isNull()
+	? QString::fromLatin1("About Qt") : caption,
+		 qApp->translate( "QMessageBox", textAboutQt )
+			.arg(QString::fromLatin1(QT_VERSION_STR))
+    );
 }
+
+
+#include <qmetaobject.h>
+
+
+const char *QMessageBoxLabel::className() const
+{
+    return "QMessageBoxLabel";
+}
+
+QMetaObject *QMessageBoxLabel::metaObj = 0;
+
+void QMessageBoxLabel::initMetaObject()
+{
+    if ( metaObj )
+	return;
+    if ( strcmp(QLabel::className(), "QLabel") != 0 )
+	badSuperclassWarning("QMessageBoxLabel","QLabel");
+    if ( !QLabel::metaObject() )
+	QLabel::initMetaObject();
+    metaObj = new QMetaObject( "QMessageBoxLabel", "QLabel",
+	0, 0,
+	0, 0 );
+}
+
 
 /*!
   \reimp
@@ -1496,37 +1315,9 @@ void QMessageBox::setIcon( const QPixmap &pix )
 }
 
 
-/*!
-  Returns the current text format.
-
-  \sa setTextFormat()
-*/
-
-Qt::TextFormat QMessageBox::textFormat() const
-{
-    return label->textFormat();
-}
-
-/*!
-  Sets the text format to \a format. See the Qt::TextFormat enum for
-  an explanation of the possible options.
-
-  The default format is \c AutoText.
-
-  \sa textFormat(), setText()
-*/
-
-void QMessageBox::setTextFormat( Qt::TextFormat format )
-{
-    label->setTextFormat( format );
-}
-
-
 // My own personal favorite minimalist error message popped up whilst
 // testing Freehand 8 last month.  I took a screen shot.  I believe I
 // was trying to convert a file from one format to another.
 // Apparently, I...
 //
-// http://www.people.cornell.edu/pages/mlj8/cant.gif
-
-#endif
+// http://www.people.cornell.edu/pages/mlj8/cant.png

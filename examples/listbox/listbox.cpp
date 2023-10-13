@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: qt/examples/listbox/listbox.cpp   2.3.2   edited 2001-01-26 $
+** $Id: listbox.cpp,v 1.3 1999/06/23 00:33:39 reggie Exp $
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -17,7 +17,7 @@
 #include <qlistbox.h>
 #include <qbuttongroup.h>
 #include <qlayout.h>
-#include <qpushbutton.h>
+
 
 
 ListBoxDemo::ListBoxDemo()
@@ -31,7 +31,7 @@ ListBoxDemo::ListBoxDemo()
     l = new QListBox( this );
     g->addWidget( l, 1, 1 );
     l->setFocusPolicy( QWidget::StrongFocus );
-
+    
     QVBoxLayout * v = new QVBoxLayout;
     g->addLayout( v, 1, 0 );
 
@@ -100,22 +100,14 @@ ListBoxDemo::ListBoxDemo()
     connect( cb, SIGNAL(toggled(bool)), this, SLOT(setVariableWidth(bool)) );
     v->addWidget( cb );
 
-    cb = new QCheckBox( "Extended-Selection", this );
+    cb = new QCheckBox( "Multiselection", this );
     connect( cb, SIGNAL(toggled(bool)), this, SLOT(setMultiSelection(bool)) );
     v->addWidget( cb );
-
-    QPushButton *pb = new QPushButton( "Sort ascending", this );
-    connect( pb, SIGNAL( clicked() ), this, SLOT( sortAscending() ) );
-    v->addWidget( pb );
-
-    pb = new QPushButton( "Sort descending", this );
-    connect( pb, SIGNAL( clicked() ), this, SLOT( sortDescending() ) );
-    v->addWidget( pb );
 
     v->addStretch( 100 );
 
     int i = 0;
-    while( ++i <= 2560 )
+    while( ++i <= 256 )
         l->insertItem( QString::fromLatin1( "Item " ) + QString::number( i ),
                        i );
     columns->setRange( 1, 256 );
@@ -180,15 +172,5 @@ void ListBoxDemo::setVariableHeight( bool b )
 void ListBoxDemo::setMultiSelection( bool b )
 {
     l->clearSelection();
-    l->setSelectionMode( b ? QListBox::Extended : QListBox::Single );
-}
-
-void ListBoxDemo::sortAscending()
-{
-    l->sort( TRUE );
-}
-
-void ListBoxDemo::sortDescending()
-{
-    l->sort( FALSE );
+    l->setMultiSelection( b );
 }

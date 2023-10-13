@@ -1,16 +1,13 @@
 /****************************************************************************
-** $Id: qt/examples/customlayout/card.h   2.3.2   edited 2001-01-26 $
+** $Id: card.h,v 1.1 1999/06/03 10:08:55 warwick Exp $
 **
 ** Definition of simple flow layout for custom layout example
 **
 ** Created : 979899
 **
-** Copyright (C) 1997 by Trolltech AS.  All rights reserved.
+** Copyright (C) 1997 by Troll Tech AS.  All rights reserved.
 **
-** This file is part of an example program for Qt.  This example
-** program may be used, distributed and modified without limitation.
-**
-*****************************************************************************/
+****************************************************************************/
 
 #ifndef CARD_H
 #define CARD_H

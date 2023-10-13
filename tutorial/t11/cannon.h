@@ -7,9 +7,6 @@
 #ifndef CANNON_H
 #define CANNON_H
 
-class QTimer;
-
-
 #include <qwidget.h>
 
 
@@ -19,8 +16,9 @@ class CannonField : public QWidget
 public:
     CannonField( QWidget *parent=0, const char *name=0 );
 
-    int   angle() const { return ang; }
-    int   force() const { return f; }
+    int   angle()      const { return ang; }
+    int   force()      const { return f; }
+    bool  isShooting() const { return shooting; }
     QSizePolicy sizePolicy() const;
 
 public slots:
@@ -28,27 +26,26 @@ public slots:
     void  setForce( int newton );
     void  shoot();
 
-private slots:
-    void  moveShot();
-
 signals:
     void  angleChanged( int );
     void  forceChanged( int );
 
 protected:
+    void  timerEvent( QTimerEvent * );
     void  paintEvent( QPaintEvent * );
 
 private:
+    void  stopShooting();
     void  paintShot( QPainter * );
     void  paintCannon( QPainter * );
     QRect cannonRect() const;
     QRect shotRect() const;
 
-    int ang;
-    int f;
+    int   ang;
+    int   f;
+    bool  shooting;
 
-    int timerCount;
-    QTimer * autoShootTimer;
+    int   timerCount;
     float shoot_ang;
     float shoot_f;
 };

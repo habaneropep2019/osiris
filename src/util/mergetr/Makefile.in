@@ -1,0 +1,68 @@
+#############################################################################
+
+####### Compiler, tools and options
+
+CXX	=	$(SYSCONF_CXX)
+CXXFLAGS=	$(SYSCONF_CXXFLAGS_QT) $(SYSCONF_CXXFLAGS)
+CC	=	$(SYSCONF_CC)
+CFLAGS	=	$(SYSCONF_CFLAGS)
+INCPATH =	
+LFLAGS	=	$(SYSCONF_LFLAGS_QT) $(SYSCONF_LFLAGS_X11) $(SYSCONF_LFLAGS)
+LIBS	=	$(SYSCONF_LIBS_QT) $(SYSCONF_LIBS_X11) $(SYSCONF_LIBS)
+MOC	=	$(SYSCONF_MOC)
+
+####### Target
+
+DESTDIR = ./
+VER_MAJ = 1
+VER_MIN = 0
+TARGET	= mergetr
+TARGET1 = lib$(TARGET).so.$(VER_MAJ)
+
+####### Files
+
+HEADERS =	
+SOURCES =	mergetr.cpp
+OBJECTS =	mergetr.o
+SRCMOC	=	
+OBJMOC	=	
+
+####### Implicit rules
+
+.SUFFIXES: .cpp .cxx .cc .C .c
+
+.cpp.o:
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o $@ $<
+
+.cxx.o:
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o $@ $<
+
+.cc.o:
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o $@ $<
+
+.C.o:
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o $@ $<
+
+.c.o:
+	$(CC) -c $(CFLAGS) $(INCPATH) -o $@ $<
+
+####### Build rules
+
+all: $(DESTDIR)$(TARGET)
+
+$(DESTDIR)$(TARGET): $(OBJECTS) $(OBJMOC) 
+	$(SYSCONF_LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(OBJMOC) $(LIBS)
+
+moc: $(SRCMOC)
+
+tmake:
+	tmake mergetr.pro
+
+clean:
+	-rm -f $(OBJECTS) $(OBJMOC) $(SRCMOC)
+	-rm -f *~ core
+
+####### Compile
+
+mergetr.o: mergetr.cpp
+

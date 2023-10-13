@@ -1,55 +1,42 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qcolor.cpp   2.3.2   edited 2001-03-26 $
+** $Id: qcolor.cpp,v 2.39 1999/05/26 14:13:08 paul Exp $
 **
 ** Implementation of QColor class
 **
 ** Created : 940112
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
-** This file is part of the kernel module of the Qt GUI Toolkit.
+** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses may use this file in accordance with the Qt Commercial License
-** Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
+*****************************************************************************/
 
 #include "qcolor.h"
+#include "qpaintdevice.h"
 #include "qnamespace.h"
 #include "qdatastream.h"
 #include <stdlib.h>
 #include <ctype.h>
 
 
-// NOT REVISED
 /*!
   \class QColor qcolor.h
   \brief The QColor class provides colors based on RGB.
 
   \ingroup color
   \ingroup drawing
-  \ingroup appearance
 
   A color is normally specified in terms of RGB (red,green and blue)
   components, but it is also possible to specify HSV (hue,saturation
@@ -105,7 +92,7 @@
   255 is far from black as possible. </ul>
 
   Here are some examples: Pure red is H=0, S=255, V=255.  A dark red,
-  moving slightly towards the magenta, could be H=350 (equivalent to
+  moving slightly towards the magenta, could be H=350 (equvalent to
   -10), S=255, V=180.  A grayish light red could have H about 0 (say
   350-359 or 0-10), S about 50-100, and S=255.
 
@@ -156,13 +143,6 @@ bool QColor::color_init   = FALSE;		// color system not initialized
 bool QColor::globals_init = FALSE;		// global color not initialized
 bool QColor::lazy_alloc = TRUE;			// lazy color allocation
 
-
-QColor* QColor::globalColors()
-{
-    return stdcol;
-}
-
-
 /*!
   Initializes the global colors.  This function is called if a global
   color variable is initialized before the constructors for our global
@@ -182,32 +162,27 @@ QColor* QColor::globalColors()
 void QColor::initGlobalColors()
 {
     globals_init = TRUE;
-    stdcol[ 0].pix = COLOR0_PIX;
-    stdcol[ 1].pix = COLOR1_PIX;
-#ifdef _WS_QWS_
-    stdcol[ 0].rgbVal = 0;
-    stdcol[ 1].rgbVal = 0x00ffffff; //######### QWS color allocation is a mess
-#else
-    stdcol[ 0].rgbVal = 0x00ffffff;
-    stdcol[ 1].rgbVal = 0;
-#endif
-    stdcol[ 2].setRgb(   0,   0,   0 );
-    stdcol[ 3].setRgb( 255, 255, 255 );
-    stdcol[ 4].setRgb( 128, 128, 128 );
-    stdcol[ 5].setRgb( 160, 160, 164 );
-    stdcol[ 6].setRgb( 192, 192, 192 );
-    stdcol[ 7].setRgb( 255,   0,   0 );
-    stdcol[ 8].setRgb(   0, 255,   0 );
-    stdcol[ 9].setRgb(   0,   0, 255 );
-    stdcol[10].setRgb(   0, 255, 255 );
-    stdcol[11].setRgb( 255,   0, 255 );
-    stdcol[12].setRgb( 255, 255,   0 );
-    stdcol[13].setRgb( 128,   0,   0 );
-    stdcol[14].setRgb(   0, 128,   0 );
-    stdcol[15].setRgb(   0,   0, 128 );
-    stdcol[16].setRgb(   0, 128, 128 );
-    stdcol[17].setRgb( 128,   0, 128 );
-    stdcol[18].setRgb( 128, 128,   0 );
+    ((QColor*)(&Qt::color0))->pix = COLOR0_PIX;
+    ((QColor*)(&Qt::color1))->pix = COLOR1_PIX;
+    ((QColor*)(&Qt::color0))->rgbVal = 0x00ffffff;
+    ((QColor*)(&Qt::color1))->rgbVal = 0;
+    ((QColor*)(&Qt::black))->setRgb(   0,	 0,   0 );
+    ((QColor*)(&Qt::white))->setRgb( 255, 255, 255 );
+    ((QColor*)(&Qt::darkGray))->setRgb( 128, 128, 128 );
+    ((QColor*)(&Qt::gray))->setRgb( 160, 160, 164 );
+    ((QColor*)(&Qt::lightGray))->setRgb( 192, 192, 192 );
+    ((QColor*)(&Qt::red))->setRgb( 255,	 0,   0 );
+    ((QColor*)(&Qt::green))->setRgb(   0, 255,   0 );
+    ((QColor*)(&Qt::blue))->setRgb(   0,	0,  255 );
+    ((QColor*)(&Qt::cyan))->setRgb(   0, 255, 255 );
+    ((QColor*)(&Qt::magenta))->setRgb( 255,	0,  255 );
+    ((QColor*)(&Qt::yellow))->setRgb( 255, 255,   0 );
+    ((QColor*)(&Qt::darkRed))->setRgb( 128,	0,    0 );
+    ((QColor*)(&Qt::darkGreen))->setRgb(   0, 128,   0 );
+    ((QColor*)(&Qt::darkBlue))->setRgb(   0,	0,  128 );
+    ((QColor*)(&Qt::darkCyan))->setRgb(   0, 128, 128 );
+    ((QColor*)(&Qt::darkMagenta))->setRgb( 128,	0,  128 );
+    ((QColor*)(&Qt::darkYellow))->setRgb( 128, 128,   0 );
 }
 
 
@@ -244,7 +219,7 @@ QColor::QColor( QRgb rgb, uint pixel )
     if ( pixel == 0xffffffff ) {
 	setRgb( rgb );
     } else {
-	rgbVal = (rgb & RGB_MASK) | RGB_DIRECT;
+	rgbVal = rgb | RGB_DIRECT;
 	pix    = pixel;
     }
 }
@@ -310,6 +285,68 @@ QColor::QColor( const QColor &c )
 }
 
 
+inline static int hex2int( QChar hexchar )
+{
+    int v;
+    if ( hexchar.isDigit() )
+	v = hexchar.digitValue();
+    else if ( hexchar >= 'A' && hexchar <= 'F' )
+	v = hexchar.cell() - 'A' + 10;
+    else if ( hexchar >= 'a' && hexchar <= 'f' )
+	v = hexchar.cell() - 'a' + 10;
+    else
+	v = 0;
+    return v;
+}
+
+
+/*!
+  Sets the RGB value to that of the named color.
+
+  The color name may be in one of five formats: <ul>
+  <li> #RGB (each of R, G and B is a single hex digit)
+  <li> #RRGGBB
+  <li> #RRRGGGBBB
+  <li> #RRRRGGGGBBBB
+  <li> A named from the X color database (rgb.txt),  e.g.
+  "steelblue" or "gainsboro".  These color names also work
+  under Qt for Windows.
+*/
+
+void QColor::setNamedColor( const QString& name )
+{
+    if ( name.isEmpty() ) {
+	setRgb( 0 );
+    } else if ( name[0] == '#' ) {
+	const QChar *p = name.unicode()+1;
+	int len = name.length()-1;
+	int r, g, b;
+	if ( len == 12 ) {
+	    r = (hex2int(p[0]) << 4) + hex2int(p[1]);
+	    g = (hex2int(p[4]) << 4) + hex2int(p[5]);
+	    b = (hex2int(p[8]) << 4) + hex2int(p[9]);
+	} else if ( len == 9 ) {
+	    r = (hex2int(p[0]) << 4) + hex2int(p[1]);
+	    g = (hex2int(p[3]) << 4) + hex2int(p[4]);
+	    b = (hex2int(p[6]) << 4) + hex2int(p[7]);
+	} else if ( len == 6 ) {
+	    r = (hex2int(p[0]) << 4) + hex2int(p[1]);
+	    g = (hex2int(p[2]) << 4) + hex2int(p[3]);
+	    b = (hex2int(p[4]) << 4) + hex2int(p[5]);
+	} else if ( len == 3 ) {
+	    r = hex2int(p[0]) << 4;
+	    g = hex2int(p[1]) << 4;
+	    b = hex2int(p[2]) << 4;
+	} else {
+	    r = g = b = 0;
+	}
+	setRgb( r, g, b );
+    } else {
+	setSystemNamedColor( name );
+    }
+}
+
+
 /*!
   Assigns a copy of the color \c and returns a reference to this color.
 */
@@ -338,95 +375,10 @@ QColor &QColor::operator=( const QColor &c )
 */
 
 
-/*!
-  Returns the name of the color in the format #RRGGBB.
-
-  \sa setNamedColor()
-*/
-
-QString QColor::name() const
-{
-    QString s;
-    s.sprintf( "#%02x%02x%02x", red(), green(), blue() );
-    return s;
-}
-
-
-static int hex2int( QChar hexchar )
-{
-    int v;
-    if ( hexchar.isDigit() )
-	v = hexchar.digitValue();
-    else if ( hexchar >= 'A' && hexchar <= 'F' )
-	v = hexchar.cell() - 'A' + 10;
-    else if ( hexchar >= 'a' && hexchar <= 'f' )
-	v = hexchar.cell() - 'a' + 10;
-    else
-	v = 0;
-    return v;
-}
-
-
-/*!
-  Sets the RGB value to that of the named color.
-
-  The color name may be in one of five formats: <ul>
-  <li> #RGB (each of R, G and B is a single hex digit)
-  <li> #RRGGBB
-  <li> #RRRGGGBBB
-  <li> #RRRRGGGGBBBB
-  <li> A named from the X color database (rgb.txt),  e.g.
-  "steelblue" or "gainsboro".  These color names also work
-  under Qt for Windows.
-  </ul>
-*/
-
-void QColor::setNamedColor( const QString& name )
-{
-    if ( name.isEmpty() ) {
-	setRgb( 0 );
-    } else if ( name[0] == '#' ) {
-	const QChar *p = name.unicode()+1;
-	int len = name.length()-1;
-	int r, g, b;
-	if ( len == 12 ) {
-	    r = (hex2int(p[0]) << 4) + hex2int(p[1]);
-	    g = (hex2int(p[4]) << 4) + hex2int(p[5]);
-	    b = (hex2int(p[8]) << 4) + hex2int(p[9]);
-	} else if ( len == 9 ) {
-	    r = (hex2int(p[0]) << 4) + hex2int(p[1]);
-	    g = (hex2int(p[3]) << 4) + hex2int(p[4]);
-	    b = (hex2int(p[6]) << 4) + hex2int(p[7]);
-	} else if ( len == 6 ) {
-	    r = (hex2int(p[0]) << 4) + hex2int(p[1]);
-	    g = (hex2int(p[2]) << 4) + hex2int(p[3]);
-	    b = (hex2int(p[4]) << 4) + hex2int(p[5]);
-	} else if ( len == 3 ) {
-	    r = (hex2int(p[0]) << 4) + hex2int(p[0]);
-	    g = (hex2int(p[1]) << 4) + hex2int(p[1]);
-	    b = (hex2int(p[2]) << 4) + hex2int(p[2]);
-	} else {
-	    r = g = b = 0;
-	}
-	setRgb( r, g, b );
-    } else {
-	setSystemNamedColor( name );
-    }
-}
-
-
 #undef max
 #undef min
 
-/*! \obsolete */
-
-void QColor::getHsv( int &h, int &s, int &v ) const
-{
-    hsv( &h, &s, &v );
-}
-
-
-/*!
+/*!\obsolete
   Returns the current RGB value as HSV.
 
   \arg \e *h, hue.
@@ -441,6 +393,26 @@ void QColor::getHsv( int &h, int &s, int &v ) const
 */
 
 void QColor::hsv( int *h, int *s, int *v ) const
+{
+    getHsv(*h,*s,*v);
+}
+
+
+/*!\obsolete
+  Returns the current RGB value as HSV.
+
+  \arg \e h, hue.
+  \arg \e s, saturation.
+  \arg \e v, value.
+
+  The hue defines the color. Its range is 0..359 if the color is chromatic
+  and -1 if the color is achromatic.  The saturation and value both vary
+  between 0 and 255 inclusive.
+
+  \sa setHsv(), rgb()
+*/
+
+void QColor::getHsv( int &h, int &s, int &v ) const
 {
     int r = qRed(rgbVal);
     int g = qGreen(rgbVal);
@@ -459,34 +431,33 @@ void QColor::hsv( int *h, int *s, int *v ) const
     if ( (uint)g < min ) min = g;
     if ( (uint)b < min ) min = b;
     int delta = max-min;
-    *v = max;					// calc value
-    *s = max ? (510*delta+max)/(2*max) : 0;
-    if ( *s == 0 ) {
-	*h = -1;				// undefined hue
+    v = max;					// calc value
+    s = max ? (510*delta+max)/(2*max) : 0;
+    if ( s == 0 ) {
+	h = -1;				// undefined hue
     } else {
 	switch ( whatmax ) {
 	    case 0:				// red is max component
 		if ( g >= b )
-		    *h = (120*(g-b)+delta)/(2*delta);
+		    h = (120*(g-b)+delta)/(2*delta);
 		else
-		    *h = (120*(g-b+delta)+delta)/(2*delta) + 300;
+		    h = (120*(g-b+delta)+delta)/(2*delta) + 300;
 		break;
 	    case 1:				// green is max component
 		if ( b > r )
-		    *h = 120 + (120*(b-r)+delta)/(2*delta);
+		    h = 120 + (120*(b-r)+delta)/(2*delta);
 		else
-		    *h = 60 + (120*(b-r+delta)+delta)/(2*delta);
+		    h = 60 + (120*(b-r+delta)+delta)/(2*delta);
 		break;
 	    case 2:				// blue is max component
 		if ( r > g )
-		    *h = 240 + (120*(r-g)+delta)/(2*delta);
+		    h = 240 + (120*(r-g)+delta)/(2*delta);
 		else
-		    *h = 180 + (120*(r-g+delta)+delta)/(2*delta);
+		    h = 180 + (120*(r-g+delta)+delta)/(2*delta);
 		break;
 	}
     }
 }
-
 
 /*!
   Sets a HSV color value.
@@ -495,7 +466,7 @@ void QColor::hsv( int *h, int *s, int *v ) const
   \arg \e s, saturation (0..255).
   \arg \e v, value (0..255).
 
-  \sa hsv(), setRgb()
+  \sa getHsv(), setRgb()
 */
 
 void QColor::setHsv( int h, int s, int v )
@@ -508,7 +479,7 @@ void QColor::setHsv( int h, int s, int v )
 #endif
     int r=v, g=v, b=v;
     if ( s == 0 || h == -1 ) {			// achromatic case
-	// Ignore
+	;
     } else {					// chromatic case
 	if ( (uint)h >= 360 )
 	    h %= 360;
@@ -571,7 +542,7 @@ void QColor::setRgb( int r, int g, int b )
     if ( (uint)r > 255 || (uint)g > 255 || (uint)b > 255 )
 	qWarning( "QColor::setRgb: RGB parameter(s) out of range" );
 #endif
-    rgbVal = ((r & 0xff) << 16) | ((g & 0xff) << 8) | (b & 0xff);
+    rgbVal = qRgb(r,g,b);
     if ( lazy_alloc || !color_init ) {
 	rgbVal |= RGB_DIRTY;			// alloc later
 	pix = 0;
@@ -592,13 +563,14 @@ void QColor::setRgb( int r, int g, int b )
 void QColor::setRgb( QRgb rgb )
 {
     if ( lazy_alloc || !color_init ) {
-	rgbVal = (rgb & RGB_MASK) | RGB_DIRTY;	// alloc later
+	rgbVal = (rgb & 0x00ffffff) | RGB_DIRTY;// alloc later
 	pix = 0;
     } else {
-	rgbVal = (rgb & RGB_MASK);
+	rgbVal = (rgb & 0x00ffffff);
 	alloc();				// alloc now
     }
 }
+
 
 /*!
   \fn int QColor::red() const
@@ -739,12 +711,12 @@ void QColor::setLazyAlloc( bool enable )
 /*****************************************************************************
   QColor stream functions
  *****************************************************************************/
-#ifndef QT_NO_DATASTREAM
+
 /*!
   \relates QColor
   Writes a color object to the stream.
 
-  \sa \link datastreamformat.html Format of the QDataStream operators \endlink
+  Serialization format: RGB value serialized as an Q_UINT32.
 */
 
 QDataStream &operator<<( QDataStream &s, const QColor &c )
@@ -758,8 +730,6 @@ QDataStream &operator<<( QDataStream &s, const QColor &c )
 /*!
   \relates QColor
   Reads a color object from the stream.
-
-  \sa \link datastreamformat.html Format of the QDataStream operators \endlink
 */
 
 QDataStream &operator>>( QDataStream &s, QColor &c )
@@ -771,7 +741,7 @@ QDataStream &operator>>( QDataStream &s, QColor &c )
     c.setRgb( p );
     return s;
 }
-#endif
+
 
 /*****************************************************************************
   QColor global functions (documentation only)
@@ -799,29 +769,13 @@ QDataStream &operator>>( QDataStream &s, QColor &c )
 */
 
 /*!
-  \fn int qAlpha( QRgb rgba )
-  \relates QColor
-  Returns the alpha component of the RGBA quadruplet \e rgb.
-*/
-
-/*!
   \fn QRgb qRgb( int r, int g, int b )
   \relates QColor
   Returns the RGB triplet \a (r,g,b).
 
   The return type \e QRgb is equivalent to \c unsigned \c int.
 
-  \sa qRgba(), qRed(), qGreen(), qBlue()
-*/
-
-/*!
-  \fn QRgb qRgba( int r, int g, int b, int a )
-  \relates QColor
-  Returns the RGBA quadruplet \a (r,g,b,a).
-
-  The return type \e QRgb is equivalent to \c unsigned \c int.
-
-  \sa qRgb(), qRed(), qGreen(), qBlue()
+  \sa qRed(), qGreen(), qBlue()
 */
 
 /*!

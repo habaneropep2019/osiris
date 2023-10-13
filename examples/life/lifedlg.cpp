@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: qt/examples/life/lifedlg.cpp   2.3.2   edited 2001-01-26 $
+** $Id: lifedlg.cpp,v 1.2 1999/06/03 01:44:48 warwick Exp $
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -47,24 +47,24 @@ void LifeTimer::setSpeed( int speed )
 
 // A top-level container widget to organize the others
 
-LifeDialog::LifeDialog( int scale, QWidget * parent, const char * name )
+LifeDialog::LifeDialog( QWidget * parent, const char * name )
     : QWidget( parent, name )
 {
     qb = new QPushButton( "Quit!", this );
     cb = new QComboBox( this, "comboBox" );
-    life = new LifeWidget(scale, this);
+    life = new LifeWidget(this);
     life->move( SIDEBORDER, TOPBORDER );
 
 
     connect( qb, SIGNAL(clicked()), qApp, SLOT(quit()) );
-    qb->setGeometry( SIDEBORDER, SIDEBORDER, qb->sizeHint().width(), 25 );
+    qb->setGeometry( SIDEBORDER, SIDEBORDER, 75, 25 );
     timer = new LifeTimer( this );
 
     connect( timer, SIGNAL(timeout()), life, SLOT(nextGeneration()) );
     pb = new QPushButton( "Pause", this );
     pb->setToggleButton( TRUE );
     connect( pb, SIGNAL(toggled(bool)), timer, SLOT(pause(bool)) );
-    pb->resize( pb->sizeHint().width(), 25 );
+    pb->resize( 75, 25 );
     pb->move( width() - SIDEBORDER - pb->width(), SIDEBORDER );
 
     sp = new QLabel( "Speed:", this );
@@ -131,8 +131,7 @@ LifeDialog::LifeDialog( int scale, QWidget * parent, const char * name )
     s = life->sizeIncrement();
     setSizeIncrement( s.width(), s.height() );
 
-    resize( QMIN(512, qApp->desktop()->width()),
-	    QMIN(480, qApp->desktop()->height()) );
+    resize( 512, 480 );
 }
 
 

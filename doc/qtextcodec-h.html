@@ -1,0 +1,114 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><meta name="robots" content="noindex,noarchive"><title>
+Qt Toolkit - qtextcodec.h include file
+</title><style type="text/css"><!--
+h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
+a:link { text-decoration: none; }
+body { background: white; color: black; }
+--></style>
+</head><body bgcolor="#ffffff">
+
+<a href=index.html><img width=122 height=65 src=qtlogo.png alt="Qt logo" align=left border=0></a>
+<center><img src=dochead.png width=448 height=23></center>
+<br clear=all>
+
+<h1 align=center>qtextcodec.h</h1><br clear="all">
+This is the verbatim text of the qtextcodec.h include file.  It is
+provided only for illustration; the copyright
+remains with Troll Tech.
+<hr>
+<pre>
+/****************************************************************************
+** &#36;Id&#58; qtextcodec.h,v 1.16 1999/06/17 15:25:59 warwick Exp $
+**
+** Definition of QTextCodec class
+**
+** Created : 981015
+**
+** Copyright (C) 1998-1999 Troll Tech AS.  All rights reserved.
+**
+** This file is part of the Qt GUI Toolkit.
+**
+** This file may be distributed under the terms of the Q Public License
+** as defined by Troll Tech AS of Norway and appearing in the file
+** LICENSE.QPL included in the packaging of this file.
+**
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
+**
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
+**
+*****************************************************************************/
+
+#ifndef QTEXTCODEC_H
+#define QTEXTCODEC_H
+
+#include "qstring.h"
+
+class <a href="qtextcodec.html">QTextCodec</a>;
+class <a href="qiodevice.html">QIODevice</a>;
+
+class Q_EXPORT <a href="qtextencoder.html">QTextEncoder</a> {
+public:
+    virtual ~QTextEncoder();
+    virtual QCString fromUnicode(const QString&amp; uc, int&amp; lenInOut) = 0;
+};
+
+class Q_EXPORT <a href="qtextdecoder.html">QTextDecoder</a> {
+public:
+    virtual ~QTextDecoder();
+    virtual QString toUnicode(const char* chars, int len) = 0;
+};
+
+class Q_EXPORT <a href="qtextcodec.html">QTextCodec</a> {
+public:
+    virtual ~QTextCodec();
+
+    static QTextCodec* loadCharmap(QIODevice*);
+    static QTextCodec* loadCharmapFile(QString filename);
+
+    static QTextCodec* codecForMib(int mib);
+    static QTextCodec* codecForName(const char* hint, int accuracy=0);
+    static QTextCodec* codecForContent(const char* chars, int len);
+    static QTextCodec* codecForIndex(int i);
+    static QTextCodec* codecForLocale();
+
+    static void deleteAllCodecs();
+
+    static const char* locale();
+
+    virtual const char* name() const = 0;
+    virtual int mibEnum() const = 0;
+
+    virtual QTextDecoder* makeDecoder() const;
+    virtual QTextEncoder* makeEncoder() const;
+
+    virtual QString toUnicode(const char* chars, int len) const;
+    virtual QCString fromUnicode(const QString&amp; uc, int&amp; lenInOut) const;
+
+    QCString fromUnicode(const QString&amp; uc) const;
+    QString toUnicode(const QByteArray&amp;, int len) const;
+    QString toUnicode(const QByteArray&amp;) const;
+    QString toUnicode(const char* chars) const;
+    virtual bool canEncode( QChar ) const;
+    virtual bool canEncode( const QString&amp; ) const;
+
+    virtual int heuristicContentMatch(const char* chars, int len) const = 0;
+    virtual int heuristicNameMatch(const char* hint) const;
+
+protected:
+    QTextCodec();
+    static int simpleHeuristicNameMatch(const char* name, const char* hint);
+};
+
+#endif
+
+</pre>
+<p><address><hr><div align="center">
+<table width="100%" cellspacing="0" border="0"><tr>
+<td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.00</div>
+</table></div></address></body></html>

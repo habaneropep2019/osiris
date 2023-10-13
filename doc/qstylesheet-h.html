@@ -1,0 +1,191 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><meta name="robots" content="noindex,noarchive"><title>
+Qt Toolkit - qstylesheet.h include file
+</title><style type="text/css"><!--
+h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
+a:link { text-decoration: none; }
+body { background: white; color: black; }
+--></style>
+</head><body bgcolor="#ffffff">
+
+<a href=index.html><img width=122 height=65 src=qtlogo.png alt="Qt logo" align=left border=0></a>
+<center><img src=dochead.png width=448 height=23></center>
+<br clear=all>
+
+<h1 align=center>qstylesheet.h</h1><br clear="all">
+This is the verbatim text of the qstylesheet.h include file.  It is
+provided only for illustration; the copyright
+remains with Troll Tech.
+<hr>
+<pre>
+/****************************************************************************
+** &#36;Id&#58; qstylesheet.h,v 2.9 1999/06/18 01:10:18 ettrich Exp $
+**
+** Definition of the QStyleSheet class
+**
+** Created : 990101
+**
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+**
+** This file is part of the Qt GUI Toolkit.
+**
+** This file may be distributed under the terms of the Q Public License
+** as defined by Troll Tech AS of Norway and appearing in the file
+** LICENSE.QPL included in the packaging of this file.
+**
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
+**
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
+**
+*****************************************************************************/
+
+#ifndef QSTYLESHEET_H
+#define QSTYLESHEET_H
+
+#include "qlist.h"
+#include "qdict.h"
+#include "qmap.h"
+#include "qpixmap.h"
+#include "qscrollview.h"
+#include "qcolor.h"
+
+class <a href="qstylesheet.html">QStyleSheet</a>;
+class QStyleSheetItemData;
+
+
+class Q_EXPORT <a href="qstylesheetitem.html">QStyleSheetItem</a> : public <a href="qt.html">Qt</a>
+{
+public:
+    QStyleSheetItem( QStyleSheet* parent, const QString&amp; name );
+    ~QStyleSheetItem();
+
+    QString name() const;
+
+    QStyleSheet* styleSheet();
+    const QStyleSheet* styleSheet() const;
+
+    enum AdditionalStyleValues { Undefined  = - 1};
+
+    enum DisplayMode {DisplayBlock, DisplayInline, DisplayListItem, DisplayNone};
+    DisplayMode displayMode() const;
+    void setDisplayMode(DisplayMode m);
+
+    int alignment() const;
+    void setAlignment( int f);
+
+    int fontWeight() const;
+    void setFontWeight(int w);
+
+    int logicalFontSize() const;
+    void setLogicalFontSize(int s);
+
+    int logicalFontSizeStep() const;
+    void setLogicalFontSizeStep( int s );
+
+    int fontSize() const;
+    void setFontSize(int s);
+
+    QString fontFamily() const;
+    void setFontFamily( const QString&amp; );
+
+    int numberOfColumns() const;
+    void setNumberOfColumns(int ncols);
+
+    QColor color() const;
+    void setColor( const QColor &amp;);
+
+    bool fontItalic() const;
+    void setFontItalic( bool );
+    bool definesFontItalic() const;
+
+    bool fontUnderline() const;
+    void setFontUnderline( bool );
+    bool definesFontUnderline() const;
+
+    bool isAnchor() const;
+    void setAnchor(bool anc);
+
+    enum WhiteSpaceMode {WhiteSpaceNormal, WhiteSpacePre };
+    WhiteSpaceMode whiteSpaceMode() const;
+    void setWhiteSpaceMode(WhiteSpaceMode m);
+
+    enum Margin { MarginLeft, MarginRight, MarginTop, MarginBottom, MarginAll, MarginVertical, MarginHorizontal };
+    int margin( Margin m) const;
+    void setMargin( Margin, int);
+
+    enum ListStyle { ListDisc, ListCircle, ListSquare, ListDecimal, ListLowerAlpha, ListUpperAlpha };
+
+    ListStyle listStyle() const;
+    void setListStyle( ListStyle );
+
+    QString contexts() const;
+    void setContexts( const QString&amp; );
+    bool allowedInContext( const QStyleSheetItem* ) const;
+
+    bool selfNesting() const;
+    void setSelfNesting( bool );
+
+private:
+    void init();
+    QStyleSheetItemData* d;
+};
+
+
+#if defined(Q_TEMPLATEDLL)
+// MOC_SKIP_BEGIN
+template class Q_EXPORT QDict&lt;QStyleSheetItem&gt;;
+// MOC_SKIP_END
+#endif
+
+class QTextNode;
+class QTextContainer;
+
+
+class Q_EXPORT <a href="qstylesheet.html">QStyleSheet</a> : public <a href="qobject.html">QObject</a>
+{
+    Q_OBJECT
+public:
+    QStyleSheet( QObject *parent=0, const char *name=0 );
+    virtual ~QStyleSheet();
+
+    static QStyleSheet* defaultSheet();
+    static void setDefaultSheet( QStyleSheet* );
+
+
+    QStyleSheetItem* item( const QString&amp; name);
+    const QStyleSheetItem* item( const QString&amp; name) const;
+
+    void insert( QStyleSheetItem* item);
+
+    virtual QTextNode* tag( const QString&amp; name,
+                            const QMap&lt;QString, QString&gt; &amp;attr,
+                            const QString&amp; context,
+                            const QMimeSourceFactory&amp; factory,
+                            bool emptyTag = FALSE) const;
+
+    static QString convertFromPlainText( const QString&amp; );
+    static bool mightBeRichText( const QString&amp; );
+
+    virtual void scaleFont( QFont&amp; font, int logicalSize ) const;
+
+    virtual void error( const QString&amp; ) const;
+
+private:
+    void init();
+    QDict&lt;QStyleSheetItem&gt; styles;
+    QStyleSheetItem* nullstyle;
+};
+
+
+#endif // QSTYLESHEET_H
+
+</pre>
+<p><address><hr><div align="center">
+<table width="100%" cellspacing="0" border="0"><tr>
+<td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.00</div>
+</table></div></address></body></html>

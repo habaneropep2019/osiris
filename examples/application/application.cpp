@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: qt/examples/application/application.cpp   2.3.2   edited 2001-06-12 $
+** $Id: application.cpp,v 1.9 1999/06/24 13:01:10 ettrich Exp $
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -54,7 +54,6 @@ ApplicationWindow::ApplicationWindow()
     QPixmap openIcon, saveIcon, printIcon;
 
     fileTools = new QToolBar( this, "file operations" );
-    fileTools->setLabel( tr( "File Operations" ) );
 
     openIcon = QPixmap( fileopen );
     QToolButton * fileOpen
@@ -104,10 +103,10 @@ ApplicationWindow::ApplicationWindow()
     menuBar()->insertSeparator();
     menuBar()->insertItem( "&Help", help );
 
-    help->insertItem( "&About", this, SLOT(about()), Key_F1 );
-    help->insertItem( "About &Qt", this, SLOT(aboutQt()) );
+    help->insertItem( "&About", this, SLOT(about()), Key_F1);
+    help->insertItem( "About&Qt", this, SLOT(aboutQt()));
     help->insertSeparator();
-    help->insertItem( "What's &This", this, SLOT(whatsThis()), SHIFT+Key_F1 );
+    help->insertItem( "What's &This", this, SLOT(whatsThis()), SHIFT+Key_F1);
 
     e = new QMultiLineEdit( this, "editor" );
     e->setFocus();
@@ -127,7 +126,6 @@ ApplicationWindow::~ApplicationWindow()
 void ApplicationWindow::newDoc()
 {
     ApplicationWindow *ed = new ApplicationWindow;
-    ed->setCaption("Qt Example - Application");
     ed->show();
 }
 
@@ -160,7 +158,6 @@ void ApplicationWindow::load( const char *fileName )
 
     e->setAutoUpdate( TRUE );
     e->repaint();
-    e->setEdited( FALSE );
     setCaption( fileName );
     QString s;
     s.sprintf( "Loaded document %s", fileName );
@@ -171,23 +168,21 @@ void ApplicationWindow::load( const char *fileName )
 void ApplicationWindow::save()
 {
     if ( filename.isEmpty() ) {
-	saveAs();
-	return;
+        saveAs();
+        return;
     }
 
     QString text = e->text();
     QFile f( filename );
     if ( !f.open( IO_WriteOnly ) ) {
-	statusBar()->message( QString("Could not write to %1").arg(filename),
+        statusBar()->message( QString("Could not write to %1").arg(filename),
 			      2000 );
-	return;
+        return;
     }
 
     QTextStream t( &f );
     t << text;
     f.close();
-
-    e->setEdited( FALSE );
 
     setCaption( filename );
 
@@ -200,10 +195,10 @@ void ApplicationWindow::saveAs()
     QString fn = QFileDialog::getSaveFileName( QString::null, QString::null,
 					       this );
     if ( !fn.isEmpty() ) {
-	filename = fn;
-	save();
+        filename = fn;
+        save();
     } else {
-	statusBar()->message( "Saving aborted", 2000 );
+        statusBar()->message( "Saving aborted", 2000 );
     }
 }
 
@@ -216,14 +211,12 @@ void ApplicationWindow::print()
     if ( printer->setup(this) ) {		// printer dialog
 	statusBar()->message( "Printing..." );
 	QPainter p;
-	if( !p.begin( printer ) )
-	    return;				// paint on printer
-
+	p.begin( printer );			// paint on printer
 	p.setFont( e->font() );
-	int yPos	= 0;			// y position for each line
+	int yPos        = 0;			// y position for each line
 	QFontMetrics fm = p.fontMetrics();
 	QPaintDeviceMetrics metrics( printer ); // need width/height
-						// of printer surface
+	                                         // of printer surface
 	for( int i = 0 ; i < e->numLines() ; i++ ) {
 	    if ( Margin + yPos > metrics.height() - Margin ) {
 		QString msg( "Printing (page " );
@@ -244,32 +237,20 @@ void ApplicationWindow::print()
     } else {
 	statusBar()->message( "Printing aborted", 2000 );
     }
+
 }
 
-void ApplicationWindow::closeEvent( QCloseEvent* ce )
+void ApplicationWindow::closeEvent( QCloseEvent* e )
 {
-    if ( !e->edited() ) {
-	ce->accept();
-	return;
-    }
-
-    switch( QMessageBox::information( this, "Qt Application Example",
-				      "The document has been changed since "
-				      "the last save.",
-				      "Save Now", "Cancel", "Leave Anyway",
-				      0, 1 ) ) {
-    case 0:
-	save();
-	ce->accept();
-	break;
-    case 1:
-    default: // just for sanity
-	ce->ignore();
-	break;
-    case 2:
-	ce->accept();
-	break;
-    }
+    if ( QMessageBox::warning( this, "Qt Application Example", 
+			       "Help me, I'm being closed!", 
+			       "Close", "Cancel"
+			       ) == 0 )
+	e->accept();
+    
+    // Note: If we accepted the close event, we will be deleted
+    // afterwards since we used the WDestructiveClose flag in the
+    // constructor
 }
 
 

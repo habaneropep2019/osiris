@@ -1,39 +1,27 @@
 /****************************************************************************
-** $Id: qt/src/dialogs/qprintdialog.h   2.3.2   edited 2001-01-26 $
+** $Id: qprintdialog.h,v 2.14 1999/04/28 09:55:20 aavit Exp $
 **
 ** Definition of print dialog.
 **
 ** Created : 950829
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
-** This file is part of the dialogs module of the Qt GUI Toolkit.
+** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses may use this file in accordance with the Qt Commercial License
-** Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
+*****************************************************************************/
 
 #ifndef QPRINTDIALOG_H
 #define QPRINTDIALOG_H
@@ -41,8 +29,6 @@
 #ifndef QT_H
 #include "qdialog.h"
 #endif // QT_H
-
-#ifndef QT_NO_PRINTDIALOG
 
 class QGroupBox;
 
@@ -62,8 +48,6 @@ public:
     void setPrinter( QPrinter *, bool = FALSE );
     QPrinter * printer() const;
 
-    void addButton( QPushButton *but );
-
 private slots:
     void browseClicked();
     void okClicked();
@@ -79,15 +63,12 @@ private slots:
     void setFirstPage( int );
     void setLastPage( int );
 
-    void fileNameEditChanged( const QString &text );
-    
 private:
     QPrintDialogPrivate *d;
 
     QGroupBox * setupDestination();
     QGroupBox * setupOptions();
     QGroupBox * setupPaper();
-    QGroupBox * setupPrinterSettings();
 
 private:	// Disabled copy constructor and operator=
 #if defined(Q_DISABLE_COPY)
@@ -96,6 +77,5 @@ private:	// Disabled copy constructor and operator=
 #endif
 };
 
-#endif
 
 #endif // QPRINTDIALOG_H

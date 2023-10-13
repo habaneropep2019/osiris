@@ -1,0 +1,78 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta name="robots" content="noindex"><title>Qt tutorial - t8/main.cpp</title>
+</head><body bgcolor="#ffffff">
+<p>
+<a href=index.html><img width=122 height=65 src=qtlogo.png alt="Qt logo" align=left border=0></a>
+<center><img src=dochead.png width=448 height=23></center>
+<br clear=all>
+<p>
+<h1 align=center>Source code for <a href="t8.html">tutorial 8</a>: main.cpp</h1><br clear="all">
+<hr>
+<pre>/****************************************************************
+**
+** Qt tutorial 8
+**
+****************************************************************/
+
+#include &lt;<a href="qapplication-h.html">qapplication.h</a>&gt;
+#include &lt;<a href="qpushbutton-h.html">qpushbutton.h</a>&gt;
+#include &lt;<a href="qscrollbar-h.html">qscrollbar.h</a>&gt;
+#include &lt;<a href="qlcdnumber-h.html">qlcdnumber.h</a>&gt;
+#include &lt;<a href="qfont-h.html">qfont.h</a>&gt;
+#include &lt;<a href="qlayout-h.html">qlayout.h</a>&gt;
+
+#include "lcdrange.h"
+#include "cannon.h"
+
+class MyWidget: public QWidget
+{
+public:
+    MyWidget( <a href="qwidget.html">QWidget</a> *parent=0, const char *name=0 );
+};
+
+MyWidget::MyWidget( <a href="qwidget.html">QWidget</a> *parent, const char *name )
+        : <a href="qwidget.html">QWidget</a>( parent, name )
+{
+    <a href="qwidget.html#378ed6">setMinimumSize</a>( 500, 355 );
+
+    <a href="qpushbutton.html">QPushButton</a> *quit = new <a href="qpushbutton.html">QPushButton</a>( "Quit", this, "quit" );
+    quit-&gt;<a href="qwidget.html#dde00b">setFont</a>( <a href="qfont.html">QFont</a>( "Times", 18, QFont::Bold ) );
+    <a href="qobject.html#c2d209">connect</a>( quit, SIGNAL(clicked()), qApp, SLOT(quit()) );
+
+    LCDRange *angle = new LCDRange( this, "angle" );
+    angle-&gt;<a href="qwidget.html#44675b">setFixedHeight</a>( 70 );
+    angle-&gt;setRange( 5, 70 );
+
+    CannonField *cannonField = new CannonField( this, "cannonField" );
+
+    <a href="qobject.html#c2d209">connect</a>( angle, SIGNAL(valueChanged(int)),
+             cannonField, SLOT(setAngle(int)));
+    <a href="qobject.html#c2d209">connect</a>( cannonField, SIGNAL(angleChanged(int)),
+             angle, SLOT(setValue(int)));
+
+    <a href="qgridlayout.html">QGridLayout</a> *grid = new <a href="qgridlayout.html">QGridLayout</a>( this, 2, 2, 10 ); //2x2, 10 pixel border
+    grid-&gt;<a href="qgridlayout.html#70abf2">addWidget</a>( quit, 0, 0 );
+    grid-&gt;<a href="qgridlayout.html#70abf2">addWidget</a>( angle, 1, 0, Qt::AlignTop );
+    grid-&gt;<a href="qgridlayout.html#70abf2">addWidget</a>( cannonField, 1, 1 );
+    grid-&gt;<a href="qgridlayout.html#4ffa51">setColStretch</a>( 1, 10 );
+
+    angle-&gt;setValue( 60 );
+}
+
+int main( int argc, char **argv )
+{
+    <a href="qapplication.html">QApplication</a> a( argc, argv );
+
+    MyWidget w;
+    w.<a href="qwidget.html#8e0197">setGeometry</a>( 100, 100, 500, 355 );
+    a.<a href="qapplication.html#11c921">setMainWidget</a>( &amp;w );
+    w.<a href="qwidget.html#ccc8f7">show</a>();
+    return a.<a href="qapplication.html#7076af">exec</a>();
+}
+</pre>
+<p>
+
+<p><address><hr><div align="center">
+<table width="100%" cellspacing="0" border="0"><tr>
+<td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.00</div>
+</table></div></address></body></html>

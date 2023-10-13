@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: qt/examples/tetrix/qdragapp.cpp   2.3.2   edited 2001-01-26 $
+** $Id: qdragapp.cpp,v 1.3 1999/06/05 10:02:52 reggie Exp $
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -54,7 +54,8 @@ class QDragger : public QObject
     Q_OBJECT
 public:
     QDragger();
-    ~QDragger();
+    ~QDragger()
+    {}
     
     bool notify( QObject *, QEvent * ); // event filter
     void closeDropWindow( DropWindow * );
@@ -85,7 +86,7 @@ private:
     QWidget		  *hostWidget;
     QCursor		   cursor;
 
-    QPopupMenu*		   menu;
+    QPopupMenu		   menu;
     QPoint		   clickOffset;
     QColor		   dragBackground;
     QColor		   dragForeground;
@@ -138,30 +139,23 @@ QDragger::QDragger()
     draggedDict.setAutoDelete( TRUE );
     dropDict   .setAutoDelete( TRUE );
 
-    menu = new QPopupMenu;
-    menu->insertItem( "Open drop window", 1 );
-    menu->insertItem( "Kill drop window", 2 );
-    menu->insertItem( "Kill all drop windows", 3 );
-    menu->insertSeparator();
-//    menu->insertItem( "Send child home", 4 );
-    menu->insertItem( "Send all children home", 5 );
+    menu.insertItem( "Open drop window" );
+    menu.insertItem( "Kill drop window" );
+    menu.insertItem( "Kill all drop windows" );
+    menu.insertSeparator();
+//    menu.insertItem( "Send child home" );
+    menu.insertItem( "Send all children home" );
 
-    menu->connectItem( 1, this, SLOT(openDropWindow()) );
-    menu->connectItem( 2, this, SLOT(killDropWindow()) );
-    menu->connectItem( 3, this, SLOT(killAllDropWindows()) );
-//    menu->connectItem( 4, this, SLOT(sendChildHome()) );
-    menu->connectItem( 5, this, SLOT(sendAllChildrenHome()) );
+    menu.connectItem( 0, this, SLOT(openDropWindow()) );
+    menu.connectItem( 1, this, SLOT(killDropWindow()) );
+    menu.connectItem( 2, this, SLOT(killAllDropWindows()) );
+//    menu.connectItem( 4, this, SLOT(sendChildHome()) );
+    menu.connectItem( 4, this, SLOT(sendAllChildrenHome()) );
 }
-
-QDragger::~QDragger()
-{
-    delete menu;
-}
-
 
 bool QDragger::notify( QObject *o, QEvent *e )
 {
-    if ( !o->isWidgetType() || o == menu )
+    if ( !o->isWidgetType() || o == &menu )
 	return FALSE;
     switch( e->type() ) {
 	case QEvent::MouseMove:
@@ -249,7 +243,7 @@ bool QDragger::dragEvent( QWidget *w, QMouseEvent *e )
 		 isParentToDragged( w )	|| // has had widget children
 		 w->parentWidget() == 0 ) {       // is top level window
 		hostWidget = w;
-		menu->popup( w->mapToGlobal( e->pos() ) );
+		menu.popup( w->mapToGlobal( e->pos() ) );
 		return TRUE;
 	    }
 	    if ( !draggedDict.find( (long) w ) ) {

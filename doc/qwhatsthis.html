@@ -1,0 +1,139 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta name="robots" content="noindex,noarchive">
+<title>Qt Toolkit - QWhatsThis Class</title><style type="text/css"><!--
+h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
+a:link { text-decoration: none; }
+body { background: white; color: black; }
+--></style>
+</head><body bgcolor="#ffffff">
+
+<a href=index.html><img width=122 height=65 src=qtlogo.png alt="Qt logo" align=left border=0></a>
+<center><img src=dochead.png width=448 height=23></center>
+<br clear=all>
+
+<h1 align=center>QWhatsThis Class Reference</h1><br clear="all">
+<p>
+The QWhatsThis class provides a simple description of any widget, e.g. answering the question "what's this?"
+<a href="#details">More...</a>
+<p>
+<code>#include &lt;<a href="qwhatsthis-h.html">qwhatsthis.h</a>&gt;</code>
+<p>
+Inherits <a href="qt.html">Qt</a>.
+<p><a href="qwhatsthis-members.html">List of all member functions.</a>
+<h2>Public Members</h2>
+<ul>
+<li><span class="fn"><a href="#f55fd2"><b>QWhatsThis</b></a> ( QWidget * ) </span>
+<li><span class="fn">virtual <a href="#be24ee"><b>~QWhatsThis</b></a> () </span>
+<li><span class="fn">virtual QString <a href="#6690d8"><b>text</b></a> ( const QPoint &amp; ) </span>
+</ul>
+<h2>Static Public Members</h2>
+<ul>
+<li><span class="fn">void <a href="#5265e7"><b>add</b></a> ( QWidget *, const QString &amp; ) </span>
+<li><span class="fn">void <a href="#bf0c69"><b>remove</b></a> ( QWidget * ) </span>
+<li><span class="fn">QString <a href="#219fbd"><b>textFor</b></a> ( QWidget *, const QPoint &amp; pos = QPoint ()) </span>
+<li><span class="fn">QToolButton* <a href="#36466d"><b>whatsThisButton</b></a> ( QWidget * parent ) </span>
+<li><span class="fn">void <a href="#8d84ad"><b>enterWhatsThisMode</b></a> () </span>
+<li><span class="fn">bool <a href="#b5fe5f"><b>inWhatsThisMode</b></a> () </span>
+<li><span class="fn">void <a href="#8b7684"><b>leaveWhatsThisMode</b></a> ( const QString &amp; = QString::null, const QPoint &amp; pos = QCursor::pos ()) </span>
+</ul>
+<hr><h2><a name="details"></a>Detailed Description</h2>
+The QWhatsThis class provides a simple description of any widget, e.g. answering the question "what's this?"
+<p>
+What's This help lies between tool tips and fully-blown online help
+systems: <ul><li> Tool Tips - flyweight help, extremely brief,
+entirely integrated in the user interface. <li> What's This? - also
+lightweight, but can encompass a three-paragraph explanation.  <li>
+Online Help - can encompass any amount of information, but is
+typically a little slower to call up, a little separated from the
+user's work, and often users feel that using online help is a
+digression from their real task. </ul>
+<p>QWhatsThis, then, offers a single window with a single explanatory
+text, which pops up quickly when the user asks "what's this?", and
+goes away as soon as the user does something else.  There are two
+ways to make QWhatsThis pop up: Click a "What's This?" button and
+then click on some other widget to get help for that other widget,
+or press Shift-F1 to get help for the widget that has keyboard
+focus. But you can also connect a "what's this" entry of a help menu
+(with Shift-F1 as accelerator) to the whatsThis() slot of a
+<a href="qmainwindow.html">QMainWindow</a>, then the focus widget does not have a special meaning.
+<p>QWhatsThis provides functions to <a href="qwhatsthis.html#5265e7">add</a>() and <a href="qwhatsthis.html#bf0c69">remove</a>() What's This help
+for a widget, and it provides a function to create a What's This
+button suitable for typical tool bars.
+<p><img src="whatsthis.png" width="376" height="239">
+<p>Futhermore, you can create a dedicated QWhatsThis object for a
+special widget. By subclassing and reimplementing <a href="qwhatsthis.html#6690d8">QWhatsThis::text</a>()
+it is possible, to have different explanatory texts depending on the
+position of the mouse click.
+<p>If you widget needs even more control, see
+<a href="qwidget.html#dd25bf">QWidget::customWhatsThis</a>().
+<p>Other Qt classes support What's This help directly. Keyboard
+accelerators, for example, can also provide explanatory text with
+access through both they acceleration key itself or an attached menu
+item. See <a href="qaccel.html#d5b55e">QAccel::setWhatsThis</a>() for details.
+<p>The explanatory text can be both rich text or plain text.  If you
+specify a rich text formatted string, it will be rendered using the
+default stylesheet. This makes it also possible to embed images. See
+<a href="qstylesheet.html#9d69e9">QStyleSheet::defaultSheet</a>() for details.
+<p>See also:  <a href="qtooltip.html">QToolTip</a>.
+
+<hr><h2>Member Function Documentation</h2>
+<h3 class="fn"><a name="f55fd2"></a>QWhatsThis::QWhatsThis ( <a href="qwidget.html">QWidget</a> * widget )</h3>
+<p>Constructs a dynamic What's This object for <em>widget.</em>
+<h3 class="fn"><a name="be24ee"></a>QWhatsThis::~QWhatsThis () <code>[virtual]</code></h3>
+<p>Destroys the object and frees any allocated resources.
+<h3 class="fn">void <a name="5265e7"></a>QWhatsThis::add ( <a href="qwidget.html">QWidget</a> * widget, const <a href="qstring.html">QString</a> &amp; text ) <code>[static]</code></h3>
+<p>Adds <em>text</em> as What's This help for <em>widget.</em> If the text is rich
+text formatted, it will be rendered with the default stylesheet
+<a href="qstylesheet.html#9d69e9">QStyleSheet::defaultSheet</a>().
+<p>See also:  <a href="qwhatsthis.html#bf0c69">remove</a>().
+<h3 class="fn">void <a name="8d84ad"></a>QWhatsThis::enterWhatsThisMode () <code>[static]</code></h3>
+<p>Enters What's This? question mode and returns immediately.
+<p>What's This will install a special cursor and take over mouse input
+until the user click somewhere, then show any help available and
+switch out of What's This mode.  Finally, What's This removes its
+cursor and help window and restores ordinary event processing.  At
+this point the left mouse button is not pressed.
+<p>See also:  <a href="qwhatsthis.html#b5fe5f">inWhatsThisMode</a>() and <a href="qwhatsthis.html#8b7684">leaveWhatsThisMode</a>().
+<h3 class="fn">bool <a name="b5fe5f"></a>QWhatsThis::inWhatsThisMode () <code>[static]</code></h3>
+<p>Returns whether the application is in What's This mode.
+<p>See also:  <a href="qwhatsthis.html#8d84ad">enterWhatsThisMode</a>() and <a href="qwhatsthis.html#8b7684">leaveWhatsThisMode</a>().
+<h3 class="fn">void <a name="8b7684"></a>QWhatsThis::leaveWhatsThisMode ( const <a href="qstring.html">QString</a> &amp; text = QString::null, const <a href="qpoint.html">QPoint</a> &amp; pos = QCursor::pos ()) <code>[static]</code></h3>
+<p>Leaves What's This? question mode
+<p>This function is used internally by widgets that support
+<a href="qwidget.html#dd25bf">QWidget::customWhatsThis</a>(), applications usually never have to call
+it.  An example for such a kind of widget is QPopupMenu: Menus still
+work normally in What's This mode, but provide help texts for single
+menu items instead.
+<p>If <em>text</em> is not a null string, then a What's This help window is
+displayed at the global position <em>pos</em> of the screen.
+<p>See also:  <a href="qwhatsthis.html#b5fe5f">inWhatsThisMode</a>() and <a href="qwhatsthis.html#8d84ad">enterWhatsThisMode</a>().
+<h3 class="fn">void <a name="bf0c69"></a>QWhatsThis::remove ( <a href="qwidget.html">QWidget</a> * widget ) <code>[static]</code></h3>
+<p>Removes the What's This help for <em>widget.</em>
+<p>See also:  <a href="qwhatsthis.html#5265e7">add</a>().
+<h3 class="fn"><a href="qstring.html">QString</a> <a name="6690d8"></a>QWhatsThis::text ( const <a href="qpoint.html">QPoint</a> &amp; ) <code>[virtual]</code></h3>
+<p>This virtual functions returns the text for position <em>p</em> in the
+widget this What's This object documents.  If there is no What's
+This text for a position, QString::null may be returned.
+<p>The default implementation returns QString::null.
+<p>See also:  qml().
+<h3 class="fn"><a href="qstring.html">QString</a> <a name="219fbd"></a>QWhatsThis::textFor ( <a href="qwidget.html">QWidget</a> * widget, const <a href="qpoint.html">QPoint</a> &amp; pos = QPoint ()) <code>[static]</code></h3>
+<p>Returns the text for <em>widget,</em> or a null string if there
+isn't any What's This help for <em>widget.</em>
+<p>See also:  <a href="qwhatsthis.html#5265e7">add</a>().
+<h3 class="fn"><a href="qtoolbutton.html">QToolButton</a> * <a name="36466d"></a>QWhatsThis::whatsThisButton ( <a href="qwidget.html">QWidget</a> * parent ) <code>[static]</code></h3>
+<p>Returns a pointer to a specially configured <a href="qtoolbutton.html">QToolButton</a>, suitable
+for use to enter What's This mode.
+<p>See also:  <a href="qtoolbutton.html">QToolButton</a>.
+<hr><p>
+Search the documentation, FAQ, qt-interest archive and more (uses
+<a href="http://www.troll.no">www.troll.no</a>):<br>
+<form method=post action="http://www.troll.no/search.cgi">
+<input type=hidden name="version" value="2.00"><nobr>
+<input size="50" name="search"><input type=submit value="Search">
+</nobr></form><hr><p>
+This file is part of the <a href="index.html">Qt toolkit</a>,
+copyright &copy; 1995-99
+<a href="http://www.troll.no">Troll Tech</a>, all rights reserved.<p><address><hr><div align="center">
+<table width="100%" cellspacing="0" border="0"><tr>
+<td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.00</div>
+</table></div></address></body></html>

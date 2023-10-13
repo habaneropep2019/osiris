@@ -2,22 +2,20 @@
 
 ####### Compiler, tools and options
 
-CXX	=	$(SYSCONF_CXX) $(QT_CXX_MT)
+CXX	=	$(SYSCONF_CXX)
 CXXFLAGS=	$(SYSCONF_CXXFLAGS_QT) $(SYSCONF_CXXFLAGS)
-CC	=	$(SYSCONF_CC) $(QT_C_MT)
+CC	=	$(SYSCONF_CC)
 CFLAGS	=	$(SYSCONF_CFLAGS)
 INCPATH =	
-LFLAGS	=	$(SYSCONF_LFLAGS_QT) $(SYSCONF_RPATH_QT) $(SYSCONF_LFLAGS) $(QT_LFLAGS_MT)
-LIBS	=	$(SUBLIBS) $(SYSCONF_LIBS_QT) $(SYSCONF_LIBS) $(SYSCONF_LIBS_QTAPP)
+LFLAGS	=	$(SYSCONF_LFLAGS_QT) $(SYSCONF_LFLAGS_X11) $(SYSCONF_LFLAGS)
+LIBS	=	$(SYSCONF_LIBS_QT) $(SYSCONF_LIBS_X11) $(SYSCONF_LIBS)
 MOC	=	$(SYSCONF_MOC)
-UIC	=	$(SYSCONF_UIC)
 
 ####### Target
 
 DESTDIR = ./
 VER_MAJ = 1
 VER_MIN = 0
-VER_PATCH = 0
 TARGET	= checklists
 TARGET1 = lib$(TARGET).so.$(VER_MAJ)
 
@@ -28,12 +26,8 @@ SOURCES =	checklists.cpp \
 		main.cpp
 OBJECTS =	checklists.o \
 		main.o
-INTERFACES =    
-UICDECLS =      
-UICIMPLS =      
 SRCMOC	=	moc_checklists.cpp
 OBJMOC	=	moc_checklists.o
-
 
 ####### Implicit rules
 
@@ -56,11 +50,10 @@ OBJMOC	=	moc_checklists.o
 
 ####### Build rules
 
-
 all: $(DESTDIR)$(TARGET)
 
-$(DESTDIR)$(TARGET): $(UICDECLS) $(OBJECTS) $(OBJMOC) $(SUBLIBS)
-	$(SYSCONF_LINK) $(LFLAGS) -o $(DESTDIR)$(TARGET) $(OBJECTS) $(OBJMOC) $(LIBS)
+$(DESTDIR)$(TARGET): $(OBJECTS) $(OBJMOC) 
+	$(SYSCONF_LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(OBJMOC) $(LIBS)
 
 moc: $(SRCMOC)
 
@@ -68,44 +61,18 @@ tmake:
 	tmake checklists.pro
 
 clean:
-	-rm -f $(OBJECTS) $(OBJMOC) $(SRCMOC) $(UICIMPLS) $(UICDECLS)
+	-rm -f $(OBJECTS) $(OBJMOC) $(SRCMOC)
 	-rm -f *~ core
-	-rm -f allmoc.cpp
-
-####### Extension Modules
-
-listpromodules:
-	@echo 
-
-listallmodules:
-	@echo 
-
-listaddonpromodules:
-	@echo 
-
-listaddonentmodules:
-	@echo 
-
-
-REQUIRES=large-config
-
-####### Sub-libraries
-
-
-###### Combined headers
-
-
 
 ####### Compile
 
 checklists.o: checklists.cpp \
 		checklists.h \
+		../../include/qhbox.h \
 		../../include/qwidget.h \
 		../../include/qwindowdefs.h \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
-		../../include/qfeatures.h \
-		../../include/qconfig.h \
 		../../include/qstring.h \
 		../../include/qcstring.h \
 		../../include/qarray.h \
@@ -126,7 +93,6 @@ checklists.o: checklists.cpp \
 		../../include/qvaluelist.h \
 		../../include/qdatastream.h \
 		../../include/qiodevice.h \
-		../../include/qregexp.h \
 		../../include/qpaintdevice.h \
 		../../include/qpalette.h \
 		../../include/qcolor.h \
@@ -137,9 +103,9 @@ checklists.o: checklists.cpp \
 		../../include/qfontinfo.h \
 		../../include/qstyle.h \
 		../../include/qsizepolicy.h \
+		../../include/qframe.h \
 		../../include/qlistview.h \
 		../../include/qscrollview.h \
-		../../include/qframe.h \
 		../../include/qscrollbar.h \
 		../../include/qrangecontrol.h \
 		../../include/qdrawutil.h \
@@ -148,23 +114,17 @@ checklists.o: checklists.cpp \
 		../../include/qpointarray.h \
 		../../include/qwmatrix.h \
 		../../include/qvbox.h \
-		../../include/qhbox.h \
 		../../include/qlabel.h \
 		../../include/qpushbutton.h \
-		../../include/qbutton.h \
-		../../include/qiconset.h \
-		../../include/qpixmap.h \
-		../../include/qlayout.h \
-		../../include/qabstractlayout.h
+		../../include/qbutton.h
 
 main.o: main.cpp \
 		checklists.h \
+		../../include/qhbox.h \
 		../../include/qwidget.h \
 		../../include/qwindowdefs.h \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
-		../../include/qfeatures.h \
-		../../include/qconfig.h \
 		../../include/qstring.h \
 		../../include/qcstring.h \
 		../../include/qarray.h \
@@ -185,7 +145,6 @@ main.o: main.cpp \
 		../../include/qvaluelist.h \
 		../../include/qdatastream.h \
 		../../include/qiodevice.h \
-		../../include/qregexp.h \
 		../../include/qpaintdevice.h \
 		../../include/qpalette.h \
 		../../include/qcolor.h \
@@ -196,6 +155,7 @@ main.o: main.cpp \
 		../../include/qfontinfo.h \
 		../../include/qstyle.h \
 		../../include/qsizepolicy.h \
+		../../include/qframe.h \
 		../../include/qapplication.h \
 		../../include/qasciidict.h \
 		../../include/qgdict.h \
@@ -204,12 +164,11 @@ main.o: main.cpp \
 
 moc_checklists.o: moc_checklists.cpp \
 		checklists.h \
+		../../include/qhbox.h \
 		../../include/qwidget.h \
 		../../include/qwindowdefs.h \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
-		../../include/qfeatures.h \
-		../../include/qconfig.h \
 		../../include/qstring.h \
 		../../include/qcstring.h \
 		../../include/qarray.h \
@@ -230,7 +189,6 @@ moc_checklists.o: moc_checklists.cpp \
 		../../include/qvaluelist.h \
 		../../include/qdatastream.h \
 		../../include/qiodevice.h \
-		../../include/qregexp.h \
 		../../include/qpaintdevice.h \
 		../../include/qpalette.h \
 		../../include/qcolor.h \
@@ -240,9 +198,9 @@ moc_checklists.o: moc_checklists.cpp \
 		../../include/qfontmetrics.h \
 		../../include/qfontinfo.h \
 		../../include/qstyle.h \
-		../../include/qsizepolicy.h
+		../../include/qsizepolicy.h \
+		../../include/qframe.h
 
 moc_checklists.cpp: checklists.h
 	$(MOC) checklists.h -o moc_checklists.cpp
-
 

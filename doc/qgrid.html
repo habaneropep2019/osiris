@@ -1,0 +1,69 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta name="robots" content="noindex,noarchive">
+<title>Qt Toolkit - QGrid Class</title><style type="text/css"><!--
+h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
+a:link { text-decoration: none; }
+body { background: white; color: black; }
+--></style>
+</head><body bgcolor="#ffffff">
+
+<a href=index.html><img width=122 height=65 src=qtlogo.png alt="Qt logo" align=left border=0></a>
+<center><img src=dochead.png width=448 height=23></center>
+<br clear=all>
+
+<h1 align=center>QGrid Class Reference</h1><br clear="all">
+<p>
+The QGrid widget performs geometry management on its children
+<a href="#details">More...</a>
+<p>
+<code>#include &lt;<a href="qgrid-h.html">qgrid.h</a>&gt;</code>
+<p>
+Inherits <a href="qframe.html">QFrame</a>.
+<p><a href="qgrid-members.html">List of all member functions.</a>
+<h2>Public Members</h2>
+<ul>
+<li><span class="fn">enum <b>Direction</b> { Horizontal, Vertical }</span>
+<li><span class="fn"><a href="#703f63"><b>QGrid</b></a> ( int n, QWidget * parent=0, const char * name=0, WFlags f=0 ) </span>
+<li><span class="fn"><a href="#e2b204"><b>QGrid</b></a> ( int n, Direction, QWidget * parent=0, const char * name=0, WFlags f=0 ) </span>
+<li><span class="fn">void <a href="#446581"><b>setSpacing</b></a> ( int ) </span>
+</ul>
+<h2>Protected Members</h2>
+<ul>
+<li><span class="fn">virtual void <a href="#741efc"><b>frameChanged</b></a> () </span>
+</ul>
+<hr><h2><a name="details"></a>Detailed Description</h2>
+The QGrid widget performs geometry management on its children
+<p>
+The number of rows or columns is defined in the constructor. All its
+children will be placed and sized according to their <a href="qwidget.html#290bcd">sizeHint</a>() and
+<a href="qframe.html#43e488">sizePolicy</a>() return values.
+<p>Use <a href="qframe.html#ab991e">setMargin</a>() to add space around the edge, and use addSpacing to
+add space between the widgets.
+<p><img src=qgrid-m.png>
+<p>See also:  <a href="qvbox.html">QVBox</a> and <a href="qhbox.html">QHBox</a>.
+
+<hr><h2>Member Function Documentation</h2>
+<h3 class="fn"><a name="703f63"></a>QGrid::QGrid ( int n, <a href="qwidget.html">QWidget</a> * parent=0, const char * name=0, WFlags f=0 )</h3>
+<p>Constructs a grid widget with parent <em>parent</em> and name <em>name. n</em> specifies the number of columns.
+<h3 class="fn"><a name="e2b204"></a>QGrid::QGrid ( int n, Direction dir, <a href="qwidget.html">QWidget</a> * parent=0, const char * name=0, WFlags f=0 )</h3>
+<p>Constructs a grid widget with parent <em>parent</em> and name <em>name.</em> If <em>dir</em> is
+<code>Horizontal,</code> <em>n</em> specifies the number of columns. If <em>dir</em> is <code>Vertical,</code>
+<em>n</em> specifies the number of rows.
+<h3 class="fn">void <a name="741efc"></a>QGrid::frameChanged () <code>[virtual protected]</code></h3>
+<p>Reimplemented for internal purposes.
+<p>Reimplemented from <a href="qframe.html#595a12">QFrame.</a>
+<h3 class="fn">void <a name="446581"></a>QGrid::setSpacing ( int space )</h3>
+<p>Sets the spacing between children to <em>space.</em>
+<hr><p>
+Search the documentation, FAQ, qt-interest archive and more (uses
+<a href="http://www.troll.no">www.troll.no</a>):<br>
+<form method=post action="http://www.troll.no/search.cgi">
+<input type=hidden name="version" value="2.00"><nobr>
+<input size="50" name="search"><input type=submit value="Search">
+</nobr></form><hr><p>
+This file is part of the <a href="index.html">Qt toolkit</a>,
+copyright &copy; 1995-99
+<a href="http://www.troll.no">Troll Tech</a>, all rights reserved.<p><address><hr><div align="center">
+<table width="100%" cellspacing="0" border="0"><tr>
+<td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.00</div>
+</table></div></address></body></html>

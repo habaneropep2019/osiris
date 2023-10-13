@@ -2,22 +2,20 @@
 
 ####### Compiler, tools and options
 
-CXX	=	$(SYSCONF_CXX) $(QT_CXX_MT)
+CXX	=	$(SYSCONF_CXX)
 CXXFLAGS=	$(SYSCONF_CXXFLAGS_QT) $(SYSCONF_CXXFLAGS)
-CC	=	$(SYSCONF_CC) $(QT_C_MT)
+CC	=	$(SYSCONF_CC)
 CFLAGS	=	$(SYSCONF_CFLAGS)
 INCPATH =	
-LFLAGS	=	$(SYSCONF_LFLAGS_QT) $(SYSCONF_RPATH_QT) $(SYSCONF_LFLAGS) $(QT_LFLAGS_MT)
-LIBS	=	$(SUBLIBS) $(SYSCONF_LIBS_QT) $(SYSCONF_LIBS) $(SYSCONF_LIBS_QTAPP)
+LFLAGS	=	$(SYSCONF_LFLAGS_QT) $(SYSCONF_LFLAGS_X11) $(SYSCONF_LFLAGS)
+LIBS	=	$(SYSCONF_LIBS_QT) $(SYSCONF_LIBS_X11) $(SYSCONF_LIBS)
 MOC	=	$(SYSCONF_MOC)
-UIC	=	$(SYSCONF_UIC)
 
 ####### Target
 
 DESTDIR = ./
 VER_MAJ = 1
 VER_MIN = 0
-VER_PATCH = 0
 TARGET	= menu
 TARGET1 = lib$(TARGET).so.$(VER_MAJ)
 
@@ -26,12 +24,8 @@ TARGET1 = lib$(TARGET).so.$(VER_MAJ)
 HEADERS =	menu.h
 SOURCES =	menu.cpp
 OBJECTS =	menu.o
-INTERFACES =    
-UICDECLS =      
-UICIMPLS =      
 SRCMOC	=	moc_menu.cpp
 OBJMOC	=	moc_menu.o
-
 
 ####### Implicit rules
 
@@ -54,11 +48,10 @@ OBJMOC	=	moc_menu.o
 
 ####### Build rules
 
-
 all: $(DESTDIR)$(TARGET)
 
-$(DESTDIR)$(TARGET): $(UICDECLS) $(OBJECTS) $(OBJMOC) $(SUBLIBS)
-	$(SYSCONF_LINK) $(LFLAGS) -o $(DESTDIR)$(TARGET) $(OBJECTS) $(OBJMOC) $(LIBS)
+$(DESTDIR)$(TARGET): $(OBJECTS) $(OBJMOC) 
+	$(SYSCONF_LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(OBJMOC) $(LIBS)
 
 moc: $(SRCMOC)
 
@@ -66,33 +59,8 @@ tmake:
 	tmake menu.pro
 
 clean:
-	-rm -f $(OBJECTS) $(OBJMOC) $(SRCMOC) $(UICIMPLS) $(UICDECLS)
+	-rm -f $(OBJECTS) $(OBJMOC) $(SRCMOC)
 	-rm -f *~ core
-	-rm -f allmoc.cpp
-
-####### Extension Modules
-
-listpromodules:
-	@echo 
-
-listallmodules:
-	@echo 
-
-listaddonpromodules:
-	@echo 
-
-listaddonentmodules:
-	@echo 
-
-
-REQUIRES=medium-config
-
-####### Sub-libraries
-
-
-###### Combined headers
-
-
 
 ####### Compile
 
@@ -102,8 +70,6 @@ menu.o: menu.cpp \
 		../../include/qwindowdefs.h \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
-		../../include/qfeatures.h \
-		../../include/qconfig.h \
 		../../include/qstring.h \
 		../../include/qcstring.h \
 		../../include/qarray.h \
@@ -124,7 +90,6 @@ menu.o: menu.cpp \
 		../../include/qvaluelist.h \
 		../../include/qdatastream.h \
 		../../include/qiodevice.h \
-		../../include/qregexp.h \
 		../../include/qpaintdevice.h \
 		../../include/qpalette.h \
 		../../include/qcolor.h \
@@ -150,11 +115,7 @@ menu.o: menu.cpp \
 		../../include/qtranslator.h \
 		../../include/qintdict.h \
 		../../include/qmessagebox.h \
-		../../include/qdialog.h \
-		../../include/qpainter.h \
-		../../include/qpen.h \
-		../../include/qpointarray.h \
-		../../include/qwmatrix.h
+		../../include/qdialog.h
 
 moc_menu.o: moc_menu.cpp \
 		menu.h \
@@ -162,8 +123,6 @@ moc_menu.o: moc_menu.cpp \
 		../../include/qwindowdefs.h \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
-		../../include/qfeatures.h \
-		../../include/qconfig.h \
 		../../include/qstring.h \
 		../../include/qcstring.h \
 		../../include/qarray.h \
@@ -184,7 +143,6 @@ moc_menu.o: moc_menu.cpp \
 		../../include/qvaluelist.h \
 		../../include/qdatastream.h \
 		../../include/qiodevice.h \
-		../../include/qregexp.h \
 		../../include/qpaintdevice.h \
 		../../include/qpalette.h \
 		../../include/qcolor.h \
@@ -206,5 +164,4 @@ moc_menu.o: moc_menu.cpp \
 
 moc_menu.cpp: menu.h
 	$(MOC) menu.h -o moc_menu.cpp
-
 

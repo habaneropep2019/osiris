@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: qt/examples/popup/popup.cpp   2.3.2   edited 2001-06-12 $
+** $Id: popup.cpp,v 1.1 1999/06/03 10:08:55 warwick Exp $
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -127,7 +127,7 @@ int main( int argc, char **argv )
     QApplication a(argc,argv);
 
     Frame frame;
-    frame.setCaption("Qt Example - Custom Popups");
+    frame.setCaption("Custom Popups");
     a.setMainWidget(&frame);
     frame.show();
     return a.exec();

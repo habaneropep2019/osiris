@@ -1,53 +1,40 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qlcdnumber.cpp   2.3.2   edited 2001-01-26 $
+** $Id: qlcdnumber.cpp,v 2.39 1999/06/16 09:11:06 agulbra Exp $
 **
 ** Implementation of QLCDNumber class
 **
 ** Created : 940518
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
-** This file is part of the widgets module of the Qt GUI Toolkit.
+** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses may use this file in accordance with the Qt Commercial License
-** Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
+*****************************************************************************/
 
 #include "qlcdnumber.h"
-#ifndef QT_NO_LCDNUMBER
 #include "qbitarray.h"
 #include "qpainter.h"
+//!hanordce #include <stdio.h>
 
 
-// NOT REVISED
 /*!
   \class QLCDNumber qlcdnumber.h
 
   \brief The QLCDNumber widget displays a number with LCD-like digits.
 
-  \ingroup basic
+  \ingroup realwidgets
 
   It can display a number in just about any size, in decimal,
   hexadecimal, octal or binary notation, and is easy to connect to
@@ -82,31 +69,6 @@
   \sa QLabel, QFrame
 */
 
-/*! \enum QLCDNumber::Mode
-
-  This type determines how numbers are shown. The possible values are:
-
-  <ul>
-  <li>\c Hex - Hexadecimal
-  <li>\c Dec - Decimal
-  <li>\c Oct - Octal
-  <li>\c Bin - Binary
-  </ul>
- */
-
-/*! \enum QLCDNumber::SegmentStyle
-
-  This type determines the visual appearance of the QLCDNumber
-  widget. The possible values are:
-
-  <ul>
-  <li>\c Outline gives raised segments filled with the background brush.
-  <li>\c Filled gives raised segments filled with the foreground brush.
-  <li>\c Flat gives flat segments filled with the foreground brush.
-  </ul>
- */
-
-
 
 /*!
   \fn void QLCDNumber::overflow()
@@ -130,13 +92,13 @@ static QString int2string( int num, int base, int ndigits, bool *oflow )
     }
     switch( base ) {
 	case QLCDNumber::HEX:
-	    s.sprintf( "%*x", ndigits, num );
+	    s.sprintf( "%*lx", ndigits, num );
 	    break;
 	case QLCDNumber::DEC:
-	    s.sprintf( "%*i", ndigits, num );
+	    s.sprintf( "%*li", ndigits, num );
 	    break;
 	case QLCDNumber::OCT:
-	    s.sprintf( "%*o", ndigits, num );
+	    s.sprintf( "%*lo", ndigits, num );
 	    break;
 	case QLCDNumber::BIN:
 	    {
@@ -187,15 +149,12 @@ static QString double2string( double num, int base, int ndigits, bool *oflow )
 	}
 	s = int2string( (int)num, base, ndigits, 0 );
     } else {					// decimal base
-	int nd = ndigits;
-	do {
-	    s.sprintf( "%*.*g", ndigits, nd, num );
-	    int i = s.find('e');
-	    if ( i > 0 && s[i+1]=='+' ) {
-		s[i] = ' ';
-		s[i+1] = 'e';
-	    }
-	} while (nd-- && (int)s.length() > ndigits);
+	s.sprintf( "%*g", ndigits, num );
+	int i = s.find('e');
+	if ( i > 0 && s[i+1]=='+' ) {
+	    s[i] = ' ';
+	    s[i+1] = 'e';
+	}
     }
     if ( oflow )
 	*oflow = (int)s.length() > ndigits;
@@ -338,11 +297,10 @@ void QLCDNumber::init()
     setNumDigits( ndigits );
     setSegmentStyle( Outline );
     d = 0;
-    setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum ) );
 }
 
 /*!
-  Destructs the LCD number.
+  Destroys the LCD number.
 */
 
 QLCDNumber::~QLCDNumber()
@@ -383,8 +341,8 @@ void QLCDNumber::setNumDigits( int numDigits )
 	digitStr.fill( ' ', ndigits );
 	points.fill( 0, ndigits );
 	digitStr[ndigits - 1] = '0';		// "0" is the default number
-    } else {
-	bool doDisplay = ndigits == 0;
+    }
+    else {
 	if ( numDigits == ndigits )		// no change
 	    return;
 	register int i;
@@ -399,7 +357,8 @@ void QLCDNumber::setNumDigits( int numDigits )
 		points.setBit( i, points.testBit(i-dif) );
 	    for ( i=0; i<dif; i++ )
 		points.clearBit( i );
-	} else {					// shrink
+	}
+	else {					// shrink
 	    dif = ndigits - numDigits;
 	    digitStr = digitStr.right( numDigits );
 	    QBitArray tmpPoints = points.copy();
@@ -408,8 +367,6 @@ void QLCDNumber::setNumDigits( int numDigits )
 		points.setBit( i, tmpPoints.testBit(i+dif) );
 	}
 	ndigits = numDigits;
-	if ( doDisplay )
-	    display( value() );
 	update();
     }
 }
@@ -496,7 +453,7 @@ void QLCDNumber::display( int num )
     if ( of )
 	emit overflow();
     else
-	internalSetString( s );
+	internalDisplay( s );
 }
 
 
@@ -512,7 +469,7 @@ void QLCDNumber::display( double num )
     if ( of )
 	emit overflow();
     else
-	internalSetString( s );
+	internalDisplay( s );
 }
 
 
@@ -531,7 +488,7 @@ void QLCDNumber::display( double num )
 void QLCDNumber::display( const QString &s )
 {
     val = 0;
-    internalSetString( s );
+    internalDisplay( s );
 }
 
 /*!
@@ -591,6 +548,8 @@ void QLCDNumber::setBinMode()
   and \c HEX.  All four modes can display both integers, floating-point
   numbers and strings (subject to character set limitations).
 
+  The display is set to "0".
+
   Example:
   \code
     myLcd.setMode( QLCDNumber::HEX );
@@ -603,8 +562,7 @@ void QLCDNumber::setBinMode()
 void QLCDNumber::setMode( Mode m )
 {
     base = m;
-
-    display( val );
+    display( 0 );
 }
 
 
@@ -625,12 +583,15 @@ void QLCDNumber::setMode( Mode m )
   The inter-digit space is made slightly wider when the decimal point
   is drawn between the digits.
 
+  The display is set to "0.0".
+
   \sa smallDecimalPoint(), setMode()
 */
 
 void QLCDNumber::setSmallDecimalPoint( bool b )
 {
     smallPoint = b;
+    display( 0.0 );
 }
 
 
@@ -639,40 +600,39 @@ void QLCDNumber::setSmallDecimalPoint( bool b )
   QFrame::paintEvent().
 */
 
-
 void QLCDNumber::drawContents( QPainter *p )
 {
     if ( smallPoint )
-	drawString( digitStr, *p, &points, FALSE );
+	drawString( digitStr, *p, &points );
     else
-	drawString( digitStr, *p, 0, FALSE );
+	drawString( digitStr, *p, 0 );
 }
-
 
 /*!
   \internal
 */
 
-void QLCDNumber::internalDisplay( const QString & )
-{
-    // Not used anymore
-}
-
-void QLCDNumber::internalSetString( const QString& s )
+void QLCDNumber::internalDisplay( const QString &s )
 {
     QString buffer;
     int i;
     int len = s.length();
-    QBitArray newPoints(ndigits);
 
     if ( !smallPoint ) {
-	if ( len == ndigits )
-	    buffer = s;
-	else
-	    buffer = s.right( ndigits ).rightJustify( ndigits, ' ' );
-    } else {
+	if ( len >= ndigits ) {
+	    for( i=0; i<(int)ndigits; i++ )	// trunc too long string
+		buffer[i] = s[len - ndigits + i];
+	} else {
+	    for( i=0; i<ndigits-len; i++ )	// pad with spaces
+		buffer[i] = ' ';
+	    for( i=0; i<len; i++ )
+		buffer[ndigits - len + i] = s[i];
+	}
+	internalSetString(buffer,0);
+   } else {
 	int  index = -1;
 	bool lastWasPoint = TRUE;
+	QBitArray newPoints(ndigits);
 	newPoints.clearBit(0);
 	for ( i=0; i<len; i++ ) {
 	    if ( s[i] == '.' ) {
@@ -704,24 +664,7 @@ void QLCDNumber::internalSetString( const QString& s )
 		newPoints.clearBit(i);
 	    }
 	}
-    }
-
-    if ( buffer == digitStr )
-	return;
-
-    if ( backgroundMode() == FixedPixmap
-	 || colorGroup().brush( QColorGroup::Background ).pixmap() ) {
-	digitStr = buffer;
-	if ( smallPoint )
-	    points = newPoints;
-	repaint( contentsRect() );
-    }
-    else {
-	QPainter p( this );
-	if ( !smallPoint )
-	    drawString( buffer, p );
-	else
-	    drawString( buffer, p, &newPoints );
+	internalSetString(buffer,&newPoints);
     }
 }
 
@@ -730,7 +673,7 @@ void QLCDNumber::internalSetString( const QString& s )
 */
 
 void QLCDNumber::drawString( const QString &s, QPainter &p,
-			     QBitArray *newPoints, bool newString )
+			     QBitArray *newPoints ) const
 {
     QPoint  pos;
 
@@ -744,27 +687,28 @@ void QLCDNumber::drawString( const QString &s, QPainter &p,
 
     for ( int i=0;  i<ndigits; i++ ) {
 	pos = QPoint( xOffset + xAdvance*i, yOffset );
-	if ( newString )
-	    drawDigit( pos, p, segLen, s[i], digitStr[i].latin1() );
-	else
-	    drawDigit( pos, p, segLen, s[i]);
+	drawDigit( pos, p, segLen, s[i]);
 	if ( newPoints ) {
 	    char newPoint = newPoints->testBit(i) ? '.' : ' ';
-	    if ( newString ) {
-		char oldPoint = points.testBit(i) ? '.' : ' ';
-		drawDigit( pos, p, segLen, newPoint, oldPoint );
-	    } else {
-		drawDigit( pos, p, segLen, newPoint );
-	    }
+	    drawDigit( pos, p, segLen, newPoint );
 	}
     }
-    if ( newString ) {
-	digitStr = s;
-	if ( (int)digitStr.length() > ndigits )
-	    digitStr.truncate( ndigits );
-	if ( newPoints )
-	    points = *newPoints;
-    }
+}
+
+void QLCDNumber::internalSetString( const QString& s, const QBitArray* newPoints )
+{
+    QString t = s;
+
+    if ( (int)t.length() > ndigits )
+	t.truncate( ndigits );
+    if ( newPoints )
+	points = *newPoints;
+
+    if ( t == digitStr )
+	return;
+
+    digitStr = t;
+    repaint();
 }
 
 
@@ -773,46 +717,12 @@ void QLCDNumber::drawString( const QString &s, QPainter &p,
 */
 
 void QLCDNumber::drawDigit( const QPoint &pos, QPainter &p, int segLen,
-			    char newCh, char oldCh )
+			    char ch ) const
 {
-// Draws and/or erases segments to change display of a single digit
-// from oldCh to newCh
-
-    char updates[18][2];	// can hold 2 times number of segments, only
-				// first 9 used if segment table is correct
-    int	 nErases;
-    int	 nUpdates;
-    const char *segs;
-    int	 i,j;
-
-    const char erase	  = 0;
-    const char draw	  = 1;
-    const char leaveAlone = 2;
-
-    segs = getSegments(oldCh);
-    for ( nErases=0; segs[nErases] != 99; nErases++ ) {
-	updates[nErases][0] = erase;		// get segments to erase to
-	updates[nErases][1] = segs[nErases];	// remove old char
-    }
-    nUpdates = nErases;
-    segs = getSegments(newCh);
-    for(i = 0 ; segs[i] != 99 ; i++) {
-	for ( j=0;  j<nErases; j++ )
-	    if ( segs[i] == updates[j][1] ) {	// same segment ?
-		updates[j][0] = leaveAlone;	// yes, already on screen
-		break;
-	    }
-	if ( j == nErases ) {			// if not already on screen
-	    updates[nUpdates][0] = draw;
-	    updates[nUpdates][1] = segs[i];
-	    nUpdates++;
-	}
-    }
-    for ( i=0; i<nUpdates; i++ ) {
-	if ( updates[i][0] == draw )
-	    drawSegment( pos, updates[i][1], p, segLen );
-	if (updates[i][0] == erase)
-	    drawSegment( pos, updates[i][1], p, segLen, TRUE );
+    // Draws segments to change display of a single digit newCh
+    const char* segs = getSegments(ch);
+    for(int i = 0 ; segs[i] != 99 ; i++) {
+	drawSegment( pos, segs[i], p, segLen );
     }
 }
 
@@ -829,22 +739,17 @@ static void addPoint( QPointArray &a, const QPoint &p )
 */
 
 void QLCDNumber::drawSegment( const QPoint &pos, char segmentNo, QPainter &p,
-			      int segLen, bool erase )
+			      int segLen ) const
 {
     QPoint pt = pos;
     int width = segLen/5;
 
     const QColorGroup & g = colorGroup();
     QColor lightColor,darkColor,fgColor;
-    if ( erase ){
-	lightColor = backgroundColor();
-	darkColor  = lightColor;
-	fgColor    = lightColor;
-    } else {
-	lightColor = g.light();
-	darkColor  = g.dark();
-	fgColor    = g.foreground();
-    }
+
+    lightColor = g.light();
+    darkColor  = g.dark();
+    fgColor    = g.foreground();
 
 #define LINETO(X,Y) addPoint( a, QPoint(pt.x() + (X),pt.y() + (Y)))
 #define LIGHT
@@ -1116,7 +1021,6 @@ void QLCDNumber::drawSegment( const QPoint &pos, char segmentNo, QPainter &p,
 }
 
 
-
 /*!
   Sets the style of the QLCDNumber to \a s.
   <ul>
@@ -1134,7 +1038,6 @@ void QLCDNumber::setSegmentStyle( SegmentStyle s )
 {
     fill = ( s == Flat || s == Filled );
     shadow = ( s == Outline || s == Filled );
-    update();
 }
 
 
@@ -1154,19 +1057,27 @@ QLCDNumber::SegmentStyle QLCDNumber::segmentStyle() const
 }
 
 
-/*!\reimp
+/*!  Returns a suitable size for this LCD number.  The size hint is on
+  the small side, so as to be usable as minimum size.
+
+  The size hint takes numDigits() and smallDecimalPoint() into
+  consideration.
+
+  \sa setNumDigits() setSmallDecimalPoint() setMinimumSize()
 */
+
 QSize QLCDNumber::sizeHint() const
 {
     return QSize( 10 + 9 * (numDigits() + (smallDecimalPoint() ? 0 : 1)), 23 );
 }
 
 
-/*!\reimp
+/*!
+  Specifies that this widget may stretch horizontally and
+  vertically beyond the sizeHint().
 */
+
 QSizePolicy QLCDNumber::sizePolicy() const
 {
-    //### removeme 3.0
-    return QWidget::sizePolicy();
+    return QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum );
 }
-#endif // QT_NO_LCDNUMBER

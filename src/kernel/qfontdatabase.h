@@ -1,45 +1,44 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qfontdatabase.h   2.3.2   edited 2001-08-29 $
+** $Id: qfontdatabase.h,v 1.8 1999/06/03 16:50:27 hanord Exp $
 **
 ** Definition of the QFontDatabase class
 **
 ** Created : 981126
 **
-** Copyright (C) 1999-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1999 Troll Tech AS.  All rights reserved.
 **
-** This file is part of the kernel module of the Qt GUI Toolkit.
+** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses may use this file in accordance with the Qt Commercial License
-** Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
+*****************************************************************************/
 
 #ifndef QFONTDATABASE_H
 #define QFONTDATABASE_H
 
-#ifndef QT_H
 #include "qwindowdefs.h"
+
+//
+//  W A R N I N G
+//  -------------
+//
+//  This class is under development and all members are private.
+//
+//  The API will probably be opened up in Qt 2.1 In the meantime it is
+//  used by QFontDialog only.
+//
+
+#ifndef QT_H
 #include "qstring.h"
 #include "qstringlist.h"
 #include "qfont.h"
@@ -47,33 +46,22 @@
 #include "qvaluelist.h"
 #endif // QT_H
 
-#ifndef QT_NO_FONTDATABASE
-
 class QStringList;
 class QFontStylePrivate;
-class QtFontStyle;
-class QtFontCharSet;
-class QtFontFamily;
-class QtFontFoundry;
-#ifdef _WS_QWS_
-class QDiskFont;
-#endif
 
 class QFontDatabasePrivate;
 
 class Q_EXPORT QFontDatabase
 {
-public:
+private:
     QFontDatabase();
 
-    QStringList families( bool onlyForLocale = TRUE ) const;
-    QValueList<int> pointSizes( const QString &family,
-				const QString &style = QString::null,
-				const QString &charSet = QString::null );
-    QStringList styles( const QString &family,
-			const QString &charSet = QString::null ) const;
-    QStringList charSets( const QString &familyName,
-			  bool onlyForLocale = TRUE ) const;
+    const QStringList &families( bool onlyForLocale = TRUE ) const;
+    const QStringList &styles( const QString &family,
+			       const QString &charSet = QString::null ) const;
+    const QValueList<int> pointSizes( const QString &family,
+				      const QString &style,
+				      const QString &charSet = QString::null );
 
     QFont font( const QString familyName, const QString &style,
 		int pointSize, const QString charSetName = QString::null );
@@ -87,15 +75,12 @@ public:
     bool  isScalable( const QString &family,
 		      const QString &style   = QString::null,
 		      const QString &charSet = QString::null ) const;
-    bool  isFixedPitch( const QString &family,
-			const QString &style   = QString::null,
-			const QString &charset = QString::null) const;
 
-    QValueList<int> smoothSizes( const QString &family,
-				 const QString &style,
-				 const QString &charSet = QString::null );
+    const QValueList<int> smoothSizes( const QString &family,
+				      const QString &style,
+				      const QString &charSet = QString::null );
 
-    static QValueList<int> standardSizes();
+    static const QValueList<int> standardSizes();
 
     bool italic( const QString &family,
 		 const QString &style,
@@ -111,35 +96,28 @@ public:
 
 
 #if 0
-    QValueList<QFont::CharSet> charSets( const QString &familyName ) const;
+    const QValueList<QFont::CharSet> charSets( const QString &familyName ) const;
     bool  supportsCharSet( const QString &familyName,
 			   const QString &charSet ) const;
     bool  supportsCharSet( const QString &familyName,
 			   QFont::CharSet charSet ) const;
 #endif
 
+const QStringList charSets( const QString &familyName,
+			    bool onlyForLocale = TRUE ) const;
+
     QString styleString( const QFont &);
 
-    static QString verboseCharSetName( const QString & charSetName );
-    static QString charSetSample( const QString & charSetName );
-
-#ifdef _WS_QWS_
-    static void qwsAddDiskFont( QDiskFont *qdf );
-#endif
+static QString verboseCharSetName( const QString & charSetName );
+static QString charSetSample( const QString & charSetName );
 
 private:
     static void createDatabase();
 
-    friend class QtFontStyle;
-    friend class QtFontCharSet;
-    friend class QtFontFamily;
-    friend class QtFontFoundry;
-    friend class QFontDatabasePrivate;
-
     QFontDatabasePrivate *d;
 
+    friend class QFontDialog;
+    friend class QFontDialogPrivate;
 };
-
-#endif // QT_NO_FONTDATABASE
 
 #endif // QFONTDATABASE_H

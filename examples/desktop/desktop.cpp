@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: qt/examples/desktop/desktop.cpp   2.3.2   edited 2001-01-26 $
+** $Id: desktop.cpp,v 1.3 1999/06/21 13:58:44 reggie Exp $
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -210,9 +210,9 @@ public:
 
     void dropEvent( QDropEvent * e )
     {
-	QPixmap pmp;
-	if ( QImageDrag::decode( e, pmp ) ) {
-	    setBackgroundPixmap( pmp );
+	QPixmap pm;
+	if ( QImageDrag::decode( e, pm ) ) {
+	    setBackgroundPixmap( pm );
 	    update();
 	}
     }
@@ -258,7 +258,7 @@ void DesktopWidget::paintEvent( QPaintEvent * )
     bitBlt( this, x, y, &offscreen );
 }
 
-void desktopWidget( const char *s = "Trolltech" )
+void desktopWidget( const char *s = "Troll Tech" )
 {
     DesktopWidget *t = new DesktopWidget(s);
     t->update();
@@ -266,7 +266,7 @@ void desktopWidget( const char *s = "Trolltech" )
     delete t;
 }
 
-void desktopText( const char *s = "Trolltech" )
+void desktopText( const char *s = "Troll Tech" )
 {
     const int border = 20;
 

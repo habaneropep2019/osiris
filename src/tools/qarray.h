@@ -1,39 +1,27 @@
 /****************************************************************************
-** $Id: qt/src/tools/qarray.h   2.3.2   edited 2001-01-26 $
+** $Id: qarray.h,v 2.10 1999/06/22 15:29:00 agulbra Exp $
 **
 ** Definition of QArray template/macro class
 **
 ** Created : 930906
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
-** This file is part of the tools module of the Qt GUI Toolkit.
+** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses may use this file in accordance with the Qt Commercial License
-** Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
+*****************************************************************************/
 
 #ifndef QARRAY_H
 #define QARRAY_H
@@ -63,12 +51,13 @@ public:
     type *data()    const	{ return (type *)QGArray::data(); }
     uint  nrefs()   const	{ return QGArray::nrefs(); }
     uint  size()    const	{ return QGArray::size()/sizeof(type); }
-    uint  count()   const 	{ return size(); }
     bool  isEmpty() const	{ return QGArray::size() == 0; }
     bool  isNull()  const	{ return QGArray::data() == 0; }
+    // ### bug bug bug.  this does not call constructors/destructors
     bool  resize( uint size )	{ return QGArray::resize(size*sizeof(type)); }
     bool  truncate( uint pos )	{ return QGArray::resize(pos*sizeof(type)); }
-    bool  fill( const type &d, int size = -1 )
+    // end of bug bug bug.  but the bug is in the constructur too.
+    bool  fill( const type &d, int size=-1 )
 	{ return QGArray::fill((char*)&d,size,sizeof(type) ); }
     void  detach()		{ QGArray::detach(); }
     QArray<type>   copy() const
@@ -90,9 +79,6 @@ public:
 	{ return QGArray::find((char*)&d,i,sizeof(type)); }
     int	 contains( const type &d ) const
 	{ return QGArray::contains((char*)&d,sizeof(type)); }
-    void sort() { QGArray::sort(sizeof(type)); }
-    int  bsearch( const type &d ) const
-	{ return QGArray::bsearch((const char*)&d,sizeof(type)); }
     type& operator[]( int i ) const
 	{ return (type &)(*(type *)QGArray::at(i*sizeof(type))); }
     type& at( uint i ) const

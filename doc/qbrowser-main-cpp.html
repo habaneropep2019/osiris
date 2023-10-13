@@ -1,0 +1,276 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><meta name="robots" content="noindex,noarchive"><title>
+Qt Toolkit - qbrowser/main.cpp example file
+</title><style type="text/css"><!--
+h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
+a:link { text-decoration: none; }
+body { background: white; color: black; }
+--></style>
+</head><body bgcolor="#ffffff">
+
+<a href=index.html><img width=122 height=65 src=qtlogo.png alt="Qt logo" align=left border=0></a>
+<center><img src=dochead.png width=448 height=23></center>
+<br clear=all>
+
+<h1 align=center>Simple HTML Browser</h1><br clear="all">
+
+  The QBrowser exampple implements a simple HTML browser using Qt's Richtext widget.
+
+  <hr>
+
+  Header file:
+
+  <pre>/****************************************************************************
+** &#36;Id&#58; helpwindow.h,v 1.3 1999/06/17 22:02:28 ettrich Exp $
+**
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+**
+** This file is part of an example program for Qt.  This example
+** program may be used, distributed and modified without limitation.
+**
+*****************************************************************************/
+
+#ifndef HELPWINDOW_H
+#define HELPWINDOW_H
+#include &lt;<a href="qtextbrowser-h.html">qtextbrowser.h</a>&gt;
+#include &lt;<a href="qmainwindow-h.html">qmainwindow.h</a>&gt;
+
+class HelpWindow : public QMainWindow
+{
+    Q_OBJECT
+public:
+    HelpWindow( const QString&amp; home_,  const QString&amp; path, QWidget* parent = 0, const char *name=0 );
+    ~HelpWindow();
+
+    void setupSlideshow( const QString&amp; file);
+
+ private slots:
+    void setBackwardAvailable( bool );
+    void setForwardAvailable( bool );
+
+    void textChanged();
+    void about();
+    void aboutQt();
+    void openFile();
+    void newWindow();
+
+private:
+    <a href="qtextbrowser.html">QTextBrowser</a>* browser;
+    int backwardId, forwardId;
+
+};
+
+#endif
+</pre>
+
+
+  <hr>
+
+  Implementation:
+
+  <pre>/****************************************************************************
+** &#36;Id&#58; helpwindow.cpp,v 1.9 1999/06/18 01:12:08 ettrich Exp $
+**
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+**
+** This file is part of an example program for Qt.  This example
+** program may be used, distributed and modified without limitation.
+**
+*****************************************************************************/
+
+#include "helpwindow.h"
+#include &lt;<a href="qstatusbar-h.html">qstatusbar.h</a>&gt;
+#include &lt;<a href="qpixmap-h.html">qpixmap.h</a>&gt;
+#include &lt;<a href="qpopupmenu-h.html">qpopupmenu.h</a>&gt;
+#include &lt;<a href="qmenubar-h.html">qmenubar.h</a>&gt;
+#include &lt;<a href="qtoolbar-h.html">qtoolbar.h</a>&gt;
+#include &lt;<a href="qtoolbutton-h.html">qtoolbutton.h</a>&gt;
+#include &lt;<a href="qiconset-h.html">qiconset.h</a>&gt;
+#include &lt;<a href="qfile-h.html">qfile.h</a>&gt;
+#include &lt;<a href="qtextstream-h.html">qtextstream.h</a>&gt;
+#include &lt;<a href="qstylesheet-h.html">qstylesheet.h</a>&gt;
+#include &lt;<a href="qmessagebox-h.html">qmessagebox.h</a>&gt;
+#include &lt;<a href="qfiledialog-h.html">qfiledialog.h</a>&gt;
+#include &lt;<a href="qapplication-h.html">qapplication.h</a>&gt;
+
+HelpWindow::HelpWindow( const QString&amp; home_, const QString&amp; path, QWidget* parent, const char *name )
+    : <a href="qmainwindow.html">QMainWindow</a>( parent, name, WDestructiveClose )
+{
+
+    browser = new <a href="qtextbrowser.html">QTextBrowser</a>( this );
+    browser-&gt;mimeSourceFactory()-&gt;setFilePath( path );
+    browser-&gt;setFrameStyle( QFrame::Panel | QFrame::Sunken );
+    connect( browser, SIGNAL( textChanged() ),
+             this, SLOT( textChanged() ) );
+
+    setCentralWidget( browser );
+
+    if ( !home_.isEmpty() )
+        browser-&gt;setSource( home_ );
+
+    connect( browser, SIGNAL( highlighted( const QString&amp;) ),
+             statusBar(), SLOT( message( const QString&amp;)) );
+
+    resize( 640,700 );
+
+    <a href="qpopupmenu.html">QPopupMenu</a>* file = new <a href="qpopupmenu.html">QPopupMenu</a>( this );
+    file-&gt;<a href="qmenudata.html#43c652">insertItem</a>( tr("&amp;New Window"), this, SLOT( newWindow() ), ALT | Key_N );
+    file-&gt;<a href="qmenudata.html#43c652">insertItem</a>( tr("&amp;Open File"), this, SLOT( openFile() ), ALT | Key_O );
+    file-&gt;<a href="qmenudata.html#5e712e">insertSeparator</a>();
+    file-&gt;<a href="qmenudata.html#43c652">insertItem</a>( tr("&amp;Close"), this, SLOT( close() ), ALT | Key_Q );
+    file-&gt;<a href="qmenudata.html#43c652">insertItem</a>( tr("E&amp;xit"), qApp, SLOT( closeAllWindows() ), ALT | Key_X );
+
+    <a href="qpopupmenu.html">QPopupMenu</a>* go = new <a href="qpopupmenu.html">QPopupMenu</a>( this );
+    backwardId = go-&gt;<a href="qmenudata.html#43c652">insertItem</a>( <a href="qpixmap.html">QPixmap</a>("back.xpm"),
+                                       tr("&amp;Backward"), browser, SLOT( backward() ),
+                                       ALT | Key_Left );
+    forwardId = go-&gt;<a href="qmenudata.html#43c652">insertItem</a>( <a href="qpixmap.html">QPixmap</a>("forward.xpm"),
+                                      tr("&amp;Forward"), browser, SLOT( forward() ),
+                                       ALT | Key_Right );
+    go-&gt;<a href="qmenudata.html#43c652">insertItem</a>( <a href="qpixmap.html">QPixmap</a>("home.xpm"), tr("&amp;Home"), browser, SLOT( home() ) );
+
+    <a href="qpopupmenu.html">QPopupMenu</a>* help = new <a href="qpopupmenu.html">QPopupMenu</a>( this );
+    help-&gt;<a href="qmenudata.html#43c652">insertItem</a>( tr("&amp;About ..."), this, SLOT( about() ) );
+    help-&gt;<a href="qmenudata.html#43c652">insertItem</a>( tr("About &amp;<a href="qt.html">Qt</a> ..."), this, SLOT( aboutQt() ) );
+
+    menuBar()-&gt;insertItem( tr("&amp;File"), file );
+    menuBar()-&gt;insertItem( tr("&amp;Go"), go );
+    menuBar()-&gt;insertSeparator();
+    menuBar()-&gt;insertItem( tr("&amp;Help"), help );
+
+    menuBar()-&gt;setItemEnabled( forwardId, FALSE);
+    menuBar()-&gt;setItemEnabled( backwardId, FALSE);
+    connect( browser, SIGNAL( backwardAvailable( bool ) ),
+             this, SLOT( setBackwardAvailable( bool ) ) );
+    connect( browser, SIGNAL( forwardAvailable( bool ) ),
+             this, SLOT( setForwardAvailable( bool ) ) );
+
+    <a href="qtoolbar.html">QToolBar</a>* toolbar = new <a href="qtoolbar.html">QToolBar</a>( this );
+    addToolBar( toolbar, "Toolbar");
+    <a href="qtoolbutton.html">QToolButton</a>* button;
+
+    button = new <a href="qtoolbutton.html">QToolButton</a>( <a href="qpixmap.html">QPixmap</a>("back.xpm"), tr("Backward"), "", browser, SLOT(backward()), toolbar );
+    connect( browser, SIGNAL( backwardAvailable(bool) ), button, SLOT( setEnabled(bool) ) );
+    button-&gt;<a href="qwidget.html#f996ef">setEnabled</a>( FALSE );
+    button = new <a href="qtoolbutton.html">QToolButton</a>( <a href="qpixmap.html">QPixmap</a>("forward.xpm"), tr("Forward"), "", browser, SLOT(forward()), toolbar );
+    connect( browser, SIGNAL( forwardAvailable(bool) ), button, SLOT( setEnabled(bool) ) );
+    button-&gt;<a href="qwidget.html#f996ef">setEnabled</a>( FALSE );
+    button = new <a href="qtoolbutton.html">QToolButton</a>( <a href="qpixmap.html">QPixmap</a>("home.xpm"), tr("Home"), "", browser, SLOT(home()), toolbar );
+
+    browser-&gt;setFocus();
+}
+
+void <a name="394"></a>HelpWindow::setBackwardAvailable( bool b)
+{
+    <a href="qmainwindow.html#2fcbc3">menuBar</a>()-&gt;setItemEnabled( backwardId, b);
+}
+
+void <a name="395"></a>HelpWindow::setForwardAvailable( bool b)
+{
+    <a href="qmainwindow.html#2fcbc3">menuBar</a>()-&gt;setItemEnabled( forwardId, b);
+}
+
+void <a name="396"></a>HelpWindow::textChanged()
+{
+    if ( browser-&gt;documentTitle().isNull() )
+        <a href="qwidget.html#d4f007">setCaption</a>( browser-&gt;context() );
+    else
+        <a href="qwidget.html#d4f007">setCaption</a>( browser-&gt;documentTitle() ) ;
+}
+
+HelpWindow::~HelpWindow()
+{
+}
+
+void <a name="397"></a>HelpWindow::about()
+{
+    <a href="qmessagebox.html#e67950">QMessageBox::about</a>( this, "QBrowser Example",
+                        "&lt;p&gt;This example implements a simple HTML browser "
+                        "using Qt's rich text capabilities&lt;/p&gt;"
+                        "&lt;p&gt;It's just about 100 lines of C++ code, so don't expect too much :-)&lt;/p&gt;"
+                        );
+}
+
+void <a name="398"></a>HelpWindow::aboutQt()
+{
+    <a href="qmessagebox.html#976755">QMessageBox::aboutQt</a>( this, "QBrowser" );
+}
+
+void <a name="399"></a>HelpWindow::openFile()
+{
+    <a href="qstring.html">QString</a> fn = QFileDialog::getOpenFileName( QString::null, QString::null, this );
+    if ( !fn.<a href="qstring.html#9a6d7e">isEmpty</a>() )
+        browser-&gt;setSource( fn );
+}
+
+void <a name="400"></a>HelpWindow::newWindow()
+{
+    ( new HelpWindow(browser-&gt;source(), "qbrowser") )-&gt;show();
+}
+</pre>
+
+
+  <hr>
+
+  Main:
+<pre>/****************************************************************************
+** &#36;Id&#58; main.cpp,v 1.7 1999/06/17 22:46:58 warwick Exp $
+**
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+**
+** This file is part of an example program for Qt.  This example
+** program may be used, distributed and modified without limitation.
+**
+*****************************************************************************/
+
+#include &lt;<a name="qapplication.h"></a><a href="qapplication-h.html">qapplication.h</a>&gt;
+#include &lt;<a name="qwindowsstyle.h"></a><a href="qwindowsstyle-h.html">qwindowsstyle.h</a>&gt;
+#include &lt;<a name="qstylesheet.h"></a><a href="qstylesheet-h.html">qstylesheet.h</a>&gt;
+#include "helpwindow.h"
+#include &lt;stdlib.h&gt;
+
+int main( int argc, char ** argv )
+{
+    <a name="QApplication::setColorSpec"></a><a href="qapplication.html#e2431b">QApplication::setColorSpec</a>( QApplication::ManyColor );
+    <a name="QApplication"></a><a href="qapplication.html">QApplication</a> a(argc, argv);
+
+    <a name="QStyleSheetItem"></a><a href="qstylesheetitem.html">QStyleSheetItem</a>* style;
+
+    // Modify the application-wide default style sheet to handle
+    // some extra HTML gracefully.
+    //
+    // Ignore any bodytext in &lt;head&gt;...&lt;/head&gt;:
+    style = new <a href="qstylesheetitem.html">QStyleSheetItem</a>( <a name="QStyleSheet::defaultSheet"></a><a href="qstylesheet.html#9d69e9">QStyleSheet::defaultSheet</a>(), "head" );
+    style-&gt;<a name="setDisplayMode"></a><a href="qstylesheetitem.html#9e2b2f">setDisplayMode</a>(QStyleSheetItem::DisplayNone);
+    //
+    // Not in default style sheet, just fake it:
+    style = new <a href="qstylesheetitem.html">QStyleSheetItem</a>( <a href="qstylesheet.html#9d69e9">QStyleSheet::defaultSheet</a>(), "dl" );
+    style-&gt;<a href="qstylesheetitem.html#9e2b2f">setDisplayMode</a>(QStyleSheetItem::DisplayBlock);
+    style = new <a href="qstylesheetitem.html">QStyleSheetItem</a>( <a href="qstylesheet.html#9d69e9">QStyleSheet::defaultSheet</a>(), "dt" );
+    style-&gt;<a href="qstylesheetitem.html#9e2b2f">setDisplayMode</a>(QStyleSheetItem::DisplayBlock);
+    style-&gt;<a name="setContexts"></a><a href="qstylesheetitem.html#bbd619">setContexts</a>("dl");
+    //
+    // Many HTML files omit the &lt;/p&gt; or &lt;/li&gt;, so we add this for efficiency:
+    <a href="qstylesheet.html#9d69e9">QStyleSheet::defaultSheet</a>()-&gt;item("p")-&gt;setSelfNesting( FALSE );
+    <a href="qstylesheet.html#9d69e9">QStyleSheet::defaultSheet</a>()-&gt;item("li")-&gt;setSelfNesting( FALSE );
+
+    <a name="QString"></a><a href="qstring.html">QString</a> home;
+
+    if (argc &gt; 1)
+        home = argv[1];
+    else
+        home = QString(getenv("QTDIR")) + "/doc/index.html";
+
+    ( new HelpWindow(home, ".", 0, "qbrowser") )-&gt;show();
+
+    <a name="QObject::connect"></a><a href="qobject.html#c2d209">QObject::connect</a>( &amp;a, SIGNAL(lastWindowClosed()),
+                      &amp;a, SLOT(quit()) );
+
+    return a.<a name="exec"></a><a href="qapplication.html#7076af">exec</a>();
+}
+</pre>
+<p><address><hr><div align="center">
+<table width="100%" cellspacing="0" border="0"><tr>
+<td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.00</div>
+</table></div></address></body></html>

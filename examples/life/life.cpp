@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: qt/examples/life/life.cpp   2.3.2   edited 2001-01-26 $
+** $Id: life.cpp,v 1.2 1999/06/03 01:44:46 warwick Exp $
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -18,11 +18,9 @@
 
 // The main game of life widget
 
-LifeWidget::LifeWidget( int s, QWidget *parent, const char *name )
+LifeWidget::LifeWidget( QWidget *parent, const char *name )
     : QFrame( parent, name )
 {
-    SCALE = s;
-
     maxi = maxj = 50;
     setMinimumSize( MINSIZE * SCALE + 2 * BORDER,
 		   MINSIZE * SCALE + 2 * BORDER );
@@ -111,6 +109,11 @@ void LifeWidget::nextGeneration()
 }
 
 
+//
+// Normally you implement drawContents() instead since LifeWidget
+// inherits QFrame.
+//
+
 void LifeWidget::paintEvent( QPaintEvent * e )
 {
     int starti = pos2index( e->rect().left() );
@@ -127,6 +130,8 @@ void LifeWidget::paintEvent( QPaintEvent * e )
     for ( int i = starti; i <= stopi; i++ ) {
 	for ( int j = startj; j <= stopj; j++ ) {
 	    if ( cells[current][i][j] )
+		// could avoid this if cells[!current][i][j] and this
+		// is a repaint(FALSE)... probably not worth it
 		qDrawShadePanel( &paint, index2pos( i ), index2pos( j ),
 				 SCALE - 1, SCALE - 1, colorGroup() );
 	    else if ( cells[!current][i][j] )

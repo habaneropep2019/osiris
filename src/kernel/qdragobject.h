@@ -1,37 +1,25 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qdragobject.h   2.3.2   edited 2001-08-30 $
+** $Id: qdragobject.h,v 2.43 1999/06/23 13:09:45 warwick Exp $
 **
 ** Definition of QDragObject
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
-** This file is part of the kernel module of the Qt GUI Toolkit.
+** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses may use this file in accordance with the Qt Commercial License
-** Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
+*****************************************************************************/
 
 #ifndef QDRAGOBJECT_H
 #define QDRAGOBJECT_H
@@ -44,10 +32,8 @@ class QWidget;
 #include "qobject.h"
 #include "qimage.h"
 #include "qstrlist.h"
-#include "qcolor.h"
 #endif // QT_H
 
-#ifndef QT_NO_MIME
 
 class Q_EXPORT QDragObject: public QObject, public QMimeSource {
     Q_OBJECT
@@ -55,35 +41,24 @@ public:
     QDragObject( QWidget * dragSource = 0, const char * name = 0 );
     virtual ~QDragObject();
 
-#ifndef QT_NO_DRAGANDDROP
     bool drag();
     bool dragMove();
     void dragCopy();
-#if defined(Q_INCOMPATIBLE_3_0_ADDONS)
-    void dragLink();
-#endif
 
     virtual void setPixmap(QPixmap);
     virtual void setPixmap(QPixmap, QPoint hotspot);
     QPixmap pixmap() const;
     QPoint pixmapHotSpot() const;
-#endif
 
     QWidget * source();
     static QWidget * target();
 
     static void setTarget(QWidget*);
 
-#ifndef QT_NO_DRAGANDDROP
-    enum DragMode { DragDefault, DragCopy, DragMove, DragCopyOrMove
-#if defined(Q_INCOMPATIBLE_3_0_ADDONS)
-		    , DragLink
-#endif
-    };
+    enum DragMode { DragDefault, DragCopy, DragMove, DragCopyOrMove };
 
 protected:
     virtual bool drag(DragMode);
-#endif
 
 private:
     QDragData * d;
@@ -174,25 +149,9 @@ public:
     static bool decodeLocalFiles( const QMimeSource* e, QStringList& i );
 };
 
-class Q_EXPORT QColorDrag : public QStoredDrag
-{
-    Q_OBJECT
-    QColor color;
-
-public:
-    QColorDrag( const QColor &col, QWidget *dragsource = 0, const char *name = 0 );
-    QColorDrag( QWidget * dragSource = 0, const char * name = 0 );
-    void setColor( const QColor &col );
-
-    static bool canDecode( QMimeSource * );
-    static bool decode( QMimeSource *, QColor &col );
-};
-
 #ifndef QT_NO_COMPAT
 typedef QUriDrag QUrlDrag;
 #endif
-
-#ifndef QT_NO_DRAGANDDROP
 
 // QDragManager is not part of the public API.  It is defined in a
 // header file simply so different .cpp files can implement different
@@ -215,7 +174,7 @@ private:
 
     bool drag( QDragObject *, QDragObject::DragMode );
 
-    void cancel( bool deleteSource = TRUE );
+    void cancel();
     void move( const QPoint & );
     void drop();
     void updatePixmap();
@@ -235,8 +194,5 @@ private:
     int n_cursor;
 };
 
+
 #endif
-
-#endif // QT_NO_MIME
-
-#endif // QDRAGOBJECT_H

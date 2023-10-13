@@ -1,43 +1,29 @@
 /****************************************************************************
-** $Id: qt/src/tools/qutfcodec.cpp   2.3.2   edited 2001-01-26 $
+** $Id: qutfcodec.cpp,v 1.11 1999/06/19 16:26:56 agulbra Exp $
 **
 ** Implementation of QEucCodec class
 **
 ** Created : 981015
 **
-** Copyright (C)1998-2000 Trolltech AS.  All rights reserved.
+** Copyright (C)1998-1999 Troll Tech AS.  All rights reserved.
 **
-** This file is part of the tools module of the Qt GUI Toolkit.
+** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses may use this file in accordance with the Qt Commercial License
-** Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
+*****************************************************************************/
 
 #include "qutfcodec.h"
-
-#ifndef QT_NO_TEXTCODEC
 
 int QUtf8Codec::mibEnum() const
 {
@@ -47,7 +33,7 @@ int QUtf8Codec::mibEnum() const
 QCString QUtf8Codec::fromUnicode(const QString& uc, int& len_in_out) const
 {
     int l = QMIN((int)uc.length(),len_in_out);
-    int rlen = l*3+1;
+    int rlen = l*2+1;
     QCString rstr(rlen);
     uchar* cursor = (uchar*)rstr.data();
     for (int i=0; i<l; i++) {
@@ -65,14 +51,14 @@ QCString QUtf8Codec::fromUnicode(const QString& uc, int& len_in_out) const
 	    *cursor++ = 0x80 | (ch.cell()&0x3f);
 	}
     }
+    *cursor = 0x00; // NUL terminator
     len_in_out = cursor - (uchar*)rstr.data();
-    rstr.truncate(len_in_out);
     return rstr;
 }
 
 const char* QUtf8Codec::name() const
 {
-    return "UTF-8";
+    return "utf8";
 }
 
 int QUtf8Codec::heuristicContentMatch(const char* chars, int len) const
@@ -85,13 +71,12 @@ int QUtf8Codec::heuristicContentMatch(const char* chars, int len) const
 	    return -1;
 	if ( ch < 128 ) {
 	    // Inconclusive
-	    score++;
 	} else if ( (ch&0xe0) == 0xc0 ) {
 	    if ( i < len-1 ) {
 		uchar c2 = chars[++i];
 		if ( (c2&0xc0) != 0x80 )
 		    return -1;
-		score+=3;
+		score+=2;
 	    }
 	} else if ( (ch&0xf0) == 0xe0 ) {
 	    if ( i < len-1 ) {
@@ -107,7 +92,6 @@ int QUtf8Codec::heuristicContentMatch(const char* chars, int len) const
 		    }
 #endif
 		}
-		score+=2;
 	    }
 	}
     }
@@ -127,7 +111,7 @@ public:
 
     QString toUnicode(const char* chars, int len)
     {
-	QString result = "";
+	QString result;
 	for (int i=0; i<len; i++) {
 	    uchar ch = chars[i];
 	    if (need) {
@@ -175,7 +159,7 @@ int QUtf16Codec::mibEnum() const
 
 const char* QUtf16Codec::name() const
 {
-    return "ISO-10646-UCS-2";
+    return "utf16";
 }
 
 int QUtf16Codec::heuristicContentMatch(const char* chars, int len) const
@@ -183,7 +167,7 @@ int QUtf16Codec::heuristicContentMatch(const char* chars, int len) const
     uchar* uchars = (uchar*)chars;
     if ( len >= 2 && (uchars[0] == 0xff && uchars[1] == 0xfe ||
 		      uchars[1] == 0xff && uchars[0] == 0xfe) )
-	return len;
+	return 2;
     else
 	return 0;
 }
@@ -242,13 +226,12 @@ public:
 		    ch.cell() = *chars++;
 		}
 		if ( !headerdone ) {
-		    if ( ch == QChar::byteOrderSwapped ) {
+		    if ( ch == QChar::byteOrderSwapped )
 			swap = !swap;
-		    } else if ( ch == QChar::byteOrderMark ) {
-			// Ignore ZWNBSP
-		    } else {
+		    else if ( ch == QChar::byteOrderMark )
+			; // Ignore ZWNBSP
+		    else
 			r += ch;
-		    }
 		    headerdone = TRUE;
 		} else
 		    r += ch;
@@ -273,4 +256,4 @@ QTextEncoder* QUtf16Codec::makeEncoder() const
     return new QUtf16Encoder;
 }
 
-#endif // QT_NO_TEXTCODEC
+

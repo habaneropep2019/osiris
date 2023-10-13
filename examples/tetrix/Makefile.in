@@ -2,22 +2,20 @@
 
 ####### Compiler, tools and options
 
-CXX	=	$(SYSCONF_CXX) $(QT_CXX_MT)
+CXX	=	$(SYSCONF_CXX)
 CXXFLAGS=	$(SYSCONF_CXXFLAGS_QT) $(SYSCONF_CXXFLAGS)
-CC	=	$(SYSCONF_CC) $(QT_C_MT)
+CC	=	$(SYSCONF_CC)
 CFLAGS	=	$(SYSCONF_CFLAGS)
 INCPATH =	
-LFLAGS	=	$(SYSCONF_LFLAGS_QT) $(SYSCONF_RPATH_QT) $(SYSCONF_LFLAGS) $(QT_LFLAGS_MT)
-LIBS	=	$(SUBLIBS) $(SYSCONF_LIBS_QT) $(SYSCONF_LIBS) $(SYSCONF_LIBS_QTAPP)
+LFLAGS	=	$(SYSCONF_LFLAGS_QT) $(SYSCONF_LFLAGS_X11) $(SYSCONF_LFLAGS)
+LIBS	=	$(SYSCONF_LIBS_QT) $(SYSCONF_LIBS_X11) $(SYSCONF_LIBS)
 MOC	=	$(SYSCONF_MOC)
-UIC	=	$(SYSCONF_UIC)
 
 ####### Target
 
 DESTDIR = ./
 VER_MAJ = 1
 VER_MIN = 0
-VER_PATCH = 0
 TARGET	= tetrix
 TARGET1 = lib$(TARGET).so.$(VER_MAJ)
 
@@ -40,9 +38,6 @@ OBJECTS =	gtetrix.o \
 		qtetrixb.o \
 		tetrix.o \
 		tpiece.o
-INTERFACES =    
-UICDECLS =      
-UICIMPLS =      
 SRCMOC	=	moc_qdragapp.cpp \
 		moc_qtetrix.cpp \
 		moc_qtetrixb.cpp \
@@ -50,7 +45,6 @@ SRCMOC	=	moc_qdragapp.cpp \
 OBJMOC	=	moc_qdragapp.o \
 		moc_qtetrix.o \
 		moc_qtetrixb.o
-
 
 ####### Implicit rules
 
@@ -73,11 +67,10 @@ OBJMOC	=	moc_qdragapp.o \
 
 ####### Build rules
 
-
 all: $(DESTDIR)$(TARGET)
 
-$(DESTDIR)$(TARGET): $(UICDECLS) $(OBJECTS) $(OBJMOC) $(SUBLIBS)
-	$(SYSCONF_LINK) $(LFLAGS) -o $(DESTDIR)$(TARGET) $(OBJECTS) $(OBJMOC) $(LIBS)
+$(DESTDIR)$(TARGET): $(OBJECTS) $(OBJMOC) 
+	$(SYSCONF_LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(OBJMOC) $(LIBS)
 
 moc: $(SRCMOC)
 
@@ -85,33 +78,8 @@ tmake:
 	tmake tetrix.pro
 
 clean:
-	-rm -f $(OBJECTS) $(OBJMOC) $(SRCMOC) $(UICIMPLS) $(UICDECLS)
+	-rm -f $(OBJECTS) $(OBJMOC) $(SRCMOC)
 	-rm -f *~ core
-	-rm -f allmoc.cpp
-
-####### Extension Modules
-
-listpromodules:
-	@echo 
-
-listallmodules:
-	@echo 
-
-listaddonpromodules:
-	@echo 
-
-listaddonentmodules:
-	@echo 
-
-
-REQUIRES=small-config
-
-####### Sub-libraries
-
-
-###### Combined headers
-
-
 
 ####### Compile
 
@@ -127,8 +95,6 @@ qdragapp.o: qdragapp.cpp \
 		../../include/qwindowdefs.h \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
-		../../include/qfeatures.h \
-		../../include/qconfig.h \
 		../../include/qstring.h \
 		../../include/qcstring.h \
 		../../include/qarray.h \
@@ -149,7 +115,6 @@ qdragapp.o: qdragapp.cpp \
 		../../include/qvaluelist.h \
 		../../include/qdatastream.h \
 		../../include/qiodevice.h \
-		../../include/qregexp.h \
 		../../include/qpaintdevice.h \
 		../../include/qpalette.h \
 		../../include/qcolor.h \
@@ -173,8 +138,7 @@ qdragapp.o: qdragapp.cpp \
 		../../include/qobjectlist.h \
 		../../include/qobjectdict.h \
 		../../include/qmetaobject.h \
-		../../include/qconnection.h \
-		../../include/qstrlist.h
+		../../include/qconnection.h
 
 qtetrix.o: qtetrix.cpp \
 		qtetrix.h \
@@ -186,8 +150,6 @@ qtetrix.o: qtetrix.cpp \
 		../../include/qwindowdefs.h \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
-		../../include/qfeatures.h \
-		../../include/qconfig.h \
 		../../include/qstring.h \
 		../../include/qcstring.h \
 		../../include/qarray.h \
@@ -208,7 +170,6 @@ qtetrix.o: qtetrix.cpp \
 		../../include/qvaluelist.h \
 		../../include/qdatastream.h \
 		../../include/qiodevice.h \
-		../../include/qregexp.h \
 		../../include/qpaintdevice.h \
 		../../include/qpalette.h \
 		../../include/qcolor.h \
@@ -221,11 +182,8 @@ qtetrix.o: qtetrix.cpp \
 		../../include/qsizepolicy.h \
 		../../include/qlcdnumber.h \
 		../../include/qbitarray.h \
-		../../include/qlabel.h \
 		../../include/qpushbutton.h \
 		../../include/qbutton.h \
-		../../include/qiconset.h \
-		../../include/qpixmap.h \
 		../../include/qpainter.h \
 		../../include/qpen.h \
 		../../include/qpointarray.h \
@@ -235,6 +193,7 @@ qtetrix.o: qtetrix.cpp \
 		../../include/qgdict.h \
 		../../include/qtranslator.h \
 		../../include/qintdict.h \
+		../../include/qlabel.h \
 		../../include/qdatetime.h
 
 qtetrixb.o: qtetrixb.cpp \
@@ -246,8 +205,6 @@ qtetrixb.o: qtetrixb.cpp \
 		../../include/qwindowdefs.h \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
-		../../include/qfeatures.h \
-		../../include/qconfig.h \
 		../../include/qstring.h \
 		../../include/qcstring.h \
 		../../include/qarray.h \
@@ -268,7 +225,6 @@ qtetrixb.o: qtetrixb.cpp \
 		../../include/qvaluelist.h \
 		../../include/qdatastream.h \
 		../../include/qiodevice.h \
-		../../include/qregexp.h \
 		../../include/qpaintdevice.h \
 		../../include/qpalette.h \
 		../../include/qcolor.h \
@@ -282,11 +238,8 @@ qtetrixb.o: qtetrixb.cpp \
 		qtetrix.h \
 		../../include/qlcdnumber.h \
 		../../include/qbitarray.h \
-		../../include/qlabel.h \
 		../../include/qpushbutton.h \
 		../../include/qbutton.h \
-		../../include/qiconset.h \
-		../../include/qpixmap.h \
 		../../include/qpainter.h \
 		../../include/qpen.h \
 		../../include/qpointarray.h \
@@ -304,8 +257,6 @@ tetrix.o: tetrix.cpp \
 		../../include/qwindowdefs.h \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
-		../../include/qfeatures.h \
-		../../include/qconfig.h \
 		../../include/qstring.h \
 		../../include/qcstring.h \
 		../../include/qarray.h \
@@ -326,7 +277,6 @@ tetrix.o: tetrix.cpp \
 		../../include/qvaluelist.h \
 		../../include/qdatastream.h \
 		../../include/qiodevice.h \
-		../../include/qregexp.h \
 		../../include/qpaintdevice.h \
 		../../include/qpalette.h \
 		../../include/qcolor.h \
@@ -339,11 +289,8 @@ tetrix.o: tetrix.cpp \
 		../../include/qsizepolicy.h \
 		../../include/qlcdnumber.h \
 		../../include/qbitarray.h \
-		../../include/qlabel.h \
 		../../include/qpushbutton.h \
 		../../include/qbutton.h \
-		../../include/qiconset.h \
-		../../include/qpixmap.h \
 		../../include/qpainter.h \
 		../../include/qpen.h \
 		../../include/qpointarray.h \
@@ -362,9 +309,7 @@ tpiece.o: tpiece.cpp \
 		../../include/qarray.h \
 		../../include/qgarray.h \
 		../../include/qshared.h \
-		../../include/qglobal.h \
-		../../include/qfeatures.h \
-		../../include/qconfig.h
+		../../include/qglobal.h
 
 moc_qdragapp.o: moc_qdragapp.cpp \
 		qdragapp.h \
@@ -373,8 +318,6 @@ moc_qdragapp.o: moc_qdragapp.cpp \
 		../../include/qwindowdefs.h \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
-		../../include/qfeatures.h \
-		../../include/qconfig.h \
 		../../include/qstring.h \
 		../../include/qcstring.h \
 		../../include/qarray.h \
@@ -395,7 +338,6 @@ moc_qdragapp.o: moc_qdragapp.cpp \
 		../../include/qvaluelist.h \
 		../../include/qdatastream.h \
 		../../include/qiodevice.h \
-		../../include/qregexp.h \
 		../../include/qpaintdevice.h \
 		../../include/qpalette.h \
 		../../include/qcolor.h \
@@ -421,8 +363,6 @@ moc_qtetrix.o: moc_qtetrix.cpp \
 		../../include/qwindowdefs.h \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
-		../../include/qfeatures.h \
-		../../include/qconfig.h \
 		../../include/qstring.h \
 		../../include/qcstring.h \
 		../../include/qarray.h \
@@ -443,7 +383,6 @@ moc_qtetrix.o: moc_qtetrix.cpp \
 		../../include/qvaluelist.h \
 		../../include/qdatastream.h \
 		../../include/qiodevice.h \
-		../../include/qregexp.h \
 		../../include/qpaintdevice.h \
 		../../include/qpalette.h \
 		../../include/qcolor.h \
@@ -456,11 +395,8 @@ moc_qtetrix.o: moc_qtetrix.cpp \
 		../../include/qsizepolicy.h \
 		../../include/qlcdnumber.h \
 		../../include/qbitarray.h \
-		../../include/qlabel.h \
 		../../include/qpushbutton.h \
 		../../include/qbutton.h \
-		../../include/qiconset.h \
-		../../include/qpixmap.h \
 		../../include/qpainter.h \
 		../../include/qpen.h \
 		../../include/qpointarray.h \
@@ -475,8 +411,6 @@ moc_qtetrixb.o: moc_qtetrixb.cpp \
 		../../include/qwindowdefs.h \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
-		../../include/qfeatures.h \
-		../../include/qconfig.h \
 		../../include/qstring.h \
 		../../include/qcstring.h \
 		../../include/qarray.h \
@@ -497,7 +431,6 @@ moc_qtetrixb.o: moc_qtetrixb.cpp \
 		../../include/qvaluelist.h \
 		../../include/qdatastream.h \
 		../../include/qiodevice.h \
-		../../include/qregexp.h \
 		../../include/qpaintdevice.h \
 		../../include/qpalette.h \
 		../../include/qcolor.h \
@@ -520,5 +453,4 @@ moc_qtetrixb.cpp: qtetrixb.h
 
 qdragapp.moc: qdragapp.cpp
 	$(MOC) qdragapp.cpp -o qdragapp.moc
-
 

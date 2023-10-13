@@ -1,13 +1,14 @@
 /****************************************************************************
-** $Id: qt/examples/picture/picture.cpp   2.3.2   edited 2001-10-18 $
+** $Id: picture.cpp,v 1.3 1999/06/24 20:29:42 paul Exp $
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
 **
 *****************************************************************************/
 
+#include <ctype.h>
 #include <qapplication.h>
 #include <qpainter.h>
 #include <qpicture.h>
@@ -15,7 +16,6 @@
 #include <qwidget.h>
 #include <qmessagebox.h>
 #include <qfile.h>
-#include <ctype.h>
 
 
 void paintCar( QPainter *p )			// paint a car
@@ -34,11 +34,11 @@ void paintCar( QPainter *p )			// paint a car
     brush.setColor( windowColor );		// set this brush color
     p->setBrush( brush );			// set brush
     p->drawRect( 80, 80, 250, 70 );		// car window
-    p->drawText( 180, 80, 150, 70, Qt::AlignCenter, "--  Qt  --\nTrolltech AS" );
+    p->drawText( 180, 80, 150, 70, Qt::AlignCenter, "--  Qt  --\nTroll Tech AS" );
 
     QPixmap pixmap;
     if ( pixmap.load("flag.bmp") )		// load and draw image
-	p->drawPixmap( 100, 85, pixmap );
+	p->drawPixmap( 100, 90, pixmap );
 
     p->setBackgroundMode( Qt::OpaqueMode );		// set opaque mode
     p->setBrush( Qt::DiagCrossPattern );		// black diagonal cross pattern
@@ -104,7 +104,7 @@ int main( int argc, char **argv )
 {
     QApplication a( argc, argv );		// QApplication required!
 
-    const char *fileName = "car.pic";			// default picture file name
+    char *fileName = "car.pic";			// default picture file name
 
     if ( argc == 2 )				// use argument as file name
 	fileName = argv[1];
@@ -123,7 +123,6 @@ int main( int argc, char **argv )
     } else {
 	PictureDisplay test( fileName );		// create picture display
 	a.setMainWidget( &test);			// set main widget
-	test.setCaption("Qt Example - Picture");
 	test.show();				// show it
 
 	return a.exec();				// start event loop

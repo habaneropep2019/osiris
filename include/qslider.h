@@ -1,39 +1,27 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qslider.h   2.3.2   edited 2001-01-26 $
+** $Id: qslider.h,v 2.39 1999/06/22 13:59:07 paul Exp $
 **
 ** Definition of QSlider class
 **
 ** Created : 961019
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
-** This file is part of the widgets module of the Qt GUI Toolkit.
+** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses may use this file in accordance with the Qt Commercial License
-** Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
+*****************************************************************************/
 
 #ifndef QSLIDER_H
 #define QSLIDER_H
@@ -43,8 +31,6 @@
 #include "qrangecontrol.h"
 #endif // QT_H
 
-#ifndef QT_NO_SLIDER
-
 
 class QTimer;
 struct QSliderData;
@@ -53,20 +39,10 @@ struct QSliderData;
 class Q_EXPORT QSlider : public QWidget, public QRangeControl
 {
     Q_OBJECT
-    Q_ENUMS( TickSetting )
-    Q_PROPERTY( int minValue READ minValue WRITE setMinValue )
-    Q_PROPERTY( int maxValue READ maxValue WRITE setMaxValue )
-    Q_PROPERTY( int lineStep READ lineStep WRITE setLineStep )
-    Q_PROPERTY( int pageStep READ pageStep WRITE setPageStep )
-    Q_PROPERTY( int value READ value WRITE setValue )
-    Q_PROPERTY( bool tracking READ tracking WRITE setTracking )
-    Q_PROPERTY( Orientation orientation READ orientation WRITE setOrientation )
-    Q_PROPERTY( TickSetting tickmarks READ tickmarks WRITE setTickmarks )
-    Q_PROPERTY( int tickInterval READ tickInterval WRITE setTickInterval )
-	
 public:
     enum TickSetting { NoMarks = 0, Above = 1, Left = Above,
 		       Below = 2, Right = Below, Both = 3 };
+
     QSlider( QWidget *parent, const char *name=0 );
     QSlider( Orientation, QWidget *parent, const char *name=0 );
     QSlider( int minValue, int maxValue, int pageStep, int value, Orientation,
@@ -76,27 +52,18 @@ public:
     Orientation orientation() const;
     virtual void	setTracking( bool enable );
     bool	tracking() const;
+
     virtual void 	setPalette( const QPalette & );
     QRect	sliderRect() const;
     QSize	sizeHint() const;
     QSizePolicy sizePolicy() const;
     QSize	minimumSizeHint() const;
-
+    
     virtual void setTickmarks( TickSetting );
     TickSetting tickmarks() const { return ticks; }
 
     virtual void setTickInterval( int );
     int 	tickInterval() const { return tickInt; }
-
-    int	 minValue() const;
-    int	 maxValue() const;
-    void setMinValue( int );
-    void setMaxValue( int );
-    int	 lineStep() const;
-    int	 pageStep() const;
-    void setLineStep( int );
-    void setPageStep( int );
-    int  value() const;
 
 public slots:
     virtual void	setValue( int );
@@ -182,7 +149,5 @@ inline QSlider::Orientation QSlider::orientation() const
     return orient;
 }
 
-
-#endif // QT_NO_SLIDER
 
 #endif // QSLIDER_H

@@ -1,55 +1,36 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qmime.cpp   2.3.2   edited 2001-05-18 $
+** $Id: qmime.cpp,v 2.15 1999/06/24 20:14:30 warwick Exp $
 **
 ** Implementation of MIME support
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
-** This file is part of the kernel module of the Qt GUI Toolkit.
+** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses may use this file in accordance with the Qt Commercial License
-** Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
+*****************************************************************************/
 
 #include "qmime.h"
-
-#ifndef QT_NO_MIME
-
 #include "qmap.h"
 #include "qstringlist.h"
 #include "qfileinfo.h"
 #include "qdir.h"
 #include "qdragobject.h"
-#include "qapplication.h" // ### for now
-#include "qclipboard.h" // ### for now
 
-// NOT REVISED
 /*!
   \class QMimeSource qmime.h
   \brief An abstract piece of formatted data.
-  \ingroup misc
 
   \link dnd.html Drag-and-drop\endlink and
   \link QClipboard clipboard\endlink use this abstraction.
@@ -64,18 +45,6 @@
 */
 QMimeSource::~QMimeSource()
 {
-    if (QApplication::closingDown()) return;
-    
-#ifndef QT_NO_MIMECLIPBOARD
-    if (QApplication::clipboard()->data() == this) {
-#ifdef CHECK_RANGE
-	qWarning("QMimeSource::~QMimeSource: clipboard data deleted!");
-#endif
-#if defined(_WS_X11_)	
-	QApplication::clipboard()->clobber();
-#endif
-    }
-#endif // QT_NO_CLIPBOARD
 }
 
 /*!
@@ -84,7 +53,7 @@ QMimeSource::~QMimeSource()
   Returns the encoded payload of this object, in the specified
   MIME format.
 
-  Subclasses must reimplement this function.
+  Subclasses must override this function.
 */
 
 
@@ -144,7 +113,6 @@ public:
 /*!
   \class QMimeSourceFactory qmime.h
   \brief An extensible supply of MIME-typed data.
-  \ingroup environment
 
   A QMimeSourceFactory provides an abstract interface to a collection of
   information.  Each piece of information is represented by a QMimeSource
@@ -169,7 +137,7 @@ public:
   As mentioned earlier, a factory can also be used as container to
   store data associated with a name. This technique is useful whenever
   rich text contains images that are stored in the program itself, not
-  loaded from the hard disk. Your program may for example define some
+  loaded from the harddisk. Your program may for example define some
   image data as
 
   \code
@@ -198,7 +166,7 @@ public:
 
 
 /*!
-  Constructs a QMimeSourceFactory which has no file path and no stored
+  Constructs a QMimeSourceFactory which has no filepath and no stored
   content.
 */
 QMimeSourceFactory::QMimeSourceFactory() :
@@ -208,8 +176,7 @@ QMimeSourceFactory::QMimeSourceFactory() :
     setExtensionType("htm", "text/html;charset=iso8859-1");
     setExtensionType("html", "text/html;charset=iso8859-1");
     setExtensionType("txt", "text/plain");
-    setExtensionType("xml", "text/xml;charset=UTF-8");
-    setExtensionType("jpg", "image/jpeg"); // support misspelled jpeg files
+    setExtensionType("xml", "text/xml;charset=utf8");
 }
 
 /*!
@@ -226,7 +193,7 @@ static QMimeSource* data_internal(const QString& abs_name,
     QMimeSource* r = 0;
     QFileInfo fi(abs_name);
     if ( fi.isReadable() ) {
-
+	
 	// get the right mimetype
 	QString e = fi.extension(FALSE);
 	QCString mimetype = "application/octet-stream";
@@ -235,7 +202,7 @@ static QMimeSource* data_internal(const QString& abs_name,
 	    mimetype = extensions[e].latin1();
 	else if ( ( imgfmt = QImage::imageFormat( abs_name ) ) )
 	    mimetype = QCString("image/")+QCString(imgfmt).lower();
-
+	
 	QFile f(abs_name);
 	if ( f.open(IO_ReadOnly) ) {
 	    QByteArray ba(f.size());
@@ -267,7 +234,7 @@ static QMimeSource* data_internal(const QString& abs_name,
   setExtensionType("html", "text/html;charset=iso8859-1");
   setExtensionType("htm", "text/html;charset=iso8859-1");
   setExtensionType("txt", "text/plain");
-  setExtensionType("xml", "text/xml;charset=UTF-8");
+  setExtensionType("xml", "text/xml;charset=utf8");
   \endcode
   The effect of these is that filenames ending in "html" or "htm" will
   be treated as text encoded in the iso8859-1 encoding, those ending in "txt"
@@ -279,7 +246,7 @@ static QMimeSource* data_internal(const QString& abs_name,
   encode any Unicode characters without resorting to encoding definitions
   inside the file.
 
-  Any file data that is not recognized will be retrieved as a QMimeSource
+  Any file data that is not recognized will be retreived as a QMimeSource
   providing the "application/octet-stream" MIME type, which is just
   uninterpreted binary data.
   You can add further extensions or change existing ones with
@@ -323,30 +290,10 @@ const QMimeSource* QMimeSourceFactory::data(const QString& abs_name) const
 /*!
   Sets a list of directories which will be searched when named data
   is requested.
-
-  \sa filePath()
 */
 void QMimeSourceFactory::setFilePath( const QStringList& path )
 {
     d->path = path;
-}
-
-/*!
-  Returns the currently set search paths.
-*/
-QStringList QMimeSourceFactory::filePath() const
-{
-  return d->path;
-}
-
-/*!
-  Adds another search path.
-
-  \sa setFilePath()
-*/
-void QMimeSourceFactory::addFilePath( const QString& p )
-{
-  d->path += p;
 }
 
 /*!
@@ -360,17 +307,12 @@ void QMimeSourceFactory::setExtensionType( const QString& ext, const char* mimet
 
 /*!
   Converts the absolute or relative data item name \a abs_or_rel_name
-  to an absolute name, interpreted within the context of the data
+  to an absolute name, interpretted within the context of the data
   item named \a context (this must be an absolute name).
 */
 QString QMimeSourceFactory::makeAbsolute(const QString& abs_or_rel_name, const QString& context) const
 {
-    if ( context.isNull() ||
-	 !(context[0] == '/'
-#ifdef _WS_WIN_
-	 || ( context[0] && context[1] == ':')
-#endif
-	   ))
+    if ( context.isNull() )
 	return abs_or_rel_name;
     if ( abs_or_rel_name.isEmpty() )
 	return context;
@@ -384,10 +326,7 @@ QString QMimeSourceFactory::makeAbsolute(const QString& abs_or_rel_name, const Q
 */
 const QMimeSource* QMimeSourceFactory::data(const QString& abs_or_rel_name, const QString& context) const
 {
-    const QMimeSource* r = data(makeAbsolute(abs_or_rel_name,context));
-    if ( !r && !d->path.isEmpty() )
-	r = data(abs_or_rel_name);
-    return r;
+    return data(makeAbsolute(abs_or_rel_name,context));
 }
 
 
@@ -441,7 +380,6 @@ static QMimeSourceFactory* defaultfactory = 0;
 void qt_cleanup_defaultfactory()
 {
     delete defaultfactory;
-    defaultfactory = 0;
 }
 
 /*!
@@ -475,5 +413,3 @@ void QMimeSourceFactory::setDefaultFactory( QMimeSourceFactory* factory)
 	delete defaultfactory;
     defaultfactory = factory;
 }
-
-#endif // QT_NO_MIME

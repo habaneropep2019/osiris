@@ -2,22 +2,20 @@
 
 ####### Compiler, tools and options
 
-CXX	=	$(SYSCONF_CXX) $(QT_CXX_MT)
+CXX	=	$(SYSCONF_CXX)
 CXXFLAGS=	$(SYSCONF_CXXFLAGS_QT) $(SYSCONF_CXXFLAGS)
-CC	=	$(SYSCONF_CC) $(QT_C_MT)
+CC	=	$(SYSCONF_CC)
 CFLAGS	=	$(SYSCONF_CFLAGS)
 INCPATH =	-I../aclock -I../dclock
-LFLAGS	=	$(SYSCONF_LFLAGS_QT) $(SYSCONF_RPATH_QT) $(SYSCONF_LFLAGS) $(QT_LFLAGS_MT)
-LIBS	=	$(SUBLIBS) $(SYSCONF_LIBS_QT) $(SYSCONF_LIBS) $(SYSCONF_LIBS_QTAPP)
+LFLAGS	=	$(SYSCONF_LFLAGS_QT) $(SYSCONF_LFLAGS_X11) $(SYSCONF_LFLAGS)
+LIBS	=	$(SYSCONF_LIBS_QT) $(SYSCONF_LIBS_X11) $(SYSCONF_LIBS)
 MOC	=	$(SYSCONF_MOC)
-UIC	=	$(SYSCONF_UIC)
 
 ####### Target
 
 DESTDIR = ./
 VER_MAJ = 1
 VER_MIN = 0
-VER_PATCH = 0
 TARGET	= widgets
 TARGET1 = lib$(TARGET).so.$(VER_MAJ)
 
@@ -34,16 +32,12 @@ OBJECTS =	main.o \
 		widgets.o \
 		../aclock/aclock.o \
 		../dclock/dclock.o
-INTERFACES =    
-UICDECLS =      
-UICIMPLS =      
 SRCMOC	=	moc_widgets.cpp \
 		../aclock/moc_aclock.cpp \
 		../dclock/moc_dclock.cpp
 OBJMOC	=	moc_widgets.o \
 		../aclock/moc_aclock.o \
 		../dclock/moc_dclock.o
-
 
 ####### Implicit rules
 
@@ -66,11 +60,10 @@ OBJMOC	=	moc_widgets.o \
 
 ####### Build rules
 
-
 all: $(DESTDIR)$(TARGET)
 
-$(DESTDIR)$(TARGET): $(UICDECLS) $(OBJECTS) $(OBJMOC) $(SUBLIBS)
-	$(SYSCONF_LINK) $(LFLAGS) -o $(DESTDIR)$(TARGET) $(OBJECTS) $(OBJMOC) $(LIBS)
+$(DESTDIR)$(TARGET): $(OBJECTS) $(OBJMOC) 
+	$(SYSCONF_LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(OBJMOC) $(LIBS)
 
 moc: $(SRCMOC)
 
@@ -78,33 +71,8 @@ tmake:
 	tmake widgets.pro
 
 clean:
-	-rm -f $(OBJECTS) $(OBJMOC) $(SRCMOC) $(UICIMPLS) $(UICDECLS)
+	-rm -f $(OBJECTS) $(OBJMOC) $(SRCMOC)
 	-rm -f *~ core
-	-rm -f allmoc.cpp
-
-####### Extension Modules
-
-listpromodules:
-	@echo 
-
-listallmodules:
-	@echo 
-
-listaddonpromodules:
-	@echo 
-
-listaddonentmodules:
-	@echo 
-
-
-REQUIRES=full-config
-
-####### Sub-libraries
-
-
-###### Combined headers
-
-
 
 ####### Compile
 
@@ -114,8 +82,6 @@ main.o: main.cpp \
 		../../include/qwindowdefs.h \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
-		../../include/qfeatures.h \
-		../../include/qconfig.h \
 		../../include/qstring.h \
 		../../include/qcstring.h \
 		../../include/qarray.h \
@@ -136,7 +102,6 @@ main.o: main.cpp \
 		../../include/qvaluelist.h \
 		../../include/qdatastream.h \
 		../../include/qiodevice.h \
-		../../include/qregexp.h \
 		../../include/qpaintdevice.h \
 		../../include/qpalette.h \
 		../../include/qcolor.h \
@@ -155,23 +120,11 @@ main.o: main.cpp \
 		../../include/qmainwindow.h \
 		../../include/qmovie.h \
 		../../include/qpixmap.h \
-		../../include/qlistview.h \
-		../../include/qscrollview.h \
-		../../include/qframe.h \
-		../../include/qscrollbar.h \
-		../../include/qrangecontrol.h \
-		../../include/qdrawutil.h \
-		../../include/qpainter.h \
-		../../include/qpen.h \
-		../../include/qpointarray.h \
-		../../include/qwmatrix.h \
 		../../include/qmotifstyle.h \
 		../../include/qcommonstyle.h \
 		../../include/qcdestyle.h \
 		../../include/qwindowsstyle.h \
-		../../include/qplatinumstyle.h \
-		../../include/qsgistyle.h \
-		../../include/qguardedptr.h
+		../../include/qplatinumstyle.h
 
 widgets.o: widgets.cpp \
 		../../include/qmessagebox.h \
@@ -180,8 +133,6 @@ widgets.o: widgets.cpp \
 		../../include/qwindowdefs.h \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
-		../../include/qfeatures.h \
-		../../include/qconfig.h \
 		../../include/qstring.h \
 		../../include/qcstring.h \
 		../../include/qarray.h \
@@ -202,7 +153,6 @@ widgets.o: widgets.cpp \
 		../../include/qvaluelist.h \
 		../../include/qdatastream.h \
 		../../include/qiodevice.h \
-		../../include/qregexp.h \
 		../../include/qpaintdevice.h \
 		../../include/qpalette.h \
 		../../include/qcolor.h \
@@ -222,8 +172,6 @@ widgets.o: widgets.cpp \
 		../../include/qtranslator.h \
 		../../include/qintdict.h \
 		../../include/qkeycode.h \
-		../../include/qtoolbar.h \
-		../../include/qmainwindow.h \
 		../../include/qmenubar.h \
 		../../include/qpopupmenu.h \
 		../../include/qframe.h \
@@ -257,6 +205,8 @@ widgets.o: widgets.cpp \
 		../../include/qtooltip.h \
 		../../include/qspinbox.h \
 		../../include/qstatusbar.h \
+		../../include/qtoolbar.h \
+		../../include/qmainwindow.h \
 		../../include/qwhatsthis.h \
 		../../include/qtoolbutton.h \
 		../../include/qvbox.h \
@@ -268,7 +218,6 @@ widgets.o: widgets.cpp \
 		../../include/qprogressbar.h \
 		../../include/qsplitter.h \
 		../../include/qlistview.h \
-		../../include/qheader.h \
 		../../include/qtextview.h \
 		../../include/qfiledialog.h \
 		../../include/qdir.h \
@@ -276,15 +225,6 @@ widgets.o: widgets.cpp \
 		../../include/qfileinfo.h \
 		../../include/qfile.h \
 		../../include/qdatetime.h \
-		../../include/qurloperator.h \
-		../../include/qurl.h \
-		../../include/qnetworkprotocol.h \
-		../../include/qurlinfo.h \
-		../../include/qdict.h \
-		../../include/qqueue.h \
-		../../include/qaccel.h \
-		../../include/qmetaobject.h \
-		../../include/qconnection.h \
 		widgets.h \
 		../../include/qmovie.h \
 		../aclock/aclock.h \
@@ -299,8 +239,6 @@ widgets.o: widgets.cpp \
 		../../include/qwindowdefs.h \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
-		../../include/qfeatures.h \
-		../../include/qconfig.h \
 		../../include/qstring.h \
 		../../include/qcstring.h \
 		../../include/qarray.h \
@@ -321,7 +259,6 @@ widgets.o: widgets.cpp \
 		../../include/qvaluelist.h \
 		../../include/qdatastream.h \
 		../../include/qiodevice.h \
-		../../include/qregexp.h \
 		../../include/qpaintdevice.h \
 		../../include/qpalette.h \
 		../../include/qcolor.h \
@@ -349,8 +286,6 @@ widgets.o: widgets.cpp \
 		../../include/qwindowdefs.h \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
-		../../include/qfeatures.h \
-		../../include/qconfig.h \
 		../../include/qstring.h \
 		../../include/qcstring.h \
 		../../include/qarray.h \
@@ -371,7 +306,6 @@ widgets.o: widgets.cpp \
 		../../include/qvaluelist.h \
 		../../include/qdatastream.h \
 		../../include/qiodevice.h \
-		../../include/qregexp.h \
 		../../include/qpaintdevice.h \
 		../../include/qpalette.h \
 		../../include/qcolor.h \
@@ -392,8 +326,6 @@ moc_widgets.o: moc_widgets.cpp \
 		../../include/qwindowdefs.h \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
-		../../include/qfeatures.h \
-		../../include/qconfig.h \
 		../../include/qstring.h \
 		../../include/qcstring.h \
 		../../include/qarray.h \
@@ -414,7 +346,6 @@ moc_widgets.o: moc_widgets.cpp \
 		../../include/qvaluelist.h \
 		../../include/qdatastream.h \
 		../../include/qiodevice.h \
-		../../include/qregexp.h \
 		../../include/qpaintdevice.h \
 		../../include/qpalette.h \
 		../../include/qcolor.h \
@@ -426,17 +357,7 @@ moc_widgets.o: moc_widgets.cpp \
 		../../include/qstyle.h \
 		../../include/qsizepolicy.h \
 		../../include/qmovie.h \
-		../../include/qpixmap.h \
-		../../include/qlistview.h \
-		../../include/qscrollview.h \
-		../../include/qframe.h \
-		../../include/qscrollbar.h \
-		../../include/qrangecontrol.h \
-		../../include/qdrawutil.h \
-		../../include/qpainter.h \
-		../../include/qpen.h \
-		../../include/qpointarray.h \
-		../../include/qwmatrix.h
+		../../include/qpixmap.h
 
 ../aclock/moc_aclock.o: ../aclock/moc_aclock.cpp \
 		../aclock/aclock.h \
@@ -444,8 +365,6 @@ moc_widgets.o: moc_widgets.cpp \
 		../../include/qwindowdefs.h \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
-		../../include/qfeatures.h \
-		../../include/qconfig.h \
 		../../include/qstring.h \
 		../../include/qcstring.h \
 		../../include/qarray.h \
@@ -466,7 +385,6 @@ moc_widgets.o: moc_widgets.cpp \
 		../../include/qvaluelist.h \
 		../../include/qdatastream.h \
 		../../include/qiodevice.h \
-		../../include/qregexp.h \
 		../../include/qpaintdevice.h \
 		../../include/qpalette.h \
 		../../include/qcolor.h \
@@ -487,8 +405,6 @@ moc_widgets.o: moc_widgets.cpp \
 		../../include/qwindowdefs.h \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
-		../../include/qfeatures.h \
-		../../include/qconfig.h \
 		../../include/qstring.h \
 		../../include/qcstring.h \
 		../../include/qarray.h \
@@ -509,7 +425,6 @@ moc_widgets.o: moc_widgets.cpp \
 		../../include/qvaluelist.h \
 		../../include/qdatastream.h \
 		../../include/qiodevice.h \
-		../../include/qregexp.h \
 		../../include/qpaintdevice.h \
 		../../include/qpalette.h \
 		../../include/qcolor.h \
@@ -530,5 +445,4 @@ moc_widgets.cpp: widgets.h
 
 ../dclock/moc_dclock.cpp: ../dclock/dclock.h
 	$(MOC) ../dclock/dclock.h -o ../dclock/moc_dclock.cpp
-
 

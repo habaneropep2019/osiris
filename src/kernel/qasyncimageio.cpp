@@ -1,62 +1,45 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qasyncimageio.cpp   2.3.2   edited 2001-08-03 $
+** $Id: qasyncimageio.cpp,v 1.50 1999/06/02 22:50:23 hanord Exp $
 **
 ** Implementation of asynchronous image/movie loading classes
 **
 ** Created : 970617
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
-** This file is part of the kernel module of the Qt GUI Toolkit.
+** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses may use this file in accordance with the Qt Commercial License
-** Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
+*****************************************************************************/
 
 #include "qasyncimageio.h"
-
-#ifndef QT_NO_ASYNC_IMAGE_IO
-
 #include "qpainter.h"
 #include "qlist.h"
 #include "qgif.h"
 #include <stdlib.h>
 
-extern void qt_init_image_handlers();
 
 
-// NOT REVISED
 /*!
   \class QImageConsumer qasyncimageio.h
   \brief An abstraction used by QImageDecoder.
 
   \ingroup images
 
-  A QImageConsumer consumes information about changes to the QImage
-  maintained by a QImageDecoder.  It represents the a view of the
-  image which the decoder produces.
+  A QImageConsumer consumes information about changes to the
+  QImage maintained by a QImageDecoder.  It represents the
+  a view of the image which the decoder produces.
 
   \sa QImageDecoder
 */
@@ -77,28 +60,8 @@ extern void qt_init_image_handlers();
 /*!
   \fn void QImageConsumer::frameDone()
 
-  One of the two frameDone() functions will be called
-  when a frame of an animated image has ended and been revealed
-  as changed().
-
-  When this function is called, the current image should be displayed.
-
-  The decoder will not make
-  any further changes to the image until the next call to
-  QImageFormat::decode().
-*/
-
-/*!
-  \fn void QImageConsumer::frameDone( const QPoint& offset, const QRect& rect )
-
-  One of the two frameDone() functions will be called
-  when a frame of an animated image has ended and been revealed
-  as changed().
-
-  When this function is called, the area \a rect in the current image
-  should be moved by \a offset and displayed.
-
-  The decoder will not make
+  Called when a frame of an animated image has ended and been revealed
+  as changed().  The decoder will not make
   any further changes to the image until the next call to
   QImageFormat::decode().
 */
@@ -153,14 +116,6 @@ extern void qt_init_image_handlers();
   QImageFormatType, and the QMovie class can be used for using
   all installed incremental image formats; QImageDecoder is only
   useful for creating new ways of feeding data to an QImageConsumer.
-  
-  \mustquote
-
-  Qt supports GIF reading, if it is configured that way during
-  installation (see qgif.h). If it is, we are required to state that
-  "The Graphics Interchange Format(c) is the Copyright property of
-  CompuServe Incorporated. GIF(sm) is a Service Mark property of
-  CompuServe Incorporated."
 */
 
 static const int max_header = 32;
@@ -220,7 +175,6 @@ private:
     Disposal disposal;
     bool disposed;
     int trans;
-    int trans_index;
     bool preserve_trans;
     bool gcmap;
     int bgcol;
@@ -309,7 +263,6 @@ void QImageDecoderPrivate::cleanup()
 */
 QImageDecoder::QImageDecoder(QImageConsumer* c)
 {
-    qt_init_image_handlers();
     d = new QImageDecoderPrivate;
     CHECK_PTR(d);
     consumer = c;
@@ -344,12 +297,14 @@ QImageDecoder::~QImageDecoder()
 */
 int QImageDecoder::decode(const uchar* buffer, int length)
 {
-    if (!actual_decoder) {
-	int i=0;
-
-	while (i < length && d->count < max_header)
-	    d->header[d->count++] = buffer[i++];
-
+    if (actual_decoder) {
+	return actual_decoder->decode(img, consumer, buffer, length);
+    } else {
+	int consumed=0;
+	while (consumed < length && d->count < max_header) {
+	    d->header[d->count++] = buffer[consumed++];
+	}
+	
 	QImageDecoderPrivate::ensureFactories();
 
 	for (QImageFormatType* f = QImageDecoderPrivate::factories->first();
@@ -359,37 +314,26 @@ int QImageDecoder::decode(const uchar* buffer, int length)
 	    actual_decoder = f->decoderFor(d->header, d->count);
 	}
 
-	if (!actual_decoder) {
-	    if ( d->count < max_header ) {
-		// not enough info yet
-		return i;
-	    } else {
-		// failure - nothing matches max_header bytes
-		return -1;
+	if (actual_decoder) {
+	    uchar* b = d->header;
+	    int more = 1;
+	    while (d->count > 0)  {
+		more = actual_decoder->decode(img, consumer, b, d->count);
+		if ( more <= 0 ) break;
+		d->count -= more;
+		b += more;
+	    }
+	    if (more <= 0) {
+		// Decoder must have failed.  Input not valid.  We assume
+		// consumer has been notified.
+		delete actual_decoder;
+		actual_decoder = 0;
+		return more;
 	    }
 	}
-    }
-    return actual_decoder->decode(img, consumer, buffer, length);
-}
 
-/*!
-  Returns a QImageFormatType by name. This might be used in cases where
-  the user needs to force data to be interpreted as being in a certain
-  format.  \a name is one of the formats listed by
-  QImageDecoder::inputFormats(). Note that you will still need to supply
-  decodable data to result->decoderFor() before you can begin decoding
-  the data.
-*/
-QImageFormatType* QImageDecoder::format( const char* name )
-{
-    for (QImageFormatType* f = QImageDecoderPrivate::factories->first();
-	f;
-	f = QImageDecoderPrivate::factories->next())
-    {
-	if ( qstricmp(name,f->formatName())==0 )
-	    return f;
+	return consumed;
     }
-    return 0;
 }
 
 /*!
@@ -472,7 +416,7 @@ void QImageDecoder::unregisterDecoderFactory(QImageFormatType* f)
   be sources for a QMovie, or for the first frame of the image stream
   to be loaded as a QImage or QPixmap.
 
-  Your new subclass must reimplement the decode() function in order to
+  Your new subclass must override the decode() function in order to
   process your new format.
 
   New QImageFormat objects are generated by new QImageFormatType factories.
@@ -492,7 +436,7 @@ QImageFormat::~QImageFormat()
   \fn int QImageFormat::decode(QImage& img, QImageConsumer* consumer,
 	    const uchar* buffer, int length)
 
-  New subclasses must reimplement this method.
+  New subclasses must override this method.
 
   It should decode some or all of the bytes from \a buffer into
   \a img, calling the methods of \a consumer as the decoding proceeds to
@@ -552,7 +496,7 @@ QImageFormat::~QImageFormat()
 */
 
 /*!
-  Constructs a factory.  It automatically registers itself with QImageDecoder.
+  Creates a factory.  It automatically registers itself with QImageDecoder.
 */
 QImageFormatType::QImageFormatType()
 {
@@ -640,7 +584,7 @@ QImageFormat* QGIFFormatType::decoderFor(
      && buffer[3]=='8'
      && (buffer[4]=='9' || buffer[4]=='7')
      && buffer[5]=='a')
-	return new QGIFFormat;
+        return new QGIFFormat;
     return 0;
 }
 
@@ -671,9 +615,9 @@ void QGIFFormat::disposePrevious( QImage& img, QImageConsumer* consumer )
 	break;
       case RestoreBackground:
 	preserve_trans = FALSE;
-	if (trans_index>=0) {
-	    // Easy:  we use the transparent color
-	    fillRect(img, l, t, r-l+1, b-t+1, trans_index);
+	if (trans>=0) {
+	    // Easy:  we use the transparent colour
+	    fillRect(img, l, t, r-l+1, b-t+1, trans);
 	} else if (bgcol>=0) {
 	    // Easy:  we use the bgcol given
 	    fillRect(img, l, t, r-l+1, b-t+1, bgcol);
@@ -686,16 +630,14 @@ void QGIFFormat::disposePrevious( QImage& img, QImageConsumer* consumer )
 	    consumer->changed(QRect(l, t, r-l+1, b-t+1));
 	break;
       case RestoreImage: {
-	if ( frame > 0 ) {
-	    uchar** line = img.jumpTable();
-	    preserve_trans = FALSE;
-	    for (int ln=t; ln<=b; ln++) {
-		memcpy(line[ln]+l,
-		    backingstore.scanLine(ln-t),
-		    r-l+1);
-	    }
-	    consumer->changed(QRect(l, t, r-l+1, b-t+1));
+	uchar** line = img.jumpTable();
+	preserve_trans = FALSE;
+	for (int ln=t; ln<=b; ln++) {
+	    memcpy(line[ln]+l,
+		backingstore.scanLine(ln-t),
+		r-l+1);
 	}
+	consumer->changed(QRect(l, t, r-l+1, b-t+1));
       }
     }
     disposal = NoDisposal; // Until an extension says otherwise.
@@ -716,7 +658,7 @@ int QGIFFormat::decode(QImage& img, QImageConsumer* consumer,
     //    CompuServe Incorporated. GIF(sm) is a Service Mark property of
     //    CompuServe Incorporated."
 
-#define LM(l, m) (((m)<<8)|l)
+    #define LM(l, m) (((m)<<8)|l)
     digress = FALSE;
     int initial = length;
     uchar** line = img.jumpTable();
@@ -743,41 +685,33 @@ int QGIFFormat::decode(QImage& img, QImageConsumer* consumer,
 		//UNUSED: bpchan=(((hold[4]&0x70)>>3)+1);
 		//UNUSED: gcmsortflag=!!(hold[4]&0x08);
 		gncols=2<<(hold[4]&0x7);
-		bgcol=(gcmap) ? hold[5] : -1;
+		bgcol=(gcmap && hold[5]) ? hold[5] : -1;
 		//aspect=hold[6] ? double(hold[6]+15)/64.0 : 1.0;
 
 		trans = -1;
-		trans_index = -1;
 		preserve_trans = FALSE;
 		count=0;
 		ncols=gncols;
 		if (gcmap) {
 		    ccount=0;
 		    state=GlobalColorMap;
-		    globalcmap = new QRgb[gncols+1]; // +1 for trans_index
-		    globalcmap[gncols] = 0x00000000;
+		    globalcmap = new QRgb[gncols];
 		} else {
-		    state=Introducer;
+		    state=ImageDescriptor;
 		}
 	    }
 	    break;
 	  case GlobalColorMap: case LocalColorMap:
 	    hold[count++]=ch;
 	    if (count==3) {
-		QRgb rgb = qRgb(hold[0], hold[1], hold[2]);
-		if ( gncols >= 256 ) {
-		    if (ccount==trans)
-			rgb &= 0x00ffffff;
-		}
+		QRgb rgb = (ccount==trans ? 0 : 0xff000000)
+		    | qRgb(hold[0], hold[1], hold[2]);
 		if ( state == LocalColorMap ) {
-		    if ( ccount < img.numColors() )
-			img.setColor(ccount, rgb);
+		    img.setColor(ccount, rgb);
 		} else {
 		    globalcmap[ccount] = rgb;
 		}
 		if (++ccount >= ncols) {
-		    if ( ncols < img.numColors() && state == LocalColorMap )
-			img.setColor(ncols,0x00000000);
 		    if ( state == LocalColorMap )
 			state=TableImageLZWSize;
 		    else
@@ -817,21 +751,13 @@ int QGIFFormat::decode(QImage& img, QImageConsumer* consumer,
 		int width=LM(hold[5], hold[6]);
 		int height=LM(hold[7], hold[8]);
 
-		// disbelieve ridiculous logical screen sizes,
-		// unless the image frames are also large.
-		if ( swidth/10 > QMAX(width,200) )
-		    swidth = -1;
-		if ( sheight/10 > QMAX(height,200) )
-		    sheight = -1;
-
 		if ( swidth <= 0 )
 		    swidth = newleft + width;
 		if ( sheight <= 0 )
 		    sheight = newtop + height;
 
 		if (img.isNull()) {
-		    img.create(swidth, sheight, 8,
-			(gcmap && gncols < 256) ? gncols+1 : 256);
+		    img.create(swidth, sheight, 8, gcmap ? gncols : 256);
 		    if (consumer) consumer->setSize(swidth, sheight);
 		}
 		img.setAlphaBuffer(trans >= 0);
@@ -844,8 +770,8 @@ int QGIFFormat::decode(QImage& img, QImageConsumer* consumer,
 		top = newtop;
 
 		// Sanity check frame size - must fit on "screen".
-		if (left >= swidth) left=QMAX(0, swidth-1);
-		if (top >= sheight) top=QMAX(0, sheight-1);
+		if (left >= swidth) left=swidth-1;
+		if (top >= sheight) top=sheight-1;
 		if (left+width >= swidth) {
 		    if ( width <= swidth )
 			left=swidth-width;
@@ -859,8 +785,8 @@ int QGIFFormat::decode(QImage& img, QImageConsumer* consumer,
 			height=sheight-top;
 		}
 
-		right=QMAX( 0, left+width-1);
-		bottom=QMAX(0, top+height-1);
+		right=left+width-1;
+		bottom=top+height-1;
 		lcmap=!!(hold[9]&0x80);
 		interlace=!!(hold[9]&0x40);
 		//bool lcmsortflag=!!(hold[9]&0x20);
@@ -878,8 +804,8 @@ int QGIFFormat::decode(QImage& img, QImageConsumer* consumer,
 			if ( bgcol>=0 ) {
 			    fillRect(img, 0, 0, swidth, sheight, bgcol);
 			    if (consumer) consumer->changed(QRect(0,0,swidth,sheight));
-			} else if ( trans_index > 0 ) {
-			    fillRect(img, 0, 0, swidth, sheight, trans_index);
+			} else if ( trans > 0 ) {
+			    fillRect(img, 0, 0, swidth, sheight, trans);
 			    if (consumer) consumer->changed(QRect(0,0,swidth,sheight));
 			}
 		    }
@@ -914,11 +840,8 @@ int QGIFFormat::decode(QImage& img, QImageConsumer* consumer,
 		    state=LocalColorMap;
 		} else {
 		    if (gcmap) {
-			int n=ncols; if (n<256) n++; // +1 for trans_index
-			if ( !img.colorTable() || img.numColors() < n )
-			    img.setNumColors( n );
 			memcpy(img.colorTable(), globalcmap,
-			    n * sizeof(QRgb));
+			    ncols * sizeof(QRgb));
 		    }
 		    state=TableImageLZWSize;
 		}
@@ -997,12 +920,8 @@ int QGIFFormat::decode(QImage& img, QImageConsumer* consumer,
 		    if (needfirst) {
 			firstcode=oldcode=code;
 			if (!out_of_bounds) {
-			    if (firstcode==trans) {
-				if ( !preserve_trans && line )
-				    line[y][x] = trans_index;
-			    } else if ( line ) {
+			    if (!(preserve_trans && firstcode==trans))
 				line[y][x] = firstcode;
-			    }
 			}
 			x++;
 			if (x>=swidth) out_of_bounds = TRUE;
@@ -1048,12 +967,8 @@ int QGIFFormat::decode(QImage& img, QImageConsumer* consumer,
 			while (sp>stack) {
 			    --sp;
 			    if (!out_of_bounds) {
-				if (*sp==trans) {
-				    if ( !preserve_trans )
-					line[y][x] = trans_index;
-				} else {
+				if (!(preserve_trans && *sp==trans))
 				    line[y][x] = *sp;
-				}
 			    }
 			    x++;
 			    if (x>=swidth) out_of_bounds = TRUE;
@@ -1096,7 +1011,7 @@ int QGIFFormat::decode(QImage& img, QImageConsumer* consumer,
 	    if (count<11) hold[count]=ch;
 	    count++;
 	    if (count==hold[0]+1) {
-		if (qstrncmp((char*)(hold+1), "NETSCAPE", 8)==0) {
+		if (strncmp((char*)(hold+1), "NETSCAPE", 8)==0) {
 		    // Looping extension
 		    state=NetscapeExtensionBlockSize;
 		} else {
@@ -1136,25 +1051,33 @@ int QGIFFormat::decode(QImage& img, QImageConsumer* consumer,
 		int delay=count>3 ? LM(hold[2], hold[3]) : 0;
 		bool havetrans=hold[1]&0x1;
 		int newtrans=havetrans ? hold[4] : -1;
-		if (newtrans > ncols) {
+		if (newtrans >= ncols) {
 		    // Ignore invalid transparency.
 		    newtrans=-1;
 		}
 		if (newtrans >= 0 && frame>=0)
 		    preserve_trans = TRUE;
 		if (newtrans != trans) {
-		    if (trans >= 0 && trans < gncols) {
-			if (globalcmap && trans_index >=0 && trans_index < gncols)
-			    globalcmap[trans_index]|=0xff000000;
+		    // Unset old transparency
+		    if (trans >= 0) {
+			img.setColor(trans, 0xff000000|img.color(trans));
+			if ( newtrans >= 0 ) {
+			    // Changed transparency.  Groan.
+			    // Change all occurrence of old to new.
+			    uchar** line = img.jumpTable();
+			    for (int j=0; j<sheight; j++) {
+				for (int i=0; i<swidth; i++) {
+				    if (line[j][i]==trans) {
+					line[j][i]=newtrans;
+				    }
+				}
+			    }
+			}
 		    }
 		    trans = newtrans;
-		    if ( ncols < 256 )
-			trans_index = ncols;
-		    else
-			trans_index = newtrans;
-		    if (trans >= 0 && trans < gncols) {
-			if (globalcmap && trans_index >=0 && trans_index < gncols)
-			    globalcmap[trans_index]&=0x00ffffff;
+		    if (trans >= 0) {
+			if (globalcmap)
+			    globalcmap[trans]&=0x00ffffff;
 		    }
 		}
 		if (consumer) consumer->setFramePeriod(delay*10);
@@ -1173,11 +1096,9 @@ int QGIFFormat::decode(QImage& img, QImageConsumer* consumer,
 	    if (count==expectcount) state=SkipBlockSize;
 	    break;
 	  case Done:
-	    digress=TRUE;
-	    /* Netscape ignores the junk, so we do too.
 	    length++; // Unget
+	    digress=TRUE;
 	    state=Error; // More calls to this is an error
-	    */
 	    break;
 	  case Error:
 	    return -1; // Called again after done.
@@ -1210,54 +1131,35 @@ void QGIFFormat::nextY(QImage& img, QImageConsumer* consumer)
 	{
 	    int i;
 	    my = QMIN(7, bottom-y);
-	    if ( trans<0 ) // Don't dup with transparency
-		for (i=1; i<=my; i++)
-		    memcpy(img.scanLine(y+i)+left, img.scanLine(y)+left,
-			right-left+1);
+	    for (i=1; i<=my; i++)
+		memcpy(img.scanLine(y+i)+left, img.scanLine(y)+left,
+		    right-left+1);
 	    if (consumer && !out_of_bounds)
-		consumer->changed(QRect(left, y, right-left+1, my+1));
+	        consumer->changed(QRect(left, y, right-left+1, my+1));
 	    y+=8;
-	    if (y>bottom) {
-		interlace++; y=top+4;
-		if (y > bottom) { // for really broken GIFs with bottom < 5
-		    interlace=2;
-		    y = top + 2;
-		    if (y > bottom) { // for really broken GIF with bottom < 3
-			interlace = 0;
-			y = top + 1;
-		    }
-		}
-	    }
+	    if (y>bottom) { interlace++; y=top+4; }
 	} break;
       case 2:
 	{
 	    int i;
 	    my = QMIN(3, bottom-y);
-	    if ( trans<0 ) // Don't dup with transparency
-		for (i=1; i<=my; i++)
-		    memcpy(img.scanLine(y+i)+left, img.scanLine(y)+left,
-			right-left+1);
-	    if (consumer && !out_of_bounds)
-		consumer->changed(QRect(left, y, right-left+1, my+1));
+	    for (i=1; i<=my; i++)
+		memcpy(img.scanLine(y+i)+left, img.scanLine(y)+left,
+		    right-left+1);
+    	    if (consumer && !out_of_bounds)
+	        consumer->changed(QRect(left, y, right-left+1, my+1));
 	    y+=8;
-	    if (y>bottom) {
-		interlace++; y=top+2;
-		if (y > bottom) { // for really broken GIF with bottom < 3
-		    interlace = 3;
-		    y = top + 1;
-		}
-	    }
-  	} break;
+	    if (y>bottom) { interlace++; y=top+2; }
+	} break;
       case 3:
 	{
 	    int i;
 	    my = QMIN(1, bottom-y);
-	    if ( trans<0 ) // Don't dup with transparency
-		for (i=1; i<=my; i++)
-		    memcpy(img.scanLine(y+i)+left, img.scanLine(y)+left,
-			right-left+1);
+	    for (i=1; i<=my; i++)
+		memcpy(img.scanLine(y+i)+left, img.scanLine(y)+left,
+		    right-left+1);
 	    if (consumer && !out_of_bounds)
-		consumer->changed(QRect(left, y, right-left+1, my+1));
+	        consumer->changed(QRect(left, y, right-left+1, my+1));
 	    y+=4;
 	    if (y>bottom) { interlace++; y=top+1; }
 	} break;
@@ -1272,5 +1174,3 @@ void QGIFFormat::nextY(QImage& img, QImageConsumer* consumer)
 }
 
 #endif // QT_BUILTIN_GIF_READER
-
-#endif // QT_NO_ASYNC_IMAGE_IO

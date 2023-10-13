@@ -1,43 +1,29 @@
 /****************************************************************************
-** $Id: qt/src/tools/qkoi8codec.cpp   2.3.2   edited 2001-01-26 $
+** $Id: qkoi8codec.cpp,v 1.13 1999/06/16 18:15:35 warwick Exp $
 **
 ** Implementation of QKoi8Codec class
 **
 ** Created : 981015
 **
-** Copyright (C)1998-2000 Trolltech AS.  All rights reserved.
+** Copyright (C)1998-1999 Troll Tech AS.  All rights reserved.
 **
-** This file is part of the tools module of the Qt GUI Toolkit.
+** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses may use this file in accordance with the Qt Commercial License
-** Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
+*****************************************************************************/
 
 #include "qkoi8codec.h"
-
-#ifndef QT_NO_CODECS
 
 int QKoi8Codec::mibEnum() const
 {
@@ -242,7 +228,7 @@ const char* QKoi8Codec::name() const
 
 int QKoi8Codec::heuristicNameMatch(const char* hint) const
 {
-    if ( qstrnicmp(hint,"koi8",4)==0 )
+    if ( strnicmp(hint,"koi8",4)==0 )
 	return 2;
     return QTextCodec::heuristicNameMatch(hint);
 }
@@ -258,5 +244,3 @@ int QKoi8Codec::heuristicContentMatch(const char* chars, int len) const
     }
     return score;
 }
-
-#endif

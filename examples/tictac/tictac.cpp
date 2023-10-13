@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: qt/examples/tictac/tictac.cpp   2.3.2   edited 2001-01-26 $
+** $Id: tictac.cpp,v 1.2 1999/06/03 01:45:57 warwick Exp $
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -15,7 +15,6 @@
 #include <qcombobox.h>
 #include <qcheckbox.h>
 #include <qlabel.h>
-#include <qlayout.h>
 #include <stdlib.h>				// rand() function
 #include <qdatetime.h>				// seed for rand()
 
@@ -28,8 +27,9 @@
 // Creates a TicTacButton
 //
 
-TicTacButton::TicTacButton( QWidget *parent ) : QPushButton( parent )
+TicTacButton::TicTacButton( QWidget *parent ) : QButton( parent )
 {
+    setBackgroundColor( blue );			// special background color
     t = Blank;					// initial type
 }
 
@@ -37,13 +37,16 @@ TicTacButton::TicTacButton( QWidget *parent ) : QPushButton( parent )
 // Paints TicTacButton
 //
 
-void TicTacButton::drawButtonLabel( QPainter *p )
+void TicTacButton::drawButton( QPainter *p )
 {
-    QRect r = rect();
-    p->setPen( QPen( white,2 ) );		// set fat pen
-    if ( t == Circle ) {
+    QRect r = rect();				// get rectangle
+    static QColorGroup g( white, blue, white, darkBlue, blue, black, black );
+    QBrush fill( blue );
+    qDrawShadePanel( p, r, g, isDown(), 1, &fill );
+    p->setPen( QPen(white,2) );			// set fat pen
+    if ( t == Circle )				// draw circle
 	p->drawEllipse( r.left()+4, r.top()+4, r.width()-8, r.height()-8 );
-    } else if ( t == Cross ) {			// draw cross
+    else if ( t == Cross ) {			// draw cross
 	p->drawLine( r.topLeft()   +QPoint(4,4), r.bottomRight()-QPoint(4,4));
 	p->drawLine( r.bottomLeft()+QPoint(4,-4),r.topRight()   -QPoint(4,-4));
     }
@@ -68,15 +71,10 @@ TicTacGameBoard::TicTacGameBoard( int n, QWidget *parent, const char *name )
     comp_starts = FALSE;			// human starts
     buttons = new TicTacButtons(n);		// create real buttons
     btArray = new TicTacArray(n);		// create button model
-    QGridLayout * grid = new QGridLayout( this, 3, 3, 4 );
-    QPalette p( blue );
     for ( int i=0; i<n; i++ ) {			// create and connect buttons
-	TicTacButton *ttb = new TicTacButton( this );
-	ttb->setPalette( p );
-	ttb->setEnabled( FALSE );
-	connect( ttb, SIGNAL(clicked()), SLOT(buttonClicked()) );
-	grid->addWidget( ttb, i%3, i/3 );
-	buttons->insert( i, ttb );
+	TicTacButton *p = new TicTacButton( this );
+	connect( p, SIGNAL(clicked()), SLOT(buttonClicked()) );
+	buttons->insert( i, p );
 	btArray->at(i) = TicTacButton::Blank;	// initial button type
     }
     QTime t = QTime::currentTime();		// set random seed
@@ -158,8 +156,6 @@ void TicTacGameBoard::updateButtons()
     for ( int i=0; i<nBoard*nBoard; i++ ) {
 	if ( buttons->at(i)->type() != btArray->at(i) )
 	    buttons->at(i)->setType( (TicTacButton::Type)btArray->at(i) );
-	buttons->at(i)->setEnabled( buttons->at(i)->type() ==
-				    TicTacButton::Blank );
     }
 }
 
@@ -277,6 +273,28 @@ void TicTacGameBoard::computerMove()
 }
 
 
+// --------------------------------------------------------------------------
+// Handle board resize events
+// We resize the matrix of tic-tac buttons to fit into the new rectangle.
+//
+
+void TicTacGameBoard::resizeEvent( QResizeEvent * )
+{
+    float w = width()/nBoard;
+    float h = height()/nBoard;
+    QSize ps( (int)(0.9*w), (int)(0.9*h) );	// size of every piece
+    int i = 0;
+    for ( int x=0; x<nBoard; x++ ) {
+	for ( int y=0; y<nBoard; y++ ) {
+	    TicTacButton *p = buttons->at(i++);	// get piece #i
+	    QRect pr( QPoint(0,0), ps );	// piece rectangle
+	    pr.moveCenter( QPoint((int)(w*x+w/2), (int)(h*y+h/2)) );
+	    p->setGeometry( pr );		// set pos and size of piece
+	}
+    }
+}
+
+
 //***************************************************************************
 //* TicTacToe member functions
 //***************************************************************************
@@ -289,47 +307,48 @@ void TicTacGameBoard::computerMove()
 TicTacToe::TicTacToe( int boardSize, QWidget *parent, const char *name )
     : QWidget( parent, name )
 {
-    QVBoxLayout * l = new QVBoxLayout( this, 6 );
+    resize( 200, 300 );				// resize this widget
 
-    // Create a message label
+// Create the game board and connect the signal finished() to this
+// gameOver() slot
 
-    message = new QLabel( this );
-    message->setFrameStyle( QFrame::WinPanel | QFrame::Sunken );
-    message->setAlignment( AlignCenter );
-    l->addWidget( message );
-
-    // Create the game board and connect the signal finished() to this
-    // gameOver() slot
-
-    board = new TicTacGameBoard( boardSize, this );
+    board= new TicTacGameBoard(boardSize,this);	// create and connect widgets
+    board->setGeometry( 30, 50, 140, 140 );	// resize the game board
     connect( board, SIGNAL(finished()), SLOT(gameOver()) );
-    l->addWidget( board );
 
-    // Create a horizontal frame line
-
-    QFrame *line = new QFrame( this );
-    line->setFrameStyle( QFrame::HLine | QFrame::Sunken );
-    l->addWidget( line );
-
-    // Create the combo box for deciding who should start, and
-    // connect its clicked() signals to the buttonClicked() slot
-
+// Create the combo box for deciding who should start, and
+// connect its clicked() signals to the buttonClicked() slot
+    
     whoStarts = new QComboBox( this );
     whoStarts->insertItem( "Computer starts" );
     whoStarts->insertItem( "Human starts" );
-    l->addWidget( whoStarts );
+    whoStarts->move( 0,0 );
+    whoStarts->adjustSize();
+    whoStarts->move( 15, 220 );
 
-    // Create the push buttons and connect their clicked() signals
-    // to this right slots.
+// Create the push buttons and connect their clicked() signals
+// to this buttonClicked() slot
 
     newGame = new QPushButton( "Play!", this );
+    newGame->setGeometry( 15, 260, 70, 25 );
     connect( newGame, SIGNAL(clicked()), SLOT(newGameClicked()) );
     quit = new QPushButton( "Quit", this );
+    quit->setGeometry( 110, 260, 70, 25 );
     connect( quit, SIGNAL(clicked()), qApp, SLOT(quit()) );
-    QHBoxLayout * b = new QHBoxLayout;
-    l->addLayout( b );
-    b->addWidget( newGame );
-    b->addWidget( quit );
+
+// Create a message label
+
+    message = new QLabel( this );
+    message->setGeometry( 20, 10, 160, 20 );
+    message->setFrameStyle( QFrame::WinPanel | QFrame::Sunken );
+    message->setBackgroundColor( message->colorGroup().base() );
+    message->setAlignment( AlignCenter );
+
+// Create a horizontal frame line
+
+    QFrame *line = new QFrame( this );
+    line->setGeometry( 10, 200, 180, 10 );
+    line->setFrameStyle( QFrame::HLine | QFrame::Sunken );
 
     newState();
 }
@@ -368,8 +387,8 @@ void TicTacToe::gameOver()
 
 void TicTacToe::newState()
 {
-    static const char *msg[] = {		// TicTacGameBoard::State texts
-	"Click Play to start", "Make your move",
+    static char *msg[] = {			// TicTacGameBoard::State texts
+	"Wanna play?", "Make your move",
 	"You won!", "Computer won!", "It's a draw" };
     message->setText( msg[board->state()] );
     return;

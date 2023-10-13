@@ -1,58 +1,41 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qstylesheet.cpp   2.3.2   edited 2001-10-13 $
+** $Id: qstylesheet.cpp,v 2.17 1999/06/21 23:50:16 agulbra Exp $
 **
 ** Implementation of the QStyleSheet class
 **
 ** Created : 990101
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
-** This file is part of the kernel module of the Qt GUI Toolkit.
+** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses may use this file in accordance with the Qt Commercial License
-** Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
-
+*****************************************************************************/
 #include "qstylesheet.h"
-
-#ifndef QT_NO_RICHTEXT
-
-#include "qrichtext_p.h"
+#include "qrichtextintern.cpp"
 #include "qapplication.h"
 #include "qlayout.h"
 #include "qpainter.h"
 
 #include "qstack.h"
+#include "stdio.h"
 #include "qfile.h"
 #include "qtextstream.h"
 #include "qlayout.h"
 #include "qbitmap.h"
 #include "qtimer.h"
 #include "qimage.h"
-
-#include <stdio.h>
 
 class QStyleSheetItemData
 {
@@ -79,7 +62,6 @@ public:
     QStyleSheet* sheet;
 };
 
-// NOT REVISED
 /*!
   \class QStyleSheetItem qstylesheet.h
   \brief The QStyleSheetItem class encapsulates a text format.
@@ -88,39 +70,6 @@ public:
   display properties.  When used in a \link QStyleSheet style
   sheet\endlink, items define the name of a rich text tag, and the
   display property changes associated with it.
-*/
-
-
-/*! \enum QStyleSheetItem::WhiteSpaceMode
-
-  This enum defines the ways in which QStyleSheet can treat white
-  space.  There are three values at present: <ul>
-
-  <li> \c WhiteSpaceNormal - any sequence of white space is equivalent
-  to a single space, and is a line-break position.
-
-  <li> \c WhiteSpacePre - white space must be output exactly as given
-  in the input.
-
-  <li> \c WhiteSpaceNoWrap - multiple spaces are collapsed as with
-  WhiteSpaceNormal, but no  automatic line breaks occur. To break lines
-  manually, use the \c &lt;br&gt; tag.
-
-</ul>
-
-*/
-
-/*! \enum QStyleSheetItem::Margin
-
-  <ul>
-  <li> \c MarginLeft - left margin
-  <li> \c MarginRight - right margin
-  <li> \c MarginTop - top margin
-  <li> \c MarginBottom - bottom margin
-  <li> \c MarginAll - all margins (left, right, top and bottom )
-  <li> \c MarginVertical - top and bottom margin
-  <li> \c MarginHorizontal - left and right margin
-  </ul>
 */
 
 /*!
@@ -140,19 +89,9 @@ QStyleSheetItem::QStyleSheetItem( QStyleSheet* parent, const QString& name )
 	parent->insert( this );
 }
 
-/*!
-  Copy constructor. Constructs a copy of \a other that is
-  not bound to any stylesheet.
- */
-QStyleSheetItem::QStyleSheetItem( const QStyleSheetItem & other )
-{
-    d = new QStyleSheetItemData;
-    *d = *other.d;
-}
-
 
 /*!
-  Destructs the style.  Note that QStyleSheetItem objects become owned
+  Destroys the style.  Note that QStyleSheetItem objects become owned
   by QStyleSheet when they are created.
  */
 QStyleSheetItem::~QStyleSheetItem()
@@ -223,26 +162,25 @@ QStyleSheetItem::DisplayMode QStyleSheetItem::displayMode() const
     return d->disp;
 }
 
-/*! \enum QStyleSheetItem::DisplayMode
-
-  This enum type defines the way adjacent elements are displayed.  The possible values are: <ul>
-
-  <li> \c DisplayBlock
-		- elements are displayed as a rectangular block.
-		    (eg. &lt;P&gt; ... &lt;/P&gt;)
-   <li> \c DisplayInline
-		- elements are displayed in a horizontally flowing sequence.
-		    (eg. &lt;EM&gt; ... &lt;/EM&gt;)
-   <li> \c DisplayListItem
-		- elements are displayed in a vertically sequence.
-		    (eg. &lt;EM&gt; ... &lt;/EM&gt;)
-   <li> \c DisplayNone
-		- elements are not displayed at all.
-  </ul>
-*/
-
 /*!
   Sets the display mode of the style to \a m.
+
+  \define QStyleSheetItem::DisplayMode
+
+  The affect of the available values are:
+  <ul>
+   <li> \c DisplayBlock
+		- elements will be displayed as a rectangular block.
+		    (eg. &lt;P&gt; ... &lt;/P&gt;)
+   <li> \c DisplayInline
+		- elements will be displayed in a horizontally flowing sequence.
+		    (eg. &lt;EM&gt; ... &lt;/EM&gt;)
+   <li> \c DisplayListItem
+		- elements will be displayed vertically sequenced.
+		    (eg. &lt;EM&gt; ... &lt;/EM&gt;)
+   <li> \c DisplayNone
+		- elements which are not displayed at all.
+  </ul>
 
   \sa displayMode()
  */
@@ -256,7 +194,7 @@ void QStyleSheetItem::setDisplayMode(DisplayMode m)
   Returns the alignment of this style. Possible values are AlignLeft,
   AlignRight and AlignCenter.
 
-  \sa setAlignment(), Qt::AlignmentFlags
+  \sa setAlignment()
  */
 int QStyleSheetItem::alignment() const
 {
@@ -269,7 +207,7 @@ int QStyleSheetItem::alignment() const
   DisplayBlock. Possible values are AlignLeft, AlignRight and
   AlignCenter.
 
-  \sa alignment(), displayMode(), Qt::AlignmentFlags
+  \sa alignment(), displayMode()
  */
 void QStyleSheetItem::setAlignment( int f )
 {
@@ -344,7 +282,7 @@ bool QStyleSheetItem::definesFontUnderline() const
   Returns the font weight setting of the style. This is either a
   valid QFont::Weight or the value QStyleSheetItem::Undefined.
 
- \sa setFontWeight(), QFont
+ \sa setFontWeight, QFont
  */
 int QStyleSheetItem::fontWeight() const
 {
@@ -454,7 +392,7 @@ void QStyleSheetItem::setFontFamily( const QString& fam)
 }
 
 
-/*!\obsolete
+/*!
   Returns the number of columns for this style.
 
   \sa setNumberOfColumns(), displayMode(), setDisplayMode()
@@ -466,7 +404,7 @@ int QStyleSheetItem::numberOfColumns() const
 }
 
 
-/*!\obsolete
+/*!
   Sets the number of columns for this style.  Elements in the style
   are divided into columns.
 
@@ -540,15 +478,11 @@ QStyleSheetItem::WhiteSpaceMode QStyleSheetItem::whiteSpaceMode() const
   Sets the white space mode to \a m. Possible values are
   <ul>
    <li> \c WhiteSpaceNormal
-	- white spaces in the document only serve as separators.
+	- white spaces in the document only serve as seperators.
 	Multiple spaces or indentation therefore is ignored.
    <li> \c WhiteSpacePre
-	  - white spaces are preserved. This is particularly useful to
+          - white spaces are preserved. This is particulary useful to
 	  display programming code.
-   <li> \c WhiteSpaceNoWrap
-	  - multiple spaces are collapsed as with WhiteSpaceNormal, but no
-	  automatic line breaks occur. To break lines manually, use the
-	  \c &lt;br&gt; tag.
   </ul>
  */
 void QStyleSheetItem::setWhiteSpaceMode(WhiteSpaceMode m)
@@ -579,7 +513,7 @@ int QStyleSheetItem::margin(Margin m) const
   \c MarginTop, \c MarginBottom, \c MarginAll, \c MarginVertical or \c
   MarginHorizontal.  The value \a v must be >= 0.
 
-  \sa margin()
+  \sa border()
  */
 void QStyleSheetItem::setMargin(Margin m, int v)
 {
@@ -612,27 +546,31 @@ QStyleSheetItem::ListStyle QStyleSheetItem::listStyle() const
     return d->list;
 }
 
-/*! \enum QStyleSheetItem::ListStyle
+/*!
+  Sets the list style of the style
 
-  This enum type defines how the items in a list are prefixed when
-  displayed.  The currently defined values are: <ul>
+  This is used by nested elements which have a
+  \link QStyleSheetItem::DisplayMode display mode\endlink of DisplayListItem.
 
-  <li> \c ListDisc - a filled circle
-  <li> \c ListCircle - an unfilled circle
-  <li> \c ListSquare - a filled circle
-  <li> \c ListDecimal - an integer in base 10: \e 1, \e 2, \e 3, ...
-  <li> \c ListLowerAlpha - a lowercase letter: \e a, \e b, \e c, ...
-  <li> \c ListUpperAlpha - an uppercase letter: \e A, \e B, \e C, ...
+  \define QStyleSheetItem::ListStyle
+
+  The affect of the available values are:
+  <ul>
+   <li> \c ListDisc
+		- a filled circle
+   <li> \c ListCircle
+		- an unfilled circle
+   <li> \c ListSquare
+		- a filled circle
+   <li> \c ListDecimal
+		- an integer in base 10: \e 1, \e 2, \e 3, ...
+   <li> \c ListLowerAlpha
+		- a lowercase letter: \e a, \e b, \e c, ...
+   <li> \c ListUpperAlpha
+		- an uppercase letter: \e A, \e B, \e C, ...
   </ul>
 
-*/
-/*!
-  Sets the list style of the style.
-
-  This is used by nested elements which have a display mode of
-  DisplayListItem.
-
-  \sa listStyle() DisplayMode
+  \sa listStyle()
  */
 void QStyleSheetItem::setListStyle(ListStyle s)
 {
@@ -691,11 +629,16 @@ bool QStyleSheetItem::selfNesting() const
 /*!
   Sets the self nesting property for this style to \a nesting.
 
-  In order to support "dirty" HTML, paragraphs &lt;p&gt and list items
-  &lt;li&gt are not self nesting. This means that starting a new
-  paragraph or list item automatically closes the previous one.
+  Usually, all styles are self nesting, i.e. they can legally be
+  nested recursively.  A paragraph, for example, might contain other
+  paragraphs as subparagraphs.
 
-  \sa selfNesting()
+  You may nevertheles want to disable self nesting for common HTML
+  tags such as \c &lt;p&gt; or \c &lt;li&gt;, if you want to parse and
+  display rich text documents based on "dirty" HTML.  However, we
+  recommend fixing the documents instead to close all non-empty tags,
+  if that is possible.
+
  */
 void QStyleSheetItem::setSelfNesting( bool nesting )
 {
@@ -715,9 +658,6 @@ void QStyleSheetItem::setSelfNesting( bool nesting )
   \class QStyleSheet qstylesheet.h
   \brief A collection of styles for rich text rendering and a generator of tags.
 
-  \ingroup drawing
-  \ingroup helpsystem
-
   By creating QStyleSheetItem objects for a style sheet, you build a
   definition of a set of tags.  This definition will be used by the
   internal rich text rendering system to parse and display text
@@ -727,13 +667,8 @@ void QStyleSheetItem::setSelfNesting( bool nesting )
   follow. With QSimpleRichText it is possible to use the rich text
   renderer for custom widgets as well.
 
-  The default QStyleSheet object has the following style bindings,
-  sorted by structuring bindings, anchors, character style bindings
-  (i.e. inline styles), special elements like horizontal lines or
-  images and other tags. In addition, rich text supports simple HTML
-  tables.
+  The default QStyleSheet object has the following style bindings:
 
-  The structuring tags are:
   <ul>
     <li>\c &lt;qt&gt;...&lt;/qt&gt;
 	- A Qt rich text document. It understands the following attributes
@@ -758,160 +693,102 @@ void QStyleSheetItem::setSelfNesting( bool nesting )
 	<li> \c link
 	- The link color, for example \c link="green"
 	</ul>
-    <li>\c &lt;h1&gt;...&lt;/h1&gt;
-	- A top-level heading.
-    <li>\c &lt;h2&gt;...&lt;/h2&gt;
-	- A sub-level heading.
-    <li>\c &lt;h3&gt;...&lt;/h3&gt;
-	- A sub-sub-level heading.
-    <li>\c &lt;p&gt;...&lt;/p&gt;
-	- A left-aligned paragraph. Adjust the alignment with
-	the  \c align attribute. Possible values are
-	\c left, \c right and \c center.
-    <li>\c &lt;center&gt;...&lt;/center&gt;
-	- A centered paragraph.
-    <li>\c &lt;blockquote&gt;...&lt;/blockquote&gt;
-	- An indented paragraph, useful for quotes.
-    <li>\c &lt;ul&gt;...&lt;/ul&gt;
-	- An un-ordered list. You can also pass a type argument to
-	define the bullet style. The default is \c type=disc,  other
-	types are \c circle and \c square.
-    <li>\c &lt;ol&gt;...&lt;/ol&gt;
-	- An ordered list. You can also pass a type argument to define
-	the enumeration label style. The default is \c type="1", other
-	types are \c "a" and \c "A".
-    <li>\c &lt;li&gt;...&lt;/li&gt;
-	- A list item. This tag can only be used within the context of
-	\c ol or \c ul.
-    <li>\c &lt;pre&gt;...&lt;/pre&gt;
-	- For larger junks of code. Whitespaces in the contents are preserved.
-	For small bits of code, use the inline-style \c code.
-   </ul>
 
-   Anchors and links are done with a single tag:
-   <ul>
     <li>\c &lt;a&gt;...&lt;/a&gt;
 	- An anchor or link. The reference target is defined in the
-	\c href attribute of the tag as in \c &lt;a \c href="target.qml"&gt;...&lt;/a&gt;.
+	\c href attribute of the tag as in \c&lt;a \c href="target.qml"&gt;...&lt;/a&gt;.
 	You can also specify an additional anchor within the specified target document, for
 	example \c &lt;a \c href="target.qml#123"&gt;...&lt;/a&gt;.  If
 	\c a is meant to be an anchor, the reference source is given in
 	the \c name attribute.
-  </ul>
 
-   The default character style bindings are:
-   <ul>
-    <li>\c &lt;em&gt;...&lt;/em&gt;
-	- Emphasized. As default, this is the same as \c &lt;i&gt;...&lt;/i&gt; (Italic)
-    <li>\c &lt;strong&gt;...&lt;/strong&gt;
-	- Strong. As default, this is the same as \c &lt;bold&gt;...&lt;/bold&gt; (bold).
-    <li>\c &lt;i&gt;...&lt;/i&gt;
-	- Italic font style.
-    <li>\c &lt;b&gt;...&lt;/b&gt;
-	- Bold font style.
-    <li>\c &lt;u&gt;...&lt;/u&gt;
-	- Underlined font style.
-    <li>\c &lt;big&gt;...&lt;/big&gt;
-	- A larger font size.
-    <li>\c &lt;small&gt;...&lt;/small&gt;
-	- A smaller font size.
-    <li>\c &lt;code&gt;...&lt;/code&gt;
-	- Indicates Code. As default, this is the same as \c &lt;tt&gt;...&lt;/tt&gt; (typewriter). For
-	larger junks of code, use the block-tag \c pre.
-    <li>\c &lt;tt&gt;...&lt;/tt&gt;
-	- Typewriter font style.
     <li>\c &lt;font&gt;...&lt;/font&gt;
-	- Customizes the font size, family  and text color. The tag understands
-	the following  attributes:
+	- Customizes the font size and text color. The tag understands two attributes:
 	<ul>
 	<li> \c color
 	- the text color, for example \c color="red" or \c color="#FF0000".
 	<li> \c size
 	- the logical size of the font. Logical sizes 1 to 7 are supported.
 	 The value may either be absolute, for example
-	\c size=3, or relative like \c size=-2. In the latter case, the sizes
-	are simply added.
-	<li> \c face
-	- the family of the font, for example \c face=times.
+	\c size=3, or relative. In the latter case, the sizes are simply added.
 	</ul>
-   </ul>
+	
+    <li>\c &lt;em&gt;...&lt;/em&gt;
+	- Emphasized. As default, this is the same as \c &lt;i&gt;...&lt;/i&gt; (Italic)
 
-   Special elements are:
-   <ul>
+    <li>\c &lt;strong&gt;...&lt;/strong&gt;
+	- Strong. As default, this is the same as \c &lt;bold&gt;...&lt;/bold&gt; (bold)
+
+    <li>\c &lt;big&gt;...&lt;/big&gt;
+	- A larger font size.
+
+    <li>\c &lt;small&gt;...&lt;/small&gt;
+	- A smaller font size.
+	
+    <li>\c &lt;code&gt;...&lt;/code&gt;
+	- Indicates Code. As default, this is the same as \c &lt;tt&gt;...&lt;/tt&gt; (typewriter)
+
+    <li>\c &lt;pre&gt;...&lt;/pre&gt;
+	- For larger junks of code. Whitespaces in the contents are preserved.
+
+    <li>\c &lt;large&gt;...&lt;/large&gt;
+	- Large font size.
+
+    <li>\c &lt;b&gt;...&lt;/b&gt;
+    - style->setFontWeight( QFont::Bold);
+	Bold font style.
+
+    <li>\c &lt;h1&gt;...&lt;/h1&gt;
+	- A top-level heading.
+
+    <li>\c &lt;h2&gt;...&lt;/h2&gt;
+	- A sub-level heading.
+
+    <li>\c &lt;h3&gt;...&lt;/h3&gt;
+	- A sub-sub-level heading.
+
+    <li>\c &lt;p&gt;...&lt;/p&gt;
+	- A paragraph.
+
+    <li>\c &lt;center&gt;...&lt;/center&gt;
+	- A centered paragraph.
+
+    <li>\c &lt;blockquote&gt;...&lt;/blockquote&gt;
+	- An indented paragraph, useful for quotes.
+
+    <li>\c &lt;multicol \c cols=\a n \c &gt;...&lt;/multicol&gt;
+	- Multicol display with \a n columns
+
+    <li>\c &lt;twocolumn&gt;...&lt;/twocolumn&gt;
+	- Two-column display.
+
+    <li>\c &lt;ul&gt;...&lt;/ul&gt;
+	- An un-ordered list. You can also pass a type argument to
+	define the bullet style. The default is \c type=disc,  other
+	types are \c circle and \c square.
+
+    <li>\c &lt;ol&gt;...&lt;/ol&gt;
+	- An ordered list. You can also pass a type argument to define
+	the enumeration label style. The default is \c type="1", other
+	types are \c "a" and \c "A".
+
+    <li>\c &lt;li&gt;...&lt;/li&gt;
+	- A list item.
+
     <li>\c &lt;img/&gt;
 	- An image. The image name for the mime source
 	factory  is given in the source attribute, for example
-	\c &lt;img \c src="qt.xpm"/&gt; The image tag also
+	\c &lt;img \c source="qt.xpm"/&gt; The image tag also
 	understands the attributes \c width and \c height that determine
 	the size of the image. If the pixmap does not fit to the specified
 	size, it will be scaled automatically ( by using QImage::smoothScale() ).
 
-	The \c align attribute determines where the image is
-	placed. Per default, an image is placed inline, just like a
-	normal character. Specify \c left or \c right to place the
-	image at the respective side.
-    <li>\c &lt;hr/&gt;
-	- A horizontal line
     <li>\c &lt;br/&gt;
 	- A line break
+	
+    <li>\c &lt;hr/&gt;
+	- A horizonal line
   </ul>
-
-  Other tags not in any of the above categories are:
-  <ul>
-  <li>\c &lt;nobr&gt;...&lt;/nobr&gt;
-	- No break. Prevents word wrap.
-  </ul>
-
-  In addition, rich text supports simple HTML tables. A table consists
-  of a set of rows where each row contains some number of cells. Cells
-  are either data cells or header cells, depending on their
-  content. Usually a cell fills one rectangle in the table grid. It
-  may, however, also span several rows, columns or both.
-
- <ul>
-   <li>\c &lt;table&gt;...&lt;/table&gt;
-   - A table definition.
-     The default table is frameless. Specify the boolean attribute
-     \c border in order to get a frame. Other attributes are:
-	<ul>
-	<li>\c bgcolor
-	- The background color
-	<li> \c width
-	- The table width. This is either absolute in pixels or relative
-	in percent of the column width, for example \c width=80%
-	<li> \c border
-	- The width of the table border. The default is 0 (= no border).
-	<li> \c cellspacing
-	- Additional space around the table cells. The default is 2.
-	<li> \c cellpadding
-	- Additinal space around the contents of table cells. Default is 1.
-	</ul>
-   <li>\c &lt;tr&gt;...&lt;/tr&gt;
-   - A table row. Can only be used within \c table. Understands the attribute
-	<ul>
-	<li>\c bgcolor
-	- The background color
-	</ul>
-   <li>\c &lt;td&gt;...&lt;/td&gt;
-   - A table data cell. Can only be used within \c tr. Understands the attributes
-	<ul>
-	<li>\c bgcolor
-	- The background color
-	<li> \c width
-	- The cell width. This is either absolute in pixels or relative
-	in percent of the entire table width, for example \c width=50%
-	<li> \c colspan
-	- Defines how many columns this cell spans. The default is 1.
-	<li> \c rowspan
-	- Defines how many rows this cell spans. The default is 1.
-	<li> \c align
-	- Alignment, possible values are \c left, \c right and \c center. The
-	default is left-aligned.
-	</ul>
-   <li>\c &lt;th&gt;...&lt;/th&gt;
-   - A table header cell. Like \c td but defaults to center-alignment
-     and a bold font.
-   </ul>
 */
 
 /*!
@@ -927,7 +804,7 @@ QStyleSheet::QStyleSheet( QObject *parent, const char *name )
 }
 
 /*!
-  Destructs the style sheet.  All styles inserted into the style sheet
+  Destroys the style sheet.  All styles inserted into the style sheet
   will be deleted.
 */
 QStyleSheet::~QStyleSheet()
@@ -965,8 +842,6 @@ void QStyleSheet::init()
 
     style = new QStyleSheetItem( this, QString::fromLatin1("big") );
     style->setLogicalFontSizeStep( 1 );
-    style = new QStyleSheetItem( this, QString::fromLatin1("large") ); // compatibility
-    style->setLogicalFontSizeStep( 1 );
 
     style = new QStyleSheetItem( this, QString::fromLatin1("small") );
     style->setLogicalFontSizeStep( -1 );
@@ -981,54 +856,45 @@ void QStyleSheet::init()
     style->setFontWeight( QFont::Bold);
     style->setLogicalFontSize(6);
     style->setDisplayMode(QStyleSheetItem::DisplayBlock);
-    style-> setMargin(QStyleSheetItem::MarginTop, 12);
-    style-> setMargin(QStyleSheetItem::MarginBottom, 6);
+    style-> setMargin(QStyleSheetItem::MarginVertical, 12);
 
     style = new QStyleSheetItem( this, QString::fromLatin1("h2") );
     style->setFontWeight( QFont::Bold);
     style->setLogicalFontSize(5);
     style->setDisplayMode(QStyleSheetItem::DisplayBlock);
-    style-> setMargin(QStyleSheetItem::MarginTop, 10);
-    style-> setMargin(QStyleSheetItem::MarginBottom, 5);
+    style-> setMargin(QStyleSheetItem::MarginVertical, 10);
 
     style = new QStyleSheetItem( this, QString::fromLatin1("h3") );
     style->setFontWeight( QFont::Bold);
     style->setLogicalFontSize(4);
     style->setDisplayMode(QStyleSheetItem::DisplayBlock);
-    style-> setMargin(QStyleSheetItem::MarginTop, 8);
-    style-> setMargin(QStyleSheetItem::MarginBottom, 4);
+    style-> setMargin(QStyleSheetItem::MarginVertical, 8);
 
     style = new QStyleSheetItem( this, QString::fromLatin1("p") );
     style->setDisplayMode(QStyleSheetItem::DisplayBlock);
     style-> setMargin(QStyleSheetItem::MarginVertical, 4);
-    style->setSelfNesting( FALSE );
 
     style = new QStyleSheetItem( this, QString::fromLatin1("center") );
     style->setDisplayMode(QStyleSheetItem::DisplayBlock);
     style->setAlignment( AlignCenter );
 
     style = new QStyleSheetItem( this, QString::fromLatin1("twocolumn") );
-    style->setDisplayMode(QStyleSheetItem::DisplayBlock);
     style->setNumberOfColumns( 2 );
 
-    style =  new QStyleSheetItem( this, QString::fromLatin1("multicol") );
-    style->setDisplayMode(QStyleSheetItem::DisplayBlock);
+    (void) new QStyleSheetItem( this, QString::fromLatin1("multicol") );
     (void) new QStyleSheetItem( this, QString::fromLatin1("font") );
 
     style = new QStyleSheetItem( this, QString::fromLatin1("ul") );
     style->setDisplayMode(QStyleSheetItem::DisplayBlock);
-    style-> setMargin(QStyleSheetItem::MarginVertical, 4);
 
     style = new QStyleSheetItem( this, QString::fromLatin1("ol") );
     style->setDisplayMode(QStyleSheetItem::DisplayBlock);
     style->setListStyle( QStyleSheetItem::ListDecimal );
-    style-> setMargin(QStyleSheetItem::MarginVertical, 4);
 
     style = new QStyleSheetItem( this, QString::fromLatin1("li") );
     style->setDisplayMode(QStyleSheetItem::DisplayListItem);
-    style->setSelfNesting( FALSE );
     style->setContexts(QString::fromLatin1("ol ul"));
-    style-> setMargin(QStyleSheetItem::MarginVertical, 4);
+    //    style-> setMargin(QStyleSheetItem::MarginVertical, 4);
 
     style = new QStyleSheetItem( this, QString::fromLatin1("code") );
     style->setFontFamily( QString::fromLatin1("courier") );
@@ -1040,44 +906,15 @@ void QStyleSheet::init()
     new QStyleSheetItem(this, QString::fromLatin1("br"));
     new QStyleSheetItem(this, QString::fromLatin1("hr"));
 
+    style = new QStyleSheetItem( this, QString::fromLatin1("table") );
+    style->setDisplayMode(QStyleSheetItem::DisplayBlock);
     style = new QStyleSheetItem( this, QString::fromLatin1("pre") );
     style->setFontFamily( QString::fromLatin1("courier") );
     style->setDisplayMode(QStyleSheetItem::DisplayBlock);
     style->setWhiteSpaceMode(QStyleSheetItem::WhiteSpacePre);
     style = new QStyleSheetItem( this, QString::fromLatin1("blockquote") );
     style->setDisplayMode(QStyleSheetItem::DisplayBlock);
-    style->setMargin(QStyleSheetItem::MarginHorizontal, 40 );
-
-     style = new QStyleSheetItem( this, QString::fromLatin1("head") );
-     style->setDisplayMode(QStyleSheetItem::DisplayNone);
-     style = new QStyleSheetItem( this, QString::fromLatin1("div") );
-     style->setDisplayMode(QStyleSheetItem::DisplayBlock);
-     style = new QStyleSheetItem( this, QString::fromLatin1("dl") );
-     style->setDisplayMode(QStyleSheetItem::DisplayBlock);
-     style = new QStyleSheetItem( this, QString::fromLatin1("dt") );
-     style->setDisplayMode(QStyleSheetItem::DisplayBlock);
-     style->setContexts(QString::fromLatin1("dl") );
-     style = new QStyleSheetItem( this, QString::fromLatin1("dd") );
-     style->setDisplayMode(QStyleSheetItem::DisplayBlock);
-     style->setMargin(QStyleSheetItem::MarginLeft, 30);
-     style->setContexts(QString::fromLatin1("dt dl") );
-     style = new QStyleSheetItem( this, QString::fromLatin1("u") );
-     style->setFontUnderline( TRUE);
-     style = new QStyleSheetItem( this, QString::fromLatin1("nobr") );
-     style->setWhiteSpaceMode( QStyleSheetItem::WhiteSpaceNoWrap );
-
-     // tables
-     style = new QStyleSheetItem( this, QString::fromLatin1("table") );
-     style = new QStyleSheetItem( this, QString::fromLatin1("tr") );
-     style->setContexts(QString::fromLatin1("table"));
-     style = new QStyleSheetItem( this, QString::fromLatin1("td") );
-     style->setContexts(QString::fromLatin1("tr"));
-     style = new QStyleSheetItem( this, QString::fromLatin1("th") );
-     style->setFontWeight( QFont::Bold );
-     style->setAlignment( Qt::AlignCenter );
-     style->setContexts(QString::fromLatin1("tr"));
-
-     style = new QStyleSheetItem( this, QString::fromLatin1("html") );
+    style->setMargin(QStyleSheetItem::MarginAll, 8 );
 }
 
 
@@ -1086,7 +923,6 @@ static QStyleSheet* defaultsheet = 0;
 void qt_cleanup_defaultsheet()
 {
     delete defaultsheet;
-    defaultsheet = 0;
 }
 
 /*!
@@ -1160,29 +996,55 @@ const QStyleSheetItem* QStyleSheet::item( const QString& name) const
 
   This function should not (yet) be used in application code.
 */
-QTextCustomItem* QStyleSheet::tag( const QString& name,
-				   const QMap<QString, QString> &attr,
-				   const QString& context,
-				   const QMimeSourceFactory& factory,
-				   bool /*emptyTag */ ) const
+QTextNode* QStyleSheet::tag( const QString& name,
+			     const QMap<QString, QString> &attr,
+			     const QString& context,
+			     const QMimeSourceFactory& factory,
+			     bool emptyTag ) const
 {
+    QStyleSheetItem* style = name.isNull()?0:styles[name];
+    if ( !style ) {
+	QString msg;
+	msg.sprintf("QStyleSheet Warning: unknown tag '%s'", name.ascii() );
+	error( msg );
+	style = nullstyle;
+    }
+
     static QString s_img = QString::fromLatin1("img");
     static QString s_hr = QString::fromLatin1("hr");
-/* ### Not used???
     static QString s_br = QString::fromLatin1("br");
     static QString s_multicol = QString::fromLatin1("multicol");
     static QString s_font = QString::fromLatin1("font");
-*/
 
-    const QStyleSheetItem* style = item( name );
     // first some known  tags
-    if ( !style )
-	return 0;
     if ( style->name() == s_img )
 	return new QTextImage(attr, context, factory);
-    if ( style->name() == s_hr )
-	return new QTextHorizontalLine();
-   return 0;
+    else if ( style->name() == s_hr )
+	return new QTextHorizontalLine(attr, factory);
+    else if ( style->name() == s_br ) {
+	QTextNode* result = new QTextNode;
+	result->text = '\n';
+	return result;
+    }
+    else if ( style->name() == s_multicol )
+	return new QTextMulticol( style, attr );
+    else if ( style->name() == s_font )
+	return new QTextFont( style, attr );
+
+    // empty tags
+    if ( emptyTag ) { // w know nothing about that, make a null node
+	return new QTextNode;
+    }
+
+    // process containers
+    switch ( style->displayMode() ) {
+    case QStyleSheetItem::DisplayBlock:
+    case QStyleSheetItem::DisplayNone:
+    case QStyleSheetItem::DisplayListItem:
+	return new QTextBox( style, attr );
+    default: // inline, none
+	return new QTextContainer( style, attr );
+    }
 }
 
 
@@ -1205,8 +1067,7 @@ QString QStyleSheet::convertFromPlainText( const QString& plain)
 	}
 	else if ( plain[i] == '\t' ){
 	    rich += 0x00a0U;
-	    // while ( col / 4.0 != int( col/4 ) ) { // weird
-	    while ( col % 4 ) {
+	    while ( col / 4.0 != int( col/4 ) ) {
 		rich += 0x00a0U;
 		++col;
 	    }
@@ -1217,8 +1078,6 @@ QString QStyleSheet::convertFromPlainText( const QString& plain)
 	    rich +="&lt;";
 	else if ( plain[i] == '>' )
 	    rich +="&gt;";
-	else if ( plain[i] == '&' )
-	    rich +="&amp;";
 	else
 	    rich += plain[i];
 	++col;
@@ -1226,24 +1085,6 @@ QString QStyleSheet::convertFromPlainText( const QString& plain)
     rich += "</p>";
     return rich;
 }
-
-// Must doc this enum somewhere, and it is logically related to QStyleSheet
-
-/*!
-  \enum Qt::TextFormat
-
-  This enum is used in widgets that can display both plain text and
-  rich text, e.g. QLabel. It is used for deciding whether a text
-  string should be interpreted as the one or the other. This is
-  normally done by passing one of the enum values to a setTextFormat()
-  function.
-
-  <ul>
-  <li> \c PlainText - The text string is interpreted as a normal text string.
-  <li> \c RichText - The text string is interpreted as a rich text according to the current QStyleSheet::defaultSheet().
-  <li> \c AutoText - The text string is interpreted as for \c RichText if QStyleSheet::mightBeRichText() returns TRUE, otherwise as for \c PlainText.
-  </ul>
-*/
 
 /*!
   Returns whether the string \a text is likely to be rich text
@@ -1258,28 +1099,22 @@ bool QStyleSheet::mightBeRichText( const QString& text)
 {
     if ( text.isEmpty() )
 	return FALSE;
-    if ( text.left(5).lower() == "<!doc" )
-	return TRUE;
     int open = 0;
-    while ( open < int(text.length()) && text[open] != '<'
-	    && text[open] != '\n' && text[open] != '&')
+    while ( open < int(text.length()) && text[open] != '<' && text[open] != '\n' )
 	++open;
-    if ( text[open] == '&' ) {
-	if ( text.mid(open+1,3) == "lt;" )
-	    return TRUE; // support desperate attempt of user to see <...>
-    } else if ( text[open] == '<' ) {
+    if ( text[open] == '<' ) {
 	int close = text.find('>', open);
 	if ( close > -1 ) {
-	    QString tag;
+	    bool hasTag = FALSE;
 	    for (int i = open+1; i < close; ++i) {
 		if ( text[i].isDigit() || text[i].isLetter() )
-		    tag += text[i];
-		else if ( !tag.isEmpty() && text[i].isSpace() )
-		    break;
-		else if ( !text[i].isSpace() && (!tag.isEmpty() || text[i] != '!' ) )
+		    hasTag = TRUE;
+		else if ( hasTag && text[i].isSpace() )
+		    return TRUE;
+		else if ( !text[i].isSpace() && (hasTag || text[i] != '!' ) )
 		    return FALSE; // that's not a tag
 	    }
-	    return defaultSheet()->item( tag.lower() ) != 0;
+	    return TRUE;
 	}
     }
     return FALSE;
@@ -1289,7 +1124,7 @@ bool QStyleSheet::mightBeRichText( const QString& text)
 /*! \fn void QStyleSheet::error( const QString& msg) const
 
   This virtual function is called when an error occurs when
-  processing rich text. Reimplement if if you need to catch
+  processsing rich text. Reimplement if if you need to catch
   error messages.
 
   Errors might occur if some rich text strings contain tags that are
@@ -1312,8 +1147,7 @@ void QStyleSheet::error( const QString& ) const
 
   Typical logical font sizes range from 1 to 7, with 1 being the smallest.
 
-  \sa QStyleSheetItem::logicalFontSize(),
-  QStyleSheetItem::logicalFontSizeStep(), QFont::setPointSize()
+  \sa logicalFontSize(), logicalFontSizeStep(), QFont::setPointSize()
  */
 void QStyleSheet::scaleFont( QFont& font, int logicalSize ) const
 {
@@ -1325,27 +1159,25 @@ void QStyleSheet::scaleFont( QFont& font, int logicalSize ) const
     int s;
     switch ( logicalSize ) {
     case 1:
-	s =  basePointSize/2;
+	s =  int(0.5 * basePointSize);
 	break;
     case 2:
-	s = (8 * basePointSize) / 10;
+	s = int(0.8 * basePointSize);
 	break;
     case 4:
-	s =  (12 * basePointSize) / 10;
+	s =  int(1.2 * basePointSize);
 	break;
     case 5:
-	s = (15 * basePointSize) / 10;
+	s = int(1.5 * basePointSize);
 	break;
     case 6:
-	s = 2 * basePointSize;
+	s = int(2 * basePointSize);
 	break;
     case 7:
-	s = (24 * basePointSize) / 10;
+	s = int(2.4 * basePointSize);
 	break;
     default:
 	s = basePointSize;
     }
     font.setPointSize( s );
 }
-
-#endif // QT_NO_RICHTEXT

@@ -1,0 +1,316 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><meta name="robots" content="noindex,noarchive"><title>
+Qt Toolkit - qfiledialog.h include file
+</title><style type="text/css"><!--
+h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
+a:link { text-decoration: none; }
+body { background: white; color: black; }
+--></style>
+</head><body bgcolor="#ffffff">
+
+<a href=index.html><img width=122 height=65 src=qtlogo.png alt="Qt logo" align=left border=0></a>
+<center><img src=dochead.png width=448 height=23></center>
+<br clear=all>
+
+<h1 align=center>qfiledialog.h</h1><br clear="all">
+This is the verbatim text of the qfiledialog.h include file.  It is
+provided only for illustration; the copyright
+remains with Troll Tech.
+<hr>
+<pre>
+/****************************************************************************
+** &#36;Id&#58; qfiledialog.h,v 2.46 1999/06/23 22:10:02 agulbra Exp $
+**
+** Definition of QFileDialog class
+**
+** Created : 950428
+**
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+**
+** This file is part of the Qt GUI Toolkit.
+**
+** This file may be distributed under the terms of the Q Public License
+** as defined by Troll Tech AS of Norway and appearing in the file
+** LICENSE.QPL included in the packaging of this file.
+**
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
+**
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
+**
+*****************************************************************************/
+
+#ifndef QFILEDIALOG_H
+#define QFILEDIALOG_H
+
+struct QFileDialogPrivate;
+class <a href="qpushbutton.html">QPushButton</a>;
+class <a href="qlabel.html">QLabel</a>;
+class <a href="qwidget.html">QWidget</a>;
+class <a href="qfiledialog.html">QFileDialog</a>;
+class <a href="qtimer.html">QTimer</a>;
+
+#ifndef QT_H
+#include "qdir.h"
+#include "qdialog.h"
+#include "qlistbox.h"
+#include "qlineedit.h"
+#include "qlistview.h"
+#endif // QT_H
+
+
+class Q_EXPORT <a href="qfileiconprovider.html">QFileIconProvider</a> : public <a href="qobject.html">QObject</a>
+{
+    Q_OBJECT
+public:
+    QFileIconProvider( QObject * parent = 0, const char* name = 0 );
+
+    virtual const QPixmap * pixmap( const QFileInfo &amp; );
+};
+
+class QRenameEdit : public QLineEdit
+{
+    Q_OBJECT
+
+public:
+    QRenameEdit( QWidget *parent )
+        : QLineEdit( parent )
+    {}
+
+protected:
+    void keyPressEvent( QKeyEvent *e );
+    void focusOutEvent( QFocusEvent *e );
+
+signals:
+    void escapePressed();
+
+};
+
+
+class QFileListBox : public QListBox
+{
+    friend class QFileDialog;
+
+    Q_OBJECT
+
+private:
+    QFileListBox( QWidget *parent, QFileDialog *d );
+
+    void clear();
+    void show();
+    void startRename( bool check = TRUE );
+    void setSelected( QListBoxItem *i, bool s );
+    void setSelected( int i, bool s );
+
+private:
+    void viewportMousePressEvent( QMouseEvent *e );
+    void viewportMouseDoubleClickEvent( QMouseEvent *e );
+    void keyPressEvent( QKeyEvent *e );
+
+private slots:
+    void rename();
+    void cancelRename();
+
+private slots:
+    void doubleClickTimeout();
+
+private:
+    QRenameEdit *lined;
+    QFileDialog *filedialog;
+    bool renaming;
+    QTimer* renameTimer;
+    QListBoxItem *renameItem;
+
+};
+
+
+class QFileListView : public QListView
+{
+    friend class QFileDialog;
+
+    Q_OBJECT
+
+private:
+    QFileListView( QWidget *parent, QFileDialog *d );
+
+    void clear();
+    void startRename( bool check = TRUE );
+
+private:
+    void viewportMousePressEvent( QMouseEvent *e );
+    void viewportMouseDoubleClickEvent( QMouseEvent *e );
+    void keyPressEvent( QKeyEvent *e );
+
+private slots:
+    void rename();
+    void cancelRename();
+
+private slots:
+    void doubleClickTimeout();
+
+private:
+    QRenameEdit *lined;
+    QFileDialog *filedialog;
+    bool renaming;
+    QTimer* renameTimer;
+    QListViewItem *renameItem;
+
+};
+
+
+class Q_EXPORT <a href="qfiledialog.html">QFileDialog</a> : public <a href="qdialog.html">QDialog</a>
+{
+    friend class QFileListBox;
+
+    Q_OBJECT
+public:
+    QFileDialog( const QString&amp; dirName, const QString&amp; filter = QString::null,
+                 QWidget *parent=0, const char *name=0, bool modal=FALSE );
+    QFileDialog( QWidget *parent=0, const char *name=0, bool modal=FALSE );
+    ~QFileDialog();
+
+    // recommended static functions
+
+    static QString getOpenFileName( const QString &amp;initially = QString::null,
+                                    const QString &amp;filter= QString::null,
+                                    QWidget *parent = 0, const char* name = 0);
+    static QString getSaveFileName( const QString &amp;initially = QString::null,
+                                    const QString &amp;filter= QString::null,
+                                    QWidget *parent = 0, const char* name = 0);
+    static QString getExistingDirectory( const QString &amp;dir = QString::null,
+                                         QWidget *parent = 0,
+                                         const char* name = 0 );
+    static QStringList getOpenFileNames( const QString &amp;filter= QString::null,
+                                         const QString &amp;dir = QString::null,
+                                         QWidget *parent = 0,
+                                         const char* name = 0);
+
+    // other static functions
+
+    static void setIconProvider( QFileIconProvider * );
+    static QFileIconProvider * iconProvider();
+
+    // non-static function for special needs
+
+    QString selectedFile() const;
+    void setSelection( const QString &amp;);
+
+    QString dirPath() const;
+
+    void setDir( const QDir &amp; );
+    const QDir *dir() const;
+
+    void rereadDir();
+
+    enum Mode { AnyFile, ExistingFile, Directory, ExistingFiles };
+    void setMode( Mode );
+    Mode mode() const;
+
+    bool eventFilter( QObject *, QEvent * );
+
+public slots:
+    void setDir( const QString&amp; );
+    void setFilter( const QString&amp; );
+    void setFilters( const char ** );
+    void setFilters( const QStringList&amp; );
+
+signals:
+    void fileHighlighted( const QString&amp; );
+    void fileSelected( const QString&amp; );
+    void dirEntered( const QString&amp; );
+
+private slots:
+    void fileSelected( int );
+    void fileHighlighted( int );
+    void dirSelected( int );
+    void pathSelected( int );
+
+    void updateFileNameEdit( QListViewItem *);
+    void selectDirectoryOrFile( QListViewItem * );
+    void popupContextMenu( QListViewItem *, const QPoint &amp;, int );
+    void popupContextMenu( QListBoxItem *, const QPoint &amp; );
+    void updateFileNameEdit( QListBoxItem *);
+    void selectDirectoryOrFile( QListBoxItem * );
+    void fileNameEditDone();
+
+    void okClicked();
+    void filterClicked(); // not used
+    void cancelClicked();
+
+    void cdUpClicked();
+    void newFolderClicked();
+
+    void fixupNameEdit();
+
+protected:
+    void resizeEvent( QResizeEvent * );
+    void keyPressEvent( QKeyEvent * );
+
+    void addWidgets( QLabel *, QWidget *, QPushButton * );
+
+private slots:
+    void updateGeometries();
+    void modeButtonsDestroyed();
+
+private:
+    enum PopupAction {
+        PA_Open = 0,
+        PA_Delete,
+        PA_Rename,
+        PA_SortAscent,
+        PA_SortDescent,
+        PA_Cancel
+    };
+
+    void init();
+    bool trySetSelection( const QFileInfo&amp;, bool );
+    void deleteFile( const QString &amp;filename );
+    void popupContextMenu( const QString &amp;filename, bool withSort,
+                           PopupAction &amp;action, const QPoint &amp;p );
+
+    QDir cwd;
+    QString fileName;
+
+    QFileDialogPrivate *d;
+    QFileListView  *files;
+
+    QLineEdit  *nameEdit; // also filter
+    QPushButton *okB;
+    QPushButton *cancelB;
+
+#if defined(_WS_WIN_)
+    static QString winGetOpenFileName( const QString &amp;initialSelection,
+                                       const QString &amp;filter,
+                                       QString* workingDirectory,
+                                       QWidget *parent = 0,
+                                       const char* name = 0 );
+    static QString winGetSaveFileName( const QString &amp;initialSelection,
+                                       const QString &amp;filter,
+                                       QString* workingDirectory,
+                                       QWidget *parent = 0,
+                                       const char* name = 0 );
+    static QStringList winGetOpenFileNames( const QString &amp;filter,
+                                            QString* workingDirectory,
+                                            QWidget *parent = 0,
+                                            const char* name = 0 );
+#endif
+
+private:        // Disabled copy constructor and operator=
+#if defined(Q_DISABLE_COPY)
+    QFileDialog( const QFileDialog &amp; );
+    QFileDialog &amp;operator=( const QFileDialog &amp; );
+#endif
+};
+
+
+#endif // QFILEDIALOG_H
+
+</pre>
+<p><address><hr><div align="center">
+<table width="100%" cellspacing="0" border="0"><tr>
+<td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.00</div>
+</table></div></address></body></html>

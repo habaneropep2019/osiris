@@ -1,39 +1,27 @@
 /**********************************************************************
-** $Id: qt/src/widgets/qlineedit.h   2.3.2   edited 2001-04-04 $
+** $Id: qlineedit.h,v 2.50 1999/06/09 03:45:05 agulbra Exp $
 **
 ** Definition of QLineEdit widget class
 **
 ** Created : 941011
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
-** This file is part of the widgets module of the Qt GUI Toolkit.
+** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses may use this file in accordance with the Qt Commercial License
-** Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
+*****************************************************************************/
 
 #ifndef QLINEEDIT_H
 #define QLINEEDIT_H
@@ -49,30 +37,16 @@ class QValidator;
 #include "qstring.h"
 #endif // QT_H
 
-#ifndef QT_NO_LINEEDIT
 
 class Q_EXPORT QLineEdit : public QWidget
 {
     Q_OBJECT
-    Q_ENUMS( EchoMode )
-    Q_PROPERTY( QString text READ text WRITE setText )
-    Q_PROPERTY( int maxLength READ maxLength WRITE setMaxLength )
-    Q_PROPERTY( bool frame READ frame WRITE setFrame )
-    Q_PROPERTY( EchoMode echoMode READ echoMode WRITE setEchoMode )
-    Q_PROPERTY( QString displayText READ displayText )
-    Q_PROPERTY( int cursorPosition READ cursorPosition WRITE setCursorPosition )
-    Q_PROPERTY( Alignment alignment READ alignment WRITE setAlignment )
-    Q_PROPERTY( bool edited READ edited WRITE setEdited )
-    Q_PROPERTY( bool hasMarkedText READ hasMarkedText )
-    Q_PROPERTY( QString markedText READ markedText )
-	
 public:
     QLineEdit( QWidget *parent, const char *name=0 );
     QLineEdit( const QString &, QWidget *parent, const char *name=0 );
    ~QLineEdit();
 
     QString text() const;
-
     QString displayText() const;
 
     int		maxLength()	const;
@@ -84,11 +58,6 @@ public:
     enum	EchoMode { Normal, NoEcho, Password };
     virtual void setEchoMode( EchoMode );
     EchoMode 	echoMode() const;
-#if OSIRIS_VERSION >= 300
-#error "Make setReadOnly virtual"
-#endif
-    void setReadOnly( bool );
-    bool isReadOnly() const;
 
     virtual void setValidator( const QValidator * );
     const QValidator * validator() const;
@@ -100,18 +69,16 @@ public:
     virtual void setEnabled( bool );
     virtual void setFont( const QFont & );
     virtual void setPalette( const QPalette & );
-    virtual void setSelection( int, int );
 
+    virtual void setSelection( int, int );
     virtual void setCursorPosition( int );
     int		cursorPosition() const;
 
     bool	validateAndSet( const QString &, int, int, int );
 
-#ifndef QT_NO_CLIPBOARD
     void	cut();
     void	copy() const;
     void	paste();
-#endif
 
     void setAlignment( int flag );
     int alignment() const;
@@ -130,15 +97,9 @@ public:
 
     bool	hasMarkedText() const;
     QString	markedText() const;
-#if defined(Q_INCOMPATIBLE_3_0_ADDONS)
-    bool 	getSelection( int *start, int *end );
-    void 	setPasswordChar( QChar c );
-    QChar 	passwordChar() const;
-#endif    
 
 public slots:
     virtual void setText( const QString &);
-
     void	selectAll();
     void	deselect();
 
@@ -153,7 +114,6 @@ signals:
     void	returnPressed();
 
 protected:
-    bool	event( QEvent * );
     void	mousePressEvent( QMouseEvent * );
     void	mouseMoveEvent( QMouseEvent * );
     void	mouseReleaseEvent( QMouseEvent * );
@@ -164,10 +124,8 @@ protected:
     void	paintEvent( QPaintEvent * );
     void	resizeEvent( QResizeEvent * );
     void	leaveEvent( QEvent * );
-#ifndef QT_NO_DRAGANDDROP
     void	dragEnterEvent( QDragEnterEvent * );
     void	dropEvent( QDropEvent * );
-#endif
 
     void	repaintArea( int, int );
 
@@ -175,9 +133,6 @@ private slots:
     void	clipboardChanged();
     void	blinkSlot();
     void	dragScrollSlot();
-#ifndef QT_NO_DRAGANDDROP
-    void 	doDrag();
-#endif
 
 private:
     // kept
@@ -186,7 +141,6 @@ private:
     int		lastCharVisible() const;
     int		minMark() const;
     int		maxMark() const;
-    int		frameW() const;
 
     void	init();
 
@@ -207,8 +161,6 @@ private:
     int xPosToCursorPos( int ) const;
     void blinkOn();
     void makePixmap() const;
-    void undoInternal();
-    void redoInternal();
 
 private:	// Disabled copy constructor and operator=
 #if defined(Q_DISABLE_COPY)
@@ -217,6 +169,5 @@ private:	// Disabled copy constructor and operator=
 #endif
 };
 
-#endif // QT_NO_LINEEDIT
 
 #endif // QLINEEDIT_H

@@ -1,63 +1,51 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qtabwidget.cpp   2.3.2   edited 2001-03-21 $
+** $Id: qtabwidget.cpp,v 1.23 1999/06/22 23:53:34 qtwin Exp $
 **
 ** Implementation of QTabWidget class
 **
 ** Created : 990318
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
-** This file is part of the widgets module of the Qt GUI Toolkit.
+** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses may use this file in accordance with the Qt Commercial License
-** Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
+*****************************************************************************/
 
 #include "qtabwidget.h"
-#ifndef QT_NO_TABWIDGET
 #include "qobjectlist.h"
 #include "qobjectdict.h"
 #include "qtabbar.h"
 #include "qapplication.h"
 #include "qwidgetstack.h"
 #include "qbitmap.h"
-
-// NOT REVISED
 /*!
   \class QTabWidget qtabwidget.h
 
   \brief The QTabWidget class provides a stack of tabbed widgets.
 
-  \ingroup organizers
+  \ingroup realwidgets
 
   A tabbed widget is one in which several "pages" are available, and
   the user selects which page to see and use by clicking on its tab,
   or by pressing the indicated Alt-(letter) key combination.
 
   QTabWidget does not provide more than one row of tabs, and does not
-  provide tabs along the sides or bottom of the pages.
+  provide tabs along the sides or bottom of the pages.  It also does
+  not offer any way to find out which page is currently visible or to
+  set the visible page.
+
 
   The normal way to use QTabWidget is to do the following in the
   constructor: <ol> <li> Create a QTabWidget. <li> Create a QWidget
@@ -73,8 +61,7 @@
   meaningful and descriptive to the user, while the widget name is
   used primarily for debugging.
 
-  A signal currentChanged() is emitted when the user selects some
-  page.
+  A signal selected() is emitted when the user selects some page.
 
   Each tab is either enabled or disabled at any given time.  If a tab
   is enabled, the tab text is drawn in black and the user can select
@@ -96,27 +83,7 @@
   \sa QTabDialog
 */
 
-
-/*! \enum QTabWidget::TabPosition
-
-  This enum type defines where QTabWidget can draw the tab row: <ul>
-  <li> \c Top - above the pages
-  <li> \c Bottom - below the pages
-  </ul>
-*/
-
-/*! \enum QTabWidget::TabShape
-
-  This enum type defines the shape of the tabs: <ul>
-  <li> \c Rounded - rounded look (normal)
-  <li> \c Triangular - triangular look (very unusual, included for completeness)
-  </ul>
-*/
-
-/* undocumented now
-  \obsolete
-
-  \fn void QTabWidget::selected( const QString &tabLabel );
+/*! \fn void QTabWidget::selected( const QString &tabLabel );
 
   This signal is emitted whenever a tab is selected (raised),
   including during the first show().
@@ -124,54 +91,24 @@
   \sa raise()
 */
 
-
-/*! \fn void QTabWidget::currentChanged( QWidget* );
-
-  This signal is emitted whenever the current page changes.
-
-  \sa currentPage(), showPage(), tabLabel()
-*/
-
 class QTabWidgetData
 {
 public:
     QTabWidgetData()
-	: tabs(0), stack(0), dirty( TRUE ), pos( QTabWidget::Top ), shape( QTabWidget::Rounded )
+	: tabs(0), stack(0), dirty( TRUE ), pos( QTabWidget::Top )
 	{};
     ~QTabWidgetData(){};
     QTabBar* tabs;
     QWidgetStack* stack;
     bool dirty;
     QTabWidget::TabPosition pos;
-    QTabWidget::TabShape shape;
 };
 
-
-
-
-
 /*!
-  Constructs a tabbed widget with parent \a parent, name \a name
-  and widget flags \a f.
+  Constructs a QTabWidget
 */
-
-
-QTabWidget::QTabWidget( QWidget *parent, const char *name, WFlags f )
-    : QWidget( parent, name, f )
-{
-    init();
-}
-
-/*!
-  \overload
-*/
-QTabWidget::QTabWidget( QWidget *parent, const char *name )
+QTabWidget::QTabWidget( QWidget *parent, const char *name)
     : QWidget( parent, name )
-{
-    init();
-}
-
-void QTabWidget::init()
 {
     d = new QTabWidgetData;
 
@@ -181,10 +118,6 @@ void QTabWidget::init()
 
     d->stack->setFrameStyle( QFrame::StyledPanel | QFrame::Raised );
     d->stack->setLineWidth( style().defaultFrameWidth() );
-
-    setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) );
-    setFocusPolicy( TabFocus );
-    setFocusProxy( d->tabs );
 }
 
 /*!
@@ -328,7 +261,7 @@ void QTabWidget::insertTab( QWidget *child, QTab* tab, int index)
 
 
 /*!
-  Defines a new label for the tab of page \a w
+  Defines a new label for the tab of page \w
  */
 void QTabWidget::changeTab( QWidget *w, const QString &label)
 {
@@ -342,20 +275,11 @@ void QTabWidget::changeTab( QWidget *w, const QString &label)
 	return;
     t->label = label;
     d->tabs->layoutTabs();
-
-    int ct = d->tabs->currentTab();
-    bool block = d->tabs->signalsBlocked();
-    d->tabs->blockSignals( TRUE );
-    d->tabs->setCurrentTab( 0 );
-    d->tabs->setCurrentTab( ct );
-    d->tabs->blockSignals( block );
-
-    d->tabs->update();
     setUpLayout();
 }
 
-/*!
-  Defines a new \a iconset and a new \a label for the tab of page \a w
+/*
+  Defines a new iconset and a new label for the tab of page \w
  */
 void QTabWidget::changeTab( QWidget *w, const QIconSet& iconset, const QString &label)
 {
@@ -371,15 +295,6 @@ void QTabWidget::changeTab( QWidget *w, const QIconSet& iconset, const QString &
     t->label = label;
     t->iconset = new QIconSet( iconset );
     d->tabs->layoutTabs();
-
-    int ct = d->tabs->currentTab();
-    bool block = d->tabs->signalsBlocked();
-    d->tabs->blockSignals( TRUE );
-    d->tabs->setCurrentTab( 0 );
-    d->tabs->setCurrentTab( ct );
-    d->tabs->blockSignals( block );
-
-    d->tabs->update();
     setUpLayout();
 }
 
@@ -435,15 +350,14 @@ void QTabWidget::showPage( QWidget * w)
     if ( id >= 0 ) {
 	d->stack->raiseWidget( w );
 	d->tabs->setCurrentTab( id );
-	// ### why overwrite the frame style?
-	if ( d->stack->frameStyle() != ( QFrame::StyledPanel|QFrame::Raised ) )
+	if ( d->stack->frameStyle() != ( QFrame::StyledPanel | QFrame::Raised ) )
 	    d->stack->setFrameStyle( QFrame::StyledPanel | QFrame::Raised );
     }
 }
 
 /*! Removes page \a w from this stack of widgets.  Does not
   delete \a w.
-  \sa showPage(), QWidgetStack::removeWidget()
+  \sa showPage(), \sa QWidgetStack::removeWidget()
 */
 void QTabWidget::removePage( QWidget * w )
 {
@@ -453,9 +367,9 @@ void QTabWidget::removePage( QWidget * w )
 	d->stack->removeWidget( w );
 	d->tabs->removeTab( d->tabs->tab(id) );
 	setUpLayout();
-	
-	if ( d->tabs->count() == 0 ) 
+	if ( !currentPage() && d->stack->frameStyle() != QFrame::NoFrame )
 	    d->stack->setFrameStyle( QFrame::NoFrame );
+
     }
 }
 
@@ -478,27 +392,7 @@ QWidget * QTabWidget::currentPage() const
     return d->stack->visibleWidget();
 }
 
-/*! Returns the ID of the current page.
-*/
-
-int QTabWidget::currentPageIndex() const
-{
-    return d->tabs->currentTab();
-}
-
-/*! Sets the page with index \a id as current page.
-
-    Note that \e id is not the index that is specified when you insert a tab
-*/
-
-void QTabWidget::setCurrentPage( int id )
-{
-    d->tabs->setCurrentTab( id );
-    showTab( id );
-}
-
-/*!
-  \reimp
+/*\reimp
  */
 void QTabWidget::resizeEvent( QResizeEvent * )
 {
@@ -513,8 +407,6 @@ void QTabWidget::resizeEvent( QResizeEvent * )
 */
 void QTabWidget::setTabBar( QTabBar* tb)
 {
-    if ( tb->parentWidget() != this )
-	tb->reparent( this, QPoint(0,0), TRUE );
     delete d->tabs;
     d->tabs = tb;
     connect( d->tabs, SIGNAL(selected(int)),
@@ -541,7 +433,6 @@ void QTabWidget::showTab( int i )
     if ( d->stack->widget( i ) ) {
 	d->stack->raiseWidget( i );
 	emit selected( d->tabs->tab( i )->label );
-	emit currentChanged( d->stack->widget( i ) );
     }
 }
 
@@ -558,27 +449,25 @@ void QTabWidget::setUpLayout( bool onlyCheck )
 	return; // we'll do it later
     }
     QSize t( d->tabs->sizeHint() );
-    if ( t.width() > width() )
-	t.setWidth( width() );
     int lw = d->stack->lineWidth();
     if ( d->pos == Bottom ) {
-	d->tabs->setGeometry( QMAX(0, lw-2), height() - t.height() - lw, t.width(), t.height() );
-	d->stack->setGeometry( 0, 0, width(), height()-t.height()+QMAX(0, lw-2) );
+	d->tabs->setGeometry( QMAX(0, lw-2), height() - t.height(), t.width(), t.height() );
+	d->stack->setGeometry( 0, 0, width(), height()-t.height()+lw );
     }
     else { // Top
 	d->tabs->setGeometry( QMAX(0, lw-2), 0, t.width(), t.height() );
-	d->stack->setGeometry( 0, t.height()-lw, width(), height()-t.height()+QMAX(0, lw-2));
+	d->stack->setGeometry( 0, t.height()-lw, width(), height()-t.height()+lw );
     }
-
+	
     d->dirty = FALSE;
-    if ( !onlyCheck )
-	update();
     if ( autoMask() )
 	updateMask();
 }
 
-/*!\reimp
+/*!
+  Returns a suitable size for the tab widget.
 */
+
 QSize QTabWidget::sizeHint() const
 {
     QSize s( d->stack->sizeHint() );
@@ -594,7 +483,7 @@ QSize QTabWidget::sizeHint() const
 QSize QTabWidget::minimumSizeHint() const
 {
     QSize s( d->stack->minimumSizeHint() );
-    QSize t( d->tabs->minimumSizeHint() );
+    QSize t( d->tabs->sizeHint() );
     return QSize( QMAX( s.width(), t.width()),
 		  s.height() + t.height() );
 }
@@ -624,7 +513,7 @@ QTabWidget::TabPosition QTabWidget::tabPosition() const
   Possible values are QTabWidget::Top and QTabWidget::Bottom.
   \sa tabPosition()
  */
-void QTabWidget::setTabPosition( TabPosition pos)
+void QTabWidget::setTabPosition( QTabWidget::TabPosition pos)
 {
     if (d->pos == pos)
 	return;
@@ -641,44 +530,9 @@ void QTabWidget::setTabPosition( TabPosition pos)
 	else
 	    d->tabs->setShape( QTabBar::RoundedAbove );
     }
-    d->tabs->layoutTabs();
     setUpLayout();
 }
 
-/*!
-  Returns the shape of the tabs.
-  
-  \sa setTabShape()
-*/
-
-QTabWidget::TabShape QTabWidget::tabShape() const
-{
-    return d->shape;
-}
-
-/*!
-  Sets the shape of the tabs to \a s.
-*/
-
-void QTabWidget::setTabShape( TabShape s )
-{
-    if ( d->shape == s )
-	return;
-    d->shape = s;
-    if ( d->pos == Top ) {
-	if ( s == Rounded )
-	    d->tabs->setShape( QTabBar::RoundedAbove );
-	else
-	    d->tabs->setShape( QTabBar::TriangularAbove );
-    } else {
-	if ( s == Rounded )
-	    d->tabs->setShape( QTabBar::RoundedBelow );
-	else
-	    d->tabs->setShape( QTabBar::TriangularBelow );
-    }
-    d->tabs->layoutTabs();
-    setUpLayout();
-}
 
 
 /*!
@@ -720,12 +574,17 @@ void QTabWidget::updateMask()
 {
     if ( !autoMask() )
 	return;
+    QBitmap bm( size() );
+    bm.fill( color0 );
 
-    QRect r;
-    QRegion reg( r );
-    reg += QRegion( d->tabs->geometry() );
-    reg += QRegion( d->stack->geometry() );
-    setMask( reg );
+    QPainter p;
+    p.begin( &bm, this );
+    p.setBrush(color1);
+    p.setPen(color1);
+    p.drawRect( d->tabs->geometry() );
+    p.drawRect( d->stack->geometry() );
+   p.end();
+   setMask( bm );
 }
 
 
@@ -733,22 +592,10 @@ void QTabWidget::updateMask()
  */
 bool QTabWidget::eventFilter( QObject *o, QEvent * e)
 {
-    if ( o == d->stack && e->type() == QEvent::ChildRemoved
+    if ( o == d->stack && e->type() == QEvent::ChildRemoved 
 	 && ( (QChildEvent*)e )->child()->isWidgetType() ) {
 	removePage( (QWidget*)  ( (QChildEvent*)e )->child() );
 	return TRUE;
     }
     return FALSE;
 }
-
-
-/*!\reimp
- */
-
-QSizePolicy QTabWidget::sizePolicy() const
-{
-    //### removeme 3.0
-    return QWidget::sizePolicy();
-}
-
-#endif

@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: qt/examples/qmag/qmag.cpp   2.3.2   edited 2001-01-26 $
+** $Id: qmag.cpp,v 1.2 1999/06/03 01:45:14 warwick Exp $
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -43,7 +43,6 @@ protected:
     void	resizeEvent( QResizeEvent * );
 
 private:
-    void	grabAround(QPoint pos);
     void	grab();
 
     QComboBox   *zoom;
@@ -64,30 +63,22 @@ private:
 };
 
 
-#ifdef COMPLEX_GUI
 static const char *zoomfactors[] = {
     "100%", "200%", "300%", "400%", "500%",
     "600%", "700%", "800%", "1600%", 0 };
 
 static const char *refreshrates[] = {
-    "No autorefresh", "50 per second", "4 per second", "3 per second", "2 per second",
+    "No autorefresh", "4 per second", "3 per second", "2 per second",
     "Every second", "Every two seconds", "Every three seconds",
     "Every five seconds", "Every ten seconds", 0 };
-#endif
 
 static const int timer[] = {
-    0, 20, 250, 333, 500, 1000, 2000, 3000, 5000, 10000 };
+    0, 250, 333, 500, 1000, 2000, 3000, 5000, 10000 };
 
 
 MagWidget::MagWidget( QWidget *parent, const char *name )
     : QWidget( parent, name)
 {
-    z = 1;			// default zoom (100%)
-    r = 0;			// default refresh (none)
-
-#ifdef COMPLEX_GUI
-    int w=0, x=0, n;
-
     zoom = new QComboBox( FALSE, this );
     CHECK_PTR(zoom);
     zoom->insertStrList( zoomfactors, 9 );
@@ -98,6 +89,9 @@ MagWidget::MagWidget( QWidget *parent, const char *name )
     refresh->insertStrList( refreshrates, 9 );
     connect( refresh, SIGNAL(activated(int)), SLOT(setRefresh(int)) );
 
+    int w, x, n;
+
+    w = 0;
     for( n=0; n<9; n++) {
 	int w2 = zoom->fontMetrics().width( zoomfactors[n] );
 	w = QMAX(w2, w);
@@ -133,13 +127,6 @@ MagWidget::MagWidget( QWidget *parent, const char *name )
     quitButton->setText( "Quit" );
     quitButton->setGeometry( multiSaveButton->geometry().right() + 2, 2,
 			     10+quitButton->fontMetrics().width("Quit"), 20 );
-#else
-    zoom = 0;
-    multiSaveButton = 0;
-#endif
-
-    setRefresh(1);
-    setZoom(5);
 
     rgb = new QLabel( this );
     CHECK_PTR( rgb );
@@ -147,23 +134,19 @@ MagWidget::MagWidget( QWidget *parent, const char *name )
     rgb->setAlignment( AlignVCenter );
     rgb->resize( width(), rgb->fontMetrics().height() + 4 );
 
-#ifdef COMPLEX_GUI
     yoffset = zoom->height()	// top buttons
 	+ 4			// space around top buttons
 	+ rgb->height();	// color-value text height
-    setMinimumSize( quitButton->pos().x(), yoffset+20 );
-    resize( quitButton->geometry().topRight().x() + 2, yoffset+60 );
-#else
-    yoffset = 0;
-    resize(350,350);
-#endif
 
+    z = 1;			// default zoom (100%)
+    r = 0;			// default refresh (none)
     grabx = graby = -1;
     grabbing = FALSE;
 
-    setMouseTracking( TRUE );	// and do let me know what pixel I'm at, eh?
+    setMinimumSize( quitButton->pos().x(), yoffset+20 );
+    resize( quitButton->geometry().topRight().x() + 2, yoffset+60 );
 
-    grabAround( QPoint(grabx=qApp->desktop()->width()/2, graby=qApp->desktop()->height()/2) );
+    setMouseTracking( TRUE );	// and do let me know what pixel I'm at, eh?
 }
 
 
@@ -245,7 +228,7 @@ void MagWidget::grab()
     m.scale( (double)z, (double)z );
     pm = p.xForm( m );
 
-    if ( !multiSaveButton || !multiSaveButton->isOn() )
+    if ( !multiSaveButton->isOn() )
 	repaint( FALSE );		// and finally repaint, flicker-free
 }
 
@@ -254,8 +237,8 @@ void MagWidget::paintEvent( QPaintEvent * )
 {
     if ( !pm.isNull() ) {
 	QPainter paint( this );
-	paint.drawPixmap( 0, zoom ? zoom->height()+4 : 0, pm, 
-			      0,0, width(), height()-yoffset );
+	paint.drawPixmap( 0, zoom->height()+4, pm, 
+			  0,0, width(), height()-yoffset );
     }
 }
 
@@ -280,56 +263,49 @@ void MagWidget::mouseReleaseEvent( QMouseEvent * e )
 {
     if ( grabbing && grabx >= 0 && graby >= 0 ) {
 	grabbing = FALSE;
-	grabAround(e->pos());
-	releaseMouse();
-    }
-}
-
-void MagWidget::grabAround(QPoint pos)
-{
-    int rx, ry;
-    rx = mapToGlobal(pos).x();
-    ry = mapToGlobal(pos).y();
-    int w = QABS(rx-grabx);
-    int h = QABS(ry-graby);
-    if ( w > 10 && h > 10 ) {
-	int pz;
-	pz = 1;
-	while ( w*pz*h*pz < width()*(height()-yoffset) &&
-		w*pz < QApplication::desktop()->width() &&
-		h*pz < QApplication::desktop()->height() )
-	    pz++;
-	if ( (w*pz*h*pz - width()*(height()-yoffset)) > 
-	     (width()*(height()-yoffset) - w*(pz-1)*h*(pz-1)) )
-	    pz--;
-	if ( pz < 1 )
+	int rx, ry;
+	rx = mapToGlobal(e->pos()).x();
+	ry = mapToGlobal(e->pos()).y();
+	int w = QABS(rx-grabx);
+	int h = QABS(ry-graby);
+	if ( w > 10 && h > 10 ) {
+	    int pz;
 	    pz = 1;
-	if ( pz > 8 )
-	    pz = 8;
-	if ( zoom )
+	    while ( w*pz*h*pz < width()*(height()-yoffset) &&
+		    w*pz < QApplication::desktop()->width() &&
+		    h*pz < QApplication::desktop()->height() )
+		pz++;
+	    if ( (w*pz*h*pz - width()*(height()-yoffset)) > 
+		 (width()*(height()-yoffset) - w*(pz-1)*h*(pz-1)) )
+		pz--;
+	    if ( pz < 1 )
+		pz = 1;
+	    if ( pz > 8 )
+		pz = 8;
 	    zoom->setCurrentItem( pz-1 );
-
-	z = pz;
-	grabx = QMIN(rx, grabx) + w/2;
-	graby = QMIN(ry, graby) + h/2;
-	resize( w*z, h*z+yoffset );
+	    z = pz;
+	    grabx = QMIN(rx, grabx) + w/2;
+	    graby = QMIN(ry, graby) + h/2;
+	    resize( w*z, h*z+yoffset );
+	}
+	releaseMouse();
+	grab();
+	if ( r )
+	    startTimer( timer[r] );
     }
-    grab();
-    if ( r )
-	startTimer( timer[r] );
 }
 
 
 void MagWidget::mouseMoveEvent( QMouseEvent *e )
 {
     if ( grabbing || pm.isNull() ||
-	 e->pos().y() > height() - (zoom ? zoom->fontMetrics().height() - 4 : 0) ||
-	 e->pos().y() < (zoom ? zoom->height()+4 : 4) ) {
+	 e->pos().y() > height() - zoom->fontMetrics().height() - 4 ||
+	 e->pos().y() < zoom->height()+4 ) {
 	rgb->setText( "" );
     } else {
 	int x,y;
 	x = e->pos().x() / z;
-	y = (e->pos().y() - ( zoom ? zoom->height() : 0 ) - 4) / z;
+	y = (e->pos().y() - zoom->height() - 4) / z;
 	QString pixelinfo;
 	if ( image.valid(x,y) )
 	{
@@ -355,7 +331,6 @@ void MagWidget::focusOutEvent( QFocusEvent * )
 void MagWidget::timerEvent( QTimerEvent * )
 {
     grab();
-/*
     if ( multiSaveButton->isOn() && !multifn.isEmpty() ) {
 	QRegExp num("[0-9][0-9]*");
 	int start;
@@ -366,7 +341,6 @@ void MagWidget::timerEvent( QTimerEvent * )
 	    );
 	p.save( multifn, "BMP" );
     }
-*/
 }
 
 

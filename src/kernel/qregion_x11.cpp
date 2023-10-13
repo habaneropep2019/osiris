@@ -1,39 +1,27 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qregion_x11.cpp   2.3.2   edited 2001-07-24 $
+** $Id: qregion_x11.cpp,v 2.25 1999/05/20 15:33:35 aavit Exp $
 **
 ** Implementation of QRegion class for X11
 **
 ** Created : 940729
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
-** This file is part of the kernel module of the Qt GUI Toolkit.
+** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses for Unix/X11 may use this file in accordance with the Qt Commercial
-** License Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
+*****************************************************************************/
 
 #include "qregion.h"
 #include "qpointarray.h"
@@ -42,7 +30,6 @@
 #include "qbitmap.h"
 #include "qt_x11.h"
 
-// NOT REVISED
 
 static QRegion *empty_region = 0;
 
@@ -54,7 +41,7 @@ static void cleanup_empty_region()
 
 
 /*!
-  Constructs a null region.
+  Constructs an null region.
   \sa isNull()
 */
 
@@ -82,13 +69,12 @@ QRegion::QRegion( bool is_null )
 }
 
 /*!
-\overload
+  Constructs a rectangular or elliptic region.
 
-If the rectangle is invalid, the rectangle will be normalized() before the region is created. This semantics will change in Qt-3
-and an invalid rectangle will construct an empty region.
-
-\sa QRect::isValid() QRect::normalize()
- */
+  \arg \e r is the region rectangle.
+  \arg \e t is the region type: QRegion::Rectangle (default) or
+  QRegion::Ellipse.
+*/
 
 QRegion::QRegion( const QRect &r, RegionType t )
 {
@@ -97,7 +83,6 @@ QRegion::QRegion( const QRect &r, RegionType t )
     CHECK_PTR( data );
     data->is_null = FALSE;
     if ( t == Rectangle ) {			// rectangular region
-	data->br = r;
 	data->rgn = XCreateRegion();
 	XRectangle xr;
 	xr.x = rr.x();
@@ -115,38 +100,26 @@ QRegion::QRegion( const QRect &r, RegionType t )
 
 
 /*!
-  Constructs a polygon region from the point array \a a.
+  Constructs a polygon region from the point array \e a.
 
-  If \a winding is TRUE, the polygon
-  region is filled using the winding algorithm, otherwise the default
-  even-odd fill algorithm is used.
-
-  This constructor may create complex regions that will slow
-  down painting when used.
+  If \e winding is TRUE, the polygon region uses the winding
+  algorithm, otherwise the alternative (even-odd) algorithm
+  will be used.
 */
 
 QRegion::QRegion( const QPointArray &a, bool winding )
 {
-    if (a.size() > 0) {
-    	data = new QRegionData;
-	CHECK_PTR( data );
-	data->is_null = FALSE;
-	data->rgn = XPolygonRegion( (XPoint*)a.shortPoints(), a.size(),
-				    winding ? WindingRule : EvenOddRule );
-    } else {
-	if ( !empty_region ) {
-	    qAddPostRoutine( cleanup_empty_region );
-	    empty_region = new QRegion( TRUE );
-	    CHECK_PTR( empty_region );
-	}
-	data = empty_region->data;
-	data->ref();
-    }
+    data = new QRegionData;
+    CHECK_PTR( data );
+    data->is_null = FALSE;
+    data->rgn = XPolygonRegion( (XPoint*)a.shortPoints(), a.size(),
+				winding ? WindingRule : EvenOddRule );
 }
 
 
 /*!
-  Constructs a new region which is equal to \a r.
+  Constructs a region which is a
+  \link shclass.html shallow copy\endlink of \e r.
 */
 
 QRegion::QRegion( const QRegion &r )
@@ -232,17 +205,11 @@ Region qt_x11_bitmapToRegion(const QBitmap& bitmap)
 }
 
 
-
 /*!
-  Constructs a region from the bitmap \a bm.
+  Constructs a region from a bitmap.
 
-  The resulting region consists of the pixels in \a bm that are \c
-  color1, as if each pixel was a 1 by 1 rectangle.
-
-  This constructor may create complex regions that will slow
-  down painting when used. Note that drawing masked pixmaps
-  can be done much faster using QPixmap::setMask().
-
+  The pixels in \a bm that are color1 will be part of the
+  region as if each was a 1 by 1 rectangle.
 */
 QRegion::QRegion( const QBitmap & bm )
 {
@@ -253,7 +220,7 @@ QRegion::QRegion( const QBitmap & bm )
 }
 
 /*!
-  Destructs the region.
+  Destroys the region.
 */
 
 QRegion::~QRegion()
@@ -266,9 +233,9 @@ QRegion::~QRegion()
 
 
 /*!
-  Assigns \a r to this region and returns a reference to the
-  region.
-
+  Assigns a
+  \link shclass.html shallow copy\endlink of \e r to this region and
+  returns a reference to the region.
 */
 
 QRegion &QRegion::operator=( const QRegion &r )
@@ -284,9 +251,8 @@ QRegion &QRegion::operator=( const QRegion &r )
 
 
 /*!
-  Returns a \link shclass.html deep copy\endlink of the region.
-
-  \sa detach()
+  Returns a
+  \link shclass.html deep copy\endlink of the region.
 */
 
 QRegion QRegion::copy() const
@@ -296,11 +262,13 @@ QRegion QRegion::copy() const
     return r;
 }
 
+
 /*!
   Returns TRUE if the region is a null region, otherwise FALSE.
 
-  A null region is a region that has not been initialized. A
-  null region is always empty.
+  A null region is a region that has not been initialized. The
+  documentation for isEmpty() contains an example that shows how to use
+  isNull() and isEmpty().
 
   \sa isEmpty()
 */
@@ -313,7 +281,6 @@ bool QRegion::isNull() const
 
 /*!
   Returns TRUE if the region is empty, or FALSE if it is non-empty.
-  An empty region is a region that contains no points.
 
   Example:
   \code
@@ -342,7 +309,7 @@ bool QRegion::isEmpty() const
 
 
 /*!
-  Returns TRUE if the region contains the point \a p, or FALSE if \a p is
+  Returns TRUE if the region contains the point \e p, or FALSE if \e p is
   outside the region.
 */
 
@@ -352,19 +319,19 @@ bool QRegion::contains( const QPoint &p ) const
 }
 
 /*!
-  Returns TRUE if the region overlaps the rectangle \a r, or FALSE if \a r is
-  completely outside the region.
+  Returns TRUE if the region contains the rectangle \e r, or FALSE if \e r is
+  outside the region.
 */
 
 bool QRegion::contains( const QRect &r ) const
 {
-    return XRectInRegion( data->rgn, r.left(), r.top(),
+    return XRectInRegion( data->rgn, r.left(), r.right(),
 			  r.width(), r.height() ) != RectangleOut;
 }
 
 
 /*!
-  Translates (moves) the region \a dx along the X axis and \a dy along the Y axis.
+  Translates the region \e dx along the X axis and \e dy along the Y axis.
 */
 
 void QRegion::translate( int dx, int dy )
@@ -372,17 +339,12 @@ void QRegion::translate( int dx, int dy )
     if ( data == empty_region->data )
 	return;
     detach();
-    data->br = QRect();
     XOffsetRegion( data->rgn, dx, dy );
 }
 
 
 /*!
-  Returns a region which is the union of this region and \a r.
-
-    <img src=runion.png>
-
-  The figure shows the union of two elliptical regions.
+  Returns a region which is the union of this region and \e r.
 */
 
 QRegion QRegion::unite( const QRegion &r ) const
@@ -393,11 +355,7 @@ QRegion QRegion::unite( const QRegion &r ) const
 }
 
 /*!
-  Returns a region which is the intersection of this region and \a r.
-
-  <img src=rintersect.png>
-
-  The figure shows the intersection of two elliptical regions.
+  Returns a region which is the intersection of this region and \e r.
 */
 
 QRegion QRegion::intersect( const QRegion &r ) const
@@ -408,12 +366,7 @@ QRegion QRegion::intersect( const QRegion &r ) const
 }
 
 /*!
-  Returns a region which is \a r subtracted from this region.
-
-  <img src=rsubtract.png>
-
-  The figure shows the result when the ellipse on the right is subtracted
-  from the ellipse on the left. (\c left-right )
+  Returns a region which is \e r subtracted from this region.
 */
 
 QRegion QRegion::subtract( const QRegion &r ) const
@@ -424,11 +377,7 @@ QRegion QRegion::subtract( const QRegion &r ) const
 }
 
 /*!
-  Returns a region which is the exclusive or (XOR) of this region and \a r.
-
-  <img src=rxor.png>
-
-  The figure shows the exclusive or of two elliptical regions.
+  Returns a region which is this region XOR \e r.
 */
 
 QRegion QRegion::eor( const QRegion &r ) const
@@ -441,13 +390,12 @@ QRegion QRegion::eor( const QRegion &r ) const
 
 /*!
   Returns the bounding rectangle of this region.
-  An empty region gives a rectangle that is  QRect::isNull().
+  An empty region gives a \link QRect::isNull() null\endlink
+  rectangle.
 */
 
 QRect QRegion::boundingRect() const
 {
-    if ( !data->br.isNull() )
-	return data->br;
     XRectangle r;
     XClipBox( data->rgn, &r );
     return QRect( r.x, r.y, r.width, r.height );
@@ -471,9 +419,9 @@ struct _XRegion {
 
 
 /*!
-  Returns an array of non-overlapping rectangles that make up the region.
-
-  The union of all the rectangles is equal to the original region.
+  Returns an array of the rectangles that make up the region.
+  The rectangles are non-overlapping. The region is formed by
+  the union of all these rectangles.
 */
 
 QArray<QRect> QRegion::rects() const
@@ -481,36 +429,17 @@ QArray<QRect> QRegion::rects() const
     QArray<QRect> a( (int)data->rgn->numRects );
     BOX *r = data->rgn->rects;
     for ( int i=0; i<(int)a.size(); i++ ) {
+	// Note: the -1 are correct - see that setClipRect(r)
+	//       gives r back.
 	a[i].setCoords( r->x1, r->y1, r->x2-1, r->y2-1);
 	r++;
     }
     return a;
 }
 
-/*!
-  Sets the region to be the given set of rectangles.  The rectangles
-  \e must be optimal Y-X sorted bands as follows:
-   <ul>
-    <li> The rectangles must not intersect
-    <li> All rectangles with a given top coordinate must have the same height.
-    <li> No two rectangles may abut horizontally (they should be combined
-		into a single wider rectangle in that case).
-    <li> The rectangles must be sorted ascendingly by Y as the major sort key
-		and X as the minor sort key.
-   </ul>
-  \internal
-  Only some platforms have that restriction (QWS).
-*/
-void QRegion::setRects( const QRect *rects, int num )
-{
-    // Could be optimized
-    *this = QRegion();
-    for (int i=0; i<num; i++)
-	*this |= rects[i];
-}
 
 /*!
-  Returns TRUE if the region is equal to \a r, or FALSE if the regions are
+  Returns TRUE if the region is equal to \e r, or FALSE if the regions are
   different.
 */
 
@@ -522,6 +451,6 @@ bool QRegion::operator==( const QRegion &r ) const
 
 /*!
   \fn bool QRegion::operator!=( const QRegion &r ) const
-  Returns TRUE if the region is different from \a r, or FALSE if the regions
+  Returns TRUE if the region is different from \e r, or FALSE if the regions
   are equal.
 */

@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: qt/examples/i18n/mywidget.cpp   2.3.2   edited 2001-01-26 $
+** $Id: mywidget.cpp,v 1.3 1999/06/15 22:30:33 warwick Exp $
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -33,7 +33,7 @@ MyWidget::MyWidget( QWidget* parent, const char* name )
     setCentralWidget(central);
 
     QPopupMenu* file = new QPopupMenu(this);
-    file->insertItem( tr("E&xit"), qApp, SLOT(quit()),
+    file->insertItem( tr("E&xit..."), qApp, SLOT(quit()),
             QAccel::stringToKey(tr("Ctrl+Q")) );
     menuBar()->insertItem( tr("&File"), file );
 
@@ -65,10 +65,4 @@ void MyWidget::initChoices(QWidget* parent)
     QListBox* lb = new QListBox( parent ); 
     for ( int i = 0; choices[i]; i++ )
 	lb->insertItem( tr( choices[i] ) ); 
-}
-
-void MyWidget::closeEvent(QCloseEvent* e)
-{
-    QWidget::closeEvent(e);
-    emit closed();
 }

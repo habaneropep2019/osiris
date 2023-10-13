@@ -1,42 +1,29 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qradiobutton.cpp   2.3.2   edited 2001-04-18 $
+** $Id: qradiobutton.cpp,v 2.68 1999/06/18 01:38:09 ettrich Exp $
 **
 ** Implementation of QRadioButton class
 **
 ** Created : 940222
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
-** This file is part of the widgets module of the Qt GUI Toolkit.
+** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses may use this file in accordance with the Qt Commercial License
-** Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
+*****************************************************************************/
 
 #include "qradiobutton.h"
-#ifndef QT_NO_RADIOBUTTON
 #include "qbuttongroup.h"
 #include "qpainter.h"
 #include "qdrawutil.h"
@@ -44,42 +31,21 @@
 #include "qpixmapcache.h"
 #include "qbitmap.h"
 #include "qtextstream.h"
-#include "qapplication.h"
 
-// NOT REVISED
 /*!
   \class QRadioButton qradiobutton.h
   \brief The QRadioButton widget provides a radio button with a text label.
 
-  \ingroup basic
+  \ingroup realwidgets
 
-  QRadioButton and QCheckBox are both option buttons. That is, they
-  can be switched on (checked) or off (unchecked). The classes differ
-  in how the choices for the user are restricted. Check-boxes define
-  "many of many" choices, while radio buttons provide a "one of many"
-  choice. In a group of radio buttons, only one button at a time can
-  be checked. If the user selects another button, the previously
-  selected button is switched off.
+  QRadioButton and QCheckBox are both toggle buttons, that is, they can be
+  switched on (checked) or off (unchecked).  Unlike check boxes, radio
+  buttons are normally organized in groups where only one radio button can be
+  switched on at a time.
 
-  While it is technically possible to implement radio-behaviour with
-  check boxes and vice versa, it's strongly recommended to stick with
-  the well-known semantics. Otherwise your users would be pretty
-  confused.
-
-  The easiest way to implement a "one of many" choice, is to simply
-  stick the radio buttons into QButtonGroup.
-
-  Whenver a button is switched on or off, it emits the signal
-  toggled(). Connect to this signal if you want to trigger an action
-  each time the button changes state. Otherwise, use isChecked() to
-  query whether or not a particular button is selected.
+  The QButtonGroup widget is very useful for defining groups of radio buttons.
 
   <img src=qradiobt-m.png> <img src=qradiobt-w.png>
-
-  \important text, setText, text, pixmap, setPixmap, accel, setAccel,
-  isToggleButton, setDown, isDown, isOn, state, autoRepeat,
-  isExclusiveToggle, group, setAutoRepeat, toggle, pressed, released,
-  clicked, toggled, state stateChanged
 
   \sa QPushButton QToolButton
   <a href="guibooks.html#fowler">GUI Design Handbook: Radio Button</a>
@@ -97,7 +63,7 @@ static const int margin = 2; // to right of text
 */
 
 QRadioButton::QRadioButton( QWidget *parent, const char *name )
-	: QButton( parent, name, WRepaintNoErase | WResizeNoErase | WMouseNoMask )
+	: QButton( parent, name, WResizeNoErase | WMouseNoMask )
 {
     init();
 }
@@ -110,12 +76,11 @@ QRadioButton::QRadioButton( QWidget *parent, const char *name )
 
 QRadioButton::QRadioButton( const QString &text, QWidget *parent,
 			    const char *name )
-	: QButton( parent, name, WRepaintNoErase | WResizeNoErase | WMouseNoMask )
+	: QButton( parent, name, WResizeNoErase | WMouseNoMask )
 {
     init();
     setText( text );
 }
-
 
 /*!
   Initializes the radio button.
@@ -123,7 +88,6 @@ QRadioButton::QRadioButton( const QString &text, QWidget *parent,
 
 void QRadioButton::init()
 {
-    setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Fixed ) );
     setToggleButton( TRUE );
     if ( parentWidget() && parentWidget()->inherits("QButtonGroup") ) {
 	QButtonGroup *bgrp = (QButtonGroup *)parentWidget();
@@ -155,13 +119,15 @@ void QRadioButton::setChecked( bool check )
 
 
 
-/*!\reimp
+/*!
+  Returns a size which fits the contents of the radio button.
 */
+
 QSize QRadioButton::sizeHint() const
 {
     // Any more complex, and we will use style().itemRect()
     // NB: QCheckBox::sizeHint() is similar
-    constPolish();
+
     QSize sz;
     if (pixmap())
 	sz = pixmap()->size();
@@ -173,30 +139,38 @@ QSize QRadioButton::sizeHint() const
 
     return sz + QSize( bmsz.width()
 			+ (text().isEmpty() ? 0 : gutter+margin),
-			4 ).expandedTo( QApplication::globalStrut() );
+			4 );
 }
 
 
-/*!\reimp
+/*!
+  Specifies that this widget may stretch horizontally, but is fixed
+  vertically.
 */
 
 QSizePolicy QRadioButton::sizePolicy() const
 {
-    //### removeme 3.0
-    return QWidget::sizePolicy();
+    return QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Fixed );
 }
 
 
-/*!\reimp
+/*!
+  Reimplements QButton::hitButton().  This function is implemented to
+  prevent a radio button that is \link isOn() on \endlink from being
+  switched off.
 */
+
 bool QRadioButton::hitButton( const QPoint &pos ) const
 {
     return rect().contains( pos );
 }
 
 
-/*!\reimp
+/*!
+  Draws the radio button, but not the button label.
+  \sa drawButtonLabel()
 */
+
 void QRadioButton::drawButton( QPainter *paint )
 {
     QPainter	*p = paint;
@@ -206,13 +180,10 @@ void QRadioButton::drawButton( QPainter *paint )
     QFontMetrics fm = fontMetrics();
     QSize lsz = fm.size(ShowPrefix, text());
     QSize sz = style().exclusiveIndicatorSize();
-    x = text().isEmpty() ? 1 : 0;
+    x = 0;
     y = (height() - lsz.height() + fm.height() - sz.height())/2;
 
-#ifndef QT_NO_TEXTSTREAM
 #define SAVE_RADIOBUTTON_PIXMAPS
-#endif
-
 #if defined(SAVE_RADIOBUTTON_PIXMAPS)
     QString pmkey;				// pixmap key
     int kf = 0;
@@ -222,8 +193,7 @@ void QRadioButton::drawButton( QPainter *paint )
 	kf |= 2;
     if ( isEnabled() )
 	kf |= 4;
-    QTextOStream os(&pmkey);
-    os << "$qt_radio_" << style().className() << "_"
+    QTextOStream(&pmkey) << "$qt_radio_" << style().className() << "_"
 			 << palette().serialNumber() << "_" << kf;
     QPixmap *pm = QPixmapCache::find( pmkey );
     if ( pm ) {					// pixmap exists
@@ -252,14 +222,6 @@ void QRadioButton::drawButton( QPainter *paint )
 #if defined(SAVE_RADIOBUTTON_PIXMAPS)
     if ( use_pm ) {
 	pmpaint.end();
-	if ( backgroundPixmap() || backgroundMode() == X11ParentRelative ) {
-	    QBitmap bm( pm->size() );
-	    bm.fill( color0 );
-	    pmpaint.begin( &bm );
-	    style().drawExclusiveIndicatorMask( &pmpaint, 0, 0, bm.width(), bm.height(), isOn() );
-	    pmpaint.end();
-	    pm->setMask( bm );
-	}
 	p = paint;				// draw in default device
 	p->drawPixmap( wx, wy, *pm );
 	if (!QPixmapCache::insert(pmkey, pm) )	// save in cache
@@ -271,8 +233,11 @@ void QRadioButton::drawButton( QPainter *paint )
 
 
 
-/*!\reimp
+/*!
+  Draws the radio button label.
+  \sa drawButton()
 */
+
 void QRadioButton::drawButtonLabel( QPainter *p )
 {
     int x, y, w, h;
@@ -301,22 +266,11 @@ void QRadioButton::drawButtonLabel( QPainter *p )
 	br.setBottom( br.bottom()+2);
 	br = br.intersect( QRect(0,0,width(),height()) );
 
-	if ( !text().isEmpty() )
-	    style().drawFocusRect( p, br, colorGroup() );
-	else {
-	    br.setRight( br.left()-1 );
-	    br.setLeft( br.left()-16 );
-	    br.setTop( br.top() );
-	    br.setBottom( br.bottom() );
-	    style().drawFocusRect( p, br, colorGroup() );
-	}
+	style().drawFocusRect(p, br, colorGroup());
     }
 }
 
 
-/*!
-  \reimp
-*/
 void QRadioButton::resizeEvent( QResizeEvent* e )
 {
     QButton::resizeEvent(e);
@@ -340,8 +294,6 @@ void QRadioButton::resizeEvent( QResizeEvent* e )
 }
 
 
-/*!\reimp
- */
 void QRadioButton::updateMask()
 {
     QBitmap bm(width(),height());
@@ -368,7 +320,7 @@ void QRadioButton::updateMask()
 			  pixmap(), text() );
 	x = 0;
 	y = (height() - lsz.height() + fm.height() - sz.height())/2;
-
+	
 	style().drawExclusiveIndicatorMask(&p, x, y, sz.width(), sz.height(), isOn() );
 
 	if ( hasFocus() ) {
@@ -386,16 +338,7 @@ void QRadioButton::updateMask()
 	    br.setBottom( br.bottom()+2);
 	    br = br.intersect( QRect(0,0,width(),height()) );
 
-	    if ( !text().isEmpty() )
-		style().drawFocusRect( &p, br, cg );
-	    else {
-		br.setRight( br.left()-1 );
-		br.setLeft( br.left()-16 );
-		br.setTop( br.top() );
-		br.setBottom( br.bottom() );
-		style().drawFocusRect( &p, br, cg );
-	    }
-
+	    style().drawFocusRect( &p, br, cg );
 	}
     }
     setMask(bm);
@@ -404,8 +347,13 @@ void QRadioButton::updateMask()
 
 /*! \reimp */
 
-void QRadioButton::focusInEvent( QFocusEvent *e  )
+void QRadioButton::focusInEvent( QFocusEvent * e )
 {
-    QButton::focusInEvent( e ); // ### 3.0 remove
+    QButton * b = 0;
+    if ( group() && !isOn() )
+	b = group()->selected();
+    if ( b && b->isEnabled() )
+	b->setFocus();
+    else
+	QButton::focusInEvent( e );
 }
-#endif

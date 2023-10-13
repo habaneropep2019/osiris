@@ -1,39 +1,27 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qpen.h   2.3.2   edited 2001-01-26 $
+** $Id: qpen.h,v 2.9 1999/04/28 09:57:01 aavit Exp $
 **
 ** Definition of QPen class
 **
 ** Created : 940112
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
-** This file is part of the kernel module of the Qt GUI Toolkit.
+** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses may use this file in accordance with the Qt Commercial License
-** Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
+*****************************************************************************/
 
 #ifndef QPEN_H
 #define QPEN_H
@@ -51,7 +39,6 @@ public:
     QPen();
     QPen( PenStyle );
     QPen( const QColor &color, uint width=0, PenStyle style=SolidLine );
-    QPen( const QColor &cl, uint w, PenStyle s, PenCapStyle c, PenJoinStyle j);
     QPen( const QPen & );
    ~QPen();
     QPen &operator=( const QPen & );
@@ -62,10 +49,6 @@ public:
     void	setWidth( uint );
     const QColor &color() const		{ return data->color; }
     void	setColor( const QColor & );
-    PenCapStyle	capStyle() const;
-    void	setCapStyle( PenCapStyle );
-    PenJoinStyle joinStyle() const;
-    void	setJoinStyle( PenJoinStyle );
 
     bool	operator==( const QPen &p ) const;
     bool	operator!=( const QPen &p ) const
@@ -74,12 +57,11 @@ public:
 private:
     QPen	copy()	const;
     void	detach();
-    void	init( const QColor &, uint, uint );
+    void	init( const QColor &, uint, PenStyle );
     struct QPenData : public QShared {		// pen data
 	PenStyle  style;
 	uint	  width;
 	QColor	  color;
-	Q_UINT16  linest;
     } *data;
 };
 
@@ -87,9 +69,9 @@ private:
 /*****************************************************************************
   QPen stream functions
  *****************************************************************************/
-#ifndef QT_NO_DATASTREAM
+
 Q_EXPORT QDataStream &operator<<( QDataStream &, const QPen & );
 Q_EXPORT QDataStream &operator>>( QDataStream &, QPen & );
-#endif
+
 
 #endif // QPEN_H

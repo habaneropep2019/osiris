@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: qt/examples/progress/progress.cpp   2.3.2   edited 2001-06-12 $
+** $Id: progress.cpp,v 1.2 1999/06/03 01:45:07 warwick Exp $
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -300,9 +300,9 @@ private:
 		p.fillRect(x,y,w,h,c);
 	    }
 
-	    p.fillRect(0, 0, width(), height(), backgroundColor());
+	    lpb->setProgress(n);
 
-	    delete lpb;
+	    p.fillRect(0, 0, width(), height(), backgroundColor());
 	}
     }
 
@@ -327,7 +327,6 @@ int main( int argc, char **argv )
     for ( int i=0; i<wincount; i++ ) {
 	CPUWaster* cpuw = new CPUWaster;
 	if ( i == 0 ) a.setMainWidget(cpuw);
-	cpuw->setCaption("Qt Example - Progress");
 	cpuw->show();
     }
     return a.exec();

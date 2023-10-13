@@ -1,0 +1,1952 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><meta name="robots" content="noindex,noarchive"><title>
+Qt Toolkit - qiconview/main.cpp example file
+</title><style type="text/css"><!--
+h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
+a:link { text-decoration: none; }
+body { background: white; color: black; }
+--></style>
+</head><body bgcolor="#ffffff">
+
+<a href=index.html><img width=122 height=65 src=qtlogo.png alt="Qt logo" align=left border=0></a>
+<center><img src=dochead.png width=448 height=23></center>
+<br clear=all>
+
+<h1 align=center>Iconview</h1><br clear="all">
+
+  This example implements a flexible icon view which can store
+  lots of icon items. It supports Drag'n'Drop, different selection modes,
+  view modes, rubberband selection, etc.
+
+  <hr>
+
+  Header file:
+
+  <pre>/****************************************************************************
+** &#36;Id&#58; qiconview.h,v 1.3 1999/06/10 13:29:46 reggie Exp $
+**
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+**
+** This file is part of an example program for Qt.  This example
+** program may be used, distributed and modified without limitation.
+**
+*****************************************************************************/
+
+#ifndef QTICONVIEW_H
+#define QTICONVIEW_H
+
+#include &lt;<a href="qscrollview-h.html">qscrollview.h</a>&gt;
+#include &lt;<a href="qiconset-h.html">qiconset.h</a>&gt;
+#include &lt;<a href="qstring-h.html">qstring.h</a>&gt;
+#include &lt;<a href="qrect-h.html">qrect.h</a>&gt;
+#include &lt;<a href="qpoint-h.html">qpoint.h</a>&gt;
+#include &lt;<a href="qsize-h.html">qsize.h</a>&gt;
+#include &lt;<a href="qfont-h.html">qfont.h</a>&gt;
+#include &lt;<a href="qlist-h.html">qlist.h</a>&gt;
+#include &lt;<a href="qdragobject-h.html">qdragobject.h</a>&gt;
+#include &lt;<a href="qmultilineedit-h.html">qmultilineedit.h</a>&gt;
+#include &lt;<a href="qstringlist-h.html">qstringlist.h</a>&gt;
+
+class QtIconView;
+class QFontMetrics;
+class QPainter;
+class QMimeSource;
+class QDragObject;
+class QMouseEvent;
+class QDragEnterEvent;
+class QDragMoveEvent;
+class QDragLeaveEvent;
+class QKeyEvent;
+
+struct QtIconViewPrivate;
+class QtIconViewItem;
+
+/*****************************************************************************
+ *
+ * Class QtIconViewItemDrag
+ *
+ *****************************************************************************/
+
+class QtIconViewItemDrag : public QDragObject
+{
+public:
+    QtIconViewItemDrag( <a href="qwidget.html">QWidget</a> *source = 0, const char *name = 0 )
+        : <a href="qdragobject.html">QDragObject</a>( source, name )  {}
+
+    virtual const char *format( int )  const
+    { return 0L; }
+
+    virtual QByteArray encodedData( const char * )  const
+    { return QByteArray(); }
+
+};
+
+/*****************************************************************************
+ *
+ * Class QtIconViewItemLineEdit
+ *
+ *****************************************************************************/
+
+class QtIconViewItemLineEdit : public QMultiLineEdit
+{
+    Q_OBJECT
+
+public:
+    QtIconViewItemLineEdit( const QString &amp;text, QWidget *parent, QtIconViewItem *theItem, const char *name = 0 );
+
+signals:
+    void escapePressed();
+
+protected:
+    void keyPressEvent( <a href="qkeyevent.html">QKeyEvent</a> *e );
+
+protected:
+    QtIconViewItem *item;
+    <a href="qstring.html">QString</a> startText;
+
+};
+
+/*****************************************************************************
+ *
+ * Class QtIconViewItem
+ *
+ *****************************************************************************/
+
+class QtIconViewItem : public QObject
+{
+    friend class QtIconView;
+
+    Q_OBJECT
+
+public:
+    QtIconViewItem( QtIconView *parent );
+    QtIconViewItem( QtIconView *parent, QtIconViewItem *after );
+    QtIconViewItem( QtIconView *parent, const QString &amp;text );
+    QtIconViewItem( QtIconView *parent, QtIconViewItem *after, const QString &amp;text );
+    QtIconViewItem( QtIconView *parent, const QString &amp;text, const QIconSet &amp;icon );
+    QtIconViewItem( QtIconView *parent, QtIconViewItem *after, const QString &amp;text, const QIconSet &amp;icon );
+    virtual ~QtIconViewItem();
+
+    virtual void setAllowRename( bool allow );
+    virtual void setAllowDrag( bool allow );
+    virtual void setAllowDrop( bool allow );
+
+    virtual QString text();
+    virtual QIconSet icon();
+
+    virtual bool allowRename();
+    virtual bool allowDrag();
+    virtual bool allowDrop();
+
+    virtual QtIconView *iconView()  const;
+    virtual QtIconViewItem *prevItem()  const;
+    virtual QtIconViewItem *nextItem()  const;
+
+    virtual int index();
+
+    virtual void setSelected( bool s, bool cb = FALSE );
+    virtual void setSelectable( bool s );
+
+    virtual bool isSelected();
+    virtual bool isSelectable();
+
+    virtual void repaint();
+
+    virtual void move( int x, int y );
+    virtual void moveBy( int dx, int dy );
+    virtual void move( const QPoint &amp;pnt );
+    virtual void moveBy( const QPoint &amp;pnt );
+
+    virtual QRect rect();
+    virtual int x();
+    virtual int y();
+    virtual int width();
+    virtual int height();
+    virtual QSize size();
+    virtual QPoint pos();
+    virtual QRect textRect( bool relative = TRUE );
+    virtual QRect iconRect( bool relative = TRUE );
+    virtual bool contains( <a href="qpoint.html">QPoint</a> pnt );
+    virtual bool intersects( <a href="qrect.html">QRect</a> r );
+
+    virtual void setFont( const QFont &amp;font );
+    virtual QFont font();
+
+    virtual void setViewMode( QIconSet::Size mode );
+
+    virtual bool acceptDrop( <a href="qmimesource.html">QMimeSource</a> *mime );
+    virtual QDragObject *dragObject();
+
+    virtual void rename();
+
+public slots:
+    virtual void setText( const QString &amp;text );
+    virtual void setIcon( const QIconSet &amp;icon );
+
+protected slots:
+    virtual void renameItem();
+    virtual void cancelRenameItem();
+
+protected:
+    virtual void removeRenameBox();
+    virtual void calcRect();
+    virtual void paintItem( <a href="qpainter.html">QPainter</a> *p );
+    virtual void paintFocus( <a href="qpainter.html">QPainter</a> *p );
+    virtual void makeActiveIcon();
+    virtual void dropped( <a href="qmimesource.html">QMimeSource</a> *mime );
+    virtual void breakLines( const QString text, QStringList &amp;lst, int width );
+    virtual void dragEntered();
+    virtual void dragLeft();
+
+    QtIconView *view;
+    <a href="qstring.html">QString</a> itemText;
+    <a href="qiconset.html">QIconSet</a> itemIcon;
+    QtIconViewItem *prev, *next;
+    bool allow_rename, allow_drag, allow_drop;
+    bool selected, selectable;
+    <a href="qrect.html">QRect</a> itemRect, itemTextRect, itemIconRect;
+    <a href="qfontmetrics.html">QFontMetrics</a> *fm;
+    <a href="qfont.html">QFont</a> f;
+    QIconSet::Size viewMode;
+    QtIconViewItemLineEdit *renameBox;
+
+};
+
+/*****************************************************************************
+ *
+ * Class QtIconView
+ *
+ *****************************************************************************/
+
+class QtIconView : public QScrollView
+{
+    friend class QtIconViewItem;
+    friend struct QtIconViewPrivate;
+
+    Q_OBJECT
+
+public:
+    enum SelectionMode {
+        Single = 0,
+        Multi,
+        StrictMulti
+    };
+
+    QtIconView( <a href="qwidget.html">QWidget</a> *parent = 0, const char *name = 0 );
+    virtual ~QtIconView();
+
+    virtual void insertItem( QtIconViewItem *item, QtIconViewItem *after = 0L );
+    virtual void removeItem( QtIconViewItem *item );
+
+    virtual int index( QtIconViewItem *item );
+
+    virtual QtIconViewItem *firstItem()  const;
+    virtual QtIconViewItem *lastItem()  const;
+    virtual QtIconViewItem *currentItem()  const;
+    virtual void setCurrentItem( QtIconViewItem *item );
+
+    virtual unsigned int count();
+
+    virtual void setViewMode( QIconSet::Size mode );
+    virtual QIconSet::Size viewMode();
+
+    virtual void orderItemsInGrid();
+    virtual void show();
+
+    virtual void setSelectionMode( SelectionMode m );
+    virtual SelectionMode selectionMode();
+
+    virtual QtIconViewItem *findItem( const QPoint &amp;pos );
+    virtual void selectAll( bool select );
+
+    virtual void repaintItem( QtIconViewItem *item );
+
+    virtual void ensureItemVisible( QtIconViewItem *item );
+
+    virtual void clear();
+
+    virtual void setRastX( int rx );
+    virtual void setRastY( int ry );
+    virtual int rastX();
+    virtual int rastY();
+    virtual void setSpacing( int sp );
+    virtual int spacing();
+
+signals:
+    void dropped( <a href="qmimesource.html">QMimeSource</a> *mime );
+    void moved();
+    void doubleClicked( QtIconViewItem *item );
+    void itemRightClicked( QtIconViewItem *item );
+    void viewportRightClicked();
+    void selectionChanged();
+    void selectionChanged( int numItems );
+    void currentChanged();
+    void currentChanged( QtIconViewItem *item );
+
+protected slots:
+    virtual void doAutoScroll();
+
+protected:
+    virtual void drawContents( <a href="qpainter.html">QPainter</a> *p, int cx, int cy, int cw, int ch );
+    virtual void contentsMousePressEvent( <a href="qmouseevent.html">QMouseEvent</a> *e );
+    virtual void contentsMouseReleaseEvent( <a href="qmouseevent.html">QMouseEvent</a> *e );
+    virtual void contentsMouseMoveEvent( <a href="qmouseevent.html">QMouseEvent</a> *e );
+    virtual void contentsMouseDoubleClickEvent( <a href="qmouseevent.html">QMouseEvent</a> *e );
+    virtual void contentsDragEnterEvent( <a href="qdragenterevent.html">QDragEnterEvent</a> *e );
+    virtual void contentsDragMoveEvent( <a href="qdragmoveevent.html">QDragMoveEvent</a> *e );
+    virtual void contentsDragLeaveEvent( <a href="qdragleaveevent.html">QDragLeaveEvent</a> *e );
+    virtual void contentsDropEvent( <a href="qdropevent.html">QDropEvent</a> *e );
+    virtual void keyPressEvent( <a href="qkeyevent.html">QKeyEvent</a> *e );
+
+    virtual void selectByRubber( <a href="qrect.html">QRect</a> oldRubber );
+    virtual void drawRubber( <a href="qpainter.html">QPainter</a> *p );
+    virtual QDragObject *dragObject();
+    virtual void startDrag( bool move = FALSE );
+    virtual void insertInGrid( QtIconViewItem *item );
+
+    void emitSelectionChanged();
+    void emitNewSelectionNumber();
+
+    QtIconViewPrivate *d;
+
+};
+
+#endif
+</pre>
+
+
+  <hr>
+
+  Implementation:
+
+  <pre>/****************************************************************************
+** &#36;Id&#58; qiconview.cpp,v 1.6 1999/06/24 16:40:07 reggie Exp $
+**
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+**
+** This file is part of an example program for Qt.  This example
+** program may be used, distributed and modified without limitation.
+**
+*****************************************************************************/
+
+#include "qiconview.h"
+
+#include &lt;<a href="qpixmap-h.html">qpixmap.h</a>&gt;
+#include &lt;<a href="qfontmetrics-h.html">qfontmetrics.h</a>&gt;
+#include &lt;<a href="qpainter-h.html">qpainter.h</a>&gt;
+#include &lt;<a href="qevent-h.html">qevent.h</a>&gt;
+#include &lt;<a href="qpalette-h.html">qpalette.h</a>&gt;
+#include &lt;<a href="qmime-h.html">qmime.h</a>&gt;
+#include &lt;<a href="qimage-h.html">qimage.h</a>&gt;
+#include &lt;<a href="qpen-h.html">qpen.h</a>&gt;
+#include &lt;<a href="qbrush-h.html">qbrush.h</a>&gt;
+#include &lt;<a href="qtimer-h.html">qtimer.h</a>&gt;
+#include &lt;<a href="qcursor-h.html">qcursor.h</a>&gt;
+#include &lt;qkeycode.h&gt;
+
+static const char *unknown[] = {
+    "32 32 11 1",
+    "c c #ffffff",
+    "g c #c0c0c0",
+    "a c #c0ffc0",
+    "h c #a0a0a4",
+    "d c #585858",
+    "f c #303030",
+    "i c #400000",
+    "b c #00c000",
+    "e c #000000",
+    "# c #000000",
+    ". c None",
+    "...###..........................",
+    "...#aa##........................",
+    ".###baaa##......................",
+    ".#cde#baaa##....................",
+    ".#cccdeebaaa##..##f.............",
+    ".#cccccdeebaaa##aaa##...........",
+    ".#cccccccdeebaaaaaaaa##.........",
+    ".#cccccccccdeebaaaaaaa#.........",
+    ".#cccccgcgghhebbbbaaaaa#........",
+    ".#ccccccgcgggdebbbbbbaa#........",
+    ".#cccgcgcgcgghdeebiebbba#.......",
+    ".#ccccgcggggggghdeddeeba#.......",
+    ".#cgcgcgcggggggggghghdebb#......",
+    ".#ccgcggggggggghghghghd#b#......",
+    ".#cgcgcggggggggghghghhd#b#......",
+    ".#gcggggggggghghghhhhhd#b#......",
+    ".#cgcggggggggghghghhhhd#b#......",
+    ".#ggggggggghghghhhhhhhdib#......",
+    ".#gggggggggghghghhhhhhd#b#......",
+    ".#hhggggghghghhhhhhhhhd#b#......",
+    ".#ddhhgggghghghhhhhhhhd#b#......",
+    "..##ddhhghghhhhhhhhhhhdeb#......",
+    "....##ddhhhghhhhhhhhhhd#b#......",
+    "......##ddhhhhhhhhhhhhd#b#......",
+    "........##ddhhhhhhhhhhd#b#......",
+    "..........##ddhhhhhhhhd#b#......",
+    "............##ddhhhhhhd#b###....",
+    "..............##ddhhhhd#b#####..",
+    "................##ddhhd#b######.",
+    "..................##dddeb#####..",
+    "....................##d#b###....",
+    "......................####......"};
+
+/*****************************************************************************
+ *
+ * Struct QtIconViewPrivate
+ *
+ *****************************************************************************/
+
+struct QtIconViewPrivate
+{
+    QtIconViewItem *firstItem, *lastItem;
+    unsigned int count;
+    QIconSet::Size mode;
+    bool mousePressed, startDrag;
+    QtIconView::SelectionMode selectionMode;
+    QtIconViewItem *currentItem, *tmpCurrentItem;
+    <a href="qrect.html">QRect</a> *rubber;
+    <a href="qtimer.html">QTimer</a> *scrollTimer;
+    int rastX, rastY, spacing;
+    bool cleared;
+};
+
+/*****************************************************************************
+ *
+ * Class QtIconViewItemLineEdit
+ *
+ *****************************************************************************/
+
+QtIconViewItemLineEdit::QtIconViewItemLineEdit( const QString &amp;text, QWidget *parent, QtIconViewItem *theItem, const char *name )
+    : <a href="qmultilineedit.html">QMultiLineEdit</a>( parent, name ), item( theItem ), startText( text )
+{
+    setText( text );
+    clearTableFlags();
+}
+
+void <a name="239"></a>QtIconViewItemLineEdit::keyPressEvent( <a href="qkeyevent.html">QKeyEvent</a> *e )
+{
+    if ( e-&gt;<a href="qkeyevent.html#a0a881">key</a>()  == Key_Escape ) {
+        item-&gt;<a href=#147><a name="147"></a>QtIconViewItem::setText</a>( startText );
+//         item-&gt;iconView()-&gt;repaintContents( item-&gt;iconView()-&gt;contentsX(), item-&gt;iconView()-&gt;contentsY(),
+//                                            item-&gt;iconView()-&gt;contentsWidth(), item-&gt;iconView()-&gt;contentsHeight() );
+        emit escapePressed();
+    }
+    else if ( e-&gt;<a href="qkeyevent.html#a0a881">key</a>() == Key_Enter ||
+              e-&gt;<a href="qkeyevent.html#a0a881">key</a>() == Key_Return )
+        emit returnPressed();
+    else
+        <a href="qmultilineedit.html#eeb683">QMultiLineEdit::keyPressEvent</a>( e ) ;
+}
+
+/*****************************************************************************
+ *
+ * Class QtIconViewItem
+ *
+ *****************************************************************************/
+
+QtIconViewItem::QtIconViewItem( QtIconView *parent )
+    : view( parent ), itemText(), itemIcon( <a href="qpixmap.html">QPixmap</a>( unknown ) ),
+      prev( 0L ), next( 0L ), allow_rename( TRUE ), allow_drag( TRUE ), allow_drop( TRUE ),
+      selected( FALSE ), selectable( TRUE ), fm( 0L ), renameBox( 0L )
+{
+    if ( view ) {
+        fm = new <a href="qfontmetrics.html">QFontMetrics</a>( view-&gt;font() );
+        viewMode = view-&gt;viewMode();
+
+        <a href=#191>makeActiveIcon</a>();
+        <a href=#188>calcRect</a>();
+
+        view-&gt;insertItem( this );
+    }
+}
+
+QtIconViewItem::QtIconViewItem( QtIconView *parent, QtIconViewItem *after )
+    : view( parent ), itemText(), itemIcon( <a href="qpixmap.html">QPixmap</a>( unknown ) ),
+      prev( 0L ), next( after ), allow_rename( TRUE ), allow_drag( TRUE ), allow_drop( TRUE ),
+      selected( FALSE ), selectable( TRUE ), fm( 0L ), renameBox( 0L )
+{
+    if ( view ) {
+        fm = new <a href="qfontmetrics.html">QFontMetrics</a>( view-&gt;font() );
+        viewMode = view-&gt;viewMode();
+
+        <a href=#191>makeActiveIcon</a>();
+        <a href=#188>calcRect</a>();
+
+        view-&gt;insertItem( this );
+    }
+}
+
+QtIconViewItem::QtIconViewItem( QtIconView *parent, const QString &amp;text )
+    : view( parent ), itemText( text ), itemIcon( <a href="qpixmap.html">QPixmap</a>( unknown ) ),
+      prev( 0L ), next( 0L ), allow_rename( TRUE ), allow_drag( TRUE ), allow_drop( TRUE ),
+      selected( FALSE ), selectable( TRUE ), fm( 0L ), renameBox( 0L )
+{
+    if ( view ) {
+        fm = new <a href="qfontmetrics.html">QFontMetrics</a>( view-&gt;font() );
+        viewMode = view-&gt;viewMode();
+
+        <a href=#191>makeActiveIcon</a>();
+        <a href=#188>calcRect</a>();
+
+        view-&gt;insertItem( this );
+    }
+}
+
+QtIconViewItem::QtIconViewItem( QtIconView *parent, QtIconViewItem *after, const QString &amp;text )
+    : view( parent ), itemText( text ), itemIcon( <a href="qpixmap.html">QPixmap</a>( unknown ) ),
+      prev( 0L ), next( after ), allow_rename( TRUE ), allow_drag( TRUE ), allow_drop( TRUE ),
+      selected( FALSE ), selectable( TRUE ), fm( 0L ), renameBox( 0L )
+{
+    if ( view ) {
+        fm = new <a href="qfontmetrics.html">QFontMetrics</a>( view-&gt;font() );
+        viewMode = view-&gt;viewMode();
+
+        <a href=#191>makeActiveIcon</a>();
+        <a href=#188>calcRect</a>();
+
+        view-&gt;insertItem( this );
+    }
+}
+
+QtIconViewItem::QtIconViewItem( QtIconView *parent, const QString &amp;text, const QIconSet &amp;icon )
+    : view( parent ), itemText( text ), itemIcon( icon ),
+      prev( 0L ), next( 0L ), allow_rename( TRUE ), allow_drag( TRUE ), allow_drop( TRUE ),
+      selected( FALSE ), selectable( TRUE ), fm( 0L ), renameBox( 0L )
+{
+    if ( view ) {
+        fm = new <a href="qfontmetrics.html">QFontMetrics</a>( view-&gt;font() );
+        viewMode = view-&gt;viewMode();
+
+        <a href=#191>makeActiveIcon</a>();
+        <a href=#188>calcRect</a>();
+
+        view-&gt;insertItem( this );
+    }
+}
+
+QtIconViewItem::QtIconViewItem( QtIconView *parent, QtIconViewItem *after, const QString &amp;text, const QIconSet &amp;icon )
+    : view( parent ), itemText( text ), itemIcon( icon ),
+      prev( 0L ), next( after ), allow_rename( TRUE ), allow_drag( TRUE ), allow_drop( TRUE ),
+      selected( FALSE ), selectable( TRUE ), fm( 0L ), renameBox( 0L )
+{
+    if ( view ) {
+        fm = new <a href="qfontmetrics.html">QFontMetrics</a>( view-&gt;font() );
+        viewMode = view-&gt;viewMode();
+
+        <a href=#191>makeActiveIcon</a>();
+        <a href=#188>calcRect</a>();
+
+        view-&gt;insertItem( this );
+    }
+}
+
+QtIconViewItem::~QtIconViewItem()
+{
+    view-&gt;removeItem( this );
+    <a href=#187>removeRenameBox</a>();
+}
+
+void <a name="147"></a>QtIconViewItem::setText( const QString &amp;text )
+{
+    if ( text == itemText )
+        return;
+
+    itemText = text;
+    <a href=#188>calcRect</a>();
+    <a href=#165>repaint</a>();
+}
+
+void <a name="148"></a>QtIconViewItem::setIcon( const QIconSet &amp;icon )
+{
+    itemIcon = icon;
+    <a href=#188>calcRect</a>();
+    <a href=#165>repaint</a>();
+}
+
+void <a name="149"></a>QtIconViewItem::setAllowRename( bool allow )
+{
+    allow_rename = allow;
+}
+
+void <a name="150"></a>QtIconViewItem::setAllowDrag( bool allow )
+{
+    allow_drag = allow;
+}
+
+void <a name="151"></a>QtIconViewItem::setAllowDrop( bool allow )
+{
+    allow_drop = allow;
+}
+
+<a href="qstring.html">QString</a> <a name="152"></a>QtIconViewItem::text()
+{
+    return itemText;
+}
+
+<a href="qiconset.html">QIconSet</a> <a name="153"></a>QtIconViewItem::icon()
+{
+    return itemIcon;
+}
+
+bool <a name="154"></a>QtIconViewItem::allowRename()
+{
+    return allow_rename;
+}
+
+bool <a name="155"></a>QtIconViewItem::allowDrag()
+{
+    return allow_drag;
+}
+
+bool <a name="156"></a>QtIconViewItem::allowDrop()
+{
+    return allow_drop;
+}
+
+QtIconView *<a name="157"></a>QtIconViewItem::iconView() const
+{
+    return view;
+}
+
+QtIconViewItem *<a name="158"></a>QtIconViewItem::prevItem() const
+{
+    return prev;
+}
+
+QtIconViewItem *<a name="159"></a>QtIconViewItem::nextItem() const
+{
+    return next;
+}
+
+int <a name="160"></a>QtIconViewItem::index()
+{
+    if ( view )
+        return view-&gt;index( this );
+
+    return -1;
+}
+
+void <a name="161"></a>QtIconViewItem::setSelected( bool s, bool cb )
+{
+    if ( selectable &amp;&amp; s != selected ) {
+        if ( !s )
+            selected = FALSE;
+        else {
+            if ( view-&gt;d-&gt;selectionMode == QtIconView::Single &amp;&amp; view-&gt;d-&gt;currentItem )
+                view-&gt;d-&gt;currentItem-&gt;setSelected( FALSE );
+            else if ( view-&gt;d-&gt;selectionMode == QtIconView::StrictMulti &amp;&amp; !cb )
+                view-&gt;selectAll( FALSE );
+        }
+        selected = s;
+
+        <a href=#165>repaint</a>();
+        view-&gt;emitSelectionChanged();
+    }
+}
+
+void <a name="162"></a>QtIconViewItem::setSelectable( bool s )
+{
+    selectable = s;
+    if ( selected )
+        selected = FALSE;
+}
+
+bool <a name="163"></a>QtIconViewItem::isSelected()
+{
+    return selected;
+}
+
+bool <a name="164"></a>QtIconViewItem::isSelectable()
+{
+    return selectable;
+}
+
+void <a name="165"></a>QtIconViewItem::repaint()
+{
+    if ( view )
+        view-&gt;repaintItem( this );
+}
+
+void <a name="168"></a>QtIconViewItem::move( int x, int y )
+{
+    itemRect.setRect( x, y, itemRect.width(), itemRect.height() );
+}
+
+void <a name="169"></a>QtIconViewItem::moveBy( int dx, int dy )
+{
+    itemRect.moveBy( dx, dy );
+}
+
+void <a name="168"></a>QtIconViewItem::move( const QPoint &amp;pnt )
+{
+    <a href=#168>move</a>( pnt.<a href="qpoint.html#1ed201">x</a>(), pnt.<a href="qpoint.html#90c362">y</a>() );
+}
+
+void <a name="169"></a>QtIconViewItem::moveBy( const QPoint &amp;pnt )
+{
+    <a href=#169>moveBy</a>( pnt.<a href="qpoint.html#1ed201">x</a>(), pnt.<a href="qpoint.html#90c362">y</a>() );
+}
+
+<a href="qrect.html">QRect</a> <a name="170"></a>QtIconViewItem::rect()
+{
+    return itemRect;
+}
+
+int QtIconViewItem::x()
+{
+    return itemRect.x();
+}
+
+int QtIconViewItem::y()
+{
+    return itemRect.y();
+}
+
+int <a name="171"></a>QtIconViewItem::width()
+{
+    return itemRect.width();
+}
+
+int <a name="172"></a>QtIconViewItem::height()
+{
+    return itemRect.height();
+}
+
+<a href="qsize.html">QSize</a> <a name="173"></a>QtIconViewItem::size()
+{
+    return QSize( itemRect.width(), itemRect.height() );
+}
+
+<a href="qpoint.html">QPoint</a> <a name="174"></a>QtIconViewItem::pos()
+{
+    return QPoint( itemRect.x(), itemRect.y() );
+}
+
+/*!
+ * If relative is TRUE, the returned rectangle is relative to the origin of the viewport's
+ * coordinate system, else the rectangle is relative to the origin of the item's rectangle
+ */
+
+<a href="qrect.html">QRect</a> <a name="175"></a>QtIconViewItem::textRect( bool relative )
+{
+    if ( relative )
+        return itemTextRect;
+    else
+        return QRect( x() + itemTextRect.x(), y() + itemTextRect.y(), itemTextRect.width(), itemTextRect.height() );
+}
+
+/*!
+ * If relative is TRUE, the returned rectangle is relative to the origin of the viewport's
+ * coordinate system, else the rectangle is relative to the origin of the item's rectangle
+ */
+
+<a href="qrect.html">QRect</a> <a name="176"></a>QtIconViewItem::iconRect( bool relative )
+{
+    if ( relative )
+        return itemIconRect;
+    else
+        return QRect( x() + itemIconRect.x(), y() + itemIconRect.y(), itemIconRect.width(), itemIconRect.height() );
+}
+
+bool <a name="177"></a>QtIconViewItem::contains( <a href="qpoint.html">QPoint</a> pnt )
+{
+    return ( textRect( FALSE ).contains( pnt ) ||
+             <a href=#176>iconRect</a>( FALSE ).contains( pnt ) );
+}
+
+bool <a name="178"></a>QtIconViewItem::intersects( <a href="qrect.html">QRect</a> r )
+{
+    return ( textRect( FALSE ).intersects( r ) ||
+             <a href=#176>iconRect</a>( FALSE ).intersects( r ) );
+}
+
+void <a name="179"></a>QtIconViewItem::setFont( const QFont &amp;font )
+{
+    f = font;
+
+    if ( fm )
+        delete fm;
+
+    fm = new <a href="qfontmetrics.html">QFontMetrics</a>( f );
+    <a href=#188>calcRect</a>();
+    <a href=#165>repaint</a>();
+}
+
+<a href="qfont.html">QFont</a> <a name="180"></a>QtIconViewItem::font()
+{
+    return f;
+}
+
+void <a name="181"></a>QtIconViewItem::setViewMode( QIconSet::Size mode )
+{
+    viewMode = mode;
+    <a href=#188>calcRect</a>();
+}
+
+bool <a name="182"></a>QtIconViewItem::acceptDrop( <a href="qmimesource.html">QMimeSource</a> * )
+{
+    return FALSE;
+}
+
+<a href="qdragobject.html">QDragObject</a> *<a name="183"></a>QtIconViewItem::dragObject()
+{
+    return 0L;
+}
+
+void <a name="184"></a>QtIconViewItem::rename()
+{
+    renameBox = new QtIconViewItemLineEdit( itemText, view-&gt;viewport(), this );
+    renameBox-&gt;resize( <a href=#175>textRect</a>().width() - 2, <a href=#175>textRect</a>().height() - 2 );
+    view-&gt;addChild( renameBox, <a href=#175>textRect</a>( FALSE ).x() + 1, <a href=#175>textRect</a>( FALSE ).y() + 1 );
+    renameBox-&gt;setFrameStyle( QFrame::NoFrame );//Box | QFrame::Plain );
+    renameBox-&gt;selectAll();
+    renameBox-&gt;setFocus();
+    renameBox-&gt;show();
+    view-&gt;viewport()-&gt;setFocusProxy( renameBox );
+    <a href="qobject.html#c2d209">connect</a>( renameBox, SIGNAL( returnPressed() ), this, SLOT( <a href=#185>renameItem</a>() ) );
+    <a href="qobject.html#c2d209">connect</a>( renameBox, SIGNAL( escapePressed() ), this, SLOT( <a href=#186>cancelRenameItem</a>() ) );
+}
+
+void <a name="185"></a>QtIconViewItem::renameItem()
+{
+    if ( !renameBox )
+        return;
+
+    <a href="qrect.html">QRect</a> r = itemRect;
+    <a href=#147>setText</a>( renameBox-&gt;text() );
+    view-&gt;repaintContents( r.<a href="qrect.html#3a3d38">x</a>() - 1, r.<a href="qrect.html#65e614">y</a>() - 1, r.<a href="qrect.html#44fb71">width</a>() + 2, r.<a href="qrect.html#5d9fd1">height</a>() + 2 );
+    <a href=#187>removeRenameBox</a>();
+}
+
+void <a name="186"></a>QtIconViewItem::cancelRenameItem()
+{
+    if ( !renameBox )
+        return;
+
+    <a href=#187>removeRenameBox</a>();
+}
+
+void <a name="187"></a>QtIconViewItem::removeRenameBox()
+{
+    if ( !renameBox )
+        return;
+
+    delete renameBox;
+    renameBox = 0L;
+    view-&gt;viewport()-&gt;setFocusProxy( view );
+    view-&gt;setFocus();
+}
+
+void <a name="188"></a>QtIconViewItem::calcRect()
+{
+    if ( !fm )
+        return;
+
+    int w = 0, h = 0;
+
+    if ( view-&gt;rastX() != -1 &amp;&amp; fm-&gt;width( itemText ) &gt; view-&gt;rastX() - 4 ) {
+        <a href="qstringlist.html">QStringList</a> lst;
+        <a href=#193>breakLines</a>( itemText, lst, view-&gt;rastX() - 4 );
+
+        <a href="qvaluelistiterator.html">QValueListIterator</a>&lt;<a href="qstring.html">QString</a>&gt; it = lst.begin();
+        for ( ; it != lst.end(); ++it ) {
+            w = QMAX( w, fm-&gt;width( *it ) );
+            h += fm-&gt;height();
+        }
+        w += 6;
+        h += 2;
+    } else {
+        w = fm-&gt;width( itemText ) + 6;
+        h = fm-&gt;height() + 2;
+    }
+
+    itemTextRect.setWidth( w );
+    itemTextRect.setHeight( h );
+
+    w = itemIcon.pixmap( viewMode, QIconSet::Normal ).width() + 2;
+    h = itemIcon.pixmap( viewMode, QIconSet::Normal ).height() + 2;
+
+    itemIconRect.setWidth( w );
+    itemIconRect.setHeight( h );
+
+    w = QMAX( itemTextRect.width(), itemIconRect.width() );
+    h = itemTextRect.height() + itemIconRect.height() + 1;
+
+    itemRect.setWidth( w );
+    itemRect.setHeight( h );
+
+    itemTextRect = QRect( ( <a href=#171>width</a>() - itemTextRect.width() ) / 2, <a href=#172>height</a>() - itemTextRect.height(),
+                          itemTextRect.width(), itemTextRect.height() );
+    itemIconRect = QRect( ( <a href=#171>width</a>() - itemIconRect.width() ) / 2, 0,
+                          itemIconRect.width(), itemIconRect.height() );
+}
+
+void <a name="189"></a>QtIconViewItem::paintItem( <a href="qpainter.html">QPainter</a> *p )
+{
+    QIconSet::Mode m = QIconSet::Normal;
+    if ( isSelected() )
+        m = QIconSet::Active;
+    else if ( !isSelectable() )
+        m = QIconSet::Disabled;
+
+    int w = itemIcon.pixmap( viewMode, QIconSet::Normal ).width();
+
+    if ( isSelected() )
+        p-&gt;<a href="qpainter.html#0f4c23">fillRect</a>( <a href=#176>iconRect</a>( FALSE ), view-&gt;colorGroup().highlight() );
+    p-&gt;<a href="qpainter.html#f3fb4a">drawPixmap</a>( x() + ( <a href=#171>width</a>() - w ) / 2, y(), itemIcon.pixmap( viewMode, m ) );
+
+    p-&gt;<a href="qpainter.html#629789">save</a>();
+    if ( isSelected() ) {
+        p-&gt;<a href="qpainter.html#0f4c23">fillRect</a>( <a href=#175>textRect</a>( FALSE ), view-&gt;colorGroup().highlight() );
+        p-&gt;<a href="qpainter.html#1b9993">setPen</a>( <a href="qpen.html">QPen</a>( view-&gt;colorGroup().highlightedText() ) );
+    }
+    else
+        p-&gt;<a href="qpainter.html#1b9993">setPen</a>( view-&gt;colorGroup().text() );
+
+    if ( view-&gt;rastX() != -1 &amp;&amp; fm-&gt;width( itemText ) &gt; view-&gt;rastX() - 4 ) {
+        <a href="qstringlist.html">QStringList</a> lst;
+        <a href=#193>breakLines</a>( itemText, lst, view-&gt;rastX() - 4 );
+
+        <a href="qvaluelistiterator.html">QValueListIterator</a>&lt;<a href="qstring.html">QString</a>&gt; it = lst.begin();
+        int h = 0;
+        for ( ; it != lst.end(); ++it ) {
+            p-&gt;<a href="qpainter.html#8a59ed">drawText</a>( <a href="qrect.html">QRect</a>( <a href=#175>textRect</a>( FALSE ).x(), h + textRect( FALSE ).y(),
+                                <a href=#175>textRect</a>( FALSE ).width(), fm-&gt;height() ),
+                         Qt::AlignCenter, *it);
+            h += fm-&gt;height();
+        }
+    } else {
+        p-&gt;<a href="qpainter.html#8a59ed">drawText</a>( <a href=#175>textRect</a>( FALSE ), Qt::AlignCenter, itemText );
+    }
+
+    p-&gt;<a href="qpainter.html#24cf68">restore</a>();
+}
+
+void <a name="190"></a>QtIconViewItem::paintFocus( <a href="qpainter.html">QPainter</a> *p )
+{
+    view-&gt;style().drawFocusRect( p, QRect( <a href=#175>textRect</a>( FALSE ).x(), <a href=#175>textRect</a>( FALSE ).y(), <a href=#175>textRect</a>( FALSE ).width(), <a href=#175>textRect</a>( FALSE ).height() ),
+                                 view-&gt;colorGroup(), <a href=#163>isSelected</a>() ? &amp;view-&gt;colorGroup().highlight() : &amp;view-&gt;colorGroup().base(), <a href=#163>isSelected</a>() );
+    view-&gt;style().drawFocusRect( p, QRect( <a href=#176>iconRect</a>( FALSE ).x(), <a href=#176>iconRect</a>( FALSE ).y(), <a href=#176>iconRect</a>( FALSE ).width(), <a href=#176>iconRect</a>( FALSE ).height() ),
+                                 view-&gt;colorGroup(), <a href=#163>isSelected</a>() ? &amp;view-&gt;colorGroup().highlight() : &amp;view-&gt;colorGroup().base(), <a href=#163>isSelected</a>() );
+}
+
+void <a name="191"></a>QtIconViewItem::makeActiveIcon()
+{
+}
+
+void <a name="192"></a>QtIconViewItem::dropped( <a href="qmimesource.html">QMimeSource</a> * )
+{
+}
+
+void <a name="193"></a>QtIconViewItem::breakLines( const QString text, QStringList &amp;lst, int width )
+{
+    lst.clear();
+
+    if ( !fm )
+        return;
+
+    if ( text.isEmpty() ) {
+        lst.append( text );
+        return;
+    }
+
+    <a href="qstringlist.html">QStringList</a> words;
+    <a href="qstring.html">QString</a> line = text;
+
+    if ( line.<a href="qstring.html#ea86bb">simplifyWhiteSpace</a>().find( <a href="qchar.html">QChar</a>( ' ') ) == -1 ) {
+        // we have only one word - do some ugly line breaking
+
+        <a href="qstring.html">QString</a> txt;
+        for ( unsigned int i = 0; i &lt; line.<a href="qstring.html#6db3bf">length</a>(); i++ ) {
+            if ( fm-&gt;width( txt ) + fm-&gt;width( line.<a href="qstring.html#c5f1c6">at</a>( i ) ) &lt;= width ) {
+                txt += line.<a href="qstring.html#c5f1c6">at</a>( i );
+            } else {
+                lst.append( txt );
+                txt = line.<a href="qstring.html#c5f1c6">at</a>( i );
+            }
+        }
+        if ( !txt.<a href="qstring.html#9a6d7e">isEmpty</a>() )
+            lst.append( txt );
+
+        return;
+    }
+
+    int i = text.find( <a href="qchar.html">QChar</a>( ' ' ), 0 );
+
+    while ( i != -1 ) {
+        words.append( line.<a href="qstring.html#c27161">left</a>( i ) );
+        line.<a href="qstring.html#11dc0f">remove</a>( 0, i + 1 );
+        i = line.<a href="qstring.html#193519">find</a>( <a href="qchar.html">QChar</a>( ' ' ), 0 );
+    }
+
+    if ( !line.<a href="qstring.html#ea86bb">simplifyWhiteSpace</a>().isEmpty() )
+        words.append( line.<a href="qstring.html#ea86bb">simplifyWhiteSpace</a>() );
+
+    <a href="qvaluelistiterator.html">QValueListIterator</a>&lt;<a href="qstring.html">QString</a>&gt; it = words.begin();
+
+    int w = 0;
+    line = QString::null;
+
+    for ( ; it != words.end(); ++it ) {
+        if ( w == 0 ) {
+            line = *it;
+            line += QChar( ' ' );
+            w = fm-&gt;width( line );
+        } else {
+            if ( fm-&gt;width( line + *it ) &lt;= width ) {
+                line += *it;
+                line += QChar( ' ' );
+                w = fm-&gt;width( line );
+            } else {
+                lst.append( line );
+                w = 0;
+                --it;
+            }
+        }
+    }
+
+    if ( !line.<a href="qstring.html#9a6d7e">isEmpty</a>() )
+        lst.append( line );
+}
+
+void <a name="194"></a>QtIconViewItem::dragEntered()
+{
+}
+
+void <a name="195"></a>QtIconViewItem::dragLeft()
+{
+}
+
+/*****************************************************************************
+ *
+ * Class QtIconView
+ *
+ *****************************************************************************/
+
+QtIconView::QtIconView( <a href="qwidget.html">QWidget</a> *parent, const char *name )
+    : <a href="qscrollview.html">QScrollView</a>( parent, name, WNorthWestGravity )
+{
+    d = new QtIconViewPrivate;
+    d-&gt;firstItem = 0L;
+    d-&gt;lastItem = 0L;
+    d-&gt;count = 0;
+    d-&gt;mode = QIconSet::Automatic;
+    d-&gt;mousePressed = FALSE;
+    d-&gt;selectionMode = Single;
+    d-&gt;currentItem = 0L;
+    d-&gt;rubber = 0L;
+    d-&gt;scrollTimer = 0L;
+    d-&gt;startDrag = FALSE;
+    d-&gt;tmpCurrentItem = 0L;
+    d-&gt;rastX = d-&gt;rastY = -1;
+    d-&gt;spacing = 5;
+    d-&gt;cleared = FALSE;
+
+    <a href="qwidget.html#e1c7b1">setAcceptDrops</a>( TRUE );
+    <a href="qscrollview.html#040cb5">viewport</a>()-&gt;setAcceptDrops( TRUE );
+
+    <a href="qwidget.html#eeb59b">setMouseTracking</a>( TRUE );
+    <a href="qscrollview.html#040cb5">viewport</a>()-&gt;setMouseTracking( TRUE );
+
+    <a href="qwidget.html#f1bc97">setFocusPolicy</a>( QWidget::StrongFocus );
+    <a href="qscrollview.html#040cb5">viewport</a>()-&gt;setFocusPolicy( QWidget::StrongFocus );
+
+    <a href="qwidget.html#587c91">setBackgroundMode</a>( NoBackground );
+    <a href="qscrollview.html#040cb5">viewport</a>()-&gt;setFocusProxy( this );
+}
+
+QtIconView::~QtIconView()
+{
+    delete d;
+}
+
+void <a name="196"></a>QtIconView::insertItem( QtIconViewItem *item, QtIconViewItem *after )
+{
+    if ( !item )
+        return;
+
+    if ( !d-&gt;firstItem ) {
+        d-&gt;firstItem = d-&gt;lastItem = item;
+        item-&gt;prev = 0L;
+        item-&gt;next = 0L;
+    } else {
+        if ( !after || after == d-&gt;lastItem ) {
+            d-&gt;lastItem-&gt;next = item;
+            item-&gt;prev = d-&gt;lastItem;
+            d-&gt;lastItem = item;
+        } else {
+            QtIconViewItem *i = d-&gt;firstItem;
+            while ( i != after )
+                i = i-&gt;next;
+
+            if ( i ) {
+                QtIconViewItem *next = i-&gt;next;
+                item-&gt;next = next;
+                item-&gt;prev = i;
+                i-&gt;next = item;
+                next-&gt;prev = item;
+            }
+        }
+    }
+
+    if ( isVisible() ) {
+        <a href=#236>insertInGrid</a>( item );
+
+        <a href="qscrollview.html#e4cb2e">resizeContents</a>( QMAX( <a href="qscrollview.html#97d58f">contentsWidth</a>(), item-&gt;x() + item-&gt;width() + 5 ),
+                        QMAX( <a href="qscrollview.html#c8c152">contentsHeight</a>(), item-&gt;y() + item-&gt;height() + 5 ) );
+    }
+
+    d-&gt;count++;
+}
+
+void <a name="197"></a>QtIconView::removeItem( QtIconViewItem *item )
+{
+    if ( !item )
+        return;
+
+    if ( item == d-&gt;firstItem )
+        d-&gt;firstItem = d-&gt;firstItem-&gt;next;
+    else if ( item == d-&gt;lastItem )
+        d-&gt;lastItem = d-&gt;lastItem-&gt;prev;
+    else {
+        QtIconViewItem *i = d-&gt;firstItem;
+        while ( i != item )
+            i = i-&gt;next;
+
+        if ( i ) {
+            i-&gt;prev-&gt;next = i-&gt;next;
+            i-&gt;next-&gt;prev = i-&gt;prev;
+        }
+    }
+
+    d-&gt;count--;
+}
+
+int <a name="198"></a>QtIconView::index( QtIconViewItem *item )
+{
+    if ( !item )
+        return -1;
+
+    if ( item == d-&gt;firstItem )
+        return 0;
+    else if ( item == d-&gt;lastItem )
+        return d-&gt;count - 1;
+    else {
+        QtIconViewItem *i = d-&gt;firstItem;
+        unsigned int j = 0;
+        while ( i != item ) {
+            i = i-&gt;next;
+            ++j;
+        }
+
+        return j;
+    }
+}
+
+QtIconViewItem *<a name="199"></a>QtIconView::firstItem() const
+{
+    return d-&gt;firstItem;
+}
+
+QtIconViewItem *<a name="200"></a>QtIconView::lastItem() const
+{
+    return d-&gt;lastItem;
+}
+
+QtIconViewItem *<a name="201"></a>QtIconView::currentItem() const
+{
+    return d-&gt;currentItem;
+}
+
+void <a name="202"></a>QtIconView::setCurrentItem( QtIconViewItem *item )
+{
+    d-&gt;currentItem = item;
+    emit currentChanged();
+    emit currentChanged( d-&gt;currentItem );
+    <a href=#238>emitNewSelectionNumber</a>();
+}
+
+unsigned int <a name="203"></a>QtIconView::count()
+{
+    return d-&gt;count;
+}
+
+void <a name="204"></a>QtIconView::setViewMode( QIconSet::Size mode )
+{
+    d-&gt;mode = mode;
+
+    if ( !d-&gt;firstItem )
+        return;
+
+    QtIconViewItem *item = d-&gt;firstItem;
+    for ( ; item; item = item-&gt;next )
+        item-&gt;setViewMode( mode );
+
+    <a href="qscrollview.html#f9c109">repaintContents</a>( contentsX(), <a href="qscrollview.html#abff81">contentsY</a>(), <a href="qscrollview.html#97d58f">contentsWidth</a>(), <a href="qscrollview.html#c8c152">contentsHeight</a>() );
+}
+
+QIconSet::Size <a name="205"></a>QtIconView::viewMode()
+{
+    return d-&gt;mode;
+}
+
+void <a name="206"></a>QtIconView::doAutoScroll()
+{
+    <a href="qpoint.html">QPoint</a> pos = QCursor::pos();
+    pos = viewport()-&gt;mapFromGlobal( pos );
+    pos = viewportToContents( pos );
+
+    <a href="qpainter.html">QPainter</a> p;
+    p.<a href="qpainter.html#59f1bb">begin</a>( <a href="qscrollview.html#040cb5">viewport</a>() );
+    p.<a href="qpainter.html#728d28">setRasterOp</a>( NotROP );
+    p.<a href="qpainter.html#1b9993">setPen</a>( <a href="qpen.html">QPen</a>( Qt::black, 1, Qt::DotLine ) );
+    p.<a href="qpainter.html#38e68f">setBrush</a>( Qt::NoBrush );
+    <a href=#233>drawRubber</a>( &amp;p );
+    p.<a href="qpainter.html#c7f9ac">end</a>();
+
+    <a href="qscrollview.html#4e576a">ensureVisible</a>( pos.<a href="qpoint.html#1ed201">x</a>(), pos.<a href="qpoint.html#90c362">y</a>() );
+
+    pos = QCursor::pos();
+    pos = viewport()-&gt;mapFromGlobal( pos );
+    pos = viewportToContents( pos );
+
+    <a href="qrect.html">QRect</a> oldRubber = QRect( *d-&gt;rubber );
+
+    d-&gt;rubber-&gt;setRight( pos.<a href="qpoint.html#1ed201">x</a>() );
+    d-&gt;rubber-&gt;setBottom( pos.<a href="qpoint.html#90c362">y</a>() );
+
+    <a href=#232>selectByRubber</a>( oldRubber );
+
+    p.<a href="qpainter.html#59f1bb">begin</a>( <a href="qscrollview.html#040cb5">viewport</a>() );
+    p.<a href="qpainter.html#728d28">setRasterOp</a>( NotROP );
+    p.<a href="qpainter.html#1b9993">setPen</a>( <a href="qpen.html">QPen</a>( Qt::black, 1, Qt::DotLine ) );
+    p.<a href="qpainter.html#38e68f">setBrush</a>( Qt::NoBrush );
+    <a href=#233>drawRubber</a>( &amp;p );
+
+    p.<a href="qpainter.html#c7f9ac">end</a>();
+
+    pos = QCursor::pos();
+    pos = mapFromGlobal( pos );
+
+    if ( !QRect( 0, 0, <a href="qscrollview.html#040cb5">viewport</a>()-&gt;width(), <a href="qscrollview.html#040cb5">viewport</a>()-&gt;height() ).contains( pos ) &amp;&amp;
+         !d-&gt;scrollTimer ) {
+        d-&gt;scrollTimer = new <a href="qtimer.html">QTimer</a>( this );
+
+        <a href="qobject.html#c2d209">connect</a>( d-&gt;scrollTimer, SIGNAL( timeout() ),
+                 this, SLOT( <a href=#206>doAutoScroll</a>() ) );
+        d-&gt;scrollTimer-&gt;start( 100, FALSE );
+    } else if ( <a href="qrect.html">QRect</a>( 0, 0, <a href="qscrollview.html#040cb5">viewport</a>()-&gt;width(), <a href="qscrollview.html#040cb5">viewport</a>()-&gt;height() ).contains( pos ) &amp;&amp;
+                d-&gt;scrollTimer ) {
+        <a href="qobject.html#86a5c4">disconnect</a>( d-&gt;scrollTimer, SIGNAL( timeout() ),
+                    this, SLOT( <a href=#206>doAutoScroll</a>() ) );
+        d-&gt;scrollTimer-&gt;stop();
+        delete d-&gt;scrollTimer;
+        d-&gt;scrollTimer = 0L;
+    }
+
+}
+
+void <a name="207"></a>QtIconView::drawContents( <a href="qpainter.html">QPainter</a> *p, int cx, int cy, int cw, int ch )
+{
+    p-&gt;<a href="qpainter.html#0f4c23">fillRect</a>( cx, cy, cw, ch, <a href="qwidget.html#5bc085">colorGroup</a>().base() );
+
+    if ( !d-&gt;firstItem )
+        return;
+
+    QtIconViewItem *item = d-&gt;firstItem;
+    for ( ; item; item = item-&gt;next )
+        if ( item-&gt;rect().intersects( <a href="qrect.html">QRect</a>( cx, cy, cw, ch ) ) )
+            item-&gt;paintItem( p );
+
+    if ( d-&gt;currentItem &amp;&amp; d-&gt;currentItem-&gt;rect().intersects( <a href="qrect.html">QRect</a>( cx, cy, cw, ch ) ) )
+        d-&gt;currentItem-&gt;paintFocus( p );
+}
+
+void <a name="208"></a>QtIconView::orderItemsInGrid()
+{
+    int w = 0, h = 0;
+
+    <a href="qscrollview.html#e4cb2e">resizeContents</a>( viewport()-&gt;width(), <a href="qscrollview.html#040cb5">viewport</a>()-&gt;height() );
+    QtIconViewItem *item = d-&gt;firstItem;
+    for ( ; item; item = item-&gt;next ) {
+        <a href=#236>insertInGrid</a>( item );
+        w = QMAX( w, item-&gt;x() + item-&gt;width() );
+        h = QMAX( h, item-&gt;y() + item-&gt;height() );
+    }
+
+    <a href="qscrollview.html#e4cb2e">resizeContents</a>( w /*+ 5*/, h /*+ 5*/ );
+}
+
+void <a name="209"></a>QtIconView::show()
+{
+    <a href="qscrollview.html#88277a">QScrollView::show</a>();
+    <a href=#208>orderItemsInGrid</a>();
+}
+
+void <a name="210"></a>QtIconView::setSelectionMode( SelectionMode m )
+{
+    d-&gt;selectionMode = m;
+}
+
+QtIconView::SelectionMode <a name="211"></a>QtIconView::selectionMode()
+{
+    return d-&gt;selectionMode;
+}
+
+QtIconViewItem *<a name="212"></a>QtIconView::findItem( const QPoint &amp;pos )
+{
+    if ( !d-&gt;firstItem )
+        return 0L;
+
+    QtIconViewItem *item = d-&gt;firstItem;
+    for ( ; item; item = item-&gt;next )
+        if ( item-&gt;contains( pos ) )
+            return item;
+
+    return 0L;
+}
+
+void <a name="213"></a>QtIconView::selectAll( bool select )
+{
+    QtIconViewItem *item = d-&gt;firstItem;
+    for ( ; item; item = item-&gt;next )
+        item-&gt;setSelected( select );
+}
+
+void <a name="214"></a>QtIconView::repaintItem( QtIconViewItem *item )
+{
+    if ( !item )
+        return;
+
+    if ( <a href="qrect.html">QRect</a>( <a href="qscrollview.html#d83f9b">contentsX</a>(), <a href="qscrollview.html#abff81">contentsY</a>(), <a href="qscrollview.html#97d58f">contentsWidth</a>(), <a href="qscrollview.html#c8c152">contentsHeight</a>() ).
+         intersects( <a href="qrect.html">QRect</a>( item-&gt;x() - 1, item-&gt;y() - 1, item-&gt;width() + 2, item-&gt;height() + 2 ) ) )
+        <a href="qscrollview.html#f9c109">repaintContents</a>( item-&gt;x() - 1, item-&gt;y() - 1, item-&gt;width() + 2, item-&gt;height() + 2 );
+}
+
+void <a name="215"></a>QtIconView::ensureItemVisible( QtIconViewItem *item )
+{
+    if ( !item )
+        return;
+
+    <a href="qscrollview.html#4e576a">ensureVisible</a>( item-&gt;x(), item-&gt;y(),
+                   item-&gt;width(), item-&gt;height() );
+}
+
+void <a name="216"></a>QtIconView::clear()
+{
+    if ( !d-&gt;firstItem )
+        return;
+
+    QtIconViewItem *item = d-&gt;firstItem, *tmp;
+    while ( item ) {
+        tmp = item-&gt;next;
+        delete item;
+        item = tmp;
+    }
+
+    d-&gt;count = 0;
+    d-&gt;firstItem = 0L;
+    d-&gt;lastItem = 0L;
+    <a href=#202>setCurrentItem</a>( 0L );
+    d-&gt;tmpCurrentItem = 0L;
+
+    <a href="qscrollview.html#332857">setContentsPos</a>( 0, 0 );
+    <a href="qscrollview.html#e4cb2e">resizeContents</a>( viewport()-&gt;width(), <a href="qscrollview.html#040cb5">viewport</a>()-&gt;height() );
+    <a href="qscrollview.html#040cb5">viewport</a>()-&gt;repaint( TRUE );
+
+    d-&gt;cleared = TRUE;
+}
+
+void <a name="217"></a>QtIconView::setRastX( int rx )
+{
+    d-&gt;rastX = rx;
+}
+
+void <a name="218"></a>QtIconView::setRastY( int ry )
+{
+    d-&gt;rastY = ry;
+}
+
+int <a name="219"></a>QtIconView::rastX()
+{
+    return d-&gt;rastX;
+}
+
+int <a name="220"></a>QtIconView::rastY()
+{
+    return d-&gt;rastY;
+}
+
+void <a name="221"></a>QtIconView::setSpacing( int sp )
+{
+    d-&gt;spacing = sp;
+}
+
+int <a name="222"></a>QtIconView::spacing()
+{
+    return d-&gt;spacing;
+}
+
+void <a name="223"></a>QtIconView::contentsMousePressEvent( <a href="qmouseevent.html">QMouseEvent</a> *e )
+{
+    if ( d-&gt;currentItem )
+        d-&gt;currentItem-&gt;renameItem();
+
+    if ( e-&gt;button() == LeftButton ) {
+        d-&gt;startDrag = FALSE;
+
+        QtIconViewItem *item = findItem( e-&gt;pos() );
+        QtIconViewItem *oldCurrent = d-&gt;currentItem;
+
+        if ( item  &amp;&amp; item-&gt;isSelected() &amp;&amp;
+             item-&gt;textRect( FALSE ).contains( e-&gt;pos() ) ) {
+
+            if ( !item-&gt;allowRename() )
+                return;
+
+                        <a href=#215>ensureItemVisible</a>( item );
+            <a href=#202>setCurrentItem</a>( item );
+            <a href=#214>repaintItem</a>( item );
+            item-&gt;rename();
+            return;
+        }
+
+        if ( item &amp;&amp; item-&gt;isSelectable() )
+            if ( d-&gt;selectionMode == Single )
+                item-&gt;setSelected( TRUE, e-&gt;<a href="qkeyevent.html#c72446">state</a>() &amp; ControlButton );
+            else
+                item-&gt;setSelected( !item-&gt;isSelected(), e-&gt;<a href="qkeyevent.html#c72446">state</a>() &amp; ControlButton );
+        else
+            <a href=#213>selectAll</a>( FALSE );
+
+        <a href=#202>setCurrentItem</a>( item );
+
+        <a href=#214>repaintItem</a>( oldCurrent );
+        <a href=#214>repaintItem</a>( d-&gt;currentItem );
+
+        if ( !d-&gt;currentItem &amp;&amp; d-&gt;selectionMode != Single ) {
+            if ( d-&gt;rubber )
+                delete d-&gt;rubber;
+            d-&gt;rubber = 0L;
+            d-&gt;rubber = new <a href="qrect.html">QRect</a>( e-&gt;x(), e-&gt;y(), 0, 0 );
+
+            if ( d-&gt;selectionMode == StrictMulti &amp;&amp; !( e-&gt;<a href="qkeyevent.html#c72446">state</a>() &amp; ControlButton ) )
+                <a href=#213>selectAll</a>( FALSE );
+        }
+
+        d-&gt;mousePressed = TRUE;
+    } else if ( e-&gt;button() == RightButton ) {
+        QtIconViewItem *item = findItem( e-&gt;pos() );
+        if ( item )
+            emit itemRightClicked( item );
+        else
+            emit viewportRightClicked();
+    }
+}
+
+void <a name="224"></a>QtIconView::contentsMouseReleaseEvent( <a href="qmouseevent.html">QMouseEvent</a> * )
+{
+    d-&gt;mousePressed = FALSE;
+    d-&gt;startDrag = FALSE;
+
+    if ( d-&gt;rubber ) {
+        <a href="qpainter.html">QPainter</a> p;
+        p.<a href="qpainter.html#59f1bb">begin</a>( <a href="qscrollview.html#040cb5">viewport</a>() );
+        p.<a href="qpainter.html#728d28">setRasterOp</a>( NotROP );
+        p.<a href="qpainter.html#1b9993">setPen</a>( <a href="qpen.html">QPen</a>( Qt::black, 1, Qt::DotLine ) );
+        p.<a href="qpainter.html#38e68f">setBrush</a>( Qt::NoBrush );
+
+        <a href=#233>drawRubber</a>( &amp;p );
+
+        p.<a href="qpainter.html#c7f9ac">end</a>();
+
+        delete d-&gt;rubber;
+        d-&gt;rubber = 0L;
+    }
+
+    if ( d-&gt;scrollTimer ) {
+        <a href="qobject.html#86a5c4">disconnect</a>( d-&gt;scrollTimer, SIGNAL( timeout() ), this, SLOT( <a href=#206>doAutoScroll</a>() ) );
+        d-&gt;scrollTimer-&gt;stop();
+        delete d-&gt;scrollTimer;
+        d-&gt;scrollTimer = 0L;
+    }
+}
+
+void <a name="225"></a>QtIconView::contentsMouseMoveEvent( <a href="qmouseevent.html">QMouseEvent</a> *e )
+{
+    if ( d-&gt;mousePressed &amp;&amp; d-&gt;currentItem &amp;&amp; d-&gt;currentItem-&gt;allowDrag() ) {
+        if ( !d-&gt;startDrag ) {
+            d-&gt;currentItem-&gt;setSelected( TRUE, TRUE );
+            d-&gt;startDrag = TRUE;
+        }
+        else {
+            d-&gt;mousePressed = FALSE;
+            d-&gt;cleared = FALSE;
+            <a href=#235>startDrag</a>( e-&gt;<a href="qkeyevent.html#c72446">state</a>() &amp; ControlButton );
+            if ( d-&gt;tmpCurrentItem )
+                <a href=#214>repaintItem</a>( d-&gt;tmpCurrentItem );
+        }
+    } else if ( d-&gt;mousePressed &amp;&amp; !d-&gt;currentItem &amp;&amp; d-&gt;rubber )
+        <a href=#206>doAutoScroll</a>();
+}
+
+void <a name="226"></a>QtIconView::contentsMouseDoubleClickEvent( <a href="qmouseevent.html">QMouseEvent</a> *e )
+{
+    QtIconViewItem *item = findItem( e-&gt;pos() );
+    if ( item ) {
+        <a href=#213>selectAll</a>( FALSE );
+        item-&gt;setSelected( TRUE, TRUE );
+        emit doubleClicked( item );
+    }
+}
+
+void <a name="227"></a>QtIconView::contentsDragEnterEvent( <a href="qdragenterevent.html">QDragEnterEvent</a> * )
+{
+    d-&gt;tmpCurrentItem = 0L;
+}
+
+void <a name="228"></a>QtIconView::contentsDragMoveEvent( <a href="qdragmoveevent.html">QDragMoveEvent</a> *e )
+{
+    if ( d-&gt;tmpCurrentItem )
+        <a href=#214>repaintItem</a>( d-&gt;tmpCurrentItem );
+
+    QtIconViewItem *old = d-&gt;tmpCurrentItem;
+    d-&gt;tmpCurrentItem = 0L;
+
+    QtIconViewItem *item = findItem( e-&gt;pos() );
+
+    if ( item ) {
+        if ( item != old ) {
+            if ( old )
+                old-&gt;dragLeft();
+            item-&gt;dragEntered();
+        }
+
+        if ( item-&gt;acceptDrop( e ) )
+            e-&gt;<a href="qkeyevent.html#45898a">accept</a>();
+        else
+            e-&gt;<a href="qkeyevent.html#130332">ignore</a>();
+
+        d-&gt;tmpCurrentItem = item;
+        <a href="qpainter.html">QPainter</a> p;
+        p.<a href="qpainter.html#59f1bb">begin</a>( <a href="qscrollview.html#040cb5">viewport</a>() );
+        p.<a href="qpainter.html#ba64b6">translate</a>( -contentsX(), -contentsY() );
+        item-&gt;paintFocus( &amp;p );
+        p.<a href="qpainter.html#c7f9ac">end</a>();
+    } else {
+        e-&gt;<a href="qkeyevent.html#45898a">accept</a>();
+        if ( old )
+            old-&gt;dragLeft();
+    }
+}
+
+void <a name="229"></a>QtIconView::contentsDragLeaveEvent( <a href="qdragleaveevent.html">QDragLeaveEvent</a> * )
+{
+    if ( d-&gt;tmpCurrentItem ) {
+        <a href=#214>repaintItem</a>( d-&gt;tmpCurrentItem );
+        d-&gt;tmpCurrentItem-&gt;dragLeft();
+    }
+
+    d-&gt;tmpCurrentItem = 0L;
+}
+
+void <a name="230"></a>QtIconView::contentsDropEvent( <a href="qdropevent.html">QDropEvent</a> *e )
+{
+    if ( d-&gt;tmpCurrentItem )
+        <a href=#214>repaintItem</a>( d-&gt;tmpCurrentItem );
+
+    QtIconViewItem *i = findItem( e-&gt;pos() );
+
+    if ( !i &amp;&amp; e-&gt;source() == viewport() &amp;&amp; d-&gt;currentItem &amp;&amp; !d-&gt;cleared ) {
+        <a href="qrect.html">QRect</a> r = d-&gt;currentItem-&gt;rect();
+
+        d-&gt;currentItem-&gt;move( <a href="qpoint.html">QPoint</a>( e-&gt;pos().x() - d-&gt;currentItem-&gt;iconRect().width() / 2,
+                                      e-&gt;pos().y() - d-&gt;currentItem-&gt;iconRect().height() / 2 ) );
+
+        int w = d-&gt;currentItem-&gt;x() + d-&gt;currentItem-&gt;width() + 1;
+        int h = d-&gt;currentItem-&gt;y() + d-&gt;currentItem-&gt;height() + 1;
+
+        <a href=#214>repaintItem</a>( d-&gt;currentItem );
+        <a href="qscrollview.html#f9c109">repaintContents</a>( r.<a href="qrect.html#3a3d38">x</a>(), r.<a href="qrect.html#65e614">y</a>(), r.<a href="qrect.html#44fb71">width</a>(), r.<a href="qrect.html#5d9fd1">height</a>() );
+
+        if ( d-&gt;selectionMode != Single ) {
+            int dx = d-&gt;currentItem-&gt;x() - r.<a href="qrect.html#3a3d38">x</a>();
+            int dy = d-&gt;currentItem-&gt;y() - r.<a href="qrect.html#65e614">y</a>();
+
+            QtIconViewItem *item = d-&gt;firstItem;
+            for ( ; item; item = item-&gt;next )
+                if ( item-&gt;isSelected() &amp;&amp; item != d-&gt;currentItem ) {
+                    <a href="qrect.html">QRect</a> or = item-&gt;rect();
+                    item-&gt;moveBy( dx, dy );
+                    <a href=#214>repaintItem</a>( item );
+                    <a href="qscrollview.html#f9c109">repaintContents</a>( or.<a href="qrect.html#3a3d38">x</a>(), or.<a href="qrect.html#65e614">y</a>(), or.<a href="qrect.html#44fb71">width</a>(), or.<a href="qrect.html#5d9fd1">height</a>() );
+                    w = QMAX( w, item-&gt;x() + item-&gt;width() + 1 );
+                    h = QMAX( h, item-&gt;y() + item-&gt;height() + 1 );
+                }
+        }
+        bool fullRepaint = FALSE;
+        if ( w &gt; contentsWidth() ||
+             h &gt; contentsHeight() )
+            fullRepaint = TRUE;
+
+        int oldw = contentsWidth();
+        int oldh = contentsHeight();
+
+        <a href="qscrollview.html#e4cb2e">resizeContents</a>( QMAX( <a href="qscrollview.html#97d58f">contentsWidth</a>(), w ), QMAX( <a href="qscrollview.html#c8c152">contentsHeight</a>(), h ) );
+
+        if ( fullRepaint ) {
+            <a href="qscrollview.html#f9c109">repaintContents</a>( oldw, 0, <a href="qscrollview.html#97d58f">contentsWidth</a>() - oldw, <a href="qscrollview.html#c8c152">contentsHeight</a>() );
+            <a href="qscrollview.html#f9c109">repaintContents</a>( 0, oldh, <a href="qscrollview.html#97d58f">contentsWidth</a>(), <a href="qscrollview.html#c8c152">contentsHeight</a>() - oldh );
+        }
+    } else if ( !i &amp;&amp; e-&gt;source() != viewport() || d-&gt;cleared )
+        emit dropped( e );
+    else if ( i )
+        i-&gt;dropped( e );
+}
+
+void <a name="231"></a>QtIconView::keyPressEvent( <a href="qkeyevent.html">QKeyEvent</a> *e )
+{
+    if ( !d-&gt;firstItem )
+        return;
+
+    if ( !d-&gt;currentItem ) {
+        if ( e-&gt;<a href="qkeyevent.html#a0a881">key</a>() == Key_Control )
+            return;
+
+        <a href=#202>setCurrentItem</a>( d-&gt;firstItem );
+
+        if ( d-&gt;selectionMode == Single )
+            d-&gt;currentItem-&gt;setSelected( TRUE, TRUE );
+
+        <a href=#214>repaintItem</a>( d-&gt;currentItem );
+        return;
+    }
+
+    switch ( e-&gt;<a href="qkeyevent.html#a0a881">key</a>() )
+    {
+    case Key_Home:
+    {
+        if ( !d-&gt;firstItem )
+            return;
+
+        QtIconViewItem *item = d-&gt;currentItem;
+        <a href=#202>setCurrentItem</a>( d-&gt;firstItem );
+
+        if ( d-&gt;selectionMode == Single ) {
+            item-&gt;setSelected( FALSE );
+            d-&gt;currentItem-&gt;setSelected( TRUE, TRUE );
+        } else {
+            if ( e-&gt;<a href="qkeyevent.html#c72446">state</a>() &amp; ShiftButton )
+                d-&gt;currentItem-&gt;setSelected( !d-&gt;currentItem-&gt;isSelected(), TRUE );
+        }
+
+        <a href=#214>repaintItem</a>( item );
+        <a href=#214>repaintItem</a>( d-&gt;currentItem );
+    } break;
+    case Key_End:
+    {
+        if ( !d-&gt;lastItem )
+            return;
+
+        QtIconViewItem *item = d-&gt;currentItem;
+        <a href=#202>setCurrentItem</a>( d-&gt;lastItem );
+
+        if ( d-&gt;selectionMode == Single ) {
+            item-&gt;setSelected( FALSE );
+            d-&gt;currentItem-&gt;setSelected( TRUE, TRUE );
+        } else {
+            if ( e-&gt;<a href="qkeyevent.html#c72446">state</a>() &amp; ShiftButton )
+                d-&gt;currentItem-&gt;setSelected( !d-&gt;currentItem-&gt;isSelected(), TRUE );
+        }
+
+        <a href=#214>repaintItem</a>( item );
+        <a href=#214>repaintItem</a>( d-&gt;currentItem );
+    } break;
+    case Key_Right:
+    {
+        if ( !d-&gt;currentItem-&gt;next )
+            return;
+
+        QtIconViewItem *item = d-&gt;currentItem;
+        <a href=#202>setCurrentItem</a>( d-&gt;currentItem-&gt;next );
+
+        if ( d-&gt;selectionMode == Single ) {
+            item-&gt;setSelected( FALSE );
+            d-&gt;currentItem-&gt;setSelected( TRUE, TRUE );
+        } else {
+            if ( e-&gt;<a href="qkeyevent.html#c72446">state</a>() &amp; ShiftButton )
+                d-&gt;currentItem-&gt;setSelected( !d-&gt;currentItem-&gt;isSelected(), TRUE );
+        }
+
+        <a href=#214>repaintItem</a>( item );
+        <a href=#214>repaintItem</a>( d-&gt;currentItem );
+    } break;
+    case Key_Left:
+    {
+        if ( !d-&gt;currentItem-&gt;prev )
+            return;
+
+        QtIconViewItem *item = d-&gt;currentItem;
+        <a href=#202>setCurrentItem</a>( d-&gt;currentItem-&gt;prev );
+
+        if ( d-&gt;selectionMode == Single ) {
+            item-&gt;setSelected( FALSE );
+            d-&gt;currentItem-&gt;setSelected( TRUE, TRUE );
+        } else {
+            if ( e-&gt;<a href="qkeyevent.html#c72446">state</a>() &amp; ShiftButton )
+                d-&gt;currentItem-&gt;setSelected( !d-&gt;currentItem-&gt;isSelected(), TRUE );
+        }
+
+        <a href=#214>repaintItem</a>( item );
+        <a href=#214>repaintItem</a>( d-&gt;currentItem );
+    } break;
+    case Key_Space:
+    {
+        if ( d-&gt;selectionMode == Single )
+            return;
+
+        d-&gt;currentItem-&gt;setSelected( !d-&gt;currentItem-&gt;isSelected(), TRUE );
+    } break;
+    case Key_Enter: case Key_Return:
+        emit doubleClicked( d-&gt;currentItem );
+        break;
+    }
+
+    <a href=#215>ensureItemVisible</a>( d-&gt;currentItem );
+}
+
+void <a name="232"></a>QtIconView::selectByRubber( <a href="qrect.html">QRect</a> oldRubber )
+{
+    if ( !d-&gt;rubber )
+        return;
+
+    oldRubber = oldRubber.<a href="qrect.html#75e42c">normalize</a>();
+    int minx = contentsWidth(), miny = contentsHeight();
+    int maxx = 0, maxy = 0;
+    int selected = 0;
+
+    QtIconViewItem *item = d-&gt;firstItem;
+    for ( ; item; item = item-&gt;next ) {
+        if ( item-&gt;intersects( oldRubber ) &amp;&amp;
+             !item-&gt;intersects( d-&gt;rubber-&gt;normalize() ) )
+            item-&gt;setSelected( FALSE );
+        else if ( item-&gt;intersects( d-&gt;rubber-&gt;normalize() ) ) {
+            item-&gt;setSelected( TRUE, TRUE );
+            ++selected;
+            minx = QMIN( minx, item-&gt;x() - 1 );
+            miny = QMIN( miny, item-&gt;y() - 1 );
+            maxx = QMAX( maxx, item-&gt;x() + item-&gt;width() + 1 );
+            maxy = QMAX( maxy, item-&gt;y() + item-&gt;height() + 1 );
+        }
+    }
+    emit selectionChanged();
+    emit selectionChanged( selected );
+}
+
+void <a name="233"></a>QtIconView::drawRubber( <a href="qpainter.html">QPainter</a> *p )
+{
+    if ( !p || !d-&gt;rubber )
+        return;
+
+    <a href="qpoint.html">QPoint</a> pnt( d-&gt;rubber-&gt;x(), d-&gt;rubber-&gt;y() );
+    pnt = contentsToViewport( pnt );
+    p-&gt;<a href="qpainter.html#b29a16">drawRect</a>( <a href="qrect.html">QRect</a>( pnt.<a href="qpoint.html#1ed201">x</a>(), pnt.<a href="qpoint.html#90c362">y</a>(), d-&gt;rubber-&gt;width(), d-&gt;rubber-&gt;height() ) );
+}
+
+<a href="qdragobject.html">QDragObject</a> *<a name="234"></a>QtIconView::dragObject()
+{
+    if ( !d-&gt;currentItem )
+        return 0L;
+
+    QtIconViewItemDrag *drag = new QtIconViewItemDrag( <a href="qscrollview.html#040cb5">viewport</a>() );
+    drag-&gt;<a href="qdragobject.html#3f0ef8">setPixmap</a>( <a href="qpixmap.html">QPixmap</a>( d-&gt;currentItem-&gt;icon().pixmap( d-&gt;mode, QIconSet::Normal ) ),
+                     <a href="qpoint.html">QPoint</a>( d-&gt;currentItem-&gt;iconRect().width() / 2, d-&gt;currentItem-&gt;iconRect().height() / 2 ) );
+
+    return drag;
+}
+
+void <a name="235"></a>QtIconView::startDrag( bool move )
+{
+    <a href="qdragobject.html">QDragObject</a> *drag = dragObject();
+    if ( !drag )
+        return;
+
+    if ( move ) {
+        if ( drag-&gt;<a href="qdragobject.html#d8d0fe">dragMove</a>() )
+            if ( drag-&gt;<a href="qdragobject.html#b114ee">target</a>() != viewport() )
+                emit moved();
+    }
+    else
+        drag-&gt;<a href="qdragobject.html#8b1196">dragCopy</a>();
+}
+
+void <a name="236"></a>QtIconView::insertInGrid( QtIconViewItem *item )
+{
+    if ( !item )
+        return;
+
+    int px = d-&gt;spacing;
+    int py = d-&gt;spacing;
+    int pw = d-&gt;rastX == -1 ? 1 : d-&gt;rastX / 2;
+    int ph = d-&gt;rastY == -1 ? 1 : d-&gt;rastY / 2;
+    bool isFirst = item == d-&gt;firstItem;
+
+    if ( item-&gt;prev ) {
+        px = item-&gt;prev-&gt;x();
+        py = item-&gt;prev-&gt;y();
+        pw = item-&gt;prev-&gt;width();
+        ph = item-&gt;prev-&gt;height();
+        if ( d-&gt;rastX != - 1 &amp;&amp; pw &gt; d-&gt;rastX - 1 ) {
+            px = px + pw - d-&gt;rastX;
+            pw = d-&gt;rastX - 1;
+        }
+        if ( d-&gt;rastY != - 1 &amp;&amp; ph &gt; d-&gt;rastY - 1 ) {
+            py = py + ph - d-&gt;rastY;
+            ph = d-&gt;rastY - 1;
+        }
+    }
+
+    int xpos = 0;
+    int ypos = 0;
+    bool nextRow = FALSE;
+
+    if ( d-&gt;rastX == -1 ) {
+        xpos = px + pw + d-&gt;spacing;
+        if ( xpos + item-&gt;width() &gt;= contentsWidth() ) {
+            xpos = d-&gt;spacing;
+            nextRow = TRUE;
+        }
+    } else {
+        int fact = px / d-&gt;rastX;
+
+        if ( !isFirst )
+            xpos = ( fact + 1 ) * d-&gt;rastX;
+        else
+            xpos = fact * d-&gt;rastX;
+        if ( xpos + d-&gt;rastX &gt;= contentsWidth() ) {
+            xpos = d-&gt;spacing;
+            nextRow = TRUE;
+        }
+        xpos += ( d-&gt;rastX - item-&gt;width() ) / 2 + d-&gt;spacing;
+    }
+
+    if ( d-&gt;rastY == -1 ) {
+        if ( !nextRow )
+            ypos = py;
+        else
+            ypos = py + ph + d-&gt;spacing;
+    } else {
+        int fact = py / d-&gt;rastY;
+
+        if ( !nextRow )
+            ypos = fact * d-&gt;rastY;
+        else
+            ypos = ( fact + 1 ) * d-&gt;rastY;
+        ypos += ( d-&gt;rastY - item-&gt;height() ) / 2;
+    }
+
+    item-&gt;move( xpos, ypos );
+}
+
+void <a name="237"></a>QtIconView::emitSelectionChanged()
+{
+    emit selectionChanged();
+    <a href=#238>emitNewSelectionNumber</a>();
+}
+
+void <a name="238"></a>QtIconView::emitNewSelectionNumber()
+{
+    int num = 0;
+    QtIconViewItem *item = d-&gt;firstItem;
+    for ( ; item; item = item-&gt;next )
+        if ( item-&gt;isSelected() )
+            ++num;
+
+    emit selectionChanged( num );
+}
+</pre>
+
+
+  <hr>
+
+  Main:
+<pre>/****************************************************************************
+** &#36;Id&#58; main.cpp,v 1.2 1999/06/09 23:03:51 reggie Exp $
+**
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+**
+** This file is part of an example program for Qt.  This example
+** program may be used, distributed and modified without limitation.
+**
+*****************************************************************************/
+
+#include "qiconview.h"
+#include &lt;<a name="qapplication.h"></a><a href="qapplication-h.html">qapplication.h</a>&gt;
+#include &lt;<a name="qdragobject.h"></a><a href="qdragobject-h.html">qdragobject.h</a>&gt;
+#include &lt;<a name="qpixmap.h"></a><a href="qpixmap-h.html">qpixmap.h</a>&gt;
+#include &lt;<a name="qiconset.h"></a><a href="qiconset-h.html">qiconset.h</a>&gt;
+
+#include &lt;<a name="qmime.h"></a><a href="qmime-h.html">qmime.h</a>&gt;
+#include &lt;stdio.h&gt;
+
+class ListenDND : public QObject
+{
+    Q_OBJECT
+
+public:
+    ListenDND( <a name="QWidget"></a><a href="qwidget.html">QWidget</a> *w )
+        : view( w )
+    {}
+
+public slots:
+    void dropped( <a name="QMimeSource"></a><a href="qmimesource.html">QMimeSource</a> *mime ) {
+        printf( "Dropped Mimesource %p into the view %p\n", mime, view );
+        printf( "  Formats:\n" );
+        int i = 0;
+        const char *str = mime-&gt;<a name="format"></a><a href="qmimesource.html#dbf817">format</a>( i );
+        printf( "    %s\n", str );
+        while ( str ) {
+            str = mime-&gt;<a href="qmimesource.html#dbf817">format</a>( ++i );
+            printf( "    %s\n", str );
+        }
+    };
+    void moved() {
+        printf( "All selected items were moved to another widget\n" );
+    }
+
+protected:
+    <a href="qwidget.html">QWidget</a> *view;
+
+};
+
+int main( int argc, char **argv )
+{
+    <a name="QApplication"></a><a href="qapplication.html">QApplication</a> a( argc, argv );
+
+    QtIconView qiconview;
+    qiconview.setSelectionMode( QtIconView::Multi );
+    qiconview.setViewMode( QIconSet::Large );
+    qiconview.<a name="resize"></a><a href="qscrollview.html#5d37af">resize</a>( 600, 480 );
+
+    for ( unsigned int i = 0; i &lt; 350; i++ )
+        ( void )new QtIconViewItem( &amp;qiconview, QString( "Item %1" ).arg( i + 1 ) );
+
+    qiconview.<a name="setCaption"></a><a href="qwidget.html#d4f007">setCaption</a>( "Iconview" );
+
+    ListenDND listen_dnd( &amp;qiconview );
+    <a name="QObject::connect"></a><a href="qobject.html#c2d209">QObject::connect</a>( &amp;qiconview, SIGNAL( dropped( <a href="qmimesource.html">QMimeSource</a> * ) ), &amp;listen_dnd, SLOT( dropped( <a href="qmimesource.html">QMimeSource</a> * ) ) );
+    <a href="qobject.html#c2d209">QObject::connect</a>( &amp;qiconview, SIGNAL( moved() ), &amp;listen_dnd, SLOT( moved() ) );
+
+    a.<a name="setMainWidget"></a><a href="qapplication.html#11c921">setMainWidget</a>( &amp;qiconview );
+    qiconview.<a name="show"></a><a href="qscrollview.html#88277a">show</a>();
+
+    return a.<a name="exec"></a><a href="qapplication.html#7076af">exec</a>();
+}
+
+#include "main.moc"
+</pre>
+<p><address><hr><div align="center">
+<table width="100%" cellspacing="0" border="0"><tr>
+<td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.00</div>
+</table></div></address></body></html>

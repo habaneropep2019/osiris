@@ -1,43 +1,28 @@
 /****************************************************************************
-** $Id: qt/src/dialogs/qfontdialog.cpp   2.3.2   edited 2001-09-11 $
+** $Id: qfontdialog.cpp,v 2.46 1999/06/23 03:15:55 warwick Exp $
 **
 ** Implementation of QFontDialog
 **
 ** Created : 970605
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
-** This file is part of the dialogs module of the Qt GUI Toolkit.
+** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses may use this file in accordance with the Qt Commercial License
-** Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
-
+*****************************************************************************/
 #include "qwindowdefs.h"
-
-#ifndef QT_NO_FONTDIALOG
 
 #include "qfontdialog.h"
 
@@ -56,16 +41,21 @@
 
 #include <ctype.h>
 
-// BEING REVISED: hanord
+//
+//  W A R N I N G
+//  -------------
+//
+//  This class is under development and is currently unstable.
+//
+//
+
 /*!
   \class QFontDialog qfontdialog.h
-  \brief The QFontDialog class provides a dialog widget for selecting a text font.
+  \brief The QFontDialog provides a dialog widget for selecting a text font
   \ingroup dialogs
 
-  This dialog can be used to let the user choose a font with attributes and so on.
-  Normally you may use the static convenience function getFont().
-
-  <img src=qfontdlg-m.png> <img src=qfontdlg-w.png>
+  Used for allowing the user to select a font among the available fonts
+  on the underlying window system.
 */
 
 class QFontDialogPrivate
@@ -116,42 +106,71 @@ public:
     bool usingStandardSizes;
 };
 
+/*
+  Tweak layout.
+ */
+
+class QExpandingLineEdit : public QLineEdit
+{
+public:
+    QExpandingLineEdit( QWidget *parent, const char *name, bool fixedHeight )
+	: QLineEdit( parent, name ) { f = fixedHeight; }
+    QSizePolicy sizePolicy() const
+    {
+	    return QSizePolicy( QSizePolicy::Expanding,
+				f ? QSizePolicy::Fixed :
+				    QSizePolicy::Expanding  );
+    }
+    QSize sizeHint() const { QSize sz = QLineEdit::sizeHint();
+                             sz.setWidth( 20 );
+			     return sz;
+                           }
+    bool f;
+};
+
+class QExpandingComboBox : public QComboBox
+{
+public:
+    QExpandingComboBox( bool b, QWidget *parent, const char *name=0 )
+	: QComboBox( b, parent, name ) {}
+    QSizePolicy sizePolicy() const
+	{
+	    return QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
+	}
+};
+
 
 /*!
-  Constructs a default font dialog. Use setFont() for setting
-  the initial values.
-
-  \sa getFont()
+  Creates a default font dialog.
 */
 
 QFontDialog::QFontDialog( QWidget *parent, const char *name,
 			  bool modal, WFlags f )
     : QDialog( parent, name, modal, f )
 {
-    setSizeGripEnabled( TRUE );
     d = new QFontDialogPrivate;
     // grid
-    d->familyEdit = new QLineEdit( this, "font family I" );
+    d->familyEdit = new QExpandingLineEdit( this, "font family I", TRUE );
     d->familyEdit->setFocusPolicy( StrongFocus );
     d->familyList = new QListBox( this, "font family II" );
-    d->familyList->viewport()->setFocusProxy( d->familyEdit );
+    d->familyList->setFocusPolicy( NoFocus );
 
     d->familyAccel
 	= new QLabel( d->familyEdit, tr("&Font"), this, "family accelerator" );
     d->familyAccel->setIndent( 2 );
 
-    d->styleEdit = new QLineEdit( this, "font style I" );
+    d->styleEdit = new QExpandingLineEdit( this, "font style I", TRUE );
     d->styleEdit->setFocusPolicy( StrongFocus );
     d->styleList = new QListBox( this, "font style II" );
-    d->styleList->viewport()->setFocusProxy( d->styleEdit );
+    d->styleList->setFocusPolicy( NoFocus );
     d->styleAccel
 	= new QLabel( d->styleEdit, tr("Font st&yle"), this, "style accelerator" );
     d->styleAccel->setIndent( 2 );
 
-    d->sizeEdit = new QLineEdit( this, "font size I" );
+    d->sizeEdit = new QExpandingLineEdit( this, "font size I", TRUE );
     d->sizeEdit->setFocusPolicy( StrongFocus );
     d->sizeList = new QListBox( this, "font size II" );
-    d->sizeList->viewport()->setFocusProxy( d->sizeEdit );
+    d->sizeList->setFocusPolicy( NoFocus );
     d->sizeAccel
 	= new QLabel ( d->sizeEdit, tr("&Size"), this, "size accelerator" );
     d->sizeAccel->setIndent( 2 );
@@ -172,8 +191,7 @@ QFontDialog::QFontDialog( QWidget *parent, const char *name,
 #endif
 
     d->sample = new QHGroupBox( tr("Sample"), this, "sample text" );
-    d->sampleEdit = new QLineEdit( d->sample, "r/w sample text" );
-    d->sampleEdit->setFixedHeight( 75 );
+    d->sampleEdit = new QExpandingLineEdit( d->sample, "r/w sample text", FALSE );
 
     // Note that the sample text is *not* translated with tr(), as the
     // characters used depend on the charset encoding.
@@ -181,7 +199,7 @@ QFontDialog::QFontDialog( QWidget *parent, const char *name,
 
     d->sampleEdit->setAlignment( AlignCenter );
 
-    d->scriptCombo = new QComboBox( TRUE, this, "font encoding" );
+    d->scriptCombo = new QExpandingComboBox( TRUE, this, "font encoding" );
     d->scriptCombo->setFocusPolicy( StrongFocus );
 
     d->scriptAccel
@@ -289,7 +307,7 @@ QFontDialog::QFontDialog( QWidget *parent, const char *name,
     d->familyEdit->setFocus();
 }
 
-/*! Destructs the font dialog and frees up its storage. */
+/*! Deletes the font dialog and frees up its storage. */
 
 QFontDialog::~QFontDialog()
 {
@@ -372,7 +390,7 @@ QFont QFontDialog::getFont( bool *ok, const QFont *def,
     QFontDialog *dlg = new QFontDialog( parent, name, TRUE );
     if ( def )
 	dlg->setFont( *def );
-    dlg->setCaption( tr("Select Font") );
+    dlg->setCaption( tr("Font") );
     if ( dlg->exec() == QDialog::Accepted ) {
 	result = dlg->font();
 	if ( ok )
@@ -420,10 +438,6 @@ QListBox * QFontDialog::sizeListBox() const
 {
     return d->sizeList;
 }
-
-/*!
-  This slot is called if the user changes the font size.
-*/
 
 void QFontDialog::sizeChanged( const QString &s )
 {
@@ -491,7 +505,7 @@ bool QFontDialog::eventFilter( QObject * o , QEvent * e )
 	else if ( o == d->sizeList )
 	    d->sizeEdit->setFocus();
     }
-    return QDialog::eventFilter( o, e );
+    return FALSE;
 }
 
 
@@ -502,7 +516,7 @@ bool QFontDialog::eventFilter( QObject * o , QEvent * e )
 
 void QFontDialog::updateFamilies()
 {
-    d->familyNames = d->fdb.families( FALSE );
+    d->familyNames = d->fdb.families();
     QStringList newList;
     QString s;
     QStringList::Iterator it = d->familyNames.begin();
@@ -533,24 +547,23 @@ void QFontDialog::updateScripts()
 {
     d->scriptCombo->clear();
 
-    d->charSetNames = d->fdb.charSets( d->family, FALSE );
+    d->charSetNames = d->fdb.charSets( d->family );
 
     if ( d->charSetNames.isEmpty() ) {
 	qWarning( "QFontDialog::updateFamilies: Internal error, "
 		  "no character sets for family \"%s\"",
 		  (const char *) d->family );
-	d->charSetNames.append( "Any" );
+	return;
     }
 
     QStringList::Iterator it = d->charSetNames.begin();
-    for ( ; it != d->charSetNames.end() ; ++it ) 
+    for ( ; it != d->charSetNames.end() ; ++it )
 	d->scriptCombo->insertItem( d->fdb.verboseCharSetName(*it) );
 }
 
 /*!  Update the contents of the "font style" list box.  This
   function can be reimplemented if you have special requirements.
 */
-
 void QFontDialog::updateStyles()
 {
     d->styleList->clear();
@@ -564,10 +577,6 @@ void QFontDialog::updateStyles()
     }
     d->styleList->insertStringList( styles );
 }
-
-/*!  Update the contents of the "font size" list box.  This
-  function can be reimplemented if you have special requirements.
-*/
 
 void QFontDialog::updateSizes()
 {
@@ -626,18 +635,10 @@ void QFontDialog::scriptHighlighted( int index )
 void QFontDialog::scriptHighlighted( const QString &s )
 {
     d->charSet = s;
-    QString currentStyle = d->styleList->currentText();
+
     updateStyles();
-    if ( d->styleList->count() != 0 ) {
-	for ( int i = 0 ; i < (int)d->styleList->count() ; i++ ) {
-	    if ( currentStyle == d->styleList->text(i) ) {
-		d->styleList->setCurrentItem( i ); // Will call styleHighlighted
-		break;
-	    }
-	}
-        if ( d->styleList->currentItem() == -1 )
-	    d->styleList->setCurrentItem( 0 ); // Will call styleHighlighted
-    }
+    if ( d->styleList->count() != 0 )
+	d->styleList->setCurrentItem( 0 );  // Will call styleHighlighted
 }
 
 /*!
@@ -646,7 +647,7 @@ void QFontDialog::scriptHighlighted( const QString &s )
 
 void QFontDialog::styleHighlighted( const QString &s )
 {
-    d->styleEdit->setText( s );
+    d->styleEdit->setText( s );	
     if ( style() == WindowsStyle && d->styleEdit->hasFocus() )
 	d->styleEdit->selectAll();
 
@@ -685,20 +686,9 @@ void QFontDialog::sizeHighlighted( const QString &s )
     updateSample();
 }
 
-/*!
-  Sets the \a f to the font which values should be set
-  in the QFontDialog.
-
-  \sa font()
-*/
-
 void QFontDialog::setFont( const QFont &f )
 {
-#ifdef _WS_WIN32_
-    QString famNam = f.family();
-#else 
     QString famNam = f.family().lower();
-#endif
 
     QStringList::Iterator it;
     it = d->familyNames.begin();
@@ -711,25 +701,21 @@ void QFontDialog::setFont( const QFont &f )
 	    break;
 	}
 	if ( s.contains('-') ) {
-	    int j = s.find('-');
-	    if ( famNam == s.right( s.length() - j - 1 ) ) {
-		d->familyList->setCurrentItem( i );
+	    i = s.find('-');
+	    if ( famNam == s.right( s.length() - i - 1 ) ) {
+		familyHighlighted( i );
 		i = -1;
 		break;
 	    }
 	}
 	i++;
     }
+    if ( i == -1 )
+	return;
 
     QString styleString = d->fdb.styleString( f );
-    if ( !styleString.isEmpty() && d->styleList->count() != 0 ) {
-	for ( i = 0 ; i < (int)d->styleList->count() ; i++ ) {
-	    if ( styleString == d->styleList->text(i) ) {
-		d->styleList->setCurrentItem( i );
-		break;
-	    }
-	}
-    }
+    if ( !styleString.isEmpty() )
+	styleHighlighted( styleString );
 
     if ( d->sizeList->count() != 0 ) {
 	int pSize = f.pointSize();
@@ -741,17 +727,28 @@ void QFontDialog::setFont( const QFont &f )
 	d->sizeList->setCurrentItem( i );
     }
 
-    d->strikeout->setChecked( f.strikeOut() );
-    d->underline->setChecked( f.underline() );
-    
-    updateSample();
+
+    (void)f.pointSize(); // #### Was this needed Eiriken?
+#if 0
+    int a = f.pointSize();
+    a = a;
+    // ### Quick hack
+    QFontCharSet charSet = d->family.charSet( f.charSet() );
+    if ( charSet.isNull() )
+	return;
+    d->charSet = charSet;
+    updateStyles();
+
+#if 0
+    QFontStyle style = QFontStyle( f );
+    d->style = style;
+#endif
+
+    QString tmp;
+    tmp.sprintf( "%i", f.pointSize() );
+    d->sizeEdit->setText( tmp );
+#endif
 }
-
-/*!
-  Returns the font which the user has chosen.
-
-  \sa setFont()
-*/
 
 QFont QFontDialog::font() const
 {
@@ -759,8 +756,10 @@ QFont QFontDialog::font() const
     if ( pSize == 0 )
 	pSize = 12;
     QFont f = d->fdb.font( d->family, d->style, pSize, d->charSet );
-    f.setStrikeOut( d->strikeout->isChecked() );
-    f.setUnderline( d->underline->isChecked() );
+    if ( d->strikeout->isChecked() )
+	f.setStrikeOut( TRUE );
+    if ( d->underline->isChecked() )
+	f.setUnderline( TRUE );
     return f;
 }
 
@@ -775,16 +774,3 @@ void QFontDialog::emitSelectedFont()
     emit fontSelected(font());
 }
 
-/*!
-  \fn void QFontDialog::fontSelected( const QFont & )
-
-  This signal is emitted, when the user has chosen a font and clicked ok.
-*/
-
-/*!
-  \fn void QFontDialog::fontHighlighted( const QFont & )
-
-  This signal is emitted, when the user changed a setting in the dialog.
-*/
-
-#endif

@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: qt/examples/widgets/widgets.cpp   2.3.2   edited 2001-06-12 $
+** $Id: widgets.cpp,v 1.8 1999/06/24 16:58:41 warwick Exp $
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -16,7 +16,6 @@
 
 // Standard Qt widgets
 
-#include <qtoolbar.h>
 #include <qmenubar.h>
 #include <qpopupmenu.h>
 #include <qbuttongroup.h>
@@ -35,6 +34,7 @@
 #include <qtooltip.h>
 #include <qspinbox.h>
 #include <qstatusbar.h>
+#include <qtoolbar.h>
 #include <qwhatsthis.h>
 #include <qtoolbutton.h>
 #include <qvbox.h>
@@ -44,13 +44,13 @@
 #include <qprogressbar.h>
 #include <qsplitter.h>
 #include <qlistview.h>
-#include <qheader.h>
 #include <qtextview.h>
+
 #include <qfiledialog.h>
-#include <qaccel.h>
-#include <qmetaobject.h>
 
 #include "widgets.h"
+
+
 
 
 // Some sample widgets
@@ -77,8 +77,7 @@ public:
     QString text( const QPoint & p) {
 	QListBoxItem* i = listbox->itemAt( p );
 	if ( i && i->pixmap() ) {
-	    return "Isn't that a <em>wonderful</em> pixmap? <br>" \
-		"Imagine, you could even decorate a" \
+	    return "Isn't that a <em>wonderful</em> pixmap? <br>Imagine, you could even decorate a"
 		" <b>red</b> pushbutton with it! :-)";
 	}
 	return "This is a QListBox.";
@@ -88,32 +87,6 @@ private:
     QListBox* listbox;
 };
 
-
-class MyMenuItem : public QCustomMenuItem
-{
-public:
-    MyMenuItem( const QString& s, const QFont& f )
-	: string( s ), font( f ){};
-    ~MyMenuItem(){}
-
-    void paint( QPainter* p, const QColorGroup& /*cg*/, bool /*act*/,
-		bool /*enabled*/, int x, int y, int w, int h )
-    {
-	p->setFont ( font );
-	p->drawText( x, y, w, h,
-		     AlignLeft | AlignVCenter | ShowPrefix | DontClip,
-		     string );
-    }
-
-    QSize sizeHint()
-    {
-	return QFontMetrics( font ).size( AlignLeft | AlignVCenter |
-					  ShowPrefix | DontClip,  string );
-    }
-private:
-    QString string;
-    QFont font;
-};
 
 //
 // Construct the WidgetView with children
@@ -125,38 +98,44 @@ WidgetView::WidgetView( QWidget *parent, const char *name )
     QColor col;
 
     // Set the window caption/title
-    setCaption( "Qt Example - Widgets Demo Application" );
+
+    setCaption( "Qt Widgets Demo Application" );
 
     // create a toolbar
     QToolBar *tools = new QToolBar( this, "toolbar" );
+    //addToolBar( tools, QString( "Testing") );
+
 
     // put something in it
-    QPixmap openIcon( fileopen );
-    QToolButton * toolb = new QToolButton( openIcon, "toolbutton 1",
+
+    QToolButton * toolb = new QToolButton( QPixmap(fileopen), "toolbutton 1",
 					   QString::null, this, SLOT(open()),
 					   tools, "open file" );
-    QWhatsThis::add( toolb, "This is a <b>QToolButton</b>. It lives in a "
-		     "QToolBar. This particular button doesn't do anything "
-		     "useful." );
+    QWhatsThis::add( toolb, "This is a QToolButton. It lives in a QToolBar.\n"
+		     "This particular button doesn't do\n" "anything useful." );
 
     QPixmap saveIcon( filesave );
     toolb = new QToolButton( saveIcon, "toolbutton 2", QString::null,
 			     this, SLOT(dummy()),
 			     tools, "save file" );
-    QWhatsThis::add( toolb, "This is also a <b>QToolButton</b>." );
+    QWhatsThis::add( toolb, "This is also a QToolButton." );
 
     QPixmap  printIcon( fileprint );
     toolb = new QToolButton( printIcon, "toolbutton 3", QString::null,
 			     this, SLOT(dummy()),
 			     tools, "print file" );
-    QWhatsThis::add( toolb, "This is the third <b>QToolButton</b>.");
+    QWhatsThis::add( toolb, "This is the third QToolButton.");
+
 
     toolb = QWhatsThis::whatsThisButton( tools );
-    QWhatsThis::add( toolb, "This is a <b>What's This</b> button "
-		     "It enables the user to ask for help "
+    QWhatsThis::add( toolb, "This is a What's This button\n"
+		     "It enables the user to ask for help\n"
 		     "about widgets on the screen.");
 
-    // Install an application-global event filter to catch control+leftbutton
+    tools->show();//#####
+
+    // Install an application-global event filter
+
     qApp->installEventFilter( this );
 
     //make a central widget to contain the other widgets
@@ -164,54 +143,51 @@ WidgetView::WidgetView( QWidget *parent, const char *name )
     setCentralWidget( central );
 
     // Create a layout to position the widgets
+
     QHBoxLayout *topLayout = new QHBoxLayout( central, 10 );
 
     // Create a grid layout to hold most of the widgets
+
     QGridLayout *grid = new QGridLayout( 0, 3 ); //3 wide and autodetect number of rows
     topLayout->addLayout( grid, 1 );
 
     // Create an easter egg
     QToolTip::add( menuBar(), QRect( 0, 0, 2, 2 ), "easter egg" );
+//     QWhatsThis::add( menuBar(), "This is a QMenuBar.\n"
+// 		     "You can have several pull-down menus in it.");
+
+
 
     QPopupMenu* popup;
-    popup = new QPopupMenu( this );
+    popup = new QPopupMenu;
     menuBar()->insertItem( "&File", popup );
     int id;
     id = popup->insertItem( "&New" );
     popup->setItemEnabled( id, FALSE );
-    id = popup->insertItem( openIcon, "&Open", this, SLOT( open() ) );
-
+#if 0
+    QPopupMenu *testM = new QPopupMenu;
+    testM->insertItem( "kjhlsgfhksgfkjhdsgfdkjhfdsgkjhlgfskdjhlsfkjdhlg" );
+    testM->insertItem( "hlsfkjdhlg" );
+    testM->insertItem( "hlsfkjdhlg" );
+    testM->insertItem( "hlsfkjdhlg" );
+    popup->insertItem( "Menu", testM );
+    id = popup->insertItem( "Test" );
+    popup->setItemEnabled( id, FALSE );
+    id = popup->insertItem( "Test" );
+    id = popup->insertItem( "Test" );
+    popup->setItemEnabled( id, FALSE );
+    id = menuBar()->insertItem( "Two" );
+    id = menuBar()->insertItem( "Three" );
+    id = menuBar()->insertItem( "Four" );
+#endif
+    id = popup->insertItem( "&Open", this, SLOT( open() ) );
+    //popup->setItemEnabled( id, FALSE );
     popup->insertSeparator();
     popup->insertItem( "&Quit", qApp, SLOT(quit()), CTRL+Key_Q );
 
 
-    textStylePopup = popup = new QPopupMenu( this );
-    menuBar()->insertItem( "&Edit", popup );
-
-    plainStyleID = id = popup->insertItem( "&Plain" );
-    popup->setAccel( CTRL+Key_T, id );
-
-    popup->insertSeparator();
-    QFont f = font();
-    f.setBold( TRUE );
-    id = popup->insertItem( new MyMenuItem( "&Bold", f ) );
-    popup->setAccel( CTRL+Key_B, id );
-    f = font();
-    f.setItalic( TRUE );
-    id = popup->insertItem( new MyMenuItem( "&Italic", f ) );
-    popup->setItemChecked( id, TRUE );
-    popup->setAccel( CTRL+Key_I, id );
-    f = font();
-    f.setUnderline( TRUE );
-    id = popup->insertItem( new MyMenuItem( "&Underline", f ) );
-    popup->setAccel( CTRL+Key_U, id );
-    f = font();
-    f.setStrikeOut( TRUE );
-    id = popup->insertItem( new MyMenuItem( "&Strike", f ) );
-    connect( textStylePopup, SIGNAL(activated(int)),
-	     this, SLOT(popupSelected(int)) );
-
     // Create an analog and a digital clock
+
     AnalogClock  *aclock = new AnalogClock( central );
     aclock->setAutoMask( TRUE );
     DigitalClock *dclock = new DigitalClock( central );
@@ -220,49 +196,55 @@ WidgetView::WidgetView( QWidget *parent, const char *name )
     grid->addWidget( dclock, 1, 2 );
 
     // Give the dclock widget a blue palette
+
     col.setRgb( 0xaa, 0xbe, 0xff );
     dclock->setPalette( QPalette( col ) );
 
     // make tool tips for both of them
+
     QToolTip::add( aclock, "custom widget: analog clock" );
     QToolTip::add( dclock, "custom widget: digital clock" );
 
     // Create a push button.
+
     QPushButton *pb;
-    pb = new QPushButton( "&Push button 1", central, "button1" );
+    pb = new QPushButton( central, "button1" );	// create button 1
+    pb->setText( "&Push button 1" );
+    ///    pb->setFixedHeight( pb->sizeHint().height() );
     grid->addWidget( pb, 0, 0, AlignVCenter );
     connect( pb, SIGNAL(clicked()), SLOT(button1Clicked()) );
     QToolTip::add( pb, "push button 1" );
-    QWhatsThis::add( pb, "This is a <b>QPushButton</b>.<br>"
-		     "Click it and watch...<br>"
-		     "The wonders of modern technology.");
+    QWhatsThis::add( pb, "This is a QPushButton.\n" "Click it and watch the status area.\n"
+		     "The wonders of modern technology...");
 
     QPixmap pm;
-    bool pix = pm.load("qt.png");
+    bool pix = pm.load("qt.bmp");		// load pixmap for button 2
     if ( !pix ) {
 	QMessageBox::information( 0, "Qt Widgets Example",
-				  "Could not load the file \"qt.png\", which\n"
+				  "Could not load the file \"qt.bmp\", which\n"
 				  "contains an icon used...\n\n"
 				  "The text \"line 42\" will be substituted.",
 				  QMessageBox::Ok + QMessageBox::Default );
     }
 
     // Create a label containing a QMovie
-    movie = QMovie( MOVIEFILENAME );
+
     movielabel = new QLabel( central, "label0" );
+    movie = QMovie( MOVIEFILENAME );
     movie.connectStatus(this, SLOT(movieStatus(int)));
     movie.connectUpdate(this, SLOT(movieUpdate(const QRect&)));
     movielabel->setFrameStyle( QFrame::Box | QFrame::Plain );
     movielabel->setMovie( movie );
+    movielabel->setIndent( 0 );
     movielabel->setFixedSize( 128+movielabel->frameWidth()*2,
 			      64+movielabel->frameWidth()*2 );
     grid->addWidget( movielabel, 0, 1, AlignCenter );
     QToolTip::add( movielabel, "movie" );
-    QWhatsThis::add( movielabel, "This is a <b>QLabel</b> "
-		     "that contains a QMovie." );
+    QWhatsThis::add( movielabel, "This is a QLabel  that contains a QMovie." );
 
     // Create a group of check boxes
-    bg = new QButtonGroup( central, "checkGroup" );
+
+    QButtonGroup *bg = new QButtonGroup( central, "checkGroup" );
     bg->setTitle( "Check Boxes" );
     grid->addWidget( bg, 1, 0 );
 
@@ -274,12 +256,17 @@ WidgetView::WidgetView( QWidget *parent, const char *name )
     cb[0] = new QCheckBox( bg );
     cb[0]->setText( "&Read" );
     vbox->addWidget( cb[0] );
+    ///    cb[0]->setMinimumSize( cb[0]->sizeHint() );
     cb[1] = new QCheckBox( bg );
     cb[1]->setText( "&Write" );
     vbox->addWidget( cb[1] );
+    ///    cb[1]->setMinimumSize( cb[1]->sizeHint() );
     cb[2] = new QCheckBox( bg );
     cb[2]->setText( "&Execute" );
+    ///    cb[2]->setMinimumSize( cb[2]->sizeHint() );
     vbox->addWidget( cb[2] );
+    ///    bg->setMinimumSize( bg->childrenRect().size() );
+    //vbox->activate();
 
     connect( bg, SIGNAL(clicked(int)), SLOT(checkBoxClicked(int)) );
 
@@ -288,6 +275,7 @@ WidgetView::WidgetView( QWidget *parent, const char *name )
     QToolTip::add( cb[2], "check box 3" );
 
     // Create a group of radio buttons
+
     QRadioButton *rb;
     bg = new QButtonGroup( central, "radioGroup" );
     bg->setTitle( "Radio buttons" );
@@ -302,19 +290,24 @@ WidgetView::WidgetView( QWidget *parent, const char *name )
     rb->setText( "&AM" );
     rb->setChecked( TRUE );
     vbox->addWidget(rb);
+    ///    rb->setMinimumSize( rb->sizeHint() );
     QToolTip::add( rb, "radio button 1" );
     rb = new QRadioButton( bg );
     rb->setText( "F&M" );
     vbox->addWidget(rb);
+    ///    rb->setMinimumSize( rb->sizeHint() );
     QToolTip::add( rb, "radio button 2" );
     rb = new QRadioButton( bg );
     rb->setText( "&Short Wave" );
     vbox->addWidget(rb);
+    ///    rb->setMinimumSize( rb->sizeHint() );
+    //    vbox->activate();
 
     connect( bg, SIGNAL(clicked(int)), SLOT(radioButtonClicked(int)) );
     QToolTip::add( rb, "radio button 3" );
 
     // Create a list box
+
     QListBox *lb = new QListBox( central, "listBox" );
     for ( int i=0; i<100; i++ ) {		// fill list box
 	QString str;
@@ -333,116 +326,129 @@ WidgetView::WidgetView( QWidget *parent, const char *name )
     grid->addLayout( vbox, 2, 1 );
 
     // Create a slider
+
     QSlider *sb = new QSlider( 0, 300, 30, 100, QSlider::Horizontal,
 			       central, "Slider" );
     sb->setTickmarks( QSlider::Below );
     sb->setTickInterval( 10 );
     sb->setFocusPolicy( QWidget::TabFocus );
+    ///    sb->setFixedHeight(sb->sizeHint().height());
     vbox->addWidget( sb );
 
     connect( sb, SIGNAL(valueChanged(int)), SLOT(sliderValueChanged(int)) );
     QToolTip::add( sb, "slider" );
-    QWhatsThis::add( sb, "This is a <b>QSlider</b>. "
-		     "The tick marks are optional."
+    QWhatsThis::add( sb, "This is a QSlider. \n"
+		     "The tick marks are optional.\n"
 		     " This slider controls the speed of the movie." );
     // Create a combo box
+
     QComboBox *combo = new QComboBox( FALSE, central, "comboBox" );
     combo->insertItem( "darkBlue" );
     combo->insertItem( "darkRed" );
     combo->insertItem( "darkGreen" );
     combo->insertItem( "blue" );
     combo->insertItem( "red" );
+    ///    combo->setFixedHeight(combo->sizeHint().height());
     vbox->addWidget( combo );
-    connect( combo, SIGNAL(activated(int)),
-	     this, SLOT(comboBoxItemActivated(int)) );
+    connect( combo, SIGNAL(activated(int)), SLOT(comboBoxItemActivated(int)) );
     QToolTip::add( combo, "read-only combo box" );
 
     // Create an editable combo box
+
     QComboBox *edCombo = new QComboBox( TRUE, central, "edComboBox" );
     edCombo->insertItem( "Permutable" );
     edCombo->insertItem( "Malleable" );
     edCombo->insertItem( "Adaptable" );
     edCombo->insertItem( "Alterable" );
     edCombo->insertItem( "Inconstant" );
+    ///    edCombo->setFixedHeight(edCombo->sizeHint().height());
     vbox->addWidget( edCombo );
     connect( edCombo, SIGNAL(activated(const QString&)),
-	     this, SLOT(edComboBoxItemActivated(const QString&)) );
+	     SLOT(edComboBoxItemActivated(const QString&)) );
     QToolTip::add( edCombo, "editable combo box" );
 
     edCombo->setAutoCompletion( TRUE );
+
+    vbox->addStretch( 1 );
 
     vbox = new QVBoxLayout(8);
     grid->addLayout( vbox, 2, 2 );
 
     // Create a spin box
+
     QSpinBox *spin = new QSpinBox( 0, 10, 1, central, "spin" );
     spin->setSuffix(" mm");
     spin->setSpecialValueText( "Auto" );
+    ///    spin->setMinimumSize( spin->sizeHint() );
     connect( spin, SIGNAL( valueChanged(const QString&) ),
 	     SLOT( spinBoxValueChanged(const QString&) ) );
     QToolTip::add( spin, "spin box" );
-    QWhatsThis::add( spin, "This is a <b>QSpinBox</b>. "
-		     "You can chose values in a given range "
-		     "either by using the arrow buttons "
-		     "or by typing them in." );
+    QWhatsThis::add( spin, "This is a QSpinBox.\n" "You can chose values in a given range\n"
+		     "either by using the arrow buttons\n" "or by typing them in." );
     vbox->addWidget( spin );
 
     vbox->addStretch( 1 );
 
     // Create a tabwidget that switches between multi line edits
-    tabs = new QTabWidget( central );
+
+    QTabWidget* tabs = new QTabWidget( central );
     //tabs->setTabPosition( QTabWidget::Bottom );
     tabs->setMargin( 4 );
     grid->addMultiCellWidget( tabs, 3, 3, 1, 2 );
     QMultiLineEdit *mle = new QMultiLineEdit( tabs, "multiLineEdit" );
-    edit = mle;
-    mle->setWordWrap( QMultiLineEdit::WidgetWidth );
-    mle->setText("This is a QMultiLineEdit widget, "
-	         "useful for small multi-line "
+    mle->setText("This is a QMultiLineEdit widget,\n"
+	         "useful for small multi-line\n"
 		 "input fields.");
     QToolTip::add( mle, "multi line editor" );
 
-    tabs->addTab( mle, "F&irst");
+    tabs->addTab( mle, QPixmap(fileopen), "F&irst");
 
     mle = new QMultiLineEdit( tabs, "multiLineEdit" );
-    QString mleText = "This is another QMultiLineEdit widget.";
-#if 1
-    mleText += "\n";
-    mleText += "Japanese: ";
-    mleText += QChar((ushort)0x6a38); // Kanji
-    mleText += "\n";
-    mleText += "Russian:";
-    mleText += QChar((ushort)0x042e); // Cyrillic
-    mleText += "\n";
-    mleText += "Norwegian:";
-    mleText += QChar((ushort)0x00d8); // Norwegian
-    mleText += "\n";
-    mleText += "Unicode (black square):";
-    mleText += QChar((ushort)0x25A0); // BLACK SQUARE
-    mleText += "\n";
-#endif
-    mle->setText( mleText );
+    mle->setText("This is another QMultiLineEdit widget,\n"
+	         "we will put in some fancy characters here"
+		 );
     QToolTip::add( mle, "second multi line editor" );
-    tabs->addTab( mle, "Se&cond");
+    tabs->addTab( mle, QPixmap(fileopen), "Se&cond");
 
 
     // Create a single line edit
+
     QLineEdit *le = new QLineEdit( central, "lineEdit" );
 
+#if 0
+    QString uni;
+    uni += "JP:";
+    uni += QChar((ushort)0x6a38); // Kanji
+    uni += "RU:";
+    uni += QChar((ushort)0x042e); // Cyrillic
+    uni += "NO:";
+    uni += QChar((ushort)0x00d8); // Norwegian
+    uni += "U:";
+    uni += QChar((ushort)0x25A0); // BLACK SQUARE
+    le->setText(uni);
+#endif
 
     grid->addMultiCellWidget( le, 4, 4, 1, 2 );
+    ///    le->setFixedHeight(le->sizeHint().height());
     connect( le, SIGNAL(textChanged(const QString&)),
 	     SLOT(lineEditTextChanged(const QString&)) );
     QToolTip::add( le, "single line editor" );
-    QWhatsThis::add( le, "This is a <b>QLineEdit</b>, you can enter a "
-		     "single line of text in it. "
-		      "It also it accepts text drops." );
+    QWhatsThis::add( le, "This is a QLineEdit, you can enter a single line of text in it.\n"
+		     "It also it accepts text drops." );
+    // Create a horizontal line (sort of QFrame) above the message line
+
+    //    QFrame *separator = new QFrame( central, "separatorLine" );
+    //    separator->setFrameStyle( QFrame::HLine | QFrame::Sunken );
+    ///    separator->setFixedHeight( separator->sizeHint().height() );
+    //    grid->addMultiCellWidget( separator, 5, 5, 0, 2 );
+    //    QToolTip::add( separator, "tool tips on a separator! wow!" );
 
     grid->setRowStretch(0,0);
     grid->setRowStretch(1,0);
     grid->setRowStretch(2,0);
     grid->setRowStretch(3,1);
     grid->setRowStretch(4,0);
+    //    grid->setRowStretch(5,0);
 
     grid->setColStretch(0,1);
     grid->setColStretch(1,1);
@@ -452,15 +458,7 @@ WidgetView::WidgetView( QWidget *parent, const char *name )
     QSplitter *split = new QSplitter( Vertical, central, "splitter" );
     split->setOpaqueResize( TRUE );
     topLayout->addWidget( split, 1 );
-    QListView *lv = new MyListView( split );
-    connect(lv, SIGNAL(selectionChanged() ),
-	    this, SLOT( selectionChanged() ) );
-    connect(lv, SIGNAL(selectionChanged(QListViewItem*) ),
-	    this, SLOT( selectionChanged(QListViewItem*) ) );
-    connect(lv, SIGNAL(clicked(QListViewItem*) ),
-	    this, SLOT( clicked(QListViewItem*) ) );
-    connect(lv, SIGNAL(mySelectionChanged(QListViewItem*) ),
-	    this, SLOT( mySelectionChanged(QListViewItem*) ) );
+    QListView *lv = new QListView( split );
     lv->addColumn( "One" );
     lv->addColumn( "Two" );
     lv->setAllColumnsShowFocus( TRUE );
@@ -474,10 +472,6 @@ WidgetView::WidgetView( QWidget *parent, const char *name )
     lvi=  new QListViewItem( lvi, "SubText", "Side Text" );
     lvi=  new QListViewItem( lvi, "SubSubText", "Complimentary Text" );
 
-    QToolTip::add( lv, "list view" );
-    QWhatsThis::add( lv, "This is a <b>QListView</b>, you can display lists "
-		     "(or outline lists) of multiple-column data in it." );
-
     lv = new QListView( split );
     lv->addColumn( "Choices" );
     (void) new QCheckListItem( lv, "Onion", QCheckListItem::CheckBox );
@@ -486,7 +480,7 @@ WidgetView::WidgetView( QWidget *parent, const char *name )
     (void) new QCheckListItem( lv, "Habaneros", QCheckListItem::CheckBox );
     (void) new QCheckListItem( lv, "Pineapple", QCheckListItem::CheckBox );
     (void) new QCheckListItem( lv, "Ham", QCheckListItem::CheckBox );
-    (void) new QCheckListItem( lv, "Pepperoni", QCheckListItem::CheckBox );
+    (void) new QCheckListItem( lv, "Peperoni", QCheckListItem::CheckBox );
     (void) new QCheckListItem( lv, "Garlic", QCheckListItem::CheckBox );
 
 
@@ -496,42 +490,40 @@ WidgetView::WidgetView( QWidget *parent, const char *name )
     (void) new QCheckListItem( lit, "Mozarella", QCheckListItem::RadioButton );
     (void) new QCheckListItem( lit, "Jarlsberg", QCheckListItem::RadioButton );
 
-    QToolTip::add( lv, "list view" );
-    QWhatsThis::add( lv, "This is also a <b>QListView</b>, with "
-		     "interactive items." );
 
-     QTextView *qmlv =  new QTextView( "<hr><h1>QTextView</h1>"
+     QTextView *qmlv =  new QTextView( "<h1>QTextView</h1>"
 		      "<p>Qt supports formatted rich text, such "
 		      "as the heading above, <em>emphasized</em> and "
 		      "<b>bold</b> text, via an XML subset.</p> "
 		      "<p>Style sheets are supported.</p>",
  				  "", split );
-    qmlv->setFont(QFont("Charter",11));
+    qmlv->setFont(QFont("Times",12));
     qmlv->setFrameStyle( QFrame::WinPanel | QFrame::Sunken );
 
     // Create an label and a message in the status bar
     // The message is updated when buttons are clicked etc.
     msg = new QLabel( statusBar(), "message" );
     msg->setAlignment( AlignCenter );
-    QFont boldfont; boldfont.setWeight(QFont::Bold);
-    msg->setFont( boldfont );
+    msg->setFont( QFont("Times",12,QFont::Bold) );
+    msg->setText( "Message" );
+    msg->setMinimumHeight( msg->sizeHint().height() );
+    msg->setText( "" );
     statusBar()->addWidget( msg, 4 );
     QToolTip::add( msg, "Message area" );
-
-    QAccel* a = new QAccel( this );
-    a->connectItem(  a->insertItem( Key_F9 ),
-		     this, SLOT( showProperties() ) );
 
     prog = new QProgressBar( statusBar(), "progress" );
     prog->setTotalSteps( 100 );
     progress = 64;
     prog->setProgress( progress );
     statusBar()->addWidget( prog , 1 );
-    QWhatsThis::add( prog, "This is a <b>QProgressBar</b> "
-		     "You can use it to show that a lengthy "
-		     " process is progressing. "
+    QWhatsThis::add( prog, "This is a QProgressBar\n" "You can use it to show that a lengthy\n"
+		     " process is progressing.\n"
 		     "In this program, nothing much seems to happen." );
+    topLayout->activate();
+
+
     statusBar()->message( "Welcome to Qt", 2000 );
+
 }
 
 void WidgetView::setStatus(const QString& text)
@@ -556,12 +548,9 @@ void WidgetView::movieStatus( int s )
 {
     switch ( s ) {
       case QMovie::SourceEmpty:
-      case QMovie::UnrecognizedFormat:
-	{
-	    QPixmap pm("tt-logo.png");
-	    movielabel->setPixmap(pm);
-	    movielabel->setFixedSize(pm.size());
-	}
+	movielabel->setText("Could not load\n" MOVIEFILENAME );
+	movielabel->setAlignment( AlignCenter );
+	movielabel->setBackgroundColor( backgroundColor() );
       break;
       default:
 	if ( movielabel->movie() )	 	// for flicker-free animation:
@@ -569,18 +558,6 @@ void WidgetView::movieStatus( int s )
     }
 }
 
-
-void WidgetView::popupSelected( int selectedId )
-{
-    if ( selectedId == plainStyleID ) {
-	for ( int i = 0; i < int(textStylePopup->count()); i++ ) {
-	    int id = textStylePopup->idAt( i );
-	    textStylePopup->setItemChecked( id, FALSE);
-	}
-    } else {
-	textStylePopup->setItemChecked( selectedId, TRUE );
-    }
-}
 
 void WidgetView::checkBoxClicked( int id )
 {
@@ -600,7 +577,7 @@ void WidgetView::checkBoxClicked( int id )
 
 void WidgetView::edComboBoxItemActivated( const QString& text)
 {
-    QString str = tr("Editable Combo Box set to ");
+    QString str = "Editable Combo Box set to ";
     str += text;
     msg->setText( str );
 }
@@ -696,59 +673,17 @@ bool WidgetView::eventFilter( QObject *obj, QEvent *event )
 	    identify_now = TRUE;		// allow it again
 	}
     }
-    return QMainWindow::eventFilter( obj, event ); // don't eat event
+    return FALSE;				// don't eat event
 }
 
 
 void WidgetView::open()
 {
-    QFileDialog::getOpenFileName( QString::null, "Textfiles (*.txt)", this );
+    QFileDialog::getOpenFileName( );
 }
 
 
 void WidgetView::dummy()
 {
-    QMessageBox::information( this, "Sorry",
-			      "This function is not implemented" );
-}
-
-void WidgetView::selectionChanged()
-{
-    //qDebug("selectionChanged");
-}
-void WidgetView::selectionChanged( QListViewItem* item)
-{
-    //qDebug("selectionChanged %p", item );
-}
-
-void WidgetView::clicked( QListViewItem* item )
-{
-    //qDebug("clicked %p", item );
-}
-
-void WidgetView::mySelectionChanged( QListViewItem* item )
-{
-    //qDebug("mySelectionChanged %p", item );
-}
-
-void WidgetView::showProperties()
-{
-    if ( !qApp->focusWidget() )
-	return;
-    QStrList properties
-	= qApp->focusWidget()->metaObject()->propertyNames( TRUE );
-    QCString output;
-    output.sprintf( "Properties for class '%s'",
-		    qApp->focusWidget()->className() );
-    int i = 0;
-    while( i < (int) properties.count() ) {
-	const QMetaProperty* p
-	    = qApp->focusWidget()->metaObject()->property( properties.at(i),
-							   TRUE );
-	QCString tmp;
-	tmp.sprintf( "\n %2d: %s (read-%s, %s)", ++i, p->name(),
-		     p->writable() ? "write" : "only", p->type() );
-	output += tmp;
-    }
-    qDebug( output );
+    QMessageBox::information( this, "Sorry", "This function is not implemented" );
 }

@@ -1,39 +1,27 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qnpsupport.cpp   2.3.2   edited 2001-01-26 $
+** $Id: qnpsupport.cpp,v 2.18 1999/05/07 14:23:38 ettrich Exp $
 **
 ** Low-level support for Netscape Plugins under X11.
 **
 ** Created : 970601
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
-** This file is part of the kernel module of the Qt GUI Toolkit.
+** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses may use this file in accordance with the Qt Commercial License
-** Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
+*****************************************************************************/
 
 #include "qapplication.h"
 #define	 GC GC_QQQ
@@ -127,16 +115,6 @@ void qt_np_remove_timeoutcb( SameAsXtTimerCallbackProc cb )
     }
 }
 
-void qt_np_enable_timers()
-{
-    if ( islist ) {
-	timeval *tm = qt_wait_timer();
-	if (tm) {
-	    int interval = (int)QMIN(tm->tv_sec,INT_MAX/1000)*1000 + (int)tm->tv_usec/1000;
-	    qt_np_set_timer(interval);
-	}
-    }
-}
 
 int qt_event_handler( XEvent* event )
 {
@@ -157,13 +135,18 @@ int qt_event_handler( XEvent* event )
 		XLeaveWindowEvent* e = (XLeaveWindowEvent*)event;
 		qt_np_leave_cb(e);
 	    }
-	qt_activate_timers();
-	qt_np_enable_timers();
+	if ( islist ) {
+	    qt_activate_timers();
+	    timeval *tm = qt_wait_timer();
+	    if (tm) {
+		int interval = (int)QMIN(tm->tv_sec,INT_MAX/1000)*1000 + (int)tm->tv_usec/1000;
+		qt_np_set_timer(interval);
+	    }
+	}
 	qt_reset_color_avail();
 	QApplication::sendPostedEvents();
 	// send the event to Xt in any case (think about XGrabPointer with ownerEvents TRUE
-	if ( event->type != 7 && event->type != 8 )
-	    (void) qt_np_cascade_event_handler[event->type]( event );
+	(void) qt_np_cascade_event_handler[event->type]( event );
 	return True;
     }
 }

@@ -1,16 +1,13 @@
 /****************************************************************************
-** $Id: qt/examples/forever/forever.h   2.3.2   edited 2001-01-26 $
+** $Id: forever.h,v 1.1 1999/06/03 10:49:02 warwick Exp $
 **
 ** Definition of something or other
 **
 ** Created : 979899
 **
-** Copyright (C) 1997 by Trolltech AS.  All rights reserved.
+** Copyright (C) 1997 by Troll Tech AS.  All rights reserved.
 **
-** This file is part of an example program for Qt.  This example
-** program may be used, distributed and modified without limitation.
-**
-*****************************************************************************/
+****************************************************************************/
 
 #ifndef FOREVER_H
 #define FOREVER_H
@@ -27,6 +24,7 @@ class Forever : public QWidget
 public:
     Forever( QWidget *parent=0, const char *name=0 );
 protected:
+    void	paintEvent( QPaintEvent * );
     void	timerEvent( QTimerEvent * );
 private slots:
     void	updateCaption();

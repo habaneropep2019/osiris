@@ -1,39 +1,27 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qpaintdevice_x11.cpp   2.3.2   edited 2001-01-26 $
+** $Id: qpaintdevice_x11.cpp,v 2.34 1999/06/24 20:13:37 warwick Exp $
 **
 ** Implementation of QPaintDevice class for X11
 **
 ** Created : 940721
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
-** This file is part of the kernel module of the Qt GUI Toolkit.
+** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses for Unix/X11 may use this file in accordance with the Qt Commercial
-** License Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
+*****************************************************************************/
 
 #include "qpaintdevice.h"
 #include "qpaintdevicemetrics.h"
@@ -43,7 +31,6 @@
 #include "qt_x11.h"
 
 
-// NOT REVISED
 /*!
   \class QPaintDevice qpaintdevice.h
   \brief The base class of objects that can be painted.
@@ -113,7 +100,7 @@ QPaintDevice::QPaintDevice( uint devflags )
     if ( !qApp ) {				// global constructor
 #if defined(CHECK_STATE)
 	qFatal( "QPaintDevice: Must construct a QApplication before a "
-		"QPaintDevice" );
+	       "QPaintDevice" );
 #endif
 	return;
     }
@@ -124,7 +111,7 @@ QPaintDevice::QPaintDevice( uint devflags )
 }
 
 /*!
-  Destructs the paint device and frees window system resources.
+  Destroys the paint device and frees window system resources.
 */
 
 QPaintDevice::~QPaintDevice()
@@ -132,12 +119,12 @@ QPaintDevice::~QPaintDevice()
 #if defined(CHECK_STATE)
     if ( paintingActive() )
 	qWarning( "QPaintDevice: Cannot destroy paint device that is being "
-		  "painted" );
+		 "painted" );
 #endif
     if ( x11Data ) {
 	delete x11Data;
 	x11Data = 0;
-    }
+    }	
 }
 
 
@@ -202,10 +189,8 @@ QPaintDeviceX11Data* QPaintDevice::getX11Data( bool def ) const
 
 /*!
   \fn int QPaintDevice::devType() const
-
-  Returns the device type identifier: \c QInternal::Widget, \c
-  QInternal::Pixmap, \c QInternal::Printer, \c QInternal::Picture or
-  \c QInternal::UndefinedDevice.
+  Returns the device type identifier: \c QInternal::Widget, \c QInternal::Pixmap,
+  \c QInternal::Printer, \c QInternal::Picture or \c QInternal::UndefinedDevice.
 */
 
 /*!
@@ -229,232 +214,51 @@ QPaintDeviceX11Data* QPaintDevice::getX11Data( bool def ) const
 */
 
 /*!
-  \fn HDC QPaintDevice::handle() const
-
-  Returns the window system handle of the paint device, for low-level
-  access.  <em>Using this function is not portable.</em>
-
-  The HDC type varies with platform; see qpaintdevice.h and qwindowdefs.h
-  for details.
-*/
-
-/*!
-  \fn Display *QPaintDevice::x11AppDisplay()
-
-  Returns a pointer to the X display
-  global to the application (X11 only).
-  <em>Using this function is not portable.</em>
-
-  \sa handle()
-*/
-
-/*!
-  \fn int QPaintDevice::x11AppScreen ()
-
-  Returns the screen number on the X display
-  global to the application (X11 only).
-  <em>Using this function is not portable.</em>
-*/
-
-/*!
-  \fn int QPaintDevice::x11AppDepth ()
-
-  Returns the depth of the X display
-  global to the application (X11 only).
-  <em>Using this function is not portable.</em>
-
-  \sa QPixmap::defaultDepth()
-*/
-
-/*!
-  \fn int QPaintDevice::x11AppCells ()
-
-  Returns the number of entries in the colormap of the X display
-  global to the application (X11 only).
-  <em>Using this function is not portable.</em>
-
-  \sa x11Colormap()
-*/
-
-/*!
-  \fn HANDLE QPaintDevice::x11AppColormap ()
-
-  Returns the colormap of the X display
-  global to the application (X11 only).
-  <em>Using this function is not portable.</em>
-
-  \sa x11Cells()
-*/
-
-/*!
-  \fn bool QPaintDevice::x11AppDefaultColormap ()
-
-  Returns the default colormap of the X display
-  global to the application (X11 only).
-  <em>Using this function is not portable.</em>
-
-  \sa x11Cells()
-*/
-
-/*!
-  \fn void* QPaintDevice::x11AppVisual ()
-
-  Returns the Visual of the X display
-  global to the application (X11 only).
-  <em>Using this function is not portable.</em>
-*/
-
-/*!
-  \fn bool QPaintDevice::x11AppDefaultVisual ()
-
-  Returns the default Visual of the X display
-  global to the application (X11 only).
-  <em>Using this function is not portable.</em>
-*/
-
-
-/*!
   \fn Display *QPaintDevice::x11Display() const
 
-  Returns a pointer to the X display
-  for the paint device (X11 only).
+  Returns a pointer to the X display (X11 only).
   <em>Using this function is not portable.</em>
 
   \sa handle()
 */
 
-/*!
-  \fn int QPaintDevice::x11Screen () const
-
-  Returns the screen number on the X display
-  for the paint device (X11 only).
-  <em>Using this function is not portable.</em>
-*/
-
-/*!
-  \fn int QPaintDevice::x11Depth () const
-
-  Returns the depth of the X display
-  for the paint device (X11 only).
-  <em>Using this function is not portable.</em>
-
-  \sa QPixmap::defaultDepth()
-*/
-
-/*!
-  \fn int QPaintDevice::x11Cells () const
-
-  Returns the number of entries in the colormap of the X display
-  for the paint device (X11 only).
-  <em>Using this function is not portable.</em>
-
-  \sa x11Colormap()
-*/
-
-/*!
-  \fn HANDLE QPaintDevice::x11Colormap () const
-
-  Returns the colormap of the X display
-  for the paint device (X11 only).
-  <em>Using this function is not portable.</em>
-
-  \sa x11Cells()
-*/
-
-/*!
-  \fn bool QPaintDevice::x11DefaultColormap () const
-
-  Returns the default colormap of the X display
-  for the paint device (X11 only).
-  <em>Using this function is not portable.</em>
-
-  \sa x11Cells()
-*/
-
-/*!
-  \fn void* QPaintDevice::x11Visual () const
-
-  Returns the Visual of the X display
-  for the paint device (X11 only).
-  <em>Using this function is not portable.</em>
-*/
-
-/*!
-  \fn bool QPaintDevice::x11DefaultVisual () const
-
-  Returns the default Visual of the X display
-  for the paint device (X11 only).
-  <em>Using this function is not portable.</em>
-*/
-
-static int dpiX=0,dpiY=0;
-extern void     qX11ClearFontNameCache(); // defined in qfont_x11.cpp
-
-/*!
-  Sets the value returned by x11AppDpiX().  The default is determined
-  by the display configuration.  Changing this value will alter the
-  scaling of fonts and many other metrics and is not recommended.
-
-  \sa x11SetAppDpiY()
-*/
-void QPaintDevice::x11SetAppDpiX(int dpi)
-{
-    dpiX = dpi;
-    qX11ClearFontNameCache();
-}
-
-/*!
-  Sets the value returned by x11AppDpiY().  The default is determined
-  by the display configuration.  Changing this value will alter the
-  scaling of fonts and many other metrics and is not recommended.
-
-  \sa x11SetAppDpiX()
-*/
-void QPaintDevice::x11SetAppDpiY(int dpi)
-{
-    dpiY = dpi;
-    qX11ClearFontNameCache();
-}
 
 /*!
   Returns the horizontal DPI of the X display (X11 only).
   <em>Using this function is not portable.</em> See QPaintDeviceMetrics
   for portable access to related information.
 
-  \sa x11AppDpiY(), x11SetAppDpiX(), QPaintDeviceMetrics::logicalDpiX()
+  \sa QPaintDeviceMetrics::logicalDpiX();
 */
 int QPaintDevice::x11AppDpiX()
 {
-    if ( !dpiX ) {
-	Display *dpy = x11AppDisplay();
-	int scr = x11AppScreen();
-	if ( dpy ) {
-	    dpiX =
-		(DisplayWidth(dpy,scr) * 254 + DisplayWidthMM(dpy,scr)*5)
-		       / (DisplayWidthMM(dpy,scr)*10);
-	}
-    }
-    return dpiX;
-}
-
-/*!
-  Returns the vertical DPI of the X11 display (X11 only).
-  <em>Using this function is not portable.</em> See QPaintDeviceMetrics
-  for portable access to related information.
-
-  \sa x11AppDpiX(), x11SetAppDpiY(), QPaintDeviceMetrics::logicalDpiY()
-*/
-int QPaintDevice::x11AppDpiY()
-{
-    if ( !dpiY ) {
+    static int remember = 0;
+    if ( !remember ) {
 	Display *dpy = x11AppDisplay();
 	int scr = x11AppScreen();
 	if ( dpy )
-	    dpiY =
-		(DisplayHeight(dpy,scr) * 254 + DisplayHeightMM(dpy,scr)*5)
-		       / (DisplayHeightMM(dpy,scr)*10);
+	    remember = DisplayWidth(dpy,scr) * 254 / DisplayWidthMM(dpy,scr) / 10;
     }
-    return dpiY;
+    return remember;
+}
+
+/*!
+  Returns the vertical DPI of the X display (X11 only).
+  <em>Using this function is not portable.</em> See QPaintDeviceMetrics
+  for portable access to related information.
+
+  \sa QPaintDeviceMetrics::logicalDpiY();
+*/
+int QPaintDevice::x11AppDpiY()
+{
+    static int remember = 0;
+    if ( !remember ) {
+	Display *dpy = x11AppDisplay();
+	int scr = x11AppScreen();
+	if ( dpy )
+	    remember = DisplayHeight(dpy,scr) * 254 / DisplayHeightMM(dpy,scr) / 10;
+    }
+    return remember;
 }
 
 
@@ -689,29 +493,12 @@ void bitBlt( QPaintDevice *dst, int dx, int dy,
 	return;
     }
 
-    switch ( ts ) {
-	case QInternal::Widget:
-	case QInternal::Pixmap:
-	case QInternal::System:			// OK, can blt from these
-	    break;
-	default:
+    if ( !(ts <= QInternal::Pixmap && td <= QInternal::Pixmap) ) {
 #if defined(CHECK_RANGE)
-	    qWarning( "bitBlt: Cannot bitBlt from device type %x", ts );
+	qWarning( "bitBlt: Cannot bitBlt to or from device" );
 #endif
-	    return;
+	return;
     }
-    switch ( td ) {
-	case QInternal::Widget:
-	case QInternal::Pixmap:
-	case QInternal::System:			// OK, can blt to these
-	    break;
-	default:
-#if defined(CHECK_RANGE)
-	    qWarning( "bitBlt: Cannot bitBlt to device type %x", td );
-#endif
-	    return;
-    }
-
     static short ropCodes[] = {			// ROP translation table
 	GXcopy, GXor, GXxor, GXandInverted,
 	GXcopyInverted, GXorInverted, GXequiv, GXand,

@@ -1,39 +1,27 @@
 /****************************************************************************
-** $Id: qt/src/tools/qglist.h   2.3.2   edited 2001-01-26 $
+** $Id: qglist.h,v 2.14 1999/06/21 00:22:34 agulbra Exp $
 **
 ** Definition of QGList and QGListIterator classes
 **
 ** Created : 920624
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
-** This file is part of the tools module of the Qt GUI Toolkit.
+** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses may use this file in accordance with the Qt Commercial License
-** Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
+*****************************************************************************/
 
 #ifndef QGLIST_H
 #define QGLIST_H
@@ -72,17 +60,15 @@ friend class QGVector;				// needed by QGVector::toList
 public:
     uint  count() const;			// return number of nodes
 
-#ifndef QT_NO_DATASTREAM
     QDataStream &read( QDataStream & );		// read list from stream
     QDataStream &write( QDataStream & ) const;	// write list to stream
-#endif
+
 protected:
     QGList();					// create empty list
     QGList( const QGList & );			// make copy of other list
     virtual ~QGList();
 
     QGList &operator=( const QGList & );	// assign from other list
-    bool operator==( const QGList& ) const;
 
     void inSort( QCollection::Item );		// add item sorted in list
     void append( QCollection::Item );		// add item at end of list
@@ -126,10 +112,9 @@ protected:
 
     virtual int compareItems( QCollection::Item, QCollection::Item );
 
-#ifndef QT_NO_DATASTREAM
     virtual QDataStream &read( QDataStream &, QCollection::Item & );
     virtual QDataStream &write( QDataStream &, QCollection::Item ) const;
-#endif
+
 private:
     void  prepend( QCollection::Item ); // add item at start of list
 
@@ -200,10 +185,9 @@ inline QCollection::Item QGList::clast() const
   QGList stream functions
  *****************************************************************************/
 
-#ifndef QT_NO_DATASTREAM
 Q_EXPORT QDataStream &operator>>( QDataStream &, QGList & );
 Q_EXPORT QDataStream &operator<<( QDataStream &, const QGList & );
-#endif
+
 
 /*****************************************************************************
   QGListIterator class

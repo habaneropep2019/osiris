@@ -1,0 +1,63 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><meta name="robots" content="noindex,noarchive"><title>
+Qt Toolkit - qcdestyle.h include file
+</title><style type="text/css"><!--
+h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
+a:link { text-decoration: none; }
+body { background: white; color: black; }
+--></style>
+</head><body bgcolor="#ffffff">
+
+<a href=index.html><img width=122 height=65 src=qtlogo.png alt="Qt logo" align=left border=0></a>
+<center><img src=dochead.png width=448 height=23></center>
+<br clear=all>
+
+<h1 align=center>qcdestyle.h</h1><br clear="all">
+This is the verbatim text of the qcdestyle.h include file.  It is
+provided only for illustration; the copyright
+remains with Troll Tech.
+<hr>
+<pre>
+/****************************************************************************
+** &#36;Id&#58; qcdestyle.h,v 1.1 1999/05/13 00:35:31 ettrich Exp $
+**
+** Definition of something or other
+**
+** Created : 979899
+**
+** Copyright (C) 1997 by Troll Tech AS.  All rights reserved.
+**
+****************************************************************************/
+
+#ifndef QCDESTYLE_H
+#define QCDESTYLE_H
+
+#include "qmotifstyle.h"
+
+class Q_EXPORT <a href="qcdestyle.html">QCDEStyle</a> : public <a href="qmotifstyle.html">QMotifStyle</a>
+{
+    Q_OBJECT
+public:
+    QCDEStyle( bool useHighlightCols = FALSE );
+
+    int defaultFrameWidth() const;
+
+    void drawArrow( QPainter *p, ArrowType type, bool down,
+                    int x, int y, int w, int h,
+                    const QColorGroup &amp;g, bool enabled, const QBrush *fill = 0 );
+
+    void drawIndicator( QPainter* p, int x, int y, int w, int h,  const QColorGroup &amp;g,
+                       int state, bool down = FALSE, bool enabled = TRUE );
+
+    void drawExclusiveIndicator( QPainter* p,  int x, int y, int w, int h, const QColorGroup &amp;g,
+                                 bool on, bool down = FALSE, bool enabled = TRUE );
+};
+
+#endif
+
+</pre>
+<p><address><hr><div align="center">
+<table width="100%" cellspacing="0" border="0"><tr>
+<td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.00</div>
+</table></div></address></body></html>

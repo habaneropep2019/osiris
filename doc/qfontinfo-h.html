@@ -1,0 +1,113 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><meta name="robots" content="noindex,noarchive"><title>
+Qt Toolkit - qfontinfo.h include file
+</title><style type="text/css"><!--
+h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
+a:link { text-decoration: none; }
+body { background: white; color: black; }
+--></style>
+</head><body bgcolor="#ffffff">
+
+<a href=index.html><img width=122 height=65 src=qtlogo.png alt="Qt logo" align=left border=0></a>
+<center><img src=dochead.png width=448 height=23></center>
+<br clear=all>
+
+<h1 align=center>qfontinfo.h</h1><br clear="all">
+This is the verbatim text of the qfontinfo.h include file.  It is
+provided only for illustration; the copyright
+remains with Troll Tech.
+<hr>
+<pre>
+/****************************************************************************
+** &#36;Id&#58; qfontinfo.h,v 2.13 1999/05/03 11:32:58 warwick Exp $
+**
+** Definition of QFontInfo class
+**
+** Created : 950131
+**
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+**
+** This file is part of the Qt GUI Toolkit.
+**
+** This file may be distributed under the terms of the Q Public License
+** as defined by Troll Tech AS of Norway and appearing in the file
+** LICENSE.QPL included in the packaging of this file.
+**
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
+**
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
+**
+*****************************************************************************/
+
+#ifndef QFONTINFO_H
+#define QFONTINFO_H
+
+#ifndef QT_H
+#include "qfont.h"
+#endif // QT_H
+
+
+class Q_EXPORT <a href="qfontinfo.html">QFontInfo</a>
+{
+public:
+    QFontInfo( const QFont &amp; );
+    QFontInfo( const QFontInfo &amp; );
+   ~QFontInfo();
+
+    QFontInfo          &amp;operator=( const QFontInfo &amp; );
+
+    QString             family()        const;
+    int                 pointSize()     const;
+    bool                italic()        const;
+    int                 weight()        const;
+    bool                bold()          const;
+    bool                underline()     const;
+    bool                strikeOut()     const;
+    bool                fixedPitch()    const;
+    QFont::StyleHint    styleHint()     const;
+    QFont::CharSet      charSet()       const;
+    bool                rawMode()       const;
+
+    bool                exactMatch()    const;
+
+#if 1   /* OBSOLETE */
+    const QFont &amp;font() const;
+#endif
+
+private:
+    QFontInfo( const QPainter * );
+    static void reset( const QPainter * );
+    const QFontDef *spec() const;
+
+    QFontInternal *fin;
+    QPainter      *painter;
+    int            flags;
+
+    bool    underlineFlag()  const { return (flags &amp; 0x1) != 0; }
+    bool    strikeOutFlag()  const { return (flags &amp; 0x2) != 0; }
+    bool    exactMatchFlag() const { return (flags &amp; 0x4) != 0; }
+    void    setUnderlineFlag()     { flags |= 0x1; }
+    void    setStrikeOutFlag()     { flags |= 0x2; }
+    void    setExactMatchFlag()    { flags |= 0x4; }
+
+    friend class QWidget;
+    friend class QPainter;
+};
+
+
+inline bool QFontInfo::bold() const
+{ return weight() &gt; QFont::Normal; }
+
+
+#endif // QFONTINFO_H
+
+</pre>
+<p><address><hr><div align="center">
+<table width="100%" cellspacing="0" border="0"><tr>
+<td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.00</div>
+</table></div></address></body></html>

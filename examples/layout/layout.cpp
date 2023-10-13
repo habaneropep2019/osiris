@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: qt/examples/layout/layout.cpp   2.3.2   edited 2001-06-12 $
+** $Id: layout.cpp,v 1.3 1999/06/08 11:19:14 paul Exp $
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -37,7 +37,7 @@ ExampleWidget::ExampleWidget( QWidget *parent, const char *name )
     QMenuBar *menubar = new QMenuBar( this );
     menubar->setSeparator( QMenuBar::InWindowsStyle );
     QPopupMenu* popup;
-    popup = new QPopupMenu( this );
+    popup = new QPopupMenu;
     popup->insertItem( "&Quit", qApp, SLOT(quit()) );
     menubar->insertItem( "&File", popup );
 
@@ -107,12 +107,14 @@ ExampleWidget::ExampleWidget( QWidget *parent, const char *name )
 	// The line edit goes in the second column
 	grid->addWidget( ed, row, linedCol );	
 
-	// Make a label that is a buddy of the line edit
+	QLabel *label = new QLabel( this );
 	QString s;
 	s.sprintf( "Line &%d", row+1 );
-	QLabel *label = new QLabel( ed, s, this );
+	label->setText( s );
 	// The label goes in the first column.
 	grid->addWidget( label, row, labelCol );
+	// show off the nice new keyboard interface in Qt 1.3
+	label->setBuddy( ed );
     }
 
     // The multiline edit will cover the entire vertical range of the
@@ -152,10 +154,9 @@ int main( int argc, char **argv )
 {
     QApplication a( argc, argv );
 
-    ExampleWidget f;
-    a.setMainWidget(&f);
-    f.setCaption("Qt Example - Caption");
-    f.show();
+    QWidget *f = new ExampleWidget;
+    a.setMainWidget(f);
+    f->show();
 
     return a.exec();
 }

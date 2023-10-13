@@ -1,41 +1,28 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qobject.cpp   2.3.2   edited 2001-09-02 $
+** $Id: qobject.cpp,v 2.99 1999/06/21 23:50:14 agulbra Exp $
 **
 ** Implementation of QObject class
 **
 ** Created : 930418
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
-** This file is part of the kernel module of the Qt GUI Toolkit.
+** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses may use this file in accordance with the Qt Commercial License
-** Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
+*****************************************************************************/
 
-#include "qvariant.h"
 #include "qapplication.h"
 #include "qobject.h"
 #include "qobjectlist.h"
@@ -44,21 +31,11 @@
 #include "qregexp.h"
 #include <ctype.h>
 
-#include "qpixmap.h"
-#include "qiconset.h"
-#include "qimage.h"
-#include "qregion.h"
-#include "qbitmap.h"
-#include "qpointarray.h"
-#include "qcursor.h"
 
-// NOT REVISED
 /*! \class Qt qnamespace.h
 
   \brief The Qt class is a namespace for miscellaneous identifiers
   that need to be global-like.
-
-  \ingroup misc
 
   Normally, you can ignore this class.  QObject and a few other
   classes inherit it, so that all the identifiers in the Qt namespace
@@ -72,62 +49,117 @@
 
 /*! \enum Qt::Orientation
 
-  This type is used to signify whether an object should be \c
-  Horizontal or \c Vertical (for example in QScrollBar).
+  This type is used to signify whether an object should be \a
+  Horizontal or \a Vertical (for example in QScrollBar).
 */
 
 
 /*!
   \class QObject qobject.h
-  \brief The QObject class is the base class of all Qt objects.
+  \brief The QObject class is the base class of all Qt objects that can
+  deal with signals, slots and events.
 
-  \ingroup objectmodel
+  \ingroup kernel
 
-  QObject is the heart of the \link object.html Qt object model.
-  \endlink The central feature in this model is a very powerful
-  mechanism for seamless object commuinication dubbed \link
-  signalsandslots.html signals and slots \endlink. With connect(), you
-  can connect a signal to a slot and destroy the connection again with
-  disconnect(). To avoid never-ending notification loops, you can
-  temporarily block signals with blockSignals(). The protected
-  functions connectNotify() and disconnectNotify() make it possible to
-  track connections.
+  Qt provides a very powerful mechanism for seamless object
+  communication; \link metaobjects.html signal/slot
+  connections\endlink. The signal/slot mechanism is an advanced way
+  of making traditional callback routines.
 
-  QObjects organize themselves in object trees. When you create a
-  QObject with another object as parent, it will automatically do an
-  insertChild() on the parent and thus show up in the parent's
-  children() list. The parent receives object ownership, i.e. it will
-  automatically delete its children in its destructor. You can look
-  for an object by name and optionally type using child() or
-  queryList(), and get the list of tree roots using objectTrees().
+  Example:
+  \code
+    //
+    // The Mandelbrot class uses a QTimer to calculate the mandelbrot
+    // set one scanline at a time without blocking the CPU.
+    // It inherits QObject to use signals and slots.
+    // Calling start() starts the calculation. The done() signal is
+    // emitted when it has finished.
+    // Note that this example is not complete. Feel free to complete it.
+    //
 
-  Every object has an object name() and can report its className() and
-  whether it inherits() another class in the QObject inheritance
-  hierarchy.
+    class Mandelbrot : public QObject
+    {
+	Q_OBJECT				// required for signals/slots
+    public:
+	Mandelbrot( QObject *parent=0, const char *name );
+	...
+    public slots:
+	void	start();
+    signals:
+	void	done();
+    private slots:
+	void	calculate();
+    private:
+	QTimer	timer;
+	...
+    };
 
-  When an object is deleted, it emits a destroyed() signal. You can
-  catch this signal to avoid dangling references to QObjects. The
-  QGuardedPtr class provides an elegant way to use this feature.
+    //
+    // Constructs and initializes a Mandelbrot object.
+    //
 
-  QObjects can receive events through event() and filter events of
-  other objects. See installEventFilter() and eventFilter() for
-  details. A convenience handler childEvent() can be reimplemented to
-  catch child events.
+    Mandelbrot::Mandelbrot( QObject *parent=0, const char *name )
+	: QObject( parent, name )
+    {
+	connect( &timer, SIGNAL(timeout()), SLOT(calculate()) );
+	...
+    }
 
-  Last but not least, QObject provides the basic timer support in Qt,
-  see QTimer for high-level support for timers.
+    //
+    // Starts the calculation task. The internal calculate() slot
+    // will be activated every 10 milliseconds.
+    //
+
+    void Mandelbrot::start()
+    {
+	if ( !timer.isActive() )		// not already running
+	    timer.start( 10 );			// timeout every 10 ms
+    }
+
+    //
+    // Calculates one scanline at a time.
+    // Emits the done() signal when finished.
+    //
+
+    void Mandelbrot::calculate()
+    {
+	...			// perform the calculation for a scanline
+	if ( finished ) {	// no more scanlines
+	   timer.stop();
+	   emit done();
+	}
+    }
+  \endcode
+
+  When an object has changed in some way that might be interesting for
+  the outside world, it emits a signal to tell whoever is listening.
+  All slots that are connected to this signal will be activated
+  (called).  It is even possible to connect a signal directly to
+  another signal.  (This will emit the second signal immediately
+  whenever the first is emitted.)
+
+  There is no limitation on how many slots that can be connected to
+  a signal.  The slots will be activated in the order they were connected
+  to the signal.
 
   Notice that the \c Q_OBJECT macro is mandatory for any object that
-  implement signals, slots or properties.  You also need to run the
-  \link moc.html moc program (Meta Object Compiler) \endlink on the
-  source file. We strongly recommend to use the macro in \e all
-  subclasses of QObject regardless whether they actually use signals,
-  slots and properties or not. Otherwise certain functions can show
-  undefined behaviour.
+  implement signals or slots.  You also need to run the \link
+  metaobjects.html moc program (Meta Object Compiler) \endlink on the
+  source file.
 
-  All Qt widgets inherit QObject. The convenience function
-  isWidgetType() returns whether an object is actually a widget.  It
-  is much faster than inherits( "QWidget" ).
+  The signal/slot mechanism allows objects to easily reused, because
+  the object that emits a signal does not need to know what the
+  signals are connected to.
+
+  All Qt widgets inherit QObject and use signals and slots.  A
+  QScrollBar, for example, emits \link QScrollBar::valueChanged()
+  valueChanged()\endlink whenever the scroll bar value changes.
+
+  Meta objects are useful for doing more than connecting signals to slots.
+  They also allow the programmer to obtain information about the class to
+  which an object is instantiated from (see isA() and inherits()) or to
+  produce a list of child objects that inherit a particular class
+  (see queryList()).
 */
 
 
@@ -178,9 +210,9 @@ static inline bool isSpace( char x )
 #endif
 }
 
-static QCString qt_rmWS( const char *src )
+static QCString rmWS( const char *src )
 {
-    QCString result( qstrlen(src)+1 );
+    QCString result( strlen(src)+1 );
     char *d = result.data();
     char *s = (char *)src;
     char last = 0;
@@ -197,12 +229,12 @@ static QCString qt_rmWS( const char *src )
     result.truncate( (int)(d - result.data()) );
     int void_pos = result.find("(void)");
     if ( void_pos >= 0 )
-	result.remove( void_pos+1, qstrlen("void") );
+	result.remove( void_pos+1, strlen("void") );
     return result;
 }
 
 
-// Event functions, implemented in qapplication_xxx.cpp
+// Event functions, implemented in qapp_xxx.cpp
 
 int   qStartTimer( int interval, QObject *obj );
 bool  qKillTimer( int id );
@@ -239,9 +271,9 @@ static void removeObjFromList( QObjectList *objList, const QObject *obj,
 
   \code
     QListBox * c = (QListBox *)::qt_find_obj_child(myWidget,QListBox,
-						   "listboxname");
+                                                   "listboxname");
     if ( c )
-	c->insertItem( "another string" );
+        c->insertItem( "another string" );
   \endcode
 */
 
@@ -262,34 +294,6 @@ void *qt_find_obj_child( QObject *parent, const char *type, const char *name )
 }
 
 
-static QObjectList* object_trees = 0;
-static void cleanup_object_trees()
-{
-    delete object_trees;
-    object_trees = 0;
-}
-
-static void ensure_object_trees()
-{
-    if ( object_trees )
-	return;
-    object_trees = new QObjectList;
-    qAddPostRoutine( cleanup_object_trees );
-}
-
-static void insert_tree( QObject* obj )
-{
-    ensure_object_trees();
-    object_trees->insert(0, obj );
-}
-
-static void remove_tree( QObject* obj )
-{
-    if ( object_trees )
-	object_trees->removeRef( obj );
-}
-
-
 /*****************************************************************************
   QObject member functions
  *****************************************************************************/
@@ -307,12 +311,13 @@ static void remove_tree( QObject* obj )
   If the object is a widget, it will become a top-level window.
 
   The object name is a text that can be used to identify this QObject.
-  It's particularly useful in conjunction with
-    <a href=designer.html>the Qt Designer</a>.
-  You can find an object by name (and type) using child(), and more
-  than one using queryList().
+  It is not very useful in the current version of Qt, but it will become
+  increasingly important in the future.
 
-  \sa parent(), name(), child(), queryList()
+  The queryList() function searches the object tree for objects that
+  matches a particular object name.
+
+  \sa parent(), name(), queryList()
 */
 
 QObject::QObject( QObject *parent, const char *name )
@@ -320,16 +325,11 @@ QObject::QObject( QObject *parent, const char *name )
     if ( !objectDict )				// will create object dict
 	initMetaObject();
     objname       = name ? qstrdup(name) : 0;   // set object name
+    parentObj     = 0;				// parent set by insertChild()
     childObjects  = 0;				// no children yet
     connections   = 0;				// no connections yet
     senderObjects = 0;				// no signals connected yet
     eventFilters  = 0;				// no filters installed
-#if OSIRIS_VERSION >= 300
-#error "Remove sigSender - it's a massive waste."
-    // there was a comment here saying "change 3.0 incompatibly but
-    // don't give people any warning of the upcoming change" or words
-    // to that effect.
-#endif
     sigSender     = 0;				// no sender yet
     isSignal   = FALSE;				// assume not a signal object
     isWidget   = FALSE;				// assume not a widget object
@@ -337,20 +337,14 @@ QObject::QObject( QObject *parent, const char *name )
     pendEvent  = FALSE;				// no events yet
     blockSig   = FALSE;				// not blocking signals
     wasDeleted = FALSE;				// double-delete catcher
-    isTree = FALSE;				// no tree yet
-    parentObj  = parent;			// to avoid root checking in insertChild()
-    if ( parent ) {				// add object to parent
+    if ( parent )				// add object to parent
 	parent->insertChild( this );
-    } else {
-	insert_tree( this );
-	isTree = TRUE;
-    }
 }
 
 
 
 /*!
-  Destructs the object, deleting all its child objects.
+  Destroys the object and all its children objects.
 
   All signals to and from the object are automatically disconnected.
 
@@ -378,11 +372,7 @@ QObject::~QObject()
 	qKillTimer( this );
     if ( pendEvent )
 	QApplication::removePostedEvents( this );
-    if ( isTree ) {
-	remove_tree( this );		// remove from global root list
-	isTree = FALSE;
-    }
-    if ( parentObj ) 				// remove it from parent object
+    if ( parentObj )				// remove it from parent object
 	parentObj->removeChild( this );
     register QObject *obj;
     if ( senderObjects ) {			// disconnect from senders
@@ -420,9 +410,9 @@ QObject::~QObject()
 	while ( (obj=it.current()) ) {
 	    ++it;
 	    obj->parentObj = 0;
-	    // ### nest line is a QGList workaround - remove in 3.0
-	    childObjects->removeRef( obj );
 	    delete obj;
+	    if ( !childObjects )		// removeChild resets it
+		break;
 	}
 	delete childObjects;
     }
@@ -433,14 +423,17 @@ QObject::~QObject()
   \fn QMetaObject *QObject::metaObject() const
   Returns a pointer to the meta object of this object.
 
-  A meta object contains information about a class that inherits
-  QObject: class name, super class name, properties, signals and
-  slots. Every class that contains the \c Q_OBJECT macro will also
-  have a meta object.
+  A meta object contains information about a class that inherits QObject:
+  class name, super class name, signals and slots. Every class that contains
+  the \c Q_OBJECT macro will also have a meta object.
 
-  The meta object information is required by the signal/slot
-  connection mechanism and the property system.  The functions isA()
-  and inherits() also make use of the meta object.
+  The meta object information is required by the signal/slot connection
+  mechanism.  The functions isA() and inherits() also make use of the
+  meta object.
+
+  The meta object is created by the initMetaObject() function, which
+  is generated by the meta object compiler and called from the QObject
+  constructor.
 */
 
 /*!
@@ -478,7 +471,7 @@ const char *QObject::className() const
 bool QObject::isA( const char *clname ) const
 {
     QMetaObject *meta = queryMetaObject();
-    return meta ? qstrcmp(clname,meta->className()) == 0 : FALSE;
+    return meta ? strcmp(clname,meta->className()) == 0 : FALSE;
 }
 
 /*!
@@ -505,68 +498,62 @@ bool QObject::isA( const char *clname ) const
 bool QObject::inherits( const char *clname ) const
 {
     QMetaObject *meta = queryMetaObject();
-    return meta? meta->inherits( clname ) : FALSE;
+    while ( meta ) {
+	if ( strcmp(clname,meta->className()) == 0 )
+	    return TRUE;
+	meta = meta->superClass();
+    }
+    return FALSE;
 }
 
-
-#if OSIRIS_VERSION >= 290
-#error "remove superClasses now."
-#endif
-#ifndef QT_NO_STRINGLIST
-/*! \obsolete
-
-  This function is misleadingly named, and cannot be implemented in a
-  way that fulfills its name.  someQWidget->superClasses() should have
-  returned QPaintDevice and QObject, obviously.  And it never can, so
-  let us kill the function. <strong>It will be removed in Qt-3.0</strong>
-
-  Oh, and the return type was wrong, too.  QStringList not QStrList.
+/*!
+  Returns a list of all super classes. If \e includeThis is TRUE
+  then the most derived class name of this object is added, too.
+  The most derived classes appear first in the list. That means that
+  QObject is always the last entry in the list.
 */
 
 QStringList QObject::superClasses( bool includeThis ) const
 {
-    qObsolete( "QObject", "superClasses" ); // Arnt killed it.  RIP.
+  QStringList lst;
 
-    QStringList lst;
+  QMetaObject *meta = queryMetaObject();
+  if ( !includeThis )
+    meta = meta->superClass();
 
-    QMetaObject *meta = queryMetaObject();
-    if ( meta ) {
-	if ( !includeThis )
-	    meta = meta->superClass();
-	while ( meta ) {
-	    lst.append( QString::fromLatin1(meta->className()) );
-	    meta = meta->superClass();
-	}
-    }
-    return lst;
+  while ( meta ) {
+    lst.append( QString::fromLatin1(meta->className()) );
+    meta = meta->superClass();
+  }
+
+  return lst;
 }
-#endif
+
 
 /*!
   \fn const char *QObject::name() const
 
   Returns the name of this object. If the object does not have a name,
-  it will return "unnamed", so that printf() (used in qDebug()) will
+  it will return "unnamed", so that printf() (used in debug()) will
   not be asked to output a null pointer.  If you want a null pointer
-  to be returned for unnamed objects, you can call name( 0 ).
+  to be returned for unnamed objects, you can call name(0).
 
   \code
     qDebug( "MyClass::setPrecision(): (%s) unable to set precision to %f",
 	    name(), newPrecision );
   \endcode
 
-  The object name is set by the constructor or by the setName()
-  function.  The object name is not very useful in the current version
-  of Qt, but will become increasingly important in the future.
+  The object name is set by the constructor or by the setName() function.
+  The object name is not very useful in the current version of Qt, but
+  will become increasingly important in the future.
 
-  You can find an object by name (and type) using child(), and more
-  than one using queryList().
+  The queryList() function searches the object tree for objects that
+  matches a particular object name.
 
-  \sa setName(), className(), child(), queryList()
+  \sa setName(), className(), queryList()
 */
 const char * QObject::name() const
 {
-    // If you change the name here, the builder will be broken
     return objname ? objname : "unnamed";
 }
 
@@ -585,10 +572,13 @@ const char * QObject::name( const char * defaultName ) const
   Sets the name of this object to \e name.  The default name is the
   one assigned by the constructor.
 
-  You can find an object by name (and type) using child(), and more
-  than one using queryList().
+  The object name is not very useful in the current version of Qt, but
+  it will become increasingly important in the future.
 
-  \sa name(), className(), queryList(), child()
+  The queryList() function searches the object tree for objects that
+  matches a particular object name.
+
+  \sa name(), className(), queryList()
 */
 
 void QObject::setName( const char *name )
@@ -599,15 +589,17 @@ void QObject::setName( const char *name )
 }
 
 /*!
-  Searches through the children and grandchildren of this object for
-  an object named \a name and with type \a type (or a subclass of that
-  type), and returns a pointer to that object if it exists.  If \a
-  type is 0, any type matches.
+  Returns the pointer to a child widget with the required name and type or
+  0 if no child matches. This function works recursive. That means it traverses
+  the entire object tree to find the child. That in turn means that names have
+  to be unique with regard to their toplevel window.
 
-  If there isn't any such object, this function returns null.
+  If multiple widgets with the same name and type are found then it is undefined
+  which one of them is returned.
 
-  If there is more than one, one of them is returned; use queryList()
-  if you need all of them.
+  If \e type is set to 0 then the only criterion is the objects name.
+
+  This function is useful if you need a widget of a dialog that was created from a ressource file.
 */
 
 QObject* QObject::child( const char *name, const char *type )
@@ -618,7 +610,7 @@ QObject* QObject::child( const char *name, const char *type )
 	QObject *obj;
 	while ( ( obj = it.current() ) ) {
 	    ++it;
-	    if ( ( !type || obj->inherits(type) ) && ( !name || qstrcmp( name, obj->name() ) == 0 ) )
+	    if ( ( !type || obj->inherits(type) ) && qstrcmp( name, obj->name() ) == 0 )
 		return obj;
 	}
 
@@ -708,21 +700,6 @@ void QObject::timerEvent( QTimerEvent * )
 
   Child events are sent to objects when children are inserted or removed.
 
-  Note that events with QEvent::type() \c QEvent::ChildInserted are
-  \e posted (with QApplication::postEvent()), to make sure that the
-  child's construction is completed before this function is called.
-
-  Note that if a child is removed immediately after it is inserted, the 
-  \c ChildInserted event may be suppressed, but the \c ChildRemoved 
-  event will always be sent. In this case there will be a \c ChildRemoved
-  event without a corresponding \c ChildInserted event.
-
-  If you change state based on \c ChildInserted events, call
-  QWidget::constPolish(), or do
-  <code>QApplication::sendPostedEvents( this, QEvent::ChildInserted );</code>
-  in functions that depend on the state. One notable example is
-  QWidget::sizeHint().
-
   \sa event(), QChildEvent
 */
 
@@ -737,11 +714,6 @@ void QObject::childEvent( QChildEvent * )
 
   The reimplementation of this virtual function must return TRUE if the
   event should be stopped, or FALSE if the event should be dispatched normally.
-
-  \warning
-  If you delete the receiver object in this function, be sure to return TRUE.
-  If you return FALSE, Qt sends the event to the deleted object and the
-  program will crash.
 
   \sa installEventFilter()
 */
@@ -875,10 +847,9 @@ void QObject::killTimer( int id )
 /*!
   Kills all timers that this object has started.
 
-  Note that using this function can cause hard-to-find bugs: It kills
-  timers started by sub- and superclasses as well as those started by
-  you, which is often not what you want.  Therefore, we recommend
-  using a QTimer, or perhaps killTimer().
+  Using this function makes it harder to subclass your class (it kills
+  timers started by subclasses as well as those started by you), so it
+  is generally better to use killTimer().
 
   \sa timerEvent(), startTimer(), killTimer()
 */
@@ -892,7 +863,6 @@ void QObject::killTimers()
 static void objSearch( QObjectList *result,
 		       QObjectList *list,
 		       const char  *inheritsClass,
-		       bool onlyWidgets,
 		       const char  *objName,
 		       QRegExp	   *rx,
 		       bool	    recurse )
@@ -902,9 +872,7 @@ static void objSearch( QObjectList *result,
     QObject *obj = list->first();
     while ( obj ) {
 	bool ok = TRUE;
-	if ( onlyWidgets )
-	    ok = obj->isWidgetType();
-	else if ( inheritsClass && !obj->inherits(inheritsClass) )
+	if ( inheritsClass && !obj->inherits(inheritsClass) )
 	    ok = FALSE;
 	if ( ok ) {
 	    if ( objName )
@@ -916,7 +884,7 @@ static void objSearch( QObjectList *result,
 	    result->append( obj );
 	if ( recurse && obj->children() )
 	    objSearch( result, (QObjectList *)obj->children(), inheritsClass,
-		       onlyWidgets, objName, rx, recurse );
+		       objName, rx, recurse );
 	obj = list->next();
     }
 }
@@ -932,81 +900,61 @@ static void objSearch( QObjectList *result,
   \fn const QObjectList *QObject::children() const
   Returns a list of child objects, or 0 if this object has no children.
 
-  The QObjectList class is defined in the qobjectlist.h header file.
+  The QObjectList class is defined in the qobjcoll.h header file.
 
   The latest child added is the \link QList::first() first\endlink object
-  in the list and the first child added is the \link QList::last()
+  in the list and the first child is added is the \link QList::last()
   last\endlink object in the list.
 
-  Note that the list order changes when QWidget children are \link
-  QWidget::raise() raised\endlink or \link QWidget::lower()
-  lowered.\endlink A widget that is raised becomes the last object in
-  the list, and a widget that is lowered becomes the first object in
-  the list.
+  Note that the list order might change when \link QWidget widget\endlink
+  children are \link QWidget::raise() raised\endlink or \link
+  QWidget::lower() lowered\endlink. A widget that is raised becomes the
+  last object in the list.  A widget that is lowered becomes the first
+  object in the list.
 
-  \sa child(), queryList(), parent(), insertChild(), removeChild()
+  \sa queryList(), parent(), insertChild(), removeChild()
 */
 
 
 /*!
-  Returns a pointer to the list of all object trees (respectively
-  their root objects), or 0 if there are no objects.
+  Returns a list of child objects found by a query.
 
-  The QObjectList class is defined in the qobjectlist.h header file.
+  The query is specified by:
+  \arg \e inheritsClass is the name of the base class that an object should
+  inherit. Any class will be matched if \e inheritsClass is 0.
+  \arg \e objName is the object name to search for. Any object name will be
+  matched if \e objName is 0.
+  \arg \e regexpMatch specifies whether \e objName is a regular expression
+  (default) or not.
+  \arg \e recursiveSearch must be \c TRUE (default) if you want to search
+  the entire object tree, or \c FALSE if you want the search to traverse
+  just the 1st level child objects of this object.
 
-  The latest root object created is the \link QList::first()
-  first\endlink object in the list and the first root object added is
-  the \link QList::last() last\endlink object in the list.
-
-  \sa children(), parent(), insertChild(), removeChild()
- */
-const QObjectList *QObject::objectTrees()
-{
-    return object_trees;
-}
-
-
-/*!  Searches the children and optinally grandchildren of this object,
-  and returns a list of those objects that are named or matches \a
-  objName and inherit \a ineritsClass.  If \a inheritsClass is 0 (the
-  default), all classes match.  IF \a objName is 0 (the default), all
-  object names match.
-
-  If \a regexpMatch is TRUE (the default), \a objName is a regexp that
-  the objects's names must match.  If \a regexpMatch is FALSE, \a
-  objName is a string and object names must match it exactly.
-
-  Note that \a ineritsClass uses single inheritance from QObject, the
-  way inherits() does.  According to inherits(), QMenuBar inherits
-  QWidget but not QMenuData. This does not quite match reality, but is
-  the best that can be done on the wide variety of compilers Qt
-  supports.
-
-  Finally, if \a recursiveSearch is TRUE (the default), queryList()
-  searches nth-generation as well as first-generation children.
-
-  If all this seems a bit complex for your needs, the simpler function
-  child() may be what you want.
-
-  This somewhat contrived example disables all the buttons in this
-  window:
+  Example:
   \code
-    QObjectList * l = topLevelWidget()->queryList( "QButton" );
-    QObjectListIt it( *l );		// iterate over the buttons
+    //
+    // Sets a Courier 24 point fonts for all children in myWidget that
+    // inherit QButton (i.e. QPushButton, QCheckBox, QRadioButton).
+    //
+    QObjectList	*list = myWidget->queryList( "QButton" );
+    QObjectListIt it( *list );		// iterate over the buttons
+    QFont newFont( "Courier", 24 );
     QObject * obj;
     while ( (obj=it.current()) != 0 ) {	// for each found object...
 	++it;
-	((QButton*)obj)->setEnabled( FALSE );
+	((QButton*)obj)->setFont( newFont );
     }
-    delete l;				// delete the list, not the objects
+    delete list;			// delete the list, not the objects
   \endcode
 
-  \warning Delete the list away as soon you have finished using it.
-  The list contains pointers that may become invalid at almost any
-  time without notice - as soon as the user closes a window you may
-  have dangling pointers, for example.
+  The QObjectList class is defined in the qobjcoll.h header file.
 
-  \sa child() children(), parent(), inherits(), name(), QRegExp
+  \warning
+  Delete the list away as soon you have finished using it.
+  You can get in serious trouble if you for instance try to access
+  an object that has been deleted.
+
+  \sa children(), parent(), inherits(), name(), QRegExp
 */
 
 QObjectList *QObject::queryList( const char *inheritsClass,
@@ -1016,17 +964,17 @@ QObjectList *QObject::queryList( const char *inheritsClass,
 {
     QObjectList *list = new QObjectList;
     CHECK_PTR( list );
-    bool onlyWidgets = (inheritsClass && qstrcmp( inheritsClass, "QWidget" ) == 0 );
     if ( regexpMatch && objName ) {		// regexp matching
 	QRegExp rx(QString::fromLatin1(objName));
-	objSearch( list, (QObjectList *)children(), inheritsClass, onlyWidgets,
+	objSearch( list, (QObjectList *)children(), inheritsClass,
 		   0, &rx, recursiveSearch );
     } else {
-	objSearch( list, (QObjectList *)children(), inheritsClass, onlyWidgets,
+	objSearch( list, (QObjectList *)children(), inheritsClass,
 		   objName, 0, recursiveSearch );
     }
     return list;
 }
+
 
 /*!
   Returns a list of objects/slot pairs that are connected to the
@@ -1039,7 +987,7 @@ QConnectionList *QObject::receivers( const char *signal ) const
 {
     if ( connections && signal ) {
 	if ( *signal == '2' ) {			// tag == 2, i.e. signal
-	    QCString s = qt_rmWS( signal+1 );
+	    QCString s = rmWS( signal+1 );
 	    return connections->find( (const char*)s );
 	} else {
 	    return connections->find( signal );
@@ -1061,11 +1009,7 @@ QConnectionList *QObject::receivers( const char *signal ) const
 
 void QObject::insertChild( QObject *obj )
 {
-    if ( obj->isTree ) {
-	remove_tree( obj );
-	obj->isTree = FALSE;
-    }
-    if ( obj->parentObj && obj->parentObj != this ) {
+    if ( obj->parentObj ) {
 #if defined(CHECK_STATE)
 	if ( obj->parentObj != this && obj->isWidgetType() )
 	    qWarning( "QObject::insertChild: Cannot reparent a widget, "
@@ -1107,10 +1051,6 @@ void QObject::removeChild( QObject *obj )
 {
     if ( childObjects && childObjects->removeRef(obj) ) {
 	obj->parentObj = 0;
-	if ( !obj->wasDeleted ) {
-	    insert_tree( obj );			// it's a root object now
-	    obj->isTree = TRUE;
-	}
 	if ( childObjects->isEmpty() ) {
 	    delete childObjects;		// last child removed
 	    childObjects = 0;			// reset children list
@@ -1124,16 +1064,16 @@ void QObject::removeChild( QObject *obj )
 
 
 /*!
-  Installs an event filter \e obj for this object.
+  Installs an event filter object for this object.
 
   An event filter is an object that receives all events that are sent to
   this object.	The filter can either stop the event or forward it to this
-  object.  The event filter \e obj receives events via its eventFilter()
+  object.  The event filter object receives events via the eventFilter()
   function.  The eventFilter() function must return TRUE if the event
   should be stopped, or FALSE if the event should be dispatched normally.
 
   If multiple event filters are installed for a single object, the
-  filter that was installed last is activated first.
+  filter that was installed last will be activated first.
 
   Example:
   \code
@@ -1154,18 +1094,18 @@ void QObject::removeChild( QObject *obj )
 	    parent->installEventFilter( this ); // then install filter
     }
 
-    bool MyWidget::eventFilter( QObject *o, QEvent *e )
+    bool MyWidget::eventFilter( QObject *, QEvent *e )
     {
 	if ( e->type() == QEvent::KeyPress ) {	// key press
 	    QKeyEvent *k = (QKeyEvent*)e;
 	    qDebug( "Ate key press %d", k->key() );
 	    return TRUE;			// eat event
 	}
-	return QWidget::eventFilter( o, e );	// standard event processing
+	return FALSE;				// standard event processing
     }
   \endcode
 
-  The QAccel class, for example, uses this technique.
+  The QAccel class was implemented using this technique.
 
   \warning
   If you delete the receiver object in your eventFilter() function, be
@@ -1177,15 +1117,7 @@ void QObject::removeChild( QObject *obj )
 
 void QObject::installEventFilter( const QObject *obj )
 {
-    if ( !obj )
-	return;
-    if ( eventFilters ) {
-	int c = eventFilters->findRef( obj );
-	if ( c >= 0 )
-	    eventFilters->take( c );
-	disconnect( obj, SIGNAL(destroyed()),
-		    this, SLOT(cleanupEventFilter()) );
-    } else {
+    if ( !eventFilters ) {
 	eventFilters = new QObjectList;
 	CHECK_PTR( eventFilters );
     }
@@ -1309,15 +1241,8 @@ static void err_info_about_candidates( int code,
 
 /*!
   \fn const QObject *QObject::sender()
-
-  Returns a pointer to the object that sent the signal, if called in a
-  slot before any function call or signal emission.  Returns an
-  undefined value in all other cases.
-
-  \warning This function will return something apparently correct in
-  other cases as well.  However, its value may change during any function
-  call, depending on what signal-slot connections are activated during
-  that call.  In Qt 3.0 the value will change more often than in 2.x.
+  Returns a pointer to the object that sent the last signal received by
+  this object.
 
   \warning
   This function violates the object-oriented principle of modularity,
@@ -1388,25 +1313,15 @@ bool QObject::checkConnectArgs( const char    *signal,
 {
     const char *s1 = signal;
     const char *s2 = member;
-    while ( *s1++ != '(' ) { }			// scan to first '('
-    while ( *s2++ != '(' ) { }
-    if ( *s2 == ')' || qstrcmp(s1,s2) == 0 )	// member has no args or
+    while ( *s1++ != '(' ) ;			// scan to first '('
+    while ( *s2++ != '(' ) ;
+    if ( *s2 == ')' || strcmp(s1,s2) == 0 )	// member has no args or
 	return TRUE;				//   exact match
-    int s1len = qstrlen(s1);
-    int s2len = qstrlen(s2);
-    if ( s2len < s1len && qstrncmp(s1,s2,s2len-1)==0 && s1[s2len-1]==',' )
+    int s1len = strlen(s1);
+    int s2len = strlen(s2);
+    if ( s2len < s1len && strncmp(s1,s2,s2len-1)==0 && s1[s2len-1]==',' )
 	return TRUE;				// member has less args
     return FALSE;
-}
-
-/*!
-  Normlizes the signal or slot definition \a signalSlot by removing
-  unnecessary whitespaces.
-*/
-
-QCString QObject::normalizeSignalSlot( const char *signalSlot )
-{
-    return  qt_rmWS( signalSlot );
 }
 
 
@@ -1503,10 +1418,6 @@ void QObject::badSuperclassWarning( const char *className,
   If a signal is connected to several slots, the slots are activated
   in arbitrary order when the signal is emitted.
 
-  The function returns TRUE if it successfully connects the signal to
-  the slot.  It will return FALSE when it cannot connect the signal to
-  the slot.
-
   \sa disconnect()
 */
 
@@ -1523,8 +1434,8 @@ bool QObject::connect( const QObject *sender,	const char *signal,
 	return FALSE;
     }
 #endif
-    QCString signal_name = qt_rmWS( signal );	// white space stripped
-    QCString member_name = qt_rmWS( member );
+    QCString signal_name = rmWS( signal );	// white space stripped
+    QCString member_name = rmWS( member );
     signal = signal_name;
     member = member_name;
 
@@ -1633,38 +1544,28 @@ bool QObject::connect( const QObject *sender,	const char *signal,
 
   disconnect() is typically used in three ways, as the following examples
   show.
+
   <ol>
   <li> Disconnect everything connected to an object's signals:
   \code
-    disconnect( myObject, 0, 0, 0 );
+    disconnect( myObject );
   \endcode
-  equivalent to the non-static overloaded function
+  <li> Disconnect everything connected to a signal:
   \code
-    myObject->disconnect();
-  \endcode
-  <li> Disconnect everything connected to a specific signal:
-  \code
-    disconnect( myObject, SIGNAL(mySignal()), 0, 0 );
-  \endcode
-  equivalent to the non-static overloaded function
-  \code
-    myObject->disconnect( SIGNAL(mySignal()) );
+    disconnect( myObject, SIGNAL(mySignal()) );
   \endcode
   <li> Disconnect a specific receiver.
   \code
     disconnect( myObject, 0, myReceiver, 0 );
   \endcode
-  equivalent to the non-static overloaded function
-  \code
-    myObject->disconnect(  myReceiver );
-  \endcode
   </ol>
 
-  0 may be used as a wildcard, meaning "any signal", "any receiving
-  object" or "any slot in the receiving object" respectively.
+  0 may be used as a wildcard in three of the four arguments, meaning
+  "any signal", "any receiving object" or "any slot in the receiving
+  object" respectively.
 
-  The \e sender may never be 0.  (You cannot disconnect signals from
-  more than one object.)
+  The \e sender has no default and may never be 0.  (You cannot
+  disconnect signals from more than one object.)
 
   If \e signal is 0, it disconnects \e receiver and \e member from any
   signal.  If not, only the specified signal is disconnected.
@@ -1698,7 +1599,7 @@ bool QObject::disconnect( const QObject *sender,   const char *signal,
     QObject *s = (QObject *)sender;
     QObject *r = (QObject *)receiver;
     if ( member ) {
-	member_name = qt_rmWS( member );
+	member_name = rmWS( member );
 	member = member_name.data();
 	int membcode = member[0] - '0';
 #if defined(CHECK_RANGE)
@@ -1738,7 +1639,7 @@ bool QObject::disconnect( const QObject *sender,   const char *signal,
 		    c = clist->next();
 		} else if ( r == c->object() &&
 			    (member == 0 ||
-			     qstrcmp(member,c->memberName()) == 0) ) {
+			     strcmp(member,c->memberName()) == 0) ) {
 		    removeObjFromList( c->object()->senderObjects, s );
 		    clist->remove();
 		    c = clist->current();
@@ -1753,7 +1654,7 @@ bool QObject::disconnect( const QObject *sender,   const char *signal,
     }
 
     else {					// specific signal
-	signal_name = qt_rmWS( signal );
+	signal_name = rmWS( signal );
 	signal = signal_name.data();
 #if defined(CHECK_RANGE)
 	if ( !check_signal_macro( s, signal, "disconnect", "unbind" ) )
@@ -1778,7 +1679,7 @@ bool QObject::disconnect( const QObject *sender,   const char *signal,
 		removeObjFromList( c->object()->senderObjects, s, TRUE );
 		c = clist->next();
 	    } else if ( r == c->object() && (member == 0 ||
-				      qstrcmp(member,c->memberName()) == 0) ) {
+				      strcmp(member,c->memberName()) == 0) ) {
 		removeObjFromList( c->object()->senderObjects, s, TRUE );
 		clist->remove();
 		c = clist->current();
@@ -1842,15 +1743,11 @@ QMetaObject *QObject::queryMetaObject() const
     return m;
 }
 
-#ifndef QT_NO_TRANSLATION // Otherwise we have a simple inline version
-
-/*! \overload
-
-  Returns a translated version of \a text in context QObject and with
-  no comment, or \a text if there is no appropriate translated
-  version.  All QObject subclasses which use the Q_OBJECT macro have a
-  reimplementation of this function which uses the relevant class name
-  as context.
+/*!
+  Returns a translated version of \a text, or \a text if there is
+  no appropriate translated version.  All QObject subclasses which use the
+  \link metaobjects.html Q_OBJECT macro\endlink have an overridden
+  version of this.
 
   \sa QApplication::translate()
 */
@@ -1858,34 +1755,15 @@ QMetaObject *QObject::queryMetaObject() const
 QString QObject::tr( const char *text )
 {
     if ( qApp )
-	return qApp->translate( "QObject", text, 0 );
+	return qApp->translate( "QObject", text );
     else
 	return QString::fromLatin1(text);
 }
-
-/*!
-  Returns a translated version of \a text in context QObject and and
-  with \a comment, or \a text if there is no appropriate translated
-  version.  All QObject subclasses which use the Q_OBJECT macro have a
-  reimplementation of this function which uses the relevant class name
-  as context.
-
-  \sa QApplication::translate()
-*/
-
-QString QObject::tr( const char *text, const char * comment )
-{
-    if ( qApp )
-	return qApp->translate( "QObject", text, comment );
-    else
-	return QString::fromLatin1(text);
-}
-
-#endif
 
 /*!
   Initializes the \link metaObject() meta object\endlink of this
-  object. This method is automatically executed on demand.
+  object. This method is automatically executed on demand from the
+  QObject constructor.
   \sa metaObject()
 */
 void QObject::initMetaObject()
@@ -1893,102 +1771,33 @@ void QObject::initMetaObject()
     staticMetaObject();
 }
 
-
 /*!
   The functionality of initMetaObject(), provided as a static function.
 */
-QMetaObject* QObject::staticMetaObject()
+void QObject::staticMetaObject()
 {
     if ( metaObj )
-	return metaObj;
-
+	return;
     typedef void(QObject::*m1_t0)();
     m1_t0 v1_0 = &QObject::cleanupEventFilter;
     QMetaData *slot_tbl = new QMetaData[1];
     slot_tbl[0].name = "cleanupEventFilter()";
-    slot_tbl[0].ptr = (QMember)v1_0;
-
-    //### remove 3.0, replace with slot_tbl[0].access = QMetaData::Private;
-    QMetaData::Access *slot_tbl_access = new QMetaData::Access[1];
-    slot_tbl_access[0] = QMetaData::Private;
-
+    slot_tbl[0].ptr = *((QMember*)&v1_0);
     typedef void(QObject::*m2_t0)();
     m2_t0 v2_0 = &QObject::destroyed;
     QMetaData *signal_tbl = new QMetaData[1];
     signal_tbl[0].name = "destroyed()";
-    signal_tbl[0].ptr = (QMember)v2_0;
-#ifndef QT_NO_PROPERTIES
-    QMetaProperty *props_tbl = new QMetaProperty[1];
-    typedef const char*(QObject::*m3_t0)()const;
-    typedef void(QObject::*m3_t1)(const char*);
-    m3_t0 v3_0 = &QObject::name;
-    m3_t1 v3_1 = &QObject::setName;
-    props_tbl[0].n = "name";
-    props_tbl[0].get = (QMember)v3_0;
-    props_tbl[0].set = (QMember)v3_1;
-    props_tbl[0].t = "QCString";
-    props_tbl[0].enumData = 0;
-    props_tbl[0].gspec = QMetaProperty::ConstCharStar;
-    props_tbl[0].sspec = QMetaProperty::ConstCharStar;
-    props_tbl[0].setFlags(QMetaProperty::StdSet);
-    QMetaEnum* enum_tbl = QMetaObject::new_metaenum( 3 );
-    enum_tbl[0].name = "Alignment";
-    enum_tbl[0].count = 8;
-    enum_tbl[0].set = TRUE;
-    enum_tbl[0].items = QMetaObject::new_metaenum_item( 8 );
-    enum_tbl[0].items[0].key = "AlignLeft";
-    enum_tbl[0].items[0].value = (int) Qt::AlignLeft;
-    enum_tbl[0].items[1].key = "AlignRight";
-    enum_tbl[0].items[1].value = (int) Qt::AlignRight;
-    enum_tbl[0].items[2].key = "AlignHCenter";
-    enum_tbl[0].items[2].value = (int) Qt::AlignHCenter;
-    enum_tbl[0].items[3].key = "AlignTop";
-    enum_tbl[0].items[3].value = (int) Qt::AlignTop;
-    enum_tbl[0].items[4].key = "AlignBottom";
-    enum_tbl[0].items[4].value = (int) Qt::AlignBottom;
-    enum_tbl[0].items[5].key = "AlignVCenter";
-    enum_tbl[0].items[5].value = (int) Qt::AlignVCenter;
-    enum_tbl[0].items[6].key = "AlignCenter";
-    enum_tbl[0].items[6].value = (int) Qt::AlignCenter;
-    enum_tbl[0].items[7].key = "WordBreak";
-    enum_tbl[0].items[7].value = (int) Qt::WordBreak;
-    enum_tbl[1].name = "Orientation";
-    enum_tbl[1].count = 2;
-    enum_tbl[1].set = FALSE;
-    enum_tbl[1].items = QMetaObject::new_metaenum_item( 2 );
-    enum_tbl[1].items[0].key = "Horizontal";
-    enum_tbl[1].items[0].value = (int) Qt::Horizontal;
-    enum_tbl[1].items[1].key = "Vertical";
-    enum_tbl[1].items[1].value = (int) Qt::Vertical;
-    enum_tbl[2].name = "TextFormat";
-    enum_tbl[2].count = 3;
-    enum_tbl[2].set = FALSE;
-    enum_tbl[2].items = QMetaObject::new_metaenum_item( 3 );
-    enum_tbl[2].items[0].key = "PlainText";
-    enum_tbl[2].items[0].value = (int) Qt::PlainText;
-    enum_tbl[2].items[1].key = "RichText";
-    enum_tbl[2].items[1].value = (int) Qt::RichText;
-    enum_tbl[2].items[2].key = "AutoText";
-    enum_tbl[2].items[2].value = (int) Qt::AutoText;
-#endif
+    signal_tbl[0].ptr = *((QMember*)&v2_0);
     metaObj = new QMetaObject( "QObject", "",
 	slot_tbl, 1,
-	signal_tbl, 1,
-#ifndef QT_NO_PROPERTIES
-	props_tbl, 1,
-	enum_tbl, 3,
-#endif
-        0, 0 );
-    metaObj->set_slot_access( slot_tbl_access ); // ### remove 3.0
-    return metaObj;
+	signal_tbl, 1 );
 }
 
-/*!
-  \internal
 
-  Signal activation with the most frequently used parameter/argument
-  types.  All other combinations are generated by the meta object
-  compiler.
+/*!
+  \internal Signal activation with the most frequently used
+  parameter/argument types.  All other combinations are generated by the
+  meta object compiler.
 */
 void QObject::activate_signal( const char *signal )
 {
@@ -1998,6 +1807,7 @@ void QObject::activate_signal( const char *signal )
     if ( !clist || signalsBlocked() )
 	return;
     typedef void (QObject::*RT)();
+    typedef RT *PRT;
     RT r;
     QConnectionListIt it(*clist);
     register QConnection *c;
@@ -2006,7 +1816,7 @@ void QObject::activate_signal( const char *signal )
 	++it;
 	object = c->object();
 	object->sigSender = this;
-	r = (RT)*(c->member());
+	r = *((PRT)(c->member()));
 	(object->*r)();
     }
 }
@@ -2028,36 +1838,6 @@ void QObject::activate_signal( const char *signal )
 */
 
 
-#ifdef Q_FP_CCAST_BROKEN
-#define ACTIVATE_SIGNAL_WITH_PARAM(FNAME,TYPE)				      \
-void QObject::FNAME( const char *signal, TYPE param )			      \
-{									      \
-    if ( !connections )							      \
-        return;								      \
-    QConnectionList *clist = connections->find( signal );		      \
-    if ( !clist || signalsBlocked() )					      \
-        return;								      \
-    typedef void (QObject::*RT0)();					      \
-    typedef void (QObject::*RT1)( TYPE );				      \
-    RT0 r0;								      \
-    RT1 r1;								      \
-    QConnectionListIt it(*clist);					      \
-    register QConnection *c;						      \
-    register QObject *object;						      \
-    while ( (c=it.current()) ) {					      \
-        ++it;								      \
-        object = c->object();						      \
-        object->sigSender = this;					      \
-        if ( c->numArgs() ) {						      \
-            r1 = reinterpret_cast<RT1>(*(c->member()));			      \
-            (object->*r1)( param );					      \
-        } else {							      \
-            r0 = reinterpret_cast<RT0>(*(c->member()));			      \
-            (object->*r0)();						      \
-        }								      \
-    }									      \
-}
-#else
 #define ACTIVATE_SIGNAL_WITH_PARAM(FNAME,TYPE)				      \
 void QObject::FNAME( const char *signal, TYPE param )			      \
 {									      \
@@ -2067,7 +1847,9 @@ void QObject::FNAME( const char *signal, TYPE param )			      \
     if ( !clist || signalsBlocked() )					      \
 	return;								      \
     typedef void (QObject::*RT0)();					      \
+    typedef RT0 *PRT0;							      \
     typedef void (QObject::*RT1)( TYPE );				      \
+    typedef RT1 *PRT1;							      \
     RT0 r0;								      \
     RT1 r1;								      \
     QConnectionListIt it(*clist);					      \
@@ -2078,15 +1860,14 @@ void QObject::FNAME( const char *signal, TYPE param )			      \
 	object = c->object();						      \
 	object->sigSender = this;					      \
 	if ( c->numArgs() ) {						      \
-	    r1 = (RT1)*(c->member());					      \
+	    r1 = *((PRT1)(c->member()));				      \
 	    (object->*r1)( param );					      \
 	} else {							      \
-	    r0 = (RT0)*(c->member());					      \
+	    r0 = *((PRT0)(c->member()));				      \
 	    (object->*r0)();						      \
 	}								      \
     }									      \
 }
-#endif
 
 // We don't want to duplicate too much text so...
 
@@ -2097,19 +1878,6 @@ ACTIVATE_SIGNAL_WITH_PARAM( activate_signal, const char * )
 ACTIVATE_SIGNAL_WITH_PARAM( activate_signal_bool, bool )
 ACTIVATE_SIGNAL_WITH_PARAM( activate_signal_string, QString )
 ACTIVATE_SIGNAL_WITH_PARAM( activate_signal_strref, const QString & )
-
-/*!
-  \fn void QObject::activate_signal_bool (const char * signal, bool)
-  \internal
-*/
-/*!
-  \fn void QObject::activate_signal_string (const char * signal, QString)
-  \internal
-*/
-/*!
-  \fn void QObject::activate_signal_strref (const char * signal, const QString & )
-  \internal
-*/
 
 
 /*****************************************************************************
@@ -2138,7 +1906,7 @@ static void dumpRecursive( int level, QObject *object )
 	    } else {
 		flags += 'I';
 	    }
-	}
+	}	
 	qDebug( "%s%s::%s %s", (const char*)buf, object->className(), name,
 	    flags.latin1() );
 	if ( object->children() ) {
@@ -2159,10 +1927,7 @@ static void dumpRecursive( int level, QObject *object )
 /*!
   Dumps a tree of children to the debug output.
 
-  This function is useful for debugging. This function does nothing if
-  the library has been compiled in release mode (i.e without debugging
-  information).
-
+  This function is useful for debugging.
 */
 
 void QObject::dumpObjectTree()
@@ -2174,9 +1939,7 @@ void QObject::dumpObjectTree()
   Dumps information about signal connections etc. for this object to the
   debug output.
 
-  This function is useful for debugging. This function does nothing if
-  the library has been compiled in release mode (i.e without debugging
-  information).
+  This function is useful for debugging.
 */
 
 void QObject::dumpObjectInfo()
@@ -2218,1282 +1981,3 @@ void QObject::dumpObjectInfo()
 	qDebug( "\t<None>" );
 #endif
 }
-
-#ifndef QT_NO_PROPERTIES
-
-/*!
-  Sets the object's property \a name to \a value.
-
-  Returne TRUE is the operation was successful, FALSE otherwise.
-
-  Information about all available properties are provided through the
-  metaObject().
-
-  \sa property(), metaObject(), QMetaObject::propertyNames(), QMetaObject::property()
-*/
-bool QObject::setProperty( const char *name, const QVariant& value )
-{
-    if ( !value.isValid() )
-	return FALSE;
-
-    typedef void (QObject::*ProtoConstCharStar)( const char* );
-
-    typedef void (QObject::*ProtoString)( QString );
-    typedef void (QObject::*RProtoString)( const QString&);
-
-    typedef void (QObject::*ProtoCString)( QCString );
-    typedef void (QObject::*RProtoCString)( const QCString&);
-
-    typedef void (QObject::*ProtoInt)( int );
-    typedef void (QObject::*RProtoInt)( const int& );
-
-    typedef void (QObject::*ProtoUInt)( uint );
-    typedef void (QObject::*RProtoUInt)( const uint& );
-
-    typedef void (QObject::*ProtoDouble)( double );
-    typedef void (QObject::*RProtoDouble)( const double& );
-
-    typedef void (QObject::*ProtoBool)( bool );
-    typedef void (QObject::*RProtoBool)( const bool& );
-
-    typedef void (QObject::*ProtoFont)( QFont );
-    typedef void (QObject::*RProtoFont)( const QFont& );
-
-    typedef void (QObject::*ProtoPixmap)( QPixmap );
-    typedef void (QObject::*RProtoPixmap)( const QPixmap& );
-
-    typedef void (QObject::*ProtoBrush)( QBrush );
-    typedef void (QObject::*RProtoBrush)( const QBrush& );
-
-    typedef void (QObject::*ProtoRect)( QRect );
-    typedef void (QObject::*RProtoRect)( const QRect& );
-
-    typedef void (QObject::*ProtoSize)( QSize );
-    typedef void (QObject::*RProtoSize)( const QSize& );
-
-    typedef void (QObject::*ProtoColor)( QColor );
-    typedef void (QObject::*RProtoColor)( const QColor& );
-
-    typedef void (QObject::*ProtoPalette)( QPalette );
-    typedef void (QObject::*RProtoPalette)( const QPalette& );
-
-    typedef void (QObject::*ProtoColorGroup)( QColorGroup );
-    typedef void (QObject::*RProtoColorGroup)( const QColorGroup& );
-
-    typedef void (QObject::*ProtoBitmap)( QBitmap );
-    typedef void (QObject::*RProtoBitmap)( const QBitmap& );
-
-    typedef void (QObject::*ProtoRegion)( QRegion );
-    typedef void (QObject::*RProtoRegion)( const QRegion& );
-
-    typedef void (QObject::*ProtoPointArray)( QPointArray );
-    typedef void (QObject::*RProtoPointArray)( const QPointArray& );
-
-    typedef void (QObject::*ProtoIconSet)( QIconSet );
-    typedef void (QObject::*RProtoIconSet)( const QIconSet& );
-
-    typedef void (QObject::*ProtoImage)( QImage );
-    typedef void (QObject::*RProtoImage)( const QImage& );
-
-    typedef void (QObject::*ProtoCursor)( QCursor );
-    typedef void (QObject::*RProtoCursor)( const QCursor& );
-
-    typedef void (QObject::*ProtoPoint)( QPoint );
-    typedef void (QObject::*RProtoPoint)( const QPoint& );
-
-    typedef void (QObject::*ProtoStringList)( QStringList );
-    typedef void (QObject::*RProtoStringList)( const QStringList& );
-
-    typedef void (QObject::*ProtoList)( QValueList<QVariant> );
-    typedef void (QObject::*RProtoList)( const QValueList<QVariant>& );
-
-    typedef void (QObject::*ProtoMap)( QMap<QString,QVariant> );
-    typedef void (QObject::*RProtoMap)( const QMap<QString,QVariant>& );
-
-    typedef void (QObject::*ProtoSizePolicy)( QSizePolicy );
-    typedef void (QObject::*RProtoSizePolicy)( const QSizePolicy& );
-
-    QMetaObject* meta = queryMetaObject();
-    if ( !meta )
-	return FALSE;
-    const QMetaProperty* p = meta->property( name, TRUE );
-    if ( !p || !p->writable() )
-	return FALSE;
-
-    if ( p->isEnumType() ) {
-	int v = 0;
-
-	if( value.type() == QVariant::Int ||
-	    value.type() == QVariant::UInt ) {
-	    v = value.toInt();
-	} else if ( value.type() == QVariant::String ||
-		    value.type() == QVariant::CString ) {
-
-	    if ( p->isSetType() ) {
-		QString s = value.toString();
-		// QStrList does not support split, use QStringList for that.
-		QStringList l = QStringList::split( '|', s );
-		QStrList keys;
-		for ( QStringList::Iterator it = l.begin(); it != l.end(); ++it )
-		    keys.append( (*it).stripWhiteSpace().latin1() );
-		v = p->keysToValue( keys );
-	    } else {
-		v = p->keyToValue( value.toCString().data() );
-	    }
-	} else {
-	    return FALSE;
-	}
-	ProtoInt m = (ProtoInt)p->set;
-	(this->*m)( v );
-	return TRUE;
-    }
-
-    QVariant::Type type = QVariant::nameToType( p->type() );
-    if ( !value.canCast( type ) )
-	return FALSE;
-
-    // Some stupid casts in this switch... for #@$!&@ Sun WorkShop C++ 5.0
-    switch ( type ) {
-
-    case QVariant::Invalid:
-	return FALSE;
-
-    case QVariant::Image:
-	if ( p->sspec == QMetaProperty::Class ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    ProtoImage m = reinterpret_cast<ProtoImage>(p->set);
-#else	    
-	    ProtoImage m = (ProtoImage)p->set;
-#endif	    
-	    (this->*m)( (QImage)(value.toImage()) );
-	    return TRUE;
-	} else if ( p->sspec == QMetaProperty::Reference ) {
-	    RProtoImage m = (RProtoImage)p->set;
-	    (this->*m)( value.toImage() );
-	    return TRUE;
-	}
-	break;
-
-    case QVariant::Point:
-	if ( p->sspec == QMetaProperty::Class ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    ProtoPoint m = reinterpret_cast<ProtoPoint>(p->set);
-#else	    
-	    ProtoPoint m = (ProtoPoint)p->set;
-#endif	    
-	    (this->*m)( value.toPoint() );
-	    return TRUE;
-	} else if ( p->sspec == QMetaProperty::Reference ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    RProtoPoint m = reinterpret_cast<RProtoPoint>(p->set);
-#else	    
-	    RProtoPoint m = (RProtoPoint)p->set;
-#endif	    
-	    (this->*m)( value.toPoint() );
-	    return TRUE;
-	}
-	break;
-
-    case QVariant::StringList:
-	if ( p->sspec == QMetaProperty::Class ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    ProtoStringList m = reinterpret_cast<ProtoStringList>(p->set);
-#else	    
-	    ProtoStringList m = (ProtoStringList)p->set;
-#endif	    
-	    (this->*m)( (QStringList)value.toStringList() );
-	    return TRUE;
-	} else if ( p->sspec == QMetaProperty::Reference ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    RProtoStringList m = reinterpret_cast<RProtoStringList>(p->set);
-#else	    
-	    RProtoStringList m = (RProtoStringList)p->set;
-#endif	    
-	    (this->*m)( value.toStringList() );
-	    return TRUE;
-	}
-	break;
-
-    case QVariant::String:
-	if ( p->sspec == QMetaProperty::Class ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    ProtoString m = reinterpret_cast<ProtoString>(p->set);
-#else	    
-	    ProtoString m = (ProtoString)p->set;
-#endif	    
-	    (this->*m)( (QString)(value.toString()) );
-	    return TRUE;
-	} else if ( p->sspec == QMetaProperty::Reference ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    RProtoString m = reinterpret_cast<RProtoString>(p->set);
-#else	    
-	    RProtoString m = (RProtoString)p->set;
-#endif	    
-	    (this->*m)( value.toString() );
-	    return TRUE;
-	}
-	break;
-
-    case QVariant::CString:
-	if ( p->sspec == QMetaProperty::Class ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    ProtoCString m = reinterpret_cast<ProtoCString>(p->set);
-#else	    
-	    ProtoCString m = (ProtoCString)p->set;
-#endif	    
-	    (this->*m)( (QCString)(value.toCString()) );
-	    return TRUE;
-	} else if ( p->sspec == QMetaProperty::Reference ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    RProtoCString m = reinterpret_cast<RProtoCString>(p->set);
-#else	    
-	    RProtoCString m = (RProtoCString)p->set;
-#endif	    
-	    (this->*m)( value.toCString() );
-	    return TRUE;
-	} else if ( p->sspec == QMetaProperty::ConstCharStar ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    ProtoConstCharStar m = reinterpret_cast<ProtoConstCharStar>(p->set);
-#else	    
-	    ProtoConstCharStar m = (ProtoConstCharStar)p->set;
-#endif	    
-	    (this->*m)( value.toCString().data() );
-	    return TRUE;
-	}
-	break;
-
-    case QVariant::Font:
-	if ( p->sspec == QMetaProperty::Class ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    ProtoFont m = reinterpret_cast<ProtoFont>(p->set);
-#else	    
-	    ProtoFont m = (ProtoFont)p->set;
-#endif	    
-	    (this->*m)( (QFont)(value.toFont()) );
-	    return TRUE;
-	} else if ( p->sspec == QMetaProperty::Reference ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    RProtoFont m = reinterpret_cast<RProtoFont>(p->set);
-#else	    
-	    RProtoFont m = (RProtoFont)p->set;
-#endif	    
-	    (this->*m)( value.toFont() );
-	    return TRUE;
-	}
-	break;
-
-    case QVariant::Pixmap:
-	if ( p->sspec == QMetaProperty::Class ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    ProtoPixmap m = reinterpret_cast<ProtoPixmap>(p->set);
-#else	    
-	    ProtoPixmap m = (ProtoPixmap)p->set;
-#endif	    
-	    (this->*m)( (QPixmap)(value.toPixmap()) );
-	    return TRUE;
-	} else if ( p->sspec == QMetaProperty::Reference ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    RProtoPixmap m = reinterpret_cast<RProtoPixmap>(p->set);
-#else	    
-	    RProtoPixmap m = (RProtoPixmap)p->set;
-#endif	    
-	    (this->*m)( value.toPixmap() );
-	    return TRUE;
-	}
-	break;
-
-    case QVariant::Brush:
-	if ( p->sspec == QMetaProperty::Class ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    ProtoBrush m = reinterpret_cast<ProtoBrush>(p->set);
-#else	    
-	    ProtoBrush m = (ProtoBrush)p->set;
-#endif	    
-	    (this->*m)( (QBrush)(value.toBrush()) );
-	    return TRUE;
-	} else if ( p->sspec == QMetaProperty::Reference ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    RProtoBrush m = reinterpret_cast<RProtoBrush>(p->set);
-#else	    
-	    RProtoBrush m = (RProtoBrush)p->set;
-#endif	    
-	    (this->*m)( value.toBrush() );
-	    return TRUE;
-	}
-	break;
-
-    case QVariant::Rect:
-	if ( p->sspec == QMetaProperty::Class ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    ProtoRect m = reinterpret_cast<ProtoRect>(p->set);
-#else	    
-	    ProtoRect m = (ProtoRect)p->set;
-#endif	    
-	    (this->*m)( value.toRect() );
-	    return TRUE;
-	} else if ( p->sspec == QMetaProperty::Reference ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    RProtoRect m = reinterpret_cast<RProtoRect>(p->set);
-#else	    
-	    RProtoRect m = (RProtoRect)p->set;
-#endif	    
-	    (this->*m)( value.toRect() );
-	    return TRUE;
-	}
-	break;
-
-    case QVariant::Size:
-	if ( p->sspec == QMetaProperty::Class ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    ProtoSize m = reinterpret_cast<ProtoSize>(p->set);
-#else	    
-	    ProtoSize m = (ProtoSize)p->set;
-#endif	    
-	    (this->*m)( value.toSize() );
-	    return TRUE;
-	} else if ( p->sspec == QMetaProperty::Reference ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    RProtoSize m = reinterpret_cast<RProtoSize>(p->set);
-#else	    
-	    RProtoSize m = (RProtoSize)p->set;
-#endif	    
-	    (this->*m)( value.toSize() );
-	    return TRUE;
-	}
-	break;
-
-    case QVariant::Color:
-	if ( p->sspec == QMetaProperty::Class ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    ProtoColor m = reinterpret_cast<ProtoColor>(p->set);
-#else	    
-	    ProtoColor m = (ProtoColor)p->set;
-#endif	    
-	    (this->*m)( (QColor)(value.toColor()) );
-	    return TRUE;
-	} else if ( p->sspec == QMetaProperty::Reference ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    RProtoColor m = reinterpret_cast<RProtoColor>(p->set);
-#else	    
-	    RProtoColor m = (RProtoColor)p->set;
-#endif	    
-	    (this->*m)( value.toColor() );
-	    return TRUE;
-	}
-	break;
-
-    case QVariant::Palette:
-	if ( p->sspec == QMetaProperty::Class ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    ProtoPalette m = reinterpret_cast<ProtoPalette>(p->set);
-#else	    
-	    ProtoPalette m = (ProtoPalette)p->set;
-#endif	    
-	    (this->*m)( (QPalette)(value.toPalette()) );
-	    return TRUE;
-	} else if ( p->sspec == QMetaProperty::Reference ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    RProtoPalette m = reinterpret_cast<RProtoPalette>(p->set);
-#else	    
-	    RProtoPalette m = (RProtoPalette)p->set;
-#endif	    
-	    (this->*m)( value.toPalette() );
-	    return TRUE;
-	}
-	break;
-
-    case QVariant::ColorGroup:
-	if ( p->sspec == QMetaProperty::Class ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    ProtoColorGroup m = reinterpret_cast<ProtoColorGroup>(p->set);
-#else	    
-	    ProtoColorGroup m = (ProtoColorGroup)p->set;
-#endif	    
-	    (this->*m)( (QColorGroup)(value.toColorGroup()) );
-	    return TRUE;
-	} else if ( p->sspec == QMetaProperty::Reference ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    RProtoColorGroup m = reinterpret_cast<RProtoColorGroup>(p->set);
-#else	    
-	    RProtoColorGroup m = (RProtoColorGroup)p->set;
-#endif	    
-	    (this->*m)( value.toColorGroup() );
-	    return TRUE;
-	}
-	break;
-
-    case QVariant::Bitmap:
-	if ( p->sspec == QMetaProperty::Class ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    ProtoBitmap m = reinterpret_cast<ProtoBitmap>(p->set);
-#else	    
-	    ProtoBitmap m = (ProtoBitmap)p->set;
-#endif	    
-	    (this->*m)( (QBitmap)(value.toBitmap()) );
-	    return TRUE;
-	} else if ( p->sspec == QMetaProperty::Reference )  {
-#ifdef Q_FP_CCAST_BROKEN	
-	    RProtoBitmap m = reinterpret_cast<RProtoBitmap>(p->set);
-#else	    
-	    RProtoBitmap m = (RProtoBitmap)p->set;
-#endif	    
-	    (this->*m)( value.toBitmap() );
-	    return TRUE;
-	}
-	break;
-
-    case QVariant::Region:
-	if ( p->sspec == QMetaProperty::Class ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    ProtoRegion m = reinterpret_cast<ProtoRegion>(p->set);
-#else	    
-	    ProtoRegion m = (ProtoRegion)p->set;
-#endif	    
-	    (this->*m)( (QRegion)(value.toRegion()) );
-	    return TRUE;
-	} else if ( p->sspec == QMetaProperty::Reference )  {
-#ifdef Q_FP_CCAST_BROKEN	
-	    RProtoRegion m = reinterpret_cast<RProtoRegion>(p->set);
-#else	    
-	    RProtoRegion m = (RProtoRegion)p->set;
-#endif	    
-	    (this->*m)( value.toRegion() );
-	    return TRUE;
-	}
-	break;
-
-    case QVariant::PointArray:
-	if ( p->sspec == QMetaProperty::Class ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    ProtoPointArray m = reinterpret_cast<ProtoPointArray>(p->set);
-#else	    
-	    ProtoPointArray m = (ProtoPointArray)p->set;
-#endif	    
-	    (this->*m)( (QPointArray)(value.toPointArray()) );
-	    return TRUE;
-	} else if ( p->sspec == QMetaProperty::Reference )  {
-#ifdef Q_FP_CCAST_BROKEN	
-	    RProtoPointArray m = reinterpret_cast<RProtoPointArray>(p->set);
-#else	    
-	    RProtoPointArray m = (RProtoPointArray)p->set;
-#endif	    
-	    (this->*m)( value.toPointArray() );
-	    return TRUE;
-	}
-	break;
-
-    case QVariant::Cursor:
-	if ( p->sspec == QMetaProperty::Class ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    ProtoCursor m = reinterpret_cast<ProtoCursor>(p->set);
-#else	    
-	    ProtoCursor m = (ProtoCursor)p->set;
-#endif	    
-	    (this->*m)( (QCursor)(value.toCursor()) );
-	    return TRUE;
-	} else if ( p->sspec == QMetaProperty::Reference )  {
-#ifdef Q_FP_CCAST_BROKEN	
-	    RProtoCursor m = reinterpret_cast<RProtoCursor>(p->set);
-#else	    
-	    RProtoCursor m = (RProtoCursor)p->set;
-#endif	    
-	    (this->*m)( value.toCursor() );
-	    return TRUE;
-	}
-	break;
-
-    case QVariant::IconSet:
-	if ( p->sspec == QMetaProperty::Class ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    ProtoIconSet m = reinterpret_cast<ProtoIconSet>(p->set);
-#else	    
-	    ProtoIconSet m = (ProtoIconSet)p->set;
-#endif	    
-	    (this->*m)( (QIconSet)(value.toIconSet()) );
-	    return TRUE;
-	} else if ( p->sspec == QMetaProperty::Reference )  {
-#ifdef Q_FP_CCAST_BROKEN	
-	    RProtoIconSet m = reinterpret_cast<RProtoIconSet>(p->set);
-#else	    
-	    RProtoIconSet m = (RProtoIconSet)p->set;
-#endif	    
-	    (this->*m)( value.toIconSet() );
-	    return TRUE;
-	}
-	break;
-
-    case QVariant::Int:
-	if ( p->sspec == QMetaProperty::Class ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    ProtoInt m = reinterpret_cast<ProtoInt>(p->set);
-#else	    
-	    ProtoInt m = (ProtoInt)p->set;
-#endif	    
-	    (this->*m)( value.toInt() );
-	    return TRUE;
-	} else if ( p->sspec == QMetaProperty::Reference ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    RProtoInt m = reinterpret_cast<RProtoInt>(p->set);
-#else	    
-	    RProtoInt m = (RProtoInt)p->set;
-#endif	    
-	    (this->*m)( value.toInt() );
-	    return TRUE;
-	}
-	break;
-
-    case QVariant::UInt:
-	if ( p->sspec == QMetaProperty::Class ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    ProtoUInt m = reinterpret_cast<ProtoUInt>(p->set);
-#else	    
-	    ProtoUInt m = (ProtoUInt)p->set;
-#endif	    
-	    (this->*m)( value.toUInt() );
-	    return TRUE;
-	} else if ( p->sspec == QMetaProperty::Reference ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    RProtoUInt m = reinterpret_cast<RProtoUInt>(p->set);
-#else	    
-	    RProtoUInt m = (RProtoUInt)p->set;
-#endif	    
-	    (this->*m)( value.toUInt() );
-	    return TRUE;
-	}
-	break;
-
-    case QVariant::Double:
-	if ( p->sspec == QMetaProperty::Class ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    ProtoDouble m = reinterpret_cast<ProtoDouble>(p->set);
-#else	    
-	    ProtoDouble m = (ProtoDouble)p->set;
-#endif	    
-	    (this->*m)( value.toDouble() );
-	    return TRUE;
-	} else if ( p->sspec == QMetaProperty::Reference ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    RProtoDouble m = reinterpret_cast<RProtoDouble>(p->set);
-#else	    
-	    RProtoDouble m = (RProtoDouble)p->set;
-#endif	    
-	    (this->*m)( value.toDouble() );
-	    return TRUE;
-	}
-	break;
-
-    case QVariant::Bool:
-	if ( p->sspec == QMetaProperty::Class ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    ProtoBool m = reinterpret_cast<ProtoBool>(p->set);
-#else	    
-	    ProtoBool m = (ProtoBool)p->set;
-#endif	    
-	    (this->*m)( value.toBool() );
-	    return TRUE;
-	} else if ( p->sspec == QMetaProperty::Reference ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    RProtoBool m = reinterpret_cast<RProtoBool>(p->set);
-#else	    
-	    RProtoBool m = (RProtoBool)p->set;
-#endif	    
-	    (this->*m)( value.toBool() );
-	    return TRUE;
-	}
-	break;
-
-    case QVariant::List:
-	if ( p->sspec == QMetaProperty::Class ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    ProtoList m = reinterpret_cast<ProtoList>(p->set);
-#else	    
-	    ProtoList m = (ProtoList)p->set;
-#endif	    
-	    (this->*m)( (QValueList<QVariant>)(value.toList()) );
-	    return TRUE;
-	} else if ( p->sspec == QMetaProperty::Reference ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    RProtoList m = reinterpret_cast<RProtoList>(p->set);
-#else	    
-	    RProtoList m = (RProtoList)p->set;
-#endif	    
-	    (this->*m)( value.toList() );
-	    return TRUE;
-	}
-	break;
-
-    case QVariant::Map:
-	if ( p->sspec == QMetaProperty::Class ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    ProtoMap m = reinterpret_cast<ProtoMap>(p->set);
-#else	    
-	    ProtoMap m = (ProtoMap)p->set;
-#endif	    
-	    (this->*m)( (QMap<QString, QVariant>)(value.toMap()) );
-	    return TRUE;
-	} else if ( p->sspec == QMetaProperty::Reference ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    RProtoMap m = reinterpret_cast<RProtoMap>(p->set);
-#else	    
-	    RProtoMap m = (RProtoMap)p->set;
-#endif	    
-	    (this->*m)( value.toMap() );
-	    return TRUE;
-	}
-	break;
-
-    case QVariant::SizePolicy:
-	if ( p->sspec == QMetaProperty::Class ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    ProtoSizePolicy m = reinterpret_cast<ProtoSizePolicy>(p->set);
-#else	    
-	    ProtoSizePolicy m = (ProtoSizePolicy)p->set;
-#endif	    
-	    (this->*m)( value.toSizePolicy() );
-	    return TRUE;
-	} else if ( p->sspec == QMetaProperty::Reference ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    RProtoSizePolicy m = reinterpret_cast<RProtoSizePolicy>(p->set);
-#else	    
-	    RProtoSizePolicy m = (RProtoSizePolicy)p->set;
-#endif	    
-	    (this->*m)( value.toSizePolicy() );
-	    return TRUE;
-	}
-	break;
-    }
-
-    qWarning( "%s (%s): failed to set property %s", className(), QObject::name(), p->name() );
-    return FALSE;
-}
-
-/*!
-  Returns the value of the object's \a name property.
-
-  If no such property exists, the returned variant is invalid.
-
-  Information about all available properties are provided through the
-  metaObject().
-
-  \sa setProperty(), QVariant::isValid(), metaObject(),
-  QMetaObject::propertyNames(), QMetaObject::property()
-
-*/
-QVariant QObject::property( const char *name ) const
-{
-
-    QVariant value;
-
-    typedef const char* (QObject::*ProtoConstCharStar)() const;
-
-    typedef QString (QObject::*ProtoString)() const;
-    typedef const QString* (QObject::*PProtoString)() const;
-    typedef const QString& (QObject::*RProtoString)() const;
-
-    typedef QCString (QObject::*ProtoCString)() const;
-    typedef const QCString* (QObject::*PProtoCString)() const;
-    typedef const QCString& (QObject::*RProtoCString)() const;
-
-    typedef int (QObject::*ProtoInt)() const;
-    typedef const int* (QObject::*PProtoInt)() const;
-    typedef const int& (QObject::*RProtoInt)() const;
-
-    typedef uint (QObject::*ProtoUInt)() const;
-    typedef const uint* (QObject::*PProtoUInt)() const;
-    typedef const uint& (QObject::*RProtoUInt)() const;
-
-    typedef double (QObject::*ProtoDouble)() const;
-    typedef const double* (QObject::*PProtoDouble)() const;
-    typedef const double& (QObject::*RProtoDouble)() const;
-
-    typedef bool (QObject::*ProtoBool)() const;
-    typedef const bool* (QObject::*PProtoBool)() const;
-    typedef const bool& (QObject::*RProtoBool)() const;
-
-    typedef QFont (QObject::*ProtoFont)() const;
-    typedef const QFont* (QObject::*PProtoFont)() const;
-    typedef const QFont& (QObject::*RProtoFont)() const;
-
-    typedef QPixmap (QObject::*ProtoPixmap)() const;
-    typedef const QPixmap* (QObject::*PProtoPixmap)() const;
-    typedef const QPixmap& (QObject::*RProtoPixmap)() const;
-
-    typedef QBrush (QObject::*ProtoBrush)() const;
-    typedef const QBrush* (QObject::*PProtoBrush)() const;
-    typedef const QBrush& (QObject::*RProtoBrush)() const;
-
-    typedef QRect (QObject::*ProtoRect)() const;
-    typedef const QRect* (QObject::*PProtoRect)() const;
-    typedef const QRect& (QObject::*RProtoRect)() const;
-
-    typedef QSize (QObject::*ProtoSize)() const;
-    typedef const QSize* (QObject::*PProtoSize)() const;
-    typedef const QSize& (QObject::*RProtoSize)() const;
-
-    typedef QColor (QObject::*ProtoColor)() const;
-    typedef const QColor* (QObject::*PProtoColor)() const;
-    typedef const QColor& (QObject::*RProtoColor)() const;
-
-    typedef QPalette (QObject::*ProtoPalette)() const;
-    typedef const QPalette* (QObject::*PProtoPalette)() const;
-    typedef const QPalette& (QObject::*RProtoPalette)() const;
-
-    typedef QColorGroup (QObject::*ProtoColorGroup)() const;
-    typedef const QColorGroup* (QObject::*PProtoColorGroup)() const;
-    typedef const QColorGroup& (QObject::*RProtoColorGroup)() const;
-
-    typedef QIconSet (QObject::*ProtoIconSet)() const;
-    typedef const QIconSet* (QObject::*PProtoIconSet)() const;
-    typedef const QIconSet& (QObject::*RProtoIconSet)() const;
-
-    typedef QPoint (QObject::*ProtoPoint)() const;
-    typedef const QPoint* (QObject::*PProtoPoint)() const;
-    typedef const QPoint& (QObject::*RProtoPoint)() const;
-
-    typedef QBitmap (QObject::*ProtoBitmap)() const;
-    typedef const QBitmap* (QObject::*PProtoBitmap)() const;
-    typedef const QBitmap& (QObject::*RProtoBitmap)() const;
-
-    typedef QRegion (QObject::*ProtoRegion)() const;
-    typedef const QRegion* (QObject::*PProtoRegion)() const;
-    typedef const QRegion& (QObject::*RProtoRegion)() const;
-
-    typedef QPointArray (QObject::*ProtoPointArray)() const;
-    typedef const QPointArray* (QObject::*PProtoPointArray)() const;
-    typedef const QPointArray& (QObject::*RProtoPointArray)() const;
-
-    typedef QCursor (QObject::*ProtoCursor)() const;
-    typedef const QCursor* (QObject::*PProtoCursor)() const;
-    typedef const QCursor& (QObject::*RProtoCursor)() const;
-
-    typedef QImage (QObject::*ProtoImage)() const;
-    typedef const QImage* (QObject::*PProtoImage)() const;
-    typedef const QImage& (QObject::*RProtoImage)() const;
-
-    typedef QStringList (QObject::*ProtoStringList)() const;
-    typedef const QStringList* (QObject::*PProtoStringList)() const;
-    typedef const QStringList& (QObject::*RProtoStringList)() const;
-
-    typedef QValueList<QVariant> (QObject::*ProtoList)() const;
-    typedef const QValueList<QVariant>* (QObject::*PProtoList)() const;
-    typedef const QValueList<QVariant>& (QObject::*RProtoList)() const;
-
-    typedef QMap<QString,QVariant> (QObject::*ProtoMap)() const;
-    typedef const QMap<QString,QVariant>* (QObject::*PProtoMap)() const;
-    typedef const QMap<QString,QVariant>& (QObject::*RProtoMap)() const;
-
-    typedef QSizePolicy (QObject::*ProtoSizePolicy)() const;
-    typedef const QSizePolicy* (QObject::*PProtoSizePolicy)() const;
-    typedef const QSizePolicy& (QObject::*RProtoSizePolicy)() const;
-
-    QMetaObject* meta = queryMetaObject();
-    if ( !meta )
-	return value;
-    const QMetaProperty* p = meta->property( name, TRUE );
-    if ( !p )
-	return value;
-
-    if ( p->isEnumType() ) {
-	ProtoInt m = (ProtoInt)p->get;
-	int x = (int) (this->*m)();
-	value = QVariant( x );
-	return value;
-    }
-
-    // p->type must be a type understood by QVariant, so we can savely convert it.
-    QVariant::Type type = QVariant::nameToType( p->type() );
-
-    switch ( type ) {
-    case QVariant::Invalid:
-	// A real assert, since this indicates a moc bug
-	ASSERT( 0 );
-	return QVariant();
-
-    case QVariant::Image:
-	if ( p->gspec == QMetaProperty::Class ) {
-	    ProtoImage m = (ProtoImage)p->get;
-	    value = QVariant( (this->*m)() );
-	} else if ( p->gspec == QMetaProperty::Reference ) {
-	    RProtoImage m = (RProtoImage)p->get;
-	    value = QVariant( (this->*m)() );
-	} else if ( p->gspec == QMetaProperty::Pointer ) {
-	    PProtoImage m = (PProtoImage)p->get;
-	    const QImage* p = (this->*m)();
-	    if ( p )
-		value = QVariant( *p );
-	    else
-		value = QVariant( QImage() );
-	} else {
-	    ASSERT( 0 );
-	}
-	return value;
-
-    case QVariant::Point:
-	if ( p->gspec == QMetaProperty::Class ) {
-	    ProtoPoint m = (ProtoPoint)p->get;
-	    value = QVariant( (this->*m)() );
-	} else if ( p->gspec == QMetaProperty::Reference ) {
-	    RProtoPoint m = (RProtoPoint)p->get;
-	    value = QVariant( (this->*m)() );
-	} else if ( p->gspec == QMetaProperty::Pointer ) {
-	    PProtoPoint m = (PProtoPoint)p->get;
-	    const QPoint* p = (this->*m)();
-	    if ( p )
-		value = QVariant( *p );
-	    else
-		value = QVariant( QPoint() );
-	} else {
-	    ASSERT( 0 );
-	}
-	return value;
-
-    case QVariant::StringList:
-	if ( p->gspec == QMetaProperty::Class ) {
-	    ProtoStringList m = (ProtoStringList)p->get;
-	    value = QVariant( (this->*m)() );
-	} else if ( p->gspec == QMetaProperty::Reference ) {
-	    RProtoStringList m = (RProtoStringList)p->get;
-	    value = QVariant( (this->*m)() );
-	} else if ( p->gspec == QMetaProperty::Pointer ) {
-	    PProtoStringList m = (PProtoStringList)p->get;
-	    const QStringList* p = (this->*m)();
-	    if ( p )
-		value = QVariant( *p );
-	    else
-		value = QVariant( QStringList() );
-	} else {
-	    ASSERT( 0 );
-	}
-	return value;
-
-    case QVariant::List:
-	if ( p->gspec == QMetaProperty::Class ) {
-	    ProtoList m = (ProtoList)p->get;
-	    value = QVariant( (this->*m)() );
-	} else if ( p->gspec == QMetaProperty::Reference ) {
-	    RProtoList m = (RProtoList)p->get;
-	    value = QVariant( (this->*m)() );
-	} else if ( p->gspec == QMetaProperty::Pointer ) {
-	    PProtoList m = (PProtoList)p->get;
-	    const QValueList<QVariant>* p = (this->*m)();
-	    if ( p )
-		value = QVariant( *p );
-	    else
-		value = QVariant( QValueList<QVariant>() );
-	} else {
-	    ASSERT( 0 );
-	}
-	return value;
-
-    case QVariant::CString:
-	if ( p->gspec == QMetaProperty::Class ) {
-	    ProtoCString m = (ProtoCString)p->get;
-	    value = QVariant( (this->*m)() );
-	} else if ( p->gspec == QMetaProperty::Reference ) {
-	    RProtoCString m = (RProtoCString)p->get;
-	    value = QVariant( (this->*m)() );
-	} else if ( p->gspec == QMetaProperty::Pointer ) {
-	    PProtoCString m = (PProtoCString)p->get;
-	    const QCString* p = (this->*m)();
-	    if ( p )
-		value = QVariant( *p );
-	    else
-		value = QVariant( QCString() );
-	} else if ( p->gspec == QMetaProperty::ConstCharStar ) {
-	    ProtoConstCharStar m = (ProtoConstCharStar)p->get;
-	    value = QVariant( QCString( (this->*m)() ) );
-	} else {
-	    ASSERT( 0 );
-	}
-	return value;
-
-    case QVariant::String:
-	if ( p->gspec == QMetaProperty::Class ) {
-	    ProtoString m = (ProtoString)p->get;
-	    value = QVariant( (this->*m)() );
-	} else if ( p->gspec == QMetaProperty::Reference ) {
-	    RProtoString m = (RProtoString)p->get;
-	    value = QVariant( (this->*m)() );
-	} else if ( p->gspec == QMetaProperty::Pointer ) {
-	    PProtoString m = (PProtoString)p->get;
-	    const QString* p = (this->*m)();
-	    if ( p )
-		value = QVariant( *p );
-	    else
-		value = QVariant( QString() );
-	} else if ( p->gspec == QMetaProperty::ConstCharStar ) {
-	    ProtoConstCharStar m = (ProtoConstCharStar)p->get;
-	    value = QVariant( QCString( (this->*m)() ) );
-	} else {
-	    ASSERT( 0 );
-	}
-	return value;
-
-    case QVariant::Font:
-	if ( p->gspec == QMetaProperty::Class ) {
-	    ProtoFont m = (ProtoFont)p->get;
-	    value = QVariant( (this->*m)() );
-	} else if ( p->gspec == QMetaProperty::Reference ) {
-	    RProtoFont m = (RProtoFont)p->get;
-	    value = QVariant( (this->*m)() );
-	} else if ( p->gspec == QMetaProperty::Pointer ) {
-	    PProtoFont m = (PProtoFont)p->get;
-	    const QFont* p = (this->*m)();
-	    if ( p )
-		value = QVariant( *p );
-	    else
-		value = QVariant( QFont() );
-	} else {
-	    ASSERT( 0 );
-	}
-	return value;
-
-    case QVariant::Pixmap:
-	if ( p->gspec == QMetaProperty::Class ) {
-	    ProtoPixmap m = (ProtoPixmap)p->get;
-	    value = QVariant( (this->*m)() );
-	} else if ( p->gspec == QMetaProperty::Reference ) {
-	    RProtoPixmap m = (RProtoPixmap)p->get;
-	    value = QVariant( (this->*m)() );
-	} else if ( p->gspec == QMetaProperty::Pointer ) {
-	    PProtoPixmap m = (PProtoPixmap)p->get;
-	    const QPixmap* p = (this->*m)();
-	    if ( p )
-		value = QVariant( *p );
-	    else
-		value = QVariant( QPixmap() );
-	} else {
-	    ASSERT( 0 );
-	}
-	return value;
-
-    case QVariant::Brush:
-	if ( p->gspec == QMetaProperty::Class ) {
-	    ProtoBrush m = (ProtoBrush)p->get;
-	    value = QVariant( (this->*m)() );
-	} else if ( p->gspec == QMetaProperty::Reference ) {
-	    RProtoBrush m = (RProtoBrush)p->get;
-	    value = QVariant( (this->*m)() );
-	} else if ( p->gspec == QMetaProperty::Pointer ) {
-	    PProtoBrush m = (PProtoBrush)p->get;
-	    const QBrush* p = (this->*m)();
-	    if ( p )
-		value = QVariant( *p );
-	    else
-		value = QVariant( QBrush() );
-	} else {
-	    ASSERT( 0 );
-	}
-	return value;
-
-    case QVariant::Rect:
-	if ( p->gspec == QMetaProperty::Class ) {
-	    ProtoRect m = (ProtoRect)p->get;
-	    value = QVariant( (this->*m)() );
-	} else if ( p->gspec == QMetaProperty::Reference ) {
-	    RProtoRect m = (RProtoRect)p->get;
-	    value = QVariant( (this->*m)() );
-	} else if ( p->gspec == QMetaProperty::Pointer ) {
-	    PProtoRect m = (PProtoRect)p->get;
-	    const QRect* p = (this->*m)();
-	    if ( p )
-		value = QVariant( *p );
-	    else
-		value = QVariant( QRect() );
-	} else {
-	    ASSERT( 0 );
-	}
-	return value;
-
-    case QVariant::Size:
-	if ( p->gspec == QMetaProperty::Class ) {
-	    ProtoSize m = (ProtoSize)p->get;
-	    value = QVariant( (this->*m)() );
-	} else if ( p->gspec == QMetaProperty::Reference ) {
-	    RProtoSize m = (RProtoSize)p->get;
-	    value = QVariant( (this->*m)() );
-	} else if ( p->gspec == QMetaProperty::Pointer ) {
-	    PProtoSize m = (PProtoSize)p->get;
-	    const QSize* p = (this->*m)();
-	    if ( p )
-		value = QVariant( *p );
-	    else
-		value = QVariant( QSize() );
-	} else {
-	    ASSERT( 0 );
-	}
-	return value;
-
-    case QVariant::Color:
-	if ( p->gspec == QMetaProperty::Class ) {
-	    ProtoColor m = (ProtoColor)p->get;
-	    value = QVariant( (this->*m)() );
-	} else if ( p->gspec == QMetaProperty::Reference ) {
-	    RProtoColor m = (RProtoColor)p->get;
-	    value = QVariant( (this->*m)() );
-	} else if ( p->gspec == QMetaProperty::Pointer ) {
-	    PProtoColor m = (PProtoColor)p->get;
-	    const QColor* p = (this->*m)();
-	    if ( p )
-		value = QVariant( *p );
-	    else
-		value = QVariant( QColor() );
-	} else {
-	    ASSERT( 0 );
-	}
-	return value;
-
-    case QVariant::Palette:
-	if ( p->gspec == QMetaProperty::Class ) {
-	    ProtoPalette m = (ProtoPalette)p->get;
-	    value = QVariant( (this->*m)() );
-	} else if ( p->gspec == QMetaProperty::Reference ) {
-	    RProtoPalette m = (RProtoPalette)p->get;
-	    value = QVariant( (this->*m)() );
-	} else if ( p->gspec == QMetaProperty::Pointer ) {
-	    PProtoPalette m = (PProtoPalette)p->get;
-	    const QPalette* p = (this->*m)();
-	    if ( p )
-		value = QVariant( *p );
-	    else
-		value = QVariant( QPalette() );
-	} else {
-	    ASSERT( 0 );
-	}
-	return value;
-
-    case QVariant::ColorGroup:
-	if ( p->gspec == QMetaProperty::Class ) {
-	    ProtoColorGroup m = (ProtoColorGroup)p->get;
-	    value = QVariant( (this->*m)() );
-	} else if ( p->gspec == QMetaProperty::Reference ) {
-	    RProtoColorGroup m = (RProtoColorGroup)p->get;
-	    value = QVariant( (this->*m)() );
-	} else if ( p->gspec == QMetaProperty::Pointer ) {
-	    PProtoColorGroup m = (PProtoColorGroup)p->get;
-	    const QColorGroup* p = (this->*m)();
-	    if ( p )
-		value = QVariant( *p );
-	    else
-		value = QVariant( QColorGroup() );
-	} else {
-	    ASSERT( 0 );
-	}
-	return value;
-
-    case QVariant::Bitmap:
-	if ( p->gspec == QMetaProperty::Class ) {
-	    ProtoBitmap m = (ProtoBitmap)p->get;
-	    value = QVariant( (this->*m)() );
-	} else if ( p->gspec == QMetaProperty::Reference ) {
-	    RProtoBitmap m = (RProtoBitmap)p->get;
-	    value = QVariant( (this->*m)() );
-	} else if ( p->gspec == QMetaProperty::Pointer ) {
-	    PProtoBitmap m = (PProtoBitmap)p->get;
-	    const QBitmap* p = (this->*m)();
-	    if ( p )
-		value = QVariant( *p );
-	    else
-		value = QVariant( QBitmap() );
-	} else {
-	    ASSERT( 0 );
-	}
-	return value;
-
-    case QVariant::PointArray:
-	if ( p->gspec == QMetaProperty::Class ) {
-	    ProtoPointArray m;
-	    m = (ProtoPointArray)p->get;
-	    value = QVariant( (this->*m)() );
-	} else if ( p->gspec == QMetaProperty::Reference ) {
-	    RProtoPointArray m = (RProtoPointArray)p->get;
-	    value = QVariant( (this->*m)() );
-	} else if ( p->gspec == QMetaProperty::Pointer ) {
-	    PProtoPointArray m = (PProtoPointArray)p->get;
-	    const QPointArray* p = (this->*m)();
-	    if ( p )
-		value = QVariant( *p );
-	    else
-		value = QVariant( QPointArray() );
-	} else {
-	    ASSERT( 0 );
-	}
-	return value;
-
-    case QVariant::Region:
-	if ( p->gspec == QMetaProperty::Class ) {
-	    ProtoRegion m = (ProtoRegion)p->get;
-	    value = QVariant( (this->*m)() );
-	} else if ( p->gspec == QMetaProperty::Reference ) {
-	    RProtoRegion m = (RProtoRegion)p->get;
-	    value = QVariant( (this->*m)() );
-	} else if ( p->gspec == QMetaProperty::Pointer ) {
-	    PProtoRegion m = (PProtoRegion)p->get;
-	    const QRegion* p = (this->*m)();
-	    if ( p )
-		value = QVariant( *p );
-	    else
-		value = QVariant( QRegion() );
-	} else {
-	    ASSERT( 0 );
-	}
-	return value;
-
-    case QVariant::Cursor:
-#ifndef QT_NO_CURSOR
-	if ( p->gspec == QMetaProperty::Class ) {
-	    ProtoCursor m = (ProtoCursor)p->get;
-	    value = QVariant( (this->*m)() );
-	} else if ( p->gspec == QMetaProperty::Reference ) {
-	    RProtoCursor m = (RProtoCursor)p->get;
-	    value = QVariant( (this->*m)() );
-	} else if ( p->gspec == QMetaProperty::Pointer ) {
-	    PProtoCursor m = (PProtoCursor)p->get;
-	    const QCursor* p = (this->*m)();
-	    if ( p )
-		value = QVariant( *p );
-	    else
-		value = QVariant( QCursor() );
-	} else {
-	    ASSERT( 0 );
-	}
-#else
-	qWarning("Cursor in QVariant ignored");
-#endif
-	return value;
-
-    case QVariant::IconSet:
-	if ( p->gspec == QMetaProperty::Class ) {
-	    ProtoIconSet m = (ProtoIconSet)p->get;
-	    value = QVariant( (this->*m)() );
-	} else if ( p->gspec == QMetaProperty::Reference ) {
-	    RProtoIconSet m = (RProtoIconSet)p->get;
-	    value = QVariant( (this->*m)() );
-	} else if ( p->gspec == QMetaProperty::Pointer ) {
-	    PProtoIconSet m = (PProtoIconSet)p->get;
-	    const QIconSet* p = (this->*m)();
-	    if ( p )
-		value = QVariant( *p );
-	    else
-		value = QVariant( QIconSet() );
-	} else {
-	    ASSERT( 0 );
-	}
-	return value;
-
-    case QVariant::Int:
-	if ( p->gspec == QMetaProperty::Class ) {
-	    ProtoInt m = (ProtoInt)p->get;
-	    value = QVariant( (this->*m)() );
-	} else if ( p->gspec == QMetaProperty::Reference ) {
-	    RProtoInt m = (RProtoInt)p->get;
-	    value = QVariant( (this->*m)() );
-	} else if ( p->gspec == QMetaProperty::Pointer ) {
-	    PProtoInt m = (PProtoInt)p->get;
-	    const int *p = (this->*m)();
-	    if ( p )
-		value = QVariant( *p );
-	    else
-		value = QVariant( 0 );
-	} else {
-	    ASSERT( 0 );
-	}
-	return value;
-
-    case QVariant::UInt:
-	if ( p->gspec == QMetaProperty::Class ) {
-	    ProtoUInt m = (ProtoUInt)p->get;
-	    value = QVariant( (this->*m)() );
-	} else if ( p->gspec == QMetaProperty::Reference ) {
-	    RProtoUInt m = (RProtoUInt)p->get;
-	    value = QVariant( (this->*m)() );
-	} else if ( p->gspec == QMetaProperty::Pointer ) {
-	    PProtoUInt m = (PProtoUInt)p->get;
-	    const uint *p = (this->*m)();
-	    if ( p )
-		value = QVariant( *p );
-	    else
-		value = QVariant( 0 );
-	} else {
-	    ASSERT( 0 );
-	}
-	return value;
-
-    case QVariant::Double:
-	if ( p->gspec == QMetaProperty::Class ) {
-	    ProtoDouble m = (ProtoDouble)p->get;
-	    value = QVariant( (this->*m)() );
-	} else if ( p->gspec == QMetaProperty::Reference ) {
-	    RProtoDouble m = (RProtoDouble)p->get;
-	    value = QVariant( (this->*m)() );
-	} else if ( p->gspec == QMetaProperty::Pointer ) {
-	    PProtoDouble m = (PProtoDouble)p->get;
-	    const double* p = (this->*m)();
-	    if ( p )
-		value = QVariant( *p );
-	    else
-		value = QVariant( 0.0 );
-	} else {
-	    ASSERT( 0 );
-	}
-	return value;
-
-    case QVariant::Bool:
-	if ( p->gspec == QMetaProperty::Class ) {
-	    ProtoBool m = (ProtoBool)p->get;
-	    value = QVariant( (this->*m)(), 42 /* dummy */ );
-	} else if ( p->gspec == QMetaProperty::Reference ) {
-	    RProtoBool m = (RProtoBool)p->get;
-	    value = QVariant( (this->*m)(), 42 /* dummy */ );
-	} else if ( p->gspec == QMetaProperty::Pointer ) {
-	    PProtoBool m = (PProtoBool)p->get;
-	    const bool* p = (this->*m)();
-	    value = QVariant( p ? *p : FALSE, 42 /* dummy */ );
-	} else {
-	    ASSERT( 0 );
-	}
-	return value;
-
-    case QVariant::Map:
-	if ( p->gspec == QMetaProperty::Class ) {
-	    ProtoMap m = (ProtoMap)p->get;
-	    value = QVariant( (this->*m)() );
-	} else if ( p->gspec == QMetaProperty::Reference ) {
-	    RProtoMap m = (RProtoMap)p->get;
-	    value = QVariant( (this->*m)() );
-	} else if ( p->gspec == QMetaProperty::Pointer ) {
-	    PProtoMap m = (PProtoMap)p->get;
-	    const QMap<QString,QVariant>* p = (this->*m)();
-	    if ( p )
-		value = QVariant( *p );
-	    else
-		value = QVariant( QMap<QString,QVariant>() );
-	} else {
-	    ASSERT( 0 );
-	}
-	return value;
-
-    case QVariant::SizePolicy:
-	if ( p->gspec == QMetaProperty::Class ) {
-	    ProtoSizePolicy m = (ProtoSizePolicy)p->get;
-	    value = QVariant( (this->*m)() );
-	} else if ( p->gspec == QMetaProperty::Reference ) {
-	    RProtoSizePolicy m = (RProtoSizePolicy)p->get;
-	    value = QVariant( (this->*m)() );
-	} else if ( p->gspec == QMetaProperty::Pointer ) {
-	    PProtoSizePolicy m = (PProtoSizePolicy)p->get;
-	    const QSizePolicy *p = (this->*m)();
-	    if ( p )
-		value = QVariant( *p );
-	    else
-		value = QVariant( 0 );
-	} else {
-	    ASSERT( 0 );
-	}
-	return value;
-    }
-
-    return value;
-}
-
-#endif // QT_NO_PROPERTIES

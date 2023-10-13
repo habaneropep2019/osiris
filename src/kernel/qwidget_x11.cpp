@@ -1,39 +1,27 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qwidget_x11.cpp   2.3.2   edited 2001-09-05 $
+** $Id: qwidget_x11.cpp,v 2.235 1999/06/24 20:13:39 warwick Exp $
 **
 ** Implementation of QWidget and QWindow classes for X11
 **
 ** Created : 931031
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
-** This file is part of the kernel module of the Qt GUI Toolkit.
+** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses for Unix/X11 may use this file in accordance with the Qt Commercial
-** License Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
+*****************************************************************************/
 
 #include "qapplication.h"
 #include "qpaintdevicemetrics.h"
@@ -49,8 +37,6 @@
 #include "qabstractlayout.h"
 #include "qtextcodec.h"
 #include "qt_x11.h"
-
-// NOT REVISED
 
 void qt_enter_modal( QWidget * );		// defined in qapplication_x11.cpp
 void qt_leave_modal( QWidget * );		// --- "" ---
@@ -68,16 +54,14 @@ extern XIMStyle qt_xim_style;
 extern void qt_set_paintevent_clipping( QPaintDevice* dev, const QRegion& region);
 extern void qt_clear_paintevent_clipping();
 
-extern bool qt_dnd_enable( QWidget* w, bool on );
+extern bool qt_xdnd_enable( QWidget* w, bool on );
 extern bool qt_nograb();
 
-extern void qt_deferred_map_add( QWidget* ); // defined in qapplication_x11.cpp
-extern void qt_deferred_map_take( QWidget* );// defined in qapplication_x11.cpp
+extern void qt_deferred_map_add( QWidget* ); // defined in qapplication_x11.const
+extern void qt_deferred_map_take( QWidget* );// defined in qapplication_x11.const
 
 static QWidget *mouseGrb    = 0;
 static QWidget *keyboardGrb = 0;
-
-extern Time qt_x_time; // defined in qapplication_x11.cpp
 
 
 /*****************************************************************************
@@ -85,15 +69,10 @@ extern Time qt_x_time; // defined in qapplication_x11.cpp
  *****************************************************************************/
 
 
-extern Atom qt_wm_delete_window;	// defined in qapplication_x11.cpp
-extern Atom qt_wm_take_focus;		// defined in qapplication_x11.cpp
-extern Atom qt_wm_client_leader;	// defined in qapplication_x11.cpp
-extern Atom qt_window_role;		// defined in qapplication_x11.cpp
-extern Atom qt_sm_client_id;		// defined in qapplication_x11.cpp
-extern Atom qt_net_wm_context_help;	// defined in qapplication_x11.cpp
-extern Atom qt_xa_motif_wm_hints;	// defined in qapplication_x11.cpp
-extern bool qt_broken_wm;		// defined in qapplication_x11.cpp
-
+extern Atom qt_wm_delete_window;		// defined in qapplication_x11.cpp
+extern Atom qt_wm_client_leader;		// defined in qapplication_x11.cpp
+extern Atom qt_window_role;			// defined in qapplication_x11.cpp
+extern Atom qt_sm_client_id;			// defined in qapplication_x11.cpp
 
 const uint stdWidgetEventMask =			// X event mask
 	(uint)(
@@ -158,6 +137,8 @@ void QWidget::create( WId window, bool initializeWindow, bool destroyOldWindow)
     if ( testWState(WState_Created) && window == 0 )
 	return;
     setWState( WState_Created );			// set created flag
+    clearWState( WState_USPositionX );
+    setX11Data( 0 );
 
     if ( !parentWidget() )
 	setWFlags( WType_TopLevel );		// top-level widget
@@ -173,14 +154,15 @@ void QWidget::create( WId window, bool initializeWindow, bool destroyOldWindow)
     if ( modal )
 	setWFlags(WStyle_Dialog);
     bool desktop = testWFlags(WType_Desktop);
-    Window root_win = qt_xrootwin(); // ## should be in paintdevice, depends on x11Display and x11Screen
+    Window root_win = RootWindow(dpy,scr);
     Window parentw, destroyw = 0;
     WId	   id;
 
     if ( !window )				// always initialize
 	initializeWindow = TRUE;
 
-    if ( popup ) {
+    if ( popup ) {				
+	setWFlags(WStyle_Tool); // a popup is a tool window
 	setWFlags(WStyle_StaysOnTop); // a popup stays on top
     }
 
@@ -233,7 +215,7 @@ void QWidget::create( WId window, bool initializeWindow, bool destroyOldWindow)
 					 bg_col.pixel() );
 	} else {
 	    wsa.background_pixel = bg_col.pixel();
-	    wsa.border_pixel = black.pixel();
+	    wsa.border_pixel = black.pixel();		
 	    wsa.colormap = (Colormap)x11Colormap();
 	    id = (WId)qt_XCreateWindow( this, dpy, parentw,
 				   crect.left(), crect.top(),
@@ -244,55 +226,31 @@ void QWidget::create( WId window, bool initializeWindow, bool destroyOldWindow)
 				   &wsa );
 	}
 	setWinId( id );				// set widget id/handle + hd
+	if ( parentw == root_win )
+	    qt_xdnd_enable( this, TRUE );
     }
-#ifdef QT_XFT
-    qt_create_ft_draw (x11Display (), id, (Visual *) x11Visual (), x11Colormap());
-#endif
 
-    if ( !topLevel ) {
-	if ( !testWFlags(WStyle_Customize) )
-	    setWFlags( WStyle_NormalBorder | WStyle_Title | WStyle_MinMax | WStyle_SysMenu  );
-    } else if ( !(desktop || popup) ) {
-
-	ulong wsa_mask = 0;
-
+    if ( topLevel && !(desktop || popup) ) {
 	if ( testWFlags(WStyle_Customize) ) {	// customize top-level widget
-	    if ( testWFlags(WStyle_NormalBorder) || testWFlags( WStyle_DialogBorder) ) {
+	    ulong wsa_mask = 0;
+	    if ( testWFlags(WStyle_NormalBorder) ) {
 		;				// ok, we already have it
-	    } else if ( testWFlags( WStyle_NoBorderEx ) ){ // Style_NoBorderEx, sets Motif hint
-		// ### this should really be WStyle_NoBorder in 3.0
-		struct {
-		    ulong flags;
-		    ulong functions;
-		    ulong decorations;
-		    long input_mode;
-		    ulong status;
-		} hints;
-		hints.decorations = 0;
-		hints.flags =  (1L << 1); // MWM_HINTS_DECORATIONS;
-		XChangeProperty (dpy, id, qt_xa_motif_wm_hints,
-				 qt_xa_motif_wm_hints, 32, PropModeReplace,
-				 (unsigned char*) &hints, 5 );
-	    } else { // Style_NoBorder
-		setWFlags( WX11BypassWM ); // ### compatibility
+	    } else {
+		if ( !testWFlags(WStyle_DialogBorder) ) {
+		    wsa.override_redirect = TRUE;
+		    wsa_mask |= CWOverrideRedirect;
+		}
 	    }
 	    if ( testWFlags(WStyle_Tool) ) {
 		wsa.save_under = TRUE;
 		wsa_mask |= CWSaveUnder;
 	    }
+	    if ( wsa_mask && initializeWindow )
+		XChangeWindowAttributes( dpy, id, wsa_mask, &wsa );
 	} else {				// normal top-level widget
-	    if ( testWFlags(WStyle_Dialog ) )
-		setWFlags( WStyle_NormalBorder | WStyle_Title | WStyle_SysMenu | WStyle_ContextHelp );
-	    else
-		setWFlags( WStyle_NormalBorder | WStyle_Title | WStyle_MinMax | WStyle_SysMenu  );
+	    setWFlags( WStyle_NormalBorder | WStyle_Title | WStyle_SysMenu |
+		       WStyle_MinMax );
 	}
-
-	if ( testWFlags( WX11BypassWM ) ) {
-	    wsa.override_redirect = TRUE;
-	    wsa_mask |= CWOverrideRedirect;
-	}
-	if ( wsa_mask && initializeWindow )
-	    XChangeWindowAttributes( dpy, id, wsa_mask, &wsa );
     }
 
     if ( !initializeWindow ) {
@@ -311,9 +269,7 @@ void QWidget::create( WId window, bool initializeWindow, bool destroyOldWindow)
 	     || testWFlags(WStyle_StaysOnTop)
 	     || testWFlags(WStyle_Dialog)
 	     || testWFlags(WStyle_Tool) ) {
-	    if ( testWFlags( WStyle_StaysOnTop ) )
-		XSetTransientForHint( dpy, id, None );
-	    else  if ( p )
+	    if ( p )
 		XSetTransientForHint( dpy, id, p->winId() );
 	    else				// application-modal
 		XSetTransientForHint( dpy, id, root_win );
@@ -323,42 +279,39 @@ void QWidget::create( WId window, bool initializeWindow, bool destroyOldWindow)
 	while ( p && p->parentWidget()) {
 	    p = p->parentWidget()->topLevelWidget();
 	}
-
+	
 	XSizeHints size_hints;
 	size_hints.flags = USSize | PSize | PWinGravity;
 	size_hints.x = crect.left();
 	size_hints.y = crect.top();
 	size_hints.width = crect.width();
 	size_hints.height = crect.height();
-	size_hints.win_gravity = NorthWestGravity;
+	size_hints.win_gravity = 1;		// NorthWest
 	char *title = qAppName();
 	XWMHints wm_hints;			// window manager hints
 	wm_hints.input = True;
 	wm_hints.initial_state = NormalState;
 	wm_hints.flags = InputHint | StateHint;
-
+	
 	if (p) { // the real client leader (head of the group)
 	    wm_hints.window_group = p->winId();
 	    wm_hints.flags |= WindowGroupHint;
 	}
-
+	
 	XClassHint class_hint;
-	class_hint.res_class = title; 	// app name and widget name
-	class_hint.res_name = name() ? (char *)name() : title;
+	class_hint.res_name = title;		// app name and widget name
+	class_hint.res_class = name() ? (char *)name() : title;
 	XSetWMProperties( dpy, id, 0, 0, 0, 0, &size_hints, &wm_hints,
 			  &class_hint );
 	XResizeWindow( dpy, id, crect.width(), crect.height() );
 	XStoreName( dpy, id, title );
-	Atom protocols[3];
-	int n = 0;
-	protocols[n++] = qt_wm_delete_window;	// support del window protocol
-	protocols[n++] = qt_wm_take_focus;	// support take focus window protocol
-	if ( testWFlags( WStyle_ContextHelp ) )
-	    protocols[n++] = qt_net_wm_context_help;
-	XSetWMProtocols( dpy, id, protocols, n );
+	Atom protocols[1];
+	protocols[0] = qt_wm_delete_window;	// support del window protocol
+	XSetWMProtocols( dpy, id, protocols, 1 );
     }
 
     if ( initializeWindow ) {
+	//    if ( testWFlags(WResizeNoErase) && initializeWindow ) { //}
 	wsa.bit_gravity = NorthWestGravity;	// don't erase when resizing
 	XChangeWindowAttributes( dpy, id, CWBitGravity, &wsa );
     }
@@ -383,14 +336,14 @@ void QWidget::create( WId window, bool initializeWindow, bool destroyOldWindow)
 	    clearWState( WState_Visible );
 	else
 	    setWState( WState_Visible );
-	QPaintDeviceX11Data* xd = getX11Data( TRUE );
-	xd->x_depth = a.depth;
-	xd->x_visual = a.visual;
-	xd->x_defvisual = ( XVisualIDFromVisual( a.visual ) ==
-			    XVisualIDFromVisual( (Visual*)x11AppVisual() ) );
-	xd->x_colormap = a.colormap;
-	setX11Data( xd );
-	delete xd;
+	if ( a.depth != x11AppDepth() )	{	// multi-depth system
+	    // #Handling of various X11 factors can be added here
+	    QPaintDeviceX11Data* xd = getX11Data( TRUE );
+	    xd->x_depth = a.depth;
+	    //### also set visual!
+	    setX11Data( xd );
+	    delete xd;
+	}
     }
 
     if ( topLevel ) {
@@ -444,29 +397,23 @@ void QWidget::destroy( bool destroyWindow, bool destroySubWindows )
 	    releaseMouse();
 	if ( keyboardGrb == this )
 	    releaseKeyboard();
-	if ( isTopLevel() )
+	if ( testWState( WType_TopLevel ) )
 	    qt_deferred_map_take( this );
 	if ( testWFlags(WType_Modal) )		// just be sure we leave modal
 	    qt_leave_modal( this );
 	else if ( testWFlags(WType_Popup) )
 	    qApp->closePopup( this );
-#ifdef QT_XFT
-	qt_destroy_ft_draw (x11Display (), winid);
-#endif
 	if ( testWFlags(WType_Desktop) ) {
 	    if ( acceptDrops() )
-		qt_dnd_enable( this, FALSE );
+		qt_xdnd_enable( this, FALSE );
 	} else {
 	    if ( destroyWindow )
 		qt_XDestroyWindow( this, x11Display(), winid );
 	}
 	setWinId( 0 );
-
-	extern void qPRCleanup( QWidget *widget ); // from qapplication_x11.cpp
-	if ( testWState(WState_Reparented) )
-	    qPRCleanup(this);
     }
 }
+
 
 /*!
   Reparents the widget.  The widget gets a new \a parent, new widget
@@ -474,7 +421,7 @@ void QWidget::destroy( bool destroyWindow, bool destroySubWindows )
   parent (\a p).
 
   If \a showIt is TRUE, show() is called once the widget has been
-  reparented.
+  reparent.
 
   If the new parent widget is in a different top-level widget, the
   reparented widget and its children are appended to the end of the
@@ -498,36 +445,11 @@ void QWidget::reparent( QWidget *parent, WFlags f, const QPoint &p,
 {
     extern void qPRCreate( const QWidget *, Window );
     Display *dpy = x11Display();
-    QCursor oldcurs;
-    bool setcurs=testWState(WState_OwnCursor);
-    if ( setcurs ) {
-	oldcurs = cursor();
-	unsetCursor();
-    }
-    bool accept_drops = acceptDrops();
-    if ( accept_drops )
-	setAcceptDrops( FALSE ); // dnd unregister (we will register again below)
-
-    // clear mouse tracking, re-enabled below
-    bool mouse_tracking = hasMouseTracking();
-    clearWState(WState_MouseTracking);
-
-    QWidget* oldtlw = topLevelWidget();
-    QWidget *oldparent = parentWidget();
     WId old_winid = winid;
     if ( testWFlags(WType_Desktop) )
 	old_winid = 0;
-
     setWinId( 0 );
-
-    // hide and reparent our own window away. Otherwise we might get
-    // destroyed when emitting the child remove event below. See QWorkspace.
-    XUnmapWindow( x11Display(), old_winid );
-    XReparentWindow( x11Display(), old_winid,
-		     RootWindow( x11Display(), x11Screen() ), 0, 0 );
-
-    if ( isTopLevel() )
-	topData()->parentWinId = 0;
+    reparentFocusWidgets( parent );		// fix focus chains
 
     if ( parentObj ) {				// remove from parent
 	parentObj->removeChild( this );
@@ -535,6 +457,8 @@ void QWidget::reparent( QWidget *parent, WFlags f, const QPoint &p,
     if ( parent ) {				// insert into new parent
 	parentObj = parent;			// avoid insertChild warning
 	parent->insertChild( this );
+    } else {
+	qApp->noteTopLevel(this);
     }
     bool     enable = isEnabled();		// remember status
     FocusPolicy fp = focusPolicy();
@@ -543,9 +467,7 @@ void QWidget::reparent( QWidget *parent, WFlags f, const QPoint &p,
     QColor   bgc    = bg_col;			// save colors
     QString capt= caption();
     widget_flags = f;
-    clearWState( WState_Created | WState_Visible | WState_ForceHide );
-    if ( isTopLevel() || (!parent || parent->isVisibleTo( 0 ) ) )
-	setWState( WState_ForceHide );	// new widgets do not show up in already visible parents
+    clearWState( WState_Created | WState_Visible );
     create();
     const QObjectList *chlist = children();
     if ( chlist ) {				// reparent children
@@ -554,15 +476,8 @@ void QWidget::reparent( QWidget *parent, WFlags f, const QPoint &p,
 	while ( (obj=it.current()) ) {
 	    if ( obj->isWidgetType() ) {
 		QWidget *w = (QWidget *)obj;
-		if ( !w->isTopLevel() ) {
-		    XReparentWindow( x11Display(), w->winId(), winId(),
-				     w->geometry().x(), w->geometry().y() );
-		} else if ( w->isPopup()
-			    || w->testWFlags(WStyle_DialogBorder)
-			    || w->testWFlags(WStyle_Dialog)
-			    || w->testWFlags(WStyle_Tool) ) {
-		    XSetTransientForHint( x11Display(), w->winId(), winId() );
-		}
+		XReparentWindow( x11Display(), w->winId(), winId(),
+				 w->geometry().x(), w->geometry().y() );
 	    }
 	    ++it;
 	}
@@ -584,29 +499,19 @@ void QWidget::reparent( QWidget *parent, WFlags f, const QPoint &p,
     if ( old_winid )
 	qt_XDestroyWindow( this, dpy, old_winid );
 
-    if ( setcurs ) {
-	setCursor(oldcurs);
+    QObjectList	*accelerators = queryList( "QAccel" );
+    QObjectListIt it( *accelerators );
+    QObject *obj;
+    while ( (obj=it.current()) != 0 ) {
+	++it;
+	((QAccel*)obj)->repairEventFilter();
     }
-
-    reparentFocusWidgets( oldtlw );
-
-    // re-register dnd
-    if (oldparent)
-	oldparent->checkChildrenDnd();
-    if ( accept_drops )
-	setAcceptDrops( TRUE );
-    else {
-	if (parent)
-	    parent->checkChildrenDnd();
-	qt_dnd_enable(this, (extra && extra->children_use_dnd));
+    delete accelerators;
+    if ( !parent ) {
+	QFocusData *fd = focusData( TRUE );
+	if ( fd->focusWidgets.findRef(this) < 0 )
+ 	    fd->focusWidgets.append( this );
     }
-
-    // re-enable mouse tracking
-    if (mouse_tracking)
-	setMouseTracking(mouse_tracking);
-
-    QCustomEvent e( QEvent::Reparent, 0 );
-    QApplication::sendEvent( this, &e );
 }
 
 
@@ -614,7 +519,7 @@ void QWidget::reparent( QWidget *parent, WFlags f, const QPoint &p,
   Translates the widget coordinate \e pos to global screen coordinates.
   For example, \code mapToGlobal(QPoint(0,0))\endcode would give the
   global coordinates of the top-left pixel of the widget.
-  \sa mapFromGlobal() mapTo() mapToParent()
+  \sa mapFromGlobal()
 */
 
 QPoint QWidget::mapToGlobal( const QPoint &pos ) const
@@ -629,7 +534,7 @@ QPoint QWidget::mapToGlobal( const QPoint &pos ) const
 
 /*!
   Translates the global screen coordinate \e pos to widget coordinates.
-  \sa mapToGlobal() mapFrom() mapFromParent()
+  \sa mapToGlobal()
 */
 
 QPoint QWidget::mapFromGlobal( const QPoint &pos ) const
@@ -654,38 +559,28 @@ QPoint QWidget::mapFromGlobal( const QPoint &pos ) const
   used for user Accessibility focus handling.  If \a text is TRUE, it also
   sets the IME composition window in Far East Asian language input systems.
 
-  In the X11 version of Qt, if \a text is TRUE, this method sets the
-  XIM "spot" point for complex language input handling.
-
-  \sa microFocusHint()
+  In the X11 version of Qt, if \a text is TRUE,
+  this method sets the XIMP "spot" point for
+  complex language input handling.
 */
-void QWidget::setMicroFocusHint(int x, int y, int width, int height, bool text)
+void QWidget::setMicroFocusHint(int x, int y, int /*width*/, int height, bool text)
 {
 #ifndef NO_XIM
     if ( text ) {
 	QWidget* tlw = topLevelWidget();
-	if ( tlw->extra && tlw->extra->topextra &&
-	     tlw->extra->topextra->xic ) {
-	    QPoint p( x, y ); // ### use mapTo()
-	    QWidget * w = this;
-	    QWidget * tlw = topLevelWidget();
-	    while ( w != tlw ) {
-		p = w->mapToParent( p );
-		w = w->parentWidget();
-	    }
+	if ( tlw->extra && tlw->extra->topextra && tlw->extra->topextra->xic ) {
+	    QPoint p = tlw->mapFromGlobal(mapToGlobal(QPoint(x,y)));
 	    XPoint spot;
 	    spot.x = p.x();
 	    spot.y = p.y()+height;
 	    XIC xic = (XIC)tlw->extra->topextra->xic;
 	    XVaNestedList preedit_attr;
-	    preedit_attr = XVaCreateNestedList(0, XNSpotLocation, &spot, (char *) 0);
-	    XSetICValues(xic, XNPreeditAttributes, preedit_attr, (char *) 0);
+	    preedit_attr = XVaCreateNestedList(0, XNSpotLocation, &spot, 0);
+	    XSetICValues(xic, XNPreeditAttributes, preedit_attr, 0);
 	    XFree(preedit_attr);
 	}
     }
 #endif
-    if ( QRect( x, y, width, height ) != microFocusHint() )
-	extraData()->micro_focus_hint.setRect( x, y, width, height );
 }
 
 #ifndef NO_XIM
@@ -694,8 +589,7 @@ static XFontSet fixed_fontset = 0; // leaked once
 static
 void cleanup_ffs()
 {
-    if ( fixed_fontset )
-        XFreeFontSet(QPaintDevice::x11AppDisplay(), fixed_fontset);
+    XFreeFontSet(QPaintDevice::x11AppDisplay(), fixed_fontset);
     fixed_fontset = 0;
 }
 
@@ -726,7 +620,6 @@ XFontSet xic_fontset(void* qfs, int pt)
 }
 #endif
 
-
 void QWidget::setFontSys()
 {
 #ifndef NO_XIM
@@ -738,14 +631,14 @@ void QWidget::setFontSys()
 					font().pointSize());
 
 	XVaNestedList preedit_att = XVaCreateNestedList( 0, XNFontSet, fontset,
-							 (char *) NULL );
+							 NULL );
 	XVaNestedList status_att = XVaCreateNestedList( 0, XNFontSet, fontset,
-							(char *) NULL );
+							NULL );
 
 	XSetICValues( xic,
 		      XNPreeditAttributes, preedit_att,
 		      XNStatusAttributes, status_att,
-		      (char *) 0 );
+		      0 );
 
 	XFree(preedit_att);
 	XFree(status_att);
@@ -822,12 +715,6 @@ void QWidget::setBackgroundEmpty()
 }
 
 
-void QWidget::setBackgroundX11Relative()
-{
-    XSetWindowBackgroundPixmap( x11Display(), winId(), ParentRelative );
-}
-
-
 /*!
   Sets the widget cursor shape to \e cursor.
 
@@ -863,7 +750,7 @@ void QWidget::setCursor( const QCursor &cursor )
   Unset the cursor for this widget. The widget will use the cursor of
   its parent from now on.
 
-  This functions does nothing for top-level windows.
+  This functions does nothing for toplevel windows.
 
   \sa cursor(), setCursor(), QApplication::setOverrideCursor()
  */
@@ -884,38 +771,21 @@ void QWidget::unsetCursor()
 static XTextProperty*
 qstring_to_xtp( const QString& s )
 {
-    static XTextProperty tp = { 0, 0, 0, 0 };
-    static bool free_prop = TRUE; // we can't free tp.value in case it references
-    // the data of the static QCString below.
-    if ( tp.value ) {
-	if ( free_prop )
-	    XFree( tp.value );
-	tp.value = 0;
-	free_prop = TRUE;
-    }
-
+    static XTextProperty tp;
     static const QTextCodec* mapper = QTextCodec::codecForLocale();
-    int errCode = 0;
     if ( mapper ) {
 	QCString mapped = mapper->fromUnicode(s);
 	char* tl[2];
 	tl[0] = mapped.data();
 	tl[1] = 0;
-	errCode = XmbTextListToTextProperty( QPaintDevice::x11AppDisplay(),
-					     tl, 1, XStdICCTextStyle, &tp );
-#if defined(DEBUG)
-	if ( errCode < 0 )
-	    qDebug( "qstring_to_xtp result code %d", errCode );
-#endif
-    }
-    if ( !mapper || errCode < 0 ) {
-	static QCString qcs;
-	qcs = s.ascii();
+	XmbTextListToTextProperty( QPaintDevice::x11AppDisplay(),
+	    tl, 1, XStdICCTextStyle, &tp );
+    } else {
+	static QCString qcs = s.ascii();
 	tp.value = (uchar*)qcs.data();
 	tp.encoding = XA_STRING;
 	tp.format = 8;
 	tp.nitems = qcs.length();
-	free_prop = FALSE;
     }
 
     // ### If we knew WM could understand unicode, we could use
@@ -931,24 +801,22 @@ qstring_to_xtp( const QString& s )
 }
 
 /*!
-  Sets the window caption (title) to \a caption.
+  Sets the window caption (title).
   \sa caption(), setIcon(), setIconText()
 */
 
 void QWidget::setCaption( const QString &caption )
 {
-    if ( QWidget::caption() == caption )
+    if ( extra && extra->topextra && extra->topextra->caption == caption )
 	return; // for less flicker
-    topData()->caption = caption;
+    createTLExtra();
+    extra->topextra->caption = caption;
     XSetWMName( x11Display(), winId(), qstring_to_xtp(caption) );
-    QCustomEvent e( QEvent::CaptionChange, 0 );
-    QApplication::sendEvent( this, &e );
 }
 
 /*!
-  Sets the window icon to \a pixmap.
-  \sa icon(), setIconText(), setCaption(),
-      \link appicon.html Setting the Application Icon\endlink
+  Sets the window icon pixmap.
+  \sa icon(), setIconText(), setCaption()
 */
 
 void QWidget::setIcon( const QPixmap &pixmap )
@@ -959,16 +827,17 @@ void QWidget::setIcon( const QPixmap &pixmap )
     } else {
 	createTLExtra();
     }
-    Pixmap icon_pixmap = 0;
-    Pixmap mask_pixmap = 0;
-    if ( !pixmap.isNull() ) {
-	QPixmap* pm = new QPixmap( pixmap );
-	extra->topextra->icon = pm;
-  	if ( !pm->mask() )
-  	    pm->setMask( pm->createHeuristicMask() ); // may do detach()
-	icon_pixmap = pm->handle();
-  	if ( pm->mask() )
-  	    mask_pixmap = pm->mask()->handle();
+    ::Pixmap icon_pixmap;
+    ::Pixmap mask_pixmap;
+    QBitmap mask;
+    if ( pixmap.isNull() ) {
+	icon_pixmap = 0;
+	mask_pixmap = 0;
+    } else {
+	extra->topextra->icon = new QPixmap( pixmap );
+	icon_pixmap = pixmap.handle();
+	mask = pixmap.mask() ? *pixmap.mask() : pixmap.createHeuristicMask();
+	mask_pixmap = mask.handle();
     }
     XWMHints *h = XGetWMHints( x11Display(), winId() );
     XWMHints  wm_hints;
@@ -978,13 +847,11 @@ void QWidget::setIcon( const QPixmap &pixmap )
 	h->flags = 0;
     }
     h->icon_pixmap = icon_pixmap;
-    h->icon_mask = mask_pixmap;
+    h->icon_mask   = mask_pixmap;
     h->flags |= IconPixmapHint | IconMaskHint;
     XSetWMHints( x11Display(), winId(), h );
     if ( got_hints )
 	XFree( (char *)h );
-    QCustomEvent e( QEvent::IconChange, 0 );
-    QApplication::sendEvent( this, &e );
 }
 
 
@@ -1014,13 +881,13 @@ void QWidget::setMouseTracking( bool enable )
 	clearWState( WState_MouseTracking );
     if ( testWFlags(WType_Desktop) ) {		// desktop widget?
 	QWidget* main_desktop = find( winId() );
-	if ( main_desktop->testWFlags(WPaintDesktop) )
+	if ( main_desktop->testWFlags(WPaintDesktop) )	// get desktop paint events
 	    XSelectInput( x11Display(), winId(),
-			  stdDesktopEventMask | ExposureMask );
+			  stdDesktopEventMask|ExposureMask );
 	else
 	    XSelectInput( x11Display(), winId(), stdDesktopEventMask );
     } else {
-	XSelectInput( x11Display(), winId(),
+	XSelectInput( x11Display(), winId(),	// specify events
 		      m | stdWidgetEventMask );
     }
 }
@@ -1039,9 +906,6 @@ void QWidget::setMouseTracking( bool enable )
   mouse when a button is pressed and keeps it until the last button is
   released.
 
-  Beware that only widgets actually shown on the screen may grab the
-  mouse input.
-
   \sa releaseMouse(), grabKeyboard(), releaseKeyboard()
 */
 
@@ -1050,26 +914,11 @@ void QWidget::grabMouse()
     if ( !qt_nograb() ) {
 	if ( mouseGrb )
 	    mouseGrb->releaseMouse();
-#if defined(CHECK_STATE)
-	int status =
-#endif
-	XGrabPointer( x11Display(), winId(), False,
-		      (uint)( ButtonPressMask | ButtonReleaseMask |
-			      PointerMotionMask | EnterWindowMask |
-			      LeaveWindowMask ),
+	XGrabPointer( x11Display(), winId(), TRUE,
+		      (uint)(ButtonPressMask | ButtonReleaseMask |
+		             PointerMotionMask | EnterWindowMask | LeaveWindowMask),
 		      GrabModeAsync, GrabModeAsync,
-		      None, None, qt_x_time );
-#if defined(CHECK_STATE)
-	if ( status ) {
-	    const char *s =
-		status == GrabNotViewable ? "\"GrabNotViewable\"" :
-		status == AlreadyGrabbed  ? "\"AlreadyGrabbed\"" :
-		status == GrabFrozen      ? "\"GrabFrozen\"" :
-		status == GrabInvalidTime ? "\"GrabInvalidTime\"" :
-					    "<?>";
-	    qWarning( "Grabbing the mouse failed with %s", s );
-	}
-#endif
+		      None, None, CurrentTime );
 	mouseGrb = this;
     }
 }
@@ -1091,25 +940,11 @@ void QWidget::grabMouse( const QCursor &cursor )
     if ( !qt_nograb() ) {
 	if ( mouseGrb )
 	    mouseGrb->releaseMouse();
-#if defined(CHECK_STATE)
-	int status =
-#endif
-	XGrabPointer( x11Display(), winId(), False,
+	XGrabPointer( x11Display(), winId(), TRUE,
 		      (uint)(ButtonPressMask | ButtonReleaseMask |
 			     PointerMotionMask | EnterWindowMask | LeaveWindowMask),
 		      GrabModeAsync, GrabModeAsync,
-		      None, cursor.handle(), qt_x_time );
-#if defined(CHECK_STATE)
-	if ( status ) {
-	    const char *s =
-		status == GrabNotViewable ? "\"GrabNotViewable\"" :
-		status == AlreadyGrabbed  ? "\"AlreadyGrabbed\"" :
-		status == GrabFrozen      ? "\"GrabFrozen\"" :
-		status == GrabInvalidTime ? "\"GrabInvalidTime\"" :
-					    "<?>";
-	    qWarning( "Grabbing the mouse failed with %s", s );
-	}
-#endif
+		      None, cursor.handle(), CurrentTime );
 	mouseGrb = this;
     }
 }
@@ -1123,7 +958,7 @@ void QWidget::grabMouse( const QCursor &cursor )
 void QWidget::releaseMouse()
 {
     if ( !qt_nograb() && mouseGrb == this ) {
-	XUngrabPointer( x11Display(),  qt_x_time );
+	XUngrabPointer( x11Display(), CurrentTime );
 	XFlush( x11Display() );
 	mouseGrb = 0;
     }
@@ -1145,8 +980,8 @@ void QWidget::grabKeyboard()
     if ( !qt_nograb() ) {
 	if ( keyboardGrb )
 	    keyboardGrb->releaseKeyboard();
-	XGrabKeyboard( x11Display(), winid, False, GrabModeAsync, GrabModeAsync,
-		       qt_x_time );
+	XGrabKeyboard( x11Display(), winid, TRUE, GrabModeAsync, GrabModeAsync,
+		       CurrentTime );
 	keyboardGrb = this;
     }
 }
@@ -1160,7 +995,7 @@ void QWidget::grabKeyboard()
 void QWidget::releaseKeyboard()
 {
     if ( !qt_nograb() && keyboardGrb == this ) {
-	XUngrabKeyboard( x11Display(), qt_x_time );
+	XUngrabKeyboard( x11Display(), CurrentTime );
 	keyboardGrb = 0;
     }
 }
@@ -1205,16 +1040,11 @@ QWidget *QWidget::keyboardGrabber()
   focus.
 
   This function performs the same operation as clicking the mouse on
-  the title bar of a top-level window. On X11, the result depends on
-  the Window Manager. If you want to ensure that the window is stacked
-  on top as well, call raise() in addition. Note that the window has be
-  to visible, otherwise setActiveWindow() has no effect.
-
-  On Windows, if you are calling this when the application is not
-  currently the active one then it will not make it the active window.  It
-  will flash the task bar entry blue to indicate that the window has done
-  something.  This is due to Microsoft not allowing an application to
-  interrupt what the user is currently doing in another application.
+  the title bar of a top-level window, at least on Windows. On X11,
+  the result depends on the Window Manager. If you want to ensure that
+  the window is stacked on top as well, call raise() in addition. Note
+  that the window has be to visible, otherwise setActiveWindow() has
+  no effect.
 
   \sa isActiveWindow(), topLevelWidget(), show()
 */
@@ -1222,56 +1052,37 @@ QWidget *QWidget::keyboardGrabber()
 void QWidget::setActiveWindow()
 {
     QWidget *tlw = topLevelWidget();
-    if ( tlw->isVisible() && !tlw->topData()->embedded ) {
-	XSetInputFocus( x11Display(), tlw->winId(), RevertToNone, qt_x_time);
-
-#ifndef NO_XIM
-	if (tlw->topData()->xic)
-	    XSetICFocus( (XIC) tlw->topData()->xic);
-#endif
-    }
+    if ( tlw->isVisible() )
+	XSetInputFocus( x11Display(), tlw->winId(), RevertToNone, CurrentTime);
 }
 
 
 /*!
   Updates the widget unless updates are disabled or the widget is hidden.
 
-  Updating the widget will erase the widget contents and generate an
-  appropriate paint event for the invalidated region. The paint event
-  is processed after the program has returned to the main event loop.
-  Calling update() many times in a row will generate a single paint
-  event.
+  Updating the widget will erase the widget contents and generate a paint
+  event from the window system. The paint event is processed after the
+  program has returned to the main event loop.
 
-  If the widgets sets the WRepaintNoErase flag, update() will not erase
-  its contents.
-
-  \sa repaint(), paintEvent(), setUpdatesEnabled(), erase(), setWFlags()
+  \sa repaint(), paintEvent(), setUpdatesEnabled(), erase()
 */
 
 void QWidget::update()
 {
-    if ( (widget_state & (WState_Visible|WState_BlockUpdates)) == WState_Visible ) {
-	QApplication::postEvent( this, new QPaintEvent( visibleRect(),
-		!testWFlags(WRepaintNoErase) ) );
-    }
+    if ( (widget_state & (WState_Visible|WState_BlockUpdates)) == WState_Visible )
+	XClearArea( x11Display(), winId(), 0, 0, 0, 0, TRUE );
 }
 
 /*!
   Updates a rectangle (\e x, \e y, \e w, \e h) inside the widget
   unless updates are disabled or the widget is hidden.
 
-  Updating the widget erases the widget area \e (x,y,w,h) and generate
-  an appropriate paint event for the invalidated region. The paint
-  event is processed after the program has returned to the main event
-  loop.  Calling update() many times in a row will generate a single
-  paint event.
+  Updating the widget erases the widget area \e (x,y,w,h), which in turn
+  generates a paint event from the window system. The paint event is
+  processed after the program has returned to the main event loop.
 
   If \e w is negative, it is replaced with <code>width() - x</code>.
   If \e h is negative, it is replaced width <code>height() - y</code>.
-
-
-  If the widgets sets the WRepaintNoErase flag, update() will not erase
-  its contents.
 
   \sa repaint(), paintEvent(), setUpdatesEnabled(), erase()
 */
@@ -1279,15 +1090,13 @@ void QWidget::update()
 void QWidget::update( int x, int y, int w, int h )
 {
     if ( w && h &&
-	 (widget_state & (WState_Visible|WState_BlockUpdates)) == WState_Visible ) {
+	 (widget_flags & (WState_Visible|WState_BlockUpdates)) == WState_Visible ) {
 	if ( w < 0 )
 	    w = crect.width()  - x;
 	if ( h < 0 )
 	    h = crect.height() - y;
 	if ( w != 0 && h != 0 )
-	    QApplication::postEvent( this,
-	        new QPaintEvent( visibleRect().intersect(QRect(x,y,w,h)),
-				 !testWFlags( WRepaintNoErase ) ) );
+	    XClearArea( x11Display(), winId(), x, y, w, h, TRUE );
     }
 }
 
@@ -1316,10 +1125,9 @@ void QWidget::update( int x, int y, int w, int h )
   If \e w is negative, it is replaced with <code>width() - x</code>.
   If \e h is negative, it is replaced width <code>height() - y</code>.
 
-  Use repaint if your widget needs to be repainted immediately, for
-  example when doing some animation. In all other cases, update() is
-  to be preferred. Calling update() many times in a row will generate
-  a single paint event.
+  Doing a repaint() is usually faster than doing an update(), but
+  calling update() many times in a row will generate a single paint
+  event.
 
   \warning If you call repaint() in a function which may itself be called
   from paintEvent(), you may see infinite recursion. The update() function
@@ -1339,14 +1147,9 @@ void QWidget::repaint( int x, int y, int w, int h, bool erase )
 	if ( r.isEmpty() )
 	    return; // nothing to do
 	QPaintEvent e( r, erase );
- 	if ( r != rect() )
-	    qt_set_paintevent_clipping( this, r );
-	if ( erase && w != 0 && h != 0 ) {
-	    if ( backgroundOrigin() == WidgetOrigin )
-		XClearArea( x11Display(), winId(), x, y, w, h, FALSE );
-	    else
-		this->erase( x, y, w, h);
-	}
+	qt_set_paintevent_clipping( this, r );
+	if ( erase && w != 0 && h != 0 )
+	    XClearArea( x11Display(), winId(), x, y, w, h, FALSE );
 	QApplication::sendEvent( this, &e );
 	qt_clear_paintevent_clipping();
     }
@@ -1358,10 +1161,9 @@ void QWidget::repaint( int x, int y, int w, int h, bool erase )
 
   Erases the widget region  \a reg if \a erase is TRUE.
 
-  Use repaint if your widget needs to be repainted immediately, for
-  example when doing some animation. In all other cases, update() is
-  to be preferred. Calling update() many times in a row will generate
-  a single paint event.
+  Calling repaint() is usually faster than doing an update(), but
+  calling update() many times in a row will generate a single paint
+  event.
 
   \warning If you call repaint() in a function which may itself be called
   from paintEvent(), you may see infinite recursion. The update() function
@@ -1394,30 +1196,18 @@ void QWidget::repaint( const QRegion& reg, bool erase )
 
 void QWidget::showWindow()
 {
-
-    if ( isTopLevel()  ) {
-	int sm = topData()->showMode;
-	if ( sm ) { // handles minimize and reset
-	    XWMHints *h = XGetWMHints( x11Display(), winId() );
-	    XWMHints  wm_hints;
-	    bool got_hints = h != 0;
-	    if ( !got_hints ) {
-		h = &wm_hints;
-		h->flags = 0;
-	    }
-	    h->initial_state = sm == 1? IconicState : NormalState;
-	    h->flags |= StateHint;
-	    XSetWMHints( x11Display(), winId(), h );
-	    if ( got_hints )
-		XFree( (char *)h );
-	    topData()->showMode = sm == 1?3:0; // trigger reset to normal state next time
-	}
-	if ( topData()->parentWinId && topData()->parentWinId != qt_xrootwin() && !isMinimized() ) {
-	    qt_deferred_map_add( this );
-	    return;
-	}
-    }
-    XMapWindow( x11Display(), winId() );
+    setWState( WState_Visible );
+    clearWState( WState_ForceHide );
+    clearWState( WState_Withdrawn );
+    QShowEvent e(FALSE);
+    QApplication::sendEvent( this, &e );
+    if ( testWFlags(WType_TopLevel) &&
+	 extra &&
+	 extra->topextra &&
+	 extra->topextra->wmstate == 2)
+	qt_deferred_map_add( this );
+    else
+	XMapWindow( x11Display(), winId() );
 }
 
 
@@ -1428,18 +1218,17 @@ void QWidget::showWindow()
 
 void QWidget::hideWindow()
 {
-    clearWState( WState_Exposed );
     deactivateWidgetCleanup();
-    if ( isTopLevel() ) {
+    if ( testWFlags(WType_TopLevel) ) {
 	qt_deferred_map_take( this );
-	if ( winId() ) // in nsplugin, may be 0
-	    XWithdrawWindow( x11Display(), winId(), x11Screen() );
-	crect.moveTopLeft( fpos );
-	topData()->fsize = crect.size();
-    } else {
-	if ( winId() ) // in nsplugin, may be 0
-	    XUnmapWindow( x11Display(), winId() );
+	XWithdrawWindow( x11Display(), winId(), x11Screen() );
+	if ( extra && extra->topextra && extra->topextra->wmstate ) // wm_state supported
+	    extra->topextra->wmstate = 2; // waiting for wm_state change before next showWindow
     }
+    else
+	XUnmapWindow( x11Display(), winId() );
+    if ( isPopup() )
+	XFlush( x11Display() );
 }
 
 
@@ -1454,18 +1243,11 @@ void QWidget::hideWindow()
 
 void QWidget::showMinimized()
 {
-    if ( isTopLevel() ) {
-	if ( isVisible() )
-	    XIconifyWindow( x11Display(), winId(), x11Screen() );
-	else {
-	    topData()->showMode = 1;
-	    show();
-	    clearWState( WState_Visible );
-	    sendHideEventsToChildren(TRUE);
-	}
-    }
-    QCustomEvent e( QEvent::ShowMinimized, 0 );
-    QApplication::sendEvent( this, &e );
+    if ( testWFlags(WType_TopLevel) )
+	XIconifyWindow( x11Display(), winId(), x11Screen() );
+    //### if the window is mapped (i.e. not WState_Withdrawn) we have
+    // to show it with initial state Iconic! Right now the function only
+    // works for widgets that are already visible.
 }
 
 /*!
@@ -1479,32 +1261,11 @@ bool QWidget::isMinimized() const
     return qt_wstate_iconified( winId() );
 }
 
-bool QWidget::isMaximized() const
-{
-    return testWState(WState_Maximized);
-}
-
-// ### ### this really needs to wait for a maximum of 0.N seconds
-void qt_wait_for_window_manager( QWidget* w )
-{
-    QApplication::flushX();
-    XEvent ev;
-    while (!XCheckTypedWindowEvent( w->x11Display(), w->winId(), ReparentNotify, &ev )) {
-	if ( XCheckTypedWindowEvent( w->x11Display(), w->winId(), MapNotify, &ev ) )
-	    break;
-    }
-    qApp->x11ProcessEvent( &ev );
-}
-
 /*!
   Shows the widget maximized.
 
   Calling this function has no effect for other than \link isTopLevel()
   top-level widgets\endlink.
-
-  On X11, this function may not work properly with certain window
-  managers. See the \link geometry.html Window Geometry
-  documentation\endlink for details on why.
 
   \sa showNormal(), showMinimized(), show(), hide(), isVisible()
 */
@@ -1516,21 +1277,13 @@ void QWidget::showMaximized()
 	int scr = x11Screen();
 	int sw = DisplayWidth(dpy,scr);
 	int sh = DisplayHeight(dpy,scr);
-	if ( topData()->normalGeometry.width() < 0 )
-	    topData()->normalGeometry = geometry();
-	if ( !topData()->parentWinId && !isVisible() ) {
-	    setGeometry(0, 0, sw, sh );
-	    show();
-	    qt_wait_for_window_manager( this );
+	createTLExtra();
+	if ( extra->topextra->normalGeometry.width() < 0 ) {
+	    extra->topextra->normalGeometry = geometry();
+	    setGeometry( 0, 0, sw, sh );
 	}
-	sw -= frameGeometry().width() - width();
-	sh -= frameGeometry().height() - height();
-	resize( sw, sh );
+	show();
     }
-    show();
-    QCustomEvent e( QEvent::ShowMaximized, 0 );
-    QApplication::sendEvent( this, &e );
-    setWState(WState_Maximized);
 }
 
 /*!
@@ -1544,23 +1297,17 @@ void QWidget::showMaximized()
 
 void QWidget::showNormal()
 {
-    if ( isTopLevel() ) {
-	if ( topData()->fullscreen ) {
-	    // when reparenting, preserve some widget flags
-	    reparent( 0, WType_TopLevel | (getWFlags() & 0xffff0000), QPoint(0,0) );
-	    topData()->fullscreen = 0;
+    if ( testWFlags(WType_TopLevel) ) {
+	if ( extra && extra->topextra ) {
+	    QRect r = extra->topextra->normalGeometry;
+	    if ( r.width() >= 0 ) {
+		// the widget has been maximized
+		extra->topextra->normalGeometry = QRect(0,0,-1,-1);
+		setGeometry( r );
+	    }
 	}
-	QRect r = topData()->normalGeometry;
-	if ( r.width() >= 0 ) {
-	    // the widget has been maximized
-	    topData()->normalGeometry = QRect(0,0,-1,-1);
-	    resize( r.size() );
-	    move( r.topLeft() );
-	}
+	show();
     }
-    show();
-    QCustomEvent e( QEvent::ShowNormal, 0 );
-    QApplication::sendEvent( this, &e );
 }
 
 
@@ -1570,7 +1317,7 @@ void QWidget::showNormal()
   If there are any siblings of this widget that overlap it on the screen,
   this widget will be visually in front of its siblings afterwards.
 
-  \sa lower(), stackUnder()
+  \sa lower()
 */
 
 void QWidget::raise()
@@ -1587,7 +1334,7 @@ void QWidget::raise()
   If there are siblings of this widget that overlap it on the screen, this
   widget will be obscured by its siblings afterwards.
 
-  \sa raise(), stackUnder()
+  \sa raise()
 */
 
 void QWidget::lower()
@@ -1599,30 +1346,6 @@ void QWidget::lower()
 }
 
 
-/*!
-  Places the widget under \a w in the parent widget's stack.
-
-  To make this work, the widget itself and \a w have to be siblings.
-
-  \sa raise(), lower()
-*/
-void QWidget::stackUnder( QWidget* w)
-{
-    QWidget *p = parentWidget();
-    if ( !w || isTopLevel() || p != w->parentWidget() || this == w )
-	return;
-    if ( p && p->childObjects && p->childObjects->findRef(w) >= 0 && p->childObjects->findRef(this) >= 0 ) {
-	p->childObjects->take();
-	p->childObjects->insert( p->childObjects->findRef(w), this );
-    }
-    Window stack[2];
-    stack[0] = w->winId();;
-    stack[1] = winId();
-    XRestackWindows( x11Display(), stack, 2 );
-}
-
-
-
 /*
   The global variable qwidget_tlw_gravity defines the window gravity of
   the next top level window to be created. We do this when setting the
@@ -1630,50 +1353,35 @@ void QWidget::stackUnder( QWidget* w)
   a negative position.
 */
 
-int qwidget_tlw_gravity = NorthWestGravity;
+int qwidget_tlw_gravity = 1;
 
-static void do_size_hints( QWidget* widget, QWExtra *x )
+static void do_size_hints( Display *dpy, WId winid, QWExtra *x, XSizeHints *s )
 {
-    XSizeHints s;
-    s.flags = 0;
     if ( x ) {
-	s.x = widget->x();
-	s.y = widget->y();
-	s.width = widget->width();
-	s.height = widget->height();
 	if ( x->minw > 0 || x->minh > 0 ) {	// add minimum size hints
-	    s.flags |= PMinSize;
-	    s.min_width  = x->minw;
-	    s.min_height = x->minh;
+	    s->flags |= PMinSize;
+	    s->min_width  = x->minw;
+	    s->min_height = x->minh;
 	}
 	if ( x->maxw < QWIDGETSIZE_MAX || x->maxh < QWIDGETSIZE_MAX ) {
-	    s.flags |= PMaxSize;		// add maximum size hints
-	    s.max_width  = x->maxw;
-	    s.max_height = x->maxh;
+	    s->flags |= PMaxSize;		// add maximum size hints
+	    s->max_width  = x->maxw;
+	    s->max_height = x->maxh;
 	}
 	if ( x->topextra &&
 	   (x->topextra->incw > 0 || x->topextra->inch > 0) )
 	{					// add resize increment hints
-	    s.flags |= PResizeInc | PBaseSize;
-	    s.width_inc = x->topextra->incw;
-	    s.height_inc = x->topextra->inch;
-	    s.base_width = x->topextra->basew;
-	    s.base_height = x->topextra->baseh;
-	}
-
-	if ( x->topextra && x->topextra->uspos) {
-	    s.flags |= USPosition;
-	    s.flags |= PPosition;
-	}
-	if ( x->topextra && x->topextra->ussize) {
-	    s.flags |= USSize;
-	    s.flags |= PSize;
+	    s->flags |= PResizeInc | PBaseSize;
+	    s->width_inc = x->topextra->incw;
+	    s->height_inc = x->topextra->inch;
+	    s->base_width = x->topextra->basew;
+	    s->base_height = x->topextra->baseh;
 	}
     }
-    s.flags |= PWinGravity;
-    s.win_gravity = qwidget_tlw_gravity;	// usually NorthWest
-    qwidget_tlw_gravity = NorthWestGravity;	// reset in case it was set
-    XSetWMNormalHints( widget->x11Display(), widget->winId(), &s );
+    s->flags |= PWinGravity;
+    s->win_gravity = qwidget_tlw_gravity;	// usually NorthWest (1)
+    qwidget_tlw_gravity = 1;			// reset in case it was set
+    XSetWMNormalHints( dpy, winid, s );
 }
 
 
@@ -1683,7 +1391,6 @@ void QWidget::internalSetGeometry( int x, int y, int w, int h, bool isMove )
 
     if ( testWFlags(WType_Desktop) )
 	return;
-    clearWState(WState_Maximized);
     if ( extra ) {				// any size restrictions?
 	w = QMIN(w,extra->maxw);
 	h = QMIN(h,extra->maxh);
@@ -1694,58 +1401,60 @@ void QWidget::internalSetGeometry( int x, int y, int w, int h, bool isMove )
 	w = 1;
     if ( h < 1 )
 	h = 1;
-    QPoint oldPos( pos() );
-    QSize oldSize( size() );
-    QRect oldGeom( crect );
+    QPoint oldp = pos();
+    QSize  olds = size();
     QRect  r( x, y, w, h );
 
     // We only care about stuff that changes the geometry, or may
     // cause the window manager to change its state
-    if ( !isTopLevel() && oldGeom == r )
+    if ( r.size() == olds && oldp == r.topLeft() &&
+	 (isTopLevel() == FALSE
+	  || !isMove || testWState(WState_USPositionX)) )
 	return;
 
     setCRect( r );
 
-    bool isResize = size() != oldSize;
-
     if ( isTopLevel() ) {
+	setWState( WState_ConfigPending );
+	XSizeHints size_hints;
+	size_hints.flags = USSize | PSize;
 	if ( isMove )
-	    topData()->uspos = 1;
-	if ( isResize )
-	    topData()->ussize = 1;
-	do_size_hints( this, extra );
+	    setWState(WState_USPositionX);
+	if ( testWState(WState_USPositionX) )
+	    // also restore the usposition, otherwise it would be cleared
+	    size_hints.flags |= USPosition;
+	size_hints.x = x;
+	size_hints.y = y;
+	size_hints.width = w;
+	size_hints.height = h;
+	do_size_hints( dpy, winId(), extra, &size_hints );
     }
 
-    if ( isMove ) {
-	if (! qt_broken_wm)
-	     // pos() is right according to ICCCM 4.1.5
-	    XMoveResizeWindow( dpy, winid, pos().x(), pos().y(), w, h );
-	else
-	    // work around 4Dwm's incompliance with ICCCM 4.1.5
-	    XMoveResizeWindow( dpy, winid, x, y, w, h);
-    } else if ( isResize )
+    if ( isMove )
+	XMoveResizeWindow( dpy, winid, x, y, w, h );
+    else
 	XResizeWindow( dpy, winid, w, h );
 
+    bool isResize = olds != r.size();
+
     if ( isVisible() ) {
-	if ( isMove && pos() != oldPos ) {
-	    QMoveEvent e( pos(), oldPos );
+	if ( isMove ) {
+	    QMoveEvent e( r.topLeft(), oldp );
 	    QApplication::sendEvent( this, &e );
 	}
 	if ( isResize ) {
-
-	    // set config pending only on resize, see qapplication_x11.cpp, translateConfigEvent()
-	    setWState( WState_ConfigPending );
-
-	    QResizeEvent e( size(), oldSize );
+	    QResizeEvent e( r.size(), olds );
 	    QApplication::sendEvent( this, &e );
+	    if ( !testWFlags( WNorthWestGravity ) )
+		repaint( visibleRect(), !testWFlags(WResizeNoErase) );
 	}
     } else {
-	if ( isMove && pos() != oldPos )
+	if ( isMove )
 	    QApplication::postEvent( this,
-				     new QMoveEvent( pos(), oldPos ) );
+				     new QMoveEvent( r.topLeft(), oldp ) );
 	if ( isResize )
 	    QApplication::postEvent( this,
-				     new QResizeEvent( size(), oldSize ) );
+				     new QResizeEvent( r.size(), olds ) );
     }
 }
 
@@ -1761,10 +1470,7 @@ void QWidget::internalSetGeometry( int x, int y, int w, int h, bool isMove )
   size. The widget's size is forced to the minimum size if the current
   size is smaller.
 
-  If you use a layout inside the widget, the minimum size will be set by the layout and
-  not by setMinimumSize, unless you set the layouts resize mode to QLayout::FreeResize.
-
-  \sa minimumSize(), setMaximumSize(), setSizeIncrement(), resize(), size(), QLayout::setResizeMode()
+  \sa minimumSize(), setMaximumSize(), setSizeIncrement(), resize(), size()
 */
 
 void QWidget::setMinimumSize( int minw, int minh )
@@ -1778,14 +1484,13 @@ void QWidget::setMinimumSize( int minw, int minh )
 	return;
     extra->minw = minw;
     extra->minh = minh;
-    if ( minw > width() || minh > height() ) {
-	bool resized = testWState( WState_Resized );
+    if ( minw > width() || minh > height() )
 	resize( QMAX(minw,width()), QMAX(minh,height()) );
-	if ( !resized )
-	    clearWState( WState_Resized ); //not a user resize
+    if ( testWFlags(WType_TopLevel) ) {
+	XSizeHints size_hints;
+	size_hints.flags = 0;
+	do_size_hints( x11Display(), winId(), extra, &size_hints );
     }
-    if ( testWFlags(WType_TopLevel) )
-	do_size_hints( this, extra );
     updateGeometry();
 }
 
@@ -1827,14 +1532,13 @@ void QWidget::setMaximumSize( int maxw, int maxh )
 	return;
     extra->maxw = maxw;
     extra->maxh = maxh;
-    if ( maxw < width() || maxh < height() ) {
-	bool resized = testWState( WState_Resized );
+    if ( maxw < width() || maxh < height() )
 	resize( QMIN(maxw,width()), QMIN(maxh,height()) );
-	if ( !resized )
-	    clearWState( WState_Resized ); //not a user resize
+    if ( testWFlags(WType_TopLevel) ) {
+	XSizeHints size_hints;
+	size_hints.flags = 0;
+	do_size_hints( x11Display(), winId(), extra, &size_hints );
     }
-    if ( testWFlags(WType_TopLevel) )
-	do_size_hints( this, extra );
     updateGeometry();
 }
 
@@ -1859,13 +1563,17 @@ void QWidget::setMaximumSize( int maxw, int maxh )
 
 void QWidget::setSizeIncrement( int w, int h )
 {
-    QTLWExtra* x = topData();
+    createTLExtra();
+    QTLWExtra* x = extra->topextra;
     if ( x->incw == w && x->inch == h )
 	return;
     x->incw = w;
     x->inch = h;
-    if ( testWFlags(WType_TopLevel) )
-	do_size_hints( this, extra );
+    if ( testWFlags(WType_TopLevel) ) {
+	XSizeHints size_hints;
+	size_hints.flags = 0;
+	do_size_hints( x11Display(), winId(), extra, &size_hints );
+    }
 }
 /*!
   \overload void QWidget::setSizeIncrement( const QSize& )
@@ -1882,13 +1590,16 @@ void QWidget::setSizeIncrement( int w, int h )
 void QWidget::setBaseSize( int basew, int baseh )
 {
     createTLExtra();
-    QTLWExtra* x = topData();
+    QTLWExtra* x = extra->topextra;
     if ( x->basew == basew && x->baseh == baseh )
 	return;
     x->basew = basew;
     x->baseh = baseh;
-    if ( testWFlags(WType_TopLevel) )
-	do_size_hints( this, extra );
+    if ( testWFlags(WType_TopLevel) ) {
+	XSizeHints size_hints;
+	size_hints.flags = 0;
+	do_size_hints( x11Display(), winId(), extra, &size_hints );
+    }
 }
 
 
@@ -1920,13 +1631,12 @@ void QWidget::setBaseSize( int basew, int baseh )
 
 void QWidget::erase( int x, int y, int w, int h )
 {
-    extern void qt_erase_rect( QWidget*, const QRect& ); // in qpainer_x11.cpp
     if ( w < 0 )
 	w = crect.width()  - x;
     if ( h < 0 )
 	h = crect.height() - y;
     if ( w != 0 && h != 0 )
-	qt_erase_rect( this, QRect(x, y, w, h ) );
+	XClearArea( x11Display(), winId(), x, y, w, h, FALSE );
 }
 
 /*!
@@ -1938,17 +1648,32 @@ void QWidget::erase( int x, int y, int w, int h )
 
 void QWidget::erase( const QRegion& reg )
 {
-    extern void qt_erase_region( QWidget*, const QRegion& ); // in qpainer_x11.cpp
-    qt_erase_region( this, reg );
+    QArray<QRect> r = reg.rects();
+    for (uint i=0; i<r.size(); i++) {
+	const QRect& rr = r[(int)i];
+	XClearArea( x11Display(), winId(),
+		    rr.x(), rr.y(), rr.width(), rr.height(), FALSE );
+    }
 }
 
 
-/*! \overload
+/*!
+  Scrolls the contents of the widget \e dx pixels rightwards and \e dy
+  pixels downwards.  If \e dx/dy is negative, the scroll direction is
+  leftwards/upwards.  Child widgets are moved accordingly.
 
-  This version of the function scrolls the entire widget and moves the
-  widget's children along with the scroll.
+  \warning You might find that QScrollView offers a higher-level of
+	functionality than using this function.
 
-  \sa bitBlt() QScrollView
+  The areas of the widget that are exposed will be erased and
+  \link paintEvent() paint events\endlink may be generated immediately,
+  or after some further event processing.
+
+  \warning If you call scroll() in a function which may itself be
+  called from the moveEvent() or paintEvent() of a direct child of the
+  widget being scrolled, you may see infinite recursion.
+
+  \sa erase(), bitBlt()
 */
 
 void QWidget::scroll( int dx, int dy )
@@ -1956,29 +1681,28 @@ void QWidget::scroll( int dx, int dy )
     scroll( dx, dy, QRect() );
 }
 
-/*! Scrolls \a r \a dx pixels to the right and \a dy downwards.  Both
-  \a dx and \a dy may be negative.
+/*!
+  Scrolls the area \a r of this widget \a dx pixels rightwards and \a dy
+  pixels downwards.  If \e dx/dy is negative, the scroll direction is
+  leftwards/upwards.  Child widgets are not moved.
 
-  If \a r is empty or invalid, the result is undefined.
+  \warning You might find that QScrollView offers a higher-level of
+	functionality than using this function.
 
-  After scrolling, scroll() sends a paint event for the the part of \a r
-  that is read but not written.  For example, when scrolling 10 pixels
-  rightwards, the leftmost ten pixels of \a r need repainting. The paint
-  event may be delivered immediately or later, depending on some heuristics.
+  The areas of the widget that are exposed will be erased and
+  \link paintEvent() paint events\endlink may be generated immediately,
+  or after some further event processing.
 
-  This version of scroll() does not move the children of this widget.
+  \warning If you call scroll() in a function which may itself be
+  called from the moveEvent() or paintEvent() of a direct child of the
+  widget being scrolled, you may see infinite recursion.
 
-  \sa QScrollView erase() bitBlt()
+  \sa erase(), bitBlt()
 */
 void QWidget::scroll( int dx, int dy, const QRect& r )
 {
-    if ( testWState( WState_BlockUpdates ) )
-	return;
     bool valid_rect = r.isValid();
-    bool just_update = QABS( dx ) > width() || QABS( dy ) > height();
-    if ( just_update )
-	update();
-    QRect sr = valid_rect?r:visibleRect();
+    QRect sr = valid_rect?r:rect();
     int x1, y1, x2, y2, w=sr.width(), h=sr.height();
     if ( dx > 0 ) {
 	x1 = sr.x();
@@ -2005,11 +1729,9 @@ void QWidget::scroll( int dx, int dy, const QRect& r )
     Display *dpy = x11Display();
     GC gc = qt_xget_readonly_gc();
     // Want expose events
-    if ( w > 0 && h > 0 && !just_update ) {
-	XSetGraphicsExposures( dpy, gc, TRUE );
-	XCopyArea( dpy, winId(), winId(), gc, x1, y1, w, h, x2, y2);
-	XSetGraphicsExposures( dpy, gc, FALSE );
-    }
+    XSetGraphicsExposures( dpy, gc, TRUE );
+    XCopyArea( dpy, winId(), winId(), gc, x1, y1, w, h, x2, y2);
+    XSetGraphicsExposures( dpy, gc, FALSE );
 
     if ( !valid_rect && children() ) {	// scroll children
 	QPoint pd( dx, dy );
@@ -2025,23 +1747,20 @@ void QWidget::scroll( int dx, int dy, const QRect& r )
 	}
     }
 
-    if ( just_update )
-	return;
-
     // Don't let the server be bogged-down with repaint events
     bool repaint_immediately = qt_sip_count( this ) < 3;
 
     if ( dx ) {
 	int x = x2 == sr.x() ? sr.x()+w : sr.x();
 	if ( repaint_immediately )
-	    repaint( x, sr.y(), QABS(dx), sr.height(), !testWFlags(WRepaintNoErase) );
+	    repaint( x, sr.y(), QABS(dx), sr.height(), TRUE );
 	else
 	    XClearArea( dpy, winid, x, sr.y(), QABS(dx), sr.height(), TRUE );
     }
     if ( dy ) {
 	int y = y2 == sr.y() ? sr.y()+h : sr.y();
 	if ( repaint_immediately )
-	    repaint( sr.x(), y, sr.width(), QABS(dy), !testWFlags(WRepaintNoErase) );
+	    repaint( sr.x(), y, sr.width(), QABS(dy), TRUE );
 	else
 	    XClearArea( dpy, winid, sr.x(), y, sr.width(), QABS(dy), TRUE );
     }
@@ -2110,10 +1829,10 @@ int QWidget::metric( int m ) const
 		      DisplayHeight(dpy,scr);
 		break;
 	    case QPaintDeviceMetrics::PdmNumColors:
-		val = x11Cells();
+		val = DisplayCells(dpy,scr);
 		break;
 	    case QPaintDeviceMetrics::PdmDepth:
-		val = x11Depth();
+		val = DisplayPlanes(dpy,scr);
 		break;
 	    default:
 		val = 0;
@@ -2143,20 +1862,20 @@ void QWidget::createTLSysExtra()
 	XFontSet fontset = xic_fontset(fontMetrics().fontSet(), font().pointSize());
 
 	XVaNestedList preedit_att = XVaCreateNestedList(0,
-							XNSpotLocation, &spot,
-							XNFontSet, fontset,
-							(char *) NULL);
+			XNSpotLocation, &spot,
+			XNFontSet, fontset,
+			NULL);
 	XVaNestedList status_att = XVaCreateNestedList(0,
-						       XNFontSet, fontset,
-						       (char *) NULL);
+			XNFontSet, fontset,
+			NULL);
 
 	extra->topextra->xic = (void*)XCreateIC( qt_xim,
-						 XNInputStyle, qt_xim_style,
-						 XNClientWindow, (void *) winId(),
-						 XNFocusWindow, (void *) winId(),
-						 XNPreeditAttributes, preedit_att,
-						 XNStatusAttributes, status_att,
-						 (char *) 0 );
+			XNInputStyle, qt_xim_style,
+			XNClientWindow, winId(),
+			XNFocusWindow, winId(),
+			XNPreeditAttributes, preedit_att,
+			XNStatusAttributes, status_att,
+			0 );
 
 	XFree(preedit_att);
 	XFree(status_att);
@@ -2164,8 +1883,6 @@ void QWidget::createTLSysExtra()
     } else {
 	extra->topextra->xic = 0;
     }
-#else
-    extra->topextra->xic = 0;
 #endif
 }
 
@@ -2180,44 +1897,6 @@ void QWidget::deleteTLSysExtra()
 #endif
 }
 
-/*
-  examine the children of our parent up the tree and set the
-  children_use_dnd extra data appropriately... this is used to keep DND enabled
-  for widgets that are reparented and don't have DND enabled, BUT *DO* have
-  children (or children of children ...) with DND enabled...
-*/
-  void QWidget::checkChildrenDnd()
-{
-    QWidget *parent = parentWidget();
-    const QObjectList *children;
-    QObject *object;
-    QWidget *child;
-    while (parent) {
-	// note: the desktop widget has no parent, so this will never be done
-	// for the desktop widget
-
-	bool children_use_dnd = FALSE;
-	children = parent->children();
-	if ( children ) {
-	    QObjectListIt it(*children);
-	    while ( (object = it.current()) ) {
-		++it;
-		if ( object->isWidgetType() ) {
-		    child = (QWidget *) object;
-		    children_use_dnd = (children_use_dnd ||
-					child->acceptDrops() ||
-					(child->extra &&
-					 child->extra->children_use_dnd));
-		}
-	    }
-	}
-
-	parent->createExtra();
-	parent->extraData()->children_use_dnd = children_use_dnd;
-
-	parent = parent->parentWidget();
-    }
-}
 
 /*!
   Returns TRUE if drop events are enabled for this widget.
@@ -2244,15 +1923,12 @@ bool QWidget::acceptDrops() const
 void QWidget::setAcceptDrops( bool on )
 {
     if ( testWState(WState_DND) != on ) {
-	if ( qt_dnd_enable( this, on ) ) {
+	if ( qt_xdnd_enable( this, on ) ) {
 	    if ( on )
 		setWState(WState_DND);
 	    else
 		clearWState(WState_DND);
 	}
-
-	if (parentWidget())
-	    parentWidget()->checkChildrenDnd();
     }
 }
 

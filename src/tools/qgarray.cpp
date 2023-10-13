@@ -1,39 +1,27 @@
 /****************************************************************************
-** $Id: qt/src/tools/qgarray.cpp   2.3.2   edited 2001-01-26 $
+** $Id: qgarray.cpp,v 2.14 1999/06/16 10:00:30 agulbra Exp $
 **
 ** Implementation of QGArray class
 **
 ** Created : 930906
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
-** This file is part of the tools module of the Qt GUI Toolkit.
+** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses may use this file in accordance with the Qt Commercial License
-** Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
+*****************************************************************************/
 
 #define	 QGARRAY_CPP
 #include "qgarray.h"
@@ -55,7 +43,6 @@
 #endif
 
 
-// NOT REVISED
 /*!
   \class QShared qshared.h
   \brief The QShared struct is internally used for implementing shared classes.
@@ -261,7 +248,7 @@ bool QGArray::fill( const char *d, int len, uint sz )
 	    *x++ = v;
     } else if ( sz == 2 ) {			// 16 bit elements
 	register Q_INT16 *x = (Q_INT16*)data();
-	Q_INT16 v = *((Q_INT16*)d);
+	INT16 v = *((Q_INT16*)d);
 	while ( len-- )
 	    *x++ = v;
     } else {					// any other size elements
@@ -532,7 +519,7 @@ int QGArray::find( const char *d, uint index, uint sz ) const
     uint ii;
     switch ( sz ) {
 	case 1: {				// 8 bit elements
-	    register char *x = data() + index;
+	    register char *x = data();
 	    char v = *d;
 	    for ( i=index; i<shd->len; i++ ) {
 		if ( *x++ == v )
@@ -542,7 +529,7 @@ int QGArray::find( const char *d, uint index, uint sz ) const
 	    }
 	    break;
 	case 2: {				// 16 bit elements
-	    register Q_INT16 *x = (Q_INT16*)(data() + index);
+	    register Q_INT16 *x = (INT16*)(data() + index);
 	    Q_INT16 v = *((Q_INT16*)d);
 	    for ( i=index; i<shd->len; i+=2 ) {
 		if ( *x++ == v )
@@ -625,59 +612,6 @@ int QGArray::contains( const char *d, uint sz ) const
     }
     return count;
 }
-
-static int cmp_item_size = 0;
-
-#if defined(Q_C_CALLBACKS)
-extern "C" {
-#endif
-
-static int cmp_arr( const void *n1, const void *n2 )
-{
-    return ( n1 && n2 ) ? memcmp( n1, n2, cmp_item_size ) 
-	                : (int)((long)n1 - (long)n2);
-    // Qt 3.0: Add a virtual compareItems() method and call that instead
-}
-
-#if defined(Q_C_CALLBACKS)
-}
-#endif
-
-/*!
-  \internal
-
-  Sort the array.
-*/
-
-void QGArray::sort( uint sz )
-{
-    int numItems = size() / sz;
-    if ( numItems < 2 )
-	return;
-    cmp_item_size = sz;
-    qsort( shd->data, numItems, sz, cmp_arr );
-}
-
-/*!
-  \internal
-
-  Binary search; assumes sorted array
-*/
-
-int QGArray::bsearch( const char *d, uint sz ) const
-{
-    int numItems = size() / sz;
-    if ( !numItems )
-	return -1;
-    cmp_item_size = sz;
-    char* r = (char*)::bsearch( d, shd->data, numItems, sz, cmp_arr );
-    if ( !r )
-	return -1;
-    while( (r >= shd->data + sz) && (cmp_arr( r - sz, d ) == 0) )
-	r -= sz;	// search to first of equal elements; bsearch is undef 
-    return (int)(( r - shd->data ) / sz);
-}
-
 
 /*!
   \fn char *QGArray::at( uint index ) const

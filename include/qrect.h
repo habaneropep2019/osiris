@@ -1,39 +1,27 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qrect.h   2.3.2   edited 2001-01-26 $
+** $Id: qrect.h,v 2.14 1999/04/28 09:57:27 aavit Exp $
 **
 ** Definition of QRect class
 **
 ** Created : 931028
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
-** This file is part of the kernel module of the Qt GUI Toolkit.
+** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses may use this file in accordance with the Qt Commercial License
-** Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
+*****************************************************************************/
 
 #ifndef QRECT_H
 #define QRECT_H
@@ -42,10 +30,6 @@
 #include "qsize.h"
 #endif // QT_H
 
-#if defined(topLeft)
-#error "Macro definition of topLeft conflicts with QRect"
-// don't just silently undo people's defines: #undef topLeft
-#endif
 
 class Q_EXPORT QRect					// rectangle class
 {
@@ -64,7 +48,7 @@ public:
     int	   top()	const;
     int	   right()	const;
     int	   bottom()	const;
-
+    
     QCOORD &rLeft();
     QCOORD &rTop();
     QCOORD &rRight();
@@ -111,7 +95,6 @@ public:
     QRect&  operator&=(const QRect &r);
 
     bool   contains( const QPoint &p, bool proper=FALSE ) const;
-    bool   contains( int x, int y, bool proper=FALSE ) const;
     bool   contains( const QRect &r, bool proper=FALSE ) const;
     QRect  unite( const QRect &r ) const;
     QRect  intersect( const QRect &r ) const;
@@ -141,10 +124,10 @@ Q_EXPORT bool operator!=( const QRect &, const QRect & );
 /*****************************************************************************
   QRect stream functions
  *****************************************************************************/
-#ifndef QT_NO_DATASTREAM
+
 Q_EXPORT QDataStream &operator<<( QDataStream &, const QRect & );
 Q_EXPORT QDataStream &operator>>( QDataStream &, QRect & );
-#endif
+
 
 /*****************************************************************************
   QRect inline member functions
@@ -239,14 +222,5 @@ inline int QRect::height() const
 inline QSize QRect::size() const
 { return QSize(x2-x1+1, y2-y1+1); }
 
-inline bool QRect::contains( int x, int y, bool proper ) const
-{
-    if ( proper )
-        return x > x1 && x < x2 &&
-               y > y1 && y < y2;
-    else
-        return x >= x1 && x <= x2 &&
-               y >= y1 && y <= y2;
-}
 
 #endif // QRECT_H

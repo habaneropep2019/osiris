@@ -1,40 +1,28 @@
 /****************************************************************************
-** $Id: qt/src/tools/qcstring.cpp   2.3.2   edited 2001-10-14 $
+** $Id: qcstring.cpp,v 2.10 1999/06/16 09:56:27 agulbra Exp $
 **
 ** Implementation of extended char array operations, and QByteArray and
 ** QCString classes
 **
 ** Created : 920722
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
-** This file is part of the tools module of the Qt GUI Toolkit.
+** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses may use this file in accordance with the Qt Commercial License
-** Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
+*****************************************************************************/
 
 #include "qstring.h"
 #include "qregexp.h"
@@ -93,8 +81,32 @@ char *qstrdup( const char *str )
 	return 0;
     char *dst = new char[strlen(str)+1];
     CHECK_PTR( dst );
-    return strcpy( dst, str );
+    return cstrcpy( dst, str );
 }
+
+/*!
+  \fn uint strlen( const char *str )
+  \relates QCString
+
+  A safe strlen() function that overrides the one defined by the C library.
+  The original strlen() function has been renamed cstrlen().
+
+  Returns the number of characters in \e str, or 0 if \e str is null.
+*/
+
+/*!
+  \fn char *strcpy( char *dst, const char *str )
+  \relates QCString
+
+  A safe strcpy() function that overrides the one defined by the C library.
+  The original strcpy() function has been renamed cstrcpy().
+
+  Copies all characters (including \0) from \e str into \e dst and returns
+  a pointer to \e dst.
+  If \e src is null, it immediately returns 0.
+
+  \sa qstrncpy()
+*/
 
 /*!
   \relates QCString
@@ -105,7 +117,7 @@ char *qstrdup( const char *str )
   a pointer to \e dst.	Guarantees that \e dst is \0-terminated.
   If \e src is null, it immediately returns 0.
 
-  \sa qstrcpy()
+  \sa strcpy()
 */
 
 char *qstrncpy( char *dst, const char *src, uint len )
@@ -119,10 +131,11 @@ char *qstrncpy( char *dst, const char *src, uint len )
 }
 
 /*!
-  \fn int qstrcmp( const char *str1, const char *str2 )
+  \fn int strcmp( const char *str1, const char *str2 )
   \relates QCString
 
-  A safe strcmp() function.
+  A safe strcmp() function that overrides the one defined by the C library.
+  The original strcmp() function has been renamed cstrcmp().
 
   Compares \e str1 and \e str2.	 Returns a negative value if \e str1
   is less than \e str2, 0 if \e str1 is equal to \e str2 or a positive
@@ -133,14 +146,15 @@ char *qstrncpy( char *dst, const char *src, uint len )
   Special case II: Returns a random nonzero value if \e str1 is null
   or \e str2 is null (but not both).
 
-  \sa qstrncmp(), qstricmp(), qstrnicmp()
+  \sa strncmp(), stricmp(), strnicmp()
 */
 
 /*!
-  \fn int qstrncmp( const char *str1, const char *str2, uint len )
+  \fn int strncmp( const char *str1, const char *str2, uint len )
   \relates QCString
 
-  A safe strncmp() function.
+  A safe strncmp() function that overrides the one defined by the C library.
+  The original strncmp() function has been renamed cstrncmp().
 
   Compares \e str1 and \e str2 up to \e len bytes.
 
@@ -153,14 +167,15 @@ char *qstrncpy( char *dst, const char *src, uint len )
   Special case II: Returns a random nonzero value if \e str1 is null
   or \e str2 is null (but not both).
 
-  \sa qstrcmp(), qstricmp(), qstrnicmp()
+  \sa strcmp(), stricmp(), strnicmp()
 */
 
 /*!
-  \fn int qstricmp( const char *str1, const char *str2 )
+  \fn int stricmp( const char *str1, const char *str2 )
   \relates QCString
 
-  A safe stricmp() function.
+  A safe stricmp() function that overrides the one defined by the C library,
+  if the C library has one.
 
   Compares \e str1 and \e str2 ignoring the case.
 
@@ -173,7 +188,7 @@ char *qstrncpy( char *dst, const char *src, uint len )
   Special case II: Returns a random nonzero value if \e str1 is null
   or \e str2 is null (but not both).
 
-  \sa qstrcmp(), qstrncmp(), qstrnicmp()
+  \sa strcmp(), strncmp(), strnicmp()
 */
 
 int qstricmp( const char *str1, const char *str2 )
@@ -183,7 +198,7 @@ int qstricmp( const char *str1, const char *str2 )
     int res;
     uchar c;
     if ( !s1 || !s2 )
-	return s1 == s2 ? 0 : (int)((long)s2 - (long)s1);
+	return s1 == s1 ? 0 : (int)((long)s2 - (long)s1);
     for ( ; !(res = (c=tolower(*s1)) - tolower(*s2)); s1++, s2++ )
 	if ( !c )				// strings are equal
 	    break;
@@ -194,7 +209,8 @@ int qstricmp( const char *str1, const char *str2 )
   \fn int strnicmp( const char *str1, const char *str2, uint len )
   \relates QCString
 
-  A safe strnicmp() function.
+  A safe strnicmp() function that overrides the one defined by the C library,
+  if the C library has one.
 
   Compares \e str1 and \e str2 up to \e len bytes ignoring the case.
 
@@ -207,7 +223,7 @@ int qstricmp( const char *str1, const char *str2 )
   Special case II: Returns a random nonzero value if \e str1 is null
   or \e str2 is null (but not both).
 
-  \sa qstrcmp(), qstrncmp() qstricmp()
+  \sa strcmp(), strncmp() stricmp()
 */
 
 int qstrnicmp( const char *str1, const char *str2, uint len )
@@ -290,7 +306,6 @@ Q_UINT16 qChecksum( const char *data, uint len )
   QByteArray member functions
  *****************************************************************************/
 
-// NOT REVISED
 /*! \class QByteArray qcstring.h
 
   \brief The QByteArray class provides an array of bytes.
@@ -311,9 +326,9 @@ Q_UINT16 qChecksum( const char *data, uint len )
   \relates QByteArray
   Writes a byte array to a stream and returns a reference to the stream.
 
-  \sa \link datastreamformat.html Format of the QDataStream operators \endlink
+  The serialization format is the byte array size (\c Q_UINT32) followed by
+  this number of bytes.
 */
-#ifndef QT_NO_DATASTREAM
 
 QDataStream &operator<<( QDataStream &s, const QByteArray &a )
 {
@@ -323,8 +338,6 @@ QDataStream &operator<<( QDataStream &s, const QByteArray &a )
 /*!
   \relates QByteArray
   Reads a byte array from a stream and returns a reference to the stream.
-
-  \sa \link datastreamformat.html Format of the QDataStream operators \endlink
 */
 
 QDataStream &operator>>( QDataStream &s, QByteArray &a )
@@ -346,7 +359,7 @@ QDataStream &operator>>( QDataStream &s, QByteArray &a )
     return s;
 }
 
-#endif //QT_NO_DATASTREAM
+
 
 /*****************************************************************************
   QCString member functions
@@ -369,13 +382,6 @@ QDataStream &operator>>( QDataStream &s, QByteArray &a )
   You might use QCString for text that is never exposed to the user,
   but for text the user sees, you should use QString (which provides
   implicit sharing, Unicode and other internationalization support).
-
-  Note that QCString is one of the weaker classes in Qt; its design is
-  flawed (it tries to behave like a more convenient const char *) and
-  as a result, algorithms that use QCString heavily all too often
-  perform badly.  For example, append() is O(length()) since it scans
-  for a null terminator, which makes many algorithms that use QCString
-  scale even worse.
 
   Note that for the QCString methods that take a <var>const char *</var>
   parameter the results are undefined if the QCString is not
@@ -445,37 +451,34 @@ QCString::QCString( int size )
 
 QCString::QCString( const char *str )
 {
-    duplicate( str, qstrlen(str) + 1 );
+    duplicate( str, strlen(str)+1 );
 }
 
 
 /*!
   Constructs a string that is a deep copy of \e str, that is no more
-  than \a maxsize bytes long including the '\0'-terminator.
+  than \a maxlen bytes long including the '\0'-terminator.
 
   Example:
   \code
-    QCString str( "helloworld", 6 ); // Assigns "hello" to str.
+    QCString str("helloworld",6); // Assigns "hello" to str.
   \endcode
 
-  If \a str contains a 0 byte within the first \a maxsize bytes, the
+  If \a str contains a 0 byte within the first \a maxlen bytes, the
   resulting QCString will be terminated by the 0.  If \a str is 0 a
   null string is created.
 
   \sa isNull()
 */
 
-QCString::QCString( const char *str, uint maxsize )
+QCString::QCString( const char *str, uint maxlen )
 {
-    if ( str == 0 )
-	return;
-    uint len; // index of first '\0'
-    for ( len = 0; len < maxsize - 1; len++ ) {
-	if ( str[len] == '\0' )
-	    break;
+    uint len; // index of last nul character
+    // cannot use memchr - we need the *index*, not void*
+    for (len=0; len<maxlen-1; len++) {
+	if (!str[len]) break;
     }
-    QByteArray::resize( len + 1 );
-    memcpy( data(), str, len );
+    duplicate( str, len+1 );
     data()[len] = 0;
 }
 
@@ -568,17 +571,10 @@ QCString::QCString( const char *str, uint maxsize )
 bool QCString::resize( uint len )
 {
     detach();
-    uint oldlen = length();
     if ( !QByteArray::resize(len) )
 	return FALSE;
     if ( len )
 	*(data()+len-1) = '\0';
-
-    // if we are resized > 0, and the old length was zero, we make sure that it
-    // doesn't change
-    if (len > 0 && oldlen == 0)
-	*(data()) = '\0';
-
     return TRUE;
 }
 
@@ -611,11 +607,6 @@ bool QCString::resize( uint len )
   your application.
 */
 
-/*
- * The following code was changed to use code by Martin Tobias Holmedahl Sandsmark
- * via https://invent.kde.org/sandsmark/qt2/-/commit/33030661efa9bc563cc3d6cf6a3aa5420bca03f2
- * The licensing notice on the reference file is the same as this file.
- */
 QCString &QCString::sprintf( const char *format, ... )
 {
     detach();
@@ -623,14 +614,12 @@ QCString &QCString::sprintf( const char *format, ... )
     va_start( ap, format );
     if ( size() < 256 )
 	QByteArray::resize( 256 );		// make string big enough
-    vsnprintf( data(), size(), format, ap );
-    resize( qstrlen(data()) + 1 );		// truncate
+    vsprintf( data(), format, ap );
+    resize( strlen(data()) + 1 );		// truncate
     va_end( ap );
     return *this;
 }
-/*
- * End copied code
- */
+
 
 /*!
   Fills the string with \e len bytes of value \e c, followed by a
@@ -680,8 +669,8 @@ int QCString::find( char c, int index, bool cs ) const
 	d = strchr( data()+index, c );
     } else {
 	d = data()+index;
-	c = tolower( (uchar) c );
-	while ( *d && tolower((uchar) *d) != c )
+	c = tolower( c );
+	while ( *d && tolower(*d) != c )
 	    d++;
 	if ( !*d && c )				// not found
 	    d = 0;
@@ -712,9 +701,9 @@ int QCString::find( const char *str, int index, bool cs ) const
 	d = strstr( data()+index, str );
     } else {					// case insensitive
 	d = data()+index;
-	int len = qstrlen( str );
+	int len = strlen( str );
 	while ( *d ) {
-	    if ( qstrnicmp(d, str, len) == 0 )
+	    if ( strnicmp(d, str, len) == 0 )
 		break;
 	    d++;
 	}
@@ -754,8 +743,8 @@ int QCString::findRev( char c, int index, bool cs ) const
 	while ( d >= b && *d != c )
 	    d--;
     } else {					// case insensitive
-	c = tolower( (uchar) c );
-	while ( d >= b && tolower((uchar) *d) != c )
+	c = tolower( c );
+	while ( d >= b && tolower(*d) != c )
 	    d--;
     }
     return d >= b ? (int)(d - b) : -1;
@@ -773,7 +762,7 @@ int QCString::findRev( char c, int index, bool cs ) const
 
 int QCString::findRev( const char *str, int index, bool cs ) const
 {
-    int slen = qstrlen(str);
+    int slen = strlen(str);
     if ( index < 0 )				// neg index ==> start from end
 	index = length()-slen;
     else if ( (uint)index >= size() )		// bad index
@@ -786,11 +775,11 @@ int QCString::findRev( const char *str, int index, bool cs ) const
     register char *d = data() + index;
     if ( cs ) {					// case sensitive
 	for ( int i=index; i>=0; i-- )
-	    if ( qstrncmp(d--,str,slen)==0 )
+	    if ( strncmp(d--,str,slen)==0 )
 		return i;
     } else {					// case insensitive
 	for ( int i=index; i>=0; i-- )
-	    if ( qstrnicmp(d--,str,slen)==0 )
+	    if ( strnicmp(d--,str,slen)==0 )
 		return i;
     }
     return -1;
@@ -815,9 +804,9 @@ int QCString::contains( char c, bool cs ) const
 	    if ( *d++ == c )
 		count++;
     } else {					// case insensitive
-	c = tolower( (uchar) c );
+	c = tolower( c );
 	while ( *d ) {
-	    if ( tolower((uchar) *d) == c )
+	    if ( tolower(*d) == c )
 		count++;
 	    d++;
 	}
@@ -843,13 +832,13 @@ int QCString::contains( const char *str, bool cs ) const
     char *d = data();
     if ( !d )
 	return 0;
-    int len = qstrlen( str );
+    int len = strlen( str );
     while ( *d ) {				// counts overlapping strings
 	if ( cs ) {
-	    if ( qstrncmp( d, str, len ) == 0 )
+	    if ( strncmp( d, str, len ) == 0 )
 		count++;
 	} else {
-	    if ( qstrnicmp(d, str, len) == 0 )
+	    if ( strnicmp(d, str, len) == 0 )
 		count++;
 	}
 	d++;
@@ -937,7 +926,7 @@ QCString QCString::right( uint len ) const
 QCString QCString::mid( uint index, uint len ) const
 {
     if ( len == 0xffffffff ) len = length()-index;
-    uint slen = qstrlen( data() );
+    uint slen = strlen( data() );
     if ( isEmpty() || index >= slen ) {
 	QCString empty;
 	return empty;
@@ -971,7 +960,7 @@ QCString QCString::mid( uint index, uint len ) const
 QCString QCString::leftJustify( uint width, char fill, bool truncate ) const
 {
     QCString result;
-    int len = qstrlen(data());
+    int len = strlen(data());
     int padlen = width - len;
     if ( padlen > 0 ) {
 	result.QByteArray::resize( len+padlen+1 );
@@ -994,7 +983,7 @@ QCString QCString::leftJustify( uint width, char fill, bool truncate ) const
   If the length of the string exceeds \e width and \e truncate is FALSE,
   then the returned string is a copy of the string.
   If the length of the string exceeds \e width and \e truncate is TRUE,
-  then the returned string is a left(\e width).
+  then the returned string is a right(\e width).
 
   Example:
   \code
@@ -1008,7 +997,7 @@ QCString QCString::leftJustify( uint width, char fill, bool truncate ) const
 QCString QCString::rightJustify( uint width, char fill, bool truncate ) const
 {
     QCString result;
-    int len = qstrlen(data());
+    int len = strlen(data());
     int padlen = width - len;
     if ( padlen > 0 ) {
 	result.QByteArray::resize( len+padlen+1 );
@@ -1045,7 +1034,7 @@ QCString QCString::lower() const
     register char *p = s.data();
     if ( p ) {
 	while ( *p ) {
-	    *p = tolower( (uchar) *p );
+	    *p = tolower(*p);
 	    p++;
 	}
     }
@@ -1103,19 +1092,19 @@ QCString QCString::stripWhiteSpace() const
     register char *s = data();
     QCString result = s;
     int reslen = result.length();
-    if ( !isspace((uchar) s[0]) && !isspace((uchar) s[reslen-1]) )
+    if ( !isspace(s[0]) && !isspace(s[reslen-1]) )
 	return result;				// returns a copy
 
     s = result.data();
     int start = 0;
     int end = reslen - 1;
-    while ( isspace((uchar) s[start]) )		// skip white space from start
+    while ( isspace(s[start]) )			// skip white space from start
 	start++;
     if ( s[start] == '\0' ) {			// only white space
 	result.resize( 1 );
 	return result;
     }
-    while ( end && isspace((uchar) s[end]) )	// skip white space from end
+    while ( end && isspace(s[end]) )		// skip white space from end
 	end--;
     end -= start - 1;
     memmove( result.data(), &s[start], end );
@@ -1147,10 +1136,10 @@ QCString QCString::simplifyWhiteSpace() const
     char *from	= data();
     char *to	= result.data();
     char *first = to;
-    for (;;) {
-	while ( isspace((uchar) *from) )
+    while ( TRUE ) {
+	while ( *from && isspace(*from) )
 	    from++;
-	while ( *from && !isspace((uchar) *from) )
+	while ( *from && !isspace(*from) )
 	    *to++ = *from++;
 	if ( *from )
 	    *to++ = 0x20;			// ' '
@@ -1181,7 +1170,7 @@ QCString QCString::simplifyWhiteSpace() const
 
 QCString &QCString::insert( uint index, const char *s )
 {
-    int len = qstrlen(s);
+    int len = strlen(s);
     if ( len == 0 )
 	return *this;
     uint olen = length();
@@ -1367,7 +1356,7 @@ QCString &QCString::replace( const QRegExp &rx, const char *str )
 /*!
   Returns the string converted to a <code>long</code> value.
 
-  If \e ok is nonnull, \e *ok is set to TRUE if there are no
+  If \e ok is non-null, \e *ok is set to TRUE if there are no
   conceivable errors, and FALSE if the string is not a number at all, or if
   it has trailing garbage.
 */
@@ -1381,7 +1370,7 @@ long QCString::toLong( bool *ok ) const
     int neg = 0;
     if ( !p )
 	goto bye;
-    while ( isspace((uchar) *p) )		// skip leading space
+    while ( isspace(*p) )			// skip leading space
 	p++;
     if ( *p == '-' ) {
 	p++;
@@ -1389,16 +1378,16 @@ long QCString::toLong( bool *ok ) const
     } else if ( *p == '+' ) {
 	p++;
     }
-    if ( !isdigit((uchar) *p) )
+    if ( !isdigit(*p) )
 	goto bye;
-    while ( isdigit((uchar) *p) ) {
+    while ( isdigit(*p) ) {
 	if ( val > max_mult || (val == max_mult && (*p-'0') > 7+neg) )
 	    goto bye;
 	val = 10*val + (*p++ - '0');
     }
     if ( neg )
 	val = -val;
-    while ( isspace((uchar) *p) )		// skip trailing space
+    while ( isspace(*p) )			// skip trailing space
 	p++;
     if ( *p == '\0' )
 	is_ok = TRUE;
@@ -1412,7 +1401,7 @@ bye:
   Returns the string converted to an <code>unsigned long</code>
   value.
 
-  If \e ok is nonnull, \e *ok is set to TRUE if there are no
+  If \e ok is non-null, \e *ok is set to TRUE if there are no
   conceivable errors, and FALSE if the string is not a number at all,
   or if it has trailing garbage.
 */
@@ -1425,18 +1414,18 @@ ulong QCString::toULong( bool *ok ) const
     bool is_ok = FALSE;
     if ( !p )
 	goto bye;
-    while ( isspace((uchar) *p) )		// skip leading space
+    while ( isspace(*p) )			// skip leading space
 	p++;
     if ( *p == '+' )
 	p++;
-    if ( !isdigit((uchar) *p) )
+    if ( !isdigit(*p) )
 	goto bye;
-    while ( isdigit((uchar) *p) ) {
+    while ( isdigit(*p) ) {
 	if ( val > max_mult || (val == max_mult && (*p-'0') > 5) )
 	    goto bye;
 	val = 10*val + (*p++ - '0');
     }
-    while ( isspace((uchar) *p) )		// skip trailing space
+    while ( isspace(*p) )			// skip trailing space
 	p++;
     if ( *p == '\0' )
 	is_ok = TRUE;
@@ -1449,7 +1438,7 @@ bye:
 /*!
   Returns the string converted to a <code>short</code> value.
 
-  If \e ok is nonnull, \e *ok is set to TRUE if there are no
+  If \e ok is non-null, \e *ok is set to TRUE if there are no
   conceivable errors, and FALSE if the string is not a number at all, or if
   it has trailing garbage.
 */
@@ -1465,7 +1454,7 @@ short QCString::toShort( bool *ok ) const
 /*!
   Returns the string converted to an <code>unsigned short</code> value.
 
-  If \e ok is nonnull, \e *ok is set to TRUE if there are no
+  If \e ok is non-null, \e *ok is set to TRUE if there are no
   conceivable errors, and FALSE if the string is not a number at all, or if
   it has trailing garbage.
 */
@@ -1482,7 +1471,7 @@ ushort QCString::toUShort( bool *ok ) const
 /*!
   Returns the string converted to a <code>int</code> value.
 
-  If \e ok is nonnull, \e *ok is set to TRUE if there are no
+  If \e ok is non-null, \e *ok is set to TRUE if there are no
   conceivable errors, and FALSE if the string is not a number at all,
   or if it has trailing garbage.
 */
@@ -1495,7 +1484,7 @@ int QCString::toInt( bool *ok ) const
 /*!
   Returns the string converted to an <code>unsigned int</code> value.
 
-  If \e ok is nonnull, \e *ok is set to TRUE if there are no
+  If \e ok is non-null, \e *ok is set to TRUE if there are no
   conceivable errors, and FALSE if the string is not a number at all,
   or if it has trailing garbage.
 */
@@ -1508,7 +1497,7 @@ uint QCString::toUInt( bool *ok ) const
 /*!
   Returns the string converted to a <code>double</code> value.
 
-  If \e ok is nonnull, \e *ok is set to TRUE if there are no conceivable
+  If \e ok is non-null, \e *ok is set to TRUE if there are no conceivable
   errors, and FALSE if the string is not a number at all, or if it has
   trailing garbage.
 */
@@ -1525,7 +1514,7 @@ double QCString::toDouble( bool *ok ) const
 /*!
   Returns the string converted to a <code>float</code> value.
 
-  If \e ok is nonnull, \e *ok is set to TRUE if there are no
+  If \e ok is non-null, \e *ok is set to TRUE if there are no
   conceivable errors, and FALSE if the string is not a number at all,
   or if it has trailing garbage.
 */
@@ -1545,7 +1534,7 @@ QCString &QCString::setStr( const char *str )
 {
     detach();
     if ( str )					// valid string
-	store( str, qstrlen(str)+1 );
+	store( str, strlen(str)+1 );
     else					// empty
 	resize( 0 );
     return *this;
@@ -1575,7 +1564,7 @@ QCString &QCString::setNum( long n )
     } while ( n );
     if ( neg )
 	*--p = '-';
-    store( p, qstrlen(p)+1 );
+    store( p, strlen(p)+1 );
     return *this;
 }
 
@@ -1594,7 +1583,7 @@ QCString &QCString::setNum( ulong n )
 	*--p = ((int)(n%10)) + '0';
 	n /= 10;
     } while ( n );
-    store( p, qstrlen(p)+1 );
+    store( p, strlen(p)+1 );
     return *this;
 }
 
@@ -1697,6 +1686,11 @@ bool QCString::setExpand( uint index, char c )
   Returns the string data.
 */
 
+/*!
+  \fn bool QCString::operator!() const
+  Returns TRUE if it is a null string, otherwise FALSE.
+*/
+
 
 /*!
   \fn QCString& QCString::append( const char *str )
@@ -1714,7 +1708,7 @@ QCString& QCString::operator+=( const char *str )
 	return *this;				// nothing to append
     detach();
     uint len1 = length();
-    uint len2 = qstrlen(str);
+    uint len2 = strlen(str);
     if ( !QByteArray::resize( len1 + len2 + 1 ) )
 	return *this;				// no memory
     memcpy( data() + len1, str, len2 + 1 );
@@ -1740,13 +1734,14 @@ QCString &QCString::operator+=( char c )
 /*****************************************************************************
   QCString stream functions
  *****************************************************************************/
-#ifndef QT_NO_DATASTREAM
+
 /*!
   \relates QCString
   Writes a string to the stream.
 
-  \sa \link datastreamformat.html Format of the QDataStream operators \endlink
+  Output format: [length (Q_UINT32) data...]
 */
+
 QDataStream &operator<<( QDataStream &s, const QCString &str )
 {
     return s.writeBytes( str.data(), str.size() );
@@ -1755,8 +1750,6 @@ QDataStream &operator<<( QDataStream &s, const QCString &str )
 /*!
   \relates QCString
   Reads a string from the stream.
-
-  \sa \link datastreamformat.html Format of the QDataStream operators \endlink
 */
 
 QDataStream &operator>>( QDataStream &s, QCString &str )
@@ -1778,7 +1771,7 @@ QDataStream &operator>>( QDataStream &s, QCString &str )
 	s.readRawBytes( str.data(), (uint)len );
     return s;
 }
-#endif //QT_NO_DATASTREAM
+
 
 /*****************************************************************************
   Documentation for related functions
@@ -1789,7 +1782,7 @@ QDataStream &operator>>( QDataStream &s, QCString &str )
   \relates QCString
   Returns TRUE if the two strings are equal, or FALSE if they are different.
 
-  Equivalent to <code>qstrcmp(s1,s2) == 0</code>.
+  Equivalent to <code>strcmp(s1,s2) == 0</code>.
 */
 
 /*!
@@ -1797,7 +1790,7 @@ QDataStream &operator>>( QDataStream &s, QCString &str )
   \relates QCString
   Returns TRUE if the two strings are equal, or FALSE if they are different.
 
-  Equivalent to <code>qstrcmp(s1,s2) == 0</code>.
+  Equivalent to <code>strcmp(s1,s2) == 0</code>.
 */
 
 /*!
@@ -1805,7 +1798,7 @@ QDataStream &operator>>( QDataStream &s, QCString &str )
   \relates QCString
   Returns TRUE if the two strings are equal, or FALSE if they are different.
 
-  Equivalent to <code>qstrcmp(s1,s2) == 0</code>.
+  Equivalent to <code>strcmp(s1,s2) == 0</code>.
 */
 
 /*!
@@ -1813,7 +1806,7 @@ QDataStream &operator>>( QDataStream &s, QCString &str )
   \relates QCString
   Returns TRUE if the two strings are different, or FALSE if they are equal.
 
-  Equivalent to <code>qstrcmp(s1,s2) != 0</code>.
+  Equivalent to <code>strcmp(s1,s2) != 0</code>.
 */
 
 /*!
@@ -1821,7 +1814,7 @@ QDataStream &operator>>( QDataStream &s, QCString &str )
   \relates QCString
   Returns TRUE if the two strings are different, or FALSE if they are equal.
 
-  Equivalent to <code>qstrcmp(s1,s2) != 0</code>.
+  Equivalent to <code>strcmp(s1,s2) != 0</code>.
 */
 
 /*!
@@ -1829,7 +1822,7 @@ QDataStream &operator>>( QDataStream &s, QCString &str )
   \relates QCString
   Returns TRUE if the two strings are different, or FALSE if they are equal.
 
-  Equivalent to <code>qstrcmp(s1,s2) != 0</code>.
+  Equivalent to <code>strcmp(s1,s2) != 0</code>.
 */
 
 /*!
@@ -1837,7 +1830,7 @@ QDataStream &operator>>( QDataStream &s, QCString &str )
   \relates QCString
   Returns TRUE if \e s1 is alphabetically less than \e s2, otherwise FALSE.
 
-  Equivalent to <code>qstrcmp(s1,s2) \< 0</code>.
+  Equivalent to <code>strcmp(s1,s2) \< 0</code>.
 */
 
 /*!
@@ -1845,7 +1838,7 @@ QDataStream &operator>>( QDataStream &s, QCString &str )
   \relates QCString
   Returns TRUE if \e s1 is alphabetically less than \e s2, otherwise FALSE.
 
-  Equivalent to <code>qstrcmp(s1,s2) \< 0</code>.
+  Equivalent to <code>strcmp(s1,s2) \< 0</code>.
 */
 
 /*!
@@ -1854,7 +1847,7 @@ QDataStream &operator>>( QDataStream &s, QCString &str )
   Returns TRUE if \e s1 is alphabetically less than or equal to \e s2,
   otherwise FALSE.
 
-  Equivalent to <code>qstrcmp(s1,s2) \<= 0</code>.
+  Equivalent to <code>strcmp(s1,s2) \<= 0</code>.
 */
 
 /*!
@@ -1863,7 +1856,7 @@ QDataStream &operator>>( QDataStream &s, QCString &str )
   Returns TRUE if \e s1 is alphabetically less than or equal to \e s2,
   otherwise FALSE.
 
-  Equivalent to <code>qstrcmp(s1,s2) \<= 0</code>.
+  Equivalent to <code>strcmp(s1,s2) \<= 0</code>.
 */
 
 /*!
@@ -1871,7 +1864,7 @@ QDataStream &operator>>( QDataStream &s, QCString &str )
   \relates QCString
   Returns TRUE if \e s1 is alphabetically greater than \e s2, otherwise FALSE.
 
-  Equivalent to <code>qstrcmp(s1,s2) \> 0</code>.
+  Equivalent to <code>strcmp(s1,s2) \> 0</code>.
 */
 
 /*!
@@ -1879,7 +1872,7 @@ QDataStream &operator>>( QDataStream &s, QCString &str )
   \relates QCString
   Returns TRUE if \e s1 is alphabetically greater than \e s2, otherwise FALSE.
 
-  Equivalent to <code>qstrcmp(s1,s2) \> 0</code>.
+  Equivalent to <code>strcmp(s1,s2) \> 0</code>.
 */
 
 /*!
@@ -1888,7 +1881,7 @@ QDataStream &operator>>( QDataStream &s, QCString &str )
   Returns TRUE if \e s1 is alphabetically greater than or equal to \e s2,
   otherwise FALSE.
 
-  Equivalent to <code>qstrcmp(s1,s2) \>= 0</code>.
+  Equivalent to <code>strcmp(s1,s2) \>= 0</code>.
 */
 
 /*!
@@ -1897,7 +1890,7 @@ QDataStream &operator>>( QDataStream &s, QCString &str )
   Returns TRUE if \e s1 is alphabetically greater than or equal to \e s2,
   otherwise FALSE.
 
-  Equivalent to <code>qstrcmp(s1,s2) \>= 0</code>.
+  Equivalent to <code>strcmp(s1,s2) \>= 0</code>.
 */
 
 /*!

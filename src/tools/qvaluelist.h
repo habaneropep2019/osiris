@@ -1,39 +1,27 @@
 /****************************************************************************
-** $Id: qt/src/tools/qvaluelist.h   2.3.2   edited 2001-01-26 $
+** $Id: qvaluelist.h,v 1.24 1999/06/22 20:40:27 agulbra Exp $
 **
 ** Definition of QValueList class
 **
 ** Created : 990406
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
-** This file is part of the tools module of the Qt GUI Toolkit.
+** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses may use this file in accordance with the Qt Commercial License
-** Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
+*****************************************************************************/
 
 #ifndef QVALUELIST_H
 #define QVALUELIST_H
@@ -48,15 +36,10 @@
 #endif
 
 template <class T>
-class Q_EXPORT QValueListNode
+struct QValueListNode
 {
-public:
     QValueListNode( const T& t ) : data( t ) { }
     QValueListNode() { }
-#if defined(Q_TEMPLATEDLL)
-    // Workaround MS bug in memory de/allocation in DLL vs. EXE 
-    virtual ~QValueListNode() { }
-#endif
 
     QValueListNode<T>* next;
     QValueListNode<T>* prev;
@@ -183,7 +166,7 @@ public:
      * Functions
      */
     QValueListPrivate() { node = new Node; node->next = node->prev = node; nodes = 0; }
-    QValueListPrivate( const QValueListPrivate<T>& _p ) : QShared() {
+    QValueListPrivate( const QValueListPrivate& _p ) : QShared() {
 	node = new Node; node->next = node->prev = node; nodes = 0;
 	Iterator b( _p.node->next );
 	Iterator e( _p.node );
@@ -198,10 +181,6 @@ public:
 	    delete this;
     }
 
-#if defined(Q_TEMPLATEDLL)
-    // Workaround MS bug in memory de/allocation in DLL vs. EXE 
-    virtual
-#endif
     ~QValueListPrivate() {
 	NodePtr p = node->next;
 	while( p != node ) {
@@ -318,14 +297,14 @@ public:
      * API
      */
     QValueList() { sh = new QValueListPrivate<T>; }
-    QValueList( const QValueList<T>& l ) { sh = l.sh; sh->ref(); }
-    ~QValueList() { sh->derefAndDelete(); }
+    QValueList( const QValueList& l ) { sh = l.sh; sh->ref(); }
+    ~QValueList() { if ( sh->deref() ) delete sh; }
 
     QValueList<T>& operator= ( const QValueList<T>& l )
     {
-	l.sh->ref();
 	sh->derefAndDelete();
 	sh = l.sh;
+	sh->ref();
 	return *this;
     }
 
@@ -420,14 +399,13 @@ protected:
     QValueListPrivate<T>* sh;
 };
 
-#ifndef QT_NO_DATASTREAM
 template<class T>
-inline QDataStream& operator>>( QDataStream& s, QValueList<T>& l )
+QDataStream& operator>>( QDataStream& s, QValueList<T>& l )
 {
     l.clear();
-    Q_UINT32 c;
+    uint c;
     s >> c;
-    for( Q_UINT32 i = 0; i < c; ++i )
+    for( uint i = 0; i < c; ++i )
     {
 	T t;
 	s >> t;
@@ -437,13 +415,13 @@ inline QDataStream& operator>>( QDataStream& s, QValueList<T>& l )
 }
 
 template<class T>
-inline QDataStream& operator<<( QDataStream& s, const QValueList<T>& l )
+QDataStream& operator<<( QDataStream& s, const QValueList<T>& l )
 {
-    s << (Q_UINT32)l.count();
-    QValueListConstIterator<T> it = l.begin();
+    s << l.count();
+    QValueList<T>::ConstIterator it = l.begin();
     for( ; it != l.end(); ++it )
 	s << *it;
     return s;
 }
-#endif // QT_NO_DATASTREAM
-#endif // QVALUELIST_H
+
+#endif

@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: qt/examples/drawdemo/drawdemo.cpp   2.3.2   edited 2001-06-12 $
+** $Id: drawdemo.cpp,v 1.3 1999/06/11 18:17:48 warwick Exp $
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -27,7 +27,7 @@ void drawColorWheel( QPainter *p )
 {
     QFont f( "times", 18, QFont::Bold );
     p->setFont( f );
-    p->setPen( Qt::black );
+    p->setPen( Qt::black );				// black pen outline
     p->setWindow( 0, 0, 500, 500 );		// defines coordinate system
 
     for ( int i=0; i<36; i++ ) {		// draws 36 rotated rectangles
@@ -56,7 +56,7 @@ void drawColorWheel( QPainter *p )
 
 void drawFonts( QPainter *p )
 {
-    static const char *fonts[] = { "Helvetica", "Courier", "Times", 0 };
+    static char *fonts[] = { "Helvetica", "Courier", "Times", 0 };
     static int	 sizes[] = { 10, 12, 18, 24, 36, 0 };
     int f = 0;
     int y = 0;
@@ -82,14 +82,14 @@ void drawFonts( QPainter *p )
 
 void drawShapes( QPainter *p )
 {
-    QBrush b1( Qt::blue );
+    QBrush b1( Qt::blue );				// solid blue brush
     QBrush b2( Qt::green, Qt::Dense6Pattern );		// green 12% fill
-    QBrush b3( Qt::NoBrush );				// void brush
+    QBrush b3( Qt::NoBrush );			// void brush
     QBrush b4( Qt::CrossPattern );			// black cross pattern
 
     p->setPen( Qt::red );
     p->setBrush( b1 );
-    p->drawRect( 10, 10, 200, 100 );
+    p->drawRect( 10, 10, 200, 100 );		// draw some shapes
     p->setBrush( b2 );
     p->drawRoundRect( 10, 150, 200, 100, 20, 20 );
     p->setBrush( b3 );
@@ -99,11 +99,59 @@ void drawShapes( QPainter *p )
 }
 
 
+//
+// This function draws a text that follows a (Bezier) curve.
+// Notice that this function does not support the general case.
+// It should be rewritten to calculate the real dx/dy.
+//
+
+void drawPathText( QPainter *p )
+{
+    QPointArray a( 4 );
+    a.setPoint( 0, 100,200 );
+    a.setPoint( 1, 150,75 );
+    a.setPoint( 2, 250,75 );
+    a.setPoint( 3, 300,200 );
+    a = a.quadBezier();				// calculate Bezier curve
+
+    p->setPen( Qt::lightGray );			// set light gray pen
+    p->drawPolyline( a );			// draw Bezier point array
+
+    p->setFont( QFont("Times",24) );		// set fast font
+    p->setPen( Qt::black );				// set black pen
+
+    const char *text = "Troll Tech AS";
+
+    int len = strlen(text);
+    if ( len == 0 )
+        return;
+    int ipos = a.size()/len;
+    int cpos = ipos;
+
+    for ( int i=0; i<len; i++ ) {		// for each char in text...
+        QPoint p1 = a.point( cpos-1 );
+        QPoint p2 = a.point( cpos+1 );
+        QPoint pt = a.point(cpos);
+        float dx = (float)(p2.x() - p1.x());
+        float dy = (float)(p2.y() - p1.y());
+        float angle = (float)atan(dy/dx);	// way too simple
+        angle *= 180.0F/3.14F;
+        QWMatrix m;				// setup world matrix
+        m.translate( (float)pt.x(), (float)pt.y() );
+        m.rotate( angle );
+        p->setWorldMatrix( m );
+        p->drawText( 0,0, &text[i], 1 );
+        cpos += ipos;
+    }
+
+}
+
+
 typedef void (*draw_func)(QPainter*);
 
 struct DrawThing {
     draw_func	 f;
-    const char	*name;
+    char	*name;
 };
 
 //
@@ -115,6 +163,7 @@ DrawThing ourDrawFunctions[] = {
     { drawColorWheel,	"Draw color wheel" },
     { drawFonts,	"Draw fonts" },
     { drawShapes,	"Draw shapes" },
+    { drawPathText,	"Draw path text" },
     { 0,		0 } };
 
 
@@ -154,6 +203,8 @@ DrawView::DrawView()
     setCaption( "Qt Draw Demo Application" );
     setBackgroundColor( white );
 
+    printer = new QPrinter;
+
     // Create a button group to contain all buttons
     bgroup = new QButtonGroup( this );
     bgroup->resize( 200, 200 );
@@ -162,7 +213,7 @@ DrawView::DrawView()
     // Calculate the size for the radio buttons
     int maxwidth = 80;
     int i;
-    const char *n;
+    char *n;
     QFontMetrics fm = bgroup->fontMetrics();
     for ( i=0; (n=ourDrawFunctions[i].name) != 0; i++ ) {
         int w = fm.width( n );
@@ -182,8 +233,6 @@ DrawView::DrawView()
 
     maxwidth += 40;				// now size of bgroup
 
-    printer = new QPrinter;
-
     // Create and setup the print button
     print = new QPushButton( "Print...", bgroup );
     print->resize( 80, 30 );
@@ -200,9 +249,7 @@ DrawView::DrawView()
 //
 DrawView::~DrawView()
 {
-#ifndef QT_NO_PRINTER
     delete printer;
-#endif
 }
 
 //
@@ -223,7 +270,7 @@ void DrawView::updateIt( int index )
 
 void DrawView::drawIt( QPainter *p )
 {
-    (*ourDrawFunctions[drawindex].f)(p);
+    (*ourDrawFunctions[drawindex].f)(p);	// call draw function
 }
 
 //
@@ -232,14 +279,10 @@ void DrawView::drawIt( QPainter *p )
 
 void DrawView::printIt()
 {
-#ifndef QT_NO_PRINTER
     if ( printer->setup( this ) ) {
-        QPainter paint;
-	if ( !paint.begin( printer ) )
-	    return;
+        QPainter paint( printer );	
         drawIt( &paint );
     }
-#endif
 }
 
 //
@@ -249,7 +292,7 @@ void DrawView::printIt()
 void DrawView::paintEvent( QPaintEvent * )
 {
     QPainter paint( this );
-    drawIt( &paint );
+    drawIt( &paint );				// draw color wheel
 }
 
 //
@@ -274,7 +317,6 @@ int main( int argc, char **argv )
     QApplication app( argc, argv );
     DrawView   draw;
     app.setMainWidget( &draw );
-    draw.setCaption("Qt Example - Drawdemo");
     draw.show();
     return app.exec();
 }

@@ -1,43 +1,31 @@
 /****************************************************************************
-** $Id: qt/src/tools/qsjiscodec.h   2.3.2   edited 2001-01-26 $
+** $Id: qsjiscodec.h,v 2.5 1999/04/28 09:59:17 aavit Exp $
 **
 ** Definition of QSjisCodec class
 **
 ** Created : 990225
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
-** This file is part of the tools module of the Qt GUI Toolkit.
+** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses may use this file in accordance with the Qt Commercial License
-** Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
+*****************************************************************************/
 
 // Most of the code here was originally written by Serika Kurusugawa
 // a.k.a. Junji Takagi, and is include in Qt with the author's permission,
-// and the grateful thanks of the Trolltech team.
+// and the grateful thanks of the Troll Tech team.
 
 /*
  * Copyright (c) 1999 Serika Kurusugawa, All rights reserved.
@@ -67,12 +55,8 @@
 #ifndef QSJISCODEC_H
 #define QSJISCODEC_H
 
-#ifndef QT_H
 #include "qtextcodec.h"
 #include "qjpunicode.h"
-#endif // QT_H
-
-#ifndef QT_NO_CODECS
 
 class Q_EXPORT QSjisCodec : public QTextCodec {
 public:
@@ -93,5 +77,4 @@ protected:
     const QJpUnicodeConv * const conv;
 };
 
-#endif
 #endif

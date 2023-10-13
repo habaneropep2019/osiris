@@ -1,0 +1,126 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><meta name="robots" content="noindex,noarchive"><title>
+Qt Toolkit - qpointarray.h include file
+</title><style type="text/css"><!--
+h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
+a:link { text-decoration: none; }
+body { background: white; color: black; }
+--></style>
+</head><body bgcolor="#ffffff">
+
+<a href=index.html><img width=122 height=65 src=qtlogo.png alt="Qt logo" align=left border=0></a>
+<center><img src=dochead.png width=448 height=23></center>
+<br clear=all>
+
+<h1 align=center>qpointarray.h</h1><br clear="all">
+This is the verbatim text of the qpointarray.h include file.  It is
+provided only for illustration; the copyright
+remains with Troll Tech.
+<hr>
+<pre>
+/****************************************************************************
+** &#36;Id&#58; qpointarray.h,v 2.20 1999/05/14 16:01:43 hanord Exp $
+**
+** Definition of QPointArray class
+**
+** Created : 940213
+**
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+**
+** This file is part of the Qt GUI Toolkit.
+**
+** This file may be distributed under the terms of the Q Public License
+** as defined by Troll Tech AS of Norway and appearing in the file
+** LICENSE.QPL included in the packaging of this file.
+**
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
+**
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
+**
+*****************************************************************************/
+
+#ifndef QPOINTARRAY_H
+#define QPOINTARRAY_H
+
+#ifndef QT_H
+#include "qarray.h"
+#include "qpoint.h"
+#endif // QT_H
+
+
+#if defined(Q_TEMPLATEDLL)
+template class Q_EXPORT QArray&lt;QPoint&gt;;
+#endif
+
+class Q_EXPORT <a href="qpointarray.html">QPointArray</a> : public <a href="qarray.html">QArray</a>&lt;QPoint&gt;
+{
+public:
+    QPointArray() {}
+    QPointArray( int size ) : QArray&lt;QPoint&gt;( size ) {}
+    QPointArray( const QPointArray &amp;a ) : QArray&lt;QPoint&gt;( a ) {}
+    QPointArray( const QRect &amp;r, bool closed=FALSE );
+    QPointArray( int nPoints, const QCOORD *points );
+
+    QPointArray  &amp;operator=( const QPointArray &amp;a )
+        { return (QPointArray&amp;)assign( a ); }
+
+    QPointArray copy() const
+        { QPointArray tmp; return *((QPointArray*)&amp;tmp.duplicate(*this)); }
+
+    void    translate( int dx, int dy );
+    QRect   boundingRect() const;
+
+    void    point( uint i, int *x, int *y ) const;
+    QPoint  point( uint i ) const;
+    void    setPoint( uint i, int x, int y );
+    void    setPoint( uint i, const QPoint &amp;p );
+    bool    setPoints( int nPoints, const QCOORD *points );
+    bool    setPoints( int nPoints, int firstx, int firsty, ... );
+    bool    putPoints( int index, int nPoints, const QCOORD *points );
+    bool    putPoints( int index, int nPoints, int firstx, int firsty, ... );
+
+    void    makeArc( int x, int y, int w, int h, int a1, int a2 );
+    void    makeEllipse( int x, int y, int w, int h );
+    void    makeArc( int x, int y, int w, int h, int a1, int a2,
+                     const QWMatrix&amp; );
+    QPointArray quadBezier() const;
+
+    void*  shortPoints( int index = 0, int nPoints = -1 ) const;
+    static void cleanBuffers();
+
+protected:
+    static uint splen;
+    static void* sp;
+};
+
+
+/*****************************************************************************
+  QPointArray stream functions
+ *****************************************************************************/
+
+Q_EXPORT QDataStream &amp;operator&lt;&lt;( QDataStream &amp;, const QPointArray &amp; );
+Q_EXPORT QDataStream &amp;operator&gt;&gt;( QDataStream &amp;, QPointArray &amp; );
+
+
+/*****************************************************************************
+  Misc. QPointArray functions
+ *****************************************************************************/
+
+inline void QPointArray::setPoint( uint i, const QPoint &amp;p )
+{
+    setPoint( i, p.x(), p.y() );
+}
+
+
+#endif // QPOINTARRAY_H
+
+</pre>
+<p><address><hr><div align="center">
+<table width="100%" cellspacing="0" border="0"><tr>
+<td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.00</div>
+</table></div></address></body></html>

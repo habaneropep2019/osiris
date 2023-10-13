@@ -2,22 +2,20 @@
 
 ####### Compiler, tools and options
 
-CXX	=	$(SYSCONF_CXX) $(QT_CXX_MT)
+CXX	=	$(SYSCONF_CXX)
 CXXFLAGS=	$(SYSCONF_CXXFLAGS_QT) $(SYSCONF_CXXFLAGS)
-CC	=	$(SYSCONF_CC) $(QT_C_MT)
+CC	=	$(SYSCONF_CC)
 CFLAGS	=	$(SYSCONF_CFLAGS)
 INCPATH =	
-LFLAGS	=	$(SYSCONF_LFLAGS_QT) $(SYSCONF_RPATH_QT) $(SYSCONF_LFLAGS) $(QT_LFLAGS_MT)
-LIBS	=	$(SUBLIBS) $(SYSCONF_LIBS_QT) $(SYSCONF_LIBS) $(SYSCONF_LIBS_QTAPP)
+LFLAGS	=	$(SYSCONF_LFLAGS_QT) $(SYSCONF_LFLAGS_X11) $(SYSCONF_LFLAGS)
+LIBS	=	$(SYSCONF_LIBS_QT) $(SYSCONF_LIBS_X11) $(SYSCONF_LIBS)
 MOC	=	$(SYSCONF_MOC)
-UIC	=	$(SYSCONF_UIC)
 
 ####### Target
 
 DESTDIR = ./
 VER_MAJ = 1
 VER_MIN = 0
-VER_PATCH = 0
 TARGET	= life
 TARGET1 = lib$(TARGET).so.$(VER_MAJ)
 
@@ -31,14 +29,10 @@ SOURCES =	life.cpp \
 OBJECTS =	life.o \
 		lifedlg.o \
 		main.o
-INTERFACES =    
-UICDECLS =      
-UICIMPLS =      
 SRCMOC	=	moc_life.cpp \
 		moc_lifedlg.cpp
 OBJMOC	=	moc_life.o \
 		moc_lifedlg.o
-
 
 ####### Implicit rules
 
@@ -61,11 +55,10 @@ OBJMOC	=	moc_life.o \
 
 ####### Build rules
 
-
 all: $(DESTDIR)$(TARGET)
 
-$(DESTDIR)$(TARGET): $(UICDECLS) $(OBJECTS) $(OBJMOC) $(SUBLIBS)
-	$(SYSCONF_LINK) $(LFLAGS) -o $(DESTDIR)$(TARGET) $(OBJECTS) $(OBJMOC) $(LIBS)
+$(DESTDIR)$(TARGET): $(OBJECTS) $(OBJMOC) 
+	$(SYSCONF_LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(OBJMOC) $(LIBS)
 
 moc: $(SRCMOC)
 
@@ -73,33 +66,8 @@ tmake:
 	tmake life.pro
 
 clean:
-	-rm -f $(OBJECTS) $(OBJMOC) $(SRCMOC) $(UICIMPLS) $(UICDECLS)
+	-rm -f $(OBJECTS) $(OBJMOC) $(SRCMOC)
 	-rm -f *~ core
-	-rm -f allmoc.cpp
-
-####### Extension Modules
-
-listpromodules:
-	@echo 
-
-listallmodules:
-	@echo 
-
-listaddonpromodules:
-	@echo 
-
-listaddonentmodules:
-	@echo 
-
-
-REQUIRES=medium-config
-
-####### Sub-libraries
-
-
-###### Combined headers
-
-
 
 ####### Compile
 
@@ -110,8 +78,6 @@ life.o: life.cpp \
 		../../include/qwindowdefs.h \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
-		../../include/qfeatures.h \
-		../../include/qconfig.h \
 		../../include/qstring.h \
 		../../include/qcstring.h \
 		../../include/qarray.h \
@@ -132,7 +98,6 @@ life.o: life.cpp \
 		../../include/qvaluelist.h \
 		../../include/qdatastream.h \
 		../../include/qiodevice.h \
-		../../include/qregexp.h \
 		../../include/qpaintdevice.h \
 		../../include/qpalette.h \
 		../../include/qcolor.h \
@@ -162,8 +127,6 @@ lifedlg.o: lifedlg.cpp \
 		../../include/qobject.h \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
-		../../include/qfeatures.h \
-		../../include/qconfig.h \
 		../../include/qwindowdefs.h \
 		../../include/qstring.h \
 		../../include/qcstring.h \
@@ -184,7 +147,6 @@ lifedlg.o: lifedlg.cpp \
 		../../include/qvaluelist.h \
 		../../include/qdatastream.h \
 		../../include/qiodevice.h \
-		../../include/qregexp.h \
 		../../include/qwidget.h \
 		../../include/qpaintdevice.h \
 		../../include/qpalette.h \
@@ -205,8 +167,6 @@ lifedlg.o: lifedlg.cpp \
 		../../include/qintdict.h \
 		../../include/qpushbutton.h \
 		../../include/qbutton.h \
-		../../include/qiconset.h \
-		../../include/qpixmap.h \
 		../../include/qlabel.h \
 		../../include/qslider.h \
 		../../include/qrangecontrol.h \
@@ -220,8 +180,6 @@ main.o: main.cpp \
 		../../include/qobject.h \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
-		../../include/qfeatures.h \
-		../../include/qconfig.h \
 		../../include/qwindowdefs.h \
 		../../include/qstring.h \
 		../../include/qcstring.h \
@@ -242,7 +200,6 @@ main.o: main.cpp \
 		../../include/qvaluelist.h \
 		../../include/qdatastream.h \
 		../../include/qiodevice.h \
-		../../include/qregexp.h \
 		../../include/qwidget.h \
 		../../include/qpaintdevice.h \
 		../../include/qpalette.h \
@@ -269,8 +226,6 @@ moc_life.o: moc_life.cpp \
 		../../include/qwindowdefs.h \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
-		../../include/qfeatures.h \
-		../../include/qconfig.h \
 		../../include/qstring.h \
 		../../include/qcstring.h \
 		../../include/qarray.h \
@@ -291,7 +246,6 @@ moc_life.o: moc_life.cpp \
 		../../include/qvaluelist.h \
 		../../include/qdatastream.h \
 		../../include/qiodevice.h \
-		../../include/qregexp.h \
 		../../include/qpaintdevice.h \
 		../../include/qpalette.h \
 		../../include/qcolor.h \
@@ -309,8 +263,6 @@ moc_lifedlg.o: moc_lifedlg.cpp \
 		../../include/qobject.h \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
-		../../include/qfeatures.h \
-		../../include/qconfig.h \
 		../../include/qwindowdefs.h \
 		../../include/qstring.h \
 		../../include/qcstring.h \
@@ -331,7 +283,6 @@ moc_lifedlg.o: moc_lifedlg.cpp \
 		../../include/qvaluelist.h \
 		../../include/qdatastream.h \
 		../../include/qiodevice.h \
-		../../include/qregexp.h \
 		../../include/qwidget.h \
 		../../include/qpaintdevice.h \
 		../../include/qpalette.h \
@@ -351,5 +302,4 @@ moc_life.cpp: life.h
 
 moc_lifedlg.cpp: lifedlg.h
 	$(MOC) lifedlg.h -o moc_lifedlg.cpp
-
 

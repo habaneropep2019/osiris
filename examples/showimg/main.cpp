@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: qt/examples/showimg/main.cpp   2.3.2   edited 2001-06-12 $
+** $Id: main.cpp,v 1.3 1999/06/24 20:23:39 warwick Exp $
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -9,9 +9,13 @@
 *****************************************************************************/
 
 #include "showimg.h"
-#include "imagefip.h"
 #include <qapplication.h>
 #include <qimage.h>
+
+#ifdef QIMGIO
+#include <qimageio.h>
+#endif
+
 
 int main( int argc, char **argv )
 {
@@ -19,33 +23,27 @@ int main( int argc, char **argv )
 	QApplication::setColorSpec( QApplication::ManyColor );
 	argc--;
 	argv++;
-    } 
-    else if ( argc > 1 && QString(argv[1]) == "-n" ) {
-	QApplication::setColorSpec( QApplication::NormalColor );
-	argc--;
-	argv++;
-    } 
-    else {
+    } else {
 	QApplication::setColorSpec( QApplication::CustomColor );
     }
 
     QApplication::setFont( QFont("Helvetica", 12) );
     QApplication a( argc, argv );
 
-    QFileDialog::setIconProvider(new ImageIconProvider);
+#ifdef QIMGIO
+    qInitImageIO();
+#endif
 
     if ( argc <= 1 ) {
 	// Create a window which looks after its own existence.
 	ImageViewer *w =
-	    new ImageViewer(0, "new window", Qt::WDestructiveClose | Qt::WResizeNoErase );
-	w->setCaption("Qt Example - Image Viewer");
+	    new ImageViewer(0, "new window", Qt::WDestructiveClose);
 	w->show();
     } else {
 	for ( int i=1; i<argc; i++ ) {
 	    // Create a window which looks after its own existence.
 	    ImageViewer *w =
-		new ImageViewer(0, argv[i], Qt::WDestructiveClose | Qt::WResizeNoErase );
-	    w->setCaption("Qt Example - Image Viewer");
+		new ImageViewer(0, argv[i], Qt::WDestructiveClose);
 	    w->loadImage( argv[i] );
 	    w->show();
 	}

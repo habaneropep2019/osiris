@@ -1,39 +1,27 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qwmatrix.cpp   2.3.2   edited 2001-06-22 $
+** $Id: qwmatrix.cpp,v 2.12 1999/05/20 08:00:58 aavit Exp $
 **
 ** Implementation of QWMatrix class
 **
 ** Created : 941020
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
-** This file is part of the kernel module of the Qt GUI Toolkit.
+** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses may use this file in accordance with the Qt Commercial License
-** Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
+*****************************************************************************/
 
 #include "qwmatrix.h"
 #include "qdatastream.h"
@@ -43,9 +31,6 @@ double qsincos( double, bool calcCos );		// defined in qpainter_x11.cpp
 #include <math.h>
 #endif
 
-#ifndef QT_NO_WMATRIX
-
-// NOT REVISED
 /*!
   \class QWMatrix qwmatrix.h
   \brief The QWMatrix class specifies 2D transformations of a
@@ -402,8 +387,8 @@ QWMatrix &QWMatrix::rotate( double a )
 QWMatrix QWMatrix::invert( bool *invertible ) const
 {
     double det = _m11*_m22 - _m12*_m21;
-    if ( det == 0.0 ) {
-	if ( invertible )
+    if ( QABS(det) < 0.000001 ) {		// very close to zero
+	if ( invertible )			//   (whatever that means...)
 	    *invertible = FALSE;		// singular matrix
 	QWMatrix defaultMatrix;
 	return defaultMatrix;
@@ -490,18 +475,19 @@ QWMatrix operator*( const QWMatrix &m1, const QWMatrix &m2 )
 /*****************************************************************************
   QWMatrix stream functions
  *****************************************************************************/
-#ifndef QT_NO_DATASTREAM
+
 /*!
   \relates QWMatrix
   Writes a matrix to the stream and returns a reference to the stream.
 
-  \sa \link datastreamformat.html Format of the QDataStream operators \endlink
+  Serialization format: m11, m12, m21, m22, dx and dy are serialized as
+  \c double in the listed order.
 */
 
 QDataStream &operator<<( QDataStream &s, const QWMatrix &m )
 {
     if ( s.version() == 1 )
-	s << (float)m.m11() << (float)m.m12() << (float)m.m21()
+	s << (float)m.m11() << (float)m.m12() << (float)m.m21() 
 	  << (float)m.m22() << (float)m.dx()  << (float)m.dy();
     else
 	s << m.m11() << m.m12() << m.m21() << m.m22()
@@ -512,8 +498,6 @@ QDataStream &operator<<( QDataStream &s, const QWMatrix &m )
 /*!
   \relates QWMatrix
   Reads a matrix from the stream and returns a reference to the stream.
-
-  \sa \link datastreamformat.html Format of the QDataStream operators \endlink
 */
 
 QDataStream &operator>>( QDataStream &s, QWMatrix &m )
@@ -532,6 +516,3 @@ QDataStream &operator>>( QDataStream &s, QWMatrix &m )
     }
     return s;
 }
-#endif // QT_NO_DATASTREAM
-#endif // QT_NO_WMATRIX
-

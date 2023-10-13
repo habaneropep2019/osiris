@@ -1,37 +1,25 @@
 /****************************************************************************
-** $Id: qt/src/moc/moc.l   2.3.2   edited 2001-01-26 $
+** $Id: moc.l,v 2.15 1999/05/18 18:14:18 eiriken Exp $
 **
 ** Lexical analyzer for meta object compiler
 **
 ** Created : 930417
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1993-1999 by Troll Tech AS.  All rights reserved.
 **
-** This file is part of the widgets module of the Qt GUI Toolkit.
+** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses may use this file in accordance with the Qt Commercial License
-** Agreement provided with the Software.
-**
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -42,11 +30,8 @@
 #define input yyinput				// yyinput in C++
 
 #define X if(lexDebug){fprintf(stderr,"LEX (%i) : %s\n",lineNo,yytext);};
-#define Y if(lexDebug){fprintf(stderr,"LEX (%i) : %s\n",lineNo,yytext);};
-/*
 #define Y if(lexDebug){fprintf(stderr,"LEX (%i) : %s updates level to %i\n"\
-                                 ,lineNo,yytext,templLevel);};
-*/
+                               ,lineNo,yytext,templLevel);};
 #define Z if(lexDebug){fprintf(stderr,"LEX (%i) : skipped the string %s\"\n"\
                                ,lineNo,yytext);};
 #define BEGIN_INSIDE
@@ -64,19 +49,19 @@ int expLevel         = 1;  /* Depth of nested parentheses in IN_EXPR */
 int fctLevel         = 1;  /* Depth of nested parentheses in IN_FCT */
 int templLevel       = 1;  /* Depth of levels in IN_TEMPL_ARGS */
 
-int lastState        = 0;  /* Remembers the state when a
+int lastState        = 0;  /* Remembers the state when a 
                               MOC_SKIP_BEGIN is encountered */
 int skipLevel        = 0; /* Depth of MOC_SKIP_BEGINs */
 
 
 class QString;
 
-extern void addExpressionChar( const char );
-extern void addExpressionString( const char * );
-extern void moc_warn( const char *msg );
+extern void addExpressionChar( char );
+extern void addExpressionString( char * );
+extern void moc_warn( char *msg );
 %}
 
-%start OUTSIDE QT_DEF IN_CLASS IN_NAMESPACE IN_ENUM IN_EXPR IN_FCT IN_TEMPL_ARGS GIMME_SEMICOLON SKIP IN_PROPERTY IN_PROPDEF IN_CLASSINFO
+%start OUTSIDE QT_DEF IN_CLASS IN_NAMESPACE IN_EXPR IN_FCT IN_TEMPL_ARGS GIMME_SEMICOLON SKIP
 
 %%
 <OUTSIDE>"class"		{ X;
@@ -91,31 +76,20 @@ extern void moc_warn( const char *msg );
 <OUTSIDE>"template"		{ X;
 				  BEGIN QT_DEF;
 				  return TEMPLATE; }
-<QT_DEF>"Q_OBJECT"		{ X; return Q_OBJECT; }
-<QT_DEF>"signals"		{ X; return SIGNALS; }
-<QT_DEF>"slots"			{ X; return SLOTS; }
-<QT_DEF>"Q_CLASSINFO"		{ X;return Q_CLASSINFO; }
-<QT_DEF>"Q_PROPERTY"		{ X; return Q_PROPERTY; }
-<QT_DEF>"Q_OVERRIDE"		{ X; return Q_OVERRIDE; }
-<QT_DEF>"Q_ENUMS"		{ X; return Q_ENUMS; }
-<QT_DEF>"Q_SETS"		{ X; return Q_SETS; }
+<QT_DEF>"signals"		{ X;return SIGNALS; }
+<QT_DEF>"slots"			{ X;return SLOTS; }
 
 <IN_FCT>"{"			{ fctLevel++;Y; }
 <IN_FCT>"}"			{ fctLevel--;Y;if (fctLevel==0){X;return '}';}}
 <IN_CLASS>"{"			{ classPLevel++;Y; }
-<IN_CLASS>"}"			{ classPLevel--;Y;if (classPLevel == 0)
+<IN_CLASS>"}"			{ classPLevel--;Y;if (classPLevel == 0) 
                                                       {X;return '}';} }
-<IN_CLASS>"public"		{ X;if( classPLevel == 1 ) return PUBLIC; }
-<IN_CLASS>"protected"		{ X;if( classPLevel == 1 ) return PROTECTED; }
-<IN_CLASS>"private"		{ X;if( classPLevel == 1 ) return PRIVATE; }
-<IN_CLASS>"signals"		{ X;if( classPLevel == 1 ) return SIGNALS; }
-<IN_CLASS>"slots"		{ X;if( classPLevel == 1 ) return SLOTS; }
-<IN_CLASS>"Q_CLASSINFO"		{ X;if( classPLevel == 1 ) return Q_CLASSINFO; }
-<IN_CLASS>"Q_OBJECT"		{ X;if( classPLevel == 1 ) return Q_OBJECT; }
-<IN_CLASS>"Q_PROPERTY"		{ X;if( classPLevel == 1 ) return Q_PROPERTY; }
-<IN_CLASS>"Q_OVERRIDE"		{ X;if( classPLevel == 1 ) return Q_OVERRIDE; }
-<IN_CLASS>"Q_ENUMS"		{ X;if( classPLevel == 1 ) return Q_ENUMS; }
-<IN_CLASS>"Q_SETS"		{ X;if( classPLevel == 1 ) return Q_SETS; }
+<IN_CLASS>"public"		{ X;return PUBLIC; }
+<IN_CLASS>"protected"		{ X;return PROTECTED; }
+<IN_CLASS>"private"		{ X;return PRIVATE; }
+<IN_CLASS>"signals"		{ X;return SIGNALS; }
+<IN_CLASS>"slots"		{ X;return SLOTS; }
+<IN_CLASS>"Q_OBJECT"		{ X;return Q_OBJECT; }
 
 <IN_NAMESPACE>"{"		{ namespacePLevel++;Y; }
 <IN_NAMESPACE>"}"		{ namespacePLevel--;Y;if (namespacePLevel == 0)
@@ -129,66 +103,29 @@ extern void moc_warn( const char *msg );
 <IN_NAMESPACE>"namespace"	{ X;
 				  BEGIN QT_DEF;
 				  return NAMESPACE; }
-<IN_NAMESPACE>"using"		{ X;
+<IN_NAMESPACE>"using"		{ X; 
                                   BEGIN QT_DEF;
 				  return USING; }
 
-<IN_PROPERTY>"("		{ X; return '('; }
-<IN_PROPERTY>")"		{ X; return ')'; }
-<IN_PROPERTY>"READ"		{ X; return READ; }
-<IN_PROPERTY>"WRITE"		{ X; return WRITE; }
-<IN_PROPERTY>"STORED"		{ X; return STORED; }
-<IN_PROPERTY>"RESET"		{ X; return RESET; }
-<IN_PROPERTY>"DESIGNABLE"	{ X; return DESIGNABLE; }
-
-<IN_PROPDEF>"READ"		{ X; if ( expLevel == 1 ) BEGIN IN_PROPERTY; return READ; }
-<IN_PROPDEF>"WRITE"		{ X; if ( expLevel == 1 ) BEGIN IN_PROPERTY; return WRITE; }
-<IN_PROPDEF>"STORED"		{ X; if ( expLevel == 1 ) BEGIN IN_PROPERTY; return STORED; }
-<IN_PROPDEF>"RESET"		{ X; if ( expLevel == 1 ) BEGIN IN_PROPERTY; return RESET; }
-<IN_PROPDEF>"DESIGNABLE"	{ X; if ( expLevel == 1 ) BEGIN IN_PROPERTY; return DESIGNABLE; }
-<IN_PROPDEF>"("			{ addExpressionChar( '(' ); expLevel++;X; }
-<IN_PROPDEF>")"			{ expLevel--;Y;if (expLevel == 0)
-					{ X; BEGIN IN_PROPERTY; return ')';}
-				  else
-					{ addExpressionChar( ')' ); }
-				}
-<IN_PROPDEF>"["			{ addExpressionChar( '[' ); expLevel++;X; }
-<IN_PROPDEF>"]"			{ expLevel--;X;if (expLevel == 0)
-					{ X; BEGIN IN_PROPERTY; return ']';}
-				  else
-					{ addExpressionChar( ']' ); }
-				}
-
-<IN_EXPR>"("			{ expLevel++;X; }
-<IN_EXPR>")"			{ expLevel--;Y;if (expLevel == 0)
+<QT_DEF>"Q_OBJECT"		{ X;return Q_OBJECT; }
+<IN_EXPR>"("			{ expLevel++;Y; }
+<IN_EXPR>")"			{ expLevel--;Y;if (expLevel == 0) 
 					{ X; BEGIN QT_DEF; return ')';} }
-<IN_EXPR>"["			{ expLevel++;X; }
-<IN_EXPR>"]"			{ expLevel--;X;if (expLevel == 0)
+<IN_EXPR>"["			{ expLevel++;Y; }
+<IN_EXPR>"]"			{ expLevel--;Y;if (expLevel == 0) 
 					{ X; BEGIN QT_DEF; return ']';} }
-<IN_EXPR>","			{ if (expLevel == 0)
+<IN_EXPR>","			{ if (expLevel == 0) 
 					{ X; BEGIN QT_DEF; return ',' ;} }
 <IN_EXPR>";"			{ if (expLevel == 0)
 					{ X; BEGIN QT_DEF; return ';' ;} }
-<IN_ENUM>"("			{ expLevel++;X; }
-<IN_ENUM>")"			{ expLevel--;X;if (expLevel == 0)
-					{ X; BEGIN QT_DEF; return ')';} }
-<IN_ENUM>"["			{ expLevel++;X; }
-<IN_ENUM>"]"			{ expLevel--;X;if (expLevel == 0)
-					{ X; BEGIN QT_DEF; return ']';} }
-<IN_ENUM>","			{ if (expLevel == 0)
-					{ X; BEGIN QT_DEF; return ',' ;} }
-<IN_ENUM>";"			{ if (expLevel == 0)
-					{ X; BEGIN QT_DEF; return ';' ;} }
-<IN_ENUM>"}"			{ if (expLevel == 0)
-					{ X; BEGIN QT_DEF; return '}' ;} }
 <IN_TEMPL_ARGS>"<"		{ templLevel++;Y; }
-<IN_TEMPL_ARGS>">"		{ templLevel--;Y;if (templLevel == 0)
+<IN_TEMPL_ARGS>">"		{ templLevel--;Y;if (templLevel == 0) 
 					{ X; BEGIN QT_DEF; return '>';} }
 <IN_TEMPL_ARGS>"("		{ templLevel++;Y; }
-<IN_TEMPL_ARGS>")"		{ templLevel--;Y;if (templLevel == 0)
+<IN_TEMPL_ARGS>")"		{ templLevel--;Y;if (templLevel == 0) 
 					{ X; BEGIN QT_DEF; return ')';} }
 <IN_TEMPL_ARGS>"["		{ templLevel++;Y; }
-<IN_TEMPL_ARGS>"]"		{ templLevel--;Y;if (templLevel == 0)
+<IN_TEMPL_ARGS>"]"		{ templLevel--;Y;if (templLevel == 0) 
 					{ X; BEGIN QT_DEF; return ']';} }
 <QT_DEF>"friend"		{ X;return FRIEND; }
 <QT_DEF>"typedef"		{ X;return TYPEDEF; }
@@ -231,27 +168,6 @@ extern void moc_warn( const char *msg );
 			  return IDENTIFIER;
 			}
 
-<IN_PROPERTY>[_a-zA-Z][_a-zA-Z0-9]* {
-			  X;
-			  yylval.string = qstrdup(yytext);
-			  return IDENTIFIER;
-			}
-
-<IN_CLASSINFO>"(" { X; return '('; }
-<IN_CLASSINFO>")" { X; return ')'; }
-<IN_CLASSINFO>"," { X; return ','; }
-
-<IN_CLASSINFO>\"[^"]*      { if (yytext[yyleng - 1] == '\\') {
-			      yymore();
-			  }
-			  else {
-			      X;
-			      yylval.string = qstrdup(yytext+1);
-			      input();		/* discard the '"' */
-			      return STRING;
-			 }
-			}
-
 <OUTSIDE>[_a-zA-Z][_a-zA-Z0-9]*  ;
 <IN_CLASS>[_a-zA-Z][_a-zA-Z0-9]* ;
 <IN_NAMESPACE>[_a-zA-Z][_a-zA-Z0-9]* ;
@@ -292,8 +208,19 @@ extern void moc_warn( const char *msg );
 			  }
 			  else {
 			    Z;
+			    input();		/* discard the '"' */
+			  }
+			}
+
+<IN_EXPR>\"[^"]*        { 
+			  if (yytext[yyleng - 1] == '\\') {
+			    yymore();
+			  }
+			  else {
+			    X;
 			    addExpressionString(yytext);
 			    input();		/* discard the '"' */
+			    return STRING;
 			  }
 			}
 
@@ -315,32 +242,9 @@ extern void moc_warn( const char *msg );
 			  }
 			  else {
 			      X;
-			      yylval.string = qstrdup(yytext+1);
+			      yylval.string = qstrdup(yytext);
 			      input();		/* discard the '"' */
 			      return STRING;
-			 }
-			}
-
-
-<IN_PROPDEF>\"[^"]*	     { if (yytext[yyleng - 1] == '\\') {
-			      yymore();
-			  }
-			  else {
-			      X;
-			      addExpressionString( yytext );
-			      addExpressionChar( '"' );
-			      input();		/* discard the '"' */
-			 }
-			}
-
-<IN_PROPDEF>\'[^']*	     { if (yytext[yyleng - 1] == '\\') {
-			      yymore();
-			  }
-			  else {
-			      X;
-			      addExpressionString( yytext );
-			      addExpressionChar( '"' );
-			      input();		/* discard the ''' */
 			 }
 			}
 
@@ -455,7 +359,7 @@ extern void moc_warn( const char *msg );
 			}
 
 ^[ \t]*#.*		{ /* preprocessor commands are skipped */}
-"//"[^\n]*		{ /* C++ comment */
+"//"[^\n]*		{ /* C++ comment */ 
 			  QCString s = yytext;
                           if ( s.contains( "MOC_SKIP_BEGIN" ) ) {
                             skipLevel++;
@@ -493,9 +397,7 @@ extern void moc_warn( const char *msg );
 <IN_NAMESPACE>.		;
 <IN_FCT>.		;
 <IN_EXPR>.		  { addExpressionChar( yytext[0] ); }
-<IN_ENUM>.		  { addExpressionChar( yytext[0] ); }
 <IN_TEMPL_ARGS>.	  { addExpressionChar( yytext[0] ); }
-<IN_PROPDEF>.		  { addExpressionChar( yytext[0] ); }
 <OUTSIDE>.		;
 <SKIP>.		        ;
 <QT_DEF>.		{
@@ -509,7 +411,6 @@ extern void moc_warn( const char *msg );
 \n			{
 			  lineNo++;
 			}
-
 
 %%
 

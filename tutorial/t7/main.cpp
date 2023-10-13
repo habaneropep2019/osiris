@@ -24,6 +24,8 @@ public:
 MyWidget::MyWidget( QWidget *parent, const char *name )
         : QVBox( parent, name )
 {
+    setMinimumSize( 200, 300 );
+
     QPushButton *quit = new QPushButton( "Quit", this, "quit" );
     quit->setFont( QFont( "Times", 18, QFont::Bold ) );
 

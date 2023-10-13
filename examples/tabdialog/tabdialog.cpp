@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: qt/examples/tabdialog/tabdialog.cpp   2.3.2   edited 2001-01-26 $
+** $Id: tabdialog.cpp,v 1.2 1999/06/07 14:16:04 reggie Exp $
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -68,9 +68,9 @@ void TabDialog::setupTab2()
     if ( fileinfo.isReadable() )
         readable->setChecked( TRUE );
 
-    QCheckBox *writable = new QCheckBox( "Writeable", bg );
+    QCheckBox *writeable = new QCheckBox( "Writeable", bg );
     if ( fileinfo.isWritable() )
-        writable->setChecked( TRUE );
+        writeable->setChecked( TRUE );
 
     QCheckBox *executable = new QCheckBox( "Executable", bg );
     if ( fileinfo.isExecutable() )

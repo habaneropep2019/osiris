@@ -1,39 +1,27 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qcolor.h   2.3.2   edited 2001-01-26 $
+** $Id: qcolor.h,v 2.25 1999/05/12 15:29:26 paul Exp $
 **
 ** Definition of QColor class
 **
 ** Created : 940112
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
-** This file is part of the kernel module of the Qt GUI Toolkit.
+** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses may use this file in accordance with the Qt Commercial License
-** Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
+*****************************************************************************/
 
 #ifndef QCOLOR_H
 #define QCOLOR_H
@@ -41,6 +29,7 @@
 #ifndef QT_H
 #include "qwindowdefs.h"
 #endif // QT_H
+
 
 const QRgb  RGB_DIRTY	= 0x80000000;		// flags unset color
 const QRgb  RGB_INVALID = 0x40000000;		// flags invalid color
@@ -61,10 +50,10 @@ Q_EXPORT inline int qAlpha( QRgb rgb )		// get alpha part of RGBA
 { return (int)((rgb >> 24) & 0xff); }
 
 Q_EXPORT inline QRgb qRgb( int r, int g, int b )// set RGB value
-{ return (0xff << 24) | ((r & 0xff) << 16) | ((g & 0xff) << 8) | (b & 0xff); }
+{ return (uint)((uint)(r & 0xff) << 16) |((uint)(g & 0xff) << 8) |(b & 0xff); }
 
 Q_EXPORT inline QRgb qRgba( int r, int g, int b, int a )// set RGBA value
-{ return ((a & 0xff) << 24) | ((r & 0xff) << 16) | ((g & 0xff) << 8) | (b & 0xff); }
+{ return qRgb(r,g,b) | ((uint)(a & 0xff) << 24); }
 
 Q_EXPORT inline int qGray( int r, int g, int b )// convert R,G,B to gray 0..255
 { return (r*11+g*16+b*5)/32; }
@@ -90,7 +79,6 @@ public:
     bool   isValid() const;
     bool   isDirty() const;
 
-    QString name() const;
     void   setNamedColor( const QString& name );
 
     void   rgb( int *r, int *g, int *b ) const;
@@ -136,7 +124,6 @@ public:
 private:
     void   setSystemNamedColor( const QString& name );
     static void initGlobalColors();
-    static QColor* globalColors();
     static bool color_init;
     static bool globals_init;
     static bool lazy_alloc;
@@ -161,7 +148,7 @@ inline bool QColor::isDirty() const
 { return (rgbVal & RGB_DIRTY) != 0; }
 
 inline QRgb QColor::rgb() const
-{ return rgbVal | ~RGB_MASK; }
+{ return rgbVal & RGB_MASK; }
 
 inline int QColor::red() const
 { return qRed(rgbVal); }
@@ -181,11 +168,10 @@ inline bool QColor::lazyAlloc()
 
 inline bool QColor::operator==( const QColor &c ) const
 {
-    return isValid()==c.isValid() &&
-	((((rgbVal | c.rgbVal) & RGB_DIRECT) == 0 &&
-	    (rgbVal & RGB_MASK) == (c.rgbVal & RGB_MASK)) ||
+    return (((rgbVal | c.rgbVal) & RGB_DIRECT) == 0 &&
+	    (rgbVal & 0x00ffffff) == (c.rgbVal & 0x00ffffff)) ||
 	   ((rgbVal & c.rgbVal & RGB_DIRECT) != 0 &&
-	    (rgbVal & RGB_MASK) == (c.rgbVal & RGB_MASK) && pix == c.pix));
+	    (rgbVal & 0x00ffffff) == (c.rgbVal & 0x00ffffff) && pix == c.pix);
 }
 
 inline bool QColor::operator!=( const QColor &c ) const
@@ -198,9 +184,8 @@ inline bool QColor::operator!=( const QColor &c ) const
   QColor stream functions
  *****************************************************************************/
 
-#ifndef QT_NO_DATASTREAM
 Q_EXPORT QDataStream &operator<<( QDataStream &, const QColor & );
 Q_EXPORT QDataStream &operator>>( QDataStream &, QColor & );
-#endif
+
 
 #endif // QCOLOR_H

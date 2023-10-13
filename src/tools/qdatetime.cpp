@@ -1,39 +1,27 @@
 /****************************************************************************
-** $Id: qt/src/tools/qdatetime.cpp   2.3.2   edited 2001-02-18 $
+** $Id: qdatetime.cpp,v 2.29 1999/06/24 13:31:28 hanord Exp $
 **
 ** Implementation of date and time classes
 **
 ** Created : 940124
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
-** This file is part of the tools module of the Qt GUI Toolkit.
+** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses may use this file in accordance with the Qt Commercial License
-** Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
+*****************************************************************************/
 
 #define gettimeofday	__hide_gettimeofday
 #include "qdatetime.h"
@@ -52,14 +40,14 @@
 #include <dos.h>
 #elif defined(_OS_OS2_)
 #include <os2.h>
-#elif defined(_OS_UNIX_)
-#include <unistd.h>
+#elif defined(UNIX)
 #include <sys/time.h>
+#include <unistd.h>
 #undef	gettimeofday
 extern "C" int gettimeofday( struct timeval *, struct timezone * );
 #endif
 
-static const uint FIRST_DAY	= 2361222;	// Julian day for 1752/09/14
+static const uint FIRST_DAY	= 2361222;	// Julian day for 17520914
 static const int  FIRST_YEAR	= 1752;		// ### wrong for many countries
 static const uint SECS_PER_DAY	= 86400;
 static const uint MSECS_PER_DAY = 86400000;
@@ -68,15 +56,15 @@ static const uint MSECS_PER_HOUR= 3600000;
 static const uint SECS_PER_MIN	= 60;
 static const uint MSECS_PER_MIN = 60000;
 
-static const short monthDays[] ={0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+static short monthDays[] ={0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
 // ##### Localize.
 
-const char * const QDate::monthNames[] = {
+const char *QDate::monthNames[] = {
     "Jan", "Feb", "Mar", "Apr", "May", "Jun",
     "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
 
-const char * const QDate::weekdayNames[] ={
+const char *QDate::weekdayNames[] ={
     "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun" };
 
 
@@ -84,93 +72,48 @@ const char * const QDate::weekdayNames[] ={
   QDate member functions
  *****************************************************************************/
 
-// REVISED: aavit
-
 /*!
   \class QDate qdatetime.h
   \brief The QDate class provides date functions.
 
   \ingroup time
 
-  A QDate object contains a calendar date, i.e. year, month, and day
-  numbers in the modern western (Gregorian) calendar. It can read the
-  current date from the system clock. It provides functions for
-  comparing dates and for manipulating a date by adding a number of
-  days.
-
-  A QDate object is typically created either by giving the year, month
-  and day numbers explicitly, or by using the static function
-  currentDate(), which makes a QDate object which contains the
-  system's clock date. An explicit date can also be set using
-  setYMD().
-
-  The year(), month(), and day() functions provide access to the year,
-  month, and day numbers. Also, dayOfWeek() and dayOfYear() functions
-  are provided. The same information is provided in textual format by
-  the toString(), dayName(), and monthName() functions.
-
-  QDate provides a full set of operators to compare two QDate
-  objects. A date is considered smaller than another if it is earlier
-  than the other.
-
-  The date a given number of days later than a given date can be found
-  using the addDays() function. Correspondingly, the number of days
-  between two dates can be found using the daysTo() function.
-
-  The daysInMonth() and daysInYear() functions tell how many days
-  there are in this date's month and year, respectively. The
-  isLeapYear() function tells whether this date is in a leap year.
-
-  Note that QDate may not be used for date calculations for dates in
-  the remote past, i.e. prior to the introduction of the Gregorian
-  calendar. This calendar was adopted by England Sep. 14. 1752 (hence
-  this is the earliest valid QDate), and subsequently by most other
-  western countries, until 1923.
-
+  The QDate is based on the Gregorian (modern western) calendar.  This
+  calendar was first adopted by England in 1752, and subsequently by
+  most other western countries.  QDate computes the wrong day of week
+  for all dates earlier than 14th September 1752, and the day it
+  computes is correct only in some countries for years between 1752
+  and 1923.
+  
   The end of time is reached around 8000AD, by which time we expect Qt
   to be obsolete.
 
   \sa QTime, QDateTime
 */
 
-
 /*!
   \fn QDate::QDate()
-  Constructs a null date. Null dates are invalid.
-
-  \sa isNull(), isValid()
+  Constructs a null date.  Null dates are invalid.
 */
 
-
 /*!
-  Constructs a date with the year \a y, month \a m and day \a d.
-
-  \a y must be in the range 1752-ca. 8000, \a m must be in the range
-  1-12, and \a d must be in the range 1-31. Exception: if \a y is in
-  the range 0-99, it is interpreted as 1900-1999.
-
-  \sa isValid()
+  Constructs a date with the year \e y, month \e m and day \e d.
 */
 
 QDate::QDate( int y, int m, int d )
 {
-    jd = 0;
     setYMD( y, m, d );
 }
 
 
 /*!
   \fn bool QDate::isNull() const
-
   Returns TRUE if the date is null.  A null date is invalid.
-
   \sa isValid()
 */
 
-
 /*!
-  Returns TRUE if this date is valid.
-
+  Returns TRUE if the date is valid.
   \sa isNull()
 */
 
@@ -181,8 +124,7 @@ bool QDate::isValid() const
 
 
 /*!
-  Returns the year (>= 1752) of this date.
-
+  Returns the year (>= 1752) for this date.
   \sa month(), day()
 */
 
@@ -194,8 +136,7 @@ int QDate::year() const
 }
 
 /*!
-  Returns the month (January=1 .. December=12) of this date.
-
+  Returns the month (January=1 .. December=12) for this date.
   \sa year(), day()
 */
 
@@ -207,8 +148,7 @@ int QDate::month() const
 }
 
 /*!
-  Returns the day of the month (1..31) of this date.
-
+  Returns the day of the month (1..31) for this date.
   \sa year(), month(), dayOfWeek()
 */
 
@@ -221,8 +161,7 @@ int QDate::day() const
 
 /*!
   Returns the weekday (Monday=1 .. Sunday=7) for this date.
-
-  \sa day(), dayOfYear()
+  \sa day()
 */
 
 int QDate::dayOfWeek() const
@@ -232,8 +171,6 @@ int QDate::dayOfWeek() const
 
 /*!
   Returns the day of the year (1..365) for this date.
-
-  \sa day(), dayOfWeek()
 */
 
 int QDate::dayOfYear() const
@@ -243,8 +180,6 @@ int QDate::dayOfYear() const
 
 /*!
   Returns the number of days in the month (28..31) for this date.
-
-  \sa day(), daysInYear()
 */
 
 int QDate::daysInMonth() const
@@ -259,8 +194,6 @@ int QDate::daysInMonth() const
 
 /*!
   Returns the number of days in the year (365 or 366) for this date.
-
-  \sa day(), daysInMonth()
 */
 
 int QDate::daysInYear() const
@@ -272,19 +205,17 @@ int QDate::daysInYear() const
 
 
 /*!
-  Returns the name of the \a month.
+  Returns the name of the \e month.
 
   Month 1 == "Jan", month 2 == "Feb" etc.
-
-  \sa toString(), dayName()
 */
 
 QString QDate::monthName( int month ) const
 {
 #if defined(CHECK_RANGE)
-    if ( month < 1 || month > 12 ) {
+    if ( month < 0 || month > 12 ) {
 	qWarning( "QDate::monthName: Parameter out ouf range." );
-	month = 1;
+	month = 0;
     }
 #endif
     // ### Remove the fromLatin1 during localization
@@ -292,19 +223,17 @@ QString QDate::monthName( int month ) const
 }
 
 /*!
-  Returns the name of the \a weekday.
+  Returns the name of the \e weekday.
 
   Weekday 1 == "Mon", day 2 == "Tue" etc.
-
-  \sa toString(), monthName()
 */
 
-QString QDate::dayName( int weekday ) const
+QString QDate::dayName( int weekday) const
 {
 #if defined(CHECK_RANGE)
-    if ( weekday < 1 || weekday > 7 ) {
+    if ( weekday < 0 || weekday > 7 ) {
 	qWarning( "QDate::dayName: Parameter out of range." );
-	weekday = 1;
+	weekday = 0;
     }
 #endif
     // ### Remove the fromLatin1 during localization
@@ -315,10 +244,7 @@ QString QDate::dayName( int weekday ) const
 /*!
   Returns the date as a string.
 
-  The string format is "Sat May 20 1995". This function uses the
-  dayName() and monthName() functions to generate the string.
-
-  \sa dayName(), monthName()
+  The string format is "Sat May 20 1995".
 */
 
 QString QDate::toString() const
@@ -336,12 +262,7 @@ QString QDate::toString() const
 
 
 /*!
-  Sets the year \a y, month \a m and day \a d.
-
-  \a y must be in the range 1752-ca. 8000, \a m must be in the range
-  1-12, and \a d must be in the range 1-31. Exception: if \a y is in
-  the range 0-99, it is interpreted as 1900-1999.
-
+  Sets the year \e y, month \e m and day \e d.
   Returns TRUE if the date is valid, otherwise FALSE.
 */
 
@@ -355,16 +276,13 @@ bool QDate::setYMD( int y, int m, int d )
     }
     jd = greg2jul( y, m, d );
 #if defined(DEBUG)
-    ASSERT( year() == (y > 99 ? y : 1900+y) && month() == m && day() == d );
+    ASSERT( year() == y && month() == m && day() == d );
 #endif
     return TRUE;
 }
 
 /*!
-  Returns a QDate object containing a date \a ndays later than the
-  date of this object (or earlier if \a ndays is negative).
-
-  \sa daysTo()
+  Returns this date plus \e ndays days.
 */
 
 QDate QDate::addDays( int ndays ) const
@@ -375,8 +293,8 @@ QDate QDate::addDays( int ndays ) const
 }
 
 /*!
-  Returns the number of days from this date to \a d (which is negative
-  if \a d is earlier than this date).
+  Returns the number of days from this date to \a d, which is negative
+  if \a d is in the past.
 
   Example:
   \code
@@ -385,7 +303,6 @@ QDate QDate::addDays( int ndays ) const
     d1.daysTo( d2 );			// returns 3
     d2.daysTo( d1 );			// returns -3
   \endcode
-
   \sa addDays()
 */
 
@@ -397,40 +314,39 @@ int QDate::daysTo( const QDate &d ) const
 
 /*!
   \fn bool QDate::operator==( const QDate &d ) const
-  Returns TRUE if this date is equal to \a d, or FALSE if
+  Returns TRUE if this date is equal to \e d, or FALSE if
   they are different.
 */
 
 /*!
   \fn bool QDate::operator!=( const QDate &d ) const
-  Returns TRUE if this date is different from \a d, or FALSE if
+  Returns TRUE if this date is different from \e d, or FALSE if
   they are equal.
 */
 
 /*!
   \fn bool QDate::operator<( const QDate &d ) const
-  Returns TRUE if this date is earlier than \a d, otherwise FALSE.
+  Returns TRUE if this date is before \e d, otherwise FALSE.
 */
 
 /*!
   \fn bool QDate::operator<=( const QDate &d ) const
-  Returns TRUE if this date is earlier than or equal to \a d, otherwise FALSE.
+  Returns TRUE if this date is before or equal to \e d, otherwise FALSE.
 */
 
 /*!
   \fn bool QDate::operator>( const QDate &d ) const
-  Returns TRUE if this date is later than \a d, otherwise FALSE.
+  Returns TRUE if this date is after \e d, otherwise FALSE.
 */
 
 /*!
   \fn bool QDate::operator>=( const QDate &d ) const
-  Returns TRUE if this date is later than or equal to \a d, otherwise FALSE.
+  Returns TRUE if this date is equal to or after \e d, otherwise FALSE.
 */
 
 
 /*!
-  Returns the current date, as reported by the system clock.
-
+  Returns the current date.
   \sa QTime::currentTime(), QDateTime::currentDateTime()
 */
 
@@ -457,21 +373,11 @@ QDate QDate::currentDate()
 }
 
 /*!
-  Returns TRUE if the specified date (year \a y, month \a m and day \a
-  d) is valid.
+  Returns TRUE if the specified date is valid.
 
-  Example:
-  \code
-    QDate::isValid( 2002, 5, 17 );	// TRUE;  May 17th 2002 is OK.
-    QDate::isValid( 2002, 2, 30 );	// FALSE; Feb 30th does not exist
-    QDate::isValid( 2004, 2, 29 );	// TRUE; 2004 is a leap year
-    QDate::isValid( 1202, 6, 6 );	// FALSE; 1202 is pre-Gregorian
-  \endcode
+  Note that years 00-99 are treated as 1900-1999.
 
-  Note that a \a y value in the range 00-99 is interpreted as
-  1900-1999.
-
-  \sa isNull(), setYMD()
+  \sa isNull()
 */
 
 bool QDate::isValid( int y, int m, int d )
@@ -486,7 +392,7 @@ bool QDate::isValid( int y, int m, int d )
 }
 
 /*!
-  Returns TRUE if the specified year \a y is a leap year.
+  Returns TRUE if the specified year \e y is a leap year.
 */
 
 bool QDate::leapYear( int y )
@@ -555,64 +461,28 @@ void QDate::jul2greg( uint jd, int &y, int &m, int &d )
 /*!
   \class QTime qdatetime.h
 
-  \brief The QTime class provides clock time functions.
+  \brief The QTime class provides time functions 24 hours a day.
+
+  \capt Time functions
 
   \ingroup time
 
-  A QTime object contains a clock time, i.e. a number of hours,
-  minutes, seconds and milliseconds since midnight. It can read the
-  current time from the system clock, and measure a span of elapsed
-  time. It provides functions for comparing times and for manipulating
-  a time by adding a number of (milli)seconds.
-
-  QTime operates with 24-hour clock format; it has no concept of
-  AM/PM. It operates with local time; it does not know anything about
-  time zones or daylight savings time.
-
-  A QTime object is typically created either by giving the number of
-  hours, minutes, seconds, and milliseconds explicitly, or by using
-  the static function currentTime(), which makes a QTime object which
-  contains the system's clock time. Note that the accuracy depends on
-  the accuracy of the underlying operating system; not all systems
-  provide 1-millisecond accuracy.
-
-  The hour(), minute(), second(), and msec() functions provide access
-  to the number of hours, minutes, seconds, and milliseconds of the
-  time. The same information is provided in textual format by the
-  toString() function.
-
-  QTime provides a full set of operators to compare two QTime
-  objects. A time is considered smaller than another if it is earlier
-  than the other.
-
-  The time a given number of seconds or milliseconds later than a
-  given time can be found using the addSecs() or addMSecs()
-  functions. Correspondingly, the number of (milli)seconds between two
-  times can be found using the secsTo() or msecsTo() functions.
-
-  QTime can be used to measure a span of elapsed time using the
-  start(), restart(), and elapsed() functions.
+  The time resolution of QTime is a millisecond, although the accuracy
+  depends on the underlying operating system.  Some operating systems
+  (e.g. Linux and Window NT) support a one-millisecond resolution, while
+  others (MS-DOS and Windows 3.1) support only a 55 millisecond resolution.
 
   \sa QDate, QDateTime
 */
 
 /*!
   \fn QTime::QTime()
-
-  Constructs the time 0 hours, minutes, seconds and milliseconds,
-  i.e. 00:00:00.000 (midnight). This is a valid time.
-
-  \sa isValid()
+  Constructs a time 00:00:00.000, which is valid.
 */
 
 /*!
-  Constructs a time with hour \a h, minute \a m, seconds \a s and
-  milliseconds \a ms.
-
-  \a h must be in the range 0-23, \a m and \a s must be in the range
-  0-59, and \a ms must be in the range 0-999.
-
-  \sa isValid()
+  Constructs a time with hour \e h, minute \e m, seconds \e s and milliseconds
+  \e ms.
 */
 
 QTime::QTime( int h, int m, int s, int ms )
@@ -622,7 +492,7 @@ QTime::QTime( int h, int m, int s, int ms )
 
 
 /*!
-  \fn bool QTime::isNull() const
+  \fn bool  QTime::isNull() const
   Returns TRUE if the time is equal to 00:00:00.000. A null time is valid.
 
   \sa isValid()
@@ -679,9 +549,8 @@ int QTime::msec() const
 
 
 /*!
-  Returns the time of this object in a textual format. Milliseconds
-  are not included. The string format is HH:MM:SS, e.g. 1 second
-  before midnight would be "23:59:59".
+  Converts the date to a string, which is returned.  Milliseconds are
+  not included. The string format is "03:40:13".
 */
 
 QString QTime::toString() const
@@ -693,14 +562,9 @@ QString QTime::toString() const
 
 
 /*!
-  Sets the time to hour \a h, minute \a m, seconds \a s and
-  milliseconds \a ms.
-
-  \a h must be in the range 0-23, \a m and \a s must be in the range
-  0-59, and \a ms must be in the range 0-999. Returns TRUE if the set
-  time is valid, otherwise FALSE.
-
-  \sa isValid()
+  Sets the hour \e h, minute \e m, seconds \e s and milliseconds
+  \e ms.
+  Returns TRUE if the time is valid, otherwise FALSE.
 */
 
 bool QTime::setHMS( int h, int m, int s, int ms )
@@ -710,7 +574,6 @@ bool QTime::setHMS( int h, int m, int s, int ms )
 	qWarning( "QTime::setHMS Invalid time %02d:%02d:%02d.%03d", h, m, s,
 		 ms );
 #endif
-	ds = MSECS_PER_DAY;		// make this invalid
 	return FALSE;
     }
     ds = (h*SECS_PER_HOUR + m*SECS_PER_MIN + s)*1000 + ms;
@@ -718,22 +581,8 @@ bool QTime::setHMS( int h, int m, int s, int ms )
 }
 
 /*!
-  Returns a QTime object containing a time \a nsecs seconds later than
-  the time of this object (or earlier if \a ms is negative).
-
-  Note that the time will wrap if it passes midnight.
-
-  Example:
-  \code
-    QTime n( 14, 0, 0 );                // n == 14:00:00
-    QTime t;
-    t = n.addSecs( 70 );                // t == 14:01:10
-    t = n.addSecs( -70 );               // t == 13:58:50
-    t = n.addSecs( 10*60*60 + 5 );      // t == 00:00:05
-    t = n.addSecs( -15*60*60 );         // t == 23:00:00
-  \endcode
-
-  \sa addMSecs(), secsTo(), QDateTime::addSecs()
+  Returns the time plus \e nsecs seconds.
+  \sa secsTo()
 */
 
 QTime QTime::addSecs( int nsecs ) const
@@ -743,7 +592,7 @@ QTime QTime::addSecs( int nsecs ) const
 
 /*!
   Returns the number of seconds from this time to \a t (which is
-  negative if \a t is earlier than this time).
+  negative if \a t is in the past).
 
   Since QTime measures time within a day and there are 86400 seconds
   in a day, the result is between -86400 and 86400.
@@ -757,13 +606,7 @@ int QTime::secsTo( const QTime &t ) const
 }
 
 /*!
-  Returns a QTime object containing a time \a ms milliseconds later than
-  the time of this object (or earlier if \a ms is negative).
-
-  Note that the time will wrap if it passes midnight. See addSecs()
-  for an example.
-
-  \sa addSecs(), msecsTo()
+  Returns the time plus \e ms milliseconds.
 */
 
 QTime QTime::addMSecs( int ms ) const
@@ -781,13 +624,7 @@ QTime QTime::addMSecs( int ms ) const
 }
 
 /*!
-  Returns the number of milliseconds from this time to \a t (which is
-  negative if \a t is earlier than this time).
-
-  Since QTime measures time within a day and there are 86400000
-  milliseconds in a day, the result is between -86400000 and 86400000.
-
-  \sa secsTo()
+  Returns the number of milliseconds between this time and \e t.
 */
 
 int QTime::msecsTo( const QTime &t ) const
@@ -798,51 +635,40 @@ int QTime::msecsTo( const QTime &t ) const
 
 /*!
   \fn bool QTime::operator==( const QTime &t ) const
-
-  Returns TRUE if this time is equal to \a t, or FALSE if they are
-  different.
+  Returns TRUE if this time is equal to \e t, or FALSE if
+  they are different.
 */
 
 /*!
   \fn bool QTime::operator!=( const QTime &t ) const
-
-  Returns TRUE if this time is different from \a t, or FALSE if they
-  are equal.
+  Returns TRUE if this time is different from \e t, or FALSE if
+  they are equal.
 */
 
 /*!
   \fn bool QTime::operator<( const QTime &t ) const
-
-  Returns TRUE if this time is earlier than \a t, otherwise FALSE.
+  Returns TRUE if this time is before \e t, otherwise FALSE.
 */
 
 /*!
   \fn bool QTime::operator<=( const QTime &t ) const
-
-  Returns TRUE if this time is earlier than or equal to \a t,
-  otherwise FALSE.
+  Returns TRUE if this time is before or equal to \e t, otherwise FALSE.
 */
 
 /*!
   \fn bool QTime::operator>( const QTime &t ) const
-
-  Returns TRUE if this time is later than \a t, otherwise FALSE.
+  Returns TRUE if this time is after \e t, otherwise FALSE.
 */
 
 /*!
   \fn bool QTime::operator>=( const QTime &t ) const
-
-  Returns TRUE if this time is later than or equal to \a t, otherwise
-  FALSE.
+  Returns TRUE if this time is equal to or after \e t, otherwise FALSE.
 */
 
 
 
 /*!
-  Returns the current time, as reported by the system clock.
-
-  Note that the accuracy depends on the accuracy of the underlying
-  operating system; not all systems provide 1-millisecond accuracy.
+  Returns the current time.
 */
 
 QTime QTime::currentTime()
@@ -853,8 +679,6 @@ QTime QTime::currentTime()
 }
 
 /*!
-  \internal
-
   Fetches the current time and returns TRUE if the time is within one
   minute after midnight, otherwise FALSE. The return value is used by
   QDateTime::currentDateTime() to ensure that the date there is correct.
@@ -893,7 +717,7 @@ bool QTime::currentTime( QTime *ct )
 	     t.second*1000 + t.hsecond*10;
     return (t.hour== 0 && t.minute == 0);
 
-#elif defined(_OS_UNIX_)
+#elif defined(UNIX)
 
     struct timeval tv;
     gettimeofday( &tv, 0 );
@@ -917,9 +741,6 @@ bool QTime::currentTime( QTime *ct )
 /*!
   Returns TRUE if the specified time is valid, otherwise FALSE.
 
-  The time is valid if \a h is in the range 0-23, \a m and \a s are in
-  the range 0-59, and \a ms is in the range 0-999.
-
   Example:
   \code
     QTime::isValid(21, 10, 30);		// returns TRUE
@@ -934,8 +755,7 @@ bool QTime::isValid( int h, int m, int s, int ms )
 
 
 /*!
-  Sets this time to the current time. This is practical for timing:
-
+  Sets the time to the current time, e.g. for timing:
   \code
     QTime t;
     t.start();				// start clock
@@ -943,7 +763,7 @@ bool QTime::isValid( int h, int m, int s, int ms )
     qDebug( "%d\n", t.elapsed() );	// prints # msecs elapsed
   \endcode
 
-  \sa restart(), elapsed(), currentTime()
+  \sa restart(), elapsed()
 */
 
 void QTime::start()
@@ -952,22 +772,20 @@ void QTime::start()
 }
 
 /*!
-  Sets this time to the current time, and returns the number of
-  milliseconds that have elapsed since the last time start() or
-  restart() was called.
+  Sets *this to the current time, and returns the number of
+  milliseconds that have elapsed since the last start() or restart().
 
-  This function is guaranteed to be atomic, and is thus very handy for
-  repeated measurements: call start() to start the first measurement,
+  restart is guaranteed to be atomic, and so is very handy for
+  repeated measurements; call start() to start the first measurement,
   then restart() for each later measurement.
 
   Note that the counter wraps to zero 24 hours after the last call to
   start() or restart().
 
-  \warning If the system's clock setting has been changed since the
-  last time start() or restart() was called, the result is undefined.
+  \warning If the system's local time changes, the result is undefined.
   This can happen e.g. when daylight saving is turned on or off.
 
-  \sa start(), elapsed(), currentTime()
+  \sa start(), elapsed()
 */
 
 int QTime::restart()
@@ -981,17 +799,13 @@ int QTime::restart()
 }
 
 /*!
-  Returns the number of milliseconds that have elapsed since the last
-  time start() or restart() was called.
+  Returns the number of milliseconds that have elapsed since start() or
+  restart() were called.
 
   Note that the counter wraps to zero 24 hours after the last call to
   start() or restart.
 
-  Note that the accuracy depends on the accuracy of the underlying
-  operating system; not all systems provide 1-millisecond accuracy.
-
-  \warning If the system's clock setting has been changed since the
-  last time start() or restart() was called, the result is undefined.
+  \warning If the system's local time changes, the result is undefined.
   This can happen e.g. when daylight saving is turned on or off.
 
   \sa start(), restart()
@@ -1012,57 +826,27 @@ int QTime::elapsed()
 
 /*!
   \class QDateTime qdatetime.h
-  \brief The QDateTime class provides date and time functions.
+  \brief The QDateTime class combines QDate and QTime into a single class.
 
   \ingroup time
 
-  A QDateTime object contains a calendar date and a clock time (a
-  "datetime"). It is a combination of the QDate and QTime classes. It
-  can read the current datetime from the system clock. It provides
-  functions for comparing datetimes and for manipulating a datetime by
-  adding a number of seconds or days.
+  QDateTime provides high precision date and time functions since it can work
+  with Gregorian dates up to about year 8000.
 
-  A QDateTime object is typically created either by giving a date and
-  time explicitly, or by using the static function currentTime(),
-  which makes a QDateTime object which contains the system's clock
-  time.
-
-  The date() and time() functions provide access to the date and time
-  parts of the datetime. The same information is provided in textual
-  format by the toString() function.
-
-  QDateTime provides a full set of operators to compare two QDateTime
-  objects. A datetime is considered smaller than another if it is
-  earlier than the other.
-
-  The datetime a given number of days or seconds later than a given
-  datetime can be found using the addDays() and addSecs()
-  functions. Correspondingly, the number of days or seconds between
-  two times can be found using the daysTo() or secsTo() functions.
-
-  A datetime can also be set using the setTime_t() function, which
-  takes a POSIX-standard "number of seconds since 00:00:00 on January
-  1, 1970" value.
-
-  The limitations regarding range and resolution mentioned in the
-  QDate and QTime documentation apply for QDateTime also.
+  Most countries that use the Gregorian calendar switched to it between 1550
+  and 1920.
 
   \sa QDate, QTime
 */
 
-
 /*!
   \fn QDateTime::QDateTime()
-
   Constructs a null datetime (i.e. null date and null time).  A null
   datetime is invalid, since the date is invalid.
-
-  \sa isValid()
 */
 
-
 /*!
-  Constructs a datetime with date \a date and null time (00:00:00.000).
+  Constructs a datetime with date \e date and null time (00:00:00.000).
 */
 
 QDateTime::QDateTime( const QDate &date )
@@ -1071,7 +855,7 @@ QDateTime::QDateTime( const QDate &date )
 }
 
 /*!
-  Constructs a datetime with date \a date and time \a time.
+  Constructs a datetime with date \e date and time \e time.
 */
 
 QDateTime::QDateTime( const QDate &date, const QTime &time )
@@ -1082,50 +866,38 @@ QDateTime::QDateTime( const QDate &date, const QTime &time )
 
 /*!
   \fn bool QDateTime::isNull() const
-
   Returns TRUE if both the date and the time are null.	A null date is invalid.
-
   \sa QDate::isNull(), QTime::isNull()
 */
 
 /*!
   \fn bool QDateTime::isValid() const
-
-  Returns TRUE if both the date and the time are valid.
-
+  Returns TRUE if both the date and the time are value.
   \sa QDate::isValid(), QTime::isValid()
 */
 
 /*!
   \fn QDate QDateTime::date() const
-
   Returns the date part of this datetime.
-
-  \sa setDate(), time()
+  \sa time()
 */
 
 /*!
   \fn QTime QDateTime::time() const
-
   Returns the time part of this datetime.
-
-  \sa setTime(), date()
+  \sa date()
 */
 
 /*!
   \fn void QDateTime::setDate( const QDate &date )
-
   Sets the date part of this datetime.
-
-  \sa date(), setTime()
+  \sa setTime()
 */
 
 /*!
   \fn void QDateTime::setTime( const QTime &time )
-
   Sets the time part of this datetime.
-
-  \sa time(), setDate()
+  \sa setDate()
 */
 
 
@@ -1150,7 +922,7 @@ void QDateTime::setTime_t( uint secsSince1Jan1970UTC )
 	    t.ds = 0;
 	    return;
 	}
-    }
+    } 
     d.jd = QDate::greg2jul( tM->tm_year + 1900, tM->tm_mon + 1, tM->tm_mday );
     t.ds = MSECS_PER_HOUR*tM->tm_hour + MSECS_PER_MIN*tM->tm_min +
 	    1000*tM->tm_sec;
@@ -1161,10 +933,6 @@ void QDateTime::setTime_t( uint secsSince1Jan1970UTC )
   Returns the datetime as a string.
 
   The string format is "Sat May 20 03:40:13 1998".
-
-  This function uses QDate::dayName(), QDate::monthName(), and
-  QTime::toString() to generate the string.
-
 */
 
 QString QDateTime::toString() const
@@ -1182,11 +950,8 @@ QString QDateTime::toString() const
 }
 
 /*!
-  Returns a QDateTime object containing a datetime \a ndays days later
-  than the datetime of this object (or earlier if \a ndays is
-  negative).
-
-  \sa daysTo(), addSecs()
+  Returns the datetime plus \e ndays days.
+  \sa daysTo()
 */
 
 QDateTime QDateTime::addDays( int ndays ) const
@@ -1195,11 +960,8 @@ QDateTime QDateTime::addDays( int ndays ) const
 }
 
 /*!
-  Returns a QDateTime object containing a datetime \a nsecs seconds
-  later than the datetime of this object (or earlier if \a nsecs is
-  negative).
-
-  \sa secsTo(), addDays()
+  Returns the datetime plus \e nsecs seconds.
+  \sa secsTo()
 */
 
 QDateTime QDateTime::addSecs( int nsecs ) const
@@ -1232,10 +994,10 @@ QDateTime QDateTime::addSecs( int nsecs ) const
 }
 
 /*!
-  Returns the number of days from this datetime to \a dt (which is
-  negative if \a dt is earlier than this datetime).
+  Returns the number of days from this datetime to \a dt, which is
+  negative if \a dt is in the past.
 
-  \sa addDays(), secsTo()
+  \sa addDays() secsTo()
 */
 
 int QDateTime::daysTo( const QDateTime &dt ) const
@@ -1244,8 +1006,8 @@ int QDateTime::daysTo( const QDateTime &dt ) const
 }
 
 /*!
-  Returns the number of seconds from this datetime to \a dt (which is
-  negative if \a dt is earlier than this datetime).
+  Returns the number of seconds from this datetime to \a dt, which is
+  negative if \a t is in the past.
 
   Example:
   \code
@@ -1254,7 +1016,7 @@ int QDateTime::daysTo( const QDateTime &dt ) const
     qDebug( "There are %d seconds to Christmas", dt.secsTo(x) );
   \endcode
 
-  \sa addSecs(), daysTo(), QTime::secsTo()
+  \sa addSecs() daysTo() QTime::secsTo()
 */
 
 int QDateTime::secsTo( const QDateTime &dt ) const
@@ -1264,7 +1026,7 @@ int QDateTime::secsTo( const QDateTime &dt ) const
 
 
 /*!
-  Returns TRUE if this datetime is equal to \a dt, or FALSE if
+  Returns TRUE if this datetime is equal to \e dt, or FALSE if
   they are different.
   \sa operator!=()
 */
@@ -1275,7 +1037,7 @@ bool QDateTime::operator==( const QDateTime &dt ) const
 }
 
 /*!
-  Returns TRUE if this datetime is different from \a dt, or FALSE if
+  Returns TRUE if this datetime is different from \e dt, or FALSE if
   they are equal.
   \sa operator==()
 */
@@ -1286,7 +1048,7 @@ bool QDateTime::operator!=( const QDateTime &dt ) const
 }
 
 /*!
-  Returns TRUE if this datetime is earlier than \a dt, otherwise FALSE.
+  Returns TRUE if this datetime is before \e dt, otherwise FALSE.
 */
 
 bool QDateTime::operator<( const QDateTime &dt ) const
@@ -1297,8 +1059,8 @@ bool QDateTime::operator<( const QDateTime &dt ) const
 }
 
 /*!
-  Returns TRUE if this datetime is earlier than or equal to \a dt,
-  otherwise FALSE.
+  Returns TRUE if this datetime is before or equal to \e dt, otherwise
+  FALSE.
 */
 
 bool QDateTime::operator<=( const QDateTime &dt ) const
@@ -1309,7 +1071,7 @@ bool QDateTime::operator<=( const QDateTime &dt ) const
 }
 
 /*!
-  Returns TRUE if this datetime is later than \a dt, otherwise FALSE.
+  Returns TRUE if this datetime is after \e dt, otherwise FALSE.
 */
 
 bool QDateTime::operator>( const QDateTime &dt ) const
@@ -1320,8 +1082,8 @@ bool QDateTime::operator>( const QDateTime &dt ) const
 }
 
 /*!
-  Returns TRUE if this datetime is later than or equal to \a dt,
-  otherwise FALSE.
+  Returns TRUE if this datetime is equal to or after \e dt, otherwise
+  FALSE.
 */
 
 bool QDateTime::operator>=( const QDateTime &dt ) const
@@ -1332,8 +1094,7 @@ bool QDateTime::operator>=( const QDateTime &dt ) const
 }
 
 /*!
-  Returns the current datetime, as reported by the system clock.
-
+  Returns the current datetime.
   \sa QDate::currentDate(), QTime::currentTime()
 */
 
@@ -1352,12 +1113,11 @@ QDateTime QDateTime::currentDateTime()
   Date/time stream functions
  *****************************************************************************/
 
-#ifndef QT_NO_DATASTREAM
 /*!
   \relates QDate
   Writes the date to the stream.
 
-  \sa \link datastreamformat.html Format of the QDataStream operators \endlink
+  Serialization format: [Q_UINT32], Julian day.
 */
 
 QDataStream &operator<<( QDataStream &s, const QDate &d )
@@ -1368,8 +1128,6 @@ QDataStream &operator<<( QDataStream &s, const QDate &d )
 /*!
   \relates QDate
   Reads a date from the stream.
-
-  \sa \link datastreamformat.html Format of the QDataStream operators \endlink
 */
 
 QDataStream &operator>>( QDataStream &s, QDate &d )
@@ -1384,7 +1142,7 @@ QDataStream &operator>>( QDataStream &s, QDate &d )
   \relates QTime
   Writes a time to the stream.
 
-  \sa \link datastreamformat.html Format of the QDataStream operators \endlink
+  Serialization format: [Q_UINT32], milliseconds since midnight.
 */
 
 QDataStream &operator<<( QDataStream &s, const QTime &t )
@@ -1395,8 +1153,6 @@ QDataStream &operator<<( QDataStream &s, const QTime &t )
 /*!
   \relates QTime
   Reads a time from the stream.
-
-  \sa \link datastreamformat.html Format of the QDataStream operators \endlink
 */
 
 QDataStream &operator>>( QDataStream &s, QTime &t )
@@ -1411,7 +1167,7 @@ QDataStream &operator>>( QDataStream &s, QTime &t )
   \relates QDateTime
   Writes a datetime to the stream.
 
-  \sa \link datastreamformat.html Format of the QDataStream operators \endlink
+  Serialization format: [QDate QTime].
 */
 
 QDataStream &operator<<( QDataStream &s, const QDateTime &dt )
@@ -1422,8 +1178,6 @@ QDataStream &operator<<( QDataStream &s, const QDateTime &dt )
 /*!
   \relates QDateTime
   Reads a datetime from the stream.
-
-  \sa \link datastreamformat.html Format of the QDataStream operators \endlink
 */
 
 QDataStream &operator>>( QDataStream &s, QDateTime &dt )
@@ -1431,4 +1185,3 @@ QDataStream &operator>>( QDataStream &s, QDateTime &dt )
     s >> dt.d >> dt.t;
     return s;
 }
-#endif //QT_NO_DATASTREAM

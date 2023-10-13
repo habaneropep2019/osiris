@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: qt/examples/tictac/tictac.h   2.3.2   edited 2001-01-26 $
+** $Id: tictac.h,v 1.2 1999/06/03 01:45:58 warwick Exp $
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -23,20 +23,16 @@ class QLabel;
 // TicTacButton implements a single tic-tac-toe button
 //
 
-class TicTacButton : public QPushButton
+class TicTacButton : public QButton
 {
     Q_OBJECT
 public:
-    TicTacButton( QWidget *parent );
+    TicTacButton( QWidget *parent=0 );
     enum Type { Blank, Circle, Cross };
     Type	type() const		{ return t; }
     void	setType( Type type )	{ t = type; repaint(); }
-    QSizePolicy sizePolicy() const
-    { return QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Preferred ); }
-    QSize sizeHint() const { return QSize( 32, 32 ); }
-    QSize minimumSizeHint() const { return QSize( 10, 10 ); }
 protected:
-    void	drawButtonLabel( QPainter * );
+    void	drawButton( QPainter * );
 private:
     Type t;
 };
@@ -68,6 +64,8 @@ signals:
     void	finished();			// game finished
 private slots:
     void	buttonClicked();
+protected:
+    void	resizeEvent( QResizeEvent * );
 private:
     void        setState( State state ) { st = state; }
     void	updateButtons();

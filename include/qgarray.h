@@ -1,39 +1,27 @@
 /****************************************************************************
-** $Id: qt/src/tools/qgarray.h   2.3.2   edited 2001-01-26 $
+** $Id: qgarray.h,v 2.9 1999/06/16 09:58:07 agulbra Exp $
 **
 ** Definition of QGArray class
 **
 ** Created : 930906
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
-** This file is part of the tools module of the Qt GUI Toolkit.
+** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses may use this file in accordance with the Qt Commercial License
-** Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
+*****************************************************************************/
 
 #ifndef QGARRAY_H
 #define QGARRAY_H
@@ -47,7 +35,7 @@ class Q_EXPORT QGArray					// generic array
 {
 friend class QBuffer;
 public:
-    //### DO NOT USE THIS.  IT IS PUBLIC BUT DO NOT USE IT IN NEW CODE.
+    // DO NOT USE THIS.  IT IS PUBLIC BUT DO NOT USE IT IN NEW CODE.
     struct array_data : public QShared {	// shared array
 	array_data()	{ data=0; len=0; }
 	char *data;				// actual array data
@@ -87,9 +75,6 @@ protected:
 
     int		find( const char *d, uint index, uint sz ) const;
     int		contains( const char *d, uint sz ) const;
-    
-    void	sort( uint sz );
-    int		bsearch( const char *d, uint sz ) const;
 
     char       *at( uint index ) const;
 

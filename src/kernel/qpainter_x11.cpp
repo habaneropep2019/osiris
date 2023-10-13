@@ -1,39 +1,27 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qpainter_x11.cpp   2.3.2   edited 2001-10-22 $
+** $Id: qpainter_x11.cpp,v 2.113 1999/06/22 20:12:35 paul Exp $
 **
 ** Implementation of QPainter class for X11
 **
 ** Created : 940112
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
-** This file is part of the kernel module of the Qt GUI Toolkit.
+** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses for Unix/X11 may use this file in accordance with the Qt Commercial
-** License Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
+*****************************************************************************/
 
 #include "qpainter.h"
 #include "qwidget.h"
@@ -41,22 +29,18 @@
 #include "qpixmapcache.h"
 #include "qlist.h"
 #include "qintdict.h"
-#include "qfontdata_p.h"
+#include "qfontdata.h"
 #include "qtextcodec.h"
 #include <ctype.h>
 #include <stdlib.h>
 #include "qt_x11.h"
 #include "qpaintdevicemetrics.h"
 
-#include <netinet/in.h>
-
-// REVISED: arnt
 
 /* paintevent magic to provide Windows semantics on X11
  */
 static QRegion* paintEventClipRegion = 0;
 static QPaintDevice* paintEventDevice = 0;
-
 void qt_set_paintevent_clipping( QPaintDevice* dev, const QRegion& region)
 {
     if ( !paintEventClipRegion )
@@ -65,49 +49,12 @@ void qt_set_paintevent_clipping( QPaintDevice* dev, const QRegion& region)
 	*paintEventClipRegion = region;
     paintEventDevice = dev;
 }
-
 void qt_clear_paintevent_clipping()
 {
     delete paintEventClipRegion;
     paintEventClipRegion = 0;
     paintEventDevice = 0;
 }
-
-void qt_erase_region( QWidget* w, const QRegion& region)
-{
-    QRegion reg = region;
-
-    if ( !w->paintingActive() && !w->isTopLevel() && w->backgroundPixmap()
-	 && w->backgroundOrigin() == QWidget::ParentOrigin ) {
-	QPainter p( w );
-	p.setClipRegion( region ); // automatically includes paintEventDevice if required
-	p.drawTiledPixmap( 0, 0, w->width(), w->height(),
-			   *w->backgroundPixmap(),
-			   w->x(), w->y() );
-	return;
-    }
-
-    if ( w == paintEventDevice )
-	reg = paintEventClipRegion->intersect( reg );
-
-    QArray<QRect> r = reg.rects();
-    for (uint i=0; i<r.size(); i++) {
-	const QRect& rr = r[(int)i];
-	XClearArea( w->x11Display(), w->winId(),
-		    rr.x(), rr.y(), rr.width(), rr.height(), FALSE );
-    }
-}
-
-void qt_erase_rect( QWidget* w, const QRect& r)
-{
-    if ( w == paintEventDevice || w->backgroundOrigin() == QWidget::ParentOrigin )
-	qt_erase_region( w, r );
-    else
-	XClearArea( w->x11Display(), w->winId(), r.x(), r.y(), r.width(), r.height(), FALSE );
-
-}
-
-
 
 
 /*****************************************************************************
@@ -247,7 +194,7 @@ static GC alloc_gc( Display *dpy, Drawable hd, bool monochrome=FALSE,
     privateGC = TRUE;				// will be slower
 #endif
     if ( privateGC ) {
-	GC gc = XCreateGC( dpy, hd, 0, 0 );
+	GC gc = XCreateGC( dpy, hd, 0, 0 );	
 	XSetGraphicsExposures( dpy, gc, FALSE );
 	return gc;
     }
@@ -295,7 +242,6 @@ static void free_gc( Display *dpy, GC gc, bool privateGC = FALSE )
 		XSetClipMask( dpy, gc, None );	// make it reusable
 		XSetFunction( dpy, gc, GXcopy );
 		XSetFillStyle( dpy, gc, FillSolid );
-		XSetTSOrigin( dpy, gc, 0, 0 );
 		return;
 	    }
 	    p++;
@@ -305,37 +251,27 @@ static void free_gc( Display *dpy, GC gc, bool privateGC = FALSE )
 
 
 /*****************************************************************************
-  QPainter internal GC (Graphics Context) cache for solid pens and
-  brushes.
+  QPainter internal GC (Graphics Context) cache for solid pens and brushes.
 
-  The GC cache makes a significant contribution to speeding up
-  drawing.  Setting new pen and brush colors will make the painter
-  look for another GC with the same color instead of changing the
-  color value of the GC currently in use. The cache structure is
-  optimized for fast lookup.  Only solid line pens with line width 0
-  and solid brushes are cached.
-
-  In addition, stored GCs may have an implicit clipping region
-  set. This prevents any drawing outside paint events. Both
-  updatePen() and updateBrush() keep track of the validity of this
-  clipping region by storing the clip_serial number in the cache.
-
-*****************************************************************************/
+  The GC cache makes a significant contribution to speeding up drawing.
+  Setting new pen and brush colors will make the painter look for another
+  GC with the same color instead of changing the color value of the GC
+  currently in use. The cache structure is optimized for fast lookup.
+  Only solid line pens with line width 0 and solid brushes are cached.
+ *****************************************************************************/
 
 struct QGCC					// cached GC
 {
-    GC gc;
-    uint pix;
-    int count;
-    int hits;
-    int clip_serial;
+    GC	    gc;
+    uint    pix;
+    int	    count;
+    int	    hits;
 };
 
 const  int   gc_cache_size = 29;		// multiply by 4
 static QGCC *gc_cache_buf;
 static QGCC *gc_cache[4*gc_cache_size];
 static bool  gc_cache_init = FALSE;
-static int gc_cache_clip_serial = 0;
 
 
 static void init_gc_cache()
@@ -370,7 +306,7 @@ static void cleanup_gc_cache()
     qDebug( "Number of cache creates = %d", g_numcreates );
     qDebug( "Number of cache faults = %d", g_numfaults );
     for ( int i=0; i<gc_cache_size; i++ ) {
-	QCString    str;
+	QString	    str;
 	QBuffer	    buf( str );
 	buf.open(IO_ReadWrite);
 	QTextStream s(&buf);
@@ -399,7 +335,7 @@ static bool obtain_gc( void **ref, GC *gc, uint pix, Display *dpy, HANDLE hd )
     QGCC *g = gc_cache[k];
     QGCC *prev = 0;
 
-#define NOMATCH (g->gc && (g->pix != pix || g->count > 0 ) )
+#define NOMATCH (g->gc && g->pix != pix)
 
     if ( NOMATCH ) {
 	prev = g;
@@ -415,9 +351,7 @@ static bool obtain_gc( void **ref, GC *gc, uint pix, Display *dpy, HANDLE hd )
 			g->pix	 = pix;
 			g->count = 1;
 			g->hits	 = 1;
-			g->clip_serial = 0;
 			XSetForeground( dpy, g->gc, pix );
-			XSetClipMask( dpy, g->gc, None );
 			gc_cache[k]   = prev;
 			gc_cache[k-1] = g;
 			*ref = (void *)g;
@@ -459,7 +393,6 @@ static bool obtain_gc( void **ref, GC *gc, uint pix, Display *dpy, HANDLE hd )
 	g->pix	 = pix;
 	g->count = 1;
 	g->hits	 = 1;
-	g->clip_serial = 0;
 	*gc = g->gc;
 	return FALSE;
     }
@@ -470,159 +403,6 @@ static inline void release_gc( void *ref )
     ((QGCC*)ref)->count--;
 }
 
-
-
-#ifdef QT_XFT
-int qt_use_xft (void)
-{
-    static int	checked_env=0;
-    static int	use_xft=0;
-
-    if (!checked_env) {
-	if (XftDefaultHasRender(qt_xdisplay())) {
-	    char *e = getenv ("QT_XFT");
-	    if ( e && (*e == '1' ||
-		       *e == 'y' || *e == 'Y' ||
-		       *e == 't' || *e == 'T' ))
-		use_xft = 1;
-	    else
-		use_xft = 0;
-	}
-	checked_env = 1;
-    }
-    return use_xft;
-}
-
-typedef struct _qt_ft_draw {
-    struct _qt_ft_draw	*next;
-    Drawable		draw;
-    Display		*dpy;
-    Visual		*visual;
-    Colormap		cmap;
-    XftDraw		*ftdraw;
-    int			clip_serial;
-    bool		clip_bad;
-} qt_ft_draw;
-
-static qt_ft_draw   *qt_ft_head;
-
-XftDraw *
-qt_lookup_ft_draw (Drawable draw, bool paintEventClipOn, QRegion *crgn)
-{
-    qt_ft_draw	**prev, *qt_ft;
-
-    for (prev = &qt_ft_head; (qt_ft = *prev); prev = &qt_ft->next)
-	if (qt_ft->draw == draw) {
-	    if (!qt_ft->ftdraw) {
-		if (qt_ft->visual)
-		    qt_ft->ftdraw = XftDrawCreate (qt_ft->dpy,
-						   qt_ft->draw,
-						   qt_ft->visual,
-						   qt_ft->cmap);
-		else
-		    qt_ft->ftdraw = XftDrawCreateBitmap (qt_ft->dpy,
-							 (Pixmap) qt_ft->draw);
-		if (!qt_ft->ftdraw) {
-		    *prev = qt_ft->next;
-		    free (qt_ft);
-		    return 0;
-		}
-	    }
-
-	    if (prev != &qt_ft_head) {
-		*prev = qt_ft->next;
-		qt_ft->next = qt_ft_head;
-		qt_ft_head = qt_ft;
-	    }
-	    if (crgn != 0) {
-		if ( paintEventClipOn ) {
-		    QRegion rgn;
-		    if (qt_ft->clip_serial < gc_cache_clip_serial ||
-			qt_ft->clip_bad) {
-			rgn = crgn->intersect (*paintEventClipRegion);
-			XftDrawSetClip (qt_ft->ftdraw, rgn.handle());
-			qt_ft->clip_serial = gc_cache_clip_serial;
-			qt_ft->clip_bad = FALSE;
-		    }
-		} else {
-		    if (qt_ft->clip_serial || qt_ft->clip_bad) {
-			XftDrawSetClip (qt_ft->ftdraw, crgn->handle());
-			qt_ft->clip_serial = 0;
-			qt_ft->clip_bad = FALSE;
-		    }
-		}
-	    } else {
-		if ( paintEventClipOn ) {
-		    if (qt_ft->clip_serial < gc_cache_clip_serial ||
-			qt_ft->clip_bad) {
-			XftDrawSetClip (qt_ft->ftdraw,
-					paintEventClipRegion->handle());
-			qt_ft->clip_serial = gc_cache_clip_serial;
-			qt_ft->clip_bad = FALSE;
-		    }
-		} else {
-		    if (qt_ft->clip_serial || qt_ft->clip_bad) {
-			XftDrawSetClip (qt_ft->ftdraw, 0);
-			qt_ft->clip_serial = 0;
-			qt_ft->clip_bad = FALSE;
-		    }
-		}
-	    }
-	    return qt_ft->ftdraw;
-	}
-    return 0;
-}
-
-int
-qt_create_ft_draw (Display *dpy, Drawable draw, Visual *visual, Colormap cmap)
-{
-    qt_ft_draw	*qt_ft;
-
-    if (!qt_use_xft ())
-	return 1;
-    qt_ft = (qt_ft_draw *) malloc (sizeof (qt_ft_draw));
-    if (!qt_ft)
-	return 0;
-    qt_ft->next = qt_ft_head;
-    qt_ft_head = qt_ft;
-
-    qt_ft->draw = draw;
-    qt_ft->ftdraw = 0;
-    qt_ft->dpy = dpy;
-    qt_ft->visual = visual;
-    qt_ft->cmap = cmap;
-    qt_ft->clip_serial = 0;
-    qt_ft->clip_bad = FALSE;
-
-    return 1;
-}
-
-void
-qt_destroy_ft_draw (Display */*dpy*/, Drawable draw)
-{
-    qt_ft_draw	**prev, *qt_ft;
-
-    for (prev = &qt_ft_head; (qt_ft = *prev); prev = &qt_ft->next)
-	if (qt_ft->draw == draw)
-	{
-	    *prev = qt_ft->next;
-	    if (qt_ft->ftdraw)
-		XftDrawDestroy (qt_ft->ftdraw);
-	    free (qt_ft);
-	    break;
-	}
-}
-
-void
-qt_invalidate_ft_clip (Drawable draw)
-{
-    qt_ft_draw	*qt_ft;
-
-    for (qt_ft = qt_ft_head; qt_ft; qt_ft = qt_ft->next)
-	if (qt_ft->draw == draw)
-	    qt_ft->clip_bad = TRUE;
-}
-#endif
 
 /*****************************************************************************
   QPainter member functions
@@ -660,12 +440,19 @@ typedef QIntDict<QPaintDevice> QPaintDeviceDict;
 static QPaintDeviceDict *pdev_dict = 0;
 
 /*!
-  Redirects all paint command for a paint device \a pdev to another
-  paint device \a replacement, unless \a replacement is 0.  If \a
-  replacement is 0, the redirection for \a pdev is removed.
+  Redirects all paint command for a paint device \e pdev to another paint
+  device \e replacement.
 
-  Mostly, you can get better results with less work by calling
-  QPixmap::grabWidget() or QPixmap::grapWindow().
+  A redirected paint device is reset if \e replacement is 0.
+
+  The following example redirects painting of a widget to a pixmap:
+  \code
+    QPixmap pm( myWidget->width(), myWidget->height() );
+    pm.fill( myWidget->backgroundColor() );
+    QPainter::redirect( myWidget, &pm );
+    myWidget->repaint( FALSE );
+    QPainter::redirect( myWidget, 0 );
+  \endcode
 */
 
 void QPainter::redirect( QPaintDevice *pdev, QPaintDevice *replacement )
@@ -713,16 +500,15 @@ void QPainter::init()
 
 /*!
   \fn const QFont &QPainter::font() const
-
-  Returns the currently set painter font.
+  Returns the current painter font.
   \sa setFont(), QFont
 */
 
 /*!
   Sets a new painter font.
 
-  This font is used by subsequent drawText() functions.  The text
-  color is the same as the pen color.
+  This font is used by all subsequent drawText() functions.
+  The text color is the same as the pen color.
 
   \sa font(), drawText()
 */
@@ -753,7 +539,7 @@ void QPainter::updateFont()
     if ( penRef )
 	updatePen();				// force a non-cached GC
     HANDLE h = cfont.handle();
-    if ( h && h != 1 ) {
+    if ( h ) {
 	XSetFont( dpy, gc, cfont.handle() );
     }
 }
@@ -761,6 +547,11 @@ void QPainter::updateFont()
 
 void QPainter::updatePen()
 {
+    static char dash_line[]	    = { 7, 3 };
+    static char dot_line[]	    = { 1, 3 };
+    static char dash_dot_line[]	    = { 7, 3, 2, 3 };
+    static char dash_dot_dot_line[] = { 7, 3, 2, 3, 2, 3 };
+
     if ( testf(ExtDev) ) {
 	QPDevCmdParam param[1];
 	param[0].pen = &cpen;
@@ -768,13 +559,11 @@ void QPainter::updatePen()
 	    return;
     }
 
-    int	ps = cpen.style();
-    bool cacheIt = (!testf(ClipOn|MonoDev|NoCache) &&
-		    (ps == NoPen || ps == SolidLine) &&
-		    cpen.width() == 0 && rop == CopyROP);
+    int	 ps = cpen.style();
+    bool cacheIt = !testf(ClipOn|MonoDev|NoCache) &&
+		   (ps == NoPen || ps == SolidLine) &&
+		   cpen.width() == 0 && rop == CopyROP;
 
-    bool obtained = FALSE;
-    bool internclipok = hasClipping();
     if ( cacheIt ) {
 	if ( gc ) {
 	    if ( penRef )
@@ -782,8 +571,9 @@ void QPainter::updatePen()
 	    else
 		free_gc( dpy, gc );
 	}
-	obtained = obtain_gc(&penRef, &gc, cpen.color().pixel(), dpy, hd);
-	if ( !obtained && !penRef )
+	if ( obtain_gc(&penRef, &gc, cpen.color().pixel(), dpy, hd) )
+	    return;
+	if ( !penRef )
 	    gc = alloc_gc( dpy, hd, FALSE );
     } else {
 	if ( gc ) {
@@ -791,115 +581,37 @@ void QPainter::updatePen()
 		release_gc( penRef );
 		penRef = 0;
 		gc = alloc_gc( dpy, hd, testf(MonoDev) );
-	    } else {
-		internclipok = TRUE;
 	    }
 	} else {
 	    gc = alloc_gc( dpy, hd, testf(MonoDev), testf(UsePrivateCx) );
 	}
     }
 
-    if ( !internclipok ) {
-	if ( testf(PaintEventClipOn) && paintEventClipRegion ) {
-	    if ( penRef &&((QGCC*)penRef)->clip_serial < gc_cache_clip_serial ) {
-		XSetRegion( dpy, gc, paintEventClipRegion->handle() );
-		((QGCC*)penRef)->clip_serial = gc_cache_clip_serial;
-	    } else if ( !penRef ) {
-		XSetRegion( dpy, gc, paintEventClipRegion->handle() );
-	    }
-	} else if (penRef && ((QGCC*)penRef)->clip_serial ) {
-	    XSetClipMask( dpy, gc, None );
-	    ((QGCC*)penRef)->clip_serial = 0;
-	}
-
-#ifdef QT_XFT
-	qt_invalidate_ft_clip(hd);
-#endif // QT_XFT
-
-    }
-
-    if ( obtained )
-	return;
-
-    char dashes[10];				// custom pen dashes
+    char *dashes = 0;				// custom pen dashes
     int dash_len = 0;				// length of dash list
     int s = LineSolid;
-    int cp = CapButt;
-    int jn = JoinMiter;
-
-    /*
-      We are emulating Windows here.  Windows treats cpen.width() == 1
-      as a very special case.  The fudge variable unifies this case
-      with the general case.
-    */
-    int dot = cpen.width();			// width of a dot
-    int fudge = 1;
-    bool allow_zero_lw = TRUE;
-    if ( dot <= 1 ) {
-	dot = 3;
-	fudge = 2;
-    }
 
     switch( ps ) {
-    case NoPen:
-    case SolidLine:
-	s = LineSolid;
-	break;
-    case DashLine:
-	dashes[0] = fudge * 3 * dot;
-	dashes[1] = fudge * dot;
-	dash_len = 2;
-	allow_zero_lw = FALSE;
-	break;
-    case DotLine:
-	dashes[0] = dot;
-	dashes[1] = dot;
-	dash_len = 2;
-	allow_zero_lw = FALSE;
-	break;
-    case DashDotLine:
-	dashes[0] = 3 * dot;
-	dashes[1] = fudge * dot;
-	dashes[2] = dot;
-	dashes[3] = fudge * dot;
-	dash_len = 4;
-	allow_zero_lw = FALSE;
-	break;
-    case DashDotDotLine:
-	dashes[0] = 3 * dot;
-	dashes[1] = dot;
-	dashes[2] = dot;
-	dashes[3] = dot;
-	dashes[4] = dot;
-	dashes[5] = dot;
-	dash_len = 6;
-	allow_zero_lw = FALSE;
-    }
-    ASSERT( dash_len <= (int) sizeof(dashes) );
-
-    switch ( cpen.capStyle() ) {
-    case SquareCap:
-	cp = CapProjecting;
-	break;
-    case RoundCap:
-	cp = CapRound;
-	break;
-    case FlatCap:
-    default:
-	cp = CapButt;
-	break;
-    }
-    switch ( cpen.joinStyle() ) {
-    case BevelJoin:
-	jn = JoinBevel;
-	break;
-    case RoundJoin:
-	jn = JoinRound;
-	break;
-    case MiterJoin:
-    default:
-	jn = JoinMiter;
-	break;
+	case NoPen:
+	case SolidLine:
+	    s = LineSolid;
+	    break;
+	case DashLine:
+	    dashes = dash_line;
+	    dash_len = sizeof(dash_line);
+	    break;
+	case DotLine:
+	    dashes = dot_line;
+	    dash_len = sizeof(dot_line);
+	    break;
+	case DashDotLine:
+	    dashes = dash_dot_line;
+	    dash_len = sizeof(dash_dot_line);
+	    break;
+	case DashDotDotLine:
+	    dashes = dash_dot_dot_line;
+	    dash_len = sizeof(dash_dot_dot_line);
+	    break;
     }
 
     XSetForeground( dpy, gc, cpen.color().pixel() );
@@ -909,9 +621,7 @@ void QPainter::updatePen()
 	XSetDashes( dpy, gc, 0, dashes, dash_len );
 	s = bg_mode == TransparentMode ? LineOnOffDash : LineDoubleDash;
     }
-    XSetLineAttributes( dpy, gc,
-			(! allow_zero_lw && cpen.width() == 0) ? 1 : cpen.width(),
-			s, cp, jn );
+    XSetLineAttributes( dpy, gc, cpen.width(), s, CapButt, JoinMiter );
 }
 
 
@@ -974,8 +684,6 @@ static uchar *pat_tbl[] = {
 		   (bs == NoBrush || bs == SolidPattern) &&
 		   bro.x() == 0 && bro.y() == 0 && rop == CopyROP;
 
-    bool obtained = FALSE;
-    bool internclipok = hasClipping();
     if ( cacheIt ) {
 	if ( gc_brush ) {
 	    if ( brushRef )
@@ -983,8 +691,9 @@ static uchar *pat_tbl[] = {
 	    else
 		free_gc( dpy, gc_brush );
 	}
-	obtained = obtain_gc(&brushRef, &gc_brush, cbrush.color().pixel(), dpy, hd);
-	if ( !obtained && !brushRef )
+	if ( obtain_gc(&brushRef, &gc_brush, cbrush.color().pixel(), dpy, hd) )
+	    return;
+	if ( !brushRef )
 	    gc_brush = alloc_gc( dpy, hd, FALSE );
     } else {
 	if ( gc_brush ) {
@@ -992,30 +701,11 @@ static uchar *pat_tbl[] = {
 		release_gc( brushRef );
 		brushRef = 0;
 		gc_brush = alloc_gc( dpy, hd, testf(MonoDev) );
-	    } else {
-		internclipok = TRUE;
 	    }
 	} else {
 	    gc_brush = alloc_gc( dpy, hd, testf(MonoDev), testf(UsePrivateCx));
 	}
     }
-
-    if ( !internclipok ) {
-	if ( testf(PaintEventClipOn) && paintEventClipRegion ) {
-	    if ( brushRef &&((QGCC*)brushRef)->clip_serial < gc_cache_clip_serial ) {
-		XSetRegion( dpy, gc_brush, paintEventClipRegion->handle() );
-		((QGCC*)brushRef)->clip_serial = gc_cache_clip_serial;
-	    } else if ( !brushRef ){
-		XSetRegion( dpy, gc_brush, paintEventClipRegion->handle() );
-	    }
-	} else if (brushRef && ((QGCC*)brushRef)->clip_serial ) {
-	    XSetClipMask( dpy, gc_brush, None );
-	    ((QGCC*)brushRef)->clip_serial = 0;
-	}
-    }
-
-    if ( obtained )
-	return;
 
     uchar *pat = 0;				// pattern
     int d = 0;					// defalt pattern size: d*d
@@ -1066,27 +756,53 @@ static uchar *pat_tbl[] = {
 
 /*!
   Begins painting the paint device \a pd and returns TRUE if successful,
-  or FALSE if an error occurs.
+  or FALSE if it cannot begin painting. Call end() when you have finished
+  painting.
 
-  The errors that can occur are serious problems, such as these:
+  On the X Window System, paint commands are buffered and may not appear
+  on the screen immediately. The flush() function flushes the buffer.
 
-  \code
-    p->begin( 0 ); // impossible - paint device cannot be 0
+  As an alternative to calling begin() and end(), you can use the QPainter
+  constructor that takes a paint device argument. This is for short-lived
+  painters, for example in \link QWidget::paintEvent() paint events\endlink.
 
-    QPixmap pm( 0, 0 );
-    p->begin( pm ); // impossible - pm.isNull();
-
-    p->begin( myWidget );
-    p2->begin( myWidget ); // impossible - only one painter at a time
-  \endcode
-
-  Note that most of the time, you can use one of the constructors
-  instead of begin(), and that end() is automatically done at
-  destruction.
+  This function initializes all painter settings:
+  <ul>
+  <li>The \link setFont() font\endlink is set to the default \link
+  QApplication::setFont() application font\endlink, or to the \link
+  QWidget::setFont() widget's font\endlink if \e pd is a widget.
+  <li>The \link setPen() pen\endlink is set to QPen(black,0,SolidLine),
+  or to QPen(\link QWidget::foregroundColor() widget->foreground()\endlink,
+  0,SolidLine) if \e pd is a widget.
+  <li>The \link setBrush() brush\endlink is set to QBrush(NoBrush).
+  <li>The \link setBackgroundColor() background color\endlink is set
+  to white, or to the \link QWidget::setBackgroundColor() widget's
+  background color\endlink if \e pd is a widget.
+  <li>The \link setBackgroundMode() background mode\endlink is set
+  to \c TransparentMode.
+  <li>The \link setRasterOp() raster operation\endlink is set to
+  \c CopyROP.
+  <li>The \link setBrushOrigin() brush origin\endlink is set to (0,0).
+  <li>The \link setViewXForm() view transformation\endlink setting
+  is turned off.
+  <li>The \link setWindow() window\endlink is set to the paint device
+  rectangle; (0,0,pd->width(),pd->height()).
+  <li>The \link setViewport() viewport\endlink is set to the paint device
+  rectangle; (0,0,pd->width(),pd->height()).
+  <li>The \link setWorldXForm() world transformation\endlink setting
+  is turned off.
+  <li>The \link setWorldMatrix() world matrix\endlink is set to the
+  \link QWMatrix::reset() identify matrix\endlink.
+  <li>\link setClipping() Clipping\endlink is disabled.
+  <li>The \link setClipRegion() clip region\endlink is set to an empty region.
+  </ul>
 
   \warning A paint device can only be painted by one painter at a time.
 
-  \sa end(), flush()
+  \sa end(), flush(), setFont(), setPen(), setBrush(), setBackgroundColor(),
+  setBackgroundMode(), setRasterOp(), setBrushOrigin(), setViewXForm(),
+  setWindow(), setViewport(), setWorldXForm(), setWorldMatrix(),
+  setClipRegion()
 */
 
 bool QPainter::begin( const QPaintDevice *pd )
@@ -1094,7 +810,7 @@ bool QPainter::begin( const QPaintDevice *pd )
     if ( isActive() ) {				// already active painting
 #if defined(CHECK_STATE)
 	qWarning( "QPainter::begin: Painter is already active."
-		  "\n\tYou must end() the painter before a second begin()" );
+		 "\n\tYou must end() the painter before a second begin()" );
 #endif
 	return FALSE;
     }
@@ -1105,12 +821,12 @@ bool QPainter::begin( const QPaintDevice *pd )
 	return FALSE;
     }
 
-    const QWidget *copyFrom = 0;
+    QWidget *copyFrom = 0;
     if ( pdev_dict ) {				// redirected paint device?
 	pdev = pdev_dict->find( (long)pd );
 	if ( pdev ) {
 	    if ( pd->devType() == QInternal::Widget )
-		copyFrom = (const QWidget *)pd;	// copy widget settings
+		copyFrom = (QWidget *)pd;	// copy widget settings
 	} else {
 	    pdev = (QPaintDevice *)pd;
 	}
@@ -1119,20 +835,20 @@ bool QPainter::begin( const QPaintDevice *pd )
     }
 
     if ( pdev->isExtDev() && pdev->paintingActive() ) {
-	// somebody else is already painting
+		// somebody else is already painting
 #if defined(CHECK_STATE)
 	qWarning( "QPainter::begin: Another QPainter is already painting "
-		  "this device;\n\tAn extended paint device can only be "
-		  "painted by one QPainter at a time." );
+		 "this device;\n\tAn extended paint device can only be painted "
+	         "by one QPainter at a time." );
 #endif
 	return FALSE;
     }
 
-    bool reinit = !testf(IsStartingUp);	// 2nd or 3rd etc. time called
+    bool reinit = flags != IsStartingUp;	// 2nd or 3rd etc. time called
     flags = IsActive | DirtyFont;		// init flags
     int dt = pdev->devType();			// get the device type
 
-    if ( (pdev->devFlags & QInternal::ExternalDevice) != 0 )
+    if ( (pdev->devFlags & QInternal::ExternalDevice) != 0 )	// this is an extended device
 	setf(ExtDev);
     else if ( dt == QInternal::Pixmap )		// device is a pixmap
 	((QPixmap*)pdev)->detach();		// will modify it
@@ -1143,10 +859,6 @@ bool QPainter::begin( const QPaintDevice *pd )
     if ( testf(ExtDev) ) {			// external device
 	if ( !pdev->cmd( QPaintDevice::PdcBegin, this, 0 ) ) {
 	    // could not begin painting
-	    if ( reinit )
-		clearf( IsActive | DirtyFont );
-	    else
-		flags = IsStartingUp;
 	    pdev = 0;
 	    return FALSE;
 	}
@@ -1160,9 +872,6 @@ bool QPainter::begin( const QPaintDevice *pd )
 	setf(NoCache);
 	setf(UsePrivateCx);
     }
-
-    if (pdev == paintEventDevice)
-	setf(PaintEventClipOn);
 
     pdev->painters++;				// also tell paint device
     bro = curPt = QPoint( 0, 0 );
@@ -1196,7 +905,6 @@ bool QPainter::begin( const QPaintDevice *pd )
 	wh = vh = w->height();
 	if ( w->testWFlags(WPaintUnclipped) ) { // paint direct on device
 	    setf( NoCache );
-	    setf(UsePrivateCx);
 	    updatePen();
 	    updateBrush();
 	    XSetSubwindowMode( dpy, gc, IncludeInferiors );
@@ -1235,31 +943,16 @@ bool QPainter::begin( const QPaintDevice *pd )
 	setBackgroundMode( TransparentMode );	// default background mode
 	setRasterOp( CopyROP );			// default raster operation
     }
-    gc_cache_clip_serial++;
     updateBrush();
     updatePen();
+    if ( paintEventDevice == device() )
+	setClipRegion( *paintEventClipRegion );
     return TRUE;
 }
 
 /*!
   Ends painting.  Any resources used while painting are released.
-
-  Note that while you mostly don't need to call end(), the destructor
-  will do it, there is at least one common case, namely double
-  buffering.
-
-  \code
-    QPainter p( myPixmap, this )
-    // ...
-    p.end(); // stops drawing on myPixmap
-    p.begin( this );
-    p.drawPixmap( myPixmap );
-  \endcode
-
-  Since you can't draw a QPixmap while it is being painted, it is
-  necessary to close the active painter.
-
-  \sa begin(), isActive()
+  \sa begin()
 */
 
 bool QPainter::end()				// end painting
@@ -1270,7 +963,6 @@ bool QPainter::end()				// end painting
 #endif
 	return FALSE;
     }
-    killPStack();
     if ( testf(FontMet) )			// remove references to this
 	QFontMetrics::reset( this );
     if ( testf(FontInf) )			// remove references to this
@@ -1328,13 +1020,14 @@ void QPainter::flush()
 
 
 /*!
-  Sets the background color of the painter to \a c.
+  Sets the background color of the painter to \e c.
 
   The background color is the color that is filled in when drawing
-  opaque text, stippled lines and bitmaps.  The background color has
-  no effect in transparent background mode (which is the default).
+  opaque text, stippled lines and bitmaps.
+  The background color has no effect when transparent background mode
+  is set.
 
-  \sa backgroundColor() setBackgroundMode() BackgroundMode
+  \sa backgroundColor(), setBackgroundMode()
 */
 
 void QPainter::setBackgroundColor( const QColor &c )
@@ -1359,14 +1052,17 @@ void QPainter::setBackgroundColor( const QColor &c )
 }
 
 /*!
-  Sets the background mode of the painter to \a m, which must be one
-  of \c TransparentMode (the default) and \c OpaqueMode.
+  Sets the background mode of the painter to \e m, which must be one of:
+  <ul>
+  <li> \c TransparentMode (default)
+  <li> \c OpaqueMode
+  </ul>
 
   Transparent mode draws stippled lines and text without setting the
   background pixels. Opaque mode fills these space with the current
   background color.
 
-  Note that in order to draw a bitmap or pixmap transparently, you must use
+  In order to draw a bitmap or pixmap transparently, you must use
   QPixmap::setMask().
 
   \sa backgroundMode(), setBackgroundColor() */
@@ -1406,7 +1102,28 @@ static short ropCodes[] = {			// ROP translation table
 };
 
 /*!
-  Sets the raster operation to \a r.  The default is \c CopyROP.
+  Sets the raster operation to \e r.
+
+  The \e r parameter must be one of:
+  <ul>
+  <li> \c Qt::CopyROP:     dst = src.
+  <li> \c Qt::OrROP:       dst = src OR dst.
+  <li> \c Qt::XorROP:      dst = src XOR dst.
+  <li> \c Qt::NotAndROP:   dst = (NOT src) AND dst
+  <li> \c Qt::NotCopyROP:  dst = NOT src
+  <li> \c Qt::NotOrROP:    dst = (NOT src) OR dst
+  <li> \c Qt::NotXorROP:   dst = (NOT src) XOR dst
+  <li> \c Qt::AndROP       dst = src AND dst
+  <li> \c Qt::NotROP:      dst = NOT dst
+  <li> \c Qt::ClearROP:    dst = 0
+  <li> \c Qt::SetROP:      dst = 1
+  <li> \c Qt::NopROP:      dst = dst
+  <li> \c Qt::AndNotROP:   dst = src AND (NOT dst)
+  <li> \c Qt::OrNotROP:    dst = src OR (NOT dst)
+  <li> \c Qt::NandROP:     dst = NOT (src AND dst)
+  <li> \c Qt::NorROP:      dst = NOT (src OR dst)
+  </ul>
+
   \sa rasterOp()
 */
 
@@ -1439,14 +1156,12 @@ void QPainter::setRasterOp( RasterOp r )
     XSetFunction( dpy, gc_brush, ropCodes[rop] );
 }
 
-// ### matthias - true?
 
 /*!
-  Sets the brush origin to \a (x,y).
+  Sets the brush origin to \e (x,y).
 
-  The brush origin specifies the (0,0) coordinate of the painter's
-  brush.  This setting only applies to pattern brushes and pixmap
-  brushes.
+  The brush origin specifies the (0,0) coordinate of the painter's brush.
+  This setting is only necessary for pattern brushes or pixmap brushes.
 
   \sa brushOrigin()
 */
@@ -1474,22 +1189,24 @@ void QPainter::setBrushOrigin( int x, int y )
 
 
 /*!
-  Enables clipping if \a enable is TRUE, or disables clipping if \a enable
+  Enables clipping if \e enable is TRUE, or disables clipping if \e enable
   is FALSE.
   \sa hasClipping(), setClipRect(), setClipRegion()
 */
 
 void QPainter::setClipping( bool enable )
 {
-    if ( !isActive() ) {
 #if defined(CHECK_STATE)
+    if ( !isActive() )
 	qWarning( "QPainter::setClipping: Will be reset by begin()" );
 #endif
-	return;
-    }
-
     if ( !isActive() || enable == testf(ClipOn) )
 	return;
+
+    if ( !enable && paintEventDevice == device() ) {
+	enable = TRUE;
+	crgn = *paintEventClipRegion;
+    }
 
     setf( ClipOn, enable );
     if ( testf(ExtDev) ) {
@@ -1499,38 +1216,21 @@ void QPainter::setClipping( bool enable )
 	    return;
     }
     if ( enable ) {
-	QRegion rgn = crgn;
-	if ( testf(PaintEventClipOn) && paintEventClipRegion )
-	    rgn = rgn.intersect( *paintEventClipRegion );
 	if ( penRef )
 	    updatePen();
-	XSetRegion( dpy, gc, rgn.handle() );
+	XSetRegion( dpy, gc, crgn.handle() );
 	if ( brushRef )
 	    updateBrush();
-	XSetRegion( dpy, gc_brush, rgn.handle() );
+	XSetRegion( dpy, gc_brush, crgn.handle() );
     } else {
-	if ( testf(PaintEventClipOn) && paintEventClipRegion ) {
-	    XSetRegion( dpy, gc, paintEventClipRegion->handle() );
-	    XSetRegion( dpy, gc_brush, paintEventClipRegion->handle() );
-	} else {
-	    XSetClipMask( dpy, gc, None );
-	    XSetClipMask( dpy, gc_brush, None );
-	}
+	XSetClipMask( dpy, gc, None );
+	XSetClipMask( dpy, gc_brush, None );
     }
-
-#ifdef QT_XFT
-    qt_invalidate_ft_clip (hd);
-#endif // QT_XFT
 }
 
 
 /*!
   \overload void QPainter::setClipRect( const QRect &r )
-
-  If the rectangle is invalid, the rectangle will be normalized() before the clipping region is set. This semantics will change in Qt-3
-  and an invalid rectangle will clip the painter to an empty rectangle.
-
-  \sa QRect::isValid() QRect::normalize()
 */
 
 void QPainter::setClipRect( const QRect &r )
@@ -1540,11 +1240,11 @@ void QPainter::setClipRect( const QRect &r )
 }
 
 /*!
-  Sets the clip region to \a rgn and enables clipping.
+  Sets the clip region to \e rgn and enables clipping.
 
   Note that the clip region is given in physical device coordinates and
-  \e not subject to any \link coordsys.html coordinate
-  transformation.\endlink
+  \e not subject to any \link setWorldMatrix() coordinate
+  transformation\endlink.
 
   \sa setClipRect(), clipRegion(), setClipping()
 */
@@ -1556,12 +1256,16 @@ void QPainter::setClipRegion( const QRegion &rgn )
 	qWarning( "QPainter::setClipRegion: Will be reset by begin()" );
 #endif
     crgn = rgn;
+    if ( paintEventDevice == device() )
+	crgn = crgn.intersect( *paintEventClipRegion );
 
     if ( testf(ExtDev) ) {
 	QPDevCmdParam param[1];
 	param[0].rgn = &crgn;
-	if ( !pdev->cmd( QPaintDevice::PdcSetClipRegion, this, param ) )
-	    return; // device cannot clip
+	if (( !pdev->cmd( QPaintDevice::PdcSetClipRegion, this, param )
+	      || !hd ) &&
+	    (pdev->devType() != QInternal::Printer ))
+	    return;
     }
     clearf( ClipOn );				// be sure to update clip rgn
     setClipping( TRUE );
@@ -1602,9 +1306,7 @@ void QPainter::drawPolyInternal( const QPointArray &a, bool close )
 
 
 /*!
-  Draws/plots a single point at \a (x,y) using the current pen.
-
-  \sa QPen
+  Draws/plots a single point at \e (x,y) using the current pen.
 */
 
 void QPainter::drawPoint( int x, int y )
@@ -1628,12 +1330,9 @@ void QPainter::drawPoint( int x, int y )
 
 
 /*!
-  Draws/plots an array of points using the current pen.
-
-  If \a index is non-zero (the default is zero) only points from \a
-  index are drawn.  If \a npoints is negative (the default) the rest
-  of the points from \a index are drawn.  If is is zero or greater, \a
-  npoints points are drawn.
+  Draws/plots an array of points using the current pen.  The
+  \a index and \a npoints arguments allow a subsequence of the
+  array to be drawn.
 */
 
 void QPainter::drawPoints( const QPointArray& a, int index, int npoints )
@@ -1661,7 +1360,7 @@ void QPainter::drawPoints( const QPointArray& a, int index, int npoints )
 	    if ( pa.size() != a.size() ) {
 		index = 0;
 		npoints = pa.size();
-	    }
+	    }		
 	}
     }
     if ( cpen.style() != NoPen )
@@ -1671,8 +1370,8 @@ void QPainter::drawPoints( const QPointArray& a, int index, int npoints )
 
 
 /*!
-  Sets the current pen position to \a (x,y)
-  \sa lineTo(), pos()
+  Sets the current point.
+  \sa lineTo(), drawLine()
 */
 
 void QPainter::moveTo( int x, int y )
@@ -1693,10 +1392,9 @@ void QPainter::moveTo( int x, int y )
 }
 
 /*!
-  Draws a line from the current pen position to \a (x,y) and sets \a
-  (x,y) to be the new current pen position.
-
-  \sa QPen moveTo(), drawLine(), pos()
+  Draws a line from the current point to \e (x,y) and sets this to the new
+  current point. Both endpoints are are drawn.
+  \sa moveTo(), drawLine()
 */
 
 void QPainter::lineTo( int x, int y )
@@ -1719,10 +1417,8 @@ void QPainter::lineTo( int x, int y )
 }
 
 /*!
-  Draws a line from \a (x1,y2) to \a (x2,y2) and sets \a (x2,y2) to be
-  the new current pen position.
-
-  \sa QPen
+  Draws a line from \e (x1,y2) to \e (x2,y2). Both endpoints are drawn.
+  \sa moveTo(), lineTo()
 */
 
 void QPainter::drawLine( int x1, int y1, int x2, int y2 )
@@ -1749,10 +1445,10 @@ void QPainter::drawLine( int x1, int y1, int x2, int y2 )
 
 
 /*!
-  Draws a rectangle with upper left corner at \a (x,y) and with
-  width \a w and height \a h.
+  Draws a rectangle with upper left corner at \e (x,y) and with
+  width \e w and height \e h.
 
-  \sa QPen, drawRoundRect()
+  \sa drawRoundRect()
 */
 
 void QPainter::drawRect( int x, int y, int w, int h )
@@ -1792,11 +1488,12 @@ void QPainter::drawRect( int x, int y, int w, int h )
 }
 
 /*!
-  Draws a Windows focus rectangle with upper left corner at \a (x,y) and with
-  width \a w and height \a h.
+  Draws a Windows focus rectangle with upper left corner at \e (x,y) and with
+  width \e w and height \e h.
 
   This function draws a stippled XOR rectangle that is used to indicate
-  keyboard focus (when QApplication::style() is \c WindowStyle).
+  keyboard focus (when the \link QApplication::style() GUI style\endlink
+  is \c WindowStyle).
 
   \warning This function draws nothing if the coordinate system has been
   \link rotate() rotated\endlink or \link shear() sheared\endlink.
@@ -1810,15 +1507,15 @@ void QPainter::drawWinFocusRect( int x, int y, int w, int h )
 }
 
 /*!
-  Draws a Windows focus rectangle with upper left corner at \a (x,y) and with
-  width \a w and height \a h using a pen color that contrasts with \a bgColor.
+  Draws a Windows focus rectangle with upper left corner at \e (x,y) and with
+  width \e w and height \e h using a pen color that contrasts with \e bgColor.
 
-  This function draws a stippled rectangle (XOR is not used) that is
-  used to indicate keyboard focus (when the QApplication::style() is
-  \c WindowStyle).
+  This function draws a stippled rectangle (XOR is not used) that is used
+  to indicate keyboard focus (when the \link QApplication::style() GUI
+  style\endlink is \c WindowStyle).
 
   The pen color used to draw the rectangle is either white or black
-  depending on the color of \a bgColor (see QColor::gray()).
+  depending on the grayness of \e bgColor (see QColor::gray()).
 
   \warning This function draws nothing if the coordinate system has been
   \link rotate() rotated\endlink or \link shear() sheared\endlink.
@@ -1879,7 +1576,7 @@ void QPainter::drawWinFocusRect( int x, int y, int w, int h,
 	fix_neg_rect( &x, &y, &w, &h );
     }
     XSetDashes( dpy, gc, 0, winfocus_line, 2 );
-    XSetLineAttributes( dpy, gc, 1, LineOnOffDash, CapButt, JoinMiter );
+    XSetLineAttributes( dpy, gc, 0, LineOnOffDash, CapButt, JoinMiter );
 
     XDrawRectangle( dpy, hd, gc, x, y, w-1, h-1 );
     XSetLineAttributes( dpy, gc, 0, LineSolid, CapButt, JoinMiter );
@@ -1888,30 +1585,16 @@ void QPainter::drawWinFocusRect( int x, int y, int w, int h,
 }
 
 
-/*! \overload void QPainter::drawRoundRect( int x, int y, int w, int h )
-
-  As the main version of the function, but with the roundness
-  arguments fixed at 25.
-*/
-
-
-/*! \overload void QPainter::drawRoundRect( const QRect & )
-
-  As the main version of the function, but with the roundness
-  arguments fixed at 25.
-*/
-
-
 /*!
-  Draws a rectangle with round corners at \a (x,y), with width \a w
-  and height \a h.
+  Draws a rectangle with round corners at \e (x,y), with width \e w
+  and height \e h.
 
-  The \a xRnd and \a yRnd arguments specify how rounded the corners
+  The \e xRnd and \e yRnd arguments specify how rounded the corners
   should be.  0 is angled corners, 99 is maximum roundedness.
 
-  The width and height include all of the drawn lines.
+  The width and height include both lines.
 
-  \sa drawRect(), QPen
+  \sa drawRect()
 */
 
 void QPainter::drawRoundRect( int x, int y, int w, int h, int xRnd, int yRnd )
@@ -1938,35 +1621,40 @@ void QPainter::drawRoundRect( int x, int y, int w, int h, int xRnd, int yRnd )
 		return;
 	}
 	if ( txop == TxRotShear ) {		// rotate/shear polygon
+	    QPointArray a;
 	    if ( w <= 0 || h <= 0 )
 		fix_neg_rect( &x, &y, &w, &h );
 	    w--;
 	    h--;
 	    int rxx = w*xRnd/200;
 	    int ryy = h*yRnd/200;
-	    // were there overflows?
-	    if ( rxx < 0 )
-		rxx = w/200*xRnd;
-	    if ( ryy < 0 )
-		ryy = h/200*yRnd;
 	    int rxx2 = 2*rxx;
 	    int ryy2 = 2*ryy;
-	    QPointArray a[4];
-	    a[0].makeArc( x, y, rxx2, ryy2, 1*16*90, 16*90, xmat );
-	    a[1].makeArc( x, y+h-ryy2, rxx2, ryy2, 2*16*90, 16*90, xmat );
-	    a[2].makeArc( x+w-rxx2, y+h-ryy2, rxx2, ryy2, 3*16*90, 16*90, xmat );
-	    a[3].makeArc( x+w-rxx2, y, rxx2, ryy2, 0*16*90, 16*90, xmat );
-	    // ### is there a better way to join QPointArrays?
-	    QPointArray aa;
-	    aa.resize( a[0].size() + a[1].size() + a[2].size() + a[3].size() );
-	    uint j = 0;
-	    for ( int k=0; k<4; k++ ) {
-		for ( uint i=0; i<a[k].size(); i++ ) {
-		    aa.setPoint( j, a[k].point(i) );
-		    j++;
-		}
+	    int xx, yy;
+
+	    // ###### WWA: this should use the new makeArc (with xmat)
+
+	    a.makeEllipse( x, y, rxx2, ryy2 );
+	    int s = a.size()/4;
+	    int i = 0;
+	    while ( i < s ) {
+		a.point( i, &xx, &yy );
+		xx += w - rxx2;
+		a.setPoint( i++, xx, yy );
 	    }
-	    drawPolyInternal( aa );
+	    i = 2*s;
+	    while ( i < 3*s ) {
+		a.point( i, &xx, &yy );
+		yy += h - ryy2;
+		a.setPoint( i++, xx, yy );
+	    }
+	    while ( i < 4*s ) {
+		a.point( i, &xx, &yy );
+		xx += w - rxx2;
+		yy += h - ryy2;
+		a.setPoint( i++, xx, yy );
+	    }
+	    drawPolyInternal( xForm(a) );
 	    return;
 	}
 	map( x, y, w, h, &x, &y, &w, &h );
@@ -2037,7 +1725,7 @@ void QPainter::drawRoundRect( int x, int y, int w, int h, int xRnd, int yRnd )
 }
 
 /*!
-  Draws an ellipse with center at \a (x+w/2,y+h/2) and size \a (w,h).
+  Draws an ellipse with center at \e (x+w/2,y+h/2) and size \e (w,h).
 */
 
 void QPainter::drawEllipse( int x, int y, int w, int h )
@@ -2081,18 +1769,20 @@ void QPainter::drawEllipse( int x, int y, int w, int h )
 
 
 /*!
-  Draws an arc defined by the rectangle \a (x,y,w,h), the start
-  angle \a a and the arc length \a alen.
+  Draws an arc defined by the rectangle \e (x,y,w,h), the start
+  angle \e a and the arc length \e alen.
 
-  The angles \a a and \a alen are 1/16th of a degree, i.e. a full
-  circle equals 5760 (16*360). Positive values of \a a and \a alen mean
+  The angles \e a and \e alen are 1/16th of a degree, i.e. a full
+  circle equals 5760 (16*360). Positive values of \e a and \e alen mean
   counter-clockwise while negative values mean clockwise direction.
   Zero degrees is at the 3'o clock position.
 
   Example:
   \code
-    QPainter p( myWidget );
+    QPainter p;
+    p.begin( myWidget );
     p.drawArc( 10,10, 70,100, 100*16, 160*16 ); // draws a "(" arc
+    p.end();
   \endcode
 
   \sa drawPie(), drawChord()
@@ -2134,17 +1824,17 @@ void QPainter::drawArc( int x, int y, int w, int h, int a, int alen )
 
 
 /*!
-  Draws a pie defined by the rectangle \a (x,y,w,h), the start
-  angle \a a and the arc length \a alen.
+  Draws a pie defined by the rectangle \e (x,y,w,h), the start
+  angle \e a and the arc length \e alen.
 
-  The pie is filled with the current brush().
+  The pie is filled with the current \link setBrush() brush\endlink.
 
-  The angles \a a and \a alen are 1/16th of a degree, i.e. a full
-  circle equals 5760 (16*360). Positive values of \a a and \a alen mean
+  The angles \e a and \e alen are 1/16th of a degree, i.e. a full
+  circle equals 5760 (16*360). Positive values of \e a and \e alen mean
   counter-clockwise while negative values mean clockwise direction.
   Zero degrees is at the 3'o clock position.
 
-  \sa drawArc(), drawChord()
+  \sa drawArc(), drawPie()
 */
 
 void QPainter::drawPie( int x, int y, int w, int h, int a, int alen )
@@ -2221,13 +1911,13 @@ void QPainter::drawPie( int x, int y, int w, int h, int a, int alen )
 
 
 /*!
-  Draws a chord defined by the rectangle \a (x,y,w,h), the start
-  angle \a a and the arc length \a alen.
+  Draws a chord defined by the rectangle \e (x,y,w,h), the start
+  angle \e a and the arc length \e alen.
 
-  The chord is filled with the current brush().
+  The chord is filled with the current \link setBrush() brush\endlink.
 
-  The angles \a a and \a alen are 1/16th of a degree, i.e. a full
-  circle equals 5760 (16*360). Positive values of \a a and \a alen mean
+  The angles \e a and \e alen are 1/16th of a degree, i.e. a full
+  circle equals 5760 (16*360). Positive values of \e a and \e alen mean
   counter-clockwise while negative values mean clockwise direction.
   Zero degrees is at the 3'o clock position.
 
@@ -2295,15 +1985,14 @@ void QPainter::drawChord( int x, int y, int w, int h, int a, int alen )
 
 
 /*!
-  Draws \a nlines separate lines from points defined in \a a, starting
-  at a[\a index] (\a index defaults to 0). If \a nlines is -1 (the
-  defauls) all points until the end of the array are used
-  (i.e. (a.size()-index)/2 lines are drawn).
+  Draws \e nlines separate lines from points defined in \e a, starting at
+  a[\e index]. If \e nlines is -1 all points until the end of the array
+  are used (i.e. (a.size()-index)/2 lines are drawn).
 
-  Draws the 1st line from \a a[index] to \a a[index+1].
-  Draws the 2nd line from \a a[index+2] to \a a[index+3] etc.
+  Draws the 1st line from \e a[index] to \e a[index+1].
+  Draws the 2nd line from \e a[index+2] to \e a[index+3] etc.
 
-  \sa drawPolyline(), drawPolygon(), QPen
+  \sa drawPolyline(), drawPolygon()
 */
 
 void QPainter::drawLineSegments( const QPointArray &a, int index, int nlines )
@@ -2333,7 +2022,7 @@ void QPainter::drawLineSegments( const QPointArray &a, int index, int nlines )
 	    if ( pa.size() != a.size() ) {
 		index  = 0;
 		nlines = pa.size()/2;
-	    }
+	    }		
 	}
     }
     if ( cpen.style() != NoPen )
@@ -2343,13 +2032,13 @@ void QPainter::drawLineSegments( const QPointArray &a, int index, int nlines )
 
 
 /*!
-  Draws the polyline defined by the \a npoints points in \a a starting
-  at \a a[index].  (\a index defaults to 0.)
+  Draws the polyline defined by the \e npoints points in \e a starting
+  at \e a[index].
 
-  If \a npoints is -1 (the default) all points until the end of the
-  array are used (i.e. a.size()-index-1 line segments are drawn).
+  If \e npoints is -1 all points until the end of the array are used
+  (i.e. a.size()-index-1 line segments are drawn).
 
-  \sa drawLineSegments(), drawPolygon(), QPen
+  \sa drawLineSegments(), drawPolygon()
 */
 
 void QPainter::drawPolyline( const QPointArray &a, int index, int npoints )
@@ -2379,38 +2068,30 @@ void QPainter::drawPolyline( const QPointArray &a, int index, int npoints )
 	    if ( pa.size() != a.size() ) {
 		index   = 0;
 		npoints = pa.size();
-	    }
+	    }		
 	}
     }
-    if ( cpen.style() != NoPen ) {
-	while(npoints>65535) {
-	    XDrawLines( dpy, hd, gc, (XPoint*)(pa.shortPoints( index, 65535 )),
-			65535, CoordModeOrigin );
-	    npoints-=65535;
-	    index+=65535;
-	}
+    if ( cpen.style() != NoPen )
 	XDrawLines( dpy, hd, gc, (XPoint*)(pa.shortPoints( index, npoints )),
 		    npoints, CoordModeOrigin );
-    }
 }
 
 
 /*!
-  Draws the polygon defined by the \a npoints points in \a a starting at
-  \a a[index].  (\a index defaults to 0.)
+  Draws the polygon defined by the \e npoints points in \e a starting at
+  \e a[index].
 
-  If \a npoints is -1 (the default) all points until the end of the
-  array are used (i.e. a.size()-index line segments define the
-  polygon).
+  If \e npoints is -1 all points until the end of the array are used
+  (i.e. a.size()-index line segments define the polygon).
 
   The first point is always connected to the last point.
 
-  The polygon is filled with the current brush().
-  If \a winding is TRUE, the polygon is filled using the winding
-  fill algorithm. If \a winding is FALSE, the polygon is filled using the
+  The polygon is filled with the current \link setBrush() brush\endlink.
+  If \e winding is TRUE, the polygon is filled using the winding
+  fill algorithm. If \e winding is FALSE, the polygon is filled using the
   even-odd (alternative) fill algorithm.
 
-  \sa drawLineSegments(), drawPolyline(), QPen
+  \sa drawLineSegments(), drawPolyline()
 */
 
 void QPainter::drawPolygon( const QPointArray &a, bool winding,
@@ -2442,27 +2123,34 @@ void QPainter::drawPolygon( const QPointArray &a, bool winding,
 	    if ( pa.size() != a.size() ) {
 		index   = 0;
 		npoints = pa.size();
-	    }
+	    }		
 	}
     }
     if ( winding )				// set to winding fill rule
 	XSetFillRule( dpy, gc_brush, WindingRule );
 
-    if ( pa[index] != pa[index+npoints-1] ){   // close open pointarray
-	pa.detach();
-    	pa.resize( index+npoints+1 );
-    	pa.setPoint( index+npoints, pa[index] );
-    	npoints++;
-    }
+    int x1, y1, x2, y2;				// connect last to first point
+    pa.point( index+npoints-1, &x1, &y1 );
+    pa.point( index, &x2, &y2 );
+    bool closed = x1 == x2 && y1 == y2;
 
     if ( cbrush.style() != NoBrush ) {		// draw filled polygon
 	XFillPolygon( dpy, hd, gc_brush,
 		      (XPoint*)(pa.shortPoints( index, npoints )),
 		      npoints, Complex, CoordModeOrigin );
+	if ( cpen.style() == NoPen ) {		// draw fake outline
+	    XDrawLines( dpy, hd, gc_brush,
+			(XPoint*)(pa.shortPoints( index, npoints )),
+			npoints, CoordModeOrigin );
+	    if ( !closed )
+		XDrawLine( dpy, hd, gc_brush, x1, y1, x2, y2 );
+	}
     }
     if ( cpen.style() != NoPen ) {		// draw outline
 	XDrawLines( dpy, hd, gc, (XPoint*)(pa.shortPoints( index, npoints )),
 		    npoints, CoordModeOrigin );
+	if ( !closed )
+	    XDrawLine( dpy, hd, gc, x1, y1, x2, y2 );
     }
     if ( winding )				// set to normal fill rule
 	XSetFillRule( dpy, gc_brush, EvenOddRule );
@@ -2470,11 +2158,11 @@ void QPainter::drawPolygon( const QPointArray &a, bool winding,
 
 
 /*!
-  Draws a cubic Bezier curve defined by the control points in \a a,
-  starting at \a a[index].  (\a index defaults to 0.)
+  Draws a cubic Bezier curve defined by the control points in \e a,
+  starting at \e a[index].
 
-  Control points after \a a[index+3] are ignored.  Nothing happens if
-  there aren't enough control points.
+  \e a must have 4 points or more.  The control point \e a[index+4] and
+  beyond are ignored.
 */
 
 void QPainter::drawQuadBezier( const QPointArray &a, int index )
@@ -2513,14 +2201,17 @@ void QPainter::drawQuadBezier( const QPointArray &a, int index )
 
 
 /*!
-  Draws a pixmap at \a (x,y) by copying a part of \a pixmap into the
+  Draws a pixmap at \e (x,y) by copying a part of the pixmap into the
   paint device.
 
-  \a (x,y) specify the top-left point in the paint device that is to
-  be drawn onto.  \a (sx,sy) specify the top-left point in \a pixmap
-  that is to be drawn (the default is (0,0).  \a (sw,sh) specify the
-  size of the pixmap that is to be drawn (the default, (-1,-1), means
-  all the way to the right/bottom of the pixmap).
+  \arg \e (x,y) specify the point in the paint device.
+  \arg \e (sx,sy) specify an offset in the pixmap.
+  \arg \e (sw,sh) specify the area of the area of the pixmap to
+  be copied.  The value -1 means to the right/bottom of the
+  pixmap.
+
+  The pixmap is clipped if a \link QPixmap::setMask() mask\endlink has
+  been set.
 
   \sa bitBlt(), QPixmap::setMask()
 */
@@ -2594,7 +2285,7 @@ void QPainter::drawPixmap( int x, int y, const QPixmap &pixmap,
 		int dx, dy;
 		mat.map( 0, 0, &dx, &dy );
 		uint save_flags = flags;
-		flags = IsActive | (save_flags & ( ClipOn | PaintEventClipOn ) );
+		flags = IsActive | (save_flags & ClipOn);
 		drawPixmap( x-dx, y-dy, pm );
 		flags = save_flags;
 		return;
@@ -2606,7 +2297,7 @@ void QPainter::drawPixmap( int x, int y, const QPixmap &pixmap,
     QBitmap *mask = (QBitmap *)pixmap.mask();
     bool mono = pixmap.depth() == 1;
 
-    if ( mask && !hasClipping() && !testf(PaintEventClipOn) ) {
+    if ( mask && !hasClipping() ) {
 	if ( mono ) {				// needs GCs pen color
 	    bool selfmask = pixmap.data->selfmask;
 	    if ( selfmask ) {
@@ -2624,34 +2315,17 @@ void QPainter::drawPixmap( int x, int y, const QPixmap &pixmap,
 	    XSetFillStyle( dpy, gc, FillSolid );
 	    if ( !selfmask ) {
 		XSetClipOrigin( dpy, gc, 0, 0 );
-		if ( testf(PaintEventClipOn) && paintEventClipRegion )
-		    XSetRegion( dpy, gc, paintEventClipRegion->handle() );
-		else
-		    XSetClipMask( dpy, gc, None );
+		XSetClipMask( dpy, gc, None );
 	    }
-
-#ifdef QT_XFT
-	    qt_invalidate_ft_clip (hd);
-#endif // QT_XFT
-
 	} else {
 	    bitBlt( pdev, x, y, &pixmap, sx, sy, sw, sh, (RasterOp)rop );
 	}
 	return;
     }
 
-    QRegion rgn = crgn;
-
     if ( mask ) {				// pixmap has clip mask
-	// Implies that clipping is on, either explicit or implicit
+	// Implies that clipping is on
 	// Create a new mask that combines the mask with the clip region
-
-	if ( testf(PaintEventClipOn) && paintEventClipRegion ) {
-	    if ( hasClipping() )
-		rgn = rgn.intersect( *paintEventClipRegion );
-	    else
-		rgn = *paintEventClipRegion;
-	}
 
 	QBitmap *comb = new QBitmap( sw, sh );
 	comb->detach();
@@ -2660,7 +2334,7 @@ void QPainter::drawPixmap( int x, int y, const QPixmap &pixmap,
 	XFillRectangle( dpy, comb->handle(), cgc, 0, 0, sw, sh );
 	XSetBackground( dpy, cgc, 0 );
 	XSetForeground( dpy, cgc, 1 );
-	XSetRegion( dpy, cgc, rgn.handle() );
+	XSetRegion( dpy, cgc, crgn.handle() );
 	XSetClipOrigin( dpy, cgc, -x, -y );
 	XSetFillStyle( dpy, cgc, FillOpaqueStippled );
 	XSetStipple( dpy, cgc, mask->handle() );
@@ -2690,12 +2364,7 @@ void QPainter::drawPixmap( int x, int y, const QPixmap &pixmap,
 
     if ( mask ) {				// restore clipping
 	XSetClipOrigin( dpy, gc, 0, 0 );
-	XSetRegion( dpy, gc, rgn.handle() );
-
-#ifdef QT_XFT
-	qt_invalidate_ft_clip (hd);
-#endif // QT_XFT
-
+	XSetRegion( dpy, gc, crgn.handle() );
 	delete mask;				// delete comb, created above
     }
 }
@@ -2728,7 +2397,6 @@ static void drawTile( QPainter *p, int x, int y, int w, int h,
     }
 }
 
-#if 0 // see comment in drawTiledPixmap
 /* Internal, used by drawTiledPixmap */
 
 static void fillTile(  QPixmap *tile, const QPixmap &pixmap )
@@ -2745,18 +2413,18 @@ static void fillTile(  QPixmap *tile, const QPixmap &pixmap )
 	y *= 2;
     }
 }
-#endif
 
 /*!
   Draws a tiled \a pixmap in the specified rectangle.
 
-  \a (x,y) specify the top-left point in the paint device that is to
-  be drawn onto.  \a (sx,sy) specify the top-left point in \a pixmap
-  that is to be drawn (the default is (0,0).
+  \arg \a (x,y,w,h) is the rectangle to be filled.
+  \arg \a (sx,sy) specify an offset in the pixmap.
 
-  Calling drawTiledPixmap() is similar to calling drawPixmap() several
-  times to fill (tile) an area with a pixmap, but is potentially
-  much more efficient depending on the underlying window system.
+  The pixmap is clipped if a \link QPixmap::setMask() mask\endlink has
+  been set.
+
+  Calling drawTiledPixmap() is similar to calling drawPixmap()
+  several times to fill (tile) an area with a pixmap.
 
   \sa drawPixmap()
 */
@@ -2766,8 +2434,6 @@ void QPainter::drawTiledPixmap( int x, int y, int w, int h,
 {
     int sw = pixmap.width();
     int sh = pixmap.height();
-    if (!sw || !sh )
-	return;
     if ( sx < 0 )
 	sx = sw - -sx % sw;
     else
@@ -2778,10 +2444,10 @@ void QPainter::drawTiledPixmap( int x, int y, int w, int h,
 	sy = sy % sh;
     /*
       Requirements for optimizing tiled pixmaps:
-      - not an external device
-      - not scale or rotshear
-      - not mono pixmap
-      - no mask
+       - not an external device
+       - not scale or rotshear
+       - not mono pixmap
+       - no mask
     */
     QBitmap *mask = (QBitmap *)pixmap.mask();
     if ( !testf(ExtDev) && txop <= TxTranslate && pixmap.depth() > 1 &&
@@ -2796,19 +2462,12 @@ void QPainter::drawTiledPixmap( int x, int y, int w, int h,
 	XSetFillStyle( dpy, gc, FillSolid );
 	return;
     }
-
-#if 0
-    // maybe there'll be point in this again, but for the time all it
-    // does is make trouble for the postscript code.
     if ( sw*sh < 8192 && sw*sh < 16*w*h ) {
-	int tw = sw;
-	int th = sh;
-	while( th * tw < 4096 && ( th < h || tw < w ) ) {
-	    if ( h/th > w/tw )
-		th *= 2;
-	    else
-		tw *= 2;
-	}
+	int tw = sw, th = sh;
+	while ( tw*th < 32678 && tw < w/2 )
+	    tw *= 2;
+	while ( tw*th < 32678 && th < h/2 )
+	    th *= 2;
 	QPixmap tile( tw, th, pixmap.depth(), QPixmap::NormalOptim );
 	fillTile( &tile, pixmap );
 	if ( mask ) {
@@ -2820,11 +2479,6 @@ void QPainter::drawTiledPixmap( int x, int y, int w, int h,
     } else {
 	drawTile( this, x, y, w, h, pixmap, sx, sy );
     }
-#else
-    // for now we'll just output the original and let the postscript
-    // code make what it can of it.  qpicture will be unhappy.
-    drawTile( this, x, y, w, h, pixmap, sx, sy );
-#endif
 }
 
 
@@ -2872,18 +2526,20 @@ static void ins_text_bitmap( const QString &key, QBitmap *bm )
 
 
 /*!
-  Draws at most \a len characters from \a str at position \a (x,y).
+  Draws at most \e len characters from \e str at position \e (x,y).
 
-  \a (x,y) is the base line position.  Note that the meaning of
-  \a y is not the same for the two drawText() varieties.
+  \e (x,y) is the base line position.  Note that the meaning of \a y
+  is not the same for the two drawText() varieties.
 */
 
 void QPainter::drawText( int x, int y, const QString &str, int len )
 {
-    if ( !isActive() || str.isEmpty() )
+    if ( !isActive() )
 	return;
-    if ( len < 0 || len > (int) str.length() )
+    if ( len < 0 )
 	len = str.length();
+    if ( len == 0 )				// empty string
+	return;
 
     if ( testf(DirtyFont|ExtDev|VxF|WxF) ) {
 	if ( testf(DirtyFont) )
@@ -2910,9 +2566,9 @@ void QPainter::drawText( int x, int y, const QString &str, int len )
 	    QFont dfont( cfont );
 	    QWMatrix mat2;
 	    if ( txop == TxScale ) {
-		double newSize = m22() * cfont.pointSizeFloat();
-		newSize = QMAX( 6.0, QMIN( newSize, 72.0 ) ); // empirical values
-		dfont.setPointSizeFloat( newSize );
+		int newSize = qRound( m22() * (double)cfont.pointSize() ) - 1;
+		newSize = QMAX( 6, QMIN( newSize, 72 ) ); // empirical values
+		dfont.setPointSize( newSize );
 		QFontMetrics fm2( dfont );
 		QRect abbox = fm2.boundingRect( str, len );
 		aw = abbox.width();
@@ -2921,8 +2577,8 @@ void QPainter::drawText( int x, int y, const QString &str, int len )
 		ty = -abbox.y();	// text position - off-by-one?
 		if ( aw == 0 || ah == 0 )
 		    return;
-		double rx = mat1.m11() * (double)w / (double)aw;
-		double ry = mat1.m22() * (double)h / (double)ah;
+		double rx = (double)bbox.width() * mat1.m11() / (double)aw;
+		double ry = (double)bbox.height() * mat1.m22() /(double)ah;
 		mat2 = QWMatrix( rx, 0, 0, ry, 0, 0 );
 	    } else {
 		mat2 = QPixmap::trueMatrix( mat1, w, h );
@@ -2947,17 +2603,19 @@ void QPainter::drawText( int x, int y, const QString &str, int len )
 		}
 	    }
 	    if ( bg_mode == OpaqueMode ) {	// opaque fill
+		// ### WWA: not sure on this, but the previous
+		// ###      was totally non-Unicode.
 		int fx = x;
 		int fy = y - fm.ascent();
 		int fw = fm.width(str,len);
 		int fh = fm.ascent() + fm.descent();
 		int m, n;
 		QPointArray a(5);
-		mat1.map( fx,	 fy,	&m, &n );  a.setPoint( 0, m, n );
+		mat2.map( fx,	 fy,	&m, &n );  a.setPoint( 0, m, n );
 						   a.setPoint( 4, m, n );
-		mat1.map( fx+fw, fy,	&m, &n );  a.setPoint( 1, m, n );
-		mat1.map( fx+fw, fy+fh, &m, &n );  a.setPoint( 2, m, n );
-		mat1.map( fx,	 fy+fh, &m, &n );  a.setPoint( 3, m, n );
+		mat2.map( fx+fw, fy,	&m, &n );  a.setPoint( 1, m, n );
+		mat2.map( fx+fw, fy+fh, &m, &n );  a.setPoint( 2, m, n );
+		mat2.map( fx,	 fy+fh, &m, &n );  a.setPoint( 3, m, n );
 		QBrush oldBrush = cbrush;
 		setBrush( backgroundColor() );
 		updateBrush();
@@ -2996,7 +2654,7 @@ void QPainter::drawText( int x, int y, const QString &str, int len )
 	// translate from Unicode to font charset encoding here
 	mapped = mapper->fromUnicode(str,len);
     }
-// ### not pretty -- using codec to produce 16-bit encoding
+
     if ( !cfont.handle() ) {
 	if ( mapped.isNull() )
 	    qWarning("Fontsets only apply to mapped encodings");
@@ -3008,22 +2666,11 @@ void QPainter::drawText( int x, int y, const QString &str, int len )
 		XmbDrawImageString( dpy, hd, set, gc, x, y, mapped, len );
 	}
     } else {
-	if ( !mapped.isNull()
-#ifdef QT_XFT
-	     // XFT always uses unicode mappings
-	     && !qt_use_xft()
-#endif
-	    ) {
-	    if ( cfont.charSet() < QFont::Enc16 )
-		if ( bg_mode == TransparentMode )
-		    XDrawString( dpy, hd, gc, x, y, mapped, len );
-		else
-		    XDrawImageString( dpy, hd, gc, x, y, mapped, len );
+	if ( !mapped.isNull() ) {
+	    if ( bg_mode == TransparentMode )
+		XDrawString( dpy, hd, gc, x, y, mapped, len );
 	    else
-		if ( bg_mode == TransparentMode )
-		    XDrawString16( dpy, hd, gc, x, y, (XChar2b*)mapped.data(), len/2 );
-		else
-		    XDrawImageString16( dpy, hd, gc, x, y, (XChar2b*)mapped.data(), len/2 );
+		XDrawImageString( dpy, hd, gc, x, y, mapped, len );
 	} else {
 	    // Unicode font
 
@@ -3033,56 +2680,12 @@ void QPainter::drawText( int x, int y, const QString &str, int len )
 	    v = v.visual(); // visual ordering
 	    len = v.length();
 #endif
-#ifdef QT_XFT
-            XftFont	    *ft = 0;
-            XftDraw	    *draw;
-            XftColor    color;
-	    if (qt_use_xft ())
-		ft = (XftFont *)qt_ft_font (&cfont);
 
-            if (ft && (draw = qt_lookup_ft_draw (hd, (testf(PaintEventClipOn) &&
-						      paintEventClipRegion),
-						 testf(ClipOn) ? &crgn : 0)))
-            {
-                unsigned short   *tstr;
-                unsigned short  *tshort, c;
-                int i;
-
-                tshort = new unsigned short[len];
-                tstr = (unsigned short *) v.unicode();
-                for (i = 0; i < len; i++)
-                {
-                    c = tstr[i];
-                    tshort[i] = htons( c );
-                }
-                if ( bg_mode != TransparentMode )
-                {
-                    XGlyphInfo	extents;
-                    XftTextExtents16 (dpy, ft, tshort, len, &extents);
-                    color.color.red = backgroundColor().red() | backgroundColor().red() << 8;
-                    color.color.green = backgroundColor().green() | backgroundColor().green() << 8;
-                    color.color.blue = backgroundColor().blue() | backgroundColor().blue() << 8;
-                    color.color.alpha = 0xffff;
-                    color.pixel = backgroundColor().pixel();
-                    XftDrawRect (draw, &color, x, y - ft->ascent,
-                                 extents.xOff, ft->ascent + ft->descent);
-                }
-                color.color.red = cpen.color().red() | cpen.color().red() << 8;
-                color.color.green = cpen.color().green() | cpen.color().green() << 8;
-                color.color.blue = cpen.color().blue() | cpen.color().blue() << 8;
-                color.color.alpha = 0xffff;
-                color.pixel = cpen.color().pixel();
-                XftDrawString16 (draw, &color, ft, x, y, tshort, len);
-                delete [] tshort;
-	    } else
-#endif
-	    {
 	    if ( bg_mode == TransparentMode )
 		XDrawString16( dpy, hd, gc, x, y, (XChar2b*)v.unicode(), len );
 	    else
 		XDrawImageString16( dpy, hd, gc, x, y, (XChar2b*)v.unicode(), len );
 	}
-    }
     }
 
     if ( cfont.underline() || cfont.strikeOut() ) {
@@ -3097,14 +2700,3 @@ void QPainter::drawText( int x, int y, const QString &str, int len )
 			    tw, lw );
     }
 }
-
-/*!
-  Returns the current position of the  pen.
-
-  \sa moveTo()
- */
-QPoint QPainter::pos() const
-{
-    return curPt;
-}
-

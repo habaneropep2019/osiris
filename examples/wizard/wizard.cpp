@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: qt/examples/wizard/wizard.cpp   2.3.2   edited 2001-08-18 $
+** $Id: wizard.cpp,v 1.5 1999/06/17 19:46:40 paul Exp $
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -113,7 +113,6 @@ void Wizard::setupPage2()
     connect( email, SIGNAL( textChanged( const QString & ) ), this, SLOT( dataChanged( const QString & ) ) );
 
     addPage( page2, "Personal Data" );
-
     setHelpEnabled( page2, FALSE );
 }
 
@@ -221,3 +220,4 @@ void Wizard::dataChanged( const QString & )
     else
         nextButton()->setEnabled( FALSE );
 }
+

@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: qt/examples/tetrix/qtetrix.cpp   2.3.2   edited 2001-01-26 $
+** $Id: qtetrix.cpp,v 1.2 1999/06/03 01:45:46 warwick Exp $
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -96,21 +96,9 @@ QTetrix::QTetrix( QWidget *parent, const char *name )
 
     board       = new QTetrixBoard(this);
     showNext    = new ShowNextPiece(this);
-#ifndef QT_NO_LCDNUMBER
     showScore   = new QLCDNumber(5,this);
     showLevel   = new QLCDNumber(2,this);
     showLines   = new QLCDNumber(5,this);
-#else
-    showScore   = new QLabel("0",this);
-    showLevel   = new QLabel("0",this);
-    showLines   = new QLabel("0",this);
-    showScore->setAlignment(AlignCenter);
-    showLines->setAlignment(AlignCenter);
-    showLevel->setAlignment(AlignCenter);
-    showScore->setFrameStyle(QFrame::Sunken|QFrame::Box);
-    showLines->setFrameStyle(QFrame::Sunken|QFrame::Box);
-    showLevel->setFrameStyle(QFrame::Sunken|QFrame::Box);
-#endif    
     quitButton  = new QPushButton("&Quit",this);
     startButton = new QPushButton("&New Game",this);
     pauseButton = new QPushButton("&Pause",this);
@@ -124,21 +112,12 @@ QTetrix::QTetrix( QWidget *parent, const char *name )
     connect( board, SIGNAL(drawNextSquareSignal(int,int,QColor*)), showNext,
 	     SLOT(drawNextSquare(int,int,QColor*)) );
     connect( showNext, SIGNAL(update()), board, SLOT(updateNext()) );
-#ifndef QT_NO_LCDNUMBER
     connect( board, SIGNAL(updateScoreSignal(int)), showScore,
 	     SLOT(display(int)) );
     connect( board, SIGNAL(updateLevelSignal(int)), showLevel,
 	     SLOT(display(int)));
     connect( board, SIGNAL(updateRemovedSignal(int)), showLines,
 	     SLOT(display(int)));
-#else
-    connect( board, SIGNAL(updateScoreSignal(int)), showScore,
-	     SLOT(setNum(int)) );
-    connect( board, SIGNAL(updateLevelSignal(int)), showLevel,
-	     SLOT(setNum(int)));
-    connect( board, SIGNAL(updateRemovedSignal(int)), showLines,
-	     SLOT(setNum(int)));
-#endif
     connect( startButton, SIGNAL(clicked()), board, SLOT(start()) );
     connect( quitButton , SIGNAL(clicked()), SLOT(quit()));
     connect( pauseButton, SIGNAL(clicked()), board, SLOT(pause()) );
@@ -146,17 +125,11 @@ QTetrix::QTetrix( QWidget *parent, const char *name )
     board->setGeometry( 150, 20, 153, 333 );
     showNext->setGeometry( 50, 40, 78, 94 );
     showScore->setGeometry( 330, 40, 178, 93 );
-    showLevel->setGeometry( 50, 160, 78, 93 );
-    showLines->setGeometry( 330, 160, 178, 93 );
-#ifndef QT_NO_LCDNUMBER
     showScore->display( 0 );
+    showLevel->setGeometry( 50, 160, 78, 93 );
     showLevel->display( 0 );
+    showLines->setGeometry( 330, 160, 178, 93 );
     showLines->display( 0 );
-#else
-    showScore->setNum( 0 );
-    showLevel->setNum( 0 );
-    showLines->setNum( 0 );
-#endif    
     startButton->setGeometry( 50, 288, 80, 30 );
     quitButton->setGeometry( 375, 265, 80, 30 );
     pauseButton->setGeometry( 375, 310, 80, 30 );

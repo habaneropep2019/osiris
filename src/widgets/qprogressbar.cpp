@@ -1,52 +1,38 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qprogressbar.cpp   2.3.2   edited 2001-01-26 $
+** $Id: qprogressbar.cpp,v 2.47 1999/06/22 13:59:02 paul Exp $
 **
 ** Implementation of QProgressBar class
 **
 ** Created : 970521
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
-** This file is part of the widgets module of the Qt GUI Toolkit.
+** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses may use this file in accordance with the Qt Commercial License
-** Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
+*****************************************************************************/
 
 #include "qprogressbar.h"
-#ifndef QT_NO_PROGRESSBAR
 #include "qpainter.h"
 #include "qdrawutil.h"
 #include "qapplication.h"
 #include <limits.h>
 
-// BEING REVISED: eiriken
 /*!
   \class QProgressBar qprogressbar.h
   \brief The QProgressBar widget provides a horizontal progress bar.
-  \ingroup advanced
+  \ingroup realwidgets
 
   A progress bar is used to give the user an indication of progress
   of an operation. To reassure them that the application has not crashed.
@@ -81,7 +67,6 @@ QProgressBar::QProgressBar( QWidget *parent, const char *name, WFlags f )
       auto_indicator( TRUE ),
       d( 0 )
 {
-    setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed ) );
     initFrame();
 }
 
@@ -111,7 +96,6 @@ QProgressBar::QProgressBar( int totalSteps,
       auto_indicator( TRUE ),
       d( 0 )
 {
-    setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed ) );
     initFrame();
 }
 
@@ -172,28 +156,25 @@ void QProgressBar::setTotalSteps( int totalSteps )
 
 void QProgressBar::setProgress( int progress )
 {
-    if ( progress == progress_val ||
-	 progress < 0 || progress > total_steps )
+    if ( progress <= progress_val )
 	return;
-
-    bool needClearing = progress < progress_val;
     progress_val = progress;
-    if ( !isVisible() )
-	return;
-
-    if ( setIndicator( progress_str, progress_val, total_steps ) )
-	needClearing = TRUE;
-    repaint( needClearing );
-    if ( autoMask() )
-	updateMask();
+    if ( isVisible() ) {
+	if ( setIndicator(progress_str, progress_val, total_steps) ) {
+	    repaint( FALSE );
+	    if ( autoMask() )
+		updateMask();
+	}
+    }
 }
 
 
-/*!\reimp
+/*!
+  Returns a size which fits the contents of the progress bar.
 */
+
 QSize QProgressBar::sizeHint() const
 {
-    constPolish();
     QFontMetrics fm = fontMetrics();
     return QSize( fm.height()*4, fm.height()+8);
 }
@@ -205,16 +186,19 @@ QSize QProgressBar::sizeHint() const
 */
 QSize QProgressBar::minimumSizeHint() const
 {
-    return sizeHint();
+    //so we can implement it later
+    return QWidget::minimumSizeHint();
 }
 
 
-/*!\reimp
+/*!
+  Specifies that this widget can use more, but is able to survive on
+  less, horizontal space; and is fixed vertically.
 */
+
 QSizePolicy QProgressBar::sizePolicy() const
 {
-    //### removeme 3.0
-    return QWidget::sizePolicy();
+    return QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
 }
 
 /*!
@@ -262,7 +246,7 @@ void QProgressBar::setCenterIndicator( bool on )
 
 /*!
   When set to TRUE (the default) the positioning of the indicator string
-  follows the GUI style. When set to FALSE the indicator position is decided
+  follows the GUI style. When set to FALSE the indicator posion is decided
   by the value of indicatorFollowsStyle().
 
   \sa indicatorFollowsStyle(), centerIndicator(), setCenterIndicator(),
@@ -278,9 +262,6 @@ void QProgressBar::setIndicatorFollowsStyle( bool on )
 	updateMask();
 }
 
-/*!
-  \reimp
-*/
 void QProgressBar::show()
 {
     setIndicator( progress_str, progress_val, total_steps );
@@ -351,8 +332,13 @@ bool QProgressBar::setIndicator( QString & indicator, int progress,
 }
 
 
-/*!\reimp
+/*!
+  Handles paint events for the progress bar.
+  In WindowsStyle, \link QColorGroup::text() colorGroup().text()\endlink
+  and colorGroup::highlight() are used.  In MotifStyle,
+  \link QColorGroup::base() colorGroup().base()\endlink is also used.
 */
+
 void QProgressBar::drawContents( QPainter *p )
 {
     const int unit_width  = 9;	    // includes 2 bg pixels
@@ -397,18 +383,14 @@ void QProgressBar::drawContents( QPainter *p )
 	qDrawShadePanel( p, r, colorGroup(), TRUE, 1 );
 
 	// ### This part changes every percentage change.
-	p->setPen( colorGroup().foreground() );
-	erase ( r.x()+r.width(), bar.y(), textw, bar.height() );
+	p->setPen( colorGroup().text() );
+	p->fillRect( r.x()+r.width(), bar.y(), textw, bar.height(),
+	    backgroundColor() );
 	p->drawText( r.x()+r.width(), bar.y(), textw, bar.height(),
 	    AlignRight | AlignVCenter, progress_str );
     } else {
 	if (total_steps) { // Sanity check
-	    int u = bar.width();
-	    int pw;
-	    if ( u > 0 && progress_val >= INT_MAX / u && total_steps >= u )
-		pw = (u * (progress_val / u)) / (total_steps / u);
-	    else
-		pw = bar.width() * progress_val / total_steps;
+	    int pw = bar.width() * progress_val / total_steps;
 
 	    p->setPen( colorGroup().highlightedText() );
 	    p->setClipRect( bar.x(), bar.y(), pw, bar.height() );
@@ -417,10 +399,8 @@ void QProgressBar::drawContents( QPainter *p )
 
 	    p->setClipRect( bar.x()+pw, bar.y(), bar.width()-pw, bar.height() );
 	}
-	if ( progress_val != total_steps )
-	    p->fillRect( bar, colorGroup().brush( style()==MotifStyle ?
-		QColorGroup::Background : QColorGroup::Base ) );
-	p->setPen( style()==MotifStyle? colorGroup().foreground() : colorGroup().text() );
+	p->fillRect( bar, colorGroup().brush( QColorGroup::Base ) );
+	p->setPen( colorGroup().text() );
 	p->drawText( bar, AlignCenter, progress_str );
     }
 }
@@ -454,4 +434,3 @@ void QProgressBar::drawContentsMask( QPainter *p )
 	p->drawRect( bar );
     }
 }
-#endif

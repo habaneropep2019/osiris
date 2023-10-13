@@ -1,47 +1,51 @@
 /****************************************************************
 **
-** Implementation of LCDRange class, Qt tutorial 8
+** Implementation of LCDRange class, Qt tutorial 10
 **
 ****************************************************************/
 
 #include "lcdrange.h"
 
-#include <qslider.h>
+#include <qscrollbar.h>
 #include <qlcdnumber.h>
+#include <qlayout.h>
 
 LCDRange::LCDRange( QWidget *parent, const char *name )
-        : QVBox( parent, name )
+        : QWidget( parent, name )
 {
     QLCDNumber *lcd  = new QLCDNumber( 2, this, "lcd"  );
-    slider = new QSlider( Horizontal, this, "slider" );
-    slider->setRange( 0, 99 );
-    slider->setValue( 0 );
-    connect( slider, SIGNAL(valueChanged(int)),
-	     lcd, SLOT(display(int)) );
-    connect( slider, SIGNAL(valueChanged(int)),
-	     SIGNAL(valueChanged(int)) );
+    sBar = new QScrollBar( 0, 99, 	// range
+			   1, 10,	// line/page steps
+			   0,	// inital value
+			   QScrollBar::Horizontal, 	// orientation
+			   this, "scrollbar" );
+    QVBoxLayout *vbox = new QVBoxLayout( this, 5 );
+    vbox->addWidget( lcd );
+    vbox->addWidget( sBar );
 
-    setFocusProxy( slider );
+    connect( sBar, SIGNAL(valueChanged(int)), lcd, SLOT(display(int)) );
+    connect( sBar, SIGNAL(valueChanged(int)), SIGNAL(valueChanged(int)) );
+
 }
 
 int LCDRange::value() const
 {
-    return slider->value();
+    return sBar->value();
 }
 
 void LCDRange::setValue( int value )
 {
-    slider->setValue( value );
+    sBar->setValue( value );
 }
 
 void LCDRange::setRange( int minVal, int maxVal )
 {
     if ( minVal < 0 || maxVal > 99 || minVal > maxVal ) {
-      qWarning( "LCDRange::setRange(%d,%d)\n"
-	       "\tRange must be 0..99\n"
-	       "\tand minVal must not be greater than maxVal",
-	       minVal, maxVal );
-      return;
+	qWarning( "LCDRange::setRange(%d,%d)\n"
+		 "\tRange must be 0..99\n"
+		 "\tand minVal must not be greater than maxVal",
+		 minVal, maxVal );
+	return; 
     }
-    slider->setRange( minVal, maxVal );
+    sBar->setRange( minVal, maxVal );    
 }

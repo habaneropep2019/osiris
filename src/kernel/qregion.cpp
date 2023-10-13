@@ -1,67 +1,49 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qregion.cpp   2.3.2   edited 2001-06-07 $
+** $Id: qregion.cpp,v 2.24 1999/05/29 17:19:44 warwick Exp $
 **
 ** Implementation of QRegion class
 **
 ** Created : 950726
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
-** This file is part of the kernel module of the Qt GUI Toolkit.
+** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses may use this file in accordance with the Qt Commercial License
-** Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
+*****************************************************************************/
 
 #include "qregion.h"
 #include "qpointarray.h"
 #include "qbuffer.h"
 #include "qdatastream.h"
 
-// BEING REVISED: paul
 /*!
   \class QRegion qregion.h
   \brief The QRegion class specifies a clip region for a painter.
 
   \ingroup drawing
 
-  QRegion is used with QPainter::setClipRegion() to limit the paint area to what
-  needs to be painted. There is also a QWidget::repaint() that takes a QRegion parameter.
-  QRegion is the best tool for reducing flicker.
+  A region can be a rectangle, an ellipse, a polygon or a combination
+  of these.
 
-  
-  
-  A region can be created from a rectangle, an ellipse, a polygon or a
-  bitmap. Complex regions may be created by combining simple regions,
-  using unite(), intersect(), subtract() or eor() (exclusive or). Use
-  translate() to move a region.
-  
-  You can test if a region isNull(), isEmpty() or if it contains() 
-  a QPoint or QRect. The bounding rectangle is given by boundingRect().
-  
-  The function rects() gives a decomposition of the region into rectangles.
+  Regions are combined by creating a new region which is a
+  union, intersection or difference between any two regions.
+
+  The region XOR operation is defined as:
+  \code
+    a XOR b = (a UNION b) - (a INTERSECTION b)
+  \endcode
 
   Example of using complex regions:
   \code
@@ -79,22 +61,8 @@
     }
   \endcode
 
-  QRegion is an \link shclass.html implicitely shared\endlink class.
-    
-  Due to window system limitations, the width and height of a region
-  is limited to 65535 on Unix/X11.
-
   \sa QPainter::setClipRegion(), QPainter::setClipRect()
 */
-
-
-/*! \enum QRegion::RegionType
-  Determines the shape of the region to be created.
-  <ul>
-  <li>\c Rectangle - the region covers the entire rectangle
-  <li>\c Ellipse - the region is an ellipse inside the rectangle
-  </ul> 
- */
 
 
 /*****************************************************************************
@@ -104,11 +72,9 @@
 /*!
   Constructs a rectangular or elliptic region.
 
-  If \a t is \c Rectangle, the region is the filled rectangle (\a x,
-  \a y, \a w, \a h). If \a t is \c Ellipse, the region is the filled
-  ellipse ellipse with center at (\a x + \a w / 2, \a y + \a h / 2) and 
-  size (\a w ,\a h ).
-
+  \a x, \a y, \a w, and \a h specify the region rectangle.
+  \a t is the region type: QRegion::Rectangle (default) or
+  QRegion::Ellipse.
 */
 QRegion::QRegion( int x, int y, int w, int h, RegionType t )
 {
@@ -121,7 +87,9 @@ QRegion::QRegion( int x, int y, int w, int h, RegionType t )
   Detaches from shared region data to makes sure that this region is the
   only one referring the data.
 
-  \sa copy(), \link shclass.html shared classes\endlink
+  If multiple regions share common data, this region dereferences the data
+  and gets a copy of the data. Nothing is done if there is just a single
+  reference.
 */
 
 void QRegion::detach()
@@ -130,7 +98,7 @@ void QRegion::detach()
 	*this = copy();
 }
 
-#ifndef QT_NO_DATASTREAM
+
 /*!
   Executes region commands in the internal buffer and rebuild the original
   region.
@@ -154,14 +122,8 @@ void QRegion::exec( const QByteArray &buffer, int ver )
     int test_cnt = 0;
 #endif
     while ( !s.eof() ) {
-	Q_INT32 id;
-	if ( s.version() == 1 ) {
-	    int id_int;
-	    s >> id_int;
-	    id = id_int;
-	} else {
-	    s >> id;
-	}
+	int id;
+	s >> id;
 #if defined(CHECK_STATE)
 	if ( test_cnt > 0 && id != QRGN_TRANSLATE )
 	    qWarning( "QRegion::exec: Internal error" );
@@ -220,10 +182,7 @@ void QRegion::exec( const QByteArray &buffer, int ver )
 
 /*!
   \relates QRegion
-  Writes the region \a r to the stream \a s and returns a reference to 
-  the stream.
-
-  \sa \link datastreamformat.html Format of the QDataStream operators \endlink
+  Writes a region to the stream and returns a reference to the stream.
 */
 
 QDataStream &operator<<( QDataStream &s, const QRegion &r )
@@ -244,7 +203,7 @@ QDataStream &operator<<( QDataStream &s, const QRegion &r )
 	}
 	else {
 	    s << (Q_UINT32)(4+4+16*a.size()); // 16: storage size of QRect
-	    s << (Q_INT32)QRGN_RECTS;
+	    s << (int)QRGN_RECTS;
 	    s << (Q_UINT32)a.size();
 	    for ( int i=0; i<(int)a.size(); i++ )
 		s << a[i];
@@ -255,10 +214,7 @@ QDataStream &operator<<( QDataStream &s, const QRegion &r )
 
 /*!
   \relates QRegion
-  Reads a region from the stream \a s into \a r and returns a 
-  reference to the stream.
-
-  \sa \link datastreamformat.html Format of the QDataStream operators \endlink
+  Reads a region from the stream and returns a reference to the stream.
 */
 
 QDataStream &operator>>( QDataStream &s, QRegion &r )
@@ -268,69 +224,40 @@ QDataStream &operator>>( QDataStream &s, QRegion &r )
     r.exec( b, s.version() );
     return s;
 }
-#endif //QT_NO_DATASTREAM
+
 
 // These are not inline - they can be implemented better on some platforms
 //  (eg. Windows at least provides 3-variable operations).  For now, simple.
 
 
-/*! \c r1|r2 is equivalent to \c r1.unite(r2) 
- \sa unite(), operator+()
- */
+/*! Equivalent to unite(r) and operator+. */
 QRegion QRegion::operator|( const QRegion &r ) const
     { return unite(r); }
-
-/*! \c r1+r2 is equivalent to \c r1.unite(r2) 
- \sa unite(), operator|() 
- */
+/*! Equivalent to unite(r) and operator|. */
 QRegion QRegion::operator+( const QRegion &r ) const
     { return unite(r); }
-
-/*! \c r1&r2 is equivalent to \c r1.intersect(r2) 
- \sa intersect()
-*/
+/*! Equivalent to intersect(r). */
 QRegion QRegion::operator&( const QRegion &r ) const
     { return intersect(r); }
-
-/*! \c r1-r2 is equivalent to \c r1.subtract(r2) 
- \sa subtract()
-*/
+/*! Equivalent to subtract(r). */
 QRegion QRegion::operator-( const QRegion &r ) const
     { return subtract(r); }
-
-/*! \c r1^r2 is equivalent to \c r1.eor(r2) 
- \sa eor()
-*/
+/*! Equivalent to eor(r). */
 QRegion QRegion::operator^( const QRegion &r ) const
     { return eor(r); }
-
-/*! \c r1|=r2 is equivalent to \c r1=r1.unite(r2) 
- \sa unite()
-*/
+/*! Equivalent to *this = *this | r. */
 QRegion& QRegion::operator|=( const QRegion &r )
     { return *this = *this | r; }
-
-/*! \c r1+=r2 is equivalent to \c r1=r1.unite(r2) 
- \sa intersect()
-*/
+/*! Equivalent to *this = *this + r. */
 QRegion& QRegion::operator+=( const QRegion &r )
     { return *this = *this + r; }
-
-/*! \c r1&=r2 is equivalent to \c r1=r1.intersect(r2) 
- \sa intersect()
-*/
+/*! Equivalent to *this = *this & r. */
 QRegion& QRegion::operator&=( const QRegion &r )
     { return *this = *this & r; }
-
-/*! \c r1-=r2 is equivalent to \c r1=r1.subtract(r2) 
- \sa subtract()
-*/
+/*! Equivalent to *this = *this - r. */
 QRegion& QRegion::operator-=( const QRegion &r )
     { return *this = *this - r; }
-
-/*! \c r1^=r2 is equivalent to \c r1=r1.eor(r2) 
- \sa eor()
-*/
+/*! Equivalent to *this = *this ^ r. */
 QRegion& QRegion::operator^=( const QRegion &r )
     { return *this = *this ^ r; }
 

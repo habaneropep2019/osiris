@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: qt/examples/qwerty/qwerty.h   2.3.2   edited 2001-01-26 $
+** $Id: qwerty.h,v 1.3 1999/06/17 18:27:35 ettrich Exp $
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -23,16 +23,13 @@ public:
     Editor( QWidget *parent=0, const char *name="qwerty" );
    ~Editor();
 
-    void load( const QString& fileName, int code=-1 );
-
 public slots:
     void newDoc();
     void load();
+    void load( const QString& fileName );
     bool save();
     void print();
     void addEncoding();
-    void toUpper();
-    void toLower();
 
 protected:
     void resizeEvent( QResizeEvent * );
@@ -40,7 +37,6 @@ protected:
 
 private slots:
     void saveAsEncoding( int );
-    void openAsEncoding( int );
     void textChanged();
 
 private:
@@ -48,11 +44,8 @@ private:
     void rebuildCodecList();
     QMenuBar 	   *m;
     QMultiLineEdit *e;
-#ifndef QT_NO_PRINTER
     QPrinter        printer;
-#endif
     QPopupMenu	   *save_as;
-    QPopupMenu	   *open_as;
     bool changed;
 };
 

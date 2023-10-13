@@ -1,43 +1,29 @@
 /****************************************************************************
-** $Id: qt/src/dialogs/qtabdialog.cpp   2.3.2   edited 2001-01-26 $
+** $Id: qtabdialog.cpp,v 2.76 1999/06/16 02:22:14 warwick Exp $
 **
 ** Implementation of QTabDialog class
 **
 ** Created : 960825
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
-** This file is part of the dialogs module of the Qt GUI Toolkit.
+** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses may use this file in accordance with the Qt Commercial License
-** Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
+*****************************************************************************/
 
 #include "qtabdialog.h"
-
-#ifndef QT_NO_TABDIALOG
 
 #include "qobjectlist.h"
 #include "qobjectdict.h"
@@ -51,7 +37,6 @@
 #include "qwidgetstack.h"
 #include "qlayout.h"
 
-// NOT REVISED
 /*!
   \class QTabDialog qtabdialog.h
 
@@ -79,6 +64,8 @@
   dialog (Apply, Cancel and so on). <li> Connect to the
   signals and slots. </ol>
 
+  The pref.cpp example does all this.
+
   If you don't call addTab(), the page you have created will not be
   visible.  Please don't confuse the object name you supply to the
   QWidget constructor and the tab label you supply to addTab():
@@ -102,7 +89,7 @@
   show(); if there is any chance that the state of the application may
   change between the creation of the tab dialog and the time it show()
   is called, you must connect this signal to a slot which resets the
-  state of the dialog. <li> currentChanged() is emitted when the user
+  state of the dialog. <li> selected() is emitted when the user
   selects some page. </ul>
 
   Each tab is either enabled or disabled at any given time.  If a tab
@@ -177,21 +164,12 @@
   \sa QDialog
 */
 
-/*!
-  \fn void QTabDialog::selected( const QString &tabLabel );
-  \obsolete
+/*! \fn void QTabDialog::selected( const QString &tabLabel );
 
   This signal is emitted whenever a tab is selected (raised),
   including during the first show().
 
   \sa raise()
-*/
-
-/*! \fn void QTabDialog::currentChanged( QWidget* );
-
-  This signal is emitted whenever the current page changes.
-
-  \sa currentPage(), showPage(), tabLabel()
 */
 
 
@@ -231,7 +209,6 @@ QTabDialog::QTabDialog( QWidget *parent, const char *name, bool modal,
 
     d->tw = new QTabWidget( this, "tab widget" );
     connect ( d->tw, SIGNAL ( selected( const QString& ) ), this, SIGNAL( selected( const QString& ) ) );
-    connect ( d->tw, SIGNAL ( currentChanged( QWidget* ) ), this, SIGNAL( currentChanged( QWidget* ) ) );
 
     d->ok = new QPushButton( this, "ok" );
     CHECK_PTR( d->ok );
@@ -245,7 +222,7 @@ QTabDialog::QTabDialog( QWidget *parent, const char *name, bool modal,
 
 
 /*!
-  Destructs the tab dialog.
+  Destroys the tab dialog.
 */
 
 QTabDialog::~QTabDialog()
@@ -284,8 +261,8 @@ void QTabDialog::setFont( const QFont & font )
 /*!
   Returns TRUE if the tab dialog has a Defaults button, FALSE if not.
 
-  \sa setDefaultButton() defaultButtonPressed() hasApplyButton()
-  hasCancelButton()
+  \sa setApplyButton() applyButtonPressed() hasCancelButton()
+  hasDefaultButton()
 */
 
 bool QTabDialog::hasDefaultButton() const
@@ -297,8 +274,8 @@ bool QTabDialog::hasDefaultButton() const
 /*!
   Returns TRUE if the tab dialog has a Help button, FALSE if not.
 
-  \sa setHelpButton() helpButtonPressed() hasApplyButton()
-  hasCancelButton()
+  \sa setApplyButton() applyButtonPressed() hasCancelButton()
+  hasHelpButton()
 */
 
 bool QTabDialog::hasHelpButton() const
@@ -324,8 +301,8 @@ bool QTabDialog::hasHelpButton() const
 /*!
   Returns TRUE if the tab dialog has a Cancel button, FALSE if not.
 
-  \sa setCancelButton() cancelButtonPressed() hasApplyButton()
-  hasDefaultButton()
+  \sa setCancelButton() cancelButtonPressed() hasDefaultButton()
+  hasApplyButton()
 */
 
 bool QTabDialog::hasCancelButton() const
@@ -361,8 +338,8 @@ bool QTabDialog::hasCancelButton() const
 /*!
   Returns TRUE if the tab dialog has an Apply button, FALSE if not.
 
-  \sa setApplyButton() applyButtonPressed() hasCancelButton()
-  hasDefaultButton()
+  \sa setDefaultsButton() defaultButtonPressed() hasApplyButton()
+  hasCancelButton()
 */
 
 bool QTabDialog::hasApplyButton() const
@@ -374,8 +351,8 @@ bool QTabDialog::hasApplyButton() const
 /*!
   Returns TRUE if the tab dialog has an OK button, FALSE if not.
 
-  \sa setOkButton() hasApplyButton() hasCancelButton()
-  hasDefaultButton()
+  \sa setDefaultsButton() defaultButtonPressed() hasOkButton()
+  hasCancelButton()
 */
 
 bool QTabDialog::hasOkButton() const
@@ -401,13 +378,16 @@ bool QTabDialog::hasOkButton() const
 */
 
 
-/*!\reimp
+/*!
+  Shows the tab view and its children.  Reimplemented in order to
+  delay show()'ing of every page except the initially visible one, and
+  in order to emit the aboutToShow() signal.
+
+  \sa hide(), aboutToShow()
 */
+
 void QTabDialog::show()
 {
-    //   Reimplemented in order to delay show()'ing of every page
-    //   except the initially visible one, and in order to emit the
-    //   aboutToShow() signal.
     if ( topLevelWidget() == this )
 	d->tw->setFocus();
     emit aboutToShow();
@@ -829,7 +809,7 @@ void QTabDialog::setDefaultButton()
   \link QString::operator!() null string\endlink,
   no button is shown.
 
-  \sa setApplyButton() setDefaultButton() cancelButtonPressed()
+  \sa setApplyButton setDefaultButton() cancelButtonPressed()
 */
 
 void QTabDialog::setCancelButton( const QString &text )
@@ -1024,19 +1004,27 @@ void QTabDialog::setSizes()
     setTabOrder( w, d->tw );
 }
 
-/*!\reimp
+
+
+
+/*!
+  Handles resize events for the tab dialog.
 */
+
 void QTabDialog::resizeEvent( QResizeEvent * e )
 {
     QDialog::resizeEvent( e );
 }
 
 
-/*!\reimp
+/*!
+  Handles paint events for the tabbed dialog
 */
+
 void QTabDialog::paintEvent( QPaintEvent * )
 {
 }
+
 
 
 /*!
@@ -1087,11 +1075,7 @@ void QTabDialog::setOkButton()
  */
 void QTabDialog::setOKButton( const QString &text )
 {
-    // Ugle workaround for original "OK" default argument
-    QString newText( text );
-    if ( text.isNull() )
-	newText = QString::fromLatin1( "OK" );
-    setOkButton( newText );
+    setOkButton( text );
 }
 
 
@@ -1104,8 +1088,9 @@ QString QTabDialog::tabLabel( QWidget * w )
 }	
 
 
-/*!  \reimp
+/*!  Reimplemented to hndle a change of GUI style while on-screen.
 */
+
 void QTabDialog::styleChange( QStyle& s )
 {
     QDialog::styleChange( s );
@@ -1124,15 +1109,15 @@ QWidget * QTabDialog::currentPage() const
 }
 
 /*!
-  Defines a new \a label for the tab of page \a w
+  Defines a new label for the tab of page \w
  */
 void QTabDialog::changeTab( QWidget *w, const QString &label)
 {
     d->tw->changeTab( w, label );
 }
 
-/*!
-  Defines a new \a iconset and a new \a label for the tab of page \a w
+/*
+  Defines a new iconset and a new label for the tab of page \w
  */
 void QTabDialog::changeTab( QWidget *w, const QIconSet& iconset, const QString &label)
 {
@@ -1147,5 +1132,3 @@ void QTabDialog::removePage( QWidget * w )
 {
     d->tw->removePage( w );
 }
-
-#endif

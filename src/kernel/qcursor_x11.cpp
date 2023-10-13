@@ -1,39 +1,27 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qcursor_x11.cpp   2.3.2   edited 2001-01-26 $
+** $Id: qcursor_x11.cpp,v 2.24 1999/05/23 20:28:20 agulbra Exp $
 **
 ** Implementation of QCursor class for X11
 **
 ** Created : 940219
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
-** This file is part of the kernel module of the Qt GUI Toolkit.
+** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses for Unix/X11 may use this file in accordance with the Qt Commercial
-** License Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
+*****************************************************************************/
 
 #include "qcursor.h"
 #include "qbitmap.h"
@@ -43,10 +31,6 @@
 #include "qt_x11.h"
 #include <X11/cursorfont.h>
 
-// NOT REVISED
-
-// Define QT_USE_APPROXIMATE_CURSORS when compiling if you REALLY want to
-// use the ugly X11 cursors.
 
 /*****************************************************************************
   Internal QCursorData class
@@ -93,10 +77,8 @@ QCursorData::~QCursorData()
   Global cursors
  *****************************************************************************/
 
-static const int cursors = 15;
+static const int cursors = 14;
 static QCursor cursorTable[cursors];
-
-static const int arrowCursorIdx = 0;
 
 QT_STATIC_CONST_IMPL QCursor & Qt::arrowCursor = cursorTable[0];
 QT_STATIC_CONST_IMPL QCursor & Qt::upArrowCursor = cursorTable[1];
@@ -112,7 +94,6 @@ QT_STATIC_CONST_IMPL QCursor & Qt::blankCursor = cursorTable[10];
 QT_STATIC_CONST_IMPL QCursor & Qt::splitHCursor = cursorTable[11];
 QT_STATIC_CONST_IMPL QCursor & Qt::splitVCursor = cursorTable[12];
 QT_STATIC_CONST_IMPL QCursor & Qt::pointingHandCursor = cursorTable[13];
-QT_STATIC_CONST_IMPL QCursor & Qt::forbiddenCursor = cursorTable[14];
 
 
 QCursor *QCursor::find_cur( int shape )		// find predefined cursor
@@ -121,7 +102,7 @@ QCursor *QCursor::find_cur( int shape )		// find predefined cursor
 }
 
 
-static bool initialized = FALSE;
+bool initialized = FALSE;
 
 /*!
   Internal function that deinitializes the predefined cursors.
@@ -130,9 +111,6 @@ static bool initialized = FALSE;
 */
 void QCursor::cleanup()
 {
-    if ( !initialized )
-	return;
-    
     int shape;
     for( shape = 0; shape < cursors; shape++ ) {
 	delete cursorTable[shape].data;
@@ -170,7 +148,7 @@ QCursor::QCursor()
 	}
 	initialize();
     }
-    QCursor* c = &cursorTable[arrowCursorIdx];
+    QCursor* c = (QCursor *)&Qt::arrowCursor;
     c->data->ref();
     data = c->data;
 }
@@ -178,47 +156,23 @@ QCursor::QCursor()
 
 
 /*!
-  Constructs a cursor with the specified \a shape.
-
-  \a shape can be one of
-  <ul>
-  <li> \c ArrowCursor - standard arrow cursor
-  <li> \c UpArrowCursor - upwards arrow
-  <li> \c CrossCursor - crosshair
-  <li> \c WaitCursor - hourglass/watch
-  <li> \c IbeamCursor - ibeam/text entry
-  <li> \c SizeVerCursor - vertical resize
-  <li> \c SizeHorCursor - horizontal resize
-  <li> \c SizeBDiagCursor - diagonal resize (/)
-  <li> \c SizeFDiagCursor - diagonal resize (\)
-  <li> \c SizeAllCursor - all directions resize
-  <li> \c BlankCursor - blank/invisible cursor
-  <li> \c SplitVCursor - vertical splitting
-  <li> \c SplitHCursor - horziontal splitting
-  <li> \c PointingHandCursor - a pointing hand
-  <li> \c BitmapCursor - userdefined bitmap cursor
-  </ul>
-
-  These correspond to the <a href="#cursors">predefined</a>
-  global QCursor objects.
-
-  \sa setShape()
+  Constructs a cursor with the specified \e shape.
 */
 
-QCursor::QCursor( int shape )
+QCursor::QCursor( int shape )			// cursor with shape
 {
     if ( !initialized )
 	initialize();
     QCursor *c = find_cur( shape );
     if ( !c )					// not found
-	c = &cursorTable[arrowCursorIdx];	//   then use arrowCursor
+	c = (QCursor *)&Qt::arrowCursor;	//   then use arrowCursor
     c->data->ref();
     data = c->data;
 }
 
 
 void QCursor::setBitmap( const QBitmap &bitmap, const QBitmap &mask,
-			 int hotX, int hotY )
+		  int hotX, int hotY )
 {
     if ( !initialized )
 	initialize();
@@ -227,7 +181,7 @@ void QCursor::setBitmap( const QBitmap &bitmap, const QBitmap &mask,
 #if defined(CHECK_NULL)
 	qWarning( "QCursor: Cannot create bitmap cursor; invalid bitmap(s)" );
 #endif
-	QCursor *c = &cursorTable[arrowCursorIdx];
+	QCursor *c = (QCursor *)&Qt::arrowCursor;
 	c->data->ref();
 	data = c->data;
 	return;
@@ -250,7 +204,7 @@ void QCursor::setBitmap( const QBitmap &bitmap, const QBitmap &mask,
 
 
 /*!
-  Constructs a copy of the cursor \a c.
+  Constructs a copy of the cursor \e c.
 */
 
 QCursor::QCursor( const QCursor &c )
@@ -262,7 +216,7 @@ QCursor::QCursor( const QCursor &c )
 }
 
 /*!
-  Destructs the cursor.
+  Destroys the cursor.
 */
 
 QCursor::~QCursor()
@@ -273,7 +227,7 @@ QCursor::~QCursor()
 
 
 /*!
-  Assigns \a c to this cursor and returns a reference to this cursor.
+  Assigns \e c to this cursor and returns a reference to this cursor.
 */
 
 QCursor &QCursor::operator=( const QCursor &c )
@@ -289,35 +243,13 @@ QCursor &QCursor::operator=( const QCursor &c )
 
 
 /*!
-  Returns the cursor shape identifer. The return value is one of
-  following values (cast to an int)
-
-  <ul>
-  <li> \c ArrowCursor - standard arrow cursor
-  <li> \c UpArrowCursor - upwards arrow
-  <li> \c CrossCursor - crosshair
-  <li> \c WaitCursor - hourglass/watch
-  <li> \c IbeamCursor - ibeam/text entry
-  <li> \c SizeVerCursor - vertical resize
-  <li> \c SizeHorCursor - horizontal resize
-  <li> \c SizeBDiagCursor - diagonal resize (/)
-  <li> \c SizeFDiagCursor - diagonal resize (\)
-  <li> \c SizeAllCursor - all directions resize
-  <li> \c BlankCursor - blank/invisible cursor
-  <li> \c SplitVCursor - vertical splitting
-  <li> \c SplitHCursor - horziontal splitting
-  <li> \c PointingHandCursor - a pointing hand
-  <li> \c ForbiddenCursor - a slashed circle
-  <li> \c BitmapCursor - userdefined bitmap cursor
-  </ul>
-
-  These correspond to the <a href="#cursors">predefined</a>
-  global QCursor objects.
+  Returns the cursor shape identifer. If a custom bitmap has been set,
+  \c BitmapCursor is returned.
 
   \sa setShape()
 */
 
-int QCursor::shape() const
+int QCursor::shape() const			// get cursor shape
 {
     if ( !initialized )
 	initialize();
@@ -325,29 +257,13 @@ int QCursor::shape() const
 }
 
 /*!
-  Sets the cursor to the shape identified by \a shape.
+  Sets the cursor to the shape identified by \e shape.
 
-  <ul>
-  <li> \c ArrowCursor - standard arrow cursor
-  <li> \c UpArrowCursor - upwards arrow
-  <li> CrossCursor - crosshair
-  <li> \c WaitCursor - hourglass/watch
-  <li> \c IbeamCursor - ibeam/text entry
-  <li> \c SizeVerCursor - vertical resize
-  <li> \c SizeHorCursor - horizontal resize
-  <li> \c SizeBDiagCursor - diagonal resize (/)
-  <li> \c SizeFDiagCursor - diagonal resize (\)
-  <li> \c SizeAllCursor - all directions resize
-  <li> \c BlankCursor - blank/invisible cursor
-  <li> \c SplitVCursor - vertical splitting
-  <li> \c SplitHCursor - horziontal splitting
-  <li> \c PointingHandCursor - a pointing hand
-  <li> \c ForbiddenCursor - a slashed circle
-  <li> \c BitmapCursor - userdefined bitmap cursor
-  </ul>
-
-  These correspond to the <a href="#cursors">predefined</a>
-  global QCursor objects.
+  The allowed shapes are: \c ArrowCursor, \c UpArrowCursor, \c
+  CrossCursor, \c WaitCursor, \c IbeamCursor, \c SizeVerCursor, \c
+  SizeHorCursor, \c SizeBDiagCursor, \c SizeFDiagCursor, \c
+  SizeAllCursor, \c BlankCursor. These correspond to the <a
+  href="#cursors">predefined</a> global QCursor objects.
 
   \sa shape()
 */
@@ -358,7 +274,7 @@ void QCursor::setShape( int shape )
 	initialize();
     QCursor *c = find_cur( shape );		// find one of the global ones
     if ( !c )					// not found
-	c = &cursorTable[arrowCursorIdx];	//   then use arrowCursor
+	c = (QCursor *)&Qt::arrowCursor;	//   then use arrowCursor
     c->data->ref();
     if ( data->deref() )			// make shallow copy
 	delete data;
@@ -439,7 +355,7 @@ QPoint QCursor::pos()
 }
 
 /*!
-  Moves the cursor (hot spot) to the global screen position \a x and \a y.
+  Moves the cursor (hot spot) to the global screen position \e (x,y).
 
   You can call QWidget::mapToGlobal() to translate widget coordinates
   to global screen coordinates.
@@ -459,10 +375,10 @@ void QCursor::setPos( int x, int y )
     XWarpPointer( qt_xdisplay(), None, qt_xrootwin(), 0, 0, 0, 0, x, y );
 }
 
+
 /*!
   \overload void QCursor::setPos ( const QPoint & )
 */
-
 
 /*!
   \internal Creates the cursor.
@@ -476,23 +392,8 @@ void QCursor::update() const
     if ( d->hcurs )				// already loaded
 	return;
 
-    Display *dpy = qt_xdisplay();
-    Window rootwin = qt_xrootwin();
-
-    if ( d->cshape == BitmapCursor ) {
-	d->hcurs = XCreatePixmapCursor( dpy, d->bm->handle(), d->bmm->handle(),
-					&d->fg, &d->bg, d->hx, d->hy );
-	return;
-    }
-
-    static uchar cur_blank_bits[] = {
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
-
   // Non-standard X11 cursors are created from bitmaps
 
-#ifndef QT_USE_APPROXIMATE_CURSORS
     static uchar cur_ver_bits[] = {
 	0x00, 0x00, 0x00, 0x00, 0x80, 0x01, 0xc0, 0x03, 0xe0, 0x07, 0xf0, 0x0f,
 	0x80, 0x01, 0x80, 0x01, 0x80, 0x01, 0x80, 0x01, 0x80, 0x01, 0xf0, 0x0f,
@@ -525,6 +426,11 @@ void QCursor::update() const
 	0x00, 0x00, 0x00, 0x00, 0xfc, 0x07, 0xfc, 0x03, 0xfc, 0x01, 0xfc, 0x00,
 	0xfc, 0x41, 0xfc, 0x63, 0xdc, 0x77, 0x8c, 0x7f, 0x04, 0x7f, 0x00, 0x7e,
 	0x00, 0x7f, 0x80, 0x7f, 0xc0, 0x7f, 0x00, 0x00 };
+    static uchar cur_blank_bits[] = {
+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+
     static uchar *cursor_bits16[] = {
 	cur_ver_bits, mcur_ver_bits, cur_hor_bits, mcur_hor_bits,
 	cur_bdiag_bits, mcur_bdiag_bits, cur_fdiag_bits, mcur_fdiag_bits,
@@ -578,52 +484,87 @@ void QCursor::update() const
 	0x00, 0xe0, 0x03, 0x00, 0x00, 0xc0, 0x01, 0x00, 0x00, 0x80, 0x00, 0x00,
 	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+
     static uchar phand_bits[] = {
-	0x00, 0x00, 0x00, 0x00,	0xfe, 0x01, 0x00, 0x00,	0x01, 0x02, 0x00, 0x00,
-	0x7e, 0x04, 0x00, 0x00,	0x08, 0x08, 0x00, 0x00,	0x70, 0x08, 0x00, 0x00,
-	0x08, 0x08, 0x00, 0x00,	0x70, 0x14, 0x00, 0x00,	0x08, 0x22, 0x00, 0x00,
-	0x30, 0x41, 0x00, 0x00,	0xc0, 0x20, 0x00, 0x00,	0x40, 0x12, 0x00, 0x00,
-	0x80, 0x08, 0x00, 0x00,	0x00, 0x05, 0x00, 0x00,	0x00, 0x02, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00,	0x00, 0x00, 0x00, 0x00,	0x00, 0x00, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00,	0x00, 0x00, 0x00, 0x00,	0x00, 0x00, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00,	0x00, 0x00, 0x00, 0x00,	0x00, 0x00, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00,	0x00, 0x00, 0x00, 0x00,	0x00, 0x00, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00,	0x00, 0x00, 0x00, 0x00,	0x00, 0x00, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00,	0x00, 0x00, 0x00, 0x00 };
+	0x00,0x00,0x00,0x00,
+	0xfe,0x01,0x00,0x00,
+	0x01,0x02,0x00,0x00,
+	0x7e,0x04,0x00,0x00,
+	0x08,0x08,0x00,0x00,
+	0x70,0x08,0x00,0x00,
+	0x08,0x08,0x00,0x00,
+	0x70,0x14,0x00,0x00,
+	0x08,0x22,0x00,0x00,
+	0x30,0x41,0x00,0x00,
+	0xc0,0x20,0x00,0x00,
+	0x40,0x12,0x00,0x00,
+	0x80,0x08,0x00,0x00,
+	0x00,0x05,0x00,0x00,
+	0x00,0x02,0x00,0x00,
+	0x00,0x00,0x00,0x00,
+	0x00,0x00,0x00,0x00,
+	0x00,0x00,0x00,0x00,
+	0x00,0x00,0x00,0x00,
+	0x00,0x00,0x00,0x00,
+	0x00,0x00,0x00,0x00,
+	0x00,0x00,0x00,0x00,
+	0x00,0x00,0x00,0x00,
+	0x00,0x00,0x00,0x00,
+	0x00,0x00,0x00,0x00,
+	0x00,0x00,0x00,0x00,
+	0x00,0x00,0x00,0x00,
+	0x00,0x00,0x00,0x00,
+	0x00,0x00,0x00,0x00,
+	0x00,0x00,0x00,0x00,
+	0x00,0x00,0x00,0x00,
+	0x00,0x00,0x00,0x00
+    };
+    
     static uchar phandm_bits[] = {
-	0xfe, 0x01, 0x00, 0x00,	0xff, 0x03, 0x00, 0x00,	0xff, 0x07, 0x00, 0x00,
-	0xff, 0x0f, 0x00, 0x00,	0xfe, 0x1f, 0x00, 0x00,	0xf8, 0x1f, 0x00, 0x00,
-	0xfc, 0x1f, 0x00, 0x00,	0xf8, 0x3f, 0x00, 0x00,	0xfc, 0x7f, 0x00, 0x00,
-	0xf8, 0xff, 0x00, 0x00,	0xf0, 0x7f, 0x00, 0x00,	0xe0, 0x3f, 0x00, 0x00,
-	0xc0, 0x1f, 0x00, 0x00,	0x80, 0x0f, 0x00, 0x00,	0x00, 0x07, 0x00, 0x00,
-	0x00, 0x02, 0x00, 0x00,	0x00, 0x00, 0x00, 0x00,	0x00, 0x00, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00,	0x00, 0x00, 0x00, 0x00,	0x00, 0x00, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00,	0x00, 0x00, 0x00, 0x00,	0x00, 0x00, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00,	0x00, 0x00, 0x00, 0x00,	0x00, 0x00, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00,	0x00, 0x00, 0x00, 0x00,	0x00, 0x00, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00,	0x00, 0x00, 0x00, 0x00 };
+	0xfe,0x01,0x00,0x00,
+	0xff,0x03,0x00,0x00,
+	0xff,0x07,0x00,0x00,
+	0xff,0x0f,0x00,0x00,
+	0xfe,0x1f,0x00,0x00,
+	0xf8,0x1f,0x00,0x00,
+	0xfc,0x1f,0x00,0x00,
+	0xf8,0x3f,0x00,0x00,
+	0xfc,0x7f,0x00,0x00,
+	0xf8,0xff,0x00,0x00,
+	0xf0,0x7f,0x00,0x00,
+	0xe0,0x3f,0x00,0x00,
+	0xc0,0x1f,0x00,0x00,
+	0x80,0x0f,0x00,0x00,
+	0x00,0x07,0x00,0x00,
+	0x00,0x02,0x00,0x00,
+	0x00,0x00,0x00,0x00,
+	0x00,0x00,0x00,0x00,
+	0x00,0x00,0x00,0x00,
+	0x00,0x00,0x00,0x00,
+	0x00,0x00,0x00,0x00,
+	0x00,0x00,0x00,0x00,
+	0x00,0x00,0x00,0x00,
+	0x00,0x00,0x00,0x00,
+	0x00,0x00,0x00,0x00,
+	0x00,0x00,0x00,0x00,
+	0x00,0x00,0x00,0x00,
+	0x00,0x00,0x00,0x00,
+	0x00,0x00,0x00,0x00,
+	0x00,0x00,0x00,0x00,
+	0x00,0x00,0x00,0x00,
+	0x00,0x00,0x00,0x00
+    };
 
     static uchar *cursor_bits32[] = {
-	vsplit_bits, vsplitm_bits, hsplit_bits, hsplitm_bits,
-	    phand_bits, phandm_bits
+	vsplit_bits, vsplitm_bits, hsplit_bits, hsplitm_bits, phand_bits, phandm_bits
     };
 
-    static uchar forbidden_bits[] = {
-	0x00,0x00,0x00,0x80,0x1f,0x00,0xe0,0x7f,0x00,0xf0,0xf0,0x00,0x38,0xc0,0x01,
-	    0x7c,0x80,0x03,0xec,0x00,0x03,0xce,0x01,0x07,0x86,0x03,0x06,0x06,0x07,0x06,
-	    0x06,0x0e,0x06,0x06,0x1c,0x06,0x0e,0x38,0x07,0x0c,0x70,0x03,0x1c,0xe0,0x03,
-	    0x38,0xc0,0x01,0xf0,0xe0,0x00,0xe0,0x7f,0x00,0x80,0x1f,0x00,0x00,0x00,0x00 };
-
-    static unsigned char forbiddenm_bits[] = {
-	0x80,0x1f,0x00,0xe0,0x7f,0x00,0xf0,0xff,0x00,0xf8,0xff,0x01,0xfc,0xf0,0x03,
-	    0xfe,0xc0,0x07,0xfe,0x81,0x07,0xff,0x83,0x0f,0xcf,0x07,0x0f,0x8f,0x0f,0x0f,
-	    0x0f,0x1f,0x0f,0x0f,0x3e,0x0f,0x1f,0xfc,0x0f,0x1e,0xf8,0x07,0x3e,0xf0,0x07,
-	    0xfc,0xe0,0x03,0xf8,0xff,0x01,0xf0,0xff,0x00,0xe0,0x7f,0x00,0x80,0x1f,0x00};
-
-    static uchar *cursor_bits20[] = {
-	    forbidden_bits, forbiddenm_bits
-    };
-
+    Display *dpy = qt_xdisplay();
+    if ( d->cshape == BitmapCursor ) {
+	d->hcurs = XCreatePixmapCursor( dpy, d->bm->handle(), d->bmm->handle(),
+					&d->fg, &d->bg, d->hx, d->hy );
+	return;
+    }
     if ( d->cshape >= SizeVerCursor && d->cshape < SizeAllCursor ||
 	 d->cshape == BlankCursor ) {
 	XColor bg, fg;				// ignore stupid CFront message
@@ -634,6 +575,7 @@ void QCursor::update() const
 	fg.green = 0;
 	fg.blue  = 0;
 	int i = (d->cshape - SizeVerCursor)*2;
+	Window rootwin = qt_xrootwin();
 	d->pm  = XCreateBitmapFromData( dpy, rootwin, (char *)cursor_bits16[i],
 					16, 16 );
 	d->pmm = XCreateBitmapFromData( dpy, rootwin, (char *)cursor_bits16[i+1],
@@ -650,6 +592,7 @@ void QCursor::update() const
 	fg.green = 0;
 	fg.blue  = 0;
 	int i = (d->cshape - SplitVCursor)*2;
+	Window rootwin = qt_xrootwin();
 	d->pm  = XCreateBitmapFromData( dpy, rootwin, (char *)cursor_bits32[i],
 					32, 32 );
 	d->pmm = XCreateBitmapFromData( dpy, rootwin, (char *)cursor_bits32[i+1],
@@ -658,24 +601,6 @@ void QCursor::update() const
 	d->hcurs = XCreatePixmapCursor( dpy, d->pm, d->pmm, &fg, &bg, hs, hs );
 	return;
     }
-    if ( d->cshape == ForbiddenCursor ) {
-	XColor bg, fg;				// ignore stupid CFront message
-	bg.red   = 255 << 8;
-	bg.green = 255 << 8;
-	bg.blue  = 255 << 8;
-	fg.red   = 0;
-	fg.green = 0;
-	fg.blue  = 0;
-	int i = (d->cshape - ForbiddenCursor)*2;
-	d->pm  = XCreateBitmapFromData( dpy, rootwin, (char *)cursor_bits20[i],
-					20, 20 );
-	d->pmm = XCreateBitmapFromData( dpy, rootwin, (char *)cursor_bits20[i+1],
-					20, 20);
-	d->hcurs = XCreatePixmapCursor( dpy, d->pm, d->pmm, &fg, &bg, 10, 10 );
-	return;
-    }
-#endif /* ! QT_USE_APPROXIMATE_CURSORS */
-
     uint sh;
     switch ( d->cshape ) {			// map Q cursor to X cursor
 	case ArrowCursor:
@@ -696,48 +621,6 @@ void QCursor::update() const
 	case SizeAllCursor:
 	    sh = XC_fleur;
 	    break;
-#ifdef QT_USE_APPROXIMATE_CURSORS
-	case SizeVerCursor:
-	    sh = XC_top_side;
-	    break;
-	case SizeHorCursor:
-	    sh = XC_right_side;
-	    break;
-	case SizeBDiagCursor:
-	    sh = XC_top_right_corner;
-	    break;
-	case SizeFDiagCursor:
-	    sh = XC_bottom_right_corner;
-	    break;
-	case BlankCursor:
-	    XColor bg, fg;                          // ignore stupid CFront message
-	    bg.red   = 255 << 8;
-	    bg.green = 255 << 8;
-	    bg.blue  = 255 << 8;
-	    fg.red   = 0;
-	    fg.green = 0;
-	    fg.blue  = 0;
-	    d->pm  = XCreateBitmapFromData( dpy, rootwin,
-		(char *)cur_blank_bits, 16, 16 );
-	    d->pmm = XCreateBitmapFromData( dpy, rootwin,
-		(char *)cur_blank_bits, 16,16);
-	    d->hcurs = XCreatePixmapCursor( dpy, d->pm, d->pmm, &fg,
-		&bg, 8, 8 );
-	    return;
-	    break;
-	case SplitVCursor:
-	    sh = XC_sb_h_double_arrow;
-	    break;
-	case SplitHCursor:
-	    sh = XC_sb_v_double_arrow;
-	    break;
-	case PointingHandCursor:
-	    sh = XC_hand1;
-	    break;
-	case ForbiddenCursor:
-	    sh = XC_circle;
-	    break;
-#endif /* QT_USE_APPROXIMATE_CURSORS */
 	default:
 #if defined(CHECK_RANGE)
 	    qWarning( "QCursor::update: Invalid cursor shape %d", d->cshape );

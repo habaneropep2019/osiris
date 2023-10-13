@@ -1,39 +1,27 @@
 /****************************************************************************
-** $Id: qt/src/tools/qmap.h   2.3.2   edited 2001-01-26 $
+** $Id: qmap.h,v 1.21 1999/06/15 13:01:26 weis Exp $
 **
 ** Definition of QMap class
 **
 ** Created : 990406
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
-** This file is part of the tools module of the Qt GUI Toolkit.
+** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses may use this file in accordance with the Qt Commercial License
-** Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
+*****************************************************************************/
 
 #ifndef QMAP_H
 #define QMAP_H
@@ -75,7 +63,7 @@ struct QMapNode : public QMapNodeBase
 {
     QMapNode( const K& _key, const T& _data ) { data = _data; key = _key; }
     QMapNode( const K& _key )	   { key = _key; }
-    QMapNode( const QMapNode<K,T>& _n ) { key = _n.key; data = _n.data; }
+    QMapNode( const QMapNode& _n ) { key = _n.key; data = _n.data; }
     QMapNode() { }
     T data;
     K key;
@@ -116,7 +104,7 @@ class Q_EXPORT QMapIterator
     const T& data() const { return node->data; }
 
 private:
-    int inc() {
+    void inc() {
 	QMapNodeBase* tmp = node;
 	if ( tmp->right ) {
 	    tmp = tmp->right;
@@ -132,10 +120,9 @@ private:
 		tmp = y;
 	}
 	node = (NodePtr)tmp;
-	return 0;
     }
 
-    int dec() {
+    void dec() {
 	QMapNodeBase* tmp = node;
 	if (tmp->color == QMapNodeBase::Red &&
 	    tmp->parent->parent == tmp ) {
@@ -154,7 +141,6 @@ private:
 	    tmp = y;
 	}
 	node = (NodePtr)tmp;
-	return 0;
     }
 
 public:
@@ -214,7 +200,7 @@ class Q_EXPORT QMapConstIterator
     const T& data() const { return node->data; }
 
 private:
-    int inc() {
+    void inc() {
         QMapNodeBase* tmp = node;
 	if ( tmp->right ) {
 	    tmp = tmp->right;
@@ -230,10 +216,9 @@ private:
 		tmp = y;
 	}
 	node = (NodePtr)tmp;
-	return 0;
     }
 
-    int dec() {
+    void dec() {
 	QMapNodeBase* tmp = node;
 	if (tmp->color == QMapNodeBase::Red &&
 	    tmp->parent->parent == tmp ) {
@@ -252,7 +237,6 @@ private:
 	    tmp = y;
 	}
 	node = (NodePtr)tmp;
-	return 0;
     }
 
 public:
@@ -324,13 +308,13 @@ public:
      */
     QMapPrivate() {
 	header = new Node;
-	header->color = QMapNodeBase::Red; // Mark the header
+	header->color = Node::Red; // Mark the header
 	header->parent = 0;
 	header->left = header->right = header;
     }
     QMapPrivate( const QMapPrivate< Key, T >* _map ) : QMapPrivateBase( _map ) {
 	header = new Node;
-	header->color = QMapNodeBase::Red; // Mark the header
+	header->color = Node::Red; // Mark the header
 	if ( _map->header->parent == 0 ) {
 	    header->parent = 0;
 	    header->left = header->right = header;
@@ -347,7 +331,6 @@ public:
 	if ( !p )
 	    return 0;
 	NodePtr n = new Node( *p );
-	n->color = p->color;
 	if ( p->left ) {
 	    n->left = copy( (NodePtr)(p->left) );
 	    n->left->parent = n;
@@ -365,7 +348,7 @@ public:
 
     void clear() {
 	clear( (NodePtr)(header->parent) );
-	header->color = QMapNodeBase::Red;
+	header->color = Node::Red;
 	header->parent = 0;
 	header->left = header->right = header;
 	node_count = 0;
@@ -456,7 +439,7 @@ public:
 	    }
 	}
 	// Really bigger ?
-	if ( (j.node->key) < k )
+	if ( j.node->key < k )
 	    return insert(x, y, k );
 	// We are going to replace a node
 	return j;
@@ -517,7 +500,7 @@ public:
     ~QMap() { if ( sh->deref() ) delete sh; }
 
     QMap<Key,T>& operator= ( const QMap<Key,T>& m )
-      { m.sh->ref(); if ( sh->deref() ) delete sh; sh = m.sh; return *this; }
+      { if ( sh->deref() ) delete sh; sh = m.sh; sh->ref(); return *this; }
 
     Iterator begin() { detach(); return sh->begin(); }
     Iterator end() { detach(); return sh->end(); }
@@ -529,8 +512,8 @@ public:
     ConstIterator find ( const Key& k ) const
 	{ return sh->find( k ); }
     T& operator[] ( const Key& k ) {
-	detach(); QMapNode<Key,T>* p = sh->find( k ).node;
-	if ( p != sh->end().node ) return p->data;
+	detach(); Iterator it( sh->find( k ).node );
+	if ( it != sh->end() ) return it.data();
 	return insert( k, T() ).data(); }
     const T& operator[] ( const Key& k ) const
 	{ return sh->find( k ).data(); }
@@ -564,10 +547,6 @@ public:
 
     void clear() { if ( sh->count == 1 ) sh->clear(); else { sh->deref(); sh = new QMapPrivate<Key,T>; } }
 
-#if defined(Q_FULL_TEMPLATE_INSTANTIATION)
-    bool operator==( const QMap<Key,T>& ) const { return FALSE; }
-#endif
-
 protected:
     /**
      * Helpers
@@ -578,13 +557,12 @@ protected:
 };
 
 
-#ifndef QT_NO_DATASTREAM
 template<class Key, class T>
-inline QDataStream& operator>>( QDataStream& s, QMap<Key,T>& m ) {
+QDataStream& operator>>( QDataStream& s, QMap<Key,T>& m ) {
     m.clear();
-    Q_UINT32 c;
+    uint c;
     s >> c;
-    for( Q_UINT32 i = 0; i < c; ++i ) {
+    for( uint i = 0; i < c; ++i ) {
 	Key k; T t;
 	s >> k >> t;
 	m.insert( k, t );
@@ -594,13 +572,13 @@ inline QDataStream& operator>>( QDataStream& s, QMap<Key,T>& m ) {
 
 
 template<class Key, class T>
-inline QDataStream& operator<<( QDataStream& s, const QMap<Key,T>& m ) {
-    s << (Q_UINT32)m.count();
-    QMapConstIterator<Key,T> it = m.begin();
+QDataStream& operator<<( QDataStream& s, const QMap<Key,T>& m ) {
+    s << m.count();
+    QMap<Key,T>::ConstIterator it = m.begin();
     for( ; it != m.end(); ++it )
 	s << it.key() << it.data();
     return s;
 }
-#endif
+
 
 #endif // QMAP_H

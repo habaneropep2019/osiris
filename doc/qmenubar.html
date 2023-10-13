@@ -1,0 +1,200 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta name="robots" content="noindex,noarchive">
+<title>Qt Toolkit - QMenuBar Class</title><style type="text/css"><!--
+h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
+a:link { text-decoration: none; }
+body { background: white; color: black; }
+--></style>
+</head><body bgcolor="#ffffff">
+
+<a href=index.html><img width=122 height=65 src=qtlogo.png alt="Qt logo" align=left border=0></a>
+<center><img src=dochead.png width=448 height=23></center>
+<br clear=all>
+
+<h1 align=center>QMenuBar Class Reference</h1><br clear="all">
+<p>
+The QMenuBar class provides a horizontal menu bar.
+<a href="#details">More...</a>
+<p>
+<code>#include &lt;<a href="qmenubar-h.html">qmenubar.h</a>&gt;</code>
+<p>
+Inherits <a href="qframe.html">QFrame</a> and <a href="qmenudata.html">QMenuData</a>.
+<p><a href="qmenubar-members.html">List of all member functions.</a>
+<h2>Public Members</h2>
+<ul>
+<li><span class="fn"><a href="#31d9d4"><b>QMenuBar</b></a> ( QWidget * parent=0, const char * name=0 ) </span>
+<li><span class="fn"><a href="#0fea29"><b>~QMenuBar</b></a> () </span>
+<li><span class="fn">virtual void <a href="#f0f7c2"><b>updateItem</b></a> ( int id ) </span>
+<li><span class="fn">virtual void <a href="#768e1b"><b>show</b></a> () </span>
+<li><span class="fn">virtual void <a href="#6c5bca"><b>hide</b></a> () </span>
+<li><span class="fn">virtual bool <a href="#90adf4"><b>eventFilter</b></a> ( QObject *, QEvent * ) </span>
+<li><span class="fn">virtual int <a href="#5f9b14"><b>heightForWidth</b></a> ( int ) const</span>
+<li><span class="fn">enum <a href="#Separator"><b>Separator</b></a> { Never=0, InWindowsStyle=1 }</span>
+<li><span class="fn">Separator <a href="#0285fc"><b>separator</b></a> () const</span>
+<li><span class="fn">virtual void <a href="#cea0e5"><b>setSeparator</b></a> ( Separator when ) </span>
+<li><span class="fn">virtual bool <a href="#ec0046"><b>customWhatsThis</b></a> () const</span>
+</ul>
+<h2>Signals</h2>
+<ul>
+<li><span class="fn">void <a href="#e4ba80"><b>activated</b></a> ( int itemId ) </span>
+<li><span class="fn">void <a href="#0ab87a"><b>highlighted</b></a> ( int itemId ) </span>
+</ul>
+<h2>Protected Members</h2>
+<ul>
+<li><span class="fn">virtual void <a href="#6f6df1"><b>drawContents</b></a> ( QPainter * ) </span>
+<li><span class="fn">virtual void <a href="#a3f23d"><b>fontChange</b></a> ( const QFont &amp; ) </span>
+<li><span class="fn">virtual void <a href="#923f12"><b>mousePressEvent</b></a> ( QMouseEvent * ) </span>
+<li><span class="fn">virtual void <a href="#43938f"><b>mouseReleaseEvent</b></a> ( QMouseEvent * ) </span>
+<li><span class="fn">virtual void <a href="#72974b"><b>mouseMoveEvent</b></a> ( QMouseEvent * ) </span>
+<li><span class="fn">virtual void <a href="#0474b5"><b>keyPressEvent</b></a> ( QKeyEvent * ) </span>
+<li><span class="fn">virtual void <a href="#7cb666"><b>focusOutEvent</b></a> ( QFocusEvent * ) </span>
+<li><span class="fn">virtual void <a href="#056999"><b>resizeEvent</b></a> ( QResizeEvent * ) </span>
+<li><span class="fn">virtual void <a href="#3bbf81"><b>leaveEvent</b></a> ( QEvent * ) </span>
+<li><span class="fn">virtual void <a href="#52bee7"><b>menuContentsChanged</b></a> () </span>
+<li><span class="fn">virtual void <a href="#de6942"><b>menuStateChanged</b></a> () </span>
+<li><span class="fn">virtual void <a href="#7fecb4"><b>styleChange</b></a> ( QStyle &amp; ) </span>
+</ul>
+<hr><h2><a name="details"></a>Detailed Description</h2>
+The QMenuBar class provides a horizontal menu bar.
+<p>
+It automatically sets its own geometry to the top of the parent
+widget and changes appropriately it when the parent widget is
+resized.
+<p><a href="menu-menu-cpp.html#QMenuBar">menu/menu.cpp</a> is a typical example of QMenuBar and <a href="qpopupmenu.html">QPopupMenu</a> use.
+<p><img src=qmenubar-m.png> <img src=qmenubar-w.png>
+<p>See also:  <a href="qpopupmenu.html">QPopupMenu</a> and <a href="guibooks.html#fowler">GUI Design Handbook: Menu Bar</a>
+<p>Examples:
+ <a href="grapher-grapher-cpp.html#QMenuBar">grapher/grapher.cpp</a>
+ <a href="layout-layout-cpp.html#QMenuBar">layout/layout.cpp</a>
+ <a href="menu-menu-cpp.html#QMenuBar">menu/menu.cpp</a>
+ <a href="progress-progress-cpp.html#QMenuBar">progress/progress.cpp</a>
+ <a href="scrollview-scrollview-cpp.html#QMenuBar">scrollview/scrollview.cpp</a>
+
+<hr><h2>Member Type Documentation</h2>
+<h3 class="fn"><a name="Separator">QMenuBar::Separator</h3>
+This enum type is used to decide whether QMenuBar should draw a
+separator line at its bottom.  The possible values are: <ul>
+<p><li> <code>Never</code> - in many applications, there already is a separator,
+and two looks stupid.
+<p><li> <code>InWindowsStyle</code> - in some other applications, a separator
+looks good in Windows style but not else.
+<p></ul>
+<hr><h2>Member Function Documentation</h2>
+<h3 class="fn"><a name="31d9d4"></a>QMenuBar::QMenuBar ( <a href="qwidget.html">QWidget</a> * parent=0, const char * name=0 )</h3>
+<p>Creates a menu bar with a <em>parent</em> and a <em>name.</em>
+<h3 class="fn"><a name="0fea29"></a>QMenuBar::~QMenuBar ()</h3>
+<p>Destroys the menu bar.
+<h3 class="fn">void <a name="e4ba80"></a>QMenuBar::activated ( int id ) <code>[signal]</code></h3>
+<p>This signal is emitted when a menu item is selected; <em>id</em> is the id
+of the selected item.
+<p>Normally, you will connect each menu item to a single slot using
+<a href="qmenudata.html#0b9657">QMenuData::insertItem</a>(), but sometimes you will want to connect
+several items to a single slot (most often if the user selects from
+an array).  This signal is handy in such cases.
+<p>See also:  <a href="qmenubar.html#0ab87a">highlighted</a>() and <a href="qmenudata.html#0b9657">QMenuData::insertItem</a>().
+<h3 class="fn">bool <a name="ec0046"></a>QMenuBar::customWhatsThis () const <code>[virtual]</code></h3>
+<p>Reimplemented for internal reasons; the API is not affected.
+<p>Reimplemented from <a href="qwidget.html#dd25bf">QWidget.</a>
+<h3 class="fn">void <a name="6f6df1"></a>QMenuBar::drawContents ( <a href="qpainter.html">QPainter</a> * p ) <code>[virtual protected]</code></h3>
+<p>Called from <a href="qframe.html#2e9073">QFrame::paintEvent</a>().
+<p>Reimplemented from <a href="qframe.html#99e687">QFrame.</a>
+<h3 class="fn">bool <a name="90adf4"></a>QMenuBar::eventFilter ( <a href="qobject.html">QObject</a> * object, <a href="qevent.html">QEvent</a> * event ) <code>[virtual]</code></h3>
+<p>This function is used to adjust the menu bar's geometry to the
+parent widget's.  Note that this is <em>not</em> part of the public
+interface - the function is <code>public</code> only because
+<a href="qobject.html#bb8547">QObject::eventFilter</a>() is.
+<p>Reimplemented from <a href="qobject.html#bb8547">QObject.</a>
+<h3 class="fn">void <a name="7cb666"></a>QMenuBar::focusOutEvent ( <a href="qfocusevent.html">QFocusEvent</a> * e ) <code>[virtual protected]</code></h3>
+<p>Reimplemented for internal reasons; the API is not affected.
+<p>Reimplemented from <a href="qwidget.html#bdc4a1">QWidget.</a>
+<h3 class="fn">void <a name="a3f23d"></a>QMenuBar::fontChange ( const <a href="qfont.html">QFont</a> &amp; f ) <code>[virtual protected]</code></h3>
+<p>For internal use only.
+<p>Reimplemented from <a href="qwidget.html#570a8f">QWidget.</a>
+<h3 class="fn">int <a name="5f9b14"></a>QMenuBar::heightForWidth ( int max_width ) const <code>[virtual]</code></h3>
+<p>Returns the height that the menu would resize itself to if its parent
+(and hence itself) resized to the given width.  This can be useful for
+simple layout tasks where the height of the menubar is needed after
+items have been inserted.  See examples/showimg/showimg.cpp for an
+example of the usage.
+<p>Reimplemented from <a href="qwidget.html#2e8476">QWidget.</a>
+<h3 class="fn">void <a name="6c5bca"></a>QMenuBar::hide () <code>[virtual]</code></h3>
+<p>Reimplements <a href="qwidget.html#bc7c6a">QWidget::hide</a>() in order to deselect any selected item.
+<p>Examples:
+ <a href="grapher-grapher-cpp.html#hide">grapher/grapher.cpp</a>
+<p>Reimplemented from <a href="qwidget.html#bc7c6a">QWidget.</a>
+<h3 class="fn">void <a name="0ab87a"></a>QMenuBar::highlighted ( int id ) <code>[signal]</code></h3>
+<p>This signal is emitted when a menu item is highlighted; <em>id</em> is the
+id of the highlighted item.
+<p>Normally, you will connect each menu item to a single slot using
+<a href="qmenudata.html#0b9657">QMenuData::insertItem</a>(), but sometimes you will want to connect
+several items to a single slot (most often if the user selects from
+an array).  This signal is handy in such cases.
+<p>See also:  <a href="qmenubar.html#e4ba80">activated</a>() and <a href="qmenudata.html#0b9657">QMenuData::insertItem</a>().
+<h3 class="fn">void <a name="0474b5"></a>QMenuBar::keyPressEvent ( <a href="qkeyevent.html">QKeyEvent</a> * e ) <code>[virtual protected]</code></h3>
+<p>Handles key press events for the menu bar.
+<p>Reimplemented from <a href="qwidget.html#cdb1c7">QWidget.</a>
+<h3 class="fn">void <a name="3bbf81"></a>QMenuBar::leaveEvent ( <a href="qevent.html">QEvent</a> * e ) <code>[virtual protected]</code></h3>
+<p>Handles leave events for the menu bar.
+<p>Reimplemented from <a href="qwidget.html#467513">QWidget.</a>
+<h3 class="fn">void <a name="52bee7"></a>QMenuBar::menuContentsChanged () <code>[virtual protected]</code></h3>
+<p>Recomputes the menu bar's display data according to the new
+contents.
+<p>You should never need to call this, it is called automatically by
+<a href="qmenudata.html">QMenuData</a> whenever it needs to be called.
+<p>Reimplemented from <a href="qmenudata.html#91c23e">QMenuData.</a>
+<h3 class="fn">void <a name="de6942"></a>QMenuBar::menuStateChanged () <code>[virtual protected]</code></h3>
+<p>Recomputes the menu bar's display data according to the new
+state.
+<p>You should never need to call this, it is called automatically by
+<a href="qmenudata.html">QMenuData</a> whenever it needs to be called.
+<p>Reimplemented from <a href="qmenudata.html#7acb0f">QMenuData.</a>
+<h3 class="fn">void <a name="72974b"></a>QMenuBar::mouseMoveEvent ( <a href="qmouseevent.html">QMouseEvent</a> * e ) <code>[virtual protected]</code></h3>
+<p>Handles mouse move events for the menu bar.
+<p>Reimplemented from <a href="qwidget.html#8b6935">QWidget.</a>
+<h3 class="fn">void <a name="923f12"></a>QMenuBar::mousePressEvent ( <a href="qmouseevent.html">QMouseEvent</a> * e ) <code>[virtual protected]</code></h3>
+<p>Handles mouse press events for the menu bar.
+<p>Reimplemented from <a href="qwidget.html#fb611b">QWidget.</a>
+<h3 class="fn">void <a name="43938f"></a>QMenuBar::mouseReleaseEvent ( <a href="qmouseevent.html">QMouseEvent</a> * e ) <code>[virtual protected]</code></h3>
+<p>Handles mouse release events for the menu bar.
+<p>Reimplemented from <a href="qwidget.html#773a0f">QWidget.</a>
+<h3 class="fn">void <a name="056999"></a>QMenuBar::resizeEvent ( <a href="qresizeevent.html">QResizeEvent</a> * ) <code>[virtual protected]</code></h3>
+<p>Handles resize events for the menu bar.
+<p>Reimplemented from <a href="qwidget.html#28c156">QWidget.</a>
+<h3 class="fn">QMenuBar::Separator <a name="0285fc"></a>QMenuBar::separator() const</h3>
+<p>Returns the currently set <a href="qmenubar.html#Separator">Separator</a> usage.
+<p>See also:  <a href="qmenubar.html#Separator">Separator</a> and <a href="qmenubar.html#cea0e5">setSeparator</a>().
+<h3 class="fn">void <a name="cea0e5"></a>QMenuBar::setSeparator ( <a href="qmenubar.html#Separator">Separator</a> when ) <code>[virtual]</code></h3>
+<p>When a menubar is used above an unframed widget, it may look better
+with a separating line when displayed with <a href="qwidget.html#ea8b00">WindowsStyle</a>.
+<p>This function sets the usage of such a separator to appear either
+QMenuBar::Never, or QMenuBar::InWindowsStyle.
+<p>The default is QMenuBar::Never.
+<p>See also:  <a href="qmenubar.html#Separator">Separator</a> and <a href="qmenubar.html#0285fc">separator</a>().
+<p>Examples:
+ <a href="layout-layout-cpp.html#setSeparator">layout/layout.cpp</a>
+ <a href="scrollview-scrollview-cpp.html#setSeparator">scrollview/scrollview.cpp</a>
+<h3 class="fn">void <a name="768e1b"></a>QMenuBar::show () <code>[virtual]</code></h3>
+<p>Reimplements <a href="qwidget.html#ccc8f7">QWidget::show</a>() in order to set up the correct keyboard
+accelerators and raise itself to the top of the widget stack.
+<p>Examples:
+ <a href="grapher-grapher-cpp.html#show">grapher/grapher.cpp</a>
+<p>Reimplemented from <a href="qwidget.html#ccc8f7">QWidget.</a>
+<h3 class="fn">void <a name="7fecb4"></a>QMenuBar::styleChange ( <a href="qstyle.html">QStyle</a> &amp; old ) <code>[virtual protected]</code></h3>
+<p>Reimplemented for internal reasons; the API is not affected.
+<p>Reimplemented from <a href="qwidget.html#7a14f4">QWidget.</a>
+<h3 class="fn">void <a name="f0f7c2"></a>QMenuBar::updateItem ( int ) <code>[virtual]</code></h3>
+<p>For internal use only.
+<p>Reimplemented from <a href="qmenudata.html#1a02ea">QMenuData.</a>
+<hr><p>
+Search the documentation, FAQ, qt-interest archive and more (uses
+<a href="http://www.troll.no">www.troll.no</a>):<br>
+<form method=post action="http://www.troll.no/search.cgi">
+<input type=hidden name="version" value="2.00"><nobr>
+<input size="50" name="search"><input type=submit value="Search">
+</nobr></form><hr><p>
+This file is part of the <a href="index.html">Qt toolkit</a>,
+copyright &copy; 1995-99
+<a href="http://www.troll.no">Troll Tech</a>, all rights reserved.<p><address><hr><div align="center">
+<table width="100%" cellspacing="0" border="0"><tr>
+<td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.00</div>
+</table></div></address></body></html>

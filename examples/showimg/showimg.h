@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: qt/examples/showimg/showimg.h   2.3.2   edited 2001-02-14 $
+** $Id: showimg.h,v 1.2 1999/06/03 01:45:29 warwick Exp $
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -37,7 +37,6 @@ private:
     void	scale();
     int		conversion_flags;
     bool	smooth() const;
-    bool	unscaled() const;
     bool	useColorContext() const;
     int		alloc_context;
     bool	convertEvent( QMouseEvent* e, int& x, int& y );
@@ -57,7 +56,7 @@ private:
     QLabel     *status;
     int         si, sp, ac, co, mo, fd, bd, // Menu item ids
 		td, ta, ba, fa, au, ad, dd,
-		ns, us, ss, cc, t1, t8, t32;
+		ss, cc, t1, t8, t32;
     void	updateStatus();
     void	setMenuItemFlags();
     bool 	reconvertImage();
@@ -65,7 +64,6 @@ private:
     int		clickx, clicky;
     bool	may_be_other;
     static ImageViewer* other;
-    void	setImage(const QImage& newimage);
 
 private slots:
     void	to1Bit();
@@ -75,12 +73,6 @@ private slots:
 
     void	copy();
     void	paste();
-
-    void	hFlip();
-    void	vFlip();
-    void	rot180();
-
-    void	editText();
 
     void	newWindow();
     void	openFile();

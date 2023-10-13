@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: qt/examples/showimg/showimg.cpp   2.3.2   edited 2001-02-14 $
+** $Id: showimg.cpp,v 1.3 1999/06/22 03:50:42 warwick Exp $
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -9,7 +9,6 @@
 *****************************************************************************/
 
 #include "showimg.h"
-#include "imagetexteditor.h"
 #include <qmenubar.h>
 #include <qfiledialog.h>
 #include <qmessagebox.h>
@@ -55,23 +54,17 @@ ImageViewer::ImageViewer( QWidget *parent, const char *name, int wFlags )
 
     file = new QPopupMenu();
     menubar->insertItem( "&File", file );
-    file->insertItem( "&New window", this,  SLOT(newWindow()), CTRL+Key_N );
-    file->insertItem( "&Open...", this,  SLOT(openFile()), CTRL+Key_O );
+    file->insertItem( "New window", this,  SLOT(newWindow()), CTRL+Key_N );
+    file->insertItem( "Open...", this,  SLOT(openFile()), CTRL+Key_O );
     si = file->insertItem( "Save image", saveimage );
     sp = file->insertItem( "Save pixmap", savepixmap );
     file->insertSeparator();
-    file->insertItem( "E&xit", qApp,  SLOT(quit()), CTRL+Key_Q );
+    file->insertItem( "Quit", qApp,  SLOT(quit()), CTRL+Key_Q );
 
     edit =  new QPopupMenu();
     menubar->insertItem( "&Edit", edit );
-    edit->insertItem("&Copy", this, SLOT(copy()), CTRL+Key_C);
-    edit->insertItem("&Paste", this, SLOT(paste()), CTRL+Key_V);
-    edit->insertSeparator();
-    edit->insertItem("&Horizontal flip", this, SLOT(hFlip()), ALT+Key_H);
-    edit->insertItem("&Vertical flip", this, SLOT(vFlip()), ALT+Key_V);
-    edit->insertItem("&Rotate 180", this, SLOT(rot180()), ALT+Key_R);
-    edit->insertSeparator();
-    edit->insertItem("&Text...", this, SLOT(editText()));
+    edit->insertItem("&Copy", this, SLOT(copy()), ALT+Key_C);
+    edit->insertItem("&Paste", this, SLOT(paste()), ALT+Key_V);
     edit->insertSeparator();
     t1 = edit->insertItem( "Convert to &1 bit", this, SLOT(to1Bit()) );
     t8 = edit->insertItem( "Convert to &8 bit", this, SLOT(to8Bit()) );
@@ -94,11 +87,8 @@ ImageViewer::ImageViewer( QWidget *parent, const char *name, int wFlags )
     ad = options->insertItem( "PreferDither" );
     dd = options->insertItem( "AvoidDither" );
     options->insertSeparator();
-    ns = options->insertItem( "No scaling" );
-    us = options->insertItem( "Normal scaling" );
     ss = options->insertItem( "Smooth scaling" );
-    options->insertSeparator();
-    cc = options->insertItem( "Use color context" );
+    cc = options->insertItem( "Use colour context" );
     if ( QApplication::colorSpec() == QApplication::ManyColor )
 	options->setItemEnabled( cc, FALSE );
     options->setCheckable( TRUE );
@@ -134,7 +124,7 @@ ImageViewer::~ImageViewer()
 */
 void ImageViewer::doOption(int item)
 {
-    if ( item == cc ) {
+    if ( item == ss || item == cc ) {
 	// Toggle
 	bool newbool = !options->isItemChecked(item);
 	options->setItemChecked(item, newbool);
@@ -146,15 +136,6 @@ void ImageViewer::doOption(int item)
 
     if ( options->isItemChecked( item ) ) return; // They are all radio buttons
 
-    if ( item == ns || item == us || item == ss ) {
-	options->setItemChecked( ns, item == ns );
-	options->setItemChecked( us, item == us );
-	options->setItemChecked( ss, item == ss );
-	reconvertImage();
-	repaint(image.hasAlphaBuffer() || unscaled() );	// show image in widget
-	return;
-    }
-    
     int ocf = conversion_flags;
 
     if ( item == ac ) {
@@ -327,7 +308,6 @@ void ImageViewer::savePixmap( int item )
 void ImageViewer::newWindow()
 {
     ImageViewer* that = new ImageViewer(0, "new window", WDestructiveClose);
-    that->options->setItemChecked( that->cc, useColorContext() );
     that->show();
 }
 
@@ -426,11 +406,6 @@ bool ImageViewer::reconvertImage()
     return success;				// TRUE if loaded OK
 }
 
-bool ImageViewer::unscaled() const
-{
-    return options->isItemChecked(ns);
-}
-
 bool ImageViewer::smooth() const
 {
     return options->isItemChecked(ss);
@@ -453,7 +428,7 @@ void ImageViewer::scale()
     if ( image.isNull() ) return;
 
     QApplication::setOverrideCursor( waitCursor ); // this might take time
-    if ( width() == pm.width() && h == pm.height() || unscaled() )
+    if ( width() == pm.width() && h == pm.height() )
     {						// no need to scale if widget
 	pmScaled = pm;				// size equals pixmap size
     } else {
@@ -489,8 +464,6 @@ void ImageViewer::resizeEvent( QResizeEvent * )
 	scale();				// scale pmScaled to window
 	updateStatus();
     }
-    if ( image.hasAlphaBuffer() )
-	erase();
 }
 
 bool ImageViewer::convertEvent( QMouseEvent* e, int& x, int& y)
@@ -557,16 +530,24 @@ void ImageViewer::paintEvent( QPaintEvent *e )
 void ImageViewer::giveHelp()
 {
     if (!helpmsg) {
-	QString helptext =
-	    "<b>Usage:</b> <tt>showimg [-m] <i>filename ...</i></tt>"
-	    "<blockquote>"
-		"<tt>-m</tt> - use <i>ManyColor</i> color spec"
-	    "</blockquote>"
-	    "<p>Supported input formats:"
-	    "<blockquote>";
-	helptext += QImage::inputFormatList().join(", ");
-	helptext += "</blockquote>";
-
+	QString helptext = "Usage: showimg [-m] [filename]\n\n   -m  - use ManyColor color spec";
+	QStrList support = QImage::inputFormats();
+	helptext += "\n\nSupported input formats:\n";
+	int lastnl = helptext.length();
+	helptext += "  ";
+	const char* f = support.first();
+	helptext += f;
+	f = support.next();
+	for (; f; f = support.next()) {
+	    helptext += ',';
+	    if ( helptext.length() - lastnl > 40 ) {
+		helptext += "\n  ";
+		lastnl = helptext.length() - 2;
+	    } else {
+		helptext += ' ';
+	    }
+	    helptext += f;
+	}
 	helpmsg = new QMessageBox( "Help", helptext,
 	    QMessageBox::Information, QMessageBox::Ok, 0, 0, 0, 0, FALSE );
     }
@@ -598,75 +579,44 @@ void ImageViewer::copyFrom(ImageViewer* s)
 }
 ImageViewer* ImageViewer::other = 0;
 
-void ImageViewer::hFlip()
-{
-    setImage(image.mirror(TRUE,FALSE));
-}
-
-void ImageViewer::vFlip()
-{
-    setImage(image.mirror(FALSE,TRUE));
-}
-
-void ImageViewer::rot180()
-{
-    setImage(image.mirror(TRUE,TRUE));
-}
-
 void ImageViewer::copy()
 {
-#ifndef QT_NO_MIMECLIPBOARD
+    //QApplication::clipboard()->setPixmap(pm);
     QApplication::clipboard()->setImage(image); // Less information loss
-#endif
 }
 
 void ImageViewer::paste()
 {
-#ifndef QT_NO_MIMECLIPBOARD
-    QImage p = QApplication::clipboard()->image();
+    image = QApplication::clipboard()->image();
 
     if ( !image.isNull() ) {
 	filename = "pasted";
-	setImage(p);
+
+	// From loadImage - could be factored out
+
+	pickx = -1;
+	clickx = -1;
+	setCaption( filename );			// set window caption
+	int w = image.width();
+	int h = image.height();
+
+	const int reasonable_width = 128;
+	if ( w < reasonable_width ) {
+	    // Integer scale up to something reasonable
+	    int multiply = ( reasonable_width + w - 1 ) / w;
+	    w *= multiply;
+	    h *= multiply;
+	}
+
+	h += menubar->heightForWidth(w) + status->height();
+	resize( w, h );				// we resize to fit image
+
+	reconvertImage();
+	repaint( image.hasAlphaBuffer() );
+
+	updateStatus();
+	setMenuItemFlags();
     }
-#endif
-}
-
-void ImageViewer::setImage(const QImage& newimage)
-{
-    image = newimage;
-
-    pickx = -1;
-    clickx = -1;
-    setCaption( filename );			// set window caption
-    int w = image.width();
-    int h = image.height();
-
-    if ( !w )
-	return;
-
-    const int reasonable_width = 128;
-    if ( w < reasonable_width ) {
-	// Integer scale up to something reasonable
-	int multiply = ( reasonable_width + w - 1 ) / w;
-	w *= multiply;
-	h *= multiply;
-    }
-
-    h += menubar->heightForWidth(w) + status->height();
-    resize( w, h );				// we resize to fit image
-
-    reconvertImage();
-    repaint( image.hasAlphaBuffer() );
-
-    updateStatus();
-    setMenuItemFlags();
-}
-
-void ImageViewer::editText()
-{
-    ImageTextEditor editor(image,this);
-    editor.exec();
 }
 
 void ImageViewer::to1Bit()

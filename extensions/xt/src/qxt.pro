@@ -1,7 +1,8 @@
 TEMPLATE	= lib
-CONFIG		+= qt staticlib warn_on release x11
-HEADERS		= qxt.h
+CONFIG		= staticlib qt warn_on release
+HEADERS		= ../../../include/qxt.h
 SOURCES		= qxt.cpp
+MOC_DIR		= .
 TARGET		= qxt
 DESTINCDIR	= ../../../include
 DESTDIR		= ../../../lib

@@ -1,12 +1,9 @@
 /****************************************************************************
-** $Id: qt/examples/customlayout/border.cpp   2.3.2   edited 2001-01-26 $
+** $Id: border.cpp,v 1.5 1999/06/21 13:58:40 reggie Exp $
 **
 ** Implementing your own layout: flow example
 **
-** Copyright (C) 1996 by Trolltech AS.  All rights reserved.
-**
-** This file is part of an example program for Qt.  This example
-** program may be used, distributed and modified without limitation.
+** Copyright (C) 1996 by Troll Tech AS.  All rights reserved.
 **
 *****************************************************************************/
 
@@ -123,59 +120,59 @@ QLayoutIterator BorderLayout::iterator()
     return QLayoutIterator( new BorderLayoutIterator( &list ) );
 }
 
-void BorderLayout::setGeometry( const QRect &rct )
+void BorderLayout::setGeometry( const QRect &rect )
 {
-    QLayout::setGeometry( rct );
-    doLayout( rct );
+    QLayout::setGeometry( rect );
+    doLayout( rect );
 }
 
-void BorderLayout::doLayout( const QRect &rct, bool /*testonly*/ )
+void BorderLayout::doLayout( const QRect &rect, bool /*testonly*/ )
 {
     int ew = 0, ww = 0, nh = 0, sh = 0;
     int h = 0;
 
     BorderLayoutIterator it = BorderLayoutIterator( &list );
     BorderLayoutStruct *o;
-    BorderLayoutStruct *center = 0;
+    BorderLayoutStruct *center = 0L;
     while ( ( o = it.currentStruct() ) != 0 ) {
         ++it;
 
         if ( o->pos == North ) {
-            o->item->setGeometry( QRect( rct.x(), nh, rct.width(), o->item->sizeHint().height() ) );
+            o->item->setGeometry( QRect( rect.x(), nh, rect.width(), o->item->sizeHint().height() ) );
             nh += o->item->geometry().height() + spacing();
         }
         if ( o->pos == South ) {
             o->item->setGeometry( QRect( o->item->geometry().x(), o->item->geometry().y(),
-                                         rct.width(), o->item->sizeHint().height() ) );
+                                         rect.width(), o->item->sizeHint().height() ) );
             sh += o->item->geometry().height() + spacing();
-            o->item->setGeometry( QRect( rct.x(), rct.y() + rct.height() - sh + spacing(),
+            o->item->setGeometry( QRect( rect.x(), rect.y() + rect.height() - sh + spacing(),
                                          o->item->geometry().width(), o->item->geometry().height() ) );
         }
         if ( o->pos == Center )
             center = o;
     }
 
-    h = rct.height() - nh - sh;
+    h = rect.height() - nh - sh;
 
     it.toFirst();
     while ( ( o = it.currentStruct() ) != 0 ) {
         ++it;
 
         if ( o->pos == West ) {
-            o->item->setGeometry( QRect( rct.x() + ww, nh, o->item->sizeHint().width(), h ) );
+            o->item->setGeometry( QRect( rect.x() + ww, nh, o->item->sizeHint().width(), h ) );
             ww += o->item->geometry().width() + spacing();
         }
         if ( o->pos == East ) {
             o->item->setGeometry( QRect( o->item->geometry().x(), o->item->geometry().y(),
                                          o->item->sizeHint().width(), h ) );
             ew += o->item->geometry().width() + spacing();
-            o->item->setGeometry( QRect( rct.x() + rct.width() - ew + spacing(), nh,
+            o->item->setGeometry( QRect( rect.x() + rect.width() - ew + spacing(), nh,
                                          o->item->geometry().width(), o->item->geometry().height() ) );
         }
     }
 
     if ( center )
-        center->item->setGeometry( QRect( ww, nh, rct.width() - ew - ww, h ) );
+        center->item->setGeometry( QRect( ww, nh, rect.width() - ew - ww, h ) );
 }
 
 void BorderLayout::calcSize( SizeType st )

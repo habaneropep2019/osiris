@@ -1,0 +1,172 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta name="robots" content="noindex,noarchive">
+<title>Qt Toolkit - QPalette Class</title><style type="text/css"><!--
+h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
+a:link { text-decoration: none; }
+body { background: white; color: black; }
+--></style>
+</head><body bgcolor="#ffffff">
+
+<a href=index.html><img width=122 height=65 src=qtlogo.png alt="Qt logo" align=left border=0></a>
+<center><img src=dochead.png width=448 height=23></center>
+<br clear=all>
+
+<h1 align=center>QPalette Class Reference</h1><br clear="all">
+<p>
+The QPalette class contains color groups for each widget state.
+<a href="#details">More...</a>
+<p>
+<code>#include &lt;<a href="qpalette-h.html">qpalette.h</a>&gt;</code>
+<p><a href="qpalette-members.html">List of all member functions.</a>
+<h2>Public Members</h2>
+<ul>
+<li><span class="fn"><a href="#4db7ec"><b>QPalette</b></a> () </span>
+<li><span class="fn"><a href="#6ab1b1"><b>QPalette</b></a> ( const QColor &amp; button ) </span>
+<li><span class="fn"><a href="#dcc4f5"><b>QPalette</b></a> ( const QColor &amp; button, const QColor &amp; background ) </span>
+<li><span class="fn"><a href="#22730f"><b>QPalette</b></a> ( const QColorGroup &amp; normal, const QColorGroup &amp; disabled, const QColorGroup &amp; active ) </span>
+<li><span class="fn"><a href="#e14c24"><b>QPalette</b></a> ( const QPalette &amp; ) </span>
+<li><span class="fn"><a href="#c079c6"><b>~QPalette</b></a> () </span>
+<li><span class="fn">QPalette&amp; <a href="#45beba"><b>operator=</b></a> ( const QPalette &amp; ) </span>
+<li><span class="fn">enum <b>ColorGroup</b> { Normal, Disabled, Active, NColorGroups }</span>
+<li><span class="fn">const QColor&amp; <a href="#acc79b"><b>color</b></a> ( ColorGroup, QColorGroup::ColorRole ) const</span>
+<li><span class="fn">const QBrush&amp; <a href="#12851f"><b>brush</b></a> ( ColorGroup, QColorGroup::ColorRole ) const</span>
+<li><span class="fn">void <a href="#7981c8"><b>setColor</b></a> ( ColorGroup, QColorGroup::ColorRole, const QColor &amp; ) </span>
+<li><span class="fn">void <a href="#e7f2bc"><b>setBrush</b></a> ( ColorGroup, QColorGroup::ColorRole, const QBrush &amp; ) </span>
+<li><span class="fn">void <a href="#4dd621"><b>setColor</b></a> ( QColorGroup::ColorRole, const QColor &amp; ) </span>
+<li><span class="fn">void <a href="#d95c94"><b>setBrush</b></a> ( QColorGroup::ColorRole, const QBrush &amp; ) </span>
+<li><span class="fn">QPalette <a href="#6f2662"><b>copy</b></a> () const</span>
+<li><span class="fn">const QColorGroup&amp; <a href="#d02d46"><b>normal</b></a> () const</span>
+<li><span class="fn">const QColorGroup&amp; <a href="#a67ec0"><b>disabled</b></a> () const</span>
+<li><span class="fn">const QColorGroup&amp; <a href="#73a182"><b>active</b></a> () const</span>
+<li><span class="fn">void <a href="#ce757a"><b>setNormal</b></a> ( const QColorGroup &amp; ) </span>
+<li><span class="fn">void <a href="#be00a5"><b>setDisabled</b></a> ( const QColorGroup &amp; ) </span>
+<li><span class="fn">void <a href="#ef09be"><b>setActive</b></a> ( const QColorGroup &amp; ) </span>
+<li><span class="fn">bool <a href="#0f9ec6"><b>operator==</b></a> ( const QPalette &amp; p ) const</span>
+<li><span class="fn">bool <a href="#420126"><b>operator!=</b></a> ( const QPalette &amp; p ) const</span>
+<li><span class="fn">bool <a href="#abb7ba"><b>isCopyOf</b></a> ( const QPalette &amp; ) </span>
+<li><span class="fn">int <a href="#1f3095"><b>serialNumber</b></a> () const</span>
+</ul>
+<h2>Related Functions</h2>
+(Note that these are not member functions.)
+<ul>
+<li>QDataStream &amp; <a href="qpalette.html#3613b9"><b>operator&gt;&gt;</b></a> (QDataStream &amp; s, QPalette &amp; p)
+<li>QDataStream &amp; <a href="qpalette.html#69e1d9"><b>operator&lt;&lt;</b></a> (QDataStream &amp; s, const QPalette &amp; p)
+</ul>
+<hr><h2><a name="details"></a>Detailed Description</h2>
+The QPalette class contains color groups for each widget state.
+<p>
+A palette consists of three color groups: a <em>normal,</em> a <em>disabled</em>
+and an <em>active</em> color group.  All <a href="qwidget.html">widgets</a>
+contain a palette, and all the widgets in Qt use their palette to draw
+themselves.  This makes the user interface consistent and easily
+configurable.
+<p>If you make a new widget you are strongly advised to use the colors in
+the palette rather than hard-coding specific colors.
+<p>The <em>active</em> group is used for the widget in focus.  Normally it
+contains the same colors as <em>normal</em> so as not to overwhelm the user
+with bright and flashing colors, but if you need to you can change it.
+<p>The <em>disabled</em> group is used for widgets that are currently
+inactive or not usable.
+<p>The <em>normal</em> color group is used in all other cases.
+<p>See also:  <a href="qapplication.html#9604e2">QApplication::setPalette</a>(), <a href="qwidget.html#379ca0">QWidget::setPalette</a>(), <a href="qcolorgroup.html">QColorGroup</a> and <a href="qcolor.html">QColor</a>.
+
+<hr><h2>Member Function Documentation</h2>
+<h3 class="fn"><a name="4db7ec"></a>QPalette::QPalette ()</h3>
+<p>Constructs a palette that consists of color groups with only black colors.
+<h3 class="fn"><a name="6ab1b1"></a>QPalette::QPalette ( const <a href="qcolor.html">QColor</a> &amp; button )</h3>
+<p><b>This function is obsolete.</b> It is provided to keep old programs working.  We strongly advise against using it in new code.<p>
+Constructs a palette from the <em>button</em> color. The other colors are
+automatically calculated, based on this color. Background will be
+the button color as well.
+<h3 class="fn"><a name="dcc4f5"></a>QPalette::QPalette ( const <a href="qcolor.html">QColor</a> &amp; button, const <a href="qcolor.html">QColor</a> &amp; background )</h3>
+<p>Constructs a palette from a <em>button</em> color and a background. The other colors are
+automatically calculated, based on this color.
+<h3 class="fn"><a name="22730f"></a>QPalette::QPalette ( const <a href="qcolorgroup.html">QColorGroup</a> &amp; normal, const <a href="qcolorgroup.html">QColorGroup</a> &amp; disabled, const <a href="qcolorgroup.html">QColorGroup</a> &amp; active )</h3>
+<p>Constructs a palette that consists of the three color groups <em>normal, disabled</em> and <em>active.</em>
+<h3 class="fn"><a name="e14c24"></a>QPalette::QPalette ( const QPalette &amp; p )</h3>
+<p>Constructs a palette that is a
+<a href="shclass.html">shallow copy</a> of <em>p.</em>
+<p>See also:  <a href="qpalette.html#6f2662">copy</a>().
+<h3 class="fn"><a name="c079c6"></a>QPalette::~QPalette ()</h3>
+<p>Destroys the palette.
+<h3 class="fn">const <a href="qcolorgroup.html">QColorGroup</a> &amp; <a name="73a182"></a>QPalette::active () const</h3>
+<p>Returns the active color group of this palette.
+<p>See also:  <a href="qcolorgroup.html">QColorGroup</a>, <a href="qpalette.html#d02d46">normal</a>(), <a href="qpalette.html#a67ec0">disabled</a>() and <a href="qpalette.html#ef09be">setActive</a>().
+<h3 class="fn">const <a href="qbrush.html">QBrush</a> &amp; <a name="12851f"></a>QPalette::brush ( ColorGroup gr, QColorGroup::ColorRole r ) const</h3>
+<p>Returns the brush in <em>gr</em> used for color role <em>r.</em>
+<h3 class="fn">const <a href="qcolor.html">QColor</a> &amp; <a name="acc79b"></a>QPalette::color ( ColorGroup gr, QColorGroup::ColorRole r ) const</h3>
+<p>Returns the color in <em>gr</em> used for color role <em>r.</em>
+<p>See also:  <a href="qpalette.html#12851f">brush</a>().
+<h3 class="fn">QPalette <a name="6f2662"></a>QPalette::copy () const</h3>
+<p>Returns a
+<a href="shclass.html">deep copy</a> of the palette.
+<h3 class="fn">const <a href="qcolorgroup.html">QColorGroup</a> &amp; <a name="a67ec0"></a>QPalette::disabled () const</h3>
+<p>Returns the disabled color group of this palette.
+<p>See also:  <a href="qcolorgroup.html">QColorGroup</a>, <a href="qpalette.html#d02d46">normal</a>(), <a href="qpalette.html#73a182">active</a>() and <a href="qpalette.html#be00a5">setDisabled</a>().
+<h3 class="fn">bool <a name="abb7ba"></a>QPalette::isCopyOf ( const QPalette &amp; p )</h3>
+<p>Returns TRUE if this palette and <em>p</em> are copies of each other,
+ie. one of them was created as a copy of the other and neither was
+subsequently modified.  This is much stricter than equality.
+<p>See also:  operator= and operator==.
+<h3 class="fn">const <a href="qcolorgroup.html">QColorGroup</a> &amp; <a name="d02d46"></a>QPalette::normal () const</h3>
+<p>Returns the normal color group of this palette.
+<p>See also:  <a href="qcolorgroup.html">QColorGroup</a>, <a href="qpalette.html#a67ec0">disabled</a>(), <a href="qpalette.html#73a182">active</a>() and <a href="qpalette.html#ce757a">setNormal</a>().
+<h3 class="fn">bool <a name="420126"></a>QPalette::operator!= ( const QPalette &amp; p ) const</h3>
+<p>Returns TRUE if this palette is different from <em>p,</em> or FALSE if they
+are equal.
+<h3 class="fn">QPalette &amp; <a name="45beba"></a>QPalette::operator= ( const QPalette &amp; p )</h3>
+<p>Assigns <em>p</em> to this palette and returns a reference to this palette.
+Note that a <em>shallow</em> copy of <em>p</em> is used.
+<p>See also:  <a href="qpalette.html#6f2662">copy</a>().
+<h3 class="fn">bool <a name="0f9ec6"></a>QPalette::operator== ( const QPalette &amp; p ) const</h3>
+<p>Returns TRUE if this palette is equal to <em>p,</em> or FALSE if they
+are different.
+<h3 class="fn">int <a name="1f3095"></a>QPalette::serialNumber () const</h3>
+<p>Returns a number that uniquely identifies this QPalette object. The
+serial number is very useful for caching.
+<p>See also:  <a href="qpixmap.html">QPixmap</a> and <a href="qpixmapcache.html">QPixmapCache</a>.
+<h3 class="fn">void <a name="ef09be"></a>QPalette::setActive ( const <a href="qcolorgroup.html">QColorGroup</a> &amp; g )</h3>
+<p>Sets the <code>active</code> color group to <em>g.</em>
+<p>See also:  <a href="qpalette.html#73a182">active</a>().
+<h3 class="fn">void <a name="e7f2bc"></a>QPalette::setBrush ( ColorGroup gr,QColorGroup::ColorRole r,const <a href="qbrush.html">QBrush</a> &amp; b )</h3>
+<p>Sets the brush in <em>gr</em> used for color role <em>r</em> to <em>b.</em>
+<h3 class="fn">void <a name="d95c94"></a>QPalette::setBrush ( QColorGroup::ColorRole r, const <a href="qbrush.html">QBrush</a> &amp; b )</h3>
+<p>Sets the brush in all color groups (Normal, Disabled, and Active)
+that is used for color role <em>r</em> to <em>b.</em>
+<h3 class="fn">void <a name="7981c8"></a>QPalette::setColor ( ColorGroup gr,QColorGroup::ColorRole r,const <a href="qcolor.html">QColor</a> &amp; c )</h3>
+<p>Sets the brush in <em>gr</em> used for color role <em>r</em> to the solid color <em>c.</em>
+<h3 class="fn">void <a name="4dd621"></a>QPalette::setColor ( QColorGroup::ColorRole r, const <a href="qcolor.html">QColor</a> &amp; c )</h3>
+<p>Sets the color of the brush in <em>gr</em> used for color role <em>r</em> to <em>c.</em>
+<h3 class="fn">void <a name="be00a5"></a>QPalette::setDisabled ( const <a href="qcolorgroup.html">QColorGroup</a> &amp; g )</h3>
+<p>Sets the <code>disabled</code> color group to <em>g.</em>
+<p>See also:  <a href="qpalette.html#a67ec0">disabled</a>().
+<h3 class="fn">void <a name="ce757a"></a>QPalette::setNormal ( const <a href="qcolorgroup.html">QColorGroup</a> &amp; g )</h3>
+<p>Sets the <code>normal</code> color group to <em>g.</em>
+<p>See also:  <a href="qpalette.html#d02d46">normal</a>().
+<hr><h2>Related Functions</h2>
+<h3><a href="qdatastream.html">QDataStream</a> &amp; <a name="3613b9"></a>operator&gt;&gt; (<a href="qdatastream.html">QDataStream</a> &amp; s, QPalette &amp; p)</h3>
+<p>Reads a palette from the stream and returns a reference to the stream.
+
+<h3><a href="qdatastream.html">QDataStream</a> &amp; <a name="69e1d9"></a>operator&lt;&lt; (<a href="qdatastream.html">QDataStream</a> &amp; s, const QPalette &amp; p)</h3>
+<p>Writes a palette to the stream and returns a reference to the stream.
+<p>Serialization format:
+<ol>
+<li> <a href="qcolorgroup.html">QColorGroup</a> normal
+<li> QColorGroup disabled
+<li> QColorGroup active
+</ol>
+The color groups are serialized in the listed order.
+
+<hr><p>
+Search the documentation, FAQ, qt-interest archive and more (uses
+<a href="http://www.troll.no">www.troll.no</a>):<br>
+<form method=post action="http://www.troll.no/search.cgi">
+<input type=hidden name="version" value="2.00"><nobr>
+<input size="50" name="search"><input type=submit value="Search">
+</nobr></form><hr><p>
+This file is part of the <a href="index.html">Qt toolkit</a>,
+copyright &copy; 1995-99
+<a href="http://www.troll.no">Troll Tech</a>, all rights reserved.<p><address><hr><div align="center">
+<table width="100%" cellspacing="0" border="0"><tr>
+<td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.00</div>
+</table></div></address></body></html>

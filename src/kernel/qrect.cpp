@@ -1,45 +1,32 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qrect.cpp   2.3.2   edited 2001-06-07 $
+** $Id: qrect.cpp,v 2.18 1999/05/20 08:00:56 aavit Exp $
 **
 ** Implementation of QRect class
 **
 ** Created : 931028
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
-** This file is part of the kernel module of the Qt GUI Toolkit.
+** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses may use this file in accordance with the Qt Commercial License
-** Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
+*****************************************************************************/
 
 #define	 QRECT_C
 #include "qrect.h"
 #include "qdatastream.h"
 
-// NOT REVISED
 /*!
   \class QRect qrect.h
   \brief The QRect class defines a rectangle in the plane.
@@ -79,7 +66,7 @@
 
 /*!
   \fn QRect::QRect()
-  Constructs an invalid rectangle.
+  Constructs an empty rectangle.
 */
 
 /*!
@@ -591,11 +578,6 @@ bool QRect::contains( const QPoint &p, bool proper ) const
 }
 
 /*!
-  \fn bool QRect::contains( int x, int y, bool proper ) const
-  \overload bool QRect::contains( const QPoint &p, bool proper ) const
-*/
-
-/*!
   Returns TRUE if the rectangle \e r is inside this rectangle.
 
   If \e proper is TRUE, this function returns TRUE only if \e r is
@@ -617,8 +599,7 @@ bool QRect::contains( const QRect &r, bool proper ) const
 */
 QRect& QRect::operator|=(const QRect &r)
 {
-    *this = *this | r;
-    return *this;
+    return *this = *this | r;
 }
 
 /*!
@@ -626,8 +607,7 @@ QRect& QRect::operator|=(const QRect &r)
 */
 QRect& QRect::operator&=(const QRect &r)
 {
-    *this = *this & r;
-    return *this;
+    return *this = *this & r;
 }
 
 
@@ -731,13 +711,14 @@ bool operator!=( const QRect &r1, const QRect &r2 )
 /*****************************************************************************
   QRect stream functions
  *****************************************************************************/
-#ifndef QT_NO_DATASTREAM
+
 /*!
   \relates QRect
 
   Writes a QRect to the stream and returns a reference to the stream.
 
-  \sa \link datastreamformat.html Format of the QDataStream operators \endlink
+  Serialization format: [left (Q_INT32), top (Q_INT32), right (Q_INT32),
+  bottom (Q_INT32)].
 */
 
 QDataStream &operator<<( QDataStream &s, const QRect &r )
@@ -755,8 +736,6 @@ QDataStream &operator<<( QDataStream &s, const QRect &r )
   \relates QRect
 
   Reads a QRect from the stream and returns a reference to the stream.
-
-  \sa \link datastreamformat.html Format of the QDataStream operators \endlink
 */
 
 QDataStream &operator>>( QDataStream &s, QRect &r )
@@ -773,4 +752,3 @@ QDataStream &operator>>( QDataStream &s, QRect &r )
     }
     return s;
 }
-#endif // QT_NO_DATASTREAM

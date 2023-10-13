@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: qt/examples/life/lifedlg.h   2.3.2   edited 2001-01-26 $
+** $Id: lifedlg.h,v 1.2 1999/06/03 01:44:49 warwick Exp $
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -42,7 +42,7 @@ class LifeDialog : public QWidget
 {
     Q_OBJECT
 public:
-    LifeDialog( int scale = 10, QWidget *parent = 0, const char *name = 0 );
+    LifeDialog( QWidget *parent = 0, const char *name = 0 );
 public slots:
     void	getPattern( int );
 

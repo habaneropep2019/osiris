@@ -1,66 +1,49 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qsemimodal.cpp   2.3.2   edited 2001-01-26 $
+** $Id: qsemimodal.cpp,v 2.10 1999/04/28 09:57:32 aavit Exp $
 **
 ** Implementation of QSemiModal class
 **
 ** Created : 970627
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
-** This file is part of the kernel module of the Qt GUI Toolkit.
+** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses may use this file in accordance with the Qt Commercial License
-** Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
+*****************************************************************************/
 
 #include "qsemimodal.h"
-
-#ifndef QT_NO_SEMIMODAL
 #include "qapplication.h"
 
-// NOT REVISED
 /*!
   \class QSemiModal qsemimodal.h
   \brief The QSemiModal class is the base class of semi-modal dialog windows.
 
-  \ingroup abstractwidgets
   \ingroup dialogs
 
-  The semi-modal dialog window can disable events to other windows
-  while it is open.  To enable this, the QSemiModal must be
-  constructed with TRUE for the \e modal argument, which is FALSE by
-  default, for consistency with QDialog.  Such a QSemiModal is modal
-  like QDialog, but it does not have its own event loop. The flow of
-  control is still within your code and it is up to you to update the
-  semi-modal dialog (for example a progressbar) from time to time.
+  The semi-modal dialog window can disable events to other windows while
+  it is open.  To enable this, the QSemiModal must be constructed with
+  TRUE for the \e modal argument, which is FALSE by default, for consistency
+  with QDialog.
+  Such a QSemiModal is modal like QDialog, but it does not have
+  its own event loop and has no concept of a default button.
 
-  Note that the parent widget has a different meaning for dialogs than
-  for other types of widgets. A dialog is placed on top of the parent
-  widget. The dialog is centered on the screen if the parent widget is
-  zero.
-*/
+  Note that the parent widget has a different meaning for semi-modal
+  dialogs than for other types of widgets. A semi-modal dialog is
+  placed on top of the parent widget. The dialog is centered on the
+  screen if the parent widget is zero.  
+*/ 
 
 
 /*!
@@ -70,13 +53,13 @@
 */
 
 QSemiModal::QSemiModal( QWidget *parent, const char *name, bool modal, WFlags f )
-    : QWidget( parent, name, (modal ? (f | WType_Modal) : f) | WType_TopLevel | WStyle_Dialog )
+    : QWidget( parent, name, modal ? f | WType_Modal : f )
 {
     did_move = did_resize = FALSE;
 }
 
 /*!
-  Destructs the widget, deleting all its children.
+  Destroys the QSemiModal and all its children.
 */
 
 QSemiModal::~QSemiModal()
@@ -180,4 +163,3 @@ void QSemiModal::setGeometry( const QRect &r )
     did_resize = TRUE;
     QWidget::setGeometry( r );
 }
-#endif //QT_NO_SEMIMODAL

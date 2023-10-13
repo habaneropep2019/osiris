@@ -1,12 +1,9 @@
 /****************************************************************************
-** $Id: qt/examples/dragdrop/main.cpp   2.3.2   edited 2001-06-12 $
+** $Id: main.cpp,v 1.2 1999/06/03 01:44:23 warwick Exp $
 **
 ** Ritual main() for Qt applications
 **
-** Copyright (C) 1996 by Trolltech AS.  All rights reserved.
-**
-** This file is part of an example program for Qt.  This example
-** program may be used, distributed and modified without limitation.
+** Copyright (C) 1996 by Troll Tech AS.  All rights reserved.
 **
 *****************************************************************************/
 
@@ -35,12 +32,14 @@ static void addStuff( QWidget * parent, bool image, bool secret = FALSE )
 	d->setText("Drag and Drop");
     }
     d->setFont(QFont("Helvetica",18));
+    d->setMinimumSize( d->sizeHint() );
     if ( secret ) {
 	SecretSource *s = new SecretSource( 42, parent );
 	tll->addWidget( s );
     }
 
-    QLabel * format = new QLabel( "\n\n\n\nNone\n\n\n\n", parent );
+    QLabel * format = new QLabel( "\nNone\n", parent );
+    format->setMinimumSize( format->sizeHint() );
     tll->addWidget( format );
     tll->activate();
     parent->resize( parent->sizeHint() );
@@ -50,23 +49,23 @@ static void addStuff( QWidget * parent, bool image, bool secret = FALSE )
 }
 
 
-int main( int argc, char ** argv )
+int main( int argc, char ** argv ) 
 {
     QApplication a( argc, argv );
 
     QWidget mw;
     addStuff( &mw, TRUE );
-    mw.setCaption( "Qt Example - Drag and Drop" );
+    mw.setCaption( "Drag and Drop Example" );
     mw.show();
 
     QWidget mw2;
     addStuff( &mw2, FALSE );
-    mw2.setCaption( "Qt Example - Drag and Drop" );
+    mw2.setCaption( "Drag and Drop Example" );
     mw2.show();
 
     QWidget mw3;
     addStuff( &mw3, TRUE, TRUE );
-    mw3.setCaption( "Qt Example - Drag and Drop" );
+    mw3.setCaption( "Drag and Drop Example" );
     mw3.show();
 
     QObject::connect(qApp,SIGNAL(lastWindowClosed()),qApp,SLOT(quit()));

@@ -1,39 +1,27 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qabstractlayout.h   2.3.2   edited 2001-01-26 $
+** $Id: qabstractlayout.h,v 2.25 1999/06/16 15:49:23 paul Exp $
 **
 ** Definition of the abstract layout base class
 **
 ** Created : 960416
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
-** This file is part of the kernel module of the Qt GUI Toolkit.
+** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses may use this file in accordance with the Qt Commercial License
-** Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
+*****************************************************************************/
 
 #ifndef QABSTRACTLAYOUT_H
 #define QABSTRACTLAYOUT_H
@@ -44,16 +32,12 @@
 #include "qwidget.h"
 #endif // QT_H
 
-#ifndef QT_NO_LAYOUT
-
 class QMenuBar;
 class QWidget;
 struct QLayoutData;
 class QLayoutItem;
 class QLayout;
 class QSpacerItem;
-class QDomElement;
-class QConfigureLayoutEvent;
 
 class Q_EXPORT QGLayoutIterator : public QShared
 {
@@ -73,9 +57,9 @@ public:
     ~QLayoutIterator() { if ( it && it->deref() ) delete it; }
     QLayoutIterator &operator=( const QLayoutIterator &i )
     {
-	if ( i.it ) i.it->ref();
 	if ( it && it->deref() ) delete it;
 	it = i.it;
+	if ( it ) it->ref();
 	return *this;
     }
     QLayoutItem *operator++() { return it ? it->next() : 0; }
@@ -158,8 +142,6 @@ public:
     bool hasHeightForWidth() const;
     int heightForWidth( int ) const;
 
-    const QSize &widgetSizeHint() const;
-
 private:
     //QSize cachedSizeHint;
     QWidget *wid;
@@ -169,48 +151,37 @@ private:
 class Q_EXPORT QLayout : public QObject, public QLayoutItem
 {
     Q_OBJECT
-    Q_ENUMS( ResizeMode )
-    Q_PROPERTY( int margin READ margin WRITE setMargin )
-    Q_PROPERTY( int spacing READ spacing WRITE setSpacing )
-    Q_PROPERTY( ResizeMode resizeMode READ resizeMode WRITE setResizeMode )
-
 public:
-    QLayout( QWidget *parent, int margin=0, int space=-1,
+    QLayout( QWidget *parent, int border=0, int space=-1,
 	     const char *name=0 );
     QLayout( QLayout *parentLayout, int space=-1, const char *name=0 );
     QLayout( int space=-1, const char *name=0 );
 
     ~QLayout();
-
-    int margin() const { return outsideBorder; }
     int spacing() const { return insideSpacing; }
+    int margin() const { return outsideBorder; }
 
     virtual void setMargin( int );
     virtual void setSpacing( int );
 
     enum { unlimited = QWIDGETSIZE_MAX };
+    enum ResizeMode { FreeResize, Minimum, Fixed };
 #if 1 //OBSOLETE
     int defaultBorder() const { return insideSpacing; }
     void freeze( int w, int h );
     void freeze() { setResizeMode( Fixed ); }
 #endif
-
-    enum ResizeMode { FreeResize, Minimum, Fixed };
     void setResizeMode( ResizeMode );
     ResizeMode resizeMode() const;
-
-#ifndef QT_NO_MENUBAR
     virtual void  setMenuBar( QMenuBar *w );
-    QMenuBar *menuBar() const { return menubar; }
-#endif
 
     QWidget *mainWidget();
+    QMenuBar *menuBar() const { return menubar; }
     bool isTopLevel() const { return topLevel; }
 
     virtual void setAutoAdd( bool );
     bool autoAdd() const { return autoNewChild; }
 
-    void invalidate();
     QRect geometry() const;
     bool activate();
 
@@ -229,22 +200,12 @@ public:
     QSize totalMaximumSize() const;
     QSize totalSizeHint() const;
     QLayout *layout();
-
-    bool supportsMargin() const { return marginImpl; }
-    
-    void setEnabled( bool );
-    bool isEnabled() const;
-
 protected:
     bool  eventFilter( QObject *, QEvent * );
     void addChildLayout( QLayout *l );
     void deleteAllItems();
-
-    void setSupportsMargin( bool );
-    QRect alignmentRect( const QRect& ) const;
 private:
     void setWidgetLayout( QWidget *, QLayout * );
-    void init();
     int insideSpacing;
     int outsideBorder;
     uint topLevel : 1;
@@ -252,13 +213,9 @@ private:
     uint autoNewChild : 1;
     uint frozen : 1;
     uint activated : 1;
-    uint marginImpl : 1;
-    uint enabled : 1;
     QRect rect;
     QLayoutData *extraData;
-#ifndef QT_NO_MENUBAR
     QMenuBar *menubar;
-#endif
 private:	// Disabled copy constructor and operator=
 #if defined(Q_DISABLE_COPY)
     QLayout( const QLayout & );
@@ -269,7 +226,7 @@ private:	// Disabled copy constructor and operator=
 
 inline void QLayoutIterator::deleteCurrent()
 {
-    delete takeCurrent();
+    delete takeCurrent(); 
 }
-#endif //QT_NO_LAYOUT
+
 #endif

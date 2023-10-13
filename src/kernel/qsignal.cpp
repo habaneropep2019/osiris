@@ -1,51 +1,37 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qsignal.cpp   2.3.2   edited 2001-01-26 $
+** $Id: qsignal.cpp,v 2.11 1999/05/23 20:28:53 agulbra Exp $
 **
 ** Implementation of QSignal class
 **
 ** Created : 941201
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
-** This file is part of the kernel module of the Qt GUI Toolkit.
+** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses may use this file in accordance with the Qt Commercial License
-** Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
+*****************************************************************************/
 
 #include "qsignal.h"
 #include "qmetaobject.h"
-#include "qptrdict.h"
 #include <ctype.h>
 
-// NOT REVISED
 /*!
   \class QSignal qsignal.h
   \brief The QSignal class can be used to send signals without parameters.
 
-  \ingroup misc
+  \ingroup kernel
 
   QSignal is a simple extension of QObject that can send plain signals
   without parameters.  If you want to send signals from a class that does
@@ -105,53 +91,6 @@
 QMetaObject *QSignal::metaObj = 0;
 
 
-
-#if OSIRIS_VERSION >= 300
-#error "Move to QSignal body"
-#endif
-
-class QSignalPrivate {
-public:
-    QSignalPrivate() :
-	val(0)
-    {
-    }
-    int val;
-};
-
-static QPtrDict<QSignalPrivate>* d_ptr = 0;
-static void cleanup_d_ptr()
-{
-    delete d_ptr;
-    d_ptr = 0;
-}
-static QSignalPrivate* d( const QSignal* that )
-{
-    if ( !d_ptr ) {
-	d_ptr = new QPtrDict<QSignalPrivate>;
-	d_ptr->setAutoDelete( TRUE );
-	qAddPostRoutine( cleanup_d_ptr );
-    }
-    QSignalPrivate* ret = d_ptr->find( (void*) that );
-    if ( ! ret ) {
-	ret = new QSignalPrivate;
-	d_ptr->replace( (void*) that, ret );
-    }
-    return ret;
-}
-static void delete_d( const QSignal* that )
-{
-    if ( d_ptr )
-	d_ptr->remove( (void*) that );
-}
-static bool has_d( const QSignal* that )
-{
-    return d_ptr && d_ptr->find( (void*) that);
-}
-
-
-
-
 /*!
   Constructs a signal object with the parent object \e parent and a \e name.
   These arguments are passed directly to QObject.
@@ -163,15 +102,6 @@ QSignal::QSignal( QObject *parent, const char *name )
     if ( !metaObj )				// will create object dict
 	initMetaObject();
     isSignal = TRUE;
-}
-
-/*!
-  Destructs the signal.  All connections are removed, as is the case
-  with all QObjects.
-*/
-QSignal::~QSignal()
-{
-    delete_d(this);
 }
 
 
@@ -206,7 +136,7 @@ const char *QSignal::className() const
 
 bool QSignal::connect( const QObject *receiver, const char *member )
 {
-    return QObject::connect( (QObject *)this, SIGNAL(x(int)),
+    return QObject::connect( (QObject *)this, SIGNAL(x()),
 			     receiver, member );
 }
 
@@ -217,7 +147,7 @@ bool QSignal::connect( const QObject *receiver, const char *member )
 
 bool QSignal::disconnect( const QObject *receiver, const char *member )
 {
-    return QObject::disconnect( (QObject *)this, SIGNAL(x(int)),
+    return QObject::disconnect( (QObject *)this, SIGNAL(x()),
 				receiver, member );
 }
 
@@ -244,67 +174,30 @@ bool QSignal::disconnect( const QObject *receiver, const char *member )
 /*!
   \fn void QSignal::activate()
   Emits the signal.
-
-  \sa isBlocked()
+  \sa isBlock()
 */
-void  QSignal::activate()
-{
-    if ( has_d(this) )
-	activate_signal("x(int)", d(this)->val );
-    else
-	activate_signal("x(int)", 0 );
-}
 
 
-/*!
-  Sets the signal's parameter to \a value
- */
-void QSignal::setParameter( int value )
-{
-    d(this)->val = value;
-}
-
-/*!
-  Returns the signal's parameter.
- */
-int QSignal::parameter() const
-{
-    if ( has_d(this) )
-	return d(this)->val;
-    else
-	return 0;
-}
-
-void QSignal::dummy(int)				// just for the meta object
+void QSignal::dummy()				// just for the meta object
 {						//   should never be called
 #if defined(CHECK_STATE)
     qWarning( "QSignal: Internal error" );
 #endif
 }
 
+
 void QSignal::initMetaObject()			// initialize meta object
 {
     if ( metaObj )
 	return;
-    if ( qstrcmp(QObject::className(), "QObject") != 0 )
-	badSuperclassWarning("QWidget","QObject");
-    (void)staticMetaObject();
-}
-
-QMetaObject* QSignal::staticMetaObject()
-{
-    if ( metaObj )
-	return metaObj;
-    (void)QObject::staticMetaObject();
-
-    typedef void(QSignal::*m2_t0)(int);
-    m2_t0 v2_0 =  &QSignal::dummy;
-    QMetaData *signal_tbl = QMetaObject::new_metadata(1);
-    signal_tbl[0].name = "x(int)";
+    if ( !QObject::metaObject() )
+	QObject::initMetaObject();
+    typedef void (QSignal::*m2_t0)();
+    m2_t0 v2_0 = &QSignal::dummy;
+    QMetaData *signal_tbl = new QMetaData[1];
+    signal_tbl[0].name = (char *)"x()";		// fake signal x in meta object
     signal_tbl[0].ptr = *((QMember*)&v2_0);
-    metaObj = QMetaObject::new_metaobject(
-	"QSignal", "QObject",
+    metaObj = new QMetaObject( "QSignal", "QObject",
 	0, 0,
 	signal_tbl, 1 );
-    return metaObj;
 }

@@ -1,53 +1,33 @@
+
+/* WARNING! THIS IS NOT YET PART OF THE Qt API, AND MAY BE CHANGED WITHOUT
+   NOTICE */
+
 /****************************************************************************
-** $Id: qt/src/kernel/qlayoutengine.cpp   2.3.2   edited 2001-01-26 $
+** $Id: qlayoutengine.cpp,v 2.10 1999/06/10 18:32:18 warwick Exp $
 **
 ** Implementation of QLayout functionality
 **
 ** Created : 981231
 **
-** Copyright (C) 1998-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1998-1999 Troll Tech AS.  All rights reserved.
 **
-** This file is part of the kernel module of the Qt GUI Toolkit.
+** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses may use this file in accordance with the Qt Commercial License
-** Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
+*****************************************************************************/
 
-//
-//  W A R N I N G
-//  -------------
-//
-// This file is not part of the Qt API.  It may change from version to
-// version without notice, or even be removed.
-//
-//
-
-
-#include "qlayoutengine_p.h"
-
-#ifndef QT_NO_LAYOUT
+#include "qlayoutengine.h"
 
 static inline int toFixed( int i ) { return i * 256; }
 static inline int fRound( int i ) {
@@ -99,7 +79,7 @@ void qGeomCalc( QArray<QLayoutStruct> &chain, int start, int count, int pos,
     if ( spacerCount )
 	spacerCount -= 1; //only spacers between things
     if ( space < cMin + spacerCount*spacer ) {
-	//	qDebug("not enough space");
+	//	debug("not enough space");
 	for ( i = start; i < start+count; i++ ) {
 	    chain[i].size = chain[i].minimumSize;
 	    chain[i].done = TRUE;
@@ -237,5 +217,3 @@ void qGeomCalc( QArray<QLayoutStruct> &chain, int start, int count, int pos,
 	    p += spacer+extra;
     }
 }
-
-#endif //QT_NO_LAYOUT

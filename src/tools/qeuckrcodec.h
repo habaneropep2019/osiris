@@ -1,42 +1,30 @@
 /****************************************************************************
-** $Id: qt/src/tools/qeuckrcodec.h   2.3.2   edited 2001-01-26 $
+** $Id: qeuckrcodec.h,v 1.2 1999/04/28 09:58:38 aavit Exp $
 **
 ** Definition of QEucKrCodec class
 **
 ** Created : 990303
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
-** This file is part of the tools module of the Qt GUI Toolkit.
+** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses may use this file in accordance with the Qt Commercial License
-** Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
+*****************************************************************************/
 
 /*
- * Copyright (c) 1999-2000 Mizi Research Inc., All rights reserved.
+ * Copyright (c) 1999 Mizi Research Inc., All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -63,13 +51,9 @@
 #ifndef QEUCKRCODEC_H
 #define QEUCKRCODEC_H
 
-#ifndef QT_H
 #include "qtextcodec.h"
-#endif // QT_H
 
-#ifndef QT_NO_CODECS
-
-class Q_EXPORT QEucKrCodec : public QTextCodec {
+class QEucKrCodec : public QTextCodec {
 public:
     virtual int mibEnum() const;
     const char* name() const;
@@ -83,5 +67,4 @@ public:
     int heuristicNameMatch(const char* hint) const;
 };
 
-#endif
 #endif

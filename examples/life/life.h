@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: qt/examples/life/life.h   2.3.2   edited 2001-01-26 $
+** $Id: life.h,v 1.2 1999/06/03 01:44:47 warwick Exp $
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -18,7 +18,7 @@ class LifeWidget : public QFrame
 {
     Q_OBJECT
 public:
-    LifeWidget( int s = 10, QWidget *parent = 0, const char *name = 0 );
+    LifeWidget( QWidget *parent = 0, const char *name = 0 );
 
     void	setPoint( int i, int j );
 
@@ -37,22 +37,21 @@ protected:
     void	 mouseHandle( const QPoint &pos );
 
 private:
-    enum { MAXSIZE = 50, MINSIZE = 10, BORDER = 5 };
+    enum { SCALE = 10, MAXSIZE = 50, MINSIZE = 10, BORDER = 5 };
 
     bool	cells[2][MAXSIZE + 2][MAXSIZE + 2];
     int		current;
     int		maxi, maxj;
 
-    int pos2index( int x )
+    static int pos2index( int x )
     {
 	return ( x - BORDER ) / SCALE + 1;
     }
-    int index2pos( int i )
+    static int index2pos( int i )
     {
 	return	( i - 1 ) * SCALE + BORDER;
     }
 
-    int SCALE;
 };
 
 

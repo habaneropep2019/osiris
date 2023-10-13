@@ -1,39 +1,27 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qlistview.h   2.3.2   edited 2001-01-26 $
+** $Id: qlistview.h,v 2.93 1999/06/22 13:59:01 paul Exp $
 **
 ** Definition of QListView widget class
 **
 ** Created : 970809
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
-** This file is part of the widgets module of the Qt GUI Toolkit.
+** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses may use this file in accordance with the Qt Commercial License
-** Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
+*****************************************************************************/
 
 #ifndef QLISTVIEW_H
 #define QLISTVIEW_H
@@ -51,15 +39,10 @@ class QListViewItemIterator;
 #include "qscrollview.h"
 #endif // QT_H
 
-#ifndef QT_NO_LISTVIEW
-
 
 class Q_EXPORT QListViewItem: public Qt
 {
-    friend class QListViewItemIterator;
-#if defined(_CC_MSVC_)
-    friend class QListViewItem;
-#endif
+friend class QListViewItemIterator;
 
 public:
     QListViewItem( QListView * parent );
@@ -146,15 +129,11 @@ public:
 
     void repaint() const;
 
-    void sort(); // ######## make virtual in next major release
-    void moveItem( QListViewItem *after );
-
 protected:
     virtual void enforceSortOrder() const;
     virtual void setHeight( int );
     virtual void activate();
 
-    bool activatedPos( QPoint & );
 private:
     void init();
     void moveToJustAfter( QListViewItem * );
@@ -180,28 +159,14 @@ private:
     friend class QListView;
 };
 
-class QCheckListItem;
 
 class Q_EXPORT QListView: public QScrollView
 {
-    friend class QListViewItemIterator;
-    friend class QListViewItem;
-    friend class QCheckListItem;
-    
-    Q_OBJECT
-    Q_ENUMS( SelectionMode )
-    Q_PROPERTY( int columns READ columns )
-    Q_PROPERTY( bool multiSelection READ isMultiSelection WRITE setMultiSelection DESIGNABLE false )
-    Q_PROPERTY( SelectionMode selectionMode READ selectionMode WRITE setSelectionMode )
-    Q_PROPERTY( int childCount READ childCount )
-    Q_PROPERTY( bool allColumnsShowFocus READ allColumnsShowFocus WRITE setAllColumnsShowFocus )
-    Q_PROPERTY( bool showSortIndicator READ showSortIndicator WRITE setShowSortIndicator )
-    Q_PROPERTY( int itemMargin READ itemMargin WRITE setItemMargin )
-    Q_PROPERTY( bool rootIsDecorated READ rootIsDecorated WRITE setRootIsDecorated )
+friend class QListViewItemIterator;
 
+    Q_OBJECT
 public:
-    QListView( QWidget * parent, const char *name, WFlags f );
-    QListView( QWidget * parent = 0, const char *name = 0 ); // ##### merge with above in 3.0
+    QListView( QWidget * parent = 0, const char *name = 0 );
     ~QListView();
 
     int treeStepSize() const;
@@ -217,7 +182,6 @@ public:
 
     virtual int addColumn( const QString &label, int size = -1);
     virtual int addColumn( const QIconSet& iconset, const QString &label, int size = -1);
-    void removeColumn( int index ); // #### make virtual in next major release!
     virtual void setColumnText( int column, const QString &label );
     virtual void setColumnText( int column, const QIconSet& iconset, const QString &label );
     QString columnText( int column ) const;
@@ -226,7 +190,6 @@ public:
     enum WidthMode { Manual, Maximum };
     virtual void setColumnWidthMode( int column, WidthMode );
     WidthMode columnWidthMode( int column ) const;
-    int columns() const;
 
     virtual void setColumnAlignment( int, int );
     int columnAlignment( int ) const;
@@ -243,11 +206,6 @@ public:
 
     virtual void setMultiSelection( bool enable );
     bool isMultiSelection() const;
-
-    enum SelectionMode { Single, Multi, Extended, NoSelection  };
-    void setSelectionMode( SelectionMode mode );
-    SelectionMode selectionMode() const;
-
     virtual void clearSelection();
     virtual void setSelected( QListViewItem *, bool );
     bool isSelected( const QListViewItem * ) const;
@@ -272,7 +230,6 @@ public:
     bool rootIsDecorated() const;
 
     virtual void setSorting( int column, bool increasing = TRUE );
-    void sort(); // #### make virtual in next major release
 
     virtual void setFont( const QFont & );
     virtual void setPalette( const QPalette & );
@@ -282,36 +239,18 @@ public:
     QSize sizeHint() const;
     QSize minimumSizeHint() const;
 
-    void setShowSortIndicator( bool show );
-    bool showSortIndicator() const;
-
 public slots:
-    void invertSelection(); // ###### make virtual
-    void selectAll( bool select ); // make virtual
     void triggerUpdate();
-    void setContentsPos( int x, int y );
 
 signals:
     void selectionChanged();
     void selectionChanged( QListViewItem * );
     void currentChanged( QListViewItem * );
-    void clicked( QListViewItem * );
-    void clicked( QListViewItem *, const QPoint &, int );
-    void pressed( QListViewItem * );
-    void pressed( QListViewItem *, const QPoint &, int );
 
     void doubleClicked( QListViewItem * );
     void returnPressed( QListViewItem * );
     void rightButtonClicked( QListViewItem *, const QPoint&, int );
     void rightButtonPressed( QListViewItem *, const QPoint&, int );
-    void mouseButtonPressed( int, QListViewItem *, const QPoint& , int );
-    void mouseButtonClicked( int, QListViewItem *,  const QPoint&, int );
-
-    void onItem( QListViewItem *item );
-    void onViewport();
-
-    void expanded( QListViewItem *item );
-    void collapsed( QListViewItem *item );
 
 protected:
     void contentsMousePressEvent( QMouseEvent * e );
@@ -346,21 +285,14 @@ private slots:
     void handleSizeChange( int, int, int );
 
 private:
-    void init();
     void updateGeometries();
     void buildDrawableList() const;
     void reconfigureItems();
     void widthChanged(const QListViewItem*, int c);
-    void handleItemChange( QListViewItem *old, bool shift, bool control );
-    void selectRange( QListViewItem *from, QListViewItem *to, bool invert, bool includeFirst, bool clearSel = FALSE );
 
     QListViewPrivate * d;
 
-private:	// Disabled copy constructor and operator=
-#if defined(Q_DISABLE_COPY)
-    QListView( const QWidget & );
-    QListView &operator=( const QWidget & );
-#endif
+    friend class QListViewItem;
 };
 
 
@@ -379,7 +311,6 @@ public:
 		    const QPixmap & );
     QCheckListItem( QListView *parent, const QString &text,
 		    const QPixmap & );
-    ~QCheckListItem();
 
     void paintCell( QPainter *,  const QColorGroup & cg,
 		    int column, int width, int alignment );
@@ -393,9 +324,6 @@ public:
     Type type() const { return myType; }
     QString text() const { return QListViewItem::text( 0 ); }
     QString text( int n ) const { return QListViewItem::text( n ); }
-
-    void setEnabled( bool b );
-    bool isEnabled() const;
 
 protected:
     void paintBranches( QPainter * p, const QColorGroup & cg,
@@ -449,7 +377,5 @@ private:
     void currentRemoved();
 
 };
-
-#endif // QT_NO_LISTVIEW
 
 #endif // QLISTVIEW_H

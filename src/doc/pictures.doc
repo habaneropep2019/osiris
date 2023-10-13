@@ -1,133 +1,135 @@
 /****************************************************************************
-** $Id: qt/doc/pictures.doc   2.3.2   edited 2001-01-26 $
+** $Id: pictures.doc,v 2.9 1999/06/16 09:40:56 warwick Exp $
 **
 ** Pictures of Most Widgets in Qt
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses may use this file in accordance with the Qt Commercial License
-** Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
+*****************************************************************************/
 
-// $Id: qt/doc/pictures.doc   2.3.2   edited 2001-01-26 $
+// $Id: pictures.doc,v 2.9 1999/06/16 09:40:56 warwick Exp $
 
 /*! \page pictures.html
 
-\title Pictures of Most Qt Widgets
+<title>Pictures of Most Widgets</title>
+</head><body bgcolor="#ffffff">
+\postheader
+
+<h1 align=center>Pictures of Most Widgets in Qt</h1><br clear="all">
 
 <p>Most of these widgets are pictured in either Motif or Windows
 style.  All widgets are supported in both styles (plus other
 \link QStyle styles\endlink), but for clarity we've chosen to cut
 down on the number of repeated images.
 
-<p>Here you see three views seperated by <a href="qsplitter.html">QSplitters</a>. On
-the lef/top you see a <a href="qlistbox.html">QListBox</a>, at the right/top
-you see a <a href="qlistview.html">QListView</a> with a
-<a href="qheader.html">QHeader</a> and two <a href="qscrollbar.html">QScrollBars</a>.
-And at the bottom there is a <a href="qiconview.html">QIconView</a>.
-<p><img src=splitter-views-w.png >&nbsp;Windows<br>
+<h2><a href="qbuttongroup.html">QButtonGroup</a></h2>
+<img src=qbttngrp-m.png align=top>&nbsp;Motif
 
-In this screenshot you see a <a href="qmainwindow.html">QMainWindow</a>
-which contains on the top a <a href="qmenubar.html">QMenuBar</a>,
-below that and at the left some <a href="qtoolbar.html">QToolBars</a>
-with widgets like <a href="qtoolbutton.html">QToolButtons</a> and
-<a href="qcombobox.html">QComboBoxes</a>. The central widget
-is a <a href="qworkspace.html">QWorkspace</a> which is used
-for MDI window management and which contains as MDI-Window
-a <a href="qmultilineedit.html">QMultiLineEdit</a> here. At the bottom
-you see a <a href="qstatusbar.html">QStatusBar</a> and at the
-right/bottom edge a <a href="qsizegrip.html">QSizeGrip</a>
-<p><img src=mainwindow-w.png >&nbsp;Windows<br>
+<h2><a href="qcheckbox.html">QCheckBox</a></h2>
+<img src=qchkbox-w.png align=top>&nbsp;Windows
 
-Here you see a <a href="qfiledialog.html">QFileDialog</a>. On
-the Windows Platform you can either use the QFileDialog or the native
-Windows Filedialog. For more information on that see the
-<a href="qfiledialog.html">QFileDialog</a> class documentation.
-<p><img src=qfiledlg-w.png >&nbsp;Windows<br>
+<h2><a href="qcombobox.html">QComboBox</a></h2>
+<img src="qcombo1-m.png" align=top>&nbsp;Motif 1, read-only
+<br clear="all">
+<img src="qcombo2-m.png" align=top>&nbsp;Motif 2, read-write
+<br clear="all">
+<img src="qcombo3-m.png" align=top>&nbsp;Motif 2, read-only:
+<br clear="all">
+<img src="qcombo1-w.png" align=top>&nbsp;Windows
 
-This is a QPrintDialog. On Windows this dialog is not supported, as the
-native Windows Print-Dialog is used there. Use QPrinter::setup() for
-portability instead of the QPrintDialog if you need to be platform
-independent.
-<p><img src=qprintdlg-m.png >&nbsp;Motif
+<h2><a href="qfiledialog.html">QFileDialog</a></h2>
+<img src=qfiledlg-w.png align=top>&nbsp;Windows
 
-In this screenshot you see a <a href="qfontdialog.html">QFontDialog</a>.
-<p><img src=qfontdlg-w.png >&nbsp;Windows<br>
+<h2><a href="qgroupbox.html">QGroupBox</a></h2>
+<img src=qgrpbox-m.png align=top>&nbsp;Motif
 
-And in this picture a <a href="qcolordialog.html">QColorDialog</a> is shown.
-<p><img src=qcolordlg-w.png >&nbsp;Windows<br>
+<h2><a href="qheader.html">QHeader</a></h2>
+<img src=qheader-m.png align=top>&nbsp;Motif
 
-For displaying messages you will use
-the <a href="qmessagebox.html">QMessageBox</a>.
-<p><img src=qmsgbox-w.png >&nbsp;Windows<br>
+<h2><a href="qlabel.html">QLabel</a></h2>
+<img src=qlabel-m.png align=top>&nbsp;Motif
 
-This image shows a <a href="qprogressdialog.html">QProgressDialog</a>. The
-<a href="qprogressbar.html">QProgressBar</a> can be used as seperate
-widget too.
-<p><img src=qprogdlg-w.png >&nbsp;Windows<br>
+<h2><a href="qlcdnumber.html">QLCDNumber</a></h2>
+<img src=qlcdnum-m.png align=top>&nbsp;Motif
 
-In the screenshot below you see a <a href="qgroupbox.html">QGroupBox</a>
-which contains a <a href="qlineedit.html">QLineEdit</a>, a read-only
-<a href="qcombobox.html">QComboBox</a> and a
-editable <a href="qcombobox.html">QComboBox</a>.
-<p><img src=groupbox-w.png >&nbsp;Windows<br>
+<h2><a href="qlineedit.html">QLineEdit</a></h2>
+<img src=qlined-w.png align=top>&nbsp;Windows
 
-This screenshot shows a <a href="qpopupmenu.html">QPopupMenu</a>.
-<p><img src=qpopmenu-w.png >&nbsp;Windows<br>
+<h2><a href="qlistbox.html">QListBox</a></h2>
+<img src=qlistbox-w.png align=top>&nbsp;Windows
 
-In the screenshot below you see a
-<a href="qbuttongroup.html">QButtonGroup</a> containing
-four <a href="qradiobutton.html">QRadioButtons</a> and
-two <a href="qcheckbox.html">QCheckBoxes</a></h2>.
-<p><img src=buttongroup-w.png >&nbsp;Windows<br>
+<h2><a href="qlistview.html">QListView</a></h2>
+<img src="listview.png" width="518" height="82" align="top">&nbsp;
+Non-hierarchical list view
 
-All views in the first screenshot are widgets derived from
-a <a href="qscrollview.html">QScrollView</a>. But this
-class can also manage lots of child-widgets, like in
-this screenshot.
-<p><img src=qscrollview-m.png >&nbsp;Motif<br>
+<img src="treeview.png" width="227" height="261" align="top">&nbsp;
+Hierarchical list view (multi-column tree view)
 
-This screenshot shows a <a href="qtabdialog.html">QTabDialog</a>.
-The tabs (<a href="qtabbar.html">QTabBar</a>) or the more
-convenient class <a href="qtabwidget.html">QTabWidget</a>, which
-combines a tab bar with the pages, can be used separately.
-In the visible page you see a <a href="qlabel.html">QLabel</a>,
-the range controls <a href="qslider.html">QSlider</a> and
-<a href="qspinbox.html">QSpinBox</a> and below a
-<a href="qlcdnumber.html">QLCDNumber</a>.
-In the bottom row you can see some
-<a href="qpushbutton.html">QPushButtons</a>
-<p><img src=qtabdlg-w.png >&nbsp;Windows<br>
+<h2><a href="qmainwindow.html">QMainWindow</a></h2>
+<img src=qmainwindow-w.png align=top>&nbsp;Windows
 
-The screenshot below shows a <a href="qtableview.html">QTableView</a>.
-<p><img src=qtablevw-m.png >&nbsp;Motif<br>
+<h2><a href="qmenubar.html">QMenuBar</a></h2>
+<img src=qmenubar-w.png align=top>&nbsp;Windows
 
-In this screenshot you see the <a href="qtextbrowser.html">QTextBrowser</a>
-displaying a HTML page. See also <a href="qtextview.html">QTextView</a>!
-<p><img src=qtextbrowser-w.png >&nbsp;Windows<br>
+<h2><a href="qmessagebox.html">QMessageBox</a></h2>
+<img src=qmsgbox-m.png align=top>&nbsp;Motif
+
+<img src=qmsgbox-w.png align=top>&nbsp;Windows
+
+<h2><a href="qmultilineedit.html">QMultiLineEdit</a></h2>
+<img src=qmlined-w.png align=top>&nbsp;Windows
+
+<h2><a href="qpopupmenu.html">QPopupMenu</a></h2>
+<img src=qpopmenu-m.png align=top>&nbsp;Motif
+
+<h2><a href="qprogressbar.html">QProgressBar</a></h2>
+<img src=qprogbar-w.png align=top>&nbsp;Windows
+
+<h2><a href="qprogressdialog.html">QProgressDialog</a></h2>
+<img src=qprogdlg-w.png align=top>&nbsp;Windows
+
+<h2><a href="qradiobutton.html">QRadioButton</a></h2>
+<img src=qradiobt-w.png align=top>&nbsp;Windows
+
+<h2><a href="qscrollbar.html">QScrollBar</a></h2>
+<img src=qscrbar-m.png align=top>&nbsp;Motif
+
+<h2><a href="qscrollview.html">QScrollView</a></h2>
+<img src=qscrollview-m.png align=top>&nbsp;Motif
+
+<h2><a href="qslider.html">QSlider</a></h2>
+<img src=qslider-m.png align=top>&nbsp;Motif
+
+<h2><a href="qspinbox.html">QSpinBox</a></h2>
+<img src=qspinbox-w.png align=top>&nbsp;Windows
+
+<h2><a href="qsplitter.html">QSplitter</a></h2>
+<img src=qsplitter-m.png align=top>&nbsp;Motif
+
+<h2><a href="qstatusbar.html">QStatusBar</a></h2>
+<img src=qstatusbar-w.png align=top>&nbsp;Windows
+
+<h2><a href="qtabbar.html">QTabBar</a></h2>
+<img src=qtabbar-w.png align=top>&nbsp;Windows
+
+<h2><a href="qtabdialog.html">QTabDialog</a></h2>
+<img src=qtabdlg-w.png align=top>&nbsp;Windows
+
+<h2><a href="qtableview.html">QTableView</a></h2>
+<img src=qtablevw-m.png align=top>&nbsp;Motif
 
 */

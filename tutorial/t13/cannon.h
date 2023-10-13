@@ -7,9 +7,6 @@
 #ifndef CANNON_H
 #define CANNON_H
 
-class QTimer;
-
-
 #include <qwidget.h>
 
 
@@ -19,10 +16,10 @@ class CannonField : public QWidget
 public:
     CannonField( QWidget *parent=0, const char *name=0 );
 
-    int   angle() const { return ang; }
-    int   force() const { return f; }
-    bool  gameOver() const { return gameEnded; }
-    bool  isShooting() const;
+    int   angle()      const { return ang; }
+    int   force()      const { return f; }
+    bool  gameOver()   const { return gameEnded; }
+    bool  isShooting() const { return shooting; }
     QSizePolicy sizePolicy() const;
 
 public slots:
@@ -33,20 +30,18 @@ public slots:
     void  setGameOver();
     void  restartGame();
 
-private slots:
-    void  moveShot();
-
 signals:
     void  hit();
     void  missed();
     void  angleChanged( int );
     void  forceChanged( int );
-    void  canShoot( bool );
 
 protected:
+    void  timerEvent( QTimerEvent * );
     void  paintEvent( QPaintEvent * );
 
 private:
+    void  stopShooting();
     void  paintShot( QPainter * );
     void  paintTarget( QPainter * );
     void  paintCannon( QPainter * );
@@ -54,11 +49,11 @@ private:
     QRect shotRect() const;
     QRect targetRect() const;
 
-    int ang;
-    int f;
+    int   ang;
+    int   f;
+    bool  shooting;
 
-    int timerCount;
-    QTimer * autoShootTimer;
+    int   timerCount;
     float shoot_ang;
     float shoot_f;
 

@@ -1,44 +1,29 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qiconset.cpp   2.3.2   edited 2001-01-26 $
+** $Id: qiconset.cpp,v 2.28 1999/05/30 16:37:13 agulbra Exp $
 **
 ** Implementation of QIconSet class
 **
 ** Created : 980318
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
-** This file is part of the kernel module of the Qt GUI Toolkit.
+** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses may use this file in accordance with the Qt Commercial License
-** Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
+*****************************************************************************/
 
 #include "qiconset.h"
-
-#ifndef QT_NO_ICONSET
-
 #include "qimage.h"
 #include "qbitmap.h"
 #include "qapplication.h"
@@ -53,7 +38,7 @@ struct QIconSetPrivate: public QShared
 	{
 	    delete pm;
 	}
-	void clearGenerate()
+	void clear()
 	{
 	    if ( generated ) {
 		delete pm;
@@ -74,47 +59,32 @@ struct QIconSetPrivate: public QShared
 };
 
 
-// REVISED: warwick
 /*! \class QIconSet qiconset.h
 
-  \brief The QIconSet class provides a set of differently styled and sized
-  icons.
+  \brief The QIconSet class provides a set of icons (normal, disabled,
+  various sizes) for e.g. buttons.
 
   \ingroup misc
-  \ingroup shared
 
-  Once a QIconSet is fed some pixmaps,
-  it can generate smaller, larger, active and disabled pixmaps.
-  Such pixmaps are used by
-  QToolButton, QHeader, QPopupMenu, etc. to show an icon representing
-  a piece of functionality.
+  QIconSet must be fed at least one icon, and can generate the other
+  icons from the ones it is fed, or use programmer-specified icons.
 
-  The simplest usage of QIconSet is to create one from a QPixmap then
-  use it, allowing Qt to work out all the required icon sizes. For example:
-
-  \code
-  QToolButton *tb = new QToolButton( QIconSet( QPixmap("open.xpm") ), ... );
-  \endcode
-
-  Using whichever pixmaps you specify as a base,
-  QIconSet provides a set of six icons each with
-    a \link QIconSet::Size Size\endlink and
-    a \link QIconSet::Mode Mode\endlink:
-  <ul>
-  <li> <i>Small Normal</i> - can only be calculated from Large Normal.
-  <li> <i>Small Disabled</i> - calculated from Large Disabled or Small Normal.
-  <li> <i>Small Active</i> - same as Small Normal unless you set it.
-  <li> <i>Large Normal</i> - can only be calculated from Small Normal.
-  <li> <i>Large Disabled</i> - calculated from Small Disabled or Large Normal.
-  <li> <i>Large Active</i> - same as Large Normal unless you set it.
+  Using the icon or icons specified, QIconSet generates a set of six
+  icons: <ul>
+  <li> Small, normal
+  <li> Small, disabled
+  <li> Small, active
+  <li> Large, normal
+  <li> Large, disabled
+  <li> Large, active
   </ul>
 
   You can set any of the icons using setPixmap() and when you retrieve
-  one using pixmap(Size,Mode), QIconSet will compute it from the
-  closest other icon and cache it for later.
+  one using pixmap(), QIconSet will compute and cache that from the
+  closest other icon.
 
   The \c Disabled appearance is computed using a "shadow" algorithm
-  which produces results very similar to that used in Microsoft
+  which produces results very similar to that used in of Microsoft
   Windows 95.
 
   The \c Active appearance is identical to the \c Normal appearance
@@ -122,166 +92,73 @@ struct QIconSetPrivate: public QShared
 
   When scaling icons, QIconSet uses \link QImage::smoothScale
   smooth scaling\endlink, which can partially blend the color component
-  of pixmaps.  If the results look poor, the best solution
-  is to supply both large and small sizes of pixmap.
+  of transparent images.  If the results look poor, the best solution
+  is to supply sizes that do not require scaling.
 
   QIconSet provides a function, isGenerated(), that indicates whether
   an icon was set by the application programmer or computed by
   QIconSet itself.
 
-  <h3>Making classes that use QIconSet</h3>
-
-  If you write your own widgets that have an option to set a small pixmap,
-  you should consider instead, or additionally, allowing a QIconSet to be
-  set for that pixmap.  The Qt class QToolButton is an example of such
-  a widget.
-
-  Provide a method to set a QIconSet, and when you draw the icon, choose
-  whichever icon is appropriate for the current state of your widget.
-  For example:
-  \code
-  void YourWidget::drawIcon( QPainter* p, QPoint pos )
-  {
-      p->drawPixmap( pos, icons->pixmap(isEnabled(), QIconSet::Small) );
-  }
-  \endcode
-
-  You might also make use of the Active mode, perhaps making your widget
-  Active when the mouse in inside the widget (see QWidget::enterEvent),
-  while the mouse is pressed pending the release that will activate
-  the function, or when it is the currently selected item.
-
   \sa QPixmap QLabel QToolButton QPopupMenu
-	QIconViewItem::setViewMode() QMainWindow::setUsesBigPixmaps()
-  <a href="guibooks.html#fowler">GUI Design Handbook: Iconic Label</a>
-  <a href="http://cgl.microsoft.com/clipgallerylive/cgl30/eula.asp?nInterface=0">Microsoft
+  <a href="guibooks.html#fowler">GUI Design Handbook: Iconic Label,</a>
+  <q href="http://www.microsoft.com/clipgallerylive/icons.asp">Microsoft
   Icon Gallery.</a>
 */
 
 
-/*!
-  \enum QIconSet::Size
-
-  This enum type describes the size for which a pixmap is intended to be
-  provided.
-  The currently defined sizes are:
-
-  <ul>
-    <li> \c Automatic - the size of the pixmap is determined from its
-		    pixel size. This is a useful default.
-    <li> \c Small - the pixmap is the smaller of two.
-    <li> \c Large - the pixmap is the larger of two
-  </ul>
-
-  If a Small pixmap is not set by QIconSet::setPixmap(), then the
-  Large pixmap may be automatically scaled to two-thirds of its size to
-  generate the Small pixmap.  Conversely, a Small pixmap will be
-  automatically scaled up by 50% to create a Large pixmap if needed.
-
-  \sa setPixmap() pixmap() QIconViewItem::setViewMode()
-      QMainWindow::setUsesBigPixmaps()
-*/
-
-/*!
-  \enum QIconSet::Mode
-
-  This enum type describes the mode for which a pixmap is intended to be
-  provided.
-  The currently defined modes are:
-
-  <ul>
-    <li> \c Normal
-	- the pixmap to be displayed when the user is
-	not interacting with the icon, but when the
-	functionality represented by the icon is available.
-    <li> \c Disabled
-	- the pixmap to be displayed when the
-	functionality represented by the icon is not available.
-    <li> \c Active
-	- the pixmap to be displayed when the
-	functionality represented by the icon is available and
-	the user is interacting with the icon, such as by pointing
-	at it or by invoking it.
-  </ul>
-*/
 
 
-/*!
-  Constructs an icon set of \link QPixmap::isNull() null\endlink pixmaps.
-  Use setPixmap(), reset(), or operator=() to set some pixmaps.
+/*!  Constructs an icon set that will generate its members from \a
+  defaultPixmap, which is assumed to be of \a defaultSize.
+
+  The default for \a defaultSize is \c Automatic, which means that
+  QIconSet will determine the icon's size from its actual size.
 
   \sa reset()
 */
-QIconSet::QIconSet()
+
+QIconSet::QIconSet( const QPixmap & defaultPixmap, Size defaultSize )
 {
     d = 0;
-    reset( QPixmap(), Automatic );
+    reset( defaultPixmap, defaultSize );
 }
 
 
-/*!  Constructs an icon set for which the Normal pixmap is
-  \a pixmap, which is assumed to be the given \a size.
+/*!  Constructs an a copy of \a other.  This is very fast. \sa detach() */
 
-  The default for \a size is \c Automatic, which means that
-  QIconSet will determine if the pixmap is Small or Large
-  from its pixel size.
-  Pixmaps less than 23 pixels wide are considered to be Small.
-
-  \sa reset()
-*/
-QIconSet::QIconSet( const QPixmap& pixmap, Size size )
-{
-    d = 0;
-    reset( pixmap, size );
-}
-
-
-/*!
-  Constructs a copy of \a other.  This is very fast.
-*/
-QIconSet::QIconSet( const QIconSet& other )
+QIconSet::QIconSet( const QIconSet & other )
 {
     d = other.d;
     if ( d )
 	d->ref();
 }
 
-/*!  Creates an iconset which uses the pixmap \a smallPix for for
-  displaying small a small icon, and \a largePix for displaying a large
-  one.
-*/
 
-QIconSet::QIconSet( const QPixmap &smallPix, const QPixmap &largePix )
-{
-    d = 0;
-    reset( smallPix, Small );
-    reset( largePix, Large );
-}
+/*! Destroys the icon set and frees any allocated resources. */
 
-/*!
-  Destructs the icon set and frees any allocated resources.
-*/
 QIconSet::~QIconSet()
 {
     if ( d && d->deref() )
 	delete d;
 }
 
+
 /*!
-  Assigns \a other to this icon set and returns a reference to this
+  Assigns \e other to this icon set and returns a reference to this
   icon set.
 
   This is very fast.
 
   \sa detach()
 */
-QIconSet &QIconSet::operator=( const QIconSet &other )
+
+QIconSet &QIconSet::operator=( const QIconSet &p )
 {
-    if ( other.d ) {
-	other.d->ref();				// beware of other = other
+    if ( p.d ) {
+	p.d->ref();				// beware of p = p
 	if ( d->deref() )
 	    delete d;
-	d = other.d;
+	d = p.d;
 	return *this;
     } else {
 	if ( d && d->deref() )
@@ -291,21 +168,13 @@ QIconSet &QIconSet::operator=( const QIconSet &other )
     }
 }
 
-/*!
-  Returns TRUE if the icon set is empty. Currently, a QIconSet
-  is never empty (although it may contain null pixmaps).
-*/
-bool QIconSet::isNull() const
-{
-    return ( d == 0 );
-}
 
-/*!
-  Sets this icon set to provide \a pm for the Normal pixmap,
-  assuming it to be of size \a s.
 
-  This is equivalent to assigning QIconSet(pm,s) to this icon set.
+/*!  Set this icon set to display \a pm, which is assumed to be in
+  size \a s.  If \a s is \c Automatic, QIconSet guesses the size from
+  the size of \a pm using and an unspecified algorithm.
 */
+
 void QIconSet::reset( const QPixmap & pm, Size s )
 {
     detach();
@@ -318,86 +187,60 @@ void QIconSet::reset( const QPixmap & pm, Size s )
 }
 
 
-/*!
-  Sets this icon set to provide \a pm for a \a size and \a mode.
-  It may also use \a pm for deriving some other varieties if those
-  are not set.
+/*!  Sets this icon set to display \a pn in size \a s/mode \a m, and
+  perhaps to use \a pm for deriving some other varieties.
 
-  The \a size can be one of Automatic, Large or Small.  If Automatic is used,
-  QIconSet will determine if the pixmap is Small or Large from its pixel size.
-  Pixmaps less than 23 pixels wide are considered to be Small.
-
-  \sa reset()
+  \a s must be Large or Small; it cannot be Automatic.
 */
-void QIconSet::setPixmap( const QPixmap & pm, Size size, Mode mode )
+
+void QIconSet::setPixmap( const QPixmap & pm, Size s, Mode m )
 {
     detach();
     if ( d ) {
-	d->small.clearGenerate();
-	d->large.clearGenerate();
-	d->smallDisabled.clearGenerate();
-	d->largeDisabled.clearGenerate();
-	d->smallActive.clearGenerate();
-	d->largeActive.clearGenerate();
+	d->small.clear();
+	d->large.clear();
+	d->smallDisabled.clear();
+	d->largeDisabled.clear();
+	d->smallActive.clear();
+	d->largeActive.clear();
     } else {
 	d = new QIconSetPrivate;
     }
-    if ( size == Large || (size == Automatic && pm.width() > 22)) {
-	switch( mode ) {
+    if ( s == Large ) {
+	switch( m ) {
 	case Active:
-	    if ( !d->largeActive.pm )
-		d->largeActive.pm = new QPixmap();
-	    *d->largeActive.pm = pm;
+	    d->largeActive.pm = new QPixmap( pm );
 	    break;
 	case Disabled:
-	    if ( !d->largeDisabled.pm )
-		d->largeDisabled.pm = new QPixmap();
-	    *d->largeDisabled.pm = pm;
+	    d->largeDisabled.pm = new QPixmap( pm );
 	    break;
 	case Normal:
 	default:
-	    if ( !d->large.pm )
-		d->large.pm = new QPixmap();
-	    *d->large.pm = pm;
+	    d->large.pm = new QPixmap( pm );
 	    break;
 	}
-    } else if ( size == Small  || (size == Automatic && pm.width() <= 22)) {
-	switch( mode ) {
+    } else if ( s == Small ) {
+	switch( m ) {
 	case Active:
-	    if ( !d->smallActive.pm )
-		d->smallActive.pm = new QPixmap();
-	    *d->smallActive.pm = pm;
+	    d->smallActive.pm = new QPixmap( pm );
 	    break;
 	case Disabled:
-	    if ( !d->smallDisabled.pm )
-		d->smallDisabled.pm = new QPixmap();
-	    *d->smallDisabled.pm = pm;
+	    d->smallDisabled.pm = new QPixmap( pm );
 	    break;
 	case Normal:
 	default:
-	    if ( !d->small.pm )
-		d->small.pm = new QPixmap();
-	    *d->small.pm = pm;
+	    d->small.pm = new QPixmap( pm );
 	    break;
 	}
-#if defined(CHECK_RANGE)
-    } else {
-	qWarning("QIconSet::setPixmap: invalid size passed");
-#endif
     }
 }
 
 
-/*!
-  Sets this icon set to load \a fileName as a pixmap and provide it
-  for size \a s and mode \a m.
-  It may also use the pixmap for deriving some other varieties if those
-  are not set.
-
-  The \a size can be one of Automatic, Large or Small.  If Automatic is used,
-  QIconSet will determine if the pixmap is Small or Large from its pixel size.
-  Pixmaps less than 23 pixels wide are considered to be Small.
+/*!  Sets this icon set to load \a fileName as a pixmap and display it
+  in size \a s/mode \a m, and perhaps to use \a pm for deriving some
+  other varieties.
 */
+
 void QIconSet::setPixmap( const QString &fileName, Size s, Mode m )
 {
     QPixmap p;
@@ -407,17 +250,17 @@ void QIconSet::setPixmap( const QString &fileName, Size s, Mode m )
 }
 
 
-/*!
-  Returns a pixmap with size \a s and mode \a m, generating one if
-  needed. Generated pixmaps are cached.
+/*!  Returns a pixmap with size \a s and mode \a m, generating one if
+  needed.
 */
+
 QPixmap QIconSet::pixmap( Size s, Mode m ) const
 {
     if ( !d ) {
 	QPixmap r;
 	return r;
     }
-
+	
     QImage i;
     QIconSetPrivate * p = ((QIconSet *)this)->d;
     QPixmap * pm = 0;
@@ -467,12 +310,9 @@ QPixmap QIconSet::pixmap( Size s, Mode m ) const
 		    if (pixmap( Large, Normal).mask())
 			tmp = *pixmap( Large, Normal).mask();
 		    else {
-			QPixmap conv = pixmap( Large, Normal );
-			if ( !conv.isNull() ) {
-			    i = conv.convertToImage();
-			    i = i.createHeuristicMask();
-			    tmp.convertFromImage( i, Qt::MonoOnly + Qt::ThresholdDither );
-			}
+			i = pixmap( Large, Normal ).convertToImage();
+			i = i.createHeuristicMask();
+			tmp.convertFromImage( i, Qt::MonoOnly + Qt::ThresholdDither );
 		    }
 		    p->largeDisabled.pm
 			= new QPixmap( p->large.pm->width()+1,
@@ -547,12 +387,9 @@ QPixmap QIconSet::pixmap( Size s, Mode m ) const
 		    if ( pixmap( Small, Normal).mask())
 			tmp = *pixmap( Small, Normal).mask();
 		    else {
-			QPixmap conv = pixmap( Small, Normal );
-			if ( !conv.isNull() ) {
-			    i = conv.convertToImage();
-			    i = i.createHeuristicMask();
-			    tmp.convertFromImage( i, Qt::MonoOnly + Qt::ThresholdDither );
-			}
+			i = pixmap( Small, Normal ).convertToImage();
+			i = i.createHeuristicMask();
+			tmp.convertFromImage( i, Qt::MonoOnly + Qt::ThresholdDither );
 		    }
 		    p->smallDisabled.pm
 			= new QPixmap( p->small.pm->width()+1,
@@ -588,26 +425,12 @@ QPixmap QIconSet::pixmap( Size s, Mode m ) const
 }
 
 
-/*!
-  Returns a pixmap with size \a s, and Mode either Normal or Disabled,
-  depending on the value of \a enabled.
+/*! Returns TRUE if the variant with size \a s and mode \a m was
+  automatically generated, and FALSE if it was not.
 */
-QPixmap QIconSet::pixmap( Size s, bool enabled ) const
-{
-    return pixmap( s, enabled ? Normal : Disabled );
-}
 
-
-/*!
-  Returns TRUE if the variant with size \a s and mode \a m was
-  automatically generated, and FALSE if it was not. This mainly
-  useful for development purposes.
-*/
 bool QIconSet::isGenerated( Size s, Mode m ) const
 {
-    if ( !d )
-	return FALSE;
-
     if ( s == Large ) {
 	if ( m == Disabled )
 	    return d->largeDisabled.generated || !d->largeDisabled.pm;
@@ -627,37 +450,27 @@ bool QIconSet::isGenerated( Size s, Mode m ) const
 }
 
 
-/*!
-  Returns the pixmap originally provided to the constructor or
-  to reset().  This is the Normal pixmap of unspecified Size.
+/*!  Returns the pixmap originally provided to the constructor or
+  reset().
 
   \sa reset()
 */
 
 QPixmap QIconSet::pixmap() const
 {
-    if ( !d )
-	return QPixmap();
-
     return d->defpm;
 }
 
 
-/*!
-  Detaches this icon set from others with which it may share data.
-
-  You will never need to call this function; other QIconSet functions
-  call it as necessary.
+/*!  Detaches this icon set from others with which it may share data.
+  You should never need to call this function; reset() and setPixmap()
+  call it as necessary.  It exists merely so that the copy constructor
+  and operator= can be faster.
 */
+
 void QIconSet::detach()
 {
-    if ( !d )
-    {
-	d = new QIconSetPrivate;
-	return;
-    }
-
-    if ( d->count == 1 )
+    if ( !d || d->count == 1 )
 	return;
 
     QIconSetPrivate * p = new QIconSetPrivate;
@@ -677,5 +490,3 @@ void QIconSet::detach()
     d->deref();
     d = p;
 }
-
-#endif // QT_NO_ICONSET

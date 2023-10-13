@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: qt/examples/splitter/splitter.cpp   2.3.2   edited 2001-06-12 $
+** $Id: splitter.cpp,v 1.2 1999/06/03 01:45:32 warwick Exp $
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -28,7 +28,6 @@ private:
 Test::Test(QWidget* parent, const char* name, int f) :
     QWidget(parent, name, f)
 {
-
 }
 
 void Test::paintEvent(QPaintEvent* e)
@@ -84,17 +83,12 @@ int main( int argc, char ** argv )
     t5->setMinimumSize( 80, 50 );
     t5->setBackgroundColor( Qt::yellow );
 
-#ifdef _WS_QWS_
-    // Qt/Embedded XOR drawing not yet implemented.
-    s1->setOpaqueResize( TRUE );
-#endif
+    // Test widgets draw fast...
+    //s1->setOpaqueResize( TRUE );
     s2->setOpaqueResize( TRUE );
     s3->setOpaqueResize( TRUE );
 
     a.setMainWidget( s1 );
-    s1->setCaption("Qt Example - Splitters");
     s1->show();
-    int result = a.exec();
-    delete s1;
-    return result;
+    return a.exec();
 }

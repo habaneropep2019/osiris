@@ -1,55 +1,40 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qbuttongroup.cpp   2.3.2   edited 2001-01-26 $
+** $Id: qbuttongroup.cpp,v 2.41 1999/06/03 16:35:22 warwick Exp $
 **
 ** Implementation of QButtonGroup class
 **
 ** Created : 950130
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
-** This file is part of the widgets module of the Qt GUI Toolkit.
+** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses may use this file in accordance with the Qt Commercial License
-** Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
+*****************************************************************************/
 
 #include "qbuttongroup.h"
-#ifndef QT_NO_BUTTONGROUP
 #include "qbutton.h"
 #include "qlist.h"
 #include "qradiobutton.h"
 #include "qapplication.h"
 
 
-
-// NOT REVISED
 /*!
   \class QButtonGroup qbuttongroup.h
   \brief The QButtonGroup widget organizes QButton widgets in a group.
 
-  \ingroup organizers
+  \ingroup realwidgets
 
   A button group widget makes it easier to deal with groups of
   buttons.  A button in a button group is associated with a unique
@@ -76,6 +61,10 @@
   using the insert() function with an identifer.
   </ol>
 
+  By default, the button group's setFont() and setPalette() functions
+  do not change the appearance of the buttons, but you can use
+  setFontPropagation() and setPalettePropagation() to change that.
+
   <img src=qbttngrp-m.png> <img src=qbttngrp-w.png>
 
   \sa QButton, QPushButton, QCheckBox, QRadioButton
@@ -88,16 +77,12 @@ struct QButtonItem
     int	     id;
 };
 
-
 class QButtonList: public QList<QButtonItem>
 {
 public:
     QButtonList() {}
    ~QButtonList() {}
 };
-
-
-typedef QListIterator<QButtonItem> QButtonListIt;
 
 
 /*!
@@ -164,27 +149,23 @@ void QButtonGroup::init()
     CHECK_PTR( buttons );
     buttons->setAutoDelete( TRUE );
     excl_grp = FALSE;
-    radio_excl = TRUE;
+    radio_excl = FALSE;
 }
 
-/*! \reimp */
+/*!
+  Destroys the button group and its child widgets.
+*/
 
 QButtonGroup::~QButtonGroup()
 {
-    QButtonList * tmp = buttons;
-    QButtonItem *bi = tmp->first();
-    buttons = 0;
-    while( bi ) {
+    for ( register QButtonItem *bi=buttons->first(); bi; bi=buttons->next() )
 	bi->button->setGroup(0);
-	bi = tmp->next();
-    }
-    delete tmp;
+    delete buttons;
 }
 
 
 /*!
   Returns TRUE if the button group is exclusive, otherwise FALSE.
-
   \sa setExclusive()
 */
 
@@ -238,32 +219,24 @@ int QButtonGroup::insert( QButton *button, int id )
 {
     if ( button->group() )
 	button->group()->remove( button );
-
     static int seq_no = -2;
-    QButtonItem *bi = new QButtonItem;
+    register QButtonItem *bi = new QButtonItem;
     CHECK_PTR( bi );
-
     if ( id < -1 )
 	bi->id = seq_no--;
     else if ( id == -1 )
 	bi->id = buttons->count();
     else
 	bi->id = id;
-
     bi->button = button;
     button->setGroup(this);
     buttons->append( bi );
-
     connect( button, SIGNAL(pressed()) , SLOT(buttonPressed()) );
     connect( button, SIGNAL(released()), SLOT(buttonReleased()) );
     connect( button, SIGNAL(clicked()) , SLOT(buttonClicked()) );
     connect( button, SIGNAL(toggled(bool)) , SLOT(buttonToggled(bool)) );
-
-    if ( button->isToggleButton() && !button->isOn() &&
-	 selected() && (selected()->focusPolicy() & TabFocus) != 0 )
-	button->setFocusPolicy( (FocusPolicy)(button->focusPolicy() &
-					      ~TabFocus) );
-
+    if ( button->inherits( "QRadioButton" ) )
+	setRadioButtonExclusive( TRUE );
     return bi->id;
 }
 
@@ -282,18 +255,13 @@ int QButtonGroup::count() const
 
 void QButtonGroup::remove( QButton *button )
 {
-    if ( !buttons )
-	return;
-
-    QButtonListIt it( *buttons );
-    QButtonItem *i;
-    while ( (i=it.current()) != 0 ) {
-	++it;
+    for ( QButtonItem *i=buttons->first(); i; i=buttons->next() ) {
 	if ( i->button == button ) {
-	    buttons->remove( i );
+	    buttons->remove();
 	    button->setGroup(0);
 	    button->disconnect( this );
-	    return;
+	    button->removeEventFilter( this );
+	    break;
 	}
     }
 }
@@ -308,7 +276,6 @@ void QButtonGroup::remove( QButton *button )
 
 QButton *QButtonGroup::find( int id ) const
 {
-    // introduce a QButtonListIt if calling anything
     for ( QButtonItem *i=buttons->first(); i; i=buttons->next() )
 	if ( i->id == id )
 	    return i->button;
@@ -346,7 +313,6 @@ QButton *QButtonGroup::find( int id ) const
 
 void QButtonGroup::buttonPressed()
 {
-    // introduce a QButtonListIt if calling anything
     int id = -1;
     QButton *bt = (QButton *)sender();		// object that sent the signal
     for ( register QButtonItem *i=buttons->first(); i; i=buttons->next() )
@@ -366,7 +332,6 @@ void QButtonGroup::buttonPressed()
 
 void QButtonGroup::buttonReleased()
 {
-    // introduce a QButtonListIt if calling anything
     int id = -1;
     QButton *bt = (QButton *)sender();		// object that sent the signal
     for ( register QButtonItem *i=buttons->first(); i; i=buttons->next() )
@@ -386,7 +351,6 @@ void QButtonGroup::buttonReleased()
 
 void QButtonGroup::buttonClicked()
 {
-    // introduce a QButtonListIt if calling anything
     int id = -1;
     QButton *bt = (QButton *)sender();		// object that sent the signal
 #if defined(CHECK_NULL)
@@ -411,7 +375,6 @@ void QButtonGroup::buttonClicked()
 
 void QButtonGroup::buttonToggled( bool on )
 {
-    // introduce a QButtonListIt if calling anything
     if ( !on || !excl_grp && !radio_excl )
 	return;
     QButton *bt = (QButton *)sender();		// object that sent the signal
@@ -422,33 +385,18 @@ void QButtonGroup::buttonToggled( bool on )
 
     if ( !excl_grp && !bt->inherits("QRadioButton") )
 	return;
-    QButtonItem * i = buttons->first();
-    bool hasTabFocus = FALSE;
-
-    while( i != 0 && hasTabFocus == FALSE ) {
-	if ( ( excl_grp || i->button->inherits("QRadioButton") ) &&
-	     (i->button->focusPolicy() & TabFocus) )
-	    hasTabFocus = TRUE;
-	i = buttons->next();
-    }
-
-    i = buttons->first();
+    QButtonItem *i = buttons->first();
     while( i ) {
 	if ( bt != i->button &&
 	     i->button->isToggleButton() &&
 	     i->button->isOn() &&
-	     ( excl_grp || i->button->inherits( "QRadioButton" ) ) )
+	     (excl_grp || i->button->inherits("QRadioButton") ) ) {
 	    i->button->setOn( FALSE );
-	if ( ( excl_grp || i->button->inherits( "QRadioButton" ) ) &&
-	     i->button->isToggleButton() &&
-	     hasTabFocus )
-	    i->button->setFocusPolicy( (FocusPolicy)(i->button->focusPolicy() &
-						     ~TabFocus) );
+	    if ( i->button->hasFocus() )
+		bt->setFocus();
+	}
 	i = buttons->next();
     }
-
-    if ( hasTabFocus )
-	bt->setFocusPolicy( (FocusPolicy)(bt->focusPolicy() | TabFocus) );
 }
 
 
@@ -469,7 +417,7 @@ void QButtonGroup::setButton( int id )
   \fn bool QButtonGroup::isRadioButtonExclusive () const
 
   Returns whether this button group will treat radio buttons as
-  mutually exclusive. The default is TRUE.
+  mutually exclusive.
 
   \sa setRadioButtonExclusive()
 */
@@ -477,7 +425,9 @@ void QButtonGroup::setButton( int id )
 /*!
   If \a on is TRUE, this button group will treat radio buttons as
   mutually exclusive, and other buttons according to
-  isExclusive(). 
+  isExclusive(). This function is called automatically whenever a
+  QRadioButton is inserted, so you should normally never have to call
+  it.
 */
 
 void QButtonGroup::setRadioButtonExclusive( bool on)
@@ -514,6 +464,7 @@ void QButtonGroup::moveFocus( int key )
     i = buttons->first();
     while( i && i->button ) {
 	if ( i->button != f &&
+	     i->button->focusPolicy() &&
 	     i->button->isEnabled() ) {
 	    QPoint p(i->button->mapToGlobal(i->button->geometry().center()));
 	    int score = (p.y() - goal.y())*(p.y() - goal.y()) +
@@ -556,18 +507,10 @@ void QButtonGroup::moveFocus( int key )
 	i = buttons->next();
     }
 
-    if ( candidate && f && f->inherits( "QButton" ) &&
-	 ((QButton*)f)->isOn() &&
-	 candidate->inherits( "QButton" ) &&
-	 ((QButton*)candidate)->isToggleButton() &&
-	 ( isExclusive() || ( f->inherits( "QRadioButton" ) &&
-			      candidate->inherits( "QRadioButton" )))) {
-	if ( f->focusPolicy() & TabFocus ) {
-	    f->setFocusPolicy( (FocusPolicy)(f->focusPolicy() & ~TabFocus) );
-	    candidate->setFocusPolicy( (FocusPolicy)(candidate->focusPolicy()|
-						     TabFocus) );
-	}
-	((QButton*)candidate)->setOn( TRUE );
+    if ( candidate && f && f->inherits( "QRadioButton" ) &&
+	 ((QRadioButton*)f)->isChecked() &&
+	 candidate->inherits( "QRadioButton" ) ) {
+	((QRadioButton*)candidate)->setChecked( TRUE );
 	((QButton*)candidate)->animateClick();
 	((QButton*)candidate)->animateTimeout(); // ### crude l&f hack
     }
@@ -579,23 +522,15 @@ void QButtonGroup::moveFocus( int key )
 
 /*!  Returns a pointer to the selected radio button in this group, if
   one exists, or 0 if there is no selected radio button in this group.
-
-  <b>Warning: </b>In future versions of Qt, the selected toggle button will be returned.
 */
 
 QButton * QButtonGroup::selected()
 {
-    if ( !buttons )
-	return 0;
-    QButtonListIt it( *buttons );
-    QButtonItem *i;
-    while( (i=it.current()) != 0 ) {
-	++it;
-	if ( i->button && i->button->inherits("QRadioButton") &&
-	     i->button->isToggleButton() && i->button->isOn() )
-	    return i->button;
-    }
-    return 0;
+    QButtonItem *i = buttons->first();
+    while ( i && !( i->button && i->button->inherits("QRadioButton") &&
+		    i->button->isToggleButton() && i->button->isOn() ) )
+	i = buttons->next();
+    return i ? i->button : 0;
 }
 
 
@@ -610,4 +545,3 @@ int QButtonGroup::id( QButton * button ) const
 	i = buttons->next();
     return i ? i->id : -1;
 }
-#endif

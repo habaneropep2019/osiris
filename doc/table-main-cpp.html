@@ -1,0 +1,337 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><meta name="robots" content="noindex,noarchive"><title>
+Qt Toolkit - table/main.cpp example file
+</title><style type="text/css"><!--
+h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
+a:link { text-decoration: none; }
+body { background: white; color: black; }
+--></style>
+</head><body bgcolor="#ffffff">
+
+<a href=index.html><img width=122 height=65 src=qtlogo.png alt="Qt logo" align=left border=0></a>
+<center><img src=dochead.png width=448 height=23></center>
+<br clear=all>
+
+<h1 align=center>Table</h1><br clear="all">
+
+  The table program displays a spreadsheet-like table. It is an example of
+  how to inherit the QTableView widget for presentations of 2D data arrays.
+
+  Left-click the mouse to set a current cell. Press the arrow buttons to
+  move the current mark around.
+
+  <hr>
+
+  Header file:
+
+  <pre>/****************************************************************************
+** &#36;Id&#58; table.h,v 1.2 1999/06/03 01:45:38 warwick Exp $
+**
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+**
+** This file is part of an example program for Qt.  This example
+** program may be used, distributed and modified without limitation.
+**
+*****************************************************************************/
+
+#ifndef TABLE_H
+#define TABLE_H
+
+#include &lt;<a href="qtableview-h.html">qtableview.h</a>&gt;
+
+class Table : public QTableView
+{
+    Q_OBJECT
+public:
+    Table( int numRows, int numCols, QWidget* parent=0, const char* name=0 );
+    ~Table();
+
+    const char* cellContent( int row, int col ) const;
+    void setCellContent( int row, int col, const char* );
+
+protected:
+    void paintCell( <a href="qpainter.html">QPainter</a>*, int row, int col );
+    void mousePressEvent( <a href="qmouseevent.html">QMouseEvent</a>* );
+    void keyPressEvent( <a href="qkeyevent.html">QKeyEvent</a>* );
+    void focusInEvent( <a href="qfocusevent.html">QFocusEvent</a>* );
+    void focusOutEvent( <a href="qfocusevent.html">QFocusEvent</a>* );
+
+private:
+    int indexOf( int row, int col ) const;
+    <a href="qstring.html">QString</a>* contents;
+    int curRow;
+    int curCol;
+};
+
+#endif // TABLE_H
+</pre>
+
+
+  <hr>
+
+  Implementation:
+
+  <pre>/****************************************************************************
+** &#36;Id&#58; table.cpp,v 1.3 1999/06/11 18:17:54 warwick Exp $
+**
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+**
+** This file is part of an example program for Qt.  This example
+** program may be used, distributed and modified without limitation.
+**
+*****************************************************************************/
+
+#include "table.h"
+#include &lt;<a href="qpainter-h.html">qpainter.h</a>&gt;
+#include &lt;qkeycode.h&gt;
+#include &lt;<a href="qprinter-h.html">qprinter.h</a>&gt;
+
+/*
+  Constructs a Table widget.
+*/
+
+Table::Table( int numRows, int numCols, QWidget *parent, const char *name )
+    : <a href="qtableview.html">QTableView</a>(parent,name)
+{
+    curRow = curCol = 0;                        // set currently selected cell
+    <a href="qwidget.html#f1bc97">setFocusPolicy</a>( StrongFocus );              // we accept keyboard focus
+    <a href="qwidget.html#587c91">setBackgroundMode</a>( PaletteBase );           // set widgets background
+    <a href="qtableview.html#ebb019">setNumCols</a>( numCols );                      // set number of col's in table
+    <a href="qtableview.html#7eba23">setNumRows</a>( numRows );                      // set number of rows in table
+    <a href="qtableview.html#789c91">setCellWidth</a>( 100 );                        // set width of cell in pixels
+    <a href="qtableview.html#c2b0ca">setCellHeight</a>( 30 );                        // set height of cell in pixels
+    <a href="qtableview.html#49ea11">setTableFlags</a>( Tbl_vScrollBar |             // always vertical scroll bar
+                   Tbl_hScrollBar |             // ditto for horizontal
+                   Tbl_clipCellPainting |       // avoid drawing outside cell
+                   Tbl_smoothScrolling);        // easier to see the scrolling
+    <a href="qwidget.html#9ff9d8">resize</a>( 400, 200 );                         // set default size in pixels
+
+    contents = new <a href="qstring.html">QString</a>[numRows * numCols];  // make room for contents
+}
+
+/*
+  Destructor: deallocates memory for contents
+*/
+
+Table::~Table()
+{
+    delete[] contents;                          // deallocation
+}
+
+/*
+  Return content of cell
+*/
+
+const char* <a name="309"></a>Table::cellContent( int row, int col ) const
+{
+    return contents[indexOf( row, col )];       // contents array lookup
+}
+
+/*
+  Set content of cell
+*/
+
+void <a name="310"></a>Table::setCellContent( int row, int col, const char* c )
+{
+    contents[indexOf( row, col )] = c;          // contents lookup and assign
+    <a href="qtableview.html#eec35d">updateCell</a>( row, col );                     // show new content
+}
+
+/*
+  Handles cell painting for the Table widget.
+*/
+
+void <a name="311"></a>Table::paintCell( <a href="qpainter.html">QPainter</a>* p, int row, int col )
+{
+    int w = cellWidth( col );                   // width of cell in pixels
+    int h = cellHeight( row );                  // height of cell in pixels
+    int x2 = w - 1;
+    int y2 = h - 1;
+
+    /*
+      Draw our part of cell frame.
+    */
+    p-&gt;<a href="qpainter.html#ffde14">drawLine</a>( x2, 0, x2, y2 );               // draw vertical line on right
+    p-&gt;<a href="qpainter.html#ffde14">drawLine</a>( 0, y2, x2, y2 );               // draw horiz. line at bottom
+
+    /*
+      Draw extra frame inside if this is the current cell.
+    */
+    if ( (row == curRow) &amp;&amp; (col == curCol) ) { // if we are on current cell,
+        if ( hasFocus() ) {
+            p-&gt;<a href="qpainter.html#b29a16">drawRect</a>( 0, 0, x2, y2 );        // draw rect. along cell edges
+        }
+        else {                                  // we don't have focus, so
+            p-&gt;<a href="qpainter.html#1b9993">setPen</a>( DotLine );               // use dashed line to
+            p-&gt;<a href="qpainter.html#b29a16">drawRect</a>( 0, 0, x2, y2 );        // draw rect. along cell edges
+            p-&gt;<a href="qpainter.html#1b9993">setPen</a>( SolidLine );             // restore to normal
+        }
+    }
+
+    /*
+      Draw cell content (text)
+    */
+    p-&gt;<a href="qpainter.html#8a59ed">drawText</a>( 0, 0, w, h, AlignCenter, contents[indexOf(row,col)] );
+}
+
+/*
+  Handles mouse press events for the Table widget.
+  The current cell marker is set to the cell the mouse is clicked in.
+*/
+
+void <a name="312"></a>Table::mousePressEvent( <a href="qmouseevent.html">QMouseEvent</a>* e )
+{
+    int oldRow = curRow;                        // store previous current cell
+    int oldCol = curCol;
+    <a href="qpoint.html">QPoint</a> clickedPos = e-&gt;pos();               // extract pointer position
+    curRow = findRow( clickedPos.<a href="qpoint.html#90c362">y</a>() );         // map to row; set current cell
+    curCol = findCol( clickedPos.<a href="qpoint.html#1ed201">x</a>() );         // map to col; set current cell
+    if ( (curRow != oldRow)                     // if current cell has moved,
+         || (curCol != oldCol) ) {
+        <a href="qtableview.html#eec35d">updateCell</a>( oldRow, oldCol );           // erase previous marking
+        <a href="qtableview.html#eec35d">updateCell</a>( curRow, curCol );           // show new current cell
+    }
+}
+
+/*
+  Handles key press events for the Table widget.
+  Allows moving the current cell marker around with the arrow keys
+*/
+
+void <a name="313"></a>Table::keyPressEvent( <a href="qkeyevent.html">QKeyEvent</a>* e )
+{
+    int oldRow = curRow;                        // store previous current cell
+    int oldCol = curCol;
+    switch( e-&gt;<a href="qkeyevent.html#a0a881">key</a>() ) {                        // Look at the key code
+        case Key_Left:                          // If 'left arrow'-key, 
+            if( curCol &gt; 0 ) {                  // and cr't not in leftmost col
+                curCol--;                       // set cr't to next left column
+                int edge = leftCell();          // find left edge
+                if ( curCol &lt; edge )            // if we have moved off  edge,
+                    <a href="qtableview.html#f2656c">setLeftCell</a>( edge - 1 );    // scroll view to rectify
+            }
+            break;
+        case Key_Right:                         // Correspondingly...
+            if( curCol &lt; numCols()-1 ) {
+                curCol++;
+                int edge = lastColVisible();
+                if ( curCol &gt;= edge )
+                    <a href="qtableview.html#f2656c">setLeftCell</a>( leftCell() + 1 );
+            }
+            break;
+        case Key_Up:
+            if( curRow &gt; 0 ) {
+                curRow--;
+                int edge = topCell();
+                if ( curRow &lt; edge )
+                    <a href="qtableview.html#d659d2">setTopCell</a>( edge - 1 );
+            }
+            break;
+        case Key_Down:
+            if( curRow &lt; numRows()-1 ) {
+                curRow++;
+                int edge = lastRowVisible();
+                if ( curRow &gt;= edge )
+                    <a href="qtableview.html#d659d2">setTopCell</a>( topCell() + 1 );
+            }
+            break;
+        default:                                // If not an interesting key,
+            e-&gt;<a href="qkeyevent.html#130332">ignore</a>();                        // we don't accept the event
+            return;     
+    }
+
+    if ( (curRow != oldRow)                     // if current cell has moved,
+         || (curCol != oldCol)  ) {
+        <a href="qtableview.html#eec35d">updateCell</a>( oldRow, oldCol );           // erase previous marking
+        <a href="qtableview.html#eec35d">updateCell</a>( curRow, curCol );           // show new current cell
+    }
+}
+
+/*
+  Handles focus reception events for the Table widget.
+  Repaint only the current cell; to avoid flickering
+*/
+
+void <a name="314"></a>Table::focusInEvent( <a href="qfocusevent.html">QFocusEvent</a>* )
+{
+    <a href="qtableview.html#eec35d">updateCell</a>( curRow, curCol );               // draw current cell
+}    
+
+/*
+  Handles focus loss events for the Table widget.
+  Repaint only the current cell; to avoid flickering
+*/
+
+void <a name="315"></a>Table::focusOutEvent( <a href="qfocusevent.html">QFocusEvent</a>* )
+{
+    <a href="qtableview.html#eec35d">updateCell</a>( curRow, curCol );               // draw current cell
+}    
+
+/*
+  Utility function for mapping from 2D table to 1D array
+*/
+
+int <a name="316"></a>Table::indexOf( int row, int col ) const
+{
+    return (row * numCols()) + col;
+}
+</pre>
+
+
+  <hr>
+
+  Main:
+<pre>/****************************************************************************
+** &#36;Id&#58; main.cpp,v 1.2 1999/06/03 01:45:36 warwick Exp $
+**
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+**
+** This file is part of an example program for Qt.  This example
+** program may be used, distributed and modified without limitation.
+**
+*****************************************************************************/
+
+#include "table.h"
+#include &lt;<a name="qpushbutton.h"></a><a href="qpushbutton-h.html">qpushbutton.h</a>&gt;
+#include &lt;<a name="qapplication.h"></a><a href="qapplication-h.html">qapplication.h</a>&gt;
+
+/*
+  Constants
+*/
+
+const int numRows = 20;                         // Tablesize: number of rows
+const int numCols = 20;                         // Tablesize: number of columns
+
+/*
+  The program starts here. 
+*/
+
+int main( int argc, char **argv )
+{
+    <a name="QApplication"></a><a href="qapplication.html">QApplication</a> a(argc,argv);                  
+
+    Table v( numRows, numCols );
+
+    /*
+      Fill the table with default content: a coordinate string.
+    */
+    <a name="QString"></a><a href="qstring.html">QString</a> s ;
+    for( int i = 0; i &lt; numRows; i++ ) {
+        for( int j = 0; j &lt; numCols; j++ ) {
+            s.<a name="setNum"></a><a href="qstring.html#01d80b">setNum</a>(j);
+            s += ' ';
+            s += 'A' + ( i % 26 );              // Wrap if necessary
+            v.setCellContent( i, j, s );
+        }
+    }
+
+    a.<a name="setMainWidget"></a><a href="qapplication.html#11c921">setMainWidget</a>( &amp;v );
+    v.<a name="show"></a><a href="qtableview.html#5fd0ad">show</a>();
+    return a.<a name="exec"></a><a href="qapplication.html#7076af">exec</a>();
+}
+</pre>
+<p><address><hr><div align="center">
+<table width="100%" cellspacing="0" border="0"><tr>
+<td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.00</div>
+</table></div></address></body></html>

@@ -1,53 +1,87 @@
 /****************************************************************************
-** $Id: qt/src/tools/qdir.cpp   2.3.2   edited 2001-08-07 $
+** $Id: qdir.cpp,v 2.62 1999/06/23 22:11:56 agulbra Exp $
 **
 ** Implementation of QDir class
 **
 ** Created : 950427
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
-** This file is part of the tools module of the Qt GUI Toolkit.
+** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses may use this file in accordance with the Qt Commercial License
-** Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
+*****************************************************************************/
 
 #include "qglobal.h"
+#if defined(_OS_WIN32_)
+#ifdef UNICODE
+#ifndef _UNICODE
+#define _UNICODE
+#endif
+#endif
+#endif
 
 #include "qdir.h"
-
-#ifndef QT_NO_DIR
 #include "qfileinfo.h"
-#include "qfiledefs_p.h"
+#include "qfiledefs.h"
 #include "qregexp.h"
 #include "qstringlist.h"
 #include <stdlib.h>
 #include <ctype.h>
+#if defined(_OS_WIN32_)
+#if defined(_CC_BOOL_DEF_)
+#undef	bool
+#include <windows.h>
+#define bool int
+#else
+#include <windows.h>
+#endif
+#include <direct.h>
+#include <tchar.h>
+#endif
+#if defined(_OS_OS2EMX_)
+extern "C" Q_UINT32 DosQueryCurrentDisk(Q_UINT32*,Q_UINT32*);
+#define NO_ERROR 0
+#endif
 
-// NOT REVISED
+#if defined(_OS_FATFS_) || defined(_OS_OS2EMX_)
+
+
+static void slashify( QString& n )
+{
+    if ( n.isNull() )
+	return;
+    for ( int i=0; i<(int)n.length(); i++ ) {
+	if ( n[i] ==  '\\' )
+	    n[i] = '/';
+    }
+}
+
+extern QCString qt_win95Name(const QString s);
+
+#elif defined(UNIX)
+
+static void slashify( QString& )
+{
+    return;
+}
+
+#endif
+
+
+
+
 /*!
   \class QDir qdir.h
   \brief Traverses directory structures and contents in a
@@ -214,7 +248,7 @@ void QDir::init()
 }
 
 /*!
-  Destructs the QDir and cleans up.
+  Destroys the QDir and cleans up.
 */
 
 QDir::~QDir()
@@ -241,7 +275,7 @@ QDir::~QDir()
   is using a relative or an absolute file path. You can call the function
   convertToAbs() to convert a relative QDir to an absolute one.
 
-  \sa path(), absPath(), exists(), cleanDirPath(), dirName(),
+  \sa path(), absPath(), exists, cleanDirPath(), dirName(),
       absFilePath(), isRelative(), convertToAbs()
 */
 
@@ -287,6 +321,55 @@ QString QDir::absPath() const
 }
 
 /*!
+  Returns the canonical path, i.e. a path without symbolic links.
+
+  On systems that do not have symbolic links this function will
+  always return the same string that absPath returns.
+  If the canonical path does not exist a null string is returned.
+
+  \sa path(), absPath(), exists(), cleanDirPath(), dirName(),
+      absFilePath(), QString::isNull()
+*/
+
+QString QDir::canonicalPath() const
+{
+    QString r;
+
+#ifdef _WS_WIN_
+    char cur[PATH_MAX];
+    GETCWD( cur, PATH_MAX );
+    if ( qt_winunicode ) {
+	if ( _tchdir((TCHAR*)qt_winTchar(dPath,TRUE)) >= 0 ) {
+	    TCHAR tmp[PATH_MAX];
+	    if ( _tgetcwd( tmp, PATH_MAX ) )
+		r = qt_winQString(tmp);
+	}
+    } else {
+	if ( CHDIR(qt_win95Name(dPath)) >= 0 ) {
+	    char tmp[PATH_MAX];
+	    if ( GETCWD( tmp, PATH_MAX ) )
+		r = tmp;
+	}
+    }
+    CHDIR( cur );
+    slashify( r );
+#else
+    char cur[PATH_MAX];
+    char tmp[PATH_MAX];
+
+    GETCWD( cur, PATH_MAX );
+    if ( CHDIR(QFile::encodeName(dPath)) >= 0 ) {
+	GETCWD( tmp, PATH_MAX );
+	r = QFile::decodeName(tmp);
+    }
+    CHDIR( cur );
+
+#endif
+
+    return r;
+}
+
+/*!
   Returns the name of the directory, this is NOT the same as the path, e.g.
   a directory with the name "mail", might have the path "/var/spool/mail".
   If the directory has no name (e.g. the root directory) a null string is
@@ -326,7 +409,7 @@ QString QDir::filePath( const QString &fileName,
     if ( acceptAbsPath && !isRelativePath(fileName) )
 	return QString(fileName);
 
-    QString tmp = dPath;
+    QString tmp = dPath.copy();
     if ( tmp.isEmpty() || (tmp[(int)tmp.length()-1] != '/' && !!fileName &&
 			   fileName[0] != '/') )
 	tmp += '/';
@@ -469,18 +552,17 @@ bool QDir::cdUp()
 /*!
   \fn QString QDir::nameFilter() const
   Returns the string set by setNameFilter()
+  \sa setNameFilter()
 */
 
 /*!
   Sets the name filter used by entryList() and entryInfoList().
 
   The name filter is a wildcarding filter that understands "*" and "?"
-  wildcards, You may specify several filter entries separated by a " " or a ";". If
-  you want entryList() and entryInfoList() to list all files ending with
-  ".cpp" and all files ending with ".h", you simply call
-  dir.setNameFilter("*.cpp *.h") or dir.setNameFilter("*.cpp;*.h")
+  wildcards, if you want entryList() and entryInfoList() to list all files
+  ending with ".cpp", you simply call dir.setNameFilter("*.cpp");
 
-  \sa nameFilter(), setFilter()
+  \sa nameFilter()
 */
 
 void QDir::setNameFilter( const QString &nameFilter )
@@ -494,45 +576,36 @@ void QDir::setNameFilter( const QString &nameFilter )
 /*!
   \fn QDir::FilterSpec QDir::filter() const
   Returns the value set by setFilter()
+  \sa setFilter()
 */
-
-/*! \enum QDir::FilterSpec
-
-  This enum describes how QDir is to select what entries in a
-  directory to return.  The filter value is specified by or-ing
-  together values from the following list: <ul>
-
-  <li> \c Dirs - List directories only
-  <li> \c Files - List files only
-
-  <li> \c  Drives - List disk drives (does nothing under unix)
-  <li> \c  NoSymLinks - Do not list symbolic links (where they exist)
-  <li> \c  Readable - List files for which the application has read access.
-  <li> \c  Writable - List files for which the application has write access.
-  <li> \c  Executable - List files for which the application has execute access
-  <li> \c  Modified - Only list files that have been modified (does nothing
-  under unix)
-  <li> \c  Hidden - List hidden files (on unix, files starting with a .)
-  <li> \c  System - List system files (on unix, FIFOs, sockets and device files)
-  </ul>
-
-  If you do not set any of \c Readable, \c Writable or \c Executable,
-  QDir will set all three of them.  This makes the default easy to
-  write and at the same time useful.
-
-  Examples: \c Readable|Writable means list all files for which the
-  application has read access, write access or both.  \c Dirs|Drives
-  means list drives, directories, all files that the application can
-  read, write or execute, and also symlinks to such files/directories.
-*/
-
 
 /*!
   Sets the filter used by entryList() and entryInfoList(). The filter is used
   to specify the kind of files that should be returned by entryList() and
-  entryInfoList().
+  entryInfoList(). The filter is specified by or-ing values from the enum
+  FilterSpec. The different values are:
 
-  \sa filter(), setNameFilter()
+
+  <dl compact>
+  <dt>Dirs<dd> List directories only.
+  <dt>Files<dd> List files only.
+  <dt>Drives<dd> List drives.
+  <dt>NoSymLinks<dd> Do not list symbolic links.
+
+  <dt>Readable<dd> List files with read permission.
+  <dt>Writable<dd> List files with write permission.
+  <dt>Executable<dd> List files with execute permission.
+
+  Setting none of the three flags above is equivalent to setting all of them.
+
+  <dt>Modified<dd> Only list files that have been modified (does nothing
+			  under UNIX).
+  <dt>Hidden<dd> List hidden files also (.* under UNIX).
+  <dt>System<dd> List system files (does nothing under UNIX).
+
+  </dl>
+
+  \sa nameFilter()
 */
 
 void QDir::setFilter( int filterSpec )
@@ -550,30 +623,6 @@ void QDir::setFilter( int filterSpec )
 
   \sa setSorting()
 */
-
-/*! \enum QDir::SortSpec
-
-  This enum describes how QDir is to sort entries in a directory when
-  it returns a list of them.  The sort value is specified by or-ing
-  together values from the following list: <ul>
-
-  <li> \c Name - sort by name
-  <li> \c Time - sort by time (modification time)
-  <li> \c Size - sort by file size
-  <li> \c Unsorted - do not sort
-
-  <li> \c DirsFirst - put all directories first in the list
-  <li> \c Reversed - reverse the sort order
-  <li> \c IgnoreCase - sort case-insensitively
-
-  </ul>
-
-  You can only specify one of the first four.  If you specify both \c
-  DirsFirst and \c Reversed, directories are still put first but the
-  list is otherwise reversed.
-*/
-
-// ### Unsorted+DirsFirst ? Unsorted+Reversed?
 
 /*!
   Sets the sorting order used by entryList() and entryInfoList().
@@ -635,7 +684,7 @@ void QDir::setMatchAllDirs( bool enable )
 /*!
   Returns the number of files that was found.
   Equivalent to entryList().count().
-  \sa operator[](), entryList()
+  \sa operator[], entryList()
 */
 
 uint QDir::count() const
@@ -811,6 +860,80 @@ const QFileInfoList *QDir::entryInfoList( const QString &nameFilter,
 }
 
 /*!
+  Creates a directory.
+
+  If \e acceptAbsPath is TRUE a path starting with a separator ('/')
+  will create the absolute directory, if \e acceptAbsPath is FALSE
+  any number of separators at the beginning of \e dirName will be removed.
+
+  Returns TRUE if successful, otherwise FALSE.
+
+  \sa rmdir()
+*/
+
+bool QDir::mkdir( const QString &dirName, bool acceptAbsPath ) const
+{
+#if defined (UNIX) || defined(__CYGWIN32__)
+    return MKDIR( QFile::encodeName(filePath(dirName,acceptAbsPath)), 0777 ) == 0;
+#else
+    if ( qt_winunicode ) {
+	return _tmkdir((const TCHAR*)qt_winTchar(filePath(dirName,acceptAbsPath),TRUE)) == 0;
+    } else {
+	return _mkdir(qt_win95Name(filePath(dirName,acceptAbsPath))) == 0;
+    }
+#endif
+}
+
+/*!
+  Removes a directory.
+
+  If \e acceptAbsPath is TRUE a path starting with a separator ('/')
+  will remove the absolute directory, if \e acceptAbsPath is FALSE
+  any number of separators at the beginning of \e dirName will be removed.
+
+  The directory must be empty for rmdir() to succeed.
+
+  Returns TRUE if successful, otherwise FALSE.
+
+  \sa mkdir()
+*/
+
+bool QDir::rmdir( const QString &dirName, bool acceptAbsPath ) const
+{
+#if defined (UNIX) || defined(__CYGWIN32__)
+    return RMDIR( QFile::encodeName(filePath(dirName,acceptAbsPath)) ) == 0;
+#else
+    if ( qt_winunicode ) {
+	return _trmdir((const TCHAR*)qt_winTchar(filePath(dirName,acceptAbsPath),TRUE)) == 0;
+    } else {
+	return _rmdir(qt_win95Name(filePath(dirName,acceptAbsPath))) == 0;
+    }
+#endif
+}
+
+/*!
+  Returns TRUE if the directory is readable AND we can open files by
+  name. This function will return FALSE if only one of these is present.
+  \warning A FALSE value from this function is not a guarantee that files
+  in the directory are not accessible.
+
+  \sa QFileInfo::isReadable()
+*/
+
+bool QDir::isReadable() const
+{
+#if defined (UNIX) || defined(__CYGWIN32__)
+    return ACCESS( QFile::encodeName(dPath), R_OK | X_OK ) == 0;
+#else
+    if ( qt_winunicode ) {
+	return _taccess((const TCHAR*)qt_winTchar(dPath,TRUE), R_OK) == 0;
+    } else {
+	return ACCESS(qt_win95Name(dPath), R_OK) == 0;
+    }
+#endif
+}
+
+/*!
   Returns TRUE if the directory exists. (If a file with the same
   name is found this function will of course return FALSE).
 
@@ -821,6 +944,34 @@ bool QDir::exists() const
 {
     QFileInfo fi( dPath );
     return fi.exists() && fi.isDir();
+}
+
+/*!
+  Returns TRUE if the directory is the root directory, otherwise FALSE.
+
+  Note: If the directory is a symbolic link to the root directory this
+  function returns FALSE. If you want to test for this you can use
+  canonicalPath():
+
+  Example:
+  \code
+    QDir d( "/tmp/root_link" );
+    d = d.canonicalPath();
+    if ( d.isRoot() )
+	qWarning( "It IS a root link!" );
+  \endcode
+
+  \sa root(), rootDirPath()
+*/
+
+bool QDir::isRoot() const
+{
+#if defined(_OS_FATFS_) || defined(_OS_OS2EMX_)
+    return dPath == "/" || dPath == "//" ||
+	(dPath[0].isLetter() && dPath.mid(1,dPath.length()) == ":/");
+#else
+    return dPath == QString::fromLatin1("/");
+#endif
 }
 
 /*!
@@ -925,6 +1076,48 @@ bool QDir::remove( const QString &fileName, bool acceptAbsPath )
 }
 
 /*!
+  Renames a file.
+
+  If \e acceptAbsPaths is TRUE a path starting with a separator ('/')
+  will rename the file with the absolute path, if \e acceptAbsPath is FALSE
+  any number of separators at the beginning of \e name will be removed.
+
+  Returns TRUE if successful, otherwise FALSE.
+
+  On most file systems, rename() fails only if oldName does not exist
+  or if \a newName and \a oldName are not on the same partition, but
+  there are also other reasons why rename() can fail.  For example, on
+  at least one file system rename() fails if newName points to an open
+  file
+*/
+
+bool QDir::rename( const QString &name, const QString &newName,
+		   bool acceptAbsPaths	)
+{
+    if ( name.isEmpty() || newName.isEmpty() ) {
+#if defined(CHECK_NULL)
+	qWarning( "QDir::rename: Empty or null file name(s)" );
+#endif
+	return FALSE;
+    }
+    QString fn1 = filePath( name, acceptAbsPaths );
+    QString fn2 = filePath( newName, acceptAbsPaths );
+#if defined (UNIX) || defined(__CYGWIN32__)
+    return ::rename( QFile::encodeName(fn1),
+		     QFile::encodeName(fn2) ) == 0;
+#else
+    if ( qt_winunicode ) {
+	TCHAR* t2 = (TCHAR*)qt_winTchar_new(fn1);
+	bool r = _trename((const TCHAR*)qt_winTchar(fn1,TRUE), t2) == 0;
+	delete [] t2;
+	return r;
+    } else {
+	return rename(qt_win95Name(fn1), qt_win95Name(fn2)) == 0;
+    }
+#endif
+}
+
+/*!
   Checks for existence of a file.
 
   If \e acceptAbsPaths is TRUE a path starting with a separator ('/')
@@ -959,7 +1152,7 @@ bool QDir::exists( const QString &name, bool acceptAbsPath )
 
 char QDir::separator()
 {
-#if defined(_OS_UNIX_)
+#if defined( UNIX )
     return '/';
 #elif defined (_OS_FATFS_)
     return '\\';
@@ -968,6 +1161,28 @@ char QDir::separator()
 #else
     return '/';
 #endif
+}
+
+
+/*!
+  Sets the the current directory. Returns TRUE if successful.
+*/
+
+bool QDir::setCurrent( const QString &path )
+{
+    int r;
+
+#ifdef _WS_WIN_
+    if ( qt_winunicode ) {
+	r = _tchdir((const TCHAR*)qt_winTchar(path,TRUE));
+    } else {
+	r = CHDIR(qt_win95Name(path));
+    }
+#else
+    r = CHDIR( QFile::encodeName(path) );
+#endif
+
+    return r >= 0;
 }
 
 /*!
@@ -1000,65 +1215,95 @@ QDir QDir::root()
     return QDir( rootDirPath() );
 }
 
-/*!
-  \fn QString QDir::homeDirPath()
 
+/*!
+  Returns the absolute path of the current directory.
+  \sa current()
+*/
+
+QString QDir::currentDirPath()
+{
+    QString result;
+
+#ifdef _WS_WIN_
+    if ( qt_winunicode ) {
+	TCHAR currentName[PATH_MAX];
+	if ( _tgetcwd(currentName,PATH_MAX) >= 0 ) {
+	    result = qt_winQString(currentName);
+	}
+    } else {
+	char currentName[PATH_MAX];
+	if ( GETCWD(currentName,PATH_MAX) >= 0 ) {
+	    result = QString::fromLatin1(currentName);
+	}
+    }
+    slashify( result );
+#else
+    STATBUF st;
+
+    if ( STAT( ".", &st ) == 0 ) {
+	char currentName[PATH_MAX];
+	if ( GETCWD( currentName, PATH_MAX ) != 0 )
+	    result = QFile::decodeName(currentName);
+#if defined(DEBUG)
+	if ( result.isNull() )
+	    qWarning( "QDir::currentDirPath: getcwd() failed" );
+#endif
+    } else {
+#if defined(DEBUG)
+	qWarning( "QDir::currentDirPath: stat(\".\") failed" );
+#endif
+    }
+#endif
+    return result;
+}
+
+/*!
   Returns the absolute path for the user's home directory,
   \sa home()
 */
 
-QStringList qt_makeFilterList( const QString &filter )
+QString QDir::homeDirPath()
 {
-    if ( filter.isEmpty() )
-	return QStringList();
-
-    QChar sep( ';' );
-    int i = filter.find( sep, 0 );
-    if ( i == -1 && filter.find( ' ', 0 ) != -1 )
-	sep = QChar( ' ' );
-
-    QStringList lst = QStringList::split( sep, filter );
-    QStringList lst2;
-    QStringList::Iterator it = lst.begin();
-
-    for ( ; it != lst.end(); ++it ) {
-	QString s = *it;
-	lst2 << s.stripWhiteSpace();
-    }
-    return lst2;
+    QString d;
+    d = QFile::decodeName(getenv("HOME"));
+    slashify( d );
+    if ( d.isNull() )
+	d = rootDirPath();
+    return d;
 }
 
 /*!
-  Returns TRUE if the \e fileName matches one of the wildcards in the list \e filters.
-  \sa QRegExp
+  Returns the absolute path for the root directory ("/" under UNIX).
+
+  \sa root() drives()
 */
 
-bool QDir::match( const QStringList &filters, const QString &fileName )
+QString QDir::rootDirPath()
 {
-    QStringList::ConstIterator sit = filters.begin();
-    bool matched = FALSE;
-    for ( ; sit != filters.end(); ++sit ) {
-	QRegExp regexp( *sit, FALSE, TRUE );
-	if ( regexp.match( fileName ) != -1 ) {
-	    matched = TRUE;
-	    break;
-	}
-    }
-
-    return matched;
+#if defined(_OS_FATFS_)
+    QString d = QString::fromLatin1( "c:/" );
+#elif defined(_OS_OS2EMX_)
+    char dir[4];
+    _abspath( dir, "/", _MAX_PATH );
+    QString d( dir );
+#elif defined(UNIX)
+    QString d = QString::fromLatin1( "/" );
+#else
+# error Not implemented
+#endif
+    return d;
 }
 
 /*!
   Returns TRUE if the \e fileName matches the wildcard \e filter.
-  \a Filter may also contain multiple wildcards separated by spaces or
-  semicolons.
   \sa QRegExp
 */
 
 bool QDir::match( const QString &filter, const QString &fileName )
 {
-    QStringList lst = qt_makeFilterList( filter );
-    return match( lst, fileName );
+    QRegExp tmp( filter, TRUE, TRUE ); // case sensitive and wildcard mode on
+    return tmp.match( fileName ) != -1;
 }
 
 
@@ -1067,11 +1312,7 @@ bool QDir::match( const QString &filter, const QString &fileName )
   any "." or ".." found in the path.
 
   Symbolic links are kept.  This function does not return the
-  canonical path, but rather the most simplified version of the input.
-  "../stuff" becomes "stuff", "stuff/../nonsense" becomes "nonsense"
-  and "\\stuff\\more\\..\\nonsense" becomes "\\stuff\\nonsense".
-
-  \sa absPath() canonicalPath()
+  canonical path.
 */
 
 QString QDir::cleanDirPath( const QString &filePath )
@@ -1136,26 +1377,49 @@ QString QDir::cleanDirPath( const QString &filePath )
     return newPath;
 }
 
-int qt_cmp_si_sortSpec;
+/*!
+  Returns TRUE if the path is relative, FALSE if it is absolute.
+  \sa isRelative()
+*/
 
-#if defined(Q_C_CALLBACKS)
-extern "C" {
+bool QDir::isRelativePath( const QString &path )
+{
+    int len = path.length();
+    if ( len == 0 )
+	return TRUE;
+#if defined(_OS_FATFS_) || defined(_OS_OS2EMX_)
+    int i = 0;
+    if ( path[0].isLetter() && path[1] == ':' )		// drive, e.g. a:
+	i = 2;
+    return path[i] != '/' && path[i] != '\\';
+#elif defined(UNIX)
+    return path[0] != '/';
+#else
+# error "Not implemented for this operating system"
 #endif
+}
 
-int qt_cmp_si( const void *n1, const void *n2 )
+struct QDirSortItem {
+    QString filename_cache;
+    QFileInfo* item;
+};
+
+static int cmp_si_sortSpec;
+
+static int cmp_si( const void *n1, const void *n2 )
 {
     if ( !n1 || !n2 )
-	return 0;
+        return 0;
 
     QDirSortItem* f1 = (QDirSortItem*)n1;
     QDirSortItem* f2 = (QDirSortItem*)n2;
 
-    if ( qt_cmp_si_sortSpec & QDir::DirsFirst )
+    if ( cmp_si_sortSpec & QDir::DirsFirst )
 	if ( f1->item->isDir() != f2->item->isDir() )
 	    return f1->item->isDir() ? -1 : 1;
 
     int r = 0;
-    int sortBy = qt_cmp_si_sortSpec & QDir::SortByMask;
+    int sortBy = cmp_si_sortSpec & QDir::SortByMask;
 
     switch ( sortBy ) {
       case QDir::Time:
@@ -1170,7 +1434,7 @@ int qt_cmp_si( const void *n1, const void *n2 )
 
     if ( r == 0 && sortBy != QDir::Unsorted ) {
 	// Still not sorted - sort by name
-	bool ic = qt_cmp_si_sortSpec & QDir::IgnoreCase;
+	bool ic = cmp_si_sortSpec & QDir::IgnoreCase;
 
 	if ( f1->filename_cache.isNull() )
 	    f1->filename_cache = ic ? f1->item->fileName().lower()
@@ -1187,14 +1451,281 @@ int qt_cmp_si( const void *n1, const void *n2 )
 	r = (char*)n1 - (char*)n2;
     }
 
-    if ( qt_cmp_si_sortSpec & QDir::Reversed )
+    if ( cmp_si_sortSpec & QDir::Reversed )
 	return -r;
     else
 	return r;
 }
 
-#if defined(Q_C_CALLBACKS)
-}
+/*!
+  \internal
+  Reads directory entries.
+*/
+
+bool QDir::readDirEntries( const QString &nameFilter,
+			   int filterSpec, int sortSpec )
+{
+    int i;
+    if ( !fList ) {
+	fList  = new QStringList;
+	CHECK_PTR( fList );
+	fiList = new QFileInfoList;
+	CHECK_PTR( fiList );
+	fiList->setAutoDelete( TRUE );
+    } else {
+	fList->clear();
+	fiList->clear();
+    }
+
+    bool doDirs	    = (filterSpec & Dirs)	!= 0;
+    bool doFiles    = (filterSpec & Files)	!= 0;
+    bool noSymLinks = (filterSpec & NoSymLinks) != 0;
+    bool doReadable = (filterSpec & Readable)	!= 0;
+    bool doWritable = (filterSpec & Writable)	!= 0;
+    bool doExecable = (filterSpec & Executable) != 0;
+    bool doHidden   = (filterSpec & Hidden)	!= 0;
+#if !defined(UNIX)
+    // show hidden files if the user asks explicitly for e.g. .*
+    if ( !doHidden && !nameFilter.isEmpty() && nameFilter[0] == '.' )
+	doHidden = TRUE;
+    bool doModified = (filterSpec & Modified)	!= 0;
+    bool doSystem   = (filterSpec & System)	!= 0;
 #endif
 
-#endif // QT_NO_DIR
+#if defined(_OS_WIN32_)
+
+    QRegExp   wc( nameFilter, FALSE, TRUE );	// wild card, case insensitive
+    bool      first = TRUE;
+    QString   p = dPath.copy();
+    int	      plen = p.length();
+    HANDLE    ff;
+    WIN32_FIND_DATA finfo;
+    QFileInfo fi;
+
+#undef	IS_SUBDIR
+#undef	IS_RDONLY
+#undef	IS_ARCH
+#undef	IS_HIDDEN
+#undef	IS_SYSTEM
+#undef	FF_ERROR
+
+#define IS_SUBDIR   FILE_ATTRIBUTE_DIRECTORY
+#define IS_RDONLY   FILE_ATTRIBUTE_READONLY
+#define IS_ARCH	    FILE_ATTRIBUTE_ARCHIVE
+#define IS_HIDDEN   FILE_ATTRIBUTE_HIDDEN
+#define IS_SYSTEM   FILE_ATTRIBUTE_SYSTEM
+#define FF_ERROR    INVALID_HANDLE_VALUE
+
+    if ( plen == 0 ) {
+#if defined(CHECK_NULL)
+	qWarning( "QDir::readDirEntries: No directory name specified" );
+#endif
+	return FALSE;
+    }
+    if ( p.at(plen-1) != '/' && p.at(plen-1) != '\\' )
+	p += '/';
+    p += QString::fromLatin1("*.*");
+
+    if ( qt_winunicode ) {
+	ff = FindFirstFile((TCHAR*)qt_winTchar(p,TRUE),&finfo);
+    } else {
+	// Cast is safe, since char is at end of WIN32_FIND_DATA
+	ff = FindFirstFileA(qt_win95Name(p),(WIN32_FIND_DATAA*)&finfo);
+    }
+    if ( ff == FF_ERROR ) {
+#if defined(CHECK_RANGE)
+	qWarning( "QDir::readDirEntries: Cannot read the directory: %s (UTF8)",
+		 dPath.utf8().data() );
+#endif
+	return FALSE;
+    }
+
+    while ( TRUE ) {
+	if ( first )
+	    first = FALSE;
+	else {
+	    if ( qt_winunicode ) {
+		if ( !FindNextFile(ff,&finfo) )
+		    break;
+	    } else {
+		if ( !FindNextFileA(ff,(WIN32_FIND_DATAA*)&finfo) )
+		    break;
+	    }
+	}
+	int  attrib = finfo.dwFileAttributes;
+	bool isDir	= (attrib & IS_SUBDIR) != 0;
+	bool isFile	= !isDir;
+	bool isSymLink	= FALSE;
+	bool isReadable = TRUE;
+	bool isWritable = (attrib & IS_RDONLY) == 0;
+	bool isExecable = FALSE;
+	bool isModified = (attrib & IS_ARCH)   != 0;
+	bool isHidden	= (attrib & IS_HIDDEN) != 0;
+	bool isSystem	= (attrib & IS_SYSTEM) != 0;
+
+	QString fname;
+	if ( qt_winunicode ) {
+	    fname = qt_winQString(finfo.cFileName);
+	} else {
+	    fname = qt_winMB2QString((const char*)finfo.cFileName);
+	}
+	if ( wc.match(fname) == -1 && !(allDirs && isDir) )
+	    continue;
+
+	if  ( (doDirs && isDir) || (doFiles && isFile) ) {
+	    QString name = fname;
+	    slashify(name);
+	    if ( doExecable ) {
+		QString ext = name.right(4).lower();
+		if ( ext == ".exe" || ext == ".com" || ext == ".bat" ||
+		     ext == ".pif" || ext == ".cmd" )
+		    isExecable = TRUE;
+	    }
+
+	    if ( noSymLinks && isSymLink )
+		continue;
+	    if ( (filterSpec & RWEMask) != 0 )
+		if ( (doReadable && !isReadable) ||
+		     (doWritable && !isWritable) ||
+		     (doExecable && !isExecable) )
+		    continue;
+	    if ( doModified && !isModified )
+		continue;
+	    if ( !doHidden && isHidden )
+		continue;
+	    if ( !doSystem && isSystem )
+		continue;
+	    fi.setFile( *this, name );
+	    fiList->append( new QFileInfo( fi ) );
+	}
+    }
+    FindClose( ff );
+
+#undef	IS_SUBDIR
+#undef	IS_RDONLY
+#undef	IS_ARCH
+#undef	IS_HIDDEN
+#undef	IS_SYSTEM
+#undef	FF_ERROR
+
+#else // UNIX
+
+#if defined(_OS_OS2EMX_)
+    QRegExp   wc( nameFilter, FALSE, TRUE );	// wild card, case insensitive
+#else
+    QRegExp   wc( nameFilter, TRUE, TRUE );	// wild card, case sensitive
+#endif
+    QFileInfo fi;
+    DIR	     *dir;
+    dirent   *file;
+
+    dir = opendir( QFile::encodeName(dPath) );
+    if ( !dir ) {
+#if defined(CHECK_NULL)
+	qWarning( "QDir::readDirEntries: Cannot read the directory: %s",
+		 QFile::encodeName(dPath).data() );
+#endif
+	return FALSE;
+    }
+
+    while ( (file = readdir(dir)) ) {
+	QString fn = QFile::decodeName(file->d_name);
+	fi.setFile( *this, fn );
+	if ( wc.match(fn) == -1 && !(allDirs && fi.isDir()) )
+	    continue;
+	if  ( (doDirs && fi.isDir()) || (doFiles && fi.isFile()) ) {
+	    if ( noSymLinks && fi.isSymLink() )
+		continue;
+	    if ( (filterSpec & RWEMask) != 0 )
+		if ( (doReadable && !fi.isReadable()) ||
+		     (doWritable && !fi.isWritable()) ||
+		     (doExecable && !fi.isExecutable()) )
+		    continue;
+	    if ( !doHidden && fn[0] == '.' &&
+		    fn != QString::fromLatin1(".")
+		    && fn != QString::fromLatin1("..") )
+		continue;
+	    fiList->append( new QFileInfo( fi ) );
+	}
+    }
+    if ( closedir(dir) != 0 ) {
+#if defined(CHECK_NULL)
+	qWarning( "QDir::readDirEntries: Cannot close the directory: %s (UTF8)",
+		 dPath.utf8().data() );
+#endif
+    }
+
+#endif // UNIX
+
+    // Sort...
+    QDirSortItem* si= new QDirSortItem[fiList->count()];
+    QFileInfo* itm;
+    i=0;
+    for (itm = fiList->first(); itm; itm = fiList->next())
+	si[i++].item = itm;
+    cmp_si_sortSpec = sortSpec;
+    qsort( si, i, sizeof(si[0]), cmp_si );
+    // put them back in the list
+    fiList->setAutoDelete( FALSE );
+    fiList->clear();
+    int j;
+    for ( j=0; j<i; j++ ) {
+	fiList->append( si[j].item );
+	fList->append( si[j].item->fileName() );
+    }
+    delete [] si;
+    fiList->setAutoDelete( TRUE );
+
+    if ( filterSpec == (FilterSpec)filtS && sortSpec == (SortSpec)sortS &&
+	 nameFilter == nameFilt )
+	dirty = FALSE;
+    else
+	dirty = TRUE;
+    return TRUE;
+}
+
+
+/*!  Returns a list if the root directories on this system.  On
+  win32, this returns a number of QFileInfo objects containing "C:/",
+  "D:/" etc.  On other operating systems, it returns a list containing
+  just one root directory (e.g. "/").
+*/
+
+const QFileInfoList * QDir::drives()
+{
+    // at most one instance of QFileInfoList is leaked, and this variable
+    // points to that list
+    static QFileInfoList * knownMemoryLeak = 0;
+
+    if ( !knownMemoryLeak ) {
+	knownMemoryLeak = new QFileInfoList;
+
+#if defined(_OS_WIN32_)
+	Q_UINT32 driveBits = (Q_UINT32) GetLogicalDrives() & 0x3ffffff;
+#elif defined(_OS_OS2EMX_)
+	Q_UINT32 driveBits, cur;
+	if (DosQueryCurrentDisk(&cur,&driveBits) != NO_ERROR)
+	    exit(1);
+	driveBits &= 0x3ffffff;
+#endif
+#if defined(_OS_WIN32_) || defined(_OS_OS2EMX_)
+	char driveName[4];
+	qstrcpy( driveName, "a:/" );
+	while( driveBits ) {
+	    if ( driveBits & 1 )
+		knownMemoryLeak->append(
+		      new QFileInfo( QString::fromLatin1(driveName) ) );
+	    driveName[0]++;
+	    driveBits = driveBits >> 1;
+	}
+
+#else
+
+	// non-win32 versions both use just one root directory
+	knownMemoryLeak->append( new QFileInfo( rootDirPath() ) );
+
+#endif
+    }
+
+    return knownMemoryLeak;
+}

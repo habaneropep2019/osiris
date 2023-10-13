@@ -1,43 +1,31 @@
 /****************************************************************************
-** $Id: qt/src/tools/qjpunicode.h   2.3.2   edited 2001-01-26 $
+** $Id: qjpunicode.h,v 2.4 1999/06/14 10:47:49 warwick Exp $
 **
 ** Definition of QJpUnicodeConv class
 **
 ** Created : 990225
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
-** This file is part of the tools module of the Qt GUI Toolkit.
+** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses may use this file in accordance with the Qt Commercial License
-** Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
+*****************************************************************************/
 
 // Most of the code here was originally written by Serika Kurusugawa
 // a.k.a. Junji Takagi, and is include in Qt with the author's permission,
-// and the grateful thanks of the Trolltech team.
+// and the grateful thanks of the Troll Tech team.
 
 /*
  * Copyright (c) 1999 Serika Kurusugawa, All rights reserved.
@@ -67,9 +55,7 @@
 #ifndef QJPUNICODE_H
 #define QJPUNICODE_H
 
-#ifndef QT_H
 #include "qglobal.h"
-#endif // QT_H
 
 
 // "ASCII" is ANSI X.3.4-1986, a.k.a. US-ASCII here.
@@ -91,8 +77,6 @@ class Q_EXPORT QJpUnicodeConv {
 public:
     static const QJpUnicodeConv *newConverter(int rule);
 
-    // ### NOTE: member function names will be changed in Qt 3.0; see doc
-
     virtual uint AsciiToUnicode(uint h, uint l) const;
     /*virtual*/ uint Jisx0201ToUnicode(uint h, uint l) const;
     virtual uint Jisx0201LatinToUnicode(uint h, uint l) const;
@@ -100,28 +84,24 @@ public:
     virtual uint Jisx0208ToUnicode(uint h, uint l) const;
     virtual uint Jisx0212ToUnicode(uint h, uint l) const;
 
-    // ### NOTE: member function names will be changed in Qt 3.0; see doc
-
-    uint AsciiToUnicode(uint ascii) const {
+    inline uint AsciiToUnicode(uint ascii) const {
 	return AsciiToUnicode((ascii & 0xff00) >> 8, (ascii & 0x00ff));
     }
-    uint Jisx0201ToUnicode(uint jis) const {
+    inline uint Jisx0201ToUnicode(uint jis) const {
 	return Jisx0201ToUnicode((jis & 0xff00) >> 8, (jis & 0x00ff));
     }
-    uint Jisx0201LatinToUnicode(uint jis) const {
+    inline uint Jisx0201LatinToUnicode(uint jis) const {
 	return Jisx0201LatinToUnicode((jis & 0xff00) >> 8, (jis & 0x00ff));
     }
-    uint Jisx0201KanaToUnicode(uint jis) const {
+    inline uint Jisx0201KanaToUnicode(uint jis) const {
 	return Jisx0201KanaToUnicode((jis & 0xff00) >> 8, (jis & 0x00ff));
     }
-    uint Jisx0208ToUnicode(uint jis) const {
+    inline uint Jisx0208ToUnicode(uint jis) const {
 	return Jisx0208ToUnicode((jis & 0xff00) >> 8, (jis & 0x00ff));
     }
-    uint Jisx0212ToUnicode(uint jis) const {
+    inline uint Jisx0212ToUnicode(uint jis) const {
 	return Jisx0212ToUnicode((jis & 0xff00) >> 8, (jis & 0x00ff));
     }
-
-    // ### NOTE: member function names will be changed in Qt 3.0; see doc
 
     virtual uint UnicodeToAscii(uint h, uint l) const;
     /*virtual*/ uint UnicodeToJisx0201(uint h, uint l) const;
@@ -130,38 +110,32 @@ public:
     virtual uint UnicodeToJisx0208(uint h, uint l) const;
     virtual uint UnicodeToJisx0212(uint h, uint l) const;
 
-    // ### NOTE: member function names will be changed in Qt 3.0; see doc
-
-    uint UnicodeToAscii(uint unicode) const {
+    inline uint UnicodeToAscii(uint unicode) const {
 	return UnicodeToAscii((unicode & 0xff00) >> 8, (unicode & 0x00ff));
     }
-    uint UnicodeToJisx0201(uint unicode) const {
+    inline uint UnicodeToJisx0201(uint unicode) const {
 	return UnicodeToJisx0201((unicode & 0xff00) >> 8, (unicode & 0x00ff));
     }
-    uint UnicodeToJisx0201Latin(uint unicode) const {
+    inline uint UnicodeToJisx0201Latin(uint unicode) const {
 	return UnicodeToJisx0201Latin((unicode & 0xff00) >> 8, (unicode & 0x00ff));
     }
-    uint UnicodeToJisx0201Kana(uint unicode) const {
+    inline uint UnicodeToJisx0201Kana(uint unicode) const {
 	return UnicodeToJisx0201Kana((unicode & 0xff00) >> 8, (unicode & 0x00ff));
     }
-    uint UnicodeToJisx0208(uint unicode) const {
+    inline uint UnicodeToJisx0208(uint unicode) const {
 	return UnicodeToJisx0208((unicode & 0xff00) >> 8, (unicode & 0x00ff));
     }
-    uint UnicodeToJisx0212(uint unicode) const {
+    inline uint UnicodeToJisx0212(uint unicode) const {
 	return UnicodeToJisx0212((unicode & 0xff00) >> 8, (unicode & 0x00ff));
     }
-
-    // ### NOTE: member function names will be changed in Qt 3.0; see doc
 
     uint SjisToUnicode(uint h, uint l) const;
     uint UnicodeToSjis(uint h, uint l) const;
 
-    // ### NOTE: member function names will be changed in Qt 3.0; see doc
-
-    uint SjisToUnicode(uint sjis) const {
+    inline uint SjisToUnicode(uint sjis) const {
 	return SjisToUnicode((sjis & 0xff00) >> 8, (sjis & 0x00ff));
     }
-    uint UnicodeToSjis(uint unicode) const {
+    inline uint UnicodeToSjis(uint unicode) const {
 	return UnicodeToSjis((unicode & 0xff00) >> 8, (unicode & 0x00ff));
     }
 

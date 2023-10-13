@@ -1,0 +1,63 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta name="robots" content="noindex"><title>Qt tutorial - t9/cannon.cpp</title>
+</head><body bgcolor="#ffffff">
+<p>
+<a href=index.html><img width=122 height=65 src=qtlogo.png alt="Qt logo" align=left border=0></a>
+<center><img src=dochead.png width=448 height=23></center>
+<br clear=all>
+<p>
+<h1 align=center>Source code for <a href="t9.html">tutorial 9</a>: cannon.cpp</h1><br clear="all">
+<hr>
+<pre>/****************************************************************
+**
+** Implementation CannonField class, Qt tutorial 9
+**
+****************************************************************/
+
+#include "cannon.h"
+#include &lt;<a href="qpainter-h.html">qpainter.h</a>&gt;
+
+CannonField::CannonField( <a href="qwidget.html">QWidget</a> *parent, const char *name )
+        : <a href="qwidget.html">QWidget</a>( parent, name )
+{
+    ang = 45;
+    <a href="qwidget.html#379ca0">setPalette</a>( <a href="qpalette.html">QPalette</a>( <a href="qcolor.html">QColor</a>( 250, 250, 200) ) );
+}
+
+void <a name="671"></a>CannonField::setAngle( int degrees )
+{
+    if ( degrees &lt; 5 )
+        degrees = 5;
+    if ( degrees &gt; 70 )
+        degrees = 70;
+    if ( ang == degrees )
+        return;
+    ang = degrees;
+    <a href="qwidget.html#977d49">repaint</a>();
+    emit angleChanged( ang );
+}
+
+void <a name="672"></a>CannonField::paintEvent( <a href="qpaintevent.html">QPaintEvent</a> * )
+{
+    <a href="qpainter.html">QPainter</a> p( this );
+
+    p.<a href="qpainter.html#38e68f">setBrush</a>( blue );
+    p.<a href="qpainter.html#1b9993">setPen</a>( NoPen );
+
+    p.<a href="qpainter.html#ba64b6">translate</a>( 0, <a href="qwidget.html#e872e1">rect</a>().bottom() );
+    p.<a href="qpainter.html#dc4acb">drawPie</a>( <a href="qrect.html">QRect</a>(-35, -35, 70, 70), 0, 90*16 );
+    p.<a href="qpainter.html#4bd0fb">rotate</a>( -ang );
+    p.<a href="qpainter.html#b29a16">drawRect</a>( <a href="qrect.html">QRect</a>(33, -4, 15, 8) );
+}
+
+<a href="qsizepolicy.html">QSizePolicy</a> <a name="673"></a>CannonField::sizePolicy() const
+{
+    return QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding );
+}
+</pre>
+<p>
+
+<p><address><hr><div align="center">
+<table width="100%" cellspacing="0" border="0"><tr>
+<td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.00</div>
+</table></div></address></body></html>

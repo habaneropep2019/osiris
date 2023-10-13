@@ -1,14 +1,11 @@
 /****************************************************************************
-** $Id: qt/examples/dragdrop/dropsite.cpp   2.3.2   edited 2001-01-26 $
+** $Id: dropsite.cpp,v 1.3 1999/06/11 18:17:47 warwick Exp $
 **
 ** Drop site example implementation
 **
 ** Created : 979899
 **
-** Copyright (C) 1997 by Trolltech AS.  All rights reserved.
-**
-** This file is part of an example program for Qt.  This example
-** program may be used, distributed and modified without limitation.
+** Copyright (C) 1997 by Troll Tech AS.  All rights reserved.
 **
 *****************************************************************************/
 
@@ -75,8 +72,6 @@ void DropSite::dragLeaveEvent( QDragLeaveEvent * )
 
 void DropSite::dropEvent( QDropEvent * e )
 {
-    setBackgroundColor(lightGray);
-    
     // Try to decode to the data you understand...
 
     QString str;
@@ -131,22 +126,22 @@ void DragMoviePlayer::updatePixmap( const QRect& )
 
 void DropSite::mousePressEvent( QMouseEvent * /*e*/ )
 {
-    QDragObject *drobj;
+    QDragObject *d;
     if ( pixmap() ) {
-	drobj = new QImageDrag( pixmap()->convertToImage(), this );
+	d = new QImageDrag( pixmap()->convertToImage(), this );
 #if 1
 	QPixmap pm;
 	pm.convertFromImage(pixmap()->convertToImage().smoothScale(
 	    pixmap()->width()/3,pixmap()->height()/3));
-	drobj->setPixmap(pm,QPoint(-5,-7));
+	d->setPixmap(pm,QPoint(-5,-7));
 #else
 	// Try it.
-	(void)new DragMoviePlayer(drobj);
+	(void)new DragMoviePlayer(d);
 #endif
     } else {
-	drobj = new QTextDrag( text(), this );
+	d = new QTextDrag( text(), this );
     }
-    drobj->dragCopy();
+    d->dragCopy();
 }
 
 

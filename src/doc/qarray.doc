@@ -1,37 +1,25 @@
 /****************************************************************************
-** $Id: qt/doc/qarray.doc   2.3.2   edited 2001-05-04 $
+** $Id: qarray.doc,v 2.10 1999/06/09 10:19:37 paul Exp $
 **
 ** QArray class documentation
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses may use this file in accordance with the Qt Commercial License
-** Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
+*****************************************************************************/
 
 
 /*****************************************************************************
@@ -47,14 +35,14 @@
   QArray is implemented as a template class. Define a template
   instance QArray\<X\> to create an array that contains X items.
 
+  The QVector collection class is also a kind of array.  Like all
+  \link collection.html collection classes\endlink, it has pointers to the
+  contained items.
+
   QArray stores the array elements directly in the array. It can only
   deal with simple types, i.e. C++ types, structs and classes that have
   no constructors, destructors or virtual functions.  QArray uses
   bitwise operations to copy and compare array elements.
-
-  The QVector collection class is also a kind of array.  Like most
-  \link collection.html collection classes\endlink, it has pointers to the
-  contained items.
 
   QArray uses explicit \link shclass.html sharing\endlink with a reference
   count.  If more than one array share common data, and one array is
@@ -105,34 +93,6 @@
 	1 is found 2 times
 	5 is found at index 4
   \endcode
-
-  Note about using QArray for manipulating structs or classes:
-  Compilers will often pad the size of structs of odd sizes up to the
-  nearest word boundary. This will then be the size QArray will use
-  for its bitwise element comparisons. Since the remaining bytes will
-  typically be uninitialized, this can cause find() etc. to fail to
-  find the element. Example:
-
-  \code
-    struct MyStruct
-    {
-      short i;                    // 2 bytes
-      char c;                     // 1 byte
-    };                            // sizeof(MyStruct) may be padded to 4 bytes
-
-    QArray<MyStruct> a(1);
-    a[0].i = 5;
-    a[0].c = 't';
-
-    MyStruct x;
-    x.i = '5';
-    x.c = 't';
-    int i = a.find( x );          // May return -1 if the pad bytes differ
-  \endcode
-
-  To workaround this, make sure that you use a struct where sizeof()
-  returns the same as the sum of the sizes of the members, either by
-  changing the types of the struct members or by adding dummy members.
 
   \sa \link shclass.html Shared Classes\endlink
 */
@@ -205,18 +165,11 @@
 */
 
 /*!
-  \fn uint QArray::count() const
-  Returns the same as size().
-
-  \sa size()
-*/
-
-/*!
   \fn bool QArray::isEmpty() const
   Returns TRUE if the array is empty, i.e. size() == 0, otherwise FALSE.
 
   isEmpty() is equivalent with isNull() for QArray.  Note that this is not
-  the case for QCString::isEmpty().
+  the case for QString::isEmpty().
 */
 
 /*!
@@ -250,7 +203,7 @@
 */
 
 /*!
-  \fn bool QArray::fill( const type &v, int size )
+  \fn bool QArray::fill( const type &v, int size=-1 )
   Fills the array with the value \e v. If \e size is specified as different
   from -1, then the array will be resized before filled.
 
@@ -374,25 +327,6 @@
 */
 
 /*!
-  \fn void QArray::sort()
-  Sorts the array elements in ascending order, using bitwise
-  comparison (memcmp()).
-
-  \sa bsearch()
-*/
-
-/*!
-  \fn int QArray::bsearch( const type &v ) const
-  In a sorted array, finds the first occurrence of \e v using binary
-  search. For a sorted array, this is generally much faster than
-  find(), which does a linear search.
-
-  Returns the position of \e v, or -1 if \e v could not be found.
-
-  \sa sort(), find()
-*/
-
-/*!
   \fn type &QArray::operator[]( int index ) const
   Returns a reference to the element at position \e index in the array.
 
@@ -466,21 +400,3 @@
   It is a pointer.
 */
 
-
-/*****************************************************************************
-  QByteArray documentation
- *****************************************************************************/
-
-/*!
-  \class QByteArray qcstring.h
-  \brief The QByteArray class provides an array of bytes.
-
-  \inherit QArray
-
-  \ingroup tools
-
-  The QByteArray class provides an explicitly shared array of
-  bytes. It is useful for manipulating memory areas with custom
-  data. QByteArray is implemented as QArray<char>. See the QArray
-  documentation for further information.
-*/

@@ -1,14 +1,11 @@
 /****************************************************************************
-** $Id: qt/examples/dragdrop/secret.cpp   2.3.2   edited 2001-01-26 $
+** $Id: secret.cpp,v 1.2 1999/06/03 01:44:24 warwick Exp $
 **
 ** Custom MIME type implementation example
 **
 ** Created : 979899
 **
-** Copyright (C) 1997 by Trolltech AS.  All rights reserved.
-**
-** This file is part of an example program for Qt.  This example
-** program may be used, distributed and modified without limitation.
+** Copyright (C) 1997 by Troll Tech AS.  All rights reserved.
 **
 *****************************************************************************/
 

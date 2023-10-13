@@ -1,39 +1,27 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qcolor_x11.cpp   2.3.2   edited 2001-10-14 $
+** $Id: qcolor_x11.cpp,v 2.51 1999/05/23 20:28:17 agulbra Exp $
 **
 ** Implementation of QColor class for X11
 **
 ** Created : 940112
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
-** This file is part of the kernel module of the Qt GUI Toolkit.
+** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses for Unix/X11 may use this file in accordance with the Qt Commercial
-** License Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
+*****************************************************************************/
 
 #include "qcolor.h"
 #include "string.h"
@@ -41,7 +29,6 @@
 #include "qapplication.h"
 #include "qt_x11.h"
 
-// NOT REVISED
 
 /*****************************************************************************
   The color dictionary speeds up color allocation significantly for X11.
@@ -177,9 +164,6 @@ int QColor::numBitPlanes()
 
 void QColor::initialize()
 {
-    static const int blackIdx = 2;
-    static const int whiteIdx = 3;
-
     if ( color_init )				// already initialized
 	return;
     color_init = TRUE;
@@ -200,7 +184,7 @@ void QColor::initialize()
 	CHECK_PTR( g_carr );
 	memset( g_carr, 0, g_cells*sizeof(XColor) );
 	g_carr_fetch = TRUE;		// run XQueryColors on demand
-	g_our_alloc = new bool[g_cells];
+	g_our_alloc = new bool[g_cells];	
 	CHECK_PTR( g_our_alloc );
 	memset( g_our_alloc, FALSE, g_cells*sizeof(bool) );
 	XColor *xc = &g_carr[0];
@@ -227,15 +211,15 @@ void QColor::initialize()
 
   // Initialize global color objects
 
-    globalColors()[blackIdx].rgbVal = qRgb( 0, 0, 0 ) & RGB_MASK;
-    globalColors()[whiteIdx].rgbVal = qRgb( 255, 255, 255 ) & RGB_MASK;
+    ((QColor*)(&Qt::black))->rgbVal = qRgb( 0, 0, 0 );
+    ((QColor*)(&Qt::white))->rgbVal = qRgb( 255, 255, 255 );
     if ( QPaintDevice::x11AppDefaultVisual() &&
 	 QPaintDevice::x11AppDefaultColormap() ) {
-	globalColors()[blackIdx].pix = (uint)BlackPixel( dpy, scr );
-	globalColors()[whiteIdx].pix = (uint)WhitePixel( dpy, scr );
+	((QColor*)(&Qt::black))->pix = (uint)BlackPixel( dpy, scr );
+	((QColor*)(&Qt::white))->pix = (uint)WhitePixel( dpy, scr );
     } else {
-	globalColors()[blackIdx].alloc();
-	globalColors()[whiteIdx].alloc();
+	((QColor*)(&Qt::black))->alloc();
+	((QColor*)(&Qt::white))->alloc();
     }
 
     if ( spec == (int)QApplication::ManyColor ) {
@@ -253,7 +237,7 @@ void QColor::initialize()
 	    int nr = 2;
 	    int ng = 2;
 	    int nb = 2;
-	    for (;;) {
+	    while ( 1 ) {
 		if ( nb*2 < nr && (nb+1)*nr*ng < qt_ncols_option )
 		    nb++;
 		else if ( nr*3 < ng*2 && nb*(nr+1)*ng < qt_ncols_option )
@@ -302,14 +286,10 @@ void QColor::cleanup()
     if ( !color_init )
 	return;
     color_init = FALSE;
-    if ( g_carr ) {
+    if ( g_carr )				// Avoid purify complaint
 	delete [] g_carr;
-	g_carr = 0;
-    }
-    if ( g_our_alloc ) {
+    if ( g_our_alloc )				// Avoid purify complaint
 	delete [] g_our_alloc;
-	g_our_alloc = 0;
-    }
     if ( colorDict ) {
 	colorDict->setAutoDelete( TRUE );
 	colorDict->clear();
@@ -378,7 +358,7 @@ uint QColor::alloc()
 
     do {
 	// This loop is run until we manage to either allocate or
-	// find an approximate color, it stops after a few iterations.
+	// find an approximate color, it stops after 100 iterations.
 
 	try_again = FALSE;
 
@@ -430,16 +410,11 @@ uint QColor::alloc()
 
 	    if ( i == -1 ) {			// no nearest color?!
 		rgbVal |= RGB_INVALID;
-		int unused, value;
-		hsv(&unused, &unused, &value);
-		if (value < 128)
-		    pix = (uint)BlackPixel( dpy, scr );
-		else
-		    pix = (uint)WhitePixel( dpy, scr );
+		pix = (uint)BlackPixel( dpy, scr );
 		return pix;
 	    }
 	    if ( g_our_alloc[i] ) {		// we've already allocated it
-		; // i == g_carr[i].pixel
+		i = (uint)g_carr[i].pixel;//#### not needed
 	    } else {
 		// Try to allocate existing color
 		col = g_carr[i];
@@ -462,16 +437,11 @@ uint QColor::alloc()
 	    }
 	}
 
-    } while ( try_again && try_count < 2 );
+    } while ( try_again && try_count < 100 );
 
     if ( try_again ) {				// no hope of allocating color
 	rgbVal |= RGB_INVALID;
-	int unused, value;
-	hsv(&unused, &unused, &value);
-	if (value < 128)
-	    pix = (uint)BlackPixel( dpy, scr );
-	else
-	    pix = (uint)WhitePixel( dpy, scr );
+	pix = (uint)BlackPixel( dpy, scr );
 	return pix;
     }
     // All colors outside context 0 must go into the dictionary
@@ -545,7 +515,7 @@ static void init_context_stack()
   \code
     QPixmap loadPixmap( QString fileName )
     {
-	static int alloc_context = 0;
+        static int alloc_context = 0;
 	if ( alloc_context )
 	    QColor::destroyAllocContext( alloc_context );
 	alloc_context = QColor::enterAllocContext();
@@ -669,6 +639,7 @@ void QColor::destroyAllocContext( int context )
     uint rgbVal;
     while ( (d=it.current()) ) {
 	rgbVal = (uint)it.currentKey();
+	++it;
 	if ( (d->context || context==-1) &&
 	     (d->context == context || context < 0) )
 	{
@@ -680,7 +651,6 @@ void QColor::destroyAllocContext( int context )
 	    }
 	    colorDict->remove( (long)rgbVal );	// remove from dict
 	}
-	++it;
     }
     if ( i )
 	XFreeColors( QPaintDevice::x11AppDisplay(),

@@ -1,39 +1,27 @@
 /****************************************************************************
-** $Id: qt/src/tools/qasciidict.h   2.3.2   edited 2001-07-29 $
+** $Id: qasciidict.h,v 1.1 1999/06/01 09:30:16 hanord Exp $
 **
 ** Definition of QAsciiDict template class
 **
 ** Created : 920821
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
-** This file is part of the tools module of the Qt GUI Toolkit.
+** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses may use this file in accordance with the Qt Commercial License
-** Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
+*****************************************************************************/
 
 #ifndef QASCIIDICT_H
 #define QASCIIDICT_H
@@ -71,19 +59,8 @@ public:
     void  resize( uint n )		{ QGDict::resize(n); }
     void  statistics() const		{ QGDict::statistics(); }
 private:
-    void  deleteItem( Item d );
+    void  deleteItem( Item d )		{ if ( del_item ) delete (type *)d; }
 };
-
-#if defined(Q_DELETING_VOID_UNDEFINED)
-template<> inline void QAsciiDict<void>::deleteItem( Item )
-{
-}
-#endif
-
-template<class type> inline void QAsciiDict<type>::deleteItem( QCollection::Item d )
-{
-    if ( del_item ) delete (type *)d;
-}
 
 
 template<class type> class Q_EXPORT QAsciiDictIterator : public QGDictIterator

@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><meta name="robots" content="noindex,noarchive"><title>
+Qt Toolkit - qdir/qdir.cpp example file
+</title><style type="text/css"><!--
+h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
+a:link { text-decoration: none; }
+body { background: white; color: black; }
+--></style>
+</head><body bgcolor="#ffffff">
+
+<a href=index.html><img width=122 height=65 src=qtlogo.png alt="Qt logo" align=left border=0></a>
+<center><img src=dochead.png width=448 height=23></center>
+<br clear=all>
+
+<h1 align=center>QDir</h1><br clear="all">
+
+  ???
+
+  <hr>
+
+  Main:
+<pre>/****************************************************************************
+** &#36;Id&#58; qdir.cpp,v 1.2 1999/06/03 01:45:10 warwick Exp $
+**
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+**
+** This file is part of an example program for Qt.  This example
+** program may be used, distributed and modified without limitation.
+**
+*****************************************************************************/
+
+#include &lt;<a name="qapplication.h"></a><a href="qapplication-h.html">qapplication.h</a>&gt;
+#include "<a name="qfiledialog.h"></a><a href="qfiledialog-h.html">qfiledialog.h</a>"
+
+int main( int argc, char ** argv )
+{
+    <a name="QFileDialog::Mode"></a><a href="qfiledialog.html#Mode">QFileDialog::Mode</a> mode = QFileDialog::ExistingFile;
+    <a name="QString"></a><a href="qstring.html">QString</a> start;
+    <a href="qstring.html">QString</a> filter;
+    <a href="qstring.html">QString</a> caption;
+    <a name="QApplication"></a><a href="qapplication.html">QApplication</a> a( argc, argv );
+    for (int i=1; i&lt;argc; i++) {
+        <a href="qstring.html">QString</a> arg = argv[i];
+        if ( arg == "-any" )
+            mode = QFileDialog::AnyFile;
+        else if ( arg == "-dir" )
+            mode = QFileDialog::Directory;
+        else if ( arg == "-default" )
+            start = argv[++i];
+        else if ( arg == "-filter" )
+            filter = argv[++i];
+        else if ( arg[0] == '-' ) {
+            <a name="qDebug"></a><a href="qapplication.html#e09d29">qDebug</a>("Usage: qdir [-any | -dir] [-default f] {-filter f} [caption ...]\n"
+                  "      -any         Get any filename, need not exist.\n"
+                  "      -dir         Return a directory rather than a file.\n"
+                  "      -default f   Start from directory/file f.\n"
+                  "      -filter f    eg. '*.gif' '*.bmp'\n"
+                  "      caption ...  Caption for dialog.\n"
+            );
+            return 1;
+        } else {
+            if ( !caption.<a name="isNull"></a><a href="qstring.html#a2a6ba">isNull</a>() )
+                caption += ' ';
+            caption += arg;
+        }
+    }
+
+    if ( !start )
+        start = QDir::currentDirPath();
+
+    if ( !caption )
+        caption = mode == QFileDialog::Directory
+                    ? "Choose directory..." : "Choose file...";
+
+    <a name="QFileDialog"></a><a href="qfiledialog.html">QFileDialog</a> fd( QString::null, filter, 0, 0, TRUE );
+    fd.<a name="setMode"></a><a href="qfiledialog.html#087344">setMode</a>( mode );
+    fd.<a name="setCaption"></a><a href="qwidget.html#d4f007">setCaption</a>( caption );
+    fd.<a name="setSelection"></a><a href="qfiledialog.html#8e8f0c">setSelection</a>( start );
+    if ( fd.<a name="exec"></a><a href="qdialog.html#633670">exec</a>() == QDialog::Accepted ) {
+        <a href="qstring.html">QString</a> result = fd.<a name="selectedFile"></a><a href="qfiledialog.html#87e5ca">selectedFile</a>();
+        printf("%s\n", (const char*)result);
+        return 0;
+    } else {
+        return 1;
+    }
+}
+</pre>
+<p><address><hr><div align="center">
+<table width="100%" cellspacing="0" border="0"><tr>
+<td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.00</div>
+</table></div></address></body></html>

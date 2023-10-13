@@ -1,81 +1,60 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qdrawutil.cpp   2.3.2   edited 2001-01-26 $
+** $Id: qdrawutil.cpp,v 2.39 1999/05/23 20:28:22 agulbra Exp $
 **
 ** Implementation of draw utilities
 **
 ** Created : 950920
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
-** This file is part of the kernel module of the Qt GUI Toolkit.
+** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses may use this file in accordance with the Qt Commercial License
-** Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
+*****************************************************************************/
 
 #include "qdrawutil.h"
-#ifndef QT_NO_DRAWUTIL
 #include "qbitmap.h"
 #include "qpixmapcache.h"
-
-// REVISED: paul
 
 /*!
   \relates QPainter
 
-  <code>#include &lt;qdrawutil.h&gt;</code>
+  Draws a horizontal (\e y1 == \e y2) or vertical (\e x1 == \e x2) shaded
+  line using the painter \e p.
 
-  Draws a horizontal (\a y1 == \a y2) or vertical (\a x1 == \a x2) shaded
-  line using the painter \a p.
+  Nothing is drawn if \e y1 != y2 and \e x1 != x2 (i.e. the line is neither
+  horizontal nor vertical).
 
-  Nothing is drawn if \a y1 != \a y2 and \a x1 != \a x2 (i.e. the line
-  is neither horizontal nor vertical).
-
-  The color group argument \a g specifies the shading colors
+  The color group argument \e g specifies the shading colors
   (\link QColorGroup::light() light\endlink,
   \link QColorGroup::dark() dark\endlink and
   \link QColorGroup::mid() middle\endlink colors).
 
-  The line appears sunken if \a sunken is TRUE, or raised if \a sunken is
+  The line appears sunken if \e sunken is TRUE, or raised if \e sunken is
   FALSE.
 
-  The \a lineWidth argument specifies the line width for each of the
+  The \e lineWidth argument specifies the line width for each of the
   lines. It is not the total line width.
 
-  The \a midLineWidth argument specifies the width of a middle line drawn
+  The \e midLineWidth argument specifies the width of a middle line drawn
   in the QColorGroup::mid() color.
 
   If you want to use a QFrame widget instead, you can make it display a
   shaded line, for example
   <code>QFrame::setFrameStyle( QFrame::HLine | QFrame::Sunken )</code>.
 
-  \warning This function does not look at QWidget::style()
-  or QApplication::style(). Use the drawing functions in QStyle to make
-  widgets that follow the current GUI style.
-
-  \sa qDrawShadeRect(), qDrawShadePanel(), QStyle::drawSeparator()
+  \sa qDrawShadeRect(), qDrawShadePanel()
 */
 
 void qDrawShadeLine( QPainter *p, int x1, int y1, int x2, int y2,
@@ -164,38 +143,30 @@ void qDrawShadeLine( QPainter *p, int x1, int y1, int x2, int y2,
 /*!
   \relates QPainter
 
-  <code>#include &lt;qdrawutil.h&gt;</code>
+  Draws a shaded rectangle/box given by \e (x,y,w,h) using the painter \e p.
 
-  Draws a shaded rectangle/box given by (\a x, \a y, \a w, \a h)
-  using the painter \a p.
-
-  The color group argument \a g specifies the shading colors
+  The color group argument \e g specifies the shading colors
   (\link QColorGroup::light() light\endlink,
   \link QColorGroup::dark() dark\endlink and
   \link QColorGroup::mid() middle\endlink colors).
 
-  The rectangle appears sunken if \a sunken is TRUE, or raised if \a
+  The rectangle appears sunken if \e sunken is TRUE, or raised if \e
   sunken is FALSE.
 
-  The \a lineWidth argument specifies the line width for each of the
+  The \e lineWidth argument specifies the line width for each of the
   lines. It is not the total line width.
 
-  The \a midLineWidth argument specifies the width of a middle line drawn
+  The \e midLineWidth argument specifies the width of a middle line drawn
   in the QColorGroup::mid() color.
 
-  The rectangle interior is filled with the \a fill brush unless \a fill
+  The rectangle interior is filled with the \e *fill brush unless \e fill
   is null.
 
   If you want to use a QFrame widget instead, you can make it display a
   shaded rectangle, for example
   <code>QFrame::setFrameStyle( QFrame::Box | QFrame::Raised )</code>.
 
-  \warning This function does not look at QWidget::style()
-  or QApplication::style(). Use the drawing functions in QStyle to make
-  widgets that follow the current GUI style.
-
-  \sa qDrawShadeLine(), qDrawShadePanel(), qDrawPlainRect(),
-  QStyle::drawRect(), QStyle::drawRectStrong()
+  \sa qDrawShadeLine(), qDrawShadePanel(), qDrawPlainRect()
 */
 
 void qDrawShadeRect( QPainter *p, int x, int y, int w, int h,
@@ -277,34 +248,26 @@ void qDrawShadeRect( QPainter *p, int x, int y, int w, int h,
 /*!
   \relates QPainter
 
-  <code>#include &lt;qdrawutil.h&gt;</code>
+  Draws a shaded panel given by \e (x,y,w,h) using the painter \e p.
 
-  Draws a shaded panel given by (\a x, \a y, \a w, \a h)
-  using the painter \a p.
-
-  The color group argument \a g specifies the shading colors
+  The color group argument \e g specifies the shading colors
   (\link QColorGroup::light() light\endlink,
   \link QColorGroup::dark() dark\endlink and
   \link QColorGroup::mid() middle\endlink colors).
 
-  The panel appears sunken if \a sunken is TRUE, or raised if \a sunken is
+  The panel appears sunken if \e sunken is TRUE, or raised if \e sunken is
   FALSE.
 
-  The \a lineWidth argument specifies the line width.
+  The \e lineWidth argument specifies the line width.
 
-  The panel interior is filled with the \a fill brush unless \a fill is
+  The panel interior is filled with the \e *fill brush unless \e fill is
   null.
 
   If you want to use a QFrame widget instead, you can make it display a
   shaded panel, for example
   <code>QFrame::setFrameStyle( QFrame::Panel | QFrame::Sunken )</code>.
 
-  \warning This function does not look at QWidget::style()
-  or QApplication::style(). Use the drawing functions in QStyle to make
-  widgets that follow the current GUI style.
-
-
-  \sa qDrawWinPanel(), qDrawShadeLine(), qDrawShadeRect(), QStyle::drawPanel()
+  \sa qDrawWinPanel(), qDrawShadeLine(), qDrawShadeRect()
 */
 
 void qDrawShadePanel( QPainter *p, int x, int y, int w, int h,
@@ -393,7 +356,7 @@ static void qDrawWinShades( QPainter *p,
 			   const QColor &c3, const QColor &c4,
 			   const QBrush *fill )
 {
-    if ( w < 2 || h < 2 )			// can't do anything with that
+    if ( w < 2 || h < 2 )			// nothing to draw
 	return;
     QPen oldPen = p->pen();
     QPointArray a( 3 );
@@ -433,29 +396,22 @@ static void qDrawWinShades( QPainter *p,
 /*!
   \relates QPainter
 
-  <code>#include &lt;qdrawutil.h&gt;</code>
+  Draws a Windows-style button given by \e (x,y,w,h) using the painter \e p.
 
-  Draws a Windows-style button given by (\a x, \a y, \a w, \a h)
-  using the painter \a p.
-
-  The color group argument \a g specifies the shading colors
+  The color group argument \e g specifies the shading colors
   (\link QColorGroup::light() light\endlink,
   \link QColorGroup::dark() dark\endlink and
   \link QColorGroup::mid() middle\endlink colors).
 
-  The button appears sunken if \a sunken is TRUE, or raised if \a sunken
+  The button appears sunken if \e sunken is TRUE, or raised if \e sunken
   is FALSE.
 
   The line width is 2 pixels.
 
-  The button interior is filled with the \a *fill brush unless \a fill is
+  The button interior is filled with the \e *fill brush unless \e fill is
   null.
 
-  \warning This function does not look at QWidget::style()
-  or QApplication::style(). Use the drawing functions in QStyle to make
-  widgets that follow the current GUI style.
-
-  \sa qDrawWinPanel(), QStyle::drawButton()
+  \sa qDrawWinPanel()
 */
 
 void qDrawWinButton( QPainter *p, int x, int y, int w, int h,
@@ -473,30 +429,23 @@ void qDrawWinButton( QPainter *p, int x, int y, int w, int h,
 /*!
   \relates QPainter
 
-  <code>#include &lt;qdrawutil.h&gt;</code>
+  Draws a Windows-style panel given by \e (x,y,w,h) using the painter \e p.
 
-  Draws a Windows-style panel given by (\a x, \a y, \a w, \a h)
-  using the painter \a p.
+  The color group argument \e g specifies the shading colors.
 
-  The color group argument \a g specifies the shading colors.
-
-  The panel appears sunken if \a sunken is TRUE, or raised if \a sunken is
+  The panel appears sunken if \e sunken is TRUE, or raised if \e sunken is
   FALSE.
 
   The line width is 2 pixels.
 
-  The button interior is filled with the \a fill brush unless \a fill is
+  The button interior is filled with the \e *fill brush unless \e fill is
   null.
 
   If you want to use a QFrame widget instead, you can make it display a
   shaded panel, for example
   <code>QFrame::setFrameStyle( QFrame::WinPanel | QFrame::Raised )</code>.
 
-  \warning This function does not look at QWidget::style()
-  or QApplication::style(). Use the drawing functions in QStyle to make
-  widgets that follow the current GUI style.
-
-  \sa qDrawShadePanel(), qDrawWinButton(), QStyle::drawPanel()
+  \sa qDrawShadePanel(), qDrawWinButton()
 */
 
 void qDrawWinPanel( QPainter *p, int x, int y, int w, int h,
@@ -505,37 +454,30 @@ void qDrawWinPanel( QPainter *p, int x, int y, int w, int h,
 {
     if ( sunken )
 	qDrawWinShades( p, x, y, w, h,
-			g.dark(), g.light(), g.shadow(), g.midlight(), fill );
+		       g.dark(), g.light(), g.shadow(), g.midlight(), fill );
     else
 	qDrawWinShades( p, x, y, w, h,
-			g.midlight(), g.shadow(), g.light(), g.dark(), fill );
+		       g.midlight(), g.shadow(), g.light(), g.dark(), fill );
 }
 
 
 /*!
   \relates QPainter
 
-  <code>#include &lt;qdrawutil.h&gt;</code>
+  Draws a plain rectangle given by \e (x,y,w,h) using the painter \e p.
 
-  Draws a plain rectangle given by (\a x, \a y, \a w, \a h)
-  using the painter \a p.
+  The color argument \e c specifies the line color.
 
-  The color argument \a c specifies the line color.
+  The \e lineWidth argument specifies the line width.
 
-  The \a lineWidth argument specifies the line width.
-
-  The rectangle interior is filled with the \a fill brush unless \a fill
+  The rectangle interior is filled with the \e *fill brush unless \e fill
   is null.
 
   If you want to use a QFrame widget instead, you can make it display a
-  plain rectangle, for example
+  shaded rectangle, for example
   <code>QFrame::setFrameStyle( QFrame::Box | QFrame::Plain )</code>.
 
-  \warning This function does not look at QWidget::style()
-  or QApplication::style(). Use the drawing functions in QStyle to make
-  widgets that follow the current GUI style.
-
-  \sa qDrawShadeRect(), QStyle::drawRect()
+  \sa qDrawShadeRect()
 */
 
 void qDrawPlainRect( QPainter *p, int x, int y, int w, int h, const QColor &c,
@@ -604,7 +546,7 @@ void qDrawItem( QPainter *p, Qt::GUIStyle gs,
 		const QPixmap *pixmap,
 		const QString& text, int len , const QColor* penColor )
 {
-    p->setPen( penColor?*penColor:g.foreground() );
+    p->setPen( penColor?*penColor:g.text() );
     if ( pixmap ) {
 	QPixmap  pm( *pixmap );
 	bool clip = (flags & Qt::DontClip) == 0;
@@ -806,9 +748,7 @@ static void qDrawMotifArrow( QPainter *p, Qt::ArrowType type, bool down,
     QPointArray bTop;				// top shadow.
     QPointArray bBot;				// bottom shadow.
     QPointArray bLeft;				// left shadow.
-#ifndef QT_NO_TRANSFORMATIONS
     QWMatrix	matrix;				// xform matrix
-#endif
     bool vertical = type == Qt::UpArrow || type == Qt::DownArrow;
     bool horizontal = !vertical;
     int	 dim = w < h ? w : h;
@@ -857,7 +797,6 @@ static void qDrawMotifArrow( QPainter *p, Qt::ArrowType type, bool down,
     }
 
     if ( type == Qt::UpArrow || type == Qt::LeftArrow ) {
-#ifndef QT_NO_TRANSFORMATIONS	// #### fix me!
 	matrix.translate( x, y );
 	if ( vertical ) {
 	    matrix.translate( 0, h - 1 );
@@ -866,20 +805,17 @@ static void qDrawMotifArrow( QPainter *p, Qt::ArrowType type, bool down,
 	    matrix.translate( w - 1, h - 1 );
 	    matrix.rotate( 180 );
 	}
-#endif
 	if ( down )
 	    colspec = horizontal ? 0x2334 : 0x2343;
 	else
 	    colspec = horizontal ? 0x1443 : 0x1434;
     }
     else if ( type == Qt::DownArrow || type == Qt::RightArrow ) {
-#ifndef QT_NO_TRANSFORMATIONS	// #### fix me!
 	matrix.translate( x, y );
 	if ( vertical ) {
 	    matrix.translate( w-1, 0 );
 	    matrix.rotate( 90 );
 	}
-#endif
 	if ( down )
 	    colspec = horizontal ? 0x2443 : 0x2434;
 	else
@@ -899,17 +835,13 @@ static void qDrawMotifArrow( QPainter *p, Qt::ArrowType type, bool down,
 
     QPen     savePen   = p->pen();		// save current pen
     QBrush   saveBrush = p->brush();		// save current brush
-#ifndef QT_NO_TRANSFORMATIONS
     QWMatrix wxm = p->worldMatrix();
-#endif
     QPen     pen( Qt::NoPen );
     QBrush brush = g.brush( QColorGroup::Button );
 
     p->setPen( pen );
     p->setBrush( brush );
-#ifndef QT_NO_TRANSFORMATIONS
     p->setWorldMatrix( matrix, TRUE );		// set transformation matrix
-#endif
     p->drawPolygon( bFill );			// fill arrow
     p->setBrush( Qt::NoBrush );			// don't fill
 
@@ -920,9 +852,7 @@ static void qDrawMotifArrow( QPainter *p, Qt::ArrowType type, bool down,
     p->setPen( CBOT );
     p->drawLineSegments( bBot );
 
-#ifndef QT_NO_TRANSFORMATIONS
     p->setWorldMatrix( wxm );
-#endif
     p->setBrush( saveBrush );			// restore brush
     p->setPen( savePen );			// restore pen
 
@@ -952,4 +882,3 @@ void qDrawArrow( QPainter *p, Qt::ArrowType type, Qt::GUIStyle style, bool down,
 #endif
     }
 }
-#endif //QT_NO_DRAWUTIL

@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><meta name="robots" content="noindex,noarchive"><title>
+Qt Toolkit - qwizard.h include file
+</title><style type="text/css"><!--
+h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
+a:link { text-decoration: none; }
+body { background: white; color: black; }
+--></style>
+</head><body bgcolor="#ffffff">
+
+<a href=index.html><img width=122 height=65 src=qtlogo.png alt="Qt logo" align=left border=0></a>
+<center><img src=dochead.png width=448 height=23></center>
+<br clear=all>
+
+<h1 align=center>qwizard.h</h1><br clear="all">
+This is the verbatim text of the qwizard.h include file.  It is
+provided only for illustration; the copyright
+remains with Troll Tech.
+<hr>
+<pre>
+/****************************************************************************
+** &#36;Id&#58; qwizard.h,v 2.9 1999/05/25 15:43:42 warwick Exp $
+**
+** Definition of the QWizard wizard framework
+**
+** Created : 990101
+**
+** Copyright (C) 1999 by Troll Tech AS.  All rights reserved.
+**
+****************************************************************************/
+
+#ifndef QWIZARDDIALOG_H
+#define QWIZARDDIALOG_H
+
+
+#ifndef QT_H
+#include "qdialog.h"
+#endif // QT_H
+
+
+class QWizardPrivate;
+class QWizardPagePrivate;
+class <a href="qwizard.html">QWizard</a>;
+
+class <a href="qhboxlayout.html">QHBoxLayout</a>;
+
+
+class Q_EXPORT <a href="qwizard.html">QWizard</a> : public <a href="qdialog.html">QDialog</a>
+{
+    Q_OBJECT
+public:
+    QWizard( QWidget *parent=0, const char *name=0, bool modal=FALSE,
+             WFlags f=0 );
+    ~QWizard();
+
+    void show();
+    void setFont( const QFont &amp; font );
+
+    virtual void addPage( QWidget *, const QString &amp; );
+    virtual void removePage( QWidget * );
+
+    QString title( QWidget * ) const;
+
+    virtual void showPage( QWidget * );
+
+    QWidget * currentPage() const;
+
+    virtual bool appropriate( QWidget * ) const;
+    virtual void setAppropriate( QWidget *, bool );
+
+    //bool backEnabled( QWidget * ) const;
+    //bool nextEnabled( QWidget * ) const;
+    //bool helpEnabled( QWidget * ) const;
+
+    QPushButton * backButton() const;
+    QPushButton * nextButton() const;
+    QPushButton * finishButton() const;
+    QPushButton * cancelButton() const;
+    QPushButton * helpButton() const;
+
+    bool eventFilter( QObject *, QEvent * );
+
+public slots:
+    virtual void setBackEnabled( QWidget *, bool );
+    virtual void setNextEnabled( QWidget *, bool );
+    virtual void setFinishEnabled( QWidget *, bool );
+
+    virtual void setHelpEnabled( QWidget *, bool );
+
+    virtual void setFinish(  QWidget *, bool );
+
+protected slots:
+    virtual void back();
+    virtual void next();
+    virtual void help();
+
+signals:
+    void helpClicked();
+
+protected:
+    virtual void layOutButtonRow( QHBoxLayout * );
+    virtual void layOutTitleRow( QHBoxLayout *, const QString &amp; );
+
+private:
+    void setBackEnabled( bool );
+    void setNextEnabled( bool );
+
+    void setHelpEnabled( bool );
+
+    void setNextPage( QWidget * );
+
+    void updateButtons();
+
+    int count() const;
+
+    void layOut();
+    QWizardPrivate *d;
+};
+
+
+#endif
+
+</pre>
+<p><address><hr><div align="center">
+<table width="100%" cellspacing="0" border="0"><tr>
+<td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.00</div>
+</table></div></address></body></html>

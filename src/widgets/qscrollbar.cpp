@@ -1,132 +1,118 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qscrollbar.cpp   2.3.2   edited 2001-01-26 $
+** $Id: qscrollbar.cpp,v 2.78 1999/06/20 13:23:41 ettrich Exp $
 **
 ** Implementation of QScrollBar class
 **
 ** Created : 940427
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
-** This file is part of the widgets module of the Qt GUI Toolkit.
+** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses may use this file in accordance with the Qt Commercial License
-** Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
+*****************************************************************************/
 
 #include "qscrollbar.h"
-#ifndef QT_NO_SCROLLBAR
 #include "qpainter.h"
 #include "qbitmap.h"
 #include "qapplication.h"
 #include "qtimer.h"
 #include <limits.h>
 
-// REVISED: warwick
 /*!
   \class QScrollBar qscrollbar.h
 
   \brief The QScrollBar widget provides a vertical or horizontal scroll bar.
 
-  \ingroup basic
+  \ingroup realwidgets
 
-  A scroll bar allows the user to control a value within a
+  A scroll bar is used to let the user control a value within a
   program-definable range, and to give the user visible indication of
   the current value of a \link QRangeControl range control \endlink.
 
-  Scroll bars include four separate controls:
-  <ul>
-   <li> The \e line-up and \e line-down controls are little button with
-    which the user can move one line up or down.  The meaning of "line"
-    is configurable.  In editors and list boxes it means one line of text,
-    while an image viewer it might mean 20 pixels.
-   <li> The \e slider is the handle that indicates the current value
-    of the scroll bar, and which the user can drag to change the value.
-    This part of the scroll bar is sometimes called the "thumb".
-   <li> The \a page-up/down control is the area on which the slider
-    slides (the scroll bar's background).  Clicking here moves the scroll
-    bar towards the click.  The meaning of page is also configurable
-    - in editors and list boxes it means as many lines as there is space
-    for in the widget.
-  </ul>
+  Scroll bars include four separate controls, in order: <ul> <li> The
+  \e line-up control is a little triangle with which the user can move
+  one line up.  The meaning of line is configurable. In e.g. editors
+  and list boxes means one line of text.  <li> The \e slider is the
+  handle that indicates the current value of the scroll bar, and which
+  the user can drag to change the value.  <li> The \a page-up/down
+  control is the area on which the slider slides (the scroll bar's
+  background).  Clicking here moves the scroll bar up or down one
+  page.  The meaning of page too is configurable - in editors and list
+  boxes it means as many lines as there is space for in the widget.
+  <li> Finally, the line-down control is the arrow on the other end of
+  the scroll bar.  Clicking there moves the scroll bar down/rightwards
+  one line.</ul>
 
   QScrollBar has not much of an API of its own; it mostly relies on
   QRangeControl.  The most useful functions are setValue() to set the
-  scroll bar directly to some value; addPage(), addLine(), subtractPage()
-  and subtractLine() to simulate the effects of clicking (useful for
+  scrollbar directly to some value; addPage(), addLine(), subPage()
+  and subLine() to simulate the effects of clicking (neat for
   accelerator keys; setSteps() to define the values of pageStep() and
-  lineStep(); and setRange() to set the minValue()
-  and maxValue() of the scroll bar.  QScrollBar has a convenience
-  constructor with which you can set most of these properties.
+  lineStep(); and last but NOT least setRange() to set the minValue()
+  and maxValue() of the scrollbar.  (QScrollBar has a convenience
+  constructor with which you can set most of that.)
 
   Some GUI styles, for example the provided Windows and Motif styles,
-  also use the pageStep() value to calculate the size of the slider.
+  also use the pageStep() value to calculate the size of the sliding
+  thumb (scroll indicator).
 
   In addition to the access functions from QRangeControl, QScrollBar
-  has a comprehensive set of signals:
-  <ul>
+  has a comprehensive set of signals: <ul>
+
   <li> valueChanged() - emitted when the scroll bar's value has changed.
-	  The tracking() determines whether this signal is emitted
-	    \e during interaction.
+
   <li> sliderPressed() - emitted when the user starts to drag the
-	  slider
+  slider
+
   <li> sliderMoved() - emitted when the user drags the slider
+
   <li> sliderReleased() - emitted when the user releases the slider
+
   <li> nextLine() - emitted when the scroll bar has moved one line
-	  down/rightwards.  Line is defined in QRangeControl.
+  down/rightwards.  Line is defined in QRangeControl.
+
   <li> prevLine() - emitted when the scroll bar has moved one line
-	  up/leftwards.
+  up/leftwards.
+
   <li> nextPage() - emitted when the scroll bar has moved one page
-	  down/rightwards.
+  down/rightwards.
+
   <li> prevPage() - emitted when the scroll bar has moved one page
-      up/leftwards.
+  up/leftwards.
+
   </ul>
 
-  QScrollBar only offers integer ranges.  Note that while QScrollBar
-  handles very large numbers, scroll bars on today's screens cannot
-  usefully control ranges above about 100,000 pixels.  Beyond that,
-  it becomes difficult for the user to control the
-  scroll bar using either keyboard or mouse.
+  QScrollBar only offers integer ranges, and the current
+  implementation has problems when the range is greater than a million
+  or so.  (A million is more than sufficient for today's display
+  sizes, however.)
 
   A scroll bar can be controlled by the keyboard, but it has a
   default focusPolicy() of \c NoFocus. Use setFocusPolicy() to
-  enable keyboard focus. See keyPressEvent() for a list of
-  key bindings.
-
-  If you need to add scrollbars to an interface, consider using the
-  QScrollView class which encapsulates the common uses for scrollbars.
+  enable keyboard focus.
 
   <img src=qscrbar-m.png> <img src=qscrbar-w.png>
 
-  \sa QSlider QSpinBox QScrollView
+  \sa QSlider QSpinBox
   <a href="guibooks.html#fowler">GUI Design Handbook: Scroll Bar</a>
 */
 
 
 /*!
   \fn void QScrollBar::valueChanged( int value )
-  This signal is emitted when the scroll bar value has changed, with the
+  This signal is emitted when the scroll bar value is changed, with the
   new scroll bar value as an argument.
 */
 
@@ -189,7 +175,7 @@ static const int repeatTime	= 50;
 */
 
 QScrollBar::QScrollBar( QWidget *parent, const char *name )
-    : QWidget( parent, name )
+    : QWidget( parent, name, WResizeNoErase )
 {
     orient = Vertical;
     init();
@@ -205,7 +191,7 @@ QScrollBar::QScrollBar( QWidget *parent, const char *name )
 
 QScrollBar::QScrollBar( Orientation orientation, QWidget *parent,
 			const char *name )
-    : QWidget( parent, name )
+    : QWidget( parent, name, WResizeNoErase )
 {
     orient = orientation;
     init();
@@ -217,8 +203,7 @@ QScrollBar::QScrollBar( Orientation orientation, QWidget *parent,
   \arg \e minValue is the minimum scroll bar value.
   \arg \e maxValue is the maximum scroll bar value.
   \arg \e lineStep is the line step value.
-  \arg \e pageStep is the page step value. It is also used to calculate the size
-	    of the slider.
+  \arg \e pageStep is the page step value. It is also used to calculate the size of the sliding thumb (scroll indicator).
   \arg \e value is the initial value.
   \arg \e orientation must be QScrollBar::Vertical or QScrollBar::Horizontal.
 
@@ -228,7 +213,7 @@ QScrollBar::QScrollBar( Orientation orientation, QWidget *parent,
 QScrollBar::QScrollBar( int minValue, int maxValue, int lineStep, int pageStep,
 			int value,  Orientation orientation,
 			QWidget *parent, const char *name )
-    : QWidget( parent, name ),
+    : QWidget( parent, name, WResizeNoErase ),
       QRangeControl( minValue, maxValue, lineStep, pageStep, value )
 {
     orient = orientation;
@@ -250,11 +235,6 @@ void QScrollBar::init()
 	setBackgroundMode( PaletteMid );
     else
 	setBackgroundMode( PaletteBackground );
-
-    if ( orient == Horizontal )
-	setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Fixed ) );
-    else
-	setSizePolicy( QSizePolicy(  QSizePolicy::Fixed, QSizePolicy::Minimum ) );
 }
 
 
@@ -266,21 +246,14 @@ void QScrollBar::init()
 
 void QScrollBar::setOrientation( Orientation orientation )
 {
-    if ( (uint) orientation == orient )
-	return;
-
-    QSizePolicy pol = sizePolicy();
-    setSizePolicy( QSizePolicy( pol.verData(), pol.horData() ) );
-	
     orient = orientation;
-
     positionSliderFromValue();
     update();
 }
 
 /*!
   \fn Orientation QScrollBar::orientation() const
-  Returns the orientation of the scroll bar; QScrollBar::Vertical or
+  Returns the scroll bar orientation; QScrollBar::Vertical or
   QScrollBar::Horizontal.
   \sa setOrientation()
 */
@@ -290,11 +263,11 @@ void QScrollBar::setOrientation( Orientation orientation )
   Enables scroll bar tracking if \e enable is TRUE, or disables tracking
   if \e enable is FALSE.
 
-  If tracking is enabled (the default), the scroll bar emits the
-  valueChanged() signal while the slider is being dragged.  If
+  If tracking is enabled (default), the scroll bar emits the
+  valueChanged() signal whenever the slider is being dragged.  If
   tracking is disabled, the scroll bar emits the valueChanged() signal
-  only when the user releases the mouse button after moving the
-  slider.
+  when the user releases the mouse button (unless the value happens to
+  be the same as before).
 
   \sa tracking()
 */
@@ -336,26 +309,31 @@ void QScrollBar::setPalette( const QPalette &p )
 }
 
 
-/*!\reimp
+/*!
+  Returns a size hint for this scroll bar.
 */
+
 QSize QScrollBar::sizeHint() const
 {
-    constPolish();
-    QSize sbextent = style().scrollBarExtent();
-
     if ( orient == Horizontal ) {
-	return QSize( 30, sbextent.height() );
+	return QSize( 30, 16 );
     } else {
-	return QSize( sbextent.width(), 30 );
+	return QSize( 16, 30 );
     }
 }
 
-/*!\reimp
+/*!
+  Specifies that this widget can use more, but is able to survive on
+  less, space in the orientation() direction; and is fixed in the other
+  direction.
 */
+
 QSizePolicy QScrollBar::sizePolicy() const
 {
-    //### removeme 3.0
-    return QWidget::sizePolicy();
+    if ( orient == Horizontal )
+	return QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Fixed );
+    else
+	return QSizePolicy(  QSizePolicy::Fixed, QSizePolicy::Minimum );
 }
 
 
@@ -369,8 +347,7 @@ void QScrollBar::valueChange()
     int tmp = sliderPos;
     positionSliderFromValue();
     if ( tmp != sliderPos )
-	drawControls( QStyle::AddPage | QStyle::Slider | QStyle::SubPage,
-		      pressedControl );
+	drawControls( QStyle::AddPage | QStyle::Slider | QStyle::SubPage , pressedControl );
     emit valueChanged(value());
 }
 
@@ -393,7 +370,7 @@ void QScrollBar::rangeChange()
 {
     positionSliderFromValue();
     drawControls( QStyle::AddLine | QStyle::AddPage | QStyle::Slider |
-		  QStyle::SubPage | QStyle::SubLine | QStyle::First | QStyle::Last,
+		  QStyle::SubPage | QStyle::SubLine,
 		  pressedControl );
 }
 
@@ -440,7 +417,8 @@ void QScrollBar::stopAutoRepeat()
 }
 
 
-/*!\reimp
+/*!
+  Handles wheel events for the scroll bar.
 */
 void QScrollBar::wheelEvent( QWheelEvent *e ){
     static float offset = 0;
@@ -450,11 +428,7 @@ void QScrollBar::wheelEvent( QWheelEvent *e ){
 	offset = 0;
     }
     e->accept();
-    int step = QMIN( QApplication::wheelScrollLines()*lineStep(),
-		     pageStep() );
-    if ( e->state() & ControlButton )
-	step = pageStep();
-    offset += -e->delta()*step/120;
+    offset += -e->delta()*QMAX(pageStep()/8,2*lineStep())/120;
     if (QABS(offset)<1)
 	return;
     setValue( value() + int(offset) );
@@ -462,22 +436,12 @@ void QScrollBar::wheelEvent( QWheelEvent *e ){
 }
 
 
-/*!\reimp
+/*!
+  Handles key press events for the scroll bar.
 */
+
 void QScrollBar::keyPressEvent( QKeyEvent *e )
 {
-    //   <ul>
-    //     <li>Left/Right move a horizontal scrollbar by one line.
-    //     <li>Up/Down move a vertical scrollbar by one line.
-    //     <li>PageUp moves up one page.
-    //     <li>PageDown moves down one page.
-    //     <li>Home moves to the start (minValue()).
-    //     <li>End moves to the end (maxValue()).
-    //   </ul>
-
-    //   Note that unless you call setFocusPolicy(), the default NoFocus
-    //   will apply and the user will not be able to use the keyboard to
-    //   interact with the scrollbar.
     switch ( e->key() ) {
     case Key_Left:
 	if ( orient == Horizontal )
@@ -514,28 +478,34 @@ void QScrollBar::keyPressEvent( QKeyEvent *e )
 }
 
 
-/*!\reimp
+/*!
+  Handles resize events for the scroll bar.
 */
+
 void QScrollBar::resizeEvent( QResizeEvent * )
 {
     positionSliderFromValue();
+    repaint(rect());
 }
 
 
-/*!\reimp
+/*!
+  Handles paint events for the scroll bar.
 */
+
 void QScrollBar::paintEvent( QPaintEvent * )
 {
     QPainter p( this );
-    drawControls( QStyle::AddLine | QStyle::SubLine | QStyle::AddPage |
-		  QStyle::SubPage | QStyle::Slider | QStyle::First | QStyle::Last,
-		  pressedControl, &p );
+    drawControls( QStyle::AddLine | QStyle::SubLine | QStyle::AddPage | QStyle::SubPage | QStyle::Slider,
+			pressedControl, &p );
 }
 
 static QCOORD sliderStartPos = 0;
 
-/*!\reimp
+/*!
+  Handles mouse press events for the scroll bar.
 */
+
 void QScrollBar::mousePressEvent( QMouseEvent *e )
 {
     if ( !(e->button() == LeftButton ||
@@ -553,11 +523,10 @@ void QScrollBar::mousePressEvent( QMouseEvent *e )
 	  pressedControl == QStyle::Slider ) &&
 	 /*style() == MotifStyle &&*/
 	 e->button() == MidButton ) {
-	int sliderMin, dummy2, dummy3, sliderLength;
-	metrics( sliderMin, dummy2, sliderLength, dummy3 );
+	int dummy1, dummy2, dummy3, sliderLength;
+	metrics( dummy1, dummy2, sliderLength, dummy3 );
 	int newSliderPos = (HORIZONTAL ? e->pos().x() : e->pos().y())
 			   - sliderLength/2;
-	newSliderPos = QMAX( sliderMin, newSliderPos );
 	setValue( sliderPosToRangeValue(newSliderPos) );
 	sliderPos = newSliderPos;
 	pressedControl = QStyle::Slider;
@@ -568,7 +537,6 @@ void QScrollBar::mousePressEvent( QMouseEvent *e )
 				- sliderPos );
 	slidePrevVal   = value();
 	sliderStartPos = sliderPos;
-	drawControls( pressedControl, pressedControl );
 	emit sliderPressed();
     } else if ( pressedControl != QStyle::NoScroll ) {
 	drawControls( pressedControl, pressedControl );
@@ -578,8 +546,10 @@ void QScrollBar::mousePressEvent( QMouseEvent *e )
 }
 
 
-/*!\reimp
+/*!
+  Handles mouse release events for the scroll bar.
 */
+
 void QScrollBar::mouseReleaseEvent( QMouseEvent *e )
 {
     if ( !clickedAt || !( e->button() == LeftButton ||
@@ -598,13 +568,13 @@ void QScrollBar::mouseReleaseEvent( QMouseEvent *e )
 	    emit valueChanged( value() );
     }
     drawControls( tmp, pressedControl );
-    if ( e->button() == MidButton )
-	repaint( FALSE );
 }
 
 
-/*!\reimp
+/*!
+  Handles mouse move events for the scroll bar.
 */
+
 void QScrollBar::mouseMoveEvent( QMouseEvent *e )
 {
     if ( !isVisible() ) {
@@ -636,7 +606,7 @@ void QScrollBar::mouseMoveEvent( QMouseEvent *e )
 	else
 	    newSliderPos = (HORIZONTAL ? e->pos().x() :
 			    e->pos().y()) -clickOffset;
-
+	
 	if ( newSliderPos < sliderMin )
 	    newSliderPos = sliderMin;
 	else if ( newSliderPos > sliderMax )
@@ -652,8 +622,7 @@ void QScrollBar::mouseMoveEvent( QMouseEvent *e )
 	}
 	slidePrevVal = newVal;
 	sliderPos = (QCOORD)newSliderPos;
-	drawControls( QStyle::AddPage | QStyle::Slider | QStyle::SubPage,
-		      pressedControl );
+	drawControls( QStyle::AddPage | QStyle::Slider | QStyle::SubPage, pressedControl );
     }
     else if ( style() == WindowsStyle ) {
 	// stop scrolling when the mouse pointer leaves a control
@@ -747,33 +716,26 @@ int QScrollBar::sliderPosToRangeValue( int pos ) const
 void QScrollBar::action( QStyle::ScrollControl control )
 {
     switch( control ) {
-    case QStyle::AddLine:
-	emit nextLine();
-	addLine();
-	break;
-    case QStyle::SubLine:
-	emit prevLine();
-	subtractLine();
-	break;
-    case QStyle::AddPage:
-	emit nextPage();
-	addPage();
-	break;
-    case QStyle::SubPage:
-	emit prevPage();
-	subtractPage();
-	break;
-    case QStyle::First:
-	emit valueChanged( minValue() );
-	setValue( minValue() );
-	break;
-    case QStyle::Last:
-	emit valueChanged( maxValue() );
-	setValue( maxValue() );
-	break;
-    default:
+	case QStyle::AddLine:
+	    emit nextLine();
+	    addLine();
+	    break;
+	case QStyle::SubLine:
+	    emit prevLine();
+	    subtractLine();
+	    break;
+	case QStyle::AddPage:
+	    emit nextPage();
+	    addPage();
+	    break;
+	case QStyle::SubPage:
+	    emit prevPage();
+	    subtractPage();
+	    break;
+	default:
 #if defined(CHECK_RANGE)
-	    qWarning( "QScrollBar::action: (%s) internal error", name() );
+	    qWarning( "QScrollBar::action: (%s) internal error",
+		     name( "unnamed" ) );
 #else
 	    ;
 #endif
@@ -792,8 +754,7 @@ void QScrollBar::drawControls( uint controls, uint activeControl,
 			       QPainter *p ) const
 {
 
-    style().drawScrollBarControls( p, this, sliderStart(), controls,
-				   activeControl);
+    style().drawScrollBarControls(p, this, sliderStart(), controls, activeControl);
     return;
 
 }
@@ -802,7 +763,6 @@ void QScrollBar::drawControls( uint controls, uint activeControl,
  */
 void QScrollBar::styleChange( QStyle& old )
 {
-    positionSliderFromValue();
     if ( style() == MotifStyle )
 	setBackgroundMode( PaletteMid );
     else
@@ -811,102 +771,6 @@ void QScrollBar::styleChange( QStyle& old )
     QWidget::styleChange( old );
 }
 
-/*!
-  \reimp
-*/
-int QScrollBar::minValue() const
-{
-    return QRangeControl::minValue();
-}
-
-/*!
-  \reimp
-*/
-int QScrollBar::maxValue() const
-{
-    return QRangeControl::maxValue();
-}
-
-/*!
-  A convenience function which just calls
-  setRange( i, maxValue() )
-
-  \sa setRange()
-*/
-void QScrollBar::setMinValue( int i )
-{
-    setRange( i, maxValue() );
-}
-
-/*!
-  A convenience function which just calls
-  setRange( minValue(), i )
-
-  \sa setRange()
-*/
-void QScrollBar::setMaxValue( int i )
-{
-    setRange( minValue(), i );
-}
-
-/*!
-  \reimp
-*/
-int QScrollBar::lineStep() const
-{
-    return QRangeControl::lineStep();
-}
-
-/*!
-  \reimp
-*/
-int QScrollBar::pageStep() const
-{
-    return QRangeControl::pageStep();
-}
-
-/*!
-  Sets the line step to \e i.
-
-  Calls the virtual stepChange() function if the new line step is
-  different from the previous setting.
-
-  \sa lineStep() QRangeControl::setSteps() setPageStep() setRange()
-*/
-void QScrollBar::setLineStep( int i )
-{
-    setSteps( i, pageStep() );
-}
-
-/*!
-  Sets the page step to \e i.
-
-  Calls the virtual stepChange() function if the new page step is
-  different from the previous setting.
-
-  \sa pageStep() QRangeControl::setSteps() setLineStep() setRange()
-*/
-void QScrollBar::setPageStep( int i )
-{
-    setSteps( lineStep(), i );
-}
-
-/*!
-  \reimp
-*/
-int QScrollBar::value() const
-{
-    return QRangeControl::value();
-}
-
-/*!
-  \reimp
-*/
-void QScrollBar::setValue( int i )
-{
-    QRangeControl::setValue( i );
-}
 
 #undef ADD_LINE_ACTIVE
 #undef SUB_LINE_ACTIVE
-#endif

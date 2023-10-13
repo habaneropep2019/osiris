@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: qt/examples/widgets/main.cpp   2.3.2   edited 2001-01-26 $
+** $Id: main.cpp,v 1.3 1999/06/18 01:15:06 warwick Exp $
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -14,7 +14,7 @@
 #include <qcdestyle.h>
 #include <qwindowsstyle.h>
 #include <qplatinumstyle.h>
-#include <qsgistyle.h>
+
 
 class MyWidgetView : public WidgetView
 {
@@ -27,7 +27,7 @@ public:
 
     void button1Clicked() {
 	s++;
-	switch (s%5){
+	switch (s%4){
 	case 0:
 	    qApp->setStyle(new QMotifStyle);
 	    break;
@@ -39,9 +39,6 @@ public:
 	    break;
 	case 3:
 	    qApp->setStyle(new QPlatinumStyle);
-	    break;
-	case 4:
-	    qApp->setStyle(new QSGIStyle);
 	    break;
 	}
 	WidgetView::button1Clicked();
@@ -58,11 +55,9 @@ int main( int argc, char **argv )
     QApplication::setColorSpec( QApplication::CustomColor );
     QApplication a( argc, argv );
 
-    MyWidgetView* w = new MyWidgetView;
-    a.setMainWidget( w );
+    MyWidgetView w;
+    a.setMainWidget( &w );
 
-    w->show();
-    int res = a.exec();
-    delete w;
-    return res;
+     w.show();
+     return a.exec();
 }

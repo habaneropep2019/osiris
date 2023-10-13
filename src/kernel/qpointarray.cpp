@@ -1,39 +1,27 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qpointarray.cpp   2.3.2   edited 2001-01-26 $
+** $Id: qpointarray.cpp,v 2.27 1999/05/23 20:28:43 agulbra Exp $
 **
 ** Implementation of QPointArray class
 **
 ** Created : 940213
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
-** This file is part of the kernel module of the Qt GUI Toolkit.
+** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses may use this file in accordance with the Qt Commercial License
-** Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
+*****************************************************************************/
 
 #include "qpointarray.h"
 #include "qrect.h"
@@ -42,40 +30,41 @@
 #include "qwmatrix.h"
 #include <stdarg.h>
 
-const double Q_PI = 3.14159265358979323846;   // pi // one more useful comment
+const double Q_PI   = 3.14159265358979323846;   // pi
 
 
-// REVISED: arnt
 /*!
   \class QPointArray qpointarray.h
   \brief The QPointArray class provides an array of points.
 
   \ingroup drawing
-  \ingroup shared
 
   \inherit QArray
 
-  The QPointArray is an array of QPoint objects. In addition to the
-  functions provided by QArray, QPointArray provides some
-  point-specific functions.
+  The QPointArray is an array of QPoint objects. In addition to the functions 
+  provided by QArray, QPointArray provides some handy methods:
 
-  For convenient reading and writing of the point data: setPoints(),
+  For convenient reading and writing of the point data: setPoints(), 
   putPoints(), point(), and setPoint().
 
-  For geometry operations: boundingRect() and translate(). There is
-  also a QWMatrix::map() function for more general transformation of
-  QPointArrays.
+  For geometry operations: boundingRect() and translate(). As for the latter,
+  note that QWMatrix provides a map() function for more general transformation
+  of QPointArrays.
 
-  QPointArray is used by QPainter::drawLineSegments(),
-  QPainter::drawPolyline(), QPainter::drawPolygon() and
-  QPainter::drawQuadBezier(), among other things.
+  QPointArray is used by the QPainter to draw
+  \link QPainter::drawLineSegments() line segments\endlink,
+  \link QPainter::drawPolyline() polylines\endlink,
+  \link QPainter::drawPolygon() polygons\endlink and
+  \link QPainter::drawQuadBezier() Bezier curves\endlink.
 
-  Note that since this class is a QArray, it is explicitly shared and
-  works with shallow copies by default.
 
-  \sa QPainter QWMatrix QArray
+  Note that since this class is a QArray, it is
+  \link shclass.html explicitly shared\endlink
+  and works with shallow copies by default.
 */
 
+uint QPointArray::splen = 0;
+void* QPointArray::sp = 0;
 
 /*****************************************************************************
   QPointArray member functions
@@ -84,35 +73,39 @@ const double Q_PI = 3.14159265358979323846;   // pi // one more useful comment
 /*!
   \fn QPointArray::QPointArray()
   Constructs a null point array.
-
   \sa isNull()
 */
 
 /*!
   \fn QPointArray::QPointArray( int size )
-
-  Constructs a point array with room for \a size points. Makes a null
-  array if \a size == 0.
+  Constructs a point array with room for \e size points.
+  Makes a null array if \e size == 0.
 
   \sa resize(), isNull()
 */
 
 /*!
   \fn QPointArray::QPointArray( const QPointArray &a )
-
-  Constructs a shallow copy of the point array \a a.
+  Constructs a
+  \link shclass.html shallow copy\endlink of the point array \e a.
 
   \sa copy()
 */
 
 /*!
-  Constructs a point array from the rectangle \a r.
+  Constructs a point array from the rectangle \e r.
 
-  If \a closed is FALSE, then the point array just contains the
-  following four points in the listed order: r.topLeft(),
-  r.topRight(), r.bottomRight() and r.bottomLeft().
+  If \e closed is FALSE, then the point array will contain the
+  following four points (in the listed order):
+  <ol>
+  <li> r.topLeft()
+  <li> r.topRight()
+  <li> r.bottomRight()
+  <li> r.bottomLeft()
+  </ol>
 
-  If \a closed is TRUE, then a fifth point is set to r.topLeft().
+  If \e closed is TRUE, then a fifth point is set to r.topLeft() to
+  close the point array.
 */
 
 QPointArray::QPointArray( const QRect &r, bool closed )
@@ -128,8 +121,8 @@ QPointArray::QPointArray( const QRect &r, bool closed )
 }
 
 /*!
-  Constructs a point array with \a nPoints points, taken from the
-  \a points array.
+  Constructs a point array with \e nPoints points, taken from the
+  \e points array.
 
   Equivalent to setPoints(nPoints,points).
 */
@@ -141,17 +134,10 @@ QPointArray::QPointArray( int nPoints, const QCOORD *points )
 
 
 /*!
-  \fn QPointArray::~QPointArray()
-
-  Destructs the point array.
-*/
-
-
-/*!
   \fn QPointArray &QPointArray::operator=( const QPointArray &a )
-
-  Assigns a shallow copy of \a a to this point array and returns a
-  reference to this point array.
+  Assigns a
+  \link shclass.html shallow copy\endlink of \e a to this point array
+  and returns a reference to this point array.
 
   Equivalent to assign( a ).
 
@@ -161,13 +147,14 @@ QPointArray::QPointArray( int nPoints, const QCOORD *points )
 /*!
   \fn QPointArray QPointArray::copy() const
 
-  Creates a deep copy of the array.
+  Creates a
+  \link shclass.html deep copy\endlink of the array.
 */
 
 
 
 /*!
-  Translates all points in the array \a (dx,dy).
+  Translates all points in the array \e (dx,dy).
 */
 
 void QPointArray::translate( int dx, int dy )
@@ -183,7 +170,7 @@ void QPointArray::translate( int dx, int dy )
 
 
 /*!
-  Returns the point at position \a index in the array in \a *x and \a *y.
+  Returns the point at position \e index in the array in \e *x and \e *y.
 */
 
 void QPointArray::point( uint index, int *x, int *y ) const
@@ -194,7 +181,7 @@ void QPointArray::point( uint index, int *x, int *y ) const
 }
 
 /*!
-  Returns the point at position \a index in the array.
+  Returns the point at position \e index in the array.
 */
 
 QPoint QPointArray::point( uint index ) const
@@ -203,7 +190,7 @@ QPoint QPointArray::point( uint index ) const
 }
 
 /*!
-  Sets the point at position \a index in the array to \a (x,y).
+  Sets the point at position \e index in the array to \e (x,y).
 */
 
 void QPointArray::setPoint( uint index, int x, int y )
@@ -212,18 +199,19 @@ void QPointArray::setPoint( uint index, int x, int y )
 }
 
 /*!
-  Resizes the array to \a nPoints and sets the points in the array to
-  the values taken from \a points.
+  Resizes the array to \e nPoints and sets the points in the array to
+  the values taken from \e points.
 
-  Returns TRUE if successful, or FALSE if the array could not be
-  resized (normally due to lack of memory).
+  Returns TRUE if successful, or FALSE if the array could not be resized.
 
-  The example code creates an array with two points (1,2) and (3,4):
+  Example:
   \code
     static QCOORD points[] = { 1,2, 3,4 };
     QPointArray a;
     a.setPoints( 2, points );
   \endcode
+
+  The example code creates an array with two points (1,2) and (3,4).
 
   \sa resize(), putPoints()
 */
@@ -248,23 +236,24 @@ bool QPointArray::setPoints( int nPoints, const QCOORD *points )
 */
 
 /*!
-  Resizes the array to \a nPoints and sets the points in the array to
+  Resizes the array to \e nPoints and sets the points in the array to
   the values taken from the variable argument list.
 
-  Returns TRUE if successful, or FALSE if the array could not be
-  resized (typically due to lack of memory).
+  Returns TRUE if successful, or FALSE if the array could not be resized.
 
-  The example code creates an array with two points (1,2) and (3,4):
-
+  Example:
   \code
     QPointArray a;
     a.setPoints( 2, 1,2, 3,4 );
   \endcode
 
+  The example code creates an array with two points (1,2) and (3,4).
+
   \sa resize(), putPoints()
 */
 
-bool QPointArray::setPoints( int nPoints, int firstx, int firsty, ... )
+bool QPointArray::setPoints( int nPoints, int firstx, int firsty,
+			     ... )
 {
     va_list ap;
     if ( !resize(nPoints) )
@@ -283,21 +272,22 @@ bool QPointArray::setPoints( int nPoints, int firstx, int firsty, ... )
 }
 
 /*!
-  Copies \a nPoints points from the \a points array into this point array.
+  Copies \e nPoints points from the \e points array into this point array.
   Will resize this point array if <code>index+nPoints</code> exceeds
   the size of the array.
 
-  Returns TRUE if successful, or FALSE if the array could not be
-  resized (typcailly due to lack of memory).
+  Returns TRUE if successful, or FALSE if the array could not be resized.
 
-  The example code creates an array with three points: (1,2), (3,4)
-  and (5,6):
+  Example:
   \code
     QPointArray a( 1 );
     a[0] = QPoint( 1, 2 );
     static QCOORD points[] = { 3,4, 5,6 };
     a.putPoints( 1, 2, points );
   \endcode
+
+  The example code creates an array with three points: (1,2), (3,4)
+  and (5,6).
 
   This function differs from setPoints() in that it does not resize the
   array unless the array size is exceeded.
@@ -321,21 +311,22 @@ bool QPointArray::putPoints( int index, int nPoints, const QCOORD *points )
 }
 
 /*!
-  Copies \a nPoints points from the variable argument list into this point
+  Copies \e nPoints points from the variable argument list into this point
   array. Will resize this point array if <code>index+nPoints</code> exceeds
   the size of the array.
 
-  Returns TRUE if successful, or FALSE if the array could not be
-  resized (typically due to lack of memory).
+  Returns TRUE if successful, or FALSE if the array could not be resized.
 
-  The example code creates an array with two points (1,2), (3,4) and (5,6):
+  Example:
   \code
     QPointArray a( 1 );
     a[0] = QPoint( 1, 2 );
     a.putPoints( 1, 2, 3,4, 5,6 );
   \endcode
 
-  This function differs from setPoints() in that it does not resize the
+  The example code creates an array with two points (1,2), (3,4) and (5,6).
+
+  This function differs from setPoints() because it does not resize the
   array unless the array size is exceeded.
 
   \sa resize(), setPoints()
@@ -398,31 +389,29 @@ static inline int fix_angle( int a )
 {
     if ( a > 16*360 )
 	a %= 16*360;
-    else if ( a < -16*360 ) {
-	a = -( (-a) % (16*360) );
-    }
+    else if ( a < -16*360 )
+	a = -((-a) % 16*360);
     return a;
 }
 
 /*!
   Sets the points of the array to those describing an arc of an
   ellipse with size \a w by \a h and position (\a x, \a y ), starting
-  from angle \a a1, spanning \a a2.  The resulting array has sufficient
+  from angle \a1, spanning \a a2.  The resulting array has sufficient
   resolution for pixel accuracy (see the overloaded function which
   takes an additional QWMatrix parameter).
 
-  Angles are specified in 16ths of a degree, i.e. a full circle equals
-  5760 (16*360).  Positive values mean counter-clockwise while
-  negative values mean clockwise direction.  Zero degrees is at the 3
-  o'clock position.
+  Angles are specified in 16ths of a degree,
+  i.e. a full circle equals 5760 (16*360). Positive values mean
+  counter-clockwise while negative values mean clockwise direction.
+  Zero degrees is at the 3'o clock position.
 */
 
 void QPointArray::makeArc( int x, int y, int w, int h, int a1, int a2 )
 {
-#if !defined(QT_OLD_MAKEELLIPSE) && !defined(QT_NO_TRANSFORMATIONS)
     QWMatrix unit;
     makeArc(x,y,w,h,a1,a2,unit);
-#else
+#if QT_OLD_MAKEELLIPSE // ### WWA says discard this.
     a1 = fix_angle( a1 );
     if ( a1 < 0 )
 	a1 += 16*360;
@@ -451,7 +440,7 @@ void QPointArray::makeArc( int x, int y, int w, int h, int a1, int a2 )
 #endif
 }
 
-#ifndef QT_NO_TRANSFORMATIONS
+
 // Based upon:
 //   parelarc.c from Graphics Gems III
 //   VanAken / Simar, "A Parametric Elliptical Arc Algorithm"
@@ -489,7 +478,7 @@ qtr_elips(QPointArray& a, int& offset, double dxP, double dyP, double dxQ, doubl
     uy += vy >> (m + 1);          /* cancel 1st-order error */
 
     int n = offset;
-    for (i = (PIV2 >> (16 - m)); i >= 0; --i) {
+    for (i = (PIV2 << m) >> 16; i >= 0; --i) {
         a[n++] = QPoint((xJ + vx) >> 16, (yJ + vy) >> 16);
         ux -= vx >> m;
         vx += ux >> m;
@@ -507,24 +496,18 @@ qtr_elips(QPointArray& a, int& offset, double dxP, double dyP, double dxQ, doubl
 /*!
   Sets the points of the array to those describing an arc of an
   ellipse with size \a w by \a h and position (\a x, \a y ), starting
-  from angle \a a1, spanning \a a2, transformed by the matrix \a xf.
+  from angle \a1, spanning \a a2, transformed by the matrix \a xf.
   The resulting array has sufficient resolution for pixel accuracy.
 
-  Angles are specified in 16ths of a degree, i.e. a full circle equals
-  5760 (16*360). Positive values mean counter-clockwise while negative
-  values mean clockwise direction.  Zero degrees is at the 3 o'clock
-  position.
+  Angles are specified in 16ths of a degree,
+  i.e. a full circle equals 5760 (16*360). Positive values mean
+  counter-clockwise while negative values mean clockwise direction.
+  Zero degrees is at the 3'o clock position.
 */
 void QPointArray::makeArc( int x, int y, int w, int h,
 			       int a1, int a2,
 			       const QWMatrix& xf )
 {
-#define PIV2  102944     /* fixed point PI/2 */
-    if ( --w < 0 || --h < 0 || !a2 ) {
-	resize( 0 );
-	return;
-    }
-
     bool rev = a2 < 0;
     if ( rev ) {
 	a1 += a2;
@@ -537,6 +520,7 @@ void QPointArray::makeArc( int x, int y, int w, int h,
 
     bool arc = a1 != 0 || a2 != 360*16 || rev;
 
+
     double xP, yP, xQ, yQ, xK, yK;
 
     xf.map(x+w, y+h/2.0, &xP, &yP);
@@ -546,12 +530,11 @@ void QPointArray::makeArc( int x, int y, int w, int h,
     int m = 2;
     int max;
     int q = int(QMAX(QABS(xP-xQ),QABS(yP-yQ)));
-    const int arcexpand = 32; // Needs to be this big.  Poor.
     if ( arc )
-	q *= arcexpand;
+	q *= 2;
     do {
 	m++;
-	max = 4*(1 + (PIV2 >> (16 - m)) );
+	max = 4*(1 + int((Q_PI/2)*(1<<m)));
     } while (max < q && m < 16); // 16 limits memory usage on HUGE arcs
     resize(max);
 
@@ -593,45 +576,42 @@ void QPointArray::makeArc( int x, int y, int w, int h,
 	    da1 -= Q_PI/2;
 	    t++;
 	}
-
 	int i = nquad[t]+int(da1/inc+0.5);
 	int k = int(da2/inc+0.5);
-	QPointArray r(k);
-	int j = 0;
-
-	// This is rather poor.
-
 	if ( rev ) {
-	    while ( k-- )
+	    QPointArray r(k);
+	    int j = 0;
+	    while (k--)
 		r[j++] = at((i+k)%n);
+	    *this = r;
 	} else {
-	    while ( j < k ) {
-		r[j] = at((i+j)%n);
+	    int j = 0;
+	    while (j < k) {
+		setPoint(j,at((k+j)%n));
 		j++;
 	    }
+	    resize(j);
 	}
-	*this = r;
     } else {
 	resize(n);
     }
-#undef PIV2
 }
-
-#endif // QT_NO_TRANSFORMATIONS
 
 /*!
   Sets the points of the array to those describing an ellipse with
   size \a w by \a h and position (\a x, \a y ).
 
-  The returned array has sufficient resolution for use as pixels.
+  The returned array has sufficient
+  resolution for use as pixels (see the overloaded function which
+  takes an additional QWMatrix parameter).
 */
 void QPointArray::makeEllipse( int xx, int yy, int w, int h )
 {						// midpoint, 1/4 ellipse
-#if !defined(QT_OLD_MAKEELLIPSE) && !defined(QT_NO_TRANSFORMATIONS)
     QWMatrix unit;
     makeArc(xx,yy,w,h,0,360*16,unit);
     return;
-#else
+
+#if QT_OLD_MAKEELLIPSE // ### WWA says discard this.
     if ( w <= 0 || h <= 0 ) {
 	if ( w == 0 || h == 0 ) {
 	    resize( 0 );
@@ -738,7 +718,7 @@ void split(const double *p, double *l, double *r)
 //   by Alan Paeth
 //   from "Graphics Gems", Academic Press, 1990
 static
-int pnt_on_line( const int* p, const int* q, const int* t )
+int pnt_on_line( const double* p, const double* q, const double* t )
 {
 /*
  * given a line through P:(px,py) Q:(qx,qy) and T:(tx,ty)
@@ -771,11 +751,6 @@ int pnt_on_line( const int* p, const int* q, const int* t )
  * in merging collinear (to grid coordinates) vertex chains
  * into a larger, spanning vectors within the Lemming editor.
  */
-
-	// if all points are coincident, return condition 2 (on line)
-	if(q[0]==p[0] && q[1]==p[1] && q[0]==t[0] && q[1]==t[1]) {
-		return 2;
-	}
 
     if ( QABS((q[1]-p[1])*(t[0]-p[0])-(t[1]-p[1])*(q[0]-p[0])) >=
         (QMAX(QABS(q[0]-p[0]), QABS(q[1]-p[1])))) return 0;
@@ -814,35 +789,16 @@ void polygonizeQBezier( double* acc, int& accsize, const double ctrl[],
     double r[8];
     split( ctrl, l, r);
 
-    // convert to integers for line condition check
-    int c0[2]; c0[0] = int(ctrl[0]); c0[1] = int(ctrl[1]);
-    int c1[2]; c1[0] = int(ctrl[2]); c1[1] = int(ctrl[3]);
-    int c2[2]; c2[0] = int(ctrl[4]); c2[1] = int(ctrl[5]);
-    int c3[2]; c3[0] = int(ctrl[6]); c3[1] = int(ctrl[7]);
-
-    // #### Duplication needed?
-    if ( QABS(c1[0]-c0[0]) <= 1 && QABS(c1[1]-c0[1]) <= 1
-      && QABS(c2[0]-c0[0]) <= 1 && QABS(c2[1]-c0[1]) <= 1
-      && QABS(c3[0]-c1[0]) <= 1 && QABS(c3[1]-c0[1]) <= 1 )
+    if ( pnt_on_line( &ctrl[0], &ctrl[6], &ctrl[2] ) == 2
+      && pnt_on_line( &ctrl[0], &ctrl[6], &ctrl[4] ) == 2 )
     {
-	// Approximate by one line.
-	// Dont need to write last pt as it is the same as first pt
-	// on the next segment
+	// Approximate by 2 lines.
 	acc[accsize++] = l[0];
 	acc[accsize++] = l[1];
-	return;
-    }
-
-    if ( ( pnt_on_line( c0, c3, c1 ) == 2 && pnt_on_line( c0, c3, c2 ) == 2 )
-      || ( QABS(c1[0]-c0[0]) <= 1 && QABS(c1[1]-c0[1]) <= 1
-        && QABS(c2[0]-c0[0]) <= 1 && QABS(c2[1]-c0[1]) <= 1
-        && QABS(c3[0]-c1[0]) <= 1 && QABS(c3[1]-c0[1]) <= 1 ) )
-    {
-	// Approximate by one line.
-	// Dont need to write last pt as it is the same as first pt
-	// on the next segment
-	acc[accsize++] = l[0];
-	acc[accsize++] = l[1];
+	acc[accsize++] = l[6];
+	acc[accsize++] = l[7];
+	acc[accsize++] = r[6];
+	acc[accsize++] = r[7];
 	return;
     }
 
@@ -867,9 +823,10 @@ QPointArray QPointArray::quadBezier() const
     }
 
     int v;
+    const int n = 3;				// n + 1 control points
     float xvec[4];
     float yvec[4];
-    for ( v=0; v<4; v++ ) {			// store all x,y in xvec,yvec
+    for ( v=0; v<=n; v++ ) {			// store all x,y in xvec,yvec
 	int x, y;
 	point( v, &x, &y );
 	xvec[v] = (float)x;
@@ -922,7 +879,7 @@ QPointArray QPointArray::quadBezier() const
 	QRect r = boundingRect();
 	int m = 4+2*QMAX(r.width(),r.height());
 	double *p = new double[m];
-	double ctrl[8];
+	double *ctrl = new double[8];
 	int i;
 	for (i=0; i<4; i++) {
 	    ctrl[i*2] = at(i).x();
@@ -930,16 +887,16 @@ QPointArray QPointArray::quadBezier() const
 	}
 	int len=0;
 	polygonizeQBezier( p, len, ctrl, m );
-	QPointArray pa((len/2)+1); // one extra point for last point on line
+	QPointArray pa(len/2);
 	int j=0;
 	for (i=0; j<len; i++) {
-	    int x = qRound(p[j++]);
-	    int y = qRound(p[j++]);
+	    // Don't round - it looks terrible
+	    int x = int(p[j++]);
+	    int y = int(p[j++]);
 	    pa[i] = QPoint(x,y);
 	}
-	// add last pt on the line, which will be at the last control pt
-	pa[(int)pa.size()-1] = at(3);
 	delete[] p;
+	delete[] ctrl;
 
 	return pa;
     }
@@ -951,12 +908,16 @@ QPointArray QPointArray::quadBezier() const
 /*****************************************************************************
   QPointArray stream functions
  *****************************************************************************/
-#ifndef QT_NO_DATASTREAM
+
 /*!
   \relates QPointArray
   Writes a point array to the stream and returns a reference to the stream.
 
-  \sa \link datastreamformat.html Format of the QDataStream operators \endlink
+  The serialization format is:
+  <ol>
+  <li> The array size (UINT32)
+  <li> The array points (QPoint)
+  </ol>
 */
 
 QDataStream &operator<<( QDataStream &s, const QPointArray &a )
@@ -972,8 +933,6 @@ QDataStream &operator<<( QDataStream &s, const QPointArray &a )
 /*!
   \relates QPointArray
   Reads a point array from the stream and returns a reference to the stream.
-
-  \sa \link datastreamformat.html Format of the QDataStream operators \endlink
 */
 
 QDataStream &operator>>( QDataStream &s, QPointArray &a )
@@ -990,16 +949,6 @@ QDataStream &operator>>( QDataStream &s, QPointArray &a )
     }
     return s;
 }
-#endif //QT_NO_DATASTREAM
-
-
-
-struct QShortPoint {			// Binary compatible with XPoint
-    short x, y;
-};
-
-uint QPointArray::splen = 0;
-void* QPointArray::sp = 0;		// Really a QShortPoint*
 
 /*!
   \internal
@@ -1012,6 +961,9 @@ void* QPointArray::sp = 0;		// Really a QShortPoint*
 
 void* QPointArray::shortPoints( int index, int nPoints ) const
 {
+    typedef struct {
+	short x, y;
+    } x11Point;
 
     if ( isNull() || !nPoints )
 	return 0;
@@ -1020,11 +972,11 @@ void* QPointArray::shortPoints( int index, int nPoints ) const
     uint i = nPoints < 0 ? size() : nPoints;
     if ( splen < i ) {
 	if ( sp )
-	    delete[] ((QShortPoint*)sp);
-	sp = new QShortPoint[i];
+	    delete[] sp;
+	sp = new x11Point[i];
 	splen = i;
     }
-    QShortPoint* ps = (QShortPoint*)sp;
+    x11Point* ps = (x11Point*)sp;
     while ( i-- ) {
 	ps->x = (short)p->x();
 	ps->y = (short)p->y();
@@ -1044,7 +996,7 @@ void* QPointArray::shortPoints( int index, int nPoints ) const
 void QPointArray::cleanBuffers()
 {
     if ( sp )
-	delete[] ((QShortPoint*)sp);
+	delete[] sp;
     sp = 0;
     splen = 0;
 }

@@ -1,14 +1,14 @@
 /****************************************************************************
-** $Id: qt/extensions/nsplugin/doc/index.doc   2.3.2   edited 2001-02-23 $
+** $Id: index.doc,v 1.8 1999/06/16 20:04:48 agulbra Exp $
 **
 ** Index page
 **
-** Copyright (C) 1995-1997 by Trolltech AS.  All rights reserved.
+** Copyright (C) 1995-1997 by Troll Tech AS.  All rights reserved.
 **
 *****************************************************************************/
 
 #if defined(DEBUG)
-static char ident[] = "$Id: qt/extensions/nsplugin/doc/index.doc   2.3.2   edited 2001-02-23 $";
+static char ident[] = "$Id: index.doc,v 1.8 1999/06/16 20:04:48 agulbra Exp $";
 #endif
 
 /*! \page nsplugin.html
@@ -34,7 +34,7 @@ WWW browser supporting the same protocol.
  <li>Download the
     <a href="http://home.netscape.com/comprod/development_partners/plugin_api/index.html">
     Plugin SDK from Netscape</a>, and copy the following files from there to
-    <tt>$OSIRISDIR/extensions/nsplugin/src</tt> :
+    <tt>$QTDIR/extensions/nsplugin/src</tt> :
     <multicol cols=2>
     <ul>
 	<li>common/npwin.cpp
@@ -49,14 +49,8 @@ WWW browser supporting the same protocol.
  <li>Build the Netscape Plugin extension library, found in the
 	<tt>extensions/nsplugin/src</tt> directory of your Qt distribution.
 	This produces a static library to be linked with your plugin code.
- <li>Read the NSPlugin components in the
-	<a href="annotated.html">class documentation</a>.
- <li>Examine the example plugins:
-    <ul>
-     <li><a href=trivial-trivial-cpp.html>Trivial example</a>
-     <li><a href=qtimage-qtimage-cpp.html>Image example</a>
-     <li><a href=grapher-grapher-cpp.html>Graphing example</a>
-    </ul>
+ <li>Read the <a href="annotated.html">plugin class documentation</a>, and
+	examine the <a href="examples.html">example plugins</a>.
  <li>Do most of your development as a stand-alone Qt application - debugging
 	Netscape Plugins is cumbersome.  You may want to use <tt>signal(2)</tt>
 	in your plugin to enable core-dumps if your browser disables them.
@@ -75,7 +69,7 @@ WWW browser supporting the same protocol.
 	section of their browser preferences.
 </ol>
 
-We are working on streamlining the build process for Qt-based Netscape Plugins.	
+We are working on streamlining the build process for Qt-based Netscape Plugins.
 
 <h3>Building under X11</h3>
 
@@ -88,8 +82,6 @@ We are working on streamlining the build process for Qt-based Netscape Plugins.
 <h3>Building under Windows</h3>
 
 <ul>
- <li>Qt needs to be built as a static library when building Netscape plugins, we are
-     looking into the problem of making it work with Qt as a dynamic library.
  <li>Plugins must be named <tt>np</tt><i>name</i><tt>.dll</tt>,
      or the browser will ignore them.
  <li>The link step must include:

@@ -1,48 +1,34 @@
 /****************************************************************************
-** $Id: qt/src/tools/qtl.h   2.3.2   edited 2001-01-26 $
+** $Id: qtl.h,v 1.11 1999/06/22 20:55:32 agulbra Exp $
 **
 ** Definition of Qt template library classes
 **
 ** Created : 990128
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
-** This file is part of the tools module of the Qt GUI Toolkit.
+** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses may use this file in accordance with the Qt Commercial License
-** Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
+*****************************************************************************/
 #ifndef QTL_H
 #define QTL_H
 
-#ifndef QT_H
-#include "qtextstream.h"
-#include "qstring.h"
-#endif // QT_H
+#include <qtextstream.h>
+#include <qstring.h>
 
-#ifndef QT_NO_TEXTSTREAM
+
 template <class T>
 class QTextOStreamIterator
 {
@@ -64,7 +50,7 @@ public:
     QTextOStreamIterator<T>& operator++() { return *this; }
     QTextOStreamIterator<T>& operator++(int) { return *this; }
 };
-#endif //QT_NO_TEXTSTREAM
+
 
 template <class InputIterator, class OutputIterator>
 inline OutputIterator qCopy( InputIterator _begin, InputIterator _end,
@@ -126,8 +112,8 @@ inline void qBubbleSort( Container &c )
 }
 
 
-template <class Value>
-inline void qHeapSortPushDown( Value* heap, int first, int last )
+template <class HeapPtr>
+void qHeapSortPushDown( HeapPtr heap, int first, int last )
 {
     int r = first;
     while( r <= last/2 ) {
@@ -158,7 +144,7 @@ inline void qHeapSortPushDown( Value* heap, int first, int last )
 
 
 template <class InputIterator, class Value>
-inline void qHeapSortHelper( InputIterator b, InputIterator e, Value, uint n )
+void qHeapSortHelper( InputIterator b, InputIterator e, Value, int n )
 {
     // Create the heap
     InputIterator insert = b;
@@ -176,11 +162,11 @@ inline void qHeapSortHelper( InputIterator b, InputIterator e, Value, uint n )
     }
 
     // Now do the sorting
-    for( uint i = n; i > 0; i-- ) {
+    for( int i = n; i > 0; i-- ) {
 	*b++ = heap[1];
 	if ( i > 1 ) {
 	    heap[1] = heap[i];
-	    qHeapSortPushDown( heap, 1, (int)i - 1 );
+	    qHeapSortPushDown( heap, 1, i - 1 );
 	}
     }
 
@@ -197,15 +183,15 @@ inline void qHeapSort( InputIterator b, InputIterator e )
 
     // How many entries have to be sorted ?
     InputIterator it = b;
-    uint n = 0;
+    int n = 0;
     while ( it != e ) {
 	++n;
 	++it;
     }
 
-    // The second last parameter is a hack to retrieve the value type
+    // The last parameter is a hack to retrieve the value type
     // Do the real sorting here
-    qHeapSortHelper( b, e, *b, n );
+    qHeapSortHelper( b, e, *b );
 }
 
 
@@ -215,7 +201,7 @@ inline void qHeapSort( Container &c )
     if ( c.isEmpty() )
 	return;
 
-    // The second last parameter is a hack to retrieve the value type
+    // The last parameter is a hack to retrieve the value type
     // Do the real sorting here
     qHeapSortHelper( c.begin(), c.end(), *(c.begin()), c.count() );
 }

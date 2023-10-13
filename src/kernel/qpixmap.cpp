@@ -1,41 +1,27 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qpixmap.cpp   2.3.2   edited 2001-09-06 $
+** $Id: qpixmap.cpp,v 2.57 1999/06/10 18:32:19 warwick Exp $
 **
 ** Implementation of QPixmap class
 **
 ** Created : 950301
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
-** This file is part of the kernel module of the Qt GUI Toolkit.
+** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses may use this file in accordance with the Qt Commercial License
-** Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
-
-#include "qpixmap.h"
+*****************************************************************************/
 
 #include "qbitmap.h"
 #include "qimage.h"
@@ -43,10 +29,8 @@
 #include "qpainter.h"
 #include "qdatastream.h"
 #include "qbuffer.h"
-#include "qobjectlist.h"
-#include "qapplication.h"
 
-// NOT REVISED
+
 /*!
   \class QPixmap qpixmap.h
   \brief The QPixmap class is an off-screen pixel-based paint device.
@@ -77,78 +61,25 @@
   QImage.
 
   You can display a QPixmap on the screen easily using
-  e.g. QLabel::setPixmap(), and all the QButton subclasses support
-  pixmap use.
+  e.g. QLabel::setPixmap(), and all the \link QButton button classes
+  \endlink support pixmap use.
 
-  The QPixmap class uses lazy copying, so it is practical to pass pass
-  QPixmap objects as arguments.
+  There are also convenience functions to get and set single pixels
+  and to load and save the entire pixmap; these work by converting the
+  pixmap to a QImage internally.
 
-  Note about Windows 95 and 98: On Windows 9x, the system crashes if
-  you create more than approximately 1000 pixmaps, independent of the
-  size of the pixmaps or installed RAM.  Windows NT does not have this
-  limitation.
+  The QPixmap class is optimized by the use of \link shclass.html implicit
+  sharing\endlink, so it is very efficient to pass QPixmap objects as
+  arguments.
 
-  Qt tries to work around the resource limitation.  If you set the
-  pixmap optimization to \c QPixmap::MemoryOptim and the width of your
-  pixmap is less than or equal to 128 pixels, Qt stores the pixmap in
-  a way which is very memory-efficient when there are many pixmaps.
-
-  If your application uses dozens or hundreds of pixmaps, e.g. on tool
-  bar buttons, in popup menus, and you plan to run it on Windows 95 or
-  Windows 98, then we recommend using code like this:
-
-  \code
-    QPixmap::setDefaultOptimization( QPixmap::MemoryOptim );
-    while ( ... ) {
-      // load tool bar pixmaps etc.
-      QPixmap *pixmap = new QPixmap(fileName);
-    }
-    QPixmap::setDefaultOptimization( QPixmap::NormalOptim );
-  \endcode
+  <strong>Note about Windows 95 and 98:</strong> Because of internal
+  limitations in the operating system, Windows 9x easily crashes if you
+  create around 1000 pixmaps or more.  Qt will work around this problem
+  if you set the \link setOptimization() pixmap optimization\endlink
+  to \c QPixmap::MemoryOptim.  Read more about this in the
+  setOptimization() documentation.
 
   \sa QBitmap, QImage, QImageIO, \link shclass.html Shared Classes\endlink
-*/
-
-/*! \enum QPixmap::ColorMode
-
-  This enum type defines the color modes that exist for converting
-  QImage objects to QPixmap.  The current values are: <ul>
-
-  <li> \c Auto - select \c Color or \c Mono on a case-by-case basis.
-  <li> \c Color - always create colored pixmaps.
-  <li> \c Mono - always create bitmaps.
-  </ul>
-*/
-
-/*! \enum QPixmap::Optimization
-
-  QPixmap has the choice of optimizing for speed or memory in a few
-  places, and the best choice varies from pixmap to pixmap, but can
-  generally be derived heuristically.  This enum type defines a number
-  of optimization modes you can set for any pixmap, to tweak the
-  speed/memory tradeoffs:
-
-  <ul>
-
-  <li> \c DefaultOptim - whatever QPixmap::defaultOptimization()
-  returns.  A pixmap with this optimization mode set always has the
-  default optimization type, even if the default is changed with
-  setDefaultOptimization().
-
-  <li> \c NoOptim - no optimization (currently the same as \c MemoryOptim).
-
-  <li> \c MemoryOptim - optimize for minimal memory use.
-
-  <li> \c NormalOptim - optimize for typical usage.  Often uses more
-  memory than \c MemoryOptim, and often faster.
-
-  <li> \c BestOptim - optimize for pixmaps that are drawn very often
-  and where performance is critical.  Generally uses more memory than
-  \c NormalOptim and may provide a little better speed.
-
-  </ul>
-
-  We recommend sticking with \c DefaultOptim
 */
 
 
@@ -246,26 +177,6 @@ QPixmap::QPixmap( const QString& fileName, const char *format, ColorMode mode )
 
 /*!
   Constructs a pixmap from \a xpm, which must be a valid XPM image.
-
-  Error are silently ignored.
-
-  Note that it's possible to squeeze the XPM variable a little bit by
-  using an unusual declaration:
-
-  \code
-    static const char * const start_xpm[]={
-        "16 15 8 1",
-        "a c #cec6bd",
-    ....
-  \endcode
-
-  The extra \c const makes the entire definition read-only, which is
-  slightly more efficient e.g. when the code is in a shared library,
-  and ROMable when the application is to be stored in ROM.
-
-  In order to use that sort of declaration, you must cast the variable
-  back to <nobr><code>const char **</code></nobr> when you create the
-  QPixmap.
 */
 
 QPixmap::QPixmap( const char *xpm[] )
@@ -311,15 +222,13 @@ QPixmap::QPixmap( const QPixmap &pixmap )
 #elif defined(_WS_X11_)
 	hd = pixmap.hd;				// copy X11 drawable
 	copyX11Data( &pixmap );			// copy x11Data
-#elif defined(_WS_QWS_)
-	hd = pixmap.hd;
 #endif
     }
 }
 
 
 /*!
-  Destructs the pixmap.
+  Destroys the pixmap.
 */
 
 QPixmap::~QPixmap()
@@ -370,7 +279,7 @@ QPixmap &QPixmap::operator=( const QPixmap &pixmap )
 	      pixmap.data->bitmap, pixmap.data->optim );
 	data->uninit = FALSE;
 	if ( !isNull() ) {
-	    bitBlt( this, 0, 0, &pixmap, 0, 0, pixmap.width(), pixmap.height(),
+	    bitBlt( this, 0, 0, &pixmap, pixmap.width(), pixmap.height(),
 		    CopyROP, TRUE );
 	    if ( pixmap.mask() )
 		setMask( pixmap.data->selfmask ? *((QBitmap*)(this))
@@ -385,8 +294,6 @@ QPixmap &QPixmap::operator=( const QPixmap &pixmap )
 #elif defined(_WS_X11_)
 	hd = pixmap.hd;				// copy QPaintDevice drawable
 	copyX11Data( &pixmap );			// copy x11Data
-#elif defined(_WS_QWS_)
-	hd = pixmap.hd;
 #endif
     }
     return *this;
@@ -485,7 +392,7 @@ QPixmap &QPixmap::operator=( const QImage &image )
 
     QPainter p( &pix );
     p.translate( -ur.x(), -ur.y() );	// use widget coordinate system
-					// when drawing on pixmap
+                                        // when drawing on pixmap
     //    ... draw on pixmap ...
 
     p.end();
@@ -583,9 +490,9 @@ void QPixmap::resize( int w, int h )
 
 void QPixmap::setMask( const QBitmap &newmask )
 {
-    const QPixmap *tmp = &newmask;		// dec cxx bug
-    if ( (data == tmp->data) ||
+    if ( (data == newmask.data) ||
 	 ( newmask.handle() && newmask.handle() == handle() ) ) {
+	const QPixmap *tmp = &newmask;		// dec cxx bug
 	QPixmap m = tmp->copy( TRUE );
 	setMask( *((QBitmap*)&m) );
 	data->selfmask = TRUE;			// mask == pixmap
@@ -607,10 +514,13 @@ void QPixmap::setMask( const QBitmap &newmask )
     }
     delete data->mask;
     QBitmap* newmaskcopy;
-    if ( newmask.mask() )
+    if ( newmask.mask() ) {
+	const QPixmap *tmp = &newmask;
 	newmaskcopy = (QBitmap*)new QPixmap( tmp->copy( TRUE ) );
-    else
+    }
+    else {
 	newmaskcopy = new QBitmap( newmask );
+    }
     data->mask = newmaskcopy;
 }
 
@@ -707,7 +617,7 @@ bool QPixmap::load( const QString &fileName, const char *format,
 	conversion_flags |= MonoOnly;
 	break;
       default:
-	break;// Nothing.
+	;// Nothing.
     }
     return load( fileName, format, conversion_flags );
 }
@@ -728,7 +638,7 @@ bool QPixmap::convertFromImage( const QImage &image, ColorMode mode )
 	conversion_flags |= MonoOnly;
 	break;
       default:
-	break;// Nothing.
+	;// Nothing.
     }
     return convertFromImage( image, conversion_flags );
 }
@@ -785,7 +695,7 @@ bool QPixmap::loadFromData( const uchar *buf, uint len, const char *format,
 	conversion_flags |= MonoOnly;
 	break;
       default:
-	break;// Nothing.
+	;// Nothing.
     }
     return loadFromData( buf, len, format, conversion_flags );
 }
@@ -806,44 +716,15 @@ bool QPixmap::loadFromData( const QByteArray &buf, const char *format,
   Saves the pixmap to the file \e fileName, using the image file format
   \e format.  Returns TRUE if successful, or FALSE if the pixmap could not
   be saved.
-
   \sa load(), loadFromData(), imageFormat(), QImage::save(), QImageIO
 */
 
 bool QPixmap::save( const QString &fileName, const char *format ) const
 {
-    return save( fileName, format, -1 );
-}
-
-
-/*!
-  Saves the pixmap to the file \e fileName, using the image file format
-  \e format and a quality factor \e quality.  \e quality must be in the
-  range [0,100] or -1.  Specify 0 to obtain small compressed files, 100
-  for large uncompressed files and -1 to use the default settings.
-  Returns TRUE if successful, or FALSE if the pixmap could not be saved.
-
-  \sa load(), loadFromData(), imageFormat(), QImage::save(), QImageIO
-*/
-
-bool QPixmap::save( const QString &fileName, const char *format, int quality ) const
-{
     if ( isNull() )
 	return FALSE;				// nothing to save
     QImageIO io( fileName, format );
     io.setImage( convertToImage() );
-    if ( quality > 100  || quality < -1 ) {
-#if defined(CHECK_RANGE)
-	qWarning( "QPixmap::save: quality out of range [-1,100]" );
-#endif
-        if ( quality > 100 )
-	    quality = 100;
-    }
-    if ( quality >= 0 ) {
-	QString s;
-	s.setNum( quality );
-	io.setParameters( s.latin1() );
-    }
     return io.write();
 }
 
@@ -851,10 +732,8 @@ bool QPixmap::save( const QString &fileName, const char *format, int quality ) c
 /*!
   \fn int QPixmap::serialNumber() const
 
-  Returns a number that uniquely identifies the contents of this QPixmap object.
-  This means that multiple QPixmaps objects can have the same serial number
-  as long as they refer to the same contents.
-  The serial number is for example very useful for caching.
+  Returns a number that uniquely identifies this QPixmap object. The
+  serial number is very useful for caching.
 
   \sa QPixmapCache
 */
@@ -889,111 +768,14 @@ void QPixmap::setDefaultOptimization( Optimization optimization )
 }
 
 
-// helper for next function.
-static QPixmap grabChildWidgets( QWidget * w )
-{
-    QPixmap res( w->width(), w->height() );
-    res.fill( w, QPoint( 0, 0 ) );
-    QPainter::redirect( w, &res ); // ### overwrites earlier redirect
-    QPaintEvent e( w->rect(), FALSE );
-    QApplication::sendEvent( w, &e );
-    QPainter::redirect( w, 0 );
-
-    const QObjectList * children = w->children();
-    if ( children ) {
-	QPainter p( &res );
-	QObjectListIt it( *children );
-	QObject * child;
-	while( (child=it.current()) != 0 ) {
-	    ++it;
-	    if ( child->isWidgetType() &&
-		 !((QWidget *)child)->isHidden() &&
-		 ((QWidget *)child)->geometry().intersects( w->rect() ) ) {
-		// those conditions aren't quite right, it's possible
-		// to have a grandchild completely outside its
-		// grandparent, but partially inside its parent.  no
-		// point in optimizing for that.
-
-		// make sure to evaluate pos() first - who knows what
-		// the paint event(s) inside grabChildWidgets() will do.
-		QPoint childpos = ((QWidget *)child)->pos();
-		p.drawPixmap( childpos, grabChildWidgets( (QWidget *)child ) );
-	    }
-	}
-    }
-    return res;
-}
-
-
-/*!  Creates a pixmap and paints \a widget in it.
-
-  If \a widget has children, they are painted too, appropriately located.
-
-  If you specify \a x, \a y, \a w or \a h, only the rectangle you
-  specify is painted.  The defaults are 0, 0 (top-left corner) and
-  -1,-1 (which means the entire widget).
-
-  (If \e w is negative, the function copies everything to the right
-  border of the window.  If \e h is negative, the function copies
-  everything to the bottom of the window.)
-
-  If \a widget is 0, or if the rectangle defined by \a x, \a y, the
-  modified \a w and the modified \a h does not overlap the \a
-  widget->rect(), this function returns a null QPixmap.
-
-  This function actually asks \a widget to paint itself (and its
-  children to paint themselves).  QPixmap::grabWindow() grabs pixels
-  off the screen, which is a bit faster and picks up \e exactly what's
-  on-screen.  This function works by calling paintEvent() with painter
-  redirection turned on, which gets the result of paintEvent(),
-  without e.g. overlying windows.
-
-  If there is overlap, it returns a pixmap of the size you want,
-  containing a rendering of \a widget.  If the rectangle you ask for
-  is a superset of \a widget, the area outside \a widget are covered
-  with the widget's background.
-
-  \sa grabWindow() QPainter::redirect() QWidget::paintEvent()
-*/
-
-QPixmap QPixmap::grabWidget( QWidget * widget, int x, int y, int w, int h )
-{
-    QPixmap res;
-    if ( !widget )
-	return res;
-
-    if ( w < 0 )
-	w = widget->width() - x;
-    if ( h < 0 )
-	h = widget->height() - y;
-
-    QRect wr( x, y, w, h );
-    if ( wr == widget->rect() )
-	return grabChildWidgets( widget );
-    if ( !wr.intersects( widget->rect() ) )
-	return res;
-
-    res.resize( w, h );
-    res.fill( widget, QPoint( w,h ) );
-    QPixmap tmp( grabChildWidgets( widget ) );
-    ::bitBlt( &res, 0, 0, &tmp, x, y, w, h );
-    return res;
-}
-
-
-
-
-
 /*****************************************************************************
   QPixmap stream functions
  *****************************************************************************/
-#ifndef QT_NO_DATASTREAM
+
 /*!
   \relates QPixmap
   Writes a pixmap to the stream as a PNG image.
-
   \sa QPixmap::save()
-  \link datastreamformat.html Format of the QDataStream operators \endlink
 */
 
 QDataStream &operator<<( QDataStream &s, const QPixmap &pixmap )
@@ -1014,7 +796,6 @@ QDataStream &operator<<( QDataStream &s, const QPixmap &pixmap )
   \relates QPixmap
   Reads a pixmap from the stream.
   \sa QPixmap::load()
-  \link datastreamformat.html Format of the QDataStream operators \endlink
 */
 
 QDataStream &operator>>( QDataStream &s, QPixmap &pixmap )
@@ -1024,5 +805,3 @@ QDataStream &operator>>( QDataStream &s, QPixmap &pixmap )
 	pixmap.convertFromImage( io.image() );
     return s;
 }
-
-#endif //QT_NO_DATASTREAM

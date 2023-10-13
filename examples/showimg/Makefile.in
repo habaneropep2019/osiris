@@ -2,48 +2,32 @@
 
 ####### Compiler, tools and options
 
-CXX	=	$(SYSCONF_CXX) $(QT_CXX_MT)
+CXX	=	$(SYSCONF_CXX)
 CXXFLAGS=	$(SYSCONF_CXXFLAGS_QT) $(SYSCONF_CXXFLAGS)
-CC	=	$(SYSCONF_CC) $(QT_C_MT)
+CC	=	$(SYSCONF_CC)
 CFLAGS	=	$(SYSCONF_CFLAGS)
 INCPATH =	
-LFLAGS	=	$(SYSCONF_LFLAGS_QT) $(SYSCONF_RPATH_QT) $(SYSCONF_LFLAGS) $(QT_LFLAGS_MT)
-LIBS	=	$(SUBLIBS) $(SYSCONF_LIBS_QT) $(SYSCONF_LIBS) $(SYSCONF_LIBS_QTAPP)
+LFLAGS	=	$(SYSCONF_LFLAGS_QT) $(SYSCONF_LFLAGS_X11) $(SYSCONF_LFLAGS)
+LIBS	=	$(SYSCONF_LIBS_QT) $(SYSCONF_LIBS_X11) $(SYSCONF_LIBS)
 MOC	=	$(SYSCONF_MOC)
-UIC	=	$(SYSCONF_UIC)
 
 ####### Target
 
 DESTDIR = ./
 VER_MAJ = 1
 VER_MIN = 0
-VER_PATCH = 0
 TARGET	= showimg
 TARGET1 = lib$(TARGET).so.$(VER_MAJ)
 
 ####### Files
 
-HEADERS =	showimg.h \
-		imagetexteditor.h \
-		imagefip.h
+HEADERS =	showimg.h
 SOURCES =	main.cpp \
-		imagetexteditor.cpp \
-		showimg.cpp \
-		imagefip.cpp
+		showimg.cpp
 OBJECTS =	main.o \
-		imagetexteditor.o \
-		showimg.o \
-		imagefip.o
-INTERFACES =    
-UICDECLS =      
-UICIMPLS =      
-SRCMOC	=	moc_showimg.cpp \
-		moc_imagetexteditor.cpp \
-		moc_imagefip.cpp
-OBJMOC	=	moc_showimg.o \
-		moc_imagetexteditor.o \
-		moc_imagefip.o
-
+		showimg.o
+SRCMOC	=	moc_showimg.cpp
+OBJMOC	=	moc_showimg.o
 
 ####### Implicit rules
 
@@ -66,11 +50,10 @@ OBJMOC	=	moc_showimg.o \
 
 ####### Build rules
 
-
 all: $(DESTDIR)$(TARGET)
 
-$(DESTDIR)$(TARGET): $(UICDECLS) $(OBJECTS) $(OBJMOC) $(SUBLIBS)
-	$(SYSCONF_LINK) $(LFLAGS) -o $(DESTDIR)$(TARGET) $(OBJECTS) $(OBJMOC) $(LIBS)
+$(DESTDIR)$(TARGET): $(OBJECTS) $(OBJMOC) 
+	$(SYSCONF_LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(OBJMOC) $(LIBS)
 
 moc: $(SRCMOC)
 
@@ -78,33 +61,8 @@ tmake:
 	tmake showimg.pro
 
 clean:
-	-rm -f $(OBJECTS) $(OBJMOC) $(SRCMOC) $(UICIMPLS) $(UICDECLS)
+	-rm -f $(OBJECTS) $(OBJMOC) $(SRCMOC)
 	-rm -f *~ core
-	-rm -f allmoc.cpp
-
-####### Extension Modules
-
-listpromodules:
-	@echo 
-
-listallmodules:
-	@echo 
-
-listaddonpromodules:
-	@echo 
-
-listaddonentmodules:
-	@echo 
-
-
-REQUIRES=full-config
-
-####### Sub-libraries
-
-
-###### Combined headers
-
-
 
 ####### Compile
 
@@ -114,8 +72,6 @@ main.o: main.cpp \
 		../../include/qwindowdefs.h \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
-		../../include/qfeatures.h \
-		../../include/qconfig.h \
 		../../include/qstring.h \
 		../../include/qcstring.h \
 		../../include/qarray.h \
@@ -136,7 +92,6 @@ main.o: main.cpp \
 		../../include/qvaluelist.h \
 		../../include/qdatastream.h \
 		../../include/qiodevice.h \
-		../../include/qregexp.h \
 		../../include/qpaintdevice.h \
 		../../include/qpalette.h \
 		../../include/qcolor.h \
@@ -150,105 +105,12 @@ main.o: main.cpp \
 		../../include/qimage.h \
 		../../include/qpixmap.h \
 		../../include/qstrlist.h \
-		imagefip.h \
-		../../include/qfiledialog.h \
-		../../include/qdir.h \
-		../../include/qfileinfo.h \
-		../../include/qfile.h \
-		../../include/qdatetime.h \
-		../../include/qdialog.h \
-		../../include/qlistbox.h \
-		../../include/qscrollview.h \
-		../../include/qframe.h \
-		../../include/qscrollbar.h \
-		../../include/qrangecontrol.h \
-		../../include/qdrawutil.h \
-		../../include/qpainter.h \
-		../../include/qpen.h \
-		../../include/qpointarray.h \
-		../../include/qwmatrix.h \
-		../../include/qtimer.h \
-		../../include/qlineedit.h \
-		../../include/qlistview.h \
-		../../include/qurloperator.h \
-		../../include/qurl.h \
-		../../include/qnetworkprotocol.h \
-		../../include/qurlinfo.h \
-		../../include/qdict.h \
-		../../include/qgdict.h \
-		../../include/qqueue.h \
 		../../include/qapplication.h \
 		../../include/qasciidict.h \
+		../../include/qgdict.h \
 		../../include/qtranslator.h \
-		../../include/qintdict.h
-
-imagetexteditor.o: imagetexteditor.cpp \
-		imagetexteditor.h \
-		../../include/qdialog.h \
-		../../include/qwidget.h \
-		../../include/qwindowdefs.h \
-		../../include/qobjectdefs.h \
-		../../include/qglobal.h \
-		../../include/qfeatures.h \
-		../../include/qconfig.h \
-		../../include/qstring.h \
-		../../include/qcstring.h \
-		../../include/qarray.h \
-		../../include/qgarray.h \
-		../../include/qshared.h \
-		../../include/qnamespace.h \
-		../../include/qobject.h \
-		../../include/qevent.h \
-		../../include/qregion.h \
-		../../include/qrect.h \
-		../../include/qsize.h \
-		../../include/qpoint.h \
-		../../include/qmime.h \
-		../../include/qlist.h \
-		../../include/qglist.h \
-		../../include/qcollection.h \
-		../../include/qstringlist.h \
-		../../include/qvaluelist.h \
-		../../include/qdatastream.h \
-		../../include/qiodevice.h \
-		../../include/qregexp.h \
-		../../include/qpaintdevice.h \
-		../../include/qpalette.h \
-		../../include/qcolor.h \
-		../../include/qbrush.h \
-		../../include/qcursor.h \
-		../../include/qfont.h \
-		../../include/qfontmetrics.h \
-		../../include/qfontinfo.h \
-		../../include/qstyle.h \
-		../../include/qsizepolicy.h \
-		../../include/qimage.h \
-		../../include/qpixmap.h \
-		../../include/qstrlist.h \
-		../../include/qlayout.h \
-		../../include/qabstractlayout.h \
-		../../include/qgrid.h \
-		../../include/qframe.h \
-		../../include/qvbox.h \
-		../../include/qhbox.h \
-		../../include/qcombobox.h \
-		../../include/qmultilineedit.h \
-		../../include/qtableview.h \
-		../../include/qlabel.h \
-		../../include/qlineedit.h \
-		../../include/qlistbox.h \
-		../../include/qscrollview.h \
-		../../include/qscrollbar.h \
-		../../include/qrangecontrol.h \
-		../../include/qdrawutil.h \
-		../../include/qpainter.h \
-		../../include/qpen.h \
-		../../include/qpointarray.h \
-		../../include/qwmatrix.h \
-		../../include/qtimer.h \
-		../../include/qpushbutton.h \
-		../../include/qbutton.h \
-		../../include/qiconset.h
+		../../include/qintdict.h \
+		../../include/qimageio.h
 
 showimg.o: showimg.cpp \
 		showimg.h \
@@ -256,8 +118,6 @@ showimg.o: showimg.cpp \
 		../../include/qwindowdefs.h \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
-		../../include/qfeatures.h \
-		../../include/qconfig.h \
 		../../include/qstring.h \
 		../../include/qcstring.h \
 		../../include/qarray.h \
@@ -278,7 +138,6 @@ showimg.o: showimg.cpp \
 		../../include/qvaluelist.h \
 		../../include/qdatastream.h \
 		../../include/qiodevice.h \
-		../../include/qregexp.h \
 		../../include/qpaintdevice.h \
 		../../include/qpalette.h \
 		../../include/qcolor.h \
@@ -292,8 +151,6 @@ showimg.o: showimg.cpp \
 		../../include/qimage.h \
 		../../include/qpixmap.h \
 		../../include/qstrlist.h \
-		imagetexteditor.h \
-		../../include/qdialog.h \
 		../../include/qmenubar.h \
 		../../include/qpopupmenu.h \
 		../../include/qframe.h \
@@ -305,6 +162,7 @@ showimg.o: showimg.cpp \
 		../../include/qfileinfo.h \
 		../../include/qfile.h \
 		../../include/qdatetime.h \
+		../../include/qdialog.h \
 		../../include/qlistbox.h \
 		../../include/qscrollview.h \
 		../../include/qscrollbar.h \
@@ -317,90 +175,15 @@ showimg.o: showimg.cpp \
 		../../include/qtimer.h \
 		../../include/qlineedit.h \
 		../../include/qlistview.h \
-		../../include/qurloperator.h \
-		../../include/qurl.h \
-		../../include/qnetworkprotocol.h \
-		../../include/qurlinfo.h \
-		../../include/qdict.h \
-		../../include/qgdict.h \
-		../../include/qqueue.h \
 		../../include/qmessagebox.h \
 		../../include/qlabel.h \
 		../../include/qkeycode.h \
 		../../include/qapplication.h \
 		../../include/qasciidict.h \
+		../../include/qgdict.h \
 		../../include/qtranslator.h \
 		../../include/qintdict.h \
 		../../include/qclipboard.h
-
-imagefip.o: imagefip.cpp \
-		imagefip.h \
-		../../include/qfiledialog.h \
-		../../include/qdir.h \
-		../../include/qstrlist.h \
-		../../include/qstring.h \
-		../../include/qcstring.h \
-		../../include/qarray.h \
-		../../include/qgarray.h \
-		../../include/qshared.h \
-		../../include/qglobal.h \
-		../../include/qfeatures.h \
-		../../include/qconfig.h \
-		../../include/qlist.h \
-		../../include/qglist.h \
-		../../include/qcollection.h \
-		../../include/qdatastream.h \
-		../../include/qiodevice.h \
-		../../include/qfileinfo.h \
-		../../include/qfile.h \
-		../../include/qdatetime.h \
-		../../include/qdialog.h \
-		../../include/qwidget.h \
-		../../include/qwindowdefs.h \
-		../../include/qobjectdefs.h \
-		../../include/qnamespace.h \
-		../../include/qobject.h \
-		../../include/qevent.h \
-		../../include/qregion.h \
-		../../include/qrect.h \
-		../../include/qsize.h \
-		../../include/qpoint.h \
-		../../include/qmime.h \
-		../../include/qstringlist.h \
-		../../include/qvaluelist.h \
-		../../include/qregexp.h \
-		../../include/qpaintdevice.h \
-		../../include/qpalette.h \
-		../../include/qcolor.h \
-		../../include/qbrush.h \
-		../../include/qcursor.h \
-		../../include/qfont.h \
-		../../include/qfontmetrics.h \
-		../../include/qfontinfo.h \
-		../../include/qstyle.h \
-		../../include/qsizepolicy.h \
-		../../include/qlistbox.h \
-		../../include/qscrollview.h \
-		../../include/qframe.h \
-		../../include/qscrollbar.h \
-		../../include/qrangecontrol.h \
-		../../include/qdrawutil.h \
-		../../include/qpainter.h \
-		../../include/qpen.h \
-		../../include/qpointarray.h \
-		../../include/qwmatrix.h \
-		../../include/qpixmap.h \
-		../../include/qtimer.h \
-		../../include/qlineedit.h \
-		../../include/qlistview.h \
-		../../include/qurloperator.h \
-		../../include/qurl.h \
-		../../include/qnetworkprotocol.h \
-		../../include/qurlinfo.h \
-		../../include/qdict.h \
-		../../include/qgdict.h \
-		../../include/qqueue.h \
-		../../include/qimage.h
 
 moc_showimg.o: moc_showimg.cpp \
 		showimg.h \
@@ -408,8 +191,6 @@ moc_showimg.o: moc_showimg.cpp \
 		../../include/qwindowdefs.h \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
-		../../include/qfeatures.h \
-		../../include/qconfig.h \
 		../../include/qstring.h \
 		../../include/qcstring.h \
 		../../include/qarray.h \
@@ -430,7 +211,6 @@ moc_showimg.o: moc_showimg.cpp \
 		../../include/qvaluelist.h \
 		../../include/qdatastream.h \
 		../../include/qiodevice.h \
-		../../include/qregexp.h \
 		../../include/qpaintdevice.h \
 		../../include/qpalette.h \
 		../../include/qcolor.h \
@@ -445,122 +225,6 @@ moc_showimg.o: moc_showimg.cpp \
 		../../include/qpixmap.h \
 		../../include/qstrlist.h
 
-moc_imagetexteditor.o: moc_imagetexteditor.cpp \
-		imagetexteditor.h \
-		../../include/qdialog.h \
-		../../include/qwidget.h \
-		../../include/qwindowdefs.h \
-		../../include/qobjectdefs.h \
-		../../include/qglobal.h \
-		../../include/qfeatures.h \
-		../../include/qconfig.h \
-		../../include/qstring.h \
-		../../include/qcstring.h \
-		../../include/qarray.h \
-		../../include/qgarray.h \
-		../../include/qshared.h \
-		../../include/qnamespace.h \
-		../../include/qobject.h \
-		../../include/qevent.h \
-		../../include/qregion.h \
-		../../include/qrect.h \
-		../../include/qsize.h \
-		../../include/qpoint.h \
-		../../include/qmime.h \
-		../../include/qlist.h \
-		../../include/qglist.h \
-		../../include/qcollection.h \
-		../../include/qstringlist.h \
-		../../include/qvaluelist.h \
-		../../include/qdatastream.h \
-		../../include/qiodevice.h \
-		../../include/qregexp.h \
-		../../include/qpaintdevice.h \
-		../../include/qpalette.h \
-		../../include/qcolor.h \
-		../../include/qbrush.h \
-		../../include/qcursor.h \
-		../../include/qfont.h \
-		../../include/qfontmetrics.h \
-		../../include/qfontinfo.h \
-		../../include/qstyle.h \
-		../../include/qsizepolicy.h
-
-moc_imagefip.o: moc_imagefip.cpp \
-		imagefip.h \
-		../../include/qfiledialog.h \
-		../../include/qdir.h \
-		../../include/qstrlist.h \
-		../../include/qstring.h \
-		../../include/qcstring.h \
-		../../include/qarray.h \
-		../../include/qgarray.h \
-		../../include/qshared.h \
-		../../include/qglobal.h \
-		../../include/qfeatures.h \
-		../../include/qconfig.h \
-		../../include/qlist.h \
-		../../include/qglist.h \
-		../../include/qcollection.h \
-		../../include/qdatastream.h \
-		../../include/qiodevice.h \
-		../../include/qfileinfo.h \
-		../../include/qfile.h \
-		../../include/qdatetime.h \
-		../../include/qdialog.h \
-		../../include/qwidget.h \
-		../../include/qwindowdefs.h \
-		../../include/qobjectdefs.h \
-		../../include/qnamespace.h \
-		../../include/qobject.h \
-		../../include/qevent.h \
-		../../include/qregion.h \
-		../../include/qrect.h \
-		../../include/qsize.h \
-		../../include/qpoint.h \
-		../../include/qmime.h \
-		../../include/qstringlist.h \
-		../../include/qvaluelist.h \
-		../../include/qregexp.h \
-		../../include/qpaintdevice.h \
-		../../include/qpalette.h \
-		../../include/qcolor.h \
-		../../include/qbrush.h \
-		../../include/qcursor.h \
-		../../include/qfont.h \
-		../../include/qfontmetrics.h \
-		../../include/qfontinfo.h \
-		../../include/qstyle.h \
-		../../include/qsizepolicy.h \
-		../../include/qlistbox.h \
-		../../include/qscrollview.h \
-		../../include/qframe.h \
-		../../include/qscrollbar.h \
-		../../include/qrangecontrol.h \
-		../../include/qdrawutil.h \
-		../../include/qpainter.h \
-		../../include/qpen.h \
-		../../include/qpointarray.h \
-		../../include/qwmatrix.h \
-		../../include/qpixmap.h \
-		../../include/qtimer.h \
-		../../include/qlineedit.h \
-		../../include/qlistview.h \
-		../../include/qurloperator.h \
-		../../include/qurl.h \
-		../../include/qnetworkprotocol.h \
-		../../include/qurlinfo.h \
-		../../include/qdict.h \
-		../../include/qgdict.h \
-		../../include/qqueue.h
-
 moc_showimg.cpp: showimg.h
 	$(MOC) showimg.h -o moc_showimg.cpp
-
-moc_imagetexteditor.cpp: imagetexteditor.h
-	$(MOC) imagetexteditor.h -o moc_imagetexteditor.cpp
-
-moc_imagefip.cpp: imagefip.h
-	$(MOC) imagefip.h -o moc_imagefip.cpp
-
 

@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: qt/examples/scribble/scribble.cpp   2.3.2   edited 2001-01-26 $
+** $Id: scribble.cpp,v 1.1 1999/06/03 10:08:56 warwick Exp $
 **
-** Copyright ( C ) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright ( C ) 1992-1999 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -10,7 +10,6 @@
 
 #include "scribble.h"
 
-#include <qapplication.h>
 #include <qevent.h>
 #include <qpainter.h>
 #include <qtoolbar.h>
@@ -27,30 +26,23 @@
 #include <qpopupmenu.h>
 #include <qintdict.h>
 
-const bool no_writing = FALSE;
-
 Canvas::Canvas( QWidget *parent, const char *name )
-    : QWidget( parent, name, WNorthWestGravity ), pen( Qt::red, 3 ), polyline(3),
+    : QWidget( parent, name ), pen( Qt::red, 3 ), polyline(3),
       mousePressed( FALSE ), buffer( width(), height() )
 {
-
-    if ((qApp->argc() > 0) && !buffer.load(qApp->argv()[1]))
-    	buffer.fill( colorGroup().base() );
-    setBackgroundMode( QWidget::PaletteBase );
-#ifndef QT_NO_CURSOR
+    buffer.fill( Qt::white );
+    setBackgroundMode( QWidget::NoBackground );
     setCursor( Qt::crossCursor );
-#endif
 }
 
 void Canvas::save( const QString &filename, const QString &format )
 {
-    if ( !no_writing )
-	buffer.save( filename, format.upper() );
+    buffer.save( filename, format.upper() );
 }
 
 void Canvas::clearScreen()
 {
-    buffer.fill( colorGroup().base() );
+    buffer.fill( Qt::white );
     repaint( FALSE );
 }
 
@@ -99,7 +91,7 @@ void Canvas::resizeEvent( QResizeEvent *e )
 
     QPixmap tmp( buffer );
     buffer.resize( w, h );
-    buffer.fill( colorGroup().base() );
+    buffer.fill( Qt::white );
     bitBlt( &buffer, 0, 0, &tmp, 0, 0, tmp.width(), tmp.height() );
 }
 
@@ -107,20 +99,17 @@ void Canvas::paintEvent( QPaintEvent *e )
 {
     QWidget::paintEvent( e );
 
-    QArray<QRect> rects = e->region().rects();
-    for ( uint i = 0; i < rects.count(); i++ ) {
-	QRect r = rects[(int)i];
-	bitBlt( this, r.x(), r.y(), &buffer, r.x(), r.y(), r.width(), r.height() );
-    }
+    QRect r = e->rect();
+
+    bitBlt( this, r.x(), r.y(), &buffer, r.x(), r.y(), r.width(), r.height() );
 }
 
 //------------------------------------------------------
 
 Scribble::Scribble( QWidget *parent, const char *name )
-    : QMainWindow( parent, name )
+    : QMainWindow( parent, name ), canvas( this )
 {
-    canvas = new Canvas( this );
-    setCentralWidget( canvas );
+    setCentralWidget( &canvas );
 
     QToolBar *tools = new QToolBar( this );
 
@@ -147,7 +136,7 @@ Scribble::Scribble( QWidget *parent, const char *name )
 
 void Scribble::slotSave()
 {
-    QPopupMenu *menu = new QPopupMenu( 0 );
+    QPopupMenu *menu = new QPopupMenu( 0L );
     QIntDict<QString> formats;
     formats.setAutoDelete( TRUE );
 
@@ -159,29 +148,28 @@ void Scribble::slotSave()
     menu->setMouseTracking( TRUE );
     int id = menu->exec( bSave->mapToGlobal( QPoint( 0, bSave->height() + 1 ) ) );
 
-    if ( id != -1 ) {
-	QString format = *formats[ id ];
+    if ( id == -1 )
+        return;
 
-	QString filename = QFileDialog::getSaveFileName( QString::null, QString( "*.%1" ).arg( format.lower() ), this );
-	if ( !filename.isEmpty() )
-	    canvas->save( filename, format );
-    }
+    QString format = *formats[ id ];
 
-    delete menu;
+    QString filename = QFileDialog::getSaveFileName( QString::null, QString( "*.%1" ).arg( format.lower() ), this );
+    if ( !filename.isEmpty() )
+        canvas.save( filename, format );
 }
 
 void Scribble::slotColor()
 {
-    QColor c = QColorDialog::getColor( canvas->penColor(), this );
-    canvas->setPenColor( c );
+    QColor c = QColorDialog::getColor( canvas.penColor(), this );
+    canvas.setPenColor( c );
 }
 
 void Scribble::slotWidth( int w )
 {
-    canvas->setPenWidth( w );
+    canvas.setPenWidth( w );
 }
 
 void Scribble::slotClear()
 {
-    canvas->clearScreen();
+    canvas.clearScreen();
 }

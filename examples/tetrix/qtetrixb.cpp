@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: qt/examples/tetrix/qtetrixb.cpp   2.3.2   edited 2001-01-26 $
+** $Id: qtetrixb.cpp,v 1.2 1999/06/03 01:45:48 warwick Exp $
 **
-** Copyright (C) 1992-1998 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1998 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.

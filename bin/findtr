@@ -3,13 +3,10 @@
 
 # See Qt I18N documentation for usage information.
 
-use POSIX qw(strftime);
-
-$projectid='PROJECT VERSION';
-$datetime = strftime "%Y-%m-%d %X %Z", localtime;
+$projectid='example-Qt-message-extraction';
+$datetime='1999-02-23 15:38+0200';
 $charset='iso-8859-1';
-$translator='FULLNAME <EMAIL@ADDRESS>';
-$revision_date='YYYY-MM-DD';
+$translator='';
 
 $real_mark = "tr";
 $noop_mark = "QT_TR_NOOP";
@@ -18,14 +15,13 @@ $noop_scoped_mark = "QT_TRANSLATE_NOOP";
 
 $header=
 '# This is a Qt message file in .po format.  Each msgid starts with
-# a scope.  This scope should *NOT* be translated - eg. translating
-# from French to English, "Foo::Bar" would be translated to "Pub",
-# not "Foo::Pub".
+# a scope.  This scope should *NOT* be translated - eg. "Foo::Bar"
+# would be translated to "Pub", not "Foo::Pub".
 msgid ""
 msgstr ""
 "Project-Id-Version: '.$projectid.'\n"
 "POT-Creation-Date: '.$datetime.'\n"
-"PO-Revision-Date: '.$revision_date.'\n"
+"PO-Revision-Date: '.$datetime.'\n"
 "Last-Translator: '.$translator.'\n"
 "Content-Type: text/plain; charset='.$charset.'\n"
 
@@ -46,13 +42,12 @@ sub outmsg {
     my ($file, $line, $scope, $msgid) = @_;
     # unesc
     $msgid =~ s/$esc:$esc:$esc/::/gs;
-    $msgid =~ s|$esc/$esc/$esc|//|gs;
 
     # Remove blank lines
     $msgid =~ s/\n\n+/\n/gs;
     $msgid = "\"\"\n$msgid" if $msgid =~ /\n/s;
     print "#: $file:$line\n";
-    $msgid =~ s/^"//; #"emacs bug
+    $msgid =~ s/^"//;
     print "msgid \"${scope}::$msgid\n";
     #print "msgstr \"$msgid\n";
     print "msgstr \"\"\n";
@@ -73,23 +68,18 @@ foreach $file ( @ARGV ) {
 
     $source = join( "", <I> );
 
-    # Find esc. Avoid bad case 1/// -> 1/1/1/1 -> ///1
+    # Find esc
     $esc = 1;
-    while ( $source =~ m!(?:$esc/$esc/$esc)|(?:$esc///)
-	    |(?:$esc:$esc:$esc)|(?:$esc:\:\:)! ) {
+    while ( $source =~ /$esc:$esc:$esc/ ) {
 	$esc++;
     }
 
     # Hide quoted :: in practically all strings
     $source =~ s/\"([^"\n]*)::([^"\n]*)\"/\"$1$esc:$esc:$esc$2\"/g;
 
-    # Hide quoted // in practically all strings
-    $source =~ s|\"([^"\n]*)//([^"\n]*)\"|\"$1$esc/$esc/$esc$2\"|g;
-
-
-    # strip comments -- does not handle "/*" in strings
+    # strip comments
     while( $source =~ s|/\*(.*?)\*/|justlines($1)|ges ) { }
-    while( $source =~ s|//(.*?)\n|\n|g ) { }
+    while( $source =~ s|//(.*?)||g ) { }
 
     while( $source =~ /
 	    (?:
@@ -101,9 +91,9 @@ foreach $file ( @ARGV ) {
 		    (\w+)::(?:\w+)
 		    \s*
 		    # Parameters etc up to open-curly - no semicolons
-		    \(([^();]*)\)
+		    \(([^;]*)\)
 		    \s*
-		    (?:\{|:)
+		    \{
 		)
 	      |
 		# $3 - one-argument msgid
@@ -126,7 +116,7 @@ foreach $file ( @ARGV ) {
 			\s*"([^\"]*)"
 			\s*,\s*
 			# The msgid parameter
-			\s*((?:\"(?:[^"]|[^\\]\\")*"\s*)+) #"emacs
+			\s*((?:\"(?:[^"]|[^\\]\\")*"\s*)+)
 		    \)
 		)
 	      |

@@ -1,0 +1,77 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta name="robots" content="noindex"><title>Qt Image IO Extension Library</title>
+</head>
+<body bgcolor=#ffffff>
+<p>
+<h1 align=center>Qt Image IO Extension Library</h1>
+<hr>
+<p>
+This library is an extension to the
+Qt GUI Toolkit.  It provides image input/output facilities for additional
+formats which may require additional libraries or DLLs, or simply large
+amounts of code to implement.  The purpose of this extension is to allow
+the Qt GUI Toolkit to remain unbloated by such additional library code,
+while allowing Qt applications with specific image I/O requirements to
+have readily available support.
+<p>
+The API of the library is simple.  An application requiring additional
+image formats should either call the function:
+<p>
+<ul>
+ <li> <a href="#all"><b>qInitImageIO</b></a> ()
+</ul>
+<p>
+<em>or</em> call a selection of the format-specific functions:
+<p>
+<ul>
+ <li> <a href="#jpeg"><b>qInitJpegIO</b></a> ()
+</ul>
+<p>
+<hr>
+<p>
+<h2>Function Documentation</h2>
+<p>
+<h3> <a name="all">qInitImageIO()</a> </h3>
+<p>
+<pre>
+  #include &lt;qimageio.h&gt;
+</pre>
+<p>
+  Initialize <em>all</em> image I/O extensions.  Note that future versions
+  of this extension may support more formats than the version your application
+  was originally linked with.  If you link dynamically with <tt>libqimgio</tt>,
+  then
+  those new formats will be available, and the user will require
+  any libraries for supporting those formats (which presumably they will
+  have if they have installed a newer version of <tt>libqimgio</tt>).
+  If this is not what you want, consider linking this code statically.
+<p>
+  Currently, this function enables JPEG support.  Note that PNG support is
+  now included in Qt (installer chooses static or dynamic linking at
+  installation time).
+<p>
+<h3> <a name="jpeg">qInitJpegIO()</a> </h3>
+<p>
+<pre>
+  #include &lt;qjpegio.h&gt;
+</pre>
+<p>
+  Initialize JPEG image I/O extensions.
+<p>
+ <ul>
+   <li> Requires <tt>libjpeg.so.6</tt>
+    <ul>
+        <li> Tested with <tt>libjpeg.so.6.0.1</tt>.
+        <li> See <a href="ftp://ftp.uu.net/graphics/jpeg/">ftp.uu.net</a> for the official sources.
+        <li> See <a href="http://ftpsearch.lycos.com">FTP Search</a> for other sources.
+        <li> See <a href="http://www.faqs.org/faqs/jpeg-faq/">the JPEG FAQ</a> for more information.
+    </ul>
+ </ul>
+<p>
+</body>
+</html>
+
+<p><address><hr><div align="center">
+<table width="100%" cellspacing="0" border="0"><tr>
+<td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.00</div>
+</table></div></address></body></html>

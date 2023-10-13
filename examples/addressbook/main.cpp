@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: qt/examples/addressbook/main.cpp   2.3.2   edited 2001-06-12 $
+** $Id: main.cpp,v 1.2 1999/06/08 14:20:28 aavit Exp $
 **
-** Copyright ( C ) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright ( C ) 1992-1999 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -11,14 +11,14 @@
 #include <qapplication.h>
 #include <qplatinumstyle.h>
 
-#include "mainwindow.h"
+#include "ab_mainwindow.h"
 
 int main( int argc, char ** argv )
 {
     QApplication a( argc, argv );
 
     ABMainWindow *mw = new ABMainWindow();
-    mw->setCaption( "Qt Example - Addressbook" );
+    mw->setCaption( "Addressbook 1" );
     a.setMainWidget( mw );
     mw->show();
 

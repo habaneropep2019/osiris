@@ -1,40 +1,28 @@
 /****************************************************************************
-** $Id: qt/src/tools/qcstring.h   2.3.2   edited 2001-03-04 $
+** $Id: qcstring.h,v 2.7 1999/05/28 20:48:52 agulbra Exp $
 **
-** Definition of the extended char array operations,
+** Definition of the QString class, extended char array operations,
 ** and QByteArray and QCString classes
 **
 ** Created : 920609
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
-** This file is part of the tools module of the Qt GUI Toolkit.
+** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses may use this file in accordance with the Qt Commercial License
-** Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
+*****************************************************************************/
 
 #ifndef QCSTRING_H
 #define QCSTRING_H
@@ -43,11 +31,11 @@
 #include "qarray.h"
 #endif // QT_H
 
-#if (defined(_OS_SUN_) && defined(_CC_GNU_))
+#include <string.h>
+
+#if defined(_OS_SUN_) && defined(_CC_GNU_)
 #include <strings.h>
 #endif
-
-#include <string.h>
 
 
 /*****************************************************************************
@@ -56,18 +44,15 @@
 
 #if defined(_OS_HPUX_)
 // HP-UX has badly defined strstr() etc.
-// ### fix in 3.0: change hack_* to qt_hack_*
-// by the way HP-UX is probably right, the standard has evolved and
-// we'll have to adapt to it
 inline char *hack_strstr( const char *s1, const char *s2 )
 { return (char *)strstr(s1, s2); }
 inline char *hack_strchr( const char *s, int c )
 { return (char *)strchr(s, c); }
 inline char *hack_strrchr( const char *s, int c )
 { return (char *)strrchr(s, c); }
-#define strstr(s1,s2)	hack_strstr((s1),(s2))
-#define strchr(s,c)	hack_strchr((s),(c))
-#define strrchr(s,c)	hack_strrchr((s),(c))
+#define strstr	hack_strstr
+#define strchr	hack_strchr
+#define strrchr hack_strrchr
 #endif
 
 
@@ -78,7 +63,7 @@ inline char *hack_strrchr( const char *s, int c )
 Q_EXPORT void *qmemmove( void *dst, const void *src, uint len );
 
 #if defined(_OS_SUN_) || defined(_CC_OC_)
-#define memmove(s1,s2,n) qmemmove((s1),(s2),(n))
+#define memmove qmemmove
 #endif
 
 Q_EXPORT char *qstrdup( const char * );
@@ -89,11 +74,17 @@ Q_EXPORT inline uint cstrlen( const char *str )
 Q_EXPORT inline uint qstrlen( const char *str )
 { return str ? strlen(str) : 0; }
 
+#undef	strlen
+#define strlen qstrlen
+
 Q_EXPORT inline char *cstrcpy( char *dst, const char *src )
 { return strcpy(dst,src); }
 
 Q_EXPORT inline char *qstrcpy( char *dst, const char *src )
 { return src ? strcpy(dst, src) : 0; }
+
+#undef	strcpy
+#define strcpy qstrcpy
 
 Q_EXPORT char *qstrncpy( char *dst, const char *src, uint len );
 
@@ -103,6 +94,9 @@ Q_EXPORT inline int cstrcmp( const char *str1, const char *str2 )
 Q_EXPORT inline int qstrcmp( const char *str1, const char *str2 )
 { return (str1 && str2) ? strcmp(str1,str2) : (int)((long)str2 - (long)str1); }
 
+#undef	strcmp
+#define strcmp qstrcmp
+
 Q_EXPORT inline int cstrncmp( const char *str1, const char *str2, uint len )
 { return strncmp(str1,str2,len); }
 
@@ -110,36 +104,16 @@ Q_EXPORT inline int qstrncmp( const char *str1, const char *str2, uint len )
 { return (str1 && str2) ? strncmp(str1,str2,len) :
 			  (int)((long)str2 - (long)str1); }
 
-Q_EXPORT int qstricmp( const char *, const char * );
-
-Q_EXPORT int qstrnicmp( const char *, const char *, uint len );
-
-// ### TODO for 3.0: these and the cstr* functions should be used if
-//                   !defined(QT_CLEAN_NAMESPACE)
-//                   We want to keep source compatibility for 2.x
-// ### TODO for 4.0: completely remove these and the cstr* functions
-
-#if !defined(QT_GENUINE_STR)
-
-#undef	strlen
-#define strlen qstrlen
-
-#undef	strcpy
-#define strcpy qstrcpy
-
-#undef	strcmp
-#define strcmp qstrcmp
-
 #undef	strncmp
 #define strncmp qstrncmp
 
+Q_EXPORT int qstricmp( const char *, const char * );
+Q_EXPORT int qstrnicmp( const char *, const char *, uint len );
+
 #undef	stricmp
 #define stricmp	 qstricmp
-
 #undef	strnicmp
 #define strnicmp qstrnicmp
-
-#endif
 
 
 // qChecksum: Internet checksum
@@ -159,10 +133,9 @@ typedef QArray<char> QByteArray;
 /*****************************************************************************
   QByteArray stream functions
  *****************************************************************************/
-#ifndef QT_NO_DATASTREAM
+
 Q_EXPORT QDataStream &operator<<( QDataStream &, const QByteArray & );
 Q_EXPORT QDataStream &operator>>( QDataStream &, QByteArray & );
-#endif
 
 
 
@@ -256,10 +229,10 @@ public:
 /*****************************************************************************
   QCString stream functions
  *****************************************************************************/
-#ifndef QT_NO_DATASTREAM
+
 Q_EXPORT QDataStream &operator<<( QDataStream &, const QCString & );
 Q_EXPORT QDataStream &operator>>( QDataStream &, QCString & );
-#endif
+
 
 /*****************************************************************************
   QCString inline functions
@@ -269,7 +242,7 @@ inline QCString &QCString::operator=( const QCString &s )
 { return (QCString&)assign( s ); }
 
 inline QCString &QCString::operator=( const char *str )
-{ return (QCString&)duplicate( str, qstrlen(str)+1 ); }
+{ return (QCString&)duplicate( str, strlen(str)+1 ); }
 
 inline bool QCString::isNull() const
 { return data() == 0; }
@@ -277,16 +250,8 @@ inline bool QCString::isNull() const
 inline bool QCString::isEmpty() const
 { return data() == 0 || *data() == '\0'; }
 
-/*
- * The following code was changed to use code by Martin Tobias Holmedahl Sandsmark
- * via https://invent.kde.org/sandsmark/qt2/-/commit/33030661efa9bc563cc3d6cf6a3aa5420bca03f2
- * The licensing notice on the reference file is the same as this file.
- */
 inline uint QCString::length() const
-{ return strnlen( data(), size() ); }
-/*
- * End copied code
- */
+{ return strlen( data() ); }
 
 inline bool QCString::truncate( uint pos )
 { return resize(pos+1); }
@@ -324,49 +289,49 @@ inline QCString::operator const char *() const
  *****************************************************************************/
 
 Q_EXPORT inline bool operator==( const QCString &s1, const QCString &s2 )
-{ return qstrcmp(s1.data(),s2.data()) == 0; }
+{ return strcmp(s1.data(),s2.data()) == 0; }
 
 Q_EXPORT inline bool operator==( const QCString &s1, const char *s2 )
-{ return qstrcmp(s1.data(),s2) == 0; }
+{ return strcmp(s1.data(),s2) == 0; }
 
 Q_EXPORT inline bool operator==( const char *s1, const QCString &s2 )
-{ return qstrcmp(s1,s2.data()) == 0; }
+{ return strcmp(s1,s2.data()) == 0; }
 
 Q_EXPORT inline bool operator!=( const QCString &s1, const QCString &s2 )
-{ return qstrcmp(s1.data(),s2.data()) != 0; }
+{ return strcmp(s1.data(),s2.data()) != 0; }
 
 Q_EXPORT inline bool operator!=( const QCString &s1, const char *s2 )
-{ return qstrcmp(s1.data(),s2) != 0; }
+{ return strcmp(s1.data(),s2) != 0; }
 
 Q_EXPORT inline bool operator!=( const char *s1, const QCString &s2 )
-{ return qstrcmp(s1,s2.data()) != 0; }
+{ return strcmp(s1,s2.data()) != 0; }
 
 Q_EXPORT inline bool operator<( const QCString &s1, const QCString& s2 )
-{ return qstrcmp(s1.data(),s2.data()) < 0; }
+{ return strcmp(s1.data(),s2.data()) < 0; }
 
 Q_EXPORT inline bool operator<( const QCString &s1, const char *s2 )
-{ return qstrcmp(s1.data(),s2) < 0; }
+{ return strcmp(s1.data(),s2) < 0; }
 
 Q_EXPORT inline bool operator<( const char *s1, const QCString &s2 )
-{ return qstrcmp(s1,s2.data()) < 0; }
+{ return strcmp(s1,s2.data()) < 0; }
 
 Q_EXPORT inline bool operator<=( const QCString &s1, const char *s2 )
-{ return qstrcmp(s1.data(),s2) <= 0; }
+{ return strcmp(s1.data(),s2) <= 0; }
 
 Q_EXPORT inline bool operator<=( const char *s1, const QCString &s2 )
-{ return qstrcmp(s1,s2.data()) <= 0; }
+{ return strcmp(s1,s2.data()) <= 0; }
 
 Q_EXPORT inline bool operator>( const QCString &s1, const char *s2 )
-{ return qstrcmp(s1.data(),s2) > 0; }
+{ return strcmp(s1.data(),s2) > 0; }
 
 Q_EXPORT inline bool operator>( const char *s1, const QCString &s2 )
-{ return qstrcmp(s1,s2.data()) > 0; }
+{ return strcmp(s1,s2.data()) > 0; }
 
 Q_EXPORT inline bool operator>=( const QCString &s1, const char *s2 )
-{ return qstrcmp(s1.data(),s2) >= 0; }
+{ return strcmp(s1.data(),s2) >= 0; }
 
 Q_EXPORT inline bool operator>=( const char *s1, const QCString &s2 )
-{ return qstrcmp(s1,s2.data()) >= 0; }
+{ return strcmp(s1,s2.data()) >= 0; }
 
 Q_EXPORT inline QCString operator+( const QCString &s1, const QCString &s2 )
 {

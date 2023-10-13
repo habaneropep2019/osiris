@@ -1,39 +1,27 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qframe.h   2.3.2   edited 2001-01-26 $
+** $Id: qframe.h,v 2.20 1999/06/08 20:39:37 ettrich Exp $
 **
 ** Definition of QFrame widget class
 **
 ** Created : 950201
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
-** This file is part of the widgets module of the Qt GUI Toolkit.
+** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses may use this file in accordance with the Qt Commercial License
-** Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
+*****************************************************************************/
 
 #ifndef QFRAME_H
 #define QFRAME_H
@@ -42,21 +30,10 @@
 #include "qwidget.h"
 #endif // QT_H
 
-#ifndef QT_NO_FRAME
 
 class Q_EXPORT QFrame : public QWidget			// frame class
 {
     Q_OBJECT
-    Q_ENUMS( Shape Shadow )
-    Q_PROPERTY( int frameWidth READ frameWidth )
-    Q_PROPERTY( QRect contentsRect READ contentsRect )
-    Q_PROPERTY( Shape frameShape READ frameShape WRITE setFrameShape )
-    Q_PROPERTY( Shadow frameShadow READ frameShadow WRITE setFrameShadow )
-    Q_PROPERTY( int lineWidth READ lineWidth WRITE setLineWidth )
-    Q_PROPERTY( int margin READ margin WRITE setMargin )
-    Q_PROPERTY( int midLineWidth READ midLineWidth WRITE setMidLineWidth )
-    Q_PROPERTY( QRect frameRect READ frameRect WRITE setFrameRect DESIGNABLE false )
-
 public:
     QFrame( QWidget *parent=0, const char *name=0, WFlags f=0,
 	    bool = TRUE );
@@ -74,6 +51,7 @@ public:
     QSize	sizeHint() const;
     QSizePolicy sizePolicy() const;
 
+q_properties:
     enum Shape { NoFrame  = 0,				// no frame
 		 Box	  = 0x0001,			// rectangular box
 		 Panel    = 0x0002,			// rectangular panel
@@ -161,7 +139,5 @@ inline int QFrame::margin() const
 inline int QFrame::frameWidth() const
 { return fwidth; }
 
-
-#endif // QT_NO_FRAME
 
 #endif // QFRAME_H

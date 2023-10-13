@@ -1,37 +1,25 @@
 /****************************************************************************
-** $Id: qt/doc/qvaluelist.doc   2.3.2   edited 2001-01-26 $
+** $Id: qvaluelist.doc,v 1.3 1999/06/15 12:58:15 weis Exp $
 **
 ** QValueList and QValueListIterator class documentation
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
+** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
+** Licensees with valid Qt Professional Edition licenses may distribute and
+** use this file in accordance with the Qt Professional Edition License
+** provided at sale or upon request.
 **
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses may use this file in accordance with the Qt Commercial License
-** Agreement provided with the Software.
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
+*****************************************************************************/
 
 
 /*****************************************************************************
@@ -44,26 +32,16 @@
 
   \ingroup qtl
   \ingroup tools
-  \ingroup shared
 
   Define a template instance QValueList\<X\> to create a list of values which all
   have the class X. Please notice that QValueList does not store pointers to the
   members of the list. It holds a copy of every member. That is the reason why this
   kind of classes are called "value based" while QList and QDict are "reference based".
 
-  Some classes can not be used within a QValueList,  for example everything
-  derived from QObject and thus all classes that implement widgets.
-  Only values can be used in a QValueList. To qualify as a value, the class
-  must provide
-  <ul>
-  <li>a copy constructor,
-  <li>an assignment operator and
-  <li> a default constructor, i.e. a constructor that does not take any arguments.
-  </ul>
-
-  Note that C++ defaults to field-by-field assignment operators and
-  copy constructors if no explicit version is supplied. In many cases,
-  this is sufficient.
+  Some classes can not be used within a QValueList. For example everything derived from
+  QObject and as a reason of this that extends to all classes which implement widgets.
+  You can only put stuff in a QValueList which can be easily copied. That means that the 
+  class X should implement a fast copy constructor.
 
   Example:
   \code
@@ -74,17 +52,15 @@
     class Employee
     {
     public:
-	Employee(): s(0) {}
-	Employee( const QString& name, int salary )
-	    : n(name), s(salary)
-	{}
+        Employee( const QString& name, int salary ) { n=name; s=salary; }
+        Employee( const Employee& _e ) { n = _e.name; s = _e.s; }
 
-	QString     name()   const	 	{ return n; }
-	int	    salary() const	 	{ return s; }
-	void	    setSalary( int salary )	{ s = salary; }
+        QString     name()   const		 { return n; }
+        int	    salary() const		 { return s; }
+	void	    setSalary( int _s ) const	 { s = _s; }
     private:
-	QString     n;
-	int         s;
+        QString     n;
+        int         s;
     };
 
     void main()
@@ -102,7 +78,7 @@
 	
 	EmployeeList::Iterator it;
 	for( it = list.begin(); it != list.end(); ++it )
-	    printf( "%s earns %d\n", (*it).name().latin1(), (*it).salary().latin1() );
+	    printf( "%s earns %d\n", (*it).name(), (*it).salary() );
     }
   \endcode
 
@@ -125,7 +101,7 @@
 
   The second way of accessing a list is with operator[]. That means you can address
   it like an array. The return value is a reference to the value stored in the list.
-  There exist two versions of this operator. The first one is const and returns a
+  There exist two versions of this operator. The first one is const and returns a 
   const reference to the value. The second on is non const and returns a non const
   reference to the value. It is up to your compiler to choose the correct one.
 
@@ -134,11 +110,11 @@
   It is save to have multiple iterators at the same time. If some member of the list is
   removed then only iterators pointing to the removed member become invalid. Inserting in
   the list does not invalidate any iterator. For convenience the function last() returns
-  an iterator for the last and first() for the first element in the list.
+  an iterator for the last and first() for thge first element in the list.
 
   In addition you can search items in the list with the find() function. It exists in a const
   and a non const version. It starts searching from the beginning of the list, but another
-  flavor of the find() function allows you to specify where searching should start.
+  flavour of the find() function allows you to specify where searching should start.
   If you just want to know wether a certain item is at least once in the list, then you
   can use the contains() function.
 
@@ -146,7 +122,7 @@
   list. The list holds its own copies and will free them if the corresponding member or
   the list itself is deleted. You can force the list to free all of its item with clear().
 
-  QValueList is implicitly shared. That means you can just make copies of the list
+  QValueList is implict shared. That means you can just make copies of the list
   in time O(1). If multiple QValueList instances share the same data and one
   is doing a modification of the lists data then this modifying instance makes a copy
   and modifies its private copy. So it does not affect the other instances.
@@ -162,9 +138,13 @@
   the remove(). The other possibility is to pass a value to remove() which will
   delete all members which match this value.
 
-  Lists can be sorted with the algorithms provided by the <a
-  href="qtl.html">Qt Template Library</a>, for example with
-  qHeapSort():
+  Sorting of the list is not supported by the class itself. That has three reasons:
+  For one Qt does not require that the class of the instances stored in a QValueList
+  do need to implement operator<. Reason number three is that sorting is very
+  often not needed. By adding the sorting algorithm to the QValueList template
+  the compiler would generate sorting code for every incarnation of the template but
+  it is never used. Reason number three is that you can choose between different sorting
+  algorithms. TODO: Reference to QTL
 
   Example:
   \code
@@ -186,7 +166,7 @@
 */
 
 /*!
-  \fn QValueList::QValueList( const QValueList<T>& l )
+  \fn QValueList::QValueList( const QValueList& l )
   Constructs a copy of \e l.
 
   This operation costs O(1) time since QValueList is implicit shared.
@@ -209,7 +189,7 @@
   Assigns \e l to this list and returns a reference to this list.
 
   All iterators of the current list become invalidated by this operation.
-  The cost of such an assignment is O(1) since QValueList is implicitly shared.
+  The cost of such an assignment is O(1) since QValueList is implict shared.
 */
 
 /*!
@@ -306,7 +286,7 @@
 
 /*!
   \fn Iterator QValueList::prepend( const T& x )
-  Inserts the value \e x at the beginning of the list.
+  Inserts the value \e x at the end of the list.
 
   Returns an iterator pointing at the inserted item.
 
@@ -521,36 +501,34 @@
     class Employee
     {
     public:
-	Employee(): s(0) {}
-	Employee( const QString& name, int salary )
-	    : n(name), s(salary)
-	{}
+        Employee( const QString& name, int salary ) { n=name; s=salary; }
+        Employee( const Employee& _e ) { n = _e.name; s = _e.s; }
 
-	QString     name()   const		{ return n; }
-	int	    salary() const		{ return s; }
-	void	    setSalary( int salary )	{ s = salary; }
+        QString     name()   const		 { return n; }
+        int	    salary() const		 { return s; }
+	void	    setSalary( int _s ) const	 { s = _s; }
     private:
-	QString     n;
-	int         s;
+        QString     n;
+        int         s;
     };
 
     void main()
-	{
-	    typedef QValueList<Employee> EmployeeList;
-	    EmployeeList list;		// list of Employee
+    {
+	typedef QValueList<Employee> EmployeeList;
+	EmployeeList list;		// list of Employee
 
-	    list.append( Employee("Bill", 50000) );
-	    list.append( Employee("Steve",80000) );
-	    list.append( Employee("Ron",  60000) );
+	list.append( Employee("Bill", 50000) );
+	list.append( Employee("Steve",80000) );
+	list.append( Employee("Ron",  60000) );
 
-	    Employee joe( "Joe", 50000 );
-	    list.append( joe );
-	    joe.setSalary( 4000 );
+	Employee joe( "Joe", 50000 );
+	list.append( joe );
+	joe.setSalary( 4000 );
 	
-	    EmployeeList::Iterator it;
-	    for( it = list.begin(); it != list.end(); ++it )
-		printf( "%s earns %d\n", (*it).name().latin1(), (*it).salary() );
-	}
+	EmployeeList::Iterator it;
+	for( it = list.begin(); it != list.end(); ++it )
+	    printf( "%s earns %d\n", (*it).name(), (*it).salary() );
+    }
   \endcode
 
   Program output:
@@ -568,7 +546,7 @@
   by what you are doing. QValueList does not know about all its iterators
   and the iterators dont even know to which list they belong. That makes
   things fast and slim but a bit dangerous because it is up to you to make
-  sure that iterators you are using are still valid. QListIterator will be able
+  shure that iterators you are using are still valid. QListIterator will be able
   to give warnings while QValueListIterator may end up in an undefined state.
 
   For every Iterator there is a ConstIterator. When accessing a QValueList
@@ -576,12 +554,13 @@
   const, then you have to use the ConstIterator. Its semantics are the same,
   but it returns only const references to the item it points to.
 
-  \sa QValueList, QValueListConstIterator
+  \sa QValueList
+  \sa QValueListConstIterator
 */
 
 /*!
   \fn QValueListIterator::QValueListIterator()
-  Creates un uninitialized iterator.
+  Creates un unitilaized iterator.
 */
 
 /*!
@@ -682,12 +661,13 @@
 
   For more informations on QValueList iterators see QValueListIterator.
 
-  \sa QValueListIterator, QValueList
+  \sa QValueListIterator
+  \sa QValueList
 */
 
 /*!
   \fn QValueListConstIterator::QValueListConstIterator()
-  Creates un uninitialized iterator.
+  Creates un unitilaized iterator.
 */
 
 /*!

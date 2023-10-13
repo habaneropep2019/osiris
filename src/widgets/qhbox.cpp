@@ -1,43 +1,18 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qhbox.cpp   2.3.2   edited 2001-01-26 $
+** $Id: qhbox.cpp,v 1.17 1999/06/22 10:21:12 paul Exp $
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
-** This file is part of the widgets module of the Qt GUI Toolkit.
+** This file is part of an example program for Qt.  This example
+** program may be used, distributed and modified without limitation.
 **
-** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
-** LICENSE.QPL included in the packaging of this file.
-**
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
-**
-** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses may use this file in accordance with the Qt Commercial License
-** Agreement provided with the Software.
-**
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
+*****************************************************************************/
 
 #include "qhbox.h"
-#ifndef QT_NO_HBOX
 #include "qlayout.h"
 #include "qapplication.h"
 #include "qobjectlist.h"
 
-// NOT REVISED
 /*!
   \class QHBox qhbox.h
   \brief The QHBox widget performs geometry management on its children
@@ -84,7 +59,8 @@ QHBox::QHBox( bool horizontal, QWidget *parent , const char *name, WFlags f, boo
     lay->setAutoAdd( TRUE );
 }
 
-/*!\reimp
+/*!
+  Reimplemented for internal purposes
  */
 void QHBox::frameChanged()
 {
@@ -100,30 +76,6 @@ void QHBox::frameChanged()
 
 void QHBox::setSpacing( int space )
 {
-    if ( layout() ) // ### why not use this->lay?
+    if ( layout() )
 	layout()->setSpacing( space );
 }
-
-
-/*!
-  \reimp
-*/
-
-QSize QHBox::sizeHint() const
-{
-    QWidget *mThis = (QWidget*)this;
-    QApplication::sendPostedEvents( mThis, QEvent::ChildInserted );
-    return QFrame::sizeHint();
-}
-
-/*!
-  Sets the stretch factor of \a w to \a stretch.
-  \sa QBoxLayout::setStretchFactor()
-*/
-bool QHBox::setStretchFactor( QWidget* w, int stretch )
-{
-    QWidget *mThis = (QWidget*)this;
-    QApplication::sendPostedEvents( mThis, QEvent::ChildInserted );
-    return lay->setStretchFactor( w, stretch );
-}
-#endif

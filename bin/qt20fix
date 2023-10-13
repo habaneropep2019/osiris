@@ -194,8 +194,8 @@ sub parseline{
  "pointingHandCursor" => "Qt::pointingHandCursor"
 );
 
-if ( defined( $ENV{"OSIRISDIR"} ) &&
-     open( I, "< ". $ENV{"OSIRISDIR"} . "/src/kernel/q1xcompatibility.h" ) ) {
+if ( defined( $ENV{"QTDIR"} ) &&
+     open( I, "< ". $ENV{"QTDIR"} . "/src/kernel/q1xcompatibility.h" ) ) {
     while( <I> ) {
 	if ( /\#define\s+([a-zA-Z0-9_]+)\s+(\S+)/ ) {
 	    if ( !defined( $globals{$1} ) ) {
