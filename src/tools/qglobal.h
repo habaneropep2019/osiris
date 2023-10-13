@@ -168,7 +168,7 @@
 //   USLC	- SCO UnixWare7 C++
 //   CDS	- Reliant C++
 //   KAI	- KAI C++
-//   CLANG  - C++ Frontend for the LLVM compiler
+//   CLANG	= Clang/LLVM
 //
 
 
@@ -305,7 +305,6 @@
 //   MAC	- unsupported
 //   PM		- unsupported
 //   WIN16	- unsupported
-//   WL		- Wayland
 //
 
 #if defined(_OS_MAC_)
@@ -331,9 +330,6 @@
 #define Q_WS_X11
 #endif
 #endif
-
-#if defined(_WS_WL_)
-#error "Osiris does not currently support native Wayland. Please use X11 or via XWayland"
 
 #if defined(_WS_WIN16_) || defined(_WS_WIN32_)
 #define _WS_WIN_

@@ -10,7 +10,6 @@ Osiris 2.4.1 is a maintenance release. As a reminder, Osiris is a fork of Qt ver
 - Fixed examples/httpd: main() missing type specifier (should have been int, none present)
 - Removed the need for the environment variable OSIRISDIR in the configure script, making it easier to use
 - Removed configs for long obsolete platforms and platforms that have no planned support in Osiris.
-- Added stub mention of Wayland in qglobal
 - Bumped OSIRIS_VER and OSIRIS_VER_STR to reflect new Osiris release 2.4.1
 - Fixed a bug in qtextbrowser that would cause a segfault when forwardStack was empty
 
