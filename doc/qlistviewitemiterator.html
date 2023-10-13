@@ -39,6 +39,10 @@ The QListViewItemIterator class provides an iterator for collections of QListVie
 Construct an instance of a QListViewItemIterator with either a
 <a href="qlistview.html">QListView</a>* or a <a href="qlistviewitem.html">QListViewItem</a>* as argument, to operate on the tree
 of QListViewItems.
+<p>A QListViewItemIterator iterates over all items of a listview. This means ++it makes always
+the first child of the current item the new current one. If there is no child, the next sibling
+gets the new current item, and if there is no next sibling, the next sibling of the parent is
+set to current.
 <p>Example:
 <p>Often you want to get all items, which were selected by a user. Here is
 an example which does this and stores the pointers to all selected items
@@ -134,7 +138,7 @@ iterator.
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.troll.no">www.troll.no</a>):<br>
 <form method=post action="http://www.troll.no/search.cgi">
-<input type=hidden name="version" value="2.00"><nobr>
+<input type=hidden name="version" value="2.0.1"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -142,5 +146,5 @@ copyright &copy; 1995-99
 <a href="http://www.troll.no">Troll Tech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.00</div>
+<td align="right"><div align="right">Qt version 2.0.1</div>
 </table></div></address></body></html>

@@ -1,0 +1,312 @@
+.TH QPopupMenu 3qt "20 July 1999" "Troll Tech AS" \" -*- nroff -*-
+.\" Copyright 1992-1999 Troll Tech AS.  All rights reserved.  See the
+.\" license file included in the distribution for a complete license
+.\" statement.
+.\"
+.ad l
+.nh
+.SH NAME
+QPopupMenu \- Popup menu widget
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <qpopupmenu.h>\fR
+.PP
+Inherits QFrame and QMenuData.
+.PP
+.SS "Public Members"
+.in +1c
+.ti -1c
+.BI "\fBQPopupMenu\fR ( QWidget * " "parent" "=0, const char * " "name" "=0 )"
+.br
+.ti -1c
+.BI "\fB~QPopupMenu\fR ()"
+.br
+.ti -1c
+.BI "void \fBpopup\fR ( const QPoint & " "pos" ", int " "indexAtPoint" " = 0 )"
+.br
+.ti -1c
+.BI "virtual void \fBupdateItem\fR ( int id )"
+.br
+.ti -1c
+.BI "virtual void \fBsetCheckable\fR ( bool )"
+.br
+.ti -1c
+.BI "bool \fBisCheckable\fR () const"
+.br
+.ti -1c
+.BI "virtual void \fBsetFont\fR ( const QFont & )"
+.br
+.ti -1c
+.BI "virtual void \fBshow\fR ()"
+.br
+.ti -1c
+.BI "virtual void \fBhide\fR ()"
+.br
+.ti -1c
+.BI "int \fBexec\fR ()"
+.br
+.ti -1c
+.BI "int \fBexec\fR ( const QPoint & " "pos" ", int " "indexAtPoint" " = 0 )"
+.br
+.ti -1c
+.BI "virtual void \fBsetActiveItem\fR ( int )"
+.br
+.ti -1c
+.BI "virtual QSize \fBsizeHint\fR () const"
+.br
+.ti -1c
+.BI "int \fBidAt\fR ( int index ) const"
+.br
+.ti -1c
+.BI "int \fBidAt\fR ( const QPoint & pos ) const"
+.br
+.ti -1c
+.BI "virtual bool \fBcustomWhatsThis\fR () const"
+.br
+.in -1c
+.SS "Signals"
+.in +1c
+.ti -1c
+.BI "void \fBactivated\fR ( int itemId )"
+.br
+.ti -1c
+.BI "void \fBhighlighted\fR ( int itemId )"
+.br
+.ti -1c
+.BI "void \fBactivatedRedirect\fR ( int itemId )"
+.br
+.ti -1c
+.BI "void \fBhighlightedRedirect\fR ( int itemId )"
+.br
+.ti -1c
+.BI "void \fBaboutToShow\fR ()"
+.br
+.in -1c
+.SS "Protected Members"
+.in +1c
+.ti -1c
+.BI "int \fBitemHeight\fR ( int ) const"
+.br
+.ti -1c
+.BI "int \fBitemHeight\fR ( QMenuItem * mi ) const"
+.br
+.ti -1c
+.BI "void \fBdrawItem\fR ( QPainter * " "p" ", int " "tab" ", QMenuItem * " "mi" ", bool " "act" ", int " "x" ", int " "y" ", int " "w" ", int h )"
+.br
+.ti -1c
+.BI "virtual void \fBdrawContents\fR ( QPainter * )"
+.br
+.ti -1c
+.BI "virtual void \fBcloseEvent\fR ( QCloseEvent * e )"
+.br
+.ti -1c
+.BI "virtual void \fBpaintEvent\fR ( QPaintEvent * )"
+.br
+.ti -1c
+.BI "virtual void \fBmousePressEvent\fR ( QMouseEvent * )"
+.br
+.ti -1c
+.BI "virtual void \fBmouseReleaseEvent\fR ( QMouseEvent * )"
+.br
+.ti -1c
+.BI "virtual void \fBmouseMoveEvent\fR ( QMouseEvent * )"
+.br
+.ti -1c
+.BI "virtual void \fBkeyPressEvent\fR ( QKeyEvent * )"
+.br
+.ti -1c
+.BI "virtual void \fBtimerEvent\fR ( QTimerEvent * )"
+.br
+.ti -1c
+.BI "virtual void \fBstyleChange\fR ( QStyle & )"
+.br
+.in -1c
+.SH DESCRIPTION
+The QPopupMenu class provides a popup menu widget.
+.PP
+menu/menu.cpp is a typical example of QMenuBar and QPopupMenu use.
+.PP
+<img src=qpopmenu-m.png> <img src=qpopmenu-w.png>
+.PP
+See also: QMenuBar and GUI Design Handbook: Menu, Drop-Down and Pop-Up
+.PP
+Examples:
+.(l
+qtimage/qtimage.cpp grapher/grapher.cpp mainlyQt/editor.cpp layout/layout.cpp menu/menu.cpp progress/progress.cpp scrollview/scrollview.cpp
+.)l
+.SH MEMBER FUNCTION DOCUMENTATION
+.SH "QPopupMenu::QPopupMenu ( QWidget * parent=0, const char * name=0 )"
+Constructs a popup menu with a parent and a widget name.
+.PP
+Although a popup menu is always a top level widget, if a parent is passed, the popup menu will be deleted on destruction of that parent (as with any other QObject).
+.SH "QPopupMenu::~QPopupMenu ()"
+Destroys the popup menu.
+.SH "void QPopupMenu::aboutToShow () \fC[signal]\fR"
+This signal is emitted just before the popup menu is displayed. You can connect it to any slot that sets up the menu contents (e.g. to ensure that the right items are enabled).
+.PP
+See also: setItemEnabled(), setItemChecked(), insertItem() and removeItem().
+.SH "void QPopupMenu::activated ( int id ) \fC[signal]\fR"
+This signal is emitted when a menu item is selected; \fIid\fR is the id of the selected item.
+.PP
+Normally, you will connect each menu item to a single slot using QMenuData::insertItem(), but sometimes you will want to connect several items to a single slot (most often if the user selects from an array). This signal is handy in such cases.
+.PP
+See also: highlighted() and QMenuData::insertItem().
+.SH "void QPopupMenu::activatedRedirect ( int id ) \fC[signal]\fR"
+For internal use only.
+.SH "void QPopupMenu::closeEvent ( QCloseEvent * e ) \fC[virtual protected]\fR"
+Handles close events for the popup menu.
+.PP
+Reimplemented from QWidget.
+.SH "bool QPopupMenu::customWhatsThis () const \fC[virtual]\fR"
+Reimplemented for internal reasons; the API is not affected.
+.PP
+Reimplemented from QWidget.
+.SH "int QPopupMenu::exec ()"
+Execute this popup synchronously.
+.PP
+Similar to the above function, but the position of the popup is not set, so you must choose an appropriate position. The function move the popup if it is partially off-screen.
+.PP
+More common usage is to position the popup at the current mouse position:
+.PP
+.nf
+.br
+      exec(QCursor::pos());
+.fi
+.PP
+or aligned to a widget:
+.PP
+.nf
+.br
+      exec(somewidget.mapToGlobal(QPoint(0,0)));
+.fi
+.SH "int QPopupMenu::exec ( const QPoint & pos, int indexAtPoint = 0 )"
+Execute this popup synchronously.
+.PP
+Opens the popup menu so that the item number \fIindexAtPoint\fR will be at the specified \fIglobal\fR position \fIpos.\fR To translate a widget's local coordinates into global coordinates, use QWidget::mapToGlobal().
+.PP
+The return code is the ID of the selected item in either the popup menu or one of its submenus, or -1 if no item is selected (normally because the user presses Escape).
+.PP
+Note that all signals are emitted as usual. If you connect a menu item to a slot and call the menu's exec(), you get the result both via the signal-slot connection and in the return value of exec().
+.PP
+Common usage is to position the popup at the current mouse position:
+.PP
+.nf
+.br
+      exec(QCursor::pos());
+.fi
+.PP
+or aligned to a widget:
+.PP
+.nf
+.br
+      exec(somewidget.mapToGlobal(QPoint(0,0)));
+.fi
+.PP
+When positioning a popup with exec() or popup(), keep in mind that you cannot rely on the popup menu's current size(). For performance reasons, the popup adapts its size only when actually needed. So in many cases, the size before and after the show is different. Instead, use sizeHint(). It calculates the proper size depending on the menu's current contents.
+.PP
+See also: popup() and sizeHint().
+.SH "void QPopupMenu::hide () \fC[virtual]\fR"
+Reimplements QWidget::hide() for internal purposes.
+.PP
+Reimplemented from QWidget.
+.SH "void QPopupMenu::highlighted ( int id ) \fC[signal]\fR"
+This signal is emitted when a menu item is highlighted; \fIid\fR is the id of the highlighted item.
+.PP
+Normally, you will connect each menu item to a single slot using QMenuData::insertItem(), but sometimes you will want to connect several items to a single slot (most often if the user selects from an array). This signal is handy in such cases.
+.PP
+See also: activated() and QMenuData::insertItem().
+.SH "void QPopupMenu::highlightedRedirect ( int id ) \fC[signal]\fR"
+For internal use only.
+.SH "int QPopupMenu::idAt ( const QPoint & pos ) const"
+Return the id of the item at \fIpos,\fR or -1 if there is no item there, or if it is a separator item.
+.SH "int QPopupMenu::idAt ( int index ) const"
+Returns the identifier of the menu item at position \fIindex\fR in the internal list, or -1 if \fIindex\fR is out of range.
+.PP
+See also: QMenuData::setId() and QMenuData::indexOf().
+.PP
+Examples:
+.(l
+scrollview/scrollview.cpp
+.)l
+.SH "bool QPopupMenu::isCheckable () const"
+Returns whether display of check marks by the menu items is enabled.
+.PP
+See also: setCheckable() and QMenuData::setItemChecked().
+.SH "int QPopupMenu::itemHeight ( QMenuItem * mi ) const \fC[protected]\fR"
+Calculates the height in pixels of the item \fImi.\fR
+.SH "int QPopupMenu::itemHeight ( int row ) const \fC[protected]\fR"
+Calculates the height in pixels of the item in row \fIrow.\fR
+.SH "void QPopupMenu::keyPressEvent ( QKeyEvent * e ) \fC[virtual protected]\fR"
+Handles key press events for the popup menu.
+.PP
+Reimplemented from QWidget.
+.SH "void QPopupMenu::mouseMoveEvent ( QMouseEvent * e ) \fC[virtual protected]\fR"
+Handles mouse move events for the popup menu.
+.PP
+Reimplemented from QWidget.
+.SH "void QPopupMenu::mousePressEvent ( QMouseEvent * e ) \fC[virtual protected]\fR"
+Handles mouse press events for the popup menu.
+.PP
+Reimplemented from QWidget.
+.SH "void QPopupMenu::mouseReleaseEvent ( QMouseEvent * e ) \fC[virtual protected]\fR"
+Handles mouse release events for the popup menu.
+.PP
+Reimplemented from QWidget.
+.SH "void QPopupMenu::paintEvent ( QPaintEvent * e ) \fC[virtual protected]\fR"
+Handles paint events for the popup menu.
+.PP
+Reimplemented from QWidget.
+.SH "void QPopupMenu::popup ( const QPoint & pos, int indexAtPoint = 0 )"
+Opens the popup menu so that the item number \fIindexAtPoint\fR will be at the specified \fIglobal\fR position \fIpos.\fR To translate a widget's local coordinates into global coordinates, use QWidget::mapToGlobal().
+.PP
+When positioning a popup with exec() or popup(), keep in mind that you cannot rely on the popup menu's current size(). For performance reasons, the popup adapts its size only when actually needed. So in many cases, the size before and after the show is different. Instead, use sizeHint(). It calculates the proper size depending on the menu's current contents.
+.PP
+Examples:
+.(l
+qtimage/qtimage.cpp
+.)l
+.SH "void QPopupMenu::setActiveItem ( int i ) \fC[virtual]\fR"
+Sets the currently active item to \fIi\fR and repaints as necessary.
+.SH "void QPopupMenu::setCheckable ( bool enable ) \fC[virtual]\fR"
+Enables or disables display of check marks by the menu items.
+.PP
+Notice that checking is always enabled when in windows-style.
+.PP
+See also: isCheckable() and QMenuData::setItemChecked().
+.PP
+Examples:
+.(l
+grapher/grapher.cpp menu/menu.cpp progress/progress.cpp scrollview/scrollview.cpp
+.)l
+.SH "void QPopupMenu::setFont ( const QFont & font ) \fC[virtual]\fR"
+Reimplements QWidget::setFont() to be able to refresh the popup menu when its font changes.
+.PP
+Reimplemented from QWidget.
+.SH "void QPopupMenu::show () \fC[virtual]\fR"
+Reimplements QWidget::show() for internal purposes.
+.PP
+Reimplemented from QWidget.
+.SH "QSize QPopupMenu::sizeHint () const \fC[virtual]\fR"
+Returns the size the popupmenu would use shall it become visible now. (##### is that english??)
+.PP
+Note that this size may be different from the popup's actual size. It changes all the time a new item is added or an existing one is modified. For performance reasons, QPopupMenu doesn't change its physical size each time this happens but only once before it is shown.
+.PP
+See also: exec() and show().
+.PP
+Reimplemented from QWidget.
+.SH "void QPopupMenu::styleChange ( QStyle & old ) \fC[virtual protected]\fR"
+Reimplemented for internal purposes.
+.PP
+Reimplemented from QWidget.
+.SH "void QPopupMenu::timerEvent ( QTimerEvent * e ) \fC[virtual protected]\fR"
+Handles timer events for the popup menu.
+.PP
+Reimplemented from QObject.
+.SH "SEE ALSO"
+.BR http://www.troll.no/qt/qpopupmenu.html
+.SH COPYRIGHT
+Copyright 1992-1999 Troll Tech AS.  See the license file included in
+the distribution for a complete license statement.
+.SH AUTHOR
+Generated automatically from the source code.

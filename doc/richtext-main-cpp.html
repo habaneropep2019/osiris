@@ -67,7 +67,7 @@ protected slots:
   Implementation:
 
   <pre>/****************************************************************************
-** &#36;Id&#58; richtext.cpp,v 1.4 1999/06/11 16:50:24 warwick Exp $
+** &#36;Id&#58; richtext.cpp,v 1.4.2.1 1999/07/13 20:00:21 warwick Exp $
 **
 ** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
@@ -108,19 +108,19 @@ static const char* sayings[] = {
 
     "&lt;b&gt;Saying 4:&lt;/b&gt;&lt;br&gt;"
     "&lt;hr&gt;&lt;br&gt;&lt;br&gt;"
-    "&lt;big&gt;The Least Successful Executions&lt;br&gt;"
-    "      History has furnished us with two executioners worthy of attention. "
+    "&lt;big&gt;&lt;b&gt;The Least Successful Executions&lt;/b&gt;&lt;br&gt;"
+    "&lt;twocolumn&gt;&lt;p&gt;      History has furnished us with two executioners worthy of attention. "
     "The first performed in Sydney in Australia.  In 1803 three attempts were "
     "made to hang a Mr. Joseph Samuels.  On the first two of these the rope "
     "snapped, while on the third Mr. Samuels just hung there peacefully until he "
     "and everyone else got bored.  Since he had proved unsusceptible to capital "
-    "punishment, he was reprieved.&lt;br&gt;"
-    "        The most important British executioner was Mr. James Berry who "
+    "punishment, he was reprieved.&lt;/p&gt;"
+    "&lt;p&gt;        The most important British executioner was Mr. James Berry who "
     "tried three times in 1885 to hang Mr. John Lee at Exeter Jail, but on each "
-    "occasion failed to get the trap door open.&lt;br&gt;"
-    "        In recognition of this achievement, the Home Secretary commuted "
+    "occasion failed to get the trap door open.&lt;!p&gt;"
+    "&lt;p&gt;        In recognition of this achievement, the Home Secretary commuted "
     "Lee's sentence to \"life\" imprisonment.  He was released in 1917, emigrated "
-    "to America and lived until 1933.&lt;/big&gt;&lt;br&gt;&lt;br&gt;"
+    "to America and lived until 1933.&lt;/p&gt;&lt;/twocolumn&gt;&lt;/big&gt;&lt;br&gt;&lt;br&gt;"
     "&lt;center&gt;&lt;i&gt;-- Stephen Pile, \"The Book of Heroic Failures\"&lt;/i&gt;&lt;/center&gt;",
 
     "&lt;b&gt;Saying 5:&lt;/b&gt;&lt;br&gt;"
@@ -169,13 +169,13 @@ MyRichText::MyRichText( <a href="qwidget.html">QWidget</a> *parent, const char *
     bPrev-&gt;setEnabled( FALSE );
 
     <a href="qobject.html#c2d209">connect</a>( bClose, SIGNAL( clicked() ), qApp, SLOT( quit() ) );
-    <a href="qobject.html#c2d209">connect</a>( bPrev, SIGNAL( clicked() ), this, SLOT( <a href=#321>prev</a>() ) );
-    <a href="qobject.html#c2d209">connect</a>( bNext, SIGNAL( clicked() ), this, SLOT( <a href=#322>next</a>() ) );
+    <a href="qobject.html#c2d209">connect</a>( bPrev, SIGNAL( clicked() ), this, SLOT( <a href=#228>prev</a>() ) );
+    <a href="qobject.html#c2d209">connect</a>( bNext, SIGNAL( clicked() ), this, SLOT( <a href=#229>next</a>() ) );
 
     num = 0;
 }
 
-void <a name="321"></a>MyRichText::prev()
+void <a name="228"></a>MyRichText::prev()
 {
     if ( num &lt;= 0 )
         return;
@@ -190,7 +190,7 @@ void <a name="321"></a>MyRichText::prev()
     bNext-&gt;setEnabled( TRUE );
 }
 
-void <a name="322"></a>MyRichText::next()
+void <a name="229"></a>MyRichText::next()
 {
     if ( !sayings[++num] )
         return;
@@ -237,5 +237,5 @@ int main( int argc, char **argv )
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.00</div>
+<td align="right"><div align="right">Qt version 2.0.1</div>
 </table></div></address></body></html>

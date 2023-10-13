@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qheader.cpp,v 2.87 1999/06/15 07:13:34 aavit Exp $
+** $Id: qheader.cpp,v 2.87.2.4 1999/07/17 03:47:36 ettrich Exp $
 **
 ** Implementation of QHeader widget class (table header)
 **
@@ -485,11 +485,11 @@ void QHeader::mouseReleaseEvent( QMouseEvent *m )
 	break;
     case Sliding: {
 	int s = orient == Horizontal ? m->pos().x() : m->pos().y();
-	// setCursor( arrowCursor ); // We're probably still there...
+	// unsetCursor(); // We're probably still there...
 	handleColumnResize( handleIdx, s, TRUE );
 	} break;
     case Moving: {
-	setCursor( arrowCursor );
+	unsetCursor();
 	if ( handleIdx != moveToIdx && moveToIdx != -1 ) {
 	    moveCell( handleIdx, moveToIdx );
 	    emit moved( handleIdx, moveToIdx );
@@ -534,7 +534,7 @@ void QHeader::mouseMoveEvent( QMouseEvent *m )
 	    }
 	}
 	if ( !hit )
-	    setCursor( arrowCursor );
+	    unsetCursor();
 	break;
     case Blocked:
 	break;
@@ -584,13 +584,18 @@ void QHeader::handleColumnResize( int index, int s, bool final )
     int newSize = oldSize + delta;
     setCellSize( lIdx, newSize );
     int repaintPos = QMIN( oldPos, s );
-    if ( orient == Horizontal )
-        repaint(repaintPos-2, 0, width(), height());
-    else
-        repaint(0, repaintPos-oldSize+2, width(), height());
+
+    if ( orient == Horizontal ) {
+	if ( repaintPos < width() )
+	    scroll( delta, 0, QRect( repaintPos, 0, width() - repaintPos,  height() ) );
+	repaint( repaintPos - 4, 0, 4, height(), FALSE ); // border between the items
+    } else
+	repaint(0, repaintPos-oldSize+2, width(), height());
+
+
     if ( tracking() && oldSize != newSize )
 	emit sizeChange( lIdx, oldSize, newSize );
-    else if ( final && oldHIdxSize != newSize )
+    else if ( !tracking() && final && oldHIdxSize != newSize )
 	emit sizeChange( lIdx, oldHIdxSize, newSize );
 }
 
@@ -621,7 +626,7 @@ void QHeader::setLabel( int i, const QIconSet& iconset, const QString &s, int si
   Sets the text on logical section \a i to \a s. If the section does not exist,
   nothing happens.
   If \a size is non-negative, the section width is set to \a size.
-  
+
   Any icon set that has been defined for this section remains
   unchanged.
 */
@@ -696,20 +701,20 @@ int QHeader::addLabel( const QString &s, int size )
 	iw = data->iconsets[n-1]->pixmap( QIconSet::Small, QIconSet::Normal ).width() + 2;
 	ih = data->iconsets[n-1]->pixmap( QIconSet::Small, QIconSet::Normal ).height();
     }
-    
+
     QFontMetrics fm = fontMetrics();
     int height = QMAX( fm.lineSpacing() + 6, ih );
     int width = -fm.minLeftBearing()
 		+fm.width( s )
 		-fm.minRightBearing() + QH_MARGIN*2 + iw;
-    
+
     if ( size < 0 ) {
 	if ( orient == Horizontal )
 	    size = width;
 	else
 	    size = height;
     }
-    
+
     data->sizes[n-1] = size;
     // we abuse the heights as widths for vertical layout
     data->heights[n-1] = orient == Horizontal ? height : width;

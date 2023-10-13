@@ -1,0 +1,84 @@
+.TH QHBoxLayout 3qt "20 July 1999" "Troll Tech AS" \" -*- nroff -*-
+.\" Copyright 1992-1999 Troll Tech AS.  All rights reserved.  See the
+.\" license file included in the distribution for a complete license
+.\" statement.
+.\"
+.ad l
+.nh
+.SH NAME
+QHBoxLayout \- Lines up widgets horizontally
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <qlayout.h>\fR
+.PP
+Inherits QBoxLayout.
+.PP
+.SS "Public Members"
+.in +1c
+.ti -1c
+.BI "\fBQHBoxLayout\fR ( QWidget * " "parent" ", int " "border" "=0, int " "space" " = -1, const char * " "name" "=0 )"
+.br
+.ti -1c
+.BI "\fBQHBoxLayout\fR ( QLayout * " "parentLayout" ", int " "space" " = -1, const char * " "name" "=0 )"
+.br
+.ti -1c
+.BI "\fBQHBoxLayout\fR ( int " "space" " = -1, const char * " "name" "=0 )"
+.br
+.ti -1c
+.BI "\fB~QHBoxLayout\fR ()"
+.br
+.in -1c
+.SH DESCRIPTION
+The QHBoxLayout class lines up widgets horizontally.
+.PP
+This class provides an easier way to construct horizontal box layout objects. See QBoxLayout for more details.
+.PP
+The simplest ways to use this class are:
+.PP
+.nf
+.br
+     QBoxLayout * l = new QHBoxLayout( widget );
+.br
+     l->setAutoAdd( TRUE );
+.br
+     new QSomeWidget( widget );
+.br
+     new QSomeOtherWidget( widget );
+.br
+     new QAnotherWidget( widget );
+.fi
+.PP
+or
+.PP
+.nf
+.br
+     QBoxLayout * l = new QHBoxLayout( widget );
+.br
+     l->addWidget( existingChildOfWidget );
+.br
+     l->addWidget( anotherChildOfWidget );
+.fi
+.PP
+See also: QVBoxLayout, QGridLayout and Layout overview documentation
+.PP
+Examples:
+.(l
+layout/layout.cpp popup/popup.cpp
+.)l
+.SH MEMBER FUNCTION DOCUMENTATION
+.SH "QHBoxLayout::QHBoxLayout ( QLayout * parentLayout, int space = -1, const char * name=0 )"
+Creates a new horizontal box and adds it to \fIparentLayout.\fR
+.SH "QHBoxLayout::QHBoxLayout ( QWidget * parent, int border=0, int space = -1, const char * name=0 )"
+Creates a new top-level horizontal box.
+.SH "QHBoxLayout::QHBoxLayout ( int space = -1, const char * name=0 )"
+Creates a new horizontal box. You have to add it to another layout.
+.SH "QHBoxLayout::~QHBoxLayout ()"
+Destroys this box.
+.SH "SEE ALSO"
+.BR http://www.troll.no/qt/qhboxlayout.html
+.SH COPYRIGHT
+Copyright 1992-1999 Troll Tech AS.  See the license file included in
+the distribution for a complete license statement.
+.SH AUTHOR
+Generated automatically from the source code.

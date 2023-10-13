@@ -115,7 +115,7 @@ ListBoxDemo::ListBoxDemo()
     bg-&gt;insert( b );
     v-&gt;<a href="qboxlayout.html#219265">addWidget</a>( b );
     b-&gt;<a href="qradiobutton.html#11e2e3">setChecked</a>( TRUE );
-    <a href="qobject.html#c2d209">connect</a>( b, SIGNAL(clicked()), this, SLOT(<a href=#264>setNumCols</a>()) );
+    <a href="qobject.html#c2d209">connect</a>( b, SIGNAL(clicked()), this, SLOT(<a href=#171>setNumCols</a>()) );
     <a href="qhboxlayout.html">QHBoxLayout</a> * h = new <a href="qhboxlayout.html">QHBoxLayout</a>;
     v-&gt;<a href="qboxlayout.html#7a3fdc">addLayout</a>( h );
     h-&gt;<a href="qboxlayout.html#488ad0">addSpacing</a>( 30 );
@@ -131,7 +131,7 @@ ListBoxDemo::ListBoxDemo()
                           this );
     bg-&gt;insert( b );
     v-&gt;<a href="qboxlayout.html#219265">addWidget</a>( b );
-    <a href="qobject.html#c2d209">connect</a>( b, SIGNAL(clicked()), this, SLOT(<a href=#266>setColsByWidth</a>()) );
+    <a href="qobject.html#c2d209">connect</a>( b, SIGNAL(clicked()), this, SLOT(<a href=#173>setColsByWidth</a>()) );
 
     v-&gt;<a href="qboxlayout.html#488ad0">addSpacing</a>( 12 );
 
@@ -140,7 +140,7 @@ ListBoxDemo::ListBoxDemo()
                           this );
     bg-&gt;insert( b );
     v-&gt;<a href="qboxlayout.html#219265">addWidget</a>( b );
-    <a href="qobject.html#c2d209">connect</a>( b, SIGNAL(clicked()), this, SLOT(<a href=#263>setNumRows</a>()) );
+    <a href="qobject.html#c2d209">connect</a>( b, SIGNAL(clicked()), this, SLOT(<a href=#170>setNumRows</a>()) );
     h = new <a href="qhboxlayout.html">QHBoxLayout</a>;
     v-&gt;<a href="qboxlayout.html#7a3fdc">addLayout</a>( h );
     h-&gt;<a href="qboxlayout.html#488ad0">addSpacing</a>( 30 );
@@ -157,22 +157,22 @@ ListBoxDemo::ListBoxDemo()
                           this );
     bg-&gt;insert( b );
     v-&gt;<a href="qboxlayout.html#219265">addWidget</a>( b );
-    <a href="qobject.html#c2d209">connect</a>( b, SIGNAL(clicked()), this, SLOT(<a href=#265>setRowsByHeight</a>()) );
+    <a href="qobject.html#c2d209">connect</a>( b, SIGNAL(clicked()), this, SLOT(<a href=#172>setRowsByHeight</a>()) );
 
     v-&gt;<a href="qboxlayout.html#488ad0">addSpacing</a>( 12 );
 
     <a href="qcheckbox.html">QCheckBox</a> * cb = new <a href="qcheckbox.html">QCheckBox</a>( "Variable-height rows", this );
     cb-&gt;<a href="qcheckbox.html#f146fc">setChecked</a>( TRUE );
-    <a href="qobject.html#c2d209">connect</a>( cb, SIGNAL(toggled(bool)), this, SLOT(<a href=#268>setVariableHeight</a>(bool)) );
+    <a href="qobject.html#c2d209">connect</a>( cb, SIGNAL(toggled(bool)), this, SLOT(<a href=#175>setVariableHeight</a>(bool)) );
     v-&gt;<a href="qboxlayout.html#219265">addWidget</a>( cb );
     v-&gt;<a href="qboxlayout.html#488ad0">addSpacing</a>( 6 );
 
     cb = new <a href="qcheckbox.html">QCheckBox</a>( "Variable-width columns", this );
-    <a href="qobject.html#c2d209">connect</a>( cb, SIGNAL(toggled(bool)), this, SLOT(<a href=#267>setVariableWidth</a>(bool)) );
+    <a href="qobject.html#c2d209">connect</a>( cb, SIGNAL(toggled(bool)), this, SLOT(<a href=#174>setVariableWidth</a>(bool)) );
     v-&gt;<a href="qboxlayout.html#219265">addWidget</a>( cb );
 
     cb = new <a href="qcheckbox.html">QCheckBox</a>( "Multiselection", this );
-    <a href="qobject.html#c2d209">connect</a>( cb, SIGNAL(toggled(bool)), this, SLOT(<a href=#269>setMultiSelection</a>(bool)) );
+    <a href="qobject.html#c2d209">connect</a>( cb, SIGNAL(toggled(bool)), this, SLOT(<a href=#176>setMultiSelection</a>(bool)) );
     v-&gt;<a href="qboxlayout.html#219265">addWidget</a>( cb );
 
     v-&gt;<a href="qboxlayout.html#51b0de">addStretch</a>( 100 );
@@ -186,8 +186,8 @@ ListBoxDemo::ListBoxDemo()
     rows-&gt;setRange( 1, 256 );
     rows-&gt;setValue( 256 );
 
-    <a href="qobject.html#c2d209">connect</a>( columns, SIGNAL(valueChanged(int)), this, SLOT(<a href=#264>setNumCols</a>()) );
-    <a href="qobject.html#c2d209">connect</a>( rows, SIGNAL(valueChanged(int)), this, SLOT(<a href=#263>setNumRows</a>()) );
+    <a href="qobject.html#c2d209">connect</a>( columns, SIGNAL(valueChanged(int)), this, SLOT(<a href=#171>setNumCols</a>()) );
+    <a href="qobject.html#c2d209">connect</a>( rows, SIGNAL(valueChanged(int)), this, SLOT(<a href=#170>setNumRows</a>()) );
 }
 
 ListBoxDemo::~ListBoxDemo()
@@ -195,45 +195,45 @@ ListBoxDemo::~ListBoxDemo()
     delete bg;
 }
 
-void <a name="263"></a>ListBoxDemo::setNumRows()
+void <a name="170"></a>ListBoxDemo::setNumRows()
 {
     columns-&gt;setEnabled( FALSE );
     rows-&gt;setEnabled( TRUE );
     l-&gt;setRowMode( rows-&gt;value() );
 }
 
-void <a name="264"></a>ListBoxDemo::setNumCols()
+void <a name="171"></a>ListBoxDemo::setNumCols()
 {
     columns-&gt;setEnabled( TRUE );
     rows-&gt;setEnabled( FALSE );
     l-&gt;setColumnMode( columns-&gt;value() );
 }
 
-void <a name="265"></a>ListBoxDemo::setRowsByHeight()
+void <a name="172"></a>ListBoxDemo::setRowsByHeight()
 {
     columns-&gt;setEnabled( FALSE );
     rows-&gt;setEnabled( FALSE );
     l-&gt;setRowMode( QListBox::FitToHeight );
 }
 
-void <a name="266"></a>ListBoxDemo::setColsByWidth()
+void <a name="173"></a>ListBoxDemo::setColsByWidth()
 {
     columns-&gt;setEnabled( FALSE );
     rows-&gt;setEnabled( FALSE );
     l-&gt;setColumnMode( QListBox::FitToWidth );
 }
 
-void <a name="267"></a>ListBoxDemo::setVariableWidth( bool b )
+void <a name="174"></a>ListBoxDemo::setVariableWidth( bool b )
 {
     l-&gt;setVariableWidth( b );
 }
 
-void <a name="268"></a>ListBoxDemo::setVariableHeight( bool b )
+void <a name="175"></a>ListBoxDemo::setVariableHeight( bool b )
 {
     l-&gt;setVariableHeight( b );
 }
 
-void <a name="269"></a>ListBoxDemo::setMultiSelection( bool b )
+void <a name="176"></a>ListBoxDemo::setMultiSelection( bool b )
 {
     l-&gt;clearSelection();
     l-&gt;setMultiSelection( b );
@@ -272,5 +272,5 @@ int main( int argc, char **argv )
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.00</div>
+<td align="right"><div align="right">Qt version 2.0.1</div>
 </table></div></address></body></html>

@@ -19,7 +19,7 @@ remains with Troll Tech.
 <hr>
 <pre>
 /****************************************************************************
-** &#36;Id&#58; qmovie.h,v 1.21 1999/02/20 00:48:24 weis Exp $
+** &#36;Id&#58; qmovie.h,v 1.24 1999/04/28 09:56:39 aavit Exp $
 **
 ** Definition of movie classes
 **
@@ -33,9 +33,9 @@ remains with Troll Tech.
 ** as defined by Troll Tech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees with valid Qt Professional Edition licenses may distribute and
-** use this file in accordance with the Qt Professional Edition License
-** provided at sale or upon request.
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
 **
 ** See http://www.troll.no/pricing.html or email sales@troll.no for
 ** information about the Professional Edition licensing, or see
@@ -50,42 +50,10 @@ remains with Troll Tech.
 #include "qobject.h"
 #include "qpixmap.h"
 #include "qlist.h"
-#include "qimage.h"
 #endif // QT_H
 
 class <a href="qdatasource.html">QDataSource</a>;
 class QMovieFilePrivate;
-class QMovieFramePrivate;
-
-class Q_EXPORT QMovieFrame {
-public:
-    QMovieFrame();
-    QMovieFrame( const QImage&amp; pix, int dx, int dy, int dtime );
-
-    QPixmap pixmap() const;
-    const QImage&amp; image() const;
-    int xOffset() const;
-    int yOffset() const;
-    int timeOffset() const;
-
-    void set( const QImage&amp; pix, int dx, int dy, int dtime );
-
-    bool operator==( const QMovieFrame&amp; );
-    bool operator&lt;( const QMovieFrame&amp; );
-
-private:
-    int x_offset;
-    int y_offset;
-    int time_offset;
-    QImage myimage;
-};
-
-typedef QList&lt;QMovieFrame&gt; QMovieFrames;
-
-QDataStream&amp; operator&gt;&gt;(QDataStream&amp;, QMovieFrame&amp;);
-QDataStream&amp; operator&lt;&lt;(QDataStream&amp;, QMovieFrame&amp;);
-QDataStream&amp; operator&gt;&gt;(QDataStream&amp;, QMovieFrames&amp;);
-QDataStream&amp; operator&lt;&lt;(QDataStream&amp;, QMovieFrames&amp;);
 
 class Q_EXPORT <a href="qmovie.html">QMovie</a> {
 public:
@@ -93,7 +61,6 @@ public:
     QMovie(QDataSource*, int bufsize=1024);
     QMovie(const QString &amp;fileName, int bufsize=1024);
     QMovie(QByteArray data, int bufsize=1024);
-    QMovie(QList&lt;QMovieFrame&gt; &amp;frames);
     QMovie(const QMovie&amp;);
     ~QMovie();
 
@@ -141,7 +108,6 @@ public:
 private:
     friend class QMoviePrivate;
     QMovieFilePrivate *d;
-    QMovieFramePrivate* f;
 };
 
 #endif
@@ -150,5 +116,5 @@ private:
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.00</div>
+<td align="right"><div align="right">Qt version 2.0.1</div>
 </table></div></address></body></html>

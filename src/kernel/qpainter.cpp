@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qpainter.cpp,v 2.92 1999/05/23 21:26:02 hanord Exp $
+** $Id: qpainter.cpp,v 2.92.2.6 1999/07/19 05:32:19 aavit Exp $
 **
 ** Implementation of QPainter, QPen and QBrush classes
 **
@@ -104,6 +104,15 @@ typedef QStack<QWMatrix> QWMatrixStack;
   QPainter::begin() copies these attributes from the paint device, and
   changing a paint device's attributes will have effect only the next
   time a painter is opened on it.
+
+  \warning The range of acceptable coordinate values to QPainter's
+  various drawing functions is limited by the capabilities of the
+  drawing engine of the underlying window system. Currently, only
+  Windows NT is able to handle the full 32 bit range; on other
+  platforms, the output may be incorrect when the absolute value of
+  any coordinate (after any set world and/or view transforms have been
+  applied) exceeds some system-dependent value. All systems we have
+  tested were able to correctly handle coordinates up to +/- 2000.
 
   \warning QPainter::begin() resets all attributes to their default
   values, from the device, thus setting fonts, brushes, etc, before
@@ -384,17 +393,19 @@ void QPainter::restore()
 	return;
     }
     register QPState *ps = pss->pop();
-    if ( ps->font != cfont )
+    bool hardRestore = testf(VolatileDC);
+
+    if ( ps->font != cfont || hardRestore )
 	setFont( ps->font );
-    if ( ps->pen != cpen )
+    if ( ps->pen != cpen || hardRestore )
 	setPen( ps->pen );
-    if ( ps->brush != cbrush )
+    if ( ps->brush != cbrush || hardRestore )
 	setBrush( ps->brush );
-    if ( ps->bgc != bg_col )
+    if ( ps->bgc != bg_col || hardRestore )
 	setBackgroundColor( ps->bgc );
-    if ( ps->bgm != bg_mode )
+    if ( ps->bgm != bg_mode || hardRestore )
 	setBackgroundMode( (BGMode)ps->bgm );
-    if ( ps->rop != rop )
+    if ( ps->rop != rop || hardRestore )
 	setRasterOp( (RasterOp)ps->rop );
 #if 0
     if ( ps->pu != pu )				// !!!not used
@@ -402,19 +413,19 @@ void QPainter::restore()
 #endif
     QRect wr( wx, wy, ww, wh );
     QRect vr( vx, vy, vw, vh );
-    if ( ps->wr != wr )
+    if ( ps->wr != wr || hardRestore )
 	setWindow( ps->wr );
-    if ( ps->vr != vr )
+    if ( ps->vr != vr || hardRestore )
 	setViewport( ps->vr );
-    if ( ps->wm != wxmat )
+    if ( ps->wm != wxmat || hardRestore )
 	setWorldMatrix( ps->wm );
-    if ( ps->vxf != testf(VxF) )
+    if ( ps->vxf != testf(VxF) || hardRestore )
 	setViewXForm( ps->vxf );
-    if ( ps->wxf != testf(WxF) )
+    if ( ps->wxf != testf(WxF) || hardRestore )
 	setWorldXForm( ps->wxf );
-    if ( ps->rgn != crgn )
+    if ( ps->rgn != crgn || hardRestore )
 	setClipRegion( ps->rgn );
-    if ( ps->clip != testf(ClipOn) )
+    if ( ps->clip != testf(ClipOn) || hardRestore )
 	setClipping( ps->clip );
     tabstops = ps->ts;
     tabarray = ps->ta;
@@ -1721,7 +1732,7 @@ void QPainter::drawImage( int x, int y, const QImage & image,
 	return;
 
     bool all = image.rect().intersect(QRect(sx,sy,sw,sh)) == image.rect();
-    QImage subimage = all ? image : image.copy(sx,sy,sw,wh);
+    QImage subimage = all ? image : image.copy(sx,sy,sw,sh);
 
     if ( testf(ExtDev) ) {
 	QPDevCmdParam param[2];
@@ -2011,9 +2022,11 @@ void qt_format_text( const QFontMetrics& fm, int x, int y, int w, int h,
     else
 	localTabStops = fm.width(QChar('x'))*8;       	// default to 8 times x
 
-    while ( k < len ) {				// convert string to codes
+    QString word;
 
-	if ( ISPRINT(*p) ) {			// printable character
+    while ( k <= len ) {				// convert string to codes
+
+	if ( k < len && ISPRINT(*p) ) {			// printable character
 	    if ( *p == '&' && showprefix ) {
 		cc = '&';			// assume ampersand
 		if ( k < len-1 ) {
@@ -2025,66 +2038,64 @@ void qt_format_text( const QFontMetrics& fm, int x, int y, int w, int h,
 	    } else {
 		cc = ENCCHAR(*p);
 	    }
-	    cw = CWIDTH(*p);
-
+	    word += *p;
+	    cw = 0;
 	} else {				// not printable (except ' ')
+	    cw = fm.width(word);
+	    word = "";
+	    if ( wordbreak ) {
+		if ( breakindex > 0 && tw+cw > w ) {
+		    codes[begline] = BEGLINE | QMIN(tw,MAXWIDTH);
+		    maxwidth = QMAX(maxwidth,tw);
+		    begline = breakindex;
+		    nlines++;
+		    tw = cw;
+		    breakindex = tabindex = 0;
+		    cw = 0;
+		}
+	    }
 
-	    if ( *p == ' ' ) {			// the space character
+	    if ( k == len ) {
+		// end (*p not valid)
+		cc = 0;
+	    } else if ( *p == ' ' ) {			// the space character
 		cc = ' ';
-		cw = spacewidth;
+		cw += spacewidth;
 	    } else if ( *p == '\n' ) {		// newline
 		if ( singleline ) {
 		    cc = ' ';			// convert newline to space
-		    cw = spacewidth;
+		    cw += spacewidth;
 		} else {
 		    cc = BEGLINE;
-		    cw = 0;
 		}
 	    } else if ( *p == '\t' ) {		// TAB character
 		if ( expandtabs ) {
-		    cw = 0;
+		    int ccw = 0;
 		    if ( tabarray ) {		// use tab array
 			while ( tabindex < tabarraylen ) {
-			    if ( tabarray[tabindex] > tw ) {
-				cw = tabarray[tabindex] - tw;
+			    if ( tabarray[tabindex] > (tw+cw) ) {
+				ccw = tabarray[tabindex] - (tw+cw);
 				tabindex++;
 				break;
 			    }
 			    tabindex++;
 			}
 		    }
-		    if ( cw == 0 )		// use fixed tab stops
-			cw = localTabStops - tw%localTabStops;
+		    if ( ccw == 0 )		// use fixed tab stops
+			ccw = localTabStops - (tw+cw)%localTabStops;
+		    cw += ccw;
 		    cc = TABSTOP | QMIN(tw+cw,MAXWIDTH);
 		} else {			// convert TAB to space
 		    cc = ' ';
-		    cw = spacewidth;
+		    cw += spacewidth;
 		}
 	    } else {				// ignore character
 		k++;
 		p++;
 		continue;
 	    }
-
-	    if ( wordbreak ) {			// possible break position
-		breakindex = index;
-		breakwidth = tw;
-		bcwidth = cw;
-	    }
-	}
-
-	if ( wordbreak && breakindex > 0 && tw+cw > w ) {
-	    if ( index == breakindex ) {	// break at current index
-		cc = BEGLINE;
-		cw = 0;
-	    } else {				// break at breakindex
-		codes[begline] = BEGLINE | QMIN(breakwidth,MAXWIDTH);
-		maxwidth = QMAX(maxwidth,breakwidth);
-		begline = breakindex;
-		nlines++;
-		tw -= breakwidth + bcwidth;
-		breakindex = tabindex = 0;
-	    }
+	    breakindex = index;
+	    bcwidth = cw;
 	}
 
 	tw += cw;				// increment text width
@@ -2164,8 +2175,8 @@ void qt_format_text( const QFontMetrics& fm, int x, int y, int w, int h,
 	maxwidth += overflow;
 	xp = w - maxwidth;			// right aligned
     } else if ( (tf & Qt::AlignHCenter) == Qt::AlignHCenter ) {
-	xp = w/2 - maxwidth/2;			// centered text
 	maxwidth += overflow;
+	xp = w/2 - maxwidth/2;			// centered text
     } else {
 	maxwidth += overflow;
 	xp = 0;				// left aligned
@@ -2258,7 +2269,8 @@ void qt_format_text( const QFontMetrics& fm, int x, int y, int w, int h,
 	if ( (tf & Qt::AlignRight) == Qt::AlignRight ) {
 	    xc = w - tw + fm.minRightBearing();
 	} else if ( (tf & Qt::AlignHCenter) == Qt::AlignHCenter ) {
-	    xc = w/2 - tw/2;
+	    xc = w/2 - (tw-fm.minLeftBearing()-fm.minRightBearing())/2
+		-fm.minLeftBearing();
 	} else {
 	    xc = -fm.minLeftBearing();
 	}
@@ -2351,7 +2363,7 @@ void qt_format_text( const QFontMetrics& fm, int x, int y, int w, int h,
   <li> \c WordBreak breaks the text to fit the rectangle.
   </ul>
 
-  These flags are defined in qwindowdefs.h.
+  These flags are defined in qnamespace.h.
 
   \sa drawText(), fontMetrics()
 */

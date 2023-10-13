@@ -1,0 +1,79 @@
+.TH QListBoxPixmap 3qt "20 July 1999" "Troll Tech AS" \" -*- nroff -*-
+.\" Copyright 1992-1999 Troll Tech AS.  All rights reserved.  See the
+.\" license file included in the distribution for a complete license
+.\" statement.
+.\"
+.ad l
+.nh
+.SH NAME
+QListBoxPixmap \- List box items with a pixmap
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <qlistbox.h>\fR
+.PP
+Inherits QListBoxItem.
+.PP
+.SS "Public Members"
+.in +1c
+.ti -1c
+.BI "\fBQListBoxPixmap\fR ( QListBox * " "listbox" ", const QPixmap & )"
+.br
+.ti -1c
+.BI "\fBQListBoxPixmap\fR ( const QPixmap & )"
+.br
+.ti -1c
+.BI "\fB~QListBoxPixmap\fR ()"
+.br
+.ti -1c
+.BI "virtual const QPixmap* \fBpixmap\fR () const"
+.br
+.ti -1c
+.BI "virtual int \fBheight\fR ( const QListBox * ) const"
+.br
+.ti -1c
+.BI "int \fBwidth\fR ( const QListBox * ) const"
+.br
+.in -1c
+.SS "Protected Members"
+.in +1c
+.ti -1c
+.BI "virtual void \fBpaint\fR ( QPainter * )"
+.br
+.in -1c
+.SH DESCRIPTION
+The QListBoxPixmap class provides list box items with a pixmap.
+.PP
+See also: QListBox and QListBoxItem.
+.SH MEMBER FUNCTION DOCUMENTATION
+.SH "QListBoxPixmap::QListBoxPixmap ( QListBox * listbox, const QPixmap & pixmap )"
+Creates a new list box item in listbox \fIlistbox\fR showing the pixmap \fIpixmap.\fR
+.SH "QListBoxPixmap::QListBoxPixmap ( const QPixmap & pixmap )"
+Creates a new list box item showing the pixmap \fIpixmap.\fR
+.SH "QListBoxPixmap::~QListBoxPixmap ()"
+Destroys the item.
+.SH "int QListBoxPixmap::height ( const QListBox * ) const \fC[virtual]\fR"
+Returns the height of the pixmap.
+.PP
+See also: paint() and width().
+.PP
+Reimplemented from QListBoxItem.
+.SH "void QListBoxPixmap::paint ( QPainter * painter ) \fC[virtual protected]\fR"
+Draws the pixmap using \fIpainter.\fR
+.PP
+Reimplemented from QListBoxItem.
+.SH "const QPixmap * QListBoxPixmap::pixmap () const \fC[virtual]\fR"
+Returns the pixmap connected with the item.
+.PP
+Reimplemented from QListBoxItem.
+.SH "int QListBoxPixmap::width ( const QListBox * ) const"
+Returns the width of the pixmap, plus some margin.
+.PP
+See also:  paint() and height().
+.SH "SEE ALSO"
+.BR http://www.troll.no/qt/qlistboxpixmap.html
+.SH COPYRIGHT
+Copyright 1992-1999 Troll Tech AS.  See the license file included in
+the distribution for a complete license statement.
+.SH AUTHOR
+Generated automatically from the source code.

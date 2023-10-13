@@ -24,8 +24,8 @@ definition
 implementation
 <li><a href="t10-main-cpp.html">main.cpp</a> contains MyWidget and main.
 <li><a href="t10-makefile.html">Makefile</a> contains some rules for
-generating the meta object information necessary for <a
-href="metaobjects.html">signal/slot creation.</a>
+generating the meta object information necessary for
+<a href="metaobjects.html">signal/slot creation.</a>
 </ul>
 <p>
 <h2>Line by Line Walk-Through</h2>
@@ -56,9 +56,8 @@ The interface to the force follows the same practice as for angle.
         <a href="qrect.html">QRect</a> cannonRect() const;
 </pre>
 <p>
-We have moved the painting of the cannon to a separate function and have
-also put the definition of the cannon's enclosing rectangle in a separate
-function.
+We have put the definition of the cannon's enclosing rectangle in a
+separate function.
 <p>
 <pre>
         int ang;
@@ -102,10 +101,11 @@ The force (f) is initialized to zero.
     }
 </pre>
 <p>
-We have made a slight change in the setAngle() function. It repaints
+We have made a slight change in the setAngle() function.  It repaints
 only the portion of the widget that contains the cannon.  The FALSE
 argument indicates that the specified rectangle should not be erased
-before a paint event is sent to the widget.
+before a paint event is sent to the widget.  This speeds up and smooths
+drawing a little bit.
 <p>
 <pre>
     void CannonField::setForce( int newton )
@@ -119,9 +119,9 @@ before a paint event is sent to the widget.
     }
 </pre>
 <p>
-The implementation of setForce() is quite similar to that of setAngle().
-The only difference is that we don't show the force value, hence we
-don't need to repaint the widget.
+The implementation of setForce() is quite similar to that of
+setAngle().  The only difference is that since we don't show the force
+value, we don't need to repaint the widget.
 <p>
 <pre>
     void CannonField::paintEvent( <a href="qpaintevent.html">QPaintEvent</a> *e )
@@ -146,154 +146,116 @@ don't need to repaint the widget.
         tmp.<a href="qpainter.html#4bd0fb">rotate</a>( -ang );
         tmp.<a href="qpainter.html#b29a16">drawRect</a>( <a href="qrect.html">QRect</a>(33, -4, 15, 8) );
         tmp.<a href="qpainter.html#c7f9ac">end</a>();
+    
         p-&gt;<a href="qpainter.html#f3fb4a">drawPixmap</a>( cr.<a href="qrect.html#4ff486">topLeft</a>(), pix );
+    }
+    
+    <a href="qrect.html">QRect</a> CannonField::cannonRect() const
+    {
+        <a href="qrect.html">QRect</a> r( 0, 0, 50, 50 );
+        r.<a href="qrect.html#eb5839">moveBottomLeft</a>( <a href="qwidget.html#e872e1">rect</a>().bottomLeft() );
+        return r;
 </pre>
 <p>
 We have now optimized the paint event to repaint only the parts of the
-widget that need updating.  First we fetch the update rectangle parameter
-from the QPaintEvent.  Then we begin painting on this widget.  We check if
-the update rectangle intersects with the cannon rectangle. If it does, we
-paint the cannon.  Note that we pass a pointer to the painter to the
-paintCannon() function.
+widget that need updating.  First we check whether we have to paint
+anything at all, and return if we don't.
+<p>
+<pre>
+    }
+    <a href="qsizepolicy.html">QSizePolicy</a> CannonField::sizePolicy() const
+</pre>
+<p>
+Then we create a temporary pixmap, which we use for flicker-free
+painting.  All the painting operations are done into this pixmap, and
+then the pixmap is drawn on the screen in a single operation.
+<p>
+This is the essence of flicker-free drawing: Draw on each pixel
+precisely once.  Less, and you get drawing errors.  More, and you get
+flicker.  It doesn't matter much in this example - when the code was
+written there were still machines slow enough for it to flicker, but
+not any more.  We've kept the code for educational purposes.
+<p>
+<pre>
+    {
+</pre>
+<p>
+We fill the pixmap with the background from this widget.
+<p>
+<pre>
+        return QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding );
+    }
+<p>
+</pre>
+<p>
+We paint, as in chapter 9, but now we paint in the pixmap.
+<p>
+At this point, we have a painter variable and a pixmap that looks
+precisely right, but we still haven't painted on the screen.
 <p>
 <pre>
 <p>
 </pre>
 <p>
-We have chosen to define the barrel rectangle as a constant.
+So we open the painter on the CannonField itself and then draw the pixmap.
 <p>
-<pre>
-<p>
-</pre>
-<p>
-First we fetch the cannon's enclosing rectangle and store it in <code>cr.</code>
-<p>
-<pre>
-<p>
-</pre>
-<p>
-Here we encounter a new class; the QPixmap.  QPixmap is an off-screen
-paint device which is handy for flicker-free painting.  Here we
-create a pixmap with the same size as the cannon.  We want to draw the
-cannon in this pixmap and then move the pixmap to the screen in one
-operation.  This technique is called double-buffering and virtually
-removes flickering.
-<p>
-<pre>
-<p>
-</pre>
-<p>
-We create a temporary painter <code>tmp</code> for drawing in the pixmap.
-<p>
-<pre>
-<p>
-</pre>
-<p>
-Upon creation, a pixmap is filled with arbitrary pixels, thus we first
-fill it with the widget's background. We have to specify the position
-where the pixmap will be placed in the widget, so that we can cope with
-any type of background (for instance <a href="qwidget.html#a6c4d9">background pixmaps</a>).
-<p>
-<pre>
-<p>
-</pre>
-<p>
-Here we start painting on the pixmap.  We set a blue brush and an
-invisible pen, as in the previous chapter.  This time we use a shortcut.
-<a href="qpainter.html#1b9993">setPen()</a> and <a href="qpainter.html#38e68f">setBrush()</a> are overloaded functions in QPainter.
-<p>
-<pre>
-<p>
-</pre>
-<p>
-The code that draws the cannon is very similar to the code in the previous
-example.  The only difference is the translation which now is relative to
-the pixmap height and that we have moved the barrel rectangle into a
-constant.
-<p>
-<pre>
-<p>
-</pre>
-<p>
-Finally, we call <a href="qpainter.html#f3fb4a">drawPixmap()</a> to
-zip the pixmap onto the screen in one lightning fast operation.
+That's all.  A couple of extra lines at the top and a couple at the
+bottom, and the code is 100% flickerfree.
 <p>
 <pre>
 <p>
 </pre>
 <p>
 This function returns the rectangle enclosing the cannon in widget
-coordinates.  First we create a rectangle with the size 50x50, then we set
-its bottom left corner equal to the widget's bottom left corner.
+coordinates.  First we create a rectangle with the size 50x50, then
+move it so its bottom left corner is equal to the widget's own bottom
+left corner.
 <p>
-The <a href="qwidget.html#e872e1">rect()</a> function returns the widget's
-enclosing rectangle in widget coordinates (i.e. the top left corner is
-0,0).
+The <a href="qwidget.html#e872e1">QWidget::rect()</a> function returns the widget's enclosing
+rectangle in the widget's own coordinates (where the top left corner
+is 0,0).
 <p>
 <h3><a href="t10-main-cpp.html">main.cpp</a></h3>
 <p>
 <pre>
-    class MyWidget : public QWidget
+    MyWidget::MyWidget( <a href="qwidget.html">QWidget</a> *parent, const char *name )
+            : <a href="qwidget.html">QWidget</a>( parent, name )
     {
-    public:
-        MyWidget( <a href="qwidget.html">QWidget</a> *parent=0, const char *name=0 );
-    };
+</pre>
+<p>
+The constructor is mostly the same, but some new bits have been added.
+<p>
+<pre>
+        LCDRange *force  = new LCDRange( this, "force" );
+        force-&gt;setRange( 10, 50 );
 </pre>
 <p>
 We add a second LCDRange which will be used to set the force.
 <p>
 <pre>
-        LCDRange *force  = new LCDRange( this, "force" );
-        force-&gt;setRange( 10, 50 );
-    
-        CannonField *cannonField = new CannonField( this, "cannonField" );
-        cannonField-&gt;setBackgroundColor( <a href="qcolor.html">QColor</a>( 250, 250, 200) );
-    
-        <a href="qobject.html#c2d209">connect</a>( angle, SIGNAL(valueChanged(int)),
-                 cannonField, SLOT(setAngle(int)) );
-        <a href="qobject.html#c2d209">connect</a>( cannonField, SIGNAL(angleChanged(int)),
-                 angle,SLOT(setValue(int)) );
-    
         <a href="qobject.html#c2d209">connect</a>( force, SIGNAL(valueChanged(int)),
                  cannonField, SLOT(setForce(int)) );
         <a href="qobject.html#c2d209">connect</a>( cannonField, SIGNAL(forceChanged(int)),
                  force, SLOT(setValue(int)) );
-    
-        <a href="qgridlayout.html">QGridLayout</a> *grid = new <a href="qgridlayout.html">QGridLayout</a>( this, 2, 2, 10 );
-        grid-&gt;<a href="qgridlayout.html#70abf2">addWidget</a>( quit, 0, 0 );
-        grid-&gt;<a href="qgridlayout.html#70abf2">addWidget</a>( cannonField, 1, 1 );
-        grid-&gt;<a href="qgridlayout.html#4ffa51">setColStretch</a>( 1, 10 );
-    
-        <a href="qvboxlayout.html">QVBoxLayout</a> *leftBox = new <a href="qvboxlayout.html">QVBoxLayout</a>;
-        grid-&gt;<a href="qgridlayout.html#7fc9ea">addLayout</a>( leftBox, 1, 0 );
-        leftBox-&gt;<a href="qboxlayout.html#219265">addWidget</a>( angle );
-        leftBox-&gt;<a href="qboxlayout.html#219265">addWidget</a>( force );
-    
-        angle-&gt;setValue( 60 );
-        force-&gt;setValue( 25 );
-    }
-    
-    int main( int argc, char **argv )
-    {
-        <a href="qapplication.html#e2431b">QApplication::setColorSpec</a>( QApplication::CustomColor );
-        <a href="qapplication.html">QApplication</a> a( argc, argv );
-    
-        MyWidget w;
-        w.<a href="qwidget.html#8e0197">setGeometry</a>( 100, 100, 500, 355 );
-</pre>
-<p>
-We place the <code>force</code> LCDRange widget below the <code>angle</code> widget and
-specify the range to 10..50.
-<p>
-<pre>
-<p>
 </pre>
 <p>
 We connect the <code>force</code> widget and the <code>cannonField</code> widget just like
 we did for the <code>angle</code> widget.
 <p>
 <pre>
+        <a href="qvboxlayout.html">QVBoxLayout</a> *leftBox = new <a href="qvboxlayout.html">QVBoxLayout</a>;
+        grid-&gt;<a href="qgridlayout.html#7fc9ea">addLayout</a>( leftBox, 1, 0 );
+        leftBox-&gt;<a href="qboxlayout.html#219265">addWidget</a>( angle );
+        leftBox-&gt;<a href="qboxlayout.html#219265">addWidget</a>( force );
+</pre>
 <p>
+In chapter 9, we put <code>angle</code> in the lower-left cell of the layout.
+Now, we want to have two widgets in that cell, so we make a vertical
+box, put the vertical box in the grid cell, and put each of <code>angle</code>
+and <code>range</code> in the vertical box.
+<p>
+<pre>
+        force-&gt;setValue( 25 );
 </pre>
 <p>
 We initialize the force value to 25.
@@ -308,6 +270,11 @@ Make the size of the cannon barrel be dependent on the force.
 <p>
 Put the cannon in the bottom right corner.
 <p>
+Try adding a better keyboard interface.  For example, make + and -
+increase and decrease the force and enter shoot.  Hint: <a href="qaccel.html">QAccel</a> and
+new addStep() and subtractStep() slots in LCDRange, like <a href="qslider.html#a83993">QSlider::addStep()</a>.  If you're bothered by the way the left and right
+keys work (I am!), change that too.
+<p>
 You may now go on to <a href="t11.html">chapter eleven.</a>
 <p>
 [<a href="t9.html">Previous tutorial</a>]
@@ -317,5 +284,5 @@ You may now go on to <a href="t11.html">chapter eleven.</a>
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.00</div>
+<td align="right"><div align="right">Qt version 2.0.1</div>
 </table></div></address></body></html>

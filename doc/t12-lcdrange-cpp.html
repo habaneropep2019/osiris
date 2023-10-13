@@ -22,17 +22,17 @@
 LCDRange::LCDRange( <a href="qwidget.html">QWidget</a> *parent, const char *name )
         : <a href="qvbox.html">QVBox</a>( parent, name )
 {
-    <a href=#636>init</a>();
+    <a href=#554>init</a>();
 }
 
 LCDRange::LCDRange( const char *s, QWidget *parent, const char *name )
         : <a href="qvbox.html">QVBox</a>( parent, name )
 {
-    <a href=#636>init</a>();
-    <a href=#641>setText</a>( s );
+    <a href=#554>init</a>();
+    <a href=#559>setText</a>( s );
 }
 
-void <a name="636"></a>LCDRange::init()
+void <a name="554"></a>LCDRange::init()
 {
     <a href="qlcdnumber.html">QLCDNumber</a> *lcd  = new <a href="qlcdnumber.html">QLCDNumber</a>( 2, this, "lcd"  );
     slider = new <a href="qslider.html">QSlider</a>( 0, 99,        // range
@@ -48,25 +48,25 @@ void <a name="636"></a>LCDRange::init()
     <a href="qobject.html#c2d209">connect</a>( slider, SIGNAL(valueChanged(int)), SIGNAL(valueChanged(int)) );
 }
 
-int <a name="637"></a>LCDRange::value() const
+int <a name="555"></a>LCDRange::value() const
 {
     return slider-&gt;value();
 }
 
-const char *<a name="638"></a>LCDRange::text() const
+const char *<a name="556"></a>LCDRange::text() const
 {
     return label-&gt;text();
 }
 
-void <a name="639"></a>LCDRange::setValue( int value )
+void <a name="557"></a>LCDRange::setValue( int value )
 {
     slider-&gt;setValue( value );
 }
 
-void <a name="640"></a>LCDRange::setRange( int minVal, int maxVal )
+void <a name="558"></a>LCDRange::setRange( int minVal, int maxVal )
 {
     if ( minVal &lt; 0 || maxVal &gt; 99 || minVal &gt; maxVal ) {
-        <a href="qapplication.html#63c38a">qWarning</a>( "<a name="640"></a>LCDRange::setRange(%d,%d)\n"
+        <a href="qapplication.html#63c38a">qWarning</a>( "<a name="558"></a>LCDRange::setRange(%d,%d)\n"
                  "\tRange must be 0..99\n"
                  "\tand minVal must not be greater than maxVal",
                  minVal, maxVal );
@@ -75,7 +75,7 @@ void <a name="640"></a>LCDRange::setRange( int minVal, int maxVal )
     slider-&gt;setRange( minVal, maxVal );
 }
 
-void <a name="641"></a>LCDRange::setText( const char *s )
+void <a name="559"></a>LCDRange::setText( const char *s )
 {
     label-&gt;setText( s );
 }
@@ -85,5 +85,5 @@ void <a name="641"></a>LCDRange::setText( const char *s )
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.00</div>
+<td align="right"><div align="right">Qt version 2.0.1</div>
 </table></div></address></body></html>

@@ -22,7 +22,7 @@ body { background: white; color: black; }
 
   Implementation:
 <pre>/****************************************************************************
-** &#36;Id&#58; splitter.cpp,v 1.2 1999/06/03 01:45:32 warwick Exp $
+** &#36;Id&#58; splitter.cpp,v 1.2.2.1 1999/07/13 20:00:22 warwick Exp $
 **
 ** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
@@ -50,7 +50,7 @@ Test::Test(<a href="qwidget.html">QWidget</a>* parent, const char* name, int f) 
 {
 }
 
-void <a name="317"></a>Test::paintEvent(<a href="qpaintevent.html">QPaintEvent</a>* e)
+void <a name="224"></a>Test::paintEvent(<a href="qpaintevent.html">QPaintEvent</a>* e)
 {
     <a name="QPainter"></a><a href="qpainter.html">QPainter</a> p(this);
     p.<a name="setClipRect"></a><a href="qpainter.html#2ccac9">setClipRect</a>(e-&gt;<a name="rect"></a><a href="qpaintevent.html#6177d5">rect</a>());
@@ -109,11 +109,13 @@ int main( int argc, char ** argv )
 
     a.<a name="setMainWidget"></a><a href="qapplication.html#11c921">setMainWidget</a>( s1 );
     s1-&gt;<a name="show"></a><a href="qwidget.html#ccc8f7">show</a>();
-    return a.<a name="exec"></a><a href="qapplication.html#7076af">exec</a>();
+    int result = a.<a name="exec"></a><a href="qapplication.html#7076af">exec</a>();
+    delete s1;
+    return result;
 }
 </pre>
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.00</div>
+<td align="right"><div align="right">Qt version 2.0.1</div>
 </table></div></address></body></html>

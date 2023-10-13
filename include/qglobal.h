@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qglobal.h,v 2.95 1999/06/24 00:17:25 hanord Exp $
+** $Id: qglobal.h,v 2.95.2.1 1999/07/01 07:56:08 warwick Exp $
 **
 ** Global type declarations and definitions
 **
@@ -27,8 +27,8 @@
 #define QGLOBAL_H
 
 
-#define QT_VERSION	200
-#define QT_VERSION_STR	"2.00"
+#define QT_VERSION	201
+#define QT_VERSION_STR	"2.0.1"
 
 
 //

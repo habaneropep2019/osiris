@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qfont_x11.cpp,v 2.111 1999/06/24 20:13:40 warwick Exp $
+** $Id: qfont_x11.cpp,v 2.111.2.6 1999/07/16 11:51:39 warwick Exp $
 **
 ** Implementation of QFont, QFontMetrics and QFontInfo classes for X11
 **
@@ -541,7 +541,7 @@ void QFont::setRawName( const QString &name )
     bool validXLFD = fillFontDef( name.latin1(), &d->req, 0 );
     d->req.dirty = TRUE;
     if ( !validXLFD ) {
-	qWarning("QFront: invalid X font description '%s'", name.latin1() );
+	qDebug("QFont: not an XLFD: \"%s\", using raw mode", name.latin1() );
 	setFamily( name );
 	setRawMode( TRUE );
     }
@@ -759,8 +759,13 @@ void QFont::load() const
 	    int nmissing;
 	    s = XCreateFontSet( QPaintDevice::x11AppDisplay(), n,
 				&missing, &nmissing, 0 );
-	    if ( missing )
+	    if ( missing ) {
 		XFreeStringList(missing);
+#if defined(DEBUG)
+		for(int i=0; i<nmissing; i++)
+		    debug("Qt: missing charset %s",missing[i]);
+#endif
+	    }
 	    d->fin->set = s;
 	    // [not cached]
 	    initFontInfo();
@@ -805,9 +810,9 @@ void QFont::load() const
 #define CharSetScore	 0x80
 #define PitchScore	 0x40
 #define SizeScore	 0x20
-#define WeightScore	 0x10
-#define SlantScore	 0x08
-#define ResolutionScore	 0x04
+#define ResolutionScore	 0x10
+#define WeightScore	 0x08
+#define SlantScore	 0x04
 #define WidthScore	 0x02
 #define NonUnicodeScore	 0x01
 
@@ -1105,11 +1110,10 @@ QCString QFont_Private::bestMatch( const char *pattern, int *score )
     QCString bestName;
     char *tokens[fontFields];
 
-    if ( bestScalable.score >= exactScore ||
-	 ( bestScalable.score > best.score ||
+    if ( bestScalable.score > best.score ||
 	   bestScalable.score == best.score &&
 	   ( best.pointDiff != 0 ||
-	     bestScalable.weightDiff < best.weightDiff ) ) ) {
+	     bestScalable.weightDiff < best.weightDiff ) ) {
 	strcpy( matchBuffer.data(), bestScalable.name );
 	if ( qParseXFontName( matchBuffer, tokens ) ) {
 	    // X will scale the font accordingly
@@ -1149,27 +1153,50 @@ QCString QFont_Private::bestFamilyMember( const char *foundry,
                                 WeightScore | SlantScore | WidthScore;
 
     char pattern[256];
-    int foundryScore = 0;
-    QCString foundryResult;
-    int localScore = 0;
-    QCString localResult;
+    int testScore = 0;
+    QCString testResult;
+    int bestScore = 0;
+    QCString result;
 
     if ( foundry && foundry[0] ) {
-	sprintf( pattern, "-%s-%s-*-*-*-*-*-*-*-*-*-*-*-*", foundry, family );
-	foundryResult = bestMatch( pattern, &foundryScore );
-    }
-    if ( foundryScore < prettyGoodScore ) {
-	sprintf( pattern, "-*-%s-*-*-*-*-*-*-*-*-*-*-*-*", family );
-	localResult =  bestMatch( pattern, &localScore );
-    }
-    if ( localScore < foundryScore ) {
-	localScore  = foundryScore;
-	localResult = foundryResult;
+	sprintf( pattern, "-%s-%s-*-*-*-*-*-%d-%d-%d-*-*-*-*", foundry, family,
+	    deciPointSize(), QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
+	result = bestMatch( pattern, &bestScore );
     }
 
+    if ( bestScore < prettyGoodScore ) {
+	sprintf( pattern, "-*-%s-*-*-*-*-*-%d-%d-%d-*-*-*-*", family,
+	    deciPointSize(), QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
+	testResult = bestMatch( pattern, &testScore );
+	if ( testScore > bestScore ) {
+	    bestScore = testScore;
+	    result = testResult;
+	}
+    }
+
+    // These branches will only be exercised on old X servers...
+    if ( bestScore < prettyGoodScore ) {
+	sprintf( pattern, "-*-%s-*-*-*-*-*-*-%d-%d-*-*-*-*", family,
+	    QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
+	testResult = bestMatch( pattern, &testScore );
+	if ( testScore > bestScore ) {
+	    bestScore = testScore;
+	    result = testResult;
+	}
+    }
+    if ( bestScore < prettyGoodScore ) {
+	sprintf( pattern, "-*-%s-*-*-*-*-*-*-*-*-*-*-*-*", family );
+	testResult = bestMatch( pattern, &testScore );
+	if ( testScore > bestScore ) {
+	    bestScore = testScore;
+	    result = testResult;
+	}
+    }
+
+
     if ( score )
-	*score = localScore;
-    return localResult;
+	*score = bestScore;
+    return result;
 }
 
 
@@ -1208,42 +1235,43 @@ QCString QFont_Private::findFont( bool *exact )
 	const char* slant2 = italic() ? "o" : "r";
 	int size = pointSize()*10;
 	QCString s( 512 + 3*familyName.length() );
+	int xdpi = QPaintDevice::x11AppDpiX();
+	int ydpi = QPaintDevice::x11AppDpiY();
 	if ( foundry.isEmpty() ) {
 	    s.sprintf(
-		      "-*-%s-%s-%s-normal-*-*-%d-*-*-*-*-*-*,"
-		      "-*-%s-*-%s-*-*-*-%d-*-*-*-*-*-*,"
-		      "-*-%s-*-%s-*-*-*-%d-*-*-*-*-*-*,"
-		      "-*-helvetica-%s-%s-*-*-*-%d-*-*-*-*-*-*,"
-		      "-*-*-*-%s-*-*-*-%d-*-*-*-*-*-*,"
-		      "-*-*-*-*-*-*-*-%d-*-*-*-*-*-*",
-		      familyName.ascii(), wt, slant, size,
-		      familyName.ascii(), slant, size,
-		      familyName.ascii(), slant2, size,
-		      slant, wt, size,
-		      slant, size,
-		      size );
+		      "-*-%s-%s-%s-normal-*-*-%d-%d-%d-*-*-*-*,"
+		      "-*-%s-*-%s-*-*-*-%d-%d-%d-*-*-*-*,"
+		      "-*-%s-*-%s-*-*-*-%d-%d-%d-*-*-*-*,"
+		      "-*-helvetica-%s-%s-*-*-*-%d-%d-%d-*-*-*-*,"
+		      "-*-*-*-%s-*-*-*-%d-%d-%d-*-*-*-*,"
+		      "-*-*-*-*-*-*-*-%d-%d-%d-*-*-*-*",
+		      familyName.ascii(), wt, slant, size, xdpi, ydpi,
+		      familyName.ascii(), slant, size, xdpi, ydpi,
+		      familyName.ascii(), slant2, size, xdpi, ydpi,
+		      slant, wt, size, xdpi, ydpi,
+		      slant, size, xdpi, ydpi,
+		      size, xdpi, ydpi );
 	} else {
 	    s.sprintf(
-		      "-%s-%s-%s-%s-normal-*-*-%d-*-*-*-*-*-*,"
-		      "-%s-%s-*-%s-*-*-*-%d-*-*-*-*-*-*,"
-		      "-%s-%s-*-%s-*-*-*-%d-*-*-*-*-*-*,"
-		      "-*-%s-%s-%s-normal-*-*-%d-*-*-*-*-*-*,"
-		      "-*-%s-*-%s-*-*-*-%d-*-*-*-*-*-*,"
-		      "-*-%s-*-%s-*-*-*-%d-*-*-*-*-*-*,"
-		      "-*-helvetica-%s-%s-*-*-*-%d-*-*-*-*-*-*,"
-		      "-*-*-*-%s-*-*-*-%d-*-*-*-*-*-*,"
-		      "-*-*-*-*-*-*-*-%d-*-*-*-*-*-*",
-		      foundry.ascii(), familyName.ascii(), wt, slant, size,
-		      foundry.ascii(), familyName.ascii(), slant, size,
-		      foundry.ascii(), familyName.ascii(), slant2, size,
-		      familyName.ascii(), wt, slant, size,
-		      familyName.ascii(), slant, size,
-		      familyName.ascii(), slant2, size,
-		      slant, wt, size,
-		      slant, size,
-		      size );
+		      "-%s-%s-%s-%s-normal-*-*-%d-%d-%d-*-*-*-*,"
+		      "-%s-%s-*-%s-*-*-*-%d-%d-%d-*-*-*-*,"
+		      "-%s-%s-*-%s-*-*-*-%d-%d-%d-*-*-*-*,"
+		      "-*-%s-%s-%s-normal-*-*-%d-%d-%d-*-*-*-*,"
+		      "-*-%s-*-%s-*-*-*-%d-%d-%d-*-*-*-*,"
+		      "-*-%s-*-%s-*-*-*-%d-%d-%d-*-*-*-*,"
+		      "-*-helvetica-%s-%s-*-*-*-%d-%d-%d-*-*-*-*,"
+		      "-*-*-*-%s-*-*-*-%d-%d-%d-*-*-*-*,"
+		      "-*-*-*-*-*-*-*-%d-%d-%d-*-*-*-*",
+		      foundry.ascii(), familyName.ascii(), wt, slant, size, xdpi, ydpi,
+		      foundry.ascii(), familyName.ascii(), slant, size, xdpi, ydpi,
+		      foundry.ascii(), familyName.ascii(), slant2, size, xdpi, ydpi,
+		      familyName.ascii(), wt, slant, size, xdpi, ydpi,
+		      familyName.ascii(), slant, size, xdpi, ydpi,
+		      familyName.ascii(), slant2, size, xdpi, ydpi,
+		      slant, wt, size, xdpi, ydpi,
+		      slant, size, xdpi, ydpi,
+		      size, xdpi, ydpi );
 	}
-
 
 	return s;
     } else {
@@ -1348,8 +1376,8 @@ int QFontMetrics::printerAdjusted(int val) const
     if ( painter && painter->device() &&
 	 painter->device()->devType() == QInternal::Printer) {
 	painter->cfont.handle();
-	int xres = painter->cfont.d->fin->xResolution();
-	return ( val * 72 + 36 ) / xres; // PostScript is 72dpi
+	int res = QPaintDevice::x11AppDpiY();
+	return ( val * 72 + 36 ) / res; // PostScript is 72dpi
     } else {
 	return val;
     }

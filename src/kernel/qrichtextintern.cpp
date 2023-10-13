@@ -1,3 +1,27 @@
+/****************************************************************************
+** $Id: qrichtextintern.cpp,v 2.15.2.2 1999/07/15 11:50:56 weis Exp $
+**
+** Internal rich text classes
+**
+** Created : 990124
+**
+** Copyright (C) 1999 Troll Tech AS.  All rights reserved.
+**
+** This file is part of the Qt GUI Toolkit.
+**
+** This file may be distributed under the terms of the Q Public License
+** as defined by Troll Tech AS of Norway and appearing in the file
+** LICENSE.QPL included in the packaging of this file.
+**
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
+**
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
+**
+*****************************************************************************/
 #include "qstring.h"
 #include "qmap.h"
 #include "qstylesheet.h"
@@ -312,8 +336,8 @@ public:
 class QRichText : public QTextBox
 {
 public:
-    QRichText( const QString &doc, const QFont& fnt = QApplication::font(),
-	       const QString& context = QString::null,
+  QRichText( const QString &doc, const QFont& fnt /* = QApplication::font() */,
+	     const QString& context /* = QString::null */,
 	       int margin = 8, const QMimeSourceFactory* factory = 0, const QStyleSheet* sheet = 0 );
     ~QRichText();
 

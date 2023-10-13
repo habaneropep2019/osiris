@@ -38,9 +38,9 @@ Inherits <a href="qscrollview.html">QScrollView</a>.
 <li><span class="fn">QString <a href="#502474"><b>columnText</b></a> ( int column ) const</span>
 <li><span class="fn">virtual void <a href="#a7b0fd"><b>setColumnWidth</b></a> ( int column, int width ) </span>
 <li><span class="fn">int <a href="#cd6d31"><b>columnWidth</b></a> ( int column ) const</span>
-<li><span class="fn">enum <b>WidthMode</b> { Manual, Maximum }</span>
+<li><span class="fn">enum <a href="#WidthMode"><b>WidthMode</b></a> { Manual, Maximum }</span>
 <li><span class="fn">virtual void <a href="#163974"><b>setColumnWidthMode</b></a> ( int column, WidthMode ) </span>
-<li><span class="fn">WidthMode <b>columnWidthMode</b> ( int column ) const</span>
+<li><span class="fn">WidthMode <a href="#b6f150"><b>columnWidthMode</b></a> ( int column ) const</span>
 <li><span class="fn">virtual void <a href="#0fa747"><b>setColumnAlignment</b></a> ( int, int ) </span>
 <li><span class="fn">int <a href="#f9de27"><b>columnAlignment</b></a> ( int ) const</span>
 <li><span class="fn">virtual void <a href="#8b5aca"><b>show</b></a> () </span>
@@ -184,6 +184,16 @@ Windows style, flat (from <a href="qfiledialog.html">QFileDialog</a>)
 <br clear="all">
 Motif style, hierarchical (from the dirview/dirview.cpp example).
 
+<hr><h2>Member Type Documentation</h2>
+<h3 class="fn"><a name="WidthMode">QListView::WidthMode</a></h3>
+This enum type describes how the width of a column in the view
+changes.  The currently defined modes are: <ul>
+<p><li> <code>Manual</code> - the column width does not change automatically
+<p><li> <code>Maximum</code> - the column is automatically sized according to the
+widths of all items in the column.  (Note: The column never shrinks
+in this case.)
+<p></ul>
+<p>See also:  <a href="qlistview.html#a7b0fd">setColumnWidth</a>(), <a href="qlistview.html#163974">setColumnWidthMode</a>() and <a href="qlistview.html#cd6d31">columnWidth</a>().
 <hr><h2>Member Function Documentation</h2>
 <h3 class="fn"><a name="f7a560"></a>QListView::QListView ( <a href="qwidget.html">QWidget</a> * parent = 0, const char * name = 0 )</h3>
 <p>Creates a new empty list view, with <em>parent</em> as a parent and <em>name</em> as object name.
@@ -192,14 +202,14 @@ Motif style, hierarchical (from the dirview/dirview.cpp example).
 allocated resources.
 <h3 class="fn">int <a name="d01f15"></a>QListView::addColumn ( const <a href="qiconset.html">QIconSet</a> &amp; iconset, const <a href="qstring.html">QString</a> &amp; label, int width = -1 ) <code>[virtual]</code></h3>
 <p>Adds a new column at the right end of the widget, with the header <em>label</em> and <em>iconset,</em> and returns the index of the column.
-<p>If <em>width</em> is negative, the new column will have WidthMode Maximum,
+<p>If <em>width</em> is negative, the new column will have <a href="qlistview.html#WidthMode">WidthMode</a> Maximum,
 otherwise it will be Manual at <em>width</em> pixels wide.
 <p>See also:  <a href="qlistview.html#545c5f">setColumnText</a>(), <a href="qlistview.html#a7b0fd">setColumnWidth</a>() and <a href="qlistview.html#163974">setColumnWidthMode</a>().
 <p>Examples:
  <a href="dirview-main-cpp.html#addColumn">dirview/main.cpp</a>
 <h3 class="fn">int <a name="ec26b9"></a>QListView::addColumn ( const <a href="qstring.html">QString</a> &amp; label, int width = -1 ) <code>[virtual]</code></h3>
 <p>Adds a new column at the right end of the widget, with the header <em>label,</em> and returns the index of the column.
-<p>If <em>width</em> is negative, the new column will have WidthMode Maximum,
+<p>If <em>width</em> is negative, the new column will have <a href="qlistview.html#WidthMode">WidthMode</a> Maximum,
 otherwise it will be Manual at <em>width</em> pixels wide.
 <p>See also:  <a href="qlistview.html#545c5f">setColumnText</a>(), <a href="qlistview.html#a7b0fd">setColumnWidth</a>() and <a href="qlistview.html#163974">setColumnWidthMode</a>().
 <h3 class="fn">bool <a name="419504"></a>QListView::allColumnsShowFocus () const</h3>
@@ -225,9 +235,12 @@ items.
 <p>Returns the alignment of logical column <em>column.</em>  The default
 is <code>AlignLeft.</code>
 <h3 class="fn"><a href="qstring.html">QString</a> <a name="502474"></a>QListView::columnText ( int c ) const</h3>
-<p>Returns the text for the heading of column <em>c.</em>
+<p>Returns the text of column <em>c.</em>
 <h3 class="fn">int <a name="cd6d31"></a>QListView::columnWidth ( int c ) const</h3>
-<p>Returns the width of the heading of column <em>c.</em>
+<p>Returns the width of column <em>c.</em>
+<h3 class="fn">QListView::WidthMode <a name="b6f150"></a>QListView::columnWidthMode( int c ) const</h3>
+<p>Returns the currently set <a href="qlistview.html#WidthMode">WidthMode</a> for column <em>c.</em>
+<p>See also:  <a href="qlistview.html#163974">setColumnWidthMode</a>().
 <h3 class="fn">void <a name="64a113"></a>QListView::contentsMouseDoubleClickEvent ( <a href="qmouseevent.html">QMouseEvent</a> * e ) <code>[virtual protected]</code></h3>
 <p>Processes mouse double-click events on behalf of the viewed widget.
 <p>Reimplemented from <a href="qscrollview.html#63b198">QScrollView.</a>
@@ -412,7 +425,6 @@ flicker.
 <p>Configures the logical column <em>column</em> to have alignment <em>align.</em>
 The alignment is ultimately passed to <a href="qlistviewitem.html#271528">QListViewItem::paintCell</a>()
 for each item in the view.
-<p>The display is automatically scheduled to be updated.
 <h3 class="fn">void <a name="987188"></a>QListView::setColumnText ( int column, const <a href="qiconset.html">QIconSet</a> &amp; iconset, const <a href="qstring.html">QString</a> &amp; label ) <code>[virtual]</code></h3>
 <p>Sets the heading text of column <em>column</em> to <em>iconset</em> and <em>label.</em>  The leftmost colum is number 0.
 <h3 class="fn">void <a name="545c5f"></a>QListView::setColumnText ( int column, const <a href="qstring.html">QString</a> &amp; label ) <code>[virtual]</code></h3>
@@ -420,21 +432,12 @@ for each item in the view.
 colum is number 0.
 <h3 class="fn">void <a name="a7b0fd"></a>QListView::setColumnWidth ( int column, int w ) <code>[virtual]</code></h3>
 <p>Sets the width of column <em>column</em> to <em>w</em> pixels.  Note that if the
-column has a WidthMode other than Manual, this width setting may be
+column has a <a href="qlistview.html#WidthMode">WidthMode</a> other than Manual, this width setting may be
 subsequently overridden.  The leftmost colum is number 0.
-<h3 class="fn">void <a name="163974"></a>QListView::setColumnWidthMode ( int c, WidthMode mode ) <code>[virtual]</code></h3>
-<p>Sets column <code>to</code> behave according to <em>mode,</em> which is one of:
-<p><ul>
-<li> <code>Manual</code> - the column width does not change automatically
-<li> <code>Maximum</code> - the column is automatically sized according to the
-widths of all items in the column.
-</ul>
-<p></ul>
+<h3 class="fn">void <a name="163974"></a>QListView::setColumnWidthMode ( int c, <a href="qlistview.html#WidthMode">WidthMode</a> mode ) <code>[virtual]</code></h3>
+<p>Sets column <code>to</code> behave according to <em>mode.</em>  The default depends
+on whether the width argument to addColumn was positive or negative.
 <p>See also:  <a href="qlistviewitem.html#f022fe">QListViewItem::width</a>().
-<p>Bugs and limitations:
-<ul>
-<li>doesn't shrink back yet when items shrink or close
-</ul>
 <h3 class="fn">void <a name="c1c788"></a>QListView::setCurrentItem ( <a href="qlistviewitem.html">QListViewItem</a> * i ) <code>[virtual]</code></h3>
 <p>Sets <em>i</em> to be the current highlighted item and repaints
 appropriately.  This highlighted item is used for keyboard
@@ -522,7 +525,7 @@ Don't call this directly; call triggerUpdates() instead.
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.troll.no">www.troll.no</a>):<br>
 <form method=post action="http://www.troll.no/search.cgi">
-<input type=hidden name="version" value="2.00"><nobr>
+<input type=hidden name="version" value="2.0.1"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -530,5 +533,5 @@ copyright &copy; 1995-99
 <a href="http://www.troll.no">Troll Tech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.00</div>
+<td align="right"><div align="right">Qt version 2.0.1</div>
 </table></div></address></body></html>

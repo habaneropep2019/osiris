@@ -113,11 +113,11 @@ ProgressBar::ProgressBar( <a href="qwidget.html">QWidget</a> *parent, const char
     progress = new <a href="qprogressbar.html">QProgressBar</a>( 100, this );
 
     // connect the clicked() SIGNALs of the pushbuttons to SLOTs
-    <a href="qobject.html#c2d209">connect</a>( start, SIGNAL( clicked() ), this, SLOT( <a href=#318>slotStart</a>() ) );
-    <a href="qobject.html#c2d209">connect</a>( reset, SIGNAL( clicked() ), this, SLOT( <a href=#319>slotReset</a>() ) );
+    <a href="qobject.html#c2d209">connect</a>( start, SIGNAL( clicked() ), this, SLOT( <a href=#225>slotStart</a>() ) );
+    <a href="qobject.html#c2d209">connect</a>( reset, SIGNAL( clicked() ), this, SLOT( <a href=#226>slotReset</a>() ) );
 
     // connect the timeout() SIGNAL of the progress-timer to a SLOT
-    <a href="qobject.html#c2d209">connect</a>( &amp;timer, SIGNAL( timeout() ), this, SLOT( <a href=#320>slotTimeout</a>() ) );
+    <a href="qobject.html#c2d209">connect</a>( &amp;timer, SIGNAL( timeout() ), this, SLOT( <a href=#227>slotTimeout</a>() ) );
 
     // Let's start with normal speed...
     normal-&gt;setChecked( TRUE );
@@ -130,7 +130,7 @@ ProgressBar::ProgressBar( <a href="qwidget.html">QWidget</a> *parent, const char
  * button
  */
 
-void <a name="318"></a>ProgressBar::slotStart()
+void <a name="225"></a>ProgressBar::slotStart()
 {
     // If the progress bar is at the beginning...
     if ( progress-&gt;progress() == -1 ) {
@@ -169,7 +169,7 @@ void <a name="318"></a>ProgressBar::slotStart()
  * This SLOT is called when the user clicks the reset button
  */
 
-void <a name="319"></a>ProgressBar::slotReset()
+void <a name="226"></a>ProgressBar::slotReset()
 {
     // stop the timer and progress
     timer.stop();
@@ -195,7 +195,7 @@ void <a name="319"></a>ProgressBar::slotReset()
  * active (== progress is running)
  */
 
-void <a name="320"></a>ProgressBar::slotTimeout()
+void <a name="227"></a>ProgressBar::slotTimeout()
 {
     int p = progress-&gt;progress();
 
@@ -247,5 +247,5 @@ int main(int argc,char **argv)
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.00</div>
+<td align="right"><div align="right">Qt version 2.0.1</div>
 </table></div></address></body></html>

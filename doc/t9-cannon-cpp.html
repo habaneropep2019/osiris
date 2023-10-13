@@ -23,7 +23,7 @@ CannonField::CannonField( <a href="qwidget.html">QWidget</a> *parent, const char
     <a href="qwidget.html#379ca0">setPalette</a>( <a href="qpalette.html">QPalette</a>( <a href="qcolor.html">QColor</a>( 250, 250, 200) ) );
 }
 
-void <a name="671"></a>CannonField::setAngle( int degrees )
+void <a name="589"></a>CannonField::setAngle( int degrees )
 {
     if ( degrees &lt; 5 )
         degrees = 5;
@@ -36,7 +36,7 @@ void <a name="671"></a>CannonField::setAngle( int degrees )
     emit angleChanged( ang );
 }
 
-void <a name="672"></a>CannonField::paintEvent( <a href="qpaintevent.html">QPaintEvent</a> * )
+void <a name="590"></a>CannonField::paintEvent( <a href="qpaintevent.html">QPaintEvent</a> * )
 {
     <a href="qpainter.html">QPainter</a> p( this );
 
@@ -49,7 +49,7 @@ void <a name="672"></a>CannonField::paintEvent( <a href="qpaintevent.html">QPain
     p.<a href="qpainter.html#b29a16">drawRect</a>( <a href="qrect.html">QRect</a>(33, -4, 15, 8) );
 }
 
-<a href="qsizepolicy.html">QSizePolicy</a> <a name="673"></a>CannonField::sizePolicy() const
+<a href="qsizepolicy.html">QSizePolicy</a> <a name="591"></a>CannonField::sizePolicy() const
 {
     return QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding );
 }
@@ -59,5 +59,5 @@ void <a name="672"></a>CannonField::paintEvent( <a href="qpaintevent.html">QPain
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.00</div>
+<td align="right"><div align="right">Qt version 2.0.1</div>
 </table></div></address></body></html>

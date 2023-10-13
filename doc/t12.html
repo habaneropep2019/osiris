@@ -48,6 +48,7 @@ definition.
     public:
         LCDRange( <a href="qwidget.html">QWidget</a> *parent=0, const char *name=0 );
         LCDRange( const char *s, QWidget *parent=0, const char *name=0 );
+        int         value() const;
 </pre>
 <p>
 We have added a new constructor that sets the label text in addition to
@@ -78,7 +79,8 @@ initialization in the private init() function.
 </pre>
 <p>
 We also have a new private variable; a QLabel.  QLabel is one of Qt's
-standard widgets and can show a text or a pixmap with or without a frame.
+standard widgets and can show a text or a pixmap with or without a
+frame.
 <p>
 <h3><a href="t12-lcdrange-cpp.html">lcdrange.cpp</a></h3>
 <p>
@@ -128,10 +130,10 @@ This constructor first calls init(), then sets the label text.
     }
 </pre>
 <p>
-The set up of <code>lcd</code> and <code>slider</code> is the same as in the previous chapter.
-Next, we create a QLabel and tell it to align the contents centered
-(both vertically and horizontally). The connect() statements have also
-been taken from the previous chapter.
+The set up of <code>lcd</code> and <code>slider</code> is the same as in the previous
+chapter.  Next, we create a QLabel and tell it to align the contents
+centered (both vertically and horizontally).  The connect() statements
+have also been taken from the previous chapter.
 <p>
 <pre>
     const char *LCDRange::text() const
@@ -151,18 +153,9 @@ This function returns the label text.
 <p>
 This function sets the label text.
 <p>
-<pre>
-<p>
-</pre>
-<p>
-This event handler is similar to the one in the previous chapter,
-except that we also must make room for the label.  The number 41 in
-the lcd resize statement is the height of the slider plus the height
-of the label plus the spacing between them (16+20+5).
-<p>
 <h3><a href="t12-cannon-h.html">cannon.h</a></h3>
 <p>
-The CannonField now has two new signals: hit() and missed(). In addition
+The CannonField now has two new signals: hit() and missed().  In addition
 it contains a target.
 <p>
 <pre>
@@ -178,8 +171,9 @@ This slot creates a target at a new position.
 </pre>
 <p>
 The hit() signal is emitted when a shot hits the target.  The missed()
-signal is emitted when the shot moves beyond the right or bottom edge of
-the widget (i.e. it has not hit the target).
+signal is emitted when the shot moves beyond the right or bottom edge
+of the widget (i.e.  it has is certain that it has not and will not
+hit the target).
 <p>
 <pre>
         void  paintTarget( <a href="qpainter.html">QPainter</a> * );
@@ -217,11 +211,11 @@ We include the stdlib library because we need the rand() function.
         newTarget();
 </pre>
 <p>
-This line has been added to the constructor. It creates a "random"
-position for the target. In fact, the newTarget() function will try to
-paint the target.  Since we are in a constructor, the CannonField widget
-is invisible.  Qt guarantees that no harm is done when painting a hidden
-widget.
+This line has been added to the constructor.  It creates a "random"
+position for the target.  In fact, the newTarget() function will try
+to paint the target.  Since we are in a constructor, the CannonField
+widget is invisible.  Qt guarantees that no harm is done when calling
+repaint() on a hidden widget.
 <p>
 <pre>
     void  CannonField::newTarget()
@@ -246,7 +240,7 @@ We use the rand() function to fetch random integers.  The rand() function
 normally returns the same series of numbers each time you run a program.
 This would make the target appear at the same position every time.  To
 avoid this, we must set a random seed the first time this function is
-called. The random seed must also be random in order to avoid equal random
+called.  The random seed must also be random in order to avoid equal random
 number series.  The solution is to use the number of seconds that have
 passed since midnight as a pseudo-random value.
 <p>
@@ -257,14 +251,15 @@ The <code>if</code> test will only succeed the first time this function is calle
 because we set <code>first_time</code> to FALSE inside the <code>if</code> block.
 <p>
 Then we create the QTime object <code>midnight</code> which represents the time
-00:00:00. Next, we fetch the number of seconds from midnight until now and
-use it as a random seed. See the documentation of <a href="qdate.html">QDate</a>, <a href="qtime.html">QTime</a> and <a href="qdatetime.html">QDateTime</a> for more information.
+00:00:00.  Next, we fetch the number of seconds from midnight until
+now and use it as a random seed.  See the documentation for <a href="qdate.html">QDate</a>,
+<a href="qtime.html">QTime</a> and <a href="qdatetime.html">QDateTime</a> for more information.
 <p>
-Finally, we calculate the target's center point. We keep it within
-the rectangle (x=200,y=35,width=190,height=255), (i.e. the possible
+Finally, we calculate the target's center point.  We keep it within
+the rectangle (x=200,y=35,width=190,height=255), (i.e.  the possible
 x and y values are x = 200..390 and y = 35..290) in a coordinate system
 where we put y position 0 at the bottom edge of the widget and let
-y values increase upwards. x is as normal, with 0 at the left edge and
+y values increase upwards.  x is as normal, with 0 at the left edge and
 with x values increasing to the right.
 <p>
 By experimentation, we have found this to always be in reach of the shot.
@@ -272,39 +267,26 @@ By experimentation, we have found this to always be in reach of the shot.
 Note that rand() return a random integer >= 0.
 <p>
 <pre>
-    void CannonField::timerEvent( <a href="qtimerevent.html">QTimerEvent</a> * )
-    {
-        <a href="qwidget.html#4f563f">erase</a>( shotRect() );
-        timerCount++;
-    
-        <a href="qrect.html">QRect</a> shotR = shotRect();
+<p>
 </pre>
 <p>
 This part of the timer event has not changed from the previous chapter.
 <p>
 <pre>
-        if ( shotR.<a href="qrect.html#6d4f45">intersects</a>( targetRect() ) ) {
-            stopShooting();
-            emit hit();     
-            return;
-        }
+<p>
 </pre>
 <p>
-This <code>if</code> statement checks if the shot rectangle intersects the target
-rectangle.  If it does, the shot has hit the target (ouchh!).  We stop
-shooting and emit the hit() signal to tell the outside world that a target
-was destroyed and return.
+This <code>if</code> statement checks if the shot rectangle intersects the
+target rectangle.  If it does, the shot has hit the target (ouchh!).
+We stop the shoot timer and emit the hit() signal to tell the outside
+world that a target was destroyed and return.
 <p>
 Note that we could have created a new target on the spot, but since the
 CannonField is a component, we leave such decisions to the user of the
 component.
 <p>
 <pre>
-        if ( shotR.<a href="qrect.html#3a3d38">x</a>() &gt; width() || shotR.<a href="qrect.html#65e614">y</a>() &gt; height() ) {
-            stopShooting();
-            emit missed();
-            return;
-        }   
+<p>
 </pre>
 <p>
 This <code>if</code> statement is the same as in the previous chapter, except that
@@ -312,47 +294,35 @@ it now emits the missed() signal to tell the outside world about the
 failure.
 <p>
 <pre>
-        <a href="qwidget.html#977d49">repaint</a>( shotR, FALSE );
-    }
+<p>
 </pre>
 <p>
-No changes here.
+And the rest of the function is as before.
 <p>
-Modifications in CannonField::paintEvent():
+CannonField::paintEvent() is as before, except that this has been
+added:
 <p>
 <pre>
-        if ( updateR.<a href="qrect.html#6d4f45">intersects</a>( targetRect() ) )
-            paintTarget( &amp;p );
+<p>
 </pre>
 <p>
-These two lines have been added to the paintEvent() to paint the
-target if necessary.
+These two lines make sure the target too is painted, when necessary.
 <p>
 <pre>
-    void CannonField::paintTarget( <a href="qpainter.html">QPainter</a> *p )
-    {
-        p-&gt;<a href="qpainter.html#38e68f">setBrush</a>( red );
-        p-&gt;<a href="qpainter.html#1b9993">setPen</a>( black );
-        p-&gt;<a href="qpainter.html#b29a16">drawRect</a>( targetRect() );
-    }
+<p>
 </pre>
 <p>
 This private function paints the target; a rectangle filled with red and
 with a black outline.
 <p>
 <pre>
-    <a href="qrect.html">QRect</a> CannonField::targetRect() const
-    {
-        <a href="qrect.html">QRect</a> r( 0, 0, 20, 10 );
-        r.<a href="qrect.html#b0408d">moveCenter</a>( <a href="qpoint.html">QPoint</a>(target.x(),<a href="qwidget.html#180786">height</a>() - 1 - target.y()) );
-        return r;
-    }
+<p>
 </pre>
 <p>
 This private function returns the enclosing rectangle of the target.
 Remember from newTarget() that the <code>target</code> point uses y coordinate 0 at
 the bottom of the widget.  We calculate the point in widget coordinates
-before we call <a href="qrect.html#b0408d">moveCenter()</a>.
+before we call <a href="qrect.html#b0408d">QRect::moveCenter()</a>.
 <p>
 The reason we have chosen this coordinate mapping is to fix the distance
 between the target and the bottom of the widget.  Remember that the widget
@@ -375,25 +345,33 @@ We set the angle text label to "ANGLE".
 <p>
 We set the force text label to "FORCE".
 <p>
-Note that we have not changed the position or the size of the LCDRanges.
-The QLCDNumber in LCDRange will become a bit smaller to make room for the
-label.  MyWidget doesn't care about that, because it uses LCDRange as a
-component and trust that it will show its value in the best way possible.
-<p>
 <h2>Behavior</h2>
 <p>
 The cannon can shoot at a target and a new target is automatically created
 when one has been hit.
+<p>
+The LCDRange widgets look a bit strange - the built-in layout
+management in QVBox gives the labels too much space and the rest not
+enough.  We'll fix that in the next chapter.
 <p>
 <h2>Excercises</h2>
 <p>
 Make a cheat button that when pressed makes the CannonField display
 the shot trajectory for 5 seconds.
 <p>
+If you did the "round shot" exercise from the previous chapter, try
+changing the shotRect() to a shotRegion() that returns a <a href="qregion.html">QRegion</a> so
+you can have really accurate collision detection.
+<p>
 Make a moving target.
 <p>
-Make it possible to have several shots in the air at the same time.
-Hint: make a Shot object.
+Make sure the target is always created entirely on-screen.
+<p>
+Make sure that the widget cannot be resized so that the target isn't
+visible.  Hint: <a href="qwidget.html#378ed6">QWidget::setMinimumSize()</a> is your friend.
+<p>
+(Not easy:) Make it possible to have several shots in the air at the
+same time.  Hint: make a Shot object.
 <p>
 You may now go on to <a href="t13.html">chapter thirteen.</a>
 <p>
@@ -404,5 +382,5 @@ You may now go on to <a href="t13.html">chapter thirteen.</a>
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.00</div>
+<td align="right"><div align="right">Qt version 2.0.1</div>
 </table></div></address></body></html>

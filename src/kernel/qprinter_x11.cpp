@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qprinter_x11.cpp,v 2.45 1999/06/23 03:19:09 warwick Exp $
+** $Id: qprinter_x11.cpp,v 2.45.2.1 1999/06/30 14:00:11 warwick Exp $
 **
 ** Implementation of QPrinter class for X11
 **
@@ -150,11 +150,9 @@ bool QPrinter::aborted() const
 }
 
 
-/*! \obsolete
+/*!
   Opens a printer setup dialog and asks the user to specify what printer
   to use and miscellaneous printer settings.
-
-  Now obsoleted by QPrintDialog::getPrinterSetup().
 
   Returns TRUE if the user pressed "OK" to print, or FALSE if the
   user cancelled the operation.

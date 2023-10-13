@@ -28,8 +28,8 @@ The QString class provides an abstraction of Unicode text and the classic C zero
 <li><span class="fn">inline <b>~QString</b> () </span>
 <li><span class="fn">QString&amp; <a href="#2e17e7"><b>operator=</b></a> ( const QString &amp; ) </span>
 <li><span class="fn">QString&amp; <a href="#4659ac"><b>operator=</b></a> ( const QCString &amp; ) </span>
-<li><span class="fn">QString&amp; <b>operator=</b> ( QChar c ) </span>
-<li><span class="fn">QString&amp; <b>operator=</b> ( char c ) </span>
+<li><span class="fn">QString&amp; <a href="#9b3183"><b>operator=</b></a> ( QChar c ) </span>
+<li><span class="fn">QString&amp; <a href="#a728e5"><b>operator=</b></a> ( char c ) </span>
 <li><span class="fn">bool <a href="#a2a6ba"><b>isNull</b></a> () const</span>
 <li><span class="fn">bool <a href="#9a6d7e"><b>isEmpty</b></a> () const</span>
 <li><span class="fn">uint <a href="#6db3bf"><b>length</b></a> () const</span>
@@ -104,8 +104,8 @@ The QString class provides an abstraction of Unicode text and the classic C zero
 <li><span class="fn">QChar <a href="#ff43fe"><b>operator[]</b></a> ( int i ) const</span>
 <li><span class="fn">QCharRef <a href="#c5f1c6"><b>at</b></a> ( uint i ) </span>
 <li><span class="fn">QCharRef <a href="#f3e646"><b>operator[]</b></a> ( int i ) </span>
-<li><span class="fn">QChar <b>constref</b> ( uint i ) const</span>
-<li><span class="fn">QChar&amp; <b>ref</b> ( uint i ) </span>
+<li><span class="fn">QChar <a href="#3aa9ec"><b>constref</b></a> ( uint i ) const</span>
+<li><span class="fn">QChar&amp; <a href="#01fc50"><b>ref</b></a> ( uint i ) </span>
 <li><span class="fn">const QChar* <a href="#43c77a"><b>unicode</b></a> () const</span>
 <li><span class="fn">const char* <b>ascii</b> () const</span>
 <li><span class="fn">const char* <a href="#7113e4"><b>latin1</b></a> () const</span>
@@ -214,7 +214,7 @@ first <em>length</em> <a href="qchar.html">QChar</a> in the array <em>unicode.</
 <p>See also:  QString::make().
 <h3 class="fn"><a name="5322d1"></a>QString::QString ( const QByteArray &amp; ba )</h3>
 <p>Constructs a string that is a deep copy of <em>ba</em> interpreted as
-interpreted as a classic C string.
+a classic C string.
 <h3 class="fn"><a name="e39f78"></a>QString::QString ( const QString &amp; s )</h3>
 <p>Constructs an implicitly-shared copy of <em>s.</em>
 <h3 class="fn">QString&amp; <a name="f174c4"></a>QString::append ( char ch )</h3>
@@ -307,6 +307,9 @@ to those experimenting with Arabic and other composition-rich texts.
 text requires rendering with glyph-poor fonts, but also
 makes compositions such as <a href="qchar.html">QChar</a>(0x0041) ('A') and QChar(0x0308)
 (Unicode accent diaresis) giving QChar(0x00c4) (German A Umlaut).
+<h3 class="fn"><a href="qchar.html">QChar</a> <a name="3aa9ec"></a>QString::constref ( uint i ) const</h3>
+<p>Equivalent to <a href="qstring.html#c5f1c6">at</a>(i), this returns the <a href="qchar.html">QChar</a> at <em>i</em> by value.
+<p>See also:  <a href="qstring.html#01fc50">ref</a>().
 <h3 class="fn">int <a name="e8a9c1"></a>QString::contains ( <a href="qchar.html">QChar</a> c, bool cs=TRUE ) const</h3>
 <p>Returns the number of times the character <em>c</em> occurs in the string.
 <p>The match is case sensitive if <em>cs</em> is TRUE, or case insensitive if <em>cs</em>
@@ -562,6 +565,10 @@ this string and returns a reference to this string.
 <h3 class="fn">QString &amp; <a name="2e17e7"></a>QString::operator= ( const QString &amp; s )</h3>
 <p>Assigns a shallow copy of <em>s</em> to this string and returns a
 reference to this string.
+<h3 class="fn">QString&amp; <a name="9b3183"></a>QString::operator= ( <a href="qchar.html">QChar</a> c )</h3>
+<p>Sets the string to contain just the single character <em>c.</em>
+<h3 class="fn">QString&amp; <a name="a728e5"></a>QString::operator= ( char c )</h3>
+<p>Sets the string to contain just the single character <em>c.</em>
 <h3 class="fn"><a href="qchar.html">QChar</a> <a name="ff43fe"></a>QString::operator[] ( int ) const</h3>
 <p>Returns the character at <em>i,</em> or QChar::null if <em>i</em> is beyond the
 length of the string.
@@ -583,6 +590,9 @@ use the result as anything but a QChar.
 <h3 class="fn">QString&amp; <a name="35e29b"></a>QString::prepend ( char ch )</h3>
 <p>Prepends <em>ch</em> to the string and returns a reference to the result.
 <p>See also:  <a href="qstring.html#2a68e1">insert</a>().
+<h3 class="fn"><a href="qchar.html">QChar</a>&amp; <a name="01fc50"></a>QString::ref ( uint i )</h3>
+<p>Returns the <a href="qchar.html">QChar</a> at <em>i</em> by reference.
+<p>See also:  <a href="qstring.html#3aa9ec">constref</a>().
 <h3 class="fn">QString &amp; <a name="11dc0f"></a>QString::remove ( uint index, uint len )</h3>
 <p>Removes <em>len</em> characters starting at position <em>index</em> from the
 string and returns a reference to the string.
@@ -899,7 +909,7 @@ otherwise FALSE.
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.troll.no">www.troll.no</a>):<br>
 <form method=post action="http://www.troll.no/search.cgi">
-<input type=hidden name="version" value="2.00"><nobr>
+<input type=hidden name="version" value="2.0.1"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -907,5 +917,5 @@ copyright &copy; 1995-99
 <a href="http://www.troll.no">Troll Tech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.00</div>
+<td align="right"><div align="right">Qt version 2.0.1</div>
 </table></div></address></body></html>

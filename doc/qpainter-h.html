@@ -19,7 +19,7 @@ remains with Troll Tech.
 <hr>
 <pre>
 /****************************************************************************
-** &#36;Id&#58; qpainter.h,v 2.48 1999/06/18 13:37:03 hanord Exp $
+** &#36;Id&#58; qpainter.h,v 2.48.2.1 1999/07/14 19:13:18 aavit Exp $
 **
 ** Definition of QPainter class
 **
@@ -272,7 +272,7 @@ private:
            VxF=0x10, WxF=0x20, ClipOn=0x40, SafePolygon=0x80, MonoDev=0x100,
            DirtyFont=0x200, DirtyPen=0x400, DirtyBrush=0x800,
            RGBColor=0x1000, FontMet=0x2000, FontInf=0x4000, CtorBegin=0x8000,
-           UsePrivateCx = 0x10000 };
+           UsePrivateCx = 0x10000, VolatileDC = 0x20000 };
     uint        flags;
     bool        testf( uint b ) const { return (flags&amp;b)!=0; }
     void        setf( uint b )  { flags |= b; }
@@ -622,5 +622,5 @@ inline void *QPainter::textMetric()
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.00</div>
+<td align="right"><div align="right">Qt version 2.0.1</div>
 </table></div></address></body></html>

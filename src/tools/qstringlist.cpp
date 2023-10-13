@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qstringlist.cpp,v 1.11 1999/06/08 17:30:46 weis Exp $
+** $Id: qstringlist.cpp,v 1.11.2.2 1999/07/13 19:59:09 warwick Exp $
 **
 ** Implementation of QStringList
 **
@@ -29,7 +29,7 @@
 
 /*!
   \class QStringList qstringlist.h
-  \brief A list of strings
+  \brief A list of strings.
 
   \ingroup tools
   \ingroup shared
@@ -74,6 +74,17 @@
   is the same as a deep copy. If this list or the original one or some
   other list referencing the same shared data is modified, then the
   modifying list makes a copy first.
+*/
+
+/*!
+  \fn QStringList::QStringList (const QString & i)
+  Constructs a string list consisting of the single string \a i.
+  To make longers lists easily, use:
+  \code
+    QString s1,s2,s3;
+    ...
+    QStringList mylist = QStringList() << s1 << s2 << s3;
+  \endcode
 */
 
 /*!

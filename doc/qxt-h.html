@@ -19,7 +19,7 @@ remains with Troll Tech.
 <hr>
 <pre>
 /****************************************************************************
-** &#36;Id&#58; qxt.h,v 1.6 1999/02/18 12:00:57 warwick Exp $
+** &#36;Id&#58; qxt.h,v 1.6.2.1 1999/07/02 23:07:01 ettrich Exp $
 **
 ** Definition of Qt extension classes for Xt/Motif support.
 **
@@ -58,13 +58,12 @@ public:
         const char** resources=0);
     QXtApplication(Display*);
     ~QXtApplication();
-
-    bool x11EventFilter(XEvent*);
 };
 
 class <a href="qxtwidget.html">QXtWidget</a> : public QWidget {
     Q_OBJECT
     Widget xtw;
+    Widget xtparent;
     bool   need_reroot;
     void init(const char* name, WidgetClass widget_class,
                     Widget parent, QWidget* qparent,
@@ -78,19 +77,20 @@ class <a href="qxtwidget.html">QXtWidget</a> : public QWidget {
 public:
     QXtWidget(const char* name, Widget parent, bool managed=FALSE);
     QXtWidget(const char* name, WidgetClass widget_class,
-              QXtWidget *parent=0, ArgList args=0, Cardinal num_args=0,
+              QWidget *parent=0, ArgList args=0, Cardinal num_args=0,
               bool managed=FALSE);
-    QXtWidget(QWidget *parent, const char* name);
     ~QXtWidget();
 
     Widget xtWidget() const { return xtw; }
-
-    void setGeometry( int x, int y, int w, int h );
-    void setGeometry( const QRect &amp; );
+    bool isActiveWindow() const;
 
 protected:
-    bool x11Event( XEvent* );
+    void enterEvent(QEvent*);
     void leaveEvent(QEvent*);
+    void focusInEvent( QFocusEvent * );
+    void focusOutEvent( QFocusEvent * );
+    void moveEvent( QMoveEvent* );
+    void resizeEvent( QResizeEvent* );
 };
 
 #endif
@@ -99,5 +99,5 @@ protected:
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.00</div>
+<td align="right"><div align="right">Qt version 2.0.1</div>
 </table></div></address></body></html>

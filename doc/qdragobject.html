@@ -72,7 +72,7 @@ then the return value should always be ignored, as the target
 is expected to manipulate the referred-to content directly.
 On X11 the return value should always be correct anyway, but
 on Windows this is not necessarily the case (eg. the file manager
-starts a background process to move files, so the source 
+starts a background process to move files, so the source
 <em>must not</em> delete the files!).
 <h3 class="fn">bool <a name="448654"></a>QDragObject::drag ( DragMode mode ) <code>[virtual protected]</code></h3>
 <p>Starts a drag operation using the contents of this object.
@@ -84,14 +84,6 @@ processing - after that time the drag object will be deleted.
 <p>Returns TRUE if the dragged data was dragged as a <em>move,</em>
 indicating that the caller should remove the original source
 of the data (the drag object must continue to have a copy).
-<p>The <em>mode</em> is one of:
-<p><ul>
-<li><code>DragDefault</code> - the mode is determined heuristically.
-<li><code>DragCopy</code> - the data is copied, never moved.
-<li><code>DragMove</code> - the data is moved, if dragged at all.
-<li><code>DragCopyOrMove</code> - the user chooses the mode
-by using control key to switch from the default.
-</ul>
 <p>Normally one of simpler drag(), <a href="qdragobject.html#d8d0fe">dragMove</a>(), or <a href="qdragobject.html#8b1196">dragCopy</a>() functions
 would be used instead.<p><b>Warning:</b> in Qt 1.x, drag operations all return FALSE.  This will change
 in later versions - the functions are provided in this way to
@@ -136,7 +128,7 @@ and from the same widget.
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.troll.no">www.troll.no</a>):<br>
 <form method=post action="http://www.troll.no/search.cgi">
-<input type=hidden name="version" value="2.00"><nobr>
+<input type=hidden name="version" value="2.0.1"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -144,5 +136,5 @@ copyright &copy; 1995-99
 <a href="http://www.troll.no">Troll Tech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.00</div>
+<td align="right"><div align="right">Qt version 2.0.1</div>
 </table></div></address></body></html>

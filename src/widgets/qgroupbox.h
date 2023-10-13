@@ -1,5 +1,5 @@
 /**********************************************************************
-** $Id: qgroupbox.h,v 2.20 1999/06/03 02:13:41 warwick Exp $
+** $Id: qgroupbox.h,v 2.20.2.1 1999/07/07 08:59:02 paul Exp $
 **
 ** Definition of QGroupBox widget class
 **
@@ -40,7 +40,6 @@ class QGridLayout;
 class Q_EXPORT QGroupBox : public QFrame
 {
     Q_OBJECT
-    Q_BUILDER( "Groupbox", "qgroupbox.xpm", DefaultInspector )
 public:
     QGroupBox( QWidget *parent=0, const char *name=0 );
     QGroupBox( const QString &title, QWidget *parent=0, const char* name=0 );

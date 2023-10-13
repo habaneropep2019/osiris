@@ -19,7 +19,7 @@ remains with Troll Tech.
 <hr>
 <pre>
 /****************************************************************************
-** &#36;Id&#58; qwidget.h,v 2.137 1999/06/23 17:53:22 ettrich Exp $
+** &#36;Id&#58; qwidget.h,v 2.137.2.1 1999/07/13 19:59:02 warwick Exp $
 **
 ** Definition of QWidget class
 **
@@ -70,17 +70,17 @@ class Q_EXPORT <a href="qwidget.html">QWidget</a> : public <a href="qobject.html
     Q_OBJECT
 public:
     QWidget( QWidget *parent=0, const char *name=0, WFlags f=0 );
-   ~QWidget();
+    ~QWidget();
 
     WId          winId() const;
     void         setName( const char *name );
 
-  // GUI style setting
+    // GUI style setting
 
     QStyle     &amp;style() const;
     void        setStyle( QStyle * );
 
-  // Widget types and states
+    // Widget types and states
 
     bool         isTopLevel()   const;
     bool         isModal()      const;
@@ -93,7 +93,7 @@ public:
 public slots:
     virtual void setEnabled( bool );
 
-  // Widget coordinates
+    // Widget coordinates
 
 public:
     QRect        frameGeometry() const;
@@ -136,7 +136,7 @@ public:
     void        setFixedWidth( int w );
     void        setFixedHeight( int h );
 
-  // Widget coordinate mapping
+    // Widget coordinate mapping
 
     QPoint       mapToGlobal( const QPoint &amp; )   const;
     QPoint       mapFromGlobal( const QPoint &amp; ) const;
@@ -145,7 +145,7 @@ public:
 
     QWidget     *topLevelWidget()   const;
 
-  // Widget attribute functions
+    // Widget attribute functions
 
     enum BackgroundMode { FixedColor, FixedPixmap, NoBackground,
                           PaletteForeground, PaletteButton, PaletteLight,
@@ -209,8 +209,13 @@ public slots:
     void                clearFocus();
 
 public:
-    enum FocusPolicy
-    { NoFocus = 0, TabFocus = 0x1, ClickFocus = 0x2, StrongFocus = 0x3, WheelFocus = 0x7 };
+    enum FocusPolicy {
+        NoFocus = 0, 
+        TabFocus = 0x1,
+        ClickFocus = 0x2,
+        StrongFocus = 0x3,
+        WheelFocus = 0x7
+    };
 
     bool                isActiveWindow() const;
     virtual void        setActiveWindow();
@@ -222,7 +227,7 @@ public:
     virtual void        setFocusProxy( QWidget * );
     QWidget *           focusProxy() const;
 
-  // Grab functions
+    // Grab functions
 
     void                grabMouse();
     void                grabMouse( const QCursor &amp; );
@@ -232,7 +237,7 @@ public:
     static QWidget *    mouseGrabber();
     static QWidget *    keyboardGrabber();
 
-  // Update/refresh functions
+    // Update/refresh functions
 
     bool                isUpdatesEnabled() const;
 
@@ -247,7 +252,7 @@ public slots:
     void                repaint( const QRect &amp;, bool erase=TRUE );
     void                repaint( const QRegion &amp;, bool erase=TRUE );
 
-  // Widget management functions
+    // Widget management functions
 
     virtual void        show();
     virtual void        hide();
@@ -289,8 +294,8 @@ public:
                                   bool showIt=FALSE );
 #ifndef QT_NO_COMPAT
     void                recreate( QWidget *parent, WFlags f, const QPoint &amp; p,
-                                 bool showIt=FALSE )
-        { reparent(parent,f,p,showIt); }
+                                  bool showIt=FALSE )
+    { reparent(parent,f,p,showIt); }
 #endif
 
     void                erase();
@@ -303,11 +308,11 @@ public:
     void                drawText( int x, int y, const QString &amp;);
     void                drawText( const QPoint &amp;, const QString &amp;);
 
-  // Misc. functions
+    // Misc. functions
 
     QWidget *           focusWidget() const;
 
-  // drag and drop
+    // drag and drop
 
     bool                acceptDrops() const;
     virtual void        setAcceptDrops( bool on );
@@ -326,7 +331,7 @@ public:
     static QWidget *    find( WId );
     static QWidgetMapper *wmapper();
 
-  // Event handlers
+    // Event handlers
 
 protected:
     bool         event( QEvent * );
@@ -365,7 +370,7 @@ protected:
 
     virtual void updateMask();
 
-  // Misc. protected functions
+    // Misc. protected functions
 
 protected:
     virtual void styleChange( QStyle&amp; );
@@ -450,7 +455,7 @@ private:
     friend class QFontMetrics;
     friend class QFontInfo;
     friend class QETWidget;
-#if 1 //def TOTAL_LOSER_COMPILER
+#if 1 //was #ifdef TOTAL_LOSER_COMPILER but they all seem to be
     friend class QLayout;
 #else
     friend void QLayout::setWidgetLayout( QWidget *, QLayout * );
@@ -679,5 +684,5 @@ struct QWExtra {
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.00</div>
+<td align="right"><div align="right">Qt version 2.0.1</div>
 </table></div></address></body></html>

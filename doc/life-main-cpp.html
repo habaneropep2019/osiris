@@ -113,12 +113,12 @@ LifeWidget::LifeWidget( <a href="qwidget.html">QWidget</a> *parent, const char *
                    MAXSIZE * SCALE + 2 * BORDER );
     <a href="qwidget.html#832223">setSizeIncrement</a>( SCALE, SCALE);
 
-    <a href=#240>clear</a>();
+    <a href=#147>clear</a>();
     <a href="qwidget.html#9ff9d8">resize</a>( maxi * SCALE + 2 * BORDER , maxj * SCALE + 2 * BORDER );
 
 }
 
-void <a name="240"></a>LifeWidget::clear()
+void <a name="147"></a>LifeWidget::clear()
 {
     current = 0;
     for ( int t = 0; t &lt; 2; t++ )
@@ -133,13 +133,13 @@ void <a name="240"></a>LifeWidget::clear()
 // this is not in general TRUE, but in practice it's good enough for
 // this program
 
-void <a name="241"></a>LifeWidget::resizeEvent( <a href="qresizeevent.html">QResizeEvent</a> * e )
+void <a name="148"></a>LifeWidget::resizeEvent( <a href="qresizeevent.html">QResizeEvent</a> * e )
 {
     maxi = (e-&gt;size().width()  - 2 * BORDER) / SCALE;
     maxj = (e-&gt;size().height() - 2 * BORDER) / SCALE;
 }
 
-void <a name="242"></a>LifeWidget::setPoint( int i, int j )
+void <a name="149"></a>LifeWidget::setPoint( int i, int j )
 {
     if ( i &lt; 1 || i &gt; maxi || j &lt; 1 || j &gt; maxi )
         return;
@@ -147,25 +147,25 @@ void <a name="242"></a>LifeWidget::setPoint( int i, int j )
     <a href="qwidget.html#413466">repaint</a>( index2pos(i), index2pos(j), SCALE, SCALE, FALSE );
 }
 
-void <a name="243"></a>LifeWidget::mouseHandle( const QPoint &amp;pos )
+void <a name="150"></a>LifeWidget::mouseHandle( const QPoint &amp;pos )
 {
     int i = pos2index( pos.x() );
     int j = pos2index( pos.y() );
-    <a href=#242>setPoint</a>( i, j );
+    <a href=#149>setPoint</a>( i, j );
 }
 
-void <a name="244"></a>LifeWidget::mouseMoveEvent( <a href="qmouseevent.html">QMouseEvent</a> *e )
+void <a name="151"></a>LifeWidget::mouseMoveEvent( <a href="qmouseevent.html">QMouseEvent</a> *e )
 {
-    <a href=#243>mouseHandle</a>( e-&gt;pos() );
+    <a href=#150>mouseHandle</a>( e-&gt;pos() );
 }
 
-void <a name="245"></a>LifeWidget::mousePressEvent( <a href="qmouseevent.html">QMouseEvent</a> *e )
+void <a name="152"></a>LifeWidget::mousePressEvent( <a href="qmouseevent.html">QMouseEvent</a> *e )
 {
     if ( e-&gt;button() == QMouseEvent::LeftButton )
-        <a href=#243>mouseHandle</a>( e-&gt;pos() );
+        <a href=#150>mouseHandle</a>( e-&gt;pos() );
 }
 
-void <a name="246"></a>LifeWidget::nextGeneration()
+void <a name="153"></a>LifeWidget::nextGeneration()
 {
     for ( int i = 1; i &lt;= MAXSIZE; i++ ) {
         for ( int j = 1; j &lt;= MAXSIZE; j++ ) {
@@ -191,7 +191,7 @@ void <a name="246"></a>LifeWidget::nextGeneration()
 // inherits QFrame.
 //
 
-void <a name="247"></a>LifeWidget::paintEvent( <a href="qpaintevent.html">QPaintEvent</a> * e )
+void <a name="154"></a>LifeWidget::paintEvent( <a href="qpaintevent.html">QPaintEvent</a> * e )
 {
     int starti = pos2index( e-&gt;<a href="qpaintevent.html#6177d5">rect</a>().left() );
     int stopi  = pos2index( e-&gt;<a href="qpaintevent.html#6177d5">rect</a>().right() );
@@ -251,5 +251,5 @@ int main( int argc, char **argv )
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.00</div>
+<td align="right"><div align="right">Qt version 2.0.1</div>
 </table></div></address></body></html>

@@ -91,7 +91,7 @@ the part the printer can draw on.  The default is FALSE: You can
 probably paint on (0,0) but the document's margins are unknown.
 <li> <a href="qprinter.html#a43b82">setNumCopies</a>() tells QPrinter how many copies of the document
 it should print.
-<li> <a href="qprinter.html#1db086">setMinMax</a>() tells QPrinter and <a href="qprintdialog.html">QPrintDialog</a> what the allowed
+<li> <a href="qprinter.html#1db086">setMinMax</a>() tells QPrinter and QPrintDialog what the allowed
 range for <a href="qprinter.html#237988">fromPage</a>() and <a href="qprinter.html#0ec450">toPage</a>() are.
 </ul>
 <p>There are also some settings that the user sets (through
@@ -120,7 +120,7 @@ It may cancel the entire job, or just some of it.
  <a href="drawdemo-drawdemo-cpp.html#QPrinter">drawdemo/drawdemo.cpp</a>
 
 <hr><h2>Member Type Documentation</h2>
-<h3 class="fn"><a name="Orientation">QPrinter::Orientation</h3>
+<h3 class="fn"><a name="Orientation">QPrinter::Orientation</a></h3>
 This enum type (not to be confused with <a href="qt.html#Orientation">Qt::Orientation</a>) is used to
 decide how Qt should print on each sheet.  <ul>
 <p><li> <code>Portrait</code> - (the default) means to print such that the page's
@@ -131,7 +131,7 @@ greater than its height.
 <p>This type interacts with <a href="qprinter.html#PageSize">QPrinter::PageSize</a> and QPrinter::setFullPage()
 to determine the final size of the page available to the
 application.
-<h3 class="fn"><a name="PageOrder">QPrinter::PageOrder</h3>
+<h3 class="fn"><a name="PageOrder">QPrinter::PageOrder</a></h3>
 This enum type is used by QPrinter/QPrintDialog to tell the
 application program how to print.  The possible values are <ul>
 <p><li> <code>QPrinter::FirstPageFirst</code> - the lowest-numbered page should
@@ -139,7 +139,7 @@ be printed first.
 <p><li> <code>QPrinter::LastPageFirst</code> - the highest-numbered page should
 be printed first.
 <p></ul>
-<h3 class="fn"><a name="PageSize">QPrinter::PageSize</h3>
+<h3 class="fn"><a name="PageSize">QPrinter::PageSize</a></h3>
 This enum type decides what paper size QPrinter is to use.  QPrinter
 does not check that the paper size is available; it just uses this
 information together with <a href="qprinter.html#Orientation">Orientation</a> and QPrinter::setFullPage() to
@@ -346,10 +346,8 @@ other values to use a specific printer selection option.
 <p>If the printer selection option is changed while the printer is
 active, the current print job may or may not be affected.
 <h3 class="fn">bool <a name="a36243"></a>QPrinter::setup ( <a href="qwidget.html">QWidget</a> * parent = 0 )</h3>
-<p><b>This function is obsolete.</b> It is provided to keep old programs working.  We strongly advise against using it in new code.<p>
-Opens a printer setup dialog and asks the user to specify what printer
+<p>Opens a printer setup dialog and asks the user to specify what printer
 to use and miscellaneous printer settings.
-<p>Now obsoleted by <a href="qprintdialog.html#1aaa7f">QPrintDialog::getPrinterSetup</a>().
 <p>Returns TRUE if the user pressed "OK" to print, or FALSE if the
 user cancelled the operation.
 <p>Examples:
@@ -363,7 +361,7 @@ accordingly.
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.troll.no">www.troll.no</a>):<br>
 <form method=post action="http://www.troll.no/search.cgi">
-<input type=hidden name="version" value="2.00"><nobr>
+<input type=hidden name="version" value="2.0.1"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -371,5 +369,5 @@ copyright &copy; 1995-99
 <a href="http://www.troll.no">Troll Tech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.00</div>
+<td align="right"><div align="right">Qt version 2.0.1</div>
 </table></div></address></body></html>

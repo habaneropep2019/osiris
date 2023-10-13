@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qtextbrowser.cpp,v 2.11 1999/06/18 00:13:31 ettrich Exp $
+** $Id: qtextbrowser.cpp,v 2.11.2.2 1999/07/16 16:38:15 warwick Exp $
 **
 ** Implementation of the QTextView class
 **
@@ -139,7 +139,7 @@ QTextBrowser::~QTextBrowser()
 void QTextBrowser::setSource(const QString& name)
 {
     if ( isVisibleToTLW() )
-	qApp->setOverrideCursor( waitCursor ); 
+	qApp->setOverrideCursor( waitCursor );
     QString source = name;
     QString mark;
     int hash = name.find('#');
@@ -165,6 +165,20 @@ void QTextBrowser::setSource(const QString& name)
 		qWarning("QTextBrowser: cannot decode %s", source.latin1() );
 	    }
 	}
+
+	if ( isVisibleToTLW() ) {
+	    QString firstTag = txt.left( txt.find('>' )+1 );
+	    QRichText tmp( firstTag, QApplication::font(), QString::null );
+	    static QString s_type = QString::fromLatin1("type");
+	    static QString s_detail = QString::fromLatin1("detail");
+	    if (tmp.attributes() && tmp.attributes()->contains(s_type)
+		&& (*tmp.attributes())[s_type] == s_detail ) {
+		popupDetail( txt, d->lastClick );
+		qApp->restoreOverrideCursor();
+		return;
+	    }
+	}
+
 	d->curmain = url;
 	setText( txt, url );
     }
@@ -194,7 +208,7 @@ void QTextBrowser::setSource(const QString& name)
 /*!
   Returns the source of the currently display document. If no document is displayed or
   the source is unknown, a null string is returned.
-  
+
   \sa setSource()
  */
 QString QTextBrowser::source() const

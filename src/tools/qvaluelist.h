@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qvaluelist.h,v 1.24 1999/06/22 20:40:27 agulbra Exp $
+** $Id: qvaluelist.h,v 1.24.2.2 1999/07/13 19:59:14 warwick Exp $
 **
 ** Definition of QValueList class
 **
@@ -166,7 +166,7 @@ public:
      * Functions
      */
     QValueListPrivate() { node = new Node; node->next = node->prev = node; nodes = 0; }
-    QValueListPrivate( const QValueListPrivate& _p ) : QShared() {
+    QValueListPrivate( const QValueListPrivate<T>& _p ) : QShared() {
 	node = new Node; node->next = node->prev = node; nodes = 0;
 	Iterator b( _p.node->next );
 	Iterator e( _p.node );
@@ -297,7 +297,7 @@ public:
      * API
      */
     QValueList() { sh = new QValueListPrivate<T>; }
-    QValueList( const QValueList& l ) { sh = l.sh; sh->ref(); }
+    QValueList( const QValueList<T>& l ) { sh = l.sh; sh->ref(); }
     ~QValueList() { if ( sh->deref() ) delete sh; }
 
     QValueList<T>& operator= ( const QValueList<T>& l )
@@ -418,7 +418,7 @@ template<class T>
 QDataStream& operator<<( QDataStream& s, const QValueList<T>& l )
 {
     s << l.count();
-    QValueList<T>::ConstIterator it = l.begin();
+    QValueListConstIterator<T> it = l.begin();
     for( ; it != l.end(); ++it )
 	s << *it;
     return s;

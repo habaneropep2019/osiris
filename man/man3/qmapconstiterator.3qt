@@ -1,0 +1,76 @@
+.TH QMapConstIterator 3qt "20 July 1999" "Troll Tech AS" \" -*- nroff -*-
+.\" Copyright 1992-1999 Troll Tech AS.  All rights reserved.  See the
+.\" license file included in the distribution for a complete license
+.\" statement.
+.\"
+.ad l
+.nh
+.SH NAME
+QMapConstIterator \- Iterator for QMap
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <qmap.h>\fR
+.PP
+.SS "Public Members"
+.in +1c
+.ti -1c
+.BI "\fBQMapConstIterator\fR ()"
+.br
+.ti -1c
+.BI "\fBQMapConstIterator\fR ( QMapNode<K, T> * p )"
+.br
+.ti -1c
+.BI "\fBQMapConstIterator\fR ( const QMapConstIterator<K,T> & it )"
+.br
+.ti -1c
+.BI "\fBQMapConstIterator\fR ( const QMapIterator<K,T> & it )"
+.br
+.ti -1c
+.BI "bool \fBoperator==\fR ( const QMapConstIterator<K,T> & it ) const"
+.br
+.ti -1c
+.BI "bool \fBoperator!=\fR ( const QMapConstIterator<K,T> & it ) const"
+.br
+.ti -1c
+.BI "const T& \fBoperator*\fR () const"
+.br
+.ti -1c
+.BI "const K& \fBkey\fR () const"
+.br
+.ti -1c
+.BI "const T& \fBdata\fR () const"
+.br
+.in -1c
+.SH DESCRIPTION
+The QMapConstIterator class provides an iterator for QMap.
+.PP
+In contrast to QMapIterator this class is used to iterate over a const map. It does not allow to modify the values of the map since this would break the const semantics.
+.PP
+For more informations on QMap iterators see QMapIterator.
+.PP
+See also: QMap, \\sa and QMapIterator.
+.SH MEMBER FUNCTION DOCUMENTATION
+.SH "QMapConstIterator::QMapConstIterator ()"
+Creates an uninitialized iterator.
+.SH "QMapConstIterator::QMapConstIterator ( const QMapIterator<K,T> & it )"
+Constructs a copy of the iterator.
+.SH "QMapConstIterator::QMapConstIterator ( const QMapConstIterator<K,T> & it )"
+Constructs a copy of the iterator.
+.SH "const T& QMapConstIterator::data () const"
+Returns a const reference to the data of the current item.
+.SH "const K& QMapConstIterator::key () const"
+Returns a const reference to the current key.
+.SH "bool QMapConstIterator::operator!= ( const QMapConstIterator<K,T> & it ) const"
+Compares both iterators and returns TRUE if they point to different items.
+.SH "const T& QMapConstIterator::operator* () const"
+Asterix operator. Returns a const reference to the current item. The same as data().
+.SH "bool QMapConstIterator::operator== ( const QMapConstIterator<K,T> & it ) const"
+Compares both iterators and returns TRUE if they point to the same item.
+.SH "SEE ALSO"
+.BR http://www.troll.no/qt/qmapconstiterator.html
+.SH COPYRIGHT
+Copyright 1992-1999 Troll Tech AS.  See the license file included in
+the distribution for a complete license statement.
+.SH AUTHOR
+Generated automatically from the source code.

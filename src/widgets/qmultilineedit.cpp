@@ -1,5 +1,5 @@
 /**********************************************************************
-** $Id: qmultilineedit.cpp,v 1.60 1999/06/23 13:09:43 warwick Exp $
+** $Id: qmultilineedit.cpp,v 1.60.2.3 1999/07/15 11:52:36 weis Exp $
 **
 ** Definition of QMultiLineEdit widget class
 **
@@ -463,9 +463,16 @@ void QMultiLineEdit::paintCell( QPainter *painter, int row, int )
 
 int QMultiLineEdit::textWidth( const QString &s )
 {
-    int w = !s.isNull()
-		? textWidthWithTabs( QFontMetrics( font() ), s, s.length(), mlData->align ) : 0;
-    return w + 2 * mlData->lr_marg;
+  // int w = !s.isNull()
+  // ? textWidthWithTabs( QFontMetrics( font() ), s, s.length(), mlData->align ) : 0;
+  int w = 0;
+  if ( !s.isNull() )
+  {
+    QFontMetrics f( font() );
+    w = textWidthWithTabs( f, s, s.length(), mlData->align );
+  }
+
+  return w + 2 * mlData->lr_marg;
 }
 
 
@@ -1764,7 +1771,12 @@ void QMultiLineEdit::mousePressEvent( QMouseEvent *m )
 
     int newX, newY;
     pixelPosToCursorPos( m->pos(), &newX, &newY );
-    if ( inMark(newX, newY) && echoMode() == Normal ) {
+    if (
+	inMark(newX, newY)		// Click on highlighted text
+	&& echoMode() == Normal		// No DnD of passwords, etc.
+	&& m->pos().y() < totalHeight() // Click past the end is not dragging
+    )
+    {
 	// The user might be trying to drag
 	mlData->dnd_primed = TRUE;
 	mlData->dnd_timer = startTimer( 250 );
@@ -1779,10 +1791,12 @@ void QMultiLineEdit::pixelPosToCursorPos(QPoint p, int* x, int* y) const
 {
     *y = findRow( p.y() );
     if ( *y < 0 ) {
-	if ( p.y() < lineWidth() )
+	if ( p.y() < lineWidth() ) {
 	    *y = topCell();
-	else
+	} else {
 	    *y = lastRowVisible();
+	    p.setX(cellWidth());
+	}
     }
     *y = QMIN( (int)contents->count() - 1, *y );
     QFontMetrics fm( font() );
@@ -2626,10 +2640,11 @@ is never read by QMultiLineEdit, but is changed to TRUE whenever the user
 changes its contents.
 
 This is useful e.g. for things that need to provide a default value,
-but cannot find the default at once.  Just open the line edit without
-the best default and when the default is known, check the edited()
-return value and set the line edit's contents if the user has not
-started editing the line edit.
+but cannot find the default at once.  Just open the widget without the
+best default and when the default is known, check the edited() return
+value and set the line edit's contents if the user has not started
+editing the line edit.  Another example is to detect whether the
+contents need saving.
 
 \sa edited()
 */
@@ -2639,8 +2654,8 @@ void QMultiLineEdit::setEdited( bool e )
 }
 
 /*!  Returns the edited flag of the line edit.  If this returns FALSE,
-the contents has not been changed since the construction
-of the QMultiLineEdit (or the last call to setEdited( FALSE ), if any).  If
+the contents has not been changed since the construction of the
+QMultiLineEdit (or the last call to setEdited( FALSE ), if any).  If
 it returns true, the contents have been edited, or setEdited( TRUE )
 has been called.
 
@@ -2651,16 +2666,27 @@ bool QMultiLineEdit::edited() const
     return mlData->edited;
 }
 
-/*!
-  Sets the echo mode to \a em.  Values are:
+/*! \enum QMultiLineEdit::EchoMode
 
-  \define QMultiLineEdit::EchoMode
+  This enum type describes the ways in which QLineEdit can display its
+  contents.  The currently defined values are: <ul>
 
-  <ul>
-   <li>\c Normal - the text is displayed normally.
-   <li>\c Password - the text is replaced by a same-length sequence of *'s.
-   <li>\c NoEcho - the text is not displayed at all.
+  <li> \c Normal - display characters as they are entered.  This is
+  the default.
+
+  <li> \c NoEcho - do not display anything.
+
+  <li> \c Password - display asterisks instead of the characters
+  actually entered.
+
   </ul>
+
+  \sa setEchoMode() echoMode() QLineEdit::EchoMode
+*/
+
+
+/*!
+  Sets the echo mode to \a em.  The default is \c Normal.
 
   The display is updated according.
 
@@ -2685,10 +2711,12 @@ QMultiLineEdit::EchoMode QMultiLineEdit::echoMode() const
     return mlData->echomode;
 }
 
+
 /*!
   Returns the string shown at line \a row, including
-  processing of the \link setEchoMode() echo mode\endlink.
+  processing of the echoMode().
 */
+
 QString QMultiLineEdit::stringShown(int row) const
 {
     QString* s = getString(row);

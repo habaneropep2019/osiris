@@ -88,6 +88,7 @@ the constructor.
 <p>You will almost always want to use the convenience classes for
 QBoxLayout: QVBoxLayout and QHBoxLayout, because of their simpler
 constructors.
+<p>See also the <a href="layout.html">Layout Overview</a> documentation.
 <p>Examples:
  <a href="layout-layout-cpp.html#QBoxLayout">layout/layout.cpp</a>
  <a href="popup-popup-cpp.html#QBoxLayout">popup/popup.cpp</a>
@@ -118,7 +119,7 @@ of <em>border</em> is used.
 <p>Reimplemented from <a href="qlayout.html#3f230a">QLayout.</a>
 <h3 class="fn">void <a name="7a3fdc"></a>QBoxLayout::addLayout ( <a href="qlayout.html">QLayout</a> * layout, int stretch = 0 )</h3>
 <p>Adds <em>layout</em> to the box, with serial stretch factor <em>stretch.</em>
-<p>See also:  <a href="qboxlayout.html#219265">addWidget</a>() and <a href="qboxlayout.html#488ad0">addSpacing</a>().
+<p>See also:  <a href="qlayout.html#eedc7c">setAutoAdd</a>(), <a href="qboxlayout.html#219265">addWidget</a>() and <a href="qboxlayout.html#488ad0">addSpacing</a>().
 <h3 class="fn">void <a name="488ad0"></a>QBoxLayout::addSpacing ( int size )</h3>
 <p>Adds a non-stretchable space with size <em>size.</em>  QBoxLayout gives
 default border and spacing. This function adds additional space.
@@ -140,13 +141,14 @@ factor grow more.
 <p>If the stretch factor is 0 and nothing else in the QBoxLayout has a
 stretch factor greater than zero, the space is distributed according
 to the QWidget:sizePolicy() of each widget that's involved.
-<p>The default alignment is 0, which means that the widget fills the
-entire cell.
+<p>Alignment is specified by <em>alignmnt</em> which takes the same arguments
+as <a href="qlabel.html#1f406e">QLabel::setAlignment</a>(). The default alignment is 0, which means
+that the widget fills the entire cell.
 <p>Note: The alignment parameter is interpreted more aggressively
 than in previous versions of Qt.  A non-default alignment now
 indicates that the widget should not grow to fill the available
 space, but should be sized according to <a href="qboxlayout.html#433998">sizeHint</a>().
-<p>See also:  <a href="qboxlayout.html#7a3fdc">addLayout</a>() and <a href="qboxlayout.html#488ad0">addSpacing</a>().
+<p>See also:  <a href="qlayout.html#eedc7c">setAutoAdd</a>(), <a href="qboxlayout.html#7a3fdc">addLayout</a>() and <a href="qboxlayout.html#488ad0">addSpacing</a>().
 <p>Examples:
  <a href="layout-layout-cpp.html#addWidget">layout/layout.cpp</a>
  <a href="popup-popup-cpp.html#addWidget">popup/popup.cpp</a>
@@ -183,7 +185,7 @@ TRUE, if <em>w</em> is found in this layout (not including child layouts).
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.troll.no">www.troll.no</a>):<br>
 <form method=post action="http://www.troll.no/search.cgi">
-<input type=hidden name="version" value="2.00"><nobr>
+<input type=hidden name="version" value="2.0.1"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -191,5 +193,5 @@ copyright &copy; 1995-99
 <a href="http://www.troll.no">Troll Tech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.00</div>
+<td align="right"><div align="right">Qt version 2.0.1</div>
 </table></div></address></body></html>

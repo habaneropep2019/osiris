@@ -45,9 +45,9 @@ operates on this widget.
         p.<a href="qpainter.html#38e68f">setBrush</a>( blue );
 </pre>
 <p>
-When QPainter fills a rectangle, a circle or something, it fills using
-its brush.  Here, we set it to use a blue brush.  (We could also use a
-pattern.)
+When QPainter fills a rectangle, a circle or something, it fills the
+shape using its brush.  Here, we set it to use a blue brush.  (We
+could also use a pattern.)
 <p>
 <pre>
         p.<a href="qpainter.html#1b9993">setPen</a>( NoPen );
@@ -55,7 +55,7 @@ pattern.)
 <p>
 And the edges of what QPainter draws are drawn using the pen.  Here we
 set it to NoPen, meaning that there will be no special edge when we
-draw something.  The blue brush will to all the way to the edges of
+draw something.  The blue brush will go all the way to the edges of
 the things we draw.
 <p>
 <pre>
@@ -63,9 +63,9 @@ the things we draw.
 </pre>
 <p>
 The <a href="qpainter.html#ba64b6">QPainter::translate()</a> function translates the coordinate system
-of the QPainter, i.e. moves it by an offset.  Here we set the (0,0)
+of the QPainter, i.e.  moves it by an offset.  Here we set the (0,0)
 point to the bottom left corner of the widget.  The x and y directions
-remain unchanged, i.e. all the y coordinates inside the widget are now
+remain unchanged, i.e.  all the y coordinates inside the widget are now
 negative (see <a href="coordsys.html">The Coordinate System</a> for
 more information about Qt's coordinate system).
 <p>
@@ -118,7 +118,8 @@ We're done, except that we haven't explained why Windows didn't dither
 this time.
 <p>
 <pre>
-    int main( int argc, char **argv )    {
+    int main( int argc, char **argv )
+    {
         <a href="qapplication.html#e2431b">QApplication::setColorSpec</a>( QApplication::CustomColor );
         <a href="qapplication.html">QApplication</a> a( argc, argv );
 </pre>
@@ -138,12 +139,19 @@ allocation strategy helps.
 When the slider is operated, the angle of the drawn cannon changes
 accordingly.
 <p>
+The Q on the Quit button is now underlined, and Alt-Q does what you
+think it does.  If you do not know why, you didn't do the exercises in
+chapter eight.
+<p>
 You may notice that the cannon flickers annoyingly, especially on a
 slow machine.  We'll fix this in the next chapter.
 <p>
 <h2>Excercises</h2>
 <p>
 Set a different pen instead of NoPen.  Set a patterned brush.
+<p>
+Try "Q&uit" or "Qu&it" as button text instead of "&Quit" - what
+happens?
 <p>
 You may now go on to <a href="t10.html">chapter ten.</a>
 <p>
@@ -154,5 +162,5 @@ You may now go on to <a href="t10.html">chapter ten.</a>
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.00</div>
+<td align="right"><div align="right">Qt version 2.0.1</div>
 </table></div></address></body></html>

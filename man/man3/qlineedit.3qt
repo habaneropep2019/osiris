@@ -1,0 +1,542 @@
+.TH QLineEdit 3qt "20 July 1999" "Troll Tech AS" \" -*- nroff -*-
+.\" Copyright 1992-1999 Troll Tech AS.  All rights reserved.  See the
+.\" license file included in the distribution for a complete license
+.\" statement.
+.\"
+.ad l
+.nh
+.SH NAME
+QLineEdit \- Simple line editor for inputting text
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <qlineedit.h>\fR
+.PP
+Inherits QWidget.
+.PP
+Inherited by QRenameEdit.
+.PP
+.SS "Public Members"
+.in +1c
+.ti -1c
+.BI "\fBQLineEdit\fR ( QWidget * " "parent" ", const char * " "name" "=0 )"
+.br
+.ti -1c
+.BI "\fBQLineEdit\fR ( const QString &, QWidget * " "parent" ", const char * " "name" "=0 )"
+.br
+.ti -1c
+.BI "\fB~QLineEdit\fR ()"
+.br
+.ti -1c
+.BI "QString \fBtext\fR () const"
+.br
+.ti -1c
+.BI "QString \fBdisplayText\fR () const"
+.br
+.ti -1c
+.BI "int \fBmaxLength\fR () const"
+.br
+.ti -1c
+.BI "virtual void \fBsetMaxLength\fR ( int )"
+.br
+.ti -1c
+.BI "virtual void \fBsetFrame\fR ( bool )"
+.br
+.ti -1c
+.BI "bool \fBframe\fR () const"
+.br
+.ti -1c
+.BI "enum \fBEchoMode\fR { Normal, NoEcho, Password }"
+.br
+.ti -1c
+.BI "virtual void \fBsetEchoMode\fR ( EchoMode )"
+.br
+.ti -1c
+.BI "EchoMode \fBechoMode\fR () const"
+.br
+.ti -1c
+.BI "virtual void \fBsetValidator\fR ( const QValidator * )"
+.br
+.ti -1c
+.BI "const QValidator* \fBvalidator\fR () const"
+.br
+.ti -1c
+.BI "virtual QSize \fBsizeHint\fR () const"
+.br
+.ti -1c
+.BI "virtual QSize \fBminimumSizeHint\fR () const"
+.br
+.ti -1c
+.BI "virtual QSizePolicy \fBsizePolicy\fR () const"
+.br
+.ti -1c
+.BI "virtual void \fBsetEnabled\fR ( bool )"
+.br
+.ti -1c
+.BI "virtual void \fBsetFont\fR ( const QFont & )"
+.br
+.ti -1c
+.BI "virtual void \fBsetPalette\fR ( const QPalette & )"
+.br
+.ti -1c
+.BI "virtual void \fBsetSelection\fR ( int, int )"
+.br
+.ti -1c
+.BI "virtual void \fBsetCursorPosition\fR ( int )"
+.br
+.ti -1c
+.BI "int \fBcursorPosition\fR () const"
+.br
+.ti -1c
+.BI "bool \fBvalidateAndSet\fR ( const QString &, int, int, int )"
+.br
+.ti -1c
+.BI "void \fBcut\fR ()"
+.br
+.ti -1c
+.BI "void \fBcopy\fR () const"
+.br
+.ti -1c
+.BI "void \fBpaste\fR ()"
+.br
+.ti -1c
+.BI "void \fBsetAlignment\fR ( int flag )"
+.br
+.ti -1c
+.BI "int \fBalignment\fR () const"
+.br
+.ti -1c
+.BI "void \fBcursorLeft\fR ( bool " "mark" ", int " "steps" " = 1 )"
+.br
+.ti -1c
+.BI "void \fBcursorRight\fR ( bool " "mark" ", int " "steps" " = 1 )"
+.br
+.ti -1c
+.BI "void \fBcursorWordForward\fR ( bool mark )"
+.br
+.ti -1c
+.BI "void \fBcursorWordBackward\fR ( bool mark )"
+.br
+.ti -1c
+.BI "void \fBbackspace\fR ()"
+.br
+.ti -1c
+.BI "void \fBdel\fR ()"
+.br
+.ti -1c
+.BI "void \fBhome\fR ( bool mark )"
+.br
+.ti -1c
+.BI "void \fBend\fR ( bool mark )"
+.br
+.ti -1c
+.BI "void \fBsetEdited\fR ( bool )"
+.br
+.ti -1c
+.BI "bool \fBedited\fR () const"
+.br
+.ti -1c
+.BI "bool \fBhasMarkedText\fR () const"
+.br
+.ti -1c
+.BI "QString \fBmarkedText\fR () const"
+.br
+.in -1c
+.SS "Public Slots"
+.in +1c
+.ti -1c
+.BI "virtual void \fBsetText\fR ( const QString & )"
+.br
+.ti -1c
+.BI "void \fBselectAll\fR ()"
+.br
+.ti -1c
+.BI "void \fBdeselect\fR ()"
+.br
+.ti -1c
+.BI "void \fBclearValidator\fR ()"
+.br
+.ti -1c
+.BI "void \fBinsert\fR ( const QString & )"
+.br
+.ti -1c
+.BI "void \fBclear\fR ()"
+.br
+.in -1c
+.SS "Signals"
+.in +1c
+.ti -1c
+.BI "void \fBtextChanged\fR ( const QString & )"
+.br
+.ti -1c
+.BI "void \fBreturnPressed\fR ()"
+.br
+.in -1c
+.SS "Protected Members"
+.in +1c
+.ti -1c
+.BI "virtual void \fBmousePressEvent\fR ( QMouseEvent * )"
+.br
+.ti -1c
+.BI "virtual void \fBmouseMoveEvent\fR ( QMouseEvent * )"
+.br
+.ti -1c
+.BI "virtual void \fBmouseReleaseEvent\fR ( QMouseEvent * )"
+.br
+.ti -1c
+.BI "virtual void \fBmouseDoubleClickEvent\fR ( QMouseEvent * )"
+.br
+.ti -1c
+.BI "virtual void \fBkeyPressEvent\fR ( QKeyEvent * )"
+.br
+.ti -1c
+.BI "virtual void \fBfocusInEvent\fR ( QFocusEvent * )"
+.br
+.ti -1c
+.BI "virtual void \fBfocusOutEvent\fR ( QFocusEvent * )"
+.br
+.ti -1c
+.BI "virtual void \fBpaintEvent\fR ( QPaintEvent * )"
+.br
+.ti -1c
+.BI "virtual void \fBresizeEvent\fR ( QResizeEvent * )"
+.br
+.ti -1c
+.BI "virtual void \fBleaveEvent\fR ( QEvent * )"
+.br
+.ti -1c
+.BI "virtual void \fBdragEnterEvent\fR ( QDragEnterEvent * )"
+.br
+.ti -1c
+.BI "virtual void \fBdropEvent\fR ( QDropEvent * )"
+.br
+.ti -1c
+.BI "void \fBrepaintArea\fR ( int, int )"
+.br
+.in -1c
+.SH DESCRIPTION
+The QLineEdit widget is a simple line editor for inputting text.
+.PP
+The default QLineEdit object has its own frame as specified by the Windows/Motif style guides, you can turn off the frame by calling setFrame( FALSE ).
+.PP
+It draws the text using its own color group: colorGroup().text() on colorGroup().base(). The cursor and frame use other colors from same color group, of course.
+.PP
+The default key bindings are described in keyPressEvent(); they cannot be customized except by inheriting the class.
+.PP
+<img src=qlined-m.png> <img src=qlined-w.png>
+.PP
+See also: QMultiLineEdit, QLabel, QComboBox, GUI Design Handbook: Field, Entry, and GUI Design Handbook: Field, Required.
+.PP
+Examples:
+.(l
+tabdialog/tabdialog.cpp xform/xform.cpp layout/layout.cpp popup/popup.cpp
+.)l
+.SS "Member Type Documentation"
+.SH "QLineEdit::EchoMode"
+This enum type describes the ways in which QLineEdit can display its contents. The currently defined values are: 
+.IP
+.TP
+\fCNormal\fR - display characters as they are entered. This is the default.
+.IP
+.TP
+\fCNoEcho\fR - do not display anything.
+.IP
+.TP
+\fCPassword\fR - display asterisks instead of the characters actually entered.
+.IP
+.PP
+See also: setEchoMode(), echoMode() and QMultiLineEdit::EchoMode.
+.SH MEMBER FUNCTION DOCUMENTATION
+.SH "QLineEdit::QLineEdit ( QWidget * parent, const char * name=0 )"
+Constructs a line editor with an empty edit buffer.
+.PP
+The cursor position is set to the start of the line, the maximum buffer size to 32767 characters, and the buffer contents to "".
+.PP
+The \fIparent\fR and \fIname\fR arguments are sent to the QWidget constructor.
+.SH "QLineEdit::QLineEdit ( const QString & contents, QWidget * parent, const char * name=0 )"
+Constructs a line editor whose edit buffer starts out as \fIcontents.\fR
+.PP
+The cursor position is set to the end of the line and the maximum buffer size to 32767 characters.
+.PP
+The \fIparent\fR and \fIname\fR arguments are sent to the QWidget constructor.
+.SH "QLineEdit::~QLineEdit ()"
+Destroys the line editor.
+.SH "int QLineEdit::alignment () const"
+Returns the current alignment of the line editor. Possible Values are Qt::AlignLeft, Qt::AlignRight and Qt::AlignCenter.
+.PP
+See also: setAlignment().
+.SH "void QLineEdit::backspace ()"
+Deletes the character on the left side of the text cursor and moves the cursor one position to the left. If a text has been marked by the user (e.g. by clicking and dragging) the cursor will be put at the beginning of the marked text and the marked text will be removed.
+.PP
+See also: del().
+.SH "void QLineEdit::clear () \fC[slot]\fR"
+Syntax sugar for setText( "" ), provided to match no-argument signals.
+.SH "void QLineEdit::clearValidator () \fC[slot]\fR"
+This slot is equivalent to setValidator( 0 ).
+.SH "void QLineEdit::copy () const"
+Copies the marked text to the clipboard, if there is any and echoMode() is Normal.
+.PP
+See also: cut() and paste().
+.SH "void QLineEdit::cursorLeft ( bool mark, int steps = 1 )"
+Moves the cursor leftwards one or more characters.
+.PP
+See also: cursorRight().
+.SH "int QLineEdit::cursorPosition () const"
+Returns the current cursor position for this line edit.
+.PP
+See also: setCursorPosition().
+.SH "void QLineEdit::cursorRight ( bool mark, int steps = 1 )"
+Moves the cursor rightwards one or more characters.
+.PP
+See also: cursorLeft().
+.SH "void QLineEdit::cursorWordBackward ( bool mark )"
+Moves the cursor one word to the left. If \fImark\fR is TRUE, the text is marked.
+.PP
+See also: cursorWordForward().
+.SH "void QLineEdit::cursorWordForward ( bool mark )"
+Moves the cursor one word to the right. If \fImark\fR is TRUE, the text is marked.
+.PP
+See also: cursorWordBackward().
+.SH "void QLineEdit::cut ()"
+Copies the marked text to the clipboard and deletes it, if there is any.
+.PP
+If the current validator disallows deleting the marked text, cut() will copy it but not delete it.
+.PP
+See also: copy() and paste().
+.SH "void QLineEdit::del ()"
+Deletes the character on the right side of the text cursor. If a text has been marked by the user (e.g. by clicking and dragging) the cursor will be put at the beginning of the marked text and the marked text will be removed.
+.PP
+See also: backspace().
+.SH "void QLineEdit::deselect () \fC[slot]\fR"
+Deselects all text (i.e. removes marking) and leaves the cursor at the current position.
+.SH "QString QLineEdit::displayText () const"
+Returns the text that's currently displayed. This is normally the same as text(), but can be e.g. "*****" if EchoMode is Password or "" if it is NoEcho.
+.PP
+See also: setEchoMode(), text() and EchoMode.
+.SH "QLineEdit::EchoMode QLineEdit::echoMode() const"
+Returns the current echo mode of the line edit.
+.PP
+See also: setEchoMode() and EchoMode.
+.SH "bool QLineEdit::edited () const"
+Returns the edited flag of the line edit. If this returns FALSE, the line edit's contents have not been changed since the construction of the QLineEdit (or the last call to setEdited( FALSE ), if any). If it returns true, the contents have been edited, or setEdited( TRUE ) has been called.
+.PP
+See also: setEdited().
+.SH "void QLineEdit::end ( bool mark )"
+Moves the text cursor to the right end of the line. If mark is TRUE text will be marked towards the last position, if not any marked text will be unmarked if the cursor is moved.
+.PP
+See also: home().
+.SH "void QLineEdit::focusInEvent ( QFocusEvent * ) \fC[virtual protected]\fR"
+Handles the cursor blinking.
+.PP
+Reimplemented from QWidget.
+.SH "void QLineEdit::focusOutEvent ( QFocusEvent * ) \fC[virtual protected]\fR"
+Handles the cursor blinking and selection copying.
+.PP
+Reimplemented from QWidget.
+.SH "bool QLineEdit::frame () const"
+Returns TRUE if the line edit draws itself inside a frame, FALSE if it draws itself without any frame.
+.PP
+The default is to use a frame.
+.PP
+See also: setFrame().
+.SH "bool QLineEdit::hasMarkedText () const"
+Returns TRUE if part of the text has been marked by the user (e.g. by clicking and dragging).
+.SH "void QLineEdit::home ( bool mark )"
+Moves the text cursor to the left end of the line. If mark is TRUE text will be marked towards the first position, if not any marked text will be unmarked if the cursor is moved.
+.PP
+See also: end().
+.SH "void QLineEdit::insert ( const QString & newText ) \fC[slot]\fR"
+Removes any currently selected text, inserts \fInewText,\fR validates the result and if it is valid, sets it as the new contents of the line edit.
+.SH "void QLineEdit::keyPressEvent ( QKeyEvent * e ) \fC[virtual protected]\fR"
+The key press event handler converts a key press to some line editor action.
+.PP
+If return or enter is pressed and the current text is valid (or if the validator can make the text valid), the signal returnPressed is emitted.
+.PP
+Here are the default key bindings:
+.TP
+\fI Left Arrow \fR Move the cursor one character leftwards
+.TP
+\fI Right Arrow \fR Move the cursor one character rightwards
+.TP
+\fI Backspace \fR Delete the character to the left of the cursor
+.TP
+\fI Home \fR Move the cursor to the beginning of the line
+.TP
+\fI End \fR Move the cursor to the end of the line
+.TP
+\fI Delete \fR Delete the character to the right of the cursor
+.TP
+\fI Shift - Left Arrow \fR Mark text one character leftwards
+.TP
+\fI Shift - Right Arrow \fR Mark text one character rightwards
+.TP
+\fI Control-A \fR Move the cursor to the beginning of the line
+.TP
+\fI Control-B \fR Move the cursor one character leftwards
+.TP
+\fI Control-C \fR Copy the marked text to the clipboard.
+.TP
+\fI Control-D \fR Delete the character to the right of the cursor
+.TP
+\fI Control-E \fR Move the cursor to the end of the line
+.TP
+\fI Control-F \fR Move the cursor one character rightwards
+.TP
+\fI Control-H \fR Delete the character to the left of the cursor
+.TP
+\fI Control-V \fR Paste the clipboard text into line edit.
+.TP
+\fI Control-X \fR Cut the marked text, copy to clipboard.
+.PP
+All other keys with valid ASCII codes insert themselves into the line.
+.PP
+Reimplemented from QWidget.
+.SH "void QLineEdit::leaveEvent ( QEvent * ) \fC[virtual protected]\fR"
+Handles selection copying.
+.PP
+Reimplemented from QWidget.
+.SH "QString QLineEdit::markedText () const"
+Returns the text marked by the user (e.g. by clicking and dragging), or a null string if no text is marked.
+.PP
+See also: hasMarkedText().
+.SH "int QLineEdit::maxLength () const"
+Returns the current maximum length of the text in the editor.
+.PP
+See also: setMaxLength().
+.SH "QSize QLineEdit::minimumSizeHint () const \fC[virtual]\fR"
+Returns a minimum size for the line edit.
+.PP
+The width returned tends to be enough for one character.
+.PP
+Reimplemented from QWidget.
+.SH "void QLineEdit::mouseDoubleClickEvent ( QMouseEvent * ) \fC[virtual protected]\fR"
+Handles mouse double click events for this widget.
+.PP
+Reimplemented from QWidget.
+.SH "void QLineEdit::mouseMoveEvent ( QMouseEvent * e ) \fC[virtual protected]\fR"
+Handles mouse move events for the line editor, primarily for marking text.
+.PP
+Reimplemented from QWidget.
+.SH "void QLineEdit::mousePressEvent ( QMouseEvent * e ) \fC[virtual protected]\fR"
+Handles mouse press events for this widget.
+.PP
+Reimplemented from QWidget.
+.SH "void QLineEdit::mouseReleaseEvent ( QMouseEvent * e ) \fC[virtual protected]\fR"
+Handles mouse release events for this widget.
+.PP
+Reimplemented from QWidget.
+.SH "void QLineEdit::paintEvent ( QPaintEvent * e ) \fC[virtual protected]\fR"
+Handles paint events for the line editor.
+.PP
+Reimplemented from QWidget.
+.SH "void QLineEdit::paste ()"
+Inserts the clipboard's text at the cursor position, deleting any previous marked text.
+.PP
+If the end result is not acceptable for the current validator, nothing happens.
+.PP
+See also: copy() and cut().
+.SH "void QLineEdit::repaintArea ( int from, int to ) \fC[protected]\fR"
+Repaints all characters from \fIfrom\fR to \fIto.\fR If cursorPos is between from and to, ensures that cursorPos is visible.
+.SH "void QLineEdit::resizeEvent ( QResizeEvent * ) \fC[virtual protected]\fR"
+Handles resize events for this widget.
+.PP
+Reimplemented from QWidget.
+.SH "void QLineEdit::returnPressed () \fC[signal]\fR"
+This signal is emitted when the return or enter key is pressed.
+.SH "void QLineEdit::selectAll () \fC[slot]\fR"
+Selects all text (i.e. marks it) and moves the cursor to the end. Useful when a default value has been inserted. If the user types before clicking on the widget the selected text will be erased.
+.SH "void QLineEdit::setAlignment ( int flag )"
+Sets the alignment of the line editor. Possible Values are Qt::AlignLeft, Qt::AlignRight and Qt::AlignCenter.
+.PP
+See also: alignment().
+.SH "void QLineEdit::setCursorPosition ( int newPos ) \fC[virtual]\fR"
+Set the cursor position for this line edit to \fInewPos\fR and repaint accordingly.
+.PP
+See also: cursorPosition().
+.SH "void QLineEdit::setEchoMode ( EchoMode mode ) \fC[virtual]\fR"
+Sets the echo mode of the line edit widget.
+.PP
+The echo modes available are: 
+.TP
+\fCNormal\fR - display characters as they are entered. This is the default. 
+.TP
+\fCNoEcho\fR - do not display anything. 
+.TP
+\fCPassword\fR - display asterisks instead of the characters actually entered. 
+.PP
+It is always possible to cut and paste any marked text; only the widget's own display is affected.
+.PP
+See also: echoMode(), EchoMode and displayText().
+.SH "void QLineEdit::setEdited ( bool on )"
+Sets the edited flag of this line edit to \fIon.\fR The edited flag is never read by QLineEdit, and is changed to TRUE whenever the user changes its contents.
+.PP
+This is useful e.g. for things that need to provide a default value, but cannot find the default at once. Just open the line edit without the best default and when the default is known, check the edited() return value and set the line edit's contents if the user has not started editing the line edit.
+.PP
+See also: edited().
+.SH "void QLineEdit::setEnabled ( bool e ) \fC[virtual]\fR"
+Reimplemented for internal reasons; the API is not affected.
+.SH "void QLineEdit::setFont ( const QFont & f ) \fC[virtual]\fR"
+Reimplemented for internal reasons; the API is not affected.
+.SH "void QLineEdit::setFrame ( bool enable ) \fC[virtual]\fR"
+Sets the line edit to draw itself inside a two-pixel frame if \fIenable\fR is TRUE, and to draw itself without any frame if \fIenable\fR is FALSE.
+.PP
+The default is TRUE.
+.PP
+See also: frame() and QComboBox.
+.SH "void QLineEdit::setMaxLength ( int m ) \fC[virtual]\fR"
+Set the maximum length of the text in the editor. If the text is currently too long, it is chopped off at the limit. Any marked text will be unmarked. The cursor position is set to 0 and the first part of the string is shown.
+.PP
+See also: maxLength().
+.SH "void QLineEdit::setPalette ( const QPalette & p ) \fC[virtual]\fR"
+Reimplemented for internal reasons; the API is not affected.
+.SH "void QLineEdit::setSelection ( int start, int length ) \fC[virtual]\fR"
+Sets the marked area of this line edit to start at \fIstart\fR and be \fIlength\fR characters long.
+.SH "void QLineEdit::setText ( const QString & text ) \fC[virtual slot]\fR"
+Sets the line editor text to \fItext,\fR clears the selection and moves the cursor to the end of the line.
+.PP
+If necessary the text is truncated to fit maxLength().
+.PP
+See also: text().
+.PP
+Examples:
+.(l
+xform/xform.cpp
+.)l
+.SH "void QLineEdit::setValidator ( const QValidator * v ) \fC[virtual]\fR"
+Sets this line edit to accept input only as accepted by \fIv.\fR
+.PP
+If \fIv\fR == 0, remove the currently set input validator. The default is no input validator (ie. any input is accepted up to maxLength()).
+.PP
+See also: validator() and QValidator.
+.SH "QSize QLineEdit::sizeHint () const \fC[virtual]\fR"
+Returns a size which fits the contents of the line edit.
+.PP
+The width returned tends to be enough for about 15-20 characters.
+.PP
+Reimplemented from QWidget.
+.SH "QSizePolicy QLineEdit::sizePolicy () const \fC[virtual]\fR"
+Specifies that this widget can use more, but is able to survive on less, horizontal space; and is fixed vertically.
+.PP
+Reimplemented from QWidget.
+.SH "QString QLineEdit::text () const"
+Returns the text currently in the line.
+.PP
+See also: setText().
+.SH "void QLineEdit::textChanged ( const QString & ) \fC[signal]\fR"
+This signal is emitted every time the text has changed. The argument is the new text.
+.SH "bool QLineEdit::validateAndSet ( const QString & newText, int newPos, int newMarkAnchor, int newMarkDrag )"
+Validates and perhaps sets this line edit to contain \fInewText\fR with the cursor at position newPos, with marked text from \fInewMarkAnchor\fR to \fInewMarkDrag.\fR Returns TRUE if it changes the line edit and FALSE if it doesn't.
+.PP
+Linebreaks in \fInewText\fR are converted to spaces, and it is truncated to maxLength() if necessary before testing its validity.
+.PP
+Repaints and emits textChanged() if appropriate.
+.SH "const QValidator * QLineEdit::validator () const"
+Returns a pointer to the current input validator, or 0 if no
+validator has been set.
+.SH "SEE ALSO"
+.BR http://www.troll.no/qt/qlineedit.html
+.SH COPYRIGHT
+Copyright 1992-1999 Troll Tech AS.  See the license file included in
+the distribution for a complete license statement.
+.SH AUTHOR
+Generated automatically from the source code.

@@ -1,5 +1,5 @@
 /**********************************************************************
-** $Id: qmultilineedit.h,v 1.16 1999/06/08 14:10:34 warwick Exp $
+** $Id: qmultilineedit.h,v 1.16.2.2 1999/07/13 19:59:26 warwick Exp $
 **
 ** Definition of QMultiLineEdit widget class
 **

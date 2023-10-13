@@ -44,7 +44,7 @@ Inherits <a href="qscrollview.html">QScrollView</a>.
 <li><span class="fn">int <a href="#945b20"><b>numItemsVisible</b></a> () const</span>
 <li><span class="fn">int <a href="#5636a4"><b>currentItem</b></a> () const</span>
 <li><span class="fn">virtual void <a href="#30dbc0"><b>setCurrentItem</b></a> ( int index ) </span>
-<li><span class="fn">virtual void <b>setCurrentItem</b> ( QListBoxItem * ) </span>
+<li><span class="fn">virtual void <a href="#ed56da"><b>setCurrentItem</b></a> ( QListBoxItem * ) </span>
 <li><span class="fn">void <b>centerCurrentItem</b> () </span>
 <li><span class="fn">int <a href="#555f25"><b>topItem</b></a> () const</span>
 <li><span class="fn">virtual void <a href="#b903db"><b>setTopItem</b></a> ( int index ) </span>
@@ -66,13 +66,13 @@ Inherits <a href="qscrollview.html">QScrollView</a>.
 <li><span class="fn">void <a href="#2e120f"><b>triggerUpdate</b></a> ( bool doLayout ) </span>
 <li><span class="fn">bool <a href="#f3e111"><b>itemVisible</b></a> ( int index ) </span>
 <li><span class="fn">bool <a href="#68afe7"><b>itemVisible</b></a> ( const QListBoxItem * ) </span>
-<li><span class="fn">enum <b>LayoutMode</b> { FixedNumber, FitToWidth, FitToHeight = FitToWidth, Variable }</span>
+<li><span class="fn">enum <a href="#LayoutMode"><b>LayoutMode</b></a> { FixedNumber, FitToWidth, FitToHeight = FitToWidth, Variable }</span>
 <li><span class="fn">virtual void <a href="#9745a1"><b>setColumnMode</b></a> ( LayoutMode ) </span>
 <li><span class="fn">virtual void <a href="#ecdd3f"><b>setColumnMode</b></a> ( int ) </span>
 <li><span class="fn">virtual void <a href="#8d9533"><b>setRowMode</b></a> ( LayoutMode ) </span>
 <li><span class="fn">virtual void <a href="#84c92c"><b>setRowMode</b></a> ( int ) </span>
-<li><span class="fn">LayoutMode <b>columnMode</b> () const</span>
-<li><span class="fn">LayoutMode <b>rowMode</b> () const</span>
+<li><span class="fn">LayoutMode <a href="#4ef9d2"><b>columnMode</b></a> () const</span>
+<li><span class="fn">LayoutMode <a href="#f9835c"><b>rowMode</b></a> () const</span>
 <li><span class="fn">int <a href="#fcd30b"><b>numColumns</b></a> () const</span>
 <li><span class="fn">int <a href="#17337a"><b>numRows</b></a> () const</span>
 <li><span class="fn">bool <a href="#bc2771"><b>variableWidth</b></a> () const</span>
@@ -95,8 +95,8 @@ Inherits <a href="qscrollview.html">QScrollView</a>.
 <li><span class="fn">void <a href="#84600d"><b>selected</b></a> ( int index ) </span>
 <li><span class="fn">void <a href="#6b8a4f"><b>highlighted</b></a> ( const QString &amp; ) </span>
 <li><span class="fn">void <a href="#1b97be"><b>selected</b></a> ( const QString &amp; ) </span>
-<li><span class="fn">void <b>highlighted</b> ( QListBoxItem * ) </span>
-<li><span class="fn">void <b>selected</b> ( QListBoxItem * ) </span>
+<li><span class="fn">void <a href="#3ee6d1"><b>highlighted</b></a> ( QListBoxItem * ) </span>
+<li><span class="fn">void <a href="#402ceb"><b>selected</b></a> ( QListBoxItem * ) </span>
 <li><span class="fn">void <a href="#e1d0f2"><b>selectionChanged</b></a> () </span>
 </ul>
 <h2>Protected Members</h2>
@@ -171,9 +171,9 @@ still supports this mode of operation).  Everything can be done
 using the new objects; most things can be done using the indexes too
 but unfortunately not everything.
 <p>Each item in a QListBox contains a QListBoxItem.  One of the items
-can be the current item.  The <a href="qlistbox.html#2053cf">highlighted</a>() signal is emitted when the
-user highlights a new current item; <a href="qlistbox.html#1b97be">selected</a>() is emitted when the
-user double-clicks on an item or presses return when an item is
+can be the current item.  The <a href="qlistbox.html#2053cf">highlighted</a>() signal is emitted when
+the user highlights a new current item; <a href="qlistbox.html#1b97be">selected</a>() is emitted when
+the user double-clicks on an item or presses return when an item is
 highlighted.
 <p>If the user does not select anything, no signals are emitted and
 <a href="qlistbox.html#5636a4">currentItem</a>() returns -1.
@@ -193,7 +193,20 @@ and will delete them when is does  not need them any more.
  <a href="tabdialog-tabdialog-cpp.html#QListBox">tabdialog/tabdialog.cpp</a>
 
 <hr><h2>Member Type Documentation</h2>
-<h3 class="fn"><a name="SelectionMode">QListBox::SelectionMode</h3>
+<h3 class="fn"><a name="LayoutMode">QListBox::LayoutMode</a></h3>
+This enum type decides how QListBox lays out its rows and columns.
+The two modes interact, of course.
+<p>The possible values for each mode are: <ul>
+<p><li> <code>FixedNumber</code> - there is a fixed number of rows (or columns).
+<p><li> <code>FitToHeight</code> - there are as many rows as will fit on-screen.
+(Ditto with <code>FitToWidth</code> and columns.)
+<p><li> <code>Variable</code> - there are as many rows as are required by the
+column mode.  (Or as many columns as required by the row mode.)
+<p></ul>
+<p>Example: When you call <a href="qlistbox.html#84c92c">setRowMode</a>( FitToHeight ), <a href="qlistbox.html#4ef9d2">columnMode</a>()
+automatically becomes <code>Variable</code> to accomodate the row mode you've
+set.
+<h3 class="fn"><a name="SelectionMode">QListBox::SelectionMode</a></h3>
 This enumerated type is used by QListBox to indicate how it reacts
 to selection by the user.  It has three values: <ul>
 <p><li> <code>Single</code> - When the user selects an item, any already-selected
@@ -237,6 +250,10 @@ either just one or a range of contiguous items.
 <p>Deselects all items, if possible.
 <p>Note that a single-selection listbox will automatically select an
 item if it has keyboard focus.
+<h3 class="fn">QListBox::LayoutMode <a name="4ef9d2"></a>QListBox::columnMode() const</h3>
+<p>Returns the column layout mode for this list box.  This is
+normally <code>FixedNumber,</code> but can be changed by calling <a href="qlistbox.html#9745a1">setColumnMode</a>()
+<p>See also:  <a href="qlistbox.html#f9835c">rowMode</a>(), <a href="qlistbox.html#9745a1">setColumnMode</a>() and <a href="qlistbox.html#fcd30b">numColumns</a>().
 <h3 class="fn">uint <a name="6ef52e"></a>QListBox::count () const</h3>
 <p>Returns the number of items in the list box.
 <h3 class="fn">int <a name="5636a4"></a>QListBox::currentItem () const</h3>
@@ -257,6 +274,10 @@ to call it.
 <p>Handles focus out events. Repaints the current item, if set.
 <p>See also:  <a href="qlistbox.html#37e10b">keyPressEvent</a>() and focusOutEvent().
 <p>Reimplemented from <a href="qwidget.html#bdc4a1">QWidget.</a>
+<h3 class="fn">void <a name="3ee6d1"></a>QListBox::highlighted ( <a href="qlistboxitem.html">QListBoxItem</a> * ) <code>[signal]</code></h3>
+<p>This signal is emitted when the user highlights a new current item.
+The argument is a pointer to the new current item.
+<p>See also:  <a href="qlistbox.html#1b97be">selected</a>(), <a href="qlistbox.html#5636a4">currentItem</a>() and <a href="qlistbox.html#e1d0f2">selectionChanged</a>().
 <h3 class="fn">void <a name="6b8a4f"></a>QListBox::highlighted ( const <a href="qstring.html">QString</a> &amp; ) <code>[signal]</code></h3>
 <p>This signal is emitted when the user highlights a new current item
 and the new item is a string.  The argument is the text of the
@@ -355,7 +376,7 @@ visible.
 <p><code>Up</code> and <code>down</code> arrow keys make the highlighted item move and if
 necessary scroll the list box.
 <p><code>Enter</code> makes the list box emit the <a href="qlistbox.html#1b97be">selected</a>() signal.
-<p>See also:  <a href="qlistbox.html#1b97be">selected</a>() and <a href="qlistbox.html#30dbc0">setCurrentItem</a>().
+<p>See also:  <a href="qlistbox.html#1b97be">selected</a>() and <a href="qlistbox.html#ed56da">setCurrentItem</a>().
 <p>Reimplemented from <a href="qwidget.html#cdb1c7">QWidget.</a>
 <h3 class="fn"><a href="qsize.html">QSize</a> <a name="afaa6a"></a>QListBox::minimumSizeHint () const <code>[virtual]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
@@ -400,6 +421,15 @@ is emitted.
 <h3 class="fn">void <a name="561759"></a>QListBox::resizeEvent ( <a href="qresizeevent.html">QResizeEvent</a> * e ) <code>[virtual protected]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
 <p>Reimplemented from <a href="qwidget.html#28c156">QWidget.</a>
+<h3 class="fn">QListBox::LayoutMode <a name="f9835c"></a>QListBox::rowMode() const</h3>
+<p>Returns the row layout mode for this list box.  This is normally
+<code>Variable,</code> but can be changed by calling <a href="qlistbox.html#84c92c">setRowMode</a>().
+<p>See also:  <a href="qlistbox.html#4ef9d2">columnMode</a>(), <a href="qlistbox.html#84c92c">setRowMode</a>() and <a href="qlistbox.html#17337a">numRows</a>().
+<h3 class="fn">void <a name="402ceb"></a>QListBox::selected ( <a href="qlistboxitem.html">QListBoxItem</a> * ) <code>[signal]</code></h3>
+<p>This signal is emitted when the user double-clicks on an item or
+presses return when an item is highlighted.  The argument is a
+pointer to the new selected item.
+<p>See also:  <a href="qlistbox.html#2053cf">highlighted</a>() and <a href="qlistbox.html#e1d0f2">selectionChanged</a>().
 <h3 class="fn">void <a name="1b97be"></a>QListBox::selected ( const <a href="qstring.html">QString</a> &amp; ) <code>[signal]</code></h3>
 <p>This signal is emitted when the user double-clicks on an item or
 presses return while an item is highlighted, and the selected item
@@ -425,7 +455,7 @@ signal can be connected to computationally expensive slots.
 <p>Scrolls the list box so the item at position <em>index</em> in the list
 is displayed in the bottom row of the list box.
 <p>See also:  <a href="qlistbox.html#b903db">setTopItem</a>().
-<h3 class="fn">void <a name="9745a1"></a>QListBox::setColumnMode ( LayoutMode mode ) <code>[virtual]</code></h3>
+<h3 class="fn">void <a name="9745a1"></a>QListBox::setColumnMode ( <a href="qlistbox.html#LayoutMode">LayoutMode</a> mode ) <code>[virtual]</code></h3>
 <p>Sets the column layout mode to <em>mode,</em> and the number of displayed
 columns accordingly.
 <p>The row layout mode implicitly becomes <code>Variable.</code>
@@ -433,14 +463,16 @@ columns accordingly.
 <h3 class="fn">void <a name="ecdd3f"></a>QListBox::setColumnMode ( int columns ) <code>[virtual]</code></h3>
 <p>Sets the column layout mode for this list box to <code>FixedNumber,</code> and
 sets the number of displayed columns accordingly.
-<p>\<a href="qlistbox.html#84c92c">setRowMode</a>() <a href="qlistbox.html#4ef9d2">columnMode</a>() <a href="qlistbox.html#fcd30b">numColumns</a>().
-<h3 class="fn">void <a name="30dbc0"></a>QListBox::setCurrentItem ( int index ) <code>[virtual]</code></h3>
-<p>Sets the highlighted item to the item at position <em>index</em> in the list.
-The highlighting is moved and the list box scrolled as necessary.
-<p>If autoUpdate() is enabled, the display is updated accordingly.
+<p>See also:  <a href="qlistbox.html#84c92c">setRowMode</a>(), <a href="qlistbox.html#4ef9d2">columnMode</a>() and <a href="qlistbox.html#fcd30b">numColumns</a>().
+<h3 class="fn">void <a name="ed56da"></a>QListBox::setCurrentItem ( <a href="qlistboxitem.html">QListBoxItem</a> * i ) <code>[virtual]</code></h3>
+<p>Sets the highlighted item to the item at position <em>index</em> in the
+list.  The highlighting is moved and the list box scrolled as necessary.
 <p>See also:  <a href="qlistbox.html#5636a4">currentItem</a>().
 <p>Examples:
  <a href="tabdialog-tabdialog-cpp.html#setCurrentItem">tabdialog/tabdialog.cpp</a>
+<h3 class="fn">void <a name="30dbc0"></a>QListBox::setCurrentItem ( int index ) <code>[virtual]</code></h3>
+<p>This is an overloaded member function, provided for convenience.  It differs from the above function only in what argument(s) it accepts.
+<p>This is a bit slower than the <a href="qlistboxitem.html">QListBoxItem</a> * version.
 <h3 class="fn">void <a name="158033"></a>QListBox::setFont ( const <a href="qfont.html">QFont</a> &amp; font ) <code>[virtual]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
 <h3 class="fn">void <a name="aa6f50"></a>QListBox::setMultiSelection ( bool enable )</h3>
@@ -449,7 +481,7 @@ to single-selection mode if <em>enable</em> is FALSE.  We recommend using
 <a href="qlistbox.html#765692">setSelectionMode</a>() instead; that function also offers a third mode
 of selection.
 <p>See also:  <a href="qlistbox.html#765692">setSelectionMode</a>() and <a href="qlistbox.html#3721b9">selectionMode</a>().
-<h3 class="fn">void <a name="8d9533"></a>QListBox::setRowMode ( LayoutMode mode ) <code>[virtual]</code></h3>
+<h3 class="fn">void <a name="8d9533"></a>QListBox::setRowMode ( <a href="qlistbox.html#LayoutMode">LayoutMode</a> mode ) <code>[virtual]</code></h3>
 <p>Sets the row layout mode to <em>mode,</em> and the number of displayed
 rows accordingly.
 <p>The column layout mode implicitly becomes <code>Variable.</code>
@@ -466,7 +498,7 @@ setCurrentItem will be called.
 <p>If the listbox is a single-selection listbox and and <em>select</em> is FALSE,
 <a href="qlistbox.html#bac3e1">clearSelection</a>() will be called if <em>index</em> is the currently selected
 item.
-<p>See also:  <a href="qlistbox.html#aa6f50">setMultiSelection</a>(), <a href="qlistbox.html#30dbc0">setCurrentItem</a>(), <a href="qlistbox.html#bac3e1">clearSelection</a>() and <a href="qlistbox.html#5636a4">currentItem</a>().
+<p>See also:  <a href="qlistbox.html#aa6f50">setMultiSelection</a>(), <a href="qlistbox.html#ed56da">setCurrentItem</a>(), <a href="qlistbox.html#bac3e1">clearSelection</a>() and <a href="qlistbox.html#5636a4">currentItem</a>().
 <h3 class="fn">void <a name="892caa"></a>QListBox::setSelected ( int index, bool select )</h3>
 <p>Selects the item at position <em>index</em> if <em>select</em> is TRUE, or
 unselects it if <em>select</em> is FALSE, and repaints the item
@@ -476,7 +508,7 @@ setCurrentItem will be called.
 <p>If the listbox is a single-selection listbox and and <em>select</em> is FALSE,
 <a href="qlistbox.html#bac3e1">clearSelection</a>() will be called if <em>index</em> is the currently selected
 item.
-<p>See also:  <a href="qlistbox.html#aa6f50">setMultiSelection</a>(), <a href="qlistbox.html#30dbc0">setCurrentItem</a>(), <a href="qlistbox.html#bac3e1">clearSelection</a>() and <a href="qlistbox.html#5636a4">currentItem</a>().
+<p>See also:  <a href="qlistbox.html#aa6f50">setMultiSelection</a>(), <a href="qlistbox.html#ed56da">setCurrentItem</a>(), <a href="qlistbox.html#bac3e1">clearSelection</a>() and <a href="qlistbox.html#5636a4">currentItem</a>().
 <h3 class="fn">void <a name="765692"></a>QListBox::setSelectionMode ( <a href="qlistbox.html#SelectionMode">SelectionMode</a> mode ) <code>[virtual]</code></h3>
 <p>Sets the list box to selection mode <em>mode,</em> which may be one of
 <code>Single</code> (the default), <em>Extended</em> and <code>Multi.</code>
@@ -561,7 +593,7 @@ FALSE if all the columns have the same width.
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.troll.no">www.troll.no</a>):<br>
 <form method=post action="http://www.troll.no/search.cgi">
-<input type=hidden name="version" value="2.00"><nobr>
+<input type=hidden name="version" value="2.0.1"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -569,5 +601,5 @@ copyright &copy; 1995-99
 <a href="http://www.troll.no">Troll Tech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.00</div>
+<td align="right"><div align="right">Qt version 2.0.1</div>
 </table></div></address></body></html>

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: dirview.cpp,v 1.2 1999/06/03 01:44:16 warwick Exp $
+** $Id: dirview.cpp,v 1.2.2.1 1999/07/13 20:00:16 warwick Exp $
 **
 ** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
@@ -245,7 +245,7 @@ QString Directory::text( int column ) const
 
 DirectoryView::DirectoryView( QWidget *parent, const char *name, bool sdo )
     : QListView( parent, name ), dirsOnly( sdo ), oldCurrent( 0L ),
-      dropItem( 0L ), autoopen_timer( this ), autoscroll_timer( this )
+      dropItem( 0L ), autoopen_timer( this ), mousePressed( FALSE ), autoscroll_timer( this )
 {
     connect( this, SIGNAL( doubleClicked( QListViewItem * ) ),
              this, SLOT( slotFolderSelected( QListViewItem * ) ) );
@@ -474,11 +474,13 @@ void DirectoryView::contentsMousePressEvent( QMouseEvent* e )
 {
     QListView::contentsMousePressEvent(e);
     presspos = e->pos();
+    mousePressed = TRUE;
 }
 
 void DirectoryView::contentsMouseMoveEvent( QMouseEvent* e )
 {
-    if ( (e->pos() - presspos).manhattanLength() > 4 ) {
+    if ( mousePressed && (e->pos() - presspos).manhattanLength() > 4 ) {
+	mousePressed = FALSE;
         QListViewItem *item = itemAt( contentsToViewport(presspos) );
         if ( item ) {
             QString source = fullPath(item);
@@ -491,4 +493,9 @@ void DirectoryView::contentsMouseMoveEvent( QMouseEvent* e )
             }
         }
     }
+}
+
+void DirectoryView::contentsMouseReleaseEvent( QMouseEvent * )
+{
+    mousePressed = FALSE;
 }

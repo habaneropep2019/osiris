@@ -16,6 +16,7 @@ MOC	=	$(SYSCONF_MOC)
 DESTDIR = ./
 VER_MAJ = 1
 VER_MIN = 0
+VER_PATCH = 0
 TARGET	= qbrowser
 TARGET1 = lib$(TARGET).so.$(VER_MAJ)
 
@@ -115,6 +116,12 @@ helpwindow.o: helpwindow.cpp \
 		../../include/qwmatrix.h \
 		../../include/qtextview.h \
 		../../include/qmainwindow.h \
+		../../include/qmap.h \
+		../../include/qdir.h \
+		../../include/qstrlist.h \
+		../../include/qfileinfo.h \
+		../../include/qfile.h \
+		../../include/qdatetime.h \
 		../../include/qstatusbar.h \
 		../../include/qpopupmenu.h \
 		../../include/qmenudata.h \
@@ -124,19 +131,13 @@ helpwindow.o: helpwindow.cpp \
 		../../include/qtoolbar.h \
 		../../include/qtoolbutton.h \
 		../../include/qbutton.h \
-		../../include/qfile.h \
 		../../include/qtextstream.h \
 		../../include/qstylesheet.h \
 		../../include/qdict.h \
 		../../include/qgdict.h \
-		../../include/qmap.h \
 		../../include/qmessagebox.h \
 		../../include/qdialog.h \
 		../../include/qfiledialog.h \
-		../../include/qdir.h \
-		../../include/qstrlist.h \
-		../../include/qfileinfo.h \
-		../../include/qdatetime.h \
 		../../include/qlistbox.h \
 		../../include/qtimer.h \
 		../../include/qlineedit.h \
@@ -144,7 +145,9 @@ helpwindow.o: helpwindow.cpp \
 		../../include/qapplication.h \
 		../../include/qasciidict.h \
 		../../include/qtranslator.h \
-		../../include/qintdict.h
+		../../include/qintdict.h \
+		../../include/qcombobox.h \
+		../../include/qobjectlist.h
 
 main.o: main.cpp \
 		../../include/qapplication.h \
@@ -204,7 +207,12 @@ main.o: main.cpp \
 		helpwindow.h \
 		../../include/qtextbrowser.h \
 		../../include/qtextview.h \
-		../../include/qmainwindow.h
+		../../include/qmainwindow.h \
+		../../include/qdir.h \
+		../../include/qstrlist.h \
+		../../include/qfileinfo.h \
+		../../include/qfile.h \
+		../../include/qdatetime.h
 
 moc_helpwindow.o: moc_helpwindow.cpp \
 		helpwindow.h \
@@ -254,7 +262,13 @@ moc_helpwindow.o: moc_helpwindow.cpp \
 		../../include/qpointarray.h \
 		../../include/qwmatrix.h \
 		../../include/qtextview.h \
-		../../include/qmainwindow.h
+		../../include/qmainwindow.h \
+		../../include/qmap.h \
+		../../include/qdir.h \
+		../../include/qstrlist.h \
+		../../include/qfileinfo.h \
+		../../include/qfile.h \
+		../../include/qdatetime.h
 
 moc_helpwindow.cpp: helpwindow.h
 	$(MOC) helpwindow.h -o moc_helpwindow.cpp

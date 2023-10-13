@@ -1,5 +1,5 @@
 /**********************************************************************
-** $Id: qpsprinter.cpp,v 2.74 1999/06/11 23:58:35 agulbra Exp $
+** $Id: qpsprinter.cpp,v 2.74.2.1 1999/07/16 13:41:01 agulbra Exp $
 **
 ** Implementation of QPSPrinter class
 **
@@ -2046,6 +2046,11 @@ void QPSPrinter::setFont( const QFont & f )
 	    ps = QString::fromLatin1(postscriptFontNames[i].light);
 	else
 	    ps.append( QString::fromLatin1("-Light") );
+    } else if ( italic ) {
+	if ( postscriptFontNames[i].italic )
+	    ps = QString::fromLatin1(postscriptFontNames[i].italic);
+	else
+	    ps.append( QString::fromLatin1("-Italic") );
     } else {
 	if ( postscriptFontNames[i].roman )
 	    ps = QString::fromLatin1(postscriptFontNames[i].roman);

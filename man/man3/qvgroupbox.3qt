@@ -1,0 +1,50 @@
+.TH QVGroupBox 3qt "20 July 1999" "Troll Tech AS" \" -*- nroff -*-
+.\" Copyright 1992-1999 Troll Tech AS.  All rights reserved.  See the
+.\" license file included in the distribution for a complete license
+.\" statement.
+.\"
+.ad l
+.nh
+.SH NAME
+QVGroupBox \- Organizes QButton widgets in a group with one vertical column
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <qvgroupbox.h>\fR
+.PP
+Inherits QGroupBox.
+.PP
+.SS "Public Members"
+.in +1c
+.ti -1c
+.BI "\fBQVGroupBox\fR ( QWidget * " "parent" "=0, const char * " "name" "=0 )"
+.br
+.ti -1c
+.BI "\fBQVGroupBox\fR ( const QString & " "title" ", QWidget * " "parent" "=0, const char * " "name" "=0 )"
+.br
+.ti -1c
+.BI "\fB~QVGroupBox\fR ()"
+.br
+.in -1c
+.SH DESCRIPTION
+The QVGroupBox widget organizes QButton widgets in a group with one vertical column.
+.PP
+QVGroupBox is a convenience class that offers a thin layer on top of QGroupBox. Think of it as a QVBox that offers a frame with a title.
+.SH MEMBER FUNCTION DOCUMENTATION
+.SH "QVGroupBox::QVGroupBox ( QWidget * parent=0, const char * name=0 )"
+Constructs a vertical group box with no title.
+.PP
+The \fIparent\fR and \fIname\fR arguments are passed to the QWidget constructor.
+.SH "QVGroupBox::QVGroupBox ( const QString & title, QWidget * parent=0, const char * name=0 )"
+Constructs a vertical group box with a title.
+.PP
+The \fIparent\fR and \fIname\fR arguments are passed to the QWidget constructor.
+.SH "QVGroupBox::~QVGroupBox ()"
+Destroys the vertical group box and its child widgets.
+.SH "SEE ALSO"
+.BR http://www.troll.no/qt/qvgroupbox.html
+.SH COPYRIGHT
+Copyright 1992-1999 Troll Tech AS.  See the license file included in
+the distribution for a complete license statement.
+.SH AUTHOR
+Generated automatically from the source code.

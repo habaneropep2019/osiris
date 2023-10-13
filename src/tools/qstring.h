@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qstring.h,v 2.89 1999/06/15 12:00:54 warwick Exp $
+** $Id: qstring.h,v 2.89.2.1 1999/07/07 17:16:04 warwick Exp $
 **
 ** Definition of the QString class, extended char array operations,
 ** and QByteArray and QCString classes
@@ -258,12 +258,11 @@ struct Q_EXPORT QStringData : public QShared {
 };
 
 
-
 class Q_EXPORT QString
 {
 public:
     QString();					// make null string
-    QString( QChar );			// one-char string
+    QString( QChar );				// one-char string
     QString( const QString & );			// impl-shared copy
     QString( const QByteArray& );		// deep copy
     QString( const QChar* unicode, uint length ); // deep copy

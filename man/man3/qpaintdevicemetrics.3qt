@@ -1,0 +1,82 @@
+.TH QPaintDeviceMetrics 3qt "20 July 1999" "Troll Tech AS" \" -*- nroff -*-
+.\" Copyright 1992-1999 Troll Tech AS.  All rights reserved.  See the
+.\" license file included in the distribution for a complete license
+.\" statement.
+.\"
+.ad l
+.nh
+.SH NAME
+QPaintDeviceMetrics \- Information about a paint device
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <qpaintdevicemetrics.h>\fR
+.PP
+.SS "Public Members"
+.in +1c
+.ti -1c
+.BI "\fBQPaintDeviceMetrics\fR ( const QPaintDevice * )"
+.br
+.ti -1c
+.BI "enum { PdmWidth = 1, PdmHeight, PdmWidthMM, PdmHeightMM, PdmNumColors, PdmDepth, PdmDpiX, PdmDpiY }"
+.br
+.ti -1c
+.BI "int \fBwidth\fR () const"
+.br
+.ti -1c
+.BI "int \fBheight\fR () const"
+.br
+.ti -1c
+.BI "int \fBwidthMM\fR () const"
+.br
+.ti -1c
+.BI "int \fBheightMM\fR () const"
+.br
+.ti -1c
+.BI "int \fBlogicalDpiX\fR () const"
+.br
+.ti -1c
+.BI "int \fBlogicalDpiY\fR () const"
+.br
+.ti -1c
+.BI "int \fBnumColors\fR () const"
+.br
+.ti -1c
+.BI "int \fBdepth\fR () const"
+.br
+.in -1c
+.SH DESCRIPTION
+The QPaintDeviceMetrics class provides information about a paint device.
+.PP
+Sometimes it is necessary to obtain information about the physical size of a paint device when drawing graphics.
+.PP
+Example:
+.PP
+.nf
+.br
+    QPaintDeviceMetrics pdm( myWidget );
+.br
+    double aspect = (double)pdm.widthMM / (double)pdm.heightMM();
+.fi
+.SH MEMBER FUNCTION DOCUMENTATION
+.SH "QPaintDeviceMetrics::QPaintDeviceMetrics ( const QPaintDevice * pd )"
+Constructs a metric for the paint device \fIpd.\fR
+.SH "int QPaintDeviceMetrics::depth () const"
+Returns the bit depth (number of bit planes) of the paint device.
+.SH "int QPaintDeviceMetrics::height () const"
+Returns the height of the paint device, in default coordinate system units (e.g. pixels for QPixmap and QWidget).
+.SH "int QPaintDeviceMetrics::heightMM () const"
+Returns the height of the paint device, measured in millimeters.
+.SH "int QPaintDeviceMetrics::numColors () const"
+Returns the number of different colors available for the paint device.
+.SH "int QPaintDeviceMetrics::width () const"
+Returns the width of the paint device, in default coordinate system units (e.g. pixels for QPixmap and QWidget).
+.SH "int QPaintDeviceMetrics::widthMM () const"
+Returns the width of the paint device, measured in millimeters.
+.SH "SEE ALSO"
+.BR http://www.troll.no/qt/qpaintdevicemetrics.html
+.SH COPYRIGHT
+Copyright 1992-1999 Troll Tech AS.  See the license file included in
+the distribution for a complete license statement.
+.SH AUTHOR
+Generated automatically from the source code.

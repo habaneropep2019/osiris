@@ -81,7 +81,7 @@ private:
   Implementation:
 
   <pre>/****************************************************************************
-** &#36;Id&#58; application.cpp,v 1.9 1999/06/24 13:01:10 ettrich Exp $
+** &#36;Id&#58; application.cpp,v 1.9.2.1 1999/07/13 20:00:14 warwick Exp $
 **
 ** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
@@ -236,6 +236,7 @@ void <a name="140"></a>ApplicationWindow::load( const char *fileName )
 
     e-&gt;setAutoUpdate( TRUE );
     e-&gt;repaint();
+    e-&gt;setEdited( FALSE );
     <a href="qwidget.html#d4f007">setCaption</a>( fileName );
     <a href="qstring.html">QString</a> s;
     s.<a href="qstring.html#2eb9bc">sprintf</a>( "Loaded document %s", fileName );
@@ -260,6 +261,8 @@ void <a name="141"></a>ApplicationWindow::save()
     <a href="qtextstream.html">QTextStream</a> t( &amp;f );
     t &lt;&lt; text;
     f.<a href="qfile.html#e37a87">close</a>();
+
+    e-&gt;setEdited( FALSE );
 
     <a href="qwidget.html#d4f007">setCaption</a>( filename );
 
@@ -291,7 +294,7 @@ void <a name="143"></a>ApplicationWindow::print()
         int yPos        = 0;                    // y position for each line
         <a href="qfontmetrics.html">QFontMetrics</a> fm = p.<a href="qpainter.html#f572a5">fontMetrics</a>();
         <a href="qpaintdevicemetrics.html">QPaintDeviceMetrics</a> metrics( printer ); // need width/height
-                                                 // of printer surface
+                                                // of printer surface
         for( int i = 0 ; i &lt; e-&gt;numLines() ; i++ ) {
             if ( Margin + yPos &gt; metrics.<a href="qpaintdevicemetrics.html#3792df">height</a>() - Margin ) {
                 <a href="qstring.html">QString</a> msg( "Printing (page " );
@@ -315,17 +318,30 @@ void <a name="143"></a>ApplicationWindow::print()
 
 }
 
-void <a name="144"></a>ApplicationWindow::closeEvent( <a href="qcloseevent.html">QCloseEvent</a>* e )
+void <a name="144"></a>ApplicationWindow::closeEvent( <a href="qcloseevent.html">QCloseEvent</a>* ce )
 {
-    if ( <a href="qmessagebox.html#b7fab2">QMessageBox::warning</a>( this, "Qt Application Example", 
-                               "Help me, I'm being closed!", 
-                               "Close", "Cancel"
-                               ) == 0 )
-        e-&gt;<a href="qcloseevent.html#47cc57">accept</a>();
+    if ( !e-&gt;edited() ) {
+        ce-&gt;<a href="qcloseevent.html#47cc57">accept</a>();
+        return;
+    }
 
-    // Note: If we accepted the close event, we will be deleted
-    // afterwards since we used the WDestructiveClose flag in the
-    // constructor
+    switch( <a href="qmessagebox.html#2e454b">QMessageBox::information</a>( this, "Qt Application Example",
+                                      "The document has been changed since "
+                                      "the last save.",
+                                      "Save Now", "Cancel", "Leave Anyway",
+                                      0, 1 ) ) {
+    case 0:
+        <a href=#141>save</a>();
+        ce-&gt;<a href="qcloseevent.html#47cc57">accept</a>();
+        break;
+    case 1:
+    default: // just for sanity
+        ce-&gt;<a href="qcloseevent.html#e2007a">ignore</a>();
+        break;
+    case 2:
+        ce-&gt;<a href="qcloseevent.html#47cc57">accept</a>();
+        break;
+    }
 }
 
 void <a name="145"></a>ApplicationWindow::about()
@@ -370,5 +386,5 @@ int main( int argc, char ** argv ) {
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.00</div>
+<td align="right"><div align="right">Qt version 2.0.1</div>
 </table></div></address></body></html>

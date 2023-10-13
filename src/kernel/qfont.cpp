@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qfont.cpp,v 2.80 1999/06/24 20:13:43 warwick Exp $
+** $Id: qfont.cpp,v 2.80.2.2 1999/07/13 19:58:50 warwick Exp $
 **
 ** Implementation of QFont, QFontMetrics and QFontInfo classes
 **
@@ -187,7 +187,7 @@ void QFont::detach()
 /*!
   Constructs a font object that refers to the default font.
 
-  /sa QApplication::setFont(), QApplication::font()
+  \sa QApplication::setFont(), QApplication::font()
 */
 
 QFont::QFont()
@@ -791,7 +791,7 @@ bool QFont::rawMode() const
     return d->req.rawMode;
 }
 
-/*!  
+/*!
   Turns raw mode on if \e enable is TRUE, or turns it off if \e enable is
   FALSE.
 
@@ -815,8 +815,8 @@ bool QFont::rawMode() const
 
   \warning Do not use raw mode unless you really, really need it! In
   most (if not all") cases, setRawName() is a much better choise.
-  
-  
+
+
   \sa rawMode(), setRawName()
 */
 
@@ -1572,7 +1572,7 @@ QRect QFontMetrics::boundingRect( int x, int y, int w, int h, int flgs,
   <li> \c WordBreak breaks the text to fit the rectangle.
   </ul>
 
-  These flags are defined in qwindowdefs.h.
+  These flags are defined in qnamespace.h.
 
   If \c ExpandTabs is set in \a flgs, then:
   if \a tabarray is non.zero, it specifies a 0-terminated sequence

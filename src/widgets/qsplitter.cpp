@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qsplitter.cpp,v 1.75 1999/06/16 16:53:27 ettrich Exp $
+** $Id: qsplitter.cpp,v 1.75.2.2 1999/07/13 19:59:31 warwick Exp $
 **
 **  Splitter widget
 **
@@ -537,12 +537,16 @@ void QSplitter::moveBefore( int pos, int id, bool upLeft )
 
 void QSplitter::moveAfter( int pos, int id, bool upLeft )
 {
-    QSplitterLayoutStruct *s = data->list.at(id);
+    QSplitterLayoutStruct *s = id < int(data->list.count()) ?
+			       data->list.at(id) : 0;
     if ( !s )
 	return;
     QWidget *w = s->wid;
     if ( w->testWState(WState_ForceHide) ) {
 	moveAfter( pos, id+1, upLeft );
+    } else if ( pick( w->pos() ) == pos ) {
+	//No need to do anything if it's already there.
+	return;
     } else if ( s->isSplitter ) {
 	int dd = s->sizer;
 	if ( upLeft ) {
@@ -559,8 +563,7 @@ void QSplitter::moveAfter( int pos, int id, bool upLeft )
 	dd = QMAX( pick(minSize(w)), QMIN(dd, pick(w->maximumSize())));
 	int newRight = pos+dd-1;
 	setG( w, pos, dd );
-	if ( right != newRight )
-	    moveAfter( newRight+1, id+1, upLeft );
+	moveAfter( newRight+1, id+1, upLeft );
     }
 }
 
@@ -721,16 +724,24 @@ void QSplitter::recalc( bool update )
 	doResize();
 }
 
+/*! \enum QSplitter::ResizeMode
+
+  This enum type describes how QSplitter will resize each of its child widgets.  The currently defined values are: <ul>
+
+  <li> \c Stretch - the widget will be resized when the splitter
+  itself is resized.
+
+  <li> \c KeepSize - QSplitter will try to keep this widget's size
+  unchanged.
+
+  </ul>
+
+*/
 
 /*!
-  Sets resize mode of \a w to \a mode. \a mode can be one of:
+  Sets resize mode of \a w to \a mode. 
 
-  \define QSplitter::ResizeMode
-
-  <ul>
-    <li> \c Stretch (the default) - \a w will resize when the splitter resizes
-    <li> \c KeepSize - \a w will keep its size.
-  </ul>
+  \sa ResizeMode
 */
 
 void QSplitter::setResizeMode( QWidget *w, ResizeMode mode )

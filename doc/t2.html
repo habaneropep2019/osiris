@@ -44,14 +44,16 @@ int main( int argc, char **argv )
 <h2>Line by Line Walk-Through</h2>
 <p>
 <pre>
-    #include &lt;<a href="qfont-h.html">qfont.h</a>&gt;</pre>
+    #include &lt;<a href="qfont-h.html">qfont.h</a>&gt;
+</pre>
 <p>
 Since this program uses QFont, it needs to include qfont.h.  Qt's font
 abstraction is rather different from the horror provided by X, and
 loading and using fonts has been highly optimized.
 <p>
 <pre>
-        <a href="qpushbutton.html">QPushButton</a> quit( "Quit", 0 );</pre>
+        <a href="qpushbutton.html">QPushButton</a> quit( "Quit", 0 );
+</pre>
 <p>
 This time, the button says "Quit" and that's exactly what the program
 will do when the user clicks the button.  This is not a coincidence.
@@ -72,20 +74,19 @@ use <a href="qfontmetrics.html">QFontMetrics</a> to set right size.
 Here we choose a new font for the button, an 18-point bold font from
 the Times family.  Note that we create the font on the spot.
 <p>
-It is also possible to <a href="qapplication.html#01d457">change the
-default font</a> for the whole application.
+It is also possible to change the default font (using <a href="qapplication.html#01d457">QApplication::setFont())</a> for the whole application.
 <p>
 <pre>
         <a href="qobject.html#c2d209">QObject::connect</a>( &amp;quit, SIGNAL(clicked()), &amp;a, SLOT(quit()) );
 </pre>
 <p>
 connect() is perhaps <em>the</em> most central feature of Qt.
-Note that connect() is a static function in QObject. Do not confuse it
+Note that connect() is a static function in QObject.  Do not confuse it
 with the connect() function in the socket library.
 <p>
 This line establishes a one-way connection between two Qt objects (objects
 that inherit QObject, directly or indirectly).  Every Qt object can have
-both <code>signals</code> (to send messages) and <code>slots</code> (to receive messages). All
+both <code>signals</code> (to send messages) and <code>slots</code> (to receive messages).  All
 widgets are Qt objects.  They inherit QWidget which in turn inherits
 QObject.
 <p>
@@ -117,5 +118,5 @@ You may now go on to <a href="t3.html">chapter three.</a>
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.00</div>
+<td align="right"><div align="right">Qt version 2.0.1</div>
 </table></div></address></body></html>

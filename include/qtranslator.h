@@ -1,13 +1,28 @@
 /****************************************************************************
-** $Id: qtranslator.h,v 2.7 1999/06/15 19:37:25 agulbra Exp $
+** $Id: qtranslator.h,v 2.7.2.2 1999/07/13 19:59:00 warwick Exp $
 **
-** Definition of something or other
+** Definition of the translator class
 **
-** Created : 979899
+** Created : 980906
 **
-** Copyright (C) 1997 by Troll Tech AS.  All rights reserved.
+** Copyright (C) 1998-99 by Troll Tech AS.  All rights reserved.
 **
-****************************************************************************/
+** This file is part of the Qt GUI Toolkit.
+**
+** This file may be distributed under the terms of the Q Public License
+** as defined by Troll Tech AS of Norway and appearing in the file
+** LICENSE.QPL included in the packaging of this file.
+**
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
+**
+** See http://www.troll.no/pricing.html or email sales@troll.no for
+** information about the Professional Edition licensing, or see
+** http://www.troll.no/qpl/ for QPL licensing information.
+**
+*****************************************************************************/
+
 
 #ifndef QTRANSLATOR_H
 #define QTRANSLATOR_H
@@ -34,7 +49,7 @@ public:
 	       const QString & suffix = QString::null );
 
     enum SaveMode { Everything, Stripped };
-    
+
     bool save( const QString & filename, SaveMode mode = Everything );
 
     void clear();

@@ -21,7 +21,7 @@ body { background: white; color: black; }
   Header file:
 
   <pre>/****************************************************************************
-** &#36;Id&#58; helpwindow.h,v 1.3 1999/06/17 22:02:28 ettrich Exp $
+** &#36;Id&#58; helpwindow.h,v 1.3.2.1 1999/07/13 19:17:56 reggie Exp $
 **
 ** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
@@ -32,8 +32,15 @@ body { background: white; color: black; }
 
 #ifndef HELPWINDOW_H
 #define HELPWINDOW_H
+
 #include &lt;<a href="qtextbrowser-h.html">qtextbrowser.h</a>&gt;
 #include &lt;<a href="qmainwindow-h.html">qmainwindow.h</a>&gt;
+#include &lt;<a href="qstringlist-h.html">qstringlist.h</a>&gt;
+#include &lt;<a href="qmap-h.html">qmap.h</a>&gt;
+#include &lt;<a href="qdir-h.html">qdir.h</a>&gt;
+
+class QComboBox;
+class QPopupMenu;
 
 class HelpWindow : public QMainWindow
 {
@@ -42,9 +49,7 @@ public:
     HelpWindow( const QString&amp; home_,  const QString&amp; path, QWidget* parent = 0, const char *name=0 );
     ~HelpWindow();
 
-    void setupSlideshow( const QString&amp; file);
-
- private slots:
+private slots:
     void setBackwardAvailable( bool );
     void setForwardAvailable( bool );
 
@@ -54,9 +59,24 @@ public:
     void openFile();
     void newWindow();
 
+    void pathSelected( const QString &amp; );
+    void histChosen( int );
+    void bookmChosen( int );
+    void addBookmark();
+
 private:
+    bool eventFilter( <a href="qobject.html">QObject</a> * o, QEvent * e );
+    void readHistory();
+    void readBookmarks();
+
     <a href="qtextbrowser.html">QTextBrowser</a>* browser;
+    <a href="qcombobox.html">QComboBox</a> *pathCombo;
     int backwardId, forwardId;
+    <a href="qstring.html">QString</a> selectedURL;
+    <a href="qdir.html">QDir</a> path;
+    <a href="qstringlist.html">QStringList</a> fileList, history, bookmarks;
+    <a href="qmap.html">QMap</a>&lt;int, QString&gt; mHistory, mBookmarks;
+    <a href="qpopupmenu.html">QPopupMenu</a> *hist, *bookm;
 
 };
 
@@ -69,7 +89,7 @@ private:
   Implementation:
 
   <pre>/****************************************************************************
-** &#36;Id&#58; helpwindow.cpp,v 1.9 1999/06/18 01:12:08 ettrich Exp $
+** &#36;Id&#58; helpwindow.cpp,v 1.9.2.1 1999/07/13 19:17:55 reggie Exp $
 **
 ** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
@@ -92,13 +112,27 @@ private:
 #include &lt;<a href="qmessagebox-h.html">qmessagebox.h</a>&gt;
 #include &lt;<a href="qfiledialog-h.html">qfiledialog.h</a>&gt;
 #include &lt;<a href="qapplication-h.html">qapplication.h</a>&gt;
+#include &lt;<a href="qcombobox-h.html">qcombobox.h</a>&gt;
+#include &lt;<a href="qevent-h.html">qevent.h</a>&gt;
+#include &lt;<a href="qlineedit-h.html">qlineedit.h</a>&gt;
+#include &lt;qobjectlist.h&gt;
+#include &lt;<a href="qfileinfo-h.html">qfileinfo.h</a>&gt;
+#include &lt;<a href="qfile-h.html">qfile.h</a>&gt;
+#include &lt;<a href="qdatastream-h.html">qdatastream.h</a>&gt;
 
-HelpWindow::HelpWindow( const QString&amp; home_, const QString&amp; path, QWidget* parent, const char *name )
-    : <a href="qmainwindow.html">QMainWindow</a>( parent, name, WDestructiveClose )
+#include &lt;ctype.h&gt;
+
+HelpWindow::HelpWindow( const QString&amp; home_, const QString&amp; _path, QWidget* parent, const char *name )
+    : <a href="qmainwindow.html">QMainWindow</a>( parent, name, WDestructiveClose ), pathCombo( 0 ), selectedURL(),
+      path( <a href="qfileinfo.html">QFileInfo</a>( home_ ).dirPath( TRUE ), "*.htm*" )
 {
+    readHistory();
+    readBookmarks();
+
+    fileList = path.entryList();
 
     browser = new <a href="qtextbrowser.html">QTextBrowser</a>( this );
-    browser-&gt;mimeSourceFactory()-&gt;setFilePath( path );
+    browser-&gt;mimeSourceFactory()-&gt;setFilePath( _path );
     browser-&gt;setFrameStyle( QFrame::Panel | QFrame::Sunken );
     connect( browser, SIGNAL( textChanged() ),
              this, SLOT( textChanged() ) );
@@ -122,19 +156,38 @@ HelpWindow::HelpWindow( const QString&amp; home_, const QString&amp; path, QWidg
 
     <a href="qpopupmenu.html">QPopupMenu</a>* go = new <a href="qpopupmenu.html">QPopupMenu</a>( this );
     backwardId = go-&gt;<a href="qmenudata.html#43c652">insertItem</a>( <a href="qpixmap.html">QPixmap</a>("back.xpm"),
-                                       tr("&amp;Backward"), browser, SLOT( backward() ),
-                                       ALT | Key_Left );
+                                 tr("&amp;Backward"), browser, SLOT( backward() ),
+                                 ALT | Key_Left );
     forwardId = go-&gt;<a href="qmenudata.html#43c652">insertItem</a>( <a href="qpixmap.html">QPixmap</a>("forward.xpm"),
-                                      tr("&amp;Forward"), browser, SLOT( forward() ),
-                                       ALT | Key_Right );
+                                tr("&amp;Forward"), browser, SLOT( forward() ),
+                                ALT | Key_Right );
     go-&gt;<a href="qmenudata.html#43c652">insertItem</a>( <a href="qpixmap.html">QPixmap</a>("home.xpm"), tr("&amp;Home"), browser, SLOT( home() ) );
 
     <a href="qpopupmenu.html">QPopupMenu</a>* help = new <a href="qpopupmenu.html">QPopupMenu</a>( this );
     help-&gt;<a href="qmenudata.html#43c652">insertItem</a>( tr("&amp;About ..."), this, SLOT( about() ) );
     help-&gt;<a href="qmenudata.html#43c652">insertItem</a>( tr("About &amp;<a href="qt.html">Qt</a> ..."), this, SLOT( aboutQt() ) );
 
+    hist = new <a href="qpopupmenu.html">QPopupMenu</a>( this );
+    QStringList::Iterator it = history.begin();
+    for ( ; it != history.end(); ++it )
+        mHistory[ hist-&gt;insertItem( *it ) ] = *it;
+    connect( hist, SIGNAL( activated( int ) ),
+             this, SLOT( histChosen( int ) ) );
+
+    bookm = new <a href="qpopupmenu.html">QPopupMenu</a>( this );
+    bookm-&gt;insertItem( tr( "Add Bookmark" ), this, SLOT( addBookmark() ) );
+    bookm-&gt;insertSeparator();
+
+    QStringList::Iterator it2 = bookmarks.begin();
+    for ( ; it2 != bookmarks.end(); ++it2 )
+        mBookmarks[ bookm-&gt;insertItem( *it2 ) ] = *it2;
+    connect( bookm, SIGNAL( activated( int ) ),
+             this, SLOT( bookmChosen( int ) ) );
+
     menuBar()-&gt;insertItem( tr("&amp;File"), file );
     menuBar()-&gt;insertItem( tr("&amp;Go"), go );
+    menuBar()-&gt;insertItem( tr( "History" ), hist );
+    menuBar()-&gt;insertItem( tr( "Bookmarks" ), bookm );
     menuBar()-&gt;insertSeparator();
     menuBar()-&gt;insertItem( tr("&amp;Help"), help );
 
@@ -157,55 +210,205 @@ HelpWindow::HelpWindow( const QString&amp; home_, const QString&amp; path, QWidg
     button-&gt;<a href="qwidget.html#f996ef">setEnabled</a>( FALSE );
     button = new <a href="qtoolbutton.html">QToolButton</a>( <a href="qpixmap.html">QPixmap</a>("home.xpm"), tr("Home"), "", browser, SLOT(home()), toolbar );
 
+    toolbar-&gt;<a href="qtoolbar.html#0c2bac">addSeparator</a>();
+
+    pathCombo = new <a href="qcombobox.html">QComboBox</a>( TRUE, toolbar );
+    connect( pathCombo, SIGNAL( activated( const QString &amp; ) ),
+             this, SLOT( pathSelected( const QString &amp; ) ) );
+    toolbar-&gt;<a href="qtoolbar.html#cf1b0e">setStretchableWidget</a>( pathCombo );
+    setRightJustification( TRUE );
+
+    pathCombo-&gt;insertItem( home_ );
+    pathCombo-&gt;installEventFilter( this );
+    QObjectList *l = queryList( "QLineEdit" );
+    if ( l &amp;&amp; l-&gt;first() )
+        ( (<a href="qlineedit.html">QLineEdit</a>*)l-&gt;first() )-&gt;installEventFilter( this );
+
     browser-&gt;setFocus();
 }
 
-void <a name="394"></a>HelpWindow::setBackwardAvailable( bool b)
+void <a name="301"></a>HelpWindow::setBackwardAvailable( bool b)
 {
     <a href="qmainwindow.html#2fcbc3">menuBar</a>()-&gt;setItemEnabled( backwardId, b);
 }
 
-void <a name="395"></a>HelpWindow::setForwardAvailable( bool b)
+void <a name="302"></a>HelpWindow::setForwardAvailable( bool b)
 {
     <a href="qmainwindow.html#2fcbc3">menuBar</a>()-&gt;setItemEnabled( forwardId, b);
 }
 
-void <a name="396"></a>HelpWindow::textChanged()
+void <a name="303"></a>HelpWindow::textChanged()
 {
     if ( browser-&gt;documentTitle().isNull() )
         <a href="qwidget.html#d4f007">setCaption</a>( browser-&gt;context() );
     else
         <a href="qwidget.html#d4f007">setCaption</a>( browser-&gt;documentTitle() ) ;
+
+    selectedURL = caption();
+    if ( !selectedURL.isEmpty() &amp;&amp; pathCombo ) {
+        path = QDir( <a href="qfileinfo.html">QFileInfo</a>( selectedURL ).dirPath( TRUE ), "*.htm*" );
+        fileList = path.entryList();
+        bool exists = FALSE;
+        int i;
+        for ( i = 0; i &lt; pathCombo-&gt;count(); ++i ) {
+            if ( pathCombo-&gt;text( i ) == selectedURL ) {
+                exists = TRUE;
+                break;
+            }
+        }
+        if ( !exists ) {
+            pathCombo-&gt;insertItem( selectedURL, 0 );
+            pathCombo-&gt;setCurrentItem( 0 );
+            mHistory[ hist-&gt;insertItem( selectedURL ) ] = selectedURL;
+        } else
+            pathCombo-&gt;setCurrentItem( i );
+        selectedURL = QString::null;
+    }
 }
 
 HelpWindow::~HelpWindow()
 {
+    history.clear();
+    <a href="qmap.html">QMap</a>&lt;int, QString&gt;::Iterator it = mHistory.begin();
+    for ( ; it != mHistory.end(); ++it )
+        history.append( *it );
+
+    <a href="qfile.html">QFile</a> f( <a href="qdir.html#da1981">QDir::currentDirPath</a>() + "/.history" );
+    f.<a href="qfile.html#44ae9b">open</a>( IO_WriteOnly );
+    <a href="qdatastream.html">QDataStream</a> s( &amp;f );
+    s &lt;&lt; history;
+    f.<a href="qfile.html#e37a87">close</a>();
+
+    bookmarks.clear();
+    <a href="qmap.html">QMap</a>&lt;int, QString&gt;::Iterator it2 = mBookmarks.begin();
+    for ( ; it2 != mBookmarks.end(); ++it2 )
+        bookmarks.append( *it2 );
+
+    <a href="qfile.html">QFile</a> f2( <a href="qdir.html#da1981">QDir::currentDirPath</a>() + "/.bookmarks" );
+    f2.<a href="qfile.html#44ae9b">open</a>( IO_WriteOnly );
+    <a href="qdatastream.html">QDataStream</a> s2( &amp;f2 );
+    s2 &lt;&lt; bookmarks;
+    f2.<a href="qfile.html#e37a87">close</a>();
 }
 
-void <a name="397"></a>HelpWindow::about()
+void <a name="304"></a>HelpWindow::about()
 {
     <a href="qmessagebox.html#e67950">QMessageBox::about</a>( this, "QBrowser Example",
                         "&lt;p&gt;This example implements a simple HTML browser "
                         "using Qt's rich text capabilities&lt;/p&gt;"
                         "&lt;p&gt;It's just about 100 lines of C++ code, so don't expect too much :-)&lt;/p&gt;"
-                        );
+        );
 }
 
-void <a name="398"></a>HelpWindow::aboutQt()
+void <a name="305"></a>HelpWindow::aboutQt()
 {
     <a href="qmessagebox.html#976755">QMessageBox::aboutQt</a>( this, "QBrowser" );
 }
 
-void <a name="399"></a>HelpWindow::openFile()
+void <a name="306"></a>HelpWindow::openFile()
 {
     <a href="qstring.html">QString</a> fn = QFileDialog::getOpenFileName( QString::null, QString::null, this );
     if ( !fn.<a href="qstring.html#9a6d7e">isEmpty</a>() )
         browser-&gt;setSource( fn );
 }
 
-void <a name="400"></a>HelpWindow::newWindow()
+void <a name="307"></a>HelpWindow::newWindow()
 {
     ( new HelpWindow(browser-&gt;source(), "qbrowser") )-&gt;show();
+}
+
+void <a name="308"></a>HelpWindow::pathSelected( const QString &amp;_path )
+{
+    browser-&gt;setSource( _path );
+    path = QDir( <a href="qfileinfo.html">QFileInfo</a>( _path ).dirPath( TRUE ), "*.htm*" );
+    fileList = path.entryList();
+    <a href="qmap.html">QMap</a>&lt;int, QString&gt;::Iterator it = mHistory.begin();
+    bool exists = FALSE;
+    for ( ; it != mHistory.end(); ++it ) {
+        if ( *it == _path ) {
+            exists = TRUE;
+            break;
+        }
+    }
+    if ( !exists )
+        mHistory[ hist-&gt;insertItem( _path ) ] = _path;
+}
+
+bool <a name="309"></a>HelpWindow::eventFilter( <a href="qobject.html">QObject</a> * o, QEvent * e )
+{
+    QObjectList *l = queryList( "QLineEdit" );
+    if ( !l || !l-&gt;first() )
+        return FALSE;
+
+    <a href="qlineedit.html">QLineEdit</a> *lined = (<a href="qlineedit.html">QLineEdit</a>*)l-&gt;first();
+
+    if ( ( o == pathCombo || o == lined ) &amp;&amp;
+         e-&gt;type() == QEvent::KeyPress ) {
+
+        if ( isprint(((<a href="qkeyevent.html">QKeyEvent</a> *)e)-&gt;ascii()) ) {
+            if ( lined-&gt;<a href="qlineedit.html#005dfd">hasMarkedText</a>() )
+                lined-&gt;<a href="qlineedit.html#99e7dd">del</a>();
+            <a href="qstring.html">QString</a> nt( lined-&gt;<a href="qlineedit.html#bc5402">text</a>() );
+            nt.<a href="qstring.html#11dc0f">remove</a>( 0, nt.<a href="qstring.html#14806b">findRev</a>( '/' ) + 1 );
+            nt.<a href="qstring.html#131045">truncate</a>( lined-&gt;<a href="qlineedit.html#bff9ef">cursorPosition</a>() );
+            nt += (char)(((<a href="qkeyevent.html">QKeyEvent</a> *)e)-&gt;ascii());
+
+            QStringList::Iterator it = fileList.begin();
+            while ( it != fileList.end() &amp;&amp; (*it).left( nt.<a href="qstring.html#6db3bf">length</a>() ) != nt )
+                ++it;
+
+            if ( !(*it).isEmpty() ) {
+                nt = *it;
+                int cp = lined-&gt;<a href="qlineedit.html#bff9ef">cursorPosition</a>() + 1;
+                int l = path.canonicalPath().length() + 1;
+                lined-&gt;<a href="qlineedit.html#5679ea">validateAndSet</a>( path.canonicalPath() + "/" + nt, cp, cp, l + nt.<a href="qstring.html#6db3bf">length</a>() );
+                return TRUE;
+            }
+        }
+    }
+
+    return FALSE;
+}
+
+void <a name="310"></a>HelpWindow::readHistory()
+{
+    if ( <a href="qfile.html#88f631">QFile::exists</a>( <a href="qdir.html#da1981">QDir::currentDirPath</a>() + "/.history" ) ) {
+        <a href="qfile.html">QFile</a> f( <a href="qdir.html#da1981">QDir::currentDirPath</a>() + "/.history" );
+        f.<a href="qfile.html#44ae9b">open</a>( IO_ReadOnly );
+        <a href="qdatastream.html">QDataStream</a> s( &amp;f );
+        s &gt;&gt; history;
+        f.<a href="qfile.html#e37a87">close</a>();
+        while ( history.count() &gt; 20 )
+            history.remove( history.begin() );
+    }
+}
+
+void <a name="311"></a>HelpWindow::readBookmarks()
+{
+    if ( <a href="qfile.html#88f631">QFile::exists</a>( <a href="qdir.html#da1981">QDir::currentDirPath</a>() + "/.bookmarks" ) ) {
+        <a href="qfile.html">QFile</a> f( <a href="qdir.html#da1981">QDir::currentDirPath</a>() + "/.bookmarks" );
+        f.<a href="qfile.html#44ae9b">open</a>( IO_ReadOnly );
+        <a href="qdatastream.html">QDataStream</a> s( &amp;f );
+        s &gt;&gt; bookmarks;
+        f.<a href="qfile.html#e37a87">close</a>();
+    }
+}
+
+void <a name="312"></a>HelpWindow::histChosen( int i )
+{
+    if ( mHistory.contains( i ) )
+        browser-&gt;setSource( mHistory[ i ] );
+}
+
+void <a name="313"></a>HelpWindow::bookmChosen( int i )
+{
+    if ( mBookmarks.contains( i ) )
+        browser-&gt;setSource( mBookmarks[ i ] );
+}
+
+void <a name="314"></a>HelpWindow::addBookmark()
+{
+    mBookmarks[ bookm-&gt;insertItem( <a href="qwidget.html#4ae7ff">caption</a>() ) ] = caption();
 }
 </pre>
 
@@ -214,7 +417,7 @@ void <a name="400"></a>HelpWindow::newWindow()
 
   Main:
 <pre>/****************************************************************************
-** &#36;Id&#58; main.cpp,v 1.7 1999/06/17 22:46:58 warwick Exp $
+** &#36;Id&#58; main.cpp,v 1.7.2.1 1999/07/13 19:17:57 reggie Exp $
 **
 ** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
@@ -272,5 +475,5 @@ int main( int argc, char ** argv )
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.00</div>
+<td align="right"><div align="right">Qt version 2.0.1</div>
 </table></div></address></body></html>

@@ -95,8 +95,8 @@ custom signal.
 <p>
 Slots must be implemented in the normal way (remember, a slot is also
 a C++ member function).  Signals are automatically implemented in the
-<a href="metaobjects.html">meta object</a> file. Signals follow the
-access rules of protected C++ functions, i.e. they can only be emitted
+<a href="metaobjects.html">meta object</a> file.  Signals follow the
+access rules of protected C++ functions, i.e.  they can only be emitted
 by the class they are defined in or by classes inheriting from it.
 <p>
 The signal valueChanged() is used when the LCDRange's value has
@@ -111,13 +111,15 @@ only the changes are noted here.
 <pre>
         <a href="qobject.html#c2d209">connect</a>( slider, SIGNAL(valueChanged(int)), lcd, SLOT(display(int)) );
         <a href="qobject.html#c2d209">connect</a>( slider, SIGNAL(valueChanged(int)), SIGNAL(valueChanged(int)) );
+    }
+    int LCDRange::value() const
 </pre>
 <p>
 This code is from the LCDRange constructor.
 <p>
 The first connect is the same you've seen in the previous chapter.
 The second is new: It connects slider's valueChanged() signal to this
-object's valueChanged <em>signal.</em> connect() with 3 arguments always
+object's valueChanged <em>signal.</em>  connect() with 3 arguments always
 connect to signals or slots in <code>this</code> object.
 <p>
 Yes, that's right.  Signals can be connected to other signals.  When
@@ -137,20 +139,14 @@ LCDRange::valueChanged() may be emitted before or after
 QLCDNumber::display(), entirely arbitrarily.
 <p>
 <pre>
-    int LCDRange::value() const
-    {
-        return slider-&gt;value();
-    }
+<p>
 </pre>
 <p>
 The implementation of value() is straight forward, it simply returns
 the slider's value.
 <p>
 <pre>
-    void LCDRange::setValue( int value )
-    {
-        slider-&gt;setValue( value );
-    }
+<p>
 </pre>
 <p>
 The implementation of setValue() is equally straight forward.  Note
@@ -188,10 +184,10 @@ Try operating the slider to the bottom right...
 <p>
 <h2>Excercises</h2>
 <p>
-Use the bottom right slider to set all LCDs to 30. Then set the
+Use the bottom right slider to set all LCDs to 30.  Then set the
 top half to 29 by using the rightmost slider on the 2nd row.
 Now, use the one to the left of the last one operated to set the first seven
-LCDs back to 30. Click on the left arrow on the bottom right slider.
+LCDs back to 30.  Click on the left arrow on the bottom right slider.
 What happens? Why is this the correct behavior?
 <p>
 You may now go on to <a href="t8.html">chapter eight.</a>
@@ -203,5 +199,5 @@ You may now go on to <a href="t8.html">chapter eight.</a>
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.00</div>
+<td align="right"><div align="right">Qt version 2.0.1</div>
 </table></div></address></body></html>

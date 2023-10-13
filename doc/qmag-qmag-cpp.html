@@ -107,12 +107,12 @@ MagWidget::MagWidget( <a href="qwidget.html">QWidget</a> *parent, const char *na
     zoom = new <a href="qcombobox.html">QComboBox</a>( FALSE, this );
     CHECK_PTR(zoom);
     zoom-&gt;<a name="insertStrList"></a><a href="qcombobox.html#1b09b7">insertStrList</a>( zoomfactors, 9 );
-    <a name="connect"></a><a href="qobject.html#c2d209">connect</a>( zoom, SIGNAL(activated(int)), SLOT(<a name="setZoom"></a><a href="#297">setZoom</a>(int)) );
+    <a name="connect"></a><a href="qobject.html#c2d209">connect</a>( zoom, SIGNAL(activated(int)), SLOT(<a name="setZoom"></a><a href="#204">setZoom</a>(int)) );
 
     refresh = new <a href="qcombobox.html">QComboBox</a>( FALSE, this );
     CHECK_PTR(refresh);
     refresh-&gt;<a href="qcombobox.html#1b09b7">insertStrList</a>( refreshrates, 9 );
-    <a href="qobject.html#c2d209">connect</a>( refresh, SIGNAL(activated(int)), SLOT(<a name="setRefresh"></a><a href="#298">setRefresh</a>(int)) );
+    <a href="qobject.html#c2d209">connect</a>( refresh, SIGNAL(activated(int)), SLOT(<a name="setRefresh"></a><a href="#205">setRefresh</a>(int)) );
 
     int w, x, n;
 
@@ -133,7 +133,7 @@ MagWidget::MagWidget( <a href="qwidget.html">QWidget</a> *parent, const char *na
 
     saveButton = new <a href="qpushbutton.html">QPushButton</a>( this );
     CHECK_PTR(saveButton);
-    <a href="qobject.html#c2d209">connect</a>( saveButton, SIGNAL(clicked()), this, SLOT(<a name="save"></a><a href="#299">save</a>()) );
+    <a href="qobject.html#c2d209">connect</a>( saveButton, SIGNAL(clicked()), this, SLOT(<a name="save"></a><a href="#206">save</a>()) );
     saveButton-&gt;<a name="setText"></a><a href="qbutton.html#58c887">setText</a>( "Save" );
     saveButton-&gt;<a name="setGeometry"></a><a href="qpushbutton.html#604169">setGeometry</a>( x+w+30+2, 2,
                              10+saveButton-&gt;<a href="qwidget.html#d0d02b">fontMetrics</a>().width("Save"), 20 );
@@ -141,7 +141,7 @@ MagWidget::MagWidget( <a href="qwidget.html">QWidget</a> *parent, const char *na
     multiSaveButton = new <a href="qpushbutton.html">QPushButton</a>( this );
     multiSaveButton-&gt;<a name="setToggleButton"></a><a href="qpushbutton.html#792138">setToggleButton</a>(TRUE);
     CHECK_PTR(multiSaveButton);
-    <a href="qobject.html#c2d209">connect</a>( multiSaveButton, SIGNAL(clicked()), this, SLOT(<a name="multiSave"></a><a href="#300">multiSave</a>()) );
+    <a href="qobject.html#c2d209">connect</a>( multiSaveButton, SIGNAL(clicked()), this, SLOT(<a name="multiSave"></a><a href="#207">multiSave</a>()) );
     multiSaveButton-&gt;<a href="qbutton.html#58c887">setText</a>( "MultiSave" );
     multiSaveButton-&gt;<a href="qpushbutton.html#604169">setGeometry</a>( saveButton-&gt;<a name="geometry"></a><a href="qwidget.html#745b48">geometry</a>().right() + 2, 2,
                              10+multiSaveButton-&gt;<a href="qwidget.html#d0d02b">fontMetrics</a>().width("MultiSave"), 20 );
@@ -174,16 +174,16 @@ MagWidget::MagWidget( <a href="qwidget.html">QWidget</a> *parent, const char *na
     <a name="setMouseTracking"></a><a href="qwidget.html#eeb59b">setMouseTracking</a>( TRUE );   // and do let me know what pixel I'm at, eh?
 }
 
-void <a name="297"></a>MagWidget::setZoom( int index )
+void <a name="204"></a>MagWidget::setZoom( int index )
 {
     if (index == 8)
         z = 16;
     else
         z = index+1;
-    <a name="grab"></a><a href="#301">grab</a>();
+    <a name="grab"></a><a href="#208">grab</a>();
 }
 
-void <a name="298"></a>MagWidget::setRefresh( int index )
+void <a name="205"></a>MagWidget::setRefresh( int index )
 {
     r = index;
     <a name="killTimers"></a><a href="qobject.html#66592d">killTimers</a>();
@@ -191,7 +191,7 @@ void <a name="298"></a>MagWidget::setRefresh( int index )
         <a name="startTimer"></a><a href="qobject.html#906d99">startTimer</a>( timer[r] );
 }
 
-void <a name="299"></a>MagWidget::save()
+void <a name="206"></a>MagWidget::save()
 {
     if ( !p.<a name="isNull"></a><a href="qpixmap.html#29cbd3">isNull</a>() ) {
         <a href="qobject.html#66592d">killTimers</a>();
@@ -203,7 +203,7 @@ void <a name="299"></a>MagWidget::save()
     }
 }
 
-void <a name="300"></a>MagWidget::multiSave()
+void <a name="207"></a>MagWidget::multiSave()
 {
     if ( !p.<a href="qpixmap.html#29cbd3">isNull</a>() ) {
         multifn = ""; // stops saving
@@ -217,7 +217,7 @@ void <a name="300"></a>MagWidget::multiSave()
     }
 }
 
-void <a name="301"></a>MagWidget::grab()
+void <a name="208"></a>MagWidget::grab()
 {
     if ( !isVisible() ) 
         return;                 // don't eat resources when iconified
@@ -253,7 +253,7 @@ void <a name="301"></a>MagWidget::grab()
         <a name="repaint"></a><a href="qwidget.html#977d49">repaint</a>( FALSE );               // and finally repaint, flicker-free
 }
 
-void <a name="302"></a>MagWidget::paintEvent( <a href="qpaintevent.html">QPaintEvent</a> * )
+void <a name="209"></a>MagWidget::paintEvent( <a href="qpaintevent.html">QPaintEvent</a> * )
 {
     if ( !pm.<a href="qpixmap.html#29cbd3">isNull</a>() ) {
         <a name="QPainter"></a><a href="qpainter.html">QPainter</a> paint( this );
@@ -262,7 +262,7 @@ void <a name="302"></a>MagWidget::paintEvent( <a href="qpaintevent.html">QPaintE
     }
 }
 
-void <a name="303"></a>MagWidget::mousePressEvent( <a href="qmouseevent.html">QMouseEvent</a> *e )
+void <a name="210"></a>MagWidget::mousePressEvent( <a href="qmouseevent.html">QMouseEvent</a> *e )
 {
     if ( !grabbing ) {          // prepare to grab...
         grabbing = TRUE;
@@ -276,7 +276,7 @@ void <a name="303"></a>MagWidget::mousePressEvent( <a href="qmouseevent.html">QM
     }
 }
 
-void <a name="304"></a>MagWidget::mouseReleaseEvent( <a href="qmouseevent.html">QMouseEvent</a> * e )
+void <a name="211"></a>MagWidget::mouseReleaseEvent( <a href="qmouseevent.html">QMouseEvent</a> * e )
 {
     if ( grabbing &amp;&amp; grabx &gt;= 0 &amp;&amp; graby &gt;= 0 ) {
         grabbing = FALSE;
@@ -306,13 +306,13 @@ void <a name="304"></a>MagWidget::mouseReleaseEvent( <a href="qmouseevent.html">
             <a href="qwidget.html#9775bb">resize</a>( w*z, h*z+yoffset );
         }
         <a name="releaseMouse"></a><a href="qwidget.html#141529">releaseMouse</a>();
-        <a href=#301>grab</a>();
+        <a href=#208>grab</a>();
         if ( r )
             <a href="qobject.html#906d99">startTimer</a>( timer[r] );
     }
 }
 
-void <a name="305"></a>MagWidget::mouseMoveEvent( <a href="qmouseevent.html">QMouseEvent</a> *e )
+void <a name="212"></a>MagWidget::mouseMoveEvent( <a href="qmouseevent.html">QMouseEvent</a> *e )
 {
     if ( grabbing || pm.<a href="qpixmap.html#29cbd3">isNull</a>() ||
          e-&gt;<a href="qmouseevent.html#ac025d">pos</a>().y() &gt; height() - zoom-&gt;<a href="qwidget.html#d0d02b">fontMetrics</a>().height() - 4 ||
@@ -337,14 +337,14 @@ void <a name="305"></a>MagWidget::mouseMoveEvent( <a href="qmouseevent.html">QMo
     }
 }
 
-void <a name="306"></a>MagWidget::focusOutEvent( <a href="qfocusevent.html">QFocusEvent</a> * )
+void <a name="213"></a>MagWidget::focusOutEvent( <a href="qfocusevent.html">QFocusEvent</a> * )
 {
     rgb-&gt;<a href="qlabel.html#dffb43">setText</a>( "" );
 }
 
-void <a name="307"></a>MagWidget::timerEvent( <a href="qtimerevent.html">QTimerEvent</a> * )
+void <a name="214"></a>MagWidget::timerEvent( <a href="qtimerevent.html">QTimerEvent</a> * )
 {
-    <a href=#301>grab</a>();
+    <a href=#208>grab</a>();
     if ( multiSaveButton-&gt;<a href="qbutton.html#380a2c">isOn</a>() &amp;&amp; !multifn.<a href="qstring.html#9a6d7e">isEmpty</a>() ) {
         <a name="QRegExp"></a><a href="qregexp.html">QRegExp</a> num("[0-9][0-9]*");
         int start;
@@ -357,10 +357,10 @@ void <a name="307"></a>MagWidget::timerEvent( <a href="qtimerevent.html">QTimerE
     }
 }
 
-void <a name="308"></a>MagWidget::resizeEvent( <a href="qresizeevent.html">QResizeEvent</a> * )
+void <a name="215"></a>MagWidget::resizeEvent( <a href="qresizeevent.html">QResizeEvent</a> * )
 {
     rgb-&gt;<a href="qwidget.html#8e0197">setGeometry</a>( 0, <a href="qwidget.html#180786">height</a>() - rgb-&gt;<a href="qwidget.html#180786">height</a>(), <a href="qwidget.html#576663">width</a>(), rgb-&gt;<a href="qwidget.html#180786">height</a>() );
-    <a href=#301>grab</a>();
+    <a href=#208>grab</a>();
 }
 
 #include "qmag.moc"
@@ -377,5 +377,5 @@ int main( int argc, char **argv )
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.00</div>
+<td align="right"><div align="right">Qt version 2.0.1</div>
 </table></div></address></body></html>

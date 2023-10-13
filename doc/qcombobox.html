@@ -52,9 +52,9 @@ Inherits <a href="qwidget.html">QWidget</a>.
 <li><span class="fn">int <a href="#807b9d"><b>sizeLimit</b></a> () const</span>
 <li><span class="fn">virtual void <a href="#523689"><b>setMaxCount</b></a> ( int ) </span>
 <li><span class="fn">int <a href="#708ed8"><b>maxCount</b></a> () const</span>
-<li><span class="fn">enum <b>Policy</b> { NoInsertion, AtTop, AtCurrent, AtBottom, AfterCurrent, BeforeCurrent }</span>
+<li><span class="fn">enum <a href="#Policy"><b>Policy</b></a> { NoInsertion, AtTop, AtCurrent, AtBottom, AfterCurrent, BeforeCurrent }</span>
 <li><span class="fn">virtual void <a href="#3ecc82"><b>setInsertionPolicy</b></a> ( Policy policy ) </span>
-<li><span class="fn">Policy <b>insertionPolicy</b> () const</span>
+<li><span class="fn">Policy <a href="#ec4f9c"><b>insertionPolicy</b></a> () const</span>
 <li><span class="fn">virtual void <a href="#32a346"><b>setValidator</b></a> ( const QValidator * ) </span>
 <li><span class="fn">const QValidator* <a href="#eecd1b"><b>validator</b></a> () const</span>
 <li><span class="fn">virtual void <a href="#cf750c"><b>setListBox</b></a> ( QListBox * ) </span>
@@ -134,16 +134,9 @@ new item has been activated (selected) or highlighted (set to
 current).  Both signals exist in two versions, one with a <code>char*</code>
 argument and one with an <code>int</code> argument.  If the user highlights or
 activates a pixmap, only the <code>int</code> signals are emitted.
-<p>Read-write combo boxes offer four policies for dealing with typed
-input: <ul> <li> <code>NoInsertion</code> means to simply emit the activated()
-signal, <li> <code>AtBottom</code> means to insert the string at the bottom of
-the combo box and emit activated(), <li> <code>AtTop</code> means to insert
-the string at the top of the combo box and emit activated(), and
-finally <li> <code>AtCurrent</code> means to replace the previously selected
-item with the typed string, and emit activated(). </ul> If inserting
-the typed string would cause the combo box to breach its content
-size limit, the item at the other end of the list is deleted.  The
-default insertion policy is <code>AtBottom,</code> you can change it using
+<p>When the user enters a new string in a read-write combo, the widget
+may or may not insert it, and it can insert it in several locations.
+The default policy is is <code>AtBottom,</code> you can change it using
 <a href="qcombobox.html#3ecc82">setInsertionPolicy</a>().
 <p>It is possible to constrain the input to an editable combo box using
 <a href="qvalidator.html">QValidator</a>; see <a href="qcombobox.html#32a346">setValidator</a>().  By default, all input is accepted.
@@ -157,6 +150,25 @@ not grab focus if clicked.  This differs from both Windows and Motif.
 <p>Examples:
  <a href="qmag-qmag-cpp.html#QComboBox">qmag/qmag.cpp</a>
 
+<hr><h2>Member Type Documentation</h2>
+<h3 class="fn"><a name="Policy">QComboBox::Policy</a></h3>
+This enum type specifies what QComboBox should do with a new string
+entered by the user.  The following policies are defined: <ul>
+<p><li> <code>NoInsertion</code> means not to insert the string in the combo.
+<p><li> <code>AtTop</code> means to insert the string at the top of the combo box.
+<p><li> <code>AtCurrent</code> means to replace the previously selected item with
+the typed string.
+<p><li> <code>AtBottom</code> means to insert the string at the bottom of the
+combo box.
+<p><li> <code>AfterCurrent</code> means to to insert the string just after the
+previously selected item.
+<p><li> <code>BeforeCurrent</code> means to to insert the string just before the
+previously selected item.
+<p></ul>
+<p><a href="qcombobox.html#b2b3e6">activated</a>() is always emitted, of course.
+<p>If inserting the new string would cause the combo box to breach
+its content size limit, the item at the other end of the list is
+deleted.  The definition of "other end" is implementation-dependent.
 <hr><h2>Member Function Documentation</h2>
 <h3 class="fn"><a name="05e894"></a>QComboBox::QComboBox ( <a href="qwidget.html">QWidget</a> * parent=0, const char * name=0 )</h3>
 <p>Constructs a combo box widget with a parent and a name.
@@ -173,7 +185,7 @@ may only choose one of the items in the combo box.
 <p>This signal is emitted when a new item has been activated
 (selected). <em>string</em> is the activated string.
 <p>You can also use activated(int) signal, but be aware that its
-argument meaningful only for selected strings, not for typed
+argument is meaningful only for selected strings, not for typed
 strings.
 <h3 class="fn">void <a name="e5819b"></a>QComboBox::activated ( int index ) <code>[signal]</code></h3>
 <p>This signal is emitted when a new item has been activated (selected).
@@ -251,6 +263,9 @@ terminated with 0.
 <p>This is an overloaded member function, provided for convenience.  It differs from the above function only in what argument(s) it accepts.
 <h3 class="fn">void <a name="7a74b9"></a>QComboBox::insertStringList ( const <a href="qstringlist.html">QStringList</a> &amp; list, int index=-1 )</h3>
 <p>Inserts the list of strings at the index <em>index</em> in the combo box.
+<h3 class="fn">QComboBox::Policy <a name="ec4f9c"></a>QComboBox::insertionPolicy() const</h3>
+<p>Returns the current insertion policy of the combo box.
+<p>See also:  setPolicy().
 <h3 class="fn">void <a name="8a8d58"></a>QComboBox::keyPressEvent ( <a href="qkeyevent.html">QKeyEvent</a> * e ) <code>[virtual protected]</code></h3>
 <p>Handles key press events for the combo box.
 <p>In Motif style, up and down change the selected item and both enter
@@ -326,7 +341,7 @@ user presses enter.
 <p>Reimplements <a href="qwidget.html#26de4b">QWidget::setFont</a>().
 <p>Sets the font for both the combo box button and the
 combo box popup list.
-<h3 class="fn">void <a name="3ecc82"></a>QComboBox::setInsertionPolicy ( Policy policy ) <code>[virtual]</code></h3>
+<h3 class="fn">void <a name="3ecc82"></a>QComboBox::setInsertionPolicy ( <a href="qcombobox.html#Policy">Policy</a> policy ) <code>[virtual]</code></h3>
 <p>Sets the insertion policy of the combo box to <em>policy.</em>
 <p>The insertion policy governs where items typed in by the user are
 inserted in the list.  The possible values are <ul> <li> <code>NoInsertion:</code> Strings typed by the user aren't inserted anywhere <li>
@@ -390,7 +405,7 @@ box if there is any, or else 0.
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.troll.no">www.troll.no</a>):<br>
 <form method=post action="http://www.troll.no/search.cgi">
-<input type=hidden name="version" value="2.00"><nobr>
+<input type=hidden name="version" value="2.0.1"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -398,5 +413,5 @@ copyright &copy; 1995-99
 <a href="http://www.troll.no">Troll Tech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.00</div>
+<td align="right"><div align="right">Qt version 2.0.1</div>
 </table></div></address></body></html>

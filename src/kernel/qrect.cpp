@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qrect.cpp,v 2.18 1999/05/20 08:00:56 aavit Exp $
+** $Id: qrect.cpp,v 2.18.2.1 1999/07/01 06:07:53 warwick Exp $
 **
 ** Implementation of QRect class
 **
@@ -599,7 +599,8 @@ bool QRect::contains( const QRect &r, bool proper ) const
 */
 QRect& QRect::operator|=(const QRect &r)
 {
-    return *this = *this | r;
+    *this = *this | r;
+    return *this;
 }
 
 /*!
@@ -607,7 +608,8 @@ QRect& QRect::operator|=(const QRect &r)
 */
 QRect& QRect::operator&=(const QRect &r)
 {
-    return *this = *this & r;
+    *this = *this & r;
+    return *this;
 }
 
 

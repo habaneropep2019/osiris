@@ -1,0 +1,48 @@
+.TH QColorDialog 3qt "20 July 1999" "Troll Tech AS" \" -*- nroff -*-
+.\" Copyright 1992-1999 Troll Tech AS.  All rights reserved.  See the
+.\" license file included in the distribution for a complete license
+.\" statement.
+.\"
+.ad l
+.nh
+.SH NAME
+QColorDialog \- The QColorDialog provides a dialog widget for specifying colors
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <qcolordialog.h>\fR
+.PP
+Inherits QDialog.
+.PP
+.SS "Public Members"
+.in +1c
+.ti -1c
+.BI "\fB~QColorDialog\fR ()"
+.br
+.in -1c
+.SS "Static Public Members"
+.in +1c
+.ti -1c
+.BI "QColor \fBgetColor\fR ( QColor, QWidget * " "parent" "=0, const char * " "name" "=0 )"
+.br
+.in -1c
+.SH DESCRIPTION
+The QColorDialog provides a dialog widget for specifying colors.
+.PP
+This version of Qt provides the static getColor() function that pops up a modal color dialog.
+.SH MEMBER FUNCTION DOCUMENTATION
+.SH "QColorDialog::~QColorDialog ()"
+Destroys the dialog and frees allocated memory.
+.SH "QColor QColorDialog::getColor ( QColor initial, QWidget * parent=0, const char * name=0 ) \fC[static]\fR"
+Pops up a modal color dialog letting the user choose a color and returns
+that color. The color is initially set to \fIinitial.\fR Returns an
+invalid color if the user cancels
+the dialog. All colors allocated by the dialog will be deallocated
+before this function returns.
+.SH "SEE ALSO"
+.BR http://www.troll.no/qt/qcolordialog.html
+.SH COPYRIGHT
+Copyright 1992-1999 Troll Tech AS.  See the license file included in
+the distribution for a complete license statement.
+.SH AUTHOR
+Generated automatically from the source code.

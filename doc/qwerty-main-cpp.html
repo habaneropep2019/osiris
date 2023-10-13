@@ -80,7 +80,7 @@ private:
   Implementation:
 
   <pre>/****************************************************************************
-** &#36;Id&#58; qwerty.cpp,v 1.4 1999/06/17 22:01:49 ettrich Exp $
+** &#36;Id&#58; qwerty.cpp,v 1.4.2.1 1999/07/14 19:50:34 aavit Exp $
 **
 ** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
@@ -115,25 +115,25 @@ Editor::Editor( <a href="qwidget.html">QWidget</a> * parent , const char * name 
     CHECK_PTR( file );
     m-&gt;insertItem( "&amp;File", file );
 
-    file-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "&amp;New",   this, SLOT(<a href=#330>newDoc</a>()),   ALT+Key_N );
-    file-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "&amp;Open",  this, SLOT(<a href=#332>load</a>()),     ALT+Key_O );
-    file-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "&amp;Save",  this, SLOT(<a href=#333>save</a>()),     ALT+Key_S );
+    file-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "&amp;New",   this, SLOT(<a href=#237>newDoc</a>()),   ALT+Key_N );
+    file-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "&amp;Open",  this, SLOT(<a href=#239>load</a>()),     ALT+Key_O );
+    file-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "&amp;Save",  this, SLOT(<a href=#240>save</a>()),     ALT+Key_S );
 
     save_as = new <a href="qpopupmenu.html">QPopupMenu</a>();
     file-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "Save &amp;as",  save_as );
-    file-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "Add &amp;encoding", this, SLOT(<a href=#335>addEncoding</a>()) );
+    file-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "Add &amp;encoding", this, SLOT(<a href=#242>addEncoding</a>()) );
     file-&gt;<a href="qmenudata.html#5e712e">insertSeparator</a>();
-    file-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "&amp;Print", this, SLOT(<a href=#337>print</a>()),    ALT+Key_P );
+    file-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "&amp;Print", this, SLOT(<a href=#244>print</a>()),    ALT+Key_P );
     file-&gt;<a href="qmenudata.html#5e712e">insertSeparator</a>();
     file-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "&amp;Close", this, SLOT(<a href="qwidget.html#8c97df">close</a>()),ALT+Key_W );
     file-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "&amp;Quit",  qApp, SLOT(closeAllWindows()),     ALT+Key_Q );
 
-    <a href="qobject.html#c2d209">connect</a>( save_as, SIGNAL(activated(int)), this, SLOT(<a href=#334>saveAsEncoding</a>(int)) );
-    <a href=#329>rebuildCodecList</a>();
+    <a href="qobject.html#c2d209">connect</a>( save_as, SIGNAL(activated(int)), this, SLOT(<a href=#241>saveAsEncoding</a>(int)) );
+    <a href=#236>rebuildCodecList</a>();
 
     changed = FALSE;
     e = new <a href="qmultilineedit.html">QMultiLineEdit</a>( this, "editor" );
-    <a href="qobject.html#c2d209">connect</a>( e, SIGNAL( <a href=#340>textChanged</a>() ), this, SLOT( <a href=#340>textChanged</a>() ) );
+    <a href="qobject.html#c2d209">connect</a>( e, SIGNAL( <a href=#247>textChanged</a>() ), this, SLOT( <a href=#247>textChanged</a>() ) );
     e-&gt;setFont( <a href="qfont.html">QFont</a>("Helvetica", 24) );
 
     e-&gt;setFocus();
@@ -143,7 +143,7 @@ Editor::~Editor()
 {
 }
 
-void <a name="329"></a>Editor::rebuildCodecList()
+void <a name="236"></a>Editor::rebuildCodecList()
 {
     delete codecList;
     codecList = new <a href="qlist.html">QList</a>&lt;<a href="qtextcodec.html">QTextCodec</a>&gt;;
@@ -160,21 +160,21 @@ void <a name="329"></a>Editor::rebuildCodecList()
         save_as-&gt;insertItem( codecList-&gt;at(i)-&gt;name(), Codec + i );
 }
 
-void <a name="330"></a>Editor::newDoc()
+void <a name="237"></a>Editor::newDoc()
 {
     Editor *ed = new Editor;
     ed-&gt;<a href="qwidget.html#9775bb">resize</a>( 400, 400 );
     ed-&gt;<a href="qwidget.html#ccc8f7">show</a>();
 }
 
-void <a name="332"></a>Editor::load()
+void <a name="239"></a>Editor::load()
 {
     <a href="qstring.html">QString</a> fn = QFileDialog::getOpenFileName( QString::null, QString::null, this );
     if ( !fn.<a href="qstring.html#9a6d7e">isEmpty</a>() )
-        <a href=#332>load</a>( fn );
+        <a href=#239>load</a>( fn );
 }
 
-void <a name="332"></a>Editor::load( const QString&amp; fileName )
+void <a name="239"></a>Editor::load( const QString&amp; fileName )
 {
     <a href="qfile.html">QFile</a> f( fileName );
     if ( !f.<a href="qfile.html#44ae9b">open</a>( IO_ReadOnly ) )
@@ -193,7 +193,7 @@ void <a name="332"></a>Editor::load( const QString&amp; fileName )
     changed = FALSE;
 }
 
-bool <a name="333"></a>Editor::save()
+bool <a name="240"></a>Editor::save()
 {
     //storing filename (proper save) is left as an exercise...
     <a href="qstring.html">QString</a> fn = QFileDialog::getSaveFileName( QString::null, QString::null, this );
@@ -202,7 +202,7 @@ bool <a name="333"></a>Editor::save()
     return FALSE;
 }
 
-void <a name="334"></a>Editor::saveAsEncoding( int code )
+void <a name="241"></a>Editor::saveAsEncoding( int code )
 {
     //storing filename (proper save) is left as an exercise...
     <a href="qstring.html">QString</a> fn = QFileDialog::getSaveFileName( QString::null, QString::null, this );
@@ -210,14 +210,14 @@ void <a name="334"></a>Editor::saveAsEncoding( int code )
         (void) saveAs( fn, code );
 }
 
-void <a name="335"></a>Editor::addEncoding()
+void <a name="242"></a>Editor::addEncoding()
 {
     <a href="qstring.html">QString</a> fn = QFileDialog::getOpenFileName( QString::null, "*.map", this );
     if ( !fn.<a href="qstring.html#9a6d7e">isEmpty</a>() ) {
         <a href="qfile.html">QFile</a> f(fn);
         if (f.<a href="qfile.html#44ae9b">open</a>(IO_ReadOnly)) {
             if (<a href="qtextcodec.html#1b8155">QTextCodec::loadCharmap</a>(&amp;f)) {
-                <a href=#329>rebuildCodecList</a>();
+                <a href=#236>rebuildCodecList</a>();
             } else {
                 <a href="qmessagebox.html#b7fab2">QMessageBox::warning</a>(0,"Charmap error",
                     "The file did not contain a valid charmap.\n\n"
@@ -236,7 +236,7 @@ void <a name="335"></a>Editor::addEncoding()
     }
 }
 
-bool <a name="336"></a>Editor::saveAs( const QString&amp; fileName, int code )
+bool <a name="243"></a>Editor::saveAs( const QString&amp; fileName, int code )
 {
     <a href="qfile.html">QFile</a> f( fileName );
     if ( !f.<a href="qfile.html#44ae9b">open</a>( IO_WriteOnly ) ) {
@@ -261,40 +261,43 @@ bool <a name="336"></a>Editor::saveAs( const QString&amp; fileName, int code )
     return TRUE;
 }
 
-void <a name="337"></a>Editor::print()
+void <a name="244"></a>Editor::print()
 {
-    const int MARGIN = 10;
-
     if ( printer.setup(this) ) {                // opens printer dialog
+        printer.setFullPage(TRUE);              // we'll set our own margins
         <a href="qpainter.html">QPainter</a> p;
         p.<a href="qpainter.html#59f1bb">begin</a>( &amp;printer );                    // paint on printer
         p.<a href="qpainter.html#e4d6b7">setFont</a>( e-&gt;font() );
-        int yPos        = 0;                    // y position for each line
         <a href="qfontmetrics.html">QFontMetrics</a> fm = p.<a href="qpainter.html#f572a5">fontMetrics</a>();
         <a href="qpaintdevicemetrics.html">QPaintDeviceMetrics</a> metrics( &amp;printer ); // need width/height
                                                  // of printer surface
+        const int MARGIN = metrics.logicalDpiX() / 2; // half-inch margin
+        int yPos        = MARGIN;               // y position for each line
+
         for( int i = 0 ; i &lt; e-&gt;numLines() ; i++ ) {
-            if ( MARGIN + yPos &gt; metrics.<a href="qpaintdevicemetrics.html#3792df">height</a>() - MARGIN ) {
-                printer.newPage();              // no more room on this page
-                yPos = 0;                       // back to top of page
+            if ( printer.aborted() )
+                break; 
+            if ( yPos + fm.<a href="qfontmetrics.html#ebe056">lineSpacing</a>() &gt; metrics.<a href="qpaintdevicemetrics.html#3792df">height</a>() - MARGIN ) {
+                // no more room on this page
+                if ( !printer.newPage() )          // start new page
+                    break;                           // some error
+                yPos = MARGIN;                   // back to top of page
             }
-            p.<a href="qpainter.html#8a59ed">drawText</a>( MARGIN, MARGIN + yPos,
-                        metrics.<a href="qpaintdevicemetrics.html#a53b11">width</a>(), fm.<a href="qfontmetrics.html#ebe056">lineSpacing</a>(),
-                        ExpandTabs | DontClip,
-                        e-&gt;textLine( i ) );
-            yPos = yPos + fm.<a href="qfontmetrics.html#ebe056">lineSpacing</a>();
+            p.<a href="qpainter.html#8a59ed">drawText</a>( MARGIN, yPos, metrics.<a href="qpaintdevicemetrics.html#a53b11">width</a>() - 2*MARGIN,
+                        fm.<a href="qfontmetrics.html#ebe056">lineSpacing</a>(), ExpandTabs, e-&gt;textLine( i ) );
+            yPos += fm.<a href="qfontmetrics.html#ebe056">lineSpacing</a>();
         }
         p.<a href="qpainter.html#c7f9ac">end</a>();                                // send job to printer
     }
 }
 
-void <a name="338"></a>Editor::resizeEvent( <a href="qresizeevent.html">QResizeEvent</a> * )
+void <a name="245"></a>Editor::resizeEvent( <a href="qresizeevent.html">QResizeEvent</a> * )
 {
     if ( e &amp;&amp; m )
         e-&gt;setGeometry( 0, m-&gt;height(), <a href="qwidget.html#576663">width</a>(), <a href="qwidget.html#180786">height</a>() - m-&gt;height() );
 }
 
-void <a name="339"></a>Editor::closeEvent( <a href="qcloseevent.html">QCloseEvent</a> *e )
+void <a name="246"></a>Editor::closeEvent( <a href="qcloseevent.html">QCloseEvent</a> *e )
 {
     e-&gt;<a href="qcloseevent.html#47cc57">accept</a>();
 
@@ -321,7 +324,7 @@ void <a name="339"></a>Editor::closeEvent( <a href="qcloseevent.html">QCloseEven
     }
 }
 
-void <a name="340"></a>Editor::textChanged()
+void <a name="247"></a>Editor::textChanged()
 {
     changed = TRUE;
 }
@@ -363,5 +366,5 @@ int main( int argc, char **argv )
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.00</div>
+<td align="right"><div align="right">Qt version 2.0.1</div>
 </table></div></address></body></html>

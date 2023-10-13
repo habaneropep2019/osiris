@@ -1,0 +1,96 @@
+.TH QImageDrag 3qt "20 July 1999" "Troll Tech AS" \" -*- nroff -*-
+.\" Copyright 1992-1999 Troll Tech AS.  All rights reserved.  See the
+.\" license file included in the distribution for a complete license
+.\" statement.
+.\"
+.ad l
+.nh
+.SH NAME
+QImageDrag \- The QImageDrag provides a drag-and-drop object for transferring images
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <qdragobject.h>\fR
+.PP
+Inherits QDragObject.
+.PP
+.SS "Public Members"
+.in +1c
+.ti -1c
+.BI "\fBQImageDrag\fR ( QImage " "image" ", QWidget * " "dragSource" " = 0, const char * " "name" " = 0 )"
+.br
+.ti -1c
+.BI "\fBQImageDrag\fR ( QWidget * " "dragSource" " = 0, const char * " "name" " = 0 )"
+.br
+.ti -1c
+.BI "\fB~QImageDrag\fR ()"
+.br
+.ti -1c
+.BI "virtual void \fBsetImage\fR ( QImage image )"
+.br
+.ti -1c
+.BI "virtual const char* \fBformat\fR ( int i ) const"
+.br
+.ti -1c
+.BI "virtual QByteArray \fBencodedData\fR ( const char * ) const"
+.br
+.in -1c
+.SS "Static Public Members"
+.in +1c
+.ti -1c
+.BI "bool \fBcanDecode\fR ( const QMimeSource * e )"
+.br
+.ti -1c
+.BI "bool \fBdecode\fR ( const QMimeSource * " "e" ", QImage & i )"
+.br
+.ti -1c
+.BI "bool \fBdecode\fR ( const QMimeSource * " "e" ", QPixmap & i )"
+.br
+.in -1c
+.SH DESCRIPTION
+The QImageDrag provides a drag-and-drop object for transferring images.
+.PP
+Images are offered to the receiving application in multiple formats, determined by the output formats in Qt.
+.PP
+For detailed information about drag-and-drop, see the QDragObject class.
+.SH MEMBER FUNCTION DOCUMENTATION
+.SH "QImageDrag::QImageDrag ( QImage image, QWidget * dragSource = 0, const char * name = 0 )"
+Creates an image drag object and sets it to \fIimage. dragSource\fR must be the drag source, \fIname\fR is the object name.
+.SH "QImageDrag::QImageDrag ( QWidget * dragSource = 0, const char * name = 0 )"
+Creates a default text drag object. \fIdragSource\fR must be the drag source, \fIname\fR is the object name.
+.SH "QImageDrag::~QImageDrag ()"
+Destroys the image drag object and frees all allocated resources.
+.SH "bool QImageDrag::canDecode ( const QMimeSource * e ) \fC[static]\fR"
+Returns TRUE if the information in \fIe\fR can be decoded into an image.
+.PP
+See also: decode().
+.PP
+Examples:
+.(l
+desktop/desktop.cpp
+.)l
+.SH "bool QImageDrag::decode ( const QMimeSource * e, QImage & img ) \fC[static]\fR"
+Attempts to decode the dropped information in \fIe\fR into \fIimg,\fR returning TRUE if successful.
+.PP
+See also: canDecode().
+.SH "bool QImageDrag::decode ( const QMimeSource * e, QPixmap & pm ) \fC[static]\fR"
+Attempts to decode the dropped information in \fIe\fR into \fIpm,\fR returning TRUE if successful.
+.PP
+This is a convenience function that converts to \fIpm\fR via a QImage.
+.PP
+See also: canDecode().
+.PP
+Examples:
+.(l
+desktop/desktop.cpp
+.)l
+.SH "void QImageDrag::setImage ( QImage image ) \fC[virtual]\fR"
+Sets the image to be dragged.  You will need to call this if you did
+not pass the image during construction.
+.SH "SEE ALSO"
+.BR http://www.troll.no/qt/qimagedrag.html
+.SH COPYRIGHT
+Copyright 1992-1999 Troll Tech AS.  See the license file included in
+the distribution for a complete license statement.
+.SH AUTHOR
+Generated automatically from the source code.

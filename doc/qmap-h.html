@@ -19,7 +19,7 @@ remains with Troll Tech.
 <hr>
 <pre>
 /****************************************************************************
-** &#36;Id&#58; qmap.h,v 1.21 1999/06/15 13:01:26 weis Exp $
+** &#36;Id&#58; qmap.h,v 1.21.2.2 1999/07/16 06:37:18 weis Exp $
 **
 ** Definition of QMap class
 **
@@ -83,7 +83,7 @@ struct QMapNode : public QMapNodeBase
 {
     QMapNode( const K&amp; _key, const T&amp; _data ) { data = _data; key = _key; }
     QMapNode( const K&amp; _key )      { key = _key; }
-    QMapNode( const QMapNode&amp; _n ) { key = _n.key; data = _n.data; }
+    QMapNode( const QMapNode&lt;K,T&gt;&amp; _n ) { key = _n.key; data = _n.data; }
     QMapNode() { }
     T data;
     K key;
@@ -124,7 +124,7 @@ class Q_EXPORT <a href="qmapiterator.html">QMapIterator</a>
     const T&amp; data() const { return node-&gt;data; }
 
 private:
-    void inc() {
+    int inc() {
         QMapNodeBase* tmp = node;
         if ( tmp-&gt;right ) {
             tmp = tmp-&gt;right;
@@ -140,9 +140,10 @@ private:
                 tmp = y;
         }
         node = (NodePtr)tmp;
+        return 0;
     }
 
-    void dec() {
+    int dec() {
         QMapNodeBase* tmp = node;
         if (tmp-&gt;color == QMapNodeBase::Red &amp;&amp;
             tmp-&gt;parent-&gt;parent == tmp ) {
@@ -161,6 +162,7 @@ private:
             tmp = y;
         }
         node = (NodePtr)tmp;
+        return 0;
     }
 
 public:
@@ -220,7 +222,7 @@ class Q_EXPORT <a href="qmapconstiterator.html">QMapConstIterator</a>
     const T&amp; data() const { return node-&gt;data; }
 
 private:
-    void inc() {
+    int inc() {
         QMapNodeBase* tmp = node;
         if ( tmp-&gt;right ) {
             tmp = tmp-&gt;right;
@@ -236,9 +238,10 @@ private:
                 tmp = y;
         }
         node = (NodePtr)tmp;
+        return 0;
     }
 
-    void dec() {
+    int dec() {
         QMapNodeBase* tmp = node;
         if (tmp-&gt;color == QMapNodeBase::Red &amp;&amp;
             tmp-&gt;parent-&gt;parent == tmp ) {
@@ -257,6 +260,7 @@ private:
             tmp = y;
         }
         node = (NodePtr)tmp;
+        return 0;
     }
 
 public:
@@ -607,5 +611,5 @@ QDataStream&amp; operator&lt;&lt;( QDataStream&amp; s, const QMap&lt;Key,T&gt;&a
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.00</div>
+<td align="right"><div align="right">Qt version 2.0.1</div>
 </table></div></address></body></html>

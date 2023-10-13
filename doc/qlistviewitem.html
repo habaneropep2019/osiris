@@ -110,12 +110,12 @@ children:
         myChild = myChild-&gt;<a href="qlistviewitem.html#b0c1d0">nextSibling</a>();
     }
 </pre>
-<p>(No iterator class is provided for QListViewItem, as a simple
-iterator does not adequately express the choices QListViewItem
-necessitates: Would <code>++it</code> mean "next sibling", "child if
-any, else next sibling", "child if this object is open and has
-children, else next subling" or any of a few other possible
-meanings?)
+<p>Also there is now an interator class to traverse a tree of list view items.
+To iterate over all items of a list view, do:
+<p><pre>    <a href="qlistviewitemiterator.html">QListViewItemIterator</a> it( listview );
+    for ( ; it.<a href="qlistviewitemiterator.html#42e4b3">current</a>(); ++it )
+      do_something_with_the_item( it.<a href="qlistviewitemiterator.html#42e4b3">current</a>() );
+</pre>
 <p>Note that the order of the children will change when the sorting
 order changes, and is undefined if the items are not visible.  You
 can however call <a href="qlistviewitem.html#9ad434">enforceSortOrder</a>() at any time, and QListView will
@@ -439,7 +439,7 @@ the cached height.
 <p>Returns the number of pixels of width required to draw column <em>c</em>
 of listview <em>lv,</em> using the metrics <em>fm</em> without cropping.
 The list view containing this item may use
-this information, depending on the QListView::WidthMode settings
+this information, depending on the <a href="qlistview.html#WidthMode">QListView::WidthMode</a> settings
 for the column.
 <p>The default implementation returns the width of the bounding
 rectangle of the text of column <em>c.</em>
@@ -455,7 +455,7 @@ call to widthChanged() is required.
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.troll.no">www.troll.no</a>):<br>
 <form method=post action="http://www.troll.no/search.cgi">
-<input type=hidden name="version" value="2.00"><nobr>
+<input type=hidden name="version" value="2.0.1"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -463,5 +463,5 @@ copyright &copy; 1995-99
 <a href="http://www.troll.no">Troll Tech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.00</div>
+<td align="right"><div align="right">Qt version 2.0.1</div>
 </table></div></address></body></html>

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: metal.cpp,v 1.5 1999/06/23 15:26:09 reggie Exp $
+** $Id: metal.cpp,v 1.5.2.2 1999/07/13 20:00:23 warwick Exp $
 **
 ** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qabstractlayout.cpp,v 2.60 1999/06/21 23:50:13 agulbra Exp $
+** $Id: qabstractlayout.cpp,v 2.60.2.5 1999/07/08 10:57:03 paul Exp $
 **
 ** Implementation of the abstract layout base class
 **
@@ -347,7 +347,7 @@ static QSize smartMaxSize( QWidget *w, int align = 0 )
 	if ( !w->sizePolicy().mayGrowVertically() )
 	    s.setHeight( w->sizeHint().height() );
 
-    //s = s.expandedTo( w->minimumSize() ); //### ???
+    s = s.expandedTo( w->minimumSize() );
 
     if (align & HorAlign )
 	s.setWidth( QWIDGETSIZE_MAX );
@@ -397,7 +397,8 @@ void QWidgetItem::setGeometry( const QRect &r )
     else if ( !(align & Qt::AlignTop) )
 	y = y + ( r.height() - s.height() ) / 2;
 
-    wid->setGeometry( x, y, s.width(), s.height() );
+    if ( !wid->testWState( QWidget::WState_ForceHide ) )
+	wid->setGeometry( x, y, s.width(), s.height() );
 }
 
 
@@ -600,7 +601,8 @@ bool QWidgetItem::isEmpty() const
   support children whose height depend on their widths, implement
   hasHeightForWidth() and heightForWidth().
   See the <a href="customlayout.html">custom layout page</a> for an in-depth
-  description.
+  description and the <a href="layout.html">layout overview page</a>
+  for an introduction.
 
   Geometry management stops when the layout manager is deleted.
 */
@@ -648,6 +650,7 @@ QLayout::QLayout( QWidget *parent, int border, int space, const char *name )
 	insideSpacing = border;
     else
 	insideSpacing = space;
+    installEventFilter( this );//###binary compatibility.
 }
 
 
@@ -669,6 +672,7 @@ QLayout::QLayout( QLayout *parentLayout, int space, const char *name )
     topLevel = FALSE;
     insideSpacing = space < 0 ? parentLayout->insideSpacing : space;
     parentLayout->addItem( this );
+    installEventFilter( this );//###binary compatibility.
 }
 
 
@@ -687,6 +691,7 @@ QLayout::QLayout( int space, const char *name )
     menubar = 0;
     topLevel	 = FALSE;
     insideSpacing = space;
+    installEventFilter( this );//###binary compatibility.
 }
 
 
@@ -888,11 +893,28 @@ static bool removeWidget( QLayoutItem *lay, QWidget *w )
 }
 /*!
   Performs child widget layout when the parent widget is resized.
-  Also handles removal of widgets.
+  Also handles removal of widgets and child layouts.
 */
 
 bool QLayout::eventFilter( QObject *o, QEvent *e )
 {
+    if ( o == this && e->type() == QEvent::ChildRemoved ) {
+	//we cannot implement childEvent() or event() because of
+	//###binary compatibility.
+	QChildEvent *c = (QChildEvent*)e;
+	QLayoutIterator it = iterator();
+	QLayoutItem *item;
+	while ( (item = it.current() ) ) {
+	    if ( item == (QLayout*)c->child() ) {
+		it.takeCurrent();
+		invalidate();
+		return FALSE;
+	    }
+	    ++it;
+	}
+	return FALSE;
+    }
+
     if ( !o->isWidgetType() )
 	return FALSE;
 
@@ -1551,5 +1573,6 @@ void QLayout::setAutoAdd( bool b )
 {
     autoNewChild = b;
 }
+
 
 

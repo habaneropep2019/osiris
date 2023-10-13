@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qpaintdevice_x11.cpp,v 2.34 1999/06/24 20:13:37 warwick Exp $
+** $Id: qpaintdevice_x11.cpp,v 2.34.2.1 1999/07/01 14:31:38 warwick Exp $
 **
 ** Implementation of QPaintDevice class for X11
 **
@@ -236,8 +236,11 @@ int QPaintDevice::x11AppDpiX()
     if ( !remember ) {
 	Display *dpy = x11AppDisplay();
 	int scr = x11AppScreen();
-	if ( dpy )
-	    remember = DisplayWidth(dpy,scr) * 254 / DisplayWidthMM(dpy,scr) / 10;
+	if ( dpy ) {
+	    remember =
+		(DisplayWidth(dpy,scr) * 254 + DisplayWidthMM(dpy,scr)*5)
+		       / (DisplayWidthMM(dpy,scr)*10);
+	}
     }
     return remember;
 }
@@ -256,7 +259,9 @@ int QPaintDevice::x11AppDpiY()
 	Display *dpy = x11AppDisplay();
 	int scr = x11AppScreen();
 	if ( dpy )
-	    remember = DisplayHeight(dpy,scr) * 254 / DisplayHeightMM(dpy,scr) / 10;
+	    remember =
+		(DisplayHeight(dpy,scr) * 254 + DisplayHeightMM(dpy,scr)*5)
+		       / (DisplayHeightMM(dpy,scr)*10);
     }
     return remember;
 }

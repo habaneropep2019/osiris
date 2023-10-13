@@ -1,0 +1,130 @@
+.TH QWhatsThis 3qt "20 July 1999" "Troll Tech AS" \" -*- nroff -*-
+.\" Copyright 1992-1999 Troll Tech AS.  All rights reserved.  See the
+.\" license file included in the distribution for a complete license
+.\" statement.
+.\"
+.ad l
+.nh
+.SH NAME
+QWhatsThis \- Simple description of any widget, e.g. answering the question "what's this?"
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <qwhatsthis.h>\fR
+.PP
+Inherits Qt.
+.PP
+.SS "Public Members"
+.in +1c
+.ti -1c
+.BI "\fBQWhatsThis\fR ( QWidget * )"
+.br
+.ti -1c
+.BI "virtual \fB~QWhatsThis\fR ()"
+.br
+.ti -1c
+.BI "virtual QString \fBtext\fR ( const QPoint & )"
+.br
+.in -1c
+.SS "Static Public Members"
+.in +1c
+.ti -1c
+.BI "void \fBadd\fR ( QWidget *, const QString & )"
+.br
+.ti -1c
+.BI "void \fBremove\fR ( QWidget * )"
+.br
+.ti -1c
+.BI "QString \fBtextFor\fR ( QWidget *, const QPoint & pos = QPoint ())"
+.br
+.ti -1c
+.BI "QToolButton* \fBwhatsThisButton\fR ( QWidget * parent )"
+.br
+.ti -1c
+.BI "void \fBenterWhatsThisMode\fR ()"
+.br
+.ti -1c
+.BI "bool \fBinWhatsThisMode\fR ()"
+.br
+.ti -1c
+.BI "void \fBleaveWhatsThisMode\fR ( const QString & = QString::null, const QPoint & pos = QCursor::pos ())"
+.br
+.in -1c
+.SH DESCRIPTION
+The QWhatsThis class provides a simple description of any widget, e.g. answering the question "what's this?"
+.PP
+What's This help lies between tool tips and fully-blown online help systems: 
+.TP
+Tool Tips - flyweight help, extremely brief, entirely integrated in the user interface. 
+.TP
+What's This? - also lightweight, but can encompass a three-paragraph explanation. 
+.TP
+Online Help - can encompass any amount of information, but is typically a little slower to call up, a little separated from the user's work, and often users feel that using online help is a digression from their real task. 
+.PP
+QWhatsThis, then, offers a single window with a single explanatory text, which pops up quickly when the user asks "what's this?", and goes away as soon as the user does something else. There are two ways to make QWhatsThis pop up: Click a "What's This?" button and then click on some other widget to get help for that other widget, or press Shift-F1 to get help for the widget that has keyboard focus. But you can also connect a "what's this" entry of a help menu (with Shift-F1 as accelerator) to the whatsThis() slot of a QMainWindow, then the focus widget does not have a special meaning.
+.PP
+QWhatsThis provides functions to add() and remove() What's This help for a widget, and it provides a function to create a What's This button suitable for typical tool bars.
+.PP
+<img src="whatsthis.png" width="376" height="239">
+.PP
+Futhermore, you can create a dedicated QWhatsThis object for a special widget. By subclassing and reimplementing QWhatsThis::text() it is possible, to have different explanatory texts depending on the position of the mouse click.
+.PP
+If you widget needs even more control, see QWidget::customWhatsThis().
+.PP
+Other Qt classes support What's This help directly. Keyboard accelerators, for example, can also provide explanatory text with access through both they acceleration key itself or an attached menu item. See QAccel::setWhatsThis() for details.
+.PP
+The explanatory text can be both rich text or plain text. If you specify a rich text formatted string, it will be rendered using the default stylesheet. This makes it also possible to embed images. See QStyleSheet::defaultSheet() for details.
+.PP
+See also: QToolTip.
+.SH MEMBER FUNCTION DOCUMENTATION
+.SH "QWhatsThis::QWhatsThis ( QWidget * widget )"
+Constructs a dynamic What's This object for \fIwidget.\fR
+.SH "QWhatsThis::~QWhatsThis () \fC[virtual]\fR"
+Destroys the object and frees any allocated resources.
+.SH "void QWhatsThis::add ( QWidget * widget, const QString & text ) \fC[static]\fR"
+Adds \fItext\fR as What's This help for \fIwidget.\fR If the text is rich text formatted, it will be rendered with the default stylesheet QStyleSheet::defaultSheet().
+.PP
+See also: remove().
+.SH "void QWhatsThis::enterWhatsThisMode () \fC[static]\fR"
+Enters What's This? question mode and returns immediately.
+.PP
+What's This will install a special cursor and take over mouse input until the user click somewhere, then show any help available and switch out of What's This mode. Finally, What's This removes its cursor and help window and restores ordinary event processing. At this point the left mouse button is not pressed.
+.PP
+See also: inWhatsThisMode() and leaveWhatsThisMode().
+.SH "bool QWhatsThis::inWhatsThisMode () \fC[static]\fR"
+Returns whether the application is in What's This mode.
+.PP
+See also: enterWhatsThisMode() and leaveWhatsThisMode().
+.SH "void QWhatsThis::leaveWhatsThisMode ( const QString & text = QString::null, const QPoint & pos = QCursor::pos ()) \fC[static]\fR"
+Leaves What's This? question mode
+.PP
+This function is used internally by widgets that support QWidget::customWhatsThis(), applications usually never have to call it. An example for such a kind of widget is QPopupMenu: Menus still work normally in What's This mode, but provide help texts for single menu items instead.
+.PP
+If \fItext\fR is not a null string, then a What's This help window is displayed at the global position \fIpos\fR of the screen.
+.PP
+See also: inWhatsThisMode() and enterWhatsThisMode().
+.SH "void QWhatsThis::remove ( QWidget * widget ) \fC[static]\fR"
+Removes the What's This help for \fIwidget.\fR
+.PP
+See also: add().
+.SH "QString QWhatsThis::text ( const QPoint & ) \fC[virtual]\fR"
+This virtual functions returns the text for position \fIp\fR in the widget this What's This object documents. If there is no What's This text for a position, QString::null may be returned.
+.PP
+The default implementation returns QString::null.
+.PP
+See also: qml().
+.SH "QString QWhatsThis::textFor ( QWidget * widget, const QPoint & pos = QPoint ()) \fC[static]\fR"
+Returns the text for \fIwidget,\fR or a null string if there isn't any What's This help for \fIwidget.\fR
+.PP
+See also: add().
+.SH "QToolButton * QWhatsThis::whatsThisButton ( QWidget * parent ) \fC[static]\fR"
+Returns a pointer to a specially configured QToolButton, suitable for use to enter What's This mode.
+.PP
+See also:  QToolButton.
+.SH "SEE ALSO"
+.BR http://www.troll.no/qt/qwhatsthis.html
+.SH COPYRIGHT
+Copyright 1992-1999 Troll Tech AS.  See the license file included in
+the distribution for a complete license statement.
+.SH AUTHOR
+Generated automatically from the source code.

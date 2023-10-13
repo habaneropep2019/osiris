@@ -19,7 +19,7 @@ remains with Troll Tech.
 <hr>
 <pre>
 /****************************************************************************
-** &#36;Id&#58; qvaluelist.h,v 1.24 1999/06/22 20:40:27 agulbra Exp $
+** &#36;Id&#58; qvaluelist.h,v 1.24.2.2 1999/07/13 19:59:14 warwick Exp $
 **
 ** Definition of QValueList class
 **
@@ -186,7 +186,7 @@ public:
      * Functions
      */
     QValueListPrivate() { node = new Node; node-&gt;next = node-&gt;prev = node; nodes = 0; }
-    QValueListPrivate( const QValueListPrivate&amp; _p ) : QShared() {
+    QValueListPrivate( const QValueListPrivate&lt;T&gt;&amp; _p ) : QShared() {
         node = new Node; node-&gt;next = node-&gt;prev = node; nodes = 0;
         Iterator b( _p.node-&gt;next );
         Iterator e( _p.node );
@@ -317,7 +317,7 @@ public:
      * API
      */
     QValueList() { sh = new QValueListPrivate&lt;T&gt;; }
-    QValueList( const QValueList&amp; l ) { sh = l.sh; sh-&gt;ref(); }
+    QValueList( const QValueList&lt;T&gt;&amp; l ) { sh = l.sh; sh-&gt;ref(); }
     ~QValueList() { if ( sh-&gt;deref() ) delete sh; }
 
     QValueList&lt;T&gt;&amp; operator= ( const QValueList&lt;T&gt;&amp; l )
@@ -438,7 +438,7 @@ template&lt;class T&gt;
 QDataStream&amp; operator&lt;&lt;( QDataStream&amp; s, const QValueList&lt;T&gt;&amp; l )
 {
     s &lt;&lt; l.count();
-    QValueList&lt;T&gt;::ConstIterator it = l.begin();
+    QValueListConstIterator&lt;T&gt; it = l.begin();
     for( ; it != l.end(); ++it )
         s &lt;&lt; *it;
     return s;
@@ -450,5 +450,5 @@ QDataStream&amp; operator&lt;&lt;( QDataStream&amp; s, const QValueList&lt;T&gt;
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.00</div>
+<td align="right"><div align="right">Qt version 2.0.1</div>
 </table></div></address></body></html>

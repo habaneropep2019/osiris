@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qmenubar.cpp,v 2.97 1999/06/23 17:53:27 ettrich Exp $
+** $Id: qmenubar.cpp,v 2.97.2.2 1999/07/08 02:35:03 warwick Exp $
 **
 ** Implementation of QMenuBar class
 **
@@ -340,8 +340,8 @@ bool QMenuBar::eventFilter( QObject *object, QEvent *event )
 	     event->type() == QEvent::KeyRelease &&
 	     (((QKeyEvent *)event)->key() == Key_Alt ||
 	      ((QKeyEvent *)event)->key() == Key_Meta) ) {
-	    actItem = 0;
-	    setFocus();
+	    windowsaltactive = FALSE; // trigger update
+	    setWindowsAltMode( TRUE, 0 );
 	    if ( object->parent() )
 		object->removeEventFilter( this );
 	    QWidget * tlw = ((QWidget *)object)->topLevelWidget();
@@ -604,7 +604,10 @@ int QMenuBar::calculateRects( int max_width )
 	    w = mi->pixmap()->width();
 	    h = mi->pixmap()->height();
 	} else if ( !mi->text().isNull() ) {	// text item
-	    w = fm.width(mi->text()) + 2*motifItemHMargin;
+	    w = fm.width(mi->text())
+		    - fm.minLeftBearing()
+		    - fm.minRightBearing()
+		    + 2*motifItemHMargin;
 	    h = fm.height() + motifItemVMargin;
 	} else if ( mi->isSeparator() ) {	// separator item
 	    separator = i;
@@ -1103,8 +1106,6 @@ void QMenuBar::setWindowsAltMode( bool enable, int index )
 		setUpdatesEnabled( TRUE );
 	    }
 	}
-	if ( index == actItem ) // work around setActItem overoptimization
-	    actItem = -1;
 	setActItem( index, FALSE );
     } else {
 	if ( windowsaltactive ) {
@@ -1115,8 +1116,6 @@ void QMenuBar::setWindowsAltMode( bool enable, int index )
 	    }
 	    windowsaltactive = 0;
 	}
-	if ( index == actItem ) // work around setActItem overoptimization
-	    actItem = -1;
 	setActItem( index, FALSE );
     }
 }
@@ -1173,9 +1172,8 @@ bool QMenuBar::customWhatsThis() const
 
 /*!\reimp
  */
-void QMenuBar::focusOutEvent( QFocusEvent * e )
+void QMenuBar::focusOutEvent( QFocusEvent * )
 {
     if ( windowsaltactive )
 	setWindowsAltMode( FALSE, -1 );
-    QWidget::focusOutEvent( e );
 }

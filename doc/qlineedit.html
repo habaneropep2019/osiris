@@ -31,9 +31,9 @@ Inherits <a href="qwidget.html">QWidget</a>.
 <li><span class="fn">virtual void <a href="#4c9286"><b>setMaxLength</b></a> ( int ) </span>
 <li><span class="fn">virtual void <a href="#ec249f"><b>setFrame</b></a> ( bool ) </span>
 <li><span class="fn">bool <a href="#6be767"><b>frame</b></a> () const</span>
-<li><span class="fn">enum <b>EchoMode</b> { Normal, NoEcho, Password }</span>
+<li><span class="fn">enum <a href="#EchoMode"><b>EchoMode</b></a> { Normal, NoEcho, Password }</span>
 <li><span class="fn">virtual void <a href="#36de17"><b>setEchoMode</b></a> ( EchoMode ) </span>
-<li><span class="fn">EchoMode <b>echoMode</b> () const</span>
+<li><span class="fn">EchoMode <a href="#bc703f"><b>echoMode</b></a> () const</span>
 <li><span class="fn">virtual void <a href="#5060f7"><b>setValidator</b></a> ( const QValidator * ) </span>
 <li><span class="fn">const QValidator* <a href="#e137ba"><b>validator</b></a> () const</span>
 <li><span class="fn">virtual QSize <a href="#2dc45e"><b>sizeHint</b></a> () const</span>
@@ -103,12 +103,6 @@ Windows/Motif style guides, you can turn off the frame by calling
 <p>It draws the text using its own <a href="qcolorgroup.html">color group:</a> <a href="qcolorgroup.html#34dd3f">colorGroup().text()</a> on
 <a href="qcolorgroup.html#57dd1f">colorGroup().base().</a>  The cursor
 and frame use other colors from same color group, of course.
-<p>QLineEdit can display the content of itself in three ways, depending
-on the current <a href="qlineedit.html#36de17">echo mode.</a> The echo
-modes available are: <ul> <li> <code>Normal</code> - display characters as
-they are entered.  This is the default. <li> <code>NoEcho</code> - do not
-display anything. <li> <code>Password</code> - display asterisks instead of
-the characters actually entered. </ul>
 <p>The default key bindings are described in <a href="qlineedit.html#b20580">keyPressEvent</a>(); they cannot
 be customized except by inheriting the class.
 <p><img src=qlined-m.png> <img src=qlined-w.png>
@@ -119,6 +113,17 @@ be customized except by inheriting the class.
  <a href="layout-layout-cpp.html#QLineEdit">layout/layout.cpp</a>
  <a href="popup-popup-cpp.html#QLineEdit">popup/popup.cpp</a>
 
+<hr><h2>Member Type Documentation</h2>
+<h3 class="fn"><a name="EchoMode">QLineEdit::EchoMode</a></h3>
+This enum type describes the ways in which QLineEdit can display its
+contents.  The currently defined values are: <ul>
+<p><li> <code>Normal</code> - display characters as they are entered.  This is
+the default.
+<p><li> <code>NoEcho</code> - do not display anything.
+<p><li> <code>Password</code> - display asterisks instead of the characters
+actually entered.
+<p></ul>
+<p>See also:  <a href="qlineedit.html#36de17">setEchoMode</a>(), <a href="qlineedit.html#bc703f">echoMode</a>() and <a href="qmultilineedit.html#EchoMode">QMultiLineEdit::EchoMode</a>.
 <hr><h2>Member Function Documentation</h2>
 <h3 class="fn"><a name="b1fc10"></a>QLineEdit::QLineEdit ( <a href="qwidget.html">QWidget</a> * parent, const char * name=0 )</h3>
 <p>Constructs a line editor with an empty edit buffer.
@@ -185,9 +190,12 @@ be removed.
 current position.
 <h3 class="fn"><a href="qstring.html">QString</a> <a name="7a0137"></a>QLineEdit::displayText () const</h3>
 <p>Returns the text that's currently displayed.  This is normally
-the same as <a href="qlineedit.html#bc5402">text</a>(), but can be e.g. "*****" if EchoMode is Password or
+the same as <a href="qlineedit.html#bc5402">text</a>(), but can be e.g. "*****" if <a href="qlineedit.html#EchoMode">EchoMode</a> is Password or
 "" if it is NoEcho.
-<p>See also:  <a href="qlineedit.html#36de17">setEchoMode</a>() and <a href="qlineedit.html#bc5402">text</a>().
+<p>See also:  <a href="qlineedit.html#36de17">setEchoMode</a>(), <a href="qlineedit.html#bc5402">text</a>() and <a href="qlineedit.html#EchoMode">EchoMode</a>.
+<h3 class="fn">QLineEdit::EchoMode <a name="bc703f"></a>QLineEdit::echoMode() const</h3>
+<p>Returns the current echo mode of the line edit.
+<p>See also:  <a href="qlineedit.html#36de17">setEchoMode</a>() and <a href="qlineedit.html#EchoMode">EchoMode</a>.
 <h3 class="fn">bool <a name="eae052"></a>QLineEdit::edited () const</h3>
 <p>Returns the edited flag of the line edit.  If this returns FALSE,
 the line edit's contents have not been changed since the construction
@@ -309,7 +317,7 @@ Qt::AlignRight and Qt::AlignCenter.
 <p>Set the cursor position for this line edit to <em>newPos</em> and
 repaint accordingly.
 <p>See also:  <a href="qlineedit.html#bff9ef">cursorPosition</a>().
-<h3 class="fn">void <a name="36de17"></a>QLineEdit::setEchoMode ( EchoMode mode ) <code>[virtual]</code></h3>
+<h3 class="fn">void <a name="36de17"></a>QLineEdit::setEchoMode ( <a href="qlineedit.html#EchoMode">EchoMode</a> mode ) <code>[virtual]</code></h3>
 <p>Sets the echo mode of the line edit widget.
 <p>The echo modes available are: <ul> <li> <code>Normal</code> - display
 characters as they are entered.  This is the default. <li> <code>NoEcho</code>
@@ -317,7 +325,7 @@ characters as they are entered.  This is the default. <li> <code>NoEcho</code>
 instead of the characters actually entered. </ul>
 <p>It is always possible to cut and paste any marked text; only the
 widget's own display is affected.
-<p>See also:  <a href="qlineedit.html#bc703f">echoMode</a>().
+<p>See also:  <a href="qlineedit.html#bc703f">echoMode</a>(), <a href="qlineedit.html#EchoMode">EchoMode</a> and <a href="qlineedit.html#7a0137">displayText</a>().
 <h3 class="fn">void <a name="988b47"></a>QLineEdit::setEdited ( bool on )</h3>
 <p>Sets the edited flag of this line edit to <em>on.</em>  The edited flag
 is never read by QLineEdit, and is changed to TRUE whenever the user
@@ -388,7 +396,7 @@ validator has been set.
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.troll.no">www.troll.no</a>):<br>
 <form method=post action="http://www.troll.no/search.cgi">
-<input type=hidden name="version" value="2.00"><nobr>
+<input type=hidden name="version" value="2.0.1"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -396,5 +404,5 @@ copyright &copy; 1995-99
 <a href="http://www.troll.no">Troll Tech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.00</div>
+<td align="right"><div align="right">Qt version 2.0.1</div>
 </table></div></address></body></html>

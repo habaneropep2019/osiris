@@ -350,7 +350,7 @@ void <a name="92"></a>Graph::paintPie(<a href="qpaintevent.html">QPaintEvent</a>
     pm.<a name="resize"></a><a href="qpixmap.html#9792fe">resize</a>(<a name="width"></a><a href="qwidget.html#576663">width</a>(),<a href="qwidget.html#180786">height</a>());
     pm.<a name="fill"></a><a href="qpixmap.html#e584bd">fill</a>(<a name="backgroundColor"></a><a href="qwidget.html#370ea4">backgroundColor</a>());
     <a href="qpainter.html">QPainter</a> p(&amp;pm);
-    p.<a name="setFont"></a><a href="qpainter.html#e4d6b7">setFont</a>(<a name="font"></a><a href="qwidget.html#605f4c">font</a>());
+    p.<a name="setFont"></a><a href="qpainter.html#e4d6b7">setFont</a>(<a name="font"></a><a href="qwidget.html#3a7237">font</a>());
 
     p.<a href="qpainter.html#2ccac9">setClipRect</a>(event-&gt;<a href="qpaintevent.html#6177d5">rect</a>());
 
@@ -512,7 +512,7 @@ int <a name="79"></a>Grapher::nCols() const
 
     const char* fontfamily = arg("FONTFAMILY");
     const char* fontsize = arg("FONTSIZE");
-    int ptsize = fontsize ? atoi(fontsize) : graph-&gt;<a href="qwidget.html#605f4c">font</a>().pointSize();
+    int ptsize = fontsize ? atoi(fontsize) : graph-&gt;<a href="qwidget.html#3a7237">font</a>().pointSize();
     if (fontfamily) graph-&gt;<a name="setFont"></a><a href="qwidget.html#dde00b">setFont</a>(<a name="QFont"></a><a href="qfont.html">QFont</a>(fontfamily, ptsize));
 
     <a name="connect"></a><a href="qobject.html#c2d209">connect</a>(graph, SIGNAL(<a name="aboutPlugin"></a><a href="#83">aboutPlugin</a>()), this, SLOT(<a href=#83>aboutPlugin</a>()));
@@ -679,5 +679,5 @@ public:
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.00</div>
+<td align="right"><div align="right">Qt version 2.0.1</div>
 </table></div></address></body></html>

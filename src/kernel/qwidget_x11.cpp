@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qwidget_x11.cpp,v 2.235 1999/06/24 20:13:39 warwick Exp $
+** $Id: qwidget_x11.cpp,v 2.235.2.6 1999/07/19 17:23:21 warwick Exp $
 **
 ** Implementation of QWidget and QWindow classes for X11
 **
@@ -421,7 +421,7 @@ void QWidget::destroy( bool destroyWindow, bool destroySubWindows )
   parent (\a p).
 
   If \a showIt is TRUE, show() is called once the widget has been
-  reparent.
+  reparented.
 
   If the new parent widget is in a different top-level widget, the
   reparented widget and its children are appended to the end of the
@@ -445,6 +445,12 @@ void QWidget::reparent( QWidget *parent, WFlags f, const QPoint &p,
 {
     extern void qPRCreate( const QWidget *, Window );
     Display *dpy = x11Display();
+    QCursor oldcurs;
+    bool setcurs=testWState(WState_OwnCursor);
+    if ( setcurs ) {
+	oldcurs = cursor();
+	unsetCursor();
+    }
     WId old_winid = winid;
     if ( testWFlags(WType_Desktop) )
 	old_winid = 0;
@@ -498,6 +504,10 @@ void QWidget::reparent( QWidget *parent, WFlags f, const QPoint &p,
 	show();
     if ( old_winid )
 	qt_XDestroyWindow( this, dpy, old_winid );
+
+    if ( setcurs ) {
+	setCursor(oldcurs);
+    }
 
     QObjectList	*accelerators = queryList( "QAccel" );
     QObjectListIt it( *accelerators );
@@ -560,7 +570,7 @@ QPoint QWidget::mapFromGlobal( const QPoint &pos ) const
   sets the IME composition window in Far East Asian language input systems.
 
   In the X11 version of Qt, if \a text is TRUE,
-  this method sets the XIMP "spot" point for
+  this method sets the XIM "spot" point for
   complex language input handling.
 */
 void QWidget::setMicroFocusHint(int x, int y, int /*width*/, int height, bool text)
@@ -1090,7 +1100,7 @@ void QWidget::update()
 void QWidget::update( int x, int y, int w, int h )
 {
     if ( w && h &&
-	 (widget_flags & (WState_Visible|WState_BlockUpdates)) == WState_Visible ) {
+	 (widget_state & (WState_Visible|WState_BlockUpdates)) == WState_Visible ) {
 	if ( w < 0 )
 	    w = crect.width()  - x;
 	if ( h < 0 )
@@ -1278,10 +1288,19 @@ void QWidget::showMaximized()
 	int sw = DisplayWidth(dpy,scr);
 	int sh = DisplayHeight(dpy,scr);
 	createTLExtra();
-	if ( extra->topextra->normalGeometry.width() < 0 ) {
+	if ( extra->topextra->normalGeometry.width() < 0 )
 	    extra->topextra->normalGeometry = geometry();
-	    setGeometry( 0, 0, sw, sh );
+	if ( !extra->topextra->parentWinId ) {
+	    setGeometry(0, 0, sw, sh );
+	    show();
+	    XEvent ev;
+	    while (!XCheckTypedWindowEvent( qt_xdisplay(), winId(), ReparentNotify, &ev ))
+		;
+	    qApp->x11ProcessEvent( &ev );
 	}
+	sw -= frameGeometry().width() - width();
+	sh -= frameGeometry().height() - height();
+	setGeometry( 0, 0, sw, sh );
 	show();
     }
 }
@@ -1701,6 +1720,8 @@ void QWidget::scroll( int dx, int dy )
 */
 void QWidget::scroll( int dx, int dy, const QRect& r )
 {
+    if ( testWState( WState_BlockUpdates ) )
+	return;
     bool valid_rect = r.isValid();
     QRect sr = valid_rect?r:rect();
     int x1, y1, x2, y2, w=sr.width(), h=sr.height();

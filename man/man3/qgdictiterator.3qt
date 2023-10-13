@@ -1,0 +1,86 @@
+.TH QGDictIterator 3qt "20 July 1999" "Troll Tech AS" \" -*- nroff -*-
+.\" Copyright 1992-1999 Troll Tech AS.  All rights reserved.  See the
+.\" license file included in the distribution for a complete license
+.\" statement.
+.\"
+.ad l
+.nh
+.SH NAME
+QGDictIterator \- An internal class for implementing QDictIterator and QIntDictIterator
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <qgdict.h>\fR
+.PP
+Inherited by QAsciiDictIterator, QDictIterator, QIntDictIterator and QPtrDictIterator.
+.PP
+.SS "Public Members"
+.in +1c
+.ti -1c
+.BI "\fBQGDictIterator\fR ( const QGDict & )"
+.br
+.ti -1c
+.BI "\fBQGDictIterator\fR ( const QGDictIterator & )"
+.br
+.ti -1c
+.BI "QGDictIterator& \fBoperator=\fR ( const QGDictIterator & )"
+.br
+.ti -1c
+.BI "\fB~QGDictIterator\fR ()"
+.br
+.ti -1c
+.BI "QCollection::Item \fBtoFirst\fR ()"
+.br
+.ti -1c
+.BI "QCollection::Item \fBget\fR () const"
+.br
+.ti -1c
+.BI "QString \fBgetKeyString\fR () const"
+.br
+.ti -1c
+.BI "const char* \fBgetKeyAscii\fR () const"
+.br
+.ti -1c
+.BI "long \fBgetKeyInt\fR () const"
+.br
+.ti -1c
+.BI "void* \fBgetKeyPtr\fR () const"
+.br
+.ti -1c
+.BI "QCollection::Item \fBoperator\fR ()()"
+.br
+.ti -1c
+.BI "QCollection::Item \fBoperator++\fR ()"
+.br
+.ti -1c
+.BI "QCollection::Item \fBoperator+=\fR ( uint )"
+.br
+.in -1c
+.SH DESCRIPTION
+An internal class for implementing QDictIterator and QIntDictIterator.
+.PP
+QGDictIterator is a strictly internal class that does the heavy work for QDictIterator and QIntDictIterator.
+.SH MEMBER FUNCTION DOCUMENTATION
+.SH "QGDictIterator::QGDictIterator ( const QGDict & d )"
+For internal use only.
+.SH "QGDictIterator::QGDictIterator ( const QGDictIterator & it )"
+For internal use only.
+.SH "QGDictIterator::~QGDictIterator ()"
+For internal use only.
+.SH "QCollection::Item QGDictIterator::operator()()"
+For internal use only.
+.SH "QCollection::Item QGDictIterator::operator++()"
+For internal use only.
+.SH "QCollection::Item QGDictIterator::operator+=( uint jumps )"
+For internal use only.
+.SH "QGDictIterator & QGDictIterator::operator= ( const QGDictIterator & it )"
+For internal use only.
+.SH "QCollection::Item QGDictIterator::toFirst()"
+For internal use only.
+.SH "SEE ALSO"
+.BR http://www.troll.no/qt/qgdictiterator.html
+.SH COPYRIGHT
+Copyright 1992-1999 Troll Tech AS.  See the license file included in
+the distribution for a complete license statement.
+.SH AUTHOR
+Generated automatically from the source code.

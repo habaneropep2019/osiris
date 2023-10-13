@@ -113,7 +113,7 @@ MyWidget::MyWidget( <a href="qwidget.html">QWidget</a>* parent, const char* name
     (void)new <a href="qradiobutton.html">QRadioButton</a>( <a href="qobject.html#44b4c1">tr</a>( "Isometric" ), gbox ); 
     (void)new <a href="qradiobutton.html">QRadioButton</a>( <a href="qobject.html#44b4c1">tr</a>( "Oblique" ), gbox ); 
 
-    <a href=#248>initChoices</a>(central); 
+    <a href=#155>initChoices</a>(central); 
 }
 
 static const char* choices[] = {
@@ -123,7 +123,7 @@ static const char* choices[] = {
     0
 }; 
 
-void <a name="248"></a>MyWidget::initChoices(<a href="qwidget.html">QWidget</a>* parent)
+void <a name="155"></a>MyWidget::initChoices(<a href="qwidget.html">QWidget</a>* parent)
 {
     <a href="qlistbox.html">QListBox</a>* lb = new <a href="qlistbox.html">QListBox</a>( parent ); 
     for ( int i = 0; choices[i]; i++ )
@@ -194,5 +194,5 @@ main( int argc, char** argv )
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.00</div>
+<td align="right"><div align="right">Qt version 2.0.1</div>
 </table></div></address></body></html>

@@ -113,7 +113,7 @@ Biff::Biff( <a href="qwidget.html">QWidget</a> *parent, const char *name )
     lastModified = fi.<a href="qfileinfo.html#901050">lastModified</a>();
 }
 
-void <a name="401"></a>Biff::timerEvent( <a href="qtimerevent.html">QTimerEvent</a> * )
+void <a name="315"></a>Biff::timerEvent( <a href="qtimerevent.html">QTimerEvent</a> * )
 {
     <a href="qfileinfo.html">QFileInfo</a> fi( mailbox );
     bool newState = ( fi.<a href="qfileinfo.html#901050">lastModified</a>() != lastModified &amp;&amp;
@@ -126,7 +126,7 @@ void <a name="401"></a>Biff::timerEvent( <a href="qtimerevent.html">QTimerEvent<
     }
 }
 
-void <a name="402"></a>Biff::paintEvent( <a href="qpaintevent.html">QPaintEvent</a> * )
+void <a name="316"></a>Biff::paintEvent( <a href="qpaintevent.html">QPaintEvent</a> * )
 {
     if ( gotMail )
         <a href="qpaintdevice.html#058006">bitBlt</a>( this, 0, 0, &amp;hasNewMail );
@@ -134,7 +134,7 @@ void <a name="402"></a>Biff::paintEvent( <a href="qpaintevent.html">QPaintEvent<
         <a href="qpaintdevice.html#058006">bitBlt</a>( this, 0, 0, &amp;noNewMail );
 }
 
-void <a name="403"></a>Biff::mousePressEvent( <a href="qmouseevent.html">QMouseEvent</a> * )
+void <a name="317"></a>Biff::mousePressEvent( <a href="qmouseevent.html">QMouseEvent</a> * )
 {
     <a href="qfileinfo.html">QFileInfo</a> fi( mailbox );
     lastModified = fi.<a href="qfileinfo.html#901050">lastModified</a>();
@@ -170,5 +170,5 @@ int main( int argc, char ** argv )
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.00</div>
+<td align="right"><div align="right">Qt version 2.0.1</div>
 </table></div></address></body></html>

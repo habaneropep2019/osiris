@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qtextcodec.cpp,v 1.71 1999/06/22 01:41:59 warwick Exp $
+** $Id: qtextcodec.cpp,v 1.71.2.3 1999/07/13 19:59:10 warwick Exp $
 **
 ** Implementation of QTextCodec class
 **
@@ -150,10 +150,73 @@ QString QTextStatelessDecoder::toUnicode(const char* chars, int len)
   text file formats supported QTextStream and, under X11 for the
   locale-specific character input and output (under Windows NT
   codecs are not needed for GUI I/O since the system works
-  with Unicode already).
+  with Unicode already, and Windows 95/98 has built-in convertors
+  for the 8-bit local encoding).
 
   More recently created QTextCodec objects take precedence
   over earlier ones.
+
+  To add support for another 8-bit encoding to Qt, make a subclass
+  or QTextCodec and implement at least the following methods:
+  <dl>
+   <dt>\c const char* name() const
+    <dd>Return the official name for the encoding.
+   <dt>\c int mibEnum() const
+    <dd>Return the MIB enum for the encoding if it is listed in the
+      <a href=ftp://ftp.isi.edu/in-notes/iana/assignments/character-sets>
+      IANA character-sets encoding file</a>.
+  </dl>
+  If the encoding is multi-byte then it will have "state"; that is,
+  the interpretation of some bytes will be dependent on some preceeding
+  bytes.  For such an encoding, you will need to implement
+  <dl>
+   <dt> \c QTextDecoder* makeDecoder() const
+    <dd>Return a QTextDecoder that remembers incomplete multibyte 
+	sequence prefixes or other required state.
+  </dl>
+  If the encoding does \e not require state, you should implement:
+  <dl>
+   <dt> \c QString toUnicode(const char* chars, int len) const
+    <dd>Converts \e len characters from \e chars to Unicode.
+  </dl>
+  The base QTextCodec class has default implementations of the above
+  two functions, <i>but they are mutually recursive</i>, so you must
+  re-implement at least one of them, or both for improved efficiency.
+
+  For conversion from Unicode to 8-bit encodings, it is rarely necessary
+  to maintain state.  However, two functions similar to the two above
+  are used for encoding:
+  <dl>
+   <dt> \c QTextEncoder* makeEncoder() const
+    <dd>Return a QTextDecoder.
+   <dt> \c QCString fromUnicode(const QString& uc, int& lenInOut ) const;
+    <dd>Converts \e lenInOut characters (of type QChar) from the start
+	of the string \a uc, returning a QCString result, and also returning
+	the \link QCString::length() length\endlink
+	of the result in lenInOut.
+  </dl>
+  Again, these are mutually recursive so only one needs to be implemented,
+  or both if better efficiency is possible.
+
+  Finally, you must implement:
+  <dl>
+   <dt> \c int heuristicContentMatch(const char* chars, int len) const
+    <dd>Gives a value indicating how likely it is that \e len chracters
+	from \e chars are in the encoding.
+  </dl>
+  A good model for this function is the
+  QWindowsLocalCodec::heuristicContentMatch function found in the Qt sources.
+
+  A QTextCodec subclass might have improved performance if you also
+  re-implement:
+  <dl>
+   <dt> \c bool canEncode( QChar ) const
+    <dd>Test if a Unicode character can be encoded.
+   <dt> \c bool canEncode( const QString& ) const
+    <dd>Test if a string of Unicode characters can be encoded.
+   <dt> \c int heuristicNameMatch(const char* hint) const
+    <dd>Test if a possibly non-standard name is referring to the codec.
+  </dl>
 */
 
 
@@ -363,8 +426,21 @@ static const char * iso8859_2locales[] = {
     "sk_SK", "sl", "sl_CS", "sl_SI", "slovak", "slovene", "sr_SP", 0 };
 
 static const char * iso8859_5locales[] = {
-    "bg", "bg_BG", "bulgarian", "mk", "mk_MK", "ru", "ru_RU", "ru_SU",
+    "bg", "bg_BG", "bulgarian", "mk", "mk_MK", /*"ru",*/ "ru_RU", "ru_SU",
     "russian", "sp", "sp_YU", 0 };
+
+// This is NOT CORRECT.  But so many Russians use this rather than the
+// ISO standard that we default to this.  Russian users SHOULD set their
+// $LANG to ru_RU.KOI8-R if they are not using the X default, but since
+// they DON'T, we work around it, forcing the small number of iso8859-5
+// users to set THEIR LANG to ru_RU.iso8859-5.  If you read the history,
+// it seems that many Russians blame ISO and Peristroika for the confusion.
+//
+// The real bug is that some programs break if the user specifies
+// ru_RU.KOI8-R
+//
+static const char * koi8_rlocales[] = {
+    "ru", 0 };
 
 static const char * iso8859_6locales[] = {
     "ar_AA", "ar_SA", "arabic", 0 };
@@ -446,6 +522,8 @@ QTextCodec* QTextCodec::codecForLocale()
 	    localeMapper = codecForName( "ISO 8859-9" );
 	else if ( try_locale_list( iso8859_15locales, lang ) )
 	    localeMapper = codecForName( "ISO 8859-15" );
+	else if ( try_locale_list( koi8_rlocales, lang ) )
+	    localeMapper = codecForName( "KOI8-R" );
 	else
 	    localeMapper = codecForName( "ISO 8859-1" );
     }
@@ -1155,6 +1233,8 @@ public:
 
     int heuristicContentMatch(const char* chars, int len) const;
 
+    int heuristicNameMatch(const char* hint) const;
+
 private:
     int forwardIndex;
 };
@@ -1454,6 +1534,17 @@ int QSimpleTextCodec::mibEnum() const
     return unicodevalues[forwardIndex].mib;
 }
 
+int QSimpleTextCodec::heuristicNameMatch(const char* hint) const
+{
+    if ( hint[0]=='k' ) {
+	// Help people with messy fonts
+	if ( QCString(hint) == "koi8-1" )
+	    return QTextCodec::heuristicNameMatch("koi8-r")-1;
+	if ( QCString(hint) == "koi8-ru" )
+	    return QTextCodec::heuristicNameMatch("koi8-r")-1;
+    }
+    return QTextCodec::heuristicNameMatch(hint);
+}
 
 int QSimpleTextCodec::heuristicContentMatch(const char* chars, int len) const
 {

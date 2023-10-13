@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qtextstream.cpp,v 2.85 1999/06/20 17:42:52 agulbra Exp $
+** $Id: qtextstream.cpp,v 2.85.2.1 1999/07/13 19:59:11 warwick Exp $
 **
 ** Implementation of QTextStream class
 **
@@ -74,7 +74,11 @@
   The QTextStream class reads and writes text and it is not
   appropriate for dealing with binary data (but QDataStream is).
 
-  Note that all 8-bit characters are interpreted as Latin1 characters.
+  By default output of Unicode text (ie. QString) is done using the
+  local 8-bit encoding.  This can be changed using the setEncoding()
+  method.  For input, the QTextStream will auto-detect standard
+  Unicode "byte order marked" text files, but otherwise the local
+  8-bit encoding is used.
 
   \sa QDataStream
 */

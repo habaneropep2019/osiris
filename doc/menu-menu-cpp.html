@@ -192,18 +192,18 @@ MenuExample::MenuExample( <a name="QWidget"></a><a href="qwidget.html">QWidget</
 
     <a name="QPopupMenu"></a><a href="qpopupmenu.html">QPopupMenu</a> *print = new <a href="qpopupmenu.html">QPopupMenu</a>( this );
     CHECK_PTR( print );
-    print-&gt;<a name="insertItem"></a><a href="qmenudata.html#43c652">insertItem</a>( "&amp;Print to printer", this, SLOT(<a name="printer"></a><a href="#281">printer</a>()) );
-    print-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "Print to &amp;file", this, SLOT(<a name="file"></a><a href="#282">file</a>()) );
-    print-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "Print to fa&amp;x", this, SLOT(<a name="fax"></a><a href="#283">fax</a>()) );
+    print-&gt;<a name="insertItem"></a><a href="qmenudata.html#43c652">insertItem</a>( "&amp;Print to printer", this, SLOT(<a name="printer"></a><a href="#188">printer</a>()) );
+    print-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "Print to &amp;file", this, SLOT(<a name="file"></a><a href="#189">file</a>()) );
+    print-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "Print to fa&amp;x", this, SLOT(<a name="fax"></a><a href="#190">fax</a>()) );
     print-&gt;<a name="insertSeparator"></a><a href="qmenudata.html#5e712e">insertSeparator</a>();
-    print-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "Printer &amp;Setup", this, SLOT(<a name="printerSetup"></a><a href="#284">printerSetup</a>()) );
+    print-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "Printer &amp;Setup", this, SLOT(<a name="printerSetup"></a><a href="#191">printerSetup</a>()) );
 
     <a href="qpopupmenu.html">QPopupMenu</a> *file = new <a href="qpopupmenu.html">QPopupMenu</a>( this );
     CHECK_PTR( file );
-    file-&gt;<a href="qmenudata.html#43c652">insertItem</a>( p1, "&amp;Open",  this, SLOT(<a name="open"></a><a href="#270">open</a>()), CTRL+Key_O );
-    file-&gt;<a href="qmenudata.html#43c652">insertItem</a>( p2, "&amp;New", this, SLOT(<a name="news"></a><a href="#271">news</a>()), CTRL+Key_N );
-    file-&gt;<a href="qmenudata.html#43c652">insertItem</a>( p3, "&amp;Save", this, SLOT(<a name="save"></a><a href="#272">save</a>()), CTRL+Key_S );
-    file-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "&amp;Close", this, SLOT(<a name="closeDoc"></a><a href="#273">closeDoc</a>()), CTRL+Key_W );
+    file-&gt;<a href="qmenudata.html#43c652">insertItem</a>( p1, "&amp;Open",  this, SLOT(<a name="open"></a><a href="#177">open</a>()), CTRL+Key_O );
+    file-&gt;<a href="qmenudata.html#43c652">insertItem</a>( p2, "&amp;New", this, SLOT(<a name="news"></a><a href="#178">news</a>()), CTRL+Key_N );
+    file-&gt;<a href="qmenudata.html#43c652">insertItem</a>( p3, "&amp;Save", this, SLOT(<a name="save"></a><a href="#179">save</a>()), CTRL+Key_S );
+    file-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "&amp;Close", this, SLOT(<a name="closeDoc"></a><a href="#180">closeDoc</a>()), CTRL+Key_W );
     file-&gt;<a href="qmenudata.html#5e712e">insertSeparator</a>();
     file-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "&amp;Print", print, CTRL+Key_P );
     file-&gt;<a href="qmenudata.html#5e712e">insertSeparator</a>();
@@ -211,25 +211,25 @@ MenuExample::MenuExample( <a name="QWidget"></a><a href="qwidget.html">QWidget</
 
     <a href="qpopupmenu.html">QPopupMenu</a> *edit = new <a href="qpopupmenu.html">QPopupMenu</a>( this );
     CHECK_PTR( edit );
-    int undoID = edit-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "&amp;Undo", this, SLOT(<a name="undo"></a><a href="#274">undo</a>()) );
-    int redoID = edit-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "&amp;Redo", this, SLOT(<a name="redo"></a><a href="#275">redo</a>()) );
+    int undoID = edit-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "&amp;Undo", this, SLOT(<a name="undo"></a><a href="#181">undo</a>()) );
+    int redoID = edit-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "&amp;Redo", this, SLOT(<a name="redo"></a><a href="#182">redo</a>()) );
     edit-&gt;<a name="setItemEnabled"></a><a href="qmenudata.html#b2cb33">setItemEnabled</a>( undoID, FALSE );
     edit-&gt;<a href="qmenudata.html#b2cb33">setItemEnabled</a>( redoID, FALSE );
 
     <a href="qpopupmenu.html">QPopupMenu</a>* options = new <a href="qpopupmenu.html">QPopupMenu</a>( this );
     CHECK_PTR( options );
-    options-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "&amp;Normal Font", this, SLOT(<a name="normal"></a><a href="#276">normal</a>()) );
+    options-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "&amp;Normal Font", this, SLOT(<a name="normal"></a><a href="#183">normal</a>()) );
     options-&gt;<a href="qmenudata.html#5e712e">insertSeparator</a>();
-    boldID = options-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "&amp;Bold", this, SLOT(<a name="bold"></a><a href="#277">bold</a>()) );
-    underlineID = options-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "&amp;Underline", this, SLOT(<a name="underline"></a><a href="#278">underline</a>()) );
+    boldID = options-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "&amp;Bold", this, SLOT(<a name="bold"></a><a href="#184">bold</a>()) );
+    underlineID = options-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "&amp;Underline", this, SLOT(<a name="underline"></a><a href="#185">underline</a>()) );
     isBold = FALSE;
     isUnderline = FALSE;
     options-&gt;<a name="setCheckable"></a><a href="qpopupmenu.html#14432f">setCheckable</a>( TRUE );
 
     <a href="qpopupmenu.html">QPopupMenu</a> *help = new <a href="qpopupmenu.html">QPopupMenu</a>( this );
     CHECK_PTR( help );
-    help-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "&amp;About", this, SLOT(<a name="about"></a><a href="#279">about</a>()), CTRL+Key_H );
-    help-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "About &amp;<a name="Qt"></a><a href="qt.html">Qt</a>", this, SLOT(<a name="aboutQt"></a><a href="#280">aboutQt</a>()) );
+    help-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "&amp;About", this, SLOT(<a name="about"></a><a href="#186">about</a>()), CTRL+Key_H );
+    help-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "About &amp;<a name="Qt"></a><a href="qt.html">Qt</a>", this, SLOT(<a name="aboutQt"></a><a href="#187">aboutQt</a>()) );
 
     menu = new <a name="QMenuBar"></a><a href="qmenubar.html">QMenuBar</a>( this );
     CHECK_PTR( menu );
@@ -253,37 +253,37 @@ MenuExample::MenuExample( <a name="QWidget"></a><a href="qwidget.html">QWidget</
     <a name="setMinimumSize"></a><a href="qwidget.html#378ed6">setMinimumSize</a>( 100, 80 );
 }
 
-void <a name="270"></a>MenuExample::open()
+void <a name="177"></a>MenuExample::open()
 {
     emit explain( "File/Open selected" );
 }
 
-void <a name="271"></a>MenuExample::news()
+void <a name="178"></a>MenuExample::news()
 {
     emit explain( "File/New selected" );
 }
 
-void <a name="272"></a>MenuExample::save()
+void <a name="179"></a>MenuExample::save()
 {
     emit explain( "File/Save selected" );
 }
 
-void <a name="273"></a>MenuExample::closeDoc()
+void <a name="180"></a>MenuExample::closeDoc()
 {
     emit explain( "File/Close selected" );
 }
 
-void <a name="274"></a>MenuExample::undo()
+void <a name="181"></a>MenuExample::undo()
 {
     emit explain( "Edit/Undo selected" );
 }
 
-void <a name="275"></a>MenuExample::redo()
+void <a name="182"></a>MenuExample::redo()
 {
     emit explain( "Edit/Redo selected" );
 }
 
-void <a name="276"></a>MenuExample::normal()
+void <a name="183"></a>MenuExample::normal()
 {
     isBold = FALSE;
     isUnderline = FALSE;
@@ -292,21 +292,21 @@ void <a name="276"></a>MenuExample::normal()
     emit explain( "Options/Normal selected" );
 }
 
-void <a name="277"></a>MenuExample::bold()
+void <a name="184"></a>MenuExample::bold()
 {
     isBold = !isBold;
     menu-&gt;setItemChecked( boldID, isBold );
     emit explain( "Options/Bold selected" );
 }
 
-void <a name="278"></a>MenuExample::underline()
+void <a name="185"></a>MenuExample::underline()
 {
     isUnderline = !isUnderline;
     menu-&gt;setItemChecked( underlineID, isUnderline );
     emit explain( "Options/Underline selected" );
 }
 
-void <a name="279"></a>MenuExample::about()
+void <a name="186"></a>MenuExample::about()
 {
     <a name="QMessageBox::about"></a><a href="qmessagebox.html#e67950">QMessageBox::about</a>( this, "Qt Menu Example",
                         "This example demonstrates simple use of Qt menus.\n"
@@ -314,32 +314,32 @@ void <a name="279"></a>MenuExample::about()
                         "programs." );
 }
 
-void <a name="280"></a>MenuExample::aboutQt()
+void <a name="187"></a>MenuExample::aboutQt()
 {
     <a name="QMessageBox::aboutQt"></a><a href="qmessagebox.html#976755">QMessageBox::aboutQt</a>( this, "Qt Menu Example" );
 }
 
-void <a name="281"></a>MenuExample::printer()
+void <a name="188"></a>MenuExample::printer()
 {
     emit explain( "File/Printer/Print selected" );
 }
 
-void <a name="282"></a>MenuExample::file()
+void <a name="189"></a>MenuExample::file()
 {
     emit explain( "File/Printer/Print To File selected" );
 }
 
-void <a name="283"></a>MenuExample::fax()
+void <a name="190"></a>MenuExample::fax()
 {
     emit explain( "File/Printer/Print To Fax selected" );
 }
 
-void <a name="284"></a>MenuExample::printerSetup()
+void <a name="191"></a>MenuExample::printerSetup()
 {
     emit explain( "File/Printer/Printer Setup selected" );
 }
 
-void <a name="285"></a>MenuExample::resizeEvent( <a name="QResizeEvent"></a><a href="qresizeevent.html">QResizeEvent</a> * )
+void <a name="192"></a>MenuExample::resizeEvent( <a name="QResizeEvent"></a><a href="qresizeevent.html">QResizeEvent</a> * )
 {
     label-&gt;setGeometry( 20, <a href="qwidget.html#e872e1">rect</a>().center().y()-20, <a href="qwidget.html#576663">width</a>()-40, 40 );
 }
@@ -357,5 +357,5 @@ int main( int argc, char ** argv )
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.00</div>
+<td align="right"><div align="right">Qt version 2.0.1</div>
 </table></div></address></body></html>

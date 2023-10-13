@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: richtext.cpp,v 1.4 1999/06/11 16:50:24 warwick Exp $
+** $Id: richtext.cpp,v 1.4.2.1 1999/07/13 20:00:21 warwick Exp $
 **
 ** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
@@ -40,19 +40,19 @@ static const char* sayings[] = {
 
     "<b>Saying 4:</b><br>"
     "<hr><br><br>"
-    "<big>The Least Successful Executions<br>"
-    "      History has furnished us with two executioners worthy of attention. "
+    "<big><b>The Least Successful Executions</b><br>"
+    "<twocolumn><p>      History has furnished us with two executioners worthy of attention. "
     "The first performed in Sydney in Australia.  In 1803 three attempts were "
     "made to hang a Mr. Joseph Samuels.  On the first two of these the rope "
     "snapped, while on the third Mr. Samuels just hung there peacefully until he "
     "and everyone else got bored.  Since he had proved unsusceptible to capital "
-    "punishment, he was reprieved.<br>"
-    "        The most important British executioner was Mr. James Berry who "
+    "punishment, he was reprieved.</p>"
+    "<p>        The most important British executioner was Mr. James Berry who "
     "tried three times in 1885 to hang Mr. John Lee at Exeter Jail, but on each "
-    "occasion failed to get the trap door open.<br>"
-    "        In recognition of this achievement, the Home Secretary commuted "
+    "occasion failed to get the trap door open.<!p>"
+    "<p>        In recognition of this achievement, the Home Secretary commuted "
     "Lee's sentence to \"life\" imprisonment.  He was released in 1917, emigrated "
-    "to America and lived until 1933.</big><br><br>"
+    "to America and lived until 1933.</p></twocolumn></big><br><br>"
     "<center><i>-- Stephen Pile, \"The Book of Heroic Failures\"</i></center>",
 
     "<b>Saying 5:</b><br>"

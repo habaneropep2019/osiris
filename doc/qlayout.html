@@ -79,11 +79,12 @@ layout will be resized to zero size if there is little space. To
 support children whose height depend on their widths, implement
 <a href="qlayoutitem.html#25207b">hasHeightForWidth</a>() and <a href="qlayoutitem.html#740c84">heightForWidth</a>().
 See the <a href="customlayout.html">custom layout page</a> for an in-depth
-description.
+description and the <a href="layout.html">layout overview page</a>
+for an introduction.
 <p>Geometry management stops when the layout manager is deleted.
 
 <hr><h2>Member Type Documentation</h2>
-<h3 class="fn"><a name="ResizeMode">QLayout::ResizeMode</h3>
+<h3 class="fn"><a name="ResizeMode">QLayout::ResizeMode</a></h3>
 The possible values are are:
 <ul>
 <li> <code>Fixed</code> - the main widget's size is set to <a href="qlayout.html#1f01ad">sizeHint</a>(), it
@@ -155,7 +156,7 @@ that are direct children of their mainWidget().
 <p>Removes and deletes all items in this layout.
 <h3 class="fn">bool <a name="d4f527"></a>QLayout::eventFilter ( <a href="qobject.html">QObject</a> * o, <a href="qevent.html">QEvent</a> * e ) <code>[virtual protected]</code></h3>
 <p>Performs child widget layout when the parent widget is resized.
-Also handles removal of widgets.
+Also handles removal of widgets and child layouts.
 <p>Reimplemented from <a href="qobject.html#bb8547">QObject.</a>
 <h3 class="fn"><a href="qrect.html">QRect</a> <a name="4d7aa5"></a>QLayout::geometry () const <code>[virtual]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
@@ -235,7 +236,7 @@ for all others.
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.troll.no">www.troll.no</a>):<br>
 <form method=post action="http://www.troll.no/search.cgi">
-<input type=hidden name="version" value="2.00"><nobr>
+<input type=hidden name="version" value="2.0.1"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -243,5 +244,5 @@ copyright &copy; 1995-99
 <a href="http://www.troll.no">Troll Tech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.00</div>
+<td align="right"><div align="right">Qt version 2.0.1</div>
 </table></div></address></body></html>

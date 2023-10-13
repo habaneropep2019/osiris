@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qdir.h,v 2.22 1999/06/24 02:35:33 agulbra Exp $
+** $Id: qdir.h,v 2.22.2.1 1999/07/13 19:59:06 warwick Exp $
 **
 ** Definition of QDir class
 **
@@ -44,23 +44,26 @@ public:
 		      Drives	    = 0x004,
 		      NoSymLinks    = 0x008,
 		      All	    = 0x007,
-		      TypeMask	    = 0x00F,
+		       TypeMask	    = 0x00F,
 
 		      Readable	    = 0x010,
 		      Writable	    = 0x020,
 		      Executable    = 0x040,
-		      RWEMask	    = 0x070,
+		       RWEMask	    = 0x070,
+
 		      Modified	    = 0x080,
 		      Hidden	    = 0x100,
 		      System	    = 0x200,
-		      AccessMask    = 0x3F0,
+		       AccessMask    = 0x3F0,
+
 		      DefaultFilter = -1 };
 
     enum SortSpec   { Name	    = 0x00,
 		      Time	    = 0x01,
 		      Size	    = 0x02,
 		      Unsorted	    = 0x03,
-		      SortByMask    = 0x03,
+		       SortByMask    = 0x03,
+
 		      DirsFirst	    = 0x04,
 		      Reversed	    = 0x08,
 		      IgnoreCase    = 0x10,

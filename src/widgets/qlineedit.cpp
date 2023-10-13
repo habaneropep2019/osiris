@@ -1,5 +1,5 @@
 /**********************************************************************
-** $Id: qlineedit.cpp,v 2.172 1999/06/23 17:53:25 ettrich Exp $
+** $Id: qlineedit.cpp,v 2.172.2.3 1999/07/13 19:59:20 warwick Exp $
 **
 ** Implementation of QLineEdit widget class
 **
@@ -42,7 +42,7 @@ struct QLineEditPrivate {
 	pm(0), pmDirty( TRUE ),
 	blinkTimer( l, "QLineEdit blink timer" ),
 	dragTimer( l, "QLineEdit drag timer" ),
-	inDoubleClick( FALSE ) {}
+	inDoubleClick( FALSE ), offsetDirty( FALSE ) {}
 
     bool frame;
     QLineEdit::EchoMode mode;
@@ -53,6 +53,7 @@ struct QLineEditPrivate {
     QTimer dragTimer;
     QRect cursorRepaintRect;
     bool inDoubleClick;
+    bool offsetDirty;
 };
 
 
@@ -63,8 +64,6 @@ struct QLineEditPrivate {
 
   \ingroup realwidgets
 
-  \define QLineEdit::EchoMode
-
   The default QLineEdit object has its own frame as specified by the
   Windows/Motif style guides, you can turn off the frame by calling
   setFrame( FALSE ).
@@ -74,13 +73,6 @@ struct QLineEditPrivate {
   \link QColorGroup::base() colorGroup().base(). \endlink  The cursor
   and frame use other colors from same color group, of course.
 
-  QLineEdit can display the content of itself in three ways, depending
-  on the current \link setEchoMode() echo mode. \endlink The echo
-  modes available are: <ul> <li> \c Normal - display characters as
-  they are entered.  This is the default. <li> \c NoEcho - do not
-  display anything. <li> \c Password - display asterisks instead of
-  the characters actually entered. </ul>
-
   The default key bindings are described in keyPressEvent(); they cannot
   be customized except by inheriting the class.
 
@@ -89,6 +81,25 @@ struct QLineEditPrivate {
   \sa QMultiLineEdit QLabel QComboBox
   <a href="guibooks.html#fowler">GUI Design Handbook: Field, Entry,</a>
   <a href="guibooks.html#fowler">GUI Design Handbook: Field, Required.</a>
+*/
+
+
+/*! \enum QLineEdit::EchoMode
+
+  This enum type describes the ways in which QLineEdit can display its
+  contents.  The currently defined values are: <ul>
+
+  <li> \c Normal - display characters as they are entered.  This is
+  the default.
+
+  <li> \c NoEcho - do not display anything.
+
+  <li> \c Password - display asterisks instead of the characters
+  actually entered.
+
+  </ul>
+
+  \sa setEchoMode() echoMode() QMultiLineEdit::EchoMode
 */
 
 
@@ -247,7 +258,7 @@ QString QLineEdit::text() const
 the same as text(), but can be e.g. "*****" if EchoMode is Password or
 "" if it is NoEcho.
 
-\sa setEchoMode() text()
+\sa setEchoMode() text() EchoMode
 */
 
 QString QLineEdit::displayText() const
@@ -512,6 +523,8 @@ void QLineEdit::leaveEvent( QEvent * )
 
 void QLineEdit::paintEvent( QPaintEvent *e )
 {
+    if ( d->offsetDirty )
+	updateOffset();
     if ( !d->pm || d->pmDirty ) {
 	makePixmap();
 	QPainter p( d->pm, this );
@@ -567,7 +580,8 @@ void QLineEdit::paintEvent( QPaintEvent *e )
     QPainter p( this );
 
     if ( frame() ) {
-	style().drawPanel( &p, 0, 0, width(), height(), colorGroup(), TRUE, style().defaultFrameWidth() );
+	style().drawPanel( &p, 0, 0, width(), height(), colorGroup(),
+			   TRUE, style().defaultFrameWidth() );
 	p.drawPixmap( 2, 2, *d->pm );
     } else {
 	p.drawPixmap( 0, 0, *d->pm );
@@ -609,6 +623,7 @@ void QLineEdit::resizeEvent( QResizeEvent * )
 {
     delete d->pm;
     d->pm = 0;
+    updateOffset();
 }
 
 
@@ -749,7 +764,8 @@ void QLineEdit::cursorRight( bool mark, int steps )
     cp = QMAX( cp, 0 );
     cp = QMIN( cp, (int)tbuf.length() );
     if ( cp == cursorPos ) {
-	// nothing
+	if ( !mark )
+	    deselect();
     } else if ( mark ) {
 	newMark( cp );
 	blinkOn();
@@ -1013,7 +1029,7 @@ bool QLineEdit::frame() const
   It is always possible to cut and paste any marked text; only the
   widget's own display is affected.
 
-  \sa echoMode()
+  \sa echoMode() EchoMode displayText()
 */
 
 void QLineEdit::setEchoMode( EchoMode mode )
@@ -1030,7 +1046,7 @@ void QLineEdit::setEchoMode( EchoMode mode )
 /*!
   Returns the current echo mode of the line edit.
 
-  \sa setEchoMode()
+  \sa setEchoMode() EchoMode
 */
 
 QLineEdit::EchoMode QLineEdit::echoMode() const
@@ -1292,7 +1308,7 @@ void QLineEdit::repaintArea( int from, int to )
     }
 
     d->pmDirty = TRUE;
-    if ( cursorPos >= a && cursorPos <= b )
+    if ( d->offsetDirty || cursorPos >= a && cursorPos <= b )
 	updateOffset();
     if ( !d->pmDirty )
 	return;
@@ -1458,9 +1474,11 @@ void QLineEdit::cursorWordBackward( bool mark )
 
 void QLineEdit::updateOffset()
 {
-    if ( !isVisible() )
+    if ( !isVisible() ) {
+	d->offsetDirty = TRUE;
 	return;
-
+    }
+    d->offsetDirty = FALSE;
     makePixmap();
     QFontMetrics fm = fontMetrics();
     int textWidth = fm.width( displayText() )+4;

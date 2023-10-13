@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qbutton.cpp,v 2.95 1999/06/23 17:53:23 ettrich Exp $
+** $Id: qbutton.cpp,v 2.95.2.1 1999/07/02 18:20:23 paul Exp $
 **
 ** Implementation of QButton widget class
 **
@@ -289,7 +289,9 @@ QButton::~QButton()
 
 /*!
   \fn QString QButton::text() const
-  Returns the button text, or 0 if the button has no text.
+  Returns the button text, or 
+  \link QString::operator!() null string\endlink  
+  if the button has no text.
   \sa setText()
 */
 

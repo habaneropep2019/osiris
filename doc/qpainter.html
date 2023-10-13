@@ -210,7 +210,14 @@ force a paint event as necessary.
 as current font, current foreground colors and so on.
 <p><a href="qpainter.html#59f1bb">QPainter::begin</a>() copies these attributes from the paint device, and
 changing a paint device's attributes will have effect only the next
-time a painter is opened on it.<p><b>Warning:</b> QPainter::begin() resets all attributes to their default
+time a painter is opened on it.<p><b>Warning:</b> The range of acceptable coordinate values to QPainter's
+various drawing functions is limited by the capabilities of the
+drawing engine of the underlying window system. Currently, only
+Windows NT is able to handle the full 32 bit range; on other
+platforms, the output may be incorrect when the absolute value of
+any coordinate (after any set world and/or view transforms have been
+applied) exceeds some system-dependent value. All systems we have
+tested were able to correctly handle coordinates up to +/- 2000.<p><b>Warning:</b> QPainter::begin() resets all attributes to their default
 values, from the device, thus setting fonts, brushes, etc, before
 begin() will have <em>no</em> effect.
 <p>See also:  <a href="qpaintdevice.html">QPaintDevice</a>, <a href="qwidget.html">QWidget</a> and <a href="qpixmap.html">QPixmap</a>.
@@ -357,7 +364,7 @@ rectangle, is constrained to the rectangle <em>(x,y,w,h).</em>
 <li> <code>ShowPrefix</code> displays "&x" as "x" underlined.
 <li> <code>WordBreak</code> breaks the text to fit the rectangle.
 </ul>
-<p>These flags are defined in <a href="qwindowdefs-h.html">qwindowdefs.h</a>.
+<p>These flags are defined in <a href="qnamespace-h.html">qnamespace.h</a>.
 <p>See also:  <a href="qpainter.html#8a59ed">drawText</a>() and <a href="qpainter.html#f572a5">fontMetrics</a>().
 <h3 class="fn"><a href="qrect.html">QRect</a> <a name="57f5ab"></a>QPainter::boundingRect ( const <a href="qrect.html">QRect</a> &amp; r, int tf, const <a href="qstring.html">QString</a> &amp;, int len = -1, char ** i=0 )</h3>
 <p>This is an overloaded member function, provided for convenience.  It differs from the above function only in what argument(s) it accepts.
@@ -1192,7 +1199,7 @@ shaded rectangle, for example
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.troll.no">www.troll.no</a>):<br>
 <form method=post action="http://www.troll.no/search.cgi">
-<input type=hidden name="version" value="2.00"><nobr>
+<input type=hidden name="version" value="2.0.1"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -1200,5 +1207,5 @@ copyright &copy; 1995-99
 <a href="http://www.troll.no">Troll Tech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.00</div>
+<td align="right"><div align="right">Qt version 2.0.1</div>
 </table></div></address></body></html>

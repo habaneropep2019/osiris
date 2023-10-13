@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: wizard.cpp,v 1.5 1999/06/17 19:46:40 paul Exp $
+** $Id: wizard.cpp,v 1.5.2.1 1999/07/14 16:44:15 reggie Exp $
 **
 ** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
@@ -103,6 +103,8 @@ void Wizard::setupPage2()
     label5->setMinimumWidth( label4->sizeHint().width() );
 
     firstName = new QLineEdit( row1 );
+    firstName->setMinimumWidth( QFontMetrics( firstName->font() ).
+				width( "REGGIES WIZARD" ) );
     lastName = new QLineEdit( row2 );
     address = new QLineEdit( row3 );
     phone = new QLineEdit( row4 );

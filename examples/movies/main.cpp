@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: main.cpp,v 1.3 1999/06/17 19:46:38 paul Exp $
+** $Id: main.cpp,v 1.3.2.1 1999/07/20 01:59:32 warwick Exp $
 **
 ** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
@@ -209,8 +209,6 @@ public slots:
 int main(int argc, char **argv)
 {
     QApplication a(argc, argv);
-
-    QApplication::setFont(QFont("Helvetica"));
 
     if (argc > 1) {
         // Commandline mode - show movies given on the command line

@@ -11,7 +11,8 @@ Qt Tutorial - Chapter 8
 <center><img src="t8.png" alt="Screenshot of tutorial eight"></center>
 <p>
 In this example, we introduce the first custom widget that can paint
-itself.
+itself.  We also add a useful keyboard interface (with two lines of
+code).
 <p>
 <ul>
 <li><a href="t8-lcdrange-h.html">lcdrange.h</a> contains the LCDRange
@@ -44,6 +45,8 @@ Until now, it has been fixed at 0..99.
 <p>
 <h3><a href="t8-lcdrange-cpp.html">lcdrange.cpp</a></h3>
 <p>
+There is a change to the constructor, we'll discuss that later.
+<p>
 <pre>
     void LCDRange::setRange( int minVal, int maxVal )
     {
@@ -61,11 +64,12 @@ Until now, it has been fixed at 0..99.
 setRange() sets the range of the slider in the LCDRange.  Since we
 have set up the QLCDNumber to always display two digits, we want to
 limit the possible range of <code>minVal</code> and <code>maxVal</code> to 0..99 to avoid
-overflow of the QLCDNumber.  (We could have allowed values in -9..99
+overflow of the QLCDNumber.  (We could have allowed values down to -9
 but chose not to.)  If the arguments are illegal, we use Qt's
 qWarning() function to issue a warning to the user and return
 immediately.  qWarning() is a printf-like function that by default
-sends its output to <code>stderr.</code> You can install your own <a href="qapplication.html#972896">handler function</a> if you want.
+sends its output to <code>stderr.</code>  You can install your own handler
+function using <a href="qapplication.html#972896">::qInstallMsgHandler()</a> if you want.
 <p>
 <h3><a href="t8-cannon-h.html">cannon.h</a></h3>
 <p>
@@ -102,7 +106,7 @@ provide an interface using the same idiom as for value in LCDRange.
 <p>
 This is the second of the many event handlers in QWidget that we
 encounter.  This virtual function is called by Qt whenever a widget needs
-to update itself (i.e. paint the widget's surface).
+to update itself (i.e.  paint the widget's surface).
 <p>
 <h3><a href="t8-cannon-cpp.html">cannon.cpp</a></h3>
 <p>
@@ -142,18 +146,16 @@ colors wil be used.)
     }
 </pre>
 <p>
-This function sets the angle value. We have chosen a legal range 5..70
-and adjust the given number of degrees accordingly.
-We have chosen not to issue a warning if the new angle is out of range.
+This function sets the angle value.  We have chosen a legal range of
+5..70 and adjust the given number of degrees accordingly.  We have
+chosen not to issue a warning if the new angle is out of range.
 <p>
-If the new angle equals the old one, we return immediately.
-It is important to only emit the signal angleChanged() when the
-angle <em>really</em> has changed.
+If the new angle equals the old one, we return immediately.  It is
+important to only emit the signal angleChanged() when the angle <em>really</em> has changed.
 <p>
-Then we set the new angle value and repaint our widget. The <a href="qwidget.html#977d49">repaint()</a> function will clear the widget
-(i.e. fill it with its background color) and send a paint event to the
-widget. This will immediately call the paint event function of the
-widget.
+Then we set the new angle value and repaint our widget.  The <a href="qwidget.html#977d49">QWidget::repaint()</a> function clears the widget (usually filling it with
+its background color) and send a paint event to the widget.  This
+results in a call the paint event function of the widget.
 <p>
 Finally, we emit the angleChanged() signal to tell the outside world
 that the angle has changed.  The <code>emit</code> keyword is unique to Qt and
@@ -169,15 +171,14 @@ not regular C++ syntax.  In fact, it is a macro.
 </pre>
 <p>
 This is our first attempt to write a paint event handler.  The event
-argument contains a <a href="qpaintevent.html">description</a> of the paint
-event.  QPaintEvent contains the region in the widget that must be
-updated.  For the time being, we will be lazy and just paint
-everything.
+argument contains a description of the paint event.  <a href="qpaintevent.html">QPaintEvent</a>
+contains the region in the widget that must be updated.  For the time
+being, we will be lazy and just paint everything.
 <p>
 Our code displays the angle value in the widget at a fixed position.
 First we create a QString with some text and the angle, then we create
 a QPainter operating on this widget, and use it to paint the string.
-We'll come back to QPainter later; it can do a great many thing.
+We'll come back to QPainter later; it can do a great many things.
 <p>
 <h3><a href="t8-main-cpp.html">main.cpp</a></h3>
 <p>
@@ -199,19 +200,19 @@ This time, we include a single LCDRange and a CannonField in our top level
 widget.
 <p>
 <pre>
-        LCDRange *angle = new LCDRange( this, "angle" );        angle-&gt;<a href="qwidget.html#44675b">setFixedHeight</a>( 70 );
+        LCDRange *angle = new LCDRange( this, "angle" );
 </pre>
 <p>
-In the constructor, we create and set up our LCDRange and fix its
-height at 70 pixels.
+In the constructor, we create and set up our LCDRange.
 <p>
 <pre>
-        angle-&gt;setRange( 5, 70 );
+        angle-&gt;<a href="qwidget.html#44675b">setFixedHeight</a>( 70 );
 </pre>
 <p>
 We set the LCDRange to accept ranges from 5 to 70 degrees.
 <p>
 <pre>
+        angle-&gt;setRange( 5, 70 );
         CannonField *cannonField = new CannonField( this, "cannonField" );
 </pre>
 <p>
@@ -242,6 +243,7 @@ loop upon the first change of one of the values.
 <p>
 <pre>
         <a href="qgridlayout.html">QGridLayout</a> *grid = new <a href="qgridlayout.html">QGridLayout</a>( this, 2, 2, 10 ); //2x2, 10 pixel border
+        grid-&gt;<a href="qgridlayout.html#70abf2">addWidget</a>( quit, 0, 0 );
 </pre>
 <p>
 Until now we've used the no-assembly-required QVBox and QGrid widgets
@@ -255,28 +257,28 @@ borders.  (The constructor for <a href="qgridlayout.html">QGridLayout</a> can be
 so it's good to put in such comments.)
 <p>
 <pre>
-        grid-&gt;<a href="qgridlayout.html#70abf2">addWidget</a>( quit, 0, 0 );
+        grid-&gt;<a href="qgridlayout.html#70abf2">addWidget</a>( angle, 1, 0, Qt::AlignTop );
 </pre>
 <p>
 We add the Quit button in the top-left cell of the grid: 0, 0.
 <p>
 <pre>
-        grid-&gt;<a href="qgridlayout.html#70abf2">addWidget</a>( angle, 1, 0, Qt::AlignTop );
+        grid-&gt;<a href="qgridlayout.html#70abf2">addWidget</a>( cannonField, 1, 1 );
 </pre>
 <p>
-We put teh angle LCDRange in the bottom-left cell, aligned to the top
+We put the angle LCDRange in the bottom-left cell, aligned to the top
 of its cell.  (This alignment is one of the things QGridLayout allows
 but QGrid does not.)
 <p>
 <pre>
-        grid-&gt;<a href="qgridlayout.html#70abf2">addWidget</a>( cannonField, 1, 1 );
+        grid-&gt;<a href="qgridlayout.html#4ffa51">setColStretch</a>( 1, 10 );
 </pre>
 <p>
 We put the CannonField object in the bottom right cell.  (The top
 right cell is empty, yes.)
 <p>
 <pre>
-        grid-&gt;<a href="qgridlayout.html#4ffa51">setColStretch</a>( 1, 10 );
+        angle-&gt;setValue( 60 );
 </pre>
 <p>
 We tell QGridLayout that the right column (column 1) is stretchable.
@@ -286,13 +288,36 @@ unchanged and resize just the CannonField when the MyWidget is
 resized.
 <p>
 <pre>
-        angle-&gt;setValue( 60 );
+    }
 </pre>
 <p>
-Finally, we set an initial angle value.  Note that this will trigger the
+We set an initial angle value.  Note that this will trigger the
 connection from LCDRange to CannonField.
 <p>
+<pre>
+    int main( int argc, char **argv )
+</pre>
+<p>
+And our last action is to set <code>angle</code> to have keyboard focus, so that
+by default, keyboard input will go to the LCDRange widget.
+<p>
+LCDRange does not contain any keyPressEvent(), so that would seem not
+to be terribly useful.  However, its constructor just got a new line:
+<p>
+<pre>
+<p>
+</pre>
+<p>
+The LCDRange sets the slider to be its focus proxy.  That means that
+when someone (the program or the user) wants to give the LCDRange
+keyboard focus, the slider should take care of it.  QSlider has a decent
+keyboard interface, so with just one line of code we've give LCDRange
+one.
+<p>
 <h2>Behavior</h2>
+<p>
+The keyboard now does something - the arrow keys, Home, End, PageUp
+and PageDown now all do something vaguely sensible.
 <p>
 When the slider is operated, the CannonField displays the new angle
 value.  Upon resize, CannonField is gives as much space as possible.
@@ -311,6 +336,12 @@ and size?  Why?
 If you give the left-hand column a non-zero stretch factor, what
 happens when you resize the window?
 <p>
+Leave out the setFocus() call.  Which behavior do you prefer?
+<p>
+Try to change "Quit" to "&Quit" in the QButton::setText() call.  How
+does the button's look change?  What happens if you press Alt-Q while
+the program's running?  (Meta-Q on a few keyboards.)
+<p>
 Center the text in the CannonField.
 <p>
 You may now go on to <a href="t9.html">chapter nine.</a>
@@ -322,5 +353,5 @@ You may now go on to <a href="t9.html">chapter nine.</a>
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.00</div>
+<td align="right"><div align="right">Qt version 2.0.1</div>
 </table></div></address></body></html>

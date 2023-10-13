@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qapplication.cpp,v 2.184 1999/06/23 17:53:18 ettrich Exp $
+** $Id: qapplication.cpp,v 2.184.2.3 1999/07/13 19:58:44 warwick Exp $
 **
 ** Implementation of QApplication class
 **
@@ -875,12 +875,10 @@ void QApplication::setPalette( const QPalette &palette, bool updateAllWidgets, c
 }
 
 /*!
-  Returns the default font for a widget. Basicly this function uses the
+  Returns the default font for a widget. Basically this function uses the
   class name of the widget to get a font for it.
 
-  If \a w is 0 the default application font is returned.  There is always
-  an application font, i.e. the returned pointer is guaranteed to be
-  non-null if a QApplication object has been constructed.
+  If \a w is 0 the default application font is returned.
 
   \sa setFont(), fontMetrics(), QWidget::font()
 */
@@ -968,8 +966,8 @@ void QApplication::setFont( const QFont &font, bool updateAllWidgets, const char
   Usually widgets call this automatically when they are polished.  It
   may be used to do some style-based central customization of widgets.
 
-  Note that you are not limited to public functions of \llink QWidget.
-  Instead, based on meta information like \link QObject::className()
+  Note that you are not limited to public functions of QWidget.
+  Instead, based on meta information like QObject::className()
   you are able to customize any kind of widgets.
 
   The default implementation sets a class specific font or palette if
@@ -982,11 +980,11 @@ void QApplication::setFont( const QFont &font, bool updateAllWidgets, const char
 void QApplication::polish(QWidget* w)
 {
     if ( !w->testWState( WState_PaletteSet ) ) {
-	if ( palette( w ) != palette() )
+	if ( !palette( w ).isCopyOf( palette() ) )
 	    w->setPalette( palette( w ) );
     }
     if ( !w->testWState( WState_FontSet ) ) {
-	if ( font( w ) != font() )
+	if ( !font( w ).isCopyOf( font() ) )
 	    w->setFont( font( w ) );
     }
 

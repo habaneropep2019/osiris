@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qsimplerichtext.cpp,v 2.5 1999/06/21 15:58:53 ettrich Exp $
+** $Id: qsimplerichtext.cpp,v 2.5.2.3 1999/07/17 03:06:51 ettrich Exp $
 **
 ** Implementation of the QSimpleRichText class
 **
@@ -36,14 +36,14 @@
   useful if you want to display some rich text in a custom widget.
 
   Once created, the rich text object can be queried for its width(),
-  height() and the actual width used ( see widthUsed() ). And, most
-  certainly, it can be drawn on any given QPainter with draw().  By
-  using anchor(), it is possible to use QSimpleRichText to implement
-  some kind of hypertext or active text facilities as well.
+  height() and the actual width used (see widthUsed()). Most
+  importantly, it can be drawn on any given QPainter with draw().
+  QSimpleRichText can also be used to implement
+  hypertext or active text facilities by using anchor().
 
-  Changes other than resizing with setWidth() cannot be made. If the
-  contents is supposed to change, just throw the rich text object away
-  and make a new one with the new contents.
+  Once constructed from a string, the contents cannot be changed, only
+  resized.  If the contents should change, just throw the rich text
+  object away and make a new one with the new contents.
 
   For large documents, see QTextView or QTextBrowser.
 */
@@ -55,18 +55,16 @@ public:
 };
 
 /*!
-  Constructs a QSimpleRichText from the rich text string  \a text.
+  Constructs a QSimpleRichText from the rich text string \a text
+  and the font \a fnt.
 
-  If a font \a fnt is specified, this font will be used as basis for
-  the text rendering. When using rich text rendering on a certain
-  widget \e w, you would regularily specify the widget's font as shown in
-  the following code example:
+  The font is used as basis for the text rendering. When using rich
+  text rendering on a certain widget \e w, you would regularily
+  specify the widget's font as shown in the following code example:
 
   \code
   QSimpleRichText* t = new QSimpleRichText( contents, w->font() );
   \endcode
-
-  If not font has been specified, the application's default font is used.
 
   \a context is the optional context of the document. This becomes
   important if \a text contains relative references, for example
@@ -86,6 +84,7 @@ QSimpleRichText::QSimpleRichText( const QString& text, const QFont& fnt,
     d  = new QSimpleRichTextData;
     d->doc = new QRichText( text, fnt, context, 0, 0, s );
 }
+
 
 /*!
   Destructs the document, freeing memory.

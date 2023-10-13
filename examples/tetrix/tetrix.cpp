@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: tetrix.cpp,v 1.2 1999/06/03 01:45:50 warwick Exp $
+** $Id: tetrix.cpp,v 1.2.2.1 1999/07/20 01:59:33 warwick Exp $
 **
 ** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
@@ -16,7 +16,6 @@ int main( int argc, char **argv )
 {
     QApplication::setColorSpec( QApplication::CustomColor );
     QDragApplication a(argc,argv);
-    QApplication::setFont( QFont( "helvetica", 12 ) );
     QTetrix *tetrix = new QTetrix;
     a.setMainWidget(tetrix);
     tetrix->show();

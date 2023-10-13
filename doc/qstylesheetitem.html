@@ -27,8 +27,8 @@ Inherits <a href="qt.html">Qt</a>.
 <li><span class="fn">QStyleSheet* <a href="#c517ca"><b>styleSheet</b></a> () </span>
 <li><span class="fn">const QStyleSheet* <a href="#e40950"><b>styleSheet</b></a> () const</span>
 <li><span class="fn">enum <b>AdditionalStyleValues</b> { Undefined = - 1}</span>
-<li><span class="fn">enum <b>DisplayMode</b> {DisplayBlock, DisplayInline, DisplayListItem, DisplayNone}</span>
-<li><span class="fn">DisplayMode <b>displayMode</b> () const</span>
+<li><span class="fn">enum <a href="#DisplayMode"><b>DisplayMode</b></a> {DisplayBlock, DisplayInline, DisplayListItem, DisplayNone}</span>
+<li><span class="fn">DisplayMode <a href="#a52ddd"><b>displayMode</b></a> () const</span>
 <li><span class="fn">void <a href="#9e2b2f"><b>setDisplayMode</b></a> ( DisplayMode m ) </span>
 <li><span class="fn">int <a href="#e7283d"><b>alignment</b></a> () const</span>
 <li><span class="fn">void <a href="#3d22ad"><b>setAlignment</b></a> ( int f ) </span>
@@ -60,8 +60,8 @@ Inherits <a href="qt.html">Qt</a>.
 <li><span class="fn">enum <b>Margin</b> { MarginLeft, MarginRight, MarginTop, MarginBottom, MarginAll, MarginVertical, MarginHorizontal }</span>
 <li><span class="fn">int <a href="#cfad11"><b>margin</b></a> ( Margin m ) const</span>
 <li><span class="fn">void <a href="#e9ed97"><b>setMargin</b></a> ( Margin, int ) </span>
-<li><span class="fn">enum <b>ListStyle</b> { ListDisc, ListCircle, ListSquare, ListDecimal, ListLowerAlpha, ListUpperAlpha }</span>
-<li><span class="fn">ListStyle <b>listStyle</b> () const</span>
+<li><span class="fn">enum <a href="#ListStyle"><b>ListStyle</b></a> { ListDisc, ListCircle, ListSquare, ListDecimal, ListLowerAlpha, ListUpperAlpha }</span>
+<li><span class="fn">ListStyle <a href="#bca680"><b>listStyle</b></a> () const</span>
 <li><span class="fn">void <a href="#86d1ba"><b>setListStyle</b></a> ( ListStyle ) </span>
 <li><span class="fn">QString <a href="#d4fd6c"><b>contexts</b></a> () const</span>
 <li><span class="fn">void <a href="#bbd619"><b>setContexts</b></a> ( const QString &amp; ) </span>
@@ -79,11 +79,36 @@ display property changes associated with it.
 <p>Examples:
  <a href="qbrowser-main-cpp.html#QStyleSheetItem">qbrowser/main.cpp</a>
 
+<hr><h2>Member Type Documentation</h2>
+<h3 class="fn"><a name="DisplayMode">QStyleSheetItem::DisplayMode</a></h3>
+This enum type defines the way adjacent elements are displayed.  The possible values are: <ul>
+<p><li> <code>DisplayBlock</code>
+- elements are displayed as a rectangular block.
+(eg. &lt;P&gt; ... &lt;/P&gt;)
+<li> <code>DisplayInline</code>
+- elements are displayed in a horizontally flowing sequence.
+(eg. &lt;EM&gt; ... &lt;/EM&gt;)
+<li> <code>DisplayListItem</code>
+- elements are displayed in a vertically sequence.
+(eg. &lt;EM&gt; ... &lt;/EM&gt;)
+<li> <code>DisplayNone</code>
+- elements are not displayed at all.
+</ul>
+<h3 class="fn"><a name="ListStyle">QStyleSheetItem::ListStyle</a></h3>
+This enum type defines how the items in a list are prefixed when
+displayed.  The currently defined values are: <ul>
+<p><li> <code>ListDisc</code> - a filled circle
+<li> <code>ListCircle</code> - an unfilled circle
+<li> <code>ListSquare</code> - a filled circle
+<li> <code>ListDecimal</code> - an integer in base 10: <em>1, 2, 3,</em> ...
+<li> <code>ListLowerAlpha</code> - a lowercase letter: <em>a, b, c,</em> ...
+<li> <code>ListUpperAlpha</code> - an uppercase letter: <em>A, B, C,</em> ...
+</ul>
 <hr><h2>Member Function Documentation</h2>
 <h3 class="fn"><a name="b2f6e3"></a>QStyleSheetItem::QStyleSheetItem ( <a href="qstylesheet.html">QStyleSheet</a> * parent, const <a href="qstring.html">QString</a> &amp; name )</h3>
 <p>Constructs a new style named <em>name</em> for the stylesheet <em>parent.</em>
 <p>All properties in QStyleSheetItem are initially in the "do not change" state,
-except , which defaults
+except <a href="qstylesheetitem.html#DisplayMode">display mode</a>, which defaults
 to <code>DisplayInline.</code>
 <h3 class="fn"><a name="7f3d92"></a>QStyleSheetItem::~QStyleSheetItem ()</h3>
 <p>Destroys the style.  Note that QStyleSheetItem objects become owned
@@ -115,6 +140,9 @@ does not define any shape until <a href="qstylesheetitem.html#c18bde">setFontIta
 property of the font.  A style does not define this until
 <a href="qstylesheetitem.html#f7ac89">setFontUnderline</a>() is called.
 <p>See also:  <a href="qstylesheetitem.html#f7ac89">setFontUnderline</a>() and <a href="qstylesheetitem.html#a0ae7b">fontUnderline</a>().
+<h3 class="fn">QStyleSheetItem::DisplayMode <a name="a52ddd"></a>QStyleSheetItem::displayMode() const</h3>
+<p>Returns the <a href="qstylesheetitem.html#DisplayMode">display mode</a> of the style.
+<p>See also:  <a href="qstylesheetitem.html#9e2b2f">setDisplayMode</a>().
 <h3 class="fn"><a href="qstring.html">QString</a> <a name="5bbe79"></a>QStyleSheetItem::fontFamily () const</h3>
 <p>Returns the font family setting of the style. This is either a valid
 font family or QString::null if no family has been set.
@@ -136,6 +164,9 @@ valid <a href="qfont.html#Weight">QFont::Weight</a> or the value QStyleSheetItem
 <h3 class="fn">bool <a name="fc0413"></a>QStyleSheetItem::isAnchor () const</h3>
 <p>Returns whether this style is an anchor.
 <p>See also:  <a href="qstylesheetitem.html#c4ae7f">setAnchor</a>().
+<h3 class="fn">QStyleSheetItem::ListStyle <a name="bca680"></a>QStyleSheetItem::listStyle() const</h3>
+<p>Returns the list style of the style.
+<p>See also:  <a href="qstylesheetitem.html#86d1ba">setListStyle</a>().
 <h3 class="fn">int <a name="9f8f30"></a>QStyleSheetItem::logicalFontSize () const</h3>
 <p>Returns the logical font size setting of the style. This is either a valid
 size between 1 and 7  or QStyleSheetItem::Undefined.
@@ -159,7 +190,8 @@ size between 1 and 7  or QStyleSheetItem::Undefined.
 <p>See also:  <a href="qstylesheetitem.html#6e8ef1">setSelfNesting</a>().
 <h3 class="fn">void <a name="3d22ad"></a>QStyleSheetItem::setAlignment ( int f )</h3>
 <p>Sets the alignment. This only makes sense for styles with
-<p>DisplayBlock. Possible values are AlignLeft, AlignRight and
+<a href="qstylesheetitem.html#DisplayMode">display mode</a>
+DisplayBlock. Possible values are AlignLeft, AlignRight and
 AlignCenter.
 <p>See also:  <a href="qstylesheetitem.html#e7283d">alignment</a>() and <a href="qstylesheetitem.html#a52ddd">displayMode</a>().
 <h3 class="fn">void <a name="c4ae7f"></a>QStyleSheetItem::setAnchor ( bool anc )</h3>
@@ -176,22 +208,8 @@ everywhere.
 <p>See also:  <a href="qstylesheetitem.html#d4fd6c">contexts</a>().
 <p>Examples:
  <a href="qbrowser-main-cpp.html#setContexts">qbrowser/main.cpp</a>
-<h3 class="fn">void <a name="9e2b2f"></a>QStyleSheetItem::setDisplayMode ( DisplayMode m )</h3>
+<h3 class="fn">void <a name="9e2b2f"></a>QStyleSheetItem::setDisplayMode ( <a href="qstylesheetitem.html#DisplayMode">DisplayMode</a> m )</h3>
 <p>Sets the display mode of the style to <em>m.</em>
-<p>The affect of the available values are:
-<ul>
-<li> <code>DisplayBlock</code>
-- elements will be displayed as a rectangular block.
-(eg. &lt;P&gt; ... &lt;/P&gt;)
-<li> <code>DisplayInline</code>
-- elements will be displayed in a horizontally flowing sequence.
-(eg. &lt;EM&gt; ... &lt;/EM&gt;)
-<li> <code>DisplayListItem</code>
-- elements will be displayed vertically sequenced.
-(eg. &lt;EM&gt; ... &lt;/EM&gt;)
-<li> <code>DisplayNone</code>
-- elements which are not displayed at all.
-</ul>
 <p>See also:  <a href="qstylesheetitem.html#a52ddd">displayMode</a>().
 <p>Examples:
  <a href="qbrowser-main-cpp.html#setDisplayMode">qbrowser/main.cpp</a>
@@ -211,26 +229,11 @@ everywhere.
 <p>Sets the font weight setting of the style.  Valid values are
 those defined by <a href="qfont.html#Weight">QFont::Weight</a>.
 <p>See also:  <a href="qfont.html">QFont</a> and <a href="qstylesheetitem.html#85ef85">fontWeight</a>().
-<h3 class="fn">void <a name="86d1ba"></a>QStyleSheetItem::setListStyle ( ListStyle s )</h3>
-<p>Sets the list style of the style
-<p>This is used by nested elements which have a
-of DisplayListItem.
-<p>The affect of the available values are:
-<ul>
-<li> <code>ListDisc</code>
-- a filled circle
-<li> <code>ListCircle</code>
-- an unfilled circle
-<li> <code>ListSquare</code>
-- a filled circle
-<li> <code>ListDecimal</code>
-- an integer in base 10: <em>1, 2, 3,</em> ...
-<li> <code>ListLowerAlpha</code>
-- a lowercase letter: <em>a, b, c,</em> ...
-<li> <code>ListUpperAlpha</code>
-- an uppercase letter: <em>A, B, C,</em> ...
-</ul>
-<p>See also:  <a href="qstylesheetitem.html#bca680">listStyle</a>().
+<h3 class="fn">void <a name="86d1ba"></a>QStyleSheetItem::setListStyle ( <a href="qstylesheetitem.html#ListStyle">ListStyle</a> s )</h3>
+<p>Sets the list style of the style.
+<p>This is used by nested elements which have a display mode of
+DisplayListItem.
+<p>See also:  <a href="qstylesheetitem.html#bca680">listStyle</a>() and <a href="qstylesheetitem.html#DisplayMode">DisplayMode</a>.
 <h3 class="fn">void <a name="885160"></a>QStyleSheetItem::setLogicalFontSize ( int s )</h3>
 <p>Sets the logical font size setting of the style tp <em>s.</em>
 Valid logical sizes are 1 to 7.
@@ -246,7 +249,7 @@ Valid logical sizes are 1 to 7.
 <p>Sets the number of columns for this style.  Elements in the style
 are divided into columns.
 <p>This only makes sense
-if the style uses a .
+if the style uses a <a href="qstylesheetitem.html#DisplayMode">block display mode</a>.
 <p>See also:  <a href="qstylesheetitem.html#6bfc1c">numberOfColumns</a>().
 <h3 class="fn">void <a name="6e8ef1"></a>QStyleSheetItem::setSelfNesting ( bool nesting )</h3>
 <p>Sets the self nesting property for this style to <em>nesting.</em>
@@ -276,7 +279,7 @@ display programming code.
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.troll.no">www.troll.no</a>):<br>
 <form method=post action="http://www.troll.no/search.cgi">
-<input type=hidden name="version" value="2.00"><nobr>
+<input type=hidden name="version" value="2.0.1"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -284,5 +287,5 @@ copyright &copy; 1995-99
 <a href="http://www.troll.no">Troll Tech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.00</div>
+<td align="right"><div align="right">Qt version 2.0.1</div>
 </table></div></address></body></html>

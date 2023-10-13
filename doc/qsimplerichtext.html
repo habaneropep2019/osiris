@@ -19,7 +19,7 @@ A small displayable piece of rich text.
 <p><a href="qsimplerichtext-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><span class="fn"><a href="#d7553e"><b>QSimpleRichText</b></a> ( const QString &amp; text, const QFont &amp; fnt = QApplication::font (), const QString &amp; context = QString::null, const QStyleSheet * s = 0) </span>
+<li><span class="fn"><a href="#d7553e"><b>QSimpleRichText</b></a> ( const QString &amp; text, const QFont &amp; fnt, const QString &amp; context = QString::null, const QStyleSheet * s = 0 ) </span>
 <li><span class="fn"><a href="#6465ab"><b>~QSimpleRichText</b></a> () </span>
 <li><span class="fn">void <a href="#e3bbe2"><b>setWidth</b></a> ( QPainter *, int ) </span>
 <li><span class="fn">int <a href="#41b4a7"><b>width</b></a> () const</span>
@@ -37,25 +37,24 @@ This class encapsulates simple richt text usage where a string is
 interpretted as richt text and can be drawn. This is in particular
 useful if you want to display some rich text in a custom widget.
 <p>Once created, the rich text object can be queried for its <a href="qsimplerichtext.html#41b4a7">width</a>(),
-<a href="qsimplerichtext.html#844389">height</a>() and the actual width used ( see <a href="qsimplerichtext.html#a83750">widthUsed</a>() ). And, most
-certainly, it can be drawn on any given <a href="qpainter.html">QPainter</a> with <a href="qsimplerichtext.html#876616">draw</a>().  By
-using <a href="qsimplerichtext.html#0070d5">anchor</a>(), it is possible to use QSimpleRichText to implement
-some kind of hypertext or active text facilities as well.
-<p>Changes other than resizing with <a href="qsimplerichtext.html#e3bbe2">setWidth</a>() cannot be made. If the
-contents is supposed to change, just throw the rich text object away
-and make a new one with the new contents.
+<a href="qsimplerichtext.html#844389">height</a>() and the actual width used (see <a href="qsimplerichtext.html#a83750">widthUsed</a>()). Most
+importantly, it can be drawn on any given <a href="qpainter.html">QPainter</a> with <a href="qsimplerichtext.html#876616">draw</a>().
+QSimpleRichText can also be used to implement
+hypertext or active text facilities by using <a href="qsimplerichtext.html#0070d5">anchor</a>().
+<p>Once constructed from a string, the contents cannot be changed, only
+resized.  If the contents should change, just throw the rich text
+object away and make a new one with the new contents.
 <p>For large documents, see <a href="qtextview.html">QTextView</a> or <a href="qtextbrowser.html">QTextBrowser</a>.
 
 <hr><h2>Member Function Documentation</h2>
-<h3 class="fn"><a name="d7553e"></a>QSimpleRichText::QSimpleRichText ( const <a href="qstring.html">QString</a> &amp; text, const <a href="qfont.html">QFont</a> &amp; fnt = QApplication::font (), const <a href="qstring.html">QString</a> &amp; context = QString::null, const <a href="qstylesheet.html">QStyleSheet</a> * s = 0)</h3>
-<p>Constructs a QSimpleRichText from the rich text string  <em>text.</em>
-<p>If a font <em>fnt</em> is specified, this font will be used as basis for
-the text rendering. When using rich text rendering on a certain
-widget <em>w,</em> you would regularily specify the widget's font as shown in
-the following code example:
+<h3 class="fn"><a name="d7553e"></a>QSimpleRichText::QSimpleRichText ( const <a href="qstring.html">QString</a> &amp; text, const <a href="qfont.html">QFont</a> &amp; fnt, const <a href="qstring.html">QString</a> &amp; context = QString::null, const <a href="qstylesheet.html">QStyleSheet</a> * s = 0 )</h3>
+<p>Constructs a QSimpleRichText from the rich text string <em>text</em>
+and the font <em>fnt.</em>
+<p>The font is used as basis for the text rendering. When using rich
+text rendering on a certain widget <em>w,</em> you would regularily
+specify the widget's font as shown in the following code example:
 <p><pre>  <a href="qsimplerichtext.html">QSimpleRichText</a>* t = new <a href="qsimplerichtext.html">QSimpleRichText</a>( contents, w-&gt;font() );
 </pre>
-<p>If not font has been specified, the application's default font is used.
 <p><em>context</em> is the optional context of the document. This becomes
 important if <em>text</em> contains relative references, for example
 within image tags. QSimpleRichText always uses the default mime
@@ -112,7 +111,7 @@ not fill the width completely.
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.troll.no">www.troll.no</a>):<br>
 <form method=post action="http://www.troll.no/search.cgi">
-<input type=hidden name="version" value="2.00"><nobr>
+<input type=hidden name="version" value="2.0.1"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -120,5 +119,5 @@ copyright &copy; 1995-99
 <a href="http://www.troll.no">Troll Tech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.00</div>
+<td align="right"><div align="right">Qt version 2.0.1</div>
 </table></div></address></body></html>

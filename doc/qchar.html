@@ -23,7 +23,7 @@ A Unicode character.
 <li><span class="fn">enum <b>Direction</b> { DirL, DirR, DirEN, DirES, DirET, DirAN, DirCS, DirB, DirS, DirWS, DirON }</span>
 <li><span class="fn">enum <b>Decomposition</b> { Single, Canonical, Font, NoBreak, Initial, Medial, Final, Isolated, Circle, Super, Sub, Vertical, Wide, Narrow, Small, Square, Compat, Fraction }</span>
 <li><span class="fn">enum <b>Joining</b> { OtherJoining, Dual, Right, Center, Unknown }</span>
-<li><span class="fn">bool <b>isNull</b> () const</span>
+<li><span class="fn">bool <a href="#ba633a"><b>isNull</b></a> () const</span>
 <li><span class="fn">bool <a href="#55227d"><b>isPrint</b></a> () const</span>
 <li><span class="fn">bool <a href="#51bc57"><b>isPunct</b></a> () const</span>
 <li><span class="fn">bool <a href="#9744c0"><b>isSpace</b></a> () const</span>
@@ -42,10 +42,10 @@ A Unicode character.
 <li><span class="fn">Decomposition <b>decompositionTag</b> () const</span>
 <li><span class="fn">char <b>latin1</b> () const</span>
 <li><span class="fn">ushort <a href="#93cde1"><b>unicode</b></a> () const</span>
-<li><span class="fn">uchar&amp; <b>cell</b> () </span>
-<li><span class="fn">uchar&amp; <b>row</b> () </span>
-<li><span class="fn">uchar <b>cell</b> () const</span>
-<li><span class="fn">uchar <b>row</b> () const</span>
+<li><span class="fn">uchar&amp; <a href="#77ceb8"><b>cell</b></a> () </span>
+<li><span class="fn">uchar&amp; <a href="#ea6f53"><b>row</b></a> () </span>
+<li><span class="fn">uchar <a href="#15e807"><b>cell</b></a> () const</span>
+<li><span class="fn">uchar <a href="#84e6cc"><b>row</b></a> () const</span>
 </ul>
 <h2>Static Public Members</h2>
 <ul>
@@ -74,6 +74,10 @@ which is the Cyrillic letter YA which looks like a mirrored R.
 </dl>
 
 <hr><h2>Member Function Documentation</h2>
+<h3 class="fn">uchar <a name="15e807"></a>QChar::cell () const</h3>
+<p>Returns the cell (least significant byte) of the Unicode character.
+<h3 class="fn">uchar&amp; <a name="77ceb8"></a>QChar::cell ()</h3>
+<p>Returns a reference to the cell (least significant byte) of the Unicode character.
 <h3 class="fn"><a href="qstring.html">QString</a> <a name="fc3170"></a>QChar::decomposition () const</h3>
 <p>Decomposes a character into its parts. Returns QString::null if
 no decomposition exists.
@@ -86,6 +90,9 @@ a digit.
 <p>Returns whether the character is a letter (Letter_* categories).
 <h3 class="fn">bool <a name="6835cd"></a>QChar::isMark () const</h3>
 <p>Returns whether the character is a mark (Mark_* categories).
+<h3 class="fn">bool <a name="ba633a"></a>QChar::isNull () const</h3>
+<p>Returns TRUE if the charaters is the unicode character 0x0000,
+ie. ASCII NUL.
 <h3 class="fn">bool <a name="a4bc0b"></a>QChar::isNumber () const</h3>
 <p>Returns whether the character is a number (of any sort - Number_* categories).
 <p>See also:  <a href="qchar.html#2f74af">isDigit</a>().
@@ -104,6 +111,10 @@ or the character itself otherwise.
 <h3 class="fn">bool <a name="f5d062"></a>QChar::mirrored () const</h3>
 <p>Returns whether the character is a mirrored character (one that
 should be reversed if the text direction is reversed).
+<h3 class="fn">uchar <a name="84e6cc"></a>QChar::row () const</h3>
+<p>Returns the row (most significant byte) of the Unicode character.
+<h3 class="fn">uchar&amp; <a name="ea6f53"></a>QChar::row ()</h3>
+<p>Returns a reference to the row (most significant byte) of the Unicode character.
 <h3 class="fn">ushort <a name="93cde1"></a>QChar::unicode () const</h3>
 <p>Returns the numeric Unicode value equal to the QChar.  Normally, you
 should use QChar objects as they are equivalent, but for some low-level
@@ -116,7 +127,7 @@ or the character itself otherwise.
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.troll.no">www.troll.no</a>):<br>
 <form method=post action="http://www.troll.no/search.cgi">
-<input type=hidden name="version" value="2.00"><nobr>
+<input type=hidden name="version" value="2.0.1"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -124,5 +135,5 @@ copyright &copy; 1995-99
 <a href="http://www.troll.no">Troll Tech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.00</div>
+<td align="right"><div align="right">Qt version 2.0.1</div>
 </table></div></address></body></html>

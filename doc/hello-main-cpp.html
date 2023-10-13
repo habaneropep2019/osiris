@@ -85,7 +85,7 @@ Hello::Hello( const char *text, QWidget *parent, const char *name )
     : <a href="qwidget.html">QWidget</a>(parent,name), t(text), b(0)
 {
     <a href="qtimer.html">QTimer</a> *timer = new <a href="qtimer.html">QTimer</a>(this);
-    <a href="qobject.html#c2d209">connect</a>( timer, SIGNAL(timeout()), SLOT(<a href=#380>animate</a>()) );
+    <a href="qobject.html#c2d209">connect</a>( timer, SIGNAL(timeout()), SLOT(<a href=#287>animate</a>()) );
     timer-&gt;<a href="qtimer.html#3aafb5">start</a>( 40 );
 
     <a href="qwidget.html#9775bb">resize</a>( 260, 130 );
@@ -95,7 +95,7 @@ Hello::Hello( const char *text, QWidget *parent, const char *name )
   This private slot is called each time the timer fires.
 */
 
-void <a name="380"></a>Hello::animate()
+void <a name="287"></a>Hello::animate()
 {
     b = (b + 1) &amp; 15;
     <a href="qwidget.html#977d49">repaint</a>( FALSE );
@@ -108,7 +108,7 @@ void <a name="380"></a>Hello::animate()
   the widget.
 */
 
-void <a name="381"></a>Hello::mouseReleaseEvent( <a href="qmouseevent.html">QMouseEvent</a> *e )
+void <a name="288"></a>Hello::mouseReleaseEvent( <a href="qmouseevent.html">QMouseEvent</a> *e )
 {
     if ( rect().contains( e-&gt;<a href="qmouseevent.html#ac025d">pos</a>() ) )
         emit clicked();
@@ -121,7 +121,7 @@ void <a name="381"></a>Hello::mouseReleaseEvent( <a href="qmouseevent.html">QMou
   pixmap is then blt'ed to the screen.
 */
 
-void <a name="382"></a>Hello::paintEvent( <a href="qpaintevent.html">QPaintEvent</a> * )
+void <a name="289"></a>Hello::paintEvent( <a href="qpaintevent.html">QPaintEvent</a> * )
 {
     static int sin_tbl[16] = {
         0, 38, 71, 92, 100, 92, 71, 38, 0, -38, -71, -92, -100, -92, -71, -38};
@@ -146,7 +146,7 @@ void <a name="382"></a>Hello::paintEvent( <a href="qpaintevent.html">QPaintEvent
     int y = h/2 + fm.<a href="qfontmetrics.html#a71895">descent</a>();
     int i = 0;
     p.<a href="qpainter.html#59f1bb">begin</a>( &amp;pm );
-    p.<a href="qpainter.html#e4d6b7">setFont</a>( <a href="qwidget.html#605f4c">font</a>() );
+    p.<a href="qpainter.html#e4d6b7">setFont</a>( <a href="qwidget.html#3a7237">font</a>() );
     while ( !t[i].isNull() ) {
         int i16 = (b+i) &amp; 15;
         p.<a href="qpainter.html#1b9993">setPen</a>( <a href="qcolor.html">QColor</a>((15-i16)*16,255,255,QColor::Hsv) );
@@ -207,5 +207,5 @@ int main( int argc, char **argv )
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.00</div>
+<td align="right"><div align="right">Qt version 2.0.1</div>
 </table></div></address></body></html>

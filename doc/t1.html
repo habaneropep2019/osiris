@@ -55,12 +55,12 @@ This line includes the QPushButton class definition.  The <a
 href="hierarchy.html">reference documentation</a> for each class
 mentions at the top which file needs to be included to use that class.
 <p>
-QPushButton is a classical GUI push button, which the user can press and
-release.  It manages its own look and feel, like every other <a href="qwidget.html">widget</a>.  A widget is a user interface object which can process
-user input and draw graphics.  The programmer can change both the overall
+QPushButton is a classical GUI push button, which the user can press
+and release.  It manages its own look and feel, like every other <a href="qwidget.html">QWidget</a>.  A widget is a user interface object which can process user
+input and draw graphics.  The programmer can change both the overall
 <a href="qapplication.html#c9e3b3">look and feel</a> and many minor
 properties of it such as color, as well as the widget's content.  A
-QPushButton can show either a text or a <a href="qpixmap.html">pixmap</a>.
+QPushButton can show either a text or a <a href="qpixmap.html">QPixmap</a>.
 <p>
 <pre>
     int main( int argc, char **argv )
@@ -73,7 +73,7 @@ before passing the control to the Qt library, which then tells the
 program about the user's actions via events.
 <p>
 <code>argc</code> is the number of command-line arguments and <code>argv</code> is the array
-of command-line arguments. This is a C/C++ feature. It is not Qt specific,
+of command-line arguments.  This is a C/C++ feature.  It is not Qt specific,
 however, Qt needs to process these arguments (see below).
 <p>
 <pre>
@@ -105,7 +105,7 @@ window which the button should be inside).
 </pre>
 <p>
 The button is set up to be 100 pixels wide and 30 pixels high (plus the
-window system frame). In this case we don't care about the button's
+window system frame).  In this case we don't care about the button's
 position and accept the default value.
 <p>
 <pre>
@@ -140,7 +140,7 @@ these on to the appropriate widgets.
 <p>
 <h2>Behavior</h2>
 <p>
-You should now try to compile and <a href="qapplication.html#811515">run</a> this program.
+You should now try to compile and run this program.
 <p>
 When you run it, you will see a small window filled with a single
 button, and on it you can read the famous words, Hello World!
@@ -149,7 +149,7 @@ button, and on it you can read the famous words, Hello World!
 <p>
 Try to resize the window.  Press the button.  If you're running X11,
 try running the program with the -geometry option
-(e.g. -geometry 100x200+10+20)
+(e.g.  -geometry 100x200+10+20)
 <p>
 You may now go on to <a href="t2.html">chapter two.</a>
 <p>
@@ -159,5 +159,5 @@ You may now go on to <a href="t2.html">chapter two.</a>
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.00</div>
+<td align="right"><div align="right">Qt version 2.0.1</div>
 </table></div></address></body></html>

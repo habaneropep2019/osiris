@@ -65,9 +65,68 @@ system and the coder is used as required in the different
 text file formats supported <a href="qtextstream.html">QTextStream</a> and, under X11 for the
 locale-specific character input and output (under Windows NT
 codecs are not needed for GUI I/O since the system works
-with Unicode already).
+with Unicode already, and Windows 95/98 has built-in convertors
+for the 8-bit local encoding).
 <p>More recently created QTextCodec objects take precedence
 over earlier ones.
+<p>To add support for another 8-bit encoding to Qt, make a subclass
+or QTextCodec and implement at least the following methods:
+<dl>
+<dt><code>const</code> char* <a href="qtextcodec.html#fcf223">name</a>() const
+<dd>Return the official name for the encoding.
+<dt><code>int</code> <a href="qtextcodec.html#b0aafb">mibEnum</a>() const
+<dd>Return the MIB enum for the encoding if it is listed in the
+<a href=ftp://ftp.isi.edu/in-notes/iana/assignments/character-sets>
+IANA character-sets encoding file</a>.
+</dl>
+If the encoding is multi-byte then it will have "state"; that is,
+the interpretation of some bytes will be dependent on some preceeding
+bytes.  For such an encoding, you will need to implement
+<dl>
+<dt> <code><a href="qtextdecoder.html">QTextDecoder</a>*</code> <a href="qtextcodec.html#bfe11b">makeDecoder</a>() const
+<dd>Return a QTextDecoder that remembers incomplete multibyte 
+sequence prefixes or other required state.
+</dl>
+If the encoding does <em>not</em> require state, you should implement:
+<dl>
+<dt> <code><a href="qstring.html">QString</a></code> <a href="qtextcodec.html#235cd6">toUnicode</a>(const char* chars, int len) const
+<dd>Converts <em>len</em> characters from <em>chars</em> to Unicode.
+</dl>
+The base QTextCodec class has default implementations of the above
+two functions, <i>but they are mutually recursive</i>, so you must
+re-implement at least one of them, or both for improved efficiency.
+<p>For conversion from Unicode to 8-bit encodings, it is rarely necessary
+to maintain state.  However, two functions similar to the two above
+are used for encoding:
+<dl>
+<dt> <code><a href="qtextencoder.html">QTextEncoder</a>*</code> <a href="qtextcodec.html#c400c7">makeEncoder</a>() const
+<dd>Return a QTextDecoder.
+<dt> <code><a href="qcstring.html">QCString</a></code> <a href="qtextcodec.html#7e416f">fromUnicode</a>(const QString& uc, int& lenInOut ) const;
+<dd>Converts <em>lenInOut</em> characters (of type <a href="qchar.html">QChar</a>) from the start
+of the string <em>uc,</em> returning a QCString result, and also returning
+the <a href="qcstring.html#acf534">length</a>
+of the result in lenInOut.
+</dl>
+Again, these are mutually recursive so only one needs to be implemented,
+or both if better efficiency is possible.
+<p>Finally, you must implement:
+<dl>
+<dt> <code>int</code> <a href="qtextcodec.html#461187">heuristicContentMatch</a>(const char* chars, int len) const
+<dd>Gives a value indicating how likely it is that <em>len</em> chracters
+from <em>chars</em> are in the encoding.
+</dl>
+A good model for this function is the
+QWindowsLocalCodec::heuristicContentMatch function found in the Qt sources.
+<p>A QTextCodec subclass might have improved performance if you also
+re-implement:
+<dl>
+<dt> <code>bool</code> <a href="qtextcodec.html#288c5c">canEncode</a>( QChar ) const
+<dd>Test if a Unicode character can be encoded.
+<dt> <code>bool</code> canEncode( const QString& ) const
+<dd>Test if a string of Unicode characters can be encoded.
+<dt> <code>int</code> <a href="qtextcodec.html#144365">heuristicNameMatch</a>(const char* hint) const
+<dd>Test if a possibly non-standard name is referring to the codec.
+</dl>
 
 <hr><h2>Member Function Documentation</h2>
 <h3 class="fn"><a name="f9b2db"></a>QTextCodec::QTextCodec () <code>[protected]</code></h3>
@@ -233,7 +292,7 @@ the other to avoid infinite recursion.
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.troll.no">www.troll.no</a>):<br>
 <form method=post action="http://www.troll.no/search.cgi">
-<input type=hidden name="version" value="2.00"><nobr>
+<input type=hidden name="version" value="2.0.1"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -241,5 +300,5 @@ copyright &copy; 1995-99
 <a href="http://www.troll.no">Troll Tech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.00</div>
+<td align="right"><div align="right">Qt version 2.0.1</div>
 </table></div></address></body></html>

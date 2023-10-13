@@ -19,7 +19,7 @@ remains with Troll Tech.
 <hr>
 <pre>
 /****************************************************************************
-** &#36;Id&#58; qstring.h,v 2.89 1999/06/15 12:00:54 warwick Exp $
+** &#36;Id&#58; qstring.h,v 2.89.2.1 1999/07/07 17:16:04 warwick Exp $
 **
 ** Definition of the QString class, extended char array operations,
 ** and QByteArray and QCString classes
@@ -278,12 +278,11 @@ struct Q_EXPORT QStringData : public <a href="qshared.html">QShared</a> {
 };
 
 
-
 class Q_EXPORT <a href="qstring.html">QString</a>
 {
 public:
     QString();                                  // make null string
-    QString( QChar );                   // one-char string
+    QString( QChar );                           // one-char string
     QString( const QString &amp; );                 // impl-shared copy
     QString( const QByteArray&amp; );               // deep copy
     QString( const QChar* unicode, uint length ); // deep copy
@@ -722,5 +721,5 @@ extern Q_EXPORT QString qt_winMB2QString( const char* mb, int len=-1 );
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.00</div>
+<td align="right"><div align="right">Qt version 2.0.1</div>
 </table></div></address></body></html>

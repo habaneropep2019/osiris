@@ -13,7 +13,7 @@ SYSCONF_CXXFLAGS_YACC     =
 # Linking with support libraries
 # X11
 SYSCONF_LFLAGS_X11	= 
-SYSCONF_LIBS_X11	= -lXext -lX11
+SYSCONF_LIBS_X11	= -lXext -lX11 -lm
 # Qt, Qt+OpenGL
 SYSCONF_LFLAGS_QT	= -L$(QTDIR)/lib
 SYSCONF_LIBS_QT		= -lqt
@@ -36,12 +36,12 @@ SYSCONF_LFLAGS_SHOBJ	=
 SYSCONF_MOC		= $(QTDIR)/bin/moc
 
 # Linking shared libraries
-#   - Build the $(TARGET) library, eg. lib$(TARGET).so.0.0
+#   - Build the $(TARGET) library, eg. lib$(TARGET).so.2.0.1
 #   - Place target in $(DESTDIR) - which has a trailing /
-#   - Usually needs to incorporate $(VER_MAJ) and $(VER_MIN)
+#   - Usually needs to incorporate $(VER_MAJ), $(VER_MIN) and $(VER_PATCH)
 #
 SYSCONF_LINK_SHLIB	= ld
-SYSCONF_LINK_TARGET_SHARED	= lib$(TARGET).so.$(VER_MAJ).$(VER_MIN)
+SYSCONF_LINK_TARGET_SHARED	= lib$(TARGET).so.$(VER_MAJ).$(VER_MIN).$(VER_PATCH)
 SYSCONF_LINK_LIB_SHARED	= /usr/lpp/xlC/bin/makeC++SharedLib -p 0 -o lib$(TARGET).so.$(VER_MAJ).$(VER_MIN) -lXext -lX11 $(OBJECTS) $(OBJMOC); ar q lib$(TARGET).a lib$(TARGET).so.$(VER_MAJ).$(VER_MIN); ranlib lib$(TARGET).a; mv lib$(TARGET).a $(DESTDIR)
 
 # Linking static libraries

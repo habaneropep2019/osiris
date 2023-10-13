@@ -19,7 +19,7 @@ remains with Troll Tech.
 <hr>
 <pre>
 /**********************************************************************
-** &#36;Id&#58; qprinter.h,v 2.21 1999/06/11 03:41:17 agulbra Exp $
+** &#36;Id&#58; qprinter.h,v 2.21.2.1 1999/07/14 19:13:21 aavit Exp $
 **
 ** Definition of QPrinter class
 **
@@ -150,6 +150,7 @@ private:
     short       ncopies;
 #if defined(_WS_WIN_)
     bool        viewOffsetDone;
+    QPainter*   painter;
 #endif
 
 private:        // Disabled copy constructor and operator=
@@ -206,5 +207,5 @@ inline int QPrinter::numCopies() const
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.00</div>
+<td align="right"><div align="right">Qt version 2.0.1</div>
 </table></div></address></body></html>

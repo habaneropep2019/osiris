@@ -1,0 +1,99 @@
+.TH QSpacerItem 3qt "20 July 1999" "Troll Tech AS" \" -*- nroff -*-
+.\" Copyright 1992-1999 Troll Tech AS.  All rights reserved.  See the
+.\" license file included in the distribution for a complete license
+.\" statement.
+.\"
+.ad l
+.nh
+.SH NAME
+QSpacerItem \- A QLayoutItem that represents blank space
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <qabstractlayout.h>\fR
+.PP
+Inherits QLayoutItem.
+.PP
+.SS "Public Members"
+.in +1c
+.ti -1c
+.BI "\fBQSpacerItem\fR ( int " "w" ", int " "h" ", QSizePolicy::SizeType hData=QSizePolicy::Minimum, QSizePolicy::SizeType vData= QSizePolicy::Minimum )"
+.br
+.ti -1c
+.BI "void \fBchangeSize\fR ( int " "w" ", int " "h" ", QSizePolicy::SizeType hData=QSizePolicy::Minimum, QSizePolicy::SizeType vData=QSizePolicy::Minimum )"
+.br
+.ti -1c
+.BI "virtual QSize \fBsizeHint\fR () const"
+.br
+.ti -1c
+.BI "virtual QSize \fBminimumSize\fR () const"
+.br
+.ti -1c
+.BI "virtual QSize \fBmaximumSize\fR () const"
+.br
+.ti -1c
+.BI "virtual QSizePolicy::ExpandData \fBexpanding\fR () const"
+.br
+.ti -1c
+.BI "virtual bool \fBisEmpty\fR () const"
+.br
+.ti -1c
+.BI "virtual void \fBsetGeometry\fR ( const QRect & )"
+.br
+.ti -1c
+.BI "virtual QRect \fBgeometry\fR () const"
+.br
+.ti -1c
+.BI "virtual QSpacerItem* \fBspacerItem\fR ()"
+.br
+.in -1c
+.SH DESCRIPTION
+A QLayoutItem that represents blank space.
+.PP
+For custom layouts.
+.PP
+See also: QLayout.
+.SH MEMBER FUNCTION DOCUMENTATION
+.SH "QSpacerItem::QSpacerItem ( int w, int h, QSizePolicy::SizeType hData=QSizePolicy::Minimum=QSizePolicy::Minimum, QSizePolicy::SizeType vData= QSizePolicy::Minimum= QSizePolicy::Minimum )"
+Constructs a spacer item with preferred width \fIw,\fR preferred height \fIh,\fR horizontal size policy \fIhData\fR and vertical size policy \fIvData.\fR
+.PP
+The default values gives a gap that is able to stretch, if nothing else wants the space.
+.SH "void QSpacerItem::changeSize ( int w, int h, QSizePolicy::SizeType hData=QSizePolicy::Minimum, QSizePolicy::SizeType vData=QSizePolicy::Minimum )"
+Changes this spacer item to have preferred width \fIw,\fR preferred height \fIh,\fR horizontal size policy \fIhData\fR and vertical size policy \fIvData.\fR
+.PP
+The default values gives a gap that is able to stretch, if nothing else wants the space.
+.SH "QRect QSpacerItem::geometry () const \fC[virtual]\fR"
+Reimplemented for internal reasons; the API is not affected.
+.PP
+Reimplemented from QLayoutItem.
+.SH "bool QSpacerItem::isEmpty () const \fC[virtual]\fR"
+Returns TRUE, since a space item never contains widgets.
+.PP
+Reimplemented from QLayoutItem.
+.SH "QSize QSpacerItem::maximumSize () const \fC[virtual]\fR"
+Returns the maximum size of this space item.
+.PP
+Reimplemented from QLayoutItem.
+.SH "QSize QSpacerItem::minimumSize () const \fC[virtual]\fR"
+Returns the minimum size of this space item.
+.PP
+Reimplemented from QLayoutItem.
+.SH "void QSpacerItem::setGeometry ( const QRect & r ) \fC[virtual]\fR"
+This function stores \fIr,\fR so it can be returned by geometry().
+.PP
+Reimplemented from QLayoutItem.
+.SH "QSize QSpacerItem::sizeHint () const \fC[virtual]\fR"
+Returns the preferred size of this space item.
+.PP
+Reimplemented from QLayoutItem.
+.SH "QSpacerItem * QSpacerItem::spacerItem () \fC[virtual]\fR"
+Reimplemented for internal reasons; the API is not affected.
+.PP
+Reimplemented from QLayoutItem.
+.SH "SEE ALSO"
+.BR http://www.troll.no/qt/qspaceritem.html
+.SH COPYRIGHT
+Copyright 1992-1999 Troll Tech AS.  See the license file included in
+the distribution for a complete license statement.
+.SH AUTHOR
+Generated automatically from the source code.

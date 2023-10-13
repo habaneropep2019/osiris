@@ -122,7 +122,7 @@ Table::~Table()
   Return content of cell
 */
 
-const char* <a name="309"></a>Table::cellContent( int row, int col ) const
+const char* <a name="216"></a>Table::cellContent( int row, int col ) const
 {
     return contents[indexOf( row, col )];       // contents array lookup
 }
@@ -131,7 +131,7 @@ const char* <a name="309"></a>Table::cellContent( int row, int col ) const
   Set content of cell
 */
 
-void <a name="310"></a>Table::setCellContent( int row, int col, const char* c )
+void <a name="217"></a>Table::setCellContent( int row, int col, const char* c )
 {
     contents[indexOf( row, col )] = c;          // contents lookup and assign
     <a href="qtableview.html#eec35d">updateCell</a>( row, col );                     // show new content
@@ -141,7 +141,7 @@ void <a name="310"></a>Table::setCellContent( int row, int col, const char* c )
   Handles cell painting for the Table widget.
 */
 
-void <a name="311"></a>Table::paintCell( <a href="qpainter.html">QPainter</a>* p, int row, int col )
+void <a name="218"></a>Table::paintCell( <a href="qpainter.html">QPainter</a>* p, int row, int col )
 {
     int w = cellWidth( col );                   // width of cell in pixels
     int h = cellHeight( row );                  // height of cell in pixels
@@ -179,7 +179,7 @@ void <a name="311"></a>Table::paintCell( <a href="qpainter.html">QPainter</a>* p
   The current cell marker is set to the cell the mouse is clicked in.
 */
 
-void <a name="312"></a>Table::mousePressEvent( <a href="qmouseevent.html">QMouseEvent</a>* e )
+void <a name="219"></a>Table::mousePressEvent( <a href="qmouseevent.html">QMouseEvent</a>* e )
 {
     int oldRow = curRow;                        // store previous current cell
     int oldCol = curCol;
@@ -198,7 +198,7 @@ void <a name="312"></a>Table::mousePressEvent( <a href="qmouseevent.html">QMouse
   Allows moving the current cell marker around with the arrow keys
 */
 
-void <a name="313"></a>Table::keyPressEvent( <a href="qkeyevent.html">QKeyEvent</a>* e )
+void <a name="220"></a>Table::keyPressEvent( <a href="qkeyevent.html">QKeyEvent</a>* e )
 {
     int oldRow = curRow;                        // store previous current cell
     int oldCol = curCol;
@@ -252,7 +252,7 @@ void <a name="313"></a>Table::keyPressEvent( <a href="qkeyevent.html">QKeyEvent<
   Repaint only the current cell; to avoid flickering
 */
 
-void <a name="314"></a>Table::focusInEvent( <a href="qfocusevent.html">QFocusEvent</a>* )
+void <a name="221"></a>Table::focusInEvent( <a href="qfocusevent.html">QFocusEvent</a>* )
 {
     <a href="qtableview.html#eec35d">updateCell</a>( curRow, curCol );               // draw current cell
 }    
@@ -262,7 +262,7 @@ void <a name="314"></a>Table::focusInEvent( <a href="qfocusevent.html">QFocusEve
   Repaint only the current cell; to avoid flickering
 */
 
-void <a name="315"></a>Table::focusOutEvent( <a href="qfocusevent.html">QFocusEvent</a>* )
+void <a name="222"></a>Table::focusOutEvent( <a href="qfocusevent.html">QFocusEvent</a>* )
 {
     <a href="qtableview.html#eec35d">updateCell</a>( curRow, curCol );               // draw current cell
 }    
@@ -271,7 +271,7 @@ void <a name="315"></a>Table::focusOutEvent( <a href="qfocusevent.html">QFocusEv
   Utility function for mapping from 2D table to 1D array
 */
 
-int <a name="316"></a>Table::indexOf( int row, int col ) const
+int <a name="223"></a>Table::indexOf( int row, int col ) const
 {
     return (row * numCols()) + col;
 }
@@ -333,5 +333,5 @@ int main( int argc, char **argv )
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.00</div>
+<td align="right"><div align="right">Qt version 2.0.1</div>
 </table></div></address></body></html>

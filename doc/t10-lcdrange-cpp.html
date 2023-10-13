@@ -37,20 +37,20 @@ LCDRange::LCDRange( <a href="qwidget.html">QWidget</a> *parent, const char *name
 
 }
 
-int <a name="633"></a>LCDRange::value() const
+int <a name="551"></a>LCDRange::value() const
 {
     return sBar-&gt;value();
 }
 
-void <a name="634"></a>LCDRange::setValue( int value )
+void <a name="552"></a>LCDRange::setValue( int value )
 {
     sBar-&gt;setValue( value );
 }
 
-void <a name="635"></a>LCDRange::setRange( int minVal, int maxVal )
+void <a name="553"></a>LCDRange::setRange( int minVal, int maxVal )
 {
     if ( minVal &lt; 0 || maxVal &gt; 99 || minVal &gt; maxVal ) {
-        <a href="qapplication.html#63c38a">qWarning</a>( "<a name="635"></a>LCDRange::setRange(%d,%d)\n"
+        <a href="qapplication.html#63c38a">qWarning</a>( "<a name="553"></a>LCDRange::setRange(%d,%d)\n"
                  "\tRange must be 0..99\n"
                  "\tand minVal must not be greater than maxVal",
                  minVal, maxVal );
@@ -64,5 +64,5 @@ void <a name="635"></a>LCDRange::setRange( int minVal, int maxVal )
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.00</div>
+<td align="right"><div align="right">Qt version 2.0.1</div>
 </table></div></address></body></html>

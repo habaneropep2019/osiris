@@ -15,7 +15,8 @@ MOC	=	$(SYSCONF_MOC)
 
 DESTDIR = ../lib/
 VER_MAJ = 2
-VER_MIN = 00
+VER_MIN = 0
+VER_PATCH = 1
 TARGET	= qt
 TARGET1 = lib$(TARGET).so.$(VER_MAJ)
 
@@ -152,8 +153,8 @@ HEADERS =	dialogs/qcolordialog.h \
 		widgets/qcombobox.h \
 		widgets/qcommonstyle.h \
 		widgets/qframe.h \
-		widgets/qgroupbox.h \
 		widgets/qgrid.h \
+		widgets/qgroupbox.h \
 		widgets/qhbuttongroup.h \
 		widgets/qheader.h \
 		widgets/qhgroupbox.h \
@@ -303,8 +304,8 @@ SOURCES =	kernel/qapplication_x11.cpp \
 		widgets/qcombobox.cpp \
 		widgets/qcommonstyle.cpp \
 		widgets/qframe.cpp \
-		widgets/qgroupbox.cpp \
 		widgets/qgrid.cpp \
+		widgets/qgroupbox.cpp \
 		widgets/qhbuttongroup.cpp \
 		widgets/qheader.cpp \
 		widgets/qhgroupbox.cpp \
@@ -458,8 +459,8 @@ OBJECTS =	kernel/qapplication_x11.o \
 		widgets/qcombobox.o \
 		widgets/qcommonstyle.o \
 		widgets/qframe.o \
-		widgets/qgroupbox.o \
 		widgets/qgrid.o \
+		widgets/qgroupbox.o \
 		widgets/qhbuttongroup.o \
 		widgets/qheader.o \
 		widgets/qhgroupbox.o \
@@ -541,8 +542,8 @@ SRCMOC	=	dialogs/moc_qcolordialog.cpp \
 		widgets/moc_qcombobox.cpp \
 		widgets/moc_qcommonstyle.cpp \
 		widgets/moc_qframe.cpp \
-		widgets/moc_qgroupbox.cpp \
 		widgets/moc_qgrid.cpp \
+		widgets/moc_qgroupbox.cpp \
 		widgets/moc_qhbuttongroup.cpp \
 		widgets/moc_qheader.cpp \
 		widgets/moc_qhgroupbox.cpp \
@@ -619,8 +620,8 @@ OBJMOC	=	dialogs/moc_qcolordialog.o \
 		widgets/moc_qcombobox.o \
 		widgets/moc_qcommonstyle.o \
 		widgets/moc_qframe.o \
-		widgets/moc_qgroupbox.o \
 		widgets/moc_qgrid.o \
+		widgets/moc_qgroupbox.o \
 		widgets/moc_qhbuttongroup.o \
 		widgets/moc_qheader.o \
 		widgets/moc_qhgroupbox.o \
@@ -4151,6 +4152,46 @@ widgets/qframe.o: widgets/qframe.cpp \
 		kernel/qbitmap.h \
 		kernel/qpixmap.h
 
+widgets/qgrid.o: widgets/qgrid.cpp \
+		widgets/qgrid.h \
+		widgets/qframe.h \
+		kernel/qwidget.h \
+		kernel/qwindowdefs.h \
+		kernel/qobjectdefs.h \
+		tools/qglobal.h \
+		tools/qstring.h \
+		tools/qcstring.h \
+		tools/qarray.h \
+		tools/qgarray.h \
+		tools/qshared.h \
+		kernel/qnamespace.h \
+		kernel/qobject.h \
+		kernel/qevent.h \
+		kernel/qregion.h \
+		kernel/qrect.h \
+		kernel/qsize.h \
+		kernel/qpoint.h \
+		kernel/qmime.h \
+		tools/qlist.h \
+		tools/qglist.h \
+		tools/qcollection.h \
+		tools/qstringlist.h \
+		tools/qvaluelist.h \
+		tools/qdatastream.h \
+		tools/qiodevice.h \
+		kernel/qpaintdevice.h \
+		kernel/qpalette.h \
+		kernel/qcolor.h \
+		kernel/qbrush.h \
+		kernel/qcursor.h \
+		kernel/qfont.h \
+		kernel/qfontmetrics.h \
+		kernel/qfontinfo.h \
+		kernel/qstyle.h \
+		kernel/qsizepolicy.h \
+		kernel/qlayout.h \
+		kernel/qabstractlayout.h
+
 widgets/qgroupbox.o: widgets/qgroupbox.cpp \
 		widgets/qgroupbox.h \
 		widgets/qframe.h \
@@ -4202,46 +4243,6 @@ widgets/qgroupbox.o: widgets/qgroupbox.cpp \
 		kernel/qfocusdata.h \
 		kernel/qwidgetlist.h \
 		kernel/qobjectlist.h
-
-widgets/qgrid.o: widgets/qgrid.cpp \
-		widgets/qgrid.h \
-		widgets/qframe.h \
-		kernel/qwidget.h \
-		kernel/qwindowdefs.h \
-		kernel/qobjectdefs.h \
-		tools/qglobal.h \
-		tools/qstring.h \
-		tools/qcstring.h \
-		tools/qarray.h \
-		tools/qgarray.h \
-		tools/qshared.h \
-		kernel/qnamespace.h \
-		kernel/qobject.h \
-		kernel/qevent.h \
-		kernel/qregion.h \
-		kernel/qrect.h \
-		kernel/qsize.h \
-		kernel/qpoint.h \
-		kernel/qmime.h \
-		tools/qlist.h \
-		tools/qglist.h \
-		tools/qcollection.h \
-		tools/qstringlist.h \
-		tools/qvaluelist.h \
-		tools/qdatastream.h \
-		tools/qiodevice.h \
-		kernel/qpaintdevice.h \
-		kernel/qpalette.h \
-		kernel/qcolor.h \
-		kernel/qbrush.h \
-		kernel/qcursor.h \
-		kernel/qfont.h \
-		kernel/qfontmetrics.h \
-		kernel/qfontinfo.h \
-		kernel/qstyle.h \
-		kernel/qsizepolicy.h \
-		kernel/qlayout.h \
-		kernel/qabstractlayout.h
 
 widgets/qhbuttongroup.o: widgets/qhbuttongroup.cpp \
 		widgets/qhbuttongroup.h \
@@ -7935,8 +7936,8 @@ widgets/moc_qframe.o: widgets/moc_qframe.cpp \
 		kernel/qstyle.h \
 		kernel/qsizepolicy.h
 
-widgets/moc_qgroupbox.o: widgets/moc_qgroupbox.cpp \
-		widgets/qgroupbox.h \
+widgets/moc_qgrid.o: widgets/moc_qgrid.cpp \
+		widgets/qgrid.h \
 		widgets/qframe.h \
 		kernel/qwidget.h \
 		kernel/qwindowdefs.h \
@@ -7973,8 +7974,8 @@ widgets/moc_qgroupbox.o: widgets/moc_qgroupbox.cpp \
 		kernel/qstyle.h \
 		kernel/qsizepolicy.h
 
-widgets/moc_qgrid.o: widgets/moc_qgrid.cpp \
-		widgets/qgrid.h \
+widgets/moc_qgroupbox.o: widgets/moc_qgroupbox.cpp \
+		widgets/qgroupbox.h \
 		widgets/qframe.h \
 		kernel/qwidget.h \
 		kernel/qwindowdefs.h \
@@ -9670,11 +9671,11 @@ widgets/moc_qcommonstyle.cpp: widgets/qcommonstyle.h
 widgets/moc_qframe.cpp: widgets/qframe.h
 	$(MOC) widgets/qframe.h -o widgets/moc_qframe.cpp
 
-widgets/moc_qgroupbox.cpp: widgets/qgroupbox.h
-	$(MOC) widgets/qgroupbox.h -o widgets/moc_qgroupbox.cpp
-
 widgets/moc_qgrid.cpp: widgets/qgrid.h
 	$(MOC) widgets/qgrid.h -o widgets/moc_qgrid.cpp
+
+widgets/moc_qgroupbox.cpp: widgets/qgroupbox.h
+	$(MOC) widgets/qgroupbox.h -o widgets/moc_qgroupbox.cpp
 
 widgets/moc_qhbuttongroup.cpp: widgets/qhbuttongroup.h
 	$(MOC) widgets/qhbuttongroup.h -o widgets/moc_qhbuttongroup.cpp

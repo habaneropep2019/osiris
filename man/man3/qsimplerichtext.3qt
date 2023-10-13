@@ -1,0 +1,112 @@
+.TH QSimpleRichText 3qt "20 July 1999" "Troll Tech AS" \" -*- nroff -*-
+.\" Copyright 1992-1999 Troll Tech AS.  All rights reserved.  See the
+.\" license file included in the distribution for a complete license
+.\" statement.
+.\"
+.ad l
+.nh
+.SH NAME
+QSimpleRichText \- A small displayable piece of rich text
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <qsimplerichtext.h>\fR
+.PP
+.SS "Public Members"
+.in +1c
+.ti -1c
+.BI "\fBQSimpleRichText\fR ( const QString & " "text" ", const QFont & " "fnt" ", const QString & context = QString::null, const QStyleSheet * " "s" " = 0 )"
+.br
+.ti -1c
+.BI "\fB~QSimpleRichText\fR ()"
+.br
+.ti -1c
+.BI "void \fBsetWidth\fR ( QPainter *, int )"
+.br
+.ti -1c
+.BI "int \fBwidth\fR () const"
+.br
+.ti -1c
+.BI "int \fBwidthUsed\fR () const"
+.br
+.ti -1c
+.BI "int \fBheight\fR () const"
+.br
+.ti -1c
+.BI "void \fBdraw\fR ( QPainter *, int " "x" ", int " "y" ", const QRegion & " "clipRegion" ", const QPalette & " "pal" ", const QBrush * " "paper" " = 0 ) const"
+.br
+.ti -1c
+.BI "void \fBdraw\fR ( QPainter *, int " "x" ", int " "y" ", const QRegion & " "clipRegion" ", const QColorGroup & " "cg" ", const QBrush * " "paper" " = 0 ) const"
+.br
+.ti -1c
+.BI "QString \fBcontext\fR () const"
+.br
+.ti -1c
+.BI "QString \fBanchor\fR ( QPainter * " "p" ", const QPoint & pos )"
+.br
+.in -1c
+.SH DESCRIPTION
+A small displayable piece of rich text.
+.PP
+This class encapsulates simple richt text usage where a string is interpretted as richt text and can be drawn. This is in particular useful if you want to display some rich text in a custom widget.
+.PP
+Once created, the rich text object can be queried for its width(), height() and the actual width used (see widthUsed()). Most importantly, it can be drawn on any given QPainter with draw(). QSimpleRichText can also be used to implement hypertext or active text facilities by using anchor().
+.PP
+Once constructed from a string, the contents cannot be changed, only resized. If the contents should change, just throw the rich text object away and make a new one with the new contents.
+.PP
+For large documents, see QTextView or QTextBrowser.
+.SH MEMBER FUNCTION DOCUMENTATION
+.SH "QSimpleRichText::QSimpleRichText ( const QString & text, const QFont & fnt, const QString & context = QString::null, const QStyleSheet * s = 0 )"
+Constructs a QSimpleRichText from the rich text string \fItext\fR and the font \fIfnt.\fR
+.PP
+The font is used as basis for the text rendering. When using rich text rendering on a certain widget \fIw,\fR you would regularily specify the widget's font as shown in the following code example:
+.PP
+.nf
+.br
+  QSimpleRichText* t = new QSimpleRichText( contents, w->font() );
+.fi
+.PP
+\fIcontext\fR is the optional context of the document. This becomes important if \fItext\fR contains relative references, for example within image tags. QSimpleRichText always uses the default mime source factory (see QMimeSourceFactory::defaultFactory() ) to resolve those references. The context will then be used to calculate the absolute path. See QMimeSourceFactory::makeAbsolute() for details.
+.PP
+\fIs\fR is an optional stylesheet. If it is 0, the default style sheet will be used (see QStyleSheet::defaultSheet() ).
+.SH "QSimpleRichText::~QSimpleRichText ()"
+Destructs the document, freeing memory.
+.SH "QString QSimpleRichText::anchor ( QPainter * p, const QPoint & pos )"
+Returns the anchor at the requested position. The QPainter is needed for font size calculations. An empty string is returned if no anchor is specified for this certain position.
+.SH "QString QSimpleRichText::context () const"
+Returns the context of the rich text document. If no context has been specified in the constructor, a null string is returned.
+.SH "void QSimpleRichText::draw ( QPainter * p, int x, int y, const QRegion & clipRegion, const QColorGroup & cg, const QBrush * paper = 0 ) const"
+Draws the formatted text with \fIp,\fR at position (\fIx,\\a\fR y), clipped to \fIclipRegion.\fR Colors from the \fIcg\fR are used as needed, and if not 0, *\fIpaper\fR is used as the background brush.
+.PP
+Note that the display code is highly optimized to reduce flicker, so passing a brush for \fIpaper\fR is preferrable to simply clearing the area to be painted and then calling this without a brush.
+.PP
+This is a convenience function if there's no palette but just a cologroup available. If you have a palette, pass this instead of \fIcg.\fR
+.SH "void QSimpleRichText::draw ( QPainter * p, int x, int y, const QRegion & clipRegion, const QPalette & pal, const QBrush * paper = 0 ) const"
+Draws the formatted text with \fIp,\fR at position (\fIx,\\a\fR y), clipped to \fIclipRegion.\fR Colors from the palette \fIpal\fR are used as needed, and if not 0, *\fIpaper\fR is used as the background brush.
+.PP
+Note that the display code is highly optimized to reduce flicker, so passing a brush for \fIpaper\fR is preferrable to simply clearing the area to be painted and then calling this without a brush.
+.SH "int QSimpleRichText::height () const"
+Returns the height of the document, in pixels.
+.PP
+See also: setWidth().
+.SH "void QSimpleRichText::setWidth ( QPainter * p, int w )"
+Sets the width of the document to \fIw\fR pixels, recalculating the layout as if it were to be drawn with \fIp.\fR
+.PP
+See also: height().
+.SH "int QSimpleRichText::width () const"
+Returns the set width of the document, in pixels.
+.PP
+See also: widthUsed().
+.SH "int QSimpleRichText::widthUsed () const"
+Returns the width in pixels that is actually used by the document. This can be smaller or wider than the set width.
+.PP
+It may be wider, for example, if the text contains images or non-breakable words that are already wider than the available space. It's smaller when the document only consists of lines that do not fill the width completely.
+.PP
+See also:  width().
+.SH "SEE ALSO"
+.BR http://www.troll.no/qt/qsimplerichtext.html
+.SH COPYRIGHT
+Copyright 1992-1999 Troll Tech AS.  See the license file included in
+the distribution for a complete license statement.
+.SH AUTHOR
+Generated automatically from the source code.

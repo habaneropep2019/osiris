@@ -34,10 +34,10 @@ Inherits <a href="qframe.html">QFrame</a>.
 <li><span class="fn">int <a href="#53beb5"><b>childY</b></a> ( QWidget * child ) </span>
 <li><span class="fn">bool <a href="#580567"><b>childIsVisible</b></a> ( QWidget * child ) </span>
 <li><span class="fn">void <a href="#5cb8e3"><b>showChild</b></a> ( QWidget * child, bool yes=TRUE ) </span>
-<li><span class="fn">enum <b>ScrollBarMode</b> { Auto, AlwaysOff, AlwaysOn }</span>
-<li><span class="fn">ScrollBarMode <b>vScrollBarMode</b> () const</span>
+<li><span class="fn">enum <a href="#ScrollBarMode"><b>ScrollBarMode</b></a> { Auto, AlwaysOff, AlwaysOn }</span>
+<li><span class="fn">ScrollBarMode <a href="#8c5241"><b>vScrollBarMode</b></a> () const</span>
 <li><span class="fn">virtual void <a href="#9dfd25"><b>setVScrollBarMode</b></a> ( ScrollBarMode ) </span>
-<li><span class="fn">ScrollBarMode <b>hScrollBarMode</b> () const</span>
+<li><span class="fn">ScrollBarMode <a href="#6add94"><b>hScrollBarMode</b></a> () const</span>
 <li><span class="fn">virtual void <a href="#6c2eab"><b>setHScrollBarMode</b></a> ( ScrollBarMode ) </span>
 <li><span class="fn">QWidget* <a href="#2c699f"><b>cornerWidget</b></a> () const</span>
 <li><span class="fn">virtual void <a href="#54521e"><b>setCornerWidget</b></a> ( QWidget * ) </span>
@@ -237,7 +237,7 @@ covered up by the viewport, clipper, or scrollbars.
  <a href="scrollview-scrollview-cpp.html#QScrollView">scrollview/scrollview.cpp</a>
 
 <hr><h2>Member Type Documentation</h2>
-<h3 class="fn"><a name="ResizePolicy">QScrollView::ResizePolicy</h3>
+<h3 class="fn"><a name="ResizePolicy">QScrollView::ResizePolicy</a></h3>
 This enum type is used to control QScrollView's reaction to resize
 events.  There are three possible settings:<ul>
 <p><li> <code>Default</code> - QScrollView selects one of the other settings
@@ -248,6 +248,17 @@ changs to <code>Manual</code> if you resize the contents with
 <p><li> <code>AutoOne</code> - if there is only only child widget, the view stays
 the size of that widget.  Otherwise, the behaviour is undefined.
 <p></ul>
+<h3 class="fn"><a name="ScrollBarMode">QScrollView::ScrollBarMode</a></h3>
+This enum type describes the various modes of QScrollView's scroll
+bars.  The defined modes are: <ul>
+<p><li> <code>Auto</code> - QScrollView shows a scrollbar when the content is
+too tall to fit and not else.  This is the default.
+<p><li> <code>AlwaysOff</code> - QScrollView never shows a scrollbar.
+<p><li> <code>AlwaysOn</code> - QScrollView always shows a scrollbar.
+<p></ul>
+<p>(The modes for the horizontal and vertical scroll bars are independent.).
+<p>Examples:
+ <a href="scrollview-scrollview-cpp.html#QScrollView::ScrollBarMode">scrollview/scrollview.cpp</a>
 <hr><h2>Member Function Documentation</h2>
 <h3 class="fn"><a name="dc5598"></a>QScrollView::QScrollView ( <a href="qwidget.html">QWidget</a> * parent=0, const char * name=0, WFlags f=0 )</h3>
 <p>Constructs a QScrollView.
@@ -425,6 +436,11 @@ are not visible, scrolling to make them so.
 <h3 class="fn">void <a name="c67292"></a>QScrollView::frameChanged () <code>[virtual protected]</code></h3>
 <p>An override - ensures scrollbars are correct size when frame style changes.
 <p>Reimplemented from <a href="qframe.html#595a12">QFrame.</a>
+<h3 class="fn">QScrollView::ScrollBarMode <a name="6add94"></a>QScrollView::hScrollBarMode() const</h3>
+<p>Returns the currently set mode for the horizontal scrollbar.
+<p>See also:  <a href="qscrollview.html#6c2eab">setHScrollBarMode</a>().
+<p>Examples:
+ <a href="scrollview-scrollview-cpp.html#hScrollBarMode">scrollview/scrollview.cpp</a>
 <h3 class="fn"><a href="qscrollbar.html">QScrollBar</a>* <a name="240999"></a>QScrollView::horizontalScrollBar () const</h3>
 <p>Returns the component horizontal scrollbar.  It is made available to allow
 accelerators, autoscrolling, etc., and to allow changing
@@ -496,7 +512,7 @@ like providing extra buttons in some of the space normally used by the
 scrollbars.
 <p>The default implementation simply gives all the space to <em>hbar.</em>
 <p>See also:  <a href="qscrollview.html#8c159c">setVBarGeometry</a>().
-<h3 class="fn">void <a name="6c2eab"></a>QScrollView::setHScrollBarMode ( ScrollBarMode mode ) <code>[virtual]</code></h3>
+<h3 class="fn">void <a name="6c2eab"></a>QScrollView::setHScrollBarMode ( <a href="qscrollview.html#ScrollBarMode">ScrollBarMode</a> mode ) <code>[virtual]</code></h3>
 <p>Sets the mode for the horizontal scrollbar.
 <ul>
 <li> <code>Auto</code> (the default) shows a scrollbar when the content is too wide to fit.
@@ -523,13 +539,8 @@ like providing extra buttons in some of the space normally used by the
 scrollbars.
 <p>The default implementation simply gives all the space to <em>vbar.</em>
 <p>See also:  <a href="qscrollview.html#d385f5">setHBarGeometry</a>().
-<h3 class="fn">void <a name="9dfd25"></a>QScrollView::setVScrollBarMode ( ScrollBarMode mode ) <code>[virtual]</code></h3>
+<h3 class="fn">void <a name="9dfd25"></a>QScrollView::setVScrollBarMode ( <a href="qscrollview.html#ScrollBarMode">ScrollBarMode</a> mode ) <code>[virtual]</code></h3>
 <p>Sets the mode for the vertical scrollbar.
-<p><ul>
-<li> <code>Auto</code> (the default) shows a scrollbar when the content is too tall to fit.
-<li> <code>AlwaysOff</code> never shows a scrollbar.
-<li> <code>AlwaysOn</code> always shows a scrollbar.
-</ul>
 <p>See also:  <a href="qscrollview.html#8c5241">vScrollBarMode</a>() and <a href="qscrollview.html#6c2eab">setHScrollBarMode</a>().
 <p>Examples:
  <a href="scrollview-scrollview-cpp.html#setVScrollBarMode">scrollview/scrollview.cpp</a>
@@ -557,6 +568,11 @@ nothing is repainted.
 <h3 class="fn">void <a name="837fb5"></a>QScrollView::updateScrollBars () <code>[slot]</code></h3>
 <p>Updates scrollbars - all possibilities considered.  You should never
 need to call this in your code.
+<h3 class="fn">QScrollView::ScrollBarMode <a name="8c5241"></a>QScrollView::vScrollBarMode() const</h3>
+<p>Returns the currently set mode for the vertical scrollbar.
+<p>See also:  <a href="qscrollview.html#9dfd25">setVScrollBarMode</a>().
+<p>Examples:
+ <a href="scrollview-scrollview-cpp.html#vScrollBarMode">scrollview/scrollview.cpp</a>
 <h3 class="fn"><a href="qscrollbar.html">QScrollBar</a>* <a name="e173fa"></a>QScrollView::verticalScrollBar () const</h3>
 <p>Returns the component vertical scrollbar.  It is made available to allow
 accelerators, autoscrolling, etc., and to allow changing
@@ -674,7 +690,7 @@ events sent to the viewport.
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.troll.no">www.troll.no</a>):<br>
 <form method=post action="http://www.troll.no/search.cgi">
-<input type=hidden name="version" value="2.00"><nobr>
+<input type=hidden name="version" value="2.0.1"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -682,5 +698,5 @@ copyright &copy; 1995-99
 <a href="http://www.troll.no">Troll Tech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.00</div>
+<td align="right"><div align="right">Qt version 2.0.1</div>
 </table></div></address></body></html>

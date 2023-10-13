@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qlistview.cpp,v 2.276 1999/06/23 13:12:22 reggie Exp $
+** $Id: qlistview.cpp,v 2.276.2.6 1999/07/17 03:47:37 ettrich Exp $
 **
 ** Implementation of QListView widget class
 **
@@ -227,12 +227,14 @@ struct QListViewPrivate
     }
   \endcode
 
-  (No iterator class is provided for QListViewItem, as a simple
-  iterator does not adequately express the choices QListViewItem
-  necessitates: Would <code>++it</code> mean "next sibling", "child if
-  any, else next sibling", "child if this object is open and has
-  children, else next subling" or any of a few other possible
-  meanings?)
+  Also there is now an interator class to traverse a tree of list view items.
+  To iterate over all items of a list view, do:
+
+  \code
+    QListViewItemIterator it( listview );
+    for ( ; it.current(); ++it )
+      do_something_with_the_item( it.current() );
+  \endcode
 
   Note that the order of the children will change when the sorting
   order changes, and is undefined if the items are not visible.  You
@@ -1516,7 +1518,7 @@ void QListViewPrivate::Root::setup()
   name as object name. */
 
 QListView::QListView( QWidget * parent, const char *name )
-    : QScrollView( parent, name )
+    : QScrollView( parent, name, WNorthWestGravity )
 {
     d = new QListViewPrivate;
     d->vci = 0;
@@ -2034,48 +2036,61 @@ void QListView::setColumnWidth( int column, int w )
     }
 }
 
+
 /*!
-  Returns the text for the heading of column \a c.
+  Returns the text of column \a c.
 */
+
 QString QListView::columnText( int c ) const
 {
     return d->h->label(c);
 }
 
 /*!
-  Returns the width of the heading of column \a c.
+  Returns the width of column \a c.
 */
+
 int QListView::columnWidth( int c ) const
 {
     return d->h->cellSize(c);
 }
 
+
+/*! \enum QListView::WidthMode
+
+  This enum type describes how the width of a column in the view
+  changes.  The currently defined modes are: <ul>
+
+  <li> \c Manual - the column width does not change automatically
+
+  <li> \c Maximum - the column is automatically sized according to the
+  widths of all items in the column.  (Note: The column never shrinks
+  in this case.)
+
+  </ul>
+
+  \sa setColumnWidth() setColumnWidthMode() columnWidth()
+*/
+
+
 /*!
-  Sets column \c to behave according to \a mode, which is one of:
-
-\define QListView::WidthMode
-
-  <ul>
-   <li> \c Manual - the column width does not change automatically
-   <li> \c Maximum - the column is automatically sized according to the
-	    widths of all items in the column.
-   </ul>
-
-   \bug doesn't shrink back yet when items shrink or close
-
-   </ul>
+  Sets column \c to behave according to \a mode.  The default depends
+  on whether the width argument to addColumn was positive or negative.
 
   \sa QListViewItem::width()
 */
+
 void QListView::setColumnWidthMode( int c, WidthMode mode )
 {
     d->column[c]->wmode = mode;
 }
 
+
 /*!
   Returns the currently set WidthMode for column \a c.
   \sa setColumnWidthMode()
 */
+
 QListView::WidthMode QListView::columnWidthMode( int c ) const
 {
     return d->column[c]->wmode;
@@ -2086,8 +2101,6 @@ QListView::WidthMode QListView::columnWidthMode( int c ) const
   Configures the logical column \a column to have alignment \a align.
   The alignment is ultimately passed to QListViewItem::paintCell()
   for each item in the view.
-
-  The display is automatically scheduled to be updated.
 */
 
 void QListView::setColumnAlignment( int column, int align )
@@ -2118,13 +2131,13 @@ void QListView::setColumnAlignment( int column, int align )
 int QListView::columnAlignment( int column ) const
 {
     if ( column < 0 || !d->vci )
-	return AlignLeft;
+        return AlignLeft;
     QListViewPrivate::ViewColumnInfo * l = d->vci;
     while( column ) {
-	if ( !l->next )
-	    l->next = new QListViewPrivate::ViewColumnInfo;
-	l = l->next;
-	column--;
+        if ( !l->next )
+            l->next = new QListViewPrivate::ViewColumnInfo;
+        l = l->next;
+        column--;
     }
     return l ? l->align : AlignLeft;
 }
@@ -2163,6 +2176,7 @@ void QListView::updateContents()
     ensureItemVisible( d->focusItem );
 }
 
+
 void QListView::updateGeometries()
 {
     int th = d->r->totalHeight();
@@ -2182,18 +2196,29 @@ void QListView::updateGeometries()
     }
 }
 
+
 /*!
   Updates the display when a section has changed size.
 */
+
 void QListView::handleSizeChange( int section, int os, int ns )
 {
+    viewport()->setUpdatesEnabled( FALSE );
     updateGeometries();
-    int left = d->h->cellPos( section ) - contentsX(); //d->h->cellPos( d->h->mapToActual( section ) - d->h->offset() );
-    if ( columnAlignment( section ) == AlignLeft )
-        left += QMIN( os, ns ) - 1;
+    viewport()->setUpdatesEnabled( TRUE );
     
-    viewport()->repaint( left, 0, visibleWidth() - left,
-                         visibleHeight(), FALSE );
+    int actual = d->h->mapToActual( section );
+    int dx = ns - os;
+    int left = d->h->cellPos( actual ) - contentsX() + d->h->cellSize( actual );
+    if ( dx > 0)
+	left -= dx;
+    if ( left < visibleWidth() )
+	viewport()->scroll( dx, 0, QRect( left, 0, visibleWidth() - left, visibleHeight() ) );
+    viewport()->repaint( left-4, 0, 4, visibleHeight(), FALSE ); // border between the items
+    
+    if ( columnAlignment( actual ) != AlignLeft )
+	viewport()->repaint( d->h->cellPos( actual ) - contentsX(), 0, 
+			     d->h->cellSize( actual ), visibleHeight() );
 }
 
 
@@ -2205,16 +2230,19 @@ void QListView::handleSizeChange( int section, int os, int ns )
 void QListView::updateDirtyItems()
 {
     if ( d->timer->isActive() || !d->dirtyItems)
-        return;
+	return;
     QRect ir;
     QPtrDictIterator<void> it( *(d->dirtyItems) );
     QListViewItem * i;
     while( (i=(QListViewItem *)(it.currentKey())) != 0 ) {
-        ++it;
-        ir = ir.unite( itemRect(i) );
+	++it;
+	ir = ir.unite( itemRect(i) );
     }
-    if ( !ir.isEmpty() )                    // rectangle to be repainted
-        viewport()->repaint( ir, FALSE );
+    if ( !ir.isEmpty() )  {		      // rectangle to be repainted
+	if ( ir.x() < 0 )
+	    ir.moveBy( -ir.x(), 0 );
+	viewport()->repaint( ir, FALSE );
+    }
 }
 
 
@@ -2223,6 +2251,7 @@ void QListView::makeVisible()
     if ( d->focusItem )
         ensureItemVisible( d->focusItem );
 }
+
 
 /*!  Ensures that the header is correctly sized and positioned.
 */
@@ -2258,6 +2287,7 @@ void QListView::triggerUpdate()
     }
     d->timer->start( 0, TRUE );
 }
+
 
 /*!  Redirects events for the viewport to mousePressEvent(),
   keyPressEvent() and friends. */
@@ -2319,6 +2349,7 @@ bool QListView::eventFilter( QObject * o, QEvent * e )
     return QScrollView::eventFilter( o, e );
 }
 
+
 /*! Returns a pointer to the listview containing this item.
 */
 
@@ -2331,6 +2362,7 @@ QListView * QListViewItem::listView() const
 	return 0;
     return ((QListViewPrivate::Root*)c)->theListView();
 }
+
 
 /*!
   Returns the depth of this item.
@@ -2643,23 +2675,7 @@ void QListView::contentsMouseReleaseEvent( QMouseEvent * e )
 
 	int c = d->h->mapToLogical( d->h->cellAt( vp.x() ) );
 	emit rightButtonClicked( i, viewport()->mapToGlobal( vp ), c );
-        return;
     }
-
-    if ( e->button() != LeftButton || !d->buttonDown )
-        return;
-
-    QListViewItem * i = itemAt( vp );
-    if ( !i )
-        return;
-
-    if ( i->isSelectable() )
-        setSelected( i, d->select );
-
-    setCurrentItem( i ); // repaints
-    ensureItemVisible( i );
-
-    return;
 }
 
 
@@ -4252,6 +4268,11 @@ void QListView::takeItem( QListViewItem * i )
   Construct an instance of a QListViewItemIterator with either a
   QListView* or a QListViewItem* as argument, to operate on the tree
   of QListViewItems.
+
+  A QListViewItemIterator iterates over all items of a listview. This means ++it makes always
+  the first child of the current item the new current one. If there is no child, the next sibling
+  gets the new current item, and if there is no next sibling, the next sibling of the parent is
+  set to current.
 
   Example:
 

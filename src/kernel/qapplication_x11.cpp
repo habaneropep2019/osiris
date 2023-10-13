@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qapplication_x11.cpp,v 2.352 1999/06/24 17:39:14 paul Exp $
+** $Id: qapplication_x11.cpp,v 2.352.2.11 1999/07/20 01:33:23 weis Exp $
 **
 ** Implementation of X11 startup routines and event handling
 **
@@ -53,6 +53,9 @@
 #include <ctype.h>
 #include <locale.h>
 #include <errno.h>
+#if defined(_OS_AIX_)
+#include <strings.h>
+#endif
 #define	 GC GC_QQQ
 
 #if defined(_OS_LINUX_) && defined(DEBUG)
@@ -228,6 +231,7 @@ XIM	qt_xim = 0;
 XIMStyle qt_xim_style = 0;
 static XIMStyle xim_preferred_style = XIMPreeditPosition | XIMStatusNothing;
 #endif
+static int composingKeycode=0;
 static QTextCodec * input_mapper = 0;
 
 QObject	       *qt_clipboard = 0;
@@ -355,7 +359,6 @@ extern "C" {
 static bool x11_ignore_badwindow;
 static bool x11_badwindow;
 
-
     // starts to ignore bad window errors from X
 void qt_ignore_badwindow()
 {
@@ -379,6 +382,10 @@ static int qt_x_errhandler( Display *dpy, XErrorEvent *err )
 	    return 0;
 	if ( x11_ignore_badwindow )
 	    return 0;
+    }
+    else if ( err->error_code == BadMatch
+	      && err->request_code == 42 /* X_SetInputFocus */ ) {
+	return 0;
     }
 
     char errstr[256];
@@ -477,7 +484,18 @@ static void qt_x11_process_intern_atoms()
     }
 }
 
-// read the QT_DESKTOP_PROPERTIES property and apply the settings to
+
+static void qt_fix_tooltips()
+{
+    // No resources for this yet (unlike on Windows).
+    QColorGroup cg( Qt::black, QColor(255,255,220),
+		    QColor(96,96,96), Qt::black, Qt::black,
+		    Qt::black, QColor(255,255,220) );
+    QPalette pal( cg, cg, cg );
+    QApplication::setPalette( pal, TRUE, "QTipLabel");
+}
+
+// read the _QT_DESKTOP_PROPERTIES property and apply the settings to
 // the application
 static bool qt_set_desktop_properties()
 {
@@ -517,6 +535,7 @@ static bool qt_set_desktop_properties()
     if ( font != QApplication::font() ) {
 	QApplication::setFont( font, TRUE );
     }
+    qt_fix_tooltips();
     return TRUE;
 }
 
@@ -636,6 +655,7 @@ static void qt_set_x11_resources( const char* font = 0, const char* fg = 0,
 	QPalette pal( cg, dcg, cg );
 	if ( pal != QApplication::palette() )
 	    QApplication::setPalette( pal, TRUE );
+	qt_fix_tooltips();
     }
 }
 
@@ -988,11 +1008,16 @@ void qt_init_internal( int *argcptr, char **argv, Display *display )
 
     // pick default character set (now that we have done setlocale stuff)
     QFont::locale_init();
-    QFont f( "Helvetica", 12 ); // default font
+    QFont f;
+    if ( QPaintDevice::x11AppDpiX() < 95 )
+	f=QFont( "Helvetica", 12 ); // default font
+    else
+	f=QFont( "Helvetica", 11 ); // default font
     f.setCharSet( QFont::charSetForLocale() ); // must come after locale_init()
     QApplication::setFont( f );
 
     qt_set_x11_resources(appFont, appFGCol, appBGCol, appBTNCol);
+    qt_fix_tooltips();
 }
 
 void qt_init( int *argcptr, char **argv )
@@ -2080,6 +2105,7 @@ int QApplication::x11ClientMessage(QWidget* w, XEvent* event, bool passive_only)
     return 0;
 }
 
+
 /*!
   Returns
   1 if the event was consumed by special handling,
@@ -2111,6 +2137,26 @@ int QApplication::x11ProcessEvent( XEvent* event )
 	}
 	else if ( widget->testWState(WState_Reparented) )
 	    qPRCleanup( widget );		// remove from alt mapper
+    }
+
+    QETWidget *keywidget=0;
+    bool grabbed=FALSE;
+    if ( event->type==XKeyPress || event->type==XKeyRelease ) {
+        keywidget = (QETWidget*)QWidget::keyboardGrabber();
+	if ( keywidget ) {
+	    grabbed = TRUE;
+	} else {
+	    if ( focus_widget )
+		keywidget = (QETWidget*)focus_widget;
+	    else if ( widget )
+		keywidget = (QETWidget*)widget->topLevelWidget();
+	}
+    }
+    int xkey_keycode = event->xkey.keycode;
+    if ( XFilterEvent( event, keywidget ? keywidget->topLevelWidget()->winId() : None ) ) {
+	if ( keywidget )
+	    composingKeycode = xkey_keycode; // ### not documented in xlib
+	return 1;
     }
 
     if ( event->type == MappingNotify ) {	// keyboard mapping changed
@@ -2168,15 +2214,15 @@ int QApplication::x11ProcessEvent( XEvent* event )
     if ( !widget ) {				// don't know this window
 	if ( (widget=(QETWidget*)QApplication::activePopupWidget()) )
 	    {
-		// Danger - make sure we don't lock the server
-		switch ( event->type ) {
-		case ButtonPress:
-		case ButtonRelease:
-		case XKeyPress:
-		case XKeyRelease:
-		    widget->hide();
-		    return 1;
-		}
+ 		// Danger - make sure we don't lock the server
+ 		switch ( event->type ) {
+ 		case ButtonPress:
+ 		case ButtonRelease:
+ 		case XKeyPress:
+ 		case XKeyRelease:
+ 		    widget->close();
+ 		    return 1;
+ 		}
 	    } else {
 		void qt_np_process_foreign_event(XEvent*); // in qnpsupport.cpp
 		qt_np_process_foreign_event( event );
@@ -2207,15 +2253,8 @@ int QApplication::x11ProcessEvent( XEvent* event )
     case XKeyPress:				// keyboard event
     case XKeyRelease: {
 	qt_x_clipboardtime = event->xkey.time;
-	QWidget *g = QWidget::keyboardGrabber();
-	if ( g )
-	    widget = (QETWidget*)g;
-	else if ( focus_widget )
-	    widget = (QETWidget*)focus_widget;
-	else
-	    widget = (QETWidget*)widget->topLevelWidget();
-
-	widget->translateKeyEvent( event, g != 0 );
+	if ( keywidget ) // should always exist
+	    keywidget->translateKeyEvent( event, grabbed );
     }
     break;
 
@@ -2284,6 +2323,8 @@ int QApplication::x11ProcessEvent( XEvent* event )
     case EnterNotify:			// enter window
     case LeaveNotify: {			// leave window
 	qt_x_clipboardtime = event->xcrossing.time;
+	if ( event->xcrossing.detail == NotifyNormal )
+	    widget->translateMouseEvent( event ); //we don't get MotionNotify
 	QEvent e( event->type == EnterNotify ? QEvent::Enter : QEvent::Leave );
 	QApplication::sendEvent( widget, &e );
     }
@@ -2312,6 +2353,11 @@ int QApplication::x11ProcessEvent( XEvent* event )
 	//break;
 
     case ReparentNotify:			// window manager reparents
+	while ( XCheckTypedWindowEvent( widget->x11Display(),
+					widget->winId(),
+					ReparentNotify,
+					event ) )
+		    ;	// skip old reparent events
 	if ( event->xreparent.parent == appRootWin ) {
 	
 	    QTLWExtra*  x = widget->extra? widget->extra->topextra : 0;
@@ -2320,43 +2366,55 @@ int QApplication::x11ProcessEvent( XEvent* event )
 	}
 	else if (!QWidget::find((WId)event->xreparent.parent) )
 	    {
-		XWindowAttributes a1, a2;
-		while ( XCheckTypedWindowEvent( widget->x11Display(),
-						widget->winId(),
-						ReparentNotify,
-						event ) )
-		    ;				// skip old reparent events
 		Window parent = event->xreparent.parent;
-		// ### this causes two round trips for every top-level
-		// ### window being shown.  to be avoided if possible.
 		
 		// We can drop the entire crect calculation here (it's
 		// already done in translateConfigEvent()
 		// anyway). QWidget::frameGeometry() should do this
 		// calculation instead - Matthias
 
-		XGetWindowAttributes( widget->x11Display(),
-				      widget->winId(), &a1 );
+		int x = event->xreparent.x;
+		int y = event->xreparent.y;
+		XWindowAttributes a;
 		qt_ignore_badwindow();
 		XGetWindowAttributes( widget->x11Display(), parent,
-				      &a2 );
+				      &a );
 		if (qt_badwindow())
 		    break;
 		
 		QRect& r = widget->crect;
-		XWindowAttributes *a;
-		if ( a1.x == 0 && a1.y == 0 && (a2.x + a2.y > 0)
-		     && a2.x + a2.y < r.left() + r.top())
-		    a = &a2;			// typical for mwm, fvwm
-		else
-		    a = &a1;			// typical for twm, olwm
-		a->x += a2.border_width;
-		a->y += a2.border_width;
+		QRect frect ( r );
 		
-		QRect frect(QPoint(r.left()	- a->x,
-				   r.top()	- a->y),
-			    QPoint(r.right()	+ a->x,
-				   r.bottom() + a->x) );
+		if ( x == 0 && y == 0 && a.width == r.width() && a.height == r.height() ) {
+		    // multi reparenting window manager, parent is just a shell		
+		    Window root_return, parent_return, *children_return;
+		    unsigned int nchildren;
+		    if ( XQueryTree( widget->x11Display(), parent,
+				     &root_return, &parent_return,
+				     &children_return, &nchildren) ) {
+			if ( children_return )
+			    XFree( (void*) children_return );
+			XWindowAttributes a2;
+			qt_ignore_badwindow();
+			XGetWindowAttributes( widget->x11Display(), parent_return,
+					      &a2 );
+			if (qt_badwindow())
+			    break;
+			x += a.x;
+			y += a.y;
+			frect.setRect(r.left() - x - a2.border_width,
+				      r.top() - y - a2.border_width,
+				      a2.width + 2*a2.border_width,
+				      a2.height + 2*a2.border_width);
+		    }
+		} else {
+		    // single reparenting window manager
+		    frect.setRect(r.left() - x - a.border_width,
+				  r.top() - y - a.border_width,
+				  a.width + 2*a.border_width,
+				  a.height + 2*a.border_width);
+		}
+		
 		widget->createTLExtra();
 		widget->fpos = frect.topLeft();
 		widget->extra->topextra->fsize = frect.size();
@@ -3028,7 +3086,7 @@ bool QETWidget::translateMouseEvent( const XEvent *event )
     if ( sm_blockUserInput ) // block user interaction during session management
 	return TRUE;
 
-    if ( event->type == MotionNotify ) {	// mouse move
+    if ( event->type == MotionNotify ) { // mouse move
 	XEvent *xevent = (XEvent *)event;
 	unsigned int xstate = event->xmotion.state;
 	while ( XCheckTypedWindowEvent( appDpy, event->xmotion.window, MotionNotify, xevent ) ) {
@@ -3044,10 +3102,25 @@ bool QETWidget::translateMouseEvent( const XEvent *event )
 	globalPos.rx() = xevent->xmotion.x_root;
 	globalPos.ry() = xevent->xmotion.y_root;
 	state = translateButtonState( xevent->xmotion.state );
+	if ( qt_button_down && (state & (LeftButton |
+					 MidButton |
+					 RightButton ) ) == 0 )
+	    qt_button_down = 0;
+    } else if ( event->type == EnterNotify || event->type == LeaveNotify) {
+	XEvent *xevent = (XEvent *)event;
+	//unsigned int xstate = event->xcrossing.state;
+	type = QEvent::MouseMove;
+	pos.rx() = xevent->xcrossing.x;
+	pos.ry() = xevent->xcrossing.y;
+	globalPos.rx() = xevent->xcrossing.x_root;
+	globalPos.ry() = xevent->xcrossing.y_root;
+	state = translateButtonState( xevent->xcrossing.state );
+	if ( qt_button_down && (state & (LeftButton |
+					 MidButton |
+					 RightButton ) ) == 0 )
+	    qt_button_down = 0;
 	if ( !qt_button_down )
-	    state &= ~(LeftButton |
-		       MidButton |
-		       RightButton );
+	    state = state & ~(LeftButton | MidButton | RightButton );
     } else {					// button press or release
 	pos.rx() = event->xbutton.x;
 	pos.ry() = event->xbutton.y;
@@ -3416,15 +3489,8 @@ bool QETWidget::translateKeyEventInternal( const XEvent *event, int& count,
 			? QEvent::KeyPress : QEvent::KeyRelease;
     // Implementation for X11R5 and newer, using XIM
 
-    static int composingKeycode;
     int	       keycode = event->xkey.keycode;
     Status     status;
-
-    // Perhaps we should filer ALL events.
-    if ( XFilterEvent( (XEvent*)event, tlw->winId() ) ) {
-	composingKeycode = keycode; // ### not documented in xlib
-	return TRUE;
-    }
 
     if ( type == QEvent::KeyPress ) {
 	bool mb=FALSE;
@@ -3507,6 +3573,7 @@ bool QETWidget::translateKeyEventInternal( const XEvent *event, int& count,
 	}
     }
 
+#if 0
 #ifndef Q_EE
     static int c  = 0;
     extern void qt_dialog_default_key();
@@ -3525,6 +3592,7 @@ bool QETWidget::translateKeyEventInternal( const XEvent *event, int& count,
 	}
     }
 #undef Q_EE
+#endif
 #endif
 
     if ( qApp->inPopupMode() ) {			// in popup mode
@@ -3822,7 +3890,8 @@ bool QETWidget::translatePaintEvent( const XEvent *event )
 	// WARNING: this is O(number_of_events * number_of_matching_events)
 	while ( XCheckIfEvent(x11Display(),&xevent,isPaintOrScrollDoneEvent,
 			      (XPointer)&info) &&
-		!qApp->x11EventFilter(&xevent) ) // send event through filter
+		!qApp->x11EventFilter(&xevent)  &&
+		!x11Event( &xevent ) ) // send event through filter
 	{
 	    if ( !info.config ) {
 		if ( xevent.type == Expose || xevent.type == GraphicsExpose ) {
@@ -3909,22 +3978,38 @@ bool QETWidget::translateConfigEvent( const XEvent *event )
     clearWState(WState_ConfigPending);
 
     QSize  newSize( event->xconfigure.width, event->xconfigure.height );
+    int x = event->xconfigure.x;
+    int y = event->xconfigure.y;
+
+    if (event->xconfigure.send_event ||
+	( extra && extra->topextra && 
+	  ( extra->topextra->parentWinId == None || 
+	    extra->topextra->parentWinId == appRootWin ) ) ) {
+	// nothing to do, x and y is correct
+    } else {
+	Display *dpy = x11Display();
+	Window child;
+	// ### this slows down display of all top-level widgets, and most
+	// ### don't care about the result.  can it be avoided?
+	XTranslateCoordinates( dpy, winId(), DefaultRootWindow(dpy),
+			       0, 0, &x, &y, &child );
+    }
+
 
     XEvent otherEvent;
-    while ( XCheckTypedWindowEvent(x11Display(),winId(),ConfigureNotify,&otherEvent) ) {
-	if ( qApp->x11EventFilter(&otherEvent) )
+    while ( XCheckTypedWindowEvent( x11Display(),winId(),ConfigureNotify,&otherEvent ) ) {
+	if ( qApp->x11EventFilter( &otherEvent ) )
+	    break;
+	if (x11Event( &otherEvent ) )
 	    break;
 	newSize.setWidth( otherEvent.xconfigure.width );
 	newSize.setHeight( otherEvent.xconfigure.height );
+	if ( otherEvent.xconfigure.send_event ) {
+	    x = otherEvent.xconfigure.x;
+	    y = otherEvent.xconfigure.y;
+	}
     }
 
-    Display *dpy = x11Display();
-    Window child;
-    int	   x, y;
-    // ### this slows down display of all top-level widgets, and most
-    // ### don't care about the result.  can it be avoided?
-    XTranslateCoordinates( dpy, winId(), DefaultRootWindow(dpy),
-			   0, 0, &x, &y, &child );
     QPoint newPos( x, y );
     QRect  r = geometry();
     if ( newSize != size() ) {			// size changed

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qfiledialog.cpp,v 2.188 1999/06/24 20:10:19 warwick Exp $
+** $Id: qfiledialog.cpp,v 2.188.2.8 1999/07/13 19:08:41 reggie Exp $
 **
 ** Implementation of QFileDialog class
 **
@@ -807,6 +807,28 @@ void QFileDialogPrivate::MCItem::paint( QPainter * ptr )
 }
 
 
+static QString findNewFolderName( const QDir &dir )
+{
+
+    QStringList entries = dir.entryList( QFileDialog::tr( "New" ) );
+
+    int i = 1;
+    while ( TRUE ) {
+	QString fname = QFileDialog::tr( "New Folder %1" ).arg( i );
+	QStringList::Iterator it = entries.begin();
+	bool exist = FALSE;
+	for ( ; it != entries.end(); ++it ) {
+	    if ( *it == fname ) {
+		exist = TRUE;
+		break;
+	    }
+	}
+	if ( !exist )
+	    return fname;
+	++i;
+    }
+}
+
 /*!
   \class QFileDialog qfiledialog.h
   \brief The QFileDialog provides a dialog widget for inputting file names.
@@ -907,21 +929,20 @@ void QFileDialog::init()
     nameEdit->installEventFilter( this );
 
     d->stack = new QWidgetStack( this, "files and more files" );
-    d->stack->setFrameStyle( QFrame::WinPanel + QFrame::Sunken );
 
     files = new QFileListView( d->stack, this );
     QFontMetrics fm = fontMetrics();
-    files->addColumn( tr("Name"), 150 );
-    files->setColumnWidthMode( 0, QListView::Manual );
-    files->addColumn( tr("Size"), 30 + fm.width( tr("Size") ) );
-    files->setColumnWidthMode( 1, QListView::Maximum );
+    files->addColumn( tr("Name") );
+    //files->setColumnWidthMode( 0, QListView::Maximum );
+    files->addColumn( tr("Size") );
+    //files->setColumnWidthMode( 1, QListView::Maximum );
     files->setColumnAlignment( 1, AlignRight );
-    files->addColumn( tr("Type"), 10 + fm.width( tr("Directory") ) );
-    files->setColumnWidthMode( 2, QListView::Maximum );
-    files->addColumn( tr("Date"), 70 );
-    files->setColumnWidthMode( 3, QListView::Maximum );
-    files->addColumn( tr("Attributes"), 20 + fm.width( tr("Attributes") ) );
-    files->setColumnWidthMode( 0, QListView::Maximum );
+    files->addColumn( tr("Type") );
+    //files->setColumnWidthMode( 2, QListView::Maximum );
+    files->addColumn( tr("Date") );
+    //files->setColumnWidthMode( 3, QListView::Maximum );
+    files->addColumn( tr("Attributes") );
+    //files->setColumnWidthMode( 0, QListView::Maximum );
 
     files->setMinimumSize( 50, 25 + 2*fm.lineSpacing() );
 
@@ -944,7 +965,6 @@ void QFileDialog::init()
     files->viewport()->installEventFilter( this );
 
     d->moreFiles = new QFileListBox( d->stack, this );
-    d->moreFiles->setFrameStyle( QFrame::NoFrame );
     d->moreFiles->setFocusPolicy( StrongFocus );
     d->moreFiles->setRowMode( QListBox::FitToHeight );
     d->moreFiles->setVariableWidth( TRUE );
@@ -1381,7 +1401,7 @@ void qt_leave_modal( QWidget* );
   the dialogs starts in that directory, and with \a startWith
   selected.
 
-  Only files matching \a filter are selectable.  If \a filter is 0,
+  Only files matching \a filter are selectable.  If \a filter is QString::null,
   all files are selectable.
 
   If \a widget and/or \a name is provided, the dialog will be centered
@@ -1396,7 +1416,7 @@ void qt_leave_modal( QWidget* );
   Example:
   \code
     // start at the current working directory and with *.cpp as filter
-    QString f = QFileDialog::getOpenFileName( 0, "*.cpp", this );
+    QString f = QFileDialog::getOpenFileName( QString::null, "*.cpp", this );
     if ( !f.isEmpty() ) {
         // the user selected a valid existing file
     } else {
@@ -1464,7 +1484,7 @@ QString QFileDialog::getOpenFileName( const QString & startWith,
   the dialogs starts in that directory, and with \a startWith
   selected.
 
-  Only files matching \a filter are selectable.  If \a filter is 0,
+  Only files matching \a filter are selectable.  If \a filter is QString::null,
   all files are selectable.
 
   If \a widget and/or \a name is provided, the dialog will be centered
@@ -1479,7 +1499,7 @@ QString QFileDialog::getOpenFileName( const QString & startWith,
   Example:
   \code
     // start at the current working directory and with *.cpp as filter
-    QString f = QFileDialog::getSaveFileName( 0, "*.cpp", this );
+    QString f = QFileDialog::getSaveFileName( QString::null, "*.cpp", this );
     if ( !f.isEmpty() ) {
         // the user gave a file name
     } else {
@@ -1541,6 +1561,8 @@ QString QFileDialog::getSaveFileName( const QString & startWith,
 
 void QFileDialog::okClicked()
 {
+    *workingDirectory = cwd.absPath();
+
     // if we're in multi-selection mode and something is selected,
     // accept it and be done.
     if ( mode() == ExistingFiles ) {
@@ -1992,7 +2014,7 @@ protected:
     void resizeEvent( QResizeEvent *e ) {
         QDialog::resizeEvent( e );
         if ( back )
-            back->resize( size() );
+            back->setGeometry( QRect(QPoint(0,0), size()) );
     }
 
 private:
@@ -2011,14 +2033,14 @@ QtNewFolderDialog::QtNewFolderDialog(QWidget *parent, const char *name)
     back->setMargin( 10 );
     back->setSpacing( 5 );
 
-    QHBox *row1 = new QHBox( back );
+    QHBox *row1 = new QHBox( (QWidget*)back );
     row1->setSpacing( 5 );
     QLabel *label = new QLabel( QFileDialog::tr("&Folder name:"), row1);
 	nameEdit = new QLineEdit( row1 );
     label->setBuddy( nameEdit );
     label->setAutoResize(TRUE);
 
-    QHBox *row2 = new QHBox( back );
+    QHBox *row2 = new QHBox( (QWidget*)back );
     row2->setSpacing( 5 );
     (void)new QWidget( row2 );
 
@@ -2040,29 +2062,29 @@ QtNewFolderDialog::~QtNewFolderDialog()
 
 void QFileDialog::newFolderClicked()
 {
-    QtNewFolderDialog *dialog = new QtNewFolderDialog(this, "new folder dialog");
-    if ( dialog->exec() == QDialog::Accepted ) {
-        QString dirname = dialog->dirname();
-        delete dialog;
-        if (dirname.length() < 1) {
-	        QMessageBox::warning( this, tr("New Folder"),
-                                  QString( tr("Invalid directory name") ));
-            return;
-        }
-        if (!cwd.mkdir(dirname))
-            if (cwd.exists(dirname))
-                QMessageBox::warning( this, tr("New Folder"),
-                                      tr("<qt>Unable to create directory \"%1\". "
-                                         "A file/directory with that name already exists.</qt>"
-                                          ).arg(cwd.absPath() + "/" + dirname) );
-            else
-                QMessageBox::warning( this, tr("New Folder"),
-                                      tr("<qt>Unable to create directory \"%1\". "
-                                         "Please make sure that the current directory "
-                                         "is writable.</qt>"
-                                          ).arg(cwd.absPath() + "/" + dirname) );
-        else
-            rereadDir(); // This seem not to work!?
+    QString fname = findNewFolderName( cwd );
+    cwd.mkdir( fname );
+    rereadDir();
+
+    if ( d->moreFiles->isVisible() ) {
+	for ( uint i = 0; i < d->moreFiles->count(); ++i ) {
+	    if ( d->moreFiles->text( i ) == fname ) {
+		d->moreFiles->setCurrentItem( i );
+		d->moreFiles->startRename( FALSE );
+		break;
+	    }
+	}
+    } else {
+	QListViewItem *item = files->firstChild();
+	while ( item ) {
+	    if ( item->text( 0 ) == fname ) {
+		files->setSelected( item, TRUE );
+		files->setCurrentItem( item );
+		files->startRename( FALSE );
+		break;
+	    }
+	    item = item->nextSibling();
+	}
     }
 }
 
@@ -2092,12 +2114,16 @@ QString QFileDialog::getExistingDirectory( const QString & dir,
         QFileInfo f( *workingDirectory );
         if ( f.isDir() )
             dialog->setDir( *workingDirectory );
-    }	
-    if ( !dir.isEmpty() ) {
-        QFileInfo f( dir );
-        if ( f.isDir() ) {
-            *workingDirectory = dir;
-            dialog->setDir( dir );
+    } else {
+        QString theDir = dir;
+        if ( theDir.isEmpty() )
+            theDir = QDir::currentDirPath();
+        if ( !theDir.isEmpty() ) {
+            QFileInfo f( dir );
+            if ( f.isDir() ) {
+                *workingDirectory = theDir;
+                dialog->setDir( theDir );
+            }
         }
     }
 
@@ -2118,7 +2144,9 @@ QString QFileDialog::getExistingDirectory( const QString & dir,
 
 /*!  Sets this file dialog to \a newMode, which can be one of \c
   Directory (directories are accepted), \c ExistingFile (existing
-  files are accepted) or \c AnyFile (any valid file name is accepted).
+  files are accepted), \c AnyFile (any valid file name is accepted)
+  or \c ExistingFiles (like \c ExistingFile, but multple files may be
+  selected)
 
   \sa mode()
 */
@@ -2389,7 +2417,7 @@ bool QFileDialog::eventFilter( QObject * o, QEvent * e )
         if ( o == d->moreFiles->viewport() && !d->moreFiles->viewport()->hasFocus() ||
              o == d->moreFiles && !d->moreFiles->hasFocus() )
             ((QWidget*)o)->setFocus();
-        return TRUE;
+        return FALSE;
      }
     return FALSE;
 }
@@ -2461,9 +2489,7 @@ void QFileDialog::modeButtonsDestroyed()
   \a parent is a widget over which the dialog should be positioned and
   \a name is the object name of the temporary QFileDialog object.
 
-  Note that the returned list has auto-delete turned off.  It is the
-  application developer's responsibility to delete the strings in the
-  list, for example using code such as:
+  Example:
 
   \code
     QStringList s( QFileDialog::getOpenFileNames() );
@@ -2478,21 +2504,20 @@ QStringList QFileDialog::getOpenFileNames( const QString & filter,
 {
     makeVariables();
 
-    // ### Problem with the logic here: If dir is unset, will get root
-    // (and why not CWD, as doc says?) instead of current value of
-    // workingDirectory
-
     if ( workingDirectory->isNull() )
         *workingDirectory = QDir::currentDirPath();
 
-    QFileInfo tmp( QDir::root(), dir );
-    if ( !tmp.isDir() ) {
-        tmp.setFile( QDir::root(), *workingDirectory );
-        while( !tmp.isDir() )
-            tmp.setFile( tmp.dirPath( TRUE ) );
-    }
+//     QFileInfo tmp( QDir::root(), dir );
+//     if ( !tmp.isDir() ) {
+//         tmp.setFile( QDir::root(), *workingDirectory );
+//         while( !tmp.isDir() )
+//             tmp.setFile( tmp.dirPath( TRUE ) );
+//     }
 
-    *workingDirectory = tmp.absFilePath();
+//     *workingDirectory = tmp.absFilePath();
+
+    if ( !dir.isEmpty() )
+        *workingDirectory = dir;
 
 #if defined(_WS_WIN_)
     if ( qApp->style() == WindowsStyle )

@@ -70,6 +70,7 @@ The QPopupMenu class provides a popup menu widget.
 <p>Examples:
  <a href="qtimage-qtimage-cpp.html#QPopupMenu">qtimage/qtimage.cpp</a>
  <a href="grapher-grapher-cpp.html#QPopupMenu">grapher/grapher.cpp</a>
+ <a href="mainlyQt-editor-cpp.html#QPopupMenu">mainlyQt/editor.cpp</a>
  <a href="layout-layout-cpp.html#QPopupMenu">layout/layout.cpp</a>
  <a href="menu-menu-cpp.html#QPopupMenu">menu/menu.cpp</a>
  <a href="progress-progress-cpp.html#QPopupMenu">progress/progress.cpp</a>
@@ -134,7 +135,13 @@ mouse position:
 <p>or aligned to a widget:
 <pre>      exec(somewidget.mapToGlobal(<a href="qpoint.html">QPoint</a>(0,0)));
 </pre>
-<p>See also:  <a href="qpopupmenu.html#8b5cd7">popup</a>(), When, positioning, a, popup, with, <a href="qpopupmenu.html#5b40c9">exec</a>(), or, popup(), keep, in, mind, that, you, cannot, rely, on, the, popup, menu's, current, <a href="qwidget.html#da2102">size</a>()., For, performance, reasons, the, popup, adapts, its, size, only, when, actually, needed., So, in, many, cases, the, size, before, after, the, show, is, different., Instead, use, <a href="qpopupmenu.html#5b3afa">sizeHint</a>()., It, calculates, the, proper, size, depending, on, the, menu's, current, contents., \sa and sizeHint().
+<p>When positioning a popup with exec() or <a href="qpopupmenu.html#8b5cd7">popup</a>(), keep in mind that
+you cannot rely on the popup menu's current <a href="qwidget.html#da2102">size</a>(). For performance
+reasons, the popup adapts its size only when actually needed. So in
+many cases, the size before and after the show is
+different. Instead, use <a href="qpopupmenu.html#5b3afa">sizeHint</a>(). It calculates the proper size
+depending on the menu's current contents.
+<p>See also:  <a href="qpopupmenu.html#8b5cd7">popup</a>() and <a href="qpopupmenu.html#5b3afa">sizeHint</a>().
 <h3 class="fn">void <a name="48087d"></a>QPopupMenu::hide () <code>[virtual]</code></h3>
 <p>Reimplements <a href="qwidget.html#bc7c6a">QWidget::hide</a>() for internal purposes.
 <p>Reimplemented from <a href="qwidget.html#bc7c6a">QWidget.</a>
@@ -229,7 +236,7 @@ shown.
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.troll.no">www.troll.no</a>):<br>
 <form method=post action="http://www.troll.no/search.cgi">
-<input type=hidden name="version" value="2.00"><nobr>
+<input type=hidden name="version" value="2.0.1"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -237,5 +244,5 @@ copyright &copy; 1995-99
 <a href="http://www.troll.no">Troll Tech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.00</div>
+<td align="right"><div align="right">Qt version 2.0.1</div>
 </table></div></address></body></html>

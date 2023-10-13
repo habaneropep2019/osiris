@@ -13,14 +13,14 @@ SYSCONF_CXXFLAGS_YACC     = -Olimit 1000
 # Linking with support libraries
 # X11
 SYSCONF_LFLAGS_X11	= -L/usr/X11R6/lib
-SYSCONF_LIBS_X11	= -lXext -lX11
+SYSCONF_LIBS_X11	= -lXext -lX11 -lm
 # Qt, Qt+OpenGL
 SYSCONF_LFLAGS_QT	= -L$(QTDIR)/lib
 SYSCONF_LIBS_QT		= -lqt
 SYSCONF_LIBS_QT_OPENGL	= -lqgl
 # OpenGL
 SYSCONF_LFLAGS_OPENGL	= -L/usr/X11R6/lib
-SYSCONF_LIBS_OPENGL	= -lMesaGL -lMesaGLU -lXmu -lXext -lm
+SYSCONF_LIBS_OPENGL	= -lMesaGL -lMesaGLU -lXmu
 # Yacc
 SYSCONF_LIBS_YACC	= 
 
@@ -36,20 +36,21 @@ SYSCONF_LFLAGS_SHOBJ	= -shared
 SYSCONF_MOC		= $(QTDIR)/bin/moc
 
 # Linking shared libraries
-#   - Build the $(TARGET) library, eg. lib$(TARGET).so.0.0
+#   - Build the $(TARGET) library, eg. lib$(TARGET).so.2.0.1
 #   - Place target in $(DESTDIR) - which has a trailing /
-#   - Usually needs to incorporate $(VER_MAJ) and $(VER_MIN)
+#   - Usually needs to incorporate $(VER_MAJ), $(VER_MIN) and $(VER_PATCH)
 #
 SYSCONF_LINK_SHLIB	= cxx
-SYSCONF_LINK_TARGET_SHARED	= lib$(TARGET).so.$(VER_MAJ).$(VER_MIN)
+SYSCONF_LINK_TARGET_SHARED	= lib$(TARGET).so.$(VER_MAJ).$(VER_MIN).$(VER_PATCH)
 SYSCONF_LINK_LIB_SHARED	=  $(SYSCONF_LINK_SHLIB) -shared -soname lib$(TARGET).so.$(VER_MAJ) \
 				     $(LFLAGS) -o $(SYSCONF_LINK_TARGET_SHARED) \
 				     $(OBJECTS) $(OBJMOC) $(LIBS) && \
 				 mv $(SYSCONF_LINK_TARGET_SHARED) $(DESTDIR); \
 				 cd $(DESTDIR) && \
-				 rm -f lib$(TARGET).so lib$(TARGET).so.$(VER_MAJ); \
+				 rm -f lib$(TARGET).so lib$(TARGET).so.$(VER_MAJ) lib$(TARGET).so.$(VER_MAJ).$(VER_MIN); \
 				 ln -s $(SYSCONF_LINK_TARGET_SHARED) lib$(TARGET).so; \
-				 ln -s $(SYSCONF_LINK_TARGET_SHARED) lib$(TARGET).so.$(VER_MAJ)
+				 ln -s $(SYSCONF_LINK_TARGET_SHARED) lib$(TARGET).so.$(VER_MAJ); \
+				 ln -s $(SYSCONF_LINK_TARGET_SHARED) lib$(TARGET).so.$(VER_MAJ).$(VER_MIN)
 
 # Linking static libraries
 #   - Build the $(TARGET) library, eg. lib$(TARGET).a

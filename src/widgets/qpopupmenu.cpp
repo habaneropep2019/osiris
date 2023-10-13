@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qpopupmenu.cpp,v 2.160 1999/06/22 00:26:10 ettrich Exp $
+** $Id: qpopupmenu.cpp,v 2.160.2.1 1999/07/13 19:59:27 warwick Exp $
 **
 ** Implementation of QPopupMenu class
 **
@@ -142,9 +142,11 @@ QPopupMenu::QPopupMenu( QWidget *parent, const char *name )
     maxPMWidth = 0;
 
     tab = 0;
+    reserved = 0;
     setFrameStyle( QFrame::PopupPanel | QFrame::Raised );
     style().polishPopupMenu( this );
     setBackgroundMode( PaletteButton );
+    connectModalRecursionSafety = 0;
 }
 
 /*!
@@ -530,6 +532,7 @@ int QPopupMenu::itemPos( int index )		// get y coord for item
 
 void QPopupMenu::updateSize()
 {
+    polish();
     int height = 0;
     int max_width = 0;
     QFontMetrics fm = fontMetrics();
@@ -823,7 +826,10 @@ void QPopupMenu::mousePressEvent( QMouseEvent *e )
     }
     register QMenuItem *mi = mitems->at(item);
     if ( item != actItem ) {			// new item activated
-	actItem = item;
+	int lastActItem = actItem;
+        actItem = item;
+        if ( actItem != lastActItem && lastActItem >= 0 )
+            updateRow( lastActItem );
 	updateRow( actItem );
 	hilitSig( mi->id() );
     }
@@ -933,9 +939,9 @@ void QPopupMenu::mouseMoveEvent( QMouseEvent *e )
 	else if ( singleSingleShot )
 	    singleSingleShot->stop();
 
-	int lastActItem = actItem;
+        int lastActItem = actItem;
 	actItem = item;
-	if ( lastActItem >= 0 )
+        if ( lastActItem >= 0 )
 	    updateRow( lastActItem );
 	updateRow( actItem );
 	hilitSig( mi->id() );
@@ -1242,7 +1248,6 @@ void QPopupMenu::updateRow( int row )
   \code
       exec(somewidget.mapToGlobal(QPoint(0,0)));
   \endcode
-  \sa popup()
 
   When positioning a popup with exec() or popup(), keep in mind that
   you cannot rely on the popup menu's current size(). For performance
@@ -1251,7 +1256,7 @@ void QPopupMenu::updateRow( int row )
   different. Instead, use sizeHint(). It calculates the proper size
   depending on the menu's current contents.
 
-  \sa sizeHint()
+  \sa popup(), sizeHint()
 */
 
 int QPopupMenu::exec( const QPoint & pos, int indexAtPoint )
@@ -1281,19 +1286,22 @@ int QPopupMenu::exec( const QPoint & pos, int indexAtPoint )
  */
 void QPopupMenu::connectModal( QPopupMenu* receiver, bool doConnect )
 {
+    connectModalRecursionSafety = doConnect;
+
     if ( doConnect )
-	connect( this, SIGNAL(activated(int)),
-		 receiver, SLOT(modalActivation(int)) );
+        connect( this, SIGNAL(activated(int)),
+                 receiver, SLOT(modalActivation(int)) );
     else
-	disconnect( this, SIGNAL(activated(int)),
-		    receiver, SLOT(modalActivation(int)) );
+        disconnect( this, SIGNAL(activated(int)),
+                    receiver, SLOT(modalActivation(int)) );
 
     QMenuItemListIt it(*mitems);
     register QMenuItem *mi;
     while ( (mi=it.current()) ) {
-	++it;
-	if ( mi->popup() && mi->popup() != receiver && mi->popup()->parentMenu == this ) //avoid circularity
-	    mi->popup()->connectModal( receiver, doConnect );
+        ++it;
+        if ( mi->popup() && mi->popup() != receiver
+	     && mi->popup()->connectModalRecursionSafety != doConnect ) //avoid circularity
+            mi->popup()->connectModal( receiver, doConnect );
     }
 }
 

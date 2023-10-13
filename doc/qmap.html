@@ -104,16 +104,16 @@ class X and Y must implement a copy constructor.
         Gates, Bill earns 50000
         Sommer, Ron earns 60000
 </pre>
-<p>As you can see, the latest changes to Joes salary did not affect the value
-in the list because the map created a copy of Joes entry. In addition you
+<p>As you can see, the latest changes to Joe's salary did not affect the value
+in the list because the map created a copy of Joe's entry. In addition you
 should notice that the items are alphabetically sorted when iterating
 over the map.
 <p>There are two ways to find values in the list. The first one is to use
 the <a href="qmap.html#15e44c">find</a>() function. It returns an iterator pointing to the desired
 item or the <a href="qmap.html#1de6d2">end</a>() iterator it no such element exists.
-<p>The scond approach uses the operator[]. But be warned: If you dont know
+<p>The second approach uses the operator[]. But be warned: If you don't know
 that the element you are searching for is really in the list, then you
-should not use operator[]. The following example illustrated that.
+should not use operator[]. The following example illustrates that.
 <p><pre>        <a href="qmap.html">QMap</a>&lt;<a href="qstring.html">QString</a>,QString&gt; map;
         map.<a href="qmap.html#bbef7e">insert</a>( "Weis", "Torben" );
         str &lt;&lt; map["Weis"] &lt;&lt; map["Ettrich"] &lt;&lt; endl;
@@ -123,11 +123,11 @@ should not use operator[]. The following example illustrated that.
 </pre>
 <p>The code fragment will print out "Weis", "" and the second part will
 print "Weis", "". In addition the first fragment inserted an empty entry
-with they "Ettrich". The second one did not insert an empty entry with
+with key "Ettrich". The second one did not insert an empty entry with
 key "Reggie" because the const operator[] was used which can not do insertion.
-So if you are not shure wether a certain element is in the map you should
+So if you are not sure whether a certain element is in the map you should
 use find() and iterators.
-<p>If you just want to know wether a certain key is contained in the map,
+<p>If you just want to know whether a certain key is contained in the map,
 the the <a href="qmap.html#c6582b">contains</a>() function is what you are looking for. In addition <a href="qmap.html#c0fa4e">count</a>()
 tells you how many keys there are currently in the map.
 <p>Another method for traversing a map is to use the functions <a href="qmap.html#57d22a">begin</a>() and end().
@@ -138,15 +138,15 @@ the map does not invalidate any iterator.
 <p>Since QMap is value based there is no need to care about deleting elements in the
 list. The list holds its own copies and will free them if the corresponding member or
 the list itself is deleted. You can force the list to free all of its item with <a href="qmap.html#d7523d">clear</a>().
-<p>QMap is implict shared. That means you can just make copies of the map
-in time O(1). If multiple QMap instances share the same data and one
-is doing a modification of the maps data then this modifying instance makes a copy
-and modifies its private copy. So it does not affect the other instances.
-From a developers point of view you can think that a QMap and a copy of this
-map have nothing to do with each other. Developers may only notice that copying is
-very fast. People known to a CPUs MMU architecture will know this pattern as "copy on write".
-<p>There are two ways of inerting new elements in a list. One uses the <a href="qmap.html#bbef7e">insert</a>() method
-while the other one uses operator[] like this:
+<p>QMap is implicitly shared. This means you can just make copies of the
+map in time O(1). If multiple QMap instances share the same data and
+one is modifying the map's data then this modifying
+instance makes a copy and modifies its private copy - thus it does not
+affect other instances.  From a developer's point of view you can
+think that a QMap and a copy of this map have nothing to do with each
+other.
+<p>There are two ways of inserting new elements in a list. One uses the
+<a href="qmap.html#bbef7e">insert</a>() method while the other one uses operator[] like this:
 <p><pre>        <a href="qmap.html">QMap</a>&lt;<a href="qstring.html">QString</a>,QString&gt; map;
         map["Weis"] = "Torben";
 </pre>
@@ -169,9 +169,9 @@ a function is very fast.
 <h3 class="fn"><a name="b6969a"></a>QMap::~QMap ()</h3>
 <p>Destroys the map. References to the values in the map and all iterators
 of this map become invalidated. Since QMap is highly tuned for performance
-you wont see warnings if you use invalid iterators,
+you won't see warnings if you use invalid iterators,
 because it is impossible for
-an iterator to check wether it is valid or not.
+an iterator to check whether it is valid or not.
 <h3 class="fn">ConstIterator <a name="57d22a"></a>QMap::begin () const</h3>
 <p>Returns an iterator pointing to the first element in the map. This
 iterator equals <a href="qmap.html#1de6d2">end</a>() if the map is empty;
@@ -252,7 +252,7 @@ the streaming operator, too.
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.troll.no">www.troll.no</a>):<br>
 <form method=post action="http://www.troll.no/search.cgi">
-<input type=hidden name="version" value="2.00"><nobr>
+<input type=hidden name="version" value="2.0.1"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -260,5 +260,5 @@ copyright &copy; 1995-99
 <a href="http://www.troll.no">Troll Tech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.00</div>
+<td align="right"><div align="right">Qt version 2.0.1</div>
 </table></div></address></body></html>

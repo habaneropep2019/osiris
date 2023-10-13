@@ -1,0 +1,133 @@
+.TH QTranslator 3qt "20 July 1999" "Troll Tech AS" \" -*- nroff -*-
+.\" Copyright 1992-1999 Troll Tech AS.  All rights reserved.  See the
+.\" license file included in the distribution for a complete license
+.\" statement.
+.\"
+.ad l
+.nh
+.SH NAME
+QTranslator \- Internationalization support for text output
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <qtranslator.h>\fR
+.PP
+Inherits QObject.
+.PP
+.SS "Public Members"
+.in +1c
+.ti -1c
+.BI "\fBQTranslator\fR ( QObject * " "parent" ", const char * " "name" " = 0 )"
+.br
+.ti -1c
+.BI "\fB~QTranslator\fR ()"
+.br
+.ti -1c
+.BI "virtual QString \fBfind\fR ( const char *, const char * ) const"
+.br
+.ti -1c
+.BI "bool \fBload\fR ( const QString & " "filename" ", const QString & directory = QString::null, const QString & search_delimiters = QString::null, const QString & suffix = QString::null )"
+.br
+.ti -1c
+.BI "enum \fBSaveMode\fR { Everything, Stripped }"
+.br
+.ti -1c
+.BI "bool \fBsave\fR ( const QString & " "filename" ", SaveMode " "mode" " = Everything )"
+.br
+.ti -1c
+.BI "void \fBclear\fR ()"
+.br
+.ti -1c
+.BI "void \fBinsert\fR ( const char *, const char *, const QString & )"
+.br
+.ti -1c
+.BI "void \fBremove\fR ( const char *, const char * )"
+.br
+.ti -1c
+.BI "bool \fBcontains\fR ( const char *, const char * ) const"
+.br
+.ti -1c
+.BI "void \fBsqueeze\fR ()"
+.br
+.ti -1c
+.BI "void \fBunsqueeze\fR ()"
+.br
+.in -1c
+.SH DESCRIPTION
+The QTranslator class provides internationalization support for text output.
+.PP
+The class is conceptually very simple: An object of this class contains a set of translations from the reference language to a target language, and provides functions to add, look up and remove such translations as well as the ability to load and save the object to a file.
+.PP
+The most common use of QTranslator is expected to be loading one from a file, installing it using QApplication::installTranslator(), and using it via QObject::tr().
+.PP
+Slightly more advanced usage of QTranslator includes direct lookup using find(), adding new translations using insert() and removing existing ones using remove() or even clear(), and testing whether the QTranslator contains a translation using contains().
+.PP
+The hash() function mentioned is a variant on the standard ELF hash, modified to work well with Unicode strings in UCS-2 format. Its algorithm is not specified beyond the fact that it will remain unchanged in future versions of Qt.
+.PP
+To examine the contents of a QTranslator, use QTranslatorIterator.
+.PP
+See also: QTranslatorIterator, QApplication::installTranslator, QApplication::removeTranslator(), QObject::tr() and QApplication::translate().
+.PP
+Examples:
+.(l
+i18n/main.cpp
+.)l
+.SH MEMBER FUNCTION DOCUMENTATION
+.SH "QTranslator::QTranslator ( QObject * parent, const char * name = 0 )"
+Constructs an empty message file, not connected to any file.
+.SH "QTranslator::~QTranslator ()"
+Destroys the object and frees any allocated resources.
+.SH "void QTranslator::clear ()"
+Empties this translator of all contents.
+.SH "bool QTranslator::contains ( const char * scope, const char * key ) const"
+Returns TRUE if this message file contains a message with hash value \fIh,\fR and FALSE if it does not.
+.PP
+(This is is a one-liner that calls find().).
+.SH "QString QTranslator::find ( const char * scope, const char * message ) const \fC[virtual]\fR"
+Returns the translation for (\fIscope, key),\fR or QString::null in case there is none in this translator.
+.SH "void QTranslator::insert ( const char * scope, const char * message, const QString & translation )"
+Inserts \fItranslation\fR of \fImessage\fR into this message file.
+.SH "bool QTranslator::load ( const QString & filename, const QString & directory = QString::null, const QString & search_delimiters = QString::null, const QString & suffix = QString::null )"
+Loads \fIfilename,\fR which may be an absolute file name or relative to \fIdirectory.\fR If the full filename does not exist, other filenames are tried in the following order:
+.IP 1
+Filename with \fIsuffix\fR appended (".qm" if suffix is QString::null)
+.IP 2
+Filename with text after a character in \fIsearch_delimiters\fR stripped ("_." is the default for \fIsearch_delimiters\fR if it is QString::null)
+.IP 3
+Filename stripped and \fIsuffix\fR appended.
+.IP 4
+Filename stripped further, etc. For example, load("foo_bar.baz", "/opt/foolib") will search for:
+.IP 1
+/opt/foolib/foo_bar.baz
+.IP 2
+/opt/foolib/foo_bar.baz.qm
+.IP 3
+/opt/foolib/foo_bar
+.IP 4
+/opt/foolib/foo_bar.qm
+.IP 5
+/opt/foolib/foo
+.IP 6
+/opt/foolib/foo.qm
+.PP
+Examples:
+.(l
+i18n/main.cpp
+.)l
+.SH "void QTranslator::remove ( const char * scope, const char * message )"
+Removes the string for \fIh\fR from this message file. If there is no string for h, this function does nothing.
+.SH "void QTranslator::squeeze ()"
+Converts this message file to the compact format used to store message files on disk. You should never need to call this directly; save() and other functions call it as necessary.
+.SH "void QTranslator::unsqueeze ()"
+Converts this message file into an easily modifiable data structure, less compact than the format used in the files.
+.PP
+You should never need to call this function; it is called by insert() etc. as necessary.
+.PP
+See also:  squeeze().
+.SH "SEE ALSO"
+.BR http://www.troll.no/qt/qtranslator.html
+.SH COPYRIGHT
+Copyright 1992-1999 Troll Tech AS.  See the license file included in
+the distribution for a complete license statement.
+.SH AUTHOR
+Generated automatically from the source code.

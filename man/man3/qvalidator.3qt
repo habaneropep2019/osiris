@@ -1,0 +1,88 @@
+.TH QValidator 3qt "20 July 1999" "Troll Tech AS" \" -*- nroff -*-
+.\" Copyright 1992-1999 Troll Tech AS.  All rights reserved.  See the
+.\" license file included in the distribution for a complete license
+.\" statement.
+.\"
+.ad l
+.nh
+.SH NAME
+QValidator \- Validation of input text
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <qvalidator.h>\fR
+.PP
+Inherits QObject.
+.PP
+Inherited by QDoubleValidator and QIntValidator.
+.PP
+.SS "Public Members"
+.in +1c
+.ti -1c
+.BI "\fBQValidator\fR ( QWidget * " "parent" ", const char * " "name" " = 0 )"
+.br
+.ti -1c
+.BI "\fB~QValidator\fR ()"
+.br
+.ti -1c
+.BI "enum \fBState\fR { Invalid, Valid, Acceptable }"
+.br
+.ti -1c
+.BI "virtual State \fBvalidate\fR ( QString &, int & ) const"
+.br
+.ti -1c
+.BI "virtual void \fBfixup\fR ( QString & ) const"
+.br
+.in -1c
+.SH DESCRIPTION
+The QValidator class provides validation of input text.
+.PP
+The class itself is abstract; two subclasses provide rudimentary numeric range checking.
+.PP
+The class includes two virtual functions, validate() and fixup().
+.PP
+validate() is pure virtual, so it must be implemented by every subclass. It returns Invalid, Valid or Acceptable depending on whether its argument is valid (for the class' definition of valid).
+.PP
+The three states require some explanation. An \fCInvalid\fR string is \fIclearly\fR invalid. \fCValid\fR is less obvious - the concept of validity is slippery when the string is incomplete (still being edited). QValidator defines \fCValid\fR as the property of a string that it is not clearly invalid. \fCAcceptable\fR means that the string is acceptable as a final result. One might say that any string that is a plausible intermediate state during entry of an \fCAcceptable\fR string is \fCValid.\fR
+.PP
+Here are some examples: 
+.IP 1
+For a line edit that accepts integers from 0 to 999 inclusive, 42 and 666 are \fCAcceptable,\fR the empty string and 1114 are \fCValid\fR and asdf is \fCInvalid.\fR
+.IP 2
+For an editable combo box that accepts URLs, any well-formed URL is \fCAcceptable,\fR "http://www.troll.no/," is \fCValid\fR (it can be a cut-and-paste job that accidentally took in a comma at the end), the empty string is valid (the user might select and delete all of the text in preparation to entering a new URL), and "http:///./moron" is \fCInvalid.\fR
+.IP 3
+For a spin box that accepts lengths, "11cm" and "1in" are \fCAcceptable,\fR "11" and the empty string are \fCValid,\fR and "http://www.troll.no" and "hour" are \fCInvalid.\fR
+.PP
+fixup() is provided for validators that can repair some or all user errors. The default does nothing. QLineEdit, for example, will call fixup() if the user presses Return and the content is not currently valid, in case fixup() can do magic. This allows some \fCInvalid\fR strings to be made \fCAcceptable,\fR too, spoiling the muddy definition above even more.
+.PP
+QValidator is generally used with QLineEdit, QSpinBox and QComboBox.
+.SH MEMBER FUNCTION DOCUMENTATION
+.SH "QValidator::QValidator ( QWidget * parent, const char * name = 0 )"
+Sets up the internal data structures used by the validator. At the moment there aren't any.
+.SH "QValidator::~QValidator ()"
+Deletes the validator and frees any storage and other resources used.
+.SH "void QValidator::fixup ( QString & input ) const \fC[virtual]\fR"
+Attempts to change \fIto\fR be valid according to this validator's rules. Need not result in a valid string - callers of this function must re-test afterwards. The default does nothing.
+.PP
+Reimplementation notes:
+.PP
+Note that \fIinput\fR may not be the only QString object referencing this string, so it's almost always necessary to detach() the string at the start of the code:
+.PP
+.nf
+.br
+    input.detach();
+.fi
+.PP
+You can change \fIinput\fR even if you aren't able to produce a valid
+string.  For example an ISBN validator might want to delete every
+character except digits and "-", even if the result is not a valid
+ISBN, and a last-name validator might want to remove white space
+from the start and end of the string, even if the resulting string
+is not in the list of known last names.
+.SH "SEE ALSO"
+.BR http://www.troll.no/qt/qvalidator.html
+.SH COPYRIGHT
+Copyright 1992-1999 Troll Tech AS.  See the license file included in
+the distribution for a complete license statement.
+.SH AUTHOR
+Generated automatically from the source code.

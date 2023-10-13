@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qmap.h,v 1.21 1999/06/15 13:01:26 weis Exp $
+** $Id: qmap.h,v 1.21.2.2 1999/07/16 06:37:18 weis Exp $
 **
 ** Definition of QMap class
 **
@@ -63,7 +63,7 @@ struct QMapNode : public QMapNodeBase
 {
     QMapNode( const K& _key, const T& _data ) { data = _data; key = _key; }
     QMapNode( const K& _key )	   { key = _key; }
-    QMapNode( const QMapNode& _n ) { key = _n.key; data = _n.data; }
+    QMapNode( const QMapNode<K,T>& _n ) { key = _n.key; data = _n.data; }
     QMapNode() { }
     T data;
     K key;
@@ -104,7 +104,7 @@ class Q_EXPORT QMapIterator
     const T& data() const { return node->data; }
 
 private:
-    void inc() {
+    int inc() {
 	QMapNodeBase* tmp = node;
 	if ( tmp->right ) {
 	    tmp = tmp->right;
@@ -120,9 +120,10 @@ private:
 		tmp = y;
 	}
 	node = (NodePtr)tmp;
+	return 0;
     }
 
-    void dec() {
+    int dec() {
 	QMapNodeBase* tmp = node;
 	if (tmp->color == QMapNodeBase::Red &&
 	    tmp->parent->parent == tmp ) {
@@ -141,6 +142,7 @@ private:
 	    tmp = y;
 	}
 	node = (NodePtr)tmp;
+	return 0;
     }
 
 public:
@@ -200,7 +202,7 @@ class Q_EXPORT QMapConstIterator
     const T& data() const { return node->data; }
 
 private:
-    void inc() {
+    int inc() {
         QMapNodeBase* tmp = node;
 	if ( tmp->right ) {
 	    tmp = tmp->right;
@@ -216,9 +218,10 @@ private:
 		tmp = y;
 	}
 	node = (NodePtr)tmp;
+	return 0;
     }
 
-    void dec() {
+    int dec() {
 	QMapNodeBase* tmp = node;
 	if (tmp->color == QMapNodeBase::Red &&
 	    tmp->parent->parent == tmp ) {
@@ -237,6 +240,7 @@ private:
 	    tmp = y;
 	}
 	node = (NodePtr)tmp;
+	return 0;
     }
 
 public:

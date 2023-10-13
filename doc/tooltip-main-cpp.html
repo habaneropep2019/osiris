@@ -95,7 +95,7 @@ DynamicTip::DynamicTip( <a href="qwidget.html">QWidget</a> * parent )
     // no explicit initialization needed
 }
 
-void <a name="323"></a>DynamicTip::maybeTip( const QPoint &amp;pos )
+void <a name="230"></a>DynamicTip::maybeTip( const QPoint &amp;pos )
 {
     if ( !parentWidget()-&gt;inherits( "TellMe" ) )
         return;
@@ -128,7 +128,7 @@ TellMe::~TellMe()
     t = 0;
 }
 
-void <a name="324"></a>TellMe::paintEvent( <a href="qpaintevent.html">QPaintEvent</a> * e )
+void <a name="231"></a>TellMe::paintEvent( <a href="qpaintevent.html">QPaintEvent</a> * e )
 {
     <a href="qpainter.html">QPainter</a> p( this );
 
@@ -150,7 +150,7 @@ void <a name="324"></a>TellMe::paintEvent( <a href="qpaintevent.html">QPaintEven
     }
 }
 
-void <a name="325"></a>TellMe::mousePressEvent( <a href="qmouseevent.html">QMouseEvent</a> * e )
+void <a name="232"></a>TellMe::mousePressEvent( <a href="qmouseevent.html">QMouseEvent</a> * e )
 {
     if ( r1.contains( e-&gt;<a href="qmouseevent.html#ac025d">pos</a>() ) )
         r1 = randomRect();
@@ -159,7 +159,7 @@ void <a name="325"></a>TellMe::mousePressEvent( <a href="qmouseevent.html">QMous
     <a href="qwidget.html#977d49">repaint</a>();
 }
 
-void <a name="326"></a>TellMe::resizeEvent( <a href="qresizeevent.html">QResizeEvent</a> * )
+void <a name="233"></a>TellMe::resizeEvent( <a href="qresizeevent.html">QResizeEvent</a> * )
 {
     if ( !rect().contains( r1 ) )
          r1 = randomRect();
@@ -167,13 +167,13 @@ void <a name="326"></a>TellMe::resizeEvent( <a href="qresizeevent.html">QResizeE
          r2 = randomRect();
 }
 
-<a href="qrect.html">QRect</a> <a name="327"></a>TellMe::randomRect()
+<a href="qrect.html">QRect</a> <a name="234"></a>TellMe::randomRect()
 {
     return QRect( ::rand() % (<a href="qwidget.html#576663">width</a>() - 20), ::rand() % (<a href="qwidget.html#180786">height</a>() - 20),
                   20, 20 );
 }
 
-<a href="qrect.html">QRect</a> <a name="328"></a>TellMe::tip( const QPoint &amp; p )
+<a href="qrect.html">QRect</a> <a name="235"></a>TellMe::tip( const QPoint &amp; p )
 {
     if ( r1.contains( p ) )
         return r1;
@@ -216,5 +216,5 @@ int main( int argc, char ** argv )
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.00</div>
+<td align="right"><div align="right">Qt version 2.0.1</div>
 </table></div></address></body></html>

@@ -625,12 +625,10 @@ Does nothing on other platforms.
 if no application widget has the focus.
 <p>See also:  <a href="qwidget.html#666b3c">QWidget::setFocus</a>(), <a href="qwidget.html#88e8e7">QWidget::hasFocus</a>() and <a href="qapplication.html#679c3d">activeWindow</a>().
 <h3 class="fn"><a href="qfont.html">QFont</a> <a name="43060b"></a>QApplication::font ( const <a href="qwidget.html">QWidget</a> * w = 0 ) <code>[static]</code></h3>
-<p>Returns the default font for a widget. Basicly this function uses the
+<p>Returns the default font for a widget. Basically this function uses the
 class name of the widget to get a font for it.
-<p>If <em>w</em> is 0 the default application font is returned.  There is always
-an application font, i.e. the returned pointer is guaranteed to be
-non-null if a QApplication object has been constructed.
-<p>See also:  <a href="qapplication.html#01d457">setFont</a>(), <a href="qapplication.html#b35955">fontMetrics</a>() and <a href="qwidget.html#605f4c">QWidget::font</a>().
+<p>If <em>w</em> is 0 the default application font is returned.
+<p>See also:  <a href="qapplication.html#01d457">setFont</a>(), <a href="qapplication.html#b35955">fontMetrics</a>() and <a href="qwidget.html#3a7237">QWidget::font</a>().
 <h3 class="fn"><a href="qfontmetrics.html">QFontMetrics</a> <a name="b35955"></a>QApplication::fontMetrics () <code>[static]</code></h3>
 <p>Returns display (screen) font metrics for the application font.
 <p>See also:  <a href="qapplication.html#43060b">font</a>(), <a href="qapplication.html#01d457">setFont</a>(), <a href="qwidget.html#d0d02b">QWidget::fontMetrics</a>() and <a href="qpainter.html#f572a5">QPainter::fontMetrics</a>().
@@ -702,8 +700,8 @@ in the display settings.
 <p>Polishing of widgets.
 <p>Usually widgets call this automatically when they are polished.  It
 may be used to do some style-based central customization of widgets.
-<p>Note that you are not limited to public functions of \llink <a href="qwidget.html">QWidget</a>.
-Instead, based on meta information like \link <a href="qobject.html#421b72">QObject::className</a>()
+<p>Note that you are not limited to public functions of <a href="qwidget.html">QWidget</a>.
+Instead, based on meta information like <a href="qobject.html#421b72">QObject::className</a>()
 you are able to customize any kind of widgets.
 <p>The default implementation sets a class specific font or palette if
 available and no font or palette has been set yet. Then it calls
@@ -927,13 +925,11 @@ Windows on the X server in use.
 widgets is set to <em>font.</em>
 <p>If a className is passed, then the font is only set for widgets
 that inherit this class in the sense of <a href="qobject.html#ac17a9">QObject::inherits</a>()
-<p>Widgets created after this call get <em>font</em> as their <a href="qwidget.html#605f4c">font</a> when they access it.
+<p>Widgets created after this call get <em>font</em> as their <a href="qwidget.html#3a7237">font</a> when they access it.
 <p>See also:  <a href="qapplication.html#43060b">font</a>(), <a href="qapplication.html#b35955">fontMetrics</a>() and <a href="qwidget.html#26de4b">QWidget::setFont</a>().
 <p>Examples:
  <a href="showimg-main-cpp.html#QApplication::setFont">showimg/main.cpp</a>
- <a href="tetrix-tetrix-cpp.html#QApplication::setFont">tetrix/tetrix.cpp</a>
  <a href="desktop-desktop-cpp.html#setFont">desktop/desktop.cpp</a>
- <a href="movies-main-cpp.html#QApplication::setFont">movies/main.cpp</a>
 <h3 class="fn">void <a name="50cb07"></a>QApplication::setGlobalMouseTracking ( bool enable ) <code>[static]</code></h3>
 <p>Enables global mouse tracking if <em>enable</em> is TRUE or disables it
 if <em>enable</em> is FALSE.
@@ -1120,7 +1116,7 @@ and exits.  If <em>p</em> is not null, nothing happens.
 <h3>Q_EXPORT void <a name="63c38a"></a>qWarning (const char * msg, ...)</h3>
 <p>Prints a warning message, or calls the message handler (if it has been
 installed).
-<p>This function takes a format string and a stack arguments, similar to
+<p>This function takes a format string and a list of arguments, similar to
 the C printf() function.
 <p>Example:
 <pre>    void f( int c )
@@ -1216,7 +1212,7 @@ an application-wide basis to control debug output.
 <h3>Q_EXPORT void <a name="a4ac79"></a>qFatal (const char * msg, ...)</h3>
 <p>Prints a fatal error message and exits, or calls the message handler (if it
 has been installed).
-<p>This function takes a format string and a stack arguments, similar to
+<p>This function takes a format string and a list of arguments, similar to
 the C printf() function.
 <p>Example:
 <pre>    int divide( int a, int b )
@@ -1238,7 +1234,7 @@ or "1.31".
 <h3>Q_EXPORT void <a name="e09d29"></a>qDebug (const char * msg, ...)</h3>
 <p>Prints a debug message, or calls the message handler (if it has been
 installed).
-<p>This function takes a format string and a stack arguments, similar to
+<p>This function takes a format string and a list of arguments, similar to
 the C printf() function.
 <p>Example:
 <pre>    <a href="qapplication.html#e09d29">qDebug</a>( "my window handle = %x", myWidget-&gt;id() );
@@ -1251,6 +1247,7 @@ sent to the debugger.
 <p>See also:  warning(), fatal(), <a href="qapplication.html#972896">qInstallMsgHandler</a>() and <a href="debug.html">Debugging</a>
 <p>Examples:
  <a href="qdir-qdir-cpp.html#qDebug">qdir/qdir.cpp</a>
+ <a href="mainlyXt-editor-cpp.html#qDebug">mainlyXt/editor.cpp</a>
 
 <h3>void <a name="ee89a8"></a>qAddPostRoutine (Q_CleanUpFunction p)</h3>
 <p>Adds a global routine that will be called from the QApplication destructor.
@@ -1275,7 +1272,7 @@ This function is normally used to add cleanup routines.
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.troll.no">www.troll.no</a>):<br>
 <form method=post action="http://www.troll.no/search.cgi">
-<input type=hidden name="version" value="2.00"><nobr>
+<input type=hidden name="version" value="2.0.1"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -1283,5 +1280,5 @@ copyright &copy; 1995-99
 <a href="http://www.troll.no">Troll Tech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.00</div>
+<td align="right"><div align="right">Qt version 2.0.1</div>
 </table></div></address></body></html>

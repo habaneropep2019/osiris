@@ -108,7 +108,7 @@ LineEdits::LineEdits( <a href="qwidget.html">QWidget</a> *parent, const char *na
     combo1-&gt;insertItem( "No Echo", -1 );
     // ...and connect the activated() SIGNAL with the slotEchoChanged() SLOT to be able
     // to react when an item is selected
-    <a href="qobject.html#c2d209">connect</a>( combo1, SIGNAL( activated( int ) ), this, SLOT( <a href=#254>slotEchoChanged</a>( int ) ) );
+    <a href="qobject.html#c2d209">connect</a>( combo1, SIGNAL( activated( int ) ), this, SLOT( <a href=#161>slotEchoChanged</a>( int ) ) );
 
     // insert the first LineEdit
     lined1 = new <a href="qlineedit.html">QLineEdit</a>( this );
@@ -126,7 +126,7 @@ LineEdits::LineEdits( <a href="qwidget.html">QWidget</a> *parent, const char *na
     combo2-&gt;insertItem( "Integer Validator", -1 );
     combo2-&gt;insertItem( "Double Validator", -1 );
     // ...and again the activated() SIGNAL gets connected with a SLOT
-    <a href="qobject.html#c2d209">connect</a>( combo2, SIGNAL( activated( int ) ), this, SLOT( <a href=#255>slotValidatorChanged</a>( int ) ) );
+    <a href="qobject.html#c2d209">connect</a>( combo2, SIGNAL( activated( int ) ), this, SLOT( <a href=#162>slotValidatorChanged</a>( int ) ) );
 
     // and the second LineEdit
     lined2 = new <a href="qlineedit.html">QLineEdit</a>( this );
@@ -144,7 +144,7 @@ LineEdits::LineEdits( <a href="qwidget.html">QWidget</a> *parent, const char *na
     combo3-&gt;insertItem( "Centered", -1 );
     combo3-&gt;insertItem( "Right", -1 );
     // ...and again the activated() SIGNAL gets connected with a SLOT
-    <a href="qobject.html#c2d209">connect</a>( combo3, SIGNAL( activated( int ) ), this, SLOT( <a href=#256>slotAlignmentChanged</a>( int ) ) );
+    <a href="qobject.html#c2d209">connect</a>( combo3, SIGNAL( activated( int ) ), this, SLOT( <a href=#163>slotAlignmentChanged</a>( int ) ) );
 
     // and the lineedit
     lined3 = new <a href="qlineedit.html">QLineEdit</a>( this );
@@ -161,7 +161,7 @@ LineEdits::LineEdits( <a href="qwidget.html">QWidget</a> *parent, const char *na
  * first LineEdit.
  */
 
-void <a name="254"></a>LineEdits::slotEchoChanged( int i )
+void <a name="161"></a>LineEdits::slotEchoChanged( int i )
 {
     switch ( i ) {
     case 0:
@@ -188,7 +188,7 @@ void <a name="254"></a>LineEdits::slotEchoChanged( int i )
  * ignored and not inserted into the lineedit.
  */
 
-void <a name="255"></a>LineEdits::slotValidatorChanged( int i )
+void <a name="162"></a>LineEdits::slotValidatorChanged( int i )
 {
     switch ( i ) {
     case 0:
@@ -215,7 +215,7 @@ void <a name="255"></a>LineEdits::slotValidatorChanged( int i )
  * third LineEdit.
  */
 
-void <a name="256"></a>LineEdits::slotAlignmentChanged( int i )
+void <a name="163"></a>LineEdits::slotAlignmentChanged( int i )
 {
     switch ( i ) {
     case 0:
@@ -266,5 +266,5 @@ int main( int argc, char **argv )
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.00</div>
+<td align="right"><div align="right">Qt version 2.0.1</div>
 </table></div></address></body></html>

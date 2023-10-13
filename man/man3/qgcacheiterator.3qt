@@ -1,0 +1,101 @@
+.TH QGCacheIterator 3qt "20 July 1999" "Troll Tech AS" \" -*- nroff -*-
+.\" Copyright 1992-1999 Troll Tech AS.  All rights reserved.  See the
+.\" license file included in the distribution for a complete license
+.\" statement.
+.\"
+.ad l
+.nh
+.SH NAME
+QGCacheIterator \- An internal class for implementing QCacheIterator and QIntCacheIterator
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <qgcache.h>\fR
+.PP
+Inherited by QAsciiCacheIterator, QCacheIterator and QIntCacheIterator.
+.PP
+.SS "Protected Members"
+.TP
+\fBQGCacheIterator\fR ( const QGCache & ) 
+.TP
+\fBQGCacheIterator\fR ( const QGCacheIterator & ) 
+.TP
+\fB~QGCacheIterator\fR () 
+.TP
+QGCacheIterator& \fBoperator=\fR ( const QGCacheIterator & ) 
+.TP
+uint \fBcount\fR () const
+.TP
+bool \fBatFirst\fR () const
+.TP
+bool \fBatLast\fR () const
+.TP
+QCollection::Item \fBtoFirst\fR () 
+.TP
+QCollection::Item \fBtoLast\fR () 
+.TP
+QCollection::Item \fBget\fR () const
+.TP
+QString \fBgetKeyString\fR () const
+.TP
+const char* \fBgetKeyAscii\fR () const
+.TP
+long \fBgetKeyInt\fR () const
+.TP
+QCollection::Item \fBoperator\fR ()() 
+.TP
+QCollection::Item \fBoperator++\fR () 
+.TP
+QCollection::Item \fBoperator+=\fR ( uint ) 
+.TP
+QCollection::Item \fBoperator--\fR () 
+.TP
+QCollection::Item \fBoperator-=\fR ( uint ) 
+.SH DESCRIPTION
+An internal class for implementing QCacheIterator and QIntCacheIterator.
+.PP
+QGCacheIterator is a strictly internal class that does the heavy work for QCacheIterator and QIntCacheIterator.
+.SH MEMBER FUNCTION DOCUMENTATION
+.SH "QGCacheIterator::QGCacheIterator ( const QGCache & c ) \fC[protected]\fR"
+For internal use only.
+.SH "QGCacheIterator::QGCacheIterator ( const QGCacheIterator & ci ) \fC[protected]\fR"
+For internal use only.
+.SH "QGCacheIterator::~QGCacheIterator () \fC[protected]\fR"
+For internal use only.
+.SH "bool QGCacheIterator::atFirst () const \fC[protected]\fR"
+For internal use only.
+.SH "bool QGCacheIterator::atLast () const \fC[protected]\fR"
+For internal use only.
+.SH "uint QGCacheIterator::count () const \fC[protected]\fR"
+For internal use only.
+.SH "QCollection::Item QGCacheIterator::get() const \fC[protected]\fR"
+For internal use only.
+.SH "const char * QGCacheIterator::getKeyAscii () const \fC[protected]\fR"
+For internal use only.
+.SH "long QGCacheIterator::getKeyInt () const \fC[protected]\fR"
+For internal use only.
+.SH "QString QGCacheIterator::getKeyString () const \fC[protected]\fR"
+For internal use only.
+.SH "QCollection::Item QGCacheIterator::operator()() \fC[protected]\fR"
+For internal use only.
+.SH "QCollection::Item QGCacheIterator::operator++() \fC[protected]\fR"
+For internal use only.
+.SH "QCollection::Item QGCacheIterator::operator+=( uint jump ) \fC[protected]\fR"
+For internal use only.
+.SH "QCollection::Item QGCacheIterator::operator--() \fC[protected]\fR"
+For internal use only.
+.SH "QCollection::Item QGCacheIterator::operator-=( uint jump ) \fC[protected]\fR"
+For internal use only.
+.SH "QGCacheIterator & QGCacheIterator::operator= ( const QGCacheIterator & ci ) \fC[protected]\fR"
+For internal use only.
+.SH "QCollection::Item QGCacheIterator::toFirst() \fC[protected]\fR"
+For internal use only.
+.SH "QCollection::Item QGCacheIterator::toLast() \fC[protected]\fR"
+For internal use only.
+.SH "SEE ALSO"
+.BR http://www.troll.no/qt/qgcacheiterator.html
+.SH COPYRIGHT
+Copyright 1992-1999 Troll Tech AS.  See the license file included in
+the distribution for a complete license statement.
+.SH AUTHOR
+Generated automatically from the source code.

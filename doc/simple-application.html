@@ -1,4 +1,6 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta name="robots" content="noindex">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta name="robots" content="noindex"><title>Qt Simple Application</title>
+</head><body bgcolor="#ffffff">
+<p>
 <a href=index.html><img width=122 height=65 src=qtlogo.png alt="Qt logo" align=left border=0></a>
 <center><img src=dochead.png width=448 height=23></center>
 <br clear=all>
@@ -105,7 +107,8 @@ int main( int argc, char ** argv ) {
 We'll go over main() in detail.
 <p>
 <pre>
-    int main( int argc, char ** argv ) {        <a href="qapplication.html">QApplication</a> a( argc, argv );
+    int main( int argc, char ** argv ) {
+        <a href="qapplication.html">QApplication</a> a( argc, argv );
 </pre>
 <p>
 We create a QApplication object with the usual constructor and let it
@@ -150,7 +153,8 @@ We skip the preliminary #include and some text constants, and start
 with the constructor.
 <p>
 <pre>
-    ApplicationWindow::ApplicationWindow()        : <a href="qmainwindow.html">QMainWindow</a>( 0, "example application main window", WDestructiveClose )
+    ApplicationWindow::ApplicationWindow()
+        : <a href="qmainwindow.html">QMainWindow</a>( 0, "example application main window", WDestructiveClose )
     {
 </pre>
 <p>
@@ -291,10 +295,15 @@ used.
         <a href="qwidget.html#9ff9d8">resize</a>( 450, 600 );
 </pre>
 <p>
-That's it.
+We provide a nice default size for the new window.
 <p>
 <pre>
     }
+</pre>
+<p>
+That's it.
+<p>
+<pre>
     ApplicationWindow::~ApplicationWindow()
     {
         delete printer;
@@ -358,6 +367,7 @@ away.)
     
         e-&gt;setAutoUpdate( TRUE );
         e-&gt;repaint();
+        e-&gt;setEdited( FALSE );
         <a href="qwidget.html#d4f007">setCaption</a>( fileName );
         <a href="qstring.html">QString</a> s;
         s.<a href="qstring.html#2eb9bc">sprintf</a>( "Loaded document %s", fileName );
@@ -377,13 +387,7 @@ displays a success message for two seconds in the status bar.
             saveAs();
             return;
         }
-</pre>
-<p>
-Yes.
-<p>
-<a name="printer"></a>
-<p>
-<pre>
+    
         <a href="qstring.html">QString</a> text = e-&gt;text();
         <a href="qfile.html">QFile</a> f( filename );
         if ( !f.<a href="qfile.html#44ae9b">open</a>( IO_WriteOnly ) ) {
@@ -395,12 +399,34 @@ Yes.
         <a href="qtextstream.html">QTextStream</a> t( &amp;f );
         t &lt;&lt; text;
         f.<a href="qfile.html#e37a87">close</a>();
-    
+</pre>
+<p>
+This function saves the current file.  Nothing remarkable in the first
+part.
+<p>
+<pre>
+        e-&gt;setEdited( FALSE );
+</pre>
+<p>
+Tell the editor that the contents haven't been edited since the last
+save.  When the user closes the window, ApplicationWindow may want to
+ask "Save?".
+<p>
+<pre>
         <a href="qwidget.html#d4f007">setCaption</a>( filename );
-    
+</pre>
+<p>
+It may be that the document was saved under a different name than the
+caption, so we set the window caption just to be sure.
+<p>
+<pre>
         <a href="qmainwindow.html#14153d">statusBar</a>()-&gt;message( <a href="qstring.html">QString</a>( "File %1 saved" ).arg( filename ), 2000 );
     }
-    
+</pre>
+<p>
+That was all.
+<p>
+<pre>
     void ApplicationWindow::saveAs()
     {
         <a href="qstring.html">QString</a> fn = QFileDialog::getSaveFileName( QString::null, QString::null,
@@ -412,7 +438,14 @@ Yes.
             <a href="qmainwindow.html#14153d">statusBar</a>()-&gt;message( "Saving aborted", 2000 );
         }
     }
-    
+</pre>
+<p>
+This function asks for a new name, saves the document under that name,
+and implicitly changes the window system caption to the new name.
+<p>
+<a name="printer"></a>
+<p>
+<pre>
     void ApplicationWindow::print()
     {
         const int Margin = 10;
@@ -446,7 +479,7 @@ So, we test the return value, and if it's TRUE, we...
             int yPos        = 0;                    // y position for each line
             <a href="qfontmetrics.html">QFontMetrics</a> fm = p.<a href="qpainter.html#f572a5">fontMetrics</a>();
             <a href="qpaintdevicemetrics.html">QPaintDeviceMetrics</a> metrics( printer ); // need width/height
-                                                     // of printer surface
+                                                    // of printer surface
 </pre>
 <p>
 We create a painter for the output, select font, and set up some
@@ -537,25 +570,51 @@ FALSE), we acknowledge that.
 Tha's all.  We have printed a text document.
 <p>
 <pre>
-    void ApplicationWindow::closeEvent( <a href="qcloseevent.html">QCloseEvent</a>* e )
+    void ApplicationWindow::closeEvent( <a href="qcloseevent.html">QCloseEvent</a>* ce )
     {
-        if ( <a href="qmessagebox.html#b7fab2">QMessageBox::warning</a>( this, "Qt Application Example", 
-                                   "Help me, I'm being closed!", 
-                                   "Close", "Cancel"
-                                   ) == 0 )
-            e-&gt;<a href="qcloseevent.html#47cc57">accept</a>();
-    
-        // Note: If we accepted the close event, we will be deleted
-        // afterwards since we used the WDestructiveClose flag in the
-        // constructor
+</pre>
+<p>
+This event get to process window-system close events.  A close event
+is subtly different from a hide event: hide may often mean "iconify"
+but close means that the window is going away for good.
+<p>
+<pre>
+        if ( !e-&gt;edited() ) {
+            ce-&gt;<a href="qcloseevent.html#47cc57">accept</a>();
+            return;
+        }
+</pre>
+<p>
+If the text hasn't been edited, we just accept the event.  The window
+will be closed, and since we used the <code>WDestructiveClose</code> widget
+flag, the widget will be deleted.
+<p>
+<pre>
+        switch( <a href="qmessagebox.html#2e454b">QMessageBox::information</a>( this, "Qt Application Example",
+                                          "The document has been changed since "
+                                          "the last save.",
+                                          "Save Now", "Cancel", "Leave Anyway",
+                                          0, 1 ) ) {
+        case 0:
+            save();
+            ce-&gt;<a href="qcloseevent.html#47cc57">accept</a>();
+            break;
+        case 1:
+        default: // just for sanity
+            ce-&gt;<a href="qcloseevent.html#e2007a">ignore</a>();
+            break;
+        case 2:
+            ce-&gt;<a href="qcloseevent.html#47cc57">accept</a>();
+            break;
+        }
     }
 </pre>
 <p>
-This slot is connected to the File->Close Window menu item.  It simply
-calls the function in Qt that closes this window and then deletes the
-widget.  If this widget was the only window the application had, this
-will cause the application to exit - see <a href="#close">the
-lastWindowClosed setup in main()</a> above.
+We know the text has been edited, so we ask the user: What do you want
+to do?  If the user wants to save and then exit, we do that.  If the
+user wants to not exit, we ignore the close event (there is a chance
+that we can't block it but we try).  If the user just wants to exit,
+abandoning the edits, that's very simple.
 <p>
 <pre>
     void ApplicationWindow::about()
@@ -576,17 +635,12 @@ this program and the GUI toolkit it uses.  (You don't need to provide
 an About Qt in your programs, but if you use Qt for free we'd
 appreciate it if you tell people what you're using.)
 <p>
-That's all.  A complete, almost useful application with nice help.  If
-you write the save() function it'll be as good as the "editors" some
-computer vendors have shipped with their desktops.  In two-hundred-odd
-lines of code.
-<p>
-Feel free to copy and modify the code from this walkthrough.  In
-particular, the main() and bits of the constructor can be used in a
-great many programs.
+That's all.  A complete, almost useful application with nice help.
+Almost as good as the "editors" some computer vendors have shipped
+with their desktops.  In less than 300 lines of code.
 
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.00</div>
+<td align="right"><div align="right">Qt version 2.0.1</div>
 </table></div></address></body></html>

@@ -1,5 +1,5 @@
 /**********************************************************************
-** $Id: qlistbox.cpp,v 2.205 1999/06/23 17:53:26 ettrich Exp $
+** $Id: qlistbox.cpp,v 2.205.2.5 1999/07/13 19:59:21 warwick Exp $
 **
 ** Implementation of QListBox widget class
 **
@@ -468,10 +468,10 @@ int QListBoxPixmap::width( const QListBox* ) const
   but unfortunately not everything.
 
   Each item in a QListBox contains a QListBoxItem.  One of the items
-can be the current item.  The highlighted() signal is emitted when the
-user highlights a new current item; selected() is emitted when the
-user double-clicks on an item or presses return when an item is
-highlighted.
+  can be the current item.  The highlighted() signal is emitted when
+  the user highlights a new current item; selected() is emitted when
+  the user double-clicks on an item or presses return when an item is
+  highlighted.
 
   If the user does not select anything, no signals are emitted and
   currentItem() returns -1.
@@ -528,6 +528,30 @@ highlighted.
   either just one or a range of contiguous items.
 */
 
+
+/*! \enum QListBox::LayoutMode
+
+  This enum type decides how QListBox lays out its rows and columns.
+  The two modes interact, of course.
+
+  The possible values for each mode are: <ul>
+
+  <li> \c FixedNumber - there is a fixed number of rows (or columns).
+
+  <li> \c FitToHeight - there are as many rows as will fit on-screen.
+  (Ditto with \c FitToWidth and columns.)
+
+  <li> \c Variable - there are as many rows as are required by the
+  column mode.  (Or as many columns as required by the row mode.)
+
+  </ul>
+
+  Example: When you call setRowMode( FitToHeight ), columnMode()
+  automatically becomes \c Variable to accomodate the row mode you've
+  set.
+*/
+
+
 /*!
   Constructs a list box.  The arguments are passed directly to the
   QScrollView constructor.
@@ -583,6 +607,14 @@ QListBox::~QListBox()
   \sa selected() currentItem() selectionChanged()
 */
 
+/*! \fn void QListBox::highlighted( QListBoxItem * )
+
+  This signal is emitted when the user highlights a new current item.
+  The argument is a pointer to the new current item.
+
+  \sa selected() currentItem() selectionChanged()
+*/
+
 /*! \fn void QListBox::highlighted( const QString &)
 
   This signal is emitted when the user highlights a new current item
@@ -597,6 +629,15 @@ QListBox::~QListBox()
   This signal is emitted when the user double-clicks on an item or
   presses return when an item is highlighted.  The argument is the
   index of the selected item.
+
+  \sa highlighted() selectionChanged()
+*/
+
+/*! \fn void QListBox::selected( QListBoxItem * )
+
+  This signal is emitted when the user double-clicks on an item or
+  presses return when an item is highlighted.  The argument is a
+  pointer to the new selected item.
 
   \sa highlighted() selectionChanged()
 */
@@ -857,16 +898,16 @@ void QListBox::removeItem( int index )
 
 void QListBox::clear()
 {
-    d->count = 0;
     d->current = 0;
     QListBoxItem * i = d->head;
     d->head = 0;
     while ( i ) {
-	QListBoxItem * n = i->n;
-	i->n = i->p = 0;
-	delete i;
-	i = n;
+        QListBoxItem * n = i->n;
+        i->n = i->p = 0;
+        delete i;
+        i = n;
     }
+    d->count = 0;
     triggerUpdate( TRUE );
 }
 
@@ -1006,13 +1047,18 @@ int QListBox::currentItem() const
     return index( d->current );
 }
 
+
 /*!
-  Sets the highlighted item to the item at position \a index in the list.
-  The highlighting is moved and the list box scrolled as necessary.
+  \fn QString QListBox::currentText() const
 
-  If autoUpdate() is enabled, the display is updated accordingly.
+  Returns the text of the current item.
 
-  \sa currentItem()
+  This is equivalent to text(currentItem()).
+*/
+
+/*! \overload
+
+  This is a bit slower than the QListBoxItem * version.
 */
 
 void QListBox::setCurrentItem( int index )
@@ -1020,6 +1066,12 @@ void QListBox::setCurrentItem( int index )
     setCurrentItem( item( index ) );
 }
 
+
+/*!  Sets the highlighted item to the item at position \a index in the
+  list.  The highlighting is moved and the list box scrolled as necessary.
+
+  \sa currentItem()
+*/
 
 void QListBox::setCurrentItem( QListBoxItem * i )
 {
@@ -1063,7 +1115,7 @@ index is out of bounds. \sa index()
 QListBoxItem *QListBox::item( int index ) const
 {
     QListBoxItem * i = d->head;
-    while ( i && index ) {
+    while ( i && index > 0 ) {
 	index--;
 	i = i->n;
     }
@@ -1367,47 +1419,48 @@ void QListBox::keyPressEvent( QKeyEvent *e )
 	}
 	break;
     case Key_Left:
-	if ( currentColumn() > 0 ) {
-	    setCurrentItem( currentItem() - numRows() );
-	    if ( e->state() & ShiftButton )
-		toggleCurrentItem();
-	} else if ( numColumns() > 1 && currentItem() > 0 ) {
-	    int row = currentRow();
-	    setCurrentItem( currentRow() - 1 + ( numColumns() - 1 ) * numRows() );
+        if ( currentColumn() > 0 ) {
+            setCurrentItem( currentItem() - numRows() );
+            if ( e->state() & ShiftButton )
+                toggleCurrentItem();
+        } else if ( numColumns() > 1 && currentItem() > 0 ) {
+            int row = currentRow();
+            setCurrentItem( currentRow() - 1 + ( numColumns() - 1 ) * numRows() );
 
-	    if ( !item( currentItem() ) )
-		setCurrentItem( row - 1 + ( numColumns() - 2 ) * numRows() );
+            if ( currentItem() == -1 )
+                setCurrentItem( row - 1 + ( numColumns() - 2 ) * numRows() );
 
-	    if ( e->state() & ShiftButton )
-		toggleCurrentItem();
-	} else {
-	    QApplication::sendEvent( horizontalScrollBar(), e );
+            if ( e->state() & ShiftButton )
+                toggleCurrentItem();
+        } else {
+            QApplication::sendEvent( horizontalScrollBar(), e );
 	}
 	break;
     case Key_Right:
-	if ( currentColumn() < numColumns()-1 ) {
-	    int row = currentRow();
-	    int i = currentItem();
-	    setCurrentItem( currentItem() + numRows() );
+        if ( currentColumn() < numColumns()-1 ) {
+            int row = currentRow();
+            int i = currentItem();
+            setCurrentItem( currentItem() + numRows() );
 
-	    if ( !item( currentItem() ) )
-		if ( row < numRows() - 1 )
-		    setCurrentItem( row + 1 );
-		else
-		    setCurrentItem( i );
+            if ( currentItem() == -1 ) {
+                if ( row < numRows() - 1 )
+                    setCurrentItem( row + 1 );
+                else
+                    setCurrentItem( i );
+            }
 
-	    if ( e->state() & ShiftButton )
-		toggleCurrentItem();
-	} else if ( numColumns() > 1 && currentRow() < numRows() ) {
-	    if ( currentRow() + 1 < numRows() ) {
-		setCurrentItem( currentRow() + 1 );
+            if ( e->state() & ShiftButton )
+                toggleCurrentItem();
+        } else if ( numColumns() > 1 && currentRow() < numRows() ) {
+            if ( currentRow() + 1 < numRows() ) {
+                setCurrentItem( currentRow() + 1 );
 
-		if ( e->state() & ShiftButton )
-		    toggleCurrentItem();
-	    }
-	} else {
-	    QApplication::sendEvent( horizontalScrollBar(), e );
-	}
+                if ( e->state() & ShiftButton )
+                    toggleCurrentItem();
+            }
+        } else {
+            QApplication::sendEvent( horizontalScrollBar(), e );
+        }
 	break;
     case Key_Next:
 	{
@@ -1731,7 +1784,7 @@ bool QListBox::isSelected( int i ) const
 	return i == currentItem();
 
     QListBoxItem * lbi = item( i );
-    if ( !i )
+    if ( !lbi )
 	return FALSE; // should not happen
     return lbi->s;
 }
@@ -1858,7 +1911,7 @@ void QListBox::setColumnMode( LayoutMode mode )
 /*!  Sets the column layout mode for this list box to \c FixedNumber, and
   sets the number of displayed columns accordingly.
 
-  \setRowMode() columnMode() numColumns()
+  \sa setRowMode() columnMode() numColumns()
 */
 
 void QListBox::setColumnMode( int columns )
@@ -2512,10 +2565,10 @@ void QListBox::viewportPaintEvent( QPaintEvent * e )
     QWidget* vp = viewport();
     QPainter p( vp );
     QRegion r = e->region();
-    p.setClipRegion( r );
 
 #if 0
-    { // this stuff has been useful enough times that from now I'm
+    {
+	// this stuff has been useful enough times that from now I'm
 	//  leaving it in the source.
 	int i = 0;
 	debug( "%s/%s: %i rects", className(), name(), r.rects().size() );
@@ -2728,7 +2781,7 @@ void QListBox::paintCell( QPainter * p, int row, int col )
     }
     i->paint( p );
     if ( d->current == i && hasFocus() )
-	style().drawFocusRect( p, QRect( 1, 1, cw-2, ch-2 ),
+	style().drawFocusRect( p, QRect( 0, 0, cw, ch ),
 			       g, i->selected() ? &g.highlight() : &g.base(),
 			       TRUE );
 }

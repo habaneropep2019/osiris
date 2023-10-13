@@ -117,7 +117,7 @@ ListBoxCombo::ListBoxCombo( <a href="qwidget.html">QWidget</a> *parent, const ch
     // Create a pushbutton...
     <a href="qpushbutton.html">QPushButton</a> *arrow1 = new <a href="qpushbutton.html">QPushButton</a>( " -&gt; ", row1 );
     // ...and connect the clicked SIGNAL with the SLOT slotLeft2Right
-    <a href="qobject.html#c2d209">connect</a>( arrow1, SIGNAL( clicked() ), this, SLOT( <a href=#377>slotLeft2Right</a>() ) );
+    <a href="qobject.html#c2d209">connect</a>( arrow1, SIGNAL( clicked() ), this, SLOT( <a href=#284>slotLeft2Right</a>() ) );
 
     // create an empty single-selection ListBox
     lb2 = new <a href="qlistbox.html">QListBox</a>( row1 );
@@ -154,8 +154,8 @@ ListBoxCombo::ListBoxCombo( <a href="qwidget.html">QWidget</a> *parent, const ch
     }
 
     // Connect the activated SIGNALs of the Comboboxes with SLOTs
-    <a href="qobject.html#c2d209">connect</a>( cb1, SIGNAL( activated( const QString &amp; ) ), this, SLOT( <a href=#378>slotCombo1Activated</a>( const QString &amp; ) ) );
-    <a href="qobject.html#c2d209">connect</a>( cb2, SIGNAL( activated( const QString &amp; ) ), this, SLOT( <a href=#379>slotCombo2Activated</a>( const QString &amp; ) ) );
+    <a href="qobject.html#c2d209">connect</a>( cb1, SIGNAL( activated( const QString &amp; ) ), this, SLOT( <a href=#285>slotCombo1Activated</a>( const QString &amp; ) ) );
+    <a href="qobject.html#c2d209">connect</a>( cb2, SIGNAL( activated( const QString &amp; ) ), this, SLOT( <a href=#286>slotCombo2Activated</a>( const QString &amp; ) ) );
 }
 
 /*
@@ -165,7 +165,7 @@ ListBoxCombo::ListBoxCombo( <a href="qwidget.html">QWidget</a> *parent, const ch
  * second ListBox
  */
 
-void <a name="377"></a>ListBoxCombo::slotLeft2Right()
+void <a name="284"></a>ListBoxCombo::slotLeft2Right()
 {
     // Go through all items of the first ListBox
     for ( unsigned int i = 0; i &lt; lb1-&gt;count(); i++ ) {
@@ -192,7 +192,7 @@ void <a name="377"></a>ListBoxCombo::slotLeft2Right()
  * the first Label.
  */
 
-void <a name="378"></a>ListBoxCombo::slotCombo1Activated( const QString &amp;s )
+void <a name="285"></a>ListBoxCombo::slotCombo1Activated( const QString &amp;s )
 {
     label1-&gt;setText( <a href="qstring.html">QString</a>( "Current Item: %1" ).arg( s ) );
 }
@@ -205,7 +205,7 @@ void <a name="378"></a>ListBoxCombo::slotCombo1Activated( const QString &amp;s )
  * the second Label.
  */
 
-void <a name="379"></a>ListBoxCombo::slotCombo2Activated( const QString &amp;s )
+void <a name="286"></a>ListBoxCombo::slotCombo2Activated( const QString &amp;s )
 {
     label2-&gt;setText( <a href="qstring.html">QString</a>( "Current Item: %1" ).arg( s ) );
 }
@@ -244,5 +244,5 @@ int main( int argc, char **argv )
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.00</div>
+<td align="right"><div align="right">Qt version 2.0.1</div>
 </table></div></address></body></html>

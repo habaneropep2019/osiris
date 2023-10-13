@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qmainwindow.cpp,v 2.70 1999/06/16 16:53:19 ettrich Exp $
+** $Id: qmainwindow.cpp,v 2.70.2.3 1999/07/13 19:59:24 warwick Exp $
 **
 ** Implementation of QMainWindow class
 **
@@ -450,7 +450,7 @@ void QMainWindow::setStatusBar( QStatusBar * newStatusBar )
   statusBar() creates an empty status bar on the fly, and if necessary
   a tool tip group too.
 
-  \sa setMenuBar() statusBar() toolTipGroup()
+  \sa  menuBar() toolTipGroup()
 */
 
 QStatusBar * QMainWindow::statusBar() const
@@ -596,9 +596,11 @@ void QMainWindow::addToolBar( QToolBar * toolBar,
     if ( !toolBar )
 	return;
 
-    if ( toolBar->mw )
+    if ( toolBar->mw ) {
 	toolBar->mw->removeToolBar( toolBar );
-
+	toolBar->mw = this;
+    }
+    
     setDockEnabled( edge, TRUE );
 
     QMainWindowPrivate::ToolBarDock * dl = 0;

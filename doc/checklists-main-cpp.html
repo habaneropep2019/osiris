@@ -65,7 +65,7 @@ protected slots:
   Implementation:
 
   <pre>/****************************************************************************
-** &#36;Id&#58; checklists.cpp,v 1.2 1999/06/11 18:17:46 warwick Exp $
+** &#36;Id&#58; checklists.cpp,v 1.2.2.1 1999/07/13 20:00:15 warwick Exp $
 **
 ** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
@@ -79,13 +79,13 @@ protected slots:
 #include &lt;<a href="qlistview-h.html">qlistview.h</a>&gt;
 #include &lt;<a href="qvbox-h.html">qvbox.h</a>&gt;
 #include &lt;<a href="qlabel-h.html">qlabel.h</a>&gt;
-#include &lt;<a href="qlist-h.html">qlist.h</a>&gt;
+#include &lt;<a href="qvaluelist-h.html">qvaluelist.h</a>&gt;
 #include &lt;<a href="qstring-h.html">qstring.h</a>&gt;
 #include &lt;<a href="qpushbutton-h.html">qpushbutton.h</a>&gt;
 
 /*
  * Constructor
- * 
+ *
  * Create all child widgets of the CheckList Widget
  */
 
@@ -107,21 +107,23 @@ CheckLists::CheckLists( <a href="qwidget.html">QWidget</a> *parent, const char *
     lv1-&gt;setRootIsDecorated( TRUE );
 
     // create a list with 4 ListViewItems which will be parent items of other ListViewItems
-    <a href="qlist.html">QList</a>&lt;<a href="qlistviewitem.html">QListViewItem</a>&gt; parentList;
-    parentList.<a href="qcollection.html#a3fc3c">setAutoDelete</a>( FALSE );
+    <a href="qvaluelist.html">QValueList</a>&lt;<a href="qlistviewitem.html">QListViewItem</a> *&gt; parentList;
 
-    parentList.<a href="qlist.html#687e74">append</a>( new QListViewItem( lv1, "Parent Item 1" ) );
-    parentList.<a href="qlist.html#687e74">append</a>( new QListViewItem( lv1, "Parent Item 2" ) );
-    parentList.<a href="qlist.html#687e74">append</a>( new QListViewItem( lv1, "Parent Item 3" ) );
-    parentList.<a href="qlist.html#687e74">append</a>( new QListViewItem( lv1, "Parent Item 4" ) );
+    parentList.<a href="qvaluelist.html#e5e044">append</a>( new QListViewItem( lv1, "Parent Item 1" ) );
+    parentList.<a href="qvaluelist.html#e5e044">append</a>( new QListViewItem( lv1, "Parent Item 2" ) );
+    parentList.<a href="qvaluelist.html#e5e044">append</a>( new QListViewItem( lv1, "Parent Item 3" ) );
+    parentList.<a href="qvaluelist.html#e5e044">append</a>( new QListViewItem( lv1, "Parent Item 4" ) );
 
     <a href="qlistviewitem.html">QListViewItem</a> *item = 0;
-    unsigned int num;
+    unsigned int num = 1;
     // go through the list of parent items...
-    for ( item = parentList.<a href="qlist.html#df743c">first</a>(), num = 1; item; item-&gt;<a href="qlistviewitem.html#2862d2">setOpen</a>( TRUE ), item = parentList.<a href="qlist.html#b39e6b">next</a>(), num++ )
+    for ( <a href="qvaluelist.html">QValueList</a>&lt;<a href="qlistviewitem.html">QListViewItem</a>*&gt;::Iterator it = parentList.<a href="qvaluelist.html#7bdcbf">begin</a>(); it != parentList.<a href="qvaluelist.html#33bf3e">end</a>(); 
+          ( *it )-&gt;setOpen( TRUE ), ++it, num++ ) {
+        item = *it;
         // ...and create 5 checkable child ListViewItems for each parent item
         for ( unsigned int i = 1; i &lt;= 5; i++ )
             (void)new <a href="qchecklistitem.html">QCheckListItem</a>( item, QString( "%1. Child of Parent %2" ).arg( i ).arg( num ), QCheckListItem::CheckBox );
+    }
 
     // Create another widget for layouting
     <a href="qvbox.html">QVBox</a> *tmp = new <a href="qvbox.html">QVBox</a>( this );
@@ -216,7 +218,7 @@ void <a name="103"></a>CheckLists::copy2to3()
         if ( it.<a href="qlistviewitemiterator.html#42e4b3">current</a>()-&gt;parent() )
             // ...if the item is checked...
             if ( ( (<a href="qchecklistitem.html">QCheckListItem</a>*)it.<a href="qlistviewitemiterator.html#42e4b3">current</a>() )-&gt;isOn() )
-                // ...set the text of the item to the label 
+                // ...set the text of the item to the label
                 label-&gt;setText( it.<a href="qlistviewitemiterator.html#42e4b3">current</a>()-&gt;text( 0 ) );
 }
 </pre>
@@ -254,5 +256,5 @@ int main( int argc, char **argv )
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.00</div>
+<td align="right"><div align="right">Qt version 2.0.1</div>
 </table></div></address></body></html>

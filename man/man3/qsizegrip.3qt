@@ -1,0 +1,88 @@
+.TH QSizeGrip 3qt "20 July 1999" "Troll Tech AS" \" -*- nroff -*-
+.\" Copyright 1992-1999 Troll Tech AS.  All rights reserved.  See the
+.\" license file included in the distribution for a complete license
+.\" statement.
+.\"
+.ad l
+.nh
+.SH NAME
+QSizeGrip \- Corner-grip for resizeing a top level window
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <qsizegrip.h>\fR
+.PP
+Inherits QWidget.
+.PP
+.SS "Public Members"
+.in +1c
+.ti -1c
+.BI "\fBQSizeGrip\fR ( QWidget * " "parent" ", const char * " "name" "=0 )"
+.br
+.ti -1c
+.BI "\fB~QSizeGrip\fR ()"
+.br
+.ti -1c
+.BI "virtual QSize \fBsizeHint\fR () const"
+.br
+.ti -1c
+.BI "virtual QSizePolicy \fBsizePolicy\fR () const"
+.br
+.in -1c
+.SS "Protected Members"
+.in +1c
+.ti -1c
+.BI "virtual void \fBpaintEvent\fR ( QPaintEvent * )"
+.br
+.ti -1c
+.BI "virtual void \fBmousePressEvent\fR ( QMouseEvent * )"
+.br
+.ti -1c
+.BI "virtual void \fBmouseMoveEvent\fR ( QMouseEvent * )"
+.br
+.in -1c
+.SH DESCRIPTION
+The QSizeGrip class provides corner-grip for resizeing a top level window.
+.PP
+This widget works like the standard Windows resize handle. In the X11 version this resize handle generally works differently than the one provided by the system; we hope to reduce this difference in the future.
+.PP
+Put this widget anywhere in a tree and the user can use it to resize the top-level window. Generally this should be in the lower right-hand corner. Note that QStatusBar already uses this widget, so if you have a status bar (eg. you are using QMainWindow), then you don't need to use this widget explicitly.
+.PP
+<img src=qsizegrip-m.png> <img src=qsizegrip-w.png>
+.PP
+See also: QStatusBar.
+.PP
+Examples:
+.(l
+scrollview/scrollview.cpp
+.)l
+.SH MEMBER FUNCTION DOCUMENTATION
+.SH "QSizeGrip::QSizeGrip ( QWidget * parent, const char * name=0 )"
+Construct a resize corner as a child widget of \fIparent.\fR
+.SH "void QSizeGrip::mouseMoveEvent ( QMouseEvent * e ) \fC[virtual protected]\fR"
+Resizes the top-level widget containing this widget.
+.PP
+Reimplemented from QWidget.
+.SH "void QSizeGrip::mousePressEvent ( QMouseEvent * e ) \fC[virtual protected]\fR"
+Primes the resize operation.
+.PP
+Reimplemented from QWidget.
+.SH "void QSizeGrip::paintEvent ( QPaintEvent * e ) \fC[virtual protected]\fR"
+Paints the resize grip - small diagonal textured lines in the lower righthand corner.
+.PP
+Reimplemented from QWidget.
+.SH "QSize QSizeGrip::sizeHint () const \fC[virtual]\fR"
+Returns a small size.
+.PP
+Reimplemented from QWidget.
+.SH "QSizePolicy QSizeGrip::sizePolicy () const \fC[virtual]\fR"
+The size grip has a fixed height, but can grow horizontally.
+.PP
+Reimplemented from QWidget.
+.SH "SEE ALSO"
+.BR http://www.troll.no/qt/qsizegrip.html
+.SH COPYRIGHT
+Copyright 1992-1999 Troll Tech AS.  See the license file included in
+the distribution for a complete license statement.
+.SH AUTHOR
+Generated automatically from the source code.

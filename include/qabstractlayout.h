@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qabstractlayout.h,v 2.25 1999/06/16 15:49:23 paul Exp $
+** $Id: qabstractlayout.h,v 2.25.2.1 1999/07/07 17:15:51 warwick Exp $
 **
 ** Definition of the abstract layout base class
 **
@@ -226,7 +226,7 @@ private:	// Disabled copy constructor and operator=
 
 inline void QLayoutIterator::deleteCurrent()
 {
-    delete takeCurrent(); 
+    delete takeCurrent();
 }
 
 #endif

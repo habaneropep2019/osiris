@@ -1,5 +1,5 @@
 /**********************************************************************
-** $Id: qprinter.h,v 2.21 1999/06/11 03:41:17 agulbra Exp $
+** $Id: qprinter.h,v 2.21.2.1 1999/07/14 19:13:21 aavit Exp $
 **
 ** Definition of QPrinter class
 **
@@ -130,6 +130,7 @@ private:
     short	ncopies;
 #if defined(_WS_WIN_)
     bool	viewOffsetDone;
+    QPainter*   painter;
 #endif
 
 private:	// Disabled copy constructor and operator=

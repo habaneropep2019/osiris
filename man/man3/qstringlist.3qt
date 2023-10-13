@@ -1,0 +1,94 @@
+.TH QStringList 3qt "20 July 1999" "Troll Tech AS" \" -*- nroff -*-
+.\" Copyright 1992-1999 Troll Tech AS.  All rights reserved.  See the
+.\" license file included in the distribution for a complete license
+.\" statement.
+.\"
+.ad l
+.nh
+.SH NAME
+QStringList \- A list of strings
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <qstringlist.h>\fR
+.PP
+Inherits QValueList<QString>.
+.PP
+.SS "Public Members"
+.in +1c
+.ti -1c
+.BI "\fBQStringList\fR ()"
+.br
+.ti -1c
+.BI "\fBQStringList\fR ( const QStringList & l )"
+.br
+.ti -1c
+.BI "\fBQStringList\fR ( const QString & i )"
+.br
+.ti -1c
+.BI "void \fBsort\fR ()"
+.br
+.in -1c
+.SH DESCRIPTION
+A list of strings.
+.PP
+This class is a list of QString objects. Like QValueList it is value based unlike QList. In contrast to QStrList it deals with real QString objects instead of character pointers. That makes QStringList the class of choice if you have to deal with unicode strings.
+.PP
+Like QString itself, a QStringList provides implicit share. Therefore string lists can be passed around as value-parameters both fast and safe.
+.PP
+Example:
+.PP
+.nf
+.br
+        QStringList list;
+.br
+.br
+        // three different ways of appending values:
+.br
+        list.append( "Torben");
+.br
+        list += "Warwick";
+.br
+        list << "Matthias" << "Arnt" << "Paul";
+.br
+.br
+        // sort the list, Arnt's now first
+.br
+        list.sort();
+.br
+.br
+        // print it out
+.br
+        for ( QStringList::Iterator it = list.begin(); it != list.end(); ++it ) {
+.br
+            printf( "%s \\n", it->latin1() );
+.br
+        }
+.fi
+.SH MEMBER FUNCTION DOCUMENTATION
+.SH "QStringList::QStringList ()"
+Creates an empty list.
+.SH "QStringList::QStringList ( const QString & i )"
+Constructs a string list consisting of the single string \fIi.\fR To make longers lists easily, use:
+.PP
+.nf
+.br
+    QString s1,s2,s3;
+.br
+    ...
+.br
+    QStringList mylist = QStringList() << s1 << s2 << s3;
+.fi
+.SH "QStringList::QStringList ( const QStringList & l )"
+Creates a copy of the list. This function is very fast since QStringList is implicit shared. However, for the programmer this is the same as a deep copy. If this list or the original one or some other list referencing the same shared data is modified, then the modifying list makes a copy first.
+.SH "void QStringList::sort ()"
+Sorts the list of strings in ascending order.
+The sorting algorithm used is HeapSort which operates
+in O(n*logn).
+.SH "SEE ALSO"
+.BR http://www.troll.no/qt/qstringlist.html
+.SH COPYRIGHT
+Copyright 1992-1999 Troll Tech AS.  See the license file included in
+the distribution for a complete license statement.
+.SH AUTHOR
+Generated automatically from the source code.

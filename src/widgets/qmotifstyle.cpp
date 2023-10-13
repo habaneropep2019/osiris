@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qmotifstyle.cpp,v 1.15 1999/06/23 17:53:29 ettrich Exp $
+** $Id: qmotifstyle.cpp,v 1.15.2.1 1999/07/17 03:06:53 ettrich Exp $
 **
 ** Implementation of Motif-like style class
 **
@@ -624,7 +624,7 @@ void QMotifStyle::drawScrollBarControls( QPainter* p, const QScrollBar* sb, int 
     int sliderMin, sliderMax, sliderLength, buttonDim;
     scrollBarMetrics( sb, sliderMin, sliderMax, sliderLength, buttonDim );
 
-    if ( controls == (AddLine | SubLine | AddPage | SubLine | Slider) )
+    if ( controls == (AddLine | SubLine | AddPage | SubPage | Slider) )
 	qDrawShadePanel( p, sb->rect(), g, TRUE );
 
     if (sliderStart > sliderMax) { // sanity check

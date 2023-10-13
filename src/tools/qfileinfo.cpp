@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qfileinfo.cpp,v 2.32 1999/06/11 22:50:17 warwick Exp $
+** $Id: qfileinfo.cpp,v 2.32.2.1 1999/07/08 10:55:59 paul Exp $
 **
 ** Implementation of QFileInfo class
 **
@@ -633,7 +633,7 @@ QString QFileInfo::readLink() const
     char s[PATH_MAX+1];
     if ( !isSymLink() )
 	return QString();
-    int len = readlink( QFile::encodeName(fn), s, PATH_MAX );
+    int len = readlink( QFile::encodeName(fn).data(), s, PATH_MAX );
     if ( len >= 0 )
 	r = QFile::decodeName(s);
 #endif

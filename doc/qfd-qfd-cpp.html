@@ -96,21 +96,21 @@ FontRowTable::FontRowTable( <a href="qwidget.html">QWidget</a>* parent, const ch
     <a href="qwidget.html#587c91">setBackgroundMode</a>(PaletteBase);
     <a href="qframe.html#c0d758">setFrameStyle</a>(Panel|Sunken);
     <a href="qframe.html#ab991e">setMargin</a>(8);
-    <a href=#351>setRow</a>(0);
+    <a href=#258>setRow</a>(0);
 }
 
-<a href="qsize.html">QSize</a> <a name="348"></a>FontRowTable::sizeHint() const
+<a href="qsize.html">QSize</a> <a name="255"></a>FontRowTable::sizeHint() const
 {
     return 16*cellSize()+QSize(2,2)*(<a href="qframe.html#f69ee0">margin</a>()+frameWidth());
 }
 
-<a href="qsize.html">QSize</a> <a name="349"></a>FontRowTable::cellSize() const
+<a href="qsize.html">QSize</a> <a name="256"></a>FontRowTable::cellSize() const
 {
     <a href="qfontmetrics.html">QFontMetrics</a> fm = fontMetrics();
     return QSize( fm.<a href="qfontmetrics.html#d638e2">maxWidth</a>(), fm.<a href="qfontmetrics.html#ebe056">lineSpacing</a>()+1 );
 }
 
-void <a name="350"></a>FontRowTable::paintEvent( <a href="qpaintevent.html">QPaintEvent</a>* e )
+void <a name="257"></a>FontRowTable::paintEvent( <a href="qpaintevent.html">QPaintEvent</a>* e )
 {
     <a href="qframe.html#2e9073">QFrame::paintEvent</a>(e);
     <a href="qpainter.html">QPainter</a> p(this);
@@ -171,7 +171,7 @@ void <a name="350"></a>FontRowTable::paintEvent( <a href="qpaintevent.html">QPai
     }
 }
 
-void <a name="351"></a>FontRowTable::setRow(int r)
+void <a name="258"></a>FontRowTable::setRow(int r)
 {
     row = r;
 
@@ -239,5 +239,5 @@ main(int argc, char** argv)
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.00</div>
+<td align="right"><div align="right">Qt version 2.0.1</div>
 </table></div></address></body></html>

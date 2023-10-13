@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qpopupmenu.h,v 2.37 1999/06/15 21:53:30 warwick Exp $
+** $Id: qpopupmenu.h,v 2.37.2.1 1999/07/13 19:59:29 warwick Exp $
 **
 ** Definition of QPopupMenu class
 **
@@ -121,6 +121,7 @@ private:
     int tab;
     uint accelDisabled : 1;
     uint checkable : 1;
+    uint connectModalRecursionSafety : 1;
     int maxPMWidth;
     int reserved;
 

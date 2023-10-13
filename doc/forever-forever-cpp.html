@@ -99,11 +99,11 @@ Forever::Forever( <a name="QWidget"></a><a href="qwidget.html">QWidget</a> *pare
     <a name="startTimer"></a><a href="qobject.html#906d99">startTimer</a>( 0 );                            // run continuous timer
     <a name="QTimer"></a><a href="qtimer.html">QTimer</a> * counter = new <a href="qtimer.html">QTimer</a>( this );
     <a name="connect"></a><a href="qobject.html#c2d209">connect</a>( counter, SIGNAL(timeout()),
-             this, SLOT(<a name="updateCaption"></a><a href="#341">updateCaption</a>()) );
+             this, SLOT(<a name="updateCaption"></a><a href="#248">updateCaption</a>()) );
     counter-&gt;<a name="start"></a><a href="qtimer.html#3aafb5">start</a>( 1000 );
 }
 
-void <a name="341"></a>Forever::updateCaption()
+void <a name="248"></a>Forever::updateCaption()
 {
     <a name="QString"></a><a href="qstring.html">QString</a> s;
     s.<a name="sprintf"></a><a href="qstring.html#2eb9bc">sprintf</a>( "forever - %d rectangles/second", rectangles );
@@ -115,7 +115,7 @@ void <a name="341"></a>Forever::updateCaption()
 // Handles paint events for the Forever widget.
 //
 
-void <a name="342"></a>Forever::paintEvent( <a name="QPaintEvent"></a><a href="qpaintevent.html">QPaintEvent</a> * )
+void <a name="249"></a>Forever::paintEvent( <a name="QPaintEvent"></a><a href="qpaintevent.html">QPaintEvent</a> * )
 {
     <a name="QPainter"></a><a href="qpainter.html">QPainter</a> paint( this );                     // painter object
     paint.<a name="setWindow"></a><a href="qpainter.html#797026">setWindow</a>( 0, 0, 1024, 1024 );        // define coordinate system
@@ -131,7 +131,7 @@ void <a name="342"></a>Forever::paintEvent( <a name="QPaintEvent"></a><a href="q
 // Handles timer events for the Forever widget.
 //
 
-void <a name="343"></a>Forever::timerEvent( <a name="QTimerEvent"></a><a href="qtimerevent.html">QTimerEvent</a> * )
+void <a name="250"></a>Forever::timerEvent( <a name="QTimerEvent"></a><a href="qtimerevent.html">QTimerEvent</a> * )
 {
     for ( int i=0; i&lt;100; i++ ) {
         <a name="repaint"></a><a href="qwidget.html#977d49">repaint</a>( FALSE );                       // repaint, don't erase
@@ -155,5 +155,5 @@ int main( int argc, char **argv )
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 1999 Troll Tech<td><a href="http://www.troll.no/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.00</div>
+<td align="right"><div align="right">Qt version 2.0.1</div>
 </table></div></address></body></html>

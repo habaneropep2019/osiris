@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qfileiconview.cpp,v 1.5 1999/06/24 16:40:39 reggie Exp $
+** $Id: qfileiconview.cpp,v 1.5.2.1 1999/06/30 14:00:04 warwick Exp $
 **
 ** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
 **
@@ -417,7 +417,7 @@ void QtFileIconView::readDir( const QDir &dir )
         ++it;
         QtFileIconViewItem *item = new QtFileIconViewItem( this, fi );
         if ( !allowRenameSet ) {
-            if ( !QFileInfo( fi->absFilePath() ).isWritable() || 
+            if ( !QFileInfo( fi->absFilePath() ).isWritable() ||
                  item->text() == "." || item->text() == ".." )
                 allowRename = FALSE;
             else
@@ -461,7 +461,7 @@ QDragObject *QtFileIconView::dragObject()
     QtFileIconViewItem *item = ( QtFileIconViewItem* )firstItem();
     for ( ; item; item = ( QtFileIconViewItem* )item->nextItem() )
         if ( item->isSelected() )
-            lst.append( item->filename().latin1() );
+            lst.append( QString( "file://" + item->filename() ).latin1() );
 
     QUrlDrag *drag = new QUrlDrag( lst, viewport() );
     drag->setPixmap( QPixmap( currentItem()->icon().pixmap( viewMode(), QIconSet::Normal ) ),

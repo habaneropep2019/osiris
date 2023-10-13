@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qdnd_x11.cpp,v 2.96 1999/06/24 02:35:01 agulbra Exp $
+** $Id: qdnd_x11.cpp,v 2.96.2.1 1999/07/08 00:17:48 warwick Exp $
 **
 ** XDND implementation for Qt.  See http://www.cco.caltech.edu/~jafl/xdnd/
 **
@@ -874,10 +874,11 @@ bool QDragManager::eventFilter( QObject * o, QEvent * e)
 	    dragSource = 0;
 	    beingCancelled = FALSE;
 	    qApp->exit_loop();
+	} else {
+	    updateMode(ke->stateAfter());
+	    qt_xdnd_source_sameanswer = QRect(); // force move
+	    move( QCursor::pos() );
 	}
-	updateMode(ke->stateAfter());
-	qt_xdnd_source_sameanswer = QRect(); // force move
-	move( QCursor::pos() );
 	return TRUE; // Eat all key events
     }
 

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qstring.cpp,v 2.166 1999/06/23 13:04:44 hanord Exp $
+** $Id: qstring.cpp,v 2.166.2.5 1999/07/12 19:40:23 warwick Exp $
 **
 ** Implementation of the QString class and related Unicode functions
 **
@@ -9600,6 +9600,28 @@ int ucstrnicmp( const QChar *a, const QChar *b, int l )
    </dl>
 */
 
+/*!
+  \fn bool QChar::isNull() const
+  Returns TRUE if the charaters is the unicode character 0x0000,
+  ie. ASCII NUL.
+*/
+
+/*!
+  \fn uchar QChar::cell () const
+  Returns the cell (least significant byte) of the Unicode character.
+*/
+/*!
+  \fn uchar QChar::row () const
+  Returns the row (most significant byte) of the Unicode character.
+*/
+/*!
+  \fn uchar& QChar::cell () 
+  Returns a reference to the cell (least significant byte) of the Unicode character.
+*/
+/*!
+  \fn uchar& QChar::row () 
+  Returns a reference to the row (most significant byte) of the Unicode character.
+*/
 
 /*!
   Returns whether the character is a printable character.  This is
@@ -10305,7 +10327,7 @@ QChar* QString::asciiToUnicode( const QByteArray& ba, uint* len )
     while ( l < (int)ba.size() && ba[l] )
 	l++;
     char* str = ba.data();
-    QChar *uc = new QChar[l];
+    QChar *uc = (QChar*)new char[ l*sizeof(QChar) ];
     QChar *result = uc;
     if ( len )
 	*len = l;
@@ -10334,7 +10356,7 @@ QChar* QString::asciiToUnicode(const char *str, uint* len, uint maxlen )
 	    // Faster?
 	    l = strlen(str);
 	}
-	QChar *uc = new QChar[l];
+	QChar *uc = (QChar*)new char[ l*sizeof(QChar) ];
 	result = uc;
 	uint i = l;
 	while ( i-- )
@@ -10489,7 +10511,8 @@ QString::QString( int size, bool /*dummy*/ )
 	Q2HELPER(stat_construct_int++);
 	int l = size;
 	Q2HELPER(stat_construct_int_size+=l);
-	d = new QStringData(new QChar[l],0,l);
+	QChar* uc = (QChar*)new char[ l*sizeof(QChar) ];
+	d = new QStringData( uc, 0, l );
     } else {
 	Q2HELPER(stat_construct_null++);
 	d = shared_null ? shared_null : shared_null=new QStringData;
@@ -10499,7 +10522,7 @@ QString::QString( int size, bool /*dummy*/ )
 
 /*!
   Constructs a string that is a deep copy of \a ba interpreted as
-  interpreted as a classic C string.
+  a classic C string.
 */
 
 QString::QString( const QByteArray& ba )
@@ -10519,7 +10542,7 @@ QString::QString( const QByteArray& ba )
 
 QString::QString( const QChar* unicode, uint length )
 {
-    QChar* uc = new QChar[ length ];
+    QChar* uc = (QChar*)new char[ length*sizeof(QChar) ];
     memcpy(uc, unicode, length*sizeof(QChar));
     d = new QStringData(uc,length,length);
 }
@@ -10572,6 +10595,16 @@ void QStringData::deleteSelf()
 {
     delete this;
 }
+
+/*!
+  \fn QString& QString::operator=( QChar c )
+  Sets the string to contain just the single character \a c.
+*/
+
+/*!
+  \fn QString& QString::operator=( char c )
+  Sets the string to contain just the single character \a c.
+*/
 
 /*!
   Assigns a shallow copy of \a s to this string and returns a
@@ -10682,10 +10715,10 @@ void QString::truncate( uint newLen )
 }
 
 /*!
-  Ensures that at least \a len characters are allocated, and sets the
-  length to \a len. Will detach. New space is \e not defined.
+  Ensures that at least \a newLen characters are allocated, and sets the
+  length to \a newLen. Will detach. New space is \e not defined.
 
-  If \a len is 0, this string becomes empty, unless this string is null,
+  If \a newLen is 0, this string becomes empty, unless this string is null,
   in which case it remains null.
 
   \sa truncate(), isNull(), isEmpty()
@@ -10700,7 +10733,7 @@ void QString::setLength( uint newLen )
 	uint newMax = 4;
 	while ( newMax < newLen )
 	    newMax *= 2;
-	QChar* nd = new QChar[newMax];
+	QChar* nd = (QChar*)new char[newMax*sizeof(QChar)];
 	uint len = QMIN( d->len, newLen );
 	if ( d->unicode )
 	    memcpy( nd, d->unicode, sizeof(QChar)*len );
@@ -11068,11 +11101,11 @@ void QString::fill( QChar c, int len )
 {
     if ( len < 0 )
 	len = length();
-    deref();
     if ( len == 0 ) {
 	*this = "";
     } else {
-	QChar * nd = new QChar[len];
+	deref();
+	QChar * nd = (QChar*)new char[ len*sizeof(QChar) ];
 	d = new QStringData(nd,len,len);
 	while (len--) *nd++ = c;
     }
@@ -11139,10 +11172,10 @@ int QString::find( const QString& str, int index, bool cs ) const
     uint n = length()-index+1;
     uint strl = str.length();
     if ( cs ) {
-	while ( n-- >= strl && ucstrncmp(uc,str.d->unicode,strl) )
+	while ( n-- > strl && ucstrncmp(uc,str.d->unicode,strl) )
 	    uc++;
     } else {
-	while ( n-- >= strl && ucstrnicmp(uc,str.d->unicode,strl) )
+	while ( n-- > strl && ucstrnicmp(uc,str.d->unicode,strl) )
 	    uc++;
     }
     return uc - unicode() <= int(length()-strl) ? int(uc - unicode()) : -1;
@@ -11657,7 +11690,7 @@ QString &QString::insert( uint index, const QChar* s, uint len )
     int df = d->unicode - s;
     if ( df >= 0 && (uint)df < d->maxl ) {
 	// Part of me - take a copy.
-	QChar *tmp = new QChar[len];
+	QChar *tmp = (QChar*)new char[ len*sizeof(QChar) ];
 	memcpy(tmp,s,len*sizeof(QChar));
 	insert(index,tmp,len);
 	delete[] tmp;
@@ -11794,7 +11827,7 @@ QString &QString::replace( uint index, uint len, const QChar* s, uint slen )
 	int df = d->unicode - s;
 	if ( df >= 0 && (uint)df < d->maxl ) {
 	    // Part of me - take a copy.
-	    QChar *tmp = new QChar[slen];
+	    QChar *tmp = (QChar*)new char[ slen*sizeof(QChar) ];
 	    memcpy(tmp,s,slen*sizeof(QChar));
 	    replace(index,len,tmp,slen);
 	    delete[] tmp;
@@ -11902,7 +11935,7 @@ QString &QString::replace( const QRegExp &rx, const QString &str )
     int index = 0;
     int slen  = str.length();
     int len;
-    while ( index < (int)length()-1 ) {
+    while ( index < (int)length() ) {
 	index = rx.match( *this, index, &len, FALSE );
 	if ( index >= 0 ) {
 	    replace( index, len, str );
@@ -12277,7 +12310,6 @@ QString &QString::setNum( double n, char f, int prec )
 */
 
 
-
 /*!
   A convenience factory function that returns a string representation
   of the number \a n.
@@ -12346,10 +12378,6 @@ QString QString::number( double n, char f, int prec )
     s.setNum( n, f, prec );
     return s;
 }
-
-
-
-
 
 
 /*! \obsolete
@@ -12626,6 +12654,20 @@ QString QString::fromLocal8Bit(const char* local8Bit, int len)
   Note: If this QString is not const or const&, the non-const at()
   will be used instead, which will expand the string if \a i is beyond
   the length of the string.
+*/
+
+/*!
+  \fn QChar QString::constref(uint i) const
+  Equivalent to at(i), this returns the QChar at \a i by value.
+
+  \sa ref()
+*/
+
+/*!
+  \fn QChar& QString::ref(uint i)
+  Returns the QChar at \a i by reference.
+
+  \sa constref()
 */
 
 /*!
@@ -13021,7 +13063,7 @@ QConstString::QConstString( QChar* unicode, uint length ) :
 QConstString::~QConstString()
 {
     if ( d->count > 1 ) {
-        QChar* cp = new QChar[d->len];
+        QChar* cp = (QChar*)new char[ d->len*sizeof(QChar) ];
         memcpy( cp, d->unicode, d->len*sizeof(QChar) );
         d->unicode = cp;
     } else {
@@ -13153,12 +13195,12 @@ QCString qt_winQString2MB( const QString& s, int uclen )
 QString qt_winMB2QString( const char* mb, int mblen )
 {
     const int wclen_auto = 4096;
-    QChar wc_auto[wclen_auto];
+    WCHAR wc_auto[wclen_auto];
     int wclen = wclen_auto;
-    QChar *wc = wc_auto;
+    WCHAR *wc = wc_auto;
     int len;
     while ( !(len=MultiByteToWideChar( CP_ACP, MB_PRECOMPOSED,
-		mb, mblen, (WCHAR*)wc, wclen )) )
+		mb, mblen, wc, wclen )) )
     {
 	int r = GetLastError();
 	if ( r == ERROR_INSUFFICIENT_BUFFER ) {
@@ -13168,7 +13210,7 @@ QString qt_winMB2QString( const char* mb, int mblen )
 	    } else {
 		wclen = MultiByteToWideChar( CP_ACP, MB_PRECOMPOSED,
 				    mb, mblen, 0, 0 );
-		wc = new QChar[wclen];
+		wc = new WCHAR[wclen];
 		// and try again...
 	    }
 	} else {
@@ -13177,7 +13219,7 @@ QString qt_winMB2QString( const char* mb, int mblen )
 	    break;
 	}
     }
-    QString s(wc, len-1/*don't want terminator*/);
+    QString s( (QChar*)wc, len-1 ); // len-1: we don't want terminator
     if ( wc != wc_auto )
 	delete [] wc;
     return s;

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qrichtext.cpp,v 2.27 1999/06/18 02:48:20 ettrich Exp $
+** $Id: qrichtext.cpp,v 2.27.2.2 1999/07/13 19:58:57 warwick Exp $
 **
 ** Implementation of the Qt classes dealing with rich text
 **
@@ -292,6 +292,7 @@ QTextRow::QTextRow( QPainter* p, QFontMetrics &fm,
     QTextIterator lastSpace = it;
     int lastHeight = rh;
     int lastWidth = 0;
+    int lastBearing = 0;
     int lastAsc = rasc;
     int lastDesc = rdesc;
     bool noSpaceFound = TRUE; // TRUE;
@@ -314,7 +315,7 @@ QTextRow::QTextRow( QPainter* p, QFontMetrics &fm,
 	else if ( !it->isContainer ) {
 	    QTextCustomNode* c = (QTextCustomNode*)*it;
 	    if ( c->expandsHorizontally() ) {
-		c->width = width - fm.width(' ');
+		c->width = width + fm.minRightBearing() - fm.width(' ');
 	    }
 	    tx +=c->width;
 	    h = c->height;
@@ -330,8 +331,7 @@ QTextRow::QTextRow( QPainter* p, QFontMetrics &fm,
 	    }
 	}
 	
-	if (tx > width - fm.width(' ') && !noSpaceFound  && !it->isSpace() )
-// 	if (tx > width - fm.width(' ') && *it != first && !it->isSpace() )
+	if (tx > width - fm.width(' ') + fm.minRightBearing() && !noSpaceFound  && !it->isSpace() )
 	    break;
 
 	rh = QMAX( rh, h );
@@ -350,6 +350,7 @@ QTextRow::QTextRow( QPainter* p, QFontMetrics &fm,
 	    lastAsc = rasc;
 	    lastDesc = rdesc;
 	    lastWidth = tx;
+	    lastBearing = fm.minRightBearing();
  	    if (noSpaceFound && prev->isSpace())
  		noSpaceFound = FALSE;
 	}
@@ -380,7 +381,7 @@ QTextRow::QTextRow( QPainter* p, QFontMetrics &fm,
 	fill = 0;
     }
 
-    min = lastWidth;
+    min = lastWidth - lastBearing;
 
     ++it;
 
@@ -1949,9 +1950,12 @@ void QTextCursor::end(QPainter* p, bool select)
 
 QRichText::QRichText( const QString &doc, const QFont& font,
 		      const QString& context,
-		      int margin,  const QMimeSourceFactory* factory, const QStyleSheet* sheet  )
-    :QTextBox( (base = new QStyleSheetItem( 0, QString::fromLatin1(""))) )
+		      int margin,  const QMimeSourceFactory* factory,
+		      const QStyleSheet* sheet  )
+    : QTextBox( 0 )
 {
+    style = new QStyleSheetItem( 0, QString::fromLatin1("") );
+    base = (QStyleSheetItem*)style;
     isRoot = 1;
     contxt = context;
 

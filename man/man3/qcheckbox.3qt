@@ -1,0 +1,133 @@
+.TH QCheckBox 3qt "20 July 1999" "Troll Tech AS" \" -*- nroff -*-
+.\" Copyright 1992-1999 Troll Tech AS.  All rights reserved.  See the
+.\" license file included in the distribution for a complete license
+.\" statement.
+.\"
+.ad l
+.nh
+.SH NAME
+QCheckBox \- Check box with a text label
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <qcheckbox.h>\fR
+.PP
+Inherits QButton.
+.PP
+.SS "Public Members"
+.in +1c
+.ti -1c
+.BI "\fBQCheckBox\fR ( QWidget * " "parent" ", const char * " "name" "=0 )"
+.br
+.ti -1c
+.BI "\fBQCheckBox\fR ( const QString & " "text" ", QWidget * " "parent" ", const char * " "name" "=0 )"
+.br
+.ti -1c
+.BI "bool \fBisChecked\fR () const"
+.br
+.ti -1c
+.BI "void \fBsetChecked\fR ( bool check )"
+.br
+.ti -1c
+.BI "void \fBsetNoChange\fR ()"
+.br
+.ti -1c
+.BI "void \fBsetTristate\fR ( bool " "y" "=TRUE )"
+.br
+.ti -1c
+.BI "virtual QSize \fBsizeHint\fR () const"
+.br
+.ti -1c
+.BI "virtual QSizePolicy \fBsizePolicy\fR () const"
+.br
+.in -1c
+.SS "Protected Members"
+.in +1c
+.ti -1c
+.BI "virtual void \fBresizeEvent\fR ( QResizeEvent * )"
+.br
+.ti -1c
+.BI "virtual void \fBdrawButton\fR ( QPainter * )"
+.br
+.ti -1c
+.BI "virtual void \fBdrawButtonLabel\fR ( QPainter * )"
+.br
+.ti -1c
+.BI "virtual void \fBupdateMask\fR ()"
+.br
+.in -1c
+.SH DESCRIPTION
+The QCheckBox widget provides a check box with a text label.
+.PP
+QCheckBox and QRadioButton are both toggle buttons, but a check box represents an independent switch that can be on (checked) or off (unchecked).
+.PP
+<img src=qchkbox-m.png> <img src=qchkbox-w.png>
+.PP
+See also: QButton, QRadioButton and Fowler: Check Box.
+.PP
+Examples:
+.(l
+tabdialog/tabdialog.cpp xform/xform.cpp
+.)l
+.SH MEMBER FUNCTION DOCUMENTATION
+.SH "QCheckBox::QCheckBox ( QWidget * parent, const char * name=0 )"
+Constructs a check box with no text.
+.PP
+The \fIparent\fR and \fIname\fR arguments are sent to the QWidget constructor.
+.SH "QCheckBox::QCheckBox ( const QString & text, QWidget * parent, const char * name=0 )"
+Constructs a check box with a text.
+.PP
+The \fIparent\fR and \fIname\fR arguments are sent to the QWidget constructor.
+.SH "void QCheckBox::drawButton ( QPainter * paint ) \fC[virtual protected]\fR"
+Draws the check box. Calls drawButtonLabel() to draw the content.
+.PP
+See also: drawButtonLabel().
+.PP
+Reimplemented from QButton.
+.SH "void QCheckBox::drawButtonLabel ( QPainter * p ) \fC[virtual protected]\fR"
+Draws the check box label.
+.PP
+See also: drawButton().
+.PP
+Reimplemented from QButton.
+.SH "bool QCheckBox::isChecked () const"
+Returns TRUE if the check box is checked, or FALSE if it is not checked.
+.PP
+See also: setChecked().
+.PP
+Examples:
+.(l
+xform/xform.cpp
+.)l
+.SH "void QCheckBox::setChecked ( bool check )"
+Checks the check box if \fIcheck\fR is TRUE, or unchecks it if \fIcheck\fR is FALSE.
+.PP
+See also: isChecked().
+.PP
+Examples:
+.(l
+tabdialog/tabdialog.cpp
+.)l
+.SH "void QCheckBox::setNoChange ()"
+Sets the checkbox into the "no change" state.
+.PP
+See also: setTristate().
+.SH "void QCheckBox::setTristate ( bool y=TRUE )"
+Makes the checkbox a tristate checkbox if \fIy\fR is TRUE. A tristate checkbox is useful when you need to give the use the option of neither setting nor unsetting an option, for example choosing Italic or non-Italic when the selected text is partially Italic and partially not.
+.PP
+See also: setNoChange() and stateChanged().
+.SH "QSize QCheckBox::sizeHint () const \fC[virtual]\fR"
+Returns a size which fits the contents of the check box.
+.PP
+Reimplemented from QWidget.
+.SH "QSizePolicy QCheckBox::sizePolicy () const \fC[virtual]\fR"
+Specifies that this widget may stretch horizontally, but is fixed vertically.
+.PP
+Reimplemented from QWidget.
+.SH "SEE ALSO"
+.BR http://www.troll.no/qt/qcheckbox.html
+.SH COPYRIGHT
+Copyright 1992-1999 Troll Tech AS.  See the license file included in
+the distribution for a complete license statement.
+.SH AUTHOR
+Generated automatically from the source code.

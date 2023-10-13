@@ -1,0 +1,45 @@
+.TH QVBox 3qt "20 July 1999" "Troll Tech AS" \" -*- nroff -*-
+.\" Copyright 1992-1999 Troll Tech AS.  All rights reserved.  See the
+.\" license file included in the distribution for a complete license
+.\" statement.
+.\"
+.ad l
+.nh
+.SH NAME
+QVBox \- Performs geometry management on its children
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <qvbox.h>\fR
+.PP
+Inherits QHBox.
+.PP
+.SS "Public Members"
+.in +1c
+.ti -1c
+.BI "\fBQVBox\fR ( QWidget * " "parent" "=0, const char * " "name" "=0, WFlags " "f" "=0, bool " "allowLines" "=TRUE )"
+.br
+.in -1c
+.SH DESCRIPTION
+The QVBox widget performs geometry management on its children
+.PP
+All its children will be placed vertically and sized according to their sizeHint()s.
+.PP
+<img src=qvbox-m.png>
+.PP
+See also: QVBox and QHBox.
+.PP
+Examples:
+.(l
+tabdialog/tabdialog.cpp
+.)l
+.SH MEMBER FUNCTION DOCUMENTATION
+.SH "QVBox::QVBox ( QWidget * parent=0, const char * name=0, WFlags f=0, bool allowLines=TRUE )"
+Constructs a vbox widget with parent \fIparent\fR and name \fIname\fR
+.SH "SEE ALSO"
+.BR http://www.troll.no/qt/qvbox.html
+.SH COPYRIGHT
+Copyright 1992-1999 Troll Tech AS.  See the license file included in
+the distribution for a complete license statement.
+.SH AUTHOR
+Generated automatically from the source code.

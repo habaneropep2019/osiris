@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qfontdatabase.h,v 1.8 1999/06/03 16:50:27 hanord Exp $
+** $Id: qfontdatabase.h,v 1.8.2.1 1999/07/16 16:39:09 warwick Exp $
 **
 ** Definition of the QFontDatabase class
 **
@@ -57,7 +57,7 @@ private:
     QFontDatabase();
 
     const QStringList &families( bool onlyForLocale = TRUE ) const;
-    const QStringList &styles( const QString &family,
+    QStringList styles( const QString &family,
 			       const QString &charSet = QString::null ) const;
     const QValueList<int> pointSizes( const QString &family,
 				      const QString &style,
