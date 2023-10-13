@@ -1,0 +1,100 @@
+.TH QWidgetItem 3qt "12 April 2000" "Troll Tech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.\" license file included in the distribution for a complete license
+.\" statement.
+.\"
+.ad l
+.nh
+.SH NAME
+QWidgetItem \- A QLayoutItem that represents widget
+\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
+.br
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <qabstractlayout.h>\fR
+.PP
+Inherits QLayoutItem.
+.PP
+.SS "Public Members"
+.in +1c
+.ti -1c
+.BI "\fBQWidgetItem\fR ( QWidget * w )"
+.br
+.ti -1c
+.BI "virtual QSize \fBsizeHint\fR () const"
+.br
+.ti -1c
+.BI "virtual QSize \fBminimumSize\fR () const"
+.br
+.ti -1c
+.BI "virtual QSize \fBmaximumSize\fR () const"
+.br
+.ti -1c
+.BI "virtual QSizePolicy::ExpandData \fBexpanding\fR () const"
+.br
+.ti -1c
+.BI "virtual bool \fBisEmpty\fR () const"
+.br
+.ti -1c
+.BI "virtual void \fBsetGeometry\fR ( const QRect & )"
+.br
+.ti -1c
+.BI "virtual QWidget* \fBwidget\fR ()"
+.br
+.in -1c
+.SH DESCRIPTION
+A QLayoutItem that represents widget.
+.PP
+For custom layouts.
+.PP
+See also: QLayout.
+.SH MEMBER FUNCTION DOCUMENTATION
+.SH "QWidgetItem::QWidgetItem ( QWidget * w )"
+Creates an item containing \fIw.\fR
+.SH "QSizePolicy::ExpandData QWidgetItem::expanding() const \fC[virtual]\fR"
+Returns whether this item's widget is expanding.
+.PP
+Reimplemented from QLayoutItem.
+.SH "QRect QWidgetItem::geometry () const \fC[virtual]\fR"
+Reimplemented for internal reasons; the API is not affected.
+.PP
+Reimplemented from QLayoutItem.
+.SH "bool QWidgetItem::hasHeightForWidth () const \fC[virtual]\fR"
+Reimplemented for internal reasons; the API is not affected.
+.PP
+Reimplemented from QLayoutItem.
+.SH "int QWidgetItem::heightForWidth ( int w ) const \fC[virtual]\fR"
+Reimplemented for internal reasons; the API is not affected.
+.PP
+Reimplemented from QLayoutItem.
+.SH "bool QWidgetItem::isEmpty () const \fC[virtual]\fR"
+Returns TRUE, if the widget has been hidden, FALSE otherwise.
+.PP
+Reimplemented from QLayoutItem.
+.SH "QSize QWidgetItem::maximumSize () const \fC[virtual]\fR"
+Returns the maximum size of this item.
+.PP
+Reimplemented from QLayoutItem.
+.SH "QSize QWidgetItem::minimumSize () const \fC[virtual]\fR"
+Returns the minimum size of this item.
+.PP
+Reimplemented from QLayoutItem.
+.SH "void QWidgetItem::setGeometry ( const QRect & r ) \fC[virtual]\fR"
+Sets the geometry of this item's widget to be contained within \fIr,\fR taking alignment and maximum size into account.
+.PP
+Reimplemented from QLayoutItem.
+.SH "QSize QWidgetItem::sizeHint () const \fC[virtual]\fR"
+Returns the preferred size of this item.
+.PP
+Reimplemented from QLayoutItem.
+.SH "QWidget * QWidgetItem::widget () \fC[virtual]\fR"
+Returns the widget managed by this item.
+.SH "SEE ALSO"
+.BR http://doc.trolltech.com/qwidgetitem.html
+.SH COPYRIGHT
+Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+license file included in the distribution for a complete license
+statement.
+.SH AUTHOR
+Generated automatically from the source code.

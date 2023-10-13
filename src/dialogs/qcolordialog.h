@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qcolordialog.h,v 1.6 1999/05/25 16:28:40 paul Exp $
+** $Id: qt/src/dialogs/qcolordialog.h   2.1.0   edited 2000-03-24 $
 **
 ** Definition of QColorDialog class
 **
 ** Created : 990222
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -32,19 +32,41 @@
 
 class QColorDialogPrivate;
 
-class Q_EXPORT QColorDialog : public QDialog {
+class Q_EXPORT QColorDialog : public QDialog
+{
     Q_OBJECT
+
 public:
     static QColor getColor( QColor, QWidget *parent=0, const char* name=0 );
-    ~QColorDialog();
+    static QRgb getRgba( QRgb, bool* ok = 0,
+			 QWidget *parent=0, const char* name=0 );
+
+
+    static int customCount();
+    static QRgb customColor( int );
+    static void setCustomColor( int, QRgb );
+
 private:
+    ~QColorDialog();
+
     QColorDialog( QWidget* parent=0, const char* name=0, bool modal=FALSE );
-    void setSelectedColor( QColor );
-    QColor selectedColor() const;
+    void setColor( QColor );
+    QColor color() const;
+
+private:
+    void setSelectedAlpha( int );
+    int selectedAlpha() const;
 
     void showCustom( bool=TRUE );
 private:
-     QColorDialogPrivate *d;
+    QColorDialogPrivate *d;
+    friend class QColorDialogPrivate;
+
+private:	// Disabled copy constructor and operator=
+#if defined(Q_DISABLE_COPY)
+    QColorDialog( const QColorDialog & );
+    QColorDialog& operator=( const QColorDialog & );
+#endif
 };
 
 #endif //QCOLORDIALOG_H

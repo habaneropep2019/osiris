@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qtextstream.cpp,v 2.85.2.3 1999/08/20 13:53:55 paul Exp $
+** $Id: qt/src/tools/qtextstream.cpp   2.1.0   edited 2000-04-06 $
 **
 ** Implementation of QTextStream class
 **
 ** Created : 940922
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -31,6 +31,11 @@
 #include <ctype.h>
 #include <stdlib.h>
 
+#if defined(_OS_WIN32_)
+#include <windows.h>
+#endif
+
+// NOT REVISED
 /*!
   \class QTextStream qtextstream.h
 
@@ -109,9 +114,9 @@
   is executed with the argument.
 */
 
-/* \fn QTSManip::QTSManip (QTSMFI m, int a)
+/*! \fn QTSManip::QTSManip (QTSMFI m, int a)
 
-  Constructs a QTSManip object which will call \m (a member function
+  Constructs a QTSManip object which will call \a m (a member function
   in QTextStream which accepts a single int) with argument \a a when
   QTSManip::exec() is called.  Used internally in e.g. endl:
 
@@ -120,7 +125,7 @@
   \endcode
 */
 
-/* \fn void QTSManip::exec (QTextStream& s)
+/*! \fn void QTSManip::exec (QTextStream& s)
 
   Calls the member function specified in the constructor, for object
   \a s.  Used internally in e.g. endl:
@@ -416,12 +421,19 @@ private:        // Disabled copy constructor and operator=
   \code
     QString str;
     QTextStream ts( &str, IO_WriteOnly );
-    ts << "pi = " << 3.14;			// str == "pi = 3.14..."
+    ts << "pi = " << 3.14;			// str == "pi = 3.14"
   \endcode
 
   Writing data to the text stream will modify the contents of the string.
   The string will be expanded when data is written beyond the end of the
-  string.
+  string. Note that the string will not be truncated:
+  \code
+    QString str = "pi = 3.14";
+    QTextStream ts( &str, IO_WriteOnly );
+    ts <<  "2+2 = " << 2+2; 		// str == "2+2 = 414"
+  \endcode
+  
+  
 
   Note that since QString is Unicode, you should not use readRawBytes()
   or writeRawBytes() on such a stream.
@@ -514,7 +526,7 @@ QTextStream::QTextStream( FILE *fh, int mode )
 }
 
 /*!
-  Destroys the text stream.
+  Destructs the text stream.
 
   The destructor does not affect the current IO device.
 */
@@ -578,14 +590,13 @@ QChar QTextStream::ts_getc()
 		decoder = mapper->makeDecoder();
 	    QString s;
 	    do {
-		char b[1];
 		int c = dev->getch();
 		if ( c == EOF )
 		    return QEOF;
-		b[0] = c;
-		s  = decoder->toUnicode( b, 1 );
+		char b = c;
+		s  = decoder->toUnicode( &b, 1 );
 	    } while ( s.isEmpty() );
-	    r = s[0];
+	    r = s.constref(0);
 	}
     } else if ( latin1 ) {
 	int c = dev->getch();
@@ -658,20 +669,22 @@ bool QTextStream::ts_isspace( QChar c )
 
 void QTextStream::ts_ungetc( QChar c )
 {
-    if ( mapper ) {
-	ungetcBuf = c;
-    } else if ( latin1 ) {
-	dev->ungetch( c );
-    } else {
-	if ( isNetworkOrder() ) {
-	    //stream is network ordered
-	// Reverse of put
-	    dev->ungetch(c.cell());
-	    dev->ungetch(c.row());
+    if ( c.unicode() != 0xffff ) {
+	if ( mapper ) {
+	    ungetcBuf = c;
+	} else if ( latin1 ) {
+		dev->ungetch( c );
 	} else {
-	// Reverse of put
-	    dev->ungetch(c.row());
-	    dev->ungetch( c.cell() );
+	    if ( isNetworkOrder() ) {
+		//stream is network ordered
+	    // Reverse of put
+		dev->ungetch(c.cell());
+		dev->ungetch(c.row());
+	    } else {
+	    // Reverse of put
+		dev->ungetch(c.row());
+		dev->ungetch( c.cell() );
+	    }
 	}
     }
 }
@@ -1279,6 +1292,9 @@ QTextStream &QTextStream::operator>>( QCString &str )
   return. Note that this is different from QIODevice::readLine(), which
   does not strip the newline at the end of the line.
 
+  On EOF you will get a QString that is null. On reading an empty line the
+  returned QString is empty but not null.
+  
   \sa QIODevice::readLine()
 */
 
@@ -1290,20 +1306,19 @@ QString QTextStream::readLine()
 	return QString::null;
     }
 #endif
-    QString result;
     QChar c = ts_getc();
+    if ( c == QEOF )
+	return QString::null;
 
-    while ( c != QEOF ) {
-	if ( c == '\n' ) {
-	    break;
-	}
+    QString result( "" );
+    while ( c != QEOF && c != '\n' ) {
 	result += c;
 	c = ts_getc();
     }
 
-    if ( !!result && result[int(result.length())-1] == '\r' )
-	result.truncate(result.length()-1);
-	    // (if there are two \r, let one stay)
+    int len = (int)result.length();
+    if ( len && result[len-1] == '\r' )
+	result.truncate(len-1);		// (if there are two \r, let one stay)
 
     return result;
 }
@@ -1623,13 +1638,17 @@ QTextStream &QTextStream::operator<<( const char* s )
     return *this;
 }
 
+/*!
+  Writes \a s to the stream and returns a reference to the stream.
+*/
+
 QTextStream &QTextStream::operator<<( const QCString & s )
 {
     return operator<<(s.data());
 }
 
 /*!
-  Writes a string to the stream and returns a reference to the stream.
+  Writes \a s to the stream and returns a reference to the stream.
 */
 
 QTextStream &QTextStream::operator<<( const QString& s )
@@ -1914,7 +1933,7 @@ QTextStream &reset( QTextStream &s )
   order. The initial byte order marker will be stripped off before data is read.
 
   \note This function should be called before any data is read to/written from the stream.
-  \sa setCodec
+  \sa setCodec()
 */
 
 void QTextStream::setEncoding( Encoding e )
@@ -1945,12 +1964,14 @@ void QTextStream::setEncoding( Encoding e )
 	internalOrder = TRUE;
 	break;
     case Locale:
-	latin1 = TRUE; //fallback to Latin 1
+	latin1 = TRUE; 				// fallback to Latin 1
 	mapper = QTextCodec::codecForLocale();
-	if ( mapper && mapper->mibEnum() == 4 ) {
-	    // Use optimized latin1 processing
-	    mapper = 0;
-	}
+#if defined(_OS_WIN32_)
+	if ( GetACP() == 1252 )
+	    mapper = 0;				// Optimized latin1 processing
+#endif
+	if ( mapper && mapper->mibEnum() == 4 )
+	    mapper = 0;				// Optimized latin1 processing
 	doUnicodeHeader = TRUE; // If it reads as Unicode, accept it
 	break;
     case Latin1:
@@ -1966,7 +1987,7 @@ void QTextStream::setEncoding( Encoding e )
   Sets the codec for this stream to \a codec. Will not try to autodetect Unicode.
 
     \note This function should be called before any data is read to/written from the stream.
-    \sa setEncoding
+    \sa setEncoding()
 */
 
 void QTextStream::setCodec( QTextCodec *codec )

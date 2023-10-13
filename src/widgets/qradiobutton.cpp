@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qradiobutton.cpp,v 2.68 1999/06/18 01:38:09 ettrich Exp $
+** $Id: qt/src/widgets/qradiobutton.cpp   2.1.0   edited 2000-04-03 $
 **
 ** Implementation of QRadioButton class
 **
 ** Created : 940222
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -32,20 +32,40 @@
 #include "qbitmap.h"
 #include "qtextstream.h"
 
+// NOT REVISED
 /*!
   \class QRadioButton qradiobutton.h
   \brief The QRadioButton widget provides a radio button with a text label.
 
-  \ingroup realwidgets
+  \ingroup basic
 
-  QRadioButton and QCheckBox are both toggle buttons, that is, they can be
-  switched on (checked) or off (unchecked).  Unlike check boxes, radio
-  buttons are normally organized in groups where only one radio button can be
-  switched on at a time.
+  QRadioButton and QCheckBox are both option buttons. That is, they
+  can be switched on (checked) or off (unchecked). The classes differ
+  in how the choices for the user are restricted. Check-boxes define
+  "many of many" choices, while radio buttons provide a "one of many"
+  choice. In a group of radio buttons, only one button at a time can
+  be checked. If the user selects another button, the previously
+  selected button is switched off.
 
-  The QButtonGroup widget is very useful for defining groups of radio buttons.
+  While it is technically possible to imlement radio-behaviour with
+  check boxes and vice versa, it's strongly recommended to stick with
+  the well-known semantics. Otherwise your users would be pretty
+  confused.
+
+  The easiest way to implement a "one of many" choice, is to simply
+  stick the radio buttons into QButtonGroup.
+
+  Whenver a button is switched on or off, it emits the signal
+  toggled(). Connect to this signal if you want to trigger an action
+  each time the button changes state. Otherwise, use isChecked() to
+  query whether or not a particular button is selected.
 
   <img src=qradiobt-m.png> <img src=qradiobt-w.png>
+
+  \important text, setText, text, pixmap, setPixmap, accel, setAccel,
+  isToggleButton, setDown, isDown, isOn, state, autoRepeat,
+  isExclusiveToggle, group, setAutoRepeat, toggle, pressed, released,
+  clicked, toggled, state stateChanged
 
   \sa QPushButton QToolButton
   <a href="guibooks.html#fowler">GUI Design Handbook: Radio Button</a>
@@ -81,6 +101,7 @@ QRadioButton::QRadioButton( const QString &text, QWidget *parent,
     init();
     setText( text );
 }
+
 
 /*!
   Initializes the radio button.
@@ -119,15 +140,13 @@ void QRadioButton::setChecked( bool check )
 
 
 
-/*!
-  Returns a size which fits the contents of the radio button.
+/*!\reimp
 */
-
 QSize QRadioButton::sizeHint() const
 {
     // Any more complex, and we will use style().itemRect()
     // NB: QCheckBox::sizeHint() is similar
-
+    constPolish();
     QSize sz;
     if (pixmap())
 	sz = pixmap()->size();
@@ -143,9 +162,7 @@ QSize QRadioButton::sizeHint() const
 }
 
 
-/*!
-  Specifies that this widget may stretch horizontally, but is fixed
-  vertically.
+/*!\reimp
 */
 
 QSizePolicy QRadioButton::sizePolicy() const
@@ -154,23 +171,16 @@ QSizePolicy QRadioButton::sizePolicy() const
 }
 
 
-/*!
-  Reimplements QButton::hitButton().  This function is implemented to
-  prevent a radio button that is \link isOn() on \endlink from being
-  switched off.
+/*!\reimp
 */
-
 bool QRadioButton::hitButton( const QPoint &pos ) const
 {
     return rect().contains( pos );
 }
 
 
-/*!
-  Draws the radio button, but not the button label.
-  \sa drawButtonLabel()
+/*!\reimp
 */
-
 void QRadioButton::drawButton( QPainter *paint )
 {
     QPainter	*p = paint;
@@ -222,6 +232,14 @@ void QRadioButton::drawButton( QPainter *paint )
 #if defined(SAVE_RADIOBUTTON_PIXMAPS)
     if ( use_pm ) {
 	pmpaint.end();
+	if ( backgroundPixmap() ) {
+	    QBitmap bm( pm->size() );
+	    bm.fill( color0 );
+	    pmpaint.begin( &bm );
+	    style().drawExclusiveIndicatorMask( &pmpaint, 0, 0, bm.width(), bm.height(), isOn() );
+	    pmpaint.end();
+	    pm->setMask( bm );
+	}
 	p = paint;				// draw in default device
 	p->drawPixmap( wx, wy, *pm );
 	if (!QPixmapCache::insert(pmkey, pm) )	// save in cache
@@ -233,11 +251,8 @@ void QRadioButton::drawButton( QPainter *paint )
 
 
 
-/*!
-  Draws the radio button label.
-  \sa drawButton()
+/*!\reimp
 */
-
 void QRadioButton::drawButtonLabel( QPainter *p )
 {
     int x, y, w, h;
@@ -271,6 +286,9 @@ void QRadioButton::drawButtonLabel( QPainter *p )
 }
 
 
+/*!
+  \reimp
+*/
 void QRadioButton::resizeEvent( QResizeEvent* e )
 {
     QButton::resizeEvent(e);
@@ -294,6 +312,8 @@ void QRadioButton::resizeEvent( QResizeEvent* e )
 }
 
 
+/*!\reimp
+ */
 void QRadioButton::updateMask()
 {
     QBitmap bm(width(),height());
@@ -320,7 +340,7 @@ void QRadioButton::updateMask()
 			  pixmap(), text() );
 	x = 0;
 	y = (height() - lsz.height() + fm.height() - sz.height())/2;
-	
+
 	style().drawExclusiveIndicatorMask(&p, x, y, sz.width(), sz.height(), isOn() );
 
 	if ( hasFocus() ) {
@@ -347,13 +367,7 @@ void QRadioButton::updateMask()
 
 /*! \reimp */
 
-void QRadioButton::focusInEvent( QFocusEvent * e )
+void QRadioButton::focusInEvent( QFocusEvent *e  )
 {
-    QButton * b = 0;
-    if ( group() && !isOn() )
-	b = group()->selected();
-    if ( b && b->isEnabled() )
-	b->setFocus();
-    else
-	QButton::focusInEvent( e );
+    QButton::focusInEvent( e ); // ### 3.0 remove
 }

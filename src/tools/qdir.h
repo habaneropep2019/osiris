@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qdir.h,v 2.22.2.1 1999/07/13 19:59:06 warwick Exp $
+** $Id: qt/src/tools/qdir.h   2.1.0   edited 2000-03-24 $
 **
 ** Definition of QDir class
 **
 ** Created : 950427
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -107,7 +107,7 @@ public:
 
     uint count() const;
     QString	operator[]( int ) const;
-
+    
     virtual QStrList encodedEntryList( int filterSpec = DefaultFilter,
 				       int sortSpec   = DefaultSort  ) const;
     virtual QStrList encodedEntryList( const QString &nameFilter,
@@ -159,6 +159,7 @@ public:
     static QString homeDirPath();
     static QString rootDirPath();
 
+    static bool match( const QStringList &filters, const QString &fileName );
     static bool match( const QString &filter, const QString &fileName );
     static QString cleanDirPath( const QString &dirPath );
     static bool isRelativePath( const QString &path );
@@ -167,6 +168,8 @@ private:
     void init();
     virtual bool readDirEntries( const QString &nameFilter,
 				 int FilterSpec, int SortSpec  );
+
+    static void slashify ( QString &);
 
     QString	dPath;
     QStringList   *fList;
@@ -208,6 +211,12 @@ inline bool QDir::operator!=( const QDir &d ) const
 {
     return !(*this == d);
 }
+
+
+struct QDirSortItem {
+    QString filename_cache;
+    QFileInfo* item;
+};
 
 
 #endif // QDIR_H

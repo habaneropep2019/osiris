@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: dclock.cpp,v 1.2 1999/06/03 01:44:07 warwick Exp $
+** $Id: qt/examples/dclock/dclock.cpp   2.1.0   edited 2000-02-21 $
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -64,9 +64,9 @@ void DigitalClock::showDate()
 {
     if ( showDateTimer != -1 )			// already showing date
 	return;
-    QDate d = QDate::currentDate();
+    QDate date = QDate::currentDate();
     QString s;
-    s.sprintf( "%2d %2d", d.month(), d.day() );
+    s.sprintf( "%2d %2d", date.month(), date.day() );
     display( s );				// sets the LCD number/text
     showDateTimer = startTimer( 2000 );		// keep this state for 2 secs
 }

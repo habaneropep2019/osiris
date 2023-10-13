@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qsemimodal.cpp,v 2.10 1999/04/28 09:57:32 aavit Exp $
+** $Id: qt/src/kernel/qsemimodal.cpp   2.1.0   edited 2000-03-24 $
 **
 ** Implementation of QSemiModal class
 **
 ** Created : 970627
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,33 +17,36 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
 #include "qsemimodal.h"
 #include "qapplication.h"
 
+// NOT REVISED
 /*!
   \class QSemiModal qsemimodal.h
   \brief The QSemiModal class is the base class of semi-modal dialog windows.
 
+  \ingroup abstractwidgets
   \ingroup dialogs
 
-  The semi-modal dialog window can disable events to other windows while
-  it is open.  To enable this, the QSemiModal must be constructed with
-  TRUE for the \e modal argument, which is FALSE by default, for consistency
-  with QDialog.
-  Such a QSemiModal is modal like QDialog, but it does not have
-  its own event loop and has no concept of a default button.
+  The semi-modal dialog window can disable events to other windows
+  while it is open.  To enable this, the QSemiModal must be
+  constructed with TRUE for the \e modal argument, which is FALSE by
+  default, for consistency with QDialog.  Such a QSemiModal is modal
+  like QDialog, but it does not have its own event loop. The flow of
+  control is still within your code and it is up to you to update the
+  semi-modal dialog (for example a progressbar) from time to time. 
 
-  Note that the parent widget has a different meaning for semi-modal
-  dialogs than for other types of widgets. A semi-modal dialog is
-  placed on top of the parent widget. The dialog is centered on the
-  screen if the parent widget is zero.  
-*/ 
+  Note that the parent widget has a different meaning for dialogs than
+  for other types of widgets. A dialog is placed on top of the parent
+  widget. The dialog is centered on the screen if the parent widget is
+  zero.
+*/
 
 
 /*!
@@ -59,7 +62,7 @@ QSemiModal::QSemiModal( QWidget *parent, const char *name, bool modal, WFlags f 
 }
 
 /*!
-  Destroys the QSemiModal and all its children.
+  Destructs the widget, deleting all its children.
 */
 
 QSemiModal::~QSemiModal()

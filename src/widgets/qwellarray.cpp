@@ -1,11 +1,11 @@
 /**********************************************************************
-** $Id: qwellarray.cpp,v 1.18 1999/06/10 18:32:33 warwick Exp $
+** $Id: qt/src/widgets/qwellarray.cpp   2.1.0   edited 2000-03-24 $
 **
 ** Implementation of QWellArray widget class
 **
 ** Created : 980114
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,38 +17,41 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
-//#include <qlayout.h>
+
+#include "qwellarray_p.h"
+
+//#include "qlayout.h"
 #include "qdrawutil.h"
-//#include <qevent.h>
+//#include "qevent.h"
 //#include "qobjectlist.h"
 #include "qobjectdict.h"
-
-#include "qwellarray.h"
 
 struct QWellArrayData {
     QBrush *brush;
 };
 
-/* WARNING, NOT 
-  \class QWellArray qwellarray.h
+// NOT REVISED
+/* WARNING, NOT
+  \class QWellArray qwellarray_p.h
   \brief ....
 
   ....
 
-  \ingroup realwidgets
+  \ingroup advanced
 */
 
 QWellArray::QWellArray( QWidget *parent, const char * name, bool popup )
-    : QTableView(parent,name,popup?WStyle_Customize|WStyle_Tool|WStyle_NoBorder:0)
+    : QTableView( parent, name,
+		  popup ? (WStyle_Customize|WStyle_Tool|WStyle_NoBorder) : 0 )
 {
     d = 0;
-    setFocusPolicy( StrongFocus );		
-    //    setBackgroundMode( PaletteBase );	
+    setFocusPolicy( StrongFocus );
+    setBackgroundMode( PaletteButton );
     nCols = 7;
     nRows = 7;
     int w = 24;		// cell width
@@ -64,16 +67,10 @@ QWellArray::QWellArray( QWidget *parent, const char * name, bool popup )
 	setMargin( 1 );
 	setLineWidth( 2 );
     }
-    setNumCols( nCols );			
-    setNumRows( nRows );			
-    setCellWidth( w );			
-    setCellHeight( h );			
-    /*    setTableFlags( Tbl_vScrollBar |		
-	  Tbl_hScrollBar |		
-	  Tbl_clipCellPainting |	
-	  Tbl_smoothScrolling);	
-	  */
-
+    setNumCols( nCols );
+    setNumRows( nRows );
+    setCellWidth( w );
+    setCellHeight( h );
     curCol = 0;
     curRow = 0;
     selCol = -1;
@@ -90,6 +87,7 @@ QWellArray::QWellArray( QWidget *parent, const char * name, bool popup )
 
 QSize QWellArray::sizeHint() const
 {
+    constPolish();
     int f = frameWidth() * 2;
     int w = nCols * cellWidth() + f;
     int h = nRows * cellHeight() + f;
@@ -99,27 +97,19 @@ QSize QWellArray::sizeHint() const
 
 void QWellArray::paintCell( QPainter* p, int row, int col )
 {
-    //	debug( "::repaint%d", xOffset() );
-
     int w = cellWidth( col );			// width of cell in pixels
     int h = cellHeight( row );			// height of cell in pixels
-
-    //    int x = 0;
-    //    int y = 0;
-    //    int x2 = w - 1;
-    //    int y2 = h - 1;
-
     int b = 1;
 
     if ( !smallStyle )
-	b = 3; //#####
+	b = 3;
 
     const QColorGroup & g = colorGroup();
     p->setPen( QPen( black, 0, SolidLine ) );
     if ( !smallStyle && row ==selRow && col == selCol &&
 	 style() != MotifStyle ) {
 	int n = 2;
-	p->drawRect( n, n, w-2*n, h-2*n );	
+	p->drawRect( n, n, w-2*n, h-2*n );
     }
 
 
@@ -132,8 +122,8 @@ void QWellArray::paintCell( QPainter* p, int row, int col )
 	    qDrawShadePanel( p, b, b ,  w - 2*b,  h - 2*b,
 			     g, TRUE, 2 );
 	    b += 2;
-	} else {	
-	    int t = ( row == selRow && col == selCol ) ? 3 : 0;
+	} else {
+	    int t = ( row == selRow && col == selCol ) ? 2 : 0;
 	    b -= t;
 	    qDrawShadePanel( p, b, b ,  w - 2*b,  h - 2*b,
 			     g, TRUE, 2 );
@@ -145,20 +135,13 @@ void QWellArray::paintCell( QPainter* p, int row, int col )
     if ( (row == curRow) && (col == curCol) ) {
 	if ( smallStyle ) {
 	    p->setPen ( white );
-	    p->drawRect( 1, 1, w-2, h-2 );	
+	    p->drawRect( 1, 1, w-2, h-2 );
 	    p->setPen ( black );
-	    p->drawRect( 0, 0, w, h );	
+	    p->drawRect( 0, 0, w, h );
 	    p->drawRect( 2, 2, w-4, h-4 );
 	    b = 3;
 	} else if ( hasFocus() ) {
-	    if ( style() == MotifStyle ) {
-		int t = 1;
-		if ( row == selRow && col == selCol )
-		    t = 3;
-		p->drawRect(t,t,w-2*t,h-2*t );
-	    } else {
-		p->drawWinFocusRect(0,0,w,h,g.background() );
-	    }
+	    style().drawFocusRect(p, QRect(0,0,w,h), g );
 	}
     }
     drawContents( p, row, col, QRect(b, b, w - 2*b, h - 2*b) );
@@ -173,7 +156,7 @@ void QWellArray::drawContents( QPainter *p )
 }
 
 /*!
-  Override this function to change the contents of the well array.
+  Reimplement this function to change the contents of the well array.
  */
 void QWellArray::drawContents( QPainter *p, int row, int col, const QRect &r )
 {
@@ -189,27 +172,32 @@ void QWellArray::drawContents( QPainter *p, int row, int col, const QRect &r )
 }
 
 
-/*
-  Handles mouse press events for the well array.
-  The current cell marker is set to the cell the mouse is clicked in.
+/*\reimp
 */
-
 void QWellArray::mousePressEvent( QMouseEvent* e )
 {
-    QPoint clickedPos = e->pos();
-    setCurrent( findRow( clickedPos.y() ), findCol( clickedPos.x() ) );
+    // The current cell marker is set to the cell the mouse is pressed
+    // in.
+    QPoint pos = e->pos();
+    setCurrent( findRow( pos.y() ), findCol( pos.x() ) );
+}
+
+/*\reimp
+*/
+void QWellArray::mouseReleaseEvent( QMouseEvent* )
+{
+    // The current cell marker is set to the cell the mouse is clicked
+    // in.
     setSelected( curRow, curCol );
-    //emit selected();
 }
 
 
-/*
-  Handles mouse move events for the well array.
-  The current cell marker is set to the cell the mouse is clicked in.
+/*\reimp
 */
-
 void QWellArray::mouseMoveEvent( QMouseEvent* e )
 {
+    //   The current cell marker is set to the cell the mouse is
+    //   clicked in.
     if ( smallStyle ) {
 	QPoint pos = e->pos();
 	setCurrent( findRow( pos.y() ), findCol( pos.x() ) );
@@ -267,15 +255,15 @@ void QWellArray::setSelected( int row, int col )
     if ( row >= 0 )
 	emit selected( row, col );
 
+    if ( isVisible() && parentWidget() && parentWidget()->inherits("QPopupMenu") )
+	parentWidget()->close();
+
 }
 
 
 
-/*!
-  Handles focus reception events for the well array.
-  Repaint only the current cell; to avoid flickering
+/*!\reimp
 */
-
 void QWellArray::focusInEvent( QFocusEvent* )
 {
     updateCell( curRow, curCol );
@@ -298,8 +286,8 @@ void QWellArray::setDimension( int rows, int cols )
 	delete d;
 	d = 0;
     }
-    setNumCols( nCols );			
-    setNumRows( nRows );			
+    setNumCols( nCols );
+    setNumRows( nRows );
 }
 
 void QWellArray::setCellBrush( int row, int col, const QBrush &b )
@@ -323,7 +311,7 @@ void QWellArray::setCellBrush( int row, int col, const QBrush &b )
   \c NoBrush is returned.
 */
 
-QBrush QWellArray::getCellBrush( int row, int col )
+QBrush QWellArray::cellBrush( int row, int col )
 {
     if ( d && row >= 0 && row < nRows && col >= 0 && col < nCols )
 	return d->brush[row*nCols+col];
@@ -332,9 +320,7 @@ QBrush QWellArray::getCellBrush( int row, int col )
 
 
 
-/*!
-  Handles focus loss events for the well array.
-  Repaint only the current cell; to avoid flickering
+/*!\reimp
 */
 
 void QWellArray::focusOutEvent( QFocusEvent* )
@@ -342,11 +328,8 @@ void QWellArray::focusOutEvent( QFocusEvent* )
     updateCell( curRow, curCol );
 }
 
-/*
-  Handles key press events for the well array.
-  Allows moving the current cell marker around with the arrow keys
+/*\reimp
 */
-
 void QWellArray::keyPressEvent( QKeyEvent* e )
 {
     switch( e->key() ) {			// Look at the key code
@@ -372,7 +355,8 @@ void QWellArray::keyPressEvent( QKeyEvent* e )
 	    int edge = topCell();
 	    if ( curRow < edge )
 		setTopCell( edge - 1 );
-	}
+	} else if ( smallStyle )
+	    focusNextPrevChild( FALSE );
 	break;
     case Key_Down:
 	if( curRow < numRows()-1 ) {
@@ -380,25 +364,17 @@ void QWellArray::keyPressEvent( QKeyEvent* e )
 	    int edge = lastRowVisible();
 	    if ( curRow >= edge )
 		setTopCell( topCell() + 1 );
-	}
+	} else if ( smallStyle )
+	    focusNextPrevChild( TRUE );
 	break;
     case Key_Space:
     case Key_Return:
     case Key_Enter:
-	if( !smallStyle ) {
-	    setSelected( curRow, curCol );
-	}
-	//emit selected();
+	setSelected( curRow, curCol );
 	break;
     default:				// If not an interesting key,
 	e->ignore();			// we don't accept the event
-	return;	
+	return;
     }
 
 }
-    //    if ( e->key() == Key_Enter || e->key() == Key_Return )
-    //		emit return_pressed; // or ignore the event or something...
-
-
-
-

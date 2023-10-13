@@ -5,7 +5,7 @@ SYSCONF_CC		= cc
 # Compiling with support libraries
 SYSCONF_CXXFLAGS_X11	= -I/usr/include/X11R6
 SYSCONF_CXXFLAGS_QT	= -I$(QTDIR)/include
-SYSCONF_CXXFLAGS_OPENGL	= 
+SYSCONF_CXXFLAGS_OPENGL	= -I/opt/graphics/OpenGL/include -I/usr/contrib/X11R6/include
 
 # Compiline YACC output
 SYSCONF_CXXFLAGS_YACC     = 
@@ -13,21 +13,21 @@ SYSCONF_CXXFLAGS_YACC     =
 # Linking with support libraries
 # X11
 SYSCONF_LFLAGS_X11	= -L/usr/lib/X11R6
-SYSCONF_LIBS_X11	= -lXext -lX11 -lm
+SYSCONF_LIBS_X11	= -lXext -lX11
 # Qt, Qt+OpenGL
 SYSCONF_LFLAGS_QT	= -L$(QTDIR)/lib
 SYSCONF_LIBS_QT		= -lqt
 SYSCONF_LIBS_QT_OPENGL	= -lqgl
 # OpenGL
-SYSCONF_LFLAGS_OPENGL	= 
-SYSCONF_LIBS_OPENGL	= -lGL -lGLU -lXmu
+SYSCONF_LFLAGS_OPENGL	= -L/opt/graphics/OpenGL/lib -L/usr/contrib/X11R6/lib
+SYSCONF_LIBS_OPENGL	= -lGLU -lGL -lXmu
 # Yacc
 SYSCONF_LIBS_YACC	= -ly
 
 # Linking applications
 SYSCONF_LINK		= aCC
 SYSCONF_LFLAGS		= 
-SYSCONF_LIBS		= 
+SYSCONF_LIBS		= -lm
 
 # Link flags shared objects
 SYSCONF_LFLAGS_SHOBJ	= -b

@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qglobal.h,v 2.95.2.3 1999/09/07 07:43:36 hanord Exp $
+** $Id: qt/src/tools/qglobal.h   2.1.0   edited 2000-04-12 $
 **
 ** Global type declarations and definitions
 **
 ** Created : 920529
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -27,8 +27,8 @@
 #define QGLOBAL_H
 
 
-#define QT_VERSION	202
-#define QT_VERSION_STR	"2.0.2"
+#define QT_VERSION	210
+#define QT_VERSION_STR	"2.1.0"
 
 
 //
@@ -82,6 +82,8 @@
 #define _OS_HPUX_
 #elif defined(ultrix) || defined(__ultrix) || defined(__ultrix__)
 #define _OS_ULTRIX_
+#elif defined(reliantunix)
+#define _OS_RELIANTUNIX_
 #elif defined(linux) || defined(__linux) || defined(__linux__)
 #define _OS_LINUX_
 #elif defined(__FreeBSD__)
@@ -115,7 +117,7 @@
 #elif !defined(_SCO_DS) && defined(__USLC__) && defined(__SCO_VERSION__)
 #define _OS_UNIXWARE7_
 #else
-#error "Qt has not been ported to this OS - talk to qt-bugs@troll.no"
+#error "Qt has not been ported to this OS - talk to qt-bugs@trolltech.com"
 #endif
 
 #if !defined(UNIX)
@@ -147,6 +149,7 @@
 
 
 // Should be sorted most-authorative to least-authorative
+
 #if defined(__SC__)
 #define _CC_SYM_
 #elif defined(applec)
@@ -162,6 +165,10 @@
 #define _CC_WAT_
 #elif defined(__GNUC__)
 #define _CC_GNU_
+#if __GNUC__ == 2 && __GNUC_MINOR__ <= 7
+#define Q_FULL_TEMPLATE_INSTANTIATION
+#define Q_TEMPLATE_NEEDS_CLASS_DECLARATION
+#endif
 #elif defined(__xlC__)
 #define _CC_XLC_
 #elif defined(como40)
@@ -182,9 +189,13 @@
 #if __SUNPRO_CC >= 0x500
 #define HAS_BOOL_TYPE
 #define Q_SPARCWORKS_FUNCP_BUG
+#define Q_C_CALLBACKS
 #endif
 #elif defined(__DECCXX)
 #define _CC_DEC_
+#elif defined(__CDS__)
+#define _CC_CDS_
+#define HAS_BOOL_TYPE
 #elif defined(_OS_HPUX_)
 // this test is from aCC online help
 #if __cplusplus >= 199707L
@@ -194,9 +205,10 @@
 #else
 // this is the CC
 #define _CC_HP_
+#define Q_FULL_TEMPLATE_INSTANTIATION
 #endif // __cplusplus >= 199707L
 #else
-#error "Qt has not been tested with this compiler - talk to qt-bugs@troll.no"
+#error "Qt has not been tested with this compiler - talk to qt-bugs@trolltech.com"
 #endif
 
 #if defined(_CC_COMEAU_)

@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qscrollview.cpp,v 2.112.2.2 1999/08/31 11:45:16 reggie Exp $
+** $Id: qt/src/widgets/qscrollview.cpp   2.1.0   edited 2000-04-06 $
 **
 ** Implementation of QScrollView class
 **
 ** Created : 950524
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -33,10 +33,13 @@
 #include "qscrollview.h"
 #include "qptrdict.h"
 #include "qapplication.h"
+#include "qtimer.h"
 
-const int sbDim = 16;
 
 const int coord_limit = 4000;
+static const int autoscroll_margin = 16;
+static const int initialScrollTime = 30;
+static const int initialScrollAccel = 5;
 
 struct QSVChildRec {
     QSVChildRec(QWidget* c, int xx, int yy) :
@@ -88,13 +91,30 @@ struct QSVChildRec {
     int x, y;
 };
 
+
+class QClipperWidget : public QWidget {
+public:
+    QClipperWidget( QWidget * parent=0, const char * name=0, WFlags f=0 )
+        : QWidget ( parent,name,f) { blockFocus = FALSE; }
+    bool focusNextPrevChild( bool next ) {
+	if ( !blockFocus )
+	    return QWidget::focusNextPrevChild( next );
+	else
+	    return TRUE;
+    }
+    bool blockFocus;
+};
+
+
 struct QScrollViewData {
     QScrollViewData(QWidget* parent, int vpwflags) :
 	hbar( QScrollBar::Horizontal, parent, "qt_hbar" ),
 	vbar( QScrollBar::Vertical, parent, "qt_vbar" ),
 	viewport( parent, "qt_viewport", vpwflags ),
 	clipped_viewport( 0 ),
-	vx( 0 ), vy( 0 ), vwidth( 1 ), vheight( 1 )
+	flags( vpwflags ),
+	vx( 0 ), vy( 0 ), vwidth( 1 ), vheight( 1 ),
+	autoscroll_timer( parent ), drag_autoscroll( TRUE )
     {
 	l_marg = r_marg = t_marg = b_marg = 0;
 	viewport.setBackgroundMode( QWidget::PaletteDark );
@@ -140,32 +160,41 @@ struct QScrollViewData {
 	children.removeRef(r);
 	delete r;
     }
-    void hideOrShowAll(QScrollView* sv)
+    void hideOrShowAll(QScrollView* sv, bool isScroll = FALSE )
     {
-	if ( clipped_viewport ) {
+        if ( clipped_viewport ) {
 	    if ( clipped_viewport->x() <= 0
-	      && clipped_viewport->y() <= 0
-	      && clipped_viewport->width()+clipped_viewport->x() >=
-		    viewport.width()
-	      && clipped_viewport->height()+clipped_viewport->y() >=
-		    viewport.height() )
-	    {
+		 && clipped_viewport->y() <= 0
+		 && clipped_viewport->width()+clipped_viewport->x() >=
+		 viewport.width()
+		 && clipped_viewport->height()+clipped_viewport->y() >=
+		 viewport.height() ) {
 		// clipped_viewport still covers viewport
-		return;
+		if ( !isScroll && !clipped_viewport->testWFlags( Qt::WNorthWestGravity) )
+		    clipped_viewport->repaint( clipped_viewport->visibleRect(),
+			       !clipped_viewport->testWFlags(Qt::WRepaintNoErase) );
+		} else {
+		    // Re-center
+		    int nx = ( viewport.width() - clipped_viewport->width() ) / 2;
+		    int ny = ( viewport.height() - clipped_viewport->height() ) / 2;
+		    // hide the clipped_viewport while we mess around
+		    // with it. To avoid having the focus jumping
+		    // around, we block it.
+		    clipped_viewport->blockFocus = TRUE;
+		    clipped_viewport->hide();
+		    clipped_viewport->move(nx,ny);
+		    clipped_viewport->blockFocus = FALSE;
+		    // no need to update, we'll receive a paintevent after show.
+		}
+	    for (QSVChildRec *r = children.first(); r; r=children.next()) {
+		r->hideOrShow(sv, clipped_viewport);
 	    }
-	    // Re-center
-	    int nx = -(clipped_viewport->width()+viewport.width())/2;
-	    int ny = -(clipped_viewport->height()+viewport.height())/2;
-	    clipped_viewport->hide(); // while we mess with it
-	    clipped_viewport->move(nx,ny);
-	}
-	for (QSVChildRec *r = children.first(); r; r=children.next()) {
-	    r->hideOrShow(sv, clipped_viewport);
-	}
-	if ( clipped_viewport ) {
-	    clipped_viewport->show();
+	    if ( clipped_viewport ) {
+		clipped_viewport->show();
+	    }
 	}
     }
+
     void moveAllBy(int dx, int dy)
     {
 	if ( clipped_viewport ) {
@@ -173,7 +202,6 @@ struct QScrollViewData {
 		clipped_viewport->x()+dx,
 		clipped_viewport->y()+dy
 	    );
-	    //hideOrShowAll(sv);
 	} else {
 	    for (QSVChildRec *r = children.first(); r; r=children.next()) {
 		r->child->move(r->child->x()+dx,r->child->y()+dy);
@@ -193,6 +221,13 @@ struct QScrollViewData {
 	}
 	return FALSE;
     }
+    void autoMove(QScrollView* sv)
+    {
+	if ( policy == QScrollView::AutoOne ) {
+	    QSVChildRec* r = children.first();
+	    sv->setContentsPos(-r->child->x(),-r->child->y());
+	}
+    }
     void autoResize(QScrollView* sv)
     {
 	if ( policy == QScrollView::AutoOne ) {
@@ -200,11 +235,21 @@ struct QScrollViewData {
 	    sv->resizeContents(r->child->width(),r->child->height());
 	}
     }
+    void autoResizeHint()
+    {
+	if ( policy == QScrollView::AutoOne ) {
+	    QSVChildRec* r = children.first();
+	    QSize s = r->child->sizeHint();
+	    if ( s.isValid() )
+		r->child->resize(s);
+	}
+    }
 
     QScrollBar	hbar;
     QScrollBar	vbar;
     QWidget	viewport;
-    QWidget*    clipped_viewport;
+    QClipperWidget*    clipped_viewport;
+    int		flags;
     QList<QSVChildRec>	children;
     QPtrDict<QSVChildRec>	childDict;
     QWidget*	corner;
@@ -213,6 +258,11 @@ struct QScrollViewData {
     QScrollView::ResizePolicy policy;
     QScrollView::ScrollBarMode	vMode;
     QScrollView::ScrollBarMode	hMode;
+    QPoint cpDragStart;
+    QTimer autoscroll_timer;
+    int autoscroll_time;
+    int autoscroll_accel;
+    bool drag_autoscroll;
 
     // This variable allows ensureVisible to move the contents then
     // update both the sliders.  Otherwise, updating the sliders would
@@ -221,6 +271,7 @@ struct QScrollViewData {
     bool signal_choke;
 };
 
+// NOT REVISED
 /*!
 \class QScrollView qscrollview.h
 \brief The QScrollView widget provides a scrolling area with on-demand scrollbars.
@@ -237,10 +288,9 @@ outside the normal coordinate range (but they are still limited in
 size).
 
 To provide content for the widget, inherit from QScrollView and
-override drawContentsOffset(), and use resizeContents() to set the size
+reimplement drawContents(), and use resizeContents() to set the size
 of the viewed area.  Use addChild() / moveChild() to position widgets
-on the view.  For large numbers of such child widgets, consider using
-packChildWidgets() to improve performance.
+on the view.
 
 To use QScrollView effectively, it is important to understand its
 widget structure in the three styles of usage: a single large child widget,
@@ -283,15 +333,14 @@ do.
 
 <img src=qscrollview-vp.png>
 
-The second usage of QScrollView depicated above is
-appropriate when few, if any, widgets are on a very large scrolling area
-that is potentially larger than 4000 pixels in either dimension. In this
-usage, you call resizeContents() to set the size of the area, and override
-drawContents() to paint the contents.  You may also add some widgets,
-by making them children of the viewport() and adding them with
-addChild() (this is the same as the process for the single large
-widget in the previous example):
-\code
+The second usage of QScrollView depicated above is appropriate when
+few, if any, widgets are on a very large scrolling area that is
+potentially larger than 4000 pixels in either dimension. In this
+usage, you call resizeContents() to set the size of the area, and
+reimplement drawContents() to paint the contents.  You may also add
+some widgets, by making them children of the viewport() and adding
+them with addChild() (this is the same as the process for the single
+large widget in the previous example): \code
     QScrollView* sv = new QScrollView(...);
     QLabel* child1 = new QLabel("CHILD", sv->viewport());
     sv->addChild(child1);
@@ -314,7 +363,7 @@ the scrollview moves the child widgets individually.
 The final usage of QScrollView depicated above is
 appropriate when many widgets are on a very large scrolling area
 that is potentially larger than 4000 pixels in either dimension. In this
-usage, you call resizeContents() to set the size of the area, and override
+usage, you call resizeContents() to set the size of the area, and reimplement
 drawContents() to paint the contents.  You then call enableClipper(TRUE)
 and add widgets, again
 by making them children of the viewport() and adding them with
@@ -354,8 +403,8 @@ relative to the contents - use the function mapToContents() for this.
 
 To handle mouse events on the scrolling area, subclass scrollview as
 you would subclass other widgets, but rather than overriding
-mousePressEvent(), override viewportMousePressEvent() instead (if you
-override mousePressEvent() you'll only get called when part of the
+mousePressEvent(), reimplement viewportMousePressEvent() instead (if
+you reimplement mousePressEvent() you'll only get called when part of the
 QScrollView is clicked - and the only such part is the "corner" (if
 you don't set a cornerWidget()) and the frame, everything else being
 covered up by the viewport, clipper, or scrollbars.
@@ -387,13 +436,17 @@ Constructs a QScrollView.
 
 If you intend to add child widgets, you may see improved refresh
 if you include \c WPaintClever in the widgets flags, \a f.  \c WPaintClever
-as well as \c WNorthWestGravity is propagated to the viewport() widget.
+as well as \c WNorthWestGravity and \c WRepaintNoErase
+is propagated to the viewport() widget.
 */
 
 QScrollView::QScrollView( QWidget *parent, const char *name, WFlags f ) :
-    QFrame( parent, name, f & ~WNorthWestGravity, FALSE )
+    QFrame( parent, name, f & (~WNorthWestGravity) & (~WRepaintNoErase), FALSE )
 {
-    d = new QScrollViewData(this,WResizeNoErase| (f&WPaintClever) | (f&WNorthWestGravity));
+    d = new QScrollViewData(this,WResizeNoErase |
+	    (f&WPaintClever) | (f&WRepaintNoErase) | (f&WNorthWestGravity) );
+    connect( &d->autoscroll_timer, SIGNAL( timeout() ),
+	     this, SLOT( doDragAutoScroll() ) );
 
     connect( &d->hbar, SIGNAL( valueChanged( int ) ),
 	this, SLOT( hslide( int ) ) );
@@ -495,6 +548,8 @@ QSize QScrollView::viewportSize( int x, int y ) const
 
     bool needh, needv;
     bool showh, showv;
+    int hsbExt = horizontalScrollBar()->sizeHint().height();
+    int vsbExt = verticalScrollBar()->sizeHint().width();
 
     if ( d->policy != AutoOne || d->anyVisibleChildren() ) {
 	// Do we definitely need the scrollbar?
@@ -517,11 +572,11 @@ QSize QScrollView::viewportSize( int x, int y ) const
 	    showv = needv;
 
 	// Given other scrollbar will be shown, NOW do we need one?
-	if ( showh && h-sbDim-tmarg-bmarg < y ) {
+	if ( showh && h-vsbExt-tmarg-bmarg < y ) {
 	    if (d->vMode == Auto)
 		showv=TRUE;
 	}
-	if ( showv && w-sbDim-lmarg-rmarg < x ) {
+	if ( showv && w-hsbExt-lmarg-rmarg < x ) {
 	    if (d->hMode == Auto)
 		showh=TRUE;
 	}
@@ -531,8 +586,8 @@ QSize QScrollView::viewportSize( int x, int y ) const
 	showv = d->vMode == AlwaysOn;
     }
 
-    return QSize( w-lmarg-rmarg - (showv ? sbDim : 0),
-		  h-tmarg-bmarg - (showh ? sbDim : 0) );
+    return QSize( w-lmarg-rmarg - (showv ? vsbExt : 0),
+		  h-tmarg-bmarg - (showh ? hsbExt : 0) );
 }
 
 
@@ -560,6 +615,9 @@ void QScrollView::updateScrollBars()
     bool showh;
     bool showv;
 
+    int hsbExt = horizontalScrollBar()->sizeHint().height();
+    int vsbExt = verticalScrollBar()->sizeHint().width();
+
     if ( d->policy != AutoOne || d->anyVisibleChildren() ) {
 	// Do we definitely need the scrollbar?
 	needh = w-lmarg-rmarg < contentsWidth();
@@ -581,12 +639,12 @@ void QScrollView::updateScrollBars()
 	    showv = needv;
 
 	// Given other scrollbar will be shown, NOW do we need one?
-	if ( showh && h-sbDim-tmarg-bmarg < contentsHeight() ) {
+	if ( showh && h-vsbExt-tmarg-bmarg < contentsHeight() ) {
 	    needv=TRUE;
 	    if (d->vMode == Auto)
 		showv=TRUE;
 	}
-	if ( showv && w-sbDim-lmarg-rmarg < contentsWidth() ) {
+	if ( showv && w-hsbExt-lmarg-rmarg < contentsWidth() ) {
 	    needh=TRUE;
 	    if (d->hMode == Auto)
 		showh=TRUE;
@@ -598,20 +656,23 @@ void QScrollView::updateScrollBars()
 	showv = d->vMode == AlwaysOn;
     }
 
+    bool sc = d->signal_choke;
+    d->signal_choke=TRUE;
+
     // Hide unneeded scrollbar, calculate viewport size
     if ( showh ) {
-	porth=h-sbDim-tmarg-bmarg;
+        porth=h-hsbExt-tmarg-bmarg;
     } else {
 	if (!needh)
-	    hslide( 0 ); // move to left
+	    d->hbar.setValue(0);
 	d->hbar.hide();
 	porth=h-tmarg-bmarg;
     }
     if ( showv ) {
-	portw=w-sbDim-lmarg-rmarg;
+	portw=w-vsbExt-lmarg-rmarg;
     } else {
 	if (!needv)
-	    vslide( 0 ); // move to top
+	    d->vbar.setValue(0);
 	d->vbar.hide();
 	portw=w-lmarg-rmarg;
     }
@@ -637,33 +698,43 @@ void QScrollView::updateScrollBars()
     // Position the scrollbars, viewport, and corner widget.
     int bottom;
     if ( showh ) {
-	int right = ( showv || cornerWidget() ) ? w-sbDim : w;
+	int right = ( showv || cornerWidget() ) ? w-vsbExt : w;
 	if ( style() == WindowsStyle )
-	    setHBarGeometry(d->hbar, fw, h-sbDim-fw, right-fw-fw, sbDim );
+            setHBarGeometry(d->hbar, fw, h-hsbExt-fw,
+                            right-fw-fw, hsbExt );
 	else
-	    setHBarGeometry(d->hbar, 0, h-sbDim, right, sbDim );
-	bottom=h-sbDim;
+            setHBarGeometry(d->hbar, 0, h-hsbExt, right,
+                            hsbExt );
+	bottom=h-hsbExt;
     } else {
-	bottom=h;
+        bottom=h;
     }
     if ( showv ) {
 	clipper()->setGeometry( lmarg, tmarg,
-				 w-sbDim-lmarg-rmarg, bottom-tmarg-bmarg );
+                                w-vsbExt-lmarg-rmarg,
+                                bottom-tmarg-bmarg );
 	if ( style() == WindowsStyle )
 	    changeFrameRect(QRect(0, 0, w, h) );
 	else
-	    changeFrameRect(QRect(0, 0, w-sbDim, bottom));
+	    changeFrameRect(QRect(0, 0, w-vsbExt, bottom));
 	if (cornerWidget()) {
 	    if ( style() == WindowsStyle )
-		setVBarGeometry( d->vbar, w-sbDim-fw, fw, sbDim, h-sbDim-fw-fw );
+                setVBarGeometry( d->vbar, w-vsbExt-fw,
+                                 fw, vsbExt,
+                                 h-hsbExt-fw-fw );
 	    else
-		setVBarGeometry( d->vbar, w-sbDim, 0, sbDim, h-sbDim );
+                setVBarGeometry( d->vbar, w-vsbExt, 0,
+                                 vsbExt,
+                                 h-hsbExt );
 	}
 	else {
 	    if ( style() == WindowsStyle )
-		setVBarGeometry( d->vbar, w-sbDim-fw, fw, sbDim, bottom-fw-fw );
+                setVBarGeometry( d->vbar, w-vsbExt-fw,
+                                 fw, vsbExt,
+                                 bottom-fw-fw );
 	    else
-		setVBarGeometry( d->vbar, w-sbDim, 0, sbDim, bottom );
+                setVBarGeometry( d->vbar, w-vsbExt, 0,
+                                 vsbExt, bottom );
 	}
     } else {
 	if ( style() == WindowsStyle )
@@ -675,10 +746,18 @@ void QScrollView::updateScrollBars()
     }
     if ( d->corner ) {
 	if ( style() == WindowsStyle )
-	    d->corner->setGeometry( w-sbDim-fw, h-sbDim-fw, sbDim, sbDim );
+            d->corner->setGeometry( w-vsbExt-fw,
+                                    h-hsbExt-fw,
+                                    vsbExt,
+                                    hsbExt );
 	else
-	    d->corner->setGeometry( w-sbDim, h-sbDim, sbDim, sbDim );
+            d->corner->setGeometry( w-vsbExt,
+                                    h-hsbExt,
+                                    vsbExt,
+                                    hsbExt );
     }
+
+    d->signal_choke=sc;
 
     if ( contentsX()+visibleWidth() > contentsWidth() ) {
 	int x=QMAX(0,contentsWidth()-visibleWidth());
@@ -701,59 +780,67 @@ void QScrollView::updateScrollBars()
 }
 
 
-/*!
-An override - ensures scrollbars are correct size upon showing.
+/*! \reimp
 */
 void QScrollView::show()
 {
+    //     Ensures that scrollbars have the correct size when the
+    //     widget is shown.
     if (isVisible()) return;
     QWidget::show();
     updateScrollBars();
     d->hideOrShowAll(this);
 }
 
-/*!
-An override - ensures scrollbars are correct size upon resize.
-*/
+/*! \reimp
+ */
 void QScrollView::resize( int w, int h )
 {
-    // Need both this and resize event, due to deferred resize event.
-    bool u = isUpdatesEnabled();
-    setUpdatesEnabled( FALSE );
+    //   Ensures that scrollbars have the correct size when the widget is
+    //   resized.
     QWidget::resize( w, h );
-    updateScrollBars();
-    d->hideOrShowAll(this);
-    setUpdatesEnabled( u );
 }
 
-/*!
-An override - ensures scrollbars are correct size upon resize.
+/*! \reimp
 */
 void QScrollView::resize( const QSize& s )
 {
+    //   Ensures that scrollbars have the correct size when the widget is
+    //   resized.
     resize(s.width(),s.height());
 }
 
-/*!
-An override - ensures scrollbars are correct size upon resize.
+/*! \reimp
 */
 void QScrollView::resizeEvent( QResizeEvent* event )
 {
+    // Ensures that scrollbars have the correct size when the widget
+    // is resized.
     bool u = isUpdatesEnabled();
     setUpdatesEnabled( FALSE );
     QFrame::resizeEvent( event );
-    updateScrollBars();
+
+    // do _not_ update the scrollbars when updates have been
+    // disabled. This makes it possible for subclasses to implement
+    // dynamic wrapping without a horizontal scrollbar showing up all
+    // the time when making a window smaller.
+    if ( u )
+	updateScrollBars();
     d->hideOrShowAll(this);
     setUpdatesEnabled( u );
 }
 
 
-/*!
-An override - pass wheel events to the vertical scrollbar
+/*! \reimp
 */
 void QScrollView::wheelEvent( QWheelEvent *e ){
-    if (verticalScrollBar())
-	QApplication::sendEvent( verticalScrollBar(), e);
+    QWheelEvent ce( viewport()->mapFromGlobal( e->globalPos() ),
+		    e->globalPos(), e->delta(), e->state());
+    viewportWheelEvent(&ce);
+    if ( !ce.isAccepted() ) {
+	if (verticalScrollBar())
+	    QApplication::sendEvent( verticalScrollBar(), e);
+    }
 }
 
 /*!
@@ -899,6 +986,12 @@ QScrollView::ResizePolicy QScrollView::resizePolicy() const
     return d->policy;
 }
 
+/*! \reimp
+*/
+void QScrollView::setEnabled( bool enable )
+{
+    QFrame::setEnabled( enable );
+}
 
 /*!
   Removes a child from the scrolled area.  Note that this happens
@@ -913,21 +1006,7 @@ void QScrollView::removeChild(QWidget* child)
     if ( r ) d->deleteChildRec( r );
 }
 
-/*!
-  \reimp
-*/
-
-void QScrollView::setEnabled( bool enable )
-{
-    if ( enable != isEnabled() ) {
-	viewport()->setEnabled( enable );
-	viewport()->repaint( FALSE );
-    }
-    QFrame::setEnabled( enable );
-}
-
-/*!
-  Just an override to keep QObject::removeChild() accessible.
+/*! \reimp
 */
 void QScrollView::removeChild(QObject* child)
 {
@@ -939,8 +1018,8 @@ void QScrollView::removeChild(QObject* child)
   The position defaults to (0,0). If the child is already in the view,
   it is just moved.
 
-  You may want to call packChildWidgets() after a large number of
-  such additions is complete.
+  You may want to call enableClipper(TRUE) if you add a large number
+  of widgets.
 */
 void QScrollView::addChild(QWidget* child, int x, int y)
 {
@@ -950,6 +1029,7 @@ void QScrollView::addChild(QWidget* child, int x, int y)
 	if (r) {
 	    r->moveTo(this,x,y,d->clipped_viewport);
 	    if ( d->policy > Manual ) {
+		d->autoResizeHint();
 		d->autoResize(this); // #### better to just deal with this one widget!
 	    }
 	    return;
@@ -968,6 +1048,7 @@ void QScrollView::addChild(QWidget* child, int x, int y)
     d->addChildRec(child,x,y)->hideOrShow(this, d->clipped_viewport);
 
     if ( d->policy > Manual ) {
+	d->autoResizeHint();
 	d->autoResize(this); // #### better to just deal with this one widget!
     }
 }
@@ -1056,25 +1137,40 @@ bool QScrollView::eventFilter( QObject *obj, QEvent *e )
 	case QEvent::MouseMove:
 	    viewportMouseMoveEvent( (QMouseEvent*)e );
 	    break;
-        case QEvent::DragEnter:
+	case QEvent::DragEnter:
 	    viewportDragEnterEvent( (QDragEnterEvent*)e );
 	    break;
-        case QEvent::DragMove:
+	case QEvent::DragMove: {
+	    if ( d->drag_autoscroll ) {
+		QPoint vp = contentsToViewport( ( (QDragMoveEvent*)e )->pos() );
+		QRect inside_margin( autoscroll_margin, autoscroll_margin,
+				     visibleWidth() - autoscroll_margin * 2,
+				     visibleHeight() - autoscroll_margin * 2 );
+		if ( !inside_margin.contains( vp ) ) {
+		    startDragAutoScroll();
+		    ( (QDragMoveEvent*)e )->accept( QRect(0,0,0,0) ); // Keep sending move events
+		}
+	    }
 	    viewportDragMoveEvent( (QDragMoveEvent*)e );
-	    break;
-        case QEvent::DragLeave:
+	} break;
+	case QEvent::DragLeave:
+	    stopDragAutoScroll();
 	    viewportDragLeaveEvent( (QDragLeaveEvent*)e );
 	    break;
-        case QEvent::Drop:
+	case QEvent::Drop:
+	    stopDragAutoScroll();
 	    viewportDropEvent( (QDropEvent*)e );
 	    break;
-        case QEvent::Wheel:
+	case QEvent::Wheel:
 	    viewportWheelEvent( (QWheelEvent*)e );
 	    break;
 
 
 	case QEvent::ChildRemoved:
 	    removeChild((QWidget*)((QChildEvent*)e)->child());
+	    break;
+	case QEvent::LayoutHint:
+	    d->autoResizeHint();
 	    break;
 	default:
 	    break;
@@ -1085,6 +1181,8 @@ bool QScrollView::eventFilter( QObject *obj, QEvent *e )
 	if (!r) return FALSE; // spurious
 	if ( e->type() == QEvent::Resize )
 	    d->autoResize(this);
+	else if ( e->type() == QEvent::Move )
+	    d->autoMove(this);
     }
     return FALSE;  // always continue with standard event processing
 }
@@ -1166,14 +1264,15 @@ void QScrollView::contentsDropEvent( QDropEvent * )
   wheelEvent() - the mouse position is translated to be a
   point on the contents.
 */
-void QScrollView::contentsWheelEvent( QWheelEvent * )
+void QScrollView::contentsWheelEvent( QWheelEvent * e )
 {
+    e->ignore();
 }
 
 
 /*!
   This is a low-level painting routine that draws the viewport
-  contents.  Override this if drawContentsOffset() is too high-level.
+  contents.  Reimplement this if drawContents() is too high-level.
   (for example, if you don't want to open a QPainter on the viewport).
 */
 void QScrollView::viewportPaintEvent( QPaintEvent* pe )
@@ -1434,17 +1533,6 @@ void QScrollView::ensureVisible( int x, int y, int xmargin, int ymargin )
 	cy=0;
     }
 
-#ifdef QT_1x_SEMANTICS
-    if ( x < -cx+xmargin )
-	cx = -x+pw-xmargin;
-    else if ( x >= -cx+pw-xmargin )
-	cx = -x+xmargin;
-
-    if ( y < -cy+ymargin )
-	cy = -y+ph-ymargin;
-    else if ( y >= -cy+ph-ymargin )
-	cy = -y+ymargin;
-#else
     if ( x < -cx+xmargin )
 	cx = -x+xmargin;
     else if ( x >= -cx+pw-xmargin )
@@ -1454,7 +1542,6 @@ void QScrollView::ensureVisible( int x, int y, int xmargin, int ymargin )
 	cy = -y+ymargin;
     else if ( y >= -cy+ph-ymargin )
 	cy = -y+ph-ymargin;
-#endif
 
     if ( cx > 0 )
 	cx=0;
@@ -1481,9 +1568,9 @@ void QScrollView::setContentsPos( int x, int y )
     moveContents( -x, -y );
     d->vbar.setValue( y );
     d->hbar.setValue( x );
-    updateScrollBars();
+//     updateScrollBars(); // ### warwick, why should we need that???
     d->signal_choke=FALSE;
-    updateScrollBars();
+//     updateScrollBars(); // ### warwick, why should we need that???
 }
 
 /*!
@@ -1547,10 +1634,10 @@ void QScrollView::moveContents(int x, int y)
     if (!dx && !dy)
 	return; // Nothing to do
 
+    emit contentsMoving( -x, -y );
+
     d->vx = x;
     d->vy = y;
-
-    emit contentsMoving( -x, -y );
 
     if ( d->clipped_viewport ) {
 	// Cheap move (usually)
@@ -1561,13 +1648,14 @@ void QScrollView::moveContents(int x, int y)
 	)
     {
 	// Big move
-	viewport()->update();
+	if ( viewport()->isUpdatesEnabled() )
+	    viewport()->update();
 	d->moveAllBy(dx,dy);
     } else {
 	// Small move
 	clipper()->scroll(dx,dy);
     }
-    d->hideOrShowAll(this);
+    d->hideOrShowAll(this, TRUE );
 }
 
 /*!
@@ -1694,6 +1782,24 @@ void QScrollView::updateContents( int x, int y, int w, int h )
 }
 
 /*!
+  \overload
+*/
+void QScrollView::updateContents( const QRect& r )
+{
+    updateContents(r.x(), r.y(), r.width(), r.height());
+}
+
+/*!
+  \overload
+*/
+void QScrollView::repaintContents( const QRect& r, bool erase )
+{
+    repaintContents(r.x(), r.y(), r.width(), r.height(), erase);
+}
+
+
+
+/*!
   Calls repaint() on rectangle defined by \a x, \a y, \a w, \a h,
   translated appropriately.  If the rectangle in not visible,
   nothing is repainted.
@@ -1727,8 +1833,8 @@ void QScrollView::repaintContents( int x, int y, int w, int h, bool erase )
 
     if ( d->clipped_viewport ) {
 	// Translate clipper() to viewport()
-	x += d->clipped_viewport->x();
-	y += d->clipped_viewport->y();
+	x -= d->clipped_viewport->x();
+	y -= d->clipped_viewport->y();
     }
 
     vp->repaint( x, y, w, h, erase );
@@ -1763,7 +1869,7 @@ void QScrollView::drawContentsOffset(QPainter* p, int offsetx, int offsety, int 
   {
     // Fill a 40000 by 50000 rectangle at (100000,150000)
 
-    // Calculate the coordinates... (don't use QPoint, QRect, etc!)
+    // Calculate the coordinates...
     int x1 = 100000, y1 = 150000;
     int x2 = x1+40000-1, y2 = y1+50000-1;
 
@@ -1786,11 +1892,12 @@ void QScrollView::drawContents(QPainter*, int, int, int, int)
 {
 }
 
-/*!
-An override - ensures scrollbars are correct size when frame style changes.
+/*! \reimp
 */
 void QScrollView::frameChanged()
 {
+    // Ensures that scrollbars have the correct size when the frame
+    // style changes.
     updateScrollBars();
 }
 
@@ -1839,22 +1946,26 @@ void QScrollView::changeFrameRect(const QRect& r)
 {
     QRect oldr = frameRect();
     if (oldr != r) {
-	setFrameRect(r);
-	//### do _not_ update, we'll receive a paint event anyway
- 	if ( frameWidth() ) {
- 	    // Redraw frames
- 	    update(r);
- 	    update(oldr);
- 	}
+	QRect cr = contentsRect();
+	QRegion fr( frameRect() );
+	fr = fr.subtract( contentsRect() );
+	setFrameRect( r );
+	if ( isVisible() ) {
+	    cr = cr.intersect( contentsRect() );
+	    fr = fr.unite( frameRect() );
+	    fr = fr.subtract( cr );
+	    if ( !fr.isEmpty() )
+		QApplication::postEvent( this, new QPaintEvent( fr, FALSE ) );
+	}
     }
 }
 
 
 /*!
-  Sets the margins around the scrolling area.  This is useful for applications
-  such as spreadsheets with `locked' rows and columns.  The marginal space
-  is \e inside the frameRect() and is left blank - override drawContents()
-  or put widgets in the unused area.
+  Sets the margins around the scrolling area.  This is useful for
+  applications such as spreadsheets with `locked' rows and columns.
+  The marginal space is \e inside the frameRect() and is left blank -
+  reimplement drawContents() or put widgets in the unused area.
 
   By default all margins are zero.
 
@@ -1867,7 +1978,7 @@ void QScrollView::setMargins(int left, int top, int right, int bottom)
 	 right == d->r_marg &&
 	 bottom == d->b_marg )
 	return;
-	
+
     d->l_marg = left;
     d->t_marg = top;
     d->r_marg = right;
@@ -1880,7 +1991,7 @@ void QScrollView::setMargins(int left, int top, int right, int bottom)
   Returns the current left margin.
   \sa setMargins()
 */
-int QScrollView::leftMargin() const	
+int QScrollView::leftMargin() const
 {
     return d->l_marg;
 }
@@ -1890,7 +2001,7 @@ int QScrollView::leftMargin() const
   Returns the current top margin.
   \sa setMargins()
 */
-int QScrollView::topMargin() const	
+int QScrollView::topMargin() const
 {
     return d->t_marg;
 }
@@ -1900,7 +2011,7 @@ int QScrollView::topMargin() const
   Returns the current right margin.
   \sa setMargins()
 */
-int QScrollView::rightMargin() const	
+int QScrollView::rightMargin() const
 {
     return d->r_marg;
 }
@@ -1910,17 +2021,18 @@ int QScrollView::rightMargin() const
   Returns the current bottom margin.
   \sa setMargins()
 */
-int QScrollView::bottomMargin() const	
+int QScrollView::bottomMargin() const
 {
     return d->b_marg;
 }
 
-/*!
-  Override so that traversal moves among child widgets, even if they
-  are not visible, scrolling to make them so.
+/*! \reimp
 */
 bool QScrollView::focusNextPrevChild( bool next )
 {
+    //  Makes sure that the new focus widget is on-screen, if
+    //  necessary by scrolling the scroll view.
+
     // first set things up for the scan
     QFocusData *f = focusData();
     QWidget *startingPoint = f->home();
@@ -1932,7 +2044,7 @@ bool QScrollView::focusNextPrevChild( bool next )
     while( !candidate && w != startingPoint ) {
 	if ( w != startingPoint &&
 	     (w->focusPolicy() & TabFocus) == TabFocus
-	     && w->isEnabledToTLW() &&!w->focusProxy() && w->isVisibleToTLW() )
+	     && w->isEnabled() &&!w->focusProxy() && w->isVisible() )
 	    candidate = w;
 	w = next ? f->next() : f->prev();
     }
@@ -1977,7 +2089,7 @@ void QScrollView::enableClipper(bool y)
     if ( d->children.count() )
 	qFatal("May only call QScrollView::enableClipper() before adding widgets");
     if ( y ) {
-	d->clipped_viewport = new QWidget(clipper());
+	d->clipped_viewport = new QClipperWidget(clipper(), "qt_clipped_viewport", d->flags);
 	d->clipped_viewport->setGeometry(-coord_limit/2,-coord_limit/2,
 					coord_limit,coord_limit);
 	d->viewport.setBackgroundMode(NoBackground); // no exposures for this
@@ -2051,9 +2163,7 @@ void QScrollView::viewportToContents(int vx, int vy, int& x, int& y)
 }
 
 
-/*!
-  Specifies that this widget can use additional space, and that it can
-  survive on less than sizeHint().
+/*!\reimp
 */
 QSizePolicy QScrollView::sizePolicy() const
 {
@@ -2064,18 +2174,117 @@ QSizePolicy QScrollView::sizePolicy() const
 /*!
   \reimp
 */
-QSize	QScrollView::minimumSizeHint() const
+QSize QScrollView::sizeHint() const
 {
-    //so we can implement it later
-    return QWidget::minimumSizeHint();
+    constPolish();
+    QSize result = QSize(frameWidth()*2, frameWidth()*2);
+    if ( d->policy == QScrollView::AutoOne ) {
+	QSVChildRec* r = d->children.first();
+	QSize cs = r->child->sizeHint();
+	if ( cs.isValid() )
+	    result += cs;
+	else
+	    result += r->child->size();
+    } else {
+	result += QSize(contentsWidth(),contentsHeight());
+    }
+    return result;
 }
 
 
 /*!
   \reimp
 */
+QSize QScrollView::minimumSizeHint() const
+{
+    return QSize(100+frameWidth()*2,
+		 100+frameWidth()*2);
+}
 
+
+/*!
+  \reimp
+
+  (Implemented to get rid of a compiler warning.)
+*/
 void QScrollView::drawContents( QPainter * )
 {
-    //implemented to get rid of a compiler warning.
+}
+
+/*!
+  \internal
+*/
+void QScrollView::startDragAutoScroll()
+{
+    if ( !d->autoscroll_timer.isActive() ) {
+	d->autoscroll_time = initialScrollTime;
+	d->autoscroll_accel = initialScrollAccel;
+	d->autoscroll_timer.start( d->autoscroll_time );
+    }
+}
+
+/*!
+  \internal
+*/
+
+void QScrollView::stopDragAutoScroll()
+{
+    d->autoscroll_timer.stop();
+}
+
+/*!
+  \internal
+*/
+
+void QScrollView::doDragAutoScroll()
+{
+    QPoint p = viewport()->mapFromGlobal( QCursor::pos() );
+
+    if ( d->autoscroll_accel-- <= 0 && d->autoscroll_time ) {
+	d->autoscroll_accel = initialScrollAccel;
+	d->autoscroll_time--;
+	d->autoscroll_timer.start( d->autoscroll_time );
+    }
+    int l = QMAX( 1, ( initialScrollTime- d->autoscroll_time ) );
+
+    int dx = 0, dy = 0;
+    if ( p.y() < autoscroll_margin ) {
+	dy = -l;
+    } else if ( p.y() > visibleHeight() - autoscroll_margin ) {
+	dy = +l;
+    }
+    if ( p.x() < autoscroll_margin ) {
+	dx = -l;
+    } else if ( p.x() > visibleWidth() - autoscroll_margin ) {
+	dx = +l;
+    }
+    if ( dx || dy ) {
+	scrollBy(dx,dy);
+    } else {
+	stopDragAutoScroll();
+    }
+}
+
+/*!
+  If \a b is set to TRUE, the QScrollView automatically scrolles the contents
+  in drag move events if the user moves the cursor close to a border of the
+  view. This of course only works id the viewport accepts drops!.
+  Specifying FALSE here disables this autscroll feature.
+*/
+
+void QScrollView::setDragAutoScroll( bool b )
+{
+    d->drag_autoscroll = b;
+}
+
+/*!
+  Returns TRUE if autoscrolling in drag move events is enabled, else
+  FALSE.
+
+  \sa setDragAutoScroll()
+*/
+
+bool QScrollView::dragAutoScroll() const
+{
+    return d->drag_autoscroll;
 }

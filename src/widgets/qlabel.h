@@ -1,11 +1,11 @@
 /**********************************************************************
-** $Id: qlabel.h,v 2.28 1999/06/17 19:46:37 paul Exp $
+** $Id: qt/src/widgets/qlabel.h   2.1.0   edited 2000-03-24 $
 **
 ** Definition of QLabel widget class
 **
 ** Created : 941215
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -36,6 +36,13 @@ class QLabelPrivate;
 class Q_EXPORT QLabel : public QFrame
 {
     Q_OBJECT
+    Q_PROPERTY( QString text READ text WRITE setText )
+    Q_PROPERTY( QPixmap pixmap READ pixmap WRITE setPixmap )
+    Q_PROPERTY( TextFormat textFormat READ textFormat WRITE setTextFormat )
+    Q_PROPERTY( Alignment alignment READ alignment WRITE setAlignment )
+    Q_PROPERTY( int indent READ indent WRITE setIndent )
+    Q_PROPERTY( bool autoResize READ autoResize WRITE setAutoResize )
+	
 public:
     QLabel( QWidget *parent, const char *name=0, WFlags f=0 );
     QLabel( const QString &text, QWidget *parent, const char *name=0,
@@ -44,51 +51,55 @@ public:
 	    QWidget * parent, const char * name=0, WFlags f=0 );
    ~QLabel();
 
-    QString	text()		const	{ return ltext; }
-    QPixmap    *pixmap()	const	{ return lpixmap; }
-    QMovie     *movie()		const;
+    QString	 text()		const	{ return ltext; }
+    QPixmap     *pixmap()	const	{ return lpixmap; }
+    QMovie      *movie()		const;
 
-    Qt::TextFormat textFormat() const;
-    void setTextFormat( Qt::TextFormat );
+    TextFormat textFormat() const;
+    void 	 setTextFormat( TextFormat );
 
-    int		alignment()	const	{ return align; }
+    int		 alignment() const	{ return align; }
     virtual void setAlignment( int );
-    int		indent()	const	{ return extraMargin; }
-    void setIndent( int );
+    int		 indent() const		{ return extraMargin; }
+    void 	 setIndent( int );
 
-    bool	autoResize()	const	{ return autoresize; }
+    bool 	 autoResize() const	{ return autoresize; }
     virtual void setAutoResize( bool );
-    QSize	sizeHint() const;
-    QSizePolicy sizePolicy() const;
+
+    QSize	 sizeHint() const;
+    QSize	 minimumSizeHint() const;
+    QSizePolicy  sizePolicy() const;
 
     virtual void setBuddy( QWidget * );
-    QWidget    *buddy() const;
+    QWidget     *buddy() const;
 
-    void setAutoMask(bool);
+    void	 setAutoMask(bool);
 
-    int heightForWidth(int) const;
+    int		 heightForWidth(int) const;
 
 public slots:
-    virtual void	setText( const QString &);
-    virtual void	setPixmap( const QPixmap & );
-    virtual void	setMovie( const QMovie & );
-    virtual void	setNum( int );
-    virtual void	setNum( double );
-    void	clear();
+    virtual void setText( const QString &);
+    virtual void setPixmap( const QPixmap & );
+    virtual void setMovie( const QMovie & );
+    virtual void setNum( int );
+    virtual void setNum( double );
+    void	 clear();
 
 protected:
-    void	drawContents( QPainter * );
-    void	drawContentsMask( QPainter * );
+    void	 drawContents( QPainter * );
+    void	 drawContentsMask( QPainter * );
+    void	 fontChange( const QFont & );
 
 private slots:
-    void	acceleratorSlot();
-    void	buddyDied();
-    void	movieUpdated(const QRect&);
-    void	movieResized(const QSize&);
+    void	 acceleratorSlot();
+    void	 buddyDied();
+    void	 movieUpdated(const QRect&);
+    void	 movieResized(const QSize&);
 
 private:
-    void init();
-    void	updateLabel();
+    void	init();
+    void	clearContents();
+    void	updateLabel( QSize oldSizeHint );
     QSize	sizeForWidth( int w ) const;
     QString	ltext;
     QPixmap    *lpixmap;
@@ -97,12 +108,10 @@ private:
     ushort	align;
     short	extraMargin;
     uint	autoresize:1;
-    Qt::TextFormat textformat;
+    TextFormat textformat;
     QSimpleRichText* doc;
-    QAccel *	accel;  // NON NULL
+    QAccel *	accel;
     QLabelPrivate* d;
-
-    void	unsetMovie();
 
 private:	// Disabled copy constructor and operator=
 #if defined(Q_DISABLE_COPY)

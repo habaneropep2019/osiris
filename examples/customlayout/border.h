@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: border.h,v 1.5 1999/06/21 13:58:41 reggie Exp $
+** $Id: qt/examples/customlayout/border.h   2.1.0   edited 2000-01-31 $
 **
 ** Definition of simple flow layout for custom layout example
 **

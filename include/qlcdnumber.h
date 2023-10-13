@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qlcdnumber.h,v 2.20.2.1 1999/08/12 11:06:41 aavit Exp $
+** $Id: qt/src/widgets/qlcdnumber.h   2.1.0   edited 2000-03-24 $
 **
 ** Definition of QLCDNumber class
 **
 ** Created : 940518
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -37,6 +37,14 @@ class QLCDNumberPrivate;
 class Q_EXPORT QLCDNumber : public QFrame		// LCD number widget
 {
     Q_OBJECT
+    Q_ENUMS( Mode SegmentStyle )
+    Q_PROPERTY( bool smallDecimalPoint READ smallDecimalPoint WRITE setSmallDecimalPoint )
+    Q_PROPERTY( int numDigits READ numDigits WRITE setNumDigits )
+    Q_PROPERTY( Mode mode READ mode WRITE setMode )
+    Q_PROPERTY( SegmentStyle segmentStyle READ segmentStyle WRITE setSegmentStyle )
+    Q_PROPERTY( double value READ value WRITE display )
+    Q_PROPERTY( int intValue READ intValue WRITE display )
+
 public:
     QLCDNumber( QWidget *parent=0, const char *name=0 );
     QLCDNumber( uint numDigits, QWidget *parent=0, const char *name=0 );

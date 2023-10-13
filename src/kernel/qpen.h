@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qpen.h,v 2.9 1999/04/28 09:57:01 aavit Exp $
+** $Id: qt/src/kernel/qpen.h   2.1.0   edited 2000-03-24 $
 **
 ** Definition of QPen class
 **
 ** Created : 940112
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -39,6 +39,7 @@ public:
     QPen();
     QPen( PenStyle );
     QPen( const QColor &color, uint width=0, PenStyle style=SolidLine );
+    QPen( const QColor &cl, uint w, PenStyle s, PenCapStyle c, PenJoinStyle j);
     QPen( const QPen & );
    ~QPen();
     QPen &operator=( const QPen & );
@@ -49,6 +50,10 @@ public:
     void	setWidth( uint );
     const QColor &color() const		{ return data->color; }
     void	setColor( const QColor & );
+    PenCapStyle	capStyle() const;
+    void	setCapStyle( PenCapStyle );
+    PenJoinStyle joinStyle() const;
+    void	setJoinStyle( PenJoinStyle );
 
     bool	operator==( const QPen &p ) const;
     bool	operator!=( const QPen &p ) const
@@ -57,11 +62,12 @@ public:
 private:
     QPen	copy()	const;
     void	detach();
-    void	init( const QColor &, uint, PenStyle );
+    void	init( const QColor &, uint, uint );
     struct QPenData : public QShared {		// pen data
 	PenStyle  style;
 	uint	  width;
 	QColor	  color;
+	Q_UINT16  linest;
     } *data;
 };
 

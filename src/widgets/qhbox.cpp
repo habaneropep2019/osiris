@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: qhbox.cpp,v 1.17.2.1 1999/07/08 13:35:34 paul Exp $
+** $Id: qt/src/widgets/qhbox.cpp   2.1.0   edited 2000-03-24 $
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -13,9 +13,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -24,6 +24,7 @@
 #include "qapplication.h"
 #include "qobjectlist.h"
 
+// NOT REVISED
 /*!
   \class QHBox qhbox.h
   \brief The QHBox widget performs geometry management on its children
@@ -70,8 +71,7 @@ QHBox::QHBox( bool horizontal, QWidget *parent , const char *name, WFlags f, boo
     lay->setAutoAdd( TRUE );
 }
 
-/*!
-  Reimplemented for internal purposes
+/*!\reimp
  */
 void QHBox::frameChanged()
 {
@@ -87,6 +87,29 @@ void QHBox::frameChanged()
 
 void QHBox::setSpacing( int space )
 {
-    if ( layout() )
+    if ( layout() ) // ### why not use this->lay?
 	layout()->setSpacing( space );
+}
+
+
+/*!
+  \reimp
+*/
+
+QSize QHBox::sizeHint() const
+{
+    QWidget *mThis = (QWidget*)this;
+    QApplication::sendPostedEvents( mThis, QEvent::ChildInserted );
+    return QFrame::sizeHint();
+}
+
+/*!
+  Sets the stretch factor of \a w to \a stretch.
+  \sa QBoxLayout::setStretchFactor()
+*/
+bool QHBox::setStretchFactor( QWidget* w, int stretch )
+{
+    QWidget *mThis = (QWidget*)this;
+    QApplication::sendPostedEvents( mThis, QEvent::ChildInserted );
+    return lay->setStretchFactor( w, stretch );
 }

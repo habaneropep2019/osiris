@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qcheckbox.h,v 2.19 1999/04/28 09:59:45 aavit Exp $
+** $Id: qt/src/widgets/qcheckbox.h   2.1.0   edited 2000-03-24 $
 **
 ** Definition of QCheckBox class
 **
 ** Created : 940222
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -30,16 +30,18 @@
 #include "qbutton.h"
 #endif // QT_H
 
-
 class Q_EXPORT QCheckBox : public QButton
 {
     Q_OBJECT
+    Q_PROPERTY( bool checked READ isChecked WRITE setChecked )
+
 public:
     QCheckBox( QWidget *parent, const char *name=0 );
     QCheckBox( const QString &text, QWidget *parent, const char* name=0 );
 
     bool    isChecked() const;
     void    setChecked( bool check );
+
     void    setNoChange();
 
     void    setTristate(bool y=TRUE);

@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qgarray.cpp,v 2.14 1999/06/16 10:00:30 agulbra Exp $
+** $Id: qt/src/tools/qgarray.cpp   2.1.0   edited 2000-03-24 $
 **
 ** Implementation of QGArray class
 **
 ** Created : 930906
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -43,6 +43,7 @@
 #endif
 
 
+// NOT REVISED
 /*!
   \class QShared qshared.h
   \brief The QShared struct is internally used for implementing shared classes.
@@ -519,7 +520,7 @@ int QGArray::find( const char *d, uint index, uint sz ) const
     uint ii;
     switch ( sz ) {
 	case 1: {				// 8 bit elements
-	    register char *x = data();
+	    register char *x = data() + index;
 	    char v = *d;
 	    for ( i=index; i<shd->len; i++ ) {
 		if ( *x++ == v )
@@ -612,6 +613,59 @@ int QGArray::contains( const char *d, uint sz ) const
     }
     return count;
 }
+
+static int cmp_item_size = 0;
+
+#if defined(Q_C_CALLBACKS)
+extern "C" {
+#endif
+
+static int cmp_arr( const void *n1, const void *n2 )
+{
+    return ( n1 && n2 ) ? memcmp( n1, n2, cmp_item_size ) 
+	                : (int)((long)n1 - (long)n2);
+    // Qt 3.0: Add a virtual compareItems() method and call that instead
+}
+
+#if defined(Q_C_CALLBACKS)
+}
+#endif
+
+/*!
+  \internal
+
+  Sort the array.
+*/
+
+void QGArray::sort( uint sz )
+{
+    int numItems = size() / sz;
+    if ( numItems < 2 )
+	return;
+    cmp_item_size = sz;
+    qsort( shd->data, numItems, sz, cmp_arr );
+}
+
+/*!
+  \internal
+
+  Binary search; assumes sorted array
+*/
+
+int QGArray::bsearch( const char *d, uint sz ) const
+{
+    int numItems = size() / sz;
+    if ( !numItems )
+	return -1;
+    cmp_item_size = sz;
+    char* r = (char*)::bsearch( d, shd->data, numItems, sz, cmp_arr );
+    if ( !r )
+	return -1;
+    while( (r >= shd->data + sz) && (cmp_arr( r - sz, d ) == 0) )
+	r -= sz;	// search to first of equal elements; bsearch is undef 
+    return (int)(( r - shd->data ) / sz);
+}
+
 
 /*!
   \fn char *QGArray::at( uint index ) const

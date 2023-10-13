@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qsocketnotifier.cpp,v 2.15 1999/05/23 20:28:57 agulbra Exp $
+** $Id: qt/src/kernel/qsocketnotifier.cpp   2.1.0   edited 2000-03-24 $
 **
 ** Implementation of QSocketNotifier class
 **
 ** Created : 951114
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -30,11 +30,11 @@
 extern bool qt_set_socket_handler( int, int, QObject *, bool );
 
 
+// NOT REVISED
 /*!
   \class QSocketNotifier qsocketnotifier.h
   \brief The QSocketNotifer class provides support for socket callbacks.
 
-  \ingroup kernel
   \ingroup io
 
   This class makes it possible to write e.g. asynchronous TCP/IP
@@ -101,11 +101,11 @@ extern bool qt_set_socket_handler( int, int, QObject *, bool );
   wait before sending more data. In this case, you do not need to
   disable and re-enable the write notifier, it will fire again as soon
   as the system allows more data may be sent.
-  
+
   The behaviour of a write notifier that is left in enabled state
   after having emitting the first activated() signal (and no "would
   block" error has occured) is undefined. Depending on the operating
-  system, it may fire on every pass of the event loop, or not at all.  
+  system, it may fire on every pass of the event loop, or not at all.
 
   If you need a time-out for your sockets, you can use either
   \link QObject::startTimer() timer events\endlink or the QTimer class.
@@ -153,7 +153,7 @@ QSocketNotifier::QSocketNotifier( int socket, Type type, QObject *parent,
 }
 
 /*!
-  Destroys the socket notifier.
+  Destructs the socket notifier.
 */
 
 QSocketNotifier::~QSocketNotifier()
@@ -230,14 +230,12 @@ void QSocketNotifier::setEnabled( bool enable )
 }
 
 
-/*!
-  Handles events for the socket notifier object.
-
-  Emits the activated() signal when a \c QEvent::SockAct is received.
+/*!\reimp
 */
-
 bool QSocketNotifier::event( QEvent *e )
 {
+    // Emits the activated() signal when a \c QEvent::SockAct is
+    // received.
     QObject::event( e );			// will activate filters
     if ( e->type() == QEvent::SockAct ) {
 	emit activated( sockfd );

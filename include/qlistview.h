@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qlistview.h,v 2.93 1999/06/22 13:59:01 paul Exp $
+** $Id: qt/src/widgets/qlistview.h   2.1.0   edited 2000-03-24 $
 **
 ** Definition of QListView widget class
 **
 ** Created : 970809
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -42,7 +42,10 @@ class QListViewItemIterator;
 
 class Q_EXPORT QListViewItem: public Qt
 {
-friend class QListViewItemIterator;
+    friend class QListViewItemIterator;
+#if defined(_CC_MSVC_)
+    friend class QListViewItem;
+#endif
 
 public:
     QListViewItem( QListView * parent );
@@ -129,11 +132,14 @@ public:
 
     void repaint() const;
 
+    void sort(); // ######## make virtual in next major release
+
 protected:
     virtual void enforceSortOrder() const;
     virtual void setHeight( int );
     virtual void activate();
 
+    bool activatedPos( QPoint & );
 private:
     void init();
     void moveToJustAfter( QListViewItem * );
@@ -162,9 +168,19 @@ private:
 
 class Q_EXPORT QListView: public QScrollView
 {
-friend class QListViewItemIterator;
+    friend class QListViewItemIterator;
+    friend class QListViewItem;
 
     Q_OBJECT
+    Q_ENUMS( SelectionMode )
+    Q_PROPERTY( int columns READ columns )
+    Q_PROPERTY( bool multiSelection READ isMultiSelection WRITE setMultiSelection )
+    Q_PROPERTY( SelectionMode selectionMode READ selectionMode WRITE setSelectionMode )
+    Q_PROPERTY( int childCount READ childCount )
+    Q_PROPERTY( bool allColumnsShowFocus READ allColumnsShowFocus WRITE setAllColumnsShowFocus )
+    Q_PROPERTY( int itemMargin READ itemMargin WRITE setItemMargin )
+    Q_PROPERTY( bool rootIsDecorated READ rootIsDecorated WRITE setRootIsDecorated )
+
 public:
     QListView( QWidget * parent = 0, const char *name = 0 );
     ~QListView();
@@ -182,6 +198,7 @@ public:
 
     virtual int addColumn( const QString &label, int size = -1);
     virtual int addColumn( const QIconSet& iconset, const QString &label, int size = -1);
+    void removeColumn( int index ); // #### make virtual in next major release!
     virtual void setColumnText( int column, const QString &label );
     virtual void setColumnText( int column, const QIconSet& iconset, const QString &label );
     QString columnText( int column ) const;
@@ -190,6 +207,7 @@ public:
     enum WidthMode { Manual, Maximum };
     virtual void setColumnWidthMode( int column, WidthMode );
     WidthMode columnWidthMode( int column ) const;
+    int columns() const;
 
     virtual void setColumnAlignment( int, int );
     int columnAlignment( int ) const;
@@ -206,6 +224,11 @@ public:
 
     virtual void setMultiSelection( bool enable );
     bool isMultiSelection() const;
+
+    enum SelectionMode { Single, Multi, Extended, NoSelection  };
+    void setSelectionMode( SelectionMode mode );
+    SelectionMode selectionMode() const;
+
     virtual void clearSelection();
     virtual void setSelected( QListViewItem *, bool );
     bool isSelected( const QListViewItem * ) const;
@@ -230,6 +253,7 @@ public:
     bool rootIsDecorated() const;
 
     virtual void setSorting( int column, bool increasing = TRUE );
+    void sort(); // #### make virtual in next major release
 
     virtual void setFont( const QFont & );
     virtual void setPalette( const QPalette & );
@@ -239,18 +263,36 @@ public:
     QSize sizeHint() const;
     QSize minimumSizeHint() const;
 
+    void setShowSortIndicator( bool show );
+    bool showSortIndicator() const;
+
 public slots:
+    void invertSelection(); // ###### make virtual
+    void selectAll( bool select ); // make virtual
     void triggerUpdate();
+    void setContentsPos( int x, int y );
 
 signals:
     void selectionChanged();
     void selectionChanged( QListViewItem * );
     void currentChanged( QListViewItem * );
+    void clicked( QListViewItem * );
+    void clicked( QListViewItem *, const QPoint &, int );
+    void pressed( QListViewItem * );
+    void pressed( QListViewItem *, const QPoint &, int );
 
     void doubleClicked( QListViewItem * );
     void returnPressed( QListViewItem * );
     void rightButtonClicked( QListViewItem *, const QPoint&, int );
     void rightButtonPressed( QListViewItem *, const QPoint&, int );
+    void mouseButtonPressed( int, QListViewItem *, const QPoint& , int );
+    void mouseButtonClicked( int, QListViewItem *,  const QPoint&, int );
+
+    void onItem( QListViewItem *item );
+    void onViewport();
+
+    void expanded( QListViewItem *item );
+    void collapsed( QListViewItem *item );
 
 protected:
     void contentsMousePressEvent( QMouseEvent * e );
@@ -289,10 +331,16 @@ private:
     void buildDrawableList() const;
     void reconfigureItems();
     void widthChanged(const QListViewItem*, int c);
+    void handleItemChange( QListViewItem *old, bool shift, bool control );
+    void selectRange( QListViewItem *from, QListViewItem *to, bool invert, bool includeFirst, bool clearSel = FALSE );
 
     QListViewPrivate * d;
 
-    friend class QListViewItem;
+private:	// Disabled copy constructor and operator=
+#if defined(Q_DISABLE_COPY)
+    QListView( const QWidget & );
+    QListView &operator=( const QWidget & );
+#endif
 };
 
 

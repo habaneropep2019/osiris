@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qscrollview.h,v 2.44.2.1 1999/08/31 11:45:17 reggie Exp $
+** $Id: qt/src/widgets/qscrollview.h   2.1.0   edited 2000-03-24 $
 **
 ** Definition of QScrollView class
 **
 ** Created : 970523
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 #ifndef QSCROLLVIEW_H
@@ -35,6 +35,18 @@ struct QScrollViewData;
 class Q_EXPORT QScrollView : public QFrame
 {
     Q_OBJECT
+    Q_ENUMS( ResizePolicy ScrollBarMode )
+    Q_PROPERTY( ResizePolicy resizePolicy READ resizePolicy WRITE setResizePolicy )
+    Q_PROPERTY( ScrollBarMode vScrollBarMode READ vScrollBarMode WRITE setVScrollBarMode )
+    Q_PROPERTY( ScrollBarMode hScrollBarMode READ hScrollBarMode WRITE setHScrollBarMode )
+    Q_PROPERTY( int visibleWidth READ visibleWidth )
+    Q_PROPERTY( int visibleHeight READ visibleHeight )
+    Q_PROPERTY( int contentsWidth READ contentsWidth )
+    Q_PROPERTY( int contentsHeight READ contentsHeight )
+    Q_PROPERTY( int contentsX READ contentsX )
+    Q_PROPERTY( int contentsY READ contentsY )
+    Q_PROPERTY( bool dragAutoScroll READ dragAutoScroll WRITE setDragAutoScroll )
+
 public:
     QScrollView(QWidget *parent=0, const char *name=0, WFlags f=0);
     ~QScrollView();
@@ -80,7 +92,9 @@ public:
     void	show();
 
     void	updateContents( int x, int y, int w, int h );
+    void	updateContents( const QRect& r );
     void	repaintContents( int x, int y, int w, int h, bool erase=TRUE );
+    void	repaintContents( const QRect& r, bool erase=TRUE );
 
     void	contentsToViewport(int x, int y, int& vx, int& vy);
     void	viewportToContents(int vx, int vy, int& x, int& y);
@@ -90,9 +104,13 @@ public:
 
     QSize	viewportSize( int, int ) const;
     QSizePolicy sizePolicy() const;
+    QSize	sizeHint() const;
     QSize	minimumSizeHint() const;
 
     void	removeChild(QObject* child);
+
+    void	setDragAutoScroll( bool b ); // #### virtual in 3.0
+    bool	dragAutoScroll() const;
 
 signals:
     void	contentsMoving(int x, int y);
@@ -107,7 +125,7 @@ public slots:
     void	center(int x, int y, float xmargin, float ymargin);
 
     void	updateScrollBars();
-    void 	setEnabled( bool enable );
+    void	setEnabled( bool enable );
 
 protected:
     void	resizeEvent(QResizeEvent*);
@@ -161,6 +179,9 @@ private:
 private slots:
     void hslide(int);
     void vslide(int);
+    void doDragAutoScroll();
+    void startDragAutoScroll();
+    void stopDragAutoScroll();
 
 private:	// Disabled copy constructor and operator=
 #if defined(Q_DISABLE_COPY)

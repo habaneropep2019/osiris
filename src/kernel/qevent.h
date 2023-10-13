@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qevent.h,v 2.51 1999/06/11 09:25:58 warwick Exp $
+** $Id: qt/src/kernel/qevent.h   2.1.0   edited 2000-03-30 $
 **
 ** Definition of event classes
 **
 ** Created : 931029
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -49,7 +49,7 @@ public:
 
 	Timer = 1,				// timer event
 	MouseButtonPress = 2,			// mouse button pressed
-        MouseButtonRelease = 3,			// mouse button released
+	MouseButtonRelease = 3,			// mouse button released
 	MouseButtonDblClick= 4,			// mouse button double click
 	MouseMove = 5,				// mouse move
 	KeyPress = 6,				// key pressed
@@ -67,9 +67,23 @@ public:
 	Hide = 18,				// widget is hidden
 	Close = 19,				// request to close widget
 	Quit = 20,				// request to quit application
+	Reparent = 21,				// widget has been reparented
+	ShowMaximized = 21,		       	// widget is shown maximized
+	ShowMinimized = 22,		       	// widget is shown minimized
+	ShowNormal = 23,	       		// widget is shown normal
+	WindowActivate = 24,	       		// window was activated
+	WindowDeactivate = 25,	       		// window was deactivated
+	ShowToParent = 26,	       		// widget is shown to parent
+	HideToParent = 27,	       		// widget is hidden to parent
 	Accel = 30,				// accelerator event
 	Wheel = 31,				// wheel event
 	AccelAvailable = 32,			// accelerator available event
+	CaptionChange = 33,			// caption changed
+	IconChange = 34,			// icon changed
+	ParentFontChange = 35,			// parent font changed
+	ApplicationFontChange = 36,		// application font changed
+	ParentPaletteChange = 37,		// parent font changed
+	ApplicationPaletteChange = 38,		// application palette changed
 	Clipboard = 40,				// internal clipboard event
 	SockAct = 50,				// socket activation
 	DragEnter = 60,				// drag moves into widget
@@ -82,6 +96,8 @@ public:
 	LayoutHint = 72,			// child min/max size changed
 	ActivateControl = 80,			// ActiveX activation
 	DeactivateControl = 81,			// ActiveX deactivation
+	Configure = 82,				// configure an object
+	ConfigureLayout = 83,			// configure a layout
 	User = 1000				// first user event id
     };
 
@@ -193,10 +209,21 @@ protected:
 class Q_EXPORT QFocusEvent : public QEvent
 {
 public:
+
     QFocusEvent( Type type )
 	: QEvent(type) {}
+
     bool   gotFocus()	const { return type() == FocusIn; }
     bool   lostFocus()	const { return type() == FocusOut; }
+
+    enum Reason { Mouse, Tab, ActiveWindow, Popup, Shortcut, Other };
+    static Reason reason();
+    static void setReason( Reason reason );
+    static void resetReason();
+
+private:
+    static Reason m_reason;
+    static Reason prev_reason;
 };
 
 
@@ -281,8 +308,9 @@ protected:
     bool spont;
 };
 
+
 // This class is rather closed at the moment.  If you need to create your
-// own DND event objects, write to qt-bugs@troll.no and we'll try to
+// own DND event objects, write to qt-bugs@trolltech.com and we'll try to
 // find a way to extend it so it covers your needs.
 
 class Q_EXPORT QDropEvent : public QEvent, public QMimeSource
@@ -348,6 +376,7 @@ public:
 };
 
 
+/* An internal class */
 class Q_EXPORT QDragResponseEvent : public QEvent
 {
 public:
@@ -383,12 +412,13 @@ protected:
 class Q_EXPORT QCustomEvent : public QEvent
 {
 public:
+    QCustomEvent( int type );
     QCustomEvent( Type type, void *data )
-	: QEvent(type), d(data) {}
+	: QEvent(type), d(data) {};
     void       *data()	const	{ return d; }
+    void	setData( void* data )	{ d = data; }
 private:
     void       *d;
 };
-
 
 #endif // QEVENT_H

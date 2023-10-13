@@ -1,0 +1,189 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>
+Qt Toolkit - qmainwindow.h include file
+</title><style type="text/css"><!--
+h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
+a:link { text-decoration: none; }
+body { background: white; color: black; }
+--></style>
+</head><body bgcolor="#ffffff">
+
+<a href="index.html">
+<img width="122" height="65" src="qtlogo.png" alt="Home"
+  align="left" border="0">
+</a><div align=right><img src="dochead.png" width="472" height="27"><br>
+<a href="classes.html"><b>Classes</b></a>
+- <a href="annotated.html">Annotated</a>
+- <a href="hierarchy.html">Tree</a>
+- <a href="functions.html">Functions</a>
+- <a href="index.html">Home</a>
+- <a href="topicals.html"><b>Structure</b></a>
+</div>
+<br clear=all>
+
+<h1 align=center>qmainwindow.h</h1><br clear="all">
+This is the verbatim text of the qmainwindow.h include file.  It is
+provided only for illustration; the copyright
+remains with Troll Tech.
+<hr>
+<pre>
+/****************************************************************************
+** &#36;Id&#58; qt/src/widgets/qmainwindow.h   2.1.0   edited 2000-03-24 $
+**
+** Definition of QMainWindow class
+**
+** Created : 980316
+**
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+**
+** This file is part of the Qt GUI Toolkit.
+**
+** This file may be distributed under the terms of the Q Public License
+** as defined by Troll Tech AS of Norway and appearing in the file
+** LICENSE.QPL included in the packaging of this file.
+**
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
+**
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
+** information about the Professional Edition licensing, or see
+** http://www.trolltech.com/qpl/ for QPL licensing information.
+**
+*****************************************************************************/
+
+#ifndef QMAINWINDOW_H
+#define QMAINWINDOW_H
+
+#if defined(Q_TEMPLATE_NEEDS_CLASS_DECLARATION) &amp;&amp; defined(QLIST_H)
+#warning Qt warning:
+#warning Header file qlist.h is included before qmainwindow.h.
+#warning This will cause errors on this compiler because of improper template support.
+#warning Try changing the order of inclusion of your header files.
+#endif
+
+#ifndef QT_H
+#include "qwidget.h"
+#endif // QT_H
+
+class <a href="qmenubar.html">QMenuBar</a>;
+class <a href="qtoolbar.html">QToolBar</a>;
+class <a href="qstatusbar.html">QStatusBar</a>;
+class <a href="qtooltipgroup.html">QToolTipGroup</a>;
+template &lt;class type&gt; class QList;
+
+class QMainWindowPrivate;
+
+class Q_EXPORT <a href="qmainwindow.html">QMainWindow</a>: public QWidget
+{
+    Q_OBJECT
+    Q_PROPERTY( bool rightJustification READ rightJustification WRITE setRightJustification )
+    Q_PROPERTY( bool usesBigPixmaps READ usesBigPixmaps WRITE setUsesBigPixmaps )
+    Q_PROPERTY( bool usesTextLabel READ usesTextLabel WRITE setUsesTextLabel )
+    Q_PROPERTY( bool toolBarsMovable READ toolBarsMovable WRITE setToolBarsMovable )
+    Q_PROPERTY( bool opaqueMoving READ opaqueMoving WRITE setOpaqueMoving )
+
+public:
+    QMainWindow( QWidget * parent = 0, const char * name = 0, WFlags f = WType_TopLevel );
+    ~QMainWindow();
+
+    QMenuBar * menuBar() const;
+    QStatusBar * statusBar() const;
+    QToolTipGroup * toolTipGroup() const;
+
+    virtual void setCentralWidget( QWidget * );
+    QWidget * centralWidget() const;
+
+    enum ToolBarDock { Unmanaged, TornOff, Top, Bottom, Right, Left, Minimized };
+
+    virtual void setDockEnabled( ToolBarDock dock, bool enable );
+    bool isDockEnabled( ToolBarDock dock ) const;
+    void setDockEnabled( QToolBar *tb, ToolBarDock dock, bool enable ); // ########### make virtual
+    bool isDockEnabled( QToolBar *tb, ToolBarDock dock ) const;
+
+    void addToolBar( QToolBar *, ToolBarDock = Top, bool newLine = FALSE );
+    void addToolBar( QToolBar *, const QString &amp;label,
+                     ToolBarDock = Top, bool newLine = FALSE );
+    void moveToolBar( QToolBar *, ToolBarDock = Top );
+    void moveToolBar( QToolBar *, ToolBarDock, bool nl, int index, int extraOffset = -1 );
+
+    void removeToolBar( QToolBar * );
+
+
+    void show();
+    QSize sizeHint() const;
+    QSize minimumSizeHint() const;
+
+    bool rightJustification() const;
+    bool usesBigPixmaps() const;
+    bool usesTextLabel() const;
+    bool toolBarsMovable() const;
+    bool opaqueMoving() const;
+
+    bool eventFilter( QObject*, QEvent* );
+
+    bool getLocation( QToolBar *tb, ToolBarDock &amp;dock, int &amp;index, bool &amp;nl, int &amp;extraOffset ) const;
+
+    QList&lt;QToolBar&gt; toolBars( ToolBarDock dock ) const;
+    void lineUpToolBars( bool keepNewLines = FALSE );
+
+    bool isDockMenuEnabled() const;
+
+public slots:
+    virtual void setRightJustification( bool );
+    virtual void setUsesBigPixmaps( bool );
+    void setUsesTextLabel( bool ); // virtual 3.0
+    void setToolBarsMovable( bool ); // virtual 3.0
+    void setOpaqueMoving( bool ); // virtual 3.0
+    void setDockMenuEnabled( bool );
+
+    void whatsThis();
+
+signals:
+    void pixmapSizeChanged( bool );
+    void usesTextLabelChanged( bool );
+    void startMovingToolBar( QToolBar * );
+    void endMovingToolBar( QToolBar * );
+    void toolBarPositionChanged( QToolBar * );
+
+protected slots:
+    virtual void setUpLayout();
+
+protected:
+    void paintEvent( QPaintEvent * );
+    void resizeEvent( QResizeEvent * );
+    void childEvent( QChildEvent * );
+    bool event( QEvent * );
+    void styleChange( QStyle&amp; );
+
+private:
+    QMainWindowPrivate * d;
+    void triggerLayout( bool deleteLayout = TRUE);
+    void moveToolBar( QToolBar *, QMouseEvent * );
+    void rightMouseButtonMenu( const QPoint &amp;p );
+
+    virtual void setMenuBar( QMenuBar * );
+    virtual void setStatusBar( QStatusBar * );
+    virtual void setToolTipGroup( QToolTipGroup * );
+    ToolBarDock findDockArea( const QPoint &amp;pos, QRect &amp;rect, QToolBar *tb, QRect *dockRect = 0 );
+    void moveToolBar( QToolBar *, ToolBarDock, QToolBar *relative, int ipos );
+
+    friend class QToolBar;
+    friend class QMenuBar;
+    friend class QHideDock;
+private:        // Disabled copy constructor and operator=
+#if defined(Q_DISABLE_COPY)
+    QMainWindow( const QMainWindow &amp; );
+    QMainWindow&amp; operator=( const QMainWindow &amp; );
+#endif
+};
+
+
+#endif
+
+</pre>
+<p><address><hr><div align="center">
+<table width="100%" cellspacing="0" border="0"><tr>
+<td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.1.0</div>
+</table></div></address></body></html>

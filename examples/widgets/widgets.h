@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: widgets.h,v 1.1 1999/06/03 01:56:17 warwick Exp $
+** $Id: qt/examples/widgets/widgets.h   2.1.0   edited 2000-03-03 $
 **
 ** Definition of something or other
 **
@@ -14,10 +14,48 @@
 
 #include <qmainwindow.h>
 #include <qmovie.h>
+#include <qlistview.h>
 class QLabel;
 class QCheckBox;
 class QProgressBar;
+class QTabWidget;
+class QGroupBox;
+class QMultiLineEdit;
+class QPopupMenu;
 
+class MyListView : public QListView
+{
+    Q_OBJECT
+public:
+    MyListView( QWidget * parent = 0, const char *name = 0 )
+	: QListView( parent, name ), selected(0)
+    {}
+    ~MyListView()
+    {}
+protected:
+
+    void contentsMousePressEvent( QMouseEvent * e )
+    {
+	selected = selectedItem();
+	QListView::contentsMousePressEvent( e );
+    }
+    void contentsMouseReleaseEvent( QMouseEvent * e )
+    {
+	QListView::contentsMouseReleaseEvent( e );
+	if ( selectedItem() != selected ) {
+	    emit mySelectionChanged( selectedItem() );
+	    emit mySelectionChanged();
+	}
+    }
+
+signals:
+    void mySelectionChanged();
+    void mySelectionChanged( QListViewItem* );
+
+private:
+    QListViewItem* selected;
+
+};
 //
 // WidgetView contains lots of Qt widgets.
 //
@@ -30,6 +68,10 @@ public:
 
 public slots:
     void	setStatus(const QString&);
+    void selectionChanged();
+    void selectionChanged( QListViewItem* );
+    void clicked( QListViewItem* );
+    void mySelectionChanged( QListViewItem* );
 
 protected slots:
    virtual void button1Clicked();
@@ -44,20 +86,26 @@ private slots:
     void	movieStatus( int );
     void	movieUpdate( const QRect& );
     void	spinBoxValueChanged( const QString& );
-
+    void	popupSelected( int );
+    
     void	open();
     void	dummy();
-    
+    void	showProperties();
+
 private:
     bool	eventFilter( QObject *, QEvent * );
     QLabel     *msg;
     QCheckBox  *cb[3];
+    QGroupBox* bg;
     QLabel     *movielabel;
     QMovie      movie;
     QWidget *central;
     QProgressBar *prog;
     int progress;
+    QTabWidget* tabs;
+    QMultiLineEdit* edit;
+    QPopupMenu *textStylePopup;
+    int plainStyleID;
 };
-
 
 #endif

@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qmotifstyle.h,v 1.3 1999/06/03 02:13:43 warwick Exp $
+** $Id: qt/src/widgets/qmotifstyle.h   2.1.0   edited 2000-03-24 $
 **
 ** Definition of Motif-like style class
 **
 ** Created : 981231
 **
-** Copyright (C) 1998-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1998-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,23 +17,26 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
 #ifndef QMOTIFSTYLE_H
 #define QMOTIFSTYLE_H
 
+#ifndef QT_H
 #include "qcommonstyle.h"
 #include "qpalette.h"
+#endif // QT_H
 
 class Q_EXPORT QMotifStyle : public QCommonStyle
 {
     Q_OBJECT
 public:
     QMotifStyle( bool useHighlightCols = FALSE);
+    virtual ~QMotifStyle();
 
     void setUseHighlightColors( bool );
     bool useHighlightColors() const;
@@ -50,6 +53,16 @@ public:
 			  const QBrush *fill = 0 );
     void drawFocusRect( QPainter*,
 			const QRect&, const QColorGroup &, const QColor* =0, bool = FALSE );
+
+    // "combo box"
+    void drawComboButton( QPainter *p, int x, int y, int w, int h,
+			  const QColorGroup &g, bool sunken = FALSE,
+			  bool editable = FALSE,
+			  bool enabled = TRUE,
+			  const QBrush *fill = 0 );
+    QRect comboButtonRect( int x, int y, int w, int h);
+    QRect comboButtonFocusRect( int x, int y, int w, int h);
+
 
     void drawPushButton( QPushButton* btn, QPainter *p);
 
@@ -96,12 +109,17 @@ public:
     int extraPopupMenuItemWidth( bool checkable, int maxpmw, QMenuItem* mi, const QFontMetrics& fm );
     int popupMenuItemHeight( bool checkable, QMenuItem* mi, const QFontMetrics& fm );
     void drawPopupMenuItem( QPainter* p, bool checkable, int maxpmw, int tab, QMenuItem* mi,
-			    const QPalette& pal, 
+			    const QPalette& pal,
 			    bool act, bool enabled, int x, int y, int w, int h);
 
 
 private:
     bool highlightCols;
+private:	// Disabled copy constructor and operator=
+#if defined(Q_DISABLE_COPY)
+    QMotifStyle( const QMotifStyle & );
+    QMotifStyle& operator=( const QMotifStyle & );
+#endif
 };
 
 #endif

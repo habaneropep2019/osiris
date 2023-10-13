@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: metal.h,v 1.2 1999/06/11 09:26:30 warwick Exp $
+** $Id: qt/examples/themes/metal.h   2.1.0   edited 2000-01-31 $
 **
 ** Definition of something or other
 **

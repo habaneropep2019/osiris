@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qpopupmenu.h,v 2.37.2.1 1999/07/13 19:59:29 warwick Exp $
+** $Id: qt/src/widgets/qpopupmenu.h   2.1.0   edited 2000-04-03 $
 **
 ** Definition of QPopupMenu class
 **
 ** Created : 941128
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -35,6 +35,7 @@
 class Q_EXPORT QPopupMenu : public QFrame, public QMenuData
 {
     Q_OBJECT
+    Q_PROPERTY( bool checkable READ isCheckable WRITE setCheckable )
 public:
     QPopupMenu( QWidget *parent=0, const char *name=0 );
    ~QPopupMenu();
@@ -60,6 +61,8 @@ public:
 
     bool 	customWhatsThis() const;
 
+    int	insertTearOffHandle( int id=-1, int index=-1 );
+
 signals:
     void	activated( int itemId );
     void	highlighted( int itemId );
@@ -81,8 +84,13 @@ protected:
     void	mouseReleaseEvent( QMouseEvent * );
     void	mouseMoveEvent( QMouseEvent * );
     void	keyPressEvent( QKeyEvent * );
+    void	focusInEvent( QFocusEvent * );
+    void	focusOutEvent( QFocusEvent * );
     void	timerEvent( QTimerEvent * );
     void 	styleChange( QStyle& );
+    int 	columns() const;
+
+    bool focusNextPrevChild( bool next );
 
 private slots:
     void	subActivated( int itemId );
@@ -92,6 +100,7 @@ private slots:
     void	modalActivation( int );
 
     void	subMenuTimer();
+    void     toggleTearOff();
 
 private:
     void	menuContentsChanged();
@@ -109,7 +118,7 @@ private:
     void	byeMenuBar();
 
     int		itemAtPos( const QPoint & ) const;
-    int		itemPos( int index );
+    QRect		itemGeometry( int index ); // ## protected in 3.0
     void	updateSize();
     void	updateRow( int row );
     void	updateAccel( QWidget * );
@@ -122,8 +131,10 @@ private:
     uint accelDisabled : 1;
     uint checkable : 1;
     uint connectModalRecursionSafety : 1;
+    uint tornOff : 1;
     int maxPMWidth;
-    int reserved;
+    int ncols;
+    bool	tryMouseEvent( QPopupMenu *, QMouseEvent * );
 
     friend class QMenuData;
     friend class QMenuBar;

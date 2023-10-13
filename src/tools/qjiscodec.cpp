@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qjiscodec.cpp,v 2.11 1999/06/22 01:42:15 warwick Exp $
+** $Id: qt/src/tools/qjiscodec.cpp   2.1.0   edited 2000-03-24 $
 **
 ** Implementation of QJisCodec class
 **
 ** Created : 990225
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -27,30 +27,48 @@
 // a.k.a. Junji Takagi, and is include in Qt with the author's permission,
 // and the grateful thanks of the Troll Tech team.
 
-/*
- * Copyright (c) 1999 Serika Kurusugawa, All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer.
- * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in the
- *    documentation and/or other materials provided with the distribution.
- *
- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- * ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
- * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
- * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
- * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
- * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
- * SUCH DAMAGE.
- */
+/*! \class QJisCodec qjiscodec.h
+
+  \brief Provides conversion to and from JIS character sets
+
+  The QJisCodec class subclasses QTextCodec to provide support for JIS
+  X 0201 Latin, JIS X 0201 Kana, JIS X 0208 and JIS X 0212.
+
+  The environment variable \c UNICODEMAP_JP can be used to fine-tune how
+  QJpUnicodeConv, QEucJpCodec, QJisCodec and QSjisCodec do their work.
+  The QJpUnicodeConv documentation describes how to use this variable.
+
+  It was largely written by Serika Kurusugawa a.k.a. Junji Takagi, and
+  is included in Qt with the author's permission, and the grateful
+  thanks of the Troll Tech team. Here is the copyright statement for
+  that code:
+
+  \mustquote
+
+  Copyright (c) 1999 Serika Kurusugawa, All rights reserved.
+
+  Redistribution and use in source and binary forms, with or without
+  modification, are permitted provided that the following conditions
+  are met: <ol>
+  <li> Redistributions of source code must retain the above copyright
+     notice, this list of conditions and the following disclaimer.
+  <li> Redistributions in binary form must reproduce the above copyright
+     notice, this list of conditions and the following disclaimer in the
+     documentation and/or other materials provided with the distribution.
+  </ol>
+
+  THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
+  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+  ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+  FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+  DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+  OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+  HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+  LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+  OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+  SUCH DAMAGE.
+*/
 
 #include "qjiscodec.h"
 
@@ -82,17 +100,19 @@ static const char Esc_JISX0201_Kana[]	= {Esc, '(', 'I', 0 };
 static const char Esc_JISX0208_1978[]	= {Esc, '$', '@', 0 };
 static const char Esc_JISX0208_1983[]	= {Esc, '$', 'B', 0 };
 static const char Esc_JISX0212[]	= {Esc, '$', '(', 'D', 0 };
-static const char *Esc_SEQ[] = { Esc_Ascii,
-				 Esc_JISX0201_Latin,
-				 Esc_JISX0201_Kana,
-				 Esc_JISX0208_1978,
-				 Esc_JISX0208_1983,
-				 Esc_JISX0212 };
+static const char * const Esc_SEQ[] = { Esc_Ascii,
+					Esc_JISX0201_Latin,
+					Esc_JISX0201_Kana,
+					Esc_JISX0208_1978,
+					Esc_JISX0208_1983,
+					Esc_JISX0212 };
 
+/*! \internal */
 QJisCodec::QJisCodec() : conv(QJpUnicodeConv::newConverter(JU_Default))
 {
 }
 
+/*! \internal */
 int QJisCodec::mibEnum() const
 {
     /*
@@ -105,6 +125,7 @@ int QJisCodec::mibEnum() const
     return 16;
 }
 
+/*! \internal */
 QCString QJisCodec::fromUnicode(const QString& uc, int& len_in_out) const
 {
     int l = QMIN((int)uc.length(),len_in_out);
@@ -166,6 +187,7 @@ QCString QJisCodec::fromUnicode(const QString& uc, int& len_in_out) const
     return result;
 }
 
+/*! \internal */
 QString QJisCodec::toUnicode(const char* chars, int len) const
 {
     QString result;
@@ -275,11 +297,13 @@ QString QJisCodec::toUnicode(const char* chars, int len) const
     return result;
 }
 
+/*! \internal */
 const char* QJisCodec::name() const
 {
     return "JIS7";
 }
 
+/*! \internal */
 int QJisCodec::heuristicNameMatch(const char* hint) const
 {
     int score = 0;
@@ -311,6 +335,7 @@ int QJisCodec::heuristicNameMatch(const char* hint) const
     return QTextCodec::heuristicNameMatch(hint);
 }
 
+/*! \internal */
 int QJisCodec::heuristicContentMatch(const char* chars, int len) const
 {
     int score = 0;
@@ -586,6 +611,7 @@ public:
     }
 };
 
+/*! \internal */
 QTextDecoder* QJisCodec::makeDecoder() const
 {
     return new QJisDecoder(conv);

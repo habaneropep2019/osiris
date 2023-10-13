@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qdialog.cpp,v 2.51 1999/06/15 12:00:52 warwick Exp $
+** $Id: qt/src/kernel/qdialog.cpp   2.1.0   edited 2000-03-24 $
 **
 ** Implementation of QDialog class
 **
 ** Created : 950502
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -30,11 +30,14 @@
 #include "qobjectdict.h"
 #include "qwidgetlist.h"
 
+
+// NOT REVISED
 /*!
   \class QDialog qdialog.h
   \brief The QDialog class is the base class of dialog windows.
 
   \ingroup dialogs
+  \ingroup abstractwidgets
 
   A dialog window is a widget used to communicate with the user. It offers
   mechanisms such as default buttons.
@@ -98,6 +101,10 @@
 
   The \a f argument is the \link QWidget::QWidget() widget flags,
   \endlink which can be used to customize the window frame style.
+  
+  If you e.g. don't want a What"s this button in the titlebar of the dialog,
+  pass WStyle_Customize | WStyle_NormalBorder | WStyle_Title | WStyle_SysMenu
+  here.
 
   A dialog is always a top level widget. The optional parent, however,
   will know about this child and also delete it on
@@ -119,7 +126,7 @@ QDialog::QDialog( QWidget *parent, const char *name, bool modal, WFlags f )
 }
 
 /*!
-  Destroys the QDialog and all its children.
+  Destructs the QDialog, deleting all its children.
 */
 
 QDialog::~QDialog()
@@ -129,11 +136,12 @@ QDialog::~QDialog()
     hide();
 }
 
-
 /*!
   \internal
-  This function is called by the push button \e pushButton when it becomes
-  the default button.
+  This function is called by the push button \e pushButton when it
+  becomes the default button. If \a pushButton is 0, the dialogs
+  default default button becomes the default button. This is what a
+  push button calls when it looses focus.
 */
 
 void QDialog::setDefault( QPushButton *pushButton )
@@ -143,17 +151,33 @@ void QDialog::setDefault( QPushButton *pushButton )
     QPushButton *pb;
     bool hasMain = FALSE;
     while ( (pb = (QPushButton*)it.current()) ) {
+	++it;
 	if ( pb == mainDef )
 	    hasMain = TRUE;
 	if ( pb != pushButton )
 	    pb->setDefault( FALSE );
-	++it;
     }
     if (!pushButton && hasMain)
 	mainDef->setDefault( TRUE );
     if (!hasMain)
 	mainDef = pushButton;
     delete list;
+}
+
+/*!
+  \internal
+  Hides the default button indicator. Called when non auto-default
+  push button get focus.
+ */
+void QDialog::hideDefault()
+{
+    QObjectList *list = queryList( "QPushButton" );
+    QObjectListIt it( *list );
+    QPushButton *pb;
+    while ( (pb = (QPushButton*)it.current()) ) {
+	++it;
+	pb->setDefault( FALSE );
+    }
 }
 
 
@@ -248,16 +272,13 @@ void QDialog::reject()
   Event handlers
  *****************************************************************************/
 
-/*!
-  Handles key press events for the dialog.
-
-  Calls reject() if Escape is pressed.
-  Simulates a button click for the default button if Enter is pressed.
-  All other keys are ignored.
+/*!\reimp
 */
-
 void QDialog::keyPressEvent( QKeyEvent *e )
 {
+    //   Calls reject() if Escape is pressed.  Simulates a button click
+    //   for the default button if Enter is pressed.  All other keys are
+    //   ignored.
     if ( e->state() == 0 ) {
 	switch ( e->key() ) {
 	case Key_Enter:
@@ -266,7 +287,7 @@ void QDialog::keyPressEvent( QKeyEvent *e )
 	    QObjectListIt it( *list );
 	    QPushButton *pb;
 	    while ( (pb = (QPushButton*)it.current()) ) {
-		if ( pb->isDefault() && pb->isVisibleToTLW() ) {
+		if ( pb->isDefault() && pb->isVisible() ) {
 		    delete list;
 		    if ( pb->isEnabled() ) {
 			emit pb->clicked();
@@ -283,12 +304,24 @@ void QDialog::keyPressEvent( QKeyEvent *e )
 	    break;
 	case Key_Up:
 	case Key_Left:
+	    if ( focusWidget() &&
+		 ( focusWidget()->focusPolicy() == QWidget::StrongFocus ||
+		   focusWidget()->focusPolicy() == QWidget::WheelFocus ) ) {
+		e->ignore();
+		break;
+	    }
 	    // call ours, since c++ blocks us from calling the one
 	    // belonging to focusWidget().
 	    focusNextPrevChild( FALSE );
 	    break;
 	case Key_Down:
 	case Key_Right:
+	    if ( focusWidget() &&
+		 ( focusWidget()->focusPolicy() == QWidget::StrongFocus ||
+		   focusWidget()->focusPolicy() == QWidget::WheelFocus ) ) {
+		e->ignore();
+		break;
+	    }
 	    focusNextPrevChild( TRUE );
 	    break;
 	default:
@@ -353,8 +386,8 @@ void QDialog::show()
 	    int w, h;
 	    QWidget * current = it.current();
 	    ++it;
-	    w = current->frameGeometry().width() - current->width();
-	    h = current->frameGeometry().height() - current->height();
+	    w = current->geometry().x() - current->x();
+	    h = current->geometry().y() - current->y();
 
 	    extraw = QMAX( extraw, w );
 	    extrah = QMAX( extrah, h );
@@ -362,13 +395,13 @@ void QDialog::show()
 	delete list;
 
 	if ( w )
-	    p = QPoint( w->x() + w->width()/2,
-			w->y() + w->height()/ 2 );
+	    p = QPoint( w->geometry().x() + w->width()/2,
+			w->geometry().y() + w->height()/ 2 );
 	else
 	    p = QPoint( desk->width()/2, desk->height()/2 );
 
 	p = QPoint( p.x()-width()/2 - extraw,
-		    p.y()-height()/2 - extraw );
+		    p.y()-height()/2 - extrah );
 
 	if ( p.x() + extraw + width() > desk->width() )
 	    p.setX( desk->width() - width() - extraw );
@@ -379,7 +412,7 @@ void QDialog::show()
 	    p.setY( desk->height() - height() - extrah );
 	if ( p.y() < 0 )
 	    p.setY( 0 );
-	
+
 	move( p );
     }
     QWidget::show();
@@ -387,8 +420,11 @@ void QDialog::show()
 	qApp->enter_loop();
 }
 
+/*!\reimp
+*/
 void QDialog::hide()
 {
+    // Reimplemented to exit a modal when the dialog is hidden.
     bool ex = testWState(WState_Visible) && testWFlags(WType_Modal);
     QWidget::hide();
     if ( ex )

@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qscrollbar.h,v 2.20 1999/06/17 05:12:21 ettrich Exp $
+** $Id: qt/src/widgets/qscrollbar.h   2.1.0   edited 2000-03-24 $
 **
 ** Definition of QScrollBar class
 **
 ** Created : 940427
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -38,6 +38,15 @@ class QTimer;
 class Q_EXPORT QScrollBar : public QWidget, public QRangeControl
 {
     Q_OBJECT
+    Q_PROPERTY( int minValue READ minValue WRITE setMinValue )
+    Q_PROPERTY( int maxValue READ maxValue WRITE setMaxValue )
+    Q_PROPERTY( int lineStep READ lineStep WRITE setLineStep )
+    Q_PROPERTY( int pageStep READ pageStep WRITE setPageStep )
+    Q_PROPERTY( int value READ value WRITE setValue )
+    Q_PROPERTY( bool tracking READ tracking WRITE setTracking )
+    Q_PROPERTY( bool draggingSlider READ draggingSlider )
+    Q_PROPERTY( Orientation orientation READ orientation WRITE setOrientation )
+	
 public:
     QScrollBar( QWidget *parent, const char *name=0 );
     QScrollBar( Orientation, QWidget *parent, const char *name=0 );
@@ -49,12 +58,22 @@ public:
     Orientation orientation() const;
     virtual void setTracking( bool enable );
     bool	tracking() const;
-
     bool	draggingSlider() const;
 
     virtual void setPalette( const QPalette & );
     QSize	sizeHint() const;
     QSizePolicy sizePolicy() const;
+
+    int	 minValue() const;
+    int	 maxValue() const;
+    void setMinValue( int );
+    void setMaxValue( int );
+    int	 lineStep() const;
+    int	 pageStep() const;
+    void setLineStep( int );
+    void setPageStep( int );
+    int  value() const;
+    void setValue( int );
 
 signals:
     void	valueChanged( int value );
@@ -109,7 +128,7 @@ private:
     void drawControls( uint controls, uint activeControl ) const;
     void drawControls( uint controls, uint activeControl,
 				QPainter *p ) const;
-
+    
     uint pressedControl	 : 8;
     uint track		 : 1;
     uint clickedAt	 : 1;

@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: vw.cpp,v 1.2 1999/06/03 01:46:10 warwick Exp $
+** $Id: qt/examples/validator/vw.cpp   2.1.0   edited 2000-03-14 $
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -95,7 +95,7 @@ VW::VW( QWidget * parent, const char * name )
     year->setMaximumHeight( year->minimumSize().height() );
     grid->addWidget( year, 2, 1 );
 
-    l = new QLabel( year, "Model:", box, "model year label" );
+    l = new QLabel( year, "Year:", box, "model year label" );
     l->setMinimumSize( l->sizeHint() );
     grid->addWidget( l, 2, 0 );
 
@@ -106,7 +106,7 @@ VW::VW( QWidget * parent, const char * name )
     // output box
 
     box = new QGroupBox( this, "output box" );
-    hb->addWidget( box, 0, AlignTop );
+    hb->addWidget( box, 0 );
 
     b = new QVBoxLayout( box, 12 );
 

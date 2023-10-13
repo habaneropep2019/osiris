@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: checklists.h,v 1.1 1999/06/03 10:08:55 warwick Exp $
+** $Id: qt/examples/checklists/checklists.h   2.1.0   edited 2000-03-20 $
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -11,12 +11,12 @@
 #ifndef CHECKLISTS_H
 #define CHECKLISTS_H
 
-#include <qhbox.h>
+#include <qwidget.h>
 
 class QListView;
 class QLabel;
 
-class CheckLists : public QHBox
+class CheckLists : public QWidget
 {
     Q_OBJECT
 

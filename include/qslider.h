@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qslider.h,v 2.39 1999/06/22 13:59:07 paul Exp $
+** $Id: qt/src/widgets/qslider.h   2.1.0   edited 2000-03-24 $
 **
 ** Definition of QSlider class
 **
 ** Created : 961019
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -39,10 +39,20 @@ struct QSliderData;
 class Q_EXPORT QSlider : public QWidget, public QRangeControl
 {
     Q_OBJECT
+    Q_ENUMS( TickSetting )
+    Q_PROPERTY( int minValue READ minValue WRITE setMinValue )
+    Q_PROPERTY( int maxValue READ maxValue WRITE setMaxValue )
+    Q_PROPERTY( int lineStep READ lineStep WRITE setLineStep )
+    Q_PROPERTY( int pageStep READ pageStep WRITE setPageStep )
+    Q_PROPERTY( int value READ value WRITE setValue )
+    Q_PROPERTY( bool tracking READ tracking WRITE setTracking )
+    Q_PROPERTY( Orientation orientation READ orientation WRITE setOrientation )
+    Q_PROPERTY( TickSetting tickmarks READ tickmarks WRITE setTickmarks )
+    Q_PROPERTY( int tickInterval READ tickInterval WRITE setTickInterval )
+	
 public:
     enum TickSetting { NoMarks = 0, Above = 1, Left = Above,
 		       Below = 2, Right = Below, Both = 3 };
-
     QSlider( QWidget *parent, const char *name=0 );
     QSlider( Orientation, QWidget *parent, const char *name=0 );
     QSlider( int minValue, int maxValue, int pageStep, int value, Orientation,
@@ -52,18 +62,27 @@ public:
     Orientation orientation() const;
     virtual void	setTracking( bool enable );
     bool	tracking() const;
-
     virtual void 	setPalette( const QPalette & );
     QRect	sliderRect() const;
     QSize	sizeHint() const;
     QSizePolicy sizePolicy() const;
     QSize	minimumSizeHint() const;
-    
+
     virtual void setTickmarks( TickSetting );
     TickSetting tickmarks() const { return ticks; }
 
     virtual void setTickInterval( int );
     int 	tickInterval() const { return tickInt; }
+
+    int	 minValue() const;
+    int	 maxValue() const;
+    void setMinValue( int );
+    void setMaxValue( int );
+    int	 lineStep() const;
+    int	 pageStep() const;
+    void setLineStep( int );
+    void setPageStep( int );
+    int  value() const;
 
 public slots:
     virtual void	setValue( int );

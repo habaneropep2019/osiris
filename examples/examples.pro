@@ -2,7 +2,7 @@ TEMPLATE    =	subdirs
 SUBDIRS     =	aclock \
 		addressbook \
 		application \
-		buttons_groups \
+		buttongroups \
 		checklists \
 		cursor \
 		customlayout \
@@ -13,24 +13,25 @@ SUBDIRS     =	aclock \
 		drawlines \
 		forever \
 		hello \
+		helpviewer \
 		i18n \
 		layout \
 		life \
 		lineedits \
-		listbox_combo \
+		listboxcombo \
 		listbox \
 		listviews \
 		menu \
+		mdi \
 		movies \
 		picture \
 		popup \
 		progress \
 		progressbar \
-		qbrowser \
 		qdir \
 		qfd \
-		qfileiconview \
-		qiconview \
+		fileiconview \
+		iconview \
 		qmag \
 		qwerty \
 		rangecontrols \

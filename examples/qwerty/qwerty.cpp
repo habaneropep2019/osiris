@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: qwerty.cpp,v 1.4.2.1 1999/07/14 19:50:34 aavit Exp $
+** $Id: qt/examples/qwerty/qwerty.cpp   2.1.0   edited 2000-02-21 $
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -220,9 +220,9 @@ void Editor::resizeEvent( QResizeEvent * )
 	e->setGeometry( 0, m->height(), width(), height() - m->height() );
 }
 
-void Editor::closeEvent( QCloseEvent *e )
+void Editor::closeEvent( QCloseEvent *event )
 {
-    e->accept();
+    event->accept();
 
     if ( changed ) { // the text has been changed
 	switch ( QMessageBox::warning( this, "Qwerty",
@@ -233,15 +233,15 @@ void Editor::closeEvent( QCloseEvent *e )
 					0, 2) ) {
 	case 0: // yes
 	    if ( save() )
-		e->accept();
+		event->accept();
 	    else
-		e->ignore();
+		event->ignore();
 	    break;
 	case 1: // no
-	    e->accept();
+	    event->accept();
 	    break;
 	default: // cancel
-	    e->ignore();
+	    event->ignore();
 	    break;
 	}
     }

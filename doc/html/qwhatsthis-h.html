@@ -1,0 +1,94 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>
+Qt Toolkit - qwhatsthis.h include file
+</title><style type="text/css"><!--
+h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
+a:link { text-decoration: none; }
+body { background: white; color: black; }
+--></style>
+</head><body bgcolor="#ffffff">
+
+<a href="index.html">
+<img width="122" height="65" src="qtlogo.png" alt="Home"
+  align="left" border="0">
+</a><div align=right><img src="dochead.png" width="472" height="27"><br>
+<a href="classes.html"><b>Classes</b></a>
+- <a href="annotated.html">Annotated</a>
+- <a href="hierarchy.html">Tree</a>
+- <a href="functions.html">Functions</a>
+- <a href="index.html">Home</a>
+- <a href="topicals.html"><b>Structure</b></a>
+</div>
+<br clear=all>
+
+<h1 align=center>qwhatsthis.h</h1><br clear="all">
+This is the verbatim text of the qwhatsthis.h include file.  It is
+provided only for illustration; the copyright
+remains with Troll Tech.
+<hr>
+<pre>
+/****************************************************************************
+** &#36;Id&#58; qt/src/widgets/qwhatsthis.h   2.1.0   edited 2000-03-24 $
+**
+** Definition of QWhatsThis class
+**
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+**
+** This file is part of the Qt GUI Toolkit.
+**
+** This file may be distributed under the terms of the Q Public License
+** as defined by Troll Tech AS of Norway and appearing in the file
+** LICENSE.QPL included in the packaging of this file.
+**
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
+**
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
+** information about the Professional Edition licensing, or see
+** http://www.trolltech.com/qpl/ for QPL licensing information.
+**
+*****************************************************************************/
+
+#ifndef QWHATSTHIS_H
+#define QWHATSTHIS_H
+
+#ifndef QT_H
+#include "qobject.h"
+#endif // QT_H
+
+#include "qcursor.h"
+
+class <a href="qtoolbutton.html">QToolButton</a>;
+class <a href="qpopupmenu.html">QPopupMenu</a>;
+class <a href="qstylesheet.html">QStyleSheet</a>;
+
+class Q_EXPORT <a href="qwhatsthis.html">QWhatsThis</a>: public Qt
+{
+public:
+    QWhatsThis( QWidget *);
+    virtual ~QWhatsThis();
+
+    virtual QString text( const QPoint &amp; );
+
+    // the common static functions
+    static void add( QWidget *, const QString &amp;);
+    static void remove( QWidget * );
+    static QString textFor( QWidget *, const QPoint &amp; pos = QPoint() );
+
+    static QToolButton * whatsThisButton( QWidget * parent );
+
+    static void enterWhatsThisMode();
+    static bool inWhatsThisMode();
+    static void leaveWhatsThisMode( const QString&amp; = QString::null, const QPoint&amp; pos = QCursor::pos() );
+
+};
+
+#endif
+
+</pre>
+<p><address><hr><div align="center">
+<table width="100%" cellspacing="0" border="0"><tr>
+<td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.1.0</div>
+</table></div></address></body></html>

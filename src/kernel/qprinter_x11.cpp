@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qprinter_x11.cpp,v 2.45.2.1 1999/06/30 14:00:11 warwick Exp $
+** $Id: qt/src/kernel/qprinter_x11.cpp   2.1.0   edited 2000-04-06 $
 **
 ** Implementation of QPrinter class for X11
 **
 ** Created : 950810
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -28,7 +28,7 @@
 #include "qfile.h"
 #include "qfileinfo.h"
 #include "qdir.h"
-#include "qpsprinter.h"
+#include "qpsprinter_p.h"
 #include "qprintdialog.h"
 #include "qapplication.h"
 #include <stdlib.h>
@@ -60,6 +60,7 @@
 #include <process.h>
 #endif
 
+// NOT REVISED
 
 /*****************************************************************************
   QPrinter member functions
@@ -92,7 +93,7 @@ QPrinter::QPrinter()
 }
 
 /*!
-  Destroys the printer paint device and cleans up.
+  Destructs the printer paint device and cleans up.
 */
 
 QPrinter::~QPrinter()
@@ -175,18 +176,18 @@ bool QPrinter::cmd( int c, QPainter *paint, QPDevCmdParam *p )
     if ( c ==  PdcBegin ) {
 	if ( state == PST_IDLE ) {
 	    if ( output_file ) {
+		int fd = 0;
 #if defined(_OS_WIN32_)
-		int fd;
-		if ( qt_winver == Qt::WV_NT )
+		if ( qt_winver & Qt::WV_NT_based )
 		    fd = _topen( qt_winTchar(output_filename,TRUE),
 				_O_CREAT | _O_BINARY | _O_TRUNC | _O_WRONLY );
 		else
 		    fd = _open( output_filename.ascii(),
 				_O_CREAT | _O_BINARY | _O_TRUNC | _O_WRONLY );
 #else
-		int fd = ::open( output_filename.local8Bit(),
-				 O_CREAT | O_NOCTTY | O_TRUNC | O_WRONLY,
-				 0666 );
+		fd = ::open( output_filename.local8Bit(),
+			     O_CREAT | O_NOCTTY | O_TRUNC | O_WRONLY,
+			     0666 );
 #endif
 		if ( fd >= 0 ) {
 		    pdrv = new QPSPrinter( this, fd );
@@ -211,9 +212,9 @@ bool QPrinter::cmd( int c, QPainter *paint, QPDevCmdParam *p )
 		// this code is still not used, and maybe it's not
 		// usable either, any more.  if you want to use it,
 		// you may need to fix it first.
-		
+
 		// old comment:
-		
+
 		// this code is usable but not in use.  spawn() is
 		// preferable to fork()/exec() for very large
 		// programs.  if fork()/exec() is a problem and you
@@ -277,10 +278,14 @@ bool QPrinter::cmd( int c, QPainter *paint, QPDevCmdParam *p )
 			QString lprhack;
 			const char * lparg = 0;
 			QString lphack;
-			if ( pr && option_string ) {
-			    lprhack = QString::fromLatin1( "-P" ) + pr;
+			if ( pr || option_string ) {
+			    lprhack = pr;
+			    lprhack.prepend( option_string ? option_string :
+					     QString::fromLatin1( "-P" ) );
 			    lprarg = lprhack.ascii();
-			    lphack = QString::fromLatin1( "-d" ) + pr;
+			    lphack = pr;
+			    lphack.prepend( option_string ? option_string :
+					    QString::fromLatin1( "-d" ) );
 			    lparg = lphack.ascii();
 			}
 			(void)execlp( "lp", "lp", lparg, 0 );
@@ -396,11 +401,21 @@ int QPrinter::metric( int m ) const
 }
 
 
-/*!
+/*!  Returns the width of the left/right and top/bottom margins of the
+printer.  This is a best-effort guess, not based on perfect knowledge.
 
+If you have called setFullPage( TRUE ) (this is recommended for
+high-quality printing), margins().width() may be treated as the
+smallest sane left/right margin you can use, and margins().height() as
+the smallest sane top/bottom margins you can use.
+
+If you have called setFullPage( FALSE ) (this is the default),
+margins() is automatically subtracted from the pageSize() by QPrinter.
+
+\sa setFullPage() QPaintDeviceMetrics PageSize
 */
 
 QSize QPrinter::margins() const
 {
-    return QSize( 36, 22 );
+    return (orient == Portrait) ? QSize( 36, 22 ) : QSize( 22, 36 );
 }

@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qframe.h,v 2.20.2.1 1999/08/12 09:29:17 paul Exp $
+** $Id: qt/src/widgets/qframe.h   2.1.0   edited 2000-03-27 $
 **
 ** Definition of QFrame widget class
 **
 ** Created : 950201
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -30,10 +30,19 @@
 #include "qwidget.h"
 #endif // QT_H
 
-
 class Q_EXPORT QFrame : public QWidget			// frame class
 {
     Q_OBJECT
+    Q_ENUMS( Shape Shadow )
+    Q_PROPERTY( int frameWidth READ frameWidth )
+    Q_PROPERTY( QRect contentsRect READ contentsRect )
+    Q_PROPERTY( Shape frameShape READ frameShape WRITE setFrameShape )
+    Q_PROPERTY( Shadow frameShadow READ frameShadow WRITE setFrameShadow )
+    Q_PROPERTY( int lineWidth READ lineWidth WRITE setLineWidth )
+    Q_PROPERTY( int margin READ margin WRITE setMargin )
+    Q_PROPERTY( int midLineWidth READ midLineWidth WRITE setMidLineWidth )
+    Q_PROPERTY( QRect frameRect READ frameRect WRITE setFrameRect DESIGNABLE false )
+
 public:
     QFrame( QWidget *parent=0, const char *name=0, WFlags f=0,
 	    bool = TRUE );

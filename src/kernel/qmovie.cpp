@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qmovie.cpp,v 1.61 1999/06/03 16:35:18 warwick Exp $
+** $Id: qt/src/kernel/qmovie.cpp   2.1.0   edited 2000-04-07 $
 **
 ** Implementation of movie classes
 **
 ** Created : 970617
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -39,11 +39,13 @@
 
 #include <stdlib.h>
 
+// NOT REVISED
 /*!
   \class QMovie qmovie.h
   \brief Incrementally loads an animation or image, signalling as it progresses.
 
   \ingroup images
+  \ingroup drawing
 
   A QMovie provides a QPixmap as the framePixmap(), and connections can
   be made via connectResize() and connectUpdate() to receive notification
@@ -72,8 +74,7 @@
   extension is obeyed.
 
   Archives of animated GIFs and tools for building them can be found
-  at <a href=http://www.yahoo.com/Arts/Visual_Arts/Animation/Computer_Animation/Animated_GIFs/>
-  Yahoo!</a>.
+  at <a href="http://dir.yahoo.com/Arts/Visual_Arts/Animation/Computer_Animation/Animated_GIFs/">Yahoo</a>.
 
   We are required to state: The Graphics Interchange Format(c) is the
   Copyright property of CompuServe Incorporated. GIF(sm) is a Service
@@ -81,13 +82,12 @@
 
   \warning Unisys has changed its position regarding GIF.  If you are
   in a country where Unisys holds a patent on LZW compression and/or
-  decompression, Unisys may require a license from you.  These
-  countries include Canada, Japan, the USA, France, Germany, Italy and
-  the UK.  There is more information on Unisys web site: <a
-  href="http://corp2.unisys.com/LeadStory/lzwfaq.html">Overview of
-  Unisys' position.</a> GIF support may be removed in a future version
-  of Qt.  We recommend using the PNG format, which is available in the
-  <a href="imageio.html">Qt Image IO Extension</a> package.
+  decompression and you want to use GIF, Unisys may require you to
+  license that technology.  These countries include Canada, Japan, the
+  USA, France, Germany, Italy and the UK.
+
+  GIF support may be removed completely in a future version of Qt.  We
+  recommend using the PNG format.
 
   <img src="qmovie.png">
 
@@ -275,8 +275,7 @@ void QMovieFilePrivate::updatePixmapFromImage()
 
     // Create temporary QImage to hold the part we want
     const QImage& gimg = decoder->image();
-    QImage img(changed_area.size(), 8, gimg.numColors());
-    img.setAlphaBuffer(gimg.hasAlphaBuffer());
+    QImage img = gimg.copy(changed_area);
 
 #ifdef QT_SAVE_MOVIE_HACK
     if ( save_image ) {
@@ -286,20 +285,6 @@ void QMovieFilePrivate::updatePixmapFromImage()
     }
 #endif
 
-    // Copy color map.
-    memcpy(img.colorTable(), gimg.colorTable(),
-	   sizeof(QRgb)*gimg.numColors());
-
-    // Copy pixels.
-    const int t = changed_area.top();
-    const int b = changed_area.bottom();
-    const int l = changed_area.left();
-    const int w = changed_area.width();
-    const int h = changed_area.height();
-    for (int y=t; y<=b; y++) {
-	memcpy(img.scanLine(y-t), gimg.scanLine(y)+l, w);
-    }
-
     // Resize to size of image
     if (mypixmap.width() != gimg.width() || mypixmap.height() != gimg.height())
 	mypixmap.resize(gimg.width(), gimg.height());
@@ -307,7 +292,7 @@ void QMovieFilePrivate::updatePixmapFromImage()
     if (bg.isValid()) {
 	QPainter p;
 	p.begin(&mypixmap);
-	p.fillRect(l, t, w, h, bg);
+	p.fillRect(changed_area, bg);
 	p.end();
     } else {
 	if (gimg.hasAlphaBuffer()) {
@@ -323,10 +308,14 @@ void QMovieFilePrivate::updatePixmapFromImage()
     // Convert to pixmap and paste that onto myself
     QPixmap lines;
     lines.convertFromImage(img);
-    bitBlt(&mypixmap, l, t, &lines, 0, 0, w, h, CopyROP, !bg.isValid());
+    bitBlt(&mypixmap, changed_area.left(), changed_area.top(),
+	&lines, 0, 0, changed_area.width(), changed_area.height(),
+	CopyROP, !bg.isValid());
 
     if (!bg.isValid() && gimg.hasAlphaBuffer()) {
-	bitBlt(&mymask, l, t, lines.mask(), 0, 0, w, h, CopyROP, TRUE);
+	bitBlt(&mymask, changed_area.left(), changed_area.top(),
+	    lines.mask(), 0, 0, changed_area.width(), changed_area.height(),
+	    CopyROP, TRUE);
 	mypixmap.setMask(mymask);
     }
 }
@@ -537,7 +526,7 @@ void QMovieFilePrivate::refresh()
 
 
 /*!
-  Creates a null QMovie.  The only interesting thing to do to such
+  Constructs a null QMovie.  The only interesting thing to do to such
   a movie is to assign another movie to it.
 
   \sa isNull()
@@ -548,7 +537,7 @@ QMovie::QMovie()
 }
 
 /*!
-  Creates a QMovie which reads an image sequence from the given
+  Constructs a QMovie which reads an image sequence from the given
   QDataSource.  The source must be allocated dynamically,
   as it becomes owned by the QMovie, and will be destroyed
   when the movie is destroyed.
@@ -565,7 +554,7 @@ QMovie::QMovie(QDataSource* src, int bufsize)
 }
 
 /*!
-  Creates a QMovie which reads an image sequence from the named file.
+  Constructs a QMovie which reads an image sequence from the named file.
 */
 QMovie::QMovie(const QString &fileName, int bufsize)
 {
@@ -575,7 +564,7 @@ QMovie::QMovie(const QString &fileName, int bufsize)
 }
 
 /*!
-  Creates a QMovie which reads an image sequence from given data.
+  Constructs a QMovie which reads an image sequence from given data.
 */
 QMovie::QMovie(QByteArray data, int bufsize)
 {
@@ -890,133 +879,4 @@ void QMovie::disconnectStatus(QObject* receiver, const char *member)
 }
 
 
-/* tmake ignore Q_OBJECT */
-
-//       MANUALLY INCLUDED.  Regenerate in vi with:   !Gmoc %
-/****************************************************************************
-** QMovieFilePrivate meta object code from reading C++ file 'standard input'
-**
-** Created: Fri Aug 21 01:55:09 1998
-**      by: The Qt Meta Object Compiler ($Revision: 1.61 $)
-**
-** WARNING! All changes made in this file will be lost!
-*****************************************************************************/
-
-#if !defined(Q_MOC_OUTPUT_REVISION)
-#define Q_MOC_OUTPUT_REVISION 3
-#elif Q_MOC_OUTPUT_REVISION != 3
-#error "Moc format conflict - please regenerate all moc files"
-#endif
-
-#include <qmetaobject.h>
-
-
-const char *QMovieFilePrivate::className() const
-{
-    return "QMovieFilePrivate";
-}
-
-QMetaObject *QMovieFilePrivate::metaObj = 0;
-
-void QMovieFilePrivate::initMetaObject()
-{
-    if ( metaObj )
-	return;
-    if ( strcmp(QObject::className(), "QObject") != 0 )
-	badSuperclassWarning("QMovieFilePrivate","QObject");
-    if ( !QObject::metaObject() )
-	QObject::initMetaObject();
-    typedef void(QMovieFilePrivate::*m1_t0)();
-    m1_t0 v1_0 = &QMovieFilePrivate::refresh;
-    QMetaData *slot_tbl = new QMetaData[1];
-    slot_tbl[0].name = "refresh()";
-    slot_tbl[0].ptr = *((QMember*)&v1_0);
-    typedef void(QMovieFilePrivate::*m2_t0)(const QSize&);
-    typedef void(QMovieFilePrivate::*m2_t1)(const QRect&);
-    typedef void(QMovieFilePrivate::*m2_t2)(int);
-    m2_t0 v2_0 = &QMovieFilePrivate::sizeChanged;
-    m2_t1 v2_1 = &QMovieFilePrivate::areaChanged;
-    m2_t2 v2_2 = &QMovieFilePrivate::dataStatus;
-    QMetaData *signal_tbl = new QMetaData[3];
-    signal_tbl[0].name = "sizeChanged(const QSize&)";
-    signal_tbl[1].name = "areaChanged(const QRect&)";
-    signal_tbl[2].name = "dataStatus(int)";
-    signal_tbl[0].ptr = *((QMember*)&v2_0);
-    signal_tbl[1].ptr = *((QMember*)&v2_1);
-    signal_tbl[2].ptr = *((QMember*)&v2_2);
-    metaObj = new QMetaObject( "QMovieFilePrivate", "QObject",
-	slot_tbl, 1,
-	signal_tbl, 3 );
-}
-
-#include "qsignalslotimp.h"
-
-// SIGNAL sizeChanged
-void QMovieFilePrivate::sizeChanged( const QSize& t0 )
-{
-    QConnectionList *clist = receivers("sizeChanged(const QSize&)");
-    if ( !clist || signalsBlocked() )
-	return;
-    typedef void (QObject::*RT0)();
-    typedef RT0 *PRT0;
-    typedef void (QObject::*RT1)(const QSize&);
-    typedef RT1 *PRT1;
-    RT0 r0;
-    RT1 r1;
-    QConnectionListIt it(*clist);
-    QConnection   *c;
-    QSenderObject *object;
-    while ( (c=it.current()) ) {
-	++it;
-	object = (QSenderObject*)c->object();
-	object->setSender( this );
-	switch ( c->numArgs() ) {
-	    case 0:
-		r0 = *((PRT0)(c->member()));
-		(object->*r0)();
-		break;
-	    case 1:
-		r1 = *((PRT1)(c->member()));
-		(object->*r1)(t0);
-		break;
-	}
-    }
-}
-
-// SIGNAL areaChanged
-void QMovieFilePrivate::areaChanged( const QRect& t0 )
-{
-    QConnectionList *clist = receivers("areaChanged(const QRect&)");
-    if ( !clist || signalsBlocked() )
-	return;
-    typedef void (QObject::*RT0)();
-    typedef RT0 *PRT0;
-    typedef void (QObject::*RT1)(const QRect&);
-    typedef RT1 *PRT1;
-    RT0 r0;
-    RT1 r1;
-    QConnectionListIt it(*clist);
-    QConnection   *c;
-    QSenderObject *object;
-    while ( (c=it.current()) ) {
-	++it;
-	object = (QSenderObject*)c->object();
-	object->setSender( this );
-	switch ( c->numArgs() ) {
-	    case 0:
-		r0 = *((PRT0)(c->member()));
-		(object->*r0)();
-		break;
-	    case 1:
-		r1 = *((PRT1)(c->member()));
-		(object->*r1)(t0);
-		break;
-	}
-    }
-}
-
-// SIGNAL dataStatus
-void QMovieFilePrivate::dataStatus( int t0 )
-{
-    activate_signal( "dataStatus(int)", t0 );
-}
+#include "qmovie.moc"

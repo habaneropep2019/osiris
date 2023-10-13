@@ -4,28 +4,47 @@ CONFIG		= qt warn_on release
 # Comment out the next line if you don't want use png/zlib in 3rdparty
 # CONFIG		+= png zlib
 
+# Uncomment the next line if you want to use NAS sound
+#unix:DEFINES    += QT_NAS_SUPPORT
+#unix:LIBS	+= -laudio -lXt
+
+# Uncomment the next line if you want to use jpeglib
+#
+# Install jpegsrc.v6b.tar.gz (find with http://ftpsearch.lycos.com)
+#
+#unix:DEFINES += QT_JPEG_SUPPORT
+#unix:LIBS	+= -ljpeg
+#win32:DEFINES += QT_JPEG_SUPPORT
+#win32:LIBS	+= libjpeg.lib
+
 # Uncomment the next line if you want to use the standard png/zlib libs
 # unix:LIBS	+= -lpng -lz
 
-#DEFINES += QT_NO_ASCII_CAST
-#DEFINES += QT_NO_CAST_ASCII
+# for now, dunno how to make this configurable, also requires a #define in qapplication_x11.cpp
+# unix:LIBS += $$TMAKE_LIBS_X11SM
+# DEFINES += QT_SM_SUPPORT
+# DEFINES += QT_THREAD_SUPPORT
+# unix:LIBS += -lpthread
 
-unix:CONFIG	+= x11inc
-unix:TMAKE_CXXFLAGS   += -DQT_FATAL_ASSERT
+#DEFINES	+= QT_NO_ASCII_CAST
+#DEFINES	+= QT_NO_CAST_ASCII
+
+unix:CONFIG	       += x11inc
+unix:TMAKE_CXXFLAGS    += -DQT_FATAL_ASSERT
 
 win32:TMAKE_CFLAGS     += -DUNICODE
 win32:TMAKE_CXXFLAGS   += -DUNICODE
-#win32:TMAKE_CFLAGS     += -MD
-#win32:TMAKE_CXXFLAGS   += -MD
+#win32:TMAKE_CFLAGS    += -MT
+#win32:TMAKE_CXXFLAGS  += -MT
 
 PNG_INCLUDEPATH		= 3rdparty/libpng
 ZLIB_INCLUDEPATH	= 3rdparty/zlib
-png:INCLUDEPATH	       += $$PNG_INCLUDEPATH
+png:INCLUDEPATH        += $$PNG_INCLUDEPATH
 zlib:INCLUDEPATH       += $$ZLIB_INCLUDEPATH
 win32:INCLUDEPATH      += tmp
 win32-borland:INCLUDEPATH += kernel
 
-win32:MOC_DIR	= tmp
+win32:MOC_DIR	  = tmp
 win32:OBJECTS_DIR = tmp
 
 win32:DIALOGS_H	= ../include
@@ -38,6 +57,11 @@ unix:KERNEL_H	= kernel
 unix:TOOLS_H	= tools
 unix:WIDGETS_H	= widgets
 
+DIALOGS_P	= dialogs
+KERNEL_P	= kernel
+TOOLS_P		= tools
+WIDGETS_P	= widgets
+
 win32:DEPENDPATH = ../include
 unix:DEPENDPATH	= $$DIALOGS_H:$$KERNEL_H:$$TOOLS_H:$$WIDGETS_H
 
@@ -48,6 +72,7 @@ HEADERS		= $$DIALOGS_H/qcolordialog.h \
 		  $$DIALOGS_H/qprogressdialog.h \
 		  $$DIALOGS_H/qtabdialog.h \
 		  $$DIALOGS_H/qwizard.h \
+		  $$DIALOGS_H/qinputdialog.h \
 		  $$KERNEL_H/qabstractlayout.h \
 		  $$KERNEL_H/qaccel.h \
 		  $$KERNEL_H/qapplication.h \
@@ -66,20 +91,23 @@ HEADERS		= $$DIALOGS_H/qcolordialog.h \
 		  $$KERNEL_H/qevent.h \
 		  $$KERNEL_H/qfocusdata.h \
 		  $$KERNEL_H/qfont.h \
-		  $$KERNEL_H/qfontdata.h \
+		  $$KERNEL_P/qfontdata_p.h \
 		  $$KERNEL_H/qfontinfo.h \
 		  $$KERNEL_H/qfontmetrics.h \
+		  $$KERNEL_H/qguardedptr.h \
 		  $$KERNEL_H/qgif.h \
 		  $$KERNEL_H/qiconset.h \
 		  $$KERNEL_H/qimage.h \
 		  $$KERNEL_H/qkeycode.h \
+		  $$KERNEL_H/qjpegio.h \
 		  $$KERNEL_H/qlayout.h \
-		  $$KERNEL_H/qlayoutengine.h \
+		  $$KERNEL_P/qlayoutengine_p.h \
 		  $$KERNEL_H/qtranslator.h \
 		  $$KERNEL_H/qmetaobject.h \
 		  $$KERNEL_H/qmime.h \
 		  $$KERNEL_H/qmovie.h \
 		  $$KERNEL_H/qnamespace.h \
+		  $$KERNEL_H/qnetworkprotocol.h \
 		  $$KERNEL_H/qobject.h \
 		  $$KERNEL_H/qobjectdefs.h \
 		  $$KERNEL_H/qobjectdict.h \
@@ -112,14 +140,20 @@ HEADERS		= $$DIALOGS_H/qcolordialog.h \
 		  $$KERNEL_H/qstyle.h \
 		  $$KERNEL_H/qstylesheet.h \
 		  $$KERNEL_H/qtimer.h \
+		  $$KERNEL_H/qurl.h \
+		  $$KERNEL_H/qlocalfs.h \
+		  $$KERNEL_H/qurloperator.h \
+		  $$KERNEL_H/qurlinfo.h \
 		  $$KERNEL_H/qwidget.h \
 		  $$KERNEL_H/qwidgetintdict.h \
 		  $$KERNEL_H/qwidgetlist.h \
 		  $$KERNEL_H/qwindowdefs.h \
 		  $$KERNEL_H/qwmatrix.h \
+		  $$KERNEL_H/qvariant.h \
 		  $$TOOLS_H/qarray.h \
 		  $$TOOLS_H/qasciicache.h \
 		  $$TOOLS_H/qasciidict.h \
+		  $$TOOLS_H/qbig5codec.h \
 		  $$TOOLS_H/qbitarray.h \
 		  $$TOOLS_H/qbuffer.h \
 		  $$TOOLS_H/qcache.h \
@@ -132,9 +166,10 @@ HEADERS		= $$DIALOGS_H/qcolordialog.h \
 		  $$TOOLS_H/qeucjpcodec.h \
 		  $$TOOLS_H/qeuckrcodec.h \
 		  $$TOOLS_H/qfile.h \
-		  $$TOOLS_H/qfiledefs.h \
+		  $$TOOLS_P/qfiledefs_p.h \
 		  $$TOOLS_H/qfileinfo.h \
 		  $$TOOLS_H/qgarray.h \
+		  $$TOOLS_H/qgbkcodec.h \
 		  $$TOOLS_H/qgcache.h \
 		  $$TOOLS_H/qgdict.h \
 		  $$TOOLS_H/qgeneric.h \
@@ -164,7 +199,7 @@ HEADERS		= $$DIALOGS_H/qcolordialog.h \
 		  $$TOOLS_H/qtextstream.h \
 		  $$TOOLS_H/qutfcodec.h \
 		  $$TOOLS_H/qvector.h \
-		  $$TOOLS_H/qvaluelist.h \
+	          $$TOOLS_H/qvaluelist.h \
 		  $$WIDGETS_H/qbuttongroup.h \
 		  $$WIDGETS_H/qbutton.h \
 		  $$WIDGETS_H/qcheckbox.h \
@@ -178,6 +213,7 @@ HEADERS		= $$DIALOGS_H/qcolordialog.h \
 		  $$WIDGETS_H/qheader.h \
 		  $$WIDGETS_H/qhgroupbox.h \
 		  $$WIDGETS_H/qhbox.h \
+		  $$WIDGETS_H/qiconview.h \
 		  $$WIDGETS_H/qlabel.h \
 		  $$WIDGETS_H/qlcdnumber.h \
 		  $$WIDGETS_H/qlineedit.h \
@@ -212,14 +248,18 @@ HEADERS		= $$DIALOGS_H/qcolordialog.h \
 		  $$WIDGETS_H/qvbox.h \
 		  $$WIDGETS_H/qvbuttongroup.h \
 		  $$WIDGETS_H/qvgroupbox.h \
-		  $$WIDGETS_H/qwellarray.h \
+		  $$WIDGETS_P/qwellarray_p.h \
 		  $$WIDGETS_H/qwhatsthis.h \
 		  $$WIDGETS_H/qwidgetstack.h \
-		  $$WIDGETS_H/qwindowsstyle.h
+		  $$WIDGETS_H/qwindowsstyle.h \
+		  $$WIDGETS_H/qworkspace.h \
 
 # DO NOT sort directories - dependency order = tools,kernel,widgets,dialogs
 
-win32:SOURCES	= kernel/qapplication_win.cpp \
+win32:SOURCES	= tools/qdir_win.cpp \
+	 	  tools/qfile_win.cpp \
+		  tools/qfileinfo_win.cpp \
+		  kernel/qapplication_win.cpp \
 		  kernel/qclipboard_win.cpp \
 		  kernel/qcolor_win.cpp \
 		  kernel/qcursor_win.cpp \
@@ -236,25 +276,30 @@ win32:SOURCES	= kernel/qapplication_win.cpp \
 
 win32:SOURCES  += kernel/qole_win.c
 
-unix:SOURCES    = kernel/qapplication_x11.cpp \
+unix:SOURCES    = tools/qdir_unix.cpp \
+		  tools/qfile_unix.cpp \
+		  tools/qfileinfo_unix.cpp \
+		  kernel/qapplication_x11.cpp \
 		  kernel/qclipboard_x11.cpp \
 		  kernel/qcolor_x11.cpp \
 		  kernel/qcursor_x11.cpp \
 		  kernel/qdnd_x11.cpp \
+		  kernel/qmotifdnd_x11.cpp \
 		  kernel/qfont_x11.cpp \
 		  kernel/qpixmap_x11.cpp \
 		  kernel/qprinter_x11.cpp \
 		  kernel/qpaintdevice_x11.cpp \
 		  kernel/qpainter_x11.cpp \
 		  kernel/qregion_x11.cpp \
-		  kernel/qwidget_x11.cpp
+		  kernel/qwidget_x11.cpp \
 
 unix:SOURCES   += dialogs/qprintdialog.cpp \
 		  kernel/qpsprinter.cpp \
 		  kernel/qnpsupport.cpp \
 		  kernel/qwidgetcreate_x11.cpp
 
-SOURCES	       += tools/qbitarray.cpp \
+SOURCES	       += tools/qbig5codec.cpp \
+		  tools/qbitarray.cpp \
 		  tools/qbuffer.cpp \
 		  tools/qcollection.cpp \
 		  tools/qcstring.cpp \
@@ -266,6 +311,7 @@ SOURCES	       += tools/qbitarray.cpp \
 		  tools/qfile.cpp \
 		  tools/qfileinfo.cpp \
 		  tools/qgarray.cpp \
+		  tools/qgbkcodec.cpp \
 		  tools/qgcache.cpp \
 		  tools/qgdict.cpp \
 		  tools/qglist.cpp \
@@ -301,14 +347,17 @@ SOURCES	       += tools/qbitarray.cpp \
 		  kernel/qfocusdata.cpp \
 		  kernel/qfont.cpp \
 		  kernel/qfontdatabase.cpp \
+		  kernel/qguardedptr.cpp \
 		  kernel/qiconset.cpp \
 		  kernel/qimage.cpp \
+		  kernel/qjpegio.cpp \
 		  kernel/qlayout.cpp \
 		  kernel/qlayoutengine.cpp \
 		  kernel/qtranslator.cpp \
 		  kernel/qmetaobject.cpp \
 		  kernel/qmime.cpp \
 		  kernel/qmovie.cpp \
+		  kernel/qnetworkprotocol.cpp \
 		  kernel/qobject.cpp \
 		  kernel/qpainter.cpp \
 		  kernel/qpalette.cpp \
@@ -333,8 +382,13 @@ SOURCES	       += tools/qbitarray.cpp \
 		  kernel/qsocketnotifier.cpp \
 		  kernel/qstylesheet.cpp \
 		  kernel/qtimer.cpp \
+		  kernel/qurl.cpp \
+		  kernel/qlocalfs.cpp \
+		  kernel/qurloperator.cpp \
+		  kernel/qurlinfo.cpp \
 		  kernel/qwidget.cpp \
 		  kernel/qwmatrix.cpp \
+		  kernel/qvariant.cpp \
 		  widgets/qbuttongroup.cpp \
 		  widgets/qbutton.cpp \
 		  widgets/qcdestyle.cpp \
@@ -348,6 +402,7 @@ SOURCES	       += tools/qbitarray.cpp \
 		  widgets/qheader.cpp \
 		  widgets/qhgroupbox.cpp \
 		  widgets/qhbox.cpp \
+		  widgets/qiconview.cpp \
 		  widgets/qlabel.cpp \
 		  widgets/qlcdnumber.cpp \
 		  widgets/qlineedit.cpp \
@@ -386,16 +441,18 @@ SOURCES	       += tools/qbitarray.cpp \
 		  widgets/qwhatsthis.cpp \
 		  widgets/qwidgetstack.cpp \
 		  widgets/qwindowsstyle.cpp \
+		  widgets/qworkspace.cpp \
 		  dialogs/qcolordialog.cpp \
 		  dialogs/qfiledialog.cpp \
 		  dialogs/qfontdialog.cpp \
 		  dialogs/qmessagebox.cpp \
 		  dialogs/qprogressdialog.cpp \
 		  dialogs/qtabdialog.cpp \
-		  dialogs/qwizard.cpp
+		  dialogs/qwizard.cpp \
+		  dialogs/qinputdialog.cpp
 
 unix:HEADERS   += $$DIALOGS_H/qprintdialog.h \
-		  $$KERNEL_H/qpsprinter.h \
+		  $$KERNEL_P/qpsprinter_p.h \
 		  $$KERNEL_H/qfontdatabase.h
 
 PNG_SOURCES	= 3rdparty/libpng/png.c \
@@ -433,6 +490,7 @@ png:SOURCES    += $$PNG_SOURCES
 zlib:SOURCES   += $$ZLIB_SOURCES
 
 TARGET		= qt
-VERSION		= 2.0.2
+VERSION		= 2.1.0
 DESTDIR		= ../lib
 DLLDESTDIR	= ../bin
+

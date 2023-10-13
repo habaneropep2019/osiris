@@ -1,0 +1,62 @@
+.TH QColorDialog 3qt "12 April 2000" "Troll Tech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.\" license file included in the distribution for a complete license
+.\" statement.
+.\"
+.ad l
+.nh
+.SH NAME
+QColorDialog \- The QColorDialog provides a dialog widget for specifying colors
+\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
+.br
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <qcolordialog.h>\fR
+.PP
+Inherits QDialog.
+.PP
+.SS "Static Public Members"
+.TP
+QColor \fBgetColor\fR ( QColor, QWidget * parent=0, const char * name=0 ) 
+.TP
+QRgb \fBgetRgba\fR ( QRgb, bool * ok = 0, QWidget * parent=0, const char * name=0 ) 
+.TP
+int \fBcustomCount\fR () 
+.TP
+QRgb \fBcustomColor\fR ( int ) 
+.TP
+void \fBsetCustomColor\fR ( int, QRgb ) 
+.SH DESCRIPTION
+The QColorDialog provides a dialog widget for specifying colors.
+.PP
+The color dialog's function is to allow users to choose colours - for instance, you might use this in a drawing program to allow the user to set the brush colour.
+.PP
+This version of Qt only provides modal color dialogs. The static getColor() function shows the dialog and allows the user to specify a color, while getRgba() does the same but allows the user to specify a color with an alpha channel (transparency) value.
+.PP
+The user can store customCount() different custom colors. The custom colors are shared by all color dialogs, and remembered during the execution of the program. Use setCustomColor() to set the custom colors, and customColor() to get them.
+.PP
+<img src=qcolordlg-m.png> <img src=qcolordlg-w.png>
+.SH MEMBER FUNCTION DOCUMENTATION
+.SH "QRgb QColorDialog::customColor ( int i ) \fC[static]\fR"
+Returns custom color number \fIi\fR as a QRgb.
+.SH "int QColorDialog::customCount () \fC[static]\fR"
+Returns the number of custom colors supported by QColorDialog. All color dialogs share the same custom colors.
+.SH "QColor QColorDialog::getColor ( QColor initial, QWidget * parent=0, const char * name=0 ) \fC[static]\fR"
+Pops up a modal color dialog letting the user choose a color and returns that color. The color is initially set to \fIinitial.\fR Returns an invalid color if the user cancels the dialog. All colors allocated by the dialog will be deallocated before this function returns.
+.SH "QRgb QColorDialog::getRgba ( QRgb initial, bool * ok = 0, QWidget * parent=0, const char * name=0 ) \fC[static]\fR"
+Pops up a modal color dialog, letting the user choose a color and an alpha channel value. The color+alpha is initially set to \fIinitial.\fR
+.PP
+If \fIok\fR is non-null, \fC*ok\fR is set to TRUE if the user clicked OK, and FALSE if the user clicked Cancel.
+.PP
+If the user clicks Cancel the \fIinitial\fR value is returned.
+.SH "void QColorDialog::setCustomColor ( int i, QRgb c ) \fC[static]\fR"
+Sets custom color number \fIi\fR to the QRgb value \fIc.\fR
+.SH "SEE ALSO"
+.BR http://doc.trolltech.com/qcolordialog.html
+.SH COPYRIGHT
+Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+license file included in the distribution for a complete license
+statement.
+.SH AUTHOR
+Generated automatically from the source code.

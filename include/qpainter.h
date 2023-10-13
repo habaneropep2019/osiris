@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qpainter.h,v 2.48.2.1 1999/07/14 19:13:18 aavit Exp $
+** $Id: qt/src/kernel/qpainter.h   2.1.0   edited 2000-03-31 $
 **
 ** Definition of QPainter class
 **
 ** Created : 940112
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -79,6 +79,7 @@ public:
     void	setBrush( const QBrush & );
     void	setBrush( BrushStyle );
     void	setBrush( const QColor & );
+    QPoint	pos() const;
 
   // Drawing attributes/modes
 
@@ -162,6 +163,8 @@ public:
 				  const QColor &bgColor );
     void	drawRoundRect( int x, int y, int w, int h, int, int );
     void	drawRoundRect( const QRect &, int, int );
+    void	drawRoundRect( int x, int y, int w, int h );
+    void	drawRoundRect( const QRect & );
     void	drawEllipse( int x, int y, int w, int h );
     void	drawEllipse( const QRect & );
     void	drawArc( int x, int y, int w, int h, int a, int alen );
@@ -224,12 +227,15 @@ public:
     int	       *tabArray() const;
     void	setTabArray( int * );
 
+    // Other functions
+    
 #if defined(_WS_WIN_)
     HDC		handle() const;
 #elif defined(_WS_X11_)
     HANDLE	handle() const;
 #endif
 
+    
     static void initialize();
     static void cleanup();
 
@@ -326,6 +332,10 @@ protected:
     GC		gc;				// graphics context (standard)
     GC		gc_brush;			// graphics contect for brush
     QPoint	curPt;				// current point
+#elif defined(_WS_MAC_)
+    int penx;
+    int peny;
+    void * hd;
 #endif
     friend class QFontMetrics;
     friend class QFontInfo;
@@ -354,16 +364,6 @@ inline QPaintDevice *QPainter::device() const
 inline bool QPainter::isActive() const
 {
     return testf(IsActive);
-}
-
-inline QFontMetrics QPainter::fontMetrics() const
-{
-    return QFontMetrics(this);
-}
-
-inline QFontInfo QPainter::fontInfo() const
-{
-    return QFontInfo(this);
 }
 
 inline const QFont &QPainter::font() const
@@ -509,6 +509,21 @@ inline void QPainter::drawRoundRect( const QRect &r, int xRnd, int yRnd )
 {
     drawRoundRect( r.x(), r.y(), r.width(), r.height(), xRnd, yRnd );
 }
+
+inline void QPainter::drawRoundRect( const QRect &r )
+{
+    // ### Qt 3.0 make one func. with def. args.
+    drawRoundRect( r.x(), r.y(), r.width(), r.height(), 25, 25 );
+}
+
+inline void QPainter::drawRoundRect( int x, int y, int w, int h )
+{
+    // ### Qt 3.0 make one func. with def. args.
+    drawRoundRect( x, y, w, h, 25, 25 );
+}
+
+
+
 
 inline void QPainter::drawEllipse( const QRect &r )
 {

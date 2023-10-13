@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qvgroupbox.cpp,v 1.1 1999/06/02 16:53:02 eiriken Exp $
+** $Id: qt/src/widgets/qvgroupbox.cpp   2.1.0   edited 2000-03-24 $
 **
 ** Implementation of QVGroupBox class
 **
 ** Created : 990602
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,27 +17,28 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
 #include "qvgroupbox.h"
 
+// NOT REVISED
 /*!
   \class QVGroupBox qvgroupbox.h
 
-  \brief The QVGroupBox widget organizes QButton widgets in a group
+  \brief The QVGroupBox widget organizes widgets in a group
   with one vertical column.
 
-  \ingroup realwidgets
+  \ingroup geomanagement
 
   QVGroupBox is a convenience class that offers a thin layer on top of
   QGroupBox. Think of it as a QVBox that offers a frame with a title.
 */
 
-/*!  
+/*!
   Constructs a vertical group box with no title.
 
   The \e parent and \e name arguments are passed to the QWidget constructor.
@@ -60,7 +61,7 @@ QVGroupBox::QVGroupBox( const QString &title, QWidget *parent,
 }
 
 /*!
-  Destroys the vertical group box and its child widgets.
+  Destructs the vertical group box, deleting its child widgets.
 */
 QVGroupBox::~QVGroupBox()
 {

@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qfont.h,v 2.32 1999/06/23 03:18:59 warwick Exp $
+** $Id: qt/src/kernel/qfont.h   2.1.0   edited 2000-03-24 $
 **
 ** Definition of QFont class
 **
 ** Created : 940514
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -61,8 +61,17 @@ public:
 		     Set_Ko,
 		     Set_Th_TH,
 		     Set_Zh,
-		     Set_Zh_TW, Set_N = Set_Zh_TW,
-		     Unicode
+		     Set_Zh_TW,
+		     Set_N = Set_Zh_TW,
+		     Unicode,
+		     /* The following will need to be re-ordered later,
+			since we accidientally left no room below "Unicode".
+		        (For binary-compatibility that cannot change yet).
+			The above will be obsoleted and a same-named list
+			added below.
+		     */
+		     Set_GBK,
+		     Set_Big5
 		    };
     enum StyleHint { Helvetica, Times, Courier, OldEnglish,  System, AnyStyle,
 		     SansSerif	= Helvetica,
@@ -108,7 +117,7 @@ public:
 
     static CharSet charSetForLocale();
 
-    bool	rawMode()	const;
+    bool	rawMode()      const;
     void	setRawMode( bool );
 
     bool	exactMatch()	const;
@@ -119,6 +128,8 @@ public:
 
 #if defined(_WS_WIN_)
     HFONT	handle() const;
+#elif defined(_WS_MAC_)
+    HANDLE      handle() const;
 #elif defined(_WS_X11_)
     HANDLE	handle() const;
 #endif
@@ -130,7 +141,7 @@ public:
 
     static QString encodingName( CharSet );
 
-    static const QFont defaultFont();
+    static QFont defaultFont();
     static void setDefaultFont( const QFont & );
 
     static QString substitute( const QString &familyName );
@@ -157,6 +168,9 @@ private:
     void	detach();
     void	initFontInfo() const;
     void	load() const;
+#if defined(_WS_MAC_)
+    void        macSetFont(void *);
+#endif
 #if defined(_WS_WIN_)
     HFONT	create( bool *, HDC=0, bool=FALSE ) const;
     void       *textMetric() const;

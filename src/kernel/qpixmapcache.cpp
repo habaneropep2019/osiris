@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qpixmapcache.cpp,v 2.22 1999/06/03 16:35:19 warwick Exp $
+** $Id: qt/src/kernel/qpixmapcache.cpp   2.1.0   edited 2000-03-24 $
 **
 ** Implementation of QPixmapCache class
 **
 ** Created : 950504
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -28,27 +28,32 @@
 #include "qobject.h"
 
 
+// REVISED: paul
 /*!
   \class QPixmapCache qpixmapcache.h
 
   \brief The QPixmapCache class provides an application-global cache for
   pixmaps.
 
-  \ingroup kernel
+  \ingroup environment
+  \ingroup drawing
 
-  This class is a tool for optimized drawing with \link QPixmap
-  QPixmaps\endlink.  Here follows an example.  The QRadioButton widget has
-  a non-trivial visual representation.	In the \link
-  QRadioButton::drawButton() drawButton()\endlink function, we do not draw
-  the radio button directly. Instead, we first check the global pixmap
-  cache if a pixmap called "$qt_radio_s_" exists. The \c s is a numerical
-  value that specifies the the radio button state.  If a pixmap is found,
-  we bitBlt() it onto the widget and return. Otherwise, we create a new
-  pixmap, draw the radio button in the pixmap and finally insert the
-  pixmap in the global pixmap cache, using the key above.  The bitBlt() is
-  10 times faster than drawing the radio button.  All radio buttons in the
-  program share the cached pixmap since QPixmapCache is
-  application-global.
+  This class is a tool for optimized drawing with QPixmap.  You can
+  use it to store temporary pixmaps that are expensive to generate,
+  without using more storage space than cacheLimit(). Use insert() to
+  insert pixmaps, find() to find them and clear() to empty the cache.
+
+  Here follows an example. QRadioButton has a non-trivial visual
+  representation. In the function QRadioButton::drawButton(), we do
+  not draw the radio button directly. Instead, we first check the
+  global pixmap cache for a pixmap with the key "$qt_radio_nnn_",
+  where \c nnn is a numerical value that specifies the the radio
+  button state.  If a pixmap is found, we bitBlt() it onto the widget
+  and return. Otherwise, we create a new pixmap, draw the radio button
+  in the pixmap and finally insert the pixmap in the global pixmap
+  cache, using the key above.  The bitBlt() is 10 times faster than
+  drawing the radio button.  All radio buttons in the program share
+  the cached pixmap since QPixmapCache is application-global.
 
   QPixmapCache contains no member data, only static functions to access
   the global pixmap cache.  It creates an internal QCache for caching the
@@ -59,15 +64,16 @@
   pixmap will hide the first pixmap. The QDict and QCache classes do
   exactly the same.
 
-  The cache becomes full when the total size of all pixmaps in the cache
-  exceeds the cache limit.  The initial cache limit is 1024 KByte (1
-  MByte).  A pixmap takes roughly width*height*depth/8 bytes of memory.
+  The cache becomes full when the total size of all pixmaps in the
+  cache exceeds cacheLimit().  The initial cache limit is 1024 KByte
+  (1 MByte); it is changed with setCacheLimit().  A pixmap takes
+  roughly width*height*depth/8 bytes of memory.
 
-  See the QCache documentation for a more details about the cache mechanism.
+  See the \l QCache documentation for more details about the cache mechanism.
 */
 
 
-const  int cache_size	  = 149;		// size of internal hash array
+static const int cache_size = 149;		// size of internal hash array
 static int cache_limit	  = 1024;		// 1024 KB cache limit
 
 void cleanup_pixmap_cache();
@@ -144,7 +150,7 @@ void cleanup_pixmap_cache()
 
 
 /*!
-  Returns the pixmap associated with \e key in the cache, or null if there
+  Returns the pixmap associated with \a key in the cache, or null if there
   is no such pixmap.
 
   <strong>
@@ -176,9 +182,10 @@ QPixmap *QPixmapCache::find( const QString &key )
 
 
 /*!
-  Sets \a pm to the cached pixmap associated with \e key in the cache and
-  returns TRUE.  If FALSE is returned, no cached copy was found, and
-  \a pm is unchanged.
+  Looks for a cached pixmap associated with \a key in the cache.  If a
+  pixmap is found, the function sets \a pm to that pixmap and returns
+  TRUE.  Otherwise, the function returns FALSE and does not change \a
+  pm.
 
   Example:
   \code
@@ -200,15 +207,20 @@ bool QPixmapCache::find( const QString &key, QPixmap& pm )
 
 
 /*!
-  Inserts the pixmap \e pm associated with \e key into the cache.
+  \obsolete
+  Inserts the pixmap \a pm associated with \a key into the cache.
   Returns TRUE if successful, or FALSE if the pixmap is too big for the cache.
 
   <strong>
-    NOTE: If this function returns FALSE, you must delete \a pm yourself.
-    Additionally, be very careful about using \a pm after calling this
-    function, as any other insertions into the cache, from anywhere in
-    the application, or within Qt itself, could cause the pixmap to be
-    discarded from the cache, and the pointer to become invalid.
+    NOTE: \a pm must be allocated on the heap (using \c new).
+
+    If this function returns FALSE, you must delete \a pm yourself.
+
+    If this function returns TRUE, do not use \a pm afterwards or
+    keep references to it, as any other insertions into the cache,
+    from anywhere in the application, or within Qt itself, could cause
+    the pixmap to be discarded from the cache, and the pointer to
+    become invalid.
 
     Due to these dangers, we strongly recommend that you use
     insert(const QString&, const QPixmap&) instead.
@@ -225,7 +237,7 @@ bool QPixmapCache::insert( const QString &key, QPixmap *pm )
 }
 
 /*!
-  Inserts a copy of the pixmap \e pm associated with \e key into the cache.
+  Inserts a copy of the pixmap \a pm associated with \a key into the cache.
   Returns TRUE if successful, or FALSE if the pixmap is too big for the cache.
 
   All pixmaps inserted by the Qt library have a key starting with "$qt..".
@@ -265,7 +277,7 @@ int QPixmapCache::cacheLimit()
 }
 
 /*!
-  Sets the cache limit to \e n kilobytes.
+  Sets the cache limit to \a n kilobytes.
 
   The default setting is 1024 kilobytes.
 

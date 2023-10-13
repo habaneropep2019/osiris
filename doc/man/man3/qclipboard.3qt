@@ -1,0 +1,155 @@
+.TH QClipboard 3qt "12 April 2000" "Troll Tech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.\" license file included in the distribution for a complete license
+.\" statement.
+.\"
+.ad l
+.nh
+.SH NAME
+QClipboard \- Access to the window systems clipboard
+\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
+.br
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <qclipboard.h>\fR
+.PP
+Inherits QObject.
+.PP
+.SS "Public Members"
+.in +1c
+.ti -1c
+.BI "void \fBclear\fR ()"
+.br
+.ti -1c
+.BI "QMimeSource* \fBdata\fR () const"
+.br
+.ti -1c
+.BI "void \fBsetData\fR ( QMimeSource * )"
+.br
+.ti -1c
+.BI "QString \fBtext\fR () const"
+.br
+.ti -1c
+.BI "void \fBsetText\fR ( const QString & )"
+.br
+.ti -1c
+.BI "QImage \fBimage\fR () const"
+.br
+.ti -1c
+.BI "QPixmap \fBpixmap\fR () const"
+.br
+.ti -1c
+.BI "void \fBsetImage\fR ( const QImage & )"
+.br
+.ti -1c
+.BI "void \fBsetPixmap\fR ( const QPixmap & )"
+.br
+.in -1c
+.SS "Signals"
+.in +1c
+.ti -1c
+.BI "void \fBdataChanged\fR ()"
+.br
+.in -1c
+.SS "Protected Members"
+.in +1c
+.ti -1c
+.BI "virtual void \fBconnectNotify\fR ( const char * ) (internal)"
+.br
+.in -1c
+.SH DESCRIPTION
+The QClipboard class provides access to the window systems clipboard.
+.PP
+The clipboard offers a simple mechanism to copy and paste data between applications.
+.PP
+QClipboard supports the same data types that drag and drop supports, and uses much of the same mechanisms.
+.PP
+Only a single QClipboard object may exist in an application. This is because QClipboard is a shared window system resource. Call QApplication::clipboard() to access the clipboard.
+.PP
+Example:
+.PP
+.nf
+.br
+    QClipboard *cb = QApplication::clipboard();
+.br
+    QString text;
+.br
+.br
+    // Copy text from the clipboard (paste)
+.br
+    text = cb->text();
+.br
+    if ( text )
+.br
+        qDebug( "The clipboard contains: %s", text );
+.br
+.br
+    // Copy text into the clipboard
+.br
+    cb->setText( "This text can be pasted by other programs" );
+.fi
+.PP
+QClipboard features some convenience functions to access common data types. The methods setText() and text() allow to exchange unicode text easily over the clipboard, while setPixmap(), setImage() and pixmap(), image() allow to exchange QPixmap and QImage between applications.
+.PP
+The most flexible methods are data() and setData(). They allow to put a QMimeSource() on the clipboard or retrieve it from the clipboard. This does not only allow you to put all kind of data type on the clipboard. In addition it allows you to exchange some information using different data types. For example you want to put a sound on the clipboard. Since you can not know exactly what kind of formats the other application understands you can feature multiple formats at once. This functionality is provided by QMimeSource. The application which retrieves the data from the clipboard receives a QMimeSource, too, and can select one of the offered data types.
+.PP
+You can clear the clipboard by calling the method clear().
+.SH MEMBER FUNCTION DOCUMENTATION
+.SH "void QClipboard::clear ()"
+Clears the clipboard contents.
+.SH "QMimeSource* QClipboard::data () const"
+Returns a reference to a QMimeSource representation of the current clipboard data.
+.SH "void QClipboard::dataChanged () \fC[signal]\fR"
+This signal is emitted when the clipboard data is changed.
+.SH "bool QClipboard::event ( QEvent * e ) \fC[virtual protected]\fR"
+Reimplemented for internal reasons; the API is not affected.
+.PP
+Reimplemented from QObject.
+.SH "QImage QClipboard::image () const"
+Returns the clipboard image, or a null image if the clipboard does not contain an image. In addition a null image may be returned if Qt does not understand the provided image format.
+.PP
+See also: setImage(), pixmap() and data().
+.SH "QPixmap QClipboard::pixmap () const"
+Returns the clipboard pixmap, or null if the clipboard does not contain any pixmap. Note that this usually looses more information than image().
+.PP
+See also: setPixmap(), image() and data().
+.SH "void QClipboard::setData ( QMimeSource * src )"
+Sets the clipboard data. Ownership of the data is transferred to the clipboard - the only way to remove this data is to set something else, or to call clear(). The QDragObject subclasses are reasonable things to put on the clipboard (but do not try to drag the same object). Do not put QDragMoveEvent or QDropEvent subclasses on the clipboard, as they do not belong to the event handler which receives them.
+.PP
+The setText() and setPixmap() functions are shorthand ways of setting the data.
+.SH "void QClipboard::setImage ( const QImage & image )"
+Copies \fIimage\fR into the clipboard.
+.PP
+This is just a shorthand for:
+.PP
+.nf
+.br
+    setData(new QImageDrag(image))
+.fi
+.PP
+See also: image(), setPixmap() and setData().
+.SH "void QClipboard::setPixmap ( const QPixmap & pixmap )"
+Copies \fIpixmap\fR into the clipboard. Note that this usually looses more information than setImage(), as the data may be converted to an image for transfer.
+.PP
+See also: pixmap(), setImage() and setData().
+.SH "void QClipboard::setText ( const QString & text )"
+Copies \fItext\fR into the clipboard.
+.PP
+See also: text() and setData().
+.SH "QString QClipboard::text () const"
+Returns the clipboard text, or a null string if the clipboard does not contain any text.
+.PP
+See also: setText() and data().
+.SH "void QClipboard::connectNotify ( const char * ) \fC[virtual protected]\fR"
+For internal use only.
+.PP
+Reimplemented from QObject.
+.SH "SEE ALSO"
+.BR http://doc.trolltech.com/qclipboard.html
+.SH COPYRIGHT
+Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+license file included in the distribution for a complete license
+statement.
+.SH AUTHOR
+Generated automatically from the source code.

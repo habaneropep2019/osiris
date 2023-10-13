@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qasyncio.cpp,v 1.18.2.2 1999/07/13 19:58:47 warwick Exp $
+** $Id: qt/src/kernel/qasyncio.cpp   2.1.0   edited 2000-03-24 $
 **
 ** Implementation of asynchronous I/O classes
 **
 ** Created : 970617
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -28,6 +28,7 @@
 #include "qtimer.h"
 #include <stdlib.h>
 
+// NOT REVISED
 /*!
   \class QAsyncIO qasyncio.h
   \brief Encapsulates I/O asynchronicity.
@@ -167,7 +168,7 @@ bool QDataSource::rewindable() const
   is TRUE, then the data source must take measures to allow the rewind()
   function to subsequently operate as described.  If rewindable() is FALSE,
   the function should call QDataSource::enableRewind(), which aborts with
-  a fatal() error.
+  a qFatal() error.
 
   For example, a network connection may choose to utilize a disk cache
   of input only if rewinding is enabled before the first buffer-full of
@@ -258,7 +259,7 @@ void QIODeviceSource::enableRewind(bool on)
     rew = on;
 }
 
-/*
+/*!
   Calls reset() on the QIODevice.
 */
 void QIODeviceSource::rewind()
@@ -289,7 +290,7 @@ void QIODeviceSource::rewind()
 */
 
 /*!
-  Creates a QDataPump to move data from a given \a data_source
+  Constructs a QDataPump to move data from a given \a data_source
   to a given \a data_sink.
 */
 QDataPump::QDataPump(QDataSource* data_source, QDataSink* data_sink) :

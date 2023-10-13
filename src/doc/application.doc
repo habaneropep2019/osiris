@@ -1,4 +1,4 @@
-// $Id: application.doc,v 2.3.2.2 1999/07/13 20:03:43 warwick Exp $
+// $Id: qt/doc/application.doc   2.1.0   edited 2000-01-31 $
 
 /*! \page simple-application.html
 <title>Qt Simple Application</title>
@@ -44,8 +44,8 @@ We'll go over main() in detail.
 \line QApplication
 
 We create a QApplication object with the usual constructor and let it
-parse \e argc and \e argv so that on X11, this program behaves like X
-programs are expected to do.
+parse \e argc and \e argv so that on X11, this program behaves as X
+programs are expected to.
 
 \line ApplicationWindow
 \line setCaption
@@ -164,9 +164,9 @@ That's it.
 \line ::~
 \until }
 
-The only thing this widget needs to do is delete the printer it
-created.  All the other objects are child widgets, which Qt will
-delete as appropriate.  Simple.
+The only thing this widget needs to do in its destructor is delete the
+printer it created.  All the other objects are child widgets, which Qt
+will delete as appropriate.  Simple.
 
 \line ::newDoc
 \until }
@@ -310,6 +310,7 @@ FALSE), we acknowledge that.
 
 Tha's all.  We have printed a text document.
 
+<a name="closeEvent"></a>
 \line ::closeEvent
 \line {
 

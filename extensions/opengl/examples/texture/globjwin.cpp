@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: globjwin.cpp,v 1.2 1999/06/16 14:01:25 aavit Exp $
+** $Id: qt/extensions/opengl/examples/texture/globjwin.cpp   2.1.0   edited 2000-01-31 $
 **
 ** Implementation of GLObjectWindow widget class
 **

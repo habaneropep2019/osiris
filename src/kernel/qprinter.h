@@ -1,11 +1,11 @@
 /**********************************************************************
-** $Id: qprinter.h,v 2.21.2.1 1999/07/14 19:13:21 aavit Exp $
+** $Id: qt/src/kernel/qprinter.h   2.1.0   edited 2000-03-24 $
 **
 ** Definition of QPrinter class
 **
 ** Created : 940927
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -31,8 +31,8 @@
 #include "qstring.h"
 #endif // QT_H
 
-#ifdef B0
-#undef B0 // Terminal hang-up.
+#if defined(B0)
+#undef B0 // Terminal hang-up.  We assume that you do not want that.
 #endif
 
 class Q_EXPORT QPrinter : public QPaintDevice
@@ -131,6 +131,8 @@ private:
 #if defined(_WS_WIN_)
     bool	viewOffsetDone;
     QPainter*   painter;
+    void	readPdlg( void* );
+    void	readPdlgA( void* );
 #endif
 
 private:	// Disabled copy constructor and operator=

@@ -66,96 +66,10 @@ clean:
 ####### Compile
 
 popup.o: popup.cpp \
-		popup.h \
-		../../include/qlabel.h \
-		../../include/qframe.h \
-		../../include/qwidget.h \
-		../../include/qwindowdefs.h \
-		../../include/qobjectdefs.h \
-		../../include/qglobal.h \
-		../../include/qstring.h \
-		../../include/qcstring.h \
-		../../include/qarray.h \
-		../../include/qgarray.h \
-		../../include/qshared.h \
-		../../include/qnamespace.h \
-		../../include/qobject.h \
-		../../include/qevent.h \
-		../../include/qregion.h \
-		../../include/qrect.h \
-		../../include/qsize.h \
-		../../include/qpoint.h \
-		../../include/qmime.h \
-		../../include/qlist.h \
-		../../include/qglist.h \
-		../../include/qcollection.h \
-		../../include/qstringlist.h \
-		../../include/qvaluelist.h \
-		../../include/qdatastream.h \
-		../../include/qiodevice.h \
-		../../include/qpaintdevice.h \
-		../../include/qpalette.h \
-		../../include/qcolor.h \
-		../../include/qbrush.h \
-		../../include/qcursor.h \
-		../../include/qfont.h \
-		../../include/qfontmetrics.h \
-		../../include/qfontinfo.h \
-		../../include/qstyle.h \
-		../../include/qsizepolicy.h \
-		../../include/qpushbutton.h \
-		../../include/qbutton.h \
-		../../include/qlineedit.h \
-		../../include/qapplication.h \
-		../../include/qasciidict.h \
-		../../include/qgdict.h \
-		../../include/qtranslator.h \
-		../../include/qintdict.h \
-		../../include/qkeycode.h \
-		../../include/qlayout.h \
-		../../include/qabstractlayout.h
+		popup.h
 
 moc_popup.o: moc_popup.cpp \
-		popup.h \
-		../../include/qlabel.h \
-		../../include/qframe.h \
-		../../include/qwidget.h \
-		../../include/qwindowdefs.h \
-		../../include/qobjectdefs.h \
-		../../include/qglobal.h \
-		../../include/qstring.h \
-		../../include/qcstring.h \
-		../../include/qarray.h \
-		../../include/qgarray.h \
-		../../include/qshared.h \
-		../../include/qnamespace.h \
-		../../include/qobject.h \
-		../../include/qevent.h \
-		../../include/qregion.h \
-		../../include/qrect.h \
-		../../include/qsize.h \
-		../../include/qpoint.h \
-		../../include/qmime.h \
-		../../include/qlist.h \
-		../../include/qglist.h \
-		../../include/qcollection.h \
-		../../include/qstringlist.h \
-		../../include/qvaluelist.h \
-		../../include/qdatastream.h \
-		../../include/qiodevice.h \
-		../../include/qpaintdevice.h \
-		../../include/qpalette.h \
-		../../include/qcolor.h \
-		../../include/qbrush.h \
-		../../include/qcursor.h \
-		../../include/qfont.h \
-		../../include/qfontmetrics.h \
-		../../include/qfontinfo.h \
-		../../include/qstyle.h \
-		../../include/qsizepolicy.h \
-		../../include/qpushbutton.h \
-		../../include/qbutton.h \
-		../../include/qlineedit.h
+		popup.h
 
 moc_popup.cpp: popup.h
 	$(MOC) popup.h -o moc_popup.cpp

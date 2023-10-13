@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qsizegrip.cpp,v 2.6.2.1 1999/07/07 17:15:59 warwick Exp $
+** $Id: qt/src/kernel/qsizegrip.cpp   2.1.0   edited 2000-03-24 $
 **
 ** Implementation of QSizeGrip class
 **
 ** Created : 980119
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -35,13 +35,36 @@ extern Atom qt_sizegrip;			// defined in qapplication_x11.cpp
 #include "qt_windows.h"
 #endif
 
+
+static QWidget *qt_sizegrip_topLevelWidget( QWidget* w)
+{
+    QWidget *p = w->parentWidget();
+    while ( !w->isTopLevel() && p && !p->inherits("QWorkspace") ) {
+	w = p;
+	p = p->parentWidget();
+    }
+    return w;
+}
+
+static QWidget* qt_sizegrip_workspace( QWidget* w )
+{
+    while ( w && !w->inherits("QWorkspace" ) ) {
+	if ( w->isTopLevel() )
+	    return 0;
+	w = w->parentWidget();
+    }
+    return w;
+}
+
+
+// NOT REVISED
 /*! \class QSizeGrip qsizegrip.h
 
   \brief The QSizeGrip class provides corner-grip for resizeing a top level
 	    window.
 
-  \ingroup realwidgets
   \ingroup application
+  \ingroup basic
 
   This widget works like the standard Windows resize handle.  In the
   X11 version this resize handle generally works differently than the
@@ -69,24 +92,27 @@ QSizeGrip::QSizeGrip( QWidget * parent, const char* name )
     setCursor( sizeFDiagCursor );
 
 #if defined(_WS_X11_)
-    WId id = winId();
-    XChangeProperty(qt_xdisplay(), topLevelWidget()->winId(),
-		    qt_sizegrip, XA_WINDOW, 32, PropModeReplace,
-		    (unsigned char *)&id, 1);
+    if ( !qt_sizegrip_workspace( this ) ) {
+	WId id = winId();
+	XChangeProperty(qt_xdisplay(), topLevelWidget()->winId(),
+			qt_sizegrip, XA_WINDOW, 32, PropModeReplace,
+			(unsigned char *)&id, 1);
+    }
 #endif
 }
 
 
-/*
+/*!
   Destructor
  */
 QSizeGrip::~QSizeGrip()
 {
 #if defined(_WS_X11_)
     if ( !QApplication::closingDown() && parentWidget() ) {
+	WId id = None;
  	XChangeProperty(qt_xdisplay(), topLevelWidget()->winId(),
  			qt_sizegrip, XA_WINDOW, 32, PropModeReplace,
- 			(unsigned char *)None, 1);
+ 			(unsigned char *)&id, 1);
     }
 #endif
 }
@@ -110,16 +136,18 @@ void QSizeGrip::paintEvent( QPaintEvent *e )
     painter.translate( width()-13, height()-13 ); // paint in the corner
     QPointArray a;
     a.setPoints( 3, 1,12, 12,1, 12,12 );
-    painter.setPen( colorGroup().dark() );
+    painter.setPen( QPen( colorGroup().dark(), 1 ) );
     painter.setBrush( colorGroup().dark() );
     painter.drawPolygon( a );
-    painter.setPen( colorGroup().light() );
-    painter.drawLine(  0, 12, 12,  0 );
-    painter.drawLine(  5, 12, 12,  5 );
-    painter.drawLine( 10, 12, 12, 10 );
-    painter.setPen( colorGroup().background() );
-    painter.drawLine(  4, 12, 12,  4 );
-    painter.drawLine(  9, 12, 12,  9 );
+    painter.setPen( QPen( colorGroup().light(), 1 ) );
+    painter.drawLine(  0, 12, 13,  -1 );
+    painter.drawLine(  4, 12, 13,  3 );
+    painter.drawLine( 8, 12, 13, 7 );
+    painter.setPen( QPen( colorGroup().background(), 1 ) );
+    painter.drawLine( 3, 12, 13, 2 );
+    painter.drawLine( 7, 12, 13, 6 );
+    painter.drawLine( 11, 12, 13, 10 );
+    painter.drawLine( 12, 12, 13, 11 );
 }
 
 /*!
@@ -128,7 +156,7 @@ void QSizeGrip::paintEvent( QPaintEvent *e )
 void QSizeGrip::mousePressEvent( QMouseEvent * e )
 {
     p = e->globalPos();
-    s = topLevelWidget()->size();
+    s = qt_sizegrip_topLevelWidget(this)->size();
 }
 
 
@@ -140,10 +168,21 @@ void QSizeGrip::mouseMoveEvent( QMouseEvent * e )
     if ( e->state() != LeftButton )
 	return;
 
-    if ( topLevelWidget()->testWState(WState_ConfigPending) )
+    QWidget* tlw = qt_sizegrip_topLevelWidget(this);
+    if ( tlw->testWState(WState_ConfigPending) )
 	return;
 
     QPoint np( e->globalPos() );
+
+    QWidget* ws = qt_sizegrip_workspace( this );
+    if ( ws ) {
+	QPoint tmp( ws->mapFromGlobal( np ) );
+	if ( tmp.x() > ws->width() )
+	    tmp.setX( ws->width() );
+	if ( tmp.y() > ws->height() )
+	    tmp.setY( ws->height() );
+	np = ws->mapToGlobal( tmp );
+    }
 
     int w = np.x() - p.x() + s.width();
     int h = np.y() - p.y() + s.height();
@@ -151,7 +190,6 @@ void QSizeGrip::mouseMoveEvent( QMouseEvent * e )
 	w = 1;
     if ( h < 1 )
 	h = 1;
-    QWidget* tlw = topLevelWidget();
     tlw->resize( w, h );
 #ifdef _WS_WIN_
     MSG msg;
@@ -169,5 +207,5 @@ void QSizeGrip::mouseMoveEvent( QMouseEvent * e )
 
 QSizePolicy QSizeGrip::sizePolicy() const
 {
-    return QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed );
+    return QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Fixed );
 }

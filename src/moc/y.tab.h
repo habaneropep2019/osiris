@@ -40,6 +40,16 @@
 #define SIGNALS 296
 #define SLOTS 297
 #define Q_OBJECT 298
+#define Q_PROPERTY 299
+#define Q_OVERRIDE 300
+#define Q_CLASSINFO 301
+#define Q_ENUMS 302
+#define Q_SETS 303
+#define READ 304
+#define WRITE 305
+#define STORED 306
+#define DESIGNABLE 307
+#define RESET 308
 typedef union {
     char	char_val;
     int		int_val;

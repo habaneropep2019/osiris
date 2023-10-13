@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qwizard.h,v 2.9.2.3 1999/07/08 13:35:20 paul Exp $
+** $Id: qt/src/dialogs/qwizard.h   2.1.0   edited 2000-03-24 $
 **
 ** Definition of the QWizard class.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -35,9 +35,7 @@
 class QWizardPrivate;
 class QWizardPagePrivate;
 class QWizard;
-
 class QHBoxLayout;
-
 
 class Q_EXPORT QWizard : public QDialog
 {
@@ -48,6 +46,7 @@ public:
     ~QWizard();
 
     void show();
+
     void setFont( const QFont & font );
 
     virtual void addPage( QWidget *, const QString & );
@@ -58,6 +57,9 @@ public:
     virtual void showPage( QWidget * );
 
     QWidget * currentPage() const;
+
+    QWidget* page( int pos ) const;
+    int pageCount() const;
 
     virtual bool appropriate( QWidget * ) const;
     virtual void setAppropriate( QWidget *, bool );
@@ -101,10 +103,14 @@ private:
 
     void updateButtons();
 
-    int count() const;
-
     void layOut();
     QWizardPrivate *d;
+
+private:	// Disabled copy constructor and operator=
+#if defined(Q_DISABLE_COPY)
+    QWizard( const QWizard & );
+    QWizard& operator=( const QWizard & );
+#endif
 };
 
 

@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qtextview.h,v 2.5 1999/06/18 00:13:35 ettrich Exp $
+** $Id: qt/src/widgets/qtextview.h   2.1.0   edited 2000-03-24 $
 **
 ** Definition of the QTextView class
 **
 ** Created : 990101
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,41 +17,51 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
 #ifndef QTEXTVIEW_H
 #define QTEXTVIEW_H
 
+#ifndef QT_H
 #include "qlist.h"
 #include "qpixmap.h"
 #include "qscrollview.h"
 #include "qcolor.h"
+#endif // QT_H
 
 class QRichText;
 class QTextViewData;
-class QTextContainer;
 class QStyleSheet;
 class QMimeSourceFactory;
 
 class Q_EXPORT QTextView : public QScrollView
 {
     Q_OBJECT
+    Q_PROPERTY( QString text READ text WRITE setText )
+    Q_PROPERTY( TextFormat textFormat READ textFormat WRITE setTextFormat )
+    Q_PROPERTY( QBrush paper READ paper WRITE setPaper )
+    Q_PROPERTY( QColorGroup paperColorGroup READ paperColorGroup WRITE setPaperColorGroup )
+    Q_PROPERTY( QColor linkColor READ linkColor WRITE setLinkColor )
+    Q_PROPERTY( bool linkUnderline READ linkUnderline WRITE setLinkUnderline )
+    Q_PROPERTY( QString documentTitle READ documentTitle )
+
 public:
     QTextView(QWidget *parent=0, const char *name=0);
     QTextView( const QString& text, const QString& context = QString::null,
 	       QWidget *parent=0, const char *name=0);
     ~QTextView();
 
-    virtual void setText( const QString& text, const QString& context = QString::null );
+    virtual void setText( const QString& text, const QString& context  );
+    void setText( const QString& text ); // write function for 'text' property
     virtual QString text() const;
     virtual QString context() const;
 
-    Qt::TextFormat textFormat() const;
-    void setTextFormat( Qt::TextFormat );
+    TextFormat textFormat() const;
+    void setTextFormat( TextFormat );
 
 
     QStyleSheet* styleSheet() const;
@@ -60,14 +70,16 @@ public:
 
     // convenience functions
     void setPaper( const QBrush& pap);
+    // ##### This non const thing is obsolete
     const QBrush& paper();
+    const QBrush& paper() const;
 
     void setPaperColorGroup( const QColorGroup& colgrp);
     const QColorGroup &paperColorGroup() const;
-    
+
     void setLinkColor( const QColor& );
     const QColor& linkColor() const;
-    
+
     void setLinkUnderline( bool );
     bool linkUnderline() const;
 
@@ -78,6 +90,16 @@ public:
 
     int heightForWidth( int w ) const;
 
+    void append( const QString& text );
+
+    bool hasSelectedText() const;
+    QString selectedText() const;
+
+public slots:
+   void copy();
+   void selectAll();
+
+
 protected:
     void drawContentsOffset(QPainter*, int ox, int oy,
 			    int cx, int cy, int cw, int ch);
@@ -87,6 +109,9 @@ protected:
     void viewportMouseReleaseEvent( QMouseEvent* );
     void viewportMouseMoveEvent( QMouseEvent* );
     void keyPressEvent( QKeyEvent * );
+    void showEvent( QShowEvent* );
+    void focusInEvent( QFocusEvent * );
+    void focusOutEvent( QFocusEvent * );
 
 protected:
 
@@ -95,55 +120,25 @@ protected:
 
 private slots:
     void doResize();
+    void clipboardChanged();
+    void doStartDrag();
+    void doAutoScroll();
 
 private:
     void init();
     void createRichText();
+    friend class QRichText;
     QTextViewData* d;
-};
+    void updateLayout();
+    void clearSelection();
+    void doSelection( const QPoint& );
 
-
-
-#if 0
-class QTextCursor;
-
-class Q_EXPORT QTextEdit : public QTextView
-{
-    //    Q_OBJECT
-public:
-    QTextEdit(QWidget *parent=0, const char *name=0);
-    ~QTextEdit();
-
-    void setText( const QString& text, const QString& context = QString::null );
-    QString text();
-
-protected:
-    void drawContentsOffset(QPainter*, int ox, int oy,
-			    int cx, int cy, int cw, int ch);
-    void viewportMousePressEvent( QMouseEvent* );
-    void viewportMouseReleaseEvent( QMouseEvent* );
-    void viewportMouseMoveEvent( QMouseEvent* );
-    void keyPressEvent( QKeyEvent * );
-    void viewportResizeEvent(QResizeEvent*);
-
-    void showCursor();
-    void hideCursor();
-
-    //private slots:
-void cursorTimerDone();
-
-private:
-    bool cursor_hidden;
-    QTimer* cursorTimer;
-    QTextCursor* cursor;
-
-    void updateSelection(int oldY=-1, int newY=-1);
-
-    void updateScreen();
-    void* d;
-};
+private:	// Disabled copy constructor and operator=
+#if defined(Q_DISABLE_COPY)
+    QTextView( const QTextView & );
+    QTextView& operator=( const QTextView & );
 #endif
-
+};
 
 
 #endif

@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qnamespace.h,v 2.29 1999/06/17 02:07:46 ettrich Exp $
+** $Id: qt/src/kernel/qnamespace.h   2.1.0   edited 2000-04-06 $
 **
 ** Definition of Qt namespace (as class for compiler compatibility)
 **
 ** Created : 980927
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,18 +17,18 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
 #ifndef QNAMESPACE_H
 #define QNAMESPACE_H
 
-#if !defined(QT_H)
+#ifndef QT_H
 #include "qglobal.h"
-#endif
+#endif // QT_H
 
 
 class QColor;
@@ -57,6 +57,7 @@ public:
     QT_STATIC_CONST QColor & darkMagenta;
     QT_STATIC_CONST QColor & darkYellow;
 
+    // documented in qevent.cpp
     enum ButtonState {				// mouse/keyboard state values
 	NoButton	= 0x00,
 	LeftButton	= 0x01,
@@ -69,6 +70,7 @@ public:
 	KeyButtonMask   = 0x38
     };
 
+    // documented in qobject.cpp
     enum Orientation {
         Horizontal,
 	Vertical
@@ -76,6 +78,7 @@ public:
 
     // Text formatting flags for QPainter::drawText and QLabel
 
+    // documented in qpainter.cpp
     enum AlignmentFlags {
 	AlignLeft	= 0x0001,		// text alignment
 	AlignRight	= 0x0002,
@@ -93,7 +96,7 @@ public:
 	DontPrint	= 0x1000		// internal
     };
 
-    // QWidget state flags (internal)
+    // QWidget state flags (internal, not documented but should be)
     enum WidgetState {
 	WState_Created		= 0x00000001,
 	WState_Disabled		= 0x00000002,
@@ -110,17 +113,20 @@ public:
 	WState_AutoMask		= 0x00001000,
 	WState_Polished		= 0x00002000,
 	WState_DND		= 0x00004000,
-	WState_USPositionX	= 0x00008000,
-	WState_PaletteSet	= 0x00010000,
-	WState_PaletteFixed	= 0x00020000,
-	WState_FontSet		= 0x00040000,
-	WState_FontFixed	= 0x00080000,
-	WState_Withdrawn	= 0x00100000
+	WState_Modal		= 0x00008000,
+	WState_Reserved1	= 0x00010000,
+	WState_Reserved2	= 0x00020000,
+	WState_Reserved3	= 0x00040000,
+	WState_Reserved4	= 0x00080000,
+	WState_TranslateBackground = 0x00100000,
+	WState_ForceDisabled	= 0x00200000,
+	WState_Exposed		= 0x00400000
     };
 
-    // Widget flags
+    // Widget flags2
     typedef uint WFlags;
 
+    // documented in qwidget.cpp
     enum WidgetFlags {
 	WType_TopLevel		= 0x00000001,	// widget type flags
 	WType_Modal		= 0x00000002,
@@ -140,8 +146,8 @@ public:
 	WStyle_Tool		= 0x00000800,
 	WStyle_StaysOnTop	= 0x00001000,
 	WStyle_Dialog 		= 0x00002000,
-	WStyle_Reserved2	= 0x00004000,
-	WStyle_Reserved3	= 0x00008000,
+	WStyle_ContextHelp	= 0x00004000,
+	WStyle_NoBorderEx	= 0x00008000, // ## NoBorder in 3.0
 	WStyle_Mask		= 0x0000fff0,
 
 	WDestructiveClose	= 0x00010000,	// misc flags
@@ -150,11 +156,14 @@ public:
 	WPaintClever		= 0x00080000,
 	WResizeNoErase		= 0x00100000,
 	WMouseNoMask		= 0x00200000,
-	WNorthWestGravity	= 0x00400000
+	WNorthWestGravity	= 0x00400000,
+	WRepaintNoErase		= 0x00800000,
+	WX11BypassWM		= 0x01000000
     };
 
-    // Image conversion flags
-    // The unusual ordering is caused by compatibility and default requirements.
+    // Image conversion flags.  The unusual ordering is caused by
+    // compatibility and default requirements.
+
     enum ImageConversionFlags {
 	ColorMode_Mask		= 0x00000003,
 	AutoColor		= 0x00000000,
@@ -166,7 +175,7 @@ public:
 	ThresholdAlphaDither	= 0x00000000,
 	OrderedAlphaDither	= 0x00000004,
 	DiffuseAlphaDither	= 0x00000008,
-	//	  ReservedAlphaDither	= 0x0000000c,
+	NoAlpha			= 0x0000000c, // Not supported
 
 	Dither_Mask		= 0x00000030,
 	DiffuseDither		= 0x00000000,
@@ -187,11 +196,11 @@ public:
 
     enum PaintUnit {				// paint unit
 	PixelUnit,
-	LoMetricUnit,
-	HiMetricUnit,
-	LoEnglishUnit,
-	HiEnglishUnit,
-	TwipsUnit
+	LoMetricUnit, // OBSOLETE
+	HiMetricUnit, // OBSOLETE
+	LoEnglishUnit, // OBSOLETE
+	HiEnglishUnit, // OBSOLETE
+	TwipsUnit // OBSOLETE
     };
 
     enum GUIStyle {
@@ -479,13 +488,29 @@ public:
 	NorROP,	LastROP=NorROP
     };
 
+    // documented in qpainter.cpp
     enum PenStyle { // pen style
 	NoPen,
 	SolidLine,
 	DashLine,
 	DotLine,
 	DashDotLine,
-	DashDotDotLine
+	DashDotDotLine,
+	MPenStyle = 0x0f
+    };
+
+    enum PenCapStyle { // line endcap style
+	FlatCap = 0x00,
+	SquareCap = 0x10,
+	RoundCap = 0x20,
+	MPenCapStyle = 0x30
+    };
+
+    enum PenJoinStyle { // line join style
+	MiterJoin = 0x00,
+	BevelJoin = 0x40,
+	RoundJoin = 0x80,
+	MPenJoinStyle = 0xc0
     };
 
     enum BrushStyle { // brush style
@@ -508,10 +533,14 @@ public:
     };
 
     enum WindowsVersion {
-	WV_NT,
-	WV_95,
-	WV_98,
-	WV_32s
+	WV_32s 		= 0x0001,
+	WV_95 		= 0x0002,
+	WV_98		= 0x0003,
+	WV_DOS_based	= 0x000f,
+	
+	WV_NT 		= 0x0010,
+	WV_2000 	= 0x0020,
+	WV_NT_based	= 0x00f0
     };
 
 
@@ -533,6 +562,7 @@ public:
     QT_STATIC_CONST QCursor & splitHCursor;	// horizontal bar with up-down
 						// arrows
     QT_STATIC_CONST QCursor & pointingHandCursor;	// pointing hand
+    QT_STATIC_CONST QCursor & forbiddenCursor;	// forbidden cursor (slashed circle)
 
 
     enum TextFormat {

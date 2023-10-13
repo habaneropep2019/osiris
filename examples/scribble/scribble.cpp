@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: scribble.cpp,v 1.1.2.1 1999/09/01 06:19:59 aavit Exp $
+** $Id: qt/examples/scribble/scribble.cpp   2.1.0   edited 2000-03-14 $
 **
-** Copyright ( C ) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright ( C ) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -27,11 +27,11 @@
 #include <qintdict.h>
 
 Canvas::Canvas( QWidget *parent, const char *name )
-    : QWidget( parent, name ), pen( Qt::red, 3 ), polyline(3),
+    : QWidget( parent, name, WNorthWestGravity ), pen( Qt::red, 3 ), polyline(3),
       mousePressed( FALSE ), buffer( width(), height() )
 {
-    buffer.fill( Qt::white );
-    setBackgroundMode( QWidget::NoBackground );
+    buffer.fill( colorGroup().base() );
+    setBackgroundMode( QWidget::PaletteBase );
     setCursor( Qt::crossCursor );
 }
 
@@ -42,7 +42,7 @@ void Canvas::save( const QString &filename, const QString &format )
 
 void Canvas::clearScreen()
 {
-    buffer.fill( Qt::white );
+    buffer.fill( colorGroup().base() );
     repaint( FALSE );
 }
 
@@ -91,7 +91,7 @@ void Canvas::resizeEvent( QResizeEvent *e )
 
     QPixmap tmp( buffer );
     buffer.resize( w, h );
-    buffer.fill( Qt::white );
+    buffer.fill( colorGroup().base() );
     bitBlt( &buffer, 0, 0, &tmp, 0, 0, tmp.width(), tmp.height() );
 }
 
@@ -99,17 +99,20 @@ void Canvas::paintEvent( QPaintEvent *e )
 {
     QWidget::paintEvent( e );
 
-    QRect r = e->rect();
-
-    bitBlt( this, r.x(), r.y(), &buffer, r.x(), r.y(), r.width(), r.height() );
+    QArray<QRect> rects = e->region().rects();
+    for ( uint i = 0; i < rects.count(); i++ ) {
+	QRect r = rects[(int)i];
+	bitBlt( this, r.x(), r.y(), &buffer, r.x(), r.y(), r.width(), r.height() );
+    }
 }
 
 //------------------------------------------------------
 
 Scribble::Scribble( QWidget *parent, const char *name )
-    : QMainWindow( parent, name ), canvas( this )
+    : QMainWindow( parent, name )
 {
-    setCentralWidget( &canvas );
+    canvas = new Canvas( this );
+    setCentralWidget( canvas );
 
     QToolBar *tools = new QToolBar( this );
 
@@ -148,28 +151,29 @@ void Scribble::slotSave()
     menu->setMouseTracking( TRUE );
     int id = menu->exec( bSave->mapToGlobal( QPoint( 0, bSave->height() + 1 ) ) );
 
-    if ( id == -1 )
-        return;
+    if ( id != -1 ) {
+	QString format = *formats[ id ];
 
-    QString format = *formats[ id ];
+	QString filename = QFileDialog::getSaveFileName( QString::null, QString( "*.%1" ).arg( format.lower() ), this );
+	if ( !filename.isEmpty() )
+	    canvas->save( filename, format );
+    }
 
-    QString filename = QFileDialog::getSaveFileName( QString::null, QString( "*.%1" ).arg( format.lower() ), this );
-    if ( !filename.isEmpty() )
-        canvas.save( filename, format );
+    delete menu;
 }
 
 void Scribble::slotColor()
 {
-    QColor c = QColorDialog::getColor( canvas.penColor(), this );
-    canvas.setPenColor( c );
+    QColor c = QColorDialog::getColor( canvas->penColor(), this );
+    canvas->setPenColor( c );
 }
 
 void Scribble::slotWidth( int w )
 {
-    canvas.setPenWidth( w );
+    canvas->setPenWidth( w );
 }
 
 void Scribble::slotClear()
 {
-    canvas.clearScreen();
+    canvas->clearScreen();
 }

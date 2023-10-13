@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qmap.h,v 1.21.2.4 1999/09/21 18:00:17 paul Exp $
+** $Id: qt/src/tools/qmap.h   2.1.0   edited 2000-04-06 $
 **
 ** Definition of QMap class
 **
 ** Created : 990406
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -504,7 +504,7 @@ public:
     ~QMap() { if ( sh->deref() ) delete sh; }
 
     QMap<Key,T>& operator= ( const QMap<Key,T>& m )
-      { if ( sh->deref() ) delete sh; sh = m.sh; sh->ref(); return *this; }
+      { m.sh->ref(); if ( sh->deref() ) delete sh; sh = m.sh; return *this; }
 
     Iterator begin() { detach(); return sh->begin(); }
     Iterator end() { detach(); return sh->end(); }
@@ -562,7 +562,7 @@ protected:
 
 
 template<class Key, class T>
-QDataStream& operator>>( QDataStream& s, QMap<Key,T>& m ) {
+inline QDataStream& operator>>( QDataStream& s, QMap<Key,T>& m ) {
     m.clear();
     uint c;
     s >> c;
@@ -576,7 +576,7 @@ QDataStream& operator>>( QDataStream& s, QMap<Key,T>& m ) {
 
 
 template<class Key, class T>
-QDataStream& operator<<( QDataStream& s, const QMap<Key,T>& m ) {
+inline QDataStream& operator<<( QDataStream& s, const QMap<Key,T>& m ) {
     s << m.count();
     QMapConstIterator<Key,T> it = m.begin();
     for( ; it != m.end(); ++it )

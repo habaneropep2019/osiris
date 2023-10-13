@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qwidgetintdict.h,v 2.10 1999/06/03 00:40:37 warwick Exp $
+** $Id: qt/src/kernel/qwidgetintdict.h   2.1.0   edited 2000-03-24 $
 **
 ** Definition of QWidgetIntDict
 **
 ** Created : 950116
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 

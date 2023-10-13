@@ -1,10 +1,10 @@
 /****************************************************************************
-** $Id: qapp.h,v 1.4 1999/04/30 16:46:12 ettrich Exp $
+** $Id: qt/src/compat/qapp.h   2.1.0   edited 2000-03-24 $
 **
 ** Compatibility file - should only be included by legacy code.
 ** It #includes the file which obsoletes this one.
 **
-** Copyright (C) 1998-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1998-2000 Troll Tech AS.  All rights reserved.
 **  This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
@@ -15,9 +15,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 #ifndef QAPP_H

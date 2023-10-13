@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qobject.h,v 2.34 1999/06/20 17:41:38 agulbra Exp $
+** $Id: qt/src/kernel/qobject.h   2.1.0   edited 2000-04-06 $
 **
 ** Definition of QObject class
 **
 ** Created : 930418
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -32,18 +32,19 @@
 #include "qstring.h"
 #include "qevent.h"
 #include "qnamespace.h"
-#include "qstringlist.h"
+#include "qstringlist.h" // obsolete
 #endif // QT_H
 
 #define QT_TR_NOOP(x) (x)
 #define QT_TRANSLATE_NOOP(scope,x) (x)
 
 class QMetaObject;
-class QProperty;
-
+class QVariant;
 
 class Q_EXPORT QObject: public Qt
 {
+    Q_PROPERTY( QCString name READ name WRITE setName )
+
 public:
     QObject( QObject *parent=0, const char *name=0 );
     virtual ~QObject();
@@ -53,12 +54,11 @@ public:
     virtual bool event( QEvent * );
     virtual bool eventFilter( QObject *, QEvent * );
 
-    virtual QMetaObject *metaObject() const { return metaObj; }
+    virtual QMetaObject *metaObject() const { return staticMetaObject(); }
     virtual const char	*className()  const;
 
     bool	 isA( const char * )	 const;
     bool	 inherits( const char * ) const;
-    QStringList  superClasses( bool includeThis = FALSE ) const;
 
     const char  *name() const;
     const char  *name( const char * defaultName ) const;
@@ -76,10 +76,13 @@ public:
 
     QObject           *child( const char *name, const char *type = 0 );
     const QObjectList *children() const { return childObjects; }
+
+    static const QObjectList *objectTrees();
+    
     QObjectList	      *queryList( const char *inheritsClass = 0,
 				  const char *objName = 0,
 				  bool regexpMatch = TRUE,
-				  bool recursiveSearch = TRUE );
+				  bool recursiveSearch = TRUE ); //### const in 3.0
 
     virtual void insertChild( QObject * );
     virtual void removeChild( QObject * );
@@ -100,10 +103,8 @@ public:
     void	 dumpObjectTree();
     void	 dumpObjectInfo();
 
-#ifdef Q_PROPS
-    virtual bool setProperty( const char *name, const QProperty& value );
-    virtual bool property( const char *name, QProperty* value ) const;
-#endif
+    bool setProperty( const char *name, const QVariant& value ); // virtual in Qt 3.0
+    QVariant property( const char *name ) const;    // virtual in Qt 3.0
 
 signals:
     void	 destroyed();
@@ -128,8 +129,9 @@ protected:
 
     const QObject *sender();
 
+
     virtual void initMetaObject();
-    static void  staticMetaObject();
+    static QMetaObject* staticMetaObject();
 
     virtual void timerEvent( QTimerEvent * );
     virtual void childEvent( QChildEvent * );
@@ -149,6 +151,7 @@ private:
     uint	pendEvent  : 1;
     uint	blockSig   : 1;
     uint	wasDeleted : 1;
+    uint	isTree : 1;
 
     QMetaObject *queryMetaObject() const;
     static QMetaObject *metaObj;
@@ -171,6 +174,10 @@ private:	// Disabled copy constructor and operator=
     QObject( const QObject & );
     QObject &operator=( const QObject & );
 #endif
+    
+public: 
+    // obsolete
+    QStringList  superClasses( bool includeThis = FALSE ) const; // obsolete, remove 3.0
 };
 
 

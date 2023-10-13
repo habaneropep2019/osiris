@@ -22,7 +22,7 @@ TARGET1 = lib$(TARGET).so.$(VER_MAJ)
 
 ####### Files
 
-HEADERS =	../../../include/qnp.h
+HEADERS =	qnp.h
 SOURCES =	qnp.cpp
 OBJECTS =	qnp.o
 SRCMOC	=	moc_qnp.cpp
@@ -66,49 +66,13 @@ clean:
 ####### Compile
 
 qnp.o: qnp.cpp \
-		qnp.h \
-		npapi.h \
-		npunix.c \
-		npwin.cpp
+		../../../src/kernel/qpsprinter_p.h \
+		qnp.h
 
 moc_qnp.o: moc_qnp.cpp \
-		../../../include/qnp.h \
-		../../../include/qwidget.h \
-		../../../include/qwindowdefs.h \
-		../../../include/qobjectdefs.h \
-		../../../include/qglobal.h \
-		../../../include/qstring.h \
-		../../../include/qcstring.h \
-		../../../include/qarray.h \
-		../../../include/qgarray.h \
-		../../../include/qshared.h \
-		../../../include/qnamespace.h \
-		../../../include/qobject.h \
-		../../../include/qevent.h \
-		../../../include/qregion.h \
-		../../../include/qrect.h \
-		../../../include/qsize.h \
-		../../../include/qpoint.h \
-		../../../include/qmime.h \
-		../../../include/qlist.h \
-		../../../include/qglist.h \
-		../../../include/qcollection.h \
-		../../../include/qstringlist.h \
-		../../../include/qvaluelist.h \
-		../../../include/qdatastream.h \
-		../../../include/qiodevice.h \
-		../../../include/qpaintdevice.h \
-		../../../include/qpalette.h \
-		../../../include/qcolor.h \
-		../../../include/qbrush.h \
-		../../../include/qcursor.h \
-		../../../include/qfont.h \
-		../../../include/qfontmetrics.h \
-		../../../include/qfontinfo.h \
-		../../../include/qstyle.h \
-		../../../include/qsizepolicy.h
+		qnp.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_qnp.o moc_qnp.cpp
 
-moc_qnp.cpp: ../../../include/qnp.h
-	$(MOC) ../../../include/qnp.h -o moc_qnp.cpp
+moc_qnp.cpp: qnp.h
+	$(MOC) qnp.h -o moc_qnp.cpp
 

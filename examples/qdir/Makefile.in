@@ -22,11 +22,16 @@ TARGET1 = lib$(TARGET).so.$(VER_MAJ)
 
 ####### Files
 
-HEADERS =	
-SOURCES =	qdir.cpp
-OBJECTS =	qdir.o
-SRCMOC	=	
-OBJMOC	=	
+HEADERS =	qdir.h \
+		../dirview/dirview.h
+SOURCES =	qdir.cpp \
+		../dirview/dirview.cpp
+OBJECTS =	qdir.o \
+		../dirview/dirview.o
+SRCMOC	=	moc_qdir.cpp \
+		../dirview/moc_dirview.cpp
+OBJMOC	=	moc_qdir.o \
+		../dirview/moc_dirview.o
 
 ####### Implicit rules
 
@@ -66,64 +71,22 @@ clean:
 ####### Compile
 
 qdir.o: qdir.cpp \
-		../../include/qapplication.h \
-		../../include/qwidget.h \
-		../../include/qwindowdefs.h \
-		../../include/qobjectdefs.h \
-		../../include/qglobal.h \
-		../../include/qstring.h \
-		../../include/qcstring.h \
-		../../include/qarray.h \
-		../../include/qgarray.h \
-		../../include/qshared.h \
-		../../include/qnamespace.h \
-		../../include/qobject.h \
-		../../include/qevent.h \
-		../../include/qregion.h \
-		../../include/qrect.h \
-		../../include/qsize.h \
-		../../include/qpoint.h \
-		../../include/qmime.h \
-		../../include/qlist.h \
-		../../include/qglist.h \
-		../../include/qcollection.h \
-		../../include/qstringlist.h \
-		../../include/qvaluelist.h \
-		../../include/qdatastream.h \
-		../../include/qiodevice.h \
-		../../include/qpaintdevice.h \
-		../../include/qpalette.h \
-		../../include/qcolor.h \
-		../../include/qbrush.h \
-		../../include/qcursor.h \
-		../../include/qfont.h \
-		../../include/qfontmetrics.h \
-		../../include/qfontinfo.h \
-		../../include/qstyle.h \
-		../../include/qsizepolicy.h \
-		../../include/qasciidict.h \
-		../../include/qgdict.h \
-		../../include/qtranslator.h \
-		../../include/qintdict.h \
-		../../include/qfiledialog.h \
-		../../include/qdir.h \
-		../../include/qstrlist.h \
-		../../include/qfileinfo.h \
-		../../include/qfile.h \
-		../../include/qdatetime.h \
-		../../include/qdialog.h \
-		../../include/qlistbox.h \
-		../../include/qscrollview.h \
-		../../include/qframe.h \
-		../../include/qscrollbar.h \
-		../../include/qrangecontrol.h \
-		../../include/qdrawutil.h \
-		../../include/qpainter.h \
-		../../include/qpen.h \
-		../../include/qpointarray.h \
-		../../include/qwmatrix.h \
-		../../include/qpixmap.h \
-		../../include/qtimer.h \
-		../../include/qlineedit.h \
-		../../include/qlistview.h
+		../dirview/dirview.h \
+		qdir.h
+
+../dirview/dirview.o: ../dirview/dirview.cpp \
+		../dirview/dirview.h \
+		qdir.h
+
+moc_qdir.o: moc_qdir.cpp \
+		qdir.h
+
+../dirview/moc_dirview.o: ../dirview/moc_dirview.cpp \
+		../dirview/dirview.h
+
+moc_qdir.cpp: qdir.h
+	$(MOC) qdir.h -o moc_qdir.cpp
+
+../dirview/moc_dirview.cpp: ../dirview/dirview.h
+	$(MOC) ../dirview/dirview.h -o ../dirview/moc_dirview.cpp
 

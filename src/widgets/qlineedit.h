@@ -1,11 +1,11 @@
 /**********************************************************************
-** $Id: qlineedit.h,v 2.50 1999/06/09 03:45:05 agulbra Exp $
+** $Id: qt/src/widgets/qlineedit.h   2.1.0   edited 2000-03-24 $
 **
 ** Definition of QLineEdit widget class
 **
 ** Created : 941011
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -37,16 +37,28 @@ class QValidator;
 #include "qstring.h"
 #endif // QT_H
 
-
 class Q_EXPORT QLineEdit : public QWidget
 {
     Q_OBJECT
+    Q_ENUMS( EchoMode )
+    Q_PROPERTY( QString text READ text WRITE setText )
+    Q_PROPERTY( int maxLength READ maxLength WRITE setMaxLength )
+    Q_PROPERTY( bool frame READ frame WRITE setFrame )
+    Q_PROPERTY( EchoMode echoMode READ echoMode WRITE setEchoMode )
+    Q_PROPERTY( QString displayText READ displayText )
+    Q_PROPERTY( int cursorPosition READ cursorPosition WRITE setCursorPosition )
+    Q_PROPERTY( Alignment alignment READ alignment WRITE setAlignment )
+    Q_PROPERTY( bool edited READ edited WRITE setEdited )
+    Q_PROPERTY( bool hasMarkedText READ hasMarkedText )
+    Q_PROPERTY( QString markedText READ markedText )
+	
 public:
     QLineEdit( QWidget *parent, const char *name=0 );
     QLineEdit( const QString &, QWidget *parent, const char *name=0 );
    ~QLineEdit();
 
     QString text() const;
+
     QString displayText() const;
 
     int		maxLength()	const;
@@ -58,6 +70,11 @@ public:
     enum	EchoMode { Normal, NoEcho, Password };
     virtual void setEchoMode( EchoMode );
     EchoMode 	echoMode() const;
+#if QT_VERSION >= 300
+#error "Make setReadOnly virtual"
+#endif
+    void setReadOnly( bool );
+    bool isReadOnly() const;
 
     virtual void setValidator( const QValidator * );
     const QValidator * validator() const;
@@ -69,8 +86,8 @@ public:
     virtual void setEnabled( bool );
     virtual void setFont( const QFont & );
     virtual void setPalette( const QPalette & );
-
     virtual void setSelection( int, int );
+
     virtual void setCursorPosition( int );
     int		cursorPosition() const;
 
@@ -100,6 +117,7 @@ public:
 
 public slots:
     virtual void setText( const QString &);
+
     void	selectAll();
     void	deselect();
 
@@ -133,6 +151,7 @@ private slots:
     void	clipboardChanged();
     void	blinkSlot();
     void	dragScrollSlot();
+    void 	doDrag();
 
 private:
     // kept
@@ -161,6 +180,8 @@ private:
     int xPosToCursorPos( int ) const;
     void blinkOn();
     void makePixmap() const;
+    void undoInternal();
+    void redoInternal();
 
 private:	// Disabled copy constructor and operator=
 #if defined(Q_DISABLE_COPY)

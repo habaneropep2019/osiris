@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: main.cpp,v 1.3.2.1 1999/07/20 01:59:32 warwick Exp $
+** $Id: qt/examples/movies/main.cpp   2.1.0   edited 2000-02-25 $
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -218,7 +218,7 @@ int main(int argc, char **argv)
                                   Qt::WDestructiveClose);
         QObject::connect(qApp, SIGNAL(lastWindowClosed()), qApp, SLOT(quit()));
     } else {
-        // GUI mode - open a chooser for movies
+        // "GUI" mode - open a chooser for movies
         //
         MovieStarter* fd = new MovieStarter(".");
         fd->show();
@@ -232,9 +232,8 @@ int main(int argc, char **argv)
             "control-left-click to Step 10,\n"
             "right-click to Unpause\n\n"
             "Windows may be resized to enlarge movie.", 0 );
-        help->setCaption("movies - Help");
-        help->setIndent(10);
-        help->adjustSize();
+        help->setCaption( "movies - Help" );
+        help->setIndent( 10 );
         help->show();
     }
 

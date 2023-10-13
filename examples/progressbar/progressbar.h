@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: progressbar.h,v 1.1 1999/06/03 10:08:55 warwick Exp $
+** $Id: qt/examples/progressbar/progressbar.h   2.1.0   edited 2000-04-03 $
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -11,14 +11,14 @@
 #ifndef PROGRESSBAR_H
 #define PROGRESSBAR_H
 
-#include <qvbox.h>
+#include <qbuttongroup.h>
 #include <qtimer.h>
 
 class QRadioButton;
 class QPushButton;
 class QProgressBar;
 
-class ProgressBar : public QVBox
+class ProgressBar : public QButtonGroup
 {
     Q_OBJECT
 

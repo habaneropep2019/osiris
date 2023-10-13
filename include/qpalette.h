@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qpalette.h,v 2.30 1999/06/17 19:00:40 warwick Exp $
+** $Id: qt/src/kernel/qpalette.h   2.1.0   edited 2000-03-24 $
 **
 ** Definition of QColorGroup and QPalette classes
 **
 ** Created : 950323
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -37,18 +37,18 @@
 class QColorGroupPrivate;
 
 
-class Q_EXPORT QColorGroup				// color group class
+class Q_EXPORT QColorGroup
 {
 public:
-    QColorGroup();				// all colors black
+    QColorGroup();
     QColorGroup( const QColor &foreground, const QColor &button,
 		 const QColor &light, const QColor &dark, const QColor &mid,
 		 const QColor &text, const QColor &base );
     QColorGroup( const QBrush &foreground, const QBrush &button,
 		 const QBrush &light, const QBrush &dark, const QBrush &mid,
-		 const QBrush &text,  const QBrush &bright_text, const QBrush &base,
-		 const QBrush &background);
-    QColorGroup(const QColorGroup&);
+		 const QBrush &text, const QBrush &bright_text,
+		 const QBrush &base, const QBrush &background);
+    QColorGroup( const QColorGroup & );
 
    ~QColorGroup();
 
@@ -93,19 +93,19 @@ private:
 };
 
 
-class Q_EXPORT QPalette					// palette class
+class Q_EXPORT QPalette
 {
 public:
     QPalette();
     QPalette( const QColor &button );
     QPalette( const QColor &button, const QColor &background );
-    QPalette( const QColorGroup &normal, const QColorGroup &disabled,
-	      const QColorGroup &active );
+    QPalette( const QColorGroup &active, const QColorGroup &disabled,
+	      const QColorGroup &inactive );
     QPalette( const QPalette & );
    ~QPalette();
     QPalette &operator=( const QPalette & );
 
-    enum ColorGroup { Normal, Disabled, Active, NColorGroups };
+    enum ColorGroup { Normal, Disabled, Active, Inactive, NColorGroups };
 
     const QColor &color( ColorGroup, QColorGroup::ColorRole ) const;
     const QBrush &brush( ColorGroup, QColorGroup::ColorRole ) const;
@@ -117,13 +117,15 @@ public:
 
     QPalette	copy() const;
 
-    const QColorGroup &normal()	  const { return data->normal; }
+    const QColorGroup &active() const { return data->active; }
     const QColorGroup &disabled() const { return data->disabled; }
-    const QColorGroup &active()	  const { return data->active; }
+    const QColorGroup &inactive() const { return data->inactive; }
+    const QColorGroup &normal() const { return data->normal; } // obsolete
 
-    void	setNormal( const QColorGroup & );
-    void	setDisabled( const QColorGroup & );
     void	setActive( const QColorGroup & );
+    void	setDisabled( const QColorGroup & );
+    void	setInactive( const QColorGroup & );
+    void	setNormal( const QColorGroup & ); // obsolete
 
     bool	operator==( const QPalette &p ) const;
     bool	operator!=( const QPalette &p ) const
@@ -134,13 +136,14 @@ public:
 
 private:
     void	detach();
-    QBrush &directBrush( ColorGroup, QColorGroup::ColorRole ) const;
+    QBrush 	&directBrush( ColorGroup, QColorGroup::ColorRole ) const;
 
     struct QPalData : public QShared {
-	QColorGroup normal;
+	QColorGroup normal; // ##### alias for active due to inline functions above, remove 3.0
 	QColorGroup disabled;
 	QColorGroup active;
 	int	    ser_no;
+	QColorGroup inactive;
     } *data;
 };
 

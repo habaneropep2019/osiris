@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qtabdialog.cpp,v 2.76 1999/06/16 02:22:14 warwick Exp $
+** $Id: qt/src/dialogs/qtabdialog.cpp   2.1.0   edited 2000-03-29 $
 **
 ** Implementation of QTabDialog class
 **
 ** Created : 960825
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -37,6 +37,7 @@
 #include "qwidgetstack.h"
 #include "qlayout.h"
 
+// NOT REVISED
 /*!
   \class QTabDialog qtabdialog.h
 
@@ -63,8 +64,6 @@
   and keyboard accelerator for it. <li> Set up the buttons for the tab
   dialog (Apply, Cancel and so on). <li> Connect to the
   signals and slots. </ol>
-
-  The pref.cpp example does all this.
 
   If you don't call addTab(), the page you have created will not be
   visible.  Please don't confuse the object name you supply to the
@@ -222,7 +221,7 @@ QTabDialog::QTabDialog( QWidget *parent, const char *name, bool modal,
 
 
 /*!
-  Destroys the tab dialog.
+  Destructs the tab dialog.
 */
 
 QTabDialog::~QTabDialog()
@@ -261,8 +260,8 @@ void QTabDialog::setFont( const QFont & font )
 /*!
   Returns TRUE if the tab dialog has a Defaults button, FALSE if not.
 
-  \sa setApplyButton() applyButtonPressed() hasCancelButton()
-  hasDefaultButton()
+  \sa setDefaultButton() defaultButtonPressed() hasApplyButton()
+  hasCancelButton()
 */
 
 bool QTabDialog::hasDefaultButton() const
@@ -274,8 +273,8 @@ bool QTabDialog::hasDefaultButton() const
 /*!
   Returns TRUE if the tab dialog has a Help button, FALSE if not.
 
-  \sa setApplyButton() applyButtonPressed() hasCancelButton()
-  hasHelpButton()
+  \sa setHelpButton() helpButtonPressed() hasApplyButton()
+  hasCancelButton()
 */
 
 bool QTabDialog::hasHelpButton() const
@@ -301,8 +300,8 @@ bool QTabDialog::hasHelpButton() const
 /*!
   Returns TRUE if the tab dialog has a Cancel button, FALSE if not.
 
-  \sa setCancelButton() cancelButtonPressed() hasDefaultButton()
-  hasApplyButton()
+  \sa setCancelButton() cancelButtonPressed() hasApplyButton()
+  hasDefaultButton()
 */
 
 bool QTabDialog::hasCancelButton() const
@@ -338,8 +337,8 @@ bool QTabDialog::hasCancelButton() const
 /*!
   Returns TRUE if the tab dialog has an Apply button, FALSE if not.
 
-  \sa setDefaultsButton() defaultButtonPressed() hasApplyButton()
-  hasCancelButton()
+  \sa setApplyButton() applyButtonPressed() hasCancelButton()
+  hasDefaultButton()
 */
 
 bool QTabDialog::hasApplyButton() const
@@ -351,8 +350,8 @@ bool QTabDialog::hasApplyButton() const
 /*!
   Returns TRUE if the tab dialog has an OK button, FALSE if not.
 
-  \sa setDefaultsButton() defaultButtonPressed() hasOkButton()
-  hasCancelButton()
+  \sa setOkButton() hasApplyButton() hasCancelButton()
+  hasDefaultButton()
 */
 
 bool QTabDialog::hasOkButton() const
@@ -378,16 +377,13 @@ bool QTabDialog::hasOkButton() const
 */
 
 
-/*!
-  Shows the tab view and its children.  Reimplemented in order to
-  delay show()'ing of every page except the initially visible one, and
-  in order to emit the aboutToShow() signal.
-
-  \sa hide(), aboutToShow()
+/*!\reimp
 */
-
 void QTabDialog::show()
 {
+    //   Reimplemented in order to delay show()'ing of every page
+    //   except the initially visible one, and in order to emit the
+    //   aboutToShow() signal.
     if ( topLevelWidget() == this )
 	d->tw->setFocus();
     emit aboutToShow();
@@ -809,7 +805,7 @@ void QTabDialog::setDefaultButton()
   \link QString::operator!() null string\endlink,
   no button is shown.
 
-  \sa setApplyButton setDefaultButton() cancelButtonPressed()
+  \sa setApplyButton() setDefaultButton() cancelButtonPressed()
 */
 
 void QTabDialog::setCancelButton( const QString &text )
@@ -1004,27 +1000,19 @@ void QTabDialog::setSizes()
     setTabOrder( w, d->tw );
 }
 
-
-
-
-/*!
-  Handles resize events for the tab dialog.
+/*!\reimp
 */
-
 void QTabDialog::resizeEvent( QResizeEvent * e )
 {
     QDialog::resizeEvent( e );
 }
 
 
-/*!
-  Handles paint events for the tabbed dialog
+/*!\reimp
 */
-
 void QTabDialog::paintEvent( QPaintEvent * )
 {
 }
-
 
 
 /*!
@@ -1075,7 +1063,11 @@ void QTabDialog::setOkButton()
  */
 void QTabDialog::setOKButton( const QString &text )
 {
-    setOkButton( text );
+    // Ugle workaround for original "OK" default argument
+    QString newText( text );
+    if ( text.isNull() )
+	newText = QString::fromLatin1( "OK" );
+    setOkButton( newText );
 }
 
 
@@ -1088,9 +1080,8 @@ QString QTabDialog::tabLabel( QWidget * w )
 }	
 
 
-/*!  Reimplemented to hndle a change of GUI style while on-screen.
+/*!  \reimp
 */
-
 void QTabDialog::styleChange( QStyle& s )
 {
     QDialog::styleChange( s );
@@ -1116,8 +1107,8 @@ void QTabDialog::changeTab( QWidget *w, const QString &label)
     d->tw->changeTab( w, label );
 }
 
-/*
-  Defines a new iconset and a new label for the tab of page \w
+/*!
+  Defines a new \a iconset and a new \a label for the tab of page \w
  */
 void QTabDialog::changeTab( QWidget *w, const QIconSet& iconset, const QString &label)
 {

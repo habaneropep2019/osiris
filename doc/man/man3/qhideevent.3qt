@@ -1,0 +1,50 @@
+.TH QHideEvent 3qt "12 April 2000" "Troll Tech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.\" license file included in the distribution for a complete license
+.\" statement.
+.\"
+.ad l
+.nh
+.SH NAME
+QHideEvent \- The event sent after a widget is hidden
+\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
+.br
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <qevent.h>\fR
+.PP
+Inherits QEvent.
+.PP
+.SS "Public Members"
+.in +1c
+.ti -1c
+.BI "\fBQHideEvent\fR ( bool spontaneous )"
+.br
+.ti -1c
+.BI "bool \fBspontaneous\fR () const"
+.br
+.in -1c
+.SH DESCRIPTION
+The event sent after a widget is hidden.
+.PP
+This event is sent just before QWidget::hide() returns, and also when a top-level window has been hidden (iconified) by the user.
+.PP
+See also: QShowEvent.
+.SH MEMBER FUNCTION DOCUMENTATION
+.SH "QHideEvent::QHideEvent ( bool spontaneous )"
+Constructs a QHideEvent. \fIspontaneous\fR is TRUE if the event originated outside the application - ie. the user hid the window via the window manager controls.
+.SH "bool QHideEvent::spontaneous () const"
+Returns TRUE if the event originated outside the application -
+ie. the user hid the window via the window manager controls, either
+by iconifying the window or by switching to another virtual desktop where
+the window isn't visible. The window will become hidden, but not withdrawn.
+If the window was iconified, QWidget::isMinimized() is TRUE.
+.SH "SEE ALSO"
+.BR http://doc.trolltech.com/qhideevent.html
+.SH COPYRIGHT
+Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+license file included in the distribution for a complete license
+statement.
+.SH AUTHOR
+Generated automatically from the source code.

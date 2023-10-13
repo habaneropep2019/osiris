@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qglist.cpp,v 2.18 1999/06/21 23:50:20 agulbra Exp $
+** $Id: qt/src/tools/qglist.cpp   2.1.0   edited 2000-04-06 $
 **
 ** Implementation of QGList and QGListIterator classes
 **
 ** Created : 920624
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -28,6 +28,7 @@
 #include "qdatastream.h"
 
 
+// NOT REVISED
 /*!
   \class QLNode qglist.h
   \brief The QLNode class is an internal class for the QList template collection.
@@ -115,10 +116,10 @@ int QGList::compareItems( QCollection::Item item1, QCollection::Item item2 )
 }
 
 /*!
-  Reads a collection/list item from the stream \e s and returns a reference
+  Reads a collection/list item from the stream \a s and returns a reference
   to the stream.
 
-  The default implementation sets \e item to 0.
+  The default implementation sets \a item to 0.
 
   \sa write()
 */
@@ -130,8 +131,10 @@ QDataStream &QGList::read( QDataStream &s, QCollection::Item &item )
 }
 
 /*!
-  Writes a collection/list item to the stream \e s and returns a reference
+  Writes a collection/list item to the stream \a s and returns a reference
   to the stream.
+
+  The default implementation does nothing.
 
   \sa read()
 */
@@ -191,6 +194,7 @@ QGList::~QGList()
     QGListIterator *i = (QGListIterator*)iterators->first();
     while ( i ) {				// notify all iterators that
 	i->list = 0;				// this list is deleted
+	i->curNode = 0;
 	i = (QGListIterator*)iterators->next();
     }
     delete iterators;
@@ -217,6 +221,31 @@ QGList& QGList::operator=( const QGList &list )
     return *this;
 }
 
+/*!
+  Compares this list with \a list. Retruns TRUE if the lists
+  contain the same data, else FALSE.
+*/
+
+bool QGList::operator==( const QGList &list ) const
+{
+    if ( count() != list.count() )
+	return FALSE;
+    
+    if ( count() == 0 )
+	return TRUE;
+    
+    QLNode *n1 = firstNode;
+    QLNode *n2 = list.firstNode;
+    while ( n1 && n2 ) {
+	// should be mutable
+	if ( ( (QGList*)this )->compareItems( n1->data, n2->data ) != 0 )
+	    return FALSE;
+	n1 = n1->next;
+	n2 = n2->next;
+    }
+    
+    return TRUE;
+}
 
 /*!
   \fn uint QGList::count() const
@@ -880,6 +909,14 @@ void QGList::heapSortPushDown( QCollection::Item* heap, int first, int last )
 	}
     }
 }
+
+
+/*! Sorts the list by the result of the virtual compareItems() function.
+
+  The Heap-Sort algorithm is used for sorting.  It sorts n items with
+  O(n*log n) compares.  This is the asymptotic optimal solution of the
+  sorting problem.
+*/
 
 void QGList::sort()
 {

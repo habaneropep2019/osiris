@@ -1,9 +1,9 @@
 /****************************************************************************
-** $Id: indices.doc,v 2.35 1999/06/15 12:58:13 weis Exp $
+** $Id: qt/doc/indices.doc   2.1.0   edited 2000-03-27 $
 **
 ** Miscellaneous index pages
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -15,14 +15,14 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
 #if defined(DEBUG)
-static char ident[] = "$Id: indices.doc,v 2.35 1999/06/15 12:58:13 weis Exp $";
+static char ident[] = "$Id: qt/doc/indices.doc   2.1.0   edited 2000-03-27 $";
 #endif
 
 /*! \page index.html
@@ -32,87 +32,111 @@ static char ident[] = "$Id: indices.doc,v 2.35 1999/06/15 12:58:13 weis Exp $";
 
 \postheader
 
-<h1 align="center">
-Reference Documentation
-</h1><br clear="all">
-
-<br clear="all"><table border=0><tr>
-
-<td width="50%" valign="top">
-
-<strong>The Qt API:</strong><ul>
-<li><a href="porting.html"><b>Porting from Qt 1.x to Qt 2.0</b></a>
-<li><a href="classes.html">Alphabetical Class List</a>
-<li><a href="annotated.html">Annotated Class List</a>
-<li><a href="topicals.html">Structure Overview</a>
-<li><a href="hierarchy.html">Inheritance Hierarchy</a>
-<li><a href="functions.html">Alphabetical Function Index</a> (long)
-<li><a href="headers.html">Header File Index</a>
-<li><a href="pictures.html">Widget Screenshots</a>
+<table cellpadding=2 cellspacing=1 border=0  width=100% bgcolor=#EEEEFF>
+<tr>
+<th bgcolor=#D0D0FF width=33%>
+General
+</th>
+<th bgcolor=#D0D0FF width=33%>
+Getting Started
+</th>
+<th bgcolor=#D0D0FF width=33%>
+What´s New
+</th>
+</tr>
+<tr>
+<td>
+<ul>
+<li> <a href="aboutqt.html" >About Qt</a>
+<li> <a href="commonproblems.html">Common Problems</a>
+<li> <a href="buyhowto.html">How to buy Qt</a>
+</ul>
+</td>
+<td valign=top>
+<ul>
+<li> <a href="tutorial.html">Tutorial</a>
+<li> <a href="simple-application.html">Walkthrough</a>
+<li> <a href="examples.html">Examples</a>
+</ul>
+</td>
+<td valign=top>
+<ul>
+<li> <a href="keyfeatures21.html">  Key Features in Qt-2.1</a>
+<li> <a href="changes21.html">  Detailed Changes Notes</a>
+<li> <a href="porting.html">  Porting from Qt 1.x to Qt 2.0</a>
+</ul>
+</td>
+</tr>
+<tr>
+<th  bgcolor=#D0D0FF>
+API Reference
+</th>
+<th colspan=2 bgcolor=#D0D0FF>
+Overviews
+</tr>
+<tr>
+<td valign=top >
+<ul>
+      <li> <a href="classes.html">  Alphabetical Class List</a>
+      <li> <a href="topicals.html">  Structure Overview</a>
+      <li> <a href="annotated.html">  Annotated Class List</a>
+      <li> <a href="hierarchy.html">  Inheritance Hierachy</a>
+      <li> <a href="functions.html">  All Functions (long)</a>
+      <li> <a href="headers.html">  Header File Index</a>
+</ul>
+</td>
+<td valign=top>
+<ul>
+<li> <a href="object.html">  Introduction to the Qt Object Model</a>
+<li> <a href="moc.html">  Using the Meta Object Compiler (moc)</a>
+<li> <a href="layout.html">  Geometry Management </a>
+<li> <a href="dnd.html">  Drag and Drop (D'n'D)</a>
 </ul>
 
-<td width="50%" valign="top">
-
-<strong>Using Qt:</strong><ul>
-<li><a href="tutorial.html">Tutorial</a>
-<li><a href="examples.html">Example Programs</a>
-<li><a href="metaobjects.html">Introduction to Signals and Slots</a>
-<li><a href="moc.html">Using the Meta Object Compiler (the moc)</a>
-<li><a href="layout.html">Geometry Management (layout)</a>
-<li><a href="dnd.html">Drag and Drop (D'n'D)</a>
-<li><a href="i18n.html">Internationalization (I18n)</a>
-<li><a href="debug.html">Debugging Techniques</a>
+<td valign=top>
+<ul>
+<li> <a href="i18n.html">  Internationalization (i18n) </a>
+<li> <a href="debug.html">  Debugging Techniques</a>
+<li> <a href="network.html">  Network Programming</a>
+<li> <a href="pictures.html">  Widget Screenshots</a>
 </ul>
 
-</td></tr><tr><td width="50%" valign="top">
-
-<strong>Qt Extensions:</strong><ul>
-<li><a href="opengl.html">OpenGL 3D Graphics Support</a>
-<li><a href="nsplugin.html">Netscape/Explorer Plugin Support</a>
-<li><a href="imageio.html">Image File Formats Support</a>
-<li><a href="xt.html">Xt/Motif Legacy Code Support</a>
+</td>
+</tr>
+<tr>
+<th bgcolor=#D0D0FF>
+Troll Tech
+</th>
+<th bgcolor=#D0D0FF>
+Products For Qt
+</th>
+<th bgcolor=#D0D0FF>
+Appendix
+</th>
+</tr>
+<tr>
+<td valign=top>
+<ul>
+<li> <a href="troll.html"> About Troll Tech</a>
+<li> <a href="bughowto.html"> How to report a bug</a>
+<li> <a href="mailinglists.html"> Mailing List Information</a>
 </ul>
-
-<td width="50%" valign="top">
-
-<strong>Further Information:</strong><ul>
-<li><a href="troll.html">Troll Tech Contact Information</a>
-<li><a href="mailinglists.html">Qt Mailing Lists</a>
-<li><a href="credits.html">Credits</a>
-<li><a href="http://www.troll.no/developer/">Developers' Homepage</a> <small>[external]</small>
+</td>
+<td valign=top>
+<ul>
+  <li> <a href="opengl.html">  Qt OpenGL 3D Graphics</a>
 </ul>
-
-</tr></table>
-
-<h2>Search the documentation</h2>
-<dl>
-<dt><dd>
-<form method=post action="http://www.troll.no/search.cgi">
-<input type=hidden name="version" value="2.00">
-<input type=hidden name="sections" value="api">
-<input size="50" name="search"><input type=submit value="Search">
-(uses <a href="http://www.troll.no">www.troll.no</a>)
-</nobr></form>
-</dl>
-
-<h2 align=center><u>About Qt</u></h2>
-
-<strong>Qt</strong><sup><code>TM</code></sup> is a multi-platform C++
-GUI toolkit. It is a product of <a href="http://www.troll.no/">Troll
-Tech</a>. It is supported on all major variants of Microsoft Windows
-and Unix/X Windows.
-
-<strong>Qt Professional Edition</strong> is provided for commercial
-software development. It includes free upgrades and Technical Support
-Service. For the latest prices, please see the Troll Tech web site, <a
-href="http://www.troll.no/pricing.html">Pricing and Availability</a>
-page, or contact <a href="mailto:sales@troll.no">sales@troll.no</a>.
-
-<strong>Qt Free Edition</strong> is the Unix/X11 version of Qt
-available for development of <em>free software</em> only. It is
-provided free of charge under the <a href="license.html">Qt Free
-Edition License</a>. The latest version is available for <a
-href="http://www.troll.no/dl/qtfree-dl.html">download</a>.
+</td>
+<td valign=top>
+<ul>
+<li> <a href="accelerators.html">  Standard Accelerators</a>
+<li> <a href="license.html"> Qt Free Edition License</a>
+<li> <a href="licenses.html"> Other Licenses used in Qt </a>
+<li> <a href="credits.html"> Credits</a>
+</ul>
+</td>
+</tr>
+</table>
 
 */
 
@@ -126,66 +150,85 @@ href="http://www.troll.no/dl/qtfree-dl.html">download</a>.
 
 <h1 align="center">API Structure Overview</h1><br clear="all">
 
-The Qt API consists the following modules:
-
-<h2>Ready-To-Use GUI Components</h2>
-
-<dl>
-
-<dt><a href="application.html">Application Classes</a>
-<dd>Top-level GUI classes.
-
-<dt><a href="realwidgets.html">Widgets</a>
-<dd>The GUI primitives like buttons, listboxes, scrollbars etc.
-
-<dt><a href="dialogs.html">Dialogs</a>
-<dd>Ready-made pop-up dialogs
-
-<dt><a href="geomanagement.html">Geometry Management</a>
-<dd>Classes handling automatic resizing and moving of widgets
-
-</dl>
-
-
-<h2>GUI Component Framework</h2>
-
-<dl>
-
-<dt><a href="abstractwidgets.html">Abstract Widgets</a>
-<dd>Abstract widget classes available for subclassing.
-
-<dt><a href="drawing.html">Drawing Classes</a>
-<dd>Classes providing drawing primitives
-
-<dt><a href="fonts.html">Font Classes</a>
-<dd>Classes related to the handling of text fonts
-
-<dt><a href="kernel.html">Kernel</a>
-<dd>Classes providing access to the low-level parts of Qt
-
-<dt><a href="misc.html">Miscellaneous</a>
-<dd>Various other useful classes 
-
-</dl>
-
-
-<h2>Utilities</h2>
-
-<dl>
-
-<dt><a href="tools.html">General Tool Classes</a>
-<dd>Generic collection classes like list, queue, stack, string etc.
-
-<dt><a href="io.html">I/O Handling</a>
-<dd>Classes providing OS-independent I/O and file and directory handling.
-
-<dt><a href="images.html">Image Handling</a>
-<dd>Digital image coding, decoding and manipulation
-
-<dt><a href="time.html">Time And Date Handling</a>
-<dd>OS-independent Classes for handling date and time. 
-
-</dl>
+<table bgcolor=#EEEEFF>
+<tr>
+<th cellpadding=2 cellspacing=1 border=0 colspan=2 bgcolor=#D0D0FF>
+Components
+</th>
+</tr><tr>
+<td>
+<a href="environment.html">  Environment</a>
+</td><td> Classes providing various global services to your application such as
+event handling, access to system settings, internationalization, etc.
+</td></tr><tr><td>
+<a href="application.html"> <nobr>Mainwindow And Friends</nobr></a>
+</td><td> Everything you need for a typical modern main application window 
+(menus, toolbars, workspace, ...)
+</td></tr><tr><td>
+<a href="dialogs.html">  Standard Dialogs</a>
+</td><td> Ready-made dialogs for file-, font-, color-selection and more.
+</td></tr><tr><td>
+<a href="basic.html">  Basic Controls</a>
+</td><td> The GUI primitives like buttons, combo-boxes, scrollbars, etc. 
+</td></tr><tr><td>
+<a href="advanced.html">  Advanced Controls</a>
+</td><td> Advanced user interface controls like listviews, progressbars etc.
+</td></tr><tr><td>
+<a href="organizers.html">  Organizers</a>
+</td><td> User interface organizers like splitters, tab books, button groups, etc.
+</td></tr><tr><td>
+ <a href="helpsystem.html">  Help System</a>
+</td><td> Classes providing for all forms of online-help in your application.
+</td></tr>
+<tr>
+<th colspan=2 bgcolor=#D0D0FF>
+Framework
+</th>
+</tr><tr>
+<td>
+      <a href="objectmodel.html">  Object Model</a>
+</td><td> The framework's underlying object model.
+</td></tr><tr><td>
+      <a href="abstractwidgets.html">  Abstract Widgets</a>
+</td><td> Abstract widget classes available for subclassing.
+</td></tr><tr><td>
+      <a href="drawing.html">  Drawing And Printing</a>
+</td><td> Classes providing drawing (and thus printing) primitives
+</td></tr><tr><td>
+      <a href="draganddrop.html">  Drag and Drop</a>
+</td><td> Classes dealing with drag and drop and the necessary mime type
+encoding and decoding.
+</td></tr><tr><td>
+      <a href="appearance.html">  Widget Appearance</a>
+</td><td> Appearance customization with styles, fonts, colors etc.
+</td></tr><tr><td>
+      <a href="geomanagement.html">  Geometry Management</a>
+</td><td> Casses handling automatic resizing and moving of widgets. The Qt way
+of composing complex dialogs.
+</td></tr>
+<tr>
+<th colspan=2 bgcolor=#D0D0FF>
+Utilities
+</th>
+</tr><tr>
+<td>
+      <a href="tools.html"><nobr> General Tool Classes</nobr></a>
+</td><td> Generic collection classes like list, queue, stack, string etc.
+</td></tr><tr><td>
+      <a href="images.html">  Image Processing</a>
+</td><td> Digital image coding, decoding and manipulation
+</td></tr><tr><td>
+      <a href="io.html">  I/O Handling</a>
+</td><td>Classes providing I/O, file and directory handling.
+</td></tr><tr><td>
+      <a href="time.html">  Time And Date</a>
+</td><td>Classes for handling date and time.
+</td></tr><tr><td>
+      <a href="misc.html">  Miscellaneous</a>
+</td><td> Various other useful classes
+</td>      
+</tr>
+</table>
 
 */
 
@@ -197,19 +240,10 @@ The tool classes are general-purpose collection classes that may be used
 independently of the GUI classes.
 
 <p>In particular, these classes do not depend on QApplication at all,
-and so can be used in non-GUI programs.  
+and so can be used in non-GUI programs.
 
 <p>See also the <a href="collection.html">introduction to Qt collection
-classes</a> and <a href="qtl.html">The Qt Template Libarary</a>.
-
-*/
-
-/*! \defgroup fonts.html
-
-<h1 align="center">Font-related Classes</h1><br clear="all">
-
-These classes are used to manipulate fonts.  See also <a
-href="fontmatch.html">Font matching.</a>
+classes</a>.
 
 */
 
@@ -222,13 +256,21 @@ devices, files etc., as well as manipulating files and directories.
 
 */
 
-/*! \defgroup realwidgets.html
+/*! \defgroup basic.html
 
-<h1 align="center">Widgets</h1><br clear="all">
+<h1 align="center">Basic Controls</h1><br clear="all">
 
-These widgets are meant for direct use.  There are also some <a
+These basic controls are meant for direct use.  There are also some <a
 href="abstractwidgets.html">abstract widget classes,</a> meant for
-subclassing, and some <a href="dialogs.html">more complex widgets.</a>
+subclassing, and some <a href="advanced.html">more complex widgets.</a>
+
+*/
+
+/*! \defgroup advanced.html
+
+<h1 align="center">Advanced Controls</h1><br clear="all">
+
+These classes provide more complex user interface controls.
 
 */
 
@@ -241,6 +283,24 @@ themselves, but provide functionality that can be used by inheriting
 these classes.
 
 */
+
+/*! \defgroup objectmodel.html
+
+<h1 align="center">Object Model</h1><br clear="all">
+
+These classes form the basis of the <a href="object.html">Qt Object Model</a>.
+
+*/
+
+/*! \defgroup organizers.html
+
+<h1 align="center">Organizers</h1><br clear="all">
+
+These classes are used to organize and group GUI primitives to more
+complex applications or dialogs.
+
+*/
+
 
 /*! \defgroup dialogs.html
 
@@ -263,13 +323,30 @@ These classes are used for manipulating images.
 
 <h1 align="center">Drawing Classes</h1><br clear="all">
 
-These classes provide powerful graphics drawing primitives. 
+These classes provide powerful graphics drawing primitives.
 
 <p>See also this introduction to the <a href="coordsys.html">Qt
 coordinate system</a>.
 
 */
 
+/*! \defgroup draganddrop.html
+
+<h1 align="center">Drag And Drop Classes</h1><br clear="all">
+
+These classes deal with drag and drop and the necessary mime type
+encoding and decoding. See also <a href="dnd.html">Drag and Drop with
+Qt</a>.
+
+*/
+
+/*! \defgroup appearance.html
+
+<h1 align="center">Widget Appearance</h1><br clear="all">
+
+These classes are used to customize an application's appearance.
+
+*/
 
 /*! \defgroup shared.html
 
@@ -290,16 +367,17 @@ be passed around as arguments, even though they may seem heavyweight.
 
 These classes provide system-independent date and time abstractions.
 
-<p>Also available: <a href="y2k.html">Qt Year 2000 Compliance Statement</a>. 
+<p>Also available: <a href="y2k.html">Qt Year 2000 Compliance Statement</a>.
 */
 
 
 /*! \defgroup application.html
 
-<h1 align="center">Application Parts</h1><br clear="all">
+<h1 align="center">Main Window And Friends</h1><br clear="all">
 
-These classes provide the top level application GUI functionality,
-like main window, menu and tool bars, tool tip help etc.
+These classes provide everything you need for a typical modern main
+application window, like the main window itself , menu and tool bars,
+a statusbar, etc.
 
 */
 
@@ -313,11 +391,34 @@ These classes provide automatic geometry management of widgets.
 */
 
 
-/*! \defgroup kernel.html
+/*! \defgroup helpsystem.html
 
-<h1 align="center">Kernel Classes</h1><br clear="all">
+<h1 align="center">Help System</h1><br clear="all">
 
-These classes provide access to low-level parts of the window system
+These classes provide for all forms of online-help in your application,
+with three levels of detail:
+
+<ol>
+    <li> Tool Tips and Status Bar message - flyweight help, extremely brief,
+	entirely integrated in the user interface, requiring little
+	or no user interaction to invoke.
+    <li> What's This? - lightweight, but can be
+	a three-paragraph explanation.
+    <li> Online Help - can encompass any amount of information,
+	but is typically slower to call up, somewhat separated
+	from the user's work, and often users feel that using online
+	help is a digression from their real task.
+</ol>
+
+*/
+
+
+/*! \defgroup environment.html
+
+<h1 align="center">Environment Classes</h1><br clear="all">
+
+These classes providing various global services to your application such as
+event handling, access to system settings, internationalization, etc.
 
 */
 

@@ -1,0 +1,48 @@
+.TH QTextDecoder 3qt "12 April 2000" "Troll Tech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.\" license file included in the distribution for a complete license
+.\" statement.
+.\"
+.ad l
+.nh
+.SH NAME
+QTextDecoder \- State-based decoder
+\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
+.br
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <qtextcodec.h>\fR
+.PP
+.SS "Public Members"
+.in +1c
+.ti -1c
+.BI "virtual \fB~QTextDecoder\fR ()"
+.br
+.ti -1c
+.BI "virtual QString \fBtoUnicode\fR ( const char * " "chars" ", int len )"
+.br
+.in -1c
+.SH DESCRIPTION
+State-based decoder
+.PP
+A QTextEncoder converts a text format into Unicode, remembering any state that is required between calls.
+.PP
+See also: QTextCodec::makeEncoder().
+.SH MEMBER FUNCTION DOCUMENTATION
+.SH "QTextDecoder::~QTextDecoder () \fC[virtual]\fR"
+Destructs the decoder.
+.SH "QString QTextDecoder::toUnicode ( const char * chars, int len ) \fC[virtual]\fR"
+Converts the first \fIlen\fR bytes at \fIchars\fR to Unicode, returning the result.
+.PP
+If not all characters are used (eg. only part of a multi-byte
+encoding is at the end of the characters), the decoder remembers
+enough state to continue with the next call to this function.
+.SH "SEE ALSO"
+.BR http://doc.trolltech.com/qtextdecoder.html
+.SH COPYRIGHT
+Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+license file included in the distribution for a complete license
+statement.
+.SH AUTHOR
+Generated automatically from the source code.

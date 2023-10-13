@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qtextcodec.cpp,v 1.71.2.7 1999/09/06 07:28:34 hanord Exp $
+** $Id: qt/src/tools/qtextcodec.cpp   2.1.0   edited 2000-03-29 $
 **
 ** Implementation of QTextCodec class
 **
 ** Created : 981015
 **
-** Copyright (C)1998-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C)1998-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -27,10 +27,12 @@
 #include "qtextcodec.h"
 #ifndef QT_NO_CODECS
 #include "qutfcodec.h"
+#include "qgbkcodec.h"
 #include "qeucjpcodec.h"
 #include "qjiscodec.h"
 #include "qsjiscodec.h"
 #include "qeuckrcodec.h"
+#include "qbig5codec.h"
 #include "qrtlcodec.h"
 #endif
 
@@ -72,7 +74,6 @@ void QTextCodec::deleteAllCodecs()
     ball->clear();
     delete ball;
     destroying_is_ok = FALSE;
-    qDebug( "ball over (%p)", all );
 }
 
 
@@ -138,6 +139,7 @@ QString QTextStatelessDecoder::toUnicode(const char* chars, int len)
 
 
 
+// NOT REVISED
 /*!
   \class QTextCodec qtextcodec.h
   \brief Provides conversion between text encodings.
@@ -377,11 +379,16 @@ QWindowsLocalCodec::~QWindowsLocalCodec()
 
 QString QWindowsLocalCodec::toUnicode(const char* chars, int len) const
 {
-    if ( len >= 0 ) {
-	QCString s(chars,len+1);
-	return qt_winMB2QString(s);
+    if ( len == 1 && chars ) {		// Optimization; avoids allocation
+	char c[2];
+	c[0] = *chars;
+	c[1] = 0;
+	return qt_winMB2QString( c, 2 );
     }
-    return qt_winMB2QString( chars );
+    if ( len < 0 )
+	return qt_winMB2QString( chars );
+    QCString s(chars,len+1);
+    return qt_winMB2QString(s);
 }
 
 QCString QWindowsLocalCodec::fromUnicode(const QString& uc, int& lenInOut ) const
@@ -419,51 +426,82 @@ int QWindowsLocalCodec::heuristicContentMatch(const char* chars, int len) const
 #else
 
 /* locale names mostly copied from XFree86 */
-static const char * iso8859_2locales[] = {
+static const char * const iso8859_2locales[] = {
     "croatian", "cs", "cs_CS", "cs_CZ","cz", "cz_CZ", "czech", "hr",
     "hr_HR", "hu", "hu_HU", "hungarian", "pl", "pl_PL", "polish", "ro",
     "ro_RO", "rumanian", "serbocroatian", "sh", "sh_SP", "sh_YU", "sk",
     "sk_SK", "sl", "sl_CS", "sl_SI", "slovak", "slovene", "sr_SP", 0 };
 
-static const char * iso8859_5locales[] = {
-    "bg", "bg_BG", "bulgarian", "mk", "mk_MK", /*"ru",*/ "ru_RU", /*"ru_SU",*/
-    "russian", "sp", "sp_YU", 0 };
+static const char * const iso8859_3locales[] = {
+    "eo", 0 };
 
-// This is NOT CORRECT.  But so many Russians use this rather than the
-// ISO standard that we default to this.  Russian users SHOULD set their
-// $LANG to ru_RU.KOI8-R if they are not using the X default, but since
-// they DON'T, we work around it, forcing the small number of iso8859-5
-// users to set THEIR LANG to ru_RU.iso8859-5.  If you read the history,
-// it seems that many Russians blame ISO and Peristroika for the confusion.
-//
-// The real bug is that some programs break if the user specifies
-// ru_RU.KOI8-R
-//
-static const char * koi8_rlocales[] = {
-    "ru", "ru_SU", 0 };
+static const char * const iso8859_5locales[] = {
+    "bg", "bg_BG", "bulgarian", "mk", "mk_MK",
+    "sp", "sp_YU", 0 };
 
-static const char * iso8859_6locales[] = {
+static const char * const iso8859_6locales[] = {
     "ar_AA", "ar_SA", "arabic", 0 };
 
-static const char * iso8859_7locales[] = {
+static const char * const iso8859_7locales[] = {
     "el", "el_GR", "greek", 0 };
 
-static const char * iso8859_8locales[] = {
+static const char * const iso8859_8locales[] = {
     "hebrew", "iw", "iw_IL", 0 };
 
-static const char * iso8859_9locales[] = {
+static const char * const iso8859_9locales[] = {
     "tr", "tr_TR", "turkish", 0 };
 
-static const char * iso8859_15locales[] = {
+static const char * const iso8859_15locales[] = {
     "fr", "fi", "french", "finnish", 0 };
 
 
-static bool try_locale_list( const char * locale[], const char * lang )
+static bool try_locale_list( const char * const locale[], const char * lang )
 {
     int i;
     for( i=0; locale[i] && strcmp(locale[i], lang); i++ )
 	;
     return locale[i] != 0;
+}
+
+// For the probably_koi8_locales we have to look. the standard says
+// these are 8859-5, but almsot all Russion users uses KOI8-R and
+// incorrectly set $LANG to ru_RU. We'll check tolower() to see what
+// tolower() thinks ru_RU means.
+
+// If you read the history, it seems that many Russians blame ISO and
+// Peristroika for the confusion.
+//
+// The real bug is that some programs break if the user specifies
+// ru_RU.KOI8-R.
+
+static const char * const probably_koi8_rlocales[] = {
+    "ru", "ru_SU", "ru_RU", "russian", 0 };
+
+// this means ANY of these locale aliases. if they're aliases for
+// different locales, the code breaks.
+static QTextCodec * ru_RU_codec = 0;
+
+static QTextCodec * ru_RU_hack( const char * i ) {
+    if ( ! ru_RU_codec ) {
+	QCString origlocale = setlocale( LC_CTYPE, i );
+	// unicode   koi8r   latin5   name
+	// 0x044E    0xC0    0xEE     CYRILLIC SMALL LETTER YU
+	// 0x042E    0xE0    0xCE     CYRILLIC CAPITAL LETTER YU
+	int latin5 = tolower( 0xCE );
+	int koi8r = tolower( 0xE0 );
+	if ( koi8r == 0xC0 && latin5 != 0xEE ) {
+	    ru_RU_codec = QTextCodec::codecForName( "KOI8-R" );
+	} else if ( koi8r != 0xC0 && latin5 == 0xEE ) {
+	    ru_RU_codec = QTextCodec::codecForName( "ISO 8859-5" );
+	} else {
+	    // something else again... let's assume... *throws dice*
+	    ru_RU_codec = QTextCodec::codecForName( "KOI8-R" );
+	    qWarning( "QTextCodec: using KOI8-R, probe failed (%02x %02x %s)",
+		      koi8r, latin5, i );
+	}
+	setlocale( LC_CTYPE, origlocale.data() );
+    }
+    return ru_RU_codec;
 }
 
 #endif
@@ -504,7 +542,7 @@ QTextCodec* QTextCodec::codecForLocale()
     }
 
     if( p && *p == '.' ) {
-	 // if there is an encoding and we don't know it, we return 0
+	// if there is an encoding and we don't know it, we return 0
 	// User knows what they are doing.  Codecs will believe them.
 	localeMapper = codecForName( lang );
 	if ( !localeMapper ) {
@@ -517,6 +555,8 @@ QTextCodec* QTextCodec::codecForLocale()
 	// We could perhaps default to 8859-15.
 	if ( try_locale_list( iso8859_2locales, lang ) )
 	    localeMapper = codecForName( "ISO 8859-2" );
+	else if ( try_locale_list( iso8859_3locales, lang ) )
+	    localeMapper = codecForName( "ISO 8859-3" );
 	else if ( try_locale_list( iso8859_5locales, lang ) )
 	    localeMapper = codecForName( "ISO 8859-5" );
 	else if ( try_locale_list( iso8859_6locales, lang ) )
@@ -529,9 +569,9 @@ QTextCodec* QTextCodec::codecForLocale()
 	    localeMapper = codecForName( "ISO 8859-9" );
 	else if ( try_locale_list( iso8859_15locales, lang ) )
 	    localeMapper = codecForName( "ISO 8859-15" );
-	else if ( try_locale_list( koi8_rlocales, lang ) )
-	    localeMapper = codecForName( "KOI8-R" );
-	else
+	else if ( try_locale_list( probably_koi8_rlocales, lang ) )
+	    localeMapper = ru_RU_hack( lang );
+	else if (!lang || !(localeMapper = codecForName(lang) ))
 	    localeMapper = codecForName( "ISO 8859-1" );
     }
     delete[] lang;
@@ -569,6 +609,10 @@ QTextCodec* QTextCodec::codecForName(const char* hint, int accuracy)
   Searches all installed QTextCodec objects, returning the one
   which most recognizes the given content.  May return 0.
 
+  Note that this is often a poor choice, since character
+  encodings often use most of the available character sequences,
+  and so only by linguistic analysis could a true match be made.
+
   \sa heuristicContentMatch()
 */
 QTextCodec* QTextCodec::codecForContent(const char* chars, int len)
@@ -590,15 +634,14 @@ QTextCodec* QTextCodec::codecForContent(const char* chars, int len)
 
 /*!
   \fn const char* QTextCodec::name() const
-  Subclasses of QTextCodec must override this function.  It returns
+  Subclasses of QTextCodec must reimplement this function.  It returns
   the name of the encoding supported by the subclass.  When choosing
   a name for an encoding, consider these points:
   <ul>
-    <li>On X11,
-	\link heuristicNameMatch() \code heuristicNameMatch(\e charset)\endcode \endlink
+    <li>On X11, heuristicNameMatch( const char * hint )
 	is used to test if a the QTextCodec
 	can convert between Unicode and the encoding of a font
-	with encoding \e charset, such as "iso8859-1" for Latin-1 fonts,
+	with encoding \e hint, such as "iso8859-1" for Latin-1 fonts,
 	"koi8-r" for Russian KOI8 fonts.
 	The default algorithm of heuristicNameMatch() uses name().
     <li>Some applications may use this function to present
@@ -609,7 +652,7 @@ QTextCodec* QTextCodec::codecForContent(const char* chars, int len)
 /*!
   \fn int QTextCodec::mibEnum() const
 
-  Subclasses of QTextCodec must override this function.  It returns the
+  Subclasses of QTextCodec must reimplement this function.  It returns the
   MIBenum (see
   <a href=ftp://ftp.isi.edu/in-notes/iana/assignments/character-sets>
   the IANA character-sets encoding file</a> for more information).
@@ -621,7 +664,7 @@ QTextCodec* QTextCodec::codecForContent(const char* chars, int len)
 /*!
   \fn int QTextCodec::heuristicContentMatch(const char* chars, int len) const
 
-  Subclasses of QTextCodec must override this function.  It examines
+  Subclasses of QTextCodec must reimplement this function.  It examines
   the first \a len bytes of \a chars and returns a value indicating how
   likely it is that the string is a prefix of text encoded in the
   encoding of the subclass.  Any negative return value indicates that the text
@@ -666,11 +709,11 @@ QTextEncoder* QTextCodec::makeEncoder() const
 
 
 /*!
-  Subclasses of QTextCodec must override this function or
+  Subclasses of QTextCodec must reimplement this function or
   makeDecoder().  It converts the first \a len characters of \a chars
   to Unicode.
 
-  The default implementation makes an encoder with makeDecoder() and
+  The default implementation makes a decoder with makeDecoder() and
   converts the input with that.  Note that the default makeDecoder()
   implementation makes a decoder that simply calls
   this function, hence subclasses \e must reimplement one function or
@@ -686,7 +729,7 @@ QString QTextCodec::toUnicode(const char* chars, int len) const
 
 
 /*!
-  Subclasses of QTextCodec must override either this function or
+  Subclasses of QTextCodec must reimplement either this function or
   makeEncoder().  It converts the first \a lenInOut characters of \a
   uc from Unicode to the encoding of the subclass.  If \a lenInOut
   is negative or too large, the length of \a uc is used instead.
@@ -778,7 +821,7 @@ bool QTextCodec::canEncode( const QString& s ) const
 */
 
 /*!
-  Destroys the encoder.
+  Destructs the encoder.
 */
 QTextEncoder::~QTextEncoder()
 {
@@ -808,7 +851,7 @@ QTextEncoder::~QTextEncoder()
 
 
 /*!
-  Destroys the decoder.
+  Destructs the decoder.
 */
 QTextDecoder::~QTextDecoder()
 {
@@ -867,7 +910,7 @@ public:
 };
 
 class QTextCodecFromIOD : public QTextCodec {
-    friend QTextCodecFromIODDecoder;
+    friend class QTextCodecFromIODDecoder;
 
     QCString n;
 
@@ -1157,7 +1200,7 @@ QString QTextCodecFromIODDecoder::toUnicode(const char* chars, int len)
 /*!
   Reads a POSIX2 charmap definition from \a iod.
   The parser recognises the following lines:
-\code
+<pre>
    &lt;code_set_name&gt; <i>name</i>
    &lt;escape_char&gt; <i>character</i>
    % alias <i>alias</i>
@@ -1167,7 +1210,8 @@ QString QTextCodecFromIODDecoder::toUnicode(const char* chars, int len)
    &lt;<i>token</i>&gt; /<i>octbyte</i> &lt;U<i>unicode</i>&gt; ...
    &lt;<i>token</i>&gt; /<i>any</i>/<i>any</i>... &lt;U<i>unicode</i>&gt; ...
    END CHARMAP
-\endcode
+</pre>
+
   The resulting QTextCodec is returned (and also added to the
   global list of codecs).  The name() of the result is taken
   from the code_set_name.
@@ -1190,7 +1234,7 @@ QTextCodec* QTextCodec::loadCharmap(QIODevice* iod)
 }
 
 /*!
-  A convenience function for QTextCodec::loadCharmap().
+  A convenience function for loadCharmap().
 */
 QTextCodec* QTextCodec::loadCharmapFile(QString filename)
 {
@@ -1254,7 +1298,7 @@ static struct {
     int mib;
     Q_UINT16 values[128];
 } unicodevalues[] = {
-    // from RFC 1489, http://ds.internic.net/rfc/rfc1489.txt
+    // from RFC 1489, ftp://ftp.isi.edu/in-notes/rfc1489.txt
     { "KOI8-R", 2084,
       { 0x2500, 0x2502, 0x250C, 0x2510, 0x2514, 0x2518, 0x251C, 0x2524,
 	0x252C, 0x2534, 0x253C, 0x2580, 0x2584, 0x2588, 0x258C, 0x2590,
@@ -1523,7 +1567,8 @@ QCString QSimpleTextCodec::fromUnicode(const QString& uc, int& len ) const
     int u;
     for( i=0; i<len; i++ ) {
 	u = uc[i].cell() + 256* uc[i].row();
-	r[i] = ( u < (int)reverseMap->size() ) ? (*reverseMap)[u] :  '?';
+	r[i] = u < 128 ? u : (
+	    ( u < (int)reverseMap->size() ) ? (*reverseMap)[u] :  '?' );
     }
     r[len] = 0;
     return r;
@@ -1561,15 +1606,18 @@ int QSimpleTextCodec::heuristicContentMatch(const char* chars, int len) const
     const uchar * c = (const unsigned char *)chars;
     int r = 0;
     while( i<len && c && *c ) {
-	if ( *c >= 128 &&
-	     unicodevalues[forwardIndex].values[(*c)-128] == 0xfffd )
-	    return -1;
+	if ( *c >= 128 ) {
+	    if ( unicodevalues[forwardIndex].values[(*c)-128] == 0xfffd )
+		return -1;
+	}
 	if ( (*c >= ' ' && *c < 127) ||
 	     *c == '\n' || *c == '\t' || *c == '\r' )
 	    r++;
 	i++;
 	c++;
     }
+    if ( mibEnum()==4 )
+	r+=1;
     return r;
 }
 
@@ -1585,6 +1633,8 @@ static void setupBuiltinCodecs()
     (void)new QSjisCodec;
     (void)new QJisCodec;
     (void)new QEucKrCodec;
+    (void)new QGbkCodec;
+    (void)new QBig5Codec;
     (void)new QUtf8Codec;
     (void)new QUtf16Codec;
     (void)new QHebrewCodec;

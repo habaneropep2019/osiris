@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qgl_x11.cpp,v 1.2.2.1 1999/09/08 08:30:57 aavit Exp $
+** $Id: qt/extensions/opengl/src/qgl_x11.cpp   2.1.0   edited 2000-04-06 $
 **
 ** Implementation of OpenGL classes for Qt
 **
 ** Created : 970112
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -74,7 +74,6 @@ CMapEntry::~CMapEntry()
 	XFreeColormap( QPaintDevice::x11AppDisplay(), cmap );
 }
 
-static bool		    cmap_init = FALSE;
 static QIntDict<CMapEntry> *cmap_dict = 0;
 static bool		    mesa_gl   = FALSE;
 
@@ -89,8 +88,7 @@ static void cleanup_cmaps()
 
 static Colormap choose_cmap( Display *dpy, XVisualInfo *vi )
 {
-    if ( !cmap_init ) {
-	cmap_init = TRUE;
+    if ( !cmap_dict ) {
 	cmap_dict = new QIntDict<CMapEntry>;
 	const char *v = glXQueryServerString( dpy, vi->screen, GLX_VERSION );
 	mesa_gl = strstr(v,"Mesa") != 0;
@@ -407,7 +405,7 @@ void *QGLContext::chooseVisual()
 	  
 /*
   <strong>X11 only</strong>: This virtual function chooses a visual
-  that matches the OpenGL \link setFormat() format\endlink. Reimplement this
+  that matches the OpenGL \link format() format\endlink. Reimplement this
   function in a subclass if you need a custom visual.
 
   \sa chooseContext()

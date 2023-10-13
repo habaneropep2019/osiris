@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qfontdialog.cpp,v 2.46.2.1 1999/09/22 11:00:27 eiriken Exp $
+** $Id: qt/src/dialogs/qfontdialog.cpp   2.1.0   edited 2000-03-24 $
 **
 ** Implementation of QFontDialog
 **
 ** Created : 970605
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,11 +17,12 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
+
 #include "qwindowdefs.h"
 
 #include "qfontdialog.h"
@@ -41,21 +42,16 @@
 
 #include <ctype.h>
 
-//
-//  W A R N I N G
-//  -------------
-//
-//  This class is under development and is currently unstable.
-//
-//
-
+// BEING REVISED: hanord
 /*!
   \class QFontDialog qfontdialog.h
   \brief The QFontDialog provides a dialog widget for selecting a text font
   \ingroup dialogs
 
-  Used for allowing the user to select a font among the available fonts
-  on the underlying window system.
+  This dialog can be used to let the user choose a font with attributes and so on.
+  Normally you may use the static convenience function getFont().
+
+  <img src=qfontdlg-m.png> <img src=qfontdlg-w.png>
 */
 
 class QFontDialogPrivate
@@ -141,7 +137,10 @@ public:
 
 
 /*!
-  Creates a default font dialog.
+  Constructs a default font dialog. Use setFont() for setting
+  the initial values.
+
+  \sa getFont()
 */
 
 QFontDialog::QFontDialog( QWidget *parent, const char *name,
@@ -153,8 +152,8 @@ QFontDialog::QFontDialog( QWidget *parent, const char *name,
     d->familyEdit = new QExpandingLineEdit( this, "font family I", TRUE );
     d->familyEdit->setFocusPolicy( StrongFocus );
     d->familyList = new QListBox( this, "font family II" );
-    d->familyList->setFocusPolicy( NoFocus );
-
+    d->familyList->viewport()->setFocusProxy( d->familyEdit );
+    
     d->familyAccel
 	= new QLabel( d->familyEdit, tr("&Font"), this, "family accelerator" );
     d->familyAccel->setIndent( 2 );
@@ -162,7 +161,7 @@ QFontDialog::QFontDialog( QWidget *parent, const char *name,
     d->styleEdit = new QExpandingLineEdit( this, "font style I", TRUE );
     d->styleEdit->setFocusPolicy( StrongFocus );
     d->styleList = new QListBox( this, "font style II" );
-    d->styleList->setFocusPolicy( NoFocus );
+    d->styleList->viewport()->setFocusProxy( d->styleEdit );
     d->styleAccel
 	= new QLabel( d->styleEdit, tr("Font st&yle"), this, "style accelerator" );
     d->styleAccel->setIndent( 2 );
@@ -170,7 +169,7 @@ QFontDialog::QFontDialog( QWidget *parent, const char *name,
     d->sizeEdit = new QExpandingLineEdit( this, "font size I", TRUE );
     d->sizeEdit->setFocusPolicy( StrongFocus );
     d->sizeList = new QListBox( this, "font size II" );
-    d->sizeList->setFocusPolicy( NoFocus );
+    d->sizeList->viewport()->setFocusProxy( d->sizeEdit );
     d->sizeAccel
 	= new QLabel ( d->sizeEdit, tr("&Size"), this, "size accelerator" );
     d->sizeAccel->setIndent( 2 );
@@ -192,7 +191,8 @@ QFontDialog::QFontDialog( QWidget *parent, const char *name,
 
     d->sample = new QHGroupBox( tr("Sample"), this, "sample text" );
     d->sampleEdit = new QExpandingLineEdit( d->sample, "r/w sample text", FALSE );
-
+    d->sampleEdit->setFixedHeight( 75 );
+    
     // Note that the sample text is *not* translated with tr(), as the
     // characters used depend on the charset encoding.
     d->sampleEdit->setText( "AaBbYyZz" );
@@ -307,7 +307,7 @@ QFontDialog::QFontDialog( QWidget *parent, const char *name,
     d->familyEdit->setFocus();
 }
 
-/*! Deletes the font dialog and frees up its storage. */
+/*! Destroys the font dialog and frees up its storage. */
 
 QFontDialog::~QFontDialog()
 {
@@ -390,7 +390,7 @@ QFont QFontDialog::getFont( bool *ok, const QFont *def,
     QFontDialog *dlg = new QFontDialog( parent, name, TRUE );
     if ( def )
 	dlg->setFont( *def );
-    dlg->setCaption( tr("Font") );
+    dlg->setCaption( tr("Select Font") );
     if ( dlg->exec() == QDialog::Accepted ) {
 	result = dlg->font();
 	if ( ok )
@@ -438,6 +438,10 @@ QListBox * QFontDialog::sizeListBox() const
 {
     return d->sizeList;
 }
+
+/*!
+  This slot is called if the user changes the font size.
+*/
 
 void QFontDialog::sizeChanged( const QString &s )
 {
@@ -505,7 +509,7 @@ bool QFontDialog::eventFilter( QObject * o , QEvent * e )
 	else if ( o == d->sizeList )
 	    d->sizeEdit->setFocus();
     }
-    return FALSE;
+    return QDialog::eventFilter( o, e );
 }
 
 
@@ -564,6 +568,7 @@ void QFontDialog::updateScripts()
 /*!  Update the contents of the "font style" list box.  This
   function can be reimplemented if you have special requirements.
 */
+
 void QFontDialog::updateStyles()
 {
     d->styleList->clear();
@@ -577,6 +582,10 @@ void QFontDialog::updateStyles()
     }
     d->styleList->insertStringList( styles );
 }
+
+/*!  Update the contents of the "font size" list box.  This
+  function can be reimplemented if you have special requirements.
+*/
 
 void QFontDialog::updateSizes()
 {
@@ -647,7 +656,7 @@ void QFontDialog::scriptHighlighted( const QString &s )
 
 void QFontDialog::styleHighlighted( const QString &s )
 {
-    d->styleEdit->setText( s );	
+    d->styleEdit->setText( s );
     if ( style() == WindowsStyle && d->styleEdit->hasFocus() )
 	d->styleEdit->selectAll();
 
@@ -685,6 +694,13 @@ void QFontDialog::sizeHighlighted( const QString &s )
     d->size = s;
     updateSample();
 }
+
+/*!
+  Sets the \a f to the font which values should be set
+  in the QFontDialog.
+
+  \sa font()
+*/
 
 void QFontDialog::setFont( const QFont &f )
 {
@@ -732,6 +748,12 @@ void QFontDialog::setFont( const QFont &f )
     }
 }
 
+/*!
+  Returns the font which the user has chosen.
+
+  \sa setFont()
+*/
+
 QFont QFontDialog::font() const
 {
     int pSize = d->size.toInt();
@@ -756,3 +778,14 @@ void QFontDialog::emitSelectedFont()
     emit fontSelected(font());
 }
 
+/*!
+  \fn void QFontDialog::fontSelected( const QFont & )
+
+  This signal is emitted, when the user has chosen a font and clicked ok.
+*/
+
+/*!
+  \fn void QFontDialog::fontHighlighted( const QFont & )
+
+  This signal is emitted, when the user changed a setting in the dialog.
+*/

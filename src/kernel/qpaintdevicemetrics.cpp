@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qpaintdevicemetrics.cpp,v 2.8 1999/04/28 09:56:52 aavit Exp $
+** $Id: qt/src/kernel/qpaintdevicemetrics.cpp   2.1.0   edited 2000-03-24 $
 **
 ** Implementation of QPaintDeviceMetrics class
 **
 ** Created : 941109
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,14 +17,15 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
 #include "qpaintdevicemetrics.h"
 
+// NOT REVISED
 /*!
   \class QPaintDeviceMetrics qpaintdevicemetrics.h
   \brief The QPaintDeviceMetrics class provides information about a
@@ -32,14 +33,27 @@
 
   \ingroup drawing
 
-  Sometimes it is necessary to obtain information about the
-  physical size of a paint device when drawing graphics.
+  Sometimes it is necessary to obtain information about the physical
+  characteristics of a paint device when drawing graphics.  This class
+  provides just that.  For example, to compute the aspect ratio of a
+  paint device:
 
-  Example:
   \code
     QPaintDeviceMetrics pdm( myWidget );
     double aspect = (double)pdm.widthMM / (double)pdm.heightMM();
   \endcode
+
+  QPaintDeviceMetrics contains methods to provide the width and height
+  of a device in both pixels and millimeters, the number of colours
+  the device supports, the number of bit planes, and finally the
+  resolution of the device.
+
+  Note that it is not always possible for QPaintDeviceMetrics to
+  compute the values you ask for, particularly for external devices.
+  The ultimate example is asking for the resolution of of a QPrinter
+  that is set to "print to file" - who knows what printer that file
+  will end up?
+
 */
 
 /*!
@@ -83,4 +97,22 @@ QPaintDeviceMetrics::QPaintDeviceMetrics( const QPaintDevice *pd )
 /*!
   \fn int QPaintDeviceMetrics::depth() const
   Returns the bit depth (number of bit planes) of the paint device.
+*/
+
+/*!
+  \fn int QPaintDeviceMetrics::logicalDpiX() const
+
+  Returns the horizontal resolution of the device, in dots per inch, that is
+  used when computing font sizes.
+  For X this is usually the same as could be computed
+  from widthMM(), but on Windows this varies.
+*/
+
+/*!
+  \fn int QPaintDeviceMetrics::logicalDpiY() const
+
+  Returns the vertical resolution of the device, in dots per inch, that is
+  used when computing font sizes.
+  For X this is usually the same as could be computed
+  from heightMM(), but on Windows this varies.
 */

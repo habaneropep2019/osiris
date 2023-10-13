@@ -1,9 +1,9 @@
 /****************************************************************************
-** $Id: porting.doc,v 1.63.2.3 1999/09/17 16:06:25 paul Exp $
+** $Id: qt/doc/porting.doc   2.1.0   edited 2000-03-24 $
 **
 ** Help with porting from Qt 1.x to Qt 2.0
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -15,9 +15,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -89,48 +89,46 @@ in the collective conscious that is the Qt Developer Community!
 
 <h2 align=center>The Porting Notes</h2>
 
-<multicol cols=3>
 <ul>
- <li><b><a href=#Namespace>Namespace</a></b>
- <li><b><a href=#Virtual>Virtual Functions</a></b>
- <li><b><a href=#Collection>Collection classes</a></b>
- <li><b><a href=#DefaultParent>No Default 0 Parent Widget</a></b>
- <li><b><a href=#DebugVsRelease>Debug vs. Release</a></b>
+ <li><b><a href="#Namespace">Namespace</a></b>
+ <li><b><a href="#Virtual">Virtual Functions</a></b>
+ <li><b><a href="#Collection">Collection classes</a></b>
+ <li><b><a href="#DefaultParent">No Default 0 Parent Widget</a></b>
+ <li><b><a href="#DebugVsRelease">Debug vs. Release</a></b>
 
- <li><b><a href=#QApplication>QApplication</a></b>
- <li><b><a href=#QClipboard>QClipboard</a></b>
- <li><b><a href=#QColor>QColor</a></b>
- <li><b><a href=#QDataStream>QDataStream</a></b>
- <li><b><a href=#QDialog>QDialog</a></b>
- <li><b><a href=#QDropSite>QDropSite</a></b>
- <li><b><a href=#QEvent>QEvent</a></b>
- <li><b><a href=#QFile>QFile</a></b>
- <li><b><a href=#QFontMetrics>QFontMetrics</a></b>
- <li><b><a href=#QIODevice>QIODevice</a></b>
- <li><b><a href=#QLabel>QLabel</a></b>
- <li><b><a href=#QLayout>QLayout</a></b>
- <li><b><a href=#QListView>QListView</a></b>
- <li><b><a href=#QMenuData>QMenuData</a></b>
- <li><b><a href=#QMenuData>QPopupMenu</a></b>
- <li><b><a href=#QMultiLineEdit>QMultiLineEdit</a></b>
- <li><b><a href=#QPainter>QPainter</a></b>
- <li><b><a href=#QPicture>QPicture</a></b>
- <li><b><a href=#QPoint>QPoint, QPointArray, QSize and QRect</a></b>
- <li><b><a href=#QPixmap>QPixmap</a></b>
- <li><b><a href=#QRgb>QRgb</a></b>
- <li><b><a href=#QScrollView>QScrollView</a></b>
- <li><b><a href=#QStrList>QStrList</a></b>
- <li><b><a href=#QString>QString</a></b>
- <li><b><a href=#QTextStream>QTextStream</a></b>
- <li><b><a href=#QUriDrag>QUriDrag / QUrlDrag</a></b>
- <li><b><a href=#QValidator>QComboBox</a></b>
- <li><b><a href=#QValidator>QLineEdit</a></b>
- <li><b><a href=#QValidator>QSpinBox</a></b>
- <li><b><a href=#QValidator>QValidator</a></b>
- <li><b><a href=#QWidget>QWidget</a></b>
- <li><b><a href=#QWindow>QWindow</a></b>
+ <li><b><a href="#QApplication">QApplication</a></b>
+ <li><b><a href="#QClipboard">QClipboard</a></b>
+ <li><b><a href="#QColor">QColor</a></b>
+ <li><b><a href="#QDataStream">QDataStream</a></b>
+ <li><b><a href="#QDialog">QDialog</a></b>
+ <li><b><a href="#QDropSite">QDropSite</a></b>
+ <li><b><a href="#QEvent">QEvent</a></b>
+ <li><b><a href="#QFile">QFile</a></b>
+ <li><b><a href="#QFontMetrics">QFontMetrics</a></b>
+ <li><b><a href="#QIODevice">QIODevice</a></b>
+ <li><b><a href="#QLabel">QLabel</a></b>
+ <li><b><a href="#QLayout">QLayout</a></b>
+ <li><b><a href="#QListView">QListView</a></b>
+ <li><b><a href="#QMenuData">QMenuData</a></b>
+ <li><b><a href="#QMenuData">QPopupMenu</a></b>
+ <li><b><a href="#QMultiLineEdit">QMultiLineEdit</a></b>
+ <li><b><a href="#QPainter">QPainter</a></b>
+ <li><b><a href="#QPicture">QPicture</a></b>
+ <li><b><a href="#QPoint">QPoint, QPointArray, QSize and QRect</a></b>
+ <li><b><a href="#QPixmap">QPixmap</a></b>
+ <li><b><a href="#QRgb">QRgb</a></b>
+ <li><b><a href="#QScrollView">QScrollView</a></b>
+ <li><b><a href="#QStrList">QStrList</a></b>
+ <li><b><a href="#QString">QString</a></b>
+ <li><b><a href="#QTextStream">QTextStream</a></b>
+ <li><b><a href="#QUriDrag">QUriDrag / QUrlDrag</a></b>
+ <li><b><a href="#QValidator">QComboBox</a></b>
+ <li><b><a href="#QValidator">QLineEdit</a></b>
+ <li><b><a href="#QValidator">QSpinBox</a></b>
+ <li><b><a href="#QValidator">QValidator</a></b>
+ <li><b><a href="#QWidget">QWidget</a></b>
+ <li><b><a href="#QWindow">QWindow</a></b>
 </ul>
-</multicol>
 
 <hr>
 
@@ -636,8 +634,8 @@ that need to be changed.
 <h4>\code QLabel::setMargin()\endcode</h4>
 <p>
 \code QLabel::setMargin()\endcode and\code QLabel::margin()\endcode
-have been renamed to \code QLabel::setIndent()\endcode and 
-\code QLabel::indent()\endcode, respectively. This was done to avoid 
+have been renamed to \code QLabel::setIndent()\endcode and
+\code QLabel::indent()\endcode, respectively. This was done to avoid
 collision with QFrame::setMargin(), which is now virtual.
 
 <h4>\code QLabel::setMovie()\endcode</h4>
@@ -755,7 +753,7 @@ a simple way to build nested widget structures.
 
 <h3><a name=QListView>QListView</a></h3>
 
-In Qt 1.x mouse events to the viewport where redirected to the
+<p>In Qt 1.x mouse events to the viewport where redirected to the
 event handlers for the listview; in Qt 2.0, this functionality is
 in QScrollView where mouse (and other position-oriented) events are
 redirected to viewportMousePressEvent() etc, which in turn translate
@@ -959,6 +957,9 @@ QPopupMenus are also reusable in 2.0. They may occur in different
 locations within one menu structure or be used as both a menubar
 drop-down and as a context popup-menu.  This should make it possible to
 significantly simplify many applications.
+
+Last but not least, QPopupMenu no longer inherits QTableView. Instead,
+it directly inherits QFrame.
 
 <h3><a name=QValidator>QValidator (QLineEdit, QComboBox, QSpinBox) </a></h3>
 

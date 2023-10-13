@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qtextstream.h,v 2.41 1999/06/08 18:42:05 aavit Exp $
+** $Id: qt/src/tools/qtextstream.h   2.1.0   edited 2000-03-24 $
 **
 ** Definition of QTextStream class
 **
 ** Created : 940922
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -276,6 +276,32 @@ Q_EXPORT QTextStream &flush( QTextStream &s );	// flush output
 Q_EXPORT QTextStream &ws( QTextStream &s );	// eat whitespace on input
 Q_EXPORT QTextStream &reset( QTextStream &s );	// set default flags
 
+Q_EXPORT inline QTSManip qSetW( int w )
+{
+    QTSMFI func = &QTextStream::width;
+    return QTSManip(func,w);
+}
+
+Q_EXPORT inline QTSManip qSetFill( int f )
+{
+    QTSMFI func = &QTextStream::fill;
+    return QTSManip(func,f);
+}
+
+Q_EXPORT inline QTSManip qSetPrecision( int p )
+{
+    QTSMFI func = &QTextStream::precision;
+    return QTSManip(func,p);
+}
+
+
+#ifndef QT_ALTERNATE_QTSMANIP
+
+// These will go away in Qt 3.0, as they conflict with std libs
+//
+// If you get conflicts now, #define QT_ALTERNATE_QTSMANIP before
+// including this file.
+
 Q_EXPORT inline QTSManip setw( int w )
 {
     QTSMFI func = &QTextStream::width;
@@ -293,6 +319,6 @@ Q_EXPORT inline QTSManip setprecision( int p )
     QTSMFI func = &QTextStream::precision;
     return QTSManip(func,p);
 }
-
+#endif
 
 #endif // QTEXTSTREAM_H

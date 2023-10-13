@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qcdestyle.h,v 1.1.2.1 1999/07/08 13:35:30 paul Exp $
+** $Id: qt/src/widgets/qcdestyle.h   2.1.0   edited 2000-03-24 $
 **
 ** Definition of the CDE-like style class
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -27,14 +27,16 @@
 #ifndef QCDESTYLE_H
 #define QCDESTYLE_H
 
+#ifndef QT_H
 #include "qmotifstyle.h"
+#endif // QT_H
 
 class Q_EXPORT QCDEStyle : public QMotifStyle
 {
     Q_OBJECT
 public:
     QCDEStyle( bool useHighlightCols = FALSE );
-
+    virtual ~QCDEStyle();
     int defaultFrameWidth() const;
 
     void drawArrow( QPainter *p, ArrowType type, bool down,
@@ -46,6 +48,7 @@ public:
 
     void drawExclusiveIndicator( QPainter* p,  int x, int y, int w, int h, const QColorGroup &g,
 				 bool on, bool down = FALSE, bool enabled = TRUE );
+    
 };
 
 #endif

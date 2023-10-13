@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qtoolbar.h,v 2.21 1999/04/28 10:00:49 aavit Exp $
+** $Id: qt/src/widgets/qtoolbar.h   2.1.0   edited 2000-03-24 $
 **
 ** Definition of QToolBar class
 **
 ** Created : 980306
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -35,10 +35,14 @@ class QButton;
 class QBoxLayout;
 class QToolBarPrivate;
 
-
 class Q_EXPORT QToolBar: public QWidget
 {
     Q_OBJECT
+    Q_PROPERTY( QString label READ label WRITE setLabel )
+    Q_PROPERTY( bool hStretchable READ isHorizontalStretchable WRITE setHorizontalStretchable )
+    Q_PROPERTY( bool vStretchable READ isVerticalStretchable WRITE setVerticalStretchable )
+    Q_PROPERTY( Orientation orientation READ orientation WRITE setOrientation )
+
 public:
     QToolBar( const QString &label,
 	      QMainWindow *, QMainWindow::ToolBarDock = QMainWindow::Top,
@@ -54,10 +58,15 @@ public:
     Orientation orientation() const { return o; }
 
     void show();
+    void hide();
 
     QMainWindow * mainWindow();
 
     virtual void setStretchableWidget( QWidget * );
+    void setHorizontalStretchable( bool b );
+    void setVerticalStretchable( bool b );
+    bool isHorizontalStretchable() const;
+    bool isVerticalStretchable() const;
 
     bool event( QEvent * e );
     bool eventFilter( QObject *, QEvent * );
@@ -65,20 +74,45 @@ public:
     virtual void setLabel( const QString & );
     QString label() const;
 
+    void clear();
+
+    QSize minimumSize() const;
+    QSize minimumSizeHint() const;
+
 protected:
     void paintEvent( QPaintEvent * );
+    void resizeEvent( QResizeEvent * );
+
+signals:
+    void orientationChanged( Orientation );
+
+private slots:
+    void startMoving( QToolBar *tb );
+    void endMoving( QToolBar *tb );
+    void popupSelected( int );
+    void emulateButtonClicked();
+    void updateArrowStuff();
+    void setupArrowMenu();
 
 private:
+    void init();
     virtual void setUpGM();
+    void paintToolBar();
 
-    QBoxLayout * b;
+    QBoxLayout * bl;
     QToolBarPrivate * d;
     Orientation o;
     QMainWindow * mw;
     QWidget * sw;
     QString l;
 
-    friend QMainWindow;
+    friend class QMainWindow;
+
+private:	// Disabled copy constructor and operator=
+#if defined(Q_DISABLE_COPY)
+    QToolBar( const QToolBar & );
+    QToolBar& operator=( const QToolBar & );
+#endif
 };
 
 

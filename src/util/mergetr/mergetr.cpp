@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: mergetr.cpp,v 1.10 1999/06/22 15:23:59 paul Exp $
+** $Id: qt/src/util/mergetr/mergetr.cpp   2.1.0   edited 2000-03-27 $
 **
 ** This is a utility program for merging findtr msgfiles
 **
@@ -311,7 +311,7 @@ void merge( const QString& newname, const QString& oldname,
     f2.close();
     fout.close();
     QFile fileout(resname);
-    if ( !fileout.open( IO_WriteOnly) )
+    if ( !fileout.open( IO_WriteOnly | IO_Translate ) )
 	return;
     fileout.writeBlock(fout.buffer());
     fileout.close();
@@ -324,7 +324,7 @@ int main( int argc, char* argv[] )
     int orgfile = 1;
     int newfile = 2;
 
-    if ( argc <= newfile ) {
+    if ( argc <= newfile || argc > 1 && argv[1][0] == '-') {
 	qWarning("usage: %s  orgfile newfile [outfile]", argv[0]);
 	exit(1);
     }

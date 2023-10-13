@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qarray.h,v 2.10 1999/06/22 15:29:00 agulbra Exp $
+** $Id: qt/src/tools/qarray.h   2.1.0   edited 2000-03-24 $
 **
 ** Definition of QArray template/macro class
 **
 ** Created : 930906
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -51,12 +51,11 @@ public:
     type *data()    const	{ return (type *)QGArray::data(); }
     uint  nrefs()   const	{ return QGArray::nrefs(); }
     uint  size()    const	{ return QGArray::size()/sizeof(type); }
+    uint  count()   const 	{ return size(); }
     bool  isEmpty() const	{ return QGArray::size() == 0; }
     bool  isNull()  const	{ return QGArray::data() == 0; }
-    // ### bug bug bug.  this does not call constructors/destructors
     bool  resize( uint size )	{ return QGArray::resize(size*sizeof(type)); }
     bool  truncate( uint pos )	{ return QGArray::resize(pos*sizeof(type)); }
-    // end of bug bug bug.  but the bug is in the constructur too.
     bool  fill( const type &d, int size=-1 )
 	{ return QGArray::fill((char*)&d,size,sizeof(type) ); }
     void  detach()		{ QGArray::detach(); }
@@ -79,6 +78,9 @@ public:
 	{ return QGArray::find((char*)&d,i,sizeof(type)); }
     int	 contains( const type &d ) const
 	{ return QGArray::contains((char*)&d,sizeof(type)); }
+    void sort() { QGArray::sort(sizeof(type)); }
+    int  bsearch( const type &d ) const
+	{ return QGArray::bsearch((const char*)&d,sizeof(type)); }
     type& operator[]( int i ) const
 	{ return (type &)(*(type *)QGArray::at(i*sizeof(type))); }
     type& at( uint i ) const

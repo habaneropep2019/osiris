@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qcolor.h,v 2.25.2.1 1999/08/10 14:26:16 paul Exp $
+** $Id: qt/src/kernel/qcolor.h   2.1.0   edited 2000-03-24 $
 **
 ** Definition of QColor class
 **
 ** Created : 940112
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -49,10 +49,10 @@ Q_EXPORT inline int qAlpha( QRgb rgb )		// get alpha part of RGBA
 { return (int)((rgb >> 24) & 0xff); }
 
 Q_EXPORT inline QRgb qRgb( int r, int g, int b )// set RGB value
-{ return (uint)((uint)(r & 0xff) << 16) |((uint)(g & 0xff) << 8) |(b & 0xff); }
+{ return (0xff << 24) | ((r & 0xff) << 16) | ((g & 0xff) << 8) | (b & 0xff); }
 
 Q_EXPORT inline QRgb qRgba( int r, int g, int b, int a )// set RGBA value
-{ return qRgb(r,g,b) | ((uint)(a & 0xff) << 24); }
+{ return ((a & 0xff) << 24) | ((r & 0xff) << 16) | ((g & 0xff) << 8) | (b & 0xff); }
 
 Q_EXPORT inline int qGray( int r, int g, int b )// convert R,G,B to gray 0..255
 { return (r*11+g*16+b*5)/32; }
@@ -78,6 +78,7 @@ public:
     bool   isValid() const;
     bool   isDirty() const;
 
+    QString name() const;
     void   setNamedColor( const QString& name );
 
     void   rgb( int *r, int *g, int *b ) const;
@@ -148,7 +149,7 @@ inline bool QColor::isDirty() const
 { return (rgbVal & RGB_DIRTY) != 0; }
 
 inline QRgb QColor::rgb() const
-{ return rgbVal & RGB_MASK; }
+{ return rgbVal | ~RGB_MASK; }
 
 inline int QColor::red() const
 { return qRed(rgbVal); }
@@ -168,10 +169,11 @@ inline bool QColor::lazyAlloc()
 
 inline bool QColor::operator==( const QColor &c ) const
 {
-    return (((rgbVal | c.rgbVal) & RGB_DIRECT) == 0 &&
-	    (rgbVal & 0x00ffffff) == (c.rgbVal & 0x00ffffff)) ||
+    return isValid()==c.isValid() &&
+	((((rgbVal | c.rgbVal) & RGB_DIRECT) == 0 &&
+	    (rgbVal & RGB_MASK) == (c.rgbVal & RGB_MASK)) ||
 	   ((rgbVal & c.rgbVal & RGB_DIRECT) != 0 &&
-	    (rgbVal & 0x00ffffff) == (c.rgbVal & 0x00ffffff) && pix == c.pix);
+	    (rgbVal & RGB_MASK) == (c.rgbVal & RGB_MASK) && pix == c.pix));
 }
 
 inline bool QColor::operator!=( const QColor &c ) const

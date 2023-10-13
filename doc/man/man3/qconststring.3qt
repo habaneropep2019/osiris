@@ -1,0 +1,48 @@
+.TH QConstString 3qt "12 April 2000" "Troll Tech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.\" license file included in the distribution for a complete license
+.\" statement.
+.\"
+.ad l
+.nh
+.SH NAME
+QConstString \- A QString which uses constant Unicode data
+\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
+.br
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <qstring.h>\fR
+.PP
+.SS "Public Members"
+.in +1c
+.ti -1c
+.BI "\fBQConstString\fR ( QChar * " "unicode" ", uint length )"
+.br
+.ti -1c
+.BI "\fB~QConstString\fR ()"
+.br
+.ti -1c
+.BI "const QString& \fBstring\fR () const"
+.br
+.in -1c
+.SH DESCRIPTION
+A QString which uses constant Unicode data.
+.PP
+In order to minimize copying, highly optimized applications can use QConstString to provide a QString-compatible object from existing Unicode data. The Unicode data must exist for the entire lifetime of the QConstString object.
+.SH MEMBER FUNCTION DOCUMENTATION
+.SH "QConstString::QConstString ( QChar * unicode, uint length )"
+Constructs a QConstString that uses the first \fIlength\fR Unicode characters in the array \fIunicode.\fR Any attempt to modify copies of the string will cause it to create a copy of the data, thus it remains forever unmodified.
+.SH "QConstString::~QConstString ()"
+Destroys the QConstString, creating a copy of the data if other strings are still using it.
+.SH "const QString& QConstString::string () const"
+Returns a constant string referencing the data passed during
+construction.
+.SH "SEE ALSO"
+.BR http://doc.trolltech.com/qconststring.html
+.SH COPYRIGHT
+Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+license file included in the distribution for a complete license
+statement.
+.SH AUTHOR
+Generated automatically from the source code.

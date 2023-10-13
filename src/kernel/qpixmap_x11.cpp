@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qpixmap_x11.cpp,v 2.69 1999/06/24 20:13:38 warwick Exp $
+** $Id: qt/src/kernel/qpixmap_x11.cpp   2.1.0   edited 2000-03-24 $
 **
 ** Implementation of QPixmap class for X11
 **
 ** Created : 940501
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,13 +17,15 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
 #include "qglobal.h"
+
+// NOT REVISED
 
 // Uncomment the next line to enable the MIT Shared Memory extension
 //
@@ -416,52 +418,8 @@ int QPixmap::defaultDepth()
   The cost is more memory consumption, up to twice as much as an
   unoptimized pixmap.
 
-  The \a optimization parameter can be:
-  <ul>
-  <li> \c QPixmap::DefaultOptim, sets the default optimization, i.e.
-  QPixmap::defaultOptimization().
-  <li> \c QPixmap::NoOptim, equivalent with MemoryOptim.
-  <li> \c QPixmap::MemoryOptim, use as little memory/resource as possible,
-  with little or no caching.  The tradeoff may be unnoticably slower pixmap
-  operations.  Read the important note about Windows 95/98 below.
-  <li> \c QPixmap::NormalOptim, normal optimization to make pixmap drawing
-  faster. This option is the default and is suitable for most purposes.
-  <li> \c QPixmap::BestOptim, heavily optimized pixmap drawing, but may
-  consume more memory. Use this option for pixmap drawn extremely
-  frequently, e.g. masked pixmaps/sprites.
-  </ul>
-
   Use the setDefaultOptimization() to change the default optimization
   for all new pixmaps.
-
-  <strong>Note about Windows 95 and 98:</strong> On Windows 9x, the system
-  crashes if you create around 1000 pixmaps or more, independent of the
-  size of the pixmaps or installed RAM.  The reason is that Windows 9x has
-  a serious resource limitation that comes from the old, 64k segmented
-  memory model. Windows NT does not have this limitation.
-
-  Qt tries to work around the resource limitation.  If you set the pixmap
-  optimization to \c QPixmap::MemoryOptim and the width of your pixmap is
-  less than or equal to 128 pixels, Qt will create a logical pixmap which
-  refers an internal pixmap.  This internal pixmap is shared by hundreds
-  of other pixmaps which have the optimization set to \c
-  QPixmap::MemoryOptim.  The result is that your application may use
-  thousands of pixmaps on Windows 9x and spend only a few percent of the
-  system resources.
-
-  When should you set the memory optimization?  If your application uses
-  hundreds of pixmaps, e.g. on tool bar buttons, in popup menus, and you
-  plan to run it on Windows 95 or Windows 98.
-
-  Here is an example:
-  \code
-    QPixmap::setDefaultOptimization( QPixmap::MemoryOptim );
-    while ( ... ) {
-      // load tool bar pixmaps etc.
-      QPixmap *pixmap = new QPixmap(fileName);
-    }
-    QPixmap::setDefaultOptimization( QPixmap::NormalOptim );
-  \endcode
 
   \sa optimization(), setDefaultOptimization(), defaultOptimization()
 */
@@ -712,10 +670,10 @@ QImage QPixmap::convertToImage() const
 		if (msk) {
 		    if ( ale ) {
 			*dst++ = (asrc[x >> 3] & (1 << (x & 7)))
-			    ? (0xff000000 | qRgb(r, g, b)) : qRgb(r, g, b);
+			    ? qRgba(r, g, b, 0xff) : qRgba(r, g, b, 0x00);
 		    } else {
 			*dst++ = (asrc[x >> 3] & (1 << (7 -(x & 7))))
-			    ? (0xff000000 | qRgb(r, g, b)) : qRgb(r, g, b);
+			    ? qRgba(r, g, b, 0xff) : qRgba(r, g, b, 0x00);
 		    }
 		} else {
 		    *dst++ = qRgb(r, g, b);
@@ -833,8 +791,8 @@ QImage QPixmap::convertToImage() const
 		image.setColor( j++,
 				 ( msk ? 0xff000000 : 0 )
 				 | qRgb( (carr[i].red   >> 8) & 255,
-			                 (carr[i].green >> 8) & 255,
-			                 (carr[i].blue  >> 8) & 255 ) );
+					 (carr[i].green >> 8) & 255,
+					 (carr[i].blue  >> 8) & 255 ) );
 	    }
 	}
 	delete [] carr;
@@ -859,12 +817,12 @@ QImage QPixmap::convertToImage() const
    <dd>
     <ul>
      <li> \c AutoColor (default) - If the \e image has \link
-               QImage::depth() depth\endlink 1 and contains only
-               black and white pixels, then the pixmap becomes monochrome.
+	       QImage::depth() depth\endlink 1 and contains only
+	       black and white pixels, then the pixmap becomes monochrome.
      <li> \c ColorOnly - The pixmap is dithered/converted to the
-               \link defaultDepth() native display depth\endlink.
+	       \link defaultDepth() native display depth\endlink.
      <li> \c MonoOnly - The pixmap becomes monochrome.  If necessary,
-               it is dithered using the chosen dithering algorithm.
+	       it is dithered using the chosen dithering algorithm.
     </ul>
    <dt>Dithering mode preference, for RGB channels
    <dd>
@@ -909,7 +867,7 @@ QImage QPixmap::convertToImage() const
   \bug Does not support 2 or 4 bit display hardware.
 
   \sa convertToImage(), isQBitmap(), QImage::convertDepth(), defaultDepth(),
-    hasAlphaBuffer()
+  QImage::hasAlphaBuffer()
 */
 
 bool QPixmap::convertFromImage( const QImage &img, int conversion_flags )
@@ -951,7 +909,7 @@ bool QPixmap::convertFromImage( const QImage &img, int conversion_flags )
 	    if ( image.numColors() == 2 ) {
 		QRgb c0 = image.color(0);	// Auto: convert to best
 		QRgb c1 = image.color(1);
-		conv8 = QMIN(c0,c1) != 0 || QMAX(c0,c1) != qRgb(255,255,255);
+		conv8 = QMIN(c0,c1) != qRgb(0,0,0) || QMAX(c0,c1) != qRgb(255,255,255);
 	    } else {
 		// eg. 1-colour monochrome images (they do exist).
 		conv8 = TRUE;
@@ -1096,10 +1054,10 @@ bool QPixmap::convertFromImage( const QImage &img, int conversion_flags )
 	    for (n=2; n<16; n*=2) {
 		for (i=0; i<n; i++) {
 		    for (j=0; j<n; j++) {
-		        D[i][j]*=4;
-		        D[i+n][j]=D[i][j]+2;
-		        D[i][j+n]=D[i][j]+3;
-		        D[i+n][j+n]=D[i][j]+1;
+			D[i][j]*=4;
+			D[i+n][j]=D[i][j]+2;
+			D[i][j+n]=D[i][j]+3;
+			D[i+n][j+n]=D[i][j]+1;
 		    }
 		}
 	    }
@@ -1374,11 +1332,16 @@ bool QPixmap::convertFromImage( const QImage &img, int conversion_flags )
   entirely over the one you grab, you get pixels from the overlying
   window too.
 
-  The reason we use a window identifier and not a QWidget is to enable
-  grabbing of windows that are not part of the application.
+  Note also that the mouse cursor is generally not grabbed.
 
-  \warning Grabbing an area outside the window, or screen, is not safe
-  in general.  This depends on the underlying window system.
+  The reason we use a window identifier and not a QWidget is to enable
+  grabbing of windows that are not part of the application, window
+  system frames, and so on.
+
+  \warning Grabbing an area outside the screen is not safe in general.
+  This depends on the underlying window system.
+
+  \sa grabWidget()
 */
 
 QPixmap QPixmap::grabWindow( WId window, int x, int y, int w, int h )

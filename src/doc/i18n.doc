@@ -1,9 +1,9 @@
 /****************************************************************************
-** $Id: i18n.doc,v 1.26.2.2 1999/07/13 20:03:46 warwick Exp $
+** $Id: qt/doc/i18n.doc   2.1.0   edited 2000-03-24 $
 **
 ** Explanation of moc and the meta object system
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -15,16 +15,16 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
 /*! \page i18n.html
 
 <title>
-Qt toolkit - Internationalization
+Qt Toolkit - Internationalization
 </title></head><body bgcolor="#ffffff">
 
 \postheader
@@ -87,17 +87,19 @@ in the following stages:
 	\code
 	void some_global_function(LoginWidget* logwid)
 	{
-	    QLabel *label = new QLabel( LoginWidget::tr("Password:"), logwid );
+	    QLabel *label = new QLabel(
+		    LoginWidget::tr("Password:"), logwid );
 	}
 
 	void same_global_function(LoginWidget* logwid)
 	{
-	    QLabel *label = new QLabel( qApp->translate("LoginWidget", "Password:"), logwid );
+	    QLabel *label = new QLabel(
+		    qApp->translate("LoginWidget", "Password:"), logwid );
 	}
 	\endcode
 
 	Finally, if you need to have translatable text completely
-	outside a funciton, there are
+	outside a function, there are
 	two macros to help: QT_TR_NOOP() and QT_TRANSLATE_NOOP().
 	They merely mark the text for extraction by the <tt>findtr</tt>
 	utility described below - the macros expand to just the text (without
@@ -205,13 +207,25 @@ in the following stages:
 	    translation (no "fuzzy" matching is done).
 	</dl>
 	<p>
+	While these utilities offer a convenient way to create .qm files
+	by the existing .po files standard, any system which writes .qm files
+	is sufficient - you could make an application that adds translations
+	to a QTranslator with QTranslator::insert() and then writes a .qm
+	file with QTranslator::save(). This way the translations can come
+	from any source you choose.
+	</p>
+	<p>
 	<em>
 	Note that Qt itself contains a small number of strings that will
 	also need to be translated to the languages which you are targetting.
 	In the near future Qt will ship with translations for some languages.
 	We recommend that if you need to translate the Qt strings now
 	that you put the translations in separate .po and .qm files.  This
-	will simplify transition to the official Qt translations.
+	will simplify transition to the official Qt translations. To create
+	a .po file for all Qt sources:
+	    \code
+		findtr qt/src/*\/q*.cpp >qt.po
+	    \endcode
 	</em>
 	<p>
 	The <tt>findtr</tt> ships in <tt>qt/bin</tt>, while the other
@@ -244,7 +258,7 @@ in the following stages:
 
 	For converting Unicode to local 8-bit encodings,
 	a shortcut is available: the
-	\link QString::local8Bit() local8Bit()\endlink method of 
+	\link QString::local8Bit() local8Bit()\endlink method of
 	QString returns such 8-bit data.  Another useful shortcut
 	is the \link QString::utf8() utf8()\endlink method, which
 	returns text in the 8-bit UTF-8 encoding - interesting in
@@ -348,7 +362,7 @@ be too concerned with the actual limitations.
 	  Unicode text files even though that is the order prescribed by
 	  the Unicode Standard in the absence of higher-level protocols.
      <li>Note that unlike programs written with MFC or plain winlib, Qt programs
-	  are portable between Windows 95/98 and Windows NT - 
+	  are portable between Windows 95/98 and Windows NT -
 	  <em>you do not need different binaries to support Unicode</em>.
     </ul>
 </dl>
@@ -395,7 +409,7 @@ The current state of activity is:
 	<a href=ftp://ftp.sra.co.jp/pub/x11/kinput2/>kinput2</a>
 	is the tested input method for X11.
  <dt><b>eucKR</b>
-  <dd>Under external development, 
+  <dd>Under external development,
 	Mizi Research are assisting with this effort.
 	<a href=http://www.mizi.com/>hanIM</a>
        	is the tested input method.
@@ -418,12 +432,23 @@ with new developments like the True Type font servers
 <a href=http://www.dcs.ed.ac.uk/home/jec/programs/xfsft/>xfsft</a>,
 <a href=ftp://sunsite.unc.edu/pub/Linux/X11/fonts>xfstt</a>,
 and
-<a href=http://hawk.ise.chuo-u.ac.jp/student/person/tshiozak/x-tt/>x-tt</a>,
+x-tt,
 as well as
 <a href=http://www.ietf.org/rfc/rfc2279.txt>UTF-8</a>
 (a Unicode encoding) filenames such as with the
 <a href=http://www.sun.com/software/white-papers/wp-unicode/>Unicode
 support in Solaris<sup class="tm"><font size="-1">TM</font></sup> 7</a>.
+
+
+<h2>Notes about locales on X11</h2>
+
+Many Unix distributations in only partial support for some locales -
+for example, if you have a <tt>/usr/share/locale/ja_JP.EUC</tt>
+directory, this does not necessarily mean you can display Japanese text
+- you also need JIS encoded fonts (or Unicode fonts), and that
+<tt>/usr/share/locale/ja_JP.EUC</tt> directory needs to be complete.
+For best results, use complete locales from your OS vendor.
+
 
 <h2>Note about Kinput2 on X11</h2>
 

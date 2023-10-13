@@ -1,0 +1,48 @@
+.TH QShowEvent 3qt "12 April 2000" "Troll Tech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.\" license file included in the distribution for a complete license
+.\" statement.
+.\"
+.ad l
+.nh
+.SH NAME
+QShowEvent \- The event sent when a widget is shown
+\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
+.br
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <qevent.h>\fR
+.PP
+Inherits QEvent.
+.PP
+.SS "Public Members"
+.in +1c
+.ti -1c
+.BI "\fBQShowEvent\fR ( bool spontaneous )"
+.br
+.ti -1c
+.BI "bool \fBspontaneous\fR () const"
+.br
+.in -1c
+.SH DESCRIPTION
+The event sent when a widget is shown.
+.PP
+There are two kind of show events: spontaneous show events by the window system and internal show events. Spontaneous show events are sent just after the window system shows the window, including after a top-level window has been shown (un-iconified) by the user. Internal show events are delivered just before the widget becomes visible.
+.PP
+See also: QHideEvent.
+.SH MEMBER FUNCTION DOCUMENTATION
+.SH "QShowEvent::QShowEvent ( bool spontaneous )"
+Constructs a QShowEvent. \fIspontaneous\fR is TRUE if the event originated outside the application - ie. the user revealed the window via the window manager controls.
+.SH "bool QShowEvent::spontaneous () const"
+Returns TRUE if the event
+originated outside the application - ie. the user revealed the window via the
+window manager controls.
+.SH "SEE ALSO"
+.BR http://doc.trolltech.com/qshowevent.html
+.SH COPYRIGHT
+Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+license file included in the distribution for a complete license
+statement.
+.SH AUTHOR
+Generated automatically from the source code.

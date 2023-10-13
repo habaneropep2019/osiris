@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qeucjpcodec.cpp,v 2.8 1999/06/10 18:32:22 warwick Exp $
+** $Id: qt/src/tools/qeucjpcodec.cpp   2.1.0   edited 2000-04-03 $
 **
 ** Implementation of QEucJpCodec class
 **
 ** Created : 990225
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,15 +17,60 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
 // Most of the code here was originally written by Serika Kurusugawa
 // a.k.a. Junji Takagi, and is include in Qt with the author's permission,
 // and the grateful thanks of the Troll Tech team.
+
+/*! \class QEucJpCodec qeucjpcodec.h
+
+  \brief Provides conversion to and from EUC-CP character sets
+
+  The QEucJpCodec class subclasses QTextCodec to provide support for
+  EUC-JP, the main legacy encoding for UNIX machines in Japan.
+
+  The environment variable \c UNICODEMAP_JP can be used to fine-tune how
+  QJpUnicodeConv, QEucJpCodec, QJisCodec and QSjisCodec do their work.
+  The QJpUnicodeConv documentation describes how to use this variable.
+
+  It was largely written by Serika Kurusugawa a.k.a. Junji Takagi, and
+  is included in Qt with the author's permission, and the grateful
+  thanks of the Troll Tech team. Here is the copyright statement for
+  that code:
+
+  \mustquote
+
+  Copyright (c) 1999 Serika Kurusugawa, All rights reserved.
+
+  Redistribution and use in source and binary forms, with or without
+  modification, are permitted provided that the following conditions
+  are met: <ol>
+  <li> Redistributions of source code must retain the above copyright
+     notice, this list of conditions and the following disclaimer.
+  <li> Redistributions in binary form must reproduce the above copyright
+     notice, this list of conditions and the following disclaimer in the
+     documentation and/or other materials provided with the distribution.
+  </ol>
+
+  THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
+  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+  ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+  FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+  DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+  OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+  HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+  LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+  OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+  SUCH DAMAGE.
+*/
+
+
 
 /*
  * Copyright (c) 1999 Serika Kurusugawa, All rights reserved.
@@ -63,10 +108,16 @@ static const uchar Ss3 = 0x8f;	// Single Shift 3
 
 #define	QValidChar(u)	((u) ? QChar((ushort)(u)) : QChar::replacement)
 
+/*!
+  Construct a QEucJpCodec.
+*/
 QEucJpCodec::QEucJpCodec() : conv(QJpUnicodeConv::newConverter(JU_Default))
 {
 }
 
+/*!
+  Returns 18.
+*/
 int QEucJpCodec::mibEnum() const
 {
     /*
@@ -88,6 +139,9 @@ int QEucJpCodec::mibEnum() const
     return 18;
 }
 
+/*!
+  \reimp
+*/
 QCString QEucJpCodec::fromUnicode(const QString& uc, int& len_in_out) const
 {
     int l = QMIN((int)uc.length(),len_in_out);
@@ -128,6 +182,9 @@ QCString QEucJpCodec::fromUnicode(const QString& uc, int& len_in_out) const
     return rstr;
 }
 
+/*!
+  \reimp
+*/
 QString QEucJpCodec::toUnicode(const char* chars, int len) const
 {
     QString result;
@@ -194,20 +251,26 @@ QString QEucJpCodec::toUnicode(const char* chars, int len) const
     return result;
 }
 
+/*!
+  \reimp
+*/
 const char* QEucJpCodec::name() const
 {
     return "eucJP";
 }
 
+/*!
+  \reimp
+*/
 int QEucJpCodec::heuristicNameMatch(const char* hint) const
 {
     int score = 0;
     bool ja = FALSE;
     if (strnicmp(hint, "ja_JP", 5) == 0 || strnicmp(hint, "japan", 5) == 0) {
-	score += 3; 
+	score += 3;
 	ja = TRUE;
     } else if (strnicmp(hint, "ja", 2) == 0) {
-	score += 2; 
+	score += 2;
 	ja = TRUE;
     }
     const char *p;
@@ -235,6 +298,9 @@ int QEucJpCodec::heuristicNameMatch(const char* hint) const
     return QTextCodec::heuristicNameMatch(hint);
 }
 
+/*!
+  \reimp
+*/
 int QEucJpCodec::heuristicContentMatch(const char* chars, int len) const
 {
     int score = 0;
@@ -249,13 +315,14 @@ int QEucJpCodec::heuristicContentMatch(const char* chars, int len) const
 		score--;
 	} else if ( ch < 0x80 ) {
 	    // Inconclusive
+	    score++;
 	} else if ( ch == Ss2 ) {
 	    // JIS X 0201 Kana
 	    if ( i < len-1 ) {
 		uchar c2 = chars[++i];
 		if ( !IsKana(c2) )
 		    return -1;
-		score++;
+		score+=2;
 	    }
 	    score++;
 	} else if ( ch == Ss3 ) {
@@ -270,7 +337,7 @@ int QEucJpCodec::heuristicContentMatch(const char* chars, int len) const
 			return -1;
 		    score++;
 		}
-		score++;
+		score+=2;
 	    }
 	    score++;
 	} else if ( IsEucChar(ch) ) {
@@ -279,7 +346,7 @@ int QEucJpCodec::heuristicContentMatch(const char* chars, int len) const
 		uchar c2 = chars[++i];
 		if ( !IsEucChar(c2) )
 		    return -1;
-		score++;
+		score+=2;
 	    }
 	    score++;
 	} else {
@@ -369,6 +436,9 @@ public:
     }
 };
 
+/*!
+  \reimp
+*/
 QTextDecoder* QEucJpCodec::makeDecoder() const
 {
     return new QEucJpDecoder(conv);

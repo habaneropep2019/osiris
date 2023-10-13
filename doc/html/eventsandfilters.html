@@ -1,0 +1,64 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><title>
+Qt Toolkit - Events and Event Filters
+</title></head><body bgcolor="#ffffff">
+<p>
+<a href="index.html">
+<img width="122" height="65" src="qtlogo.png" alt="Home"
+  align="left" border="0">
+</a><div align=right><img src="dochead.png" width="472" height="27"><br>
+<a href="classes.html"><b>Classes</b></a>
+- <a href="annotated.html">Annotated</a>
+- <a href="hierarchy.html">Tree</a>
+- <a href="functions.html">Functions</a>
+- <a href="index.html">Home</a>
+- <a href="topicals.html"><b>Structure</b></a>
+</div>
+<br clear=all>
+<p>
+<h1 align=center>Events and Event Filters</h1><br clear="all">
+<p>
+Events in Qt inherit <a href="qevent.html">QEvent</a>. They are either sent to an object with
+<a href="qapplication.html#5a43f0">QApplication::sendEvent()</a> or posted with <a href="qapplication.html#552386">QApplication::postEvent()</a>. Sent events are delivered immediately,
+i.e. when the call to sendEvent() returns, the event handling was
+completely. Posted events are delivered when the flow of control
+enters or leaves the main event loop. Posting events has two main
+advantages:
+<p>
+<ul>
+<li> event compaction - several paint events for example will be united
+to one paint event that contains the combined region that needs to be
+repainted. This results in less flicker and higher execution speed.
+<li> object construction - if an object posts an event in its
+constructor, the event won't be delivered before the object's
+construction is completed. For that reason, child events in Qt are
+posted.  
+</ul>
+<p>
+A <a href="qobject.html">QObject</a> receives an event in its <a href="qobject.html#c8b023">event()</a> handler. The general event() implementation distributes
+certain events to special handlers, such as childEvent() for QObject
+or paintEvent() for QWidget.
+<p>
+Every QObject can also serve as an event filter for one ore more other
+objects. By calling <a href="qobject.html#b59963">installEventFilter()</a>, you declare another object a event
+filter for this object. The event filter will receive all events sent
+to the object in advance via its <a href="qobject.html#bb8547">eventFilter()</a> function. In addition to just seeing the
+events, the filter actually can filter out certain events.
+<p>
+All events are sent through the unique application object, which is an
+instance of <a href="qapplication.html">QApplication</a>. Since QApplication is also a QObject, you
+can just as well install an event filter on it. This so-called global
+event filter will receive <em>all</em> events, before even the other event
+filters see them.
+<p>
+A last - discouraged - way of filtering events is to subclass
+QApplication and to reimplement the <a href="qapplication.html#d6093b">notify()</a> function.
+<p>
+Sending and receiving events as communication mechanism in Qt is not
+limited to the built-in event types. You can easily create custom
+events and send them around. See the class documentation to <a href="qcustomevent.html">QCustomEvent</a> for details.
+
+<p><address><hr><div align="center">
+<table width="100%" cellspacing="0" border="0"><tr>
+<td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.1.0</div>
+</table></div></address></body></html>

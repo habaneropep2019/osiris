@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: menu.cpp,v 1.3 1999/06/11 18:17:51 warwick Exp $
+** $Id: qt/examples/menu/menu.cpp   2.1.0   edited 2000-02-21 $
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -14,6 +14,7 @@
 #include <qapplication.h>
 #include <qmessagebox.h>
 #include <qpixmap.h>
+#include <qpainter.h>
 
 /* XPM */
 static const char * p1_xpm[] = {
@@ -85,6 +86,33 @@ static const char * p3_xpm[] = {
 "                "};
 
 
+/*
+  Auxiliary class to provide fancy menu items with different
+  fonts. Used for the "bold" and "underline" menu items in the options
+  menu.
+ */
+class MyMenuItem : public QCustomMenuItem
+{
+public:
+    MyMenuItem( const QString& s, const QFont& f )
+	: string( s ), font( f ){};
+    ~MyMenuItem(){}
+
+    void paint( QPainter* p, const QColorGroup& /*cg*/, bool /*act*/, bool /*enabled*/, int x, int y, int w, int h )
+    {
+	p->setFont ( font );
+	p->drawText( x, y, w, h, AlignLeft | AlignVCenter | ShowPrefix | DontClip, string );
+    }
+
+    QSize sizeHint()
+    {
+	return QFontMetrics( font ).size( AlignLeft | AlignVCenter | ShowPrefix | DontClip,  string );
+    }
+private:
+    QString string;
+    QFont font;
+};
+
 
 MenuExample::MenuExample( QWidget *parent, const char *name )
     : QWidget( parent, name )
@@ -95,6 +123,7 @@ MenuExample::MenuExample( QWidget *parent, const char *name )
 
     QPopupMenu *print = new QPopupMenu( this );
     CHECK_PTR( print );
+    print->insertTearOffHandle();
     print->insertItem( "&Print to printer", this, SLOT(printer()) );
     print->insertItem( "Print to &file", this, SLOT(file()) );
     print->insertItem( "Print to fa&x", this, SLOT(fax()) );
@@ -121,10 +150,23 @@ MenuExample::MenuExample( QWidget *parent, const char *name )
 
     QPopupMenu* options = new QPopupMenu( this );
     CHECK_PTR( options );
+    options->insertTearOffHandle();
+    options->setCaption("Options");
     options->insertItem( "&Normal Font", this, SLOT(normal()) );
     options->insertSeparator();
-    boldID = options->insertItem( "&Bold", this, SLOT(bold()) );
-    underlineID = options->insertItem( "&Underline", this, SLOT(underline()) );
+
+    options->polish(); // adjust system settings 
+    QFont f = options->font();
+    f.setBold( TRUE );
+    boldID = options->insertItem( new MyMenuItem( "&Bold", f ) );
+    options->setAccel( CTRL+Key_B, boldID );
+    options->connectItem( boldID, this, SLOT(bold()) );
+    f = font();
+    f.setUnderline( TRUE );
+    underlineID = options->insertItem( new MyMenuItem( "&Underline", f ) );
+    options->setAccel( CTRL+Key_U, underlineID );
+    options->connectItem( underlineID, this, SLOT(underline()) );
+
     isBold = FALSE;
     isUnderline = FALSE;
     options->setCheckable( TRUE );

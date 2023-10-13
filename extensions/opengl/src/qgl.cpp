@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qgl.cpp,v 1.39.2.1 1999/09/08 08:30:53 aavit Exp $
+** $Id: qt/extensions/opengl/src/qgl.cpp   2.1.0   edited 2000-03-24 $
 **
 ** Implementation of OpenGL classes for Qt
 **
 ** Created : 970112
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -747,7 +747,6 @@ QGLContext::~QGLContext()
 /*!
   \fn QGLFormat QGLContext::format() const
   Returns the format.
-  \sa setFormat()
 */
 
 /*!
@@ -902,7 +901,7 @@ bool QGLContext::create( const QGLContext* shareContext )
 
   This semi-internal function is called by create(). It creates a
   system-dependent OpenGL handle that matches the specified \link
-  setFormat() format\endlink as closely as possible.
+  format() format\endlink as closely as possible.
 
   <strong>Windows</strong>: Calls choosePixelFormat() which finds a
   matching pixel format identifier.
@@ -1062,9 +1061,8 @@ bool QGLContext::create( const QGLContext* shareContext )
 
   If you want to use overlays, you specify it in the \link QGLFormat
   format\endlink. (Note: Overlay must be requested in the format
-  passed to the QGLWidget constructor; it cannot be added later with
-  setFormat() or setContext()). Your GL widget should also implement
-  some or all of these virtual methods:
+  passed to the QGLWidget constructor). Your GL widget should also
+  implement some or all of these virtual methods:
 
   <ul>
   <li> paintOverlayGL()
@@ -1186,7 +1184,6 @@ QGLWidget::~QGLWidget()
 /*!
   \fn QGLFormat QGLWidget::format() const
   Returns the format of the contained GL rendering context.
-  \sa setFormat()
 */
 
 /*!
@@ -1299,7 +1296,9 @@ void QGLWidget::swapBuffers()
 */
 
 
-/*!
+/*
+  OBSOLETE
+
   Sets a new format for this widget.
 
   If the underlying OpenGL/Window system cannot satisfy all the
@@ -1314,7 +1313,7 @@ void QGLWidget::swapBuffers()
   This method will try to keep any existing display list sharing with
   other QGLWidgets, but it may fail. Use isSharing() to test.
 
-  \sa format(), setContext(), isSharing(), isValid()
+  \sa format(), isSharing(), isValid()
 */
 
 void QGLWidget::setFormat( const QGLFormat &format )
@@ -1328,10 +1327,11 @@ void QGLWidget::setFormat( const QGLFormat &format )
 /*!
   \fn const QGLContext *QGLWidget::context() const
   Returns the context of this widget.
-  \sa setContext()
 */
 
-/*!
+/*
+  OBSOLETE
+
   \fn void QGLWidget::setContext( QGLContext *context,
                                   const QGLContext* shareContext,
                                   bool deleteOldContext )
@@ -1355,7 +1355,7 @@ void QGLWidget::setFormat( const QGLFormat &format )
   to the old context (as returned by context()), and want to restore
   that context later.
 
-  \sa context(), setFormat(), isSharing()
+  \sa context(), isSharing()
 */
 
 
@@ -1633,10 +1633,10 @@ void QGLWidget::qglClearColor( const QColor& c ) const
 
 /*! \page opengl.html
 
-<title>Qt OpenGL Classes</title>
+<title>Qt OpenGL 3D Graphics</title>
 </head><body bgcolor="#ffffff">
 
-<h1 align=center>Qt OpenGL Classes</h1>
+<h1 align=center>Qt OpenGL 3D Graphics</h1>
 <hr>
 
 

@@ -1,0 +1,65 @@
+.TH QIconDragItem 3qt "12 April 2000" "Troll Tech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.\" license file included in the distribution for a complete license
+.\" statement.
+.\"
+.ad l
+.nh
+.SH NAME
+QIconDragItem \- The QIconDragItem is the internal data structure of a QIconDrag
+\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
+.br
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <qiconview.h>\fR
+.PP
+.SS "Public Members"
+.in +1c
+.ti -1c
+.BI "\fBQIconDragItem\fR ()"
+.br
+.ti -1c
+.BI "virtual \fB~QIconDragItem\fR ()"
+.br
+.ti -1c
+.BI "virtual QByteArray \fBdata\fR () const"
+.br
+.ti -1c
+.BI "virtual void \fBsetData\fR ( const QByteArray & d )"
+.br
+.in -1c
+.SH DESCRIPTION
+The QIconDragItem is the internal data structure of a QIconDrag
+.PP
+This class is used internally in the QIconDrag to store the data of each item (in fact, a list of QIconDragItems is used by QIconDrag).
+.PP
+So, normally for each iconview item which is dragged, a QIconDragItem class (or a class derived from QIconDragItem) is created and stored in the QIconDrag object.
+.PP
+See QIconView::dragObject() for more information.
+.PP
+An example, how to implement this, is in the QtFileIconView example. (qt/examples/qfileiconview/qfileiconview.h and qt/examples/qfileiconview/qfileiconview.cpp).
+.PP
+Examples:
+.(l
+iconview/main.cpp
+.)l
+.SH MEMBER FUNCTION DOCUMENTATION
+.SH "QIconDragItem::QIconDragItem ()"
+Constructs a QIconDragItem with no data.
+.SH "QIconDragItem::~QIconDragItem () \fC[virtual]\fR"
+Destructor.
+.SH "QByteArray QIconDragItem::data () const \fC[virtual]\fR"
+Returns the data of this QIconDragItem.
+.SH "bool QIconDragItem::operator== ( const QIconDragItem & i ) const"
+Reimplemented for internal reasons; the API is not affected.
+.SH "void QIconDragItem::setData ( const QByteArray & d ) \fC[virtual]\fR"
+Sets the data of this QIconDragItem.
+.SH "SEE ALSO"
+.BR http://doc.trolltech.com/qicondragitem.html
+.SH COPYRIGHT
+Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+license file included in the distribution for a complete license
+statement.
+.SH AUTHOR
+Generated automatically from the source code.

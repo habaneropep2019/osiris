@@ -1,9 +1,9 @@
 /****************************************************************************
-** $Id: qdragobject.h,v 2.43 1999/06/23 13:09:45 warwick Exp $
+** $Id: qt/src/kernel/qdragobject.h   2.1.0   edited 2000-03-24 $
 **
 ** Definition of QDragObject
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -15,9 +15,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -32,6 +32,7 @@ class QWidget;
 #include "qobject.h"
 #include "qimage.h"
 #include "qstrlist.h"
+#include "qcolor.h"
 #endif // QT_H
 
 
@@ -149,6 +150,20 @@ public:
     static bool decodeLocalFiles( const QMimeSource* e, QStringList& i );
 };
 
+class QColorDrag : public QStoredDrag
+{
+    Q_OBJECT
+    QColor color;
+
+public:
+    QColorDrag( const QColor &col, QWidget *dragsource = 0, const char *name = 0 );
+    QColorDrag( QWidget * dragSource = 0, const char * name = 0 );
+    void setColor( const QColor &col );
+
+    static bool canDecode( QMimeSource * );
+    static bool decode( QMimeSource *, QColor &col );
+};
+
 #ifndef QT_NO_COMPAT
 typedef QUriDrag QUrlDrag;
 #endif
@@ -174,7 +189,7 @@ private:
 
     bool drag( QDragObject *, QDragObject::DragMode );
 
-    void cancel();
+    void cancel( bool deleteSource = TRUE );
     void move( const QPoint & );
     void drop();
     void updatePixmap();

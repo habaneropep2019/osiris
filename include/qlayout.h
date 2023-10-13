@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qlayout.h,v 2.42 1999/06/03 01:11:42 warwick Exp $
+** $Id: qt/src/kernel/qlayout.h   2.1.0   edited 2000-03-24 $
 **
 ** Definition of layout classes
 **
 ** Created : 960416
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -33,15 +33,19 @@
 class QLayoutArray;
 class QLayoutBox;
 
+#if 0
+Q_OBJECT
+#endif
+
 class Q_EXPORT QGridLayout : public QLayout
 {
     Q_OBJECT
 public:
-    QGridLayout( QWidget *parent, int nRows, int nCols, int border=0,
+    QGridLayout( QWidget *parent, int nRows = 1, int nCols = 1, int border=0,
 		 int space = -1, const char *name=0 );
-    QGridLayout( int nRows, int nCols, int space = -1,
+    QGridLayout( int nRows = 1, int nCols = 1, int space = -1,
 		 const char *name=0 );
-    QGridLayout( QLayout *parentLayout, int nRows, int nCols,
+    QGridLayout( QLayout *parentLayout, int nRows = 1, int nCols = 1,
 		 int space = -1, const char *name=0 );
     ~QGridLayout();
 
@@ -51,9 +55,12 @@ public:
 
     virtual void setRowStretch( int row, int stretch );
     virtual void setColStretch( int col, int stretch );
+    int rowStretch( int row ) const;
+    int colStretch( int col ) const;
 
     int numRows() const;
     int numCols() const;
+    QRect cellGeometry( int row, int col ) const;
 
     bool hasHeightForWidth() const;
     int heightForWidth( int ) const;
@@ -63,6 +70,7 @@ public:
     void invalidate();
 
     void addItem( QLayoutItem * );
+    void addItem( QLayoutItem *item, int row, int col );
     void addMultiCell( QLayoutItem *, int fromRow, int toRow,
 			       int fromCol, int toCol, int align = 0 );
     // void setAlignment( QWidget* );
@@ -79,6 +87,7 @@ public:
     void setOrigin( Corner );
     QLayoutIterator iterator();
     void setGeometry( const QRect& );
+
 protected:
     bool findWidget( QWidget* w, int *r, int *c );
     void add( QLayoutItem*, int row, int col );
@@ -117,6 +126,7 @@ public:
     void addItem( QLayoutItem * );
 
     Direction direction() const { return dir; }
+    void setDirection( Direction );
 
     void addSpacing( int size );
     void addStretch( int stretch = 0 );
@@ -124,7 +134,15 @@ public:
     void addLayout( QLayout *layout, int stretch = 0 );
     void addStrut( int );
 
+    void insertSpacing( int index, int size );
+    void insertStretch( int index, int stretch = 0 );
+    void insertWidget( int index, QWidget *widget, int stretch = 0,
+		       int alignment = 0 );
+    void insertLayout( int index, QLayout *layout, int stretch = 0 );
+
+
     bool setStretchFactor( QWidget*, int stretch );
+    bool setStretchFactor( QLayout *l, int stretch );
 
     QSize sizeHint() const;
     QSize minimumSize() const;
@@ -137,7 +155,14 @@ public:
     void invalidate();
     QLayoutIterator iterator();
     void setGeometry( const QRect& );
+
+    int findWidget( QWidget* w );
+protected:
+    void insertItem( int index, QLayoutItem * );
+
 private:
+    void setupGeom();
+    int calcHfw( int );
     QBoxLayoutData *data;
     Direction dir;
 private:	// Disabled copy constructor and operator=
@@ -160,6 +185,7 @@ public:
     QHBoxLayout( int space = -1, const char *name=0 );
 
     ~QHBoxLayout();
+
 };
 
 
@@ -175,6 +201,7 @@ public:
     QVBoxLayout( int space = -1, const char *name=0 );
 
     ~QVBoxLayout();
+
 };
 
 

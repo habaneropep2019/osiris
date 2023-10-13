@@ -2,11 +2,14 @@
 #
 # Configures to build the Qt library
 #
-# Copyright 1999 Troll Tech AS.  All rights reserved.
+# Copyright 1999-2000 Troll Tech AS.  All rights reserved.
 #
 
 # To remove the need for the first test, do this:
 # QTDIR=`pwd` export QTDIR
+
+relpath=`dirname $0`
+relpath=`(cd $relpath; pwd)`
 
 touch .test.qt.
 if [ '!' -f ${QTDIR}/.test.qt. ];
@@ -37,8 +40,11 @@ DEBUG=no
 SHARED=yes
 GIF=no
 SM=no
+THREAD=no
 ZLIB=yes
 LIBPNG=yes
+JPEG=no
+NAS_SOUND=no
 I_FLAGS=
 L_FLAGS=
 l_FLAGS=
@@ -74,6 +80,12 @@ while [ -n "$1" ]; do
    -sm)
        SM=yes
 	;;
+   -no-thread)
+       THREAD=no
+	;;
+   -thread)
+       THREAD=yes
+	;;
    -qt-zlib)
        ZLIB=yes
 	;;
@@ -85,6 +97,18 @@ while [ -n "$1" ]; do
 	;;
    -system-libpng)
        LIBPNG=no
+	;;
+   -no-jpeg)
+       JPEG=no
+	;;
+   -system-jpeg)
+       JPEG=yes
+	;;
+   -no-nas-sound)
+       NAS_SOUND=no
+	;;
+   -system-nas-sound)
+       NAS_SOUND=yes
 	;;
    -h | -help | --help)
        HELP=yes
@@ -125,7 +149,8 @@ if [ "$HELP" = "yes" ]; then
    [ "x$ERROR" = "xyes" ] && echo
    cat <<EOF
 Usage: $0 [-debug] [-release] [-gif] [-no-gif] [-sm] [-no-sm] \\
-        [-qt-zlib] [-system-zlib] [qt-libpng] [-system-libpng] \\
+        [-qt-zlib] [-system-zlib] [-qt-libpng] [-system-libpng] \\
+        [-no-jpeg] [-system-jpeg] [-no-thread] [-thread] \\
         [-Istring] [-lstring] [-Lstring] \\
 
 The defaults (*) are usually acceptable.  Here is a short explanation of
@@ -137,17 +162,26 @@ each option:
  *  -shared ............ Create and use a shared Qt library (libqt.so)
     -static ............ Create and use a static Qt library (libqt.a)
 
- *  -no-gif ............ Do not compile in GIF support. Please see qgif.h.
-    -gif ............... Compile in GIF support. Please see qgif.h.
+ *  -no-gif ............ Do not compile in GIF reading support.
+    -gif ............... Compile in GIF reading support. See src/kernel/qgif.h
 
  *  -no-sm ............. Do not support X Session Management.
-    -sm ................ Support X Session Management, links in -lXSM -lICE.
+    -sm ................ Support X Session Management, links in -lSM -lICE.
+
+ *  -no-thread ......... Do not compile with Threading Support
+    -thread ............ Compile with Threading Support(links in -lpthread)
 
  *  -qt-zlib ........... Use the zlib bundled with Qt.
     -system-zlib ....... Use a zlib from the operating system
 
  *  -qt-libpng ......... Use the libpng bundled with Qt.
     -system-libpng ..... Use a libpng from the operating system.
+
+ *  -no-jpeg ........... Do not compile in JPEG I/O support.
+    -system-jpeg ....... Use libjpeg from the operating system.
+
+ *  -no-nas-sound ...... Do not compile in NAS sound support.
+    -system-nas-sound .. Use NAS libaudio from the operating system.
 
     -platform target ... See the PLATFORMS file for a list of supported
                          operating systems and compilers.
@@ -190,8 +224,8 @@ then
     PLATFORMS="aix-g++ aix-xlc bsdi-g++ dgux-g++ freebsd-g++ gnu-g++ hpux-acc
 	hpux-cc hpux-g++ irix-64 irix-dcc irix-g++ irix-n32 irix-o32
 	linux-g++ netbsd-g++ openbsd-g++ osf1-cxx osf1-g++ qnx-g++ sco-g++
-	solaris-cc-gcc solaris-cc solaris-g++ sunos-g++ ultrix-g++ unixware-g++
-	unixware7-cc unixware7-g++"
+	solaris-cc-gcc solaris-cc solaris-64 solaris-g++ sunos-g++ ultrix-g++
+	unixware-g++ unixware7-cc unixware7-g++"
 
     case "$UNAME_SYSTEM:$UNAME_RELEASE" in
      AIX*)
@@ -212,9 +246,6 @@ then
 	;;
      dgux:*)
 	PLATFORM=dgux-g++
-	PLATFORM_NOTES="
-	    - WARNING: DG/ux not supported correctly in this version of Qt.
-	"
 	;;
      ULTRIX:*)
 	PLATFORM=ultrix-g++
@@ -262,6 +293,7 @@ then
 	#PLATFORM=solaris-g++
 	PLATFORM=solaris-cc
 	PLATFORM_NOTES="
+	    - Also available for SunOS:5: solaris-64 solaris-g++
 	    - To mix GNU C and SunPRO C++, add -platform solaris-cc-gcc
 	"
 	;;
@@ -304,7 +336,7 @@ fi
 TARGET=$PLATFORM
 if [ "x$SHARED" = "xyes" ]; then
     TARGET="${TARGET}-shared"
-    if [ '!' -f configs/$TARGET ]; then
+    if [ '!' -f $relpath/configs/$TARGET ]; then
         echo
         echo
         echo '    No shared library support for platform/compiler ' $TARGET
@@ -315,7 +347,7 @@ if [ "x$SHARED" = "xyes" ]; then
     fi
 else
     TARGET="${TARGET}-static"
-    if [ '!' -f configs/$TARGET ]; then
+    if [ '!' -f $relpath/configs/$TARGET ]; then
         echo
         echo
         echo '     No static library support for platform/compiler ' $TARGET
@@ -330,7 +362,7 @@ if [ "x$DEBUG" = "xyes" ]; then
     TARGET="${TARGET}-debug"
 fi
 
-CONFIG="configs/${TARGET}"
+CONFIG="$relpath/configs/${TARGET}"
 if [ -z "$TARGET" -o '!' -f "$CONFIG" ];
 then
     echo
@@ -347,18 +379,24 @@ fi
 
 QT_CXX=""
 [ "x$GIF" = "xyes" ] && QT_CXX="${QT_CXX} -DQT_BUILTIN_GIF_READER"
+[ "x$JPEG" = "xyes" ] && QT_CXX="${QT_CXX} -DQT_JPEG_SUPPORT"
+[ "x$NAS_SOUND" = "xyes" ] && QT_CXX="${QT_CXX} -DQT_NAS_SUPPORT"
 [ "x$SM" = "xyes" ] && QT_CXX="${QT_CXX} -DQT_SM_SUPPORT"
+[ "x$THREAD" = "xyes" ] && QT_CXX="${QT_CXX} -DQT_QT_THREAD_SUPPORT"
 [ "x$ZLIB" = "xyes" ] && I_FLAGS="${I_FLAGS} -I\$(QTDIR)/src/3rdparty/zlib"
 [ "x$LIBPNG" = "xyes" ] && I_FLAGS="${I_FLAGS} -I\$(QTDIR)/src/3rdparty/libpng"
 
 QT_LIBS=""
 QT_PNG=""
 QT_ZLIB=""
-[ "x$SM" = "xyes" ] && QT_LIBS="${QT_LIBS} -lICE -lSM"
-[ "x$ZLIB" = "xyes" ] && QT_ZLIB=' $(ZLIB_OBJECTS)'
+[ "x$SM" = "xyes" ] && QT_LIBS="${QT_LIBS} -lSM -lICE"
+[ "x$THREAD" = "xyes" ] && QT_LIBS="${QT_LIBS} -lpthread"
 [ "x$LIBPNG" = "xyes" ] && QT_PNG=' $(PNG_OBJECTS)'
-[ "x$ZLIB" = "xno" ] && QT_LIBS="${QT_LIBS} -lz"
+[ "x$ZLIB" = "xyes" ] && QT_ZLIB=' $(ZLIB_OBJECTS)'
 [ "x$LIBPNG" = "xno" ] && QT_LIBS="${QT_LIBS} -lpng"
+[ "x$ZLIB" = "xno" ] && QT_LIBS="${QT_LIBS} -lz"
+[ "x$JPEG" = "xyes" ] && QT_LIBS="${QT_LIBS} -ljpeg"
+[ "x$NAS_SOUND" = "xyes" ] && QT_LIBS="${QT_LIBS} -laudio -lXt" # Xt junk in audio library
 QT_LIBS="$L_FLAGS $QT_LIBS $l_FLAGS"
 
 
@@ -394,9 +432,13 @@ echo "GIF supports:  $GIF"
 echo
 echo Creating makefiles...
 
-for a in `find . -name Makefile.in -print | sort` ; do
-    N=`dirname $a`/Makefile
-    M=${N}.in
+sepath=`echo $relpath | sed -e 's/\\./\\\\./g'`
+
+for a in `find $relpath/. -name Makefile.in -print | sort` ; do
+    buildpath=`dirname $a | sed -e "s;$sepath;.;g"`
+    test -d $buildpath || mkdir $buildpath
+    N=$buildpath/Makefile
+    M=$a
     cat > $N <<EOF
 #############################################################################
 # Automatically generated from $M
@@ -404,7 +446,15 @@ for a in `find . -name Makefile.in -print | sort` ; do
 #############################################################################
 
 EOF
-    cat .buildopts $CONFIG $M >> $N
+
+    if [ $relpath != `pwd` ] ; then
+        echo VPATH=$relpath/$buildpath >> $N
+	cat .buildopts $CONFIG >> $N
+	sed -e's/	\$(MOC) [^ ]* -o .*/	$(MOC) $< -o $@/g' \
+	    -e's/\(	\$(CXX) -c \$(CXXFLAGS) \$(INCPATH) -o\) [^ ]* [^ ]*/\1 $@ $</g' $M >> $N
+    else
+	cat .buildopts $CONFIG $M >> $N
+    fi
     if [ "$VERBOSE" = "yes" ]; then
        echo '  Created' $N
     fi

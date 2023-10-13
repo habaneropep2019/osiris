@@ -13,21 +13,21 @@ SYSCONF_CXXFLAGS_YACC     =
 # Linking with support libraries
 # X11
 SYSCONF_LFLAGS_X11	= -L/usr/lib/X11R6
-SYSCONF_LIBS_X11	= -lXext -lX11 -lm
+SYSCONF_LIBS_X11	= -lXext -lX11
 # Qt, Qt+OpenGL
 SYSCONF_LFLAGS_QT	= -L$(QTDIR)/lib
 SYSCONF_LIBS_QT		= -lqt
 SYSCONF_LIBS_QT_OPENGL	= -lqgl
 # OpenGL
 SYSCONF_LFLAGS_OPENGL	= 
-SYSCONF_LIBS_OPENGL	= -lGL -lGLU -lXmu
+SYSCONF_LIBS_OPENGL	= -lGLU -lGL -lXmu
 # Yacc
 SYSCONF_LIBS_YACC	= 
 
 # Linking applications
 SYSCONF_LINK		= CC
 SYSCONF_LFLAGS		= -L/usr/lib
-SYSCONF_LIBS		= 
+SYSCONF_LIBS		= -lm
 
 # Link flags shared objects
 SYSCONF_LFLAGS_SHOBJ	= -b

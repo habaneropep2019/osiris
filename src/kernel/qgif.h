@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qgif.h,v 2.4 1999/06/04 00:12:36 warwick Exp $
+** $Id: qt/src/kernel/qgif.h   2.1.0   edited 2000-03-24 $
 **
 ** To enable built-in reading of GIF images in Qt, change the definition
 ** below to "#define QT_BUILTIN_GIF_READER 1".
@@ -12,7 +12,7 @@
 **      reader. See http://corp2.unisys.com/LeadStory/lzwfaq.html
 **      for information from Unisys
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -24,14 +24,14 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
 #ifndef QT_BUILTIN_GIF_READER
-#define QT_BUILTIN_GIF_READER 0
+#define QT_BUILTIN_GIF_READER  0
 #endif
 
 bool qt_builtin_gif_reader();

@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qpaintdevice_x11.cpp,v 2.34.2.1 1999/07/01 14:31:38 warwick Exp $
+** $Id: qt/src/kernel/qpaintdevice_x11.cpp   2.1.0   edited 2000-03-24 $
 **
 ** Implementation of QPaintDevice class for X11
 **
 ** Created : 940721
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -31,6 +31,7 @@
 #include "qt_x11.h"
 
 
+// NOT REVISED
 /*!
   \class QPaintDevice qpaintdevice.h
   \brief The base class of objects that can be painted.
@@ -100,7 +101,7 @@ QPaintDevice::QPaintDevice( uint devflags )
     if ( !qApp ) {				// global constructor
 #if defined(CHECK_STATE)
 	qFatal( "QPaintDevice: Must construct a QApplication before a "
-	       "QPaintDevice" );
+		"QPaintDevice" );
 #endif
 	return;
     }
@@ -111,7 +112,7 @@ QPaintDevice::QPaintDevice( uint devflags )
 }
 
 /*!
-  Destroys the paint device and frees window system resources.
+  Destructs the paint device and frees window system resources.
 */
 
 QPaintDevice::~QPaintDevice()
@@ -119,12 +120,12 @@ QPaintDevice::~QPaintDevice()
 #if defined(CHECK_STATE)
     if ( paintingActive() )
 	qWarning( "QPaintDevice: Cannot destroy paint device that is being "
-		 "painted" );
+		  "painted" );
 #endif
     if ( x11Data ) {
 	delete x11Data;
 	x11Data = 0;
-    }	
+    }
 }
 
 
@@ -189,8 +190,10 @@ QPaintDeviceX11Data* QPaintDevice::getX11Data( bool def ) const
 
 /*!
   \fn int QPaintDevice::devType() const
-  Returns the device type identifier: \c QInternal::Widget, \c QInternal::Pixmap,
-  \c QInternal::Printer, \c QInternal::Picture or \c QInternal::UndefinedDevice.
+
+  Returns the device type identifier: \c QInternal::Widget, \c
+  QInternal::Pixmap, \c QInternal::Printer, \c QInternal::Picture or
+  \c QInternal::UndefinedDevice.
 */
 
 /*!
@@ -222,48 +225,74 @@ QPaintDeviceX11Data* QPaintDevice::getX11Data( bool def ) const
   \sa handle()
 */
 
+static int dpiX=0,dpiY=0;
+extern void     qX11ClearFontNameCache(); // defined in qfont_x11.cpp
+
+/*!
+  Sets the value returned by x11AppDpiX().  The default is determined
+  by the display configuration.  Changing this value will alter the
+  scaling of fonts and many other metrics and is not recommended.
+
+  \sa x11SetAppDpiY()
+*/
+void QPaintDevice::x11SetAppDpiX(int dpi)
+{
+    dpiX = dpi;
+    qX11ClearFontNameCache();
+}
+
+/*!
+  Sets the value returned by x11AppDpiY().  The default is determined
+  by the display configuration.  Changing this value will alter the
+  scaling of fonts and many other metrics and is not recommended.
+
+  \sa x11SetAppDpiX()
+*/
+void QPaintDevice::x11SetAppDpiY(int dpi)
+{
+    dpiY = dpi;
+    qX11ClearFontNameCache();
+}
 
 /*!
   Returns the horizontal DPI of the X display (X11 only).
   <em>Using this function is not portable.</em> See QPaintDeviceMetrics
   for portable access to related information.
 
-  \sa QPaintDeviceMetrics::logicalDpiX();
+  \sa x11AppDpiY(), x11SetAppDpiX(), QPaintDeviceMetrics::logicalDpiX()
 */
 int QPaintDevice::x11AppDpiX()
 {
-    static int remember = 0;
-    if ( !remember ) {
+    if ( !dpiX ) {
 	Display *dpy = x11AppDisplay();
 	int scr = x11AppScreen();
 	if ( dpy ) {
-	    remember =
+	    dpiX =
 		(DisplayWidth(dpy,scr) * 254 + DisplayWidthMM(dpy,scr)*5)
 		       / (DisplayWidthMM(dpy,scr)*10);
 	}
     }
-    return remember;
+    return dpiX;
 }
 
 /*!
-  Returns the vertical DPI of the X display (X11 only).
+  Returns the vertical DPI of the X11 display (X11 only).
   <em>Using this function is not portable.</em> See QPaintDeviceMetrics
   for portable access to related information.
 
-  \sa QPaintDeviceMetrics::logicalDpiY();
+  \sa x11AppDpiX(), x11SetAppDpiY(), QPaintDeviceMetrics::logicalDpiY()
 */
 int QPaintDevice::x11AppDpiY()
 {
-    static int remember = 0;
-    if ( !remember ) {
+    if ( !dpiY ) {
 	Display *dpy = x11AppDisplay();
 	int scr = x11AppScreen();
 	if ( dpy )
-	    remember =
+	    dpiY =
 		(DisplayHeight(dpy,scr) * 254 + DisplayHeightMM(dpy,scr)*5)
 		       / (DisplayHeightMM(dpy,scr)*10);
     }
-    return remember;
+    return dpiY;
 }
 
 
@@ -498,12 +527,29 @@ void bitBlt( QPaintDevice *dst, int dx, int dy,
 	return;
     }
 
-    if ( !(ts <= QInternal::Pixmap && td <= QInternal::Pixmap) ) {
+    switch ( ts ) {
+	case QInternal::Widget:
+	case QInternal::Pixmap:
+	case QInternal::System:			// OK, can blt from these
+	    break;
+	default:
 #if defined(CHECK_RANGE)
-	qWarning( "bitBlt: Cannot bitBlt to or from device" );
+	    qWarning( "bitBlt: Cannot bitBlt from device type %x", ts );
 #endif
-	return;
+	    return;
     }
+    switch ( td ) {
+	case QInternal::Widget:
+	case QInternal::Pixmap:
+	case QInternal::System:			// OK, can blt to these
+	    break;
+	default:
+#if defined(CHECK_RANGE)
+	    qWarning( "bitBlt: Cannot bitBlt to device type %x", td );
+#endif
+	    return;
+    }
+
     static short ropCodes[] = {			// ROP translation table
 	GXcopy, GXor, GXxor, GXandInverted,
 	GXcopyInverted, GXorInverted, GXequiv, GXand,

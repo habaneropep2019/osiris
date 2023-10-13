@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qmessagebox.h,v 2.42 1999/06/22 15:28:28 agulbra Exp $
+** $Id: qt/src/dialogs/qmessagebox.h   2.1.0   edited 2000-03-24 $
 **
 ** Definition of QMessageBox class
 **
 ** Created : 950503
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -37,6 +37,12 @@ struct QMBData;
 class Q_EXPORT QMessageBox : public QDialog
 {
     Q_OBJECT
+    Q_ENUMS( Icon )
+    Q_PROPERTY( QString text READ text WRITE setText )
+    Q_PROPERTY( Icon icon READ icon WRITE setIcon )
+    Q_PROPERTY( QPixmap iconPixmap READ iconPixmap WRITE setIconPixmap )
+    Q_PROPERTY( TextFormat textFormat READ textFormat WRITE setTextFormat )
+
 public:
     enum Icon { NoIcon = 0, Information = 1, Warning = 2, Critical = 3 };
 
@@ -116,6 +122,9 @@ public:
     void	adjustSize();
 
     static QPixmap standardIcon( Icon icon, GUIStyle style );
+
+    TextFormat textFormat() const;
+    void 	 setTextFormat( TextFormat );
 
 protected:
     void	resizeEvent( QResizeEvent * );

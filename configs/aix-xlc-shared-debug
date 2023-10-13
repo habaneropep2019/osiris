@@ -20,7 +20,7 @@ SYSCONF_LIBS_QT		= -lqt
 SYSCONF_LIBS_QT_OPENGL	= -lqgl
 # OpenGL
 SYSCONF_LFLAGS_OPENGL	= 
-SYSCONF_LIBS_OPENGL	= -lGL -lGLU -lXmu
+SYSCONF_LIBS_OPENGL	= -lGLU -lGL -lXmu
 # Yacc
 SYSCONF_LIBS_YACC	= 
 
@@ -42,7 +42,7 @@ SYSCONF_MOC		= $(QTDIR)/bin/moc
 #
 SYSCONF_LINK_SHLIB	= ld
 SYSCONF_LINK_TARGET_SHARED	= lib$(TARGET).so.$(VER_MAJ).$(VER_MIN).$(VER_PATCH)
-SYSCONF_LINK_LIB_SHARED	= /usr/lpp/xlC/bin/makeC++SharedLib -p 0 -o lib$(TARGET).so.$(VER_MAJ).$(VER_MIN) -lXext -lX11 $(OBJECTS) $(OBJMOC); ar q lib$(TARGET).a lib$(TARGET).so.$(VER_MAJ).$(VER_MIN); ranlib lib$(TARGET).a; mv lib$(TARGET).a $(DESTDIR)
+SYSCONF_LINK_LIB_SHARED	= makeC++SharedLib -p 0 -o lib$(TARGET).so.$(VER_MAJ).$(VER_MIN) -lXext -lX11 $(OBJECTS) $(OBJMOC); ar q lib$(TARGET).a lib$(TARGET).so.$(VER_MAJ).$(VER_MIN); ranlib lib$(TARGET).a; mv lib$(TARGET).a $(DESTDIR)
 
 # Linking static libraries
 #   - Build the $(TARGET) library, eg. lib$(TARGET).a

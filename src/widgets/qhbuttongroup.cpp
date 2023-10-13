@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qhbuttongroup.cpp,v 1.1 1999/06/02 16:53:02 eiriken Exp $
+** $Id: qt/src/widgets/qhbuttongroup.cpp   2.1.0   edited 2000-03-24 $
 **
 ** Implementation of QHButtonGroup class
 **
 ** Created : 990602
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,28 +17,30 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
 #include "qhbuttongroup.h"
 
+// NOT REVISED
 /*!
   \class QHButtonGroup qhbuttongroup.h
 
   \brief The QHButtonGroup widget organizes QButton widgets in a group
   with one horizontal row.
 
-  \ingroup realwidgets
+  \ingroup geomanagement
+  \ingroup organizers
 
   QHButtonGroup is a convenience class that offers a thin layer on top of
   QButtonGroup. Think of it as a QHBox that offers a frame with a title
   and is specifically designed for buttons.
 */
 
-/*!  
+/*!
   Constructs a horizontal button group with no title.
 
   The \e parent and \e name arguments are passed to the QWidget constructor.
@@ -61,7 +63,7 @@ QHButtonGroup::QHButtonGroup( const QString &title, QWidget *parent,
 }
 
 /*!
-  Destroys the horizontal button group and its child widgets.
+  Destructs the horizontal button group, deleting its child widgets.
 */
 QHButtonGroup::~QHButtonGroup()
 {

@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qaccel.h,v 2.24 1999/06/15 22:15:24 warwick Exp $
+** $Id: qt/src/kernel/qaccel.h   2.1.0   edited 2000-03-24 $
 **
 ** Definition of QAccel class
 **
 ** Created : 950419
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -39,6 +39,7 @@ class Q_EXPORT QAccel : public QObject			// accelerator class
     Q_OBJECT
 public:
     QAccel( QWidget *parent, const char *name=0 );
+    QAccel( QWidget* watch, QObject *parent, const char *name=0 );
     ~QAccel();
 
     bool	isEnabled() const;
@@ -62,7 +63,7 @@ public:
 				const QObject *receiver, const char* member );
 
     void	repairEventFilter();
-    
+
     void setWhatsThis( int id, const QString& );
     QString whatsThis( int id ) const;
     void setIgnoreWhatsThis( bool );
@@ -77,9 +78,6 @@ signals:
 
 protected:
     bool	eventFilter( QObject *, QEvent * );
-
-private slots:
-    void	tlwDestroyed();
 
 private:
     QAccelPrivate * d;

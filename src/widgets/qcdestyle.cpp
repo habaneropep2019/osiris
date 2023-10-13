@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qcdestyle.cpp,v 1.1 1999/05/13 00:35:31 ettrich Exp $
+** $Id: qt/src/widgets/qcdestyle.cpp   2.1.0   edited 2000-03-24 $
 **
 ** Implementation of CDE-like style class
 **
 ** Created : 981231
 **
-** Copyright (C) 1998-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1998-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -38,9 +38,12 @@
 #include "qscrollbar.h"
 #include <limits.h>
 
+// NOT REVISED
 /*!
   \class QCDEStyle qcdestyle.h
   \brief CDE Look and Feel
+  
+  \ingroup appearance
 
   This style provides a slightly improved Motif look similar to some
   versions of the Common Desktop Environment (CDE). The main
@@ -62,6 +65,13 @@ QCDEStyle::QCDEStyle( bool useHighlightCols ) : QMotifStyle( useHighlightCols )
 {
 }
 
+/*!
+  Destructs the style.
+*/
+QCDEStyle::~QCDEStyle()
+{
+}
+
 /*!\reimp
   */
 
@@ -76,7 +86,7 @@ int QCDEStyle::defaultFrameWidth() const
 
 void QCDEStyle::drawArrow( QPainter *p, ArrowType type, bool down,
 		 int x, int y, int w, int h,
-		 const QColorGroup &g, bool /* enabled */, const QBrush * /* fill */ )
+		 const QColorGroup &g, bool enabled, const QBrush * /* fill */ )
 {
     QPointArray bFill;				// fill polygon
     QPointArray bTop;				// top shadow.
@@ -91,9 +101,19 @@ void QCDEStyle::drawArrow( QPainter *p, ArrowType type, bool down,
     if ( dim < 2 )				// too small arrow
 	return;
 
+    // adjust size and center (to fix rotation below)
+    if ( w >  dim ) {
+	x += (w-dim)/2;
+	w = dim;
+    }
+    if ( h > dim ) {
+	y += (h-dim)/2;
+	h = dim;
+    }
+
     if ( dim > 3 ) {
 	bFill.resize( dim & 1 ? 3 : 4 );
- 	bTop.resize( 2 );
+	bTop.resize( 2 );
 	bBot.resize( 2 );
 	bLeft.resize( 2 );
 	bLeft.putPoints( 0, 2, 0,0, 0,dim-1 );
@@ -148,11 +168,19 @@ void QCDEStyle::drawArrow( QPainter *p, ArrowType type, bool down,
     }
 
     QColor *cols[5];
-    cols[0] = 0;
-    cols[1] = (QColor *)&g.button();
-    cols[2] = (QColor *)&g.mid();
-    cols[3] = (QColor *)&g.light();
-    cols[4] = (QColor *)&g.dark();
+    if ( enabled ) {
+	cols[0] = 0;
+	cols[1] = (QColor *)&g.button();
+	cols[2] = (QColor *)&g.mid();
+	cols[3] = (QColor *)&g.light();
+	cols[4] = (QColor *)&g.dark();
+    } else {
+	cols[0] = 0;
+	cols[1] = (QColor *)&g.button();
+	cols[2] = (QColor *)&g.button();
+	cols[3] = (QColor *)&g.button();
+	cols[4] = (QColor *)&g.button();
+    }
 #define CMID	*cols[ (colspec>>12) & 0xf ]
 #define CLEFT	*cols[ (colspec>>8) & 0xf ]
 #define CTOP	*cols[ (colspec>>4) & 0xf ]
@@ -162,7 +190,7 @@ void QCDEStyle::drawArrow( QPainter *p, ArrowType type, bool down,
     QBrush   saveBrush = p->brush();		// save current brush
     QWMatrix wxm = p->worldMatrix();
     QPen     pen( NoPen );
-    QBrush brush = g.brush( QColorGroup::Button );
+    QBrush brush = g.brush( enabled?QColorGroup::Button:QColorGroup::Mid );
 
     p->setPen( pen );
     p->setBrush( brush );
@@ -195,8 +223,8 @@ void QCDEStyle::drawIndicator( QPainter* p,
 			       int s, bool down, bool /* enabled */ )
 {
     bool showUp = !down && s == QButton::Off;
-    QBrush fill =  down ? g.brush( QColorGroup::Mid )   : 
-                          g.brush( QColorGroup::Button );
+    QBrush fill =  down ? g.brush( QColorGroup::Mid )   :
+			  g.brush( QColorGroup::Button );
     qDrawShadePanel( p, x, y, w, h, g, !showUp, defaultFrameWidth(), &fill );
 
     if (s != QButton::Off) {
@@ -253,8 +281,8 @@ void QCDEStyle::drawExclusiveIndicator( QPainter* p,
     a.translate( x, y );
     QColor fillColor = on ? g.dark() : g.background();
     p->setPen( fillColor );
-    p->setBrush( on ?  g.brush( QColorGroup::Dark )        : 
-                       g.brush( QColorGroup::Background ) );
+    p->setBrush( on ?  g.brush( QColorGroup::Dark )        :
+		       g.brush( QColorGroup::Background ) );
     p->drawPolygon( a );
 }
 

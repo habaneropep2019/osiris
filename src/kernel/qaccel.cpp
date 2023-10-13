@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qaccel.cpp,v 2.44.2.4 1999/09/01 06:20:41 aavit Exp $
+** $Id: qt/src/kernel/qaccel.cpp   2.1.0   edited 2000-04-06 $
 **
 ** Implementation of QAccel class
 **
 ** Created : 950419
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -29,30 +29,60 @@
 #include "qlist.h"
 #include "qsignal.h"
 #include "qwhatsthis.h"
+#include "qguardedptr.h"
 
+// REVISED: paul
 /*!
   \class QAccel qaccel.h
   \brief The QAccel class handles keyboard accelerator and shortcut keys.
 
-  \ingroup kernel
+  \ingroup environment
 
-  A QAccel contains a list of accelerator items. Each accelerator item
-  consists of an identifier and a keyboard code combined with modifiers
-  (\c SHIFT, \c CTRL, \c ALT or \c UNICODE_ACCEL).
+  A keyboard accelerator triggers an action when a certain key
+  combination is pressed. The accelerator handles all keyboard
+  activity for all children of one top level widget, so it is not
+  affected by the keyboard focus.
 
-  For example, <code>CTRL + Key_P</code> could be a shortcut for printing
-  a document. The key codes are listed in qnamespace.h.
+  In most cases, you will not need to use this class directly. Use
+  QMenuData::insertItem() or QMenuData::setAccel() to make
+  accelerators for operations that are also available on menus.  Many
+  widgets automatically generate accelerators, such as QButton,
+  QGroupBox, QLabel(with QLabel::setBuddy()), QMenuBar and QTabBar.
+  Example:
+  \code
+     QPushButton p( "&Exit", parent ); //automatic shortcut ALT+Key_E
+     QPopupMenu *fileMenu = new fileMenu( parent );
+     fileMenu->insertItem( "Undo", parent, SLOT(undo()), CTRL+Key_Z );
+  \endcode
 
-  When pressed, an accelerator key sends out the signal activated() with a
-  number that identifies this particular accelerator item.  Accelerator
-  items can also be individually connected, so that two different keys
-  will activate two different slots (see connectItem()).
+  A QAccel contains a list of accelerator items. The following
+  functions manipulate the list: insertItem(), removeItem(), clear(),
+  key(), findKey().
 
-  A QAccel object handles key events to the
-  \link QWidget::topLevelWidget() top level window\endlink
+  Each accelerator item consists of an identifier and a keyboard code
+  combined with modifiers (\c SHIFT, \c CTRL, \c ALT or \c
+  UNICODE_ACCEL).  For example, <code>CTRL + Key_P</code> could be a
+  shortcut for printing a document. The key codes are listed in
+  qnamespace.h. As an alternative, use \c UNICODE_ACCEL with the
+  unicode value of the character. For example, <code>UNICODE_ACCEL +
+  'A'</code> gies the same accelerator as \c Key_A.
+
+  When an accelerator key is pressed, the accelerator sends out the
+  signal activated() with a number that identifies this particular
+  accelerator item.  Accelerator items can also be individually
+  connected, so that two different keys will activate two different
+  slots (see connectItem() and disconnectItem()).
+
+  Use setEnabled() to enable/disable all items in the accelerator,
+  or setItemEnabled() to enable/disable individual items.
+
+  The function setWhatsThis() specifies the What's This text for an
+  accelerator item.
+
+  A QAccel object handles key events to the QWidget::topLevelWidget()
   containing \a parent, and hence to any child widgets of that window.
-  Note that the accelerator will be deleted only when the \a parent
-  is deleted, and will consume relevant key events until then.
+  The accelerator will be deleted when \a parent is deleted, and will
+  consume relevant key events until then.
 
   Example:
   \code
@@ -63,8 +93,8 @@
   \endcode
 
   \sa QKeyEvent QWidget::keyPressEvent() QMenuData::setAccel()
-  QButton::setAccel()
-  <a href="guibooks.html#fowler">GUI Design Handbook: Keyboard Shortcuts,</a>
+  QButton::setAccel() QLabel::setBuddy()
+  <a href="guibooks.html#fowler">GUI Design Handbook: Keyboard Shortcuts</a>.
 */
 
 
@@ -89,7 +119,8 @@ public:
     ~QAccelPrivate() {}
     QAccelList aitems;
     bool enabled;
-    QWidget *tlw;
+    QGuardedPtr<QWidget> tlw;
+    QGuardedPtr<QWidget> watch;
     bool ignorewhatsthis;
 };
 
@@ -114,7 +145,7 @@ static QAccelItem *find_key( QAccelList &list, int key, QChar ch )
 	    if ( km ) {
 		// Modifiers must match...
 		QChar c;
-		if ( (key & Qt::CTRL) && ch < ' ' )
+		if ( (key & Qt::CTRL) && (ch < ' ') )
 		    c = ch.unicode()+'@'+' '; // Ctrl-A is ASCII 001, etc.
 		else
 		    c = ch;
@@ -137,7 +168,8 @@ static QAccelItem *find_key( QAccelList &list, int key, QChar ch )
 
 
 /*!
-  Creates a QAccel object with a parent widget and a name.
+  Constructs a QAccel object with parent \a parent and name \a name. The
+  accelerator operates on \a parent.
 */
 
 QAccel::QAccel( QWidget *parent, const char *name )
@@ -145,36 +177,52 @@ QAccel::QAccel( QWidget *parent, const char *name )
 {
     d = new QAccelPrivate;
     d->enabled = TRUE;
-    if ( parent ) {				// install event filter
-#if defined(CHECK_RANGE)
-	ASSERT( parent->isWidgetType() );
-#endif
-	d->tlw = parent->topLevelWidget();
+    d->watch = parent;
+    if ( d->watch ) {				// install event filter
+	d->tlw = d->watch->topLevelWidget();
 	d->tlw->installEventFilter( this );
-	connect( d->tlw, SIGNAL(destroyed()), SLOT(tlwDestroyed()) );
     } else {
-	d->tlw = 0;
 #if defined(CHECK_NULL)
-	qWarning( "QAccel: An accelerator must have a parent widget" );
+	qWarning( "QAccel: An accelerator must have a parent or a watch widget" );
 #endif
     }
 }
 
 /*!
-  Destroys the accelerator object.
+  Constructs a QAccel object that operates on \a watch, but is a child of
+  \a parent.
+
+  This constructor is not needed for normal application programming.
+*/
+QAccel::QAccel( QWidget* watch, QObject *parent, const char *name )
+    : QObject( parent, name )
+{
+    d = new QAccelPrivate;
+    d->enabled = TRUE;
+    d->watch = watch;
+    if ( watch ) {				// install event filter
+	d->tlw = d->watch->topLevelWidget();
+	d->tlw->installEventFilter( this );
+    } else {
+#if defined(CHECK_NULL)
+	qWarning( "QAccel: An accelerator must have a parent or a watch widget" );
+#endif
+    }
+}
+
+/*!
+  Destructs the accelerator object.
 */
 
 QAccel::~QAccel()
 {
-    if ( d->tlw )
-	d->tlw->removeEventFilter( this );
     delete d;
 }
 
 
 /*!
   \fn void QAccel::activated( int id )
-  This signal is emitted when an accelerator key is pressed. \e id is
+  This signal is emitted when an accelerator key is pressed. \a id is
   a number that identifies this particular accelerator item.
 */
 
@@ -190,8 +238,8 @@ bool QAccel::isEnabled() const
 
 
 /*!
-  Enables the accelerator if \e enable is TRUE, or disables it if
-  \e enable is FALSE.
+  Enables the accelerator if \a enable is TRUE, or disables it if
+  \a enable is FALSE.
 
   Individual keys can also be enabled or disabled.
 
@@ -205,7 +253,7 @@ void QAccel::setEnabled( bool enable )
 
 
 /*!
-  Returns the number of accelerator items.
+  Returns the number of accelerator items in this accelerator.
 */
 
 uint QAccel::count() const
@@ -214,35 +262,41 @@ uint QAccel::count() const
 }
 
 
+static int get_seq_id()
+{
+    static int seq_no = -2;  // -1 is used as return value in findKey()
+    return seq_no--;
+}
+
 /*!
   Inserts an accelerator item and returns the item's identifier.
 
-  \arg \e key is a key code plus a combination of SHIFT, CTRL and ALT.
-  \arg \e id is the accelerator item id.
+  \a key is a key code plus a combination of SHIFT, CTRL and ALT.
+  \a id is the accelerator item id.
 
-  If \e id is negative, then the item will be assigned a unique
-  identifier.
+  If \a id is negative, then the item will be assigned a unique
+  negative identifier.
 
   \code
     QAccel *a = new QAccel( myWindow );		// create accels for myWindow
     a->insertItem( Key_P + CTRL, 200 );		// Ctrl+P to print document
     a->insertItem( Key_X + ALT , 201 );		// Alt+X  to quit
     a->insertItem( UNICODE_ACCEL + 'q', 202 );	// Unicode 'q' to quit
-    a->insertItem( Key_D );			// gets id 3
-    a->insertItem( Key_P + CTRL + SHIFT );	// gets id 4
+    a->insertItem( Key_D );			// gets a unique negative id
+    a->insertItem( Key_P + CTRL + SHIFT );	// gets a unique negative id
   \endcode
 */
 
 int QAccel::insertItem( int key, int id )
 {
     if ( id == -1 )
-	id = d->aitems.count();
+	id = get_seq_id();
     d->aitems.insert( 0, new QAccelItem(key,id) );
     return id;
 }
 
 /*!
-  Removes the accelerator item with the identifier \e id.
+  Removes the accelerator item with the identifier \a id.
 */
 
 void QAccel::removeItem( int id )
@@ -263,7 +317,7 @@ void QAccel::clear()
 
 
 /*!
-  Returns the key code of the accelerator item with the identifier \e id,
+  Returns the key code of the accelerator item with the identifier \a id,
   or zero if the id cannot be found.
 */
 
@@ -275,7 +329,7 @@ int QAccel::key( int id )
 
 
 /*!
-  Returns the identifier of the accelerator item with the key code \e key, or
+  Returns the identifier of the accelerator item with the key code \a key, or
   -1 if the item cannot be found.
 */
 
@@ -287,7 +341,7 @@ int QAccel::findKey( int key ) const
 
 
 /*!
-  Returns TRUE if the accelerator item with the identifier \e id is enabled.
+  Returns TRUE if the accelerator item with the identifier \a id is enabled.
   Returns FALSE if the item is disabled or cannot be found.
   \sa setItemEnabled(), isEnabled()
 */
@@ -301,8 +355,8 @@ bool QAccel::isItemEnabled( int id ) const
 
 /*!
   Enables or disables an accelerator item.
-  \arg \e id is the item identifier.
-  \arg \e enable specifies whether the item should be enabled or disabled.
+  \a id is the item identifier.
+  \a enable specifies whether the item should be enabled or disabled.
 
   \sa isItemEnabled(), isEnabled()
 */
@@ -318,9 +372,9 @@ void QAccel::setItemEnabled( int id, bool enable )
 /*!
   Connects an accelerator item to a slot/signal in another object.
 
-  \arg \e id is the accelerator item id.
-  \arg \e receiver is the object to receive a signal.
-  \arg \e member is a slot or signal function in the receiver.
+  \a id is the accelerator item id.
+  \a receiver is the object to receive a signal.
+  \a member is a slot or signal function in the receiver.
 
   \code
     a->connectItem( 201, mainView, SLOT(quit()) );
@@ -360,30 +414,24 @@ bool QAccel::disconnectItem( int id, const QObject *receiver,
 
 /*!
   Make sure that the accelerator is watching the correct event
-  filter.  Used by QWidget::reparent().
+  filter. This function is called automatically, you should not need
+  to call it in application code.
 */
 
 void QAccel::repairEventFilter()
 {
     QWidget *ntlw;
-    if ( parent() ) {
-#if defined(CHECK_RANGE)
-	ASSERT( parent()->isWidgetType() );
-#endif
-	ntlw = ((QWidget*)parent())->topLevelWidget();
-    } else {
+    if ( d->watch )
+	ntlw = d->watch->topLevelWidget();
+    else
 	ntlw = 0;
-    }
-    if ( d->tlw != ntlw ) {
-	if ( d->tlw ) {
+
+    if ( (QWidget*) d->tlw != ntlw ) {
+	if ( d->tlw )
 	    d->tlw->removeEventFilter( this );
-	    disconnect( d->tlw, SIGNAL(destroyed()), this, SLOT(tlwDestroyed()) );
-	}
 	d->tlw = ntlw;
-	if ( d->tlw ) {
+	if ( d->tlw )
 	    d->tlw->installEventFilter( this );
-	    connect( d->tlw, SIGNAL(destroyed()), this, SLOT(tlwDestroyed()) );
-	}
     }
 }
 
@@ -392,12 +440,13 @@ void QAccel::repairEventFilter()
   Processes accelerator events intended for the top level widget.
 */
 
-bool QAccel::eventFilter( QObject *, QEvent *e )
+bool QAccel::eventFilter( QObject *o, QEvent *e )
 {
-    if ( d->enabled &&
+    if ( e->type() == QEvent::Reparent && d->watch == o ) {
+	repairEventFilter();
+    } else  if ( d->enabled &&
 	 ( e->type() == QEvent::Accel || e->type() == QEvent::AccelAvailable) &&
-	 parent() && parent()->isWidgetType() &&
-	 ((QWidget *)parent())->isVisibleToTLW() ) {
+	 d->watch && d->watch->isVisible() ) {
 	QKeyEvent *k = (QKeyEvent *)e;
 	int key = k->key();
 	if ( k->state() & ShiftButton )
@@ -407,6 +456,8 @@ bool QAccel::eventFilter( QObject *, QEvent *e )
 	if ( k->state() & AltButton )
 	    key |= ALT;
 	QAccelItem *item = find_key( d->aitems, key, k->text()[0] );
+	if ( key == Key_unknown )
+	    item = 0;
 	bool b = QWhatsThis::inWhatsThisMode();
 	if ( item && ( item->enabled || b )) {
 	    if (e->type() == QEvent::Accel) {
@@ -424,28 +475,17 @@ bool QAccel::eventFilter( QObject *, QEvent *e )
 	    return TRUE;
 	}
     }
-    return FALSE;
+    return QObject::eventFilter( o, e );
 }
 
-
-/*!
-  \internal
-  This slot is called when the top level widget that owns the accelerator
-  is destroyed.
-*/
-
-void QAccel::tlwDestroyed()
-{
-    d->tlw = 0;
-}
 
 
 /*!
   Returns the shortcut key for \a string, or 0 if \a string has no
   shortcut sequence.
 
-  For example, acceleratorKey("E&xit") returns ALT+Key_X,
-  shortcutChar("&Exit") returns ALT+Key_E and shortcutChar("Exit")
+  For example, shortcutKey("E&amp;xit") returns ALT+Key_X,
+  shortcutKey("&amp;Exit") returns ALT+Key_E and shortcutKey("Exit")
   returns 0.  (In code that does not inherit the Qt namespace class,
   you need to write e.g. Qt::ALT+Qt::Key_X.)
 
@@ -476,7 +516,7 @@ int QAccel::shortcutKey( const QString &str )
 /*!
    Creates an accelerator string for the key \a k.
    For instance CTRL+Key_O gives "Ctrl+O".  The "Ctrl" etc.
-   are \link QObject::tr() translated\endlink in the "QAccel" scope.
+   are translated (using QObject::tr()) in the "QAccel" scope.
 
    \sa stringToKey()
 */
@@ -590,11 +630,11 @@ QString QAccel::keyToString( int k )
 }
 
 /*!
-   Creates an accelerator code for the string \a s.
-   For example "Ctrl+O" gives CTRL+UNICODE_ACCEL+'O'.
-   The strings "Ctrl", "Shift", "Alt" and their
-   \link QObject::tr() translated\endlink equivalents
-   in the "QAccel" scope are recognized.
+   Returns an accelerator code for the string \a s.  For example
+   "Ctrl+O" gives CTRL+UNICODE_ACCEL+'O'.  The strings "Ctrl",
+   "Shift", "Alt" are recognized, as well as their translated
+   equivalents in the "QAccel" scope (using QObject::tr()). Returns 0
+   if \a s is not recognized.
 
    A common usage of this function is to provide
    translatable accelerator values for menus:
@@ -622,21 +662,23 @@ int QAccel::stringToKey( const QString & s )
 	if ( s.contains("Alt+") || s.contains(tr("Alt")+"+") )
 	    k |= ALT;
     }
+    else if ( s.length() == 1 ) {
+	k = s[0].unicode() | UNICODE_ACCEL;
+    }
     return k;
 }
 
 
 /*!
-  Sets a Whats This help for a certain accelerator.
-
-  \arg \e id is the accelerator item id.
-  \arg \e text is the Whats This help text.
+  Sets a Whats This help for the accelerator item \a id to \a text.
 
   The text will be shown when the application is in What's This mode
-  and the user either hits the respective accelerator key or selects a
-  menu item that has been attached to this accelerator.
+  and the user hits the accelerator key.
 
-  \sa whatsThis(), QWhatsThis::inWhatsThisMode()
+  To set Whats This help on a menu item (with or without an
+  accelerator key) use QMenuData::setWhatsThis().
+
+  \sa whatsThis(), QWhatsThis::inWhatsThisMode(), QMenuData::setWhatsThis()
  */
 void QAccel::setWhatsThis( int id, const QString& text )
 {
@@ -647,7 +689,7 @@ void QAccel::setWhatsThis( int id, const QString& text )
 }
 
 /*!
-  Returns the Whats This help text for the specified item \e id or
+  Returns the Whats This help text for the specified item \a id or
   QString::null if no text has been defined yet.
 
   \sa setWhatsThis()
@@ -659,11 +701,15 @@ QString QAccel::whatsThis( int id ) const
     return item? item->whatsthis : QString::null;
 }
 
+/*!\internal
+ */
 void QAccel::setIgnoreWhatsThis( bool b)
 {
     d->ignorewhatsthis = b;
 }
 
+/*!\internal
+ */
 bool QAccel::ignoreWhatsThis() const
 {
     return d->ignorewhatsthis;
@@ -756,7 +802,9 @@ The
 Microsoft book</a> has ISBN 1556156790.  The corresponding
 <a href="http://www.amazon.com/exec/obidos/ASIN/1859121047/trolltech/t">
 Open Group book</a> has ISBN 1859121047.  (The link does not work at
-the time of writing, but is correct: The books is simply hard to get
-hold of.  OGPubs@opengroup.org may be able to help, at a price.)
+the time of writing, since Amazon, like most book stores, does not
+supply it.  The Open Group books are \e very hard to find, and
+also rather expensive.  If you really want it, OGPubs@opengroup.org
+may be able to help.)
 
 */

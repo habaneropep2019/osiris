@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qiconset.h,v 2.11 1999/04/28 09:56:25 aavit Exp $
+** $Id: qt/src/kernel/qiconset.h   2.1.0   edited 2000-03-24 $
 **
 ** Definition of QIconSet class
 **
 ** Created : 980318
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,16 +17,18 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
 #ifndef QICONSET_H
 #define QICONSET_H
 
+#ifndef QT_H
 #include "qpixmap.h"
+#endif // QT_H
 
 
 struct QIconSetPrivate;
@@ -39,6 +41,7 @@ public:
 
     enum Mode { Normal, Disabled, Active };
 
+    QIconSet();
     QIconSet( const QPixmap &, Size = Automatic );
     QIconSet( const QIconSet & );
     virtual ~QIconSet();
@@ -48,9 +51,12 @@ public:
     virtual void setPixmap( const QPixmap &, Size, Mode = Normal );
     virtual void setPixmap( const QString &, Size, Mode = Normal );
     QPixmap pixmap( Size, Mode ) const;
+    QPixmap pixmap( Size s, bool enabled ) const;
     QPixmap pixmap() const;
     bool isGenerated( Size, Mode ) const;
 
+    bool isNull() const;
+    
     void detach();
 
     QIconSet &operator=( const QIconSet & );

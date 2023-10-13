@@ -1,9 +1,9 @@
 /****************************************************************************
-** $Id: qintcache.doc,v 2.1 1999/06/23 18:48:01 hanord Exp $
+** $Id: qt/doc/qintcache.doc   2.1.0   edited 2000-03-24 $
 **
 ** QIntCache and QIntCacheIterator class documentation
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -15,9 +15,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -163,13 +163,15 @@
 /*!
   \fn bool QIntCache::insert( long k, const type *d, int c, int p )
 
-  Inserts the item \a d into the cache with key \a k, cost \c (default
-  1) and priority \a p (default 0).  Returns TRUE if it succeeds and
-  FALSE if it fails.
+  Inserts the item \a d into the cache with key \a k and cost \a c
+  (default 1).  Returns TRUE if it succeeds and FALSE if it fails.
 
   The cache's size is limited, and if the total cost is too high,
-  QIntCache will remove old, least-used items until there is room for this
-  new item.
+  QIntCache will remove old, least-used items until there is room for
+  this new item.
+
+  The parameter \a p is internal and should be left at the default
+  value (0).
 
   \warning If this function returns FALSE, you must delete \a d
   yourself.  Additionally, be very careful about using \a d after
@@ -249,6 +251,13 @@
   \sa find()
 */
 
+/*!
+  \fn void QIntCache::statistics() const
+
+  A debug-only utility function. Prints out cache usage, hit/miss, and
+  distribution information using qDebug(). This function does nothing
+  in the release library.
+*/
 
 /*****************************************************************************
   QIntCacheIterator documentation
@@ -317,6 +326,7 @@
   \fn uint QIntCacheIterator::count() const
 
   Returns the number of items in the cache on which this iterator operates.
+
   \sa isEmpty()
 */
 
@@ -324,7 +334,29 @@
   \fn bool QIntCacheIterator::isEmpty() const
 
   Returns TRUE if the cache is empty, i.e. count() == 0, otherwise
-  FALSE.  \sa count()
+  FALSE.  
+
+  \sa count()
+*/
+
+/*!
+  \fn bool QIntCacheIterator::atFirst() const
+
+  Returns TRUE if the iterator points to the first item in the
+  cache. Note that this refers to the iterator's arbitrary ordering,
+  not to the cache's internal LRU list.
+
+  \sa toFirst(), atLast()
+*/
+
+/*!
+  \fn bool QIntCacheIterator::atLast() const
+
+  Returns TRUE if the iterator points to the last item in the
+  cache. Note that this refers to the iterator's arbitrary ordering,
+  not to the cache's internal LRU list.
+
+  \sa toLast(), atFirst()
 */
 
 /*!
@@ -346,7 +378,7 @@
 
   Sets the iterator to null and returns null if if the cache is empty.
 
-  \sa toLast() isEmpty()
+  \sa toFirst() isEmpty()
 */
 
 /*!

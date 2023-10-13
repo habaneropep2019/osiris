@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: listbox.h,v 1.2 1999/06/23 00:33:40 reggie Exp $
+** $Id: qt/examples/listbox/listbox.h   2.1.0   edited 2000-02-09 $
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -34,6 +34,8 @@ private slots:
     void setVariableWidth( bool );
     void setVariableHeight( bool );
     void setMultiSelection( bool );
+    void sortAscending();
+    void sortDescending();
     
 private:
     QListBox * l;

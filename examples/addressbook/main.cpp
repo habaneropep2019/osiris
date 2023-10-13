@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: main.cpp,v 1.2 1999/06/08 14:20:28 aavit Exp $
+** $Id: qt/examples/addressbook/main.cpp   2.1.0   edited 2000-02-14 $
 **
-** Copyright ( C ) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright ( C ) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -11,7 +11,7 @@
 #include <qapplication.h>
 #include <qplatinumstyle.h>
 
-#include "ab_mainwindow.h"
+#include "mainwindow.h"
 
 int main( int argc, char ** argv )
 {

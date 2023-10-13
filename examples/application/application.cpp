@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: application.cpp,v 1.9.2.1 1999/07/13 20:00:14 warwick Exp $
+** $Id: qt/examples/application/application.cpp   2.1.0   edited 2000-02-24 $
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -54,6 +54,7 @@ ApplicationWindow::ApplicationWindow()
     QPixmap openIcon, saveIcon, printIcon;
 
     fileTools = new QToolBar( this, "file operations" );
+    fileTools->setLabel( tr( "File Operations" ) );
 
     openIcon = QPixmap( fileopen );
     QToolButton * fileOpen
@@ -103,10 +104,10 @@ ApplicationWindow::ApplicationWindow()
     menuBar()->insertSeparator();
     menuBar()->insertItem( "&Help", help );
 
-    help->insertItem( "&About", this, SLOT(about()), Key_F1);
-    help->insertItem( "About&Qt", this, SLOT(aboutQt()));
+    help->insertItem( "&About", this, SLOT(about()), Key_F1 );
+    help->insertItem( "About &Qt", this, SLOT(aboutQt()) );
     help->insertSeparator();
-    help->insertItem( "What's &This", this, SLOT(whatsThis()), SHIFT+Key_F1);
+    help->insertItem( "What's &This", this, SLOT(whatsThis()), SHIFT+Key_F1 );
 
     e = new QMultiLineEdit( this, "editor" );
     e->setFocus();
@@ -249,7 +250,7 @@ void ApplicationWindow::closeEvent( QCloseEvent* ce )
 	ce->accept();
 	return;
     }
-    
+
     switch( QMessageBox::information( this, "Qt Application Example",
 				      "The document has been changed since "
 				      "the last save.",

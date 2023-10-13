@@ -20,7 +20,7 @@ SYSCONF_LIBS_QT		= -lqt
 SYSCONF_LIBS_QT_OPENGL	= -lqgl
 # OpenGL
 SYSCONF_LFLAGS_OPENGL	= -L/usr/X11R6/lib
-SYSCONF_LIBS_OPENGL	= -lMesaGL -lMesaGLU -lXmu
+SYSCONF_LIBS_OPENGL	= -lGLU -lGL -lXmu
 # Yacc
 SYSCONF_LIBS_YACC	= 
 
@@ -30,7 +30,7 @@ SYSCONF_LFLAGS		=
 SYSCONF_LIBS		= 
 
 # Link flags shared objects
-SYSCONF_LFLAGS_SHOBJ	= 
+SYSCONF_LFLAGS_SHOBJ	= -shared
 
 # Meta-object compiler
 SYSCONF_MOC		= $(QTDIR)/bin/moc
@@ -40,9 +40,9 @@ SYSCONF_MOC		= $(QTDIR)/bin/moc
 #   - Place target in $(DESTDIR) - which has a trailing /
 #   - Usually needs to incorporate $(VER_MAJ), $(VER_MIN) and $(VER_PATCH)
 #
-SYSCONF_LINK_SHLIB	= 
+SYSCONF_LINK_SHLIB	= g++
 SYSCONF_LINK_TARGET_SHARED	= lib$(TARGET).so.$(VER_MAJ).$(VER_MIN).$(VER_PATCH)
-SYSCONF_LINK_LIB_SHARED	=  $(SYSCONF_LINK_SHLIB)   \
+SYSCONF_LINK_LIB_SHARED	=  $(SYSCONF_LINK_SHLIB) -shared  \
 				     $(LFLAGS) -o $(SYSCONF_LINK_TARGET_SHARED) \
 				     $(OBJECTS) $(OBJMOC) $(LIBS) && \
 				 mv $(SYSCONF_LINK_TARGET_SHARED) $(DESTDIR); \
@@ -61,8 +61,8 @@ SYSCONF_LINK_TARGET_STATIC = lib$(TARGET).a
 SYSCONF_LINK_LIB_STATIC	= rm -f $(DESTDIR)$(SYSCONF_LINK_TARGET_STATIC) ; \
 				 $(SYSCONF_AR) $(DESTDIR)$(SYSCONF_LINK_TARGET_STATIC) $(OBJECTS) $(OBJMOC) 
 # Compiling application source
-SYSCONF_CXXFLAGS	= -O2
-SYSCONF_CFLAGS		= -O2
+SYSCONF_CXXFLAGS	= -O2 -mminimal-toc
+SYSCONF_CFLAGS		= -O2 -mminimal-toc
 # Compiling library source
 SYSCONF_CXXFLAGS_LIB	= 
 SYSCONF_CFLAGS_LIB	= 

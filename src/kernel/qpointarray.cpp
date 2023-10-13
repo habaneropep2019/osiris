@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qpointarray.cpp,v 2.27.2.1 1999/09/01 10:49:34 aavit Exp $
+** $Id: qt/src/kernel/qpointarray.cpp   2.1.0   edited 2000-03-24 $
 **
 ** Implementation of QPointArray class
 **
 ** Created : 940213
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -33,6 +33,7 @@
 const double Q_PI   = 3.14159265358979323846;   // pi
 
 
+// NOT REVISED
 /*!
   \class QPointArray qpointarray.h
   \brief The QPointArray class provides an array of points.
@@ -41,10 +42,10 @@ const double Q_PI   = 3.14159265358979323846;   // pi
 
   \inherit QArray
 
-  The QPointArray is an array of QPoint objects. In addition to the functions 
+  The QPointArray is an array of QPoint objects. In addition to the functions
   provided by QArray, QPointArray provides some handy methods:
 
-  For convenient reading and writing of the point data: setPoints(), 
+  For convenient reading and writing of the point data: setPoints(),
   putPoints(), point(), and setPoint().
 
   For geometry operations: boundingRect() and translate(). As for the latter,
@@ -395,14 +396,14 @@ static inline int fix_angle( int a )
 /*!
   Sets the points of the array to those describing an arc of an
   ellipse with size \a w by \a h and position (\a x, \a y ), starting
-  from angle \a1, spanning \a a2.  The resulting array has sufficient
+  from angle \a a1, spanning \a a2.  The resulting array has sufficient
   resolution for pixel accuracy (see the overloaded function which
   takes an additional QWMatrix parameter).
 
   Angles are specified in 16ths of a degree,
   i.e. a full circle equals 5760 (16*360). Positive values mean
   counter-clockwise while negative values mean clockwise direction.
-  Zero degrees is at the 3'o clock position.
+  Zero degrees is at the 3 o'clock position.
 */
 
 void QPointArray::makeArc( int x, int y, int w, int h, int a1, int a2 )
@@ -494,18 +495,23 @@ qtr_elips(QPointArray& a, int& offset, double dxP, double dyP, double dxQ, doubl
 /*!
   Sets the points of the array to those describing an arc of an
   ellipse with size \a w by \a h and position (\a x, \a y ), starting
-  from angle \a1, spanning \a a2, transformed by the matrix \a xf.
+  from angle \a a1, spanning \a a2, transformed by the matrix \a xf.
   The resulting array has sufficient resolution for pixel accuracy.
 
   Angles are specified in 16ths of a degree,
   i.e. a full circle equals 5760 (16*360). Positive values mean
   counter-clockwise while negative values mean clockwise direction.
-  Zero degrees is at the 3'o clock position.
+  Zero degrees is at the 3 o'clock position.
 */
 void QPointArray::makeArc( int x, int y, int w, int h,
 			       int a1, int a2,
 			       const QWMatrix& xf )
 {
+    if ( --w < 0 || --h < 0 ) {
+	resize( 0 );
+	return;
+    }
+
     bool rev = a2 < 0;
     if ( rev ) {
 	a1 += a2;
@@ -517,7 +523,6 @@ void QPointArray::makeArc( int x, int y, int w, int h,
     a2 = fix_angle( a2 );
 
     bool arc = a1 != 0 || a2 != 360*16 || rev;
-
 
     double xP, yP, xQ, yQ, xK, yK;
 
@@ -574,22 +579,20 @@ void QPointArray::makeArc( int x, int y, int w, int h,
 	    da1 -= Q_PI/2;
 	    t++;
 	}
+
 	int i = nquad[t]+int(da1/inc+0.5);
 	int k = int(da2/inc+0.5);
+	QPointArray r(k);
+	int j = 0;
+
 	if ( rev ) {
-	    QPointArray r(k);
-	    int j = 0;
-	    while (k--)
+	    while ( k-- )
 		r[j++] = at((i+k)%n);
-	    *this = r;
 	} else {
-	    int j = 0;
-	    while (j < k) {
-		setPoint(j,at((k+j)%n));
-		j++;
-	    }
-	    resize(j);
+	    while ( j < k )
+		r[j++] = at((i+j)%n);
 	}
+	*this = r;
     } else {
 	resize(n);
     }
@@ -716,7 +719,7 @@ void split(const double *p, double *l, double *r)
 //   by Alan Paeth
 //   from "Graphics Gems", Academic Press, 1990
 static
-int pnt_on_line( const double* p, const double* q, const double* t )
+int pnt_on_line( const int* p, const int* q, const int* t )
 {
 /*
  * given a line through P:(px,py) Q:(qx,qy) and T:(tx,ty)
@@ -749,6 +752,11 @@ int pnt_on_line( const double* p, const double* q, const double* t )
  * in merging collinear (to grid coordinates) vertex chains
  * into a larger, spanning vectors within the Lemming editor.
  */
+
+	// if all points are coincident, return condition 2 (on line)
+	if(q[0]==p[0] && q[1]==p[1] && q[0]==t[0] && q[1]==t[1]) {
+		return 2;
+	}
 
     if ( QABS((q[1]-p[1])*(t[0]-p[0])-(t[1]-p[1])*(q[0]-p[0])) >=
         (QMAX(QABS(q[0]-p[0]), QABS(q[1]-p[1])))) return 0;
@@ -787,16 +795,34 @@ void polygonizeQBezier( double* acc, int& accsize, const double ctrl[],
     double r[8];
     split( ctrl, l, r);
 
-    if ( pnt_on_line( &ctrl[0], &ctrl[6], &ctrl[2] ) == 2
-      && pnt_on_line( &ctrl[0], &ctrl[6], &ctrl[4] ) == 2 )
+    // convert to integers for line condition check
+    int c0[2]; c0[0] = int(ctrl[0]); c0[1] = int(ctrl[1]);
+    int c1[2]; c1[0] = int(ctrl[2]); c1[1] = int(ctrl[3]);
+    int c2[2]; c2[0] = int(ctrl[4]); c2[1] = int(ctrl[5]);
+    int c3[2]; c3[0] = int(ctrl[6]); c3[1] = int(ctrl[7]);
+
+    if ( QABS(c1[0]-c0[0]) <= 1 && QABS(c1[1]-c0[1]) <= 1
+      && QABS(c2[0]-c0[0]) <= 1 && QABS(c2[1]-c0[1]) <= 1
+      && QABS(c3[0]-c1[0]) <= 1 && QABS(c3[1]-c0[1]) <= 1 )
     {
-	// Approximate by 2 lines.
+	// Approximate by one line.
+	// Dont need to write last pt as it is the same as first pt
+	// on the next segment
 	acc[accsize++] = l[0];
 	acc[accsize++] = l[1];
-	acc[accsize++] = l[6];
-	acc[accsize++] = l[7];
-	acc[accsize++] = r[6];
-	acc[accsize++] = r[7];
+	return;
+    }
+
+    if ( ( pnt_on_line( c0, c3, c1 ) == 2 && pnt_on_line( c0, c3, c2 ) == 2 )
+      || ( QABS(c1[0]-c0[0]) <= 1 && QABS(c1[1]-c0[1]) <= 1
+        && QABS(c2[0]-c0[0]) <= 1 && QABS(c2[1]-c0[1]) <= 1
+        && QABS(c3[0]-c1[0]) <= 1 && QABS(c3[1]-c0[1]) <= 1 ) )
+    {
+	// Approximate by one line.
+	// Dont need to write last pt as it is the same as first pt
+	// on the next segment
+	acc[accsize++] = l[0];
+	acc[accsize++] = l[1];
 	return;
     }
 
@@ -821,10 +847,9 @@ QPointArray QPointArray::quadBezier() const
     }
 
     int v;
-    const int n = 3;				// n + 1 control points
     float xvec[4];
     float yvec[4];
-    for ( v=0; v<=n; v++ ) {			// store all x,y in xvec,yvec
+    for ( v=0; v<4; v++ ) {			// store all x,y in xvec,yvec
 	int x, y;
 	point( v, &x, &y );
 	xvec[v] = (float)x;
@@ -877,7 +902,7 @@ QPointArray QPointArray::quadBezier() const
 	QRect r = boundingRect();
 	int m = 4+2*QMAX(r.width(),r.height());
 	double *p = new double[m];
-	double *ctrl = new double[8];
+	double ctrl[8];
 	int i;
 	for (i=0; i<4; i++) {
 	    ctrl[i*2] = at(i).x();
@@ -885,7 +910,7 @@ QPointArray QPointArray::quadBezier() const
 	}
 	int len=0;
 	polygonizeQBezier( p, len, ctrl, m );
-	QPointArray pa(len/2);
+	QPointArray pa((len/2)+1); // one extra point for last point on line
 	int j=0;
 	for (i=0; j<len; i++) {
 	    // Don't round - it looks terrible
@@ -893,8 +918,9 @@ QPointArray QPointArray::quadBezier() const
 	    int y = int(p[j++]);
 	    pa[i] = QPoint(x,y);
 	}
+	// add last pt on the line, which will be at the last control pt
+	pa[(int)pa.size()-1] = at(3);
 	delete[] p;
-	delete[] ctrl;
 
 	return pa;
     }
@@ -913,7 +939,7 @@ QPointArray QPointArray::quadBezier() const
 
   The serialization format is:
   <ol>
-  <li> The array size (UINT32)
+  <li> The array size (Q_UINT32)
   <li> The array points (QPoint)
   </ol>
 */

@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qfontdialog.h,v 2.16 1999/06/03 16:50:24 hanord Exp $
+** $Id: qt/src/dialogs/qfontdialog.h   2.1.0   edited 2000-03-24 $
 **
 ** Definition of QFontDialog
 **
 ** Created : 970605
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -51,17 +51,18 @@ class QFontDialogPrivate;
 class Q_EXPORT QFontDialog: public QDialog
 {
     Q_OBJECT
+
 public:
     static QFont getFont( bool *ok, const QFont &def,
     			  QWidget *parent = 0, const char* name = 0);
 
     static QFont getFont( bool *ok, QWidget *parent = 0, const char* name = 0);
+
 private:
     QFontDialog( QWidget *parent=0, const char *name=0, bool modal=FALSE,
 		 WFlags f=0 );
    ~QFontDialog();
 
-private:
     QFont font() const;
     void setFont( const QFont &font );
 
@@ -110,6 +111,12 @@ private:
 
     QFontDialogPrivate * d;
     friend class QFontDialogPrivate;
+
+private:	// Disabled copy constructor and operator=
+#if defined(Q_DISABLE_COPY)
+    QFontDialog( const QFontDialog & );
+    QFontDialog& operator=( const QFontDialog & );
+#endif
 };
 
 #endif // QFONTDIALOG_H

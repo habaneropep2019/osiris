@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qutfcodec.cpp,v 1.11.2.1 1999/08/12 11:06:13 aavit Exp $
+** $Id: qt/src/tools/qutfcodec.cpp   2.1.0   edited 2000-04-06 $
 **
 ** Implementation of QEucCodec class
 **
 ** Created : 981015
 **
-** Copyright (C)1998-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C)1998-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -58,7 +58,7 @@ QCString QUtf8Codec::fromUnicode(const QString& uc, int& len_in_out) const
 
 const char* QUtf8Codec::name() const
 {
-    return "utf8";
+    return "UTF-8";
 }
 
 int QUtf8Codec::heuristicContentMatch(const char* chars, int len) const
@@ -71,12 +71,13 @@ int QUtf8Codec::heuristicContentMatch(const char* chars, int len) const
 	    return -1;
 	if ( ch < 128 ) {
 	    // Inconclusive
+	    score++;
 	} else if ( (ch&0xe0) == 0xc0 ) {
 	    if ( i < len-1 ) {
 		uchar c2 = chars[++i];
 		if ( (c2&0xc0) != 0x80 )
 		    return -1;
-		score+=2;
+		score+=3;
 	    }
 	} else if ( (ch&0xf0) == 0xe0 ) {
 	    if ( i < len-1 ) {
@@ -92,6 +93,7 @@ int QUtf8Codec::heuristicContentMatch(const char* chars, int len) const
 		    }
 #endif
 		}
+		score+=2;
 	    }
 	}
     }
@@ -159,7 +161,7 @@ int QUtf16Codec::mibEnum() const
 
 const char* QUtf16Codec::name() const
 {
-    return "utf16";
+    return "ISO-10646-UCS-2";
 }
 
 int QUtf16Codec::heuristicContentMatch(const char* chars, int len) const
@@ -167,7 +169,7 @@ int QUtf16Codec::heuristicContentMatch(const char* chars, int len) const
     uchar* uchars = (uchar*)chars;
     if ( len >= 2 && (uchars[0] == 0xff && uchars[1] == 0xfe ||
 		      uchars[1] == 0xff && uchars[0] == 0xfe) )
-	return 2;
+	return len;
     else
 	return 0;
 }

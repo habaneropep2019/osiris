@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qwindowsstyle.h,v 1.4 1999/06/23 17:53:31 ettrich Exp $
+** $Id: qt/src/widgets/qwindowsstyle.h   2.1.0   edited 2000-03-24 $
 **
 ** Definition of Windows-like style class
 **
 ** Created : 981231
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,22 +17,25 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
 #ifndef QWINDOWSSTYLE_H
 #define QWINDOWSSTYLE_H
 
+#ifndef QT_H
 #include "qcommonstyle.h"
+#endif // QT_H
 
 class Q_EXPORT QWindowsStyle : public QCommonStyle
 {
     Q_OBJECT
 public:
     QWindowsStyle();
+    virtual ~QWindowsStyle();
     void drawButton( QPainter *p, int x, int y, int w, int h,
 		     const QColorGroup &g, bool sunken = FALSE,
 		     const QBrush *fill = 0 );
@@ -115,7 +118,6 @@ public:
 			    const QPalette& pal,
 			    bool act, bool enabled, int x, int y, int w, int h);
 
-
 protected:
     void drawWinShades( QPainter *p,
 			int x, int y, int w, int h,
@@ -123,6 +125,11 @@ protected:
 			const QColor &c3, const QColor &c4,
 			const QBrush *fill );
 
+private:	// Disabled copy constructor and operator=
+#if defined(Q_DISABLE_COPY)
+    QWindowsStyle( const QWindowsStyle & );
+    QWindowsStyle& operator=( const QWindowsStyle & );
+#endif
 };
 
 #endif

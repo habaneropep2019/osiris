@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qbutton.h,v 2.31 1999/04/28 09:59:41 aavit Exp $
+** $Id: qt/src/widgets/qbutton.h   2.1.0   edited 2000-03-24 $
 **
 ** Definition of QButton widget class
 **
 ** Created : 940206
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -31,13 +31,26 @@
 #endif // QT_H
 
 
-class QButtonGroup;				// button group (qbuttongroup.h)
+class QButtonGroup;
 struct QButtonData;
+class QToolBar;
 
-
-class Q_EXPORT QButton : public QWidget			// button class
+class Q_EXPORT QButton : public QWidget
 {
     Q_OBJECT
+    Q_ENUMS( ToggleType ToggleState )
+    Q_PROPERTY( QString text READ text WRITE setText )
+    Q_PROPERTY( QPixmap pixmap READ pixmap WRITE setPixmap )
+    Q_PROPERTY( int accel READ accel WRITE setAccel )
+    Q_PROPERTY( bool toggleButton READ isToggleButton )
+    Q_PROPERTY( ToggleType toggleType READ toggleType )
+    Q_PROPERTY( bool down READ isDown WRITE setDown )
+    Q_PROPERTY( bool on READ isOn )
+    Q_PROPERTY( ToggleState toggleState READ state )
+    Q_PROPERTY( bool autoResize READ autoResize WRITE setAutoResize )
+    Q_PROPERTY( bool autoRepeat READ autoRepeat WRITE setAutoRepeat )
+    Q_PROPERTY( bool exclusiveToggle READ isExclusiveToggle )
+
 public:
     QButton( QWidget *parent=0, const char *name=0, WFlags f=0 );
    ~QButton();
@@ -51,6 +64,7 @@ public:
     virtual void	setAccel( int );
 
     bool	isToggleButton() const;
+
     enum ToggleType { SingleShot, Toggle, Tristate };
     ToggleType	toggleType() const;
 
@@ -62,8 +76,8 @@ public:
     enum ToggleState { Off, NoChange, On };
     ToggleState	state() const;
 
-    bool	autoResize() const;
-    virtual void setAutoResize( bool );
+    bool	autoResize() const; // obsolete
+    virtual void setAutoResize( bool ); // obsolete
 
     bool	autoRepeat() const;
     virtual void setAutoRepeat( bool );
@@ -96,6 +110,7 @@ protected:
     virtual void drawButtonLabel( QPainter * );
 
     void	keyPressEvent( QKeyEvent *);
+    void	keyReleaseEvent( QKeyEvent *);
     void	mousePressEvent( QMouseEvent * );
     void	mouseReleaseEvent( QMouseEvent * );
     void	mouseMoveEvent( QMouseEvent * );
@@ -122,6 +137,7 @@ private:
     QButtonData *d;
 
     friend class QButtonGroup;
+    friend class QToolBar;
     void          ensureData();
     virtual void setGroup( QButtonGroup* );
     QTimer	 *timer();
@@ -160,7 +176,7 @@ inline bool QButton::isOn() const
     return stat != Off;
 }
 
-inline bool QButton::autoResize() const
+inline bool QButton::autoResize() const // obsolete
 {
     return autoresize;
 }

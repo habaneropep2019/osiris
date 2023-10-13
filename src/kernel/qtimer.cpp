@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qtimer.cpp,v 2.15 1999/04/28 09:57:57 aavit Exp $
+** $Id: qt/src/kernel/qtimer.cpp   2.1.0   edited 2000-03-24 $
 **
 ** Implementation of QTimer class
 **
 ** Created : 931111
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -28,6 +28,7 @@
 #include "qobjectlist.h"
 #include "qobjectdict.h"
 
+// NOT REVISED
 /*!
   \class QTimer qtimer.h
   \brief The QTimer class provides timer signals and single-shot timers.
@@ -53,7 +54,7 @@
 
   As a special case, a QTimer with timeout 0 times out as soon as all
   the events in the window system's event queue have been processed.
-  
+
   This can be used to do heavy work while providing a snappy
   user interface: \code
     QTimer *t = new QTimer( myObject );
@@ -99,7 +100,7 @@ QTimer::QTimer( QObject *parent, const char *name )
 }
 
 /*!
-  Destroys the timer.
+  Destructs the timer.
 */
 
 QTimer::~QTimer()
@@ -134,6 +135,8 @@ QTimer::~QTimer()
 
 int QTimer::start( int msec, bool sshot )
 {
+    if ( id >=0 && !msec && sshot == single )
+	return id;
     if ( id != INV_TIMER )			// stop running timer
 	stop();
     single = sshot;
@@ -174,10 +177,8 @@ void QTimer::stop()
 }
 
 
-/*!
-  Handles timer events.	 Emits timeout() when a timer event is received.
+/*!\reimp
 */
-
 bool QTimer::event( QEvent *e )
 {
     if ( e->type() != QEvent::Timer )		// ignore all other events

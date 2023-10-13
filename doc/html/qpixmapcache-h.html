@@ -1,0 +1,83 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>
+Qt Toolkit - qpixmapcache.h include file
+</title><style type="text/css"><!--
+h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
+a:link { text-decoration: none; }
+body { background: white; color: black; }
+--></style>
+</head><body bgcolor="#ffffff">
+
+<a href="index.html">
+<img width="122" height="65" src="qtlogo.png" alt="Home"
+  align="left" border="0">
+</a><div align=right><img src="dochead.png" width="472" height="27"><br>
+<a href="classes.html"><b>Classes</b></a>
+- <a href="annotated.html">Annotated</a>
+- <a href="hierarchy.html">Tree</a>
+- <a href="functions.html">Functions</a>
+- <a href="index.html">Home</a>
+- <a href="topicals.html"><b>Structure</b></a>
+</div>
+<br clear=all>
+
+<h1 align=center>qpixmapcache.h</h1><br clear="all">
+This is the verbatim text of the qpixmapcache.h include file.  It is
+provided only for illustration; the copyright
+remains with Troll Tech.
+<hr>
+<pre>
+/****************************************************************************
+** &#36;Id&#58; qt/src/kernel/qpixmapcache.h   2.1.0   edited 2000-03-24 $
+**
+** Definition of QPixmapCache class
+**
+** Created : 950501
+**
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+**
+** This file is part of the Qt GUI Toolkit.
+**
+** This file may be distributed under the terms of the Q Public License
+** as defined by Troll Tech AS of Norway and appearing in the file
+** LICENSE.QPL included in the packaging of this file.
+**
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
+**
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
+** information about the Professional Edition licensing, or see
+** http://www.trolltech.com/qpl/ for QPL licensing information.
+**
+*****************************************************************************/
+
+#ifndef QPIXMAPCACHE_H
+#define QPIXMAPCACHE_H
+
+#ifndef QT_H
+#include "qpixmap.h"
+#endif // QT_H
+
+
+class Q_EXPORT <a href="qpixmapcache.html">QPixmapCache</a>                             // global pixmap cache
+{
+public:
+    static  int         cacheLimit();
+    static  void        setCacheLimit( int );
+    static  QPixmap    *find( const QString &amp;key );
+    static  bool        find( const QString &amp;key, QPixmap&amp; );
+    static  bool        insert( const QString &amp;key, QPixmap * );
+    static  void        insert( const QString &amp;key, const QPixmap&amp; );
+    static  void        clear();
+};
+
+
+#endif // QPIXMAPCACHE_H
+
+</pre>
+<p><address><hr><div align="center">
+<table width="100%" cellspacing="0" border="0"><tr>
+<td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.1.0</div>
+</table></div></address></body></html>

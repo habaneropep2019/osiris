@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: globjwin.h,v 1.2 1999/01/30 14:08:22 aavit Exp $
+** $Id: qt/extensions/opengl/examples/glpixmap/globjwin.h   2.1.0   edited 2000-02-23 $
 **
 ** Definition of GLObjectWindow widget class
 ** The GLObjectWindow contains a GLBox and three sliders connected to
@@ -25,9 +25,7 @@ public:
 protected slots:
 
     void		makePixmap();
-    void		makePixmapManually();
     void		makePixmapHidden();
-    void		makePixmapHiddenManually();
     void		makePixmapForMenu();
     void		useFixedPixmapSize();
 

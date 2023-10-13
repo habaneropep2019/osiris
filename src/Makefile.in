@@ -8,15 +8,15 @@ CC	=	$(SYSCONF_CC)
 CFLAGS	=	$(SYSCONF_CFLAGS) $(SYSCONF_CFLAGS_LIB) $(QT_CFLAGS_OPT)
 INCPATH =	
 LFLAGS	=	$(SYSCONF_LFLAGS_X11) $(SYSCONF_LFLAGS)
-LIBS	=	$(SYSCONF_LIBS_X11) $(QT_LIBS_OPT)
+LIBS	=	 $(QT_LIBS_OPT) $(SYSCONF_LIBS_X11)
 MOC	=	$(SYSCONF_MOC)
 
 ####### Target
 
 DESTDIR = ../lib/
 VER_MAJ = 2
-VER_MIN = 0
-VER_PATCH = 2
+VER_MIN = 1
+VER_PATCH = 0
 TARGET	= qt
 TARGET1 = lib$(TARGET).so.$(VER_MAJ)
 
@@ -29,6 +29,7 @@ HEADERS =	dialogs/qcolordialog.h \
 		dialogs/qprogressdialog.h \
 		dialogs/qtabdialog.h \
 		dialogs/qwizard.h \
+		dialogs/qinputdialog.h \
 		kernel/qabstractlayout.h \
 		kernel/qaccel.h \
 		kernel/qapplication.h \
@@ -47,20 +48,23 @@ HEADERS =	dialogs/qcolordialog.h \
 		kernel/qevent.h \
 		kernel/qfocusdata.h \
 		kernel/qfont.h \
-		kernel/qfontdata.h \
+		kernel/qfontdata_p.h \
 		kernel/qfontinfo.h \
 		kernel/qfontmetrics.h \
+		kernel/qguardedptr.h \
 		kernel/qgif.h \
 		kernel/qiconset.h \
 		kernel/qimage.h \
 		kernel/qkeycode.h \
+		kernel/qjpegio.h \
 		kernel/qlayout.h \
-		kernel/qlayoutengine.h \
+		kernel/qlayoutengine_p.h \
 		kernel/qtranslator.h \
 		kernel/qmetaobject.h \
 		kernel/qmime.h \
 		kernel/qmovie.h \
 		kernel/qnamespace.h \
+		kernel/qnetworkprotocol.h \
 		kernel/qobject.h \
 		kernel/qobjectdefs.h \
 		kernel/qobjectdict.h \
@@ -93,14 +97,20 @@ HEADERS =	dialogs/qcolordialog.h \
 		kernel/qstyle.h \
 		kernel/qstylesheet.h \
 		kernel/qtimer.h \
+		kernel/qurl.h \
+		kernel/qlocalfs.h \
+		kernel/qurloperator.h \
+		kernel/qurlinfo.h \
 		kernel/qwidget.h \
 		kernel/qwidgetintdict.h \
 		kernel/qwidgetlist.h \
 		kernel/qwindowdefs.h \
 		kernel/qwmatrix.h \
+		kernel/qvariant.h \
 		tools/qarray.h \
 		tools/qasciicache.h \
 		tools/qasciidict.h \
+		tools/qbig5codec.h \
 		tools/qbitarray.h \
 		tools/qbuffer.h \
 		tools/qcache.h \
@@ -113,9 +123,10 @@ HEADERS =	dialogs/qcolordialog.h \
 		tools/qeucjpcodec.h \
 		tools/qeuckrcodec.h \
 		tools/qfile.h \
-		tools/qfiledefs.h \
+		tools/qfiledefs_p.h \
 		tools/qfileinfo.h \
 		tools/qgarray.h \
+		tools/qgbkcodec.h \
 		tools/qgcache.h \
 		tools/qgdict.h \
 		tools/qgeneric.h \
@@ -159,6 +170,7 @@ HEADERS =	dialogs/qcolordialog.h \
 		widgets/qheader.h \
 		widgets/qhgroupbox.h \
 		widgets/qhbox.h \
+		widgets/qiconview.h \
 		widgets/qlabel.h \
 		widgets/qlcdnumber.h \
 		widgets/qlineedit.h \
@@ -193,18 +205,23 @@ HEADERS =	dialogs/qcolordialog.h \
 		widgets/qvbox.h \
 		widgets/qvbuttongroup.h \
 		widgets/qvgroupbox.h \
-		widgets/qwellarray.h \
+		widgets/qwellarray_p.h \
 		widgets/qwhatsthis.h \
 		widgets/qwidgetstack.h \
 		widgets/qwindowsstyle.h \
+		widgets/qworkspace.h \
 		dialogs/qprintdialog.h \
-		kernel/qpsprinter.h \
+		kernel/qpsprinter_p.h \
 		kernel/qfontdatabase.h
-SOURCES =	kernel/qapplication_x11.cpp \
+SOURCES =	tools/qdir_unix.cpp \
+		tools/qfile_unix.cpp \
+		tools/qfileinfo_unix.cpp \
+		kernel/qapplication_x11.cpp \
 		kernel/qclipboard_x11.cpp \
 		kernel/qcolor_x11.cpp \
 		kernel/qcursor_x11.cpp \
 		kernel/qdnd_x11.cpp \
+		kernel/qmotifdnd_x11.cpp \
 		kernel/qfont_x11.cpp \
 		kernel/qpixmap_x11.cpp \
 		kernel/qprinter_x11.cpp \
@@ -216,6 +233,7 @@ SOURCES =	kernel/qapplication_x11.cpp \
 		kernel/qpsprinter.cpp \
 		kernel/qnpsupport.cpp \
 		kernel/qwidgetcreate_x11.cpp \
+		tools/qbig5codec.cpp \
 		tools/qbitarray.cpp \
 		tools/qbuffer.cpp \
 		tools/qcollection.cpp \
@@ -228,6 +246,7 @@ SOURCES =	kernel/qapplication_x11.cpp \
 		tools/qfile.cpp \
 		tools/qfileinfo.cpp \
 		tools/qgarray.cpp \
+		tools/qgbkcodec.cpp \
 		tools/qgcache.cpp \
 		tools/qgdict.cpp \
 		tools/qglist.cpp \
@@ -263,14 +282,17 @@ SOURCES =	kernel/qapplication_x11.cpp \
 		kernel/qfocusdata.cpp \
 		kernel/qfont.cpp \
 		kernel/qfontdatabase.cpp \
+		kernel/qguardedptr.cpp \
 		kernel/qiconset.cpp \
 		kernel/qimage.cpp \
+		kernel/qjpegio.cpp \
 		kernel/qlayout.cpp \
 		kernel/qlayoutengine.cpp \
 		kernel/qtranslator.cpp \
 		kernel/qmetaobject.cpp \
 		kernel/qmime.cpp \
 		kernel/qmovie.cpp \
+		kernel/qnetworkprotocol.cpp \
 		kernel/qobject.cpp \
 		kernel/qpainter.cpp \
 		kernel/qpalette.cpp \
@@ -295,8 +317,13 @@ SOURCES =	kernel/qapplication_x11.cpp \
 		kernel/qsocketnotifier.cpp \
 		kernel/qstylesheet.cpp \
 		kernel/qtimer.cpp \
+		kernel/qurl.cpp \
+		kernel/qlocalfs.cpp \
+		kernel/qurloperator.cpp \
+		kernel/qurlinfo.cpp \
 		kernel/qwidget.cpp \
 		kernel/qwmatrix.cpp \
+		kernel/qvariant.cpp \
 		widgets/qbuttongroup.cpp \
 		widgets/qbutton.cpp \
 		widgets/qcdestyle.cpp \
@@ -310,6 +337,7 @@ SOURCES =	kernel/qapplication_x11.cpp \
 		widgets/qheader.cpp \
 		widgets/qhgroupbox.cpp \
 		widgets/qhbox.cpp \
+		widgets/qiconview.cpp \
 		widgets/qlabel.cpp \
 		widgets/qlcdnumber.cpp \
 		widgets/qlineedit.cpp \
@@ -348,18 +376,24 @@ SOURCES =	kernel/qapplication_x11.cpp \
 		widgets/qwhatsthis.cpp \
 		widgets/qwidgetstack.cpp \
 		widgets/qwindowsstyle.cpp \
+		widgets/qworkspace.cpp \
 		dialogs/qcolordialog.cpp \
 		dialogs/qfiledialog.cpp \
 		dialogs/qfontdialog.cpp \
 		dialogs/qmessagebox.cpp \
 		dialogs/qprogressdialog.cpp \
 		dialogs/qtabdialog.cpp \
-		dialogs/qwizard.cpp
-OBJECTS =	kernel/qapplication_x11.o \
+		dialogs/qwizard.cpp \
+		dialogs/qinputdialog.cpp
+OBJECTS =	tools/qdir_unix.o \
+		tools/qfile_unix.o \
+		tools/qfileinfo_unix.o \
+		kernel/qapplication_x11.o \
 		kernel/qclipboard_x11.o \
 		kernel/qcolor_x11.o \
 		kernel/qcursor_x11.o \
 		kernel/qdnd_x11.o \
+		kernel/qmotifdnd_x11.o \
 		kernel/qfont_x11.o \
 		kernel/qpixmap_x11.o \
 		kernel/qprinter_x11.o \
@@ -371,6 +405,7 @@ OBJECTS =	kernel/qapplication_x11.o \
 		kernel/qpsprinter.o \
 		kernel/qnpsupport.o \
 		kernel/qwidgetcreate_x11.o \
+		tools/qbig5codec.o \
 		tools/qbitarray.o \
 		tools/qbuffer.o \
 		tools/qcollection.o \
@@ -383,6 +418,7 @@ OBJECTS =	kernel/qapplication_x11.o \
 		tools/qfile.o \
 		tools/qfileinfo.o \
 		tools/qgarray.o \
+		tools/qgbkcodec.o \
 		tools/qgcache.o \
 		tools/qgdict.o \
 		tools/qglist.o \
@@ -418,14 +454,17 @@ OBJECTS =	kernel/qapplication_x11.o \
 		kernel/qfocusdata.o \
 		kernel/qfont.o \
 		kernel/qfontdatabase.o \
+		kernel/qguardedptr.o \
 		kernel/qiconset.o \
 		kernel/qimage.o \
+		kernel/qjpegio.o \
 		kernel/qlayout.o \
 		kernel/qlayoutengine.o \
 		kernel/qtranslator.o \
 		kernel/qmetaobject.o \
 		kernel/qmime.o \
 		kernel/qmovie.o \
+		kernel/qnetworkprotocol.o \
 		kernel/qobject.o \
 		kernel/qpainter.o \
 		kernel/qpalette.o \
@@ -450,8 +489,13 @@ OBJECTS =	kernel/qapplication_x11.o \
 		kernel/qsocketnotifier.o \
 		kernel/qstylesheet.o \
 		kernel/qtimer.o \
+		kernel/qurl.o \
+		kernel/qlocalfs.o \
+		kernel/qurloperator.o \
+		kernel/qurlinfo.o \
 		kernel/qwidget.o \
 		kernel/qwmatrix.o \
+		kernel/qvariant.o \
 		widgets/qbuttongroup.o \
 		widgets/qbutton.o \
 		widgets/qcdestyle.o \
@@ -465,6 +509,7 @@ OBJECTS =	kernel/qapplication_x11.o \
 		widgets/qheader.o \
 		widgets/qhgroupbox.o \
 		widgets/qhbox.o \
+		widgets/qiconview.o \
 		widgets/qlabel.o \
 		widgets/qlcdnumber.o \
 		widgets/qlineedit.o \
@@ -503,13 +548,15 @@ OBJECTS =	kernel/qapplication_x11.o \
 		widgets/qwhatsthis.o \
 		widgets/qwidgetstack.o \
 		widgets/qwindowsstyle.o \
+		widgets/qworkspace.o \
 		dialogs/qcolordialog.o \
 		dialogs/qfiledialog.o \
 		dialogs/qfontdialog.o \
 		dialogs/qmessagebox.o \
 		dialogs/qprogressdialog.o \
 		dialogs/qtabdialog.o \
-		dialogs/qwizard.o $(QT_PNG_OBJ) $(QT_ZLIB_OBJ)
+		dialogs/qwizard.o \
+		dialogs/qinputdialog.o $(QT_PNG_OBJ) $(QT_ZLIB_OBJ)
 SRCMOC	=	dialogs/moc_qcolordialog.cpp \
 		dialogs/moc_qfiledialog.cpp \
 		dialogs/moc_qfontdialog.cpp \
@@ -517,6 +564,7 @@ SRCMOC	=	dialogs/moc_qcolordialog.cpp \
 		dialogs/moc_qprogressdialog.cpp \
 		dialogs/moc_qtabdialog.cpp \
 		dialogs/moc_qwizard.cpp \
+		dialogs/moc_qinputdialog.cpp \
 		kernel/moc_qabstractlayout.cpp \
 		kernel/moc_qaccel.cpp \
 		kernel/moc_qapplication.cpp \
@@ -524,8 +572,10 @@ SRCMOC	=	dialogs/moc_qcolordialog.cpp \
 		kernel/moc_qclipboard.cpp \
 		kernel/moc_qdialog.cpp \
 		kernel/moc_qdragobject.cpp \
+		kernel/moc_qguardedptr.cpp \
 		kernel/moc_qlayout.cpp \
 		kernel/moc_qtranslator.cpp \
+		kernel/moc_qnetworkprotocol.cpp \
 		kernel/moc_qsemimodal.cpp \
 		kernel/moc_qsessionmanager.cpp \
 		kernel/moc_qsignalmapper.cpp \
@@ -534,6 +584,8 @@ SRCMOC	=	dialogs/moc_qcolordialog.cpp \
 		kernel/moc_qstyle.cpp \
 		kernel/moc_qstylesheet.cpp \
 		kernel/moc_qtimer.cpp \
+		kernel/moc_qlocalfs.cpp \
+		kernel/moc_qurloperator.cpp \
 		kernel/moc_qwidget.cpp \
 		widgets/moc_qbuttongroup.cpp \
 		widgets/moc_qbutton.cpp \
@@ -548,6 +600,7 @@ SRCMOC	=	dialogs/moc_qcolordialog.cpp \
 		widgets/moc_qheader.cpp \
 		widgets/moc_qhgroupbox.cpp \
 		widgets/moc_qhbox.cpp \
+		widgets/moc_qiconview.cpp \
 		widgets/moc_qlabel.cpp \
 		widgets/moc_qlcdnumber.cpp \
 		widgets/moc_qlineedit.cpp \
@@ -580,14 +633,20 @@ SRCMOC	=	dialogs/moc_qcolordialog.cpp \
 		widgets/moc_qvbox.cpp \
 		widgets/moc_qvbuttongroup.cpp \
 		widgets/moc_qvgroupbox.cpp \
-		widgets/moc_qwellarray.cpp \
+		widgets/moc_qwellarray_p.cpp \
 		widgets/moc_qwidgetstack.cpp \
 		widgets/moc_qwindowsstyle.cpp \
+		widgets/moc_qworkspace.cpp \
 		dialogs/moc_qprintdialog.cpp \
 		kernel/qapplication_x11.moc \
+		kernel/qmovie.moc \
+		widgets/qiconview.moc \
+		widgets/qtoolbar.moc \
 		widgets/qtooltip.moc \
+		widgets/qwhatsthis.moc \
+		widgets/qworkspace.moc \
 		dialogs/qcolordialog.moc \
-		dialogs/qmessagebox.moc
+		dialogs/qfiledialog.moc
 OBJMOC	=	dialogs/moc_qcolordialog.o \
 		dialogs/moc_qfiledialog.o \
 		dialogs/moc_qfontdialog.o \
@@ -595,6 +654,7 @@ OBJMOC	=	dialogs/moc_qcolordialog.o \
 		dialogs/moc_qprogressdialog.o \
 		dialogs/moc_qtabdialog.o \
 		dialogs/moc_qwizard.o \
+		dialogs/moc_qinputdialog.o \
 		kernel/moc_qabstractlayout.o \
 		kernel/moc_qaccel.o \
 		kernel/moc_qapplication.o \
@@ -602,8 +662,10 @@ OBJMOC	=	dialogs/moc_qcolordialog.o \
 		kernel/moc_qclipboard.o \
 		kernel/moc_qdialog.o \
 		kernel/moc_qdragobject.o \
+		kernel/moc_qguardedptr.o \
 		kernel/moc_qlayout.o \
 		kernel/moc_qtranslator.o \
+		kernel/moc_qnetworkprotocol.o \
 		kernel/moc_qsemimodal.o \
 		kernel/moc_qsessionmanager.o \
 		kernel/moc_qsignalmapper.o \
@@ -612,6 +674,8 @@ OBJMOC	=	dialogs/moc_qcolordialog.o \
 		kernel/moc_qstyle.o \
 		kernel/moc_qstylesheet.o \
 		kernel/moc_qtimer.o \
+		kernel/moc_qlocalfs.o \
+		kernel/moc_qurloperator.o \
 		kernel/moc_qwidget.o \
 		widgets/moc_qbuttongroup.o \
 		widgets/moc_qbutton.o \
@@ -626,6 +690,7 @@ OBJMOC	=	dialogs/moc_qcolordialog.o \
 		widgets/moc_qheader.o \
 		widgets/moc_qhgroupbox.o \
 		widgets/moc_qhbox.o \
+		widgets/moc_qiconview.o \
 		widgets/moc_qlabel.o \
 		widgets/moc_qlcdnumber.o \
 		widgets/moc_qlineedit.o \
@@ -658,9 +723,10 @@ OBJMOC	=	dialogs/moc_qcolordialog.o \
 		widgets/moc_qvbox.o \
 		widgets/moc_qvbuttongroup.o \
 		widgets/moc_qvgroupbox.o \
-		widgets/moc_qwellarray.o \
+		widgets/moc_qwellarray_p.o \
 		widgets/moc_qwidgetstack.o \
 		widgets/moc_qwindowsstyle.o \
+		widgets/moc_qworkspace.o \
 		dialogs/moc_qprintdialog.o
 PNG_OBJECTS  = 3rdparty/libpng/png.o \
 		3rdparty/libpng/pngerror.o \
@@ -729,6 +795,58 @@ clean:
 
 ####### Compile
 
+tools/qdir_unix.o: tools/qdir_unix.cpp \
+		tools/qglobal.h \
+		tools/qdir.h \
+		tools/qstrlist.h \
+		tools/qstring.h \
+		tools/qcstring.h \
+		tools/qarray.h \
+		tools/qgarray.h \
+		tools/qshared.h \
+		tools/qlist.h \
+		tools/qglist.h \
+		tools/qcollection.h \
+		tools/qdatastream.h \
+		tools/qiodevice.h \
+		tools/qfileinfo.h \
+		tools/qfile.h \
+		tools/qdatetime.h \
+		tools/qfiledefs_p.h \
+		tools/qregexp.h \
+		tools/qstringlist.h \
+		tools/qvaluelist.h
+
+tools/qfile_unix.o: tools/qfile_unix.cpp \
+		tools/qglobal.h \
+		tools/qfile.h \
+		tools/qiodevice.h \
+		tools/qcstring.h \
+		tools/qarray.h \
+		tools/qgarray.h \
+		tools/qshared.h \
+		tools/qstring.h \
+		tools/qfiledefs_p.h
+
+tools/qfileinfo_unix.o: tools/qfileinfo_unix.cpp \
+		tools/qglobal.h \
+		tools/qfileinfo.h \
+		tools/qfile.h \
+		tools/qiodevice.h \
+		tools/qcstring.h \
+		tools/qarray.h \
+		tools/qgarray.h \
+		tools/qshared.h \
+		tools/qstring.h \
+		tools/qdatetime.h \
+		tools/qfiledefs_p.h \
+		tools/qdir.h \
+		tools/qstrlist.h \
+		tools/qlist.h \
+		tools/qglist.h \
+		tools/qcollection.h \
+		tools/qdatastream.h
+
 kernel/qapplication_x11.o: kernel/qapplication_x11.cpp \
 		kernel/qapplication_x11.moc \
 		tools/qglobal.h \
@@ -756,6 +874,7 @@ kernel/qapplication_x11.o: kernel/qapplication_x11.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -774,6 +893,7 @@ kernel/qapplication_x11.o: kernel/qapplication_x11.cpp \
 		kernel/qobjectdict.h \
 		kernel/qmetaobject.h \
 		kernel/qconnection.h \
+		tools/qstrlist.h \
 		kernel/qwidgetlist.h \
 		kernel/qwidgetintdict.h \
 		tools/qbitarray.h \
@@ -789,6 +909,9 @@ kernel/qapplication_x11.o: kernel/qapplication_x11.cpp \
 		kernel/qsocketnotifier.h \
 		kernel/qsessionmanager.h \
 		tools/qdict.h \
+		kernel/qguardedptr.h \
+		kernel/qclipboard.h \
+		widgets/qwhatsthis.h \
 		tools/qfile.h \
 		kernel/qt_x11.h
 
@@ -817,6 +940,7 @@ kernel/qclipboard_x11.o: kernel/qclipboard_x11.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qapplication.h \
 		kernel/qwidget.h \
 		kernel/qpaintdevice.h \
@@ -870,6 +994,7 @@ kernel/qcolor_x11.o: kernel/qcolor_x11.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpalette.h \
 		kernel/qbrush.h \
 		kernel/qcursor.h \
@@ -909,14 +1034,15 @@ kernel/qcursor_x11.o: kernel/qcursor_x11.cpp \
 		tools/qcollection.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qstringlist.h \
+		tools/qvaluelist.h \
+		tools/qregexp.h \
 		kernel/qapplication.h \
 		kernel/qwidget.h \
 		kernel/qobject.h \
 		kernel/qevent.h \
 		kernel/qregion.h \
 		kernel/qmime.h \
-		tools/qstringlist.h \
-		tools/qvaluelist.h \
 		kernel/qpalette.h \
 		kernel/qbrush.h \
 		kernel/qfont.h \
@@ -956,6 +1082,7 @@ kernel/qdnd_x11.o: kernel/qdnd_x11.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -979,6 +1106,48 @@ kernel/qdnd_x11.o: kernel/qdnd_x11.cpp \
 		kernel/qobjectlist.h \
 		kernel/qbitmap.h \
 		kernel/qt_x11.h
+
+kernel/qmotifdnd_x11.o: kernel/qmotifdnd_x11.cpp \
+		kernel/qapplication.h \
+		kernel/qwidget.h \
+		kernel/qwindowdefs.h \
+		kernel/qobjectdefs.h \
+		tools/qglobal.h \
+		tools/qstring.h \
+		tools/qcstring.h \
+		tools/qarray.h \
+		tools/qgarray.h \
+		tools/qshared.h \
+		kernel/qnamespace.h \
+		kernel/qobject.h \
+		kernel/qevent.h \
+		kernel/qregion.h \
+		kernel/qrect.h \
+		kernel/qsize.h \
+		kernel/qpoint.h \
+		kernel/qmime.h \
+		tools/qlist.h \
+		tools/qglist.h \
+		tools/qcollection.h \
+		tools/qstringlist.h \
+		tools/qvaluelist.h \
+		tools/qdatastream.h \
+		tools/qiodevice.h \
+		tools/qregexp.h \
+		kernel/qpaintdevice.h \
+		kernel/qpalette.h \
+		kernel/qcolor.h \
+		kernel/qbrush.h \
+		kernel/qcursor.h \
+		kernel/qfont.h \
+		kernel/qfontmetrics.h \
+		kernel/qfontinfo.h \
+		kernel/qstyle.h \
+		kernel/qsizepolicy.h \
+		tools/qasciidict.h \
+		tools/qgdict.h \
+		kernel/qtranslator.h \
+		tools/qintdict.h
 
 kernel/qfont_x11.o: kernel/qfont_x11.cpp \
 		kernel/qwidget.h \
@@ -1005,6 +1174,7 @@ kernel/qfont_x11.o: kernel/qfont_x11.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -1019,7 +1189,7 @@ kernel/qfont_x11.o: kernel/qfont_x11.cpp \
 		kernel/qpen.h \
 		kernel/qpointarray.h \
 		kernel/qwmatrix.h \
-		kernel/qfontdata.h \
+		kernel/qfontdata_p.h \
 		kernel/qfontdatabase.h \
 		tools/qstrlist.h \
 		tools/qcache.h \
@@ -1061,6 +1231,9 @@ kernel/qpixmap_x11.o: kernel/qpixmap_x11.cpp \
 		tools/qcollection.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qstringlist.h \
+		tools/qvaluelist.h \
+		tools/qregexp.h \
 		kernel/qwmatrix.h \
 		kernel/qpointarray.h \
 		kernel/qapplication.h \
@@ -1069,8 +1242,6 @@ kernel/qpixmap_x11.o: kernel/qpixmap_x11.cpp \
 		kernel/qevent.h \
 		kernel/qregion.h \
 		kernel/qmime.h \
-		tools/qstringlist.h \
-		tools/qvaluelist.h \
 		kernel/qpalette.h \
 		kernel/qbrush.h \
 		kernel/qcursor.h \
@@ -1111,7 +1282,7 @@ kernel/qprinter_x11.o: kernel/qprinter_x11.cpp \
 		tools/qglist.h \
 		tools/qcollection.h \
 		tools/qdatastream.h \
-		kernel/qpsprinter.h \
+		kernel/qpsprinter_p.h \
 		tools/qtextstream.h \
 		dialogs/qprintdialog.h \
 		kernel/qdialog.h \
@@ -1122,6 +1293,7 @@ kernel/qprinter_x11.o: kernel/qprinter_x11.cpp \
 		kernel/qmime.h \
 		tools/qstringlist.h \
 		tools/qvaluelist.h \
+		tools/qregexp.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
 		kernel/qbrush.h \
@@ -1164,6 +1336,7 @@ kernel/qpaintdevice_x11.o: kernel/qpaintdevice_x11.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
 		kernel/qbrush.h \
@@ -1217,6 +1390,7 @@ kernel/qpainter_x11.o: kernel/qpainter_x11.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpalette.h \
 		kernel/qcursor.h \
 		kernel/qstyle.h \
@@ -1226,7 +1400,7 @@ kernel/qpainter_x11.o: kernel/qpainter_x11.cpp \
 		kernel/qpixmapcache.h \
 		tools/qintdict.h \
 		tools/qgdict.h \
-		kernel/qfontdata.h \
+		kernel/qfontdata_p.h \
 		tools/qtextcodec.h \
 		kernel/qt_x11.h \
 		kernel/qpaintdevicemetrics.h \
@@ -1259,6 +1433,9 @@ kernel/qregion_x11.o: kernel/qregion_x11.cpp \
 		tools/qglist.h \
 		tools/qcollection.h \
 		tools/qdatastream.h \
+		tools/qstringlist.h \
+		tools/qvaluelist.h \
+		tools/qregexp.h \
 		kernel/qbitmap.h \
 		kernel/qt_x11.h
 
@@ -1288,6 +1465,7 @@ kernel/qwidget_x11.o: kernel/qwidget_x11.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -1315,10 +1493,10 @@ kernel/qwidget_x11.o: kernel/qwidget_x11.cpp \
 		kernel/qobjectdict.h \
 		kernel/qmetaobject.h \
 		kernel/qconnection.h \
+		tools/qstrlist.h \
 		kernel/qaccel.h \
 		kernel/qdragobject.h \
 		kernel/qimage.h \
-		tools/qstrlist.h \
 		kernel/qfocusdata.h \
 		kernel/qabstractlayout.h \
 		tools/qtextcodec.h \
@@ -1351,6 +1529,7 @@ dialogs/qprintdialog.o: dialogs/qprintdialog.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -1381,11 +1560,19 @@ dialogs/qprintdialog.o: dialogs/qprintdialog.cpp \
 		kernel/qtimer.h \
 		widgets/qlineedit.h \
 		widgets/qlistview.h \
+		kernel/qurloperator.h \
+		kernel/qurl.h \
+		kernel/qnetworkprotocol.h \
+		kernel/qurlinfo.h \
+		tools/qdict.h \
+		tools/qgdict.h \
+		tools/qqueue.h \
 		tools/qtextstream.h \
 		widgets/qcombobox.h \
 		widgets/qlabel.h \
 		widgets/qpushbutton.h \
 		widgets/qbutton.h \
+		kernel/qiconset.h \
 		kernel/qprinter.h \
 		kernel/qlayout.h \
 		kernel/qabstractlayout.h \
@@ -1395,13 +1582,12 @@ dialogs/qprintdialog.o: dialogs/qprintdialog.cpp \
 		widgets/qspinbox.h \
 		kernel/qapplication.h \
 		tools/qasciidict.h \
-		tools/qgdict.h \
 		kernel/qtranslator.h \
 		tools/qintdict.h \
-		tools/qregexp.h
+		widgets/qheader.h
 
 kernel/qpsprinter.o: kernel/qpsprinter.cpp \
-		kernel/qpsprinter.h \
+		kernel/qpsprinter_p.h \
 		kernel/qprinter.h \
 		kernel/qpaintdevice.h \
 		kernel/qwindowdefs.h \
@@ -1436,10 +1622,12 @@ kernel/qpsprinter.o: kernel/qpsprinter.cpp \
 		tools/qglist.h \
 		tools/qcollection.h \
 		tools/qdatastream.h \
+		tools/qstringlist.h \
+		tools/qvaluelist.h \
+		tools/qregexp.h \
 		tools/qdatetime.h \
 		tools/qdict.h \
 		tools/qgdict.h \
-		tools/qregexp.h \
 		tools/qfile.h \
 		tools/qbuffer.h \
 		tools/qintdict.h
@@ -1470,6 +1658,7 @@ kernel/qnpsupport.o: kernel/qnpsupport.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -1510,6 +1699,7 @@ kernel/qwidgetcreate_x11.o: kernel/qwidgetcreate_x11.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -1521,6 +1711,16 @@ kernel/qwidgetcreate_x11.o: kernel/qwidgetcreate_x11.cpp \
 		kernel/qstyle.h \
 		kernel/qsizepolicy.h \
 		kernel/qt_x11.h
+
+tools/qbig5codec.o: tools/qbig5codec.cpp \
+		tools/qbig5codec.h \
+		tools/qtextcodec.h \
+		tools/qstring.h \
+		tools/qcstring.h \
+		tools/qarray.h \
+		tools/qgarray.h \
+		tools/qshared.h \
+		tools/qglobal.h
 
 tools/qbitarray.o: tools/qbitarray.cpp \
 		tools/qbitarray.h \
@@ -1597,7 +1797,7 @@ tools/qdir.o: tools/qdir.cpp \
 		tools/qfileinfo.h \
 		tools/qfile.h \
 		tools/qdatetime.h \
-		tools/qfiledefs.h \
+		tools/qfiledefs_p.h \
 		tools/qregexp.h \
 		tools/qstringlist.h \
 		tools/qvaluelist.h
@@ -1632,7 +1832,7 @@ tools/qfile.o: tools/qfile.cpp \
 		tools/qgarray.h \
 		tools/qshared.h \
 		tools/qstring.h \
-		tools/qfiledefs.h
+		tools/qfiledefs_p.h
 
 tools/qfileinfo.o: tools/qfileinfo.cpp \
 		tools/qglobal.h \
@@ -1645,7 +1845,7 @@ tools/qfileinfo.o: tools/qfileinfo.cpp \
 		tools/qshared.h \
 		tools/qstring.h \
 		tools/qdatetime.h \
-		tools/qfiledefs.h \
+		tools/qfiledefs_p.h \
 		tools/qdir.h \
 		tools/qstrlist.h \
 		tools/qlist.h \
@@ -1661,24 +1861,32 @@ tools/qgarray.o: tools/qgarray.cpp \
 		tools/qcstring.h \
 		tools/qarray.h
 
+tools/qgbkcodec.o: tools/qgbkcodec.cpp \
+		tools/qgbkcodec.h \
+		tools/qtextcodec.h \
+		tools/qstring.h \
+		tools/qcstring.h \
+		tools/qarray.h \
+		tools/qgarray.h \
+		tools/qshared.h \
+		tools/qglobal.h
+
 tools/qgcache.o: tools/qgcache.cpp \
 		tools/qgcache.h \
 		tools/qcollection.h \
 		tools/qglobal.h \
 		tools/qglist.h \
 		tools/qgdict.h \
-		tools/qlist.h \
 		tools/qstring.h \
 		tools/qcstring.h \
 		tools/qarray.h \
 		tools/qgarray.h \
 		tools/qshared.h \
+		tools/qlist.h \
 		tools/qdict.h
 
 tools/qgdict.o: tools/qgdict.cpp \
 		tools/qgdict.h \
-		tools/qlist.h \
-		tools/qglist.h \
 		tools/qcollection.h \
 		tools/qglobal.h \
 		tools/qstring.h \
@@ -1686,6 +1894,8 @@ tools/qgdict.o: tools/qgdict.cpp \
 		tools/qarray.h \
 		tools/qgarray.h \
 		tools/qshared.h \
+		tools/qlist.h \
+		tools/qglist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h
 
@@ -1706,8 +1916,6 @@ tools/qglobal.o: tools/qglobal.cpp \
 		tools/qglobal.h \
 		tools/qasciidict.h \
 		tools/qgdict.h \
-		tools/qlist.h \
-		tools/qglist.h \
 		tools/qcollection.h \
 		tools/qstring.h \
 		tools/qcstring.h \
@@ -1822,6 +2030,11 @@ tools/qstringlist.o: tools/qstringlist.cpp \
 		tools/qarray.h \
 		tools/qgarray.h \
 		tools/qstring.h \
+		tools/qregexp.h \
+		tools/qstrlist.h \
+		tools/qlist.h \
+		tools/qglist.h \
+		tools/qcollection.h \
 		tools/qtl.h \
 		tools/qtextstream.h
 
@@ -1837,11 +2050,13 @@ tools/qtextcodec.o: tools/qtextcodec.cpp \
 		tools/qgarray.h \
 		tools/qshared.h \
 		tools/qutfcodec.h \
+		tools/qgbkcodec.h \
 		tools/qeucjpcodec.h \
 		tools/qjpunicode.h \
 		tools/qjiscodec.h \
 		tools/qsjiscodec.h \
 		tools/qeuckrcodec.h \
+		tools/qbig5codec.h \
 		tools/qrtlcodec.h \
 		tools/qfile.h \
 		tools/qiodevice.h \
@@ -1896,6 +2111,7 @@ kernel/qabstractlayout.o: kernel/qabstractlayout.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qsizepolicy.h \
 		kernel/qwidget.h \
 		kernel/qpaintdevice.h \
@@ -1945,6 +2161,7 @@ kernel/qaccel.o: kernel/qaccel.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qapplication.h \
 		kernel/qwidget.h \
 		kernel/qpaintdevice.h \
@@ -1962,7 +2179,8 @@ kernel/qaccel.o: kernel/qaccel.cpp \
 		kernel/qtranslator.h \
 		tools/qintdict.h \
 		kernel/qsignal.h \
-		widgets/qwhatsthis.h
+		widgets/qwhatsthis.h \
+		kernel/qguardedptr.h
 
 kernel/qapplication.o: kernel/qapplication.cpp \
 		kernel/qapplication.h \
@@ -1990,6 +2208,7 @@ kernel/qapplication.o: kernel/qapplication.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -2008,6 +2227,7 @@ kernel/qapplication.o: kernel/qapplication.cpp \
 		kernel/qobjectdict.h \
 		kernel/qmetaobject.h \
 		kernel/qconnection.h \
+		tools/qstrlist.h \
 		kernel/qwidgetlist.h \
 		kernel/qwidgetintdict.h \
 		widgets/qwindowsstyle.h \
@@ -2019,7 +2239,6 @@ kernel/qapplication.o: kernel/qapplication.cpp \
 		kernel/qpngio.h \
 		kernel/qimage.h \
 		kernel/qpixmap.h \
-		tools/qstrlist.h \
 		kernel/qsessionmanager.h
 
 kernel/qasyncimageio.o: kernel/qasyncimageio.cpp \
@@ -2046,6 +2265,9 @@ kernel/qasyncimageio.o: kernel/qasyncimageio.cpp \
 		tools/qcollection.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qstringlist.h \
+		tools/qvaluelist.h \
+		tools/qregexp.h \
 		kernel/qpainter.h \
 		kernel/qfontmetrics.h \
 		kernel/qfont.h \
@@ -2082,6 +2304,7 @@ kernel/qasyncio.o: kernel/qasyncio.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qsignal.h \
 		kernel/qtimer.h
 
@@ -2108,7 +2331,10 @@ kernel/qbitmap.o: kernel/qbitmap.cpp \
 		tools/qglist.h \
 		tools/qcollection.h \
 		tools/qdatastream.h \
-		tools/qiodevice.h
+		tools/qiodevice.h \
+		tools/qstringlist.h \
+		tools/qvaluelist.h \
+		tools/qregexp.h
 
 kernel/qclipboard.o: kernel/qclipboard.cpp \
 		kernel/qclipboard.h \
@@ -2135,6 +2361,7 @@ kernel/qclipboard.o: kernel/qclipboard.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qapplication.h \
 		kernel/qwidget.h \
 		kernel/qpaintdevice.h \
@@ -2167,10 +2394,6 @@ kernel/qcolor.o: kernel/qcolor.cpp \
 		tools/qgarray.h \
 		tools/qshared.h \
 		kernel/qnamespace.h \
-		kernel/qpaintdevice.h \
-		kernel/qrect.h \
-		kernel/qsize.h \
-		kernel/qpoint.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h
 
@@ -2198,7 +2421,8 @@ kernel/qconnection.o: kernel/qconnection.cpp \
 		tools/qstringlist.h \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
-		tools/qiodevice.h
+		tools/qiodevice.h \
+		tools/qregexp.h
 
 kernel/qcursor.o: kernel/qcursor.cpp \
 		kernel/qcursor.h \
@@ -2224,7 +2448,10 @@ kernel/qcursor.o: kernel/qcursor.cpp \
 		tools/qglist.h \
 		tools/qcollection.h \
 		tools/qdatastream.h \
-		tools/qiodevice.h
+		tools/qiodevice.h \
+		tools/qstringlist.h \
+		tools/qvaluelist.h \
+		tools/qregexp.h
 
 kernel/qdialog.o: kernel/qdialog.cpp \
 		kernel/qdialog.h \
@@ -2252,6 +2479,7 @@ kernel/qdialog.o: kernel/qdialog.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -2264,6 +2492,8 @@ kernel/qdialog.o: kernel/qdialog.cpp \
 		kernel/qsizepolicy.h \
 		widgets/qpushbutton.h \
 		widgets/qbutton.h \
+		kernel/qiconset.h \
+		kernel/qpixmap.h \
 		kernel/qapplication.h \
 		tools/qasciidict.h \
 		tools/qgdict.h \
@@ -2273,6 +2503,7 @@ kernel/qdialog.o: kernel/qdialog.cpp \
 		kernel/qobjectdict.h \
 		kernel/qmetaobject.h \
 		kernel/qconnection.h \
+		tools/qstrlist.h \
 		kernel/qwidgetlist.h
 
 kernel/qdragobject.o: kernel/qdragobject.cpp \
@@ -2301,6 +2532,7 @@ kernel/qdragobject.o: kernel/qdragobject.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qimage.h \
 		kernel/qpixmap.h \
 		kernel/qpaintdevice.h \
@@ -2383,6 +2615,7 @@ kernel/qdropsite.o: kernel/qdropsite.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -2421,6 +2654,7 @@ kernel/qevent.o: kernel/qevent.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -2462,6 +2696,7 @@ kernel/qfocusdata.o: kernel/qfocusdata.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -2484,7 +2719,7 @@ kernel/qfont.o: kernel/qfont.cpp \
 		tools/qgarray.h \
 		tools/qshared.h \
 		kernel/qnamespace.h \
-		kernel/qfontdata.h \
+		kernel/qfontdata_p.h \
 		kernel/qfontmetrics.h \
 		kernel/qrect.h \
 		kernel/qsize.h \
@@ -2502,6 +2737,7 @@ kernel/qfont.o: kernel/qfont.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -2536,6 +2772,7 @@ kernel/qfontdatabase.o: kernel/qfontdatabase.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qfont.h \
 		tools/qlist.h \
 		tools/qglist.h \
@@ -2570,8 +2807,34 @@ kernel/qfontdatabase.o: kernel/qfontdatabase.cpp \
 		kernel/qpen.h \
 		kernel/qpointarray.h \
 		kernel/qwmatrix.h \
-		kernel/qt_x11.h \
-		kernel/qt_windows.h
+		kernel/qt_x11.h
+
+kernel/qguardedptr.o: kernel/qguardedptr.cpp \
+		kernel/qguardedptr.h \
+		kernel/qobject.h \
+		kernel/qobjectdefs.h \
+		tools/qglobal.h \
+		kernel/qwindowdefs.h \
+		tools/qstring.h \
+		tools/qcstring.h \
+		tools/qarray.h \
+		tools/qgarray.h \
+		tools/qshared.h \
+		kernel/qnamespace.h \
+		kernel/qevent.h \
+		kernel/qregion.h \
+		kernel/qrect.h \
+		kernel/qsize.h \
+		kernel/qpoint.h \
+		kernel/qmime.h \
+		tools/qlist.h \
+		tools/qglist.h \
+		tools/qcollection.h \
+		tools/qstringlist.h \
+		tools/qvaluelist.h \
+		tools/qdatastream.h \
+		tools/qiodevice.h \
+		tools/qregexp.h
 
 kernel/qiconset.o: kernel/qiconset.cpp \
 		kernel/qiconset.h \
@@ -2597,6 +2860,9 @@ kernel/qiconset.o: kernel/qiconset.cpp \
 		tools/qcollection.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qstringlist.h \
+		tools/qvaluelist.h \
+		tools/qregexp.h \
 		kernel/qbitmap.h \
 		kernel/qapplication.h \
 		kernel/qwidget.h \
@@ -2604,8 +2870,6 @@ kernel/qiconset.o: kernel/qiconset.cpp \
 		kernel/qevent.h \
 		kernel/qregion.h \
 		kernel/qmime.h \
-		tools/qstringlist.h \
-		tools/qvaluelist.h \
 		kernel/qpalette.h \
 		kernel/qbrush.h \
 		kernel/qcursor.h \
@@ -2646,6 +2910,8 @@ kernel/qimage.o: kernel/qimage.cpp \
 		tools/qcollection.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qstringlist.h \
+		tools/qvaluelist.h \
 		tools/qregexp.h \
 		tools/qfile.h \
 		tools/qtextstream.h \
@@ -2654,7 +2920,36 @@ kernel/qimage.o: kernel/qimage.cpp \
 		tools/qgdict.h \
 		tools/qintdict.h \
 		kernel/qasyncimageio.h \
-		kernel/qpngio.h
+		kernel/qpngio.h \
+		kernel/qjpegio.h \
+		tools/qmap.h
+
+kernel/qjpegio.o: kernel/qjpegio.cpp \
+		kernel/qimage.h \
+		kernel/qpixmap.h \
+		kernel/qpaintdevice.h \
+		kernel/qwindowdefs.h \
+		kernel/qobjectdefs.h \
+		tools/qglobal.h \
+		tools/qstring.h \
+		tools/qcstring.h \
+		tools/qarray.h \
+		tools/qgarray.h \
+		tools/qshared.h \
+		kernel/qnamespace.h \
+		kernel/qrect.h \
+		kernel/qsize.h \
+		kernel/qpoint.h \
+		kernel/qcolor.h \
+		tools/qstrlist.h \
+		tools/qlist.h \
+		tools/qglist.h \
+		tools/qcollection.h \
+		tools/qdatastream.h \
+		tools/qiodevice.h \
+		tools/qstringlist.h \
+		tools/qvaluelist.h \
+		tools/qregexp.h
 
 kernel/qlayout.o: kernel/qlayout.cpp \
 		kernel/qlayout.h \
@@ -2682,6 +2977,7 @@ kernel/qlayout.o: kernel/qlayout.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qsizepolicy.h \
 		kernel/qwidget.h \
 		kernel/qpaintdevice.h \
@@ -2693,10 +2989,15 @@ kernel/qlayout.o: kernel/qlayout.cpp \
 		kernel/qfontmetrics.h \
 		kernel/qfontinfo.h \
 		kernel/qstyle.h \
-		kernel/qlayoutengine.h
+		kernel/qapplication.h \
+		tools/qasciidict.h \
+		tools/qgdict.h \
+		kernel/qtranslator.h \
+		tools/qintdict.h \
+		kernel/qlayoutengine_p.h
 
 kernel/qlayoutengine.o: kernel/qlayoutengine.cpp \
-		kernel/qlayoutengine.h \
+		kernel/qlayoutengine_p.h \
 		kernel/qabstractlayout.h \
 		kernel/qobject.h \
 		kernel/qobjectdefs.h \
@@ -2721,6 +3022,7 @@ kernel/qlayoutengine.o: kernel/qlayoutengine.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qsizepolicy.h \
 		kernel/qwidget.h \
 		kernel/qpaintdevice.h \
@@ -2758,6 +3060,7 @@ kernel/qtranslator.o: kernel/qtranslator.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		tools/qintdict.h \
 		tools/qgdict.h \
 		tools/qfileinfo.h \
@@ -2806,11 +3109,14 @@ kernel/qmetaobject.o: kernel/qmetaobject.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
+		tools/qstrlist.h \
 		kernel/qobjectlist.h \
 		kernel/qobjectdict.h \
 		tools/qasciidict.h \
 		tools/qgdict.h \
-		tools/qstrlist.h
+		tools/qtl.h \
+		tools/qtextstream.h
 
 kernel/qmime.o: kernel/qmime.cpp \
 		kernel/qmime.h \
@@ -2831,6 +3137,7 @@ kernel/qmime.o: kernel/qmime.cpp \
 		tools/qiodevice.h \
 		tools/qstringlist.h \
 		tools/qvaluelist.h \
+		tools/qregexp.h \
 		tools/qfileinfo.h \
 		tools/qfile.h \
 		tools/qdatetime.h \
@@ -2849,6 +3156,7 @@ kernel/qmime.o: kernel/qmime.cpp \
 		kernel/qcolor.h
 
 kernel/qmovie.o: kernel/qmovie.cpp \
+		kernel/qmovie.moc \
 		kernel/qtimer.h \
 		kernel/qobject.h \
 		kernel/qobjectdefs.h \
@@ -2873,6 +3181,7 @@ kernel/qmovie.o: kernel/qmovie.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpainter.h \
 		kernel/qpaintdevice.h \
 		kernel/qcolor.h \
@@ -2892,24 +3201,67 @@ kernel/qmovie.o: kernel/qmovie.cpp \
 		kernel/qsignal.h \
 		kernel/qasyncimageio.h \
 		kernel/qimage.h \
-		tools/qstrlist.h \
-		kernel/qmetaobject.h \
-		kernel/qconnection.h \
-		kernel/qsignalslotimp.h \
-		tools/qasciidict.h \
-		tools/qgdict.h
+		tools/qstrlist.h
 
-kernel/qobject.o: kernel/qobject.cpp \
-		kernel/qapplication.h \
-		kernel/qwidget.h \
-		kernel/qwindowdefs.h \
-		kernel/qobjectdefs.h \
-		tools/qglobal.h \
+kernel/qnetworkprotocol.o: kernel/qnetworkprotocol.cpp \
+		kernel/qnetworkprotocol.h \
+		kernel/qurlinfo.h \
+		tools/qdatetime.h \
 		tools/qstring.h \
 		tools/qcstring.h \
 		tools/qarray.h \
 		tools/qgarray.h \
 		tools/qshared.h \
+		tools/qglobal.h \
+		tools/qdict.h \
+		tools/qgdict.h \
+		tools/qcollection.h \
+		tools/qdir.h \
+		tools/qstrlist.h \
+		tools/qlist.h \
+		tools/qglist.h \
+		tools/qdatastream.h \
+		tools/qiodevice.h \
+		tools/qfileinfo.h \
+		tools/qfile.h \
+		tools/qstringlist.h \
+		tools/qvaluelist.h \
+		tools/qregexp.h \
+		kernel/qobject.h \
+		kernel/qobjectdefs.h \
+		kernel/qwindowdefs.h \
+		kernel/qnamespace.h \
+		kernel/qevent.h \
+		kernel/qregion.h \
+		kernel/qrect.h \
+		kernel/qsize.h \
+		kernel/qpoint.h \
+		kernel/qmime.h \
+		tools/qqueue.h \
+		kernel/qlocalfs.h \
+		kernel/qurloperator.h \
+		kernel/qurl.h \
+		kernel/qtimer.h \
+		tools/qmap.h
+
+kernel/qobject.o: kernel/qobject.cpp \
+		kernel/qvariant.h \
+		tools/qstring.h \
+		tools/qcstring.h \
+		tools/qarray.h \
+		tools/qgarray.h \
+		tools/qshared.h \
+		tools/qglobal.h \
+		tools/qvaluelist.h \
+		tools/qdatastream.h \
+		tools/qiodevice.h \
+		tools/qstringlist.h \
+		tools/qregexp.h \
+		tools/qmap.h \
+		kernel/qapplication.h \
+		kernel/qwidget.h \
+		kernel/qwindowdefs.h \
+		kernel/qobjectdefs.h \
 		kernel/qnamespace.h \
 		kernel/qobject.h \
 		kernel/qevent.h \
@@ -2921,10 +3273,6 @@ kernel/qobject.o: kernel/qobject.cpp \
 		tools/qlist.h \
 		tools/qglist.h \
 		tools/qcollection.h \
-		tools/qstringlist.h \
-		tools/qvaluelist.h \
-		tools/qdatastream.h \
-		tools/qiodevice.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -2943,8 +3291,13 @@ kernel/qobject.o: kernel/qobject.cpp \
 		kernel/qobjectdict.h \
 		kernel/qmetaobject.h \
 		kernel/qconnection.h \
+		tools/qstrlist.h \
 		kernel/qsignalslotimp.h \
-		tools/qregexp.h
+		kernel/qpixmap.h \
+		kernel/qiconset.h \
+		kernel/qimage.h \
+		kernel/qbitmap.h \
+		kernel/qpointarray.h
 
 kernel/qpainter.o: kernel/qpainter.cpp \
 		kernel/qpainter.h \
@@ -2984,14 +3337,15 @@ kernel/qpainter.o: kernel/qpainter.cpp \
 		tools/qlist.h \
 		tools/qstringlist.h \
 		tools/qvaluelist.h \
+		tools/qregexp.h \
 		kernel/qpalette.h \
 		kernel/qcursor.h \
 		kernel/qstyle.h \
 		kernel/qsizepolicy.h \
 		kernel/qimage.h \
 		tools/qstrlist.h \
-		kernel/qpaintdevicemetrics.h \
-		kernel/qt_windows.h
+		kernel/q1xcompatibility.h \
+		kernel/qpaintdevicemetrics.h
 
 kernel/qpalette.o: kernel/qpalette.cpp \
 		kernel/qpalette.h \
@@ -3064,11 +3418,13 @@ kernel/qpicture.o: kernel/qpicture.cpp \
 		tools/qglist.h \
 		tools/qcollection.h \
 		tools/qdatastream.h \
+		tools/qstringlist.h \
+		tools/qvaluelist.h \
+		tools/qregexp.h \
 		tools/qfile.h \
 		kernel/qpaintdevicemetrics.h
 
 kernel/qpixmap.o: kernel/qpixmap.cpp \
-		kernel/qbitmap.h \
 		kernel/qpixmap.h \
 		kernel/qpaintdevice.h \
 		kernel/qwindowdefs.h \
@@ -3084,6 +3440,7 @@ kernel/qpixmap.o: kernel/qpixmap.cpp \
 		kernel/qsize.h \
 		kernel/qpoint.h \
 		kernel/qcolor.h \
+		kernel/qbitmap.h \
 		kernel/qimage.h \
 		tools/qstrlist.h \
 		tools/qlist.h \
@@ -3091,13 +3448,14 @@ kernel/qpixmap.o: kernel/qpixmap.cpp \
 		tools/qcollection.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qstringlist.h \
+		tools/qvaluelist.h \
+		tools/qregexp.h \
 		kernel/qwidget.h \
 		kernel/qobject.h \
 		kernel/qevent.h \
 		kernel/qregion.h \
 		kernel/qmime.h \
-		tools/qstringlist.h \
-		tools/qvaluelist.h \
 		kernel/qpalette.h \
 		kernel/qbrush.h \
 		kernel/qcursor.h \
@@ -3110,7 +3468,13 @@ kernel/qpixmap.o: kernel/qpixmap.cpp \
 		kernel/qpen.h \
 		kernel/qpointarray.h \
 		kernel/qwmatrix.h \
-		tools/qbuffer.h
+		tools/qbuffer.h \
+		kernel/qobjectlist.h \
+		kernel/qapplication.h \
+		tools/qasciidict.h \
+		tools/qgdict.h \
+		kernel/qtranslator.h \
+		tools/qintdict.h
 
 kernel/qpixmapcache.o: kernel/qpixmapcache.cpp \
 		kernel/qpixmapcache.h \
@@ -3134,15 +3498,16 @@ kernel/qpixmapcache.o: kernel/qpixmapcache.cpp \
 		tools/qcollection.h \
 		tools/qglist.h \
 		tools/qgdict.h \
-		tools/qlist.h \
 		kernel/qobject.h \
 		kernel/qevent.h \
 		kernel/qregion.h \
 		kernel/qmime.h \
+		tools/qlist.h \
 		tools/qstringlist.h \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
-		tools/qiodevice.h
+		tools/qiodevice.h \
+		tools/qregexp.h
 
 kernel/qpngio.o: kernel/qpngio.cpp \
 		kernel/qimage.h \
@@ -3167,6 +3532,9 @@ kernel/qpngio.o: kernel/qpngio.cpp \
 		tools/qcollection.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qstringlist.h \
+		tools/qvaluelist.h \
+		tools/qregexp.h \
 		kernel/qasyncimageio.h \
 		kernel/qpngio.h
 
@@ -3255,39 +3623,40 @@ kernel/qregion.o: kernel/qregion.cpp \
 		tools/qdatastream.h
 
 kernel/qrichtext.o: kernel/qrichtext.cpp \
+		kernel/qrichtext_p.h \
 		kernel/qstylesheet.h \
-		tools/qlist.h \
-		tools/qglist.h \
-		tools/qcollection.h \
-		tools/qglobal.h \
-		tools/qdict.h \
-		tools/qgdict.h \
 		tools/qstring.h \
 		tools/qcstring.h \
 		tools/qarray.h \
 		tools/qgarray.h \
 		tools/qshared.h \
-		tools/qmap.h \
-		tools/qdatastream.h \
-		tools/qiodevice.h \
-		kernel/qpixmap.h \
-		kernel/qpaintdevice.h \
-		kernel/qwindowdefs.h \
+		tools/qglobal.h \
+		tools/qdict.h \
+		tools/qgdict.h \
+		tools/qcollection.h \
+		kernel/qobject.h \
 		kernel/qobjectdefs.h \
+		kernel/qwindowdefs.h \
 		kernel/qnamespace.h \
+		kernel/qevent.h \
+		kernel/qregion.h \
 		kernel/qrect.h \
 		kernel/qsize.h \
 		kernel/qpoint.h \
-		kernel/qcolor.h \
-		widgets/qscrollview.h \
-		widgets/qframe.h \
-		kernel/qwidget.h \
-		kernel/qobject.h \
-		kernel/qevent.h \
-		kernel/qregion.h \
 		kernel/qmime.h \
+		tools/qlist.h \
+		tools/qglist.h \
 		tools/qstringlist.h \
 		tools/qvaluelist.h \
+		tools/qdatastream.h \
+		tools/qiodevice.h \
+		tools/qregexp.h \
+		kernel/qpixmap.h \
+		kernel/qpaintdevice.h \
+		kernel/qcolor.h \
+		tools/qmap.h \
+		kernel/qapplication.h \
+		kernel/qwidget.h \
 		kernel/qpalette.h \
 		kernel/qbrush.h \
 		kernel/qcursor.h \
@@ -3296,28 +3665,23 @@ kernel/qrichtext.o: kernel/qrichtext.cpp \
 		kernel/qfontinfo.h \
 		kernel/qstyle.h \
 		kernel/qsizepolicy.h \
-		widgets/qscrollbar.h \
-		widgets/qrangecontrol.h \
-		kernel/qdrawutil.h \
-		kernel/qpainter.h \
-		kernel/qpen.h \
-		kernel/qpointarray.h \
-		kernel/qwmatrix.h \
-		kernel/qrichtextintern.cpp \
-		kernel/qapplication.h \
 		tools/qasciidict.h \
 		kernel/qtranslator.h \
 		tools/qintdict.h \
 		kernel/qlayout.h \
 		kernel/qabstractlayout.h \
-		tools/qstack.h \
+		kernel/qpainter.h \
+		kernel/qpen.h \
+		kernel/qpointarray.h \
+		kernel/qwmatrix.h \
 		tools/qfile.h \
 		tools/qtextstream.h \
-		kernel/qbitmap.h \
 		kernel/qtimer.h \
 		kernel/qimage.h \
 		tools/qstrlist.h \
-		kernel/qdragobject.h
+		kernel/qdragobject.h \
+		kernel/qdrawutil.h \
+		kernel/qpaintdevicemetrics.h
 
 kernel/qsemimodal.o: kernel/qsemimodal.cpp \
 		kernel/qsemimodal.h \
@@ -3345,6 +3709,7 @@ kernel/qsemimodal.o: kernel/qsemimodal.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -3386,8 +3751,12 @@ kernel/qsignal.o: kernel/qsignal.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qmetaobject.h \
-		kernel/qconnection.h
+		kernel/qconnection.h \
+		tools/qstrlist.h \
+		tools/qptrdict.h \
+		tools/qgdict.h
 
 kernel/qsignalmapper.o: kernel/qsignalmapper.cpp \
 		kernel/qsignalmapper.h \
@@ -3414,23 +3783,26 @@ kernel/qsignalmapper.o: kernel/qsignalmapper.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		tools/qptrdict.h \
 		tools/qgdict.h
 
 kernel/qsimplerichtext.o: kernel/qsimplerichtext.cpp \
-		kernel/qsimplerichtext.h \
-		kernel/qnamespace.h \
-		tools/qglobal.h \
-		kernel/qapplication.h \
-		kernel/qwidget.h \
-		kernel/qwindowdefs.h \
-		kernel/qobjectdefs.h \
+		kernel/qrichtext_p.h \
+		kernel/qstylesheet.h \
 		tools/qstring.h \
 		tools/qcstring.h \
 		tools/qarray.h \
 		tools/qgarray.h \
 		tools/qshared.h \
+		tools/qglobal.h \
+		tools/qdict.h \
+		tools/qgdict.h \
+		tools/qcollection.h \
 		kernel/qobject.h \
+		kernel/qobjectdefs.h \
+		kernel/qwindowdefs.h \
+		kernel/qnamespace.h \
 		kernel/qevent.h \
 		kernel/qregion.h \
 		kernel/qrect.h \
@@ -3439,14 +3811,18 @@ kernel/qsimplerichtext.o: kernel/qsimplerichtext.cpp \
 		kernel/qmime.h \
 		tools/qlist.h \
 		tools/qglist.h \
-		tools/qcollection.h \
 		tools/qstringlist.h \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
+		kernel/qpixmap.h \
 		kernel/qpaintdevice.h \
-		kernel/qpalette.h \
 		kernel/qcolor.h \
+		tools/qmap.h \
+		kernel/qapplication.h \
+		kernel/qwidget.h \
+		kernel/qpalette.h \
 		kernel/qbrush.h \
 		kernel/qcursor.h \
 		kernel/qfont.h \
@@ -3455,19 +3831,11 @@ kernel/qsimplerichtext.o: kernel/qsimplerichtext.cpp \
 		kernel/qstyle.h \
 		kernel/qsizepolicy.h \
 		tools/qasciidict.h \
-		tools/qgdict.h \
 		kernel/qtranslator.h \
 		tools/qintdict.h \
-		kernel/qrichtextintern.cpp \
-		tools/qmap.h \
-		kernel/qstylesheet.h \
-		tools/qdict.h \
-		kernel/qpixmap.h \
-		widgets/qscrollview.h \
-		widgets/qframe.h \
-		widgets/qscrollbar.h \
-		widgets/qrangecontrol.h \
-		kernel/qdrawutil.h \
+		kernel/qlayout.h \
+		kernel/qabstractlayout.h \
+		kernel/qsimplerichtext.h \
 		kernel/qpainter.h \
 		kernel/qpen.h \
 		kernel/qpointarray.h \
@@ -3514,6 +3882,7 @@ kernel/qsizegrip.o: kernel/qsizegrip.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -3534,8 +3903,7 @@ kernel/qsizegrip.o: kernel/qsizegrip.cpp \
 		kernel/qtranslator.h \
 		tools/qintdict.h \
 		kernel/qt_x11.h \
-		kernel/qobjectlist.h \
-		kernel/qt_windows.h
+		kernel/qobjectlist.h
 
 kernel/qstyle.o: kernel/qstyle.cpp \
 		kernel/qstyle.h \
@@ -3562,6 +3930,7 @@ kernel/qstyle.o: kernel/qstyle.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qapplication.h \
 		kernel/qwidget.h \
 		kernel/qpaintdevice.h \
@@ -3584,7 +3953,8 @@ kernel/qstyle.o: kernel/qstyle.cpp \
 		kernel/qdrawutil.h \
 		kernel/qpixmap.h \
 		kernel/qimage.h \
-		tools/qstrlist.h
+		tools/qstrlist.h \
+		tools/qptrdict.h
 
 kernel/qsocketnotifier.o: kernel/qsocketnotifier.cpp \
 		kernel/qsocketnotifier.h \
@@ -3610,42 +3980,44 @@ kernel/qsocketnotifier.o: kernel/qsocketnotifier.cpp \
 		tools/qstringlist.h \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
-		tools/qiodevice.h
+		tools/qiodevice.h \
+		tools/qregexp.h
 
 kernel/qstylesheet.o: kernel/qstylesheet.cpp \
 		kernel/qstylesheet.h \
-		tools/qlist.h \
-		tools/qglist.h \
-		tools/qcollection.h \
-		tools/qglobal.h \
-		tools/qdict.h \
-		tools/qgdict.h \
 		tools/qstring.h \
 		tools/qcstring.h \
 		tools/qarray.h \
 		tools/qgarray.h \
 		tools/qshared.h \
-		tools/qmap.h \
-		tools/qdatastream.h \
-		tools/qiodevice.h \
-		kernel/qpixmap.h \
-		kernel/qpaintdevice.h \
-		kernel/qwindowdefs.h \
+		tools/qglobal.h \
+		tools/qdict.h \
+		tools/qgdict.h \
+		tools/qcollection.h \
+		kernel/qobject.h \
 		kernel/qobjectdefs.h \
+		kernel/qwindowdefs.h \
 		kernel/qnamespace.h \
+		kernel/qevent.h \
+		kernel/qregion.h \
 		kernel/qrect.h \
 		kernel/qsize.h \
 		kernel/qpoint.h \
-		kernel/qcolor.h \
-		widgets/qscrollview.h \
-		widgets/qframe.h \
-		kernel/qwidget.h \
-		kernel/qobject.h \
-		kernel/qevent.h \
-		kernel/qregion.h \
 		kernel/qmime.h \
+		tools/qlist.h \
+		tools/qglist.h \
 		tools/qstringlist.h \
 		tools/qvaluelist.h \
+		tools/qdatastream.h \
+		tools/qiodevice.h \
+		tools/qregexp.h \
+		kernel/qrichtext_p.h \
+		kernel/qpixmap.h \
+		kernel/qpaintdevice.h \
+		kernel/qcolor.h \
+		tools/qmap.h \
+		kernel/qapplication.h \
+		kernel/qwidget.h \
 		kernel/qpalette.h \
 		kernel/qbrush.h \
 		kernel/qcursor.h \
@@ -3654,20 +4026,15 @@ kernel/qstylesheet.o: kernel/qstylesheet.cpp \
 		kernel/qfontinfo.h \
 		kernel/qstyle.h \
 		kernel/qsizepolicy.h \
-		widgets/qscrollbar.h \
-		widgets/qrangecontrol.h \
-		kernel/qdrawutil.h \
-		kernel/qpainter.h \
-		kernel/qpen.h \
-		kernel/qpointarray.h \
-		kernel/qwmatrix.h \
-		kernel/qrichtextintern.cpp \
-		kernel/qapplication.h \
 		tools/qasciidict.h \
 		kernel/qtranslator.h \
 		tools/qintdict.h \
 		kernel/qlayout.h \
 		kernel/qabstractlayout.h \
+		kernel/qpainter.h \
+		kernel/qpen.h \
+		kernel/qpointarray.h \
+		kernel/qwmatrix.h \
 		tools/qstack.h \
 		tools/qfile.h \
 		tools/qtextstream.h \
@@ -3701,13 +4068,200 @@ kernel/qtimer.o: kernel/qtimer.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qsignal.h \
 		kernel/qobjectlist.h \
 		kernel/qobjectdict.h \
 		kernel/qmetaobject.h \
 		kernel/qconnection.h \
+		tools/qstrlist.h \
 		tools/qasciidict.h \
 		tools/qgdict.h
+
+kernel/qurl.o: kernel/qurl.cpp \
+		kernel/qurl.h \
+		tools/qstring.h \
+		tools/qcstring.h \
+		tools/qarray.h \
+		tools/qgarray.h \
+		tools/qshared.h \
+		tools/qglobal.h \
+		tools/qdir.h \
+		tools/qstrlist.h \
+		tools/qlist.h \
+		tools/qglist.h \
+		tools/qcollection.h \
+		tools/qdatastream.h \
+		tools/qiodevice.h \
+		tools/qfileinfo.h \
+		tools/qfile.h \
+		tools/qdatetime.h \
+		kernel/qnetworkprotocol.h \
+		kernel/qurlinfo.h \
+		tools/qdict.h \
+		tools/qgdict.h \
+		tools/qstringlist.h \
+		tools/qvaluelist.h \
+		tools/qregexp.h \
+		kernel/qobject.h \
+		kernel/qobjectdefs.h \
+		kernel/qwindowdefs.h \
+		kernel/qnamespace.h \
+		kernel/qevent.h \
+		kernel/qregion.h \
+		kernel/qrect.h \
+		kernel/qsize.h \
+		kernel/qpoint.h \
+		kernel/qmime.h \
+		tools/qqueue.h
+
+kernel/qlocalfs.o: kernel/qlocalfs.cpp \
+		kernel/qlocalfs.h \
+		kernel/qnetworkprotocol.h \
+		kernel/qurlinfo.h \
+		tools/qdatetime.h \
+		tools/qstring.h \
+		tools/qcstring.h \
+		tools/qarray.h \
+		tools/qgarray.h \
+		tools/qshared.h \
+		tools/qglobal.h \
+		tools/qdict.h \
+		tools/qgdict.h \
+		tools/qcollection.h \
+		tools/qdir.h \
+		tools/qstrlist.h \
+		tools/qlist.h \
+		tools/qglist.h \
+		tools/qdatastream.h \
+		tools/qiodevice.h \
+		tools/qfileinfo.h \
+		tools/qfile.h \
+		tools/qstringlist.h \
+		tools/qvaluelist.h \
+		tools/qregexp.h \
+		kernel/qobject.h \
+		kernel/qobjectdefs.h \
+		kernel/qwindowdefs.h \
+		kernel/qnamespace.h \
+		kernel/qevent.h \
+		kernel/qregion.h \
+		kernel/qrect.h \
+		kernel/qsize.h \
+		kernel/qpoint.h \
+		kernel/qmime.h \
+		tools/qqueue.h \
+		kernel/qapplication.h \
+		kernel/qwidget.h \
+		kernel/qpaintdevice.h \
+		kernel/qpalette.h \
+		kernel/qcolor.h \
+		kernel/qbrush.h \
+		kernel/qcursor.h \
+		kernel/qfont.h \
+		kernel/qfontmetrics.h \
+		kernel/qfontinfo.h \
+		kernel/qstyle.h \
+		kernel/qsizepolicy.h \
+		tools/qasciidict.h \
+		kernel/qtranslator.h \
+		tools/qintdict.h \
+		kernel/qurloperator.h \
+		kernel/qurl.h
+
+kernel/qurloperator.o: kernel/qurloperator.cpp \
+		kernel/qurloperator.h \
+		kernel/qobject.h \
+		kernel/qobjectdefs.h \
+		tools/qglobal.h \
+		kernel/qwindowdefs.h \
+		tools/qstring.h \
+		tools/qcstring.h \
+		tools/qarray.h \
+		tools/qgarray.h \
+		tools/qshared.h \
+		kernel/qnamespace.h \
+		kernel/qevent.h \
+		kernel/qregion.h \
+		kernel/qrect.h \
+		kernel/qsize.h \
+		kernel/qpoint.h \
+		kernel/qmime.h \
+		tools/qlist.h \
+		tools/qglist.h \
+		tools/qcollection.h \
+		tools/qstringlist.h \
+		tools/qvaluelist.h \
+		tools/qdatastream.h \
+		tools/qiodevice.h \
+		tools/qregexp.h \
+		kernel/qurl.h \
+		tools/qdir.h \
+		tools/qstrlist.h \
+		tools/qfileinfo.h \
+		tools/qfile.h \
+		tools/qdatetime.h \
+		kernel/qnetworkprotocol.h \
+		kernel/qurlinfo.h \
+		tools/qdict.h \
+		tools/qgdict.h \
+		tools/qqueue.h \
+		tools/qmap.h \
+		kernel/qapplication.h \
+		kernel/qwidget.h \
+		kernel/qpaintdevice.h \
+		kernel/qpalette.h \
+		kernel/qcolor.h \
+		kernel/qbrush.h \
+		kernel/qcursor.h \
+		kernel/qfont.h \
+		kernel/qfontmetrics.h \
+		kernel/qfontinfo.h \
+		kernel/qstyle.h \
+		kernel/qsizepolicy.h \
+		tools/qasciidict.h \
+		kernel/qtranslator.h \
+		tools/qintdict.h \
+		tools/qptrdict.h \
+		kernel/qtimer.h
+
+kernel/qurlinfo.o: kernel/qurlinfo.cpp \
+		kernel/qurlinfo.h \
+		tools/qdatetime.h \
+		tools/qstring.h \
+		tools/qcstring.h \
+		tools/qarray.h \
+		tools/qgarray.h \
+		tools/qshared.h \
+		tools/qglobal.h \
+		kernel/qurloperator.h \
+		kernel/qobject.h \
+		kernel/qobjectdefs.h \
+		kernel/qwindowdefs.h \
+		kernel/qnamespace.h \
+		kernel/qevent.h \
+		kernel/qregion.h \
+		kernel/qrect.h \
+		kernel/qsize.h \
+		kernel/qpoint.h \
+		kernel/qmime.h \
+		tools/qlist.h \
+		tools/qglist.h \
+		tools/qcollection.h \
+		tools/qstringlist.h \
+		tools/qvaluelist.h \
+		tools/qdatastream.h \
+		tools/qiodevice.h \
+		tools/qregexp.h \
+		kernel/qurl.h \
+		tools/qdir.h \
+		tools/qstrlist.h \
+		tools/qfileinfo.h \
+		tools/qfile.h \
+		kernel/qnetworkprotocol.h \
+		tools/qdict.h \
+		tools/qgdict.h \
+		tools/qqueue.h
 
 kernel/qwidget.o: kernel/qwidget.cpp \
 		kernel/qobjectlist.h \
@@ -3734,9 +4288,11 @@ kernel/qwidget.o: kernel/qwidget.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qobjectdict.h \
 		kernel/qmetaobject.h \
 		kernel/qconnection.h \
+		tools/qstrlist.h \
 		tools/qasciidict.h \
 		tools/qgdict.h \
 		kernel/qwidget.h \
@@ -3759,8 +4315,7 @@ kernel/qwidget.o: kernel/qwidget.cpp \
 		kernel/qapplication.h \
 		kernel/qtranslator.h \
 		kernel/qlayout.h \
-		kernel/qabstractlayout.h \
-		kernel/qt_windows.h
+		kernel/qabstractlayout.h
 
 kernel/qwmatrix.o: kernel/qwmatrix.cpp \
 		kernel/qwmatrix.h \
@@ -3779,6 +4334,43 @@ kernel/qwmatrix.o: kernel/qwmatrix.cpp \
 		kernel/qsize.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h
+
+kernel/qvariant.o: kernel/qvariant.cpp \
+		kernel/qvariant.h \
+		tools/qstring.h \
+		tools/qcstring.h \
+		tools/qarray.h \
+		tools/qgarray.h \
+		tools/qshared.h \
+		tools/qglobal.h \
+		tools/qvaluelist.h \
+		tools/qdatastream.h \
+		tools/qiodevice.h \
+		tools/qstringlist.h \
+		tools/qregexp.h \
+		tools/qmap.h \
+		kernel/qfont.h \
+		kernel/qwindowdefs.h \
+		kernel/qobjectdefs.h \
+		kernel/qnamespace.h \
+		kernel/qpixmap.h \
+		kernel/qpaintdevice.h \
+		kernel/qrect.h \
+		kernel/qsize.h \
+		kernel/qpoint.h \
+		kernel/qcolor.h \
+		kernel/qimage.h \
+		tools/qstrlist.h \
+		tools/qlist.h \
+		tools/qglist.h \
+		tools/qcollection.h \
+		kernel/qbrush.h \
+		kernel/qpalette.h \
+		kernel/qiconset.h \
+		kernel/qregion.h \
+		kernel/qpointarray.h \
+		kernel/qbitmap.h \
+		kernel/qcursor.h
 
 widgets/qbuttongroup.o: widgets/qbuttongroup.cpp \
 		widgets/qbuttongroup.h \
@@ -3808,6 +4400,7 @@ widgets/qbuttongroup.o: widgets/qbuttongroup.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -3852,6 +4445,7 @@ widgets/qbutton.o: widgets/qbutton.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -3875,7 +4469,14 @@ widgets/qbutton.o: widgets/qbutton.cpp \
 		kernel/qaccel.h \
 		kernel/qpixmapcache.h \
 		kernel/qfocusdata.h \
-		kernel/qwidgetlist.h
+		kernel/qwidgetlist.h \
+		kernel/qapplication.h \
+		tools/qasciidict.h \
+		tools/qgdict.h \
+		kernel/qtranslator.h \
+		tools/qintdict.h \
+		widgets/qpushbutton.h \
+		kernel/qiconset.h
 
 widgets/qcdestyle.o: widgets/qcdestyle.cpp \
 		widgets/qcdestyle.h \
@@ -3905,6 +4506,7 @@ widgets/qcdestyle.o: widgets/qcdestyle.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
 		kernel/qbrush.h \
@@ -3932,6 +4534,7 @@ widgets/qcdestyle.o: widgets/qcdestyle.cpp \
 		tools/qstrlist.h \
 		widgets/qpushbutton.h \
 		widgets/qbutton.h \
+		kernel/qiconset.h \
 		widgets/qrangecontrol.h \
 		widgets/qscrollbar.h
 
@@ -3962,6 +4565,7 @@ widgets/qcheckbox.o: widgets/qcheckbox.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -4008,6 +4612,7 @@ widgets/qcombobox.o: widgets/qcombobox.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -4069,6 +4674,7 @@ widgets/qcommonstyle.o: widgets/qcommonstyle.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qapplication.h \
 		kernel/qwidget.h \
 		kernel/qpaintdevice.h \
@@ -4096,10 +4702,11 @@ widgets/qcommonstyle.o: widgets/qcommonstyle.cpp \
 		tools/qstrlist.h \
 		widgets/qpushbutton.h \
 		widgets/qbutton.h \
+		kernel/qiconset.h \
 		widgets/qrangecontrol.h \
 		widgets/qtabbar.h \
-		kernel/qiconset.h \
-		widgets/qscrollbar.h
+		widgets/qscrollbar.h \
+		widgets/qtoolbutton.h
 
 widgets/qframe.o: widgets/qframe.cpp \
 		widgets/qframe.h \
@@ -4127,6 +4734,7 @@ widgets/qframe.o: widgets/qframe.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -4172,6 +4780,7 @@ widgets/qgrid.o: widgets/qgrid.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -4183,7 +4792,12 @@ widgets/qgrid.o: widgets/qgrid.cpp \
 		kernel/qstyle.h \
 		kernel/qsizepolicy.h \
 		kernel/qlayout.h \
-		kernel/qabstractlayout.h
+		kernel/qabstractlayout.h \
+		kernel/qapplication.h \
+		tools/qasciidict.h \
+		tools/qgdict.h \
+		kernel/qtranslator.h \
+		tools/qintdict.h
 
 widgets/qgroupbox.o: widgets/qgroupbox.cpp \
 		widgets/qgroupbox.h \
@@ -4212,6 +4826,7 @@ widgets/qgroupbox.o: widgets/qgroupbox.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -4235,7 +4850,13 @@ widgets/qgroupbox.o: widgets/qgroupbox.cpp \
 		widgets/qbutton.h \
 		kernel/qfocusdata.h \
 		kernel/qwidgetlist.h \
-		kernel/qobjectlist.h
+		kernel/qobjectlist.h \
+		kernel/qdrawutil.h \
+		kernel/qapplication.h \
+		tools/qasciidict.h \
+		tools/qgdict.h \
+		kernel/qtranslator.h \
+		tools/qintdict.h
 
 widgets/qhbuttongroup.o: widgets/qhbuttongroup.cpp \
 		widgets/qhbuttongroup.h \
@@ -4266,6 +4887,7 @@ widgets/qhbuttongroup.o: widgets/qhbuttongroup.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -4303,6 +4925,7 @@ widgets/qheader.o: widgets/qheader.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -4353,6 +4976,7 @@ widgets/qhgroupbox.o: widgets/qhgroupbox.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -4390,6 +5014,7 @@ widgets/qhbox.o: widgets/qhbox.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -4409,6 +5034,74 @@ widgets/qhbox.o: widgets/qhbox.cpp \
 		kernel/qtranslator.h \
 		tools/qintdict.h \
 		kernel/qobjectlist.h
+
+widgets/qiconview.o: widgets/qiconview.cpp \
+		widgets/qiconview.moc \
+		widgets/qiconview.h \
+		widgets/qscrollview.h \
+		widgets/qframe.h \
+		kernel/qwidget.h \
+		kernel/qwindowdefs.h \
+		kernel/qobjectdefs.h \
+		tools/qglobal.h \
+		tools/qstring.h \
+		tools/qcstring.h \
+		tools/qarray.h \
+		tools/qgarray.h \
+		tools/qshared.h \
+		kernel/qnamespace.h \
+		kernel/qobject.h \
+		kernel/qevent.h \
+		kernel/qregion.h \
+		kernel/qrect.h \
+		kernel/qsize.h \
+		kernel/qpoint.h \
+		kernel/qmime.h \
+		tools/qlist.h \
+		tools/qglist.h \
+		tools/qcollection.h \
+		tools/qstringlist.h \
+		tools/qvaluelist.h \
+		tools/qdatastream.h \
+		tools/qiodevice.h \
+		tools/qregexp.h \
+		kernel/qpaintdevice.h \
+		kernel/qpalette.h \
+		kernel/qcolor.h \
+		kernel/qbrush.h \
+		kernel/qcursor.h \
+		kernel/qfont.h \
+		kernel/qfontmetrics.h \
+		kernel/qfontinfo.h \
+		kernel/qstyle.h \
+		kernel/qsizepolicy.h \
+		widgets/qscrollbar.h \
+		widgets/qrangecontrol.h \
+		kernel/qdrawutil.h \
+		kernel/qpainter.h \
+		kernel/qpen.h \
+		kernel/qpointarray.h \
+		kernel/qwmatrix.h \
+		kernel/qiconset.h \
+		kernel/qpixmap.h \
+		kernel/qdragobject.h \
+		kernel/qimage.h \
+		tools/qstrlist.h \
+		kernel/qbitmap.h \
+		kernel/qtimer.h \
+		kernel/qkeycode.h \
+		kernel/qapplication.h \
+		tools/qasciidict.h \
+		tools/qgdict.h \
+		kernel/qtranslator.h \
+		tools/qintdict.h \
+		widgets/qmultilineedit.h \
+		widgets/qtableview.h \
+		tools/qmap.h \
+		widgets/qvbox.h \
+		widgets/qhbox.h \
+		widgets/qtooltip.h \
+		kernel/qpixmapcache.h
 
 widgets/qlabel.o: widgets/qlabel.cpp \
 		widgets/qlabel.h \
@@ -4437,6 +5130,7 @@ widgets/qlabel.o: widgets/qlabel.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -4466,10 +5160,7 @@ widgets/qlabel.o: widgets/qlabel.cpp \
 		kernel/qsimplerichtext.h \
 		kernel/qstylesheet.h \
 		tools/qdict.h \
-		tools/qmap.h \
-		widgets/qscrollview.h \
-		widgets/qscrollbar.h \
-		widgets/qrangecontrol.h
+		widgets/qlineedit.h
 
 widgets/qlcdnumber.o: widgets/qlcdnumber.cpp \
 		widgets/qlcdnumber.h \
@@ -4498,6 +5189,7 @@ widgets/qlcdnumber.o: widgets/qlcdnumber.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -4540,6 +5232,7 @@ widgets/qlineedit.o: widgets/qlineedit.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -4566,7 +5259,12 @@ widgets/qlineedit.o: widgets/qlineedit.cpp \
 		kernel/qdragobject.h \
 		kernel/qimage.h \
 		tools/qstrlist.h \
-		kernel/qtimer.h
+		kernel/qtimer.h \
+		widgets/qpopupmenu.h \
+		widgets/qframe.h \
+		widgets/qmenudata.h \
+		kernel/qiconset.h \
+		kernel/qsignal.h
 
 widgets/qlistbox.o: widgets/qlistbox.cpp \
 		widgets/qlistbox.h \
@@ -4596,6 +5294,7 @@ widgets/qlistbox.o: widgets/qlistbox.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -4620,7 +5319,8 @@ widgets/qlistbox.o: widgets/qlistbox.cpp \
 		tools/qasciidict.h \
 		tools/qgdict.h \
 		kernel/qtranslator.h \
-		tools/qintdict.h
+		tools/qintdict.h \
+		tools/qptrdict.h
 
 widgets/qlistview.o: widgets/qlistview.cpp \
 		widgets/qlistview.h \
@@ -4650,6 +5350,7 @@ widgets/qlistview.o: widgets/qlistview.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -4711,6 +5412,7 @@ widgets/qmainwindow.o: widgets/qmainwindow.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -4728,11 +5430,13 @@ widgets/qmainwindow.o: widgets/qmainwindow.cpp \
 		kernel/qobjectdict.h \
 		kernel/qmetaobject.h \
 		kernel/qconnection.h \
+		tools/qstrlist.h \
 		tools/qasciidict.h \
 		tools/qgdict.h \
 		kernel/qapplication.h \
 		kernel/qtranslator.h \
 		tools/qintdict.h \
+		tools/qmap.h \
 		kernel/qpainter.h \
 		kernel/qpen.h \
 		kernel/qpointarray.h \
@@ -4746,14 +5450,17 @@ widgets/qmainwindow.o: widgets/qmainwindow.cpp \
 		kernel/qsignal.h \
 		widgets/qtoolbar.h \
 		widgets/qstatusbar.h \
+		widgets/qscrollview.h \
+		widgets/qscrollbar.h \
+		widgets/qrangecontrol.h \
+		kernel/qdrawutil.h \
 		widgets/qtooltip.h \
+		tools/qdatetime.h \
 		widgets/qwhatsthis.h \
-		kernel/qlayoutengine.h
+		kernel/qbitmap.h
 
 widgets/qmenubar.o: widgets/qmenubar.cpp \
-		widgets/qmenubar.h \
-		widgets/qpopupmenu.h \
-		widgets/qframe.h \
+		widgets/qmainwindow.h \
 		kernel/qwidget.h \
 		kernel/qwindowdefs.h \
 		kernel/qobjectdefs.h \
@@ -4778,6 +5485,7 @@ widgets/qmenubar.o: widgets/qmenubar.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -4788,6 +5496,9 @@ widgets/qmenubar.o: widgets/qmenubar.cpp \
 		kernel/qfontinfo.h \
 		kernel/qstyle.h \
 		kernel/qsizepolicy.h \
+		widgets/qmenubar.h \
+		widgets/qpopupmenu.h \
+		widgets/qframe.h \
 		widgets/qmenudata.h \
 		kernel/qiconset.h \
 		kernel/qpixmap.h \
@@ -4802,7 +5513,10 @@ widgets/qmenubar.o: widgets/qmenubar.cpp \
 		tools/qasciidict.h \
 		tools/qgdict.h \
 		kernel/qtranslator.h \
-		tools/qintdict.h
+		tools/qintdict.h \
+		kernel/qguardedptr.h \
+		kernel/qlayout.h \
+		kernel/qabstractlayout.h
 
 widgets/qmenudata.o: widgets/qmenudata.cpp \
 		widgets/qmenudata.h \
@@ -4834,13 +5548,14 @@ widgets/qmenudata.o: widgets/qmenudata.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
+		kernel/qfont.h \
 		widgets/qpopupmenu.h \
 		widgets/qframe.h \
 		kernel/qwidget.h \
 		kernel/qpalette.h \
 		kernel/qbrush.h \
 		kernel/qcursor.h \
-		kernel/qfont.h \
 		kernel/qfontmetrics.h \
 		kernel/qfontinfo.h \
 		kernel/qstyle.h \
@@ -4849,7 +5564,8 @@ widgets/qmenudata.o: widgets/qmenudata.cpp \
 		tools/qasciidict.h \
 		tools/qgdict.h \
 		kernel/qtranslator.h \
-		tools/qintdict.h
+		tools/qintdict.h \
+		kernel/qguardedptr.h
 
 widgets/qmotifstyle.o: widgets/qmotifstyle.cpp \
 		widgets/qmotifstyle.h \
@@ -4878,6 +5594,7 @@ widgets/qmotifstyle.o: widgets/qmotifstyle.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
 		kernel/qbrush.h \
@@ -4905,10 +5622,10 @@ widgets/qmotifstyle.o: widgets/qmotifstyle.cpp \
 		tools/qstrlist.h \
 		widgets/qpushbutton.h \
 		widgets/qbutton.h \
+		kernel/qiconset.h \
 		widgets/qrangecontrol.h \
 		widgets/qscrollbar.h \
 		widgets/qtabbar.h \
-		kernel/qiconset.h \
 		widgets/qpopupmenu.h \
 		widgets/qmenudata.h \
 		kernel/qsignal.h
@@ -4941,6 +5658,7 @@ widgets/qmultilineedit.o: widgets/qmultilineedit.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -4960,7 +5678,6 @@ widgets/qmultilineedit.o: widgets/qmultilineedit.cpp \
 		kernel/qdrawutil.h \
 		kernel/qclipboard.h \
 		kernel/qpixmap.h \
-		tools/qregexp.h \
 		kernel/qapplication.h \
 		tools/qasciidict.h \
 		tools/qgdict.h \
@@ -4968,7 +5685,12 @@ widgets/qmultilineedit.o: widgets/qmultilineedit.cpp \
 		tools/qintdict.h \
 		kernel/qdragobject.h \
 		kernel/qimage.h \
-		tools/qstrlist.h
+		tools/qstrlist.h \
+		widgets/qpopupmenu.h \
+		widgets/qmenudata.h \
+		kernel/qiconset.h \
+		kernel/qsignal.h \
+		kernel/qtimer.h
 
 widgets/qplatinumstyle.o: widgets/qplatinumstyle.cpp \
 		widgets/qplatinumstyle.h \
@@ -4998,6 +5720,7 @@ widgets/qplatinumstyle.o: widgets/qplatinumstyle.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
 		kernel/qbrush.h \
@@ -5025,6 +5748,7 @@ widgets/qplatinumstyle.o: widgets/qplatinumstyle.cpp \
 		tools/qstrlist.h \
 		widgets/qpushbutton.h \
 		widgets/qbutton.h \
+		kernel/qiconset.h \
 		widgets/qrangecontrol.h \
 		widgets/qscrollbar.h
 
@@ -5055,6 +5779,7 @@ widgets/qpopupmenu.o: widgets/qpopupmenu.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -5084,7 +5809,9 @@ widgets/qpopupmenu.o: widgets/qpopupmenu.cpp \
 		kernel/qbitmap.h \
 		kernel/qpixmapcache.h \
 		kernel/qtimer.h \
-		widgets/qwhatsthis.h
+		widgets/qwhatsthis.h \
+		kernel/qobjectlist.h \
+		kernel/qguardedptr.h
 
 widgets/qprogressbar.o: widgets/qprogressbar.cpp \
 		widgets/qprogressbar.h \
@@ -5113,6 +5840,7 @@ widgets/qprogressbar.o: widgets/qprogressbar.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -5161,6 +5889,7 @@ widgets/qpushbutton.o: widgets/qpushbutton.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -5171,14 +5900,26 @@ widgets/qpushbutton.o: widgets/qpushbutton.cpp \
 		kernel/qfontinfo.h \
 		kernel/qstyle.h \
 		kernel/qsizepolicy.h \
+		kernel/qiconset.h \
+		kernel/qpixmap.h \
 		kernel/qdialog.h \
 		kernel/qpainter.h \
 		kernel/qpen.h \
 		kernel/qpointarray.h \
 		kernel/qwmatrix.h \
 		kernel/qdrawutil.h \
-		kernel/qpixmap.h \
-		kernel/qbitmap.h
+		kernel/qbitmap.h \
+		widgets/qpopupmenu.h \
+		widgets/qframe.h \
+		widgets/qmenudata.h \
+		kernel/qsignal.h \
+		kernel/qguardedptr.h \
+		tools/qptrdict.h \
+		tools/qgdict.h \
+		kernel/qapplication.h \
+		tools/qasciidict.h \
+		kernel/qtranslator.h \
+		tools/qintdict.h
 
 widgets/qradiobutton.o: widgets/qradiobutton.cpp \
 		widgets/qradiobutton.h \
@@ -5207,6 +5948,7 @@ widgets/qradiobutton.o: widgets/qradiobutton.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -5260,6 +6002,7 @@ widgets/qscrollbar.o: widgets/qscrollbar.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -5310,6 +6053,7 @@ widgets/qscrollview.o: widgets/qscrollview.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -5331,6 +6075,7 @@ widgets/qscrollview.o: widgets/qscrollview.cpp \
 		kernel/qobjectdict.h \
 		kernel/qmetaobject.h \
 		kernel/qconnection.h \
+		tools/qstrlist.h \
 		tools/qasciidict.h \
 		tools/qgdict.h \
 		kernel/qpixmap.h \
@@ -5341,7 +6086,8 @@ widgets/qscrollview.o: widgets/qscrollview.cpp \
 		tools/qptrdict.h \
 		kernel/qapplication.h \
 		kernel/qtranslator.h \
-		tools/qintdict.h
+		tools/qintdict.h \
+		kernel/qtimer.h
 
 widgets/qslider.o: widgets/qslider.cpp \
 		widgets/qslider.h \
@@ -5369,6 +6115,7 @@ widgets/qslider.o: widgets/qslider.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -5416,6 +6163,7 @@ widgets/qspinbox.o: widgets/qspinbox.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -5429,14 +6177,16 @@ widgets/qspinbox.o: widgets/qspinbox.cpp \
 		widgets/qrangecontrol.h \
 		widgets/qpushbutton.h \
 		widgets/qbutton.h \
+		kernel/qiconset.h \
+		kernel/qpixmap.h \
 		kernel/qpainter.h \
 		kernel/qpen.h \
 		kernel/qpointarray.h \
 		kernel/qwmatrix.h \
 		kernel/qbitmap.h \
-		kernel/qpixmap.h \
 		widgets/qlineedit.h \
-		widgets/qvalidator.h
+		widgets/qvalidator.h \
+		kernel/qpixmapcache.h
 
 widgets/qsplitter.o: widgets/qsplitter.cpp \
 		widgets/qsplitter.h \
@@ -5465,6 +6215,7 @@ widgets/qsplitter.o: widgets/qsplitter.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -5482,7 +6233,7 @@ widgets/qsplitter.o: widgets/qsplitter.cpp \
 		kernel/qdrawutil.h \
 		kernel/qbitmap.h \
 		kernel/qpixmap.h \
-		kernel/qlayoutengine.h \
+		dialogs/../kernel/qlayoutengine_p.h \
 		kernel/qabstractlayout.h \
 		kernel/qobjectlist.h \
 		kernel/qapplication.h \
@@ -5517,6 +6268,7 @@ widgets/qstatusbar.o: widgets/qstatusbar.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -5568,6 +6320,7 @@ widgets/qtabbar.o: widgets/qtabbar.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -5585,7 +6338,9 @@ widgets/qtabbar.o: widgets/qtabbar.cpp \
 		kernel/qiconset.h \
 		kernel/qpixmap.h \
 		kernel/qaccel.h \
-		kernel/qbitmap.h
+		kernel/qbitmap.h \
+		widgets/qtoolbutton.h \
+		widgets/qbutton.h
 
 widgets/qtabwidget.o: widgets/qtabwidget.cpp \
 		widgets/qtabwidget.h \
@@ -5613,6 +6368,7 @@ widgets/qtabwidget.o: widgets/qtabwidget.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -5629,6 +6385,7 @@ widgets/qtabwidget.o: widgets/qtabwidget.cpp \
 		kernel/qobjectdict.h \
 		kernel/qmetaobject.h \
 		kernel/qconnection.h \
+		tools/qstrlist.h \
 		tools/qasciidict.h \
 		tools/qgdict.h \
 		widgets/qtabbar.h \
@@ -5671,6 +6428,7 @@ widgets/qtableview.o: widgets/qtableview.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -5720,6 +6478,7 @@ widgets/qtextbrowser.o: widgets/qtextbrowser.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpalette.h \
 		kernel/qbrush.h \
 		kernel/qcursor.h \
@@ -5736,18 +6495,18 @@ widgets/qtextbrowser.o: widgets/qtextbrowser.cpp \
 		kernel/qpointarray.h \
 		kernel/qwmatrix.h \
 		widgets/qtextview.h \
-		dialogs/../kernel/qrichtextintern.cpp \
-		tools/qmap.h \
+		dialogs/../kernel/qrichtext_p.h \
 		kernel/qstylesheet.h \
 		tools/qdict.h \
 		tools/qgdict.h \
+		tools/qmap.h \
 		kernel/qapplication.h \
 		tools/qasciidict.h \
 		kernel/qtranslator.h \
 		tools/qintdict.h \
 		kernel/qlayout.h \
 		kernel/qabstractlayout.h \
-		tools/qstack.h \
+		tools/qvaluestack.h \
 		tools/qfile.h \
 		tools/qtextstream.h \
 		kernel/qbitmap.h \
@@ -5755,7 +6514,11 @@ widgets/qtextbrowser.o: widgets/qtextbrowser.cpp \
 		kernel/qimage.h \
 		tools/qstrlist.h \
 		kernel/qsimplerichtext.h \
-		kernel/qdragobject.h
+		kernel/qdragobject.h \
+		kernel/qurl.h \
+		tools/qdir.h \
+		tools/qfileinfo.h \
+		tools/qdatetime.h
 
 widgets/qtextview.o: widgets/qtextview.cpp \
 		widgets/qtextview.h \
@@ -5788,6 +6551,7 @@ widgets/qtextview.o: widgets/qtextview.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpalette.h \
 		kernel/qbrush.h \
 		kernel/qcursor.h \
@@ -5803,11 +6567,11 @@ widgets/qtextview.o: widgets/qtextview.cpp \
 		kernel/qpen.h \
 		kernel/qpointarray.h \
 		kernel/qwmatrix.h \
-		dialogs/../kernel/qrichtextintern.cpp \
-		tools/qmap.h \
+		dialogs/../kernel/qrichtext_p.h \
 		kernel/qstylesheet.h \
 		tools/qdict.h \
 		tools/qgdict.h \
+		tools/qmap.h \
 		kernel/qapplication.h \
 		tools/qasciidict.h \
 		kernel/qtranslator.h \
@@ -5821,9 +6585,11 @@ widgets/qtextview.o: widgets/qtextview.cpp \
 		kernel/qtimer.h \
 		kernel/qimage.h \
 		tools/qstrlist.h \
-		kernel/qdragobject.h
+		kernel/qdragobject.h \
+		kernel/qclipboard.h
 
 widgets/qtoolbar.o: widgets/qtoolbar.cpp \
+		widgets/qtoolbar.moc \
 		widgets/qtoolbar.h \
 		kernel/qwidget.h \
 		kernel/qwindowdefs.h \
@@ -5849,6 +6615,7 @@ widgets/qtoolbar.o: widgets/qtoolbar.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -5862,6 +6629,8 @@ widgets/qtoolbar.o: widgets/qtoolbar.cpp \
 		widgets/qmainwindow.h \
 		widgets/qpushbutton.h \
 		widgets/qbutton.h \
+		kernel/qiconset.h \
+		kernel/qpixmap.h \
 		widgets/qtooltip.h \
 		kernel/qtimer.h \
 		kernel/qlayout.h \
@@ -5871,6 +6640,7 @@ widgets/qtoolbar.o: widgets/qtoolbar.cpp \
 		kernel/qobjectdict.h \
 		kernel/qmetaobject.h \
 		kernel/qconnection.h \
+		tools/qstrlist.h \
 		tools/qasciidict.h \
 		tools/qgdict.h \
 		kernel/qpainter.h \
@@ -5880,7 +6650,11 @@ widgets/qtoolbar.o: widgets/qtoolbar.cpp \
 		kernel/qdrawutil.h \
 		kernel/qapplication.h \
 		kernel/qtranslator.h \
-		tools/qintdict.h
+		tools/qintdict.h \
+		widgets/qtoolbutton.h \
+		widgets/qpopupmenu.h \
+		widgets/qmenudata.h \
+		kernel/qsignal.h
 
 widgets/qtoolbutton.o: widgets/qtoolbutton.cpp \
 		widgets/qtoolbutton.h \
@@ -5909,6 +6683,7 @@ widgets/qtoolbutton.o: widgets/qtoolbutton.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -5936,7 +6711,12 @@ widgets/qtoolbutton.o: widgets/qtoolbutton.cpp \
 		widgets/qtoolbar.h \
 		widgets/qmainwindow.h \
 		kernel/qimage.h \
-		tools/qstrlist.h
+		tools/qstrlist.h \
+		widgets/qpopupmenu.h \
+		widgets/qframe.h \
+		widgets/qmenudata.h \
+		kernel/qsignal.h \
+		kernel/qguardedptr.h
 
 widgets/qtooltip.o: widgets/qtooltip.cpp \
 		widgets/qtooltip.moc \
@@ -5965,6 +6745,7 @@ widgets/qtooltip.o: widgets/qtooltip.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -5984,8 +6765,7 @@ widgets/qtooltip.o: widgets/qtooltip.cpp \
 		tools/qasciidict.h \
 		kernel/qtranslator.h \
 		tools/qintdict.h \
-		kernel/qmetaobject.h \
-		kernel/qconnection.h
+		kernel/qguardedptr.h
 
 widgets/qvalidator.o: widgets/qvalidator.cpp \
 		widgets/qvalidator.h \
@@ -6012,6 +6792,7 @@ widgets/qvalidator.o: widgets/qvalidator.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qwidget.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
@@ -6022,8 +6803,7 @@ widgets/qvalidator.o: widgets/qvalidator.cpp \
 		kernel/qfontmetrics.h \
 		kernel/qfontinfo.h \
 		kernel/qstyle.h \
-		kernel/qsizepolicy.h \
-		tools/qregexp.h
+		kernel/qsizepolicy.h
 
 widgets/qvbox.o: widgets/qvbox.cpp \
 		widgets/qvbox.h \
@@ -6052,6 +6832,7 @@ widgets/qvbox.o: widgets/qvbox.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -6095,6 +6876,7 @@ widgets/qvbuttongroup.o: widgets/qvbuttongroup.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -6134,6 +6916,7 @@ widgets/qvgroupbox.o: widgets/qvgroupbox.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -6146,9 +6929,10 @@ widgets/qvgroupbox.o: widgets/qvgroupbox.cpp \
 		kernel/qsizepolicy.h
 
 widgets/qwellarray.o: widgets/qwellarray.cpp \
-		kernel/qdrawutil.h \
-		kernel/qpainter.h \
-		kernel/qpaintdevice.h \
+		widgets/qwellarray_p.h \
+		widgets/qtableview.h \
+		widgets/qframe.h \
+		kernel/qwidget.h \
 		kernel/qwindowdefs.h \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
@@ -6158,24 +6942,12 @@ widgets/qwellarray.o: widgets/qwellarray.cpp \
 		tools/qgarray.h \
 		tools/qshared.h \
 		kernel/qnamespace.h \
+		kernel/qobject.h \
+		kernel/qevent.h \
+		kernel/qregion.h \
 		kernel/qrect.h \
 		kernel/qsize.h \
 		kernel/qpoint.h \
-		kernel/qcolor.h \
-		kernel/qfontmetrics.h \
-		kernel/qfont.h \
-		kernel/qfontinfo.h \
-		kernel/qregion.h \
-		kernel/qpen.h \
-		kernel/qbrush.h \
-		kernel/qpointarray.h \
-		kernel/qwmatrix.h \
-		kernel/qpalette.h \
-		kernel/qobjectdict.h \
-		kernel/qmetaobject.h \
-		kernel/qconnection.h \
-		kernel/qobject.h \
-		kernel/qevent.h \
 		kernel/qmime.h \
 		tools/qlist.h \
 		tools/qglist.h \
@@ -6184,17 +6956,31 @@ widgets/qwellarray.o: widgets/qwellarray.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
-		tools/qasciidict.h \
-		tools/qgdict.h \
-		widgets/qwellarray.h \
-		widgets/qtableview.h \
-		widgets/qframe.h \
-		kernel/qwidget.h \
+		tools/qregexp.h \
+		kernel/qpaintdevice.h \
+		kernel/qpalette.h \
+		kernel/qcolor.h \
+		kernel/qbrush.h \
 		kernel/qcursor.h \
+		kernel/qfont.h \
+		kernel/qfontmetrics.h \
+		kernel/qfontinfo.h \
 		kernel/qstyle.h \
-		kernel/qsizepolicy.h
+		kernel/qsizepolicy.h \
+		kernel/qdrawutil.h \
+		kernel/qpainter.h \
+		kernel/qpen.h \
+		kernel/qpointarray.h \
+		kernel/qwmatrix.h \
+		kernel/qobjectdict.h \
+		kernel/qmetaobject.h \
+		kernel/qconnection.h \
+		tools/qstrlist.h \
+		tools/qasciidict.h \
+		tools/qgdict.h
 
 widgets/qwhatsthis.o: widgets/qwhatsthis.cpp \
+		widgets/qwhatsthis.moc \
 		widgets/qwhatsthis.h \
 		kernel/qobject.h \
 		kernel/qobjectdefs.h \
@@ -6219,6 +7005,7 @@ widgets/qwhatsthis.o: widgets/qwhatsthis.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qcursor.h \
 		kernel/qapplication.h \
 		kernel/qwidget.h \
@@ -6250,13 +7037,7 @@ widgets/qwhatsthis.o: widgets/qwhatsthis.cpp \
 		widgets/qtooltip.h \
 		kernel/qsimplerichtext.h \
 		kernel/qstylesheet.h \
-		tools/qdict.h \
-		tools/qmap.h \
-		widgets/qscrollview.h \
-		widgets/qframe.h \
-		widgets/qscrollbar.h \
-		widgets/qrangecontrol.h \
-		kernel/qdrawutil.h
+		tools/qdict.h
 
 widgets/qwidgetstack.o: widgets/qwidgetstack.cpp \
 		widgets/qwidgetstack.h \
@@ -6285,6 +7066,7 @@ widgets/qwidgetstack.o: widgets/qwidgetstack.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -6302,6 +7084,7 @@ widgets/qwidgetstack.o: widgets/qwidgetstack.cpp \
 		kernel/qobjectdict.h \
 		kernel/qmetaobject.h \
 		kernel/qconnection.h \
+		tools/qstrlist.h \
 		tools/qasciidict.h \
 		widgets/qbutton.h \
 		widgets/qbuttongroup.h \
@@ -6336,6 +7119,7 @@ widgets/qwindowsstyle.o: widgets/qwindowsstyle.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qapplication.h \
 		kernel/qwidget.h \
 		kernel/qpaintdevice.h \
@@ -6363,13 +7147,75 @@ widgets/qwindowsstyle.o: widgets/qwindowsstyle.cpp \
 		tools/qstrlist.h \
 		widgets/qpushbutton.h \
 		widgets/qbutton.h \
+		kernel/qiconset.h \
 		widgets/qrangecontrol.h \
 		widgets/qscrollbar.h \
 		widgets/qtabbar.h \
-		kernel/qiconset.h \
 		widgets/qpopupmenu.h \
 		widgets/qmenudata.h \
 		kernel/qsignal.h
+
+widgets/qworkspace.o: widgets/qworkspace.cpp \
+		widgets/qworkspace.moc \
+		widgets/qworkspace.h \
+		kernel/qwidget.h \
+		kernel/qwindowdefs.h \
+		kernel/qobjectdefs.h \
+		tools/qglobal.h \
+		tools/qstring.h \
+		tools/qcstring.h \
+		tools/qarray.h \
+		tools/qgarray.h \
+		tools/qshared.h \
+		kernel/qnamespace.h \
+		kernel/qobject.h \
+		kernel/qevent.h \
+		kernel/qregion.h \
+		kernel/qrect.h \
+		kernel/qsize.h \
+		kernel/qpoint.h \
+		kernel/qmime.h \
+		tools/qlist.h \
+		tools/qglist.h \
+		tools/qcollection.h \
+		tools/qstringlist.h \
+		tools/qvaluelist.h \
+		tools/qdatastream.h \
+		tools/qiodevice.h \
+		tools/qregexp.h \
+		kernel/qpaintdevice.h \
+		kernel/qpalette.h \
+		kernel/qcolor.h \
+		kernel/qbrush.h \
+		kernel/qcursor.h \
+		kernel/qfont.h \
+		kernel/qfontmetrics.h \
+		kernel/qfontinfo.h \
+		kernel/qstyle.h \
+		kernel/qsizepolicy.h \
+		kernel/qwidgetlist.h \
+		kernel/qapplication.h \
+		tools/qasciidict.h \
+		tools/qgdict.h \
+		kernel/qtranslator.h \
+		tools/qintdict.h \
+		kernel/qobjectlist.h \
+		kernel/qlayout.h \
+		kernel/qabstractlayout.h \
+		widgets/qtoolbutton.h \
+		widgets/qbutton.h \
+		kernel/qpixmap.h \
+		kernel/qiconset.h \
+		widgets/qlabel.h \
+		widgets/qframe.h \
+		widgets/qvbox.h \
+		widgets/qhbox.h \
+		kernel/qaccel.h \
+		widgets/qpopupmenu.h \
+		widgets/qmenudata.h \
+		kernel/qsignal.h \
+		widgets/qmenubar.h \
+		kernel/qguardedptr.h
 
 dialogs/qcolordialog.o: dialogs/qcolordialog.cpp \
 		dialogs/qcolordialog.moc \
@@ -6399,6 +7245,7 @@ dialogs/qcolordialog.o: dialogs/qcolordialog.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -6417,17 +7264,26 @@ dialogs/qcolordialog.o: dialogs/qcolordialog.cpp \
 		kernel/qabstractlayout.h \
 		widgets/qlabel.h \
 		widgets/qframe.h \
-		widgets/qwellarray.h \
+		dialogs/../widgets/qwellarray_p.h \
 		widgets/qtableview.h \
 		widgets/qpushbutton.h \
 		widgets/qbutton.h \
+		kernel/qiconset.h \
+		kernel/qpixmap.h \
 		widgets/qlineedit.h \
 		kernel/qimage.h \
-		kernel/qpixmap.h \
 		tools/qstrlist.h \
-		kernel/qdrawutil.h
+		kernel/qdrawutil.h \
+		widgets/qvalidator.h \
+		kernel/qdragobject.h \
+		kernel/qapplication.h \
+		tools/qasciidict.h \
+		tools/qgdict.h \
+		kernel/qtranslator.h \
+		tools/qintdict.h
 
 dialogs/qfiledialog.o: dialogs/qfiledialog.cpp \
+		dialogs/qfiledialog.moc \
 		dialogs/qfiledialog.h \
 		tools/qdir.h \
 		tools/qstrlist.h \
@@ -6459,6 +7315,7 @@ dialogs/qfiledialog.o: dialogs/qfiledialog.cpp \
 		kernel/qmime.h \
 		tools/qstringlist.h \
 		tools/qvaluelist.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -6483,14 +7340,22 @@ dialogs/qfiledialog.o: dialogs/qfiledialog.cpp \
 		kernel/qtimer.h \
 		widgets/qlineedit.h \
 		widgets/qlistview.h \
+		kernel/qurloperator.h \
+		kernel/qurl.h \
+		kernel/qnetworkprotocol.h \
+		kernel/qurlinfo.h \
+		tools/qdict.h \
+		tools/qgdict.h \
+		tools/qqueue.h \
 		widgets/qcombobox.h \
 		widgets/qlabel.h \
 		widgets/qpushbutton.h \
 		widgets/qbutton.h \
+		kernel/qiconset.h \
+		widgets/qtoolbutton.h \
 		dialogs/qmessagebox.h \
 		kernel/qapplication.h \
 		tools/qasciidict.h \
-		tools/qgdict.h \
 		kernel/qtranslator.h \
 		tools/qintdict.h \
 		kernel/qlayout.h \
@@ -6498,7 +7363,6 @@ dialogs/qfiledialog.o: dialogs/qfiledialog.cpp \
 		kernel/qbitmap.h \
 		widgets/qpopupmenu.h \
 		widgets/qmenudata.h \
-		kernel/qiconset.h \
 		kernel/qsignal.h \
 		widgets/qwidgetstack.h \
 		tools/qptrdict.h \
@@ -6506,11 +7370,19 @@ dialogs/qfiledialog.o: dialogs/qfiledialog.cpp \
 		widgets/qgroupbox.h \
 		tools/qvector.h \
 		tools/qgvector.h \
-		tools/qregexp.h \
 		widgets/qvbox.h \
 		widgets/qhbox.h \
 		widgets/qtooltip.h \
-		widgets/qheader.h
+		widgets/qheader.h \
+		kernel/qdragobject.h \
+		kernel/qimage.h \
+		widgets/qprogressbar.h \
+		kernel/qobjectlist.h \
+		widgets/qcheckbox.h \
+		widgets/qsplitter.h \
+		tools/qmap.h \
+		kernel/qsemimodal.h \
+		kernel/qsizegrip.h
 
 dialogs/qfontdialog.o: dialogs/qfontdialog.cpp \
 		kernel/qwindowdefs.h \
@@ -6539,6 +7411,7 @@ dialogs/qfontdialog.o: dialogs/qfontdialog.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -6564,6 +7437,7 @@ dialogs/qfontdialog.o: dialogs/qfontdialog.cpp \
 		kernel/qtimer.h \
 		widgets/qpushbutton.h \
 		widgets/qbutton.h \
+		kernel/qiconset.h \
 		widgets/qcheckbox.h \
 		widgets/qcombobox.h \
 		kernel/qlayout.h \
@@ -6581,7 +7455,6 @@ dialogs/qfontdialog.o: dialogs/qfontdialog.cpp \
 		kernel/qfontdatabase.h
 
 dialogs/qmessagebox.o: dialogs/qmessagebox.cpp \
-		dialogs/qmessagebox.moc \
 		dialogs/qmessagebox.h \
 		kernel/qdialog.h \
 		kernel/qwidget.h \
@@ -6608,6 +7481,7 @@ dialogs/qmessagebox.o: dialogs/qmessagebox.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -6622,16 +7496,15 @@ dialogs/qmessagebox.o: dialogs/qmessagebox.cpp \
 		widgets/qframe.h \
 		widgets/qpushbutton.h \
 		widgets/qbutton.h \
-		kernel/qimage.h \
+		kernel/qiconset.h \
 		kernel/qpixmap.h \
+		kernel/qimage.h \
 		tools/qstrlist.h \
 		kernel/qapplication.h \
 		tools/qasciidict.h \
 		tools/qgdict.h \
 		kernel/qtranslator.h \
-		tools/qintdict.h \
-		kernel/qmetaobject.h \
-		kernel/qconnection.h
+		tools/qintdict.h
 
 dialogs/qprogressdialog.o: dialogs/qprogressdialog.cpp \
 		dialogs/qprogressdialog.h \
@@ -6660,6 +7533,7 @@ dialogs/qprogressdialog.o: dialogs/qprogressdialog.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -6672,6 +7546,8 @@ dialogs/qprogressdialog.o: dialogs/qprogressdialog.cpp \
 		kernel/qsizepolicy.h \
 		widgets/qpushbutton.h \
 		widgets/qbutton.h \
+		kernel/qiconset.h \
+		kernel/qpixmap.h \
 		widgets/qlabel.h \
 		widgets/qframe.h \
 		widgets/qprogressbar.h \
@@ -6715,6 +7591,7 @@ dialogs/qtabdialog.o: dialogs/qtabdialog.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -6731,6 +7608,7 @@ dialogs/qtabdialog.o: dialogs/qtabdialog.cpp \
 		kernel/qobjectdict.h \
 		kernel/qmetaobject.h \
 		kernel/qconnection.h \
+		tools/qstrlist.h \
 		tools/qasciidict.h \
 		tools/qgdict.h \
 		widgets/qtabbar.h \
@@ -6777,6 +7655,7 @@ dialogs/qwizard.o: dialogs/qwizard.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -6791,6 +7670,8 @@ dialogs/qwizard.o: dialogs/qwizard.cpp \
 		kernel/qabstractlayout.h \
 		widgets/qpushbutton.h \
 		widgets/qbutton.h \
+		kernel/qiconset.h \
+		kernel/qpixmap.h \
 		widgets/qlabel.h \
 		widgets/qframe.h \
 		widgets/qwidgetstack.h \
@@ -6807,6 +7688,62 @@ dialogs/qwizard.o: dialogs/qwizard.cpp \
 		kernel/qpointarray.h \
 		kernel/qwmatrix.h \
 		kernel/qaccel.h
+
+dialogs/qinputdialog.o: dialogs/qinputdialog.cpp \
+		dialogs/qinputdialog.h \
+		kernel/qdialog.h \
+		kernel/qwidget.h \
+		kernel/qwindowdefs.h \
+		kernel/qobjectdefs.h \
+		tools/qglobal.h \
+		tools/qstring.h \
+		tools/qcstring.h \
+		tools/qarray.h \
+		tools/qgarray.h \
+		tools/qshared.h \
+		kernel/qnamespace.h \
+		kernel/qobject.h \
+		kernel/qevent.h \
+		kernel/qregion.h \
+		kernel/qrect.h \
+		kernel/qsize.h \
+		kernel/qpoint.h \
+		kernel/qmime.h \
+		tools/qlist.h \
+		tools/qglist.h \
+		tools/qcollection.h \
+		tools/qstringlist.h \
+		tools/qvaluelist.h \
+		tools/qdatastream.h \
+		tools/qiodevice.h \
+		tools/qregexp.h \
+		kernel/qpaintdevice.h \
+		kernel/qpalette.h \
+		kernel/qcolor.h \
+		kernel/qbrush.h \
+		kernel/qcursor.h \
+		kernel/qfont.h \
+		kernel/qfontmetrics.h \
+		kernel/qfontinfo.h \
+		kernel/qstyle.h \
+		kernel/qsizepolicy.h \
+		kernel/qlayout.h \
+		kernel/qabstractlayout.h \
+		widgets/qlabel.h \
+		widgets/qframe.h \
+		widgets/qlineedit.h \
+		widgets/qpushbutton.h \
+		widgets/qbutton.h \
+		kernel/qiconset.h \
+		kernel/qpixmap.h \
+		widgets/qspinbox.h \
+		widgets/qrangecontrol.h \
+		widgets/qcombobox.h \
+		widgets/qwidgetstack.h \
+		tools/qintdict.h \
+		tools/qgdict.h \
+		tools/qptrdict.h \
+		widgets/qvalidator.h
 
 dialogs/moc_qcolordialog.o: dialogs/moc_qcolordialog.cpp \
 		dialogs/qcolordialog.h \
@@ -6835,6 +7772,7 @@ dialogs/moc_qcolordialog.o: dialogs/moc_qcolordialog.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -6878,6 +7816,7 @@ dialogs/moc_qfiledialog.o: dialogs/moc_qfiledialog.cpp \
 		kernel/qmime.h \
 		tools/qstringlist.h \
 		tools/qvaluelist.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -6901,7 +7840,14 @@ dialogs/moc_qfiledialog.o: dialogs/moc_qfiledialog.cpp \
 		kernel/qpixmap.h \
 		kernel/qtimer.h \
 		widgets/qlineedit.h \
-		widgets/qlistview.h
+		widgets/qlistview.h \
+		kernel/qurloperator.h \
+		kernel/qurl.h \
+		kernel/qnetworkprotocol.h \
+		kernel/qurlinfo.h \
+		tools/qdict.h \
+		tools/qgdict.h \
+		tools/qqueue.h
 
 dialogs/moc_qfontdialog.o: dialogs/moc_qfontdialog.cpp \
 		dialogs/qfontdialog.h \
@@ -6930,6 +7876,7 @@ dialogs/moc_qfontdialog.o: dialogs/moc_qfontdialog.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -6968,6 +7915,7 @@ dialogs/moc_qmessagebox.o: dialogs/moc_qmessagebox.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -7006,6 +7954,7 @@ dialogs/moc_qprogressdialog.o: dialogs/moc_qprogressdialog.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -7018,6 +7967,8 @@ dialogs/moc_qprogressdialog.o: dialogs/moc_qprogressdialog.cpp \
 		kernel/qsizepolicy.h \
 		widgets/qpushbutton.h \
 		widgets/qbutton.h \
+		kernel/qiconset.h \
+		kernel/qpixmap.h \
 		widgets/qlabel.h \
 		widgets/qframe.h \
 		widgets/qprogressbar.h
@@ -7049,6 +8000,7 @@ dialogs/moc_qtabdialog.o: dialogs/moc_qtabdialog.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -7089,6 +8041,46 @@ dialogs/moc_qwizard.o: dialogs/moc_qwizard.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
+		kernel/qpaintdevice.h \
+		kernel/qpalette.h \
+		kernel/qcolor.h \
+		kernel/qbrush.h \
+		kernel/qcursor.h \
+		kernel/qfont.h \
+		kernel/qfontmetrics.h \
+		kernel/qfontinfo.h \
+		kernel/qstyle.h \
+		kernel/qsizepolicy.h
+
+dialogs/moc_qinputdialog.o: dialogs/moc_qinputdialog.cpp \
+		dialogs/qinputdialog.h \
+		kernel/qdialog.h \
+		kernel/qwidget.h \
+		kernel/qwindowdefs.h \
+		kernel/qobjectdefs.h \
+		tools/qglobal.h \
+		tools/qstring.h \
+		tools/qcstring.h \
+		tools/qarray.h \
+		tools/qgarray.h \
+		tools/qshared.h \
+		kernel/qnamespace.h \
+		kernel/qobject.h \
+		kernel/qevent.h \
+		kernel/qregion.h \
+		kernel/qrect.h \
+		kernel/qsize.h \
+		kernel/qpoint.h \
+		kernel/qmime.h \
+		tools/qlist.h \
+		tools/qglist.h \
+		tools/qcollection.h \
+		tools/qstringlist.h \
+		tools/qvaluelist.h \
+		tools/qdatastream.h \
+		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -7125,6 +8117,7 @@ kernel/moc_qabstractlayout.o: kernel/moc_qabstractlayout.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qsizepolicy.h \
 		kernel/qwidget.h \
 		kernel/qpaintdevice.h \
@@ -7161,7 +8154,8 @@ kernel/moc_qaccel.o: kernel/moc_qaccel.cpp \
 		tools/qstringlist.h \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
-		tools/qiodevice.h
+		tools/qiodevice.h \
+		tools/qregexp.h
 
 kernel/moc_qapplication.o: kernel/moc_qapplication.cpp \
 		kernel/qapplication.h \
@@ -7189,6 +8183,7 @@ kernel/moc_qapplication.o: kernel/moc_qapplication.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -7229,6 +8224,7 @@ kernel/moc_qasyncio.o: kernel/moc_qasyncio.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qsignal.h \
 		kernel/qtimer.h
 
@@ -7256,7 +8252,8 @@ kernel/moc_qclipboard.o: kernel/moc_qclipboard.cpp \
 		tools/qstringlist.h \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
-		tools/qiodevice.h
+		tools/qiodevice.h \
+		tools/qregexp.h
 
 kernel/moc_qdialog.o: kernel/moc_qdialog.cpp \
 		kernel/qdialog.h \
@@ -7284,6 +8281,7 @@ kernel/moc_qdialog.o: kernel/moc_qdialog.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -7320,11 +8318,39 @@ kernel/moc_qdragobject.o: kernel/moc_qdragobject.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qimage.h \
 		kernel/qpixmap.h \
 		kernel/qpaintdevice.h \
 		kernel/qcolor.h \
 		tools/qstrlist.h
+
+kernel/moc_qguardedptr.o: kernel/moc_qguardedptr.cpp \
+		kernel/qguardedptr.h \
+		kernel/qobject.h \
+		kernel/qobjectdefs.h \
+		tools/qglobal.h \
+		kernel/qwindowdefs.h \
+		tools/qstring.h \
+		tools/qcstring.h \
+		tools/qarray.h \
+		tools/qgarray.h \
+		tools/qshared.h \
+		kernel/qnamespace.h \
+		kernel/qevent.h \
+		kernel/qregion.h \
+		kernel/qrect.h \
+		kernel/qsize.h \
+		kernel/qpoint.h \
+		kernel/qmime.h \
+		tools/qlist.h \
+		tools/qglist.h \
+		tools/qcollection.h \
+		tools/qstringlist.h \
+		tools/qvaluelist.h \
+		tools/qdatastream.h \
+		tools/qiodevice.h \
+		tools/qregexp.h
 
 kernel/moc_qlayout.o: kernel/moc_qlayout.cpp \
 		kernel/qlayout.h \
@@ -7352,6 +8378,7 @@ kernel/moc_qlayout.o: kernel/moc_qlayout.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qsizepolicy.h \
 		kernel/qwidget.h \
 		kernel/qpaintdevice.h \
@@ -7389,8 +8416,45 @@ kernel/moc_qtranslator.o: kernel/moc_qtranslator.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		tools/qintdict.h \
 		tools/qgdict.h
+
+kernel/moc_qnetworkprotocol.o: kernel/moc_qnetworkprotocol.cpp \
+		kernel/qnetworkprotocol.h \
+		kernel/qurlinfo.h \
+		tools/qdatetime.h \
+		tools/qstring.h \
+		tools/qcstring.h \
+		tools/qarray.h \
+		tools/qgarray.h \
+		tools/qshared.h \
+		tools/qglobal.h \
+		tools/qdict.h \
+		tools/qgdict.h \
+		tools/qcollection.h \
+		tools/qdir.h \
+		tools/qstrlist.h \
+		tools/qlist.h \
+		tools/qglist.h \
+		tools/qdatastream.h \
+		tools/qiodevice.h \
+		tools/qfileinfo.h \
+		tools/qfile.h \
+		tools/qstringlist.h \
+		tools/qvaluelist.h \
+		tools/qregexp.h \
+		kernel/qobject.h \
+		kernel/qobjectdefs.h \
+		kernel/qwindowdefs.h \
+		kernel/qnamespace.h \
+		kernel/qevent.h \
+		kernel/qregion.h \
+		kernel/qrect.h \
+		kernel/qsize.h \
+		kernel/qpoint.h \
+		kernel/qmime.h \
+		tools/qqueue.h
 
 kernel/moc_qsemimodal.o: kernel/moc_qsemimodal.cpp \
 		kernel/qsemimodal.h \
@@ -7418,6 +8482,7 @@ kernel/moc_qsemimodal.o: kernel/moc_qsemimodal.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -7453,7 +8518,8 @@ kernel/moc_qsessionmanager.o: kernel/moc_qsessionmanager.cpp \
 		tools/qstringlist.h \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
-		tools/qiodevice.h
+		tools/qiodevice.h \
+		tools/qregexp.h
 
 kernel/moc_qsignalmapper.o: kernel/moc_qsignalmapper.cpp \
 		kernel/qsignalmapper.h \
@@ -7479,7 +8545,8 @@ kernel/moc_qsignalmapper.o: kernel/moc_qsignalmapper.cpp \
 		tools/qstringlist.h \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
-		tools/qiodevice.h
+		tools/qiodevice.h \
+		tools/qregexp.h
 
 kernel/moc_qsizegrip.o: kernel/moc_qsizegrip.cpp \
 		kernel/qsizegrip.h \
@@ -7507,6 +8574,7 @@ kernel/moc_qsizegrip.o: kernel/moc_qsizegrip.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -7542,7 +8610,8 @@ kernel/moc_qsocketnotifier.o: kernel/moc_qsocketnotifier.cpp \
 		tools/qstringlist.h \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
-		tools/qiodevice.h
+		tools/qiodevice.h \
+		tools/qregexp.h
 
 kernel/moc_qstyle.o: kernel/moc_qstyle.cpp \
 		kernel/qstyle.h \
@@ -7568,57 +8637,37 @@ kernel/moc_qstyle.o: kernel/moc_qstyle.cpp \
 		tools/qstringlist.h \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
-		tools/qiodevice.h
+		tools/qiodevice.h \
+		tools/qregexp.h
 
 kernel/moc_qstylesheet.o: kernel/moc_qstylesheet.cpp \
 		kernel/qstylesheet.h \
-		tools/qlist.h \
-		tools/qglist.h \
-		tools/qcollection.h \
-		tools/qglobal.h \
-		tools/qdict.h \
-		tools/qgdict.h \
 		tools/qstring.h \
 		tools/qcstring.h \
 		tools/qarray.h \
 		tools/qgarray.h \
 		tools/qshared.h \
-		tools/qmap.h \
-		tools/qdatastream.h \
-		tools/qiodevice.h \
-		kernel/qpixmap.h \
-		kernel/qpaintdevice.h \
-		kernel/qwindowdefs.h \
+		tools/qglobal.h \
+		tools/qdict.h \
+		tools/qgdict.h \
+		tools/qcollection.h \
+		kernel/qobject.h \
 		kernel/qobjectdefs.h \
+		kernel/qwindowdefs.h \
 		kernel/qnamespace.h \
+		kernel/qevent.h \
+		kernel/qregion.h \
 		kernel/qrect.h \
 		kernel/qsize.h \
 		kernel/qpoint.h \
-		kernel/qcolor.h \
-		widgets/qscrollview.h \
-		widgets/qframe.h \
-		kernel/qwidget.h \
-		kernel/qobject.h \
-		kernel/qevent.h \
-		kernel/qregion.h \
 		kernel/qmime.h \
+		tools/qlist.h \
+		tools/qglist.h \
 		tools/qstringlist.h \
 		tools/qvaluelist.h \
-		kernel/qpalette.h \
-		kernel/qbrush.h \
-		kernel/qcursor.h \
-		kernel/qfont.h \
-		kernel/qfontmetrics.h \
-		kernel/qfontinfo.h \
-		kernel/qstyle.h \
-		kernel/qsizepolicy.h \
-		widgets/qscrollbar.h \
-		widgets/qrangecontrol.h \
-		kernel/qdrawutil.h \
-		kernel/qpainter.h \
-		kernel/qpen.h \
-		kernel/qpointarray.h \
-		kernel/qwmatrix.h
+		tools/qdatastream.h \
+		tools/qiodevice.h \
+		tools/qregexp.h
 
 kernel/moc_qtimer.o: kernel/moc_qtimer.cpp \
 		kernel/qtimer.h \
@@ -7644,7 +8693,83 @@ kernel/moc_qtimer.o: kernel/moc_qtimer.cpp \
 		tools/qstringlist.h \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
-		tools/qiodevice.h
+		tools/qiodevice.h \
+		tools/qregexp.h
+
+kernel/moc_qlocalfs.o: kernel/moc_qlocalfs.cpp \
+		kernel/qlocalfs.h \
+		kernel/qnetworkprotocol.h \
+		kernel/qurlinfo.h \
+		tools/qdatetime.h \
+		tools/qstring.h \
+		tools/qcstring.h \
+		tools/qarray.h \
+		tools/qgarray.h \
+		tools/qshared.h \
+		tools/qglobal.h \
+		tools/qdict.h \
+		tools/qgdict.h \
+		tools/qcollection.h \
+		tools/qdir.h \
+		tools/qstrlist.h \
+		tools/qlist.h \
+		tools/qglist.h \
+		tools/qdatastream.h \
+		tools/qiodevice.h \
+		tools/qfileinfo.h \
+		tools/qfile.h \
+		tools/qstringlist.h \
+		tools/qvaluelist.h \
+		tools/qregexp.h \
+		kernel/qobject.h \
+		kernel/qobjectdefs.h \
+		kernel/qwindowdefs.h \
+		kernel/qnamespace.h \
+		kernel/qevent.h \
+		kernel/qregion.h \
+		kernel/qrect.h \
+		kernel/qsize.h \
+		kernel/qpoint.h \
+		kernel/qmime.h \
+		tools/qqueue.h
+
+kernel/moc_qurloperator.o: kernel/moc_qurloperator.cpp \
+		kernel/qurloperator.h \
+		kernel/qobject.h \
+		kernel/qobjectdefs.h \
+		tools/qglobal.h \
+		kernel/qwindowdefs.h \
+		tools/qstring.h \
+		tools/qcstring.h \
+		tools/qarray.h \
+		tools/qgarray.h \
+		tools/qshared.h \
+		kernel/qnamespace.h \
+		kernel/qevent.h \
+		kernel/qregion.h \
+		kernel/qrect.h \
+		kernel/qsize.h \
+		kernel/qpoint.h \
+		kernel/qmime.h \
+		tools/qlist.h \
+		tools/qglist.h \
+		tools/qcollection.h \
+		tools/qstringlist.h \
+		tools/qvaluelist.h \
+		tools/qdatastream.h \
+		tools/qiodevice.h \
+		tools/qregexp.h \
+		kernel/qurl.h \
+		tools/qdir.h \
+		tools/qstrlist.h \
+		tools/qfileinfo.h \
+		tools/qfile.h \
+		tools/qdatetime.h \
+		kernel/qnetworkprotocol.h \
+		kernel/qurlinfo.h \
+		tools/qdict.h \
+		tools/qgdict.h \
+		tools/qqueue.h
 
 kernel/moc_qwidget.o: kernel/moc_qwidget.cpp \
 		kernel/qwidget.h \
@@ -7671,6 +8796,7 @@ kernel/moc_qwidget.o: kernel/moc_qwidget.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -7710,6 +8836,7 @@ widgets/moc_qbuttongroup.o: widgets/moc_qbuttongroup.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -7747,6 +8874,7 @@ widgets/moc_qbutton.o: widgets/moc_qbutton.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -7785,6 +8913,7 @@ widgets/moc_qcheckbox.o: widgets/moc_qcheckbox.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -7824,6 +8953,7 @@ widgets/moc_qcdestyle.o: widgets/moc_qcdestyle.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
 		kernel/qbrush.h
@@ -7854,6 +8984,7 @@ widgets/moc_qcombobox.o: widgets/moc_qcombobox.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -7890,7 +9021,8 @@ widgets/moc_qcommonstyle.o: widgets/moc_qcommonstyle.cpp \
 		tools/qstringlist.h \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
-		tools/qiodevice.h
+		tools/qiodevice.h \
+		tools/qregexp.h
 
 widgets/moc_qframe.o: widgets/moc_qframe.cpp \
 		widgets/qframe.h \
@@ -7918,6 +9050,7 @@ widgets/moc_qframe.o: widgets/moc_qframe.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -7956,6 +9089,7 @@ widgets/moc_qgrid.o: widgets/moc_qgrid.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -7994,6 +9128,7 @@ widgets/moc_qgroupbox.o: widgets/moc_qgroupbox.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -8034,6 +9169,7 @@ widgets/moc_qhbuttongroup.o: widgets/moc_qhbuttongroup.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -8071,6 +9207,7 @@ widgets/moc_qheader.o: widgets/moc_qheader.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -8112,6 +9249,7 @@ widgets/moc_qhgroupbox.o: widgets/moc_qhgroupbox.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -8149,6 +9287,7 @@ widgets/moc_qhbox.o: widgets/moc_qhbox.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -8160,6 +9299,59 @@ widgets/moc_qhbox.o: widgets/moc_qhbox.cpp \
 		kernel/qstyle.h \
 		kernel/qsizepolicy.h \
 		widgets/qframe.h
+
+widgets/moc_qiconview.o: widgets/moc_qiconview.cpp \
+		widgets/qiconview.h \
+		widgets/qscrollview.h \
+		widgets/qframe.h \
+		kernel/qwidget.h \
+		kernel/qwindowdefs.h \
+		kernel/qobjectdefs.h \
+		tools/qglobal.h \
+		tools/qstring.h \
+		tools/qcstring.h \
+		tools/qarray.h \
+		tools/qgarray.h \
+		tools/qshared.h \
+		kernel/qnamespace.h \
+		kernel/qobject.h \
+		kernel/qevent.h \
+		kernel/qregion.h \
+		kernel/qrect.h \
+		kernel/qsize.h \
+		kernel/qpoint.h \
+		kernel/qmime.h \
+		tools/qlist.h \
+		tools/qglist.h \
+		tools/qcollection.h \
+		tools/qstringlist.h \
+		tools/qvaluelist.h \
+		tools/qdatastream.h \
+		tools/qiodevice.h \
+		tools/qregexp.h \
+		kernel/qpaintdevice.h \
+		kernel/qpalette.h \
+		kernel/qcolor.h \
+		kernel/qbrush.h \
+		kernel/qcursor.h \
+		kernel/qfont.h \
+		kernel/qfontmetrics.h \
+		kernel/qfontinfo.h \
+		kernel/qstyle.h \
+		kernel/qsizepolicy.h \
+		widgets/qscrollbar.h \
+		widgets/qrangecontrol.h \
+		kernel/qdrawutil.h \
+		kernel/qpainter.h \
+		kernel/qpen.h \
+		kernel/qpointarray.h \
+		kernel/qwmatrix.h \
+		kernel/qiconset.h \
+		kernel/qpixmap.h \
+		kernel/qdragobject.h \
+		kernel/qimage.h \
+		tools/qstrlist.h \
+		kernel/qbitmap.h
 
 widgets/moc_qlabel.o: widgets/moc_qlabel.cpp \
 		widgets/qlabel.h \
@@ -8188,6 +9380,7 @@ widgets/moc_qlabel.o: widgets/moc_qlabel.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -8226,6 +9419,7 @@ widgets/moc_qlcdnumber.o: widgets/moc_qlcdnumber.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -8264,6 +9458,7 @@ widgets/moc_qlineedit.o: widgets/moc_qlineedit.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -8303,6 +9498,7 @@ widgets/moc_qlistbox.o: widgets/moc_qlistbox.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -8351,6 +9547,7 @@ widgets/moc_qlistview.o: widgets/moc_qlistview.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -8395,6 +9592,7 @@ widgets/moc_qmainwindow.o: widgets/moc_qmainwindow.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -8434,6 +9632,7 @@ widgets/moc_qmenubar.o: widgets/moc_qmenubar.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -8476,6 +9675,7 @@ widgets/moc_qmotifstyle.o: widgets/moc_qmotifstyle.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
 		kernel/qbrush.h
@@ -8508,6 +9708,7 @@ widgets/moc_qmultilineedit.o: widgets/moc_qmultilineedit.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -8547,6 +9748,7 @@ widgets/moc_qplatinumstyle.o: widgets/moc_qplatinumstyle.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
 		kernel/qbrush.h
@@ -8578,6 +9780,7 @@ widgets/moc_qpopupmenu.o: widgets/moc_qpopupmenu.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -8620,6 +9823,7 @@ widgets/moc_qprogressbar.o: widgets/moc_qprogressbar.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -8658,6 +9862,7 @@ widgets/moc_qpushbutton.o: widgets/moc_qpushbutton.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -8667,7 +9872,9 @@ widgets/moc_qpushbutton.o: widgets/moc_qpushbutton.cpp \
 		kernel/qfontmetrics.h \
 		kernel/qfontinfo.h \
 		kernel/qstyle.h \
-		kernel/qsizepolicy.h
+		kernel/qsizepolicy.h \
+		kernel/qiconset.h \
+		kernel/qpixmap.h
 
 widgets/moc_qradiobutton.o: widgets/moc_qradiobutton.cpp \
 		widgets/qradiobutton.h \
@@ -8696,6 +9903,7 @@ widgets/moc_qradiobutton.o: widgets/moc_qradiobutton.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -8733,6 +9941,7 @@ widgets/moc_qscrollbar.o: widgets/moc_qscrollbar.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -8777,6 +9986,7 @@ widgets/moc_qscrollview.o: widgets/moc_qscrollview.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -8821,6 +10031,7 @@ widgets/moc_qslider.o: widgets/moc_qslider.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -8860,6 +10071,7 @@ widgets/moc_qspinbox.o: widgets/moc_qspinbox.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -8899,6 +10111,7 @@ widgets/moc_qsplitter.o: widgets/moc_qsplitter.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -8936,6 +10149,7 @@ widgets/moc_qstatusbar.o: widgets/moc_qstatusbar.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -8973,6 +10187,7 @@ widgets/moc_qtabbar.o: widgets/moc_qtabbar.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -9016,6 +10231,7 @@ widgets/moc_qtabwidget.o: widgets/moc_qtabwidget.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -9056,6 +10272,7 @@ widgets/moc_qtableview.o: widgets/moc_qtableview.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -9098,6 +10315,7 @@ widgets/moc_qtextbrowser.o: widgets/moc_qtextbrowser.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpalette.h \
 		kernel/qbrush.h \
 		kernel/qcursor.h \
@@ -9146,6 +10364,7 @@ widgets/moc_qtextview.o: widgets/moc_qtextview.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpalette.h \
 		kernel/qbrush.h \
 		kernel/qcursor.h \
@@ -9188,6 +10407,7 @@ widgets/moc_qtoolbar.o: widgets/moc_qtoolbar.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -9227,6 +10447,7 @@ widgets/moc_qtoolbutton.o: widgets/moc_qtoolbutton.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -9266,6 +10487,7 @@ widgets/moc_qtooltip.o: widgets/moc_qtooltip.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -9302,7 +10524,8 @@ widgets/moc_qvalidator.o: widgets/moc_qvalidator.cpp \
 		tools/qstringlist.h \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
-		tools/qiodevice.h
+		tools/qiodevice.h \
+		tools/qregexp.h
 
 widgets/moc_qvbox.o: widgets/moc_qvbox.cpp \
 		widgets/qvbox.h \
@@ -9331,6 +10554,7 @@ widgets/moc_qvbox.o: widgets/moc_qvbox.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -9372,6 +10596,7 @@ widgets/moc_qvbuttongroup.o: widgets/moc_qvbuttongroup.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -9411,6 +10636,7 @@ widgets/moc_qvgroupbox.o: widgets/moc_qvgroupbox.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -9422,8 +10648,8 @@ widgets/moc_qvgroupbox.o: widgets/moc_qvgroupbox.cpp \
 		kernel/qstyle.h \
 		kernel/qsizepolicy.h
 
-widgets/moc_qwellarray.o: widgets/moc_qwellarray.cpp \
-		widgets/qwellarray.h \
+widgets/moc_qwellarray_p.o: widgets/moc_qwellarray_p.cpp \
+		widgets/qwellarray_p.h \
 		widgets/qtableview.h \
 		widgets/qframe.h \
 		kernel/qwidget.h \
@@ -9450,6 +10676,7 @@ widgets/moc_qwellarray.o: widgets/moc_qwellarray.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -9488,6 +10715,7 @@ widgets/moc_qwidgetstack.o: widgets/moc_qwidgetstack.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -9528,7 +10756,47 @@ widgets/moc_qwindowsstyle.o: widgets/moc_qwindowsstyle.cpp \
 		tools/qstringlist.h \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
-		tools/qiodevice.h
+		tools/qiodevice.h \
+		tools/qregexp.h
+
+widgets/moc_qworkspace.o: widgets/moc_qworkspace.cpp \
+		widgets/qworkspace.h \
+		kernel/qwidget.h \
+		kernel/qwindowdefs.h \
+		kernel/qobjectdefs.h \
+		tools/qglobal.h \
+		tools/qstring.h \
+		tools/qcstring.h \
+		tools/qarray.h \
+		tools/qgarray.h \
+		tools/qshared.h \
+		kernel/qnamespace.h \
+		kernel/qobject.h \
+		kernel/qevent.h \
+		kernel/qregion.h \
+		kernel/qrect.h \
+		kernel/qsize.h \
+		kernel/qpoint.h \
+		kernel/qmime.h \
+		tools/qlist.h \
+		tools/qglist.h \
+		tools/qcollection.h \
+		tools/qstringlist.h \
+		tools/qvaluelist.h \
+		tools/qdatastream.h \
+		tools/qiodevice.h \
+		tools/qregexp.h \
+		kernel/qpaintdevice.h \
+		kernel/qpalette.h \
+		kernel/qcolor.h \
+		kernel/qbrush.h \
+		kernel/qcursor.h \
+		kernel/qfont.h \
+		kernel/qfontmetrics.h \
+		kernel/qfontinfo.h \
+		kernel/qstyle.h \
+		kernel/qsizepolicy.h \
+		kernel/qwidgetlist.h
 
 dialogs/moc_qprintdialog.o: dialogs/moc_qprintdialog.cpp \
 		dialogs/qprintdialog.h \
@@ -9557,6 +10825,7 @@ dialogs/moc_qprintdialog.o: dialogs/moc_qprintdialog.cpp \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
+		tools/qregexp.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -9589,6 +10858,9 @@ dialogs/moc_qtabdialog.cpp: dialogs/qtabdialog.h
 dialogs/moc_qwizard.cpp: dialogs/qwizard.h
 	$(MOC) dialogs/qwizard.h -o dialogs/moc_qwizard.cpp
 
+dialogs/moc_qinputdialog.cpp: dialogs/qinputdialog.h
+	$(MOC) dialogs/qinputdialog.h -o dialogs/moc_qinputdialog.cpp
+
 kernel/moc_qabstractlayout.cpp: kernel/qabstractlayout.h
 	$(MOC) kernel/qabstractlayout.h -o kernel/moc_qabstractlayout.cpp
 
@@ -9610,11 +10882,17 @@ kernel/moc_qdialog.cpp: kernel/qdialog.h
 kernel/moc_qdragobject.cpp: kernel/qdragobject.h
 	$(MOC) kernel/qdragobject.h -o kernel/moc_qdragobject.cpp
 
+kernel/moc_qguardedptr.cpp: kernel/qguardedptr.h
+	$(MOC) kernel/qguardedptr.h -o kernel/moc_qguardedptr.cpp
+
 kernel/moc_qlayout.cpp: kernel/qlayout.h
 	$(MOC) kernel/qlayout.h -o kernel/moc_qlayout.cpp
 
 kernel/moc_qtranslator.cpp: kernel/qtranslator.h
 	$(MOC) kernel/qtranslator.h -o kernel/moc_qtranslator.cpp
+
+kernel/moc_qnetworkprotocol.cpp: kernel/qnetworkprotocol.h
+	$(MOC) kernel/qnetworkprotocol.h -o kernel/moc_qnetworkprotocol.cpp
 
 kernel/moc_qsemimodal.cpp: kernel/qsemimodal.h
 	$(MOC) kernel/qsemimodal.h -o kernel/moc_qsemimodal.cpp
@@ -9639,6 +10917,12 @@ kernel/moc_qstylesheet.cpp: kernel/qstylesheet.h
 
 kernel/moc_qtimer.cpp: kernel/qtimer.h
 	$(MOC) kernel/qtimer.h -o kernel/moc_qtimer.cpp
+
+kernel/moc_qlocalfs.cpp: kernel/qlocalfs.h
+	$(MOC) kernel/qlocalfs.h -o kernel/moc_qlocalfs.cpp
+
+kernel/moc_qurloperator.cpp: kernel/qurloperator.h
+	$(MOC) kernel/qurloperator.h -o kernel/moc_qurloperator.cpp
 
 kernel/moc_qwidget.cpp: kernel/qwidget.h
 	$(MOC) kernel/qwidget.h -o kernel/moc_qwidget.cpp
@@ -9681,6 +10965,9 @@ widgets/moc_qhgroupbox.cpp: widgets/qhgroupbox.h
 
 widgets/moc_qhbox.cpp: widgets/qhbox.h
 	$(MOC) widgets/qhbox.h -o widgets/moc_qhbox.cpp
+
+widgets/moc_qiconview.cpp: widgets/qiconview.h
+	$(MOC) widgets/qiconview.h -o widgets/moc_qiconview.cpp
 
 widgets/moc_qlabel.cpp: widgets/qlabel.h
 	$(MOC) widgets/qlabel.h -o widgets/moc_qlabel.cpp
@@ -9778,8 +11065,8 @@ widgets/moc_qvbuttongroup.cpp: widgets/qvbuttongroup.h
 widgets/moc_qvgroupbox.cpp: widgets/qvgroupbox.h
 	$(MOC) widgets/qvgroupbox.h -o widgets/moc_qvgroupbox.cpp
 
-widgets/moc_qwellarray.cpp: widgets/qwellarray.h
-	$(MOC) widgets/qwellarray.h -o widgets/moc_qwellarray.cpp
+widgets/moc_qwellarray_p.cpp: widgets/qwellarray_p.h
+	$(MOC) widgets/qwellarray_p.h -o widgets/moc_qwellarray_p.cpp
 
 widgets/moc_qwidgetstack.cpp: widgets/qwidgetstack.h
 	$(MOC) widgets/qwidgetstack.h -o widgets/moc_qwidgetstack.cpp
@@ -9787,20 +11074,38 @@ widgets/moc_qwidgetstack.cpp: widgets/qwidgetstack.h
 widgets/moc_qwindowsstyle.cpp: widgets/qwindowsstyle.h
 	$(MOC) widgets/qwindowsstyle.h -o widgets/moc_qwindowsstyle.cpp
 
+widgets/moc_qworkspace.cpp: widgets/qworkspace.h
+	$(MOC) widgets/qworkspace.h -o widgets/moc_qworkspace.cpp
+
 dialogs/moc_qprintdialog.cpp: dialogs/qprintdialog.h
 	$(MOC) dialogs/qprintdialog.h -o dialogs/moc_qprintdialog.cpp
 
 kernel/qapplication_x11.moc: kernel/qapplication_x11.cpp
 	$(MOC) kernel/qapplication_x11.cpp -o kernel/qapplication_x11.moc
 
+kernel/qmovie.moc: kernel/qmovie.cpp
+	$(MOC) kernel/qmovie.cpp -o kernel/qmovie.moc
+
+widgets/qiconview.moc: widgets/qiconview.cpp
+	$(MOC) widgets/qiconview.cpp -o widgets/qiconview.moc
+
+widgets/qtoolbar.moc: widgets/qtoolbar.cpp
+	$(MOC) widgets/qtoolbar.cpp -o widgets/qtoolbar.moc
+
 widgets/qtooltip.moc: widgets/qtooltip.cpp
 	$(MOC) widgets/qtooltip.cpp -o widgets/qtooltip.moc
+
+widgets/qwhatsthis.moc: widgets/qwhatsthis.cpp
+	$(MOC) widgets/qwhatsthis.cpp -o widgets/qwhatsthis.moc
+
+widgets/qworkspace.moc: widgets/qworkspace.cpp
+	$(MOC) widgets/qworkspace.cpp -o widgets/qworkspace.moc
 
 dialogs/qcolordialog.moc: dialogs/qcolordialog.cpp
 	$(MOC) dialogs/qcolordialog.cpp -o dialogs/qcolordialog.moc
 
-dialogs/qmessagebox.moc: dialogs/qmessagebox.cpp
-	$(MOC) dialogs/qmessagebox.cpp -o dialogs/qmessagebox.moc
+dialogs/qfiledialog.moc: dialogs/qfiledialog.cpp
+	$(MOC) dialogs/qfiledialog.cpp -o dialogs/qfiledialog.moc
 
 3rdparty/libpng/png.o: 3rdparty/libpng/png.c \
 		3rdparty/libpng/png.h \

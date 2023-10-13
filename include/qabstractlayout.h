@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qabstractlayout.h,v 2.25.2.1 1999/07/07 17:15:51 warwick Exp $
+** $Id: qt/src/kernel/qabstractlayout.h   2.1.0   edited 2000-03-24 $
 **
 ** Definition of the abstract layout base class
 **
 ** Created : 960416
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -38,6 +38,8 @@ struct QLayoutData;
 class QLayoutItem;
 class QLayout;
 class QSpacerItem;
+class QDomElement;
+class QConfigureLayoutEvent;
 
 class Q_EXPORT QGLayoutIterator : public QShared
 {
@@ -57,9 +59,9 @@ public:
     ~QLayoutIterator() { if ( it && it->deref() ) delete it; }
     QLayoutIterator &operator=( const QLayoutIterator &i )
     {
+	if ( i.it ) i.it->ref();
 	if ( it && it->deref() ) delete it;
 	it = i.it;
-	if ( it ) it->ref();
 	return *this;
     }
     QLayoutItem *operator++() { return it ? it->next() : 0; }
@@ -151,28 +153,36 @@ private:
 class Q_EXPORT QLayout : public QObject, public QLayoutItem
 {
     Q_OBJECT
+    Q_ENUMS( ResizeMode )
+    Q_PROPERTY( int margin READ margin WRITE setMargin )
+    Q_PROPERTY( int spacing READ spacing WRITE setSpacing )
+    Q_PROPERTY( ResizeMode resizeMode READ resizeMode WRITE setResizeMode )
+    
 public:
-    QLayout( QWidget *parent, int border=0, int space=-1,
+    QLayout( QWidget *parent, int margin=0, int space=-1,
 	     const char *name=0 );
     QLayout( QLayout *parentLayout, int space=-1, const char *name=0 );
     QLayout( int space=-1, const char *name=0 );
 
     ~QLayout();
-    int spacing() const { return insideSpacing; }
+    
     int margin() const { return outsideBorder; }
+    int spacing() const { return insideSpacing; }
 
     virtual void setMargin( int );
     virtual void setSpacing( int );
 
     enum { unlimited = QWIDGETSIZE_MAX };
-    enum ResizeMode { FreeResize, Minimum, Fixed };
 #if 1 //OBSOLETE
     int defaultBorder() const { return insideSpacing; }
     void freeze( int w, int h );
     void freeze() { setResizeMode( Fixed ); }
 #endif
+
+    enum ResizeMode { FreeResize, Minimum, Fixed };
     void setResizeMode( ResizeMode );
     ResizeMode resizeMode() const;
+
     virtual void  setMenuBar( QMenuBar *w );
 
     QWidget *mainWidget();
@@ -182,6 +192,7 @@ public:
     virtual void setAutoAdd( bool );
     bool autoAdd() const { return autoNewChild; }
 
+    void invalidate();
     QRect geometry() const;
     bool activate();
 
@@ -200,12 +211,19 @@ public:
     QSize totalMaximumSize() const;
     QSize totalSizeHint() const;
     QLayout *layout();
+
+    bool supportsMargin() const { return marginImpl; }
+
 protected:
     bool  eventFilter( QObject *, QEvent * );
     void addChildLayout( QLayout *l );
     void deleteAllItems();
+
+    void setSupportsMargin( bool );
+    QRect alignmentRect( const QRect& ) const;
 private:
     void setWidgetLayout( QWidget *, QLayout * );
+    void init();
     int insideSpacing;
     int outsideBorder;
     uint topLevel : 1;
@@ -213,6 +231,7 @@ private:
     uint autoNewChild : 1;
     uint frozen : 1;
     uint activated : 1;
+    uint marginImpl : 1;
     QRect rect;
     QLayoutData *extraData;
     QMenuBar *menubar;

@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qmenudata.h,v 2.33 1999/06/17 20:07:42 agulbra Exp $
+** $Id: qt/src/widgets/qmenudata.h   2.1.0   edited 2000-04-04 $
 **
 ** Definition of QMenuData class
 **
 ** Created : 941128
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -42,7 +42,9 @@ class QMenuDataData;
 
 #include "qstring.h"
 #include "qsignal.h"
+#include "qfont.h"
 
+class QCustomMenuItem;
 class QMenuItemData;
 
 class Q_EXPORT QMenuItem			// internal menu item class
@@ -58,6 +60,8 @@ public:
     QString	whatsThis()	const	{ return whatsthis_data; }
     QPixmap    *pixmap()	const	{ return pixmap_data; }
     QPopupMenu *popup()		const	{ return popup_menu; }
+    QWidget *widget()		const	{ return widget_item; }
+    QCustomMenuItem *custom()	const;
     int		key()		const	{ return accel_key; }
     QSignal    *signal()	const	{ return signal_data; }
     bool	isSeparator()	const	{ return is_separator; }
@@ -76,7 +80,7 @@ private:
     QString	whatsthis_data;			// item Whats This help text
     QPixmap    *pixmap_data;			// item pixmap
     QPopupMenu *popup_menu;			// item popup menu
-    QWidget    *widget;				// widget menu item
+    QWidget    *widget_item;				// widget menu item
     int		accel_key;			// accelerator key (state|ascii)
     QSignal    *signal_data;			// connection
     uint	is_separator : 1;		// separator flag
@@ -84,6 +88,8 @@ private:
     uint	is_checked   : 1;		// checked flag
     uint	is_dirty     : 1;		// dirty (update) flag
     QMenuItemData* d;
+
+    QMenuItemData* extra();
 
 private:	// Disabled copy constructor and operator=
 #if defined(Q_DISABLE_COPY)
@@ -103,6 +109,21 @@ class QMenuItemList;
 class QPixmap;
 
 #endif // INCLUDE_MENUITEM_TEXT
+
+
+
+class Q_EXPORT QCustomMenuItem : public Qt
+{
+public:
+    QCustomMenuItem();
+    virtual ~QCustomMenuItem();
+    virtual bool fullSpan() const;
+    virtual bool isSeparator() const;
+    virtual void setFont( const QFont& font );
+    virtual void paint( QPainter* p, const QColorGroup& cg, bool act,
+			bool enabled, int x, int y, int w, int h ) = 0;
+    virtual QSize sizeHint() = 0;
+};
 
 
 class Q_EXPORT QMenuData			// menu data class
@@ -154,9 +175,13 @@ public:
 			    const QPixmap &pixmap, QPopupMenu *popup,
 			    int id=-1, int index=-1 );
 
+    int		insertItem( QWidget* widget, int id=-1, int index=-1 );
+
+    int		insertItem( const QIconSet& icon, QCustomMenuItem* custom, int id=-1, int index=-1 );
+    int		insertItem( QCustomMenuItem* custom, int id=-1, int index=-1 );
 
 
-    void	insertSeparator( int index=-1 );
+    int		insertSeparator( int index=-1 );
 
     void	removeItem( int id )		{ removeItemAt(indexOf(id)); }
     void	removeItemAt( int index );
@@ -200,8 +225,12 @@ public:
     bool	disconnectItem( int id,
 				const QObject *receiver, const char* member );
 
+    bool	setItemParameter( int id, int param );
+    int	itemParameter( int id ) const;
+
     QMenuItem  *findItem( int id )	const;
     QMenuItem  *findItem( int id, QMenuData ** parent )	const;
+
 
 protected:
     int		   actItem;
@@ -212,6 +241,7 @@ protected:
     uint	   badSize	: 1;
     uint	   mouseBtDn	: 1;
     uint	avoid_circularity : 1;
+    uint 	actItemDown : 1;
     virtual void   menuContentsChanged();
     virtual void   menuStateChanged();
     virtual void   menuInsPopup( QPopupMenu * );
@@ -221,7 +251,7 @@ protected:
 
 private:
     int		insertAny( const QString *, const QPixmap *, QPopupMenu *,
-			   const QIconSet*, int, int );
+			   const QIconSet*, int, int, QWidget* = 0, QCustomMenuItem* = 0);
     void	removePopup( QPopupMenu * );
     virtual void	setAllDirty( bool );
     void	changeItemIconSet( int id, const QIconSet &icon );

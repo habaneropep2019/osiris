@@ -1,0 +1,747 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>
+Qt Toolkit - table/main.cpp example file
+</title><style type="text/css"><!--
+h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
+a:link { text-decoration: none; }
+body { background: white; color: black; }
+--></style>
+</head><body bgcolor="#ffffff">
+
+<a href="index.html">
+<img width="122" height="65" src="qtlogo.png" alt="Home"
+  align="left" border="0">
+</a><div align=right><img src="dochead.png" width="472" height="27"><br>
+<a href="classes.html"><b>Classes</b></a>
+- <a href="annotated.html">Annotated</a>
+- <a href="hierarchy.html">Tree</a>
+- <a href="functions.html">Functions</a>
+- <a href="index.html">Home</a>
+- <a href="topicals.html"><b>Structure</b></a>
+</div>
+<br clear=all>
+
+<h1 align=center>Table</h1><br clear="all">
+
+  The table program displays a spreadsheet-like table. It is an example of
+  how to inherit the QScrollView widget for presentations of 2D data arrays.
+
+  Left-click the mouse to set a current cell. Press the arrow buttons to
+  move the current mark around. Type something to edit a cell's
+  contents.
+
+  <hr>
+
+  Header file: <pre>/****************************************************************************
+** &#36;Id&#58; qt/examples/table/table.h   2.1.0   edited 2000-04-02 $
+**
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+**
+** This file is part of an example program for Qt.  This example
+** program may be used, distributed and modified without limitation.
+**
+*****************************************************************************/
+
+#ifndef TABLE_H
+#define TABLE_H
+
+#include &lt;<a href="qscrollview-h.html">qscrollview.h</a>&gt;
+#include &lt;<a href="qpixmap-h.html">qpixmap.h</a>&gt;
+#include &lt;<a href="qvector-h.html">qvector.h</a>&gt;
+
+class QHeader;
+class QLineEdit;
+
+class TableItem
+{
+public:
+    TableItem( const QString &amp;t, const QPixmap p )
+        : txt( t ), pix( p ) {}
+
+    <a href="qpixmap.html">QPixmap</a> pixmap() const { return pix; }
+    <a href="qstring.html">QString</a> text() const { return txt; }
+    void setPixmap( const QPixmap &amp;p ) { pix = p; }
+    void setText( const QString &amp;t ) { txt = t; }
+
+private:
+    <a href="qstring.html">QString</a> txt;
+    <a href="qpixmap.html">QPixmap</a> pix;
+
+};
+
+class Table : public QScrollView
+{
+    Q_OBJECT
+public:
+    Table( int numRows, int numCols, QWidget* parent=0, const char* name=0 );
+    ~Table();
+
+    TableItem *cellContent( int row, int col ) const;
+    void setCellContent( int row, int col, TableItem *item );
+    void setCellText( int row, int col, const QString &amp;text );
+    void setCellPixmap( int row, int col, const QPixmap &amp;pix );
+    <a href="qstring.html">QString</a> cellText( int row, int col ) const;
+    <a href="qpixmap.html">QPixmap</a> cellPixmap( int row, int col ) const;
+
+    <a href="qrect.html">QRect</a> cellGeometry( int row, int col ) const;
+    int columnWidth( int col ) const;
+    int rowHeight( int row ) const;
+    int columnPos( int col ) const;
+    int rowPos( int row ) const;
+    int columnAt( int pos ) const;
+    int rowAt( int pos ) const;
+    <a href="qsize.html">QSize</a> tableSize() const;
+
+    int rows() const;
+    int cols() const;
+
+    void updateCell( int row, int col );
+
+protected:
+    void drawContents( <a href="qpainter.html">QPainter</a> *p, int cx, int cy, int cw, int ch );
+    void contentsMousePressEvent( <a href="qmouseevent.html">QMouseEvent</a>* );
+    void contentsMouseMoveEvent( <a href="qmouseevent.html">QMouseEvent</a>* );
+    void keyPressEvent( <a href="qkeyevent.html">QKeyEvent</a>* );
+    void focusInEvent( <a href="qfocusevent.html">QFocusEvent</a>* );
+    void focusOutEvent( <a href="qfocusevent.html">QFocusEvent</a>* );
+    void resizeEvent( <a href="qresizeevent.html">QResizeEvent</a> * );
+    void showEvent( <a href="qshowevent.html">QShowEvent</a> *e );
+
+    virtual void paintEmptyArea( <a href="qpainter.html">QPainter</a> *p, int cx, int cy, int cw, int ch );
+    bool focusNextPrevChild( bool next );
+
+protected slots:
+    virtual void columnWidthChanged( int col, int os, int ns );
+    virtual void rowHeightChanged( int col, int os, int ns );
+
+private slots:
+    void editorOk();
+    void ediorCancel();
+
+private:
+    void paintCell( <a href="qpainter.html">QPainter</a> *p, int row, int col, const QRect &amp;cr );
+    int indexOf( int row, int col ) const;
+    void updateGeometries();
+
+private:
+    <a href="qvector.html">QVector</a>&lt;TableItem&gt; contents;
+    int curRow;
+    int curCol;
+    <a href="qheader.html">QHeader</a> *leftHeader, *topHeader;
+    <a href="qlineedit.html">QLineEdit</a> *editor;
+
+};
+
+#endif // TABLE_H
+</pre>
+
+
+  <hr>
+
+  Implementation: <pre>/****************************************************************************
+** &#36;Id&#58; qt/examples/table/table.cpp   2.1.0   edited 2000-04-06 $
+**
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+**
+** This file is part of an example program for Qt.  This example
+** program may be used, distributed and modified without limitation.
+**
+*****************************************************************************/
+
+#include "table.h"
+#include &lt;<a href="qpainter-h.html">qpainter.h</a>&gt;
+#include &lt;qkeycode.h&gt;
+#include &lt;<a href="qheader-h.html">qheader.h</a>&gt;
+#include &lt;<a href="qlineedit-h.html">qlineedit.h</a>&gt;
+#include &lt;<a href="qapplication-h.html">qapplication.h</a>&gt;
+#include &lt;<a href="qwmatrix-h.html">qwmatrix.h</a>&gt;
+
+// Qt logo
+
+static const char *qtlogo_xpm[] = {
+    "45 36 13 1",
+    "  c #000000",
+    ". c #999999",
+    "X c #333366",
+    "o c #6666CC",
+    "O c #333333",
+    "@ c #666699",
+    "# c #000066",
+    "$ c #666666",
+    "% c #3333CC",
+    "&amp; c #000033",
+    "* c #9999CC",
+    "= c #333399",
+    "+ c None",
+    "+++++++++++++++++++++++++++++++++++++++++++++",
+    "+++++++++++++++.$OOO$.+++++++++++++++++++++++",
+    "+++++++++++++$         O.++++++++++++++++++++",
+    "+++++++++++.O            $+++++++++++++++++++",
+    "++++++++++.    $.++.$     O++++++++++++++++++",
+    "+++++++++.   O.+++++++$    O+++++++++++++++++",
+    "+++++++++O   ++++++++++$    $++++++++++++++++",
+    "++++++++$   .+++++++++++O    .+++++++++++++++",
+    "+++++++.   O+++++++++++++    O++++++.++++++++",
+    "+++++++$   .+++++++++++++$    .+++.O ++++++++",
+    "+++++++    +++++++++++++++    O+++.  ++++++++",
+    "++++++.  &amp;Xoooo*++++++++++$    +++.  ++++++++",
+    "++++++@=%%%%%%%%%%*+++++++.    .++.  ++++++++",
+    "+++**oooooo**++*o%%%%o+++++    $++O  ++++++++",
+    "+*****$OOX@oooo*++*%%%%%*++O   $+.   OOO$++++",
+    "+.++....$O$+*ooooo*+*o%%%%%O   O+$   $$O.++++",
+    "*+++++$$....+++*oooo**+*o%%#   O++O  ++++++**",
+    "++++++O  $.....++**oooo**+*X   &amp;o*O  ++++*ooo",
+    "++++++$   O++.....++**oooo*X   &amp;%%&amp;  ..*o%%*+",
+    "++++++$    ++++.....+++**ooO   $*o&amp;  @oo*++++",
+    "++++++.    .++++++.....+++*O   Xo*O  .+++++++",
+    "+++++++    O+++++++++......    .++O  ++++++++",
+    "+++++++O    +++.$$$.++++++.   O+++O  ++++++++",
+    "+++++++.    $$OO    O.++++O   .+++O  ++++++++",
+    "++++++++O    .+++.O   $++.   O++++O  ++++++++",
+    "++++++++.    O+++++O   $+O   +++++O  ++++++++",
+    "+++++++++.    O+++++O   O   .+++++O  .+++++++",
+    "++++++++++$     .++++O     .++++.+$  O+.$.+++",
+    "+++++++++++.      O$$O    .+++++...      ++++",
+    "+++++++++++++$            O+++++$$+.O O$.++++",
+    "+++++++++++++++$OO  O$.O   O.++. .+++++++++++",
+    "+++++++++++++++++++++++.     OO  .+++++++++++",
+    "++++++++++++++++++++++++.       O++++++++++++",
+    "+++++++++++++++++++++++++.      .++++++++++++",
+    "++++++++++++++++++++++++++.O  O.+++++++++++++",
+    "+++++++++++++++++++++++++++++++++++++++++++++"
+};
+
+Table::Table( int numRows, int numCols, QWidget *parent, const char *name )
+    : <a href="qscrollview.html">QScrollView</a>( parent, name, WRepaintNoErase | WNorthWestGravity )
+{
+    <a href="qscrollview.html#fd1206">setResizePolicy</a>( Manual );
+
+    // create headers
+    leftHeader = new <a href="qheader.html">QHeader</a>( numRows, this );
+    leftHeader-&gt;setOrientation( Vertical );
+    leftHeader-&gt;setTracking( TRUE );
+    leftHeader-&gt;setMovingEnabled( FALSE );
+    topHeader = new <a href="qheader.html">QHeader</a>( numCols, this );
+    topHeader-&gt;setOrientation( Horizontal );
+    topHeader-&gt;setTracking( TRUE );
+    topHeader-&gt;setMovingEnabled( FALSE );
+    <a href="qscrollview.html#3a0368">setMargins</a>( 30, <a href="qwidget.html#d0d02b">fontMetrics</a>().height() + 4, 0, 0 );
+
+    // Initialize headers
+    int i = 0;
+    for ( i = 0; i &lt; cols(); ++i ) {
+        topHeader-&gt;setLabel( i, QString::number( i + 1 ) );
+        topHeader-&gt;resizeSection( i, 100 );
+    }
+    for ( i = 0; i &lt; rows(); ++i ) {
+        leftHeader-&gt;setLabel( i, QString::number( i + 1 ) );
+        leftHeader-&gt;resizeSection( i, 20 );
+    }
+
+    // Enable clipper and set background mode
+    <a href="qscrollview.html#55a330">enableClipper</a>( TRUE );
+    <a href="qscrollview.html#040cb5">viewport</a>()-&gt;setBackgroundMode( PaletteBase );
+
+    // preperations for contents
+    contents.resize( numRows * numCols );
+    contents.setAutoDelete( TRUE );
+    <a href="qwmatrix.html">QWMatrix</a> wm;
+    wm.<a href="qwmatrix.html#a5e455">scale</a>( 0.5, 0.5 );
+    <a href="qpixmap.html">QPixmap</a> pix( qtlogo_xpm );
+    pix = pix.<a href="qpixmap.html#3b77c0">xForm</a>( wm );
+    <a href=#291>setCellPixmap</a>( 3, 3, pix );
+    <a href=#290>setCellText</a>( 3, 3, "A Pixmap" );
+
+    // connect header, table and scrollbars
+    <a href="qobject.html#c2d209">connect</a>( horizontalScrollBar(), SIGNAL( valueChanged( int ) ),
+             topHeader, SLOT( setOffset( int ) ) );
+    <a href="qobject.html#c2d209">connect</a>( verticalScrollBar(), SIGNAL( valueChanged( int ) ),
+             leftHeader, SLOT( setOffset( int ) ) );
+    <a href="qobject.html#c2d209">connect</a>( topHeader, SIGNAL( sizeChange( int, int, int ) ),
+             this, SLOT( <a href=#303>columnWidthChanged</a>( int, int, int ) ) );
+    <a href="qobject.html#c2d209">connect</a>( leftHeader, SIGNAL( sizeChange( int, int, int ) ),
+             this, SLOT( <a href=#304>rowHeightChanged</a>( int, int, int ) ) );
+
+    // init variables
+    curRow = curCol = 0;
+    editor = 0;
+
+    // initial size
+    <a href="qscrollview.html#5d37af">resize</a>( 640, 480 );
+}
+
+Table::~Table()
+{
+}
+
+/****************************************************************************
+  Two drawing functions, 1 which finds out which cells to draw
+  and one which actually draws a cell.
+  Also one drawing function to darw empty areas.
+*****************************************************************************/
+
+void <a name="284"></a>Table::drawContents( <a href="qpainter.html">QPainter</a> *p, int cx, int cy, int cw, int ch )
+{
+    int colfirst = columnAt( cx );
+    int collast = columnAt( cx + cw );
+    int rowfirst = rowAt( cy );
+    int rowlast = rowAt( cy + ch );
+
+    if ( rowfirst == -1 || colfirst == -1 ) {
+        <a href=#286>paintEmptyArea</a>( p, cx, cy, cw, ch );
+        return;
+    }
+
+    if ( rowlast == -1 )
+        rowlast = rows() - 1;
+    if ( collast == -1 )
+        collast = cols() - 1;
+
+    // go through the rows
+    for ( int r = rowfirst; r &lt;= rowlast; ++r ) {
+        // get row position and height
+        int rowp = rowPos( r );
+        int rowh = rowHeight( r );
+
+        // go through the columns in the row r
+        // if we know from where to where use this limits (colstart, colend), else go through all of them
+        for ( int c = colfirst; c &lt;= collast; ++c ) {
+            // get position and width of column c
+            int colp, colw;
+            colp = columnPos( c );
+            colw = columnWidth( c );
+
+            //  translate painter ad draw the cell
+            p-&gt;<a href="qpainter.html#fdf12e">saveWorldMatrix</a>();
+            p-&gt;<a href="qpainter.html#ba64b6">translate</a>( colp, rowp );
+            <a href=#285>paintCell</a>( p, r, c, QRect( colp, rowp, colw, rowh ) );
+            p-&gt;<a href="qpainter.html#a7fd3c">restoreWorldMatrix</a>();
+        }
+    }
+
+    // paint empty rects
+    <a href=#286>paintEmptyArea</a>( p, cx, cy, cw, ch );
+}
+
+void <a name="285"></a>Table::paintCell( <a href="qpainter.html">QPainter</a>* p, int row, int col, const QRect &amp;cr )
+{
+    int w = cr.width();
+    int h = cr.height();
+    int x2 = w - 1;
+    int y2 = h - 1;
+
+    // draw cell background
+    p-&gt;<a href="qpainter.html#0f4c23">fillRect</a>( 0, 0, w, h, <a href="qwidget.html#5bc085">colorGroup</a>().brush( QColorGroup::Base ) );
+
+    // draw our lines
+    <a href="qpen.html">QPen</a> pen( p-&gt;<a href="qpainter.html#759128">pen</a>() );
+    p-&gt;<a href="qpainter.html#0a6aff">setPen</a>( gray );
+    p-&gt;<a href="qpainter.html#ffde14">drawLine</a>( x2, 0, x2, y2 );
+    p-&gt;<a href="qpainter.html#ffde14">drawLine</a>( 0, y2, x2, y2 );
+    p-&gt;<a href="qpainter.html#0a6aff">setPen</a>( pen );
+
+    // if we are the focus cell, draw indication
+    if ( row == curRow &amp;&amp;col == curCol ) {
+        if ( hasFocus() || viewport()-&gt;hasFocus() )
+            p-&gt;<a href="qpainter.html#b29a16">drawRect</a>( 0, 0, x2, y2 );
+    }
+
+    int x = 0;
+    <a href="qpixmap.html">QPixmap</a> pix( <a href=#293>cellPixmap</a>( row, col ) );
+    if ( !pix.<a href="qpixmap.html#29cbd3">isNull</a>() ) {
+        p-&gt;<a href="qpainter.html#f3fb4a">drawPixmap</a>( 0, ( cr.height() - pix.<a href="qpixmap.html#1d578d">height</a>() ) / 2, pix );
+        x = pix.<a href="qpixmap.html#443c1f">width</a>() + 2;
+    }
+
+    // find out if contents is a number or a string
+    bool num;
+    bool ok1 = FALSE, ok2 = FALSE;
+    <a href="qstring.html">QString</a> s( <a href=#292>cellText</a>( row, col ) );
+    s.toInt( &amp;ok1 );
+    s.toDouble( &amp;ok2 );
+    num = ok1 || ok2;
+
+    // draw conetnst
+    p-&gt;<a href="qpainter.html#8a59ed">drawText</a>( x, 0, w - x, h, ( num ? AlignRight : AlignLeft ) | AlignVCenter, s );
+}
+
+void <a name="286"></a>Table::paintEmptyArea( <a href="qpainter.html">QPainter</a> *p, int cx, int cy, int cw, int ch )
+{
+    // recion of the rect we should draw
+    <a href="qregion.html">QRegion</a> reg( <a href="qrect.html">QRect</a>( cx, cy, cw, ch ) );
+    // subtract the table from it
+    reg = reg.<a href="qregion.html#3c4d11">subtract</a>( <a href="qrect.html">QRect</a>( <a href="qpoint.html">QPoint</a>( 0, 0 ), <a href=#313>tableSize</a>() ) );
+    p-&gt;<a href="qpainter.html#629789">save</a>();
+    // set clip region
+    p-&gt;<a href="qpainter.html#6d2fff">setClipRegion</a>( reg );
+    // and fill background
+    p-&gt;<a href="qpainter.html#0f4c23">fillRect</a>( cx, cy, cw, ch, <a href="qwidget.html#5bc085">colorGroup</a>().brush( QColorGroup::Base ) );
+    p-&gt;<a href="qpainter.html#24cf68">restore</a>();
+}
+
+/****************************************************************************
+  Functions to access and set the cell contents
+  plus helper functions.
+*****************************************************************************/
+
+TableItem *<a name="287"></a>Table::cellContent( int row, int col ) const
+{
+    return contents[ indexOf( row, col ) ];     // contents array lookup
+}
+
+void <a name="288"></a>Table::setCellContent( int row, int col, TableItem *item )
+{
+    if ( contents[ indexOf( row, col ) ] )
+        delete contents[ indexOf( row, col ) ];
+
+    contents.insert( <a href=#289>indexOf</a>( row, col ), item ); // contents lookup and assign
+    <a href=#302>updateCell</a>( row, col ); // repaint
+}
+
+int <a name="289"></a>Table::indexOf( int row, int col ) const
+{
+    return ( row * cols() ) + col; // mapping from 2D table to 1D array
+}
+
+void <a name="290"></a>Table::setCellText( int row, int col, const QString &amp;text )
+{
+    TableItem *item = cellContent( row, col );
+    if ( item ) {
+        item-&gt;setText( text );
+        <a href=#302>updateCell</a>( row, col );
+    } else {
+        TableItem *i = new TableItem( text, QPixmap() );
+        <a href=#288>setCellContent</a>( row, col, i );
+    }
+}
+
+void <a name="291"></a>Table::setCellPixmap( int row, int col, const QPixmap &amp;pix )
+{
+    TableItem *item = cellContent( row, col );
+    if ( item ) {
+        item-&gt;setPixmap( pix );
+        <a href=#302>updateCell</a>( row, col );
+    } else {
+        TableItem *i = new TableItem( QString::null, pix );
+        <a href=#288>setCellContent</a>( row, col, i );
+    }
+}
+
+<a href="qstring.html">QString</a> <a name="292"></a>Table::cellText( int row, int col ) const
+{
+    TableItem *item = cellContent( row, col );
+    if ( item )
+        return item-&gt;text();
+    return QString::null;
+}
+
+<a href="qpixmap.html">QPixmap</a> <a name="293"></a>Table::cellPixmap( int row, int col ) const
+{
+    TableItem *item = cellContent( row, col );
+    if ( item )
+        return item-&gt;pixmap();
+    return QPixmap();
+}
+
+/****************************************************************************
+  Event handling to react on mouse, key and focus events.
+*****************************************************************************/
+
+void <a name="294"></a>Table::contentsMousePressEvent( <a href="qmouseevent.html">QMouseEvent</a>* e )
+{
+    // get rid of editor
+    if ( editor )
+        <a href=#316>editorOk</a>();
+
+    // remember old focus cell
+    int oldRow = curRow;
+    int oldCol = curCol;
+
+    // get new focus cell
+    curRow = rowAt( e-&gt;pos().y() );
+    curCol = columnAt( e-&gt;pos().x() );
+    if ( curRow == -1 )
+        curRow = oldRow;
+    if ( curCol == -1 )
+        curCol = oldCol;
+
+    // of we have a new focus cell, repaint
+    if ( curRow != oldRow || curCol != oldCol ) {
+        <a href=#302>updateCell</a>( oldRow, oldCol );
+        <a href=#302>updateCell</a>( curRow, curCol );
+        int cw = columnWidth( curCol );
+        int rh = rowHeight( curRow );
+        <a href="qscrollview.html#4e576a">ensureVisible</a>( columnPos( curCol ) + cw / 2, <a href=#309>rowPos</a>( curRow ) + rh / 2, cw / 2, rh / 2 );
+    }
+}
+
+void <a name="295"></a>Table::contentsMouseMoveEvent( <a href="qmouseevent.html">QMouseEvent</a> *e )
+{
+    // do the same as in mouse press
+    <a href=#294>contentsMousePressEvent</a>( e );
+}
+
+void <a name="296"></a>Table::keyPressEvent( <a href="qkeyevent.html">QKeyEvent</a>* e )
+{
+    // if a cell is just editing, do some special stuff
+    if ( editor ) {
+        if ( e-&gt;key() == Key_Escape )
+            <a href=#317>ediorCancel</a>();
+        else if ( e-&gt;key() == Key_Return || e-&gt;key() == Key_Enter )
+            <a href=#316>editorOk</a>();
+        return;
+    }
+
+    int oldRow = curRow;
+    int oldCol = curCol;
+
+    // navigate in the header...
+    switch ( e-&gt;key() ) {
+    case Key_Left:
+        curCol = QMAX( 0, curCol - 1 );
+        break;
+    case Key_Right:
+        curCol = QMIN( <a href=#315>cols</a>() - 1, curCol + 1 );
+        break;
+    case Key_Up:
+        curRow = QMAX( 0, curRow - 1 );
+        break;
+    case Key_Down:
+        curRow = QMIN( <a href=#314>rows</a>() - 1, curRow + 1 );
+        break;
+    case Key_Prior:
+    case Key_Next:
+    case Key_Home:
+    case Key_End:
+        break;
+    default: // ... or start in-place editing
+        if ( e-&gt;text()[ 0 ].isPrint() ) {
+            editor = new <a href="qlineedit.html">QLineEdit</a>( <a href=#292>cellText</a>( curRow, curCol ) + e-&gt;text(), <a href="qscrollview.html#040cb5">viewport</a>() );
+            int d = cellPixmap( curRow, curCol ).width();
+            <a href="qscrollview.html#aee5e9">moveChild</a>( editor, <a href=#308>columnPos</a>( curCol ) + 1 + d, <a href=#309>rowPos</a>( curRow ) + 1 );
+            editor-&gt;resize( <a href=#306>columnWidth</a>( curCol ) - 2 - d, <a href=#307>rowHeight</a>( curRow ) - 2 );
+            editor-&gt;setFrame( FALSE );
+            editor-&gt;show();
+            editor-&gt;setFocus();
+            <a href="qobject.html#c2d209">connect</a>( editor, SIGNAL( returnPressed() ),
+                     this, SLOT( <a href=#316>editorOk</a>() ) );
+        }       
+    }
+
+    // if focus cell changes, repaint
+    if ( curRow != oldRow || curCol != oldCol ) {
+        <a href=#302>updateCell</a>( oldRow, oldCol );
+        <a href=#302>updateCell</a>( curRow, curCol );
+        int cw = columnWidth( curCol );
+        int rh = rowHeight( curRow );
+        <a href="qscrollview.html#4e576a">ensureVisible</a>( columnPos( curCol ) + cw / 2, <a href=#309>rowPos</a>( curRow ) + rh / 2, cw / 2, rh / 2 );
+    }
+}
+
+void <a name="297"></a>Table::focusInEvent( <a href="qfocusevent.html">QFocusEvent</a>* )
+{
+    <a href=#302>updateCell</a>( curRow, curCol );
+}
+
+void <a name="298"></a>Table::focusOutEvent( <a href="qfocusevent.html">QFocusEvent</a>* )
+{
+    <a href=#302>updateCell</a>( curRow, curCol );
+}
+
+bool <a name="299"></a>Table::focusNextPrevChild( bool next )
+{
+    if ( editor )
+        return TRUE;
+    return QScrollView::focusNextPrevChild( next );
+}
+
+void <a name="300"></a>Table::resizeEvent( <a href="qresizeevent.html">QResizeEvent</a> *e )
+{
+    <a href="qscrollview.html#6894d2">QScrollView::resizeEvent</a>( e );
+    <a href=#305>updateGeometries</a>();
+}
+
+void <a name="301"></a>Table::showEvent( <a href="qshowevent.html">QShowEvent</a> *e )
+{
+    <a href="qwidget.html#add426">QScrollView::showEvent</a>( e );
+    <a href="qrect.html">QRect</a> r( <a href=#312>cellGeometry</a>( rows() - 1, <a href=#315>cols</a>() - 1 ) );
+    <a href="qscrollview.html#e4cb2e">resizeContents</a>( r.<a href="qrect.html#20e3ee">right</a>() + 1, r.<a href="qrect.html#322c3e">bottom</a>() + 1 );
+    <a href=#305>updateGeometries</a>();
+}
+
+/****************************************************************************
+  Functions to update cells, update geometries, etc.
+*****************************************************************************/
+
+void <a name="302"></a>Table::updateCell( int row, int col )
+{
+    <a href="qrect.html">QRect</a> r( <a href=#312>cellGeometry</a>( row, col ) );
+    <a href="qscrollview.html#88b69e">updateContents</a>( r );
+}
+
+void <a name="303"></a>Table::columnWidthChanged( int col, int, int )
+{
+    <a href="qscrollview.html#88b69e">updateContents</a>( columnPos( col ), 0, <a href="qscrollview.html#97d58f">contentsWidth</a>(), <a href="qscrollview.html#c8c152">contentsHeight</a>() );
+    <a href="qsize.html">QSize</a> s( <a href=#313>tableSize</a>() );
+    <a href="qscrollview.html#e4cb2e">resizeContents</a>( s.<a href="qsize.html#bda6c6">width</a>(), s.<a href="qsize.html#6f50f3">height</a>() );
+    if ( editor ) {
+        <a href="qscrollview.html#aee5e9">moveChild</a>( editor, <a href=#308>columnPos</a>( curCol ) + 1, <a href=#309>rowPos</a>( curRow ) + 1 );
+        editor-&gt;resize( <a href=#306>columnWidth</a>( curCol ) - 2, <a href=#307>rowHeight</a>( curRow ) - 2 );
+    }
+    <a href=#305>updateGeometries</a>();
+}
+
+void <a name="304"></a>Table::rowHeightChanged( int row, int, int )
+{
+    <a href="qscrollview.html#88b69e">updateContents</a>( 0, <a href=#309>rowPos</a>( row ), <a href="qscrollview.html#97d58f">contentsWidth</a>(), <a href="qscrollview.html#c8c152">contentsHeight</a>() );
+    <a href="qsize.html">QSize</a> s( <a href=#313>tableSize</a>() );
+    <a href="qscrollview.html#e4cb2e">resizeContents</a>( s.<a href="qsize.html#bda6c6">width</a>(), s.<a href="qsize.html#6f50f3">height</a>() );
+    if ( editor ) {
+        <a href="qscrollview.html#aee5e9">moveChild</a>( editor, <a href=#308>columnPos</a>( curCol ) + 1, <a href=#309>rowPos</a>( curRow ) + 1 );
+        editor-&gt;resize( <a href=#306>columnWidth</a>( curCol ) - 2, <a href=#307>rowHeight</a>( curRow ) - 2 );
+    }
+    <a href=#305>updateGeometries</a>();
+}
+
+void <a name="305"></a>Table::updateGeometries()
+{
+    <a href="qsize.html">QSize</a> ts = tableSize();
+    if ( topHeader-&gt;offset() &amp;&amp;
+         ts.<a href="qsize.html#bda6c6">width</a>() &lt; topHeader-&gt;offset() + topHeader-&gt;width() )
+        <a href="qscrollview.html#240999">horizontalScrollBar</a>()-&gt;setValue( ts.<a href="qsize.html#bda6c6">width</a>() - topHeader-&gt;width() );
+    if ( leftHeader-&gt;offset() &amp;&amp;
+         ts.<a href="qsize.html#6f50f3">height</a>() &lt; leftHeader-&gt;offset() + leftHeader-&gt;height() )
+        <a href="qscrollview.html#e173fa">verticalScrollBar</a>()-&gt;setValue( ts.<a href="qsize.html#6f50f3">height</a>() - leftHeader-&gt;height() );
+
+    leftHeader-&gt;setGeometry( <a href="qscrollview.html#73d03d">leftMargin</a>() - 30 + 2, <a href="qscrollview.html#24b1e7">topMargin</a>() + 2,
+                             30, <a href="qscrollview.html#0d27c5">visibleHeight</a>() );
+    topHeader-&gt;setGeometry( <a href="qscrollview.html#73d03d">leftMargin</a>() + 2, <a href="qscrollview.html#24b1e7">topMargin</a>() + 2 - fontMetrics().height() - 4,
+                            <a href="qscrollview.html#0f2055">visibleWidth</a>(),
+                            <a href="qwidget.html#d0d02b">fontMetrics</a>().height() + 4 );
+}
+
+/****************************************************************************
+  Following functions return the position/sizes of table cells. The
+  data is stored in the two headers anyway, so simply use it.
+*****************************************************************************/
+
+int <a name="306"></a>Table::columnWidth( int col ) const
+{
+    return topHeader-&gt;sectionSize( col );
+}
+
+int <a name="307"></a>Table::rowHeight( int row ) const
+{
+    return leftHeader-&gt;sectionSize( row );
+}
+
+int <a name="308"></a>Table::columnPos( int col ) const
+{
+    return topHeader-&gt;sectionPos( col );
+}
+
+int <a name="309"></a>Table::rowPos( int row ) const
+{
+    return leftHeader-&gt;sectionPos( row );
+}
+
+int <a name="310"></a>Table::columnAt( int pos ) const
+{
+    return topHeader-&gt;sectionAt( pos );
+}
+
+int <a name="311"></a>Table::rowAt( int pos ) const
+{
+    return leftHeader-&gt;sectionAt( pos );
+}
+
+<a href="qrect.html">QRect</a> <a name="312"></a>Table::cellGeometry( int row, int col ) const
+{
+    return QRect( <a href=#308>columnPos</a>( col ), <a href=#309>rowPos</a>( row ),
+                  <a href=#306>columnWidth</a>( col ), <a href=#307>rowHeight</a>( row ) );
+}
+
+<a href="qsize.html">QSize</a> <a name="313"></a>Table::tableSize() const
+{
+    return QSize( <a href=#308>columnPos</a>( cols() - 1 ) + columnWidth( <a href=#315>cols</a>() - 1 ),
+                  <a href=#309>rowPos</a>( rows() - 1 ) + rowHeight( <a href=#314>rows</a>() - 1 ) );
+}
+
+int <a name="314"></a>Table::rows() const
+{
+    return leftHeader-&gt;count();
+}
+
+int <a name="315"></a>Table::cols() const
+{
+    return topHeader-&gt;count();
+}
+
+/****************************************************************************
+  Helper functions for the in-place editor
+*****************************************************************************/
+
+void <a name="316"></a>Table::editorOk()
+{
+    if ( !editor )
+        return;
+    <a href=#290>setCellText</a>( curRow, curCol, editor-&gt;text() );
+    <a href=#317>ediorCancel</a>();
+}
+
+void <a name="317"></a>Table::ediorCancel()
+{
+    if ( !editor )
+        return;
+    <a href="qscrollview.html#06c836">removeChild</a>( editor );
+    delete editor;
+    <a href="qscrollview.html#040cb5">viewport</a>()-&gt;setFocus();
+    editor = 0;
+}
+</pre>
+
+
+  <hr>
+
+  Main:
+<pre>/****************************************************************************
+** &#36;Id&#58; qt/examples/table/main.cpp   2.1.0   edited 2000-04-02 $
+**
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+**
+** This file is part of an example program for Qt.  This example
+** program may be used, distributed and modified without limitation.
+**
+*****************************************************************************/
+
+#include "table.h"
+#include &lt;<a name="qpushbutton.h"></a><a href="qpushbutton-h.html">qpushbutton.h</a>&gt;
+#include &lt;<a name="qapplication.h"></a><a href="qapplication-h.html">qapplication.h</a>&gt;
+
+/*
+  Constants
+*/
+
+const int numRows = 100;                                // Tablesize: number of rows
+const int numCols = 100;                                // Tablesize: number of columns
+
+/*
+  The program starts here.
+*/
+
+int main( int argc, char **argv )
+{
+    <a name="QApplication"></a><a href="qapplication.html">QApplication</a> a(argc,argv);                  
+
+    Table v( numRows, numCols );
+
+    a.<a name="setMainWidget"></a><a href="qapplication.html#11c921">setMainWidget</a>( &amp;v );
+    v.<a name="show"></a><a href="qscrollview.html#88277a">show</a>();
+    return a.<a name="exec"></a><a href="qapplication.html#7076af">exec</a>();
+}
+</pre>
+<p><address><hr><div align="center">
+<table width="100%" cellspacing="0" border="0"><tr>
+<td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.1.0</div>
+</table></div></address></body></html>

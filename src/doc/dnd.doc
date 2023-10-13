@@ -1,9 +1,9 @@
 /****************************************************************************
-** $Id: dnd.doc,v 1.7 1999/06/17 22:41:39 warwick Exp $
+** $Id: qt/doc/dnd.doc   2.1.0   edited 2000-03-24 $
 **
 ** Drag and drop documentation
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -15,16 +15,16 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
 /*! \page dnd.html
 
 <title>
-Qt toolkit - Drag and Drop
+Qt Toolkit - Drag and Drop
 </title></head><body bgcolor="#ffffff">
 
 \postheader
@@ -33,8 +33,8 @@ Qt toolkit - Drag and Drop
 
   Drag-and-drop is a direct-manipulation model for allowing the user to
   transfer information between and within applications. It is similar
-  in function to the cut-and-paste clipboard model.  
-  
+  in function to the cut-and-paste clipboard model.
+
   <h3>Dragging</h3>
 
   To start a drag, for example in a \link QWidget::mouseMoveEvent
@@ -106,7 +106,7 @@ Qt toolkit - Drag and Drop
   <h3>The Clipboard</h3>
 
   The QDragObject, QDragEnterEvent, QDragMoveEvent, and QDropEvent
-  classes are all subclasses of QMimeSource - the class of objects 
+  classes are all subclasses of QMimeSource - the class of objects
   which provide
   typed
   information.  If you base your data
@@ -344,4 +344,27 @@ Qt toolkit - Drag and Drop
   MIME types.  This interface will be made public at some time, but
   if you need to do such translations now, contact your Qt
   Technical Support service.
-*/
+
+  On X11, Qt also supports drops via the Motif Drag&Drop Protocol. The
+  implementation incorporates some code that was originally written by
+  Daniel Dardailler, and adapted for Qt by Matt Koss \<koss@napri.sk\>
+  and Troll Tech. Here is the original copyright notice:
+
+  \mustquote
+  
+  Copyright 1996 Daniel Dardailler.
+
+  Permission to use, copy, modify, distribute, and sell this software
+  for any purpose is hereby granted without fee, provided that the above
+  copyright notice appear in all copies and that both that copyright
+  notice and this permission notice appear in supporting documentation,
+  and that the name of Daniel Dardailler not be used in advertising or
+  publicity pertaining to distribution of the software without specific,
+  written prior permission.  Daniel Dardailler makes no representations
+  about the suitability of this software for any purpose.  It is
+  provided "as is" without express or implied warranty.
+
+  Modifications Copyright 1999 Matt Koss, under the same license as
+  above.
+*/ // NOTE: That notice is from qmotifdnd_x11.cpp.
+

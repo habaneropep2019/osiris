@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: layout.cpp,v 1.3 1999/06/08 11:19:14 paul Exp $
+** $Id: qt/examples/layout/layout.cpp   2.1.0   edited 2000-03-21 $
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -37,7 +37,7 @@ ExampleWidget::ExampleWidget( QWidget *parent, const char *name )
     QMenuBar *menubar = new QMenuBar( this );
     menubar->setSeparator( QMenuBar::InWindowsStyle );
     QPopupMenu* popup;
-    popup = new QPopupMenu;
+    popup = new QPopupMenu( this );
     popup->insertItem( "&Quit", qApp, SLOT(quit()) );
     menubar->insertItem( "&File", popup );
 
@@ -154,9 +154,9 @@ int main( int argc, char **argv )
 {
     QApplication a( argc, argv );
 
-    QWidget *f = new ExampleWidget;
-    a.setMainWidget(f);
-    f->show();
+    ExampleWidget f;
+    a.setMainWidget(&f);
+    f.show();
 
     return a.exec();
 }

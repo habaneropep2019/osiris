@@ -1,15 +1,11 @@
 /****************************************************************************
-** $Id: qasyncimageio.h,v 1.23 1999/04/28 09:55:38 aavit Exp $
-**
-**		      ***   INTERNAL HEADER FILE   ***
-**
-**		This file is NOT a part of the Qt interface!
+** $Id: qt/src/kernel/qasyncimageio.h   2.1.0   edited 2000-03-24 $
 **
 ** Definition of asynchronous image/movie loading classes
 **
 ** Created : 970617
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -21,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -41,29 +37,29 @@ public:
     virtual void end()=0;
 
     // Change transfer type 1.
-    virtual void changed(const QRect&)=0;
-    virtual void frameDone()=0;
+    virtual void changed( const QRect& ) = 0;
+    virtual void frameDone() = 0;
 
     // Change transfer type 2.
-    virtual void frameDone(const QPoint&, const QRect&)=0;
+    virtual void frameDone( const QPoint&, const QRect& ) = 0;
 
-    virtual void setLooping(int)=0;
-    virtual void setFramePeriod(int)=0;
-    virtual void setSize(int, int)=0;
+    virtual void setLooping( int ) = 0;
+    virtual void setFramePeriod( int ) = 0;
+    virtual void setSize( int, int ) = 0;
 };
 
 class Q_EXPORT QImageFormat {
 public:
     virtual ~QImageFormat();
-    virtual int decode(QImage& img, QImageConsumer* consumer,
-	    const uchar* buffer, int length)=0;
+    virtual int decode( QImage& img, QImageConsumer* consumer,
+			const uchar* buffer, int length ) = 0;
 };
 
 class Q_EXPORT QImageFormatType {
 public:
     virtual ~QImageFormatType();
-    virtual QImageFormat* decoderFor(const uchar* buffer, int length)=0;
-    virtual const char* formatName() const=0;
+    virtual QImageFormat* decoderFor( const uchar* buffer, int length ) = 0;
+    virtual const char* formatName() const = 0;
 protected:
     QImageFormatType();
 };
@@ -72,17 +68,18 @@ struct QImageDecoderPrivate;
 
 class Q_EXPORT QImageDecoder {
 public:
-    QImageDecoder(QImageConsumer* c);
+    QImageDecoder( QImageConsumer* c );
     ~QImageDecoder();
 
     const QImage& image() { return img; }
-    int decode(const uchar* buffer, int length);
+    int decode( const uchar* buffer, int length );
 
-    static const char* formatName(const uchar* buffer, int length);
+    static const char* formatName( const uchar* buffer, int length );
+    static QImageFormatType* format( const char* name ); // direct use - no decode()
 
     static QStrList inputFormats();
-    static void registerDecoderFactory(QImageFormatType*);
-    static void unregisterDecoderFactory(QImageFormatType*);
+    static void registerDecoderFactory( QImageFormatType* );
+    static void unregisterDecoderFactory( QImageFormatType* );
 
 private:
     QImageFormat* actual_decoder;

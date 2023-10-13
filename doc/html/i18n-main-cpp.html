@@ -1,0 +1,203 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>
+Qt Toolkit - i18n/main.cpp example file
+</title><style type="text/css"><!--
+h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
+a:link { text-decoration: none; }
+body { background: white; color: black; }
+--></style>
+</head><body bgcolor="#ffffff">
+
+<a href="index.html">
+<img width="122" height="65" src="qtlogo.png" alt="Home"
+  align="left" border="0">
+</a><div align=right><img src="dochead.png" width="472" height="27"><br>
+<a href="classes.html"><b>Classes</b></a>
+- <a href="annotated.html">Annotated</a>
+- <a href="hierarchy.html">Tree</a>
+- <a href="functions.html">Functions</a>
+- <a href="index.html">Home</a>
+- <a href="topicals.html"><b>Structure</b></a>
+</div>
+<br clear=all>
+
+<h1 align=center>Internationalization</h1><br clear="all">
+
+  This example shows how to internationalize applications. Start it with
+  <pre># i18n de</pre>
+  to get a german version and with
+  <pre># i18n en</pre>
+  to get the english version.
+
+  Also see <a href="i18n.html">the internationalization documentation</a>.
+
+  <hr>
+
+  Header file: <pre>/****************************************************************************
+** &#36;Id&#58; qt/examples/i18n/mywidget.h   2.1.0   edited 2000-01-31 $
+**
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+**
+** This file is part of an example program for Qt.  This example
+** program may be used, distributed and modified without limitation.
+**
+*****************************************************************************/
+
+#ifndef MYWIDGET_H
+#define MYWIDGET_H
+
+#include &lt;<a href="qmainwindow-h.html">qmainwindow.h</a>&gt;
+#include &lt;<a href="qstring-h.html">qstring.h</a>&gt;
+
+class MyWidget : public QMainWindow
+{
+    Q_OBJECT
+
+public:
+    MyWidget( <a href="qwidget.html">QWidget</a>* parent=0, const char* name = 0 );
+
+private:
+    static void initChoices(<a href="qwidget.html">QWidget</a>* parent);
+};
+
+#endif
+</pre>
+
+
+  <hr>
+
+  Implementation: <pre>/****************************************************************************
+** &#36;Id&#58; qt/examples/i18n/mywidget.cpp   2.1.0   edited 2000-02-09 $
+**
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+**
+** This file is part of an example program for Qt.  This example
+** program may be used, distributed and modified without limitation.
+**
+*****************************************************************************/
+
+#include &lt;<a href="qbuttongroup-h.html">qbuttongroup.h</a>&gt;
+#include &lt;<a href="qradiobutton-h.html">qradiobutton.h</a>&gt;
+#include &lt;<a href="qlabel-h.html">qlabel.h</a>&gt;
+#include &lt;<a href="qlistbox-h.html">qlistbox.h</a>&gt;
+#include &lt;<a href="qcombobox-h.html">qcombobox.h</a>&gt;
+#include &lt;<a href="qlabel-h.html">qlabel.h</a>&gt;
+#include &lt;<a href="qhbox-h.html">qhbox.h</a>&gt;
+#include &lt;<a href="qvbox-h.html">qvbox.h</a>&gt;
+#include &lt;<a href="qaccel-h.html">qaccel.h</a>&gt;
+#include &lt;<a href="qpopupmenu-h.html">qpopupmenu.h</a>&gt;
+#include &lt;<a href="qmenubar-h.html">qmenubar.h</a>&gt;
+#include &lt;<a href="qstatusbar-h.html">qstatusbar.h</a>&gt;
+#include &lt;<a href="qapplication-h.html">qapplication.h</a>&gt;
+
+#include "mywidget.h"
+
+MyWidget::MyWidget( <a href="qwidget.html">QWidget</a>* parent, const char* name )
+        : <a href="qmainwindow.html">QMainWindow</a>( parent, name )
+{
+    <a href="qvbox.html">QVBox</a>* central = new <a href="qvbox.html">QVBox</a>(this);
+    central-&gt;<a href="qframe.html#ab991e">setMargin</a>( 5 ); 
+    central-&gt;<a href="qhbox.html#d8c6a6">setSpacing</a>( 5 ); 
+    <a href="qmainwindow.html#0983b6">setCentralWidget</a>(central);
+
+    <a href="qpopupmenu.html">QPopupMenu</a>* file = new <a href="qpopupmenu.html">QPopupMenu</a>(this);
+    file-&gt;<a href="qmenudata.html#43c652">insertItem</a>( <a href="qobject.html#44b4c1">tr</a>("E&amp;xit"), qApp, SLOT(quit()),
+            <a href="qaccel.html#7c073d">QAccel::stringToKey</a>(<a href="qobject.html#44b4c1">tr</a>("Ctrl+Q")) );
+    <a href="qmainwindow.html#2fcbc3">menuBar</a>()-&gt;insertItem( <a href="qobject.html#44b4c1">tr</a>("&amp;File"), file );
+
+    <a href="qwidget.html#d4f007">setCaption</a>( tr( "Internationalization Example" ) ); 
+
+    <a href="qstring.html">QString</a> l;
+    <a href="qmainwindow.html#14153d">statusBar</a>()-&gt;message( <a href="qobject.html#44b4c1">tr</a>("Language: English") );
+
+    ( void )new <a href="qlabel.html">QLabel</a>( <a href="qobject.html#44b4c1">tr</a>( "The Main Window" ), central ); 
+
+    <a href="qbuttongroup.html">QButtonGroup</a>* gbox = new <a href="qbuttongroup.html">QButtonGroup</a>( 1, QGroupBox::Horizontal, 
+                                      <a href="qobject.html#44b4c1">tr</a>( "View" ), central ); 
+    (void)new <a href="qradiobutton.html">QRadioButton</a>( <a href="qobject.html#44b4c1">tr</a>( "Perspective" ), gbox ); 
+    (void)new <a href="qradiobutton.html">QRadioButton</a>( <a href="qobject.html#44b4c1">tr</a>( "Isometric" ), gbox ); 
+    (void)new <a href="qradiobutton.html">QRadioButton</a>( <a href="qobject.html#44b4c1">tr</a>( "Oblique" ), gbox ); 
+
+    <a href=#170>initChoices</a>(central); 
+}
+
+static const char* choices[] = {
+    QT_TRANSLATE_NOOP( "MyWidget", "First" ), 
+    QT_TRANSLATE_NOOP( "MyWidget", "Second" ), 
+    QT_TRANSLATE_NOOP( "MyWidget", "Third" ), 
+    0
+}; 
+
+void <a name="170"></a>MyWidget::initChoices(<a href="qwidget.html">QWidget</a>* parent)
+{
+    <a href="qlistbox.html">QListBox</a>* lb = new <a href="qlistbox.html">QListBox</a>( parent ); 
+    for ( int i = 0; choices[i]; i++ )
+        lb-&gt;<a href="qlistbox.html#1527aa">insertItem</a>( <a href="qobject.html#44b4c1">tr</a>( choices[i] ) ); 
+}
+</pre>
+
+
+  <hr>
+
+  Main:
+<pre>/****************************************************************************
+** &#36;Id&#58; qt/examples/i18n/main.cpp   2.1.0   edited 2000-02-16 $
+**
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+**
+** This file is part of an example program for Qt.  This example
+** program may be used, distributed and modified without limitation.
+**
+*****************************************************************************/
+
+#include &lt;<a name="qapplication.h"></a><a href="qapplication-h.html">qapplication.h</a>&gt;
+#include &lt;<a name="qtranslator.h"></a><a href="qtranslator-h.html">qtranslator.h</a>&gt;
+#include &lt;<a name="qfileinfo.h"></a><a href="qfileinfo-h.html">qfileinfo.h</a>&gt;
+#include &lt;<a name="qmessagebox.h"></a><a href="qmessagebox-h.html">qmessagebox.h</a>&gt;
+
+#include "mywidget.h"
+
+int main( int argc, char** argv )
+{
+    <a name="QApplication"></a><a href="qapplication.html">QApplication</a> app( argc, argv );
+
+    <a name="QString"></a><a href="qstring.html">QString</a> lang;
+    if ( argc != 2 ) {
+        int i = QMessageBox::information(0, "Language?", "Which language?",
+                    "Deutsch", "English", "Norsk" );
+        switch ( i ) {
+          case 0: lang = "de"; break;
+          case 1: lang = "en"; break;
+          case 2: lang = "no"; break;
+        }
+    } else {
+        lang = argv[1];
+    }
+
+    <a href="qstring.html">QString</a> lfile = "mywidget_" + lang + ".qm";
+
+    <a name="QFileInfo"></a><a href="qfileinfo.html">QFileInfo</a> fi( lfile );
+    if ( !fi.<a name="exists"></a><a href="qfileinfo.html#2c4a21">exists</a>() ) {
+        <a name="QMessageBox::warning"></a><a href="qmessagebox.html#b7fab2">QMessageBox::warning</a>( 0, "File error",
+                  <a href="qstring.html">QString</a>("Cannot find translation for language: "+lang+
+                  "\n(try 'de', 'en' or 'no')") );
+        return 0;
+    }
+
+    <a name="QTranslator"></a><a href="qtranslator.html">QTranslator</a> translator( 0 );
+    translator.<a name="load"></a><a href="qtranslator.html#a97925">load</a>( lfile, "." );
+    app.<a name="installTranslator"></a><a href="qapplication.html#1c27a8">installTranslator</a>( &amp;translator );
+
+    MyWidget m;
+    m.<a name="resize"></a><a href="qwidget.html#9ff9d8">resize</a>( 400, 300 );
+    app.<a name="setMainWidget"></a><a href="qapplication.html#11c921">setMainWidget</a>( &amp;m );
+    m.<a name="show"></a><a href="qmainwindow.html#e71bb3">show</a>();
+
+    return app.<a name="exec"></a><a href="qapplication.html#7076af">exec</a>();
+}
+</pre>
+<p><address><hr><div align="center">
+<table width="100%" cellspacing="0" border="0"><tr>
+<td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.1.0</div>
+</table></div></address></body></html>

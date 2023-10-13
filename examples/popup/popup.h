@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: popup.h,v 1.1 1999/06/03 10:08:55 warwick Exp $
+** $Id: qt/examples/popup/popup.h   2.1.0   edited 2000-01-31 $
 **
 ** Definition of something or other
 **

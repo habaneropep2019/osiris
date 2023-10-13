@@ -1,9 +1,9 @@
 /****************************************************************************
-** $Id: qtooltip.h,v 2.26 1999/04/28 10:00:53 aavit Exp $
+** $Id: qt/src/widgets/qtooltip.h   2.1.0   edited 2000-03-24 $
 **
 ** Definition of Tool Tips (or Balloon Help) for any widget or rectangle
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -15,9 +15,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -32,28 +32,40 @@
 
 class QTipManager;
 class QLabel;
-
+class QIconViewToolTip;
 
 class Q_EXPORT QToolTipGroup: public QObject
 {
     Q_OBJECT
+    Q_PROPERTY( bool delay READ delay WRITE setDelay )
+    Q_PROPERTY( bool enabled READ enabled WRITE setEnabled )
+
 public:
     QToolTipGroup( QObject *parent, const char *name = 0 );
    ~QToolTipGroup();
 
     bool delay() const;
+    bool enabled() const;
 
 public slots:
     void setDelay( bool );
+    void setEnabled( bool );
 
 signals:
     void showTip( const QString &);
     void removeTip();
 
 private:
-    bool d;
+    uint del:1;
+    uint ena:1;
 
     friend class QTipManager;
+
+private:	// Disabled copy constructor and operator=
+#if defined(Q_DISABLE_COPY)
+    QToolTipGroup( const QToolTipGroup & );
+    QToolTipGroup& operator=( const QToolTipGroup & );
+#endif
 };
 
 
@@ -72,10 +84,15 @@ public:
 		     QToolTipGroup *, const QString& );
     static void remove( QWidget *, const QRect & );
 
+    static void hide();
+
     static QFont    font();
     static void	    setFont( const QFont & );
     static QPalette palette();
     static void	    setPalette( const QPalette & );
+
+    static void	    setEnabled( bool );
+    static bool	    enabled();
 
 protected:
     virtual void maybeTip( const QPoint & ) = 0;
@@ -88,6 +105,7 @@ public:
     QToolTipGroup *group()	  const { return g; }
 
 private:
+    void    tip( const QRect &, const QRect &, const QString &);
     QWidget	    *p;
     QToolTipGroup   *g;
     static QFont    *ttFont;
@@ -97,6 +115,7 @@ private:
     static void cleanup();
 
     friend class QTipManager;
+    friend class QIconViewToolTip;
 };
 
 

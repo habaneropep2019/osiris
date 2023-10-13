@@ -1,9 +1,9 @@
 /****************************************************************************
-** $Id: qcache.doc,v 2.16 1999/06/23 18:48:00 hanord Exp $
+** $Id: qt/doc/qcache.doc   2.1.0   edited 2000-03-24 $
 **
 ** QCache and QCacheIterator class documentation
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -15,9 +15,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -26,6 +26,7 @@
   QCache documentation
  *****************************************************************************/
 
+// BEING REVISED: ettrich
 /*!
   \class QCache qcache.h
 
@@ -34,23 +35,18 @@
   \ingroup collection
   \ingroup tools
 
-  QCache is implemented as a template class. Define a template
-  instance QCache\<X\> to create a cache that operates on pointers to
-  X, or X*.
+  A cache is a least recently used (LRU) list of cache items.  Each
+  cache item has a key and a certain cost. The sum of item costs,
+  totalCost(), never exceeds the maximum cache cost, maxCost(). If
+  inserting a new item would cause the total cost to exceed the
+  maximum cost, the least recently used items in the cache are
+  removed.
 
-  A cache is a least recently used (LRU) list of cache items.  The
-  cache items are accessed via \l QString keys, which are Unicode
-  strings.  If you want to use non-Unicode, plain 8-bit \c char* keys,
-  use the QAsciiCache template.  A QCache has the same performace as
-  a QAsciiCache.
-
-  Each cache item has a cost.  The sum of item costs, totalCost(), will not
-  exceed the maximum cache cost, maxCost().  If inserting a new item
-  would cause the total cost to exceed the maximum cost, the least
-  recently used items in the cache are removed.
+  QCache is a template class. QCache\<X\> defines a cache that
+  operates on pointers to X, or X*.
 
   Apart from insert(), by far the most important function is find()
-  (which also exists as operator[]).  This function looks up an item,
+  (which also exists as operator[]()).  This function looks up an item,
   returns it, and by default marks it as being the most recently used
   item.
 
@@ -67,11 +63,17 @@
   Inherit a dictionary and reimplement it if you want deep copies.
 
   When removing a cache item, the virtual function
-  QCollection::deleteItem() is called.  It's default implementation
-  in QCache is to delete the item if auto-deletion is enabled.
+  QCollection::deleteItem() is called.  The default implementation
+  deletes the item if auto-deletion is enabled, and does nothing
+  otherwise.
 
   There is a QCacheIterator which may be used to traverse the
   items in the cache in arbitrary order.
+
+  In QCache, the cache items are accessed via \l QString keys, which
+  are Unicode strings.  If you want to use non-Unicode, plain 8-bit \c
+  char* keys, use the QAsciiCache template.  A QCache has the same
+  performace as a QAsciiCache.
 
   \sa QCacheIterator, QAsciiCache, QIntCache,
       \link collection.html Collection Classes\endlink
@@ -174,13 +176,15 @@
 /*!
   \fn bool QCache::insert( const QString &k, const type *d, int c, int p )
 
-  Inserts the item \a d into the cache with key \a k, cost \c and
-  priority \a p, and returns TRUE if it is successful and FALSE if it
-  fails.
+  Inserts the item \a d into the cache with key \a k and cost \a
+  c. Returns TRUE if it is successful and FALSE if it fails.
 
   The cache's size is limited, and if the total cost is too high,
   QCache will remove old, least-used items until there is room for this
   new item.
+
+  The parameter \a p is internal and should be left at the default
+  value (0).
 
   \warning If this function returns FALSE, you must delete \a d
   yourself.  Additionally, be very careful about using \a d after
@@ -238,7 +242,7 @@
 /*!
   \fn type *QCache::find( const QString &k, bool ref ) const
 
-  Returns the item associated with \ k, or null if the key does not
+  Returns the item associated with \a k, or null if the key does not
   exist in the cache.  If \a ref is TRUE (the default), the item is
   moved to the front of the LRU list.
 
@@ -260,6 +264,13 @@
   \sa find()
 */
 
+/*!
+  \fn void QCache::statistics() const
+
+  A debug-only utility function. Prints out cache usage, hit/miss, and
+  distribution information using qDebug(). This function does nothing
+  in the release library.
+*/
 
 /*****************************************************************************
   QCacheIterator documentation
@@ -282,10 +293,10 @@
 
   QCacheIterator provides an operator++(), and an operator+=() to
   traverse the cache, current() and currentKey() to access the current
-  cache item and its key, atFirst() atLast() which return TRUE if the
-  iterator points to the first/last item in the cache, isEmpty() which
-  returns TRUE if the cache is empty and finally count() which returns
-  the number of items in the cache.
+  cache item and its key, atFirst() and atLast() which return TRUE if
+  the iterator points to the first/last item in the cache, isEmpty()
+  which returns TRUE if the cache is empty and finally count() which
+  returns the number of items in the cache.
 
   Note that atFirst() and atLast() refer to the iterator's arbitrary
   ordering, not to the cache's internal LRU list.
@@ -339,6 +350,26 @@
 */
 
 /*!
+  \fn bool QCacheIterator::atFirst() const
+
+  Returns TRUE if the iterator points to the first item in the
+  cache. Note that this refers to the iterator's arbitrary ordering,
+  not to the cache's internal LRU list.
+
+  \sa toFirst(), atLast()
+*/
+
+/*!
+  \fn bool QCacheIterator::atLast() const
+
+  Returns TRUE if the iterator points to the last item in the
+  cache. Note that this refers to the iterator's arbitrary ordering,
+  not to the cache's internal LRU list.
+
+  \sa toLast(), atFirst()
+*/
+
+/*!
   \fn type *QCacheIterator::toFirst()
 
   Sets the iterator to point to the first item in the cache and
@@ -357,7 +388,7 @@
 
   Sets the iterator to null and returns null if if the cache is empty.
 
-  \sa toLast() isEmpty()
+  \sa toFirst() isEmpty()
 */
 
 /*!

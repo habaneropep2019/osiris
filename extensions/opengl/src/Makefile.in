@@ -22,7 +22,7 @@ TARGET1 = lib$(TARGET).so.$(VER_MAJ)
 
 ####### Files
 
-HEADERS =	../../../include/qgl.h
+HEADERS =	qgl.h
 SOURCES =	qgl.cpp \
 		qgl_x11.cpp
 OBJECTS =	qgl.o \
@@ -76,45 +76,11 @@ qgl_x11.o: qgl_x11.cpp \
 		qgl.h
 
 moc_qgl.o: moc_qgl.cpp \
-		../../../include/qgl.h \
-		../../../include/qwidget.h \
-		../../../include/qwindowdefs.h \
-		../../../include/qobjectdefs.h \
-		../../../include/qglobal.h \
-		../../../include/qstring.h \
-		../../../include/qcstring.h \
-		../../../include/qarray.h \
-		../../../include/qgarray.h \
-		../../../include/qshared.h \
-		../../../include/qnamespace.h \
-		../../../include/qobject.h \
-		../../../include/qevent.h \
-		../../../include/qregion.h \
-		../../../include/qrect.h \
-		../../../include/qsize.h \
-		../../../include/qpoint.h \
-		../../../include/qmime.h \
-		../../../include/qlist.h \
-		../../../include/qglist.h \
-		../../../include/qcollection.h \
-		../../../include/qstringlist.h \
-		../../../include/qvaluelist.h \
-		../../../include/qdatastream.h \
-		../../../include/qiodevice.h \
-		../../../include/qpaintdevice.h \
-		../../../include/qpalette.h \
-		../../../include/qcolor.h \
-		../../../include/qbrush.h \
-		../../../include/qcursor.h \
-		../../../include/qfont.h \
-		../../../include/qfontmetrics.h \
-		../../../include/qfontinfo.h \
-		../../../include/qstyle.h \
-		../../../include/qsizepolicy.h
+		qgl.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_qgl.o moc_qgl.cpp
 
-moc_qgl.cpp: ../../../include/qgl.h
-	$(MOC) ../../../include/qgl.h -o moc_qgl.cpp
+moc_qgl.cpp: qgl.h
+	$(MOC) qgl.h -o moc_qgl.cpp
 
 qgl_x11.moc: qgl_x11.cpp
 	$(MOC) qgl_x11.cpp -o qgl_x11.moc

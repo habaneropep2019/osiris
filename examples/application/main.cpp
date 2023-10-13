@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: main.cpp,v 1.4 1999/06/10 19:20:40 agulbra Exp $
+** $Id: qt/examples/application/main.cpp   2.1.0   edited 2000-02-23 $
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.

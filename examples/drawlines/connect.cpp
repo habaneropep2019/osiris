@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: connect.cpp,v 1.1 1999/06/03 10:08:55 warwick Exp $
+** $Id: qt/examples/drawlines/connect.cpp   2.1.0   edited 2000-03-11 $
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -45,7 +45,7 @@ private:
 //
 
 ConnectWidget::ConnectWidget( QWidget *parent, const char *name )
-    : QWidget( parent, name )
+    : QWidget( parent, name, WNorthWestGravity )
 {
     setBackgroundColor( white );		// white background
     count = 0;

@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qgl.h,v 1.16.2.1 1999/09/08 08:30:54 aavit Exp $
+** $Id: qt/extensions/opengl/src/qgl.h   2.1.0   edited 2000-03-24 $
 **
 ** Definition of OpenGL classes for Qt
 **
 ** Created : 970112
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -27,8 +27,8 @@
 #define QGL_H
 
 
-#define QGL_VERSION	420
-#define QGL_VERSION_STR	"4.2"
+#define QGL_VERSION	430
+#define QGL_VERSION_STR	"4.3"
 
 const char *qGLVersion();
 
@@ -235,12 +235,16 @@ public:
     virtual void	swapBuffers();
 
     QGLFormat		format() const;
-    virtual void	setFormat( const QGLFormat& format );
+#ifndef QT_NO_COMPAT
+    virtual void	setFormat( const QGLFormat& format ); // OBSOLETE
+#endif
 
     const QGLContext*	context() const;
+#ifndef QT_NO_COMPAT
     virtual void	setContext( QGLContext* context,
 				    const QGLContext* shareContext = 0,
-				    bool deleteOldContext = TRUE );
+				    bool deleteOldContext = TRUE ); // OBSOLETE
+#endif
 
     virtual QPixmap	renderPixmap( int w = 0, int h = 0,
 				      bool useContext = FALSE );

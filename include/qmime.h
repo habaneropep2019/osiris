@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qmime.h,v 2.7 1999/06/02 23:35:16 ettrich Exp $
+** $Id: qt/src/kernel/qmime.h   2.1.0   edited 2000-03-24 $
 **
 ** Definition of mime classes
 **
 ** Created : 981204
 **
-** Copyright (C) 1998-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1998-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -28,7 +28,6 @@
 
 #ifndef QT_H
 #include "qwindowdefs.h"
-#include "qlist.h"
 #endif // QT_H
 
 class Q_EXPORT QMimeSource {
@@ -59,6 +58,8 @@ public:
     virtual void setPixmap( const QString& abs_name, const QPixmap& pm );
     virtual void setData( const QString& abs_name, QMimeSource* data );
     virtual void setFilePath( const QStringList& );
+    virtual QStringList filePath() const;
+    void addFilePath( const QString& );
     virtual void setExtensionType( const QString& ext, const char* mimetype );
 
 private:
@@ -66,6 +67,11 @@ private:
 };
 
 #ifdef _WS_WIN_
+
+// This header file is down here for GCC 2.7.* compatibility
+#ifndef QT_H
+#include "qlist.h"
+#endif // QT_H
 
 /*
   Encapsulation of conversion between MIME and Windows CLIPFORMAT.

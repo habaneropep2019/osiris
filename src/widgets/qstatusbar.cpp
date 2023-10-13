@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qstatusbar.cpp,v 2.42 1999/06/22 12:02:29 paul Exp $
+** $Id: qt/src/widgets/qstatusbar.cpp   2.1.0   edited 2000-03-28 $
 **
 ** Implementation of QStatusBar class
 **
 ** Created : 980119
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -33,51 +33,61 @@
 #include "qapplication.h"
 #include "qsizegrip.h"
 
-/*! \class QStatusBar qstatusbar.h
+// REVISED: warwick
+/*!
+  \class QStatusBar qstatusbar.h
 
   \brief The QStatusBar class provides a horizontal bar suitable for
-  presenting status messages.
+  presenting status information.
 
-  \ingroup realwidgets
   \ingroup application
+  \ingroup helpsystem
 
-  Each status message falls into one of three classes: <ul>
+  Each status indicator falls into one of three categories:
 
-  <li> \c Temporary - occupies most of the status bar briefly.  Used
-  e.g. for explaining \link QToolTip tool tip \endlink texts or menu
-  entries)
-
-  <li> \c Normal - occupies part of the status bar and may be hidden
-  by temporary messages.  Used e.g. for displaying the page and line
-  number in a word processor.
-
-  <li> \c Permanent - is never hidden.  Used for important mode
-  indications.  Some applications put a Caps Lock indicator here.
-
+  <ul>
+  <li> \e Temporary - occupies most of the status bar briefly.  Used
+    e.g. for explaining tool tip texts or menu entries.
+  <li> \e Normal - occupies part of the status bar and may be hidden
+    by temporary messages.  Used e.g. for displaying the page and line
+    number in a word processor.
+  <li> \e Permanent - is never hidden.  Used for important mode
+    indications.  Some applications put a Caps Lock indicator in the
+    status bar.
   </ul>
 
-  QStatusBar lets you display all three sorts of messages.
+  QStatusBar lets you display all three types of indicator.
 
-  To display a temporary message, you can call message(), or connect a
-  suitable signal to it.  To remove a temporary message, you can call
-  clear(), or connect a signal to it.
-
+  To display a \e temporary message, call message(), perhaps by
+  connecting a suitable signal to it.  To remove a temporary message,
+  call clear().
   There are two variants of message(), one which displays the message
-  until the next clear() or mesage(), and one which also has a time limit.
+  until the next clear() or mesage(), and one which also has a time limit:
 
-  Normal and permanent messages are displayed by creating a widget
-  (typically a QLabel) and using addWidget() to add this widget to the
-  status bar.
+  \code
+     connect( loader, SIGNAL(progressMessage(const QString&)),
+              statusBar(), SLOT(message(const QString&)) );
 
-  Finally, in Windows style QStatusBar also provides a Windows
-  standard resize handle.  In the X11 version Qt 1.40 this resize
-  handle generally works differently than the one provided by the
-  system; we hope to reduce this difference in the future.
+     statusBar()->message("Loading...");  // Initial message
+     loader.loadStuff();                  // Emits progress messages
+     statusBar()->message("Done.", 2000); // Final message for 2 seconds
+  \endcode
+
+  \e Normal and \e permanent messages are displayed by creating a small
+  widget then adding it to the status bar with addWidget().  Widgets
+  like QLabel, QProgressBar, or even QToolButton are useful for adding
+  to status bars.  removeWidget() is used to remove widgets.
+
+  \code
+     statusBar()->addWidget(new MyReadWriteIndication(statusBar()));
+  \endcode
+
+  By default, QStatusBar provides a QSizeGrip in the lower-right corner.
+  You can disable this with setSizeGripEnabled(FALSE);
 
   <img src=qstatusbar-m.png> <img src=qstatusbar-w.png>
 
   \sa QToolBar QMainWindow QLabel
-  <a href="http://www.microsoft.com/win32dev/uiguide/uigui192.htm">Microsoft Style Guide,</a>
   <a href="guibooks.html#fowler">GUI Design Handbook: Status Bar.</a>
 */
 
@@ -87,18 +97,16 @@ class QStatusBarPrivate
 public:
     QStatusBarPrivate() {}
 
-    struct StatusBarPrivateItem {
-	StatusBarPrivateItem( QWidget * widget, int stretch, bool permanent )
-	    : s( stretch ), w( widget ), p(permanent) {}
+    struct SBItem {
+	SBItem( QWidget* widget, int stretch, bool permanent )
+	    : s( stretch ), w( widget ), p( permanent ) {}
 	int s;
 	QWidget * w;
 	bool p;
     };
 
-    QList<StatusBarPrivateItem> items;
-    StatusBarPrivateItem * firstPermanent;
-
-    QString temporary;
+    QList<SBItem> items;
+    QString tempItem;
 
     QBoxLayout * box;
     QTimer * timer;
@@ -107,24 +115,26 @@ public:
 };
 
 
-/*!  Constructs an empty status bar. */
-
+/*!
+  Constructs a status bar with just a size grip.
+  \sa setSizeGripEnabled()
+*/
 QStatusBar::QStatusBar( QWidget * parent, const char *name )
     : QWidget( parent, name )
 {
     d = new QStatusBarPrivate;
     d->items.setAutoDelete( TRUE );
     d->box = 0;
-    d->resizer = new QSizeGrip( this );
+    d->resizer = 0;
     d->timer = 0;
-    reformat();
+
+    setSizeGripEnabled(TRUE); // causes reformat()
 }
 
 
-/*! Destroys the object and frees any allocated resources.
-
+/*!
+  Destructs the status bar and frees any allocated resources.
 */
-
 QStatusBar::~QStatusBar()
 {
     delete d;
@@ -132,13 +142,15 @@ QStatusBar::~QStatusBar()
 }
 
 
-/*!  Adds \a widget to this status bar, with a width of \a stretch.
+/*!
+  Adds \a widget to this status bar.
 
   \a widget is permanently visible if \a permanent is TRUE, and is
   obscured by temporary messages if \a permanent is FALSE.  The
   default is FALSE.
 
-  \a stretch is used to compute a suitable size for \a widget.
+  \a stretch is used to compute a suitable size for \a widget as the
+  status bar grows and shrinks. The default of 0 uses a minimum of space.
 
   If \a permanent is TRUE, \a widget is located at the far right of
   the status bar.  If \a permanent is FALSE (the default) \a widget is
@@ -151,9 +163,15 @@ QStatusBar::~QStatusBar()
 
 void QStatusBar::addWidget( QWidget * widget, int stretch, bool permanent )
 {
-    QStatusBarPrivate::StatusBarPrivateItem * item
-	= new QStatusBarPrivate::StatusBarPrivateItem( widget, stretch,
-						       permanent );
+    if ( !widget ) {
+#if defined(CHECK_NULL)
+	qWarning( "QStatusBar::addWidget(): Cannot add null widget" );
+#endif
+	return;
+    }
+
+    QStatusBarPrivate::SBItem* item
+	= new QStatusBarPrivate::SBItem( widget, stretch, permanent );
 
     d->items.last();
     while( !permanent && d->items.current() && d->items.current()->p )
@@ -161,11 +179,15 @@ void QStatusBar::addWidget( QWidget * widget, int stretch, bool permanent )
 
     d->items.insert( d->items.at() >= 0 ? d->items.at()+1 : 0, item );
 
+    if ( !d->tempItem.isEmpty() && !permanent )
+	widget->hide();
+
     reformat();
 }
 
 
-/*!  Removes \a widget from the status bar.
+/*!
+  Removes \a widget from the status bar.
 
   This function may cause some flicker.
 
@@ -174,70 +196,127 @@ void QStatusBar::addWidget( QWidget * widget, int stretch, bool permanent )
   \sa addWidget()
 */
 
-void QStatusBar::removeWidget( QWidget * widget )
+void QStatusBar::removeWidget( QWidget* widget )
 {
-    d->items.first();
-    do {
-	if ( d->items.current() &&
-	     d->items.current()->w == widget ) {
+    if ( !widget )
+	return;
+    bool found = FALSE;
+    QStatusBarPrivate::SBItem* item = d->items.first();
+    while ( item && !found ) {
+	if ( item->w == widget ) {
 	    d->items.remove();
-	    reformat();
-	    return;
+	    found = TRUE;
 	}
-    } while( d->items.next() );
+	item = d->items.next();
+    }
+
+    if ( found )
+	reformat();
+#if defined(DEBUG)
+    else
+	qDebug( "QStatusBar::removeWidget(): Widget not found." );
+#endif
+}
+
+/*!
+  \fn bool QStatusBar::isSizeGripEnabled() const
+
+  Returns whether the QSizeGrip in the bottom right of the status bar
+  is enabled.
+
+  \sa setSizeGripEnabled()
+*/
+
+bool QStatusBar::isSizeGripEnabled() const
+{
+    return (bool)d->resizer;
+}
+
+/*!
+  Enables or disables the QSizeGrip in the bottom right of the status bar.
+  By default, the size grip is enabled.
+
+  \sa isSizeGripEnabled()
+*/
+void QStatusBar::setSizeGripEnabled(bool enabled)
+{
+    if ( !enabled != !d->resizer ) {
+	if ( enabled ) {
+	    d->resizer = new QSizeGrip( this, "QStatusBar::resizer" );
+	} else {
+	    delete d->resizer;
+	    d->resizer = 0;
+	}
+	reformat();
+    }
 }
 
 
-/*!  Changes the status bar's appearance to account for item
-  changes. */
-
+/*!
+  Changes the status bar's appearance to account for item
+  changes. Special subclasses may need this, but normally
+  geometry management will take care of any necessary
+  rearrangements.
+*/
 void QStatusBar::reformat()
 {
-    if ( d->box ) {
+    if ( d->box )
 	delete d->box;
-	d->box = 0;
-    }
-
     d->box = new QVBoxLayout( this );
     d->box->addSpacing( 3 );
-    QBoxLayout * l = new QHBoxLayout( d->box );
 
-    QStatusBarPrivate::StatusBarPrivateItem * i;
-    d->items.first();
-    int space = 1;
-    int h = 0;
-    while( (i=d->items.current()) != 0 ) {
-	d->items.next();
-	l->addSpacing( space );
-	space = 4;
-	l->addWidget( i->w, i->s );
-	h = QMAX( h, i->w->sizeHint().height() );
+    QBoxLayout* l = new QHBoxLayout( d->box );
+    l->addSpacing( 3 );
+
+    int maxH = fontMetrics().height();
+
+    QStatusBarPrivate::SBItem* item = d->items.first();
+    while ( item && !item->p ) {
+	l->addWidget( item->w, item->s );
+	l->addSpacing( 4 );
+	int itemH = item->w->sizeHint().height();
+	maxH = QMAX( maxH, itemH );
+	item = d->items.next();
     }
-    if ( space == 1 ) {
-	l->addStretch( 1 );
-	h = QMAX( h,  3 + fontMetrics().height() + 3 );
+
+    l->addStretch( 0 );
+
+
+    while ( item ) {
+	l->addWidget( item->w, item->s );
+	l->addSpacing( 4 );
+	int itemH = item->w->sizeHint().height();
+	maxH = QMAX( maxH, itemH );
+	item = d->items.next();
     }
-    l->addStrut( h );
-    l->addSpacing( 2 );
-    l->addWidget( d->resizer, 0, AlignBottom );
+
+    if ( d->resizer ) {
+	maxH = QMAX( maxH, d->resizer->sizeHint().height() );
+	l->addSpacing( 2 );
+	l->addWidget( d->resizer, 0, AlignBottom );
+	l->addSpacing( 2 );
+    }
+
+    l->addStrut( maxH );
     d->box->addSpacing( 2 );
     d->box->activate();
+    update();
 }
 
 
 
 
-/*!  Hide the normal status indications and display \a message, until
+/*!
+  Hide the normal status indicators and display \a message, until
   clear() or another message() is called.
 
   \sa clear()
 */
-
 void QStatusBar::message( const QString &message )
 {
-    if ( d->temporary == message )
+    if ( d->tempItem == message )
 	return;
-    d->temporary = message; // ### clip and add ellipsis if necessary
+    d->tempItem = message;
     if ( d->timer ) {
 	delete d->timer;
 	d->timer = 0;
@@ -246,82 +325,86 @@ void QStatusBar::message( const QString &message )
 }
 
 
-/*!  Hide the normal status indications and display \a message for \a
+/*!
+  Hide the normal status indications and display \a message for \a
   ms milli-seconds, or until clear() or another message() is called,
-  whichever is shorter.
+  whichever is first.
 */
-
 void QStatusBar::message( const QString &message, int ms )
 {
-    d->temporary = message; // ### clip and add ellipsis if necessary
+    d->tempItem = message;
 
     if ( !d->timer ) {
 	d->timer = new QTimer( this );
 	connect( d->timer, SIGNAL(timeout()), this, SLOT(clear()) );
     }
-    d->timer->start( ms );
+    if ( ms > 0 )
+	d->timer->start( ms );
     hideOrShow();
 }
 
 
-/*!  Removes any temporary message being shown.
+/*!
+  Removes any temporary message being shown.
 
   \sa message()
 */
 
 void QStatusBar::clear()
 {
-    if ( d->temporary.isEmpty() )
+    if ( d->tempItem.isEmpty() )
 	return;
     if ( d->timer ) {
 	delete d->timer;
 	d->timer = 0;
     }
-    d->temporary = QString::fromLatin1("");
+    d->tempItem = QString::null;
     hideOrShow();
 }
 
 
-/*!  Ensures that the right widgets are visible.  Used by message()
+/*!
+  Ensures that the right widgets are visible.  Used by message()
   and clear().
 */
-
 void QStatusBar::hideOrShow()
 {
-    QStatusBarPrivate::StatusBarPrivateItem * i;
-    bool b = (d->temporary.length() == 0);
+    bool haveMessage = !d->tempItem.isEmpty();
 
-    d->items.first();
-    update();
-    while( (i=d->items.current()) != 0 ) {
-	d->items.next();
-	if ( b || i->p )
-	    i->w->show();
+    QStatusBarPrivate::SBItem* item = d->items.first();
+
+    while( item && !item->p ) {
+	if ( haveMessage )
+	    item->w->hide();
 	else
-	    i->w->hide();
+	    item->w->show();
+	item = d->items.next();
     }
+
+    update();
 }
 
 
-/*!  Shows the temporary message, if appropriate. */
-
+/*!
+  Shows the temporary message, if appropriate.
+*/
 void QStatusBar::paintEvent( QPaintEvent * )
 {
-    QStatusBarPrivate::StatusBarPrivateItem * i;
-    bool b = (d->temporary.length() == 0);
+    bool haveMessage = !d->tempItem.isEmpty();
+
     QPainter p( this );
-    d->items.first();
-    while( (i=d->items.current()) != 0 ) {
-	d->items.next();
-	if ( b || i->p )
-	    qDrawShadeRect( &p,
-			    i->w->x()-1, i->w->y()-1,
-			    i->w->width()+2, i->w->height()+2,
+    QStatusBarPrivate::SBItem* item = d->items.first();
+    while ( item ) {
+	if ( !haveMessage || item->p )
+	    qDrawShadeRect( &p, item->w->x()-1, item->w->y()-1,
+			    item->w->width()+2, item->w->height()+2,
 			    colorGroup(), TRUE, 1, 0, 0 );
+	item = d->items.next();
     }
-    if ( !b ) {
+    if ( haveMessage ) {
 	p.setPen( colorGroup().text() );
+	// ### clip and add ellipsis if necessary
 	p.drawText( 6, 0, width() - 12, height(), AlignVCenter + SingleLine,
-		    d->temporary );
+		    d->tempItem );
     }
 }

@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qgarray.h,v 2.9 1999/06/16 09:58:07 agulbra Exp $
+** $Id: qt/src/tools/qgarray.h   2.1.0   edited 2000-03-24 $
 **
 ** Definition of QGArray class
 **
 ** Created : 930906
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -35,7 +35,7 @@ class Q_EXPORT QGArray					// generic array
 {
 friend class QBuffer;
 public:
-    // DO NOT USE THIS.  IT IS PUBLIC BUT DO NOT USE IT IN NEW CODE.
+    //### DO NOT USE THIS.  IT IS PUBLIC BUT DO NOT USE IT IN NEW CODE.
     struct array_data : public QShared {	// shared array
 	array_data()	{ data=0; len=0; }
 	char *data;				// actual array data
@@ -75,6 +75,9 @@ protected:
 
     int		find( const char *d, uint index, uint sz ) const;
     int		contains( const char *d, uint sz ) const;
+    
+    void	sort( uint sz );
+    int		bsearch( const char *d, uint sz ) const;
 
     char       *at( uint index ) const;
 

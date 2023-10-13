@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qbuttongroup.h,v 2.24 1999/04/28 09:59:43 aavit Exp $
+** $Id: qt/src/widgets/qbuttongroup.h   2.1.0   edited 2000-03-24 $
 **
 ** Definition of QButtonGroup class
 **
 ** Created : 950130
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -38,11 +38,17 @@ class QButtonList;
 class Q_EXPORT QButtonGroup : public QGroupBox
 {
     Q_OBJECT
+    Q_PROPERTY( bool exclusive READ isExclusive WRITE setExclusive )
+    Q_PROPERTY( bool radioButtonExclusive READ isRadioButtonExclusive WRITE setRadioButtonExclusive )
+	
 public:
     QButtonGroup( QWidget *parent=0, const char *name=0 );
-    QButtonGroup( const QString &title, QWidget *parent=0, const char* name=0 );
-    QButtonGroup( int columns, Orientation o, QWidget *parent=0, const char *name=0 );
-    QButtonGroup( int columns, Orientation o, const QString &title, QWidget *parent=0, const char* name=0 );
+    QButtonGroup( const QString &title,
+		  QWidget *parent=0, const char* name=0 );
+    QButtonGroup( int columns, Orientation o,
+		  QWidget *parent=0, const char *name=0 );
+    QButtonGroup( int columns, Orientation o, const QString &title,
+		  QWidget *parent=0, const char* name=0 );
    ~QButtonGroup();
 
     bool	isExclusive() const;
@@ -50,6 +56,7 @@ public:
     virtual void setExclusive( bool );
     virtual void setRadioButtonExclusive( bool );
 
+public:
     int		insert( QButton *, int id=-1 );
     void	remove( QButton * );
     QButton    *find( int id ) const;

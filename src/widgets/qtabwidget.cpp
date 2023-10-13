@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qtabwidget.cpp,v 1.23.2.1 1999/07/13 19:59:32 warwick Exp $
+** $Id: qt/src/widgets/qtabwidget.cpp   2.1.0   edited 2000-04-03 $
 **
 ** Implementation of QTabWidget class
 **
 ** Created : 990318
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -30,22 +30,21 @@
 #include "qapplication.h"
 #include "qwidgetstack.h"
 #include "qbitmap.h"
+
+// NOT REVISED
 /*!
   \class QTabWidget qtabwidget.h
 
   \brief The QTabWidget class provides a stack of tabbed widgets.
 
-  \ingroup realwidgets
+  \ingroup organizers
 
   A tabbed widget is one in which several "pages" are available, and
   the user selects which page to see and use by clicking on its tab,
   or by pressing the indicated Alt-(letter) key combination.
 
   QTabWidget does not provide more than one row of tabs, and does not
-  provide tabs along the sides or bottom of the pages.  It also does
-  not offer any way to find out which page is currently visible or to
-  set the visible page.
-
+  provide tabs along the sides or bottom of the pages.
 
   The normal way to use QTabWidget is to do the following in the
   constructor: <ol> <li> Create a QTabWidget. <li> Create a QWidget
@@ -83,6 +82,16 @@
   \sa QTabDialog
 */
 
+
+/*! \enum QTabWidget::TabPosition
+
+  This enum type defines where QTabWidget can draw the tab row: <ul>
+  <li> \c Top - above the pages
+  <li> \c Bottom - below the pages
+  </ul>
+*/
+
+
 /*! \fn void QTabWidget::selected( const QString &tabLabel );
 
   This signal is emitted whenever a tab is selected (raised),
@@ -104,11 +113,32 @@ public:
     QTabWidget::TabPosition pos;
 };
 
+
+
+
+
 /*!
-  Constructs a QTabWidget
+  Constructs a tabbed widget with parent \a parent, name \a name
+  and widget flags \a f.
+*/
+
+
+QTabWidget::QTabWidget( QWidget *parent, const char *name, WFlags f)
+    : QWidget( parent, name, f )
+{
+    init();
+}
+
+/*!
+  \overload
 */
 QTabWidget::QTabWidget( QWidget *parent, const char *name)
     : QWidget( parent, name )
+{
+    init();
+}
+
+void QTabWidget::init()
 {
     d = new QTabWidgetData;
 
@@ -261,7 +291,7 @@ void QTabWidget::insertTab( QWidget *child, QTab* tab, int index)
 
 
 /*!
-  Defines a new label for the tab of page \w
+  Defines a new label for the tab of page \a w
  */
 void QTabWidget::changeTab( QWidget *w, const QString &label)
 {
@@ -278,8 +308,8 @@ void QTabWidget::changeTab( QWidget *w, const QString &label)
     setUpLayout();
 }
 
-/*
-  Defines a new iconset and a new label for the tab of page \w
+/*!
+  Defines a new \a iconset and a new \a label for the tab of page \a w
  */
 void QTabWidget::changeTab( QWidget *w, const QIconSet& iconset, const QString &label)
 {
@@ -350,7 +380,8 @@ void QTabWidget::showPage( QWidget * w)
     if ( id >= 0 ) {
 	d->stack->raiseWidget( w );
 	d->tabs->setCurrentTab( id );
-	if ( d->stack->frameStyle() != ( QFrame::StyledPanel | QFrame::Raised ) )
+	// ### why overwrite the frame style?
+	if ( d->stack->frameStyle() != ( QFrame::StyledPanel|QFrame::Raised ) )
 	    d->stack->setFrameStyle( QFrame::StyledPanel | QFrame::Raised );
     }
 }
@@ -392,7 +423,8 @@ QWidget * QTabWidget::currentPage() const
     return d->stack->visibleWidget();
 }
 
-/*\reimp
+/*!
+  \reimp
  */
 void QTabWidget::resizeEvent( QResizeEvent * )
 {
@@ -407,6 +439,8 @@ void QTabWidget::resizeEvent( QResizeEvent * )
 */
 void QTabWidget::setTabBar( QTabBar* tb)
 {
+    if ( tb->parentWidget() != this )
+	tb->reparent( this, QPoint(0,0), TRUE );
     delete d->tabs;
     d->tabs = tb;
     connect( d->tabs, SIGNAL(selected(int)),
@@ -449,6 +483,8 @@ void QTabWidget::setUpLayout( bool onlyCheck )
 	return; // we'll do it later
     }
     QSize t( d->tabs->sizeHint() );
+    if ( t.width() > width() )
+	t.setWidth( width() );
     int lw = d->stack->lineWidth();
     if ( d->pos == Bottom ) {
 	d->tabs->setGeometry( QMAX(0, lw-2), height() - t.height(), t.width(), t.height() );
@@ -458,16 +494,16 @@ void QTabWidget::setUpLayout( bool onlyCheck )
 	d->tabs->setGeometry( QMAX(0, lw-2), 0, t.width(), t.height() );
 	d->stack->setGeometry( 0, t.height()-lw, width(), height()-t.height()+lw );
     }
-	
+
     d->dirty = FALSE;
+    if ( !onlyCheck )
+	update();
     if ( autoMask() )
 	updateMask();
 }
 
-/*!
-  Returns a suitable size for the tab widget.
+/*!\reimp
 */
-
 QSize QTabWidget::sizeHint() const
 {
     QSize s( d->stack->sizeHint() );
@@ -513,7 +549,7 @@ QTabWidget::TabPosition QTabWidget::tabPosition() const
   Possible values are QTabWidget::Top and QTabWidget::Bottom.
   \sa tabPosition()
  */
-void QTabWidget::setTabPosition( QTabWidget::TabPosition pos)
+void QTabWidget::setTabPosition( TabPosition pos)
 {
     if (d->pos == pos)
 	return;
@@ -574,17 +610,12 @@ void QTabWidget::updateMask()
 {
     if ( !autoMask() )
 	return;
-    QBitmap bm( size() );
-    bm.fill( color0 );
 
-    QPainter p;
-    p.begin( &bm, this );
-    p.setBrush(color1);
-    p.setPen(color1);
-    p.drawRect( d->tabs->geometry() );
-    p.drawRect( d->stack->geometry() );
-   p.end();
-   setMask( bm );
+    QRect r;
+    QRegion reg( r );
+    reg += QRegion( d->tabs->geometry() );
+    reg += QRegion( d->stack->geometry() );
+    setMask( reg );
 }
 
 
@@ -592,10 +623,11 @@ void QTabWidget::updateMask()
  */
 bool QTabWidget::eventFilter( QObject *o, QEvent * e)
 {
-    if ( o == d->stack && e->type() == QEvent::ChildRemoved 
+    if ( o == d->stack && e->type() == QEvent::ChildRemoved
 	 && ( (QChildEvent*)e )->child()->isWidgetType() ) {
 	removePage( (QWidget*)  ( (QChildEvent*)e )->child() );
 	return TRUE;
     }
     return FALSE;
 }
+

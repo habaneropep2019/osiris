@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qspinbox.h,v 2.33 1999/06/11 16:39:11 ettrich Exp $
+** $Id: qt/src/widgets/qspinbox.h   2.1.0   edited 2000-03-24 $
 **
 ** Definition of QSpinBox widget class
 **
 ** Created : 1997
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -31,15 +31,29 @@
 #include "qrangecontrol.h"
 #endif // QT_H
 
+
 class QPushButton;
 class QLineEdit;
 class QValidator;
-struct QSpinBoxData;
 
+struct QSpinBoxPrivate;
 
 class Q_EXPORT QSpinBox: public QFrame, public QRangeControl
 {
     Q_OBJECT
+    Q_ENUMS( ButtonSymbols )
+    Q_PROPERTY( QString text READ text )
+    Q_PROPERTY( QString prefix READ prefix WRITE setPrefix )
+    Q_PROPERTY( QString suffix READ suffix WRITE setSuffix )
+    Q_PROPERTY( QString cleanText READ cleanText )
+    Q_PROPERTY( QString specialValueText READ specialValueText WRITE setSpecialValueText )
+    Q_PROPERTY( bool wrapping READ wrapping WRITE setWrapping )
+    Q_PROPERTY( ButtonSymbols buttonSymbols READ buttonSymbols WRITE setButtonSymbols )
+    Q_PROPERTY( int minValue READ minValue WRITE setMinValue )
+    Q_PROPERTY( int maxValue READ maxValue WRITE setMaxValue )
+    Q_PROPERTY( int lineStep READ lineStep WRITE setLineStep )
+    Q_PROPERTY( int value READ value WRITE setValue )
+	
 public:
     QSpinBox( QWidget* parent = 0, const char *name = 0 );
     QSpinBox( int minValue, int maxValue, int step = 1,
@@ -47,6 +61,7 @@ public:
     ~QSpinBox();
 
     QString 		text() const;
+
     virtual QString 	prefix() const;
     virtual QString 	suffix() const;
     virtual QString 	cleanText() const;
@@ -57,11 +72,23 @@ public:
     virtual void 	setWrapping( bool on );
     bool 		wrapping() const;
 
+    enum ButtonSymbols { UpDownArrows, PlusMinus };
+    void		setButtonSymbols( ButtonSymbols ); // 3.0: virtual
+    ButtonSymbols	buttonSymbols() const;
+
     virtual void	setValidator( const QValidator* v );
     const QValidator * validator() const;
 
     QSize 		sizeHint() const;
     QSizePolicy 	sizePolicy() const;
+
+    int	 minValue() const;
+    int	 maxValue() const;
+    void setMinValue( int );
+    void setMaxValue( int );
+    int	 lineStep() const;
+    void setLineStep( int );
+    int  value() const;
 
 public slots:
     virtual void	setValue( int value );
@@ -93,6 +120,7 @@ protected:
     bool		eventFilter( QObject* obj, QEvent* ev );
     void		resizeEvent( QResizeEvent* ev );
     void		wheelEvent( QWheelEvent * );
+    void		leaveEvent( QEvent* );
 
     void		styleChange( QStyle& );
 
@@ -101,7 +129,7 @@ protected slots:
 
 private:
     void initSpinBox();
-    struct QSpinBoxData* extra;
+    struct QSpinBoxPrivate* d;
     QPushButton* up;
     QPushButton* down;
     QLineEdit* vi;
@@ -111,6 +139,9 @@ private:
     QString specText;
     bool wrap;
     bool edited;
+
+    void arrangeWidgets();
+    void updateButtonSymbols();
 
 private:	// Disabled copy constructor and operator=
 #if defined(Q_DISABLE_COPY)

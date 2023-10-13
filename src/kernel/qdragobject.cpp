@@ -1,9 +1,9 @@
 /****************************************************************************
-** $Id: qdragobject.cpp,v 2.95.2.2 1999/07/13 19:58:49 warwick Exp $
+** $Id: qt/src/kernel/qdragobject.cpp   2.1.0   edited 2000-04-06 $
 **
 ** Implementation of Drag and Drop support
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -15,9 +15,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -39,8 +39,7 @@
 // the name space
 
 struct QDragData {
-    QDragData(): autoDelete( TRUE ), hot(0,0) {}
-    bool autoDelete;
+    QDragData(): hot(0,0) {}
     QPixmap pixmap;
     QPoint hot;
 };
@@ -79,7 +78,7 @@ struct QStoredDragData {
 // These pixmaps approximate the images in the Windows User Interface Guidelines.
 
 /* XPM */
-static const char * move_xpm[] = {
+static const char * const move_xpm[] = {
 "11 20 3 1",
 ".	c None",
 #if defined(_WS_WIN_)
@@ -111,7 +110,7 @@ static const char * move_xpm[] = {
 "........  ."};
 
 /* XPM */
-static const char * copy_xpm[] = {
+static const char * const copy_xpm[] = {
 "24 30 3 1",
 ".	c None",
 " 	c #000000",
@@ -171,7 +170,7 @@ static const char * copy_xpm[] = {
 ".............           "};
 
 /* XPM */
-static const char * link_xpm[] = {
+static const char * const link_xpm[] = {
 "24 30 3 1",
 ".	c None",
 " 	c #000000",
@@ -240,9 +239,9 @@ QDragManager::QDragManager()
 {
     n_cursor = 3;
     pm_cursor = new QPixmap[n_cursor];
-    pm_cursor[0] = QPixmap(move_xpm);
-    pm_cursor[1] = QPixmap(copy_xpm);
-    pm_cursor[2] = QPixmap(link_xpm);
+    pm_cursor[0] = QPixmap((const char **)move_xpm);
+    pm_cursor[1] = QPixmap((const char **)copy_xpm);
+    pm_cursor[2] = QPixmap((const char **)link_xpm);
     object = 0;
     dragSource = 0;
     dropWidget = 0;
@@ -265,7 +264,7 @@ QDragManager::~QDragManager()
 
 
 
-/*!  Creates a drag object which is a child of \a dragSource and
+/*!  Constructs a drag object which is a child of \a dragSource and
   named \a name.
 
   Note that the drag object will be deleted when \a dragSource is.
@@ -280,13 +279,13 @@ QDragObject::QDragObject( QWidget * dragSource, const char * name )
 }
 
 
-/*!  Deletes the drag object and frees up the storage used. */
+/*! Destroys the drag object, cancelling any drag-and-drop operation
+  in which it is involved, and frees up the storage used. */
 
 QDragObject::~QDragObject()
 {
-    d->autoDelete = FALSE; // so cancel() won't delete this object
     if ( manager && manager->object == this )
-	manager->cancel();
+	manager->cancel( FALSE );
     delete d;
 }
 
@@ -380,7 +379,7 @@ void QDragObject::dragCopy()
 }
 
 
-/*! \enum QDragOBject::DragMode
+/*! \enum QDragObject::DragMode
 
   This enum type decides which of several types of drag each
   individual drag is.  The available types are: <ul>
@@ -436,11 +435,12 @@ QWidget * QDragObject::source()
 }
 
 
+// NOT REVISED
 /*! \class QDragObject qdragobject.h
 
   \brief The QDragObject encapsulates MIME-based information transfer.
 
-  \ingroup kernel
+  \ingroup draganddrop
 
   QDragObject is the base class for all data that needs to be transferred
   between and within applications, both for drag-and-drop and for the
@@ -468,7 +468,7 @@ const char * staticCharset(int i)
 
     switch ( i ) {
       case 0:
-	return "utf8";
+	return "UTF-8";
       case 1:
 	if ( localcharset.isNull() ) {
 	    localcharset = QTextCodec::codecForLocale()->name();
@@ -477,7 +477,7 @@ const char * staticCharset(int i)
 	}
 	return localcharset;
       case 2:
-	return "utf16";
+	return "ISO-10646-UCS-2";
       case 3:
 	return "";
     }
@@ -529,7 +529,7 @@ void QTextDrag::setSubtype( const QCString & st)
   \brief The QTextDrag provides a drag-and-drop object for
 	      transferring plain and Unicode text.
 
-  \ingroup kernel
+  \ingroup draganddrop
 
   Plain text is single- or multi-line 8-bit text in the local encoding.
 
@@ -542,7 +542,7 @@ void QTextDrag::setSubtype( const QCString & st)
 */
 
 
-/*!  Creates a text drag object and sets it to \a text.  \a dragSource
+/*!  Constructs a text drag object and sets it to \a text.  \a dragSource
   must be the drag source, \a name is the object name. */
 
 QTextDrag::QTextDrag( const QString &text,
@@ -554,7 +554,7 @@ QTextDrag::QTextDrag( const QString &text,
 }
 
 
-/*!  Creates a default text drag object.  \a dragSource must be the drag
+/*!  Constructs a default text drag object.  \a dragSource must be the drag
   source, \a name is the object name.
 */
 
@@ -583,6 +583,9 @@ void QTextDrag::setText( const QString &text )
 }
 
 
+/*!
+  \reimp
+*/
 const char * QTextDrag::format(int i) const
 {
     if ( i >= d->nfmt )
@@ -620,6 +623,9 @@ QTextCodec* findcodec(const QMimeSource* e)
 }
 
 
+/*!
+  \reimp
+*/
 QByteArray QTextDrag::encodedData(const char* mime) const
 {
     QCString r;
@@ -731,7 +737,7 @@ public:
   \brief The QImageDrag provides a drag-and-drop object for
   transferring images.
 
-  \ingroup kernel
+  \ingroup draganddrop
 
   Images are offered to the receiving application in multiple formats,
   determined by the \link QImage::outputFormats() output formats\endlink
@@ -740,7 +746,7 @@ public:
   For detailed information about drag-and-drop, see the QDragObject class.
 */
 
-/*!  Creates an image drag object and sets it to \a image.  \a dragSource
+/*!  Constructs an image drag object and sets it to \a image.  \a dragSource
   must be the drag source, \a name is the object name. */
 
 QImageDrag::QImageDrag( QImage image,
@@ -751,7 +757,7 @@ QImageDrag::QImageDrag( QImage image,
     setImage( image );
 }
 
-/*!  Creates a default text drag object.  \a dragSource must be the drag
+/*!  Constructs a default text drag object.  \a dragSource must be the drag
   source, \a name is the object name.
 */
 
@@ -790,6 +796,9 @@ void QImageDrag::setImage( QImage image )
 	ofmts.insert(0,"PNG");
 }
 
+/*!
+  \reimp
+*/
 const char * QImageDrag::format(int i) const
 {
     if ( i < (int)ofmts.count() ) {
@@ -804,6 +813,9 @@ const char * QImageDrag::format(int i) const
     }
 }
 
+/*!
+  \reimp
+*/
 QByteArray QImageDrag::encodedData(const char* fmt) const
 {
     if ( qstrnicmp( fmt, "image/", 6 )==0 ) {
@@ -828,11 +840,16 @@ QByteArray QImageDrag::encodedData(const char* fmt) const
 */
 bool QImageDrag::canDecode( const QMimeSource* e )
 {
-    return e->provides( "image/png" )
-        || e->provides( "image/ppm" )
-        || e->provides( "image/bmp" )
-        || ( qt_builtin_gif_reader() && e->provides( "image/gif" ) );
-    // ### more Qt images types
+    QStrList fileFormats = QImageIO::inputFormats();
+    fileFormats.first();
+    while ( fileFormats.current() ) {
+	QCString format = fileFormats.current();
+	QCString type = "image/" + format.lower();
+	if ( e->provides( type.data() ) )
+	    return TRUE;
+	fileFormats.next();
+    }
+    return FALSE;
 }
 
 /*!
@@ -843,14 +860,21 @@ bool QImageDrag::canDecode( const QMimeSource* e )
 */
 bool QImageDrag::decode( const QMimeSource* e, QImage& img )
 {
-    QByteArray payload = e->encodedData( "image/png" );
-    if ( payload.isEmpty() )
-	payload = e->encodedData( "image/ppm" );
-    if ( payload.isEmpty() )
-	payload = e->encodedData( "image/bmp" );
-    if ( payload.isEmpty() ) // if we get gif, try it even if !builtin
-	payload = e->encodedData( "image/gif" );
-    // ### more Qt images types
+    QByteArray payload;
+    QStrList fileFormats = QImageIO::inputFormats();
+    // PNG is best of all
+    if ( fileFormats.remove("PNG") ) // move to front
+	fileFormats.insert(0,"PNG");
+    fileFormats.first();
+    while ( fileFormats.current() ) {
+	QCString format = fileFormats.current();
+	QCString type = "image/" + format.lower();
+	payload = e->encodedData( type.data() );
+	if ( !payload.isEmpty() )
+	    break;
+	fileFormats.next();
+    }
+
     if ( payload.isEmpty() )
 	return FALSE;
 
@@ -911,6 +935,9 @@ QStoredDrag::~QStoredDrag()
     delete d;
 }
 
+/*!
+  \reimp
+*/
 const char * QStoredDrag::format(int i) const
 {
     if ( i==0 )
@@ -965,7 +992,7 @@ QByteArray QStoredDrag::encodedData(const char* m) const
 */
 
 /*!
-  Creates an object to drag the list of URIs in \a uris.
+  Constructs an object to drag the list of URIs in \a uris.
   The \a dragSource and \a name arguments are passed on to
   QStoredDrag.  Note that URIs are always in escaped UTF8
   encoding, as defined by the W3C.
@@ -978,7 +1005,7 @@ QUriDrag::QUriDrag( QStrList uris,
 }
 
 /*!
-  Creates a object to drag.  You will need to call
+  Constructs a object to drag.  You will need to call
   setUris() before you start the drag().
 */
 QUriDrag::QUriDrag( QWidget * dragSource, const char * name ) :
@@ -1280,4 +1307,80 @@ bool QUriDrag::decodeToUnicodeUris( const QMimeSource* e, QStringList& l )
 QWidget* QDropEvent::source() const
 {
     return manager ? manager->dragSource : 0;
+}
+
+/*! \class QColorDrag qdragobject.h
+
+  \brief The QColorDrag provides a drag-and-drop object for
+	      transferring colors.
+
+  \ingroup draganddrop
+
+  This class provides a drag object which can be used to transfere
+  data about colors for drag-and-drop and over the clipboard. It's
+  e.g. used in the QColorDialog.
+
+  For detailed information about drag-and-drop, see the QDragObject class.
+*/
+
+/*!
+  Constructs a color drag with the color \a col.
+*/
+
+QColorDrag::QColorDrag( const QColor &col, QWidget *dragsource, const char *name )
+    : QStoredDrag( "application/x-color", dragsource, name )
+{
+    setColor( col );
+}
+
+/*!
+  Constructs a color drag with a while color
+*/
+
+QColorDrag::QColorDrag( QWidget *dragsource, const char *name )
+    : QStoredDrag( "application/x-color", dragsource, name )
+{
+    setColor( Qt::white );
+}
+
+/*!
+  Sets the color of the color drag to \a col
+*/
+
+void QColorDrag::setColor( const QColor &col )
+{
+    QByteArray data;
+    ushort rgba[ 4 ];
+    data.resize( sizeof( rgba ) );
+    rgba[ 0 ] = col.red()  * 0xFF;
+    rgba[ 1 ] = col.green() * 0xFF;
+    rgba[ 2 ] = col.blue()  * 0xFF;
+    rgba[ 3 ] = 0xFFFF; // Alpha not supported yet.
+    memcpy( data.data(), rgba, sizeof( rgba) );
+    setEncodedData( data );
+}
+
+/*!
+  Returns TRUE, if the color drag object can decode the
+  mime source \a e.
+*/
+
+bool QColorDrag::canDecode( QMimeSource *e )
+{
+    return e->provides( "application/x-color" );
+}
+
+/*!
+  Decodes the mime source \a e and sets the decoded values to \a col.
+*/
+
+bool QColorDrag::decode( QMimeSource *e, QColor &col )
+{
+    QByteArray data = e->encodedData( "application/x-color" );
+    ushort rgba[ 4 ];
+    if( data.size() != sizeof( rgba ) )
+	return FALSE;
+    memcpy( rgba, data.data(), sizeof( rgba ) );
+    col.setRgb( rgba[ 0 ] / 0xFF, rgba[ 1 ] / 0xFF, rgba[ 2 ] / 0xFF );
+    return TRUE;
 }

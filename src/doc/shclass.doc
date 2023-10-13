@@ -1,9 +1,9 @@
 /****************************************************************************
-** $Id: shclass.doc,v 2.11.2.1 1999/07/21 16:40:28 paul Exp $
+** $Id: qt/doc/shclass.doc   2.1.0   edited 2000-03-24 $
 **
 ** Qt Shared Classes Documentation
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -15,9 +15,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -143,17 +143,18 @@ Code fragment:
   }
 \endcode
 
-This is clearly not possible for QString, because the programmer can
+This is clearly not possible for QByteArray, because the programmer can
 do the following:
 
 \code
-  QString s = "test";
-  s[0] = 'f';				// will modify s
-  *(s.data()+1) = 'i';			// will modify s
+  QByteArray array(10);
+  array.fill('a');
+  array[0] = 'f';			// will modify array
+  *(array.data()+1) = 'i';		// will modify array
 \endcode
 
-If we should have monitored changes in a QString, the QString class would
-be unacceptably slow.
+If we should have monitored changes in a QByteArray, the QByteArray class
+would be unacceptably slow.
 
 
 <h2>Explicitly Shared Classes</h2>
@@ -187,7 +188,7 @@ The Qt classes that are implicitly shared are:
 <li>\link QPalette QPalette\endlink
 <li>\link QPixmap QPixmap\endlink
 <li>\link QString QString\endlink
-<li>\link QRegion QRegion\endlink (not fully implemented) <!-- ##### -->
+<li>\link QRegion QRegion\endlink
 </ul>
 
 These classes automatically detach from common data if an object is about

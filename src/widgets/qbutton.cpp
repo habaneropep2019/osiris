@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qbutton.cpp,v 2.95.2.2 1999/09/14 08:12:12 aavit Exp $
+** $Id: qt/src/widgets/qbutton.cpp   2.1.0   edited 2000-04-03 $
 **
 ** Implementation of QButton widget class
 **
 ** Created : 940206
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -31,6 +31,8 @@
 #include "qaccel.h"
 #include "qpixmapcache.h"
 #include "qfocusdata.h"
+#include "qapplication.h"
+#include "qpushbutton.h"
 #include <ctype.h>
 
 static const int autoRepeatDelay  = 300;
@@ -84,6 +86,14 @@ void QButton::ensureData()
 }
 
 
+/*! Returns a pointer to the group of which this button is a member.
+
+  If the button is not a member of any QButtonGroup, this function
+  returns 0.
+
+  \sa setGroup() QButtonGroup
+*/
+
 QButtonGroup *QButton::group() const
 {
     return d ? d->group : 0;
@@ -104,6 +114,7 @@ QTimer *QButton::timer()
 }
 
 
+// NOT REVISED
 /*!
   \class QButton qbutton.h
 
@@ -197,8 +208,38 @@ QTimer *QButton::timer()
   for a subclass of QButton unless you want to take over all drawing.
 
   \sa QButtonGroup
-  <a href="http://www.microsoft.com/win32dev/uiguide/uigui161.htm">Microsoft Style Guide</a>
 */
+
+
+/*! \enum QButton::ToggleType
+
+  This enum type defines what a button can do in response to a
+  mouse/keyboard press: <ul>
+
+  <li> \c SingleShot - pressing the button causes an action, then the
+  button returns to the unpressed state.
+
+  <li> \c Toggle - pressing the button toggles it between an \c On and
+  and \c Off state.
+
+  <li> \c Tristate - pressing the button cycles between the three
+  states \c On, \c Off and \c NoChange
+
+  </ul>
+
+*/
+
+/*! \enum QButton::ToggleState
+
+  This enum defines the state of a toggle button at any moment.  The possible values are: <ul>
+
+  <li> \c Off - the button is in the "off" state
+  <li> \c NoChange - the button is in the default/unchanged state
+  <li> \c On - the button is in the "on" state
+
+  </ul>
+*/
+
 
 /*!
   Constructs a standard button with a parent widget and a name.
@@ -227,12 +268,12 @@ QButton::QButton( QWidget *parent, const char *name, WFlags f )
 }
 
 /*!
-  Destroys the button and all its child widgets.
+  Destructs the button, deleting all its child widgets.
 */
 
 QButton::~QButton()
 {
-    if ( group() )				// remove from button group
+    if ( group() )
 	group()->remove( this );
     delete bpixmap;
     delete d;
@@ -254,10 +295,10 @@ QButton::~QButton()
 */
 
 /*!
-  \fn void QButton::clicked()
-  This signal is emitted when the button is activated (i.e. first
-  pressed down and then released when the mouse cursor is inside the
-  button).
+  \fn void QButton::clicked() This signal is emitted when the button
+  is activated, i.e. first pressed down and then released when the
+  mouse cursor is inside the button, or when the accelerator key is
+  typed, or when animateClick() is called.
 
   \sa pressed(), released(), toggled()
 */
@@ -289,21 +330,19 @@ QButton::~QButton()
 
 /*!
   \fn QString QButton::text() const
-  Returns the button text, or 
-  \link QString::operator!() null string\endlink  
+  Returns the button text, or
+  \link QString::operator!() null string\endlink
   if the button has no text.
   \sa setText()
 */
 
 /*!
-  Sets the button to display \e text and repaints
+  Sets the button to display \e text.
 
-  The button resizes itself if auto-resizing is enabled, changes its
-  minimum size if autoMinimumSize() is enabled, and sets the
-  appropriate accelerator.
+  If the text contains an ampersand, QButton creates an automatic
+  acceleror for it, such as  Alt-c for "&Cancel".
 
-  \sa text(), setPixmap(), setAutoMinimumSize(), setAutoResize(),
-  setAccel(), QPixmap::mask()
+  \sa text(), setPixmap(), setAccel(), QPixmap::mask()
 */
 
 void QButton::setText( const QString &text )
@@ -322,7 +361,10 @@ void QButton::setText( const QString &text )
 
     setAccel( QAccel::shortcutKey( btext ) );
 
-    repaint( FALSE );
+    if ( isVisible() ) {
+	update();
+	updateGeometry();
+    }
 }
 
 
@@ -332,7 +374,7 @@ void QButton::setText( const QString &text )
 */
 
 /*!
-  Sets the button to display \a pixmap and repaints at once.
+  Sets the button to display \a pixmap
 
   If \a pixmap is monochrome (i.e. it is a QBitmap or its \link
   QPixmap::depth() depth\endlink is 1) and it does not have a mask,
@@ -340,16 +382,14 @@ void QButton::setText( const QString &text )
   this is to draw transparent bitmaps, which is important for
   e.g. toggle buttons.
 
-  The button resizes itself if auto-resizing is enabled, changes its
-  minimum size if autoMinimumSize() is enabled, and always disables
-  any accelerator.
-
-  \sa pixmap(), setText(), setAutoMinimumSize(), setAutoResize(),
-  setAccel(), QPixmap::mask()
+  \sa pixmap(), setText(), setAccel(), QPixmap::mask()
 */
 
 void QButton::setPixmap( const QPixmap &pixmap )
 {
+    if ( bpixmap && bpixmap->serialNumber() == pixmap.serialNumber() )
+	return;
+
     bool newSize;
     if ( bpixmap ) {
 	newSize = pixmap.width() != bpixmap->width() ||
@@ -367,9 +407,12 @@ void QButton::setPixmap( const QPixmap &pixmap )
     if ( autoresize && newSize )
 	adjustSize();
     setAccel( 0 );
-    repaint( FALSE );
     if ( autoMask() )
 	updateMask();
+    if ( isVisible() ) {
+	update();
+	updateGeometry();
+    }
 }
 
 
@@ -423,6 +466,11 @@ void QButton::setAccel( int key )
 
 /*!
   \fn bool QButton::autoResize() const
+
+  \obsolete
+
+  Strange pre-layout stuff.
+
   Returns TRUE if auto-resizing is enabled, or FALSE if auto-resizing is
   disabled.
 
@@ -432,7 +480,10 @@ void QButton::setAccel( int key )
 */
 
 
-/*!
+/*!\obsolete
+
+  Strange pre-layout stuff.
+
   Enables auto-resizing if \e enable is TRUE, or disables it if \e enable is
   FALSE.
 
@@ -523,7 +574,7 @@ void QButton::animateClick()
   toggle() as well if you need to do that.  The pressed() and
   released() signals are not emitted by this function.
 
-  This method is provided in case you need to override the mouse event
+  This method is provided in case you need to reimplement the mouse event
   handlers.
 
   \sa isDown(), setOn(), toggle(), toggled()
@@ -531,6 +582,8 @@ void QButton::animateClick()
 
 void QButton::setDown( bool enable )
 {
+    if ( d )
+	timer()->stop();
     mlbDown = FALSE;				// the safe setting
     if ( (bool)buttonDown != enable ) {
 	buttonDown = enable;
@@ -547,35 +600,26 @@ void QButton::setDown( bool enable )
 */
 
 /*!
-  \fn void QButton::setState(ToggleState)
-  Protected function to set the button state into one of the
-  three states:
-  <ul>
-   <li>\c QButton::Off - isOn() is FALSE
-   <li>\c QButton::On - isOn() is TRUE
-   <li>\c QButton::NoChange - the button is in the
-	    \link QCheckBox::setTristate() NoChanged\endlink state.
-  </ul>
+  \fn void QButton::setState( ToggleState t)
+
+  This protected function sets the button state into state t but does
+  \e not cause repainting.
 
   \sa setToggleType()
 */
 
 /*!
   \fn QButton::ToggleState QButton::state() const
-  Returns the state of the button, one of:
-  <ul>
-   <li>\c QButton::Off - isOn() is FALSE
-   <li>\c QButton::On - isOn() is TRUE
-   <li>\c QButton::NoChange - the button is in the
-	    \link QCheckBox::setTristate() NoChanged\endlink state.
-  </ul>
+  Returns the state of the button.
+
+  \sa ToggleState ToggleType setState()
 */
 
 /*!
   \fn bool QButton::isOn() const
   Returns TRUE if this toggle button is switched on, or FALSE if it is
   switched off.
-  \sa setOn(), toggleButton()
+  \sa setOn(), isToggleButton()
 */
 
 /*!
@@ -583,7 +627,7 @@ void QButton::setDown( bool enable )
 
   Switches a toggle button on if \e enable is TRUE or off if \e enable is
   FALSE.  This function should be called only for toggle buttons.
-  \sa isOn(), toggleButton()
+  \sa isOn(), isToggleButton()
 */
 
 void QButton::setState( ToggleState s )
@@ -627,13 +671,13 @@ void QButton::setState( ToggleState s )
   \sa isToggleButton()
 */
 
-/*!
-  Returns TRUE if \e pos is inside the widget rectangle, or FALSE if it
-  is outside.
+/*!  
+  Returns TRUE if \e pos is inside the clickable button rectangle, or
+  FALSE if it is outside.
 
-  This virtual function is reimplemented by subclasses.
+  Per default, the clickable area is the entire widget. Subclasses may
+  reimplement it, though.
 */
-
 bool QButton::hitButton( const QPoint &pos ) const
 {
     return rect().contains( pos );
@@ -642,7 +686,11 @@ bool QButton::hitButton( const QPoint &pos ) const
 /*!
   Draws the button.  The default implementation does nothing.
 
-  This virtual function is reimplemented by subclasses to draw real buttons.
+  This virtual function is reimplemented by subclasses to draw real
+  buttons. At some point in time, these reimplementations are supposed
+  to call drawButtonLabel().
+  
+  \sa drawButtonLabel(), paintEvent()
 */
 
 void QButton::drawButton( QPainter * )
@@ -653,7 +701,10 @@ void QButton::drawButton( QPainter * )
 /*!
   Draws the button text or pixmap.
 
-  This virtual function is reimplemented by subclasses to draw real buttons.
+  This virtual function is reimplemented by subclasses to draw real
+  buttons. It's invoked by drawButton().
+  
+  \sa drawButton(), paintEvent()
 */
 
 void QButton::drawButtonLabel( QPainter * )
@@ -662,28 +713,72 @@ void QButton::drawButtonLabel( QPainter * )
 }
 
 
-/*!
-  Handles keyboard events for the button.
-
-  Space calls animateClick(), the arrow keys cause focus changes.
+static bool got_a_release = FALSE; // ### binary compatibility trick, keyReleaseEvent is new
+/*!\reimp
 */
 
 void QButton::keyPressEvent( QKeyEvent *e )
 {
-    if ( e->key() == Key_Space ) {
-	animateClick();
-    } else if ( group() &&
-	 ( e->key() == Key_Up ||
-	   e->key() == Key_Left ||
-	   e->key() == Key_Down ||
-	   e->key() == Key_Right ) ) {
-	group()->moveFocus( e->key() );
-	return;
-    } else if ( e->key() == Key_Up || e->key() == Key_Left ) {
-	focusNextPrevChild( FALSE );
-    } else if ( e->key() == Key_Down || e->key() == Key_Right ) {
-	focusNextPrevChild( TRUE );
-    } else {
+    switch ( e->key() ) {
+    case Key_Enter:
+    case Key_Return:
+	if ( inherits("QPushButton") )
+	    emit clicked();
+	else
+	    e->ignore();
+	break;
+    case Key_Space:
+	if ( !e->isAutoRepeat() ) {
+	    if ( got_a_release )
+		setDown( TRUE );
+	    else {
+		buttonDown = TRUE;
+		repaint( FALSE );
+	    }
+	}
+	break;
+    case Key_Up:
+    case Key_Left:
+	if ( group() )
+	    group()->moveFocus( e->key() );
+	else
+	    focusNextPrevChild( FALSE );
+	break;
+    case Key_Right:
+    case Key_Down:
+	if ( group() )
+	    group()->moveFocus( e->key() );
+	else
+	    focusNextPrevChild( TRUE );
+	break;
+    case Key_Escape:
+	if ( buttonDown ) {
+	    buttonDown = FALSE;
+	    update();
+	    break;
+	}
+	// fall through
+    default:
+	e->ignore();
+    }
+}
+
+/*!
+  \reimp
+ */
+void QButton::keyReleaseEvent( QKeyEvent * e)
+{
+    got_a_release = TRUE;
+    switch ( e->key() ) {
+    case Key_Space:
+	if ( buttonDown && !e->isAutoRepeat() ) {
+	    buttonDown = FALSE;
+	    nextState();
+	    emit released();
+	    emit clicked();
+	}
+	break;
+    default:
 	e->ignore();
     }
 }
@@ -694,38 +789,12 @@ void QButton::keyPressEvent( QKeyEvent *e )
 
 bool QButton::focusNextPrevChild( bool next )
 {
-    if ( !group() || !inherits( "QRadioButton" ) )
-	return QWidget::focusNextPrevChild( next );
-
-    QFocusData *f = focusData();
-
-    QWidget *startingPoint = f->home();
-    QWidget *candidate = 0;
-    QWidget *w = next ? f->prev() : f->next();
-
-    do {
-	if ( w != startingPoint &&
-	     !( w->inherits( "QRadioButton" ) &&
-		((QButton*)w)->group() == group() ) &&
-	     ( ( w->focusPolicy() & TabFocus ) == TabFocus ) &&
-	     !w->focusProxy() &&
-	     w->isVisibleToTLW() &&
-	     w->isEnabledToTLW() )
-	    candidate = w;
-	w = next ? f->prev() : f->next();
-    } while( w && !(candidate || w==startingPoint) );
-
-    if ( !candidate )
-	return QWidget::focusNextPrevChild( next );
-
-    candidate->setFocus();
-    return TRUE;
+    // we do not want this any more
+    return QWidget::focusNextPrevChild( next );
 }
 
 
-/*!
-  Handles mouse press events for the button.
-  \sa mouseReleaseEvent()
+/*!\reimp
 */
 
 void QButton::mousePressEvent( QMouseEvent *e )
@@ -743,9 +812,7 @@ void QButton::mousePressEvent( QMouseEvent *e )
     }
 }
 
-/*!
-  Handles mouse release events for the button.
-  \sa mousePressEvent()
+/*!\reimp
 */
 
 void QButton::mouseReleaseEvent( QMouseEvent *e)
@@ -766,9 +833,7 @@ void QButton::mouseReleaseEvent( QMouseEvent *e)
     }
 }
 
-/*!
-  Handles mouse move events for the button.
-  \sa mousePressEvent(), mouseReleaseEvent()
+/*!\reimp
 */
 
 void QButton::mouseMoveEvent( QMouseEvent *e )
@@ -792,26 +857,29 @@ void QButton::mouseMoveEvent( QMouseEvent *e )
 
 
 /*!
-  Handles paint events for the button.
-
-  Opens the painter on the button and calls drawButton().
+  Handles paint events for buttons.  Small and typically complex
+  buttons (less than 300x100 pixels) are painted double-buffered to
+  reduce flicker. The actually drawing is done in the virtual functions
+  drawButton() and drawButtonLabel().
+  
+  \sa drawButton(), drawButtonLabel()
 */
-
 void QButton::paintEvent( QPaintEvent *event )
 {
-    if ( event &&
+    if ( event && 
 	 width() <= drawingPixWidth &&
 	 height() <= drawingPixHeight ) {
 	makeDrawingPixmap(); // makes file-static drawpm variable
-	drawpm->fill( this, 0, 0 );
+	if ( backgroundOrigin() == ParentOrigin && !isTopLevel() )
+	    drawpm->fill( this, x(), y() );
+	else
+	    drawpm->fill( this, 0, 0 );
 	QPainter paint;
 	paint.begin( drawpm, this );
 	drawButton( &paint );
 	paint.end();
 
 	paint.begin( this );
-	// for small buttons it does not make sense to clip, and
-	// besides it led to update bugs for radio buttons
 	paint.drawPixmap( 0, 0, *drawpm );
 	paint.end();
     } else {
@@ -821,28 +889,21 @@ void QButton::paintEvent( QPaintEvent *event )
     }
 }
 
-/*!
-  Handles focus in events for the button.
-  \sa focusOutEvent()
+/*!\reimp
 */
 
-void QButton::focusInEvent( QFocusEvent * )
+void QButton::focusInEvent( QFocusEvent * e)
 {
-    repaint( FALSE );
-    if ( autoMask() )
-	updateMask();
+    QWidget::focusInEvent( e );
 }
 
-/*!
-  Handles focus out events for the button.
-  \sa focusInEvent()
+/*!\reimp
 */
 
-void QButton::focusOutEvent( QFocusEvent * )
+void QButton::focusOutEvent( QFocusEvent * e )
 {
-    repaint( FALSE );
-    if ( autoMask() )
-	updateMask();
+    buttonDown = FALSE;
+    QWidget::focusOutEvent( e );
 }
 
 
@@ -877,6 +938,7 @@ void QButton::animateTimeout()
     emit released();
     emit clicked();
 }
+
 
 void QButton::nextState()
 {
@@ -916,32 +978,23 @@ void QButton::toggle()
 }
 
 /*!
-  Sets the type of toggling behavior.  \a type is one of:
-  <ul>
-   <li>\c SingleShot - pressing the button causes an action, then the
-			button returns to the unpressed state.
-   <li>\c Toggle - pressing the button toggles between an On and and Off
-			state.
-   <li>\c Tristate - pressing the button cycles between three states -
-	    On, Off, and \link QCheckBox::setTristate() NoChanged\endlink.
-  </ul>
+  Sets the type of toggling behavior.  The default is \a SingleShot.
 
   Subclasses use this, and present it with a more comfortable interface.
 */
 void QButton::setToggleType( ToggleType type )
 {
     toggleTyp = type;
-    if ( type != Tristate && stat == NoChange ) {
-	setState(On);
-    }
+    if ( type != Tristate && stat == NoChange )
+	setState( On );
 }
 
 
 
 /*!
   Returns TRUE if this button behaves exclusively inside a QButtonGroup.
-  In that case, this button can only be toggled off by another buton
-  beinhg toggled on.
+  In that case, this button can only be toggled off by another button
+  being toggled on.
 */
 
 bool QButton::isExclusiveToggle() const

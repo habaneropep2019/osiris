@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: wizard.cpp,v 1.5.2.1 1999/07/14 16:44:15 reggie Exp $
+** $Id: qt/examples/wizard/wizard.cpp   2.1.0   edited 2000-01-31 $
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -103,8 +103,6 @@ void Wizard::setupPage2()
     label5->setMinimumWidth( label4->sizeHint().width() );
 
     firstName = new QLineEdit( row1 );
-    firstName->setMinimumWidth( QFontMetrics( firstName->font() ).
-				width( "REGGIES WIZARD" ) );
     lastName = new QLineEdit( row2 );
     address = new QLineEdit( row3 );
     phone = new QLineEdit( row4 );

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: glbox.h,v 1.5 1998/03/23 11:44:44 aavit Exp $
+** $Id: qt/extensions/opengl/examples/box/glbox.h   2.1.0   edited 2000-01-31 $
 **
 ** Definition of GLBox
 ** This is a simple QGLWidget displaying an openGL wireframe box

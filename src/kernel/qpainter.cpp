@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qpainter.cpp,v 2.92.2.10 1999/09/24 09:05:57 hanord Exp $
+** $Id: qt/src/kernel/qpainter.cpp   2.1.0   edited 2000-04-09 $
 **
 ** Implementation of QPainter, QPen and QBrush classes
 **
 ** Created : 940112
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -29,16 +29,13 @@
 #include "qdatastream.h"
 #include "qwidget.h"
 #include "qimage.h"
+#include "q1xcompatibility.h"
 #include "qpaintdevicemetrics.h"
 #include <stdlib.h>
-#if defined(_WS_WIN_)
-#include "qt_windows.h"
-#endif
-
 
 typedef QStack<QWMatrix> QWMatrixStack;
 
-
+// NOT REVISED
 /*!
   \class QPainter qpainter.h
   \brief The QPainter class paints on paint devices.
@@ -128,6 +125,115 @@ typedef QStack<QWMatrix> QWMatrixStack;
   \sa QPaintDevice, QWidget, QPixmap
 */
 
+/*! \enum Qt::AlignmentFlags
+
+  This enum type is used to describe alignment.  It contains four sets
+  of flags: Horizontal, vertical and modifying flags.  The horizontal
+  flags are: <ul>
+
+  <li> \c AlignLeft - Align with the left edge.
+  <li> \c AlignRight - Align with the left edge.
+  <li> \c AlignHCenter - Center horizontally in the available space.
+
+  </ul> The vertical flags are: <ul>
+
+  <li> \c AlignTop - Align with the top.
+  <li> \c AlignBottom - Align with the bottom.
+  <li> \c AlignVCenter - Center vertically in the available space.
+
+  </ul> You can only use one of the horizontal flags at a time.  There
+  is one two-dimensional flag: <ul>
+
+  <li> \c AlignCenter - Center in both dimensions.
+
+  </ul> This counts both as a horizontal and vertical flag: It cannot
+  be combined with any other horizontal or vertical flags.
+
+  There are also some modifier flags.  All of them apply only to
+  printing: <ul>
+
+  <li> \c SingleLine - Treat all white-space as space and print just
+  one line.
+
+  <li> \c DontClip - If it's impossible to stay within the given
+  bounds, print outside.
+
+  <li> \c ExpandTabs - Make the U+0009 (ascii tab) character move to
+  the next tab stop.
+
+  <li> \c ShowPrefix - Display the string "\&P" as an underlined P
+  (see QButton for an example).  To get an ampersand, use "\&\&".
+
+  <li> \c WordBreak - Do line breaking at at appropriate points.
+
+  </ul>
+
+  You can only use one of the horizontal flags at a time, and one of
+  the vertical flags.  \c AlignCenter counts as both horizontal and
+  vertical.  You can use as many modifier flags as you want, except
+  that \c SingleLine and \c WordBreak cannot be combined.
+
+  Flags that are inappropriate for a given use (e.g. ShowPrefix to
+  QGridLayout::addWidget()) are ignored.
+
+  Conflicting combinations of flags have undefined meanings.
+*/
+
+
+/*! \enum Qt::PenStyle
+
+  This enum type defines the pen styles supported by Qt; ie. what
+  sorts of lines that can be drawn using QPainter. The current styles
+  are: <ul>
+
+  <li> \c NoPen - no line at all.  For example, QPainter::drawRect()
+  fills but does not draw any explicit boundary line.
+
+  <li> \c SolidLine - a simple line.
+
+  <li> \c DashLine - dashes, separated by a few pixels.
+
+  <li> \c DotLine - dots, separated by a few pixels.
+
+  <li> \c DashDotLine - alternately dots and dashes.
+
+  <li> \c DashDotDotLine - one dash, two dots, one dash, two dots...
+
+  </ul>
+*/
+
+/*! \enum Qt::PenCapStyle
+
+  This enum type defines the pen cap styles supported by Qt; ie. what
+  sorts of line end caps that can be drawn using QPainter. The
+  available styles are: <ul>
+
+  <li> \c FlatCap - A square line end that does not cover the end
+  point of the line.
+
+  <li> \c SquareCap - A square line end that covers the end point and
+  extends beyond it with half the line width.
+
+  <li> \c RoundCap - A rounded line end.
+
+  </ul>
+*/
+
+/*! \enum Qt::PenJoinStyle
+
+  This enum type defines the pen join styles supported by Qt; ie. what
+  sorts of joins between two connected lines that can be drawn using
+  QPainter. The available styles are: <ul>
+
+  <li> \c MiterJoin - The outer edges of the lines are extended to
+  meet at an angle, and this area is filled.
+
+  <li> \c BevelJoin - The triangular notch between the two lines is filled.
+
+  <li> \c RoundJoin - A circular arc between the two lines is filled.
+
+  </ul>
+*/
 
 /*!
   Constructs a painter.
@@ -199,7 +305,7 @@ QPainter::QPainter( const QPaintDevice *pd,
 
 
 /*!
-  Destroys the painter.
+  Destructs the painter.
 */
 
 QPainter::~QPainter()
@@ -252,7 +358,7 @@ QPainter::~QPainter()
 
 bool QPainter::begin( const QPaintDevice *pd, const QWidget *copyAttributes )
 {
-    if ( pd == 0 ) {
+    if ( copyAttributes == 0 ) {
 #if defined(CHECK_NULL)
 	qWarning( "QPainter::begin: The widget to copy attributes from cannot "
 		 "be null" );
@@ -285,15 +391,19 @@ void QPainter::setf( uint b, bool v )
 
 /*!
   \fn bool QPainter::isActive() const
-  Returns the TRUE if the painter is active painting, i.e. begin() has
+
+  Returns TRUE if the painter is active painting, i.e. begin() has
   been called and end() has not yet been called.
+
   \sa QPaintDevice::paintingActive()
 */
 
 /*!
   \fn QPaintDevice *QPainter::device() const
-  Returns the paint device currently active for this painter, or null if
-  begin() has not been called.
+
+  Returns the paint device on which this painter is currently
+  painting, or null if the painter is not active.
+
   \sa QPaintDevice::paintingActive()
 */
 
@@ -326,6 +436,7 @@ typedef QStack<QPState> QPStateStack;
 void QPainter::killPStack()
 {
     delete (QPStateStack *)ps_stack;
+    ps_stack = 0;
 }
 
 /*!
@@ -354,7 +465,7 @@ void QPainter::save()
 	pss->setAutoDelete( TRUE );
 	ps_stack = pss;
     }
-    register QPState *ps = new QPState;
+    QPState *ps = new QPState;
     CHECK_PTR( ps );
     ps->font  = cfont;
     ps->pen   = cpen;
@@ -397,7 +508,7 @@ void QPainter::restore()
 #endif
 	return;
     }
-    register QPState *ps = pss->pop();
+    QPState *ps = pss->pop();
     bool hardRestore = testf(VolatileDC);
 
     if ( ps->font != cfont || hardRestore )
@@ -443,18 +554,32 @@ void QPainter::restore()
 
 
 /*!
-  \fn QFontMetrics QPainter::fontMetrics() const
   Returns the font metrics for the painter.
   Font metrics can only be obtained when the painter is active.
   \sa fontInfo(), isActive()
 */
 
+QFontMetrics QPainter::fontMetrics() const
+{
+    if ( pdev && pdev->devType() == QInternal::Picture )
+	return QFontMetrics( cfont );
+
+    return QFontMetrics(this);
+}
+
 /*!
-  \fn QFontInfo QPainter::fontInfo() const
   Returns the font info for the painter.
   Font info can only be obtained when the painter is active.
   \sa fontMetrics(), isActive()
 */
+
+QFontInfo QPainter::fontInfo() const
+{
+    if ( pdev && pdev->devType() == QInternal::Picture )
+	return QFontInfo( cfont );
+
+    return QFontInfo(this);
+}
 
 
 /*!
@@ -493,7 +618,7 @@ void QPainter::setPen( PenStyle style )
     if ( !isActive() )
 	qWarning( "QPainter::setPen: Will be reset by begin()" );
 #endif
-    register QPen::QPenData *d = cpen.data;	// low level access
+    QPen::QPenData *d = cpen.data;	// low level access
     if ( d->count != 1 ) {
 	cpen.detach();
 	d = cpen.data;
@@ -501,6 +626,7 @@ void QPainter::setPen( PenStyle style )
     d->style = style;
     d->width = 0;
     d->color = Qt::black;
+    d->linest = style;
     updatePen();
 }
 
@@ -516,7 +642,7 @@ void QPainter::setPen( const QColor &color )
     if ( !isActive() )
 	qWarning( "QPainter::setPen: Will be reset by begin()" );
 #endif
-    register QPen::QPenData *d = cpen.data;	// low level access
+    QPen::QPenData *d = cpen.data;	// low level access
     if ( d->count != 1 ) {
 	cpen.detach();
 	d = cpen.data;
@@ -524,6 +650,7 @@ void QPainter::setPen( const QColor &color )
     d->style = SolidLine;
     d->width = 0;
     d->color = color;
+    d->linest = SolidLine;
     updatePen();
 }
 
@@ -562,7 +689,7 @@ void QPainter::setBrush( BrushStyle style )
     if ( !isActive() )
 	qWarning( "QPainter::setBrush: Will be reset by begin()" );
 #endif
-    register QBrush::QBrushData *d = cbrush.data; // low level access
+    QBrush::QBrushData *d = cbrush.data; // low level access
     if ( d->count != 1 ) {
 	cbrush.detach();
 	d = cbrush.data;
@@ -588,7 +715,7 @@ void QPainter::setBrush( const QColor &color )
     if ( !isActive() )
 	qWarning( "QPainter::setBrush: Will be reset by begin()" );
 #endif
-    register QBrush::QBrushData *d = cbrush.data; // low level access
+    QBrush::QBrushData *d = cbrush.data; // low level access
     if ( d->count != 1 ) {
 	cbrush.detach();
 	d = cbrush.data;
@@ -1143,7 +1270,7 @@ void QPainter::rotate( double a )
 /*!
   Resets any transformations that were made using translate(), scale(),
   shear(), rotate(), setWorldMatrix(), setViewport() and setWindow()
-  \sa worldMatrix(), viewPort(), window()
+  \sa worldMatrix(), viewport(), window()
 */
 
 void QPainter::resetXForm()
@@ -1355,7 +1482,7 @@ void QPainter::mapInv( int x, int y, int w, int h,
   Returns the point \e pv transformed from user coordinates to device
   coordinates.
 
-  \sa xFormDev(), QWMatrix::xForm()
+  \sa xFormDev(), QWMatrix::map()
 */
 
 QPoint QPainter::xForm( const QPoint &pv ) const
@@ -1374,7 +1501,7 @@ QPoint QPainter::xForm( const QPoint &pv ) const
   If world transformation is enabled and rotation or shearing has been
   specified, then the bounding rectangle is returned.
 
-  \sa xFormDev(), QWMatrix::xForm()
+  \sa xFormDev(), QWMatrix::map()
 */
 
 QRect QPainter::xForm( const QRect &rv ) const
@@ -1398,7 +1525,7 @@ QRect QPainter::xForm( const QRect &rv ) const
 /*!
   Returns the point array \e av transformed from user coordinates to device
   coordinates.
-  \sa xFormDev(), QWMatrix::xForm()
+  \sa xFormDev(), QWMatrix::map()
 */
 
 QPointArray QPainter::xForm( const QPointArray &av ) const
@@ -1434,7 +1561,7 @@ QPointArray QPainter::xForm( const QPointArray &av ) const
     b = painter.xForm(a,2,-1);	// b.size() == 8
   \endcode
 
-  \sa xFormDev(), QWMatrix::xForm()
+  \sa xFormDev(), QWMatrix::map()
 */
 
 QPointArray QPainter::xForm( const QPointArray &av, int index,
@@ -1454,7 +1581,7 @@ QPointArray QPainter::xForm( const QPointArray &av, int index,
 /*!
   Returns the point \e pv transformed from device coordinates to user
   coordinates.
-  \sa xForm(), QWMatrix::xForm()
+  \sa xForm(), QWMatrix::map()
 */
 
 QPoint QPainter::xFormDev( const QPoint &pd ) const
@@ -1477,7 +1604,7 @@ QPoint QPainter::xFormDev( const QPoint &pd ) const
   If world transformation is enabled and rotation or shearing is used,
   then the bounding rectangle is returned.
 
-  \sa xForm(), QWMatrix::xForm()
+  \sa xForm(), QWMatrix::map()
 */
 
 QRect QPainter::xFormDev( const QRect &rd ) const
@@ -1504,7 +1631,7 @@ QRect QPainter::xFormDev( const QRect &rd ) const
 /*!
   Returns the point array \e av transformed from device coordinates to user
   coordinates.
-  \sa xForm(), QWMatrix::xForm()
+  \sa xForm(), QWMatrix::map()
 */
 
 QPointArray QPainter::xFormDev( const QPointArray &ad ) const
@@ -1540,7 +1667,7 @@ QPointArray QPainter::xFormDev( const QPointArray &ad ) const
     b = painter.xFormDev(a,1,-1);	// b.size() == 9
   \endcode
 
-  \sa xForm(), QWMatrix::xForm()
+  \sa xForm(), QWMatrix::map()
 */
 
 QPointArray QPainter::xFormDev( const QPointArray &ad, int index,
@@ -1936,7 +2063,7 @@ void QPainter::drawText( int x, int y, int w, int h, int tf,
 	}
     }
 
-    const QFontMetrics & fm = fontMetrics();	// get font metrics
+    const QFontMetrics & fm = fontMetrics();		// get font metrics
 
     qt_format_text(fm, x, y, w, h, tf, str, len, brect,
 		   tabstops, tabarray, tabarraylen, internal, this);
@@ -1958,6 +2085,8 @@ void qt_format_text( const QFontMetrics& fm, int x, int y, int w, int h,
 	int   tf;				// flags (alignment etc.)
 	int   len;				// text length
 	int   maxwidth;				// max text width
+	Q_INT16 mlb;				// min left bearing
+	Q_INT16 mrb;				// min right bearing
 	int   nlines;				// number of lines
 	int   codelen;				// length of encoding
     };
@@ -1994,19 +2123,20 @@ void qt_format_text( const QFontMetrics& fm, int x, int y, int w, int h,
     int breakindex;				// index where to break
     int breakwidth;				// width of text at breakindex
     int maxwidth;				// maximum width of a line
-    int bcwidth;				// width of break char
     int tabindex;				// tab array index
     int cw;					// character width
     int k;					// index for p
     int tw;					// text width
+    int minleftbearing = 0;
+    int minrightbearing = 0;
 
-#define CWIDTH(x) fm.width(x) // Could cache, but put that it in fm
 #define ENCCHAR(x) (((x).cell() << LO_SHIFT) | ((x).row() << HI_SHIFT))
 #define DECCHAR(x) QChar(((x)&LO)>>LO_SHIFT,((x)&HI)>>HI_SHIFT)
+#define CWIDTH(x) fm.width(DECCHAR(x)) // Could cache, but put that it in fm
 #define ISPRINT(x) ((x).row() || (x).cell()>' ')
     // ##### should use (unicode) QChar::isPrint() -- WWA to AG
 
-    bool wordbreak  = (tf & Qt::WordBreak)	== Qt::WordBreak;
+    bool wordbreak  = (tf & Qt::WordBreak)  == Qt::WordBreak;
     bool expandtabs = (tf & Qt::ExpandTabs) == Qt::ExpandTabs;
     bool singleline = (tf & Qt::SingleLine) == Qt::SingleLine;
     bool showprefix = (tf & Qt::ShowPrefix) == Qt::ShowPrefix;
@@ -2015,7 +2145,7 @@ void qt_format_text( const QFontMetrics& fm, int x, int y, int w, int h,
 
     nlines = 0;
     index  = 1;					// first index contains BEGLINE
-    begline = breakindex = breakwidth = maxwidth = bcwidth = tabindex = 0;
+    begline = breakindex = breakwidth = maxwidth = tabindex = 0;
     k = tw = 0;
 
     if ( decode )				// skip encoding
@@ -2029,9 +2159,10 @@ void qt_format_text( const QFontMetrics& fm, int x, int y, int w, int h,
 
     QString word;
 
+    bool fakeBreak = FALSE;
+    bool breakwithinwords = FALSE;
     while ( k <= len ) {				// convert string to codes
-
-	if ( k < len && ISPRINT(*p) ) {			// printable character
+	if ( !fakeBreak && k < len && ISPRINT(*p) ) {			// printable character
 	    if ( *p == '&' && showprefix ) {
 		cc = '&';			// assume ampersand
 		if ( k < len-1 ) {
@@ -2043,23 +2174,51 @@ void qt_format_text( const QFontMetrics& fm, int x, int y, int w, int h,
 	    } else {
 		cc = ENCCHAR(*p);
 	    }
-	    word += *p;
+	
 	    cw = 0;
+ 	    if ( breakwithinwords ) {
+ 		breakwidth += CWIDTH(cc);
+ 		if ( !word.isEmpty() && breakwidth > w ) {
+ 		    fakeBreak = TRUE;
+ 		    continue;
+ 		}
+ 	    }
+	    word += *p;
 	} else {				// not printable (except ' ')
 	    cw = fm.width(word);
-	    word = "";
-	    if ( wordbreak ) {
-		if ( breakindex > 0 && tw+cw > w ) {
-		    codes[begline] = BEGLINE | QMIN(tw,MAXWIDTH);
-		    maxwidth = QMAX(maxwidth,tw);
-		    begline = breakindex;
-		    nlines++;
-		    tw = cw;
-		    breakindex = tabindex = 0;
-		    cw = 0;
+	    if ( !fakeBreak && wordbreak ) {
+		if ( tw+cw > w ) {
+		    if ( breakindex > 0 ) {
+			breakwithinwords = FALSE;
+			codes[begline] = BEGLINE | QMIN(tw,MAXWIDTH);
+			maxwidth = QMAX(maxwidth,tw);
+			begline = breakindex;
+			tw = cw;
+			breakindex = tabindex = 0;
+			cw = 0;
+			nlines++;
+		    }
+		    if ( /*!breakwithinwords &&*/ tw+cw > w && word.length() > 1) {
+			breakwithinwords = TRUE;
+			breakwidth = 0;
+			p -= word.length();	
+			k -= word.length();
+			index = begline+1;
+			tw = 0;
+			word = "";
+			continue;
+		    }
 		}
 	    }
+	    word = "";
 
+ 	    if ( fakeBreak ) {
+ 		cc = BEGLINE;
+ 		fakeBreak = FALSE;
+  		--k;
+  		--p;
+ 	    }
+ 	    else
 	    if ( k == len ) {
 		// end (*p not valid)
 		cc = 0;
@@ -2100,12 +2259,13 @@ void qt_format_text( const QFontMetrics& fm, int x, int y, int w, int h,
 		continue;
 	    }
 	    breakindex = index;
-	    bcwidth = cw;
+	    breakwidth = 0;
 	}
 
 	tw += cw;				// increment text width
 
 	if ( cc == BEGLINE ) {
+	    breakwithinwords = FALSE;
 	    codes[begline] = BEGLINE | QMIN(tw,MAXWIDTH);
 	    maxwidth = QMAX(maxwidth,tw);
 	    begline = index;
@@ -2127,6 +2287,36 @@ void qt_format_text( const QFontMetrics& fm, int x, int y, int w, int h,
 	p++;
     }
 
+    if ( !decode ) {
+	codes[begline] = BEGLINE | QMIN(tw,MAXWIDTH);
+	maxwidth = QMAX(maxwidth,tw);
+	nlines++;
+	codes[index++] = 0;
+	codelen = index;
+	
+	uint* cptr = codes;
+	while ( *cptr ) { 			// determine bearings
+	    int lw = *cptr++ & WIDTHBITS;
+	    if ( !lw ) {			// ignore empty line
+		while ( *cptr && (*cptr & BEGLINE) != BEGLINE )
+		    cptr++;
+		continue;
+	    }
+	    if ( *cptr && (*cptr & (BEGLINE|TABSTOP)) == 0 ) {
+		int lb = fm.leftBearing( DECCHAR(*cptr) );
+		minleftbearing = QMIN( minleftbearing, lb );
+	    }
+	    while ( *cptr && (*cptr & BEGLINE) != BEGLINE )
+		cptr++;
+	    cptr--;
+	    if ( *cptr && (*cptr & (BEGLINE|TABSTOP)) == 0 ) {
+		int rb = fm.rightBearing( DECCHAR(*cptr) );
+		minrightbearing = QMIN( minrightbearing, rb );
+	    }
+	    cptr++;
+	}
+    }
+
     if ( decode ) {				// decode from internal data
 	char	  *data = *internal;
 	text_info *ti	= (text_info*)data;
@@ -2138,15 +2328,11 @@ void qt_format_text( const QFontMetrics& fm, int x, int y, int w, int h,
 	    return;
 	}
 	maxwidth = ti->maxwidth;		// get internal values
+	minleftbearing = ti->mlb;
+	minrightbearing = ti->mrb;
 	nlines	 = ti->nlines;
 	codelen	 = ti->codelen;
 	codes	 = (uint *)(data + sizeof(text_info));
-    } else {
-	codes[begline] = BEGLINE | QMIN(tw,MAXWIDTH);
-	maxwidth = QMAX(maxwidth,tw);
-	nlines++;
-	codes[index++] = 0;
-	codelen = index;
     }
 
     if ( encode ) {				// build internal data
@@ -2158,6 +2344,8 @@ void qt_format_text( const QFontMetrics& fm, int x, int y, int w, int h,
 	ti->tf	     = tf;
 	ti->len	     = len;
 	ti->maxwidth = maxwidth;
+	ti->mlb	     = minleftbearing;
+	ti->mrb	     = minrightbearing;
 	ti->nlines   = nlines;
 	ti->codelen  = codelen;
 	memcpy( data+sizeof(text_info), codes, codelen*sizeof(uint) );
@@ -2169,21 +2357,19 @@ void qt_format_text( const QFontMetrics& fm, int x, int y, int w, int h,
     int	    xp, yp;
     int	    xc;					// character xp
 
+    int overflow = -minleftbearing - minrightbearing;
+    maxwidth += overflow;
     if ( (tf & Qt::AlignVCenter) == Qt::AlignVCenter )	// vertically centered text
 	yp = h/2 - nlines*fheight/2;
     else if ( (tf & Qt::AlignBottom) == Qt::AlignBottom)// bottom aligned
 	yp = h - nlines*fheight;
     else					// top aligned
 	yp = 0;
-    int overflow = -fm.minLeftBearing()-fm.minRightBearing();
     if ( (tf & Qt::AlignRight) == Qt::AlignRight ) {
-	maxwidth += overflow;
 	xp = w - maxwidth;			// right aligned
     } else if ( (tf & Qt::AlignHCenter) == Qt::AlignHCenter ) {
-	maxwidth += overflow;
 	xp = w/2 - maxwidth/2;			// centered text
     } else {
-	maxwidth += overflow;
 	xp = 0;				// left aligned
     }
 
@@ -2198,8 +2384,7 @@ void qt_format_text( const QFontMetrics& fm, int x, int y, int w, int h,
 
     if ( hAlignFlags > 1 )
 	qWarning("QPainter::drawText: More than one of AlignRight, AlignLeft\n"
-		"                    and AlignHCenter set in the tf parameter."
-		);
+		 "\t\t    and AlignHCenter set in the tf parameter.");
 
     int vAlignFlags = 0;
     if ( (tf & Qt::AlignTop) == Qt::AlignTop )
@@ -2209,17 +2394,16 @@ void qt_format_text( const QFontMetrics& fm, int x, int y, int w, int h,
     if ( (tf & Qt::AlignBottom ) == Qt::AlignBottom )
 	vAlignFlags++;
 
-    if ( hAlignFlags > 1 )
+    if ( vAlignFlags > 1 )
 	qWarning("QPainter::drawText: More than one of AlignTop, AlignBottom\n"
-		"                    and AlignVCenter set in the tf parameter."
-		);
+		 "\t\t    and AlignVCenter set in the tf parameter.");
 #endif // CHECK_RANGE
 
     QRect br( x+xp, y+yp, maxwidth, nlines*fheight );
     if ( brect )				// set bounding rect
 	*brect = br;
 
-    if ( !painter || (tf & Qt::DontPrint) != 0 ) {	// can't/don't print any text
+    if ( !painter || (tf & Qt::DontPrint) != 0 ) {// can't/don't print any text
 	if ( code_alloc )
 	    free( codes );
 	return;
@@ -2259,7 +2443,7 @@ void qt_format_text( const QFontMetrics& fm, int x, int y, int w, int h,
 
     yp += fascent;
 
-    register uint *cp = codes;
+    uint *cp = codes;
 
     while ( *cp ) {				// finally, draw the text
 	tw = *cp++ & WIDTHBITS;			// text width
@@ -2272,12 +2456,11 @@ void qt_format_text( const QFontMetrics& fm, int x, int y, int w, int h,
 	}
 
 	if ( (tf & Qt::AlignRight) == Qt::AlignRight ) {
-	    xc = w - tw + fm.minRightBearing();
+	    xc = w - tw + minrightbearing;
 	} else if ( (tf & Qt::AlignHCenter) == Qt::AlignHCenter ) {
-	    xc = w/2 - (tw-fm.minLeftBearing()-fm.minRightBearing())/2
-		-fm.minLeftBearing();
+	    xc = w/2 - (tw-minleftbearing-minrightbearing)/2 - minleftbearing;
 	} else {
-	    xc = -fm.minLeftBearing();
+	    xc = -minleftbearing;
 	}
 
 	if ( pp )				// erase pixmap if gray text
@@ -2291,11 +2474,11 @@ void qt_format_text( const QFontMetrics& fm, int x, int y, int w, int h,
 		    int xcpos = fm.width( chunk );
 		    if ( pp )			// gray text
 			pp->fillRect( xc+xcpos, fascent+fm.underlinePos(),
-				      CWIDTH(DECCHAR(*cp)), fm.lineWidth(),
+				      CWIDTH(*cp), fm.lineWidth(),
 				      Qt::color1 );
 		    else
 			painter->fillRect( x+xc+xcpos, y+yp+fm.underlinePos(),
-					   CWIDTH(DECCHAR(*cp)), fm.lineWidth(),
+					   CWIDTH(*cp), fm.lineWidth(),
 					   painter->cpen.color() );
 		}
 		chunk += DECCHAR(*cp);
@@ -2347,6 +2530,7 @@ void qt_format_text( const QFontMetrics& fm, int x, int y, int w, int h,
 
 
 /*!
+
   Returns the bounding rectangle of the aligned text that would be
   printed with the corresponding drawText() function (the first \e len
   characters from \e str).  The drawing, and hence the bounding
@@ -2394,11 +2578,11 @@ QRect QPainter::boundingRect( int x, int y, int w, int h, int tf,
   \ingroup drawing
   \ingroup shared
 
-  A pen has a style, a width and a color.
+  A pen has a style, a width, a color, a cap style and a join style.
 
-  The pen style defines the line type. The default pen style is \c Qt::SolidLine.
-  Setting the style to \c NoPen tells the painter to not draw lines or
-  outlines.
+  The pen style defines the line type. The default pen style is \c
+  Qt::SolidLine. Setting the style to \c NoPen tells the painter to
+  not draw lines or outlines.
 
   The pen width defines the line width. The default line width is 0,
   which draws a 1-pixel line very fast, but with lower precision than
@@ -2407,6 +2591,12 @@ QRect QPainter::boundingRect( int x, int y, int w, int h, int tf,
 
   The pen color defines the color of lines and text. The default line
   color is black.  The QColor documentation lists predefined colors.
+
+  The cap style defines how the end points of lines are drawn. The
+  join style defines how the joins between two lines drawn when
+  multiple, conncted lines are drawn (QPainter::drawPolyLine() etc.).
+  The cap and join styles apply only to wide lines, i.e. when the
+  width is 1 or greater.
 
   Use the QBrush class for specifying fill styles.
 
@@ -2424,6 +2614,14 @@ QRect QPainter::boundingRect( int x, int y, int w, int h, int tf,
 
   See the setStyle() function for a complete list of pen styles.
 
+  About the end point of lines: For wide (non-0-width) pens, it
+  depends on the cap style whether the end point is drawn or not. For
+  0-width pens, QPainter will try to make sure that the end point is
+  drawn, but this cannot be absolutely guaranteed, since the underlying
+  drawing engine is free to use any (typically accellerated) algorithm
+  for drawing 0-width lines. On all tested systems, however, the
+  endpoint of at least all non-diagonal lines are drawn.
+
   \sa QPainter, QPainter::setPen()
 */
 
@@ -2433,13 +2631,14 @@ QRect QPainter::boundingRect( int x, int y, int w, int h, int tf,
   Initializes the pen.
 */
 
-void QPen::init( const QColor &color, uint width, PenStyle style )
+void QPen::init( const QColor &color, uint width, uint linestyle )
 {
     data = new QPenData;
     CHECK_PTR( data );
-    data->style = style;
+    data->style = (PenStyle)(linestyle & MPenStyle);
     data->width = width;
     data->color = color;
+    data->linest = linestyle;
 }
 
 /*!
@@ -2472,6 +2671,17 @@ QPen::QPen( const QColor &color, uint width, PenStyle style )
 }
 
 /*!
+  Constructs a pen with a specified color, width and styles.
+  \sa setWidth(), setStyle(), setColor()
+*/
+
+QPen::QPen( const QColor &cl, uint w, PenStyle s, PenCapStyle c,
+	    PenJoinStyle j )
+{
+    init( cl, w, s | c | j );
+}
+
+/*!
   Constructs a pen which is a copy of \e p.
 */
 
@@ -2482,7 +2692,7 @@ QPen::QPen( const QPen &p )
 }
 
 /*!
-  Destroys the pen.
+  Destructs the pen.
 */
 
 QPen::~QPen()
@@ -2529,7 +2739,7 @@ QPen &QPen::operator=( const QPen &p )
 
 QPen QPen::copy() const
 {
-    QPen p( data->color, data->width, data->style );
+    QPen p( data->color, data->width, data->style, capStyle(), joinStyle() );
     return p;
 }
 
@@ -2543,15 +2753,8 @@ QPen QPen::copy() const
 /*!
   Sets the pen style to \e s.
 
-  The pen styles are:
-  <ul>
-  <li> \c NoPen  no outline is drawn.
-  <li> \c SolidLine  solid line (default).
-  <li> \c DashLine  - - - (dashes) line.
-  <li> \c DotLine  * * * (dots) line.
-  <li> \c DashDotLine  - * - * line.
-  <li> \c DashDotDotLine  - ** - ** line.
-  </ul>
+  \warning On Windows 95/98, the style setting (other than NoPen and
+  SolidLine) has no effect for lines with width greater than 1.
 
   \sa style()
 */
@@ -2562,6 +2765,7 @@ void QPen::setStyle( PenStyle s )
 	return;
     detach();
     data->style = s;
+    data->linest = (data->linest & ~MPenStyle) | s;
 }
 
 
@@ -2586,6 +2790,64 @@ void QPen::setWidth( uint w )
 
 
 /*!
+  Returns the pen's cap style.
+
+  \sa setCapStyle()
+*/
+Qt::PenCapStyle QPen::capStyle() const
+{
+    return (PenCapStyle)(data->linest & MPenCapStyle);
+}
+
+/*!
+  Sets the pen's cap style to \a c.
+
+  The default value is FlatCap. The cap style has no effect on 0-width pens.
+
+  \warning On Windows 95/98, the cap style setting has no effect. Wide
+  lines are rendered as if the cap style was SquareCap.
+
+  \sa capStyle()
+*/
+
+void QPen::setCapStyle( PenCapStyle c )
+{
+    if ( (data->linest & MPenCapStyle) == c )
+	return;
+    detach();
+    data->linest = (data->linest & ~MPenCapStyle) | c;
+}
+
+/*!
+  Returns the pen's join style.
+
+  \sa setJoinStyle()
+*/
+Qt::PenJoinStyle QPen::joinStyle() const
+{
+    return (PenJoinStyle)(data->linest & MPenJoinStyle);
+}
+
+/*!
+  Sets the pen's join style to \a j.
+
+  The default value is MiterJoin. The join style has no effect on 0-width pens.
+
+  \warning On Windows 95/98, the join style setting has no effect. Wide
+  lines are rendered as if the join style was BevelJoin.
+
+  \sa joinStyle()
+*/
+
+void QPen::setJoinStyle( PenJoinStyle j )
+{
+    if ( (data->linest & MPenJoinStyle) == j )
+	return;
+    detach();
+    data->linest = (data->linest & ~MPenJoinStyle) | j;
+}
+
+/*!
   \fn const QColor &QPen::color() const
   Returns the pen color.
   \sa setColor()
@@ -2605,8 +2867,9 @@ void QPen::setColor( const QColor &c )
 
 /*!
   \fn bool QPen::operator!=( const QPen &p ) const
-  Returns TRUE if the pen is different from \e p, or FALSE if the pens are
-  equal.
+
+  Returns TRUE if the pen is different from \e p, or FALSE if the pens
+  are equal.
 
   Two pens are different if they have different styles, widths or colors.
 
@@ -2624,7 +2887,7 @@ void QPen::setColor( const QColor &c )
 
 bool QPen::operator==( const QPen &p ) const
 {
-    return (p.data == data) || (p.data->style == data->style &&
+    return (p.data == data) || (p.data->linest == data->linest &&
 	    p.data->width == data->width && p.data->color == data->color);
 }
 
@@ -2639,15 +2902,19 @@ bool QPen::operator==( const QPen &p ) const
 
   The serialization format is:
   <ol>
-  <li> The pen style (UINT8)
-  <li> The pen width (UINT8)
+  <li> The pen style(s) (Q_UINT8)
+  <li> The pen width (Q_UINT8)
   <li> The pen color (QColor)
   </ol>
 */
 
 QDataStream &operator<<( QDataStream &s, const QPen &p )
 {
-    return s << (UINT8)p.style() << (UINT8)p.width() << p.color();
+    if ( s.version() < 3 )
+	return s << (Q_UINT8)p.style() << (Q_UINT8)p.width() << p.color();
+    else
+	return s << (Q_UINT8)( p.style() | p.capStyle() | p.joinStyle() )
+		 << (Q_UINT8)p.width() << p.color();
 }
 
 /*!
@@ -2662,7 +2929,7 @@ QDataStream &operator>>( QDataStream &s, QPen &p )
     s >> style;
     s >> width;
     s >> color;
-    p = QPen( color, (uint)width, (Qt::PenStyle)style );
+    p = QPen( color, (uint)width, (Qt::PenStyle)style );	// owl
     return s;
 }
 
@@ -2783,7 +3050,7 @@ QBrush::QBrush( const QBrush &b )
 }
 
 /*!
-  Destroys the brush.
+  Destructs the brush.
 */
 
 QBrush::~QBrush()
@@ -2979,7 +3246,7 @@ bool QBrush::operator==( const QBrush &b ) const
 
   The serialization format is:
   <ol>
-  <li> The brush style (UINT8)
+  <li> The brush style (Q_UINT8)
   <li> The brush color (QColor)
   <li> If style == \c CustomPattern: the brush pixmap (QPixmap)
   </ol>
@@ -2987,7 +3254,7 @@ bool QBrush::operator==( const QBrush &b ) const
 
 QDataStream &operator<<( QDataStream &s, const QBrush &b )
 {
-    s << (UINT8)b.style() << b.color();
+    s << (Q_UINT8)b.style() << b.color();
     if ( b.style() == Qt::CustomPattern )
 	s << *b.pixmap();
     return s;
@@ -3000,7 +3267,7 @@ QDataStream &operator<<( QDataStream &s, const QBrush &b )
 
 QDataStream &operator>>( QDataStream &s, QBrush &b )
 {
-    UINT8 style;
+    Q_UINT8 style;
     QColor color;
     s >> style;
     s >> color;
@@ -3013,3 +3280,4 @@ QDataStream &operator>>( QDataStream &s, QBrush &b )
 	b = QBrush( color, (Qt::BrushStyle)style );
     return s;
 }
+

@@ -1,11 +1,11 @@
 /**********************************************************************
-** $Id: qcombobox.h,v 2.44 1999/06/11 16:38:54 ettrich Exp $
+** $Id: qt/src/widgets/qcombobox.h   2.1.0   edited 2000-03-24 $
 **
 ** Definition of QComboBox class
 **
 ** Created : 950426
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -42,6 +42,17 @@ class QListBox;
 class Q_EXPORT QComboBox : public QWidget
 {
     Q_OBJECT
+    Q_ENUMS( Policy )
+    Q_PROPERTY( int count READ count )
+    Q_PROPERTY( QString currentText READ currentText )
+    Q_PROPERTY( int currentItem READ currentItem WRITE setCurrentItem )
+    Q_PROPERTY( bool autoResize READ autoResize WRITE setAutoResize )
+    Q_PROPERTY( int sizeLimit READ sizeLimit WRITE setSizeLimit )
+    Q_PROPERTY( int maxCount READ maxCount WRITE setMaxCount )
+    Q_PROPERTY( Policy insertionPolicy READ insertionPolicy WRITE setInsertionPolicy )
+    Q_PROPERTY( bool autoCompletion READ autoCompletion WRITE setAutoCompletion )
+    Q_PROPERTY( bool duplicatesEnabled READ duplicatesEnabled WRITE setDuplicatesEnabled )
+
 public:
     QComboBox( QWidget *parent=0, const char *name=0 );
     QComboBox( bool rw, QWidget *parent=0, const char *name=0 );
@@ -56,6 +67,7 @@ public:
 
     void	insertItem( const QString &text, int index=-1 );
     void	insertItem( const QPixmap &pixmap, int index=-1 );
+    void	insertItem( const QPixmap &pixmap, const QString &text, int index=-1 );
 
     void	removeItem( int index );
     void	clear();
@@ -66,6 +78,7 @@ public:
 
     void	changeItem( const QString &text, int index );
     void	changeItem( const QPixmap &pixmap, int index );
+    void	changeItem( const QPixmap &pixmap, const QString &text, int index );
 
     int		currentItem() const;
     virtual void	setCurrentItem( int index );
@@ -97,11 +110,16 @@ public:
 
     virtual void	setListBox( QListBox * );
     QListBox * 	listBox() const;
+    
+    QLineEdit*	lineEdit() const;
 
     virtual void	setAutoCompletion( bool );
     bool	autoCompletion() const;
 
     bool	eventFilter( QObject *object, QEvent *event );
+
+    void 	setDuplicatesEnabled( bool enable );
+    bool 	duplicatesEnabled() const;
 
 public slots:
     void	clearValidator();
@@ -120,7 +138,8 @@ private slots:
     void	internalHighlight( int );
     void	internalClickTimeout();
     void	returnPressed();
-
+    void	showMore();
+    
 protected:
     void	paintEvent( QPaintEvent * );
     void	resizeEvent( QResizeEvent * );

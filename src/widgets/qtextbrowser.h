@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qtextbrowser.h,v 2.5 1999/06/18 00:13:32 ettrich Exp $
+** $Id: qt/src/widgets/qtextbrowser.h   2.1.0   edited 2000-03-24 $
 **
 ** Definition of the QTextBrowser class
 **
 ** Created : 990101
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,27 +17,30 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
 #ifndef QTEXTBROWSER_H
 #define QTEXTBROWSER_H
 
+#ifndef QT_H
 #include "qlist.h"
 #include "qpixmap.h"
 #include "qscrollview.h"
 #include "qcolor.h"
-
 #include "qtextview.h"
+#endif // QT_H
 
 class QTextBrowserData;
 
 class Q_EXPORT QTextBrowser : public QTextView
 {
     Q_OBJECT
+    Q_PROPERTY( QString source READ source WRITE setSource )
+
 public:
     QTextBrowser( QWidget *parent=0, const char *name=0 );
     ~QTextBrowser();
@@ -66,12 +69,18 @@ protected:
     void viewportMouseReleaseEvent( QMouseEvent* );
     void viewportMouseMoveEvent( QMouseEvent* );
     void keyPressEvent( QKeyEvent * e);
+    void showEvent( QShowEvent* );
 
 private:
     void popupDetail( const QString& contents, const QPoint& pos );
-    const QTextContainer* anchor(const QPoint& pos);
+    QString anchorAt(const QPoint& pos); // public in 3.0
     QTextBrowserData *d;
 
+private:	// Disabled copy constructor and operator=
+#if defined(Q_DISABLE_COPY)
+    QTextBrowser( const QTextBrowser & );
+    QTextBrowser& operator=( const QTextBrowser & );
+#endif
 };
 
 

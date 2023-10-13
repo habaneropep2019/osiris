@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qsignalmapper.cpp,v 1.15 1999/05/05 03:06:44 warwick Exp $
+** $Id: qt/src/kernel/qsignalmapper.cpp   2.1.0   edited 2000-03-24 $
 **
 ** Implementation of QSignalMapper class
 **
 ** Created : 980503
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -50,6 +50,7 @@ public:
     QPtrDict<QSignalMapperRec> dict;
 };
 
+// NOT REVISED
 /*!
   \class QSignalMapper qsignalmapper.h
   \brief A QSignalMapper object bundles signals from identifiable senders.

@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qtabwidget.h,v 1.11 1999/06/22 15:43:02 ettrich Exp $
+** $Id: qt/src/widgets/qtabwidget.h   2.1.0   edited 2000-03-24 $
 **
 ** Definition of QTabWidget class
 **
 ** Created : 990318
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -40,7 +40,12 @@ class QWidgetStack;
 class Q_EXPORT QTabWidget : public QWidget
 {
     Q_OBJECT
+    Q_ENUMS( TabPosition )
+    Q_PROPERTY( TabPosition tabPosition READ tabPosition WRITE setTabPosition )
+    Q_PROPERTY( int margin READ margin WRITE setMargin )
+
 public:
+    QTabWidget( QWidget *parent, const char *name, WFlags f);
     QTabWidget( QWidget *parent=0, const char *name=0);
    ~QTabWidget();
 
@@ -93,12 +98,19 @@ private slots:
 private:
     QTabWidgetData *d;
     void setUpLayout(bool = FALSE);
+    void init();
 
 #if 1 //def TOTAL_LOSER_COMPILER
     friend class QTabDialog;
 #else
     friend void QTabDialog::setTabBar( QTabBar* );
     friend void QTabBar* QTabDialog::tabBar() const;
+#endif
+
+private:	// Disabled copy constructor and operator=
+#if defined(Q_DISABLE_COPY)
+    QTabWidget( const QTabWidget & );
+    QTabWidget& operator=( const QTabWidget & );
 #endif
 };
 

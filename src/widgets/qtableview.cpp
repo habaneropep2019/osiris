@@ -1,11 +1,11 @@
 /**********************************************************************
-** $Id: qtableview.cpp,v 2.89 1999/06/21 23:50:24 agulbra Exp $
+** $Id: qt/src/widgets/qtableview.cpp   2.1.0   edited 2000-03-31 $
 **
 ** Implementation of QTableView class
 **
 ** Created : 941115
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -28,8 +28,6 @@
 #include "qpainter.h"
 #include "qdrawutil.h"
 #include <limits.h>
-
-const int sbDim = 16;
 
 enum ScrollBarDirtyFlags {
     verGeometry	  = 0x01,
@@ -43,6 +41,10 @@ enum ScrollBarDirtyFlags {
     verMask	  = 0x0F,
     horMask	  = 0xF0
 };
+
+
+#define HSBEXT horizontalScrollBar()->sizeHint().height()
+#define VSBEXT verticalScrollBar()->sizeHint().width()
 
 
 class QCornerSquare : public QWidget		// internal class
@@ -62,6 +64,7 @@ void QCornerSquare::paintEvent( QPaintEvent * )
 }
 
 
+// NOT REVISED
 /*!
   \class QTableView qtableview.h
   \brief This is an abstract base class for implementing tables
@@ -121,7 +124,9 @@ void QCornerSquare::paintEvent( QPaintEvent * )
   more bugs than expected, and our analysis indicates that widget's
   very flexibility is the problem.  If QScrollView or QListBox can
   easily be made to do the job you need, we recommend subclassing
-  those widgets rather than QTableView.
+  those widgets rather than QTableView. In addition, QScrollView makes
+  it easy to have child widgets inside tables, something QTableView
+  doesn't support at all.
 
   \sa QScrollView
   <a href="guibooks.html#fowler">GUI Design Handbook: Table</a>
@@ -172,7 +177,7 @@ QTableView::QTableView( QWidget *parent, const char *name, WFlags f )
 }
 
 /*!
-  Destroys the table view.
+  Destructs the table view.
 */
 
 QTableView::~QTableView()
@@ -194,25 +199,15 @@ void QTableView::setBackgroundColor( const QColor &c )
     QWidget::setBackgroundColor( c );
 }
 
-/*!
-  Reimplements QWidget::setPalette().
-  Sets the palette for the scroll bars, too.
-  \sa setBackgroundColor()
+/*!\reimp
 */
 
 void QTableView::setPalette( const QPalette &p )
 {
     QWidget::setPalette( p );
-    if ( cornerSquare )
-	cornerSquare->setPalette( p );
-    if ( vScrollBar )
-	vScrollBar->setPalette( p );
-    if ( hScrollBar )
-	hScrollBar->setPalette( p );
 }
 
-/*!
-  Reimplements QWidget::show() in order to do scroll bar tricks.
+/*!\reimp
 */
 
 void QTableView::show()
@@ -308,6 +303,7 @@ void QTableView::setNumRows( int rows )
 	nRows = rows;
     }
     updateScrollBars( verRange );
+    updateFrameSize();
 }
 
 /*!
@@ -344,6 +340,7 @@ void QTableView::setNumCols( int cols )
 	    repaint();
     }
     updateScrollBars( horRange );
+    updateFrameSize();
 }
 
 
@@ -528,7 +525,6 @@ void QTableView::setOffset( int x, int y, bool updateScrBars )
 	    y		= yCellOffs*cellH;
 	    yCellDelta	= 0;
 	}
-	yCellDelta  = (short)(y % cellH);
     } else {
 	int yn=0, yrd=0, row=0;
 	while ( row < nRows-1 && y >= yn+(yrd=cellHeight(row)) ) {
@@ -781,6 +777,11 @@ int QTableView::totalHeight()
     setTableFlags( Tbl_smoothScrolling | Tbl_autoScrollBars );
   \endcode
 
+  \warning The cutCells options (\c Tbl_cutCells, \c Tbl_cutCellsH and
+  Tbl_cutCellsV) may cause painting problems when scrollbars are
+  enabled. Do not combine cutCells and scrollbars.
+
+
   \sa clearTableFlags(), testTableFlags(), tableFlags()
 */
 
@@ -986,8 +987,6 @@ void QTableView::updateCell( int row, int col, bool erase )
 /*!
   Returns the rectangle which is the actual table, excluding any
   frame, in \e widget coordinates.
-
-  Somewhat similar to clientRect(), but does not include any frames.
 */
 
 QRect QTableView::viewRect() const
@@ -1085,7 +1084,8 @@ void QTableView::coverCornerSquare( bool enable )
 	CHECK_PTR( cornerSquare );
 	cornerSquare->setGeometry( maxViewX() + frameWidth() + 1,
 				   maxViewY() + frameWidth() + 1,
-				   sbDim, sbDim );
+                                   VSBEXT,
+                                 HSBEXT);
     }
     if ( autoUpdate() && cornerSquare ) {
 	if ( enable )
@@ -1271,16 +1271,14 @@ void QTableView::setupPainter( QPainter * )
 
 
 /*!
-  Handles paint events for the table view, by calling paintCell()
-  and drawFrame().
+  Handles paint events for the table view.
 
-  It is optimized to repaint only the cells that need to be repainted.
+  Calls paintCell() for the cells that needs to be repainted.
 */
 
 void QTableView::paintEvent( QPaintEvent *e )
 {
     QRect updateR = e->rect();			// update rectangle
-
     //debug("Update rect = ( %i, %i, %i, %i )",
     //updateR.x(),updateR.y(), updateR.width(), updateR.height() );
 
@@ -1292,7 +1290,7 @@ void QTableView::paintEvent( QPaintEvent *e )
 
     QPainter paint( this );
 
-    if ( !contentsRect().contains( updateR ) ) {// update frame ?
+    if ( !contentsRect().contains( updateR, TRUE  ) ) {// update frame ?
 	drawFrame( &paint );
 	if ( updateR.left() < frameWidth() ) 		//###
 	    updateR.setLeft( frameWidth() );
@@ -1383,25 +1381,21 @@ void QTableView::paintEvent( QPaintEvent *e )
 
     QRect viewR = viewRect();
 
-    if ( xPos < maxX ) {
+    if ( xPos <= maxX ) {
 	QRect r = viewR;
 	r.setLeft( xPos );
 	r.setBottom( yPos<maxY?yPos:maxY );
 	paint.eraseRect( r.intersect( updateR ) );
     }
-    if ( yPos < maxY ) {
+    if ( yPos <= maxY ) {
 	QRect r = viewR;
 	r.setTop( yPos );
 	paint.eraseRect( r.intersect( updateR ) );
     }
 }
 
-/*!
-  Handles resize events for the table view.
-
-  The scroll bars are moved and cells repainted as necessary.
+/*!\reimp
 */
-
 void QTableView::resizeEvent( QResizeEvent * )
 {
     updateScrollBars( horValue | verValue | horSteps | horGeometry | horRange |
@@ -1435,7 +1429,7 @@ QScrollBar *QTableView::verticalScrollBar() const
     if ( !vScrollBar ) {
 	QScrollBar *sb = new QScrollBar( QScrollBar::Vertical, that );
 	sb->setCursor( arrowCursor );
-	sb->resize( sbDim, 16 ); // 16 is irrelevant
+        sb->resize( sb->sizeHint() ); // height is irrelevant
 	CHECK_PTR(sb);
 	sb->setTracking( FALSE );
 	sb->setFocusPolicy( NoFocus );
@@ -1464,7 +1458,7 @@ QScrollBar *QTableView::horizontalScrollBar() const
     if ( !hScrollBar ) {
 	QScrollBar *sb = new QScrollBar( QScrollBar::Horizontal, that );
 	sb->setCursor( arrowCursor );
-	sb->resize( 16, sbDim ); // 16 is irrelevant
+	sb->resize( sb->sizeHint() ); // width is irrelevant
 	sb->setFocusPolicy( NoFocus );
 	CHECK_PTR(sb);
 	sb->setTracking( FALSE );
@@ -1515,7 +1509,8 @@ void QTableView::setHorScrollBar( bool on, bool update )
 	    repaint( hScrollBar->x(), hScrollBar->y(),
 		     width() - hScrollBar->x(), hScrollBar->height() );
     }
-    updateFrameSize();
+    if ( update )
+	updateFrameSize();
 }
 
 
@@ -1553,7 +1548,8 @@ void QTableView::setVerScrollBar( bool on, bool update )
 	    repaint( vScrollBar->x(), vScrollBar->y(),
 		     vScrollBar->width(), height() - vScrollBar->y() );
     }
-    updateFrameSize();
+    if ( update )
+	updateFrameSize();
 }
 
 
@@ -1828,7 +1824,8 @@ int QTableView::minViewY() const
 int QTableView::maxViewX() const
 {
     return width() - 1 - frameWidth()
-		   - (tFlags & Tbl_vScrollBar ? sbDim : 0);
+        - (tFlags & Tbl_vScrollBar ? VSBEXT
+           : 0);
 }
 
 
@@ -1843,7 +1840,8 @@ int QTableView::maxViewX() const
 int QTableView::maxViewY() const
 {
     return height() - 1 - frameWidth()
-		    - (tFlags & Tbl_hScrollBar ? sbDim : 0);
+        - (tFlags & Tbl_hScrollBar ? HSBEXT
+           : 0);
 }
 
 
@@ -1915,11 +1913,11 @@ void QTableView::doAutoScrollBars()
     }
 
     if ( testTableFlags(Tbl_autoHScrollBar) && vScrollOn && !hScrollOn )
-	if ( w > viewW - sbDim )
+	if ( w > viewW - VSBEXT )
 	    hScrollOn = TRUE;
 
     if ( testTableFlags(Tbl_autoVScrollBar) && hScrollOn && !vScrollOn )
-	if ( h > viewH - sbDim )
+	if ( h > viewH - HSBEXT )
 	    vScrollOn = TRUE;
 
     setHorScrollBar( hScrollOn, FALSE );
@@ -1974,8 +1972,9 @@ void QTableView::updateScrollBars( uint f )
 
     if ( testTableFlags(Tbl_hScrollBar) && (sbDirty & horMask) != 0 ) {
 	if ( sbDirty & horGeometry )
-	    hScrollBar->setGeometry( 0,height() - sbDim,
-				     viewWidth() + frameWidth()*2, sbDim );
+	    hScrollBar->setGeometry( 0,height() - HSBEXT,
+                                     viewWidth() + frameWidth()*2,
+                                   HSBEXT);
 
 	if ( sbDirty & horSteps ) {
 	    if ( cellW )
@@ -1997,8 +1996,9 @@ void QTableView::updateScrollBars( uint f )
 
     if ( testTableFlags(Tbl_vScrollBar) && (sbDirty & verMask) != 0 ) {
 	if ( sbDirty & verGeometry )
-	    vScrollBar->setGeometry( width() - sbDim, 0,
-				     sbDim, viewHeight() + frameWidth()*2 );
+	    vScrollBar->setGeometry( width() - VSBEXT, 0,
+                                     VSBEXT,
+                                     viewHeight() + frameWidth()*2 );
 
 	if ( sbDirty & verSteps ) {
 	    if ( cellH )
@@ -2029,8 +2029,10 @@ void QTableView::updateScrollBars( uint f )
 
 void QTableView::updateFrameSize()
 {
-    int rw = width()  - ( testTableFlags(Tbl_vScrollBar) ? sbDim : 0 );
-    int rh = height() - ( testTableFlags(Tbl_hScrollBar) ? sbDim : 0 );
+    int rw = width()  - ( testTableFlags(Tbl_vScrollBar) ?
+                          VSBEXT : 0 );
+    int rh = height() - ( testTableFlags(Tbl_hScrollBar) ?
+                          HSBEXT : 0 );
     if ( rw < 0 )
 	rw = 0;
     if ( rh < 0 )
@@ -2042,9 +2044,9 @@ void QTableView::updateFrameSize()
 
     if ( autoUpdate() ) {
 	if ( rw != fw )
-	    repaint( QMIN(fw,rw) - frameWidth(), 0, frameWidth(), rh );
+	    update( QMIN(fw,rw) - frameWidth(), 0, frameWidth(), rh );
 	if ( rh != fh )
-	    repaint( 0, QMIN(fh,rh) - frameWidth(), rw, frameWidth() );
+	    update( 0, QMIN(fh,rh) - frameWidth(), rw, frameWidth() );
     }
 }
 
@@ -2239,8 +2241,16 @@ void QTableView::showOrHideScrollBars()
 
 void QTableView::updateTableSize()
 {
+    bool updateOn = autoUpdate();
+    setAutoUpdate( FALSE );
+    int xofs = xOffset();
+    xOffs++; //so that setOffset will not return immediately
+    setOffset(xofs,yOffset(),FALSE); //to calculate internal state correctly
+    setAutoUpdate(updateOn);
+
     updateScrollBars( horSteps |  horRange |
 		      verSteps |  verRange );
     showOrHideScrollBars();
 }
+
 

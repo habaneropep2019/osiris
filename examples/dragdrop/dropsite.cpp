@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: dropsite.cpp,v 1.3.2.1 1999/08/20 12:51:22 paul Exp $
+** $Id: qt/examples/dragdrop/dropsite.cpp   2.1.0   edited 2000-03-14 $
 **
 ** Drop site example implementation
 **
@@ -39,8 +39,6 @@ void DropSite::dragMoveEvent( QDragMoveEvent * /*e*/ )
 
 void DropSite::dragEnterEvent( QDragEnterEvent *e )
 {
-    if ( e->source() == this )
-	return; //woraround
     // Check if you want the drag...
     if ( SecretDrag::canDecode( e )
       || QTextDrag::canDecode( e )
@@ -74,6 +72,8 @@ void DropSite::dragLeaveEvent( QDragLeaveEvent * )
 
 void DropSite::dropEvent( QDropEvent * e )
 {
+    setBackgroundColor(lightGray);
+    
     // Try to decode to the data you understand...
 
     QString str;
@@ -128,22 +128,22 @@ void DragMoviePlayer::updatePixmap( const QRect& )
 
 void DropSite::mousePressEvent( QMouseEvent * /*e*/ )
 {
-    QDragObject *d;
+    QDragObject *drobj;
     if ( pixmap() ) {
-	d = new QImageDrag( pixmap()->convertToImage(), this );
+	drobj = new QImageDrag( pixmap()->convertToImage(), this );
 #if 1
 	QPixmap pm;
 	pm.convertFromImage(pixmap()->convertToImage().smoothScale(
 	    pixmap()->width()/3,pixmap()->height()/3));
-	d->setPixmap(pm,QPoint(-5,-7));
+	drobj->setPixmap(pm,QPoint(-5,-7));
 #else
 	// Try it.
-	(void)new DragMoviePlayer(d);
+	(void)new DragMoviePlayer(drobj);
 #endif
     } else {
-	d = new QTextDrag( text(), this );
+	drobj = new QTextDrag( text(), this );
     }
-    d->dragCopy();
+    drobj->dragCopy();
 }
 
 

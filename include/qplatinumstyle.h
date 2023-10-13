@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qplatinumstyle.h,v 1.3 1999/06/22 04:34:45 ettrich Exp $
+** $Id: qt/src/widgets/qplatinumstyle.h   2.1.0   edited 2000-03-24 $
 **
 ** Definition of Platinum-like style class
 **
 ** Created : 981231
 **
-** Copyright (C) 1998-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1998-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,23 +17,26 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
 #ifndef QPLATINUMSTYLE_H
 #define QPLATINUMSTYLE_H
 
+#ifndef QT_H
 #include "qwindowsstyle.h"
 #include "qpalette.h"
+#endif // QT_H
 
 class Q_EXPORT QPlatinumStyle : public QWindowsStyle
 {
     Q_OBJECT
 public:
     QPlatinumStyle();
+    virtual ~QPlatinumStyle();
     void drawPopupPanel( QPainter *p, int x, int y, int w, int h,
 			 const QColorGroup &,  int lineWidth = 2,
 			 const QBrush *fill = 0 );
@@ -46,10 +49,11 @@ public:
 			  const QBrush *fill = 0 );
     void drawPushButton( QPushButton* btn, QPainter *p);
     void drawPushButtonLabel( QPushButton* btn, QPainter *p);
+    void getButtonShift( int &x, int &y);
 
     void scrollBarMetrics( const QScrollBar*, int&, int&, int&, int&);
     void drawScrollBarControls( QPainter*,  const QScrollBar*, int sliderStart, uint controls, uint activeControl );
-    ScrollControl scrollBarPointOver( const QScrollBar*, int sliderStart, const QPoint& );
+    ScrollControl scrollBarPointOver( const QScrollBar* sb, int sliderStart, const QPoint& p );
 
     QSize indicatorSize() const;
     void drawIndicator( QPainter* p, int x, int y, int w, int h,  const QColorGroup &g,
@@ -92,9 +96,8 @@ public:
     int extraPopupMenuItemWidth( bool checkable, int maxpmw, QMenuItem* mi, const QFontMetrics& fm );
     int popupMenuItemHeight( bool checkable, QMenuItem* mi, const QFontMetrics& fm );
     void drawPopupMenuItem( QPainter* p, bool checkable, int maxpmw, int tab, QMenuItem* mi,
-			    const QPalette& pal,
-			    bool act, bool enabled, int x, int y, int w, int h);
-
+			    const QPalette& pal, bool act, bool enabled,
+			    int x, int y, int w, int h);
 
 protected:
     void drawScrollBarBackground( QPainter *p, int x, int y, int w, int h,
@@ -102,6 +105,11 @@ protected:
     QColor mixedColor(const QColor &, const QColor &);
     void drawRiffles( QPainter* p,  int x, int y, int w, int h,
 		      const QColorGroup &g, bool horizontal );
+private:	// Disabled copy constructor and operator=
+#if defined(Q_DISABLE_COPY)
+    QPlatinumStyle( const QPlatinumStyle & );
+    QPlatinumStyle& operator=( const QPlatinumStyle & );
+#endif
 };
 
 

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qpngio.h,v 2.7.2.1 1999/07/08 13:35:25 paul Exp $
+** $Id: qt/src/kernel/qpngio.h   2.1.0   edited 2000-03-24 $
 **
 ** Definition of PNG QImage IOHandler
 **
@@ -17,16 +17,18 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
 #ifndef QPNGIO_H
 #define QPNGIO_H
 
+#ifndef QT_H
 #include <qimage.h>
+#endif // QT_H
 
 void qInitPngIO();
 

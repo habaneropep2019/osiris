@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: flow.h,v 1.5 1999/06/21 13:58:43 reggie Exp $
+** $Id: qt/examples/customlayout/flow.h   2.1.0   edited 2000-01-31 $
 **
 ** Definition of simple flow layout for custom layout example
 **

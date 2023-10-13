@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qstylesheet.h,v 2.9 1999/06/18 01:10:18 ettrich Exp $
+** $Id: qt/src/kernel/qstylesheet.h   2.1.0   edited 2000-03-24 $
 **
 ** Definition of the QStyleSheet class
 **
 ** Created : 990101
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,30 +17,31 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
 #ifndef QSTYLESHEET_H
 #define QSTYLESHEET_H
 
-#include "qlist.h"
+#ifndef QT_H
+#include "qstring.h"
 #include "qdict.h"
-#include "qmap.h"
-#include "qpixmap.h"
-#include "qscrollview.h"
-#include "qcolor.h"
+#include "qobject.h"
+#endif // QT_H
 
 class QStyleSheet;
 class QStyleSheetItemData;
+template<class Key, class T> class QMap;
 
 
 class Q_EXPORT QStyleSheetItem : public Qt
 {
 public:
     QStyleSheetItem( QStyleSheet* parent, const QString& name );
+    QStyleSheetItem( const QStyleSheetItem & );
     ~QStyleSheetItem();
 
     QString name() const;
@@ -50,7 +51,13 @@ public:
 
     enum AdditionalStyleValues { Undefined  = - 1};
 
-    enum DisplayMode {DisplayBlock, DisplayInline, DisplayListItem, DisplayNone};
+    enum DisplayMode {
+	DisplayBlock,
+	DisplayInline,
+	DisplayListItem,
+	DisplayNone
+    };
+
     DisplayMode displayMode() const;
     void setDisplayMode(DisplayMode m);
 
@@ -89,15 +96,31 @@ public:
     bool isAnchor() const;
     void setAnchor(bool anc);
 
-    enum WhiteSpaceMode {WhiteSpaceNormal, WhiteSpacePre };
+    enum WhiteSpaceMode { WhiteSpaceNormal, WhiteSpacePre, WhiteSpaceNoWrap };
     WhiteSpaceMode whiteSpaceMode() const;
     void setWhiteSpaceMode(WhiteSpaceMode m);
 
-    enum Margin { MarginLeft, MarginRight, MarginTop, MarginBottom, MarginAll, MarginVertical, MarginHorizontal };
+    enum Margin {
+	MarginLeft,
+	MarginRight,
+	MarginTop,
+	MarginBottom,
+	MarginAll,
+	MarginVertical,
+	MarginHorizontal
+    };
+
     int margin( Margin m) const;
     void setMargin( Margin, int);
 
-    enum ListStyle { ListDisc, ListCircle, ListSquare, ListDecimal, ListLowerAlpha, ListUpperAlpha };
+    enum ListStyle {
+	ListDisc,
+	ListCircle,
+	ListSquare,
+	ListDecimal,
+	ListLowerAlpha,
+	ListUpperAlpha
+    };
 
     ListStyle listStyle() const;
     void setListStyle( ListStyle );
@@ -121,9 +144,7 @@ template class Q_EXPORT QDict<QStyleSheetItem>;
 // MOC_SKIP_END
 #endif
 
-class QTextNode;
-class QTextContainer;
-
+class QTextCustomItem;
 
 class Q_EXPORT QStyleSheet : public QObject
 {
@@ -141,7 +162,7 @@ public:
 
     void insert( QStyleSheetItem* item);
 
-    virtual QTextNode* tag( const QString& name,
+    virtual QTextCustomItem* tag( const QString& name,
 			    const QMap<QString, QString> &attr,
 			    const QString& context,
 			    const QMimeSourceFactory& factory,

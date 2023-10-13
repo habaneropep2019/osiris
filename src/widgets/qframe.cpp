@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qframe.cpp,v 2.52 1999/06/22 15:43:00 ettrich Exp $
+** $Id: qt/src/widgets/qframe.cpp   2.1.0   edited 2000-03-31 $
 **
 ** Implementation of QFrame widget class
 **
 ** Created : 950201
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -29,46 +29,44 @@
 #include "qframe.h"
 #include "qbitmap.h"
 
+// REVISED: warwick
 /*!
   \class QFrame qframe.h
-  \brief The QFrame class is the base class of widgets that (can) have a frame.
+  \brief The QFrame class is the base class of widgets that can have a frame.
 
   \ingroup abstractwidgets
-  \ingroup realwidgets
 
   It draws a frame and calls a virtual function, drawContents(), to
-  fill in the frame.  This function is reimplemented by essentially
-  all subclasses.  There are also two other less useful functions,
+  fill in the frame.  This function is reimplemented by
+  subclasses.  There are also two other less useful functions,
   drawFrame() and frameChanged().
 
-  QMenuBar uses this to "raise" the menu bar above the surrounding
-  screen:
+  QPopupMenu uses this to "raise" the menu above the surrounding
+  screen. QProgressBar has a "sunken" look.  QLabel has a flat look.
+  The frames of widgets such as these can be changed.
 
   \code
-    if ( style() == MotifStyle ) {
-	setFrameStyle( QFrame::Panel | QFrame::Raised );
-	setLineWidth( 2 );
-    } else {
-	setFrameStyle( QFrame::NoFrame );
-    }
+    QLabel label(...);
+    label.setFrameStyle( QFrame::Panel | QFrame::Raised );
+    label.setLineWidth( 2 );
+
+    QProgressBar pbar(...);
+    label.setFrameStyle( QFrame::NoFrame );
   \endcode
 
   The QFrame class can also be used directly for creating simple frames
-  without any contents, for example like this:
+  without any contents, although usually you would use a QHBox or QVBox
+  as these layout the widgets you put inside the frame.
 
-  \code
-    QFrame *emptyFrame = new QFrame( parentWidget );
-    emptyFrame->setFrameStyle( QFrame::Panel | QFrame::Sunken );
-    emptyFrame->setLineWidth( 2 );
-  \endcode
+  A frame widget has four attributes: frameStyle(), lineWidth(),
+  midLineWidth(), and margin().
 
-  A frame widget has three attributes: \link setFrameStyle() frame
-  style\endlink, a \link setLineWidth() line width\endlink and a \link
-  setMidLineWidth() mid-line width\endlink.
-
-  The frame style is specified by a frame shape and a shadow style.
-  The frame shapes are \c NoFrame, \c Box, \c Panel, \c StyledPanel \c
-  WinPanel, \c HLine and \c VLine, and the shadow styles are \c Plain,
+  The frame style is specified by a
+  \link QFrame::Shape frame shape\endlink and a
+  \link QFrame::Shadow shadow style\endlink.
+  The frame shapes are \c NoFrame, \c Box, \c Panel,
+  \c StyledPanel, \c PopupPanel,
+  \c WinPanel, \c HLine and \c VLine, and the shadow styles are \c Plain,
   \c Raised and \c Sunken.
 
   The line width is the width of the frame border.
@@ -78,29 +76,81 @@
   effect.  Notice that a mid-line is only drawn for \c Box, \c HLine
   and \c VLine frames that are raised or sunken.
 
+  The margin is the gap between the frame and the contents of the frame.
+
   <a name=picture></a>
   This table shows the most useful combinations of styles and widths
   (and some rather useless ones):
 
-  <img src=frames.png height=422 width=520 alt="Table of frame styles">
-
-  For obvious reasons, \c NoFrame isn't shown.  The gray areas next to
-  the \c VLine and \c HLine examples are there because the widgets in
-  the illustration are taller/wider than the natural width of the
-  lines.  frameWidth() returns the natural width of the line.
-
-  The labels on the top and right are QLabel objects with frameStyle()
-  \c Raised|Panel and lineWidth() 1.
+  <img src=frames.png width=515 height=414 alt="Table of frame styles">
 */
 
+
+/*! \enum QFrame::Shape
+
+  This enum type defines the shapes of a QFrame's frame.  The
+  currently defined shapes are: <ul>
+
+  <li> \c NoFrame - QFrame draws nothing
+
+  <li> \c Box - QFrame draws a box around its contents
+
+  <li> \c Panel - QFrame draws a panel such that the contents appear raised or sunken
+
+  <li> \c WinPanel - like \c Panel, but QFrame draws the 3D effects
+  the way Microsoft Windows 95 (etc) does
+
+  <li> \c HLine - QFrame draws a horizontal line that frames nothing
+  (useful as separator)
+
+  <li> \c VLine - QFrame draws a vertical line that frames nothing
+  (useful as separator)
+
+  <li> \c StyledPanel - QFrame calls QStyle::drawPanel()
+
+  <li> \c PopupPanel - QFrame calls QStyle::drawPopupPanel()
+
+  </ul>
+
+  When it does not call QStyle, Shape interacts with QFrame::Shadow,
+  the lineWidth() and the midLineWidth() to create the total result.
+  The <a href="#picture">picture of the frames</a> in the class
+  documentation may illustrate this better than words.
+
+  \sa QFrame::Shadow QFrame::style() QStyle::drawPanel()
+  QStyle::drawPopupPanel()
+*/
+
+
+/*! \enum QFrame::Shadow
+
+  This enum type defines the 3D effect used for QFrame's frame.  The
+  currently defined effects are: <ul>
+
+  <li> \c Plain - the frame and contents appear level with the surroundings
+  <li> \c Raised - the frame and contents appear raised
+  <li> \c Sunken - the frame and contents appear sunken
+
+  </ul>
+
+  Shadow interacts with QFrame::Shape, the lineWidth() and the
+  midLineWidth().  The <a href="#picture">picture of the frames</a> in
+  the class documentation may illustrate this better than words.
+
+  \sa QFrame::Shape lineWidth() midLineWidth()
+*/
+
+
+#if (QT_VERSION > 298)
+#error "get rid of allowLines for good"
+#endif
 
 /*!
   Constructs a frame widget with frame style \c NoFrame and a 1 pixel frame
   width.
 
   The last argument exists for compatibility with Qt 1.x; it
-  no longer has any meaning.  (In Qt 2.x, QFrame always allows the
-  HLine and VLine styles.)
+  no longer has any meaning.
 
   The \e parent, \e name and \e f arguments are passed to the QWidget
   constructor.
@@ -119,6 +169,7 @@ QFrame::QFrame( QWidget *parent, const char *name, WFlags f,
     updateFrameWidth();
 }
 
+static const int wpwidth = 2; // WinPanel lwidth
 
 /*!
   \fn int QFrame::frameStyle() const
@@ -136,7 +187,7 @@ QFrame::QFrame( QWidget *parent, const char *name, WFlags f,
 */
 
 /*!
-  \fn Shape QFrame::setFrameShape() const
+  \fn void QFrame::setFrameShape(Shape)
   Sets the frame shape value of the frame style.
   \sa frameShape(), frameStyle(), setFrameShadow()
 */
@@ -148,7 +199,7 @@ QFrame::QFrame( QWidget *parent, const char *name, WFlags f,
 */
 
 /*!
-  \fn void QFrame::setFrameShadow( Shadow ) const
+  \fn void QFrame::setFrameShadow( Shadow )
   Sets the frame shadow value of the frame style.
   \sa frameShadow(), frameStyle(), setFrameShape()
 */
@@ -330,7 +381,7 @@ void QFrame::updateFrameWidth()
 	case Plain:
 	case Raised:
 	case Sunken:
-	    fwidth = lwidth = 2;
+	    fwidth =  wpwidth; //WinPanel does not use lwidth!
 	    break;
 	}
 	break;
@@ -423,8 +474,13 @@ QRect QFrame::contentsRect() const
     return r;
 }
 
+/*!\reimp
+*/
 QSize QFrame::sizeHint() const
 {
+    //   Returns a size hint for the frame - for HLine and VLine
+    //   shapes, this is stretchable one way and 3 pixels wide the
+    //   other.  For other shapes, QWidget::sizeHint() is used.
     switch (fstyle & MShape) {
     case HLine:
 	return QSize(-1,3);
@@ -437,14 +493,13 @@ QSize QFrame::sizeHint() const
 
 
 
-/*!
-  If this is a  line, it may stretch in the direction of the line, but it is
-  fixed in the other direction. If this is a normal frame, use QWidget's
-  default behavior.
+/*!\reimp
 */
-
 QSizePolicy QFrame::sizePolicy() const
 {
+    //   If this is a line, it may stretch in the direction of the
+    //   line, but it is fixed in the other direction. If this is a
+    //   normal frame, use QWidget's default behavior.
     switch (fstyle & MShape) {
     case HLine:
 	return QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Fixed );
@@ -564,7 +619,7 @@ void QFrame::drawFrame( QPainter *p )
 
     case WinPanel:
 	if ( cstyle == Plain )
-	    qDrawPlainRect( p, r, g.foreground(), lwidth );
+	    qDrawPlainRect( p, r, g.foreground(), wpwidth );
 	else
 	    qDrawWinPanel( p, r, g, cstyle == Sunken );
 	break;
@@ -620,7 +675,7 @@ void QFrame::drawContents( QPainter * )
 
   This function can be reimplemented by subclasses that need to know
   when the frame attributes change.
-  
+
   The default implementation calls update().
 */
 
@@ -693,7 +748,7 @@ void QFrame::drawFrameMask( QPainter* p )
 
     case WinPanel:
 	if ( style == Plain )
-	    qDrawPlainRect( p, r, g.foreground(), lwidth );
+	    qDrawPlainRect( p, r, g.foreground(), wpwidth );
 	else
 	    qDrawWinPanel( p, r, g, style == Sunken );
 	break;

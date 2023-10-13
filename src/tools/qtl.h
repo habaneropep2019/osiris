@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qtl.h,v 1.11.2.4 1999/09/07 15:02:00 aavit Exp $
+** $Id: qt/src/tools/qtl.h   2.1.0   edited 2000-03-28 $
 **
 ** Definition of Qt template library classes
 **
 ** Created : 990128
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,16 +17,18 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 #ifndef QTL_H
 #define QTL_H
 
+#ifndef QT_H
 #include "qtextstream.h"
 #include "qstring.h"
+#endif // QT_H
 
 
 template <class T>
@@ -112,10 +114,10 @@ inline void qBubbleSort( Container &c )
 }
 
 
-template <class HeapValue>
-inline void qHeapSortPushDown( HeapValue* heap, uint first, uint last )
+template <class Value>
+inline void qHeapSortPushDown( Value* heap, int first, int last )
 {
-    uint r = first;
+    int r = first;
     while( r <= last/2 ) {
 	// Node r has only one child ?
 	if ( last == 2*r ) {
@@ -166,7 +168,7 @@ inline void qHeapSortHelper( InputIterator b, InputIterator e, Value, uint n )
 	*b++ = heap[1];
 	if ( i > 1 ) {
 	    heap[1] = heap[i];
-	    qHeapSortPushDown( heap, (uint)1, (uint)(i - 1) );
+	    qHeapSortPushDown( heap, 1, (int)i - 1 );
 	}
     }
 

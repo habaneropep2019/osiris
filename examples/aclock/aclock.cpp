@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: aclock.cpp,v 1.2 1999/06/03 01:43:43 warwick Exp $
+** $Id: qt/examples/aclock/aclock.cpp   2.1.0   edited 2000-02-09 $
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -109,7 +109,7 @@ void AnalogClock::drawClock( QPainter *paint )
 void AnalogClock::setAutoMask(bool b)
 {
     if (b)
-	setBackgroundMode( PaletteText );
+	setBackgroundMode( PaletteForeground );
     else
 	setBackgroundMode( PaletteBackground );
     QWidget::setAutoMask(b);

@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: lineedits.h,v 1.2 1999/06/09 03:54:15 agulbra Exp $
+** $Id: qt/examples/lineedits/lineedits.h   2.1.0   edited 2000-04-03 $
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -11,12 +11,12 @@
 #ifndef LINEDITS_H
 #define LINEDITS_H
 
-#include <qvbox.h>
+#include <qgroupbox.h>
 
 class QLineEdit;
 class QComboBox;
 
-class LineEdits : public QVBox
+class LineEdits : public QGroupBox
 {
     Q_OBJECT
 

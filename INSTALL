@@ -1,4 +1,4 @@
-			  INSTALLING QT FOR X11
+			  INSTALLING Qt FOR X11
 
 
 You may need to be root, depending on the permissions of the directories
@@ -8,15 +8,15 @@ where you choose to install Qt.
 1.  Unpack the archive if you have not done so already:
 
 	cd /usr/local
-	gunzip qt-2.0.2.tar.gz	# uncompress the archive
-	tar xf qt-2.0.2.tar	# unpack it
+	gunzip qt-2.1.0.tar.gz	# uncompress the archive
+	tar xf qt-2.1.0.tar	# unpack it
 
-    This creates the directory /usr/local/qt-2.0.2 containing the
+    This creates the directory /usr/local/qt-2.1.0 containing the
     files from the main archive.
 
-    Rename qt-2.0.2 to qt (or make a symlink):
+    Rename qt-2.1.0 to qt (or make a symlink):
 
-	mv qt-2.0.2 qt
+	mv qt-2.1.0 qt
 
     The rest of this file assumes that Qt is installed in /usr/local/qt.
 
@@ -46,7 +46,7 @@ where you choose to install Qt.
 	then
 		MANPATH=$QTDIR/man:$MANPATH
 	else
-		MANPATH=$QTDIR/man
+		MANPATH=$QTDIR/man:
 	fi
 	if [ $LD_LIBRARY_PATH ]
 	then
@@ -78,7 +78,7 @@ where you choose to install Qt.
 	if ( $?MANPATH ) then
 	    setenv MANPATH $QTDIR/man:$MANPATH
 	else
-	    setenv MANPATH $QTDIR/man
+	    setenv MANPATH $QTDIR/man:
 	endif
 	if ( $?LD_LIBRARY_PATH ) then
 	    setenv LD_LIBRARY_PATH $QTDIR/lib:$LD_LIBRARY_PATH
@@ -120,7 +120,7 @@ where you choose to install Qt.
 	make
 
     If your platform or compiler is not supported, read PORTING.  If it
-    is supported but you have problems, see http://www.troll.no/platforms/
+    is supported but you have problems, see http://www.trolltech.com/platforms/
 
 
 4.  In very few cases you may need to run /sbin/ldconfig or something
@@ -135,9 +135,10 @@ where you choose to install Qt.
     And don't forget to set LD_LIBRARY_PATH as explained in 2) above.
 
 
-5.  The online HTML documentation is installed in /usr/local/qt/doc/
-    The main page is /usr/local/qt/doc/index.html
-    The man pages are installed in /usr/local/qt/man/
+5.  The online HTML documentation is installed in /usr/local/qt/doc/html/
+    The main page is /usr/local/qt/doc/html/index.html
+    The man pages are installed in /usr/local/qt/doc/man/
+
 
 
 That's all.  Qt is now installed.

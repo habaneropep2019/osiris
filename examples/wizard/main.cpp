@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: main.cpp,v 1.2 1999/06/11 03:47:50 warwick Exp $
+** $Id: qt/examples/wizard/main.cpp   2.1.0   edited 2000-01-31 $
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.

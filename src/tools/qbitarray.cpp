@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qbitarray.cpp,v 2.12 1999/05/23 20:29:04 agulbra Exp $
+** $Id: qt/src/tools/qbitarray.cpp   2.1.0   edited 2000-03-24 $
 **
 ** Implementation of QBitArray class
 **
 ** Created : 940118
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -29,6 +29,7 @@
 #define SHBLOCK	 ((bitarr_data*)(sharedBlock()))
 
 
+// NOT REVISED
 /*!
   \class QBitVal qbitarray.h
   \brief The QBitVal class is an internal class, used with QBitArray.
@@ -38,27 +39,27 @@
 */
 
 /*!
-  \fn QBitVal::QBitVal (QBitArray* a, uint i) 
+  \fn QBitVal::QBitVal (QBitArray* a, uint i)
 
   Constructs a reference to an element in a QBitArray.  This is
   what QBitArray::operator[] contructs its return value with.
 */
 
 /*!
-  \fn QBitVal::operator int() 
+  \fn QBitVal::operator int()
 
   Returns the value referenced by the QBitVal.
 */
 
 /*!
-  \fn QBitVal& QBitVal::operator= (const QBitVal& v) 
+  \fn QBitVal& QBitVal::operator= (const QBitVal& v)
 
   Sets the value referenced by the QBitVal to that referenced by another
   QBitVal.
 */
 
 /*!
-  \fn QBitVal& QBitVal::operator= (int v) 
+  \fn QBitVal& QBitVal::operator= (bool v)
 
   Sets the value referenced by the QBitVal.
 */
@@ -329,7 +330,7 @@ bool QBitArray::toggleBit( uint index )
 /*!
   \fn bool QBitArray::at( uint index ) const
   Returns the value (0 or 1) of the bit at position \e index.
-  \sa operator[]
+  \sa operator[]()
 */
 
 /*!
@@ -522,6 +523,33 @@ QBitArray operator^( const QBitArray &a1, const QBitArray &a2 )
 }
 
 
+/*! \enum QBitArray::array_data
+
+  \warning This will be renamed in the next major release of Qt.  Until
+  then it is undocumented and we recommend against its use.
+
+  \internal
+
+  ### 3.0 rename ###
+*/
+
+
+/*! \fn QBitArray::array_data * QBitArray::newData()
+
+  Returns data specific to QBitArray that extends what QGArray provides.
+  \internal
+  QCollection mechanism for allowing extra/different data.
+*/
+
+
+/*! \fn void  QBitArray::deleteData ( array_data * d)
+
+  Deletes data specific to QBitArray that extended what QGArray provided.
+  \internal
+  QCollection mechanism for allowing extra/different data.
+*/
+
+
 /*****************************************************************************
   QBitArray stream functions
  *****************************************************************************/
@@ -532,14 +560,14 @@ QBitArray operator^( const QBitArray &a1, const QBitArray &a2 )
 
   Serialization format:
   <ol>
-  <li> The array size (UINT32)
+  <li> The array size (Q_UINT32)
   <li> The array bits, (size+7)/8 bytes
   </ol>
 */
 
 QDataStream &operator<<( QDataStream &s, const QBitArray &a )
 {
-    UINT32 len = a.size();
+    Q_UINT32 len = a.size();
     s << len;					// write size of array
     if ( len > 0 )				// write data
 	s.writeRawBytes( a.data(), a.QByteArray::size() );
@@ -553,7 +581,7 @@ QDataStream &operator<<( QDataStream &s, const QBitArray &a )
 
 QDataStream &operator>>( QDataStream &s, QBitArray &a )
 {
-    UINT32 len;
+    Q_UINT32 len;
     s >> len;					// read size of array
     if ( !a.resize( (uint)len ) ) {		// resize array
 #if defined(CHECK_NULL)

@@ -4,8 +4,8 @@ DEFINES		= QT_NO_CODECS
 win32:DEFINES  += QT_NODLL
 LEXINPUT	= moc.l
 YACCINPUT	= moc.y
-INCLUDEPATH	= ../../include .
-DEPENDPATH	= ../../include .
+INCLUDEPATH	= ../../include ../tools .
+DEPENDPATH	= ../../include ../tools .
 OBJECTS_DIR	= .
 MOCGEN		= mocgen.cpp
 SOURCES		= $$MOCGEN		    \
@@ -23,6 +23,12 @@ SOURCES		= $$MOCGEN		    \
 		  ../tools/qiodevice.cpp    \
 		  ../tools/qregexp.cpp	    \
 		  ../tools/qstring.cpp	    \
-		  ../tools/qtextcodec.cpp
+		  ../tools/qstringlist.cpp  \
+		  ../tools/qtextcodec.cpp   \
+		  ../tools/qtextstream.cpp
+
+unix:SOURCES	+= ../tools/qfile_unix.cpp
+
+win32:SOURCES	+= ../tools/qfile_win.cpp
 
 TARGET		= moc

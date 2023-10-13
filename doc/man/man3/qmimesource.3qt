@@ -1,0 +1,66 @@
+.TH QMimeSource 3qt "12 April 2000" "Troll Tech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.\" license file included in the distribution for a complete license
+.\" statement.
+.\"
+.ad l
+.nh
+.SH NAME
+QMimeSource \- An abstract piece of formatted data
+\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
+.br
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <qmime.h>\fR
+.PP
+Inherited by QDragObject and QDropEvent.
+.PP
+.SS "Public Members"
+.in +1c
+.ti -1c
+.BI "virtual \fB~QMimeSource\fR ()"
+.br
+.ti -1c
+.BI "virtual const char* \fBformat\fR ( int " "n" " = 0 ) const"
+.br
+.ti -1c
+.BI "virtual bool \fBprovides\fR ( const char * ) const"
+.br
+.ti -1c
+.BI "virtual QByteArray \fBencodedData\fR ( const char * ) const"
+.br
+.in -1c
+.SH DESCRIPTION
+An abstract piece of formatted data.
+.PP
+Drag-and-drop and clipboard use this abstraction.
+.PP
+See also: IANA list of MIME media types
+.SH MEMBER FUNCTION DOCUMENTATION
+.SH "QMimeSource::~QMimeSource () \fC[virtual]\fR"
+Provided to ensure subclasses destruct correctly.
+.SH "QByteArray QMimeSource::encodedData ( const char * ) const \fC[virtual]\fR"
+Returns the encoded payload of this object, in the specified MIME format.
+.PP
+Subclasses must reimplement this function.
+.PP
+Reimplemented in QDropEvent.
+.SH "const char * QMimeSource::format ( int i = 0 ) const \fC[virtual]\fR"
+Returns the \fIith\fR format, or NULL.
+.PP
+Reimplemented in QTextDrag, QDropEvent, QImageDrag and QStoredDrag.
+.SH "bool QMimeSource::provides ( const char * mimeType ) const \fC[virtual]\fR"
+Returns TRUE if the object can provide the data in format \fImimeType.\fR The default implementation iterates over format().
+.PP
+Note that it is often better to use the more-abstract canDecode() functions such as QTextDrag::canDecode() and QImageDrag::canDecode().
+.PP
+Reimplemented in QDropEvent.
+.SH "SEE ALSO"
+.BR http://doc.trolltech.com/qmimesource.html
+.SH COPYRIGHT
+Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+license file included in the distribution for a complete license
+statement.
+.SH AUTHOR
+Generated automatically from the source code.

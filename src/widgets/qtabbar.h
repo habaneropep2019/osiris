@@ -1,9 +1,9 @@
 /****************************************************************************
-** $Id: qtabbar.h,v 2.29 1999/05/15 17:04:36 ettrich Exp $
+** $Id: qt/src/widgets/qtabbar.h   2.1.0   edited 2000-03-24 $
 **
 ** Definition of QTabBar class
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -15,9 +15,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -39,21 +39,38 @@ class Q_EXPORT QTab
 public:
     QTab():  enabled( TRUE ), id( 0 ), iconset(0) {}
     virtual ~QTab();
+#if 1
+    QTab( const QString& s):  label(s), enabled( TRUE ), id( 0 ), iconset(0) {}
+    QTab( const QIconSet& icon, const QString& s = QString::null )
+	:label(s), enabled( TRUE ), id( 0 ), iconset(new QIconSet(icon)) {}
 
+    void setText( const QString& s) { label = s;}
+    QString text() const { return label; }
+    void setIconSet( const QIconSet& icon ) { iconset = new QIconSet( icon ); }
+    QIconSet* iconSet() const { return iconset; }
+    void setRect( const QRect& rect ) { r = rect; }
+    QRect rect() const { return r; }
+    void setEnabled( bool enable ) { enabled = enable; }
+    bool isEnabled() const { return enabled; }
+    void setIdentifier( int i ) { id = i; }
+    int identitifer() const { return id; }
+#endif
+    // private: ( public for compatibility)
     QString label;
-    // the bounding rectangle of this - may overlap with others
-    QRect r;
+    QRect r;    // the bounding rectangle of this - may overlap with others
     bool enabled;
     int id;
-
-    // an optional iconset
-    QIconSet* iconset;
+    QIconSet* iconset;     // an optional iconset
 };
 
 
 class Q_EXPORT QTabBar: public QWidget
 {
     Q_OBJECT
+    Q_ENUMS( Shape )
+    Q_PROPERTY( Shape shape READ shape WRITE setShape )
+    Q_PROPERTY( int currentTab READ currentTab )
+    Q_PROPERTY( int keyboardFocusTab READ keyboardFocusTab )
 
 public:
     QTabBar( QWidget * parent = 0, const char *name = 0 );
@@ -92,12 +109,16 @@ signals:
     void  selected( int );
 
 protected:
-    virtual void paint( QPainter *, QTab *, bool ) const;
+    virtual void paint( QPainter *, QTab *, bool ) const; // ### not const
     virtual void paintLabel( QPainter*, const QRect&, QTab*, bool ) const;
+
+    void focusInEvent( QFocusEvent *e );
+    void focusOutEvent( QFocusEvent *e );
 
     virtual QTab * selectTab( const QPoint & p ) const;
     void updateMask();
 
+    void resizeEvent( QResizeEvent * );
     void paintEvent( QPaintEvent * );
     void mousePressEvent ( QMouseEvent * );
     void mouseReleaseEvent ( QMouseEvent * );
@@ -105,11 +126,21 @@ protected:
 
     QList<QTab> * tabList();
 
+private slots:
+    void scrollTabs();
+
 private:
     QList<QTab> * l;
     QList<QTab> * lstatic;
+    void makeVisible( QTab* t  );
+    void updateArrowButtons();
     QTabPrivate * d;
 
+private:	// Disabled copy constructor and operator=
+#if defined(Q_DISABLE_COPY)
+    QTabBar( const QTabBar & );
+    QTabBar& operator=( const QTabBar & );
+#endif
 };
 
 

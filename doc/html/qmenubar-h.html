@@ -1,0 +1,170 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>
+Qt Toolkit - qmenubar.h include file
+</title><style type="text/css"><!--
+h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
+a:link { text-decoration: none; }
+body { background: white; color: black; }
+--></style>
+</head><body bgcolor="#ffffff">
+
+<a href="index.html">
+<img width="122" height="65" src="qtlogo.png" alt="Home"
+  align="left" border="0">
+</a><div align=right><img src="dochead.png" width="472" height="27"><br>
+<a href="classes.html"><b>Classes</b></a>
+- <a href="annotated.html">Annotated</a>
+- <a href="hierarchy.html">Tree</a>
+- <a href="functions.html">Functions</a>
+- <a href="index.html">Home</a>
+- <a href="topicals.html"><b>Structure</b></a>
+</div>
+<br clear=all>
+
+<h1 align=center>qmenubar.h</h1><br clear="all">
+This is the verbatim text of the qmenubar.h include file.  It is
+provided only for illustration; the copyright
+remains with Troll Tech.
+<hr>
+<pre>
+/****************************************************************************
+** &#36;Id&#58; qt/src/widgets/qmenubar.h   2.1.0   edited 2000-04-06 $
+**
+** Definition of QMenuBar class
+**
+** Created : 941209
+**
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+**
+** This file is part of the Qt GUI Toolkit.
+**
+** This file may be distributed under the terms of the Q Public License
+** as defined by Troll Tech AS of Norway and appearing in the file
+** LICENSE.QPL included in the packaging of this file.
+**
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
+**
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
+** information about the Professional Edition licensing, or see
+** http://www.trolltech.com/qpl/ for QPL licensing information.
+**
+*****************************************************************************/
+
+#ifndef QMENUBAR_H
+#define QMENUBAR_H
+
+#ifndef QT_H
+#include "qpopupmenu.h"
+#endif // QT_H
+
+class Q_EXPORT <a href="qmenubar.html">QMenuBar</a> : public <a href="qframe.html">QFrame</a>, public <a href="qmenudata.html">QMenuData</a>
+{
+    Q_OBJECT
+    Q_ENUMS( Separator )
+    Q_PROPERTY( Separator separator READ separator WRITE setSeparator )
+    Q_PROPERTY( bool defaultUp READ isDefaultUp WRITE setDefaultUp )
+        
+public:
+    QMenuBar( QWidget *parent=0, const char *name=0 );
+   ~QMenuBar();
+
+    void        updateItem( int id );
+
+    void        show();                         // reimplemented show
+    void        hide();                         // reimplemented hide
+
+    bool        eventFilter( QObject *, QEvent * );
+
+    int         heightForWidth(int) const;
+
+    enum        Separator { Never=0, InWindowsStyle=1 };
+    Separator   separator() const;
+    virtual void        setSeparator( Separator when );
+    
+    void        setDefaultUp( bool );
+    bool        isDefaultUp() const;
+
+    bool customWhatsThis() const;
+
+    QSize sizeHint() const;
+    QSize minimumSize() const;
+    QSize minimumSizeHint() const;
+    
+signals:
+    void        activated( int itemId );
+    void        highlighted( int itemId );
+
+protected:
+    void        drawContents( QPainter * );
+    void        fontChange( const QFont &amp; );
+    void        mousePressEvent( QMouseEvent * );
+    void        mouseReleaseEvent( QMouseEvent * );
+    void        mouseMoveEvent( QMouseEvent * );
+    void        keyPressEvent( QKeyEvent * );
+    void        focusInEvent( QFocusEvent * );
+    void        focusOutEvent( QFocusEvent * );
+    void        resizeEvent( QResizeEvent * );
+    void        leaveEvent( QEvent * );
+    void        menuContentsChanged();
+    void        menuStateChanged();
+    void        styleChange( QStyle&amp; );
+
+private slots:
+    void        subActivated( int itemId );
+    void        subHighlighted( int itemId );
+    void        accelActivated( int itemId );
+    void        accelDestroyed();
+
+private:
+    void        menuInsPopup( QPopupMenu * );
+    void        menuDelPopup( QPopupMenu * );
+    void        frameChanged();
+
+    bool        tryMouseEvent( QPopupMenu *, QMouseEvent * );
+    void        tryKeyEvent( QPopupMenu *, QKeyEvent * );
+    void        goodbye( bool cancelled = FALSE );
+    void        openActPopup();
+    void        hidePopups();
+
+    virtual void        setActItem( int, bool = FALSE );
+    virtual void        setWindowsAltMode( bool, int = 0 );
+
+    void setActiveItem( int index, bool show = TRUE, bool activate_first_item = TRUE );
+    void setAltMode( bool );
+
+    int         calculateRects( int max_width = -1 );
+    int         itemAtPos( const QPoint &amp; );
+    QRect       itemRect( int item );
+
+    void        setupAccelerators();
+    QAccel     *autoaccel;
+    QRect      *irects;
+    int         rightSide;
+
+    uint        mseparator : 1;
+    uint        waitforalt : 1;
+    uint        popupvisible  : 1;
+    uint        hasmouse : 1;
+    uint        defaultup : 1;
+    uint        toggleclose : 1;
+
+    friend class QPopupMenu;
+
+private:        // Disabled copy constructor and operator=
+#if defined(Q_DISABLE_COPY)
+    QMenuBar( const QMenuBar &amp; );
+    QMenuBar &amp;operator=( const QMenuBar &amp; );
+#endif
+};
+
+
+#endif // QMENUBAR_H
+
+</pre>
+<p><address><hr><div align="center">
+<table width="100%" cellspacing="0" border="0"><tr>
+<td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.1.0</div>
+</table></div></address></body></html>

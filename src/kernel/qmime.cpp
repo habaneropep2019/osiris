@@ -1,9 +1,9 @@
 /****************************************************************************
-** $Id: qmime.cpp,v 2.15 1999/06/24 20:14:30 warwick Exp $
+** $Id: qt/src/kernel/qmime.cpp   2.1.0   edited 2000-04-06 $
 **
 ** Implementation of MIME support
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -15,9 +15,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -28,9 +28,11 @@
 #include "qdir.h"
 #include "qdragobject.h"
 
+// NOT REVISED
 /*!
   \class QMimeSource qmime.h
   \brief An abstract piece of formatted data.
+  \ingroup misc
 
   \link dnd.html Drag-and-drop\endlink and
   \link QClipboard clipboard\endlink use this abstraction.
@@ -53,7 +55,7 @@ QMimeSource::~QMimeSource()
   Returns the encoded payload of this object, in the specified
   MIME format.
 
-  Subclasses must override this function.
+  Subclasses must reimplement this function.
 */
 
 
@@ -113,6 +115,7 @@ public:
 /*!
   \class QMimeSourceFactory qmime.h
   \brief An extensible supply of MIME-typed data.
+  \ingroup environment
 
   A QMimeSourceFactory provides an abstract interface to a collection of
   information.  Each piece of information is represented by a QMimeSource
@@ -176,7 +179,8 @@ QMimeSourceFactory::QMimeSourceFactory() :
     setExtensionType("htm", "text/html;charset=iso8859-1");
     setExtensionType("html", "text/html;charset=iso8859-1");
     setExtensionType("txt", "text/plain");
-    setExtensionType("xml", "text/xml;charset=utf8");
+    setExtensionType("xml", "text/xml;charset=UTF-8");
+    setExtensionType("jpg", "image/jpeg"); // support missspelled jpeg files
 }
 
 /*!
@@ -193,7 +197,7 @@ static QMimeSource* data_internal(const QString& abs_name,
     QMimeSource* r = 0;
     QFileInfo fi(abs_name);
     if ( fi.isReadable() ) {
-	
+
 	// get the right mimetype
 	QString e = fi.extension(FALSE);
 	QCString mimetype = "application/octet-stream";
@@ -202,7 +206,7 @@ static QMimeSource* data_internal(const QString& abs_name,
 	    mimetype = extensions[e].latin1();
 	else if ( ( imgfmt = QImage::imageFormat( abs_name ) ) )
 	    mimetype = QCString("image/")+QCString(imgfmt).lower();
-	
+
 	QFile f(abs_name);
 	if ( f.open(IO_ReadOnly) ) {
 	    QByteArray ba(f.size());
@@ -234,7 +238,7 @@ static QMimeSource* data_internal(const QString& abs_name,
   setExtensionType("html", "text/html;charset=iso8859-1");
   setExtensionType("htm", "text/html;charset=iso8859-1");
   setExtensionType("txt", "text/plain");
-  setExtensionType("xml", "text/xml;charset=utf8");
+  setExtensionType("xml", "text/xml;charset=UTF-8");
   \endcode
   The effect of these is that filenames ending in "html" or "htm" will
   be treated as text encoded in the iso8859-1 encoding, those ending in "txt"
@@ -290,10 +294,30 @@ const QMimeSource* QMimeSourceFactory::data(const QString& abs_name) const
 /*!
   Sets a list of directories which will be searched when named data
   is requested.
+
+  \sa filePath()
 */
 void QMimeSourceFactory::setFilePath( const QStringList& path )
 {
     d->path = path;
+}
+
+/*!
+  Returns the currently set search paths.
+*/
+QStringList QMimeSourceFactory::filePath() const
+{
+  return d->path;
+}
+
+/*!
+  Adds another search path.
+
+  \sa setFilePath()
+*/
+void QMimeSourceFactory::addFilePath( const QString& p )
+{
+  d->path += p;
 }
 
 /*!
@@ -312,7 +336,12 @@ void QMimeSourceFactory::setExtensionType( const QString& ext, const char* mimet
 */
 QString QMimeSourceFactory::makeAbsolute(const QString& abs_or_rel_name, const QString& context) const
 {
-    if ( context.isNull() )
+    if ( context.isNull() ||
+	 !(context[0] == '/'
+#ifdef _WS_WIN_
+	 || ( context[0] && context[1] == ':')
+#endif
+	   ))
 	return abs_or_rel_name;
     if ( abs_or_rel_name.isEmpty() )
 	return context;

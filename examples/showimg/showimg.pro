@@ -1,7 +1,10 @@
 TEMPLATE	= app
 CONFIG		= qt warn_on release
-HEADERS		= showimg.h
+HEADERS		= showimg.h imagetexteditor.h \
+		  imagefip.h
 SOURCES		= main.cpp \
-		  showimg.cpp
+		  imagetexteditor.cpp \
+		  showimg.cpp \
+		  imagefip.cpp
 TARGET		= showimg
 DEPENDPATH=../../include

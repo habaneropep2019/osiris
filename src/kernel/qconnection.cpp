@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qconnection.cpp,v 2.10 1999/04/28 09:55:53 aavit Exp $
+** $Id: qt/src/kernel/qconnection.cpp   2.1.0   edited 2000-03-24 $
 **
 ** Implementation of QConnection class
 **
 ** Created : 930417
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,23 +17,24 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
 #include "qconnection.h"
 
-/*!
-  \class QConnection qconnection.h
+// REVISED we will not include this in the external doc any more
+/*! \class QConnection qconnection.h
+
+  \internal
 
   \brief The QConnection class is an internal class, used in the
   signal/slot mechanism.
 
   Do not use this class directly in application programs.
 
-  \internal
   QObject has a list of QConnection for each signal that is connected to the
   outside world.
 */
@@ -49,7 +50,7 @@ QConnection::QConnection( const QObject *object, QMember member,
     mbr_name = memberName;
     nargs = 0;
     if ( strstr(memberName,"()") == 0 ) {
-        const char *p = memberName;
+	const char *p = memberName;
 	nargs++;
 	while ( *p ) {
 	    if ( *p++ == ',' )

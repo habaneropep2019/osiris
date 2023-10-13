@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qcommonstyle.h,v 1.3 1999/05/15 19:33:45 ettrich Exp $
+** $Id: qt/src/widgets/qcommonstyle.h   2.1.0   edited 2000-03-24 $
 **
 ** Definition of QCommonStyle class
 **
 ** Created : 980616
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,16 +17,18 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
 #ifndef QCOMMONSTYLE_H
 #define QCOMMONSTYLE_H
 
+#ifndef QT_H
 #include "qstyle.h"
+#endif // QT_H
 
 class Q_EXPORT QCommonStyle: public QStyle
 {
@@ -67,7 +69,7 @@ public:
     void drawTabMask( QPainter*, const QTabBar*, QTab*, bool selected );
 
     // scrollbars
-    ScrollControl scrollBarPointOver( const QScrollBar*, int sliderStart, const QPoint& );
+    ScrollControl scrollBarPointOver( const QScrollBar* sb, int sliderStart, const QPoint& p );
 
     // sliders
     void drawSliderMask( QPainter *p,
@@ -78,10 +80,15 @@ public:
 				       QCOORD c,
 				       Orientation );
     int maximumSliderDragDistance() const;
-    
+
     // popups
     int popupSubmenuIndicatorWidth( const QFontMetrics& fm  );
 
+private:	// Disabled copy constructor and operator=
+#if defined(Q_DISABLE_COPY)
+    QCommonStyle( const QCommonStyle & );
+    QCommonStyle &operator=( const QCommonStyle & );
+#endif
 };
 
 

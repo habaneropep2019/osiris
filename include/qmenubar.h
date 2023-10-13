@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qmenubar.h,v 2.24 1999/06/23 17:53:28 ettrich Exp $
+** $Id: qt/src/widgets/qmenubar.h   2.1.0   edited 2000-04-06 $
 **
 ** Definition of QMenuBar class
 **
 ** Created : 941209
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -30,10 +30,13 @@
 #include "qpopupmenu.h"
 #endif // QT_H
 
-
 class Q_EXPORT QMenuBar : public QFrame, public QMenuData
 {
     Q_OBJECT
+    Q_ENUMS( Separator )
+    Q_PROPERTY( Separator separator READ separator WRITE setSeparator )
+    Q_PROPERTY( bool defaultUp READ isDefaultUp WRITE setDefaultUp )
+	
 public:
     QMenuBar( QWidget *parent=0, const char *name=0 );
    ~QMenuBar();
@@ -50,9 +53,16 @@ public:
     enum	Separator { Never=0, InWindowsStyle=1 };
     Separator 	separator() const;
     virtual void	setSeparator( Separator when );
+    
+    void	setDefaultUp( bool );
+    bool	isDefaultUp() const;
 
     bool customWhatsThis() const;
 
+    QSize sizeHint() const;
+    QSize minimumSize() const;
+    QSize minimumSizeHint() const;
+    
 signals:
     void	activated( int itemId );
     void	highlighted( int itemId );
@@ -64,6 +74,7 @@ protected:
     void	mouseReleaseEvent( QMouseEvent * );
     void	mouseMoveEvent( QMouseEvent * );
     void	keyPressEvent( QKeyEvent * );
+    void	focusInEvent( QFocusEvent * );
     void	focusOutEvent( QFocusEvent * );
     void	resizeEvent( QResizeEvent * );
     void	leaveEvent( QEvent * );
@@ -84,12 +95,15 @@ private:
 
     bool	tryMouseEvent( QPopupMenu *, QMouseEvent * );
     void	tryKeyEvent( QPopupMenu *, QKeyEvent * );
-    void	goodbye();
+    void	goodbye( bool cancelled = FALSE );
     void	openActPopup();
     void	hidePopups();
 
-    virtual void	setActItem( int, bool );
+    virtual void	setActItem( int, bool = FALSE );
     virtual void	setWindowsAltMode( bool, int = 0 );
+
+    void setActiveItem( int index, bool show = TRUE, bool activate_first_item = TRUE );
+    void setAltMode( bool );
 
     int		calculateRects( int max_width = -1 );
     int		itemAtPos( const QPoint & );
@@ -100,8 +114,12 @@ private:
     QRect      *irects;
     int		rightSide;
 
-    uint	mseparator	: 1;
-    uint	windowsaltactive : 1;
+    uint	mseparator : 1;
+    uint	waitforalt : 1;
+    uint	popupvisible  : 1;
+    uint	hasmouse : 1;
+    uint 	defaultup : 1;
+    uint 	toggleclose : 1;
 
     friend class QPopupMenu;
 

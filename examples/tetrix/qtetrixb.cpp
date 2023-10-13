@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qtetrixb.cpp,v 1.2 1999/06/03 01:45:48 warwick Exp $
+** $Id: qt/examples/tetrix/qtetrixb.cpp   2.1.0   edited 2000-01-31 $
 **
 ** Copyright (C) 1992-1998 Troll Tech AS.  All rights reserved.
 **

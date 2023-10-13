@@ -1,9 +1,9 @@
 /****************************************************************************
-** $Id: qwhatsthis.cpp,v 2.53 1999/06/17 18:26:00 ettrich Exp $
+** $Id: qt/src/widgets/qwhatsthis.cpp   2.1.0   edited 2000-03-24 $
 **
 ** Implementation of QWhatsThis class
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -15,9 +15,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -37,75 +37,83 @@
 #include "qsimplerichtext.h"
 #include "qstylesheet.h"
 
+// REVISED: warwick
 /*!
   \class QWhatsThis qwhatsthis.h
 
   \brief The QWhatsThis class provides a simple description of any
   widget, e.g. answering the question "what's this?"
 
-  \ingroup application
+  \ingroup helpsystem
 
-  What's This help lies between tool tips and fully-blown online help
-  systems: <ul><li> Tool Tips - flyweight help, extremely brief,
-  entirely integrated in the user interface. <li> What's This? - also
-  lightweight, but can encompass a three-paragraph explanation.  <li>
-  Online Help - can encompass any amount of information, but is
-  typically a little slower to call up, a little separated from the
-  user's work, and often users feel that using online help is a
-  digression from their real task. </ul>
+  <i>What's This</i> help is part of an application's
+  <a href=helpsystem.html>online help systems</a>,
+  offering users a level of detail between
+  tool tips and full text browsing windows.
 
-  QWhatsThis, then, offers a single window with a single explanatory
+  QWhatsThis provides a single window with a single explanatory
   text, which pops up quickly when the user asks "what's this?", and
-  goes away as soon as the user does something else.  There are two
-  ways to make QWhatsThis pop up: Click a "What's This?" button and
-  then click on some other widget to get help for that other widget,
-  or press Shift-F1 to get help for the widget that has keyboard
-  focus. But you can also connect a "what's this" entry of a help menu
-  (with Shift-F1 as accelerator) to the whatsThis() slot of a
-  QMainWindow, then the focus widget does not have a special meaning.
+  goes away as soon as the user does something else.
 
-  QWhatsThis provides functions to add() and remove() What's This help
-  for a widget, and it provides a function to create a What's This
-  button suitable for typical tool bars.
+  To assign <i>What's This?</i> text to a widget, you simply
+  call QWhatsThis::add() for the widget. To assign text to a
+  menu item, call QMenuData::setWhatsThis(), and for a global
+  accelerator key, call QAccel::setWhatsThis().
 
-  <img src="whatsthis.png" width="376" height="239">
-
-  Futhermore, you can create a dedicated QWhatsThis object for a
-  special widget. By subclassing and reimplementing QWhatsThis::text()
-  it is possible, to have different explanatory texts depending on the
-  position of the mouse click.
-
-  If you widget needs even more control, see
-  QWidget::customWhatsThis().
-
-  Other Qt classes support What's This help directly. Keyboard
-  accelerators, for example, can also provide explanatory text with
-  access through both they acceleration key itself or an attached menu
-  item. See QAccel::setWhatsThis() for details.
-
-  The explanatory text can be both rich text or plain text.  If you
+  The text can be either rich text or plain text.  If you
   specify a rich text formatted string, it will be rendered using the
   default stylesheet. This makes it also possible to embed images. See
   QStyleSheet::defaultSheet() for details.
 
+  By default, the user will be able to view the text for a widget
+  by pressing Shift-F1 while the widget has focus.
+  On window systems where a context help button is provided in
+  the window decorations, that button enters <i>What's This?</i> mode.
+  In this mode, if the user
+  clicks on a widget, help will be given for the widget.  The mode
+  is left when help is given or when the user presses the Escape key.
+
+  An alternative way to enter <i>What's This?</i> mode is
+  to use the ready-made toolbar tool button from
+  QWhatsThis::whatsThisButton().
+  If you are using QMainWindow, you can also use
+  the QMainWindow::whatsThis() slot to invoke the mode from a menu item.
+
+  <img src="whatsthis.png" width="284" height="246">
+
+  For more control, you can create a dedicated QWhatsThis object for a
+  special widget. By subclassing and reimplementing QWhatsThis::text()
+  it is possible to have different explanatory texts depending on the
+  position of the mouse click.
+
+  If your widget needs even more control, see
+  QWidget::customWhatsThis().
+
+  To remove added text, you can use QWhatsThis::remove(), but since
+  the text is automatically removed when the widget is destroyed,
+  this is rarely needed.
+
   \sa QToolTip
 */
 
+// a special button
+class QWhatsThisButton: public QToolButton
+{
+    Q_OBJECT
+    
+public:
+    QWhatsThisButton( QWidget * parent, const char * name );
+    ~QWhatsThisButton();
+
+public slots:
+    void mouseReleased();
+
+};
+
 class QWhatsThisPrivate: public QObject
 {
+    Q_OBJECT
 public:
-    // a special button
-    struct Button: public QToolButton
-    {
-	Button( QWidget * parent, const char * name );
-	~Button();
-
-	// reimplemented because of QButton's lack of virtuals
-	void mouseReleaseEvent( QMouseEvent * );
-	
-	// reimplemented because, well, because I'm evil.
-	const char *className() const;
-    };
 
     // an item for storing texts
     struct WhatsThisItem: public QShared
@@ -124,6 +132,10 @@ public:
 
     bool eventFilter( QObject *, QEvent * );
 
+    WhatsThisItem* newItem( QWidget * widget );
+    void add( QWidget * widget, QWhatsThis* special );
+    void add( QWidget * widget, const QString& text );
+
     // say it.
     void say( QWidget *, const QString&, const QPoint&  );
 
@@ -137,10 +149,18 @@ public:
     QWidget * whatsThat;
     QPtrDict<WhatsThisItem> * dict;
     QPtrDict<QWidget> * tlw;
-    QPtrDict<Button> * buttons;
+    QPtrDict<QWhatsThisButton> * buttons;
     State state;
 
     QCursor * cursor;
+
+private slots:
+    void cleanupWidget()
+    {
+	const QObject* o = sender();
+	if ( o->isWidgetType() ) // sanity
+	    QWhatsThis::remove((QWidget*)o);
+    }
 };
 
 
@@ -211,38 +231,36 @@ static unsigned char cursor_mask_bits[] = {
 
 
 // the button class
-QWhatsThisPrivate::Button::Button( QWidget * parent, const char * name )
+QWhatsThisButton::QWhatsThisButton( QWidget * parent, const char * name )
     : QToolButton( parent, name )
 {
     QPixmap p( button_image );
     setPixmap( p );
     setToggleButton( TRUE );
+    setAutoRaise( TRUE );
+    setFocusPolicy( NoFocus );
+    setTextLabel( tr( "What's this?" ) );
     wt->buttons->insert( (void *)this, this );
+    connect( this, SIGNAL( released() ),
+	     this, SLOT( mouseReleased() ) );
 }
 
 
-QWhatsThisPrivate::Button::~Button()
+QWhatsThisButton::~QWhatsThisButton()
 {
     if ( wt && wt->buttons )
 	wt->buttons->take( (void *)this );
 }
 
 
-void QWhatsThisPrivate::Button::mouseReleaseEvent( QMouseEvent * e )
+void QWhatsThisButton::mouseReleased()
 {
-    QToolButton::mouseReleaseEvent( e );
-    if ( wt->state == Inactive && isOn() ) {
-	setUpWhatsThis();
+    if ( wt->state == QWhatsThisPrivate::Inactive && isOn() ) {
+	QWhatsThisPrivate::setUpWhatsThis();
 	QApplication::setOverrideCursor( *wt->cursor, FALSE );
-	wt->state = Waiting;
+	wt->state = QWhatsThisPrivate::Waiting;
 	qApp->installEventFilter( wt );
     }
-}
-
-
-const char *QWhatsThisPrivate::Button::className() const
-{
-    return "QWhatsThisPrivate::Button";
 }
 
 
@@ -255,7 +273,7 @@ QWhatsThisPrivate::QWhatsThisPrivate()
     dict = new QPtrDict<QWhatsThisPrivate::WhatsThisItem>;
     tlw = new QPtrDict<QWidget>;
     wt = this;
-    buttons = new QPtrDict<Button>;
+    buttons = new QPtrDict<QWhatsThisButton>;
     state = Inactive;
     cursor = new QCursor( QBitmap( cursor_bits_width, cursor_bits_height,
 				   cursor_bits_bits, TRUE ),
@@ -287,6 +305,8 @@ QWhatsThisPrivate::~QWhatsThisPrivate()
     }
     delete dict;
     delete cursor;
+    delete whatsThat;
+
     // and finally lose wt
     wt = 0;
 }
@@ -297,7 +317,8 @@ bool QWhatsThisPrivate::eventFilter( QObject * o, QEvent * e )
 	return FALSE;
 
     if ( o == whatsThat ) {
-	if (e->type() == QEvent::MouseButtonPress  || e->type() == QEvent::KeyPress ) {
+	if (e->type() == QEvent::MouseButtonPress  ||
+	    e->type() == QEvent::KeyPress ) {
 	    whatsThat->hide();
 	    return TRUE;
 	}
@@ -318,7 +339,7 @@ bool QWhatsThisPrivate::eventFilter( QObject * o, QEvent * e )
 		if ( !i )
 		    w = w->parentWidget();
 	    }
-	
+
 	    leaveWhatsThisMode();
 	    if (!i )
 		return TRUE;
@@ -337,17 +358,17 @@ bool QWhatsThisPrivate::eventFilter( QObject * o, QEvent * e )
 	} else if ( e->type() == QEvent::KeyPress ) {
 	    QKeyEvent* kev = (QKeyEvent*)e;
 
-	    if ( o->isWidgetType() && ((QWidget*)o)->customWhatsThis() ) {
-		if (kev->key() == Qt::Key_Escape) {
-		    leaveWhatsThisMode();
-		    return TRUE;
-		}
+	    if (kev->key() == Qt::Key_Escape) {
+		leaveWhatsThisMode();
+		return TRUE;
 	    }
 	    else if ( kev->key() == Key_Menu ||
 		      ( kev->key() == Key_F10 && kev->state() == ShiftButton ) )
 		return FALSE; // ignore these keys, they are used for context menus
-	    else if ( kev->state() == kev->stateAfter() && kev->key() != Key_Meta ) // not a modifier key
+	    else if ( kev->state() == kev->stateAfter() &&
+		      kev->key() != Key_Meta )  // not a modifier key
 		leaveWhatsThisMode();
+
 	}
 	break;
     case Inactive:
@@ -360,7 +381,8 @@ bool QWhatsThisPrivate::eventFilter( QObject * o, QEvent * e )
  	    QWhatsThisPrivate::WhatsThisItem *i = w ? dict->find(w) : 0;
  	    if ( i && !i->s.isNull() ) {
 		if ( i->whatsthis )
-		    say( w, i->whatsthis->text( QPoint(0,0) ), w->mapToGlobal( w->rect().center() ));
+		    say( w, i->whatsthis->text( QPoint(0,0) ),
+			 w->mapToGlobal( w->rect().center() ) );
 		else
 		    say( w, i->s, w->mapToGlobal( w->rect().center() ));
 		((QKeyEvent *)e)->accept();
@@ -392,8 +414,8 @@ void QWhatsThisPrivate::tearDownWhatsThis()
 void QWhatsThisPrivate::leaveWhatsThisMode()
 {
     if ( state == Waiting ) {
-	QPtrDictIterator<Button> it( *(wt->buttons) );
-	Button * b;
+	QPtrDictIterator<QWhatsThisButton> it( *(wt->buttons) );
+	QWhatsThisButton * b;
 	while( (b=it.current()) != 0 ) {
 	    ++it;
 	    b->setOn( FALSE );
@@ -407,8 +429,11 @@ void QWhatsThisPrivate::leaveWhatsThisMode()
 void QWhatsThisPrivate::say( QWidget * widget, const QString &text, const QPoint& ppos)
 {
     const int shadowWidth = 6;   // also used as '5' and '6' and even '8' below
-    const int normalMargin = 12; // *2
-    const int leftMargin = 18;   // *3
+    const int vMargin = 8;
+    const int hMargin = 12;
+
+    if ( text.isEmpty() )
+	return;
 
     // make the widget, and set it up
     if ( !whatsThat ) {
@@ -419,33 +444,29 @@ void QWhatsThisPrivate::say( QWidget * widget, const QString &text, const QPoint
 	whatsThat->installEventFilter( this );
     }
 
-    QWidget * desktop = QApplication::desktop();
-
-    int w = desktop->width() / 3;
-    if ( w < 200 )
-	w = 200;
-    else if ( w > 300 )
-	w = 300;
-
-
-    QPainter p( whatsThat );
 
     QRect r;
-    QSimpleRichText* qmlDoc = 0;
+    QSimpleRichText* doc = 0;
 
     if ( QStyleSheet::mightBeRichText( text ) ) {
-	qmlDoc = new QSimpleRichText( text, whatsThat->font() );
-	qmlDoc->setWidth( &p, w );
-	r.setRect( 0, 0, qmlDoc->width(), qmlDoc->height() );
+	doc = new QSimpleRichText( text, whatsThat->font() );
+	doc->adjustSize();
+	r.setRect( 0, 0, doc->width(), doc->height() );
     }
     else {
-	r = p.boundingRect( 0, 0, w, 1000,
+	int sw = QApplication::desktop()->width() / 3;
+	if ( sw < 200 )
+	    sw = 200;
+	else if ( sw > 300 )
+	    sw = 300;
+
+	r = whatsThat->fontMetrics().boundingRect( 0, 0, sw, 1000,
 			    AlignLeft + AlignTop + WordBreak + ExpandTabs,
 			    text );
     }
 
-    int h = r.height() + normalMargin + normalMargin;
-    w = w + leftMargin + normalMargin;
+    int w = r.width() + 2*hMargin;
+    int h = r.height() + 2*vMargin;
 
     // okay, now to find a suitable location
 
@@ -499,6 +520,7 @@ void QWhatsThisPrivate::say( QWidget * widget, const QString &text, const QPoint
     // now for super-clever shadow stuff.  super-clever mostly in
     // how many window system problems it skirts around.
 
+    QPainter p( whatsThat );
     p.setPen( whatsThat->colorGroup().foreground() );
     p.drawRect( 0, 0, w, h );
     p.setPen( whatsThat->colorGroup().mid() );
@@ -506,12 +528,12 @@ void QWhatsThisPrivate::say( QWidget * widget, const QString &text, const QPoint
     p.drawRect( 1, 1, w-2, h-2 );
     p.setPen( whatsThat->colorGroup().foreground() );
 
-    if ( qmlDoc ) {
-	qmlDoc->draw( &p, leftMargin, normalMargin, r, whatsThat->colorGroup(), 0 );
-	delete qmlDoc;
+    if ( doc ) {
+	doc->draw( &p, hMargin, vMargin, r, whatsThat->colorGroup(), 0 );
+	delete doc;
     }
     else {
-	p.drawText( leftMargin, normalMargin, r.width(), r.height(),
+	p.drawText( hMargin, vMargin, r.width(), r.height(),
 		    AlignLeft + AlignTop + WordBreak + ExpandTabs,
 		    text );
     }
@@ -532,42 +554,59 @@ void QWhatsThisPrivate::say( QWidget * widget, const QString &text, const QPoint
     for( ; i > 0 ; i -= 2 )
 	p.drawLine( 6, h + 6 - i,
 		    i + 5, h + 5 );
-    p.end();
 }
 
+QWhatsThisPrivate::WhatsThisItem* QWhatsThisPrivate::newItem( QWidget * widget )
+{
+    WhatsThisItem * i = dict->find( (void *)widget );
+    if ( i )
+	QWhatsThis::remove( widget );
+    i = new WhatsThisItem;
+    dict->insert( (void *)widget, i );
+    QWidget * t = widget->topLevelWidget();
+    if ( !tlw->find( (void *)t ) ) {
+	tlw->insert( (void *)t, t );
+	t->installEventFilter( this );
+    }
+    connect( widget, SIGNAL(destroyed()), this, SLOT(cleanupWidget()) );
+    return i;
+}
+
+void QWhatsThisPrivate::add( QWidget * widget, QWhatsThis* special )
+{
+    newItem( widget )->whatsthis = special;
+}
+
+void QWhatsThisPrivate::add( QWidget * widget, const QString &text )
+{
+    newItem( widget )->s = text;
+}
 
 
 // and finally the What's This class itself
 
 /*!
+  Adds \a text as <i>What's This</i> help for \a widget. If the text is rich
+  text formatted (ie. it contains markup), it will be rendered with
+  the default stylesheet QStyleSheet::defaultSheet().
 
-  Adds \a text as What's This help for \a widget. If the text is rich
-  text formatted, it will be rendered with the default stylesheet
-  QStyleSheet::defaultSheet().
+  The text is destroyed if the widget is later destroyed and so need
+  not be explicitly removed.
 
   \sa remove()
 */
-
 void QWhatsThis::add( QWidget * widget, const QString &text )
 {
     QWhatsThisPrivate::setUpWhatsThis();
-    QWhatsThisPrivate::WhatsThisItem * i = wt->dict->find( (void *)widget );
-    if ( i )
-	remove( widget );
-
-    i = new QWhatsThisPrivate::WhatsThisItem;
-    i->s = text;
-    wt->dict->insert( (void *)widget, i );
-    QWidget * tlw = widget->topLevelWidget();
-    if ( !wt->tlw->find( (void *)tlw ) ) {
-	wt->tlw->insert( (void *)tlw, tlw );
-	tlw->installEventFilter( wt );
-    }
+    wt->add(widget,text);
 }
 
 
-/*!  Removes the What's This help for \a widget.  \sa add() */
-
+/*!
+  Removes the <i>What's This</i> help for \a widget. This happens
+  automatically if the widget is destroyed.
+  \sa add()
+*/
 void QWhatsThis::remove( QWidget * widget )
 {
     QWhatsThisPrivate::setUpWhatsThis();
@@ -583,11 +622,12 @@ void QWhatsThis::remove( QWidget * widget )
 }
 
 
-/*!  Returns the text for \a widget, or a null string if there
-  isn't any What's This help for \a widget.
+/*!
+  Returns the text for \a widget, or a null string if there
+  is no <i>What's This</i> help for \a widget.
 
-  \sa add() */
-
+  \sa add()
+*/
 QString QWhatsThis::textFor( QWidget * widget, const QPoint& pos)
 {
     QWhatsThisPrivate::setUpWhatsThis();
@@ -598,132 +638,138 @@ QString QWhatsThis::textFor( QWidget * widget, const QPoint& pos)
 }
 
 
-/*!  Returns a pointer to a specially configured QToolButton, suitable
-  for use to enter What's This mode.
-
-  \sa QToolButton
+/*!
+  Creates a QToolButton pre-configured
+  to enter <i>What's This</i> mode when clicked. You
+  will often use this with a toolbar:
+  \code
+     (void)QWhatsThis::whatsThisButton( my_help_tool_bar );
+  \endcode
 */
-
 QToolButton * QWhatsThis::whatsThisButton( QWidget * parent )
 {
     QWhatsThisPrivate::setUpWhatsThis();
-    return new QWhatsThisPrivate::Button( parent,
-					  "automatic what's this? button" );
+    return new QWhatsThisButton( parent,
+				 "automatic what's this? button" );
 }
 
 
 /*! \base64 whatsthis.png
 
-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
-Jjc3AAAAAElFTkSuQmCC
+iVBORw0KGgoAAAANSUhEUgAAARwAAAD2CAMAAAAzgsiCAAACmlBMVEX////FxsWlpaXCw8LA
+wcC+vr67vLu5ubm3t7e0tLSysrKwsLCtra2rq6upqKmmpqako6SioaJzdXODmcWfn59ziayd
+nJ2bmps5RFLAwMB0iq2FmcCIncNgYGDExMTBwcG8vLyysbGvr6+srKyqqqqnp6elpKSioqKg
+n5+dnZ27u7u5uLi2trazs7Oura2rqqqoqKijoqIAAH8AAH4AAH0AAHwAAHsAAHoAAHkAAHgA
+AHcAAHYAAHUAAHQAAHMAAHIAAHEAAHAAAG8AAG4AAG0AAGwAAGsAAGoAAGkAAGgAAGcAAGYA
+AGUAAGQAAGMAAGIAAGEAAGAAAF8AAF4AAF0AAFwAAFsAAFoAAFkAAFgAAFcAAFYAAFUAAFQA
+AFMAAFIAAFGampqHnMKryv+oyfKpx/t2j62Yl5eHm8JabIpleptwh6t8lLuHocuSrtyeu+yp
+yPxWbIeVlZWXl5eGm8FabYtZbYqTkpKVlJSGmsGQj49aa4lidZVqfqFyh616kbiBmsSSkZGF
+msClzvqOjY2Jo9CPj49hdZVpfqB4kLaAmMGHocyPqteLioqRrduNjIyEmb9fc5JnfJ1uhKh2
+jbN+lr6Fn8mNqNSVsN+IiIiZtueKiYmDmL5keZpsgqV0i7B7k7uDnMaLpdGat+eGhYWhv/OH
+hoaDl75qf6JyiK15kbiBmsOJo86Qq9mYtOSgve+Dg4OpyP+Eg4OCl71vhqp3jrV/l8CGoMuO
+qdaWsuGduuylw/eBgICBgYGClr11jLJ9lb2EnsiMptOUr96buOmjwfSqyf9+fX1/fn6Blrx8
+e3uBlbx5eHh7enqAlbt3dnbs7OwAAACAgIAAAIAEBASAgwS/wr/z9wTz9/PGw8aEgoT//wDw
+8PD//9xFzc+JAAAK1klEQVR4nO2diaMVVR3HD5RZaWUgxQPCNE2xXR48eQ94D9/zsQiyCoIg
+4CRolpZ6M2mxlFYjl9TErTLK9ijbI9sjEdGDF9mc/6VzZjvLnPm9mcu9c8557/e5PO7cWe6b
++dzv2WbmAiEIgiAIgiAIgiAIgiAIUsA4nfG298ghxo173etPe8Ppb3zTm8848y1vfdtZb58w
+0WnqlaO5OXvCJKepV47m5h0oR5KjuXknypHkcDcTZCY7Tb1yeG4mdE0pSZdt6pXDyxSTk/uI
+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
+
 */
 
 
-/*!  Constructs a dynamic What's This object for \a widget.
-*/
+/*!
+  Constructs a dynamic <i>What's This</i> object for \a widget.
 
+  When the widget is queried by the user, the text() function of
+  this QWhatsThis will be called to provide the appropriate text,
+  rather than using text assigned by add().
+*/
 QWhatsThis::QWhatsThis( QWidget * widget)
 {
     QWhatsThisPrivate::setUpWhatsThis();
-    QWhatsThisPrivate::WhatsThisItem * i = wt->dict->find( (void *)widget );
-    if ( i )
-	remove( widget );
-
-    i = new QWhatsThisPrivate::WhatsThisItem;
-    i->whatsthis = this;
-    wt->dict->insert( (void *)widget, i );
-    QWidget * tlw = widget->topLevelWidget();
-    if ( !wt->tlw->find( (void *)tlw ) ) {
-	wt->tlw->insert( (void *)tlw, tlw );
-	tlw->installEventFilter( wt );
-    }
+    wt->add(widget,this);
 }
 
 
-/*! Destroys the object and frees any allocated resources.
-
+/*!
+  Destructs the object and frees any allocated resources.
 */
-
 QWhatsThis::~QWhatsThis()
 {
-
 }
 
 
-/*!  This virtual functions returns the text for position \e p in the
-  widget this What's This object documents.  If there is no What's
-  This text for a position, QString::null may be returned.
+/*!
+  This virtual functions returns the text for position \e p in the
+  widget that this <i>What's This</i> object documents.  If there is no
+  <i>What's This</i> text for a position, QString::null is returned.
 
   The default implementation returns QString::null.
-
-  \sa qml()
 */
-
 QString QWhatsThis::text( const QPoint & )
 {
-    return QString::null; //####
+    return QString::null;
 }
 
 
-/*!  Enters What's This? question mode and returns immediately.
+/*!
+  Enters <i>What's This</i>? mode and returns immediately.
 
-  What's This will install a special cursor and take over mouse input
-  until the user click somewhere, then show any help available and
-  switch out of What's This mode.  Finally, What's This removes its
-  cursor and help window and restores ordinary event processing.  At
-  this point the left mouse button is not pressed.
+  Qt will install a special cursor and take over mouse input
+  until the user clicks somewhere, then show any help available and
+  switch out of <i>What's This</i> mode.  Finally, Qt
+  removes the special cursor and help window then restores ordinary event
+  processing, at which point the left mouse button is not pressed.
+
+  The user can also use the Escape key to leave <i>What's This</i>? mode.
 
 \sa inWhatsThisMode(), leaveWhatsThisMode()
 */
@@ -740,9 +786,9 @@ void QWhatsThis::enterWhatsThisMode()
 
 
 /*!
-  Returns whether the application is in What's This mode.
+  Returns whether the application is in <i>What's This</i> mode.
 
-\sa enterWhatsThisMode(), leaveWhatsThisMode()
+  \sa enterWhatsThisMode(), leaveWhatsThisMode()
  */
 bool QWhatsThis::inWhatsThisMode()
 {
@@ -752,16 +798,17 @@ bool QWhatsThis::inWhatsThisMode()
 }
 
 
-/*!  Leaves What's This? question mode
+/*!
+  Leaves <i>What's This</i>? question mode
 
   This function is used internally by widgets that support
-  QWidget::customWhatsThis(), applications usually never have to call
+  QWidget::customWhatsThis(), applications do not usually call
   it.  An example for such a kind of widget is QPopupMenu: Menus still
-  work normally in What's This mode, but provide help texts for single
+  work normally in <i>What's This</i> mode, but provide help texts for single
   menu items instead.
 
-  If \e text is not a null string, then a What's This help window is
-  displayed at the global position \e pos of the screen.
+  If \e text is not a null string, then a <i>What's This</i> help window is
+  displayed at the global screen position \e pos.
 
 \sa inWhatsThisMode(), enterWhatsThisMode()
 */
@@ -775,3 +822,4 @@ void QWhatsThis::leaveWhatsThisMode( const QString& text, const QPoint& pos )
 	wt->say( 0, text, pos );
 }
 
+#include "qwhatsthis.moc"

@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qfont_x11.cpp,v 2.111.2.8 1999/09/08 14:10:11 eiriken Exp $
+** $Id: qt/src/kernel/qfont_x11.cpp   2.1.0   edited 2000-03-24 $
 **
 ** Implementation of QFont, QFontMetrics and QFontInfo classes for X11
 **
 ** Created : 940515
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,15 +17,17 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
+// NOT REVISED
+
 #include "qwidget.h"
 #include "qpainter.h"
-#include "qfontdata.h"
+#include "qfontdata_p.h"
 #include "qfontdatabase.h"
 #include "qstrlist.h"
 #include "qcache.h"
@@ -40,6 +42,8 @@
 #include <limits.h>
 #include "qt_x11.h"
 #include "qmap.h"
+
+// NOT REVISED
 
 /* UNICODE:
      XLFD names are defined to be Latin1.
@@ -101,7 +105,8 @@ public:
     QCString bestFamilyMember( const char *foundry,
 			       const char *family, int *score );
     QCString findFont( bool *exact );
-    bool needsSet() const { return charSet() >= Set_1 && charSet() <= Set_N; }
+    bool needsSet() const { return (charSet() >= Set_1 && charSet() <= Set_N)
+	    || charSet() == Set_GBK || charSet() == Set_Big5; }
 
 };
 
@@ -246,7 +251,7 @@ typedef QDict<QXFontName> QFontNameDict;
 static QFontCache    *fontCache	     = 0;	// cache of loaded fonts
 static QFontDict     *fontDict	     = 0;	// dict of all loaded fonts
 static QFontNameDict *fontNameDict   = 0;	// dict of matched font names
-                                                // default character set:
+						// default character set:
 QFont::CharSet QFont::defaultCharSet = QFont::AnyCharSet;
 
 //
@@ -294,8 +299,12 @@ static struct {
     { "JIS7", QFont::Set_Ja },
     { "eucKR", QFont::Set_Ko },
     { "TACTIS", QFont::Set_Th_TH },
+    { "GBK", QFont::Set_GBK },
+    { "zh_CN.GBK", QFont::Set_GBK },
     { "eucCN", QFont::Set_Zh },
     { "eucTW", QFont::Set_Zh_TW },
+    { "zh_TW.Big5", QFont::Set_Big5 },
+    { "Big5", QFont::Set_Big5 },
     { 0, /* anything */ QFont::ISO_8859_1 }
 };
 
@@ -353,9 +362,12 @@ void QFont::cleanup()
 {
     delete fontCache;
     fontCache = 0;
-    fontDict->setAutoDelete( TRUE );
+    if ( fontDict )
+	fontDict->setAutoDelete( TRUE );
     delete fontDict;
+    fontDict = 0;
     delete fontNameDict;
+    fontNameDict = 0;
 }
 
 /*!
@@ -375,6 +387,15 @@ void QFont::cacheStatistics()
     }
     qDebug( "}" );
 #endif
+}
+
+/* Clears the internal cache of mappings from QFont instances to X11
+    (XLFD) font names. Called from QPaintDevice::x11App
+*/
+void qX11ClearFontNameCache()
+{
+    if ( fontNameDict )
+	fontNameDict->clear();
 }
 
 // If d->req.dirty is not TRUE the font must have been loaded
@@ -541,7 +562,9 @@ void QFont::setRawName( const QString &name )
     bool validXLFD = fillFontDef( name.latin1(), &d->req, 0 );
     d->req.dirty = TRUE;
     if ( !validXLFD ) {
-	qDebug("QFont: not an XLFD: \"%s\", using raw mode", name.latin1() );
+#if defined(CHECK_STATE)
+	qWarning( "QFont::setRawMode(): Invalid XLFD: \"%s\"", name.latin1() );
+#endif
 	setFamily( name );
 	setRawMode( TRUE );
     }
@@ -592,7 +615,7 @@ QString QFont::lastResortFamily() const
     return QString::fromLatin1("helvetica");
 }
 
-static const char *tryFonts[] = {
+static const char * const tryFonts[] = {
     "6x13",
     "7x13",
     "8x13",
@@ -718,8 +741,13 @@ inline int maxIndex(XFontStruct *f)
 
 void QFont::load() const
 {
-    if ( !fontCache )				// not initialized
+    if ( !fontCache ) {				// not initialized
+#if defined(CHECK_STATE)
+	qFatal( "QFont: Must construct a QApplication before a QFont" );
+#endif
+
 	return;
+    }
 
     QString k = key();
     QXFontName *fn = fontNameDict->find( k );
@@ -782,8 +810,15 @@ void QFont::load() const
 		    qFatal( "QFont::load: Internal error" );
 #endif
 	    }
+	    int chars = maxIndex(f);
+	    if ( chars > 2000 ) {
+		// If the user is using large fonts, we assume they have
+		// turned on the Xserver option deferGlyphs, and that they
+		// have more memory available to the server.
+		chars = 2000;
+	    }
 	    int size = (f->max_bounds.ascent + f->max_bounds.descent) *
-		       f->max_bounds.width * maxIndex(f) / 8;
+		       f->max_bounds.width * chars / 8;
 	    // If we get a cache overflow, we make room for this font only
 	    if ( size > fontCache->maxCost() + reserveCost )
 		fontCache->setMaxCost( size + reserveCost );
@@ -852,11 +887,11 @@ int QFont_Private::fontMatchScore( char	 *fontName,	 QCString &buffer,
 	score |= CharSetScore;
     } else if ( charSet() == KOI8R ) {
        if ( strcmp( tokens[CharsetRegistry], "koi8" ) == 0 &&
-            (strcmp( tokens[CharsetEncoding], "r" ) == 0
-             || strcmp( tokens[CharsetEncoding], "1" ) == 0) )
-               score |= CharSetScore;
+	    (strcmp( tokens[CharsetEncoding], "r" ) == 0
+	     || strcmp( tokens[CharsetEncoding], "1" ) == 0) )
+	       score |= CharSetScore;
        else
-               exactMatch = FALSE;
+	       exactMatch = FALSE;
     } else if ( strcmp( tokens[CharsetRegistry], "iso8859" ) == 0 ) {
 	// need to mask away non-8859 charsets here
 	switch( charSet() ) {
@@ -956,9 +991,9 @@ int QFont_Private::fontMatchScore( char	 *fontName,	 QCString &buffer,
 	}
     } else if ( strcmp( tokens[CharsetRegistry], "iso10646" ) == 0 ) {
 	// Yes...
-        score |= CharSetScore;
+	score |= CharSetScore;
 	// But it's big...
-        score &= ~NonUnicodeScore;
+	score &= ~NonUnicodeScore;
     } else {
 	exactMatch = FALSE;
     }
@@ -1103,7 +1138,7 @@ QCString QFont_Private::bestMatch( const char *pattern, int *score )
 	    int resx;
 	    int resy;
 	    int pSize;
-	    if ( bestScalable.smooth ) { 
+	    if ( bestScalable.smooth ) {
 		// X will scale the font accordingly
 		resx  = QPaintDevice::x11AppDpiX();
 		resy  = QPaintDevice::x11AppDpiY();
@@ -1113,7 +1148,7 @@ QCString QFont_Private::bestMatch( const char *pattern, int *score )
 		resy = atoi(tokens[ResolutionY]);
 		pSize = ( 2*deciPointSize()*QPaintDevice::x11AppDpiY() + resy )
 			/ (resy * 2);
-	    }    
+	    }
 	    bestName.sprintf( "-%s-%s-%s-%s-%s-%s-*-%i-%i-%i-%s-*-%s-%s",
 			      tokens[Foundry],
 			      tokens[Family],
@@ -1137,6 +1172,7 @@ QCString QFont_Private::bestMatch( const char *pattern, int *score )
 
     return bestName;
 }
+
 
 QCString QFont_Private::bestFamilyMember( const char *foundry,
 					  const char *family, int *score )
@@ -1168,6 +1204,7 @@ QCString QFont_Private::bestFamilyMember( const char *foundry,
 	*score = bestScore;
     return result;
 }
+
 
 QCString QFont_Private::findFont( bool *exact )
 {
@@ -1988,7 +2025,7 @@ void QFontInternal::computeLineWidth()
     bool ok;
     xres = tmp.toInt( &ok );
     if ( !ok || xres == 0 )
-	xres = QPaintDevice::x11AppDpiX();		
+	xres = QPaintDevice::x11AppDpiX();
     int score = pSize*weight;		// ad hoc algorithm
     lw = ( score ) / 700;
     if ( lw < 2 && score >= 1050 )	// looks better with thicker line

@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qfontdatabase.h,v 1.8.2.1 1999/07/16 16:39:09 warwick Exp $
+** $Id: qt/src/kernel/qfontdatabase.h   2.1.0   edited 2000-03-24 $
 **
 ** Definition of the QFontDatabase class
 **
 ** Created : 981126
 **
-** Copyright (C) 1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1999-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -27,16 +27,6 @@
 #define QFONTDATABASE_H
 
 #include "qwindowdefs.h"
-
-//
-//  W A R N I N G
-//  -------------
-//
-//  This class is under development and all members are private.
-//
-//  The API will probably be opened up in Qt 2.1 In the meantime it is
-//  used by QFontDialog only.
-//
 
 #ifndef QT_H
 #include "qstring.h"
@@ -53,15 +43,17 @@ class QFontDatabasePrivate;
 
 class Q_EXPORT QFontDatabase
 {
-private:
+public:
     QFontDatabase();
 
-    const QStringList &families( bool onlyForLocale = TRUE ) const;
+    QStringList families( bool onlyForLocale = TRUE ) const;
+    QValueList<int> pointSizes( const QString &family,
+				const QString &style = QString::null,
+				const QString &charSet = QString::null );
     QStringList styles( const QString &family,
-			       const QString &charSet = QString::null ) const;
-    const QValueList<int> pointSizes( const QString &family,
-				      const QString &style,
-				      const QString &charSet = QString::null );
+			const QString &charSet = QString::null ) const;
+    QStringList charSets( const QString &familyName,
+			  bool onlyForLocale = TRUE ) const;
 
     QFont font( const QString familyName, const QString &style,
 		int pointSize, const QString charSetName = QString::null );
@@ -76,11 +68,11 @@ private:
 		      const QString &style   = QString::null,
 		      const QString &charSet = QString::null ) const;
 
-    const QValueList<int> smoothSizes( const QString &family,
-				      const QString &style,
-				      const QString &charSet = QString::null );
+    QValueList<int> smoothSizes( const QString &family,
+				 const QString &style,
+				 const QString &charSet = QString::null );
 
-    static const QValueList<int> standardSizes();
+    static QValueList<int> standardSizes();
 
     bool italic( const QString &family,
 		 const QString &style,
@@ -96,28 +88,23 @@ private:
 
 
 #if 0
-    const QValueList<QFont::CharSet> charSets( const QString &familyName ) const;
+    QValueList<QFont::CharSet> charSets( const QString &familyName ) const;
     bool  supportsCharSet( const QString &familyName,
 			   const QString &charSet ) const;
     bool  supportsCharSet( const QString &familyName,
 			   QFont::CharSet charSet ) const;
 #endif
 
-const QStringList charSets( const QString &familyName,
-			    bool onlyForLocale = TRUE ) const;
-
     QString styleString( const QFont &);
 
-static QString verboseCharSetName( const QString & charSetName );
-static QString charSetSample( const QString & charSetName );
+    static QString verboseCharSetName( const QString & charSetName );
+    static QString charSetSample( const QString & charSetName );
 
 private:
     static void createDatabase();
 
     QFontDatabasePrivate *d;
 
-    friend class QFontDialog;
-    friend class QFontDialogPrivate;
 };
 
 #endif // QFONTDATABASE_H

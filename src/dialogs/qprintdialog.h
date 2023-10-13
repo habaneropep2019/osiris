@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qprintdialog.h,v 2.14 1999/04/28 09:55:20 aavit Exp $
+** $Id: qt/src/dialogs/qprintdialog.h   2.1.0   edited 2000-03-29 $
 **
 ** Definition of print dialog.
 **
 ** Created : 950829
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -48,6 +48,8 @@ public:
     void setPrinter( QPrinter *, bool = FALSE );
     QPrinter * printer() const;
 
+    void addButton( QPushButton *but );
+
 private slots:
     void browseClicked();
     void okClicked();
@@ -63,12 +65,15 @@ private slots:
     void setFirstPage( int );
     void setLastPage( int );
 
+    void fileNameEditChanged( const QString &text );
+    
 private:
     QPrintDialogPrivate *d;
 
     QGroupBox * setupDestination();
     QGroupBox * setupOptions();
     QGroupBox * setupPaper();
+    QGroupBox * setupPrinterSettings();
 
 private:	// Disabled copy constructor and operator=
 #if defined(Q_DISABLE_COPY)

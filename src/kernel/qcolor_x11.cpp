@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qcolor_x11.cpp,v 2.51.2.2 1999/09/06 22:30:58 hanord Exp $
+** $Id: qt/src/kernel/qcolor_x11.cpp   2.1.0   edited 2000-04-06 $
 **
 ** Implementation of QColor class for X11
 **
 ** Created : 940112
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -29,6 +29,7 @@
 #include "qapplication.h"
 #include "qt_x11.h"
 
+// NOT REVISED
 
 /*****************************************************************************
   The color dictionary speeds up color allocation significantly for X11.
@@ -166,7 +167,7 @@ void QColor::initialize()
 {
     static const int blackIdx = 2;
     static const int whiteIdx = 3;
-    
+
     if ( color_init )				// already initialized
 	return;
     color_init = TRUE;
@@ -214,8 +215,8 @@ void QColor::initialize()
 
   // Initialize global color objects
 
-    globalColors()[blackIdx].rgbVal = qRgb( 0, 0, 0 );
-    globalColors()[whiteIdx].rgbVal = qRgb( 255, 255, 255 );
+    globalColors()[blackIdx].rgbVal = qRgb( 0, 0, 0 ) & RGB_MASK;
+    globalColors()[whiteIdx].rgbVal = qRgb( 255, 255, 255 ) & RGB_MASK;
     if ( QPaintDevice::x11AppDefaultVisual() &&
 	 QPaintDevice::x11AppDefaultColormap() ) {
 	globalColors()[blackIdx].pix = (uint)BlackPixel( dpy, scr );
@@ -289,10 +290,14 @@ void QColor::cleanup()
     if ( !color_init )
 	return;
     color_init = FALSE;
-    if ( g_carr )				// Avoid purify complaint
+    if ( g_carr ) {
 	delete [] g_carr;
-    if ( g_our_alloc )				// Avoid purify complaint
+	g_carr = 0;
+    }
+    if ( g_our_alloc ) {
 	delete [] g_our_alloc;
+	g_our_alloc = 0;
+    }
     if ( colorDict ) {
 	colorDict->setAutoDelete( TRUE );
 	colorDict->clear();
@@ -417,7 +422,7 @@ uint QColor::alloc()
 		return pix;
 	    }
 	    if ( g_our_alloc[i] ) {		// we've already allocated it
-		i = (uint)g_carr[i].pixel;//#### not needed
+		; // i == g_carr[i].pixel
 	    } else {
 		// Try to allocate existing color
 		col = g_carr[i];
@@ -518,7 +523,7 @@ static void init_context_stack()
   \code
     QPixmap loadPixmap( QString fileName )
     {
-        static int alloc_context = 0;
+	static int alloc_context = 0;
 	if ( alloc_context )
 	    QColor::destroyAllocContext( alloc_context );
 	alloc_context = QColor::enterAllocContext();

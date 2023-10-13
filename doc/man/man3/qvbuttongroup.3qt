@@ -1,0 +1,53 @@
+.TH QVButtonGroup 3qt "12 April 2000" "Troll Tech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.\" license file included in the distribution for a complete license
+.\" statement.
+.\"
+.ad l
+.nh
+.SH NAME
+QVButtonGroup \- Organizes QButton widgets in a group with one vertical column
+\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
+.br
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <qvbuttongroup.h>\fR
+.PP
+Inherits QButtonGroup.
+.PP
+.SS "Public Members"
+.in +1c
+.ti -1c
+.BI "\fBQVButtonGroup\fR ( QWidget * " "parent" "=0, const char * " "name" "=0 )"
+.br
+.ti -1c
+.BI "\fBQVButtonGroup\fR ( const QString & " "title" ", QWidget * " "parent" "=0, const char * " "name" "=0 )"
+.br
+.ti -1c
+.BI "\fB~QVButtonGroup\fR ()"
+.br
+.in -1c
+.SH DESCRIPTION
+The QVButtonGroup widget organizes QButton widgets in a group with one vertical column.
+.PP
+QVButtonGroup is a convenience class that offers a thin layer on top of QButtonGroup. Think of it as a QVBox that offers a frame with a title and is specifically designed for buttons.
+.SH MEMBER FUNCTION DOCUMENTATION
+.SH "QVButtonGroup::QVButtonGroup ( QWidget * parent=0, const char * name=0 )"
+Constructs a vertical button group with no title.
+.PP
+The \fIparent\fR and \fIname\fR arguments are passed to the QWidget constructor.
+.SH "QVButtonGroup::QVButtonGroup ( const QString & title, QWidget * parent=0, const char * name=0 )"
+Constructs a vertical button group with a title.
+.PP
+The \fIparent\fR and \fIname\fR arguments are passed to the QWidget constructor.
+.SH "QVButtonGroup::~QVButtonGroup ()"
+Destructs the vertical button group, deleting its child widgets.
+.SH "SEE ALSO"
+.BR http://doc.trolltech.com/qvbuttongroup.html
+.SH COPYRIGHT
+Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+license file included in the distribution for a complete license
+statement.
+.SH AUTHOR
+Generated automatically from the source code.

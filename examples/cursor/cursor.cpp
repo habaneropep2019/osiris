@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: cursor.cpp,v 1.2.2.2 1999/09/07 09:53:39 aavit Exp $
+** $Id: qt/examples/cursor/cursor.cpp   2.1.0   edited 2000-03-11 $
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -81,7 +81,9 @@ CursorView::CursorView()			// construct view
 	{ BlankCursor,		"blankCursor" },
 	{ SplitVCursor,		"splitVCursor" },
 	{ SplitHCursor,		"splitHCursor" },
-	{ PointingHandCursor,	"pointingHandCursor" } };
+	{ PointingHandCursor,	"pointingHandCursor" },
+	{ ForbiddenCursor,		"forbiddenCursor" }
+    };
 
     setCaption( "CursorView" );			// set window caption
 

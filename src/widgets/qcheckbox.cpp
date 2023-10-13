@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qcheckbox.cpp,v 2.52 1999/06/18 01:37:59 ettrich Exp $
+** $Id: qt/src/widgets/qcheckbox.cpp   2.1.0   edited 2000-04-03 $
 **
 ** Implementation of QCheckBox class
 **
 ** Created : 940222
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -31,15 +31,43 @@
 #include "qbitmap.h"
 #include "qtextstream.h"
 
+// NOT REVISED
 /*!
   \class QCheckBox qcheckbox.h
   \brief The QCheckBox widget provides a check box with a text label.
 
-  \ingroup realwidgets
+  \ingroup basic
 
-  QCheckBox and QRadioButton are both toggle buttons, but a check box
-  represents an independent switch that can be on (checked) or off
-  (unchecked).
+  QCheckBox and QRadioButton are both option buttons. That is, they
+  can be switched on (checked) or off (unchecked). The classes differ
+  in how the choices for the user are restricted. Radio buttons define
+  a "one of many" choice, while check-boxes provide "many of many"
+  choices.
+
+  While it is technically possible to imlement radio-behaviour with
+  check boxes and vice versa, it's strongly recommended to stick with
+  the well-known semantics. Otherwise your users would be pretty
+  confused.
+
+  Use QButtonGroup to group check-buttons visually.
+
+  Whenver a check box is checked or cleared, it emits the signal
+  toggled(). Connect to this signal if you want to trigger an action
+  each time the box changes state. Otherwise, use isChecked() to query
+  whether or not a particular check box is selected.
+
+  In addition to the usual checked and unchecked states, QCheckBox
+  optionally provides a third state to indicate "no change".  This is
+  useful whenever you need to give the user the option of neither
+  setting nor unsetting an option. If you need that third state,
+  enable it with setTristate() and use state() to query the current
+  toggle state. When a tristate box changes state, it emits the
+  stateChanged() signal.
+
+  \important text, setText, text, pixmap, setPixmap, accel, setAccel,
+  isToggleButton, setDown, isDown, isOn, state, autoRepeat,
+  isExclusiveToggle, group, setAutoRepeat, toggle, pressed, released,
+  clicked, toggled, state stateChanged
 
   <img src=qchkbox-m.png> <img src=qchkbox-w.png>
 
@@ -100,13 +128,15 @@ void QCheckBox::setNoChange()
 }
 
 /*!
-  Makes the checkbox a tristate checkbox if \a y is TRUE.  A tristate
-  checkbox is useful when you need to give the use the option of
-  neither setting nor unsetting an option, for example choosing Italic
-  or non-Italic when the selected text is partially Italic and partially
-  not.
+  Makes the check box a tristate check box if \a y is TRUE.  A tristate
+  check box provides an additional state NoChange.
 
-  \sa setNoChange() stateChanged()
+  Use tristate check boxes whenever you need to give the user the
+  option of neither setting nor unsetting an option. A typical example
+  is the "Italic" check box in the font dialog of a word processor
+  when the marked text is partially Italic and partially not.
+
+  \sa setNoChange() stateChanged(), state()
 */
 void QCheckBox::setTristate(bool y)
 {
@@ -122,15 +152,13 @@ static int extraWidth( int gs )
 }
 
 
-/*!
-  Returns a size which fits the contents of the check box.
+/*!\reimp
 */
-
 QSize QCheckBox::sizeHint() const
 {
     // Any more complex, and we will use style().itemRect()
     // NB: QCheckBox::sizeHint() is similar
-
+    constPolish();
     QSize sz;
     if (pixmap()) {
 	sz = pixmap()->size();
@@ -148,9 +176,7 @@ QSize QCheckBox::sizeHint() const
 }
 
 
-/*!
-  Draws the check box.  Calls drawButtonLabel() to draw the content.
-  \sa drawButtonLabel()
+/*!\reimp
 */
 
 void QCheckBox::drawButton( QPainter *paint )
@@ -174,7 +200,9 @@ void QCheckBox::drawButton( QPainter *paint )
 	kf |= 1;
     if ( isEnabled() )
 	kf |= 2;
-    kf |= state() << 2;
+    if ( hasFocus() )
+	kf |= 4;				// active vs. normal colorgroup
+    kf |= state() << 3;
     QTextOStream(&pmkey) << "$qt_check_" << style().className() << "_"
 			 << palette().serialNumber() << "_" << kf;
     QPixmap *pm = QPixmapCache::find( pmkey );
@@ -202,6 +230,14 @@ void QCheckBox::drawButton( QPainter *paint )
 #if defined(SAVE_CHECKBOX_PIXMAPS)
     if ( use_pm ) {
 	pmpaint.end();
+	if ( backgroundPixmap() ) {
+	    QBitmap bm( pm->size() );
+	    bm.fill( color0 );
+	    pmpaint.begin( &bm );
+	    style().drawIndicatorMask( &pmpaint, 0, 0, bm.width(), bm.height(), isOn() );
+	    pmpaint.end();
+	    pm->setMask( bm );
+	}
 	p = paint;				// draw in default device
 	p->drawPixmap( wx, wy, *pm );
 	if (!QPixmapCache::insert(pmkey, pm) )	// save in cache
@@ -213,11 +249,8 @@ void QCheckBox::drawButton( QPainter *paint )
 }
 
 
-/*!
-  Draws the check box label.
-  \sa drawButton()
+/*!\reimp
 */
-
 void QCheckBox::drawButtonLabel( QPainter *p )
 {
     int x, y, w, h;
@@ -248,6 +281,9 @@ void QCheckBox::drawButtonLabel( QPainter *p )
     }
 }
 
+/*!
+  \reimp
+*/
 void QCheckBox::resizeEvent( QResizeEvent* )
 {
     int x, w, h;
@@ -267,6 +303,9 @@ void QCheckBox::resizeEvent( QResizeEvent* )
 	updateMask();
 }
 
+/*!
+  \reimp
+*/
 void QCheckBox::updateMask()
 {
 
@@ -283,7 +322,7 @@ void QCheckBox::updateMask()
 	QSize sz = style().indicatorSize();
 	x = gs == MotifStyle ? 1 : 0;
 	y = (height() - lsz.height() + fm.height() - sz.height())/2;
-	
+
 	style().drawIndicatorMask(&p, x, y, sz.width(), sz.height(), state() );
 
 	sz = style().indicatorSize();
@@ -314,11 +353,8 @@ void QCheckBox::updateMask()
 }
 
 
-/*!
-  Specifies that this widget may stretch horizontally, but is fixed
-  vertically.
+/*!\reimp
 */
-
 QSizePolicy QCheckBox::sizePolicy() const
 {
     return QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Fixed );

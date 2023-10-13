@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qprogressbar.cpp,v 2.47.2.1 1999/09/22 19:26:03 reggie Exp $
+** $Id: qt/src/widgets/qprogressbar.cpp   2.1.0   edited 2000-04-03 $
 **
 ** Implementation of QProgressBar class
 **
 ** Created : 970521
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -29,10 +29,11 @@
 #include "qapplication.h"
 #include <limits.h>
 
+// BEING REVISED: eiriken
 /*!
   \class QProgressBar qprogressbar.h
   \brief The QProgressBar widget provides a horizontal progress bar.
-  \ingroup realwidgets
+  \ingroup advanced
 
   A progress bar is used to give the user an indication of progress
   of an operation. To reassure them that the application has not crashed.
@@ -156,25 +157,28 @@ void QProgressBar::setTotalSteps( int totalSteps )
 
 void QProgressBar::setProgress( int progress )
 {
-    if ( progress <= progress_val )
+    if ( progress == progress_val ||
+	 progress < 0 || progress > total_steps )
 	return;
+
+    bool needClearing = progress < progress_val;
     progress_val = progress;
-    if ( isVisible() ) {
-	if ( setIndicator(progress_str, progress_val, total_steps) ) {
-	    repaint( FALSE );
-	    if ( autoMask() )
-		updateMask();
-	}
-    }
+    if ( !isVisible() )
+	return;
+
+    if ( setIndicator( progress_str, progress_val, total_steps ) )
+	needClearing = TRUE;
+    repaint( needClearing );
+    if ( autoMask() )
+	updateMask();
 }
 
 
-/*!
-  Returns a size which fits the contents of the progress bar.
+/*!\reimp
 */
-
 QSize QProgressBar::sizeHint() const
 {
+    constPolish();
     QFontMetrics fm = fontMetrics();
     return QSize( fm.height()*4, fm.height()+8);
 }
@@ -191,11 +195,8 @@ QSize QProgressBar::minimumSizeHint() const
 }
 
 
-/*!
-  Specifies that this widget can use more, but is able to survive on
-  less, horizontal space; and is fixed vertically.
+/*!\reimp
 */
-
 QSizePolicy QProgressBar::sizePolicy() const
 {
     return QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
@@ -262,6 +263,9 @@ void QProgressBar::setIndicatorFollowsStyle( bool on )
 	updateMask();
 }
 
+/*!
+  \reimp
+*/
 void QProgressBar::show()
 {
     setIndicator( progress_str, progress_val, total_steps );
@@ -332,13 +336,8 @@ bool QProgressBar::setIndicator( QString & indicator, int progress,
 }
 
 
-/*!
-  Handles paint events for the progress bar.
-  In WindowsStyle, \link QColorGroup::text() colorGroup().text()\endlink
-  and colorGroup::highlight() are used.  In MotifStyle,
-  \link QColorGroup::base() colorGroup().base()\endlink is also used.
+/*!\reimp
 */
-
 void QProgressBar::drawContents( QPainter *p )
 {
     const int unit_width  = 9;	    // includes 2 bg pixels
@@ -383,7 +382,9 @@ void QProgressBar::drawContents( QPainter *p )
 	qDrawShadePanel( p, r, colorGroup(), TRUE, 1 );
 
 	// ### This part changes every percentage change.
-	p->setPen( colorGroup().text() );
+	p->setPen( colorGroup().foreground() );
+	if ( backgroundOrigin() == QWidget::ParentOrigin )
+	    p->setBrushOrigin( -x(), -y() );
 	p->fillRect( r.x()+r.width(), bar.y(), textw, bar.height(),
 		     colorGroup().brush(QColorGroup::Background ) );
 	p->drawText( r.x()+r.width(), bar.y(), textw, bar.height(),
@@ -399,8 +400,10 @@ void QProgressBar::drawContents( QPainter *p )
 
 	    p->setClipRect( bar.x()+pw, bar.y(), bar.width()-pw, bar.height() );
 	}
-	p->fillRect( bar, colorGroup().brush( QColorGroup::Base ) );
-	p->setPen( colorGroup().text() );
+	if ( progress_val != total_steps )
+	    p->fillRect( bar, colorGroup().brush( style()==MotifStyle ?
+		QColorGroup::Background : QColorGroup::Base ) );
+	p->setPen( style()==MotifStyle? colorGroup().foreground() : colorGroup().text() );
 	p->drawText( bar, AlignCenter, progress_str );
     }
 }

@@ -1,11 +1,11 @@
 /**********************************************************************
-** $Id: qgroupbox.h,v 2.20.2.3 1999/08/18 17:19:23 paul Exp $
+** $Id: qt/src/widgets/qgroupbox.h   2.1.0   edited 2000-04-03 $
 **
 ** Definition of QGroupBox widget class
 **
 ** Created : 950203
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -35,16 +35,24 @@ class QAccel;
 class QGroupBoxPrivate;
 class QVBoxLayout;
 class QGridLayout;
-
+class QSpacerItem;
 
 class Q_EXPORT QGroupBox : public QFrame
 {
     Q_OBJECT
+    Q_PROPERTY( QString title READ title WRITE setTitle )
+    Q_PROPERTY( Alignment alignment READ alignment WRITE setAlignment )
+    Q_PROPERTY( Orientation orientation READ orientation WRITE setOrientation )
+    Q_PROPERTY( int columns READ columns WRITE setColumns )
+	
 public:
     QGroupBox( QWidget *parent=0, const char *name=0 );
-    QGroupBox( const QString &title, QWidget *parent=0, const char* name=0 );
-    QGroupBox( int columns, Orientation o, QWidget *parent=0, const char *name=0 );
-    QGroupBox( int columns, Orientation o, const QString &title, QWidget *parent=0, const char* name=0 );
+    QGroupBox( const QString &title,
+	       QWidget *parent=0, const char* name=0 );
+    QGroupBox( int columns, Orientation o,
+	       QWidget *parent=0, const char *name=0 );
+    QGroupBox( int columns, Orientation o, const QString &title,
+	       QWidget *parent=0, const char* name=0 );
 
     virtual void setColumnLayout(int columns, Orientation o);
 
@@ -54,11 +62,21 @@ public:
     int alignment() const { return align; }
     virtual void setAlignment( int );
 
+    int columns() const;
+    void setColumns( int );
+    
+    Orientation orientation() const { return dir; }
+    void setOrientation( Orientation );
+    
+    void addSpace( int );
+    
 protected:
     void childEvent( QChildEvent * );
     void resizeEvent( QResizeEvent * );
     void paintEvent( QPaintEvent * );
+    void focusInEvent( QFocusEvent * );
     void updateMask();
+    void fontChange( const QFont & );
 
 private slots:
     void fixFocus();
@@ -67,7 +85,7 @@ private:
     void skip();
     void init();
     void calculateFrame();
-    void insertWid( QWidget* _w );
+    void insertWid( QWidget* );
     void setTextSpacer();
 
     QString str;

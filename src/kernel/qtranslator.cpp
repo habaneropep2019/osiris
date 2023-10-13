@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qtranslator.cpp,v 2.30.2.1 1999/07/08 13:35:27 paul Exp $
+** $Id: qt/src/kernel/qtranslator.cpp   2.1.0   edited 2000-03-24 $
 **
 ** Localization database support.
 **
 ** Created : 980906
 **
-** Copyright (C) 1998-1999 by Troll Tech AS.	 All rights reserved.
+** Copyright (C) 1998-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -27,6 +27,7 @@
 #include "qtranslator.h"
 #include "qfileinfo.h"
 #include "qtextcodec.h"
+#include "qlist.h"
 
 #if defined(UNIX)
 #define QT_USE_MMAP
@@ -247,9 +248,12 @@ void QTranslatorPrivate::Message::write( QTranslator::SaveMode m,
 
 
 
+// NOT REVISED
 /*! \class QTranslator qtranslator.h
-
+  
   \brief The QTranslator class provides internationalization support for text output.
+  
+  \ingroup environment
 
   The class is conceptually very simple: An object of this class
   contains a set of translations from the reference language to a
@@ -259,7 +263,24 @@ void QTranslatorPrivate::Message::write( QTranslator::SaveMode m,
 
   The most common use of QTranslator is expected to be loading one
   from a file, installing it using QApplication::installTranslator(),
-  and using it via QObject::tr().
+  and using it via QObject::tr(). Like this:
+  \code
+  main( int argc, char** argv )
+  {
+    QApplication app( argc, argv );
+
+    QTranslator translator( 0 );
+    translator.load( "trfile.qm", "." );
+    app.installTranslator( &translator );
+
+    MyWidget m;
+    app.setMainWidget( &m );
+    m.show();
+
+    return app.exec();
+  }
+  \endcode
+
 
   Slightly more advanced usage of QTranslator includes direct lookup
   using find(), adding new translations using insert() and removing
@@ -273,9 +294,22 @@ void QTranslatorPrivate::Message::write( QTranslator::SaveMode m,
 
   To examine the contents of a QTranslator, use QTranslatorIterator.
 
-  \sa QTranslatorIterator QApplication::installTranslator QApplication::removeTranslator() QObject::tr() QApplication::translate()
+  \sa QTranslatorIterator QApplication::installTranslator
+  QApplication::removeTranslator() QObject::tr()
+  QApplication::translate()
 */
 
+/*! \enum QTranslator::SaveMode
+  This enum type defines how QTranslator can write translation files.
+  There are currently only two modes: <ul>
+
+  <li> \c Everything - files are saved with all contennts
+
+  <li> \c Stripped - files are saved with just what's needed for
+  end-user use of the files.
+
+  </ul>
+*/
 
 /*!  Constructs an empty message file, not connected to any file.
 */
@@ -287,7 +321,7 @@ QTranslator::QTranslator( QObject * parent, const char * name )
 }
 
 
-/*! Destroys the object and frees any allocated resources.
+/*! Destructs the object and frees any allocated resources.
 */
 
 QTranslator::~QTranslator()
@@ -349,8 +383,8 @@ bool QTranslator::load( const QString & filename, const QString & directory,
     delims = search_delimiters.isNull() ?
 	     QString::fromLatin1("_.") : search_delimiters;
 
-    bool done = FALSE;
-    while( !done ) {
+    while( 1 ) {
+	bool done = FALSE;
 	QFileInfo fi;
 
 	realname = prefix + fname;
@@ -423,6 +457,8 @@ bool QTranslator::load( const QString & filename, const QString & directory,
 #else
     // windows, or unix without mmap
     QFile f(realname);
+    if ( !f.exists() )
+	return FALSE;
     d->unmapLength = f.size();
     d->unmapPointer = new char[d->unmapLength]; // ### really not
     bool ok = FALSE;
@@ -483,7 +519,7 @@ bool QTranslator::load( const QString & filename, const QString & directory,
   \sa load()
 */
 
-bool QTranslator::save( const QString & filename, QTranslator::SaveMode )
+bool QTranslator::save( const QString & filename, SaveMode )
 {
     QFile f( filename );
     if ( f.open( IO_WriteOnly ) ) {

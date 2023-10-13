@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qwidget.h,v 2.137.2.1 1999/07/13 19:59:02 warwick Exp $
+** $Id: qt/src/kernel/qwidget.h   2.1.0   edited 2000-04-03 $
 **
 ** Definition of QWidget class
 **
 ** Created : 931029
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -41,13 +41,68 @@
 
 class QLayout;
 struct QWExtra;
+struct QTLWExtra;
 class QFocusData;
 class QStyle;
-
 
 class Q_EXPORT QWidget : public QObject, public QPaintDevice
 {
     Q_OBJECT
+    Q_ENUMS( BackgroundMode PropagationMode FocusPolicy BackgroundOrigin )
+    Q_PROPERTY( bool isTopLevel READ isTopLevel )
+    Q_PROPERTY( bool isModal READ isModal )
+    Q_PROPERTY( bool isPopup READ isPopup )
+    Q_PROPERTY( bool isDesktop READ isDesktop )
+    Q_PROPERTY( bool enabled READ isEnabled WRITE setEnabled )
+    Q_PROPERTY( QRect geometry READ geometry WRITE setGeometry )
+    Q_PROPERTY( QRect frameGeometry READ frameGeometry )
+    Q_PROPERTY( int x READ x )
+    Q_PROPERTY( int y READ y )
+    Q_PROPERTY( QPoint pos READ pos )
+    Q_PROPERTY( QSize frameSize READ frameSize )
+    Q_PROPERTY( QSize size READ size WRITE resize DESIGNABLE false )
+    Q_PROPERTY( int width READ width )
+    Q_PROPERTY( int height READ height )
+    Q_PROPERTY( QRect rect READ rect )
+    Q_PROPERTY( QRect childrenRect READ childrenRect )
+    Q_PROPERTY( QRegion childrenRegion READ childrenRegion )
+    Q_PROPERTY( QSize minimumSize READ minimumSize WRITE setMinimumSize )
+    Q_PROPERTY( QSize maximumSize READ maximumSize WRITE setMaximumSize )
+    Q_PROPERTY( int minimumWidth READ minimumWidth WRITE setMinimumWidth STORED false )
+    Q_PROPERTY( int minimumHeight READ minimumHeight WRITE setMinimumHeight STORED false )
+    Q_PROPERTY( int maximumWidth READ maximumWidth WRITE setMaximumWidth STORED false )
+    Q_PROPERTY( int maximumHeight READ maximumHeight WRITE setMaximumHeight STORED false )
+    Q_PROPERTY( QSize sizeIncrement READ sizeIncrement WRITE setSizeIncrement )
+    Q_PROPERTY( QSize baseSize READ baseSize WRITE setBaseSize )
+    Q_PROPERTY( BackgroundMode backgroundMode READ backgroundMode WRITE setBackgroundMode DESIGNABLE false )
+    Q_PROPERTY( QColor backgroundColor READ backgroundColor WRITE setBackgroundColor DESIGNABLE false )
+    Q_PROPERTY( QColor foregroundColor READ foregroundColor )
+    Q_PROPERTY( QPixmap backgroundPixmap READ backgroundPixmap WRITE setBackgroundPixmap DESIGNABLE false )
+    Q_PROPERTY( QColorGroup colorGroup READ colorGroup )
+    Q_PROPERTY( QPalette palette READ palette WRITE setPalette RESET unsetPalette )
+    Q_PROPERTY( QFont font READ font WRITE setFont RESET unsetFont )
+    Q_PROPERTY( QCursor cursor READ cursor WRITE setCursor RESET unsetCursor )
+    Q_PROPERTY( QString caption READ caption WRITE setCaption )
+    Q_PROPERTY( QPixmap icon READ icon WRITE setIcon )
+    Q_PROPERTY( QString iconText READ iconText WRITE setIconText )
+    Q_PROPERTY( bool mouseTracking READ hasMouseTracking WRITE setMouseTracking )
+    Q_PROPERTY( bool isActiveWindow READ isActiveWindow )
+    Q_PROPERTY( bool focusEnabled READ isFocusEnabled )
+    Q_PROPERTY( FocusPolicy focusPolicy READ focusPolicy WRITE setFocusPolicy )
+    Q_PROPERTY( bool focus READ hasFocus )
+    Q_PROPERTY( bool updatesEnabled READ isUpdatesEnabled WRITE setUpdatesEnabled DESIGNABLE false )
+    Q_PROPERTY( bool visible READ isVisible )
+    Q_PROPERTY( bool visibleToTLW READ isVisibleToTLW )
+    Q_PROPERTY( QRect visibleRect READ visibleRect )
+    Q_PROPERTY( bool minimized READ isMinimized )
+    Q_PROPERTY( QSize sizeHint READ sizeHint )
+    Q_PROPERTY( QSize minimumSizeHint READ minimumSizeHint )
+    Q_PROPERTY( QRect microFocusHint READ microFocusHint )
+    Q_PROPERTY( bool acceptDrops READ acceptDrops WRITE setAcceptDrops )
+    Q_PROPERTY( bool autoMask READ autoMask WRITE setAutoMask )
+    Q_PROPERTY( BackgroundOrigin backgroundOrigin READ backgroundOrigin WRITE setBackgroundOrigin )
+    Q_PROPERTY( bool customWhatsThis READ customWhatsThis )
+
 public:
     QWidget( QWidget *parent=0, const char *name=0, WFlags f=0 );
     ~QWidget();
@@ -70,6 +125,7 @@ public:
     bool	 isEnabled()	const;
     bool	 isEnabledTo(QWidget*) const;
     bool	 isEnabledToTLW() const;
+
 public slots:
     virtual void setEnabled( bool );
 
@@ -147,22 +203,22 @@ public:
     const QColorGroup & colorGroup() const;
     const QPalette &	palette()    const;
     virtual void	setPalette( const QPalette & );
-    void setPalette( const QPalette &, bool fixed );
+    void		unsetPalette();
 
     QFont		font() const;
     virtual void	setFont( const QFont & );
-    void		setFont( const QFont &, bool fixed );
+    void		unsetFont();
     QFontMetrics	fontMetrics() const;
     QFontInfo	 	fontInfo() const;
 
     enum PropagationMode { NoChildren, AllChildren,
 			   SameFont, SamePalette = SameFont };
 
-    PropagationMode	fontPropagation() const;
-    virtual void	setFontPropagation( PropagationMode );
+    PropagationMode	fontPropagation() const; // obsolete, remove 3.0
+    virtual void	setFontPropagation( PropagationMode ); // obsolete, remove 3.0
 
-    PropagationMode	palettePropagation() const;
-    virtual void	setPalettePropagation( PropagationMode );
+    PropagationMode	palettePropagation() const; // obsolete, remove 3.0
+    virtual void	setPalettePropagation( PropagationMode ); // obsolete, remove 3.0
 
     const QCursor      &cursor() const;
     virtual void	setCursor( const QCursor & );
@@ -190,7 +246,7 @@ public slots:
 
 public:
     enum FocusPolicy {
-	NoFocus = 0, 
+	NoFocus = 0,
 	TabFocus = 0x1,
 	ClickFocus = 0x2,
 	StrongFocus = 0x3,
@@ -200,6 +256,7 @@ public:
     bool		isActiveWindow() const;
     virtual void	setActiveWindow();
     bool		isFocusEnabled() const;
+
     FocusPolicy		focusPolicy() const;
     virtual void	setFocusPolicy( FocusPolicy );
     bool		hasFocus() const;
@@ -241,8 +298,10 @@ public slots:
 #endif
     virtual void	showMinimized();
     virtual void	showMaximized();
+    void		showFullScreen(); // virtual 3.0
     virtual void	showNormal();
     virtual void	polish();
+    void 		constPolish() const;
     bool		close();
 
     void		raise();
@@ -255,7 +314,7 @@ public slots:
     virtual void	setGeometry( const QRect & );
 
 public:
-    virtual bool	close( bool forceKill );
+    virtual bool	close( bool alsoDelete );
     bool		isVisible()	const;
     bool		isVisibleTo(QWidget*) const;
     bool		isVisibleToTLW() const;
@@ -271,6 +330,8 @@ public:
     QLayout *		layout() const { return lay_out; }
     void		updateGeometry();
     virtual void 	reparent( QWidget *parent, WFlags, const QPoint &,
+				  bool showIt=FALSE );
+    void		reparent( QWidget *parent, const QPoint &,
 				  bool showIt=FALSE );
 #ifndef QT_NO_COMPAT
     void		recreate( QWidget *parent, WFlags f, const QPoint & p,
@@ -291,20 +352,27 @@ public:
     // Misc. functions
 
     QWidget *		focusWidget() const;
+    QRect               microFocusHint() const;
 
     // drag and drop
 
     bool		acceptDrops() const;
     virtual void	setAcceptDrops( bool on );
 
+    // transparency and pseudo transparency
+    
     virtual void	setAutoMask(bool);
     bool		autoMask() const;
+    
+    enum BackgroundOrigin { WidgetOrigin, ParentOrigin };
+    
+    void setBackgroundOrigin( BackgroundOrigin );
+    BackgroundOrigin backgroundOrigin() const;
+
 
     // whats this help
-
     virtual bool customWhatsThis() const;
-				
-public:
+
     QWidget *		parentWidget() const;
     bool		testWState( uint n ) const;
     bool		testWFlags( WFlags n ) const;
@@ -342,6 +410,11 @@ protected:
 
 #if defined(_WS_MAC_)
     virtual bool macEvent( MSG * );		// Macintosh event
+    QWidget * mytop;                            // This widget's top-level widg
+    int back_type;                              // Type of background
+    QPixmap * bg_pix;
+    virtual void fixport();
+    virtual void propagateUpdates(int x,int y,int x2,int y2);
 #elif defined(_WS_WIN_)
     virtual bool winEvent( MSG * );		// Windows event
 #elif defined(_WS_X11_)
@@ -379,6 +452,7 @@ protected:
     virtual bool focusNextPrevChild( bool next );
 
     QWExtra	*extraData();
+    QTLWExtra	*topData();
     QFocusData	*focusData();
 
     virtual void setKeyCompression(bool);
@@ -393,6 +467,8 @@ private:
     void	 setWinId( WId );
     void	 showWindow();
     void	 hideWindow();
+    void	 sendShowEventsToChildren( bool spontaneous );
+    void	 sendHideEventsToChildren( bool spontaneous );
     void	 createTLExtra();
     void	 createExtra();
     void	 deleteExtra();
@@ -402,7 +478,7 @@ private:
     void	 deleteTLSysExtra();
     void	 deactivateWidgetCleanup();
     void	 internalSetGeometry( int, int, int, int, bool );
-    void	 reparentFocusWidgets( QWidget *parent );
+    void	 reparentFocusWidgets( QWidget * );
     QFocusData	*focusData( bool create );
     void         setBackgroundFromMode();
     void         setBackgroundColorDirect( const QColor & );
@@ -413,9 +489,11 @@ private:
     WId		 winid;
     uint	 widget_state;
     uint	 widget_flags;
-    uint	 propagate_font    : 2;
-    uint	 propagate_palette : 2;
-    uint	 focus_policy      : 4;
+    uint	 propagate_font : 2; // obsolete
+    uint	 propagate_palette : 2; // obsolete
+    uint	 focus_policy : 4;
+    uint 	own_font :1;
+    uint 	own_palette :1;
     QPoint	 fpos;
     QRect	 crect;
     QColor	 bg_col;
@@ -445,6 +523,10 @@ private:	// Disabled copy constructor and operator=
     QWidget( const QWidget & );
     QWidget &operator=( const QWidget & );
 #endif
+
+public: // obsolete functions to dissappear or to become inline in 3.0
+    void setPalette( const QPalette &, bool iReallyMeanIt );
+    void setFont( const QFont &, bool iReallyMeanIt );
 };
 
 
@@ -608,6 +690,14 @@ inline void QWidget::setWFlags( WFlags f )
 inline void QWidget::clearWFlags( WFlags f )
 { widget_flags &= ~f; }
 
+inline void QWidget::constPolish() const
+{
+    if ( !testWState(WState_Polished) ) {
+	QWidget* that = (QWidget*) this;
+	that->polish();
+        that->setWState(WState_Polished); // be on the safe side...
+    }
+}
 
 // Extra QWidget data
 //  - to minimize memory usage for members that are seldom used.
@@ -626,14 +716,22 @@ struct QTLWExtra {
     QSize    fsize;				// rect of frame
     short    incw, inch;			// size increments
     uint     iconic: 1;				// iconified [cur. win32 only]
+    uint     fullscreen : 1;			// full-screen mode
+    uint     showMode: 2;			// 0 normal, 1 minimized, 2 maximized, 3 reset
     short    basew, baseh;			// base sizes
 #if defined(_WS_X11_)
-    QRect    normalGeometry;			// used by showMin/maximized
     WId	     parentWinId;			// parent window Id (valid after reparenting)
     uint     embedded : 1;			// window is embedded in another Qt application
-    uint     wmstate: 2;			// wmstate trigger
+    uint     reserved: 2;			// reserved
+    uint     dnd : 1; 				// DND properties installed
+    uint     uspos : 1;                         // User defined position
+    uint     ussize : 1;                        // User defined size
     void    *xic;				// XIM Input Context
 #endif
+#if defined(_WS_WIN_)
+    HICON    winIcon;				// internal Windows icon
+#endif
+    QRect    normalGeometry;			// used by showMin/maximized/FullScreen
 };
 
 
@@ -647,7 +745,6 @@ struct QWExtra {
     QCursor *curs;
     QTLWExtra *topextra;			// only useful for TLWs
 #if defined(_WS_WIN_)
-    HICON    winIcon;				// internal Windows icon
     QOleDropTarget *dropTarget;			// drop target
 #endif
 #if defined(_WS_X11_)
@@ -655,6 +752,7 @@ struct QWExtra {
 #endif
     char     bg_mode;				// background mode
     QStyle* style;
+    QRect micro_focus_hint;                     // micro focus hint
 };
 
 

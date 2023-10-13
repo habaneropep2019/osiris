@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: main.cpp,v 1.2 1999/06/03 01:44:23 warwick Exp $
+** $Id: qt/examples/dragdrop/main.cpp   2.1.0   edited 2000-02-25 $
 **
 ** Ritual main() for Qt applications
 **
@@ -32,14 +32,12 @@ static void addStuff( QWidget * parent, bool image, bool secret = FALSE )
 	d->setText("Drag and Drop");
     }
     d->setFont(QFont("Helvetica",18));
-    d->setMinimumSize( d->sizeHint() );
     if ( secret ) {
 	SecretSource *s = new SecretSource( 42, parent );
 	tll->addWidget( s );
     }
 
-    QLabel * format = new QLabel( "\nNone\n", parent );
-    format->setMinimumSize( format->sizeHint() );
+    QLabel * format = new QLabel( "\n\n\n\nNone\n\n\n\n", parent );
     tll->addWidget( format );
     tll->activate();
     parent->resize( parent->sizeHint() );
@@ -49,7 +47,7 @@ static void addStuff( QWidget * parent, bool image, bool secret = FALSE )
 }
 
 
-int main( int argc, char ** argv ) 
+int main( int argc, char ** argv )
 {
     QApplication a( argc, argv );
 

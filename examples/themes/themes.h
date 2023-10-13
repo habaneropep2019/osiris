@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: themes.h,v 1.2.2.1 1999/09/01 06:20:01 aavit Exp $
+** $Id: qt/examples/themes/themes.h   2.1.0   edited 2000-03-20 $
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -12,6 +12,7 @@
 #define THEMES_H
 
 #include <qmainwindow.h>
+#include <qfont.h>
 
 class QTabWidget;
 
@@ -34,12 +35,15 @@ protected slots:
     void styleWindows();
     void styleCDE();
     void styleMotif();
-    
+
     void about();
     void aboutQt();
 
 private:
     void selectStyleMenu( int );
+
+    QFont appFont;
+
 };
 
 

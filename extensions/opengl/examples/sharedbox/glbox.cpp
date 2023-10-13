@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: glbox.cpp,v 1.4 1999/06/16 11:26:36 aavit Exp $
+** $Id: qt/extensions/opengl/examples/sharedbox/glbox.cpp   2.1.0   edited 2000-01-31 $
 **
 ** Implementation of GLBox
 ** This is a simple QGLWidget displaying a box

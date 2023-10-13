@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qwizard.cpp,v 2.29.2.4 1999/07/08 13:35:19 paul Exp $
+** $Id: qt/src/dialogs/qwizard.cpp   2.1.0   edited 2000-03-24 $
 **
 ** Implementation of QWizard class.
 **
 ** Created : 990124
 **
-** Copyright (C) 1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1999-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -34,8 +34,11 @@
 #include "qpainter.h"
 #include "qaccel.h"
 
-
+// NOT REVISED
 /*! \class QWizard qwizard.h
+
+  \ingroup abstractwidgets
+  \ingroup organizers
 
   \brief The QWizard class provides a framework for easily writing wizards.
 
@@ -55,7 +58,7 @@ public:
 	    w( widget ), t( title ), back( 0 ),
 	    backEnabled( TRUE ), nextEnabled( TRUE ), finishEnabled( FALSE ),
 	    helpEnabled( TRUE ),
-	    isLast( FALSE ), appropriate( TRUE )
+	    appropriate( TRUE )
 	{}
 	QWidget * w;
 	QString t;
@@ -64,7 +67,6 @@ public:
 	bool nextEnabled;
 	bool finishEnabled;
 	bool helpEnabled;
-	bool isLast;
 	bool appropriate;
     };
 
@@ -149,7 +151,7 @@ QWizard::QWizard( QWidget *parent, const char *name, bool modal,
 }
 
 
-/*! Destroys the object and frees any allocated resources, including,
+/*! Destructs the object and frees any allocated resources, including,
 of course, all pages and controllers.
 */
 
@@ -165,7 +167,7 @@ void QWizard::show()
 {
     if ( d->current )
 	showPage( d->current->w );
-    else if ( count() > 0 )
+    else if ( pageCount() > 0 )
 	showPage( d->pages[0]->w );
     else
 	showPage( 0 );
@@ -192,10 +194,10 @@ void QWizard::addPage( QWidget * page, const QString & title )
 	return;
     if ( d->page( page ) ) {
 #if defined(CHECK_STATE)
-	qDebug( "already added %s/%s to %s/%s",
-	       page->className(), page->name(),
-	       className(), name() );
-#endif	
+	qWarning( "QWizard::addPage(): already added %s/%s to %s/%s",
+		  page->className(), page->name(),
+		  className(), name() );
+#endif
 	return;
     }
     int i = d->pages.size();
@@ -227,7 +229,7 @@ void QWizard::showPage( QWidget * page )
 
 /*!  Returns the number of pages in the wizard. */
 
-int QWizard::count() const
+int QWizard::pageCount() const
 {
     return d->pages.count();
 }
@@ -274,9 +276,7 @@ void QWizard::next()
 */
 
 /*!  This slot either makes the wizard help you, if it can.  The only
-way it knows is to emit the helpClicked() signal, and perhaps the
-QWizardPage::helpClicked() signal too, if a QWizardPage is currently
-being displayed.
+way it knows is to emit the helpClicked() signal.
 */
 
 void QWizard::help()
@@ -313,25 +313,19 @@ void QWizard::setHelpEnabled( bool enable )
 }
 
 
-/*
-
+/*!
+  \obsolete
 */
-
-void QWizard::setFinish( QWidget * w, bool isLast )
+void QWizard::setFinish( QWidget *, bool )
 {
-    QWizardPrivate::Page * p = d->page( w );
-    if ( !p )
-	return;
-
-    p->isLast = isLast;
-    updateButtons();
+    // Didn't do anything.
 }
 
 
-/*
-
+/*!
+  Enables or disables the "Back" button for pages \a w in the wizard.
+  By default, all pages have this button.
 */
-
 void QWizard::setBackEnabled( QWidget * w, bool enable )
 {
     QWizardPrivate::Page * p = d->page( w );
@@ -343,10 +337,10 @@ void QWizard::setBackEnabled( QWidget * w, bool enable )
 }
 
 
-/*
-
+/*!
+  Enables or disables the "Next" button for pages \a w in the wizard.
+  By default, all pages have this button.
 */
-
 void QWizard::setNextEnabled( QWidget * w, bool enable )
 {
     QWizardPrivate::Page * p = d->page( w );
@@ -358,10 +352,10 @@ void QWizard::setNextEnabled( QWidget * w, bool enable )
 }
 
 
-/*
-
+/*!
+  Enables or disables the "Finish" button for pages \a w in the wizard.
+  By default, \e no pages have this button.
 */
-
 void QWizard::setFinishEnabled( QWidget * w, bool enable )
 {
     QWizardPrivate::Page * p = d->page( w );
@@ -373,10 +367,10 @@ void QWizard::setFinishEnabled( QWidget * w, bool enable )
 }
 
 
-/*
-
+/*!
+  Enables or disables the "Help" button for pages \a w in the wizard.
+  By default, all pages have this button.
 */
-
 void QWizard::setHelpEnabled( QWidget * w, bool enable )
 {
     QWizardPrivate::Page * p = d->page( w );
@@ -408,10 +402,12 @@ bool QWizard::appropriate( QWidget * w ) const
 }
 
 
-/*
+/*!
+  Sets whether it is appropriate for \a w to be displayed in the
+  current context of the wizard.
 
+  \sa appropriate()
 */
-
 void QWizard::setAppropriate( QWidget * w, bool enable )
 {
     QWizardPrivate::Page * p = d->page( w );
@@ -486,8 +482,8 @@ QPushButton * QWizard::nextButton() const
 /*!
   Returns the Finish button of the dialog.
 
-  By default, this button is connected to the QDialog::accept()
-  slot, which is virtual so you may override it in a QWizard subclass.
+  By default, this button is connected to the QDialog::accept() slot,
+  which is virtual so you may reimplement it in a QWizard subclass.
 */
 QPushButton * QWizard::finishButton() const
 {
@@ -498,8 +494,8 @@ QPushButton * QWizard::finishButton() const
 /*!
   Returns the Cancel button of the dialog.
 
-  By default, this button is connected to the QDialog::reject()
-  slot, which is virtual so you may override it in a QWizard subclass.
+  By default, this button is connected to the QDialog::reject() slot,
+  which is virtual so you may reimplement it in a QWizard subclass.
 */
 QPushButton * QWizard::cancelButton() const
 {
@@ -670,3 +666,18 @@ void QWizard::removePage( QWidget * page )
 	d->pages.resize( i );
     d->ws->removeWidget( page );
 }
+
+
+/*!
+  Returns a pointer to page a position \a pos, or 0 if \a pos is out of range.
+  The first page has position 0.
+*/
+  
+QWidget* QWizard::page( int pos ) const
+{
+    if ( pos >= pageCount() || pos < 0 )
+      return 0;
+
+    return d->pages[ pos ]->w;
+}
+

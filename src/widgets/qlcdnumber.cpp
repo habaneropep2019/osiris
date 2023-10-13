@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qlcdnumber.cpp,v 2.39.2.2 1999/08/12 11:06:40 aavit Exp $
+** $Id: qt/src/widgets/qlcdnumber.cpp   2.1.0   edited 2000-03-24 $
 **
 ** Implementation of QLCDNumber class
 **
 ** Created : 940518
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,24 +17,24 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
 #include "qlcdnumber.h"
 #include "qbitarray.h"
 #include "qpainter.h"
-//!hanordce #include <stdio.h>
 
 
+// NOT REVISED
 /*!
   \class QLCDNumber qlcdnumber.h
 
   \brief The QLCDNumber widget displays a number with LCD-like digits.
 
-  \ingroup realwidgets
+  \ingroup basic
 
   It can display a number in just about any size, in decimal,
   hexadecimal, octal or binary notation, and is easy to connect to
@@ -69,6 +69,31 @@
   \sa QLabel, QFrame
 */
 
+/*! \enum QLCDNumber::Mode
+
+  This type determines how numbers are shown. The possible values are:
+
+  <ul>
+  <li>\c Hex - Hexadecimal
+  <li>\c Dec - Decimal
+  <li>\c Oct - Octal
+  <li>\c Bin - Binary
+  </ul>
+ */
+
+/*! \enum QLCDNumber::SegmentStyle
+
+  This type determines the visual appearance of the QLCDNumber
+  widget. The possible values are:
+
+  <ul>
+  <li>\c Outline gives raised segments filled with the background brush.
+  <li>\c Filled gives raised segments filled with the foreground brush.
+  <li>\c Flat gives flat segments filled with the foreground brush.
+  </ul>
+ */
+
+
 
 /*!
   \fn void QLCDNumber::overflow()
@@ -92,13 +117,13 @@ static QString int2string( int num, int base, int ndigits, bool *oflow )
     }
     switch( base ) {
 	case QLCDNumber::HEX:
-	    s.sprintf( "%*lx", ndigits, num );
+	    s.sprintf( "%*x", ndigits, num );
 	    break;
 	case QLCDNumber::DEC:
-	    s.sprintf( "%*li", ndigits, num );
+	    s.sprintf( "%*i", ndigits, num );
 	    break;
 	case QLCDNumber::OCT:
-	    s.sprintf( "%*lo", ndigits, num );
+	    s.sprintf( "%*o", ndigits, num );
 	    break;
 	case QLCDNumber::BIN:
 	    {
@@ -300,7 +325,7 @@ void QLCDNumber::init()
 }
 
 /*!
-  Destroys the LCD number.
+  Destructs the LCD number.
 */
 
 QLCDNumber::~QLCDNumber()
@@ -548,8 +573,6 @@ void QLCDNumber::setBinMode()
   and \c HEX.  All four modes can display both integers, floating-point
   numbers and strings (subject to character set limitations).
 
-  The display is set to "0".
-
   Example:
   \code
     myLcd.setMode( QLCDNumber::HEX );
@@ -562,7 +585,6 @@ void QLCDNumber::setBinMode()
 void QLCDNumber::setMode( Mode m )
 {
     base = m;
-    display( 0 );
 }
 
 
@@ -583,15 +605,12 @@ void QLCDNumber::setMode( Mode m )
   The inter-digit space is made slightly wider when the decimal point
   is drawn between the digits.
 
-  The display is set to "0.0".
-
   \sa smallDecimalPoint(), setMode()
 */
 
 void QLCDNumber::setSmallDecimalPoint( bool b )
 {
     smallPoint = b;
-    display( 0.0 );
 }
 
 
@@ -624,7 +643,6 @@ void QLCDNumber::internalSetString( const QString& s )
     QString buffer;
     int i;
     int len = s.length();
-    QPainter p( this );
     QBitArray newPoints(ndigits);
 
     if ( !smallPoint ) {
@@ -678,10 +696,13 @@ void QLCDNumber::internalSetString( const QString& s )
 	    points = newPoints;
 	repaint( contentsRect() );
     }
-    else if ( !smallPoint )
-	drawString( buffer, p );
-    else
-	drawString( buffer, p, &newPoints );
+    else {
+	QPainter p( this );
+	if ( !smallPoint )
+	    drawString( buffer, p );
+	else
+	    drawString( buffer, p, &newPoints );
+    }
 }
 
 /*!
@@ -1112,26 +1133,16 @@ QLCDNumber::SegmentStyle QLCDNumber::segmentStyle() const
 }
 
 
-/*!  Returns a suitable size for this LCD number.  The size hint is on
-  the small side, so as to be usable as minimum size.
-
-  The size hint takes numDigits() and smallDecimalPoint() into
-  consideration.
-
-  \sa setNumDigits() setSmallDecimalPoint() setMinimumSize()
+/*!\reimp
 */
-
 QSize QLCDNumber::sizeHint() const
 {
     return QSize( 10 + 9 * (numDigits() + (smallDecimalPoint() ? 0 : 1)), 23 );
 }
 
 
-/*!
-  Specifies that this widget may stretch horizontally and
-  vertically beyond the sizeHint().
+/*!\reimp
 */
-
 QSizePolicy QLCDNumber::sizePolicy() const
 {
     return QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum );

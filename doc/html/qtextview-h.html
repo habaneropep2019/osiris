@@ -1,0 +1,180 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>
+Qt Toolkit - qtextview.h include file
+</title><style type="text/css"><!--
+h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
+a:link { text-decoration: none; }
+body { background: white; color: black; }
+--></style>
+</head><body bgcolor="#ffffff">
+
+<a href="index.html">
+<img width="122" height="65" src="qtlogo.png" alt="Home"
+  align="left" border="0">
+</a><div align=right><img src="dochead.png" width="472" height="27"><br>
+<a href="classes.html"><b>Classes</b></a>
+- <a href="annotated.html">Annotated</a>
+- <a href="hierarchy.html">Tree</a>
+- <a href="functions.html">Functions</a>
+- <a href="index.html">Home</a>
+- <a href="topicals.html"><b>Structure</b></a>
+</div>
+<br clear=all>
+
+<h1 align=center>qtextview.h</h1><br clear="all">
+This is the verbatim text of the qtextview.h include file.  It is
+provided only for illustration; the copyright
+remains with Troll Tech.
+<hr>
+<pre>
+/****************************************************************************
+** &#36;Id&#58; qt/src/widgets/qtextview.h   2.1.0   edited 2000-03-24 $
+**
+** Definition of the QTextView class
+**
+** Created : 990101
+**
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+**
+** This file is part of the Qt GUI Toolkit.
+**
+** This file may be distributed under the terms of the Q Public License
+** as defined by Troll Tech AS of Norway and appearing in the file
+** LICENSE.QPL included in the packaging of this file.
+**
+** Licensees holding valid Qt Professional Edition licenses may use this
+** file in accordance with the Qt Professional Edition License Agreement
+** provided with the Qt Professional Edition.
+**
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
+** information about the Professional Edition licensing, or see
+** http://www.trolltech.com/qpl/ for QPL licensing information.
+**
+*****************************************************************************/
+
+#ifndef QTEXTVIEW_H
+#define QTEXTVIEW_H
+
+#ifndef QT_H
+#include "qlist.h"
+#include "qpixmap.h"
+#include "qscrollview.h"
+#include "qcolor.h"
+#endif // QT_H
+
+class QRichText;
+class QTextViewData;
+class <a href="qstylesheet.html">QStyleSheet</a>;
+class <a href="qmimesourcefactory.html">QMimeSourceFactory</a>;
+
+class Q_EXPORT <a href="qtextview.html">QTextView</a> : public <a href="qscrollview.html">QScrollView</a>
+{
+    Q_OBJECT
+    Q_PROPERTY( QString text READ text WRITE setText )
+    Q_PROPERTY( TextFormat textFormat READ textFormat WRITE setTextFormat )
+    Q_PROPERTY( QBrush paper READ paper WRITE setPaper )
+    Q_PROPERTY( QColorGroup paperColorGroup READ paperColorGroup WRITE setPaperColorGroup )
+    Q_PROPERTY( QColor linkColor READ linkColor WRITE setLinkColor )
+    Q_PROPERTY( bool linkUnderline READ linkUnderline WRITE setLinkUnderline )
+    Q_PROPERTY( QString documentTitle READ documentTitle )
+
+public:
+    QTextView(QWidget *parent=0, const char *name=0);
+    QTextView( const QString&amp; text, const QString&amp; context = QString::null,
+               QWidget *parent=0, const char *name=0);
+    ~QTextView();
+
+    virtual void setText( const QString&amp; text, const QString&amp; context  );
+    void setText( const QString&amp; text ); // write function for 'text' property
+    virtual QString text() const;
+    virtual QString context() const;
+
+    TextFormat textFormat() const;
+    void setTextFormat( TextFormat );
+
+
+    QStyleSheet* styleSheet() const;
+    void setStyleSheet( QStyleSheet* styleSheet );
+
+
+    // convenience functions
+    void setPaper( const QBrush&amp; pap);
+    // ##### This non const thing is obsolete
+    const QBrush&amp; paper();
+    const QBrush&amp; paper() const;
+
+    void setPaperColorGroup( const QColorGroup&amp; colgrp);
+    const QColorGroup &amp;paperColorGroup() const;
+
+    void setLinkColor( const QColor&amp; );
+    const QColor&amp; linkColor() const;
+
+    void setLinkUnderline( bool );
+    bool linkUnderline() const;
+
+    void setMimeSourceFactory( QMimeSourceFactory* factory );
+    QMimeSourceFactory* mimeSourceFactory() const;
+
+    QString documentTitle() const;
+
+    int heightForWidth( int w ) const;
+
+    void append( const QString&amp; text );
+
+    bool hasSelectedText() const;
+    QString selectedText() const;
+
+public slots:
+   void copy();
+   void selectAll();
+
+
+protected:
+    void drawContentsOffset(QPainter*, int ox, int oy,
+                            int cx, int cy, int cw, int ch);
+    void resizeEvent(QResizeEvent*);
+    void viewportResizeEvent(QResizeEvent*);
+    void viewportMousePressEvent( QMouseEvent* );
+    void viewportMouseReleaseEvent( QMouseEvent* );
+    void viewportMouseMoveEvent( QMouseEvent* );
+    void keyPressEvent( QKeyEvent * );
+    void showEvent( QShowEvent* );
+    void focusInEvent( QFocusEvent * );
+    void focusOutEvent( QFocusEvent * );
+
+protected:
+
+    QRichText&amp; richText() const;
+    void paletteChange( const QPalette &amp; );
+
+private slots:
+    void doResize();
+    void clipboardChanged();
+    void doStartDrag();
+    void doAutoScroll();
+
+private:
+    void init();
+    void createRichText();
+    friend class QRichText;
+    QTextViewData* d;
+    void updateLayout();
+    void clearSelection();
+    void doSelection( const QPoint&amp; );
+
+private:        // Disabled copy constructor and operator=
+#if defined(Q_DISABLE_COPY)
+    QTextView( const QTextView &amp; );
+    QTextView&amp; operator=( const QTextView &amp; );
+#endif
+};
+
+
+#endif
+
+</pre>
+<p><address><hr><div align="center">
+<table width="100%" cellspacing="0" border="0"><tr>
+<td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.1.0</div>
+</table></div></address></body></html>

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: dropsite.h,v 1.2 1999/06/03 01:44:22 warwick Exp $
+** $Id: qt/examples/dragdrop/dropsite.h   2.1.0   edited 2000-01-31 $
 **
 ** Drop site example implementation
 **

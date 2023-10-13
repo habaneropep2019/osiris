@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: desktop.cpp,v 1.3 1999/06/21 13:58:44 reggie Exp $
+** $Id: qt/examples/desktop/desktop.cpp   2.1.0   edited 2000-03-02 $
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -210,9 +210,9 @@ public:
 
     void dropEvent( QDropEvent * e )
     {
-	QPixmap pm;
-	if ( QImageDrag::decode( e, pm ) ) {
-	    setBackgroundPixmap( pm );
+	QPixmap pmp;
+	if ( QImageDrag::decode( e, pmp ) ) {
+	    setBackgroundPixmap( pmp );
 	    update();
 	}
     }

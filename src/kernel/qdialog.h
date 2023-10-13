@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qdialog.h,v 2.17 1999/05/25 15:34:16 warwick Exp $
+** $Id: qt/src/kernel/qdialog.h   2.1.0   edited 2000-03-24 $
 **
 ** Definition of QDialog class
 **
 ** Created : 950502
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -30,9 +30,11 @@
 #include "qwidget.h"
 #endif // QT_H
 
+#if 0
+Q_OBJECT
+#endif
 
 class QPushButton;
-
 
 class Q_EXPORT QDialog : public QWidget			// dialog widget
 {
@@ -66,9 +68,9 @@ protected:
     void	setResult( int r )	{ rescode = r; }
     void	keyPressEvent( QKeyEvent * );
     void	closeEvent( QCloseEvent * );
-
 private:
-    virtual void	setDefault( QPushButton * );
+    virtual void	setDefault( QPushButton * ); // ## remove virtual 3.0
+    void		hideDefault();
     int		rescode;
     uint	did_move   : 1;
     uint	did_resize : 1;

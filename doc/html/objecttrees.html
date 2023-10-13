@@ -1,0 +1,48 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><title>
+Qt Toolkit - Object Trees and Object Ownership
+</title></head><body bgcolor="#ffffff">
+<p>
+<a href="index.html">
+<img width="122" height="65" src="qtlogo.png" alt="Home"
+  align="left" border="0">
+</a><div align=right><img src="dochead.png" width="472" height="27"><br>
+<a href="classes.html"><b>Classes</b></a>
+- <a href="annotated.html">Annotated</a>
+- <a href="hierarchy.html">Tree</a>
+- <a href="functions.html">Functions</a>
+- <a href="index.html">Home</a>
+- <a href="topicals.html"><b>Structure</b></a>
+</div>
+<br clear=all>
+<p>
+<h1 align=center>Object Trees and Object Ownership</h1><br clear="all">
+<p>
+<a href="qobject.html">QObjects</a> organize themselves in object trees.
+When you create a QObject with another object as parent, it's added to
+the parent's <a href="qobject.html#9026ce">children()</a> list, and
+is deleted when the parent is.  This turns out to fit the needs of
+many GUI objects well.  For example, a <a href="qaccel.html">QAccel</a> (keyboard
+accelerator) is a child of the right window, so when the user closes
+that window, the accelerator is deleted too.
+<p>
+The static function <a href="qobject.html#08fff2">QObject::objectTrees()</a>, gives you access to all
+root objects currently existing.
+<p>
+<a href="qwidget.html">QWidget</a>, the base class of everything that shows up on the screen,
+extensds the parent/child relationship : a child normally also becomes
+a so-called child widget, i.e. it is displayed in its parent's
+coordinate system and is graphically clipped by its parent.  Thus,
+when the the application deletes a message box after it's been closed,
+the child OK button is deleted too, just the way you'd expect.
+<p>
+Of course, you can also delete a child object yourself, and it will
+remove itself from its parent.  For example, when the user removes a
+toolbar that could often result in the application deleting one of the
+<a href="qtoolbar.html">QToolBar</a> objects, and the tool bar's <a href="qmainwindow.html">QMainWindow</a> parent would
+then notice the change and reconfigure its screen space.
+
+<p><address><hr><div align="center">
+<table width="100%" cellspacing="0" border="0"><tr>
+<td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.1.0</div>
+</table></div></address></body></html>

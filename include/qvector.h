@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qvector.h,v 2.7 1999/04/28 09:59:36 aavit Exp $
+** $Id: qt/src/tools/qvector.h   2.1.0   edited 2000-03-24 $
 **
 ** Definition of QVector template/macro class
 **
 ** Created : 930907
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -44,7 +44,7 @@ public:
     uint  size()    const		{ return QGVector::size(); }
     uint  count()   const		{ return QGVector::count(); }
     bool  isEmpty() const		{ return QGVector::count() == 0; }
-    bool  isNull()  const		{ return QGVector::size() == 0; }     \
+    bool  isNull()  const		{ return QGVector::size() == 0; }
     bool  resize( uint size )		{ return QGVector::resize(size); }
     bool  insert( uint i, const type *d){ return QGVector::insert(i,(Item)d); }
     bool  remove( uint i )		{ return QGVector::remove(i); }

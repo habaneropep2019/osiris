@@ -13,24 +13,29 @@
   This example displays a digital LCD clock and can switch between time
   and date.
 
+- fileiconview
+  This example implements a simple and not full functional filemanager using
+  a widget derived from QIconView to display the current directory and the
+  widget of the DirectoryView example to display the directory tree.
+
 - life
+   An implementation of the life game. Very UNIX-ish GUI design ;-)
+
+- helpviewer
+  The HelpViewer example implements a simple HTML help browser using
+  Qt's richtext capabilities.
 
 - movies
   The Movies example displays animated GIF files using the QMovie and
   QLabel classes.
 
-- qbrowser
-  The QBrowser example implements a simple HTML browser using Qt's Richtext widget.
-
 - qdir
+   Shows how to use and customize Qt's file dialog. See
+	qdir --help
+   for details
 
 - qfd
   This example program displayes all characters of a font.
-
-- qfileiconview
-  This example implements a simple and not full functional filemanager using
-  a widget derived from QIconView to display the current directory and the
-  widget of the DirectoryView example to display the directory tree.
 
 - qmag
   This is a simple magnifier-type program.  It shows how one can do
@@ -43,6 +48,7 @@
   magnified area as a .bmp file.
 
 - qwerty
+  Small text editor to test  different character encodings.
 
 - scribble
   This example implements the famous scribble example. You can draw around
@@ -63,12 +69,12 @@
   to see how you can make reusable components such as the TicTacGameBoard
   widget.
 
-- application:
+- application
   This example program looks like a complete modern application.  It
   has a menu bar, it has a tool bar, it has a status bar and works
   like a simple text editor.
 
-- buttons_groups:
+- buttongroups
   This examples shows different types of Groupboxes (Buttongroups, etc.) and lots
   of different kinds of Buttons (Checkboxes, Radiobuttons, Pushbuttons, etc.)
 
@@ -124,6 +130,11 @@
   # i18n en
   to get the english version.
 
+- iconview
+  This example implements a flexible icon view which can store
+  lots of icon items. It supports Drag'n'Drop, different selection modes,
+  view modes, rubberband selection, etc.
+
 - layout
   This example shows simple and intermediate use of Qt's layout
   classes, QGridLaout, QBoxLayout etc.
@@ -132,7 +143,7 @@
   The Lineedits example shows how to work with single Lineedit widgets, and
   how to use different Echo Modes and Validators.
 
-- listbox_combo
+- listboxcombo
   This example program desmonstrates how to use Listboxes (with single selection
   and multi selection) and Comboboxes (editable and non-editable).
 
@@ -140,6 +151,10 @@
   This examples shows how to work with Listviews (hirarchical and multi-columns).
   It also shows how to subclass Listview Items for sepcial reasons. It looks
   and works like the mainwindow of a mail client.
+
+- mdi
+  This example program is just like the application example, but designed as
+  Multiple Document Interface (MDI).
 
 - menu
   This example demonstrates simple use of menus (a menu bar and
@@ -161,11 +176,6 @@
 
 - progressbar
   This example shows how to use a progressbar.
-
-- qiconview
-  This example implements a flexible icon view which can store
-  lots of icon items. It supports Drag'n'Drop, different selection modes,
-  view modes, rubberband selection, etc.
 
 - rangecontrols
   This examples shows the different types of Rangecontrols which
@@ -199,10 +209,11 @@
 
 - table
   The table program displays a spreadsheet-like table. It is an example of
-  how to inherit the QTableView widget for presentations of 2D data arrays.
+  how to inherit the QScrollView widget for presentations of 2D data arrays.
 
   Left-click the mouse to set a current cell. Press the arrow buttons to
-  move the current mark around.
+  move the current mark around. Type something to edit a cell's
+  contents.
 
 - themes
   This examples demonstrates how to let widgets draw in different

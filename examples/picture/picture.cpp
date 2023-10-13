@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: picture.cpp,v 1.3 1999/06/24 20:29:42 paul Exp $
+** $Id: qt/examples/picture/picture.cpp   2.1.0   edited 2000-02-21 $
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -104,7 +104,7 @@ int main( int argc, char **argv )
 {
     QApplication a( argc, argv );		// QApplication required!
 
-    char *fileName = "car.pic";			// default picture file name
+    const char *fileName = "car.pic";			// default picture file name
 
     if ( argc == 2 )				// use argument as file name
 	fileName = argv[1];

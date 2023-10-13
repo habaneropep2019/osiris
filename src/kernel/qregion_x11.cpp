@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qregion_x11.cpp,v 2.25 1999/05/20 15:33:35 aavit Exp $
+** $Id: qt/src/kernel/qregion_x11.cpp   2.1.0   edited 2000-03-24 $
 **
 ** Implementation of QRegion class for X11
 **
 ** Created : 940729
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -30,6 +30,7 @@
 #include "qbitmap.h"
 #include "qt_x11.h"
 
+// NOT REVISED
 
 static QRegion *empty_region = 0;
 
@@ -41,7 +42,7 @@ static void cleanup_empty_region()
 
 
 /*!
-  Constructs an null region.
+  Constructs a null region.
   \sa isNull()
 */
 
@@ -69,12 +70,8 @@ QRegion::QRegion( bool is_null )
 }
 
 /*!
-  Constructs a rectangular or elliptic region.
-
-  \arg \e r is the region rectangle.
-  \arg \e t is the region type: QRegion::Rectangle (default) or
-  QRegion::Ellipse.
-*/
+\overload
+ */
 
 QRegion::QRegion( const QRect &r, RegionType t )
 {
@@ -100,11 +97,14 @@ QRegion::QRegion( const QRect &r, RegionType t )
 
 
 /*!
-  Constructs a polygon region from the point array \e a.
+  Constructs a polygon region from the point array \a a.
 
-  If \e winding is TRUE, the polygon region uses the winding
-  algorithm, otherwise the alternative (even-odd) algorithm
-  will be used.
+  If \a winding is TRUE, the polygon
+  region is filled using the winding algorithm, otherwise the default
+  even-odd fill algorithm is used.
+
+  This constructor may create complex regions that will slow
+  down painting when used.
 */
 
 QRegion::QRegion( const QPointArray &a, bool winding )
@@ -118,8 +118,7 @@ QRegion::QRegion( const QPointArray &a, bool winding )
 
 
 /*!
-  Constructs a region which is a
-  \link shclass.html shallow copy\endlink of \e r.
+  Constructs a new region which is equal to \a r.
 */
 
 QRegion::QRegion( const QRegion &r )
@@ -205,11 +204,17 @@ Region qt_x11_bitmapToRegion(const QBitmap& bitmap)
 }
 
 
-/*!
-  Constructs a region from a bitmap.
 
-  The pixels in \a bm that are color1 will be part of the
-  region as if each was a 1 by 1 rectangle.
+/*!
+  Constructs a region from the bitmap \a bm.
+
+  The resulting region consists of the pixels in \a bm that are \c
+  color1, as if each pixel was a 1 by 1 rectangle.
+
+  This constructor may create complex regions that will slow
+  down painting when used. Note that drawing masked pixmaps
+  can be done much faster using QPixmap::setMask().
+
 */
 QRegion::QRegion( const QBitmap & bm )
 {
@@ -220,7 +225,7 @@ QRegion::QRegion( const QBitmap & bm )
 }
 
 /*!
-  Destroys the region.
+  Destructs the region.
 */
 
 QRegion::~QRegion()
@@ -233,9 +238,9 @@ QRegion::~QRegion()
 
 
 /*!
-  Assigns a
-  \link shclass.html shallow copy\endlink of \e r to this region and
-  returns a reference to the region.
+  Assigns \a r to this region and returns a reference to the
+  region.
+
 */
 
 QRegion &QRegion::operator=( const QRegion &r )
@@ -251,8 +256,9 @@ QRegion &QRegion::operator=( const QRegion &r )
 
 
 /*!
-  Returns a
-  \link shclass.html deep copy\endlink of the region.
+  Returns a \link shclass.html deep copy\endlink of the region.
+
+  \sa detach()
 */
 
 QRegion QRegion::copy() const
@@ -262,13 +268,11 @@ QRegion QRegion::copy() const
     return r;
 }
 
-
 /*!
   Returns TRUE if the region is a null region, otherwise FALSE.
 
-  A null region is a region that has not been initialized. The
-  documentation for isEmpty() contains an example that shows how to use
-  isNull() and isEmpty().
+  A null region is a region that has not been initialized. A
+  null region is always empty.
 
   \sa isEmpty()
 */
@@ -281,6 +285,7 @@ bool QRegion::isNull() const
 
 /*!
   Returns TRUE if the region is empty, or FALSE if it is non-empty.
+  An empty region is a region that contains no points.
 
   Example:
   \code
@@ -309,7 +314,7 @@ bool QRegion::isEmpty() const
 
 
 /*!
-  Returns TRUE if the region contains the point \e p, or FALSE if \e p is
+  Returns TRUE if the region contains the point \a p, or FALSE if \a p is
   outside the region.
 */
 
@@ -319,8 +324,8 @@ bool QRegion::contains( const QPoint &p ) const
 }
 
 /*!
-  Returns TRUE if the region contains the rectangle \e r, or FALSE if \e r is
-  outside the region.
+  Returns TRUE if the region overlaps the rectangle \a r, or FALSE if \a r is
+  completely outside the region.
 */
 
 bool QRegion::contains( const QRect &r ) const
@@ -331,7 +336,7 @@ bool QRegion::contains( const QRect &r ) const
 
 
 /*!
-  Translates the region \e dx along the X axis and \e dy along the Y axis.
+  Translates (moves) the region \a dx along the X axis and \a dy along the Y axis.
 */
 
 void QRegion::translate( int dx, int dy )
@@ -344,7 +349,11 @@ void QRegion::translate( int dx, int dy )
 
 
 /*!
-  Returns a region which is the union of this region and \e r.
+  Returns a region which is the union of this region and \a r.
+
+    <img src=runion.png>
+
+  The figure shows the union of two elliptical regions.
 */
 
 QRegion QRegion::unite( const QRegion &r ) const
@@ -355,7 +364,11 @@ QRegion QRegion::unite( const QRegion &r ) const
 }
 
 /*!
-  Returns a region which is the intersection of this region and \e r.
+  Returns a region which is the intersection of this region and \a r.
+
+  <img src=rintersect.png>
+
+  The figure shows the intersection of two elliptical regions.
 */
 
 QRegion QRegion::intersect( const QRegion &r ) const
@@ -366,7 +379,12 @@ QRegion QRegion::intersect( const QRegion &r ) const
 }
 
 /*!
-  Returns a region which is \e r subtracted from this region.
+  Returns a region which is \a r subtracted from this region.
+
+  <img src=rsubtract.png>
+
+  The figure shows the result when the ellipse on the right is subtracted
+  from the ellipse on the left. (\c left-right )
 */
 
 QRegion QRegion::subtract( const QRegion &r ) const
@@ -377,7 +395,11 @@ QRegion QRegion::subtract( const QRegion &r ) const
 }
 
 /*!
-  Returns a region which is this region XOR \e r.
+  Returns a region which is the exclusive or (XOR) of this region and \a r.
+
+  <img src=rxor.png>
+
+  The figure shows the exclusive or of two elliptical regions.
 */
 
 QRegion QRegion::eor( const QRegion &r ) const
@@ -390,8 +412,7 @@ QRegion QRegion::eor( const QRegion &r ) const
 
 /*!
   Returns the bounding rectangle of this region.
-  An empty region gives a \link QRect::isNull() null\endlink
-  rectangle.
+  An empty region gives a rectangle that is  QRect::isNull().
 */
 
 QRect QRegion::boundingRect() const
@@ -419,18 +440,16 @@ struct _XRegion {
 
 
 /*!
-  Returns an array of the rectangles that make up the region.
-  The rectangles are non-overlapping. The region is formed by
-  the union of all these rectangles.
+  Returns an array of non-overlapping rectangles that make up the region.
+
+  The union of all the rectangles is equal to the original region.
 */
 
 QArray<QRect> QRegion::rects() const
 {
     QArray<QRect> a( (int)data->rgn->numRects );
     BOX *r = data->rgn->rects;
-    for ( int i=0; i<(int)a.size(); i++ ) {
-	// Note: the -1 are correct - see that setClipRect(r)
-	//       gives r back.
+    for ( int i=0; i<(int)a.size(); i++ ) { 
 	a[i].setCoords( r->x1, r->y1, r->x2-1, r->y2-1);
 	r++;
     }
@@ -439,7 +458,7 @@ QArray<QRect> QRegion::rects() const
 
 
 /*!
-  Returns TRUE if the region is equal to \e r, or FALSE if the regions are
+  Returns TRUE if the region is equal to \a r, or FALSE if the regions are
   different.
 */
 
@@ -451,6 +470,6 @@ bool QRegion::operator==( const QRegion &r ) const
 
 /*!
   \fn bool QRegion::operator!=( const QRegion &r ) const
-  Returns TRUE if the region is different from \e r, or FALSE if the regions
+  Returns TRUE if the region is different from \a r, or FALSE if the regions
   are equal.
 */

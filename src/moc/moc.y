@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: moc.y,v 2.53 1999/06/17 14:19:02 hanord Exp $
+** $Id: qt/src/moc/moc.y   2.1.0   edited 2000-03-24 $
 **
 ** Parser and code generator for meta object compiler
 **
 ** Created : 930417
 **
-** Copyright (C) 1993-1999 by Troll Tech AS.  All rights reserved.
+** Copyright (C) 1993-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 ** --------------------------------------------------------------------------
 **
@@ -40,15 +40,18 @@
 *****************************************************************************/
 
 %{
-void yyerror( char *msg );
+void yyerror( const char *msg );
 
 #include "qlist.h"
+#include "qasciidict.h"
 #include "qdict.h"
-#include "qstring.h"
+#include "qstrlist.h"
 #include "qdatetime.h"
+#include "qfile.h"
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
+
 
 
 static QCString rmWS( const char * );
@@ -70,7 +73,7 @@ struct Argument					// single arg meta data
 
 class ArgList : public QList<Argument> {	// member function arg list
 public:
-    ArgList() { setAutoDelete(TRUE); }
+    ArgList() { setAutoDelete( TRUE ); }
    ~ArgList() { clear(); }
 };
 
@@ -89,12 +92,153 @@ struct Function					// member function meta data
 
 class FuncList : public QList<Function> {	// list of member functions
 public:
-    FuncList() { setAutoDelete(TRUE); }
+    FuncList( bool autoDelete = FALSE ) { setAutoDelete( autoDelete ); }
+
+    FuncList find( const char* name )
+    {
+	FuncList result;
+	for ( QListIterator<Function> it( *this); it.current(); ++it ) {
+	    if ( it.current()->name == name )
+		result.append( it.current() );
+	}
+	return result;
+    }
+};
+
+class Enum : public QStrList
+{
+public:
+    QCString name;
+    bool set;
+};
+
+class EnumList : public QList<Enum> {		// list of property enums
+public:
+    EnumList() { setAutoDelete(TRUE); }
 };
 
 
+struct Property
+{
+    Property( int l, const char* t, const char* n, const char* s, const char* g, const char* r,
+	      const QCString& st, int d, bool ov )
+	: lineNo(l), type(t), name(n), set(s), get(g), reset(r), setfunc(0), getfunc(0), resetfunc(0),
+	  sspec(Unspecified), gspec(Unspecified), stored( st ),
+	  designable( d ), override( ov ), oredEnum( -1 )
+    {}
+
+    int lineNo;
+    QCString type;
+    QCString name;
+    QCString set;
+    QCString get;
+    QCString reset;
+    QCString stored;
+    int designable; // Allowed values are 1 (True), 0 (False), and -1 (Unset)
+    bool override;
+    int oredEnum; // If the enums item may be ored. That means the data type is int.
+		  // Allowed values are 1 (True), 0 (False), and -1 (Unset)
+
+    Function* setfunc;
+    Function* getfunc;
+    Function* resetfunc;
+
+    enum Specification  { Unspecified, Class, Reference, Pointer, ConstCharStar };
+    Specification sspec;
+    Specification gspec;
+
+    static const char* specToString( Specification s )
+    {
+	switch ( s ) {
+	case Class:
+	    return "Class";
+	case Reference:
+	    return "Reference";
+	case Pointer:
+	    return "Pointer";
+	case ConstCharStar:
+	    return "ConstCharStar";
+	default:
+	    return "Unspecified";
+	}
+    }
+};
+
+class PropList : public QList<Property> {	// list of properties
+public:
+    PropList() { setAutoDelete( TRUE ); }
+};
+
+
+struct ClassInfo
+{
+    ClassInfo( const char* n, const char* v )
+	: name(n), value(v)
+    {}
+    QCString name;
+    QCString value;
+};
+
+class ClassInfoList : public QList<ClassInfo> {	// list of class infos
+public:
+    ClassInfoList() { setAutoDelete( TRUE ); }
+};
+
+
+/*
+  Attention!
+  This table is copied from qvariant.cpp. If you change
+  one, change both.
+*/
+static const int ntypes = 25;
+static const char* const type_map[ntypes] =
+{
+    0,
+    "QMap<QString,QVariant>",
+    "QValueList<QVariant>",
+    "QString",
+    "QStringList",
+    "QFont",
+    "QPixmap",
+    "QBrush",
+    "QRect",
+    "QSize",
+    "QColor",
+    "QPalette",
+    "QColorGroup",
+    "QIconSet",
+    "QPoint",
+    "QImage",
+    "int",
+    "uint",
+    "bool",
+    "double",
+    "QCString",
+    "QPointArray",
+    "QRegion",
+    "QBitmap",
+    "QCursor"
+};
+
+int qvariant_nameToType( const char* name )
+{
+    for ( int i = 0; i < ntypes; i++ ) {
+	if ( !qstrcmp( type_map[i], name ) )
+	    return i;
+    }
+    return 0;
+}
+
+
 ArgList *addArg( Argument * );			// add arg to tmpArgList
-void	 addMember( char );			// add tmpFunc to current class
+
+enum Member { SignalMember,
+	      SlotMember,
+	      PropertyCandidateMember
+	    };
+
+void	 addMember( Member );			// add tmpFunc to current class
+void     addEnum();				// add tmpEnum to current class
 
 char	*strnew( const char * );		// returns a new string (copy)
 char	*stradd( const char *, const char * );	// add two strings
@@ -108,23 +252,35 @@ char	*straddSpc( const char *, const char *,
 
 extern int yydebug;
 bool	   lexDebug	   = FALSE;
-bool	   grammarDebug	   = FALSE;
 int	   lineNo;				// current line number
 bool	   errorControl	   = FALSE;		// controlled errors
 bool	   displayWarnings = TRUE;
 bool	   skipClass;				// don't generate for class
 bool	   skipFunc;				// don't generate for func
 bool	   templateClass;			// class is a template
+bool	   templateClassOld;			// previous class is a template
 
 ArgList	  *tmpArgList;				// current argument list
 Function  *tmpFunc;				// current member function
+Enum      *tmpEnum;				// current enum
 AccessPerm tmpAccessPerm;			// current access permission
 AccessPerm subClassPerm;			// current access permission
+
 bool	   Q_OBJECTdetected;			// TRUE if current class
 						// contains the Q_OBJECT macro
-QCString   tmpExpression;
+bool	   Q_PROPERTYdetected;			// TRUE if current class
+						// contains at least one Q_PROPERTY,
+						// Q_OVERRIDE, Q_SETS or Q_ENUMS macro
+bool	   tmpPropOverride;			// current property override setting
 
-const int  formatRevision = 3;			// moc output format revision
+// some temporary values
+QCString   tmpExpression;			// Used to store the characters the lexer
+						// is currently skipping (see addExpressionChar and friends)
+int	   tmpYYStart;				// Used to store the lexers current mode
+int	   tmpYYStart2;				// Used to store the lexers current mode
+						// (if tmpYYStart is already used)
+
+const int  formatRevision = 7;			// moc output format revision
 
 %}
 
@@ -186,6 +342,17 @@ const int  formatRevision = 3;			// moc output format revision
 %token			SIGNALS
 %token			SLOTS
 %token			Q_OBJECT
+%token			Q_PROPERTY
+%token			Q_OVERRIDE
+%token			Q_CLASSINFO
+%token			Q_ENUMS
+%token			Q_SETS
+
+%token			READ
+%token			WRITE
+%token			STORED
+%token			DESIGNABLE
+%token			RESET
 
 %type  <string>		class_name
 %type  <string>		template_class_name
@@ -316,6 +483,10 @@ const_expression:	   /* empty */		  { initExpression();
 						    BEGIN IN_EXPR; }
 			;
 
+enumerator_expression:	   /* empty */		  { initExpression();
+						    BEGIN IN_ENUM; }
+			;
+
 /***** r.17.3 (ARM p.391): Declarations *****/
 
 decl_specifier:		  storage_class_specifier { $$ = ""; }
@@ -378,12 +549,14 @@ template_spec:		  TEMPLATE '<' template_args '>'
 			;
 
 opt_template_spec:	  /* empty */
-			| template_spec		{ templateClass = TRUE; }
+			| template_spec		{ templateClassOld = templateClass;
+						  templateClass = TRUE;
+						}
 			;
 
 
-class_key:		  opt_template_spec CLASS { $$ = "class"; }
-			| opt_template_spec STRUCT { $$ = "struct"; }
+class_key:		  opt_template_spec CLASS	{ $$ = "class"; }
+			| opt_template_spec STRUCT	{ $$ = "struct"; }
 			;
 
 complete_class_name:	  qualified_class_name	{ $$ = $1; }
@@ -406,9 +579,9 @@ elaborated_type_specifier:
 
 argument_declaration_list:  arg_declaration_list_opt triple_dot_opt { $$ = $1;}
 			|   arg_declaration_list ',' TRIPLE_DOT	    { $$ = $1;
-				       moc_warn("Ellipsis not supported"
-					       " in signals and slots.\n"
-					       "Ellipsis argument ignored."); }
+				       func_warn("Ellipsis not supported"
+						 " in signals and slots.\n"
+						 "Ellipsis argument ignored."); }
 			;
 
 arg_declaration_list_opt:	/* empty */	{ $$ = tmpArgList; }
@@ -416,9 +589,9 @@ arg_declaration_list_opt:	/* empty */	{ $$ = tmpArgList; }
 			;
 
 triple_dot_opt:			/* empty */
-			| TRIPLE_DOT { moc_warn("Ellipsis not supported"
-					       " in signals and slots.\n"
-					       "Ellipsis argument ignored."); }
+			| TRIPLE_DOT { func_warn("Ellipsis not supported"
+						 " in signals and slots.\n"
+						 "Ellipsis argument ignored."); }
 
 			;
 
@@ -428,23 +601,19 @@ arg_declaration_list:	  arg_declaration_list
 			| argument_declaration	{ $$ = addArg($1); }
 
 argument_declaration:	  decl_specifiers abstract_decl_opt
-				{ $$ = new Argument(straddSpc($1,$2),"");
-				  CHECK_PTR($$); }
+				{ $$ = new Argument(straddSpc($1,$2),""); }
 			| decl_specifiers abstract_decl_opt
 			  '=' { expLevel = 1; }
 			  const_expression
-				{ $$ = new Argument(straddSpc($1,$2),"");
-				  CHECK_PTR($$); }
+				{ $$ = new Argument(straddSpc($1,$2),""); }
 			| decl_specifiers abstract_decl_opt dname
 				abstract_decl_opt
-				{ $$ = new Argument(straddSpc($1,$2),$4);
-				  CHECK_PTR($$); }
+				{ $$ = new Argument(straddSpc($1,$2),$4); }
 			| decl_specifiers abstract_decl_opt dname
 				abstract_decl_opt
 			  '='	{ expLevel = 1; }
 			  const_expression
-				{ $$ = new Argument(straddSpc($1,$2),$4);
-				  CHECK_PTR($$); }
+				{ $$ = new Argument(straddSpc($1,$2),$4); }
 			;
 
 
@@ -486,6 +655,7 @@ fct_decl:		  '('
 			  argument_declaration_list
 			  ')'
 			  cv_qualifier_list_opt
+			  ctor_initializer_opt
 			  fct_body_or_semicolon
 						{ tmpFunc->args	     = $2;
 						  tmpFunc->qualifier = $4; }
@@ -544,8 +714,8 @@ fct_body_or_semicolon:	  ';'
 			| '=' INT_VAL ';'   /* abstract func, INT_VAL = 0 */
 			;
 
-fct_body:		  '{' {BEGIN IN_FCT; fctLevel = 1;}
-			  '}' {BEGIN QT_DEF; }
+fct_body:		  '{' { BEGIN IN_FCT; fctLevel = 1;}
+			  '}' { BEGIN QT_DEF; }
 			;
 
 
@@ -553,7 +723,8 @@ fct_body:		  '{' {BEGIN IN_FCT; fctLevel = 1;}
 
 class_specifier:	  full_class_head
 			  '{'			{ BEGIN IN_CLASS;
-                                                  classPLevel = 1; }
+                                                  classPLevel = 1;
+						}
 			  opt_obj_member_list
 			  '}'			{ BEGIN QT_DEF; } /*catch ';'*/
 			| class_head		{ BEGIN QT_DEF;	  /* -- " -- */
@@ -585,6 +756,27 @@ full_class_head:	  class_head
 			  opt_base_spec		{ superclassName = $2; }
 			;
 
+nested_class_head:	  class_key
+			  qualified_class_name
+			  opt_base_spec		{ templateClass = templateClassOld; }
+
+ctor_initializer_opt:		/* empty */
+			| ctor_initializer
+			;
+
+ctor_initializer:	':' mem_initializer_list
+			;
+
+mem_initializer_list:	mem_initializer
+			| mem_initializer ',' mem_initializer_list
+			;
+
+/* complete_class_name also represents IDENTIFIER */
+mem_initializer:	complete_class_name '('	{ expLevel = 1; }
+			const_expression ')'
+			;
+
+
 opt_base_spec:			/* empty */	{ $$ = 0; }
 			| base_spec		{ $$ = $1; }
 			;
@@ -607,30 +799,79 @@ obj_member_area:	  qt_access_specifier	{ BEGIN QT_DEF; }
 			  slot_area
 			| SIGNALS		{ BEGIN QT_DEF; }
 			  ':'  opt_signal_declarations
-			| Q_OBJECT		{ if ( tmpAccessPerm )
-				moc_warn("Q_OBJECT is not in the private"
-					" section of the class.\n"
-					"Q_OBJECT is a macro that resets"
-					" access permission to \"private\".");
-						  Q_OBJECTdetected = TRUE; }
-
+			| Q_OBJECT		{
+			      if ( tmpAccessPerm )
+				  moc_warn("Q_OBJECT is not in the private"
+					   " section of the class.\n"
+					   "Q_OBJECT is a macro that resets"
+					   " access permission to \"private\".");
+			      Q_OBJECTdetected = TRUE;
+			  }
+			| Q_PROPERTY { tmpYYStart = YY_START;
+				       tmpPropOverride = FALSE;
+				       BEGIN IN_PROPERTY; }
+			  '(' property ')' {
+						BEGIN tmpYYStart;
+				   	   }
+			  opt_property_candidates
+			| Q_OVERRIDE { tmpYYStart = YY_START;
+				       tmpPropOverride = TRUE;
+				       BEGIN IN_PROPERTY; }
+			  '(' property ')' {
+						BEGIN tmpYYStart;
+				   	   }
+			  opt_property_candidates
+			| Q_CLASSINFO { tmpYYStart = YY_START; BEGIN IN_PROPERTY; }
+			  '(' STRING ',' STRING ')'
+				  {
+				      infos.append( new ClassInfo( $4, $6 ) );
+				      BEGIN tmpYYStart;
+				  }
+			  opt_property_candidates
+			| Q_ENUMS { tmpYYStart = YY_START; BEGIN IN_PROPERTY; }
+			  '(' qt_enums ')' {
+			  			Q_PROPERTYdetected = TRUE;
+						BEGIN tmpYYStart;
+				   	   }
+			  opt_property_candidates
+			| Q_SETS { tmpYYStart = YY_START; BEGIN IN_PROPERTY; }
+			  '(' qt_sets ')' {
+			  			Q_PROPERTYdetected = TRUE;
+						BEGIN tmpYYStart;
+				   	   }
+			  opt_property_candidates
 			;
 
-slot_area:		  SIGNALS ':'	     { moc_err( "Signals cannot "
+slot_area:		  SIGNALS ':'	{ moc_err( "Signals cannot "
 						 "have access specifiers" ); }
 			| SLOTS	  ':' opt_slot_declarations
-			| ':'		 { if ( grammarDebug )
-						  BEGIN QT_DEF;
-					      else
-						  BEGIN IN_CLASS;
-					 }
-				      opt_slot_declarations
-			| IDENTIFIER	 { BEGIN IN_CLASS;
+			| ':'		{ if ( tmpAccessPerm == _PUBLIC && Q_PROPERTYdetected )
+                                                  BEGIN QT_DEF;
+                                              else
+                                                  BEGIN IN_CLASS;
+					  suppress_func_warn = TRUE;
+                                        }
+			  opt_property_candidates
+					{
+					  suppress_func_warn = FALSE;
+					}
+			| IDENTIFIER	{ BEGIN IN_CLASS;
 					   if ( classPLevel != 1 )
 					       moc_warn( "unexpected access"
 							 "specifier" );
-					 }
+					}
 			;
+
+opt_property_candidates:	  /*empty*/
+				| property_candidate_declarations
+			;
+
+property_candidate_declarations:	  property_candidate_declarations property_candidate_declaration
+					| property_candidate_declaration
+				;
+
+property_candidate_declaration:	signal_or_slot { addMember( PropertyCandidateMember ); }
+				;
 
 opt_signal_declarations:	/* empty */
 			| signal_declarations
@@ -641,7 +882,7 @@ signal_declarations:	  signal_declarations signal_declaration
 			;
 
 
-signal_declaration:	  signal_or_slot	{ addMember('s'); }
+signal_declaration:	  signal_or_slot	{ addMember( SignalMember ); }
 			;
 
 opt_slot_declarations:		/* empty */
@@ -652,10 +893,10 @@ slot_declarations:	  slot_declarations slot_declaration
 			| slot_declaration
 			;
 
-slot_declaration:	  signal_or_slot	{ addMember('t'); }
+slot_declaration:	  signal_or_slot		{ addMember( SlotMember ); }
 			;
 
-opt_semicolons:		  /* empty */
+opt_semicolons:			/* empty */
 			| opt_semicolons ';'
 			;
 
@@ -748,7 +989,9 @@ type_and_name:		  type_name fct_name
 						 " signals or slots.");
 						}
 			| opt_virtual '~' fct_name
-						{
+						{ tmpFunc->type = "void";
+						  tmpFunc->name = "~";
+						  tmpFunc->name += $3;
 				       func_warn( "Destructors cannot be"
 						  " signals or slots.");
 						}
@@ -785,25 +1028,34 @@ type_and_name:		  type_name fct_name
 						{ operatorError();    }
 			;
 
-signal_or_slot:		  type_and_name fct_decl opt_semicolons
+
+signal_or_slot:		type_and_name fct_decl opt_semicolons
 			| type_and_name opt_bitfield ';' opt_semicolons
 				{ func_warn("Variable as signal or slot."); }
 			| type_and_name opt_bitfield ','member_declarator_list
 			  ';' opt_semicolons
 				{ func_warn("Variable as signal or slot."); }
-			| enum_specifier  ';' opt_semicolons
+			| enum_specifier opt_identifier ';' opt_semicolons
 				{ func_warn("Enum declaration as signal or"
-					  " slot."); }
+					    " slot."); }
                         | USING complete_class_name ';' opt_semicolons
                                 { func_warn("Using declaration as signal or"
 					    " slot."); }
-			|USING NAMESPACE complete_class_name ';' opt_semicolons
+			| USING NAMESPACE complete_class_name ';' opt_semicolons
                                 { func_warn("Using declaration as signal or"
 					    " slot."); }
 			| NAMESPACE IDENTIFIER '{'
                                 { classPLevel++;
 				  moc_err("Namespace declaration as signal or"
 					  " slot."); }
+ 			| nested_class_head ';' opt_semicolons
+ 				{ func_warn("Class declaration as signal or slot.");}
+ 			| nested_class_head
+ 			  '{'   { func_warn("Class declaration as signal or slot.");
+				  BEGIN IN_FCT; fctLevel=1;
+				}
+                          '}'  { BEGIN QT_DEF; }
+			  ';' opt_semicolons
 			;
 
 
@@ -824,12 +1076,98 @@ opt_bitfield:		  /* empty */
 			;
 
 
-enum_specifier:		  ENUM opt_identifier '{'   {BEGIN IN_FCT; fctLevel=1;}
-					      '}'   {BEGIN QT_DEF; }
+enum_specifier:		  ENUM enum_tail
+			;
+
+/* optional final comma at the end of an enum list. Not really C++ but
+some people still use it */
+opt_komma:		  /*empty*/
+			| ','
+			;
+
+enum_tail:		  IDENTIFIER '{'   enum_list opt_komma
+			  '}'   { BEGIN QT_DEF;
+				  if ( tmpAccessPerm == _PUBLIC) {
+				      tmpEnum->name = $1;
+				      addEnum();
+				  }
+				}
+			| '{'   enum_list opt_komma
+			  '}'   { tmpEnum->clear();}
 			;
 
 opt_identifier:		  /* empty */
 			| IDENTIFIER
+			;
+
+enum_list:		  /* empty */
+			| enumerator
+			| enum_list ',' enumerator
+			;
+
+enumerator:		  IDENTIFIER { if ( tmpAccessPerm == _PUBLIC) tmpEnum->append( $1 ); }
+			| IDENTIFIER '=' { expLevel=0; }
+			  enumerator_expression {  if ( tmpAccessPerm == _PUBLIC) tmpEnum->append( $1 );  }
+			;
+
+property:		IDENTIFIER IDENTIFIER
+				{
+				     propWrite = "";
+				     propRead = "";
+				     if ( tmpPropOverride )
+				         propStored = "";
+				     else
+					 propStored = "true";
+				     propReset = "";
+				     propOverride = tmpPropOverride;
+				     if ( tmpPropOverride )
+				         propDesignable = -1;
+				     else
+				         propDesignable = 1;
+				}
+			prop_statements
+				{
+				    if ( propRead.isEmpty() && !propOverride)
+					moc_err( "A property must at least feature a read method." );
+				    checkIdentifier( $2 );
+				    Q_PROPERTYdetected = TRUE;
+				    // Avoid duplicates
+				    for( QListIterator<Property> lit( props ); lit.current(); ++lit ) {
+					if ( lit.current()->name == $2 ) {
+					    if ( displayWarnings )
+						moc_err( "Property '%s' defined twice.",
+							 (const char*)lit.current()->name );
+					}
+				    }
+				    props.append( new Property( lineNo, $1, $2,
+								propWrite, propRead, propReset, propStored,
+								propDesignable, propOverride ) );
+				}
+			;
+
+prop_statements:	  /* empty */
+			| READ IDENTIFIER prop_statements { propRead = $2; }
+			| WRITE IDENTIFIER prop_statements { propWrite = $2; }
+			| RESET IDENTIFIER prop_statements { propReset = $2; }
+			| STORED IDENTIFIER prop_statements { propStored = $2; }
+			| DESIGNABLE IDENTIFIER
+				{
+					if ( strcmp( $2, "true" ) == 0 )
+						propDesignable = 1;
+					else if ( strcmp( $2, "false" ) == 0 )
+						propDesignable = 0;
+					else
+						moc_err( "DESIGNABLE may only be followed by 'true' or 'false'" );
+				}
+			  prop_statements
+			;
+
+qt_enums:		  /* empty */ { }
+			| IDENTIFIER qt_enums { qtEnums.append( $1 ); }
+			;
+
+qt_sets:		  /* empty */ { }
+			| IDENTIFIER qt_sets { qtSets.append( $1 ); }
 			;
 
 %%
@@ -866,6 +1204,22 @@ QCString  className;				// name of parsed class
 QCString  superclassName;			// name of super class
 FuncList  signals;				// signal interface
 FuncList  slots;				// slots interface
+FuncList  propfuncs;				// all possible property access functions
+FuncList  funcs( TRUE );			// all parsed functions, including signals
+EnumList  enums;				// enums used in properties
+PropList  props;				// list of all properties
+ClassInfoList	infos;				// list of all class infos
+
+// Used to store the values in the Q_PROPERTY macro
+QCString propWrite;				// set function
+QCString propRead;				// get function
+QCString propReset;				// reset function
+QCString propStored;				// "true", "false" or function or empty if not specified
+bool propOverride;				// Wether OVERRIDE was detected
+int propDesignable;				// Wether DESIGNABLE was TRUE (1) or FALSE (0) or not specified (-1)
+
+QStrList qtEnums;				// Used to store the contents of Q_ENUMS
+QStrList qtSets;				// Used to store the contents of Q_SETS
 
 FILE  *out;					// output file
 
@@ -931,8 +1285,6 @@ int main( int argc, char **argv )
 		lexDebug = TRUE;
 	    } else if ( opt == "ydbg" ) {	// yacc debug output
 		yydebug = TRUE;
-	    } else if ( opt == "dbg" ) {	// non-signal members are slots
-		grammarDebug = TRUE;
 	    } else {
 		error = "Invalid argument";
 	    }
@@ -976,11 +1328,6 @@ int main( int argc, char **argv )
 		 "\t-p path  Path prefix for included file\n"
 		 "\t-k       Do not stop on errors\n"
 		 "\t-nw      Do not display warnings\n"
-#if 0
-		 "\t-ldbg    lex debug output\n"
-		 "\t-ydbg    yacc debug output\n"
-		 "\t-dbg     test parser, all non-signal members are slots\n"
-#endif
 		 );
 	return 1;
     } else {
@@ -1013,6 +1360,11 @@ int main( int argc, char **argv )
 
     slots.clear();
     signals.clear();
+    propfuncs.clear();
+    funcs.clear();
+    infos.clear();
+    props.clear();
+    infos.clear();
 
     return mocError ? 1 : 0;
 }
@@ -1076,31 +1428,34 @@ QCString combinePath( const char *infile, const char *outfile )
 char *getenv()		     { return 0; }
 char *getenv( const char * ) { return 0; }
 
-
 void init()					// initialize
 {
     BEGIN OUTSIDE;
     lineNo	 = 1;
     skipClass	 = FALSE;
     skipFunc	 = FALSE;
-    signals.setAutoDelete( TRUE );
-    slots.setAutoDelete( TRUE );
-
     tmpArgList	 = new ArgList;
-    CHECK_PTR( tmpArgList );
     tmpFunc	 = new Function;
-    CHECK_PTR( tmpFunc );
+    tmpEnum	 = new Enum;
 }
 
 void initClass()				 // prepare for new class
 {
-    tmpAccessPerm    = _PRIVATE;
-    subClassPerm     = _PRIVATE;
-    Q_OBJECTdetected = FALSE;
-    skipClass	     = FALSE;
-    templateClass    = FALSE;
+    tmpAccessPerm      = _PRIVATE;
+    subClassPerm       = _PRIVATE;
+    Q_OBJECTdetected   = FALSE;
+    Q_PROPERTYdetected = FALSE;
+    skipClass	       = FALSE;
+    templateClass      = FALSE;
     slots.clear();
     signals.clear();
+    propfuncs.clear();
+    enums.clear();
+    funcs.clear();
+    props.clear();
+    infos.clear();
+    qtSets.clear();
+    qtEnums.clear();
 }
 
 struct NamespaceInfo
@@ -1119,7 +1474,7 @@ void enterNameSpace( const char *name = 0 )   	 // prepare for new class
 	namespaces.setAutoDelete( TRUE );
 	first = FALSE;
     }
-	
+
     NamespaceInfo *tmp = new NamespaceInfo;
     if ( name )
 	tmp->name = name;
@@ -1184,7 +1539,7 @@ void closeNameSpaceForMetaObject( FILE *out, int levels )
 	    fprintf( out, "}" );
     if ( levels )
 	fprintf( out, "\n" );
-	
+
 }
 
 void selectOutsideClassState()
@@ -1253,53 +1608,66 @@ void initExpression()
     tmpExpression = "";
 }
 
-void addExpressionString( char *s )
+void addExpressionString( const char *s )
 {
     tmpExpression += s;
 }
 
-void addExpressionChar( char c )
+void addExpressionChar( const char c )
 {
     tmpExpression += c;
 }
 
-void yyerror( char *msg )			// print yacc error message
+void yyerror( const char *msg )			// print yacc error message
 {
     mocError = TRUE;
     fprintf( stderr, "%s:%d: Error: %s\n", fileName.data(), lineNo, msg );
 }
 
-void moc_err( char *s )
+void moc_err( const char *s )
 {
     yyerror( s );
-    if ( errorControl )
+    if ( errorControl ) {
 	exit( -1 );
+    }
 }
 
-void moc_err( char *s1, char *s2 )
+void moc_err( const char *s1, const char *s2 )
 {
     static char tmp[1024];
     sprintf( tmp, s1, s2 );
     yyerror( tmp );
-    if ( errorControl )
+    if ( errorControl ) {
 	exit( -1 );
+    }
 }
 
-void moc_warn( char *msg )
+void moc_warn( const char *msg )
 {
     if ( displayWarnings )
 	fprintf( stderr, "%s:%d: Warning: %s\n", fileName.data(), lineNo, msg);
 }
 
-void func_warn( char *msg )
+void moc_warn( char *s1, char *s2 )
 {
-    moc_warn( msg );
+    static char tmp[1024];
+    sprintf( tmp, s1, s2 );
+    if ( displayWarnings )
+	fprintf( stderr, "%s:%d: Warning: %s\n", fileName.data(), lineNo, tmp);
+}
+
+static bool suppress_func_warn = FALSE;
+void func_warn( const char *msg )
+{
+    if ( !suppress_func_warn )
+	moc_warn( msg );
     skipFunc = TRUE;
 }
 
 void operatorError()
 {
-    moc_warn("Operator functions cannot be signals or slots.");
+    if ( !suppress_func_warn )
+	moc_warn("Operator functions cannot be signals or slots.");
     skipFunc = TRUE;
 }
 
@@ -1313,7 +1681,6 @@ int yywrap()					// more files?
 char *stradd( const char *s1, const char *s2 )	// adds two strings
 {
     char *n = new char[strlen(s1)+strlen(s2)+1];
-    CHECK_PTR( n );
     strcpy( n, s1 );
     strcat( n, s2 );
     return n;
@@ -1322,7 +1689,6 @@ char *stradd( const char *s1, const char *s2 )	// adds two strings
 char *stradd( const char *s1, const char *s2, const char *s3 )// adds 3 strings
 {
     char *n = new char[strlen(s1)+strlen(s2)+strlen(s3)+1];
-    CHECK_PTR( n );
     strcpy( n, s1 );
     strcat( n, s2 );
     strcat( n, s3 );
@@ -1333,7 +1699,6 @@ char *stradd( const char *s1, const char *s2,
 	      const char *s3, const char *s4 )// adds 4 strings
 {
     char *n = new char[strlen(s1)+strlen(s2)+strlen(s3)+strlen(s4)+1];
-    CHECK_PTR( n );
     strcpy( n, s1 );
     strcat( n, s2 );
     strcat( n, s3 );
@@ -1345,7 +1710,6 @@ char *stradd( const char *s1, const char *s2,
 char *straddSpc( const char *s1, const char *s2 )
 {
     char *n = new char[strlen(s1)+strlen(s2)+2];
-    CHECK_PTR( n );
     strcpy( n, s1 );
     strcat( n, " " );
     strcat( n, s2 );
@@ -1355,7 +1719,6 @@ char *straddSpc( const char *s1, const char *s2 )
 char *straddSpc( const char *s1, const char *s2, const char *s3 )
 {
     char *n = new char[strlen(s1)+strlen(s2)+strlen(s3)+3];
-    CHECK_PTR( n );
     strcpy( n, s1 );
     strcat( n, " " );
     strcat( n, s2 );
@@ -1368,7 +1731,6 @@ char *straddSpc( const char *s1, const char *s2,
 	      const char *s3, const char *s4 )
 {
     char *n = new char[strlen(s1)+strlen(s2)+strlen(s3)+strlen(s4)+4];
-    CHECK_PTR( n );
     strcpy( n, s1 );
     strcat( n, " " );
     strcat( n, s2 );
@@ -1414,6 +1776,7 @@ QCString qualifiedSuperclassName()
 
 const int Slot_Num   = 1;
 const int Signal_Num = 2;
+const int Prop_Num = 3;
 
 void generateFuncs( FuncList *list, char *functype, int num )
 {
@@ -1435,7 +1798,7 @@ void generateFuncs( FuncList *list, char *functype, int num )
 		 (const char*)f->type, (const char*)qualifiedClassName(),
 		 num, list->at(),
 		 (const char*)typstr,  (const char*)f->qualifier );
-	f->type = f->name.copy();
+	f->type = f->name;
 	f->type += "(";
 	f->type += typstr;
 	f->type += ")";
@@ -1455,13 +1818,586 @@ void generateFuncs( FuncList *list, char *functype, int num )
 		 functype, list->at(), num, list->at() );
 }
 
+
+void generateTypedef( Function* f, int num )
+{
+  QCString typstr = "";
+  int count = 0;
+  Argument *a = f->args->first();
+  while ( a ) {
+    if ( !a->leftType.isEmpty() || ! a->rightType.isEmpty() ) {
+      if ( count++ )
+	typstr += ",";
+      typstr += a->leftType;
+      typstr += a->rightType;
+    }
+    a = f->args->next();
+  }
+
+
+  fprintf( out, "    typedef %s(%s::*m%d_t%d)(%s)%s;\n",
+	   (const char*)f->type, (const char*)className, Prop_Num, num,
+	   (const char*)typstr,  (const char*)f->qualifier );
+}
+
+
+bool isPropertyType( const char* type )
+{
+    if ( qvariant_nameToType( type ) != 0 )
+	return TRUE;
+
+    for( QListIterator<Enum> lit( enums ); lit.current(); ++lit ) {
+	if ( lit.current()->name == type )
+	    return TRUE;
+    }
+    return FALSE;
+}
+
+/*!
+  Returns TRUE if the type is not one of a QVariant types.
+  So it is either a enum/set or an error.
+*/
+bool isEnumType( const char* type )
+{
+    if ( qvariant_nameToType( type ) != 0 )
+	return FALSE;
+
+    return TRUE;
+}
+
+void finishProps()
+{
+    int entry = 0;
+    for( QListIterator<Property> it( props ); it.current(); ++it ) {
+	if ( !isPropertyType( it.current()->type ) ||
+	     it.current()->override )
+	    fprintf( out, "    metaObj->resolveProperty( &props_tbl[%d] );\n", entry );
+	++entry;
+    }
+}
+
+int generateEnums()
+{
+    if ( enums.count() == 0 )
+	return 0;
+
+    fprintf( out, "    QMetaEnum* enum_tbl = QMetaObject::new_metaenum( %i );\n", enums.count() );
+
+    int i = 0;
+    for ( QListIterator<Enum> it( enums ); it.current(); ++it, ++i ) {
+	fprintf( out, "    enum_tbl[%i].name = \"%s\";\n", i, (const char*)it.current()->name );
+	fprintf( out, "    enum_tbl[%i].count = %i;\n", i, (const char*)it.current()->count() );
+	fprintf( out, "    enum_tbl[%i].items = QMetaObject::new_metaenum_item( %i );\n",
+		 i,(const char*)it.current()->count() );
+
+	if ( it.current()->set )
+		fprintf( out, "    enum_tbl[%i].set = TRUE;\n", i );
+	else
+		fprintf( out, "    enum_tbl[%i].set = FALSE;\n", i );
+
+	int k = 0;
+	for( QStrListIterator eit( *it.current() ); eit.current(); ++eit, ++k ) {
+	    fprintf( out, "    enum_tbl[%i].items[%i].key = \"%s\";\n", i, k, eit.current() );
+	    fprintf( out, "    enum_tbl[%i].items[%i].value = (int) %s::%s;\n",
+		     i, k, (const char*)className, eit.current() );
+	}
+    }
+
+    return enums.count();
+}
+
+
+int generateProps()
+{
+    if ( displayWarnings && !Q_OBJECTdetected )
+	moc_err("The declaration of the class \"%s\" contains properties"
+		" but no Q_OBJECT macro!", className.data());
+    //
+    // Resolve and verify property access functions
+    //
+    for( QListIterator<Property> it( props ); it.current(); ) {
+	Property* p = it.current();
+	++it;
+
+	// verify get function
+	if ( !p->get.isEmpty() ) {
+	    FuncList candidates = propfuncs.find( p->get );
+	    for ( Function* f = candidates.first(); f; f = candidates.next() ) {
+		if ( f->qualifier != "const" ) // get functions must be const
+		    continue;
+		if ( f->args && !f->args->isEmpty() ) // and must not take any arguments
+		    continue;
+		QCString tmp = f->type;
+		tmp = tmp.simplifyWhiteSpace();
+		Property::Specification spec = Property::Unspecified;
+		if ( p->type == "QCString" && (tmp == "const char*" || tmp == "const char *" ) ) {
+		    tmp = "QCString";
+		    spec = Property::ConstCharStar;
+		} else if ( tmp.right(1) == "&" ) {
+		    tmp = tmp.left( tmp.length() - 1 );
+		    spec = Property::Reference;
+		} else if ( tmp.right(1) == "*" ) {
+		    tmp = tmp.left( tmp.length() - 1 );
+		    spec = Property::Pointer;
+		} else {
+		    spec = Property::Class;
+		}
+		if ( tmp.left(6) == "const " )
+		    tmp = tmp.mid( 6, tmp.length() - 6 );
+		tmp = tmp.simplifyWhiteSpace();
+		if ( p->type == tmp ) {
+		    // If it is an enum then it may not be a set
+		    bool ok = TRUE;
+		    for( QListIterator<Enum> lit( enums ); lit.current(); ++lit )
+			if ( lit.current()->name == p->type && lit.current()->set )
+			    ok = FALSE;
+		    if ( !ok ) continue;
+		    p->gspec = spec;
+		    p->getfunc = f;
+		    p->oredEnum = 0;
+		    break;
+		}
+		else if ( isEnumType( p->type ) ) {
+		    if ( tmp == "int" || tmp == "uint" || tmp == "unsigned int" ) {
+			// Test wether the enum is really a set (unfortunately we dont know enums of super classes)
+			bool ok = TRUE;
+			for( QListIterator<Enum> lit( enums ); lit.current(); ++lit )
+			    if ( lit.current()->name == p->type && !lit.current()->set )
+				ok = FALSE;
+			if ( !ok ) continue;
+		        p->gspec = spec;
+		        p->getfunc = f;
+			p->oredEnum = 1;
+		    }
+		}
+	    }
+	    if ( p->getfunc == 0 ) {
+		if ( displayWarnings ) {
+
+		    // Is the type a set, that means, mentioned in Q_SETS ?
+		    bool set = FALSE;
+		    for( QListIterator<Enum> lit( enums ); lit.current(); ++lit )
+			if ( lit.current()->name == p->type && lit.current()->set )
+			    set = TRUE;
+
+		    fprintf( stderr, "%s:%d: Warning: Property '%s' not available.\n",
+			     fileName.data(), p->lineNo, (const char*) p->name );
+		    fprintf( stderr, "   Have been looking for public get functions \n");
+		    if ( !set ) {
+			fprintf( stderr,
+			     "      %s %s() const\n"
+			     "      %s& %s() const\n"
+			     "      const %s& %s() const\n"
+			     "      %s* %s() const\n",
+			     (const char*) p->type, (const char*) p->get,
+			     (const char*) p->type, (const char*) p->get,
+			     (const char*) p->type, (const char*) p->get,
+			     (const char*) p->type, (const char*) p->get );
+		    }
+		    if ( set || !isPropertyType( p->type ) ) {
+			fprintf( stderr,
+			     "      int %s() const\n"
+			     "      uint %s() const\n"
+			     "      unsigned int %s() const\n",
+			     (const char*) p->get,
+			     (const char*) p->get,
+			     (const char*) p->get,
+			     (const char*) p->get );
+		    }
+		    if ( p->type == "QCString" )
+			fprintf( stderr, "      const char* %s() const\n",
+				 (const char*)p->get );
+
+		    if ( candidates.isEmpty() ) {
+			fprintf( stderr, "   but found nothing.\n");
+		    } else {
+			fprintf( stderr, "   but only found the missmatching candidate(s)\n");
+			for ( Function* f = candidates.first(); f; f = candidates.next() ) {
+			    QCString typstr = "";
+			    Argument *a = f->args->first();
+			    int count = 0;
+			    while ( a ) {
+				if ( !a->leftType.isEmpty() || ! a->rightType.isEmpty() ) {
+				    if ( count++ )
+					typstr += ",";
+				    typstr += a->leftType;
+				    typstr += a->rightType;
+				}
+				a = f->args->next();
+			    }
+			    fprintf( stderr, "      %s:%d: %s %s(%s) %s\n", fileName.data(), f->lineNo,
+				     (const char*) f->type,(const char*) f->name, (const char*) typstr,
+				     f->qualifier.isNull()?"":(const char*) f->qualifier );
+			}
+		    }
+		}
+	    }
+	}
+
+	// verify set function
+	if ( !p->set.isEmpty() ) {
+	    FuncList candidates = propfuncs.find( p->set );
+	    for ( Function* f = candidates.first(); f; f = candidates.next() ) {
+		if ( !f->args || f->args->isEmpty() )
+		    continue;
+		QCString tmp = f->args->first()->leftType;
+		tmp = tmp.simplifyWhiteSpace();
+		Property::Specification spec = Property::Unspecified;
+		if ( tmp.right(1) == "&" ) {
+		    tmp = tmp.left( tmp.length() - 1 );
+		    spec = Property::Reference;
+		}
+		else {
+		    spec = Property::Class;
+		}
+		if ( p->type == "QCString" && (tmp == "const char*" || tmp == "const char *" ) ) {
+		    tmp = "QCString";
+		    spec = Property::ConstCharStar;
+		}
+		if ( tmp.left(6) == "const " )
+		    tmp = tmp.mid( 6, tmp.length() - 6 );
+		tmp = tmp.simplifyWhiteSpace();
+
+		if ( p->type == tmp && f->args->count() == 1 ) {
+		    // If it is an enum then it may not be a set
+		    if ( p->oredEnum == 1 )
+			continue;
+		    bool ok = TRUE;
+		    for( QListIterator<Enum> lit( enums ); lit.current(); ++lit )
+			if ( lit.current()->name == p->type && lit.current()->set )
+			    ok = FALSE;
+		    if ( !ok ) continue;
+		    p->sspec = spec;
+		    p->setfunc = f;
+		    p->oredEnum = 0;
+		    break;
+		}
+		else if ( isEnumType( p->type ) && f->args->count() == 1 ) {
+		    if ( tmp == "int" || tmp == "uint" || tmp == "unsigned int" ) {
+		        if ( p->oredEnum == 0 )
+			    continue;
+			// Test wether the enum is really a set (unfortunately we dont know enums of super classes)
+			bool ok = TRUE;
+			for( QListIterator<Enum> lit( enums ); lit.current(); ++lit )
+			    if ( lit.current()->name == p->type && !lit.current()->set )
+				ok = FALSE;
+			if ( !ok ) continue;
+		        p->sspec = spec;
+		        p->setfunc = f;
+			p->oredEnum = 1;
+		    }
+		}
+	    }
+	    if ( p->setfunc == 0 ) {
+		if ( displayWarnings ) {
+
+		    // Is the type a set, that means, mentioned in Q_SETS ?
+		    bool set = FALSE;
+		    for( QListIterator<Enum> lit( enums ); lit.current(); ++lit )
+			if ( lit.current()->name == p->type && lit.current()->set )
+			    set = TRUE;
+
+		    fprintf( stderr, "%s:%d: Warning: Property '%s' not writable.\n",
+			     fileName.data(), p->lineNo, (const char*) p->name );
+		    fprintf( stderr, "   Have been looking for public set functions \n");
+		    if ( !set && p->oredEnum != 1 ) {
+			fprintf( stderr,
+			     "      void %s( %s )\n"
+			     "      void %s( %s& )\n"
+			     "      void %s( const %s& )\n",
+			     (const char*) p->set, (const char*) p->type,
+			     (const char*) p->set, (const char*) p->type,
+			     (const char*) p->set, (const char*) p->type );
+		    }
+		    if ( set || ( !isPropertyType( p->type ) && p->oredEnum != 0 ) ) {
+			fprintf( stderr,
+			     "      void %s( int )\n"
+			     "      void %s( uint )\n"
+			     "      void %s( unsigned int )\n",
+			     (const char*) p->set,
+			     (const char*) p->set,
+			     (const char*) p->set );
+		    }
+
+		    if ( p->type == "QCString" )
+			fprintf( stderr, "      void %s( const char* ) const\n",
+				 (const char*) p->set );
+
+		    if ( !candidates.isEmpty() ) {
+			fprintf( stderr, "   but only found the missmatching candidate(s)\n");
+			for ( Function* f = candidates.first(); f; f = candidates.next() ) {
+			    QCString typstr = "";
+			    Argument *a = f->args->first();
+			    int count = 0;
+			    while ( a ) {
+				if ( !a->leftType.isEmpty() || ! a->rightType.isEmpty() ) {
+				    if ( count++ )
+					typstr += ",";
+				    typstr += a->leftType;
+				    typstr += a->rightType;
+				}
+				a = f->args->next();
+			    }
+			    fprintf( stderr, "      %s:%d: %s %s(%s)\n", fileName.data(), f->lineNo,
+				     (const char*) f->type,(const char*) f->name, (const char*) typstr );
+			}
+		    }
+		}
+	    }
+	}
+
+	// verify reset function
+	if ( !p->reset.isEmpty() ) {
+	    FuncList candidates = propfuncs.find( p->reset );
+	    for ( Function* f = candidates.first(); f; f = candidates.next() ) {
+		if ( f->qualifier == "const" ) // reset functions must not be const
+		    continue;
+		if ( f->args && !f->args->isEmpty() ) // and must not take any arguments
+		    continue;
+		QCString tmp = f->type;
+		tmp = tmp.simplifyWhiteSpace();
+		if ( tmp != "void" ) // Reset function must return void
+		    continue;
+		p->resetfunc = f;
+	    }
+	    if ( p->resetfunc == 0 ) {
+		if ( displayWarnings ) {
+
+		    fprintf( stderr, "%s:%d: Warning: Property '%s' not resetable.\n",
+			     fileName.data(), p->lineNo, (const char*) p->name );
+		    fprintf( stderr, "   Have been looking for public reset functions \n");
+		    fprintf( stderr, "      void %s()\n", (const char*) p->reset );
+
+		    if ( candidates.isEmpty() ) {
+			fprintf( stderr, "   but found nothing.\n");
+		    } else {
+			fprintf( stderr, "   but only found the missmatching candidate(s)\n");
+			for ( Function* f = candidates.first(); f; f = candidates.next() ) {
+			    QCString typstr = "";
+			    Argument *a = f->args->first();
+			    int count = 0;
+			    while ( a ) {
+				if ( !a->leftType.isEmpty() || ! a->rightType.isEmpty() ) {
+				    if ( count++ )
+					typstr += ",";
+				    typstr += a->leftType;
+				    typstr += a->rightType;
+				}
+				a = f->args->next();
+			    }
+			    fprintf( stderr, "      %s:%d: %s %s(%s) %s\n", fileName.data(), f->lineNo,
+				     (const char*) f->type,(const char*) f->name, (const char*) typstr,
+				     f->qualifier.isNull()?"":(const char*) f->qualifier );
+			}
+		    }
+		}
+	    }
+	}
+
+	// Resolve and verify the STORED function (if any)
+	if ( !p->stored.isEmpty() &&  p->stored != "true" && p->stored != "false" ) {
+	    bool found = FALSE;
+	    FuncList candidates = propfuncs.find( p->stored );
+	    for ( Function* f = candidates.first(); f; f = candidates.next() ) {
+		if ( f->qualifier != "const" ) // stored functions must be const
+		    continue;
+		if ( f->args && !f->args->isEmpty() ) // and must not take any arguments
+		    continue;
+
+		if ( f->type == "bool" )
+		    found = TRUE;
+	    }
+	    if ( !found ) {
+		if ( displayWarnings ) {
+		    fprintf( stderr, "%s:%d: Warning: Property '%s' not stored.\n",
+			     fileName.data(), p->lineNo, (const char*) p->name );
+		    fprintf( stderr, "   Have been looking for public function \n"
+			     "      bool %s() const\n",
+			     (const char*) p->stored );
+
+		    if ( candidates.isEmpty() ) {
+			fprintf( stderr, "   but found nothing.\n");
+		    } else {
+			fprintf( stderr, "   but only found the missmatching candidate(s)\n");
+			for ( Function* f = candidates.first(); f; f = candidates.next() ) {
+			    QCString typstr = "";
+			    Argument *a = f->args->first();
+			    int count = 0;
+			    while ( a ) {
+				if ( !a->leftType.isEmpty() || ! a->rightType.isEmpty() ) {
+				    if ( count++ )
+					typstr += ",";
+				    typstr += a->leftType;
+				    typstr += a->rightType;
+				}
+				a = f->args->next();
+			    }
+			    fprintf( stderr, "      %s:%d: %s %s(%s) %s\n", fileName.data(), f->lineNo,
+				     (const char*) f->type,(const char*) f->name, (const char*) typstr,
+				     f->qualifier.isNull()?"":(const char*) f->qualifier );
+			}
+		    }
+		}
+	    }
+	}
+
+    }
+
+    //
+    // Generate all typedefs
+    //
+    {
+	int count = 0;
+	for( QListIterator<Property> it( props ); it.current(); ++it ) {
+	    if ( it.current()->getfunc )
+		generateTypedef( it.current()->getfunc, count );
+	    if ( it.current()->setfunc )
+		generateTypedef( it.current()->setfunc, count + 1 );
+	    if ( it.current()->resetfunc )
+		generateTypedef( it.current()->resetfunc, count + 2 );
+	    count += 3;
+	}
+    }
+
+    //
+    // Crazy stuff for crazy compilers
+    //
+    {
+	int count = 0;
+	for( QListIterator<Property> it( props ); it.current(); ++it ) {
+	    if ( it.current()->getfunc )
+		fprintf( out, "    m%d_t%d v%d_%d = &%s::%s;\n", Prop_Num, count,
+			 Prop_Num, count, (const char*)className,(const char*)it.current()->getfunc->name);
+	    if ( it.current()->setfunc )
+		fprintf( out, "    m%d_t%d v%d_%d = &%s::%s;\n", Prop_Num, count + 1,
+			 Prop_Num, count + 1, (const char*)className,(const char*)it.current()->setfunc->name);
+	    if ( it.current()->resetfunc )
+		fprintf( out, "    m%d_t%d v%d_%d = &%s::%s;\n", Prop_Num, count + 2,
+			 Prop_Num, count + 2, (const char*)className,(const char*)it.current()->resetfunc->name);
+	    count += 3;
+	}
+    }
+
+    //
+    // Create meta data
+    //
+    if ( props.count() )
+	fprintf( out, "    QMetaProperty *props_tbl = QMetaObject::new_metaproperty( %d );\n", props.count() );
+    {
+	int count = 0;
+	int entry = 0;
+	for( QListIterator<Property> it( props ); it.current(); ++it ){
+
+	    fprintf( out, "    props_tbl[%d].t = \"%s\";\n", entry,
+		     (const char*)it.current()->type );
+	    fprintf( out, "    props_tbl[%d].n = \"%s\";\n",
+		     entry, (const char*) it.current()->name );
+
+	    if ( it.current()->getfunc )
+		fprintf( out, "    props_tbl[%d].get = *((QMember*)&v%d_%d);\n",
+			 entry, Prop_Num, count );
+	    else
+		fprintf( out, "    props_tbl[%d].get = 0;\n", entry );
+
+	    if ( it.current()->setfunc )
+		fprintf( out, "    props_tbl[%d].set = *((QMember*)&v%d_%d);\n",
+			 entry, Prop_Num, count + 1 );
+	    else
+		fprintf( out, "    props_tbl[%d].set = 0;\n", entry );
+
+	    if ( it.current()->resetfunc )
+		fprintf( out, "    props_tbl[%d].reset = *((QMember*)&v%d_%d);\n",
+			 entry, Prop_Num, count + 2 );
+	    else
+		fprintf( out, "    props_tbl[%d].reset = 0;\n", entry );
+
+	    fprintf( out, "    props_tbl[%d].gspec = QMetaProperty::%s;\n",
+		     entry, Property::specToString(it.current()->gspec ));
+
+	    fprintf( out, "    props_tbl[%d].sspec = QMetaProperty::%s;\n",
+		     entry, Property::specToString(it.current()->sspec ));
+
+	    int enumpos = -1;
+	    int k = 0;
+	    for( QListIterator<Enum> eit( enums ); eit.current(); ++eit, ++k ){
+		if ( eit.current()->name == it.current()->type )
+		    enumpos = k;
+	    }
+
+	    // Is it an enum of this class ?
+	    if ( enumpos != -1 )
+		fprintf( out, "    props_tbl[%d].enumData = &enum_tbl[%i];\n", entry, enumpos );
+	    // Is it an unknown enum that needs to be resolved ?
+	    else if (!isPropertyType( it.current()->type ) ) {
+		if ( it.current()->oredEnum == 1 )
+		    fprintf( out, "    props_tbl[%d].setFlags(QMetaProperty::UnresolvedSet);\n", entry );
+		else if ( it.current()->oredEnum == 0 )
+		    fprintf( out, "    props_tbl[%d].setFlags(QMetaProperty::UnresolvedEnum);\n", entry );
+		else
+		    fprintf( out, "    props_tbl[%d].setFlags(QMetaProperty::UnresolvedEnumOrSet);\n", entry );
+	    }
+
+	    // Handle STORED
+	    if ( it.current()->stored == "false" )
+		fprintf( out, "    props_tbl[%d].setFlags(QMetaProperty::NotStored);\n", entry );
+	    else if ( !it.current()->stored.isEmpty() && it.current()->stored != "true" )
+	    {
+		fprintf( out, "    typedef bool(%s::*s3_t%d)()const;\n", (const char*)className, count );
+		fprintf( out, "    s3_t%d sv3_%d = &%s::%s;\n", count, count, (const char*)className,
+			 (const char*)it.current()->stored );
+		fprintf( out, "    props_tbl[%d].store = *((QMember*)&sv3_%d);\n", entry, count );
+	    }
+	    // else { Default is TRUE -> do nothing }
+
+	    // OVERRIDE but no STORED ?
+	    if ( it.current()->override && it.current()->stored.isEmpty() )
+		fprintf( out, "    props_tbl[%d].setFlags(QMetaProperty::UnresolvedStored);\n", entry );
+
+	    // Handle DESIGNABLE
+	    if ( it.current()->designable == 0 )
+		fprintf( out, "    props_tbl[%d].setFlags(QMetaProperty::NotDesignable);\n", entry );
+	    // else { Default is TRUE -> do nothing }
+
+	    // OVERRIDE but no DESIGNABLE ?
+	    if ( it.current()->override && it.current()->designable == -1 )
+		fprintf( out, "    props_tbl[%d].setFlags(QMetaProperty::UnresolvedDesignable);\n", entry );
+
+	    ++entry;
+	    count += 3;
+	}
+    }
+
+    return props.count();
+}
+
+
+int generateClassInfos()
+{
+    if ( infos.isEmpty() )
+	return 0;
+
+    if ( displayWarnings && !Q_OBJECTdetected )
+	moc_err("The declaration of the class \"%s\" contains class infos"
+		" but no Q_OBJECT macro!", className.data());
+
+    fprintf( out, "    QClassInfo* classinfo_tbl = QMetaObject::new_classinfo( %i );\n", infos.count() );
+
+    int i = 0;
+    for( QListIterator<ClassInfo> it( infos ); it.current(); ++it, ++i ) {
+	fprintf( out, "    classinfo_tbl[%i].name = \"%s\";\n", i, it.current()->name.data() );
+	fprintf( out, "    classinfo_tbl[%i].value = \"%s\";\n", i, it.current()->value.data() );
+    }
+
+    return i;
+}
+
 void generateClass()		      // generate C++ source code for a class
 {
     static int gen_count = 0;
     char *hdr1 = "/****************************************************************************\n"
 		 "** %s meta object code from reading C++ file '%s'\n**\n";
     char *hdr2 = "** Created: %s\n"
-		 "**      by: The Qt Meta Object Compiler ($Revision: 2.53 $)\n**\n";
+		 "**      by: The Qt MOC ($Id: qt/src/moc/moc.y   2.1.0   edited 2000-03-24 $)\n**\n";
     char *hdr3 = "** WARNING! All changes made in this file will be lost!\n";
     char *hdr4 = "*****************************************************************************/\n\n";
     int   i;
@@ -1469,10 +2405,10 @@ void generateClass()		      // generate C++ source code for a class
     if ( skipClass )				// don't generate for class
 	return;
     if ( !Q_OBJECTdetected ) {
-	if ( signals.count() == 0 && slots.count() == 0 )
+	if ( signals.count() == 0 && slots.count() == 0 && props.count() == 0 && infos.count() == 0 )
 	    return;
 	generatedCode = TRUE;
-	if ( displayWarnings )
+	if ( displayWarnings && (signals.count()+slots.count()) != 0 )
 	    moc_err("The declaration of the class \"%s\" contains slots "
 		    "and/or signals\n\t but no Q_OBJECT macro!", className.data());
     } else {
@@ -1523,6 +2459,7 @@ void generateClass()		      // generate C++ source code for a class
 	fprintf( out, "\n\n" );
     }
 
+
 //
 // Generate virtual function className()
 //
@@ -1536,17 +2473,6 @@ void generateClass()		      // generate C++ source code for a class
     fprintf( out, "QMetaObject *%s::metaObj = 0;\n\n", (const char*)qualifiedClassName());
 
 //
-// Generate static meta-object constructor-object (we don't rely on
-// it, except for QBuilder).
-//
-    fprintf( out, "\n#if QT_VERSION >= 199\n" );
-    int levels = openNameSpaceForMetaObject( out );
-    fprintf( out, "static QMetaObjectInit init_%s(&%s::staticMetaObject);\n\n",
-	(const char*)pureClassName(), (const char*)qualifiedClassName() );
-    closeNameSpaceForMetaObject( out, levels );
-    fprintf( out, "#endif\n\n" );
-
-//
 // Generate initMetaObject member function
 //
     fprintf( out, "void %s::initMetaObject()\n{\n", (const char*)qualifiedClassName() );
@@ -1555,8 +2481,7 @@ void generateClass()		      // generate C++ source code for a class
 	          "\tbadSuperclassWarning(\"%s\",\"%s\");\n",
              (const char*)qualifiedSuperclassName(), (const char*)qualifiedSuperclassName(),
              (const char*)qualifiedClassName(), (const char*)qualifiedSuperclassName() );
-    fprintf( out, "\n#if QT_VERSION >= 199\n" );
-    fprintf( out, "    staticMetaObject();\n");
+    fprintf( out, "    (void) staticMetaObject();\n");
     fprintf( out, "}\n\n");
 
 //
@@ -1568,12 +2493,26 @@ void generateClass()		      // generate C++ source code for a class
 //
 // Generate staticMetaObject member function
 //
-    fprintf( out, "void %s::staticMetaObject()\n{\n", (const char*)qualifiedClassName() );
-    fprintf( out, "    if ( metaObj )\n\treturn;\n" );
-    fprintf( out, "    %s::staticMetaObject();\n", (const char*)qualifiedSuperclassName() );
-    fprintf( out, "#else\n\n" );
-    fprintf( out, "    %s::initMetaObject();\n", (const char*)qualifiedSuperclassName() );
-    fprintf( out, "#endif\n\n" );
+    fprintf( out, "QMetaObject* %s::staticMetaObject()\n{\n", (const char*)qualifiedClassName() );
+    fprintf( out, "    if ( metaObj )\n\treturn metaObj;\n" );
+    fprintf( out, "    (void) %s::staticMetaObject();\n", (const char*)qualifiedSuperclassName() );
+
+//
+// Build the enums array in staticMetaObject()
+// Enums HAVE to be generated BEFORE the properties
+//
+   int n_enums = generateEnums();
+
+//
+// Build property array in staticMetaObject()
+//
+   int n_props = generateProps();
+
+//
+// Build class info  array in staticMetaObject()
+//
+   int n_infos = generateClassInfos();
+
 //
 // Build slots array in staticMetaObject()
 //
@@ -1590,19 +2529,40 @@ void generateClass()		      // generate C++ source code for a class
     fprintf( out, "    metaObj = QMetaObject::new_metaobject(\n"
 		  "\t\"%s\", \"%s\",\n",
 	     (const char*)qualifiedClassName(), (const char*)qualifiedSuperclassName() );
+
     if ( slots.count() )
 	fprintf( out, "\tslot_tbl, %d,\n", slots.count() );
     else
 	fprintf( out, "\t0, 0,\n" );
+
     if ( signals.count() )
-	fprintf( out, "\tsignal_tbl, %d );\n", signals.count());
+	fprintf( out, "\tsignal_tbl, %d,\n", signals.count());
+    else
+	fprintf( out, "\t0, 0,\n" );
+
+    if ( n_props )
+	fprintf( out, "\tprops_tbl, %d,\n", n_props );
+    else
+	fprintf( out, "\t0, 0,\n" );
+
+    if ( n_enums )
+	fprintf( out, "\tenum_tbl, %d,\n", n_enums );
+    else
+	fprintf( out, "\t0, 0,\n" );
+
+    if ( n_infos )
+	fprintf( out, "\tclassinfo_tbl, %d );\n", n_infos );
     else
 	fprintf( out, "\t0, 0 );\n" );
+//
+// Finish property array in staticMetaObject()
+//
+    finishProps();
 
-    fprintf( out, "}\n" );
+    fprintf( out, "    return metaObj;\n}\n" );
 
 //
-// End of function initMetaObject()
+// End of function staticMetaObject()
 //
 
 //
@@ -1702,7 +2662,7 @@ void generateClass()		      // generate C++ source code for a class
 	} else {
 	    fprintf( out, "    typedef void (QObject::*RT)(%s);\n",
 		     (const char*)typstr);
-	    fprintf( out, "    typedef RT *PRT;\n" );	
+	    fprintf( out, "    typedef RT *PRT;\n" );
 	}
 	if ( nargs ) {
 	    for ( i=0; i<=nargs; i++ )
@@ -1734,9 +2694,7 @@ void generateClass()		      // generate C++ source code for a class
 	fprintf( out, "    }\n}\n" );
 	f = signals.next();
     }
-
 }
-
 
 ArgList *addArg( Argument *a )			// add argument to list
 {
@@ -1744,30 +2702,96 @@ ArgList *addArg( Argument *a )			// add argument to list
     return tmpArgList;
 }
 
-void addMember( char m )
+void addEnum()
+{
+    // Avoid duplicates
+    for( QListIterator<Enum> lit( enums ); lit.current(); ++lit ) {
+	if ( lit.current()->name == tmpEnum->name )
+        {
+	    if ( displayWarnings )
+		moc_err( "Enum %s defined twice.", (const char*)tmpEnum->name );
+	}
+    }
+
+    // Only look at stuff in Q_ENUMS and Q_SETS
+    if ( qtEnums.contains( tmpEnum->name ) || qtSets.contains( tmpEnum->name ) )
+    {
+	enums.append( tmpEnum );
+	if ( qtSets.contains( tmpEnum->name ) )
+	    tmpEnum->set = TRUE;
+	else
+	    tmpEnum->set = FALSE;
+    }
+    else
+	delete tmpEnum;
+    tmpEnum = new Enum;
+}
+
+void addMember( Member m )
 {
     if ( skipFunc ) {
+	tmpFunc->args = tmpArgList; // just to be sure
+  	delete tmpFunc;
 	tmpArgList  = new ArgList;   // ugly but works!
-	CHECK_PTR( tmpArgList );
 	tmpFunc	    = new Function;
-	CHECK_PTR( tmpFunc );
 	skipFunc    = FALSE;
 	return;
     }
-    if ( m == 's' && tmpFunc->type != "void" ) {
-	moc_err( "Signals must have \"void\" as their return type" );
-	return;
-    }
+
     tmpFunc->accessPerm = tmpAccessPerm;
     tmpFunc->args	= tmpArgList;
     tmpFunc->lineNo	= lineNo;
-    tmpArgList		= new ArgList;
-    CHECK_PTR( tmpArgList );
+
+    funcs.append( tmpFunc );
+
     switch( m ) {
-	case 's': signals.append( tmpFunc ); break;
-	case 't': slots.  append( tmpFunc ); break;
+    case SignalMember:
+	signals.append( tmpFunc );
+	break;
+    case SlotMember:
+	slots.append( tmpFunc );
+	// fall trough
+    case PropertyCandidateMember:
+	if ( !tmpFunc->name.isEmpty() && tmpFunc->accessPerm == _PUBLIC )
+	    propfuncs.append( tmpFunc );
     }
+
+ Failed:
     skipFunc = FALSE;
     tmpFunc  = new Function;
-    CHECK_PTR( tmpFunc );
+    tmpArgList = new ArgList;
 }
+
+/**
+ * Used to check property names. They must match
+ * the pattern [A-Za-z][A-Za-z0-9_]*
+ *
+ * @author Torben Weis <weis@trolltech.com>
+ */
+void checkIdentifier( const char* ident )
+{
+    const char* p = ident;
+    if ( p == 0 || *p == 0 )
+    {
+	moc_err( "A property name must not be of zero length");
+	return;
+    }
+    if ( !( *p >= 'A' && *p <= 'Z' ) && !( *p >= 'a' && *p <= 'z' )  )
+    {
+	moc_err( "'%s' is not a valid property name. It must match the pattern [A-Za-z][A-Za-z0-9_]*", (char*) ident );
+	return;
+    }
+
+    while( *p )
+    {
+    	if ( !( *p >= 'A' && *p <= 'Z' ) && !( *p >= 'a' && *p <= 'z' ) && !( *p >= '0' && *p <= '9' ) && *p != '_' )
+        {
+	    moc_err( "'%s' is not a valid property name. It must match the pattern [A-Za-z][A-Za-z0-9_]*", (char*) ident );
+            return;
+        }
+	++p;
+    }
+}
+
+
+

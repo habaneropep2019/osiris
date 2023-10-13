@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qtranslator.h,v 2.7.2.2 1999/07/13 19:59:00 warwick Exp $
+** $Id: qt/src/kernel/qtranslator.h   2.1.0   edited 2000-03-24 $
 **
 ** Definition of the translator class
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -27,8 +27,10 @@
 #ifndef QTRANSLATOR_H
 #define QTRANSLATOR_H
 
+#ifndef QT_H
 #include "qobject.h"
 #include "qintdict.h"
+#endif // QT_H
 
 
 class QTranslatorPrivate;

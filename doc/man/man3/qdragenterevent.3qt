@@ -1,0 +1,48 @@
+.TH QDragEnterEvent 3qt "12 April 2000" "Troll Tech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.\" license file included in the distribution for a complete license
+.\" statement.
+.\"
+.ad l
+.nh
+.SH NAME
+QDragEnterEvent \- The event sent to widgets when a drag-and-drop first drags onto it
+\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
+.br
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <qevent.h>\fR
+.PP
+Inherits QDragMoveEvent.
+.PP
+.SS "Public Members"
+.in +1c
+.ti -1c
+.BI "\fBQDragEnterEvent\fR ( const QPoint & pos )"
+.br
+.in -1c
+.SH DESCRIPTION
+The event sent to widgets when a drag-and-drop first drags onto it.
+.PP
+This event is always immediate followed by a QDragMoveEvent, thus you need only respond to one or the other event. Note that this class inherits most of its functionality from QDragMoveEvent, which in turn inherits most of its functionality from QDropEvent.
+.PP
+See also: QDragLeaveEvent, QDragMoveEvent and QDropEvent.
+.PP
+Examples:
+.(l
+desktop/desktop.cpp
+.)l
+.SH MEMBER FUNCTION DOCUMENTATION
+.SH "QDragEnterEvent::QDragEnterEvent ( const QPoint & pos )"
+Constructs a QDragEnterEvent entering at the given point.
+Note that QDragEnterEvent constructed outside of the Qt internals
+will not work - they currently rely on internal state.
+.SH "SEE ALSO"
+.BR http://doc.trolltech.com/qdragenterevent.html
+.SH COPYRIGHT
+Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+license file included in the distribution for a complete license
+statement.
+.SH AUTHOR
+Generated automatically from the source code.

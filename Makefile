@@ -15,6 +15,8 @@ all:  moc src util tutorial examples
 
 moc: .buildopts FORCE
 	cd src/moc; $(MAKE)
+	-mkdir bin
+	-rm -f bin/moc
 	cp src/moc/moc bin/moc
 
 util: mergetr msg2qm
@@ -22,13 +24,13 @@ util: mergetr msg2qm
 mergetr: src FORCE
 	cd src/util/mergetr; $(MAKE)
 	cp src/util/mergetr/mergetr bin/mergetr
-	
+
 msg2qm: src FORCE
 	cd src/util/msg2qm; $(MAKE)
 	cp src/util/msg2qm/msg2qm bin/msg2qm
-	
+
 symlinks:
-	@cd include; rm -f q*.h; ln -s ../src/*/q*.h .
+	@cd include; rm -f q*.h; ln -s ../src/*/q*.h . ; ln -s ../extensions/*/src/q*.h .
 
 src: moc .buildopts FORCE
 	cd $@; $(MAKE)

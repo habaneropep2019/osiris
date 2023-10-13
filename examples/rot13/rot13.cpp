@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: rot13.cpp,v 1.1 1999/06/03 10:08:56 warwick Exp $
+** $Id: qt/examples/rot13/rot13.cpp   2.1.0   edited 2000-01-31 $
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -56,9 +56,11 @@ QString Rot13::rot13( const QString & input ) const
     QString r = input;
     int i = r.length();
     while( i-- ) {
-	if ( r[i] >= QChar('A') && r[i] <= QChar('M') || r[i] >= QChar('a') && r[i] <= QChar('m') )
+	if ( r[i] >= QChar('A') && r[i] <= QChar('M') ||
+	     r[i] >= QChar('a') && r[i] <= QChar('m') )
 	    r[i] = (char)((int)QChar(r[i]) + 13);
-	else if  ( r[i] >= QChar('N') && r[i] <= QChar('Z') || r[i] >= QChar('n') && r[i] <= QChar('z') )
+	else if  ( r[i] >= QChar('N') && r[i] <= QChar('Z') ||
+		   r[i] >= QChar('n') && r[i] <= QChar('z') )
 	    r[i] = (char)((int)QChar(r[i]) - 13);
     }
     return r;

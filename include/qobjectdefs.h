@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qobjectdefs.h,v 2.15 1999/04/28 09:56:45 aavit Exp $
+** $Id: qt/src/kernel/qobjectdefs.h   2.1.0   edited 2000-03-24 $
 **
 ** Macros and definitions related to QObject
 **
 ** Created : 930419
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -38,49 +38,31 @@
 #define signals protected			// signals: in class
 #define emit					// emit signal
 
-#define q_prop
-#define q_properties public
-
-#ifdef Q_PROPS
-/* tmake ignore Q_OBJECT */
-#define Q_OBJECT							\
-public:									\
-    QMetaObject *metaObject() const { return metaObj; }			\
-    const char  *className()  const;					\
-    static QMetaObject *staticMetaObject();				\
-    static QString tr(const char*);					\
-protected:								\
-    void	 initMetaObject();					\
-private:								\
-    static QMetaObject *metaObj;
-
-#else
+#define Q_CLASSINFO( name, value )		// class info
+#define Q_PROPERTY( text )			// property
+#define Q_OVERRIDE( text )			// override property
+#define Q_ENUMS( x )
+#define Q_SETS( x )
 
 /* tmake ignore Q_OBJECT */
-#define Q_OBJECT							\
-public:									\
-    QMetaObject *metaObject() const { return metaObj; }			\
-    const char  *className()  const;					\
-    static void staticMetaObject();					\
-    static QString tr(const char*);					\
-protected:								\
-    void	 initMetaObject();					\
-private:								\
+#define Q_OBJECT					\
+public:							\
+    QMetaObject *metaObject() const { 			\
+         return staticMetaObject();			\
+    }							\
+    const char *className() const;			\
+    static QMetaObject* staticMetaObject();		\
+    static QString tr(const char*);			\
+protected:						\
+    void initMetaObject();				\
+private:						\
     static QMetaObject *metaObj;
-#endif
-
 
 /* tmake ignore Q_OBJECT */
 #define Q_OBJECT_FAKE Q_OBJECT
 
-#ifdef Q_PROPS
-#define Q_BUILDER( comment, pixmap, inspector )				\
-private:								\
-    static QObject* factory( QWidget* );
-#else
-#define Q_BUILDER( comment, pixmap, inspector )
-#endif
-						// macro for naming members
+
+// macro for naming members
 #if defined(_OLD_CPP_)
 #define METHOD(a)	"0""a"
 #define SLOT(a)		"1""a"

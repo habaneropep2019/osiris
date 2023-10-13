@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qwidgetstack.cpp,v 2.49 1999/06/23 17:53:30 ettrich Exp $
+** $Id: qt/src/widgets/qwidgetstack.cpp   2.1.0   edited 2000-03-24 $
 **
 ** Implementation of QWidgetStack class
 **
 ** Created : 980128
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -48,15 +48,13 @@ public:
     };
 };
 
-
+// NOT REVISED
 /*! \class QWidgetStack qwidgetstack.h
 
   \brief The QWidgetStack class provides a stack of widgets, where the
   user can see only the top widget.
 
-  \ingroup misc
-
-  This is often used e.g. in tab and wizard dialogs.
+  \ingroup organizers
 
   The application programmer can move any widget to the top of the
   stack at any time using the slot raiseWidget(), and add or remove
@@ -101,7 +99,7 @@ QWidgetStack::QWidgetStack( QWidget * parent, const char *name )
 }
 
 
-/*! Destroys the object and frees any allocated resources. */
+/*! Destructs the object and frees any allocated resources. */
 
 QWidgetStack::~QWidgetStack()
 {
@@ -137,6 +135,7 @@ void QWidgetStack::addWidget( QWidget * w, int id )
 	focusWidgets->replace( w, w->focusWidget() );
     }
 
+    w->hide();
     if ( w->parent() != this )
 	w->reparent( this, 0, contentsRect().topLeft(), FALSE );
     w->setGeometry( contentsRect() );
@@ -222,7 +221,7 @@ void QWidgetStack::raiseWidget( QWidget * w )
 		    if ( wc->isWidgetType() ) {
 			if ( f == wc ) {
 			    done = TRUE;
-			} else if ( (((QWidget *)wc)->focusPolicy()&QWidget::TabFocus) 
+			} else if ( (((QWidget *)wc)->focusPolicy()&QWidget::TabFocus)
 				    == QWidget::TabFocus ) {
 			    QButton * b = (QButton *)wc;
 			    if ( wc->inherits( "QButton" ) &&
@@ -323,11 +322,11 @@ void QWidgetStack::setChildGeometries()
 }
 
 
-/*!  Reimplemented in order to set the children's geometries
-  appropriately. */
-
+/*! \reimp */
 void QWidgetStack::show()
 {
+    //  Reimplemented in order to set the children's geometries
+    //  appropriately.
     if ( !isVisible() && children() ) {
 	setChildGeometries();
 
@@ -418,12 +417,12 @@ void QWidgetStack::resizeEvent( QResizeEvent * e )
 }
 
 
-/*!
-  \reimp
-*/
+/*! \reimp */
 
 QSize QWidgetStack::sizeHint() const
 {
+    constPolish();
+
     QSize size(0,0);
     if ( children() ) {
 	const QObjectList * c = children();
@@ -432,8 +431,11 @@ QSize QWidgetStack::sizeHint() const
 
 	while( (o=it.current()) != 0 ) {
 	    ++it;
-	    if ( o->isWidgetType() && o != invisible )
-		size = size.expandedTo( ((QWidget *)o)->sizeHint() );
+	    if ( o->isWidgetType() && o != invisible ) {
+		QWidget *w = (QWidget*)o;
+		size = size.expandedTo( w->sizeHint() )
+		       .expandedTo(w->minimumSize());
+	    }
 	}
     }
     if ( size.isNull() )
@@ -442,11 +444,11 @@ QSize QWidgetStack::sizeHint() const
 }
 
 
-/*!
-  \reimp
-*/
+/*! \reimp */
 QSize QWidgetStack::minimumSizeHint() const
 {
+    constPolish();
+
     QSize size(0,0);
     if ( children() ) {
 	const QObjectList * c = children();
@@ -455,16 +457,17 @@ QSize QWidgetStack::minimumSizeHint() const
 
 	while( (o=it.current()) != 0 ) {
 	    ++it;
-	    if ( o->isWidgetType() )
-		if ( o != invisible )
-		    size = size.expandedTo( ((QWidget *)o)->minimumSizeHint() );
+	    if ( o->isWidgetType() &&  o != invisible ) {
+		    QWidget *w = (QWidget*)o;
+		    size = size.expandedTo( w->minimumSizeHint())
+					    .expandedTo(w->minimumSize());
+	    }
 	}
     }
     return QSize( size.width() + 2*frameWidth(), size.height() + 2*frameWidth() );
 }
 
-/*!\reimp
- */
+/*! \reimp  */
 void QWidgetStack::childEvent( QChildEvent * e)
 {
     if ( e->child()->isWidgetType() && e->removed() )

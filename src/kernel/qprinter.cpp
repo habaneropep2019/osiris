@@ -1,11 +1,11 @@
 /**********************************************************************
-** $Id: qprinter.cpp,v 2.23 1999/06/11 04:12:09 agulbra Exp $
+** $Id: qt/src/kernel/qprinter.cpp   2.1.0   edited 2000-03-24 $
 **
 ** Implementation of QPrinter class
 **
 ** Created : 941003
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,14 +17,15 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
 #include "qprinter.h"
 
+// NOT REVISED
 /*!
   \class QPrinter qprinter.h
   \brief The QPrinter class is a paint device that paint on a printer.
@@ -47,7 +48,7 @@
   <li> setPageSize() tells QPrinter what page size to expect from the
   printer.
   <li> setFullPage() tells QPrinter whether you want to deal with the
-  full page (so you can have accurate margins etc.) or with jus with
+  full page (so you can have accurate margins etc.) or with just with
   the part the printer can draw on.  The default is FALSE: You can
   probably paint on (0,0) but the document's margins are unknown.
   <li> setNumCopies() tells QPrinter how many copies of the document
@@ -56,8 +57,8 @@
   range for fromPage() and toPage() are.
   </ul>
 
-  There are also some settings that the user sets (through
-  QPrintDialog) and that applications are expected to obey: <ul>
+  There are also some settings that the user sets (through the printer
+  dialog) and that applications are expected to obey: <ul>
 
   <li> pageOrder() tells the application program whether to print
   first-page-first or last-page-first.
@@ -70,6 +71,7 @@
 
   <li> fromPage() and toPage() indicate what pages the application
   program should print.
+
   </ul>
 
   You can of course call e.g. setPageOrder() to establish a default
@@ -78,13 +80,16 @@
   Once you've started printing, newPage() is essential.  You will
   probably also need to look at the QPaintDeviceMetrics for the
   printer (see the <a href="simple-application.html#printer">simple
-  print function</a> in the Application walk-through).  If you want
+  print function</a> in the Application walk-through). Note that the
+  paint device metrics are only valid after the QPrinter has been set
+  up; i.e. after setup() has returned successfully. If you want
   high-quality printing with accurate margins, setFullPage( TRUE ) is
   a must.
 
   If you want to abort the print job, abort() will make a best effort.
   It may cancel the entire job, or just some of it.
 
+  \internal Need a function to setup() without a dialog (ie. use defaults).
 */
 
 /*! \enum QPrinter::Orientation
@@ -161,6 +166,20 @@
 
   <li> \c QPrinter::LastPageFirst - the highest-numbered page should
   be printed first.
+
+  </ul>
+*/
+
+/*! \enum QPrinter::ColorMode
+
+  This enum type is used to indicate whether QPrinter should print in
+  color or not.  The possible values are: <ul>
+
+  <li> \c Color - print in color if available, else in grayscale.  This
+  is the default.
+
+  <li> \c GrayScale - print in grayscale, even on color printers.
+  Might be a little faster than \c Color.
 
   </ul>
 */
@@ -274,6 +293,8 @@ void QPrinter::setOutputFileName( const QString &fileName )
   The default is to return a null string; meaning that QPrinter will
   try to be smart in a system-dependent way.  On X11 only, you can set
   it to something different to use a specific print program.
+
+  On Windows, this function returns the name of the printer device driver.
 
   \sa setPrintProgram() setPrinterSelectionOption()
 */
@@ -588,8 +609,23 @@ void QPrinter::setPrinterSelectionOption( const QString & option )
 }
 
 
-/*!
+/*!  Sets QPrinter to have the origin of the coordinate system at the
+top left corner of the paper if \a fp is TRUE, or where it thinks the
+top left corner of the printable area is if \a fp is FALSE.
 
+The default is FALSE: You can (probably) print on (0,0), and
+QPaintDeviceMetrics will report something smaller than the size
+indicated by PageSize.  (Note that QPrinter may be wrong - it does not
+have perfect knowledge of the physical printer.)
+
+If you set it to TRUE, QPaintDeviceMetrics will report the exact same
+size as indicated by PageSize, but you cannot print on all of that -
+you have to take care of the ourput margins yourself.
+
+If the page-size mode is changed while the printer is active, the
+current print job may or may not be affected.
+
+\sa PageSize setPageSize() QPaintDeviceMetrics fullPage()
 */
 
 void QPrinter::setFullPage( bool fp )
@@ -598,8 +634,13 @@ void QPrinter::setFullPage( bool fp )
 }
 
 
-/*!
+/*!  Returns TRUE if the origin of the printer's coordinate system is
+at the corner of the sheet, and FALSE if it is at the edge of the
+printable area.
 
+See setFullPage() for more detail and some warnings.
+
+\sa setFullPage() PageSize QPaintDeviceMetrics
 */
 
 bool QPrinter::fullPage() const

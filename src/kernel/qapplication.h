@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qapplication.h,v 2.77.2.2 1999/09/13 19:09:13 paul Exp $
+** $Id: qt/src/kernel/qapplication.h   2.1.0   edited 2000-03-24 $
 **
 ** Definition of QApplication class
 **
 ** Created : 931107
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -28,8 +28,6 @@
 
 #ifndef QT_H
 #include "qwidget.h"
-#include "qlist.h"
-
 #include "qasciidict.h"
 #include "qpalette.h"
 #include "qtranslator.h"
@@ -38,6 +36,7 @@
 class QSessionManager;
 class QStyle;
 class QTranslator;
+template <class type> class QList;
 
 class QApplication;
 extern Q_EXPORT QApplication *qApp;		// global application object
@@ -55,7 +54,8 @@ class Q_EXPORT QApplication : public QObject
 {
     Q_OBJECT
 public:
-    QApplication( int &argc, char **argv );
+    QApplication( int &argc, char **argv);
+    QApplication( int &argc, char **argv, bool GUIenabled );
 #if defined(_WS_X11_)
     QApplication( Display* dpy );
 #endif
@@ -64,7 +64,7 @@ public:
     int		    argc()	const;
     char	  **argv()	const;
 
-    static QStyle&	    style();
+    static QStyle  &style();
     static void	    setStyle( QStyle* );
 
 #if 1	/* OBSOLETE */
@@ -84,11 +84,12 @@ public:
     static bool	     hasGlobalMouseTracking();
     static void	     setGlobalMouseTracking( bool enable );
 
-    static QPalette	     palette( const QWidget* = 0 );
-    static void	     setPalette( const QPalette &, bool updateAllWidgets=FALSE, const char* className = 0 );
-
-    static QFont 	     font( const QWidget* = 0 );
-    static void	     setFont( const QFont &, bool updateAllWidgets=FALSE, const char* className = 0 );
+    static QPalette  palette( const QWidget* = 0 );
+    static void	     setPalette( const QPalette &, bool informWidgets=FALSE,
+				 const char* className = 0 );
+    static QFont     font( const QWidget* = 0 );
+    static void	     setFont( const QFont &, bool informWidgets=FALSE,
+			      const char* className = 0 );
     static QFontMetrics fontMetrics();
 
     QWidget	    *mainWidget()  const;
@@ -139,20 +140,30 @@ public:
     void	     removeTranslator( QTranslator * );
     QString	     translate( const char * scope, const char * key ) const;
 
-    static void 	setWinStyleHighlightColor( const QColor & );
-    static const QColor& winStyleHighlightColor();
+    static void      setWinStyleHighlightColor( const QColor & );
+    static const QColor &winStyleHighlightColor();
 
-    static void 	setDesktopSettingsAware( bool );
-    static bool 	desktopSettingsAware();
+    static void      setDesktopSettingsAware( bool );
+    static bool      desktopSettingsAware();
 
-    static void 	setCursorFlashTime( int );
-    static int 	cursorFlashTime();
+    static void      setCursorFlashTime( int );
+    static int       cursorFlashTime();
 
-    static void 	setDoubleClickInterval( int );
-    static int 	doubleClickInterval();
+    static void      setDoubleClickInterval( int );
+    static int       doubleClickInterval();
+
+    static void      setWheelScrollLines( int );
+    static int       wheelScrollLines();
+
+    static void setStartDragTime( int ms );
+    static int startDragTime();
+    static void setStartDragDistance( int l );
+    static int startDragDistance();
 
 #if defined(_WS_MAC_)
+    void	     do_mouse_down(void *);
     virtual bool     macEventFilter( MSG * );
+    int              macProcessEvent( MSG * );
 #elif defined(_WS_WIN_)
     virtual bool     winEventFilter( MSG * );
 #elif defined(_WS_X11_)
@@ -167,17 +178,24 @@ public:
     static void	     winMouseButtonUp();
 #endif
 
-
     // session management
-    bool isSessionRestored() const;
-    QString sessionId() const;
-    virtual void commitData( QSessionManager& sm );
-    virtual void saveState( QSessionManager& sm );
+    bool	     isSessionRestored() const;
+    QString	     sessionId() const;
+    virtual void     commitData( QSessionManager& sm );
+    virtual void     saveState( QSessionManager& sm );
 
+#if defined(_WS_X11_)
+    static void create_xim();
+    static void close_xim();
+#endif
+
+    void	     wakeUpGuiThread();
 
 signals:
     void	     lastWindowClosed();
     void	     aboutToQuit();
+    void	     guiThreadAwake();
+
 public slots:
     void	     quit();
     void	     closeAllWindows();
@@ -208,21 +226,22 @@ private:
     static bool	     obey_desktop_settings;
     static int	     cursor_flash_time;
     static int	     mouse_double_click_time;
-    QList<QTranslator> * translators;
-    QSessionManager* session_manager;
-    QString session_id;
-    bool is_session_restored;
+    static int	     wheel_scroll_lines;
+    QList<QTranslator> *translators;
+    QSessionManager *session_manager;
+    QString	     session_id;
+    bool	     is_session_restored;
 
     static QAsciiDict<QPalette> *app_palettes;
     static QAsciiDict<QFont>    *app_fonts;
 
     static QWidgetList *popupWidgets;
-    bool	    inPopupMode() const;
-    void	    closePopup( QWidget *popup );
-    void	    openPopup( QWidget *popup );
-    void	    noteTopLevel( QWidget* tlw );
+    bool	     inPopupMode() const;
+    void	     closePopup( QWidget *popup );
+    void	     openPopup( QWidget *popup );
+    void 	     setActiveWindow( QWidget* act );
 
-    static void	removePostedEvent( QEvent * );
+    static void      removePostedEvent( QEvent * );
 
     friend class QWidget;
     friend class QETWidget;
@@ -230,7 +249,8 @@ private:
 #if defined QT_BASEAPP
     friend QNonBaseApplication;
 #endif
-private:	// Disabled copy constructor and operator=
+
+private: // Disabled copy constructor and operator=
 #if defined(Q_DISABLE_COPY)
     QApplication( const QApplication & );
     QApplication &operator=( const QApplication & );
@@ -307,6 +327,7 @@ class QApplication : public QBaseApplication
 {
 public:
     QApplication( int &, char ** );
+    QApplication( int &, char **, bool );
 private:	// Disabled copy constructor and operator=
 #if defined(Q_DISABLE_COPY)
     QApplication( const QApplication & );
@@ -316,7 +337,7 @@ private:	// Disabled copy constructor and operator=
 };
 
 inline bool QBaseApplication::sendEvent( QObject *receiver, QEvent *event )
-	{ return qApp->notify( receiver, event ); }
+{ return qApp->notify( receiver, event ); }
 
 #if defined(Q_MOC_OUTPUT_REVISION) && defined(Q_MOC_QApplication)
 #if defined(QT_MAKEDLL)
@@ -326,9 +347,8 @@ inline bool QBaseApplication::sendEvent( QObject *receiver, QEvent *event )
 
 #else
 inline bool QApplication::sendEvent( QObject *receiver, QEvent *event )
-	{ return qApp->notify( receiver, event ); }
+{ return qApp->notify( receiver, event ); }
 #endif
-
 
 
 #endif // QAPPLICATION_H

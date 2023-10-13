@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: main.cpp,v 1.2 1999/06/10 08:09:09 aavit Exp $
+** $Id: qt/examples/customlayout/main.cpp   2.1.0   edited 2000-03-14 $
 **
 ** Main for custom layout example
 **
@@ -41,14 +41,18 @@ int main( int argc, char **argv )
 
     BorderLayout *large = new BorderLayout( wid );
     large->setSpacing( 5 );
-    large->addWidget( new QPushButton( "West", wid ), BorderLayout::West );
-    large->addWidget( new QPushButton( "East", wid ), BorderLayout::East );
-    large->addWidget( new QPushButton( "South", wid ), BorderLayout::South );
     large->addWidget( new QPushButton( "North", wid ), BorderLayout::North );
+    large->addWidget( new QPushButton( "West", wid ), BorderLayout::West );
     QMultiLineEdit* m = new QMultiLineEdit( wid );
     m->setText( "Central\nWidget" );
     large->addWidget( m, BorderLayout::Center );
-    large->addWidget( new QPushButton( "East 2", wid ), BorderLayout::East );
+    QWidget *east1 = new QPushButton( "East", wid );
+    large->addWidget( east1, BorderLayout::East );
+    QWidget *east2 = new QPushButton( "East 2", wid );
+    large->addWidget( east2 , BorderLayout::East );
+    large->addWidget( new QPushButton( "South", wid ), BorderLayout::South );
+    //Left-to-right tab order looks better:
+    QWidget::setTabOrder( east2, east1 );
     gm->addWidget( wid );
 
 

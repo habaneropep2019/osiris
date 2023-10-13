@@ -57,12 +57,11 @@ main(int argc, char** argv)
     XtSetArg(args[nargs], XmNtopAttachment, XmATTACH_FORM);    nargs++;
     XtSetArg(args[nargs], XmNbottomAttachment, XmATTACH_FORM); nargs++;
     XtSetArg(args[nargs], XmNleftAttachment, XmATTACH_FORM);   nargs++;
-/*
-*/
     XtSetValues(qtchild.xtWidget(), args, nargs);
 
     nargs=0;
-    XtSetArg(args[nargs], XmNstring, XTEDMSG);                 nargs++;
+    XtSetArg(args[nargs], XmNeditMode, XmMULTI_LINE_EDIT);     nargs++;
+    XtSetArg(args[nargs], XmNvalue, XTEDMSG);                  nargs++;    
     XtSetArg(args[nargs], XmNwidth, 200);                      nargs++;
     XtSetArg(args[nargs], XmNheight, 200);                     nargs++;
     XtSetArg(args[nargs], XmNtopOffset, marg);                 nargs++;
@@ -71,10 +70,8 @@ main(int argc, char** argv)
     XtSetArg(args[nargs], XmNtopAttachment, XmATTACH_FORM);    nargs++;
     XtSetArg(args[nargs], XmNbottomAttachment, XmATTACH_FORM); nargs++;
     XtSetArg(args[nargs], XmNrightAttachment, XmATTACH_FORM);  nargs++;
-/*
     XtSetArg(args[nargs], XmNleftAttachment, XmATTACH_WIDGET); nargs++;
     XtSetArg(args[nargs], XmNleftWidget, qtchild.xtWidget());  nargs++;
-*/
     Widget xtchild = XtCreateManagedWidget("editor", xmTextWidgetClass,
 	form, args, nargs);
 

@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qpushbutton.h,v 2.25.2.2 1999/08/12 09:29:20 paul Exp $
+** $Id: qt/src/widgets/qpushbutton.h   2.1.0   edited 2000-03-24 $
 **
 ** Definition of QPushButton class
 **
 ** Created : 940221
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -28,15 +28,26 @@
 
 #ifndef QT_H
 #include "qbutton.h"
+#include "qiconset.h"
 #endif // QT_H
-
 
 class Q_EXPORT QPushButton : public QButton
 {
     Q_OBJECT
+    
+    Q_PROPERTY( bool autoDefault READ autoDefault WRITE setAutoDefault )
+    Q_PROPERTY( bool default READ isDefault WRITE setDefault )
+    Q_PROPERTY( bool menuButton READ isMenuButton WRITE setIsMenuButton )
+    Q_PROPERTY( QIconSet iconSet READ iconSet WRITE setIconSet )
+    
+    Q_OVERRIDE( bool toggleButton WRITE setToggleButton )
+    Q_OVERRIDE( bool on WRITE setOn )
+
 public:
     QPushButton( QWidget *parent, const char *name=0 );
     QPushButton( const QString &text, QWidget *parent, const char* name=0 );
+    QPushButton( const QIconSet& icon, const QString &text, QWidget *parent, const char* name=0 );
+    ~QPushButton();
 
     QSize	sizeHint() const;
     QSizePolicy sizePolicy() const;
@@ -46,9 +57,10 @@ public:
     void	resize( int w, int h );
     void	resize( const QSize & );
     virtual void setGeometry( int x, int y, int w, int h );
+
     virtual void setGeometry( const QRect & );
 
-    virtual void setToggleButton( bool );
+    virtual void setToggleButton( bool ); //### fjern virtual 3.0
 
     bool	autoDefault()	const	{ return autoDefButton; }
     virtual void setAutoDefault( bool autoDef );
@@ -57,6 +69,12 @@ public:
 
     virtual void setIsMenuButton( bool );
     bool	isMenuButton() const;
+
+    void setPopup( QPopupMenu* popup );
+    QPopupMenu* popup() const;
+
+    void setIconSet( const QIconSet& );
+    QIconSet* iconSet() const;
 
 public slots:
     virtual void setOn( bool );
@@ -71,13 +89,16 @@ protected:
     void	resizeEvent( QResizeEvent * );
     void	updateMask();
 
+private slots:
+    void popupPressed();
+
 private:
     void	init();
 
     uint	autoDefButton	: 1;
     uint	defButton	: 1;
-    uint	lastDown	: 1;
-    uint	lastDef		: 1;
+    uint	lastDown		: 1;
+    uint	reserved		: 1;
     uint	lastEnabled	: 1;
     uint	hasMenuArrow	: 1;
 

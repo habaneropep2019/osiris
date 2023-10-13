@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qvbox.h,v 1.9.2.1 1999/07/08 13:35:37 paul Exp $
+** $Id: qt/src/widgets/qvbox.h   2.1.0   edited 2000-03-24 $
 **
-** Implementation of vertical box layout widget class.
+** Definition of vertical box layout widget class
 **
 ** Created : 990124
 **
-** Copyright (C) 1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1999-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -35,6 +35,11 @@ class Q_EXPORT QVBox : public QHBox
     Q_OBJECT
 public:
     QVBox( QWidget *parent=0, const char *name=0, WFlags f=0,  bool allowLines=TRUE );
+private:	// Disabled copy constructor and operator=
+#if defined(Q_DISABLE_COPY)
+    QVBox( const QVBox & );
+    QVBox& operator=( const QVBox & );
+#endif
 };
 
 #endif //QVBOX_H

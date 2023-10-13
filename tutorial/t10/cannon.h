@@ -16,9 +16,10 @@ class CannonField : public QWidget
 public:
     CannonField( QWidget *parent=0, const char *name=0 );
 
+    QSizePolicy sizePolicy() const;
+
     int   angle() const { return ang; }
     int   force() const { return f; }
-    QSizePolicy sizePolicy() const;
 
 public slots:
     void  setAngle( int degrees );
@@ -32,7 +33,6 @@ protected:
     void  paintEvent( QPaintEvent * );
 
 private:
-    void  paintCannon( QPainter * );
     QRect cannonRect() const;
 
     int ang;

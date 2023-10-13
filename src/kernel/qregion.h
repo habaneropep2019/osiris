@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qregion.h,v 2.28 1999/05/29 17:19:46 warwick Exp $
+** $Id: qt/src/kernel/qregion.h   2.1.0   edited 2000-03-24 $
 **
 ** Definition of QRegion class
 **
 ** Created : 940514
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -82,6 +82,8 @@ public:
     HRGN    handle() const { return data->rgn; }
 #elif defined(_WS_X11_)
     Region  handle() const { return data->rgn; }
+#elif defined(_WS_MAC_)
+    void *  handle() const { return data->rgn; }
 #endif
 
     friend Q_EXPORT QDataStream &operator<<( QDataStream &, const QRegion & );
@@ -100,6 +102,8 @@ private:
 	HRGN   rgn;
 #elif defined(_WS_X11_)
 	Region rgn;
+#elif defined(_WS_MAC_)
+        void * rgn;
 #endif
 	bool   is_null;
     } *data;

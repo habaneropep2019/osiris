@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: richtext.cpp,v 1.4.2.1 1999/07/13 20:00:21 warwick Exp $
+** $Id: qt/examples/richtext/richtext.cpp   2.1.0   edited 2000-01-31 $
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -93,11 +93,8 @@ MyRichText::MyRichText( QWidget *parent, const char *name )
     buttons->setMargin( 5 );
 
     bClose = new QPushButton( "&Close", buttons );
-    QWidget *w = new QWidget( buttons );
-    w->setMaximumHeight( bClose->sizeHint().height() );
     bPrev = new QPushButton( "<< &Prev", buttons );
     bNext = new QPushButton( "&Next >>", buttons );
-    buttons->setMaximumHeight( bNext->sizeHint().height() + 10 );
 
     bPrev->setEnabled( FALSE );
 

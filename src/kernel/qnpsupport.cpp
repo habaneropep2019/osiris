@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qnpsupport.cpp,v 2.18 1999/05/07 14:23:38 ettrich Exp $
+** $Id: qt/src/kernel/qnpsupport.cpp   2.1.0   edited 2000-03-24 $
 **
 ** Low-level support for Netscape Plugins under X11.
 **
 ** Created : 970601
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -146,7 +146,8 @@ int qt_event_handler( XEvent* event )
 	qt_reset_color_avail();
 	QApplication::sendPostedEvents();
 	// send the event to Xt in any case (think about XGrabPointer with ownerEvents TRUE
-	(void) qt_np_cascade_event_handler[event->type]( event );
+	if ( event->type != 7 && event->type != 8 )
+	    (void) qt_np_cascade_event_handler[event->type]( event );
 	return True;
     }
 }

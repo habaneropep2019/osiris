@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qwmatrix.cpp,v 2.12 1999/05/20 08:00:58 aavit Exp $
+** $Id: qt/src/kernel/qwmatrix.cpp   2.1.0   edited 2000-03-24 $
 **
 ** Implementation of QWMatrix class
 **
 ** Created : 941020
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,9 +17,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -31,6 +31,7 @@ double qsincos( double, bool calcCos );		// defined in qpainter_x11.cpp
 #include <math.h>
 #endif
 
+// NOT REVISED
 /*!
   \class QWMatrix qwmatrix.h
   \brief The QWMatrix class specifies 2D transformations of a
@@ -487,7 +488,7 @@ QWMatrix operator*( const QWMatrix &m1, const QWMatrix &m2 )
 QDataStream &operator<<( QDataStream &s, const QWMatrix &m )
 {
     if ( s.version() == 1 )
-	s << (float)m.m11() << (float)m.m12() << (float)m.m21() 
+	s << (float)m.m11() << (float)m.m12() << (float)m.m21()
 	  << (float)m.m22() << (float)m.dx()  << (float)m.dy();
     else
 	s << m.m11() << m.m12() << m.m21() << m.m22()

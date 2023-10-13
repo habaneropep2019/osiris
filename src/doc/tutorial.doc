@@ -1,9 +1,9 @@
 /****************************************************************************
-** $Id: tutorial.doc,v 2.27.2.1 1999/07/13 20:03:50 warwick Exp $
+** $Id: qt/doc/tutorial.doc   2.1.0   edited 2000-03-24 $
 **
 ** Tutorial
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -15,9 +15,9 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
@@ -230,14 +230,13 @@ loading and using fonts has been highly optimized.
 
 This time, the button says "Quit" and that's exactly what the program
 will do when the user clicks the button.  This is not a coincidence.
-Still we pass 0 as the parent, since the button is a top-level window.
+We still pass 0 as the parent, since the button is a top-level window.
 
 \line resize
 
-We've chosen another size for the button since the text is a bit shorter
-than "Hello World!".  We could also have used \link
-QPushButton::setAutoResize() QPushButton::setAutoResize()\endlink, or even
-use \l QFontMetrics to set right size.
+We've chosen another size for the button since the text is a bit
+shorter than "Hello World!".  We could also have used \l QFontMetrics
+to set right size.
 
 \line setFont
 
@@ -263,7 +262,7 @@ Here, the \e clicked() signal of \e quit is connected to the \e
 quit() slot of \e a, so that when the button is clicked, the
 application quits.
 
-The \link metaobjects.html Signals and Slots\endlink documentation
+The \link signalsandslots.html Signals and Slots\endlink documentation
 describes this topic in detail.
 
 <h2>Behavior</h2>
@@ -332,9 +331,9 @@ We set its width to 200 pixels and the height to 120 pixels.
 
 A child is born.
 
-This QPushButton is created with both a text, "Quit", and a mother, w.
-A child widget is always on top of its mother.  When displayed, it is
-clipped by its mother's bounds.
+This QPushButton is created with both a text, "Quit", and a mother,
+box.  A child widget is always on top of its mother.  When displayed,
+it is clipped by its mother's bounds.
 
 The mother widget, the QVBox, automatically adds the child, centered
 in its box.  Since nothing else is added, the button gets all the
@@ -518,7 +517,10 @@ there because we use Qt's automatic layout support.
 <a name=constructor></a>
 \until {
 
-Nothing new compared to the previous chapter.
+MyWidget is now derived from QVBox instead of QWidget. That way we use
+the layout of the QVBox (which places all of its children vertically
+inside itself). Resizes are handled automatically by the QBVox and
+therefore by MyWidget too, now.
 
 \skip lcd
 \line lcd
@@ -538,7 +540,7 @@ QSlider::setRange() documentation) and its initial value to 0.
 
 \line connect
 
-Here we use the \link metaobjects.html signal/slot mechanism \endlink
+Here we use the \link signalsandslots.html signal/slot mechanism \endlink
 to connect the slider's valueChanged() signal to the LCD number's
 display() slot.
 
@@ -743,7 +745,7 @@ implementation
 <li>\link t7-main-cpp.html main.cpp\endlink contains MyWidget and main.
 <li>\link t7-makefile.html Makefile\endlink contains some rules for
 generating the meta object information necessary for <a
-href="metaobjects.html">signal/slot creation.</a>
+href="signalsandslots.html">signal/slot creation.</a>
 </ul>
 
 <h2>Line by Line Walk-Through</h2>
@@ -765,10 +767,10 @@ header file.
 
 \line include
 
-\c qwidget.h is included.  LCDRange inherits QWidget, and the header
-file of a parent class must always be included.  Until now, \c
-qwidget.h has been included indirectly via other header files like \c
-qpushbutton.h.
+\c qvbox.h is included.  LCDRange inherits QVBox, and the header file
+of a parent class must always be included.  We cheated a bit in the
+previous chapters, and let \c qwidget.h be included indirectly via
+other header files like \c qpushbutton.h.
 
 \line QSlider
 
@@ -780,7 +782,7 @@ file.
 
 This makes compilation of big projects much faster, since when a
 header file has changed, fewer files need to be recompiled.  It can
-often speed up big compiled by a factor of two or more.
+often speed up big compilations by a factor of two or more.
 
 \skip LCDRange
 \until parent=0
@@ -803,7 +805,7 @@ custom signal.
 
 Slots must be implemented in the normal way (remember, a slot is also
 a C++ member function).  Signals are automatically implemented in the
-\link metaobjects.html meta object\endlink file.  Signals follow the
+\link signalsandslots.html meta object\endlink file.  Signals follow the
 access rules of protected C++ functions, i.e.  they can only be emitted
 by the class they are defined in or by classes inheriting from it.
 
@@ -874,7 +876,7 @@ outside its legal range.
 
 All of main.cpp is copied from the previous chapter, except that in
 the constructor for MyWidget, when we create the 16 LCDRange object we
-now connect them together using the \link metaobjects.html
+now connect them together using the \link signalsandslots.html
 signal/slot\endlink mechanism.  Each one has its valueChanged() signal
 connected to the setValue() slot in the previous one.  Since LCDRange
 emits the signal valueChanged() when its value changes (surprise!), we
@@ -887,11 +889,13 @@ Try operating the slider to the bottom right...
 
 <h2>Excercises</h2>
 
-Use the bottom right slider to set all LCDs to 30.  Then set the
-top half to 29 by using the rightmost slider on the 2nd row.
-Now, use the one to the left of the last one operated to set the first seven
-LCDs back to 30.  Click on the left arrow on the bottom right slider.
-What happens? Why is this the correct behavior?
+Use the bottom right slider to set all LCDs to 50.  Then set the top
+half to 40 by clicking once to the left of the slider handle.  Now,
+use the one to the left of the last one operated to set the first
+seven LCDs back to 50.
+
+Click to the left of the handle on the bottom right slider.  What
+happens?  Why is this the correct behavior?
 
 You may now go on to \link t8.html chapter eight.  \endlink
 
@@ -995,7 +999,7 @@ implementation
 <li>\link t8-main-cpp.html main.cpp\endlink contains MyWidget and main.
 <li>\link t8-makefile.html Makefile\endlink contains some rules for
 generating the meta object information necessary for <a
-href="metaobjects.html">signal/slot creation.</a>
+href="signalsandslots.html">signal/slot creation.</a>
 </ul>
 
 <h2>Line by Line Walk-Through</h2>
@@ -1349,7 +1353,7 @@ implementation
 <li>\link t9-main-cpp.html main.cpp\endlink contains MyWidget and main.
 <li>\link t9-makefile.html Makefile\endlink contains some rules for
 generating the meta object information necessary for <a
-href="metaobjects.html">signal/slot creation.</a>
+href="signalsandslots.html">signal/slot creation.</a>
 </ul>
 
 <h2>Line by Line Walk-Through</h2>
@@ -1567,7 +1571,7 @@ implementation
 <li>\link t10-main-cpp.html main.cpp\endlink contains MyWidget and main.
 <li>\link t10-makefile.html Makefile\endlink contains some rules for
 generating the meta object information necessary for
-<a href="metaobjects.html">signal/slot creation.</a>
+<a href="signalsandslots.html">signal/slot creation.</a>
 </ul>
 
 <h2>Line by Line Walk-Through</h2>
@@ -1834,7 +1838,7 @@ implementation
 <li>\link t11-main-cpp.html main.cpp\endlink contains MyWidget and main.
 <li>\link t11-makefile.html Makefile\endlink contains some rules for
 generating the meta object information necessary for <a
-href="metaobjects.html">signal/slot creation.</a>
+href="signalsandslots.html">signal/slot creation.</a>
 </ul>
 
 <h2>Line by Line Walk-Through</h2>
@@ -2107,7 +2111,7 @@ implementation
 <li>\link t12-main-cpp.html main.cpp\endlink contains MyWidget and main.
 <li>\link t12-makefile.html Makefile\endlink contains some rules for
 generating the meta object information necessary for <a
-href="metaobjects.html">signal/slot creation.</a>
+href="signalsandslots.html">signal/slot creation.</a>
 </ul>
 
 <h2>Line by Line Walk-Through</h2>
@@ -2525,7 +2529,7 @@ implementation
 <li>\link t13-main-cpp.html main.cpp\endlink contains MyWidget and main.
 <li>\link t13-makefile.html Makefile\endlink contains some rules for
 generating the meta object information necessary for <a
-href="metaobjects.html">signal/slot creation.</a>
+href="signalsandslots.html">signal/slot creation.</a>
 </ul>
 
 <h2>Line by Line Walk-Through</h2>
@@ -2952,7 +2956,7 @@ implementation
 <li>\link t14-main-cpp.html main.cpp\endlink contains MyWidget and main.
 <li>\link t14-makefile.html Makefile\endlink contains some rules for
 generating the meta object information necessary for <a
-href="metaobjects.html">signal/slot creation.</a>
+href="signalsandslots.html">signal/slot creation.</a>
 </ul>
 
 <h2>Line by Line Walk-Through</h2>

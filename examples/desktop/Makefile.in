@@ -65,54 +65,5 @@ clean:
 
 ####### Compile
 
-desktop.o: desktop.cpp \
-		../../include/qimage.h \
-		../../include/qpixmap.h \
-		../../include/qpaintdevice.h \
-		../../include/qwindowdefs.h \
-		../../include/qobjectdefs.h \
-		../../include/qglobal.h \
-		../../include/qstring.h \
-		../../include/qcstring.h \
-		../../include/qarray.h \
-		../../include/qgarray.h \
-		../../include/qshared.h \
-		../../include/qnamespace.h \
-		../../include/qrect.h \
-		../../include/qsize.h \
-		../../include/qpoint.h \
-		../../include/qcolor.h \
-		../../include/qstrlist.h \
-		../../include/qlist.h \
-		../../include/qglist.h \
-		../../include/qcollection.h \
-		../../include/qdatastream.h \
-		../../include/qiodevice.h \
-		../../include/qbitmap.h \
-		../../include/qpainter.h \
-		../../include/qfontmetrics.h \
-		../../include/qfont.h \
-		../../include/qfontinfo.h \
-		../../include/qregion.h \
-		../../include/qpen.h \
-		../../include/qbrush.h \
-		../../include/qpointarray.h \
-		../../include/qwmatrix.h \
-		../../include/qapplication.h \
-		../../include/qwidget.h \
-		../../include/qobject.h \
-		../../include/qevent.h \
-		../../include/qmime.h \
-		../../include/qstringlist.h \
-		../../include/qvaluelist.h \
-		../../include/qpalette.h \
-		../../include/qcursor.h \
-		../../include/qstyle.h \
-		../../include/qsizepolicy.h \
-		../../include/qasciidict.h \
-		../../include/qgdict.h \
-		../../include/qtranslator.h \
-		../../include/qintdict.h \
-		../../include/qdropsite.h \
-		../../include/qdragobject.h
+desktop.o: desktop.cpp
 

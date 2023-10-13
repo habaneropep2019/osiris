@@ -1,9 +1,9 @@
 /****************************************************************************
-** $Id: credits.doc,v 2.17 1999/06/07 09:58:55 reggie Exp $
+** $Id: qt/doc/credits.doc   2.1.0   edited 2000-03-26 $
 **
 ** Credits file - all the qt-bugs stuff
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -15,21 +15,21 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
 
 #if defined(DEBUG)
-static char ident[] = "$Id: credits.doc,v 2.17 1999/06/07 09:58:55 reggie Exp $";
+static char ident[] = "$Id: qt/doc/credits.doc   2.1.0   edited 2000-03-26 $";
 #endif
 
 // the list is up to an including /local/qt/mail/qt-bugs/1715
 
 /*! \page credits.html
 
-<title>Qt toolkit - Credits</title>
+<title>Qt Toolkit - Credits</title>
 </head><body bgcolor="#ffffff">
 \postheader
 
@@ -283,16 +283,17 @@ Ximenes &lt;ximenes@netset.com&gt;<br>
 yleffler@ucis.vill.edu<br>
 Y. N. Lo &lt;ynlo@netcom.ca&gt;<br>
 Zyklon &lt;zyk@dds.nl&gt;<br>
-NGOk YUK YAU &lt;zzy@compuserve.com&gt;.
+NGOk YUK YAU &lt;zzy@compuserve.com&gt;<br>
 Lars Knoll &lt;knoll@mpi-hd.mpg.de&gt;<br>
 Oliver Eiden &lt;o.eiden@pop.ruhr.de&gt;<br>
 Thomas Rath &lt;rath@mac-info-link.de&gt;<br>
-Sandro Sigala &lt;ssigala@globalnet.it>&gt;<br>
+Sandro Sigala &lt;ssigala@globalnet.it&gt;<br>
+Don Sanders &lt;sanders@kde.org&gt;<br>
 
 </blockquote>
 
 <p>We hope there are not too many omissions from the list.  Any
 omissions are <b>bugs</b> and should be reported to
-<a href="mailto:qt-bugs@troll.no">mailto:qt-bugs@troll.no</a>
+<a href="mailto:qt-bugs@trolltech.com">qt-bugs@trolltech.com</a>
 like other bugs in the Qt code or documentation.
 */

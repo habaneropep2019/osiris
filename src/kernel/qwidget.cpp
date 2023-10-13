@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qwidget.cpp,v 2.310.2.3 1999/08/23 13:20:33 hanord Exp $
+** $Id: qt/src/kernel/qwidget.cpp   2.1.0   edited 2000-04-06 $
 **
 ** Implementation of QWidget class
 **
 ** Created : 931031
 **
-** Copyright (C) 1992-1999 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
@@ -17,11 +17,12 @@
 ** file in accordance with the Qt Professional Edition License Agreement
 ** provided with the Qt Professional Edition.
 **
-** See http://www.troll.no/pricing.html or email sales@troll.no for
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
 ** information about the Professional Edition licensing, or see
-** http://www.troll.no/qpl/ for QPL licensing information.
+** http://www.trolltech.com/qpl/ for QPL licensing information.
 **
 *****************************************************************************/
+
 
 #include "qobjectlist.h"
 #include "qobjectdict.h"
@@ -38,7 +39,7 @@
 #include "qt_windows.h"
 #endif
 
-
+// NOT REVISED
 /*!
   \class QWidget qwidget.h
   \brief The QWidget class is the base class of all user interface objects.
@@ -55,7 +56,7 @@
   top-level widget. Usually, top-level widgets are windows with a
   frame and a title bar (though it is also possible to create top
   level widgets without such decoration by the use of <a
-  href="#widgetflags">widget flags</a>).  In Qt, QMainWindow and the
+  href="qt.html#WidgetFlags">widget flags</a>).  In Qt, QMainWindow and the
   various subclasses of QDialog are the most common top-level windows.
 
   A widget without a parent widget is always a top-level widget.
@@ -92,6 +93,9 @@
 	isActiveWindow(),
 	setActiveWindow(),
 	showMinimized().
+	showMaximized(),
+	showFullScreen(),
+	showNormal().
 
   <li> Window contents:
 	update(),
@@ -135,13 +139,11 @@
   <li> Mode:
 	isVisible(),
 	isVisibleTo(),
-	isVisibleToTLW(),
 	visibleRect(),
 	isMinimized(),
 	isDesktop(),
 	isEnabled(),
 	isEnabledTo(),
-	isEnabledToTLW(),
 	isModal(),
 	isPopup(),
 	isTopLevel(),
@@ -150,10 +152,6 @@
 	setMouseTracking(),
 	isUpdatesEnabled(),
 	setUpdatesEnabled(),
-	setFontPropagation(),
-	fontPropagation(),
-	setPalettePropagation(),
-	palettePropagation().
 
   <li> Look and feel:
 	style(),
@@ -168,6 +166,7 @@
 	setBackgroundMode(),
 	backgroundPixmap(),
 	setBackgroundPixmap(),
+	setTranslateBackground(),
 	backgroundColor(),
 	colorGroup(),
 	fontMetrics(),
@@ -242,9 +241,9 @@
 	getWFlags(),
 	setWFlags(),
 	testWFlags().
-	
+
   <li> What's this help:
-  	customWhatsThis()
+	customWhatsThis()
   </ul>
 
   Every widget's constructor accepts two or three standard arguments:
@@ -261,7 +260,7 @@
   ready (you can name a a widget in the builder, and connect() to it by
   name in your code).
   <li><code>WFlags f = 0</code> (where available) sets the <a
-  href="#widgetflags">widget flags;</a> the default is good for almost
+  href="qt#WidgetFlags">widget flags;</a> the default is good for almost
   all widgets, but to get e.g. top-level widgets without a window
   system frame you must use special flags.
   </ul>
@@ -319,7 +318,8 @@
   when a key has been held down long enough for it to auto-repeat.
   Note that the Tab and shift-Tab keys are only passed to the widget
   if they are not used by the focus-change mechanisms.  To force those
-  keys to be processed by your widget, you must override QWidget::event().
+  keys to be processed by your widget, you must reimplement
+  QWidget::event().
 
   <li> focusInEvent() - called when the widget gains keyboard focus
   (assuming you have called setFocusPolicy(), of course). Well
@@ -346,7 +346,7 @@
   event for every repeat.  Note that the Tab and shift-Tab keys are
   only passed to the widget if they are not used by the focus-change
   mechanisms.  To force those keys to be processed by your widget, you
-  must override QWidget::event().
+  must reimplement QWidget::event().
 
   <li> wheelEvent() -- called whenever the user turns the mouse wheel
   while the widget has the focus.
@@ -363,12 +363,12 @@
 
   <li> closeEvent() - called when the user closes the widget (or when
   close() is called).
- </ul>
+  </ul>
 
   There are also some \e really obscure events.  They are listed in
   qevent.h and you need to reimplement event() to handle them.  The
   default implementation of event() handles Tab and shift-Tab (to move
-  the keyboard focus), and passes on every other event to one of the
+  the keyboard focus), and passes on most other events to one of the
   more specialized handlers above.
 
   When writing a widget, there are a few more things to look out
@@ -379,11 +379,9 @@
 
   <li>It is almost always useful to reimplement sizePolicy or at least
   sizeHint(), so users of your class can set up layout management more
-  easily.
-
-  sizePolicy() lets you supply good defaults for the layout management
-  handling, so that other widgets can contain yours easily.
-  sizeHint() indicates a "good" size for the widget.
+  easily.  sizePolicy() lets you supply good defaults for the layout
+  management handling, so that other widgets can contain and manage
+  yours easily.  sizeHint() indicates a "good" size for the widget.
 
   <li>If your widget is a top-level window, setCaption() and setIcon() set
   the title bar and icon respectively.
@@ -407,7 +405,7 @@
   in the file qapp_xxx.cpp.
  *****************************************************************************/
 
-static const int WDictSize = 101;
+static const int WDictSize = 3733; // plenty for 15 big complex windows
 
 class QWidgetMapper : public QWidgetIntDict
 {						// maps ids -> widgets
@@ -450,6 +448,9 @@ inline QWidget *QWidgetMapper::find( WId id )
 
 inline void QWidgetMapper::insert( const QWidget *widget )
 {
+#ifdef _OS_MAC_
+    qDebug("Insert for %d\n",(int)widget->winId());
+#endif
     QWidgetIntDict::insert((long)widget->winId(),widget);
 }
 
@@ -459,6 +460,9 @@ inline bool QWidgetMapper::remove( WId id )
 	cur_id = 0;
 	cur_widget = 0;
     }
+#ifdef _OS_MAC_
+    qDebug("Remove for %d\n",(int)id);
+#endif
     return QWidgetIntDict::remove((long)id);
 }
 
@@ -467,86 +471,179 @@ inline bool QWidgetMapper::remove( WId id )
   QWidget member functions
  *****************************************************************************/
 
-// helper function - borland needs it.
-static
-QPalette default_palette( QWidget *parent )
-{
-    return parent ? parent->palette()           // use parent's palette
-           : QApplication::palette();
-}
-// helper function - borland needs it.
-static
-QFont default_font( QWidget *parent )
-{
-    return parent ? parent->font()           // use parent's font
-           : QApplication::font();
-}
+/*
+    Widget state flags:
+  <dl compact>
+  <dt>WState_Created<dd> The widget has a valid winId().
+  <dt>WState_Disabled<dd> The widget does not receive any mouse
+       or keyboard events.
+  <dt>WState_ForceDisabled<dd> The widget is explicitely disabled, i.e. it will remain
+	disabled even when all its ancestors are set to enabled
+	state. This implies WState_Disabled.
+  <dt>WState_Visible<dd> The widget is currently visible.
+  <dt>WState_ForceHide<dd> The widget is explicitely hidden, i.e. it won't become
+  	visible unless you call show() on it.  ForceHide implies !WState_Visible
+  <dt>WState_OwnCursor<dd> A cursor has been set for this widget.
+  <dt>WState_MouseTracking<dd> Mouse tracking is enabled.
+  <dt>WState_CompressKeys<dd> Compress keyboard events.
+  <dt>WState_BlockUpdates<dd> Repaints and updates are disabled.
+  <dt>WState_InPaintEvent<dd> Currently processing a paint event.
+  <dt>WState_Reparented<dd> The widget has been reparented.
+  <dt>WState_ConfigPending<dd> A config (resize/move) event is pending.
+  <dt>WState_Resized<dd> The widget has been resized.
+  <dt>WState_AutoMask<dd> The widget has an automatic mask, see setAutoMask().
+  <dt>WState_Polished<dd> The widget has been "polished" (i.e. late initializated ) by a QStyle.
+  <dt>WState_DND<dd> The widget supports drag and drop, see setAcceptDrops().
+  <dt>WState_Modal<dd> Only for WType_Modal. Defines whether the widget is
+        actually performing  modality when shown. Modality can be switched on/off with
+        this flag.
+  <dt> WState_Exposed<dd> the widget was finally exposed (x11 only,
+        helps avoiding paint event doubling).
+  <dt>WState_TranslateBackground<dd> The widget tanslates its pixmap
+        background to the parent's coordinate system, see setTranslateBackground().
+  </dl>
+*/
+
+
+/*! \enum Qt::WidgetFlags
+
+<a name="widgetflags"></a>
+
+This enum type is used to specify various window-system properties
+of the widget.  Mostly they are fairly unusal, but necessary in a
+few cases.
+
+The main types are <ul>
+
+<li> \c WType_TopLevel - indicates that this widget is a top-level
+widget, usually with a window-system frame and so on.
+
+<li> \c WType_Modal - indicates that this widget is a modal top-level
+widget, ie. that it prevents widgets in all other top-level widget
+from getting any input.  \c WType_Modal inplies \c WStyle_Dialog.
+
+<li> \c WType_Popup - indicates that this widget is a popup top-level
+window, ie. that it is modal, but has a window system frame
+appropriate for popup menus.
+
+<li> \c WType_Desktop - indicates that this widget is the desktop.
+See also \c WPaintDesktop below.
+
+</ul> There are also a number of flags to let you customize the
+appearance of top-level windows.  These have no effect on other
+windows.<ul>
+
+<li> \c WStyle_Customize - indicates that instead of the default, the
+WStyle_* flags should be used to build the window.
+
+<li> \c WStyle_NormalBorder - gives the window a normal border. Cannot
+be combined with \c WStyle_DialogBorder or \c WStyle_NoBorder. 
+
+<li> \c WStyle_DialogBorder - gives the window a thin dialog border.
+Cannot be combined with \c WStyle_NormalBorder or \c WStyle_NoBorder.
+
+<li> \c WStyle_NoBorder - gives a borderless window.  Note that the
+user cannot move or resize a borderless window via the window system.
+Cannot be combined with \c WStyle_NormalBorder or \c
+WStyle_DialogBorder. On Windows, the flag works fine. On X11, it
+bypasses the window manager comletely. This results in a borderless
+window, but also in a window that is not managed at all (i.e. for
+example no keyboard focus unless you call setActiveWindow()
+manually. ) For compatibility, the flag was not changed for Qt-2.1. We
+suggest using WStyle_NoBorderEx instead.
+
+<li> \c WStyle_NoBorderEx - gives a borderless window.  Note that the
+user cannot move or resize a borderless window via the window system.
+Cannot be combined with \c WStyle_NormalBorder or \c
+WStyle_DialogBorder. On X11, the result of the flag is depending on
+the window manager and its ability to understand MOTIF hints to some
+degree.  Most existing modern window managers do this. With \c
+WX11BypassWM, you can bypass the window manager comletely. This
+results in a borderless window for sure, but also in a window that is
+not managed at all (i.e. for example no keyboard input unless you call
+setActiveWindow() manually )
+
+
+<li> \c WStyle_Title - gives the window a title bar.
+
+<li> \c WStyle_SysMenu - adds a window system menu.
+
+<li> \c WStyle_Minimize - adds a minimize button.
+
+<li> \c WStyle_Maximize - adds a maximize button.
+
+<li> \c WStyle_MinMax - is equal to \c WStyle_Minimize|WStyle_Maximize
+
+<li> \c WStyle_ContextHelp - adds a context help button.
+
+<li> \c WStyle_Tool - makes the window a tool window.  A tool window
+is a small window that lives for a short time and it is typically used
+for creating popup windows.  It there is a parent, the tool window
+will always be kept on top of it.  If there isn't a parent, you may
+consider passing WStyle_StaysOnTop as well.  If the window system
+supports it, a tool window is be decorated with a somewhat lighter
+frame.  It can, however, be combined with \c WStyle_NoBorder as well.
+
+<li> \c WStyle_StaysOnTop - informs the window system that the window
+should stay on top of all other windows.
+
+<li> \c WStyle_Dialog - indicates that the window is a logical
+subwindow of its parent, in other words: a dialog.  The window will
+not get its own taskbar entry and be kept on top of its parent by
+the window system.  Usually, it will also be minimized when the
+parent is minized.  If not customized, the window is decorated
+with a slightly simpler title bar.  This is the flag QDialog uses.
+
+</ul> Finally, there are some modifier flags: <ul>
+
+<li> \c WDestructiveClose - makes Qt delete this object when the object has
+accepted closeEvent(), or when the widget tried to ignore closeEvent() but
+could not.
+
+<li> \c WPaintDesktop - gives this widget paint events for the desktop.
+
+<li> \c WPaintUnclipped - makes all painters operating on this widget
+unclipped.  Children of this widget, or other widgets in front of it,
+do not clip the area the painter can paint on.
+
+<li> \c WPaintClever - indicates that Qt should not try to optimize
+repainting for the widget, but instead pass on window system repaint
+events directly.  (This tends to produce more events and smaller
+repaint regions.)
+
+<li> \c WResizeNoErase - indicates that resizing the widget should not
+erase it. This allows smart-repainting to avoid flicker.
+
+<li> \c WMouseNoMask - indicates that even if the widget has a mask,
+it wants mouse events for its entire rectangle.
+
+<li> \c WNorthWestGravity - indicates that the widget contents is
+north-west aligned and static. On resize, such a widget will receive
+paint events only for the newly visible part of itself.
+
+<li> \c WRepaintNoErase - indacates that the widget paints all its
+pixels.  Updating, scrolling and focus changes should therefore not
+erase the widget.  This allows smart-repainting to avoid flicker.
+
+</ul>
+
+*/
+
 
 /*!
-  Constructs a widget which is a child of \e parent, with the name \e name and
-  widget flags set to \e f.
+  Constructs a widget which is a child of \a parent, with the name \a name and
+  widget flags set to \a f.
 
-  If \e parent is 0, the new widget becomes a \link isTopLevel() top-level
-  window\endlink. If \e parent is another widget, this widget becomes a child
-  window inside \e parent.  Unless the newly created widget is
-  \link QWidget::reparent() reparented\endlink, it will be deleted when
-  the parent is deleted.
+  If \a parent is 0, the new widget becomes a top-level window.  If \a
+  parent is another widget, this widget becomes a child window inside
+  \a parent.  The new widget is deleted when \a parent is.
 
-  The \e name is sent to the QObject constructor.
+  The \a name is sent to the QObject constructor.
 
-  <a name="widgetflags"></a>
-
-  The widget flags argument \e f is normally 0, but it can be set to
-  customize the window frame of a top-level widget (i.e. \e parent must be
+  The widget flags argument \a f is normally 0, but it can be set to
+  customize the window frame of a top-level widget (i.e. \a parent must be
   zero). To customize the frame, set the \c WStyle_Customize flag OR'ed with
   any of these flags:
-
-  <ul>
-
-  <li> \c WStyle_NormalBorder gives the window a normal border. Cannot
-  be combined with \c WStyle_DialogBorder or \c WStyle_NoBorder.
-
-  <li> \c WStyle_DialogBorder gives the window a thin dialog
-  border. Cannot be combined with \c WStyle_NormalBorder or \c
-  WStyle_NoBorder.
-
-  <li> \c WStyle_NoBorder gives a borderless window. Note that the
-  user cannot move or resize a borderless window via the window
-  system.  Cannot be combined with \c WStyle_NormalBorder or \c
-  WStyle_DialogBorder.
-
-  <li> \c WStyle_Title gives the window a title bar.
-
-  <li> \c WStyle_SysMenu adds a window system menu.
-
-  <li> \c WStyle_Minimize adds a minimize button.
-
-  <li> \c WStyle_Maximize adds a maximize button.
-
-  <li> \c WStyle_MinMax is equal to <code>(WStyle_Minimize | WStyle_Maximize)
-  </code>.
-
-  <li> \c WStyle_Tool makes the window a tool window.  A tool window
-  is a small window that lives for a short time and it is typically
-  used for creating popup windows.  It there is a parent, the tool
-  window will be kept on top of it.  If there isn't a parent, you may
-  consider passing WStyle_StaysOnTop as well.  If the window system
-  supports it, a tool window will be decorated with a somewhat lighter
-  frame.  It can, however, be combined with \c WStyle_NoBorder as
-  well.
-
-  <li> \c WStyle_StaysOnTop informs the window system that the window
-  should stay on top of all other windows.
-
-  <li> \c WStyle_Dialog indicates that the window is a logical
-  subwindow of its parent, in other words: a dialog.  The window will
-  not get its own taskbar entry and be kept on top of its parent by
-  the window system.  Usually, it will also be minimized when the
-  parent is minized.  If not customized, the window is decorated
-  slightly less.  WStyle_Dialog is implied by WType_Modal.  It is
-  implicitely defined when using the class QDialog.
-
-  </ul>
 
   Note that the X11 version of Qt may not be able to deliver all
   combinations of style flags on all systems.  This is because on X11,
@@ -556,8 +653,8 @@ QFont default_font( QWidget *parent )
 
   Example:
   \code
-    QLabel *toolTip = new QLabel( 0, "myToolTip",
-			 	  WStyle_Customize | WStyle_NoBorder |
+    QLabel *spashScreen = new QLabel( 0, "mySplashScreen",
+				  WStyle_Customize | WStyle_NoBorder |
 				  WStyle_Tool );
   \endcode
 
@@ -566,20 +663,23 @@ QFont default_font( QWidget *parent )
 */
 
 QWidget::QWidget( QWidget *parent, const char *name, WFlags f )
-    : QObject( parent, name ), QPaintDevice( QInternal::Widget ),
-      pal( default_palette(parent) ), fnt (default_font(parent) )
+    : QObject( parent, name ), QPaintDevice( QInternal::Widget )
 {
     isWidget = TRUE;				// is a widget
     winid = 0;					// default attributes
-    widget_state = WState_Withdrawn;
+    widget_state = 0;
     widget_flags = f;
-    propagate_font = SameFont;
-    propagate_palette = SamePalette;
     focus_policy = 0;
+    own_font = 0;
+    own_palette = 0;
     lay_out = 0;
     extra = 0;					// no extra widget info
     bg_col = pal.normal().background();		// default background color
     create();					// platform-dependent init
+
+    pal = isTopLevel() ? QApplication::palette() : parentWidget()->palette();
+    fnt = isTopLevel() ? QApplication::font() : parentWidget()->font();
+
     if ( !isDesktop() )
 	setBackgroundFromMode(); //### parts of this are done in create but not all (see reparent(...) )
     // make sure move/resize events are sent to all widgets
@@ -587,18 +687,23 @@ QWidget::QWidget( QWidget *parent, const char *name, WFlags f )
     QApplication::postEvent( this, new QResizeEvent(crect.size(),
 						    crect.size()) );
     if ( isTopLevel() ) {
+	setWState( WState_ForceHide );
+	if ( testWFlags( WType_Modal ) )
+	    setWState( WState_Modal ); // default for modal windows is to be modal
 	QFocusData *fd = focusData( TRUE );
 	if ( fd->focusWidgets.findRef(this) < 0 )
 	    fd->focusWidgets.append( this );
     } else {
 	if ( !parentWidget()->isEnabled() )
-	    setWState( WState_Disabled );
+	    setWState( WState_Disabled ); 	// propagate enabled state
+   	if ( parentWidget()->isVisibleTo( 0 ) )
+ 	    setWState( WState_ForceHide );	// new widgets do not show up in already visible parents
     }
 }
 
 
 /*!
-  Destroys the widget.
+  Destructs the widget.
 
   All children of this widget are deleted first.
   The application exits if this widget is (was) the main widget.
@@ -648,6 +753,8 @@ QWidget::~QWidget()
 	while ( (obj=it.current()) ) {
 	    ++it;
 	    obj->parentObj = 0;
+	    // ### nest line is a QGList workaround - remove in 3.0
+	    childObjects->removeRef( obj );
 	    delete obj;
 	}
 	delete childObjects;
@@ -760,23 +867,41 @@ QWExtra *QWidget::extraData()
     return extra;
 }
 
+
+/*!
+  \internal
+  Returns a pointer to the block of extra toplevel widget data.
+
+  This data is guaranteed to exist for toplevel widgets.
+*/
+
+QTLWExtra *QWidget::topData()
+{
+    createTLExtra();
+    return extra->topextra;
+}
+
 void QWidget::createTLExtra()
 {
     if ( !extra )
 	createExtra();
     if ( !extra->topextra ) {
-	extra->topextra = new QTLWExtra;
-	extra->topextra->icon = 0;
-	extra->topextra->focusData = 0;
-	extra->topextra->fsize = crect.size();
-	extra->topextra->incw = extra->topextra->inch = 0;
-	extra->topextra->basew = extra->topextra->baseh = 0;
-	extra->topextra->iconic = 0;
+	QTLWExtra* x = extra->topextra = new QTLWExtra;
+	x->icon = 0;
+	x->focusData = 0;
+	x->fsize = crect.size();
+	x->incw = x->inch = 0;
+	x->basew = x->baseh = 0;
+	x->iconic = 0;
+	x->fullscreen = 0;
+	x->showMode = 0;
+	x->normalGeometry = QRect(0,0,-1,-1);
 #if defined(_WS_X11_)
-	extra->topextra->normalGeometry = QRect(0,0,-1,-1);
-	extra->topextra->embedded = 0;
-	extra->topextra->parentWinId = 0;
-	extra->topextra->wmstate = 0;
+	x->embedded = 0;
+	x->parentWinId = 0;
+	x->dnd = 0;
+	x->uspos = 0;
+	x->ussize = 0;
 #endif
 	createTLSysExtra();
     }
@@ -849,7 +974,7 @@ void QWidget::deactivateWidgetCleanup()
 
 
 /*!
-  Returns a pointer to the widget with window identifer/handle \e id.
+  Returns a pointer to the widget with window identifer/handle \a id.
 
   The window identifier type depends by the underlying window system,
   see qwindowdefs.h for the actual definition.
@@ -875,7 +1000,7 @@ QWidget *QWidget::find( WId id )
 
 /*!
   \fn WFlags QWidget::getWFlags() const
-  \internal
+
   Returns the widget flags for this this widget.
 
   Widget flags are internal, not meant for public use.
@@ -884,19 +1009,21 @@ QWidget *QWidget::find( WId id )
 
 /*!
   \fn void QWidget::setWFlags( WFlags f )
-  \internal
-  Sets the widget flags \e f.
+
+  Sets the widget flags \a f.
 
   Widget flags are internal, not meant for public use.
+
   \sa testWFlags(), getWFlags(), clearWFlags()
 */
 
 /*!
   \fn void QWidget::clearWFlags( WFlags f )
-  \internal
-  Clears the widget flags \e f.
+
+  Clears the widget flags \a f.
 
   Widget flags are internal, not meant for public use.
+
   \sa testWFlags(), getWFlags(), setWFlags()
 */
 
@@ -904,6 +1031,7 @@ QWidget *QWidget::find( WId id )
 
 /*!
   \fn WId QWidget::winId() const
+
   Returns the window system identifier of the widget.
 
   Portable in principle, but if you use it you are probably about to do
@@ -937,15 +1065,18 @@ QStyle& QWidget::style() const
 
   Reimplement this function if your widget needs to know when its GUI
   style changes.  You will almost certainly need to update the widget
-  using either repaint(TRUE) or update().
+  using update().
 
-  The default implementation calls update().
+  The default implementation updates the widget including its
+  geometry.
 
-  \sa QApplication::setStyle(), style()
+  \sa QApplication::setStyle(), style(), update(), updateGeometry()
 */
 
 void QWidget::styleChange( QStyle& )
 {
+    update();
+    updateGeometry();
 }
 
 
@@ -1013,8 +1144,13 @@ void QWidget::styleChange( QStyle& )
 
 
 /*!
-  Returns TRUE if this widget and every parent up to but excluding
-  \a ancestor is enabled, otherwise returns FALSE.
+  Returns TRUE if this widget would become enabled if \a ancestor is
+  enabled.
+
+  This is the case if neither the widget itself nor every parent up to
+  but excluding \a ancestor has been explicitely disabled.
+
+  isEnabledTo(0) is equivalent to isEnabled().
 
   \sa setEnabled() isEnabled()
 */
@@ -1022,22 +1158,19 @@ void QWidget::styleChange( QStyle& )
 bool QWidget::isEnabledTo(QWidget* ancestor) const
 {
     const QWidget * w = this;
-    while ( w && w->isEnabled()
+    while ( w && !w->testWFlags( WState_ForceDisabled )
 	    && !w->isTopLevel()
 	    && w->parentWidget()
 	    && w->parentWidget()!=ancestor
 	)
 	w = w->parentWidget();
-    return w->isEnabled();
+    return !w->testWFlags( WState_ForceDisabled );
 }
 
 
-/*!
-  Returns TRUE if this widget and every parent up to the \link
-  topLevelWidget() top level widget \endlink is enabled, otherwise
-  returns FALSE.
+/*!\obsolete
 
-  This is equivalent to isEnabledTo(0).
+  This function is deprecated. It is equivalent to isEnabled()
 
   \sa setEnabled() isEnabled()
 */
@@ -1049,7 +1182,7 @@ bool QWidget::isEnabledToTLW() const
 
 
 /*!
-  Enables widget input events if \e enable is TRUE, otherwise disables
+  Enables widget input events if \a enable is TRUE, otherwise disables
   input events.
 
   An enabled widget receives keyboard and mouse events; a disabled
@@ -1057,20 +1190,41 @@ bool QWidget::isEnabledToTLW() const
   events only when it is in focus.
 
   Some widgets display themselves differently when they are disabled.
-  For example a button might draw its label grayed out.
+  For example a button might draw its label grayed out. If your widget
+  needs to know when it becomes enabled or disabled, you can
+  reimplement the enabledChange() function.
 
-  \sa isEnabled(), QKeyEvent, QMouseEvent
+  Disabling a widget implicitely disables all its children.  Enabling
+  respectively enables all child widgets unless they have been
+  explicitely disabled.
+
+  \sa isEnabled(), isEnabledTo(), QKeyEvent, QMouseEvent, enabledChange()
 */
 
 void QWidget::setEnabled( bool enable )
 {
-    if ( isEnabled() == enable) // nothing to do
-	return;
+    if ( enable )
+	clearWState( WState_ForceDisabled );
+    else
+	setWState( WState_ForceDisabled );
+
+    if ( !isTopLevel() && !parentWidget()->isEnabled() && enable )
+	return; // nothing we can do
+
     if ( enable ) {
 	if ( testWState(WState_Disabled) ) {
 	    clearWState( WState_Disabled );
 	    setBackgroundFromMode();
 	    enabledChange( TRUE );
+	    if ( children() ) {
+		QObjectListIt it( *children() );
+		QWidget *w;
+		while( (w=(QWidget *)it.current()) != 0 ) {
+		    ++it;
+		    if ( w->isWidgetType() && !w->testWState( WState_ForceDisabled ) )
+			w->setEnabled( TRUE );
+		}
+	    }
 	}
     } else {
 	if ( !testWState(WState_Disabled) ) {
@@ -1079,6 +1233,17 @@ void QWidget::setEnabled( bool enable )
 	    setWState( WState_Disabled );
 	    setBackgroundFromMode();
 	    enabledChange( FALSE );
+	    if ( children() ) {
+		QObjectListIt it( *children() );
+		QWidget *w;
+		while( (w=(QWidget *)it.current()) != 0 ) {
+		    ++it;
+		    if ( w->isWidgetType() && w->isEnabled() ) {
+			w->setEnabled( FALSE );
+			w->clearWState( WState_ForceDisabled );
+		    }
+		}
+	    }
 	}
     }
 }
@@ -1086,12 +1251,12 @@ void QWidget::setEnabled( bool enable )
 /*!
   \fn void QWidget::enabledChange( bool oldEnabled )
 
-  This virtual function is called from setEnabled(). \e oldEnabled is the
+  This virtual function is called from setEnabled(). \a oldEnabled is the
   previous setting; you can get the new setting from isEnabled().
 
   Reimplement this function if your widget needs to know when it becomes
   enabled or disabled. You will almost certainly need to update the widget
-  using either repaint(TRUE) or update().
+  using update().
 
   The default implementation repaints the visible part of the widget.
 
@@ -1100,7 +1265,7 @@ void QWidget::setEnabled( bool enable )
 
 void QWidget::enabledChange( bool )
 {
-    repaint( visibleRect() );
+    update();
 }
 
 
@@ -1108,6 +1273,10 @@ void QWidget::enabledChange( bool )
   \fn QRect QWidget::frameGeometry() const
   Returns the geometry of the widget, relative to its parent and
   including the window frame.
+
+  See the \link geometry.html Window Geometry documentation\endlink
+  for an overview of geometry issues with top-level widgets.
+
   \sa geometry(), x(), y(), pos()
 */
 
@@ -1122,6 +1291,10 @@ QRect QWidget::frameGeometry() const
   \fn const QRect &QWidget::geometry() const
   Returns the geometry of the widget, relative to its parent widget
   and excluding the window frame.
+
+  See the \link geometry.html Window Geometry documentation\endlink
+  for an overview of geometry issues with top-level widgets.
+
   \sa frameGeometry(), size(), rect()
 */
 
@@ -1129,6 +1302,10 @@ QRect QWidget::frameGeometry() const
   \fn int QWidget::x() const
   Returns the x coordinate of the widget, relative to its parent
   widget and including the window frame.
+
+  See the \link geometry.html Window Geometry documentation\endlink
+  for an overview of geometry issues with top-level widgets.
+
   \sa frameGeometry(), y(), pos()
 */
 
@@ -1136,6 +1313,10 @@ QRect QWidget::frameGeometry() const
   \fn int QWidget::y() const
   Returns the y coordinate of the widget, relative to its parent
   widget and including the window frame.
+
+  See the \link geometry.html Window Geometry documentation\endlink
+  for an overview of geometry issues with top-level widgets.
+
   \sa frameGeometry(), x(), pos()
 */
 
@@ -1143,7 +1324,11 @@ QRect QWidget::frameGeometry() const
   \fn QPoint QWidget::pos() const
   Returns the position of the widget in its parent widget, including
   the window frame.
-  \sa frameGeometry(), x(), y()
+
+  See the \link geometry.html Window Geometry documentation\endlink
+  for an overview of geometry issues with top-level widgets.
+
+  \sa move(), frameGeometry(), x(), y()
 */
 
 /*!
@@ -1155,12 +1340,20 @@ QRect QWidget::frameGeometry() const
 /*!
   \fn int QWidget::width() const
   Returns the width of the widget, excluding the window frame.
+
+  See the \link geometry.html Window Geometry documentation\endlink
+  for an overview of geometry issues with top-level widgets.
+
   \sa geometry(), height(), size()
 */
 
 /*!
   \fn int QWidget::height() const
   Returns the height of the widget, excluding the window frame.
+
+  See the \link geometry.html Window Geometry documentation\endlink
+  for an overview of geometry issues with top-level widgets.
+
   \sa geometry(), width(), size()
 */
 
@@ -1168,6 +1361,10 @@ QRect QWidget::frameGeometry() const
   \fn QRect QWidget::rect() const
   Returns the the internal geometry of the widget, excluding the window frame.
   rect() equals QRect(0,0,width(),height()).
+
+  See the \link geometry.html Window Geometry documentation\endlink
+  for an overview of geometry issues with top-level widgets.
+
   \sa size()
 */
 
@@ -1311,7 +1508,7 @@ QSize QWidget::baseSize() const
 
 
 /*!
-  Sets both the minimum and maximum sizes of the widget to \e s,
+  Sets both the minimum and maximum sizes of the widget to \a s,
   thereby preventing it from ever growing or shrinking.
 
   \sa setMaximumSize() setMinimumSize()
@@ -1419,34 +1616,35 @@ void QWidget::setFixedHeight( int h )
 
 
 /*!
-  Translates the widget coordinate \e pos to a coordinate in the parent widget.
+  Translates the widget coordinate \a pos to a coordinate in the parent widget.
 
   Same as mapToGlobal() if the widget has no parent.
   \sa mapFromParent()
 */
 
-QPoint QWidget::mapToParent( const QPoint &p ) const
+QPoint QWidget::mapToParent( const QPoint &pos ) const
 {
-    return p + crect.topLeft();
+    return pos + crect.topLeft();
 }
 
 /*!
-  Translates the parent widget coordinate \e pos to widget coordinates.
+  Translates the parent widget coordinate \a pos to widget coordinates.
 
   Same as mapFromGlobal() if the widget has no parent.
 
   \sa mapToParent()
 */
 
-QPoint QWidget::mapFromParent( const QPoint &p ) const
+QPoint QWidget::mapFromParent( const QPoint &pos ) const
 {
-    return p - crect.topLeft();
+    return pos - crect.topLeft();
 }
 
 
 /*!
-  Returns the top-level widget for this widget, i.e. the parent widget
-  that provides the overlapping window.
+  Returns the top-level widget for this widget, i.e. the grandparent
+  widget that has a window-system frame (or at least may have one) and
+  has no parent widget inside this application.
 
   \sa isTopLevel()
 */
@@ -1468,9 +1666,19 @@ QWidget *QWidget::topLevelWidget() const
 // links to find the right answer.
 
 /*!
-  This function is deprecated.  Use setBackgroundMode() or setPalette(),
-  as they ensure the appropriate clearing color is used when the widget
-  is in the Active, Normal, or Disabled state.
+  Sets the widget to be cleared to the fixed color \a color before
+  paintEvent() is called.
+
+  Note that using this function is very often a mistake.
+
+  If you want to set the background color of a widget to one of the
+  "usual" colors, setBackgroundMode() is usually the best function.
+  For example, man widgets that usually use white backgrounds (and
+  black text on it) can use this:
+
+  \code
+    thatWidget->setBackgroundMode( QWidget::PaletteBase );
+  \endcode
 
   If you want to change the color scheme of a widget, the setPalette()
   function is better suited.  Here is how to set \e thatWidget to use a
@@ -1480,6 +1688,12 @@ QWidget *QWidget::topLevelWidget() const
   \code
     thatWidget->setPalette( QPalette( QColor(80, 255, 80) ) );
   \endcode
+
+  A fixed background color sometimes is just the right thing, but if
+  you use it, make sure that your application looks right when the
+  desktop color scheme has been changed.  (On X11, a quick way to test
+  is e.g. "./yourapp -bg paleblue".  On Windows, you have to use the
+  control panel.)
 
   \sa setPalette(), QApplication::setPalette(), backgroundColor(),
       setBackgroundPixmap(), setBackgroundMode()
@@ -1495,22 +1709,25 @@ void QWidget::setBackgroundColor( const QColor &color )
 /*!
   Sets the background pixmap of the widget to \e pixmap.
 
-  This function is deprecated.  Use setBackgroundMode() or
-  setPalette(), as they ensure the appropriate clearing pixmap or
-  color is used when the widget is in the Active, Normal, or Disabled
-  state.
+  The background pixmap is tiled to cover the entire widget.  Note
+  that some widgets do not work well with a background pixmap, for
+  example QLineEdit.
 
-  The background pixmap is tiled.  Some widgets (e.g. QLineEdit) do
-  not work well with a background pixmap.
+  If \a pixmap is part of the widget's palette(), we recommend calling
+  setBackgroundMode() instead.
 
-  \sa backgroundPixmap(), backgroundPixmapChange(), setBackgroundColor()
+  A fixed background pixmap sometimes is just the right thing, but if
+  you use it, make sure that your application looks right when the
+  desktop color scheme has been changed.  (On X11, a quick way to test
+  is e.g. "./yourapp -bg paleblue".  On Windows, you have to use the
+  control panel.)
 
-  \internal
-  This function is call with a null pixmap by setBackgroundEmpty().
+  \sa setBackgroundMode(), backgroundPixmap(), backgroundPixmapChange(),
+  setBackgroundColor()
 */
 
 void QWidget::setBackgroundPixmap( const QPixmap &pixmap )
-{
+{ // This function is called with a null pixmap by setBackgroundEmpty().
     setBackgroundPixmapDirect( pixmap );
     setBackgroundModeDirect( FixedPixmap );
 
@@ -1576,80 +1793,69 @@ void QWidget::setBackgroundFromMode()
 }
 
 /*!
-  Returns the mode most recently set by setBackgroundMode().
-  The default is \link QWidget::BackgroundMode PaletteBackground\endlink.
+  Returns the mode most recently set by setBackgroundMode().  The
+  default is PaletteBackground.
+
+  \sa BackgroundMode setBackgroundMode()
 */
 QWidget::BackgroundMode QWidget::backgroundMode() const
 {
     return extra ? (BackgroundMode)extra->bg_mode : PaletteBackground;
 }
 
+
 /*! \enum QWidget::BackgroundMode
 
   This enum describes how the background of a widget changes, as the
   widget's palette changes.
 
-  The background is what the widget contains when paintEvent() is called.
-  To minimize flicker, this should be the most common color in the
-  widget.
-
-  The following values are valid:  <ul>
+  The background is what the widget contains when paintEvent() is
+  called.  To minimize flicker, this should be the most common color
+  or pixmap in the widget.  For \c PaletteBackground, use
+  colorGroup().brush( \c QColorGroup::Background ), and so on.  There
+  are also three special values, listed at the end: <ul>
 
   <li> \c PaletteForeground
-	- use palette() . \link QColorGroup::fillForeground() fillForeground()\endlink
-    <li> \c PaletteBackground
-	- use palette() . \link QColorGroup::fillBackground() fillBackground()\endlink
-    <li> \c PaletteButton
-	- use palette() . \link QColorGroup::fillButton() fillButton()\endlink
-    <li> \c PaletteLight
-	- use palette() . \link QColorGroup::fillLight() fillLight()\endlink
-    <li> \c PaletteMidlight
-	- use palette() . \link QColorGroup::fillMidlight() fillMidlight()\endlink
-    <li> \c PaletteDark
-	- use palette() . \link QColorGroup::fillDark() fillDark()\endlink
-    <li> \c PaletteMid
-	- use palette() . \link QColorGroup::fillMid() fillMid()\endlink
-    <li> \c PaletteText
-	- use palette() . \link QColorGroup::fillText() fillText()\endlink
-    <li> \c PaletteBrightText
-	- use palette() . \link QColorGroup::fillBrightText() fillBrightText()\endlink
-    <li> \c PaletteButtonText
-	- use palette() . \link QColorGroup::fillButtonText() fillButtonText()\endlink
-    <li> \c PaletteBase
-	- use palette() . \link QColorGroup::fillBase() fillBase()\endlink
-    <li> \c PaletteShadow
-	- use palette() . \link QColorGroup::fillShadow() fillShadow()\endlink
-    <li> \c PaletteHighlight
-	- use palette() . \link QColorGroup::fillHighlight() fillHighlight()\endlink
-    <li> \c PaletteHighlightedText
-	- use palette() . \link QColorGroup::fillHighlightedText() fillHighlightedText()\endlink
-    <li> \c NoBackground
-	- no color or pixmap is used - the paintEvent() must completely
-	    cover the drawing area.  This can help avoid flicker.
+  <li> \c PaletteBackground
+  <li> \c PaletteButton
+  <li> \c PaletteLight
+  <li> \c PaletteMidlight
+  <li> \c PaletteDark
+  <li> \c PaletteMid
+  <li> \c PaletteText
+  <li> \c PaletteBrightText
+  <li> \c PaletteButtonText
+  <li> \c PaletteBase
+  <li> \c PaletteShadow
+  <li> \c PaletteHighlight
+  <li> \c PaletteHighlightedText
+  <li> \c NoBackground - the widget is not cleared before paintEvent().
+  If the widget's paint event always draws on all the pixels, using
+  this mode can be both fast and flicker-free.
+  <li> \c FixedColor - the widget is cleared to a fixed color,
+  normally different from all the ones in the palette().  Set using
+  BackgroundColor().
+  <li> \c FixedPixmap - the widget is cleared to a fixed pixmap,
+  normally different from all the ones in the palette().  Set using
+  setBackgroundPixmap().
+
   </ul>
 
-  \sa setBackgroundMode() backgroundMode()
+  \c FixedColor and \c FixedPixmap sometimes are just the right
+  thing, but if you use them, make sure that your application looks
+  right when the desktop color scheme has been changed.  (On X11, a
+  quick way to test is e.g. "./yourapp -bg paleblue".  On Windows, you
+  have to use the control panel.)
+
+  \sa setBackgroundMode() backgroundMode() setBackgroundPixmap()
+  setBackgroundColor()
 */
 
 /*!
-  Tells the window system which color to clear this widget to when
-  sending a paint event.
+  Tells the window system how to clear this widget when sending a
+  paint event.  In other words, this decides how the widgets looks
+  when paintEvent() is called.
 
-  In other words, this color is the color of the widget when
-  paintEvent() is called.  To minimize flicker, this should be the
-  most common color in the widget.
-
-  The fill functions of the colorgroup returns \link QBrush
-  Brushes\endlink, which may be either a plain color or a pixmap.
-
-  If setBackgroundPixmap() or setBackgroundColor() is called, the
-  mode will be one of:
-  <ul>
-    <li> \c FixedPixmap - the pixmap set by setBackgroundPixmap()
-    <li> \c FixedColor - the color set by setBackgroundColor()
-  </ul>
-
-  These values may not be used as parameters to setBackgroundMode().
   For most widgets the default (PaletteBackground, normally
   gray) suffices, but some need to use PaletteBase (the
   background color for text output, normally white) and a few need
@@ -1662,17 +1868,9 @@ QWidget::BackgroundMode QWidget::backgroundMode() const
     setBackgroundMode( PaletteBase );
   \endcode
 
-  If you want to change the color scheme of a widget, the setPalette()
-  function is better suited.  Here is how to set \e thatWidget to use a
-  light green (RGB value 80, 255, 80) as background color, with shades
-  of green used for all the 3D effects:
-
-  \code
-    thatWidget->setPalette( QPalette( QColor(80, 255, 80) ) );
-  \endcode
-
-  You can also use QApplication::setPalette() if you want to change
-  the color scheme of your entire application, or of all new widgets.
+  Note that two of the BackgroundMode values cannot be used with this
+  function.  For \c FixedPixmap, call setBackgroundPixmap() instead,
+  and for \c FixedColor, call setBackgroundColor().
 */
 
 void QWidget::setBackgroundMode( BackgroundMode m )
@@ -1704,11 +1902,12 @@ void QWidget::setBackgroundModeDirect( BackgroundMode m )
 /*!
   \fn const QColor &QWidget::backgroundColor() const
 
-  Returns the background color of this widget.
+  Returns the background color of this widget, which is normally set
+  implicitly by setBackgroundMode(), but can also be set explicitly by
+  setBackgroundColor().
 
-  The background color is independent of the color group.
-
-  Setting a new palette overwrites the background color.
+  If there is a background pixmap (set using setBackgroundPixmap()),
+  then the return value of this function is indeterminate.
 
   \sa setBackgroundColor(), foregroundColor(), colorGroup(), palette()
 */
@@ -1716,7 +1915,7 @@ void QWidget::setBackgroundModeDirect( BackgroundMode m )
 /*!
   Returns the foreground color of this widget.
 
-  The foreground color equals <code>colorGroup().foreground()</code>.
+  The foreground color is also accessible as colorGroup().foreground().
 
   \sa backgroundColor(), colorGroup()
 */
@@ -1735,10 +1934,8 @@ const QColor &QWidget::foregroundColor() const
   background color from backgroundColor().
 
   Reimplement this function if your widget needs to know when its
-  background color changes.  You will almost certainly need to update the
-  widget using either repaint(TRUE) or update().
-
-  The default implementation calls update()
+  background color changes.  You will almost certainly need to call
+  this implementation of the function.
 
   \sa setBackgroundColor(), backgroundColor(), setPalette(), repaint(),
   update()
@@ -1751,9 +1948,10 @@ void QWidget::backgroundColorChange( const QColor & )
 
 
 /*!
-  Returns the background pixmap, or null if no background pixmap has not
-  been set.  If the widget has been made empty, this function will return
-  a pixmap which isNull() rather than a null pointer.
+  Returns the background pixmap if one has been set.  If the widget
+  has backgroundMode() NoBackground, the return value is a pixmap for
+  which QPixmao:isNull() is true.  If the widget has no pixmap is the
+  background, the return value is a null pointer.
 
   \sa setBackgroundPixmap(), setBackgroundMode()
 */
@@ -1772,10 +1970,8 @@ const QPixmap *QWidget::backgroundPixmap() const
   new background pixmap from backgroundPixmap().
 
   Reimplement this function if your widget needs to know when its
-  background pixmap changes.  You will almost certainly need to update the
-  widget using either repaint(TRUE) or update().
-
-  The default implementation calls update()
+  background pixmap changes.  You will almost certainly need to call
+  this implementation of the function.
 
   \sa setBackgroundPixmap(), backgroundPixmap(), repaint(), update()
 */
@@ -1792,20 +1988,21 @@ void QWidget::backgroundPixmapChange( const QPixmap & )
   The color group is determined by the state of the widget.
 
   A disabled widget returns the QPalette::disabled() color group, a
-  widget in focus returns the QPalette::active() color group and a
-  normal widget returns the QPalette::normal() color group.
+  widget in the window with keyboard focus returns the
+  QPalette::active() color group and all inactive  widgets return the
+  QPalette::inactive() color group.
 
   \sa palette(), setPalette()
 */
 
 const QColorGroup &QWidget::colorGroup() const
 {
-    if ( testWState(WState_Disabled) )
+    if ( !isEnabled() )
 	return palette().disabled();
-    else if ( qApp->focus_widget == this && focusPolicy() != NoFocus )
+    else if ( isActiveWindow() )
 	return palette().active();
     else
-	return palette().normal();
+	return palette().inactive();
 }
 
 /*!
@@ -1813,8 +2010,8 @@ const QColorGroup &QWidget::colorGroup() const
   Returns the widget palette.
 
   As long as no special palette has been set, this is either a special
-  palette for the widget class, the palette of the parent widget or
-  the default application palette.
+  palette for the widget class, the parent's palette or - if this
+  widget is a toplevel widget - the default application palette.
 
   \sa setPalette(), colorGroup(), QApplication::palette()
 */
@@ -1822,49 +2019,37 @@ const QColorGroup &QWidget::colorGroup() const
 
 /*! \enum QWidget::PropagationMode
 
-  This enum determines how fonts and palette changes are propagated to
+  \obsolete
+
+  This enum used to determine how fonts and palette changes are propagated to
   children of a widget.
 
-  If a widget's propagation mode is \c NoChildren, changes to that
-  widget's font or palette do not affect the widget's children.  IF it
-  is \c AllChildren, all children are affected.  If it is \c SameFont
-  or \c SamePalette (mostly the default mode) then changes affect
-  those child widget for which no separate font/palette has been set,
-  but no other children.
-
-  \sa setFont() setPalette()
 */
 
 /*!
-  Sets the widget palette to \e p. The widget background color is set to
-  <code>colorGroup().background()</code>.
+  Sets the widget palette to \e palette and informs all children about the change.
 
-  If \a palettePropagation() is \c AllChildren or \c SamePalette,
-  setPalette() calls setPalette() for children of the object, or those
-  with whom the object shares the palette, respectively.  The default
-  for QWidget is \a SameChildren.
-
-  \sa QApplication::setPalette(), palette(), paletteChange(),
-  colorGroup(), setBackgroundColor(), setPalettePropagation()
+  \sa QApplication::setPalette(), palette(), paletteChange(), unsetPalette(),
+  colorGroup()
 */
 
-void QWidget::setPalette( const QPalette &p )
+void QWidget::setPalette( const QPalette &palette )
 {
-    QPalette old = palette();
-    setWState( WState_PaletteSet );
-    pal = p;
+    own_palette = TRUE;
+    if ( pal == palette )
+	return;
+    QPalette old = pal;
+    pal = palette;
     setBackgroundFromMode();
     paletteChange( old );
-    PropagationMode m = palettePropagation();
-    if ( m != NoChildren && children() ) {
+    if ( children() ) {
+	QCustomEvent e( QEvent::ParentPaletteChange, 0 );
 	QObjectListIt it( *children() );
 	QWidget *w;
 	while( (w=(QWidget *)it.current()) != 0 ) {
 	    ++it;
-	    if ( w->isWidgetType() &&
-		 ( m == AllChildren ||
-		   old.isCopyOf( w->pal ) ) )
-		w->setPalette( pal );
+	    if ( w->isWidgetType() )
+		QApplication::sendEvent( w, &e );
 	}
     }
     update();
@@ -1872,19 +2057,30 @@ void QWidget::setPalette( const QPalette &p )
 
 
 /*!
-  Like setPalette(const QPalette&) but has an additional flag to
-  indicate whether the palette should be fix for the widget. Fixed
-  means that QApplication::setPalette() will not touch the current
-  setting. This Function calls setPalette(const QPalette&).
+  Unsets the palette for this widget. The widget will use its natural
+  default palette from now on.
+
+\sa setPalette()
+ */
+void QWidget::unsetPalette()
+{
+    if ( own_palette ) {
+	if ( !isTopLevel() && QApplication::palette( this ).isCopyOf( QApplication::palette() ) )
+	    setPalette( parentWidget()->palette() );
+	else
+	    setPalette( QApplication::palette( this ) );
+	own_palette = FALSE;
+    }
+}
+
+/*!\obsolete
+
+  Use setPalette( const QPalette& p ) instead.
 */
 
-void QWidget::setPalette( const QPalette &p, bool fixed )
+void QWidget::setPalette( const QPalette &p, bool )
 {
     setPalette( p );
-    if ( fixed )
-	setWState( WState_PaletteFixed );
-    else
-	clearWState( WState_PaletteFixed );
 }
 
 /*!
@@ -1893,11 +2089,9 @@ void QWidget::setPalette( const QPalette &p, bool fixed )
   This virtual function is called from setPalette().  \e oldPalette is the
   previous palette; you can get the new palette from palette().
 
-  Reimplement this function if your widget needs to know when its palette
-  changes.  You will almost certainly need to update the widget using
-  either repaint(TRUE) or update().
-
-  The default implementation calls update().
+  Reimplement this function if your widget needs to know when its
+  palette changes.  You will almost certainly need to call this
+  implementation of the function.
 
   \sa setPalette(), palette()
 */
@@ -1915,14 +2109,16 @@ void QWidget::paletteChange( const QPalette & )
   fontInfo() tells you what font is actually being used.
 
   As long as no special font has been set, this is either a special
-  font for the widget class or the default application font.
+  font for the widget class, the parent's font or - if this widget is
+  a toplevel widget - the default application font.
 
   \sa setFont(), fontInfo(), fontMetrics(), QApplication::font()
 */
 
 
 /*!
-  Sets the font for the widget.
+  Sets the font for the widget and informs all children about the
+  change.
 
   The fontInfo() function reports the actual font that is being used by the
   widget.
@@ -1933,31 +2129,26 @@ void QWidget::paletteChange( const QPalette & )
     setFont( f );
   \endcode
 
-  If \a fontPropagation() is \c AllChildren or \c SameFont, setFont()
-  calls setFont() for children of the object, or those with whom the
-  object shares the font, respectively.  The default for QWidget
-  is \a SameChildren.
-
-  \sa font(), fontChange(), fontInfo(), fontMetrics(), setFontPropagation()
+  \sa font(), fontChange(), fontInfo(), fontMetrics(), unsetFont()
 */
 
 void QWidget::setFont( const QFont &font )
 {
-    QFont old = QWidget::font();
+    own_font = TRUE;
+    if ( fnt == font )
+	return;
+    QFont old = fnt;
     fnt = font;
     fnt.handle();				// force load font
-    setWState(WState_FontSet);			// indicate initialized
     fontChange( old );
-    PropagationMode m = fontPropagation();
-    if ( m != NoChildren && children() ) {
+    if ( children() ) {
+	QCustomEvent e( QEvent::ParentFontChange, 0 );
 	QObjectListIt it( *children() );
 	QWidget *w;
 	while( (w=(QWidget *)it.current()) != 0 ) {
 	    ++it;
-	    if ( w->isWidgetType() &&
-		 ( m == AllChildren ||
-		   old.isCopyOf( w->fnt ) ) )
-		 w->setFont( fnt );
+	    if ( w->isWidgetType() )
+		QApplication::sendEvent( w, &e );
 	}
     }
     if ( hasFocus() )
@@ -1965,19 +2156,32 @@ void QWidget::setFont( const QFont &font )
 }
 
 /*!
-  Like setFont(const QFont&) but has an additional flag to
-  indicate whether the font should be fix for the widget. Fixed
-  means that QApplication::setFont() will not touch the current
-  setting. This Function calls setFont(const QFont&).
+  Unsets the font for this widget. The widget will use its natural
+  default font from now on.  This is either a special font for the
+  widget class, the parent's font or - if this widget is a toplevel
+  widget - the default application font.
+
+\sa setFont()
+ */
+void QWidget::unsetFont()
+{
+    if ( own_font ) {
+	if ( !isTopLevel() && QApplication::font( this ).isCopyOf( QApplication::font() ) )
+	    setFont( parentWidget()->font() );
+	else
+	    setFont( QApplication::font( this ) );
+	own_font = FALSE;
+    }
+}
+
+/*!\obsolete
+
+  Use setFont( const QFont& font) instead.
 */
 
-void QWidget::setFont( const QFont &font, bool fixed )
+void QWidget::setFont( const QFont &font, bool )
 {
     setFont( font );
-    if ( fixed )
-	setWState( WState_FontFixed );
-    else
-	clearWState( WState_FontFixed );
 }
 
 /*!
@@ -1988,16 +2192,18 @@ void QWidget::setFont( const QFont &font, bool fixed )
 
   Reimplement this function if your widget needs to know when its font
   changes.  You will almost certainly need to update the widget using
-  either repaint(TRUE) or update().
+  update().
 
-  The default implementation calls update
+  The default implementation updates the widget including its
+  geometry.
 
-  \sa setFont(), font(), repaint(), update()
+  \sa setFont(), font(), update(), updateGeometry()
 */
 
 void QWidget::fontChange( const QFont & )
 {
     update();
+    updateGeometry();
 }
 
 
@@ -2038,10 +2244,10 @@ const QCursor &QWidget::cursor() const
 
 
 /*!
-  Returns the widget caption, or a
-  \link QString::operator!() null string\endlink
-  if no caption has been set.
-  \sa setCaption(), icon(), iconText()
+  Returns the widget caption.  If no caption has been set (common for
+  child widgets), this functions returns a null string.
+
+  \sa setCaption(), icon(), iconText(), QString::isNull()
 */
 
 QString QWidget::caption() const
@@ -2053,6 +2259,7 @@ QString QWidget::caption() const
 
 /*!
   Returns the widget icon pixmap, or null if no icon has been set.
+
   \sa setIcon(), iconText(), caption()
 */
 
@@ -2064,10 +2271,10 @@ const QPixmap *QWidget::icon() const
 }
 
 /*!
-  Returns the widget icon text, or a
-  \link QString::operator!() null string\endlink
-  if no icon text has been set.
-  \sa setIconText(), icon(), caption()
+  Returns the widget icon text.  If no icon text has been set (common for
+  child widgets), this functions returns a null string.
+
+  \sa setIconText(), icon(), caption(), QString::isNull()
 */
 
 QString QWidget::iconText() const
@@ -2080,13 +2287,16 @@ QString QWidget::iconText() const
 
 /*!
   \fn bool QWidget::hasMouseTracking() const
+
   Returns TRUE if mouse tracking is enabled for this widget, or FALSE
   if mouse tracking is disabled.
+
   \sa setMouseTracking()
 */
 
 /*!
   \fn void QWidget::setMouseTracking( bool enable )
+
   Enables mouse tracking if \e enable is TRUE, or disables it if \e enable
   is FALSE.
 
@@ -2113,7 +2323,8 @@ void QWidget::setMouseTracking( bool enable )
 #endif // _WS_X11_
 
 
-/*!  Sets this widget's focus proxy to \a w.
+/*!  Sets this widget's focus proxy to \a w. If \a w is 0, this
+  function resets this widget to not have any focus proxy.
 
   Some widgets, such as QComboBox, can "have focus," but create a
   child widget to actually handle the focus.  QComboBox, for example,
@@ -2123,6 +2334,8 @@ void QWidget::setMouseTracking( bool enable )
   "this widget" gets it.  If there is a focus proxy, focusPolicy(),
   setFocusPolicy(), setFocus() and hasFocus() all operate on the focus
   proxy.
+
+  \sa focusProxy()
 */
 
 void QWidget::setFocusProxy( QWidget * w )
@@ -2139,24 +2352,17 @@ void QWidget::setFocusProxy( QWidget * w )
     }
 
     if ( w ) {
-	// ### the next line overwrites a "can take focus" with what's usually
-	// a "can't take focus" policy.  surely that's wrong?
-	// w->setFocusPolicy( focusPolicy() );
-	setFocusPolicy( NoFocus );
-	extra->focus_proxy = w;
-	connect( extra->focus_proxy, SIGNAL(destroyed()),
+	setFocusPolicy( w->focusPolicy() );
+	connect( w, SIGNAL(destroyed()),
 		 this, SLOT(focusProxyDestroyed()) );
-    } else {
-	QWidget * pfc = extra->focus_proxy;
-	extra->focus_proxy = 0;
-	if ( pfc )
-	    setFocusPolicy( pfc->focusPolicy() );
     }
+    extra->focus_proxy = w;
 }
 
 
 /*!  Returns a pointer to the focus proxy, or 0 if there is no focus
   proxy.
+
   \sa setFocusProxy()
 */
 
@@ -2204,10 +2410,6 @@ bool QWidget::hasFocus() const
   this widget to tell it that it just received the focus.
 
   setFocus() gives focus to a widget regardless of its focus policy.
-  However, QWidget::focusWidget() (which determines where
-  Tab/shift-Tab) moves from) is changed only if the widget accepts
-  focus.  This can be used to implement "hidden focus"; see
-  focusNextPrevChild() for details.
 
   \warning If you call setFocus() in a function which may itself be
   called from focusOutEvent() or focusInEvent(), you may see infinite
@@ -2231,39 +2433,44 @@ void QWidget::setFocus()
     if ( f->it.current() == this && qApp->focusWidget() == this )
 	return;
 
-    if ( isFocusEnabled() ) {
-	f->it.toFirst();
-	while ( f->it.current() != this && !f->it.atLast() )
-	    ++f->it;
-	// at this point, the iterator should point to 'this'.  if it
-	// does not, 'this' must not be in the list - an error, but
-	// perhaps possible.  fix it.
-	if ( f->it.current() != this ) {
-	    f->focusWidgets.append( this );
-	    f->it.toLast();
-	}
+    // ### why do we do this twice?
+
+    f->it.toFirst();
+    while ( f->it.current() != this && !f->it.atLast() )
+	++f->it;
+    // at this point, the iterator should point to 'this'.  if it
+    // does not, 'this' must not be in the list - an error, but
+    // perhaps possible.  fix it.
+    if ( f->it.current() != this ) {
+	f->focusWidgets.append( this );
+	f->it.toLast();
+    }
+
+    f->it.toFirst();
+    while ( f->it.current() != this && !f->it.atLast() )
+	++f->it;
+    // at this point, the iterator should point to 'this'.  if it
+    // does not, 'this' must not be in the list - an error, but
+    // perhaps possible.  fix it.
+    if ( f->it.current() != this ) {
+	f->focusWidgets.append( this );
+	f->it.toLast();
     }
 
     if ( isActiveWindow() ) {
 	QWidget * prev = qApp->focus_widget;
 	qApp->focus_widget = this;
-	if ( prev && prev != this ) {
-	    if ( !prev->isPopup() &&
-		 topLevelWidget()->isPopup() &&
-		 topLevelWidget() != prev->topLevelWidget()) {
-		// imitate other toolkits by not sending a focus out event
-		// in that case
-	    } else {
+	if ( prev != this ) {
+	    if ( prev ) {
 		QFocusEvent out( QEvent::FocusOut );
 		QApplication::sendEvent( prev, &out );
 	    }
+
+	    QFocusEvent in( QEvent::FocusIn );
+	    QApplication::sendEvent( this, &in );
 	}
-	
-	QFocusEvent in( QEvent::FocusIn );
-	QApplication::sendEvent( this, &in );
     }
 }
-
 
 /*!
   Takes keyboard input focus from the widget.
@@ -2328,27 +2535,13 @@ bool QWidget::focusNextPrevChild( bool next )
     QWidget *startingPoint = f->it.current();
     QWidget *candidate = 0;
     QWidget *w = next ? f->focusWidgets.last() : f->focusWidgets.first();
-#if defined(_WS_X11_)
-    bool wrapped = FALSE;
-#endif
     do {
 	if ( w && w != startingPoint &&
 	     ( ( w->focusPolicy() & TabFocus ) == TabFocus )
-	     && !w->focusProxy() && w->isVisibleToTLW() && w->isEnabledToTLW())
+	     && !w->focusProxy() && w->isVisible() && w->isEnabled())
 	    candidate = w;
-#if defined(_WS_X11_)
-	if  (w == startingPoint )
-	    wrapped = TRUE;
-#endif
 	w = next ? f->focusWidgets.prev() : f->focusWidgets.next();
     } while( w && !(candidate && w==startingPoint) );
-
-#if defined(_WS_X11_)
-    extern void qt_xembed_tab_focus( QWidget*, bool ); // defined in qapplication_x11.cpp
-    if (!candidate || wrapped ) {
-	qt_xembed_tab_focus( this, next );
-    }
-#endif
 
     if ( !candidate )
 	return FALSE;
@@ -2411,18 +2604,21 @@ QFocusData * QWidget::focusData( bool create )
 
 
 /*!
-  Enables key event compression. Per default, the compression is
-  turned off.  If you enable it, the widget receives compressed key
-  press events whenever the user types too fast for your program. That
-  means you may receive an entire word in the QKeyEvent::text() field
-  of they QKeyEvent, instead of one event for each character. This
-  makes sense for a word processor, for example, since it takes almost
-  as much time to insert a single character as it takes to insert a
-  full word, because the required recalculation of the layout of the
-  paragraph is roughly the same.
+  Enables key event compression, if \a enable is TRUE, and disables it
+  if \a enable is FALSE.
 
-  If a widgets supports multiple byte unicode input, it is always safe
-  (and also recommended!) to turn the compression on.
+  By default key compression is off, so widgets receive one key press
+  event for each key press (or more, since autorepeat is usually on).
+  If you turn it on and your program doesn't keep up with key input,
+  Qt tries to compress key events so that more than one character can
+  be processed in each event.
+
+  For example, a word processor widget might receive 2, 3 or more
+  characters in each QKeyEvent::text(), if the layout recalculation
+  takes too long for the CPU.
+
+  If a widget supports multiple character unicode input, it is always
+  safe to turn the compression on.
 
   \sa QKeyEvent::text();
 */
@@ -2437,15 +2633,19 @@ void QWidget::setKeyCompression(bool compress)
 
 
 /*!
-  Returns TRUE if the top-level widget containing this widget is the
-  active window.
+  Returns TRUE if this widget is in the active window, i.e. the
+  window that has keyboard focus.
 
-  \sa setActiveWindow(), topLevelWidget()
+  When popup windows are visible, this function returns TRUE for both
+  the active window and the popup.
+
+  \sa setActiveWindow(), QApplication::activeWindow()
 */
 
 bool QWidget::isActiveWindow() const
 {
-    return topLevelWidget() == qApp->activeWindow();
+    return (topLevelWidget() == qApp->activeWindow() )||
+	     ( isVisible() && topLevelWidget()->isPopup() );
 }
 
 
@@ -2502,31 +2702,29 @@ void QWidget::setTabOrder( QWidget* first, QWidget *second )
     }
 }
 
-/*!
-  Moves the relevant widgets from the this window's tab chain to
-  that of \a parent, if there's anything to move and we're really
-  moving
+/*!\internal
+
+  Moves the relevant subwidgets of this widget from the \a oldtlw's
+  tab chain to that of the new parent, if there's anything to move and
+  we're really moving
+
+  This function is called from QWidget::reparent() *after* the widget
+  has been reparented.
 
   \sa reparent()
 */
 
-void QWidget::reparentFocusWidgets( QWidget * parent )
+void QWidget::reparentFocusWidgets( QWidget * oldtlw )
 {
-    if ( focusData() &&
-	 ( parent == 0 ? parentObj != 0
-		       : parent->topLevelWidget() != topLevelWidget() ) )
-    {
-	QFocusData * from = focusData();
-	from->focusWidgets.first();
-	QFocusData * to;
-	if ( parent ) {
-	    to = parent->focusData( TRUE );
-	} else {
-	    // ################ NOT CURRECT - need focusdata of a TLW!
-	    createTLExtra();
-	    to = extra->topextra->focusData = new QFocusData;
-	}
+    if ( oldtlw == topLevelWidget() )
+	return; // nothing to do
 
+    QFocusData * from = oldtlw->topData()->focusData;
+    from->focusWidgets.first();
+    QFocusData * to;
+    to = focusData();
+
+    if ( from ) {
 	do {
 	    QWidget * pw = from->focusWidgets.current();
 	    while( pw && pw != this )
@@ -2537,18 +2735,22 @@ void QWidget::reparentFocusWidgets( QWidget * parent )
 		    // probably best to clear keyboard focus, or
 		    // the user might become rather confused
 		    w->clearFocus();
-		to->focusWidgets.append( w );
+		if ( !isTopLevel() )
+		    to->focusWidgets.append( w );
 	    } else {
 		from->focusWidgets.next();
 	    }
 	} while( from->focusWidgets.current() );
+    }
 
-	if ( parentObj == 0 ) {
-	    // this widget is no longer a top-level widget, so get rid
-	    // of old focus data
-	    delete extra->topextra->focusData;
-	    extra->topextra->focusData = 0;
-	}
+    if ( to->focusWidgets.findRef(this) < 0 )
+	to->focusWidgets.append( this );
+
+    if ( !isTopLevel() && extra && extra->topextra && extra->topextra->focusData ) {
+	// this widget is no longer a top-level widget, so get rid
+	// of old focus data
+	delete extra->topextra->focusData;
+	extra->topextra->focusData = 0;
     }
 }
 
@@ -2636,11 +2838,12 @@ void QWidget::setCRect( const QRect &r )
 */
 
 /*!
-  Moves the widget to the position \e (x,y) relative to the parent widget.
+  Moves the widget to the position \e (x,y) relative to the parent widget and
+  including the window frame.
 
-  A \link moveEvent() move event\endlink is generated immediately if
-  the widget is visible. If the widget is invisible, the move event
-  is generated when show() is called.
+  If the widget is visible, it receives a \link moveEvent() move
+  event\endlink immediately. If the widget is not shown yet, it is
+  guaranteed to receive an event before it actually becomes visible.
 
   This function is virtual, and all other overloaded move()
   implementations call it.
@@ -2648,12 +2851,17 @@ void QWidget::setCRect( const QRect &r )
   \warning If you call move() or setGeometry() from moveEvent(), you
   may see infinite recursion.
 
+  See the \link geometry.html Window Geometry documentation\endlink
+  for an overview of geometry issues with top-level widgets.
+
   \sa pos(), resize(), setGeometry(), moveEvent()
 */
 
 void QWidget::move( int x, int y )
 {
-    internalSetGeometry( x, y, width(), height(), TRUE );
+    internalSetGeometry( x + geometry().x() - QWidget::x(),
+			 y + geometry().y() - QWidget::y(),
+			 width(), height(), TRUE );
 }
 
 
@@ -2665,9 +2873,9 @@ void QWidget::move( int x, int y )
 /*!
   Resizes the widget to size \e w by \e h pixels.
 
-  A \link resizeEvent() resize event\endlink is generated immediately if
-  the widget is visible. If the widget is invisible, the resize event
-  is generated when show() is called.
+  If the widget is visible, it receives a \link resizeEvent() resize
+  event\endlink immediately. If the widget is not shown yet, it is
+  guaranteed to receive an event before it actually becomes visible.
 
   The size is adjusted if it is outside the \link setMinimumSize()
   minimum\endlink or \link setMaximumSize() maximum\endlink widget size.
@@ -2683,7 +2891,7 @@ void QWidget::move( int x, int y )
 */
 void QWidget::resize( int w, int h )
 {
-    internalSetGeometry( x(), y(), w, h, FALSE );
+    internalSetGeometry( geometry().x(), geometry().y(), w, h, FALSE );
     setWState( WState_Resized );
 }
 
@@ -2696,9 +2904,10 @@ void QWidget::resize( int w, int h )
   Sets the widget geometry to \e w by \e h, positioned at \e x,y in its
   parent widget.
 
-  A \link resizeEvent() resize event\endlink and a \link moveEvent() move
-  event\endlink are generated immediately if the widget is visible. If the
-  widget is invisible, the events are generated when show() is called.
+  If the widget is visible, it receives a \link moveEvent() move
+  event\endlink and/or \link resizeEvent() resize event \endlink
+  immediately. If the widget is not shown yet, it is guaranteed to
+  receive appropriate events before it actually becomes visible.
 
   The size is adjusted if it is outside the \link setMinimumSize()
   minimum\endlink or \link setMaximumSize() maximum\endlink widget size.
@@ -2730,12 +2939,29 @@ void QWidget::setGeometry( int x, int y, int w, int h )
   \c QWidget::NoFocus).
 
   You must enable keyboard focus for a widget if it processes keyboard
-  events. This is normally done from the widget's constructor.  For
+  events.  This is normally done from the widget's constructor.  For
   instance, the QLineEdit constructor calls
   setFocusPolicy(\c QWidget::StrongFocus).
 
   \sa setFocusPolicy(), focusInEvent(), focusOutEvent(), keyPressEvent(),
   keyReleaseEvent(), isEnabled()
+*/
+
+/*! \enum QWidget::FocusPolicy
+
+  This enum type defines the various policies a widget can have with
+  respect to acquiring keyboard focus.
+
+  The \e policy can be:
+  <ul>
+  <li> \c QWidget::TabFocus - the widget accepts focus by tabbing.
+  <li> \c QWidget::ClickFocus - the widget accepts focus by clicking.
+  <li> \c QWidget::StrongFocus - the widget accepts focus by both tabbing
+  and clicking.
+  <li> \c QWidget::WheelFocus - like StrongFocus plus the widget accepts
+  focus by using the mouse wheel.
+  <li> \c QWidget::NoFocus - the widget does not accept focus.
+  </ul>
 */
 
 /*!
@@ -2761,17 +2987,6 @@ void QWidget::setGeometry( int x, int y, int w, int h )
   instance, the QLineEdit constructor calls
   setFocusPolicy(\c QWidget::StrongFocus).
 
-  The \e policy can be:
-  <ul>
-  <li> \c QWidget::TabFocus, the widget accepts focus by tabbing.
-  <li> \c QWidget::ClickFocus, the widget accepts focus by clicking.
-  <li> \c QWidget::StrongFocus, the widget accepts focus by both tabbing
-  and clicking.
-  <li> \c QWidget::WheelFocus, like StrongFocus plus the widget accepts
-  focus by using the mouse wheel.
-  <li> \c QWidget::NoFocus, the widget does not accept focus
-  </ul>
-
   As a special case to support applications not utilizing focus,
   \link isTopLevel() Top-level widgets \endlink that have
   NoFocus policy will receive focus events and
@@ -2788,7 +3003,7 @@ void QWidget::setFocusPolicy( FocusPolicy policy )
     if ( policy ) {
 	QFocusData * f = focusData( TRUE );
 	if ( f->focusWidgets.findRef( this ) < 0 )
- 	    f->focusWidgets.append( this );
+	    f->focusWidgets.append( this );
     }
     focus_policy = (uint)policy;
 }
@@ -2843,7 +3058,7 @@ static bool noMoreToplevels()
     QWidgetList *list   = qApp->topLevelWidgets();
     QWidget     *widget = list->first();
     while ( widget ) {
-	if ( !widget->testWState( Qt::WState_Withdrawn )
+	if ( !widget->testWState( Qt::WState_ForceHide )
 	     && !widget->isDesktop()
 	     && !widget->isPopup()
 	     && !widget->testWFlags( Qt::WStyle_Dialog) )
@@ -2870,15 +3085,91 @@ bool qt_modal_state();				// --- "" ---
   change some settings before a widget is shown, use showEvent()
   instead. If you need to do some delayed initialization use polish().
 
-  \sa showEvent, hide(), showMinimized(), isVisible(), polish()
+  \sa showEvent(), hide(), showMinimized(), showMaximized(), showNormal(),
+  isVisible(), polish()
 */
 
 void QWidget::show()
 {
-    if ( testWState(WState_Visible) )
-	return;
+    bool sendLayoutHint = !isTopLevel() && testWState( WState_ForceHide );
+    clearWState( WState_ForceHide );
 
-    if ( children() ) {
+    if ( testWState(WState_Visible) )
+	return; // nothing to do
+    if ( !isTopLevel() && !parentWidget()->isVisibleTo( 0 ) ){
+	// we should become visible, but our parents are explicitely
+	// hidden. Don' worry, since we cleared the ForceHide flag,
+	// our immediate parent will call show() on us again during
+	// his own processing of show().
+	if ( sendLayoutHint ) {
+	    QCustomEvent e( QEvent::ShowToParent, 0 );
+	    QApplication::sendEvent( this, &e );
+	}
+	return;
+    }
+
+
+    QApplication::sendPostedEvents( this, QEvent::ChildInserted );
+
+    if ( isTopLevel() && !testWState( WState_Resized ) )  {
+	// do this before sending the posted resize events. Otherwise
+	// the layout would catch the resize event and may expand the
+	// minimum size.
+	QSize s = sizeHint();
+	QSizePolicy::ExpandData exp;
+	if ( layout() ) {
+	    if ( layout()->hasHeightForWidth() )
+		s.setHeight( layout()->totalHeightForWidth( s.width() ) );
+	    exp =  layout()->expanding();
+	} else {
+	    if ( sizePolicy().hasHeightForWidth() )
+		s.setHeight( heightForWidth( s.width() ) );
+	    exp = sizePolicy().expanding();
+	}
+ 	if ( exp & QSizePolicy::Horizontal )
+	    s.setWidth( QMAX( s.width(), 200 ) );
+ 	if ( exp & QSizePolicy::Vertical )
+	    s.setHeight( QMAX( s.height(), 150 ) );
+	QWidget * d = QApplication::desktop();
+	s.setWidth( QMIN( s.width(), d->width()*2/3 ) );
+	s.setHeight( QMIN( s.height(), d->height()*2/3 ) );
+	if ( !s.isEmpty() )
+	    resize( s );
+    }
+
+    QApplication::sendPostedEvents( this, QEvent::Move );
+    QApplication::sendPostedEvents( this, QEvent::Resize );
+
+    setWState( WState_Visible );
+
+     if ( parentWidget() )
+	 QApplication::sendPostedEvents( parentWidget(),
+					 QEvent::ChildInserted );
+
+    if ( extra ) {
+	int w = crect.width();
+	int h = crect.height();
+	if ( w < extra->minw || h < extra->minh ||
+	     w > extra->maxw || h > extra->maxh ) {
+	    w = QMAX( extra->minw, QMIN( w, extra->maxw ));
+	    h = QMAX( extra->minh, QMIN( h, extra->maxh ));
+	    resize( w, h );			// deferred resize
+	}
+    }
+
+    if ( testWFlags(WStyle_Tool) || isPopup() ) {
+	raise();
+    }
+
+    if ( testWFlags(WType_TopLevel) && !isPopup() ) {
+	while ( QApplication::activePopupWidget() )
+	    QApplication::activePopupWidget()->hide();
+    }
+
+    if ( !testWState(WState_Polished) )
+	polish();
+
+     if ( children() ) {
 	QObjectListIt it(*children());
 	register QObject *object;
 	QWidget *widget;
@@ -2893,68 +3184,37 @@ void QWidget::show()
 	}
     }
 
-    QApplication::sendPostedEvents( this, QEvent::ChildInserted );
-    if ( parentWidget() )
-	QApplication::sendPostedEvents( parentWidget(),
-					QEvent::ChildInserted );
 
-    if ( isTopLevel() && !testWState( WState_Resized ) )  {
-	QSize s = sizeHint();
-	QSizePolicy::ExpandData exp;
-	if ( layout() ) {
-	    if ( layout()->hasHeightForWidth() )
-		s.setHeight( layout()->totalHeightForWidth( s.width() ) );
-	    exp =  layout()->expanding();
-	} else {
-	    if ( sizePolicy().hasHeightForWidth() )
-		s.setHeight( heightForWidth( s.width() ) );
-	    exp = sizePolicy().expanding();
-	}
-	if ( exp & QSizePolicy::Horizontal )
-	    s.setWidth( QMAX( s.width(), 200 ) );
-	if ( exp & QSizePolicy::Vertical )
-	    s.setHeight( QMAX( s.height(), 150 ) );
-	QWidget * d = QApplication::desktop();
-	s.setWidth( QMIN( s.width(), d->width()*2/3 ) );
-	s.setHeight( QMIN( s.height(), d->height()*2/3 ) );
-	if ( !s.isEmpty() )
-	    resize( s );
-    }
-    if ( extra ) {
-	int w = crect.width();
-	int h = crect.height();
-	if ( w < extra->minw || h < extra->minh ||
-	     w > extra->maxw || h > extra->maxh ) {
-	    w = QMAX( extra->minw, QMIN( w, extra->maxw ));
-	    h = QMAX( extra->minh, QMIN( h, extra->maxh ));
-	    resize( w, h );			// deferred resize
-	}
-    }
+     if ( !isTopLevel() && !parentWidget()->isVisible() ) {
+	// we should become visible, but somehow our parent is not
+	// visible, so we can't do that. Since it is not explicitely
+	// hidden (that we checked above with isVisibleTo(0) ), our
+	// window is not withdrawn, but may for example be iconfied or
+	// on another virtual desktop. Therefore we have to prepare
+	// for simply receiving a show event without show() beeing
+	// called again (see the call to sendShowEventsToChildren() in
+	// qapplication).
+	 showWindow();
+	 clearWState( WState_Visible );
+	 if ( sendLayoutHint ) {
+	     QCustomEvent e( QEvent::ShowToParent, 0 );
+	     QApplication::sendEvent( this, &e );
+	 }
+     } else {
 
-    QApplication::sendPostedEvents( this, QEvent::Move );
-    QApplication::sendPostedEvents( this, QEvent::Resize );
-    if ( testWFlags(WStyle_Tool) ) {
-	raise();
-    } else if ( testWFlags(WType_TopLevel) && !isPopup() ) {
-	while ( QApplication::activePopupWidget() )
-	    QApplication::activePopupWidget()->hide();
-    }
+	 QShowEvent e(FALSE);
+	 QApplication::sendEvent( this, &e );
 
-    if ( !testWState(WState_Polished) )
-	polish();
+	 if ( testWFlags(WType_Modal) ) {
+	     // qt_enter_modal *before* show, otherwise the initial
+	     // stacking might be wrong
+	     qt_enter_modal( this );
+	 }
+	 showWindow();
+	 if ( testWFlags(WType_Popup) )
+	     qApp->openPopup( this );
+     }
 
-    bool sendLayoutHint = testWState( WState_ForceHide ) && !isTopLevel();
-
-    if ( testWFlags(WType_Modal) ) {
-	// qt_enter_modal *before* show, otherwise the initial
-	// stacking might be wrong
-	qt_enter_modal( this );
-	showWindow();
-    } else {
-	showWindow();
-	if ( testWFlags(WType_Popup) )
-	    qApp->openPopup( this );
-    }
     if ( sendLayoutHint )
 	QApplication::postEvent( parentWidget(),
 				 new QEvent( QEvent::LayoutHint) );
@@ -2966,28 +3226,30 @@ void QWidget::show()
   Hides the widget.
 
   You almost never have to reimplement this function. If you need to
-  do something after a widget is hidden, use \link hideEvent()
-  instead.
+  do something after a widget is hidden, use hideEvent() instead.
 
-  \sa \hideEvent(), show(), showMinimized(), isVisible(), close()
+  \sa hideEvent(), show(), showMinimized(), isVisible(), close()
 */
 
 void QWidget::hide()
 {
-    setWState( WState_ForceHide );
-    if ( testWState(WState_Withdrawn) )
+    if ( testWState(WState_ForceHide) )
 	return;
+    setWState( WState_ForceHide );
 
-    if ( testWFlags(WType_Modal) )
-	qt_leave_modal( this );
-    else if ( testWFlags(WType_Popup) )
+    if ( testWFlags(WType_Popup) )
 	qApp->closePopup( this );
 
-    hideWindow();
-    setWState( WState_Withdrawn );
+    if ( isTopLevel() && !isPopup() && parentWidget() && isActiveWindow() )
+	parentWidget()->setActiveWindow();	// Activate parent
 
-   if ( !testWState(WState_Visible) )
+    hideWindow();
+
+    if ( !testWState(WState_Visible) ) {
+	QCustomEvent e( QEvent::HideToParent, 0 );
+	QApplication::sendEvent( this, &e );
 	return;
+    }
     clearWState( WState_Visible );
 
     // next bit tries to move the focus if the focus widget is now
@@ -2997,9 +3259,62 @@ void QWidget::hide()
 
     QHideEvent e(FALSE);
     QApplication::sendEvent( this, &e );
-    if ( !isTopLevel() )
+
+    // post layout hint for non toplevels. The parent widget check is
+    // necessary since the function is called in the destructor
+    if ( !isTopLevel() && parentWidget() )
 	QApplication::postEvent( parentWidget(),
 				 new QEvent( QEvent::LayoutHint) );
+
+    sendHideEventsToChildren( FALSE );
+
+    if ( testWFlags(WType_Modal) )
+	qt_leave_modal( this );
+}
+
+
+void QWidget::sendShowEventsToChildren( bool spontaneous )
+{
+     if ( children() ) {
+	QObjectListIt it(*children());
+	register QObject *object;
+	QWidget *widget;
+	while ( it ) {
+	    object = it.current();
+	    ++it;
+	    if ( object->isWidgetType() ) {
+		widget = (QWidget*)object;
+		if ( !widget->isTopLevel() && !widget->isVisible() && !widget->testWState(WState_ForceHide) ) {
+		    widget->setWState( WState_Visible );
+		    widget->sendShowEventsToChildren( spontaneous );
+		    QShowEvent e( spontaneous );
+		    QApplication::sendEvent( widget, &e );
+		}
+	    }
+	}
+    }
+}
+
+void QWidget::sendHideEventsToChildren( bool spontaneous )
+{
+     if ( children() ) {
+	QObjectListIt it(*children());
+	register QObject *object;
+	QWidget *widget;
+	while ( it ) {
+	    object = it.current();
+	    ++it;
+	    if ( object->isWidgetType() ) {
+		widget = (QWidget*)object;
+		if ( !widget->isTopLevel() && widget->isVisible() ) {
+		    widget->clearWState( WState_Visible );
+		    widget->sendHideEventsToChildren( spontaneous );
+		    QHideEvent e( spontaneous );
+		    QApplication::sendEvent( widget, &e );
+		}
+	    }
+	}
+    }
 }
 
 
@@ -3007,28 +3322,53 @@ void QWidget::hide()
   Delayed initialization of a widget.
 
   This function will be called \e after a widget has been fully created
-  just \e before it is shown the very first time.
+  and \e before it is shown the very first time.
 
   Polishing is useful for final initialization depending on an
   instantiated widget. This is something a constructor cannot
   guarantee since the initialization of the subclasses might not be
   finished.
 
-  The default implementation sets the \c WState_Polished widget state
-  and calls QApplication::polish().
+  After this function, the wiget has a proper font and palette and
+  QApplication::polish() has been called.
 
-  \sa QApplication::polish()
+  Remember to call QWidget's implementation when reimplementing this
+  function.
+
+  \sa constPolish(), QApplication::polish()
 */
 
 void QWidget::polish()
 {
     if ( !testWState(WState_Polished) ) {
+	if ( !own_font && !QApplication::font( this ).isCopyOf( QApplication::font() ) ) {
+	    setFont( QApplication::font( this ) );
+	    own_font = FALSE;
+	}
+	if ( !own_palette && !QApplication::palette( this ).isCopyOf( QApplication::palette() ) ) {
+	    setPalette( QApplication::palette( this ) );
+	    own_palette = FALSE;
+	}
 	setWState(WState_Polished);
-	if ( !parentObj )
-	    qApp->noteTopLevel(this);
 	qApp->polish( this );
+	QApplication::sendPostedEvents( this, QEvent::ChildInserted );
     }
 }
+
+
+/*!
+  \fn void QWidget::constPolish() const
+
+  Ensures that the widget is properly initialized by calling polish().
+
+  Call constPolish() from functions like sizeHint() that depends on
+  the widget being initialized, and that may be called before show().
+
+  \warning Do not call constPolish() on a widget from inside that
+  widget's constructor.
+
+  \sa polish()
+ */
 
 
 /*!
@@ -3036,9 +3376,8 @@ void QWidget::polish()
   FALSE.
 
   If \a alsoDelete is TRUE or the widget has the \c WDestructiveClose
-  widget flag, the widget is also deleted.  Otherwise, the widget can
-  prevent itself from being closed by rejecting the QCloseEvent it
-  gets.
+  widget flag, the widget is also deleted.  The widget can prevent
+  itself from being closed by rejecting the QCloseEvent it gets.
 
   The QApplication::lastWindowClosed() signal is emitted when the last
   visible top level widget is closed.
@@ -3057,7 +3396,8 @@ bool QWidget::close( bool alsoDelete )
     bool checkLastWindowClosed = isTopLevel() && !isPopup() &&
 				 !testWFlags(WStyle_Dialog);
     QCloseEvent e;
-    bool accept = QApplication::sendEvent( this, &e );
+    QApplication::sendEvent( this, &e );
+    bool accept = e.isAccepted();
     if ( !QWidget::find(id) ) {			// widget was deleted
 	accept = TRUE;
     } else {
@@ -3067,8 +3407,10 @@ bool QWidget::close( bool alsoDelete )
 		delete this;
 	}
     }
-    if ( accept && checkLastWindowClosed ) {	// last window closed?
-	if ( qApp->receivers(SIGNAL(lastWindowClosed())) && noMoreToplevels() )
+    if ( accept  ) {	// last window closed?
+	if ( checkLastWindowClosed
+	     && qApp->receivers(SIGNAL(lastWindowClosed()))
+	     && noMoreToplevels() )
 	    emit qApp->lastWindowClosed();
 	if ( isMain )
 	    qApp->quit();
@@ -3096,29 +3438,38 @@ bool QWidget::close( bool alsoDelete )
 /*!
   \fn bool QWidget::isVisible() const
 
-  Returns TRUE if the widget itself is set to visible status, or else
-  FALSE.  Calling show() sets the widget to visible status; calling
-  hide() sets it to hidden status. Iconified top-level widgets also
-  have hidden status, as well as having isMinimized() return TRUE.
+  Returns TRUE if the widget itself is visible, or else FALSE.
 
-  If a widget is set to visible status, but its parent widget is set
-  to hidden status, this function returns TRUE.  isVisibleToTLW()
-  looks at the visibility status of the parent widgets up to the
-  top level widget.
+  Calling show() sets the widget to visible status if all its parent
+  widgets up to the toplevel widget are visible. If an ancestor is not
+  visible, the widget won't become visible until all its ancestors are
+  shown.
+
+  Calling hide() hides a widget explicitly. An explicitly hidden
+  widget will never become visible, even if all its ancestors become
+  visible.
+
+  Iconified top-level widgets also have hidden status, as well as
+  having isMinimized() return TRUE.
 
   This function returns TRUE if the widget currently is obscured by
   other windows on the screen, but would be visible if moved.
 
-  \sa show(), hide(), isVisibleToTLW(), isMinimized()
+  \sa show(), hide(), isVisibleTo(), isMinimized()
 */
 
 
 /*!
-  Returns TRUE if this widget and every parent up to but excluding
-  \a ancestor is visible, otherwise returns FALSE.
+  Returns TRUE if this widget would become visible if \a ancestor is
+  shown.
+
+  This is the case if neither the widget itself nor every parent up to
+  but excluding \a ancestor has been explicitely hidden.
 
   This function returns TRUE if the widget it is obscured by other
   windows on the screen, but would be visible if moved.
+
+  isVisibleTo(0) is equivalent to isVisible().
 
   \sa show() hide() isVisible()
 */
@@ -3127,31 +3478,25 @@ bool QWidget::isVisibleTo(QWidget* ancestor) const
 {
     const QWidget * w = this;
     while ( w
-	    && w->isVisible()
+	    && !w->testWState( WState_ForceHide )
 	    && !w->isTopLevel()
 	    && w->parentWidget()
 	    && w->parentWidget()!=ancestor )
 	w = w->parentWidget();
-    return w->isVisible();
+    return !w->testWState( WState_ForceHide );
 }
 
 
-/*!
-  Returns TRUE if this widget and every parent up to the \link
-  topLevelWidget() top level widget \endlink is visible, otherwise
-  returns FALSE.
+/*!\obsolete
 
-  This function returns TRUE if the widget it is obscured by other
-  windows on the screen, but would be visible if moved.
-
-  This is equivalent to isVisibleTo(0).
+  This function is deprecated. It is equivalent to isVisible()
 
   \sa show(), hide(), isVisible()
 */
 
 bool QWidget::isVisibleToTLW() const
 {
-    return isVisibleTo( 0 );
+    return isVisible();
 }
 
 
@@ -3203,6 +3548,8 @@ QRect QWidget::visibleRect() const
 
 void QWidget::adjustSize()
 {
+    if ( !testWState(WState_Polished) )
+	polish();
     QSize s = sizeHint();
     if ( s.isValid() ) {
 	resize( s );
@@ -3229,6 +3576,7 @@ QSize QWidget::sizeHint() const
 {
     if ( layout() )
 	return layout()->totalSizeHint();
+    constPolish();
     return QSize( -1, -1 );
 }
 
@@ -3249,6 +3597,7 @@ QSize QWidget::minimumSizeHint() const
 {
     if ( layout() )
 	return layout()->totalMinimumSize();
+    constPolish();
     return QSize( -1, -1 );
 }
 
@@ -3265,82 +3614,6 @@ QSize QWidget::minimumSizeHint() const
   Returns TRUE if any of the widget flags in \e n are set. The
   widget flags are listed in qnamespace.h, and are strictly for
   internal use.
-
-  \internal
-
-  Widget state flags:
-  <dl compact>
-  <dt>WState_Created<dd> The widget has a valid winId().
-  <dt>WState_Disabled<dd> Disables mouse and keyboard events.
-  <dt>WState_Visible<dd> show() has been called.
-  <dt>WState_ForceHide<dd> hide() has been called before first show().
-  <dt>WState_OwnCursor<dd> A cursor has been set for this widget.
-  <dt>WState_MouseTracking<dd> Mouse tracking is enabled.
-  <dt>WState_CompressKeys<dd> Compress keyboard events.
-  <dt>WState_BlockUpdates<dd> Repaints and updates are disabled.
-  <dt>WState_InPaintEvent<dd> Currently processing a paint event.
-  <dt>WState_Reparented<dd> The widget has been reparented.
-  <dt>WState_ConfigPending<dd> A config (resize/move) event is pending.
-  <dt>WState_Resized<dd> The widget has been resized.
-  <dt>WState_AutoMask<dd> The widget has an automatic mask, see setAutoMask().
-  <dt>WState_Polished<dd> The widget has been "polished" (i.e. late initializated ) by a QStyle.
-  <dt>WState_DND<dd> The widget supports drag and drop, see setAcceptDrops().
-  <dt>WState_USPositionX<dd> X11 only: Set the USPosition size hint.
-  <dt>WState_PaletteSet<dd> The palette has been set.
-  <dt>WState_PaletteFixed<dd> The widget has a fixed palette.
-  <dt>WState_FontSet<dd> The font has been set.
-  <dt>WState_FontFixed<dd> The widget has a fixed font.
-  <dt> WState_Withdrawn<dd> The widget is withdrawn, i.e. hidden from the
-           window system by the program itself.
-  </dl>
-
-  Widget type flags:
-  <dl compact>
-  <dt>WType_TopLevel<dd> Top-level widget (not a child).
-  <dt>WType_Modal<dd> Modal widget, implies \c WType_TopLevel.
-  <dt>WType_Popup<dd> Popup widget, implies \c WType_TopLevel.
-  <dt>WType_Desktop<dd> Desktop widget (root window), implies
-	\c WType_TopLevel.
-  </dl>
-
-  Window style flags (for top-level widgets):
-  <dl compact>
-  <dt>WStyle_Customize<dd> Custom window style.
-  <dt>WStyle_NormalBorder<dd> Normal window border.
-  <dt>WStyle_DialogBorder<dd> Thin dialog border.
-  <dt>WStyle_NoBorder<dd> No window border.
-  <dt>WStyle_Title<dd> The window has a title.
-  <dt>WStyle_SysMenu<dd> The window has a system menu
-  <dt>WStyle_Minimize<dd> The window has a minimize box.
-  <dt>WStyle_Maximize<dd> The window has a maximize box.
-  <dt>WStyle_MinMax<dd> Equals (\c WStyle_Minimize | \c WStyle_Maximize).
-  <dt>WStyle_Tool<dd> The window is a tool window.
-  <dt>WStyle_StaysOnTop<dd> The window should stay on top of all other windows
-  <dt>WStyle_Dialog<dd> The window is a dialog
-  </dl>
-
-  Misc. flags:
-  <dl compact>
-  <dt>WDestructiveClose<dd> The widget is deleted when its closed.
-  <dt>WPaintDesktop<dd> The widget wants desktop paint events.
-  <dt>WPaintUnclipped<dd> Paint without clipping child widgets.
-  <dt>WPaintClever<dd> The widget wants every update rectangle.
-  <dt>WResizeNoErase<dd> Widget resizing should not erase the widget.
-			This allows smart-repainting to avoid flicker.
-  <dt>WMouseNoMask<dd> Even if the widget has a mask, mouse events
-			are delivered for the entire rectangle.
-  <dt>WNorthWestGravity<dd> Indicates that the widget contents is
-                                        north-west aligned and static. On resize, you will
-                                        recieve paint events consequentely only for the
-			newly visible parts of the widget.
-                                        This allows even more smart-repainting to
-			avoid even more flicker.   In case you need
-			to repaint areas in addition (what shouldn't
-			be the case with true north-west gravity),
-			it's your responsibility to call repaint() or
-			update() in the resizeEvent()-handler for the
-			respective region.
-  </dl>
 */
 
 /*!
@@ -3435,10 +3708,16 @@ bool QWidget::event( QEvent *e )
 	    bool res = FALSE;
 	    if ( k->key() == Key_Backtab ||
 		 (k->key() == Key_Tab &&
-		  (k->state() & ShiftButton)) )
+		  (k->state() & ShiftButton)) ) {
+		QFocusEvent::setReason( QFocusEvent::Tab );
 		res = focusNextPrevChild( FALSE );
-	    else if ( k->key() == Key_Tab )
+		QFocusEvent::resetReason();
+
+	    } else if ( k->key() == Key_Tab ) {
+		QFocusEvent::setReason( QFocusEvent::Tab );
 		res = focusNextPrevChild( TRUE );
+		QFocusEvent::resetReason();
+	    }
 	    if ( res )
 		break;
 	    QWidget *w = this;
@@ -3484,7 +3763,7 @@ bool QWidget::event( QEvent *e )
 
 	case QEvent::Paint:
 	    // At this point the event has to be delivered, regardless
-	    // whether the widget isVisibleToTLW() or not because it
+	    // whether the widget isVisible() or not because it
 	    // already went through the filters
 	    paintEvent( (QPaintEvent*)e );
 	    break;
@@ -3506,16 +3785,16 @@ bool QWidget::event( QEvent *e )
 	    break;
 	case QEvent::Drop:
 	    dropEvent( (QDropEvent*) e);
-	    break;	
+	    break;
 	case QEvent::DragEnter:
 	    dragEnterEvent( (QDragEnterEvent*) e);
-	    break;	
+	    break;
 	case QEvent::DragMove:
 	    dragMoveEvent( (QDragMoveEvent*) e);
-	    break;	
+	    break;
 	case QEvent::DragLeave:
 	    dragLeaveEvent( (QDragLeaveEvent*) e);
-	    break;	
+	    break;
 	case QEvent::Show:
 	    showEvent( (QShowEvent*) e);
 	    break;
@@ -3526,7 +3805,36 @@ bool QWidget::event( QEvent *e )
 	case QEvent::ChildRemoved:
 	    childEvent( (QChildEvent*) e);
 	    break;
-	default:
+	case QEvent::ParentFontChange:
+	    if ( isTopLevel() )
+		break;
+	    // FALL THROUGH
+	case QEvent::ApplicationFontChange:
+	    if ( !own_font && !isDesktop() ) {
+		if ( !isTopLevel() && QApplication::font( this ).isCopyOf( QApplication::font() ) )
+		    setFont( parentWidget()->font() );
+		else
+		    setFont( QApplication::font( this ) );
+		own_font = FALSE;
+	    }
+	case QEvent::ParentPaletteChange:
+ 	    if ( isTopLevel() )
+ 		break;
+	    // FALL THROUGH
+	case QEvent::ApplicationPaletteChange:
+	    if ( !own_palette && !isDesktop() ) {
+		if ( !isTopLevel() && QApplication::palette( this ).isCopyOf( QApplication::palette() ) )
+		    setPalette( parentWidget()->palette() );
+		else
+		    setPalette( QApplication::palette( this ) );
+		own_palette = FALSE;
+	    }
+	    break;
+        default:
+	    if ( e->type() >= QEvent::User ) {
+		customEvent( (QCustomEvent*) e );
+		return TRUE;
+	    }
 	    return FALSE;
     }
     return TRUE;
@@ -3582,7 +3890,7 @@ void QWidget::mousePressEvent( QMouseEvent *e )
 	    if (qApp->activePopupWidget() == w) // widget does not want to dissappear
 		w->hide(); // hide at least
 	}
-	if (!rect().contains(e->pos()) ){	
+	if (!rect().contains(e->pos()) ){
 	    close();
 	}
     }
@@ -3640,19 +3948,18 @@ void QWidget::wheelEvent( QWheelEvent *e )
 
 
 /*!
-  This event handler can be reimplemented in a subclass to receive
-  key press events for the widget.
+  This event handler can be reimplemented in a subclass to receive key
+  press events for the widget.
 
-  A widget must \link setFocusPolicy() accept focus\endlink initially
-  and \link hasFocus() have focus\endlink in order to receive a key press
-  event.
+  A widget must call setFocusPolicy() to accept focus initially and
+  have focus in order to receive a key press event.
 
-  If you reimplement this handler, it is very important that you \link
-  QKeyEvent ignore()\endlink the press if you do not understand it, so
-  that the widget's parent can interpret it.
+  If you reimplement this handler, it is very important that you
+  ignore() the event if you do not understand it, so that the widget's
+  parent can interpret it.
 
   The default implementation closes popup widgets if you hit
-  escape. Otherwise the event is ignored.
+  escape.  Otherwise the event is ignored.
 
   As a special case to support applications not utilizing focus,
   \link isTopLevel() Top-level widgets \endlink that have
@@ -3699,19 +4006,14 @@ void QWidget::keyReleaseEvent( QKeyEvent *e )
   This event handler can be reimplemented in a subclass to receive
   keyboard focus events (focus received) for the widget.
 
-  A widget must \link setFocusPolicy() accept focus\endlink initially in
-  order to receive focus events.
+  A widget normally must setFocusPolicy() to something other than
+  NoFocus in order to receive focus events.  (Note that the
+  application programmer can call setFocus() on any widget, even those
+  that do not normally accept focus.)
 
-  The default implementation calls repaint() since the widget's \link
-  QColorGroup color group\endlink changes from normal to active.  You
-  may want to call repaint(FALSE) to reduce flicker in any reimplementation.
-  It also calls setMicroFocusHint(), hinting any system-specific input tools about
-  the focus of the user's attention.
-
-  As a special case to support applications not utilizing focus,
-  \link isTopLevel() Top-level widgets \endlink that have
-  \link focusPolicy() NoFocus policy\endlink will receive focus events and
-  gain keyboard events, but the repaint is not done by default.
+  The default implementation updates the widget if it accepts
+  focus (see focusPolicy()).  It also calls setMicroFocusHint(), hinting any
+  system-specific input tools about the focus of the user's attention.
 
   \sa focusOutEvent(), setFocusPolicy(),
   keyPressEvent(), keyReleaseEvent(), event(), QFocusEvent
@@ -3720,7 +4022,7 @@ void QWidget::keyReleaseEvent( QKeyEvent *e )
 void QWidget::focusInEvent( QFocusEvent * )
 {
     if ( focusPolicy() != NoFocus || !isTopLevel() ) {
-	repaint( visibleRect() );
+	update();
 	if ( testWState(WState_AutoMask) )
 	    updateMask();
 	setMicroFocusHint(width()/2, 0, 1, height(), FALSE);
@@ -3731,13 +4033,15 @@ void QWidget::focusInEvent( QFocusEvent * )
   This event handler can be reimplemented in a subclass to receive
   keyboard focus events (focus lost) for the widget.
 
-  A widget must \link setFocusPolicy() accept focus\endlink initially in
-  order to receive focus events.
+  A widget normally must setFocusPolicy() to something other than
+  NoFocus in order to receive focus events.  (Note that the
+  application programmer can call setFocus() on any widget, even those
+  that do not normally accept focus.)
 
-  The default implementation calls repaint( visibleRect() ) since the
-  widget's \link QColorGroup color group\endlink changes from active
-  to normal.  You may want to call repaint( visibleRect(), FALSE) to
-  reduce flicker in any reimplementation.
+  The default implementation calls repaint() since the widget's
+  colorGroup() changes from active to normal, so the widget probably
+  needs repainting.  It also calls setMicroFocusHint(), hinting any
+  system-specific input tools about the focus of the user's attention.
 
   \sa focusInEvent(), setFocusPolicy(),
   keyPressEvent(), keyReleaseEvent(), event(), QFocusEvent
@@ -3746,11 +4050,27 @@ void QWidget::focusInEvent( QFocusEvent * )
 void QWidget::focusOutEvent( QFocusEvent * )
 {
     if ( focusPolicy() != NoFocus || !isTopLevel() ){
-	repaint( visibleRect() );
+	update();
 	if ( testWState(WState_AutoMask) )
 	    updateMask();
     }
 }
+
+
+/*!
+  Returns the currently set micro focus hint for this widget.
+
+  \sa setMicroFocusHint()
+ */
+QRect QWidget::microFocusHint() const
+{
+    if ( !extra || extra->micro_focus_hint.isEmpty() )
+	return QRect(width()/2, 0, 1, height() );
+    else
+	return extra->micro_focus_hint;
+}
+
+
 
 /*!
   This event handler can be reimplemented in a subclass to receive
@@ -3785,7 +4105,8 @@ void QWidget::leaveEvent( QEvent * )
 
   When the paint event occurs, the update region QPaintEvent::region()
   normally has been cleared to the background color or pixmap. An
-  exception is when repaint(FALSE) is called. Inside the paint event
+  exception is when repaint(FALSE) is called or the widget sets the
+  WRepaintNoErase or WResizeNoErase flag.  Inside the paint event
   handler, QPaintEvent::erased() carries this information.
 
   For many widgets it is sufficient to redraw the entire widget each time,
@@ -3925,7 +4246,7 @@ void QWidget::dropEvent( QDropEvent * )
   This event handler can be reimplemented in a subclass to receive
   widget show events.
 
-  Non-sponaneous show events are sent to widgets right before they are
+  Non-spontaneous show events are sent to widgets right before they are
   shown. Spontaneous show events of toplevel widgets are delivered
   afterwards, naturally.
 
@@ -3955,14 +4276,9 @@ void QWidget::hideEvent( QHideEvent * )
 
 /*!
   This event handler can be reimplemented in a subclass to receive
-  custom events.
-
-  QCustomEvent is a user-defined event type which contains a \c void*.
-
-  \warning
-  This event class is internally used to implement Qt enhancements.  It is
-  not advisable to use QCustomEvent in normal applications, where other
-  event types and the signal/slot mechanism can do the job.
+  custom events. Custom events are user-defined events with a type
+  value at least as large as the "User" item of the QEvent::Type enum,
+  and is typically a QCustomEvent or QCustomEvent subclass.
 
   \sa event(), QCustomEvent
 */
@@ -4034,65 +4350,45 @@ bool QWidget::x11Event( XEvent * )
 #endif
 
 
-/*!
-  Returns the font propagation mode of this widget.  The default
-  font propagation mode is \c NoChildren, but you can set it to \a
-  SameFont or \a AllChildren.
+/*!\obsolete
+
+  The return value is meaningless
 
   \sa setFontPropagation()
 */
 
 QWidget::PropagationMode QWidget::fontPropagation() const
 {
-    return (PropagationMode)propagate_font;
+    return SameFont;
 }
 
 
-/*!
-  Sets the font propagation mode to \a m.
+/*!\obsolete
 
-  if \a m is \c NoChildren (the default), setFont() does not change
-  any children's fonts.  If it is \c SameFont, setFont() changes the
-  font of the children that have the exact same font as this widget
-  (see \l QFont::isCopyOf() for details).  If it is \c AllChildren,
-  setFont() changes the font of all children.
-
-  \sa fontPropagation() setFont() setPalettePropagation()
+  Calling this function has no effect.
 */
-
-void QWidget::setFontPropagation( PropagationMode m )
+void QWidget::setFontPropagation( PropagationMode )
 {
-    propagate_font = (int)m;
 }
 
 
-/*!  Returns the palette propagation mode of this widget.  The default
-  palette propagation mode is \c NoChildren, but you can set it to \a
-  SamePalette or \a AllChildren.
+/*!  \obsolete
 
-  \sa setPalettePropagation()
+  The return value is meaningless
 */
 
 QWidget::PropagationMode QWidget::palettePropagation() const
 {
-    return (PropagationMode)propagate_palette;
+    return SamePalette;
 }
 
 
-/*!  Sets the palette propagation mode to \a m.
+/*!  \obsolete
 
-  if \a m is \c NoChildren (the default), setPalette() does not change
-  any children's palettes.  If it is \c SamePalette, setPalette()
-  changes the palette of the children that have the exact same palette
-  as this widget (see \l QPalette::isCopyOf() for details).  If it is
-  \c AllChildren, setPalette() changes the palette of all children.
-
-  \sa palettePropagation() setPalette() setFontPropagation()
+  Calling this function has no effect.
 */
-
-void QWidget::setPalettePropagation( PropagationMode m )
+void QWidget::setPalettePropagation( PropagationMode )
 {
-    propagate_palette = (int)m;
 }
 
 /*!
@@ -4108,18 +4404,31 @@ void QWidget::setPalettePropagation( PropagationMode m )
 
     \code
     if ( autoMask() )
-          updateMask();
+	  updateMask();
     \endcode
 
     at the end of your event handlers. Same holds for all member
     functions that change the appearance of the widget in a way that a
     recalculation of the mask is necessary.
 
-  \sa autoMask(), updateMask(), setMask(), clearMask()
+    While being a technically appealing concept, masks have one big
+    drawback: when using complex masks that cannot be expressed easily
+    with relatively simple regions, they tend to be very slow on some
+    window systems. The classic example is a transparent label. The
+    complex shape of its contents makes it necessary to represent its
+    mask by a bitmap, which consumes both memory and time.  If all you
+    want is to blend the background of several neighboring widgets
+    together seamlessly, you may probably want to use
+    setBackgroundOrigin() rather than a mask.
+
+  \sa autoMask(), updateMask(), setMask(), clearMask(), setBackgroundOrigin()
 */
 
 void QWidget::setAutoMask( bool enable )
 {
+    if ( enable == autoMask() )
+	return;
+
     if ( enable ) {
 	setWState(WState_AutoMask);
 	updateMask();
@@ -4130,7 +4439,7 @@ void QWidget::setAutoMask( bool enable )
 }
 
 /*!
-  Returns whether or not a widget has the auto mask feature enabled.
+  Returns whether or not the  widget has the auto mask feature enabled.
 
   \sa setAutoMask(), updateMask(), setMask(), clearMask()
 */
@@ -4139,6 +4448,57 @@ bool QWidget::autoMask() const
 {
     return testWState(WState_AutoMask);
 }
+
+/*! \enum QWidget::BackgroundOrigin
+
+  This enum defines the origin used to draw a widget's background
+  pixmap.
+
+  <ul>
+  <li> \c WidgetOrigin - the pixmap is drawn in the widget's coordinate system.
+  <li>\c ParentOrigin - the pixmap is drawn in the parent's coordinate system.
+  </ul>
+
+ */
+
+/*!
+  Sets the widget's background to be drawn relative to \a origin,
+  which is either of \c WidgetOrigin (the default) or \c ParentOrigin.
+
+  This makes a difference only if the widget has a background pixmap
+  where the positioning matters. In such case, using \c ParentOrigin
+  for several neighboring widgets makes the background blend together
+  seamlessly.
+
+  \sa backgroundOrigin(), backgroundPixmap(), setBackgroundMode()
+ */
+
+
+void QWidget::setBackgroundOrigin( BackgroundOrigin origin )
+{
+    if ( origin == backgroundOrigin() )
+	return;
+
+    if ( origin == ParentOrigin )
+	setWState( WState_TranslateBackground );
+    else
+	clearWState( WState_TranslateBackground );
+    update();
+}
+
+/*!
+  Returns the current background origin.
+
+  \sa setBackgroundOrigin()
+*/
+QWidget::BackgroundOrigin QWidget::backgroundOrigin() const
+{
+    if ( testWState( WState_TranslateBackground ) )
+	return ParentOrigin;
+    else
+	return WidgetOrigin;
+}
+
 
 /*!
   This function can be reimplemented in a subclass to support
@@ -4186,9 +4546,19 @@ void QWidget::setLayout( QLayout *l )
   policy specified by that layout is used. If there is no such
   QLayout, the result of this function is used.
 
-  The default implementation returns a value which means
-  that  the widget can be freely resized,
-  but prefers to be the size sizeHint() returns.
+  The default implementation returns a value which means that the
+  widget can be freely resized, but prefers to be the size sizeHint()
+  returns. Button-like widgets reimplement sizeHint to specify that
+  they may stretch horizontally, but are fixed vertically. The same
+  applies to lineedit controls (such as QLineEdit, QSpinBox or an
+  editable QComboBox) and other horizontally orientated widgets (such
+  as QProgressBar).  A QToolButton on the other hand wants to be
+  squared, therefore it allows growth in both directions. Widgets that
+  support different directions (such as QSlider, QScrollBar or
+  QHeader) specify stretching in the respecitive direction
+  only. Widgets that can provide scrollbars (usually subclasses of
+  QScrollView) tend to specify that they can use additional space, and
+  that they can survive on less than sizeHint().
 
   \sa sizeHint() QLayout QSizePolicy, updateGeometry()
 */
@@ -4224,7 +4594,7 @@ int QWidget::heightForWidth( int w ) const
 
   You may also reimplement customWhatsThis() if your widget is a
   so-called "passive interactor" that is supposed to work under all
-  circumstances. Simply never call QWhatsThis::leaveWhatsThisMode() in
+  circumstances. Simply don't call QWhatsThis::leaveWhatsThisMode() in
   that case.
 
   \sa QWhatsThis::inWhatsThisMode(), QWhatsThis::leaveWhatsThisMode()
@@ -4259,7 +4629,7 @@ void QWidget::updateGeometry()
   QApplication::style() instead.
 
   Setting a widget's style has no effect on existing or future
-  childwidgets.
+  child widgets.
 
   \warning This function is particularly useful for demonstration
   purposes, where you want to show Qt's styling capabilities.  Real
@@ -4280,4 +4650,74 @@ void QWidget::setStyle( QStyle *style )
 	QWidget::style().polish( this );
 	styleChange( old );
     }
+}
+
+/*!\overload
+
+  A convenience version of reparent that does not take widget
+  flags as argument.
+
+  Calls reparent(\a parent, getWFlags()&~WType_Mask, \a p, \a showit )
+*/
+void  QWidget::reparent( QWidget *parent, const QPoint & p,
+			 bool showIt )
+{
+    reparent( parent, getWFlags() & ~WType_Mask, p, showIt );
+}
+
+
+
+/*!
+  Shows the widget in full-screen mode.
+
+  Calling this function has no effect for other than top-level
+  widgets.
+
+  To return from full-screen mode, call showNormal().
+
+  Full-screen mode works fine under Windows, but has certain problems
+  under X.  These problems are due to limitations of the ICCCM
+  protocol that specifies the communication between X11 clients and
+  the window manager.  ICCCM simply does not know the concept of
+  non-decorated full-screen windows. Therefore, the best we can do is
+  to request a borderless window and place and resize it to fill the
+  entire screen. Depending on the window manager, this may or may not
+  work. The borderless window is requested using MOTIF hints, which
+  are at least partially supported by virtually all modern window
+  managers.
+  
+  An alternative would be to bypass the window manager at all and to
+  create a window with the WX11BypassWM flag. This has other severe
+  problems, though, like totally broken keyboard focus and very
+  strange effects on desktop changes or when the user raises other
+  windows.
+
+  Future window managers that follow modern post-ICCCM specifications
+  may support full-screen mode properly.
+
+  \sa showNormal(), showMaximized(), show(), hide(), isVisible()
+*/
+void QWidget::showFullScreen()
+{
+    if ( !isTopLevel() )
+	return;
+    if ( topData()->fullscreen ) {
+	show();
+	raise();
+	return;
+    }
+    if ( topData()->normalGeometry.width() < 0 )
+	topData()->normalGeometry = QRect( pos(), size() );
+    reparent( 0, WType_TopLevel | WStyle_Customize | WStyle_NoBorderEx | WStyle_StaysOnTop,
+	      QPoint(0,0) );
+    topData()->fullscreen = 1;
+    resize( qApp->desktop()->size() );
+    raise();
+    show();
+#if defined(_WS_X11_)
+    extern void qt_wait_for_window_manager( WId win ); // defined in qwidget_x11.cpp
+    qt_wait_for_window_manager( winId() );
+#endif
+    
+    setActiveWindow();
 }
