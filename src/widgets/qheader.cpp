@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qheader.cpp   2.3.1   edited 2001-01-26 $
+** $Id: qt/src/widgets/qheader.cpp   2.3.2   edited 2001-07-04 $
 **
 ** Implementation of QHeader widget class (table header)
 **
@@ -749,9 +749,10 @@ void QHeader::setLabel( int section, const QString &s, int size )
     d->labels.insert( section, new QString( s ) );
     if ( size >= 0 )
 	d->sizes[section] = size;
-    if ( isUpdatesEnabled() )
+    if ( isUpdatesEnabled() ) {
 	d->calculatePositions();
-    update();
+	update();
+    }
 }
 
 
@@ -839,9 +840,10 @@ void QHeader::removeLabel( int section )
 		--d->i2s[i];
     }
 
-    if ( isUpdatesEnabled() )
+    if ( isUpdatesEnabled() ) {
 	d->calculatePositions();
-    update();
+	update();
+    }
 }
 
 
@@ -899,7 +901,8 @@ int QHeader::addLabel( const QString &s, int size )
     d->clicks.setBit( section, d->clicks_default );
     d->resize.setBit( section, d->resize_default );
 
-    update();
+    if ( isUpdatesEnabled() )
+	update();
     return index;
 }
 
@@ -1320,9 +1323,10 @@ void QHeader::resizeSection( int section, int s )
     if ( section < 0 || section >= count() )
 	return;
     d->sizes[ section ] = s;
-    if ( isUpdatesEnabled() )
+    if ( isUpdatesEnabled() ) {
 	d->calculatePositions();
-    update();
+	update();
+    }
 }
 
 /*!

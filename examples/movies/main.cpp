@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/movies/main.cpp   2.3.1   edited 2001-01-26 $
+** $Id: qt/examples/movies/main.cpp   2.3.2   edited 2001-06-12 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -232,7 +232,7 @@ int main(int argc, char **argv)
             "control-left-click to Step 10,\n"
             "right-click to Unpause\n\n"
             "Windows may be resized to enlarge movie.", 0 );
-        help->setCaption( "movies - Help" );
+        help->setCaption( "Qt Examples - Movies" );
         help->setIndent( 10 );
         help->show();
     }

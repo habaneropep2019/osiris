@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qwidget.cpp   2.3.1   edited 2001-05-22 $
+** $Id: qt/src/kernel/qwidget.cpp   2.3.2   edited 2001-10-20 $
 **
 ** Implementation of QWidget class
 **
@@ -243,7 +243,8 @@
   <li> System functions:
 	parentWidget(),
 	topLevelWidget(),
-	reparentolish((),
+	reparent(),
+	polish(),
 	winId(),
 	find(),
 	metric().
@@ -700,6 +701,7 @@ QWidget::QWidget( QWidget *parent, const char *name, WFlags f )
     sizehint_forced = 0;
     is_closing = 0;
     in_show = 0;
+    in_show_maximized = 0;
 #ifndef QT_NO_LAYOUT
     lay_out = 0;
 #endif
@@ -778,6 +780,8 @@ QWidget::~QWidget()
 
     if ( isTopLevel() && !isHidden() && winId() )
 	hide();
+    else
+	clearWState( WState_Visible ); // just stop pointless paint events
 
     // A parent widget must destroy all its children before destroying itself
     if ( childObjects ) {			// delete children objects
@@ -998,7 +1002,7 @@ void QWidget::deleteExtra()
 #endif
 	    delete extra->topextra;
 	}
-#if defined(DEUBG)
+#if defined(DEBUG)
 	if ( extra->posted_events )
 	    qWarning( "QWidget::deleteExtra: Memory leak for "
 		      "extra->posted_events (%p)", extra->posted_events );
@@ -1037,7 +1041,7 @@ void QWidget::deactivateWidgetCleanup()
   see qwindowdefs.h for the actual definition.
   If there is no widget with this identifier, a null pointer is returned.
 
-  \sa wmapper(), id()
+  \sa wmapper(), winId()
 */
 
 QWidget *QWidget::find( WId id )
@@ -1052,7 +1056,7 @@ QWidget *QWidget::find( WId id )
 
   The widget mapper is an internal dictionary that is used to map from
   window identifiers/handles to widget pointers.
-  \sa find(), id()
+  \sa find(), winId()
 */
 
 /*!
@@ -3234,6 +3238,26 @@ void QWidget::show()
 
     if ( testWState(WState_Visible) )
 	return; // nothing to do
+
+#if 0     
+    // nice feature, but breaks for our partners that actually like
+    // 1000x1000 pixel java-forever-example applications. I added a
+    // similar logic to QDialog::sizeHint() so our messageboxes keep
+    // working.
+#if defined(_WS_QWS_)
+    if ( !in_show_maximized && isTopLevel()  && !testWFlags(WStyle_Tool | WType_Popup )
+	 && testWFlags( WStyle_NoBorder | WStyle_DialogBorder) ) {
+	extern QRect qt_maxWindowRect;
+	if ( width() > qt_maxWindowRect.width() || height() > qt_maxWindowRect.height() ) {
+	    if ( !topData()->fullscreen ) {
+		showMaximized();
+		return;
+	    }
+	}
+    }
+#endif
+#endif
+    
     if ( !isTopLevel() && !parentWidget()->isVisibleTo( 0 ) ){
 	// we should become visible, but our parents are explicitly
 	// hidden. Don' worry, since we cleared the ForceHide flag,
@@ -3353,9 +3377,15 @@ void QWidget::show()
 	    qt_enter_modal( this );
 	}
 
+	bool winQNPChildWidget = FALSE;
+#if defined(_WS_WIN_)
+	if (parentWidget())
+	    winQNPChildWidget = parentWidget()->inherits("QNPWidget");
+#endif
 	// do not show the window directly, but post a showWindow
 	// request to reduce flicker with laid out widgets
-	if ( !isTopLevel() && !parentWidget()->in_show )
+	if ( !isTopLevel() && !parentWidget()->in_show
+	    && !winQNPChildWidget)   // ### Not sure why showWindow is needed for QNPWidget children, but is nessary
 	    sendShowWindowRequest = TRUE;
 	else
 	    showWindow();
@@ -3737,14 +3767,14 @@ void QWidget::adjustSize()
     if ( !testWState(WState_Polished) )
 	polish();
     QSize s = sizeHint();
-    if ( s.isValid() ) {
-	resize( s );
-	return;
+    if ( !s.isValid() ) {
+	QRect r = childrenRect();		// get children rectangle
+	if ( r.isNull() )			// probably no widgets
+	    return;
+	s = QSize( r.width()+2*r.x(), r.height()+2*r.y() );
     }
-    QRect r = childrenRect();			// get children rectangle
-    if ( r.isNull() )				// probably no widgets
-	return;
-    resize( r.width()+2*r.x(), r.height()+2*r.y() );
+
+    resize( s );
 }
 
 
@@ -3863,17 +3893,10 @@ QSize QWidget::minimumSizeHint() const
 
 bool QWidget::event( QEvent *e )
 {
-    if ( eventFilters ) {			// try filters
-	if ( activate_filters(e) )		// stopped by a filter
-	    return TRUE;
-    }
+    if ( QObject::event( e ) )
+	return TRUE;
 
     switch ( e->type() ) {
-
-	case QEvent::Timer:
-	    timerEvent( (QTimerEvent*)e );
-	    break;
-
 	case QEvent::MouseMove:
 	    mouseMoveEvent( (QMouseEvent*)e );
 	    break;
@@ -3975,16 +3998,20 @@ bool QWidget::event( QEvent *e )
 		return FALSE;
 	    }
 	    break;
+
 #ifndef QT_NO_DRAGANDDROP
 	case QEvent::Drop:
 	    dropEvent( (QDropEvent*) e);
 	    break;
+
 	case QEvent::DragEnter:
 	    dragEnterEvent( (QDragEnterEvent*) e);
 	    break;
+
 	case QEvent::DragMove:
 	    dragMoveEvent( (QDragMoveEvent*) e);
 	    break;
+
 	case QEvent::DragLeave:
 	    dragLeaveEvent( (QDragLeaveEvent*) e);
 	    break;
@@ -3992,17 +4019,16 @@ bool QWidget::event( QEvent *e )
 	case QEvent::Show:
 	    showEvent( (QShowEvent*) e);
 	    break;
+
 	case QEvent::Hide:
 	    hideEvent( (QHideEvent*) e);
 	    break;
+
 	case QEvent::ShowWindowRequest:
 	    if ( !isHidden() )
 		showWindow();
 	    break;
-	case QEvent::ChildInserted:
-	case QEvent::ChildRemoved:
-	    childEvent( (QChildEvent*) e);
-	    break;
+
 	case QEvent::ParentFontChange:
 	    if ( isTopLevel() )
 		break;
@@ -4023,7 +4049,7 @@ bool QWidget::event( QEvent *e )
 	    // FALL THROUGH
 	case QEvent::ApplicationPaletteChange:
 	    if ( !own_palette && !isDesktop() ) {
-		if ( !isTopLevel() && QApplication::palette( this ).isCopyOf( QApplication::palette() ) )
+		if ( !isTopLevel() && parentWidget() && QApplication::palette( this ).isCopyOf( QApplication::palette() ) )
 		    setPalette( parentWidget()->palette() );
 		else
 		    setPalette( QApplication::palette( this ) );

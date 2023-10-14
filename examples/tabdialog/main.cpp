@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/tabdialog/main.cpp   2.3.1   edited 2001-01-26 $
+** $Id: qt/examples/tabdialog/main.cpp   2.3.2   edited 2001-06-12 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -19,7 +19,7 @@ int main( int argc, char **argv )
 
     TabDialog tabdialog( 0, "tabdialog", QString( argc < 2 ? "." : argv[1] ) );
     tabdialog.resize( 450, 350 );
-    tabdialog.setCaption( "Example for a Tabbed Dialog" );
+    tabdialog.setCaption( "Qt Example - Tabbed Dialog" );
     a.setMainWidget( &tabdialog );
     tabdialog.show();
 

@@ -77,8 +77,8 @@ SYSCONF_LINK_TARGET_STATIC = lib$(TARGET).a
 SYSCONF_LINK_LIB_STATIC	= rm -f $(DESTDIR)$(SYSCONF_LINK_TARGET_STATIC) ; \
 				 $(SYSCONF_AR) $(DESTDIR)$(SYSCONF_LINK_TARGET_STATIC) $(OBJECTS) $(OBJMOC) 
 # Compiling application source
-SYSCONF_CXXFLAGS	= --backend -pipe +K3 -O2
-SYSCONF_CFLAGS		= --c --backend -pipe +K3 -O2
+SYSCONF_CXXFLAGS	= --display_error_number --backend -pipe +K2 -O2
+SYSCONF_CFLAGS		= --c --display_error_number --backend -pipe +K2 -O2
 SYSCONF_LINK_LIB	= $(SYSCONF_LINK_LIB_STATIC)
 SYSCONF_LINK_TARGET	= $(SYSCONF_LINK_TARGET_STATIC)
 # Compiling library source

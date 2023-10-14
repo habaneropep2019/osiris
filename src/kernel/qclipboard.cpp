@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qclipboard.cpp   2.3.1   edited 2001-04-21 $
+** $Id: qt/src/kernel/qclipboard.cpp   2.3.2   edited 2001-04-21 $
 **
 ** Implementation of QClipboard class
 **

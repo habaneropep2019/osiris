@@ -1,6 +1,7 @@
 // Only interesting for Qt/Embedded
 
 #include <qapplication.h>
+#include <qtextstream.h>
 #include <qscrollview.h>
 #include <qfile.h>
 #include <qfont.h>
@@ -36,6 +37,29 @@ public:
 	font = QFont(family,pointSize,weight,italic);
 #ifdef _WS_QWS_
 	memorymanager->savePrerenderedFont((QMemoryManager::FontID)font.handle());
+#endif
+	setHeight(QFontMetrics(font).lineSpacing());
+	repaint();
+    }
+
+    void render(int from, int to)
+    {
+	font = QFont(family,pointSize,weight,italic);
+#ifdef _WS_QWS_
+	for (int i=from; i<=to; i++) {
+	    if ( memorymanager->inFont((QMemoryManager::FontID)font.handle(),QChar(i))) {
+		memorymanager->lockGlyph((QMemoryManager::FontID)font.handle(),QChar(i));
+		memorymanager->unlockGlyph((QMemoryManager::FontID)font.handle(),QChar(i));
+	    }
+	}
+#endif
+    }
+
+    void save()
+    {
+	font = QFont(family,pointSize,weight,italic);
+#ifdef _WS_QWS_
+	memorymanager->savePrerenderedFont((QMemoryManager::FontID)font.handle(),FALSE);
 #endif
 	setHeight(QFontMetrics(font).lineSpacing());
 	repaint();
@@ -137,12 +161,42 @@ public:
 	}
     }
 
+    void renderAndSaveAll()
+    {
+	QListViewItem* c = view->firstChild();
+	while ( c ) {
+	    renderAndSave(c);
+	    qApp->processEvents();
+	    c = c->nextSibling();
+	}
+    }
+
     void renderAndSave(const QString& family)
     {
 	QListViewItem* c = view->firstChild();
 	while ( c ) {
 	    if ( c->text(0).lower() == family.lower() )
 		renderAndSave(c);
+	    c = c->nextSibling();
+	}
+    }
+
+    void render(const QString& family, int from, int to)
+    {
+	QListViewItem* c = view->firstChild();
+	while ( c ) {
+	    if ( c->text(0).lower() == family.lower() )
+		((FontViewItem*)c)->render(from,to);
+	    c = c->nextSibling();
+	}
+    }
+
+    void save(const QString& family)
+    {
+	QListViewItem* c = view->firstChild();
+	while ( c ) {
+	    if ( c->text(0).lower() == family.lower() )
+		((FontViewItem*)c)->save();
 	    c = c->nextSibling();
 	}
     }
@@ -159,8 +213,51 @@ int main(int argc, char** argv)
     QApplication app(argc, argv, QApplication::GuiServer);
     MakeQPF m;
     if ( argc > 1 ) {
-	while (*++argv)
-	    m.renderAndSave(*argv);
+	argv++;
+	QString specfile;
+	while ( *argv && argv[0][0] == '-' ) {
+	    if (argv[0][1] == 'A' )
+		m.renderAndSaveAll();
+	    if (argv[0][1] == 'f' ) {
+		specfile = *++argv;
+	    }
+	    argv++;
+	}
+	if ( !specfile.isNull() ) {
+	    QFile f(specfile);
+	    if ( f.open(IO_ReadOnly) ) {
+		QTextStream s(&f);
+		while (!s.atEnd()) {
+		    QString family,ranges;
+		    s >> family >> ranges;
+		    QStringList r = QStringList::split(',',ranges);
+		    for (QStringList::Iterator it=r.begin(); it!=r.end(); ++it) {
+			QString rng = *it;
+			int dash = rng.find('-');
+			int from,to;
+			if ( dash==0 ) {
+			    from=0;
+			    to=rng.mid(1).toInt(0,16);
+			} else if ( dash==(int)rng.length()-1 ) {
+			    from=rng.left(dash).toInt(0,16);
+			    to=65535;
+			} else if ( dash<0 ) {
+			    from=to=rng.toInt(0,16);
+			} else {
+			    from=rng.left(dash).toInt(0,16);
+			    to=rng.mid(dash+1).toInt(0,16);
+			}
+			m.render(family,from,to);
+		    }
+		    m.save(family);
+		}
+	    } else {
+		qWarning("Cannot open %s",specfile.latin1());
+	    }
+	} else {
+	    while (*argv)
+		m.renderAndSave(*argv++);
+	}
     } else {
 	// Interactive
 	app.setMainWidget(&m);

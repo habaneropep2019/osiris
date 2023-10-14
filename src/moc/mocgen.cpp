@@ -1,14 +1,8 @@
-/* Automatically generated at Trolltech by mkdists, Qt 2.3.1 */
+/* Automatically generated at Trolltech by mkdists, Qt 2.3.2 */
 #ifndef lint
-static char yysccsid[] = "@(#)yaccpar	1.9 (Berkeley) 02/21/93";
+static char yysccsid[] = "@(#)yaccpar	1.8 (Berkeley) 01/20/90";
 #endif
 #define YYBYACC 1
-#define YYMAJOR 1
-#define YYMINOR 9
-#define yyclearin (yychar=(-1))
-#define yyerrok (yyerrflag=0)
-#define YYRECOVERING (yyerrflag!=0)
-#define YYPREFIX "yy"
 #line 55 "moc.y"
 void yyerror( const char *msg );
 
@@ -22,7 +16,9 @@ void yyerror( const char *msg );
 #include <stdio.h>
 #include <stdlib.h>
 
-
+#include "qfiledefs_p.h"
+#undef READ
+#undef WRITE
 
 static QCString rmWS( const char * );
 
@@ -99,9 +95,10 @@ struct Property
 {
     Property( int l, const char* t, const char* n, const char* s, const char* g, const char* r,
 	      const QCString& st, int d, bool ov )
-	: lineNo(l), type(t), name(n), set(s), get(g), reset(r), setfunc(0), getfunc(0), resetfunc(0),
-	  sspec(Unspecified), gspec(Unspecified), stored( st ),
-	  designable( d ), override( ov ), oredEnum( -1 )
+	: lineNo(l), type(t), name(n), set(s), get(g), reset(r), stored( st ),
+	  designable( d ), override( ov ), oredEnum( -1 ),
+	  setfunc(0), getfunc(0), resetfunc(0),
+	  sspec(Unspecified), gspec(Unspecified)
     {}
 
     int lineNo;
@@ -267,7 +264,7 @@ int	   tmpYYStart2;				/* Used to store the lexers current mode*/
 
 const int  formatRevision = 9;			/* moc output format revision*/
 
-#line 315 "moc.y"
+#line 318 "moc.y"
 typedef union {
     char	char_val;
     int		int_val;
@@ -278,7 +275,7 @@ typedef union {
     ArgList    *arg_list;
     Argument   *arg;
 } YYSTYPE;
-#line 281 "y.tab.c"
+#line 278 "y.tab.c"
 #define CHAR_VAL 257
 #define INT_VAL 258
 #define DOUBLE_VAL 259
@@ -1230,9 +1227,12 @@ char *yyrule[] = {
 "qt_sets : IDENTIFIER qt_sets",
 };
 #endif
+#define yyclearin (yychar=(-1))
+#define yyerrok (yyerrflag=0)
 #ifdef YYSTACKSIZE
-#undef YYMAXDEPTH
+#ifndef YYMAXDEPTH
 #define YYMAXDEPTH YYSTACKSIZE
+#endif
 #else
 #ifdef YYMAXDEPTH
 #define YYSTACKSIZE YYMAXDEPTH
@@ -1252,7 +1252,7 @@ YYSTYPE yylval;
 short yyss[YYSTACKSIZE];
 YYSTYPE yyvs[YYSTACKSIZE];
 #define yystacksize YYSTACKSIZE
-#line 1201 "moc.y"
+#line 1204 "moc.y"
 
 #if defined(_OS_WIN32_)
 #include <io.h>
@@ -1559,7 +1559,6 @@ QCString combinePath( const char *infile, const char *outfile )
     a = aDir;
     QString bDir( cleanDirPath( b ) );
     b = bDir;
-    QCString r;
     int i = 0;
     int ncommondirs = 0;
     while ( a[i] && a[i] == b[i] ) {
@@ -1581,6 +1580,24 @@ QCString combinePath( const char *infile, const char *outfile )
 	    return a;
 	b = &b[i];
     }
+
+    if(b.left(3) == "../") {
+	QCString cdir;
+	char currentName[PATH_MAX];
+	if ( GETCWD(currentName,PATH_MAX) != 0 ) {
+	    cdir = QString::fromLatin1(currentName);
+	    replace(cdir.data(),'\\','/');
+	    if(isRelativePath(cdir))
+		fprintf(stderr, "Got relative path from CWD, help!?");
+	}
+	while(b.left(3) == "../") {
+	    int l = cdir.findRev('/');
+	    a.prepend(cdir.right(cdir.length() - l - 1) + '/');
+	    cdir = cdir.left(l);
+	    b = b.right(b.length() - 3);
+	}
+    }
+    QCString r;
     i = b.contains('/');
     while ( i-- > 0 )
 	r += "../";
@@ -1939,20 +1956,26 @@ QCString qualifiedSuperclassName()
     }
 }
 
-QCString specialQualifiedSuperclassName()
-{
-#if defined(_CC_MSVC_)
-    // MSVC doesn't grok the code NS::A::func() in a virtual method of a class B that 
-    // inherits A, but is defined outside the namespace NS.
-    int i = superclassName.findRev( "::" );
-    if ( i < 0 )
-	return superclassName;
-    return superclassName.right( superclassName.length() - i - 2 );
-#else
-    return superclassName;
-#endif
-}
+/*
+  We call B::qt_invoke() rather than A::B::qt_invoke() to
+  work around a bug in MSVC 6. The bug occurs if the
+  super-class is in a namespace and the sub-class isn't.
 
+  Exception: if B == classname
+*/
+QCString purestSuperClassName()
+{
+    QCString result;
+    int pos = superclassName.findRev( "::" );
+    if ( pos != -1 ) {
+	result = superclassName.right( superclassName.length() - pos - 2 );
+	if ( result == className )
+	    result = superclassName;
+    } else {
+	result = superclassName;
+    }
+    return result;
+}
 const int Slot_Num   = 1;
 const int Signal_Num = 2;
 const int Prop_Num = 3;
@@ -2555,7 +2578,7 @@ int generateProps()
 	    }
 
 	    QCString flags;
-	
+
 	    // Is it an enum of this class ?
 	    if ( enumpos != -1 )
 		fprintf( out, "    props_tbl[%d].enumData = &enum_tbl[%i];\n", entry, enumpos );
@@ -2595,16 +2618,16 @@ int generateProps()
 	    // OVERRIDE but no DESIGNABLE ?
 	    if ( it.current()->override && it.current()->designable == -1 )
 		flags += "QMetaProperty::UnresolvedDesignable|";
-	
+
 	    if ( it.current()->stdSet() )
 		flags += "QMetaProperty::StdSet|";
-	
+
 	    if (!flags.isEmpty() ) {
 		if ( flags[ (int) flags.length() - 1] == '|' )
 		    flags.remove( flags.length()-1, 1);
 		fprintf( out, "    props_tbl[%d].setFlags(%s);\n", entry, flags.data() );
 	    }
-	
+
 	    ++entry;
 	    count += 3;
 	}
@@ -2641,7 +2664,7 @@ void generateClass()		      // generate C++ source code for a class
     char *hdr1 = "/****************************************************************************\n"
 		 "** %s meta object code from reading C++ file '%s'\n**\n";
     char *hdr2 = "** Created: %s\n"
-		 "**      by: The Qt MOC ($Id: qt/src/moc/moc.y   2.3.1   edited 2001-04-23 $)\n**\n";
+		 "**      by: The Qt MOC ($Id: qt/src/moc/moc.y   2.3.2   edited 2001-10-17 $)\n**\n";
     char *hdr3 = "** WARNING! All changes made in this file will be lost!\n";
     char *hdr4 = "*****************************************************************************/\n\n";
     int   i;
@@ -2717,7 +2740,7 @@ void generateClass()		      // generate C++ source code for a class
     fprintf( out, "    if ( metaObj )\n\treturn;\n" );
     fprintf( out, "    if ( qstrcmp(%s::className(), \"%s\") != 0 )\n"
 	          "\tbadSuperclassWarning(\"%s\",\"%s\");\n",
-             (const char*)specialQualifiedSuperclassName(), (const char*)qualifiedSuperclassName(),
+             (const char*)purestSuperClassName(), (const char*)qualifiedSuperclassName(),
              (const char*)qualifiedClassName(), (const char*)qualifiedSuperclassName() );
     fprintf( out, "    (void) staticMetaObject();\n");
     fprintf( out, "}\n\n");
@@ -3015,7 +3038,7 @@ void addMember( Member m )
 	    propfuncs.append( tmpFunc );
     }
 
- Failed:
+    // Failed:
     skipFunc = FALSE;
     tmpFunc  = new Function;
     tmpArgList = new ArgList;
@@ -3048,9 +3071,8 @@ void checkIdentifier( const char* ident )
 	++p;
     }
 }
-#line 3051 "y.tab.c"
+#line 3074 "y.tab.c"
 #define YYABORT goto yyabort
-#define YYREJECT goto yyabort
 #define YYACCEPT goto yyaccept
 #define YYERROR goto yyerrlab
 int
@@ -3088,8 +3110,8 @@ yyloop:
             yys = 0;
             if (yychar <= YYMAXTOKEN) yys = yyname[yychar];
             if (!yys) yys = "illegal-symbol";
-            printf("%sdebug: state %d, reading %d (%s)\n",
-                    YYPREFIX, yystate, yychar, yys);
+            printf("yydebug: state %d, reading %d (%s)\n", yystate,
+                    yychar, yys);
         }
 #endif
     }
@@ -3098,8 +3120,8 @@ yyloop:
     {
 #if YYDEBUG
         if (yydebug)
-            printf("%sdebug: state %d, shifting to state %d\n",
-                    YYPREFIX, yystate, yytable[yyn]);
+            printf("yydebug: state %d, shifting to state %d\n",
+                    yystate, yytable[yyn]);
 #endif
         if (yyssp >= yyss + yystacksize - 1)
         {
@@ -3139,8 +3161,8 @@ yyinrecovery:
             {
 #if YYDEBUG
                 if (yydebug)
-                    printf("%sdebug: state %d, error recovery shifting\
- to state %d\n", YYPREFIX, *yyssp, yytable[yyn]);
+                    printf("yydebug: state %d, error recovery shifting\
+ to state %d\n", *yyssp, yytable[yyn]);
 #endif
                 if (yyssp >= yyss + yystacksize - 1)
                 {
@@ -3154,8 +3176,8 @@ yyinrecovery:
             {
 #if YYDEBUG
                 if (yydebug)
-                    printf("%sdebug: error recovery discarding state %d\n",
-                            YYPREFIX, *yyssp);
+                    printf("yydebug: error recovery discarding state %d\n",
+                            *yyssp);
 #endif
                 if (yyssp <= yyss) goto yyabort;
                 --yyssp;
@@ -3172,8 +3194,8 @@ yyinrecovery:
             yys = 0;
             if (yychar <= YYMAXTOKEN) yys = yyname[yychar];
             if (!yys) yys = "illegal-symbol";
-            printf("%sdebug: state %d, error recovery discards token %d (%s)\n",
-                    YYPREFIX, yystate, yychar, yys);
+            printf("yydebug: state %d, error recovery discards token %d (%s)\n",
+                    yystate, yychar, yys);
         }
 #endif
         yychar = (-1);
@@ -3182,533 +3204,533 @@ yyinrecovery:
 yyreduce:
 #if YYDEBUG
     if (yydebug)
-        printf("%sdebug: state %d, reducing by rule %d (%s)\n",
-                YYPREFIX, yystate, yyn, yyrule[yyn]);
+        printf("yydebug: state %d, reducing by rule %d (%s)\n",
+                yystate, yyn, yyrule[yyn]);
 #endif
     yym = yylen[yyn];
     yyval = yyvsp[1-yym];
     switch (yyn)
     {
 case 10:
-#line 440 "moc.y"
+#line 443 "moc.y"
 { enterNameSpace(yyvsp[0].string); }
 break;
 case 11:
-#line 441 "moc.y"
+#line 444 "moc.y"
 { BEGIN IN_NAMESPACE; }
 break;
 case 12:
-#line 443 "moc.y"
+#line 446 "moc.y"
 { leaveNameSpace();
 			                       selectOutsideClassState();
                                              }
 break;
 case 13:
-#line 448 "moc.y"
+#line 451 "moc.y"
 { enterNameSpace(); }
 break;
 case 14:
-#line 449 "moc.y"
+#line 452 "moc.y"
 { BEGIN IN_NAMESPACE; }
 break;
 case 15:
-#line 451 "moc.y"
+#line 454 "moc.y"
 { leaveNameSpace();
   			                       selectOutsideClassState();
 			                     }
 break;
 case 17:
-#line 460 "moc.y"
+#line 463 "moc.y"
 { selectOutsideClassState(); }
 break;
 case 18:
-#line 464 "moc.y"
-{ selectOutsideClassState(); }
-break;
-case 19:
 #line 467 "moc.y"
 { selectOutsideClassState(); }
 break;
+case 19:
+#line 470 "moc.y"
+{ selectOutsideClassState(); }
+break;
 case 20:
-#line 468 "moc.y"
+#line 471 "moc.y"
 { selectOutsideClassState(); }
 break;
 case 21:
-#line 471 "moc.y"
+#line 474 "moc.y"
 { initClass(); }
 break;
 case 22:
-#line 472 "moc.y"
+#line 475 "moc.y"
 { generateClass();
 			                        registerClassInNamespace();
 						selectOutsideClassState(); }
 break;
 case 23:
-#line 480 "moc.y"
+#line 483 "moc.y"
 { yyval.string = yyvsp[0].string; }
 break;
 case 24:
-#line 481 "moc.y"
+#line 484 "moc.y"
 { yyval.string = yyvsp[0].string; }
 break;
 case 25:
-#line 485 "moc.y"
+#line 488 "moc.y"
 { yyval.string = stradd( yyvsp[-3].string, "<",
 				     tmpExpression =
 				     tmpExpression.stripWhiteSpace(), ">" ); }
 break;
 case 26:
-#line 496 "moc.y"
+#line 499 "moc.y"
 { initExpression();
 						    templLevel = 1;
 						    BEGIN IN_TEMPL_ARGS; }
 break;
 case 27:
-#line 509 "moc.y"
+#line 512 "moc.y"
 { initExpression();
 						    BEGIN IN_EXPR; }
 break;
 case 28:
-#line 513 "moc.y"
+#line 516 "moc.y"
 { initExpression();
 						    BEGIN IN_ENUM; }
 break;
 case 29:
-#line 519 "moc.y"
+#line 522 "moc.y"
 { yyval.string = ""; }
 break;
 case 30:
-#line 520 "moc.y"
+#line 523 "moc.y"
 { yyval.string = yyvsp[0].string; }
 break;
 case 31:
-#line 521 "moc.y"
+#line 524 "moc.y"
 { yyval.string = ""; }
 break;
 case 32:
-#line 522 "moc.y"
+#line 525 "moc.y"
 { skipFunc = TRUE; yyval.string = ""; }
 break;
 case 33:
-#line 523 "moc.y"
+#line 526 "moc.y"
 { skipFunc = TRUE; yyval.string = ""; }
 break;
 case 34:
-#line 527 "moc.y"
+#line 530 "moc.y"
 { yyval.string = straddSpc(yyvsp[-2].string,yyvsp[-1].string,yyvsp[0].string); }
 break;
 case 35:
-#line 530 "moc.y"
+#line 533 "moc.y"
 { yyval.string = ""; }
 break;
 case 36:
-#line 531 "moc.y"
-{ yyval.string = yyvsp[0].string; }
-break;
-case 37:
 #line 534 "moc.y"
 { yyval.string = yyvsp[0].string; }
 break;
+case 37:
+#line 537 "moc.y"
+{ yyval.string = yyvsp[0].string; }
+break;
 case 38:
-#line 535 "moc.y"
+#line 538 "moc.y"
 { yyval.string = straddSpc(yyvsp[-1].string,yyvsp[0].string); }
 break;
 case 41:
-#line 540 "moc.y"
+#line 543 "moc.y"
 { skipFunc = TRUE; }
 break;
 case 45:
-#line 548 "moc.y"
+#line 551 "moc.y"
 { yyval.string = "const"; }
 break;
 case 46:
-#line 549 "moc.y"
+#line 552 "moc.y"
 { yyval.string = "volatile"; }
 break;
 case 47:
-#line 552 "moc.y"
+#line 555 "moc.y"
 { yyval.string = yyvsp[0].string; }
 break;
 case 48:
-#line 553 "moc.y"
+#line 556 "moc.y"
 { yyval.string = yyvsp[0].string; }
 break;
 case 49:
-#line 554 "moc.y"
+#line 557 "moc.y"
 { yyval.string = yyvsp[0].string; }
 break;
 case 50:
-#line 558 "moc.y"
+#line 561 "moc.y"
 { yyval.string = straddSpc(yyvsp[-1].string,yyvsp[0].string); }
 break;
 case 51:
-#line 559 "moc.y"
+#line 562 "moc.y"
 { yyval.string = yyvsp[0].string; }
 break;
 case 52:
-#line 561 "moc.y"
+#line 564 "moc.y"
 { yyval.string = "char"; }
 break;
 case 53:
-#line 562 "moc.y"
+#line 565 "moc.y"
 { yyval.string = "short"; }
 break;
 case 54:
-#line 563 "moc.y"
+#line 566 "moc.y"
 { yyval.string = "int"; }
 break;
 case 55:
-#line 564 "moc.y"
+#line 567 "moc.y"
 { yyval.string = "long"; }
 break;
 case 56:
-#line 565 "moc.y"
+#line 568 "moc.y"
 { yyval.string = "signed"; }
 break;
 case 57:
-#line 566 "moc.y"
+#line 569 "moc.y"
 { yyval.string = "unsigned"; }
 break;
 case 58:
-#line 567 "moc.y"
+#line 570 "moc.y"
 { yyval.string = "float"; }
 break;
 case 59:
-#line 568 "moc.y"
+#line 571 "moc.y"
 { yyval.string = "double"; }
 break;
 case 60:
-#line 569 "moc.y"
+#line 572 "moc.y"
 { yyval.string = "void"; }
 break;
 case 61:
-#line 573 "moc.y"
+#line 576 "moc.y"
 { yyval.string = stradd( "template<",
 				     tmpExpression =
 				     tmpExpression.stripWhiteSpace(), ">" ); }
 break;
 case 63:
-#line 579 "moc.y"
+#line 582 "moc.y"
 { templateClassOld = templateClass;
 						  templateClass = TRUE;
 						}
 break;
 case 64:
-#line 585 "moc.y"
+#line 588 "moc.y"
 { yyval.string = "class"; }
 break;
 case 65:
-#line 586 "moc.y"
+#line 589 "moc.y"
 { yyval.string = "struct"; }
 break;
 case 66:
-#line 589 "moc.y"
+#line 592 "moc.y"
 { yyval.string = yyvsp[0].string; }
 break;
 case 67:
-#line 591 "moc.y"
+#line 594 "moc.y"
 { yyval.string = stradd( "::", yyvsp[0].string ); }
 break;
 case 68:
-#line 595 "moc.y"
+#line 598 "moc.y"
 { yyval.string = stradd( yyvsp[-2].string, "::", yyvsp[0].string );}
 break;
 case 69:
-#line 596 "moc.y"
+#line 599 "moc.y"
 { yyval.string = yyvsp[0].string; }
 break;
 case 70:
-#line 600 "moc.y"
+#line 603 "moc.y"
 { yyval.string = straddSpc(yyvsp[-1].string,yyvsp[0].string); }
 break;
 case 71:
-#line 601 "moc.y"
+#line 604 "moc.y"
 { yyval.string = stradd("enum ",yyvsp[0].string); }
 break;
 case 72:
-#line 602 "moc.y"
+#line 605 "moc.y"
 { yyval.string = stradd("union ",yyvsp[0].string); }
 break;
 case 73:
-#line 607 "moc.y"
+#line 610 "moc.y"
 { yyval.arg_list = yyvsp[-1].arg_list;}
 break;
 case 74:
-#line 608 "moc.y"
+#line 611 "moc.y"
 { yyval.arg_list = yyvsp[-2].arg_list;
 				       func_warn("Ellipsis not supported"
 						 " in signals and slots.\n"
 						 "Ellipsis argument ignored."); }
 break;
 case 75:
-#line 614 "moc.y"
+#line 617 "moc.y"
 { yyval.arg_list = tmpArgList; }
 break;
 case 76:
-#line 615 "moc.y"
+#line 618 "moc.y"
 { yyval.arg_list = yyvsp[0].arg_list; }
 break;
 case 78:
-#line 619 "moc.y"
+#line 622 "moc.y"
 { func_warn("Ellipsis not supported"
 						 " in signals and slots.\n"
 						 "Ellipsis argument ignored."); }
 break;
 case 79:
-#line 627 "moc.y"
+#line 630 "moc.y"
 { yyval.arg_list = addArg(yyvsp[0].arg); }
 break;
 case 80:
-#line 628 "moc.y"
+#line 631 "moc.y"
 { yyval.arg_list = addArg(yyvsp[0].arg); }
 break;
 case 81:
-#line 631 "moc.y"
+#line 634 "moc.y"
 { yyval.arg = new Argument(straddSpc(yyvsp[-1].string,yyvsp[0].string),""); }
 break;
 case 82:
-#line 633 "moc.y"
+#line 636 "moc.y"
 { expLevel = 1; }
 break;
 case 83:
-#line 635 "moc.y"
+#line 638 "moc.y"
 { yyval.arg = new Argument(straddSpc(yyvsp[-4].string,yyvsp[-3].string),""); }
 break;
 case 84:
-#line 638 "moc.y"
+#line 641 "moc.y"
 { yyval.arg = new Argument(straddSpc(yyvsp[-3].string,yyvsp[-2].string),yyvsp[0].string); }
 break;
 case 85:
-#line 641 "moc.y"
+#line 644 "moc.y"
 { expLevel = 1; }
 break;
 case 86:
-#line 643 "moc.y"
+#line 646 "moc.y"
 { yyval.arg = new Argument(straddSpc(yyvsp[-6].string,yyvsp[-5].string),yyvsp[-3].string); }
 break;
 case 87:
-#line 647 "moc.y"
+#line 650 "moc.y"
 { yyval.string = ""; }
 break;
 case 88:
-#line 648 "moc.y"
+#line 651 "moc.y"
 { yyval.string = yyvsp[0].string; }
 break;
 case 89:
-#line 652 "moc.y"
+#line 655 "moc.y"
 { yyval.string = straddSpc(yyvsp[-1].string,yyvsp[0].string); }
 break;
 case 90:
-#line 653 "moc.y"
+#line 656 "moc.y"
 { expLevel = 1; }
 break;
 case 91:
-#line 655 "moc.y"
+#line 658 "moc.y"
 { yyval.string = stradd( "[",
 				     tmpExpression =
 				     tmpExpression.stripWhiteSpace(), "]" ); }
 break;
 case 92:
-#line 658 "moc.y"
+#line 661 "moc.y"
 { expLevel = 1; }
 break;
 case 93:
-#line 660 "moc.y"
+#line 663 "moc.y"
 { yyval.string = stradd( yyvsp[-4].string,"[",
 				     tmpExpression =
 				     tmpExpression.stripWhiteSpace(),"]" ); }
 break;
 case 94:
-#line 663 "moc.y"
+#line 666 "moc.y"
 { yyval.string = yyvsp[0].string; }
 break;
 case 95:
-#line 664 "moc.y"
+#line 667 "moc.y"
 { yyval.string = yyvsp[-1].string; }
 break;
 case 96:
-#line 667 "moc.y"
+#line 670 "moc.y"
 { yyval.string = ""; }
 break;
 case 97:
-#line 669 "moc.y"
+#line 672 "moc.y"
 { yyval.string = straddSpc(yyvsp[-1].string,yyvsp[0].string);}
 break;
 case 98:
-#line 670 "moc.y"
+#line 673 "moc.y"
 { expLevel = 1; }
 break;
 case 99:
-#line 672 "moc.y"
+#line 675 "moc.y"
 { yyval.string = stradd( yyvsp[-4].string,"[",
 				     tmpExpression =
 				     tmpExpression.stripWhiteSpace(),"]" ); }
 break;
 case 100:
-#line 675 "moc.y"
+#line 678 "moc.y"
 { yyval.string = yyvsp[-1].string; }
 break;
 case 102:
-#line 687 "moc.y"
+#line 690 "moc.y"
 { tmpFunc->args	     = yyvsp[-4].arg_list;
 						  tmpFunc->qualifier = yyvsp[-2].string; }
 break;
 case 104:
-#line 693 "moc.y"
+#line 696 "moc.y"
 { func_warn("Variable as signal or slot."); }
 break;
 case 105:
-#line 694 "moc.y"
-{ expLevel=0; }
-break;
-case 106:
-#line 696 "moc.y"
-{ skipFunc = TRUE; }
-break;
-case 107:
 #line 697 "moc.y"
 { expLevel=0; }
 break;
-case 108:
+case 106:
 #line 699 "moc.y"
 { skipFunc = TRUE; }
 break;
+case 107:
+#line 700 "moc.y"
+{ expLevel=0; }
+break;
+case 108:
+#line 702 "moc.y"
+{ skipFunc = TRUE; }
+break;
 case 109:
-#line 703 "moc.y"
+#line 706 "moc.y"
 { expLevel = 1; }
 break;
 case 111:
-#line 705 "moc.y"
+#line 708 "moc.y"
 { expLevel = 1; }
 break;
 case 113:
-#line 710 "moc.y"
+#line 713 "moc.y"
 { yyval.string = ""; }
 break;
 case 114:
-#line 711 "moc.y"
-{ yyval.string = yyvsp[0].string; }
-break;
-case 115:
 #line 714 "moc.y"
 { yyval.string = yyvsp[0].string; }
 break;
+case 115:
+#line 717 "moc.y"
+{ yyval.string = yyvsp[0].string; }
+break;
 case 116:
-#line 715 "moc.y"
+#line 718 "moc.y"
 { yyval.string = straddSpc(yyvsp[-1].string,yyvsp[0].string);}
 break;
 case 117:
-#line 718 "moc.y"
+#line 721 "moc.y"
 { yyval.string = straddSpc("*",yyvsp[0].string);}
 break;
 case 118:
-#line 719 "moc.y"
+#line 722 "moc.y"
 { yyval.string = stradd("&",yyvsp[0].string);}
 break;
 case 119:
-#line 726 "moc.y"
+#line 729 "moc.y"
 { yyval.string = ""; }
 break;
 case 120:
-#line 727 "moc.y"
-{ yyval.string = yyvsp[0].string; }
-break;
-case 121:
 #line 730 "moc.y"
 { yyval.string = yyvsp[0].string; }
 break;
+case 121:
+#line 733 "moc.y"
+{ yyval.string = yyvsp[0].string; }
+break;
 case 122:
-#line 732 "moc.y"
+#line 735 "moc.y"
 { yyval.string = straddSpc(yyvsp[-1].string,yyvsp[0].string); }
 break;
 case 123:
-#line 735 "moc.y"
+#line 738 "moc.y"
 { yyval.string = "const"; }
 break;
 case 124:
-#line 736 "moc.y"
+#line 739 "moc.y"
 { yyval.string = "volatile"; }
 break;
 case 128:
-#line 744 "moc.y"
+#line 747 "moc.y"
 { BEGIN IN_FCT; fctLevel = 1;}
 break;
 case 129:
-#line 745 "moc.y"
+#line 748 "moc.y"
 { BEGIN QT_DEF; }
 break;
 case 130:
-#line 752 "moc.y"
+#line 755 "moc.y"
 { BEGIN IN_CLASS;
                                                   classPLevel = 1;
 						}
 break;
 case 131:
-#line 756 "moc.y"
+#line 759 "moc.y"
 { BEGIN QT_DEF; }
 break;
 case 132:
-#line 757 "moc.y"
+#line 760 "moc.y"
 { BEGIN QT_DEF;	  /* -- " -- */
 						  skipClass = TRUE; }
 break;
 case 133:
-#line 761 "moc.y"
+#line 764 "moc.y"
 { BEGIN QT_DEF; /* catch ';' */
 						  skipClass = TRUE; }
 break;
 case 134:
-#line 763 "moc.y"
+#line 766 "moc.y"
 { skipClass = TRUE;
 						  BEGIN GIMME_SEMICOLON; }
 break;
 case 140:
-#line 776 "moc.y"
-{ className = yyvsp[0].string; }
-break;
-case 141:
 #line 779 "moc.y"
 { className = yyvsp[0].string; }
 break;
+case 141:
+#line 782 "moc.y"
+{ className = yyvsp[0].string; }
+break;
 case 142:
-#line 783 "moc.y"
+#line 786 "moc.y"
 { superclassName = yyvsp[0].string; }
 break;
 case 143:
-#line 788 "moc.y"
+#line 791 "moc.y"
 { templateClass = templateClassOld; }
 break;
 case 149:
-#line 802 "moc.y"
+#line 805 "moc.y"
 { expLevel = 1; }
 break;
 case 151:
-#line 807 "moc.y"
+#line 810 "moc.y"
 { yyval.string = 0; }
 break;
 case 152:
-#line 808 "moc.y"
+#line 811 "moc.y"
 { yyval.string = yyvsp[0].string; }
 break;
 case 157:
-#line 820 "moc.y"
+#line 823 "moc.y"
 { tmpAccess = yyvsp[0].access; }
 break;
 case 158:
-#line 821 "moc.y"
+#line 824 "moc.y"
 { moc_err( "Missing access specifier"
 						   " before \"slots:\"." ); }
 break;
 case 159:
-#line 825 "moc.y"
+#line 828 "moc.y"
 { BEGIN QT_DEF; }
 break;
 case 161:
-#line 827 "moc.y"
+#line 830 "moc.y"
 { BEGIN QT_DEF; }
 break;
 case 163:
-#line 829 "moc.y"
+#line 832 "moc.y"
 {
 			      if ( tmpAccess )
 				  moc_warn("Q_OBJECT is not in the private"
@@ -3719,69 +3741,69 @@ case 163:
 			  }
 break;
 case 164:
-#line 837 "moc.y"
+#line 840 "moc.y"
 { tmpYYStart = YY_START;
 				       tmpPropOverride = FALSE;
 				       BEGIN IN_PROPERTY; }
 break;
 case 165:
-#line 840 "moc.y"
+#line 843 "moc.y"
 {
 						BEGIN tmpYYStart;
 				   	   }
 break;
 case 167:
-#line 844 "moc.y"
+#line 847 "moc.y"
 { tmpYYStart = YY_START;
 				       tmpPropOverride = TRUE;
 				       BEGIN IN_PROPERTY; }
 break;
 case 168:
-#line 847 "moc.y"
+#line 850 "moc.y"
 {
 						BEGIN tmpYYStart;
 				   	   }
 break;
 case 170:
-#line 851 "moc.y"
+#line 854 "moc.y"
 { tmpYYStart = YY_START; BEGIN IN_CLASSINFO; }
 break;
 case 171:
-#line 853 "moc.y"
+#line 856 "moc.y"
 {
 				      infos.append( new ClassInfo( yyvsp[-3].string, yyvsp[-1].string ) );
 				      BEGIN tmpYYStart;
 				  }
 break;
 case 173:
-#line 858 "moc.y"
+#line 861 "moc.y"
 { tmpYYStart = YY_START; BEGIN IN_PROPERTY; }
 break;
 case 174:
-#line 859 "moc.y"
+#line 862 "moc.y"
 {
 			  			Q_PROPERTYdetected = TRUE;
 						BEGIN tmpYYStart;
 				   	   }
 break;
 case 176:
-#line 864 "moc.y"
+#line 867 "moc.y"
 { tmpYYStart = YY_START; BEGIN IN_PROPERTY; }
 break;
 case 177:
-#line 865 "moc.y"
+#line 868 "moc.y"
 {
 			  			Q_PROPERTYdetected = TRUE;
 						BEGIN tmpYYStart;
 				   	   }
 break;
 case 179:
-#line 872 "moc.y"
+#line 875 "moc.y"
 { moc_err( "Signals cannot "
 						 "have access specifiers" ); }
 break;
 case 181:
-#line 875 "moc.y"
+#line 878 "moc.y"
 { if ( tmpAccess == Public && Q_PROPERTYdetected )
                                                   BEGIN QT_DEF;
                                               else
@@ -3790,13 +3812,13 @@ case 181:
                                         }
 break;
 case 182:
-#line 882 "moc.y"
+#line 885 "moc.y"
 {
 					  suppress_func_warn = FALSE;
 					}
 break;
 case 183:
-#line 885 "moc.y"
+#line 888 "moc.y"
 { BEGIN IN_CLASS;
 					   if ( classPLevel != 1 )
 					       moc_warn( "unexpected access"
@@ -3804,88 +3826,88 @@ case 183:
 					}
 break;
 case 188:
-#line 900 "moc.y"
+#line 903 "moc.y"
 { addMember( PropertyCandidateMember ); }
 break;
 case 193:
-#line 912 "moc.y"
+#line 915 "moc.y"
 { addMember( SignalMember ); }
 break;
 case 198:
-#line 923 "moc.y"
+#line 926 "moc.y"
 { addMember( SlotMember ); }
 break;
 case 201:
-#line 930 "moc.y"
+#line 933 "moc.y"
 { yyval.string=yyvsp[0].string; }
 break;
 case 204:
-#line 938 "moc.y"
+#line 941 "moc.y"
 { yyval.string = stradd( yyvsp[-3].string, "(", yyvsp[-1].string, ")" ); }
 break;
 case 205:
-#line 940 "moc.y"
+#line 943 "moc.y"
 { yyval.string = stradd( yyvsp[-3].string, "(", yyvsp[-1].string, ")" ); }
 break;
 case 206:
-#line 943 "moc.y"
-{yyval.string=yyvsp[0].string;}
-break;
-case 207:
-#line 944 "moc.y"
-{yyval.string=yyvsp[0].string;}
-break;
-case 208:
-#line 945 "moc.y"
-{yyval.string=yyvsp[0].string;}
-break;
-case 209:
 #line 946 "moc.y"
 {yyval.string=yyvsp[0].string;}
 break;
-case 210:
+case 207:
 #line 947 "moc.y"
 {yyval.string=yyvsp[0].string;}
 break;
-case 211:
+case 208:
 #line 948 "moc.y"
 {yyval.string=yyvsp[0].string;}
 break;
-case 212:
+case 209:
 #line 949 "moc.y"
 {yyval.string=yyvsp[0].string;}
 break;
-case 213:
+case 210:
 #line 950 "moc.y"
 {yyval.string=yyvsp[0].string;}
 break;
-case 214:
+case 211:
 #line 951 "moc.y"
 {yyval.string=yyvsp[0].string;}
 break;
-case 215:
+case 212:
 #line 952 "moc.y"
 {yyval.string=yyvsp[0].string;}
 break;
-case 216:
+case 213:
+#line 953 "moc.y"
+{yyval.string=yyvsp[0].string;}
+break;
+case 214:
+#line 954 "moc.y"
+{yyval.string=yyvsp[0].string;}
+break;
+case 215:
 #line 955 "moc.y"
+{yyval.string=yyvsp[0].string;}
+break;
+case 216:
+#line 958 "moc.y"
 { yyval.access=Private; }
 break;
 case 217:
-#line 956 "moc.y"
+#line 959 "moc.y"
 { yyval.access=Protected; }
 break;
 case 218:
-#line 957 "moc.y"
+#line 960 "moc.y"
 { yyval.access=Public; }
 break;
 case 262:
-#line 1009 "moc.y"
+#line 1012 "moc.y"
 { tmpFunc->type = yyvsp[-1].string;
 						  tmpFunc->name = yyvsp[0].string; }
 break;
 case 263:
-#line 1012 "moc.y"
+#line 1015 "moc.y"
 { tmpFunc->type = "int";
 						  tmpFunc->name = yyvsp[0].string;
 				  if ( tmpFunc->name == className )
@@ -3894,7 +3916,7 @@ case 263:
 						}
 break;
 case 264:
-#line 1019 "moc.y"
+#line 1022 "moc.y"
 { tmpFunc->type = "void";
 						  tmpFunc->name = "~";
 						  tmpFunc->name += yyvsp[0].string;
@@ -3903,7 +3925,7 @@ case 264:
 						}
 break;
 case 265:
-#line 1027 "moc.y"
+#line 1030 "moc.y"
 {
 						    char *tmp =
 							straddSpc(yyvsp[-4].string,yyvsp[-3].string,yyvsp[-2].string,yyvsp[-1].string);
@@ -3912,98 +3934,98 @@ case 265:
 						    tmpFunc->name = yyvsp[0].string; }
 break;
 case 266:
-#line 1034 "moc.y"
+#line 1037 "moc.y"
 { skipFunc = TRUE; }
 break;
 case 267:
-#line 1036 "moc.y"
+#line 1039 "moc.y"
 { tmpFunc->type =
 						      straddSpc(yyvsp[-2].string,yyvsp[-1].string);
 						  tmpFunc->name = yyvsp[0].string; }
 break;
 case 268:
-#line 1041 "moc.y"
+#line 1044 "moc.y"
 { tmpFunc->type =
 						      straddSpc(yyvsp[-3].string,yyvsp[-2].string,yyvsp[-1].string);
 						  tmpFunc->name = yyvsp[0].string; }
 break;
 case 269:
-#line 1045 "moc.y"
+#line 1048 "moc.y"
 { operatorError();    }
 break;
 case 270:
-#line 1047 "moc.y"
-{ operatorError();    }
-break;
-case 271:
 #line 1050 "moc.y"
 { operatorError();    }
 break;
-case 272:
-#line 1052 "moc.y"
+case 271:
+#line 1053 "moc.y"
 { operatorError();    }
 break;
-case 273:
+case 272:
 #line 1055 "moc.y"
 { operatorError();    }
 break;
-case 275:
-#line 1061 "moc.y"
-{ func_warn("Variable as signal or slot."); }
+case 273:
+#line 1058 "moc.y"
+{ operatorError();    }
 break;
-case 276:
+case 275:
 #line 1064 "moc.y"
 { func_warn("Variable as signal or slot."); }
 break;
+case 276:
+#line 1067 "moc.y"
+{ func_warn("Variable as signal or slot."); }
+break;
 case 277:
-#line 1066 "moc.y"
+#line 1069 "moc.y"
 { func_warn("Enum declaration as signal or"
 					    " slot."); }
 break;
 case 278:
-#line 1069 "moc.y"
-{ func_warn("Using declaration as signal or"
-					    " slot."); }
-break;
-case 279:
 #line 1072 "moc.y"
 { func_warn("Using declaration as signal or"
 					    " slot."); }
 break;
-case 280:
+case 279:
 #line 1075 "moc.y"
+{ func_warn("Using declaration as signal or"
+					    " slot."); }
+break;
+case 280:
+#line 1078 "moc.y"
 { classPLevel++;
 				  moc_err("Namespace declaration as signal or"
 					  " slot."); }
 break;
 case 281:
-#line 1079 "moc.y"
+#line 1082 "moc.y"
 { func_warn("Class declaration as signal or slot.");}
 break;
 case 282:
-#line 1081 "moc.y"
+#line 1084 "moc.y"
 { func_warn("Class declaration as signal or slot.");
 				  BEGIN IN_FCT; fctLevel=1;
 				}
 break;
 case 283:
-#line 1084 "moc.y"
+#line 1087 "moc.y"
 { BEGIN QT_DEF; }
 break;
 case 288:
-#line 1094 "moc.y"
+#line 1097 "moc.y"
 { expLevel = 0; }
 break;
 case 290:
-#line 1096 "moc.y"
+#line 1099 "moc.y"
 { expLevel = 0; }
 break;
 case 293:
-#line 1101 "moc.y"
+#line 1104 "moc.y"
 { expLevel = 0; }
 break;
 case 298:
-#line 1116 "moc.y"
+#line 1119 "moc.y"
 { BEGIN QT_DEF;
 				  if ( tmpAccess == Public) {
 				      tmpEnum->name = yyvsp[-4].string;
@@ -4012,23 +4034,23 @@ case 298:
 				}
 break;
 case 299:
-#line 1123 "moc.y"
+#line 1126 "moc.y"
 { tmpEnum->clear();}
 break;
 case 305:
-#line 1135 "moc.y"
+#line 1138 "moc.y"
 { if ( tmpAccess == Public) tmpEnum->append( yyvsp[0].string ); }
 break;
 case 306:
-#line 1136 "moc.y"
+#line 1139 "moc.y"
 { expLevel=0; }
 break;
 case 307:
-#line 1137 "moc.y"
+#line 1140 "moc.y"
 {  if ( tmpAccess == Public) tmpEnum->append( yyvsp[-3].string );  }
 break;
 case 308:
-#line 1141 "moc.y"
+#line 1144 "moc.y"
 {
 				     propWrite = "";
 				     propRead = "";
@@ -4045,7 +4067,7 @@ case 308:
 				}
 break;
 case 309:
-#line 1156 "moc.y"
+#line 1159 "moc.y"
 {
 				    if ( propRead.isEmpty() && !propOverride)
 					moc_err( "A property must at least feature a read method." );
@@ -4065,23 +4087,23 @@ case 309:
 				}
 break;
 case 311:
-#line 1176 "moc.y"
+#line 1179 "moc.y"
 { propRead = yyvsp[-1].string; }
 break;
 case 312:
-#line 1177 "moc.y"
+#line 1180 "moc.y"
 { propWrite = yyvsp[-1].string; }
 break;
 case 313:
-#line 1178 "moc.y"
+#line 1181 "moc.y"
 { propReset = yyvsp[-1].string; }
 break;
 case 314:
-#line 1179 "moc.y"
+#line 1182 "moc.y"
 { propStored = yyvsp[-1].string; }
 break;
 case 315:
-#line 1181 "moc.y"
+#line 1184 "moc.y"
 {
 					if ( qstrcmp( yyvsp[0].string, "true" ) == 0 )
 						propDesignable = 1;
@@ -4092,22 +4114,22 @@ case 315:
 				}
 break;
 case 317:
-#line 1192 "moc.y"
+#line 1195 "moc.y"
 { }
 break;
 case 318:
-#line 1193 "moc.y"
+#line 1196 "moc.y"
 { qtEnums.append( yyvsp[-1].string ); }
 break;
 case 319:
-#line 1196 "moc.y"
+#line 1199 "moc.y"
 { }
 break;
 case 320:
-#line 1197 "moc.y"
+#line 1200 "moc.y"
 { qtSets.append( yyvsp[-1].string ); }
 break;
-#line 4110 "y.tab.c"
+#line 4132 "y.tab.c"
     }
     yyssp -= yym;
     yystate = *yyssp;
@@ -4117,8 +4139,8 @@ break;
     {
 #if YYDEBUG
         if (yydebug)
-            printf("%sdebug: after reduction, shifting from state 0 to\
- state %d\n", YYPREFIX, YYFINAL);
+            printf("yydebug: after reduction, shifting from state 0 to\
+ state %d\n", YYFINAL);
 #endif
         yystate = YYFINAL;
         *++yyssp = YYFINAL;
@@ -4132,8 +4154,8 @@ break;
                 yys = 0;
                 if (yychar <= YYMAXTOKEN) yys = yyname[yychar];
                 if (!yys) yys = "illegal-symbol";
-                printf("%sdebug: state %d, reading %d (%s)\n",
-                        YYPREFIX, YYFINAL, yychar, yys);
+                printf("yydebug: state %d, reading %d (%s)\n",
+                        YYFINAL, yychar, yys);
             }
 #endif
         }
@@ -4147,8 +4169,8 @@ break;
         yystate = yydgoto[yym];
 #if YYDEBUG
     if (yydebug)
-        printf("%sdebug: after reduction, shifting from state %d \
-to state %d\n", YYPREFIX, *yyssp, yystate);
+        printf("yydebug: after reduction, shifting from state %d \
+to state %d\n", *yyssp, yystate);
 #endif
     if (yyssp >= yyss + yystacksize - 1)
     {

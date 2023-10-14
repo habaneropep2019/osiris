@@ -30,7 +30,7 @@ height="100" src="face.png" alt="Home" border="0">
   <hr>
 
   Header file: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/life/life.h   2.3.1   edited 2001-01-26 $
+** &#36;Id&#58; qt/examples/life/life.h   2.3.2   edited 2001-01-26 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -92,7 +92,7 @@ private:
   <hr>
 
   Implementation: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/life/life.cpp   2.3.1   edited 2001-01-26 $
+** &#36;Id&#58; qt/examples/life/life.cpp   2.3.2   edited 2001-01-26 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -117,18 +117,18 @@ LifeWidget::LifeWidget( int s, QWidget *parent, const char *name )
     SCALE = s;
 
     maxi = maxj = 50;
-    <a href="qwidget.html#378ed6">setMinimumSize</a>( MINSIZE * SCALE + 2 * BORDER,
+    <a href="qwidget.html#c0b5fb">setMinimumSize</a>( MINSIZE * SCALE + 2 * BORDER,
                    MINSIZE * SCALE + 2 * BORDER );
-    <a href="qwidget.html#4bfdb7">setMaximumSize</a>( MAXSIZE * SCALE + 2 * BORDER,
+    <a href="qwidget.html#c78dce">setMaximumSize</a>( MAXSIZE * SCALE + 2 * BORDER,
                    MAXSIZE * SCALE + 2 * BORDER );
-    <a href="qwidget.html#832223">setSizeIncrement</a>( SCALE, SCALE);
+    <a href="qwidget.html#baa891">setSizeIncrement</a>( SCALE, SCALE);
 
-    <a href=#183>clear</a>();
-    <a href="qwidget.html#9ff9d8">resize</a>( maxi * SCALE + 2 * BORDER , maxj * SCALE + 2 * BORDER );
+    <a href=#181>clear</a>();
+    <a href="qwidget.html#ff9d07">resize</a>( maxi * SCALE + 2 * BORDER , maxj * SCALE + 2 * BORDER );
 
 }
 
-void <a name="183"></a>LifeWidget::clear()
+void <a name="181"></a>LifeWidget::clear()
 {
     current = 0;
     for ( int t = 0; t &lt; 2; t++ )
@@ -136,46 +136,46 @@ void <a name="183"></a>LifeWidget::clear()
             for ( int j = 0; j &lt; MAXSIZE + 2; j++ )
                 cells[t][i][j] = FALSE;
 
-    <a href="qwidget.html#f084e3">repaint</a>();
+    <a href="qwidget.html#d5cfc3">repaint</a>();
 }
 
 // We assume that the size will never be beyond the maximum size set
 // this is not in general TRUE, but in practice it's good enough for
 // this program
 
-void <a name="184"></a>LifeWidget::resizeEvent( <a href="qresizeevent.html">QResizeEvent</a> * e )
+void <a name="182"></a>LifeWidget::resizeEvent( <a href="qresizeevent.html">QResizeEvent</a> * e )
 {
     maxi = (e-&gt;size().width()  - 2 * BORDER) / SCALE;
     maxj = (e-&gt;size().height() - 2 * BORDER) / SCALE;
 }
 
-void <a name="185"></a>LifeWidget::setPoint( int i, int j )
+void <a name="183"></a>LifeWidget::setPoint( int i, int j )
 {
     if ( i &lt; 1 || i &gt; maxi || j &lt; 1 || j &gt; maxi )
         return;
     cells[current][i][j] = TRUE;
-    <a href="qwidget.html#f084e3">repaint</a>( index2pos(i), index2pos(j), SCALE, SCALE, FALSE );
+    <a href="qwidget.html#d5cfc3">repaint</a>( index2pos(i), index2pos(j), SCALE, SCALE, FALSE );
 }
 
-void <a name="186"></a>LifeWidget::mouseHandle( const QPoint &amp;pos )
+void <a name="184"></a>LifeWidget::mouseHandle( const QPoint &amp;pos )
 {
     int i = pos2index( pos.x() );
     int j = pos2index( pos.y() );
-    <a href=#185>setPoint</a>( i, j );
+    <a href=#183>setPoint</a>( i, j );
 }
 
-void <a name="187"></a>LifeWidget::mouseMoveEvent( <a href="qmouseevent.html">QMouseEvent</a> *e )
+void <a name="185"></a>LifeWidget::mouseMoveEvent( <a href="qmouseevent.html">QMouseEvent</a> *e )
 {
-    <a href=#186>mouseHandle</a>( e-&gt;pos() );
+    <a href=#184>mouseHandle</a>( e-&gt;pos() );
 }
 
-void <a name="188"></a>LifeWidget::mousePressEvent( <a href="qmouseevent.html">QMouseEvent</a> *e )
+void <a name="186"></a>LifeWidget::mousePressEvent( <a href="qmouseevent.html">QMouseEvent</a> *e )
 {
     if ( e-&gt;button() == QMouseEvent::LeftButton )
-        <a href=#186>mouseHandle</a>( e-&gt;pos() );
+        <a href=#184>mouseHandle</a>( e-&gt;pos() );
 }
 
-void <a name="189"></a>LifeWidget::nextGeneration()
+void <a name="187"></a>LifeWidget::nextGeneration()
 {
     for ( int i = 1; i &lt;= MAXSIZE; i++ ) {
         for ( int j = 1; j &lt;= MAXSIZE; j++ ) {
@@ -193,15 +193,15 @@ void <a name="189"></a>LifeWidget::nextGeneration()
         }
     }
     current = !current;
-    <a href="qwidget.html#f084e3">repaint</a>( FALSE );           // repaint without erase
+    <a href="qwidget.html#d5cfc3">repaint</a>( FALSE );           // repaint without erase
 }
 
-void <a name="190"></a>LifeWidget::paintEvent( <a href="qpaintevent.html">QPaintEvent</a> * e )
+void <a name="188"></a>LifeWidget::paintEvent( <a href="qpaintevent.html">QPaintEvent</a> * e )
 {
-    int starti = pos2index( e-&gt;<a href="qpaintevent.html#6177d5">rect</a>().left() );
-    int stopi  = pos2index( e-&gt;<a href="qpaintevent.html#6177d5">rect</a>().right() );
-    int startj = pos2index( e-&gt;<a href="qpaintevent.html#6177d5">rect</a>().top() );
-    int stopj  = pos2index( e-&gt;<a href="qpaintevent.html#6177d5">rect</a>().bottom() );
+    int starti = pos2index( e-&gt;<a href="qpaintevent.html#2d6e18">rect</a>().left() );
+    int stopi  = pos2index( e-&gt;<a href="qpaintevent.html#2d6e18">rect</a>().right() );
+    int startj = pos2index( e-&gt;<a href="qpaintevent.html#2d6e18">rect</a>().top() );
+    int stopj  = pos2index( e-&gt;<a href="qpaintevent.html#2d6e18">rect</a>().bottom() );
 
     if (stopi &gt; maxi)
         stopi = maxi;
@@ -212,14 +212,14 @@ void <a name="190"></a>LifeWidget::paintEvent( <a href="qpaintevent.html">QPaint
     for ( int i = starti; i &lt;= stopi; i++ ) {
         for ( int j = startj; j &lt;= stopj; j++ ) {
             if ( cells[current][i][j] )
-                <a href="qpainter.html#e55bfb">qDrawShadePanel</a>( &amp;paint, index2pos( i ), index2pos( j ),
-                                 SCALE - 1, SCALE - 1, <a href="qwidget.html#5bc085">colorGroup</a>() );
+                <a href="qpainter.html#b03ffb">qDrawShadePanel</a>( &amp;paint, index2pos( i ), index2pos( j ),
+                                 SCALE - 1, SCALE - 1, <a href="qwidget.html#d92bf4">colorGroup</a>() );
             else if ( cells[!current][i][j] )
-                paint.<a href="qpainter.html#aa2595">eraseRect</a>( index2pos( i ), index2pos( j ),
+                paint.<a href="qpainter.html#bd5570">eraseRect</a>( index2pos( i ), index2pos( j ),
                                  SCALE - 1, SCALE - 1);
         }
     }
-    <a href="qframe.html#b29c53">drawFrame</a>( &amp;paint );
+    <a href="qframe.html#0dc534">drawFrame</a>( &amp;paint );
 }
 </pre>
 
@@ -228,7 +228,7 @@ void <a name="190"></a>LifeWidget::paintEvent( <a href="qpaintevent.html">QPaint
 
   Main:
 <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/life/main.cpp   2.3.1   edited 2001-02-20 $
+** &#36;Id&#58; qt/examples/life/main.cpp   2.3.2   edited 2001-06-12 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -243,7 +243,7 @@ void <a name="190"></a>LifeWidget::paintEvent( <a href="qpaintevent.html">QPaint
 
 void usage()
 {
-    <a name="qWarning"></a><a href="qapplication.html#7a943f">qWarning</a>( "Usage: life [-scale scale]" );
+    <a name="qWarning"></a><a href="qapplication.html#290ef4">qWarning</a>( "Usage: life [-scale scale]" );
 }
 
 int main( int argc, char **argv )
@@ -266,14 +266,15 @@ int main( int argc, char **argv )
         scale = 2;
 
     LifeDialog *life = new LifeDialog( scale );
-    a.<a name="setMainWidget"></a><a href="qapplication.html#11c921">setMainWidget</a>( life );
-    life-&gt;<a name="show"></a><a href="qwidget.html#ccc8f7">show</a>();
+    a.<a name="setMainWidget"></a><a href="qapplication.html#7ad759">setMainWidget</a>( life );
+    life-&gt;<a name="setCaption"></a><a href="qwidget.html#d6a291">setCaption</a>("Qt Example - Life");
+    life-&gt;<a name="show"></a><a href="qwidget.html#200ee5">show</a>();
 
-    return a.<a name="exec"></a><a href="qapplication.html#7076af">exec</a>();
+    return a.<a name="exec"></a><a href="qapplication.html#84c7bf">exec</a>();
 }
 </pre>
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.1</div>
+<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

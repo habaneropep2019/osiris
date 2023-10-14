@@ -73,7 +73,7 @@ against this library (with <tt>-lqt-mt</tt>) rather than the regular Qt
 library.
 
   On both platforms, you should compile with the macro <tt>QT_THREAD_SUPPORT</tt>
-defined (eg. compiler with <tt>-DQT_THREAD_SUPPORT</tt>).
+defined (eg. compile with <tt>-DQT_THREAD_SUPPORT</tt>).
 On Windows, this is usually done by an entry in <tt>qconfig.h</tt>.
 
 <h2>The Qt thread classes</h2>

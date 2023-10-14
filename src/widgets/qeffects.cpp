@@ -44,6 +44,7 @@
 #include "qimage.h"
 #include "qtimer.h"
 #include "qdatetime.h"
+#include "qguardedptr.h"
 
 /*
   Internal class to get access to protected QWidget-members
@@ -89,7 +90,7 @@ private:
     QImage back;
     QImage front;
     QImage mixed;
-    QAccessWidget* widget;
+    QGuardedPtr<QAccessWidget> widget;
     int duration;
     int elapsed;
     bool showWidget;
@@ -127,8 +128,6 @@ void QAlphaWidget::paintEvent( QPaintEvent* )
 */
 void QAlphaWidget::run( int time )
 {
-    grabMouse();
-
     duration = time;
 
     if ( duration < 0 )
@@ -237,21 +236,21 @@ void QAlphaWidget::render()
     alpha = double(tempel) / duration;
     if ( alpha >= 1 || !showWidget ) {
 	anim.stop();
-	widget->removeEventFilter( this );
-	widget->clearWState( WState_Visible );
-	widget->setWState( WState_ForceHide );
-	if ( QWidget::mouseGrabber() == this )
-	    releaseMouse();
-	
-	if ( showWidget ) {
-	    BackgroundMode bgm = widget->backgroundMode();
-	    widget->setBackgroundMode( NoBackground );
-	    widget->show();
-	    widget->clearWState( WState_Visible ); // prevent update in setBackgroundMode
-	    widget->setBackgroundMode( bgm );
-	    widget->setWState( WState_Visible );
-	} else {
-	    widget->hide();
+	if ( widget ) {
+	    widget->removeEventFilter( this );
+	    widget->clearWState( WState_Visible );
+	    widget->setWState( WState_ForceHide );
+
+	    if ( showWidget ) {
+		BackgroundMode bgm = widget->backgroundMode();
+		widget->setBackgroundMode( NoBackground );
+		widget->show();
+		widget->clearWState( WState_Visible ); // prevent update in setBackgroundMode
+		widget->setBackgroundMode( bgm );
+		widget->setWState( WState_Visible );
+	    } else {
+		widget->hide();
+	    }
 	}
 	blend = 0;
 	QTimer::singleShot( 0, this, SLOT(goodBye()) );
@@ -328,7 +327,7 @@ private slots:
     void goodBye();
 
 private:
-    QAccessWidget* widget;
+    QGuardedPtr<QAccessWidget> widget;
 
     int currentHeight;
     int currentWidth;
@@ -456,8 +455,6 @@ void QRollEffect::run( int time )
     if ( !widget )
 	return;
 
-    grabMouse();
-
     duration  = time;
     elapsed = 0;
 
@@ -536,21 +533,22 @@ void QRollEffect::scroll()
     }
     if ( done ) {
 	anim.stop();
-	widget->removeEventFilter( this );
-	BackgroundMode bgm = widget->backgroundMode();
-	widget->clearWState( WState_Visible );
-	widget->setWState( WState_ForceHide );
-	if ( QWidget::mouseGrabber() == this )
-	    releaseMouse();
+	BackgroundMode bgm;
+	if ( widget ) {
+	    widget->removeEventFilter( this );
+	    bgm = widget->backgroundMode();
+	    widget->clearWState( WState_Visible );
+	    widget->setWState( WState_ForceHide );
 
-	if ( showWidget ) {
-	    widget->setBackgroundMode( NoBackground );
-	    widget->show();
-	} else {
-	    widget->hide();
+	    if ( showWidget ) {
+		widget->setBackgroundMode( NoBackground );
+		widget->show();
+	    } else {
+		widget->hide();
+	    }
 	}
 	hide();
-	if ( showWidget) {
+	if ( showWidget && widget ) {
 	    widget->clearWState( WState_Visible ); // prevent update in setBackgroundMode
 	    widget->setBackgroundMode( bgm );
 	    widget->setWState( WState_Visible );
@@ -587,12 +585,8 @@ void qScrollEffect( QWidget* w, QEffects::DirFlags orient, int time )
     qApp->sendPostedEvents( w, QEvent::Move );
     qApp->sendPostedEvents( w, QEvent::Resize );
 
-    if ( qstrcmp( w->name(), "qt_internal_mdi_popup" ) )
-	roll = new QRollEffect( w, Qt::WStyle_Customize | Qt::WStyle_Tool | 
-	    Qt::WResizeNoErase | Qt::WRepaintNoErase | Qt::WStyle_StaysOnTop, orient );
-    else
-	roll = new QRollEffect( w, Qt::WStyle_Customize | Qt::WType_Popup | 
-	    Qt::WResizeNoErase | Qt::WRepaintNoErase | Qt::WStyle_StaysOnTop, orient );
+    roll = new QRollEffect( w, Qt::WStyle_Customize | Qt::WType_Popup | 
+	Qt::WResizeNoErase | Qt::WRepaintNoErase | Qt::WStyle_StaysOnTop, orient );
 
     roll->run( time );
 }
@@ -610,12 +604,8 @@ void qFadeEffect( QWidget* w, int time )
     qApp->sendPostedEvents( w, QEvent::Move );
     qApp->sendPostedEvents( w, QEvent::Resize );
 
-    if ( qstrcmp( w->name(), "qt_internal_mdi_popup" ) )
-	blend = new QAlphaWidget( w, Qt::WStyle_Customize | Qt::WStyle_Tool | 
-	    Qt::WResizeNoErase | Qt::WRepaintNoErase | Qt::WStyle_StaysOnTop );
-    else
-	blend = new QAlphaWidget( w, Qt::WStyle_Customize | Qt::WType_Popup | 
-	    Qt::WResizeNoErase | Qt::WRepaintNoErase | Qt::WStyle_StaysOnTop);
+    blend = new QAlphaWidget( w, Qt::WStyle_Customize | Qt::WType_Popup | 
+	Qt::WResizeNoErase | Qt::WRepaintNoErase | Qt::WStyle_StaysOnTop);
 
     blend->run( time );
 }

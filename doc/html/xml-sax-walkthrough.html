@@ -37,14 +37,14 @@ The element names are indented corresponding to their nesting level.
 As mentioned in <a href="xml-sax.html#introSAX2">Introduction to SAX2</a> 
 we have to implement the functions of the handler classes that we are
 interested in. In our case these are only three:
-<a href="qxmlcontenthandler.html#4df2b7">QXmlContentHandler::startDocument()</a>,
-<a href="qxmlcontenthandler.html#0647fb">QXmlContentHandler::startElement()</a> and
-<a href="qxmlcontenthandler.html#b4dcb5">QXmlContentHandler::endElement()</a>.
+<a href="qxmlcontenthandler.html#7c53e1">QXmlContentHandler::startDocument()</a>,
+<a href="qxmlcontenthandler.html#4cb897">QXmlContentHandler::startElement()</a> and
+<a href="qxmlcontenthandler.html#b9428c">QXmlContentHandler::endElement()</a>.
 <p>
 For this purpose we use a subclass of the <a href="qxmldefaulthandler.html">QXmlDefaultHandler</a> (remember
 that the special handler classes are all abstract and the default handler class
 provides an implementation that does not change the parsing behavior): <pre>/*
-&#36;Id&#58; qt/examples/xml/tagreader/structureparser.h   2.3.1   edited 2001-01-26 $
+&#36;Id&#58; qt/examples/xml/tagreader/structureparser.h   2.3.2   edited 2001-01-26 $
 */  
 
 #include &lt;<a href="qxml-h.html">qxml.h</a>&gt;
@@ -75,7 +75,7 @@ Even the implementation is straight-forward:  <pre>
     #include &lt;<a href="qstring-h.html">qstring.h</a>&gt;
 </pre>
 <p>
-First we overload <a href="qxmlcontenthandler.html#0647fb">QXmlContentHandler::startElement()</a> with a non-empty version. <pre>
+First we overload <a href="qxmlcontenthandler.html#4cb897">QXmlContentHandler::startElement()</a> with a non-empty version. <pre>
     bool StructureParser::startDocument()
     {
         indent = "";
@@ -91,7 +91,7 @@ reporting an error.
 <p>
 Because we want to be informed when the parser comes
 accross a start tag of an element and subsequently print it out, we
-have to overload <a href="qxmlcontenthandler.html#0647fb">QXmlContentHandler::startElement()</a>. <pre>
+have to overload <a href="qxmlcontenthandler.html#4cb897">QXmlContentHandler::startElement()</a>. <pre>
     bool StructureParser::startElement( const QString&amp;, const QString&amp;, 
                                         const QString&amp; qName, 
                                         const QXmlAttributes&amp; )
@@ -116,7 +116,7 @@ Finally we return TRUE in order to let the parser continue without
 errors.
 <p>
 The last functionality we need to add is the parser's behaviour when an 
-end tag occurs. This means overloading <a href="qxmlcontenthandler.html#b4dcb5">QXmlContentHandler::endElement()</a>. <pre>
+end tag occurs. This means overloading <a href="qxmlcontenthandler.html#b9428c">QXmlContentHandler::endElement()</a>. <pre>
     bool StructureParser::endElement( const QString&amp;, const QString&amp;, const QString&amp; )
     {
         indent.remove( 0, 4 );
@@ -149,13 +149,13 @@ The next step is to create an instance of the <em>StructureParser.</em> <pre>
 Then we create a
 <a href="qxmlinputsource.html">QXmlInputSource</a> for the XML file to be parsed. <pre>
             <a href="qxmlsimplereader.html">QXmlSimpleReader</a> reader;
-            reader.<a href="qxmlsimplereader.html#71b084">setContentHandler</a>( &amp;handler );
+            reader.<a href="qxmlsimplereader.html#3ce23b">setContentHandler</a>( &amp;handler );
 </pre>
 <p>
 After that we set up the reader. As our <em>StructureParser</em>
 class deals with <a href="qxmlcontenthandler.html">QXmlContentHandler</a> functionality only 
 we simply register it as the content handler of our choice. <pre>
-            reader.<a href="qxmlsimplereader.html#5d062f">parse</a>( source );
+            reader.<a href="qxmlsimplereader.html#2d6b2a">parse</a>( source );
 </pre>
 <p>
 Now we take our input source and start parsing. <pre>
@@ -186,11 +186,11 @@ Running the program on the following XML file... <pre>&lt;animals&gt;
 It will however refuse to produce the correct result if you e.g. insert
 a whitespace between a &lt; and the element name in your test-XML file.
 To prevent such annoyances
-you should always install an error handler with <a href="qxmlreader.html#98019b">QXmlReader::setErrorHandler()</a>. This allows you to report
+you should always install an error handler with <a href="qxmlreader.html#ea1a35">QXmlReader::setErrorHandler()</a>. This allows you to report
 parsing errors to the user.
 
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.1</div>
+<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

@@ -25,8 +25,13 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys/types.h>
+#include <sys/socket.h>
 #include <signal.h>
+
+// Solaris redefines connect -> __xnet_connect with _XOPEN_SOURCE_EXTENDED.
+#if defined(connect)
+#undef connect
+#endif
 
 //#define QPROCESS_DEBUG
 
@@ -35,7 +40,7 @@
 extern "C" {
 #endif
 
-#if defined(_OS_IRIX_) && defined(_CC_GNU_)
+#if defined(_OS_IRIX_) && defined(_CC_GNU_) && defined(_SGIAPI)
     static void qt_C_sigchldHnd();
 #else
     static void qt_C_sigchldHnd( int );
@@ -45,7 +50,7 @@ extern "C" {
 }
 #endif
 
-#if defined(_OS_IRIX_) && defined(_CC_GNU_)
+#if defined(_OS_IRIX_) && defined(_CC_GNU_) && defined(_SGIAPI)
 void qt_C_sigchldHnd()
 #else
 void qt_C_sigchldHnd( int )

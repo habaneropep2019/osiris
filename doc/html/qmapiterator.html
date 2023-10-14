@@ -30,16 +30,16 @@ The QMapIterator class provides an iterator for <a href="qmap.html">QMap</a>.
 <p><a href="qmapiterator-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><div class="fn"><a href="#7fd04e"><b>QMapIterator</b></a> () </div>
-<li><div class="fn"><a href="#efed06"><b>QMapIterator</b></a> ( QMapNode&lt;K, T&gt; * p ) </div>
-<li><div class="fn"><a href="#5bcc02"><b>QMapIterator</b></a> ( const QMapIterator&lt;K,T&gt; &amp; it ) </div>
-<li><div class="fn">bool <a href="#572507"><b>operator==</b></a> ( const QMapIterator&lt;K,T&gt; &amp; it ) const</div>
-<li><div class="fn">bool <a href="#a7b6f1"><b>operator!=</b></a> ( const QMapIterator&lt;K,T&gt; &amp; it ) const</div>
-<li><div class="fn">T&amp; <a href="#b949c2"><b>operator*</b></a> () </div>
-<li><div class="fn">const T&amp; <a href="#6a6bdc"><b>operator*</b></a> () const</div>
-<li><div class="fn">const K&amp; <a href="#15e01b"><b>key</b></a> () const</div>
-<li><div class="fn">T&amp; <a href="#2b33ca"><b>data</b></a> () </div>
-<li><div class="fn">const T&amp; <a href="#7a7ed8"><b>data</b></a> () const</div>
+<li><div class="fn"><a href="#61336e"><b>QMapIterator</b></a> () </div>
+<li><div class="fn"><a href="#eaf4f5"><b>QMapIterator</b></a> ( QMapNode&lt;K, T&gt; * p ) </div>
+<li><div class="fn"><a href="#ddb52f"><b>QMapIterator</b></a> ( const QMapIterator&lt;K,T&gt; &amp; it ) </div>
+<li><div class="fn">bool <a href="#dd06b8"><b>operator==</b></a> ( const QMapIterator&lt;K,T&gt; &amp; it ) const</div>
+<li><div class="fn">bool <a href="#ddfd65"><b>operator!=</b></a> ( const QMapIterator&lt;K,T&gt; &amp; it ) const</div>
+<li><div class="fn">T&amp; <a href="#57a1c9"><b>operator*</b></a> () </div>
+<li><div class="fn">const T&amp; <a href="#c66e69"><b>operator*</b></a> () const</div>
+<li><div class="fn">const K&amp; <a href="#6639c3"><b>key</b></a> () const</div>
+<li><div class="fn">T&amp; <a href="#f7b448"><b>data</b></a> () </div>
+<li><div class="fn">const T&amp; <a href="#78950a"><b>data</b></a> () const</div>
 </ul>
 <hr><h2><a name="details"></a>Detailed Description</h2>
 The QMapIterator class provides an iterator for <a href="qmap.html">QMap</a>.
@@ -111,41 +111,41 @@ points to.
 <p>See also  <a href="qmap.html">QMap</a>.
 
 <hr><h2>Member Function Documentation</h2>
-<h3 class="fn"><a name="7fd04e"></a>QMapIterator::QMapIterator ()</h3>
+<h3 class="fn"><a name="61336e"></a>QMapIterator::QMapIterator ()</h3>
 <p>Creates an uninitialized iterator.
-<h3 class="fn"><a name="efed06"></a>QMapIterator::QMapIterator ( QMapNode&lt;K, T&gt; * p )</h3>
+<h3 class="fn"><a name="eaf4f5"></a>QMapIterator::QMapIterator ( QMapNode&lt;K, T&gt; * p )</h3>
 <p>Constructs an iterator starting at node <em>p.</em>
-<h3 class="fn"><a name="5bcc02"></a>QMapIterator::QMapIterator ( const QMapIterator&lt;K,T&gt; &amp; it )</h3>
+<h3 class="fn"><a name="ddb52f"></a>QMapIterator::QMapIterator ( const QMapIterator&lt;K,T&gt; &amp; it )</h3>
 <p>Constructs a copy of the iterator.
-<h3 class="fn">T&amp; <a name="2b33ca"></a>QMapIterator::data ()</h3>
+<h3 class="fn">T&amp; <a name="f7b448"></a>QMapIterator::data ()</h3>
 <p>Returns a reference to the current item.
-<h3 class="fn">const T&amp; <a name="7a7ed8"></a>QMapIterator::data () const</h3>
+<h3 class="fn">const T&amp; <a name="78950a"></a>QMapIterator::data () const</h3>
 <p>Returns a const reference to the data of the current item.
-<h3 class="fn">const K&amp; <a name="15e01b"></a>QMapIterator::key () const</h3>
+<h3 class="fn">const K&amp; <a name="6639c3"></a>QMapIterator::key () const</h3>
 <p>Returns a const reference to the data of the current key.
-<h3 class="fn">bool <a name="a7b6f1"></a>QMapIterator::operator!= ( const QMapIterator&lt;K,T&gt; &amp; it ) const</h3>
+<h3 class="fn">bool <a name="ddfd65"></a>QMapIterator::operator!= ( const QMapIterator&lt;K,T&gt; &amp; it ) const</h3>
 <p>Compares both iterators and returns TRUE if they point to different
 items.
-<h3 class="fn">T&amp; <a name="b949c2"></a>QMapIterator::operator* ()</h3>
+<h3 class="fn">T&amp; <a name="57a1c9"></a>QMapIterator::operator* ()</h3>
 <p>Asterix operator. Returns a reference to the current item. The same
-as <a href="#2b33ca">data</a>().
-<h3 class="fn">const T&amp; <a name="6a6bdc"></a>QMapIterator::operator* () const</h3>
+as <a href="#78950a">data</a>().
+<h3 class="fn">const T&amp; <a name="c66e69"></a>QMapIterator::operator* () const</h3>
 <p>Asterix operator. Returns a const reference to the current item. The
-same as <a href="#2b33ca">data</a>().
-<h3 class="fn">bool <a name="572507"></a>QMapIterator::operator== ( const QMapIterator&lt;K,T&gt; &amp; it ) const</h3>
+same as <a href="#78950a">data</a>().
+<h3 class="fn">bool <a name="dd06b8"></a>QMapIterator::operator== ( const QMapIterator&lt;K,T&gt; &amp; it ) const</h3>
 <p>Compares both iterators and returns TRUE if they point to the same
 item.
 <hr><p>
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.3.1"><nobr>
+<input type=hidden name="version" value="2.3.2"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
-copyright &copy; 1995-2000
+copyright &copy; 1995-2001
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.1</div>
+<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

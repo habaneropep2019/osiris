@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/httpd/httpd.cpp   2.3.1   edited 2001-02-20 $
+** $Id: qt/examples/httpd/httpd.cpp   2.3.2   edited 2001-07-10 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -24,7 +24,7 @@ class HttpDaemon : public QServerSocket
     Q_OBJECT
 public:
     HttpDaemon( QObject* parent=0 ) :
-	QServerSocket(8080,0,parent)
+	QServerSocket(8080,1,parent)
     {
 	if ( !ok() ) {
 	    qWarning("Failed to bind to port 8080");
@@ -121,6 +121,7 @@ main( int argc, char** argv )
     QApplication app( argc, argv );
     HttpInfo info;
     app.setMainWidget( &info );
+    info.setCaption("Qt Example - httpd");
     info.show();
     return app.exec();
 }

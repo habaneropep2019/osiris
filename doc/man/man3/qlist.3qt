@@ -1,5 +1,5 @@
 '\" t
-.TH QList 3qt "13 June 2001" "Trolltech AS" \" -*- nroff -*-
+.TH QList 3qt "29 October 2001" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2001 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -303,11 +303,6 @@ Returns the number of items in the list.
 .PP
 See also isEmpty().
 .PP
-Examples:
-.(l
-grapher/grapher.cpp
-.)l
-.PP
 Reimplemented from QCollection.
 .SH "type * QList::current () const"
 Returns a pointer to the current list item. The current item may be null (implies that the current index is -1).
@@ -442,7 +437,7 @@ Returns TRUE if successful, or FALSE if the current item is null.
 .PP
 The removed item is deleted if auto-deletion is enabled.
 .PP
-The item after the removed item becomes the new current list item if the removed item is not the last item in the list. If the last item is removed, the new last item becomes the current item in Qt 2.x. In 3.0, the current item will be set to null. The current item is set to null if the list becomes empty.
+The item after the removed item becomes the new current list item if the removed item is not the last item in the list. If the last item is removed, the new last item becomes the current item. The current item is set to null if the list becomes empty.
 .PP
 All list iterators that refer to the removed item will be set to point to the new current item.
 .PP
@@ -456,7 +451,7 @@ The removed item is deleted if auto-deletion is enabled.
 .PP
 The compareItems() function is called when searching for the item in the list. If compareItems() is not reimplemented, it is more efficient to call removeRef().
 .PP
-The item after the removed item becomes the new current list item if the removed item is not the last item in the list. If the last item is removed, the new last item becomes the current item in Qt 2.x. In 3.0, the current item will be set to null. The current item is set to null if the list becomes empty.
+The item after the removed item becomes the new current list item if the removed item is not the last item in the list. If the last item is removed, the new last item becomes the current item. The current item is set to null if the list becomes empty.
 .PP
 All list iterators that refer to the removed item will be set to point to the new current item.
 .PP
@@ -468,7 +463,7 @@ Returns TRUE if successful, or FALSE if \fIindex\fR is out of range. The valid r
 .PP
 The removed item is deleted if auto-deletion is enabled.
 .PP
-The item after the removed item becomes the new current list item if the removed item is not the last item in the list. If the last item is removed, the new last item becomes the current item in Qt 2.x. In 3.0, the current item will be set to null. The current item is set to null if the list becomes empty.
+The item after the removed item becomes the new current list item if the removed item is not the last item in the list. If the last item is removed, the new last item becomes the current item. The current item is set to null if the list becomes empty.
 .PP
 All list iterators that refer to the removed item will be set to point to the new current item.
 .PP
@@ -525,7 +520,7 @@ Equivalent to:
         list.remove();
 .fi
 .PP
-The item after the removed item becomes the new current list item if the removed item is not the last item in the list. If the last item is removed, the new last item becomes the current item in Qt 2.x. In 3.0, the current item will be set to null. The current item is set to null if the list becomes empty.
+The item after the removed item becomes the new current list item if the removed item is not the last item in the list. If the last item is removed, the new last item becomes the current item. The current item is set to null if the list becomes empty.
 .PP
 All list iterators that refer to the removed item will be set to point to the new current item.
 .PP
@@ -541,7 +536,7 @@ See also inSort().
 .SH "type * QList::take ()"
 Takes the current item out of the list without deleting it (even if auto-deletion is enabled). Returns a pointer to the item taken out of the list, or null if the current item is null.
 .PP
-The item after the taken item becomes the new current list item if the taken item is not the last item in the list. If the last item is taken, the new last item becomes the current item in Qt 2.x. In 3.0, the current item will be set to null. The current item is set to null if the list becomes empty.
+The item after the taken item becomes the new current list item if the taken item is not the last item in the list. If the last item is taken, the new last item becomes the current item. The current item is set to null if the list becomes empty.
 .PP
 All list iterators that refer to the taken item will be set to point to the new current item.
 .PP
@@ -551,7 +546,7 @@ Takes the item at position \fIindex\fR out of the list without deleting it (even
 .PP
 Returns a pointer to the item taken out of the list, or null if the index is out of range. The valid range is \fC0 .. (count() - 1)\fR inclusive.
 .PP
-The item after the taken item becomes the new current list item if the taken item is not the last item in the list. If the last item is taken, the new last item becomes the current item in Qt 2.x. In 3.0, the current item will be set to null. The current item is set to null if the list becomes empty.
+The item after the taken item becomes the new current list item if the taken item is not the last item in the list. If the last item is taken, the new last item becomes the current item. The current item is set to null if the list becomes empty.
 .PP
 All list iterators that refer to the taken item will be set to point to the new current item.
 .PP
@@ -591,4 +586,4 @@ In case of content or formattting problems with this manual page, please
 report them to
 .BR qt-bugs@trolltech.com .
 Please include the name of the manual page (qlist.3qt) and the Qt
-version (2.3.1).
+version (2.3.2).

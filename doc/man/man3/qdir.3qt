@@ -1,5 +1,5 @@
 '\" t
-.TH QDir 3qt "13 June 2001" "Trolltech AS" \" -*- nroff -*-
+.TH QDir 3qt "29 October 2001" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2001 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -312,7 +312,7 @@ This enum describes how QDir is to select what entries in a directory to return.
 .TP
 \fCHidden\fR - List hidden files (on unix, files starting with a .)
 .TP
-\fCSystem\fR - List system files (does nothing under unix)
+\fCSystem\fR - List system files (on unix, FIFOs, sockets and device files)
 .PP
 If you do not set any of \fCReadable, Writable\fR or \fCExecutable,\fR QDir will set all three of them. This makes the default easy to write and at the same time useful.
 .PP
@@ -662,7 +662,7 @@ If \fIacceptAbsPaths\fR is TRUE a path starting with a separator ('/') will rena
 .PP
 Returns TRUE if successful, otherwise FALSE.
 .PP
-On most file systems, rename() fails only if oldName does not exist or if \fInewName\fR and \fIoldName\fR are not on the same partition, but there are also other reasons why rename() can fail. For example, on at least one file system rename() fails if newName points to an open file.
+On most file systems, rename() fails only if oldName does not exist or if \fInewName\fR and \fIoldName\fR are not on the same partition. On Windows, rename() will fail if \fInewName\fR already exists. However, there are also other reasons why rename() can fail. For example, on at least one file system rename() fails if newName points to an open file.
 .SH "bool QDir::rmdir ( const QString & dirName, bool acceptAbsPath = TRUE ) const \fC[virtual]\fR"
 Removes a directory.
 .PP
@@ -758,4 +758,4 @@ In case of content or formattting problems with this manual page, please
 report them to
 .BR qt-bugs@trolltech.com .
 Please include the name of the manual page (qdir.3qt) and the Qt
-version (2.3.1).
+version (2.3.2).

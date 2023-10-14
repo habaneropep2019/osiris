@@ -36,7 +36,7 @@ height="100" src="face.png" alt="Home" border="0">
   <hr>
  
   Header file: <pre>/*
-&#36;Id&#58; qt/examples/xml/tagreader/structureparser.h   2.3.1   edited 2001-01-26 $
+&#36;Id&#58; qt/examples/xml/tagreader/structureparser.h   2.3.2   edited 2001-01-26 $
 */  
 
 #include &lt;<a href="qxml-h.html">qxml.h</a>&gt;
@@ -60,7 +60,7 @@ private:
   <hr>
  
   Implementation: <pre>/*
-&#36;Id&#58; qt/examples/xml/tagreader/structureparser.cpp   2.3.1   edited 2001-01-26 $
+&#36;Id&#58; qt/examples/xml/tagreader/structureparser.cpp   2.3.2   edited 2001-01-26 $
 */
 
 #include "structureparser.h"
@@ -68,13 +68,13 @@ private:
 #include &lt;iostream.h&gt;
 #include &lt;<a href="qstring-h.html">qstring.h</a>&gt;
 
-bool <a name="165"></a>StructureParser::startDocument()
+bool <a name="163"></a>StructureParser::startDocument()
 {
     indent = "";
     return TRUE;
 }
 
-bool <a name="166"></a>StructureParser::startElement( const QString&amp;, const QString&amp;, 
+bool <a name="164"></a>StructureParser::startElement( const QString&amp;, const QString&amp;, 
                                     const QString&amp; qName, 
                                     const QXmlAttributes&amp; )
 {
@@ -83,7 +83,7 @@ bool <a name="166"></a>StructureParser::startElement( const QString&amp;, const 
     return TRUE;
 }
 
-bool <a name="167"></a>StructureParser::endElement( const QString&amp;, const QString&amp;, const QString&amp; )
+bool <a name="165"></a>StructureParser::endElement( const QString&amp;, const QString&amp;, const QString&amp; )
 {
     indent.remove( 0, 4 );
     return TRUE;
@@ -95,7 +95,7 @@ bool <a name="167"></a>StructureParser::endElement( const QString&amp;, const QS
  
   Main:
 <pre>/*
-&#36;Id&#58; qt/examples/xml/tagreader/tagreader.cpp   2.3.1   edited 2001-01-26 $
+&#36;Id&#58; qt/examples/xml/tagreader/tagreader.cpp   2.3.2   edited 2001-01-26 $
 */
 
 #include "structureparser.h"
@@ -109,14 +109,14 @@ int main( int argc, char **argv )
         <a name="QFile"></a><a href="qfile.html">QFile</a> xmlFile( argv[i] );
         <a name="QXmlInputSource"></a><a href="qxmlinputsource.html">QXmlInputSource</a> source( xmlFile );
         <a name="QXmlSimpleReader"></a><a href="qxmlsimplereader.html">QXmlSimpleReader</a> reader;
-        reader.<a name="setContentHandler"></a><a href="qxmlsimplereader.html#71b084">setContentHandler</a>( &amp;handler );
-        reader.<a name="parse"></a><a href="qxmlsimplereader.html#5d062f">parse</a>( source );
+        reader.<a name="setContentHandler"></a><a href="qxmlsimplereader.html#3ce23b">setContentHandler</a>( &amp;handler );
+        reader.<a name="parse"></a><a href="qxmlsimplereader.html#2d6b2a">parse</a>( source );
     }
     return 0;
 }
 </pre>
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.1</div>
+<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

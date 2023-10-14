@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qcolor_x11.cpp   2.3.1   edited 2001-01-30 $
+** $Id: qt/src/kernel/qcolor_x11.cpp   2.3.2   edited 2001-10-14 $
 **
 ** Implementation of QColor class for X11
 **
@@ -200,7 +200,7 @@ void QColor::initialize()
 	CHECK_PTR( g_carr );
 	memset( g_carr, 0, g_cells*sizeof(XColor) );
 	g_carr_fetch = TRUE;		// run XQueryColors on demand
-	g_our_alloc = new bool[g_cells];	
+	g_our_alloc = new bool[g_cells];
 	CHECK_PTR( g_our_alloc );
 	memset( g_our_alloc, FALSE, g_cells*sizeof(bool) );
 	XColor *xc = &g_carr[0];
@@ -253,7 +253,7 @@ void QColor::initialize()
 	    int nr = 2;
 	    int ng = 2;
 	    int nb = 2;
-	    while ( 1 ) {
+	    for (;;) {
 		if ( nb*2 < nr && (nb+1)*nr*ng < qt_ncols_option )
 		    nb++;
 		else if ( nr*3 < ng*2 && nb*(nr+1)*ng < qt_ncols_option )
@@ -430,7 +430,12 @@ uint QColor::alloc()
 
 	    if ( i == -1 ) {			// no nearest color?!
 		rgbVal |= RGB_INVALID;
-		pix = (uint)BlackPixel( dpy, scr );
+		int unused, value;
+		hsv(&unused, &unused, &value);
+		if (value < 128)
+		    pix = (uint)BlackPixel( dpy, scr );
+		else
+		    pix = (uint)WhitePixel( dpy, scr );
 		return pix;
 	    }
 	    if ( g_our_alloc[i] ) {		// we've already allocated it
@@ -461,7 +466,12 @@ uint QColor::alloc()
 
     if ( try_again ) {				// no hope of allocating color
 	rgbVal |= RGB_INVALID;
-	pix = (uint)BlackPixel( dpy, scr );
+	int unused, value;
+	hsv(&unused, &unused, &value);
+	if (value < 128)
+	    pix = (uint)BlackPixel( dpy, scr );
+	else
+	    pix = (uint)WhitePixel( dpy, scr );
 	return pix;
     }
     // All colors outside context 0 must go into the dictionary

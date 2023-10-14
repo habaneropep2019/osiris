@@ -205,8 +205,17 @@ bool Resource::load( QIODevice* dev, QValueList<Image> *imgs )
 	images = *imgs;
     if ( !customWidgets.isNull() )
 	loadCustomWidgets( customWidgets, this );
+
+#if defined (QT_NON_COMMERCIAL)    
+    QWidget *w = (QWidget*)createObject( firstWidget, !previewMode ? (QWidget*)formwindow : MainWindow::self, 0);
+    if ( !w )
+	return FALSE;
+    if ( previewMode )
+	w->reparent( MainWindow::self, Qt::WType_TopLevel,  w->pos(), TRUE );	    
+#else
     if ( !createObject( firstWidget, !previewMode ? formwindow : 0, 0) )
 	return FALSE;
+#endif
 
     if ( !connections.isNull() )
 	loadConnections( connections );
@@ -1099,6 +1108,9 @@ QObject *Resource::createObject( const QDomElement &e, QWidget *parent, QLayout*
 
 void Resource::createColumn( const QDomElement &e, QWidget *widget )
 {
+    if ( !widget )
+	return;
+
     if ( widget->inherits( "QListView" ) ) {
 	QListView *lv = (QListView*)widget;
 	QDomElement n = e.firstChild().toElement();
@@ -1161,7 +1173,7 @@ void Resource::loadItem( const QDomElement &e, QPixmap &pix, QString &txt, bool 
 
 void Resource::createItem( const QDomElement &e, QWidget *widget, QListViewItem *i )
 {
-    if ( !WidgetFactory::hasItems( WidgetDatabase::idFromClassName( WidgetFactory::classNameOf( widget ) ) ) )
+    if ( !widget || !WidgetFactory::hasItems( WidgetDatabase::idFromClassName( WidgetFactory::classNameOf( widget ) ) ) )
 	return;
 
     if ( widget->inherits( "QListBox" ) || widget->inherits( "QComboBox" ) ) {

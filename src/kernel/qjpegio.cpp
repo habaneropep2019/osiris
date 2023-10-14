@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qjpegio.cpp   2.3.1   edited 2001-01-26 $
+** $Id: qt/src/kernel/qjpegio.cpp   2.3.2   edited 2001-07-27 $
 **
 ** Implementation of JPEG QImage IOHandler
 **
@@ -219,17 +219,17 @@ void read_jpeg_image(QImageIO* iio)
 			    lines + cinfo.output_scanline,
 			    cinfo.output_height);
 	    (void) jpeg_finish_decompress(&cinfo);
-	}
 
-	if ( cinfo.output_components == 3 ) {
-	    // Expand 24->32 bpp.
-	    for (uint j=0; j<cinfo.output_height; j++) {
-		uchar *in = image.scanLine(j) + cinfo.output_width * 3;
-		QRgb *out = (QRgb*)image.scanLine(j);
+	    if ( cinfo.output_components == 3 ) {
+		// Expand 24->32 bpp.
+		for (uint j=0; j<cinfo.output_height; j++) {
+		    uchar *in = image.scanLine(j) + cinfo.output_width * 3;
+		    QRgb *out = (QRgb*)image.scanLine(j);
 
-		for (uint i=cinfo.output_width; i--; ) {
-		    in-=3;
-		    out[i] = qRgb(in[0], in[1], in[2]);
+		    for (uint i=cinfo.output_width; i--; ) {
+			in-=3;
+			out[i] = qRgb(in[0], in[1], in[2]);
+		    }
 		}
 	    }
 	}

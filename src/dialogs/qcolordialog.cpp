@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/dialogs/qcolordialog.cpp   2.3.1   edited 2001-03-01 $
+** $Id: qt/src/dialogs/qcolordialog.cpp   2.3.2   edited 2001-03-01 $
 **
 ** Implementation of QColorDialog class
 **

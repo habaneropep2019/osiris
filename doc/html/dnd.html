@@ -25,7 +25,7 @@ height="100" src="face.png" alt="Home" border="0">
 <p>
   <h3>Dragging</h3>
 <p>
-  To start a drag, for example in a <a href="qwidget.html#8b6935">mouse motion event</a>, create an object of the
+  To start a drag, for example in a <a href="qwidget.html#a51d92">mouse motion event</a>, create an object of the
   QDragObject subclass appropriate for your media, such as
   QTextDrag for text and QImageDrag for images. Then call
   the drag() method. This is all you need for simple dragging
@@ -35,7 +35,7 @@ height="100" src="face.png" alt="Home" border="0">
   <pre>  void MyWidget::startDragging()
   {
     <a href="qdragobject.html">QDragObject</a> *d = new <a href="qtextdrag.html">QTextDrag</a>( myHighlightedText(), this );
-    d-&gt;<a href="qdragobject.html#8b1196">dragCopy</a>();
+    d-&gt;<a href="qdragobject.html#9d27cf">dragCopy</a>();
     // do NOT delete d.
   }
 </pre>
@@ -51,13 +51,13 @@ height="100" src="face.png" alt="Home" border="0">
   <h3>Dropping</h3>
 <p>
   To be able to receive media dropped on a widget, call
-  <a href="qwidget.html#e1c7b1">setAcceptDrops(TRUE)</a>
+  <a href="qwidget.html#8169cb">setAcceptDrops(TRUE)</a>
   for the widget (eg. in its constructor), and override the
   event handler methods
-  <a href="qwidget.html#1ddf8b">dragEnterEvent()</a>,
-  <a href="qwidget.html#43e73b">dragMoveEvent()</a>,
-  <a href="qwidget.html#5db9c8">dragLeaveEvent()</a>, and
-  <a href="qwidget.html#db2a57">dropEvent()</a>.
+  <a href="qwidget.html#c8639f">dragEnterEvent()</a>,
+  <a href="qwidget.html#3b47df">dragMoveEvent()</a>,
+  <a href="qwidget.html#fdd48c">dragLeaveEvent()</a>, and
+  <a href="qwidget.html#e9b4c3">dropEvent()</a>.
 <p>
   For example, to accept text and image drops:
   <pre>  MyWidget::MyWidget(...) :
@@ -69,9 +69,9 @@ height="100" src="face.png" alt="Home" border="0">
 
   void MyWidget::dragEnterEvent(<a href="qdragenterevent.html">QDragEnterEvent</a>* event)
   {
-    event-&gt;<a href="qdropevent.html#79b9b8">accept</a>(
-        <a href="qtextdrag.html#4a8383">QTextDrag::canDecode</a>(event) ||
-        <a href="qimagedrag.html#deb43c">QImageDrag::canDecode</a>(event)
+    event-&gt;<a href="qdropevent.html#da0c5a">accept</a>(
+        <a href="qtextdrag.html#48ca8d">QTextDrag::canDecode</a>(event) ||
+        <a href="qimagedrag.html#c35128">QImageDrag::canDecode</a>(event)
     );
   }
 
@@ -80,10 +80,10 @@ height="100" src="face.png" alt="Home" border="0">
     <a href="qimage.html">QImage</a> image;
     <a href="qstring.html">QString</a> text;
 
-    if ( <a href="qimagedrag.html#703b75">QImageDrag::decode</a>(event, image) ) {
-      insertImageAt(image, event-&gt;<a href="qdropevent.html#4b9a80">pos</a>());
-    } else if ( <a href="qtextdrag.html#5da6e5">QTextDrag::decode</a>(event, text) ) {
-      insertTextAt(text, event-&gt;<a href="qdropevent.html#4b9a80">pos</a>());
+    if ( <a href="qimagedrag.html#037fd2">QImageDrag::decode</a>(event, image) ) {
+      insertImageAt(image, event-&gt;<a href="qdropevent.html#b3ba77">pos</a>());
+    } else if ( <a href="qtextdrag.html#b02128">QTextDrag::decode</a>(event, text) ) {
+      insertTextAt(text, event-&gt;<a href="qdropevent.html#b3ba77">pos</a>());
     }
   }
 </pre>
@@ -106,7 +106,7 @@ height="100" src="face.png" alt="Home" border="0">
   put your drag-and-drop oriented information on the clipboard:
   <pre>  void MyWidget::copy()
   {
-    <a href="qapplication.html#12a5ae">QApplication::clipboard</a>()-&gt;setData(
+    <a href="qapplication.html#1c95b5">QApplication::clipboard</a>()-&gt;setData(
         new QTextDrag(myHighlightedText())
     );
   }
@@ -114,7 +114,7 @@ height="100" src="face.png" alt="Home" border="0">
   void MyWidget::paste()
   {
     <a href="qstring.html">QString</a> text;
-    if ( <a href="qtextdrag.html#5da6e5">QTextDrag::decode</a>(<a href="qapplication.html#12a5ae">QApplication::clipboard</a>()-&gt;data(), text) )
+    if ( <a href="qtextdrag.html#b02128">QTextDrag::decode</a>(<a href="qapplication.html#1c95b5">QApplication::clipboard</a>()-&gt;data(), text) )
         insertText( text );
   }
 </pre>
@@ -126,17 +126,17 @@ height="100" src="face.png" alt="Home" border="0">
   <pre>  void MyWidget::save()
   {
     <a href="qfile.html">QFile</a> out(current_file_name);
-    out.<a href="qfile.html#44ae9b">open</a>(IO_WriteOnly);
+    out.<a href="qfile.html#255995">open</a>(IO_WriteOnly);
     MyCadDrag tmp(current_design);
-    out.<a href="qfile.html#cf169a">writeBlock</a>( tmp-&gt;encodedData( "image/x-dxf" );
+    out.<a href="qfile.html#a44b6a">writeBlock</a>( tmp-&gt;encodedData( "image/x-dxf" );
   }
 
   void MyWidget::load()
   {
     <a href="qfile.html">QFile</a> in(current_file_name);
-    in.<a href="qfile.html#44ae9b">open</a>(IO_ReayOnly);
-    if ( !MyCadDrag::decode(in.<a href="qiodevice.html#d71970">readAll</a>(), current_design) ) {
-        <a href="qmessagebox.html#b7fab2">QMessageBox::warning</a>( this, "Format error",
+    in.<a href="qfile.html#255995">open</a>(IO_ReayOnly);
+    if ( !MyCadDrag::decode(in.<a href="qiodevice.html#c272a4">readAll</a>(), current_design) ) {
+        <a href="qmessagebox.html#63edba">QMessageBox::warning</a>( this, "Format error",
             tr("The file \"%1\" is not in any supported format")
              .arg(current_file_name)
         );
@@ -206,13 +206,13 @@ height="100" src="face.png" alt="Home" border="0">
   when one type is sufficient.
 <p>
   Subclasses of QDragObject will override the
-  <a href="qmimesource.html#dbf817">const char* format(int i) const</a> and
-  <a href="qmimesource.html#a6c4b8">QByteArray encodedData(const char* mimetype) const</a>
+  <a href="qmimesource.html#17ce96">const char* format(int i) const</a> and
+  <a href="qmimesource.html#81afea">QByteArray encodedData(const char* mimetype) const</a>
   members, and provide a set-method to encode
   the media data and static members canDecode()
   and decode() to decode incoming data, similar to
-  <a href="qimagedrag.html#deb43c">bool canDecode(QMimeSource*) const</a> and
-  <a href="qimagedrag.html#703b75">QByteArray decode(QMimeSource*) const</a>
+  <a href="qimagedrag.html#c35128">bool canDecode(QMimeSource*) const</a> and
+  <a href="qimagedrag.html#037fd2">QByteArray decode(QMimeSource*) const</a>
   of QImageDrag.
   Of course, you can
   provide drag-only or drop-only support for a media type
@@ -241,7 +241,7 @@ height="100" src="face.png" alt="Home" border="0">
   <pre>  void MyEditor::startDragging()
   {
     <a href="qdragobject.html">QDragObject</a> *d = new <a href="qtextdrag.html">QTextDrag</a>(myHighlightedText(), this);
-    if ( d-&gt;<a href="qdragobject.html#5655f5">drag</a>() &amp;&amp; d-&gt;<a href="qdragobject.html#b114ee">target</a>() != this )
+    if ( d-&gt;<a href="qdragobject.html#61c2fe">drag</a>() &amp;&amp; d-&gt;<a href="qdragobject.html#cdb79f">target</a>() != this )
       cutMyHighlightedText();
   }
 
@@ -249,13 +249,13 @@ height="100" src="face.png" alt="Home" border="0">
   {
     <a href="qstring.html">QString</a> text;
 
-    if ( <a href="qtextdrag.html#5da6e5">QTextDrag::decode</a>(event, text) ) {
-      if ( event-&gt;<a href="qdropevent.html#f7ef81">source</a>() == this &amp;&amp; event-&gt;<a href="qdropevent.html#bfcdf4">action</a>() == QDropEvent::Move ) {
+    if ( <a href="qtextdrag.html#b02128">QTextDrag::decode</a>(event, text) ) {
+      if ( event-&gt;<a href="qdropevent.html#00626c">source</a>() == this &amp;&amp; event-&gt;<a href="qdropevent.html#d9f8b7">action</a>() == QDropEvent::Move ) {
         // Careful not to tread on my own feet
-        event-&gt;<a href="qdropevent.html#2a39a0">acceptAction</a>();
-        moveMyHighlightedTextTo(event-&gt;<a href="qdropevent.html#4b9a80">pos</a>());
+        event-&gt;<a href="qdropevent.html#d37a0e">acceptAction</a>();
+        moveMyHighlightedTextTo(event-&gt;<a href="qdropevent.html#b3ba77">pos</a>());
       } else {
-        pasteTextAt(text, event-&gt;<a href="qdropevent.html#4b9a80">pos</a>());
+        pasteTextAt(text, event-&gt;<a href="qdropevent.html#b3ba77">pos</a>());
       }
     }
   }
@@ -265,14 +265,14 @@ height="100" src="face.png" alt="Home" border="0">
   when data is dragged onto them.  For example, a CAD program might
   only accept drops of text onto text objects in the view.  In these
   cases, the
-  <a href="qwidget.html#43e73b">dragMoveEvent()</a> is used
+  <a href="qwidget.html#3b47df">dragMoveEvent()</a> is used
   and an <em>area</em> is given for which the drag is accepted or ignored:
   <pre>  void MyWidget::dragMoveEvent(<a href="qdragmoveevent.html">QDragMoveEvent</a>* event)
   {
-    if ( <a href="qtextdrag.html#4a8383">QTextDrag::canDecode</a>(event) ) {
-      MyCadItem* item = findMyItemAt(event-&gt;<a href="qdropevent.html#4b9a80">pos</a>());
+    if ( <a href="qtextdrag.html#48ca8d">QTextDrag::canDecode</a>(event) ) {
+      MyCadItem* item = findMyItemAt(event-&gt;<a href="qdropevent.html#b3ba77">pos</a>());
       if ( item )
-        event-&gt;<a href="qdragmoveevent.html#3f7828">accept</a>();
+        event-&gt;<a href="qdragmoveevent.html#250cc4">accept</a>();
     }
   }
 </pre>
@@ -282,14 +282,14 @@ height="100" src="face.png" alt="Home" border="0">
   an area for which you promise the acceptance persists:
   <pre>  void MyWidget::dragMoveEvent(<a href="qdragmoveevent.html">QDragMoveEvent</a>* event)
   {
-    if ( <a href="qtextdrag.html#4a8383">QTextDrag::canDecode</a>(event) ) {
-      MyCadItem* item = findMyItemAt(event-&gt;<a href="qdropevent.html#4b9a80">pos</a>());
+    if ( <a href="qtextdrag.html#48ca8d">QTextDrag::canDecode</a>(event) ) {
+      MyCadItem* item = findMyItemAt(event-&gt;<a href="qdropevent.html#b3ba77">pos</a>());
       if ( item ) {
         <a href="qrect.html">QRect</a> r = item-&gt;areaRelativeToMeClippedByAnythingInTheWay();
         if ( item-&gt;type() == MyTextType )
-          event-&gt;<a href="qdragmoveevent.html#3f7828">accept</a>( r );
+          event-&gt;<a href="qdragmoveevent.html#250cc4">accept</a>( r );
         else
-          event-&gt;<a href="qdragmoveevent.html#209687">ignore</a>( r );
+          event-&gt;<a href="qdragmoveevent.html#2a033b">ignore</a>( r );
       }
     }
   }
@@ -342,6 +342,6 @@ height="100" src="face.png" alt="Home" border="0">
 
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.1</div>
+<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

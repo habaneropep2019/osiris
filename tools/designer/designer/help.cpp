@@ -75,6 +75,8 @@ static QIconSet createIconSet( const QString &name )
 Help::Help( const QString& home, MainWindow* parent, const char *name )
 #if defined(HAVE_KDE)
     : KMainWindow( 0, name, WType_TopLevel | WDestructiveClose | WGroupLeader ),
+#elif defined(QT_NON_COMMERICAL)
+    : QMainWindow( parent, name, WType_TopLevel | WDestructiveClose | WGroupLeader ),
 #else
     : QMainWindow( 0, name, WType_TopLevel | WDestructiveClose | WGroupLeader ),
 #endif
@@ -200,7 +202,7 @@ void Help::filePrint()
 	richText.setWidth( &p, body.width() );
 	QRect view( body );
 	int page = 1;
-	do {
+	for (;;) {
 	    richText.draw( &p, body.left(), body.top(), view, colorGroup() );
 	    view.moveBy( 0, body.height() );
 	    p.translate( 0 , -body.height() );
@@ -211,7 +213,7 @@ void Help::filePrint()
 		break;
 	    printer.newPage();
 	    page++;
-	} while (TRUE);
+	}
     }
 }
 

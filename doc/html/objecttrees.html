@@ -21,13 +21,13 @@ height="100" src="face.png" alt="Home" border="0">
 <h1 align=center> Object Trees and Object Ownership</h1><br clear="all">
 <a href="qobject.html">QObjects</a> organize themselves in object trees.
 When you create a QObject with another object as parent, it's added to
-the parent's <a href="qobject.html#9026ce">children()</a> list, and
+the parent's <a href="qobject.html#f790ce">children()</a> list, and
 is deleted when the parent is.  This turns out to fit the needs of GUI
 objects well.  For example, a <a href="qaccel.html">QAccel</a> (keyboard accelerator) is a
 child of the right window, so when the user closes that window, the
 accelerator is deleted too.
 <p>
-The static function <a href="qobject.html#08fff2">QObject::objectTrees()</a> gives you access to all
+The static function <a href="qobject.html#3cb047">QObject::objectTrees()</a> gives you access to all
 the root objects that currently exist.
 <p>
 <a href="qwidget.html">QWidget</a>, the base class of everything that shows up on the screen,
@@ -45,11 +45,11 @@ toolbar that could often result in the application deleting one of the
 <a href="qtoolbar.html">QToolBar</a> objects, and the tool bar's <a href="qmainwindow.html">QMainWindow</a> parent would
 then notice the change and reconfigure its screen space.
 <p>
-The debugging functions <a href="qobject.html#af854e">QObject::dumpObjectTree()</a> and <a href="qobject.html#57f1a6">QObject::dumpObjectInfo()</a> are often useful when an application looks or
+The debugging functions <a href="qobject.html#c21cea">QObject::dumpObjectTree()</a> and <a href="qobject.html#d459b3">QObject::dumpObjectInfo()</a> are often useful when an application looks or
 acts strangely.
 
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.1</div>
+<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

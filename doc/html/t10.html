@@ -80,7 +80,7 @@ We include the QPixmap class definition.  <pre>
     {
         ang = 45;
         f = 0;
-        <a href="qwidget.html#379ca0">setPalette</a>( <a href="qpalette.html">QPalette</a>( <a href="qcolor.html">QColor</a>( 250, 250, 200) ) );
+        <a href="qwidget.html#d7e4b9">setPalette</a>( <a href="qpalette.html">QPalette</a>( <a href="qcolor.html">QColor</a>( 250, 250, 200) ) );
     }
 </pre>
 <p>
@@ -94,7 +94,7 @@ The force (f) is initialized to zero.  <pre>
         if ( ang == degrees )
             return;
         ang = degrees;
-        <a href="qwidget.html#977d49">repaint</a>( cannonRect(), FALSE );
+        <a href="qwidget.html#7569b1">repaint</a>( cannonRect(), FALSE );
         emit angleChanged( ang );
     }
 </pre>
@@ -120,7 +120,7 @@ setAngle().  The only difference is that since we don't show the force
 value, we don't need to repaint the widget.  <pre>
     void CannonField::paintEvent( <a href="qpaintevent.html">QPaintEvent</a> *e )
     {
-        if ( !e-&gt;<a href="qpaintevent.html#6177d5">rect</a>().intersects( cannonRect() ) )
+        if ( !e-&gt;<a href="qpaintevent.html#2d6e18">rect</a>().intersects( cannonRect() ) )
             return;
 </pre>
 <p>
@@ -128,7 +128,7 @@ We have now optimized the paint event to repaint only the parts of the
 widget that need updating.  First we check whether we have to paint
 anything at all, and return if we don't. <pre>
         <a href="qrect.html">QRect</a> cr = cannonRect();
-        <a href="qpixmap.html">QPixmap</a> pix( cr.<a href="qrect.html#517d48">size</a>() );
+        <a href="qpixmap.html">QPixmap</a> pix( cr.<a href="qrect.html#507cd9">size</a>() );
 </pre>
 <p>
 Then we create a temporary pixmap, which we use for flicker-free
@@ -140,26 +140,26 @@ precisely once.  Less, and you get drawing errors.  More, and you get
 flicker.  It doesn't matter much in this example - when the code was
 written there were still machines slow enough for it to flicker, but
 not any more.  We've kept the code for educational purposes. <pre>
-        pix.<a href="qpixmap.html#e584bd">fill</a>( this, cr.<a href="qrect.html#4ff486">topLeft</a>() );
+        pix.<a href="qpixmap.html#6910a0">fill</a>( this, cr.<a href="qrect.html#349186">topLeft</a>() );
 </pre>
 <p>
 We fill the pixmap with the background from this widget. <pre>
         <a href="qpainter.html">QPainter</a> p( &amp;pix );
-        p.<a href="qpainter.html#38e68f">setBrush</a>( blue );
-        p.<a href="qpainter.html#0a6aff">setPen</a>( NoPen );
-        p.<a href="qpainter.html#ba64b6">translate</a>( 0, pix.<a href="qpixmap.html#1d578d">height</a>() - 1 );
-        p.<a href="qpainter.html#dc4acb">drawPie</a>( <a href="qrect.html">QRect</a>( -35,-35, 70, 70 ), 0, 90*16 );
-        p.<a href="qpainter.html#4bd0fb">rotate</a>( -ang );
-        p.<a href="qpainter.html#b29a16">drawRect</a>( <a href="qrect.html">QRect</a>(33, -4, 15, 8) );
-        p.<a href="qpainter.html#c7f9ac">end</a>();
+        p.<a href="qpainter.html#3e0cc8">setBrush</a>( blue );
+        p.<a href="qpainter.html#0183e4">setPen</a>( NoPen );
+        p.<a href="qpainter.html#eb778c">translate</a>( 0, pix.<a href="qpixmap.html#d5bb33">height</a>() - 1 );
+        p.<a href="qpainter.html#3ca7a2">drawPie</a>( <a href="qrect.html">QRect</a>( -35,-35, 70, 70 ), 0, 90*16 );
+        p.<a href="qpainter.html#b5205c">rotate</a>( -ang );
+        p.<a href="qpainter.html#4c0077">drawRect</a>( <a href="qrect.html">QRect</a>(33, -4, 15, 8) );
+        p.<a href="qpainter.html#365784">end</a>();
 </pre>
 <p>
 We paint, as in chapter 9, but now we paint in the pixmap.
 <p>
 At this point, we have a painter variable and a pixmap that looks
 precisely right, but we still haven't painted on the screen. <pre>
-        p.<a href="qpainter.html#59f1bb">begin</a>( this );
-        p.<a href="qpainter.html#f3fb4a">drawPixmap</a>( cr.<a href="qrect.html#4ff486">topLeft</a>(), pix );
+        p.<a href="qpainter.html#02ed5d">begin</a>( this );
+        p.<a href="qpainter.html#c64b89">drawPixmap</a>( cr.<a href="qrect.html#349186">topLeft</a>(), pix );
 </pre>
 <p>
 So we open the painter on the CannonField itself and then draw the pixmap.
@@ -169,7 +169,7 @@ bottom, and the code is 100% flicker-free.  <pre>
     <a href="qrect.html">QRect</a> CannonField::cannonRect() const
     {
         <a href="qrect.html">QRect</a> r( 0, 0, 50, 50 );
-        r.<a href="qrect.html#eb5839">moveBottomLeft</a>( <a href="qwidget.html#e872e1">rect</a>().bottomLeft() );
+        r.<a href="qrect.html#8df149">moveBottomLeft</a>( <a href="qwidget.html#75ae71">rect</a>().bottomLeft() );
         return r;
     }
 </pre>
@@ -179,7 +179,7 @@ coordinates.  First we create a rectangle with the size 50x50, then
 move it so its bottom left corner is equal to the widget's own bottom
 left corner.
 <p>
-The <a href="qwidget.html#e872e1">QWidget::rect()</a> function returns the widget's enclosing
+The <a href="qwidget.html#75ae71">QWidget::rect()</a> function returns the widget's enclosing
 rectangle in the widget's own coordinates (where the top left corner
 is 0,0).
 <p>
@@ -195,18 +195,18 @@ The constructor is mostly the same, but some new bits have been added.  <pre>
 </pre>
 <p>
 We add a second LCDRange which will be used to set the force.  <pre>
-        <a href="qobject.html#c2d209">connect</a>( force, SIGNAL(valueChanged(int)),
+        <a href="qobject.html#7f8e37">connect</a>( force, SIGNAL(valueChanged(int)),
                  cannonField, SLOT(setForce(int)) );
-        <a href="qobject.html#c2d209">connect</a>( cannonField, SIGNAL(forceChanged(int)),
+        <a href="qobject.html#7f8e37">connect</a>( cannonField, SIGNAL(forceChanged(int)),
                  force, SLOT(setValue(int)) );
 </pre>
 <p>
 We connect the <code>force</code> widget and the <code>cannonField</code> widget just like
 we did for the <code>angle</code> widget.  <pre>
         <a href="qvboxlayout.html">QVBoxLayout</a> *leftBox = new <a href="qvboxlayout.html">QVBoxLayout</a>;
-        grid-&gt;<a href="qgridlayout.html#7fc9ea">addLayout</a>( leftBox, 1, 0 );
-        leftBox-&gt;<a href="qboxlayout.html#219265">addWidget</a>( angle );
-        leftBox-&gt;<a href="qboxlayout.html#219265">addWidget</a>( force );
+        grid-&gt;<a href="qgridlayout.html#a409bc">addLayout</a>( leftBox, 1, 0 );
+        leftBox-&gt;<a href="qboxlayout.html#ebba99">addWidget</a>( angle );
+        leftBox-&gt;<a href="qboxlayout.html#ebba99">addWidget</a>( force );
 </pre>
 <p>
 In chapter 9, we put <code>angle</code> in the lower-left cell of the layout.
@@ -230,7 +230,7 @@ Put the cannon in the bottom right corner.
 <p>
 Try adding a better keyboard interface.  For example, make + and -
 increase and decrease the force and enter shoot.  Hint: <a href="qaccel.html">QAccel</a> and
-new addStep() and subtractStep() slots in LCDRange, like <a href="qslider.html#a83993">QSlider::addStep()</a>.  If you're bothered by the way the left and right
+new addStep() and subtractStep() slots in LCDRange, like <a href="qslider.html#f8da10">QSlider::addStep()</a>.  If you're bothered by the way the left and right
 keys work (I am!), change that too.
 <p>
 You may now go on to <a href="t11.html">chapter eleven.</a>
@@ -241,6 +241,6 @@ You may now go on to <a href="t11.html">chapter eleven.</a>
 
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.1</div>
+<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/dialogs/qwizard.cpp   2.3.1   edited 2001-05-15 $
+** $Id: qt/src/dialogs/qwizard.cpp   2.3.2   edited 2001-08-18 $
 **
 ** Implementation of QWizard class.
 **
@@ -122,6 +122,7 @@ QWizard::QWizard( QWidget *parent, const char *name, bool modal,
     d = new QWizardPrivate();
     d->current = 0; // not quite true, but...
     d->ws = new QWidgetStack( this );
+    d->pages.setAutoDelete( TRUE );
     d->title = 0;
 
     // create in nice tab order
@@ -701,13 +702,9 @@ void QWizard::removePage( QWidget * page )
     while( --i >= 0 && d->pages[i] && d->pages[i]->w != page ) { }
     if ( i < 0 )
 	return;
-    QWizardPrivate::Page * p = d->pages[i];
-    delete p;
     d->pages.remove( i );
-    for ( uint j = i; j < d->pages.size() - 1; ++j ) {
-	d->pages.insert( j, d->pages[ j + 1 ] );
-	d->pages.remove( j + 1 );
-    }
+    for ( uint j = i; j < d->pages.size() - 1; ++j )
+	d->pages.insert( j, d->pages.take( j + 1 ) );
     d->pages.resize( d->pages.size() - 1 );
     d->ws->removeWidget( page );
     if ( pageCount() > 0 )

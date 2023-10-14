@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/picture/picture.cpp   2.3.1   edited 2001-02-20 $
+** $Id: qt/examples/picture/picture.cpp   2.3.2   edited 2001-10-18 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -38,7 +38,7 @@ void paintCar( QPainter *p )			// paint a car
 
     QPixmap pixmap;
     if ( pixmap.load("flag.bmp") )		// load and draw image
-	p->drawPixmap( 100, 90, pixmap );
+	p->drawPixmap( 100, 85, pixmap );
 
     p->setBackgroundMode( Qt::OpaqueMode );		// set opaque mode
     p->setBrush( Qt::DiagCrossPattern );		// black diagonal cross pattern
@@ -123,6 +123,7 @@ int main( int argc, char **argv )
     } else {
 	PictureDisplay test( fileName );		// create picture display
 	a.setMainWidget( &test);			// set main widget
+	test.setCaption("Qt Example - Picture");
 	test.show();				// show it
 
 	return a.exec();				// start event loop

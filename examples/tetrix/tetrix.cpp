@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/tetrix/tetrix.cpp   2.3.1   edited 2001-01-26 $
+** $Id: qt/examples/tetrix/tetrix.cpp   2.3.2   edited 2001-06-12 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -18,6 +18,7 @@ int main( int argc, char **argv )
     QDragApplication a(argc,argv);
     QTetrix *tetrix = new QTetrix;
     a.setMainWidget(tetrix);
+    tetrix->setCaption("Qt Example - Tetrix");
     tetrix->show();
     return a.exec();
 }

@@ -1,5 +1,5 @@
 '\" t
-.TH QCanvasItem 3qt "13 June 2001" "Trolltech AS" \" -*- nroff -*-
+.TH QCanvasItem 3qt "29 October 2001" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2001 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -161,7 +161,7 @@ Returns the bounding rectangle of pixels that the item covers.
 .PP
 See also boundingRectAdvanced().
 .PP
-Reimplemented in QCanvasText, QCanvasSprite and QCanvasPolygonalItem.
+Reimplemented in QCanvasText, QCanvasPolygonalItem and QCanvasSprite.
 .SH "QRect QCanvasItem::boundingRectAdvanced () const \fC[virtual]\fR"
 Returns the bounding rectangle of pixels that the item \fIwill\fR cover after advance(1) is called.
 .PP
@@ -173,7 +173,7 @@ Returns TRUE if the item will collide with the \fIother\fR item \fIafter\fR they
 .PP
 See also collisions().
 .PP
-Reimplemented in QCanvasPolygonalItem, QCanvasText, QCanvasEllipse, QCanvasSprite and QCanvasRectangle.
+Reimplemented in QCanvasPolygonalItem, QCanvasRectangle, QCanvasSprite, QCanvasEllipse and QCanvasText.
 .SH "QCanvasItemList QCanvasItem::collisions ( bool exact ) const"
 Returns the list of items that this item collides with.
 .PP
@@ -189,7 +189,7 @@ Note that while a QCanvasItem may be `on' a QCanvas even if it's coordinates pla
 .SH "void QCanvasItem::draw ( QPainter & painter ) \fC[virtual]\fR"
 This abstract virtual function draws the item using \fIpainter.\fR
 .PP
-Reimplemented in QCanvasPolygonalItem and QCanvasSprite.
+Reimplemented in QCanvasSprite and QCanvasPolygonalItem.
 .SH "bool QCanvasItem::enabled () const"
 Returns TRUE if the QCanvasItem is enabled.
 .SH "void QCanvasItem::hide ()"
@@ -232,7 +232,7 @@ For example:
     }
 .fi
 .PP
-Reimplemented in QCanvasPolygonalItem, QCanvasEllipse, QCanvasPolygon, QCanvasLine and QCanvasRectangle.
+Reimplemented in QCanvasRectangle, QCanvasPolygonalItem, QCanvasLine, QCanvasEllipse and QCanvasPolygon.
 .SH "bool QCanvasItem::selected () const"
 Returns TRUE if the QCanvasItem is selected.
 .SH "void QCanvasItem::setActive ( bool yes ) \fC[virtual]\fR"
@@ -312,4 +312,4 @@ In case of content or formattting problems with this manual page, please
 report them to
 .BR qt-bugs@trolltech.com .
 Please include the name of the manual page (qcanvasitem.3qt) and the Qt
-version (2.3.1).
+version (2.3.2).

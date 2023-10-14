@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qsimplerichtext.cpp   2.3.1   edited 2001-05-26 $
+** $Id: qt/src/kernel/qsimplerichtext.cpp   2.3.2   edited 2001-05-26 $
 **
 ** Implementation of the QSimpleRichText class
 **

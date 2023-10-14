@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qsound_x11.cpp   2.3.1   edited 2001-01-26 $
+** $Id: qt/src/kernel/qsound_x11.cpp   2.3.2   edited 2001-09-02 $
 **
 ** Implementation of QSound class and QAuServer internal class
 **
@@ -41,7 +41,7 @@
 
 #ifndef QT_NO_SOUND
 
-#include <qsocknot.h>
+#include <qsocketnotifier.h>
 #include <qapplication.h>
 
 

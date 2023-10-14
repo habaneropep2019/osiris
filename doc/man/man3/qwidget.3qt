@@ -1,5 +1,5 @@
 '\" t
-.TH QWidget 3qt "13 June 2001" "Trolltech AS" \" -*- nroff -*-
+.TH QWidget 3qt "29 October 2001" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2001 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -829,7 +829,7 @@ Event handlers: event(), mousePressEvent(), mouseReleaseEvent(), mouseDoubleClic
 .TP
 Change handlers: backgroundColorChange(), backgroundPixmapChange(), enabledChange(), fontChange(), paletteChange(), styleChange().
 .TP
-System functions: parentWidget(), topLevelWidget(), reparentolish((), winId(), find(), metric().
+System functions: parentWidget(), topLevelWidget(), reparent(), polish(), winId(), find(), metric().
 .TP
 Internal kernel functions: setFRect(), setCRect(), focusNextPrevChild(), wmapper(), clearWFlags(), getWFlags(), setWFlags(), testWFlags().
 .TP
@@ -1060,6 +1060,11 @@ See also setBaseSize() and setSizeIncrement().
 Returns the widget caption. If no caption has been set (common for child widgets), this functions returns a null string.
 .PP
 See also setCaption(), icon(), iconText() and QString::isNull().
+.PP
+Examples:
+.(l
+i18n/main.cpp
+.)l
 .SH "QRect QWidget::childrenRect () const"
 Returns the bounding rectangle of the widget's children.
 .PP
@@ -1120,7 +1125,7 @@ The default implementation calls e->accept(), which hides this widget. See the Q
 .PP
 See also event(), hide(), close() and QCloseEvent.
 .PP
-Reimplemented in QPopupMenu, QDialog and QProgressDialog.
+Reimplemented in QDialog, QPopupMenu and QProgressDialog.
 .SH "const QColorGroup & QWidget::colorGroup () const"
 Returns the current color group of the widget palette.
 .PP
@@ -1210,7 +1215,7 @@ See the Drag-and-drop documentation for an overview of how to provide drag-and-d
 .PP
 See also QTextDrag, QImageDrag and QDropEvent.
 .PP
-Reimplemented in QLineEdit and QMultiLineEdit.
+Reimplemented in QMultiLineEdit and QLineEdit.
 .SH "void QWidget::enabledChange ( bool oldEnabled ) \fC[virtual protected]\fR"
 This virtual function is called from setEnabled(). \fIoldEnabled\fR is the previous setting; you can get the new setting from isEnabled().
 .PP
@@ -1269,7 +1274,7 @@ Returns a pointer to the widget with window identifer/handle \fIid.\fR
 .PP
 The window identifier type depends by the underlying window system, see qwindowdefs.h for the actual definition. If there is no widget with this identifier, a null pointer is returned.
 .PP
-See also wmapper() and id().
+See also wmapper() and winId().
 .SH "QFocusData * QWidget::focusData () \fC[protected]\fR"
 Returns a pointer to the focus data for this widget's top-level widget.
 .PP
@@ -1285,7 +1290,7 @@ The default implementation updates the widget if it accepts focus (see focusPoli
 .PP
 See also focusOutEvent(), setFocusPolicy(), keyPressEvent(), keyReleaseEvent(), event() and QFocusEvent.
 .PP
-Reimplemented in QListBox, QTabBar, QLineEdit, QSlider, QGroupBox, QComboBox, QPushButton, QButton, QMultiLineEdit, QPopupMenu, QMenuBar, QTable, QDial, QListView, QTextView and QRadioButton.
+Reimplemented in QLineEdit, QDial, QTable, QMenuBar, QRadioButton, QListBox, QTabBar, QListView, QPushButton, QButton, QGroupBox, QComboBox, QPopupMenu, QTextView, QSlider and QMultiLineEdit.
 .SH "bool QWidget::focusNextPrevChild ( bool next ) \fC[virtual protected]\fR"
 Finds a new widget to give the keyboard focus to, as appropriate for Tab/shift-Tab, and returns TRUE if is can find a new widget and FALSE if it can't,
 .PP
@@ -1297,7 +1302,7 @@ Child widgets call focusNextPrevChild() on their parent widgets, and only the to
 .PP
 See also focusData().
 .PP
-Reimplemented in QButton, QPopupMenu, QMultiLineEdit and QScrollView.
+Reimplemented in QMultiLineEdit, QScrollView, QPopupMenu and QButton.
 .SH "void QWidget::focusOutEvent ( QFocusEvent * ) \fC[virtual protected]\fR"
 This event handler can be reimplemented in a subclass to receive keyboard focus events (focus lost) for the widget.
 .PP
@@ -1307,7 +1312,7 @@ The default implementation calls repaint() since the widget's colorGroup() chang
 .PP
 See also focusInEvent(), setFocusPolicy(), keyPressEvent(), keyReleaseEvent(), event() and QFocusEvent.
 .PP
-Reimplemented in QMenuBar, QMultiLineEdit, QTextView, QPopupMenu, QTabBar, QDial, QTable, QSlider, QListView, QListBox, QButton, QLineEdit and QPushButton.
+Reimplemented in QTable, QListBox, QTextView, QLineEdit, QListView, QButton, QSlider, QPushButton, QDial, QMultiLineEdit, QTabBar, QPopupMenu and QMenuBar.
 .SH "QWidget::FocusPolicy QWidget::focusPolicy() const"
 Returns \fCQWidget::TabFocus\fR if the widget accepts focus by tabbing, \fCQWidget::ClickFocus\fR if the widget accepts focus by clicking, \fCQWidget::StrongFocus\fR if it accepts both and \fCQWidget::NoFocus\fR if it does not accept focus at all.
 .PP
@@ -1340,7 +1345,7 @@ The default implementation updates the widget including its geometry.
 .PP
 See also setFont(), font(), update() and updateGeometry().
 .PP
-Reimplemented in QMenuBar, QLabel and QGroupBox.
+Reimplemented in QMenuBar, QGroupBox and QLabel.
 .SH "QFontInfo QWidget::fontInfo () const"
 Returns the font info for the widget's current font. Equivalent to QFontInto(widget->font()).
 .PP
@@ -1450,7 +1455,7 @@ Returns the preferred height for this widget, given the width \fIw.\fR The defau
 .PP
 \fBWarning:\fR Does not look at the widget's layout.
 .PP
-Reimplemented in QTextView, QMenuBar and QLabel.
+Reimplemented in QMenuBar, QTextView and QLabel.
 .SH "void QWidget::hide () \fC[virtual slot]\fR"
 Hides the widget.
 .PP
@@ -1463,7 +1468,7 @@ Examples:
 xform/xform.cpp popup/popup.cpp progress/progress.cpp scrollview/scrollview.cpp
 .)l
 .PP
-Reimplemented in QPopupMenu, QToolBar, QDialog and QMenuBar.
+Reimplemented in QToolBar, QDialog, QPopupMenu and QMenuBar.
 .SH "void QWidget::hideEvent ( QHideEvent * ) \fC[virtual protected]\fR"
 This event handler can be reimplemented in a subclass to receive widget hide events.
 .PP
@@ -1601,7 +1606,7 @@ The default implementation closes popup widgets if you hit escape. Otherwise the
 .PP
 See also keyReleaseEvent(), QKeyEvent::ignore(), setFocusPolicy(), focusInEvent(), focusOutEvent(), event() and QKeyEvent.
 .PP
-Reimplemented in QComboBox, QDial, QTextBrowser, QSlider, QMultiLineEdit, QLineEdit, QMessageBox, QScrollBar, QFileDialog, QTable, QButton, QDialog, QTextView, QMenuBar, QListBox, QListView, QPopupMenu and QTabBar.
+Reimplemented in QTabBar, QPopupMenu, QButton, QFileDialog, QTextBrowser, QLineEdit, QDialog, QTable, QTextView, QDial, QMessageBox, QListBox, QMenuBar, QSlider, QListView, QMultiLineEdit, QScrollBar and QComboBox.
 .SH "void QWidget::keyReleaseEvent ( QKeyEvent * e ) \fC[virtual protected]\fR"
 This event handler can be reimplemented in a subclass to receive key release events for the widget.
 .PP
@@ -1633,7 +1638,7 @@ A leave event is sent to the widget when the mouse cursor leaves the widget.
 .PP
 See also enterEvent(), mouseMoveEvent() and event().
 .PP
-Reimplemented in QMenuBar, QMultiLineEdit, QSpinBox, QToolButton and QLineEdit.
+Reimplemented in QLineEdit, QSpinBox, QMenuBar, QToolButton and QMultiLineEdit.
 .SH "void QWidget::lower () \fC[slot]\fR"
 Lowers the widget to the bottom of the parent widget's stack.
 .PP
@@ -1722,7 +1727,7 @@ The default implementation returns an invalid size if there is no layout for thi
 .PP
 See also QSize::isValid(), resize(), setMinimumSize() and sizePolicy().
 .PP
-Reimplemented in QMenuBar, QWidgetStack, QSlider, QListBox, QDialog, QDial, QIconView, QSplitter, QLineEdit, QToolBar, QMultiLineEdit, QProgressBar, QLabel, QTabWidget, QMainWindow, QTabBar, QListView and QScrollView.
+Reimplemented in QLineEdit, QTabBar, QListBox, QDialog, QMainWindow, QLabel, QSplitter, QListView, QScrollView, QToolBar, QMenuBar, QTabWidget, QSlider, QDial, QProgressBar, QIconView, QWidgetStack and QMultiLineEdit.
 .SH "int QWidget::minimumWidth () const"
 Returns the widget's minimum width.
 .PP
@@ -1736,7 +1741,7 @@ Note that the widgets gets a mousePressEvent() and a mouseReleaseEvent() before 
 .PP
 See also mousePressEvent(), mouseReleaseEvent(), mouseMoveEvent(), event() and QMouseEvent.
 .PP
-Reimplemented in QMultiLineEdit, QLineEdit, QListBox and QComboBox.
+Reimplemented in QListBox, QMultiLineEdit, QComboBox and QLineEdit.
 .SH "QWidget * QWidget::mouseGrabber () \fC[static]\fR"
 Returns a pointer to the widget that is currently grabbing the mouse input.
 .PP
@@ -1752,7 +1757,7 @@ QMouseEvent::pos() reports the position of the mouse cursor, relative to this wi
 .PP
 See also setMouseTracking(), mousePressEvent(), mouseReleaseEvent(), mouseDoubleClickEvent(), event() and QMouseEvent.
 .PP
-Reimplemented in QSlider, QPopupMenu, QSizeGrip, QMenuBar, QDial, QListBox, QScrollBar, QButton, QMultiLineEdit, QHeader, QLineEdit and QComboBox.
+Reimplemented in QMenuBar, QHeader, QPopupMenu, QLineEdit, QButton, QSlider, QDial, QSizeGrip, QListBox, QComboBox, QMultiLineEdit and QScrollBar.
 .SH "void QWidget::mousePressEvent ( QMouseEvent * e ) \fC[virtual protected]\fR"
 This event handler can be reimplemented in a subclass to receive mouse press events for the widget.
 .PP
@@ -1762,13 +1767,13 @@ The default implementation implements the closing of popup widgets when you clic
 .PP
 See also mouseReleaseEvent(), mouseDoubleClickEvent(), mouseMoveEvent(), event() and QMouseEvent.
 .PP
-Reimplemented in QScrollBar, QLineEdit, QButton, QSlider, QSizeGrip, QPopupMenu, QMenuBar, QMultiLineEdit, QListBox, QDial, QTabBar, QComboBox and QHeader.
+Reimplemented in QHeader, QScrollBar, QComboBox, QSlider, QPopupMenu, QListBox, QSizeGrip, QTabBar, QMultiLineEdit, QButton, QDial, QLineEdit and QMenuBar.
 .SH "void QWidget::mouseReleaseEvent ( QMouseEvent * ) \fC[virtual protected]\fR"
 This event handler can be reimplemented in a subclass to receive mouse release events for the widget.
 .PP
 See also mouseReleaseEvent(), mouseDoubleClickEvent(), mouseMoveEvent(), event() and QMouseEvent.
 .PP
-Reimplemented in QScrollBar, QButton, QPopupMenu, QTabBar, QHeader, QListBox, QMenuBar, QDial, QSlider, QLineEdit, QMultiLineEdit and QComboBox.
+Reimplemented in QScrollBar, QLineEdit, QDial, QListBox, QMultiLineEdit, QButton, QComboBox, QPopupMenu, QSlider, QMenuBar, QTabBar and QHeader.
 .SH "void QWidget::move ( int x, int y ) \fC[virtual slot]\fR"
 Moves the widget to the position \fI(x,y)\fR relative to the parent widget and including the window frame.
 .PP
@@ -1787,7 +1792,7 @@ Examples:
 drawdemo/drawdemo.cpp popup/popup.cpp
 .)l
 .PP
-Reimplemented in QSemiModal, QPushButton and QDialog.
+Reimplemented in QDialog, QSemiModal and QPushButton.
 .SH "void QWidget::move ( const QPoint & ) \fC[slot]\fR"
 This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts.
 .SH "void QWidget::moveEvent ( QMoveEvent * ) \fC[virtual protected]\fR"
@@ -1821,7 +1826,7 @@ update() and repaint() can be used to force a paint event.
 .PP
 See also event(), repaint(), update(), QPainter, QPixmap and QPaintEvent.
 .PP
-Reimplemented in QTabDialog, QSizeGrip, QButton, QFrame, QGLWidget, QStatusBar, QGroupBox, QDial, QTableView, QHeader, QScrollBar, QToolBar, QLineEdit, QMainWindow, QTabBar, QPopupMenu, QSlider and QComboBox.
+Reimplemented in QComboBox, QSlider, QGroupBox, QGLWidget, QScrollBar, QTabBar, QFrame, QHeader, QLineEdit, QSizeGrip, QStatusBar, QTableView, QPopupMenu, QDial, QTabDialog, QToolBar, QMainWindow and QButton.
 .SH "const QPalette & QWidget::palette () const"
 Returns the widget palette.
 .PP
@@ -1910,6 +1915,11 @@ Use repaint if your widget needs to be repainted immediately, for example when d
 \fBWarning:\fR If you call repaint() in a function which may itself be called from paintEvent(), you may see infinite recursion. The update() function never generates recursion.
 .PP
 See also update(), paintEvent(), setUpdatesEnabled() and erase().
+.PP
+Examples:
+.(l
+xform/xform.cpp qmag/qmag.cpp
+.)l
 .SH "void QWidget::repaint ( int x, int y, int w, int h, bool erase=TRUE ) \fC[slot]\fR"
 Repaints the widget directly by calling paintEvent() directly, unless updates are disabled or the widget is hidden.
 .PP
@@ -1922,15 +1932,15 @@ Use repaint if your widget needs to be repainted immediately, for example when d
 \fBWarning:\fR If you call repaint() in a function which may itself be called from paintEvent(), you may see infinite recursion. The update() function never generates recursion.
 .PP
 See also update(), paintEvent(), setUpdatesEnabled() and erase().
-.PP
-Examples:
-.(l
-xform/xform.cpp qmag/qmag.cpp
-.)l
 .SH "void QWidget::repaint () \fC[slot]\fR"
 This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts.
 .PP
 This version erases and repaints the entire widget.
+.PP
+Examples:
+.(l
+grapher/grapher.cpp
+.)l
 .SH "void QWidget::repaint ( bool erase ) \fC[slot]\fR"
 This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts.
 .PP
@@ -1992,7 +2002,7 @@ The default implementation calls updateMask() if the widget has automatic maskin
 .PP
 See also moveEvent(), event(), resize(), QResizeEvent and paintEvent().
 .PP
-Reimplemented in QScrollBar, QMultiLineEdit, QCheckBox, QSlider, QWidgetStack, QTabDialog, QRadioButton, QTabBar, QDial, QComboBox, QWorkspace, QGroupBox, QLineEdit, QSpinBox, QDialog, QProgressDialog, QMessageBox, QScrollView, QSplitter, QFileDialog, QTabWidget, QPushButton, QListView, QMenuBar, QMainWindow, QStatusBar, QToolBar, QGLWidget, QTableView, QListBox, QFrame, QXtWidget, QTable, QTextView and QLabel.
+Reimplemented in QTableView, QMessageBox, QTabBar, QSlider, QLabel, QProgressDialog, QTable, QFrame, QPushButton, QSplitter, QWorkspace, QScrollView, QLineEdit, QListBox, QTabWidget, QWidgetStack, QStatusBar, QMainWindow, QMenuBar, QMultiLineEdit, QGLWidget, QGroupBox, QToolBar, QScrollBar, QCheckBox, QListView, QDial, QTextView, QTabDialog, QSpinBox, QDialog, QRadioButton, QComboBox, QXtWidget and QFileDialog.
 .SH "void QWidget::scroll ( int dx, int dy, const QRect & r )"
 Scrolls \fIr dx\fR pixels to the right and \fIdy\fR downwards. Both \fIdx\fR and \fIdy\fR may be negative.
 .PP
@@ -2130,8 +2140,9 @@ See also caption(), setIcon() and setIconText().
 .PP
 Examples:
 .(l
-action/main.cpp rangecontrols/main.cpp iconview/main.cpp validator/main.cpp themes/main.cpp listviews/main.cpp checklists/main.cpp wizard/main.cpp application/main.cpp buttongroups/main.cpp drawdemo/drawdemo.cpp lineedits/main.cpp popup/popup.cpp listbox/main.cpp menu/menu.cpp progress/progress.cpp tabdialog/main.cpp progressbar/main.cpp tooltip/main.cpp richtext/main.cpp forever/forever.cpp addressbook/main.cpp movies/main.cpp hello/main.cpp listboxcombo/main.cpp mdi/main.cpp dirview/main.cpp
-.)l
+showimg/main.cpp action/main.cpp rangecontrols/main.cpp iconview/main.cpp validator/main.cpp themes/main.cpp listviews/main.cpp aclock/main.cpp checklists/main.cpp drawlines/connect.cpp dclock/main.cpp wizard/main.cpp xform/xform.cpp application/main.cpp cursor/cursor.cpp layout/layout.cpp tetrix/tetrix.cpp helpviewer/main.cpp buttongroups/main.cpp life/main.cpp i18n/main.cpp drawdemo/drawdemo.cpp lineedits/main.cpp popup/popup.cpp listbox/main.cpp menu/menu.cpp progress/progress.cpp scribble/main.cpp tabdialog/main.cpp splitter/splitter.cpp progressbar/main.cpp tooltip/main.cpp richtext/main.cpp qwerty/main.cpp forever/forever.cpp rot13/rot13.cpp xml/tagreader
+.)l-with-features/tagreader.cpp
+scrollview/scrollview.cpp qfd/qfd.cpp addressbook/main.cpp movies/main.cpp picture/picture.cpp hello/main.cpp listboxcombo/main.cpp tictac/main.cpp customlayout/main.cpp mdi/main.cpp dirview/main.cpp
 .SH "void QWidget::setCursor ( const QCursor & cursor ) \fC[virtual]\fR"
 Sets the widget cursor shape to \fIcursor.\fR
 .PP
@@ -2248,7 +2259,7 @@ Examples:
 grapher/grapher.cpp xform/xform.cpp
 .)l
 .PP
-Reimplemented in QFontDialog, QWizard, QTabDialog and QPopupMenu.
+Reimplemented in QWizard, QPopupMenu, QTabDialog and QFontDialog.
 .SH "void QWidget::setFont ( const QFont & font, bool )"
 \fBThis function is obsolete.\fR It is provided to keep old source working, and will probably be removed in a future version of Qt. We strongly advise against using it in new code.
 .PP
@@ -2517,7 +2528,7 @@ showimg/main.cpp rangecontrols/main.cpp validator/main.cpp listviews/main.cpp ac
 .)l-with-features/tagreader.cpp
 scrollview/scrollview.cpp movies/main.cpp picture/picture.cpp hello/main.cpp listboxcombo/main.cpp biff/main.cpp tictac/main.cpp customlayout/main.cpp
 .PP
-Reimplemented in QTableView, QTabBar, QMenuBar, QWidgetStack, QNPWidget, QToolBar, QWizard, QSemiModal, QMainWindow, QListView, QDialog, QScrollView, QTabDialog, QPopupMenu and QProgressBar.
+Reimplemented in QToolBar, QSemiModal, QProgressBar, QWidgetStack, QTabBar, QPopupMenu, QTableView, QDialog, QListView, QMenuBar, QMainWindow, QScrollView, QTabDialog and QWizard.
 .SH "void QWidget::showEvent ( QShowEvent * ) \fC[virtual protected]\fR"
 This event handler can be reimplemented in a subclass to receive widget show events.
 .PP
@@ -2525,7 +2536,7 @@ Non-spontaneous show events are sent to widgets right before they are shown. Spo
 .PP
 See also event() and QShowEvent.
 .PP
-Reimplemented in QTextBrowser, QProgressDialog, QTable, QTabWidget, QListBox, QWorkspace, QTextView, QListView and QHeader.
+Reimplemented in QTable, QProgressDialog, QHeader, QTextBrowser, QWorkspace, QListView, QTabWidget, QListBox and QTextView.
 .SH "void QWidget::showFullScreen () \fC[slot]\fR"
 Shows the widget in full-screen mode.
 .PP
@@ -2576,7 +2587,7 @@ The default implementation returns an invalid size if there is no layout for thi
 .PP
 See also QSize::isValid(), minimumSizeHint(), sizePolicy(), setMinimumSize() and updateGeometry().
 .PP
-Reimplemented in QGroupBox, QToolButton, QSlider, QTable, QCheckBox, QProgressDialog, QLineEdit, QMenuBar, QLCDNumber, QPushButton, QScrollBar, QRadioButton, QListBox, QHBox, QComboBox, QGrid, QSpinBox, QProgressBar, QHeader, QPopupMenu, QIconView, QDial, QListView, QTabBar, QMainWindow, QDialog, QLabel, QFrame, QTabWidget, QWidgetStack, QMultiLineEdit, QSplitter, QCanvasView, QScrollView, QSizeGrip and QWorkspace.
+Reimplemented in QTable, QMenuBar, QSizeGrip, QHBox, QRadioButton, QPopupMenu, QGroupBox, QToolButton, QCheckBox, QWidgetStack, QTabBar, QGrid, QListBox, QScrollView, QDial, QLabel, QTabWidget, QSlider, QLineEdit, QLCDNumber, QSplitter, QWorkspace, QPushButton, QSpinBox, QHeader, QIconView, QScrollBar, QProgressDialog, QCanvasView, QComboBox, QListView, QProgressBar, QFrame, QMainWindow, QDialog and QMultiLineEdit.
 .SH "QSize QWidget::sizeIncrement () const"
 Returns the widget size increment.
 .PP
@@ -2588,7 +2599,7 @@ If there is a QLayout that manages this widget's children, the size policy speci
 .PP
 See also setSizePolicy(), sizeHint(), QLayout, QSizePolicy and updateGeometry().
 .PP
-Reimplemented in QSlider, QPushButton, QProgressBar, QRadioButton, QLabel, QScrollBar, QTabBar, QWorkspace, QToolButton, QLCDNumber, QTabWidget, QFrame, QLineEdit, QHeader, QCheckBox, QSpinBox, QMultiLineEdit, QScrollView, QIconView, QSplitter and QSizeGrip.
+Reimplemented in QToolButton, QLineEdit, QFrame, QLCDNumber, QSizeGrip, QSplitter, QRadioButton, QPushButton, QWorkspace, QTabBar, QHeader, QSlider, QScrollView, QIconView, QTabWidget, QMultiLineEdit, QCheckBox, QScrollBar, QLabel, QSpinBox and QProgressBar.
 .SH "void QWidget::stackUnder ( QWidget * w ) \fC[slot]\fR"
 Places the widget under \fIw\fR in the parent widget's stack.
 .PP
@@ -2608,7 +2619,7 @@ The default implementation updates the widget including its geometry.
 .PP
 See also QApplication::setStyle(), style(), update() and updateGeometry().
 .PP
-Reimplemented in QPopupMenu, QComboBox, QProgressBar, QSlider, QIconView, QMenuBar, QScrollBar, QMainWindow, QSpinBox, QToolBar, QSplitter, QListView, QProgressDialog, QTabWidget, QTabBar, QTabDialog and QScrollView.
+Reimplemented in QScrollView, QPopupMenu, QSlider, QTabWidget, QProgressBar, QSpinBox, QListView, QIconView, QMainWindow, QTabDialog, QToolBar, QComboBox, QProgressDialog, QSplitter, QScrollBar, QTabBar and QMenuBar.
 .SH "bool QWidget::testWFlags ( WFlags f ) const"
 Returns TRUE if any of the widget flags in \fIf\fR are set.
 .PP
@@ -2653,7 +2664,7 @@ See also repaint(), paintEvent(), setUpdatesEnabled(), erase() and setWFlags().
 .PP
 Examples:
 .(l
-grapher/grapher.cpp drawlines/connect.cpp drawdemo/drawdemo.cpp desktop/desktop.cpp scrollview/scrollview.cpp picture/picture.cpp
+grapher/grapher.cpp scrollview/scrollview.cpp
 .)l
 .SH "void QWidget::update ( int x, int y, int w, int h ) \fC[slot]\fR"
 Updates a rectangle (\fIx, y, w, h)\fR inside the widget unless updates are disabled or the widget is hidden.
@@ -2665,6 +2676,11 @@ If \fIw\fR is negative, it is replaced with \fCwidth() - x\fR. If \fIh\fR is neg
 If the widgets sets the WRepaintNoErase flag, update() will not erase its contents.
 .PP
 See also repaint(), paintEvent(), setUpdatesEnabled() and erase().
+.PP
+Examples:
+.(l
+drawlines/connect.cpp drawdemo/drawdemo.cpp desktop/desktop.cpp picture/picture.cpp
+.)l
 .SH "void QWidget::update ( const QRect & r ) \fC[slot]\fR"
 This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts.
 .SH "void QWidget::updateGeometry ()"
@@ -2678,7 +2694,7 @@ This function can be reimplemented in a subclass to support transparent widgets.
 .PP
 See also setAutoMask(), updateMask(), setMask() and clearMask().
 .PP
-Reimplemented in QCheckBox, QGroupBox, QPushButton, QSlider, QRadioButton, QTabWidget, QFrame, QTabBar and QComboBox.
+Reimplemented in QPushButton, QGroupBox, QFrame, QTabBar, QCheckBox, QSlider, QRadioButton, QComboBox and QTabWidget.
 .SH "QRect QWidget::visibleRect () const"
 Returns the currently visible rectangle of the widget. This function is in particular useful to optimize immediate repainting of a widget. Typical usage is
 .PP
@@ -2704,7 +2720,7 @@ The default implementation ignores the event.
 .PP
 See also QWheelEvent::ignore(), QWheelEvent::accept(), event() and QWheelEvent.
 .PP
-Reimplemented in QSpinBox, QSlider, QScrollView, QScrollBar, QMultiLineEdit and QDial.
+Reimplemented in QSlider, QScrollBar, QSpinBox, QScrollView, QMultiLineEdit and QDial.
 .SH "int QWidget::width () const"
 Returns the width of the widget, excluding the window frame.
 .PP
@@ -2775,4 +2791,4 @@ In case of content or formattting problems with this manual page, please
 report them to
 .BR qt-bugs@trolltech.com .
 Please include the name of the manual page (qwidget.3qt) and the Qt
-version (2.3.1).
+version (2.3.2).

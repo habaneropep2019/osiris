@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qtextstream.cpp   2.3.1   edited 2001-03-12 $
+** $Id: qt/src/tools/qtextstream.cpp   2.3.2   edited 2001-10-13 $
 **
 ** Implementation of QTextStream class
 **
@@ -194,9 +194,15 @@ const int QTextStream::floatfield  = ( QTextStream::scientific |
 class QTextStreamPrivate {
 public:
 #ifndef QT_NO_TEXTCODEC
-    QTextStreamPrivate() : decoder( 0 ), sourceType( NotSet ) {}
-    ~QTextStreamPrivate() { delete decoder; }
-    QTextDecoder *decoder;		//???
+    QTextStreamPrivate() : decoder( 0 ), encoder( 0 ), sourceType( NotSet )
+    {}
+    ~QTextStreamPrivate()
+    {
+	delete decoder;
+	delete encoder;
+    }
+    QTextDecoder *decoder;
+    QTextEncoder *encoder;
 #else
     QTextStreamPrivate() : sourceType( NotSet ) {}
     ~QTextStreamPrivate() { }
@@ -676,7 +682,7 @@ uint QTextStream::ts_getbuf( QChar* buf, uint len )
 	while( rnum < len ) {
 	    QString s;
 	    bool readBlock = !( len == 1+rnum );
-	    while ( TRUE ) {
+	    for (;;) {
 		// for efficiency: normally read a whole block
 		if ( readBlock ) {
 		    // guess buffersize; this may be wrong (too small or too
@@ -810,9 +816,11 @@ void QTextStream::ts_putc( QChar c )
 {
 #ifndef QT_NO_TEXTCODEC
     if ( mapper ) {
+	if ( !d->encoder )
+	    d->encoder = mapper->makeEncoder();
 	int len = 1;
 	QString s = c;
-	QCString block = mapper->fromUnicode( s, len );
+	QCString block = d->encoder->fromUnicode( s, len );
 	dev->writeBlock( block, len );
     } else
 #endif
@@ -1226,7 +1234,7 @@ double QTextStream::input_double()
     int i = 0;
     QChar c = eat_ws();
 
-    while ( TRUE ) {
+    for (;;) {
 
 	switch ( c ) {
 	    case '+':
@@ -1527,7 +1535,7 @@ QString QTextStream::read()
     uint       i, num, start;
     bool       skipped_cr = FALSE;
 
-    while ( 1 ) {
+    for (;;) {
 	num = ts_getbuf(buf,bufsize);
 	// do a s/\r\n/\n
 	start = 0;

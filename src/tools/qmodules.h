@@ -12,4 +12,3 @@
 #define QT_MODULE_CANVAS
 #define QT_MODULE_XML
 #define QT_MODULE_NETWORK
-#define QT_MODULE_OPENGL

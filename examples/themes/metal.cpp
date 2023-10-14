@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/themes/metal.cpp   2.3.1   edited 2001-03-22 $
+** $Id: qt/examples/themes/metal.cpp   2.3.2   edited 2001-03-22 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **

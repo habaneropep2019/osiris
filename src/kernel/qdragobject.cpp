@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qdragobject.cpp   2.3.1   edited 2001-01-26 $
+** $Id: qt/src/kernel/qdragobject.cpp   2.3.2   edited 2001-08-30 $
 **
 ** Implementation of Drag and Drop support
 **
@@ -401,6 +401,18 @@ void QDragObject::dragCopy()
     (void)drag( DragCopy );
 }
 
+#if defined(Q_INCOMPATIBLE_3_0_ADDONS)
+/*!
+  Starts a drag operation using the contents of this object,
+  using DragLink mode.
+
+  see drag(DragMove) for important further information.
+*/
+void QDragObject::dragLink()
+{
+    (void)drag( DragLink );
+}
+#endif
 
 /*! \enum QDragObject::DragMode
 

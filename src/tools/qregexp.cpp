@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qregexp.cpp   2.3.1   edited 2001-01-26 $
+** $Id: qt/src/tools/qregexp.cpp   2.3.2   edited 2001-10-14 $
 **
 ** Implementation of QRegExp class
 **
@@ -675,7 +675,7 @@ int QRegExp::match( const QString &str, int index, int *len,
 		}
 	    }
 	}
-	while( 1 ) {				// regular match
+	for (;;) {				// regular match
 	    ep = matchstring( d, p, pl, indexIsStart ? start+index : start, cs );
 	    if ( ep >= 0 )
 		break;

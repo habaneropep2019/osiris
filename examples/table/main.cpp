@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/table/main.cpp   2.3.1   edited 2001-01-26 $
+** $Id: qt/examples/table/main.cpp   2.3.2   edited 2001-06-12 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -92,6 +92,7 @@ int main( int argc, char **argv )
     v.setText( 3, 3, "A Pixmap" );
     
     a.setMainWidget( &v );
+    v.setCaption("Qt Example - Table");
     v.show();
     return a.exec();
 }

@@ -13,7 +13,7 @@
  * or in pipe mode.
  */
 
-/* @(#) $Id: qt/src/3rdparty/zlib/minigzip.c   2.3.1   edited 2001-01-26 $ */
+/* @(#) $Id: qt/src/3rdparty/zlib/minigzip.c   2.3.2   edited 2001-01-26 $ */
 
 #include <stdio.h>
 #include "zlib.h"

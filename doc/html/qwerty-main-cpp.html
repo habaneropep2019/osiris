@@ -30,7 +30,7 @@ height="100" src="face.png" alt="Home" border="0">
   <hr>
 
   Header file: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/qwerty/qwerty.h   2.3.1   edited 2001-01-26 $
+** &#36;Id&#58; qt/examples/qwerty/qwerty.h   2.3.2   edited 2001-01-26 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -94,7 +94,7 @@ private:
   <hr>
 
   Implementation: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/qwerty/qwerty.cpp   2.3.1   edited 2001-01-26 $
+** &#36;Id&#58; qt/examples/qwerty/qwerty.cpp   2.3.2   edited 2001-01-26 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -132,37 +132,37 @@ Editor::Editor( <a href="qwidget.html">QWidget</a> * parent , const char * name 
     CHECK_PTR( file );
     m-&gt;insertItem( "&amp;File", file );
 
-    file-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "&amp;New",   this, SLOT(<a href=#321>newDoc</a>()),   ALT+Key_N );
-    file-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "&amp;Open",  this, SLOT(<a href=#323>load</a>()),     ALT+Key_O );
-    file-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "&amp;Save",  this, SLOT(<a href=#325>save</a>()),     ALT+Key_S );
-    file-&gt;<a href="qmenudata.html#5f2cea">insertSeparator</a>();
+    file-&gt;<a href="qmenudata.html#0076cb">insertItem</a>( "&amp;New",   this, SLOT(<a href=#319>newDoc</a>()),   ALT+Key_N );
+    file-&gt;<a href="qmenudata.html#0076cb">insertItem</a>( "&amp;Open",  this, SLOT(<a href=#321>load</a>()),     ALT+Key_O );
+    file-&gt;<a href="qmenudata.html#0076cb">insertItem</a>( "&amp;Save",  this, SLOT(<a href=#323>save</a>()),     ALT+Key_S );
+    file-&gt;<a href="qmenudata.html#e34b79">insertSeparator</a>();
     open_as = new <a href="qpopupmenu.html">QPopupMenu</a>();
-    file-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "Open &amp;as",  open_as );
+    file-&gt;<a href="qmenudata.html#0076cb">insertItem</a>( "Open &amp;as",  open_as );
     save_as = new <a href="qpopupmenu.html">QPopupMenu</a>();
-    file-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "Save &amp;as",  save_as );
-    file-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "Add &amp;encoding", this, SLOT(<a href=#327>addEncoding</a>()) );
+    file-&gt;<a href="qmenudata.html#0076cb">insertItem</a>( "Save &amp;as",  save_as );
+    file-&gt;<a href="qmenudata.html#0076cb">insertItem</a>( "Add &amp;encoding", this, SLOT(<a href=#325>addEncoding</a>()) );
 #ifndef QT_NO_PRINTER
-    file-&gt;<a href="qmenudata.html#5f2cea">insertSeparator</a>();
-    file-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "&amp;Print", this, SLOT(<a href=#329>print</a>()),    ALT+Key_P );
+    file-&gt;<a href="qmenudata.html#e34b79">insertSeparator</a>();
+    file-&gt;<a href="qmenudata.html#0076cb">insertItem</a>( "&amp;Print", this, SLOT(<a href=#327>print</a>()),    ALT+Key_P );
 #endif
-    file-&gt;<a href="qmenudata.html#5f2cea">insertSeparator</a>();
-    file-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "&amp;Close", this, SLOT(<a href="qwidget.html#8c97df">close</a>()),ALT+Key_W );
-    file-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "&amp;Quit",  qApp, SLOT(closeAllWindows()),     ALT+Key_Q );
+    file-&gt;<a href="qmenudata.html#e34b79">insertSeparator</a>();
+    file-&gt;<a href="qmenudata.html#0076cb">insertItem</a>( "&amp;Close", this, SLOT(<a href="qwidget.html#3d9c87">close</a>()),ALT+Key_W );
+    file-&gt;<a href="qmenudata.html#0076cb">insertItem</a>( "&amp;Quit",  qApp, SLOT(closeAllWindows()),     ALT+Key_Q );
 
-    <a href="qobject.html#c2d209">connect</a>( save_as, SIGNAL(activated(int)), this, SLOT(<a href=#326>saveAsEncoding</a>(int)) );
-    <a href="qobject.html#c2d209">connect</a>( open_as, SIGNAL(activated(int)), this, SLOT(<a href=#324>openAsEncoding</a>(int)) );
-    <a href=#320>rebuildCodecList</a>();
+    <a href="qobject.html#7f8e37">connect</a>( save_as, SIGNAL(activated(int)), this, SLOT(<a href=#324>saveAsEncoding</a>(int)) );
+    <a href="qobject.html#7f8e37">connect</a>( open_as, SIGNAL(activated(int)), this, SLOT(<a href=#322>openAsEncoding</a>(int)) );
+    <a href=#318>rebuildCodecList</a>();
 
     <a href="qpopupmenu.html">QPopupMenu</a> * edit = new <a href="qpopupmenu.html">QPopupMenu</a>();
     CHECK_PTR( edit );
     m-&gt;insertItem( "&amp;Edit", edit );
 
-    edit-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "To &amp;uppercase",   this, SLOT(<a href=#332>toUpper</a>()),   ALT+Key_U );
-    edit-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "To &amp;lowercase",   this, SLOT(<a href=#333>toLower</a>()),   ALT+Key_L );
+    edit-&gt;<a href="qmenudata.html#0076cb">insertItem</a>( "To &amp;uppercase",   this, SLOT(<a href=#330>toUpper</a>()),   ALT+Key_U );
+    edit-&gt;<a href="qmenudata.html#0076cb">insertItem</a>( "To &amp;lowercase",   this, SLOT(<a href=#331>toLower</a>()),   ALT+Key_L );
 
     changed = FALSE;
     e = new <a href="qmultilineedit.html">QMultiLineEdit</a>( this, "editor" );
-    <a href="qobject.html#c2d209">connect</a>( e, SIGNAL( <a href=#334>textChanged</a>() ), this, SLOT( <a href=#334>textChanged</a>() ) );
+    <a href="qobject.html#7f8e37">connect</a>( e, SIGNAL( <a href=#332>textChanged</a>() ), this, SLOT( <a href=#332>textChanged</a>() ) );
 
     // We use Unifont - if you have it installed you'll see all
     // Unicode character glyphs.
@@ -170,7 +170,7 @@ Editor::Editor( <a href="qwidget.html">QWidget</a> * parent , const char * name 
     // Unifont only comes in one pixel size, so we cannot let
     // it change pixel size as the display DPI changes.
     //
-    <a href="qfont.html">QFont</a> unifont("unifont",16,50); unifont.<a href="qfont.html#353e4e">setPixelSize</a>(16);
+    <a href="qfont.html">QFont</a> unifont("unifont",16,50); unifont.<a href="qfont.html#9d3b04">setPixelSize</a>(16);
     e-&gt;setFont( unifont );
 
     e-&gt;setFocus();
@@ -180,7 +180,7 @@ Editor::~Editor()
 {
 }
 
-void <a name="320"></a>Editor::rebuildCodecList()
+void <a name="318"></a>Editor::rebuildCodecList()
 {
     delete codecList;
     codecList = new <a href="qlist.html">QList</a>&lt;<a href="qtextcodec.html">QTextCodec</a>&gt;;
@@ -191,123 +191,123 @@ void <a name="320"></a>Editor::rebuildCodecList()
     int n = codecList-&gt;count();
     for (int pm=0; pm&lt;2; pm++) {
         <a href="qpopupmenu.html">QPopupMenu</a>* menu = pm ? open_as : save_as;
-        menu-&gt;<a href="qmenudata.html#785444">clear</a>();
+        menu-&gt;<a href="qmenudata.html#4bd5e3">clear</a>();
         <a href="qstring.html">QString</a> local = "Local (";
         local += QTextCodec::codecForLocale()-&gt;name();
         local += ")";
-        menu-&gt;<a href="qmenudata.html#43c652">insertItem</a>( local, Local );
-        menu-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "Unicode", Uni );
-        menu-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "Latin1", Lat1 );
-        menu-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "Microsoft Unicode", MBug );
+        menu-&gt;<a href="qmenudata.html#0076cb">insertItem</a>( local, Local );
+        menu-&gt;<a href="qmenudata.html#0076cb">insertItem</a>( "Unicode", Uni );
+        menu-&gt;<a href="qmenudata.html#0076cb">insertItem</a>( "Latin1", Lat1 );
+        menu-&gt;<a href="qmenudata.html#0076cb">insertItem</a>( "Microsoft Unicode", MBug );
         if ( pm )
-            menu-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "[guess]", Guess );
+            menu-&gt;<a href="qmenudata.html#0076cb">insertItem</a>( "[guess]", Guess );
         for ( i = 0; i &lt; n; i++ )
-            menu-&gt;<a href="qmenudata.html#43c652">insertItem</a>( codecList-&gt;at(i)-&gt;name(), Codec + i );
+            menu-&gt;<a href="qmenudata.html#0076cb">insertItem</a>( codecList-&gt;at(i)-&gt;name(), Codec + i );
     }
 }
 
-void <a name="321"></a>Editor::newDoc()
+void <a name="319"></a>Editor::newDoc()
 {
     Editor *ed = new Editor;
     if ( qApp-&gt;desktop()-&gt;size().width() &lt; 450 
          || qApp-&gt;desktop()-&gt;size().height() &lt; 450 ) {
-        ed-&gt;<a href="qwidget.html#400e25">showMaximized</a>();
+        ed-&gt;<a href="qwidget.html#b6e000">showMaximized</a>();
     } else {
-        ed-&gt;<a href="qwidget.html#9775bb">resize</a>( 400, 400 );
-        ed-&gt;<a href="qwidget.html#ccc8f7">show</a>();
+        ed-&gt;<a href="qwidget.html#8fcbbe">resize</a>( 400, 400 );
+        ed-&gt;<a href="qwidget.html#200ee5">show</a>();
     }
 }
 
-void <a name="323"></a>Editor::load()
+void <a name="321"></a>Editor::load()
 {
 #ifndef QT_NO_FILEDIALOG
     <a href="qstring.html">QString</a> fn = QFileDialog::getOpenFileName( QString::null, QString::null, this );
-    if ( !fn.<a href="qstring.html#9a6d7e">isEmpty</a>() )
-        <a href=#323>load</a>( fn, -1 );
+    if ( !fn.<a href="qstring.html#c62623">isEmpty</a>() )
+        <a href=#321>load</a>( fn, -1 );
 #endif    
 }
 
-void <a name="323"></a>Editor::load( const QString&amp; fileName, int code )
+void <a name="321"></a>Editor::load( const QString&amp; fileName, int code )
 {
     <a href="qfile.html">QFile</a> f( fileName );
-    if ( !f.<a href="qfile.html#44ae9b">open</a>( IO_ReadOnly ) )
+    if ( !f.<a href="qfile.html#255995">open</a>( IO_ReadOnly ) )
         return;
 
     e-&gt;setAutoUpdate( FALSE );
 
     <a href="qtextstream.html">QTextStream</a> t(&amp;f);
     if ( code &gt;= Codec )
-        t.<a href="qtextstream.html#6684f8">setCodec</a>( codecList-&gt;at(code-Codec) );
+        t.<a href="qtextstream.html#db3d00">setCodec</a>( codecList-&gt;at(code-Codec) );
     else if ( code == Uni )
-        t.<a href="qtextstream.html#a29f3d">setEncoding</a>( QTextStream::Unicode );
+        t.<a href="qtextstream.html#2c5ab2">setEncoding</a>( QTextStream::Unicode );
     else if ( code == MBug )
-        t.<a href="qtextstream.html#a29f3d">setEncoding</a>( QTextStream::UnicodeReverse );
+        t.<a href="qtextstream.html#2c5ab2">setEncoding</a>( QTextStream::UnicodeReverse );
     else if ( code == Lat1 )
-        t.<a href="qtextstream.html#a29f3d">setEncoding</a>( QTextStream::Latin1 );
+        t.<a href="qtextstream.html#2c5ab2">setEncoding</a>( QTextStream::Latin1 );
     else if ( code == Guess ) {
         <a href="qfile.html">QFile</a> f(fileName);
-        f.<a href="qfile.html#44ae9b">open</a>(IO_ReadOnly);
+        f.<a href="qfile.html#255995">open</a>(IO_ReadOnly);
         char buffer[256];
         int l = 256;
-        l=f.<a href="qfile.html#aa76eb">readBlock</a>(buffer,l);
+        l=f.<a href="qfile.html#8c8ccc">readBlock</a>(buffer,l);
         <a href="qtextcodec.html">QTextCodec</a>* codec = QTextCodec::codecForContent(buffer, l);
         if ( codec ) {
-            <a href="qmessagebox.html#2e454b">QMessageBox::information</a>(this,"Encoding",QString("Codec: ")+codec-&gt;<a href="qtextcodec.html#fcf223">name</a>());
-            t.<a href="qtextstream.html#6684f8">setCodec</a>( codec );
+            <a href="qmessagebox.html#66b7c8">QMessageBox::information</a>(this,"Encoding",QString("Codec: ")+codec-&gt;<a href="qtextcodec.html#150a9d">name</a>());
+            t.<a href="qtextstream.html#db3d00">setCodec</a>( codec );
         }
     }
-    e-&gt;setText( t.<a href="qtextstream.html#8d7b92">read</a>() );
-    f.<a href="qfile.html#e37a87">close</a>();
+    e-&gt;setText( t.<a href="qtextstream.html#4696a5">read</a>() );
+    f.<a href="qfile.html#64e640">close</a>();
 
     e-&gt;setAutoUpdate( TRUE );
     e-&gt;repaint();
-    <a href="qwidget.html#d4f007">setCaption</a>( fileName );
+    <a href="qwidget.html#d6a291">setCaption</a>( fileName );
 
     changed = FALSE;
 }
 
-void <a name="324"></a>Editor::openAsEncoding( int code )
+void <a name="322"></a>Editor::openAsEncoding( int code )
 {
 #ifndef QT_NO_FILEDIALOG
     //storing filename (proper save) is left as an exercise...
     <a href="qstring.html">QString</a> fn = QFileDialog::getOpenFileName( QString::null, QString::null, this );
-    if ( !fn.<a href="qstring.html#9a6d7e">isEmpty</a>() )
+    if ( !fn.<a href="qstring.html#c62623">isEmpty</a>() )
         (void) load( fn, code );
 #endif
 }
 
-bool <a name="325"></a>Editor::save()
+bool <a name="323"></a>Editor::save()
 {
 #ifndef QT_NO_FILEDIALOG
     //storing filename (proper save) is left as an exercise...
     <a href="qstring.html">QString</a> fn = QFileDialog::getSaveFileName( QString::null, QString::null, this );
-    if ( !fn.<a href="qstring.html#9a6d7e">isEmpty</a>() )
+    if ( !fn.<a href="qstring.html#c62623">isEmpty</a>() )
         return saveAs( fn );
     return FALSE;
 #endif
 }
 
-void <a name="326"></a>Editor::saveAsEncoding( int code )
+void <a name="324"></a>Editor::saveAsEncoding( int code )
 {
 #ifndef QT_NO_FILEDIALOG
     //storing filename (proper save) is left as an exercise...
     <a href="qstring.html">QString</a> fn = QFileDialog::getSaveFileName( QString::null, QString::null, this );
-    if ( !fn.<a href="qstring.html#9a6d7e">isEmpty</a>() )
+    if ( !fn.<a href="qstring.html#c62623">isEmpty</a>() )
         (void) saveAs( fn, code );
 #endif
 }
 
-void <a name="327"></a>Editor::addEncoding()
+void <a name="325"></a>Editor::addEncoding()
 {
 #ifndef QT_NO_FILEDIALOG    
     <a href="qstring.html">QString</a> fn = QFileDialog::getOpenFileName( QString::null, "*.map", this );
-    if ( !fn.<a href="qstring.html#9a6d7e">isEmpty</a>() ) {
+    if ( !fn.<a href="qstring.html#c62623">isEmpty</a>() ) {
         <a href="qfile.html">QFile</a> f(fn);
-        if (f.<a href="qfile.html#44ae9b">open</a>(IO_ReadOnly)) {
-            if (<a href="qtextcodec.html#1b8155">QTextCodec::loadCharmap</a>(&amp;f)) {
-                <a href=#320>rebuildCodecList</a>();
+        if (f.<a href="qfile.html#255995">open</a>(IO_ReadOnly)) {
+            if (<a href="qtextcodec.html#f4b1ee">QTextCodec::loadCharmap</a>(&amp;f)) {
+                <a href=#318>rebuildCodecList</a>();
             } else {
-                <a href="qmessagebox.html#b7fab2">QMessageBox::warning</a>(0,"Charmap error",
+                <a href="qmessagebox.html#63edba">QMessageBox::warning</a>(0,"Charmap error",
                     "The file did not contain a valid charmap.\n\n"
                     "A charmap file should look like this:\n"
                        "  &lt;code_set_name&gt; thename\n"
@@ -325,107 +325,107 @@ void <a name="327"></a>Editor::addEncoding()
 #endif
 }
 
-bool <a name="328"></a>Editor::saveAs( const QString&amp; fileName, int code )
+bool <a name="326"></a>Editor::saveAs( const QString&amp; fileName, int code )
 {
     <a href="qfile.html">QFile</a> f( fileName );
-    if ( no_writing || !f.<a href="qfile.html#44ae9b">open</a>( IO_WriteOnly ) ) {
-        <a href="qmessagebox.html#b7fab2">QMessageBox::warning</a>(this,"I/O Error",
+    if ( no_writing || !f.<a href="qfile.html#255995">open</a>( IO_WriteOnly ) ) {
+        <a href="qmessagebox.html#63edba">QMessageBox::warning</a>(this,"I/O Error",
                     <a href="qstring.html">QString</a>("The file could not be opened.\n\n")
                         +fileName);
         return FALSE;
     }
     <a href="qtextstream.html">QTextStream</a> t(&amp;f);
     if ( code &gt;= Codec )
-        t.<a href="qtextstream.html#6684f8">setCodec</a>( codecList-&gt;at(code-Codec) );
+        t.<a href="qtextstream.html#db3d00">setCodec</a>( codecList-&gt;at(code-Codec) );
     else if ( code == Uni )
-        t.<a href="qtextstream.html#a29f3d">setEncoding</a>( QTextStream::Unicode );
+        t.<a href="qtextstream.html#2c5ab2">setEncoding</a>( QTextStream::Unicode );
     else if ( code == MBug )
-        t.<a href="qtextstream.html#a29f3d">setEncoding</a>( QTextStream::UnicodeReverse );
+        t.<a href="qtextstream.html#2c5ab2">setEncoding</a>( QTextStream::UnicodeReverse );
     else if ( code == Lat1 )
-        t.<a href="qtextstream.html#a29f3d">setEncoding</a>( QTextStream::Latin1 );
+        t.<a href="qtextstream.html#2c5ab2">setEncoding</a>( QTextStream::Latin1 );
     t &lt;&lt; e-&gt;text();
-    f.<a href="qfile.html#e37a87">close</a>();
-    <a href="qwidget.html#d4f007">setCaption</a>( fileName );
+    f.<a href="qfile.html#64e640">close</a>();
+    <a href="qwidget.html#d6a291">setCaption</a>( fileName );
     changed = FALSE;
     return TRUE;
 }
 
-void <a name="329"></a>Editor::print()
+void <a name="327"></a>Editor::print()
 {
 #ifndef QT_NO_PRINTER
     if ( printer.setup(this) ) {                // opens printer dialog
         printer.setFullPage(TRUE);              // we'll set our own margins
         <a href="qpainter.html">QPainter</a> p;
-        p.<a href="qpainter.html#59f1bb">begin</a>( &amp;printer );                    // paint on printer
-        p.<a href="qpainter.html#e4d6b7">setFont</a>( e-&gt;font() );
-        <a href="qfontmetrics.html">QFontMetrics</a> fm = p.<a href="qpainter.html#f572a5">fontMetrics</a>();
+        p.<a href="qpainter.html#02ed5d">begin</a>( &amp;printer );                    // paint on printer
+        p.<a href="qpainter.html#998df2">setFont</a>( e-&gt;font() );
+        <a href="qfontmetrics.html">QFontMetrics</a> fm = p.<a href="qpainter.html#73b2e5">fontMetrics</a>();
         <a href="qpaintdevicemetrics.html">QPaintDeviceMetrics</a> metrics( &amp;printer ); // need width/height
                                                  // of printer surface
-        const int MARGIN = metrics.<a href="qpaintdevicemetrics.html#e189ef">logicalDpiX</a>() / 2; // half-inch margin
+        const int MARGIN = metrics.<a href="qpaintdevicemetrics.html#a15e9e">logicalDpiX</a>() / 2; // half-inch margin
         int yPos        = MARGIN;               // y position for each line
 
         for( int i = 0 ; i &lt; e-&gt;numLines() ; i++ ) {
             if ( printer.aborted() )
                 break;
-            if ( yPos + fm.<a href="qfontmetrics.html#ebe056">lineSpacing</a>() &gt; metrics.<a href="qpaintdevicemetrics.html#3792df">height</a>() - MARGIN ) {
+            if ( yPos + fm.<a href="qfontmetrics.html#e6e380">lineSpacing</a>() &gt; metrics.<a href="qpaintdevicemetrics.html#d4fedb">height</a>() - MARGIN ) {
                 // no more room on this page
                 if ( !printer.newPage() )          // start new page
                     break;                           // some error
                 yPos = MARGIN;                   // back to top of page
             }
-            p.<a href="qpainter.html#8a59ed">drawText</a>( MARGIN, yPos, metrics.<a href="qpaintdevicemetrics.html#a53b11">width</a>() - 2*MARGIN,
-                        fm.<a href="qfontmetrics.html#ebe056">lineSpacing</a>(), ExpandTabs, e-&gt;textLine( i ) );
-            yPos += fm.<a href="qfontmetrics.html#ebe056">lineSpacing</a>();
+            p.<a href="qpainter.html#0f088f">drawText</a>( MARGIN, yPos, metrics.<a href="qpaintdevicemetrics.html#95eb7b">width</a>() - 2*MARGIN,
+                        fm.<a href="qfontmetrics.html#e6e380">lineSpacing</a>(), ExpandTabs, e-&gt;textLine( i ) );
+            yPos += fm.<a href="qfontmetrics.html#e6e380">lineSpacing</a>();
         }
-        p.<a href="qpainter.html#c7f9ac">end</a>();                                // send job to printer
+        p.<a href="qpainter.html#365784">end</a>();                                // send job to printer
     }
 #endif
 }
 
-void <a name="330"></a>Editor::resizeEvent( <a href="qresizeevent.html">QResizeEvent</a> * )
+void <a name="328"></a>Editor::resizeEvent( <a href="qresizeevent.html">QResizeEvent</a> * )
 {
     if ( e &amp;&amp; m )
-        e-&gt;setGeometry( 0, m-&gt;height(), <a href="qwidget.html#576663">width</a>(), <a href="qwidget.html#180786">height</a>() - m-&gt;height() );
+        e-&gt;setGeometry( 0, m-&gt;height(), <a href="qwidget.html#2edab1">width</a>(), <a href="qwidget.html#e3c588">height</a>() - m-&gt;height() );
 }
 
-void <a name="331"></a>Editor::closeEvent( <a href="qcloseevent.html">QCloseEvent</a> *event )
+void <a name="329"></a>Editor::closeEvent( <a href="qcloseevent.html">QCloseEvent</a> *event )
 {
-    event-&gt;<a href="qcloseevent.html#47cc57">accept</a>();
+    event-&gt;<a href="qcloseevent.html#7cf66f">accept</a>();
 
     if ( changed ) { // the text has been changed
-        switch ( <a href="qmessagebox.html#b7fab2">QMessageBox::warning</a>( this, "Qwerty",
+        switch ( <a href="qmessagebox.html#63edba">QMessageBox::warning</a>( this, "Qwerty",
                                         "Save changes to Document?",
-                                        <a href="qobject.html#ba30fb">tr</a>("&amp;Yes"),
-                                        <a href="qobject.html#ba30fb">tr</a>("&amp;No"),
-                                        <a href="qobject.html#ba30fb">tr</a>("Cancel"),
+                                        <a href="qobject.html#2418a9">tr</a>("&amp;Yes"),
+                                        <a href="qobject.html#2418a9">tr</a>("&amp;No"),
+                                        <a href="qobject.html#2418a9">tr</a>("Cancel"),
                                         0, 2) ) {
         case 0: // yes
             if ( save() )
-                event-&gt;<a href="qcloseevent.html#47cc57">accept</a>();
+                event-&gt;<a href="qcloseevent.html#7cf66f">accept</a>();
             else
-                event-&gt;<a href="qcloseevent.html#e2007a">ignore</a>();
+                event-&gt;<a href="qcloseevent.html#ee1736">ignore</a>();
             break;
         case 1: // no
-            event-&gt;<a href="qcloseevent.html#47cc57">accept</a>();
+            event-&gt;<a href="qcloseevent.html#7cf66f">accept</a>();
             break;
         default: // cancel
-            event-&gt;<a href="qcloseevent.html#e2007a">ignore</a>();
+            event-&gt;<a href="qcloseevent.html#ee1736">ignore</a>();
             break;
         }
     }
 }
 
-void <a name="332"></a>Editor::toUpper()
+void <a name="330"></a>Editor::toUpper()
 {
     e-&gt;setText(e-&gt;text().upper());
 }
 
-void <a name="333"></a>Editor::toLower()
+void <a name="331"></a>Editor::toLower()
 {
     e-&gt;setText(e-&gt;text().lower());
 }
 
-void <a name="334"></a>Editor::textChanged()
+void <a name="332"></a>Editor::textChanged()
 {
     changed = TRUE;
 }
@@ -436,7 +436,7 @@ void <a name="334"></a>Editor::textChanged()
 
   Main:
 <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/qwerty/main.cpp   2.3.1   edited 2001-01-26 $
+** &#36;Id&#58; qt/examples/qwerty/main.cpp   2.3.2   edited 2001-06-12 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -458,21 +458,22 @@ int main( int argc, char **argv )
     int i;
     for ( i= argc &lt;= 1 ? 0 : 1; i&lt;argc; i++ ) {
         Editor *e = new Editor;
+        e-&gt;<a name="setCaption"></a><a href="qwidget.html#d6a291">setCaption</a>("Qt Example - QWERTY");
         if ( i &gt; 0 )
             e-&gt;load( argv[i] );
         if ( small ) {
-            e-&gt;<a name="showMaximized"></a><a href="qwidget.html#400e25">showMaximized</a>();
+            e-&gt;<a name="showMaximized"></a><a href="qwidget.html#b6e000">showMaximized</a>();
         } else {
-            e-&gt;<a name="resize"></a><a href="qwidget.html#9775bb">resize</a>( 400, 400 );
-            e-&gt;<a name="show"></a><a href="qwidget.html#ccc8f7">show</a>();
+            e-&gt;<a name="resize"></a><a href="qwidget.html#8fcbbe">resize</a>( 400, 400 );
+            e-&gt;<a name="show"></a><a href="qwidget.html#200ee5">show</a>();
         }
     }
-    a.<a name="connect"></a><a href="qobject.html#c2d209">connect</a>( &amp;a, SIGNAL(lastWindowClosed()), &amp;a, SLOT(quit()) );
-    return a.<a name="exec"></a><a href="qapplication.html#7076af">exec</a>();
+    a.<a name="connect"></a><a href="qobject.html#7f8e37">connect</a>( &amp;a, SIGNAL(lastWindowClosed()), &amp;a, SLOT(quit()) );
+    return a.<a name="exec"></a><a href="qapplication.html#84c7bf">exec</a>();
 }
 </pre>
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.1</div>
+<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

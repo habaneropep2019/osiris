@@ -293,8 +293,11 @@ int main( int argc, char *argv[] )
 
     MainWindow *mw = new MainWindow( creatPid );
     a.setMainWidget( mw );
+#if defined(QT_NON_COMMERCIAL)
+    mw->setCaption( "Qt Designer by Trolltech for non-commercial use" );
+#else
     mw->setCaption( "Qt Designer by Trolltech" );
-
+#endif
     mw->show();
 #if defined(_WS_X11_)
     qt_wait_for_window_manager( mw );

@@ -31,7 +31,7 @@ height="100" src="face.png" alt="Home" border="0">
   <hr>
 
   Header file: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/biff/biff.h   2.3.1   edited 2001-01-26 $
+** &#36;Id&#58; qt/examples/biff/biff.h   2.3.2   edited 2001-01-26 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -75,7 +75,7 @@ private:
   biff.cpp implements this custom widget.  Note in particular
   how two images (hasmail_bmp_data and nomail_bmp_data, both from
   bmp.cpp) are included into the executable. <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/biff/biff.cpp   2.3.1   edited 2001-01-26 $
+** &#36;Id&#58; qt/examples/biff/biff.cpp   2.3.2   edited 2001-01-26 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -98,53 +98,53 @@ Biff::Biff( <a href="qwidget.html">QWidget</a> *parent, const char *name )
     : <a href="qwidget.html">QWidget</a>( parent, name, WType_Modal )
 {
     <a href="qfileinfo.html">QFileInfo</a> fi = QString(getenv( "MAIL" ));
-    if ( !fi.<a href="qfileinfo.html#2c4a21">exists</a>() ) {
+    if ( !fi.<a href="qfileinfo.html#a1625c">exists</a>() ) {
         <a href="qstring.html">QString</a> s( "/var/spool/mail/" );
         s += getlogin();
-        fi.<a href="qfileinfo.html#203da2">setFile</a>( s );
+        fi.<a href="qfileinfo.html#4900f7">setFile</a>( s );
     }
 
-    if ( fi.<a href="qfileinfo.html#2c4a21">exists</a>() ) {
-        mailbox = fi.<a href="qfileinfo.html#b060fc">absFilePath</a>();
-        <a href="qobject.html#906d99">startTimer</a>( 1000 );
+    if ( fi.<a href="qfileinfo.html#a1625c">exists</a>() ) {
+        mailbox = fi.<a href="qfileinfo.html#b8684f">absFilePath</a>();
+        <a href="qobject.html#4c6b67">startTimer</a>( 1000 );
     }
 
-    <a href="qwidget.html#378ed6">setMinimumSize</a>( 48, 48 );
-    <a href="qwidget.html#4bfdb7">setMaximumSize</a>( 48, 48 );
-    <a href="qwidget.html#9775bb">resize</a>( 48, 48 );
+    <a href="qwidget.html#c0b5fb">setMinimumSize</a>( 48, 48 );
+    <a href="qwidget.html#c78dce">setMaximumSize</a>( 48, 48 );
+    <a href="qwidget.html#8fcbbe">resize</a>( 48, 48 );
 
     hasNewMail.loadFromData( hasmail_bmp_data, hasmail_bmp_len );
     noNewMail.loadFromData( nomail_bmp_data, nomail_bmp_len );
 
     gotMail = FALSE;
-    lastModified = fi.<a href="qfileinfo.html#901050">lastModified</a>();
+    lastModified = fi.<a href="qfileinfo.html#7187bd">lastModified</a>();
 }
 
-void <a name="380"></a>Biff::timerEvent( <a href="qtimerevent.html">QTimerEvent</a> * )
+void <a name="378"></a>Biff::timerEvent( <a href="qtimerevent.html">QTimerEvent</a> * )
 {
     <a href="qfileinfo.html">QFileInfo</a> fi( mailbox );
-    bool newState = ( fi.<a href="qfileinfo.html#901050">lastModified</a>() != lastModified &amp;&amp;
-                      fi.<a href="qfileinfo.html#901050">lastModified</a>() &gt; fi.<a href="qfileinfo.html#6d014a">lastRead</a>() );
+    bool newState = ( fi.<a href="qfileinfo.html#7187bd">lastModified</a>() != lastModified &amp;&amp;
+                      fi.<a href="qfileinfo.html#7187bd">lastModified</a>() &gt; fi.<a href="qfileinfo.html#258b1f">lastRead</a>() );
     if ( newState != gotMail ) {
         if ( gotMail )
-            lastModified = fi.<a href="qfileinfo.html#901050">lastModified</a>();
+            lastModified = fi.<a href="qfileinfo.html#7187bd">lastModified</a>();
         gotMail = newState;
-        <a href="qwidget.html#977d49">repaint</a>( FALSE );
+        <a href="qwidget.html#7569b1">repaint</a>( FALSE );
     }
 }
 
-void <a name="381"></a>Biff::paintEvent( <a href="qpaintevent.html">QPaintEvent</a> * )
+void <a name="379"></a>Biff::paintEvent( <a href="qpaintevent.html">QPaintEvent</a> * )
 {
     if ( gotMail )
-        <a href="qpaintdevice.html#058006">bitBlt</a>( this, 0, 0, &amp;hasNewMail );
+        <a href="qpaintdevice.html#35ae2e">bitBlt</a>( this, 0, 0, &amp;hasNewMail );
     else
-        <a href="qpaintdevice.html#058006">bitBlt</a>( this, 0, 0, &amp;noNewMail );
+        <a href="qpaintdevice.html#35ae2e">bitBlt</a>( this, 0, 0, &amp;noNewMail );
 }
 
-void <a name="382"></a>Biff::mousePressEvent( <a href="qmouseevent.html">QMouseEvent</a> * )
+void <a name="380"></a>Biff::mousePressEvent( <a href="qmouseevent.html">QMouseEvent</a> * )
 {
     <a href="qfileinfo.html">QFileInfo</a> fi( mailbox );
-    lastModified = fi.<a href="qfileinfo.html#901050">lastModified</a>();
+    lastModified = fi.<a href="qfileinfo.html#7187bd">lastModified</a>();
 }
 </pre>
 
@@ -153,7 +153,7 @@ void <a name="382"></a>Biff::mousePressEvent( <a href="qmouseevent.html">QMouseE
 
   Main:
 <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/biff/main.cpp   2.3.1   edited 2001-01-26 $
+** &#36;Id&#58; qt/examples/biff/main.cpp   2.3.2   edited 2001-01-26 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -169,13 +169,13 @@ int main( int argc, char ** argv )
 {
     <a name="QApplication"></a><a href="qapplication.html">QApplication</a> a( argc, argv );
     Biff b;
-    a.<a name="setMainWidget"></a><a href="qapplication.html#11c921">setMainWidget</a>( &amp;b );
-    b.<a name="show"></a><a href="qwidget.html#ccc8f7">show</a>();
-    return a.<a name="exec"></a><a href="qapplication.html#7076af">exec</a>();
+    a.<a name="setMainWidget"></a><a href="qapplication.html#7ad759">setMainWidget</a>( &amp;b );
+    b.<a name="show"></a><a href="qwidget.html#200ee5">show</a>();
+    return a.<a name="exec"></a><a href="qapplication.html#84c7bf">exec</a>();
 }
 </pre>
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.1</div>
+<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

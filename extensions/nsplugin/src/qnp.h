@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/extensions/nsplugin/src/qnp.h   2.3.1   edited 2001-03-23 $
+** $Id: qt/extensions/nsplugin/src/qnp.h   2.3.2   edited 2001-10-19 $
 **
 ** Definition of Qt extension classes for Netscape Plugin support.
 **
@@ -85,7 +85,7 @@ public:
 
     void setWindow(bool);
     void unsetWindow();
-    void show();
+    void show() { QWidget::show(); }
     virtual void enterInstance();
     virtual void leaveInstance();
 

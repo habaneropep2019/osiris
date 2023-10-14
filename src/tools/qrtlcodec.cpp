@@ -207,6 +207,7 @@ static void reverse(QString &str, unsigned int a, unsigned int b,
     // now, go through it, to see if there is some substring
     // we need to reverse again...
     QChar::Direction opposite = (dir==QChar::DirL ? QChar::DirR : QChar::DirL);
+    if ( b != 0 ) {
     while(a <= b)
     {
 	QChar::Direction d = str.at(a).direction();
@@ -246,6 +247,7 @@ static void reverse(QString &str, unsigned int a, unsigned int b,
 	    }
 	}
 	a++;
+    }
     }
 }
 

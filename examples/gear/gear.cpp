@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/gear/gear.cpp   2.3.1   edited 2001-01-26 $
+** $Id: qt/examples/gear/gear.cpp   2.3.2   edited 2001-06-12 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -292,6 +292,7 @@ int main( int argc, char **argv )
 
     GearWidget w;
     a.setMainWidget( &w );
+    w.setCaption("Qt Example - OpenGL - Gear");
     w.show();
     return a.exec();
 }

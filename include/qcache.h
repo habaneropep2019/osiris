@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qcache.h   2.3.1   edited 2001-01-26 $
+** $Id: qt/src/tools/qcache.h   2.3.2   edited 2001-07-29 $
 **
 ** Definition of QCache template class
 **
@@ -71,8 +71,19 @@ public:
 			{ return (type *)QGCache::find_string(k);}
     void  statistics() const	      { QGCache::statistics(); }
 private:
-    void  deleteItem( Item d )	      { if ( del_item ) delete (type *)d; }
+    void  deleteItem( Item d );
 };
+
+#if defined(Q_DELETING_VOID_UNDEFINED)
+template<> inline void QCache<void>::deleteItem( Item )
+{
+}
+#endif
+
+template<class type> inline void QCache<type>::deleteItem( QCollection::Item d )
+{
+    if ( del_item ) delete (type *)d;
+}
 
 
 

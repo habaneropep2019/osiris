@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qpixmap.cpp   2.3.1   edited 2001-01-26 $
+** $Id: qt/src/kernel/qpixmap.cpp   2.3.2   edited 2001-09-06 $
 **
 ** Implementation of QPixmap class
 **
@@ -311,6 +311,8 @@ QPixmap::QPixmap( const QPixmap &pixmap )
 #elif defined(_WS_X11_)
 	hd = pixmap.hd;				// copy X11 drawable
 	copyX11Data( &pixmap );			// copy x11Data
+#elif defined(_WS_QWS_)
+	hd = pixmap.hd;
 #endif
     }
 }
@@ -383,6 +385,8 @@ QPixmap &QPixmap::operator=( const QPixmap &pixmap )
 #elif defined(_WS_X11_)
 	hd = pixmap.hd;				// copy QPaintDevice drawable
 	copyX11Data( &pixmap );			// copy x11Data
+#elif defined(_WS_QWS_)
+	hd = pixmap.hd;
 #endif
     }
     return *this;

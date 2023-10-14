@@ -1,5 +1,5 @@
 /**********************************************************************
-** $Id: qt/src/widgets/qtableview.cpp   2.3.1   edited 2001-01-26 $
+** $Id: qt/src/widgets/qtableview.cpp   2.3.2   edited 2001-08-15 $
 **
 ** Implementation of QTableView class
 **
@@ -41,6 +41,10 @@
 #include "qpainter.h"
 #include "qdrawutil.h"
 #include <limits.h>
+
+extern void qt_set_paintevent_clipping( QPaintDevice* dev, const QRegion& region);
+extern void qt_clear_paintevent_clipping();
+
 
 enum ScrollBarDirtyFlags {
     verGeometry	  = 0x01,
@@ -268,7 +272,9 @@ void QTableView::repaint( int x, int y, int w, int h, bool erase )
     QPaintEvent e( r );
     if ( erase && backgroundMode() != NoBackground )
 	eraseInPaint = TRUE;			// erase when painting
+    qt_set_paintevent_clipping( this, r );
     paintEvent( &e );
+    qt_clear_paintevent_clipping();
     eraseInPaint = FALSE;
 }
 

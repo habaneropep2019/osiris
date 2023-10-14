@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qwidgetstack.cpp   2.3.1   edited 2001-01-26 $
+** $Id: qt/src/widgets/qwidgetstack.cpp   2.3.2   edited 2001-08-03 $
 **
 ** Implementation of QWidgetStack class
 **
@@ -129,6 +129,9 @@ QWidgetStack::~QWidgetStack()
 
   If \a w is not a child of \c this, QWidgetStack moves it using
   reparent().
+
+  Note that the added children are initially hidden. After you have added the widgets
+  you want to the stack, you may want to call raiseWidget() on one of them.
 */
 
 void QWidgetStack::addWidget( QWidget * w, int id )

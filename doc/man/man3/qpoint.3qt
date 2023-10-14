@@ -1,5 +1,5 @@
 '\" t
-.TH QPoint 3qt "13 June 2001" "Trolltech AS" \" -*- nroff -*-
+.TH QPoint 3qt "29 October 2001" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2001 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -67,22 +67,16 @@ QPoint \- Defines a point in the plane
 (Note that these are not member functions.)
 .in +1c
 .ti -1c
-.BI "QPoint \fBoperator+\fR (const QPoint & " "p1" ", const QPoint & " "p2" ")"
+.BI "QPoint \fBoperator/\fR (const QPoint & " "p" ", double " "c" ")"
 .br
 .ti -1c
 .BI "QPoint \fBoperator*\fR (double " "c" ", const QPoint & " "p" ")"
 .br
 .ti -1c
-.BI "QPoint \fBoperator-\fR (const QPoint & " "p" ")"
-.br
-.ti -1c
-.BI "QDataStream & \fBoperator<<\fR (QDataStream & " "s" ", const QPoint & " "p" ")"
-.br
-.ti -1c
 .BI "QPoint \fBoperator/\fR (const QPoint & " "p" ", int " "c" ")"
 .br
 .ti -1c
-.BI "QPoint \fBoperator*\fR (const QPoint & " "p" ", double " "c" ")"
+.BI "QDataStream & \fBoperator<<\fR (QDataStream & " "s" ", const QPoint & " "p" ")"
 .br
 .ti -1c
 .BI "QPoint \fBoperator*\fR (int " "c" ", const QPoint & " "p" ")"
@@ -91,19 +85,25 @@ QPoint \- Defines a point in the plane
 .BI "QDataStream & \fBoperator>>\fR (QDataStream & " "s" ", QPoint & " "p" ")"
 .br
 .ti -1c
-.BI "bool \fBoperator!=\fR (const QPoint & " "p1" ", const QPoint & " "p2" ")"
-.br
-.ti -1c
-.BI "bool \fBoperator==\fR (const QPoint & " "p1" ", const QPoint & " "p2" ")"
+.BI "QPoint \fBoperator*\fR (const QPoint & " "p" ", double " "c" ")"
 .br
 .ti -1c
 .BI "QPoint \fBoperator*\fR (const QPoint & " "p" ", int " "c" ")"
 .br
 .ti -1c
-.BI "QPoint \fBoperator-\fR (const QPoint & " "p1" ", const QPoint & " "p2" ")"
+.BI "QPoint \fBoperator+\fR (const QPoint & " "p1" ", const QPoint & " "p2" ")"
 .br
 .ti -1c
-.BI "QPoint \fBoperator/\fR (const QPoint & " "p" ", double " "c" ")"
+.BI "bool \fBoperator!=\fR (const QPoint & " "p1" ", const QPoint & " "p2" ")"
+.br
+.ti -1c
+.BI "QPoint \fBoperator-\fR (const QPoint & " "p" ")"
+.br
+.ti -1c
+.BI "bool \fBoperator==\fR (const QPoint & " "p1" ", const QPoint & " "p2" ")"
+.br
+.ti -1c
+.BI "QPoint \fBoperator-\fR (const QPoint & " "p1" ", const QPoint & " "p2" ")"
 .br
 .in -1c
 .SH DESCRIPTION
@@ -288,42 +288,43 @@ Returns the y coordinate of the point.
 .PP
 See also setY() and x().
 .SH RELATED FUNCTION DOCUMENTATION
-.SH "QPoint operator+ (const QPoint & p1, const QPoint & p2)"
-Returns the sum of \fIp1\fR and \fIp2;\fR each component is added separately.
+.SH "QPoint operator/ (const QPoint & p, double c)"
+Returns the QPoint formed by dividing both components of \fIp\fR by \fIc.\fR
+.PP
+Note that the result is truncated.
 .SH "QPoint operator* (double c, const QPoint & p)"
 Returns the QPoint formed by multiplying both components of \fIp\fR by \fIc.\fR
 .PP
 Note that the result is truncated.
-.SH "QPoint operator- (const QPoint & p)"
-Returns the QPoint formed by changing the sign of both components of \fIp,\fR equivalent to \fCQPoint(0,0) - p\fR
+.SH "QPoint operator/ (const QPoint & p, int c)"
+Returns the QPoint formed by dividing both components of \fIp\fR by \fIc.\fR
 .SH "QDataStream & operator<< (QDataStream & s, const QPoint & p)"
 Writes a QPoint to the stream and returns a reference to the stream.
 .PP
 See also Format of the QDataStream operators
-.SH "QPoint operator/ (const QPoint & p, int c)"
-Returns the QPoint formed by dividing both components of \fIp\fR by \fIc.\fR
-.SH "QPoint operator* (const QPoint & p, double c)"
-Returns the QPoint formed by multiplying both components of \fIp\fR by \fIc.\fR
-.PP
-Note that the result is truncated.
 .SH "QPoint operator* (int c, const QPoint & p)"
 Returns the QPoint formed by multiplying both components of \fIp\fR by \fIc.\fR
 .SH "QDataStream & operator>> (QDataStream & s, QPoint & p)"
 Reads a QPoint from the stream and returns a reference to the stream.
 .PP
 See also Format of the QDataStream operators
-.SH "bool operator!= (const QPoint & p1, const QPoint & p2)"
-Returns TRUE if \fIp1\fR and \fIp2\fR are different, or FALSE if they are equal.
-.SH "bool operator== (const QPoint & p1, const QPoint & p2)"
-Returns TRUE if \fIp1\fR and \fIp2\fR are equal, or FALSE if they are different.
-.SH "QPoint operator* (const QPoint & p, int c)"
+.SH "QPoint operator* (const QPoint & p, double c)"
 Returns the QPoint formed by multiplying both components of \fIp\fR by \fIc.\fR
-.SH "QPoint operator- (const QPoint & p1, const QPoint & p2)"
-Returns \fIp2\fR subtracted from \fIp1;\fR each component is subtracted separately.
-.SH "QPoint operator/ (const QPoint & p, double c)"
-Returns the QPoint formed by dividing both components of \fIp\fR by \fIc.\fR
 .PP
 Note that the result is truncated.
+.SH "QPoint operator* (const QPoint & p, int c)"
+Returns the QPoint formed by multiplying both components of \fIp\fR by \fIc.\fR
+.SH "QPoint operator+ (const QPoint & p1, const QPoint & p2)"
+Returns the sum of \fIp1\fR and \fIp2;\fR each component is added separately.
+.SH "bool operator!= (const QPoint & p1, const QPoint & p2)"
+Returns TRUE if \fIp1\fR and \fIp2\fR are different, or FALSE if they are equal.
+.SH "QPoint operator- (const QPoint & p)"
+Returns the QPoint formed by changing the sign of both components of \fIp,\fR equivalent to \fCQPoint(0,0) - p\fR
+.SH "bool operator== (const QPoint & p1, const QPoint & p2)"
+Returns TRUE if \fIp1\fR and \fIp2\fR are equal, or FALSE if they are different.
+.SH "QPoint operator- (const QPoint & p1, const QPoint & p2)"
+Returns \fIp2\fR subtracted from \fIp1;\fR each component is
+subtracted separately.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qpoint.html
 .BR http://www.trolltech.com/faq/tech.html
@@ -342,4 +343,4 @@ In case of content or formattting problems with this manual page, please
 report them to
 .BR qt-bugs@trolltech.com .
 Please include the name of the manual page (qpoint.3qt) and the Qt
-version (2.3.1).
+version (2.3.2).

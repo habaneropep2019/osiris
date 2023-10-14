@@ -23,14 +23,14 @@ TARGET1 = lib$(TARGET).so.$(VER_MAJ)
 
 ####### Files
 
-HEADERS =	
+HEADERS =	grapher.h
 SOURCES =	grapher.cpp
 OBJECTS =	grapher.o
 INTERFACES =    
 UICDECLS =      
 UICIMPLS =      
-SRCMOC	=	grapher.moc
-OBJMOC	=	
+SRCMOC	=	moc_grapher.cpp
+OBJMOC	=	moc_grapher.o
 
 
 ####### Implicit rules
@@ -97,9 +97,12 @@ REQUIRES=
 ####### Compile
 
 grapher.o: grapher.cpp \
-		grapher.moc
+		grapher.h
 
-grapher.moc: grapher.cpp
-	$(MOC) grapher.cpp -o grapher.moc
+moc_grapher.o: moc_grapher.cpp \
+		grapher.h
+
+moc_grapher.cpp: grapher.h
+	$(MOC) grapher.h -o moc_grapher.cpp
 
 

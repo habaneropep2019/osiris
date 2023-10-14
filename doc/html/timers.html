@@ -20,14 +20,14 @@ height="100" src="face.png" alt="Home" border="0">
 </table>
 <h1 align=center> Timers</h1><br clear="all">
 <a href="qobject.html">QObject</a>, the base class of all Qt objects, provides the basic timer
-support in Qt. With <a href="qobject.html#906d99">QObject::startTimer()</a>, you start a timer with
+support in Qt. With <a href="qobject.html#4c6b67">QObject::startTimer()</a>, you start a timer with
 an <em>interval</em> in milliseconds as argument. The function returns a
 unique integer timer id. The timer will now "fire" every <em>interval</em>
-milliseconds, until you explicitly call <a href="qobject.html#f5e328">QObject::killTimer()</a> with
+milliseconds, until you explicitly call <a href="qobject.html#46d1c6">QObject::killTimer()</a> with
 the timer id.
 <p>
 For this mechanism to work, the application has to run in an event
-loop. You start an event loop with <a href="qapplication.html#7076af">QApplication::exec()</a>. When a
+loop. You start an event loop with <a href="qapplication.html#84c7bf">QApplication::exec()</a>. When a
 timer fires, the application sends a QTimerEvent, and the flow of
 control leaves the event loop until the timer event is processed. This
 implies that a timer cannot fire while your application is busy doing
@@ -49,7 +49,7 @@ from a Qt example program:
 <pre>    <a href="qtimer.html">QTimer</a> * counter = new <a href="qtimer.html">QTimer</a>( this );
     connect( counter, SIGNAL(timeout()),
              this, SLOT(updateCaption()) );
-    counter-&gt;<a href="qtimer.html#3aafb5">start</a>( 1000 );
+    counter-&gt;<a href="qtimer.html#ce33bc">start</a>( 1000 );
 </pre>
 <p>
 The counter timer is made into a child of this widget, so that when
@@ -61,7 +61,7 @@ QTimer also provides a simple one-shot timer API.  <a href="qbutton.html">QButto
 to show the button being pressed down and then (0.1 second later) be
 released when the keyboard is used to "press" a button, for example:
 <p>
-<pre>    <a href="qtimer.html#37790c">QTimer::singleShot</a>( 100, this, SLOT(animateTimeout()) );
+<pre>    <a href="qtimer.html#f2ac71">QTimer::singleShot</a>( 100, this, SLOT(animateTimeout()) );
 </pre>
 <p>
 0.1 seconds after this line of code is executed, the same button's
@@ -103,7 +103,7 @@ in a single-threaded application without blocking the user interface.
     Mandelbrot::Mandelbrot( <a href="qobject.html">QObject</a> *parent=0, const char *name )
         : <a href="qobject.html">QObject</a>( parent, name )
     {
-        <a href="qobject.html#c2d209">connect</a>( &amp;timer, SIGNAL(timeout()), SLOT(calculate()) );
+        <a href="qobject.html#7f8e37">connect</a>( &amp;timer, SIGNAL(timeout()), SLOT(calculate()) );
         ...
     }
 
@@ -114,8 +114,8 @@ in a single-threaded application without blocking the user interface.
 
     void Mandelbrot::start()
     {
-        if ( !timer.<a href="qtimer.html#fcc1f2">isActive</a>() )                // not already running
-            timer.<a href="qtimer.html#3aafb5">start</a>( 10 );                  // timeout every 10 ms
+        if ( !timer.<a href="qtimer.html#0abb5f">isActive</a>() )                // not already running
+            timer.<a href="qtimer.html#ce33bc">start</a>( 10 );                  // timeout every 10 ms
     }
 
     //
@@ -127,7 +127,7 @@ in a single-threaded application without blocking the user interface.
     {
         ...                     // perform the calculation for a scanline
         if ( finished ) {       // no more scanlines
-           timer.<a href="qtimer.html#c25cc0">stop</a>();
+           timer.<a href="qtimer.html#7ad213">stop</a>();
            emit done();
         }
     }
@@ -136,6 +136,6 @@ in a single-threaded application without blocking the user interface.
 
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.1</div>
+<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

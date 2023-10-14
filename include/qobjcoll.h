@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/compat/qobjcoll.h   2.3.1   edited 2001-01-26 $
+** $Id: qt/src/compat/qobjcoll.h   2.3.2   edited 2001-01-26 $
 **
 ** Compatibility file - should only be included by legacy code.
 ** It #includes the file which obsoletes this one.
@@ -21,7 +21,7 @@
 **
 *****************************************************************************/
 /****************************************************************************
-** $Id: qt/src/compat/qobjcoll.h   2.3.1   edited 2001-01-26 $
+** $Id: qt/src/compat/qobjcoll.h   2.3.2   edited 2001-01-26 $
 **
 ** Definition of QObject and QMetaObject collections
 **

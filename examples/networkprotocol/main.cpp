@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/networkprotocol/main.cpp   2.3.1   edited 2001-01-26 $
+** $Id: qt/examples/networkprotocol/main.cpp   2.3.2   edited 2001-06-12 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -25,6 +25,7 @@ int main( int argc, char **argv )
     
     View v;
     v.resize( 600, 600 );
+    v.setCaption("Qt Example - Network Protocols");
     v.show();
     a.setMainWidget( &v );
     

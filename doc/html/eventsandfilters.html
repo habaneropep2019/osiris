@@ -20,7 +20,7 @@ height="100" src="face.png" alt="Home" border="0">
 </table>
 <h1 align=center> Events and Event Filters</h1><br clear="all">
 An event, in Qt, is an object that inherits <a href="qevent.html">QEvent</a>.  Events are
-delivered to objects that inherit <a href="qobject.html">QObject</a> through calling <a href="qobject.html#c8b023">QObject::event()</a>.  Event delivery means that an event has occurred, the
+delivered to objects that inherit <a href="qobject.html">QObject</a> through calling <a href="qobject.html#c67adb">QObject::event()</a>.  Event delivery means that an event has occurred, the
 QEvent indicates precisely what, and the QObject needs to react.  Most
 events are specific to <a href="qwidget.html">QWidget</a> and its subclasses, but there are
 important events that aren't related to graphics, such as socket
@@ -37,7 +37,7 @@ Most events types have special classes, most commonly <a href="qresizeevent.html
 There are many others, perhaps forty or so, but most are rather odd.
 <p>
 Each class, <a href="qresizeevent.html">QResizeEvent</a> is an excellent example, subclasses QEvent
-and adds event-specific functions.  In the case of QResizeEvent, <a href="qresizeevent.html#361776">QResizeEvent::size()</a> and <a href="qresizeevent.html#bbae9f">QResizeEvent::oldSize()</a> are added.
+and adds event-specific functions.  In the case of QResizeEvent, <a href="qresizeevent.html#a1e820">QResizeEvent::size()</a> and <a href="qresizeevent.html#9d3d24">QResizeEvent::oldSize()</a> are added.
 <p>
 Some classes support more than one event type.  <a href="qmouseevent.html">QMouseEvent</a>
 supports mouse moves, presses, shift-presses, drags, clicks,
@@ -45,11 +45,11 @@ right-presses, and so on ad infinitum.
 <p>
 Since programs need to react in varied and complicated ways, Qt's
 event delivery mechanisms are rather flexible.  The documentation for
-<a href="qapplication.html#d6093b">QApplication::notify()</a> concisely tells the whole story, here we
+<a href="qapplication.html#80dc5b">QApplication::notify()</a> concisely tells the whole story, here we
 will explain enough for 99% of applications.
 <p>
 The normal way for an event to be delivered is by calling a virtual
-function.  For example, <a href="qpaintevent.html">QPaintEvent</a> is delivered by calling <a href="qwidget.html#ef2069">QWidget::paintEvent()</a>.  This virtual function is responsible for
+function.  For example, <a href="qpaintevent.html">QPaintEvent</a> is delivered by calling <a href="qwidget.html#e3d821">QWidget::paintEvent()</a>.  This virtual function is responsible for
 reacting appropriately, normally by repainting the widget.
 <p>
 Occasionally there isn't a such an event-specific function, or the
@@ -57,36 +57,36 @@ event-specific function isn't sufficient.  The most common example is
 tab key presses.  Normally, those are interpreted by QWidget to move
 the keyboard focus, but a few widgets need the tab key for themselves.
 <p>
-These objects can reimplement <a href="qobject.html#c8b023">QObject::event()</a>, the general event
+These objects can reimplement <a href="qobject.html#c67adb">QObject::event()</a>, the general event
 handler, and either do their event handling before or after the usual
 handling, or replace it completely.  A very odd widget that both
 interprets tab and has an application-specific custom event might
 contain:
 <p>
 <pre>  bool MyClass:event( <a href="qevent.html">QEvent</a> * e ) {
-      if ( e-&gt;<a href="qevent.html#cadf8c">type</a>() == QEvent::KeyPress ) {
+      if ( e-&gt;<a href="qevent.html#4d3e5b">type</a>() == QEvent::KeyPress ) {
           <a href="qkeyevent.html">QKeyEvent</a> * ke = (<a href="qkeyevent.html">QKeyEvent</a>*) e;
-          if ( ke-&gt;<a href="qkeyevent.html#a0a881">key</a>() == Key_Tab ) {
+          if ( ke-&gt;<a href="qkeyevent.html#b1e63d">key</a>() == Key_Tab ) {
               // special tab handling here
               k-&gt;accept();
               return TRUE;
           }
-      } else if ( e-&gt;<a href="qevent.html#cadf8c">type</a>() &gt;= QEvent::User ) {
+      } else if ( e-&gt;<a href="qevent.html#4d3e5b">type</a>() &gt;= QEvent::User ) {
           <a href="qcustomevent.html">QCustomEvent</a> * c = (<a href="qcustomevent.html">QCustomEvent</a>*) e;
           // custom event handling here
           return TRUE;
       }
-      <a href="qwidget.html#f30772">QWidget::event</a>( e );
+      <a href="qwidget.html#6ff658">QWidget::event</a>( e );
   }
 </pre>
 <p>
 More commonly, an object needs to look at another's events.  Qt
-supports this using <a href="qobject.html#b59963">QObject::installEventFilter()</a> (and the
+supports this using <a href="qobject.html#185219">QObject::installEventFilter()</a> (and the
 corresponding remove).  For example, dialogs commonly want to filter
 key presses for some widgets, e.g. to modify Return-key handling.
 <p>
 An event filter gets to process events before the target object does.
-The filter's <a href="qobject.html#bb8547">QObject::eventFilter()</a> implementation is called, and
+The filter's <a href="qobject.html#bd20fe">QObject::eventFilter()</a> implementation is called, and
 can accept or reject the filter, and allow or deny further processing
 of the event.  If all the event filters allow further processing of an
 event, the event is sent to the target object itself.  If one of them
@@ -105,7 +105,7 @@ filters.
 Finally, many applications want to create and send their own events.
 <p>
 Creating an event of a built-in type is very simple: Create an object
-of the relevant type, and then call <a href="qapplication.html#5a43f0">QApplication::sendEvent()</a> or <a href="qapplication.html#552386">QApplication::postEvent()</a>.
+of the relevant type, and then call <a href="qapplication.html#333290">QApplication::sendEvent()</a> or <a href="qapplication.html#96d77e">QApplication::postEvent()</a>.
 <p>
 sendEvent() processes the event immediately - when sendEvent()
 returns, (the event filters and) the object have already processed the
@@ -116,7 +116,7 @@ handler that was called.
 postEvent() posts the event on a queue for later dispatch.  The next
 time Qt's main event loop runs, it dispatches all posted events, with
 some optimization.  For example, if there are several resize events,
-they are are compacted into one.  The same applies to paint events: <a href="qwidget.html#4a97ef">QWidget::update()</a> calls postEvent(), which minimizes flickering and
+they are are compacted into one.  The same applies to paint events: <a href="qwidget.html#a66a88">QWidget::update()</a> calls postEvent(), which minimizes flickering and
 increases speed by avoiding multiple repaints.
 <p>
 postEvent() is also often used during object initialization, since the
@@ -131,6 +131,6 @@ details.
 
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.1</div>
+<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

@@ -1,5 +1,5 @@
 '\" t
-.TH QCString 3qt "13 June 2001" "Trolltech AS" \" -*- nroff -*-
+.TH QCString 3qt "29 October 2001" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2001 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -204,43 +204,22 @@ Inherits QByteArray.
 (Note that these are not member functions.)
 .in +1c
 .ti -1c
-.BI "int \fBqstrcmp\fR (const char * " "str1" ", const char * " "str2" ")"
-.br
-.ti -1c
 .BI "bool \fBoperator!=\fR (const QCString & " "s1" ", const char * " "s2" ")"
 .br
 .ti -1c
-.BI "bool \fBoperator!=\fR (const char * " "s1" ", const QCString & " "s2" ")"
+.BI "int \fBqstricmp\fR (const char * " "str1" ", const char * " "str2" ")"
 .br
 .ti -1c
-.BI "bool \fBoperator==\fR (const char * " "s1" ", const QCString & " "s2" ")"
+.BI "bool \fBoperator<\fR (const QCString & " "s1" ", const char * " "s2" ")"
 .br
 .ti -1c
-.BI "char * \fBqstrncpy\fR (char * " "dst" ", const char * " "src" ", uint " "len" ")"
+.BI "bool \fBoperator==\fR (const QCString & " "s1" ", const char * " "s2" ")"
 .br
 .ti -1c
-.BI "QDataStream & \fBoperator<<\fR (QDataStream & " "s" ", const QCString & " "str" ")"
+.BI "int \fBqstrncmp\fR (const char * " "str1" ", const char * " "str2" ", uint " "len" ")"
 .br
 .ti -1c
-.BI "bool \fBoperator<\fR (const char * " "s1" ", const QCString & " "s2" ")"
-.br
-.ti -1c
-.BI "void * \fBmemmove\fR (void * " "dst" ", const void * " "src" ", uint " "len" ")"
-.br
-.ti -1c
-.BI "bool \fBoperator>\fR (const char * " "s1" ", const QCString & " "s2" ")"
-.br
-.ti -1c
-.BI "QDataStream & \fBoperator>>\fR (QDataStream & " "s" ", QCString & " "str" ")"
-.br
-.ti -1c
-.BI "bool \fBoperator<=\fR (const QCString & " "s1" ", const char * " "s2" ")"
-.br
-.ti -1c
-.BI "bool \fBoperator!=\fR (const QCString & " "s1" ", const QCString & " "s2" ")"
-.br
-.ti -1c
-.BI "bool \fBoperator<=\fR (const char * " "s1" ", const QCString & " "s2" ")"
+.BI "QCString \fBoperator+\fR (const QCString & " "s1" ", const QCString & " "s2" ")"
 .br
 .ti -1c
 .BI "bool \fBoperator>=\fR (const char * " "s1" ", const QCString & " "s2" ")"
@@ -249,43 +228,64 @@ Inherits QByteArray.
 .BI "QCString \fBoperator+\fR (const QCString & " "s" ", char " "c" ")"
 .br
 .ti -1c
-.BI "int \fBqstricmp\fR (const char * " "str1" ", const char * " "str2" ")"
-.br
-.ti -1c
-.BI "QCString \fBoperator+\fR (const QCString & " "s1" ", const QCString & " "s2" ")"
-.br
-.ti -1c
 .BI "int \fBstrnicmp\fR (const char * " "str1" ", const char * " "str2" ", uint " "len" ")"
 .br
 .ti -1c
-.BI "char * \fBqstrdup\fR (const char * " "str" ")"
+.BI "char * \fBqstrncpy\fR (char * " "dst" ", const char * " "src" ", uint " "len" ")"
 .br
 .ti -1c
-.BI "QCString \fBoperator+\fR (char " "c" ", const QCString & " "s" ")"
-.br
-.ti -1c
-.BI "bool \fBoperator>=\fR (const QCString & " "s1" ", const char * " "s2" ")"
-.br
-.ti -1c
-.BI "bool \fBoperator==\fR (const QCString & " "s1" ", const char * " "s2" ")"
+.BI "void * \fBmemmove\fR (void * " "dst" ", const void * " "src" ", uint " "len" ")"
 .br
 .ti -1c
 .BI "bool \fBoperator>\fR (const QCString & " "s1" ", const char * " "s2" ")"
 .br
 .ti -1c
-.BI "QCString \fBoperator+\fR (const QCString & " "s1" ", const char * " "s2" ")"
+.BI "QDataStream & \fBoperator<<\fR (QDataStream & " "s" ", const QCString & " "str" ")"
 .br
 .ti -1c
-.BI "bool \fBoperator<\fR (const QCString & " "s1" ", const char * " "s2" ")"
-.br
-.ti -1c
-.BI "int \fBqstrncmp\fR (const char * " "str1" ", const char * " "str2" ", uint " "len" ")"
+.BI "bool \fBoperator<=\fR (const char * " "s1" ", const QCString & " "s2" ")"
 .br
 .ti -1c
 .BI "QCString \fBoperator+\fR (const char * " "s1" ", const QCString & " "s2" ")"
 .br
 .ti -1c
+.BI "bool \fBoperator>\fR (const char * " "s1" ", const QCString & " "s2" ")"
+.br
+.ti -1c
+.BI "bool \fBoperator<=\fR (const QCString & " "s1" ", const char * " "s2" ")"
+.br
+.ti -1c
+.BI "QDataStream & \fBoperator>>\fR (QDataStream & " "s" ", QCString & " "str" ")"
+.br
+.ti -1c
+.BI "bool \fBoperator==\fR (const char * " "s1" ", const QCString & " "s2" ")"
+.br
+.ti -1c
+.BI "bool \fBoperator>=\fR (const QCString & " "s1" ", const char * " "s2" ")"
+.br
+.ti -1c
+.BI "QCString \fBoperator+\fR (char " "c" ", const QCString & " "s" ")"
+.br
+.ti -1c
+.BI "bool \fBoperator<\fR (const char * " "s1" ", const QCString & " "s2" ")"
+.br
+.ti -1c
+.BI "int \fBqstrcmp\fR (const char * " "str1" ", const char * " "str2" ")"
+.br
+.ti -1c
+.BI "bool \fBoperator!=\fR (const QCString & " "s1" ", const QCString & " "s2" ")"
+.br
+.ti -1c
+.BI "QCString \fBoperator+\fR (const QCString & " "s1" ", const char * " "s2" ")"
+.br
+.ti -1c
+.BI "char * \fBqstrdup\fR (const char * " "str" ")"
+.br
+.ti -1c
 .BI "bool \fBoperator==\fR (const QCString & " "s1" ", const QCString & " "s2" ")"
+.br
+.ti -1c
+.BI "bool \fBoperator!=\fR (const char * " "s1" ", const QCString & " "s2" ")"
 .br
 .in -1c
 .SH DESCRIPTION
@@ -793,72 +793,10 @@ Example:
 .PP
 See also lower().
 .SH RELATED FUNCTION DOCUMENTATION
-.SH "int qstrcmp (const char * str1, const char * str2)"
-A safe strcmp() function.
-.PP
-Compares \fIstr1\fR and \fIstr2.\fR Returns a negative value if \fIstr1\fR is less than \fIstr2,\fR 0 if \fIstr1\fR is equal to \fIstr2\fR or a positive value if \fIstr1\fR is greater than \fIstr2.\fR
-.PP
-Special case I: Returns 0 if \fIstr1\fR and \fIstr2\fR are both null.
-.PP
-Special case II: Returns a random nonzero value if \fIstr1\fR is null or \fIstr2\fR is null (but not both).
-.PP
-See also qstrncmp(), qstricmp() and qstrnicmp().
 .SH "bool operator!= (const QCString & s1, const char * s2)"
 Returns TRUE if the two strings are different, or FALSE if they are equal.
 .PP
 Equivalent to \fCqstrcmp(s1,s2) != 0\fR
-.SH "bool operator!= (const char * s1, const QCString & s2)"
-Returns TRUE if the two strings are different, or FALSE if they are equal.
-.PP
-Equivalent to \fCqstrcmp(s1,s2) != 0\fR
-.SH "bool operator== (const char * s1, const QCString & s2)"
-Returns TRUE if the two strings are equal, or FALSE if they are different.
-.PP
-Equivalent to \fCqstrcmp(s1,s2) == 0\fR
-.SH "char * qstrncpy (char * dst, const char * src, uint len)"
-A safe strncpy() function.
-.PP
-Copies all characters up to \fIlen\fR bytes from \fIstr\fR into \fIdst\fR and returns a pointer to \fIdst.\fR Guarantees that \fIdst\fR is \\0-terminated. If \fIsrc\fR is null, it immediately returns 0.
-.PP
-See also qstrcpy().
-.SH "QDataStream & operator<< (QDataStream & s, const QCString & str)"
-Writes a string to the stream.
-.PP
-See also Format of the QDataStream operators
-.SH "bool operator< (const char * s1, const QCString & s2)"
-Returns TRUE if \fIs1\fR is alphabetically less than \fIs2,\fR otherwise FALSE.
-.PP
-Equivalent to \fCqstrcmp(s1,s2) < 0\fR
-.SH "void * memmove (void * dst, const void * src, uint len)"
-This function is normally part of the C library. Qt implements memmove() for platforms that do not have it.
-.PP
-memmove() copies \fIlen\fR bytes from \fIsrc\fR into \fIdst.\fR The data is copied correctly even if \fIsrc\fR and \fIdst\fR overlap.
-.SH "bool operator> (const char * s1, const QCString & s2)"
-Returns TRUE if \fIs1\fR is alphabetically greater than \fIs2,\fR otherwise FALSE.
-.PP
-Equivalent to \fCqstrcmp(s1,s2) > 0\fR
-.SH "QDataStream & operator>> (QDataStream & s, QCString & str)"
-Reads a string from the stream.
-.PP
-See also Format of the QDataStream operators
-.SH "bool operator<= (const QCString & s1, const char * s2)"
-Returns TRUE if \fIs1\fR is alphabetically less than or equal to \fIs2,\fR otherwise FALSE.
-.PP
-Equivalent to \fCqstrcmp(s1,s2) <= 0\fR
-.SH "bool operator!= (const QCString & s1, const QCString & s2)"
-Returns TRUE if the two strings are different, or FALSE if they are equal.
-.PP
-Equivalent to \fCqstrcmp(s1,s2) != 0\fR
-.SH "bool operator<= (const char * s1, const QCString & s2)"
-Returns TRUE if \fIs1\fR is alphabetically less than or equal to \fIs2,\fR otherwise FALSE.
-.PP
-Equivalent to \fCqstrcmp(s1,s2) <= 0\fR
-.SH "bool operator>= (const char * s1, const QCString & s2)"
-Returns TRUE if \fIs1\fR is alphabetically greater than or equal to \fIs2,\fR otherwise FALSE.
-.PP
-Equivalent to \fCqstrcmp(s1,s2) >= 0\fR
-.SH "QCString operator+ (const QCString & s, char c)"
-Returns the concatenated string of s and c.
 .SH "int qstricmp (const char * str1, const char * str2)"
 A safe stricmp() function.
 .PP
@@ -871,44 +809,14 @@ Special case I: Returns 0 if \fIstr1\fR and \fIstr2\fR are both null.
 Special case II: Returns a random nonzero value if \fIstr1\fR is null or \fIstr2\fR is null (but not both).
 .PP
 See also qstrcmp(), qstrncmp() and qstrnicmp().
-.SH "QCString operator+ (const QCString & s1, const QCString & s2)"
-Returns the concatenated string of s1 and s2.
-.SH "int strnicmp (const char * str1, const char * str2, uint len)"
-A safe strnicmp() function.
-.PP
-Compares \fIstr1\fR and \fIstr2\fR up to \fIlen\fR bytes ignoring the case.
-.PP
-Returns a negative value if \fIstr1\fR is less than \fIstr2,\fR 0 if \fIstr1\fR is equal to \fIstr2\fR or a positive value if \fIstr1\fR is greater than \fIstr2.\fR
-.PP
-Special case I: Returns 0 if \fIstr1\fR and \fIstr2\fR are both null.
-.PP
-Special case II: Returns a random nonzero value if \fIstr1\fR is null or \fIstr2\fR is null (but not both).
-.PP
-See also qstrcmp(), qstrncmp() and qstricmp().
-.SH "char * qstrdup (const char * str)"
-Returns a duplicate string.
-.PP
-Allocates space for a copy of \fIstr\fR (using \fCnew),\fR copies it, and returns a pointer to the copy. If \fIsrc\fR is null, it immediately returns 0.
-.SH "QCString operator+ (char c, const QCString & s)"
-Returns the concatenated string of c and s.
-.SH "bool operator>= (const QCString & s1, const char * s2)"
-Returns TRUE if \fIs1\fR is alphabetically greater than or equal to \fIs2,\fR otherwise FALSE.
-.PP
-Equivalent to \fCqstrcmp(s1,s2) >= 0\fR
-.SH "bool operator== (const QCString & s1, const char * s2)"
-Returns TRUE if the two strings are equal, or FALSE if they are different.
-.PP
-Equivalent to \fCqstrcmp(s1,s2) == 0\fR
-.SH "bool operator> (const QCString & s1, const char * s2)"
-Returns TRUE if \fIs1\fR is alphabetically greater than \fIs2,\fR otherwise FALSE.
-.PP
-Equivalent to \fCqstrcmp(s1,s2) > 0\fR
-.SH "QCString operator+ (const QCString & s1, const char * s2)"
-Returns the concatenated string of s1 and s2.
 .SH "bool operator< (const QCString & s1, const char * s2)"
 Returns TRUE if \fIs1\fR is alphabetically less than \fIs2,\fR otherwise FALSE.
 .PP
 Equivalent to \fCqstrcmp(s1,s2) < 0\fR
+.SH "bool operator== (const QCString & s1, const char * s2)"
+Returns TRUE if the two strings are equal, or FALSE if they are different.
+.PP
+Equivalent to \fCqstrcmp(s1,s2) == 0\fR
 .SH "int qstrncmp (const char * str1, const char * str2, uint len)"
 A safe strncmp() function.
 .PP
@@ -921,12 +829,104 @@ Special case I: Returns 0 if \fIstr1\fR and \fIstr2\fR are both null.
 Special case II: Returns a random nonzero value if \fIstr1\fR is null or \fIstr2\fR is null (but not both).
 .PP
 See also qstrcmp(), qstricmp() and qstrnicmp().
+.SH "QCString operator+ (const QCString & s1, const QCString & s2)"
+Returns the concatenated string of s1 and s2.
+.SH "bool operator>= (const char * s1, const QCString & s2)"
+Returns TRUE if \fIs1\fR is alphabetically greater than or equal to \fIs2,\fR otherwise FALSE.
+.PP
+Equivalent to \fCqstrcmp(s1,s2) >= 0\fR
+.SH "QCString operator+ (const QCString & s, char c)"
+Returns the concatenated string of s and c.
+.SH "int strnicmp (const char * str1, const char * str2, uint len)"
+A safe strnicmp() function.
+.PP
+Compares \fIstr1\fR and \fIstr2\fR up to \fIlen\fR bytes ignoring the case.
+.PP
+Returns a negative value if \fIstr1\fR is less than \fIstr2,\fR 0 if \fIstr1\fR is equal to \fIstr2\fR or a positive value if \fIstr1\fR is greater than \fIstr2.\fR
+.PP
+Special case I: Returns 0 if \fIstr1\fR and \fIstr2\fR are both null.
+.PP
+Special case II: Returns a random nonzero value if \fIstr1\fR is null or \fIstr2\fR is null (but not both).
+.PP
+See also qstrcmp(), qstrncmp() and qstricmp().
+.SH "char * qstrncpy (char * dst, const char * src, uint len)"
+A safe strncpy() function.
+.PP
+Copies all characters up to \fIlen\fR bytes from \fIstr\fR into \fIdst\fR and returns a pointer to \fIdst.\fR Guarantees that \fIdst\fR is \\0-terminated. If \fIsrc\fR is null, it immediately returns 0.
+.PP
+See also qstrcpy().
+.SH "void * memmove (void * dst, const void * src, uint len)"
+This function is normally part of the C library. Qt implements memmove() for platforms that do not have it.
+.PP
+memmove() copies \fIlen\fR bytes from \fIsrc\fR into \fIdst.\fR The data is copied correctly even if \fIsrc\fR and \fIdst\fR overlap.
+.SH "bool operator> (const QCString & s1, const char * s2)"
+Returns TRUE if \fIs1\fR is alphabetically greater than \fIs2,\fR otherwise FALSE.
+.PP
+Equivalent to \fCqstrcmp(s1,s2) > 0\fR
+.SH "QDataStream & operator<< (QDataStream & s, const QCString & str)"
+Writes a string to the stream.
+.PP
+See also Format of the QDataStream operators
+.SH "bool operator<= (const char * s1, const QCString & s2)"
+Returns TRUE if \fIs1\fR is alphabetically less than or equal to \fIs2,\fR otherwise FALSE.
+.PP
+Equivalent to \fCqstrcmp(s1,s2) <= 0\fR
 .SH "QCString operator+ (const char * s1, const QCString & s2)"
 Returns the concatenated string of s1 and s2.
+.SH "bool operator> (const char * s1, const QCString & s2)"
+Returns TRUE if \fIs1\fR is alphabetically greater than \fIs2,\fR otherwise FALSE.
+.PP
+Equivalent to \fCqstrcmp(s1,s2) > 0\fR
+.SH "bool operator<= (const QCString & s1, const char * s2)"
+Returns TRUE if \fIs1\fR is alphabetically less than or equal to \fIs2,\fR otherwise FALSE.
+.PP
+Equivalent to \fCqstrcmp(s1,s2) <= 0\fR
+.SH "QDataStream & operator>> (QDataStream & s, QCString & str)"
+Reads a string from the stream.
+.PP
+See also Format of the QDataStream operators
+.SH "bool operator== (const char * s1, const QCString & s2)"
+Returns TRUE if the two strings are equal, or FALSE if they are different.
+.PP
+Equivalent to \fCqstrcmp(s1,s2) == 0\fR
+.SH "bool operator>= (const QCString & s1, const char * s2)"
+Returns TRUE if \fIs1\fR is alphabetically greater than or equal to \fIs2,\fR otherwise FALSE.
+.PP
+Equivalent to \fCqstrcmp(s1,s2) >= 0\fR
+.SH "QCString operator+ (char c, const QCString & s)"
+Returns the concatenated string of c and s.
+.SH "bool operator< (const char * s1, const QCString & s2)"
+Returns TRUE if \fIs1\fR is alphabetically less than \fIs2,\fR otherwise FALSE.
+.PP
+Equivalent to \fCqstrcmp(s1,s2) < 0\fR
+.SH "int qstrcmp (const char * str1, const char * str2)"
+A safe strcmp() function.
+.PP
+Compares \fIstr1\fR and \fIstr2.\fR Returns a negative value if \fIstr1\fR is less than \fIstr2,\fR 0 if \fIstr1\fR is equal to \fIstr2\fR or a positive value if \fIstr1\fR is greater than \fIstr2.\fR
+.PP
+Special case I: Returns 0 if \fIstr1\fR and \fIstr2\fR are both null.
+.PP
+Special case II: Returns a random nonzero value if \fIstr1\fR is null or \fIstr2\fR is null (but not both).
+.PP
+See also qstrncmp(), qstricmp() and qstrnicmp().
+.SH "bool operator!= (const QCString & s1, const QCString & s2)"
+Returns TRUE if the two strings are different, or FALSE if they are equal.
+.PP
+Equivalent to \fCqstrcmp(s1,s2) != 0\fR
+.SH "QCString operator+ (const QCString & s1, const char * s2)"
+Returns the concatenated string of s1 and s2.
+.SH "char * qstrdup (const char * str)"
+Returns a duplicate string.
+.PP
+Allocates space for a copy of \fIstr\fR (using \fCnew),\fR copies it, and returns a pointer to the copy. If \fIsrc\fR is null, it immediately returns 0.
 .SH "bool operator== (const QCString & s1, const QCString & s2)"
 Returns TRUE if the two strings are equal, or FALSE if they are different.
 .PP
 Equivalent to \fCqstrcmp(s1,s2) == 0\fR
+.SH "bool operator!= (const char * s1, const QCString & s2)"
+Returns TRUE if the two strings are different, or FALSE if they are equal.
+.PP
+Equivalent to \fCqstrcmp(s1,s2) != 0\fR
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qcstring.html
 .BR http://www.trolltech.com/faq/tech.html
@@ -945,4 +945,4 @@ In case of content or formattting problems with this manual page, please
 report them to
 .BR qt-bugs@trolltech.com .
 Please include the name of the manual page (qcstring.3qt) and the Qt
-version (2.3.1).
+version (2.3.2).

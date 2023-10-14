@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qslider.cpp   2.3.1   edited 2001-05-25 $
+** $Id: qt/src/widgets/qslider.cpp   2.3.2   edited 2001-06-26 $
 **
 ** Implementation of QSlider class
 **
@@ -647,6 +647,7 @@ void QSlider::wheelEvent( QWheelEvent * e){
 	return;
     setValue( value() + int(offset) );
     offset -= int(offset);
+    e->accept();
 }
 
 

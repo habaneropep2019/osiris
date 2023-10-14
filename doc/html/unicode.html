@@ -70,19 +70,19 @@ provides Unicode even on Windows platforms that do not support it
 <p>
 To obtain the benefits of Unicode, we recommend using QString for
 storing all user-visible strings and do all text file I/O using
-QTextStream.  Use <a href="qkeyevent.html#a81611">QKeyEvent::text()</a> for keyboard input in any
+QTextStream.  Use <a href="qkeyevent.html#882dd8">QKeyEvent::text()</a> for keyboard input in any
 custom widgets you write; it does not make much difference for slow
 typists in West Europe or North America, but for fast typists or
 people using special input methods using text() is beneficial.
 <p>
-All the function arguments in Qt that may be user-visible strings, <a href="qlabel.html#dffb43">QLabel::setText()</a> and a thousand others, take <code>const</code> <code>QString</code> <code>&</code>
+All the function arguments in Qt that may be user-visible strings, <a href="qlabel.html#bc5ea6">QLabel::setText()</a> and a thousand others, take <code>const</code> <code>QString</code> <code>&</code>
 as type.  <a href="qstring.html">QString</a> provides implicit casting from <code>const</code> <code>char</code>
 <code>*</code> such that things like
 <p>
 <pre>        myLabel-&gt;setText( "Hello, Dolly!" );
 </pre>
 <p>
-will work.  There is also a function, <a href="qobject.html#ba30fb">QObject::tr()</a>, that provides
+will work.  There is also a function, <a href="qobject.html#2418a9">QObject::tr()</a>, that provides
 translation support, like this:
 <p>
 <pre>        myLabel-&gt;setText( tr("Hello, Dolly!") );
@@ -108,7 +108,7 @@ Since US-ASCII and ISO-8859-1 are so common, there are also specially
 fast functions for mapping to and from them.  For example, to open an
 application's icon one might do this:
 <p>
-<pre>        <a href="qfile.html">QFile</a> f( <a href="qstring.html#8d722f">QString::fromLatin1</a>("appicon.png") );
+<pre>        <a href="qfile.html">QFile</a> f( <a href="qstring.html#0b1906">QString::fromLatin1</a>("appicon.png") );
 </pre>
 <p>
 Regarding output, Qt will do a best-effort conversion from Unicode to
@@ -120,6 +120,6 @@ first.
 
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.1</div>
+<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

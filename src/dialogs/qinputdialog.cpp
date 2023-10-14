@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/dialogs/qinputdialog.cpp   2.3.1   edited 2001-03-07 $
+** $Id: qt/src/dialogs/qinputdialog.cpp   2.3.2   edited 2001-03-07 $
 **
 ** Implementation of QInputDialog class
 **

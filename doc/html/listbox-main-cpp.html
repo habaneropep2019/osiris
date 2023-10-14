@@ -31,7 +31,7 @@ height="100" src="face.png" alt="Home" border="0">
   <hr>
 
   Header file: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/listbox/listbox.h   2.3.1   edited 2001-01-26 $
+** &#36;Id&#58; qt/examples/listbox/listbox.h   2.3.2   edited 2001-01-26 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -81,7 +81,7 @@ private:
   <hr>
 
   Implementation: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/listbox/listbox.cpp   2.3.1   edited 2001-01-26 $
+** &#36;Id&#58; qt/examples/listbox/listbox.cpp   2.3.2   edited 2001-01-26 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -106,15 +106,15 @@ ListBoxDemo::ListBoxDemo()
 {
     <a href="qgridlayout.html">QGridLayout</a> * g = new <a href="qgridlayout.html">QGridLayout</a>( this, 2, 2, 6 );
 
-    g-&gt;<a href="qgridlayout.html#70abf2">addWidget</a>( new QLabel( "&lt;b&gt;Configuration:&lt;/b&gt;", this ), 0, 0 );
-    g-&gt;<a href="qgridlayout.html#70abf2">addWidget</a>( new QLabel( "&lt;b&gt;Result:&lt;/b&gt;", this ), 0, 1 );
+    g-&gt;<a href="qgridlayout.html#dac29c">addWidget</a>( new QLabel( "&lt;b&gt;Configuration:&lt;/b&gt;", this ), 0, 0 );
+    g-&gt;<a href="qgridlayout.html#dac29c">addWidget</a>( new QLabel( "&lt;b&gt;Result:&lt;/b&gt;", this ), 0, 1 );
 
     l = new <a href="qlistbox.html">QListBox</a>( this );
-    g-&gt;<a href="qgridlayout.html#70abf2">addWidget</a>( l, 1, 1 );
+    g-&gt;<a href="qgridlayout.html#dac29c">addWidget</a>( l, 1, 1 );
     l-&gt;setFocusPolicy( QWidget::StrongFocus );
 
     <a href="qvboxlayout.html">QVBoxLayout</a> * v = new <a href="qvboxlayout.html">QVBoxLayout</a>;
-    g-&gt;<a href="qgridlayout.html#7fc9ea">addLayout</a>( v, 1, 0 );
+    g-&gt;<a href="qgridlayout.html#a409bc">addLayout</a>( v, 1, 0 );
 
     <a href="qradiobutton.html">QRadioButton</a> * b;
     bg = new <a href="qbuttongroup.html">QButtonGroup</a>( 0 );
@@ -123,89 +123,89 @@ ListBoxDemo::ListBoxDemo()
                           "as many rows as needed.",
                           this );
     bg-&gt;insert( b );
-    v-&gt;<a href="qboxlayout.html#219265">addWidget</a>( b );
-    b-&gt;<a href="qradiobutton.html#11e2e3">setChecked</a>( TRUE );
-    <a href="qobject.html#c2d209">connect</a>( b, SIGNAL(clicked()), this, SLOT(<a href=#257>setNumCols</a>()) );
+    v-&gt;<a href="qboxlayout.html#ebba99">addWidget</a>( b );
+    b-&gt;<a href="qradiobutton.html#0e50fc">setChecked</a>( TRUE );
+    <a href="qobject.html#7f8e37">connect</a>( b, SIGNAL(clicked()), this, SLOT(<a href=#255>setNumCols</a>()) );
     <a href="qhboxlayout.html">QHBoxLayout</a> * h = new <a href="qhboxlayout.html">QHBoxLayout</a>;
-    v-&gt;<a href="qboxlayout.html#7a3fdc">addLayout</a>( h );
-    h-&gt;<a href="qboxlayout.html#488ad0">addSpacing</a>( 30 );
-    h-&gt;<a href="qboxlayout.html#488ad0">addSpacing</a>( 100 );
-    h-&gt;<a href="qboxlayout.html#219265">addWidget</a>( new QLabel( "Columns:", this ) );
+    v-&gt;<a href="qboxlayout.html#6ff301">addLayout</a>( h );
+    h-&gt;<a href="qboxlayout.html#fc3fb6">addSpacing</a>( 30 );
+    h-&gt;<a href="qboxlayout.html#fc3fb6">addSpacing</a>( 100 );
+    h-&gt;<a href="qboxlayout.html#ebba99">addWidget</a>( new QLabel( "Columns:", this ) );
     columns = new <a href="qspinbox.html">QSpinBox</a>( this );
-    h-&gt;<a href="qboxlayout.html#219265">addWidget</a>( columns );
+    h-&gt;<a href="qboxlayout.html#ebba99">addWidget</a>( columns );
 
-    v-&gt;<a href="qboxlayout.html#488ad0">addSpacing</a>( 12 );
+    v-&gt;<a href="qboxlayout.html#fc3fb6">addSpacing</a>( 12 );
 
     b = new <a href="qradiobutton.html">QRadioButton</a>( "As many columns as fit on-screen,\n"
                           "as many rows as needed.",
                           this );
     bg-&gt;insert( b );
-    v-&gt;<a href="qboxlayout.html#219265">addWidget</a>( b );
-    <a href="qobject.html#c2d209">connect</a>( b, SIGNAL(clicked()), this, SLOT(<a href=#259>setColsByWidth</a>()) );
+    v-&gt;<a href="qboxlayout.html#ebba99">addWidget</a>( b );
+    <a href="qobject.html#7f8e37">connect</a>( b, SIGNAL(clicked()), this, SLOT(<a href=#257>setColsByWidth</a>()) );
 
-    v-&gt;<a href="qboxlayout.html#488ad0">addSpacing</a>( 12 );
+    v-&gt;<a href="qboxlayout.html#fc3fb6">addSpacing</a>( 12 );
 
     b = new <a href="qradiobutton.html">QRadioButton</a>( "Fixed number of rows,\n"
                           "as many columns as needed.",
                           this );
     bg-&gt;insert( b );
-    v-&gt;<a href="qboxlayout.html#219265">addWidget</a>( b );
-    <a href="qobject.html#c2d209">connect</a>( b, SIGNAL(clicked()), this, SLOT(<a href=#256>setNumRows</a>()) );
+    v-&gt;<a href="qboxlayout.html#ebba99">addWidget</a>( b );
+    <a href="qobject.html#7f8e37">connect</a>( b, SIGNAL(clicked()), this, SLOT(<a href=#254>setNumRows</a>()) );
     h = new <a href="qhboxlayout.html">QHBoxLayout</a>;
-    v-&gt;<a href="qboxlayout.html#7a3fdc">addLayout</a>( h );
-    h-&gt;<a href="qboxlayout.html#488ad0">addSpacing</a>( 30 );
-    h-&gt;<a href="qboxlayout.html#488ad0">addSpacing</a>( 100 );
-    h-&gt;<a href="qboxlayout.html#219265">addWidget</a>( new QLabel( "Rows:", this ) );
+    v-&gt;<a href="qboxlayout.html#6ff301">addLayout</a>( h );
+    h-&gt;<a href="qboxlayout.html#fc3fb6">addSpacing</a>( 30 );
+    h-&gt;<a href="qboxlayout.html#fc3fb6">addSpacing</a>( 100 );
+    h-&gt;<a href="qboxlayout.html#ebba99">addWidget</a>( new QLabel( "Rows:", this ) );
     rows = new <a href="qspinbox.html">QSpinBox</a>( this );
     rows-&gt;setEnabled( FALSE );
-    h-&gt;<a href="qboxlayout.html#219265">addWidget</a>( rows );
+    h-&gt;<a href="qboxlayout.html#ebba99">addWidget</a>( rows );
 
-    v-&gt;<a href="qboxlayout.html#488ad0">addSpacing</a>( 12 );
+    v-&gt;<a href="qboxlayout.html#fc3fb6">addSpacing</a>( 12 );
 
     b = new <a href="qradiobutton.html">QRadioButton</a>( "As many rows as fit on-screen,\n"
                           "as many columns as needed.",
                           this );
     bg-&gt;insert( b );
-    v-&gt;<a href="qboxlayout.html#219265">addWidget</a>( b );
-    <a href="qobject.html#c2d209">connect</a>( b, SIGNAL(clicked()), this, SLOT(<a href=#258>setRowsByHeight</a>()) );
+    v-&gt;<a href="qboxlayout.html#ebba99">addWidget</a>( b );
+    <a href="qobject.html#7f8e37">connect</a>( b, SIGNAL(clicked()), this, SLOT(<a href=#256>setRowsByHeight</a>()) );
 
-    v-&gt;<a href="qboxlayout.html#488ad0">addSpacing</a>( 12 );
+    v-&gt;<a href="qboxlayout.html#fc3fb6">addSpacing</a>( 12 );
 
     <a href="qcheckbox.html">QCheckBox</a> * cb = new <a href="qcheckbox.html">QCheckBox</a>( "Variable-height rows", this );
-    cb-&gt;<a href="qcheckbox.html#f146fc">setChecked</a>( TRUE );
-    <a href="qobject.html#c2d209">connect</a>( cb, SIGNAL(toggled(bool)), this, SLOT(<a href=#261>setVariableHeight</a>(bool)) );
-    v-&gt;<a href="qboxlayout.html#219265">addWidget</a>( cb );
-    v-&gt;<a href="qboxlayout.html#488ad0">addSpacing</a>( 6 );
+    cb-&gt;<a href="qcheckbox.html#08b09c">setChecked</a>( TRUE );
+    <a href="qobject.html#7f8e37">connect</a>( cb, SIGNAL(toggled(bool)), this, SLOT(<a href=#259>setVariableHeight</a>(bool)) );
+    v-&gt;<a href="qboxlayout.html#ebba99">addWidget</a>( cb );
+    v-&gt;<a href="qboxlayout.html#fc3fb6">addSpacing</a>( 6 );
 
     cb = new <a href="qcheckbox.html">QCheckBox</a>( "Variable-width columns", this );
-    <a href="qobject.html#c2d209">connect</a>( cb, SIGNAL(toggled(bool)), this, SLOT(<a href=#260>setVariableWidth</a>(bool)) );
-    v-&gt;<a href="qboxlayout.html#219265">addWidget</a>( cb );
+    <a href="qobject.html#7f8e37">connect</a>( cb, SIGNAL(toggled(bool)), this, SLOT(<a href=#258>setVariableWidth</a>(bool)) );
+    v-&gt;<a href="qboxlayout.html#ebba99">addWidget</a>( cb );
 
     cb = new <a href="qcheckbox.html">QCheckBox</a>( "Extended-Selection", this );
-    <a href="qobject.html#c2d209">connect</a>( cb, SIGNAL(toggled(bool)), this, SLOT(<a href=#262>setMultiSelection</a>(bool)) );
-    v-&gt;<a href="qboxlayout.html#219265">addWidget</a>( cb );
+    <a href="qobject.html#7f8e37">connect</a>( cb, SIGNAL(toggled(bool)), this, SLOT(<a href=#260>setMultiSelection</a>(bool)) );
+    v-&gt;<a href="qboxlayout.html#ebba99">addWidget</a>( cb );
 
     <a href="qpushbutton.html">QPushButton</a> *pb = new <a href="qpushbutton.html">QPushButton</a>( "Sort ascending", this );
-    <a href="qobject.html#c2d209">connect</a>( pb, SIGNAL( clicked() ), this, SLOT( <a href=#263>sortAscending</a>() ) );
-    v-&gt;<a href="qboxlayout.html#219265">addWidget</a>( pb );
+    <a href="qobject.html#7f8e37">connect</a>( pb, SIGNAL( clicked() ), this, SLOT( <a href=#261>sortAscending</a>() ) );
+    v-&gt;<a href="qboxlayout.html#ebba99">addWidget</a>( pb );
 
     pb = new <a href="qpushbutton.html">QPushButton</a>( "Sort descending", this );
-    <a href="qobject.html#c2d209">connect</a>( pb, SIGNAL( clicked() ), this, SLOT( <a href=#264>sortDescending</a>() ) );
-    v-&gt;<a href="qboxlayout.html#219265">addWidget</a>( pb );
+    <a href="qobject.html#7f8e37">connect</a>( pb, SIGNAL( clicked() ), this, SLOT( <a href=#262>sortDescending</a>() ) );
+    v-&gt;<a href="qboxlayout.html#ebba99">addWidget</a>( pb );
 
-    v-&gt;<a href="qboxlayout.html#51b0de">addStretch</a>( 100 );
+    v-&gt;<a href="qboxlayout.html#0226eb">addStretch</a>( 100 );
 
     int i = 0;
     while( ++i &lt;= 2560 )
-        l-&gt;insertItem( <a href="qstring.html#8d722f">QString::fromLatin1</a>( "Item " ) + QString::number( i ),
+        l-&gt;insertItem( <a href="qstring.html#0b1906">QString::fromLatin1</a>( "Item " ) + QString::number( i ),
                        i );
     columns-&gt;setRange( 1, 256 );
     columns-&gt;setValue( 1 );
     rows-&gt;setRange( 1, 256 );
     rows-&gt;setValue( 256 );
 
-    <a href="qobject.html#c2d209">connect</a>( columns, SIGNAL(valueChanged(int)), this, SLOT(<a href=#257>setNumCols</a>()) );
-    <a href="qobject.html#c2d209">connect</a>( rows, SIGNAL(valueChanged(int)), this, SLOT(<a href=#256>setNumRows</a>()) );
+    <a href="qobject.html#7f8e37">connect</a>( columns, SIGNAL(valueChanged(int)), this, SLOT(<a href=#255>setNumCols</a>()) );
+    <a href="qobject.html#7f8e37">connect</a>( rows, SIGNAL(valueChanged(int)), this, SLOT(<a href=#254>setNumRows</a>()) );
 }
 
 ListBoxDemo::~ListBoxDemo()
@@ -213,56 +213,56 @@ ListBoxDemo::~ListBoxDemo()
     delete bg;
 }
 
-void <a name="256"></a>ListBoxDemo::setNumRows()
+void <a name="254"></a>ListBoxDemo::setNumRows()
 {
     columns-&gt;setEnabled( FALSE );
     rows-&gt;setEnabled( TRUE );
     l-&gt;setRowMode( rows-&gt;value() );
 }
 
-void <a name="257"></a>ListBoxDemo::setNumCols()
+void <a name="255"></a>ListBoxDemo::setNumCols()
 {
     columns-&gt;setEnabled( TRUE );
     rows-&gt;setEnabled( FALSE );
     l-&gt;setColumnMode( columns-&gt;value() );
 }
 
-void <a name="258"></a>ListBoxDemo::setRowsByHeight()
+void <a name="256"></a>ListBoxDemo::setRowsByHeight()
 {
     columns-&gt;setEnabled( FALSE );
     rows-&gt;setEnabled( FALSE );
     l-&gt;setRowMode( QListBox::FitToHeight );
 }
 
-void <a name="259"></a>ListBoxDemo::setColsByWidth()
+void <a name="257"></a>ListBoxDemo::setColsByWidth()
 {
     columns-&gt;setEnabled( FALSE );
     rows-&gt;setEnabled( FALSE );
     l-&gt;setColumnMode( QListBox::FitToWidth );
 }
 
-void <a name="260"></a>ListBoxDemo::setVariableWidth( bool b )
+void <a name="258"></a>ListBoxDemo::setVariableWidth( bool b )
 {
     l-&gt;setVariableWidth( b );
 }
 
-void <a name="261"></a>ListBoxDemo::setVariableHeight( bool b )
+void <a name="259"></a>ListBoxDemo::setVariableHeight( bool b )
 {
     l-&gt;setVariableHeight( b );
 }
 
-void <a name="262"></a>ListBoxDemo::setMultiSelection( bool b )
+void <a name="260"></a>ListBoxDemo::setMultiSelection( bool b )
 {
     l-&gt;clearSelection();
     l-&gt;setSelectionMode( b ? QListBox::Extended : QListBox::Single );
 }
 
-void <a name="263"></a>ListBoxDemo::sortAscending()
+void <a name="261"></a>ListBoxDemo::sortAscending()
 {
     l-&gt;sort( TRUE );
 }
 
-void <a name="264"></a>ListBoxDemo::sortDescending()
+void <a name="262"></a>ListBoxDemo::sortDescending()
 {
     l-&gt;sort( FALSE );
 }
@@ -273,7 +273,7 @@ void <a name="264"></a>ListBoxDemo::sortDescending()
 
   Main:
 <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/listbox/main.cpp   2.3.1   edited 2001-01-26 $
+** &#36;Id&#58; qt/examples/listbox/main.cpp   2.3.2   edited 2001-06-12 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -290,15 +290,15 @@ int main( int argc, char **argv )
     <a name="QApplication"></a><a href="qapplication.html">QApplication</a> a( argc, argv );
 
     ListBoxDemo t;
-    t.<a name="setCaption"></a><a href="qwidget.html#d4f007">setCaption</a>( "List Box Configuration Example" );
-    a.<a name="setMainWidget"></a><a href="qapplication.html#11c921">setMainWidget</a>( &amp;t );
-    t.<a name="show"></a><a href="qwidget.html#ccc8f7">show</a>();
+    t.<a name="setCaption"></a><a href="qwidget.html#d6a291">setCaption</a>( "Qt Example - Listbox" );
+    a.<a name="setMainWidget"></a><a href="qapplication.html#7ad759">setMainWidget</a>( &amp;t );
+    t.<a name="show"></a><a href="qwidget.html#200ee5">show</a>();
 
-    return a.<a name="exec"></a><a href="qapplication.html#7076af">exec</a>();
+    return a.<a name="exec"></a><a href="qapplication.html#84c7bf">exec</a>();
 }
 </pre>
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.1</div>
+<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

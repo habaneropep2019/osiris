@@ -164,7 +164,7 @@ private slots:
     void helpManual();
     void helpAbout();
     void helpAboutQt();
-
+    void helpRegister();
     void propertyEditorHidden();
     void hierarchyViewHidden();
     void formListHidden();
@@ -254,6 +254,9 @@ private:
     QAction* actionPointerTool, *actionConnectTool, *actionOrderTool;
     QAction* actionCurrentTool;
     QAction *actionHelpContents, *actionHelpAbout, *actionHelpAboutQt, *actionHelpWhatsThis;
+#if defined(QT_NON_COMMERCIAL)
+    QAction *actionHelpRegister;
+#endif
     QAction *actionWindowHierarchyView, *actionWindowFormList, *actionHelpManual;
     QAction *actionToolsCustomWidget, *actionEditPreferences;
     QAction *actionWindowTile, *actionWindowCascade, *actionWindowClose, *actionWindowCloseAll;

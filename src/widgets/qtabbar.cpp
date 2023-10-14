@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qtabbar.cpp   2.3.1   edited 2001-03-13 $
+** $Id: qt/src/widgets/qtabbar.cpp   2.3.2   edited 2001-03-13 $
 **
 ** Implementation of QTab and QTabBar classes
 **

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/life/main.cpp   2.3.1   edited 2001-02-20 $
+** $Id: qt/examples/life/main.cpp   2.3.2   edited 2001-06-12 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -38,6 +38,7 @@ int main( int argc, char **argv )
 
     LifeDialog *life = new LifeDialog( scale );
     a.setMainWidget( life );
+    life->setCaption("Qt Example - Life");
     life->show();
 
     return a.exec();

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/network/qftp.cpp   2.3.1   edited 2001-03-30 $
+** $Id: qt/src/network/qftp.cpp   2.3.2   edited 2001-07-26 $
 **
 ** Implementation of QFtp class.
 **
@@ -166,7 +166,9 @@ void QFtp::operationMkDir( QNetworkOperation *op )
 
 void QFtp::operationRemove( QNetworkOperation *op )
 {
-    op->setState( StInProgress );
+    // put the operation in StWaiting state first until the CWD command
+    // succeeds
+    op->setState( StWaiting );
     QString path = url()->path().isEmpty() ? QString( "/" ) : url()->path();
     QString cmd = "CWD " + path + "\r\n";
 #if defined(QFTP_COMMANDSOCKET_DEBUG)
@@ -181,7 +183,9 @@ void QFtp::operationRemove( QNetworkOperation *op )
 
 void QFtp::operationRename( QNetworkOperation *op )
 {
-    op->setState( StInProgress );
+    // put the operation in StWaiting state first until the CWD command
+    // succeeds
+    op->setState( StWaiting );
     QString path = url()->path().isEmpty() ? QString( "/" ) : url()->path();
     QString cmd = "CWD " + path + "\r\n";
 #if defined(QFTP_COMMANDSOCKET_DEBUG)
@@ -831,8 +835,10 @@ void QFtp::dataClosed()
 
     reinitCommandSocket();
 
-    if ( !errorInListChildren && operationInProgress() )
+    if ( !errorInListChildren && operationInProgress() ) {
+	operationInProgress()->setState( StDone );
 	emit finished( operationInProgress() );
+    }
 }
 
 /*!

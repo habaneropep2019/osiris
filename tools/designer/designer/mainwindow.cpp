@@ -137,7 +137,12 @@ MainWindow::MainWindow( bool asClient )
     hierarchyView = 0;
 
     statusBar()->clear();
+#if defined(QT_NON_COMMERCIAL)
+    statusBar()->addWidget( new QLabel(tr("Ready - This is the non-commercial version of Qt - For commercial evaluation purposes, use the help menu to register with Trolltech."), 
+	statusBar()), 1 );
+#else
     statusBar()->addWidget( new QLabel("Ready", statusBar()), 1 );
+#endif
 
     setupMDI();
     setupMenuBar();
@@ -925,7 +930,12 @@ void MainWindow::setupHelpActions()
     actionHelpAboutQt->setStatusTip( tr("Displays information about the Qt Toolkit") );
     actionHelpAboutQt->setWhatsThis( tr("Get information about the Qt Toolkit") );
     connect( actionHelpAboutQt, SIGNAL( activated() ), this, SLOT( helpAboutQt() ) );
-
+#if defined(QT_NON_COMMERCIAL)
+    actionHelpRegister = new QAction( tr("Register Qt"), QPixmap(), tr("&Register Qt..."), 0, this, 0 );
+    actionHelpRegister->setStatusTip( tr("Launches web browser with evaluation form at www.trolltech.com") );
+    actionHelpRegister->setWhatsThis( tr("Register with Trolltech") );
+    connect( actionHelpRegister, SIGNAL( activated() ), this, SLOT( helpRegister() ) );
+#endif
     actionHelpWhatsThis = new QAction( tr("What's This?"), QIconSet( whatsthis_image, whatsthis_image ),
 				       tr("What's This?"), SHIFT + Key_F1, this, 0 );
     actionHelpWhatsThis->setStatusTip( tr("\"What's This?\" context sensitive help") );
@@ -954,6 +964,9 @@ void MainWindow::setupHelpActions()
     menu->insertSeparator();
     actionHelpAbout->addTo( menu );
     actionHelpAboutQt->addTo( menu );
+#if defined(QT_NON_COMMERCIAL)
+    actionHelpRegister->addTo( menu );
+#endif
     menu->insertSeparator();
     actionHelpWhatsThis->addTo( menu );
 }
@@ -1088,7 +1101,7 @@ static void unifyFormName( FormWindow *fw, QWorkspace *workspace )
 
 void MainWindow::fileNew()
 {
-    statusBar()->message( tr( "Select a template for the new form...") );
+    statusBar()->message( tr("Select a template for the new form...") );
     NewForm dlg( this, templatePath() );
     if ( dlg.exec() == QDialog::Accepted ) {
 	NewForm::Form f = dlg.formType();
@@ -1700,7 +1713,7 @@ static void correctGeometry( QWidget *wid, QWidget *workspace )
     if ( wid->parentWidget()->x() > workspace->width() )
 	x = QMAX( 0, workspace->width() - wid->parentWidget()->width() );
     if ( wid->parentWidget()->y() > workspace->height() )
-	x = QMAX( 0, workspace->height() - wid->parentWidget()->height() );
+	y = QMAX( 0, workspace->height() - wid->parentWidget()->height() );
     wid->parentWidget()->move( x, y );
     int w = wid->parentWidget()->width(), h = wid->parentWidget()->height();
     if ( x + w > workspace->width() )
@@ -1855,6 +1868,56 @@ void MainWindow::helpAbout()
 void MainWindow::helpAboutQt()
 {
     QMessageBox::aboutQt( this, "Qt Designer" );
+}
+
+#if defined(_WS_WIN_)
+#include <qt_windows.h>
+#include <qprocess.h>
+#endif
+
+void MainWindow::helpRegister()
+{
+#if defined(_WS_WIN_)
+    HKEY key;
+    HKEY subkey;
+    long res;
+    DWORD type;
+    DWORD size = 255;
+    QString command;
+    QString sub( "htmlfile\\shell" );
+#if defined(UNICODE)
+    if ( QApplication::winVersion() & Qt::WV_NT_based ) {
+	unsigned char data[256];
+	res = RegOpenKeyExW( HKEY_CLASSES_ROOT, NULL, 0, KEY_READ, &key );
+	res = RegOpenKeyExW( key, (TCHAR*)qt_winTchar( sub, TRUE ), 0, KEY_READ, &subkey );
+	res = RegQueryValueExW( subkey, NULL, NULL, &type, data, &size );
+	command = qt_winQString( data ) + "\\command";
+	size = 255;
+	res = RegOpenKeyExW( subkey, (TCHAR*)qt_winTchar( command, TRUE ), 0, KEY_READ, &subkey );
+	res = RegQueryValueExW( subkey, NULL, NULL, &type, data, &size );
+	command = qt_winQString( data );
+    } else
+#endif
+    {
+	unsigned char data[256];
+	res = RegOpenKeyExA( HKEY_CLASSES_ROOT, NULL, 0, KEY_READ, &key );
+	res = RegOpenKeyExA( key, sub.local8Bit(), 0, KEY_READ, &subkey );
+	res = RegQueryValueExA( subkey, NULL, NULL, &type, data, &size );
+	command = QString::fromLocal8Bit( (const char*) data ) + "\\command";
+	size = 255;
+	res = RegOpenKeyExA( subkey, command.local8Bit(), 0, KEY_READ, &subkey );
+	res = RegQueryValueExA( subkey, NULL, NULL, &type, data, &size );
+	command = QString::fromLocal8Bit( (const char*) data );
+    }
+
+    res = RegCloseKey( subkey );
+    res = RegCloseKey( key );
+
+    QProcess process( command + " www.trolltech.com/products/download/eval/evaluation.html" );
+    if ( !process.start() )
+	QMessageBox::information( this, "Register Qt", "Launching your web browser failed.\n"
+				        "To register Qt, point your browser to www.trolltech.com/products/download/eval/evaluation.html" );
+#endif
 }
 
 void MainWindow::showProperties( QWidget *w )

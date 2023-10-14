@@ -1,5 +1,5 @@
 '\" t
-.TH QTextCodec 3qt "13 June 2001" "Trolltech AS" \" -*- nroff -*-
+.TH QTextCodec 3qt "29 October 2001" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2001 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -191,7 +191,7 @@ The value returned is the property of the caller, which is responsible for delet
 .PP
 The default implementation makes an encoder with makeEncoder() and converts the input with that. Note that the default makeEncoder() implementation makes an encoder that simply calls this function, hence subclasses \fImust\fR reimplement one function or the other to avoid infinite recursion.
 .PP
-Reimplemented in QEucJpCodec, QGbkCodec, QEucKrCodec, QSjisCodec, QJisCodec and QTsciiCodec.
+Reimplemented in QGbkCodec, QEucKrCodec, QTsciiCodec, QJisCodec, QSjisCodec and QEucJpCodec.
 .SH "QCString QTextCodec::fromUnicode ( const QString & uc ) const"
 This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts.
 .SH "int QTextCodec::heuristicContentMatch ( const char * chars, int len ) const \fC[virtual]\fR"
@@ -201,7 +201,7 @@ The characters are not null terminated.
 .PP
 See also codecForContent().
 .PP
-Reimplemented in QEucJpCodec, QJisCodec, QGbkCodec, QEucKrCodec, QSjisCodec and QTsciiCodec.
+Reimplemented in QEucJpCodec, QTsciiCodec, QEucKrCodec, QGbkCodec, QJisCodec and QSjisCodec.
 .SH "int QTextCodec::heuristicNameMatch ( const char * hint ) const \fC[virtual]\fR"
 Returns a value indicating how likely this decoder is for decoding some format that has the given name.
 .PP
@@ -209,7 +209,7 @@ A good match returns a positive number around the length of the string. A bad ma
 .PP
 The default implementation calls simpleHeuristicNameMatch() with the name of the codec.
 .PP
-Reimplemented in QGbkCodec, QJisCodec, QEucKrCodec, QSjisCodec, QEucJpCodec and QTsciiCodec.
+Reimplemented in QGbkCodec, QJisCodec, QTsciiCodec, QEucJpCodec, QSjisCodec and QEucKrCodec.
 .SH "QTextCodec* QTextCodec::loadCharmap ( QIODevice * iod ) \fC[static]\fR"
 Reads a POSIX2 charmap definition from \fIiod.\fR The parser recognizes the following lines:
 .PP
@@ -248,7 +248,7 @@ Creates a QTextDecoder which stores enough state to decode chunks of char* data 
 .PP
 The caller is responsible for deleting the returned object.
 .PP
-Reimplemented in QEucKrCodec, QEucJpCodec, QJisCodec, QSjisCodec and QGbkCodec.
+Reimplemented in QEucKrCodec, QJisCodec, QEucJpCodec, QGbkCodec and QSjisCodec.
 .SH "QTextEncoder* QTextCodec::makeEncoder () const \fC[virtual]\fR"
 Creates a QTextEncoder which stores enough state to encode chunks of Unicode data as char* data. The default implementation creates a stateless encoder, which is sufficient for only the simplest encodings where each Unicode character corresponds to exactly one char.
 .PP
@@ -262,7 +262,7 @@ On X11, heuristicNameMatch( const char * hint ) is used to test if a the QTextCo
 .TP
 Some applications may use this function to present encodings to the end user.
 .PP
-Reimplemented in QJisCodec, QEucJpCodec, QEucKrCodec, QGbkCodec, QTsciiCodec and QSjisCodec.
+Reimplemented in QSjisCodec, QGbkCodec, QTsciiCodec, QEucJpCodec, QEucKrCodec and QJisCodec.
 .SH "int QTextCodec::simpleHeuristicNameMatch ( const char * name, const char * hint ) \fC[static protected]\fR"
 A simple utility function for heuristicNameMatch() - it does some very minor character-skipping so that almost-exact matches score high.
 .SH "QString QTextCodec::toUnicode ( const char * chars, int len ) const \fC[virtual]\fR"
@@ -270,7 +270,7 @@ Subclasses of QTextCodec must reimplement this function or makeDecoder(). It con
 .PP
 The default implementation makes a decoder with makeDecoder() and converts the input with that. Note that the default makeDecoder() implementation makes a decoder that simply calls this function, hence subclasses \fImust\fR reimplement one function or the other to avoid infinite recursion.
 .PP
-Reimplemented in QEucJpCodec, QEucKrCodec, QJisCodec, QSjisCodec, QGbkCodec and QTsciiCodec.
+Reimplemented in QTsciiCodec, QEucKrCodec, QSjisCodec, QGbkCodec, QJisCodec and QEucJpCodec.
 .SH "QString QTextCodec::toUnicode ( const QByteArray & a ) const"
 This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts.
 .SH "QString QTextCodec::toUnicode ( const QByteArray & a, int len ) const"
@@ -295,4 +295,4 @@ In case of content or formattting problems with this manual page, please
 report them to
 .BR qt-bugs@trolltech.com .
 Please include the name of the manual page (qtextcodec.3qt) and the Qt
-version (2.3.1).
+version (2.3.2).

@@ -1,5 +1,5 @@
 /**********************************************************************
-** Copyright (C) 2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 2000-2001 Trolltech AS.  All rights reserved.
 **
 ** This file is part of Qt Designer.
 **
@@ -31,11 +31,12 @@
 
 static QString templatePath( const QString &t )
 {
-    if ( QFileInfo( "../templates" ).exists() )
-	return "../templates";
-    QString qtdir = getenv( "QTDIR" );
-    if ( QFileInfo( qtdir + "/tools/designer/templates" ).exists() )
-	return qtdir + "/tools/designer/templates";
+    QString path = getenv( "QTDIR" );
+    if ( !path.isNull() ) {
+	path.append("/tools/designer/templates");
+	if ( QFileInfo( path ).exists() )
+	    return path;
+    }
     return t;
 }
 
@@ -57,21 +58,23 @@ NewForm::NewForm( QWidget *parent, const QString &tPath )
     i->setDragEnabled( FALSE );
 
     QString templateDir = templatePath( templPath );
-    QDir dir( templateDir );
-    const QFileInfoList *filist = dir.entryInfoList( QDir::DefaultFilter, QDir::DirsFirst | QDir::Name );
-    if ( filist ) {
-	QFileInfoListIterator it( *filist );
-	QFileInfo *fi;
-	while ( ( fi = it.current() ) != 0 ) {
-	    ++it;
-	    if ( !fi->isFile() )
-		continue;
-	    i = new QIconViewItem( templateView );
-	    i->setDragEnabled( FALSE );
-	    QString name = fi->baseName();
-	    name = name.replace( QRegExp( "_" ), " " );
-	    i->setText( name );
-	    i->setPixmap( PixmapChooser::loadPixmap( "newform.xpm" ) );
+    if ( !templateDir.isNull() ) {
+	QDir dir( templateDir );
+	const QFileInfoList *filist = dir.entryInfoList( QDir::DefaultFilter, QDir::DirsFirst | QDir::Name );
+	if ( filist ) {
+	    QFileInfoListIterator it( *filist );
+	    QFileInfo *fi;
+	    while ( ( fi = it.current() ) != 0 ) {
+		++it;
+		if ( !fi->isFile() )
+		    continue;
+		i = new QIconViewItem( templateView );
+		i->setDragEnabled( FALSE );
+		QString name = fi->baseName();
+		name = name.replace( QRegExp( "_" ), " " );
+		i->setText( name );
+		i->setPixmap( PixmapChooser::loadPixmap( "newform.xpm" ) );
+	    }
 	}
     }
 
@@ -92,9 +95,11 @@ NewForm::Form NewForm::formType() const
 
 QString NewForm::templateFile() const
 {
-    QString fn = "/" + templateView->currentItem()->text();
-    fn.prepend( templatePath( templPath ) );
-    fn.append( ".ui" );
-    fn = fn.replace( QRegExp( " " ), "_" );
-    return fn;
+    QString path = templatePath( templPath );
+    if ( !path.isNull() )
+	path.append( "/" );
+    path.append( templateView->currentItem()->text() );
+    path.append( ".ui" );
+    path = path.replace( QRegExp( " " ), "_" );
+    return path;
 }

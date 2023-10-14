@@ -1,5 +1,5 @@
 '\" t
-.TH QPainter 3qt "13 June 2001" "Trolltech AS" \" -*- nroff -*-
+.TH QPainter 3qt "29 October 2001" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2001 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -411,19 +411,19 @@ Inherits Qt.
 .BI "void \fBqDrawPlainRect\fR (QPainter * " "p" ", int " "x" ", int " "y" ", int " "w" ", int " "h" ", const QColor & " "c" ", int " "lineWidth" ", const QBrush * " "fill" ")"
 .br
 .ti -1c
+.BI "void \fBqDrawWinPanel\fR (QPainter * " "p" ", int " "x" ", int " "y" ", int " "w" ", int " "h" ", const QColorGroup & " "g" ", bool " "sunken" ", const QBrush * " "fill" ")"
+.br
+.ti -1c
 .BI "void \fBqDrawShadeLine\fR (QPainter * " "p" ", int " "x1" ", int " "y1" ", int " "x2" ", int " "y2" ", const QColorGroup & " "g" ", bool " "sunken" ", int " "lineWidth" ", int " "midLineWidth" ")"
 .br
 .ti -1c
-.BI "void \fBqDrawWinButton\fR (QPainter * " "p" ", int " "x" ", int " "y" ", int " "w" ", int " "h" ", const QColorGroup & " "g" ", bool " "sunken" ", const QBrush * " "fill" ")"
-.br
-.ti -1c
-.BI "void \fBqDrawWinPanel\fR (QPainter * " "p" ", int " "x" ", int " "y" ", int " "w" ", int " "h" ", const QColorGroup & " "g" ", bool " "sunken" ", const QBrush * " "fill" ")"
+.BI "void \fBqDrawShadeRect\fR (QPainter * " "p" ", int " "x" ", int " "y" ", int " "w" ", int " "h" ", const QColorGroup & " "g" ", bool " "sunken" ", int " "lineWidth" ", int " "midLineWidth" ", const QBrush * " "fill" ")"
 .br
 .ti -1c
 .BI "void \fBqDrawShadePanel\fR (QPainter * " "p" ", int " "x" ", int " "y" ", int " "w" ", int " "h" ", const QColorGroup & " "g" ", bool " "sunken" ", int " "lineWidth" ", const QBrush * " "fill" ")"
 .br
 .ti -1c
-.BI "void \fBqDrawShadeRect\fR (QPainter * " "p" ", int " "x" ", int " "y" ", int " "w" ", int " "h" ", const QColorGroup & " "g" ", bool " "sunken" ", int " "lineWidth" ", int " "midLineWidth" ", const QBrush * " "fill" ")"
+.BI "void \fBqDrawWinButton\fR (QPainter * " "p" ", int " "x" ", int " "y" ", int " "w" ", int " "h" ", const QColorGroup & " "g" ", bool " "sunken" ", const QBrush * " "fill" ")"
 .br
 .in -1c
 .SH DESCRIPTION
@@ -898,6 +898,11 @@ As the main version of the function, but with the roundness arguments fixed at 2
 Draws at most \fIlen\fR characters from \fIstr\fR at position \fI(x,y).\fR
 .PP
 \fI(x,y)\fR is the base line position. Note that the meaning of \fIy\fR is not the same for the two drawText() varieties.
+.PP
+Examples:
+.(l
+grapher/grapher.cpp drawdemo/drawdemo.cpp menu/menu.cpp progress/progress.cpp desktop/desktop.cpp scrollview/scrollview.cpp trivial/trivial.cpp movies/main.cpp picture/picture.cpp
+.)l
 .SH "void QPainter::drawText ( int x, int y, int w, int h, int tf, const QString & str, int len = -1, QRect * brect=0, char ** internal=0 )"
 Draws at most \fIlen\fR characters from \fIstr\fR in the rectangle \fI(x,y,w,h).\fR
 .PP
@@ -910,11 +915,6 @@ Horizontal alignment defaults to AlignLeft and vertical alignment defaults to Al
 \fIbrect\fR (if non-null) is set to the actual bounding rectangle of the output. \fIinternal\fR is, yes, internal.
 .PP
 See also boundingRect().
-.PP
-Examples:
-.(l
-grapher/grapher.cpp drawdemo/drawdemo.cpp menu/menu.cpp progress/progress.cpp desktop/desktop.cpp scrollview/scrollview.cpp trivial/trivial.cpp movies/main.cpp picture/picture.cpp
-.)l
 .SH "void QPainter::drawText ( const QPoint & p, const QString &, int len = -1 )"
 This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts.
 .SH "void QPainter::drawText ( const QRect & r, int tf, const QString &, int len = -1, QRect * br=0, char ** i=0 )"
@@ -1128,15 +1128,15 @@ Sets a new painter brush.
 The brush defines how to fill shapes.
 .PP
 See also brush().
+.SH "void QPainter::setBrush ( const QColor & color )"
+Sets a new painter brush with the style \fCSolidPattern\fR and the specified \fIcolor.\fR
+.PP
+See also brush() and QBrush.
 .PP
 Examples:
 .(l
 grapher/grapher.cpp drawdemo/drawdemo.cpp forever/forever.cpp desktop/desktop.cpp picture/picture.cpp
 .)l
-.SH "void QPainter::setBrush ( const QColor & color )"
-Sets a new painter brush with the style \fCSolidPattern\fR and the specified \fIcolor.\fR
-.PP
-See also brush() and QBrush.
 .SH "void QPainter::setBrushOrigin ( int x, int y )"
 Sets the brush origin to \fI(x,y).\fR
 .PP
@@ -1435,6 +1435,24 @@ If you want to use a QFrame widget instead, you can make it display a plain rect
 \fBWarning:\fR This function does not look at QWidget::style() or QApplication::style(). Use the drawing functions in QStyle to make widgets that follow the current GUI style.
 .PP
 See also qDrawShadeRect() and QStyle::drawRect().
+.SH "void qDrawWinPanel (QPainter * p, int x, int y, int w, int h, const QColorGroup & g, bool sunken, const QBrush * fill)"
+\fC#include <qdrawutil.h>\fR
+.PP
+Draws a Windows-style panel given by (\fIx, y, w, h)\fR using the painter \fIp.\fR
+.PP
+The color group argument \fIg\fR specifies the shading colors.
+.PP
+The panel appears sunken if \fIsunken\fR is TRUE, or raised if \fIsunken\fR is FALSE.
+.PP
+The line width is 2 pixels.
+.PP
+The button interior is filled with the \fIfill\fR brush unless \fIfill\fR is null.
+.PP
+If you want to use a QFrame widget instead, you can make it display a shaded panel, for example \fCQFrame::setFrameStyle( QFrame::WinPanel | QFrame::Raised )\fR.
+.PP
+\fBWarning:\fR This function does not look at QWidget::style() or QApplication::style(). Use the drawing functions in QStyle to make widgets that follow the current GUI style.
+.PP
+See also qDrawShadePanel(), qDrawWinButton() and QStyle::drawPanel().
 .SH "void qDrawShadeLine (QPainter * p, int x1, int y1, int x2, int y2, const QColorGroup & g, bool sunken, int lineWidth, int midLineWidth)"
 \fC#include <qdrawutil.h>\fR
 .PP
@@ -1455,58 +1473,6 @@ If you want to use a QFrame widget instead, you can make it display a shaded lin
 \fBWarning:\fR This function does not look at QWidget::style() or QApplication::style(). Use the drawing functions in QStyle to make widgets that follow the current GUI style.
 .PP
 See also qDrawShadeRect(), qDrawShadePanel() and QStyle::drawSeparator().
-.SH "void qDrawWinButton (QPainter * p, int x, int y, int w, int h, const QColorGroup & g, bool sunken, const QBrush * fill)"
-\fC#include <qdrawutil.h>\fR
-.PP
-Draws a Windows-style button given by (\fIx, y, w, h)\fR using the painter \fIp.\fR
-.PP
-The color group argument \fIg\fR specifies the shading colors (light, dark and middle colors).
-.PP
-The button appears sunken if \fIsunken\fR is TRUE, or raised if \fIsunken\fR is FALSE.
-.PP
-The line width is 2 pixels.
-.PP
-The button interior is filled with the \fI*fill\fR brush unless \fIfill\fR is null.
-.PP
-\fBWarning:\fR This function does not look at QWidget::style() or QApplication::style(). Use the drawing functions in QStyle to make widgets that follow the current GUI style.
-.PP
-See also qDrawWinPanel() and QStyle::drawButton().
-.SH "void qDrawWinPanel (QPainter * p, int x, int y, int w, int h, const QColorGroup & g, bool sunken, const QBrush * fill)"
-\fC#include <qdrawutil.h>\fR
-.PP
-Draws a Windows-style panel given by (\fIx, y, w, h)\fR using the painter \fIp.\fR
-.PP
-The color group argument \fIg\fR specifies the shading colors.
-.PP
-The panel appears sunken if \fIsunken\fR is TRUE, or raised if \fIsunken\fR is FALSE.
-.PP
-The line width is 2 pixels.
-.PP
-The button interior is filled with the \fIfill\fR brush unless \fIfill\fR is null.
-.PP
-If you want to use a QFrame widget instead, you can make it display a shaded panel, for example \fCQFrame::setFrameStyle( QFrame::WinPanel | QFrame::Raised )\fR.
-.PP
-\fBWarning:\fR This function does not look at QWidget::style() or QApplication::style(). Use the drawing functions in QStyle to make widgets that follow the current GUI style.
-.PP
-See also qDrawShadePanel(), qDrawWinButton() and QStyle::drawPanel().
-.SH "void qDrawShadePanel (QPainter * p, int x, int y, int w, int h, const QColorGroup & g, bool sunken, int lineWidth, const QBrush * fill)"
-\fC#include <qdrawutil.h>\fR
-.PP
-Draws a shaded panel given by (\fIx, y, w, h)\fR using the painter \fIp.\fR
-.PP
-The color group argument \fIg\fR specifies the shading colors (light, dark and middle colors).
-.PP
-The panel appears sunken if \fIsunken\fR is TRUE, or raised if \fIsunken\fR is FALSE.
-.PP
-The \fIlineWidth\fR argument specifies the line width.
-.PP
-The panel interior is filled with the \fIfill\fR brush unless \fIfill\fR is null.
-.PP
-If you want to use a QFrame widget instead, you can make it display a shaded panel, for example \fCQFrame::setFrameStyle( QFrame::Panel | QFrame::Sunken )\fR.
-.PP
-\fBWarning:\fR This function does not look at QWidget::style() or QApplication::style(). Use the drawing functions in QStyle to make widgets that follow the current GUI style.
-.PP
-See also qDrawWinPanel(), qDrawShadeLine(), qDrawShadeRect() and QStyle::drawPanel().
 .SH "void qDrawShadeRect (QPainter * p, int x, int y, int w, int h, const QColorGroup & g, bool sunken, int lineWidth, int midLineWidth, const QBrush * fill)"
 \fC#include <qdrawutil.h>\fR
 .PP
@@ -1526,7 +1492,41 @@ If you want to use a QFrame widget instead, you can make it display a shaded rec
 .PP
 \fBWarning:\fR This function does not look at QWidget::style() or QApplication::style(). Use the drawing functions in QStyle to make widgets that follow the current GUI style.
 .PP
-See also  qDrawShadeLine(), qDrawShadePanel(), qDrawPlainRect(), QStyle::drawRect() and QStyle::drawRectStrong().
+See also qDrawShadeLine(), qDrawShadePanel(), qDrawPlainRect(), QStyle::drawRect() and QStyle::drawRectStrong().
+.SH "void qDrawShadePanel (QPainter * p, int x, int y, int w, int h, const QColorGroup & g, bool sunken, int lineWidth, const QBrush * fill)"
+\fC#include <qdrawutil.h>\fR
+.PP
+Draws a shaded panel given by (\fIx, y, w, h)\fR using the painter \fIp.\fR
+.PP
+The color group argument \fIg\fR specifies the shading colors (light, dark and middle colors).
+.PP
+The panel appears sunken if \fIsunken\fR is TRUE, or raised if \fIsunken\fR is FALSE.
+.PP
+The \fIlineWidth\fR argument specifies the line width.
+.PP
+The panel interior is filled with the \fIfill\fR brush unless \fIfill\fR is null.
+.PP
+If you want to use a QFrame widget instead, you can make it display a shaded panel, for example \fCQFrame::setFrameStyle( QFrame::Panel | QFrame::Sunken )\fR.
+.PP
+\fBWarning:\fR This function does not look at QWidget::style() or QApplication::style(). Use the drawing functions in QStyle to make widgets that follow the current GUI style.
+.PP
+See also qDrawWinPanel(), qDrawShadeLine(), qDrawShadeRect() and QStyle::drawPanel().
+.SH "void qDrawWinButton (QPainter * p, int x, int y, int w, int h, const QColorGroup & g, bool sunken, const QBrush * fill)"
+\fC#include <qdrawutil.h>\fR
+.PP
+Draws a Windows-style button given by (\fIx, y, w, h)\fR using the painter \fIp.\fR
+.PP
+The color group argument \fIg\fR specifies the shading colors (light, dark and middle colors).
+.PP
+The button appears sunken if \fIsunken\fR is TRUE, or raised if \fIsunken\fR is FALSE.
+.PP
+The line width is 2 pixels.
+.PP
+The button interior is filled with the \fI*fill\fR brush unless \fIfill\fR is null.
+.PP
+\fBWarning:\fR This function does not look at QWidget::style() or QApplication::style(). Use the drawing functions in QStyle to make widgets that follow the current GUI style.
+.PP
+See also  qDrawWinPanel() and QStyle::drawButton().
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qpainter.html
 .BR http://www.trolltech.com/faq/tech.html
@@ -1545,4 +1545,4 @@ In case of content or formattting problems with this manual page, please
 report them to
 .BR qt-bugs@trolltech.com .
 Please include the name of the manual page (qpainter.3qt) and the Qt
-version (2.3.1).
+version (2.3.2).

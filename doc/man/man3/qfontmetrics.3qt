@@ -1,5 +1,5 @@
 '\" t
-.TH QFontMetrics 3qt "13 June 2001" "Trolltech AS" \" -*- nroff -*-
+.TH QFontMetrics 3qt "29 October 2001" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2001 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -160,11 +160,6 @@ Note that the bounding rectangle may extend to the left of (0,0), e.g. for itali
 Note that the rectangle usually extends both above and below the base line.
 .PP
 See also width().
-.PP
-Examples:
-.(l
-xform/xform.cpp
-.)l
 .SH "QRect QFontMetrics::boundingRect ( const QString & str, int len = -1 ) const"
 Returns the bounding rectangle of the first \fIlen\fR characters of \fIstr,\fR which is the set of pixels the text would cover if drawn at (0,0).
 .PP
@@ -225,6 +220,11 @@ The bounding rectangle given by this function is somewhat larger than that calcu
 The \fIinternal\fR argument is for internal purposes.
 .PP
 See also width(), QPainter::boundingRect() and Qt::AlignmentFlags.
+.PP
+Examples:
+.(l
+xform/xform.cpp
+.)l
 .SH "int QFontMetrics::descent () const"
 Returns the maximum descent of the font.
 .PP
@@ -386,4 +386,4 @@ In case of content or formattting problems with this manual page, please
 report them to
 .BR qt-bugs@trolltech.com .
 Please include the name of the manual page (qfontmetrics.3qt) and the Qt
-version (2.3.1).
+version (2.3.2).

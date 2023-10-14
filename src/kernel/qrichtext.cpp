@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qrichtext.cpp   2.3.1   edited 2001-05-18 $
+** $Id: qt/src/kernel/qrichtext.cpp   2.3.2   edited 2001-10-13 $
 **
 ** Implementation of the internal Qt classes dealing with rich text
 **
@@ -111,6 +111,8 @@ private:
     int innerborder;
 
     Placement place;
+
+    void adjustCells( int y , int shift );
 };
 
 
@@ -811,36 +813,266 @@ static void map_insert(QMap<QCString, QChar>* map, const char* str, const QChar&
 QMap<QCString, QChar> *htmlMap()
 {
     if ( !html_map ){
-        html_map = new QMap<QCString, QChar>;
-        qAddPostRoutine( qt_cleanup_html_map );
-        map_insert(html_map, "lt", '<');
-        map_insert(html_map, "gt", '>');
-        map_insert(html_map, "amp", '&');
-        map_insert(html_map, "nbsp", 0x00a0U);
-        map_insert(html_map, "bull", 0x2022U);
-        map_insert(html_map, "aring", '\xe5');
-        map_insert(html_map, "oslash", '\xf8');
-        map_insert(html_map, "ouml", '\xf6');
-        map_insert(html_map, "auml", '\xe4');
-        map_insert(html_map, "uuml", '\xfc');
-        map_insert(html_map, "Ouml", '\xd6');
-        map_insert(html_map, "Auml", '\xc4');
-        map_insert(html_map, "Uuml", '\xdc');
-        map_insert(html_map, "szlig", '\xdf');
-        map_insert(html_map, "copy", '\xa9');
-        map_insert(html_map, "deg", '\xb0');
-        map_insert(html_map, "micro", '\xb5');
-        map_insert(html_map, "plusmn", '\xb1');
-        map_insert(html_map, "middot", '*');
-        map_insert(html_map, "quot", '\"');
-        map_insert(html_map, "commat", '@');
-        map_insert(html_map, "num", '#');
-        map_insert(html_map, "dollar", '$');
-        map_insert(html_map, "ldquo", '`');
-        map_insert(html_map, "rdquo", '\'');
-        map_insert(html_map, "sol", '/' );
-        map_insert(html_map, "bsol", '\\');
-        map_insert(html_map, "lowbar", '_');
+	html_map = new QMap<QCString, QChar>;
+	qAddPostRoutine( qt_cleanup_html_map );
+	map_insert( html_map,  "AElig", 0x00c6 );
+	map_insert( html_map,  "Aacute", 0x00c1 );
+	map_insert( html_map,  "Acirc", 0x00c2 );
+	map_insert( html_map,  "Agrave", 0x00c0 );
+	map_insert( html_map,  "Alpha", 0x0391 );
+	map_insert( html_map,  "AMP", 38 );
+	map_insert( html_map,  "Aring", 0x00c5 );
+	map_insert( html_map,  "Atilde", 0x00c3 );
+	map_insert( html_map,  "Auml", 0x00c4 );
+	map_insert( html_map,  "Beta", 0x0392 );
+	map_insert( html_map,  "Ccedil", 0x00c7 );
+	map_insert( html_map,  "Chi", 0x03a7 );
+	map_insert( html_map,  "Dagger", 0x2021 );
+	map_insert( html_map,  "Delta", 0x0394 );
+	map_insert( html_map,  "ETH", 0x00d0 );
+	map_insert( html_map,  "Eacute", 0x00c9 );
+	map_insert( html_map,  "Ecirc", 0x00ca );
+	map_insert( html_map,  "Egrave", 0x00c8 );
+	map_insert( html_map,  "Epsilon", 0x0395 );
+	map_insert( html_map,  "Eta", 0x0397 );
+	map_insert( html_map,  "Euml", 0x00cb );
+	map_insert( html_map,  "Gamma", 0x0393 );
+	map_insert( html_map,  "GT", 62 );
+	map_insert( html_map,  "Iacute", 0x00cd );
+	map_insert( html_map,  "Icirc", 0x00ce );
+	map_insert( html_map,  "Igrave", 0x00cc );
+	map_insert( html_map,  "Iota", 0x0399 );
+	map_insert( html_map,  "Iuml", 0x00cf );
+	map_insert( html_map,  "Kappa", 0x039a );
+	map_insert( html_map,  "Lambda", 0x039b );
+	map_insert( html_map,  "LT", 60 );
+	map_insert( html_map,  "Mu", 0x039c );
+	map_insert( html_map,  "Ntilde", 0x00d1 );
+	map_insert( html_map,  "Nu", 0x039d );
+	map_insert( html_map,  "OElig", 0x0152 );
+	map_insert( html_map,  "Oacute", 0x00d3 );
+	map_insert( html_map,  "Ocirc", 0x00d4 );
+	map_insert( html_map,  "Ograve", 0x00d2 );
+	map_insert( html_map,  "Omega", 0x03a9 );
+	map_insert( html_map,  "Omicron", 0x039f );
+	map_insert( html_map,  "Oslash", 0x00d8 );
+	map_insert( html_map,  "Otilde", 0x00d5 );
+	map_insert( html_map,  "Ouml", 0x00d6 );
+	map_insert( html_map,  "Phi", 0x03a6 );
+	map_insert( html_map,  "Pi", 0x03a0 );
+	map_insert( html_map,  "Prime", 0x2033 );
+	map_insert( html_map,  "Psi", 0x03a8 );
+	map_insert( html_map,  "QUOT", 34 );
+	map_insert( html_map,  "Rho", 0x03a1 );
+	map_insert( html_map,  "Scaron", 0x0160 );
+	map_insert( html_map,  "Sigma", 0x03a3 );
+	map_insert( html_map,  "THORN", 0x00de );
+	map_insert( html_map,  "Tau", 0x03a4 );
+	map_insert( html_map,  "Theta", 0x0398 );
+	map_insert( html_map,  "Uacute", 0x00da );
+	map_insert( html_map,  "Ucirc", 0x00db );
+	map_insert( html_map,  "Ugrave", 0x00d9 );
+	map_insert( html_map,  "Upsilon", 0x03a5 );
+	map_insert( html_map,  "Uuml", 0x00dc );
+	map_insert( html_map,  "Xi", 0x039e );
+	map_insert( html_map,  "Yacute", 0x00dd );
+	map_insert( html_map,  "Yuml", 0x0178 );
+	map_insert( html_map,  "Zeta", 0x0396 );
+	map_insert( html_map,  "aacute", 0x00e1 );
+	map_insert( html_map,  "acirc", 0x00e2 );
+	map_insert( html_map,  "acute", 0x00b4 );
+	map_insert( html_map,  "aelig", 0x00e6 );
+	map_insert( html_map,  "agrave", 0x00e0 );
+	map_insert( html_map,  "alefsym", 0x2135 );
+	map_insert( html_map,  "alpha", 0x03b1 );
+	map_insert( html_map,  "amp", 38 );
+	map_insert( html_map,  "and", 0x22a5 );
+	map_insert( html_map,  "ang", 0x2220 );
+	map_insert( html_map,  "apos", 0x0027 );
+	map_insert( html_map,  "aring", 0x00e5 );
+	map_insert( html_map,  "asymp", 0x2248 );
+	map_insert( html_map,  "atilde", 0x00e3 );
+	map_insert( html_map,  "auml", 0x00e4 );
+	map_insert( html_map,  "bdquo", 0x201e );
+	map_insert( html_map,  "beta", 0x03b2 );
+	map_insert( html_map,  "brvbar", 0x00a6 );
+	map_insert( html_map,  "bull", 0x2022 );
+	map_insert( html_map,  "cap", 0x2229 );
+	map_insert( html_map,  "ccedil", 0x00e7 );
+	map_insert( html_map,  "cedil", 0x00b8 );
+	map_insert( html_map,  "cent", 0x00a2 );
+	map_insert( html_map,  "chi", 0x03c7 );
+	map_insert( html_map,  "circ", 0x02c6 );
+	map_insert( html_map,  "clubs", 0x2663 );
+	map_insert( html_map,  "cong", 0x2245 );
+	map_insert( html_map,  "copy", 0x00a9 );
+	map_insert( html_map,  "crarr", 0x21b5 );
+	map_insert( html_map,  "cup", 0x222a );
+	map_insert( html_map,  "curren", 0x00a4 );
+	map_insert( html_map,  "dArr", 0x21d3 );
+	map_insert( html_map,  "dagger", 0x2020 );
+	map_insert( html_map,  "darr", 0x2193 );
+	map_insert( html_map,  "deg", 0x00b0 );
+	map_insert( html_map,  "delta", 0x03b4 );
+	map_insert( html_map,  "diams", 0x2666 );
+	map_insert( html_map,  "divide", 0x00f7 );
+	map_insert( html_map,  "eacute", 0x00e9 );
+	map_insert( html_map,  "ecirc", 0x00ea );
+	map_insert( html_map,  "egrave", 0x00e8 );
+	map_insert( html_map,  "empty", 0x2205 );
+	map_insert( html_map,  "emsp", 0x2003 );
+	map_insert( html_map,  "ensp", 0x2002 );
+	map_insert( html_map,  "epsilon", 0x03b5 );
+	map_insert( html_map,  "equiv", 0x2261 );
+	map_insert( html_map,  "eta", 0x03b7 );
+	map_insert( html_map,  "eth", 0x00f0 );
+	map_insert( html_map,  "euml", 0x00eb );
+	map_insert( html_map,  "euro", 0x20ac );
+	map_insert( html_map,  "exist", 0x2203 );
+	map_insert( html_map,  "fnof", 0x0192 );
+	map_insert( html_map,  "forall", 0x2200 );
+	map_insert( html_map,  "frac12", 0x00bd );
+	map_insert( html_map,  "frac14", 0x00bc );
+	map_insert( html_map,  "frac34", 0x00be );
+	map_insert( html_map,  "frasl", 0x2044 );
+	map_insert( html_map,  "gamma", 0x03b3 );
+	map_insert( html_map,  "ge", 0x2265 );
+	map_insert( html_map,  "gt", 62 );
+	map_insert( html_map,  "hArr", 0x21d4 );
+	map_insert( html_map,  "harr", 0x2194 );
+	map_insert( html_map,  "hearts", 0x2665 );
+	map_insert( html_map,  "hellip", 0x2026 );
+	map_insert( html_map,  "iacute", 0x00ed );
+	map_insert( html_map,  "icirc", 0x00ee );
+	map_insert( html_map,  "iexcl", 0x00a1 );
+	map_insert( html_map,  "igrave", 0x00ec );
+	map_insert( html_map,  "image", 0x2111 );
+	map_insert( html_map,  "infin", 0x221e );
+	map_insert( html_map,  "int", 0x222b );
+	map_insert( html_map,  "iota", 0x03b9 );
+	map_insert( html_map,  "iquest", 0x00bf );
+	map_insert( html_map,  "isin", 0x2208 );
+	map_insert( html_map,  "iuml", 0x00ef );
+	map_insert( html_map,  "kappa", 0x03ba );
+	map_insert( html_map,  "lArr", 0x21d0 );
+	map_insert( html_map,  "lambda", 0x03bb );
+	map_insert( html_map,  "lang", 0x2329 );
+	map_insert( html_map,  "laquo", 0x00ab );
+	map_insert( html_map,  "larr", 0x2190 );
+	map_insert( html_map,  "lceil", 0x2308 );
+	map_insert( html_map,  "ldquo", 0x201c );
+	map_insert( html_map,  "le", 0x2264 );
+	map_insert( html_map,  "lfloor", 0x230a );
+	map_insert( html_map,  "lowast", 0x2217 );
+	map_insert( html_map,  "loz", 0x25ca );
+	map_insert( html_map,  "lrm", 0x200e );
+	map_insert( html_map,  "lsaquo", 0x2039 );
+	map_insert( html_map,  "lsquo", 0x2018 );
+	map_insert( html_map,  "lt", 60 );
+	map_insert( html_map,  "macr", 0x00af );
+	map_insert( html_map,  "mdash", 0x2014 );
+	map_insert( html_map,  "micro", 0x00b5 );
+	map_insert( html_map,  "middot", 0x00b7 );
+	map_insert( html_map,  "minus", 0x2212 );
+	map_insert( html_map,  "mu", 0x03bc );
+	map_insert( html_map,  "nabla", 0x2207 );
+	map_insert( html_map,  "nbsp", 0x00a0 );
+	map_insert( html_map,  "ndash", 0x2013 );
+	map_insert( html_map,  "ne", 0x2260 );
+	map_insert( html_map,  "ni", 0x220b );
+	map_insert( html_map,  "not", 0x00ac );
+	map_insert( html_map,  "notin", 0x2209 );
+	map_insert( html_map,  "nsub", 0x2284 );
+	map_insert( html_map,  "ntilde", 0x00f1 );
+	map_insert( html_map,  "nu", 0x03bd );
+	map_insert( html_map,  "oacute", 0x00f3 );
+	map_insert( html_map,  "ocirc", 0x00f4 );
+	map_insert( html_map,  "oelig", 0x0153 );
+	map_insert( html_map,  "ograve", 0x00f2 );
+	map_insert( html_map,  "oline", 0x203e );
+	map_insert( html_map,  "omega", 0x03c9 );
+	map_insert( html_map,  "omicron", 0x03bf );
+	map_insert( html_map,  "oplus", 0x2295 );
+	map_insert( html_map,  "or", 0x22a6 );
+	map_insert( html_map,  "ordf", 0x00aa );
+	map_insert( html_map,  "ordm", 0x00ba );
+	map_insert( html_map,  "oslash", 0x00f8 );
+	map_insert( html_map,  "otilde", 0x00f5 );
+	map_insert( html_map,  "otimes", 0x2297 );
+	map_insert( html_map,  "ouml", 0x00f6 );
+	map_insert( html_map,  "para", 0x00b6 );
+	map_insert( html_map,  "part", 0x2202 );
+	map_insert( html_map,  "percnt", 0x0025 );
+	map_insert( html_map,  "permil", 0x2030 );
+	map_insert( html_map,  "perp", 0x22a5 );
+	map_insert( html_map,  "phi", 0x03c6 );
+	map_insert( html_map,  "pi", 0x03c0 );
+	map_insert( html_map,  "piv", 0x03d6 );
+	map_insert( html_map,  "plusmn", 0x00b1 );
+	map_insert( html_map,  "pound", 0x00a3 );
+	map_insert( html_map,  "prime", 0x2032 );
+	map_insert( html_map,  "prod", 0x220f );
+	map_insert( html_map,  "prop", 0x221d );
+	map_insert( html_map,  "psi", 0x03c8 );
+	map_insert( html_map,  "quot", 34 );
+	map_insert( html_map,  "rArr", 0x21d2 );
+	map_insert( html_map,  "radic", 0x221a );
+	map_insert( html_map,  "rang", 0x232a );
+	map_insert( html_map,  "raquo", 0x00bb );
+	map_insert( html_map,  "rarr", 0x2192 );
+	map_insert( html_map,  "rceil", 0x2309 );
+	map_insert( html_map,  "rdquo", 0x201d );
+	map_insert( html_map,  "real", 0x211c );
+	map_insert( html_map,  "reg", 0x00ae );
+	map_insert( html_map,  "rfloor", 0x230b );
+	map_insert( html_map,  "rho", 0x03c1 );
+	map_insert( html_map,  "rlm", 0x200f );
+	map_insert( html_map,  "rsaquo", 0x203a );
+	map_insert( html_map,  "rsquo", 0x2019 );
+	map_insert( html_map,  "sbquo", 0x201a );
+	map_insert( html_map,  "scaron", 0x0161 );
+	map_insert( html_map,  "sdot", 0x22c5 );
+	map_insert( html_map,  "sect", 0x00a7 );
+	map_insert( html_map,  "shy", 0x00ad );
+	map_insert( html_map,  "sigma", 0x03c3 );
+	map_insert( html_map,  "sigmaf", 0x03c2 );
+	map_insert( html_map,  "sim", 0x223c );
+	map_insert( html_map,  "spades", 0x2660 );
+	map_insert( html_map,  "sub", 0x2282 );
+	map_insert( html_map,  "sube", 0x2286 );
+	map_insert( html_map,  "sum", 0x2211 );
+	map_insert( html_map,  "sup1", 0x00b9 );
+	map_insert( html_map,  "sup2", 0x00b2 );
+	map_insert( html_map,  "sup3", 0x00b3 );
+	map_insert( html_map,  "sup", 0x2283 );
+	map_insert( html_map,  "supe", 0x2287 );
+	map_insert( html_map,  "szlig", 0x00df );
+	map_insert( html_map,  "tau", 0x03c4 );
+	map_insert( html_map,  "there4", 0x2234 );
+	map_insert( html_map,  "theta", 0x03b8 );
+	map_insert( html_map,  "thetasym", 0x03d1 );
+	map_insert( html_map,  "thinsp", 0x2009 );
+	map_insert( html_map,  "thorn", 0x00fe );
+	map_insert( html_map,  "tilde", 0x02dc );
+	map_insert( html_map,  "times", 0x00d7 );
+	map_insert( html_map,  "trade", 0x2122 );
+	map_insert( html_map,  "uArr", 0x21d1 );
+	map_insert( html_map,  "uacute", 0x00fa );
+	map_insert( html_map,  "uarr", 0x2191 );
+	map_insert( html_map,  "ucirc", 0x00fb );
+	map_insert( html_map,  "ugrave", 0x00f9 );
+	map_insert( html_map,  "uml", 0x00a8 );
+	map_insert( html_map,  "upsih", 0x03d2 );
+	map_insert( html_map,  "upsilon", 0x03c5 );
+	map_insert( html_map,  "uuml", 0x00fc );
+	map_insert( html_map,  "weierp", 0x2118 );
+	map_insert( html_map,  "xi", 0x03be );
+	map_insert( html_map,  "yacute", 0x00fd );
+	map_insert( html_map,  "yen", 0x00a5 );
+	map_insert( html_map,  "yuml", 0x00ff );
+	map_insert( html_map,  "zeta", 0x03b6 );
+	map_insert( html_map,  "zwj", 0x200d );
+	map_insert( html_map,  "zwnj", 0x200c );
     }
     return html_map;
 }
@@ -1266,7 +1498,7 @@ bool QRichTextIterator::goTo( const QPoint& pos )
         while ( !item->it.atLast() ) {
             QPoint p( x - table->outerborder, y - table->outerborder );
             QRect r( item->it.current()->geometry() );
-            if ( r.contains( p ) || ( p.x() <= r.right() && p.y() <= r.bottom() ) )
+            if ( r.contains( p ) )
                 break;
             ++item->it;
         }
@@ -1356,7 +1588,7 @@ QTextParagraph::QTextParagraph( QTextParagraph* p, QTextFormatCollection* format
     : parent( p ), formats( formatCol ), format( fmt ), text( formatCol ), style ( stl ), attributes_( attr )
 {
     init();
-};
+}
 
 
 QTextParagraph::QTextParagraph( QTextParagraph* p, QTextFormatCollection* formatCol, const QTextCharFormat& fmt,
@@ -1364,7 +1596,7 @@ QTextParagraph::QTextParagraph( QTextParagraph* p, QTextFormatCollection* format
     : parent( p ), formats( formatCol ), format( fmt ), text( formats ), style ( stl )
 {
     init();
-};
+}
 
 
 void QTextParagraph::init()
@@ -2613,26 +2845,43 @@ void QTextTable::realize( QPainter* p)
     width = 0;
 }
 
+
+void QTextTable::adjustCells( int y , int shift )
+{
+    QListIterator<QTextTableCell> it( cells );
+    QTextTableCell* cell;
+    bool enlarge = FALSE;
+    while ( ( cell = it.current() ) ) {
+	++it;
+	QRect r = cell->geometry();
+	if ( y <= r.top() ) {
+	    r.moveBy(0, shift );
+	    cell->setGeometry( r );
+	    enlarge = TRUE;
+	} else if ( y <= r.bottom() ) {
+	    r.rBottom() += shift;
+	    cell->setGeometry( r );
+	    enlarge = TRUE;
+	}
+    }
+    if ( enlarge )
+	height += shift;
+}
+
 void QTextTable::verticalBreak( int  yt, QTextFlow* flow )
 {
     if ( flow->pagesize <= 0 )
         return;
-    int shift = 0;
-    for (QTextTableCell* cell = cells.first(); cell; cell = cells.next() ) {
-        QRect r = cell->geometry();
-        r.moveBy(0, shift );
-        cell->setGeometry( r );
-        if ( cell->column() == 0 ) {
-            int y = yt + outerborder + cell->geometry().y();
-            int oldy = y;
-            flow->adjustFlow( y, width, cell->geometry().height() + 2*cellspacing );
-            shift += y - oldy;
-            r = cell->geometry();
-            r.moveBy(0, y - oldy );
-            cell->setGeometry( r );
-        }
+    QListIterator<QTextTableCell> it( cells );
+    QTextTableCell* cell;
+    while ( ( cell = it.current() ) ) {
+	++it;
+	int y = yt + outerborder + cell->geometry().y();
+	int oldy = y;
+	flow->adjustFlow( y, width, cell->richText()->flow()->height + 2*cellspacing );
+	int shift = y - oldy;
+	adjustCells( oldy - outerborder - yt, shift );
     }
-    height += shift;
 }
 
 void QTextTable::draw(QPainter* p, int x, int y,
@@ -2641,40 +2890,44 @@ void QTextTable::draw(QPainter* p, int x, int y,
 {
     painter = p;
     for (QTextTableCell* cell = cells.first(); cell; cell = cells.next() ) {
-        if ( y + outerborder + cell->geometry().top() - cellspacing < cy+ch
-             && y + outerborder + 2*cellspacing + cell->geometry().bottom() >= cy ) {
-            cell->draw( x+outerborder, y+outerborder, ox, oy, cx, cy, cw, ch, backgroundRegion, cg, to );
-            if ( border ) {
-                QRect r( x+outerborder+cell->geometry().x()-innerborder-ox,
-                         y+outerborder+cell->geometry().y()-innerborder-oy,
-                         cell->geometry().width()+2*innerborder,
-                         cell->geometry().height()+2*innerborder);
-                int s = cellspacing;
-                if ( p->device()->devType() == QInternal::Printer ) {
-                    qDrawPlainRect( p, r, cg.text(), innerborder );
-                } else {
-                    p->fillRect( r.left()-s, r.top(), s, r.height(), cg.button() );
-                    p->fillRect( r.right(), r.top(), s, r.height(), cg.button() );
-                    p->fillRect( r.left()-s, r.top()-s, r.width()+2*s, s, cg.button() );
-                    p->fillRect( r.left()-s, r.bottom(), r.width()+2*s, s, cg.button() );
-                    qDrawShadePanel( p, r, cg, TRUE, innerborder );
-                }
-            }
-        }
+	if ( y + outerborder + cell->geometry().top() - cellspacing < cy+ch
+	     && y + outerborder + 2*cellspacing + cell->geometry().bottom() >= cy ) {
+	    cell->draw( x+outerborder, y+outerborder, ox, oy, cx, cy, cw, ch, backgroundRegion, cg, to );
+	    if ( border ) {
+		QRect r( x+outerborder+cell->geometry().x()-innerborder-ox,
+			 y+outerborder+cell->geometry().y()-innerborder-oy,
+			 cell->geometry().width()+2*innerborder,
+			 cell->geometry().height()+2*innerborder);
+		if ( p->device()->devType() == QInternal::Printer ) {
+		    qDrawPlainRect( p, r, cg.text(), innerborder );
+		} else {
+		    int s = QMAX( cellspacing-2*innerborder, 0);
+		    if ( s ) {
+			p->fillRect( r.left()-s, r.top(), s+1, r.height(), cg.button() );
+			p->fillRect( r.right(), r.top(), s+1, r.height(), cg.button() );
+			p->fillRect( r.left()-s, r.top()-s, r.width()+2*s, s, cg.button() );
+			p->fillRect( r.left()-s, r.bottom(), r.width()+2*s, s, cg.button() );
+		    }
+		    qDrawShadePanel( p, r, cg, TRUE, innerborder );
+		}
+	    }
+	}
     }
     if ( border ) {
-        QRect r ( x-ox, y-oy, width, height );
-        if ( p->device()->devType() == QInternal::Printer ) {
-            qDrawPlainRect( p, QRect(r.x()+1, r.y()+1, r.width()-2, r.height()-2), cg.text(), border );
-        } else {
-            int s = border;
-            p->fillRect( r.left(), r.top(), s, r.height(), cg.button() );
-            p->fillRect( r.right()-s, r.top(), s, r.height(), cg.button() );
-            p->fillRect( r.left(), r.top(), r.width(), s, cg.button() );
-            p->fillRect( r.left(), r.bottom()-s, r.width(), s, cg.button() );
-            qDrawShadePanel( p, r, cg, FALSE, border );
-        }
-        backgroundRegion = backgroundRegion.subtract( r );
+	QRect r ( x-ox, y-oy, width, height );
+	if ( p->device()->devType() == QInternal::Printer ) {
+	    qDrawPlainRect( p, QRect(r.x()+1, r.y()+1, r.width()-2, r.height()-2), cg.text(), border );
+	} else {
+	    int s = border+QMAX( cellspacing-2*innerborder, 0);
+	    if ( s ) {
+		p->fillRect( r.left(), r.top(), s, r.height(), cg.button() );
+		p->fillRect( r.right()-s, r.top(), s, r.height(), cg.button() );
+		p->fillRect( r.left(), r.top(), r.width(), s, cg.button() );	
+		p->fillRect( r.left(), r.bottom()-s, r.width(), s, cg.button() );
+	    }
+	    qDrawShadePanel( p, r, cg, FALSE, border );
+	}
+	backgroundRegion = backgroundRegion.subtract( r );
     }
 }
 
@@ -2708,7 +2961,7 @@ void QTextTable::resize( QPainter* p, int nwidth )
     int h = layout->heightForWidth( width-2*outerborder );
     layout->setGeometry( QRect(0, 0, width-2*outerborder, h)  );
     height = layout->geometry().height()+2*outerborder;
-};
+}
 
 void QTextTable::addCell( QTextTableCell* cell )
 {

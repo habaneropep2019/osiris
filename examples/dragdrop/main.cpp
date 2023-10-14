@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/dragdrop/main.cpp   2.3.1   edited 2001-01-26 $
+** $Id: qt/examples/dragdrop/main.cpp   2.3.2   edited 2001-06-12 $
 **
 ** Ritual main() for Qt applications
 **
@@ -56,17 +56,17 @@ int main( int argc, char ** argv )
 
     QWidget mw;
     addStuff( &mw, TRUE );
-    mw.setCaption( "Drag and Drop Example" );
+    mw.setCaption( "Qt Example - Drag and Drop" );
     mw.show();
 
     QWidget mw2;
     addStuff( &mw2, FALSE );
-    mw2.setCaption( "Drag and Drop Example" );
+    mw2.setCaption( "Qt Example - Drag and Drop" );
     mw2.show();
 
     QWidget mw3;
     addStuff( &mw3, TRUE, TRUE );
-    mw3.setCaption( "Drag and Drop Example" );
+    mw3.setCaption( "Qt Example - Drag and Drop" );
     mw3.show();
 
     QObject::connect(qApp,SIGNAL(lastWindowClosed()),qApp,SLOT(quit()));

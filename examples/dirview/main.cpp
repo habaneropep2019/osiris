@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/dirview/main.cpp   2.3.1   edited 2001-01-26 $
+** $Id: qt/examples/dirview/main.cpp   2.3.2   edited 2001-06-12 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -34,7 +34,7 @@ int main( int argc, char ** argv )
     }
 
     mw.resize( 400, 400 );
-    mw.setCaption( "Directory Browser" );
+    mw.setCaption( "Qt Example - Directory Browser" );
     mw.setAllColumnsShowFocus( TRUE );
     a.setMainWidget( &mw );
     mw.show();

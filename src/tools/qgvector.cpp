@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qgvector.cpp   2.3.1   edited 2001-01-26 $
+** $Id: qt/src/tools/qgvector.cpp   2.3.2   edited 2001-10-14 $
 **
 ** Implementation of QGVector class
 **
@@ -186,11 +186,15 @@ QGVector::QGVector( const QGVector &a )		// make copy of other vector
 	vec = 0;
 	return;
     }
-    vec = NEW(Item,len);
+    vec = NEW( Item, len );
     CHECK_PTR( vec );
-    for ( uint i=0; i<len; i++ ) {
-	vec[i] = a.vec[i] ? newItem( a.vec[i] ) : 0;
-	CHECK_PTR( vec[i] );
+    for ( uint i = 0; i < len; i++ ) {
+	if ( a.vec[i] ) {
+	    vec[i] = newItem( a.vec[i] );
+	    CHECK_PTR( vec[i] );
+	} else {
+	    vec[i] = 0;
+	}
     }
 }
 
@@ -209,19 +213,23 @@ QGVector::~QGVector()
 */
 
 QGVector& QGVector::operator=( const QGVector &v )
-{						// assign from other vector
-    clear();					// first delete old vector
+{
+    clear();
     len = v.len;
     numItems = v.numItems;
     if ( len == 0 ) {
 	vec = 0;
 	return *this;
     }
-    vec = NEW(Item,len);				// create new vector
+    vec = NEW( Item, len );
     CHECK_PTR( vec );
-    for ( uint i=0; i<len; i++ ) {		// copy elements
-	vec[i] = v.vec[i] ? newItem( v.vec[i] ) : 0;
-	CHECK_PTR( vec[i] );
+    for ( uint i = 0; i < len; i++ ) {
+	if ( v.vec[i] ) {
+	    vec[i] = newItem( v.vec[i] );
+	    CHECK_PTR( vec[i] );
+	} else {
+	    vec[i] = 0;
+	}
     }
     return *this;
 }
@@ -427,7 +435,7 @@ void QGVector::sort()				// sort vector
     register Item *start = &vec[0];
     register Item *end	= &vec[len-1];
     Item tmp;
-    while ( TRUE ) {				// put all zero elements behind
+    for (;;) {				// put all zero elements behind
 	while ( start < end && *start != 0 )
 	    start++;
 	while ( end > start && *end == 0 )

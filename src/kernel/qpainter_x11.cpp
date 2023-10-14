@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qpainter_x11.cpp   2.3.1   edited 2001-05-22 $
+** $Id: qt/src/kernel/qpainter_x11.cpp   2.3.2   edited 2001-10-22 $
 **
 ** Implementation of QPainter class for X11
 **
@@ -800,7 +800,7 @@ void QPainter::updatePen()
     }
 
     if ( !internclipok ) {
-	if ( testf(PaintEventClipOn) ) {
+	if ( testf(PaintEventClipOn) && paintEventClipRegion ) {
 	    if ( penRef &&((QGCC*)penRef)->clip_serial < gc_cache_clip_serial ) {
 		XSetRegion( dpy, gc, paintEventClipRegion->handle() );
 		((QGCC*)penRef)->clip_serial = gc_cache_clip_serial;
@@ -1001,7 +1001,7 @@ static uchar *pat_tbl[] = {
     }
 
     if ( !internclipok ) {
-	if ( testf(PaintEventClipOn) ) {
+	if ( testf(PaintEventClipOn) && paintEventClipRegion ) {
 	    if ( brushRef &&((QGCC*)brushRef)->clip_serial < gc_cache_clip_serial ) {
 		XSetRegion( dpy, gc_brush, paintEventClipRegion->handle() );
 		((QGCC*)brushRef)->clip_serial = gc_cache_clip_serial;
@@ -1500,7 +1500,7 @@ void QPainter::setClipping( bool enable )
     }
     if ( enable ) {
 	QRegion rgn = crgn;
-	if ( testf(PaintEventClipOn) )
+	if ( testf(PaintEventClipOn) && paintEventClipRegion )
 	    rgn = rgn.intersect( *paintEventClipRegion );
 	if ( penRef )
 	    updatePen();
@@ -1509,7 +1509,7 @@ void QPainter::setClipping( bool enable )
 	    updateBrush();
 	XSetRegion( dpy, gc_brush, rgn.handle() );
     } else {
-	if ( testf(PaintEventClipOn) ) {
+	if ( testf(PaintEventClipOn) && paintEventClipRegion ) {
 	    XSetRegion( dpy, gc, paintEventClipRegion->handle() );
 	    XSetRegion( dpy, gc_brush, paintEventClipRegion->handle() );
 	} else {
@@ -2624,7 +2624,7 @@ void QPainter::drawPixmap( int x, int y, const QPixmap &pixmap,
 	    XSetFillStyle( dpy, gc, FillSolid );
 	    if ( !selfmask ) {
 		XSetClipOrigin( dpy, gc, 0, 0 );
-		if ( testf(PaintEventClipOn) )
+		if ( testf(PaintEventClipOn) && paintEventClipRegion )
 		    XSetRegion( dpy, gc, paintEventClipRegion->handle() );
 		else
 		    XSetClipMask( dpy, gc, None );
@@ -2646,7 +2646,7 @@ void QPainter::drawPixmap( int x, int y, const QPixmap &pixmap,
 	// Implies that clipping is on, either explicit or implicit
 	// Create a new mask that combines the mask with the clip region
 
-	if ( testf(PaintEventClipOn) ) {
+	if ( testf(PaintEventClipOn) && paintEventClipRegion ) {
 	    if ( hasClipping() )
 		rgn = rgn.intersect( *paintEventClipRegion );
 	    else
@@ -2874,18 +2874,16 @@ static void ins_text_bitmap( const QString &key, QBitmap *bm )
 /*!
   Draws at most \a len characters from \a str at position \a (x,y).
 
-  \a (x,y) is the base line position.  Note that the meaning of \a y
-  is not the same for the two drawText() varieties.
+  \a (x,y) is the base line position.  Note that the meaning of
+  \a y is not the same for the two drawText() varieties.
 */
 
 void QPainter::drawText( int x, int y, const QString &str, int len )
 {
-    if ( !isActive() )
+    if ( !isActive() || str.isEmpty() )
 	return;
-    if ( len < 0 )
+    if ( len < 0 || len > (int) str.length() )
 	len = str.length();
-    if ( len == 0 )				// empty string
-	return;
 
     if ( testf(DirtyFont|ExtDev|VxF|WxF) ) {
 	if ( testf(DirtyFont) )
@@ -3042,8 +3040,8 @@ void QPainter::drawText( int x, int y, const QString &str, int len )
 	    if (qt_use_xft ())
 		ft = (XftFont *)qt_ft_font (&cfont);
 
-            if (ft && (draw = qt_lookup_ft_draw (hd,
-						 testf(PaintEventClipOn),
+            if (ft && (draw = qt_lookup_ft_draw (hd, (testf(PaintEventClipOn) &&
+						      paintEventClipRegion),
 						 testf(ClipOn) ? &crgn : 0)))
             {
                 unsigned short   *tstr;

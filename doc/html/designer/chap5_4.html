@@ -87,7 +87,7 @@ c++ -o myform myform.o moc_myform.o myformimpl.o moc_myformimpl.o -L$(QTDIR)/lib
     myform
 
 myform: myform.o moc_myform.o myformimpl.o moc_myformimpl.o
-    c++ -o $&commat; $+ -L$(QTDIR)/lib -lqt
+    c++ -o $@ $+ -L$(QTDIR)/lib -lqt
 
 myform.o:	myform.cpp myform.h
     c++ -c $$&lt; -I$(QTDIR)/include

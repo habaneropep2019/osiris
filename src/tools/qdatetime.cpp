@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qdatetime.cpp   2.3.1   edited 2001-02-18 $
+** $Id: qt/src/tools/qdatetime.cpp   2.3.2   edited 2001-02-18 $
 **
 ** Implementation of date and time classes
 **

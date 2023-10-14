@@ -27,8 +27,8 @@ When you run a Qt program you can specify several command line options
 that can help with debugging.
 <p>
 <ul>
-<li>-nograb The application should never grab <a href="qwidget.html#66ef02">the
-mouse</a> or <a href="qwidget.html#2bbb02">the keyboard</a>.
+<li>-nograb The application should never grab <a href="qwidget.html#5bdd5f">the
+mouse</a> or <a href="qwidget.html#6830ee">the keyboard</a>.
 This option is set by default when the program is running in the <code>gdb</code> debugger under Linux.
 <li>-dograb Ignore any implicit or explicit -nograb.  -dograb wins
 over -nograb even when -nograb is last on the command line.
@@ -45,18 +45,18 @@ version of Qt.
 Qt includes three global functions for writing out warning and debug
 text.
 <ul>
-<li><a href="qapplication.html#3db6b2">qDebug()</a> for writing debug output for testing etc.
-<li><a href="qapplication.html#7a943f">qWarning()</a> for writing warning output when program
+<li><a href="qapplication.html#72e78c">qDebug()</a> for writing debug output for testing etc.
+<li><a href="qapplication.html#290ef4">qWarning()</a> for writing warning output when program
 errors occur.
-<li><a href="qapplication.html#911fb2">qFatal()</a> for writing fatal error messages and exit.
+<li><a href="qapplication.html#0e1d68">qFatal()</a> for writing fatal error messages and exit.
 </ul>
 <p>
 The Qt implementation of these functions prints the text to the <code>stderr</code>
 output under Unix/X11 and to the debugger under Windows.  You can
 take over these functions by installing a message handler;
-<a href="qapplication.html#ef70dc">qInstallMsgHandler()</a>.
+<a href="qapplication.html#a8a31b">qInstallMsgHandler()</a>.
 <p>
-The debugging functions <a href="qobject.html#af854e">QObject::dumpObjectTree()</a> and <a href="qobject.html#57f1a6">QObject::dumpObjectInfo()</a> are often useful when an application looks
+The debugging functions <a href="qobject.html#c21cea">QObject::dumpObjectTree()</a> and <a href="qobject.html#d459b3">QObject::dumpObjectInfo()</a> are often useful when an application looks
 or acts strangely.  More useful if you use object names than not, but
 often useful even without names.
 <p>
@@ -67,9 +67,9 @@ The header file qglobal.h contains many debugging macros and #defines.
 <p>
 Two important macros are:
 <ul>
-<li><a href="qapplication.html#654961">ASSERT(b)</a> where b is a boolean expression, writes
+<li><a href="qapplication.html#6c7a8c">ASSERT(b)</a> where b is a boolean expression, writes
 the warning: "ASSERT: 'b' in file file.cpp (234)" if b is FALSE.
-<li><a href="qapplication.html#4dcfaf">CHECK_PTR(p)</a> where p is a pointer.
+<li><a href="qapplication.html#7ed4c6">CHECK_PTR(p)</a> where p is a pointer.
 Writes the warning "In file file.cpp, line 234: Out of memory" if p is null.
 </ul>
 <p>
@@ -130,12 +130,12 @@ Example:
   {
   #if defined(CHECK_NULL)
       if ( p == 0 )
-          <a href="qapplication.html#7a943f">qWarning</a>( "f: Null pointer not allowed" );
+          <a href="qapplication.html#290ef4">qWarning</a>( "f: Null pointer not allowed" );
   #endif
 
   #if defined(CHECK_RANGE)
       if ( i &lt; 0 )
-          <a href="qapplication.html#7a943f">qWarning</a>( "f: The index cannot be negative" );
+          <a href="qapplication.html#290ef4">qWarning</a>( "f: The index cannot be negative" );
   #endif
   }
 </pre>
@@ -154,6 +154,6 @@ this problem.
 
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.1</div>
+<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

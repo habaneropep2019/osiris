@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qpicture.cpp   2.3.1   edited 2001-01-26 $
+** $Id: qt/src/kernel/qpicture.cpp   2.3.2   edited 2001-10-18 $
 **
 ** Implementation of QPicture class
 **
@@ -110,10 +110,10 @@ static const Q_UINT16 mfhdr_min = 0;		// minor version #
 */
 
 QPicture::QPicture( int formatVer )
-    : QPaintDevice( QInternal::Picture | QInternal::ExternalDevice )	
+    : QPaintDevice( QInternal::Picture | QInternal::ExternalDevice )
     // set device type
 {
-    if ( formatVer != (int)mfhdr_maj ) {
+    if ( formatVer > 0 && formatVer != (int)mfhdr_maj ) {
 	formatMajor = formatVer;
 	formatMinor = 0;
 	formatOk = FALSE;

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qvariant.cpp   2.3.1   edited 2001-06-13 $
+** $Id: qt/src/kernel/qvariant.cpp   2.3.2   edited 2001-10-19 $
 **
 ** Implementation of QVariant class
 **
@@ -1822,7 +1822,9 @@ int& QVariant::asInt()
 {
     detach();
     if ( d->typ != Int ) {
-	d->value.i = toInt();
+	int i = toInt();
+	d->clear();
+ 	d->value.i = i;
 	d->typ = Int;
     }
     return d->value.i;
@@ -1835,7 +1837,9 @@ uint& QVariant::asUInt()
 {
     detach();
     if ( d->typ != UInt ) {
-	d->value.u = toUInt();
+	uint u = toUInt();
+	d->clear();
+	d->value.u = u;
 	d->typ = UInt;
     }
     return d->value.u;
@@ -1848,7 +1852,9 @@ bool& QVariant::asBool()
 {
     detach();
     if ( d->typ != Bool ) {
-	d->value.b = toBool();
+	bool b = toBool();
+	d->clear();
+	d->value.b = b;
 	d->typ = Bool;
     }
     return d->value.b;
@@ -1860,7 +1866,9 @@ bool& QVariant::asBool()
 double& QVariant::asDouble()
 {
     if ( d->typ != Double ) {
-	d->value.d = toDouble();
+	double dbl = toDouble();
+	d->clear();
+	d->value.d = dbl;
 	d->typ = Double;
     }
     return d->value.d;
@@ -1924,7 +1932,7 @@ bool QVariant::canCast( Type t ) const
     if ( t == List && d->typ == StringList )
 	return TRUE;
     if ( t == StringList && d->typ == List )   {
-	QValueList<QVariant> vl = toList();
+	QValueList<QVariant> vl = toList(); // ### Not used?
 	QValueList<QVariant>::ConstIterator it = listBegin();
 	QValueList<QVariant>::ConstIterator end = listEnd();
 	for( ; it != end; ++it ) {

@@ -1,5 +1,5 @@
 '\" t
-.TH QServerSocket 3qt "13 June 2001" "Trolltech AS" \" -*- nroff -*-
+.TH QServerSocket 3qt "29 October 2001" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2001 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -71,13 +71,17 @@ This constructor in combination with setSocket() allows one to use the QServerSo
 .PP
 See also setSocket().
 .SH "QServerSocket::QServerSocket ( Q_UINT16 port, int backlog = 0, QObject * parent=0, const char * name=0 )"
-Creates a server socket object, that will serve the given \fIport\fR on all the addresses of this host. If \fIport\fR is 0, QServerSocket picks a suitable port in in a system-dependent manner.
+Creates a server socket object, that will serve the given \fIport\fR on all the addresses of this host. If \fIport\fR is 0, QServerSocket picks a suitable port in in a system-dependent manner. With \fIbacklog\fR you can specify how many pending connections a server can have.
 .PP
 The \fIparent\fR and \fIname\fR arguments are passed on as usual to the QObject constructor.
+.PP
+\fBWarning:\fR On Tru64 Unix systems a value of 0 for \fIbacklog\fR means that you don't accept any connections at all; you should specify a value larger than 0.
 .SH "QServerSocket::QServerSocket ( const QHostAddress & address, Q_UINT16 port, int backlog = 0, QObject * parent=0, const char * name=0 )"
-Creates a server socket object, that will serve the given \fIport\fR on just \fIaddress.\fR
+Creates a server socket object, that will serve the given \fIport\fR on just \fIaddress.\fR With \fIbacklog\fR you can specify how many pending connections a server can have.
 .PP
 The \fIparent\fR and \fIname\fR arguments are passed on as usual to the QObject constructor.
+.PP
+\fBWarning:\fR On Tru64 Unix systems a value of 0 for \fIbacklog\fR means that you don't accept any connections at all; you should specify a value larger than 0.
 .SH "QServerSocket::~QServerSocket () \fC[virtual]\fR"
 Destructs the socket.
 .PP
@@ -126,4 +130,4 @@ In case of content or formattting problems with this manual page, please
 report them to
 .BR qt-bugs@trolltech.com .
 Please include the name of the manual page (qserversocket.3qt) and the Qt
-version (2.3.1).
+version (2.3.2).

@@ -58,7 +58,7 @@ There is a change to the constructor, we'll discuss that later.  <pre>
     void LCDRange::setRange( int minVal, int maxVal )
     {
         if ( minVal &lt; 0 || maxVal &gt; 99 || minVal &gt; maxVal ) {
-          <a href="qapplication.html#7a943f">qWarning</a>( "LCDRange::setRange(%d,%d)\n"
+          <a href="qapplication.html#290ef4">qWarning</a>( "LCDRange::setRange(%d,%d)\n"
                    "\tRange must be 0..99\n"
                    "\tand minVal must not be greater than maxVal",
                    minVal, maxVal );
@@ -76,7 +76,7 @@ but chose not to.)  If the arguments are illegal, we use Qt's
 qWarning() function to issue a warning to the user and return
 immediately.  qWarning() is a printf-like function that by default
 sends its output to <code>stderr.</code>  You can install your own handler
-function using <a href="qapplication.html#ef70dc">::qInstallMsgHandler()</a> if you want.
+function using <a href="qapplication.html#a8a31b">::qInstallMsgHandler()</a> if you want.
 <p>
 <h3><a href="t8-cannon-h.html">cannon.h</a></h3>
 <p>
@@ -117,7 +117,7 @@ to update itself (i.e.  paint the widget's surface).
 <p>
 Again, we use the same idiom as for LCDRange in the previous chapter. <pre>
         ang = 45;
-        <a href="qwidget.html#379ca0">setPalette</a>( <a href="qpalette.html">QPalette</a>( <a href="qcolor.html">QColor</a>( 250, 250, 200) ) );
+        <a href="qwidget.html#d7e4b9">setPalette</a>( <a href="qpalette.html">QPalette</a>( <a href="qcolor.html">QColor</a>( 250, 250, 200) ) );
     }
 </pre>
 <p>
@@ -136,7 +136,7 @@ colors will be used.)  <pre>
         if ( ang == degrees )
             return;
         ang = degrees;
-        <a href="qwidget.html#977d49">repaint</a>();
+        <a href="qwidget.html#7569b1">repaint</a>();
         emit angleChanged( ang );
     }
 </pre>
@@ -148,7 +148,7 @@ chosen not to issue a warning if the new angle is out of range.
 If the new angle equals the old one, we return immediately.  It is
 important to only emit the signal angleChanged() when the angle <em>really</em> has changed.
 <p>
-Then we set the new angle value and repaint our widget.  The <a href="qwidget.html#977d49">QWidget::repaint()</a> function clears the widget (usually filling it with
+Then we set the new angle value and repaint our widget.  The <a href="qwidget.html#7569b1">QWidget::repaint()</a> function clears the widget (usually filling it with
 its background color) and send a paint event to the widget.  This
 results in a call the paint event function of the widget.
 <p>
@@ -159,7 +159,7 @@ not regular C++ syntax.  In fact, it is a macro.  <pre>
     {
         <a href="qstring.html">QString</a> s = "Angle = " + QString::number( ang );
         <a href="qpainter.html">QPainter</a> p( this );
-        p.<a href="qpainter.html#8a59ed">drawText</a>( 200, 200, s );
+        p.<a href="qpainter.html#0f088f">drawText</a>( 200, 200, s );
     }
 </pre>
 <p>
@@ -200,9 +200,9 @@ We set the LCDRange to accept ranges from 5 to 70 degrees. <pre>
 </pre>
 <p>
 We create our CannonField. <pre>
-        <a href="qobject.html#c2d209">connect</a>( angle, SIGNAL(valueChanged(int)),
+        <a href="qobject.html#7f8e37">connect</a>( angle, SIGNAL(valueChanged(int)),
                  cannonField, SLOT(setAngle(int)) );
-        <a href="qobject.html#c2d209">connect</a>( cannonField, SIGNAL(angleChanged(int)),
+        <a href="qobject.html#7f8e37">connect</a>( cannonField, SIGNAL(angleChanged(int)),
                  angle, SLOT(setValue(int)) );
 </pre>
 <p>
@@ -234,22 +234,22 @@ manage the children of <em>any</em> widget.
 As the comment indicates, we create a two-by-two array, with ten pixel
 borders.  (The constructor for <a href="qgridlayout.html">QGridLayout</a> can be a little cryptic,
 so it's good to put in such comments.) <pre>
-        grid-&gt;<a href="qgridlayout.html#70abf2">addWidget</a>( quit, 0, 0 );
+        grid-&gt;<a href="qgridlayout.html#dac29c">addWidget</a>( quit, 0, 0 );
 </pre>
 <p>
 We add the Quit button in the top-left cell of the grid: 0, 0. <pre>
-        grid-&gt;<a href="qgridlayout.html#70abf2">addWidget</a>( angle, 1, 0, Qt::AlignTop );
+        grid-&gt;<a href="qgridlayout.html#dac29c">addWidget</a>( angle, 1, 0, Qt::AlignTop );
 </pre>
 <p>
 We put the angle LCDRange in the bottom-left cell, aligned to the top
 of its cell.  (This alignment is one of the things QGridLayout allows
 but QGrid does not.) <pre>
-        grid-&gt;<a href="qgridlayout.html#70abf2">addWidget</a>( cannonField, 1, 1 );
+        grid-&gt;<a href="qgridlayout.html#dac29c">addWidget</a>( cannonField, 1, 1 );
 </pre>
 <p>
 We put the CannonField object in the bottom right cell.  (The top
 right cell is empty, yes.) <pre>
-        grid-&gt;<a href="qgridlayout.html#4ffa51">setColStretch</a>( 1, 10 );
+        grid-&gt;<a href="qgridlayout.html#df80c4">setColStretch</a>( 1, 10 );
 </pre>
 <p>
 We tell QGridLayout that the right column (column 1) is stretchable.
@@ -262,7 +262,7 @@ resized. <pre>
 <p>
 We set an initial angle value.  Note that this will trigger the
 connection from LCDRange to CannonField. <pre>
-        angle-&gt;<a href="qwidget.html#666b3c">setFocus</a>();
+        angle-&gt;<a href="qwidget.html#25775a">setFocus</a>();
 </pre>
 <p>
 And our last action is to set <code>angle</code> to have keyboard focus, so that
@@ -270,7 +270,7 @@ by default, keyboard input will go to the LCDRange widget.
 <p>
 LCDRange does not contain any keyPressEvent(), so that would seem not
 to be terribly useful.  However, its constructor just got a new line:   <pre>
-        <a href="qwidget.html#22ecbc">setFocusProxy</a>( slider );
+        <a href="qwidget.html#cddadb">setFocusProxy</a>( slider );
 </pre>
 <p>
 The LCDRange sets the slider to be its focus proxy.  That means that
@@ -317,6 +317,6 @@ You may now go on to <a href="t9.html">chapter nine.</a>
 
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.1</div>
+<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

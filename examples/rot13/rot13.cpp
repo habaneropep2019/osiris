@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/rot13/rot13.cpp   2.3.1   edited 2001-01-26 $
+** $Id: qt/examples/rot13/rot13.cpp   2.3.2   edited 2001-06-12 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -73,6 +73,7 @@ int main( int argc, char ** argv )
     Rot13 r;
     r.resize( 400, 400 );
     a.setMainWidget( &r );
+    r.setCaption("Qt Example - ROT13");
     r.show();
     return a.exec();
 }

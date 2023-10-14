@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/extensions/xt/src/qxt.cpp   2.3.1   edited 2001-03-30 $
+** $Id: qt/extensions/xt/src/qxt.cpp   2.3.2   edited 2001-09-02 $
 **
 ** Implementation of Qt extension classes for Xt/Motif support.
 **
@@ -37,8 +37,7 @@
 
 #include <qapplication.h>
 #include <qwidget.h>
-#include <qobjcoll.h>
-#include <qwidcoll.h>
+#include <qobjectlist.h>
 
 #include "qxt.h"
 
@@ -438,7 +437,7 @@ void QXtWidget::init(const char* name, WidgetClass widget_class,
   subwidgets, layouts, etc. using Qt functionality.
 */
 QXtWidget::QXtWidget(const char* name, Widget parent, bool managed) :
-    xtw(NULL), QWidget( 0, name, WResizeNoErase )
+    QWidget( 0, name, WResizeNoErase ), xtw( NULL )
 {
     init(name, qWidgetClass, parent, 0, 0, 0, managed);
     Arg reqargs[20];
@@ -466,7 +465,7 @@ QXtWidget::QXtWidget(const char* name, Widget parent, bool managed) :
 QXtWidget::QXtWidget(const char* name, WidgetClass widget_class,
 		     QWidget *parent, ArgList args, Cardinal num_args,
 		     bool managed) :
-    xtw(NULL), QWidget( parent, name, WResizeNoErase )
+    QWidget( parent, name, WResizeNoErase ), xtw( NULL )
 {
     if ( !parent )
 	init(name, widget_class, 0, 0, args, num_args, managed);

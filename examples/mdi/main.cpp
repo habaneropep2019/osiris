@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/mdi/main.cpp   2.3.1   edited 2001-01-26 $
+** $Id: qt/examples/mdi/main.cpp   2.3.2   edited 2001-06-12 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -14,7 +14,7 @@
 int main( int argc, char ** argv ) {
     QApplication a( argc, argv );
     ApplicationWindow * mw = new ApplicationWindow();
-    mw->setCaption( "Multiple Documents" );
+    mw->setCaption( "Qt Example - Multiple Documents Interface (MDI)" );
     mw->show();
     a.connect( &a, SIGNAL(lastWindowClosed()), &a, SLOT(quit()) );
     int res = a.exec();

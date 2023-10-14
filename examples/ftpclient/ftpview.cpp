@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/ftpclient/ftpview.cpp   2.3.1   edited 2001-01-26 $
+** $Id: qt/examples/ftpclient/ftpview.cpp   2.3.2   edited 2001-09-11 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -85,7 +85,7 @@ QString FtpViewItem::key( int c, bool ) const
     case 2: {
 	QDateTime epoch( QDate( 1980, 1, 1 ) );
 	QString s;
-	s.sprintf( "%08d", epoch.secsTo( info.lastModified() ) );
+	s.sprintf( "%09d", epoch.secsTo( info.lastModified() ) );
 	return s;
     }
     }

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qimage.cpp   2.3.1   edited 2001-03-02 $
+** $Id: qt/src/kernel/qimage.cpp   2.3.2   edited 2001-10-22 $
 **
 ** Implementation of QImage and QImageIO classes
 **
@@ -373,6 +373,8 @@ QImage::QImage( uchar* yourdata, int w, int h, int depth,
 		Endian bitOrder )
 {
     init();
+    if ( !yourdata || w <= 0 || h <= 0 || depth <= 0 || numColors < 0 )
+	return;					// invalid parameter(s)
     data->w = w;
     data->h = h;
     data->d = depth;
@@ -429,6 +431,8 @@ QImage::QImage( uchar* yourdata, int w, int h, int depth,
 		Endian bitOrder )
 {
     init();
+    if ( !yourdata || w <= 0 || h <= 0 || depth <= 0 || numColors < 0 )
+	return;					// invalid parameter(s)
     data->w = w;
     data->h = h;
     data->d = depth;
@@ -535,7 +539,7 @@ QImage QImage::copy() const
 	    image.data->misc = new QImageDataMisc;
 	    *image.data->misc = misc();
 	}
-#endif	
+#endif
     }
     return image;
 }
@@ -736,7 +740,7 @@ void QImage::reset()
     setNumColors( 0 );
 #ifndef QT_NO_IMAGE_TEXT
     delete data->misc;
-#endif    
+#endif
     reinit();
 }
 
@@ -785,7 +789,7 @@ void QImage::fill( uint pixel )
 		*p++ = fill;
 	}
 #endif	// QT_NO_IMAGE_16_BIT
-#ifndef QT_NO_IMAGE_TRUECOLOR	
+#ifndef QT_NO_IMAGE_TRUECOLOR
     } else if ( depth() == 32 ) {
 	if ( hasAlphaBuffer() ) {
 	    pixel &= 0x00ffffff;
@@ -805,7 +809,7 @@ void QImage::fill( uint pixel )
 		    *p++ = pixel;
 	    }
 	}
-#endif // QT_NO_IMAGE_TRUECOLOR	
+#endif // QT_NO_IMAGE_TRUECOLOR
     }
 }
 
@@ -1079,7 +1083,7 @@ void QImage::reinit()
     data->alpha = FALSE;
 #ifndef QT_NO_IMAGE_TEXT
     data->misc = 0;
-#endif    
+#endif
     data->dpmx = 0;
     data->dpmy = 0;
     data->offset = QPoint(0,0);
@@ -1610,7 +1614,7 @@ static bool dither_to_1( const QImage *src, QImage *dst,
 			    p += 4;
 			}
 		    }
-#endif		    
+#endif
 		}
 	    }
 
@@ -1767,7 +1771,7 @@ static bool dither_to_1( const QImage *src, QImage *dst,
 		    }
 		}
 	    }
-	} else 
+	} else
 #endif //QT_NO_IMAGE_TRUECOLOR
 	    if ( d == 8 ) {
 	    uchar** line = src->jumpTable();
@@ -1940,7 +1944,7 @@ int QImage::pixelIndex( int x, int y ) const
 #ifndef QT_NO_IMAGE_TRUECOLOR
 #ifndef QT_NO_IMAGE_16_BIT
     case 16:
-#endif	
+#endif
     case 32:
 #if defined(CHECK_RANGE)
 	qWarning( "QImage::pixelIndex: Not applicable for %d-bpp images "
@@ -2101,7 +2105,7 @@ bool isGray(QRgb c)
 */
 bool QImage::allGray() const
 {
-#ifndef QT_NO_IMAGE_TRUECOLOR    
+#ifndef QT_NO_IMAGE_TRUECOLOR
     if (depth()==32) {
 	int p = width()*height();
 	QRgb* b = (QRgb*)bits();
@@ -2116,8 +2120,8 @@ bool QImage::allGray() const
 	    if (!is16BitGray(*b++))
 		return FALSE;
 #endif
-    } else 
-#endif //QT_NO_IMAGE_TRUECOLOR	
+    } else
+#endif //QT_NO_IMAGE_TRUECOLOR
 	{
 	if (!data->ctbl) return TRUE;
 	for (int i=0; i<numColors(); i++)
@@ -2618,12 +2622,12 @@ QImage QImage::mirror(bool horizontal, bool vertical) const
     int h = height();
     if (w <= 1 && h <= 1 || (!horizontal && !vertical))
         return *this;
-        
+
     // Create result image, copy colormap
     QImage result(w, h, depth(), numColors(), bitOrder());
     memcpy(result.colorTable(), colorTable(), numColors()*sizeof(QRgb));
     result.setAlphaBuffer(hasAlphaBuffer());
-    
+
     if (depth() == 1)
         w = (w+7)/8;
     int dxi = horizontal ? -1 : 1;
@@ -2665,7 +2669,7 @@ QImage QImage::mirror(bool horizontal, bool vertical) const
         }
     }
 #endif
-    
+
     // special handling of 1 bit images for horizontal mirroring
     if (horizontal && depth() == 1) {
         int shift = width() % 8;
@@ -2699,8 +2703,8 @@ QImage QImage::mirror(bool horizontal, bool vertical) const
             }
         }
     }
-    
-    return result;    
+
+    return result;
 }
 
 /*!
@@ -2741,7 +2745,7 @@ QImage QImage::swapRGB() const
 	} else if ( depth() == 16 ) {
 	    qWarning( "QImage::swapRGB not implemented for 16bpp" );
 #endif
-	} else 
+	} else
 #endif //QT_NO_IMAGE_TRUECOLOR
 	    {
 	    uint* p = (uint*)colorTable();
@@ -3886,19 +3890,27 @@ bool read_dib( QDataStream& s, int offset, int startpos, QImage& image )
 	red_shift = 16;
 	blue_scale = green_scale = red_scale = 1;
     } else if (comp == BMP_RGB && nbits == 16)  // don't support RGB values for 15/16 bpp
-	return FALSE; 
+	return FALSE;
 
     // offset can be bogus, be careful
     if (offset>=0 && startpos + offset > d->at() )
 	d->at( startpos + offset );		// start of image data
 
-    int	     bpl = image.bytesPerLine();
+    int imgbpl = image.bytesPerLine();
+#ifdef _WS_QWS_
+    int bmpbpl = bi.biSizeImage / bi.biHeight;
+    int pad = bmpbpl-imgbpl;
+#endif
     uchar **line = image.jumpTable();
 
     if ( nbits == 1 ) {				// 1 bit BMP image
 	while ( --h >= 0 ) {
-	    if ( d->readBlock((char*)line[h],bpl) != bpl )
+	    if ( d->readBlock((char*)line[h],imgbpl) != imgbpl )
 		break;
+#ifdef _WS_QWS_
+	    if ( pad > 0 )
+		d->at(d->at()+pad);
+#endif
 	}
 	if ( ncols == 2 && qGray(image.color(0)) < qGray(image.color(1)) )
 	    swapPixel01( &image );		// pixel 0 is white!
@@ -4027,8 +4039,12 @@ bool read_dib( QDataStream& s, int offset, int startpos, QImage& image )
 	    }
 	} else if ( comp == BMP_RGB ) {		// uncompressed
 	    while ( --h >= 0 ) {
-		if ( d->readBlock((char *)line[h],bpl) != bpl )
+		if ( d->readBlock((char *)line[h],imgbpl) != imgbpl )
 		    break;
+#ifdef _WS_QWS_
+		if ( pad > 0 )
+		    d->at(d->at()+pad);
+#endif
 	    }
 	}
     }
@@ -4036,8 +4052,8 @@ bool read_dib( QDataStream& s, int offset, int startpos, QImage& image )
     else if ( nbits == 16 || nbits == 24 || nbits == 32 ) { // 16,24,32 bit BMP image
 	register QRgb *p;
 	QRgb  *end;
-	uchar *buf24 = new uchar[bpl];
 	int    bpl24 = ((w*nbits+31)/32)*4;
+	uchar *buf24 = new uchar[bpl24];
 	uchar *b;
 	int c;
 
@@ -4225,7 +4241,7 @@ static int read_pbm_int( QIODevice *d )
     bool  digit;
     const int buflen = 100;
     char  buf[buflen];
-    while ( TRUE ) {
+    for (;;) {
 	if ( (c=d->getch()) == EOF )		// end of file
 	    break;
 	digit = isdigit(c);
@@ -4623,7 +4639,7 @@ static void read_xbm_image( QImageIO *iio )
     if ( w <= 0 || w > 32767 || h <= 0 || h > 32767 )
 	return;					// format error
 
-    while ( TRUE ) {				// scan for data
+    for (;;) {				// scan for data
 	if ( d->readLine(buf, buflen) <= 0 )	// end of file
 	    return;
 	if ( strstr(buf,"0x") != 0 )		// does line contain data?
@@ -5254,7 +5270,7 @@ void bitBlt( QImage* dst, int dx, int dy, const QImage* src,
 	    }
 	}
 	break;
-#endif // QT_NO_IMAGE_TRUECOLOR	
+#endif // QT_NO_IMAGE_TRUECOLOR
     }
 }
 

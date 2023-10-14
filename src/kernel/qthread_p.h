@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qthread_p.h   2.3.1   edited 2001-06-11 $
+** $Id: qt/src/kernel/qthread_p.h   2.3.2   edited 2001-09-20 $
 **
 ** QThread class for Unix
 **
@@ -41,8 +41,8 @@
 #define gettimeofday __hide_gettimeofday
 #include <qglobal.h>
 
-#include <errno.h>
 #include <unistd.h>
+#include <errno.h>
 #ifdef QWS
 #include <qptrdict.h>
 #else
@@ -59,7 +59,6 @@ extern "C" int gettimeofday( struct timeval *, struct timezone * );
 
 #if defined(_OS_LINUX_)
 #  define _XOPEN_SOURCE 500
-// Linux: couldn't we query macros from <unistd.h> instead of library versions?
 #  if (__GLIBC__ == 2) && (__GLIBC_MINOR__ == 0)
 // Linux with glibc 2.0.x - POSIX 1003.4a thread implementation
 #    define Q_HAS_RECURSIVE_MUTEX
@@ -74,8 +73,7 @@ extern "C" int gettimeofday( struct timeval *, struct timezone * );
 #    define Q_RECURSIVE_MUTEX_TYPE PTHREAD_MUTEX_RECURSIVE
 #  endif
 #elif defined(_OS_OSF_)
-// Digital UNIX - 4.0 and later has a POSIX 1003.1c implementation
-//   - should we assume > 4.0?
+// Tru64 4.0 and later - POSIX 1003.1c implementation
 #  define Q_HAS_RECURSIVE_MUTEX
 #  undef  Q_USE_PTHREAD_MUTEX_SETKIND
 #  define Q_NORMAL_MUTEX_TYPE PTHREAD_MUTEX_ERRORCHECK
@@ -473,7 +471,8 @@ public:
 	mutex.unlock();
 
 #ifdef CHECK_RANGE
-	if( ret ) qWarning("QWaitCondition::wait: wait error:%s",strerror(ret));
+	if ( ret && ret != ETIMEDOUT )
+	    qWarning("QWaitCondition::wait: wait error:%s",strerror(ret));
 #endif
 
 	return (ret == 0);
@@ -540,7 +539,8 @@ public:
 #endif
 
 #ifdef CHECK_RANGE
-	if ( ret ) qWarning("QWaitCondition::wait: wait error:%s",strerror(ret));
+	if ( ret && ret != ETIMEDOUT )
+	    qWarning("QWaitCondition::wait: wait error:%s",strerror(ret));
 #endif
 
 	return (ret == 0);
@@ -552,6 +552,13 @@ public:
 
 
 #include <pthread.h>
+#if defined(_OS_OSF_)
+// Not available in the <unistd.h> header file of Tru64 4.0F.
+// Fixed in the <unistd.h> header of Tru64 5.0A so we copy/paste from there...
+#if defined(_XOPEN_SOURCE) && defined(_OSF_SOURCE)
+extern "C" int usleep(useconds_t);
+#endif
+#endif
 
 
 class QMutexPrivate {
@@ -937,7 +944,8 @@ public:
 	mutex.unlock();
 
 #ifdef CHECK_RANGE
-	if( ret ) qWarning("QWaitCondition::wait: wait error:%s",strerror(ret));
+	if ( ret && ret != ETIMEDOUT )
+	    qWarning("QWaitCondition::wait: wait error:%s",strerror(ret));
 #endif
 
 	return (ret == 0);
@@ -1004,7 +1012,8 @@ public:
 #endif
 
 #ifdef CHECK_RANGE
-	if ( ret ) qWarning("QWaitCondition::wait: wait error:%s",strerror(ret));
+	if ( ret && ret != ETIMEDOUT )
+	    qWarning("QWaitCondition::wait: wait error:%s",strerror(ret));
 #endif
 
 	return (ret == 0);

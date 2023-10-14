@@ -1,5 +1,5 @@
 '\" t
-.TH QTime 3qt "13 June 2001" "Trolltech AS" \" -*- nroff -*-
+.TH QTime 3qt "29 October 2001" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2001 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -97,10 +97,10 @@ QTime \- Clock time functions
 (Note that these are not member functions.)
 .in +1c
 .ti -1c
-.BI "QDataStream & \fBoperator>>\fR (QDataStream & " "s" ", QTime & " "t" ")"
+.BI "QDataStream & \fBoperator<<\fR (QDataStream & " "s" ", const QTime & " "t" ")"
 .br
 .ti -1c
-.BI "QDataStream & \fBoperator<<\fR (QDataStream & " "s" ", const QTime & " "t" ")"
+.BI "QDataStream & \fBoperator>>\fR (QDataStream & " "s" ", QTime & " "t" ")"
 .br
 .in -1c
 .SH DESCRIPTION
@@ -262,12 +262,12 @@ See also restart(), elapsed() and currentTime().
 .SH "QString QTime::toString () const"
 Returns the time of this object in a textual format. Milliseconds are not included. The string format is HH:MM:SS, e.g. 1 second before midnight would be "23:59:59".
 .SH RELATED FUNCTION DOCUMENTATION
-.SH "QDataStream & operator>> (QDataStream & s, QTime & t)"
-Reads a time from the stream.
-.PP
-See also Format of the QDataStream operators
 .SH "QDataStream & operator<< (QDataStream & s, const QTime & t)"
 Writes a time to the stream.
+.PP
+See also Format of the QDataStream operators
+.SH "QDataStream & operator>> (QDataStream & s, QTime & t)"
+Reads a time from the stream.
 .PP
 See also  Format of the QDataStream operators
 .SH "SEE ALSO"
@@ -288,4 +288,4 @@ In case of content or formattting problems with this manual page, please
 report them to
 .BR qt-bugs@trolltech.com .
 Please include the name of the manual page (qtime.3qt) and the Qt
-version (2.3.1).
+version (2.3.2).

@@ -1,5 +1,5 @@
 '\" t
-.TH QSocket 3qt "13 June 2001" "Trolltech AS" \" -*- nroff -*-
+.TH QSocket 3qt "29 October 2001" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2001 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -157,7 +157,7 @@ connectToHost() is the most-used function. As its name implies, it opens a conne
 .PP
 Most network protocols are either packet-oriented or line-oriented. canReadLine() indicates whether a connection contains an entire unread line or not, and bytesAvailable() returns the number of bytes available for reading.
 .PP
-The signals error(), connected(), readyRead() and connectionClosed() inform you of the progress of the connection. There are also some less commonly used signals. hostFound() is emitted when connectToHost() has finished its DSN lookup and is starting its TCP connection. delayedCloseFinished() is emitted when close() succeeds(). bytesWritten() is emitted when QSocket moves data from its "to be written" queue into the TCP implementation.
+The signals error(), connected(), readyRead() and connectionClosed() inform you of the progress of the connection. There are also some less commonly used signals. hostFound() is emitted when connectToHost() has finished its DNS lookup and is starting its TCP connection. delayedCloseFinished() is emitted when close() succeeds. bytesWritten() is emitted when QSocket moves data from its "to be written" queue into the TCP implementation.
 .PP
 There are several access functions for the socket: state() returns whether the object is idle, is doing a DNS lookup, is connecting, has an operational connection, etc. address() and port() return the IP address and port used for the connection, peerAddress() and peerPort() return the IP address and port used by the peer, and peerName() returns the name of the peer (normally the name that was passed to connectToHost()). socket() returns a pointer to the QSocketDevice used for this socket.
 .PP
@@ -366,4 +366,4 @@ In case of content or formattting problems with this manual page, please
 report them to
 .BR qt-bugs@trolltech.com .
 Please include the name of the manual page (qsocket.3qt) and the Qt
-version (2.3.1).
+version (2.3.2).

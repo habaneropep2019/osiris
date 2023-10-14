@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qfont.cpp   2.3.1   edited 2001-04-19 $
+** $Id: qt/src/kernel/qfont.cpp   2.3.2   edited 2001-07-31 $
 **
 ** Implementation of QFont, QFontMetrics and QFontInfo classes
 **
@@ -769,7 +769,6 @@ QFont::StyleHint QFont::styleHint() const
 
   The style strategy has a default value of \c PreferDefault which tells
   the algorithm not to prefer any type of font.
-  Right now, the X version only supports bitmap fonts.
 
   In the example below the push button will
   display its text label with the Bavaria font family if this family

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qcstring.cpp   2.3.1   edited 2001-05-22 $
+** $Id: qt/src/tools/qcstring.cpp   2.3.2   edited 2001-10-14 $
 **
 ** Implementation of extended char array operations, and QByteArray and
 ** QCString classes
@@ -1140,7 +1140,7 @@ QCString QCString::simplifyWhiteSpace() const
     char *from	= data();
     char *to	= result.data();
     char *first = to;
-    while ( TRUE ) {
+    for (;;) {
 	while ( isspace((uchar) *from) )
 	    from++;
 	while ( *from && !isspace((uchar) *from) )

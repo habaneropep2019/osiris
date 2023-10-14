@@ -1,5 +1,5 @@
 /**********************************************************************
-** $Id: qt/src/widgets/qlistbox.cpp   2.3.1   edited 2001-06-08 $
+** $Id: qt/src/widgets/qlistbox.cpp   2.3.2   edited 2001-10-18 $
 **
 ** Implementation of QListBox widget class
 **
@@ -974,6 +974,7 @@ QListBox::~QListBox()
 
 void QListBox::setFont( const QFont &font )
 {
+    d->sizeHint = QSize();  // Invalidate Size Hint
     QScrollView::setFont( font );
     triggerUpdate( TRUE );
 }
@@ -1368,7 +1369,8 @@ const QPixmap *QListBox::pixmap( int index ) const
 
 void QListBox::changeItem( const QString &text, int index )
 {
-    changeItem( new QListBoxText(text), index );
+    if( index >= 0 && index < (int)count() )
+	changeItem( new QListBoxText(text), index );
 }
 
 /*!
@@ -1381,7 +1383,8 @@ void QListBox::changeItem( const QString &text, int index )
 
 void QListBox::changeItem( const QPixmap &pixmap, int index )
 {
-    changeItem( new QListBoxPixmap(pixmap), index );
+    if( index >= 0 && index < (int)count() )
+	changeItem( new QListBoxPixmap(pixmap), index );
 }
 
 /*!
@@ -1394,7 +1397,8 @@ void QListBox::changeItem( const QPixmap &pixmap, int index )
 
 void QListBox::changeItem( const QPixmap &pixmap, const QString &text, int index )
 {
-    changeItem( new QListBoxPixmap(pixmap, text), index );
+    if( index >= 0 && index < (int)count() )
+	changeItem( new QListBoxPixmap(pixmap, text), index );
 }
 
 
@@ -3953,6 +3957,7 @@ void QListBox::sort( bool ascending )
 	    prev = item;
 	}
     }
+    d->last = item;
 
     delete [] items;
     setContentsPos( 0, contentsHeight() - visibleHeight() );

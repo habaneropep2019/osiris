@@ -1,6 +1,6 @@
 TEMPLATE	= app
 CONFIG		+= qt dll release
-HEADERS		= 
+HEADERS		= grapher.h
 SOURCES		= grapher.cpp
 unix:LIBS	= -lqnp -lXt
 win32:LIBS	= $(QTDIR)/lib/qnp.lib

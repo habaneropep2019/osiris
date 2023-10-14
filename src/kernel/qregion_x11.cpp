@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qregion_x11.cpp   2.3.1   edited 2001-01-29 $
+** $Id: qt/src/kernel/qregion_x11.cpp   2.3.2   edited 2001-07-24 $
 **
 ** Implementation of QRegion class for X11
 **
@@ -97,6 +97,7 @@ QRegion::QRegion( const QRect &r, RegionType t )
     CHECK_PTR( data );
     data->is_null = FALSE;
     if ( t == Rectangle ) {			// rectangular region
+	data->br = r;
 	data->rgn = XCreateRegion();
 	XRectangle xr;
 	xr.x = rr.x();
@@ -126,11 +127,21 @@ QRegion::QRegion( const QRect &r, RegionType t )
 
 QRegion::QRegion( const QPointArray &a, bool winding )
 {
-    data = new QRegionData;
-    CHECK_PTR( data );
-    data->is_null = FALSE;
-    data->rgn = XPolygonRegion( (XPoint*)a.shortPoints(), a.size(),
-				winding ? WindingRule : EvenOddRule );
+    if (a.size() > 0) {
+    	data = new QRegionData;
+	CHECK_PTR( data );
+	data->is_null = FALSE;
+	data->rgn = XPolygonRegion( (XPoint*)a.shortPoints(), a.size(),
+				    winding ? WindingRule : EvenOddRule );
+    } else {
+	if ( !empty_region ) {
+	    qAddPostRoutine( cleanup_empty_region );
+	    empty_region = new QRegion( TRUE );
+	    CHECK_PTR( empty_region );
+	}
+	data = empty_region->data;
+	data->ref();
+    }
 }
 
 
@@ -361,6 +372,7 @@ void QRegion::translate( int dx, int dy )
     if ( data == empty_region->data )
 	return;
     detach();
+    data->br = QRect();
     XOffsetRegion( data->rgn, dx, dy );
 }
 
@@ -434,6 +446,8 @@ QRegion QRegion::eor( const QRegion &r ) const
 
 QRect QRegion::boundingRect() const
 {
+    if ( !data->br.isNull() )
+	return data->br;
     XRectangle r;
     XClipBox( data->rgn, &r );
     return QRect( r.x, r.y, r.width, r.height );
@@ -466,7 +480,7 @@ QArray<QRect> QRegion::rects() const
 {
     QArray<QRect> a( (int)data->rgn->numRects );
     BOX *r = data->rgn->rects;
-    for ( int i=0; i<(int)a.size(); i++ ) { 
+    for ( int i=0; i<(int)a.size(); i++ ) {
 	a[i].setCoords( r->x1, r->y1, r->x2-1, r->y2-1);
 	r++;
     }

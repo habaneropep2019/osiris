@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qpixmap.h   2.3.1   edited 2001-01-26 $
+** $Id: qt/src/kernel/qpixmap.h   2.3.2   edited 2001-06-22 $
 **
 ** Definition of QPixmap class
 **
@@ -99,8 +99,10 @@ public:
     static  QPixmap grabWidget( QWidget * widget,
 				int x=0, int y=0, int w=-1, int h=-1 );
 
-#ifndef QT_NO_TRANSFORMATIONS
+#ifndef QT_NO_PIXMAP_TRANSFORMATION
     QPixmap	    xForm( const QWMatrix & ) const;
+#endif
+#ifndef QT_NO_WMATRIX
     static QWMatrix trueMatrix( const QWMatrix &, int w, int h );
 #endif
 

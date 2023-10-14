@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/qfd/qfd.cpp   2.3.1   edited 2001-01-26 $
+** $Id: qt/examples/qfd/qfd.cpp   2.3.2   edited 2001-06-12 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -29,6 +29,7 @@ int main(int argc, char** argv)
     m.resize(sh.width(),
              sh.height()+3*m.statusBar()->height());
     app.setMainWidget(&m);
+    m.setCaption("Qt Example - QFD");
     m.show();
 
     return app.exec();

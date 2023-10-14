@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/opengl/qgl.cpp   2.3.1   edited 2001-04-03 $
+** $Id: qt/src/opengl/qgl.cpp   2.3.2   edited 2001-06-29 $
 **
 ** Implementation of OpenGL classes for Qt
 **
@@ -1109,6 +1109,11 @@ bool QGLContext::create( const QGLContext* shareContext )
   Note: On X servers where the default visual is in an overlay plane,
   non-GL Qt windows can also be used for overlays; see the "overlay_x11"
   example program for details.
+  
+  Note: Reparenting QGLWidgets under Windows does not work. This will
+  be improved in Qt 3.0. If you really need to change the widget
+  hierarchy after widget creation, simply destroy the old instance and
+  create a new one with the new parent.
 
 */
 

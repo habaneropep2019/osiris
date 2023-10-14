@@ -41,14 +41,14 @@ public:
 MyWidget::MyWidget( <a href="qwidget.html">QWidget</a> *parent, const char *name )
         : <a href="qwidget.html">QWidget</a>( parent, name )
 {
-    <a href="qwidget.html#378ed6">setMinimumSize</a>( 200, 120 );
-    <a href="qwidget.html#4bfdb7">setMaximumSize</a>( 200, 120 );
+    <a href="qwidget.html#c0b5fb">setMinimumSize</a>( 200, 120 );
+    <a href="qwidget.html#c78dce">setMaximumSize</a>( 200, 120 );
 
     <a href="qpushbutton.html">QPushButton</a> *quit = new <a href="qpushbutton.html">QPushButton</a>( "Quit", this, "quit" );
-    quit-&gt;<a href="qpushbutton.html#604169">setGeometry</a>( 62, 40, 75, 30 );
-    quit-&gt;<a href="qwidget.html#dde00b">setFont</a>( <a href="qfont.html">QFont</a>( "Times", 18, QFont::Bold ) );
+    quit-&gt;<a href="qpushbutton.html#c9b88e">setGeometry</a>( 62, 40, 75, 30 );
+    quit-&gt;<a href="qwidget.html#c52788">setFont</a>( <a href="qfont.html">QFont</a>( "Times", 18, QFont::Bold ) );
 
-    <a href="qobject.html#c2d209">connect</a>( quit, SIGNAL(clicked()), qApp, SLOT(quit()) );
+    <a href="qobject.html#7f8e37">connect</a>( quit, SIGNAL(clicked()), qApp, SLOT(quit()) );
 }
 
 int main( int argc, char **argv )
@@ -56,10 +56,10 @@ int main( int argc, char **argv )
     <a href="qapplication.html">QApplication</a> a( argc, argv );
 
     MyWidget w;
-    w.<a href="qwidget.html#8e0197">setGeometry</a>( 100, 100, 200, 120 );
-    a.<a href="qapplication.html#11c921">setMainWidget</a>( &amp;w );
-    w.<a href="qwidget.html#ccc8f7">show</a>();
-    return a.<a href="qapplication.html#7076af">exec</a>();
+    w.<a href="qwidget.html#9ede68">setGeometry</a>( 100, 100, 200, 120 );
+    a.<a href="qapplication.html#7ad759">setMainWidget</a>( &amp;w );
+    w.<a href="qwidget.html#200ee5">show</a>();
+    return a.<a href="qapplication.html#84c7bf">exec</a>();
 }
 </pre>
 <p>
@@ -86,8 +86,8 @@ defaults to be a top level window.
 <p>
 The second argument is the widget's name.  This is <em>not</em> the text
 that appears in the window's title bar or in the button.  It is a name
-associated with a widget to make it possible to <a href="qobject.html#fd1a0e">look up</a> this widget later, and there is
-also a <a href="qobject.html#af854e">handy debugging function</a> that will list a complete widget hierarchy. <pre>
+associated with a widget to make it possible to <a href="qobject.html#b0bff0">look up</a> this widget later, and there is
+also a <a href="qobject.html#c21cea">handy debugging function</a> that will list a complete widget hierarchy. <pre>
     MyWidget::MyWidget( <a href="qwidget.html">QWidget</a> *parent, const char *name )
             : <a href="qwidget.html">QWidget</a>( parent, name )
 </pre>
@@ -96,16 +96,16 @@ The implementation of the constructor starts here.  Like most widgets,
 it just passes on the <code>parent</code> and <code>name</code> to the QWidget
 constructor. <pre>
     {
-        <a href="qwidget.html#378ed6">setMinimumSize</a>( 200, 120 );
-        <a href="qwidget.html#4bfdb7">setMaximumSize</a>( 200, 120 );
+        <a href="qwidget.html#c0b5fb">setMinimumSize</a>( 200, 120 );
+        <a href="qwidget.html#c78dce">setMaximumSize</a>( 200, 120 );
 </pre>
 <p>
 Since this widget doesn't know how to handle resizing, we fix its size
 by setting the minimum and maximum to be equal.  In the next chapter,
 we will show how a widget can respond to resize event from the user. <pre>
         <a href="qpushbutton.html">QPushButton</a> *quit = new <a href="qpushbutton.html">QPushButton</a>( "Quit", this, "quit" );
-        quit-&gt;<a href="qpushbutton.html#604169">setGeometry</a>( 62, 40, 75, 30 );
-        quit-&gt;<a href="qwidget.html#dde00b">setFont</a>( <a href="qfont.html">QFont</a>( "Times", 18, QFont::Bold ) );
+        quit-&gt;<a href="qpushbutton.html#c9b88e">setGeometry</a>( 62, 40, 75, 30 );
+        quit-&gt;<a href="qwidget.html#c52788">setFont</a>( <a href="qfont.html">QFont</a>( "Times", 18, QFont::Bold ) );
 </pre>
 <p>
 Here we create and set up a child widget of this widget (the new widget's
@@ -122,7 +122,7 @@ imminent death.)
 <p>
 The setGeometry() call does the same as move() and resize() did in the
 previous chapters. <pre>
-        <a href="qobject.html#c2d209">connect</a>( quit, SIGNAL(clicked()), qApp, SLOT(quit()) );
+        <a href="qobject.html#7f8e37">connect</a>( quit, SIGNAL(clicked()), qApp, SLOT(quit()) );
     }
 </pre>
 <p>
@@ -141,10 +141,10 @@ MyWidget needs to talk to the application object. <pre>
         <a href="qapplication.html">QApplication</a> a( argc, argv );
     
         MyWidget w;
-        w.<a href="qwidget.html#8e0197">setGeometry</a>( 100, 100, 200, 120 );
-        a.<a href="qapplication.html#11c921">setMainWidget</a>( &amp;w );
-        w.<a href="qwidget.html#ccc8f7">show</a>();
-        return a.<a href="qapplication.html#7076af">exec</a>();
+        w.<a href="qwidget.html#9ede68">setGeometry</a>( 100, 100, 200, 120 );
+        a.<a href="qapplication.html#7ad759">setMainWidget</a>( &amp;w );
+        w.<a href="qwidget.html#200ee5">show</a>();
+        return a.<a href="qapplication.html#84c7bf">exec</a>();
     }
 </pre>
 <p>
@@ -171,6 +171,6 @@ You may now go on to <a href="t5.html">chapter five.</a>
 
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.1</div>
+<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

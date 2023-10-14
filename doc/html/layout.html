@@ -70,8 +70,8 @@ The grid above can be produced by the following code:
     new QLabel( "Five", main );
 </pre>
 <p>
-You can adjust the layout somewhat by calling <a href="qwidget.html#378ed6">setMinimumSize()</a> or
-<a href="qwidget.html#ee706d">setFixedSize()</a> on
+You can adjust the layout somewhat by calling <a href="qwidget.html#c0b5fb">setMinimumSize()</a> or
+<a href="qwidget.html#87e3f4">setFixedSize()</a> on
 the children.
 <p>
 <h2>QLayout</h2>
@@ -96,10 +96,10 @@ improvements:
     <a href="qgridlayout.html">QGridLayout</a> *grid = new <a href="qgridlayout.html">QGridLayout</a>( main, 1, 1 );
 
     //add the first four widgets with (row, column) addressing
-    grid-&gt;<a href="qgridlayout.html#70abf2">addWidget</a>( new QLabel( "One", main ), 0, 0 );
-    grid-&gt;<a href="qgridlayout.html#70abf2">addWidget</a>( new QLabel( "Two", main ), 0, 1 );
-    grid-&gt;<a href="qgridlayout.html#70abf2">addWidget</a>( new QLabel( "Three", main ), 1, 0 );
-    grid-&gt;<a href="qgridlayout.html#70abf2">addWidget</a>( new QLabel( "Four", main ), 1, 1 );
+    grid-&gt;<a href="qgridlayout.html#dac29c">addWidget</a>( new QLabel( "One", main ), 0, 0 );
+    grid-&gt;<a href="qgridlayout.html#dac29c">addWidget</a>( new QLabel( "Two", main ), 0, 1 );
+    grid-&gt;<a href="qgridlayout.html#dac29c">addWidget</a>( new QLabel( "Three", main ), 1, 0 );
+    grid-&gt;<a href="qgridlayout.html#dac29c">addWidget</a>( new QLabel( "Four", main ), 1, 1 );
 
     //add the last widget on row 2, let it span from column 0 to
     //column 1, and let it be aligned center.   
@@ -108,7 +108,7 @@ improvements:
 
     //let the ratio between the widths of columns 0 and 1 be 2:3.
     grid-&gt;setColStretch( 0, 2 );
-    grid-&gt;<a href="qgridlayout.html#4ffa51">setColStretch</a>( 1, 3 );
+    grid-&gt;<a href="qgridlayout.html#df80c4">setColStretch</a>( 1, 3 );
 </pre>
 <p>
 <p>
@@ -121,12 +121,12 @@ a parameter in the constructor.
     <a href="qlabel.html">QLabel</a>*       label = new <a href="qlabel.html">QLabel</a>( "Where do you want to go?", main );
 
     <a href="qvboxlayout.html">QVBoxLayout</a> *vbox    = new <a href="qvboxlayout.html">QVBoxLayout</a>( main ); // A layout on a widget
-    vbox-&gt;<a href="qboxlayout.html#219265">addWidget</a>( label );
-    vbox-&gt;<a href="qboxlayout.html#219265">addWidget</a>( field );
+    vbox-&gt;<a href="qboxlayout.html#ebba99">addWidget</a>( label );
+    vbox-&gt;<a href="qboxlayout.html#ebba99">addWidget</a>( field );
 
     <a href="qhboxlayout.html">QHBoxLayout</a> *buttons = new <a href="qhboxlayout.html">QHBoxLayout</a>( vbox ); // A layout inside a layout
-    buttons-&gt;<a href="qboxlayout.html#219265">addWidget</a>( ok );
-    buttons-&gt;<a href="qboxlayout.html#219265">addWidget</a>( cancel );
+    buttons-&gt;<a href="qboxlayout.html#ebba99">addWidget</a>( ok );
+    buttons-&gt;<a href="qboxlayout.html#ebba99">addWidget</a>( cancel );
 </pre>
 <p>
 If you are not satisfied with the
@@ -152,24 +152,24 @@ care of. If the widget does not have any children, or uses manual
 layout, you should reimplement the following QWidget member functions:
 <p>
 <dl>
-  <dt><a href="qwidget.html#290bcd">sizeHint()</a>
+  <dt><a href="qwidget.html#4511d1">sizeHint()</a>
       <dd> Returns the preferred size of the widget.
-  <dt><a href="qwidget.html#3f0fc2">minimumSizeHint()</a>
+  <dt><a href="qwidget.html#553e08">minimumSizeHint()</a>
       <dd> Returns the smallest size the widget can have.
-  <dt><a href="qwidget.html#2d5d13">sizePolicy()</a>
+  <dt><a href="qwidget.html#23726d">sizePolicy()</a>
       <dd> Returns a <a href="qsizepolicy.html">QSizePolicy</a>; a value
       describing the space requirements of the widget.
 <p>
 </dl>
 <p>
-Call <a href="qwidget.html#c04eb3">updateGeometry()</a> whenever
+Call <a href="qwidget.html#5f7c35">updateGeometry()</a> whenever
 the size hint, minimum size hint or size policy changes. This will
 cause a layout recalculation. Multiple calls to updateGeometry() will
 only cause one recalculation.
 <p>
 If the preferred height of your widget depends on its actual width
 (eg. a label with automatic word-breaking), set the <code>hasHeightForWidth()</code>
-flag in <code>sizePolicy(),</code> and reimplement <a href="qwidget.html#2e8476">heightForWidth()</a>.
+flag in <code>sizePolicy(),</code> and reimplement <a href="qwidget.html#1a2d58">heightForWidth()</a>.
 <p>
 Even if you implement heightForWidth(), it is still necessary to
 provide a good sizeHint(). The sizeHint() provides the preferred width
@@ -183,16 +183,16 @@ requirements to your new widget.
 <h2>Manual Layout</h2>
 <p>
 If you are making a one-of-a-kind special layout, you can also make a
-custom widget as described above. Reimplement <a href="qwidget.html#28c156">resizeEvent()</a> to calculate the
-required distribution of sizes and call <a href="qwidget.html#8e0197">setGeometry()</a> on each child.
+custom widget as described above. Reimplement <a href="qwidget.html#7d375f">resizeEvent()</a> to calculate the
+required distribution of sizes and call <a href="qwidget.html#9ede68">setGeometry()</a> on each child.
 <p>
-The widget will get an event with <a href="qevent.html#cadf8c">type</a>
+The widget will get an event with <a href="qevent.html#4d3e5b">type</a>
 <code>LayoutHint</code> when the layout needs to be
-recalculated. Reimplement <a href="qwidget.html#f30772">event()</a>
+recalculated. Reimplement <a href="qwidget.html#6ff658">event()</a>
 to be notified of <code>LayoutHint</code> events.
 
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.1</div>
+<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

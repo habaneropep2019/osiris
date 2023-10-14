@@ -30,7 +30,7 @@ remains with Trolltech.
 <hr>
 <pre>
 /****************************************************************************
-** &#36;Id&#58; qt/extensions/nsplugin/src/qnp.h   2.3.1   edited 2001-03-23 $
+** &#36;Id&#58; qt/extensions/nsplugin/src/qnp.h   2.3.2   edited 2001-10-19 $
 **
 ** Definition of Qt extension classes for Netscape Plugin support.
 **
@@ -116,7 +116,7 @@ public:
 
     void setWindow(bool);
     void unsetWindow();
-    void show();
+    void show() { QWidget::show(); }
     virtual void enterInstance();
     virtual void leaveInstance();
 
@@ -218,6 +218,6 @@ protected:
 </pre>
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.1</div>
+<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

@@ -30,12 +30,10 @@ Implementation of a NetworkProtocol which works on the local filesystem. | QLoca
 Incremental image decoder for a specific image format. | QImageFormat
 Incremental image decoder for all supported image formats. | QImageDecoder
 Incrementally loads an animation or image, signalling as it progresses. | QMovie
-Keyboard driver/handler for Qt/Embedded | QWSKeyboardHandler
 Look and Feel suitable for interlaced displays | QInterlaceStyle
 Maintains the list of widgets which can take focus. | QFocusData
 More sophisticated Motif-ish look and feel | QMotifPlusStyle
 Motif Look and Feel | QMotifStyle
-Mouse driver/handler for Qt/Embedded | QWSMouseHandler
 Moves data from a DataSink during event processing. | QDataPump
 Platinum Look and Feel | QPlatinumStyle
 Provides conversion between text encodings. | QTextCodec
@@ -190,7 +188,6 @@ The Rect widget defines a rectangle in the plane. | QRect
 The RegExp widget provides pattern matching using regular expressions or wildcards. | QRegExp
 The Region widget specifies a clip region for a painter. | QRegion
 The ResizeEvent widget contains event parameters for resize events. | QResizeEvent
-The ScreenCursor widget manages the onscreen mouse cursor in t/Embedded. It provides an implementation of a software mouse cursor and can be subclassed by hardware drivers which support a hardware mouse cursor. There may only be one QScreenCursor at a time; it is constructed by QScreen or one of its descendants. | QScreenCursor
 The ScrollBar widget provides a vertical or horizontal scroll bar. | QScrollBar
 The ScrollView widget provides a scrolling area with on-demand scrollbars. | QScrollView
 The Semaphore widget provides a robust integer semaphore. | QSemaphore

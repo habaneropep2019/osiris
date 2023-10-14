@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qmainwindow.cpp   2.3.1   edited 2001-05-14 $
+** $Id: qt/src/widgets/qmainwindow.cpp   2.3.2   edited 2001-10-14 $
 **
 ** Implementation of QMainWindow class
 **
@@ -487,7 +487,7 @@ int QToolLayout::layoutItems( const QRect &r, bool testonly )
     int e = 0;
     int pos = rect_pos( r, o, TRUE );
     int lineExtend = 0;
-    while ( TRUE ) {
+    for (;;) {
 	QSize sh = t ? size_hint( t->t ) : QSize();
 	int nx = e;
 	if ( t && t->extraOffset != -1 && t->extraOffset > e )
@@ -2872,7 +2872,7 @@ void QMainWindow::moveToolBar( QToolBar* t , QMouseEvent * e )
 		    QTime time;
 		    time.start();
 		    int i = 0;
-		    while ( TRUE ) {
+		    for (;;) {
 			if ( time.elapsed() > 10 ) {
 			    ++i;
 			    d->rectPainter->drawRect( r );

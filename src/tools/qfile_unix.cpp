@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qfile_unix.cpp   2.3.1   edited 2001-02-19 $
+** $Id: qt/src/tools/qfile_unix.cpp   2.3.2   edited 2001-10-13 $
 **
 ** Implementation of QFileInfo class
 **
@@ -207,7 +207,7 @@ bool QFile::open( int m )
 	else
 	    strcat( perm2, "b" );
 #endif
-	while (1) { // At most twice
+	for (;;) { // At most twice
 
 	    fh = fopen( QFile::encodeName(fn), perm2 );
 
@@ -232,7 +232,7 @@ bool QFile::open( int m )
 	    // non-seekable
 	    setType( IO_Sequential );
 	    length = INT_MAX;
-	    ioIndex  = (flags() & IO_Append) == 0 ? 0 : length;
+	    ioIndex  = 0;
 	} else {
 	    length = (int)st.st_size;
 	    ioIndex  = (flags() & IO_Append) == 0 ? 0 : length;
@@ -244,6 +244,7 @@ bool QFile::open( int m )
 		    ungetch(c);
 		    setType( IO_Sequential );
 		    length = INT_MAX;
+		    ioIndex  = 0;
 		}
 	    }
 	}
@@ -304,6 +305,7 @@ bool QFile::open( int m, FILE *f )
 	// non-seekable
 	setType( IO_Sequential );
 	length = INT_MAX;
+	ioIndex  = 0;
     } else {
 	length = (int)st.st_size;
 	if ( !(flags()&IO_Truncate) && length == 0 && isReadable() ) {
@@ -314,6 +316,7 @@ bool QFile::open( int m, FILE *f )
 		ungetch(c);
 		setType( IO_Sequential );
 		length = INT_MAX;
+		ioIndex  = 0;
 	    }
 	}
     }
@@ -354,6 +357,7 @@ bool QFile::open( int m, int f )
 	// non-seekable
 	setType( IO_Sequential );
 	length = INT_MAX;
+	ioIndex  = 0;
     } else {
 	length = (int)st.st_size;
 	if ( length == 0 && isReadable() ) {
@@ -364,6 +368,7 @@ bool QFile::open( int m, int f )
 		ungetch(c);
 		setType( IO_Sequential );
 		length = INT_MAX;
+		ioIndex  = 0;
 	    }
 	    resetStatus();
 	}
@@ -420,6 +425,8 @@ bool QFile::at( int pos )
 #endif
 	return FALSE;
     }
+    if ( isSequentialAccess() )
+	return FALSE;
     bool ok;
     if ( isRaw() ) {				// raw file
 	pos = (int)LSEEK(fd, pos, SEEK_SET);
@@ -494,7 +501,8 @@ int QFile::readBlock( char *p, uint len )
 	    }
 	}
     }
-    ioIndex += nread;
+    if ( !isSequentialAccess() )
+	ioIndex += nread;
     return nread;
 }
 
@@ -541,12 +549,15 @@ int QFile::writeBlock( const char *p, uint len )
 	    setStatus( IO_ResourceError );
 	else
 	    setStatus( IO_WriteError );
-	if ( isRaw() )				// recalc file position
-	    ioIndex = (int)LSEEK( fd, 0, SEEK_CUR );
-	else
-	    ioIndex = fseek( fh, 0, SEEK_CUR );
+	if ( !isSequentialAccess() ) {
+	    if ( isRaw() )				// recalc file position
+		ioIndex = (int)LSEEK( fd, 0, SEEK_CUR );
+	    else
+		ioIndex = fseek( fh, 0, SEEK_CUR );
+	}
     } else {
-	ioIndex += nwritten;
+	if ( !isSequentialAccess() )
+	    ioIndex += nwritten;
     }
     if ( ioIndex > length )			// update file length
 	length = ioIndex;

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/helpviewer/helpwindow.cpp   2.3.1   edited 2001-01-26 $
+** $Id: qt/examples/helpviewer/helpwindow.cpp   2.3.2   edited 2001-10-20 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -140,8 +140,8 @@ HelpWindow::HelpWindow( const QString& home_, const QString& _path,
     setDockEnabled( Right, FALSE );
 
     pathCombo->insertItem( home_ );
-
     browser->setFocus();
+
 }
 
 
@@ -158,12 +158,15 @@ void HelpWindow::setForwardAvailable( bool b)
 
 void HelpWindow::textChanged()
 {
-    if ( browser->documentTitle().isNull() )
-	setCaption( browser->context() );
-    else
-	setCaption( browser->documentTitle() ) ;
-
-    selectedURL = caption();
+    if ( browser->documentTitle().isNull() ) {
+	setCaption( "Qt Example - Helpviewer - " + browser->context() );
+	selectedURL = browser->context();
+    }
+    else {
+	setCaption( "Qt Example - Helpviewer - " + browser->documentTitle() ) ;
+	selectedURL = browser->documentTitle();
+    }
+    
     if ( !selectedURL.isEmpty() && pathCombo ) {
 	bool exists = FALSE;
 	int i;
@@ -257,7 +260,7 @@ void HelpWindow::print()
 	richText.setWidth( &p, body.width() );
 	QRect view( body );
 	int page = 1;
-	do {
+	for (;;) {
 	    p.setClipRect( body );
 	    richText.draw( &p, body.left(), body.top(), view, colorGroup() );
 	    p.setClipping( FALSE );
@@ -270,7 +273,7 @@ void HelpWindow::print()
 		break;
 	    printer.newPage();
 	    page++;
-	} while (TRUE);
+	}
     }
 #endif
 }

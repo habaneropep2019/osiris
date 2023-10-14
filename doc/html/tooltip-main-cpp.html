@@ -35,7 +35,7 @@ height="100" src="face.png" alt="Home" border="0">
   <hr>
 
   Header file: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/tooltip/tooltip.h   2.3.1   edited 2001-01-26 $
+** &#36;Id&#58; qt/examples/tooltip/tooltip.h   2.3.2   edited 2001-01-26 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -82,7 +82,7 @@ private:
   <hr>
 
   Implementation: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/tooltip/tooltip.cpp   2.3.1   edited 2001-01-26 $
+** &#36;Id&#58; qt/examples/tooltip/tooltip.cpp   2.3.2   edited 2001-01-26 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -102,31 +102,31 @@ DynamicTip::DynamicTip( <a href="qwidget.html">QWidget</a> * parent )
     // no explicit initialization needed
 }
 
-void <a name="312"></a>DynamicTip::maybeTip( const QPoint &amp;pos )
+void <a name="310"></a>DynamicTip::maybeTip( const QPoint &amp;pos )
 {
     if ( !parentWidget()-&gt;inherits( "TellMe" ) )
         return;
 
     <a href="qrect.html">QRect</a> r( ((TellMe*)parentWidget())-&gt;tip(pos) );
-    if ( !r.<a href="qrect.html#4cc055">isValid</a>() )
+    if ( !r.<a href="qrect.html#6d4ece">isValid</a>() )
         return;
 
     <a href="qstring.html">QString</a> s;
-    s.<a href="qstring.html#2eb9bc">sprintf</a>( "position: %d,%d", r.<a href="qrect.html#bc92ae">center</a>().x(), r.<a href="qrect.html#bc92ae">center</a>().y() );
-    <a href="qtooltip.html#02e7db">tip</a>( r, s );
+    s.<a href="qstring.html#926f67">sprintf</a>( "position: %d,%d", r.<a href="qrect.html#3daab9">center</a>().x(), r.<a href="qrect.html#3daab9">center</a>().y() );
+    <a href="qtooltip.html#585b31">tip</a>( r, s );
 }
 
 TellMe::TellMe( <a href="qwidget.html">QWidget</a> * parent , const char * name  )
     : <a href="qwidget.html">QWidget</a>( parent, name )
 {
-    <a href="qwidget.html#378ed6">setMinimumSize</a>( 30, 30 );
+    <a href="qwidget.html#c0b5fb">setMinimumSize</a>( 30, 30 );
     r1 = randomRect();
     r2 = randomRect();
     r3 = randomRect();
 
     t = new DynamicTip( this );
 
-    <a href="qtooltip.html#9a9b60">QToolTip::add</a>( this, r3, "this color is called red" ); // &lt;- helpful
+    <a href="qtooltip.html#184bfe">QToolTip::add</a>( this, r3, "this color is called red" ); // &lt;- helpful
 }
 
 TellMe::~TellMe()
@@ -135,38 +135,38 @@ TellMe::~TellMe()
     t = 0;
 }
 
-void <a name="313"></a>TellMe::paintEvent( <a href="qpaintevent.html">QPaintEvent</a> * e )
+void <a name="311"></a>TellMe::paintEvent( <a href="qpaintevent.html">QPaintEvent</a> * e )
 {
     <a href="qpainter.html">QPainter</a> p( this );
 
     // I try to be efficient here, and repaint only what's needed
 
     if ( e-&gt;rect().intersects( r1 ) ) {
-        p.<a href="qpainter.html#38e68f">setBrush</a>( blue );
-        p.<a href="qpainter.html#b29a16">drawRect</a>( r1 );
+        p.<a href="qpainter.html#3e0cc8">setBrush</a>( blue );
+        p.<a href="qpainter.html#4c0077">drawRect</a>( r1 );
     }
 
     if ( e-&gt;rect().intersects( r2 ) ) {
-        p.<a href="qpainter.html#38e68f">setBrush</a>( blue );
-        p.<a href="qpainter.html#b29a16">drawRect</a>( r2 );
+        p.<a href="qpainter.html#3e0cc8">setBrush</a>( blue );
+        p.<a href="qpainter.html#4c0077">drawRect</a>( r2 );
     }
 
     if ( e-&gt;rect().intersects( r3 ) ) {
-        p.<a href="qpainter.html#38e68f">setBrush</a>( red );
-        p.<a href="qpainter.html#b29a16">drawRect</a>( r3 );
+        p.<a href="qpainter.html#3e0cc8">setBrush</a>( red );
+        p.<a href="qpainter.html#4c0077">drawRect</a>( r3 );
     }
 }
 
-void <a name="314"></a>TellMe::mousePressEvent( <a href="qmouseevent.html">QMouseEvent</a> * e )
+void <a name="312"></a>TellMe::mousePressEvent( <a href="qmouseevent.html">QMouseEvent</a> * e )
 {
-    if ( r1.contains( e-&gt;<a href="qmouseevent.html#ac025d">pos</a>() ) )
+    if ( r1.contains( e-&gt;<a href="qmouseevent.html#ac6f25">pos</a>() ) )
         r1 = randomRect();
-    if ( r2.contains( e-&gt;<a href="qmouseevent.html#ac025d">pos</a>() ) )
+    if ( r2.contains( e-&gt;<a href="qmouseevent.html#ac6f25">pos</a>() ) )
         r2 = randomRect();
-    <a href="qwidget.html#977d49">repaint</a>();
+    <a href="qwidget.html#7569b1">repaint</a>();
 }
 
-void <a name="315"></a>TellMe::resizeEvent( <a href="qresizeevent.html">QResizeEvent</a> * )
+void <a name="313"></a>TellMe::resizeEvent( <a href="qresizeevent.html">QResizeEvent</a> * )
 {
     if ( !rect().contains( r1 ) )
          r1 = randomRect();
@@ -174,13 +174,13 @@ void <a name="315"></a>TellMe::resizeEvent( <a href="qresizeevent.html">QResizeE
          r2 = randomRect();
 }
 
-<a href="qrect.html">QRect</a> <a name="316"></a>TellMe::randomRect()
+<a href="qrect.html">QRect</a> <a name="314"></a>TellMe::randomRect()
 {
-    return QRect( ::rand() % (<a href="qwidget.html#576663">width</a>() - 20), ::rand() % (<a href="qwidget.html#180786">height</a>() - 20),
+    return QRect( ::rand() % (<a href="qwidget.html#2edab1">width</a>() - 20), ::rand() % (<a href="qwidget.html#e3c588">height</a>() - 20),
                   20, 20 );
 }
 
-<a href="qrect.html">QRect</a> <a name="317"></a>TellMe::tip( const QPoint &amp; p )
+<a href="qrect.html">QRect</a> <a name="315"></a>TellMe::tip( const QPoint &amp; p )
 {
     if ( r1.contains( p ) )
         return r1;
@@ -196,7 +196,7 @@ void <a name="315"></a>TellMe::resizeEvent( <a href="qresizeevent.html">QResizeE
 
   Main:
 <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/tooltip/main.cpp   2.3.1   edited 2001-01-26 $
+** &#36;Id&#58; qt/examples/tooltip/main.cpp   2.3.2   edited 2001-06-12 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -213,15 +213,15 @@ int main( int argc, char ** argv )
     <a name="QApplication"></a><a href="qapplication.html">QApplication</a> a( argc, argv );
 
     TellMe mw;
-    mw.<a name="setCaption"></a><a href="qwidget.html#d4f007">setCaption</a>( "Dynamic Tool Tip Demonstration" );
-    a.<a name="setMainWidget"></a><a href="qapplication.html#11c921">setMainWidget</a>( &amp;mw );
-    mw.<a name="show"></a><a href="qwidget.html#ccc8f7">show</a>();
+    mw.<a name="setCaption"></a><a href="qwidget.html#d6a291">setCaption</a>( "Qt Example - Dynamic Tool Tips" );
+    a.<a name="setMainWidget"></a><a href="qapplication.html#7ad759">setMainWidget</a>( &amp;mw );
+    mw.<a name="show"></a><a href="qwidget.html#200ee5">show</a>();
 
-    return a.<a name="exec"></a><a href="qapplication.html#7076af">exec</a>();
+    return a.<a name="exec"></a><a href="qapplication.html#84c7bf">exec</a>();
 }
 </pre>
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.1</div>
+<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

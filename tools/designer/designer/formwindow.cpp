@@ -544,7 +544,7 @@ void FormWindow::handleMousePress( QMouseEvent *e, QWidget *w )
 	    insertParent = WidgetFactory::containerOfWidget( mainContainer() ); // default parent for new widget is the formwindow
 	    if ( !isMainContainer( w ) ) { // press was not on formwindow, check if we can find another parent
 		QWidget *wid = w;
-		while ( TRUE ) {
+		for (;;) {
 		    int id = WidgetDatabase::idFromClassName( WidgetFactory::classNameOf( wid ) );
 		    if ( ( WidgetDatabase::isContainer( id ) || wid == mainContainer() ) && !wid->inherits( "QLayoutWidget" ) ) {
 			insertParent = WidgetFactory::containerOfWidget( wid ); // found another parent, store it
@@ -1803,7 +1803,7 @@ void FormWindow::breakLayout( QWidget *w )
     w = WidgetFactory::containerOfWidget( w );
     QList<Command> commands;
 
-    while ( TRUE ) {
+    for (;;) {
 	if ( !w || w == this )
 	    break;
 	if ( WidgetFactory::layoutType( w ) != WidgetFactory::NoLayout ) {

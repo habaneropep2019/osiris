@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qclipboard_x11.cpp   2.3.1   edited 2001-02-19 $
+** $Id: qt/src/kernel/qclipboard_x11.cpp   2.3.2   edited 2001-10-14 $
 **
 ** Implementation of QClipboard class for X11
 **
@@ -46,6 +46,7 @@
 #include "qdatetime.h"
 #include "qdragobject.h"
 #include "qbuffer.h"
+#include "qvaluelist.h"
 #include "qt_x11.h"
 
 #include <unistd.h>
@@ -76,6 +77,8 @@ extern const char* qt_xdnd_atom_to_str( Atom );
 
 
 static QWidget * owner = 0;
+static bool timer_event_clear = FALSE;
+static int clipboard_id = 0;
 
 static void cleanup()
 {
@@ -99,6 +102,8 @@ public:
     const char* format( int n ) const;
     QByteArray encodedData( const char* fmt ) const;
     QByteArray getDataInFormat(Atom fmtatom) const;
+
+    QValueList<const char *> formatList;
 };
 
 
@@ -291,84 +296,84 @@ bool qt_xclb_read_property( Display *dpy, Window win, Atom property,
     XFree( (char*)data );
 
     int  offset = 0, buffer_offset = 0, format_inc = 1, proplen = bytes_left;
-    
+
 #if defined (QT_CLIPBOARD_DEBUG)
     qDebug("qt_xclb_read_property: initial property length: %d", proplen);
 #endif
-    
+
     switch (*format) {
     case 8:
     default:
 	format_inc = sizeof(char) / 1;
 	break;
-	
+
     case 16:
 	format_inc = sizeof(short) / 2;
 	proplen *= sizeof(short) / 2;
 	break;
-	
+
     case 32:
 	format_inc = sizeof(long) / 4;
 	proplen *= sizeof(long) / 4;
 	break;
     }
-    
+
     bool ok = buffer->resize( proplen + (nullterm ? 1 : 0) );
-    
+
 #if defined(QT_CLIPBOARD_DEBUG)
     qDebug("qt_xclb_read_property: buffer resized to %d", buffer->size());
 #endif
-    
+
     if ( ok ) {
 	// could allocate buffer
-	
+
 	while ( bytes_left ) {
 	    // more to read...
-	    
+
 	    r = XGetWindowProperty( dpy, win, property, offset, maxsize/4,
 				    FALSE, AnyPropertyType, type, format,
 				    &length, &bytes_left, &data );
 	    if ( r != Success )
 		break;
-	    
-	    offset += length;
+
+	    offset += length / (32 / *format);
 	    length *= format_inc * (*format) / 8;
-	    
+
 	    // Here we check if we get a buffer overflow and tries to
 	    // recover -- this shouldn't normally happen, but it doesn't
 	    // hurt to be defensive
 	    if (buffer_offset + length > buffer->size()) {
 		length = buffer->size() - buffer_offset;
-		
+
 		// escape loop
 		bytes_left = 0;
 	    }
-	    
+
 	    memcpy(buffer->data() + buffer_offset, data, length);
 	    buffer_offset += length;
-	    
+
 	    XFree( (char*)data );
 	}
-	
+
 	// zero-terminate (for text)
        	if (nullterm)
 	    buffer->at(buffer_offset) = '\0';
     }
-     
+
     // correct size, not 0-term.
     if ( size )
 	*size = buffer_offset;
-    
+
 #if defined(QT_CLIPBOARD_DEBUG)
     qDebug("qt_xclb_read_property: buffer size %d, buffer offset %d, offset %d",
 	   buffer->size(), buffer_offset, offset);
 #endif
-    
+
     if ( deleteProperty )
 	XDeleteProperty( dpy, win, property );
 
     XFlush( dpy );
-    
+
     return ok;
 }
 
@@ -399,7 +404,7 @@ QByteArray qt_xclb_read_incremental_property( Display *dpy, Window win,
 	alloc_error = !buf.resize(nbytes+1);
     }
 
-    while ( TRUE ) {
+    for (;;) {
 	if ( !qt_xclb_wait_for_event(dpy,win,PropertyNotify,
 				     (XEvent*)&event,1000) )
 	    break;
@@ -460,6 +465,23 @@ void QClipboard::connectNotify( const char * )
 
 bool QClipboard::event( QEvent *e )
 {
+    if (e->type() == QEvent::Timer) {
+	QTimerEvent *te = (QTimerEvent *) e;
+
+	if (te->timerId() == clipboard_id) {
+	    killTimer(clipboard_id);
+	    clipboard_id = 0;
+
+	    timer_event_clear = TRUE;
+	    clipboardData()->clear();
+	    timer_event_clear = FALSE;
+
+	    return TRUE;
+	}
+
+	return QObject::event( e );
+    }
+
     if ( e->type() != QEvent::Clipboard )
 	return QObject::event( e );
 
@@ -475,21 +497,21 @@ bool QClipboard::event( QEvent *e )
 	qDebug("qclipboard_x11.cpp: new selection owner 0x%lx",
 	       XGetSelectionOwner(dpy, XA_PRIMARY));
 #endif
-	
+
 	clipboardData()->clear();
 	emit dataChanged();
 	break;
-	
+
     case SelectionNotify:
 	// some has delivered data to us
 	clipboardData()->clear();
 	break;
-	
+
     case SelectionRequest:
-	{	
+	{
 	    // someone wants our data
 	    XSelectionRequestEvent *req = &xevent->xselectionrequest;
-	    
+
 	    if (req->requestor == owner->winId()) break;
 
 	    XEvent evt;
@@ -500,7 +522,7 @@ bool QClipboard::event( QEvent *e )
 	    evt.xselection.target	= req->target;
 	    evt.xselection.property	= None;
 	    evt.xselection.time = req->time;
-	    
+
 #if defined(QT_CLIPBOARD_DEBUG)
 	    qDebug("qclipboard_x11.cpp: selection requested\n"
 		   "                    from 0x%lx\n"
@@ -511,10 +533,10 @@ bool QClipboard::event( QEvent *e )
 		   req->target,
 		   XGetAtomName(req->display, req->target));
 #endif
-	    
+
 	    if ( !d->source() )
 		d->setSource(new QClipboardWatcher());
-	    
+
 	    const char* fmt;
 	    QByteArray data;
 	    static Atom xa_targets = *qt_xdnd_str_to_atom( "TARGETS" );
@@ -597,7 +619,7 @@ bool QClipboard::event( QEvent *e )
 		    qDebug("qclipboard_x11.cpp:%d: size %d %d",
 			   __LINE__, n * sizeof(long), data.size());
 #endif
-		    
+
 		    XChangeProperty ( dpy, req->requestor, property, xa_targets, 32,
 				      PropModeReplace, (uchar *) data.data(), n );
 		    evt.xselection.property = property;
@@ -703,19 +725,27 @@ const char* QClipboardWatcher::format( int n ) const
     if ( empty() )
 	return 0;
 
-    // TODO: record these once
-    static Atom xa_targets = *qt_xdnd_str_to_atom( "TARGETS" );
-    QByteArray targets = getDataInFormat(xa_targets);
-    if ( targets.size()/sizeof(Atom) > (uint)n ) {
-	Atom* target = (Atom*)targets.data();
-	if ( *target == XA_PIXMAP )
-	    return "image/ppm";
-	const char* fmt = qt_xdnd_atom_to_str(target[n]);
-	return fmt;
-    } else {
-	if ( n == 0 )
-	    return "text/plain";
+        if (! formatList.count()) {
+	// get the list of targets from the current clipboard owner - we do this
+	// once so that multiple calls to this function don't require multiple
+	// server round trips...
+	static Atom xa_targets = *qt_xdnd_str_to_atom( "TARGETS" );
+
+	QClipboardWatcher *that = (QClipboardWatcher *) this;
+	QByteArray ba = getDataInFormat(xa_targets);
+	Atom *target = (Atom *) ba.data();
+	int i, size = ba.size() / sizeof(Atom);
+	for (i = 0; i < size; i++)
+	    if ( *target == XA_PIXMAP )
+		that->formatList.append("image/ppm");
+	    else
+		that->formatList.append(qt_xdnd_atom_to_str(target[i]));
     }
+
+    if (n >= 0 && n < (signed) formatList.count())
+	return formatList[n];
+    if (n == 0)
+	return "text/plain";
     return 0;
 }
 
@@ -805,8 +835,26 @@ QMimeSource* QClipboard::data() const
 {
     QClipboardData *d = clipboardData();
 
-    if ( !d->source() )
+    if ( ! d->source() && ! timer_event_clear ) {
+	QClipboard *that = ((QClipboard *) this);
+
+	if (clipboard_id) {
+	    timer_event_clear = TRUE;
+	    d->clear();
+	    timer_event_clear = FALSE;
+
+	    that->killTimer(clipboard_id);
+	}
+
 	d->setSource(new QClipboardWatcher());
+
+	// start a zero timer - we will clear cached data when the timer
+	// times out, which will be the next time we hit the event loop...
+	// that way, the data is cached long enough for calls within a single
+	// loop/function, but the data doesn't linger around in case the selection
+	// changes
+	clipboard_id = that->startTimer(0);
+    }
 
     return d->source();
 }

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qpainter.cpp   2.3.1   edited 2001-03-03 $
+** $Id: qt/src/kernel/qpainter.cpp   2.3.2   edited 2001-10-13 $
 **
 ** Implementation of QPainter, QPen and QBrush classes
 **
@@ -680,8 +680,14 @@ void QPainter::restore()
     xlatex = ps->xlatex;
     xlatey = ps->xlatey;
 #endif
-    if ( ps->rgn != crgn || hardRestore )
+    if ( ps->rgn != crgn || hardRestore ) {
+#ifdef _WS_QWS_
+	if ( !ps->clip && !testf(ExtDev) ) {
+	    crgn = ps->rgn;
+	} else
+#endif
 	setClipRegion( ps->rgn );
+    }
     if ( ps->clip != testf(ClipOn) || hardRestore )
 	setClipping( ps->clip );
     tabstops = ps->ts;
@@ -1973,13 +1979,11 @@ void QPainter::drawImage( int x, int y, const QImage & image,
 			  int conversion_flags )
 {
 #ifdef _WS_QWS_
-    //### Hackish
-# ifndef QT_NO_TRANSFORMATIONS
     if ( !image.isNull() && gfx &&
-	(txop==TxNone||txop==TxTranslate) && !testf(ExtDev) )
-# else
-    if ( !image.isNull() && gfx && !testf(ExtDev) )
+# ifndef QT_NO_TRANSFORMATIONS
+	(txop==TxNone||txop==TxTranslate) &&
 # endif
+	!testf(ExtDev) )
     {
         if(sw<0)
 	    sw=image.width();
@@ -2003,8 +2007,8 @@ void QPainter::drawImage( int x, int y, const QImage & image,
 	    map( x, y, &x, &y );
 	}
 	gfx->blt(x,y,sw,sh,sx,sy);
+	return;
     }
-    return;
 #endif
 
     if ( !isActive() || image.isNull() )
@@ -2673,7 +2677,7 @@ void qt_format_text( const QFontMetrics& fm, int x, int y, int w, int h,
 	}
 
 	int bxc = xc;				// base x position (chars)
-	while ( TRUE ) {
+	for (;;) {
 	    QString chunk;
 	    while ( *cp && (*cp & (BEGLINE|TABSTOP)) == 0 ) {
 		if ( (*cp & PREFIX) == PREFIX ) {

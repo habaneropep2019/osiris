@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/sound/sound.cpp   2.3.1   edited 2001-01-26 $
+** $Id: qt/examples/sound/sound.cpp   2.3.2   edited 2001-06-12 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -95,6 +95,7 @@ int main(int argc, char** argv)
     QApplication app(argc,argv);
     SoundPlayer sp;
     app.setMainWidget(&sp);
+    sp.setCaption("Qt Example - Sounds");
     sp.show();
     return app.exec();
 }

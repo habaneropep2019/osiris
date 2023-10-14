@@ -32,7 +32,7 @@ height="100" src="face.png" alt="Home" border="0">
 
   Implementation:
 <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/picture/picture.cpp   2.3.1   edited 2001-02-20 $
+** &#36;Id&#58; qt/examples/picture/picture.cpp   2.3.2   edited 2001-10-18 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -54,29 +54,29 @@ void paintCar( <a name="QPainter"></a><a href="qpainter.html">QPainter</a> *p ) 
 {
     <a name="QPointArray"></a><a href="qpointarray.html">QPointArray</a> a;
     <a name="QBrush"></a><a href="qbrush.html">QBrush</a> brush( Qt::yellow, Qt::SolidPattern );
-    p-&gt;<a name="setBrush"></a><a href="qpainter.html#38e68f">setBrush</a>( brush );                       // use solid, yellow brush
+    p-&gt;<a name="setBrush"></a><a href="qpainter.html#3e0cc8">setBrush</a>( brush );                       // use solid, yellow brush
 
     a.setPoints( 5, 50,50, 350,50, 450,120, 450,250, 50,250 );
-    p-&gt;<a name="drawPolygon"></a><a href="qpainter.html#4dd5bc">drawPolygon</a>( a );                        // draw car body
+    p-&gt;<a name="drawPolygon"></a><a href="qpainter.html#2efe17">drawPolygon</a>( a );                        // draw car body
 
     <a name="QFont"></a><a href="qfont.html">QFont</a> f( "courier", 12, QFont::Bold );
-    p-&gt;<a name="setFont"></a><a href="qpainter.html#e4d6b7">setFont</a>( f );
+    p-&gt;<a name="setFont"></a><a href="qpainter.html#998df2">setFont</a>( f );
 
     <a name="QColor"></a><a href="qcolor.html">QColor</a> windowColor( 120, 120, 255 );        // a light blue color
-    brush.<a name="setColor"></a><a href="qbrush.html#67a3ce">setColor</a>( windowColor );              // set this brush color
-    p-&gt;<a href="qpainter.html#38e68f">setBrush</a>( brush );                       // set brush
-    p-&gt;<a name="drawRect"></a><a href="qpainter.html#b29a16">drawRect</a>( 80, 80, 250, 70 );             // car window
-    p-&gt;<a name="drawText"></a><a href="qpainter.html#8a59ed">drawText</a>( 180, 80, 150, 70, Qt::AlignCenter, "--  Qt  --\nTrolltech AS" );
+    brush.<a name="setColor"></a><a href="qbrush.html#fdde27">setColor</a>( windowColor );              // set this brush color
+    p-&gt;<a href="qpainter.html#3e0cc8">setBrush</a>( brush );                       // set brush
+    p-&gt;<a name="drawRect"></a><a href="qpainter.html#4c0077">drawRect</a>( 80, 80, 250, 70 );             // car window
+    p-&gt;<a name="drawText"></a><a href="qpainter.html#0f088f">drawText</a>( 180, 80, 150, 70, Qt::AlignCenter, "--  Qt  --\nTrolltech AS" );
 
     <a name="QPixmap"></a><a href="qpixmap.html">QPixmap</a> pixmap;
-    if ( pixmap.<a name="load"></a><a href="qpixmap.html#775e08">load</a>("flag.bmp") )              // load and draw image
-        p-&gt;<a name="drawPixmap"></a><a href="qpainter.html#f3fb4a">drawPixmap</a>( 100, 90, pixmap );
+    if ( pixmap.<a name="load"></a><a href="qpixmap.html#a728cf">load</a>("flag.bmp") )              // load and draw image
+        p-&gt;<a name="drawPixmap"></a><a href="qpainter.html#c64b89">drawPixmap</a>( 100, 85, pixmap );
 
-    p-&gt;<a name="setBackgroundMode"></a><a href="qpainter.html#eab325">setBackgroundMode</a>( Qt::OpaqueMode );             // set opaque mode
-    p-&gt;<a href="qpainter.html#38e68f">setBrush</a>( Qt::DiagCrossPattern );                // black diagonal cross pattern
-    p-&gt;<a name="drawEllipse"></a><a href="qpainter.html#06ff17">drawEllipse</a>( 90, 210, 80, 80 );          // back wheel
-    p-&gt;<a href="qpainter.html#38e68f">setBrush</a>( Qt::CrossPattern );            // black cross fill pattern
-    p-&gt;<a href="qpainter.html#06ff17">drawEllipse</a>( 310, 210, 80, 80 );         // front wheel
+    p-&gt;<a name="setBackgroundMode"></a><a href="qpainter.html#10e1fd">setBackgroundMode</a>( Qt::OpaqueMode );             // set opaque mode
+    p-&gt;<a href="qpainter.html#3e0cc8">setBrush</a>( Qt::DiagCrossPattern );                // black diagonal cross pattern
+    p-&gt;<a name="drawEllipse"></a><a href="qpainter.html#f4ec3a">drawEllipse</a>( 90, 210, 80, 80 );          // back wheel
+    p-&gt;<a href="qpainter.html#3e0cc8">setBrush</a>( Qt::CrossPattern );            // black cross fill pattern
+    p-&gt;<a href="qpainter.html#f4ec3a">drawEllipse</a>( 310, 210, 80, 80 );         // front wheel
 }
 
 class PictureDisplay : public QWidget           // picture display widget
@@ -96,10 +96,10 @@ PictureDisplay::PictureDisplay( const char *fileName )
 {
     pict = new <a href="qpicture.html">QPicture</a>;
     name = fileName;
-    if ( !pict-&gt;<a name="load"></a><a href="qpicture.html#acc5b8">load</a>(fileName) ) {              // cannot load picture
+    if ( !pict-&gt;<a name="load"></a><a href="qpicture.html#f0cc08">load</a>(fileName) ) {              // cannot load picture
         delete pict;
         pict = 0;
-        name.<a name="sprintf"></a><a href="qstring.html#2eb9bc">sprintf</a>( "Not able to load picture: %s", fileName );
+        name.<a name="sprintf"></a><a href="qstring.html#926f67">sprintf</a>( "Not able to load picture: %s", fileName );
     }
 }
 
@@ -108,24 +108,24 @@ PictureDisplay::~PictureDisplay()
     delete pict;
 }
 
-void <a name="371"></a>PictureDisplay::paintEvent( <a href="qpaintevent.html">QPaintEvent</a> * )
+void <a name="369"></a>PictureDisplay::paintEvent( <a href="qpaintevent.html">QPaintEvent</a> * )
 {
     <a href="qpainter.html">QPainter</a> paint( this );                     // paint widget
     if ( pict )
-        paint.<a name="drawPicture"></a><a href="qpainter.html#516091">drawPicture</a>( *pict );             // draw picture
+        paint.<a name="drawPicture"></a><a href="qpainter.html#de93a0">drawPicture</a>( *pict );             // draw picture
     else
-        paint.<a href="qpainter.html#8a59ed">drawText</a>( <a name="rect"></a><a href="qwidget.html#e872e1">rect</a>(), AlignCenter, name );
+        paint.<a href="qpainter.html#0f088f">drawText</a>( <a name="rect"></a><a href="qwidget.html#75ae71">rect</a>(), AlignCenter, name );
 }
 
-void <a name="372"></a>PictureDisplay::keyPressEvent( <a href="qkeyevent.html">QKeyEvent</a> *k )
+void <a name="370"></a>PictureDisplay::keyPressEvent( <a href="qkeyevent.html">QKeyEvent</a> *k )
 {
-    switch ( tolower(k-&gt;<a name="ascii"></a><a href="qkeyevent.html#c3c00e">ascii</a>()) ) {
+    switch ( tolower(k-&gt;<a name="ascii"></a><a href="qkeyevent.html#f0af69">ascii</a>()) ) {
         case 'r':                               // reload
-            pict-&gt;<a href="qpicture.html#acc5b8">load</a>( name );
-            <a name="update"></a><a href="qwidget.html#4a97ef">update</a>();
+            pict-&gt;<a href="qpicture.html#f0cc08">load</a>( name );
+            <a name="update"></a><a href="qwidget.html#a66a88">update</a>();
             break;
         case 'q':                               // quit
-            <a name="QApplication::exit"></a><a href="qapplication.html#89f03a">QApplication::exit</a>();
+            <a name="QApplication::exit"></a><a href="qapplication.html#7328f6">QApplication::exit</a>();
             break;
     }
 }
@@ -143,24 +143,25 @@ int main( int argc, char **argv )
         <a href="qpicture.html">QPicture</a> pict;                          // our picture
         <a href="qpainter.html">QPainter</a> paint;                         // our painter
 
-        paint.<a name="begin"></a><a href="qpainter.html#59f1bb">begin</a>( &amp;pict );                   // begin painting onto picture
+        paint.<a name="begin"></a><a href="qpainter.html#02ed5d">begin</a>( &amp;pict );                   // begin painting onto picture
         paintCar( &amp;paint );                             // paint!
-        paint.<a name="end"></a><a href="qpainter.html#c7f9ac">end</a>();                            // painting done
+        paint.<a name="end"></a><a href="qpainter.html#365784">end</a>();                            // painting done
 
-        pict.<a name="save"></a><a href="qpicture.html#8c3f7e">save</a>( fileName );                  // save picture
-        <a name="QMessageBox::information"></a><a href="qmessagebox.html#2e454b">QMessageBox::information</a>(0, "Qt picture example", "Saved.  Run me again!");
+        pict.<a name="save"></a><a href="qpicture.html#2d7ded">save</a>( fileName );                  // save picture
+        <a name="QMessageBox::information"></a><a href="qmessagebox.html#66b7c8">QMessageBox::information</a>(0, "Qt picture example", "Saved.  Run me again!");
         return 0;
     } else {
         PictureDisplay test( fileName );                // create picture display
-        a.<a name="setMainWidget"></a><a href="qapplication.html#11c921">setMainWidget</a>( &amp;test);                        // set main widget
-        test.<a name="show"></a><a href="qwidget.html#ccc8f7">show</a>();                            // show it
+        a.<a name="setMainWidget"></a><a href="qapplication.html#7ad759">setMainWidget</a>( &amp;test);                        // set main widget
+        test.<a name="setCaption"></a><a href="qwidget.html#d6a291">setCaption</a>("Qt Example - Picture");
+        test.<a name="show"></a><a href="qwidget.html#200ee5">show</a>();                            // show it
 
-        return a.<a name="exec"></a><a href="qapplication.html#7076af">exec</a>();                                // start event loop
+        return a.<a name="exec"></a><a href="qapplication.html#84c7bf">exec</a>();                                // start event loop
     }
 }
 </pre>
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.1</div>
+<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

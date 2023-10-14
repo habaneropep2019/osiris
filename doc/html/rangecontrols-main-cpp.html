@@ -31,7 +31,7 @@ height="100" src="face.png" alt="Home" border="0">
   <hr>
 
   Header file: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/rangecontrols/rangecontrols.h   2.3.1   edited 2001-01-26 $
+** &#36;Id&#58; qt/examples/rangecontrols/rangecontrols.h   2.3.2   edited 2001-01-26 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -65,7 +65,7 @@ private:
   <hr>
 
   Implementation: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/rangecontrols/rangecontrols.cpp   2.3.1   edited 2001-01-26 $
+** &#36;Id&#58; qt/examples/rangecontrols/rangecontrols.cpp   2.3.2   edited 2001-01-26 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -92,48 +92,48 @@ RangeControls::RangeControls( <a href="qwidget.html">QWidget</a> *parent, const 
     <a href="qhbox.html">QHBox</a> *row1 = new <a href="qhbox.html">QHBox</a>( this );
 
     <a href="qvbox.html">QVBox</a> *cell2 = new <a href="qvbox.html">QVBox</a>( row1 );
-    cell2-&gt;<a href="qframe.html#ab991e">setMargin</a>( 10 );
-    cell2-&gt;<a href="qframe.html#c0d758">setFrameStyle</a>( QFrame::WinPanel | QFrame::Sunken );
+    cell2-&gt;<a href="qframe.html#b11d00">setMargin</a>( 10 );
+    cell2-&gt;<a href="qframe.html#558f79">setFrameStyle</a>( QFrame::WinPanel | QFrame::Sunken );
 
     (void)new <a href="qwidget.html">QWidget</a>( cell2 );
 
     <a href="qlabel.html">QLabel</a> *label1 = new <a href="qlabel.html">QLabel</a>( <a href="qstring.html">QString</a>( "Enter a value between\n%1 and %2:" ).arg( -INT_MAX ).arg( INT_MAX ), cell2 );
-    label1-&gt;<a href="qwidget.html#ea4616">setMaximumHeight</a>( label1-&gt;<a href="qlabel.html#614dd5">sizeHint</a>().height() );
+    label1-&gt;<a href="qwidget.html#4e5337">setMaximumHeight</a>( label1-&gt;<a href="qlabel.html#f40fcc">sizeHint</a>().height() );
     <a href="qspinbox.html">QSpinBox</a> *sb1 = new <a href="qspinbox.html">QSpinBox</a>( -INT_MAX, INT_MAX, 1, cell2 );
-    sb1-&gt;<a href="qspinbox.html#4960d3">setValue</a>( 0 );
+    sb1-&gt;<a href="qspinbox.html#eb409b">setValue</a>( 0 );
 
     <a href="qlabel.html">QLabel</a> *label2 = new <a href="qlabel.html">QLabel</a>( "Enter a zoom value:", cell2 );
-    label2-&gt;<a href="qwidget.html#ea4616">setMaximumHeight</a>( label2-&gt;<a href="qlabel.html#614dd5">sizeHint</a>().height() );
+    label2-&gt;<a href="qwidget.html#4e5337">setMaximumHeight</a>( label2-&gt;<a href="qlabel.html#f40fcc">sizeHint</a>().height() );
     <a href="qspinbox.html">QSpinBox</a> *sb2 = new <a href="qspinbox.html">QSpinBox</a>( 0, 1000, 10, cell2 );
-    sb2-&gt;<a href="qspinbox.html#38a1a4">setSuffix</a>( " %" );
-    sb2-&gt;<a href="qspinbox.html#a89689">setSpecialValueText</a>( "Automatic" );
+    sb2-&gt;<a href="qspinbox.html#36bd02">setSuffix</a>( " %" );
+    sb2-&gt;<a href="qspinbox.html#28d1c8">setSpecialValueText</a>( "Automatic" );
 
     <a href="qlabel.html">QLabel</a> *label3 = new <a href="qlabel.html">QLabel</a>( "Enter a price:", cell2 );
-    label3-&gt;<a href="qwidget.html#ea4616">setMaximumHeight</a>( label3-&gt;<a href="qlabel.html#614dd5">sizeHint</a>().height() );
+    label3-&gt;<a href="qwidget.html#4e5337">setMaximumHeight</a>( label3-&gt;<a href="qlabel.html#f40fcc">sizeHint</a>().height() );
     <a href="qspinbox.html">QSpinBox</a> *sb3 = new <a href="qspinbox.html">QSpinBox</a>( 0, INT_MAX, 1, cell2 );
-    sb3-&gt;<a href="qspinbox.html#ad4232">setPrefix</a>( "$" );
-    sb3-&gt;<a href="qspinbox.html#4960d3">setValue</a>( 355 );
+    sb3-&gt;<a href="qspinbox.html#eccb7d">setPrefix</a>( "$" );
+    sb3-&gt;<a href="qspinbox.html#eb409b">setValue</a>( 355 );
 
     (void)new <a href="qwidget.html">QWidget</a>( cell2 );
 
     <a href="qhbox.html">QHBox</a> *row2 = new <a href="qhbox.html">QHBox</a>( this );
 
     <a href="qvbox.html">QVBox</a> *cell3 = new <a href="qvbox.html">QVBox</a>( row2 );
-    cell3-&gt;<a href="qframe.html#ab991e">setMargin</a>( 10 );
-    cell3-&gt;<a href="qframe.html#c0d758">setFrameStyle</a>( QFrame::WinPanel | QFrame::Sunken );
+    cell3-&gt;<a href="qframe.html#b11d00">setMargin</a>( 10 );
+    cell3-&gt;<a href="qframe.html#558f79">setFrameStyle</a>( QFrame::WinPanel | QFrame::Sunken );
     <a href="qslider.html">QSlider</a> *hslider = new <a href="qslider.html">QSlider</a>( 0, 64, 1, 33, Qt::Horizontal, cell3 );
     <a href="qlcdnumber.html">QLCDNumber</a> *lcd2 = new <a href="qlcdnumber.html">QLCDNumber</a>( 2, cell3 );
-    lcd2-&gt;<a href="qlcdnumber.html#0eaac4">display</a>( 33 );
-    lcd2-&gt;<a href="qlcdnumber.html#e244b3">setSegmentStyle</a>( QLCDNumber::Filled );
-    <a href="qobject.html#c2d209">connect</a>( hslider, SIGNAL( valueChanged( int ) ), lcd2, SLOT( display( int ) ) );
+    lcd2-&gt;<a href="qlcdnumber.html#ecdf88">display</a>( 33 );
+    lcd2-&gt;<a href="qlcdnumber.html#8aa01c">setSegmentStyle</a>( QLCDNumber::Filled );
+    <a href="qobject.html#7f8e37">connect</a>( hslider, SIGNAL( valueChanged( int ) ), lcd2, SLOT( display( int ) ) );
 
     <a href="qhbox.html">QHBox</a> *cell4 = new <a href="qhbox.html">QHBox</a>( row2 );
-    cell4-&gt;<a href="qframe.html#c0d758">setFrameStyle</a>( QFrame::WinPanel | QFrame::Sunken );
-    cell4-&gt;<a href="qframe.html#ab991e">setMargin</a>( 10 );
+    cell4-&gt;<a href="qframe.html#558f79">setFrameStyle</a>( QFrame::WinPanel | QFrame::Sunken );
+    cell4-&gt;<a href="qframe.html#b11d00">setMargin</a>( 10 );
     <a href="qslider.html">QSlider</a> *vslider = new <a href="qslider.html">QSlider</a>( 0, 64, 1, 8, Qt::Vertical, cell4 );
     <a href="qlcdnumber.html">QLCDNumber</a> *lcd3 = new <a href="qlcdnumber.html">QLCDNumber</a>( 3, cell4 );
-    lcd3-&gt;<a href="qlcdnumber.html#0eaac4">display</a>( 8 );
-    <a href="qobject.html#c2d209">connect</a>( vslider, SIGNAL( valueChanged( int ) ), lcd3, SLOT( display( int ) ) );
+    lcd3-&gt;<a href="qlcdnumber.html#ecdf88">display</a>( 8 );
+    <a href="qobject.html#7f8e37">connect</a>( vslider, SIGNAL( valueChanged( int ) ), lcd3, SLOT( display( int ) ) );
 }
 </pre>
 
@@ -142,7 +142,7 @@ RangeControls::RangeControls( <a href="qwidget.html">QWidget</a> *parent, const 
 
   Main:
 <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/rangecontrols/main.cpp   2.3.1   edited 2001-01-26 $
+** &#36;Id&#58; qt/examples/rangecontrols/main.cpp   2.3.2   edited 2001-06-12 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -159,16 +159,16 @@ int main( int argc, char **argv )
     <a name="QApplication"></a><a href="qapplication.html">QApplication</a> a( argc, argv );
 
     RangeControls rangecontrols;
-    rangecontrols.<a name="resize"></a><a href="qwidget.html#9ff9d8">resize</a>( 500, 300 );
-    rangecontrols.<a name="setCaption"></a><a href="qwidget.html#d4f007">setCaption</a>( "Examples for Range Control Widgets" );
-    a.<a name="setMainWidget"></a><a href="qapplication.html#11c921">setMainWidget</a>( &amp;rangecontrols );
-    rangecontrols.<a name="show"></a><a href="qwidget.html#ccc8f7">show</a>();
+    rangecontrols.<a name="resize"></a><a href="qwidget.html#ff9d07">resize</a>( 500, 300 );
+    rangecontrols.<a name="setCaption"></a><a href="qwidget.html#d6a291">setCaption</a>( "Qt Example - Range Control Widgets" );
+    a.<a name="setMainWidget"></a><a href="qapplication.html#7ad759">setMainWidget</a>( &amp;rangecontrols );
+    rangecontrols.<a name="show"></a><a href="qwidget.html#200ee5">show</a>();
 
-    return a.<a name="exec"></a><a href="qapplication.html#7076af">exec</a>();
+    return a.<a name="exec"></a><a href="qapplication.html#84c7bf">exec</a>();
 }
 </pre>
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.1</div>
+<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

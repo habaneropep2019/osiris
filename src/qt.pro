@@ -1,14 +1,14 @@
-
 TEMPLATE	= lib
 CONFIG		+= qt warn_on release
 
 unix:CONFIG += x11
 #xft internal
 embedded:CONFIG -= x11
+#x11:CONFIG += xft
 
 TARGET		= qt
 embedded:TARGET	= qte
-VERSION		= 2.3.1
+VERSION		= 2.3.2
 DESTDIR		= ../lib
 DLLDESTDIR	= ../bin
 
@@ -69,9 +69,11 @@ internal:DEFINES += $$DEFINESI
 win32:DEFINES += QT_NO_IMAGEIO_JPEG
 
 internal:TMAKE_CXXFLAGS_EMBEDDED += -DQT_NO_QWS_VOODOO3 -DQT_NO_QWS_MATROX -DQT_NO_QWS_MACH64
+internal:TMAKE_CXXFLAGS_EMBEDDED += -DQT_NO_QWS_VNC
+#internal:TMAKE_CXXFLAGS_EMBEDDED += -DQT_NO_QWS_TRANSFORMED
+#internal:TMAKE_CXXFLAGS_EMBEDDED += -DQT_NO_QWS_LINUXFB
 internal:TMAKE_CXXFLAGS_EMBEDDED += -DQT_NO_QWS_VGA_16
 #internal:TMAKE_CXXFLAGS_EMBEDDED += -DQT_NO_QWS_VFB
-#internal:TMAKE_CXXFLAGS_EMBEDDED += -DQT_NO_QWS_TRANSFORMED
 internal:TMAKE_CXXFLAGS_EMBEDDED += -DQT_NO_QWS_DEPTH_4
 internal:TMAKE_CXXFLAGS_EMBEDDED += -DQT_NO_QWS_DEPTH_8
 #internal:TMAKE_CXXFLAGS_EMBEDDED += -DQT_NO_QWS_DEPTH_16
@@ -403,9 +405,12 @@ kernel:QWSSOURCES += kernel/qapplication_qws.cpp \
 		  kernel/qwsevent_qws.cpp \
 		  kernel/qwindowsystem_qws.cpp \
 		  kernel/qkeyboard_qws.cpp \
+		kernel/qwskeyboard_qnx.cpp \
+		kernel/qwsmouse_qnx.cpp \
 		  kernel/qwscursor_qws.cpp \
 		  kernel/qwsdecoration_qws.cpp \
 		  kernel/qwsmouse_qws.cpp \
+		kernel/qsharedmemory.cpp \
 		  kernel/qwsmanager_qws.cpp \
 		  kernel/qwsdefaultdecoration_qws.cpp \
 		  kernel/qwshydrodecoration_qws.cpp \
@@ -639,6 +644,7 @@ embedded:HEADERS += $$KERNEL_H/qcopchannel_qws.h \
 		  $$KERNEL_H/qgfxraster_qws.h \
 		  $$KERNEL_H/qgfxlinuxfb_qws.h \
 		  $$KERNEL_H/qgfxvnc_qws.h \
+		$$KERNEL_H/qsharedmemory.h \
 		  $$KERNEL_H/qwindowsystem_qws.h \
 		  $$KERNEL_H/qwscursor_qws.h \
 		  $$KERNEL_H/qwsmouse_qws.h \

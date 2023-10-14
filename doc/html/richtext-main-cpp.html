@@ -32,7 +32,7 @@ height="100" src="face.png" alt="Home" border="0">
   <hr>
 
   Header file: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/richtext/richtext.h   2.3.1   edited 2001-01-26 $
+** &#36;Id&#58; qt/examples/richtext/richtext.h   2.3.2   edited 2001-01-26 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -74,7 +74,7 @@ protected slots:
   <hr>
 
   Implementation: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/richtext/richtext.cpp   2.3.1   edited 2001-01-26 $
+** &#36;Id&#58; qt/examples/richtext/richtext.cpp   2.3.2   edited 2001-01-26 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -152,19 +152,19 @@ static const char* sayings[] = {
 MyRichText::MyRichText( <a href="qwidget.html">QWidget</a> *parent, const char *name )
     : <a href="qvbox.html">QVBox</a>( parent, name )
 {
-    <a href="qframe.html#ab991e">setMargin</a>( 5 );
+    <a href="qframe.html#b11d00">setMargin</a>( 5 );
 
     view = new <a href="qtextview.html">QTextView</a>( this );
     view-&gt;setText( "This is a &lt;b&gt;Test&lt;/b&gt; with &lt;i&gt;italic&lt;/i&gt; &lt;u&gt;stuff&lt;/u&gt;" );
     <a href="qbrush.html">QBrush</a> paper;
-    paper.<a href="qbrush.html#447de9">setPixmap</a>( <a href="qpixmap.html">QPixmap</a>( "../richtext/marble.png" ) );
+    paper.<a href="qbrush.html#406414">setPixmap</a>( <a href="qpixmap.html">QPixmap</a>( "../richtext/marble.png" ) );
     view-&gt;setPaper( paper );
 
     view-&gt;setText( sayings[0] );
     view-&gt;setMinimumSize( 450, 250 );
 
     <a href="qhbox.html">QHBox</a> *buttons = new <a href="qhbox.html">QHBox</a>( this );
-    buttons-&gt;<a href="qframe.html#ab991e">setMargin</a>( 5 );
+    buttons-&gt;<a href="qframe.html#b11d00">setMargin</a>( 5 );
 
     bClose = new <a href="qpushbutton.html">QPushButton</a>( "&amp;Close", buttons );
     bPrev = new <a href="qpushbutton.html">QPushButton</a>( "&lt;&lt; &amp;Prev", buttons );
@@ -172,14 +172,14 @@ MyRichText::MyRichText( <a href="qwidget.html">QWidget</a> *parent, const char *
 
     bPrev-&gt;setEnabled( FALSE );
 
-    <a href="qobject.html#c2d209">connect</a>( bClose, SIGNAL( clicked() ), qApp, SLOT( quit() ) );
-    <a href="qobject.html#c2d209">connect</a>( bPrev, SIGNAL( clicked() ), this, SLOT( <a href=#318>prev</a>() ) );
-    <a href="qobject.html#c2d209">connect</a>( bNext, SIGNAL( clicked() ), this, SLOT( <a href=#319>next</a>() ) );
+    <a href="qobject.html#7f8e37">connect</a>( bClose, SIGNAL( clicked() ), qApp, SLOT( quit() ) );
+    <a href="qobject.html#7f8e37">connect</a>( bPrev, SIGNAL( clicked() ), this, SLOT( <a href=#316>prev</a>() ) );
+    <a href="qobject.html#7f8e37">connect</a>( bNext, SIGNAL( clicked() ), this, SLOT( <a href=#317>next</a>() ) );
 
     num = 0;
 }
 
-void <a name="318"></a>MyRichText::prev()
+void <a name="316"></a>MyRichText::prev()
 {
     if ( num &lt;= 0 )
         return;
@@ -194,7 +194,7 @@ void <a name="318"></a>MyRichText::prev()
     bNext-&gt;setEnabled( TRUE );
 }
 
-void <a name="319"></a>MyRichText::next()
+void <a name="317"></a>MyRichText::next()
 {
     if ( !sayings[++num] )
         return;
@@ -213,7 +213,7 @@ void <a name="319"></a>MyRichText::next()
 
   Main:
 <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/richtext/main.cpp   2.3.1   edited 2001-01-26 $
+** &#36;Id&#58; qt/examples/richtext/main.cpp   2.3.2   edited 2001-06-12 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -230,16 +230,16 @@ int main( int argc, char **argv )
     <a name="QApplication"></a><a href="qapplication.html">QApplication</a> a( argc, argv );
 
     MyRichText richtext;
-    richtext.<a name="resize"></a><a href="qwidget.html#9ff9d8">resize</a>( 450, 350 );
-    richtext.<a name="setCaption"></a><a href="qwidget.html#d4f007">setCaption</a>( "Fortune" );
-    a.<a name="setMainWidget"></a><a href="qapplication.html#11c921">setMainWidget</a>( &amp;richtext );
-    richtext.<a name="show"></a><a href="qwidget.html#ccc8f7">show</a>();
+    richtext.<a name="resize"></a><a href="qwidget.html#ff9d07">resize</a>( 450, 350 );
+    richtext.<a name="setCaption"></a><a href="qwidget.html#d6a291">setCaption</a>( "Qt Example - Richtext" );
+    a.<a name="setMainWidget"></a><a href="qapplication.html#7ad759">setMainWidget</a>( &amp;richtext );
+    richtext.<a name="show"></a><a href="qwidget.html#200ee5">show</a>();
 
-    return a.<a name="exec"></a><a href="qapplication.html#7076af">exec</a>();
+    return a.<a name="exec"></a><a href="qapplication.html#84c7bf">exec</a>();
 }
 </pre>
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.1</div>
+<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

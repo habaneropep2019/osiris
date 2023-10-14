@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qpalette.cpp   2.3.1   edited 2001-05-30 $
+** $Id: qt/src/kernel/qpalette.cpp   2.3.2   edited 2001-05-30 $
 **
 ** Implementation of QColorGroup and QPalette classes
 **

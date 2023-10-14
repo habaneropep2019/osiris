@@ -31,7 +31,7 @@ height="100" src="face.png" alt="Home" border="0">
 
   Main:
 <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/iconview/main.cpp   2.3.1   edited 2001-01-26 $
+** &#36;Id&#58; qt/examples/iconview/main.cpp   2.3.2   edited 2001-06-12 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -63,11 +63,11 @@ public slots:
         printf( "Dropped Mimesource %p into the view %p\n", mime, view );
         printf( "  Formats:\n" );
         int i = 0;
-        const char *str = mime-&gt;<a name="format"></a><a href="qdropevent.html#141ff9">format</a>( i );
+        const char *str = mime-&gt;<a name="format"></a><a href="qdropevent.html#d81a92">format</a>( i );
         printf( "    %s\n", str );
         while ( str ) {
             printf( "    %s\n", str );
-            str = mime-&gt;<a href="qdropevent.html#141ff9">format</a>( ++i );
+            str = mime-&gt;<a href="qdropevent.html#d81a92">format</a>( ++i );
         }
     };
     void moved() {
@@ -84,31 +84,31 @@ int main( int argc, char **argv )
     <a name="QApplication"></a><a href="qapplication.html">QApplication</a> a( argc, argv );
 
     <a name="QIconView"></a><a href="qiconview.html">QIconView</a> qiconview;
-    qiconview.<a name="setSelectionMode"></a><a href="qiconview.html#7eddc3">setSelectionMode</a>( QIconView::Extended );
+    qiconview.<a name="setSelectionMode"></a><a href="qiconview.html#98457a">setSelectionMode</a>( QIconView::Extended );
 
     for ( unsigned int i = 0; i &lt; 3000; i++ ) {
         <a name="QIconViewItem"></a><a href="qiconviewitem.html">QIconViewItem</a> *item = new <a href="qiconviewitem.html">QIconViewItem</a>( &amp;qiconview, QString( "Item %1" ).arg( i + 1 ) );
-        item-&gt;<a name="setRenameEnabled"></a><a href="qiconviewitem.html#c25aca">setRenameEnabled</a>( TRUE );
+        item-&gt;<a name="setRenameEnabled"></a><a href="qiconviewitem.html#2eb423">setRenameEnabled</a>( TRUE );
     }
 
-    qiconview.<a name="setCaption"></a><a href="qwidget.html#d4f007">setCaption</a>( "Iconview" );
+    qiconview.<a name="setCaption"></a><a href="qwidget.html#d6a291">setCaption</a>( "Qt Example - Iconview" );
 
     ListenDND listen_dnd( &amp;qiconview );
-    <a name="QObject::connect"></a><a href="qobject.html#c2d209">QObject::connect</a>( &amp;qiconview, SIGNAL( dropped( <a href="qdropevent.html">QDropEvent</a> *, const QValueList&lt;<a name="QIconDragItem"></a><a href="qicondragitem.html">QIconDragItem</a>&gt; &amp; ) ),
+    <a name="QObject::connect"></a><a href="qobject.html#7f8e37">QObject::connect</a>( &amp;qiconview, SIGNAL( dropped( <a href="qdropevent.html">QDropEvent</a> *, const QValueList&lt;<a name="QIconDragItem"></a><a href="qicondragitem.html">QIconDragItem</a>&gt; &amp; ) ),
                       &amp;listen_dnd, SLOT( dropped( <a href="qdropevent.html">QDropEvent</a> * ) ) );
-    <a href="qobject.html#c2d209">QObject::connect</a>( &amp;qiconview, SIGNAL( moved() ), &amp;listen_dnd, SLOT( moved() ) );
+    <a href="qobject.html#7f8e37">QObject::connect</a>( &amp;qiconview, SIGNAL( moved() ), &amp;listen_dnd, SLOT( moved() ) );
 
-    a.<a name="setMainWidget"></a><a href="qapplication.html#11c921">setMainWidget</a>( &amp;qiconview );
-    qiconview.<a name="show"></a><a href="qscrollview.html#88277a">show</a>();
-    qiconview.<a name="resize"></a><a href="qscrollview.html#5d37af">resize</a>( qiconview.<a name="sizeHint"></a><a href="qiconview.html#245965">sizeHint</a>() );
+    a.<a name="setMainWidget"></a><a href="qapplication.html#7ad759">setMainWidget</a>( &amp;qiconview );
+    qiconview.<a name="show"></a><a href="qscrollview.html#45ec27">show</a>();
+    qiconview.<a name="resize"></a><a href="qscrollview.html#3480d1">resize</a>( qiconview.<a name="sizeHint"></a><a href="qiconview.html#157488">sizeHint</a>() );
 
-    return a.<a name="exec"></a><a href="qapplication.html#7076af">exec</a>();
+    return a.<a name="exec"></a><a href="qapplication.html#84c7bf">exec</a>();
 }
 
 #include "main.moc"
 </pre>
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.1</div>
+<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

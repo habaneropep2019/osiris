@@ -37,15 +37,15 @@ them from ordinary data members:
 <p>
 <ul>
 <li> a read method.  This always exists.
-<li> a write method.  Optional: read-only properties like <a href="qwidget.html#32dcd0">QWidget::isDesktop()</a> do not have this.
+<li> a write method.  Optional: read-only properties like <a href="qwidget.html#38c72f">QWidget::isDesktop()</a> do not have this.
 <li> an attribute "stored" that indicates persistence.  Most
-properties are stored, but a few janus-faced properties like <a href="qwidget.html#033e1b">QWidget::minimumWidth()</a> aren't: That property is just way of looking
-at <a href="qwidget.html#5ac2ae">QWidget::minimumSize()</a>, it has no data of its own.
+properties are stored, but a few janus-faced properties like <a href="qwidget.html#3dae47">QWidget::minimumWidth()</a> aren't: That property is just way of looking
+at <a href="qwidget.html#b24d94">QWidget::minimumSize()</a>, it has no data of its own.
 <li> a reset method to set a property back to its context specific
-default value.  Very unusual, but e.g. <a href="qwidget.html#3a7237">QWidget::font()</a> needs it:
-The default is to follow its surroundings, and no call to <a href="qwidget.html#26de4b">QWidget::setFont()</a> can mean that.
+default value.  Very unusual, but e.g. <a href="qwidget.html#167922">QWidget::font()</a> needs it:
+The default is to follow its surroundings, and no call to <a href="qwidget.html#090d60">QWidget::setFont()</a> can mean that.
 <li> an attribute "designable" that indicates whether a property is
-considered to be designable in a GUI Designer.  Most are, but e.g. <a href="qbutton.html#d0e4de">QButton::isDown()</a> can't be designed.  The user can press buttons, and
+considered to be designable in a GUI Designer.  Most are, but e.g. <a href="qbutton.html#ea8b93">QButton::isDown()</a> can't be designed.  The user can press buttons, and
 the application programmer can make the program press its own buttons,
 but a GUI design tool can't press buttons.
 <p>
@@ -66,9 +66,9 @@ the first is preferred.  However, since you can get a list of all
 available properties for any QObject through its <a href="qmetaobject.html">metaObject()</a> setProperty() can give you control over classes
 that weren't available at compile time.
 <p>
-As well as QObject::setProperty(), there is a <a href="qobject.html#d1c761">QObject::property()</a>.
-<a href="qmetaobject.html#d6f94c">QMetaObject::propertyNames()</a> returns the names of all available
-properties.  <a href="qmetaobject.html#20d1ee">QMetaObject::property()</a> returns the property data for
+As well as QObject::setProperty(), there is a <a href="qobject.html#a110be">QObject::property()</a>.
+<a href="qmetaobject.html#8c9b9c">QMetaObject::propertyNames()</a> returns the names of all available
+properties.  <a href="qmetaobject.html#843ead">QMetaObject::property()</a> returns the property data for
 a named property: a <a href="qmetaproperty.html">QMetaProperty</a> object.
 <p>
 Here's a simple example that shows the most important property
@@ -150,6 +150,6 @@ must return void and take no arguments.
 
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.1</div>
+<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

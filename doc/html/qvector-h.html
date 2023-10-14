@@ -30,7 +30,7 @@ remains with Trolltech.
 <hr>
 <pre>
 /****************************************************************************
-** &#36;Id&#58; qt/src/tools/qvector.h   2.3.1   edited 2001-01-26 $
+** &#36;Id&#58; qt/src/tools/qvector.h   2.3.2   edited 2001-07-29 $
 **
 ** Definition of QVector template/macro class
 **
@@ -109,8 +109,19 @@ public:
     type *at( uint i ) const            { return (type *)QGVector::at(i); }
     void  toList( QGList *list ) const  { QGVector::toList(list); }
 private:
-    void  deleteItem( Item d ) { if ( del_item ) delete (type *)d; }
+    void  deleteItem( Item d );
 };
+
+#if defined(Q_DELETING_VOID_UNDEFINED)
+template&lt;&gt; inline void QVector&lt;void&gt;::deleteItem( Item )
+{
+}
+#endif
+
+template&lt;class type&gt; inline void QVector&lt;type&gt;::deleteItem( QCollection::Item d )
+{
+    if ( del_item ) delete (type *)d;
+}
 
 
 #endif // QVECTOR_H
@@ -118,6 +129,6 @@ private:
 </pre>
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.1</div>
+<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

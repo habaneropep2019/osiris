@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qwmatrix.h   2.3.1   edited 2001-01-26 $
+** $Id: qt/src/kernel/qwmatrix.h   2.3.2   edited 2001-06-22 $
 **
 ** Definition of QWMatrix class
 **
@@ -44,7 +44,7 @@
 #include "qrect.h"
 #endif // QT_H
 
-#ifndef QT_NO_TRANSFORMATIONS
+#ifndef QT_NO_WMATRIX
 
 
 class Q_EXPORT QWMatrix					// 2D transform matrix
@@ -101,6 +101,6 @@ Q_EXPORT QWMatrix operator*( const QWMatrix &, const QWMatrix & );
 Q_EXPORT QDataStream &operator<<( QDataStream &, const QWMatrix & );
 Q_EXPORT QDataStream &operator>>( QDataStream &, QWMatrix & );
 
-#endif // QT_NO_TRANSFORMATIONS
+#endif // QT_NO_WMATRIX
 
 #endif // QWMATRIX_H

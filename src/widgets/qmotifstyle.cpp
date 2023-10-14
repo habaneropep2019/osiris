@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qmotifstyle.cpp   2.3.1   edited 2001-01-26 $
+** $Id: qt/src/widgets/qmotifstyle.cpp   2.3.2   edited 2001-08-20 $
 **
 ** Implementation of Motif-like style class
 **
@@ -214,19 +214,21 @@ void QMotifStyle::drawExclusiveIndicator( QPainter* p,
 				   int x, int y, int w, int h, const QColorGroup &g,
 				   bool on, bool down, bool /* enabled */ )
 {
-    static QCOORD inner_pts[] =		// used for filling diamond
-    { 2,6, 6,2, 10,6, 6,10 };
-    static QCOORD top_pts[] =		// top (^) of diamond
-    { 0,6, 6,0 , 11,5, 10,5, 6,1, 1,6, 2,6, 6,2, 9,5 };
-    static QCOORD bottom_pts[] =		// bottom (V) of diamond
-    { 1,7, 6,12, 12,6, 11,6, 6,11, 2,7, 3,7, 6,10, 10,6 };
+    QCOORD inner_pts[] =
+	{ 2,h/2, w/2,2, w-3,h/2, w/2,h-3 };
+    QCOORD top_pts[] =
+        { 0,h/2, w/2,0 , w-2,h/2-1, w-3,h/2-1,
+          w/2,1, 1,h/2, 2,h/2, w/2,2, w-4,h/2-1 };
+    QCOORD bottom_pts[] =
+        { 1,h/2+1, w/2,h-1, w-1,h/2, w-2,h/2,
+          w/2,h-2, 2,h/2+1, 3,h/2+1, w/2,h-3, w-3,h/2 };
 
     bool showUp = !(down ^ on );
     QPointArray a( QCOORDARRLEN(inner_pts), inner_pts );
     p->eraseRect( x, y, w, h );
     p->setPen( NoPen );
     p->setBrush( showUp ? g.brush( QColorGroup::Button ) :
-			  g.brush( QColorGroup::Mid ) )  ;
+		 g.brush( QColorGroup::Mid ) )  ;
     a.translate( x, y );
     p->drawPolygon( a );			// clear inner area
     p->setPen( showUp ? g.light() : g.dark() );
@@ -245,13 +247,13 @@ void QMotifStyle::drawExclusiveIndicator( QPainter* p,
   Draws the mask of a mark indicating the state of an exclusive choice
 */
 void
-QMotifStyle::drawExclusiveIndicatorMask( QPainter *p, int x, int y, int, int, bool /* on */)
+QMotifStyle::drawExclusiveIndicatorMask( QPainter *p, int x, int y, int w, int h, bool /* on */)
 {
     p->setBrush( Qt::color1 );
     p->setPen( Qt::color1 );
 
     QPointArray a;
-    a.setPoints( 4, 0,6, 6,0, 12,6, 6, 12 );
+    a.setPoints( 4, 0,h/2, h/2,0, w-2,h/2, w/2,h-1 );
     a.translate(x,y);
     p->drawPolygon( a );
 }

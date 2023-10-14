@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/dialogs/qfontdialog.cpp   2.3.1   edited 2001-04-25 $
+** $Id: qt/src/dialogs/qfontdialog.cpp   2.3.2   edited 2001-09-11 $
 **
 ** Implementation of QFontDialog
 **
@@ -539,7 +539,7 @@ void QFontDialog::updateScripts()
 	qWarning( "QFontDialog::updateFamilies: Internal error, "
 		  "no character sets for family \"%s\"",
 		  (const char *) d->family );
-	return;
+	d->charSetNames.append( "Any" );
     }
 
     QStringList::Iterator it = d->charSetNames.begin();

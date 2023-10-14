@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/xmlquotes/main.cpp   2.3.1   edited 2001-01-26 $
+** $Id: qt/examples/xmlquotes/main.cpp   2.3.2   edited 2001-06-12 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -36,7 +36,7 @@ int main( int argc, char **argv )
 
     MyRichText richtext( handler.quotes() );
     richtext.resize( 450, 350 );
-    richtext.setCaption( "Fortune" );
+    richtext.setCaption( "Qt Example - XML Quotes" );
     a.setMainWidget( &richtext );
     richtext.show();
 

@@ -32,7 +32,7 @@ height="100" src="face.png" alt="Home" border="0">
   <hr>
 
   Header file: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/listviews/listviews.h   2.3.1   edited 2001-01-26 $
+** &#36;Id&#58; qt/examples/listviews/listviews.h   2.3.2   edited 2001-01-26 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -121,12 +121,12 @@ public:
     {}
 
     void addMessage( Message *m )
-    { lstMessages.<a href="qlist.html#687e74">append</a>( m ); }
+    { lstMessages.<a href="qlist.html#c5746a">append</a>( m ); }
 
     <a href="qstring.html">QString</a> folderName() { return fName; }
 
-    Message *firstMessage() { return lstMessages.<a href="qlist.html#df743c">first</a>(); }
-    Message *nextMessage() { return lstMessages.<a href="qlist.html#b39e6b">next</a>(); }
+    Message *firstMessage() { return lstMessages.<a href="qlist.html#e625f9">first</a>(); }
+    Message *nextMessage() { return lstMessages.<a href="qlist.html#f95ddd">next</a>(); }
 
 protected:
     <a href="qstring.html">QString</a> fName;
@@ -204,7 +204,7 @@ protected slots:
   <hr>
 
   Implementation: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/listviews/listviews.cpp   2.3.1   edited 2001-05-25 $
+** &#36;Id&#58; qt/examples/listviews/listviews.cpp   2.3.2   edited 2001-05-25 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -255,7 +255,7 @@ FolderListItem::FolderListItem( <a href="qlistview.html">QListView</a> *parent, 
     : <a href="qlistviewitem.html">QListViewItem</a>( parent )
 {
     myFolder = f;
-    <a href="qlistviewitem.html#7adc2e">setText</a>( 0, f-&gt;folderName() );
+    <a href="qlistviewitem.html#808e84">setText</a>( 0, f-&gt;folderName() );
 
     if ( myFolder-&gt;children() )
         <a href=#92>insertSubFolders</a>( myFolder-&gt;children() );
@@ -266,7 +266,7 @@ FolderListItem::FolderListItem( FolderListItem *parent, Folder *f )
 {
     myFolder = f;
 
-    <a href="qlistviewitem.html#7adc2e">setText</a>( 0, f-&gt;folderName() );
+    <a href="qlistviewitem.html#808e84">setText</a>( 0, f-&gt;folderName() );
 
     if ( myFolder-&gt;children() )
         <a href=#92>insertSubFolders</a>( myFolder-&gt;children() );
@@ -285,23 +285,23 @@ MessageListItem::MessageListItem( <a href="qlistview.html">QListView</a> *parent
     : <a href="qlistviewitem.html">QListViewItem</a>( parent )
 {
     myMessage = m;
-    <a href="qlistviewitem.html#7adc2e">setText</a>( 0, myMessage-&gt;header().sender() );
-    <a href="qlistviewitem.html#7adc2e">setText</a>( 1, myMessage-&gt;header().subject() );
-    <a href="qlistviewitem.html#7adc2e">setText</a>( 2, myMessage-&gt;header().datetime().toString() );
+    <a href="qlistviewitem.html#808e84">setText</a>( 0, myMessage-&gt;header().sender() );
+    <a href="qlistviewitem.html#808e84">setText</a>( 1, myMessage-&gt;header().subject() );
+    <a href="qlistviewitem.html#808e84">setText</a>( 2, myMessage-&gt;header().datetime().toString() );
 }
 
 void <a name="85"></a>MessageListItem::paintCell( <a href="qpainter.html">QPainter</a> *p, const QColorGroup &amp;cg,
                                  int column, int width, int alignment )
 {
     <a href="qcolorgroup.html">QColorGroup</a> _cg( cg );
-    <a href="qcolor.html">QColor</a> c = _cg.<a href="qcolorgroup.html#34dd3f">text</a>();
+    <a href="qcolor.html">QColor</a> c = _cg.<a href="qcolorgroup.html#ddea87">text</a>();
 
     if ( myMessage-&gt;state() == Message::Unread )
-        _cg.<a href="qcolorgroup.html#165b6c">setColor</a>( QColorGroup::Text, Qt::red );
+        _cg.<a href="qcolorgroup.html#73080d">setColor</a>( QColorGroup::Text, Qt::red );
 
-    <a href="qlistviewitem.html#271528">QListViewItem::paintCell</a>( p, _cg, column, width, alignment );
+    <a href="qlistviewitem.html#0ab6b5">QListViewItem::paintCell</a>( p, _cg, column, width, alignment );
 
-    _cg.<a href="qcolorgroup.html#165b6c">setColor</a>( QColorGroup::Text, c );
+    _cg.<a href="qcolorgroup.html#73080d">setColor</a>( QColorGroup::Text, c );
 }
 
 // -----------------------------------------------------------------
@@ -319,7 +319,7 @@ ListViews::ListViews( <a href="qwidget.html">QWidget</a> *parent, const char *na
     <a href=#88>setupFolders</a>();
 
     folders-&gt;setRootIsDecorated( TRUE );
-    <a href="qsplitter.html#3de7e3">setResizeMode</a>( folders, QSplitter::KeepSize );
+    <a href="qsplitter.html#33bf83">setResizeMode</a>( folders, QSplitter::KeepSize );
 
     <a href="qsplitter.html">QSplitter</a> *vsplitter = new <a href="qsplitter.html">QSplitter</a>( Qt::Vertical, this );
 
@@ -333,19 +333,19 @@ ListViews::ListViews( <a href="qwidget.html">QWidget</a> *parent, const char *na
     menu = new <a href="qpopupmenu.html">QPopupMenu</a>( messages );
     for( int i = 1; i &lt;= 10; i++ )
         menu-&gt;insertItem( <a href="qstring.html">QString</a>( "Context Item %1" ).arg( i ) );
-    <a href="qobject.html#c2d209">connect</a>(messages, SIGNAL( rightButtonPressed( <a href="qlistviewitem.html">QListViewItem</a> *, const QPoint&amp; , int ) ),
+    <a href="qobject.html#7f8e37">connect</a>(messages, SIGNAL( rightButtonPressed( <a href="qlistviewitem.html">QListViewItem</a> *, const QPoint&amp; , int ) ),
             this, SLOT( <a href=#89>slotRMB</a>( <a href="qlistviewitem.html">QListViewItem</a> *, const QPoint &amp;, int ) ) );
-    vsplitter-&gt;<a href="qsplitter.html#3de7e3">setResizeMode</a>( messages, QSplitter::KeepSize );
+    vsplitter-&gt;<a href="qsplitter.html#33bf83">setResizeMode</a>( messages, QSplitter::KeepSize );
 
     message = new <a href="qlabel.html">QLabel</a>( vsplitter );
     message-&gt;setAlignment( Qt::AlignTop );
     message-&gt;setBackgroundMode( PaletteBase );
 
-    <a href="qobject.html#c2d209">connect</a>( folders, SIGNAL( selectionChanged( <a href="qlistviewitem.html">QListViewItem</a>* ) ),
+    <a href="qobject.html#7f8e37">connect</a>( folders, SIGNAL( selectionChanged( <a href="qlistviewitem.html">QListViewItem</a>* ) ),
              this, SLOT( <a href=#90>slotFolderChanged</a>( <a href="qlistviewitem.html">QListViewItem</a>* ) ) );
-    <a href="qobject.html#c2d209">connect</a>( messages, SIGNAL( selectionChanged() ),
+    <a href="qobject.html#7f8e37">connect</a>( messages, SIGNAL( selectionChanged() ),
              this, SLOT( <a href=#91>slotMessageChanged</a>() ) );
-    <a href="qobject.html#c2d209">connect</a>( messages, SIGNAL( currentChanged( <a href="qlistviewitem.html">QListViewItem</a> * ) ),
+    <a href="qobject.html#7f8e37">connect</a>( messages, SIGNAL( currentChanged( <a href="qlistviewitem.html">QListViewItem</a> * ) ),
              this, SLOT( <a href=#91>slotMessageChanged</a>() ) );
 
     messages-&gt;setSelectionMode( QListView::Extended );
@@ -360,8 +360,8 @@ ListViews::ListViews( <a href="qwidget.html">QWidget</a> *parent, const char *na
     message-&gt;setMargin( 5 );
 
     <a href="qvaluelist.html">QValueList</a>&lt;int&gt; lst;
-    lst.<a href="qvaluelist.html#e5e044">append</a>( 170 );
-    <a href="qsplitter.html#ce5f73">setSizes</a>( lst );
+    lst.<a href="qvaluelist.html#d68b11">append</a>( 170 );
+    <a href="qsplitter.html#8fd8cf">setSizes</a>( lst );
 }
 
 void <a name="86"></a>ListViews::initFolders()
@@ -393,7 +393,7 @@ void <a name="87"></a>ListViews::initFolder( Folder *folder, unsigned int &amp;c
         <a href="qstring.html">QString</a> str;
         str = QString( "Message %1  " ).arg( count );
         <a href="qdatetime.html">QDateTime</a> dt = QDateTime::currentDateTime();
-        dt = dt.<a href="qdatetime.html#18d3ae">addSecs</a>( 60 * count );
+        dt = dt.<a href="qdatetime.html#a8711a">addSecs</a>( 60 * count );
         MessageHeader mh( "Trolltech &lt;info@trolltech.com&gt;  ", str, dt );
 
         <a href="qstring.html">QString</a> body;
@@ -440,7 +440,7 @@ void <a name="91"></a>ListViews::slotMessageChanged()
     if ( !i )
         return;
 
-    if ( !i-&gt;<a href="qlistviewitem.html#0e1229">isSelected</a>() ) {
+    if ( !i-&gt;<a href="qlistviewitem.html#35710b">isSelected</a>() ) {
         message-&gt;setText( "" );
         return;
     }
@@ -450,8 +450,8 @@ void <a name="91"></a>ListViews::slotMessageChanged()
 
     <a href="qstring.html">QString</a> text;
     <a href="qstring.html">QString</a> tmp = msg-&gt;header().sender();
-    tmp = tmp.<a href="qstring.html#0894de">replace</a>( <a href="qregexp.html">QRegExp</a>( "[&lt;]" ), "&amp;lt;" );
-    tmp = tmp.<a href="qstring.html#0894de">replace</a>( <a href="qregexp.html">QRegExp</a>( "[&gt;]" ), "&amp;gt;" );
+    tmp = tmp.<a href="qstring.html#034e6e">replace</a>( <a href="qregexp.html">QRegExp</a>( "[&lt;]" ), "&amp;lt;" );
+    tmp = tmp.<a href="qstring.html#034e6e">replace</a>( <a href="qregexp.html">QRegExp</a>( "[&gt;]" ), "&amp;gt;" );
     text = QString( "&lt;b&gt;&lt;i&gt;From:&lt;/i&gt;&lt;/b&gt; &lt;a href=\"mailto:info@trolltech.com\"&gt;%1&lt;/a&gt;&lt;br&gt;"
                     "&lt;b&gt;&lt;i&gt;Subject:&lt;/i&gt;&lt;/b&gt; &lt;big&gt;&lt;big&gt;&lt;b&gt;%2&lt;/b&gt;&lt;/big&gt;&lt;/big&gt;&lt;br&gt;"
                     "&lt;b&gt;&lt;i&gt;Date:&lt;/i&gt;&lt;/b&gt; %3&lt;br&gt;&lt;br&gt;"
@@ -470,7 +470,7 @@ void <a name="91"></a>ListViews::slotMessageChanged()
 
   Main:
 <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/listviews/main.cpp   2.3.1   edited 2001-01-26 $
+** &#36;Id&#58; qt/examples/listviews/main.cpp   2.3.2   edited 2001-06-12 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -487,16 +487,16 @@ int main( int argc, char **argv )
     <a name="QApplication"></a><a href="qapplication.html">QApplication</a> a( argc, argv );
 
     ListViews listViews;
-    listViews.<a name="resize"></a><a href="qwidget.html#9ff9d8">resize</a>( 640, 480 );
-    listViews.<a name="setCaption"></a><a href="qwidget.html#d4f007">setCaption</a>( "List View Example" );
-    a.<a name="setMainWidget"></a><a href="qapplication.html#11c921">setMainWidget</a>( &amp;listViews );
-    listViews.<a name="show"></a><a href="qwidget.html#ccc8f7">show</a>();
+    listViews.<a name="resize"></a><a href="qwidget.html#ff9d07">resize</a>( 640, 480 );
+    listViews.<a name="setCaption"></a><a href="qwidget.html#d6a291">setCaption</a>( "Qt Example - Listview" );
+    a.<a name="setMainWidget"></a><a href="qapplication.html#7ad759">setMainWidget</a>( &amp;listViews );
+    listViews.<a name="show"></a><a href="qwidget.html#200ee5">show</a>();
 
-    return a.<a name="exec"></a><a href="qapplication.html#7076af">exec</a>();
+    return a.<a name="exec"></a><a href="qapplication.html#84c7bf">exec</a>();
 }
 </pre>
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.1</div>
+<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

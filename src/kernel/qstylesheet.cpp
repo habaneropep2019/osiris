@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qstylesheet.cpp   2.3.1   edited 2001-01-26 $
+** $Id: qt/src/kernel/qstylesheet.cpp   2.3.2   edited 2001-10-13 $
 **
 ** Implementation of the QStyleSheet class
 **
@@ -1168,9 +1168,11 @@ QTextCustomItem* QStyleSheet::tag( const QString& name,
 {
     static QString s_img = QString::fromLatin1("img");
     static QString s_hr = QString::fromLatin1("hr");
+/* ### Not used???
     static QString s_br = QString::fromLatin1("br");
     static QString s_multicol = QString::fromLatin1("multicol");
     static QString s_font = QString::fromLatin1("font");
+*/
 
     const QStyleSheetItem* style = item( name );
     // first some known  tags

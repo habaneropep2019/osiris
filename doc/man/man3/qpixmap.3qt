@@ -1,5 +1,5 @@
 '\" t
-.TH QPixmap 3qt "13 June 2001" "Trolltech AS" \" -*- nroff -*-
+.TH QPixmap 3qt "29 October 2001" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2001 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -240,7 +240,7 @@ See also QBitmap, QImage, QImageIO and Shared Classes
 .PP
 Examples:
 .(l
-qtimage/qtimage.cpp grapher/grapher.cpp xform/xform.cpp menu/menu.cpp qmag/qmag.cpp desktop/desktop.cpp scrollview/scrollview.cpp movies/main.cpp picture/picture.cpp
+qtimage/qtimage.cpp xform/xform.cpp menu/menu.cpp qmag/qmag.cpp desktop/desktop.cpp scrollview/scrollview.cpp movies/main.cpp picture/picture.cpp
 .)l
 .SS "Member Type Documentation"
 .SH "QPixmap::ColorMode"
@@ -429,6 +429,11 @@ It is possible to modify a pixmap without letting Qt know. You can first obtain 
 detach() returns immediately if there is just a single reference or if the pixmap has not been initialized yet.
 .SH "void QPixmap::fill ( const QColor & fillColor = Qt::white )"
 Fills the pixmap with the color \fIfillColor.\fR
+.PP
+Examples:
+.(l
+xform/xform.cpp desktop/desktop.cpp
+.)l
 .SH "void QPixmap::fill ( const QWidget * widget, const QPoint & ofs )"
 Fills the pixmap with the widget's background color or pixmap. If the background is empty, nothing is done.
 .PP
@@ -469,11 +474,6 @@ Example:
 .br
   }
 .fi
-.PP
-Examples:
-.(l
-grapher/grapher.cpp xform/xform.cpp desktop/desktop.cpp
-.)l
 .SH "void QPixmap::fill ( const QWidget * widget, int xofs, int yofs )"
 This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts.
 .SH "QPixmap QPixmap::grabWidget ( QWidget * widget, int x=0, int y=0, int w=-1, int h=-1 ) \fC[static]\fR"
@@ -611,7 +611,7 @@ If both \fIw\fR and \fIh\fR are greater than 0, a valid pixmap is created. New p
 .PP
 Examples:
 .(l
-grapher/grapher.cpp desktop/desktop.cpp
+desktop/desktop.cpp
 .)l
 .SH "void QPixmap::resize ( const QSize & size )"
 This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts.
@@ -619,15 +619,15 @@ This is an overloaded member function, provided for convenience. It differs from
 Saves the pixmap to the file \fIfileName,\fR using the image file format \fIformat.\fR Returns TRUE if successful, or FALSE if the pixmap could not be saved.
 .PP
 See also load(), loadFromData(), imageFormat(), QImage::save() and QImageIO.
+.SH "bool QPixmap::save ( const QString & fileName, const char * format, int quality ) const"
+Saves the pixmap to the file \fIfileName,\fR using the image file format \fIformat\fR and a quality factor \fIquality. quality\fR must be in the range [0,100] or -1. Specify 0 to obtain small compressed files, 100 for large uncompressed files and -1 to use the default settings. Returns TRUE if successful, or FALSE if the pixmap could not be saved.
+.PP
+See also load(), loadFromData(), imageFormat(), QImage::save() and QImageIO.
 .PP
 Examples:
 .(l
 qmag/qmag.cpp
 .)l
-.SH "bool QPixmap::save ( const QString & fileName, const char * format, int quality ) const"
-Saves the pixmap to the file \fIfileName,\fR using the image file format \fIformat\fR and a quality factor \fIquality. quality\fR must be in the range [0,100] or -1. Specify 0 to obtain small compressed files, 100 for large uncompressed files and -1 to use the default settings. Returns TRUE if successful, or FALSE if the pixmap could not be saved.
-.PP
-See also load(), loadFromData(), imageFormat(), QImage::save() and QImageIO.
 .SH "bool QPixmap::selfMask () const"
 Returns TRUE if the pixmap's mask is identical to the pixmap itself.
 .PP
@@ -823,4 +823,4 @@ In case of content or formattting problems with this manual page, please
 report them to
 .BR qt-bugs@trolltech.com .
 Please include the name of the manual page (qpixmap.3qt) and the Qt
-version (2.3.1).
+version (2.3.2).

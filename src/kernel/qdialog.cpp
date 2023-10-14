@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qdialog.cpp   2.3.1   edited 2001-01-26 $
+** $Id: qt/src/kernel/qdialog.cpp   2.3.2   edited 2001-10-20 $
 **
 ** Implementation of QDialog class
 **
@@ -46,6 +46,7 @@
 #include "qwidgetlist.h"
 #include "qlayout.h"
 #include "qsizegrip.h"
+#include "qwhatsthis.h"
 
 
 // REVISED: arnt
@@ -180,6 +181,8 @@ void QDialog::setDefault( QPushButton *pushButton )
     bool hasMain = FALSE;
     while ( (pb = (QPushButton*)it.current()) ) {
 	++it;
+	if ( pb->topLevelWidget() != this )
+	    continue;
 	if ( pb == d->mainDef )
 	    hasMain = TRUE;
 	if ( pb != pushButton )
@@ -278,7 +281,7 @@ void QDialog::done( int r )
     // less useless without subclassing.
     if ( qApp->mainWidget() == this )
 	qApp->quit();
-    
+
     if ( testWFlags(WDestructiveClose) )
 	delete this;
 }
@@ -371,6 +374,10 @@ void QDialog::keyPressEvent( QKeyEvent *e )
 /*! \reimp */
 void QDialog::closeEvent( QCloseEvent *e )
 {
+#ifndef QT_NO_WHATSTHIS
+    if ( isModal() && QWhatsThis::inWhatsThisMode() )
+	QWhatsThis::leaveWhatsThisMode();
+#endif
     e->accept();
     reject();
 }
@@ -618,6 +625,8 @@ void QDialog::showExtension( bool showIt )
 	return;
 
     if ( showIt ) {
+	if ( d->extension->isVisible() )
+	    return;
 	d->size = size();
 	d->min = minimumSize();
 	d->max = maximumSize();
@@ -635,6 +644,8 @@ void QDialog::showExtension( bool showIt )
 	}
 	d->extension->show();
     } else {
+	if ( !d->extension->isVisible() )
+	    return;
 	d->extension->hide();
 	setMinimumSize( d->min );
 	setMaximumSize( d->max );
@@ -650,15 +661,22 @@ void QDialog::showExtension( bool showIt )
 /*! \reimp */
 QSize QDialog::sizeHint() const
 {
+    QSize s = QWidget::sizeHint();
     if ( d->extension )
 	if ( d->orientation == Horizontal )
-	    return QSize( QWidget::sizeHint().width(),
-			QMAX( QWidget::sizeHint().height(),d->extension->sizeHint().height() ) );
+	    s = QSize( s.width(), QMAX( s.height(),d->extension->sizeHint().height() ) );
 	else
-	    return QSize( QMAX( QWidget::sizeHint().width(), d->extension->sizeHint().width() ),
-			QWidget::sizeHint().height() );
+	    s = QSize( QMAX( s.width(), d->extension->sizeHint().width() ), s.height() );
 
-    return QWidget::sizeHint();
+#if defined(_WS_QWS_)
+    extern QRect qt_maxWindowRect;
+    if ( s.width() > qt_maxWindowRect.width() || s.height() > qt_maxWindowRect.height() ) {
+	QSize ms = minimumSizeHint();
+	s = s.boundedTo( qt_maxWindowRect.size() ).expandedTo( minimumSizeHint() );
+    }
+
+#endif    
+    return s;
 }
 
 

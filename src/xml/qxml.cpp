@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/xml/qxml.cpp   2.3.1   edited 2001-02-18 $
+** $Id: qt/src/xml/qxml.cpp   2.3.2   edited 2001-10-14 $
 **
 ** Implementation of QXmlSimpleReader and related classes.
 **
@@ -1517,7 +1517,9 @@ bool QXmlDefaultHandler::unparsedEntityDecl( const QString&, const QString&,
 bool QXmlDefaultHandler::resolveEntity( const QString&, const QString&,
 	QXmlInputSource* ret )
 {
+/* ### This doesn't set anything to 0!
     ret = 0;
+*/
     return TRUE;
 }
 
@@ -2171,7 +2173,7 @@ bool QXmlSimpleReader::parseProlog()
     signed char input;
     bool parseOk = TRUE;
 
-    while ( TRUE ) {
+    for (;;) {
 
 	// read input
 	if ( atEnd() ) {
@@ -2349,7 +2351,7 @@ bool QXmlSimpleReader::parseElement()
     signed char input;
     bool parseOk = TRUE;
 
-    while ( TRUE ) {
+    for (;;) {
 
 	// read input
 	if ( atEnd() ) {
@@ -2705,7 +2707,7 @@ bool QXmlSimpleReader::parseContent()
     signed char input;
     bool parseOk = TRUE;
 
-    while ( TRUE ) {
+    for (;;) {
 
 	// get input (use lookup-table instead of nested ifs for performance
 	// reasons)
@@ -2959,7 +2961,7 @@ bool QXmlSimpleReader::parseMisc()
     signed char input;
     bool parseOk = TRUE;
 
-    while ( TRUE ) {
+    for (;;) {
 
 	// get input
 	if ( atEnd() ) {
@@ -3103,7 +3105,7 @@ bool QXmlSimpleReader::parsePI( bool xmldecl )
     signed char input;
     bool parseOk = TRUE;
 
-    while ( TRUE ) {
+    for (;;) {
 
 	// get input
 	if ( atEnd() ) {
@@ -3324,7 +3326,7 @@ bool QXmlSimpleReader::parseDoctype()
     signed char input;
     bool parseOk = TRUE;
 
-    while ( TRUE ) {
+    for (;;) {
 
 	// get input
 	if ( atEnd() ) {
@@ -3508,7 +3510,7 @@ bool QXmlSimpleReader::parseExternalID( bool allowPublicID )
     signed char input;
     bool parseOk = TRUE;
 
-    while ( TRUE ) {
+    for (;;) {
 
 	// get input
 	if ( atEnd() ) {
@@ -3657,7 +3659,7 @@ bool QXmlSimpleReader::parseMarkupdecl()
     signed char input;
     bool parseOk = TRUE;
 
-    while ( TRUE ) {
+    for (;;) {
 
 	// get input
 	if ( atEnd() ) {
@@ -3809,7 +3811,7 @@ bool QXmlSimpleReader::parsePEReference( EntityRecognitionContext context )
     signed char input;
     bool parseOk = TRUE;
 
-    while ( TRUE ) {
+    for (;;) {
 
 	// get input
 	if ( atEnd() ) {
@@ -3942,7 +3944,7 @@ bool QXmlSimpleReader::parseAttlistDecl()
     signed char input;
     bool parseOk = TRUE;
 
-    while ( TRUE ) {
+    for (;;) {
 
 	// get input
 	if ( atEnd() ) {
@@ -4157,7 +4159,7 @@ bool QXmlSimpleReader::parseAttType()
     signed char input;
     bool parseOk = TRUE;
 
-    while ( TRUE ) {
+    for (;;) {
 
 	// get input
 	if ( atEnd() ) {
@@ -4375,7 +4377,7 @@ bool QXmlSimpleReader::parseAttValue()
     signed char input;
     bool parseOk = TRUE;
 
-    while ( TRUE ) {
+    for (;;) {
 
 	// get input
 	if ( atEnd() ) {
@@ -4511,7 +4513,7 @@ bool QXmlSimpleReader::parseElementDecl()
     signed char input;
     bool parseOk = TRUE;
 
-    while ( TRUE ) {
+    for (;;) {
 
 	// read input
 	if ( atEnd() ) {
@@ -4703,7 +4705,7 @@ bool QXmlSimpleReader::parseNotationDecl()
     signed char input;
     bool parseOk = TRUE;
 
-    while ( TRUE ) {
+    for (;;) {
 
 	// get input
 	if ( atEnd() ) {
@@ -4831,7 +4833,7 @@ bool QXmlSimpleReader::parseChoiceSeq()
     signed char input;
     bool parseOk = TRUE;
 
-    while ( TRUE ) {
+    for (;;) {
 
 	// get input
 	if ( atEnd() ) {
@@ -4975,7 +4977,7 @@ bool QXmlSimpleReader::parseEntityDecl()
     signed char input;
     bool parseOk = TRUE;
 
-    while ( TRUE ) {
+    for (;;) {
 
 	// get input
 	if ( atEnd() ) {
@@ -5220,7 +5222,7 @@ bool QXmlSimpleReader::parseEntityValue()
     signed char input;
     bool parseOk = TRUE;
 
-    while ( TRUE ) {
+    for (;;) {
 
 	// get input
 	if ( atEnd() ) {
@@ -5335,7 +5337,7 @@ bool QXmlSimpleReader::parseComment()
     signed char state = Init;
     signed char input;
 
-    while ( TRUE ) {
+    for (;;) {
 
 	// get input
 	if ( atEnd() ) {
@@ -5439,7 +5441,7 @@ bool QXmlSimpleReader::parseAttribute()
     signed char input;
     bool parseOk = TRUE;
 
-    while ( TRUE ) {
+    for (;;) {
 
 	// get input
 	if ( atEnd() ) {
@@ -5530,7 +5532,7 @@ bool QXmlSimpleReader::parseName( bool useRef )
     signed char state = Init;
     signed char input;
 
-    while ( TRUE ) {
+    for (;;) {
 
 	// get input
 	if ( atEnd() ) {
@@ -5611,7 +5613,7 @@ bool QXmlSimpleReader::parseNmtoken()
     signed char state = Init;
     signed char input;
 
-    while ( TRUE ) {
+    for (;;) {
 
 	// get input
 	if ( atEnd() ) {
@@ -5708,7 +5710,7 @@ bool QXmlSimpleReader::parseReference( bool &charDataRead, EntityRecognitionCont
     signed char state = Init;
     signed char input;
 
-    while ( TRUE ) {
+    for (;;) {
 
 	// get input
 	if ( atEnd() ) {
@@ -5985,7 +5987,7 @@ bool QXmlSimpleReader::parseString( const QString& s )
     signed char state = 0; // state in this function is the position in the string s
     signed char input;
 
-    while ( TRUE ) {
+    for (;;) {
 
 	// get input
 	if ( atEnd() ) {

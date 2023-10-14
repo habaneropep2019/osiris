@@ -472,12 +472,19 @@ QSize QTableItem::sizeHint() const
     return QSize( s.width() + r.width(), QMAX( s.height(), r.height() ) );
 }
 
-/*!  Creates a multi-cell QTableItem covering \a rs rows and \a cs columns.
-  The top left corner of the item is at the item's former position.
+/*!  Creates a multi-cell QTableItem covering \a rs rows and \a cs
+  columns.  The top left corner of the item is at the item's former
+  position.
+
+  \warning This function only works, if the item has already been
+  inserted into the table using e.g. QTable::setItem().
 */
 
 void QTableItem::setSpan( int rs, int cs )
 {
+    if ( rw == -1 || cl == -1 )
+	return;
+	
     int rrow = rw;
     int rcol = cl;
     if ( rowspan > 1 || colspan > 1 ) {
@@ -752,8 +759,6 @@ void QTable::init( int rows, int cols )
     d = 0;
     setSorting( FALSE );
 
-    viewport()->setFocusProxy( this );
-    viewport()->setFocusPolicy( WheelFocus );
     mousePressed = FALSE;
 
     selMode = Multi;
@@ -763,6 +768,8 @@ void QTable::init( int rows, int cols )
 
     // Enable clipper and set background mode
     enableClipper( TRUE );
+    viewport()->setFocusProxy( this );
+    viewport()->setFocusPolicy( WheelFocus );
     viewport()->setBackgroundMode( PaletteBase );
     setResizePolicy( Manual );
     selections.setAutoDelete( TRUE );
@@ -1256,6 +1263,8 @@ void QTable::drawContents( QPainter *p, int cx, int cy, int cw, int ch )
 void QTable::paintCell( QPainter* p, int row, int col,
 			const QRect &cr, bool selected )
 {
+    if ( cr.width() == 0 || cr.height() == 0 )
+	return;
     if ( selected &&
 	 row == curRow &&
 	 col == curCol )
@@ -1324,13 +1333,17 @@ void QTable::paintFocus( QPainter *p, const QRect &cr )
 void QTable::paintEmptyArea( QPainter *p, int cx, int cy, int cw, int ch )
 {
     // Region of the rect we should draw
+//    contentsToViewport( cx, cy, cx, cy );
     QRegion reg( QRect( cx, cy, cw, ch ) );
     // Subtract the table from it
     reg = reg.subtract( QRect( QPoint( 0, 0 ), tableSize() ) );
+//    reg = reg.subtract( QRect( contentsToViewport( QPoint( 0, 0 ) ), tableSize() ) );
+
     // And draw the rectangles (transformed as needed)
     QArray<QRect> r = reg.rects();
-    for (int i=0; i<(int)r.count(); i++)
-	p->fillRect( r[i], colorGroup().brush( QColorGroup::Base ) );
+    for ( int i = 0; i < (int)r.count(); ++i)
+        p->fillRect( QRect(viewportToContents2(r[i].topLeft()),r[i].size()),
+                        colorGroup().brush( QColorGroup::Base ) );
 }
 
 /*!  Returns the QTableItem representing the contents of the cell \a
@@ -1685,12 +1698,17 @@ int QTable::currentSelection() const
 
 void QTable::contentsMousePressEvent( QMouseEvent* e )
 {
+    int tmpRow = rowAt( e->pos().y() );
+    int tmpCol = columnAt( e->pos().x() );
+    if ( e->button() != LeftButton ) {
+	emit pressed( tmpRow, tmpCol, e->button(), e->pos() );
+	return;
+    }
+
     mousePressed = TRUE;
     if ( isEditing() )
  	endEdit( editRow, editCol, TRUE, edMode != Editing );
 
-    int tmpRow = rowAt( e->pos().y() );
-    int tmpCol = columnAt( e->pos().x() );
     pressedRow = tmpRow;
     pressedCol = tmpCol;
     fixRow( tmpRow, e->pos().y() );
@@ -1836,12 +1854,12 @@ void QTable::doAutoScroll()
 
 void QTable::contentsMouseReleaseEvent( QMouseEvent *e )
 {
+    if ( pressedRow == curRow && pressedCol == curCol )
+	emit clicked( curRow, curCol, e->button(), e->pos() );
     if ( e->button() != LeftButton )
 	return;
     mousePressed = FALSE;
     autoScrollTimer->stop();
-    if ( pressedRow == curRow && pressedCol == curCol )
-	emit clicked( curRow, curCol, e->button(), e->pos() );
 }
 
 /*!  \reimp
@@ -1952,11 +1970,21 @@ void QTable::keyPressEvent( QKeyEvent* e )
 	navigationKey = TRUE;
 	break;
     case Key_Up:
-	tmpRow = QMAX( 0, tmpRow - 1 );
+	//tmpRow = QMAX( 0, tmpRow - 1 );
+	while ( --tmpRow >= 0 )
+	    if ( !isRowHidden( tmpRow ) )
+		break;
+	if ( tmpRow < 0 )
+	    tmpRow = curRow;
 	navigationKey = TRUE;
 	break;
     case Key_Down:
-	tmpRow = QMIN( numRows() - 1, tmpRow + 1 );
+	// tmpRow = QMIN( numRows() - 1, tmpRow + 1 );
+	while ( ++tmpRow < numRows() )
+	    if ( !isRowHidden( tmpRow ) )
+		break;
+	if ( tmpRow >= numRows() )
+	    tmpRow = curRow;
 	navigationKey = TRUE;
 	break;
     case Key_Prior:
@@ -2415,6 +2443,17 @@ void QTable::setNumRows( int r )
 {
     if ( r < 0 )
 	return;
+    QVector<QTableItem> tmp;
+    tmp.resize( contents.size() );
+    int i;
+    for ( i = 0; i < (int)tmp.size(); ++i ) {
+	QTableItem *item = contents[ i ];
+	if ( item && indexOf( item->row(), item->col() ) == i )
+	    tmp.insert( i, item );
+	else
+	    tmp.insert( i, 0 );
+    }
+    bool isUpdatesEnabled = leftHeader->isUpdatesEnabled();
     leftHeader->setUpdatesEnabled( FALSE );
     bool updateBefore = r < numRows();
     if ( r > numRows() ) {
@@ -2428,11 +2467,6 @@ void QTable::setNumRows( int r )
 	    leftHeader->removeLabel( numRows() - 1 );
     }
 
-    QVector<QTableItem> tmp;
-    tmp.resize( contents.size() );
-    int i;
-    for ( i = 0; i < (int)tmp.size(); ++i )
-	tmp.insert( i, contents[ i ] );
     contents.setAutoDelete( FALSE );
     contents.clear();
     contents.setAutoDelete( TRUE );
@@ -2448,14 +2482,15 @@ void QTable::setNumRows( int r )
     QRect r2( cellGeometry( numRows() - 1, numCols() - 1 ) );
     resizeContents( r2.right() + 1, r2.bottom() + 1 );
     updateGeometries();
-    leftHeader->setUpdatesEnabled( TRUE );
+    leftHeader->setUpdatesEnabled( isUpdatesEnabled );
     if ( updateBefore )
 	repaintContents( contentsX(), contentsY(),
 			 visibleWidth(), visibleHeight(), TRUE );
     else
 	repaintContents( contentsX(), contentsY(),
 			 visibleWidth(), visibleHeight(), FALSE );
-    leftHeader->update();
+    if ( isUpdatesEnabled )
+	leftHeader->update();
 }
 
 /*!  Sets the number of columns to \a c.
@@ -2465,6 +2500,17 @@ void QTable::setNumCols( int c )
 {
     if ( c < 0 )
 	return;
+    QVector<QTableItem> tmp;
+    tmp.resize( contents.size() );
+    int i;
+    for ( i = 0; i < (int)tmp.size(); ++i ) {
+	QTableItem *item = contents[ i ];
+	if ( item && indexOf( item->row(), item->col() ) == i )
+	    tmp.insert( i, item );
+	else
+	    tmp.insert( i, 0 );
+    }
+    bool isUpdatesEnabled = topHeader->isUpdatesEnabled();
     topHeader->setUpdatesEnabled( FALSE );
     bool updateBefore = c < numCols();
     if ( c > numCols() ) {
@@ -2478,11 +2524,6 @@ void QTable::setNumCols( int c )
 	    topHeader->removeLabel( numCols() - 1 );
     }
 
-    QVector<QTableItem> tmp;
-    tmp.resize( contents.size() );
-    int i;
-    for ( i = 0; i < (int)tmp.size(); ++i )
-	tmp.insert( i, contents[ i ] );
     contents.setAutoDelete( FALSE );
     contents.clear();
     contents.setAutoDelete( TRUE );
@@ -2498,14 +2539,15 @@ void QTable::setNumCols( int c )
     QRect r( cellGeometry( numRows() - 1, numCols() - 1 ) );
     resizeContents( r.right() + 1, r.bottom() + 1 );
     updateGeometries();
-    topHeader->setUpdatesEnabled( TRUE );
+    topHeader->setUpdatesEnabled( isUpdatesEnabled );
     if ( updateBefore )
 	repaintContents( contentsX(), contentsY(),
 			 visibleWidth(), visibleHeight(), TRUE );
     else
 	repaintContents( contentsX(), contentsY(),
 			 visibleWidth(), visibleHeight(), FALSE );
-    topHeader->update();
+    if ( isUpdatesEnabled )
+	topHeader->update();
 }
 
 /*!  This function returns a widget which should be used as editor for
@@ -3029,6 +3071,19 @@ void QTable::hideColumn( int col )
     columnWidthChanged( col );
 }
 
+
+bool QTable::isRowHidden( int row ) const
+{
+    return leftHeader->sectionSize( row ) == 0 &&
+	   !leftHeader->isResizeEnabled( row );
+}
+
+bool QTable::isColumnHidden( int col ) const
+{
+    return topHeader->sectionSize( col ) == 0 &&
+	   !topHeader->isResizeEnabled( col );
+}
+
 /*!  Shows the row \a row.
 
   \sa hideRow()
@@ -3078,6 +3133,8 @@ void QTable::setRowHeight( int row, int h )
 void QTable::adjustColumn( int col )
 {
     int w = topHeader->fontMetrics().width( topHeader->label( col ) ) + 10;
+    if ( topHeader->iconSet( col ) )
+	w += topHeader->iconSet( col )->pixmap().width();
     w = QMAX( w, 20 );
     for ( int i = 0; i < numRows(); ++i ) {
 	QTableItem *itm = item( i, col );
@@ -3096,6 +3153,8 @@ void QTable::adjustRow( int row )
 {
     int h = 20;
     h = QMAX( h, leftHeader->fontMetrics().height() );
+    if ( leftHeader->iconSet( row ) )
+	h += leftHeader->iconSet( row )->pixmap().height();
     for ( int i = 0; i < numCols(); ++i ) {
 	QTableItem *itm = item( row, i );
 	if ( !itm )

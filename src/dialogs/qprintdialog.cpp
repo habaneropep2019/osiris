@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/dialogs/qprintdialog.cpp   2.3.1   edited 2001-05-30 $
+** $Id: qt/src/dialogs/qprintdialog.cpp   2.3.2   edited 2001-09-26 $
 **
 ** Implementation of internal print dialog (X11) used by QPrinter::select().
 **
@@ -143,8 +143,9 @@ static void parsePrintcap( QListView * printers )
 	    atEnd = TRUE;
 	QString line = line_ascii;
 	line = line.stripWhiteSpace();
-	if (line.length() >= 1 && line[line.length()-1] == '\\' )
-	    line.truncate(line.length()-1);
+	int lastchar = line.length()-1;
+	if (line.length() >= 1 && line[lastchar] == '\\' )
+	    line.truncate(lastchar);
 	if ( line[0] == '#' ) {
 	    if ( !atEnd ) continue;
         } else if ( line[0] == '|' || line[0] == ':' ) {
@@ -423,67 +424,79 @@ static void parseSpoolInterface( QListView * printers )
 {
     QDir lp( QString::fromLatin1("/usr/spool/lp/interface") );
     if ( !lp.exists() )
-        return;
+	return;
     const QFileInfoList * files = lp.entryInfoList();
     if( !files )
-        return;
+	return;
 
     QFileInfoListIterator it( *files );
     QFileInfo *printer;
     while ( (printer = it.current()) != 0) {
-        ++it;
+	++it;
 
-        if ( !printer->isFile() )
-            continue;
+	if ( !printer->isFile() )
+	    continue;
 
-        // parse out some information
-        QFile configFile( printer->filePath() );
-        if ( !configFile.open( IO_ReadOnly ) )
-            continue;
+	// parse out some information
+	QFile configFile( printer->filePath() );
+	if ( !configFile.open( IO_ReadOnly ) )
+	    continue;
 
-        QCString line(1025);
-        QString hostName;
-        QString hostPrinter;
-        QString printerType;
+	QCString line(1025);
+	QString namePrinter;
+	QString hostName;
+	QString hostPrinter;
+	QString printerType;
 
-        QRegExp typeKey(QString::fromLatin1("^TYPE="));
-        QRegExp hostKey(QString::fromLatin1("^HOSTNAME="));
-        QRegExp hostPrinterKey(QString::fromLatin1("^HOSTPRINTER="));
-        int length;
+	QRegExp nameKey(QString::fromLatin1("^NAME="));
+	QRegExp typeKey(QString::fromLatin1("^TYPE="));
+	QRegExp hostKey(QString::fromLatin1("^HOSTNAME="));
+	QRegExp hostPrinterKey(QString::fromLatin1("^HOSTPRINTER="));
+	int length;
 
-        while( !configFile.atEnd() &&
-            (configFile.readLine( line.data(), 1024 )) > 0 ) {
+	while( !configFile.atEnd() &&
+	    (configFile.readLine( line.data(), 1024 )) > 0 ) {
 
-            if(typeKey.match(line, 0, &length) == 0) {
-                printerType = line.mid(length, line.length()-length);
-                printerType = printerType.simplifyWhiteSpace();
-            }
-            if(hostKey.match(line, 0, &length) == 0) {
-                hostName = line.mid(length, line.length()-length);
-                hostName = hostName.simplifyWhiteSpace();
-            }
-            if(hostPrinterKey.match(line, 0, &length) == 0) {
-                hostPrinter = line.mid(length, line.length()-length);
-                hostPrinter = hostPrinter.simplifyWhiteSpace();
-            }
-        }
-        configFile.close();
+	    if(typeKey.match(line, 0, &length) == 0) {
+		printerType = line.mid(length, line.length()-length);
+		printerType = printerType.simplifyWhiteSpace();
+	    }
+	    if(hostKey.match(line, 0, &length) == 0) {
+		hostName = line.mid(length, line.length()-length);
+		hostName = hostName.simplifyWhiteSpace();
+	    }
+	    if(hostPrinterKey.match(line, 0, &length) == 0) {
+		hostPrinter = line.mid(length, line.length()-length);
+		hostPrinter = hostPrinter.simplifyWhiteSpace();
+	    }
+	    if(nameKey.match(line, 0, &length) == 0) {
+		namePrinter = line.mid(length, line.length()-length);
+		namePrinter = namePrinter.simplifyWhiteSpace();
+	    }
+	}
+	configFile.close();
 
-        printerType = printerType.stripWhiteSpace();
-        if ( !printerType.isEmpty() && qstricmp( printerType.ascii(), "postscript" ))
-            continue;
+	printerType = printerType.stripWhiteSpace();
+	if (printerType.find("postscript", 0, FALSE) < 0)
+	    continue;
 
-        if(hostName.isEmpty() || hostPrinter.isEmpty())
-        {
-            perhapsAddPrinter( printers, printer->fileName(),
-                QString::fromLatin1(""), QString::fromLatin1(""));
-        } else
-        {
-            QString comment = QString::fromLatin1("Remote name: ");
-            comment += hostPrinter;
-            perhapsAddPrinter( printers, printer->fileName(),
-                hostName, comment);
-        }
+	int ii = 0;
+	while ((ii = namePrinter.find('"', ii)) >= 0) namePrinter.remove(ii, 1);
+
+	if(hostName.isEmpty() || hostPrinter.isEmpty())
+	{
+	    perhapsAddPrinter( printers, printer->fileName(),
+		QString::fromLatin1(""), namePrinter);
+	} else
+	{
+	    QString comment; // = QString::fromLatin1("Remote name: ");
+		 comment = namePrinter;
+		 comment += " (";
+	    comment += hostPrinter;
+		 comment += ")";
+	    perhapsAddPrinter( printers, printer->fileName(),
+		hostName, comment);
+	}
     }
 }
 
@@ -721,7 +734,6 @@ QPrintDialog::QPrintDialog( QPrinter *prn, QWidget *parent, const char *name )
 
     setFontPropagation( SameFont );
     setPalettePropagation( SamePalette );
-    d->ok->setEnabled( TRUE );
 }
 
 
@@ -1146,6 +1158,7 @@ void QPrintDialog::printerOrFileSelected( int id )
 {
     d->outputToFile = id ? TRUE : FALSE;
     if ( d->outputToFile ) {
+	d->ok->setEnabled( TRUE );
         fileNameEditChanged( d->fileName->text() );
         if ( !d->fileName->edited() && d->fileName->text().isEmpty() ) {
             QString home = QString::fromLatin1( ::getenv( "HOME" ) );
@@ -1165,7 +1178,10 @@ void QPrintDialog::printerOrFileSelected( int id )
         d->fileName->setFocus();
         d->printers->setEnabled( FALSE );
     } else {
-        d->ok->setEnabled( TRUE );
+	if ( d->printers->childCount() != 0 )
+	    d->ok->setEnabled( TRUE );
+	else
+	    d->ok->setEnabled( FALSE );
         d->printers->setEnabled( TRUE );
         if ( d->fileName->hasFocus() || d->browse->hasFocus() )
             d->printers->setFocus();
@@ -1284,8 +1300,12 @@ void QPrintDialog::setPrinter( QPrinter * p, bool pickUpSettings )
             QListViewItem * i = d->printers->firstChild();
             while( i && i->text( 0 ) != p->printerName() )
                 i = i->nextSibling();
-            if ( i )
+            if ( i ) {
                 d->printers->setSelected( i, TRUE );
+		d->ok->setEnabled( TRUE );
+	    } else if (d->fileName->text().isEmpty() ) {
+		d->ok->setEnabled( FALSE );
+	    }
         }
 
         // print command does not exist any more

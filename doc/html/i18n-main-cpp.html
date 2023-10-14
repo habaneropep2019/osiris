@@ -36,7 +36,7 @@ height="100" src="face.png" alt="Home" border="0">
   <hr>
 
   Header file: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/i18n/mywidget.h   2.3.1   edited 2001-01-26 $
+** &#36;Id&#58; qt/examples/i18n/mywidget.h   2.3.2   edited 2001-01-26 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -75,7 +75,7 @@ private:
   <hr>
 
   Implementation: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/i18n/mywidget.cpp   2.3.1   edited 2001-01-26 $
+** &#36;Id&#58; qt/examples/i18n/mywidget.cpp   2.3.2   edited 2001-01-26 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -104,29 +104,29 @@ MyWidget::MyWidget( <a href="qwidget.html">QWidget</a>* parent, const char* name
         : <a href="qmainwindow.html">QMainWindow</a>( parent, name )
 {
     <a href="qvbox.html">QVBox</a>* central = new <a href="qvbox.html">QVBox</a>(this);
-    central-&gt;<a href="qframe.html#ab991e">setMargin</a>( 5 ); 
-    central-&gt;<a href="qhbox.html#d8c6a6">setSpacing</a>( 5 ); 
-    <a href="qmainwindow.html#0983b6">setCentralWidget</a>(central);
+    central-&gt;<a href="qframe.html#b11d00">setMargin</a>( 5 ); 
+    central-&gt;<a href="qhbox.html#0075a0">setSpacing</a>( 5 ); 
+    <a href="qmainwindow.html#fce9ba">setCentralWidget</a>(central);
 
     <a href="qpopupmenu.html">QPopupMenu</a>* file = new <a href="qpopupmenu.html">QPopupMenu</a>(this);
-    file-&gt;<a href="qmenudata.html#43c652">insertItem</a>( <a href="qobject.html#ba30fb">tr</a>("E&amp;xit"), qApp, SLOT(quit()),
-            <a href="qaccel.html#7c073d">QAccel::stringToKey</a>(<a href="qobject.html#ba30fb">tr</a>("Ctrl+Q")) );
-    <a href="qmainwindow.html#2fcbc3">menuBar</a>()-&gt;insertItem( <a href="qobject.html#ba30fb">tr</a>("&amp;File"), file );
+    file-&gt;<a href="qmenudata.html#0076cb">insertItem</a>( <a href="qobject.html#2418a9">tr</a>("E&amp;xit"), qApp, SLOT(quit()),
+            <a href="qaccel.html#3ff091">QAccel::stringToKey</a>(<a href="qobject.html#2418a9">tr</a>("Ctrl+Q")) );
+    <a href="qmainwindow.html#0eb7bc">menuBar</a>()-&gt;insertItem( <a href="qobject.html#2418a9">tr</a>("&amp;File"), file );
 
-    <a href="qwidget.html#d4f007">setCaption</a>( tr( "Internationalization Example" ) ); 
+    <a href="qwidget.html#d6a291">setCaption</a>( tr( "Internationalization Example" ) ); 
 
     <a href="qstring.html">QString</a> l;
-    <a href="qmainwindow.html#14153d">statusBar</a>()-&gt;message( <a href="qobject.html#ba30fb">tr</a>("Language: English") );
+    <a href="qmainwindow.html#530937">statusBar</a>()-&gt;message( <a href="qobject.html#2418a9">tr</a>("Language: English") );
 
-    ( void )new <a href="qlabel.html">QLabel</a>( <a href="qobject.html#ba30fb">tr</a>( "The Main Window" ), central ); 
+    ( void )new <a href="qlabel.html">QLabel</a>( <a href="qobject.html#2418a9">tr</a>( "The Main Window" ), central ); 
 
     <a href="qbuttongroup.html">QButtonGroup</a>* gbox = new <a href="qbuttongroup.html">QButtonGroup</a>( 1, QGroupBox::Horizontal, 
-                                      <a href="qobject.html#ba30fb">tr</a>( "View" ), central ); 
-    (void)new <a href="qradiobutton.html">QRadioButton</a>( <a href="qobject.html#ba30fb">tr</a>( "Perspective" ), gbox ); 
-    (void)new <a href="qradiobutton.html">QRadioButton</a>( <a href="qobject.html#ba30fb">tr</a>( "Isometric" ), gbox ); 
-    (void)new <a href="qradiobutton.html">QRadioButton</a>( <a href="qobject.html#ba30fb">tr</a>( "Oblique" ), gbox ); 
+                                      <a href="qobject.html#2418a9">tr</a>( "View" ), central ); 
+    (void)new <a href="qradiobutton.html">QRadioButton</a>( <a href="qobject.html#2418a9">tr</a>( "Perspective" ), gbox ); 
+    (void)new <a href="qradiobutton.html">QRadioButton</a>( <a href="qobject.html#2418a9">tr</a>( "Isometric" ), gbox ); 
+    (void)new <a href="qradiobutton.html">QRadioButton</a>( <a href="qobject.html#2418a9">tr</a>( "Oblique" ), gbox ); 
 
-    <a href=#191>initChoices</a>(central); 
+    <a href=#189>initChoices</a>(central); 
 }
 
 static const char* choices[] = {
@@ -136,16 +136,16 @@ static const char* choices[] = {
     0
 }; 
 
-void <a name="191"></a>MyWidget::initChoices(<a href="qwidget.html">QWidget</a>* parent)
+void <a name="189"></a>MyWidget::initChoices(<a href="qwidget.html">QWidget</a>* parent)
 {
     <a href="qlistbox.html">QListBox</a>* lb = new <a href="qlistbox.html">QListBox</a>( parent ); 
     for ( int i = 0; choices[i]; i++ )
-        lb-&gt;<a href="qlistbox.html#1527aa">insertItem</a>( <a href="qobject.html#ba30fb">tr</a>( choices[i] ) ); 
+        lb-&gt;<a href="qlistbox.html#04a671">insertItem</a>( <a href="qobject.html#2418a9">tr</a>( choices[i] ) ); 
 }
 
-void <a name="192"></a>MyWidget::closeEvent(<a href="qcloseevent.html">QCloseEvent</a>* e)
+void <a name="190"></a>MyWidget::closeEvent(<a href="qcloseevent.html">QCloseEvent</a>* e)
 {
-    <a href="qwidget.html#e72517">QWidget::closeEvent</a>(e);
+    <a href="qwidget.html#c04094">QWidget::closeEvent</a>(e);
     emit closed();
 }
 </pre>
@@ -155,7 +155,7 @@ void <a name="192"></a>MyWidget::closeEvent(<a href="qcloseevent.html">QCloseEve
 
   Main:
 <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/i18n/main.cpp   2.3.1   edited 2001-06-07 $
+** &#36;Id&#58; qt/examples/i18n/main.cpp   2.3.2   edited 2001-06-12 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -190,7 +190,7 @@ public:
              WFlags f=0) : <a name="QDialog"></a><a href="qdialog.html">QDialog</a>(parent,name,modal,f)
     {
         <a name="QVBoxLayout"></a><a href="qvboxlayout.html">QVBoxLayout</a>* vb = new <a href="qvboxlayout.html">QVBoxLayout</a>(this,8);
-        vb-&gt;<a name="setAutoAdd"></a><a href="qlayout.html#eedc7c">setAutoAdd</a>(TRUE);
+        vb-&gt;<a name="setAutoAdd"></a><a href="qlayout.html#a83e73">setAutoAdd</a>(TRUE);
         hb = 0;
         sm = new <a name="QSignalMapper"></a><a href="qsignalmapper.html">QSignalMapper</a>(this);
         connect(sm,SIGNAL(mapped(int)),this,SLOT(done(int)));
@@ -213,7 +213,7 @@ public:
         if ( !hb )
             hb = new <a name="QHBox"></a><a href="qhbox.html">QHBox</a>(this);
         <a name="QPushButton"></a><a href="qpushbutton.html">QPushButton</a> *c = new <a href="qpushbutton.html">QPushButton</a>(text, hb);
-        sm-&gt;<a name="setMapping"></a><a href="qsignalmapper.html#95926a">setMapping</a>(c,result);
+        sm-&gt;<a name="setMapping"></a><a href="qsignalmapper.html#2531b8">setMapping</a>(c,result);
         connect(c,SIGNAL(clicked()),sm,SLOT(map()));
     }
 
@@ -232,8 +232,8 @@ MyWidget* showLang(<a name="QString"></a><a href="qstring.html">QString</a> lang
     lang = "mywidget_" + lang + ".qm";
     <a name="QFileInfo"></a><a href="qfileinfo.html">QFileInfo</a> fi( lang );
 
-    if ( !fi.<a name="exists"></a><a href="qfileinfo.html#2c4a21">exists</a>() ) {
-        <a name="QMessageBox::warning"></a><a href="qmessagebox.html#b7fab2">QMessageBox::warning</a>( 0, "File error",
+    if ( !fi.<a name="exists"></a><a href="qfileinfo.html#a1625c">exists</a>() ) {
+        <a name="QMessageBox::warning"></a><a href="qmessagebox.html#63edba">QMessageBox::warning</a>( 0, "File error",
                               <a href="qstring.html">QString</a>("Cannot find translation for language: "+lang+
                                       "\n(try eg. 'de', 'ko' or 'no')") );
         return 0;
@@ -246,6 +246,7 @@ MyWidget* showLang(<a name="QString"></a><a href="qstring.html">QString</a> lang
     translator-&gt;load( lang, "." );
     qApp-&gt;installTranslator( translator );
     MyWidget *m = new MyWidget;
+    m-&gt;<a name="setCaption"></a><a href="qwidget.html#d6a291">setCaption</a>("Qt Example - i18n - " + m-&gt;<a name="caption"></a><a href="qwidget.html#f852bc">caption</a>() );
     return m;
 }
 
@@ -279,7 +280,7 @@ int main( int argc, char** argv )
             for ( int i=0; qm[i]; i++ )
                 qmb[i] = new <a href="qcheckbox.html">QCheckBox</a>((const char*)qm[i],bg);
             dlg.addButtons("Cancel","OK","All");
-            r = dlg.<a name="exec"></a><a href="qdialog.html#633670">exec</a>();
+            r = dlg.<a name="exec"></a><a href="qdialog.html#0beb1a">exec</a>();
         }
         if ( r ) {
             bool tight = qApp-&gt;desktop()-&gt;width() &lt; 1024;
@@ -290,9 +291,9 @@ int main( int argc, char** argv )
                     MyWidget* w = showLang((const char*)qm[i]);
 
                     if( w == 0 ) exit( 0 );
-                    <a name="QObject::connect"></a><a href="qobject.html#c2d209">QObject::connect</a>(w, SIGNAL(closed()), qApp, SLOT(quit()));
-                    w-&gt;<a name="setGeometry"></a><a href="qwidget.html#0fac5c">setGeometry</a>(x,y,197,356);
-                    w-&gt;<a name="show"></a><a href="qmainwindow.html#e71bb3">show</a>();
+                    <a name="QObject::connect"></a><a href="qobject.html#7f8e37">QObject::connect</a>(w, SIGNAL(closed()), qApp, SLOT(quit()));
+                    w-&gt;<a name="setGeometry"></a><a href="qwidget.html#5e9ab1">setGeometry</a>(x,y,197,356);
+                    w-&gt;<a name="show"></a><a href="qmainwindow.html#eb53e3">show</a>();
                     if ( tight ) {
                         x += 8;
                         y += 8;
@@ -311,19 +312,21 @@ int main( int argc, char** argv )
     } else {
         <a href="qstring.html">QString</a> lang = argv[1];
         <a href="qwidget.html">QWidget</a>* m = showLang(lang);
-        app.<a name="setMainWidget"></a><a href="qapplication.html#11c921">setMainWidget</a>( m );
-        m-&gt;<a name="show"></a><a href="qwidget.html#ccc8f7">show</a>();
+        app.<a name="setMainWidget"></a><a href="qapplication.html#7ad759">setMainWidget</a>( m );
+        m-&gt;<a href="qwidget.html#d6a291">setCaption</a>("Qt Example - i18n");
+        m-&gt;<a name="show"></a><a href="qwidget.html#200ee5">show</a>();
     }
     // While we run "all", kill them all
-    app.<a name="exec"></a><a href="qapplication.html#7076af">exec</a>();
-
 #ifdef USE_I18N_FONT
-    memorymanager-&gt;savePrerenderedFont(font.<a name="handle"></a><a href="qfont.html#fd19b7">handle</a>(),FALSE);
+    memorymanager-&gt;savePrerenderedFont(font.<a name="handle"></a><a href="qfont.html#fd3bbb">handle</a>(),FALSE);
 #endif
+
+    return app.<a name="exec"></a><a href="qapplication.html#84c7bf">exec</a>();
+
 }
 </pre>
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.1</div>
+<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

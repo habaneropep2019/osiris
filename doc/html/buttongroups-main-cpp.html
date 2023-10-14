@@ -31,7 +31,7 @@ height="100" src="face.png" alt="Home" border="0">
   <hr>
 
   Header file: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/buttongroups/buttongroups.h   2.3.1   edited 2001-01-26 $
+** &#36;Id&#58; qt/examples/buttongroups/buttongroups.h   2.3.2   edited 2001-01-26 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -71,7 +71,7 @@ protected slots:
   <hr>
 
   Implementation: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/buttongroups/buttongroups.cpp   2.3.1   edited 2001-01-26 $
+** &#36;Id&#58; qt/examples/buttongroups/buttongroups.cpp   2.3.2   edited 2001-01-26 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -107,12 +107,12 @@ ButtonsGroups::ButtonsGroups( <a href="qwidget.html">QWidget</a> *parent, const 
 
     // Create an exclusive button group
     <a href="qbuttongroup.html">QButtonGroup</a> *grp1 = new <a href="qbuttongroup.html">QButtonGroup</a>( 1, QGroupBox::Horizontal, "Button Group 1 (exclusive)", this);
-    box1-&gt;<a href="qboxlayout.html#219265">addWidget</a>( grp1 );
-    grp1-&gt;<a href="qbuttongroup.html#84fb45">setExclusive</a>( TRUE );
+    box1-&gt;<a href="qboxlayout.html#ebba99">addWidget</a>( grp1 );
+    grp1-&gt;<a href="qbuttongroup.html#1075ee">setExclusive</a>( TRUE );
 
     // insert 3 radiobuttons
     <a href="qradiobutton.html">QRadioButton</a> *rb11 = new <a href="qradiobutton.html">QRadioButton</a>( "&amp;Radiobutton 1", grp1 );
-    rb11-&gt;<a href="qradiobutton.html#11e2e3">setChecked</a>( TRUE );
+    rb11-&gt;<a href="qradiobutton.html#0e50fc">setChecked</a>( TRUE );
     (void)new <a href="qradiobutton.html">QRadioButton</a>( "R&amp;adiobutton 2", grp1 );
     (void)new <a href="qradiobutton.html">QRadioButton</a>( "Ra&amp;diobutton 3", grp1 );
 
@@ -120,23 +120,23 @@ ButtonsGroups::ButtonsGroups( <a href="qwidget.html">QWidget</a> *parent, const 
 
     // Create a non-exclusive buttongroup
     <a href="qbuttongroup.html">QButtonGroup</a> *grp2 = new <a href="qbuttongroup.html">QButtonGroup</a>( 1, QGroupBox::Horizontal, "Button Group 2 (non-exclusive)", this );
-    box1-&gt;<a href="qboxlayout.html#219265">addWidget</a>( grp2 );
-    grp2-&gt;<a href="qbuttongroup.html#84fb45">setExclusive</a>( FALSE );
+    box1-&gt;<a href="qboxlayout.html#ebba99">addWidget</a>( grp2 );
+    grp2-&gt;<a href="qbuttongroup.html#1075ee">setExclusive</a>( FALSE );
 
     // insert 3 checkboxes
     (void)new <a href="qcheckbox.html">QCheckBox</a>( "&amp;Checkbox 1", grp2 );
     <a href="qcheckbox.html">QCheckBox</a> *cb12 = new <a href="qcheckbox.html">QCheckBox</a>( "C&amp;heckbox 2", grp2 );
-    cb12-&gt;<a href="qcheckbox.html#f146fc">setChecked</a>( TRUE );
+    cb12-&gt;<a href="qcheckbox.html#08b09c">setChecked</a>( TRUE );
     <a href="qcheckbox.html">QCheckBox</a> *cb13 = new <a href="qcheckbox.html">QCheckBox</a>( "Triple &amp;State Button", grp2 );
-    cb13-&gt;<a href="qcheckbox.html#5e5018">setTristate</a>( TRUE );
-    cb13-&gt;<a href="qcheckbox.html#f146fc">setChecked</a>( TRUE );
+    cb13-&gt;<a href="qcheckbox.html#aea03f">setTristate</a>( TRUE );
+    cb13-&gt;<a href="qcheckbox.html#08b09c">setChecked</a>( TRUE );
 
     // ------------ third group
 
     // create a buttongroup which is exclusive for radiobuttons and non-exclusive for all other buttons
     <a href="qbuttongroup.html">QButtonGroup</a> *grp3 = new <a href="qbuttongroup.html">QButtonGroup</a>( 1, QGroupBox::Horizontal, "Button Group 3 (Radiobutton-exclusive)", this );
-    box2-&gt;<a href="qboxlayout.html#219265">addWidget</a>( grp3 );
-    grp3-&gt;<a href="qbuttongroup.html#34f3b2">setRadioButtonExclusive</a>( TRUE );
+    box2-&gt;<a href="qboxlayout.html#ebba99">addWidget</a>( grp3 );
+    grp3-&gt;<a href="qbuttongroup.html#d67431">setRadioButtonExclusive</a>( TRUE );
 
     // insert three radiobuttons
     rb21 = new <a href="qradiobutton.html">QRadioButton</a>( "Rad&amp;iobutton 1", grp3 );
@@ -148,21 +148,21 @@ ButtonsGroups::ButtonsGroups( <a href="qwidget.html">QWidget</a> *parent, const 
     state = new <a href="qcheckbox.html">QCheckBox</a>( "E&amp;nable Radiobuttons", grp3 );
     state-&gt;setChecked( TRUE );
     // ...and connect its SIGNAL clicked() with the SLOT slotChangeGrp3State()
-    <a href="qobject.html#c2d209">connect</a>( state, SIGNAL( clicked() ), this, SLOT( <a href=#182>slotChangeGrp3State</a>() ) );
+    <a href="qobject.html#7f8e37">connect</a>( state, SIGNAL( clicked() ), this, SLOT( <a href=#180>slotChangeGrp3State</a>() ) );
 
     // ------------ fourth group
 
     // create a groupbox which layouts its childs in a columns
     <a href="qgroupbox.html">QGroupBox</a> *grp4 = new <a href="qbuttongroup.html">QButtonGroup</a>( 1, QGroupBox::Horizontal, "Groupbox with normal buttons", this );
-    box2-&gt;<a href="qboxlayout.html#219265">addWidget</a>( grp4 );
+    box2-&gt;<a href="qboxlayout.html#ebba99">addWidget</a>( grp4 );
 
     // insert two pushbuttons...
     (void)new <a href="qpushbutton.html">QPushButton</a>( "&amp;Push Button", grp4 );
     <a href="qpushbutton.html">QPushButton</a> *tb = new <a href="qpushbutton.html">QPushButton</a>( "&amp;Toggle Button", grp4 );
 
     // ... and make the second one a toggle button
-    tb-&gt;<a href="qpushbutton.html#792138">setToggleButton</a>( TRUE );
-    tb-&gt;<a href="qpushbutton.html#280d7b">setOn</a>( TRUE );
+    tb-&gt;<a href="qpushbutton.html#cf550e">setToggleButton</a>( TRUE );
+    tb-&gt;<a href="qpushbutton.html#15502f">setOn</a>( TRUE );
 }
 
 /*
@@ -171,7 +171,7 @@ ButtonsGroups::ButtonsGroups( <a href="qwidget.html">QWidget</a> *parent, const 
  * enables/disables the radiobuttons of the third buttongroup
  */
 
-void <a name="182"></a>ButtonsGroups::slotChangeGrp3State()
+void <a name="180"></a>ButtonsGroups::slotChangeGrp3State()
 {
     rb21-&gt;setEnabled( state-&gt;isChecked() );
     rb22-&gt;setEnabled( state-&gt;isChecked() );
@@ -184,7 +184,7 @@ void <a name="182"></a>ButtonsGroups::slotChangeGrp3State()
 
   Main:
 <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/buttongroups/main.cpp   2.3.1   edited 2001-01-26 $
+** &#36;Id&#58; qt/examples/buttongroups/main.cpp   2.3.2   edited 2001-06-12 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -201,16 +201,16 @@ int main( int argc, char **argv )
     <a name="QApplication"></a><a href="qapplication.html">QApplication</a> a( argc, argv );
 
     ButtonsGroups buttonsgroups;
-    buttonsgroups.<a name="resize"></a><a href="qwidget.html#9775bb">resize</a>( 500, 250 );
-    buttonsgroups.<a name="setCaption"></a><a href="qwidget.html#d4f007">setCaption</a>( "Examples for Buttons and Groups" );
-    a.<a name="setMainWidget"></a><a href="qapplication.html#11c921">setMainWidget</a>( &amp;buttonsgroups );
-    buttonsgroups.<a name="show"></a><a href="qwidget.html#ccc8f7">show</a>();
+    buttonsgroups.<a name="resize"></a><a href="qwidget.html#8fcbbe">resize</a>( 500, 250 );
+    buttonsgroups.<a name="setCaption"></a><a href="qwidget.html#d6a291">setCaption</a>( "Qt Example - Buttongroups" );
+    a.<a name="setMainWidget"></a><a href="qapplication.html#7ad759">setMainWidget</a>( &amp;buttonsgroups );
+    buttonsgroups.<a name="show"></a><a href="qwidget.html#200ee5">show</a>();
 
-    return a.<a name="exec"></a><a href="qapplication.html#7076af">exec</a>();
+    return a.<a name="exec"></a><a href="qapplication.html#84c7bf">exec</a>();
 }
 </pre>
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.1</div>
+<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

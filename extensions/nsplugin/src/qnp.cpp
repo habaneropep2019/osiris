@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/extensions/nsplugin/src/qnp.cpp   2.3.1   edited 2001-03-23 $
+** $Id: qt/extensions/nsplugin/src/qnp.cpp   2.3.2   edited 2001-07-22 $
 **
 ** Implementation of Qt extension classes for Netscape Plugin support.
 **
@@ -344,7 +344,6 @@ public:
 	{
 	    checkFocussedWidget();
 	}
-
 	return QApplication::notify( obj, event );
     }
 #endif
@@ -733,7 +732,7 @@ NPP_SetWindow(NPP instance, NPWindow* window)
 	    next_pi = This;
 	    /* This->widget = */ // (happens sooner - in QNPWidget constructor)
 		This->instance->newWindow();
-	    This->widget->show();
+	    This->widget->show(); 
 	} else {
 	    // New window for existing widget, and all its children.
 	    This->widget->setWindow(FALSE);
@@ -1206,7 +1205,7 @@ QNPWidget::QNPWidget() :
 #ifdef _WS_WIN_
     // Communicator and explorer give us an unshown
     // widget.  Navigator gives us a shown one.
-    show();
+    QWidget::show();
 #endif
 }
 
@@ -1244,19 +1243,6 @@ QNPInstance* QNPWidget::instance()
     return pi->instance;
 }
 
-/*!
-  This is needed in order to show plugins correctly on Windows.  Does nothing on X11.
-
-  \reimp
-*/
-void QNPWidget::show()
-{
-#ifdef _WS_WIN_
-    // ### This is a hack until I can figure out why just calling show() never works.
-    ShowWindow( winId(), SW_SHOW );
-#endif
-}
-
 class QFixableWidget : public QWidget {
 public:
     void fix()
@@ -1291,7 +1277,8 @@ void createNewWindowsForAllChildren(QWidget* parent, int indent=0)
 	    // Fix children first, so propagation can work
 	    createNewWindowsForAllChildren(c,indent+1);
 	    c->fix();
-	    if ( vis ) c->show(); // Now that all children are valid.
+	    if ( vis ) 
+		c->show(); // Now that all children are valid.			    
 	    ++it;
 	}
 	delete list;

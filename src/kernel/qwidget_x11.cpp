@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qwidget_x11.cpp   2.3.1   edited 2001-05-14 $
+** $Id: qt/src/kernel/qwidget_x11.cpp   2.3.2   edited 2001-09-05 $
 **
 ** Implementation of QWidget and QWindow classes for X11
 **
@@ -444,7 +444,7 @@ void QWidget::destroy( bool destroyWindow, bool destroySubWindows )
 	    releaseMouse();
 	if ( keyboardGrb == this )
 	    releaseKeyboard();
-	if ( testWState( WType_TopLevel ) )
+	if ( isTopLevel() )
 	    qt_deferred_map_take( this );
 	if ( testWFlags(WType_Modal) )		// just be sure we leave modal
 	    qt_leave_modal( this );
@@ -504,16 +504,16 @@ void QWidget::reparent( QWidget *parent, WFlags f, const QPoint &p,
 	oldcurs = cursor();
 	unsetCursor();
     }
-    bool topdata_dnd = FALSE;
     bool accept_drops = acceptDrops();
     if ( accept_drops )
 	setAcceptDrops( FALSE ); // dnd unregister (we will register again below)
-    if ( isTopLevel() ) {
-	topdata_dnd = topData()->dnd;
-	topData()->dnd = 0; // unregister XDND atom
-    }
+
+    // clear mouse tracking, re-enabled below
+    bool mouse_tracking = hasMouseTracking();
+    clearWState(WState_MouseTracking);
 
     QWidget* oldtlw = topLevelWidget();
+    QWidget *oldparent = parentWidget();
     WId old_winid = winid;
     if ( testWFlags(WType_Desktop) )
 	old_winid = 0;
@@ -591,10 +591,19 @@ void QWidget::reparent( QWidget *parent, WFlags f, const QPoint &p,
     reparentFocusWidgets( oldtlw );
 
     // re-register dnd
+    if (oldparent)
+	oldparent->checkChildrenDnd();
     if ( accept_drops )
 	setAcceptDrops( TRUE );
-    if (topdata_dnd)
-	qt_dnd_enable(this, topdata_dnd);
+    else {
+	if (parent)
+	    parent->checkChildrenDnd();
+	qt_dnd_enable(this, (extra && extra->children_use_dnd));
+    }
+
+    // re-enable mouse tracking
+    if (mouse_tracking)
+	setMouseTracking(mouse_tracking);
 
     QCustomEvent e( QEvent::Reparent, 0 );
     QApplication::sendEvent( this, &e );
@@ -1044,7 +1053,7 @@ void QWidget::grabMouse()
 #if defined(CHECK_STATE)
 	int status =
 #endif
-	XGrabPointer( x11Display(), winId(), TRUE,
+	XGrabPointer( x11Display(), winId(), False,
 		      (uint)( ButtonPressMask | ButtonReleaseMask |
 			      PointerMotionMask | EnterWindowMask |
 			      LeaveWindowMask ),
@@ -1085,7 +1094,7 @@ void QWidget::grabMouse( const QCursor &cursor )
 #if defined(CHECK_STATE)
 	int status =
 #endif
-	XGrabPointer( x11Display(), winId(), TRUE,
+	XGrabPointer( x11Display(), winId(), False,
 		      (uint)(ButtonPressMask | ButtonReleaseMask |
 			     PointerMotionMask | EnterWindowMask | LeaveWindowMask),
 		      GrabModeAsync, GrabModeAsync,
@@ -1136,7 +1145,7 @@ void QWidget::grabKeyboard()
     if ( !qt_nograb() ) {
 	if ( keyboardGrb )
 	    keyboardGrb->releaseKeyboard();
-	XGrabKeyboard( x11Display(), winid, TRUE, GrabModeAsync, GrabModeAsync,
+	XGrabKeyboard( x11Display(), winid, False, GrabModeAsync, GrabModeAsync,
 		       qt_x_time );
 	keyboardGrb = this;
     }
@@ -2171,6 +2180,44 @@ void QWidget::deleteTLSysExtra()
 #endif
 }
 
+/*
+  examine the children of our parent up the tree and set the
+  children_use_dnd extra data appropriately... this is used to keep DND enabled
+  for widgets that are reparented and don't have DND enabled, BUT *DO* have
+  children (or children of children ...) with DND enabled...
+*/
+  void QWidget::checkChildrenDnd()
+{
+    QWidget *parent = parentWidget();
+    const QObjectList *children;
+    QObject *object;
+    QWidget *child;
+    while (parent) {
+	// note: the desktop widget has no parent, so this will never be done
+	// for the desktop widget
+
+	bool children_use_dnd = FALSE;
+	children = parent->children();
+	if ( children ) {
+	    QObjectListIt it(*children);
+	    while ( (object = it.current()) ) {
+		++it;
+		if ( object->isWidgetType() ) {
+		    child = (QWidget *) object;
+		    children_use_dnd = (children_use_dnd ||
+					child->acceptDrops() ||
+					(child->extra &&
+					 child->extra->children_use_dnd));
+		}
+	    }
+	}
+
+	parent->createExtra();
+	parent->extraData()->children_use_dnd = children_use_dnd;
+
+	parent = parent->parentWidget();
+    }
+}
 
 /*!
   Returns TRUE if drop events are enabled for this widget.
@@ -2203,6 +2250,9 @@ void QWidget::setAcceptDrops( bool on )
 	    else
 		clearWState(WState_DND);
 	}
+
+	if (parentWidget())
+	    parentWidget()->checkChildrenDnd();
     }
 }
 

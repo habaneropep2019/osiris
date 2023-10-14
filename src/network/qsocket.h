@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/network/qsocket.h   2.3.1   edited 2001-01-26 $
+** $Id: qt/src/network/qsocket.h   2.3.2   edited 2001-07-24 $
 **
 ** Definition of QSocket class.
 **
@@ -119,6 +119,7 @@ protected:
 
 private slots:
     void	tryConnecting();
+    void	emitErrorConnectionRefused();
 
 private:
     QSocketPrivate *d;

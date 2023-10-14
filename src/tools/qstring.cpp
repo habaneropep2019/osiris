@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qstring.cpp   2.3.1   edited 2001-05-30 $
+** $Id: qt/src/tools/qstring.cpp   2.3.2   edited 2001-10-14 $
 **
 ** Implementation of the QString class and related Unicode functions
 **
@@ -11649,6 +11649,7 @@ static inline bool is_arabic(unsigned short x) {
 }
 #endif
 
+#ifndef QT_NO_UNICODETABLES
 static inline bool is_neutral(unsigned short dir) {
   return ((dir == QChar::DirB) ||
 		  (dir == QChar::DirS) ||
@@ -11656,6 +11657,7 @@ static inline bool is_neutral(unsigned short dir) {
 		  (dir == QChar::DirON) ||
 	          (dir == QChar::DirNSM));
 }
+#endif
 
 /*!
   This function returns the basic directionality of the string (QChar::DirR for
@@ -12693,7 +12695,7 @@ QString &QString::sprintf( const char* cformat, ... )
 
     int len = 0;
     int pos;
-    while ( 1 ) {
+    for (;;) {
 	pos = escape->match( format, last, &len );
 	// Non-escaped text
 	if ( pos > (int)last )
@@ -12920,7 +12922,7 @@ int QString::find( const QString& str, int index, bool cs ) const
 	    hstr += ustr[i].cell();
 	}
 	i = 0;
-	while ( TRUE ) {
+	for (;;) {
 	    if ( hthis == hstr && ucstrncmp(uthis + i, ustr, lstr) == 0 )
 		return index + i;
 	    if ( i == delta )
@@ -12935,7 +12937,7 @@ int QString::find( const QString& str, int index, bool cs ) const
 	    hstr += ustr[i].lower().cell();
 	}
 	i = 0;
-	while ( TRUE ) {
+	for (;;) {
 	    if ( hthis == hstr && ucstrnicmp(uthis + i, ustr, lstr) == 0 )
 		return index + i;
 	    if ( i == delta )
@@ -13019,7 +13021,7 @@ int QString::findRev( const QString& str, int index, bool cs ) const
 	    hstr += ustr[i].cell();
 	}
 	i = index;
-	while ( TRUE ) {
+	for (;;) {
 	    if ( hthis == hstr && ucstrncmp(uthis + i, ustr, lstr) == 0 )
 		return i;
 	    if ( i == 0 )
@@ -13034,7 +13036,7 @@ int QString::findRev( const QString& str, int index, bool cs ) const
 	    hstr += ustr[i].lower().cell();
 	}
 	i = index;
-	while ( TRUE ) {
+	for (;;) {
 	    if ( hthis == hstr && ucstrnicmp(uthis + i, ustr, lstr) == 0 )
 		return i;
 	    if ( i == 0 )
@@ -13445,7 +13447,7 @@ QString QString::simplifyWhiteSpace() const
     const QChar *fromend = from+length();
     int outc=0;
     QChar *to	= result.d->unicode;
-    while ( TRUE ) {
+    for (;;) {
 	while ( from!=fromend && from->isSpace() )
 	    from++;
 	while ( from!=fromend && !from->isSpace() )
@@ -14112,7 +14114,7 @@ QString &QString::setNum( double n, char f, int prec )
     }
 #endif
     char format[20];
-    char buf[120];				// enough for 99 precision?
+    char buf[512];				// I just hope this is large enough in all cases.
     char *fs = format;				// generate format string
     *fs++ = '%';				//   "%.<prec>l<f>"
     if ( prec >= 0 ) {
@@ -14129,7 +14131,7 @@ QString &QString::setNum( double n, char f, int prec )
     *fs++ = 'l';
     *fs++ = f;
     *fs = '\0';
-    ::sprintf( buf, format, n );
+    ::sprintf( buf, format, n );		// snprintf is unfortunately not portable.
     return setLatin1(buf);
 }
 

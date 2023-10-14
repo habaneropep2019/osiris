@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qstatusbar.cpp   2.3.1   edited 2001-05-22 $
+** $Id: qt/src/widgets/qstatusbar.cpp   2.3.2   edited 2001-10-26 $
 **
 ** Implementation of QStatusBar class
 **
@@ -287,10 +287,16 @@ void QStatusBar::reformat()
 {
     if ( d->box )
 	delete d->box;
-    d->box = new QVBoxLayout( this );
-    d->box->addSpacing( 5 );
 
-    QBoxLayout* l = new QHBoxLayout( d->box );
+    QBoxLayout *vbox;
+    if ( isSizeGripEnabled() ) {
+	d->box = new QHBoxLayout( this );
+	vbox = new QVBoxLayout( d->box );
+    } else {
+	vbox = d->box = new QVBoxLayout( this );
+    }
+    vbox->addSpacing( 3 );
+    QBoxLayout* l = new QHBoxLayout( vbox );
     l->addSpacing( 3 );
 
     int maxH = fontMetrics().height();
@@ -316,11 +322,12 @@ void QStatusBar::reformat()
 #ifndef QT_NO_SIZEGRIP
     if ( d->resizer ) {
 	maxH = QMAX( maxH, d->resizer->sizeHint().height() );
-	l->addSpacing( 2 );
-	l->addWidget( d->resizer, 0, AlignBottom );
+	d->box->addSpacing( 2 );
+	d->box->addWidget( d->resizer, 0, AlignBottom );
     }
 #endif
     l->addStrut( maxH );
+    vbox->addSpacing( 2 );
     d->box->activate();
     repaint();
 }

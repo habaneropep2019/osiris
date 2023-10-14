@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/themes/metal.h   2.3.1   edited 2001-02-15 $
+** $Id: qt/examples/themes/metal.h   2.3.2   edited 2001-02-15 $
 **
 ** Definition of something or other
 **

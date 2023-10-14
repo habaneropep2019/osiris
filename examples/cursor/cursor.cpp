@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/cursor/cursor.cpp   2.3.1   edited 2001-01-26 $
+** $Id: qt/examples/cursor/cursor.cpp   2.3.2   edited 2001-06-12 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -130,6 +130,7 @@ int main( int argc, char **argv )
     QApplication a( argc, argv );		// application object
     CursorView   v;				// cursor view
     a.setMainWidget( &v );
+    v.setCaption("Qt Example - Cursors");
     v.show();
     return a.exec();
 }

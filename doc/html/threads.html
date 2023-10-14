@@ -55,7 +55,7 @@ against this library (with <tt>-lqt-mt</tt>) rather than the regular Qt
 library.
 <p>
   On both platforms, you should compile with the macro <tt>QT_THREAD_SUPPORT</tt>
-defined (eg. compiler with <tt>-DQT_THREAD_SUPPORT</tt>).
+defined (eg. compile with <tt>-DQT_THREAD_SUPPORT</tt>).
 On Windows, this is usually done by an entry in <tt>qconfig.h</tt>.
 <p>
 <h2>The Qt thread classes</h2>
@@ -86,10 +86,10 @@ other thread until the mutex is released. For instance:
 
   void MyClass::doStuff(int c)
   {
-      mutex.<a href="qmutex.html#8eced3">lock</a>();
+      mutex.<a href="qmutex.html#4e6e5d">lock</a>();
       a=c;
       b=c*2;
-      mutex.<a href="qmutex.html#dd0cbb">unlock</a>();
+      mutex.<a href="qmutex.html#da15c3">unlock</a>();
   }
 </pre>
 <p>
@@ -127,14 +127,14 @@ implemented as one on Unix). For instance:
 
           // call the start() method inherited from QThread... this starts
           // execution of the thread immediately
-          <a href="qthread.html#fdfda3">QThread::start</a>();
+          <a href="qthread.html#536ef2">QThread::start</a>();
       }
 
   public slots:
       void slotClicked()
       {
           // wake up one thread waiting on this condition variable
-          mycond.<a href="qwaitcondition.html#4f13ff">wakeOne</a>();
+          mycond.<a href="qwaitcondition.html#57c32e">wakeOne</a>();
       }
 
   protected:
@@ -151,7 +151,7 @@ implemented as one on Unix). For instance:
               qApp-&gt;unlock();
 
                // wait until we are told to continue
-              mycond.<a href="qwaitcondition.html#86afcb">wait</a>();
+              mycond.<a href="qwaitcondition.html#d24199">wait</a>();
 
               // if we get here, we have been woken by another
               // thread... let's set the caption to indicate
@@ -177,10 +177,10 @@ implemented as one on Unix). For instance:
       // create a worker... the worker will run a thread when we do
       Worker firstworker(0, "worker");
 
-      app.<a href="qapplication.html#11c921">setMainWidget</a>(&amp;worker);
+      app.<a href="qapplication.html#7ad759">setMainWidget</a>(&amp;worker);
       worker.show();
 
-      return app.<a href="qapplication.html#7076af">exec</a>();
+      return app.<a href="qapplication.html#84c7bf">exec</a>();
   }
 </pre>
 <p>
@@ -200,7 +200,7 @@ within the event thread just as a normal window system event is. For instance,
 you could force a widget to repaint from a different thread by doing the following:
 <p>
   <pre>  <a href="qwidget.html">QWidget</a> *mywidget;
-  <a href="qthread.html#3210d6">QThread::postEvent</a>( mywidget, new <a href="qpaintevent.html">QPaintEvent</a>( <a href="qrect.html">QRect</a>(0, 0, 100, 100) ) );
+  <a href="qthread.html#f0670e">QThread::postEvent</a>( mywidget, new <a href="qpaintevent.html">QPaintEvent</a>( <a href="qrect.html">QRect</a>(0, 0, 100, 100) ) );
 </pre>
 <p>
   This (asynchronously) makes mywidget to repaint a 100x100
@@ -214,16 +214,16 @@ other than the event thread. For instance:
   <pre>  <a href="qapplication.html">QApplication</a> *qApp;
   <a href="qwidget.html">QWidget</a> *mywidget;
 
-  qApp-&gt;<a href="qapplication.html#9bd688">lock</a>();
+  qApp-&gt;<a href="qapplication.html#e7d891">lock</a>();
 
-  mywidget-&gt;<a href="qwidget.html#8e0197">setGeometry</a>(0,0,100,100);
+  mywidget-&gt;<a href="qwidget.html#9ede68">setGeometry</a>(0,0,100,100);
 
   <a href="qpainter.html">QPainter</a> p;
-  p.<a href="qpainter.html#59f1bb">begin</a>(mywidget);
-  p.<a href="qpainter.html#ffde14">drawLine</a>(0,0,100,100);
-  p.<a href="qpainter.html#c7f9ac">end</a>();
+  p.<a href="qpainter.html#02ed5d">begin</a>(mywidget);
+  p.<a href="qpainter.html#e3a489">drawLine</a>(0,0,100,100);
+  p.<a href="qpainter.html#365784">end</a>();
 
-  qApp-&gt;<a href="qapplication.html#ebc983">unlock</a>();
+  qApp-&gt;<a href="qapplication.html#cc10ca">unlock</a>();
 </pre>
 <p>
 Calling a function in Qt without holding a mutex will generally result
@@ -265,6 +265,6 @@ QApplication::processEvents() and others.</li>
 
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.1</div>
+<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

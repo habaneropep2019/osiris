@@ -1,5 +1,5 @@
 '\" t
-.TH QColor 3qt "13 June 2001" "Trolltech AS" \" -*- nroff -*-
+.TH QColor 3qt "29 October 2001" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2001 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -139,22 +139,13 @@ QColor \- Colors based on RGB
 (Note that these are not member functions.)
 .in +1c
 .ti -1c
-.BI "int \fBqBlue\fR (QRgb " "rgb" ")"
-.br
-.ti -1c
-.BI "QRgb \fBqRgb\fR (int " "r" ", int " "g" ", int " "b" ")"
-.br
-.ti -1c
-.BI "QRgb \fBqRgba\fR (int " "r" ", int " "g" ", int " "b" ", int " "a" ")"
-.br
-.ti -1c
-.BI "QDataStream & \fBoperator<<\fR (QDataStream & " "s" ", const QColor & " "c" ")"
-.br
-.ti -1c
 .BI "QDataStream & \fBoperator>>\fR (QDataStream & " "s" ", QColor & " "c" ")"
 .br
 .ti -1c
 .BI "int \fBqGreen\fR (QRgb " "rgb" ")"
+.br
+.ti -1c
+.BI "int \fBqRed\fR (QRgb " "rgb" ")"
 .br
 .ti -1c
 .BI "int \fBqAlpha\fR (QRgb " "rgba" ")"
@@ -163,10 +154,19 @@ QColor \- Colors based on RGB
 .BI "int \fBqGray\fR (int " "r" ", int " "g" ", int " "b" ")"
 .br
 .ti -1c
-.BI "int \fBqRed\fR (QRgb " "rgb" ")"
+.BI "QRgb \fBqRgba\fR (int " "r" ", int " "g" ", int " "b" ", int " "a" ")"
 .br
 .ti -1c
 .BI "int \fBqGray\fR (qRgb " "rgb" ")"
+.br
+.ti -1c
+.BI "QDataStream & \fBoperator<<\fR (QDataStream & " "s" ", const QColor & " "c" ")"
+.br
+.ti -1c
+.BI "int \fBqBlue\fR (QRgb " "rgb" ")"
+.br
+.ti -1c
+.BI "QRgb \fBqRgb\fR (int " "r" ", int " "g" ", int " "b" ")"
 .br
 .in -1c
 .SH DESCRIPTION
@@ -485,6 +485,46 @@ Sets the RGB value to \fI(r,g,b). r, g\fR and \fIb\fR must be in the range 0..25
 .PP
 See also rgb() and setHsv().
 .SH RELATED FUNCTION DOCUMENTATION
+.SH "QDataStream & operator>> (QDataStream & s, QColor & c)"
+Reads a color object from the stream.
+.PP
+See also Format of the QDataStream operators
+.SH "int qGreen (QRgb rgb)"
+Returns the green component of the RGB triplet \fIrgb.\fR
+.PP
+See also qRgb() and QColor::green().
+.PP
+Examples:
+.(l
+qmag/qmag.cpp
+.)l
+.SH "int qRed (QRgb rgb)"
+Returns the red component of the RGB triplet \fIrgb.\fR
+.PP
+See also qRgb() and QColor::red().
+.PP
+Examples:
+.(l
+qmag/qmag.cpp
+.)l
+.SH "int qAlpha (QRgb rgba)"
+Returns the alpha component of the RGBA quadruplet \fIrgb.\fR
+.SH "int qGray (int r, int g, int b)"
+Returns a gray value 0..255 from the \fI(r,g,b)\fR triplet.
+.PP
+The gray value is calculated using the formula: \fC(r*11 + g*16 + b*5)/32\fR
+.SH "QRgb qRgba (int r, int g, int b, int a)"
+Returns the RGBA quadruplet \fI(r,g,b,a).\fR
+.PP
+The return type \fIQRgb\fR is equivalent to \fCunsigned int.\fR
+.PP
+See also qRgb(), qRed(), qGreen() and qBlue().
+.SH "int qGray (qRgb rgb)"
+This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts.
+.SH "QDataStream & operator<< (QDataStream & s, const QColor & c)"
+Writes a color object to the stream.
+.PP
+See also Format of the QDataStream operators
 .SH "int qBlue (QRgb rgb)"
 Returns the blue component of the RGB triplet \fIrgb.\fR
 .PP
@@ -505,46 +545,6 @@ Examples:
 .(l
 desktop/desktop.cpp
 .)l
-.SH "QRgb qRgba (int r, int g, int b, int a)"
-Returns the RGBA quadruplet \fI(r,g,b,a).\fR
-.PP
-The return type \fIQRgb\fR is equivalent to \fCunsigned int.\fR
-.PP
-See also qRgb(), qRed(), qGreen() and qBlue().
-.SH "QDataStream & operator<< (QDataStream & s, const QColor & c)"
-Writes a color object to the stream.
-.PP
-See also Format of the QDataStream operators
-.SH "QDataStream & operator>> (QDataStream & s, QColor & c)"
-Reads a color object from the stream.
-.PP
-See also Format of the QDataStream operators
-.SH "int qGreen (QRgb rgb)"
-Returns the green component of the RGB triplet \fIrgb.\fR
-.PP
-See also qRgb() and QColor::green().
-.PP
-Examples:
-.(l
-qmag/qmag.cpp
-.)l
-.SH "int qAlpha (QRgb rgba)"
-Returns the alpha component of the RGBA quadruplet \fIrgb.\fR
-.SH "int qGray (int r, int g, int b)"
-Returns a gray value 0..255 from the \fI(r,g,b)\fR triplet.
-.PP
-The gray value is calculated using the formula: \fC(r*11 + g*16 + b*5)/32\fR
-.SH "int qRed (QRgb rgb)"
-Returns the red component of the RGB triplet \fIrgb.\fR
-.PP
-See also qRgb() and QColor::red().
-.PP
-Examples:
-.(l
-qmag/qmag.cpp
-.)l
-.SH "int qGray (qRgb rgb)"
-This is an overloaded member function, provided for convenience.  It differs from the above function only in what argument(s) it accepts.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qcolor.html
 .BR http://www.trolltech.com/faq/tech.html
@@ -563,4 +563,4 @@ In case of content or formattting problems with this manual page, please
 report them to
 .BR qt-bugs@trolltech.com .
 Please include the name of the manual page (qcolor.3qt) and the Qt
-version (2.3.1).
+version (2.3.2).

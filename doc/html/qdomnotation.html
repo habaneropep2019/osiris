@@ -32,14 +32,14 @@ Inherits <a href="qdomnode.html">QDomNode</a>.
 <p><a href="qdomnotation-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><div class="fn"><a href="#d616c2"><b>QDomNotation</b></a> () </div>
-<li><div class="fn"><a href="#f676b7"><b>QDomNotation</b></a> ( const QDomNotation &amp; x ) </div>
-<li><div class="fn">QDomNotation&amp; <a href="#386e5d"><b>operator=</b></a> ( const QDomNotation &amp; ) </div>
-<li><div class="fn"><a href="#1e878b"><b>~QDomNotation</b></a> () </div>
-<li><div class="fn">QString <a href="#16608c"><b>publicId</b></a> () const</div>
-<li><div class="fn">QString <a href="#d99c88"><b>systemId</b></a> () const</div>
-<li><div class="fn">virtual QDomNode::NodeType <a href="#1c6510"><b>nodeType</b></a> () const</div>
-<li><div class="fn">virtual bool <a href="#a470af"><b>isNotation</b></a> () const</div>
+<li><div class="fn"><a href="#95303c"><b>QDomNotation</b></a> () </div>
+<li><div class="fn"><a href="#324fb9"><b>QDomNotation</b></a> ( const QDomNotation &amp; x ) </div>
+<li><div class="fn">QDomNotation&amp; <a href="#e495cf"><b>operator=</b></a> ( const QDomNotation &amp; ) </div>
+<li><div class="fn"><a href="#da38ee"><b>~QDomNotation</b></a> () </div>
+<li><div class="fn">QString <a href="#dbbccf"><b>publicId</b></a> () const</div>
+<li><div class="fn">QString <a href="#6b9d1d"><b>systemId</b></a> () const</div>
+<li><div class="fn">virtual QDomNode::NodeType <a href="#5371d4"><b>nodeType</b></a> () const</div>
+<li><div class="fn">virtual bool <a href="#2b0e52"><b>isNotation</b></a> () const</div>
 </ul>
 <hr><h2><a name="details"></a>Detailed Description</h2>
 The QDomNotation class represents an XML notation.
@@ -56,39 +56,39 @@ For a more general introduction of the DOM implementation see the
 <a href="qdomdocument.html">QDomDocument</a> documentation.
 
 <hr><h2>Member Function Documentation</h2>
-<h3 class="fn"><a name="d616c2"></a>QDomNotation::QDomNotation ()</h3>
+<h3 class="fn"><a name="95303c"></a>QDomNotation::QDomNotation ()</h3>
 <p>Constructor.
-<h3 class="fn"><a name="f676b7"></a>QDomNotation::QDomNotation ( const QDomNotation &amp; x )</h3>
+<h3 class="fn"><a name="324fb9"></a>QDomNotation::QDomNotation ( const QDomNotation &amp; x )</h3>
 <p>Copy constructor.
 <p>The data of the copy is shared: modifying one will also change the other. If
-you want to make a real copy, use <a href="qdomnode.html#7b27fa">cloneNode</a>() instead.
-<h3 class="fn"><a name="1e878b"></a>QDomNotation::~QDomNotation ()</h3>
+you want to make a real copy, use <a href="qdomnode.html#8f17f1">cloneNode</a>() instead.
+<h3 class="fn"><a name="da38ee"></a>QDomNotation::~QDomNotation ()</h3>
 <p>Destructor.
-<h3 class="fn">bool <a name="a470af"></a>QDomNotation::isNotation () const <code>[virtual]</code></h3>
+<h3 class="fn">bool <a name="2b0e52"></a>QDomNotation::isNotation () const <code>[virtual]</code></h3>
 <p>Returns TRUE.
-<p>Reimplemented from <a href="qdomnode.html#1ab3da">QDomNode.</a>
-<h3 class="fn">QDomNode::NodeType <a name="1c6510"></a>QDomNotation::nodeType() const <code>[virtual]</code></h3>
+<p>Reimplemented from <a href="qdomnode.html#183b0e">QDomNode.</a>
+<h3 class="fn">QDomNode::NodeType <a name="5371d4"></a>QDomNotation::nodeType() const <code>[virtual]</code></h3>
 <p>Returns <code>NotationNode.</code>
-<p>Reimplemented from <a href="qdomnode.html#4aab85">QDomNode.</a>
-<h3 class="fn">QDomNotation&amp; <a name="386e5d"></a>QDomNotation::operator= ( const QDomNotation &amp; x )</h3>
+<p>Reimplemented from <a href="qdomnode.html#46495e">QDomNode.</a>
+<h3 class="fn">QDomNotation&amp; <a name="e495cf"></a>QDomNotation::operator= ( const QDomNotation &amp; x )</h3>
 <p>Assignment operator.
 <p>The data of the copy is shared: modifying one will also change the other. If
-you want to make a real copy, use <a href="qdomnode.html#7b27fa">cloneNode</a>() instead.
-<h3 class="fn"><a href="qstring.html">QString</a> <a name="16608c"></a>QDomNotation::publicId () const</h3>
+you want to make a real copy, use <a href="qdomnode.html#8f17f1">cloneNode</a>() instead.
+<h3 class="fn"><a href="qstring.html">QString</a> <a name="dbbccf"></a>QDomNotation::publicId () const</h3>
 <p>Returns the public identifier of this notation.
-<h3 class="fn"><a href="qstring.html">QString</a> <a name="d99c88"></a>QDomNotation::systemId () const</h3>
+<h3 class="fn"><a href="qstring.html">QString</a> <a name="6b9d1d"></a>QDomNotation::systemId () const</h3>
 <p>Returns the system identifier of this notation.
 <hr><p>
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.3.1"><nobr>
+<input type=hidden name="version" value="2.3.2"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
-copyright &copy; 1995-2000
+copyright &copy; 1995-2001
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.1</div>
+<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

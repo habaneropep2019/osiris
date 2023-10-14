@@ -1,5 +1,5 @@
 /**********************************************************************
-** $Id: qt/src/kernel/qpsprinter.cpp   2.3.1   edited 2001-06-12 $
+** $Id: qt/src/kernel/qpsprinter.cpp   2.3.2   edited 2001-10-17 $
 **
 ** Implementation of QPSPrinter class
 **
@@ -90,6 +90,7 @@
 #include <io.h>
 #else
 #include <unistd.h>
+#include <stdlib.h>
 #endif
 
 #ifdef _WS_X11_
@@ -1891,6 +1892,39 @@ static const struct {
 #endif
 };
 
+// duplicate entries in the glyph list. Do not download these, to avoid
+// doubly defined gl;yphs
+static const unsigned short duplicateEntries[] = {
+    0x00A0,
+	0x0394,
+	0x03a9,
+	0xf6c1,
+	0x021a,
+	0x2215,
+	0x00ad,
+	0x02c9,
+	0x03bc,
+	0x2219,
+	0xf6c2,
+	0x00a0,
+	0x021b,
+	0x0
+	};
+
+static inline bool duplicate( unsigned short unicode )
+{
+    const unsigned short *g = duplicateEntries;
+    bool duplicate = FALSE;
+    while( *g ) {
+	if ( *g == unicode ) {
+	    duplicate = TRUE;
+	    break;
+	}
+	g++;
+    }
+    return duplicate;
+}
+
 // ---------------------------------------------------------------------
 // postscript font substitution dictionary. We assume every postscript printer has at least
 // Helvetica, Times, Courier and Symbol
@@ -2610,7 +2644,14 @@ typedef struct {
   Q_UINT16 fraction;
 } Fixed; // 16.16 bit fixed-point number
 
-static ULONG getULONG(BYTE *p)
+static float f2dot14( ushort s )
+{
+    float f = ((float)( s & 0x3fff ))/ 16384.;
+    f += (s & 0x8000) ? ( (s & 0x4000) ? -1 : -2 ) : ( (s & 0x4000) ? 1 : 0 );
+    return f;
+}
+
+static ULONG getULONG(const BYTE *p)
 {
   int x;
   ULONG val=0;
@@ -2623,7 +2664,7 @@ static ULONG getULONG(BYTE *p)
   return val;
 }
 
-static USHORT getUSHORT(BYTE *p)
+static USHORT getUSHORT(const BYTE *p)
 {
   int x;
   USHORT val=0;
@@ -2636,7 +2677,7 @@ static USHORT getUSHORT(BYTE *p)
   return val;
 }
 
-static Fixed getFixed(BYTE *s)
+static Fixed getFixed(const BYTE *s)
 {
   Fixed val={0,0};
 
@@ -2646,10 +2687,11 @@ static Fixed getFixed(BYTE *s)
   return val;
 }
 
-static FWord getFWord(BYTE* s)  { return (FWord)  getUSHORT(s); }
-static uFWord getuFWord(BYTE* s) { return (uFWord) getUSHORT(s); }
-static SHORT getSHORT(BYTE* s)  { return (SHORT)  getUSHORT(s); }
+static FWord getFWord(const BYTE* s)  { return (FWord)  getUSHORT(s); }
+static uFWord getuFWord(const BYTE* s) { return (uFWord) getUSHORT(s); }
+static SHORT getSHORT(const BYTE* s)  { return (SHORT)  getUSHORT(s); }
 
+#if 0
 static const char * const Apple_CharStrings[]={
   ".notdef",".null","nonmarkingreturn","space","exclam","quotedbl","numbersign",
   "dollar","percent","ampersand","quotesingle","parenleft","parenright",
@@ -2688,6 +2730,7 @@ static const char * const Apple_CharStrings[]={
   "markingdeletertol","option","escape","parbreakltor","parbreakrtol",
   "newpage","checkmark","linebreakltor","linebreakrtol","markingnobreakspace",
   "diamond","appleoutline"};
+#endif
 
 typedef struct {
   int*    epts_ctr;                     /* array of contour endpoints */
@@ -2770,10 +2813,6 @@ private:
 
 };
 
-
-#ifndef _OS_OSF_
-extern "C" char* getenv(char*);
-#endif
 
 QPSPrinterFontTTF::QPSPrinterFontTTF(const QFont &f, QByteArray& d)
 {
@@ -3239,11 +3278,11 @@ BYTE* QPSPrinterFontTTF::getTable(const char* name)
   x=0;
   while (x != numTables) {
     if( strncmp((const char *)ptr,name,4) == 0 ) {
-      ULONG offset,length;
+      ULONG offset /*,length*/;
       BYTE *table;
 
       offset = getULONG( ptr + 8 );
-      length = getULONG( ptr + 12 );
+      //      length = getULONG( ptr + 12 );
 
       table = offset_table + offset;
       return table;
@@ -3261,7 +3300,7 @@ QString QPSPrinterFontTTF::glyphName( int glyphindex )
     QString glyphname;
     int l = 0;
     unsigned short unicode = unicode_for_glyph( glyphindex );
-    if ( unicode == 0xffff ) // workaround
+    if ( unicode == 0xffff || duplicate( unicode ) ) // workaround
         glyphname.sprintf("G%04x", glyphindex );
     else {
     while( unicodetoglyph[l].u < unicode )
@@ -4127,92 +4166,103 @@ void QPSPrinterFontTTF::charprocComposite(BYTE *glyph, QTextStream& s)
   USHORT glyphIndex;
   int arg1;
   int arg2;
-  USHORT xscale;
-  USHORT yscale;
-  USHORT scale01;
-  USHORT scale10;
+  float xscale = 1;
+  float yscale = 1;
+#if 0
+  float scale01 = 0;
+  float scale10 = 0;
+#endif
 
   /* Once around this loop for each component. */
   do {
-    flags = getUSHORT(glyph);   /* read the flags word */
-    glyph += 2;
+      flags = getUSHORT(glyph);   /* read the flags word */
+      glyph += 2;
 
-    glyphIndex = getUSHORT(glyph);      /* read the glyphindex word */
-    glyph += 2;
+      glyphIndex = getUSHORT(glyph);      /* read the glyphindex word */
+      glyph += 2;
 
-    if(flags & ARG_1_AND_2_ARE_WORDS) {
+      if(flags & ARG_1_AND_2_ARE_WORDS) {
                                 /* The tt spec. seems to say these are signed. */
-      arg1 = getSHORT(glyph);
-      glyph += 2;
-      arg2 = getSHORT(glyph);
-      glyph += 2;
-    } else {                    /* The tt spec. does not clearly indicate */
+	  arg1 = getSHORT(glyph);
+	  glyph += 2;
+	  arg2 = getSHORT(glyph);
+	  glyph += 2;
+      } else {                    /* The tt spec. does not clearly indicate */
                                 /* whether these values are signed or not. */
-      arg1 = *(glyph++);
-      arg2 = *(glyph++);
-    }
+	  arg1 = (char)*(glyph++);
+	  arg2 = (char)*(glyph++);
+      }
 
-    if(flags & WE_HAVE_A_SCALE) {
-      xscale = yscale = getUSHORT(glyph);
-      glyph += 2;
-      scale01 = scale10 = 0;
-    } else if(flags & WE_HAVE_AN_X_AND_Y_SCALE) {
-      xscale = getUSHORT(glyph);
-      glyph += 2;
-      yscale = getUSHORT(glyph);
-      glyph += 2;
-      scale01 = scale10 = 0;
-    } else if(flags & WE_HAVE_A_TWO_BY_TWO) {
-      xscale = getUSHORT(glyph);
-      glyph += 2;
-      scale01 = getUSHORT(glyph);
-      glyph += 2;
-      scale10 = getUSHORT(glyph);
-      glyph += 2;
-      yscale = getUSHORT(glyph);
-      glyph += 2;
-    } else {
-      xscale = yscale = scale01 = scale10 = 0;
-    }
+      if(flags & WE_HAVE_A_SCALE) {
+	  xscale = yscale = f2dot14( getUSHORT(glyph) );
+	  glyph += 2;
+      } else if(flags & WE_HAVE_AN_X_AND_Y_SCALE) {
+	  xscale = f2dot14( getUSHORT(glyph) );
+	  glyph += 2;
+	  yscale = f2dot14( getUSHORT(glyph) );
+	  glyph += 2;
+      } else if(flags & WE_HAVE_A_TWO_BY_TWO) {
+	  xscale = f2dot14( getUSHORT(glyph) );
+	  glyph += 2;
+#if 0
+	  scale01 = f2dot14( getUSHORT(glyph) );
+#endif
+	  glyph += 2;
+#if 0
+	  scale10 = f2dot14( getUSHORT(glyph) );
+#endif
+	  glyph += 2;
+	  yscale = f2dot14( getUSHORT(glyph) );
+	  glyph += 2;
+      }
 
-    /* Debugging */
+      /* Debugging */
 #ifdef DEBUG_TRUETYPE
-    fprintf(stderr,"% flags=%d, arg1=%d, arg2=%d, xscale=%d, yscale=%d, scale01=%d, scale10=%d\n",
-            (int)flags,arg1,arg2,(int)xscale,(int)yscale,(int)scale01,(int)scale10);
+      s << "% flags=" << flags << ", arg1=" << arg1 << ", arg2=" << arg2 << ", xscale=" << xscale << ", yscale=" << yscale <<
+	  ", scale01=" << scale01 << ", scale10=" << scale10 << endl;
 #endif
 
-    /* If we have an (X,Y) shif and it is non-zero, */
-    /* translate the coordinate system. */
-    if( flags & ARGS_ARE_XY_VALUES ) {
-      if( arg1 != 0 || arg2 != 0 ) {
-        s <<"gsave ";
-        s << topost(arg1);
-        s << " ";
-        s << topost(arg2);
-        s << " translate\n";
 
-        //fprintf(stderr,"gsave %d %d translate\n", topost(arg1), topost(arg2) );
+      if ( (flags & ARGS_ARE_XY_VALUES) != ARGS_ARE_XY_VALUES ) {
+	  s << "% unimplemented shift, arg1=" << arg1;
+	  s << ", arg2=" << arg2 << "\n";
+	  arg1 = arg2 = 0;
       }
-    } else {
-      s << "% unimplemented shift, arg1=";
-      s << arg1;
-      s << ", arg2=";
-      s << arg2;
-      s << "\n";
-    }
 
-    /* Invoke the CharStrings procedure to print the component. */
-    s << "false CharStrings /";
-    s << glyphName(glyphIndex);
-    s << " get exec\n";
+      /* If we have an (X,Y) shif and it is non-zero, */
+      /* translate the coordinate system. */
+      if ( flags & (WE_HAVE_A_TWO_BY_TWO|WE_HAVE_AN_X_AND_Y_SCALE) ) {
+#if 0
+	  // code similar to this would be needed for two_by_tow
+	  s << "gsave [ " << xscale << " " << scale01 << " " << scale10 << " "
+	    << yscale << " " << topost(arg1) << " " << topost(arg2) << "] SM\n";
+#endif
+	  if ( flags & WE_HAVE_A_TWO_BY_TWO )
+	      s << "% Two by two transformation, unimplemented\n";
+	  s <<"gsave " << topost(arg1);
+	  s << " " << topost(arg2);
+	  s << " translate\n";
+	  s << xscale << " " << yscale << " scale\n";
+      } else if ( flags & ARGS_ARE_XY_VALUES && ( arg1 != 0 || arg2 != 0 ) ) {
+	  s <<"gsave " << topost(arg1);
+	  s << " " << topost(arg2);
+	  s << " translate\n";
+      }
 
-    //  printf("false CharStrings /%s get exec\n",
-    //ttfont_CharStrings_getname(font,glyphIndex));
+      /* Invoke the CharStrings procedure to print the component. */
+      s << "false CharStrings /";
+      s << glyphName(glyphIndex);
+      s << " get exec\n";
 
-    /* If we translated the coordinate system, */
-    /* put it back the way it was. */
-    if( flags & ARGS_ARE_XY_VALUES && (arg1 != 0 || arg2 != 0) )
-      s <<"grestore ";
+      //  printf("false CharStrings /%s get exec\n",
+      //ttfont_CharStrings_getname(font,glyphIndex));
+
+      /* If we translated the coordinate system, */
+      /* put it back the way it was. */
+      if( (flags & ARGS_ARE_XY_VALUES && (arg1 != 0 || arg2 != 0) ) ||
+	  ( flags & (WE_HAVE_A_TWO_BY_TWO|WE_HAVE_AN_X_AND_Y_SCALE) ) ) {
+	  s <<"grestore ";
+      }
   } while(flags & MORE_COMPONENTS);
 }
 
@@ -4384,7 +4434,7 @@ QPSPrinterFontPFB::QPSPrinterFontPFB(const QFont &f, QByteArray& d)
 
   int pos = 0;
   int len;
-  int typ;
+  //  int typ;
   unsigned char* p = (unsigned char*) data.data();
   QString fontname;
 
@@ -4393,7 +4443,7 @@ QPSPrinterFontPFB::QPSPrinterFontPFB(const QFont &f, QByteArray& d)
     return;
   }
   pos++;
-  typ = p[ pos ]; // 1=ascii 2=binary 3=done
+  //  typ = p[ pos ]; // 1=ascii 2=binary 3=done
   pos++;
   len = p[ pos ];           pos++;
   len |= (p[ pos ] << 8) ; pos++;
@@ -4593,6 +4643,8 @@ private:
     const QJpUnicodeConv *convJP;
 };
 
+#ifndef QT_NO_UNICODETABLES
+
 QPSPrinterFontJapanese::QPSPrinterFontJapanese(const QFont& f)
 {
     psname = makePSFontName( f );
@@ -4600,18 +4652,18 @@ QPSPrinterFontJapanese::QPSPrinterFontJapanese(const QFont& f)
     // as we don't support font substitution at the moment, we just use the
     // two fonts that should be available on any system: Ryumin-Light and GothicBBB-Medium
 
-    if ( psname.contains( "Helvetica" ) || psname.contains( "Bold" ) )
-        if ( psname.contains("Italic") || psname.contains("Oblique") ) {
-            psname = "GothicBBB-Oblique";
-        } else {
-            psname = "GothicBBB";
-        }
+    if ( psname.contains( "gothic", FALSE ) )
+	psname = "GothicBBB";
+    else if ( psname.contains( "mincho", FALSE )
+	      || psname.contains ( "kyokashotai", FALSE )
+	      || psname.contains ( "gyoshotai", FALSE ) )
+	psname = "Ryumin";
+    else if ( psname.contains( "Helvetica" ) || psname.contains( "Bold" ) )
+	psname = "GothicBBB";
     else
-        if ( psname.contains("Italic") || psname.contains("Oblique") ) {
-            psname = "Ryumin-Oblique";
-        } else {
-            psname = "Ryumin";
-        }
+	psname = "Ryumin";
+    if ( psname.contains("Italic") || psname.contains("Oblique") )
+	psname.append("-Oblique");
     convJP = 0;
     replacementList = makePSFontNameList( f );
 }
@@ -4679,7 +4731,7 @@ void QPSPrinterFontJapanese::drawText( QTextStream &stream, uint spaces, const Q
                 oneChar += ch.cell();
             } else {
                 code = 1;
-                QChar ch = convJP->UnicodeToJisx0208( ch.unicode());
+                ch = convJP->UnicodeToJisx0208( ch.unicode() );
                 if ( ch.isNull() ) {
                     oneChar += 0x22;
                     oneChar += 0x22; // open box
@@ -4713,6 +4765,8 @@ void QPSPrinterFontJapanese::drawText( QTextStream &stream, uint spaces, const Q
         }
     }
 }
+
+#endif
 
 // ----------- Korean --------------
 
@@ -4775,13 +4829,83 @@ QString QPSPrinterFontKorean::defineFont( QTextStream &stream, QString ps, const
 
 // ----------- traditional chinese ------------
 
-static const psfont MSung [] = {
-    { "MSung-Light-B5-H", 0, 100. },
-    { "MSung-Light-B5-H", 0.2, 100. },
-    { "MSung-Light-B5-H", 0, 100. },
-    { "MSung-Light-B5-H", 0.2, 100. },
+// Arphic Public License Big5 TrueType fonts (on Debian and CLE and others)
+static const psfont ShanHeiSun [] = {
+    { "ShanHeiSun-Light-ETen-B5-H", 0, 100. },
+    { "ShanHeiSun-Light-Italic-ETen-B5-H", 0.2, 100. },
+    { "ShanHeiSun-Light-Bold-ETen-B5-H", 0, 100. },
+    { "ShanHeiSun-Light-BoldItalic-ETen-B5-H", 0.2, 100. },
+};
+static const psfont ZenKai [] = {
+    { "ZenKai-Medium-ETen-B5-H", 0, 100. },
+    { "ZenKai-Medium-Italic-ETen-B5-H", 0.2, 100. },
+    { "ZenKai-Medium-Bold-ETen-B5-H", 0, 100. },
+    { "ZenKai-Medium-BoldItalic-ETen-B5-H", 0.2, 100. },
 };
 
+// Fonts on Turbolinux
+static const psfont SongB5 [] = {
+    { "B5-MSung-Light-ETen-B5-H", 0, 100. },
+    { "B5-MSung-Italic-ETen-B5-H", 0, 100. },
+    { "B5-MSung-Bold-ETen-B5-H", 0, 100. },
+    { "B5-MSung-BoldItalic-ETen-B5-H", 0, 100. },
+};
+static const psfont KaiB5 [] = {
+    { "B5-MKai-Medium-ETen-B5-H", 0, 100. },
+    { "B5-MKai-Italic-ETen-B5-H", 0, 100. },
+    { "B5-MKai-Bold-ETen-B5-H", 0, 100. },
+    { "B5-MKai-BoldItalic-ETen-B5-H", 0, 100. },
+};
+static const psfont HeiB5 [] = {
+    { "B5-MHei-Medium-ETen-B5-H", 0, 100. },
+    { "B5-MHei-Italic-ETen-B5-H", 0, 100. },
+    { "B5-MHei-Bold-ETen-B5-H", 0, 100. },
+    { "B5-MHei-BoldItalic-ETen-B5-H", 0, 100. },
+};
+static const psfont FangSongB5 [] = {
+    { "B5-CFangSong-Light-ETen-B5-H", 0, 100. },
+    { "B5-CFangSong-Italic-ETen-B5-H", 0, 100. },
+    { "B5-CFangSong-Bold-ETen-B5-H", 0, 100. },
+    { "B5-CFangSong-BoldItalic-ETen-B5-H", 0, 100. },
+};
+
+// Arphic fonts on Thiz Linux
+static const psfont LinGothic [] = {
+    { "LinGothic-Light-ETen-B5-H", 0, 100. },
+    { "LinGothic-Light-Italic-ETen-B5-H", 0.2, 100. },
+    { "LinGothic-Light-Bold-ETen-B5-H", 0, 100. },
+    { "LinGothic-Light-BoldItalic-ETen-B5-H", 0.2, 100. },
+};
+static const psfont YenRound [] = {
+    { "YenRound-Light-ETen-B5-H", 0, 100. },
+    { "YenRound-Light-Italic-ETen-B5-H", 0.2, 100. },
+    { "YenRound-Light-Bold-ETen-B5-H", 0, 100. },
+    { "YenRound-Light-BoldItalic-ETen-B5-H", 0.2, 100. },
+};
+
+// Dr. Wang Hann-Tzong's GPL'ed Big5 TrueType fonts
+static const psfont HtWFangSong [] = {
+    { "HtW-FSong-Light-ETen-B5-H", 0, 100. },
+    { "HtW-FSong-Light-Italic-ETen-B5-H", 0.2, 100. },
+    { "HtW-FSong-Light-Bold-ETen-B5-H", 0, 100. },
+    { "HtW-FSong-Light-BoldItalic-ETen-B5-H", 0.2, 100. },
+};
+
+static const psfont MingB5 [] = {
+    { "Ming-Light-ETen-B5-H", 0, 100. },
+    { "Ming-Light-Italic-ETen-B5-H", 0.2, 100. },
+    { "Ming-Light-Bold-ETen-B5-H", 0, 100. },
+    { "Ming-Light-BoldItalic-ETen-B5-H", 0.2, 100. },
+};
+
+// Microsoft's Ming/Sung font?
+static const psfont MSung [] = {
+    { "MSung-Light-ETenms-B5-H", 0, 100. },
+    { "MSung-Light-ETenms-B5-H", 0.2, 100. },
+    { "MSung-Light-ETenms-B5-H", 0, 100. },
+    { "MSung-Light-ETenms-B5-H", 0.2, 100. },
+};
+// "Standard Sung/Ming" font by Taiwan Ministry of Education
 static const psfont MOESung [] = {
     { "MOESung-Regular-B5-H", 0, 100. },
     { "MOESung-Regular-B5-H", 0.2, 100. },
@@ -4789,9 +4913,29 @@ static const psfont MOESung [] = {
     { "MOESung-Regular-B5-H", 0.2, 100. },
 };
 
-static const psfont * const MSungReplacements[] = {
-    MSung, MOESung, Helvetica, 0
-        };
+static const psfont * const TraditionalReplacements[] = {
+    SongB5, ShanHeiSun, MingB5, MSung, FangSongB5, KaiB5, ZenKai, HeiB5,
+    LinGothic, YenRound, MOESung, Helvetica, 0
+	};
+
+#if 0
+static const psfont * const SongB5Replacements[] = {
+    SongB5, ShanHeiSun, MingB5, MSung, MOESung, Helvetica, 0
+	};
+#endif
+
+static const psfont * const FangSongB5Replacements[] = {
+    FangSongB5, HtWFangSong, Courier, 0
+	};
+static const psfont * const KaiB5Replacements[] = {
+    KaiB5, ZenKai, Times, 0
+	};
+static const psfont * const HeiB5Replacements[] = {
+    HeiB5, LinGothic, YenRound, LucidaSans, 0
+	};
+static const psfont * const YuanB5Replacements[] = {
+    YenRound, LinGothic, HeiB5, LucidaSans, 0
+	};
 
 class QPSPrinterFontTraditionalChinese
   : public QPSPrinterFontAsian {
@@ -4804,8 +4948,23 @@ public:
 QPSPrinterFontTraditionalChinese::QPSPrinterFontTraditionalChinese(const QFont& f)
 {
     int type = getPsFontType( f );
-    psname = MSung[type].psname;
-    appendReplacements( replacementList, MSungReplacements, type );
+    QString family = f.family();
+    if( family.contains("kai",FALSE) ) {
+	psname = KaiB5[type].psname;
+	appendReplacements( replacementList, KaiB5Replacements, type );
+    } else if( family.contains("fangsong",FALSE) || family.contains("fsong",FALSE) ) {
+	psname = FangSongB5[type].psname;
+	appendReplacements( replacementList, FangSongB5Replacements, type );
+    } else if( family.contains("hei",FALSE) ) {
+	psname = HeiB5[type].psname;
+	appendReplacements( replacementList, HeiB5Replacements, type );
+    } else if( family.contains("yuan",FALSE) || family.contains("yen",FALSE) ) {
+	psname = YenRound[type].psname;
+	appendReplacements( replacementList, YuanB5Replacements, type );
+    } else {
+	psname = SongB5[type].psname;
+	appendReplacements( replacementList, TraditionalReplacements, type );
+    }
 }
 
 
@@ -4817,7 +4976,41 @@ QString QPSPrinterFontTraditionalChinese::defineFont( QTextStream &stream, QStri
 
 // ----------- simplified chinese ------------
 
+#if 0
+// GB18030 fonts on XteamLinux (?)
+static const psfont SimplifiedGBK2K [] = {
+    { "MSung-Light-GBK2K-H", 0, 100. },
+    { "MSung-Light-GBK2K-H", 0.2, 100. },
+    { "MKai-Medium-GBK2K-H", 0, 100. },
+    { "MKai-Medium-GBK2K-H", 0.2, 100. },
+};
+#endif
 
+// GB18030 fonts on Turbolinux
+static const psfont SongGBK2K [] = {
+    { "MSung-Light-GBK2K-H", 0, 100. },
+    { "MSung-Italic-GBK2K-H", 0, 100. },
+    { "MSung-Bold-GBK2K-H", 0, 100. },
+    { "MSung-BoldItalic-GBK2K-H", 0, 100. },
+};
+static const psfont KaiGBK2K [] = {
+    { "MKai-Medium-GBK2K-H", 0, 100. },
+    { "MKai-Italic-GBK2K-H", 0, 100. },
+    { "MKai-Bold-GBK2K-H", 0, 100. },
+    { "MKai-BoldItalic-GBK2K-H", 0, 100. },
+};
+static const psfont HeiGBK2K [] = {
+    { "MHei-Medium-GBK2K-H", 0, 100. },
+    { "MHei-Italic-GBK2K-H", 0, 100. },
+    { "MHei-Bold-GBK2K-H", 0, 100. },
+    { "MHei-BoldItalic-GBK2K-H", 0, 100. },
+};
+static const psfont FangSongGBK2K [] = {
+    { "CFangSong-Light-GBK2K-H", 0, 100. },
+    { "CFangSong-Italic-GBK2K-H", 0, 100. },
+    { "CFangSong-Bold-GBK2K-H", 0, 100. },
+    { "CFangSong-BoldItalic-GBK2K-H", 0, 100. },
+};
 
 static const psfont Simplified [] = {
     { "MSung-Light-GBK-EUC-H", 0, 100. },
@@ -4840,9 +5033,38 @@ static const psfont FangSong [] = {
     { "CFangSong-Light-GBK-EUC-H", 0.2, 100. },
 };
 
+// Arphic Public License GB2312 TrueType fonts (on Debian and CLE and others)
+static const psfont BousungEG [] = {
+    { "BousungEG-Light-GB-GB-EUC-H", 0, 100. },
+    { "BousungEG-Light-GB-GB-EUC-H", 0.2, 100. },
+    { "BousungEG-Light-GB-Bold-GB-EUC-H", 0, 100. },
+    { "BousungEG-Light-GB-Bold-GB-EUC-H", 0.2, 100. },
+};
+static const psfont GBZenKai [] = {
+    { "GBZenKai-Medium-GB-GB-EUC-H", 0, 100. },
+    { "GBZenKai-Medium-GB-GB-EUC-H", 0.2, 100. },
+    { "GBZenKai-Medium-GB-Bold-GB-EUC-H", 0, 100. },
+    { "GBZenKai-Medium-GB-Bold-GB-EUC-H", 0.2, 100. },
+};
+
 static const psfont * const SimplifiedReplacements[] = {
-    Simplified, MSungGBK, FangSong, Helvetica, 0
-        };
+    SongGBK2K, FangSongGBK2K, KaiGBK2K, HeiGBK2K,
+    Simplified, MSungGBK, FangSong, BousungEG, GBZenKai, Helvetica, 0
+	};
+#if 0
+static const psfont * const SongGBK2KReplacements[] = {
+    SongGBK2K, MSungGBK, BousungEG, Helvetica, 0
+	};
+#endif
+static const psfont * const FangSongGBK2KReplacements[] = {
+    FangSongGBK2K, FangSong, Courier, 0
+	};
+static const psfont * const KaiGBK2KReplacements[] = {
+    KaiGBK2K, GBZenKai, Times, 0
+	};
+static const psfont * const HeiGBK2KReplacements[] = {
+    HeiGBK2K, LucidaSans, 0
+	};
 
 class QPSPrinterFontSimplifiedChinese
   : public QPSPrinterFontAsian {
@@ -4855,8 +5077,20 @@ public:
 QPSPrinterFontSimplifiedChinese::QPSPrinterFontSimplifiedChinese(const QFont& f)
 {
     int type = getPsFontType( f );
-    psname = MSungGBK[type].psname;
-    appendReplacements( replacementList, SimplifiedReplacements, type );
+    QString family = f.family();
+    if( family.contains("kai",FALSE) ) {
+	psname = KaiGBK2K[type].psname;
+	appendReplacements( replacementList, KaiGBK2KReplacements, type );
+    } else if( family.contains("fangsong",FALSE) ) {
+	psname = FangSongGBK2K[type].psname;
+	appendReplacements( replacementList, FangSongGBK2KReplacements, type );
+    } else if( family.contains("hei",FALSE) ) {
+	psname = HeiGBK2K[type].psname;
+	appendReplacements( replacementList, HeiGBK2KReplacements, type );
+    } else {
+	psname = SongGBK2K[type].psname;
+	appendReplacements( replacementList, SimplifiedReplacements, type );
+    }
 }
 
 
@@ -4928,9 +5162,12 @@ QPSPrinterFont::QPSPrinterFont(const QFont& f, QPSPrinterPrivate *priv)
             cs = QFont::charSetForLocale();
         if ( cs == QFont::Unicode )
             cs = QFont::ISO_8859_1;
+#ifndef QT_NO_UNICODETABLES
         if ( cs == QFont::Set_Ja || cs == QFont::JIS_X_0208) {
             p = new QPSPrinterFontJapanese( f );
-        } else if ( cs == QFont::Set_Ko || cs == QFont::KSC_5601) {
+        } else
+#endif
+            if ( cs == QFont::Set_Ko || cs == QFont::KSC_5601) {
             p = new QPSPrinterFontKorean( f );
         } else if ( cs == QFont::Set_Big5 || cs == QFont::Big5 || cs == QFont::Set_Zh_TW) {
             p = new QPSPrinterFontTraditionalChinese( f );
@@ -5245,9 +5482,12 @@ static QByteArray compress( const QImage & image, bool gray ) {
             uchar * s = image.scanLine( y );
             for( int x=0; x < image.width(); x++ ) {
                 pixel[i] = image.color( s[x] );
-                if ( qAlpha( pixel[i] )< 0x40 ) // 25% alpha, convert to white
-                    pixel[i] = qRgb( 0xff, 0xff, 0xff );
-                else
+#if 0
+		// commented out, as it doesn't seem to work correctly with 8bit images.
+               if ( qAlpha( pixel[i] )< 0x40 ) // 25% alpha, convert to white
+                   pixel[i] = qRgb( 0xff, 0xff, 0xff );
+               else
+#endif
                     pixel[i] &= RGB_MASK;
                 i++;
             }

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/customlayout/main.cpp   2.3.1   edited 2001-01-26 $
+** $Id: qt/examples/customlayout/main.cpp   2.3.2   edited 2001-06-12 $
 **
 ** Main for custom layout example
 **
@@ -89,6 +89,7 @@ int main( int argc, char **argv )
     s->setAlignment( Qt::AlignVCenter | Qt::AlignHCenter );
     gm->addWidget( s );
     a.setMainWidget( f );
+    f->setCaption("Qt Example - Custom Layout");
     f->show();
 
     int result = a.exec();

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/fileiconview/qfileiconview.cpp   2.3.1   edited 2001-01-26 $
+** $Id: qt/examples/fileiconview/qfileiconview.cpp   2.3.2   edited 2001-10-17 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -357,19 +357,19 @@ QPixmap *QtFileIconViewItem::pixmap() const
 	    else
 		return iconFolderLarge;
 	}
-    } break;
+    }
     case Link: {
 	    if ( vm == QtFileIconView::Small )
 		return iconLinkSmall;
 	    else
 		return iconLinkLarge;
-    } break;
+    }
     default: {
 	    if ( vm == QtFileIconView::Small )
 		return iconFileSmall;
 	    else
 		return iconFileLarge;
-    } break;
+    }
     }
 }
 
@@ -664,7 +664,7 @@ QDragObject *QtFileIconView::dragObject()
 				 item->pixmapRect( FALSE ).y() - orig.y(),
 				 item->pixmapRect().width(), item->pixmapRect().height() ),
 			  QRect( item->textRect( FALSE ).x() - orig.x(),
-				 item->textRect( FALSE ).y() - orig.y(), 	
+				 item->textRect( FALSE ).y() - orig.y(),
 				 item->textRect().width(), item->textRect().height() ),
 			  QString( item->filename() ) );
 	}

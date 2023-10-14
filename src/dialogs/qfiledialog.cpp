@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/dialogs/qfiledialog.cpp   2.3.1   edited 2001-06-11 $
+** $Id: qt/src/dialogs/qfiledialog.cpp   2.3.2   edited 2001-09-13 $
 **
 ** Implementation of QFileDialog class
 **
@@ -1791,7 +1791,7 @@ QString QFileDialogPrivate::File::text( int column ) const
 	// use a static const char here, so that egcs will not see
 	// the formatting string and give an incorrect warning.
 	if ( t2 && strftime( a, 255, egcsWorkaround, t2 ) > 0 )
-	    return QString::fromLatin1(a);
+	    return QString::fromLocal8Bit(a);
 	else
 	    return QString::fromLatin1("????");
     }
@@ -2175,12 +2175,14 @@ void QFileDialog::init()
     QFileInfo *fi;
     makeVariables();
 
-    if ( !!QDir::homeDirPath() )
-	d->paths->insertItem( *openFolderIcon, QDir::homeDirPath() );
-
     while ( (fi = it.current()) != 0 ) {
 	++it;
 	d->paths->insertItem( *openFolderIcon, fi->absFilePath() );
+    }
+
+    if ( !!QDir::homeDirPath() ) {
+	if ( !d->paths->listBox()->findItem( QDir::homeDirPath() ) )
+	    d->paths->insertItem( *openFolderIcon, QDir::homeDirPath() );
     }
 
     connect( d->paths, SIGNAL(activated(const QString&)),
@@ -2509,8 +2511,14 @@ void QFileDialog::changeMode( int id )
 
 QFileDialog::~QFileDialog()
 {
+    // since clear might call setContentsPos which would emit 
+    // a signal and thus cause a recompute of sizes...
+    files->blockSignals( TRUE );
+    d->moreFiles->blockSignals( TRUE );
     files->clear();
     d->moreFiles->clear();
+    d->moreFiles->blockSignals( FALSE );
+    files->blockSignals( FALSE );
     delete d;
     d = 0;
 }
@@ -2697,9 +2705,11 @@ void QFileDialog::setDir( const QString & pathstr )
 	while( i < (int)dr.length() && dr[i] != '/' )
 	    i++;
 	QCString user;
-	if ( i == 1 )
+	if ( i == 1 ) {
 	    user = ::getlogin();
-	else
+	    if( !user )
+		user = getenv( "LOGNAME" );
+	} else
 	    user = dr.mid( 1, i-1 ).local8Bit();
 	dr = dr.mid( i, dr.length() );
 	pw = ::getpwnam( user );
@@ -3637,8 +3647,7 @@ void QFileDialog::popupContextMenu( const QString &filename, bool,
 		m.setItemEnabled( ok, FALSE );
 	    m.setItemEnabled( rename, FALSE );
 	    m.setItemEnabled( del, FALSE );
-	} else if ( !QUrlInfo( d->url, filename ).isFile() )
-	    m.setItemEnabled( del, FALSE );
+	} 
 
 	if ( mode() == QFileDialog::ExistingFiles )
 	    m.setItemEnabled( rename, FALSE );
@@ -4457,6 +4466,9 @@ const QPixmap * QWindowsIconProvider::pixmap( const QFileInfo &fi )
 		return &pix;
 	    }
 	}
+
+	if ( filepath.isNull() ) 
+	    return &defaultFile;
 
 	res = ExtractIconExA( filepath.latin1(),
 			      lst[ 1 ].stripWhiteSpace().toInt(),

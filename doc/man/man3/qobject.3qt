@@ -1,5 +1,5 @@
 '\" t
-.TH QObject 3qt "13 June 2001" "Trolltech AS" \" -*- nroff -*-
+.TH QObject 3qt "29 October 2001" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2001 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -14,7 +14,7 @@ QObject \- The base class of all Qt objects
 .PP
 Inherits Qt.
 .PP
-Inherited by QAccel, QAction, QApplication, QAuServer, QCanvas, QClipboard, QCopChannel, QDataPump, QDns, QDnsSocket, QDragManager, QDragObject, QFileIconProvider, QGuardedPtrPrivate, QLayout, QNPInstance, QNetworkOperation, QNetworkProtocol, QSenderObject, QServerSocket, QSessionManager, QSignal, QSignalMapper, QSocket, QSocketNotifier, QSound, QStyle, QStyleSheet, QTimer, QToolTipGroup, QTranslator, QUrlOperator, QValidator, QWSClient, QWSKeyboardHandler, QWSMouseHandler, QWSServer and QWidget.
+Inherited by QAccel, QAction, QApplication, QAuServer, QCanvas, QClipboard, QCopChannel, QDataPump, QDns, QDnsSocket, QDragManager, QDragObject, QFileIconProvider, QGuardedPtrPrivate, QLayout, QNPInstance, QNetworkOperation, QNetworkProtocol, QSenderObject, QServerSocket, QSessionManager, QSignal, QSignalMapper, QSocket, QSocketNotifier, QSound, QStyle, QStyleSheet, QTimer, QToolTipGroup, QTranslator, QUrlOperator, QValidator, QWSClient, QWSServer and QWidget.
 .PP
 .SS "Public Members"
 .in +1c
@@ -303,15 +303,17 @@ Child events are sent to objects when children are inserted or removed.
 .PP
 Note that events with QEvent::type() \fCQEvent::ChildInserted\fR are \fIposted\fR (with QApplication::postEvent()), to make sure that the child's construction is completed before this function is called.
 .PP
+Note that if a child is removed immediately after it is inserted, the \fCChildInserted\fR event may be suppressed, but the \fCChildRemoved\fR event will always be sent. In this case there will be a \fCChildRemoved\fR event without a corresponding \fCChildInserted\fR event.
+.PP
 If you change state based on \fCChildInserted\fR events, call QWidget::constPolish(), or do \fCQApplication::sendPostedEvents( this, QEvent::ChildInserted );\fR in functions that depend on the state. One notable example is QWidget::sizeHint().
 .PP
 See also event() and QChildEvent.
 .PP
-Reimplemented in QWidgetStack, QGroupBox, QMainWindow, QWorkspace and QSplitter.
+Reimplemented in QWorkspace, QWidgetStack, QGroupBox, QMainWindow and QSplitter.
 .SH "const QObjectList * QObject::children () const"
 Returns a list of child objects, or 0 if this object has no children.
 .PP
-The QObjectList class is defined in the qobjcoll.h header file.
+The QObjectList class is defined in the qobjectlist.h header file.
 .PP
 The latest child added is the first object in the list and the first child added is the last object in the list.
 .PP
@@ -514,7 +516,7 @@ The event() function can be reimplemented to customize the behavior of an object
 .PP
 See also installEventFilter(), timerEvent(), QApplication::sendEvent(), QApplication::postEvent() and QWidget::event().
 .PP
-Reimplemented in QSplitter, QToolBar, QClipboard, QSocketNotifier, QStatusBar, QMainWindow, QLineEdit, QGroupBox, QTimer, QMultiLineEdit and QWidget.
+Reimplemented in QSocketNotifier, QLineEdit, QClipboard, QGroupBox, QWidget, QToolBar, QSplitter, QStatusBar, QMainWindow, QMultiLineEdit and QTimer.
 .SH "bool QObject::eventFilter ( QObject *, QEvent * ) \fC[virtual]\fR"
 Filters events if this object has been installed as an event filter for another object.
 .PP
@@ -524,7 +526,7 @@ The reimplementation of this virtual function must return TRUE if the event shou
 .PP
 See also installEventFilter().
 .PP
-Reimplemented in QScrollView, QToolBar, QMainWindow, QTabWidget, QFontDialog, QFileDialog, QSpinBox, QLayout, QSGIStyle, QAccel, QListView, QComboBox, QTable, QWorkspace, QMotifPlusStyle, QIconView, QMenuBar and QWizard.
+Reimplemented in QMotifPlusStyle, QLayout, QSpinBox, QFileDialog, QIconView, QSGIStyle, QComboBox, QWorkspace, QAccel, QWizard, QToolBar, QTabWidget, QListView, QFontDialog, QMenuBar, QTable, QScrollView and QMainWindow.
 .SH "bool QObject::highPriority () const"
 Returns TRUE if the object is a high priority object, or FALSE if it is a standard priority object.
 .PP
@@ -700,7 +702,7 @@ Normlizes the signal or slot definition \fIsignalSlot\fR by removing unnecessary
 .SH "const QObjectList * QObject::objectTrees () \fC[static]\fR"
 Returns a pointer to the list of all object trees (respectively their root objects), or 0 if there are no objects.
 .PP
-The QObjectList class is defined in the qobjcoll.h header file.
+The QObjectList class is defined in the qobjectlist.h header file.
 .PP
 The latest root object created is the first object in the list and the first root object added is the last object in the list.
 .PP
@@ -926,4 +928,4 @@ In case of content or formattting problems with this manual page, please
 report them to
 .BR qt-bugs@trolltech.com .
 Please include the name of the manual page (qobject.3qt) and the Qt
-version (2.3.1).
+version (2.3.2).

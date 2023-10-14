@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qapplication.cpp   2.3.1   edited 2001-05-25 $
+** $Id: qt/src/kernel/qapplication.cpp   2.3.2   edited 2001-10-13 $
 **
 ** Implementation of QApplication class
 **
@@ -1393,7 +1393,7 @@ QWidgetList *QApplication::topLevelWidgets()
     delete list;			// delete the list, not the widgets
   \endcode
 
-  The QWidgetList class is defined in the qwidcoll.h header file.
+  The QWidgetList class is defined in the qwidgetlist.h header file.
 
   \warning Delete the list away as soon you have finished using it.
   The widgets in the list may be deleted by someone else at any time.
@@ -1653,7 +1653,7 @@ bool QApplication::notify( QObject *receiver, QEvent *event )
 		pe->event = 0;
 		if ( l != postedEvents )
 		    l->remove();
-		return TRUE;
+		continue;
 	    }
 	    l->next();
 	}
@@ -1995,7 +1995,7 @@ void QApplication::postEvent( QObject *receiver, QEvent *event )
 	 event->type() == QEvent::Move ) {
 	(*l)->first();
 	QPostEvent * cur = 0;
-	while ( TRUE ) {
+	for (;;) {
 	    while ( (cur=(*l)->current()) != 0 &&
 		    ( cur->receiver != receiver ||
 		      cur->event == 0 ||

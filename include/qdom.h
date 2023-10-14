@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/xml/qdom.h   2.3.1   edited 2001-01-26 $
+** $Id: qt/src/xml/qdom.h   2.3.2   edited 2001-08-13 $
 **
 ** Definition of QDomDocument and related classes.
 **
@@ -596,7 +596,7 @@ private:
 };
 
 
-QTextStream& operator<<( QTextStream&, const QDomNode& );
+QM_EXPORT QTextStream& operator<<( QTextStream&, const QDomNode& );
 
 #endif //QT_NO_DOM
 #endif // QDOM_H

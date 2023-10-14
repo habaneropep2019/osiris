@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qbitmap.cpp   2.3.1   edited 2001-01-26 $
+** $Id: qt/src/kernel/qbitmap.cpp   2.3.2   edited 2001-06-22 $
 **
 ** Implementation of QBitmap class
 **
@@ -244,7 +244,7 @@ QBitmap &QBitmap::operator=( const QImage &image )
 }
 
 
-#ifndef QT_NO_TRANSFORMATIONS
+#ifndef QT_NO_PIXMAP_TRANSFORMATION
 /*!
   Returns a transformed copy of this bitmap, using \a matrix.
 
@@ -265,7 +265,7 @@ QBitmap QBitmap::xForm( const QWMatrix &matrix ) const
     bm = pm;
     return bm;
 }
-#endif // QT_NO_TRANSFORMATIONS
+#endif // QT_NO_PIXMAP_TRANSFORMATION
 
 
 

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qurlinfo.cpp   2.3.1   edited 2001-03-08 $
+** $Id: qt/src/kernel/qurlinfo.cpp   2.3.2   edited 2001-08-13 $
 **
 ** Implementation of QUrlInfo class
 **
@@ -44,6 +44,17 @@
 
 struct QUrlInfoPrivate
 {
+    QUrlInfoPrivate() :
+	permissions(0),
+	size(0),
+	isDir(FALSE),
+	isFile(TRUE),
+	isSymLink(FALSE),
+	isWritable(TRUE),
+	isReadable(TRUE),
+	isExecutable(FALSE)
+    {}
+
     QString name;
     int permissions;
     QString owner;
@@ -78,11 +89,6 @@ struct QUrlInfoPrivate
 QUrlInfo::QUrlInfo()
 {
     d = new QUrlInfoPrivate;
-    d->isDir = FALSE;
-    d->isFile = TRUE;
-    d->isReadable = TRUE;
-    d->size = 0;
-    d->isWritable = TRUE;
 }
 
 /*!

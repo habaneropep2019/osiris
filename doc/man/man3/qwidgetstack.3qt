@@ -1,5 +1,5 @@
 '\" t
-.TH QWidgetStack 3qt "13 June 2001" "Trolltech AS" \" -*- nroff -*-
+.TH QWidgetStack 3qt "29 October 2001" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2001 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -95,6 +95,8 @@ Adds \fIw\fR to this stack of widgets, with id \fIid.\fR
 .PP
 If \fIw\fR is not a child of \fCthis,\fR QWidgetStack moves it using reparent().
 .PP
+Note that the added children are initially hidden. After you have added the widgets you want to the stack, you may want to call raiseWidget() on one of them.
+.PP
 Examples:
 .(l
 xform/xform.cpp
@@ -174,4 +176,4 @@ In case of content or formattting problems with this manual page, please
 report them to
 .BR qt-bugs@trolltech.com .
 Please include the name of the manual page (qwidgetstack.3qt) and the Qt
-version (2.3.1).
+version (2.3.2).

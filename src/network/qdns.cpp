@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/network/qdns.cpp   2.3.1   edited 2001-06-11 $
+** $Id: qt/src/network/qdns.cpp   2.3.2   edited 2001-10-14 $
 **
 ** Implementation of QDns class.
 **
@@ -34,13 +34,6 @@
 ** not clear to you.
 **
 **********************************************************************/
-
-// 'u_char' and other BSD unsigned things used in <arpa> are undefined
-// on Tru64 4.0f unless...
-#if !defined(_OS_OSF_)
-// Has to appear before "qdns.h"??? Fix me!
-# define _OSF_SOURCE
-#endif
 
 #include "qdns.h"
 
@@ -260,7 +253,7 @@ QDnsAnswer::QDnsAnswer( QDnsQuery * query_ )
     newrr->nxdomain = TRUE;
     newrr->current = TRUE;
     rrs->append( newrr );
-};
+}
 
 
 QDnsAnswer::QDnsAnswer( const QByteArray& answer_,
@@ -278,7 +271,7 @@ QDnsAnswer::QDnsAnswer( const QByteArray& answer_,
     ttl = 0;
     label = QString::null;
     rr = 0;
-};
+}
 
 
 QDnsAnswer::~QDnsAnswer()
@@ -299,7 +292,7 @@ QString QDnsAnswer::readString()
     int p = pp;
     QString r = QString::null;
     Q_UINT8 b;
-    while( TRUE ) {
+    for (;;) {
 	b = 128;
 	if ( p >= 0 && p < size )
 	    b = answer[p];
@@ -684,7 +677,7 @@ void QDnsAnswer::parse()
 #if defined(DEBUG_QDNS)
 	qDebug( "DNS Manager: answer contained no answers" );
 #endif
-	ok = ( aa || rd );
+	ok = ( aa && rd );
     }
 
     // now go through the list and mark all the As that are referenced
@@ -1007,7 +1000,7 @@ void QDnsManager::answer()
 	delete q;
     else
 	queries.insert( i, q );
-};
+}
 
 
 void QDnsManager::transmitQuery( QDnsQuery * query_ )
@@ -2143,24 +2136,27 @@ static void doResInit()
 	    GNP getNetworkParams = (GNP) GetProcAddress( hinstLib, "GetNetworkParams" );
 	    if ( getNetworkParams != 0 ) {
 		ULONG l = 0;
-		getNetworkParams( 0, &l );
-		FIXED_INFO *finfo = (FIXED_INFO*)new char[l];
-		DWORD res = (getNetworkParams)( finfo, &l );
-		if ( res == ERROR_SUCCESS ) {
-		    domainName = finfo->DomainName;
-		    nameServer = "";
-		    IP_ADDR_STRING *dnsServer = &finfo->DnsServerList;
-		    while ( dnsServer != 0 ) {
-			nameServer += dnsServer->IpAddress.String;
-			dnsServer = dnsServer->Next;
-			if ( dnsServer != 0 )
-			    nameServer += " ";
+		DWORD res;
+		res = getNetworkParams( 0, &l );
+		if ( res == ERROR_BUFFER_OVERFLOW ) {
+		    FIXED_INFO *finfo = (FIXED_INFO*)new char[l];
+		    res = getNetworkParams( finfo, &l );
+		    if ( res == ERROR_SUCCESS ) {
+			domainName = finfo->DomainName;
+			nameServer = "";
+			IP_ADDR_STRING *dnsServer = &finfo->DnsServerList;
+			while ( dnsServer != 0 ) {
+			    nameServer += dnsServer->IpAddress.String;
+			    dnsServer = dnsServer->Next;
+			    if ( dnsServer != 0 )
+				nameServer += " ";
+			}
+			searchList = "";
+			separator = ' ';
+			gotNetworkParams = TRUE;
 		    }
-		    searchList = "";
-		    separator = ' ';
-		    gotNetworkParams = TRUE;
+		    delete[] finfo;
 		}
-		delete[] finfo;
 	    }
 	    FreeLibrary( hinstLib );
 	}

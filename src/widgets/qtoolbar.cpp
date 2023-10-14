@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qtoolbar.cpp   2.3.1   edited 2001-05-27 $
+** $Id: qt/src/widgets/qtoolbar.cpp   2.3.2   edited 2001-05-27 $
 **
 ** Implementation of QToolBar class
 **

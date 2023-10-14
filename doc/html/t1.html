@@ -37,11 +37,11 @@ int main( int argc, char **argv )
     <a href="qapplication.html">QApplication</a> a( argc, argv );
 
     <a href="qpushbutton.html">QPushButton</a> hello( "Hello world!", 0 );
-    hello.<a href="qpushbutton.html#5f0add">resize</a>( 100, 30 );
+    hello.<a href="qpushbutton.html#13fb8e">resize</a>( 100, 30 );
 
-    a.<a href="qapplication.html#11c921">setMainWidget</a>( &amp;hello );
-    hello.<a href="qwidget.html#ccc8f7">show</a>();
-    return a.<a href="qapplication.html#7076af">exec</a>();
+    a.<a href="qapplication.html#7ad759">setMainWidget</a>( &amp;hello );
+    hello.<a href="qwidget.html#200ee5">show</a>();
+    return a.<a href="qapplication.html#84c7bf">exec</a>();
 }
 </pre>
 <p>
@@ -63,7 +63,7 @@ mentions at the top which file needs to be included to use that class.
 QPushButton is a classical GUI push button, which the user can press
 and release.  It manages its own look and feel, like every other <a href="qwidget.html">QWidget</a>.  A widget is a user interface object which can process user
 input and draw graphics.  The programmer can change both the overall
-<a href="qapplication.html#c9e3b3">look and feel</a> and many minor
+<a href="qapplication.html#e52522">look and feel</a> and many minor
 properties of it such as color, as well as the widget's content.  A
 QPushButton can show either a text or a <a href="qpixmap.html">QPixmap</a>. <pre>
     int main( int argc, char **argv )
@@ -84,7 +84,7 @@ however, Qt needs to process these arguments (see below). <pre>
 <code>a</code> is this program's QApplication.  Here it is created and processes
 some of the command-line arguments (such as -display under X11).
 Note that all command-line arguments recognized by Qt are removed from
-<code>argv</code> (and <code>argc</code> is decremented accordingly).  See the <a href="qapplication.html#62fc60">QApplication::argv()</a> documentation for
+<code>argv</code> (and <code>argc</code> is decremented accordingly).  See the <a href="qapplication.html#c35457">QApplication::argv()</a> documentation for
 details.
 <p>
 <strong>Note:</strong> It is essential that the QApplication object is
@@ -98,25 +98,25 @@ push button is created.
 The button is set up to display the text "Hello world!" and be a
 window of its own (since the constructor specifies 0 for the parent
 window which the button should be inside). <pre>
-        hello.<a href="qpushbutton.html#5f0add">resize</a>( 100, 30 );
+        hello.<a href="qpushbutton.html#13fb8e">resize</a>( 100, 30 );
 </pre>
 <p>
 The button is set up to be 100 pixels wide and 30 pixels high (plus the
 window system frame).  In this case we don't care about the button's
 position and accept the default value. <pre>
-        a.<a href="qapplication.html#11c921">setMainWidget</a>( &amp;hello );
+        a.<a href="qapplication.html#7ad759">setMainWidget</a>( &amp;hello );
 </pre>
 <p>
 The push button is chosen as the main widget for the application.  If
 the user closes a main widget, the application exits.
 <p>
 You don't have to have a main widget, but most programs have one. <pre>
-        hello.<a href="qwidget.html#ccc8f7">show</a>();
+        hello.<a href="qwidget.html#200ee5">show</a>();
 </pre>
 <p>
 A widget is never visible when you create it.  You must call show() to
 make it visible. <pre>
-        return a.<a href="qapplication.html#7076af">exec</a>();
+        return a.<a href="qapplication.html#84c7bf">exec</a>();
 </pre>
 <p>
 This is where <code>main()</code> passes control to Qt.  exec() will return when
@@ -147,6 +147,6 @@ You may now go on to <a href="t2.html">chapter two.</a>
 
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.1</div>
+<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

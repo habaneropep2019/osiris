@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qfont.h   2.3.1   edited 2001-04-19 $
+** $Id: qt/src/kernel/qfont.h   2.3.2   edited 2001-04-19 $
 **
 ** Definition of QFont class
 **

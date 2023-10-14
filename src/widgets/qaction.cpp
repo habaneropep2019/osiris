@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qaction.cpp   2.3.1   edited 2001-05-15 $
+** $Id: qt/src/widgets/qaction.cpp   2.3.2   edited 2001-09-15 $
 **
 ** Implementation of QAction class
 **
@@ -914,6 +914,8 @@ void QActionGroup::insert( QAction* action )
 {
     if ( d->actions.containsRef( action ) )
 	return;
+
+    action->setEnabled( isEnabled() );
 
     d->actions.append( action );
     connect( action, SIGNAL( destroyed() ), this, SLOT( childDestroyed() ) );

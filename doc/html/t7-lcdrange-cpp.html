@@ -35,18 +35,18 @@ LCDRange::LCDRange( <a href="qwidget.html">QWidget</a> *parent, const char *name
     slider = new <a href="qslider.html">QSlider</a>( Horizontal, this, "slider" );
     slider-&gt;setRange( 0, 99 );
     slider-&gt;setValue( 0 );
-    <a href="qobject.html#c2d209">connect</a>( slider, SIGNAL(valueChanged(int)),
+    <a href="qobject.html#7f8e37">connect</a>( slider, SIGNAL(valueChanged(int)),
              lcd, SLOT(display(int)) );
-    <a href="qobject.html#c2d209">connect</a>( slider, SIGNAL(valueChanged(int)),
+    <a href="qobject.html#7f8e37">connect</a>( slider, SIGNAL(valueChanged(int)),
              SIGNAL(valueChanged(int)) );
 }
 
-int <a name="671"></a>LCDRange::value() const
+int <a name="669"></a>LCDRange::value() const
 {
     return slider-&gt;value();
 }
 
-void <a name="672"></a>LCDRange::setValue( int value )
+void <a name="670"></a>LCDRange::setValue( int value )
 {
     slider-&gt;setValue( value );
 }
@@ -55,6 +55,6 @@ void <a name="672"></a>LCDRange::setValue( int value )
 
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.1</div>
+<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

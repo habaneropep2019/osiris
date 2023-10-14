@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/statistics/main.cpp   2.3.1   edited 2001-01-26 $
+** $Id: qt/examples/statistics/main.cpp   2.3.2   edited 2001-06-12 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -16,6 +16,7 @@ int main( int argc, char **argv )
 
     Table t;
     a.setMainWidget( &t );
+    t.setCaption("Qt Example - Statistics");
     t.show();
     return a.exec();
 }

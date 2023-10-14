@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qcolor.cpp   2.3.1   edited 2001-03-26 $
+** $Id: qt/src/kernel/qcolor.cpp   2.3.2   edited 2001-03-26 $
 **
 ** Implementation of QColor class
 **

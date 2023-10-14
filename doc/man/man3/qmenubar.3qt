@@ -1,5 +1,5 @@
 '\" t
-.TH QMenuBar 3qt "13 June 2001" "Trolltech AS" \" -*- nroff -*-
+.TH QMenuBar 3qt "29 October 2001" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2001 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -231,11 +231,6 @@ Reimplemented from QWidget.
 .SH "void QMenuBar::hide () \fC[virtual]\fR"
 Reimplements QWidget::hide() in order to deselect any selected item and calls setUpLayout() for the mainwindow.
 .PP
-Examples:
-.(l
-grapher/grapher.cpp
-.)l
-.PP
 Reimplemented from QWidget.
 .SH "void QMenuBar::highlighted ( int id ) \fC[signal]\fR"
 This signal is emitted when a menu item is highlighted; \fIid\fR is the id of the highlighted item.
@@ -315,11 +310,6 @@ layout/layout.cpp scrollview/scrollview.cpp
 .SH "void QMenuBar::show () \fC[virtual]\fR"
 Reimplements QWidget::show() in order to set up the correct keyboard accelerators and raise itself to the top of the widget stack.
 .PP
-Examples:
-.(l
-grapher/grapher.cpp
-.)l
-.PP
 Reimplemented from QWidget.
 .SH "QSize QMenuBar::sizeHint () const \fC[virtual]\fR"
 Reimplemented for internal reasons; the API is not affected.
@@ -355,4 +345,4 @@ In case of content or formattting problems with this manual page, please
 report them to
 .BR qt-bugs@trolltech.com .
 Please include the name of the manual page (qmenubar.3qt) and the Qt
-version (2.3.1).
+version (2.3.2).

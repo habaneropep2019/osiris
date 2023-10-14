@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qobject.cpp   2.3.1   edited 2001-02-20 $
+** $Id: qt/src/kernel/qobject.cpp   2.3.2   edited 2001-09-02 $
 **
 ** Implementation of QObject class
 **
@@ -712,6 +712,11 @@ void QObject::timerEvent( QTimerEvent * )
   \e posted (with QApplication::postEvent()), to make sure that the
   child's construction is completed before this function is called.
 
+  Note that if a child is removed immediately after it is inserted, the 
+  \c ChildInserted event may be suppressed, but the \c ChildRemoved 
+  event will always be sent. In this case there will be a \c ChildRemoved
+  event without a corresponding \c ChildInserted event.
+
   If you change state based on \c ChildInserted events, call
   QWidget::constPolish(), or do
   <code>QApplication::sendPostedEvents( this, QEvent::ChildInserted );</code>
@@ -927,7 +932,7 @@ static void objSearch( QObjectList *result,
   \fn const QObjectList *QObject::children() const
   Returns a list of child objects, or 0 if this object has no children.
 
-  The QObjectList class is defined in the qobjcoll.h header file.
+  The QObjectList class is defined in the qobjectlist.h header file.
 
   The latest child added is the \link QList::first() first\endlink object
   in the list and the first child added is the \link QList::last()
@@ -947,7 +952,7 @@ static void objSearch( QObjectList *result,
   Returns a pointer to the list of all object trees (respectively
   their root objects), or 0 if there are no objects.
 
-  The QObjectList class is defined in the qobjcoll.h header file.
+  The QObjectList class is defined in the qobjectlist.h header file.
 
   The latest root object created is the \link QList::first()
   first\endlink object in the list and the first root object added is

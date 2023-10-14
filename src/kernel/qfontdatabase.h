@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qfontdatabase.h   2.3.1   edited 2001-02-06 $
+** $Id: qt/src/kernel/qfontdatabase.h   2.3.2   edited 2001-08-29 $
 **
 ** Definition of the QFontDatabase class
 **
@@ -55,6 +55,9 @@ class QtFontStyle;
 class QtFontCharSet;
 class QtFontFamily;
 class QtFontFoundry;
+#ifdef _WS_QWS_
+class QDiskFont;
+#endif
 
 class QFontDatabasePrivate;
 
@@ -119,6 +122,10 @@ public:
 
     static QString verboseCharSetName( const QString & charSetName );
     static QString charSetSample( const QString & charSetName );
+
+#ifdef _WS_QWS_
+    static void qwsAddDiskFont( QDiskFont *qdf );
+#endif
 
 private:
     static void createDatabase();

@@ -32,7 +32,7 @@ height="100" src="face.png" alt="Home" border="0">
 
   Implementation:
 <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/progress/progress.cpp   2.3.1   edited 2001-01-26 $
+** &#36;Id&#58; qt/examples/progress/progress.cpp   2.3.2   edited 2001-06-12 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -69,12 +69,12 @@ public:
     void show()
     {
         if (!isVisible()) startTimer(100);
-        <a name="show"></a><a href="qwidget.html#ccc8f7">QWidget::show</a>();
+        <a name="show"></a><a href="qwidget.html#200ee5">QWidget::show</a>();
     }
 
     void hide()
     {
-        <a name="QWidget::hide"></a><a href="qwidget.html#bc7c6a">QWidget::hide</a>();
+        <a name="QWidget::hide"></a><a href="qwidget.html#410481">QWidget::hide</a>();
         killTimers();
     }
 
@@ -87,14 +87,14 @@ protected:
     void timerEvent(<a name="QTimerEvent"></a><a href="qtimerevent.html">QTimerEvent</a>*)
     {
         <a name="QPainter"></a><a href="qpainter.html">QPainter</a> p(this);
-        <a name="QPen"></a><a href="qpen.html">QPen</a> pn=p.<a name="pen"></a><a href="qpainter.html#759128">pen</a>();
-        pn.<a name="setWidth"></a><a href="qpen.html#35d947">setWidth</a>(2);
-        pn.<a name="setColor"></a><a href="qpen.html#c951f8">setColor</a>(backgroundColor());
-        p.<a name="setPen"></a><a href="qpainter.html#0a6aff">setPen</a>(pn);
+        <a name="QPen"></a><a href="qpen.html">QPen</a> pn=p.<a name="pen"></a><a href="qpainter.html#3d26af">pen</a>();
+        pn.<a name="setWidth"></a><a href="qpen.html#6a009f">setWidth</a>(2);
+        pn.<a name="setColor"></a><a href="qpen.html#00d674">setColor</a>(backgroundColor());
+        p.<a name="setPen"></a><a href="qpainter.html#0183e4">setPen</a>(pn);
 
         step = (step + 1) % nqix;
 
-        p.<a name="drawLine"></a><a href="qpainter.html#ffde14">drawLine</a>(ox[0][step], oy[0][step], ox[1][step], oy[1][step]);
+        p.<a name="drawLine"></a><a href="qpainter.html#e3a489">drawLine</a>(ox[0][step], oy[0][step], ox[1][step], oy[1][step]);
 
         inc(x0, dx0, width());
         inc(y0, dy0, height());
@@ -106,30 +106,30 @@ protected:
         oy[1][step] = y1;
 
         <a name="QColor"></a><a href="qcolor.html">QColor</a> c;
-        c.<a name="setHsv"></a><a href="qcolor.html#ad075d">setHsv</a>( (step*255)/nqix, 255, 255 ); // rainbow effect
-        pn.<a href="qpen.html#c951f8">setColor</a>(c);
-        p.<a href="qpainter.html#0a6aff">setPen</a>(pn);
-        p.<a href="qpainter.html#ffde14">drawLine</a>(ox[0][step], oy[0][step], ox[1][step], oy[1][step]);
-        p.<a href="qpainter.html#0a6aff">setPen</a>(colorGroup().text());
-        p.<a name="drawText"></a><a href="qpainter.html#8a59ed">drawText</a>(rect(), AlignCenter, label);
+        c.<a name="setHsv"></a><a href="qcolor.html#e47175">setHsv</a>( (step*255)/nqix, 255, 255 ); // rainbow effect
+        pn.<a href="qpen.html#00d674">setColor</a>(c);
+        p.<a href="qpainter.html#0183e4">setPen</a>(pn);
+        p.<a href="qpainter.html#e3a489">drawLine</a>(ox[0][step], oy[0][step], ox[1][step], oy[1][step]);
+        p.<a href="qpainter.html#0183e4">setPen</a>(colorGroup().text());
+        p.<a name="drawText"></a><a href="qpainter.html#0f088f">drawText</a>(rect(), AlignCenter, label);
     }
 
     void paintEvent(<a name="QPaintEvent"></a><a href="qpaintevent.html">QPaintEvent</a>* event)
     {
         <a href="qpainter.html">QPainter</a> p(this);
-        <a href="qpen.html">QPen</a> pn=p.<a href="qpainter.html#759128">pen</a>();
-        pn.<a href="qpen.html#35d947">setWidth</a>(2);
-        p.<a href="qpainter.html#0a6aff">setPen</a>(pn);
-        p.<a name="setClipRect"></a><a href="qpainter.html#2ccac9">setClipRect</a>(event-&gt;<a name="rect"></a><a href="qpaintevent.html#6177d5">rect</a>());
+        <a href="qpen.html">QPen</a> pn=p.<a href="qpainter.html#3d26af">pen</a>();
+        pn.<a href="qpen.html#6a009f">setWidth</a>(2);
+        p.<a href="qpainter.html#0183e4">setPen</a>(pn);
+        p.<a name="setClipRect"></a><a href="qpainter.html#898839">setClipRect</a>(event-&gt;<a name="rect"></a><a href="qpaintevent.html#2d6e18">rect</a>());
         for (int i=0; i&lt;nqix; i++) {
             <a href="qcolor.html">QColor</a> c;
-            c.<a href="qcolor.html#ad075d">setHsv</a>( (i*255)/nqix, 255, 255 ); // rainbow effect
-            pn.<a href="qpen.html#c951f8">setColor</a>(c);
-            p.<a href="qpainter.html#0a6aff">setPen</a>(pn);
-            p.<a href="qpainter.html#ffde14">drawLine</a>(ox[0][i], oy[0][i], ox[1][i], oy[1][i]);
+            c.<a href="qcolor.html#e47175">setHsv</a>( (i*255)/nqix, 255, 255 ); // rainbow effect
+            pn.<a href="qpen.html#00d674">setColor</a>(c);
+            p.<a href="qpainter.html#0183e4">setPen</a>(pn);
+            p.<a href="qpainter.html#e3a489">drawLine</a>(ox[0][i], oy[0][i], ox[1][i], oy[1][i]);
         }
-        p.<a href="qpainter.html#0a6aff">setPen</a>(colorGroup().text());
-        p.<a href="qpainter.html#8a59ed">drawText</a>(rect(), AlignCenter, label);
+        p.<a href="qpainter.html#0183e4">setPen</a>(colorGroup().text());
+        p.<a href="qpainter.html#0f088f">drawText</a>(rect(), AlignCenter, label);
     }
 
 private:
@@ -165,7 +165,7 @@ class CPUWaster : public QWidget
     <a href="qstring.html">QString</a> drawItemText(int id)
     {
         <a href="qstring.html">QString</a> str;
-        str.<a name="sprintf"></a><a href="qstring.html#2eb9bc">sprintf</a>("%d Rectangles", drawItemRects(id));
+        str.<a name="sprintf"></a><a href="qstring.html#926f67">sprintf</a>("%d Rectangles", drawItemRects(id));
         return str;
     }
 
@@ -178,24 +178,24 @@ public:
 
         <a name="QPopupMenu"></a><a href="qpopupmenu.html">QPopupMenu</a>* file = new <a href="qpopupmenu.html">QPopupMenu</a>();
         CHECK_PTR( file );
-        menubar-&gt;<a name="insertItem"></a><a href="qmenudata.html#43c652">insertItem</a>( "&amp;File", file );
+        menubar-&gt;<a name="insertItem"></a><a href="qmenudata.html#0076cb">insertItem</a>( "&amp;File", file );
         for (int i=first_draw_item; i&lt;=last_draw_item; i++)
-            file-&gt;<a href="qmenudata.html#43c652">insertItem</a>( drawItemText(i), i );
+            file-&gt;<a href="qmenudata.html#0076cb">insertItem</a>( drawItemText(i), i );
         connect( menubar, SIGNAL(activated(int)), this, SLOT(doMenuItem(int)) );
-        file-&gt;<a name="insertSeparator"></a><a href="qmenudata.html#5f2cea">insertSeparator</a>();
-        file-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "Quit", qApp,  SLOT(quit()) );
+        file-&gt;<a name="insertSeparator"></a><a href="qmenudata.html#e34b79">insertSeparator</a>();
+        file-&gt;<a href="qmenudata.html#0076cb">insertItem</a>( "Quit", qApp,  SLOT(quit()) );
 
         options = new <a href="qpopupmenu.html">QPopupMenu</a>();
         CHECK_PTR( options );
-        menubar-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "&amp;Options", options );
-        td_id = options-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "Timer driven", this, SLOT(timerDriven()) );
-        ld_id = options-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "Loop driven", this, SLOT(loopDriven()) );
-        options-&gt;<a href="qmenudata.html#5f2cea">insertSeparator</a>();
-        dl_id = options-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "Default label", this, SLOT(defaultLabel()) );
-        cl_id = options-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "Custom label", this, SLOT(customLabel()) );
-        options-&gt;<a href="qmenudata.html#5f2cea">insertSeparator</a>();
-        md_id = options-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "No minimum duration", this, SLOT(toggleMinimumDuration()) );
-        options-&gt;<a name="setCheckable"></a><a href="qpopupmenu.html#14432f">setCheckable</a>( TRUE );
+        menubar-&gt;<a href="qmenudata.html#0076cb">insertItem</a>( "&amp;Options", options );
+        td_id = options-&gt;<a href="qmenudata.html#0076cb">insertItem</a>( "Timer driven", this, SLOT(timerDriven()) );
+        ld_id = options-&gt;<a href="qmenudata.html#0076cb">insertItem</a>( "Loop driven", this, SLOT(loopDriven()) );
+        options-&gt;<a href="qmenudata.html#e34b79">insertSeparator</a>();
+        dl_id = options-&gt;<a href="qmenudata.html#0076cb">insertItem</a>( "Default label", this, SLOT(defaultLabel()) );
+        cl_id = options-&gt;<a href="qmenudata.html#0076cb">insertItem</a>( "Custom label", this, SLOT(customLabel()) );
+        options-&gt;<a href="qmenudata.html#e34b79">insertSeparator</a>();
+        md_id = options-&gt;<a href="qmenudata.html#0076cb">insertItem</a>( "No minimum duration", this, SLOT(toggleMinimumDuration()) );
+        options-&gt;<a name="setCheckable"></a><a href="qpopupmenu.html#672d77">setCheckable</a>( TRUE );
         loopDriven();
         defaultLabel();
 
@@ -216,41 +216,41 @@ public slots:
     void timerDriven()
     {
         timer_driven = TRUE;
-        options-&gt;<a name="setItemChecked"></a><a href="qmenudata.html#4b7fd2">setItemChecked</a>( td_id, TRUE );
-        options-&gt;<a href="qmenudata.html#4b7fd2">setItemChecked</a>( ld_id, FALSE );
+        options-&gt;<a name="setItemChecked"></a><a href="qmenudata.html#319c05">setItemChecked</a>( td_id, TRUE );
+        options-&gt;<a href="qmenudata.html#319c05">setItemChecked</a>( ld_id, FALSE );
     }
 
     void loopDriven()
     {
         timer_driven = FALSE;
-        options-&gt;<a href="qmenudata.html#4b7fd2">setItemChecked</a>( ld_id, TRUE );
-        options-&gt;<a href="qmenudata.html#4b7fd2">setItemChecked</a>( td_id, FALSE );
+        options-&gt;<a href="qmenudata.html#319c05">setItemChecked</a>( ld_id, TRUE );
+        options-&gt;<a href="qmenudata.html#319c05">setItemChecked</a>( td_id, FALSE );
     }
 
     void defaultLabel()
     {
         default_label = TRUE;
-        options-&gt;<a href="qmenudata.html#4b7fd2">setItemChecked</a>( dl_id, TRUE );
-        options-&gt;<a href="qmenudata.html#4b7fd2">setItemChecked</a>( cl_id, FALSE );
+        options-&gt;<a href="qmenudata.html#319c05">setItemChecked</a>( dl_id, TRUE );
+        options-&gt;<a href="qmenudata.html#319c05">setItemChecked</a>( cl_id, FALSE );
     }
 
     void customLabel()
     {
         default_label = FALSE;
-        options-&gt;<a href="qmenudata.html#4b7fd2">setItemChecked</a>( dl_id, FALSE );
-        options-&gt;<a href="qmenudata.html#4b7fd2">setItemChecked</a>( cl_id, TRUE );
+        options-&gt;<a href="qmenudata.html#319c05">setItemChecked</a>( dl_id, FALSE );
+        options-&gt;<a href="qmenudata.html#319c05">setItemChecked</a>( cl_id, TRUE );
     }
 
     void toggleMinimumDuration()
     {
-        options-&gt;<a href="qmenudata.html#4b7fd2">setItemChecked</a>( md_id, 
-           !options-&gt;<a name="isItemChecked"></a><a href="qmenudata.html#b66a1c">isItemChecked</a>( md_id ) );
+        options-&gt;<a href="qmenudata.html#319c05">setItemChecked</a>( md_id, 
+           !options-&gt;<a name="isItemChecked"></a><a href="qmenudata.html#def7a0">isItemChecked</a>( md_id ) );
     }
 
 private:
     void timerEvent( <a href="qtimerevent.html">QTimerEvent</a>* )
     {
-        pb-&gt;<a name="setProgress"></a><a href="qprogressdialog.html#7d91b8">setProgress</a>( pb-&gt;<a name="totalSteps"></a><a href="qprogressdialog.html#15c931">totalSteps</a>() - rects );
+        pb-&gt;<a name="setProgress"></a><a href="qprogressdialog.html#037f30">setProgress</a>( pb-&gt;<a name="totalSteps"></a><a href="qprogressdialog.html#25744a">totalSteps</a>() - rects );
         rects--;
 
         {
@@ -265,14 +265,14 @@ private:
                 int y = rand() % (wh-8);
                 int w = rand() % (ww-x);
                 int h = rand() % (wh-y);
-                p.<a name="fillRect"></a><a href="qpainter.html#0f4c23">fillRect</a>( x, y, w, h, c );
+                p.<a name="fillRect"></a><a href="qpainter.html#5308a7">fillRect</a>( x, y, w, h, c );
             }
         }
 
         if (!rects || got_stop) {
-            pb-&gt;<a href="qprogressdialog.html#7d91b8">setProgress</a>( pb-&gt;<a href="qprogressdialog.html#15c931">totalSteps</a>() );
+            pb-&gt;<a href="qprogressdialog.html#037f30">setProgress</a>( pb-&gt;<a href="qprogressdialog.html#25744a">totalSteps</a>() );
             <a href="qpainter.html">QPainter</a> p(this);
-            p.<a href="qpainter.html#0f4c23">fillRect</a>(0, 0, width(), height(), backgroundColor());
+            p.<a href="qpainter.html#5308a7">fillRect</a>(0, 0, width(), height(), backgroundColor());
             enableDrawingItems(TRUE);
             killTimers();
             delete pb;
@@ -284,17 +284,17 @@ private:
     {
         <a href="qprogressdialog.html">QProgressDialog</a> *d = new <a href="qprogressdialog.html">QProgressDialog</a>(label, "Cancel", steps, this,
                                                  "progress", modal);
-        if ( options-&gt;<a href="qmenudata.html#b66a1c">isItemChecked</a>( md_id ) )
-            d-&gt;<a name="setMinimumDuration"></a><a href="qprogressdialog.html#a7b681">setMinimumDuration</a>(0);
+        if ( options-&gt;<a href="qmenudata.html#def7a0">isItemChecked</a>( md_id ) )
+            d-&gt;<a name="setMinimumDuration"></a><a href="qprogressdialog.html#6c1a6c">setMinimumDuration</a>(0);
         if ( !default_label )
-            d-&gt;<a name="setLabel"></a><a href="qprogressdialog.html#08bd5a">setLabel</a>( new AnimatedThingy(d,label) );
+            d-&gt;<a name="setLabel"></a><a href="qprogressdialog.html#077342">setLabel</a>( new AnimatedThingy(d,label) );
         return d;
     }
 
     void enableDrawingItems(bool yes)
     {
         for (int i=first_draw_item; i&lt;=last_draw_item; i++) {
-            menubar-&gt;<a name="setItemEnabled"></a><a href="qmenudata.html#b2cb33">setItemEnabled</a>(i, yes);
+            menubar-&gt;<a name="setItemEnabled"></a><a href="qmenudata.html#c9a23c">setItemEnabled</a>(i, yes);
         }
     }
 
@@ -302,13 +302,13 @@ private:
     {
         if ( timer_driven ) {
             if ( pb ) {
-                <a name="qWarning"></a><a href="qapplication.html#7a943f">qWarning</a>("This cannot happen!");
+                <a name="qWarning"></a><a href="qapplication.html#290ef4">qWarning</a>("This cannot happen!");
                 return;
             }
             rects = n;
             pb = newProgressDialog("Drawing rectangles.\n"
                                    "Using timer event.", n, FALSE);
-            pb-&gt;<a name="setCaption"></a><a href="qwidget.html#d4f007">setCaption</a>("Please Wait");
+            pb-&gt;<a name="setCaption"></a><a href="qwidget.html#d6a291">setCaption</a>("Please Wait");
             connect(pb, SIGNAL(cancelled()), this, SLOT(stopDrawing()));
             enableDrawingItems(FALSE);
             startTimer(0);
@@ -316,12 +316,12 @@ private:
         } else {
             <a href="qprogressdialog.html">QProgressDialog</a>* lpb = newProgressDialog(
                         "Drawing rectangles.\nUsing loop.", n, TRUE);
-            lpb-&gt;<a href="qwidget.html#d4f007">setCaption</a>("Please Wait");
+            lpb-&gt;<a href="qwidget.html#d6a291">setCaption</a>("Please Wait");
 
             <a href="qpainter.html">QPainter</a> p(this);
             for (int i=0; i&lt;n; i++) {
-                lpb-&gt;<a href="qprogressdialog.html#7d91b8">setProgress</a>(i);
-                if ( lpb-&gt;<a name="wasCancelled"></a><a href="qprogressdialog.html#3e1de0">wasCancelled</a>() )
+                lpb-&gt;<a href="qprogressdialog.html#037f30">setProgress</a>(i);
+                if ( lpb-&gt;<a name="wasCancelled"></a><a href="qprogressdialog.html#9818b6">wasCancelled</a>() )
                     break;
 
                 <a href="qcolor.html">QColor</a> c(rand()%255, rand()%255, rand()%255);
@@ -329,10 +329,10 @@ private:
                 int y = rand()%(height()-8);
                 int w = rand()%(width()-x);
                 int h = rand()%(height()-y);
-                p.<a href="qpainter.html#0f4c23">fillRect</a>(x,y,w,h,c);
+                p.<a href="qpainter.html#5308a7">fillRect</a>(x,y,w,h,c);
             }
 
-            p.<a href="qpainter.html#0f4c23">fillRect</a>(0, 0, width(), height(), backgroundColor());
+            p.<a href="qpainter.html#5308a7">fillRect</a>(0, 0, width(), height(), backgroundColor());
 
             delete lpb;
         }
@@ -358,16 +358,17 @@ int main( int argc, char **argv )
 
     for ( int i=0; i&lt;wincount; i++ ) {
         CPUWaster* cpuw = new CPUWaster;
-        if ( i == 0 ) a.<a name="setMainWidget"></a><a href="qapplication.html#11c921">setMainWidget</a>(cpuw);
-        cpuw-&gt;<a href="qwidget.html#ccc8f7">show</a>();
+        if ( i == 0 ) a.<a name="setMainWidget"></a><a href="qapplication.html#7ad759">setMainWidget</a>(cpuw);
+        cpuw-&gt;<a href="qwidget.html#d6a291">setCaption</a>("Qt Example - Progress");
+        cpuw-&gt;<a href="qwidget.html#200ee5">show</a>();
     }
-    return a.<a name="exec"></a><a href="qapplication.html#7076af">exec</a>();
+    return a.<a name="exec"></a><a href="qapplication.html#84c7bf">exec</a>();
 }
 
 #include "progress.moc"
 </pre>
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.1</div>
+<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

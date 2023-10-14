@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qwmatrix.cpp   2.3.1   edited 2001-04-17 $
+** $Id: qt/src/kernel/qwmatrix.cpp   2.3.2   edited 2001-06-22 $
 **
 ** Implementation of QWMatrix class
 **
@@ -43,7 +43,7 @@ double qsincos( double, bool calcCos );		// defined in qpainter_x11.cpp
 #include <math.h>
 #endif
 
-#ifndef QT_NO_TRANSFORMATIONS
+#ifndef QT_NO_WMATRIX
 
 // NOT REVISED
 /*!
@@ -533,5 +533,5 @@ QDataStream &operator>>( QDataStream &s, QWMatrix &m )
     return s;
 }
 #endif // QT_NO_DATASTREAM
-#endif // QT_NO_TRANSFORMATIONS
+#endif // QT_NO_WMATRIX
 

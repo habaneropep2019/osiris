@@ -1,5 +1,5 @@
 /*
-$Id: qt/examples/xml/tagreader-with-features/tagreader.cpp   2.3.1   edited 2001-01-26 $
+$Id: qt/examples/xml/tagreader-with-features/tagreader.cpp   2.3.2   edited 2001-06-12 $
 */
 
 #include "structureparser.h"
@@ -61,6 +61,7 @@ int main( int argc, char **argv )
 
 
     app.setMainWidget( container );
+    container->setCaption("Qt Example - XML Tagreader");
     container->show();
     return app.exec();      
 }

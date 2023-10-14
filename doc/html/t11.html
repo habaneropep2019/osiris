@@ -87,15 +87,15 @@ We include the math library because we need the sin() and cos() functions.  <pre
         f = 0;
         timerCount = 0;
         autoShootTimer = new <a href="qtimer.html">QTimer</a>( this, "movement handler" );
-        <a href="qobject.html#c2d209">connect</a>( autoShootTimer, SIGNAL(timeout()),
+        <a href="qobject.html#7f8e37">connect</a>( autoShootTimer, SIGNAL(timeout()),
                  this, SLOT(moveShot()) );
         shoot_ang = 0;
         shoot_f = 0;
-        <a href="qwidget.html#379ca0">setPalette</a>( <a href="qpalette.html">QPalette</a>( <a href="qcolor.html">QColor</a>( 250, 250, 200) ) );
+        <a href="qwidget.html#d7e4b9">setPalette</a>( <a href="qpalette.html">QPalette</a>( <a href="qcolor.html">QColor</a>( 250, 250, 200) ) );
     }
 </pre>
 <p>
-We initialize our new private variables and connect the <a href="qtimer.html#443214">QTimer::timeout()</a> signal to our moveShot() slot.  We'll move the
+We initialize our new private variables and connect the <a href="qtimer.html#66bd1b">QTimer::timeout()</a> signal to our moveShot() slot.  We'll move the
 shot every time the timer times out.  <pre>
     void CannonField::shoot()
     {
@@ -118,11 +118,11 @@ cannon angle and force.  Finally we start the timer.  <pre>
     
         <a href="qrect.html">QRect</a> shotR = shotRect();
     
-        if ( shotR.<a href="qrect.html#3a3d38">x</a>() &gt; width() || shotR.<a href="qrect.html#65e614">y</a>() &gt; height() )
+        if ( shotR.<a href="qrect.html#fccae7">x</a>() &gt; width() || shotR.<a href="qrect.html#f448f7">y</a>() &gt; height() )
             autoShootTimer-&gt;stop();
         else
-            r = r.<a href="qrect.html#dd997c">unite</a>( <a href="qregion.html">QRegion</a>( shotR ) );
-        <a href="qwidget.html#977d49">repaint</a>( r );
+            r = r.<a href="qrect.html#81e8a3">unite</a>( <a href="qregion.html">QRegion</a>( shotR ) );
+        <a href="qwidget.html#7569b1">repaint</a>( r );
     }
 </pre>
 <p>
@@ -149,13 +149,13 @@ Finally, we repaint the QRegion.  This will send a single paint event,
 for just the one or two rectangles that need updating.  <pre>
     void CannonField::paintEvent( <a href="qpaintevent.html">QPaintEvent</a> *e )
     {
-        <a href="qrect.html">QRect</a> updateR = e-&gt;<a href="qpaintevent.html#6177d5">rect</a>();
+        <a href="qrect.html">QRect</a> updateR = e-&gt;<a href="qpaintevent.html#2d6e18">rect</a>();
         <a href="qpainter.html">QPainter</a> p( this );
     
-        if ( updateR.<a href="qrect.html#6d4f45">intersects</a>( cannonRect() ) )
+        if ( updateR.<a href="qrect.html#5b3d2b">intersects</a>( cannonRect() ) )
             paintCannon( &amp;p );
         if ( autoShootTimer-&gt;isActive() &amp;&amp;
-             updateR.<a href="qrect.html#6d4f45">intersects</a>( shotRect() ) )
+             updateR.<a href="qrect.html#5b3d2b">intersects</a>( shotRect() ) )
             paintShot( &amp;p );
     }
 </pre>
@@ -166,9 +166,9 @@ needs painting, check whether it intersects either the cannon and/or
 the shot, and if necessary call paintCannon() and/or paintShot().  <pre>
     void CannonField::paintShot( <a href="qpainter.html">QPainter</a> *p )
     {
-        p-&gt;<a href="qpainter.html#38e68f">setBrush</a>( black );
-        p-&gt;<a href="qpainter.html#0a6aff">setPen</a>( NoPen );
-        p-&gt;<a href="qpainter.html#b29a16">drawRect</a>( shotRect() );
+        p-&gt;<a href="qpainter.html#3e0cc8">setBrush</a>( black );
+        p-&gt;<a href="qpainter.html#0183e4">setPen</a>( NoPen );
+        p-&gt;<a href="qpainter.html#4c0077">drawRect</a>( shotRect() );
     }
 </pre>
 <p>
@@ -192,7 +192,7 @@ the paintEvent() from the previous chapter.  <pre>
         double y         = y0 + vely*time - 0.5*gravity*time*time;
     
         <a href="qrect.html">QRect</a> r = QRect( 0, 0, 6, 6 );
-        r.<a href="qrect.html#b0408d">moveCenter</a>( <a href="qpoint.html">QPoint</a>( qRound(x), <a href="qwidget.html#180786">height</a>() - 1 - qRound(y) ) );
+        r.<a href="qrect.html#03af30">moveCenter</a>( <a href="qpoint.html">QPoint</a>( qRound(x), <a href="qwidget.html#e3c588">height</a>() - 1 - qRound(y) ) );
         return r;
     }
 </pre>
@@ -226,13 +226,13 @@ integer.
 <p>
 The only addition is the shoot button.   <pre>
         <a href="qpushbutton.html">QPushButton</a> *shoot = new <a href="qpushbutton.html">QPushButton</a>( "&amp;Shoot", this, "shoot" );
-        shoot-&gt;<a href="qwidget.html#dde00b">setFont</a>( <a href="qfont.html">QFont</a>( "Times", 18, QFont::Bold ) );
+        shoot-&gt;<a href="qwidget.html#c52788">setFont</a>( <a href="qfont.html">QFont</a>( "Times", 18, QFont::Bold ) );
 </pre>
 <p>
 In the constructor we create and set up the shoot button exactly like we
 did with the quit button.  Note that the first argument to the constructor
 is the button text and the third is the widget's name.  <pre>
-        <a href="qobject.html#c2d209">connect</a>( shoot, SIGNAL(clicked()), cannonField, SLOT(shoot()) );
+        <a href="qobject.html#7f8e37">connect</a>( shoot, SIGNAL(clicked()), cannonField, SLOT(shoot()) );
 </pre>
 <p>
 Connects the clicked() signal of the shoot button to the shoot() slot
@@ -244,7 +244,7 @@ The cannon can shoot, but there's nothing to shoot at.
 <p>
 <h2>Exercises</h2>
 <p>
-Make the shot a filled circle (hint: <a href="qpainter.html#06ff17">QPainter::drawEllipse()</a> may
+Make the shot a filled circle (hint: <a href="qpainter.html#f4ec3a">QPainter::drawEllipse()</a> may
 help).
 <p>
 Change the color of the cannon when a shot is in the air.
@@ -257,6 +257,6 @@ You may now go on to <a href="t12.html">chapter twelve.</a>
 
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.1</div>
+<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/tictac/main.cpp   2.3.1   edited 2001-01-26 $
+** $Id: qt/examples/tictac/main.cpp   2.3.2   edited 2001-06-12 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -25,6 +25,7 @@ int main( int argc, char **argv )
     }
     TicTacToe ttt( n );				// create game
     a.setMainWidget( &ttt );
+    ttt.setCaption("Qt Example - TicTac");
     ttt.show();					// show widget
     return a.exec();				// go
 }

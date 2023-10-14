@@ -30,66 +30,66 @@ The QDomNodeList class is a list of <a href="qdomnode.html">QDomNode</a> objects
 <p><a href="qdomnodelist-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><div class="fn"><a href="#d40f44"><b>QDomNodeList</b></a> () </div>
-<li><div class="fn"><a href="#0000e4"><b>QDomNodeList</b></a> ( const QDomNodeList &amp; ) </div>
-<li><div class="fn">QDomNodeList&amp; <a href="#f813bc"><b>operator=</b></a> ( const QDomNodeList &amp; ) </div>
-<li><div class="fn">bool <a href="#72d714"><b>operator==</b></a> ( const QDomNodeList &amp; ) const</div>
-<li><div class="fn">bool <a href="#93f889"><b>operator!=</b></a> ( const QDomNodeList &amp; ) const</div>
-<li><div class="fn">virtual <a href="#896740"><b>~QDomNodeList</b></a> () </div>
-<li><div class="fn">virtual QDomNode <a href="#ea4d97"><b>item</b></a> ( int index ) const</div>
-<li><div class="fn">virtual uint <a href="#9da3b0"><b>length</b></a> () const</div>
-<li><div class="fn">uint <a href="#58f195"><b>count</b></a> () const</div>
+<li><div class="fn"><a href="#7625db"><b>QDomNodeList</b></a> () </div>
+<li><div class="fn"><a href="#73032d"><b>QDomNodeList</b></a> ( const QDomNodeList &amp; ) </div>
+<li><div class="fn">QDomNodeList&amp; <a href="#280c42"><b>operator=</b></a> ( const QDomNodeList &amp; ) </div>
+<li><div class="fn">bool <a href="#dc1f7d"><b>operator==</b></a> ( const QDomNodeList &amp; ) const</div>
+<li><div class="fn">bool <a href="#e9f710"><b>operator!=</b></a> ( const QDomNodeList &amp; ) const</div>
+<li><div class="fn">virtual <a href="#f2ef21"><b>~QDomNodeList</b></a> () </div>
+<li><div class="fn">virtual QDomNode <a href="#62c791"><b>item</b></a> ( int index ) const</div>
+<li><div class="fn">virtual uint <a href="#37a425"><b>length</b></a> () const</div>
+<li><div class="fn">uint <a href="#4b31b3"><b>count</b></a> () const</div>
 <li><div class="fn"><b>QDomNodeList</b> ( QDOM_NodeListPrivate * ) (internal)</div>
 </ul>
 <hr><h2><a name="details"></a>Detailed Description</h2>
 The QDomNodeList class is a list of <a href="qdomnode.html">QDomNode</a> objects.
 <p>
-Lists can be obtained by <a href="qdomdocument.html#306d72">QDomDocument::elementsByTagName</a>() and
-<a href="qdomnode.html#9351b0">QDomNode::childNodes</a>(). The Document Object Model (DOM) requires these lists
+Lists can be obtained by <a href="qdomdocument.html#c2d794">QDomDocument::elementsByTagName</a>() and
+<a href="qdomnode.html#f7052a">QDomNode::childNodes</a>(). The Document Object Model (DOM) requires these lists
 to be "live": whenever you change the underlying document, the contents of
 the list will get updated.
 <p>For further information about the Document Objct Model see
 <a href="http://www.w3.org/TR/REC-DOM-Level-1/">http://www.w3.org/TR/REC-DOM-Level-1/</a>.
 For a more general introduction of the DOM implementation see the
 <a href="qdomdocument.html">QDomDocument</a> documentation.
-<p>See also  QDomNode::childNode() and <a href="qdomdocument.html#306d72">QDomDocument::elementsByTagName</a>().
+<p>See also  QDomNode::childNode() and <a href="qdomdocument.html#c2d794">QDomDocument::elementsByTagName</a>().
 
 <hr><h2>Member Function Documentation</h2>
-<h3 class="fn"><a name="d40f44"></a>QDomNodeList::QDomNodeList ()</h3>
+<h3 class="fn"><a name="7625db"></a>QDomNodeList::QDomNodeList ()</h3>
 <p>Creates an empty node list.
-<h3 class="fn"><a name="0000e4"></a>QDomNodeList::QDomNodeList ( const QDomNodeList &amp; <a href="n.html">n</a> )</h3>
+<h3 class="fn"><a name="73032d"></a>QDomNodeList::QDomNodeList ( const QDomNodeList &amp; <a href="n.html">n</a> )</h3>
 <p>Copy constructor.
-<h3 class="fn"><a name="896740"></a>QDomNodeList::~QDomNodeList () <code>[virtual]</code></h3>
+<h3 class="fn"><a name="f2ef21"></a>QDomNodeList::~QDomNodeList () <code>[virtual]</code></h3>
 <p>Destructor.
-<h3 class="fn">uint <a name="58f195"></a>QDomNodeList::count () const</h3>
+<h3 class="fn">uint <a name="4b31b3"></a>QDomNodeList::count () const</h3>
 <p>Returns the number of nodes in the list.
-<p>This function is the same as <a href="#9da3b0">length</a>().
-<h3 class="fn"><a href="qdomnode.html">QDomNode</a> <a name="ea4d97"></a>QDomNodeList::item ( int index ) const <code>[virtual]</code></h3>
+<p>This function is the same as <a href="#37a425">length</a>().
+<h3 class="fn"><a href="qdomnode.html">QDomNode</a> <a name="62c791"></a>QDomNodeList::item ( int index ) const <code>[virtual]</code></h3>
 <p>Returns the node at position <em>index.</em>
-<p>If <em>index</em> is negative or if <em>index</em> >= <a href="#9da3b0">length</a>() then a null node is
-returned (i.e. a node for which <a href="qdomnode.html#aa255a">QDomNode::isNull</a>() returns TRUE).
-<h3 class="fn">uint <a name="9da3b0"></a>QDomNodeList::length () const <code>[virtual]</code></h3>
+<p>If <em>index</em> is negative or if <em>index</em> >= <a href="#37a425">length</a>() then a null node is
+returned (i.e. a node for which <a href="qdomnode.html#cb0c9f">QDomNode::isNull</a>() returns TRUE).
+<h3 class="fn">uint <a name="37a425"></a>QDomNodeList::length () const <code>[virtual]</code></h3>
 <p>Returns the number of nodes in the list.
-<p>This function is the same as <a href="#58f195">count</a>().
-<h3 class="fn">bool <a name="93f889"></a>QDomNodeList::operator!= ( const QDomNodeList &amp; <a href="n.html">n</a> ) const</h3>
+<p>This function is the same as <a href="#4b31b3">count</a>().
+<h3 class="fn">bool <a name="e9f710"></a>QDomNodeList::operator!= ( const QDomNodeList &amp; <a href="n.html">n</a> ) const</h3>
 <p>Returns TRUE if both lists are not equal, otherwise FALSE.
-<h3 class="fn">QDomNodeList&amp; <a name="f813bc"></a>QDomNodeList::operator= ( const QDomNodeList &amp; <a href="n.html">n</a> )</h3>
+<h3 class="fn">QDomNodeList&amp; <a name="280c42"></a>QDomNodeList::operator= ( const QDomNodeList &amp; <a href="n.html">n</a> )</h3>
 <p>Assigns another node list to this object.
-<h3 class="fn">bool <a name="72d714"></a>QDomNodeList::operator== ( const QDomNodeList &amp; <a href="n.html">n</a> ) const</h3>
+<h3 class="fn">bool <a name="dc1f7d"></a>QDomNodeList::operator== ( const QDomNodeList &amp; <a href="n.html">n</a> ) const</h3>
 <p>Returns TRUE if both lists are equal, otherwise FALSE.
-<h3 class="fn"><a name="6cf52c"></a>QDomNodeList::QDomNodeList ( QDOM_NodeListPrivate * p )</h3>
+<h3 class="fn"><a name="24f1dd"></a>QDomNodeList::QDomNodeList ( QDOM_NodeListPrivate * p )</h3>
 <p>For internal use only.
 <hr><p>
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.3.1"><nobr>
+<input type=hidden name="version" value="2.3.2"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
-copyright &copy; 1995-2000
+copyright &copy; 1995-2001
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.1</div>
+<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

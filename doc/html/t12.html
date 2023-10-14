@@ -115,12 +115,12 @@ This constructor first calls init(), then sets the label text.  <pre>
         label = new <a href="qlabel.html">QLabel</a>( " ", this, "label"  );
         label-&gt;setAlignment( AlignCenter );
     
-        <a href="qobject.html#c2d209">connect</a>( slider, SIGNAL(valueChanged(int)),
+        <a href="qobject.html#7f8e37">connect</a>( slider, SIGNAL(valueChanged(int)),
                  lcd, SLOT(display(int)) );
-        <a href="qobject.html#c2d209">connect</a>( slider, SIGNAL(valueChanged(int)),
+        <a href="qobject.html#7f8e37">connect</a>( slider, SIGNAL(valueChanged(int)),
                  SIGNAL(valueChanged(int)) );
     
-        <a href="qwidget.html#22ecbc">setFocusProxy</a>( slider );
+        <a href="qwidget.html#cddadb">setFocusProxy</a>( slider );
     }
 </pre>
 <p>
@@ -196,12 +196,12 @@ repaint() on a hidden widget.  <pre>
         if ( first_time ) {
             first_time = FALSE;
             <a href="qtime.html">QTime</a> midnight( 0, 0, 0 );
-            srand( midnight.<a href="qtime.html#2fa5d7">secsTo</a>(<a href="qtime.html#03223b">QTime::currentTime</a>()) );
+            srand( midnight.<a href="qtime.html#0b9e38">secsTo</a>(<a href="qtime.html#6091a9">QTime::currentTime</a>()) );
         }
         <a href="qregion.html">QRegion</a> r( targetRect() );
         target = QPoint( 200 + rand() % 190,
                          10  + rand() % 255 );
-        <a href="qwidget.html#977d49">repaint</a>( r.<a href="qrect.html#dd997c">unite</a>( targetRect() ) );
+        <a href="qwidget.html#7569b1">repaint</a>( r.<a href="qrect.html#81e8a3">unite</a>( targetRect() ) );
     }
 </pre>
 <p>
@@ -246,7 +246,7 @@ Note that rand() return a random integer >= 0.  <pre>
 </pre>
 <p>
 This part of the timer event has not changed from the previous chapter. <pre>
-        if ( shotR.<a href="qrect.html#6d4f45">intersects</a>( targetRect() ) ) {
+        if ( shotR.<a href="qrect.html#5b3d2b">intersects</a>( targetRect() ) ) {
             autoShootTimer-&gt;stop();
             emit hit();
 </pre>
@@ -259,7 +259,7 @@ world that a target was destroyed and return.
 Note that we could have created a new target on the spot, but since the
 CannonField is a component, we leave such decisions to the user of the
 component. <pre>
-        } else if ( shotR.<a href="qrect.html#3a3d38">x</a>() &gt; width() || shotR.<a href="qrect.html#65e614">y</a>() &gt; height() ) {
+        } else if ( shotR.<a href="qrect.html#fccae7">x</a>() &gt; width() || shotR.<a href="qrect.html#f448f7">y</a>() &gt; height() ) {
             autoShootTimer-&gt;stop();
             emit missed();
 </pre>
@@ -274,16 +274,16 @@ And the rest of the function is as before.
 <p>
 CannonField::paintEvent() is as before, except that this has been
 added:   <pre>
-        if ( updateR.<a href="qrect.html#6d4f45">intersects</a>( targetRect() ) )
+        if ( updateR.<a href="qrect.html#5b3d2b">intersects</a>( targetRect() ) )
             paintTarget( &amp;p );
 </pre>
 <p>
 These two lines make sure the target too is painted, when necessary.  <pre>
     void CannonField::paintTarget( <a href="qpainter.html">QPainter</a> *p )
     {
-        p-&gt;<a href="qpainter.html#38e68f">setBrush</a>( red );
-        p-&gt;<a href="qpainter.html#0a6aff">setPen</a>( black );
-        p-&gt;<a href="qpainter.html#b29a16">drawRect</a>( targetRect() );
+        p-&gt;<a href="qpainter.html#3e0cc8">setBrush</a>( red );
+        p-&gt;<a href="qpainter.html#0183e4">setPen</a>( black );
+        p-&gt;<a href="qpainter.html#4c0077">drawRect</a>( targetRect() );
     }
 </pre>
 <p>
@@ -292,7 +292,7 @@ with a black outline.  <pre>
     <a href="qrect.html">QRect</a> CannonField::targetRect() const
     {
         <a href="qrect.html">QRect</a> r( 0, 0, 20, 10 );
-        r.<a href="qrect.html#b0408d">moveCenter</a>( <a href="qpoint.html">QPoint</a>(target.x(),<a href="qwidget.html#180786">height</a>() - 1 - target.y()) );
+        r.<a href="qrect.html#03af30">moveCenter</a>( <a href="qpoint.html">QPoint</a>(target.x(),<a href="qwidget.html#e3c588">height</a>() - 1 - target.y()) );
         return r;
     }
 </pre>
@@ -300,7 +300,7 @@ with a black outline.  <pre>
 This private function returns the enclosing rectangle of the target.
 Remember from newTarget() that the <code>target</code> point uses y coordinate 0 at
 the bottom of the widget.  We calculate the point in widget coordinates
-before we call <a href="qrect.html#b0408d">QRect::moveCenter()</a>.
+before we call <a href="qrect.html#03af30">QRect::moveCenter()</a>.
 <p>
 The reason we have chosen this coordinate mapping is to fix the distance
 between the target and the bottom of the widget.  Remember that the widget
@@ -342,7 +342,7 @@ Make a moving target.
 Make sure the target is always created entirely on-screen.
 <p>
 Make sure that the widget cannot be resized so that the target isn't
-visible.  Hint: <a href="qwidget.html#378ed6">QWidget::setMinimumSize()</a> is your friend.
+visible.  Hint: <a href="qwidget.html#c0b5fb">QWidget::setMinimumSize()</a> is your friend.
 <p>
 (Not easy:) Make it possible to have several shots in the air at the
 same time.  Hint: make a Shot object.
@@ -355,6 +355,6 @@ You may now go on to <a href="t13.html">chapter thirteen.</a>
 
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.1</div>
+<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

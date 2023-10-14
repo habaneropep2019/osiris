@@ -1,5 +1,5 @@
 '\" t
-.TH QBitArray 3qt "13 June 2001" "Trolltech AS" \" -*- nroff -*-
+.TH QBitArray 3qt "29 October 2001" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2001 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -93,19 +93,19 @@ Inherits QByteArray.
 (Note that these are not member functions.)
 .in +1c
 .ti -1c
-.BI "QBitArray \fBoperator^\fR (const QBitArray & " "a1" ", const QBitArray & " "a2" ")"
-.br
-.ti -1c
-.BI "QBitArray \fBoperator&\fR (const QBitArray & " "a1" ", const QBitArray & " "a2" ")"
-.br
-.ti -1c
-.BI "QDataStream & \fBoperator<<\fR (QDataStream & " "s" ", const QBitArray & " "a" ")"
+.BI "QDataStream & \fBoperator>>\fR (QDataStream & " "s" ", QBitArray & " "a" ")"
 .br
 .ti -1c
 .BI "QBitArray \fBoperator|\fR (const QBitArray & " "a1" ", const QBitArray & " "a2" ")"
 .br
 .ti -1c
-.BI "QDataStream & \fBoperator>>\fR (QDataStream & " "s" ", QBitArray & " "a" ")"
+.BI "QBitArray \fBoperator^\fR (const QBitArray & " "a1" ", const QBitArray & " "a2" ")"
+.br
+.ti -1c
+.BI "QDataStream & \fBoperator<<\fR (QDataStream & " "s" ", const QBitArray & " "a" ")"
+.br
+.ti -1c
+.BI "QBitArray \fBoperator&\fR (const QBitArray & " "a1" ", const QBitArray & " "a2" ")"
 .br
 .in -1c
 .SH DESCRIPTION
@@ -321,26 +321,26 @@ If the previous value was 0, the new value will be 1. If the previous value was 
 .PP
 See also setBit() and clearBit().
 .SH RELATED FUNCTION DOCUMENTATION
-.SH "QBitArray operator^ (const QBitArray & a1, const QBitArray & a2)"
-Returns the XOR result between the bit arrays \fIa1\fR and \fIa2.\fR
-.PP
-See also QBitArray::operator^().
-.SH "QBitArray operator& (const QBitArray & a1, const QBitArray & a2)"
-Returns the AND result between the bit arrays \fIa1\fR and \fIa2.\fR
-.PP
-See also QBitArray::operator&=().
-.SH "QDataStream & operator<< (QDataStream & s, const QBitArray & a)"
-Writes a bit array to a stream.
+.SH "QDataStream & operator>> (QDataStream & s, QBitArray & a)"
+Reads a bit array from a stream.
 .PP
 See also Format of the QDataStream operators
 .SH "QBitArray operator| (const QBitArray & a1, const QBitArray & a2)"
 Returns the OR result between the bit arrays \fIa1\fR and \fIa2.\fR
 .PP
 See also QBitArray::operator|=().
-.SH "QDataStream & operator>> (QDataStream & s, QBitArray & a)"
-Reads a bit array from a stream.
+.SH "QBitArray operator^ (const QBitArray & a1, const QBitArray & a2)"
+Returns the XOR result between the bit arrays \fIa1\fR and \fIa2.\fR
 .PP
-See also  Format of the QDataStream operators
+See also QBitArray::operator^().
+.SH "QDataStream & operator<< (QDataStream & s, const QBitArray & a)"
+Writes a bit array to a stream.
+.PP
+See also Format of the QDataStream operators
+.SH "QBitArray operator& (const QBitArray & a1, const QBitArray & a2)"
+Returns the AND result between the bit arrays \fIa1\fR and \fIa2.\fR
+.PP
+See also  QBitArray::operator&=().
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qbitarray.html
 .BR http://www.trolltech.com/faq/tech.html
@@ -359,4 +359,4 @@ In case of content or formattting problems with this manual page, please
 report them to
 .BR qt-bugs@trolltech.com .
 Please include the name of the manual page (qbitarray.3qt) and the Qt
-version (2.3.1).
+version (2.3.2).

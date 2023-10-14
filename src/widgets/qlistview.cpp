@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qlistview.cpp   2.3.1   edited 2001-05-03 $
+** $Id: qt/src/widgets/qlistview.cpp   2.3.2   edited 2001-09-21 $
 **
 ** Implementation of QListView widget class
 **
@@ -2658,6 +2658,8 @@ void QListView::updateGeometries()
     resizeContents( tw, th );
     if ( d->h->isHidden() ) {
 	setMargins( 0, 0, 0, 0 );
+	d->h->setGeometry( viewport()->x(), viewport()->y(),
+			   visibleWidth(), 1 );
     } else {
 	QSize hs( d->h->sizeHint() );
 	setMargins( 0, hs.height(), 0, 0 );
@@ -4325,6 +4327,7 @@ void QListView::styleChange( QStyle& old )
 */
 void QListView::setFont( const QFont & f )
 {
+    d->sizeHint = QSize();  // Invalidate Size Hint
     d->h->setFont( f );
     QScrollView::setFont( f );
     reconfigureItems();
@@ -4614,6 +4617,9 @@ void QCheckListItem::init()
 */
 QCheckListItem::~QCheckListItem()
 {
+    if ( myType == RadioButton && exclusive && exclusive->exclusive == this )
+	exclusive->turnOffChild();
+    exclusive = 0; // so the children won't try to access us.
     delete (QCheckListItemPrivate*)reserved;
 }
 

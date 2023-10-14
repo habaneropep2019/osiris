@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/i18n/main.cpp   2.3.1   edited 2001-06-07 $
+** $Id: qt/examples/i18n/main.cpp   2.3.2   edited 2001-06-12 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -90,6 +90,7 @@ MyWidget* showLang(QString lang)
     translator->load( lang, "." );
     qApp->installTranslator( translator );
     MyWidget *m = new MyWidget;
+    m->setCaption("Qt Example - i18n - " + m->caption() );
     return m;
 }
 
@@ -156,12 +157,14 @@ int main( int argc, char** argv )
 	QString lang = argv[1];
 	QWidget* m = showLang(lang);
 	app.setMainWidget( m );
+	m->setCaption("Qt Example - i18n");
 	m->show();
     }
     // While we run "all", kill them all
-    app.exec();
-
 #ifdef USE_I18N_FONT
     memorymanager->savePrerenderedFont(font.handle(),FALSE);
 #endif
+
+    return app.exec();
+
 }

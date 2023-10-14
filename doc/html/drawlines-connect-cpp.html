@@ -34,7 +34,7 @@ height="100" src="face.png" alt="Home" border="0">
 
   Implementation:
 <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/drawlines/connect.cpp   2.3.1   edited 2001-01-26 $
+** &#36;Id&#58; qt/examples/drawlines/connect.cpp   2.3.2   edited 2001-06-12 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -79,7 +79,7 @@ private:
 ConnectWidget::ConnectWidget( <a href="qwidget.html">QWidget</a> *parent, const char *name )
     : <a href="qwidget.html">QWidget</a>( parent, name, WNorthWestGravity )
 {
-    <a name="setBackgroundColor"></a><a href="qwidget.html#721b7d">setBackgroundColor</a>( white );                // white background
+    <a name="setBackgroundColor"></a><a href="qwidget.html#c09181">setBackgroundColor</a>( white );                // white background
     count = 0;
     down = FALSE;
     points = new <a href="qpoint.html">QPoint</a>[MAXPOINTS];
@@ -98,13 +98,13 @@ ConnectWidget::~ConnectWidget()
 // Handles paint events for the connect widget.
 //
 
-void <a name="122"></a>ConnectWidget::paintEvent( <a href="qpaintevent.html">QPaintEvent</a> * )
+void <a name="120"></a>ConnectWidget::paintEvent( <a href="qpaintevent.html">QPaintEvent</a> * )
 {
     <a name="QPainter"></a><a href="qpainter.html">QPainter</a> paint( this );
     for ( int i=0; i&lt;count-1; i++ ) {           // connect all points
         for ( int j=i+1; j&lt;count; j++ ) {
-            paint.<a name="setPen"></a><a href="qpainter.html#0a6aff">setPen</a>( colors[rand()%MAXCOLORS] ); // set random pen color
-            paint.<a name="drawLine"></a><a href="qpainter.html#ffde14">drawLine</a>( points[i], points[j] ); // draw line
+            paint.<a name="setPen"></a><a href="qpainter.html#0183e4">setPen</a>( colors[rand()%MAXCOLORS] ); // set random pen color
+            paint.<a name="drawLine"></a><a href="qpainter.html#e3a489">drawLine</a>( points[i], points[j] ); // draw line
         }
     }
 }
@@ -113,33 +113,33 @@ void <a name="122"></a>ConnectWidget::paintEvent( <a href="qpaintevent.html">QPa
 // Handles mouse press events for the connect widget.
 //
 
-void <a name="123"></a>ConnectWidget::mousePressEvent( <a href="qmouseevent.html">QMouseEvent</a> * )
+void <a name="121"></a>ConnectWidget::mousePressEvent( <a href="qmouseevent.html">QMouseEvent</a> * )
 {
     down = TRUE;
     count = 0;                                  // start recording points
-    <a name="erase"></a><a href="qwidget.html#4f563f">erase</a>();                                    // erase widget contents
+    <a name="erase"></a><a href="qwidget.html#10cf79">erase</a>();                                    // erase widget contents
 }
 
 //
 // Handles mouse release events for the connect widget.
 //
 
-void <a name="124"></a>ConnectWidget::mouseReleaseEvent( <a href="qmouseevent.html">QMouseEvent</a> * )
+void <a name="122"></a>ConnectWidget::mouseReleaseEvent( <a href="qmouseevent.html">QMouseEvent</a> * )
 {
     down = FALSE;                               // done recording points
-    <a name="update"></a><a href="qwidget.html#4a97ef">update</a>();                                   // draw the lines
+    <a name="update"></a><a href="qwidget.html#a66a88">update</a>();                                   // draw the lines
 }
 
 //
 // Handles mouse move events for the connect widget.
 //
 
-void <a name="125"></a>ConnectWidget::mouseMoveEvent( <a href="qmouseevent.html">QMouseEvent</a> *e )
+void <a name="123"></a>ConnectWidget::mouseMoveEvent( <a href="qmouseevent.html">QMouseEvent</a> *e )
 {
     if ( down &amp;&amp; count &lt; MAXPOINTS ) {
         <a href="qpainter.html">QPainter</a> paint( this );
-        points[count++] = e-&gt;<a name="pos"></a><a href="qmouseevent.html#ac025d">pos</a>();             // add point
-        paint.<a name="drawPoint"></a><a href="qpainter.html#036310">drawPoint</a>( e-&gt;<a href="qmouseevent.html#ac025d">pos</a>() );            // plot point
+        points[count++] = e-&gt;<a name="pos"></a><a href="qmouseevent.html#ac6f25">pos</a>();             // add point
+        paint.<a name="drawPoint"></a><a href="qpainter.html#8e172b">drawPoint</a>( e-&gt;<a href="qmouseevent.html#ac6f25">pos</a>() );            // plot point
     }
 }
 
@@ -151,13 +151,14 @@ int main( int argc, char **argv )
 {
     <a name="QApplication"></a><a href="qapplication.html">QApplication</a> a( argc, argv );
     ConnectWidget connect;
-    a.<a name="setMainWidget"></a><a href="qapplication.html#11c921">setMainWidget</a>( &amp;connect );
-    connect.<a name="show"></a><a href="qwidget.html#ccc8f7">show</a>();
-    return a.<a name="exec"></a><a href="qapplication.html#7076af">exec</a>();
+    a.<a name="setMainWidget"></a><a href="qapplication.html#7ad759">setMainWidget</a>( &amp;connect );
+    connect.<a name="setCaption"></a><a href="qwidget.html#d6a291">setCaption</a>("Qt Example - Draw lines");
+    connect.<a name="show"></a><a href="qwidget.html#200ee5">show</a>();
+    return a.<a name="exec"></a><a href="qapplication.html#84c7bf">exec</a>();
 }
 </pre>
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.1</div>
+<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

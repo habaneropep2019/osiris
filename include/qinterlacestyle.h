@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qinterlacestyle.h   2.3.1   edited 2001-05-14 $
+** $Id: qt/src/widgets/qinterlacestyle.h   2.3.2   edited 2001-05-14 $
 **
 ** Implementation of QInterlaceStyle widget class
 **

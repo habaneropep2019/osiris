@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/validator/vw.cpp   2.3.1   edited 2001-01-26 $
+** $Id: qt/examples/validator/vw.cpp   2.3.2   edited 2001-06-13 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -175,7 +175,7 @@ void VW::computeSelection()
 	return; // no model selected yet
 
     QString s;
-    s.sprintf( "You have selected a Wolkswagen %s model %d with a "
+    s.sprintf( "You have selected a Volkswagen %s model %d with a "
 	       "%d cm³ motor.\n\nGood choice!",
 	       (const char *)currentModel,
 	       (int)currentYear, currentMotorSize );

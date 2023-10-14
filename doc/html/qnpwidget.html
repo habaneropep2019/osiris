@@ -33,13 +33,14 @@ Inherits <a href="qwidget.html">QWidget</a>.
 <p><a href="qnpwidget-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><div class="fn"><a href="#6c07f4"><b>QNPWidget</b></a> () </div>
-<li><div class="fn"><a href="#5dbb44"><b>~QNPWidget</b></a> () </div>
-<li><div class="fn">void <a href="#6e2313"><b>setWindow</b></a> ( bool ) </div>
-<li><div class="fn">void <a href="#014eb0"><b>unsetWindow</b></a> () </div>
-<li><div class="fn">virtual void <a href="#2a2f76"><b>enterInstance</b></a> () </div>
-<li><div class="fn">virtual void <a href="#bf6a15"><b>leaveInstance</b></a> () </div>
-<li><div class="fn">QNPInstance* <a href="#336c07"><b>instance</b></a> () </div>
+<li><div class="fn"><a href="#d9e5df"><b>QNPWidget</b></a> () </div>
+<li><div class="fn"><a href="#6bd72d"><b>~QNPWidget</b></a> () </div>
+<li><div class="fn">void <a href="#856d1b"><b>setWindow</b></a> ( bool ) </div>
+<li><div class="fn">void <a href="#a4ae86"><b>unsetWindow</b></a> () </div>
+<li><div class="fn">void <b>show</b> () </div>
+<li><div class="fn">virtual void <a href="#9a9bc6"><b>enterInstance</b></a> () </div>
+<li><div class="fn">virtual void <a href="#9e631b"><b>leaveInstance</b></a> () </div>
+<li><div class="fn">QNPInstance* <a href="#b28390"><b>instance</b></a> () </div>
 </ul>
 <hr><h2><a name="details"></a>Detailed Description</h2>
 This class is defined in the <b>Qt NSPlugin Extension</b>, which can be found in the <tt>qt/extensions</tt> directory.
@@ -50,7 +51,7 @@ A <a href="qwidget.html">QWidget</a> that is a Web-browser plugin window
 Derive from QNPWidget to create a widget that can be used as a
 Browser plugin window, or create one and add child widgets.
 Instances of QNPWidget may only be created
-when <a href="qnpinstance.html#06d96d">QNPInstance::newWindow</a>() is called by the browser.
+when <a href="qnpinstance.html#9bff06">QNPInstance::newWindow</a>() is called by the browser.
 <p>A common way to develop a plugin widget is to develop it as a stand-alone
 application window, then make it a <em>child</em> of a plugin widget to use
 it as a browser plugin.  The technique is:
@@ -63,16 +64,16 @@ public:
         child = new MyIndependentlyDevelopedWidget();
 
         // Use the background color of the web page
-        child-&gt;<a href="qwidget.html#721b7d">setBackgroundColor</a>( backgroundColor() );
+        child-&gt;<a href="qwidget.html#c09181">setBackgroundColor</a>( backgroundColor() );
 
         // Fill the plugin widget
-        child-&gt;<a href="qwidget.html#8e0197">setGeometry</a>( 0, 0, width(), height() );
+        child-&gt;<a href="qwidget.html#9ede68">setGeometry</a>( 0, 0, width(), height() );
     }
 
     void resizeEvent(<a href="qresizeevent.html">QResizeEvent</a>*)
     {
         // Fill the plugin widget
-        child-&gt;<a href="qwidget.html#9775bb">resize</a>(size());
+        child-&gt;<a href="qwidget.html#8fcbbe">resize</a>(size());
     }
 };
 </pre>
@@ -83,39 +84,35 @@ public:
  <a href="trivial-trivial-cpp.html#QNPWidget">trivial/trivial.cpp</a>
 
 <hr><h2>Member Function Documentation</h2>
-<h3 class="fn"><a name="6c07f4"></a>QNPWidget::QNPWidget ()</h3>
+<h3 class="fn"><a name="d9e5df"></a>QNPWidget::QNPWidget ()</h3>
 <p>Creates a QNPWidget.
-<h3 class="fn"><a name="5dbb44"></a>QNPWidget::~QNPWidget ()</h3>
+<h3 class="fn"><a name="6bd72d"></a>QNPWidget::~QNPWidget ()</h3>
 <p>Destroys the window.  This will be called by the plugin binding code
 when the window is no longer required.  The Web-browser will delete windows
-when they leave the page.  The bindings will change the <a href="qwidget.html#6dceaf">QWidget::winId</a>()
+when they leave the page.  The bindings will change the <a href="qwidget.html#653917">QWidget::winId</a>()
 of the window when the window is resized, but this should not affect
 normal widget behavior.
-<h3 class="fn">void <a name="2a2f76"></a>QNPWidget::enterInstance () <code>[virtual]</code></h3>
+<h3 class="fn">void <a name="9a9bc6"></a>QNPWidget::enterInstance () <code>[virtual]</code></h3>
 <p>Called when the mouse enters the plugin window.  Default does nothing.
-<h3 class="fn"><a href="qnpinstance.html">QNPInstance</a>* <a name="336c07"></a>QNPWidget::instance ()</h3>
+<h3 class="fn"><a href="qnpinstance.html">QNPInstance</a>* <a name="b28390"></a>QNPWidget::instance ()</h3>
 <p>Returns the instance for which this widget is the window.
-<h3 class="fn">void <a name="bf6a15"></a>QNPWidget::leaveInstance () <code>[virtual]</code></h3>
+<h3 class="fn">void <a name="9e631b"></a>QNPWidget::leaveInstance () <code>[virtual]</code></h3>
 <p>Called when the mouse leaves the plugin window.  Default does nothing.
-<h3 class="fn">void <a name="6e2313"></a>QNPWidget::setWindow ( bool delold )</h3>
+<h3 class="fn">void <a name="856d1b"></a>QNPWidget::setWindow ( bool delold )</h3>
 <p>For internal use only.
-<h3 class="fn">void <a name="249a75"></a>QNPWidget::show () <code>[virtual]</code></h3>
-<p>This is needed in order to show plugins correctly on Windows.  Does nothing on X11.
-<p>Reimplemented for internal reasons; the API is not affected.
-<p>Reimplemented from <a href="qwidget.html#ccc8f7">QWidget.</a>
-<h3 class="fn">void <a name="014eb0"></a>QNPWidget::unsetWindow ()</h3>
+<h3 class="fn">void <a name="a4ae86"></a>QNPWidget::unsetWindow ()</h3>
 <p>For internal use only.
 <hr><p>
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.3.1"><nobr>
+<input type=hidden name="version" value="2.3.2"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
-copyright &copy; 1995-2000
+copyright &copy; 1995-2001
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.1</div>
+<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

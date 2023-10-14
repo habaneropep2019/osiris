@@ -284,16 +284,78 @@ int CCommands::getConfigurations(CComQIPtr<IBuildProject, &IID_IBuildProject> pr
     return S_OK;
 }
 
+bool CCommands::getGlobalSettings( CString &libname )
+{
+    CFileFind qtLib;
+    CString qtFile = "";
+    CString qtThread = "";
+    CString filever = "";
+    CString threadver = "";
+    CString libver;
+
+    BOOL bWorking = qtLib.FindFile( _T(getenv("QTDIR") + CString("\\lib\\qt*.lib" ) ) );
+    bool useThreads;
+
+    while ( bWorking ) {
+	bWorking = qtLib.FindNextFile();
+	if ( !bWorking ) 
+	    break;
+	if ( (LPCTSTR)qtLib.GetFileName().Left(5).Compare( "qt-mt" )==0 ) {
+	    qtThread = (LPCTSTR)qtLib.GetFileName();
+	    threadver = qtThread.Mid( 5, 3 );
+	} else if ( !(qtLib.GetFileName().Compare( "qtmain.lib" ) == 0) ) {
+	    qtFile = (LPCTSTR)qtLib.GetFileName();
+	    filever = qtFile.Mid( 2, 3 );
+	}
+	
+	if ( threadver.Compare( filever ) > 0 && threadver.Compare( libver ) > 0 ) {
+	    libname = qtThread;
+	    libver = threadver;
+	    useThreads = TRUE;
+	} else if ( threadver.Compare( filever ) < 0 && filever.Compare( libver ) > 0 ) {
+	    libname = qtFile;
+	    libver = filever;
+	    useThreads = FALSE;
+	} else if ( threadver.Compare( filever ) == 0 && !(qtThread.Right(6).Compare("nc.lib")==0) && threadver.Compare( libver ) > 0 ) {
+	    libname = qtThread;
+	    libver = threadver;
+	    useThreads = TRUE;
+	} else if ( filever.Compare( libver ) > 0 ) {
+	    libname = qtFile;
+	    libver = filever;
+	    useThreads = FALSE;
+	} else if ( filever.Compare( libver ) == 0 && libname.Right(6).Compare("nc.lib")==0 ) {
+	    libname = qtFile;
+	    libver = filever;
+	    useThreads = FALSE;
+	}
+    }
+    return useThreads;
+}
 void CCommands::addSharedSettings( CComPtr<IConfiguration> pConfig )
 {
+    CString libname;
+    bool useThreads = getGlobalSettings( libname );    
+    
     const CComBSTR compiler("cl.exe");
     const CComBSTR linker("link.exe");
-    const CComBSTR dllDefine("/D QT_DLL");
+    LPCTSTR dllDefs;
+    if ( useThreads )
+	dllDefs = "/D QT_DLL /D QT_THREAD_SUPPORT";
+    else
+	dllDefs = "/D QT_DLL";
+
+    const CComBSTR dllDefine( dllDefs );	
     const CComBSTR incPath(" /I$(QTDIR)\\include");
     const CComBSTR staticLib("$(QTDIR)\\lib\\qt.lib");
-    const CComBSTR sharedLib("$(QTDIR)\\lib\\qt230.lib $(QTDIR)\\lib\\qtmain.lib");
+    CString sharedLibText = CString("$(QTDIR)\\lib\\") + libname;
+    const CComBSTR sharedLib(sharedLibText + CString(" $(QTDIR)\\lib\\qtmain.lib") );
     const CComBSTR defLibs( "kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib" );
     const CComBSTR sysLibs( "kernel32.lib user32.lib gdi32.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib imm32.lib wsock32.lib" );
+    const CComBSTR threadLibD("/MLd");
+    const CComBSTR threadLibR("/ML");
+    const CComBSTR correctLibD("/MDd");
+    const CComBSTR correctLibR("/MD");
 
     VERIFY_OK(pConfig->AddToolSettings( compiler, dllDefine, CComVariant(VARIANT_FALSE) ));
     VERIFY_OK(pConfig->AddToolSettings( compiler, incPath, CComVariant(VARIANT_FALSE) ));
@@ -301,17 +363,31 @@ void CCommands::addSharedSettings( CComPtr<IConfiguration> pConfig )
     VERIFY_OK(pConfig->AddToolSettings( linker, sysLibs, CComVariant(VARIANT_FALSE) ));    
     VERIFY_OK(pConfig->RemoveToolSettings( linker, staticLib, CComVariant(VARIANT_FALSE) ));
     VERIFY_OK(pConfig->AddToolSettings( linker, sharedLib, CComVariant(VARIANT_FALSE) ));
+    VERIFY_OK(pConfig->RemoveToolSettings( compiler, threadLibD, CComVariant(VARIANT_FALSE) ));
+    VERIFY_OK(pConfig->AddToolSettings( compiler, correctLibD, CComVariant(VARIANT_FALSE) ));
+    VERIFY_OK(pConfig->RemoveToolSettings( compiler, threadLibR, CComVariant(VARIANT_FALSE) ));
+    VERIFY_OK(pConfig->AddToolSettings( compiler, correctLibR, CComVariant(VARIANT_FALSE) ));
     m_pApplication->PrintToOutputWindow( CComBSTR("\t\tadded Qt shared library") );
 }
 
 void CCommands::addStaticSettings( CComPtr<IConfiguration> pConfig )
 {
+    CString libname;
+    bool useThreads = getGlobalSettings( libname );    
+
     const CComBSTR compiler("cl.exe");
     const CComBSTR linker("link.exe");
-    const CComBSTR dllDefine("/D QT_DLL");
+    LPCTSTR dllDefs;
+    if ( useThreads )
+	dllDefs = "/D QT_DLL /D QT_THREAD_SUPPORT";
+    else
+	dllDefs = "/D QT_DLL";
+
+    const CComBSTR dllDefine( dllDefs );	
     const CComBSTR incPath(" /I$(QTDIR)\\include");
     const CComBSTR staticLib("$(QTDIR)\\lib\\qt.lib");
-    const CComBSTR sharedLib("$(QTDIR)\\lib\\qt230.lib $(QTDIR)\\lib\\qtmain.lib");
+    CString sharedLibText = CString("$(QTDIR)\\lib\\") + libname;
+    const CComBSTR sharedLib(sharedLibText + CString(" $(QTDIR)\\lib\\qtmain.lib") );
     const CComBSTR defLibs( "kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib" );
     const CComBSTR sysLibs( "kernel32.lib user32.lib gdi32.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib imm32.lib wsock32.lib" );
 
@@ -698,7 +774,7 @@ STDMETHODIMP CCommands::QMsDevGenerateQtProject()
     }
 
     m_pApplication->PrintToOutputWindow( CComBSTR("Running tmake...") );
-    if ( system( "tmake "+file+" -o "+filename+".dsp"+" -t "+tFile ) )
+    if ( system( "tmake "+file+" -o "+filename+".dsp"+" -t "+tFile + " CONFIG+=thread") )
 	m_pApplication->PrintToOutputWindow( CComBSTR("FAILED TO RUN TMAKE!") );
     else
 	::MessageBox(NULL, "Created Developer Studio Project for Qt Project "+file+"\n"
@@ -767,14 +843,18 @@ STDMETHODIMP CCommands::QMsDevNewQtProject()
 	VERIFY_OK(pConfigs->Item(Varc, &pConfig));
 	BSTR bstr;
 	pConfig->get_Name(&bstr);
+#ifndef QT_NON_COMMERCIAL
 	if ( dialog.m_shared ) {
+#endif
 	    m_pApplication->PrintToOutputWindow( CComBSTR("\tadding Qt shared library to "+ CString(bstr) + "...") );
 	    addSharedSettings( pConfig );
+#ifndef QT_NON_COMMERCIAL
 	} else {
 	    m_pApplication->PrintToOutputWindow( CComBSTR("\tadding Qt static library to "+ CString(bstr) + "...") );
 	    addStaticSettings( pConfig );
 	}
-    }
+#endif      
+   }
 
     CString projectName = dialog.m_name;
     dialog.m_name.MakeLower();

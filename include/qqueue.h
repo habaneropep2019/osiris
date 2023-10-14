@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qqueue.h   2.3.1   edited 2001-01-26 $
+** $Id: qt/src/tools/qqueue.h   2.3.2   edited 2001-07-29 $
 **
 ** Definition of QQueue template/macro class
 **
@@ -63,8 +63,19 @@ public:
 	  operator type *() const	{ return (type *)QGList::cfirst(); }
     type *current() const		{ return (type *)QGList::cfirst(); }
 private:
-    void  deleteItem( Item d ) { if ( del_item ) delete (type *)d; }
+    void  deleteItem( Item d );
 };
+
+#if defined(Q_DELETING_VOID_UNDEFINED)
+template<> inline void QQueue<void>::deleteItem( Item )
+{
+}
+#endif
+
+template<class type> inline void QQueue<type>::deleteItem( QCollection::Item d )
+{
+    if ( del_item ) delete (type *)d;
+}
 
 
 #endif // QQUEUE_H

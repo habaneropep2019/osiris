@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/dialogs/qmessagebox.cpp   2.3.1   edited 2001-04-17 $
+** $Id: qt/src/dialogs/qmessagebox.cpp   2.3.2   edited 2001-10-21 $
 **
 ** Implementation of QMessageBox class
 **
@@ -43,6 +43,9 @@
 #include "qpushbutton.h"
 #include "qimage.h"
 #include "qapplication.h"
+#if defined QT_NON_COMMERCIAL
+#include "qnc_win.h"
+#endif
 
 // Message box icons, from page 210 of the Windows style guide.
 
@@ -305,8 +308,8 @@ errors which can't be easily fixed:
   }
 \endcode
 
-    Finally, 
-  
+    Finally,
+
   The text part of all message box messages can be either rich text or
   plain text. If you specify a rich text formatted string, it will be
   rendered using the default stylesheet. See
@@ -638,21 +641,26 @@ QMessageBox::~QMessageBox()
     delete mbd;
 }
 
-
 static QString * translatedTextAboutQt = 0;
 
 void QMessageBox::init( int button0, int button1, int button2 )
 {
     if ( !translatedTextAboutQt ) {
 	translatedTextAboutQt = new QString;
+
+#if defined(QT_NON_COMMERCIAL)
+    QT_NC_MSGBOX
+#else
 	*translatedTextAboutQt
 	    = tr( "<h3>About Qt</h3>"
 		  "<p>This program uses Qt version %1, a multiplatform C++ "
 		  "GUI toolkit from Trolltech. Qt provides single-source "
-		  "portability across Windows 95/98/NT/2000, Linux, Solaris, "
+		  "portability across Windows 95/98/NT4/Me/2000, Linux, Solaris, "
 		  "HP-UX and many other versions of Unix with X11.</p>"
 		  "<p>See <tt>http://www.trolltech.com/qt/</tt> for more "
 		  "information.</p>" ).arg( QT_VERSION_STR );
+#endif
+
 #ifdef QT_NO_RICHTEXT
 	QString plain;
 	bool on=TRUE;
@@ -1029,7 +1037,24 @@ void QMessageBox::adjustSize()
 	    h = mbd->iconLabel.height() + 3*border + bh;
     }
     int w = QMAX( buttons, labelSize.width() + lmargin ) + 2*border;
+
+#if defined(_WS_QWS_)
+    // who commited QMessagebox? It really should use Layout. This way
+    // we do not even have a proper minimum size we could take into
+    // acount. ####
+    extern QRect qt_maxWindowRect;
+    QSize s( w, h );
+    s = s.boundedTo( qt_maxWindowRect.size() );
+    if ( s.width() < w && label->sizePolicy().hasHeightForWidth() ) {
+	resize( s );
+	QApplication::sendPostedEvents( this, QEvent::Resize );
+	s.rheight() += label->heightForWidth( label->width() ) - label->height();
+	s = s.boundedTo( qt_maxWindowRect.size() );
+    }
+    resize( s );
+#else
     resize( w, h );
+#endif
     setMinimumSize( size() );
 }
 

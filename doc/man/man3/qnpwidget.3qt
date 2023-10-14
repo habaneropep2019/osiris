@@ -1,5 +1,5 @@
 '\" t
-.TH QNPWidget 3qt "13 June 2001" "Trolltech AS" \" -*- nroff -*-
+.TH QNPWidget 3qt "29 October 2001" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2001 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -27,6 +27,9 @@ Inherits QWidget.
 .br
 .ti -1c
 .BI "void \fBunsetWindow\fR () "
+.br
+.ti -1c
+.BI "void \fBshow\fR () "
 .br
 .ti -1c
 .BI "virtual void \fBenterInstance\fR () "
@@ -108,12 +111,6 @@ Returns the instance for which this widget is the window.
 Called when the mouse leaves the plugin window. Default does nothing.
 .SH "void QNPWidget::setWindow ( bool delold )"
 For internal use only.
-.SH "void QNPWidget::show () \fC[virtual]\fR"
-This is needed in order to show plugins correctly on Windows. Does nothing on X11.
-.PP
-Reimplemented for internal reasons; the API is not affected.
-.PP
-Reimplemented from QWidget.
 .SH "void QNPWidget::unsetWindow ()"
 For internal use only.
 .SH "SEE ALSO"
@@ -134,4 +131,4 @@ In case of content or formattting problems with this manual page, please
 report them to
 .BR qt-bugs@trolltech.com .
 Please include the name of the manual page (qnpwidget.3qt) and the Qt
-version (2.3.1).
+version (2.3.2).

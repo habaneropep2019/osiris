@@ -2,7 +2,7 @@
 #include "qpopupmenu.h"
 
 /*!
-  \class TrayIcon TrayIcon.h
+  \class TrayIcon qtrayicon.h
   \brief The TrayIcon class implements an entry in the system tray.
 */
 
@@ -19,12 +19,12 @@ TrayIcon::TrayIcon( QObject *parent, const char *name )
 
 /*!
   Creates a TrayIcon object displaying \a icon and \a tooltip, and opening
-  \a popup when clicked with the right mousebutton. \a parent and \a name are 
+  \a popup when clicked with the right mousebutton. \a parent and \a name are
   propagated to the QObject constructor. The icon is initially invisible.
 
   \sa show
 */
-TrayIcon::TrayIcon( const QPixmap &icon, const QString &tooltip, QPopupMenu *popup, QObject *parent, const char *name ) 
+TrayIcon::TrayIcon( const QPixmap &icon, const QString &tooltip, QPopupMenu *popup, QObject *parent, const char *name )
 : QObject(parent, name), pop(popup), pm(icon), tip(tooltip), d(0)
 {
 }
@@ -41,9 +41,9 @@ TrayIcon::~TrayIcon()
   Sets the context menu to \a popup. The context menu will pop up when the
   user clicks the system tray entry with the right mouse button.
 */
-void TrayIcon::setPopup( QPopupMenu* p )
+void TrayIcon::setPopup( QPopupMenu* popup )
 {
-    pop = p;
+    pop = popup;
 }
 
 /*!
@@ -57,7 +57,8 @@ QPopupMenu* TrayIcon::popup() const
 }
 
 /*!
-  Sets the system tray icon to \a icon and replaces any previous entry in the tray.
+  \property TrayIcon::icon
+  \brief the system tray icon.
 */
 void TrayIcon::setIcon( const QPixmap &icon )
 {
@@ -65,19 +66,16 @@ void TrayIcon::setIcon( const QPixmap &icon )
     sysUpdateIcon();
 }
 
-/*!
-  Returns the current icon.
-
-  \sa setIcon
-*/
 QPixmap TrayIcon::icon() const
 {
     return pm;
 }
 
 /*!
-  Sets the tooltip for the system tray entry to \a tip. On some systems, 
-  the tooltip's length is limited and will be truncated as necessary.
+  \property TrayIcon::toolTip
+  \brief the tooltip for the system tray entry
+  
+  On some systems, the tooltip's length is limited and will be truncated as necessary.
 */
 void TrayIcon::setToolTip( const QString &tooltip )
 {
@@ -85,11 +83,6 @@ void TrayIcon::setToolTip( const QString &tooltip )
     sysUpdateToolTip();
 }
 
-/*!
-  Returns the current tooltip.
-
-  \sa setToolTip
-*/
 QString TrayIcon::toolTip() const
 {
     return tip;
@@ -177,17 +170,17 @@ void TrayIcon::mouseReleaseEvent( QMouseEvent *e )
     switch ( e->button() ) {
     case RightButton:
 	if ( pop ) {
-	    // Those lines are necessary to make keyboard focus
+	    // Necessary to make keyboard focus
 	    // and menu closing work on Windows.
 	    pop->setActiveWindow();
-	    pop->grabMouse();
-	    pop->exec( e->globalPos() );
-	    pop->releaseMouse();
+	    pop->popup( e->globalPos() );
 	    pop->setActiveWindow();
 	}
 	break;
     case LeftButton:
 	emit clicked( e->globalPos() );
+	break;
+    default:
 	break;
     }
 }
@@ -196,7 +189,7 @@ void TrayIcon::mouseReleaseEvent( QMouseEvent *e )
   This event handler can be reimplemented in a subclass to receive
   mouse double click events for the system tray entry.
 
-  Note that the system tray entry gets a mousePressEvent() and a 
+  Note that the system tray entry gets a mousePressEvent() and a
   mouseReleaseEvent() before the mouseDoubleClickEvent().
 
   \sa mousePressEvent(), mouseReleaseEvent(),
@@ -212,14 +205,14 @@ void TrayIcon::mouseDoubleClickEvent( QMouseEvent *e )
   \fn void TrayIcon::clicked( const QPoint &p )
 
   This signal is emitted when the user clicks the system tray icon
-  with the left mouse button, with \a p being the global mouse position 
+  with the left mouse button, with \a p being the global mouse position
   at that moment.
 */
 
 /*!
   \fn void TrayIcon::doubleClicked( const QPoint &p )
-  
+
   This signal is emitted when the user double clicks the system tray
-  icon with the left mouse button, with \a p being the global mouse position 
+  icon with the left mouse button, with \a p being the global mouse position
   at that moment.
 */

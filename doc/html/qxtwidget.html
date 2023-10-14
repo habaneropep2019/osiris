@@ -33,16 +33,16 @@ Inherits <a href="qwidget.html">QWidget</a>.
 <p><a href="qxtwidget-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><div class="fn"><a href="#1cea77"><b>QXtWidget</b></a> ( const char * name, Widget parent, bool managed=FALSE ) </div>
-<li><div class="fn"><a href="#173b7b"><b>QXtWidget</b></a> ( const char * name, WidgetClass widget_class, QWidget * parent=0, ArgList args=0, Cardinal num_args=0, bool managed=FALSE ) </div>
-<li><div class="fn"><a href="#561ea5"><b>~QXtWidget</b></a> () </div>
-<li><div class="fn">Widget <a href="#297387"><b>xtWidget</b></a> () const</div>
-<li><div class="fn">bool <a href="#01afb2"><b>isActiveWindow</b></a> () const</div>
-<li><div class="fn">virtual void <a href="#be834c"><b>setActiveWindow</b></a> () </div>
+<li><div class="fn"><a href="#5c378a"><b>QXtWidget</b></a> ( const char * name, Widget parent, bool managed=FALSE ) </div>
+<li><div class="fn"><a href="#d4f701"><b>QXtWidget</b></a> ( const char * name, WidgetClass widget_class, QWidget * parent=0, ArgList args=0, Cardinal num_args=0, bool managed=FALSE ) </div>
+<li><div class="fn"><a href="#6318d2"><b>~QXtWidget</b></a> () </div>
+<li><div class="fn">Widget <a href="#a2c32d"><b>xtWidget</b></a> () const</div>
+<li><div class="fn">bool <a href="#b5cf77"><b>isActiveWindow</b></a> () const</div>
+<li><div class="fn">virtual void <a href="#d227d8"><b>setActiveWindow</b></a> () </div>
 </ul>
 <h2>Protected Members</h2>
 <ul>
-<li><div class="fn">bool <a href="#add6c6"><b>x11Event</b></a> ( XEvent * ) </div>
+<li><div class="fn">bool <a href="#2d0a93"><b>x11Event</b></a> ( XEvent * ) </div>
 </ul>
 <hr><h2><a name="details"></a>Detailed Description</h2>
 This class is defined in the <b>Qt Xt/Motif Extension</b>, which can be found in the <tt>qt/extensions</tt> directory.
@@ -61,13 +61,13 @@ a QWidget.  See the constructors for the different behaviors.
  <a href="mainlyMotif-editor-cpp.html#QXtWidget">mainlyMotif/editor.cpp</a>
 
 <hr><h2>Member Function Documentation</h2>
-<h3 class="fn"><a name="1cea77"></a>QXtWidget::QXtWidget ( const char * name, Widget parent, bool managed=FALSE )</h3>
+<h3 class="fn"><a name="5c378a"></a>QXtWidget::QXtWidget ( const char * name, Widget parent, bool managed=FALSE )</h3>
 <p>Constructs a QXtWidget of the special Xt widget class known as
 "<a href="qwidget.html">QWidget</a>" to the resource manager.
 <p>Use this constructor to utilize Qt widgets in an Xt/Motif
 application.  The QXtWidget is a QWidget, so you can create
 subwidgets, layouts, etc. using Qt functionality.
-<h3 class="fn"><a name="173b7b"></a>QXtWidget::QXtWidget ( const char * name, WidgetClass widget_class, <a href="qwidget.html">QWidget</a> * parent=0, ArgList args=0, Cardinal num_args=0, bool managed=FALSE )</h3>
+<h3 class="fn"><a name="d4f701"></a>QXtWidget::QXtWidget ( const char * name, WidgetClass widget_class, <a href="qwidget.html">QWidget</a> * parent=0, ArgList args=0, Cardinal num_args=0, bool managed=FALSE )</h3>
 <p>Constructs a QXtWidget of the given <em>widget_class.</em>
 <p>Use this constructor to utilize Xt or Motif widgets in a Qt
 application.  The QXtWidget looks and behaves
@@ -78,26 +78,26 @@ of any kind. If there isn't a parent or the parent is just a normal
 QWidget, <em>widget_class</em> should be something like <code>topLevelShellWidgetClass.</code>
 <p>If the <em>managed</em> parameter is TRUE and <em>parent</em> in not NULL,
 XtManageChild it used to manage the child.
-<h3 class="fn"><a name="561ea5"></a>QXtWidget::~QXtWidget ()</h3>
+<h3 class="fn"><a name="6318d2"></a>QXtWidget::~QXtWidget ()</h3>
 <p>Destructs the QXtWidget.
-<h3 class="fn">bool <a name="01afb2"></a>QXtWidget::isActiveWindow () const</h3>
-<p>Different from <a href="qwidget.html#dfb05e">QWidget::isActiveWindow</a>().
-<h3 class="fn">void <a name="b03cef"></a>QXtWidget::moveEvent ( <a href="qmoveevent.html">QMoveEvent</a> * ) <code>[virtual protected]</code></h3>
+<h3 class="fn">bool <a name="b5cf77"></a>QXtWidget::isActiveWindow () const</h3>
+<p>Different from <a href="qwidget.html#331f68">QWidget::isActiveWindow</a>().
+<h3 class="fn">void <a name="562e6b"></a>QXtWidget::moveEvent ( <a href="qmoveevent.html">QMoveEvent</a> * ) <code>[virtual protected]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
-<p>Reimplemented from <a href="qwidget.html#be1a92">QWidget.</a>
-<h3 class="fn">void <a name="70897b"></a>QXtWidget::resizeEvent ( <a href="qresizeevent.html">QResizeEvent</a> * ) <code>[virtual protected]</code></h3>
+<p>Reimplemented from <a href="qwidget.html#3f1b15">QWidget.</a>
+<h3 class="fn">void <a name="71ff15"></a>QXtWidget::resizeEvent ( <a href="qresizeevent.html">QResizeEvent</a> * ) <code>[virtual protected]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
 <p>Examples:
  <a href="mainlyQt-editor-cpp.html#QXtWidget::resizeEvent">mainlyQt/editor.cpp</a>
  <a href="mainlyXt-editor-cpp.html#QXtWidget::resizeEvent">mainlyXt/editor.cpp</a>
-<p>Reimplemented from <a href="qwidget.html#28c156">QWidget.</a>
-<h3 class="fn">void <a name="be834c"></a>QXtWidget::setActiveWindow () <code>[virtual]</code></h3>
+<p>Reimplemented from <a href="qwidget.html#7d375f">QWidget.</a>
+<h3 class="fn">void <a name="d227d8"></a>QXtWidget::setActiveWindow () <code>[virtual]</code></h3>
 <p>Implement a degree of focus handling for Xt widgets.
-<p>Reimplemented from <a href="qwidget.html#98f8cc">QWidget.</a>
-<h3 class="fn">bool <a name="add6c6"></a>QXtWidget::x11Event ( XEvent * e ) <code>[protected]</code></h3>
+<p>Reimplemented from <a href="qwidget.html#238801">QWidget.</a>
+<h3 class="fn">bool <a name="2d0a93"></a>QXtWidget::x11Event ( XEvent * e ) <code>[protected]</code></h3>
 <p>Reimplemented to produce the Xt effect of getting focus when the
 mouse enters the widget. <em>This may be changed.</em>
-<h3 class="fn">Widget <a name="297387"></a>QXtWidget::xtWidget () const</h3>
+<h3 class="fn">Widget <a name="a2c32d"></a>QXtWidget::xtWidget () const</h3>
 <p>Returns the Xt widget equivalent for the Qt widget.
 <p>Examples:
  <a href="mainlyXt-editor-cpp.html#xtWidget">mainlyXt/editor.cpp</a>
@@ -106,13 +106,13 @@ mouse enters the widget. <em>This may be changed.</em>
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.3.1"><nobr>
+<input type=hidden name="version" value="2.3.2"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
-copyright &copy; 1995-2000
+copyright &copy; 1995-2001
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.1</div>
+<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

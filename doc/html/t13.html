@@ -84,12 +84,12 @@ except that we've added some lines at the end:  <pre>
 <p>
 We create a QVBoxLayout with all the default values, managing this
 widget's children. <pre>
-        l-&gt;<a href="qboxlayout.html#219265">addWidget</a>( lcd, 1 );
+        l-&gt;<a href="qboxlayout.html#ebba99">addWidget</a>( lcd, 1 );
 </pre>
 <p>
 At the top, we add the QLCDNumber, with a non-zero stretch. <pre>
-        l-&gt;<a href="qboxlayout.html#219265">addWidget</a>( slider );
-        l-&gt;<a href="qboxlayout.html#219265">addWidget</a>( label );
+        l-&gt;<a href="qboxlayout.html#ebba99">addWidget</a>( slider );
+        l-&gt;<a href="qboxlayout.html#ebba99">addWidget</a>( label );
 </pre>
 <p>
 Then we add the other two, both with the default zero stretch.
@@ -152,7 +152,7 @@ cannot shot now.  <pre>
         if ( isShooting() )
             autoShootTimer-&gt;stop();
         gameEnded = TRUE;
-        <a href="qwidget.html#977d49">repaint</a>();
+        <a href="qwidget.html#7569b1">repaint</a>();
     }
 </pre>
 <p>
@@ -171,7 +171,7 @@ widget.  <pre>
         if ( isShooting() )
             autoShootTimer-&gt;stop();
         gameEnded = FALSE;
-        <a href="qwidget.html#977d49">repaint</a>();
+        <a href="qwidget.html#7569b1">repaint</a>();
         emit canShoot( TRUE );
     }
 </pre>
@@ -185,13 +185,13 @@ either hit() or miss().
 Modifications in CannonField::paintEvent():  <pre>
     void CannonField::paintEvent( <a href="qpaintevent.html">QPaintEvent</a> *e )
     {
-        <a href="qrect.html">QRect</a> updateR = e-&gt;<a href="qpaintevent.html#6177d5">rect</a>();
+        <a href="qrect.html">QRect</a> updateR = e-&gt;<a href="qpaintevent.html#2d6e18">rect</a>();
         <a href="qpainter.html">QPainter</a> p( this );
     
         if ( gameEnded ) {
-            p.<a href="qpainter.html#0a6aff">setPen</a>( black );
-            p.<a href="qpainter.html#e4d6b7">setFont</a>( <a href="qfont.html">QFont</a>( "Courier", 48, QFont::Bold ) );
-            p.<a href="qpainter.html#8a59ed">drawText</a>( <a href="qwidget.html#e872e1">rect</a>(), AlignCenter, "Game Over" );
+            p.<a href="qpainter.html#0183e4">setPen</a>( black );
+            p.<a href="qpainter.html#998df2">setFont</a>( <a href="qfont.html">QFont</a>( "Courier", 48, QFont::Bold ) );
+            p.<a href="qpainter.html#0f088f">drawText</a>( <a href="qwidget.html#75ae71">rect</a>(), AlignCenter, "Game Over" );
         }
 </pre>
 <p>
@@ -207,11 +207,11 @@ rectangle.  Unfortunately, on some systems (especially X servers with
 Unicode fonts) it can take a while to load such a large font.  Since
 Qt caches fonts, you will only notice this the first time the font is
 used. <pre>
-        if ( updateR.<a href="qrect.html#6d4f45">intersects</a>( cannonRect() ) )
+        if ( updateR.<a href="qrect.html#5b3d2b">intersects</a>( cannonRect() ) )
             paintCannon( &amp;p );
-        if ( isShooting() &amp;&amp; updateR.<a href="qrect.html#6d4f45">intersects</a>( shotRect() ) )
+        if ( isShooting() &amp;&amp; updateR.<a href="qrect.html#5b3d2b">intersects</a>( shotRect() ) )
             paintShot( &amp;p );
-        if ( !gameEnded &amp;&amp; updateR.<a href="qrect.html#6d4f45">intersects</a>( targetRect() ) )
+        if ( !gameEnded &amp;&amp; updateR.<a href="qrect.html#5b3d2b">intersects</a>( targetRect() ) )
             paintTarget( &amp;p );
     }
 </pre>
@@ -267,16 +267,16 @@ We have made some changes in the GameBoard constructor.   <pre>
 constructor to use it.  (The <em>good</em> programmers at Trolltech never
 forget this, but I do.  Caveat programmor.  If "programmor" is latin,
 at least.  Anyway, back to the code.)  <pre>
-        <a href="qobject.html#c2d209">connect</a>( cannonField, SIGNAL(hit()),
+        <a href="qobject.html#7f8e37">connect</a>( cannonField, SIGNAL(hit()),
                  this, SLOT(hit()) );
-        <a href="qobject.html#c2d209">connect</a>( cannonField, SIGNAL(missed()),
+        <a href="qobject.html#7f8e37">connect</a>( cannonField, SIGNAL(missed()),
                  this, SLOT(missed()) );
 </pre>
 <p>
 This time we want to do something when the shot has hit or missed the
 target.  Thus we connect the hit() and missed() signals of the
 CannonField to two protected slots with the same names in this class.   <pre>
-        <a href="qobject.html#c2d209">connect</a>( shoot, SIGNAL(clicked()), SLOT(fire()) );
+        <a href="qobject.html#7f8e37">connect</a>( shoot, SIGNAL(clicked()), SLOT(fire()) );
 </pre>
 <p>
 Previously, we connected the shoot button's clicked() signal directly
@@ -286,17 +286,17 @@ this class instead.
 <p>
 Notice how easy it is to change the behavior of a program when you are
 working with self-contained components. <pre>
-        <a href="qobject.html#c2d209">connect</a>( cannonField, SIGNAL(canShoot(bool)),
-                 shoot, SLOT(<a href="qwidget.html#f996ef">setEnabled</a>(bool)) );
+        <a href="qobject.html#7f8e37">connect</a>( cannonField, SIGNAL(canShoot(bool)),
+                 shoot, SLOT(<a href="qwidget.html#4b103c">setEnabled</a>(bool)) );
 </pre>
 <p>
 We also use the cannonField's canShoot() signal to enable or disable
 the Shoot button appropriately.  <pre>
         <a href="qpushbutton.html">QPushButton</a> *restart 
             = new <a href="qpushbutton.html">QPushButton</a>( "&amp;New Game", this, "newgame" );
-        restart-&gt;<a href="qwidget.html#dde00b">setFont</a>( <a href="qfont.html">QFont</a>( "Times", 18, QFont::Bold ) );
+        restart-&gt;<a href="qwidget.html#c52788">setFont</a>( <a href="qfont.html">QFont</a>( "Times", 18, QFont::Bold ) );
     
-        <a href="qobject.html#c2d209">connect</a>( restart, SIGNAL(clicked()), this, SLOT(newGame()) );
+        <a href="qobject.html#7f8e37">connect</a>( restart, SIGNAL(clicked()), this, SLOT(newGame()) );
 </pre>
 <p>
 We create, set up and connect the New Game button like we have done
@@ -315,14 +315,14 @@ nothing much we want to do with them.  Qt will delete them when the
 GameBoard widget is destroyed, and the layout classes will resize them
 appropriately.  <pre>
         <a href="qhboxlayout.html">QHBoxLayout</a> *topBox = new <a href="qhboxlayout.html">QHBoxLayout</a>;
-        grid-&gt;<a href="qgridlayout.html#7fc9ea">addLayout</a>( topBox, 0, 1 );
-        topBox-&gt;<a href="qboxlayout.html#219265">addWidget</a>( shoot );
-        topBox-&gt;<a href="qboxlayout.html#219265">addWidget</a>( hits );
-        topBox-&gt;<a href="qboxlayout.html#219265">addWidget</a>( hitsL );
-        topBox-&gt;<a href="qboxlayout.html#219265">addWidget</a>( shotsLeft );
-        topBox-&gt;<a href="qboxlayout.html#219265">addWidget</a>( shotsLeftL );
-        topBox-&gt;<a href="qboxlayout.html#51b0de">addStretch</a>( 1 );
-        topBox-&gt;<a href="qboxlayout.html#219265">addWidget</a>( restart );
+        grid-&gt;<a href="qgridlayout.html#a409bc">addLayout</a>( topBox, 0, 1 );
+        topBox-&gt;<a href="qboxlayout.html#ebba99">addWidget</a>( shoot );
+        topBox-&gt;<a href="qboxlayout.html#ebba99">addWidget</a>( hits );
+        topBox-&gt;<a href="qboxlayout.html#ebba99">addWidget</a>( hitsL );
+        topBox-&gt;<a href="qboxlayout.html#ebba99">addWidget</a>( shotsLeft );
+        topBox-&gt;<a href="qboxlayout.html#ebba99">addWidget</a>( shotsLeftL );
+        topBox-&gt;<a href="qboxlayout.html#0226eb">addStretch</a>( 1 );
+        topBox-&gt;<a href="qboxlayout.html#ebba99">addWidget</a>( restart );
 </pre>
 <p>
 The number of widgets in the top-right cell is getting large.  Once it
@@ -415,6 +415,6 @@ You may now go on to <a href="t14.html">chapter fourteen.</a>
 
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.1</div>
+<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

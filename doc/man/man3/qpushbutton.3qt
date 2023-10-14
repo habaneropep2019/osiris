@@ -1,5 +1,5 @@
 '\" t
-.TH QPushButton 3qt "13 June 2001" "Trolltech AS" \" -*- nroff -*-
+.TH QPushButton 3qt "29 October 2001" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2001 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -289,13 +289,13 @@ Returns the associated popup menu or 0 if no popup menu has been defined.
 See also setPopup().
 .SH "void QPushButton::resize ( const QSize & s )"
 Reimplemented for internal reasons; the API is not affected.
-.SH "void QPushButton::resize ( int w, int h )"
-Reimplemented for internal reasons; the API is not affected.
 .PP
 Examples:
 .(l
 drawdemo/drawdemo.cpp
 .)l
+.SH "void QPushButton::resize ( int w, int h )"
+Reimplemented for internal reasons; the API is not affected.
 .SH "void QPushButton::resizeEvent ( QResizeEvent * ) \fC[virtual protected]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .PP
@@ -322,13 +322,13 @@ Disable the border.
 See also flat().
 .SH "void QPushButton::setGeometry ( const QRect & r ) \fC[virtual]\fR"
 Reimplemented for internal reasons; the API is not affected.
+.SH "void QPushButton::setGeometry ( int x, int y, int w, int h ) \fC[virtual]\fR"
+Reimplemented for internal reasons; the API is not affected.
 .PP
 Examples:
 .(l
 popup/popup.cpp qmag/qmag.cpp
 .)l
-.SH "void QPushButton::setGeometry ( int x, int y, int w, int h ) \fC[virtual]\fR"
-Reimplemented for internal reasons; the API is not affected.
 .SH "void QPushButton::setIconSet ( const QIconSet & icon )"
 Sets the button to display the icon \fIicon\fR in addition to its text or pixmap
 .PP
@@ -401,4 +401,4 @@ In case of content or formattting problems with this manual page, please
 report them to
 .BR qt-bugs@trolltech.com .
 Please include the name of the manual page (qpushbutton.3qt) and the Qt
-version (2.3.1).
+version (2.3.2).

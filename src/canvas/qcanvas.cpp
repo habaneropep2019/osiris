@@ -1,5 +1,5 @@
 /**********************************************************************
-** $Id: qt/src/canvas/qcanvas.cpp   2.3.1   edited 2001-04-23 $
+** $Id: qt/src/canvas/qcanvas.cpp   2.3.2   edited 2001-08-20 $
 **
 ** Implementation of QCanvas and associated classes
 **
@@ -1304,7 +1304,7 @@ void QCanvas::setDoubleBuffering(bool y)
   is repeated as necessary to cover the area.  If it is smaller, tiles
   to the right and bottom are not visible.
 
-  The width and height of \a p must be multipless of \a tilewidth and
+  The width and height of \a p must be multiples of \a tilewidth and
   \a tileheight. If they are not, the action of this function is
   unspecified.
 */

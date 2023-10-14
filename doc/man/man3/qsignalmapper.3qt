@@ -1,5 +1,5 @@
 '\" t
-.TH QSignalMapper 3qt "13 June 2001" "Trolltech AS" \" -*- nroff -*-
+.TH QSignalMapper 3qt "29 October 2001" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2001 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -77,15 +77,15 @@ Removes all mappings for \fIsender.\fR This is done automatically when mapped ob
 Adds a mapping such that when map() is signalled from the given sender, the signal mapper(identifier) is emitted.
 .PP
 There may be at most one string identifier for each object, and it may not be null.
+.SH "void QSignalMapper::setMapping ( const QObject * sender, int identifier ) \fC[virtual]\fR"
+Adds a mapping such that when map() is signalled from the given sender, the signal mapped(identifier) is emitted.
+.PP
+There may be at most one integer identifier for each object.
 .PP
 Examples:
 .(l
 i18n/main.cpp
 .)l
-.SH "void QSignalMapper::setMapping ( const QObject * sender, int identifier ) \fC[virtual]\fR"
-Adds a mapping such that when map() is signalled from the given sender, the signal mapped(identifier) is emitted.
-.PP
-There may be at most one integer identifier for each object.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qsignalmapper.html
 .BR http://www.trolltech.com/faq/tech.html
@@ -104,4 +104,4 @@ In case of content or formattting problems with this manual page, please
 report them to
 .BR qt-bugs@trolltech.com .
 Please include the name of the manual page (qsignalmapper.3qt) and the Qt
-version (2.3.1).
+version (2.3.2).

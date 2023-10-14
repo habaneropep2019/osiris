@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/network/qserversocket.cpp   2.3.1   edited 2001-01-26 $
+** $Id: qt/src/network/qserversocket.cpp   2.3.2   edited 2001-07-10 $
 **
 ** Implementation of QServerSocket class.
 **
@@ -72,10 +72,15 @@ public:
 /*!
   Creates a server socket object, that will serve the given \a port on
   all the addresses of this host.  If \a port is 0, QServerSocket
-  picks a suitable port in in a system-dependent manner.
+  picks a suitable port in in a system-dependent manner. With \a backlog you
+  can specify how many pending connections a server can have.
 
   The \a parent and \a name arguments are passed on as usual
   to the QObject constructor.
+
+  \warning On Tru64 Unix systems a value of 0 for \a backlog means that you
+  don't accept any connections at all; you should specify a value larger than
+  0.
 */
 
 QServerSocket::QServerSocket( Q_UINT16 port, int backlog,
@@ -89,10 +94,15 @@ QServerSocket::QServerSocket( Q_UINT16 port, int backlog,
 
 /*!
   Creates a server socket object, that will serve the given \a port
-  on just \a address.
+  on just \a address. With \a backlog you can specify how many pending
+  connections a server can have.
 
   The \a parent and \a name arguments are passed on as usual
   to the QObject constructor.
+
+  \warning On Tru64 Unix systems a value of 0 for \a backlog means that you
+  don't accept any connections at all; you should specify a value larger than
+  0.
 */
 
 QServerSocket::QServerSocket( const QHostAddress & address, Q_UINT16 port,

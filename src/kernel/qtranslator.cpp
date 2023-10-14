@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qtranslator.cpp   2.3.1   edited 2001-02-18 $
+** $Id: qt/src/kernel/qtranslator.cpp   2.3.2   edited 2001-10-13 $
 **
 ** Localization database support.
 **
@@ -368,7 +368,7 @@ bool QTranslator::load( const QString & filename, const QString & directory,
     delims = search_delimiters.isNull() ?
 	     QString::fromLatin1("_.") : search_delimiters;
 
-    while( TRUE ) {
+    for (;;) {
 	QFileInfo fi;
 
 	realname = prefix + fname;
@@ -754,7 +754,7 @@ void QTranslator::unsqueeze()
 	return;
 
     QDataStream s( *d->messageArray, IO_ReadOnly );
-    while( TRUE ) {
+    for (;;) {
 	QTranslatorMessage m( s );
 	if ( m.hash() == 0 )
 	    break;
@@ -919,7 +919,7 @@ QTranslatorMessage QTranslator::findMessage( const char* context,
 
 	Q_UINT8 len;
 	char con[256];
-	while(TRUE) {
+	for (;;) {
 	    t >> len;
 	    if ( len == 0 )
 		return QTranslatorMessage();
@@ -1052,7 +1052,7 @@ QTranslatorMessage::QTranslatorMessage( QDataStream & stream )
     char tag;
     Q_UINT8 obs1;
 
-    while( TRUE ) {
+   for (;;) {
 	tag = 0;
 	if ( !stream.atEnd() )
 	    stream.readRawBytes( &tag, 1 );

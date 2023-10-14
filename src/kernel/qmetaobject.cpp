@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qmetaobject.cpp   2.3.1   edited 2001-01-26 $
+** $Id: qt/src/kernel/qmetaobject.cpp   2.3.2   edited 2001-10-13 $
 **
 ** Implementation of QMetaObject class
 **
@@ -462,7 +462,7 @@ QMetaData::Access QMetaObject::slot_access(int index, bool super )
     register QMetaObject *meta = (QMetaObject *)this;
     QMetaData::Access *md;
     QMemberDict *dict;
-    while ( TRUE ) {
+    for (;;) {
 	dict = meta->slotDict;
 	int n = dict ? dict->count() : 0;
 	if ( super ) {
@@ -542,7 +542,7 @@ QMetaData *QMetaObject::mdata( int code, const char *name, bool super ) const
 {
     QMetaObject *meta = (QMetaObject *)this;
     QMemberDict *dict;
-    while ( TRUE ) {
+    for (;;) {
 	switch ( code ) {			// find member
 	case SLOT_CODE:   dict = meta->slotDict;   break;
 	case SIGNAL_CODE: dict = meta->signalDict; break;
@@ -571,7 +571,7 @@ QMetaData *QMetaObject::mdata( int code, int index, bool super ) const
     register QMetaObject *meta = (QMetaObject *)this;
     QMetaData *md;
     QMemberDict *dict;
-    while ( TRUE ) {
+    for (;;) {
 	switch ( code ) {			// find member
 	case SLOT_CODE:   dict = meta->slotDict;   break;
 	case SIGNAL_CODE: dict = meta->signalDict; break;

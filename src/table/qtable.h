@@ -331,6 +331,8 @@ private:
     void updateRowWidgets( int row );
     void updateColWidgets( int col );
 
+    bool isRowHidden( int ) const;
+    bool isColumnHidden( int ) const;
 private:
     QVector<QTableItem> contents;
     QVector<QWidget> widgets;

@@ -1,5 +1,5 @@
 '\" t
-.TH QCanvas 3qt "13 June 2001" "Trolltech AS" \" -*- nroff -*-
+.TH QCanvas 3qt "29 October 2001" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2001 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -333,7 +333,7 @@ The pixmap \fIp\fR contains the tiles arranged left to right, top to bottom, wit
 .PP
 If the QCanvas is larger than the matrix of tiles, the entire matrix is repeated as necessary to cover the area. If it is smaller, tiles to the right and bottom are not visible.
 .PP
-The width and height of \fIp\fR must be multipless of \fItilewidth\fR and \fItileheight.\fR If they are not, the action of this function is unspecified.
+The width and height of \fIp\fR must be multiples of \fItilewidth\fR and \fItileheight.\fR If they are not, the action of this function is unspecified.
 .SH "void QCanvas::setUpdatePeriod ( int ms ) \fC[virtual]\fR"
 Sets the canvas to call update() every \fIms\fR milliseconds. Any previous setting by setAdvancePeriod() or setUpdatePeriod() is cancelled.
 .SH "QSize QCanvas::size () const"
@@ -408,4 +408,4 @@ In case of content or formattting problems with this manual page, please
 report them to
 .BR qt-bugs@trolltech.com .
 Please include the name of the manual page (qcanvas.3qt) and the Qt
-version (2.3.1).
+version (2.3.2).

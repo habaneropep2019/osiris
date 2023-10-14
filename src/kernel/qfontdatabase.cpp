@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qfontdatabase.cpp   2.3.1   edited 2001-06-04 $
+** $Id: qt/src/kernel/qfontdatabase.cpp   2.3.2   edited 2001-10-16 $
 **
 ** Implementation of font database class.
 **
@@ -41,6 +41,7 @@
 
 #ifdef _WS_QWS_
 #include "qfontmanager_qws.h"
+#include "qdir.h"
 #endif
 #include "qmap.h"
 #include "qdict.h"
@@ -215,6 +216,9 @@ private:
     QValueList<int> sizeList;
 
     friend void QFontDatabase::createDatabase();
+#ifdef _WS_QWS_
+    friend void QFontDatabase::qwsAddDiskFont( QDiskFont *qdf );
+#endif
 #ifdef _WS_WIN_
     friend void newWinFont( void * p );
     friend void add_style( QtFontCharSet *charSet, const QString& styleName,
@@ -289,6 +293,9 @@ private:
     QStringList styleNames;
 
     friend void QFontDatabase::createDatabase();
+#ifdef _WS_QWS_
+    friend void QFontDatabase::qwsAddDiskFont( QDiskFont *qdf );
+#endif
 #ifdef _WS_WIN_
     friend void newWinFont( void * p );
     friend void add_style( QtFontCharSet *charSet, const QString& styleName,
@@ -352,6 +359,9 @@ private:
     bool fixedPitch;
 
     friend void QFontDatabase::createDatabase();
+#ifdef _WS_QWS_
+    friend void QFontDatabase::qwsAddDiskFont( QDiskFont *qdf );
+#endif
 #ifdef _WS_WIN_
     friend void newWinFont( void * p );
     friend void add_style( QtFontCharSet *charSet, const QString& styleName,
@@ -381,6 +391,9 @@ private:
         { familyDict.insert( f->name(), f ); }
 
     friend void QFontDatabase::createDatabase();
+#ifdef _WS_QWS_
+    friend void QFontDatabase::qwsAddDiskFont( QDiskFont *qdf );
+#endif
 #ifdef _WS_WIN_
     friend void newWinFont( void * p );
 #endif
@@ -416,6 +429,9 @@ private:
         { foundryDict.insert( f->name(), f ); }
 
     friend void QFontDatabase::createDatabase();
+#ifdef _WS_QWS_
+    friend void QFontDatabase::qwsAddDiskFont( QDiskFont *qdf );
+#endif
 #ifdef _WS_WIN_
     friend void newWinFont( void * p );
 #endif
@@ -1124,10 +1140,12 @@ static const char *xlfdEncodingName( int cs )
 	result = "ksc5601.1987-0";
         break;
     case QFont::Set_Zh:
-    case QFont::Set_GBK:
     case QFont::GB_2312:
 	result = "gb2312.1980-0";
         break;
+    case QFont::Set_GBK:
+	result = "gbk-0";
+	break;
     case QFont::Set_Zh_TW:
     case QFont::Set_Big5:
     case QFont::Big5:
@@ -1800,6 +1818,10 @@ static QFont::CharSet getCharSet( const QString &name )
     if ( name == "ksc5601.1987-0" )
 	return QFont::Set_Ko;
     if ( name == "gb2312.1980-0" )
+	return QFont::GB_2312;
+    if ( name == "gbk-0" )
+	return QFont::Set_GBK;
+    if ( name == "gb18030-0" )
 	return QFont::Set_GBK;
     if ( name == "big5-0" )
 	return QFont::Set_Big5;
@@ -1865,9 +1887,10 @@ static const QString getCharSet( QFont::CharSet set)
     case QFont::KSC_5601:
 	return "ksc5601.1987-0";
     case QFont::Set_Zh:
-    case QFont::Set_GBK:
     case QFont::GB_2312:
 	return "gb2312.1980-0";
+    case QFont::Set_GBK:
+	return "gbk-0";
     case QFont::Set_Zh_TW:
     case QFont::Set_Big5:
     case QFont::Big5:
@@ -1960,6 +1983,18 @@ static QString getCharSetName( QFont::CharSet cs )
     case QFont::TSCII:
 	name = "Tamil (TSCII)";
 	break;
+    case QFont::Set_GBK:
+	name = "Simplified Chinese (GBK/GB18030)";
+	break;
+    case QFont::Set_Zh:
+    case QFont::GB_2312:
+	name = "Simplified Chinese (GB2312.1980)";
+	break;
+    case QFont::Set_Zh_TW:
+    case QFont::Set_Big5:
+    case QFont::Big5:
+	name = "Traditional Chinese (BIG5)";
+	break;	
     case QFont::Unicode:
         name = "Unicode (ISO 10646)";
         break;
@@ -2087,6 +2122,19 @@ static QString getCharSetSample( QFont::CharSet cs )
  	sample += QChar(0x04D8);
  	sample += QChar(0x04AE);
   	break;
+    case QFont::Set_GBK:
+    case QFont::GB_2312:
+    case QFont::Set_Zh:
+    case QFont::Set_Zh_TW:
+    case QFont::Set_Big5:
+    case QFont::Big5:
+	sample += QChar(0x4E00);
+	sample += QChar(0x4E8C);
+	sample += QChar(0x4E09);
+	sample += QChar(0x3400);
+	sample += QChar(0x3401);
+	sample += QChar(0x3402);
+	break;	
     case QFont::Unicode:
         sample = "Aa";
         sample += QChar(0x01A7); // Latin B
@@ -2506,67 +2554,141 @@ QStringList QFontDatabase::charSets( const QString &family,
 }
 
 #ifdef _WS_QWS_
+extern QString qws_topdir();
+
+static void qt_setFontWeight( int &weight, QString &weightString )
+{
+    if ( weight <= QFont::Light ) {
+	weight = QFont::Light;
+	weightString = "Light";
+    } else if ( weight <= QFont::Normal ) {
+	weight = QFont::Normal;
+	weightString = "Regular";
+    } else if ( weight <= QFont::DemiBold ) {
+	weight = QFont::DemiBold;
+	weightString = "DemiBold";
+    } else if ( weight <= QFont::Bold ) {
+	weight = QFont::Bold;
+	weightString = "Bold";
+    } else {
+	weight = QFont::Black;
+	weightString = "Black";
+    }
+}
+
+static QtFontFoundry *qt_ttffoundry=0;
+static QtFontFoundry *qt_bdffoundry=0;
+
+void QFontDatabase::qwsAddDiskFont( QDiskFont *qdf )
+{
+    if ( !db )
+	return;
+
+    QString familyname=qdf->name;
+    QtFontFoundry *foundry = qt_ttffoundry;
+    if ( qdf->factory->name() == "BDF" )
+	foundry = qt_bdffoundry;
+    QtFontFamily * family=foundry->familyDict.find(familyname);
+    QtFontCharSet * mycharset;
+    if(!family) {
+	family=new QtFontFamily(foundry,familyname);
+	foundry->addFamily(family);
+	mycharset=new QtFontCharSet(family,"iso10646-1");
+	family->addCharSet(mycharset);
+    }
+    mycharset=family->charSetDict.find("iso10646-1");
+    QString weightString;
+    int weight=qdf->weight;
+    qt_setFontWeight( weight, weightString );
+    QString style;
+    if(qdf->italic) {
+	style=weightString+" Italic";
+    } else {
+	style=weightString;
+    }
+    QtFontStyle * mystyle=mycharset->styleDict.find(style);
+    if(!mystyle) {
+	mystyle=new QtFontStyle(mycharset,style);
+	mystyle->ital=qdf->italic;
+	mystyle->lesserItal=false;
+	mystyle->weightString=weightString;
+	mystyle->weightVal=weight;
+	mystyle->weightDirty=false;
+	mycharset->addStyle(mystyle);
+    }
+    if ( qdf->factory->name() == "FT" )
+	mystyle->setSmoothlyScalable();
+}
+
 void QFontDatabase::createDatabase()
 {
     if ( db ) return;
     db = new QFontDatabasePrivate;
 
-    QDiskFont * qdf;
-    QString fname="Truetype";
-    QtFontFoundry * foundry=new QtFontFoundry(fname);
-    db->addFoundry(foundry);
+    if ( !qt_ttffoundry ) {
+	qt_ttffoundry=new QtFontFoundry( "Truetype" );
+	db->addFoundry(qt_ttffoundry);
+    }
+
+    if ( !qt_bdffoundry ) {
+	qt_bdffoundry = new QtFontFoundry( "BDF" );
+	db->addFoundry(qt_bdffoundry);
+    }
+
+    QtFontFoundry *foundry = qt_ttffoundry;
 
     if(!qt_fontmanager)
         qt_fontmanager=new QFontManager();
 
-    for(qdf=qt_fontmanager->diskfonts.first();qdf!=0;
-        qdf=qt_fontmanager->diskfonts.next()) {
-        QString familyname=qdf->name;
-        QtFontFamily * family=foundry->familyDict.find(familyname);
-        QtFontCharSet * mycharset;
-        if(!family) {
-            family=new QtFontFamily(foundry,familyname);
-            foundry->addFamily(family);
-            mycharset=new QtFontCharSet(family,"iso10646");
-            family->addCharSet(mycharset);
-        }
-        mycharset=family->charSetDict.find("iso10646");
-        QString weightString;
-        int weight=qdf->weight;
-        if ( weight <= QFont::Light ) {
-            weight = QFont::Light;
-            weightString = "Light";
-        } else if ( weight <= QFont::Normal ) {
-            weight = QFont::Normal;
-            weightString = "Regular";
-        } else if ( weight <= QFont::DemiBold ) {
-            weight = QFont::DemiBold;
-            weightString = "DemiBold";
-        } else if ( weight <= QFont::Bold ) {
-            weight = QFont::Bold;
-            weightString = "Bold";
-        } else {
-            weight = QFont::Black;
-            weightString = "Black";
-        }
-        QString style;
-        if(qdf->italic) {
-            style=weightString+" Italic";
-        } else {
-            style=weightString;
-        }
-        QtFontStyle * mystyle=mycharset->styleDict.find(style);
-        if(!mystyle) {
-            mystyle=new QtFontStyle(mycharset,style);
-            mystyle->ital=qdf->italic;
-            mystyle->lesserItal=false;
-            mystyle->weightString=weightString;
-            mystyle->weightVal=weight;
-            mystyle->weightDirty=false;
-            mycharset->addStyle(mystyle);
-        }
-        mystyle->setSmoothlyScalable();
+    QDiskFont *qdf;
+    for ( qdf=qt_fontmanager->diskfonts.first();qdf!=0;
+	  qdf=qt_fontmanager->diskfonts.next()) {
+	qwsAddDiskFont( qdf );
     }
+
+#ifndef QT_NO_DIR
+    foundry=new QtFontFoundry( "Qt" );
+    db->addFoundry( foundry );
+
+    QDir dir(qws_topdir()+"/lib/fonts/","*.qpf");
+    for (int i=0; i<(int)dir.count(); i++) {
+	int u0 = dir[i].find('_');
+	int u1 = dir[i].find('_',u0+1);
+	int u2 = dir[i].find('_',u1+1);
+	QString familyname = dir[i].left(u0);
+	int pointSize = dir[i].mid(u0+1,u1-u0-1).toInt();
+	int weight = dir[i].mid(u1+1,u2-u1-1).toInt();
+	bool italic = dir[i].mid(u2-1,1) == "i";
+	QtFontFamily *family = foundry->familyDict.find( familyname );
+        QtFontCharSet * mycharset;
+	if ( !family ) {
+	    family=new QtFontFamily(foundry,familyname);
+	    foundry->addFamily(family);
+	    mycharset=new QtFontCharSet(family,"iso10646-1");
+	    family->addCharSet(mycharset);
+	}
+	mycharset=family->charSetDict.find("iso10646-1");
+	QString weightString;
+	qt_setFontWeight( weight, weightString );
+	QString style;
+	if(italic) {
+	    style=weightString+" Italic";
+	} else {
+	    style=weightString;
+	}
+	QtFontStyle * mystyle=mycharset->styleDict.find(style);
+	if(!mystyle) {
+	    mystyle=new QtFontStyle(mycharset,style);
+	    mystyle->ital=italic;
+	    mystyle->lesserItal=false;
+	    mystyle->weightString=weightString;
+	    mystyle->weightVal=weight;
+	    mystyle->weightDirty=false;
+	    mycharset->addStyle(mystyle);
+	}
+	mystyle->addPointSize( pointSize );
+    }
+#endif
 }
 
 #endif

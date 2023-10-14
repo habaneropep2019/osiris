@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qnpsupport.cpp   2.3.1   edited 2001-01-26 $
+** $Id: qt/src/kernel/qnpsupport.cpp   2.3.2   edited 2001-01-26 $
 **
 ** Low-level support for Netscape Plugins under X11.
 **

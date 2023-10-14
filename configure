@@ -141,6 +141,7 @@ else
 		    MODULES="$MODULES network"
 		fi
 	    fi
+	    ExpiryDate=`echo $ExpiryDate | sed -e "s,-,,g"`
 	    NOW=`date +%Y%m%d`
 	    if [ "$NOW" -gt "0$ExpiryDate" ]
 	    then
@@ -241,6 +242,7 @@ JPEG=no
 MNG=no
 NAS_SOUND=no
 XFT=auto
+XKB=auto
 I_FLAGS=
 L_FLAGS=
 R_FLAGS=
@@ -369,6 +371,12 @@ while [ -n "$1" ]; do
 	;;
    -xft)
 	XFT=yes
+	;;
+   -no-xkb)
+	XKB=no
+	;;
+   -xkb)
+	XKB=yes
 	;;
    -no-*)
        MODULE=`echo $1 | sed -e "s/-no-//"`;
@@ -850,6 +858,11 @@ then
     GLDIRS=`sed -n -e '/^SYSCONF_LFLAGS_OPENGL[	]*=/ { s/[^=]*=[	 ]*//; s/-L/ /g; p; }' $XCONFIG`
     XDIRS=`sed -n -e '/^SYSCONF_LFLAGS_X11[	]*=/ { s/[^=]*=[	 ]*//; s/-L/ /g; p; }' $XCONFIG`
     LIBDIRS="$GLDIRS $XDIRS /usr/lib /lib"
+    for L in $L_FLAGS
+    do
+        LL=`echo $L | sed -e 's/^-L//'`
+        LIBDIRS="$LIBDIRS $LL"
+    done
 
     for L in $LIBS
     do
@@ -902,6 +915,12 @@ then
 	GLDIRS=`sed -n -e '/^SYSCONF_CXXFLAGS_OPENGL[	]*=/ { s/[^=]*=[	 ]*//; s/-I/ /g; p; }' $XCONFIG`
 	XDIRS=`sed -n -e '/^SYSCONF_CXXFLAGS_X11[	]*=/ { s/[^=]*=[	 ]*//; s/-I/ /g; p; }' $XCONFIG`
 	INCDIRS="$GLDIRS $XDIRS /usr/include /include"
+	for I in $I_FLAGS
+	do
+           II=`echo $I | sed -e 's/^-I//'`
+           INCDIRS="$INCDIRS $II"
+	done
+
 
 	for I in $INCS
 	do
@@ -1030,6 +1049,94 @@ then
     fi
 fi
 
+case "$XPLATFORM" in
+solaris-*)
+    UNAME_RELEASE=`(uname -r) 2>/dev/null` || UNAME_RELEASE=unknown
+    case "$UNAME_RELEASE" in
+    5.7)
+	if [ "x$VERBOSE" = "xyes" ]
+	then
+		echo "XKB extension known to be broken on this platform."
+	fi
+	XKB=no
+	;;
+    esac
+    ;;
+tru64-*)
+    UNAME_RELEASE=`(uname -r) 2>/dev/null` || UNAME_RELEASE=unknown
+    if [ "x$VERBOSE" = "xyes" ]
+    then
+	echo "XKB extension not supported on this platform."
+    fi
+    XKB=no
+    ;;
+esac
+
+XKBLIB_H=
+if [ "$XKB" != "no" ]
+then
+    # find XKB support
+    if [ "$VERBOSE" = "yes" ]
+    then
+	echo "XKB auto-detection..."
+    fi
+    
+
+    # check for XKB headers
+
+    if [ "$XKB" != "yes" ]
+    then
+	INC="X11/XKBlib.h"
+	XDIRS=`sed -n -e '/^SYSCONF_CXXFLAGS_X11[	]*=/ { s/[^=]*=[	 ]*//; s/-I/ /g; p; }' $XCONFIG`
+	INCDIRS="$XDIRS /usr/include /include"
+	F=
+	for INCDIR in $INCDIRS
+	do
+	    if [ -f $INCDIR/$INC ]
+	    then
+		F=yes
+		XKBLIB_H=$INCDIR/$INC
+		if [ "$VERBOSE" = "yes" ]
+		then
+		    echo "  Found $INC in $INCDIR"
+		fi
+		break
+	    fi
+	done
+	if [ -z "$F" ]
+	then
+	    XKB=no
+	    if [ "$VERBOSE" = "yes" ]
+	    then
+		echo "  Could not find $INC anywhere in $INCDIRS"
+	    fi
+        else
+	    XKB=yes
+	    if [ "$VERBOSE" = "yes" ]
+            then
+                echo "  XKB support enabled."
+            fi
+	fi
+    fi
+fi
+
+# check for XkbSetPerClientControls in X11/XKBlib.h
+# if it is not found, we disable xkb support
+
+if [ "$XKB" = "yes" ] && [ -f "$XKBLIB_H" ]
+then
+    grep XkbSetPerClientControls $XKBLIB_H >/dev/null || XKB=no
+    
+    if [ "$VERBOSE" = "yes" ]
+    then
+	if [ "$XKB" = "yes" ]
+	then
+	    echo "  XkbSetPerClientControls found."
+	else
+	    echo "  XkbSetPerClientControls not found."
+	fi
+    fi
+fi
 
 # Next, emit a usage message if something failed.
 
@@ -1170,6 +1277,7 @@ QT_MODOBJ=""
 [ "x$NAS_SOUND" = "xyes" ] && QT_CXX="${QT_CXX} -DQT_NAS_SUPPORT"
 [ "x$SM" = "xno" ] && QT_CXX="${QT_CXX} -DQT_NO_SM_SUPPORT"
 [ "x$XFT" = "xyes" ] && QT_CXX="${QT_CXX} -DQT_XFT"
+[ "x$XFT" = "xno" ] && QT_CXX="${QT_CXX} -DQT_NO_XKB"
 if [ "x$THREAD" = "xyes" ]
 then
    cat >src-mt.mk <<EOF
@@ -1318,9 +1426,11 @@ then
     echo "JPEG support....................... $JPEG"
     if [ -z "$EMB" ]
     then
+	echo "OpenGL support .................... $OPENGL"
 	echo "NAS sound support.................. $NAS_SOUND"
 	echo "Session management................. $SM"
 	echo "Xft support (Anti-Aliased Fonts) .. $XFT"
+	echo "XKB support ....................... $XKB"
     fi
 else
     echo "Configuration...................... $QCONFIG"

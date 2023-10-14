@@ -182,7 +182,7 @@ diff -ac zlib113/zutil.h zlibwce/zutil.h
 ***************
 *** 7,13 ****
   
-  /* @(#) $Id: qt/src/3rdparty/libpng/projects/wince/zlib.diff   2.3.1   edited 2001-02-07 $ */
+  /* @(#) $Id: qt/src/3rdparty/libpng/projects/wince/zlib.diff   2.3.2   edited 2001-02-07 $ */
   
 ! #include <stdio.h>
   
@@ -190,7 +190,7 @@ diff -ac zlib113/zutil.h zlibwce/zutil.h
   
 --- 8,14 ----
   
-  /* @(#) $Id: qt/src/3rdparty/libpng/projects/wince/zlib.diff   2.3.1   edited 2001-02-07 $ */
+  /* @(#) $Id: qt/src/3rdparty/libpng/projects/wince/zlib.diff   2.3.2   edited 2001-02-07 $ */
   
 ! #include <windows.h>
   
@@ -1210,7 +1210,7 @@ diff -ac zlib113/zutil.h zlibwce/zutil.h
 *** 15,21 ****
 --- 16,30 ----
   
-  /* @(#) $Id: qt/src/3rdparty/libpng/projects/wince/zlib.diff   2.3.1   edited 2001-02-07 $ */
+  /* @(#) $Id: qt/src/3rdparty/libpng/projects/wince/zlib.diff   2.3.2   edited 2001-02-07 $ */
   
 + #if defined(_WIN32_WCE)
 + #if _WIN32_WCE < 211
@@ -1681,7 +1681,7 @@ diff -ac zlib113/zutil.h zlibwce/zutil.h
    * For conditions of distribution and use, see copyright notice in zlib.h 
    */
   
-  /* @(#) $Id: qt/src/3rdparty/libpng/projects/wince/zlib.diff   2.3.1   edited 2001-02-07 $ */
+  /* @(#) $Id: qt/src/3rdparty/libpng/projects/wince/zlib.diff   2.3.2   edited 2001-02-07 $ */
   
 + #if defined(_WIN32_WCE)
 + #if _WIN32_WCE < 211

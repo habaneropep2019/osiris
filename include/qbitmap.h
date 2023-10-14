@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qbitmap.h   2.3.1   edited 2001-01-26 $
+** $Id: qt/src/kernel/qbitmap.h   2.3.2   edited 2001-06-22 $
 **
 ** Definition of QBitmap class
 **
@@ -60,7 +60,7 @@ public:
     QBitmap &operator=( const QPixmap & );
     QBitmap &operator=( const QImage  & );
 
-#ifndef QT_NO_TRANSFORMATIONS
+#ifndef QT_NO_PIXMAP_TRANSFORMATION
     QBitmap  xForm( const QWMatrix & ) const;
 #endif
 };

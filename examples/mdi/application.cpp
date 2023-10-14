@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/mdi/application.cpp   2.3.1   edited 2001-02-01 $
+** $Id: qt/examples/mdi/application.cpp   2.3.2   edited 2001-10-18 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -121,7 +121,7 @@ ApplicationWindow::ApplicationWindow()
     menuBar()->insertItem( "&Help", help );
 
     help->insertItem( "&About", this, SLOT(about()), Key_F1);
-    help->insertItem( "About&Qt", this, SLOT(aboutQt()));
+    help->insertItem( "About &Qt", this, SLOT(aboutQt()));
     help->insertSeparator();
     help->insertItem( "What's &This", this, SLOT(whatsThis()), SHIFT+Key_F1);
 
@@ -129,7 +129,6 @@ ApplicationWindow::ApplicationWindow()
     vb->setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
     ws = new QWorkspace( vb );
     setCentralWidget( vb );
-
     statusBar()->message( "Ready", 2000 );
 }
 

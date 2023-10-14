@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qevent.cpp   2.3.1   edited 2001-01-26 $
+** $Id: qt/src/kernel/qevent.cpp   2.3.2   edited 2001-08-10 $
 **
 ** Implementation of event classes
 **
@@ -981,7 +981,10 @@ void QFocusEvent::resetReason()
   A \c ChildRemoved event is sent immediately, but a \c ChildInserted event
   is \e posted (with QApplication::postEvent())
 
-
+  Note that if a child is removed immediately after it is inserted, the 
+  \c ChildInserted event may be suppressed, but the \c ChildRemoved 
+  event will always be sent. In this case there will be a \c ChildRemoved
+  event without a corresponding \c ChildInserted event.
 
   The handler for these events is QObject::childEvent().
 */

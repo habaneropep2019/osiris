@@ -152,6 +152,7 @@ mocgen.o: mocgen.cpp \
 		../../include/qiodevice.h \
 		../../include/qdatetime.h \
 		../../include/qfile.h \
+		../tools/qfiledefs_p.h \
 		lex.yy.c
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mocgen.o mocgen.cpp
 

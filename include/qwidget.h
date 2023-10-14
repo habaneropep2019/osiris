@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qwidget.h   2.3.1   edited 2001-01-26 $
+** $Id: qt/src/kernel/qwidget.h   2.3.2   edited 2001-10-20 $
 **
 ** Definition of QWidget class
 **
@@ -540,6 +540,7 @@ private:
     void         setBackgroundEmpty();
 #if defined(_WS_X11_)
     void         setBackgroundX11Relative();
+    void	 checkChildrenDnd();
 #endif
 
     WId		 winid;
@@ -553,6 +554,7 @@ private:
     uint 	 sizehint_forced :1;
     uint 	 is_closing :1;
     uint 	 in_show : 1;
+    uint 	 in_show_maximized : 1;
     QPoint	 fpos;
     QRect	 crect;
     QColor	 bg_col;
@@ -878,6 +880,9 @@ struct QWExtra {
     QRect micro_focus_hint;                     // micro focus hint
     QSizePolicy size_policy;
     void * posted_events;			// in qapplication
+#if defined(_WS_X11_)
+    uint children_use_dnd : 1;			// one or more children have DND enabled
+#endif
 };
 
 

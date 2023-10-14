@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/workspace/qworkspace.cpp   2.3.1   edited 2001-06-08 $
+** $Id: qt/src/workspace/qworkspace.cpp   2.3.2   edited 2001-10-17 $
 **
 ** Implementation of the QWorkspace class
 **
@@ -471,6 +471,7 @@ protected:
     void mousePressEvent( QMouseEvent * );
     void mouseReleaseEvent( QMouseEvent * );
     void mouseMoveEvent( QMouseEvent * );
+
     bool eventFilter( QObject *, QEvent * );
 
 private:
@@ -601,6 +602,7 @@ public:
     int menuId;
     int controlId;
     QString topCaption;
+    bool autoFocusChange;
 };
 
 /*!
@@ -619,6 +621,7 @@ QWorkspace::QWorkspace( QWidget *parent, const char *name )
     d->becomeActive = 0;
     d->popup = new QPopupMenu( this, "qt_internal_mdi_popup" );
     d->toolPopup = new QPopupMenu( this, "qt_internal_mdi_popup" );
+    d->autoFocusChange = FALSE;
 
     d->menuId = -1;
     d->controlId = -1;
@@ -702,7 +705,7 @@ void QWorkspace::childEvent( QChildEvent * e)
 	    return; 	    // nothing to do
 
 	bool hasBeenHidden = w->isHidden();
-	
+
 	bool hasSize = w->testWState( WState_Resized );
 	bool hasPos = w->x() != 0 || w->y() != 0;
 	QRect wrect = QRect( w->x(), w->y(), w->width(), w->height() );
@@ -1028,6 +1031,8 @@ void QWorkspace::normalizeWindow( QWidget* w)
 {
     QWorkspaceChild* c = findChild( w );
     if ( c ) {
+	if ( d->maxWindow )
+	    hideMaximizeControls();
 	if ( c == d->maxWindow ) {
 	    c->setGeometry( d->maxRestore );
 	    d->maxWindow = 0;
@@ -1035,13 +1040,11 @@ void QWorkspace::normalizeWindow( QWidget* w)
 	    if ( !!d->topCaption )
 		topLevelWidget()->setCaption( d->topCaption );
 	    inCaptionChange = FALSE;
-	}
-	else {
+	} else {
 	    if ( c->iconw )
 		removeIcon( c->iconw->parentWidget() );
 	    c->show();
 	}
-	hideMaximizeControls();
     }
 }
 
@@ -1068,7 +1071,7 @@ void QWorkspace::maximizeWindow( QWidget* w)
 	    d->maxRestore = r;
 	}
 
-	activateWindow( w);
+	activateWindow( w );
 	showMaximizeControls();
 	inCaptionChange = TRUE;
 	if ( !!d->topCaption )
@@ -1083,7 +1086,7 @@ void QWorkspace::showWindow( QWidget* w)
 {
     if ( d->maxWindow && w->testWFlags( WStyle_MinMax ) && !w->testWFlags( WStyle_Tool) )
 	maximizeWindow( w );
-    else
+    else if ( !w->testWFlags( WStyle_Tool ) )
 	normalizeWindow( w );
     if ( d->maxWindow )
 	d->maxWindow->raise();
@@ -1117,7 +1120,7 @@ bool QWorkspace::eventFilter( QObject *o, QEvent * e)
 {
     static QTime* t = 0;
     static QWorkspace* tc = 0;
-    
+
     if ( o == this ) {
 	if ( e->type() == QEvent::Show ) {
 	    if ( d->maxWindow )
@@ -1128,7 +1131,7 @@ bool QWorkspace::eventFilter( QObject *o, QEvent * e)
 	}
 	return FALSE;
     }
-    
+
     if ( o == d->maxtools && d->menuId != -1 ) {
 	switch ( e->type() ) {
 	case QEvent::MouseButtonPress:
@@ -1146,7 +1149,6 @@ bool QWorkspace::eventFilter( QObject *o, QEvent * e)
 		}
 		return TRUE;
 	    }
-	    break;
 	default:
 	    break;
 	}
@@ -1158,9 +1160,12 @@ bool QWorkspace::eventFilter( QObject *o, QEvent * e)
 	if ( !o->isA( "QWorkspaceChild" ) || !isVisible() )
 	    break;
 	d->focus.removeRef( (QWorkspaceChild*)o );
-	if ( d->focus.isEmpty() )
+	if ( d->active != o )
+	    break;
+	if ( d->focus.isEmpty() ) {
 	    activateWindow( 0 );
-	else {
+	} else {
+	    d->autoFocusChange = TRUE;
 	    activatePreviousWindow();
 	    QWorkspaceChild* c = d->active;
 	    while ( d->active &&
@@ -1170,6 +1175,7 @@ bool QWorkspace::eventFilter( QObject *o, QEvent * e)
 		if ( d->active == c )
 		    break;
 	    }
+	    d->autoFocusChange = FALSE;
 	}
 	if ( d->maxWindow == o && d->maxWindow->isHidden() ) {
 	    d->maxWindow->setGeometry( d->maxRestore );
@@ -1441,6 +1447,7 @@ void QWorkspace::operationMenuActivated( int a )
 	break;
     case 6:
 	d->active->showShaded();
+	break;
     default:
 	break;
     }
@@ -1456,9 +1463,9 @@ void QWorkspace::activateNextWindow()
 	return;
     }
 
-    int a = d->focus.find( d->active );
+    int a = d->focus.find( d->active ) + 1;
 
-    a = (a+1) % d->focus.count();
+    a = a % d->focus.count();
 
     if ( d->focus.at( a ) )
 	activateWindow( d->focus.at( a )->windowWidget(), FALSE );
@@ -1475,14 +1482,22 @@ void QWorkspace::activatePreviousWindow()
 	    activateWindow( d->focus.first()->windowWidget(), FALSE );
 	else
 	    activateWindow( 0 );
-	
+
 	return;
     }
 
-    int a = d->focus.find( d->active );
+    int a = d->focus.find( d->active ) - 1;
 
-    if ( --a < 0 )
+    if ( a < 0 )
 	a = d->focus.count()-1;
+
+    if ( d->autoFocusChange ) {
+	QWidget *widget = 0;
+	while ( a >= 0 && d->focus.at( a ) && ( widget = d->focus.at( a )->windowWidget() ) && !widget->isVisible() )
+	    a--;
+	if ( a < 0 )
+	    a = d->focus.count() - 1;
+    }
 
     if ( d->focus.at( a ) )
 	activateWindow( d->focus.at( a )->windowWidget(), FALSE );
@@ -1515,11 +1530,13 @@ void QWorkspace::cascade()
 
     // make a list of all relevant mdi clients
     QList<QWorkspaceChild> widgets;
-    for ( QWorkspaceChild* wc = d->focus.first(); wc; wc = d->focus.next() ) {
-	if ( wc->windowWidget()->isVisibleTo( this ) && !wc->windowWidget()->testWFlags( WStyle_Tool ) ) {
+    QWorkspaceChild* wc = 0;
+    for ( wc = d->windows.first(); wc; wc = d->windows.next() )
+	if ( wc->iconw )
+	    normalizeWindow( wc->windowWidget() );
+    for ( wc = d->focus.first(); wc; wc = d->focus.next() )
+	if ( wc->windowWidget()->isVisibleTo( this ) && !wc->windowWidget()->testWFlags( WStyle_Tool ) )
 	    widgets.append( wc );
-	}
-    }
 
     int x = 0;
     int y = 0;
@@ -1548,7 +1565,7 @@ void QWorkspace::cascade()
 	    x = 0;
 	child->setGeometry( x, y, w, h );
 	x += xoffset;
-	y += yoffset;	
+	y += yoffset;
 	child->internalRaise();
 	child->setUpdatesEnabled( TRUE );
     }
@@ -1646,14 +1663,19 @@ QWorkspaceChildTitleBar::QWorkspaceChildTitleBar (QWorkspace* w, QWidget* win, Q
     closeB->setIconSet( QPixmap( (const char **)close_xpm ) );
     connect( closeB, SIGNAL( clicked() ),
 	     this, SIGNAL( doClose() ) ) ;
+    closeB->installEventFilter( this );
+
     maxB = new QToolButton( this, "maximize" );
     QToolTip::add( maxB, tr( "Maximize" ) );
     maxB->setFocusPolicy( NoFocus );
     maxB->setIconSet( QPixmap( (const char **)maximize_xpm ));
     connect( maxB, SIGNAL( clicked() ),
 	     this, SIGNAL( doMaximize() ) );
+    maxB->installEventFilter( this );
+
     iconB = new QToolButton( this, "iconify" );
     iconB->setFocusPolicy( NoFocus );
+    iconB->installEventFilter( this );
 
     shadeB = new QToolButton( this, "shade" );
     QToolTip::add( shadeB, tr( "Roll up" ) );
@@ -1661,6 +1683,7 @@ QWorkspaceChildTitleBar::QWorkspaceChildTitleBar (QWorkspace* w, QWidget* win, Q
     shadeB->setFocusPolicy( NoFocus );
     connect( shadeB, SIGNAL( clicked() ),
 	     this, SIGNAL( doShade() ) );
+    shadeB->installEventFilter( this );
 
     iconL = new QLabel( this, "icon" );
     iconL->setAlignment( AlignCenter );
@@ -1801,13 +1824,11 @@ void QWorkspaceChildTitleBar::mouseMoveEvent( QMouseEvent * e)
     parentWidget()->move( pp );
 }
 
-
 void QWorkspaceChildTitleBar::setText( const QString& title )
 {
     text = title;
     titleL->setText( title );
 }
-
 
 void QWorkspaceChildTitleBar::setIcon( const QPixmap& icon )
 {
@@ -1826,7 +1847,7 @@ bool QWorkspaceChildTitleBar::eventFilter( QObject * o, QEvent * e)
 {
     static QTime* t = 0;
     static QWorkspaceChildTitleBar* tc = 0;
-    if ( o == titleL ) {
+    if ( o == titleL || o == closeB || o == maxB || o == iconB || o == shadeB ) {
 	if ( e->type() == QEvent::MouseButtonPress
 	     || e->type() == QEvent::MouseButtonRelease
 	     || e->type() == QEvent::MouseMove) {
@@ -1836,9 +1857,9 @@ bool QWorkspaceChildTitleBar::eventFilter( QObject * o, QEvent * e)
 
 	    if (e->type() == QEvent::MouseButtonPress )
 		mousePressEvent( &ne );
-	    else if (e->type() == QEvent::MouseButtonRelease )
+	    else if ( o == titleL && e->type() == QEvent::MouseButtonRelease )
 		mouseReleaseEvent( &ne );
-	    else
+	    else if ( o == titleL )
 		mouseMoveEvent( &ne );
 	} else if ( (e->type() == QEvent::MouseButtonDblClick) &&
 		  ((QMouseEvent*)e)->button() == LeftButton ) {

@@ -22,7 +22,7 @@ height="100" src="face.png" alt="Home" border="0">
 Here we go through an example in detail. The class <code>CardLayout</code> is inspired by the Java layout manager of the same name. It
 lays out the items (widgets or nested layouts)
 on top of each other, each item offset by
-<a href="qlayout.html#47a259">spacing()</a>.
+<a href="qlayout.html#372777">spacing()</a>.
 <p>
 To write your own layout class, you must define the following:
   <ul>
@@ -30,17 +30,17 @@ To write your own layout class, you must define the following:
        handle by the layout.
         Each item is a <a href="qlayoutitem.html">QLayoutItem</a>.
         We will just use a QList in this example.
-  <li><a href="qlayout.html#3f230a">addItem()</a>, how to add items
+  <li><a href="qlayout.html#db69d5">addItem()</a>, how to add items
         to the layout.
-  <li><a href="qlayout.html#0d8bbc">setGeometry()</a>, how to do the
+  <li><a href="qlayout.html#f1f752">setGeometry()</a>, how to do the
         layout.
-  <li><a href="qlayoutitem.html#e2e8a5">sizeHint()</a>, the preferred size of the
+  <li><a href="qlayoutitem.html#48b5b2">sizeHint()</a>, the preferred size of the
         layout.
-  <li><a href="qlayout.html#795657">iterator()</a>, how to iterate over the
+  <li><a href="qlayout.html#3d3ab8">iterator()</a>, how to iterate over the
         layout.
   </ul>
 <p>
-In most cases, you will also implement <a href="qlayout.html#31524e">minimumSize()</a>.
+In most cases, you will also implement <a href="qlayout.html#8e1dc2">minimumSize()</a>.
 <p>
 <h3> card.h </h3>
 <p>
@@ -81,9 +81,9 @@ to iterate over our layout class.
 <p>
 In this case, we choose a simple implementation: we store an integer
 index into the list and a pointer to the list. Every QGLayoutIterator
-subclass must implement <a href="qglayoutiterator.html#d3bab7">current()</a>,
-<a href="qglayoutiterator.html#38e175">next()</a> and
-<a href="qglayoutiterator.html#59a14d">takeCurrent()</a>, as well as
+subclass must implement <a href="qglayoutiterator.html#cdab98">current()</a>,
+<a href="qglayoutiterator.html#e03723">next()</a> and
+<a href="qglayoutiterator.html#fa72ce">takeCurrent()</a>, as well as
 a constructor. In our example we do not need a destructor.
 <p>
 <pre>class CardLayoutIterator :public QGLayoutIterator
@@ -93,13 +93,13 @@ public:
     : idx(0), list(l)  {}
 
   <a href="qlayoutitem.html">QLayoutItem</a> *current()
-  { return idx &lt; int(list-&gt;<a href="qlist.html#816005">count</a>()) ? list-&gt;<a href="qlist.html#0812c4">at</a>(idx) : 0;  }
+  { return idx &lt; int(list-&gt;<a href="qlist.html#359d9f">count</a>()) ? list-&gt;<a href="qlist.html#0e7e42">at</a>(idx) : 0;  }
 
   <a href="qlayoutitem.html">QLayoutItem</a> *next()
   { idx++; return current(); }
 
   <a href="qlayoutitem.html">QLayoutItem</a> *takeCurrent()
-  { return list-&gt;<a href="qlist.html#0f1003">take</a>( idx ); }
+  { return list-&gt;<a href="qlist.html#0639ad">take</a>( idx ); }
 
 private:
   int idx;
@@ -119,9 +119,9 @@ this layout.
 addItem() implements the default placement strategy for layout items. It
 must be implemented. It is used by QLayout::add(), by the QLayout
 constructor that takes a layout as parent, and it is used to implement
-the <a href="qlayout.html#7508d2">auto-add</a> feature. If your layout
+the <a href="qlayout.html#d02056">auto-add</a> feature. If your layout
 has advanced placement options that require parameters, you will have to
-provide extra access functions like eg. <a href="qgridlayout.html#c5d458">QGridLayout::addMultiCell()</a>.
+provide extra access functions like eg. <a href="qgridlayout.html#67545e">QGridLayout::addMultiCell()</a>.
 <p>
 <pre>void CardLayout::addItem( <a href="qlayoutitem.html">QLayoutItem</a> *item )
 {
@@ -131,7 +131,7 @@ provide extra access functions like eg. <a href="qgridlayout.html#c5d458">QGridL
 <p>
 The layout takes over responsibility of the items added. Since
 QLayoutItem does not inherit QObject, we must delete the items
-manually. The function <a href="qlayout.html#86ae8b">deleteAllItems()</a>
+manually. The function <a href="qlayout.html#3349c9">deleteAllItems()</a>
 uses the iterator we defined above to delete all items in the layout.
 <p>
 <pre>CardLayout::~CardLayout()
@@ -146,10 +146,10 @@ spacing() as the distance between items.
 <p>
 <pre>void CardLayout::setGeometry(const QRect &amp;rect)
 {
-    <a href="qlayout.html#0d8bbc">QLayout::setGeometry</a>(rect);
+    <a href="qlayout.html#f1f752">QLayout::setGeometry</a>(rect);
 
     <a href="qlistiterator.html">QListIterator</a>&lt;<a href="qlayoutitem.html">QLayoutItem</a>&gt; it(list);
-    if (it.<a href="qlistiterator.html#e60f78">count</a>() == 0)
+    if (it.<a href="qlistiterator.html#e61e8b">count</a>() == 0)
         return;
 
     <a href="qlayoutitem.html">QLayoutItem</a> *o;
@@ -159,12 +159,12 @@ spacing() as the distance between items.
     int w = rect.width() - (list.count() - 1) * spacing();
     int h = rect.height() - (list.count() - 1) * spacing();
 
-    while ((o=it.<a href="qlistiterator.html#e76f11">current</a>()) != 0)
+    while ((o=it.<a href="qlistiterator.html#e58f06">current</a>()) != 0)
         {
             ++it;
             <a href="qrect.html">QRect</a> geom(rect.x() + i * spacing(), rect.y() + i * spacing(),
                        w, h );
-            o-&gt;<a href="qlayoutitem.html#b28121">setGeometry</a>( geom );
+            o-&gt;<a href="qlayoutitem.html#0c6928">setGeometry</a>( geom );
             ++i;
         }       
 }
@@ -182,9 +182,9 @@ spacing(), but not margin().
         s = QSize(100,70); //start with a nice default size
     <a href="qlistiterator.html">QListIterator</a>&lt;<a href="qlayoutitem.html">QLayoutItem</a>&gt; it(list);
     <a href="qlayoutitem.html">QLayoutItem</a> *o;
-    while ( (o=it.<a href="qlistiterator.html#e76f11">current</a>()) != 0 ) {
+    while ( (o=it.<a href="qlistiterator.html#e58f06">current</a>()) != 0 ) {
         ++it;
-        s = s.<a href="qsize.html#fe2608">expandedTo</a>( o-&gt;<a href="qlayoutitem.html#120a2f">minimumSize</a>() );
+        s = s.<a href="qsize.html#a74829">expandedTo</a>( o-&gt;<a href="qlayoutitem.html#83838c">minimumSize</a>() );
     }
     return s + n*QSize(spacing(),spacing());
 }
@@ -195,9 +195,9 @@ spacing(), but not margin().
     int n = list.count();
     <a href="qlistiterator.html">QListIterator</a>&lt;<a href="qlayoutitem.html">QLayoutItem</a>&gt; it(list);
     <a href="qlayoutitem.html">QLayoutItem</a> *o;
-    while ( (o=it.<a href="qlistiterator.html#e76f11">current</a>()) != 0 ) {
+    while ( (o=it.<a href="qlistiterator.html#e58f06">current</a>()) != 0 ) {
         ++it;
-        s = s.<a href="qsize.html#fe2608">expandedTo</a>( o-&gt;<a href="qlayoutitem.html#120a2f">minimumSize</a>() );
+        s = s.<a href="qsize.html#a74829">expandedTo</a>( o-&gt;<a href="qlayoutitem.html#83838c">minimumSize</a>() );
     }
     return s + n*QSize(spacing(),spacing());
 }
@@ -211,7 +211,7 @@ We ignore QLayoutItem::isEmpty(), this means that the layout will treat
 hidden widgets as visible.
 <p>
 For complex layouts, speed can be greatly increased by caching calculated
-values and/or data structures. In that case, implement <a href="qlayoutitem.html#d331d3">invalidate()</a> to mark the cached
+values and/or data structures. In that case, implement <a href="qlayoutitem.html#91d950">invalidate()</a> to mark the cached
 data as dirty.
 <p>
 Calling QLayoutItem::sizeHint(), etc. may be expensive, so you should
@@ -227,6 +227,6 @@ implement your own resizeEvent()).
 
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.1</div>
+<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

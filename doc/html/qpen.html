@@ -32,31 +32,31 @@ Inherits <a href="qt.html">Qt</a>.
 <p><a href="qpen-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><div class="fn"><a href="#d642bf"><b>QPen</b></a> () </div>
-<li><div class="fn"><a href="#a80817"><b>QPen</b></a> ( PenStyle ) </div>
-<li><div class="fn"><a href="#8aef39"><b>QPen</b></a> ( const QColor &amp; color, uint width=0, PenStyle style=SolidLine ) </div>
-<li><div class="fn"><a href="#5ce6ed"><b>QPen</b></a> ( const QColor &amp; cl, uint w, PenStyle s, PenCapStyle c, PenJoinStyle j ) </div>
-<li><div class="fn"><a href="#2a0959"><b>QPen</b></a> ( const QPen &amp; ) </div>
-<li><div class="fn"><a href="#e59a5c"><b>~QPen</b></a> () </div>
-<li><div class="fn">QPen&amp; <a href="#cbce7e"><b>operator=</b></a> ( const QPen &amp; ) </div>
-<li><div class="fn">PenStyle <a href="#3ec59f"><b>style</b></a> () const</div>
-<li><div class="fn">void <a href="#b60ca7"><b>setStyle</b></a> ( PenStyle ) </div>
-<li><div class="fn">uint <a href="#e73a72"><b>width</b></a> () const</div>
-<li><div class="fn">void <a href="#35d947"><b>setWidth</b></a> ( uint ) </div>
-<li><div class="fn">const QColor&amp; <a href="#fd09ff"><b>color</b></a> () const</div>
-<li><div class="fn">void <a href="#c951f8"><b>setColor</b></a> ( const QColor &amp; ) </div>
-<li><div class="fn">PenCapStyle <a href="#60e2c3"><b>capStyle</b></a> () const</div>
-<li><div class="fn">void <a href="#30f15b"><b>setCapStyle</b></a> ( PenCapStyle ) </div>
-<li><div class="fn">PenJoinStyle <a href="#34631c"><b>joinStyle</b></a> () const</div>
-<li><div class="fn">void <a href="#e57b6d"><b>setJoinStyle</b></a> ( PenJoinStyle ) </div>
-<li><div class="fn">bool <a href="#eb59af"><b>operator==</b></a> ( const QPen &amp; p ) const</div>
-<li><div class="fn">bool <a href="#efcd04"><b>operator!=</b></a> ( const QPen &amp; p ) const</div>
+<li><div class="fn"><a href="#171192"><b>QPen</b></a> () </div>
+<li><div class="fn"><a href="#90cf48"><b>QPen</b></a> ( PenStyle ) </div>
+<li><div class="fn"><a href="#1e24bd"><b>QPen</b></a> ( const QColor &amp; color, uint width=0, PenStyle style=SolidLine ) </div>
+<li><div class="fn"><a href="#679c79"><b>QPen</b></a> ( const QColor &amp; cl, uint w, PenStyle s, PenCapStyle c, PenJoinStyle j ) </div>
+<li><div class="fn"><a href="#b56f1c"><b>QPen</b></a> ( const QPen &amp; ) </div>
+<li><div class="fn"><a href="#2d9c9a"><b>~QPen</b></a> () </div>
+<li><div class="fn">QPen&amp; <a href="#7ce458"><b>operator=</b></a> ( const QPen &amp; ) </div>
+<li><div class="fn">PenStyle <a href="#e2fb15"><b>style</b></a> () const</div>
+<li><div class="fn">void <a href="#62894c"><b>setStyle</b></a> ( PenStyle ) </div>
+<li><div class="fn">uint <a href="#7bedc6"><b>width</b></a> () const</div>
+<li><div class="fn">void <a href="#6a009f"><b>setWidth</b></a> ( uint ) </div>
+<li><div class="fn">const QColor&amp; <a href="#0db022"><b>color</b></a> () const</div>
+<li><div class="fn">void <a href="#00d674"><b>setColor</b></a> ( const QColor &amp; ) </div>
+<li><div class="fn">PenCapStyle <a href="#0adb18"><b>capStyle</b></a> () const</div>
+<li><div class="fn">void <a href="#23e021"><b>setCapStyle</b></a> ( PenCapStyle ) </div>
+<li><div class="fn">PenJoinStyle <a href="#0cc1c8"><b>joinStyle</b></a> () const</div>
+<li><div class="fn">void <a href="#43cd4a"><b>setJoinStyle</b></a> ( PenJoinStyle ) </div>
+<li><div class="fn">bool <a href="#7a1a86"><b>operator==</b></a> ( const QPen &amp; p ) const</div>
+<li><div class="fn">bool <a href="#6248b8"><b>operator!=</b></a> ( const QPen &amp; p ) const</div>
 </ul>
 <h2>Related Functions</h2>
 (Note that these are not member functions.)
 <ul>
-<li>QDataStream &amp; <a href="qpen.html#d45c86"><b>operator&lt;&lt;</b></a> (QDataStream &amp; s, const QPen &amp; p)
-<li>QDataStream &amp; <a href="qpen.html#de62a3"><b>operator&gt;&gt;</b></a> (QDataStream &amp; s, QPen &amp; p)
+<li>QDataStream &amp; <a href="qpen.html#49435e"><b>operator&lt;&lt;</b></a> (QDataStream &amp; s, const QPen &amp; p)
+<li>QDataStream &amp; <a href="qpen.html#e8d8ed"><b>operator&gt;&gt;</b></a> (QDataStream &amp; s, QPen &amp; p)
 </ul>
 <hr><h2><a name="details"></a>Detailed Description</h2>
 The QPen class defines how a <a href="qpainter.html">QPainter</a> should draw lines and outlines of shapes.
@@ -79,14 +79,14 @@ width is 1 or greater.
 <p>Example:
 <pre>    <a href="qpainter.html">QPainter</a> painter;
     <a href="qpen.html">QPen</a>     pen( red, 2 );             // red solid line, 2 pixel width
-    painter.<a href="qpainter.html#59f1bb">begin</a>( &amp;anyPaintDevice );   // paint something
-    painter.<a href="qpainter.html#0a6aff">setPen</a>( pen );              // set the red, fat pen
-    painter.<a href="qpainter.html#b29a16">drawRect</a>( 40,30, 200,100 ); // draw rectangle
-    painter.<a href="qpainter.html#0a6aff">setPen</a>( blue );             // set blue pen, 0 pixel width
-    painter.<a href="qpainter.html#ffde14">drawLine</a>( 40,30, 240,130 ); // draw diagonal in rectangle
-    painter.<a href="qpainter.html#c7f9ac">end</a>();                      // painting done
+    painter.<a href="qpainter.html#02ed5d">begin</a>( &amp;anyPaintDevice );   // paint something
+    painter.<a href="qpainter.html#0183e4">setPen</a>( pen );              // set the red, fat pen
+    painter.<a href="qpainter.html#4c0077">drawRect</a>( 40,30, 200,100 ); // draw rectangle
+    painter.<a href="qpainter.html#0183e4">setPen</a>( blue );             // set blue pen, 0 pixel width
+    painter.<a href="qpainter.html#e3a489">drawLine</a>( 40,30, 240,130 ); // draw diagonal in rectangle
+    painter.<a href="qpainter.html#365784">end</a>();                      // painting done
 </pre>
-<p>See the <a href="#b60ca7">setStyle</a>() function for a complete list of pen styles.
+<p>See the <a href="#62894c">setStyle</a>() function for a complete list of pen styles.
 <p>About the end point of lines: For wide (non-0-width) pens, it
 depends on the cap style whether the end point is drawn or not. For
 0-width pens, QPainter will try to make sure that the end point is
@@ -94,84 +94,84 @@ drawn, but this cannot be absolutely guaranteed, since the underlying
 drawing engine is free to use any (typically accellerated) algorithm
 for drawing 0-width lines. On all tested systems, however, the
 endpoint of at least all non-diagonal lines are drawn.
-<p>See also  <a href="qpainter.html">QPainter</a> and <a href="qpainter.html#0a6aff">QPainter::setPen</a>().
+<p>See also  <a href="qpainter.html">QPainter</a> and <a href="qpainter.html#0183e4">QPainter::setPen</a>().
 <p>Examples:
  <a href="progress-progress-cpp.html#QPen">progress/progress.cpp</a>
  <a href="desktop-desktop-cpp.html#QPen">desktop/desktop.cpp</a>
 
 <hr><h2>Member Function Documentation</h2>
-<h3 class="fn"><a name="d642bf"></a>QPen::QPen ()</h3>
+<h3 class="fn"><a name="171192"></a>QPen::QPen ()</h3>
 <p>Constructs a default black solid line pen with 0 width.
-<h3 class="fn"><a name="a80817"></a>QPen::QPen ( <a href="qt.html#PenStyle">PenStyle</a> style )</h3>
+<h3 class="fn"><a name="90cf48"></a>QPen::QPen ( <a href="qt.html#PenStyle">PenStyle</a> style )</h3>
 <p>Constructs a  pen black with 0 width and a specified style.
-<p>See also  <a href="#b60ca7">setStyle</a>().
-<h3 class="fn"><a name="5ce6ed"></a>QPen::QPen ( const <a href="qcolor.html">QColor</a> &amp; cl, uint w, <a href="qt.html#PenStyle">PenStyle</a> s, <a href="qt.html#PenCapStyle">PenCapStyle</a> c, <a href="qt.html#PenJoinStyle">PenJoinStyle</a> j )</h3>
+<p>See also  <a href="#62894c">setStyle</a>().
+<h3 class="fn"><a name="679c79"></a>QPen::QPen ( const <a href="qcolor.html">QColor</a> &amp; cl, uint w, <a href="qt.html#PenStyle">PenStyle</a> s, <a href="qt.html#PenCapStyle">PenCapStyle</a> c, <a href="qt.html#PenJoinStyle">PenJoinStyle</a> j )</h3>
 <p>Constructs a pen with a specified color, width and styles.
-<p>See also  <a href="#35d947">setWidth</a>(), <a href="#b60ca7">setStyle</a>() and <a href="#c951f8">setColor</a>().
-<h3 class="fn"><a name="8aef39"></a>QPen::QPen ( const <a href="qcolor.html">QColor</a> &amp; color, uint width=0, <a href="qt.html#PenStyle">PenStyle</a> style=SolidLine )</h3>
+<p>See also  <a href="#6a009f">setWidth</a>(), <a href="#62894c">setStyle</a>() and <a href="#00d674">setColor</a>().
+<h3 class="fn"><a name="1e24bd"></a>QPen::QPen ( const <a href="qcolor.html">QColor</a> &amp; color, uint width=0, <a href="qt.html#PenStyle">PenStyle</a> style=SolidLine )</h3>
 <p>Constructs a pen with a specified color, width and style.
-<p>See also  <a href="#35d947">setWidth</a>(), <a href="#b60ca7">setStyle</a>() and <a href="#c951f8">setColor</a>().
-<h3 class="fn"><a name="2a0959"></a>QPen::QPen ( const QPen &amp; p )</h3>
+<p>See also  <a href="#6a009f">setWidth</a>(), <a href="#62894c">setStyle</a>() and <a href="#00d674">setColor</a>().
+<h3 class="fn"><a name="b56f1c"></a>QPen::QPen ( const QPen &amp; p )</h3>
 <p>Constructs a pen which is a copy of <em>p.</em>
-<h3 class="fn"><a name="e59a5c"></a>QPen::~QPen ()</h3>
+<h3 class="fn"><a name="2d9c9a"></a>QPen::~QPen ()</h3>
 <p>Destructs the pen.
-<h3 class="fn">Qt::PenCapStyle <a name="60e2c3"></a>QPen::capStyle() const</h3>
+<h3 class="fn">Qt::PenCapStyle <a name="0adb18"></a>QPen::capStyle() const</h3>
 <p>Returns the pen's cap style.
-<p>See also  <a href="#30f15b">setCapStyle</a>().
-<h3 class="fn">const <a href="qcolor.html">QColor</a> &amp; <a name="fd09ff"></a>QPen::color () const</h3>
+<p>See also  <a href="#23e021">setCapStyle</a>().
+<h3 class="fn">const <a href="qcolor.html">QColor</a> &amp; <a name="0db022"></a>QPen::color () const</h3>
 <p>Returns the pen color.
-<p>See also  <a href="#c951f8">setColor</a>().
-<h3 class="fn">Qt::PenJoinStyle <a name="34631c"></a>QPen::joinStyle() const</h3>
+<p>See also  <a href="#00d674">setColor</a>().
+<h3 class="fn">Qt::PenJoinStyle <a name="0cc1c8"></a>QPen::joinStyle() const</h3>
 <p>Returns the pen's join style.
-<p>See also  <a href="#e57b6d">setJoinStyle</a>().
-<h3 class="fn">bool <a name="efcd04"></a>QPen::operator!= ( const QPen &amp; p ) const</h3>
+<p>See also  <a href="#43cd4a">setJoinStyle</a>().
+<h3 class="fn">bool <a name="6248b8"></a>QPen::operator!= ( const QPen &amp; p ) const</h3>
 <p>Returns TRUE if the pen is different from <em>p,</em> or FALSE if the pens
 are equal.
 <p>Two pens are different if they have different styles, widths or colors.
-<p>See also  <a href="#eb59af">operator==</a>().
-<h3 class="fn">QPen &amp; <a name="cbce7e"></a>QPen::operator= ( const QPen &amp; p )</h3>
+<p>See also  <a href="#7a1a86">operator==</a>().
+<h3 class="fn">QPen &amp; <a name="7ce458"></a>QPen::operator= ( const QPen &amp; p )</h3>
 <p>Assigns <em>c</em> to this pen and returns a reference to this pen.
-<h3 class="fn">bool <a name="eb59af"></a>QPen::operator== ( const QPen &amp; p ) const</h3>
+<h3 class="fn">bool <a name="7a1a86"></a>QPen::operator== ( const QPen &amp; p ) const</h3>
 <p>Returns TRUE if the pen is equal to <em>p,</em> or FALSE if the pens are
 different.
 <p>Two pens are equal if they have equal styles, widths and colors.
-<p>See also  <a href="#efcd04">operator!=</a>().
-<h3 class="fn">void <a name="30f15b"></a>QPen::setCapStyle ( <a href="qt.html#PenCapStyle">PenCapStyle</a> c )</h3>
+<p>See also  <a href="#6248b8">operator!=</a>().
+<h3 class="fn">void <a name="23e021"></a>QPen::setCapStyle ( <a href="qt.html#PenCapStyle">PenCapStyle</a> c )</h3>
 <p>Sets the pen's cap style to <em>c.</em>
 <p>The default value is FlatCap. The cap style has no effect on 0-width pens.<p><b>Warning:</b> On Windows 95/98, the cap style setting has no effect. Wide
 lines are rendered as if the cap style was SquareCap.
-<p>See also  <a href="#60e2c3">capStyle</a>().
-<h3 class="fn">void <a name="c951f8"></a>QPen::setColor ( const <a href="qcolor.html">QColor</a> &amp; c )</h3>
+<p>See also  <a href="#0adb18">capStyle</a>().
+<h3 class="fn">void <a name="00d674"></a>QPen::setColor ( const <a href="qcolor.html">QColor</a> &amp; c )</h3>
 <p>Sets the pen color to <em>c.</em>
-<p>See also  <a href="#fd09ff">color</a>().
+<p>See also  <a href="#0db022">color</a>().
 <p>Examples:
  <a href="progress-progress-cpp.html#setColor">progress/progress.cpp</a>
-<h3 class="fn">void <a name="e57b6d"></a>QPen::setJoinStyle ( <a href="qt.html#PenJoinStyle">PenJoinStyle</a> j )</h3>
+<h3 class="fn">void <a name="43cd4a"></a>QPen::setJoinStyle ( <a href="qt.html#PenJoinStyle">PenJoinStyle</a> j )</h3>
 <p>Sets the pen's join style to <em>j.</em>
 <p>The default value is MiterJoin. The join style has no effect on 0-width pens.<p><b>Warning:</b> On Windows 95/98, the join style setting has no effect. Wide
 lines are rendered as if the join style was BevelJoin.
-<p>See also  <a href="#34631c">joinStyle</a>().
-<h3 class="fn">void <a name="b60ca7"></a>QPen::setStyle ( <a href="qt.html#PenStyle">PenStyle</a> s )</h3>
+<p>See also  <a href="#0cc1c8">joinStyle</a>().
+<h3 class="fn">void <a name="62894c"></a>QPen::setStyle ( <a href="qt.html#PenStyle">PenStyle</a> s )</h3>
 <p>Sets the pen style to <em>s.<p><b>Warning:</b></em> On Windows 95/98, the style setting (other than NoPen and
 SolidLine) has no effect for lines with width greater than 1.
-<p>See also  <a href="#3ec59f">style</a>().
-<h3 class="fn">void <a name="35d947"></a>QPen::setWidth ( uint w )</h3>
+<p>See also  <a href="#e2fb15">style</a>().
+<h3 class="fn">void <a name="6a009f"></a>QPen::setWidth ( uint w )</h3>
 <p>Sets the pen width to <em>w.</em>
-<p>See also  <a href="#e73a72">width</a>().
+<p>See also  <a href="#7bedc6">width</a>().
 <p>Examples:
  <a href="progress-progress-cpp.html#setWidth">progress/progress.cpp</a>
-<h3 class="fn"><a href="qt.html#PenStyle">PenStyle</a> <a name="3ec59f"></a>QPen::style () const</h3>
+<h3 class="fn"><a href="qt.html#PenStyle">PenStyle</a> <a name="e2fb15"></a>QPen::style () const</h3>
 <p>Returns the pen style.
-<p>See also  <a href="#b60ca7">setStyle</a>().
-<h3 class="fn">uint <a name="e73a72"></a>QPen::width () const</h3>
+<p>See also  <a href="#62894c">setStyle</a>().
+<h3 class="fn">uint <a name="7bedc6"></a>QPen::width () const</h3>
 <p>Returns the pen width.
-<p>See also  <a href="#35d947">setWidth</a>().
+<p>See also  <a href="#6a009f">setWidth</a>().
 <hr><h2>Related Functions</h2>
-<h3><a href="qdatastream.html">QDataStream</a> &amp; <a name="d45c86"></a>operator&lt;&lt; (<a href="qdatastream.html">QDataStream</a> &amp; s, const QPen &amp; p)</h3>
+<h3><a href="qdatastream.html">QDataStream</a> &amp; <a name="49435e"></a>operator&lt;&lt; (<a href="qdatastream.html">QDataStream</a> &amp; s, const QPen &amp; p)</h3>
 <p>Writes a pen to the stream and returns a reference to the stream.
 <p>See also  <a href="datastreamformat.html">Format of the QDataStream operators</a>
 
-<h3><a href="qdatastream.html">QDataStream</a> &amp; <a name="de62a3"></a>operator&gt;&gt; (<a href="qdatastream.html">QDataStream</a> &amp; s, QPen &amp; p)</h3>
+<h3><a href="qdatastream.html">QDataStream</a> &amp; <a name="e8d8ed"></a>operator&gt;&gt; (<a href="qdatastream.html">QDataStream</a> &amp; s, QPen &amp; p)</h3>
 <p>Reads a pen from the stream and returns a reference to the stream.
 <p>See also  <a href="datastreamformat.html">Format of the QDataStream operators</a>
 
@@ -179,13 +179,13 @@ SolidLine) has no effect for lines with width greater than 1.
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.3.1"><nobr>
+<input type=hidden name="version" value="2.3.2"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
-copyright &copy; 1995-2000
+copyright &copy; 1995-2001
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.1</div>
+<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qtoolbutton.cpp   2.3.1   edited 2001-02-02 $
+** $Id: qt/src/widgets/qtoolbutton.cpp   2.3.2   edited 2001-07-09 $
 **
 ** Implementation of QToolButton class
 **
@@ -276,6 +276,7 @@ QToolButton::~QToolButton()
     d->popup = 0;
     delete d;
     delete s;
+    delete son;
     threeDeeButton = 0;
 }
 

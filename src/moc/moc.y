@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/moc/moc.y   2.3.1   edited 2001-04-23 $
+** $Id: qt/src/moc/moc.y   2.3.2   edited 2001-10-17 $
 **
 ** Parser and code generator for meta object compiler
 **
@@ -64,7 +64,9 @@ void yyerror( const char *msg );
 #include <stdio.h>
 #include <stdlib.h>
 
-
+#include "qfiledefs_p.h"
+#undef READ
+#undef WRITE
 
 static QCString rmWS( const char * );
 
@@ -141,9 +143,10 @@ struct Property
 {
     Property( int l, const char* t, const char* n, const char* s, const char* g, const char* r,
 	      const QCString& st, int d, bool ov )
-	: lineNo(l), type(t), name(n), set(s), get(g), reset(r), setfunc(0), getfunc(0), resetfunc(0),
-	  sspec(Unspecified), gspec(Unspecified), stored( st ),
-	  designable( d ), override( ov ), oredEnum( -1 )
+	: lineNo(l), type(t), name(n), set(s), get(g), reset(r), stored( st ),
+	  designable( d ), override( ov ), oredEnum( -1 ),
+	  setfunc(0), getfunc(0), resetfunc(0),
+	  sspec(Unspecified), gspec(Unspecified)
     {}
 
     int lineNo;
@@ -1504,7 +1507,6 @@ QCString combinePath( const char *infile, const char *outfile )
     a = aDir;
     QString bDir( cleanDirPath( b ) );
     b = bDir;
-    QCString r;
     int i = 0;
     int ncommondirs = 0;
     while ( a[i] && a[i] == b[i] ) {
@@ -1526,6 +1528,24 @@ QCString combinePath( const char *infile, const char *outfile )
 	    return a;
 	b = &b[i];
     }
+
+    if(b.left(3) == "../") {
+	QCString cdir;
+	char currentName[PATH_MAX];
+	if ( GETCWD(currentName,PATH_MAX) != 0 ) {
+	    cdir = QString::fromLatin1(currentName);
+	    replace(cdir.data(),'\\','/');
+	    if(isRelativePath(cdir))
+		fprintf(stderr, "Got relative path from CWD, help!?");
+	}
+	while(b.left(3) == "../") {
+	    int l = cdir.findRev('/');
+	    a.prepend(cdir.right(cdir.length() - l - 1) + '/');
+	    cdir = cdir.left(l);
+	    b = b.right(b.length() - 3);
+	}
+    }
+    QCString r;
     i = b.contains('/');
     while ( i-- > 0 )
 	r += "../";
@@ -1884,20 +1904,26 @@ QCString qualifiedSuperclassName()
     }
 }
 
-QCString specialQualifiedSuperclassName()
-{
-#if defined(_CC_MSVC_)
-    // MSVC doesn't grok the code NS::A::func() in a virtual method of a class B that 
-    // inherits A, but is defined outside the namespace NS.
-    int i = superclassName.findRev( "::" );
-    if ( i < 0 )
-	return superclassName;
-    return superclassName.right( superclassName.length() - i - 2 );
-#else
-    return superclassName;
-#endif
-}
+/*
+  We call B::qt_invoke() rather than A::B::qt_invoke() to
+  work around a bug in MSVC 6. The bug occurs if the
+  super-class is in a namespace and the sub-class isn't.
 
+  Exception: if B == classname
+*/
+QCString purestSuperClassName()
+{
+    QCString result;
+    int pos = superclassName.findRev( "::" );
+    if ( pos != -1 ) {
+	result = superclassName.right( superclassName.length() - pos - 2 );
+	if ( result == className )
+	    result = superclassName;
+    } else {
+	result = superclassName;
+    }
+    return result;
+}
 const int Slot_Num   = 1;
 const int Signal_Num = 2;
 const int Prop_Num = 3;
@@ -2500,7 +2526,7 @@ int generateProps()
 	    }
 
 	    QCString flags;
-	
+
 	    // Is it an enum of this class ?
 	    if ( enumpos != -1 )
 		fprintf( out, "    props_tbl[%d].enumData = &enum_tbl[%i];\n", entry, enumpos );
@@ -2540,16 +2566,16 @@ int generateProps()
 	    // OVERRIDE but no DESIGNABLE ?
 	    if ( it.current()->override && it.current()->designable == -1 )
 		flags += "QMetaProperty::UnresolvedDesignable|";
-	
+
 	    if ( it.current()->stdSet() )
 		flags += "QMetaProperty::StdSet|";
-	
+
 	    if (!flags.isEmpty() ) {
 		if ( flags[ (int) flags.length() - 1] == '|' )
 		    flags.remove( flags.length()-1, 1);
 		fprintf( out, "    props_tbl[%d].setFlags(%s);\n", entry, flags.data() );
 	    }
-	
+
 	    ++entry;
 	    count += 3;
 	}
@@ -2586,7 +2612,7 @@ void generateClass()		      // generate C++ source code for a class
     char *hdr1 = "/****************************************************************************\n"
 		 "** %s meta object code from reading C++ file '%s'\n**\n";
     char *hdr2 = "** Created: %s\n"
-		 "**      by: The Qt MOC ($Id: qt/src/moc/moc.y   2.3.1   edited 2001-04-23 $)\n**\n";
+		 "**      by: The Qt MOC ($Id: qt/src/moc/moc.y   2.3.2   edited 2001-10-17 $)\n**\n";
     char *hdr3 = "** WARNING! All changes made in this file will be lost!\n";
     char *hdr4 = "*****************************************************************************/\n\n";
     int   i;
@@ -2662,7 +2688,7 @@ void generateClass()		      // generate C++ source code for a class
     fprintf( out, "    if ( metaObj )\n\treturn;\n" );
     fprintf( out, "    if ( qstrcmp(%s::className(), \"%s\") != 0 )\n"
 	          "\tbadSuperclassWarning(\"%s\",\"%s\");\n",
-             (const char*)specialQualifiedSuperclassName(), (const char*)qualifiedSuperclassName(),
+             (const char*)purestSuperClassName(), (const char*)qualifiedSuperclassName(),
              (const char*)qualifiedClassName(), (const char*)qualifiedSuperclassName() );
     fprintf( out, "    (void) staticMetaObject();\n");
     fprintf( out, "}\n\n");
@@ -2960,7 +2986,7 @@ void addMember( Member m )
 	    propfuncs.append( tmpFunc );
     }
 
- Failed:
+    // Failed:
     skipFunc = FALSE;
     tmpFunc  = new Function;
     tmpArgList = new ArgList;

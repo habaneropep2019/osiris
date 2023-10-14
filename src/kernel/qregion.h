@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qregion.h   2.3.1   edited 2001-01-26 $
+** $Id: qt/src/kernel/qregion.h   2.3.2   edited 2001-07-24 $
 **
 ** Definition of QRegion class
 **
@@ -119,6 +119,7 @@ private:
 	HRGN   rgn;
 #elif defined(_WS_X11_)
 	Region rgn;
+	QRect br;
 #elif defined(_WS_MAC_)
         void * rgn;
 #elif defined(_WS_QWS_)

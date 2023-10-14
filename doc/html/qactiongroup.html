@@ -32,15 +32,15 @@ Inherits <a href="qaction.html">QAction</a>.
 <p><a href="qactiongroup-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><div class="fn"><a href="#844525"><b>QActionGroup</b></a> ( QWidget * parent, const char * name = 0, bool exclusive = TRUE ) </div>
-<li><div class="fn"><a href="#e2d429"><b>~QActionGroup</b></a> () </div>
-<li><div class="fn">void <a href="#d16c37"><b>setExclusive</b></a> ( bool ) </div>
-<li><div class="fn">bool <a href="#f483bc"><b>isExclusive</b></a> () const</div>
-<li><div class="fn">void <a href="#b4473c"><b>insert</b></a> ( QAction * ) </div>
+<li><div class="fn"><a href="#05d8e0"><b>QActionGroup</b></a> ( QWidget * parent, const char * name = 0, bool exclusive = TRUE ) </div>
+<li><div class="fn"><a href="#98c340"><b>~QActionGroup</b></a> () </div>
+<li><div class="fn">void <a href="#584335"><b>setExclusive</b></a> ( bool ) </div>
+<li><div class="fn">bool <a href="#44a842"><b>isExclusive</b></a> () const</div>
+<li><div class="fn">void <a href="#2c3afa"><b>insert</b></a> ( QAction * ) </div>
 </ul>
 <h2>Signals</h2>
 <ul>
-<li><div class="fn">void <a href="#9aceb7"><b>selected</b></a> ( QAction * ) </div>
+<li><div class="fn">void <a href="#14ea92"><b>selected</b></a> ( QAction * ) </div>
 </ul>
 <h2>Properties</h2>
 <table border=1 cellpadding=3 cellspacing=0>
@@ -55,61 +55,61 @@ allows to add, remove or activate its children with a single call
 and provides radio semantics ("one of many" choice) for toggle
 actions.
 <p>QActionGroup is an action by its own and thus can be treated as
-such. Standard action functions like <a href="#a3d837">addTo</a>(), <a href="#147c1f">removeFrom</a>() and
-<a href="#bffcf9">setEnabled</a>() are automatically performed on all members of the
+such. Standard action functions like <a href="#113ed9">addTo</a>(), <a href="#01e8fd">removeFrom</a>() and
+<a href="#24497a">setEnabled</a>() are automatically performed on all members of the
 group, i.e. for example that adding a group to a toolbar creates a
 tool button for each child action.
-<p>Toggle action handling is controlled with the <a href="#d16c37">setExclusive</a>() flag,
+<p>Toggle action handling is controlled with the <a href="#584335">setExclusive</a>() flag,
 with the default being TRUE. An exclusive group switches off all
 toggle actions except the one that was activated. This results in a
 "one of many" choice similar to a group of radio buttons (see
-<a href="qradiobutton.html">QRadioButton</a>). An exclusive group emits the signal <a href="#9aceb7">selected</a>()
+<a href="qradiobutton.html">QRadioButton</a>). An exclusive group emits the signal <a href="#14ea92">selected</a>()
 whenever the current child action changes.
 
 <hr><h2>Member Function Documentation</h2>
-<h3 class="fn"><a name="844525"></a>QActionGroup::QActionGroup ( <a href="qwidget.html">QWidget</a> * parent, const char * name = 0, bool exclusive = TRUE )</h3>
+<h3 class="fn"><a name="05d8e0"></a>QActionGroup::QActionGroup ( <a href="qwidget.html">QWidget</a> * parent, const char * name = 0, bool exclusive = TRUE )</h3>
 <p>Constructs an action group with parent <em>parent</em> and name <em>name.</em>
 <p>If <em>exclusive</em> is TRUE, any toggle action that is a member of this
 group is toggled off by another action being toggled on.
-<h3 class="fn"><a name="e2d429"></a>QActionGroup::~QActionGroup ()</h3>
+<h3 class="fn"><a name="98c340"></a>QActionGroup::~QActionGroup ()</h3>
 <p>Destroys the object and frees any allocated resources.
-<h3 class="fn">bool <a name="a3d837"></a>QActionGroup::addTo ( <a href="qwidget.html">QWidget</a> * w ) <code>[virtual]</code></h3>
+<h3 class="fn">bool <a name="113ed9"></a>QActionGroup::addTo ( <a href="qwidget.html">QWidget</a> * w ) <code>[virtual]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
-<p>Reimplemented from <a href="qaction.html#c102ce">QAction.</a>
-<h3 class="fn">void <a name="b4473c"></a>QActionGroup::insert ( <a href="qaction.html">QAction</a> * action )</h3>
+<p>Reimplemented from <a href="qaction.html#780f84">QAction.</a>
+<h3 class="fn">void <a name="2c3afa"></a>QActionGroup::insert ( <a href="qaction.html">QAction</a> * action )</h3>
 <p>Inserts action <em>action</em> to the group.
 <p>It is not necessary to manually insert actions that have this action
 group as their parent object.
-<h3 class="fn">bool <a name="f483bc"></a>QActionGroup::isExclusive () const</h3>
+<h3 class="fn">bool <a name="44a842"></a>QActionGroup::isExclusive () const</h3>
 <p>Returns TRUE if the action group is exclusive, otherwise FALSE.
-<p>See also  <a href="#d16c37">setExclusive</a>().
-<h3 class="fn">bool <a name="147c1f"></a>QActionGroup::removeFrom ( <a href="qwidget.html">QWidget</a> * w ) <code>[virtual]</code></h3>
+<p>See also  <a href="#584335">setExclusive</a>().
+<h3 class="fn">bool <a name="01e8fd"></a>QActionGroup::removeFrom ( <a href="qwidget.html">QWidget</a> * w ) <code>[virtual]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
-<p>Reimplemented from <a href="qaction.html#53e64c">QAction.</a>
-<h3 class="fn">void <a name="9aceb7"></a>QActionGroup::selected ( <a href="qaction.html">QAction</a> * ) <code>[signal]</code></h3>
+<p>Reimplemented from <a href="qaction.html#80c814">QAction.</a>
+<h3 class="fn">void <a name="14ea92"></a>QActionGroup::selected ( <a href="qaction.html">QAction</a> * ) <code>[signal]</code></h3>
 <p>This signal is emitted in exclusive groups when the current toggle
 action changes.
-<p>See also  <a href="#d16c37">setExclusive</a>().
-<h3 class="fn">void <a name="bffcf9"></a>QActionGroup::setEnabled ( bool enable ) <code>[virtual]</code></h3>
+<p>See also  <a href="#584335">setExclusive</a>().
+<h3 class="fn">void <a name="24497a"></a>QActionGroup::setEnabled ( bool enable ) <code>[virtual]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
-<p>Reimplemented from <a href="qaction.html#a1b4a7">QAction.</a>
-<h3 class="fn">void <a name="d16c37"></a>QActionGroup::setExclusive ( bool enable )</h3>
+<p>Reimplemented from <a href="qaction.html#a536b2">QAction.</a>
+<h3 class="fn">void <a name="584335"></a>QActionGroup::setExclusive ( bool enable )</h3>
 <p>Sets the action group to be exclusive if <em>enable</em> is TRUE,
 or to be non-exclusive if <em>enable</em> is FALSE.
 <p>In an exclusive group, any toggle action that is a member of this
 group is toggled off by another action being toggled on.
-<p>See also  <a href="#f483bc">isExclusive</a>().
+<p>See also  <a href="#44a842">isExclusive</a>().
 <hr><p>
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.3.1"><nobr>
+<input type=hidden name="version" value="2.3.2"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
-copyright &copy; 1995-2000
+copyright &copy; 1995-2001
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.1</div>
+<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

@@ -1,5 +1,5 @@
 /**********************************************************************
-** $Id: qt/src/widgets/qlabel.cpp   2.3.1   edited 2001-05-23 $
+** $Id: qt/src/widgets/qlabel.cpp   2.3.2   edited 2001-10-08 $
 **
 ** Implementation of QLabel widget class
 **
@@ -314,8 +314,10 @@ void QLabel::clear()
 void QLabel::setPixmap( const QPixmap &pixmap )
 {
     QSize osh = sizeHint();
-    clearContents();
-    lpixmap = new QPixmap( pixmap );
+    if ( !lpixmap || lpixmap->serialNumber() != pixmap.serialNumber() ) {
+	clearContents();
+	lpixmap = new QPixmap( pixmap );
+    }
 
     if ( lpixmap->depth() == 1 && !lpixmap->mask() )
 	lpixmap->setMask( *((QBitmap *)lpixmap) );

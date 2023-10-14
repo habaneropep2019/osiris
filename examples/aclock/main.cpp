@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/aclock/main.cpp   2.3.1   edited 2001-01-26 $
+** $Id: qt/examples/aclock/main.cpp   2.3.2   edited 2001-06-12 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -20,6 +20,7 @@ int main( int argc, char **argv )
 	clock->setAutoMask( TRUE );
     clock->resize( 100, 100 );
     a.setMainWidget( clock );
+    clock->setCaption("Qt Example - Analog Clock");
     clock->show();
     int result = a.exec();
     delete clock;

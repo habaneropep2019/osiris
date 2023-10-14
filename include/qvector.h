@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qvector.h   2.3.1   edited 2001-01-26 $
+** $Id: qt/src/tools/qvector.h   2.3.2   edited 2001-07-29 $
 **
 ** Definition of QVector template/macro class
 **
@@ -78,8 +78,19 @@ public:
     type *at( uint i ) const		{ return (type *)QGVector::at(i); }
     void  toList( QGList *list ) const	{ QGVector::toList(list); }
 private:
-    void  deleteItem( Item d ) { if ( del_item ) delete (type *)d; }
+    void  deleteItem( Item d );
 };
+
+#if defined(Q_DELETING_VOID_UNDEFINED)
+template<> inline void QVector<void>::deleteItem( Item )
+{
+}
+#endif
+
+template<class type> inline void QVector<type>::deleteItem( QCollection::Item d )
+{
+    if ( del_item ) delete (type *)d;
+}
 
 
 #endif // QVECTOR_H

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/themes/main.cpp   2.3.1   edited 2001-01-26 $
+** $Id: qt/examples/themes/main.cpp   2.3.2   edited 2001-06-12 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -20,7 +20,7 @@ int main( int argc, char ** argv )
     QApplication a( argc, argv );
 
     Themes themes;
-    themes.setCaption( "Theme (QStyle) example" );
+    themes.setCaption( "Qt Example - Themes (QStyle)" );
     themes.resize( 640, 400 );
     a.setMainWidget( &themes );
     themes.show();

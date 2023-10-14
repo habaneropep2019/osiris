@@ -23,6 +23,8 @@ height="100" src="face.png" alt="Home" border="0">
 This installation procedure is written for Linux. It may need
 to be modified for other platforms.
 <p>
+<a href=qnx-framebuffer.html>QtE/Qnx6 installation instructions</a><br>
+<p>
 <h3>  Unpack the archive if you have not done so already:</h3>
 <pre>
         cd &lt;anywhere&gt;
@@ -54,9 +56,21 @@ to build <i>on</i> Linux/x86 <i>for</i> the Linux/MIPSEL target, you would use:
 Only a small number of configurations are predefined, all much the same.
 Configuration files are found in <tt>configs/</tt>.
 <p>
-<h3> Enable framebuffer support</h3>
+<h3> Enable Linux framebuffer support</h3>
+<p>
+   For application development, we recommend that you use
+   the
+<a href="qvfb-qws.html">Qt/Embedded virtual framebuffer</a>.
+   But to actually put Qt/Embedded
+   on a device running Linux, you need to ensure that the Linux
+   kernel has framebuffer support.
 <p>
    You may need to recompile your kernel to enable the framebuffer.
+<p>
+   Handheld devices running Linux, such as the SL-5000D and the iPAQ,
+   and most other embedded Linux systems that have a graphical display
+   will already have a framebuffer.
+<p>
    This document does not describe how to do this; the
    <a href=HOWTO-framebuffer.html>HOWTO-Framebuffer page</a>
    contains a short description. (You should see
@@ -68,12 +82,14 @@ Configuration files are found in <tt>configs/</tt>.
 <p>
    For Mach64 and most other cards, use the vesafb driver.
 <p>
-   For cards that are not VESA 2.0 compliant, use the VGA16 driver.
+   For VGA-compatible cards that are not VESA 2.0 compliant,
+    use the VGA16 driver.
 <p>
    The frame buffer may also need a boot parameter to be enabled. See
    <tt>/usr/src/linux/Documentation/fb</tt> for details.
 <p>
-   The <tt>fbset</tt> program, which is included in most Linux distributions,
+   The <tt>fbset</tt> program, which is included in most Linux/x86
+   distributions,
    may be used to switch video modes without rebooting the system. The
    video mode active when the server is started will be used.
    Note: <tt>fbset</tt> does not work with the vesafb driver.
@@ -91,7 +107,9 @@ Configuration files are found in <tt>configs/</tt>.
 <p>
 <h3> How to run the demonstration program</h3>
 <p>
-   Log into a virtual console and do:
+   Log into a virtual console, or run
+<a href="qvfb-qws.html">Qt/Embedded virtual framebuffer</a>.
+    and then run the commands:
 <p>
 <pre>
         cd ~/qt-<i>version</i>/examples/launcher
@@ -107,8 +125,8 @@ Configuration files are found in <tt>configs/</tt>.
 </pre>
 <p>
   In some cases, if the server does not work, it will work when run as root.
-<p>
-  Some example programs may not compile with GCC 2.95.
+  If this happens, there are permissions problems with your filesystem
+  (eg. /dev/fb0 is not writeable by you).
 <p>
   Show processes using the framebuffer:
 <p>
@@ -149,6 +167,6 @@ Configuration files are found in <tt>configs/</tt>.
 
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.1</div>
+<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

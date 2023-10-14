@@ -1,5 +1,5 @@
 '\" t
-.TH QChar 3qt "13 June 2001" "Trolltech AS" \" -*- nroff -*-
+.TH QChar 3qt "29 October 2001" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2001 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -142,28 +142,43 @@ QChar \- Light-weight Unicode character
 (Note that these are not member functions.)
 .in +1c
 .ti -1c
-.BI "int \fBoperator<=\fR (QChar " "c" ", char " "ch" ")"
+.BI "int \fBoperator>=\fR (QChar " "c1" ", QChar " "c2" ")"
 .br
 .ti -1c
-.BI "int \fBoperator>=\fR (QChar " "c1" ", QChar " "c2" ")"
+.BI "int \fBoperator>\fR (QChar " "c1" ", QChar " "c2" ")"
+.br
+.ti -1c
+.BI "int \fBoperator==\fR (QChar " "c1" ", QChar " "c2" ")"
+.br
+.ti -1c
+.BI "int \fBoperator<\fR (char " "ch" ", QChar " "c" ")"
 .br
 .ti -1c
 .BI "int \fBoperator>=\fR (char " "ch" ", QChar " "c" ")"
 .br
 .ti -1c
+.BI "int \fBoperator==\fR (char " "ch" ", QChar " "c" ")"
+.br
+.ti -1c
 .BI "int \fBoperator!=\fR (QChar " "c" ", char " "ch" ")"
+.br
+.ti -1c
+.BI "int \fBoperator==\fR (QChar " "c" ", char " "ch" ")"
+.br
+.ti -1c
+.BI "int \fBoperator<=\fR (QChar " "c1" ", QChar " "c2" ")"
+.br
+.ti -1c
+.BI "int \fBoperator<=\fR (char " "ch" ", QChar " "c" ")"
 .br
 .ti -1c
 .BI "int \fBoperator>=\fR (QChar " "c" ", char " "ch" ")"
 .br
 .ti -1c
-.BI "int \fBoperator!=\fR (QChar " "c1" ", QChar " "c2" ")"
-.br
-.ti -1c
 .BI "int \fBoperator!=\fR (char " "ch" ", QChar " "c" ")"
 .br
 .ti -1c
-.BI "int \fBoperator<=\fR (QChar " "c1" ", QChar " "c2" ")"
+.BI "int \fBoperator<=\fR (QChar " "c" ", char " "ch" ")"
 .br
 .ti -1c
 .BI "int \fBoperator>\fR (char " "ch" ", QChar " "c" ")"
@@ -172,28 +187,13 @@ QChar \- Light-weight Unicode character
 .BI "int \fBoperator<\fR (QChar " "c1" ", QChar " "c2" ")"
 .br
 .ti -1c
-.BI "int \fBoperator==\fR (QChar " "c1" ", QChar " "c2" ")"
-.br
-.ti -1c
-.BI "int \fBoperator<=\fR (char " "ch" ", QChar " "c" ")"
-.br
-.ti -1c
-.BI "int \fBoperator>\fR (QChar " "c1" ", QChar " "c2" ")"
-.br
-.ti -1c
-.BI "int \fBoperator<\fR (char " "ch" ", QChar " "c" ")"
+.BI "int \fBoperator<\fR (QChar " "c" ", char " "ch" ")"
 .br
 .ti -1c
 .BI "int \fBoperator>\fR (QChar " "c" ", char " "ch" ")"
 .br
 .ti -1c
-.BI "int \fBoperator<\fR (QChar " "c" ", char " "ch" ")"
-.br
-.ti -1c
-.BI "int \fBoperator==\fR (char " "ch" ", QChar " "c" ")"
-.br
-.ti -1c
-.BI "int \fBoperator==\fR (QChar " "c" ", char " "ch" ")"
+.BI "int \fBoperator!=\fR (QChar " "c1" ", QChar " "c2" ")"
 .br
 .in -1c
 .SH DESCRIPTION
@@ -374,42 +374,42 @@ Returns the numeric Unicode value equal to the QChar. Normally, you should use Q
 .SH "QChar QChar::upper () const"
 Returns the uppercase equivalent if the character is lowercase, or the character itself otherwise.
 .SH RELATED FUNCTION DOCUMENTATION
-.SH "int operator<= (QChar c, char ch)"
-Returns TRUE if the numeric Unicode value of \fIc\fR is less than or equal to that of the ASCII/Latin1 character \fIch.\fR
 .SH "int operator>= (QChar c1, QChar c2)"
 Returns TRUE if the numeric Unicode value of \fIc1\fR is greater than that of \fIc2,\fR or they are the same Unicode character.
+.SH "int operator> (QChar c1, QChar c2)"
+Returns TRUE if the numeric Unicode value of \fIc1\fR is greater than that of \fIc2.\fR
+.SH "int operator== (QChar c1, QChar c2)"
+Returns TRUE if \fIc1\fR and \fIc2\fR are the same Unicode character.
+.SH "int operator< (char ch, QChar c)"
+Returns TRUE if the numeric Unicode value of the ASCII/Latin1 character \fIch\fR is less than that of \fIc.\fR
 .SH "int operator>= (char ch, QChar c)"
 Returns TRUE if the numeric Unicode value of the ASCII/Latin1 character \fIch\fR is greater than or equal to that of \fIc.\fR
+.SH "int operator== (char ch, QChar c)"
+Returns TRUE if \fIc\fR is the ASCII/Latin1 character \fIch.\fR
 .SH "int operator!= (QChar c, char ch)"
 Returns TRUE if \fIc\fR is not the ASCII/Latin1 character \fIch.\fR
-.SH "int operator>= (QChar c, char ch)"
-Returns TRUE if the numeric Unicode value of \fIc\fR is greater than or equal to that of the ASCII/Latin1 character \fIch.\fR
-.SH "int operator!= (QChar c1, QChar c2)"
-Returns TRUE if \fIc1\fR and \fIc2\fR are not the same Unicode character.
-.SH "int operator!= (char ch, QChar c)"
-Returns TRUE if \fIc\fR is not the ASCII/Latin1 character \fIch.\fR
+.SH "int operator== (QChar c, char ch)"
+Returns TRUE if \fIc\fR is the ASCII/Latin1 character \fIch.\fR
 .SH "int operator<= (QChar c1, QChar c2)"
 Returns TRUE if the numeric Unicode value of \fIc1\fR is less than that of \fIc2,\fR or they are the same Unicode character.
+.SH "int operator<= (char ch, QChar c)"
+Returns TRUE if the numeric Unicode value of the ASCII/Latin1 character \fIch\fR is less than or equal to that of \fIc.\fR
+.SH "int operator>= (QChar c, char ch)"
+Returns TRUE if the numeric Unicode value of \fIc\fR is greater than or equal to that of the ASCII/Latin1 character \fIch.\fR
+.SH "int operator!= (char ch, QChar c)"
+Returns TRUE if \fIc\fR is not the ASCII/Latin1 character \fIch.\fR
+.SH "int operator<= (QChar c, char ch)"
+Returns TRUE if the numeric Unicode value of \fIc\fR is less than or equal to that of the ASCII/Latin1 character \fIch.\fR
 .SH "int operator> (char ch, QChar c)"
 Returns TRUE if the numeric Unicode value of the ASCII/Latin1 character \fIch\fR is greater than that of \fIc.\fR
 .SH "int operator< (QChar c1, QChar c2)"
 Returns TRUE if the numeric Unicode value of \fIc1\fR is less than that of \fIc2.\fR
-.SH "int operator== (QChar c1, QChar c2)"
-Returns TRUE if \fIc1\fR and \fIc2\fR are the same Unicode character.
-.SH "int operator<= (char ch, QChar c)"
-Returns TRUE if the numeric Unicode value of the ASCII/Latin1 character \fIch\fR is less than or equal to that of \fIc.\fR
-.SH "int operator> (QChar c1, QChar c2)"
-Returns TRUE if the numeric Unicode value of \fIc1\fR is greater than that of \fIc2.\fR
-.SH "int operator< (char ch, QChar c)"
-Returns TRUE if the numeric Unicode value of the ASCII/Latin1 character \fIch\fR is less than that of \fIc.\fR
-.SH "int operator> (QChar c, char ch)"
-Returns TRUE if the numeric Unicode value of \fIc\fR is greater than that of the ASCII/Latin1 character \fIch.\fR
 .SH "int operator< (QChar c, char ch)"
 Returns TRUE if the numeric Unicode value of \fIc\fR is less than that of the ASCII/Latin1 character \fIch.\fR
-.SH "int operator== (char ch, QChar c)"
-Returns TRUE if \fIc\fR is the ASCII/Latin1 character \fIch.\fR
-.SH "int operator== (QChar c, char ch)"
-Returns TRUE if \fIc\fR is the ASCII/Latin1 character \fIch.\fR
+.SH "int operator> (QChar c, char ch)"
+Returns TRUE if the numeric Unicode value of \fIc\fR is greater than that of the ASCII/Latin1 character \fIch.\fR
+.SH "int operator!= (QChar c1, QChar c2)"
+Returns TRUE if \fIc1\fR and \fIc2\fR are not the same Unicode character.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qchar.html
 .BR http://www.trolltech.com/faq/tech.html
@@ -428,4 +428,4 @@ In case of content or formattting problems with this manual page, please
 report them to
 .BR qt-bugs@trolltech.com .
 Please include the name of the manual page (qchar.3qt) and the Qt
-version (2.3.1).
+version (2.3.2).

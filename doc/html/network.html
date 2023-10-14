@@ -53,7 +53,7 @@ URLs using them is quite easy. E.g. downloading a file from an FTP
 server to the local filesystem can be done with following code:
 <p>
 <pre>    <a href="qurloperator.html">QUrlOperator</a> op;
-    op.<a href="qurloperator.html#6ab422">copy</a>( "ftp://ftp.trolltech.com/qt/source/qt-2.1.0.tar.gz", "file:/tmp", FALSE );
+    op.<a href="qurloperator.html#3a9681">copy</a>( "ftp://ftp.trolltech.com/qt/source/qt-2.1.0.tar.gz", "file:/tmp", FALSE );
 </pre>
 <p>
 And that's all! Of course an implementation of the FTP protocol has to be available
@@ -63,7 +63,7 @@ You can also do stuff like creating directories, removing files, renaming, etc. 
 create a folder on a private FTP account do
 <p>
 <pre>    <a href="qurloperator.html">QUrlOperator</a> op( "ftp://username:password@host.domain.no/home/username" );
-    op.<a href="qurloperator.html#a89403">mkdir</a>( "New Directory" );
+    op.<a href="qurloperator.html#9867b2">mkdir</a>( "New Directory" );
 </pre>
 <p>
 That's it again. To see all available operations, look at the <code>QUrlOperator</code> class
@@ -101,12 +101,12 @@ signal could look like this
 <p>
 <pre>void MyClass::slotOperationFinished( <a href="qnetworkoperation.html">QNetworkOperation</a> *op )
 {
-    switch ( op-&gt;<a href="qnetworkoperation.html#71fd13">operation</a>() ) {
+    switch ( op-&gt;<a href="qnetworkoperation.html#54b287">operation</a>() ) {
     case QNetworkProtocol::OpMkdir: {
-        if ( op-&gt;<a href="qnetworkoperation.html#a9b623">state</a>() == QNetworkProtocol::StFailed )
-            <a href="qapplication.html#3db6b2">qDebug</a>( "Couldn't create directory %s", op-&gt;<a href="qnetworkoperation.html#71bf9f">arg</a>( 0 ).latin1() );
+        if ( op-&gt;<a href="qnetworkoperation.html#0f94ff">state</a>() == QNetworkProtocol::StFailed )
+            <a href="qapplication.html#72e78c">qDebug</a>( "Couldn't create directory %s", op-&gt;<a href="qnetworkoperation.html#e142fb">arg</a>( 0 ).latin1() );
         else
-            <a href="qapplication.html#3db6b2">qDebug</a>( "Successfully created directory %s", op-&gt;<a href="qnetworkoperation.html#71bf9f">arg</a>( 0 ).latin1() );
+            <a href="qapplication.html#72e78c">qDebug</a>( "Successfully created directory %s", op-&gt;<a href="qnetworkoperation.html#e142fb">arg</a>( 0 ).latin1() );
     } break;
     // ... and so on
     }
@@ -134,24 +134,24 @@ void MyClass::slotInsertEntries( const QValueList&lt;<a href="qurlinfo.html">QUr
     <a href="qvaluelist.html">QValueList</a>&lt;<a href="qurlinfo.html">QUrlInfo</a>&gt;::ConstIterator it = info.begin();
     for ( ; it != info.end(); ++it ) {
         const QUrlInfo &amp;inf = *it;
-        <a href="qapplication.html#3db6b2">qDebug</a>( "Name: %s, Size: %d, Last Modified: %s",
+        <a href="qapplication.html#72e78c">qDebug</a>( "Name: %s, Size: %d, Last Modified: %s",
             inf.name().latin1(), inf.size(), inf.lastModified().toString().latin1() );
     }
 }
 
 void MyClass::slotStart( <a href="qnetworkoperation.html">QNetworkOperation</a> * )
 {
-    <a href="qapplication.html#3db6b2">qDebug</a>( "Start reading '%s'", op.<a href="qurl.html#bc27c8">toString</a>().latin1() );
+    <a href="qapplication.html#72e78c">qDebug</a>( "Start reading '%s'", op.<a href="qurl.html#c78524">toString</a>().latin1() );
 }
 
 void MyClass::slotFinished( <a href="qnetworkoperation.html">QNetworkOperation</a> *operation )
 {
-    if ( operation-&gt;<a href="qnetworkoperation.html#71fd13">operation</a>() == QNetworkProtocol::OpListChildren ) {
-        if ( operation-&gt;<a href="qnetworkoperation.html#a9b623">state</a>() == QNetworkProtocol::StFailed )
-            <a href="qapplication.html#3db6b2">qDebug</a>( "Couldn't read '%s'! Following error occurred: %s",
-                op.<a href="qurl.html#bc27c8">toString</a>().latin1(), operation-&gt;<a href="qnetworkoperation.html#ccae63">protocolDetail</a>().latin1() );
+    if ( operation-&gt;<a href="qnetworkoperation.html#54b287">operation</a>() == QNetworkProtocol::OpListChildren ) {
+        if ( operation-&gt;<a href="qnetworkoperation.html#0f94ff">state</a>() == QNetworkProtocol::StFailed )
+            <a href="qapplication.html#72e78c">qDebug</a>( "Couldn't read '%s'! Following error occurred: %s",
+                op.<a href="qurl.html#c78524">toString</a>().latin1(), operation-&gt;<a href="qnetworkoperation.html#bf6b66">protocolDetail</a>().latin1() );
         else
-            <a href="qapplication.html#3db6b2">qDebug</a>( "Finished reading '%s'!", op.<a href="qurl.html#bc27c8">toString</a>().latin1() );
+            <a href="qapplication.html#72e78c">qDebug</a>( "Finished reading '%s'!", op.<a href="qurl.html#c78524">toString</a>().latin1() );
     }
 }
 </pre>
@@ -343,7 +343,7 @@ Using this knowledge it should be possible to implement network protocols. Final
 to be able to use it with a QUrlOperator (and so e.g. in the QFileDialog), you have to
 register the network protocol implementation. This can be done like this:
 <p>
-<pre>    <a href="qnetworkprotocol.html#165cea">QNetworkProtocol::registerNetworkProtocol</a>( "myprot", new QNetworkProtocolFactory&lt;MyProtocol&gt; );
+<pre>    <a href="qnetworkprotocol.html#e0692e">QNetworkProtocol::registerNetworkProtocol</a>( "myprot", new QNetworkProtocolFactory&lt;MyProtocol&gt; );
 </pre>
 <p>
 In this case <code>MyProtocol</code> would be a class you implemented like described here
@@ -351,7 +351,7 @@ In this case <code>MyProtocol</code> would be a class you implemented like descr
 myprot. So if you want to use it, you would do something like
 <p>
 <pre>    <a href="qurloperator.html">QUrlOperator</a> op( "myprot://host/path" );
-    op.<a href="qurloperator.html#792154">listChildren</a>();
+    op.<a href="qurloperator.html#42b8a8">listChildren</a>();
 </pre>
 <p>
 Finally as example for a network protocol implementation you could look at the
@@ -427,6 +427,6 @@ in the seperate network extension.
 
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.1</div>
+<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

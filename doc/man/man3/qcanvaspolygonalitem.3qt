@@ -1,5 +1,5 @@
 '\" t
-.TH QCanvasPolygonalItem 3qt "13 June 2001" "Trolltech AS" \" -*- nroff -*-
+.TH QCanvasPolygonalItem 3qt "29 October 2001" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2001 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -80,7 +80,7 @@ Destruct the QCanvasPolygonalItem. Derived classes \fImust\fR call hide() in the
 .SH "QPointArray QCanvasPolygonalItem::areaPoints () const \fC[virtual]\fR"
 Must return the points bounding the shape. Note that the returned points are \fIoutside\fR the object, not touching it.
 .PP
-Reimplemented in QCanvasPolygon, QCanvasEllipse, QCanvasRectangle and QCanvasLine.
+Reimplemented in QCanvasPolygon, QCanvasLine, QCanvasRectangle and QCanvasEllipse.
 .SH "QPointArray QCanvasPolygonalItem::areaPointsAdvanced () const \fC[virtual]\fR"
 Returns the points advanced by the current xVelocity() and yVelocity().
 .SH "QRect QCanvasPolygonalItem::boundingRect () const \fC[virtual]\fR"
@@ -104,7 +104,7 @@ Subclasses must reimplement this function to draw their shape. The pen and brush
 .PP
 See also draw().
 .PP
-Reimplemented in QCanvasRectangle, QCanvasPolygon, QCanvasEllipse and QCanvasLine.
+Reimplemented in QCanvasPolygon, QCanvasEllipse, QCanvasLine and QCanvasRectangle.
 .SH "QPen QCanvasPolygonalItem::pen () const"
 Returns the QPen used to draw the outline of the item, if any.
 .PP
@@ -151,4 +151,4 @@ In case of content or formattting problems with this manual page, please
 report them to
 .BR qt-bugs@trolltech.com .
 Please include the name of the manual page (qcanvaspolygonalitem.3qt) and the Qt
-version (2.3.1).
+version (2.3.2).

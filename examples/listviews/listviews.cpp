@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/listviews/listviews.cpp   2.3.1   edited 2001-05-25 $
+** $Id: qt/examples/listviews/listviews.cpp   2.3.2   edited 2001-05-25 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **

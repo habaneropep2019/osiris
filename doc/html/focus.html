@@ -62,9 +62,9 @@ other.  The order in which Tab moves is called the tab order.
 <p>
 In Qt, this list is kept in the <a href="qfocusdata.html">QFocusData</a> class.  There is one
 QFocusData object per window, and widgets automatically append
-themselves to the end of it when <a href="qwidget.html#43a9d9">QWidget::setFocusPolicy()</a> is
+themselves to the end of it when <a href="qwidget.html#f92b0f">QWidget::setFocusPolicy()</a> is
 called with an appropriate <a href="qwidget.html#FocusPolicy">QWidget::FocusPolicy</a>.  You can customize
-the tab order using <a href="qwidget.html#bfec97">QWidget::setTabOrder()</a>.  (If you don't, Tab
+the tab order using <a href="qwidget.html#20c984">QWidget::setTabOrder()</a>.  (If you don't, Tab
 generally moves focus in the order of widget construction.)
 <p>
 Since pressing Tab is so common, most widgets that can have focus
@@ -87,7 +87,7 @@ moves focus to this field.
 There is also another exception to Tab support is text-entry widgets
 that must support tab; almost all text editors fall into this class.
 Qt treats Control-Tab as Tab and Control-Shift-Tab as Shift-Tab, and
-such widgets can reimplement <a href="qwidget.html#f30772">QWidget::event()</a> and handle Tab before
+such widgets can reimplement <a href="qwidget.html#6ff658">QWidget::event()</a> and handle Tab before
 calling QWidget::event() to get normal processing of all other keys.
 However, since some systems use Control-Tab for other purposes, and
 many users aren't aware of Control-Tab anyway, this isn't a complete
@@ -120,14 +120,14 @@ shortcut - <a href="qbutton.html">QButton</a> and its subclasses make that very 
 <p>
 For widgets that don't fall into either class, we have no advice.
 <p>
-In Qt, only the <a href="qwidget.html#43a9d9">QWidget::setFocusPolicy()</a> function affects
+In Qt, only the <a href="qwidget.html#f92b0f">QWidget::setFocusPolicy()</a> function affects
 click-to-focus.
 <p>
 <h2>The user presses a keyboard shortcut.</h2>
 <p>
 It's not unusual for keyboard shortcuts to move the focus.  This can
 happen implicitly by opening modal dialogs, but also explicitly using
-focus accelerators such as are provided by <a href="qlabel.html#191701">QLabel::setBuddy()</a>, <a href="qgroupbox.html">QGroupBox</a> and <a href="qtabbar.html">QTabBar</a>.
+focus accelerators such as are provided by <a href="qlabel.html#085fdb">QLabel::setBuddy()</a>, <a href="qgroupbox.html">QGroupBox</a> and <a href="qtabbar.html">QTabBar</a>.
 <p>
 We advise supporting shortcut focus for all widgets that the user may
 want to jump to.  For example, a tab dialog can have keyboard
@@ -158,12 +158,12 @@ the last widget to have focus should regain it.  Qt does that
 automatically.
 <p>
 If focus has never been in this window before and you know where focus
-should start out, call <a href="qwidget.html#666b3c">QWidget::setFocus()</a> on that widget before
-you <a href="qwidget.html#ccc8f7">QWidget::show()</a> it.  If you don't, Qt will pick some suitable
+should start out, call <a href="qwidget.html#25775a">QWidget::setFocus()</a> on that widget before
+you <a href="qwidget.html#200ee5">QWidget::show()</a> it.  If you don't, Qt will pick some suitable
 widget.
 
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.1</div>
+<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qurl.cpp   2.3.1   edited 2001-05-31 $
+** $Id: qt/src/kernel/qurl.cpp   2.3.2   edited 2001-10-13 $
 **
 ** Implementation of QUrl class
 **
@@ -610,7 +610,7 @@ bool QUrl::parse( const QString& url )
     int i = 0;
     QString port;
 
-    while ( TRUE ) {
+    for (;;) {
 	switch ( c ) {
 	case '?':
 	    input = InputQuery;
@@ -696,8 +696,14 @@ bool QUrl::parse( const QString& url )
 	d->path += "/";
 
     // #### do some corrections, should be done nicer too
-    if ( !d->pass.isEmpty() && d->pass[ 0 ] == ':' )
-	d->pass.remove( 0, 1 );
+    if ( !d->pass.isEmpty() ) {
+	if ( d->pass[ 0 ] == ':' )
+	    d->pass.remove( 0, 1 );
+	decode( d->pass );
+    }
+    if ( !d->user.isEmpty() ) {
+	decode( d->user );
+    }
     if ( !d->path.isEmpty() ) {
 	if ( d->path[ 0 ] == '@' || d->path[ 0 ] == ':' )
 	    d->path.remove( 0, 1 );
@@ -715,9 +721,8 @@ bool QUrl::parse( const QString& url )
     // hack for windows file://machine/path syntax
     if ( d->protocol == "file" ) {
 	if ( url.left( 7 ) == "file://" &&
-	     ( d->path.length() < 8 || d->path[ 7 ] != '/' ) &&
-	     d->path[ 1 ] != '/' )
-	    d->path.prepend( "/" );
+	     d->path.length() > 1 && d->path[ 1 ] != ':' ) 
+		 d->path.prepend( "/" );
     }
 #endif
 
@@ -1107,10 +1112,17 @@ QString QUrl::toString( bool encodedPath, bool forcePrependProtocol ) const
     } else {
 	res = d->protocol + "://";
 	if ( !d->user.isEmpty() || !d->pass.isEmpty() ) {
-	    if ( !d->user.isEmpty() )
-		res += d->user;
-	    if ( !d->pass.isEmpty() )
-		res += ":" + d->pass;
+	    QString tmp;
+	    if ( !d->user.isEmpty() ) {
+		tmp = d->user;
+		encode( tmp );
+		res += tmp;
+	    }
+	    if ( !d->pass.isEmpty() ) {
+		tmp = d->pass;
+		encode( tmp );
+		res += ":" + tmp;
+	    }
 	    res += "@";
 	}
 	res += d->host;

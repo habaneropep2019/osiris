@@ -1,5 +1,5 @@
 '\" t
-.TH QCopChannel 3qt "13 June 2001" "Trolltech AS" \" -*- nroff -*-
+.TH QCopChannel 3qt "29 October 2001" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2001 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -46,6 +46,9 @@ Inherits QObject.
 .ti -1c
 .BI "bool \fBsend\fR ( const QCString & " "channel" ", const QCString & " "msg" ", const QByteArray & data ) "
 .br
+.ti -1c
+.BI "void \fBsendLocally\fR ( const QCString & " "ch" ", const QCString & " "msg" ", const QByteArray & data ) (internal)"
+.br
 .in -1c
 .SH DESCRIPTION
 This class provides communication capabilities between several clients.
@@ -83,9 +86,9 @@ Send the message \fImsg\fR on \fIchannel.\fR The message will be distributed to 
 .PP
 See also receive().
 .SH "bool QCopChannel::send ( const QCString & channel, const QCString & msg, const QByteArray & data ) \fC[static]\fR"
-Same as above function except the additional \fIdata\fR parameter.
-QDataStream provides a convenient way to fill the byte array with
-auxiliary data.
+Same as above function except the additional \fIdata\fR parameter. QDataStream provides a convenient way to fill the byte array with auxiliary data.
+.SH "void QCopChannel::sendLocally ( const QCString & ch, const QCString & msg, const QByteArray & data ) \fC[static]\fR"
+For internal use only.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qcopchannel.html
 .BR http://www.trolltech.com/faq/tech.html
@@ -104,4 +107,4 @@ In case of content or formattting problems with this manual page, please
 report them to
 .BR qt-bugs@trolltech.com .
 Please include the name of the manual page (qcopchannel.3qt) and the Qt
-version (2.3.1).
+version (2.3.2).

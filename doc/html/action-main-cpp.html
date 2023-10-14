@@ -31,7 +31,7 @@ height="100" src="face.png" alt="Home" border="0">
   <hr>
 
   Header file: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/application/application.h   2.3.1   edited 2001-01-26 $
+** &#36;Id&#58; qt/examples/application/application.h   2.3.2   edited 2001-01-26 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -84,7 +84,7 @@ private:
   <hr>
 
   Implementation: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/application/application.cpp   2.3.1   edited 2001-01-26 $
+** &#36;Id&#58; qt/examples/application/application.cpp   2.3.2   edited 2001-06-12 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -139,7 +139,7 @@ ApplicationWindow::ApplicationWindow()
     <a href="qpixmap.html">QPixmap</a> openIcon, saveIcon, printIcon;
 
     fileTools = new <a href="qtoolbar.html">QToolBar</a>( this, "file operations" );
-    fileTools-&gt;setLabel( <a href="qobject.html#ba30fb">tr</a>( "File Operations" ) );
+    fileTools-&gt;setLabel( <a href="qobject.html#2418a9">tr</a>( "File Operations" ) );
 
     openIcon = QPixmap( fileopen );
     <a href="qtoolbutton.html">QToolButton</a> * fileOpen
@@ -158,47 +158,47 @@ ApplicationWindow::ApplicationWindow()
 
     (void)QWhatsThis::whatsThisButton( fileTools );
 
-    <a href="qwhatsthis.html#5265e7">QWhatsThis::add</a>( fileOpen, fileOpenText );
-    <a href="qmimesourcefactory.html#28c4d9">QMimeSourceFactory::defaultFactory</a>()-&gt;setPixmap( "fileopen", openIcon );
-    <a href="qwhatsthis.html#5265e7">QWhatsThis::add</a>( fileSave, fileSaveText );
-    <a href="qwhatsthis.html#5265e7">QWhatsThis::add</a>( filePrint, filePrintText );
+    <a href="qwhatsthis.html#dfcd18">QWhatsThis::add</a>( fileOpen, fileOpenText );
+    <a href="qmimesourcefactory.html#5c7072">QMimeSourceFactory::defaultFactory</a>()-&gt;setPixmap( "fileopen", openIcon );
+    <a href="qwhatsthis.html#dfcd18">QWhatsThis::add</a>( fileSave, fileSaveText );
+    <a href="qwhatsthis.html#dfcd18">QWhatsThis::add</a>( filePrint, filePrintText );
 
     <a href="qpopupmenu.html">QPopupMenu</a> * file = new <a href="qpopupmenu.html">QPopupMenu</a>( this );
-    <a href="qmainwindow.html#2fcbc3">menuBar</a>()-&gt;insertItem( "&amp;File", file );
+    <a href="qmainwindow.html#0eb7bc">menuBar</a>()-&gt;insertItem( "&amp;File", file );
 
-    file-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "&amp;New", this, SLOT(<a href=#34>newDoc</a>()), CTRL+Key_N );
+    file-&gt;<a href="qmenudata.html#0076cb">insertItem</a>( "&amp;New", this, SLOT(<a href=#34>newDoc</a>()), CTRL+Key_N );
 
-    id = file-&gt;<a href="qmenudata.html#43c652">insertItem</a>( openIcon, "&amp;Open",
+    id = file-&gt;<a href="qmenudata.html#0076cb">insertItem</a>( openIcon, "&amp;Open",
                            this, SLOT(<a href=#36>load</a>()), CTRL+Key_O );
-    file-&gt;<a href="qmenudata.html#a678e4">setWhatsThis</a>( id, fileOpenText );
+    file-&gt;<a href="qmenudata.html#88eb55">setWhatsThis</a>( id, fileOpenText );
 
-    id = file-&gt;<a href="qmenudata.html#43c652">insertItem</a>( saveIcon, "&amp;Save",
+    id = file-&gt;<a href="qmenudata.html#0076cb">insertItem</a>( saveIcon, "&amp;Save",
                            this, SLOT(<a href=#37>save</a>()), CTRL+Key_S );
-    file-&gt;<a href="qmenudata.html#a678e4">setWhatsThis</a>( id, fileSaveText );
-    id = file-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "Save &amp;as...", this, SLOT(<a href=#38>saveAs</a>()) );
-    file-&gt;<a href="qmenudata.html#a678e4">setWhatsThis</a>( id, fileSaveText );
-    file-&gt;<a href="qmenudata.html#5f2cea">insertSeparator</a>();
-    id = file-&gt;<a href="qmenudata.html#43c652">insertItem</a>( printIcon, "&amp;Print",
+    file-&gt;<a href="qmenudata.html#88eb55">setWhatsThis</a>( id, fileSaveText );
+    id = file-&gt;<a href="qmenudata.html#0076cb">insertItem</a>( "Save &amp;as...", this, SLOT(<a href=#38>saveAs</a>()) );
+    file-&gt;<a href="qmenudata.html#88eb55">setWhatsThis</a>( id, fileSaveText );
+    file-&gt;<a href="qmenudata.html#e34b79">insertSeparator</a>();
+    id = file-&gt;<a href="qmenudata.html#0076cb">insertItem</a>( printIcon, "&amp;Print",
                            this, SLOT(<a href=#39>print</a>()), CTRL+Key_P );
-    file-&gt;<a href="qmenudata.html#a678e4">setWhatsThis</a>( id, filePrintText );
-    file-&gt;<a href="qmenudata.html#5f2cea">insertSeparator</a>();
-    file-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "&amp;Close", this, SLOT(<a href="qwidget.html#930c34">close</a>()), CTRL+Key_W );
-    file-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "&amp;Quit", qApp, SLOT( closeAllWindows() ), CTRL+Key_Q );
+    file-&gt;<a href="qmenudata.html#88eb55">setWhatsThis</a>( id, filePrintText );
+    file-&gt;<a href="qmenudata.html#e34b79">insertSeparator</a>();
+    file-&gt;<a href="qmenudata.html#0076cb">insertItem</a>( "&amp;Close", this, SLOT(<a href="qwidget.html#3d9c87">close</a>()), CTRL+Key_W );
+    file-&gt;<a href="qmenudata.html#0076cb">insertItem</a>( "&amp;Quit", qApp, SLOT( closeAllWindows() ), CTRL+Key_Q );
 
     <a href="qpopupmenu.html">QPopupMenu</a> * help = new <a href="qpopupmenu.html">QPopupMenu</a>( this );
-    <a href="qmainwindow.html#2fcbc3">menuBar</a>()-&gt;insertSeparator();
-    <a href="qmainwindow.html#2fcbc3">menuBar</a>()-&gt;insertItem( "&amp;Help", help );
+    <a href="qmainwindow.html#0eb7bc">menuBar</a>()-&gt;insertSeparator();
+    <a href="qmainwindow.html#0eb7bc">menuBar</a>()-&gt;insertItem( "&amp;Help", help );
 
-    help-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "&amp;About", this, SLOT(<a href=#41>about</a>()), Key_F1 );
-    help-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "About &amp;<a href="qt.html">Qt</a>", this, SLOT(<a href=#42>aboutQt</a>()) );
-    help-&gt;<a href="qmenudata.html#5f2cea">insertSeparator</a>();
-    help-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "What's &amp;This", this, SLOT(<a href="qmainwindow.html#db02bc">whatsThis</a>()), SHIFT+Key_F1 );
+    help-&gt;<a href="qmenudata.html#0076cb">insertItem</a>( "&amp;About", this, SLOT(<a href=#41>about</a>()), Key_F1 );
+    help-&gt;<a href="qmenudata.html#0076cb">insertItem</a>( "About &amp;<a href="qt.html">Qt</a>", this, SLOT(<a href=#42>aboutQt</a>()) );
+    help-&gt;<a href="qmenudata.html#e34b79">insertSeparator</a>();
+    help-&gt;<a href="qmenudata.html#0076cb">insertItem</a>( "What's &amp;This", this, SLOT(<a href="qmainwindow.html#f50ce2">whatsThis</a>()), SHIFT+Key_F1 );
 
     e = new <a href="qmultilineedit.html">QMultiLineEdit</a>( this, "editor" );
     e-&gt;setFocus();
-    <a href="qmainwindow.html#0983b6">setCentralWidget</a>( e );
-    <a href="qmainwindow.html#14153d">statusBar</a>()-&gt;message( "Ready", 2000 );
-    <a href="qwidget.html#9ff9d8">resize</a>( 450, 600 );
+    <a href="qmainwindow.html#fce9ba">setCentralWidget</a>( e );
+    <a href="qmainwindow.html#530937">statusBar</a>()-&gt;message( "Ready", 2000 );
+    <a href="qwidget.html#ff9d07">resize</a>( 450, 600 );
 }
 
 ApplicationWindow::~ApplicationWindow()
@@ -209,42 +209,43 @@ ApplicationWindow::~ApplicationWindow()
 void <a name="34"></a>ApplicationWindow::newDoc()
 {
     ApplicationWindow *ed = new ApplicationWindow;
-    ed-&gt;<a href="qmainwindow.html#e71bb3">show</a>();
+    ed-&gt;<a href="qwidget.html#d6a291">setCaption</a>("Qt Example - Application");
+    ed-&gt;<a href="qmainwindow.html#eb53e3">show</a>();
 }
 
 void <a name="36"></a>ApplicationWindow::load()
 {
     <a href="qstring.html">QString</a> fn = QFileDialog::getOpenFileName( QString::null, QString::null,
                                                this);
-    if ( !fn.<a href="qstring.html#9a6d7e">isEmpty</a>() )
+    if ( !fn.<a href="qstring.html#c62623">isEmpty</a>() )
         <a href=#36>load</a>( fn );
     else
-        <a href="qmainwindow.html#14153d">statusBar</a>()-&gt;message( "Loading aborted", 2000 );
+        <a href="qmainwindow.html#530937">statusBar</a>()-&gt;message( "Loading aborted", 2000 );
 }
 
 void <a name="36"></a>ApplicationWindow::load( const char *fileName )
 {
     <a href="qfile.html">QFile</a> f( fileName );
-    if ( !f.<a href="qfile.html#44ae9b">open</a>( IO_ReadOnly ) )
+    if ( !f.<a href="qfile.html#255995">open</a>( IO_ReadOnly ) )
         return;
 
     e-&gt;setAutoUpdate( FALSE );
     e-&gt;clear();
 
     <a href="qtextstream.html">QTextStream</a> t(&amp;f);
-    while ( !t.<a href="qtextstream.html#29d3b3">eof</a>() ) {
-        <a href="qstring.html">QString</a> s = t.<a href="qtextstream.html#6a73a4">readLine</a>();
+    while ( !t.<a href="qtextstream.html#bb145b">eof</a>() ) {
+        <a href="qstring.html">QString</a> s = t.<a href="qtextstream.html#ae4af4">readLine</a>();
         e-&gt;append( s );
     }
-    f.<a href="qfile.html#e37a87">close</a>();
+    f.<a href="qfile.html#64e640">close</a>();
 
     e-&gt;setAutoUpdate( TRUE );
     e-&gt;repaint();
     e-&gt;setEdited( FALSE );
-    <a href="qwidget.html#d4f007">setCaption</a>( fileName );
+    <a href="qwidget.html#d6a291">setCaption</a>( fileName );
     <a href="qstring.html">QString</a> s;
-    s.<a href="qstring.html#2eb9bc">sprintf</a>( "Loaded document %s", fileName );
-    <a href="qmainwindow.html#14153d">statusBar</a>()-&gt;message( s, 2000 );
+    s.<a href="qstring.html#926f67">sprintf</a>( "Loaded document %s", fileName );
+    <a href="qmainwindow.html#530937">statusBar</a>()-&gt;message( s, 2000 );
 }
 
 void <a name="37"></a>ApplicationWindow::save()
@@ -256,32 +257,32 @@ void <a name="37"></a>ApplicationWindow::save()
 
     <a href="qstring.html">QString</a> text = e-&gt;text();
     <a href="qfile.html">QFile</a> f( filename );
-    if ( !f.<a href="qfile.html#44ae9b">open</a>( IO_WriteOnly ) ) {
-        <a href="qmainwindow.html#14153d">statusBar</a>()-&gt;message( <a href="qstring.html">QString</a>("Could not write to %1").arg(filename),
+    if ( !f.<a href="qfile.html#255995">open</a>( IO_WriteOnly ) ) {
+        <a href="qmainwindow.html#530937">statusBar</a>()-&gt;message( <a href="qstring.html">QString</a>("Could not write to %1").arg(filename),
                               2000 );
         return;
     }
 
     <a href="qtextstream.html">QTextStream</a> t( &amp;f );
     t &lt;&lt; text;
-    f.<a href="qfile.html#e37a87">close</a>();
+    f.<a href="qfile.html#64e640">close</a>();
 
     e-&gt;setEdited( FALSE );
 
-    <a href="qwidget.html#d4f007">setCaption</a>( filename );
+    <a href="qwidget.html#d6a291">setCaption</a>( filename );
 
-    <a href="qmainwindow.html#14153d">statusBar</a>()-&gt;message( <a href="qstring.html">QString</a>( "File %1 saved" ).arg( filename ), 2000 );
+    <a href="qmainwindow.html#530937">statusBar</a>()-&gt;message( <a href="qstring.html">QString</a>( "File %1 saved" ).arg( filename ), 2000 );
 }
 
 void <a name="38"></a>ApplicationWindow::saveAs()
 {
     <a href="qstring.html">QString</a> fn = QFileDialog::getSaveFileName( QString::null, QString::null,
                                                this );
-    if ( !fn.<a href="qstring.html#9a6d7e">isEmpty</a>() ) {
+    if ( !fn.<a href="qstring.html#c62623">isEmpty</a>() ) {
         filename = fn;
         <a href=#37>save</a>();
     } else {
-        <a href="qmainwindow.html#14153d">statusBar</a>()-&gt;message( "Saving aborted", 2000 );
+        <a href="qmainwindow.html#530937">statusBar</a>()-&gt;message( "Saving aborted", 2000 );
     }
 }
 
@@ -291,74 +292,74 @@ void <a name="39"></a>ApplicationWindow::print()
     int pageNo = 1;
 
     if ( printer-&gt;setup(this) ) {               // printer dialog
-        <a href="qmainwindow.html#14153d">statusBar</a>()-&gt;message( "Printing..." );
+        <a href="qmainwindow.html#530937">statusBar</a>()-&gt;message( "Printing..." );
         <a href="qpainter.html">QPainter</a> p;
-        if( !p.<a href="qpainter.html#59f1bb">begin</a>( printer ) )
+        if( !p.<a href="qpainter.html#02ed5d">begin</a>( printer ) )
             return;                             // paint on printer
 
-        p.<a href="qpainter.html#e4d6b7">setFont</a>( e-&gt;font() );
+        p.<a href="qpainter.html#998df2">setFont</a>( e-&gt;font() );
         int yPos        = 0;                    // y position for each line
-        <a href="qfontmetrics.html">QFontMetrics</a> fm = p.<a href="qpainter.html#f572a5">fontMetrics</a>();
+        <a href="qfontmetrics.html">QFontMetrics</a> fm = p.<a href="qpainter.html#73b2e5">fontMetrics</a>();
         <a href="qpaintdevicemetrics.html">QPaintDeviceMetrics</a> metrics( printer ); // need width/height
                                                 // of printer surface
         for( int i = 0 ; i &lt; e-&gt;numLines() ; i++ ) {
-            if ( Margin + yPos &gt; metrics.<a href="qpaintdevicemetrics.html#3792df">height</a>() - Margin ) {
+            if ( Margin + yPos &gt; metrics.<a href="qpaintdevicemetrics.html#d4fedb">height</a>() - Margin ) {
                 <a href="qstring.html">QString</a> msg( "Printing (page " );
                 msg += QString::number( ++pageNo );
                 msg += ")...";
-                <a href="qmainwindow.html#14153d">statusBar</a>()-&gt;message( msg );
+                <a href="qmainwindow.html#530937">statusBar</a>()-&gt;message( msg );
                 printer-&gt;newPage();             // no more room on this page
                 yPos = 0;                       // back to top of page
             }
-            p.<a href="qpainter.html#8a59ed">drawText</a>( Margin, Margin + yPos,
-                        metrics.<a href="qpaintdevicemetrics.html#a53b11">width</a>(), fm.<a href="qfontmetrics.html#ebe056">lineSpacing</a>(),
+            p.<a href="qpainter.html#0f088f">drawText</a>( Margin, Margin + yPos,
+                        metrics.<a href="qpaintdevicemetrics.html#95eb7b">width</a>(), fm.<a href="qfontmetrics.html#e6e380">lineSpacing</a>(),
                         ExpandTabs | DontClip,
                         e-&gt;textLine( i ) );
-            yPos = yPos + fm.<a href="qfontmetrics.html#ebe056">lineSpacing</a>();
+            yPos = yPos + fm.<a href="qfontmetrics.html#e6e380">lineSpacing</a>();
         }
-        p.<a href="qpainter.html#c7f9ac">end</a>();                                // send job to printer
-        <a href="qmainwindow.html#14153d">statusBar</a>()-&gt;message( "Printing completed", 2000 );
+        p.<a href="qpainter.html#365784">end</a>();                                // send job to printer
+        <a href="qmainwindow.html#530937">statusBar</a>()-&gt;message( "Printing completed", 2000 );
     } else {
-        <a href="qmainwindow.html#14153d">statusBar</a>()-&gt;message( "Printing aborted", 2000 );
+        <a href="qmainwindow.html#530937">statusBar</a>()-&gt;message( "Printing aborted", 2000 );
     }
 }
 
 void <a name="40"></a>ApplicationWindow::closeEvent( <a href="qcloseevent.html">QCloseEvent</a>* ce )
 {
     if ( !e-&gt;edited() ) {
-        ce-&gt;<a href="qcloseevent.html#47cc57">accept</a>();
+        ce-&gt;<a href="qcloseevent.html#7cf66f">accept</a>();
         return;
     }
 
-    switch( <a href="qmessagebox.html#2e454b">QMessageBox::information</a>( this, "Qt Application Example",
+    switch( <a href="qmessagebox.html#66b7c8">QMessageBox::information</a>( this, "Qt Application Example",
                                       "The document has been changed since "
                                       "the last save.",
                                       "Save Now", "Cancel", "Leave Anyway",
                                       0, 1 ) ) {
     case 0:
         <a href=#37>save</a>();
-        ce-&gt;<a href="qcloseevent.html#47cc57">accept</a>();
+        ce-&gt;<a href="qcloseevent.html#7cf66f">accept</a>();
         break;
     case 1:
     default: // just for sanity
-        ce-&gt;<a href="qcloseevent.html#e2007a">ignore</a>();
+        ce-&gt;<a href="qcloseevent.html#ee1736">ignore</a>();
         break;
     case 2:
-        ce-&gt;<a href="qcloseevent.html#47cc57">accept</a>();
+        ce-&gt;<a href="qcloseevent.html#7cf66f">accept</a>();
         break;
     }
 }
 
 void <a name="41"></a>ApplicationWindow::about()
 {
-    <a href="qmessagebox.html#e67950">QMessageBox::about</a>( this, "Qt Application Example",
+    <a href="qmessagebox.html#f6c3cd">QMessageBox::about</a>( this, "Qt Application Example",
                         "This example demonstrates simple use of "
                         "QMainWindow,\nQMenuBar and QToolBar.");
 }
 
 void <a name="42"></a>ApplicationWindow::aboutQt()
 {
-    <a href="qmessagebox.html#976755">QMessageBox::aboutQt</a>( this, "Qt Application Example" );
+    <a href="qmessagebox.html#b72270">QMessageBox::aboutQt</a>( this, "Qt Application Example" );
 }
 </pre>
 
@@ -367,7 +368,7 @@ void <a name="42"></a>ApplicationWindow::aboutQt()
 
   Main:
 <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/action/main.cpp   2.3.1   edited 2001-01-26 $
+** &#36;Id&#58; qt/examples/action/main.cpp   2.3.2   edited 2001-01-26 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -382,14 +383,14 @@ void <a name="42"></a>ApplicationWindow::aboutQt()
 int main( int argc, char ** argv ) {
     <a name="QApplication"></a><a href="qapplication.html">QApplication</a> a( argc, argv );
     ApplicationWindow * mw = new ApplicationWindow();
-    mw-&gt;<a name="setCaption"></a><a href="qwidget.html#d4f007">setCaption</a>( "Document 1" );
-    mw-&gt;<a name="show"></a><a href="qmainwindow.html#e71bb3">show</a>();
-    a.<a name="connect"></a><a href="qobject.html#c2d209">connect</a>( &amp;a, SIGNAL(lastWindowClosed()), &amp;a, SLOT(quit()) );
-    return a.<a name="exec"></a><a href="qapplication.html#7076af">exec</a>();
+    mw-&gt;<a name="setCaption"></a><a href="qwidget.html#d6a291">setCaption</a>( "Document 1" );
+    mw-&gt;<a name="show"></a><a href="qmainwindow.html#eb53e3">show</a>();
+    a.<a name="connect"></a><a href="qobject.html#7f8e37">connect</a>( &amp;a, SIGNAL(lastWindowClosed()), &amp;a, SLOT(quit()) );
+    return a.<a name="exec"></a><a href="qapplication.html#84c7bf">exec</a>();
 }
 </pre>
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.1</div>
+<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

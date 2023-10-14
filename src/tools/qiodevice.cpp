@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qiodevice.cpp   2.3.1   edited 2001-01-26 $
+** $Id: qt/src/tools/qiodevice.cpp   2.3.2   edited 2001-10-04 $
 **
 ** Implementation of QIODevice class
 **
@@ -334,7 +334,7 @@ QIODevice::~QIODevice()
   <li>\c IO_ConnectError Could not connect to the device.
   <li>\c IO_AbortError The operation was unexpectedly aborted.
   <li>\c IO_TimeOutError The operation timed out.
-  <li>\c IO_OnCloseError An unspecified error happened on close.
+  <li>\c IO_UnspecifiedError An unspecified error happened on close.
   </ul>
 
   \sa resetStatus()
@@ -570,7 +570,8 @@ int QIODevice::writeBlock( const QByteArray& data )
   Reads a line of text, up to \e maxlen bytes including a terminating
   \0.  If there is a newline at the end if the line, it is not stripped.
 
-  Returns the number of bytes read, or -1 in case of error.
+  Returns the number of bytes read including the terminating \0, or -1 in case
+  of error.
 
   This virtual function can be reimplemented much more efficiently by
   the most subclasses.
@@ -582,13 +583,8 @@ int QIODevice::readLine( char *data, uint maxlen )
 {
     if ( maxlen == 0 )				// application bug?
 	return 0;
-    int pos = at();				// get current position
-    int s  = (int)size();			// size of I/O device
     char *p = data;
-    if ( pos >= s )
-	return 0;
-    while ( pos++ < s && --maxlen ) {		// read one byte at a time
-	readBlock( p, 1 );
+    while ( --maxlen && (readBlock(p,1)>0) ) {	// read one byte at a time
 	if ( *p++ == '\n' )			// end of line
 	    break;
     }

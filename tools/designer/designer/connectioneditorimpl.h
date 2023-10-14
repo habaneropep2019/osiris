@@ -19,7 +19,7 @@
 **********************************************************************/
 
 #ifndef CONNECTIONEDITORIMPL_H
-#define  CONNECTIONEDITORIMPL_H
+#define CONNECTIONEDITORIMPL_H
 
 #include "connectioneditor.h"
 #include "metadatabase.h"

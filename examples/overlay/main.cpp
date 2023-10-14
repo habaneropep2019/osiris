@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/overlay/main.cpp   2.3.1   edited 2001-01-26 $
+** $Id: qt/examples/overlay/main.cpp   2.3.2   edited 2001-06-12 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -47,7 +47,7 @@ int main( int argc, char **argv )
     GLObjectWindow w;
     w.resize( 400, 350 );
     a.setMainWidget( &w );
-
+    w.setCaption("Qt Example - OpenGL - Overlay");
     w.show();
     return a.exec();
 }

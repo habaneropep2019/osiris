@@ -31,25 +31,25 @@ The QXmlReader class provides an interface for XML readers (i.e. parsers).
 <p><a href="qxmlreader-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><div class="fn">virtual bool <a href="#335c86"><b>feature</b></a> ( const QString &amp; name, bool * ok = 0 ) const</div>
-<li><div class="fn">virtual void <a href="#1b4ee5"><b>setFeature</b></a> ( const QString &amp; name, bool value ) </div>
-<li><div class="fn">virtual bool <a href="#3ffeea"><b>hasFeature</b></a> ( const QString &amp; name ) const</div>
-<li><div class="fn">virtual void* <a href="#c60308"><b>property</b></a> ( const QString &amp; name, bool * ok = 0 ) const</div>
-<li><div class="fn">virtual void <a href="#b14640"><b>setProperty</b></a> ( const QString &amp; name, void * value ) </div>
-<li><div class="fn">virtual bool <a href="#4edef7"><b>hasProperty</b></a> ( const QString &amp; name ) const</div>
-<li><div class="fn">virtual void <a href="#b3bbde"><b>setEntityResolver</b></a> ( QXmlEntityResolver * handler ) </div>
-<li><div class="fn">virtual QXmlEntityResolver* <a href="#9abcff"><b>entityResolver</b></a> () const</div>
-<li><div class="fn">virtual void <a href="#b0b2e7"><b>setDTDHandler</b></a> ( QXmlDTDHandler * handler ) </div>
-<li><div class="fn">virtual QXmlDTDHandler* <a href="#193ad7"><b>DTDHandler</b></a> () const</div>
-<li><div class="fn">virtual void <a href="#54a831"><b>setContentHandler</b></a> ( QXmlContentHandler * handler ) </div>
-<li><div class="fn">virtual QXmlContentHandler* <a href="#05f2c4"><b>contentHandler</b></a> () const</div>
-<li><div class="fn">virtual void <a href="#98019b"><b>setErrorHandler</b></a> ( QXmlErrorHandler * handler ) </div>
-<li><div class="fn">virtual QXmlErrorHandler* <a href="#c6f37c"><b>errorHandler</b></a> () const</div>
-<li><div class="fn">virtual void <a href="#3367d5"><b>setLexicalHandler</b></a> ( QXmlLexicalHandler * handler ) </div>
-<li><div class="fn">virtual QXmlLexicalHandler* <a href="#42a552"><b>lexicalHandler</b></a> () const</div>
-<li><div class="fn">virtual void <a href="#390ce8"><b>setDeclHandler</b></a> ( QXmlDeclHandler * handler ) </div>
-<li><div class="fn">virtual QXmlDeclHandler* <a href="#1b92a7"><b>declHandler</b></a> () const</div>
-<li><div class="fn">virtual bool <a href="#c0bfff"><b>parse</b></a> ( const QXmlInputSource &amp; input ) </div>
+<li><div class="fn">virtual bool <a href="#be21af"><b>feature</b></a> ( const QString &amp; name, bool * ok = 0 ) const</div>
+<li><div class="fn">virtual void <a href="#57cdb9"><b>setFeature</b></a> ( const QString &amp; name, bool value ) </div>
+<li><div class="fn">virtual bool <a href="#2e0d44"><b>hasFeature</b></a> ( const QString &amp; name ) const</div>
+<li><div class="fn">virtual void* <a href="#67bf3a"><b>property</b></a> ( const QString &amp; name, bool * ok = 0 ) const</div>
+<li><div class="fn">virtual void <a href="#6970da"><b>setProperty</b></a> ( const QString &amp; name, void * value ) </div>
+<li><div class="fn">virtual bool <a href="#0dfd4d"><b>hasProperty</b></a> ( const QString &amp; name ) const</div>
+<li><div class="fn">virtual void <a href="#4a0cf6"><b>setEntityResolver</b></a> ( QXmlEntityResolver * handler ) </div>
+<li><div class="fn">virtual QXmlEntityResolver* <a href="#38d777"><b>entityResolver</b></a> () const</div>
+<li><div class="fn">virtual void <a href="#174b4a"><b>setDTDHandler</b></a> ( QXmlDTDHandler * handler ) </div>
+<li><div class="fn">virtual QXmlDTDHandler* <a href="#1ec1bf"><b>DTDHandler</b></a> () const</div>
+<li><div class="fn">virtual void <a href="#a86df9"><b>setContentHandler</b></a> ( QXmlContentHandler * handler ) </div>
+<li><div class="fn">virtual QXmlContentHandler* <a href="#7357d5"><b>contentHandler</b></a> () const</div>
+<li><div class="fn">virtual void <a href="#ea1a35"><b>setErrorHandler</b></a> ( QXmlErrorHandler * handler ) </div>
+<li><div class="fn">virtual QXmlErrorHandler* <a href="#6693d3"><b>errorHandler</b></a> () const</div>
+<li><div class="fn">virtual void <a href="#6c0ebe"><b>setLexicalHandler</b></a> ( QXmlLexicalHandler * handler ) </div>
+<li><div class="fn">virtual QXmlLexicalHandler* <a href="#486af9"><b>lexicalHandler</b></a> () const</div>
+<li><div class="fn">virtual void <a href="#1b30d5"><b>setDeclHandler</b></a> ( QXmlDeclHandler * handler ) </div>
+<li><div class="fn">virtual QXmlDeclHandler* <a href="#883489"><b>declHandler</b></a> () const</div>
+<li><div class="fn">virtual bool <a href="#f618e6"><b>parse</b></a> ( const QXmlInputSource &amp; input ) </div>
 </ul>
 <hr><h2><a name="details"></a>Detailed Description</h2>
 The QXmlReader class provides an interface for XML readers (i.e. parsers).
@@ -77,101 +77,101 @@ interfaces you must implement all functions; there is a class
 <p>See also  <a href="qxmlsimplereader.html">QXmlSimpleReader</a>.
 
 <hr><h2>Member Function Documentation</h2>
-<h3 class="fn"><a href="qxmldtdhandler.html">QXmlDTDHandler</a>* <a name="193ad7"></a>QXmlReader::DTDHandler () const <code>[virtual]</code></h3>
+<h3 class="fn"><a href="qxmldtdhandler.html">QXmlDTDHandler</a>* <a name="1ec1bf"></a>QXmlReader::DTDHandler () const <code>[virtual]</code></h3>
 <p>Returns the DTD handler or 0 if none was set.
-<p>See also  <a href="#b0b2e7">setDTDHandler</a>().
-<p>Reimplemented in <a href="qxmlsimplereader.html#a6ddb9">QXmlSimpleReader</a>.
-<h3 class="fn"><a href="qxmlcontenthandler.html">QXmlContentHandler</a>* <a name="05f2c4"></a>QXmlReader::contentHandler () const <code>[virtual]</code></h3>
+<p>See also  <a href="#174b4a">setDTDHandler</a>().
+<p>Reimplemented in <a href="qxmlsimplereader.html#93c7b5">QXmlSimpleReader</a>.
+<h3 class="fn"><a href="qxmlcontenthandler.html">QXmlContentHandler</a>* <a name="7357d5"></a>QXmlReader::contentHandler () const <code>[virtual]</code></h3>
 <p>Returns the content handler or 0 if none was set.
-<p>See also  <a href="#54a831">setContentHandler</a>().
-<p>Reimplemented in <a href="qxmlsimplereader.html#c351c8">QXmlSimpleReader</a>.
-<h3 class="fn"><a href="qxmldeclhandler.html">QXmlDeclHandler</a>* <a name="1b92a7"></a>QXmlReader::declHandler () const <code>[virtual]</code></h3>
+<p>See also  <a href="#a86df9">setContentHandler</a>().
+<p>Reimplemented in <a href="qxmlsimplereader.html#26f011">QXmlSimpleReader</a>.
+<h3 class="fn"><a href="qxmldeclhandler.html">QXmlDeclHandler</a>* <a name="883489"></a>QXmlReader::declHandler () const <code>[virtual]</code></h3>
 <p>Returns the declaration handler or 0 if none was set.
-<p>See also  <a href="#390ce8">setDeclHandler</a>().
-<p>Reimplemented in <a href="qxmlsimplereader.html#38c533">QXmlSimpleReader</a>.
-<h3 class="fn"><a href="qxmlentityresolver.html">QXmlEntityResolver</a>* <a name="9abcff"></a>QXmlReader::entityResolver () const <code>[virtual]</code></h3>
+<p>See also  <a href="#1b30d5">setDeclHandler</a>().
+<p>Reimplemented in <a href="qxmlsimplereader.html#c2cdeb">QXmlSimpleReader</a>.
+<h3 class="fn"><a href="qxmlentityresolver.html">QXmlEntityResolver</a>* <a name="38d777"></a>QXmlReader::entityResolver () const <code>[virtual]</code></h3>
 <p>Returns the entity resolver or 0 if none was set.
-<p>See also  <a href="#b3bbde">setEntityResolver</a>().
-<p>Reimplemented in <a href="qxmlsimplereader.html#0551ab">QXmlSimpleReader</a>.
-<h3 class="fn"><a href="qxmlerrorhandler.html">QXmlErrorHandler</a>* <a name="c6f37c"></a>QXmlReader::errorHandler () const <code>[virtual]</code></h3>
+<p>See also  <a href="#4a0cf6">setEntityResolver</a>().
+<p>Reimplemented in <a href="qxmlsimplereader.html#69d28c">QXmlSimpleReader</a>.
+<h3 class="fn"><a href="qxmlerrorhandler.html">QXmlErrorHandler</a>* <a name="6693d3"></a>QXmlReader::errorHandler () const <code>[virtual]</code></h3>
 <p>Returns the error handler or 0 if none was set
-<p>See also  <a href="#98019b">setErrorHandler</a>().
-<p>Reimplemented in <a href="qxmlsimplereader.html#015d47">QXmlSimpleReader</a>.
-<h3 class="fn">bool <a name="335c86"></a>QXmlReader::feature ( const <a href="qstring.html">QString</a> &amp; name, bool * ok = 0 ) const <code>[virtual]</code></h3>
+<p>See also  <a href="#ea1a35">setErrorHandler</a>().
+<p>Reimplemented in <a href="qxmlsimplereader.html#4b60a5">QXmlSimpleReader</a>.
+<h3 class="fn">bool <a name="be21af"></a>QXmlReader::feature ( const <a href="qstring.html">QString</a> &amp; name, bool * ok = 0 ) const <code>[virtual]</code></h3>
 <p>If the reader has the feature <em>name,</em> this function returns the value of the
 feature.
 <p>If the reader has not the feature <em>name,</em> the return value may be anything.
 <p>If <em>ok</em> is not 0, then <em>ok</em>  is set to TRUE if the reader has the feature
 <em>name,</em> otherwise <em>ok</em> is set to FALSE.
-<p>See also  <a href="#1b4ee5">setFeature</a>() and <a href="#3ffeea">hasFeature</a>().
-<p>Reimplemented in <a href="qxmlsimplereader.html#e78e83">QXmlSimpleReader</a>.
-<h3 class="fn">bool <a name="3ffeea"></a>QXmlReader::hasFeature ( const <a href="qstring.html">QString</a> &amp; name ) const <code>[virtual]</code></h3>
+<p>See also  <a href="#57cdb9">setFeature</a>() and <a href="#2e0d44">hasFeature</a>().
+<p>Reimplemented in <a href="qxmlsimplereader.html#fb4b2e">QXmlSimpleReader</a>.
+<h3 class="fn">bool <a name="2e0d44"></a>QXmlReader::hasFeature ( const <a href="qstring.html">QString</a> &amp; name ) const <code>[virtual]</code></h3>
 <p>Returns <code>TRUE</code> if the reader has the feature <em>name,</em> otherwise FALSE.
-<p>See also  <a href="#335c86">feature</a>() and <a href="#1b4ee5">setFeature</a>().
-<p>Reimplemented in <a href="qxmlsimplereader.html#e113a4">QXmlSimpleReader</a>.
-<h3 class="fn">bool <a name="4edef7"></a>QXmlReader::hasProperty ( const <a href="qstring.html">QString</a> &amp; name ) const <code>[virtual]</code></h3>
+<p>See also  <a href="#be21af">feature</a>() and <a href="#57cdb9">setFeature</a>().
+<p>Reimplemented in <a href="qxmlsimplereader.html#70fb07">QXmlSimpleReader</a>.
+<h3 class="fn">bool <a name="0dfd4d"></a>QXmlReader::hasProperty ( const <a href="qstring.html">QString</a> &amp; name ) const <code>[virtual]</code></h3>
 <p>Returns TRUE if the reader has the property <em>name,</em> otherwise FALSE.
-<p>See also  <a href="#c60308">property</a>() and <a href="#b14640">setProperty</a>().
-<p>Reimplemented in <a href="qxmlsimplereader.html#5cce60">QXmlSimpleReader</a>.
-<h3 class="fn"><a href="qxmllexicalhandler.html">QXmlLexicalHandler</a>* <a name="42a552"></a>QXmlReader::lexicalHandler () const <code>[virtual]</code></h3>
+<p>See also  <a href="#67bf3a">property</a>() and <a href="#6970da">setProperty</a>().
+<p>Reimplemented in <a href="qxmlsimplereader.html#9425e3">QXmlSimpleReader</a>.
+<h3 class="fn"><a href="qxmllexicalhandler.html">QXmlLexicalHandler</a>* <a name="486af9"></a>QXmlReader::lexicalHandler () const <code>[virtual]</code></h3>
 <p>Returns the lexical handler or 0 if none was set.
-<p>See also  <a href="#3367d5">setLexicalHandler</a>().
-<p>Reimplemented in <a href="qxmlsimplereader.html#253f99">QXmlSimpleReader</a>.
-<h3 class="fn">bool <a name="c0bfff"></a>QXmlReader::parse ( const <a href="qxmlinputsource.html">QXmlInputSource</a> &amp; input ) <code>[virtual]</code></h3>
+<p>See also  <a href="#6c0ebe">setLexicalHandler</a>().
+<p>Reimplemented in <a href="qxmlsimplereader.html#bf85a3">QXmlSimpleReader</a>.
+<h3 class="fn">bool <a name="f618e6"></a>QXmlReader::parse ( const <a href="qxmlinputsource.html">QXmlInputSource</a> &amp; input ) <code>[virtual]</code></h3>
 <p>Parses the XML document <em>input.</em> Returns TRUE if the parsing was successful,
 otherwise FALSE.
-<p>Reimplemented in <a href="qxmlsimplereader.html#5d062f">QXmlSimpleReader</a>.
-<h3 class="fn">void* <a name="c60308"></a>QXmlReader::property ( const <a href="qstring.html">QString</a> &amp; name, bool * ok = 0 ) const <code>[virtual]</code></h3>
+<p>Reimplemented in <a href="qxmlsimplereader.html#2d6b2a">QXmlSimpleReader</a>.
+<h3 class="fn">void* <a name="67bf3a"></a>QXmlReader::property ( const <a href="qstring.html">QString</a> &amp; name, bool * ok = 0 ) const <code>[virtual]</code></h3>
 <p>If the reader has the property <em>name,</em> this function returns the value of
 the property.
 <p>If the reader has not the property <em>name,</em> the return value is 0.
 <p>If <em>ok</em> is not 0, then <em>ok</em>  is set to TRUE if the reader has the property
 <em>name,</em> otherwise <em>ok</em> is set to FALSE.
-<p>See also  <a href="#b14640">setProperty</a>() and <a href="#4edef7">hasProperty</a>().
-<p>Reimplemented in <a href="qxmlsimplereader.html#52395f">QXmlSimpleReader</a>.
-<h3 class="fn">void <a name="54a831"></a>QXmlReader::setContentHandler ( <a href="qxmlcontenthandler.html">QXmlContentHandler</a> * handler ) <code>[virtual]</code></h3>
+<p>See also  <a href="#6970da">setProperty</a>() and <a href="#0dfd4d">hasProperty</a>().
+<p>Reimplemented in <a href="qxmlsimplereader.html#282e9b">QXmlSimpleReader</a>.
+<h3 class="fn">void <a name="a86df9"></a>QXmlReader::setContentHandler ( <a href="qxmlcontenthandler.html">QXmlContentHandler</a> * handler ) <code>[virtual]</code></h3>
 <p>Sets the content handler to <em>handler.</em>
-<p>See also  <a href="#05f2c4">contentHandler</a>().
-<p>Reimplemented in <a href="qxmlsimplereader.html#71b084">QXmlSimpleReader</a>.
-<h3 class="fn">void <a name="b0b2e7"></a>QXmlReader::setDTDHandler ( <a href="qxmldtdhandler.html">QXmlDTDHandler</a> * handler ) <code>[virtual]</code></h3>
+<p>See also  <a href="#7357d5">contentHandler</a>().
+<p>Reimplemented in <a href="qxmlsimplereader.html#3ce23b">QXmlSimpleReader</a>.
+<h3 class="fn">void <a name="174b4a"></a>QXmlReader::setDTDHandler ( <a href="qxmldtdhandler.html">QXmlDTDHandler</a> * handler ) <code>[virtual]</code></h3>
 <p>Sets the DTD handler to <em>handler.</em>
-<p>See also  <a href="#193ad7">DTDHandler</a>().
-<p>Reimplemented in <a href="qxmlsimplereader.html#5918e2">QXmlSimpleReader</a>.
-<h3 class="fn">void <a name="390ce8"></a>QXmlReader::setDeclHandler ( <a href="qxmldeclhandler.html">QXmlDeclHandler</a> * handler ) <code>[virtual]</code></h3>
+<p>See also  <a href="#1ec1bf">DTDHandler</a>().
+<p>Reimplemented in <a href="qxmlsimplereader.html#1ba005">QXmlSimpleReader</a>.
+<h3 class="fn">void <a name="1b30d5"></a>QXmlReader::setDeclHandler ( <a href="qxmldeclhandler.html">QXmlDeclHandler</a> * handler ) <code>[virtual]</code></h3>
 <p>Sets the declaration handler to <em>handler.</em>
-<p>See also  <a href="#1b92a7">declHandler</a>().
-<p>Reimplemented in <a href="qxmlsimplereader.html#dedc50">QXmlSimpleReader</a>.
-<h3 class="fn">void <a name="b3bbde"></a>QXmlReader::setEntityResolver ( <a href="qxmlentityresolver.html">QXmlEntityResolver</a> * handler ) <code>[virtual]</code></h3>
+<p>See also  <a href="#883489">declHandler</a>().
+<p>Reimplemented in <a href="qxmlsimplereader.html#1bb383">QXmlSimpleReader</a>.
+<h3 class="fn">void <a name="4a0cf6"></a>QXmlReader::setEntityResolver ( <a href="qxmlentityresolver.html">QXmlEntityResolver</a> * handler ) <code>[virtual]</code></h3>
 <p>Sets the entity resolver to <em>handler.</em>
-<p>See also  <a href="#9abcff">entityResolver</a>().
-<p>Reimplemented in <a href="qxmlsimplereader.html#20e346">QXmlSimpleReader</a>.
-<h3 class="fn">void <a name="98019b"></a>QXmlReader::setErrorHandler ( <a href="qxmlerrorhandler.html">QXmlErrorHandler</a> * handler ) <code>[virtual]</code></h3>
+<p>See also  <a href="#38d777">entityResolver</a>().
+<p>Reimplemented in <a href="qxmlsimplereader.html#d7f092">QXmlSimpleReader</a>.
+<h3 class="fn">void <a name="ea1a35"></a>QXmlReader::setErrorHandler ( <a href="qxmlerrorhandler.html">QXmlErrorHandler</a> * handler ) <code>[virtual]</code></h3>
 <p>Sets the error handler to <em>handler.</em>
-<p>See also  <a href="#c6f37c">errorHandler</a>().
-<p>Reimplemented in <a href="qxmlsimplereader.html#3db340">QXmlSimpleReader</a>.
-<h3 class="fn">void <a name="1b4ee5"></a>QXmlReader::setFeature ( const <a href="qstring.html">QString</a> &amp; name, bool value ) <code>[virtual]</code></h3>
+<p>See also  <a href="#6693d3">errorHandler</a>().
+<p>Reimplemented in <a href="qxmlsimplereader.html#991a8d">QXmlSimpleReader</a>.
+<h3 class="fn">void <a name="57cdb9"></a>QXmlReader::setFeature ( const <a href="qstring.html">QString</a> &amp; name, bool value ) <code>[virtual]</code></h3>
 <p>Sets the feature <em>name</em> to <em>value.</em> If the reader has not the feature <em>name,</em> this value is ignored.
-<p>See also  <a href="#335c86">feature</a>() and <a href="#3ffeea">hasFeature</a>().
-<p>Reimplemented in <a href="qxmlsimplereader.html#7befc5">QXmlSimpleReader</a>.
-<h3 class="fn">void <a name="3367d5"></a>QXmlReader::setLexicalHandler ( <a href="qxmllexicalhandler.html">QXmlLexicalHandler</a> * handler ) <code>[virtual]</code></h3>
+<p>See also  <a href="#be21af">feature</a>() and <a href="#2e0d44">hasFeature</a>().
+<p>Reimplemented in <a href="qxmlsimplereader.html#1f7766">QXmlSimpleReader</a>.
+<h3 class="fn">void <a name="6c0ebe"></a>QXmlReader::setLexicalHandler ( <a href="qxmllexicalhandler.html">QXmlLexicalHandler</a> * handler ) <code>[virtual]</code></h3>
 <p>Sets the lexical handler to <em>handler.</em>
-<p>See also  <a href="#42a552">lexicalHandler</a>().
-<p>Reimplemented in <a href="qxmlsimplereader.html#cb08c2">QXmlSimpleReader</a>.
-<h3 class="fn">void <a name="b14640"></a>QXmlReader::setProperty ( const <a href="qstring.html">QString</a> &amp; name, void * value ) <code>[virtual]</code></h3>
+<p>See also  <a href="#486af9">lexicalHandler</a>().
+<p>Reimplemented in <a href="qxmlsimplereader.html#435e36">QXmlSimpleReader</a>.
+<h3 class="fn">void <a name="6970da"></a>QXmlReader::setProperty ( const <a href="qstring.html">QString</a> &amp; name, void * value ) <code>[virtual]</code></h3>
 <p>Sets the property <em>name</em> to <em>value.</em> If the reader has not the property <em>name,</em> this value is ignored.
-<p>See also  <a href="#c60308">property</a>() and <a href="#4edef7">hasProperty</a>().
-<p>Reimplemented in <a href="qxmlsimplereader.html#34248a">QXmlSimpleReader</a>.
+<p>See also  <a href="#67bf3a">property</a>() and <a href="#0dfd4d">hasProperty</a>().
+<p>Reimplemented in <a href="qxmlsimplereader.html#99c6cf">QXmlSimpleReader</a>.
 <hr><p>
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.3.1"><nobr>
+<input type=hidden name="version" value="2.3.2"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
-copyright &copy; 1995-2000
+copyright &copy; 1995-2001
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.1</div>
+<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

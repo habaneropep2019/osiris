@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/doc/qlist.doc   2.3.1   edited 2001-01-26 $
+** $Id: qt/doc/qlist.doc   2.3.2   edited 2001-09-07 $
 **
 ** QList and QListIterator class documentation
 **
@@ -275,8 +275,8 @@
 
   The item after the removed item becomes the new current list item if
   the removed item is not the last item in the list.  If the last item
-  is removed, the new last item becomes the current item in Qt 2.x.
-  In 3.0, the current item will be set to null.  The current item is
+  is removed, the new last item becomes the current item. The current
+  item is
   set to null if the list becomes empty.
 
   All list iterators that refer to the removed item will be set to point
@@ -296,9 +296,8 @@
 
   The item after the removed item becomes the new current list item if
   the removed item is not the last item in the list.  If the last item
-  is removed, the new last item becomes the current item in Qt 2.x.
-  In 3.0, the current item will be set to null.  The current item is
-  set to null if the list becomes empty.
+  is removed, the new last item becomes the current item. The current
+  item is set to null if the list becomes empty.
 
   All list iterators that refer to the removed item will be set to point
   to the new current item.
@@ -322,9 +321,8 @@
 
   The item after the removed item becomes the new current list item if
   the removed item is not the last item in the list.  If the last item
-  is removed, the new last item becomes the current item in Qt 2.x.
-  In 3.0, the current item will be set to null.  The current item is
-  set to null if the list becomes empty.
+  is removed, the new last item becomes the current item. The current
+  item is set to null if the list becomes empty.
 
   All list iterators that refer to the removed item will be set to point
   to the new current item.
@@ -353,9 +351,8 @@
 
   The item after the removed item becomes the new current list item if
   the removed item is not the last item in the list.  If the last item
-  is removed, the new last item becomes the current item in Qt 2.x.
-  In 3.0, the current item will be set to null.  The current item is
-  set to null if the list becomes empty.
+  is removed, the new last item becomes the current item. The current
+  item is set to null if the list becomes empty.
 
   All list iterators that refer to the removed item will be set to point
   to the new current item.
@@ -430,9 +427,8 @@
 
   The item after the taken item becomes the new current list item if
   the taken item is not the last item in the list.  If the last item
-  is taken, the new last item becomes the current item in Qt 2.x.  In
-  3.0, the current item will be set to null.  The current item is set
-  to null if the list becomes empty.
+  is taken, the new last item becomes the current item. The current
+  item is set to null if the list becomes empty.
 
   All list iterators that refer to the taken item will be set to point to
   the new current item.
@@ -449,9 +445,8 @@
 
   The item after the taken item becomes the new current list item if
   the taken item is not the last item in the list.  If the last item
-  is taken, the new last item becomes the current item in Qt 2.x.  In
-  3.0, the current item will be set to null.  The current item is set
-  to null if the list becomes empty.
+  is taken, the new last item becomes the current item. The current
+  item is set to null if the list becomes empty.
 
   All list iterators that refer to the taken item will be set to point to
   the new current item.

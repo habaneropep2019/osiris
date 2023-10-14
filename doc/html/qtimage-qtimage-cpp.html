@@ -75,38 +75,38 @@ public:
     ImageView()
     {
         popup = new <a name="QPopupMenu"></a><a href="qpopupmenu.html">QPopupMenu</a>;
-        popup-&gt;<a name="insertItem"></a><a href="qmenudata.html#43c652">insertItem</a>("Left as");
-        popup-&gt;<a href="qmenudata.html#43c652">insertItem</a>("An exercise");
-        popup-&gt;<a href="qmenudata.html#43c652">insertItem</a>("For the");
-        popup-&gt;<a href="qmenudata.html#43c652">insertItem</a>("Reader!");
+        popup-&gt;<a name="insertItem"></a><a href="qmenudata.html#0076cb">insertItem</a>("Left as");
+        popup-&gt;<a href="qmenudata.html#0076cb">insertItem</a>("An exercise");
+        popup-&gt;<a href="qmenudata.html#0076cb">insertItem</a>("For the");
+        popup-&gt;<a href="qmenudata.html#0076cb">insertItem</a>("Reader!");
     }
 
     void paintEvent(<a name="QPaintEvent"></a><a href="qpaintevent.html">QPaintEvent</a>* event)
     {
         <a name="QPainter"></a><a href="qpainter.html">QPainter</a> p(this);
-        p.<a name="setClipRect"></a><a href="qpainter.html#2ccac9">setClipRect</a>(event-&gt;<a name="rect"></a><a href="qpaintevent.html#6177d5">rect</a>());
+        p.<a name="setClipRect"></a><a href="qpainter.html#898839">setClipRect</a>(event-&gt;<a name="rect"></a><a href="qpaintevent.html#2d6e18">rect</a>());
 
-        if ( pm.<a name="size"></a><a href="qpixmap.html#45aaf7">size</a>() == size() ) {
-            p.<a name="drawPixmap"></a><a href="qpainter.html#f3fb4a">drawPixmap</a>(0,0,pm);
+        if ( pm.<a name="size"></a><a href="qpixmap.html#60b65f">size</a>() == size() ) {
+            p.<a name="drawPixmap"></a><a href="qpainter.html#c64b89">drawPixmap</a>(0,0,pm);
         } else {
-            if ( pmScaled.<a href="qpixmap.html#45aaf7">size</a>() != size() ) {
+            if ( pmScaled.<a href="qpixmap.html#60b65f">size</a>() != size() ) {
                 <a name="QWMatrix"></a><a href="qwmatrix.html">QWMatrix</a> m;
-                m.<a name="scale"></a><a href="qwmatrix.html#a5e455">scale</a>((double)width()/pm.<a name="width"></a><a href="qpixmap.html#443c1f">width</a>(),
-                        (double)height()/pm.<a name="height"></a><a href="qpixmap.html#1d578d">height</a>());
-                pmScaled = pm.<a name="xForm"></a><a href="qpixmap.html#3b77c0">xForm</a>(m);
+                m.<a name="scale"></a><a href="qwmatrix.html#41a356">scale</a>((double)width()/pm.<a name="width"></a><a href="qpixmap.html#86dbc5">width</a>(),
+                        (double)height()/pm.<a name="height"></a><a href="qpixmap.html#d5bb33">height</a>());
+                pmScaled = pm.<a name="xForm"></a><a href="qpixmap.html#ff5fcf">xForm</a>(m);
             }
-            p.<a href="qpainter.html#f3fb4a">drawPixmap</a>(0,0,pmScaled);
+            p.<a href="qpainter.html#c64b89">drawPixmap</a>(0,0,pmScaled);
         }
     }
 
     void mousePressEvent(<a name="QMouseEvent"></a><a href="qmouseevent.html">QMouseEvent</a>* e)
     {
-        popup-&gt;<a name="popup"></a><a href="qpopupmenu.html#8b5cd7">popup</a>(mapToGlobal(e-&gt;<a name="pos"></a><a href="qmouseevent.html#ac025d">pos</a>()));
+        popup-&gt;<a name="popup"></a><a href="qpopupmenu.html#0d7b5f">popup</a>(mapToGlobal(e-&gt;<a name="pos"></a><a href="qmouseevent.html#ac6f25">pos</a>()));
     }
 
     void showImage(const QImage&amp; image)
     {
-        pm.<a name="convertFromImage"></a><a href="qpixmap.html#f34554">convertFromImage</a>(image, QPixmap::Color);
+        pm.<a name="convertFromImage"></a><a href="qpixmap.html#00951a">convertFromImage</a>(image, QPixmap::Color);
         repaint( FALSE );
     }
 
@@ -134,10 +134,10 @@ public:
 
     void imageToIV()
     {
-        if (!iv || image.<a name="isNull"></a><a href="qimage.html#762534">isNull</a>()) return;
+        if (!iv || image.<a name="isNull"></a><a href="qimage.html#2f0bdd">isNull</a>()) return;
 
         iv-&gt;showImage(image);
-        image.<a name="reset"></a><a href="qimage.html#596c92">reset</a>();
+        image.<a name="reset"></a><a href="qimage.html#4533e3">reset</a>();
     }
 
     bool newStreamCreated(<a name="QNPStream"></a><a href="qnpstream.html">QNPStream</a>*, StreamMode&amp; smode)
@@ -151,7 +151,7 @@ public:
         qInitPngIO();
 
         image = QImage(fname);
-        if ( image.<a href="qimage.html#762534">isNull</a>() )
+        if ( image.<a href="qimage.html#2f0bdd">isNull</a>() )
             fprintf(stderr, "Could not convert file: %s\n", fname);
         imageToIV();
     }
@@ -200,6 +200,6 @@ public:
 </pre>
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.1</div>
+<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

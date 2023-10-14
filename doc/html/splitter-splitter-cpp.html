@@ -33,7 +33,7 @@ height="100" src="face.png" alt="Home" border="0">
 
   Implementation:
 <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/splitter/splitter.cpp   2.3.1   edited 2001-01-26 $
+** &#36;Id&#58; qt/examples/splitter/splitter.cpp   2.3.2   edited 2001-06-12 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -62,10 +62,10 @@ Test::Test(<a href="qwidget.html">QWidget</a>* parent, const char* name, int f) 
 
 }
 
-void <a name="308"></a>Test::paintEvent(<a href="qpaintevent.html">QPaintEvent</a>* e)
+void <a name="306"></a>Test::paintEvent(<a href="qpaintevent.html">QPaintEvent</a>* e)
 {
     <a name="QPainter"></a><a href="qpainter.html">QPainter</a> p(this);
-    p.<a name="setClipRect"></a><a href="qpainter.html#2ccac9">setClipRect</a>(e-&gt;<a name="rect"></a><a href="qpaintevent.html#6177d5">rect</a>());
+    p.<a name="setClipRect"></a><a href="qpainter.html#898839">setClipRect</a>(e-&gt;<a name="rect"></a><a href="qpaintevent.html#2d6e18">rect</a>());
     const int d = 1000; //large number
     int x1 = 0;
     int x2 = width()-1;
@@ -73,16 +73,16 @@ void <a name="308"></a>Test::paintEvent(<a href="qpaintevent.html">QPaintEvent</
     int y2 = height()-1;
 
     int x = (x1+x2)/2;
-    p.<a name="drawLine"></a><a href="qpainter.html#ffde14">drawLine</a>( x, y1, x+d, y1+d   );
-    p.<a href="qpainter.html#ffde14">drawLine</a>( x, y1, x-d, y1+d   );
-    p.<a href="qpainter.html#ffde14">drawLine</a>( x, y2, x+d, y2-d   );
-    p.<a href="qpainter.html#ffde14">drawLine</a>( x, y2, x-d, y2-d   );
+    p.<a name="drawLine"></a><a href="qpainter.html#e3a489">drawLine</a>( x, y1, x+d, y1+d   );
+    p.<a href="qpainter.html#e3a489">drawLine</a>( x, y1, x-d, y1+d   );
+    p.<a href="qpainter.html#e3a489">drawLine</a>( x, y2, x+d, y2-d   );
+    p.<a href="qpainter.html#e3a489">drawLine</a>( x, y2, x-d, y2-d   );
 
     int y = (y1+y2)/2;
-    p.<a href="qpainter.html#ffde14">drawLine</a>( x1, y, x1+d, y+d   );
-    p.<a href="qpainter.html#ffde14">drawLine</a>( x1, y, x1+d, y-d   );
-    p.<a href="qpainter.html#ffde14">drawLine</a>( x2, y, x2-d, y+d   );
-    p.<a href="qpainter.html#ffde14">drawLine</a>( x2, y, x2-d, y-d   );
+    p.<a href="qpainter.html#e3a489">drawLine</a>( x1, y, x1+d, y+d   );
+    p.<a href="qpainter.html#e3a489">drawLine</a>( x1, y, x1+d, y-d   );
+    p.<a href="qpainter.html#e3a489">drawLine</a>( x2, y, x2-d, y+d   );
+    p.<a href="qpainter.html#e3a489">drawLine</a>( x2, y, x2-d, y-d   );
 }
 
 int main( int argc, char ** argv )
@@ -94,42 +94,43 @@ int main( int argc, char ** argv )
     <a href="qsplitter.html">QSplitter</a> *s2 = new <a href="qsplitter.html">QSplitter</a>( QSplitter::Horizontal, s1, "top" );
 
     Test *t1 = new Test( s2 );
-    t1-&gt;<a name="setBackgroundColor"></a><a href="qwidget.html#721b7d">setBackgroundColor</a>( Qt::blue.light( 180 ) );
-    t1-&gt;<a name="setMinimumSize"></a><a href="qwidget.html#378ed6">setMinimumSize</a>( 50, 0 );
+    t1-&gt;<a name="setBackgroundColor"></a><a href="qwidget.html#c09181">setBackgroundColor</a>( Qt::blue.light( 180 ) );
+    t1-&gt;<a name="setMinimumSize"></a><a href="qwidget.html#c0b5fb">setMinimumSize</a>( 50, 0 );
 
     Test *t2 = new Test( s2 );
-    t2-&gt;<a href="qwidget.html#721b7d">setBackgroundColor</a>( Qt::green.light( 180 ) );
-    s2-&gt;<a name="setResizeMode"></a><a href="qsplitter.html#3de7e3">setResizeMode</a>( t2, QSplitter::KeepSize );
-    s2-&gt;<a name="moveToFirst"></a><a href="qsplitter.html#ee95f0">moveToFirst</a>( t2 );
+    t2-&gt;<a href="qwidget.html#c09181">setBackgroundColor</a>( Qt::green.light( 180 ) );
+    s2-&gt;<a name="setResizeMode"></a><a href="qsplitter.html#33bf83">setResizeMode</a>( t2, QSplitter::KeepSize );
+    s2-&gt;<a name="moveToFirst"></a><a href="qsplitter.html#14b4ef">moveToFirst</a>( t2 );
 
     <a href="qsplitter.html">QSplitter</a> *s3 = new <a href="qsplitter.html">QSplitter</a>( QSplitter::Horizontal,  s1, "bottom" );
 
     Test *t3 = new Test( s3 );
-    t3-&gt;<a href="qwidget.html#721b7d">setBackgroundColor</a>( Qt::red );
+    t3-&gt;<a href="qwidget.html#c09181">setBackgroundColor</a>( Qt::red );
     Test *t4 = new Test( s3 );
-    t4-&gt;<a href="qwidget.html#721b7d">setBackgroundColor</a>( Qt::white );
+    t4-&gt;<a href="qwidget.html#c09181">setBackgroundColor</a>( Qt::white );
 
     Test *t5 = new Test( s3 );
-    t5-&gt;<a name="setMaximumHeight"></a><a href="qwidget.html#ea4616">setMaximumHeight</a>( 250 );
-    t5-&gt;<a href="qwidget.html#378ed6">setMinimumSize</a>( 80, 50 );
-    t5-&gt;<a href="qwidget.html#721b7d">setBackgroundColor</a>( Qt::yellow );
+    t5-&gt;<a name="setMaximumHeight"></a><a href="qwidget.html#4e5337">setMaximumHeight</a>( 250 );
+    t5-&gt;<a href="qwidget.html#c0b5fb">setMinimumSize</a>( 80, 50 );
+    t5-&gt;<a href="qwidget.html#c09181">setBackgroundColor</a>( Qt::yellow );
 
 #ifdef _WS_QWS_
     // Qt/Embedded XOR drawing not yet implemented.
     s1-&gt;setOpaqueResize( TRUE );
 #endif
-    s2-&gt;<a name="setOpaqueResize"></a><a href="qsplitter.html#72c9e4">setOpaqueResize</a>( TRUE );
-    s3-&gt;<a href="qsplitter.html#72c9e4">setOpaqueResize</a>( TRUE );
+    s2-&gt;<a name="setOpaqueResize"></a><a href="qsplitter.html#28096e">setOpaqueResize</a>( TRUE );
+    s3-&gt;<a href="qsplitter.html#28096e">setOpaqueResize</a>( TRUE );
 
-    a.<a name="setMainWidget"></a><a href="qapplication.html#11c921">setMainWidget</a>( s1 );
-    s1-&gt;<a name="show"></a><a href="qwidget.html#ccc8f7">show</a>();
-    int result = a.<a name="exec"></a><a href="qapplication.html#7076af">exec</a>();
+    a.<a name="setMainWidget"></a><a href="qapplication.html#7ad759">setMainWidget</a>( s1 );
+    s1-&gt;<a name="setCaption"></a><a href="qwidget.html#d6a291">setCaption</a>("Qt Example - Splitters");
+    s1-&gt;<a name="show"></a><a href="qwidget.html#200ee5">show</a>();
+    int result = a.<a name="exec"></a><a href="qapplication.html#84c7bf">exec</a>();
     delete s1;
     return result;
 }
 </pre>
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.1</div>
+<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

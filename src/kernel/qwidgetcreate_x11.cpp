@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qwidgetcreate_x11.cpp   2.3.1   edited 2001-01-26 $
+** $Id: qt/src/kernel/qwidgetcreate_x11.cpp   2.3.2   edited 2001-01-26 $
 **
 ** Implementation of Qt calls to X11
 **

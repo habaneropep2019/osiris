@@ -32,12 +32,12 @@ Inherits <a href="qdomnode.html">QDomNode</a>.
 <p><a href="qdomentityreference-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><div class="fn"><a href="#8d8d02"><b>QDomEntityReference</b></a> () </div>
-<li><div class="fn"><a href="#8c8146"><b>QDomEntityReference</b></a> ( const QDomEntityReference &amp; x ) </div>
-<li><div class="fn">QDomEntityReference&amp; <a href="#cf3391"><b>operator=</b></a> ( const QDomEntityReference &amp; ) </div>
-<li><div class="fn"><a href="#71fa6a"><b>~QDomEntityReference</b></a> () </div>
-<li><div class="fn">virtual QDomNode::NodeType <a href="#074525"><b>nodeType</b></a> () const</div>
-<li><div class="fn">virtual bool <a href="#baa0d1"><b>isEntityReference</b></a> () const</div>
+<li><div class="fn"><a href="#415683"><b>QDomEntityReference</b></a> () </div>
+<li><div class="fn"><a href="#76427b"><b>QDomEntityReference</b></a> ( const QDomEntityReference &amp; x ) </div>
+<li><div class="fn">QDomEntityReference&amp; <a href="#eb2c53"><b>operator=</b></a> ( const QDomEntityReference &amp; ) </div>
+<li><div class="fn"><a href="#ee0377"><b>~QDomEntityReference</b></a> () </div>
+<li><div class="fn">virtual QDomNode::NodeType <a href="#27ea09"><b>nodeType</b></a> () const</div>
+<li><div class="fn">virtual bool <a href="#214769"><b>isEntityReference</b></a> () const</div>
 </ul>
 <hr><h2><a name="details"></a>Detailed Description</h2>
 The QDomEntityReference class represents an XML entity reference.
@@ -62,37 +62,37 @@ For a more general introduction of the DOM implementation see the
 <a href="qdomdocument.html">QDomDocument</a> documentation.
 
 <hr><h2>Member Function Documentation</h2>
-<h3 class="fn"><a name="8d8d02"></a>QDomEntityReference::QDomEntityReference ()</h3>
+<h3 class="fn"><a name="415683"></a>QDomEntityReference::QDomEntityReference ()</h3>
 <p>Constructs an empty entity reference. Use
-<a href="qdomdocument.html#139888">QDomDocument::createEntityReference</a>() to create a entity reference with
+<a href="qdomdocument.html#136958">QDomDocument::createEntityReference</a>() to create a entity reference with
 content.
-<h3 class="fn"><a name="8c8146"></a>QDomEntityReference::QDomEntityReference ( const QDomEntityReference &amp; x )</h3>
+<h3 class="fn"><a name="76427b"></a>QDomEntityReference::QDomEntityReference ( const QDomEntityReference &amp; x )</h3>
 <p>Copy constructor.
 <p>The data of the copy is shared: modifying one will also change the other. If
-you want to make a real copy, use <a href="qdomnode.html#7b27fa">cloneNode</a>() instead.
-<h3 class="fn"><a name="71fa6a"></a>QDomEntityReference::~QDomEntityReference ()</h3>
+you want to make a real copy, use <a href="qdomnode.html#8f17f1">cloneNode</a>() instead.
+<h3 class="fn"><a name="ee0377"></a>QDomEntityReference::~QDomEntityReference ()</h3>
 <p>Destructor.
-<h3 class="fn">bool <a name="baa0d1"></a>QDomEntityReference::isEntityReference () const <code>[virtual]</code></h3>
+<h3 class="fn">bool <a name="214769"></a>QDomEntityReference::isEntityReference () const <code>[virtual]</code></h3>
 <p>Returns TRUE.
-<p>Reimplemented from <a href="qdomnode.html#1b4488">QDomNode.</a>
-<h3 class="fn">QDomNode::NodeType <a name="074525"></a>QDomEntityReference::nodeType() const <code>[virtual]</code></h3>
+<p>Reimplemented from <a href="qdomnode.html#43709b">QDomNode.</a>
+<h3 class="fn">QDomNode::NodeType <a name="27ea09"></a>QDomEntityReference::nodeType() const <code>[virtual]</code></h3>
 <p>Returns <code>EntityReference.</code>
-<p>Reimplemented from <a href="qdomnode.html#4aab85">QDomNode.</a>
-<h3 class="fn">QDomEntityReference&amp; <a name="cf3391"></a>QDomEntityReference::operator= ( const QDomEntityReference &amp; x )</h3>
+<p>Reimplemented from <a href="qdomnode.html#46495e">QDomNode.</a>
+<h3 class="fn">QDomEntityReference&amp; <a name="eb2c53"></a>QDomEntityReference::operator= ( const QDomEntityReference &amp; x )</h3>
 <p>Assignment operator.
 <p>The data of the copy is shared: modifying one will also change the other. If
-you want to make a real copy, use <a href="qdomnode.html#7b27fa">cloneNode</a>() instead.
+you want to make a real copy, use <a href="qdomnode.html#8f17f1">cloneNode</a>() instead.
 <hr><p>
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.3.1"><nobr>
+<input type=hidden name="version" value="2.3.2"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
-copyright &copy; 1995-2000
+copyright &copy; 1995-2001
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.1</div>
+<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

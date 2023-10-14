@@ -1,5 +1,5 @@
 '\" t
-.TH QUrlOperator 3qt "13 June 2001" "Trolltech AS" \" -*- nroff -*-
+.TH QUrlOperator 3qt "29 October 2001" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2001 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -17,7 +17,16 @@ Inherits QObject and QUrl.
 .SS "Public Members"
 .in +1c
 .ti -1c
+.BI "\fBQUrlOperator\fR () "
+.br
+.ti -1c
+.BI "\fBQUrlOperator\fR ( const QString & urL ) "
+.br
+.ti -1c
 .BI "\fBQUrlOperator\fR ( const QUrlOperator & url ) "
+.br
+.ti -1c
+.BI "\fBQUrlOperator\fR ( const QUrlOperator & " "url" ", const QString & " "relUrl" ", bool " "checkSlash" " = FALSE ) "
 .br
 .ti -1c
 .BI "virtual \fB~QUrlOperator\fR () "
@@ -118,7 +127,7 @@ A QUrlOperator can be used like this (for e.g. downloading a file)
 .br
   QUrlOperator op;
 .br
-  op.copy( "ftp://ftp.trolltech.com/qt/source/qt-2.1.0.tar.gz", "file:/tmp", FALSE );
+  op.copy( QString("ftp://ftp.trolltech.com/qt/source/qt-2.1.0.tar.gz"), "file:/tmp", FALSE );
 .fi
 .PP
 Now, you also will connect to some signals of the QUrlOperator to get informed about success, errors, progress and more things.
@@ -130,13 +139,15 @@ For more information about the Qt Network Architecture take a look at the Qt Net
 See also QNetworkProtocol and QNetworkOperation.
 .SH MEMBER FUNCTION DOCUMENTATION
 .SH "QUrlOperator::QUrlOperator ()"
-Reimplemented for internal reasons; the API is not affected.
+Constructs a QUrlOperator with an empty (i.e. invalid) URL.
 .SH "QUrlOperator::QUrlOperator ( const QString & url )"
-Reimplemented for internal reasons; the API is not affected.
+Constructs a QUrlOperator using \fIurl\fR and parses this string.
+.PP
+You can pass strings such as "/home/qt": in this case the protocol "file" is assumed.
 .SH "QUrlOperator::QUrlOperator ( const QUrlOperator & url )"
 Copy constructor.
 .SH "QUrlOperator::QUrlOperator ( const QUrlOperator & url, const QString & relUrl, bool checkSlash = FALSE )"
-Reimplemented for internal reasons; the API is not affected.
+Constructs a QUrlOperator. The URL on which this QUrlOperator works on is constructed out of the arguments \fIurl, relUrl\fR and \fIcheckSlash;\fR the meaning of those arguments is the same as the corresponding QUrl constructor takes.
 .SH "QUrlOperator::~QUrlOperator () \fC[virtual]\fR"
 Destructor.
 .SH "bool QUrlOperator::cdUp () \fC[virtual]\fR"
@@ -339,4 +350,4 @@ In case of content or formattting problems with this manual page, please
 report them to
 .BR qt-bugs@trolltech.com .
 Please include the name of the manual page (qurloperator.3qt) and the Qt
-version (2.3.1).
+version (2.3.2).

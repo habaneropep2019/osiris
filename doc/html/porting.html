@@ -150,7 +150,7 @@ for the widget classes that are not likely to be used as main windows.
 <p>
 Note also that programs no longer need (or should) use 0 parent just
 to indicate that a widget should be top-level. See
-<pre> <a href="qwidget.html#08e823">QWidget::isTopLevel</a>()
+<pre> <a href="qwidget.html#17338a">QWidget::isTopLevel</a>()
 </pre>
  for details. See also the notes about
 <a href=#QMenuData>QPopupMenu</a> and <a href=#QDialog>QDialog</a>
@@ -163,19 +163,19 @@ of your functions accordingly.
 <p>
 <!-- warwick can check for additions to this with his qt-2-report -->
 <ul>
- <li><pre> <a href="qwidget.html#2e958b">QWidget::setStyle</a>(GUIStyle)</pre>
-<li><pre> <a href="qlistview.html#d01f15">QListView::addColumn</a>(const char *, int)</pre>
-<li><pre> <a href="qlistview.html#545c5f">QListView::setColumnText</a>(int, const char *)</pre>
-<li><pre> <a href="qlistviewitem.html#7adc2e">QListViewItem::setText</a>(int, const char *)</pre>
-<li><pre> <a href="qmultilineedit.html#d9138c">QMultiLineEdit::insertLine</a>(const char *, int)</pre>
-<li><pre> <a href="qmultilineedit.html#7c07f3">QMultiLineEdit::insertAt</a>(const char *, int, int, bool)</pre>
-<li><pre> <a href="qspinbox.html#ad4232">QSpinBox::setPrefix</a>(const char *)</pre>
-<li><pre> <a href="qspinbox.html#38a1a4">QSpinBox::setSuffix</a>(const char *)</pre>
-<li><pre> <a href="qtoolbutton.html#a66bc9">QToolButton::setTextLabel</a>(const char *, bool)</pre>
-<li><pre> <a href="qdoublevalidator.html#200b11">QDoubleValidator::validate</a>(<a href="qstring.html">QString</a> &amp;, int &amp;)</pre>
-<li><pre> <a href="qintvalidator.html#a027c9">QIntValidator::validate</a>(<a href="qstring.html">QString</a> &amp;, int &amp;)</pre>
-<li><pre> <a href="qvalidator.html#48f1a4">QValidator::fixup</a>(<a href="qstring.html">QString</a> &amp;)</pre>
-<li><pre> <a href="qslider.html#3bab19">QSlider::paintSlider</a>(<a href="qpainter.html">QPainter</a> *, const QRect &amp;)</pre>
+ <li><pre> <a href="qwidget.html#287f79">QWidget::setStyle</a>(GUIStyle)</pre>
+<li><pre> <a href="qlistview.html#2323b8">QListView::addColumn</a>(const char *, int)</pre>
+<li><pre> <a href="qlistview.html#251e98">QListView::setColumnText</a>(int, const char *)</pre>
+<li><pre> <a href="qlistviewitem.html#808e84">QListViewItem::setText</a>(int, const char *)</pre>
+<li><pre> <a href="qmultilineedit.html#e13115">QMultiLineEdit::insertLine</a>(const char *, int)</pre>
+<li><pre> <a href="qmultilineedit.html#56c164">QMultiLineEdit::insertAt</a>(const char *, int, int, bool)</pre>
+<li><pre> <a href="qspinbox.html#eccb7d">QSpinBox::setPrefix</a>(const char *)</pre>
+<li><pre> <a href="qspinbox.html#36bd02">QSpinBox::setSuffix</a>(const char *)</pre>
+<li><pre> <a href="qtoolbutton.html#51354a">QToolButton::setTextLabel</a>(const char *, bool)</pre>
+<li><pre> <a href="qdoublevalidator.html#81476e">QDoubleValidator::validate</a>(<a href="qstring.html">QString</a> &amp;, int &amp;)</pre>
+<li><pre> <a href="qintvalidator.html#91b7e2">QIntValidator::validate</a>(<a href="qstring.html">QString</a> &amp;, int &amp;)</pre>
+<li><pre> <a href="qvalidator.html#3fa523">QValidator::fixup</a>(<a href="qstring.html">QString</a> &amp;)</pre>
+<li><pre> <a href="qslider.html#904afa">QSlider::paintSlider</a>(<a href="qpainter.html">QPainter</a> *, const QRect &amp;)</pre>
 <p>
 </ul>
 <p>
@@ -235,7 +235,7 @@ functionality in Qt 2.x, the following steps are required:
             contains NULs) 8-bit data, use QByteArray; if it is text,
             use QString.
             </p>
-<li> Put a breakpoint in <pre> <a href="qstring.html#7113e4">QString::latin1</a>()</pre>
+<li> Put a breakpoint in <pre> <a href="qstring.html#ea8169">QString::latin1</a>()</pre>
 <p>
             to catch places where
             Unicode information is being converted to ASCII (loosing
@@ -327,7 +327,7 @@ default constructor, QString().
 In Qt 1.x the constructor was used in two ways:  accidentally,
 by attempting to convert a char to a QString (the char converts to int!) -
 giving strange bugs, and as a way to make a QString big enough prior to
-calling <pre> <a href="qstring.html#2eb9bc">QString::sprintf</a>()</pre>
+calling <pre> <a href="qstring.html#926f67">QString::sprintf</a>()</pre>
 .  In Qt 2.x, the accidental bug case is
 prevented (you will get a compilation error) and QString::sprintf has
 been made safe - you no longer need to pre-allocate space (though for
@@ -349,7 +349,7 @@ Also see <a href=#QStrList>QStrList</a>.
 <dt><b>Signals and Slots</b></dt>
 <dd>
 Many signal/slots have changed from const char* to QString.  You will
- get run-time errors when you try to <pre> <a href="qobject.html#c2d209">QObject::connect</a>()</pre>
+ get run-time errors when you try to <pre> <a href="qobject.html#7f8e37">QObject::connect</a>()</pre>
 <p>
  to the old
  signals and slots, usually with a message indicating the const QString&
@@ -371,16 +371,16 @@ Remove calls to QString::detach().
 <dt><b>QString::resize(int size) is obsolete and removed</b></dt>
 <dd>
 Code using this to truncate a string should use
-    <a href="qstring.html#131045">truncate(size-1)</a>.
+    <a href="qstring.html#bbfcaf">truncate(size-1)</a>.
 Code using qstr.resize(0) should use qstr = QString::null.
 Code calling resize(n) prior to using
-    <a href="qstring.html#f3e646">operator[]</a> up to n just remove
+    <a href="qstring.html#4c6de5">operator[]</a> up to n just remove
 the resize(n) completely.
 <p>
 <dt><b>QString::size() is obsolete and removed</b></dt>
 <dd>
 Calls to this function must be replaced by
-<a href="qstring.html#6db3bf">length()</a>+1.
+<a href="qstring.html#0ecbda">length()</a>+1.
 <p>
 <dt><b>QString::setStr(const char*) is removed</b></dt>
 <dd>Try to understand why you were using this.
@@ -425,12 +425,12 @@ This means that inserting a 0-character
  in the middle of the string does <em>not</em> change the length().  ie.
  <pre>   <a href="qstring.html">QString</a> s = "fred";
    s[1] = '\0';
-     // s.<a href="qstring.html#6db3bf">length</a>() == 4
+     // s.<a href="qstring.html#0ecbda">length</a>() == 4
      // s == "f\0ed"
-     // s.<a href="qstring.html#7113e4">latin1</a>() == "f"
+     // s.<a href="qstring.html#ea8169">latin1</a>() == "f"
    s[1] = 'r';
      // s == "fred"
-     // s.<a href="qstring.html#7113e4">latin1</a>() == "fred"
+     // s.<a href="qstring.html#ea8169">latin1</a>() == "fred"
 </pre>
 <p>
  Especially look out for this type of code:
@@ -442,7 +442,7 @@ This means that inserting a 0-character
  This creates a string 2 characters long.
  To find these problems while converting, you might like to
  add ASSERT(strlen(d->ascii)==d->len) inside
- <pre> <a href="qstring.html#7113e4">QString::latin1</a>()</pre>
+ <pre> <a href="qstring.html#ea8169">QString::latin1</a>()</pre>
 .
 <p>
 <dt><b>QString or Standard C++ string?</b></dt>
@@ -455,7 +455,7 @@ in the history of C - only when non-8-bit characters are <em>the norm</em>
 do programmers find them usable. Though it is possible to convert between
 string and QString, it is less efficient than using QString throughout.
 For example, when using:
-<pre>    <a href="qlabel.html#dffb43">QLabel::setText</a>( const QString&amp; )
+<pre>    <a href="qlabel.html#bc5ea6">QLabel::setText</a>( const QString&amp; )
 </pre>
 <p>
 if you use string, like this:
@@ -494,7 +494,7 @@ potentially be shared.
 <p>
 <h3><a name=QApplication>QApplication</a></h3>
 <p>
-In the function <pre> <a href="qapplication.html#e2431b">QApplication::setColorSpec</a>()</pre>
+In the function <pre> <a href="qapplication.html#1ee2d1">QApplication::setColorSpec</a>()</pre>
 ,
 PrivateColor and TrueColor are obsolete.  Use ManyColor instead.
 <p>
@@ -544,14 +544,14 @@ strange color results - use QColor::rgb() if you want a QRgb.
 <p>
 <h3><a name=QDataStream>QDataStream</a></h3>
 <p>The QDatastream serialization format of most Qt classes is changed
-in Qt 2.x. Use <pre> <a href="qdatastream.html#c617c2">QDataStream::setVersion</a>( 1 )</pre>
+in Qt 2.x. Use <pre> <a href="qdatastream.html#364c56">QDataStream::setVersion</a>( 1 )</pre>
  to get a
 datastream object that can read and write Qt 1.x format data streams.
 <p>If you want to write Qt 1.x format datastreams, note the following
 compatibility issues:
         <ul>
         <li>QString: Qt 1.x has no Unicode support, so strings will be
-        serialized by writing the classic C string returned by <pre>        <a href="qstring.html#7113e4">QString::latin1</a>().</pre>
+        serialized by writing the classic C string returned by <pre>        <a href="qstring.html#ea8169">QString::latin1</a>().</pre>
 <li><a href=#QPoint>QPoint & al.</a>: Coordinates will be
         truncated to the Qt 1.x 16 bit format.
         </ul>
@@ -560,16 +560,16 @@ compatibility issues:
 <p>
 <h4>QWidget::recreate()</h4>
 <p>
-This function is now called <a href="qwidget.html#0589b7">reparent()</a>.
+This function is now called <a href="qwidget.html#4591aa">reparent()</a>.
 <p>
 <h4>QWidget::setAcceptFocus(bool)</h4>
 <p>
 This function is removed.
 Calls like QWidget::setAcceptFocus(TRUE) should be replaced by
-    <pre> <a href="qwidget.html#43a9d9">QWidget::setFocusPolicy</a>(StrongFocus)</pre>
+    <pre> <a href="qwidget.html#f92b0f">QWidget::setFocusPolicy</a>(StrongFocus)</pre>
 , and
 calls like QWidget::setAcceptFocus(FALSE) should be replaced by
-    <pre> <a href="qwidget.html#43a9d9">QWidget::setFocusPolicy</a>(NoFocus)</pre>
+    <pre> <a href="qwidget.html#f92b0f">QWidget::setFocusPolicy</a>(NoFocus)</pre>
 .
 Additional policies are TabFocus and ClickFocus.
 <p>
@@ -599,19 +599,19 @@ that need to be changed.
 <p>
 <h3><a name=QLabel>QLabel</a></h3>
 <p>
-<h4><pre> <a href="qframe.html#ab991e">QLabel::setMargin</a>()</pre>
+<h4><pre> <a href="qframe.html#b11d00">QLabel::setMargin</a>()</pre>
 </h4>
 <p>
-<pre> <a href="qframe.html#ab991e">QLabel::setMargin</a>()</pre>
- and<pre> <a href="qframe.html#f69ee0">QLabel::margin</a>()</pre>
+<pre> <a href="qframe.html#b11d00">QLabel::setMargin</a>()</pre>
+ and<pre> <a href="qframe.html#cb5472">QLabel::margin</a>()</pre>
 <p>
-have been renamed to <pre> <a href="qlabel.html#ed9b8b">QLabel::setIndent</a>()</pre>
+have been renamed to <pre> <a href="qlabel.html#9077ed">QLabel::setIndent</a>()</pre>
  and
-<pre> <a href="qlabel.html#e3c907">QLabel::indent</a>()</pre>
+<pre> <a href="qlabel.html#f68b83">QLabel::indent</a>()</pre>
 , respectively. This was done to avoid
 collision with QFrame::setMargin(), which is now virtual.
 <p>
-<h4><pre> <a href="qlabel.html#60de9f">QLabel::setMovie</a>()</pre>
+<h4><pre> <a href="qlabel.html#fb7d9d">QLabel::setMovie</a>()</pre>
 </h4>
 <p>
 Previously, setting a movie on a label cleared the value of text().
@@ -643,7 +643,7 @@ which is a real list of QString values.
 To use QStringList rather than QStrList, change loops that look like this:
 <pre>    <a href="qstrlist.html">QStrList</a> list = ...;
     const char* s;
-    for ( s = list.<a href="qlist.html#df743c">first</a>(); s; s = list.<a href="qlist.html#b39e6b">next</a>() ) {
+    for ( s = list.<a href="qlist.html#e625f9">first</a>(); s; s = list.<a href="qlist.html#f95ddd">next</a>() ) {
         process(s);
     }
 </pre>
@@ -687,13 +687,13 @@ QFont::substitutions()</tt>.
 <h3><a name=QLayout>QLayout</a></h3>
 <p> Calling resize(0,0) or resize(1,1) will no longer work magically.
 Remove all such calls. The default size of toplevel widgets will be their
-<a href="qwidget.html#290bcd">sizeHint()</a>.
+<a href="qwidget.html#4511d1">sizeHint()</a>.
 <p> The default implementation of QWidget::sizeHint() will no longer
 return just an invalid size; if the widget has a layout, it will return
 the layout's preferred size.
 <p> The special maximum MaximumHeight/Width is now QWIDGETSIZE_MAX,
 not QCOORD_MAX.
-<p> <a href="qboxlayout.html#219265">QBoxLayout::addWidget()</a>
+<p> <a href="qboxlayout.html#ebba99">QBoxLayout::addWidget()</a>
 now interprets the <em>alignment</em> parameter more aggressively.  A
 non-default alignment now indicates that the widget should not grow to
 fill the available space, but should be sized according to sizeHint().
@@ -702,11 +702,11 @@ alignment, and is the default.)
 <p> The class QGManager is removed. Subclasses of QLayout need to be rewritten
 to use the new, much simpler <a href="qlayout.html">QLayout API</a>.
 <p> For typical layouts, all use of
-<a href="qwidget.html#378ed6">setMinimumSize()</a>
+<a href="qwidget.html#c0b5fb">setMinimumSize()</a>
 and
-<a href="qwidget.html#ee706d">setFixedSize()</a>
+<a href="qwidget.html#87e3f4">setFixedSize()</a>
 can be removed.
-<a href="qlayout.html#8296f7">activate()</a> is no longer necessary.
+<a href="qlayout.html#1cb33d">activate()</a> is no longer necessary.
 <p>
 You might like to look at the QGrid, QVBox, and QHBox widgets - they offer
 a simple way to build nested widget structures.
@@ -732,20 +732,20 @@ argument without checking for 0, may crash.
 <h3><a name=QMultiLineEdit>QMultiLineEdit</a></h3>
 <p>
 The protected function
-<pre> <a href="qmultilineedit.html#9914d0">QMultiLineEdit::textWidth</a>(<a href="qstring.html">QString</a>*)</pre>
+<pre> <a href="qmultilineedit.html#a97ed4">QMultiLineEdit::textWidth</a>(<a href="qstring.html">QString</a>*)</pre>
 <p>
 changed to
-<pre> <a href="qmultilineedit.html#9914d0">QMultiLineEdit::textWidth</a>(const QString&amp;)</pre>
+<pre> <a href="qmultilineedit.html#a97ed4">QMultiLineEdit::textWidth</a>(const QString&amp;)</pre>
 .
 This is unlikely to be a problem, and you'll get a compile error
 if you called it.
 <p>
 <h3><a name=QClipboard>QClipboard</a></h3>
 <p>
-<pre> <a href="qclipboard.html#54ee2d">QClipboard::pixmap</a>()</pre>
+<pre> <a href="qclipboard.html#905cbc">QClipboard::pixmap</a>()</pre>
  now returns a QPixmap, not a QPixmap*.
 The pixmap
-will be <a href="qpixmap.html#29cbd3">null</a> if no pixmap is on the
+will be <a href="qpixmap.html#7803c4">null</a> if no pixmap is on the
 clipboard.  QClipboard now offers powerful MIME-based types on the
 clipboard, just like drag-and-drop (in fact, you can reuse most of your
 drag-and-drop code with clipboard operations).
@@ -755,15 +755,15 @@ drag-and-drop code with clipboard operations).
 <P>
 QDropSite is obsolete.  If you simply passed <tt>this</tt>, just remove
 the inheritance of QDropSite and call
-<a href="qwidget.html#e1c7b1">setAcceptDrops(TRUE)</a> in the class
+<a href="qwidget.html#8169cb">setAcceptDrops(TRUE)</a> in the class
 constructor.
 If you passed something other than <tt>this</tt>,
 your code will not work.  A common case is passing
 the
-<a href="qscrollview.html#040cb5">viewport()</a> of a QListView,
+<a href="qscrollview.html#26f2bf">viewport()</a> of a QListView,
 in which case,
 override the
-<a href="qscrollview.html#efa5ed">viewportDragMoveEvent()</a>,
+<a href="qscrollview.html#f54ca8">viewportDragMoveEvent()</a>,
 etc.
 functions rather than QListView's dragMoveEvent() etc.  For other
 cases, you will need to use an event filter to act on the drag/drop events
@@ -772,9 +772,9 @@ of another widget (as is the usual way to intercept foreign events).
 <h3><a name=QScrollView>QScrollView</a></h3>
 <p>
 The parameters in the signal
-<a href="qscrollview.html#1d7e56">contentsMoving(int,int)</a>
+<a href="qscrollview.html#479944">contentsMoving(int,int)</a>
 are now positive rather than negative values, coinciding with
-<a href="qscrollview.html#332857">setContentsPos()</a>.  Search for
+<a href="qscrollview.html#15a368">setContentsPos()</a>.  Search for
 connections you make to this signal, and either change the slot they are
 connected to such that it also expects positive rather than negative
 values, or introduce an intermediate slot and signal that negates them.
@@ -803,7 +803,7 @@ QUrlDrag::setUrls() and QUrlDrag::urlToLocalFile().
 <p>
 <h3><a name=QPainter>QPainter</a></h3>
 <p> The GrayText painter flag has been removed. Use
-<a href="qpainter.html#0a6aff">setPen( palette().disabled().foreground() )</a>
+<a href="qpainter.html#0183e4">setPen( palette().disabled().foreground() )</a>
 instead.
 <p> The RasterOp enum
 (CopyROP,
@@ -847,7 +847,7 @@ QCOORD_MAX have changed accordingly.
 <p>QPointArray is now actually, not only seemingly, a QArray of QPoint
 objects. The semi-internal workaround classes QPointData and QPointVal
 are removed since they are no longer needed; QPoint is used directly
-instead. The function <pre> <a href="qpointarray.html#c91a13">QPointArray::shortPoints</a>()</pre>
+instead. The function <pre> <a href="qpointarray.html#0dbaa7">QPointArray::shortPoints</a>()</pre>
 <p>
 provides the point array converted to short (16bit) coordinates for
 use with external functions that demand that format.
@@ -858,7 +858,7 @@ QImage uses QRgb for the colors - see <a href=#QRgb>the changes to that</a>.
 <p>
 <h3><a name=QPixmap>QPixmap</a></h3>
 <p>
-<pre> <a href="qpixmap.html#95e53d">QPixmap::convertToImage</a>()</pre>
+<pre> <a href="qpixmap.html#8c5f15">QPixmap::convertToImage</a>()</pre>
  with bitmaps now guarantees that color0 pixels
 become color(0) in the resulting QImage.  If you worked around the lack of
 this, you may be able to simplify your code.  If you made assumptions
@@ -868,10 +868,10 @@ bitmaps (eg. "inside-out" masks).
 <pre> QPixmap::optimize(TRUE)</pre>
 <p>
 is replaced by
-<pre> <a href="qpixmap.html#9b0dee">QPixmap::setOptimization</a>(QPixmap::NormalOptim)</pre>
+<pre> <a href="qpixmap.html#41f5cf">QPixmap::setOptimization</a>(QPixmap::NormalOptim)</pre>
 <p>
 or
-<pre> <a href="qpixmap.html#9b0dee">QPixmap::setOptimization</a>(QPixmap::BestOptim)</pre>
+<pre> <a href="qpixmap.html#41f5cf">QPixmap::setOptimization</a>(QPixmap::BestOptim)</pre>
 <p>
 - see the documentation
 to choose which is best for your application.  NormalOptim is most like
@@ -881,17 +881,17 @@ the Qt 1.x "TRUE" optimization.
 <p>
 In Qt 1.x, new menu items were assigned either an application-wide
 unique identifier or an identifier equal to the index of the item, depending on the
-<a href="qmenudata.html#df7df9">insertItem(...)</a> function used.
+<a href="qmenudata.html#a0155e">insertItem(...)</a> function used.
 In Qt 2.x this confusing
 situation has been cleaned up: generated identifiers are always
 unique across the entire application.
 <p>
 If your code depends on generated ids
 being equal to the item's index, a quick fix is to use
-<pre> <a href="qmenudata.html#d25539">QMenuData::indexOf</a>(int id)</pre>
+<pre> <a href="qmenudata.html#49862d">QMenuData::indexOf</a>(int id)</pre>
 <p>
 in the handling function instead. You may alternatively pass
-<pre> <a href="qmenudata.html#fa04a9">QMenuData::count</a>()</pre>
+<pre> <a href="qmenudata.html#e3e249">QMenuData::count</a>()</pre>
 <p>
 as identifier when you insert the items.
 <p>
@@ -911,10 +911,10 @@ it directly inherits QFrame.
 <p>
 <h3><a name=QValidator>QValidator (QLineEdit, QComboBox, QSpinBox) </a></h3>
 <p>
-<pre> <a href="qvalidator.html#8b4d6c">QValidator::validate</a>(...)</pre>
+<pre> <a href="qvalidator.html#da4f8c">QValidator::validate</a>(...)</pre>
 <p>
 and
-<pre> <a href="qvalidator.html#48f1a4">QValidator::fixup</a>( <a href="qstring.html">QString</a> &amp; )</pre>
+<pre> <a href="qvalidator.html#3fa523">QValidator::fixup</a>( <a href="qstring.html">QString</a> &amp; )</pre>
 <p>
 are now const
 functions. If your subclass reimplements validate() as a
@@ -1025,6 +1025,6 @@ compile just the same anyway).  This list is provided for completeness.
 
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.1</div>
+<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

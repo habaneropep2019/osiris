@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qpopupmenu.cpp   2.3.1   edited 2001-05-22 $
+** $Id: qt/src/widgets/qpopupmenu.cpp   2.3.2   edited 2001-10-11 $
 **
 ** Implementation of QPopupMenu class
 **
@@ -88,17 +88,19 @@ static int syncMenuId = 0;
 static int motion;
 
 // used to provide ONE single-shot timer
-static QTimer * singleSingleShot = 0;
+static QGuardedPtr<QTimer> *singleSingleShot = 0;
 
 static bool supressAboutToShow = FALSE;
 
 static void popupSubMenuLater( int msec, QPopupMenu * receiver ) {
     if ( !singleSingleShot )
-	singleSingleShot = new QTimer( qApp, "popup submenu timer" );
-    singleSingleShot->disconnect( SIGNAL(timeout()) );
-    QObject::connect( singleSingleShot, SIGNAL(timeout()),
+	singleSingleShot = new QGuardedPtr<QTimer>;
+    if ( !(*singleSingleShot) )
+	(*singleSingleShot) = new QTimer( qApp, "popup submenu timer" );
+    (*singleSingleShot)->disconnect( SIGNAL(timeout()) );
+    QObject::connect( *singleSingleShot, SIGNAL(timeout()),
 		      receiver, SLOT(subMenuTimer()) );
-    singleSingleShot->start( msec, TRUE );
+    (*singleSingleShot)->start( msec, TRUE );
 }
 
 static bool preventAnimation = FALSE;
@@ -1316,8 +1318,8 @@ void QPopupMenu::mouseMoveEvent( QMouseEvent *e )
 
 	if ( mi->popup() || (popupActive >= 0 && popupActive != item) )
 	    popupSubMenuLater( style() == WindowsStyle ? 256 : 96, this );
-	else if ( singleSingleShot )
-	    singleSingleShot->stop();
+	else if ( singleSingleShot && *singleSingleShot )
+	    (*singleSingleShot)->stop();
 
 	if ( item != actItem )
 	    setActiveItem( item );
@@ -1330,6 +1332,9 @@ void QPopupMenu::mouseMoveEvent( QMouseEvent *e )
 
 void QPopupMenu::keyPressEvent( QKeyEvent *e )
 {
+#if 0	// disabled until some way to SAVE these settings is possible
+	// also must have global way to disable (eg. for stylus device)
+
     if (mouseBtDn && actItem >= 0) {
 	if (e->key() == Key_Shift ||
 	    e->key() == Key_Control ||
@@ -1345,6 +1350,7 @@ void QPopupMenu::keyPressEvent( QKeyEvent *e )
 	    setAccel(modifier + e->key(), mi->id());  ;
 	return;
     }
+#endif
 
     QMenuItem  *mi = 0;
     QPopupMenu *popup;
@@ -1394,8 +1400,8 @@ void QPopupMenu::keyPressEvent( QKeyEvent *e )
 	}
 	if ( parentMenu && parentMenu->isPopupMenu ) {
 	    ((QPopupMenu *)parentMenu)->hidePopups();
-	    if ( singleSingleShot )
-		singleSingleShot->stop();
+	    if ( singleSingleShot && *singleSingleShot )
+		(*singleSingleShot)->stop();
 	    break;
 	}
 
@@ -1405,8 +1411,8 @@ void QPopupMenu::keyPressEvent( QKeyEvent *e )
     case Key_Right:
 	if ( actItem >= 0 && (popup=mitems->at( actItem )->popup()) ) {
 	    hidePopups();
-	    if ( singleSingleShot )
-		singleSingleShot->stop();
+	    if ( singleSingleShot && *singleSingleShot )
+		(*singleSingleShot)->stop();
             // ### The next two lines were switched to fix the problem with the first item of the
             // submenu not being highlighted...any reason why they should have been the other way??
             subMenuTimer();
@@ -1598,6 +1604,8 @@ void QPopupMenu::subMenuTimer() {
 	popupActive = -1;
     }
 
+    if ( actItem < 0 )
+	return;
     QMenuItem *mi = mitems->at(actItem);
     if ( !mi || !mi->isEnabled() )
 	return;

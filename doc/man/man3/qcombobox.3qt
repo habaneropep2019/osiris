@@ -1,5 +1,5 @@
 '\" t
-.TH QComboBox 3qt "13 June 2001" "Trolltech AS" \" -*- nroff -*-
+.TH QComboBox 3qt "29 October 2001" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2001 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -381,11 +381,6 @@ Inserts a text item at position \fIindex.\fR The item will be appended if \fIind
 Inserts the list of strings at the index \fIindex\fR in the combo box.
 .PP
 This is only for compatibility, as it does not support Unicode strings. See insertStringList().
-.PP
-Examples:
-.(l
-qmag/qmag.cpp
-.)l
 .SH "void QComboBox::insertStrList ( const char ** strings, int numStrings=-1, int index=-1 )"
 Inserts the array of ASCII strings at the index \fIindex\fR in the combo box.
 .PP
@@ -399,6 +394,11 @@ Example:
 .br
     combo->insertStrList( items );
 .fi
+.PP
+Examples:
+.(l
+qmag/qmag.cpp
+.)l
 .SH "void QComboBox::insertStrList ( const QStrList & list, int index=-1 )"
 This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts.
 .SH "void QComboBox::insertStringList ( const QStringList & list, int index=-1 )"
@@ -592,4 +592,4 @@ In case of content or formattting problems with this manual page, please
 report them to
 .BR qt-bugs@trolltech.com .
 Please include the name of the manual page (qcombobox.3qt) and the Qt
-version (2.3.1).
+version (2.3.2).

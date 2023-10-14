@@ -42,9 +42,9 @@ MyWidget::MyWidget( <a href="qwidget.html">QWidget</a> *parent, const char *name
         : <a href="qvbox.html">QVBox</a>( parent, name )
 {
     <a href="qpushbutton.html">QPushButton</a> *quit = new <a href="qpushbutton.html">QPushButton</a>( "Quit", this, "quit" );
-    quit-&gt;<a href="qwidget.html#dde00b">setFont</a>( <a href="qfont.html">QFont</a>( "Times", 18, QFont::Bold ) );
+    quit-&gt;<a href="qwidget.html#c52788">setFont</a>( <a href="qfont.html">QFont</a>( "Times", 18, QFont::Bold ) );
 
-    <a href="qobject.html#c2d209">connect</a>( quit, SIGNAL(clicked()), qApp, SLOT(quit()) );
+    <a href="qobject.html#7f8e37">connect</a>( quit, SIGNAL(clicked()), qApp, SLOT(quit()) );
 
     <a href="qgrid.html">QGrid</a> *grid = new <a href="qgrid.html">QGrid</a>( 4, this );
 
@@ -53,7 +53,7 @@ MyWidget::MyWidget( <a href="qwidget.html">QWidget</a> *parent, const char *name
         for( int c = 0 ; c &lt; 4 ; c++ ) {
             LCDRange* lr = new LCDRange( grid );
             if ( previous )
-                <a href="qobject.html#c2d209">connect</a>( lr, SIGNAL(valueChanged(int)),
+                <a href="qobject.html#7f8e37">connect</a>( lr, SIGNAL(valueChanged(int)),
                          previous, SLOT(setValue(int)) );
             previous = lr;
         }
@@ -65,15 +65,15 @@ int main( int argc, char **argv )
     <a href="qapplication.html">QApplication</a> a( argc, argv );
 
     MyWidget w;
-    a.<a href="qapplication.html#11c921">setMainWidget</a>( &amp;w );
-    w.<a href="qwidget.html#ccc8f7">show</a>();
-    return a.<a href="qapplication.html#7076af">exec</a>();
+    a.<a href="qapplication.html#7ad759">setMainWidget</a>( &amp;w );
+    w.<a href="qwidget.html#200ee5">show</a>();
+    return a.<a href="qapplication.html#84c7bf">exec</a>();
 }
 </pre>
 <p>
 
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.1</div>
+<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

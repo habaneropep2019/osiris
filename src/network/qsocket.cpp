@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/network/qsocket.cpp   2.3.1   edited 2001-02-12 $
+** $Id: qt/src/network/qsocket.cpp   2.3.2   edited 2001-10-17 $
 **
 ** Implementation of QSocket class.
 **
@@ -70,13 +70,18 @@ public:
 #ifndef QT_NO_DNS
     QDns	       *dns;
 #endif
+    static QList<QSocket> *sn_read_alreadyCalled; // used to avoid unwanted recursion
 };
+
+QList<QSocket> *QSocketPrivate::sn_read_alreadyCalled = 0;
 
 QSocketPrivate::QSocketPrivate( QSocket *o )
     : owner( o ),
       state(QSocket::Idle), host(QString::fromLatin1("")), port(0),
       socket(0), rsn(0), wsn(0), rsize(0), wsize(0), rindex(0), windex(0)
 {
+    if ( !sn_read_alreadyCalled )
+	sn_read_alreadyCalled = new QList<QSocket>;
 #ifndef QT_NO_DNS
     dns = 0;
 #endif
@@ -123,9 +128,9 @@ QSocketPrivate::~QSocketPrivate()
   The signals error(), connected(), readyRead() and connectionClosed()
   inform you of the progress of the connection.  There are also some
   less commonly used signals.  hostFound() is emitted when
-  connectToHost() has finished its DSN lookup and is starting its TCP
+  connectToHost() has finished its DNS lookup and is starting its TCP
   connection. delayedCloseFinished() is emitted when close()
-  succeeds().  bytesWritten() is emitted when QSocket moves data from
+  succeeds.  bytesWritten() is emitted when QSocket moves data from
   its "to be written" queue into the TCP implementation.
 
   There are several access functions for the socket: state() returns
@@ -484,7 +489,7 @@ bool QSocket::consumeReadBuf( int nbytes, char *sink )
     qDebug( "QSocket (%s): consumeReadBuf %d bytes", name(), nbytes );
 #endif
     d->rsize -= nbytes;
-    while ( TRUE ) {
+    for (;;){
 	QByteArray *a = d->rba.first();
 	if ( d->rindex + nbytes >= (int)a->size() ) {
 	    // Here we skip the whole byte array and get the next later
@@ -507,7 +512,9 @@ bool QSocket::consumeReadBuf( int nbytes, char *sink )
 	    return TRUE;
 	}
     }
+#if !defined(_CC_EDG_)
     return FALSE;				// should never be reached
+#endif
 }
 
 
@@ -525,7 +532,7 @@ bool QSocket::consumeWriteBuf( int nbytes )
     qDebug( "QSocket (%s): skipWriteBuf %d bytes", name(), nbytes );
 #endif
     d->wsize -= nbytes;
-    while ( TRUE ) {
+    for (;;){
 	QByteArray *a = d->wba.first();
 	if ( d->windex + nbytes >= (int)a->size() ) {
 	    nbytes -= a->size() - d->windex;
@@ -538,7 +545,9 @@ bool QSocket::consumeWriteBuf( int nbytes )
 	    return TRUE;
 	}
     }
-    return FALSE;
+#if !defined(_CC_EDG_)
+    return FALSE;				// should never be reached
+#endif
 }
 
 
@@ -556,7 +565,7 @@ bool QSocket::scanNewline( QByteArray *store )
     QByteArray *a = 0;
     char *p;
     int n;
-    while ( TRUE ) {
+    for (;;){
 	if ( !a ) {
 	    a = d->rba.first();
 	    if ( !a || a->size() == 0 )
@@ -603,7 +612,9 @@ bool QSocket::scanNewline( QByteArray *store )
 	    }
 	}
     }
-    return FALSE;
+#if !defined(_CC_EDG_)
+    return FALSE;				// should never be reached
+#endif
 }
 
 
@@ -971,13 +982,12 @@ QString QSocket::readLine()
 
 void QSocket::sn_read()
 {
-    // Use alreadyCalled to avoid recursive calls of sn_read() (and as a result
-    // avoid emitting the readyRead() signal in a slot for readyRead(), if you
-    // use bytesAvailable()).
-    static bool alreadyCalled = FALSE;
-    if ( alreadyCalled )
+    // Use QSocketPrivate::sn_read_alreadyCalled to avoid recursive calls of
+    // sn_read() (and as a result avoid emitting the readyRead() signal in a
+    // slot for readyRead(), if you use bytesAvailable()).
+    if ( QSocketPrivate::sn_read_alreadyCalled->findRef(this) != -1 )
 	return;
-    alreadyCalled = TRUE;
+    QSocketPrivate::sn_read_alreadyCalled->append( this );
 
     char buf[4096];
     int  nbytes = d->socket->bytesAvailable();
@@ -989,9 +999,13 @@ void QSocket::sn_read()
 	    tryConnection();
 	} else {
 	    // nothing to do, nothing to care about
-	    alreadyCalled = FALSE;
+	    QSocketPrivate::sn_read_alreadyCalled->removeRef( this );
 	    return;
 	}
+    }
+    if ( state() == Idle ) {
+	QSocketPrivate::sn_read_alreadyCalled->removeRef( this );
+	return;
     }
 
     if ( nbytes <= 0 ) {			// connection closed?
@@ -1016,13 +1030,13 @@ void QSocket::sn_read()
 	    d->wba.clear();			// clear write buffer
 	    d->windex = d->wsize = 0;
 	    emit connectionClosed();
-	    alreadyCalled = FALSE;
+	    QSocketPrivate::sn_read_alreadyCalled->removeRef( this );
 	    return;
 	} else {
 	    if ( nread < 0 ) {
 		if ( d->socket->error() == QSocketDevice::NoError ) {
 		    // all is fine
-		    alreadyCalled = FALSE;
+		    QSocketPrivate::sn_read_alreadyCalled->removeRef( this );
 		    return;
 		}
 #if defined(QSOCKET_DEBUG)
@@ -1031,7 +1045,7 @@ void QSocket::sn_read()
 		if (d->rsn)
 		    d->rsn->setEnabled( FALSE );
 		emit error( ErrSocketRead );	// socket close error
-		alreadyCalled = FALSE;
+		QSocketPrivate::sn_read_alreadyCalled->removeRef( this );
 		return;
 	    }
 	    a = new QByteArray( nread );
@@ -1058,7 +1072,7 @@ void QSocket::sn_read()
 	if ( nread < 0 ) {
 	    if ( d->socket->error() == QSocketDevice::NoError ) {
 		// all is fine
-		alreadyCalled = FALSE;
+		QSocketPrivate::sn_read_alreadyCalled->removeRef( this );
 		return;
 	    }
 #if defined(CHECK_RANGE)
@@ -1068,7 +1082,7 @@ void QSocket::sn_read()
 	    if (d->rsn)
 		d->rsn->setEnabled( FALSE );
 	    emit error( ErrSocketRead );	// socket read error
-	    alreadyCalled = FALSE;
+	    QSocketPrivate::sn_read_alreadyCalled->removeRef( this );
 	    return;
 	}
 	if ( nread != (int)a->size() ) {		// unexpected
@@ -1082,7 +1096,7 @@ void QSocket::sn_read()
     d->rsize += nread;
     emit readyRead();
 
-    alreadyCalled = FALSE;
+    QSocketPrivate::sn_read_alreadyCalled->removeRef( this );
 }
 
 
@@ -1095,6 +1109,11 @@ void QSocket::sn_write()
     if ( d->state == Connecting ) 		// connection established?
 	tryConnection();
     flush();
+}
+
+void QSocket::emitErrorConnectionRefused()
+{
+    emit error( ErrConnectionRefused );
 }
 
 void QSocket::tryConnection()
@@ -1110,7 +1129,7 @@ void QSocket::tryConnection()
 	emit connected();
     } else {
 	d->state = Idle;
-	emit error( ErrConnectionRefused );
+	QTimer::singleShot( 0, this, SLOT(emitErrorConnectionRefused()) );
 	return;
     }
 }
@@ -1155,13 +1174,13 @@ void QSocket::setSocketIntern( int socket )
         sd = new QSocketDevice( socket, QSocketDevice::Stream );
     else
         sd = new QSocketDevice( QSocketDevice::Stream );
- 
+
     if ( state() != Idle )
         close();
     // close may not have actually deleted the thing.  so, we brutally
     // Act.
     delete d;
- 
+
     d = new QSocketPrivate( this );
     d->socket = sd;
     d->socket->setBlocking( FALSE );
@@ -1179,14 +1198,14 @@ void QSocket::setSocketIntern( int socket )
     setFlags( IO_Direct );
     setStatus( IO_Ok );
     open( IO_ReadWrite );
- 
+
     // hm... this is not very nice.
     d->host = QString::null;
     d->port = 0;
 #ifndef QT_NO_DNS
     delete d->dns;
     d->dns = 0;
-#endif                                                                                                                                                                                
+#endif
 }
 
 

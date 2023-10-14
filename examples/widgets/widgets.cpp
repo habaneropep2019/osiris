@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/widgets/widgets.cpp   2.3.1   edited 2001-02-20 $
+** $Id: qt/examples/widgets/widgets.cpp   2.3.2   edited 2001-06-12 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -125,7 +125,7 @@ WidgetView::WidgetView( QWidget *parent, const char *name )
     QColor col;
 
     // Set the window caption/title
-    setCaption( "Qt Widgets Demo Application" );
+    setCaption( "Qt Example - Widgets Demo Application" );
 
     // create a toolbar
     QToolBar *tools = new QToolBar( this, "toolbar" );

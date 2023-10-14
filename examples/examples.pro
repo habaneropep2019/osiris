@@ -81,7 +81,6 @@ table:SUBDIRS +=    statistics \
 xml:SUBDIRS +=	    xmlquotes
 
 embedded:SUBDIRS += winmanager \
-		kiosk \
 		launcher
 
 X11DIRS	    =   biff \

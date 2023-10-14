@@ -30,18 +30,18 @@ The QGuardedPtr class is a template class that provides guarded pointers to QObj
 <p><a href="qguardedptr-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><div class="fn"><a href="#4fa314"><b>QGuardedPtr</b></a> () </div>
-<li><div class="fn"><a href="#117573"><b>QGuardedPtr</b></a> ( T * p ) </div>
-<li><div class="fn"><a href="#d6eb30"><b>QGuardedPtr</b></a> ( const QGuardedPtr&lt;T&gt; &amp; p ) </div>
-<li><div class="fn"><a href="#0e981a"><b>~QGuardedPtr</b></a> () </div>
-<li><div class="fn">QGuardedPtr&lt;T&gt;&amp; <a href="#23bf31"><b>operator=</b></a> ( const QGuardedPtr&lt;T&gt; &amp; p ) </div>
-<li><div class="fn">QGuardedPtr&lt;T&gt;&amp; <a href="#005be9"><b>operator=</b></a> ( T * p ) </div>
-<li><div class="fn">bool <a href="#32b3b5"><b>operator==</b></a> ( const QGuardedPtr&lt;T&gt; &amp; p ) const</div>
-<li><div class="fn">bool <a href="#adabb4"><b>operator!=</b></a> ( const QGuardedPtr&lt;T&gt; &amp; p ) const</div>
-<li><div class="fn">bool <a href="#cb3ab4"><b>isNull</b></a> () const</div>
-<li><div class="fn">T* <a href="#fbf80f"><b>operator-&gt;</b></a> () const</div>
-<li><div class="fn">T&amp; <a href="#02d12e"><b>operator*</b></a> () const</div>
-<li><div class="fn">operator <a href=qguardedptr.html#242a32><b>T*</b></a> ()const</div>
+<li><div class="fn"><a href="#c99332"><b>QGuardedPtr</b></a> () </div>
+<li><div class="fn"><a href="#1ab629"><b>QGuardedPtr</b></a> ( T * p ) </div>
+<li><div class="fn"><a href="#e0fa7d"><b>QGuardedPtr</b></a> ( const QGuardedPtr&lt;T&gt; &amp; p ) </div>
+<li><div class="fn"><a href="#17281e"><b>~QGuardedPtr</b></a> () </div>
+<li><div class="fn">QGuardedPtr&lt;T&gt;&amp; <a href="#2e930e"><b>operator=</b></a> ( const QGuardedPtr&lt;T&gt; &amp; p ) </div>
+<li><div class="fn">QGuardedPtr&lt;T&gt;&amp; <a href="#308152"><b>operator=</b></a> ( T * p ) </div>
+<li><div class="fn">bool <a href="#5b9549"><b>operator==</b></a> ( const QGuardedPtr&lt;T&gt; &amp; p ) const</div>
+<li><div class="fn">bool <a href="#1189cc"><b>operator!=</b></a> ( const QGuardedPtr&lt;T&gt; &amp; p ) const</div>
+<li><div class="fn">bool <a href="#2d41ab"><b>isNull</b></a> () const</div>
+<li><div class="fn">T* <a href="#851be9"><b>operator-&gt;</b></a> () const</div>
+<li><div class="fn">T&amp; <a href="#096c9c"><b>operator*</b></a> () const</div>
+<li><div class="fn">operator <a href=qguardedptr.html#991ebc><b>T*</b></a> ()const</div>
 </ul>
 <hr><h2><a name="details"></a>Detailed Description</h2>
 The QGuardedPtr class is a template class that provides guarded pointers to QObjects
@@ -64,7 +64,7 @@ the pointer for validity.
       if ( label)
           label-&gt;show();
       else 
-          <a href="qapplication.html#3db6b2">qDebug</a>("The label has been destroyed");
+          <a href="qapplication.html#72e78c">qDebug</a>("The label has been destroyed");
 </pre>
 <p>The program will output
 <pre>      The label has been destroyed
@@ -78,7 +78,7 @@ to read this class documentation.
 <p>For creating guarded pointers, you can construct or assign to them
 from an X* or from another guarded pointer of the same type. You can
 compare them with each other for equality (==) and inequality (!=),
-or test for null with <a href="#cb3ab4">isNull</a>().  Finally, you can dereference
+or test for null with <a href="#2d41ab">isNull</a>().  Finally, you can dereference
 them using either the <code>*x</code> or the <code>x->member</code> notation.
 <p>A guarded pointer will automatically cast to an X* so you can freely
 mix guarded and unguarded pointers. This means that if you have a
@@ -90,57 +90,57 @@ Use a QGuardedPtr when you are storing a pointer over time.
 error will result.
 
 <hr><h2>Member Function Documentation</h2>
-<h3 class="fn"><a name="4fa314"></a>QGuardedPtr::QGuardedPtr ()</h3>
+<h3 class="fn"><a name="c99332"></a>QGuardedPtr::QGuardedPtr ()</h3>
 <p>Constructs a null guarded pointer.
-<p>See also  <a href="#cb3ab4">isNull</a>().
-<h3 class="fn"><a name="117573"></a>QGuardedPtr::QGuardedPtr ( T * p )</h3>
+<p>See also  <a href="#2d41ab">isNull</a>().
+<h3 class="fn"><a name="1ab629"></a>QGuardedPtr::QGuardedPtr ( T * p )</h3>
 <p>Constructs a guarded pointer that points to same object as is
 pointed to by <em>p.</em>
-<h3 class="fn"><a name="d6eb30"></a>QGuardedPtr::QGuardedPtr ( const QGuardedPtr&lt;T&gt; &amp; p )</h3>
+<h3 class="fn"><a name="e0fa7d"></a>QGuardedPtr::QGuardedPtr ( const QGuardedPtr&lt;T&gt; &amp; p )</h3>
 <p>Copy one guarded pointer from another. The constructed guarded pointer
 points to the same object that <em>p</em> pointed to (possibly null).
-<h3 class="fn"><a name="0e981a"></a>QGuardedPtr::~QGuardedPtr ()</h3>
+<h3 class="fn"><a name="17281e"></a>QGuardedPtr::~QGuardedPtr ()</h3>
 <p>Destructs the guarded pointer.
 Note that the object <em>pointed to</em> by the pointer
 is <em>not</em> destructed, just as is the case with a normal unguarded pointer.
-<h3 class="fn"><a name="242a32"></a>QGuardedPtr::operator T* () const</h3>
+<h3 class="fn"><a name="991ebc"></a>QGuardedPtr::operator T* () const</h3>
 <p>Cast operator, implements pointer semantics. Because of this function,
 you can pass a QGuardedPtr<X> to a function where an X* is
 required.
-<h3 class="fn">bool <a name="cb3ab4"></a>QGuardedPtr::isNull () const</h3>
+<h3 class="fn">bool <a name="2d41ab"></a>QGuardedPtr::isNull () const</h3>
 <p>Returns <code>TRUE</code> if the referenced object has been destroyed or if there is
 no referenced object.
-<h3 class="fn">bool <a name="adabb4"></a>QGuardedPtr::operator!= ( const QGuardedPtr&lt;T&gt; &amp; p ) const</h3>
+<h3 class="fn">bool <a name="1189cc"></a>QGuardedPtr::operator!= ( const QGuardedPtr&lt;T&gt; &amp; p ) const</h3>
 <p>Unequality operator, implements pointer semantics, the negation
-of <a href="#32b3b5">operator==</a>().
-<h3 class="fn">T&amp; <a name="02d12e"></a>QGuardedPtr::operator* () const</h3>
+of <a href="#5b9549">operator==</a>().
+<h3 class="fn">T&amp; <a name="096c9c"></a>QGuardedPtr::operator* () const</h3>
 <p>Dereference operator, implements pointer semantics. Just use this
 operator as you would with a normal C++ pointer.
-<h3 class="fn">T* <a name="fbf80f"></a>QGuardedPtr::operator-&gt; () const</h3>
+<h3 class="fn">T* <a name="851be9"></a>QGuardedPtr::operator-&gt; () const</h3>
 <p>Overloaded arrow operator, implements pointer semantics. Just use this
 operator as you would with a normal C++ pointer.
-<h3 class="fn">QGuardedPtr&lt;T&gt; &amp; <a name="005be9"></a>QGuardedPtr::operator= ( T * p )</h3>
+<h3 class="fn">QGuardedPtr&lt;T&gt; &amp; <a name="308152"></a>QGuardedPtr::operator= ( T * p )</h3>
 <p>Assignment operator.  This guarded pointer then points to same object as is
 pointed to by <em>p.</em>
-<h3 class="fn">QGuardedPtr&lt;T&gt;&amp; <a name="23bf31"></a>QGuardedPtr::operator= ( const QGuardedPtr&lt;T&gt; &amp; p )</h3>
+<h3 class="fn">QGuardedPtr&lt;T&gt;&amp; <a name="2e930e"></a>QGuardedPtr::operator= ( const QGuardedPtr&lt;T&gt; &amp; p )</h3>
 <p>Assignment operator. This guarded pointer then points to the same
 object as does <em>p.</em>
-<h3 class="fn">bool <a name="32b3b5"></a>QGuardedPtr::operator== ( const QGuardedPtr&lt;T&gt; &amp; p ) const</h3>
+<h3 class="fn">bool <a name="5b9549"></a>QGuardedPtr::operator== ( const QGuardedPtr&lt;T&gt; &amp; p ) const</h3>
 <p>Equality operator, implements traditional pointer semantics: returns
 TRUE if both <em>p</em> and this are null, or if both <em>p</em> and this point
 to the same object.
-<p>See also  <a href="#adabb4">operator!=</a>().
+<p>See also  <a href="#1189cc">operator!=</a>().
 <hr><p>
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.3.1"><nobr>
+<input type=hidden name="version" value="2.3.2"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
-copyright &copy; 1995-2000
+copyright &copy; 1995-2001
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.1</div>
+<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qdir_unix.cpp   2.3.1   edited 2001-01-26 $
+** $Id: qt/src/tools/qdir_unix.cpp   2.3.2   edited 2001-08-07 $
 **
 ** Implementation of QDirclass
 **
@@ -196,6 +196,7 @@ bool QDir::readDirEntries( const QString &nameFilter,
     bool doWritable = (filterSpec & Writable)	!= 0;
     bool doExecable = (filterSpec & Executable) != 0;
     bool doHidden   = (filterSpec & Hidden)	!= 0;
+    bool doSystem   = (filterSpec & System)	!= 0;
 
 #if defined(_OS_OS2EMX_)
     //QRegExp   wc( nameFilter, FALSE, TRUE );	// wild card, case insensitive
@@ -220,7 +221,8 @@ bool QDir::readDirEntries( const QString &nameFilter,
 	fi.setFile( *this, fn );
 	if ( !match( filters, fn ) && !(allDirs && fi.isDir()) )
 	     continue;
-	if  ( (doDirs && fi.isDir()) || (doFiles && fi.isFile()) ) {
+	if  ( (doDirs && fi.isDir()) || (doFiles && fi.isFile()) ||
+	      (doSystem && (!fi.isFile() && !fi.isDir())) ) {
 	    if ( noSymLinks && fi.isSymLink() )
 	        continue;
 	    if ( (filterSpec & RWEMask) != 0 )

@@ -1,5 +1,5 @@
 '\" t
-.TH QListView 3qt "13 June 2001" "Trolltech AS" \" -*- nroff -*-
+.TH QListView 3qt "29 October 2001" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2001 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -391,17 +391,17 @@ Adds a new column at the right end of the widget, with the header \fIlabel\fR an
 If \fIwidth\fR is negative, the new column will have WidthMode Maximum, otherwise it will be Manual at \fIwidth\fR pixels wide.
 .PP
 See also setColumnText(), setColumnWidth() and setColumnWidthMode().
-.PP
-Examples:
-.(l
-dirview/main.cpp
-.)l
 .SH "int QListView::addColumn ( const QString & label, int width = -1 ) \fC[virtual]\fR"
 Adds a new column at the right end of the widget, with the header \fIlabel,\fR and returns the index of the column.
 .PP
 If \fIwidth\fR is negative, the new column will have WidthMode Maximum, otherwise it will be Manual at \fIwidth\fR pixels wide.
 .PP
 See also setColumnText(), setColumnWidth() and setColumnWidthMode().
+.PP
+Examples:
+.(l
+dirview/main.cpp
+.)l
 .SH "bool QListView::allColumnsShowFocus () const"
 Returns TRUE if the items in this list view indicate focus and selection state using all of their columns, else FALSE.
 .PP
@@ -822,4 +822,4 @@ In case of content or formattting problems with this manual page, please
 report them to
 .BR qt-bugs@trolltech.com .
 Please include the name of the manual page (qlistview.3qt) and the Qt
-version (2.3.1).
+version (2.3.2).

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qdir.cpp   2.3.1   edited 2001-01-26 $
+** $Id: qt/src/tools/qdir.cpp   2.3.2   edited 2001-08-07 $
 **
 ** Implementation of QDir class
 **
@@ -513,7 +513,7 @@ void QDir::setNameFilter( const QString &nameFilter )
   <li> \c  Modified - Only list files that have been modified (does nothing
   under unix)
   <li> \c  Hidden - List hidden files (on unix, files starting with a .)
-  <li> \c  System - List system files (does nothing under unix)
+  <li> \c  System - List system files (on unix, FIFOs, sockets and device files)
   </ul>
 
   If you do not set any of \c Readable, \c Writable or \c Executable,

@@ -31,7 +31,7 @@ height="100" src="face.png" alt="Home" border="0">
   <hr>
 
   Header file: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/dclock/dclock.h   2.3.1   edited 2001-01-26 $
+** &#36;Id&#58; qt/examples/dclock/dclock.h   2.3.2   edited 2001-01-26 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -74,7 +74,7 @@ private:                                        // internal data
   <hr>
 
   Implementation: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/dclock/dclock.cpp   2.3.1   edited 2001-01-26 $
+** &#36;Id&#58; qt/examples/dclock/dclock.cpp   2.3.2   edited 2001-01-26 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -94,9 +94,9 @@ DigitalClock::DigitalClock( <a href="qwidget.html">QWidget</a> *parent, const ch
     : <a href="qlcdnumber.html">QLCDNumber</a>( parent, name )
 {
     showingColon = FALSE;
-    <a href="qframe.html#c0d758">setFrameStyle</a>( QFrame::Panel | QFrame::Raised );
-    <a href="qframe.html#bffeeb">setLineWidth</a>( 2 );                          // set frame line width
-    <a href=#130>showTime</a>();                                 // display the current time
+    <a href="qframe.html#558f79">setFrameStyle</a>( QFrame::Panel | QFrame::Raised );
+    <a href="qframe.html#b76184">setLineWidth</a>( 2 );                          // set frame line width
+    <a href=#128>showTime</a>();                                 // display the current time
     normalTimer = startTimer( 500 );            // 1/2 second timer events
     showDateTimer = -1;                         // not showing date
 }
@@ -107,13 +107,13 @@ DigitalClock::DigitalClock( <a href="qwidget.html">QWidget</a> *parent, const ch
 // and another one for switching back from date mode to time mode.
 //
 
-void <a name="126"></a>DigitalClock::timerEvent( <a href="qtimerevent.html">QTimerEvent</a> *e )
+void <a name="124"></a>DigitalClock::timerEvent( <a href="qtimerevent.html">QTimerEvent</a> *e )
 {
     if ( e-&gt;timerId() == showDateTimer )        // stop showing date
-        <a href=#129>stopDate</a>();
+        <a href=#127>stopDate</a>();
     else {                                      // normal timer
         if ( showDateTimer == -1 )              // not showing date
-            <a href=#130>showTime</a>();
+            <a href=#128>showTime</a>();
     }
 }
 
@@ -121,10 +121,10 @@ void <a name="126"></a>DigitalClock::timerEvent( <a href="qtimerevent.html">QTim
 // Enters date mode when the left mouse button is pressed.
 //
 
-void <a name="127"></a>DigitalClock::mousePressEvent( <a href="qmouseevent.html">QMouseEvent</a> *e )
+void <a name="125"></a>DigitalClock::mousePressEvent( <a href="qmouseevent.html">QMouseEvent</a> *e )
 {
-    if ( e-&gt;<a href="qmouseevent.html#de3f35">button</a>() == QMouseEvent::LeftButton )               // left button pressed
-        <a href=#128>showDate</a>();
+    if ( e-&gt;<a href="qmouseevent.html#78482f">button</a>() == QMouseEvent::LeftButton )               // left button pressed
+        <a href=#126>showDate</a>();
 }
 
 //
@@ -132,14 +132,14 @@ void <a name="127"></a>DigitalClock::mousePressEvent( <a href="qmouseevent.html"
 // Fires a timer to stop showing the date.
 //
 
-void <a name="128"></a>DigitalClock::showDate()
+void <a name="126"></a>DigitalClock::showDate()
 {
     if ( showDateTimer != -1 )                  // already showing date
         return;
     <a href="qdate.html">QDate</a> date = QDate::currentDate();
     <a href="qstring.html">QString</a> s;
-    s.<a href="qstring.html#2eb9bc">sprintf</a>( "%2d %2d", date.<a href="qdate.html#1222a2">month</a>(), date.<a href="qdate.html#f69570">day</a>() );
-    <a href="qlcdnumber.html#0eaac4">display</a>( s );                               // sets the LCD number/text
+    s.<a href="qstring.html#926f67">sprintf</a>( "%2d %2d", date.<a href="qdate.html#73a46c">month</a>(), date.<a href="qdate.html#ff0275">day</a>() );
+    <a href="qlcdnumber.html#ecdf88">display</a>( s );                               // sets the LCD number/text
     showDateTimer = startTimer( 2000 );         // keep this state for 2 secs
 }
 
@@ -147,18 +147,18 @@ void <a name="128"></a>DigitalClock::showDate()
 // Stops showing the date.
 //
 
-void <a name="129"></a>DigitalClock::stopDate()
+void <a name="127"></a>DigitalClock::stopDate()
 {
-    <a href="qobject.html#f5e328">killTimer</a>( showDateTimer );
+    <a href="qobject.html#46d1c6">killTimer</a>( showDateTimer );
     showDateTimer = -1;
-    <a href=#130>showTime</a>();
+    <a href=#128>showTime</a>();
 }
 
 //
 // Shows the current time in the internal lcd widget.
 //
 
-void <a name="130"></a>DigitalClock::showTime()
+void <a name="128"></a>DigitalClock::showTime()
 {
     showingColon = !showingColon;               // toggle/blink colon
     <a href="qstring.html">QString</a> s = QTime::currentTime().toString().left(5);
@@ -166,7 +166,7 @@ void <a name="130"></a>DigitalClock::showTime()
         s[2] = ' ';
     if ( s[0] == '0' )
         s[0] = ' ';
-    <a href="qlcdnumber.html#0eaac4">display</a>( s );                               // set LCD number/text
+    <a href="qlcdnumber.html#ecdf88">display</a>( s );                               // set LCD number/text
 }
 </pre>
 
@@ -175,7 +175,7 @@ void <a name="130"></a>DigitalClock::showTime()
 
   Main:
 <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/dclock/main.cpp   2.3.1   edited 2001-01-26 $
+** &#36;Id&#58; qt/examples/dclock/main.cpp   2.3.2   edited 2001-06-12 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -191,14 +191,15 @@ int main( int argc, char **argv )
 {
     <a name="QApplication"></a><a href="qapplication.html">QApplication</a> a( argc, argv );
     DigitalClock *clock = new DigitalClock;
-    clock-&gt;<a name="resize"></a><a href="qwidget.html#9ff9d8">resize</a>( 170, 80 );
-    a.<a name="setMainWidget"></a><a href="qapplication.html#11c921">setMainWidget</a>( clock );
-    clock-&gt;<a name="show"></a><a href="qwidget.html#ccc8f7">show</a>();
-    return a.<a name="exec"></a><a href="qapplication.html#7076af">exec</a>();
+    clock-&gt;<a name="resize"></a><a href="qwidget.html#ff9d07">resize</a>( 170, 80 );
+    a.<a name="setMainWidget"></a><a href="qapplication.html#7ad759">setMainWidget</a>( clock );
+    clock-&gt;<a name="setCaption"></a><a href="qwidget.html#d6a291">setCaption</a>("Qt Example - Digital Clock");
+    clock-&gt;<a name="show"></a><a href="qwidget.html#200ee5">show</a>();
+    return a.<a name="exec"></a><a href="qapplication.html#84c7bf">exec</a>();
 }
 </pre>
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.1</div>
+<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

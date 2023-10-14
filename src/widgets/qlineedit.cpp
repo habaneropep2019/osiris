@@ -1,5 +1,5 @@
 /**********************************************************************
-** $Id: qt/src/widgets/qlineedit.cpp   2.3.1   edited 2001-05-11 $
+** $Id: qt/src/widgets/qlineedit.cpp   2.3.2   edited 2001-10-19 $
 **
 ** Implementation of QLineEdit widget class
 **
@@ -816,28 +816,41 @@ bool QLineEdit::event( QEvent * e )
 {
     if ( e->type() == QEvent::AccelOverride && !d->readonly ) {
 	QKeyEvent* ke = (QKeyEvent*) e;
-	if ( ke->state() & ControlButton ) {
+	if ( ke->state() == NoButton ) {
+	    if ( ke->key() < Key_Escape ) {
+		ke->accept();
+	    } else {
+		switch ( ke->key() ) {
+  		case Key_Delete:
+  		case Key_Home:
+  		case Key_End:
+  		case Key_Backspace:
+  		    ke->accept();
+ 		default:
+  		    break;
+  		}
+	    }
+	} else if ( ke->state() & ControlButton ) {
 	    switch ( ke->key() ) {
-	    case Key_A:
+// Those are too frequently used for application functionality
+/*	    case Key_A:	
+	    case Key_B:
+	    case Key_D:
 	    case Key_E:
+	    case Key_F:
+	    case Key_H:
+	    case Key_K:
+*/
+	    case Key_C:
+	    case Key_V:
+	    case Key_X:	    
+	    case Key_Y:
+	    case Key_Z:	    
+	    case Key_Left:
+	    case Key_Right:
 #if defined (_WS_WIN_)
 	    case Key_Insert:
 #endif
-	    case Key_X:
-	    case Key_V:
-	    case Key_C:
-	    case Key_Left:
-	    case Key_Right:
-	    ke->accept();
-	    default:
-		break;
-	    }
-	} else {
-	    switch ( ke->key() ) {
-	    case Key_Delete:
-	    case Key_Home:
-	    case Key_End:
-	    case Key_Backspace:
 		ke->accept();
 	    default:
 		break;
@@ -1052,8 +1065,10 @@ void QLineEdit::mouseDoubleClickEvent( QMouseEvent * )
 {
     d->inDoubleClick = TRUE;
     dragScrolling = FALSE;
-
-    markWord( cursorPos );
+    if ( echoMode() == Password )
+	selectAll();
+    else
+	markWord( cursorPos );
 }
 
 /*!
@@ -1134,7 +1149,7 @@ void QLineEdit::del()
 	validateAndSet( test, minMark(), minMark(), minMark() );
     } else if ( cursorPos != (int)tbuf.length() ) {
 	test.remove( cursorPos, 1 );
-	validateAndSet( test, minMark(), minMark(), minMark() );
+	validateAndSet( test, cursorPos, 0, 0 );
     }
 }
 
@@ -1662,7 +1677,7 @@ bool QLineEdit::validateAndSet( const QString &newText, int newPos,
 void QLineEdit::insert( const QString &newText )
 {
     QString t( newText );
-    if ( t.isEmpty() )
+    if ( t.isEmpty() && !hasMarkedText() )
 	return;
 
     for ( int i=0; i<(int)t.length(); i++ )

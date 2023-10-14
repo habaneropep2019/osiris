@@ -31,7 +31,7 @@ height="100" src="face.png" alt="Home" border="0">
 
   Main:
 <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/tetrix/tetrix.cpp   2.3.1   edited 2001-01-26 $
+** &#36;Id&#58; qt/examples/tetrix/tetrix.cpp   2.3.2   edited 2001-06-12 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -46,16 +46,17 @@ height="100" src="face.png" alt="Home" border="0">
 
 int main( int argc, char **argv )
 {
-    <a name="QApplication::setColorSpec"></a><a href="qapplication.html#e2431b">QApplication::setColorSpec</a>( QApplication::CustomColor );
+    <a name="QApplication::setColorSpec"></a><a href="qapplication.html#1ee2d1">QApplication::setColorSpec</a>( QApplication::CustomColor );
     QDragApplication a(argc,argv);
     QTetrix *tetrix = new QTetrix;
     a.setMainWidget(tetrix);
-    tetrix-&gt;<a name="show"></a><a href="qwidget.html#ccc8f7">show</a>();
+    tetrix-&gt;<a name="setCaption"></a><a href="qwidget.html#d6a291">setCaption</a>("Qt Example - Tetrix");
+    tetrix-&gt;<a name="show"></a><a href="qwidget.html#200ee5">show</a>();
     return a.exec();
 }
 </pre>
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.1</div>
+<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

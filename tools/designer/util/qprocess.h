@@ -42,7 +42,6 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/wait.h>
-#include <sys/socket.h>
 #else
 #include <Windows.h>
 #endif

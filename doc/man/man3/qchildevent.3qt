@@ -1,5 +1,5 @@
 '\" t
-.TH QChildEvent 3qt "13 June 2001" "Trolltech AS" \" -*- nroff -*-
+.TH QChildEvent 3qt "29 October 2001" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2001 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -36,6 +36,8 @@ Child events are sent to objects when children are inserted or removed.
 .PP
 A \fCChildRemoved\fR event is sent immediately, but a \fCChildInserted\fR event is \fIposted\fR (with QApplication::postEvent())
 .PP
+Note that if a child is removed immediately after it is inserted, the \fCChildInserted\fR event may be suppressed, but the \fCChildRemoved\fR event will always be sent. In this case there will be a \fCChildRemoved\fR event without a corresponding \fCChildInserted\fR event.
+.PP
 The handler for these events is QObject::childEvent().
 .SH MEMBER FUNCTION DOCUMENTATION
 .SH "QChildEvent::QChildEvent ( Type type, QObject * child )"
@@ -66,4 +68,4 @@ In case of content or formattting problems with this manual page, please
 report them to
 .BR qt-bugs@trolltech.com .
 Please include the name of the manual page (qchildevent.3qt) and the Qt
-version (2.3.1).
+version (2.3.2).

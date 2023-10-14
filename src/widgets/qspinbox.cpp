@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qspinbox.cpp   2.3.1   edited 2001-01-26 $
+** $Id: qt/src/widgets/qspinbox.cpp   2.3.2   edited 2001-10-22 $
 **
 ** Implementation of QSpinBox widget class
 **
@@ -1081,6 +1081,11 @@ void QSpinBox::setLineStep( int i )
 */
 int QSpinBox::value() const
 {
+    if ( edited ) {
+	QSpinBox *that = (QSpinBox*)this;
+	that->edited = FALSE;
+	that->interpretText();
+    }
     return QRangeControl::value();
 }
 #endif

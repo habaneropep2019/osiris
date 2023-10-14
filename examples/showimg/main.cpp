@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/showimg/main.cpp   2.3.1   edited 2001-01-26 $
+** $Id: qt/examples/showimg/main.cpp   2.3.2   edited 2001-06-12 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -38,12 +38,14 @@ int main( int argc, char **argv )
 	// Create a window which looks after its own existence.
 	ImageViewer *w =
 	    new ImageViewer(0, "new window", Qt::WDestructiveClose | Qt::WResizeNoErase );
+	w->setCaption("Qt Example - Image Viewer");
 	w->show();
     } else {
 	for ( int i=1; i<argc; i++ ) {
 	    // Create a window which looks after its own existence.
 	    ImageViewer *w =
 		new ImageViewer(0, argv[i], Qt::WDestructiveClose | Qt::WResizeNoErase );
+	    w->setCaption("Qt Example - Image Viewer");
 	    w->loadImage( argv[i] );
 	    w->show();
 	}

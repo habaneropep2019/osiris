@@ -40,17 +40,17 @@ int main( int argc, char **argv )
     <a href="qapplication.html">QApplication</a> a( argc, argv );
 
     <a href="qvbox.html">QVBox</a> box;
-    box.<a href="qwidget.html#9ff9d8">resize</a>( 200, 120 );
+    box.<a href="qwidget.html#ff9d07">resize</a>( 200, 120 );
 
     <a href="qpushbutton.html">QPushButton</a> quit( "Quit", &amp;box );
-    quit.<a href="qwidget.html#dde00b">setFont</a>( <a href="qfont.html">QFont</a>( "Times", 18, QFont::Bold ) );
+    quit.<a href="qwidget.html#c52788">setFont</a>( <a href="qfont.html">QFont</a>( "Times", 18, QFont::Bold ) );
 
-    <a href="qobject.html#c2d209">QObject::connect</a>( &amp;quit, SIGNAL(clicked()), &amp;a, SLOT(quit()) );
+    <a href="qobject.html#7f8e37">QObject::connect</a>( &amp;quit, SIGNAL(clicked()), &amp;a, SLOT(quit()) );
 
-    a.<a href="qapplication.html#11c921">setMainWidget</a>( &amp;box );
-    box.<a href="qwidget.html#ccc8f7">show</a>();
+    a.<a href="qapplication.html#7ad759">setMainWidget</a>( &amp;box );
+    box.<a href="qwidget.html#200ee5">show</a>();
 
-    return a.<a href="qapplication.html#7076af">exec</a>();
+    return a.<a href="qapplication.html#84c7bf">exec</a>();
 }
 </pre>
 <p>
@@ -64,8 +64,8 @@ We add an include of qvbox.h, to get the layout class we'll use.  <pre>
 <p>
 Here we simply create a vertical box container.  The QVBox arranges
 its child widgets in a vertical row, one above the other, handing out
-space according to each child's <a href="qwidget.html#2d5d13">QWidget::sizePolicy()</a>. <pre>
-        box.<a href="qwidget.html#9ff9d8">resize</a>( 200, 120 );
+space according to each child's <a href="qwidget.html#23726d">QWidget::sizePolicy()</a>. <pre>
+        box.<a href="qwidget.html#ff9d07">resize</a>( 200, 120 );
 </pre>
 <p>
 We set its width to 200 pixels and the height to 120 pixels. <pre>
@@ -81,11 +81,11 @@ it is clipped by its mother's bounds.
 The mother widget, the QVBox, automatically adds the child, centered
 in its box.  Since nothing else is added, the button gets all the
 space the mother has.  <pre>
-        box.<a href="qwidget.html#ccc8f7">show</a>();
+        box.<a href="qwidget.html#200ee5">show</a>();
 </pre>
 <p>
 When a mother widget is shown, it will call show for all its children
-(except those on which you have done an explicit <a href="qwidget.html#bc7c6a">QWidget::hide())</a>.
+(except those on which you have done an explicit <a href="qwidget.html#410481">QWidget::hide())</a>.
 <p>
 <h2>Behavior</h2>
 <p>
@@ -108,6 +108,6 @@ You may now go on to <a href="t4.html">chapter four.</a>
 
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.1</div>
+<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

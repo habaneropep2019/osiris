@@ -77,8 +77,8 @@ SYSCONF_LINK_TARGET_STATIC = lib$(TARGET).a
 SYSCONF_LINK_LIB_STATIC	= rm -f $(DESTDIR)$(SYSCONF_LINK_TARGET_STATIC) ; \
 				 $(SYSCONF_AR) $(DESTDIR)$(SYSCONF_LINK_TARGET_STATIC) $(OBJECTS) $(OBJMOC) 
 # Compiling application source
-SYSCONF_CXXFLAGS	= -pipe -fno-inline -fno-pack-struct -fno-exceptions
-SYSCONF_CFLAGS		= -pipe -fno-inline -fno-pack-struct
+SYSCONF_CXXFLAGS	= -pipe -fno-inline -fno-pack-struct -fno-exceptions -Wall -W
+SYSCONF_CFLAGS		= -pipe -fno-inline -fno-pack-struct -Wall -W
 # Default link type (static linking is still be used where required)
 SYSCONF_LINK_LIB	= $(SYSCONF_LINK_LIB_SHARED)
 SYSCONF_LINK_TARGET	= $(SYSCONF_LINK_TARGET_SHARED)

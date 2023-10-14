@@ -1613,7 +1613,11 @@ void PropertyPaletteItem::getPalette()
     if ( w->inherits( "QScrollView" ) )
 	w = ( (QScrollView*)w )->viewport();
     QPalette pal = PaletteEditor::getPalette( &ok, val.toPalette(),
+#if defined(QT_NON_COMMERCIAL)
+					      w->backgroundMode(), listview->topLevelWidget(),
+#else
 					      w->backgroundMode(), listview,
+#endif
  					      "choose_palette", listview->propertyEditor()->formWindow() );
     if ( !ok )
 	return;

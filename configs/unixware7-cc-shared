@@ -77,8 +77,8 @@ SYSCONF_LINK_TARGET_STATIC = lib$(TARGET).a
 SYSCONF_LINK_LIB_STATIC	= rm -f $(DESTDIR)$(SYSCONF_LINK_TARGET_STATIC) ; \
 				 $(SYSCONF_AR) $(DESTDIR)$(SYSCONF_LINK_TARGET_STATIC) $(OBJECTS) $(OBJMOC) 
 # Compiling application source
-SYSCONF_CXXFLAGS	= -O -T used
-SYSCONF_CFLAGS		= -O -T used
+SYSCONF_CXXFLAGS	= -O -T used -Wall -W
+SYSCONF_CFLAGS		= -O -T used -Wall -W
 # Default link type (static linking is still be used where required)
 SYSCONF_LINK_LIB	= $(SYSCONF_LINK_LIB_SHARED)
 SYSCONF_LINK_TARGET	= $(SYSCONF_LINK_TARGET_SHARED)

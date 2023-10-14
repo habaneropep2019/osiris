@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/trayicon/trayicon.h   2.3.1   edited 2001-02-19 $
+** $Id: qt/examples/trayicon/trayicon.h   2.3.2   edited 2001-07-12 $
 **
 ** Definition of QTrayIcon class
 **
@@ -44,7 +44,6 @@
 #endif // QT_H
 
 class QPopupMenu;
-class TrayIconPrivate;
 
 class TrayIcon : public QObject
 {
@@ -58,7 +57,7 @@ public:
     TrayIcon( const QPixmap &, const QString &, QPopupMenu *popup = 0, QObject *parent = 0, const char *name = 0 );
     ~TrayIcon();
 
-			// Set a popup menu to handle RMB
+    // Set a popup menu to handle RMB
     void		setPopup( QPopupMenu * );
     QPopupMenu*		popup() const;
 
@@ -89,6 +88,7 @@ private:
     QString tip;
 
     // system-dependant part
+    class TrayIconPrivate;
     TrayIconPrivate *d;
     void sysInstall();
     void sysRemove();
@@ -96,4 +96,4 @@ private:
     void sysUpdateToolTip();
 };
 
-#endif //QTRAYICON_H
+#endif //TRAYICON_H

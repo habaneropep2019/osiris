@@ -20,7 +20,7 @@ SYSCONF_RPATH_OPENGL	=
 # Linking with support libraries
 # X11
 SYSCONF_LFLAGS_X11	= 
-SYSCONF_LIBS_X11	= -lXext -lX11 -lm
+SYSCONF_LIBS_X11	= -lXext -lX11 -lm -lbind
 # Qt, Qt+OpenGL
 SYSCONF_LFLAGS_QT	= -L$(QTDIR)/lib
 SYSCONF_LIBS_QT		= -lqt$(QT_THREAD_SUFFIX)

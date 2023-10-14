@@ -33,17 +33,17 @@ height="100" src="face.png" alt="Home" border="0">
 LCDRange::LCDRange( <a href="qwidget.html">QWidget</a> *parent, const char *name )
         : <a href="qwidget.html">QWidget</a>( parent, name )
 {
-    <a href=#579>init</a>();
+    <a href=#577>init</a>();
 }
 
 LCDRange::LCDRange( const char *s, QWidget *parent, const char *name )
         : <a href="qwidget.html">QWidget</a>( parent, name )
 {
-    <a href=#579>init</a>();
-    <a href=#584>setText</a>( s );
+    <a href=#577>init</a>();
+    <a href=#582>setText</a>( s );
 }
 
-void <a name="579"></a>LCDRange::init()
+void <a name="577"></a>LCDRange::init()
 {
     <a href="qlcdnumber.html">QLCDNumber</a> *lcd  = new <a href="qlcdnumber.html">QLCDNumber</a>( 2, this, "lcd"  );
     slider = new <a href="qslider.html">QSlider</a>( Horizontal, this, "slider" );
@@ -53,38 +53,38 @@ void <a name="579"></a>LCDRange::init()
     label = new <a href="qlabel.html">QLabel</a>( " ", this, "label"  );
     label-&gt;setAlignment( AlignCenter );
 
-    <a href="qobject.html#c2d209">connect</a>( slider, SIGNAL(valueChanged(int)),
+    <a href="qobject.html#7f8e37">connect</a>( slider, SIGNAL(valueChanged(int)),
              lcd, SLOT(display(int)) );
-    <a href="qobject.html#c2d209">connect</a>( slider, SIGNAL(valueChanged(int)),
+    <a href="qobject.html#7f8e37">connect</a>( slider, SIGNAL(valueChanged(int)),
              SIGNAL(valueChanged(int)) );
 
-    <a href="qwidget.html#22ecbc">setFocusProxy</a>( slider );
+    <a href="qwidget.html#cddadb">setFocusProxy</a>( slider );
 
     <a href="qvboxlayout.html">QVBoxLayout</a> * l = new <a href="qvboxlayout.html">QVBoxLayout</a>( this );
-    l-&gt;<a href="qboxlayout.html#219265">addWidget</a>( lcd, 1 );
-    l-&gt;<a href="qboxlayout.html#219265">addWidget</a>( slider );
-    l-&gt;<a href="qboxlayout.html#219265">addWidget</a>( label );
+    l-&gt;<a href="qboxlayout.html#ebba99">addWidget</a>( lcd, 1 );
+    l-&gt;<a href="qboxlayout.html#ebba99">addWidget</a>( slider );
+    l-&gt;<a href="qboxlayout.html#ebba99">addWidget</a>( label );
 }
 
-int <a name="580"></a>LCDRange::value() const
+int <a name="578"></a>LCDRange::value() const
 {
     return slider-&gt;value();
 }
 
-const char *<a name="581"></a>LCDRange::text() const
+const char *<a name="579"></a>LCDRange::text() const
 {
     return label-&gt;text();
 }
 
-void <a name="582"></a>LCDRange::setValue( int value )
+void <a name="580"></a>LCDRange::setValue( int value )
 {
     slider-&gt;setValue( value );
 }
 
-void <a name="583"></a>LCDRange::setRange( int minVal, int maxVal )
+void <a name="581"></a>LCDRange::setRange( int minVal, int maxVal )
 {
     if ( minVal &lt; 0 || maxVal &gt; 99 || minVal &gt; maxVal ) {
-        <a href="qapplication.html#7a943f">qWarning</a>( "<a name="583"></a>LCDRange::setRange(%d,%d)\n"
+        <a href="qapplication.html#290ef4">qWarning</a>( "<a name="581"></a>LCDRange::setRange(%d,%d)\n"
                   "\tRange must be 0..99\n"
                   "\tand minVal must not be greater than maxVal",
                   minVal, maxVal );
@@ -93,7 +93,7 @@ void <a name="583"></a>LCDRange::setRange( int minVal, int maxVal )
     slider-&gt;setRange( minVal, maxVal );
 }
 
-void <a name="584"></a>LCDRange::setText( const char *s )
+void <a name="582"></a>LCDRange::setText( const char *s )
 {
     label-&gt;setText( s );
 }
@@ -102,6 +102,6 @@ void <a name="584"></a>LCDRange::setText( const char *s )
 
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.1</div>
+<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

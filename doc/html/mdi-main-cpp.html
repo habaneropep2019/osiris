@@ -31,7 +31,7 @@ height="100" src="face.png" alt="Home" border="0">
   <hr>
 
   Header file: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/mdi/application.h   2.3.1   edited 2001-01-26 $
+** &#36;Id&#58; qt/examples/mdi/application.h   2.3.2   edited 2001-01-26 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -109,7 +109,7 @@ private:
   <hr>
 
   Implementation: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/mdi/application.cpp   2.3.1   edited 2001-02-01 $
+** &#36;Id&#58; qt/examples/mdi/application.cpp   2.3.2   edited 2001-10-18 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -167,17 +167,17 @@ ApplicationWindow::ApplicationWindow()
     <a href="qpixmap.html">QPixmap</a> openIcon, saveIcon;
 
     fileTools = new <a href="qtoolbar.html">QToolBar</a>( this, "file operations" );
-    <a href="qmainwindow.html#63cf8b">addToolBar</a>( fileTools, <a href="qobject.html#ba30fb">tr</a>( "File Operations" ), Top, TRUE );
+    <a href="qmainwindow.html#cf504f">addToolBar</a>( fileTools, <a href="qobject.html#2418a9">tr</a>( "File Operations" ), Top, TRUE );
 
     openIcon = QPixmap( fileopen );
     <a href="qtoolbutton.html">QToolButton</a> * fileOpen
         = new <a href="qtoolbutton.html">QToolButton</a>( openIcon, "Open File", QString::null,
-                           this, SLOT(<a href=#445>load</a>()), fileTools, "open file" );
+                           this, SLOT(<a href=#443>load</a>()), fileTools, "open file" );
 
     saveIcon = QPixmap( filesave );
     <a href="qtoolbutton.html">QToolButton</a> * fileSave
         = new <a href="qtoolbutton.html">QToolButton</a>( saveIcon, "Save File", QString::null,
-                           this, SLOT(<a href=#446>save</a>()), fileTools, "save file" );
+                           this, SLOT(<a href=#444>save</a>()), fileTools, "save file" );
 
 #ifndef QT_NO_PRINTER
     printer = new <a href="qprinter.html">QPrinter</a>;
@@ -186,60 +186,59 @@ ApplicationWindow::ApplicationWindow()
     printIcon = QPixmap( fileprint );
     <a href="qtoolbutton.html">QToolButton</a> * filePrint
         = new <a href="qtoolbutton.html">QToolButton</a>( printIcon, "Print File", QString::null,
-                           this, SLOT(<a href=#448>print</a>()), fileTools, "print file" );
-    <a href="qwhatsthis.html#5265e7">QWhatsThis::add</a>( filePrint, filePrintText );
+                           this, SLOT(<a href=#446>print</a>()), fileTools, "print file" );
+    <a href="qwhatsthis.html#dfcd18">QWhatsThis::add</a>( filePrint, filePrintText );
 #endif
 
     (void)QWhatsThis::whatsThisButton( fileTools );
 
-    <a href="qwhatsthis.html#5265e7">QWhatsThis::add</a>( fileOpen, fileOpenText );
-    <a href="qwhatsthis.html#5265e7">QWhatsThis::add</a>( fileSave, fileSaveText );
+    <a href="qwhatsthis.html#dfcd18">QWhatsThis::add</a>( fileOpen, fileOpenText );
+    <a href="qwhatsthis.html#dfcd18">QWhatsThis::add</a>( fileSave, fileSaveText );
 
     <a href="qpopupmenu.html">QPopupMenu</a> * file = new <a href="qpopupmenu.html">QPopupMenu</a>( this );
-    <a href="qmainwindow.html#2fcbc3">menuBar</a>()-&gt;insertItem( "&amp;File", file );
+    <a href="qmainwindow.html#0eb7bc">menuBar</a>()-&gt;insertItem( "&amp;File", file );
 
-    file-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "&amp;New", this, SLOT(<a href=#444>newDoc</a>()), CTRL+Key_N );
+    file-&gt;<a href="qmenudata.html#0076cb">insertItem</a>( "&amp;New", this, SLOT(<a href=#442>newDoc</a>()), CTRL+Key_N );
 
-    id = file-&gt;<a href="qmenudata.html#43c652">insertItem</a>( openIcon, "&amp;Open",
-                           this, SLOT(<a href=#445>load</a>()), CTRL+Key_O );
-    file-&gt;<a href="qmenudata.html#a678e4">setWhatsThis</a>( id, fileOpenText );
+    id = file-&gt;<a href="qmenudata.html#0076cb">insertItem</a>( openIcon, "&amp;Open",
+                           this, SLOT(<a href=#443>load</a>()), CTRL+Key_O );
+    file-&gt;<a href="qmenudata.html#88eb55">setWhatsThis</a>( id, fileOpenText );
 
-    id = file-&gt;<a href="qmenudata.html#43c652">insertItem</a>( saveIcon, "&amp;Save",
-                           this, SLOT(<a href=#446>save</a>()), CTRL+Key_S );
-    file-&gt;<a href="qmenudata.html#a678e4">setWhatsThis</a>( id, fileSaveText );
-    id = file-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "Save &amp;as...", this, SLOT(<a href=#447>saveAs</a>()) );
-    file-&gt;<a href="qmenudata.html#a678e4">setWhatsThis</a>( id, fileSaveText );
+    id = file-&gt;<a href="qmenudata.html#0076cb">insertItem</a>( saveIcon, "&amp;Save",
+                           this, SLOT(<a href=#444>save</a>()), CTRL+Key_S );
+    file-&gt;<a href="qmenudata.html#88eb55">setWhatsThis</a>( id, fileSaveText );
+    id = file-&gt;<a href="qmenudata.html#0076cb">insertItem</a>( "Save &amp;as...", this, SLOT(<a href=#445>saveAs</a>()) );
+    file-&gt;<a href="qmenudata.html#88eb55">setWhatsThis</a>( id, fileSaveText );
 #ifndef QT_NO_PRINTER
-    file-&gt;<a href="qmenudata.html#5f2cea">insertSeparator</a>();
-    id = file-&gt;<a href="qmenudata.html#43c652">insertItem</a>( printIcon, "&amp;Print",
-                           this, SLOT(<a href=#448>print</a>()), CTRL+Key_P );
-    file-&gt;<a href="qmenudata.html#a678e4">setWhatsThis</a>( id, filePrintText );
+    file-&gt;<a href="qmenudata.html#e34b79">insertSeparator</a>();
+    id = file-&gt;<a href="qmenudata.html#0076cb">insertItem</a>( printIcon, "&amp;Print",
+                           this, SLOT(<a href=#446>print</a>()), CTRL+Key_P );
+    file-&gt;<a href="qmenudata.html#88eb55">setWhatsThis</a>( id, filePrintText );
 #endif
-    file-&gt;<a href="qmenudata.html#5f2cea">insertSeparator</a>();
-    file-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "&amp;Close", this, SLOT(<a href=#449>closeWindow</a>()), CTRL+Key_W );
-    file-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "&amp;Quit", qApp, SLOT( closeAllWindows() ), CTRL+Key_Q );
+    file-&gt;<a href="qmenudata.html#e34b79">insertSeparator</a>();
+    file-&gt;<a href="qmenudata.html#0076cb">insertItem</a>( "&amp;Close", this, SLOT(<a href=#447>closeWindow</a>()), CTRL+Key_W );
+    file-&gt;<a href="qmenudata.html#0076cb">insertItem</a>( "&amp;Quit", qApp, SLOT( closeAllWindows() ), CTRL+Key_Q );
 
     windowsMenu = new <a href="qpopupmenu.html">QPopupMenu</a>( this );
     windowsMenu-&gt;setCheckable( TRUE );
-    <a href="qobject.html#c2d209">connect</a>( windowsMenu, SIGNAL( aboutToShow() ),
-             this, SLOT( <a href=#452>windowsMenuAboutToShow</a>() ) );
-    <a href="qmainwindow.html#2fcbc3">menuBar</a>()-&gt;insertItem( "&amp;Windows", windowsMenu );
+    <a href="qobject.html#7f8e37">connect</a>( windowsMenu, SIGNAL( aboutToShow() ),
+             this, SLOT( <a href=#450>windowsMenuAboutToShow</a>() ) );
+    <a href="qmainwindow.html#0eb7bc">menuBar</a>()-&gt;insertItem( "&amp;Windows", windowsMenu );
 
-    <a href="qmainwindow.html#2fcbc3">menuBar</a>()-&gt;insertSeparator();
+    <a href="qmainwindow.html#0eb7bc">menuBar</a>()-&gt;insertSeparator();
     <a href="qpopupmenu.html">QPopupMenu</a> * help = new <a href="qpopupmenu.html">QPopupMenu</a>( this );
-    <a href="qmainwindow.html#2fcbc3">menuBar</a>()-&gt;insertItem( "&amp;Help", help );
+    <a href="qmainwindow.html#0eb7bc">menuBar</a>()-&gt;insertItem( "&amp;Help", help );
 
-    help-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "&amp;About", this, SLOT(<a href=#450>about</a>()), Key_F1);
-    help-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "About&amp;<a href="qt.html">Qt</a>", this, SLOT(<a href=#451>aboutQt</a>()));
-    help-&gt;<a href="qmenudata.html#5f2cea">insertSeparator</a>();
-    help-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "What's &amp;This", this, SLOT(<a href="qmainwindow.html#db02bc">whatsThis</a>()), SHIFT+Key_F1);
+    help-&gt;<a href="qmenudata.html#0076cb">insertItem</a>( "&amp;About", this, SLOT(<a href=#448>about</a>()), Key_F1);
+    help-&gt;<a href="qmenudata.html#0076cb">insertItem</a>( "About &amp;<a href="qt.html">Qt</a>", this, SLOT(<a href=#449>aboutQt</a>()));
+    help-&gt;<a href="qmenudata.html#e34b79">insertSeparator</a>();
+    help-&gt;<a href="qmenudata.html#0076cb">insertItem</a>( "What's &amp;This", this, SLOT(<a href="qmainwindow.html#f50ce2">whatsThis</a>()), SHIFT+Key_F1);
 
     <a href="qvbox.html">QVBox</a>* vb = new <a href="qvbox.html">QVBox</a>( this );
-    vb-&gt;<a href="qframe.html#c0d758">setFrameStyle</a>( QFrame::StyledPanel | QFrame::Sunken );
+    vb-&gt;<a href="qframe.html#558f79">setFrameStyle</a>( QFrame::StyledPanel | QFrame::Sunken );
     ws = new <a href="qworkspace.html">QWorkspace</a>( vb );
-    <a href="qmainwindow.html#0983b6">setCentralWidget</a>( vb );
-
-    <a href="qmainwindow.html#14153d">statusBar</a>()-&gt;message( "Ready", 2000 );
+    <a href="qmainwindow.html#fce9ba">setCentralWidget</a>( vb );
+    <a href="qmainwindow.html#530937">statusBar</a>()-&gt;message( "Ready", 2000 );
 }
 
 ApplicationWindow::~ApplicationWindow()
@@ -249,46 +248,46 @@ ApplicationWindow::~ApplicationWindow()
 #endif
 }
 
-MDIWindow* <a name="444"></a>ApplicationWindow::newDoc()
+MDIWindow* <a name="442"></a>ApplicationWindow::newDoc()
 {
     MDIWindow* w = new MDIWindow( ws, 0, WDestructiveClose );
-    <a href="qobject.html#c2d209">connect</a>( w, SIGNAL( message(const QString&amp;, int) ), <a href="qmainwindow.html#14153d">statusBar</a>(), SLOT( message(const QString&amp;, int )) );
-    w-&gt;<a href="qwidget.html#d4f007">setCaption</a>("unnamed document");
-    w-&gt;<a href="qwidget.html#38db6e">setIcon</a>( <a href="qpixmap.html">QPixmap</a>("document.xpm") );
+    <a href="qobject.html#7f8e37">connect</a>( w, SIGNAL( message(const QString&amp;, int) ), <a href="qmainwindow.html#530937">statusBar</a>(), SLOT( message(const QString&amp;, int )) );
+    w-&gt;<a href="qwidget.html#d6a291">setCaption</a>("unnamed document");
+    w-&gt;<a href="qwidget.html#504fc4">setIcon</a>( <a href="qpixmap.html">QPixmap</a>("document.xpm") );
     // show the very first window in maximized mode
     if ( ws-&gt;windowList().isEmpty() )
-        w-&gt;<a href="qwidget.html#400e25">showMaximized</a>();
+        w-&gt;<a href="qwidget.html#b6e000">showMaximized</a>();
     else
-        w-&gt;<a href="qwidget.html#ccc8f7">show</a>();
+        w-&gt;<a href="qwidget.html#200ee5">show</a>();
     return w;
 }
 
-void <a name="445"></a>ApplicationWindow::load()
+void <a name="443"></a>ApplicationWindow::load()
 {
     <a href="qstring.html">QString</a> fn = QFileDialog::getOpenFileName( QString::null, QString::null, this );
-    if ( !fn.<a href="qstring.html#9a6d7e">isEmpty</a>() ) {
+    if ( !fn.<a href="qstring.html#c62623">isEmpty</a>() ) {
         MDIWindow* w = newDoc();
         w-&gt;load( fn );
     }  else {
-        <a href="qmainwindow.html#14153d">statusBar</a>()-&gt;message( "Loading aborted", 2000 );
+        <a href="qmainwindow.html#530937">statusBar</a>()-&gt;message( "Loading aborted", 2000 );
     }
 }
 
-void <a name="446"></a>ApplicationWindow::save()
+void <a name="444"></a>ApplicationWindow::save()
 {
     MDIWindow* m = (MDIWindow*)ws-&gt;activeWindow();
     if ( m )
         m-&gt;save();
 }
 
-void <a name="447"></a>ApplicationWindow::saveAs()
+void <a name="445"></a>ApplicationWindow::saveAs()
 {
     MDIWindow* m = (MDIWindow*)ws-&gt;activeWindow();
     if ( m )
         m-&gt;saveAs();
 }
 
-void <a name="448"></a>ApplicationWindow::print()
+void <a name="446"></a>ApplicationWindow::print()
 {
 #ifndef QT_NO_PRINTER
     MDIWindow* m = (MDIWindow*)ws-&gt;activeWindow();
@@ -297,26 +296,26 @@ void <a name="448"></a>ApplicationWindow::print()
 #endif
 }
 
-void <a name="449"></a>ApplicationWindow::closeWindow()
+void <a name="447"></a>ApplicationWindow::closeWindow()
 {
     MDIWindow* m = (MDIWindow*)ws-&gt;activeWindow();
     if ( m )
-        m-&gt;<a href="qwidget.html#930c34">close</a>();
+        m-&gt;<a href="qwidget.html#3d9c87">close</a>();
 }
 
-void <a name="450"></a>ApplicationWindow::about()
+void <a name="448"></a>ApplicationWindow::about()
 {
-    <a href="qmessagebox.html#e67950">QMessageBox::about</a>( this, "Qt Application Example",
+    <a href="qmessagebox.html#f6c3cd">QMessageBox::about</a>( this, "Qt Application Example",
                         "This example demonstrates simple use of\n "
                         "Qt's Multiple Document Interface (MDI).");
 }
 
-void <a name="451"></a>ApplicationWindow::aboutQt()
+void <a name="449"></a>ApplicationWindow::aboutQt()
 {
-    <a href="qmessagebox.html#976755">QMessageBox::aboutQt</a>( this, "Qt Application Example" );
+    <a href="qmessagebox.html#b72270">QMessageBox::aboutQt</a>( this, "Qt Application Example" );
 }
 
-void <a name="452"></a>ApplicationWindow::windowsMenuAboutToShow()
+void <a name="450"></a>ApplicationWindow::windowsMenuAboutToShow()
 {
     windowsMenu-&gt;clear();
     int cascadeId = windowsMenu-&gt;insertItem("&amp;Cascade", ws, SLOT(cascade() ) );
@@ -329,18 +328,18 @@ void <a name="452"></a>ApplicationWindow::windowsMenuAboutToShow()
     QWidgetList windows = ws-&gt;windowList();
     for ( int i = 0; i &lt; int(windows.count()); ++i ) {
         int id = windowsMenu-&gt;insertItem(windows.at(i)-&gt;caption(),
-                                         this, SLOT( <a href=#453>windowsMenuActivated</a>( int ) ) );
+                                         this, SLOT( <a href=#451>windowsMenuActivated</a>( int ) ) );
         windowsMenu-&gt;setItemParameter( id, i );
         windowsMenu-&gt;setItemChecked( id, ws-&gt;activeWindow() == windows.at(i) );
     }
 }
 
-void <a name="453"></a>ApplicationWindow::windowsMenuActivated( int id )
+void <a name="451"></a>ApplicationWindow::windowsMenuActivated( int id )
 {
     <a href="qwidget.html">QWidget</a>* w = ws-&gt;windowList().at( id );
     if ( w ) {
-        w-&gt;<a href="qwidget.html#427beb">showNormal</a>();
-        w-&gt;<a href="qwidget.html#666b3c">setFocus</a>();
+        w-&gt;<a href="qwidget.html#8a8f06">showNormal</a>();
+        w-&gt;<a href="qwidget.html#25775a">setFocus</a>();
     }
 }
 
@@ -349,8 +348,8 @@ MDIWindow::MDIWindow( <a href="qwidget.html">QWidget</a>* parent, const char* na
 {
     mmovie = 0;
     medit = new <a href="qmultilineedit.html">QMultiLineEdit</a>( this );
-    <a href="qwidget.html#22ecbc">setFocusProxy</a>( medit );
-    <a href="qmainwindow.html#0983b6">setCentralWidget</a>( medit );
+    <a href="qwidget.html#cddadb">setFocusProxy</a>( medit );
+    <a href="qmainwindow.html#fce9ba">setCentralWidget</a>( medit );
 }
 
 MDIWindow::~MDIWindow()
@@ -358,25 +357,25 @@ MDIWindow::~MDIWindow()
     delete mmovie;
 }
 
-void <a name="440"></a>MDIWindow::load( const QString&amp; fn )
+void <a name="438"></a>MDIWindow::load( const QString&amp; fn )
 {
     filename  = fn;
     <a href="qfile.html">QFile</a> f( filename );
-    if ( !f.<a href="qfile.html#44ae9b">open</a>( IO_ReadOnly ) )
+    if ( !f.<a href="qfile.html#255995">open</a>( IO_ReadOnly ) )
         return;
 
-    if(fn.<a href="qstring.html#5723bf">contains</a>(".gif")) {
+    if(fn.<a href="qstring.html#3c8233">contains</a>(".gif")) {
         <a href="qwidget.html">QWidget</a> * tmp=new <a href="qwidget.html">QWidget</a>(this);
-        <a href="qwidget.html#22ecbc">setFocusProxy</a>(tmp);
-        <a href="qmainwindow.html#0983b6">setCentralWidget</a>(tmp);
+        <a href="qwidget.html#cddadb">setFocusProxy</a>(tmp);
+        <a href="qmainwindow.html#fce9ba">setCentralWidget</a>(tmp);
         medit-&gt;hide();
         delete medit;
         <a href="qmovie.html">QMovie</a> * qm=new <a href="qmovie.html">QMovie</a>(fn);
 #ifdef _WS_QWS_ // temporary speed-test hack
         qm-&gt;setDisplayWidget(tmp);
 #endif
-        tmp-&gt;<a href="qwidget.html#182f0e">setBackgroundMode</a>(QWidget::NoBackground);
-        tmp-&gt;<a href="qwidget.html#ccc8f7">show</a>();
+        tmp-&gt;<a href="qwidget.html#e84bbe">setBackgroundMode</a>(QWidget::NoBackground);
+        tmp-&gt;<a href="qwidget.html#200ee5">show</a>();
         mmovie=qm;
     } else {
         mmovie = 0;
@@ -384,30 +383,30 @@ void <a name="440"></a>MDIWindow::load( const QString&amp; fn )
         medit-&gt;clear();
 
         <a href="qtextstream.html">QTextStream</a> t(&amp;f);
-        while ( !t.<a href="qtextstream.html#29d3b3">eof</a>() ) {
-            <a href="qstring.html">QString</a> s = t.<a href="qtextstream.html#6a73a4">readLine</a>();
+        while ( !t.<a href="qtextstream.html#bb145b">eof</a>() ) {
+            <a href="qstring.html">QString</a> s = t.<a href="qtextstream.html#ae4af4">readLine</a>();
             medit-&gt;append( s );
         }
-        f.<a href="qfile.html#e37a87">close</a>();
+        f.<a href="qfile.html#64e640">close</a>();
 
         medit-&gt;setAutoUpdate( TRUE );
         medit-&gt;repaint();
 
     }
-    <a href="qwidget.html#d4f007">setCaption</a>( filename );
+    <a href="qwidget.html#d6a291">setCaption</a>( filename );
     emit message( <a href="qstring.html">QString</a>("Loaded document %1").arg(filename), 2000 );
 }
 
-void <a name="441"></a>MDIWindow::save()
+void <a name="439"></a>MDIWindow::save()
 {
     if ( filename.isEmpty() ) {
-        <a href=#442>saveAs</a>();
+        <a href=#440>saveAs</a>();
         return;
     }
 
     <a href="qstring.html">QString</a> text = medit-&gt;text();
     <a href="qfile.html">QFile</a> f( filename );
-    if ( !f.<a href="qfile.html#44ae9b">open</a>( IO_WriteOnly ) ) {
+    if ( !f.<a href="qfile.html#255995">open</a>( IO_WriteOnly ) ) {
         emit message( <a href="qstring.html">QString</a>("Could not write to %1").arg(filename),
                       2000 );
         return;
@@ -415,56 +414,56 @@ void <a name="441"></a>MDIWindow::save()
 
     <a href="qtextstream.html">QTextStream</a> t( &amp;f );
     t &lt;&lt; text;
-    f.<a href="qfile.html#e37a87">close</a>();
+    f.<a href="qfile.html#64e640">close</a>();
 
-    <a href="qwidget.html#d4f007">setCaption</a>( filename );
+    <a href="qwidget.html#d6a291">setCaption</a>( filename );
 
     emit message( <a href="qstring.html">QString</a>( "File %1 saved" ).arg( filename ), 2000 );
 }
 
-void <a name="442"></a>MDIWindow::saveAs()
+void <a name="440"></a>MDIWindow::saveAs()
 {
     <a href="qstring.html">QString</a> fn = QFileDialog::getSaveFileName( filename, QString::null, this );
-    if ( !fn.<a href="qstring.html#9a6d7e">isEmpty</a>() ) {
+    if ( !fn.<a href="qstring.html#c62623">isEmpty</a>() ) {
         filename = fn;
-        <a href=#441>save</a>();
+        <a href=#439>save</a>();
     } else {
         emit message( "Saving aborted", 2000 );
     }
 }
 
-void <a name="443"></a>MDIWindow::print( <a href="qprinter.html">QPrinter</a>* printer)
+void <a name="441"></a>MDIWindow::print( <a href="qprinter.html">QPrinter</a>* printer)
 {
 #ifndef QT_NO_PRINTER
     const int Margin = 10;
     int pageNo = 1;
 
-    if ( printer-&gt;<a href="qprinter.html#a36243">setup</a>(this) ) {               // printer dialog
+    if ( printer-&gt;<a href="qprinter.html#c3cd23">setup</a>(this) ) {               // printer dialog
         emit message( "Printing...", 0 );
         <a href="qpainter.html">QPainter</a> p;
-        if ( !p.<a href="qpainter.html#59f1bb">begin</a>( printer ) )
+        if ( !p.<a href="qpainter.html#02ed5d">begin</a>( printer ) )
             return;                             // paint on printer
-        p.<a href="qpainter.html#e4d6b7">setFont</a>( medit-&gt;font() );
+        p.<a href="qpainter.html#998df2">setFont</a>( medit-&gt;font() );
         int yPos        = 0;                    // y position for each line
-        <a href="qfontmetrics.html">QFontMetrics</a> fm = p.<a href="qpainter.html#f572a5">fontMetrics</a>();
+        <a href="qfontmetrics.html">QFontMetrics</a> fm = p.<a href="qpainter.html#73b2e5">fontMetrics</a>();
         <a href="qpaintdevicemetrics.html">QPaintDeviceMetrics</a> metrics( printer ); // need width/height
         // of printer surface
         for( int i = 0 ; i &lt; medit-&gt;numLines() ; i++ ) {
-            if ( Margin + yPos &gt; metrics.<a href="qpaintdevicemetrics.html#3792df">height</a>() - Margin ) {
+            if ( Margin + yPos &gt; metrics.<a href="qpaintdevicemetrics.html#d4fedb">height</a>() - Margin ) {
                 <a href="qstring.html">QString</a> msg( "Printing (page " );
                 msg += QString::number( ++pageNo );
                 msg += ")...";
                 emit message( msg, 0 );
-                printer-&gt;<a href="qprinter.html#a7c692">newPage</a>();             // no more room on this page
+                printer-&gt;<a href="qprinter.html#d4f693">newPage</a>();             // no more room on this page
                 yPos = 0;                       // back to top of page
             }
-            p.<a href="qpainter.html#8a59ed">drawText</a>( Margin, Margin + yPos,
-                        metrics.<a href="qpaintdevicemetrics.html#a53b11">width</a>(), fm.<a href="qfontmetrics.html#ebe056">lineSpacing</a>(),
+            p.<a href="qpainter.html#0f088f">drawText</a>( Margin, Margin + yPos,
+                        metrics.<a href="qpaintdevicemetrics.html#95eb7b">width</a>(), fm.<a href="qfontmetrics.html#e6e380">lineSpacing</a>(),
                         ExpandTabs | DontClip,
                         medit-&gt;textLine( i ) );
-            yPos = yPos + fm.<a href="qfontmetrics.html#ebe056">lineSpacing</a>();
+            yPos = yPos + fm.<a href="qfontmetrics.html#e6e380">lineSpacing</a>();
         }
-        p.<a href="qpainter.html#c7f9ac">end</a>();                                // send job to printer
+        p.<a href="qpainter.html#365784">end</a>();                                // send job to printer
         emit message( "Printing completed", 2000 );
     } else {
         emit message( "Printing aborted", 2000 );
@@ -478,7 +477,7 @@ void <a name="443"></a>MDIWindow::print( <a href="qprinter.html">QPrinter</a>* p
 
   Main:
 <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/mdi/main.cpp   2.3.1   edited 2001-01-26 $
+** &#36;Id&#58; qt/examples/mdi/main.cpp   2.3.2   edited 2001-06-12 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -493,15 +492,15 @@ void <a name="443"></a>MDIWindow::print( <a href="qprinter.html">QPrinter</a>* p
 int main( int argc, char ** argv ) {
     <a name="QApplication"></a><a href="qapplication.html">QApplication</a> a( argc, argv );
     ApplicationWindow * mw = new ApplicationWindow();
-    mw-&gt;<a name="setCaption"></a><a href="qwidget.html#d4f007">setCaption</a>( "Multiple Documents" );
-    mw-&gt;<a name="show"></a><a href="qmainwindow.html#e71bb3">show</a>();
-    a.<a name="connect"></a><a href="qobject.html#c2d209">connect</a>( &amp;a, SIGNAL(lastWindowClosed()), &amp;a, SLOT(quit()) );
-    int res = a.<a name="exec"></a><a href="qapplication.html#7076af">exec</a>();
+    mw-&gt;<a name="setCaption"></a><a href="qwidget.html#d6a291">setCaption</a>( "Qt Example - Multiple Documents Interface (MDI)" );
+    mw-&gt;<a name="show"></a><a href="qmainwindow.html#eb53e3">show</a>();
+    a.<a name="connect"></a><a href="qobject.html#7f8e37">connect</a>( &amp;a, SIGNAL(lastWindowClosed()), &amp;a, SLOT(quit()) );
+    int res = a.<a name="exec"></a><a href="qapplication.html#84c7bf">exec</a>();
     return res;
 }
 </pre>
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.1</div>
+<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

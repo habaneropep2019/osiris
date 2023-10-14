@@ -1,5 +1,5 @@
 '\" t
-.TH QScrollView 3qt "13 June 2001" "Trolltech AS" \" -*- nroff -*-
+.TH QScrollView 3qt "29 October 2001" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2001 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -505,15 +505,15 @@ Reimplemented in QTable and QListView.
 .SH "void QScrollView::contentsMouseMoveEvent ( QMouseEvent * ) \fC[virtual protected]\fR"
 This event handler is called whenever the QScrollView receives a mouseMoveEvent() - the mouse position is translated to be a point on the contents.
 .PP
-Reimplemented in QListView and QTable.
+Reimplemented in QTable and QListView.
 .SH "void QScrollView::contentsMousePressEvent ( QMouseEvent * ) \fC[virtual protected]\fR"
 This event handler is called whenever the QScrollView receives a mousePressEvent() - the press position is translated to be a point on the contents.
 .PP
-Reimplemented in QListView and QTable.
+Reimplemented in QTable and QListView.
 .SH "void QScrollView::contentsMouseReleaseEvent ( QMouseEvent * ) \fC[virtual protected]\fR"
 This event handler is called whenever the QScrollView receives a mouseReleaseEvent() - the release position is translated to be a point on the contents.
 .PP
-Reimplemented in QListView and QTable.
+Reimplemented in QTable and QListView.
 .SH "void QScrollView::contentsMoving ( int x, int y ) \fC[signal]\fR"
 This signal is emitted just before the contents is moved to the given position.
 .PP
@@ -869,7 +869,7 @@ The default implementation translates the event and calls contentsMouseMoveEvent
 .PP
 See also QWidget::mouseMoveEvent().
 .PP
-Reimplemented in QTextView, QTextBrowser and QListBox.
+Reimplemented in QTextBrowser, QTextView and QListBox.
 .SH "void QScrollView::viewportMousePressEvent ( QMouseEvent * e ) \fC[virtual protected]\fR"
 To provide simple processing of events on the contents, this method receives all mouse press events sent to the viewport.
 .PP
@@ -877,7 +877,7 @@ The default implementation translates the event and calls contentsMousePressEven
 .PP
 See also contentsMousePressEvent() and QWidget::mousePressEvent().
 .PP
-Reimplemented in QTextView, QListBox and QTextBrowser.
+Reimplemented in QListBox, QTextView and QTextBrowser.
 .SH "void QScrollView::viewportMouseReleaseEvent ( QMouseEvent * e ) \fC[virtual protected]\fR"
 To provide simple processing of events on the contents, this method receives all mouse release events sent to the viewport.
 .PP
@@ -885,7 +885,7 @@ The default implementation translates the event and calls contentsMouseReleaseEv
 .PP
 See also QWidget::mouseReleaseEvent().
 .PP
-Reimplemented in QListBox, QTextView and QTextBrowser.
+Reimplemented in QTextBrowser, QListBox and QTextView.
 .SH "void QScrollView::viewportPaintEvent ( QPaintEvent * pe ) \fC[virtual protected]\fR"
 This is a low-level painting routine that draws the viewport contents. Reimplement this if drawContents() is too high-level. (for example, if you don't want to open a QPainter on the viewport).
 .PP
@@ -938,4 +938,4 @@ In case of content or formattting problems with this manual page, please
 report them to
 .BR qt-bugs@trolltech.com .
 Please include the name of the manual page (qscrollview.3qt) and the Qt
-version (2.3.1).
+version (2.3.2).

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qfont_x11.cpp   2.3.1   edited 2001-05-30 $
+** $Id: qt/src/kernel/qfont_x11.cpp   2.3.2   edited 2001-10-16 $
 **
 ** Implementation of QFont, QFontMetrics and QFontInfo classes for X11
 **
@@ -357,6 +357,8 @@ static struct {
     { "TACTIS", QFont::Set_Th_TH },
     { "GBK", QFont::Set_GBK },
     { "zh_CN.GBK", QFont::Set_GBK },
+    { "GB18030", QFont::Set_GBK },
+    { "zh_CN.GB18030", QFont::Set_GBK },
     { "eucCN", QFont::Set_Zh },
     { "eucTW", QFont::Set_Zh_TW },
     { "zh_TW.Big5", QFont::Set_Big5 },
@@ -980,7 +982,7 @@ QFontGB2312Codec::QFontGB2312Codec()
 
 const char* QFontGB2312Codec::name() const
 {
-    return "GB_2312";
+    return "QF_GB_2312";
 }
 
 int QFontGB2312Codec::mibEnum() const
@@ -1210,10 +1212,12 @@ void QFont::initFontInfo() const
                     f->cmapper = QTextCodec::codecForName("eucKR");
                 break;
             case Set_Zh:
+		case Set_GBK:
                 if (locale.left(2) != "zh")
                     f->cmapper = QTextCodec::codecForName("GBK");
                 break;
             case Set_Zh_TW:
+		case Set_Big5:
                 if (locale.left(5) != "zh_TW")
                     f->cmapper = QTextCodec::codecForName("Big5");
                 break;
@@ -1230,7 +1234,7 @@ void QFont::initFontInfo() const
         } else if ( charSet() == KSC_5601 ) {
             f->cmapper = QTextCodec::codecForName( "KSC_5601" );
         } else if ( charSet() == GB_2312 ) {
-            f->cmapper = QTextCodec::codecForName( "GB_2312" );
+            f->cmapper = QTextCodec::codecForName( "QF_GB_2312" );
         } else if ( charSet() == Big5 ) {
             f->cmapper = QTextCodec::codecForName( "QF_Big5" );
 #endif //QT_NO_CODECS
@@ -1256,7 +1260,7 @@ void QFont::initFontInfo() const
         } else if ( encoding.left(8) == "ksc5601." ) {
             f->cmapper  = QTextCodec::codecForName( "KSC_5601" );
         } else if ( encoding.left(7) == "gb2312." ) {
-            f->cmapper = QTextCodec::codecForName( "GB_2312" );
+            f->cmapper = QTextCodec::codecForName( "QF_GB_2312" );
         } else if ( encoding.left(4) == "big5" ) {
             f->cmapper = QTextCodec::codecForName( "QF_Big5" );
         } else
@@ -1321,10 +1325,10 @@ static QCString setLocaleForCharSet(QFont::CharSet charset)
     case QFont::Set_GBK: // assume GBK and/or EUC
         {
             oldlocale = setlocale(LC_CTYPE, NULL);
-            if (oldlocale.left(2) == "zh") return (const char *) 0;
+            if (oldlocale.left(5) == "zh_CN") return (const char *) 0;
 
             const char *locales[] =
-            { "zh", "zh_CN", "zh.GBK", "zh_CN.GBK", "zh_CN.GB2312", "zh_CN.EUC", 0 };
+            { "zh_CN.GB18030", "zh.GBK", "zh_CN.GBK", "zh_CN.GB2312", "zh_CN.EUC", 0 };
 
             while (setlocale(LC_CTYPE, locales[i]) == NULL) i++;
 
@@ -2931,6 +2935,8 @@ QRect QFontMetrics::boundingRect( const QString &str, int len ) const
         overall.descent = info.height - info.y;
         overall.width = info.xOff;
 #if 0
+        qDebug ("XGlyphInfo: width=%d height=%d x=%d y=%d xoff=%d yoff=%d",
+                info.width, info.height, info.x, info.y, info.xOff, info.yOff );
         qDebug ("lbearing %d rbearing %d ascent %d descent %d width %d",
                 overall.lbearing,
                 overall.rbearing,
@@ -3151,7 +3157,7 @@ static char **getXFontNames( const char *pattern, int *count )
 {
     static int maxFonts = 256;
     char **list;
-    while( 1 ) {
+    for (;;) {
         list = XListFonts( QPaintDevice::x11AppDisplay(), (char*)pattern,
                            maxFonts, count );
         // I know precisely why 32768 is 32768.

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qmenubar.cpp   2.3.1   edited 2001-05-02 $
+** $Id: qt/src/widgets/qmenubar.cpp   2.3.2   edited 2001-06-29 $
 **
 ** Implementation of QMenuBar class
 **
@@ -1093,7 +1093,7 @@ void QMenuBar::setActiveItem( int i, bool show, bool activate_first_item )
 	// just one item needs repainting
 	int n = QMAX( actItem, i );
 	actItem = i;
-	if ( irects )
+	if ( irects && n >= 0 )
 	    repaint( irects[n], FALSE );
     } else if ( QABS(i-actItem) == 1 ) {
 	// two neighbouring items need repainting

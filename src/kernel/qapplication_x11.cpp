@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qapplication_x11.cpp   2.3.1   edited 2001-06-07 $
+** $Id: qt/src/kernel/qapplication_x11.cpp   2.3.2   edited 2001-10-21 $
 **
 ** Implementation of X11 startup routines and event handling
 **
@@ -40,26 +40,11 @@
 #define select          _qt_hide_select
 #define gettimeofday    _qt_hide_gettimeofday
 
+// The QT_CLEAN_NAMESPACE needs to be defined because some systems
+// defines INT32 in Xmd.h (as a result of including GL/glx.h).
+#define QT_CLEAN_NAMESPACE
 #include "qglobal.h"
-
-// XPG4v2 needed by FD_* macros.
-#if !defined(_OS_LINUX_) && !defined(_OS_SCO_) && !defined(_OS_AIX_) && !defined(_OS_RELIANT_)
-#  ifndef _XOPEN_SOURCE_EXTENDED
-#    define _XOPEN_SOURCE_EXTENDED 1
-#  endif
-#endif
-
-#if defined(_OS_OSF_)
-#  define _OSF_SOURCE // for FIONREAD on Tru64 4.0f
-#endif
-#if defined(_OS_HPUX_) && !defined(_HPUX_SOURCE)
-// needed for ioctl() and FIONREAD
-#  define _HPUX_SOURCE
-#endif
-
-// XPG5 would be needed to request the BSD b*() and strcasecmp() functions.
-// However we keep XPG4v2 and request them "manually" on every OS so that
-// all this works even when XPG5 is not available. Easier this way for now.
+#undef QT_CLEAN_NAMESPACE
 
 #if defined(_OS_WIN32_)
 #undef select
@@ -113,57 +98,43 @@
 
 #if defined(_OS_UNIX_)
 
-#if defined(_OS_SOLARIS_) || defined(_OS_UNIXWARE7_) || defined(_OS_RELIANT_)
-// Needed for FIONREAD.
-// FIONREAD is #defined in <sys/filio.h>.
-// Have <sys/ioctl.h> include <sys/filio.h>.
-#  define BSD_COMP
-#endif
 #include <sys/ioctl.h>
 #if defined(_OS_SOLARIS_) || defined(_OS_UNIXWARE7_) || defined(_OS_RELIANT_)
-#  undef BSD_COMP
-#endif
-#if defined(_OS_OSF_)
-#  undef _OSF_SOURCE
-#endif
-#if defined(_OS_HPUX_)
-#  undef _HPUX_SOURCE
+// FIONREAD is #defined in <sys/filio.h> not <sys/ioctl.h>.
+#include <sys/filio.h>
 #endif
 
 #if defined(_OS_SCO_)
-#  include <sys/socket.h> // for FIONREAD on SCO OpenServer 5.0.x
+#include <sys/socket.h> // for FIONREAD on SCO OpenServer 5.0.x
 #endif
 
 #if defined(_OS_DYNIX_)
-#  include <sys/sockio.h> // for FIONREAD on Dynix 4.x
+#include <sys/sockio.h> // for FIONREAD on Dynix 4.x
 #endif
 
 static int qt_thread_pipe[2];
 #endif
 
 
-#if defined(_OS_LINUX_)
+#if defined(_OS_LINUX_) || defined(_OS_GNU_)
 // This is one way to request strcasecmp().
+// ### But we don't use strcasecmp() anymore, we use qstricmp() instead.
 // In the GNU C library another way would be to define __USE_BSD.
 #include <strings.h>
 #include <string.h>
 #endif
 
-#if defined(_OS_OSF_)
-// This is one way to request BSD b*() string functions.
-// On Tru64 another way would be to define _OSF_SOURCE.
-#include <strings.h>
-#endif
-
 #if defined(_OS_IRIX_)
 // Please add comments! Which version of Irix?
-// Why <bstring.h> instead of <strings.h>?
+// Why <bstring.h> instead of <strings.h>? Is it for strcasecmp()?
+// ### But we don't use strcasecmp() anymore, we use qstricmp() instead.
 #include <bstring.h>
 #endif
 
 #if defined(_OS_AIX_) || defined (_OS_HPUX_) || defined(_OS_SCO_) || defined(_OS_UNIXWARE7_) || defined(_OS_RELIANT_)
 // Please add comments! Which version of AIX? Why?
-// needed for strcasecmp() on HP-UX 10.xx
+// Needed for strcasecmp() on HP-UX 10.xx
+// ### But we don't use strcasecmp() anymore, we use qstricmp() instead.
 #include <strings.h>
 #endif
 
@@ -171,6 +142,11 @@ static int qt_thread_pipe[2];
 
 #ifndef X11R4
 #include <X11/Xlocale.h>
+#endif
+
+#include "qmodules.h"
+#ifdef QT_MODULE_OPENGL
+#include <GL/glx.h>
 #endif
 
 
@@ -837,13 +813,7 @@ static void qt_set_input_encoding()
 	input_mapper = QTextCodec::codecForLocale();
 
     } else {
-#if defined(_OS_QNX_)
-	QString str( data );
-	str = str.lower();
-	if ( !str.compare( "locale" ) )
-#else
-	if ( !strcasecmp( data, "locale" ) )
-#endif
+	if ( !qstricmp( data, "locale" ) )
 	    input_mapper = QTextCodec::codecForLocale();
 	else
 	    input_mapper = QTextCodec::codecForName( data );
@@ -1343,6 +1313,53 @@ void qt_init_internal( int *argcptr, char **argv, Display *display )
 	    QPaintDevice::x_appvisual = vis;
 	}
 
+#ifdef QT_MODULE_OPENGL
+	// If we are using OpenGL widgets we HAVE to make sure that
+	// the default visual is GL capable, otherwise it will wreck
+	// havock when e.g trying to render to GLXPixmaps via QPixmap.
+	// This is because a QPixmap is always created with a QPaintDevice
+	// that uses QPaintDevice::x_appvisual.
+	int useGL;
+	int nvis;
+	XVisualInfo * vi;
+	XVisualInfo visInfo;
+	memset( &visInfo, 0, sizeof(XVisualInfo) );
+	visInfo.visualid = XVisualIDFromVisual( vis );
+	visInfo.screen = appScreen;
+	vi = XGetVisualInfo( appDpy, VisualIDMask | VisualScreenMask,
+			     &visInfo, &nvis );
+	if ( vi ) {
+	    glXGetConfig( appDpy, vi, GLX_USE_GL, &useGL );
+	    if ( !useGL ) {
+		// Have to find another visual that is GL capable
+		int i;
+		XVisualInfo * visuals;
+		memset( &visInfo, 0, sizeof(XVisualInfo) );
+		visInfo.screen = appScreen;
+		visInfo.c_class = vi->c_class;
+		visInfo.depth = vi->depth;
+		visuals = XGetVisualInfo( appDpy, VisualClassMask |
+					  VisualDepthMask | VisualScreenMask,
+					  &visInfo, &nvis );
+		if ( visuals ) {
+		    for ( i = 0; i < nvis; i++ ) {
+			glXGetConfig( appDpy, &visuals[i], GLX_USE_GL,
+				      &useGL );
+			if ( useGL ) {
+			    vis = visuals[i].visual;
+			    QPaintDevice::x_appvisual = vis;
+			    QPaintDevice::x_appdefvisual = FALSE;
+			    break;
+			}
+		    }
+		    XFree( visuals );
+		}
+	    }
+	    XFree( vi );
+	}
+#endif
+
+
 	if ( vis->c_class == TrueColor ) {
 	    QPaintDevice::x_appdefcolormap = QPaintDevice::x_appdefvisual;
 	} else {
@@ -1389,6 +1406,11 @@ void qt_init_internal( int *argcptr, char **argv, Display *display )
 	// workaround buggy window managers (like 4Dwm)
 	qt_x11_detect_broken_wm();
 
+#ifndef QT_NO_XKB
+	unsigned int state = XkbPCF_GrabsUseXKBStateMask;
+	(void) XkbSetPerClientControls(appDpy, state, &state);
+#endif
+
 	// Misc. initialization
 
 	QColor::initialize();
@@ -1402,10 +1424,9 @@ void qt_init_internal( int *argcptr, char **argv, Display *display )
 	qApp->setName( appName );
 
 	XSelectInput( appDpy, appRootWin,
-		      KeyPressMask | KeyReleaseMask |
 		      KeymapStateMask |
 		      EnterWindowMask | LeaveWindowMask |
-		      FocusChangeMask | PropertyChangeMask
+		      PropertyChangeMask
 		      );
     }
     // XIM segfaults on Solaris with "C" locale!
@@ -2779,6 +2800,30 @@ unrecognized widget.
 */
 int QApplication::x11ProcessEvent( XEvent* event )
 {
+    switch ( event->type ) {
+    case ButtonPress:
+    case ButtonRelease:
+	qt_x_time = event->xbutton.time;
+	break;
+    case MotionNotify:
+	qt_x_time = event->xmotion.time;
+	break;
+    case XKeyPress:
+    case XKeyRelease:
+	qt_x_time = event->xkey.time;
+	break;
+    case PropertyNotify:
+	qt_x_time = event->xproperty.time;
+	break;
+    case EnterNotify:
+    case LeaveNotify:
+	qt_x_time = event->xcrossing.time;
+	qt_x_time = event->xcrossing.time;
+	break;
+    default:
+	break;
+    }
+
     if ( qt_x11EventFilter(event) )		// send through app filter
 	return 1;
 
@@ -2830,7 +2875,6 @@ int QApplication::x11ProcessEvent( XEvent* event )
     }
 
     if ( event->type == PropertyNotify ) {	// some properties changed
-	qt_x_time = event->xproperty.time;
 	if ( event->xproperty.window == appRootWin ) { // root properties
 	    if ( event->xproperty.atom == qt_selection_sentinel ) {
 		if (clipboard()->receivers(SIGNAL(dataChanged())) &&
@@ -2955,14 +2999,11 @@ int QApplication::x11ProcessEvent( XEvent* event )
     case ButtonPress:			// mouse event
     case ButtonRelease:
     case MotionNotify:
-	qt_x_time = (event->type == MotionNotify) ?
-		    event->xmotion.time : event->xbutton.time;
 	widget->translateMouseEvent( event );
 	break;
 
     case XKeyPress:				// keyboard event
     case XKeyRelease: {
-	qt_x_time = event->xkey.time;
 	if ( keywidget ) // should always exist
 	    keywidget->translateKeyEvent( event, grabbed );
     }
@@ -3017,7 +3058,6 @@ int QApplication::x11ProcessEvent( XEvent* event )
 	break;
 
     case EnterNotify: {			// enter window
-	qt_x_time = event->xcrossing.time;
 
 	// 	// check PointerRoot focus
 	// 	if ( event->xcrossing.focus &&
@@ -3040,7 +3080,6 @@ int QApplication::x11ProcessEvent( XEvent* event )
 	break;
 
     case LeaveNotify: {			// leave window
-	qt_x_time = event->xcrossing.time;
 
 	// 	// check PointerRoot focus
 	// 	if ( event->xcrossing.focus &&
@@ -3189,21 +3228,45 @@ int QApplication::x11ProcessEvent( XEvent* event )
 	break;
 
     case SelectionRequest:
-	if ( qt_xdnd_selection ) {
+	{
 	    XSelectionRequestEvent *req = &event->xselectionrequest;
-	    if ( req && req->selection == qt_xdnd_selection ) {
-		qt_xdnd_handle_selection_request( req );
+	    if (! req)
 		break;
+
+	    if ( qt_xdnd_selection && req->selection == qt_xdnd_selection ) {
+		qt_xdnd_handle_selection_request( req );
+	    } else if (qt_clipboard) {
+		QCustomEvent e( QEvent::Clipboard, event );
+		QApplication::sendEvent( qt_clipboard, &e );
 	    }
+	    break;
 	}
-	// FALL THROUGH
-    case SelectionClear:
-    case SelectionNotify:
-	if ( qt_clipboard ) {
+
+    case SelectionClear: {
+	XSelectionClearEvent *req = &event->xselectionclear;
+	// don't deliver dnd events to the clipboard, it gets confused
+	if (! req || qt_xdnd_selection && req->selection == qt_xdnd_selection)
+	    break;
+
+	if (qt_clipboard) {
 	    QCustomEvent e( QEvent::Clipboard, event );
 	    QApplication::sendEvent( qt_clipboard, &e );
 	}
 	break;
+    }
+
+    case SelectionNotify: {
+	XSelectionEvent *req = &event->xselection;
+	// don't deliver dnd events to the clipboard, it gets confused
+	if (! req || qt_xdnd_selection && req->selection == qt_xdnd_selection)
+	    break;
+
+	if (qt_clipboard) {
+	    QCustomEvent e( QEvent::Clipboard, event );
+	    QApplication::sendEvent( qt_clipboard, &e );
+	}
+	break;
+    }
 
     default:
 	break;
@@ -3346,7 +3409,9 @@ static bool qt_try_modal( QWidget *widget, XEvent *event )
     }
 
     bool block_event  = FALSE;
+/* ### This is not used???
     bool expose_event = FALSE;
+*/
 
     switch ( event->type ) {
 	case ButtonPress:			// disallow mouse/key events
@@ -3362,7 +3427,7 @@ static bool qt_try_modal( QWidget *widget, XEvent *event )
 	    block_event	 = TRUE;
 	    break;
 	case Expose:
-	    expose_event = TRUE;
+	    //	    expose_event = TRUE;
 	    break;
     }
 
@@ -3394,21 +3459,19 @@ void QApplication::openPopup( QWidget *popup )
 	(*activeBeforePopup) = active_window;
     }
     popupWidgets->append( popup );		// add to end of list
-    if ( popupWidgets->count() == 1 && !qt_nograb() ){ // grab mouse
-	int r = XGrabPointer( popup->x11Display(), popup->winId(), TRUE,
+    if ( popupWidgets->count() == 1 && !qt_nograb() ){ // grab mouse/keyboard
+	int r = XGrabKeyboard( popup->x11Display(), popup->winId(), TRUE,
+			       GrabModeSync, GrabModeAsync, CurrentTime );
+	if ( (popupGrabOk = (r == GrabSuccess)) ) {
+	    r = XGrabPointer( popup->x11Display(), popup->winId(), TRUE,
 			      (uint)(ButtonPressMask | ButtonReleaseMask |
 				     ButtonMotionMask | EnterWindowMask |
 				     LeaveWindowMask | PointerMotionMask),
 			      GrabModeSync, GrabModeAsync,
 			      None, None, CurrentTime );
-	if ( (popupGrabOk = (r == GrabSuccess)) ) {
-	    XAllowEvents( popup->x11Display(), SyncPointer, CurrentTime );
-	}
-	if ( !active_window ) {
-	    QWidget *tlw = popup->topLevelWidget();
-	    XSetInputFocus( tlw->x11Display(), tlw->winId(), RevertToNone, CurrentTime );
-	} else {
-	    XSetInputFocus( active_window->x11Display(), active_window->winId(), RevertToNone, CurrentTime );
+
+	    if ( (popupGrabOk = (r == GrabSuccess)) )
+		XAllowEvents( popup->x11Display(), SyncPointer, CurrentTime );
 	}
     } else if ( popupGrabOk ) {
 	XAllowEvents(  popup->x11Display(), SyncPointer, CurrentTime );
@@ -4025,7 +4088,6 @@ bool QETWidget::translateMouseEvent( const XEvent *event )
 	if ( !popupTarget->isEnabled() ) {
 	    if ( popupGrabOk )
 		XAllowEvents( x11Display(), SyncPointer, CurrentTime );
-	    return FALSE;
 	}
 
 	switch ( type ) {
@@ -4128,7 +4190,7 @@ bool QETWidget::translateWheelEvent( int global_x, int global_y, int delta, int 
     if (w){
 	QWidget* popup = qApp->activePopupWidget();
 	if ( popup && w != popup )
-	    popup->hide();
+	    popup->close();
 	do {
 	    QWheelEvent e( w->mapFromGlobal(QPoint( global_x, global_y)),
 			   QPoint(global_x, global_y), delta, state );
@@ -4259,6 +4321,7 @@ static const unsigned short cyrillicKeysymsToUnicode[] = {
     0x042c, 0x042b, 0x0417, 0x0428, 0x042d, 0x0429, 0x0427, 0x042a
 };
 
+/* ### This is not used???
 static const unsigned short greekKeysymsToUnicode[] = {
     0x0000, 0x0386, 0x0388, 0x0389, 0x038a, 0x03aa, 0x0000, 0x038c,
     0x038e, 0x03ab, 0x0000, 0x038f, 0x0000, 0x0000, 0x0385, 0x2015,
@@ -4273,7 +4336,9 @@ static const unsigned short greekKeysymsToUnicode[] = {
     0x03c0, 0x03c1, 0x03c3, 0x03c2, 0x03c4, 0x03c5, 0x03c6, 0x03c7,
     0x03c8, 0x03c9, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000
 };
+*/
 
+#if !defined(NO_XIM)
 // ### add keysym conversion for the missing ranges.
 static QChar keysymToUnicode(unsigned char byte3, unsigned char byte4)
 {
@@ -4289,6 +4354,7 @@ static QChar keysymToUnicode(unsigned char byte3, unsigned char byte4)
     }
     return QChar(0x0);
 }
+#endif
 
 
 bool QETWidget::translateKeyEventInternal( const XEvent *event, int& count,
@@ -4539,7 +4605,7 @@ bool QETWidget::translateKeyEvent( const XEvent *event, bool grab )
 	char	asciiIntern = 0;
 	XEvent	evRelease;
 	XEvent	evPress;
-	while (1) {
+	for (;;) {
 	    QString textIntern;
 	    if ( !XCheckTypedWindowEvent(dpy,event->xkey.window,
 					 XKeyRelease,&evRelease) )
@@ -4587,7 +4653,7 @@ bool QETWidget::translateKeyEvent( const XEvent *event, bool grab )
 	XEvent nextpress;
 	if ( XCheckTypedWindowEvent(dpy,event->xkey.window,
 				    XKeyPress,&nextpress) ) {
-	    autor = nextpress.xkey.time == event->xkey.time;
+	    autor = (nextpress.xkey.time - event->xkey.time) <= 10;
 	    // Put it back... we COULD send the event now and not need
 	    // the static curr_autorep variable.
 	    XPutBackEvent(dpy,&nextpress);
@@ -4600,7 +4666,7 @@ bool QETWidget::translateKeyEvent( const XEvent *event, bool grab )
     if ( event->type == XKeyPress && text.length() <= 1 ) {
 	XEvent evPress = *event;
 	XEvent evRelease;
-	while (1) {
+	for (;;) {
 	    if (!XCheckTypedWindowEvent(dpy,event->xkey.window,XKeyRelease,
 					&evRelease) )
 		break;
@@ -4614,7 +4680,7 @@ bool QETWidget::translateKeyEvent( const XEvent *event, bool grab )
 		break;
 	    }
 	    if ( evPress.xkey.keycode != event->xkey.keycode ||
-		 evRelease.xkey.time != evPress.xkey.time){
+		 (evPress.xkey.time - evRelease.xkey.time) > 10) {
 		XPutBackEvent(dpy, &evRelease);
 		XPutBackEvent(dpy, &evPress);
 		break;
@@ -5212,10 +5278,14 @@ static bool sm_smActive;
 static int sm_interactStyle;
 static int sm_saveType;
 static bool sm_cancel;
+/* ### This is not used???
 static bool sm_waitingForPhase2;
+*/
 static bool sm_waitingForInteraction;
 static bool sm_isshutdown;
+/* ### This is not used???
 static bool sm_shouldbefast;
+*/
 static bool sm_phase2;
 static bool sm_in_phase2;
 
@@ -5235,14 +5305,18 @@ static void sm_performSaveYourself( QSessionManager* );
 
 static void resetSmState()
 {
+/* ### This is not used???
     sm_waitingForPhase2 = FALSE;
+*/
     sm_waitingForInteraction = FALSE;
     sm_interactionActive = FALSE;
     sm_interactStyle = SmInteractStyleNone;
     sm_smActive = FALSE;
     sm_blockUserInput = FALSE;
     sm_isshutdown = FALSE;
+/* ### This is not used???
     sm_shouldbefast = FALSE;
+*/
     sm_phase2 = FALSE;
     sm_in_phase2 = FALSE;
 }
@@ -5300,7 +5374,7 @@ struct QT_smcConn {
 };
 
 static void sm_saveYourselfCallback( SmcConn smcConn, SmPointer clientData,
-				  int saveType, Bool shutdown , int interactStyle, Bool fast)
+				  int saveType, Bool shutdown , int interactStyle, Bool)
 {
     if (smcConn != smcConnection )
 	return;
@@ -5309,7 +5383,6 @@ static void sm_saveYourselfCallback( SmcConn smcConn, SmPointer clientData,
     sm_isshutdown = shutdown;
     sm_saveType = saveType;
     sm_interactStyle = interactStyle;
-    sm_shouldbefast = fast;
 
     // ugly workaround for broken libSM. libSM should do that _before_
     // actually invoking the callback in sm_process.c

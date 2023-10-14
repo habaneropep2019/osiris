@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qapplication.h   2.3.1   edited 2001-03-19 $
+** $Id: qt/src/kernel/qapplication.h   2.3.2   edited 2001-10-05 $
 **
 ** Definition of QApplication class
 **
@@ -244,6 +244,11 @@ public slots:
     void	     quit();
     void	     closeAllWindows();
 
+#if defined(_WS_QWS_)
+protected:
+    void setArgs(int, char **);
+#endif 
+
 private:
     void	     construct( int &argc, char **argv, Type );
     bool	     processNextEvent( bool );
@@ -336,6 +341,15 @@ inline char **QApplication::argv() const
 {
     return app_argv;
 }
+
+#if defined(_WS_QWS_)
+inline void QApplication::setArgs(int c, char **v)
+{
+    app_argc = c;
+    app_argv = v;
+}
+#endif
+
 #ifndef QT_NO_STYLE
 inline QStyle& QApplication::style()
 {

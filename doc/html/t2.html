@@ -39,14 +39,14 @@ int main( int argc, char **argv )
     <a href="qapplication.html">QApplication</a> a( argc, argv );
 
     <a href="qpushbutton.html">QPushButton</a> quit( "Quit", 0 );
-    quit.<a href="qpushbutton.html#5f0add">resize</a>( 75, 30 );
-    quit.<a href="qwidget.html#dde00b">setFont</a>( <a href="qfont.html">QFont</a>( "Times", 18, QFont::Bold ) );
+    quit.<a href="qpushbutton.html#13fb8e">resize</a>( 75, 30 );
+    quit.<a href="qwidget.html#c52788">setFont</a>( <a href="qfont.html">QFont</a>( "Times", 18, QFont::Bold ) );
 
-    <a href="qobject.html#c2d209">QObject::connect</a>( &amp;quit, SIGNAL(clicked()), &amp;a, SLOT(quit()) );
+    <a href="qobject.html#7f8e37">QObject::connect</a>( &amp;quit, SIGNAL(clicked()), &amp;a, SLOT(quit()) );
 
-    a.<a href="qapplication.html#11c921">setMainWidget</a>( &amp;quit );
-    quit.<a href="qwidget.html#ccc8f7">show</a>();
-    return a.<a href="qapplication.html#7076af">exec</a>();
+    a.<a href="qapplication.html#7ad759">setMainWidget</a>( &amp;quit );
+    quit.<a href="qwidget.html#200ee5">show</a>();
+    return a.<a href="qapplication.html#84c7bf">exec</a>();
 }
 </pre>
 <p>
@@ -63,20 +63,20 @@ loading and using fonts has been highly optimized.  <pre>
 This time, the button says "Quit" and that's exactly what the program
 will do when the user clicks the button.  This is not a coincidence.
 We still pass 0 as the parent, since the button is a top-level window. <pre>
-        quit.<a href="qpushbutton.html#5f0add">resize</a>( 75, 30 );
+        quit.<a href="qpushbutton.html#13fb8e">resize</a>( 75, 30 );
 </pre>
 <p>
 We've chosen another size for the button since the text is a bit
 shorter than "Hello world!".  We could also have used <a href="qfontmetrics.html">QFontMetrics</a>
 to set right size. <pre>
-        quit.<a href="qwidget.html#dde00b">setFont</a>( <a href="qfont.html">QFont</a>( "Times", 18, QFont::Bold ) );
+        quit.<a href="qwidget.html#c52788">setFont</a>( <a href="qfont.html">QFont</a>( "Times", 18, QFont::Bold ) );
 </pre>
 <p>
 Here we choose a new font for the button, an 18-point bold font from
 the Times family.  Note that we create the font on the spot.
 <p>
-It is also possible to change the default font (using <a href="qapplication.html#01d457">QApplication::setFont())</a> for the whole application. <pre>
-        <a href="qobject.html#c2d209">QObject::connect</a>( &amp;quit, SIGNAL(clicked()), &amp;a, SLOT(quit()) );
+It is also possible to change the default font (using <a href="qapplication.html#3d926a">QApplication::setFont())</a> for the whole application. <pre>
+        <a href="qobject.html#7f8e37">QObject::connect</a>( &amp;quit, SIGNAL(clicked()), &amp;a, SLOT(quit()) );
 </pre>
 <p>
 connect() is perhaps <em>the</em> most central feature of Qt.
@@ -116,6 +116,6 @@ You may now go on to <a href="t3.html">chapter three.</a>
 
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.1</div>
+<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

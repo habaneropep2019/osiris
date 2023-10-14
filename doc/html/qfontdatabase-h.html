@@ -30,7 +30,7 @@ remains with Trolltech.
 <hr>
 <pre>
 /****************************************************************************
-** &#36;Id&#58; qt/src/kernel/qfontdatabase.h   2.3.1   edited 2001-02-06 $
+** &#36;Id&#58; qt/src/kernel/qfontdatabase.h   2.3.2   edited 2001-08-29 $
 **
 ** Definition of the QFontDatabase class
 **
@@ -86,6 +86,9 @@ class QtFontStyle;
 class QtFontCharSet;
 class QtFontFamily;
 class QtFontFoundry;
+#ifdef _WS_QWS_
+class QDiskFont;
+#endif
 
 class QFontDatabasePrivate;
 
@@ -151,6 +154,10 @@ public:
     static QString verboseCharSetName( const QString &amp; charSetName );
     static QString charSetSample( const QString &amp; charSetName );
 
+#ifdef _WS_QWS_
+    static void qwsAddDiskFont( QDiskFont *qdf );
+#endif
+
 private:
     static void createDatabase();
 
@@ -171,6 +178,6 @@ private:
 </pre>
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.1</div>
+<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

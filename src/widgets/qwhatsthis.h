@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qwhatsthis.h   2.3.1   edited 2001-01-26 $
+** $Id: qt/src/widgets/qwhatsthis.h   2.3.2   edited 2001-01-26 $
 **
 ** Definition of QWhatsThis class
 **

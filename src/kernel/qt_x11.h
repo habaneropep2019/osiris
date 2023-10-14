@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qt_x11.h   2.3.1   edited 2001-03-10 $
+** $Id: qt/src/kernel/qt_x11.h   2.3.2   edited 2001-07-18 $
 **
 ** Includes X11 system header files.
 **
@@ -82,6 +82,10 @@
 #define XShapeCombineMask(a,b,c,d,e,f,g)
 #else
 #include <X11/extensions/shape.h>
+#endif
+
+#ifndef QT_NO_XKB
+#  include <X11/XKBlib.h>
 #endif
 
 #if !defined(XlibSpecificationRelease)

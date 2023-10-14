@@ -47,12 +47,12 @@ the following stages:
         QString, and QChar are just like easier versions of the clumsy
         const char* and char from traditional C.
         </p>
- <li><b>Use <a href="qobject.html#ba30fb">tr()</a> for all literal text.</b>
+ <li><b>Use <a href="qobject.html#2418a9">tr()</a> for all literal text.</b>
         <p>
         Where your program uses <tt>"quoted text"</tt> for text
         that will be presented to the user, ensure it goes through
-        the <a href="qapplication.html#471fe3">QApplication::translate()</a> function, usually this
-        simply means using <a href="qobject.html#ba30fb">QObject::tr()</a>.
+        the <a href="qapplication.html#35f6de">QApplication::translate()</a> function, usually this
+        simply means using <a href="qobject.html#2418a9">QObject::tr()</a>.
         For example, assuming <tt>LoginWidget</tt> is a subclass of
         QWidget:
         <pre>        LoginWidget::LoginWidget()
@@ -120,7 +120,7 @@ the following stages:
         The printf() style of inserting arguments in strings
         is a poor choice for internationalized text, as it is
         sometimes necessary to change the order of arguments when
-        translating. The <a href="qstring.html#fd0dc8">QString::arg()</a>
+        translating. The <a href="qstring.html#8bd12a">QString::arg()</a>
         functions offer a simple means for substituting arguments:
         <pre>        void FileCopier::showProgress( int done, int total,
                                        const QString&amp; current_file )
@@ -193,9 +193,9 @@ TRANSLATIONS    = superapp_dk.ts \
         need an extra project file for lupdate; your tmake project
         file will do, if you add the TRANSLATIONS lines.
 <p>
-        In your application, you have to <a href="qtranslator.html#a97925">QTranslator::load()</a>
+        In your application, you have to <a href="qtranslator.html#4053d1">QTranslator::load()</a>
         the translation files appropriate for the user's language, and
-        to install them using <a href="qapplication.html#1c27a8">QApplication::installTranslator()</a>.
+        to install them using <a href="qapplication.html#e8df5e">QApplication::installTranslator()</a>.
 <p>
         If you have been using the old Qt tools (findtr, msg2qm and
         mergetr), you can use <tt>qm2ts</tt> to convert your old
@@ -238,30 +238,30 @@ TRANSLATIONS    = superapp_dk.ts \
         <pre>        <a href="qstring.html">QString</a> string = ...; // Some Unicode text.
 
         <a href="qtextcodec.html">QTextCodec</a>* codec = QTextCodec::codecForName("ISO 8859-5");
-        <a href="qcstring.html">QCString</a> encoded_string = codec-&gt;<a href="qtextcodec.html#7e416f">fromUnicode</a>(string);
+        <a href="qcstring.html">QCString</a> encoded_string = codec-&gt;<a href="qtextcodec.html#ec806f">fromUnicode</a>(string);
 
         ...; // Use encoded_string in 8-bit operations
 </pre>
 <p>
         For converting Unicode to local 8-bit encodings,
         a shortcut is available: the
-        <a href="qstring.html#d1d7b2">local8Bit()</a> method of
+        <a href="qstring.html#85c213">local8Bit()</a> method of
         QString returns such 8-bit data.  Another useful shortcut
-        is the <a href="qstring.html#5078ad">utf8()</a> method, which
+        is the <a href="qstring.html#011d3d">utf8()</a> method, which
         returns text in the 8-bit UTF-8 encoding - interesting in
         that it perfectly preserves Unicode information while looking
         like plain US-ASCII if the Unicode is wholly US-ASCII.
 <p>
         For converting the other way, there are the
-        <a href="qstring.html#fd2411">QString::fromUtf8()</a> and
-        <a href="qstring.html#d3c3c8">QString::fromLocal8Bit()</a>
+        <a href="qstring.html#9465e8">QString::fromUtf8()</a> and
+        <a href="qstring.html#47169a">QString::fromLocal8Bit()</a>
         convenience functions, or the general code, demonstrated by
         this conversion from ISO 8859-5 Cyrillic to Unicode conversion:
 <p>
         <pre>        <a href="qcstring.html">QCString</a> encoded_string = ...; // Some ISO 8859-5 encoded text.
 
         <a href="qtextcodec.html">QTextCodec</a>* codec = QTextCodec::codecForName("ISO 8859-5");
-        <a href="qstring.html">QString</a> string = codec-&gt;<a href="qtextcodec.html#235cd6">toUnicode</a>(encoded_string);
+        <a href="qstring.html">QString</a> string = codec-&gt;<a href="qtextcodec.html#32c727">toUnicode</a>(encoded_string);
 
         ...; // Use string in all of Qt's QString operations.
 </pre>
@@ -274,7 +274,7 @@ TRANSLATIONS    = superapp_dk.ts \
         between arbitrary people, while within a language or national group,
         a local standard is often more appropriate.  The most important
         encoding to support is the one returned by
-        <a href="qtextcodec.html#20e3df">QTextCodec::codecForLocale()</a>,
+        <a href="qtextcodec.html#615e15">QTextCodec::codecForLocale()</a>,
         as this is the one the user is most likely to need for communicating
         with other people and applications (this is the codec used by
         local8Bit()).
@@ -333,7 +333,7 @@ be too concerned with the actual limitations.
             in some Unix variants.  All Qt file functions allow Unicode,
             but convert all filenames to the local 8-bit encoding, as
             this is the Unix convention
-            (see <a href="qfile.html#00784f">QFile::setEncodingFunction()</a>
+            (see <a href="qfile.html#a34c1e">QFile::setEncodingFunction()</a>
              if you are interested in exploring alternative encodings).
      <li>File I/O defaults to the local 8-bit encoding,
             with Unicode options in QTextStream.
@@ -431,6 +431,6 @@ For best results, use complete locales from your OS vendor.
 
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.1</div>
+<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/tools/qembed/qembed.cpp   2.3.1   edited 2001-06-08 $
+** $Id: qt/tools/qembed/qembed.cpp   2.3.2   edited 2001-07-25 $
 **
 ** Utility program for embedding binary data into a C/C++ source code.
 ** It reads a binary file and generates a C array with the binary data.
@@ -193,6 +193,7 @@ int main( int argc, char **argv )
 	    "    	    ba = new QByteArray;\n"
 	    "    	    ba->setRawData( (char*)embed_vec[i].data,\n"
 	    "    			    embed_vec[i].size );\n"
+	    "    	    dict.insert(name, ba);\n"
 	    "    	    break;\n"
 	    "    	}\n"
 	    "        }\n"
@@ -254,6 +255,11 @@ int main( int argc, char **argv )
 	    "                            r->width,\n"
 	    "                            r->height,\n"
 	    "                            r->depth,\n"
+#ifndef _WS_QWS_
+	    "#ifdef _WS_QWS_\n"
+	    "                            (r->width*r->depth+31)/32*4,\n"
+	    "#endif\n"
+#endif
 	    "                            (QRgb*)r->colorTable,\n"
 	    "                            r->numColors,\n"
 	    "                            QImage::BigEndian\n"

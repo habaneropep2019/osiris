@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/addressbook/main.cpp   2.3.1   edited 2001-01-26 $
+** $Id: qt/examples/addressbook/main.cpp   2.3.2   edited 2001-06-12 $
 **
 ** Copyright ( C ) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -18,7 +18,7 @@ int main( int argc, char ** argv )
     QApplication a( argc, argv );
 
     ABMainWindow *mw = new ABMainWindow();
-    mw->setCaption( "Addressbook 1" );
+    mw->setCaption( "Qt Example - Addressbook" );
     a.setMainWidget( mw );
     mw->show();
 

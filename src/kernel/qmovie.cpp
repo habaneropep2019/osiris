@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qmovie.cpp   2.3.1   edited 2001-06-12 $
+** $Id: qt/src/kernel/qmovie.cpp   2.3.2   edited 2001-07-06 $
 **
 ** Implementation of movie classes
 **
@@ -372,7 +372,7 @@ void QMovieFilePrivate::updatePixmapFromImage(const QPoint& off,
     }
 
     bitBlt(&mypixmap, area.left(), area.top(),
-	   &lines, off.x(), off.x(), area.width(), area.height(),
+	   &lines, off.x(), off.y(), area.width(), area.height(),
 	   CopyROP, !bg.isValid());
 
     if (!bg.isValid() && gimg.hasAlphaBuffer()) {

@@ -33,18 +33,18 @@ Inherits <a href="qobject.html">QObject</a>.
 <p><a href="qvalidator-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><div class="fn"><a href="#079476"><b>QValidator</b></a> ( QWidget * parent, const char * name = 0 ) </div>
-<li><div class="fn"><a href="#515947"><b>~QValidator</b></a> () </div>
+<li><div class="fn"><a href="#0b5d7d"><b>QValidator</b></a> ( QWidget * parent, const char * name = 0 ) </div>
+<li><div class="fn"><a href="#3baeb0"><b>~QValidator</b></a> () </div>
 <li><div class="fn">enum <a href="#State"><b>State</b></a> { Invalid, Intermediate, Valid=Intermediate, Acceptable }</div>
-<li><div class="fn">virtual State <a href="#8b4d6c"><b>validate</b></a> ( QString &amp;, int &amp; ) const</div>
-<li><div class="fn">virtual void <a href="#48f1a4"><b>fixup</b></a> ( QString &amp; ) const</div>
+<li><div class="fn">virtual State <a href="#da4f8c"><b>validate</b></a> ( QString &amp;, int &amp; ) const</div>
+<li><div class="fn">virtual void <a href="#3fa523"><b>fixup</b></a> ( QString &amp; ) const</div>
 </ul>
 <hr><h2><a name="details"></a>Detailed Description</h2>
 The QValidator class provides validation of input text.
 <p>
 The class itself is abstract; two subclasses provide rudimentary
 numeric range checking.
-<p>The class includes two virtual functions, <a href="#8b4d6c">validate</a>() and <a href="#48f1a4">fixup</a>().
+<p>The class includes two virtual functions, <a href="#da4f8c">validate</a>() and <a href="#3fa523">fixup</a>().
 <p>validate() is pure virtual, so it must be implemented by every
 subclass.  It returns <code>Invalid, Intermediate</code> or <code>Acceptable</code>
 depending on whether its argument is valid (for the class'
@@ -89,13 +89,13 @@ during editing.
 <p>The state <code>Valid</code> has been renamed <code>Intermediate.</code>  The old name
 confused too many people and is now obsolete.
 <hr><h2>Member Function Documentation</h2>
-<h3 class="fn"><a name="079476"></a>QValidator::QValidator ( <a href="qwidget.html">QWidget</a> * parent, const char * name = 0 )</h3>
+<h3 class="fn"><a name="0b5d7d"></a>QValidator::QValidator ( <a href="qwidget.html">QWidget</a> * parent, const char * name = 0 )</h3>
 <p>Sets up the internal data structures used by the validator.  At
 the moment there aren't any.
-<h3 class="fn"><a name="515947"></a>QValidator::~QValidator ()</h3>
+<h3 class="fn"><a name="3baeb0"></a>QValidator::~QValidator ()</h3>
 <p>Destroys the validator, freeing any storage and other resources
 used.
-<h3 class="fn">void <a name="48f1a4"></a>QValidator::fixup ( <a href="qstring.html">QString</a> &amp; input ) const <code>[virtual]</code></h3>
+<h3 class="fn">void <a name="3fa523"></a>QValidator::fixup ( <a href="qstring.html">QString</a> &amp; input ) const <code>[virtual]</code></h3>
 <p>Attempts to change <em>input</em> to be valid according to this validator's
 rules.  Need not result in a valid string - callers of this function
 must re-test afterwards.  The default does nothing.
@@ -105,7 +105,7 @@ want to delete every character except digits and "-", even if the
 result is not a valid ISBN, and a last-name validator might want to
 remove white space from the start and end of the string, even if the
 resulting string is not in the list of known last names.
-<h3 class="fn">QValidator::State <a name="8b4d6c"></a>QValidator::validate( QString & input, int & pos ) const</h3>
+<h3 class="fn">QValidator::State <a name="da4f8c"></a>QValidator::validate( QString & input, int & pos ) const</h3>
 <p>This pure virtual function returns <code>Invalid</code> if <em>input</em> is invalid
 according to this validator's rules, <code>Intermediate</code> if it is likely that a
 little more editing will make the input acceptable (e.g. the user
@@ -117,13 +117,13 @@ it wants to.
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.3.1"><nobr>
+<input type=hidden name="version" value="2.3.2"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
-copyright &copy; 1995-2000
+copyright &copy; 1995-2001
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.1</div>
+<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

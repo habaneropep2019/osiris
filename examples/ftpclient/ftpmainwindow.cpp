@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/ftpclient/ftpmainwindow.cpp   2.3.1   edited 2001-01-26 $
+** $Id: qt/examples/ftpclient/ftpmainwindow.cpp   2.3.2   edited 2001-09-05 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -510,6 +510,17 @@ void FtpMainWindow::slotLocalMkdir()
 
 void FtpMainWindow::slotLocalRemove()
 {
+    bool removeRequested = FALSE;
+    QValueList<QUrlInfo> selected = leftView->selectedItems();
+    for ( QValueList<QUrlInfo>::Iterator it = selected.begin();
+	  it != selected.end(); ++it )
+	if ( (*it).isFile() ) {
+	    localOperator.remove( (*it).name() );
+	    removeRequested = TRUE;
+	}
+
+    if ( removeRequested )
+	localOperator.listChildren();
 }
 
 void FtpMainWindow::slotRemoteMkdir()
@@ -525,6 +536,16 @@ void FtpMainWindow::slotRemoteMkdir()
 
 void FtpMainWindow::slotRemoteRemove()
 {
+    bool removeRequested = FALSE;
+    QValueList<QUrlInfo> remoteSelected = rightView->selectedItems();
+    for ( QValueList<QUrlInfo>::Iterator it = remoteSelected.begin();
+	  it != remoteSelected.end(); ++it )
+	if ( (*it).isFile() ) {
+	    remoteOperator.remove( (*it).name() );
+	    removeRequested = TRUE;
+	}
+    if ( removeRequested )
+	remoteOperator.listChildren();
 }
 
 void FtpMainWindow::slotConnectionStateChanged( int, const QString &msg )

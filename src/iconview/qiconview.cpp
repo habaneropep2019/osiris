@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/iconview/qiconview.cpp   2.3.1   edited 2001-04-11 $
+** $Id: qt/src/iconview/qiconview.cpp   2.3.2   edited 2001-10-14 $
 **
 ** Implementation of QIconView widget class
 **
@@ -861,6 +861,7 @@ QIconViewItem::~QIconViewItem()
 {
     if ( view && !view->d->clearing )
 	view->takeItem( this );
+    removeRenameBox();
     view = 0;
     if ( itemIcon && itemIcon->serialNumber() != unknown_icon->serialNumber() )
 	delete itemIcon;
@@ -2762,6 +2763,8 @@ uint QIconView::count() const
 
 void QIconView::doAutoScroll()
 {
+    if ( !d->rubber )
+	return;
     QRect oldRubber = QRect( *d->rubber );
 
     QPoint pos = QCursor::pos();
@@ -2875,7 +2878,6 @@ void QIconView::doAutoScroll()
 	delete d->scrollTimer;
 	d->scrollTimer = 0;
     }
-
 }
 
 /*!
@@ -2884,7 +2886,7 @@ void QIconView::doAutoScroll()
 
 void QIconView::drawContents( QPainter *p, int cx, int cy, int cw, int ch )
 {
-    if ( d->dragging &&& d->rubber )
+    if ( d->dragging && d->rubber )
 	drawRubber( p );
 
     QRect r = QRect( cx, cy, cw, ch );
@@ -2944,7 +2946,7 @@ void QIconView::drawContents( QPainter *p, int cx, int cy, int cw, int ch )
 	d->currentItem->paintFocus( p, colorGroup() );
     }
 
-    if ( d->dragging &&& d->rubber )
+    if ( d->dragging && d->rubber )
 	drawRubber( p );
 }
 
@@ -3367,6 +3369,7 @@ void QIconView::clear()
     }
 
     QIconViewItem *item = d->firstItem, *tmp;
+    d->firstItem = 0;
     while ( item ) {
 	tmp = item->next;
 	delete item;
@@ -3381,7 +3384,6 @@ void QIconView::clear()
     d->firstContainer = d->lastContainer = 0;
 
     d->count = 0;
-    d->firstItem = 0;
     d->lastItem = 0;
     setCurrentItem( 0 );
     d->highlightedItem = 0;
@@ -4947,7 +4949,7 @@ QIconViewItem *QIconView::makeRowLayout( QIconViewItem *begin, int &y )
 	    int x = 0;
 	    int ih = 0;
 	    QIconViewItem *item = begin;
-	    while ( TRUE ) {
+	    for (;;) {
 		x += d->spacing + item->width();
 		if ( x > visibleWidth() && item != begin ) {
 		    h = QMAX( h, item->height() );
@@ -4971,7 +4973,7 @@ QIconViewItem *QIconView::makeRowLayout( QIconViewItem *begin, int &y )
 
 	    // now move the items
 	    item = begin;
-	    while ( TRUE ) {
+	    for (;;) {
 		item->dirty = FALSE;
 		if ( item == begin )
 		    item->move( d->spacing, y + ih - item->pixmapRect().height() );
@@ -4993,7 +4995,7 @@ QIconViewItem *QIconView::makeRowLayout( QIconViewItem *begin, int &y )
 	    QIconViewItem *item = begin;
 	    int i = 0;
 	    int sp = 0;
-	    while ( TRUE ) {
+	    for (;;) {
 		int r = calcGridNum( item->width(), d->rastX );
 		if ( item == begin ) {
 		    i += r;
@@ -5028,7 +5030,7 @@ QIconViewItem *QIconView::makeRowLayout( QIconViewItem *begin, int &y )
 	    item = begin;
 	    i = 0;
 	    sp = 0;
-	    while ( TRUE ) {
+	    for (;;) {
 		item->dirty = FALSE;
 		int r = calcGridNum( item->width(), d->rastX );
 		if ( item == begin ) {
@@ -5067,7 +5069,7 @@ QIconViewItem *QIconView::makeRowLayout( QIconViewItem *begin, int &y )
 	    int w = 0;
 	    int y = 0;
 	    QIconViewItem *item = begin;
-	    while ( TRUE ) {
+	    for (;;) {
 		y += d->spacing + item->height();
 		if ( y > visibleHeight() && item != begin ) {
 		    item = item->prev;
@@ -5088,7 +5090,7 @@ QIconViewItem *QIconView::makeRowLayout( QIconViewItem *begin, int &y )
 
 	    // now move the items
 	    item = begin;
-	    while ( TRUE ) {
+	    for (;;) {
 		item->dirty = FALSE;
 		if ( d->itemTextPos == Bottom ) {
 		    if ( item == begin )
@@ -5294,7 +5296,7 @@ void QIconView::updateItemContainer( QIconViewItem *item )
     }
 
     bool contains;
-    while ( TRUE ) {
+    for (;;) {
 	if ( c->rect.intersects( item->rect() ) ) {
 	    contains = c->rect.contains( item->rect() );
 	    break;

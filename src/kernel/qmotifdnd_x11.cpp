@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qmotifdnd_x11.cpp   2.3.1   edited 2001-02-20 $
+** $Id: qt/src/kernel/qmotifdnd_x11.cpp   2.3.2   edited 2001-07-19 $
 **
 ** Implementation of Motif Dynamic Drag and Drop class
 **
@@ -767,6 +767,8 @@ void qt_motifdnd_handle_msg( QWidget * /* w */ , const XEvent * xe, bool /* pass
 
 	    QPoint p( dnd_data.x, dnd_data.y );
 	    QWidget *c = QApplication::widgetAt( p, TRUE );
+	    if (c)
+		p = c->mapFromGlobal(p);
 
 	    while ( c && !c->acceptDrops() && !c->isTopLevel() ) {
 		p = c->mapToParent( p );
@@ -900,7 +902,7 @@ void qt_motifdnd_handle_msg( QWidget * /* w */ , const XEvent * xe, bool /* pass
 	Dnd_selection_time = dnd_data.time;
 
 	QPoint p( dnd_data.x, dnd_data.y );
-	QDropEvent de( p );
+	QDropEvent de( drop_widget->mapFromGlobal(p) );
 	de.setAction( QDropEvent::Copy );
 	QApplication::sendEvent( drop_widget, &de );
 

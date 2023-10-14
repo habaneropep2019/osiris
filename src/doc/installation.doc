@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/doc/installation.doc   2.3.1   edited 2001-04-03 $
+** $Id: qt/doc/installation.doc   2.3.2   edited 2001-04-03 $
 **
 ** Installation page
 **
@@ -34,7 +34,7 @@
 **********************************************************************/
 
 #if defined(DEBUG)
-static char ident[] = "$Id: qt/doc/installation.doc   2.3.1   edited 2001-04-03 $";
+static char ident[] = "$Id: qt/doc/installation.doc   2.3.2   edited 2001-04-03 $";
 #endif
 
 /*! \page installation.html

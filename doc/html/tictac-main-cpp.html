@@ -35,7 +35,7 @@ height="100" src="face.png" alt="Home" border="0">
   <hr>
 
   Header file: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/tictac/tictac.h   2.3.1   edited 2001-01-26 $
+** &#36;Id&#58; qt/examples/tictac/tictac.h   2.3.2   edited 2001-01-26 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -143,7 +143,7 @@ private:
   <hr>
 
   Implementation: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/tictac/tictac.cpp   2.3.1   edited 2001-01-26 $
+** &#36;Id&#58; qt/examples/tictac/tictac.cpp   2.3.2   edited 2001-01-26 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -180,15 +180,15 @@ TicTacButton::TicTacButton( <a href="qwidget.html">QWidget</a> *parent ) : <a hr
 // Paints TicTacButton
 //
 
-void <a name="400"></a>TicTacButton::drawButtonLabel( <a href="qpainter.html">QPainter</a> *p )
+void <a name="398"></a>TicTacButton::drawButtonLabel( <a href="qpainter.html">QPainter</a> *p )
 {
     <a href="qrect.html">QRect</a> r = rect();
     p-&gt;setPen( <a href="qpen.html">QPen</a>( white,2 ) );               // set fat pen
     if ( t == Circle ) {
-        p-&gt;drawEllipse( r.<a href="qrect.html#d0f453">left</a>()+4, r.<a href="qrect.html#a9c6db">top</a>()+4, r.<a href="qrect.html#44fb71">width</a>()-8, r.<a href="qrect.html#5d9fd1">height</a>()-8 );
+        p-&gt;drawEllipse( r.<a href="qrect.html#369cab">left</a>()+4, r.<a href="qrect.html#4dd27e">top</a>()+4, r.<a href="qrect.html#45fe95">width</a>()-8, r.<a href="qrect.html#581ab8">height</a>()-8 );
     } else if ( t == Cross ) {                  // draw cross
-        p-&gt;drawLine( r.<a href="qrect.html#4ff486">topLeft</a>()   +QPoint(4,4), r.<a href="qrect.html#7f5bc3">bottomRight</a>()-QPoint(4,4));
-        p-&gt;drawLine( r.<a href="qrect.html#e01017">bottomLeft</a>()+QPoint(4,-4),r.<a href="qrect.html#e36628">topRight</a>()   -QPoint(4,-4));
+        p-&gt;drawLine( r.<a href="qrect.html#349186">topLeft</a>()   +QPoint(4,4), r.<a href="qrect.html#9f41f2">bottomRight</a>()-QPoint(4,4));
+        p-&gt;drawLine( r.<a href="qrect.html#5dd6a8">bottomLeft</a>()+QPoint(4,-4),r.<a href="qrect.html#d59dee">topRight</a>()   -QPoint(4,-4));
     }
 }
 
@@ -214,15 +214,15 @@ TicTacGameBoard::TicTacGameBoard( int n, QWidget *parent, const char *name )
     <a href="qpalette.html">QPalette</a> p( blue );
     for ( int i=0; i&lt;n; i++ ) {                 // create and connect buttons
         TicTacButton *ttb = new TicTacButton( this );
-        ttb-&gt;<a href="qwidget.html#379ca0">setPalette</a>( p );
-        ttb-&gt;<a href="qwidget.html#f996ef">setEnabled</a>( FALSE );
-        <a href="qobject.html#c2d209">connect</a>( ttb, SIGNAL(clicked()), SLOT(<a href=#393>buttonClicked</a>()) );
-        grid-&gt;<a href="qgridlayout.html#70abf2">addWidget</a>( ttb, i%3, i/3 );
+        ttb-&gt;<a href="qwidget.html#d7e4b9">setPalette</a>( p );
+        ttb-&gt;<a href="qwidget.html#4b103c">setEnabled</a>( FALSE );
+        <a href="qobject.html#7f8e37">connect</a>( ttb, SIGNAL(clicked()), SLOT(<a href=#391>buttonClicked</a>()) );
+        grid-&gt;<a href="qgridlayout.html#dac29c">addWidget</a>( ttb, i%3, i/3 );
         buttons-&gt;insert( i, ttb );
         btArray-&gt;at(i) = TicTacButton::Blank;   // initial button type
     }
     <a href="qtime.html">QTime</a> t = QTime::currentTime();             // set random seed
-    srand( t.<a href="qtime.html#2f9ab7">hour</a>()*12+t.<a href="qtime.html#42c45b">minute</a>()*60+t.<a href="qtime.html#720ffe">second</a>()*60 );
+    srand( t.<a href="qtime.html#e582de">hour</a>()*12+t.<a href="qtime.html#83f0e2">minute</a>()*60+t.<a href="qtime.html#ca67be">second</a>()*60 );
 }
 
 TicTacGameBoard::~TicTacGameBoard()
@@ -232,41 +232,41 @@ TicTacGameBoard::~TicTacGameBoard()
 }
 
 // --------------------------------------------------------------------------
-// <a name="389"></a>TicTacGameBoard::computerStarts( bool v )
+// <a name="387"></a>TicTacGameBoard::computerStarts( bool v )
 //
 // Computer starts if v=TRUE. The human starts by default.
 //
 
-void <a name="389"></a>TicTacGameBoard::computerStarts( bool v )
+void <a name="387"></a>TicTacGameBoard::computerStarts( bool v )
 {
     comp_starts = v;
 }
 
 // --------------------------------------------------------------------------
-// <a name="391"></a>TicTacGameBoard::newGame()
+// <a name="389"></a>TicTacGameBoard::newGame()
 //
 // Clears the game board and prepares for a new game
 //
 
-void <a name="391"></a>TicTacGameBoard::newGame()
+void <a name="389"></a>TicTacGameBoard::newGame()
 {
     st = HumansTurn;
     for ( int i=0; i&lt;nBoard*nBoard; i++ )
         btArray-&gt;at(i) = TicTacButton::Blank;
     if ( comp_starts )
-        <a href=#399>computerMove</a>();
+        <a href=#397>computerMove</a>();
     else
-        <a href=#395>updateButtons</a>();
+        <a href=#393>updateButtons</a>();
 }
 
 // --------------------------------------------------------------------------
-// <a name="393"></a>TicTacGameBoard::buttonClicked()             - SLOT
+// <a name="391"></a>TicTacGameBoard::buttonClicked()             - SLOT
 //
 // This slot is activated when a TicTacButton emits the signal "clicked()",
 // i.e. the user has clicked on a TicTacButton.
 //
 
-void <a name="393"></a>TicTacGameBoard::buttonClicked()
+void <a name="391"></a>TicTacGameBoard::buttonClicked()
 {
     if ( st != HumansTurn )                     // not ready
         return;
@@ -274,9 +274,9 @@ void <a name="393"></a>TicTacGameBoard::buttonClicked()
     TicTacButton *b = buttons-&gt;at(i);           // get piece that was pressed
     if ( b-&gt;type() == TicTacButton::Blank ) {   // empty piece?
         btArray-&gt;at(i) = TicTacButton::Circle;
-        <a href=#395>updateButtons</a>();
+        <a href=#393>updateButtons</a>();
         if ( checkBoard( btArray ) == 0 )       // not a winning move?
-            <a href=#399>computerMove</a>();
+            <a href=#397>computerMove</a>();
         int s = checkBoard( btArray );
         if ( s ) {                              // any winners yet?
             st = s == TicTacButton::Circle ? HumanWon : ComputerWon;
@@ -286,12 +286,12 @@ void <a name="393"></a>TicTacGameBoard::buttonClicked()
 }
 
 // --------------------------------------------------------------------------
-// <a name="395"></a>TicTacGameBoard::updateButtons()
+// <a name="393"></a>TicTacGameBoard::updateButtons()
 //
 // Updates all buttons that have changed state
 //
 
-void <a name="395"></a>TicTacGameBoard::updateButtons()
+void <a name="393"></a>TicTacGameBoard::updateButtons()
 {
     for ( int i=0; i&lt;nBoard*nBoard; i++ ) {
         if ( buttons-&gt;at(i)-&gt;type() != btArray-&gt;at(i) )
@@ -302,7 +302,7 @@ void <a name="395"></a>TicTacGameBoard::updateButtons()
 }
 
 // --------------------------------------------------------------------------
-// <a name="397"></a>TicTacGameBoard::checkBoard()
+// <a name="395"></a>TicTacGameBoard::checkBoard()
 //
 // Checks if one of the players won the game, works for any board size.
 //
@@ -312,7 +312,7 @@ void <a name="395"></a>TicTacGameBoard::updateButtons()
 //  - Zero (0) if there is no winner yet
 //
 
-int <a name="397"></a>TicTacGameBoard::checkBoard( TicTacArray *a )
+int <a name="395"></a>TicTacGameBoard::checkBoard( TicTacArray *a )
 {
     int  t = 0;
     int  row, col;
@@ -366,12 +366,12 @@ int <a name="397"></a>TicTacGameBoard::checkBoard( TicTacArray *a )
 }
 
 // --------------------------------------------------------------------------
-// <a name="399"></a>TicTacGameBoard::computerMove()
+// <a name="397"></a>TicTacGameBoard::computerMove()
 //
 // Puts a piece on the game board. Very, very simple.
 //
 
-void <a name="399"></a>TicTacGameBoard::computerMove()
+void <a name="397"></a>TicTacGameBoard::computerMove()
 {
     int numButtons = nBoard*nBoard;
     int *altv = new int[numButtons];            // buttons alternatives
@@ -408,7 +408,7 @@ void <a name="399"></a>TicTacGameBoard::computerMove()
         }
     }
     *btArray = a;                               // update model
-    <a href=#395>updateButtons</a>();                            // update buttons
+    <a href=#393>updateButtons</a>();                            // update buttons
     delete[] altv;
 }
 
@@ -431,20 +431,20 @@ TicTacToe::TicTacToe( int boardSize, QWidget *parent, const char *name )
     message = new <a href="qlabel.html">QLabel</a>( this );
     message-&gt;setFrameStyle( QFrame::WinPanel | QFrame::Sunken );
     message-&gt;setAlignment( AlignCenter );
-    l-&gt;<a href="qboxlayout.html#219265">addWidget</a>( message );
+    l-&gt;<a href="qboxlayout.html#ebba99">addWidget</a>( message );
 
     // Create the game board and connect the signal finished() to this
     // gameOver() slot
 
     board = new TicTacGameBoard( boardSize, this );
-    <a href="qobject.html#c2d209">connect</a>( board, SIGNAL(finished()), SLOT(<a href=#386>gameOver</a>()) );
-    l-&gt;<a href="qboxlayout.html#219265">addWidget</a>( board );
+    <a href="qobject.html#7f8e37">connect</a>( board, SIGNAL(finished()), SLOT(<a href=#384>gameOver</a>()) );
+    l-&gt;<a href="qboxlayout.html#ebba99">addWidget</a>( board );
 
     // Create a horizontal frame line
 
     <a href="qframe.html">QFrame</a> *line = new <a href="qframe.html">QFrame</a>( this );
-    line-&gt;<a href="qframe.html#c0d758">setFrameStyle</a>( QFrame::HLine | QFrame::Sunken );
-    l-&gt;<a href="qboxlayout.html#219265">addWidget</a>( line );
+    line-&gt;<a href="qframe.html#558f79">setFrameStyle</a>( QFrame::HLine | QFrame::Sunken );
+    l-&gt;<a href="qboxlayout.html#ebba99">addWidget</a>( line );
 
     // Create the combo box for deciding who should start, and
     // connect its clicked() signals to the buttonClicked() slot
@@ -452,53 +452,53 @@ TicTacToe::TicTacToe( int boardSize, QWidget *parent, const char *name )
     whoStarts = new <a href="qcombobox.html">QComboBox</a>( this );
     whoStarts-&gt;insertItem( "Computer starts" );
     whoStarts-&gt;insertItem( "Human starts" );
-    l-&gt;<a href="qboxlayout.html#219265">addWidget</a>( whoStarts );
+    l-&gt;<a href="qboxlayout.html#ebba99">addWidget</a>( whoStarts );
 
     // Create the push buttons and connect their clicked() signals
     // to this right slots.
 
     newGame = new <a href="qpushbutton.html">QPushButton</a>( "Play!", this );
-    <a href="qobject.html#c2d209">connect</a>( newGame, SIGNAL(clicked()), SLOT(<a href=#384>newGameClicked</a>()) );
+    <a href="qobject.html#7f8e37">connect</a>( newGame, SIGNAL(clicked()), SLOT(<a href=#382>newGameClicked</a>()) );
     quit = new <a href="qpushbutton.html">QPushButton</a>( "Quit", this );
-    <a href="qobject.html#c2d209">connect</a>( quit, SIGNAL(clicked()), qApp, SLOT(quit()) );
+    <a href="qobject.html#7f8e37">connect</a>( quit, SIGNAL(clicked()), qApp, SLOT(quit()) );
     <a href="qhboxlayout.html">QHBoxLayout</a> * b = new <a href="qhboxlayout.html">QHBoxLayout</a>;
-    l-&gt;<a href="qboxlayout.html#7a3fdc">addLayout</a>( b );
-    b-&gt;<a href="qboxlayout.html#219265">addWidget</a>( newGame );
-    b-&gt;<a href="qboxlayout.html#219265">addWidget</a>( quit );
+    l-&gt;<a href="qboxlayout.html#6ff301">addLayout</a>( b );
+    b-&gt;<a href="qboxlayout.html#ebba99">addWidget</a>( newGame );
+    b-&gt;<a href="qboxlayout.html#ebba99">addWidget</a>( quit );
 
-    <a href=#387>newState</a>();
+    <a href=#385>newState</a>();
 }
 
 // --------------------------------------------------------------------------
-// <a name="384"></a>TicTacToe::newGameClicked()                  - SLOT
+// <a name="382"></a>TicTacToe::newGameClicked()                  - SLOT
 //
 // This slot is activated when the new game button is clicked.
 //
 
-void <a name="384"></a>TicTacToe::newGameClicked()
+void <a name="382"></a>TicTacToe::newGameClicked()
 {
     board-&gt;computerStarts( whoStarts-&gt;currentItem() == 0 );
     board-&gt;newGame();
-    <a href=#387>newState</a>();
+    <a href=#385>newState</a>();
 }
 
 // --------------------------------------------------------------------------
-// <a name="386"></a>TicTacToe::gameOver()                        - SLOT
+// <a name="384"></a>TicTacToe::gameOver()                        - SLOT
 //
 // This slot is activated when the TicTacGameBoard emits the signal
 // "finished()", i.e. when a player has won or when it is a draw.
 //
 
-void <a name="386"></a>TicTacToe::gameOver()
+void <a name="384"></a>TicTacToe::gameOver()
 {
-    <a href=#387>newState</a>();                                 // update text box
+    <a href=#385>newState</a>();                                 // update text box
 }
 
 // --------------------------------------------------------------------------
 // Updates the message to reflect a new state.
 //
 
-void <a name="387"></a>TicTacToe::newState()
+void <a name="385"></a>TicTacToe::newState()
 {
     static const char *msg[] = {                // TicTacGameBoard::State texts
         "Click Play to start", "Make your move",
@@ -513,7 +513,7 @@ void <a name="387"></a>TicTacToe::newState()
 
   Main:
 <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/tictac/main.cpp   2.3.1   edited 2001-01-26 $
+** &#36;Id&#58; qt/examples/tictac/main.cpp   2.3.2   edited 2001-06-12 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -533,17 +533,18 @@ int main( int argc, char **argv )
     if ( argc == 2 )                            // get board size n
         n = atoi(argv[1]);
     if ( n &lt; 3 || n &gt; 10 ) {                    // out of range
-        <a name="qWarning"></a><a href="qapplication.html#7a943f">qWarning</a>( "%s: Board size must be from 3x3 to 10x10", argv[0] );
+        <a name="qWarning"></a><a href="qapplication.html#290ef4">qWarning</a>( "%s: Board size must be from 3x3 to 10x10", argv[0] );
         return 1;
     }
     TicTacToe ttt( n );                         // create game
-    a.<a name="setMainWidget"></a><a href="qapplication.html#11c921">setMainWidget</a>( &amp;ttt );
-    ttt.<a name="show"></a><a href="qwidget.html#ccc8f7">show</a>();                                 // show widget
-    return a.<a name="exec"></a><a href="qapplication.html#7076af">exec</a>();                            // go
+    a.<a name="setMainWidget"></a><a href="qapplication.html#7ad759">setMainWidget</a>( &amp;ttt );
+    ttt.<a name="setCaption"></a><a href="qwidget.html#d6a291">setCaption</a>("Qt Example - TicTac");
+    ttt.<a name="show"></a><a href="qwidget.html#200ee5">show</a>();                                 // show widget
+    return a.<a name="exec"></a><a href="qapplication.html#84c7bf">exec</a>();                            // go
 }
 </pre>
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.1</div>
+<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

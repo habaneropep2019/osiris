@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qdatastream.cpp   2.3.1   edited 2001-04-23 $
+** $Id: qt/src/tools/qdatastream.cpp   2.3.2   edited 2001-10-14 $
 **
 ** Implementation of QDataStream class
 **
@@ -405,7 +405,7 @@ static Q_INT32 read_int_ascii( QDataStream *s )
 {
     register int n = 0;
     char buf[40];
-    while ( TRUE ) {
+    for (;;) {
 	buf[n] = s->device()->getch();
 	if ( buf[n] == '\n' || n > 38 )		// $-terminator
 	    break;
@@ -542,7 +542,7 @@ static double read_double_ascii( QDataStream *s )
 {
     register int n = 0;
     char buf[80];
-    while ( TRUE ) {
+    for (;;) {
 	buf[n] = s->device()->getch();
 	if ( buf[n] == '\n' || n > 78 )		// $-terminator
 	    break;

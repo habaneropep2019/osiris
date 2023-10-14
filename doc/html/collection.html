@@ -104,15 +104,15 @@ them out in the reverse order:
     void main()
     {
         <a href="qlist.html">QList</a>&lt;Employee&gt; list;           // list of pointers to Employee
-        list.<a href="qcollection.html#a3fc3c">setAutoDelete</a>( TRUE );     // delete items when they are removed
+        list.<a href="qcollection.html#a8ef9f">setAutoDelete</a>( TRUE );     // delete items when they are removed
 
-        list.<a href="qlist.html#687e74">append</a>( new Employee("Bill", 50000) );
-        list.<a href="qlist.html#687e74">append</a>( new Employee("Steve",80000) );
-        list.<a href="qlist.html#687e74">append</a>( new Employee("Ron",  60000) );
+        list.<a href="qlist.html#c5746a">append</a>( new Employee("Bill", 50000) );
+        list.<a href="qlist.html#c5746a">append</a>( new Employee("Steve",80000) );
+        list.<a href="qlist.html#c5746a">append</a>( new Employee("Ron",  60000) );
 
         <a href="qlistiterator.html">QListIterator</a>&lt;Employee&gt; it(list); // iterator for employee list
-        for ( it.<a href="qlistiterator.html#a9f64f">toLast</a>(); it.<a href="qlistiterator.html#e76f11">current</a>(); --it) ) {
-            Employee *emp = it.<a href="qlistiterator.html#e76f11">current</a>();
+        for ( it.<a href="qlistiterator.html#70faa8">toLast</a>(); it.<a href="qlistiterator.html#e58f06">current</a>(); --it) ) {
+            Employee *emp = it.<a href="qlistiterator.html#e58f06">current</a>();
             printf( "%s earns %d\n", emp-&gt;name(), emp-&gt;salary() );
         }
     }
@@ -131,7 +131,7 @@ This class knows only the number of items in the collection and the
 delete strategy.
 <p>
 Items in a collection are by default not deleted when they are removed
-from the collection. The <a href="qcollection.html#a3fc3c">QCollection::setAutoDelete()</a> function
+from the collection. The <a href="qcollection.html#a8ef9f">QCollection::setAutoDelete()</a> function
 specifies the delete strategy. In the list example, we enable
 auto-deletion to make the list delete the items when they are removed
 from the list.
@@ -140,11 +140,11 @@ When inserting an item into a collection, only the pointer is copied,
 not the item itself. This is called a shallow copy. It is possible to
 make the collection copy all of the item's data (known as a deep copy)
 when an item is inserted.  All collection functions that insert an
-item call the virtual function <a href="qcollection.html#c9b4cf">QCollection::newItem()</a> for the item
+item call the virtual function <a href="qcollection.html#55065e">QCollection::newItem()</a> for the item
 to be inserted.  Inherit a collection and reimplement it if you want
 to have deep copies in your collection.
 <p>
-When removing an item from a list, the virtual function <a href="qcollection.html#24fd44">QCollection::deleteItem()</a> is called.
+When removing an item from a list, the virtual function <a href="qcollection.html#8d78e7">QCollection::deleteItem()</a> is called.
 The default implementation in all collection classes deletes the item
 if auto-deletion is enabled.
 <p>
@@ -287,6 +287,6 @@ reasons behind our decision to write, use and provide these classes.
 </ul>
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.1</div>
+<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

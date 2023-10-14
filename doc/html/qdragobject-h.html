@@ -30,7 +30,7 @@ remains with Trolltech.
 <hr>
 <pre>
 /****************************************************************************
-** &#36;Id&#58; qt/src/kernel/qdragobject.h   2.3.1   edited 2001-01-26 $
+** &#36;Id&#58; qt/src/kernel/qdragobject.h   2.3.2   edited 2001-08-30 $
 **
 ** Definition of QDragObject
 **
@@ -90,6 +90,9 @@ public:
     bool drag();
     bool dragMove();
     void dragCopy();
+#if defined(Q_INCOMPATIBLE_3_0_ADDONS)
+    void dragLink();
+#endif
 
     virtual void setPixmap(QPixmap);
     virtual void setPixmap(QPixmap, QPoint hotspot);
@@ -103,7 +106,11 @@ public:
     static void setTarget(QWidget*);
 
 #ifndef QT_NO_DRAGANDDROP
-    enum DragMode { DragDefault, DragCopy, DragMove, DragCopyOrMove };
+    enum DragMode { DragDefault, DragCopy, DragMove, DragCopyOrMove
+#if defined(Q_INCOMPATIBLE_3_0_ADDONS)
+                    , DragLink
+#endif
+    };
 
 protected:
     virtual bool drag(DragMode);
@@ -268,6 +275,6 @@ private:
 </pre>
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.1</div>
+<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

@@ -1,107 +1,4 @@
-// Include Qt Netscape Plugin classes.
-#include "qnp.h"
-
-// Include other Qt classes.
-#include <qpainter.h>
-#include <qtextstream.h>
-#include <qbuffer.h>
-#include <qpixmap.h>
-#include <qmenubar.h>
-#include <qpushbutton.h>
-#include <qlist.h>
-#include <qmessagebox.h>
-
-// Include some C library functions.
-#include <math.h>
-#include <stdlib.h>
-
-#ifndef M_PI // Some math.h don't include this.
-#define M_PI 3.14159265358979323846264338327950288
-#endif
-
-
-
-//
-// GraphModel is a simple abstract class that describes
-// a table of numeric and text data.
-//
-
-class GraphModel {
-public:
-    enum ColType { Numeric, Label };
-
-    union Datum {
-	double dbl;
-	QString* str;
-    };
-
-    virtual QList<Datum>& graphData()=0;
-    virtual ColType colType(int col) const=0;
-    virtual int nCols() const=0;
-};
-
-
-//
-// Graph is a widget subclass that displays a GraphModel.
-// Since the widget is a QNPWidget, it can be used as a plugin window,
-// returned by Grapher::newWindow() below.
-//
-
-class Graph : public QNPWidget {
-    Q_OBJECT
-public:
-    // Constructs a Graph to display a GraphModel
-    //
-    Graph(GraphModel&);
-    ~Graph();
-
-    // Two styles are available - Pie and Bar graph
-    //
-    enum Style { Pie, Bar };
-    static const char* styleName[];
-    void setStyle(Style);
-    void setStyle(const char*);
-
-    // Timer event processing rotates the pie graph
-    //
-    void timerEvent(QTimerEvent*);
-
-    // These functions are provided by QNPWidget - we override
-    // them to hide and show the plugin menubar.
-    //
-    void enterInstance();
-    void leaveInstance();
-
-    // Paint the graph...
-    //
-    void paintEvent(QPaintEvent*);
-    //
-    // ... as either a "Loading" message, a Bar graph, a Pie graph,
-    // or an error message.
-    //
-    void paintWait(QPaintEvent*);
-    void paintBar(QPaintEvent*);
-    void paintPie(QPaintEvent*);
-    void paintError(const char*);
-
-signals:
-    // Signals emitted when the Help menus are selected.
-    void aboutPlugin();
-    void aboutData();
-
-private:
-    GraphModel& model;
-    QMenuBar *menubar;
-    Style style;
-    QPopupMenu* stylemenu;
-    int pieRotationTimer;
-    int pieRotation;
-    QPixmap pm;
-
-private slots:
-    void setStyleFromMenu(int id);
-};
-
+#include "grapher.h"
 
 Graph::Graph( GraphModel& mdl ) :
     model(mdl),
@@ -152,7 +49,8 @@ void Graph::setStyle(Style s)
 
 void Graph::timerEvent(QTimerEvent*)
 {
-    pieRotation = ( pieRotation + 6 ) % 360; repaint(FALSE);
+    pieRotation = ( pieRotation + 6 ) % 360; 
+    repaint(false);    
 }
 
 void Graph::setStyle(const char* stext)
@@ -166,7 +64,7 @@ void Graph::setStyle(const char* stext)
 }
 
 void Graph::enterInstance()
-{
+{    
     menubar->show();
 }
 
@@ -347,7 +245,7 @@ void Graph::paintWait(QPaintEvent*)
 }
 
 void Graph::paintEvent(QPaintEvent* event)
-{
+{    
     if (!model.nCols()) {
 	paintWait(event);
     } else {
@@ -360,6 +258,7 @@ void Graph::paintEvent(QPaintEvent* event)
 	    break;
 	}
     }
+    
 }
 
 void Graph::setStyleFromMenu(int id)
@@ -370,56 +269,7 @@ void Graph::setStyleFromMenu(int id)
 const char* Graph::styleName[] = { "Pie", "Bar", 0 };
 
 
-//
-// Grapher is a subclass of QNPInstance, and so it can be returned
-// by GrapherPlugin::newInstance().  A QNPInstance represents the
-// plugin, distinctly from the plugin window.
-//
-// Grapher is also a GraphModel, because it loads graph data from
-// the net.  When Grapher creates a window in newWindow(), it creates
-// a Graph widget to display the GraphModel that is the Grapher itself.
-//
 
-class Grapher : public QNPInstance, GraphModel {
-    Q_OBJECT
-public:
-    // Create a Grapher - all Grapher plugins are created
-    // by one GrapherPlugin object.
-    //
-    Grapher();
-    ~Grapher();
-
-    // We override this QNPInstance function to create our
-    // own subclass of QNPWidget, a Graph widget.
-    //
-    QNPWidget* newWindow();
-
-    // We override this QNPInstance function to process the
-    // incoming graph data.
-    //
-    int write(QNPStream* /*str*/, int /*offset*/, int len, void* buffer);
-
-private:
-    // Grapher is a GraphModel, so it implements the pure virtual
-    // functions of that class.
-    //
-    QList<Datum>& graphData();
-    ColType colType(int col) const;
-    int nCols() const;
-
-    void consumeLine();
-    QList<Datum> data;
-    QBuffer line;
-    bool firstline;
-    int ncols;
-    ColType *coltype;
-
-private slots:
-    // Slots that are connected to the Graph menu items.
-    //
-    void aboutPlugin();
-    void aboutData();
-};
 
 Grapher::Grapher()
 {
@@ -626,4 +476,3 @@ QNPlugin* QNPlugin::create()
     return new GrapherPlugin;
 }
 
-#include "grapher.moc"

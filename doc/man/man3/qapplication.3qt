@@ -1,5 +1,5 @@
 '\" t
-.TH QApplication 3qt "13 June 2001" "Trolltech AS" \" -*- nroff -*-
+.TH QApplication 3qt "29 October 2001" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2001 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -308,19 +308,10 @@ Inherited by QXtApplication.
 (Note that these are not member functions.)
 .in +1c
 .ti -1c
-.BI "void \fBqDebug\fR (const char * " "msg" ", ...)"
-.br
-.ti -1c
-.BI "void \fBCHECK_PTR\fR (void * " "p" ")"
-.br
-.ti -1c
-.BI "void \fBASSERT\fR (bool " "test" ")"
+.BI "void \fBqFatal\fR (const char * " "msg" ", ...)"
 .br
 .ti -1c
 .BI "void \fBqWarning\fR (const char * " "msg" ", ...)"
-.br
-.ti -1c
-.BI "void \fBqFatal\fR (const char * " "msg" ", ...)"
 .br
 .ti -1c
 .BI "const char * \fBqVersion\fR ()"
@@ -329,10 +320,19 @@ Inherited by QXtApplication.
 .BI "void \fBqAddPostRoutine\fR (Q_CleanUpFunction " "p" ")"
 .br
 .ti -1c
-.BI "msg_handler \fBqInstallMsgHandler\fR (msg_handler " "h" ")"
+.BI "void \fBASSERT\fR (bool " "test" ")"
+.br
+.ti -1c
+.BI "void \fBqDebug\fR (const char * " "msg" ", ...)"
 .br
 .ti -1c
 .BI "bool \fBqSysInfo\fR (int * " "wordSize" ", bool * " "bigEndian" ")"
+.br
+.ti -1c
+.BI "void \fBCHECK_PTR\fR (void * " "p" ")"
+.br
+.ti -1c
+.BI "msg_handler \fBqInstallMsgHandler\fR (msg_handler " "h" ")"
 .br
 .in -1c
 .SH DESCRIPTION
@@ -559,7 +559,7 @@ Example:
     delete list;                        // delete the list, not the widgets
 .fi
 .PP
-The QWidgetList class is defined in the qwidcoll.h header file.
+The QWidgetList class is defined in the qwidgetlist.h header file.
 .PP
 \fBWarning:\fR Delete the list away as soon you have finished using it. The widgets in the list may be deleted by someone else at any time.
 .PP
@@ -1304,8 +1304,8 @@ Returns the color used to mark selections in windows style.
 .PP
 See also setWinStyleHighlightColor().
 .SH RELATED FUNCTION DOCUMENTATION
-.SH "void qDebug (const char * msg, ...)"
-Prints a debug message, or calls the message handler (if it has been installed).
+.SH "void qFatal (const char * msg, ...)"
+Prints a fatal error message and exits, or calls the message handler (if it has been installed).
 .PP
 This function takes a format string and a list of arguments, similar to the C printf() function.
 .PP
@@ -1313,75 +1313,24 @@ Example:
 .PP
 .nf
 .br
-    qDebug( "my window handle = %x", myWidget->id() );
-.fi
-.PP
-Under X11, the text is printed to stderr. Under Windows, the text is sent to the debugger.
-.PP
-\fBWarning:\fR The internal buffer is limited to 8196 bytes (including the 0-terminator).
-.PP
-See also qWarning(), qFatal(), qInstallMsgHandler() and Debugging
-.SH "void CHECK_PTR (void * p)"
-If \fIp\fR is null, a fatal messages says that the program ran out of memory and exits. If \fIp\fR is not null, nothing happens.
-.PP
-This is really a macro defined in qglobal.h.
-.PP
-Example:
-.PP
-.nf
-.br
-    int *a;
-.br
-    CHECK_PTR( a = new int[80] );       // never do this!
-.br
-      // do this instead:
-.br
-    a = new int[80];
-.br
-    CHECK_PTR( a );                     // this is fine
-.fi
-.PP
-See also qFatal() and Debugging
-.SH "void ASSERT (bool test)"
-Prints a warning message containing the source code file name and line number if \fItest\fR is FALSE.
-.PP
-This is really a macro defined in qglobal.h.
-.PP
-ASSERT is useful for testing required conditions in your program.
-.PP
-Example:
-.PP
-.nf
-.br
-    //
-.br
-    // File: div.cpp
-.br
-    //
-.br
-.br
-    #include <qglobal.h>
-.br
-.br
     int divide( int a, int b )
 .br
     {
 .br
-        ASSERT( b != 0 );                       // this is line 9
+        if ( b == 0 )                           // program error
+.br
+            qFatal( "divide: cannot divide by zero" );
 .br
         return a/b;
 .br
     }
 .fi
 .PP
-If \fCb\fR is zero, the ASSERT statement will output the following message using the qWarning() function:
+Under X11, the text is printed to stderr. Under Windows, the text is sent to the debugger.
 .PP
-.nf
-.br
-    ASSERT: "b == 0" in div.cpp (9)
-.fi
+\fBWarning:\fR The internal buffer is limited to 8196 bytes (including the 0-terminator).
 .PP
-See also qWarning() and Debugging
+See also qDebug(), qWarning(), qInstallMsgHandler() and Debugging
 .SH "void qWarning (const char * msg, ...)"
 Prints a warning message, or calls the message handler (if it has been installed).
 .PP
@@ -1412,33 +1361,6 @@ Examples:
 .(l
 life/main.cpp progress/progress.cpp tictac/main.cpp
 .)l
-.SH "void qFatal (const char * msg, ...)"
-Prints a fatal error message and exits, or calls the message handler (if it has been installed).
-.PP
-This function takes a format string and a list of arguments, similar to the C printf() function.
-.PP
-Example:
-.PP
-.nf
-.br
-    int divide( int a, int b )
-.br
-    {
-.br
-        if ( b == 0 )                           // program error
-.br
-            qFatal( "divide: cannot divide by zero" );
-.br
-        return a/b;
-.br
-    }
-.fi
-.PP
-Under X11, the text is printed to stderr. Under Windows, the text is sent to the debugger.
-.PP
-\fBWarning:\fR The internal buffer is limited to 8196 bytes (including the 0-terminator).
-.PP
-See also qDebug(), qWarning(), qInstallMsgHandler() and Debugging
 .SH "const char * qVersion ()"
 Returns the Qt version number for the library, typically "1.30" or "2.1.0".
 .SH "void qAddPostRoutine (Q_CleanUpFunction p)"
@@ -1515,6 +1437,90 @@ For modules and libraries, using a reference-counted initialization manager or Q
 .fi
 .PP
 By selecting the right parent widget/object, this can often be made to clean up the module's data at the exact right moment.
+.SH "void ASSERT (bool test)"
+Prints a warning message containing the source code file name and line number if \fItest\fR is FALSE.
+.PP
+This is really a macro defined in qglobal.h.
+.PP
+ASSERT is useful for testing required conditions in your program.
+.PP
+Example:
+.PP
+.nf
+.br
+    //
+.br
+    // File: div.cpp
+.br
+    //
+.br
+.br
+    #include <qglobal.h>
+.br
+.br
+    int divide( int a, int b )
+.br
+    {
+.br
+        ASSERT( b != 0 );                       // this is line 9
+.br
+        return a/b;
+.br
+    }
+.fi
+.PP
+If \fCb\fR is zero, the ASSERT statement will output the following message using the qWarning() function:
+.PP
+.nf
+.br
+    ASSERT: "b == 0" in div.cpp (9)
+.fi
+.PP
+See also qWarning() and Debugging
+.SH "void qDebug (const char * msg, ...)"
+Prints a debug message, or calls the message handler (if it has been installed).
+.PP
+This function takes a format string and a list of arguments, similar to the C printf() function.
+.PP
+Example:
+.PP
+.nf
+.br
+    qDebug( "my window handle = %x", myWidget->id() );
+.fi
+.PP
+Under X11, the text is printed to stderr. Under Windows, the text is sent to the debugger.
+.PP
+\fBWarning:\fR The internal buffer is limited to 8196 bytes (including the 0-terminator).
+.PP
+See also qWarning(), qFatal(), qInstallMsgHandler() and Debugging
+.SH "bool qSysInfo (int * wordSize, bool * bigEndian)"
+Obtains information about the system.
+.PP
+The system's word size in bits (typically 32) is returned in \fI*wordSize.\fR The \fI*bigEndian\fR is set to TRUE if this is a big-endian machine, or to FALSE if this is a little-endian machine.
+.PP
+This function calls qFatal() with a message if the computer is truly weird (i.e. different endianness for 16 bit and 32 bit integers).
+.SH "void CHECK_PTR (void * p)"
+If \fIp\fR is null, a fatal messages says that the program ran out of memory and exits. If \fIp\fR is not null, nothing happens.
+.PP
+This is really a macro defined in qglobal.h.
+.PP
+Example:
+.PP
+.nf
+.br
+    int *a;
+.br
+    CHECK_PTR( a = new int[80] );       // never do this!
+.br
+      // do this instead:
+.br
+    a = new int[80];
+.br
+    CHECK_PTR( a );                     // this is fine
+.fi
+.PP
+See also qFatal() and Debugging
 .SH "msg_handler qInstallMsgHandler (msg_handler h)"
 Installs a Qt message handler. Returns a pointer to the message handler previously defined.
 .PP
@@ -1581,14 +1587,7 @@ Example:
     }
 .fi
 .PP
-See also qDebug(), qWarning(), qFatal() and Debugging
-.SH "bool qSysInfo (int * wordSize, bool * bigEndian)"
-Obtains information about the system.
-.PP
-The system's word size in bits (typically 32) is returned in \fI*wordSize.\fR The \fI*bigEndian\fR is set to TRUE if this is a big-endian machine, or to FALSE if this is a little-endian machine.
-.PP
-This function calls qFatal() with a message if the computer is truly weird
-(i.e. different endianness for 16 bit and 32 bit integers).
+See also  qDebug(), qWarning(), qFatal() and Debugging
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qapplication.html
 .BR http://www.trolltech.com/faq/tech.html
@@ -1607,4 +1606,4 @@ In case of content or formattting problems with this manual page, please
 report them to
 .BR qt-bugs@trolltech.com .
 Please include the name of the manual page (qapplication.3qt) and the Qt
-version (2.3.1).
+version (2.3.2).

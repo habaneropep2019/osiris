@@ -1,5 +1,5 @@
 '\" t
-.TH QString 3qt "13 June 2001" "Trolltech AS" \" -*- nroff -*-
+.TH QString 3qt "29 October 2001" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2001 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -375,43 +375,58 @@ Inherited by QConstString.
 (Note that these are not member functions.)
 .in +1c
 .ti -1c
-.BI "QDataStream & \fBoperator>>\fR (QDataStream & " "s" ", QString & " "str" ")"
-.br
-.ti -1c
-.BI "QString \fBoperator+\fR (const char * " "s1" ", const QString & " "s2" ")"
-.br
-.ti -1c
-.BI "bool \fBoperator<=\fR (const char * " "s1" ", const QString & " "s2" ")"
-.br
-.ti -1c
-.BI "QString \fBoperator+\fR (const QString & " "s1" ", const char * " "s2" ")"
-.br
-.ti -1c
-.BI "QString \fBoperator+\fR (const QString & " "s1" ", const QString & " "s2" ")"
+.BI "bool \fBoperator==\fR (const char * " "s1" ", const QString & " "s2" ")"
 .br
 .ti -1c
 .BI "QDataStream & \fBoperator<<\fR (QDataStream & " "s" ", const QString & " "str" ")"
 .br
 .ti -1c
-.BI "bool \fBoperator==\fR (const QString & " "s1" ", const QString & " "s2" ")"
+.BI "bool \fBoperator<=\fR (const char * " "s1" ", const QString & " "s2" ")"
 .br
 .ti -1c
-.BI "bool \fBoperator!=\fR (const QString & " "s1" ", const QString & " "s2" ")"
+.BI "bool \fBoperator<\fR (const QString & " "s1" ", const char * " "s2" ")"
 .br
 .ti -1c
-.BI "bool \fBoperator!=\fR (const QString & " "s1" ", const char * " "s2" ")"
-.br
-.ti -1c
-.BI "bool \fBoperator<\fR (const char * " "s1" ", const QString & " "s2" ")"
-.br
-.ti -1c
-.BI "bool \fBoperator>=\fR (const char * " "s1" ", const QString & " "s2" ")"
+.BI "bool \fBoperator>\fR (const QString & " "s1" ", const char * " "s2" ")"
 .br
 .ti -1c
 .BI "QString \fBoperator+\fR (char " "c" ", const QString & " "s" ")"
 .br
 .ti -1c
+.BI "bool \fBoperator>=\fR (const QString & " "s1" ", const char * " "s2" ")"
+.br
+.ti -1c
+.BI "bool \fBoperator<\fR (const char * " "s1" ", const QString & " "s2" ")"
+.br
+.ti -1c
+.BI "QString \fBoperator+\fR (const QString & " "s1" ", const char * " "s2" ")"
+.br
+.ti -1c
+.BI "bool \fBoperator==\fR (const QString & " "s1" ", const char * " "s2" ")"
+.br
+.ti -1c
 .BI "bool \fBoperator<=\fR (const QString & " "s1" ", const char * " "s2" ")"
+.br
+.ti -1c
+.BI "bool \fBoperator==\fR (const QString & " "s1" ", const QString & " "s2" ")"
+.br
+.ti -1c
+.BI "bool \fBoperator!=\fR (const char * " "s1" ", const QString & " "s2" ")"
+.br
+.ti -1c
+.BI "QDataStream & \fBoperator>>\fR (QDataStream & " "s" ", QString & " "str" ")"
+.br
+.ti -1c
+.BI "bool \fBoperator!=\fR (const QString & " "s1" ", const QString & " "s2" ")"
+.br
+.ti -1c
+.BI "bool \fBoperator>=\fR (const char * " "s1" ", const QString & " "s2" ")"
+.br
+.ti -1c
+.BI "bool \fBoperator!=\fR (const QString & " "s1" ", const char * " "s2" ")"
+.br
+.ti -1c
+.BI "QString \fBoperator+\fR (const QString & " "s1" ", const QString & " "s2" ")"
 .br
 .ti -1c
 .BI "QString \fBoperator+\fR (const QString & " "s" ", char " "c" ")"
@@ -420,22 +435,7 @@ Inherited by QConstString.
 .BI "bool \fBoperator>\fR (const char * " "s1" ", const QString & " "s2" ")"
 .br
 .ti -1c
-.BI "bool \fBoperator<\fR (const QString & " "s1" ", const char * " "s2" ")"
-.br
-.ti -1c
-.BI "bool \fBoperator!=\fR (const char * " "s1" ", const QString & " "s2" ")"
-.br
-.ti -1c
-.BI "bool \fBoperator==\fR (const QString & " "s1" ", const char * " "s2" ")"
-.br
-.ti -1c
-.BI "bool \fBoperator==\fR (const char * " "s1" ", const QString & " "s2" ")"
-.br
-.ti -1c
-.BI "bool \fBoperator>\fR (const QString & " "s1" ", const char * " "s2" ")"
-.br
-.ti -1c
-.BI "bool \fBoperator>=\fR (const QString & " "s1" ", const char * " "s2" ")"
+.BI "QString \fBoperator+\fR (const char * " "s1" ", const QString & " "s2" ")"
 .br
 .in -1c
 .SH DESCRIPTION
@@ -957,7 +957,7 @@ Examples:
     s.replace( QRegExp("^[bn]a"), "" );         // NOTE! becomes ""
 .fi
 .PP
-See also find() and findRev().
+See also find() and findRev(). qmag/qmag.cpp
 .SH "QString & QString::replace ( uint index, uint len, const QChar * s, uint slen )"
 Replaces \fIlen\fR characters starting at position \fIindex\fR by \fIslen\fR units ot QChar data from \fIs,\fR and returns a reference to the string.
 .PP
@@ -975,11 +975,6 @@ If \fIindex\fR is too big, nothing is deleted and \fIs\fR is inserted at the end
 .fi
 .PP
 See also insert() and remove().
-.PP
-Examples:
-.(l
-qmag/qmag.cpp
-.)l
 .SH "QString QString::right ( uint len ) const"
 Returns a substring that contains the \fIlen\fR rightmost characters of the string.
 .PP
@@ -1188,80 +1183,80 @@ See also QString::fromUtf8(), local8Bit() and latin1().
 .SH "QString QString::visual ( int index = 0, int len = -1 )"
 This function returns the QString ordered visually. Useful for painting the string or when transforming to a visually ordered encoding.
 .SH RELATED FUNCTION DOCUMENTATION
-.SH "QDataStream & operator>> (QDataStream & s, QString & str)"
-Reads a string from the stream.
+.SH "bool operator== (const char * s1, const QString & s2)"
+Returns TRUE if the two strings are equal, or FALSE if they are different.
 .PP
-See also Format of the QDataStream operators
-.SH "QString operator+ (const char * s1, const QString & s2)"
-Returns the concatenated string of s1 and s2.
-.SH "bool operator<= (const char * s1, const QString & s2)"
-Returns TRUE if \fIs1\fR is alphabetically less than or equal to \fIs2,\fR otherwise FALSE.
-.PP
-Equivalent to \fCqstrcmp(s1,s2) <= 0\fR
-.SH "QString operator+ (const QString & s1, const char * s2)"
-Returns the concatenated string of s1 and s2.
-.SH "QString operator+ (const QString & s1, const QString & s2)"
-Returns the concatenated string of s1 and s2.
+Equivalent to \fCqstrcmp(s1,s2) == 0\fR
 .SH "QDataStream & operator<< (QDataStream & s, const QString & str)"
 Writes a string to the stream.
 .PP
 See also Format of the QDataStream operators
-.SH "bool operator== (const QString & s1, const QString & s2)"
-Returns TRUE if the two strings are equal, or FALSE if they are different. A null string is different from an empty, non-null string.
+.SH "bool operator<= (const char * s1, const QString & s2)"
+Returns TRUE if \fIs1\fR is alphabetically less than or equal to \fIs2,\fR otherwise FALSE.
 .PP
-Equivalent to \fCqstrcmp(s1,s2) == 0\fR
-.SH "bool operator!= (const QString & s1, const QString & s2)"
-Returns TRUE if the two strings are different, or FALSE if they are equal.
+Equivalent to \fCqstrcmp(s1,s2) <= 0\fR
+.SH "bool operator< (const QString & s1, const char * s2)"
+Returns TRUE if \fIs1\fR is alphabetically less than \fIs2,\fR otherwise FALSE.
 .PP
-Equivalent to \fCqstrcmp(s1,s2) != 0\fR
-.SH "bool operator!= (const QString & s1, const char * s2)"
-Returns TRUE if the two strings are different, or FALSE if they are equal.
+Equivalent to \fCqstrcmp(s1,s2) < 0\fR
+.SH "bool operator> (const QString & s1, const char * s2)"
+Returns TRUE if \fIs1\fR is alphabetically greater than \fIs2,\fR otherwise FALSE.
 .PP
-Equivalent to \fCqstrcmp(s1,s2) != 0\fR
+Equivalent to \fCqstrcmp(s1,s2) > 0\fR
+.SH "QString operator+ (char c, const QString & s)"
+Returns the concatenated string of c and s.
+.SH "bool operator>= (const QString & s1, const char * s2)"
+Returns TRUE if \fIs1\fR is alphabetically greater than or equal to \fIs2,\fR otherwise FALSE.
+.PP
+Equivalent to \fCqstrcmp(s1,s2) >= 0\fR
 .SH "bool operator< (const char * s1, const QString & s2)"
 Returns TRUE if \fIs1\fR is alphabetically less than \fIs2,\fR otherwise FALSE.
 .PP
 Equivalent to \fCqstrcmp(s1,s2) < 0\fR
-.SH "bool operator>= (const char * s1, const QString & s2)"
-Returns TRUE if \fIs1\fR is alphabetically greater than or equal to \fIs2,\fR otherwise FALSE.
+.SH "QString operator+ (const QString & s1, const char * s2)"
+Returns the concatenated string of s1 and s2.
+.SH "bool operator== (const QString & s1, const char * s2)"
+Returns TRUE if the two strings are equal, or FALSE if they are different.
 .PP
-Equivalent to \fCqstrcmp(s1,s2) >= 0\fR
-.SH "QString operator+ (char c, const QString & s)"
-Returns the concatenated string of c and s.
+Equivalent to \fCqstrcmp(s1,s2) == 0\fR
 .SH "bool operator<= (const QString & s1, const char * s2)"
 Returns TRUE if \fIs1\fR is alphabetically less than or equal to \fIs2,\fR otherwise FALSE.
 .PP
 Equivalent to \fCqstrcmp(s1,s2) <= 0\fR
+.SH "bool operator== (const QString & s1, const QString & s2)"
+Returns TRUE if the two strings are equal, or FALSE if they are different. A null string is different from an empty, non-null string.
+.PP
+Equivalent to \fCqstrcmp(s1,s2) == 0\fR
+.SH "bool operator!= (const char * s1, const QString & s2)"
+Returns TRUE if the two strings are different, or FALSE if they are equal.
+.PP
+Equivalent to \fCqstrcmp(s1,s2) != 0\fR
+.SH "QDataStream & operator>> (QDataStream & s, QString & str)"
+Reads a string from the stream.
+.PP
+See also Format of the QDataStream operators
+.SH "bool operator!= (const QString & s1, const QString & s2)"
+Returns TRUE if the two strings are different, or FALSE if they are equal.
+.PP
+Equivalent to \fCqstrcmp(s1,s2) != 0\fR
+.SH "bool operator>= (const char * s1, const QString & s2)"
+Returns TRUE if \fIs1\fR is alphabetically greater than or equal to \fIs2,\fR otherwise FALSE.
+.PP
+Equivalent to \fCqstrcmp(s1,s2) >= 0\fR
+.SH "bool operator!= (const QString & s1, const char * s2)"
+Returns TRUE if the two strings are different, or FALSE if they are equal.
+.PP
+Equivalent to \fCqstrcmp(s1,s2) != 0\fR
+.SH "QString operator+ (const QString & s1, const QString & s2)"
+Returns the concatenated string of s1 and s2.
 .SH "QString operator+ (const QString & s, char c)"
 Returns the concatenated string of s and c.
 .SH "bool operator> (const char * s1, const QString & s2)"
 Returns TRUE if \fIs1\fR is alphabetically greater than \fIs2,\fR otherwise FALSE.
 .PP
 Equivalent to \fCqstrcmp(s1,s2) > 0\fR
-.SH "bool operator< (const QString & s1, const char * s2)"
-Returns TRUE if \fIs1\fR is alphabetically less than \fIs2,\fR otherwise FALSE.
-.PP
-Equivalent to \fCqstrcmp(s1,s2) < 0\fR
-.SH "bool operator!= (const char * s1, const QString & s2)"
-Returns TRUE if the two strings are different, or FALSE if they are equal.
-.PP
-Equivalent to \fCqstrcmp(s1,s2) != 0\fR
-.SH "bool operator== (const QString & s1, const char * s2)"
-Returns TRUE if the two strings are equal, or FALSE if they are different.
-.PP
-Equivalent to \fCqstrcmp(s1,s2) == 0\fR
-.SH "bool operator== (const char * s1, const QString & s2)"
-Returns TRUE if the two strings are equal, or FALSE if they are different.
-.PP
-Equivalent to \fCqstrcmp(s1,s2) == 0\fR
-.SH "bool operator> (const QString & s1, const char * s2)"
-Returns TRUE if \fIs1\fR is alphabetically greater than \fIs2,\fR otherwise FALSE.
-.PP
-Equivalent to \fCqstrcmp(s1,s2) > 0\fR
-.SH "bool operator>= (const QString & s1, const char * s2)"
-Returns TRUE if \fIs1\fR is alphabetically greater than or equal to \fIs2,\fR otherwise FALSE.
-.PP
-Equivalent to \fCqstrcmp(s1,s2) >= 0\fR
+.SH "QString operator+ (const char * s1, const QString & s2)"
+Returns the concatenated string of s1 and s2.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qstring.html
 .BR http://www.trolltech.com/faq/tech.html
@@ -1280,4 +1275,4 @@ In case of content or formattting problems with this manual page, please
 report them to
 .BR qt-bugs@trolltech.com .
 Please include the name of the manual page (qstring.3qt) and the Qt
-version (2.3.1).
+version (2.3.2).

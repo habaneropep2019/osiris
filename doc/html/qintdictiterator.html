@@ -32,17 +32,17 @@ Inherits <a href="qgdictiterator.html">QGDictIterator</a>.
 <p><a href="qintdictiterator-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><div class="fn"><a href="#0b2eb1"><b>QIntDictIterator</b></a> ( const QIntDict&lt;type&gt; &amp; dict ) </div>
-<li><div class="fn"><a href="#3627c1"><b>~QIntDictIterator</b></a> () </div>
-<li><div class="fn">uint <a href="#2bcb05"><b>count</b></a> () const</div>
-<li><div class="fn">bool <a href="#01b107"><b>isEmpty</b></a> () const</div>
-<li><div class="fn">type* <a href="#b45396"><b>toFirst</b></a> () </div>
-<li><div class="fn">operator <a href=qintdictiterator.html#a3f357><b>type*</b></a> ()const</div>
-<li><div class="fn">type* <a href="#884546"><b>current</b></a> () const</div>
-<li><div class="fn">long <a href="#a39d7e"><b>currentKey</b></a> () const</div>
-<li><div class="fn">type* <a href="#21c3cd"><b>operator</b></a> () </div>
-<li><div class="fn">type* <a href="#6f16fd"><b>operator++</b></a> () </div>
-<li><div class="fn">type* <a href="#d4a2bf"><b>operator+=</b></a> ( uint jump ) </div>
+<li><div class="fn"><a href="#8e23ea"><b>QIntDictIterator</b></a> ( const QIntDict&lt;type&gt; &amp; dict ) </div>
+<li><div class="fn"><a href="#1b3572"><b>~QIntDictIterator</b></a> () </div>
+<li><div class="fn">uint <a href="#877902"><b>count</b></a> () const</div>
+<li><div class="fn">bool <a href="#fba06f"><b>isEmpty</b></a> () const</div>
+<li><div class="fn">type* <a href="#8a23be"><b>toFirst</b></a> () </div>
+<li><div class="fn">operator <a href=qintdictiterator.html#57bc74><b>type*</b></a> ()const</div>
+<li><div class="fn">type* <a href="#cc385f"><b>current</b></a> () const</div>
+<li><div class="fn">long <a href="#b7516f"><b>currentKey</b></a> () const</div>
+<li><div class="fn">type* <a href="#798d7d"><b>operator</b></a> () </div>
+<li><div class="fn">type* <a href="#4bcd4d"><b>operator++</b></a> () </div>
+<li><div class="fn">type* <a href="#e6baf7"><b>operator+=</b></a> ( uint jump ) </div>
 </ul>
 <hr><h2><a name="details"></a>Detailed Description</h2>
 The QIntDictIterator class provides an iterator for <a href="qintdict.html">QIntDict</a> collections.
@@ -58,14 +58,14 @@ dictionary iterator that operates on QIntDict&lt;X&gt; (dictionary of X*).
     {
         <a href="qintdict.html">QIntDict</a>&lt;char&gt; dict;            // maps long ==&gt; char*
 
-        dict.<a href="qintdict.html#ca8d81">insert</a>( 33, "France" );
-        dict.<a href="qintdict.html#ca8d81">insert</a>(  7, "Russia" );
-        dict.<a href="qintdict.html#ca8d81">insert</a>( 49, "Norway" );
+        dict.<a href="qintdict.html#8ec12f">insert</a>( 33, "France" );
+        dict.<a href="qintdict.html#8ec12f">insert</a>(  7, "Russia" );
+        dict.<a href="qintdict.html#8ec12f">insert</a>( 49, "Norway" );
 
         <a href="qintdictiterator.html">QIntDictIterator</a>&lt;char&gt; it( dict ); // iterator for dict
 
-        while ( it.<a href="#884546">current</a>() ) {
-            printf( "%d -&gt; %s\n", it.<a href="#a39d7e">currentKey</a>(), it.<a href="#884546">current</a>() );
+        while ( it.<a href="#cc385f">current</a>() ) {
+            printf( "%d -&gt; %s\n", it.<a href="#b7516f">currentKey</a>(), it.<a href="#cc385f">current</a>() );
             ++it;
         }
     }
@@ -85,40 +85,40 @@ in the traversing order.
 <p>See also  <a href="qintdict.html">QIntDict</a> and <a href="collection.html">Collection Classes</a>
 
 <hr><h2>Member Function Documentation</h2>
-<h3 class="fn"><a name="0b2eb1"></a>QIntDictIterator::QIntDictIterator ( const <a href="qintdict.html">QIntDict</a>&lt;type&gt; &amp; dict )</h3>
+<h3 class="fn"><a name="8e23ea"></a>QIntDictIterator::QIntDictIterator ( const <a href="qintdict.html">QIntDict</a>&lt;type&gt; &amp; dict )</h3>
 <p>Constructs an iterator for <em>dict.</em>  The current iterator item is
 set to point on the first item in the <em>dict.</em>
-<h3 class="fn"><a name="3627c1"></a>QIntDictIterator::~QIntDictIterator ()</h3>
+<h3 class="fn"><a name="1b3572"></a>QIntDictIterator::~QIntDictIterator ()</h3>
 <p>Destroys the iterator.
-<h3 class="fn"><a name="a3f357"></a>QIntDictIterator::operator type * () const</h3>
+<h3 class="fn"><a name="57bc74"></a>QIntDictIterator::operator type * () const</h3>
 <p>Cast operator. Returns a pointer to the current iterator item.
-Same as <a href="#884546">current</a>().
-<h3 class="fn">uint <a name="2bcb05"></a>QIntDictIterator::count () const</h3>
+Same as <a href="#cc385f">current</a>().
+<h3 class="fn">uint <a name="877902"></a>QIntDictIterator::count () const</h3>
 <p>Returns the number of items in the dictionary this iterator operates on.
-<p>See also  <a href="#01b107">isEmpty</a>().
-<h3 class="fn">type * <a name="884546"></a>QIntDictIterator::current () const</h3>
+<p>See also  <a href="#fba06f">isEmpty</a>().
+<h3 class="fn">type * <a name="cc385f"></a>QIntDictIterator::current () const</h3>
 <p>Returns a pointer to the current iterator item.
-<h3 class="fn">long <a name="a39d7e"></a>QIntDictIterator::currentKey () const</h3>
+<h3 class="fn">long <a name="b7516f"></a>QIntDictIterator::currentKey () const</h3>
 <p>Returns the key for the current iterator item.
-<h3 class="fn">bool <a name="01b107"></a>QIntDictIterator::isEmpty () const</h3>
-<p>Returns TRUE if the dictionary is empty, i.e. <a href="#2bcb05">count</a>() == 0. Returns FALSE
+<h3 class="fn">bool <a name="fba06f"></a>QIntDictIterator::isEmpty () const</h3>
+<p>Returns TRUE if the dictionary is empty, i.e. <a href="#877902">count</a>() == 0. Returns FALSE
 otherwise.
-<p>See also  <a href="#2bcb05">count</a>().
-<h3 class="fn">type * <a name="21c3cd"></a>QIntDictIterator::operator() ()</h3>
+<p>See also  <a href="#877902">count</a>().
+<h3 class="fn">type * <a name="798d7d"></a>QIntDictIterator::operator() ()</h3>
 <p>Makes the succeeding item current and returns the original current item.
 <p>If the current iterator item was the last item in the dictionary or if it
 was null, null is returned.
-<h3 class="fn">type * <a name="6f16fd"></a>QIntDictIterator::operator++ ()</h3>
+<h3 class="fn">type * <a name="4bcd4d"></a>QIntDictIterator::operator++ ()</h3>
 <p>Prefix ++ makes the succeeding item current and returns the new current
 item.
 <p>If the current iterator item was the last item in the dictionary or if it
 was null, null is returned.
-<h3 class="fn">type * <a name="d4a2bf"></a>QIntDictIterator::operator+= ( uint jump )</h3>
+<h3 class="fn">type * <a name="e6baf7"></a>QIntDictIterator::operator+= ( uint jump )</h3>
 <p>Sets the current item to the item <em>jump</em> positions after the current item,
 and returns a pointer to that item.
 <p>If that item is beyond the last item or if the dictionary is  empty,
 it sets the current item to null and returns null.
-<h3 class="fn">type * <a name="b45396"></a>QIntDictIterator::toFirst ()</h3>
+<h3 class="fn">type * <a name="8a23be"></a>QIntDictIterator::toFirst ()</h3>
 <p>Sets the current iterator item to point to the first item in the
 dictionary and returns a pointer to the item.
 If the dictionary is  empty it sets the current item to null and 
@@ -127,13 +127,13 @@ returns null.
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.3.1"><nobr>
+<input type=hidden name="version" value="2.3.2"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
-copyright &copy; 1995-2000
+copyright &copy; 1995-2001
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.1</div>
+<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

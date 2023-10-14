@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/forever/forever.cpp   2.3.1   edited 2001-01-26 $
+** $Id: qt/examples/forever/forever.cpp   2.3.2   edited 2001-10-18 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -44,7 +44,7 @@ Forever::Forever( QWidget *parent, const char *name )
 void Forever::updateCaption()
 {
     QString s;
-    s.sprintf( "forever - %d rectangles/second", rectangles );
+    s.sprintf( "Qt Example - Forever - %d rectangles/second", rectangles );
     rectangles = 0;
     setCaption( s );
 }
@@ -60,6 +60,8 @@ void Forever::timerEvent( QTimerEvent * )
     paint.setPen( NoPen );			// do not draw outline
     int w = width();
     int h = height();
+    if( w <= 0 || h <= 0 ) 
+	return;
     for ( int i=0; i<100; i++ ) {
 	paint.setBrush( colors[i % numColors]); // set random brush color
 	QPoint p1( rand()%w, rand()%h );	// p1 = top left
@@ -80,6 +82,7 @@ int main( int argc, char **argv )
     QApplication a( argc, argv );		// create application object
     Forever always;				// create widget
     a.setMainWidget( &always );			// set as main widget
+    always.setCaption("Qt Example - Forever");
     always.show();				// show widget
     return a.exec();				// run event loop
 }

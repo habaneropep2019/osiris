@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qpngio.cpp   2.3.1   edited 2001-03-19 $
+** $Id: qt/src/kernel/qpngio.cpp   2.3.2   edited 2001-03-19 $
 **
 ** Implementation of PNG QImage IOHandler
 **

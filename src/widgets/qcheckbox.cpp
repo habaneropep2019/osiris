@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qcheckbox.cpp   2.3.1   edited 2001-04-18 $
+** $Id: qt/src/widgets/qcheckbox.cpp   2.3.2   edited 2001-04-18 $
 **
 ** Implementation of QCheckBox class
 **

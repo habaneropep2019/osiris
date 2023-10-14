@@ -1,5 +1,5 @@
 '\" t
-.TH QBuffer 3qt "13 June 2001" "Trolltech AS" \" -*- nroff -*-
+.TH QBuffer 3qt "29 October 2001" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2001 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -48,11 +48,6 @@ Note that QTextStream can also operate on a QString (a Unicode string); a QBuffe
 You can also use QBuffer directly through the standard QIODevice functions readBlock(), writeBlock() readLine(), at(), getch(), putch() and ungetch().
 .PP
 See also QFile, QDataStream, QTextStream, QByteArray and Shared Classes
-.PP
-Examples:
-.(l
-grapher/grapher.cpp
-.)l
 .SH MEMBER FUNCTION DOCUMENTATION
 .SH "QBuffer::QBuffer ()"
 Constructs an empty buffer.
@@ -98,11 +93,6 @@ Reimplemented for internal reasons; the API is not affected. Closes an open buff
 .PP
 See also open().
 .PP
-Examples:
-.(l
-grapher/grapher.cpp
-.)l
-.PP
 Reimplemented from QIODevice.
 .SH "void QBuffer::flush () \fC[virtual]\fR"
 Reimplemented for internal reasons; the API is not affected. The flush function does nothing for a QBuffer.
@@ -129,11 +119,6 @@ The mode parameter \fIm\fR must be a combination of the following flags.
 .PP
 See also close() and isOpen().
 .PP
-Examples:
-.(l
-grapher/grapher.cpp
-.)l
-.PP
 Reimplemented from QIODevice.
 .SH "int QBuffer::putch ( int ch ) \fC[virtual]\fR"
 Reimplemented for internal reasons; the API is not affected. Writes the character \fIch\fR into the buffer, overwriting the character at the current index, extending the buffer if necessary.
@@ -141,11 +126,6 @@ Reimplemented for internal reasons; the API is not affected. Writes the characte
 Returns \fIch,\fR or -1 if some error occurred.
 .PP
 See also getch() and ungetch().
-.PP
-Examples:
-.(l
-grapher/grapher.cpp
-.)l
 .PP
 Reimplemented from QIODevice.
 .SH "int QBuffer::readBlock ( char * p, uint len ) \fC[virtual]\fR"
@@ -200,4 +180,4 @@ In case of content or formattting problems with this manual page, please
 report them to
 .BR qt-bugs@trolltech.com .
 Please include the name of the manual page (qbuffer.3qt) and the Qt
-version (2.3.1).
+version (2.3.2).

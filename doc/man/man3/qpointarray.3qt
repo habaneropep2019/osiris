@@ -1,5 +1,5 @@
 '\" t
-.TH QPointArray 3qt "13 June 2001" "Trolltech AS" \" -*- nroff -*-
+.TH QPointArray 3qt "29 October 2001" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2001 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -96,10 +96,10 @@ Inherits QArray.
 (Note that these are not member functions.)
 .in +1c
 .ti -1c
-.BI "QDataStream & \fBoperator>>\fR (QDataStream & " "s" ", QPointArray & " "a" ")"
+.BI "QDataStream & \fBoperator<<\fR (QDataStream & " "s" ", const QPointArray & " "a" ")"
 .br
 .ti -1c
-.BI "QDataStream & \fBoperator<<\fR (QDataStream & " "s" ", const QPointArray & " "a" ")"
+.BI "QDataStream & \fBoperator>>\fR (QDataStream & " "s" ", QPointArray & " "a" ")"
 .br
 .in -1c
 .SH DESCRIPTION
@@ -257,12 +257,12 @@ For internal use only.
 .SH "void* QPointArray::shortPoints ( int index = 0, int nPoints = -1 ) const"
 For internal use only.
 .SH RELATED FUNCTION DOCUMENTATION
-.SH "QDataStream & operator>> (QDataStream & s, QPointArray & a)"
-Reads a point array from the stream and returns a reference to the stream.
-.PP
-See also Format of the QDataStream operators
 .SH "QDataStream & operator<< (QDataStream & s, const QPointArray & a)"
 Writes a point array to the stream and returns a reference to the stream.
+.PP
+See also Format of the QDataStream operators
+.SH "QDataStream & operator>> (QDataStream & s, QPointArray & a)"
+Reads a point array from the stream and returns a reference to the stream.
 .PP
 See also  Format of the QDataStream operators
 .SH "SEE ALSO"
@@ -283,4 +283,4 @@ In case of content or formattting problems with this manual page, please
 report them to
 .BR qt-bugs@trolltech.com .
 Please include the name of the manual page (qpointarray.3qt) and the Qt
-version (2.3.1).
+version (2.3.2).

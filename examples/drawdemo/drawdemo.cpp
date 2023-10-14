@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/drawdemo/drawdemo.cpp   2.3.1   edited 2001-04-26 $
+** $Id: qt/examples/drawdemo/drawdemo.cpp   2.3.2   edited 2001-06-12 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -274,6 +274,7 @@ int main( int argc, char **argv )
     QApplication app( argc, argv );
     DrawView   draw;
     app.setMainWidget( &draw );
+    draw.setCaption("Qt Example - Drawdemo");
     draw.show();
     return app.exec();
 }

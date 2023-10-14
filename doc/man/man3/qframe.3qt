@@ -1,5 +1,5 @@
 '\" t
-.TH QFrame 3qt "13 June 2001" "Trolltech AS" \" -*- nroff -*-
+.TH QFrame 3qt "29 October 2001" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2001 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -220,7 +220,7 @@ This function is reimplemented by subclasses that draw something inside the fram
 .PP
 See also contentsRect(), QPainter::setClipRect() and drawContentsMask().
 .PP
-Reimplemented in QPopupMenu, QProgressBar, QMenuBar, QLabel and QLCDNumber.
+Reimplemented in QLCDNumber, QMenuBar, QLabel, QProgressBar and QPopupMenu.
 .SH "void QFrame::drawContentsMask ( QPainter * p ) \fC[virtual protected]\fR"
 Virtual function that draws the mask of the frame's contents.
 .PP
@@ -250,7 +250,7 @@ This function can be reimplemented by subclasses that need to know when the fram
 .PP
 The default implementation calls update().
 .PP
-Reimplemented in QWidgetStack, QScrollView, QHBox and QGrid.
+Reimplemented in QHBox, QScrollView, QGrid and QWidgetStack.
 .SH "QRect QFrame::frameRect () const"
 Returns the frame rectangle.
 .PP
@@ -453,4 +453,4 @@ In case of content or formattting problems with this manual page, please
 report them to
 .BR qt-bugs@trolltech.com .
 Please include the name of the manual page (qframe.3qt) and the Qt
-version (2.3.1).
+version (2.3.2).

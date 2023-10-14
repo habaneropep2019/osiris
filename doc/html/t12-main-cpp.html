@@ -42,9 +42,9 @@ MyWidget::MyWidget( <a href="qwidget.html">QWidget</a> *parent, const char *name
         : <a href="qwidget.html">QWidget</a>( parent, name )
 {
     <a href="qpushbutton.html">QPushButton</a> *quit = new <a href="qpushbutton.html">QPushButton</a>( "&amp;Quit", this, "quit" );
-    quit-&gt;<a href="qwidget.html#dde00b">setFont</a>( <a href="qfont.html">QFont</a>( "Times", 18, QFont::Bold ) );
+    quit-&gt;<a href="qwidget.html#c52788">setFont</a>( <a href="qfont.html">QFont</a>( "Times", 18, QFont::Bold ) );
 
-    <a href="qobject.html#c2d209">connect</a>( quit, SIGNAL(clicked()), qApp, SLOT(quit()) );
+    <a href="qobject.html#7f8e37">connect</a>( quit, SIGNAL(clicked()), qApp, SLOT(quit()) );
 
     LCDRange *angle  = new LCDRange( "ANGLE", this, "angle" );
     angle-&gt;setRange( 5, 70 );
@@ -54,57 +54,57 @@ MyWidget::MyWidget( <a href="qwidget.html">QWidget</a> *parent, const char *name
 
     CannonField *cannonField = new CannonField( this, "cannonField" );
 
-    <a href="qobject.html#c2d209">connect</a>( angle, SIGNAL(valueChanged(int)),
+    <a href="qobject.html#7f8e37">connect</a>( angle, SIGNAL(valueChanged(int)),
              cannonField, SLOT(setAngle(int)) );
-    <a href="qobject.html#c2d209">connect</a>( cannonField, SIGNAL(angleChanged(int)),
+    <a href="qobject.html#7f8e37">connect</a>( cannonField, SIGNAL(angleChanged(int)),
              angle, SLOT(setValue(int)) );
 
-    <a href="qobject.html#c2d209">connect</a>( force, SIGNAL(valueChanged(int)),
+    <a href="qobject.html#7f8e37">connect</a>( force, SIGNAL(valueChanged(int)),
              cannonField, SLOT(setForce(int)) );
-    <a href="qobject.html#c2d209">connect</a>( cannonField, SIGNAL(forceChanged(int)),
+    <a href="qobject.html#7f8e37">connect</a>( cannonField, SIGNAL(forceChanged(int)),
              force, SLOT(setValue(int)) );
 
     <a href="qpushbutton.html">QPushButton</a> *shoot = new <a href="qpushbutton.html">QPushButton</a>( "&amp;Shoot", this, "shoot" );
-    shoot-&gt;<a href="qwidget.html#dde00b">setFont</a>( <a href="qfont.html">QFont</a>( "Times", 18, QFont::Bold ) );
+    shoot-&gt;<a href="qwidget.html#c52788">setFont</a>( <a href="qfont.html">QFont</a>( "Times", 18, QFont::Bold ) );
 
-    <a href="qobject.html#c2d209">connect</a>( shoot, SIGNAL(clicked()), cannonField, SLOT(shoot()) );
+    <a href="qobject.html#7f8e37">connect</a>( shoot, SIGNAL(clicked()), cannonField, SLOT(shoot()) );
 
     <a href="qgridlayout.html">QGridLayout</a> *grid = new <a href="qgridlayout.html">QGridLayout</a>( this, 2, 2, 10 );
-    grid-&gt;<a href="qgridlayout.html#70abf2">addWidget</a>( quit, 0, 0 );
-    grid-&gt;<a href="qgridlayout.html#70abf2">addWidget</a>( cannonField, 1, 1 );
-    grid-&gt;<a href="qgridlayout.html#4ffa51">setColStretch</a>( 1, 10 );
+    grid-&gt;<a href="qgridlayout.html#dac29c">addWidget</a>( quit, 0, 0 );
+    grid-&gt;<a href="qgridlayout.html#dac29c">addWidget</a>( cannonField, 1, 1 );
+    grid-&gt;<a href="qgridlayout.html#df80c4">setColStretch</a>( 1, 10 );
 
     <a href="qvboxlayout.html">QVBoxLayout</a> *leftBox = new <a href="qvboxlayout.html">QVBoxLayout</a>;
-    grid-&gt;<a href="qgridlayout.html#7fc9ea">addLayout</a>( leftBox, 1, 0 );
-    leftBox-&gt;<a href="qboxlayout.html#219265">addWidget</a>( angle );
-    leftBox-&gt;<a href="qboxlayout.html#219265">addWidget</a>( force );
+    grid-&gt;<a href="qgridlayout.html#a409bc">addLayout</a>( leftBox, 1, 0 );
+    leftBox-&gt;<a href="qboxlayout.html#ebba99">addWidget</a>( angle );
+    leftBox-&gt;<a href="qboxlayout.html#ebba99">addWidget</a>( force );
 
     <a href="qhboxlayout.html">QHBoxLayout</a> *topBox = new <a href="qhboxlayout.html">QHBoxLayout</a>;
-    grid-&gt;<a href="qgridlayout.html#7fc9ea">addLayout</a>( topBox, 0, 1 );
-    topBox-&gt;<a href="qboxlayout.html#219265">addWidget</a>( shoot );
-    topBox-&gt;<a href="qboxlayout.html#51b0de">addStretch</a>( 1 );
+    grid-&gt;<a href="qgridlayout.html#a409bc">addLayout</a>( topBox, 0, 1 );
+    topBox-&gt;<a href="qboxlayout.html#ebba99">addWidget</a>( shoot );
+    topBox-&gt;<a href="qboxlayout.html#0226eb">addStretch</a>( 1 );
 
     angle-&gt;setValue( 60 );
     force-&gt;setValue( 25 );
-    angle-&gt;<a href="qwidget.html#666b3c">setFocus</a>();
+    angle-&gt;<a href="qwidget.html#25775a">setFocus</a>();
 }
 
 int main( int argc, char **argv )
 {
-    <a href="qapplication.html#e2431b">QApplication::setColorSpec</a>( QApplication::CustomColor );
+    <a href="qapplication.html#1ee2d1">QApplication::setColorSpec</a>( QApplication::CustomColor );
     <a href="qapplication.html">QApplication</a> a( argc, argv );
 
     MyWidget w;
-    w.<a href="qwidget.html#8e0197">setGeometry</a>( 100, 100, 500, 355 );
-    a.<a href="qapplication.html#11c921">setMainWidget</a>( &amp;w );
-    w.<a href="qwidget.html#ccc8f7">show</a>();
-    return a.<a href="qapplication.html#7076af">exec</a>();
+    w.<a href="qwidget.html#9ede68">setGeometry</a>( 100, 100, 500, 355 );
+    a.<a href="qapplication.html#7ad759">setMainWidget</a>( &amp;w );
+    w.<a href="qwidget.html#200ee5">show</a>();
+    return a.<a href="qapplication.html#84c7bf">exec</a>();
 }
 </pre>
 <p>
 
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.1</div>
+<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

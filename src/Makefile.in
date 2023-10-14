@@ -17,7 +17,7 @@ UIC	=	$(SYSCONF_UIC)
 DESTDIR = ../lib/
 VER_MAJ = 2
 VER_MIN = 3
-VER_PATCH = 1
+VER_PATCH = 2
 TARGET	= qt$(QT_THREAD_SUFFIX)
 TARGET1 = lib$(TARGET).so.$(VER_MAJ)
 
@@ -2207,7 +2207,8 @@ kernel/qapplication_x11.o: kernel/qapplication_x11.cpp \
 		widgets/qsgistyle.h \
 		kernel/qthread.h \
 		tools/qfile.h \
-		kernel/qt_x11.h
+		kernel/qt_x11.h \
+		tools/qmodules.h
 
 kernel/qclipboard_x11.o: kernel/qclipboard_x11.cpp \
 		kernel/qclipboard.h \
@@ -2788,6 +2789,7 @@ kernel/qsound_x11.o: kernel/qsound_x11.cpp \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
 		tools/qregexp.h \
+		kernel/qsocketnotifier.h \
 		kernel/qapplication.h \
 		kernel/qwidget.h \
 		kernel/qpaintdevice.h \
@@ -3418,7 +3420,8 @@ kernel/qdialog.o: kernel/qdialog.cpp \
 		kernel/qwidgetlist.h \
 		kernel/qlayout.h \
 		kernel/qabstractlayout.h \
-		kernel/qsizegrip.h
+		kernel/qsizegrip.h \
+		widgets/qwhatsthis.h
 
 kernel/qdragobject.o: kernel/qdragobject.cpp \
 		tools/qtextcodec.h \
@@ -3706,10 +3709,14 @@ kernel/qfontdatabase.o: kernel/qfontdatabase.cpp \
 		tools/qlist.h \
 		tools/qglist.h \
 		tools/qcollection.h \
+		tools/qdir.h \
+		tools/qstrlist.h \
+		tools/qfileinfo.h \
+		tools/qfile.h \
+		tools/qdatetime.h \
 		tools/qmap.h \
 		tools/qdict.h \
 		tools/qgdict.h \
-		tools/qfile.h \
 		tools/qtextstream.h \
 		kernel/qapplication.h \
 		kernel/qwidget.h \
@@ -10896,7 +10903,8 @@ widgets/qeffects.o: widgets/qeffects.cpp \
 		kernel/qimage.h \
 		tools/qstrlist.h \
 		kernel/qtimer.h \
-		tools/qdatetime.h
+		tools/qdatetime.h \
+		kernel/qguardedptr.h
 
 # Module dialogs...
 dialogs/moc_qcolordialog.o: dialogs/moc_qcolordialog.cpp \

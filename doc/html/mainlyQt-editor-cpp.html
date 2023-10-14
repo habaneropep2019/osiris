@@ -64,7 +64,7 @@ public:
     }
     void resizeEvent( <a name="QResizeEvent"></a><a href="qresizeevent.html">QResizeEvent</a>* e )
     {
-        <a name="QXtWidget::resizeEvent"></a><a href="qxtwidget.html#70897b">QXtWidget::resizeEvent</a>( e );
+        <a name="QXtWidget::resizeEvent"></a><a href="qxtwidget.html#71ff15">QXtWidget::resizeEvent</a>( e );
         XtResizeWidget( editor, width(), height(), 2 );
     }
 };
@@ -78,15 +78,15 @@ public:
         <a name="QMainWindow"></a><a href="qmainwindow.html">QMainWindow</a>( 0, "mainWindow")
     {
         <a name="QPopupMenu"></a><a href="qpopupmenu.html">QPopupMenu</a>* file = new <a href="qpopupmenu.html">QPopupMenu</a>( this );
-        file-&gt;<a name="insertItem"></a><a href="qmenudata.html#43c652">insertItem</a>("E&amp;xit", qApp, SLOT( quit() ) );
+        file-&gt;<a name="insertItem"></a><a href="qmenudata.html#0076cb">insertItem</a>("E&amp;xit", qApp, SLOT( quit() ) );
         menuBar()-&gt;insertItem( "&amp;File", file );
         statusBar();
         <a name="QSplitter"></a><a href="qsplitter.html">QSplitter</a>* splitter = new <a href="qsplitter.html">QSplitter</a>( this );
-        splitter-&gt;<a name="setOpaqueResize"></a><a href="qsplitter.html#72c9e4">setOpaqueResize</a>( TRUE );
+        splitter-&gt;<a name="setOpaqueResize"></a><a href="qsplitter.html#28096e">setOpaqueResize</a>( TRUE );
         setCentralWidget( splitter );
         xtchild = new EncapsulatedXtWidget( splitter );
         qtchild = new <a href="qmultilineedit.html">QMultiLineEdit</a>( splitter );
-        qtchild-&gt;<a name="setText"></a><a href="qmultilineedit.html#d5e499">setText</a>(QTEDMSG);
+        qtchild-&gt;<a name="setText"></a><a href="qmultilineedit.html#3fd8c1">setText</a>(QTEDMSG);
     }
 
 };
@@ -95,13 +95,13 @@ main(int argc, char** argv)
 {
     <a name="QXtApplication"></a><a href="qxtapplication.html">QXtApplication</a> app(argc, argv, "TwoEditors");
     TwoEditors m;
-    app.<a name="setMainWidget"></a><a href="qapplication.html#11c921">setMainWidget</a>(&amp;m);
-    m.<a name="show"></a><a href="qmainwindow.html#e71bb3">show</a>();
-    return app.<a name="exec"></a><a href="qapplication.html#7076af">exec</a>();
+    app.<a name="setMainWidget"></a><a href="qapplication.html#7ad759">setMainWidget</a>(&amp;m);
+    m.<a name="show"></a><a href="qmainwindow.html#eb53e3">show</a>();
+    return app.<a name="exec"></a><a href="qapplication.html#84c7bf">exec</a>();
 }
 </pre>
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.1</div>
+<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

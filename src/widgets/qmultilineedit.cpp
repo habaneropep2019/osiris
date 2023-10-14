@@ -1,5 +1,5 @@
 /**********************************************************************
-** $Id: qt/src/widgets/qmultilineedit.cpp   2.3.1   edited 2001-03-30 $
+** $Id: qt/src/widgets/qmultilineedit.cpp   2.3.2   edited 2001-08-01 $
 **
 ** Implementation of QMultiLineEdit widget class
 **
@@ -4152,32 +4152,49 @@ bool QMultiLineEdit::event( QEvent * e )
 {
     if ( e->type() == QEvent::AccelOverride && !isReadOnly() ) {
 	QKeyEvent* ke = (QKeyEvent*) e;
-	if ( ke->state() & ControlButton ) {
+	if ( ke->state() == NoButton ) {
+	    if ( ke->key() < Key_Escape ) {
+		ke->accept();
+	    } else {
+		switch ( ke->key() ) {
+		case Key_Return:
+		case Key_Enter:
+		case Key_Delete:
+		case Key_Home:
+		case Key_End:
+		case Key_Backspace:
+		    ke->accept();
+		default:
+		    break;
+		}
+	    }
+	} else if ( ke->state() & ControlButton ) {
 	    switch ( ke->key() ) {
-	    case Key_A:
+// Those are too frequently used for application functionality
+/*	    case Key_A:
+	    case Key_B:
+	    case Key_D:
 	    case Key_E:
+	    case Key_F:
+	    case Key_H:
+	    case Key_K:
+	    case Key_N:
+	    case Key_P:
+*/
+	    case Key_C:
+	    case Key_V:
+	    case Key_X:
+	    case Key_Y:
+	    case Key_Z:
 #if defined (_WS_WIN_)
 	    case Key_Insert:
 #endif
-	    case Key_X:
-	    case Key_V:
-	    case Key_C:
 	    case Key_Left:
 	    case Key_Right:
 	    case Key_Up:
 	    case Key_Down:
 	    case Key_Home:
 	    case Key_End:
-		ke->accept();
-	    default:
-		break;
-	    }
-	} else {
-	    switch ( ke->key() ) {
-	    case Key_Delete:
-	    case Key_Home:
-	    case Key_End:
-	    case Key_Backspace:
 		ke->accept();
 	    default:
 		break;

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qdragobject.h   2.3.1   edited 2001-01-26 $
+** $Id: qt/src/kernel/qdragobject.h   2.3.2   edited 2001-08-30 $
 **
 ** Definition of QDragObject
 **
@@ -59,6 +59,9 @@ public:
     bool drag();
     bool dragMove();
     void dragCopy();
+#if defined(Q_INCOMPATIBLE_3_0_ADDONS)
+    void dragLink();
+#endif
 
     virtual void setPixmap(QPixmap);
     virtual void setPixmap(QPixmap, QPoint hotspot);
@@ -72,7 +75,11 @@ public:
     static void setTarget(QWidget*);
 
 #ifndef QT_NO_DRAGANDDROP
-    enum DragMode { DragDefault, DragCopy, DragMove, DragCopyOrMove };
+    enum DragMode { DragDefault, DragCopy, DragMove, DragCopyOrMove
+#if defined(Q_INCOMPATIBLE_3_0_ADDONS)
+		    , DragLink
+#endif
+    };
 
 protected:
     virtual bool drag(DragMode);

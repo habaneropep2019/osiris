@@ -32,25 +32,25 @@ Inherits <a href="qobject.html">QObject</a>.
 <p><a href="qfileiconprovider-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><div class="fn"><a href="#63109e"><b>QFileIconProvider</b></a> ( QObject * parent = 0, const char * name = 0 ) </div>
-<li><div class="fn">virtual const QPixmap* <a href="#38b549"><b>pixmap</b></a> ( const QFileInfo &amp; ) </div>
+<li><div class="fn"><a href="#bfbb8b"><b>QFileIconProvider</b></a> ( QObject * parent = 0, const char * name = 0 ) </div>
+<li><div class="fn">virtual const QPixmap* <a href="#b7f5cc"><b>pixmap</b></a> ( const QFileInfo &amp; ) </div>
 </ul>
 <hr><h2><a name="details"></a>Detailed Description</h2>
 The QFileIconProvider class provides icons for <a href="qfiledialog.html">QFileDialog</a> to use.
 <p>
 By default, QFileIconProvider is not used, but any application or
-library can subclass it, reimplement <a href="#38b549">pixmap</a>() to return a suitable
+library can subclass it, reimplement <a href="#b7f5cc">pixmap</a>() to return a suitable
 icon, and make all QFileDialog objects use it by calling the static
-function <a href="qfiledialog.html#7c742a">QFileDialog::setIconProvider</a>().
+function <a href="qfiledialog.html#8d2ecf">QFileDialog::setIconProvider</a>().
 <p>It's advisable to make all the icons QFileIconProvider returns be of
 the same size, or at least the same width.  This makes the list view
 look much better.
 <p>See also  <a href="qfiledialog.html">QFileDialog</a>.
 
 <hr><h2>Member Function Documentation</h2>
-<h3 class="fn"><a name="63109e"></a>QFileIconProvider::QFileIconProvider ( <a href="qobject.html">QObject</a> * parent = 0, const char * name = 0 )</h3>
+<h3 class="fn"><a name="bfbb8b"></a>QFileIconProvider::QFileIconProvider ( <a href="qobject.html">QObject</a> * parent = 0, const char * name = 0 )</h3>
 <p>Constructs an empty file icon provider.
-<h3 class="fn">const <a href="qpixmap.html">QPixmap</a> * <a name="38b549"></a>QFileIconProvider::pixmap ( const <a href="qfileinfo.html">QFileInfo</a> &amp; info ) <code>[virtual]</code></h3>
+<h3 class="fn">const <a href="qpixmap.html">QPixmap</a> * <a name="b7f5cc"></a>QFileIconProvider::pixmap ( const <a href="qfileinfo.html">QFileInfo</a> &amp; info ) <code>[virtual]</code></h3>
 <p>Returns a pointer to a pixmap which should be used for
 visualizing the file with the information <em>info.</em>
 <p>If pixmap() returns 0, <a href="qfiledialog.html">QFileDialog</a> draws the default pixmap.
@@ -61,13 +61,13 @@ link-files, link-directories, and blank for other types.
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.3.1"><nobr>
+<input type=hidden name="version" value="2.3.2"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
-copyright &copy; 1995-2000
+copyright &copy; 1995-2001
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.1</div>
+<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

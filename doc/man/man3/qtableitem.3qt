@@ -1,5 +1,5 @@
 '\" t
-.TH QTableItem 3qt "13 June 2001" "Trolltech AS" \" -*- nroff -*-
+.TH QTableItem 3qt "29 October 2001" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2001 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -186,6 +186,8 @@ Sets the item's row to be \fIrow.\fR Normally you will not need to call this fun
 If the cell spans multiple rows, this function sets the top row and retains the height.
 .SH "void QTableItem::setSpan ( int rs, int cs ) \fC[virtual]\fR"
 Creates a multi-cell QTableItem covering \fIrs\fR rows and \fIcs\fR columns. The top left corner of the item is at the item's former position.
+.PP
+\fBWarning:\fR This function only works, if the item has already been inserted into the table using e.g. QTable::setItem().
 .SH "void QTableItem::setText ( const QString & str ) \fC[virtual]\fR"
 Changes the text of the item to \fIstr.\fR Note that the cell is not repainted.
 .SH "void QTableItem::setWordWrap ( bool b ) \fC[virtual]\fR"
@@ -220,4 +222,4 @@ In case of content or formattting problems with this manual page, please
 report them to
 .BR qt-bugs@trolltech.com .
 Please include the name of the manual page (qtableitem.3qt) and the Qt
-version (2.3.1).
+version (2.3.2).

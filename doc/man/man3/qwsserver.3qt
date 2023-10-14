@@ -1,5 +1,5 @@
 '\" t
-.TH QWSServer 3qt "13 June 2001" "Trolltech AS" \" -*- nroff -*-
+.TH QWSServer 3qt "29 October 2001" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2001 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -70,6 +70,9 @@ Inherits QObject.
 .ti -1c
 .BI "void \fBwindowEvent\fR ( QWSWindow * " "w" ", QWSServer::WindowEvent e ) "
 .br
+.ti -1c
+.BI "void \fBnewChannel\fR ( const QString & ) "
+.br
 .in -1c
 .SS "Static Public Members"
 .in +1c
@@ -114,6 +117,12 @@ Inherits QObject.
 .br
 .ti -1c
 .BI "void \fBsetKeyboardHandler\fR ( QWSKeyboardHandler * kh ) "
+.br
+.ti -1c
+.BI "void \fBsetScreenSaver\fR ( QWSScreenSaver * ) "
+.br
+.ti -1c
+.BI "void \fBsetScreenSaverIntervals\fR ( int * ms ) "
 .br
 .ti -1c
 .BI "void \fBsetScreenSaverInterval\fR ( int ) "
@@ -194,8 +203,8 @@ Sets the primary keyboard handler to \fIkh.\fR
 Sets the area of the screen which Qt/Embedded application will consider to be the maximum area to use for windows.
 .PP
 See also QWidget::showMaximized().
-.SH "void QWSServer::setScreenSaverInterval ( int ms ) \fC[static]\fR"
-Sets the timeout for the screensaver to \fIms\fR milliseconds. A setting of zero turns of the screensaver.
+.SH "void QWSServer::setScreenSaverIntervals ( int * ms ) \fC[static]\fR"
+Sets an array of timeouts for the screensaver to a list of \fIms\fR milliseconds. A setting of zero turns off the screensaver. The array must be 0-terminated.
 .SH "QWSWindow * QWSServer::windowAt ( const QPoint & pos )"
 Returns the window containing the point \fCpos\fR or 0 if there is no window under the point.
 .SH "void QWSServer::closedown () \fC[static]\fR"
@@ -230,4 +239,4 @@ In case of content or formattting problems with this manual page, please
 report them to
 .BR qt-bugs@trolltech.com .
 Please include the name of the manual page (qwsserver.3qt) and the Qt
-version (2.3.1).
+version (2.3.2).

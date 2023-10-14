@@ -32,12 +32,12 @@ Inherits <a href="qdomtext.html">QDomText</a>.
 <p><a href="qdomcdatasection-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><div class="fn"><a href="#026c78"><b>QDomCDATASection</b></a> () </div>
-<li><div class="fn"><a href="#e4f008"><b>QDomCDATASection</b></a> ( const QDomCDATASection &amp; x ) </div>
-<li><div class="fn">QDomCDATASection&amp; <a href="#51b39e"><b>operator=</b></a> ( const QDomCDATASection &amp; ) </div>
-<li><div class="fn"><a href="#fd8079"><b>~QDomCDATASection</b></a> () </div>
-<li><div class="fn">virtual QDomNode::NodeType <a href="#835a93"><b>nodeType</b></a> () const</div>
-<li><div class="fn">virtual bool <a href="#2c0785"><b>isCDATASection</b></a> () const</div>
+<li><div class="fn"><a href="#03dbb8"><b>QDomCDATASection</b></a> () </div>
+<li><div class="fn"><a href="#c8bada"><b>QDomCDATASection</b></a> ( const QDomCDATASection &amp; x ) </div>
+<li><div class="fn">QDomCDATASection&amp; <a href="#6b1a27"><b>operator=</b></a> ( const QDomCDATASection &amp; ) </div>
+<li><div class="fn"><a href="#133c1f"><b>~QDomCDATASection</b></a> () </div>
+<li><div class="fn">virtual QDomNode::NodeType <a href="#c4afc9"><b>nodeType</b></a> () const</div>
+<li><div class="fn">virtual bool <a href="#9a8405"><b>isCDATASection</b></a> () const</div>
 </ul>
 <hr><h2><a name="details"></a>Detailed Description</h2>
 The QDomCDATASection class represents an XML CDATA section.
@@ -56,36 +56,36 @@ For a more general introduction of the DOM implementation see the
 <a href="qdomdocument.html">QDomDocument</a> documentation.
 
 <hr><h2>Member Function Documentation</h2>
-<h3 class="fn"><a name="026c78"></a>QDomCDATASection::QDomCDATASection ()</h3>
+<h3 class="fn"><a name="03dbb8"></a>QDomCDATASection::QDomCDATASection ()</h3>
 <p>Constructs an empty CDATA section. To create a CDATA section with content,
-use the <a href="qdomdocument.html#ad35f6">QDomDocument::createCDATASection</a>() function.
-<h3 class="fn"><a name="e4f008"></a>QDomCDATASection::QDomCDATASection ( const QDomCDATASection &amp; x )</h3>
+use the <a href="qdomdocument.html#735338">QDomDocument::createCDATASection</a>() function.
+<h3 class="fn"><a name="c8bada"></a>QDomCDATASection::QDomCDATASection ( const QDomCDATASection &amp; x )</h3>
 <p>Copy constructor.
 <p>The data of the copy is shared: modifying one will also change the other. If
-you want to make a real copy, use <a href="qdomnode.html#7b27fa">cloneNode</a>() instead.
-<h3 class="fn"><a name="fd8079"></a>QDomCDATASection::~QDomCDATASection ()</h3>
+you want to make a real copy, use <a href="qdomnode.html#8f17f1">cloneNode</a>() instead.
+<h3 class="fn"><a name="133c1f"></a>QDomCDATASection::~QDomCDATASection ()</h3>
 <p>Destructor.
-<h3 class="fn">bool <a name="2c0785"></a>QDomCDATASection::isCDATASection () const <code>[virtual]</code></h3>
+<h3 class="fn">bool <a name="9a8405"></a>QDomCDATASection::isCDATASection () const <code>[virtual]</code></h3>
 <p>Returns TRUE.
-<p>Reimplemented from <a href="qdomnode.html#fbabaf">QDomNode.</a>
-<h3 class="fn">QDomNode::NodeType <a name="835a93"></a>QDomCDATASection::nodeType() const <code>[virtual]</code></h3>
+<p>Reimplemented from <a href="qdomnode.html#c9c342">QDomNode.</a>
+<h3 class="fn">QDomNode::NodeType <a name="c4afc9"></a>QDomCDATASection::nodeType() const <code>[virtual]</code></h3>
 <p>Returns <code>CDATASection.</code>
-<p>Reimplemented from <a href="qdomnode.html#4aab85">QDomNode.</a>
-<h3 class="fn">QDomCDATASection&amp; <a name="51b39e"></a>QDomCDATASection::operator= ( const QDomCDATASection &amp; x )</h3>
+<p>Reimplemented from <a href="qdomnode.html#46495e">QDomNode.</a>
+<h3 class="fn">QDomCDATASection&amp; <a name="6b1a27"></a>QDomCDATASection::operator= ( const QDomCDATASection &amp; x )</h3>
 <p>Assigment operator.
 <p>The data of the copy is shared: modifying one will also change the other. If
-you want to make a real copy, use <a href="qdomnode.html#7b27fa">cloneNode</a>() instead.
+you want to make a real copy, use <a href="qdomnode.html#8f17f1">cloneNode</a>() instead.
 <hr><p>
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.3.1"><nobr>
+<input type=hidden name="version" value="2.3.2"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
-copyright &copy; 1995-2000
+copyright &copy; 1995-2001
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.1</div>
+<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

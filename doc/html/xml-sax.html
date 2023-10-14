@@ -106,11 +106,11 @@ Like every other feature this has a unique name represented by a URI:
 it is called <em>http://xml.org/sax/features/namespace-prefixes.</em>
 <p>
 The Qt SAX2 implementation allows you to find out whether the 
-reader has this ability using <a href="qxmlreader.html#3ffeea">QXmlReader::hasFeature()</a>.
+reader has this ability using <a href="qxmlreader.html#2e0d44">QXmlReader::hasFeature()</a>.
 If the return value is TRUE it is possible to
 turn the relevant feature on and off.
-To do this use <a href="qxmlreader.html#1b4ee5">QXmlReader::setFeature()</a>. Whether a supported feature
-is on or off (TRUE or FALSE) can be queried using  <a href="qxmlreader.html#335c86">QXmlReader::feature()</a>.
+To do this use <a href="qxmlreader.html#57cdb9">QXmlReader::setFeature()</a>. Whether a supported feature
+is on or off (TRUE or FALSE) can be queried using  <a href="qxmlreader.html#be21af">QXmlReader::feature()</a>.
 <p>
 Consider the example 
 <pre>&lt;document xmlns:book = 'http://trolltech.com/fnord/book/'
@@ -122,7 +122,7 @@ A reader not supporting the
 report the element name <em>document</em> but not its attributes <em>xmlns:book</em> and <em>xmlns</em>
 with their values. A
 reader with the feature <em>http://xml.org/sax/features/namespace-prefixes</em>
-reports the namespace attributes if <a href="qxmlreader.html#335c86">QXmlReader::feature()</a> is TRUE and 
+reports the namespace attributes if <a href="qxmlreader.html#be21af">QXmlReader::feature()</a> is TRUE and 
 disregards them if the feature is FALSE.
 <p>
 Other features include <em>http://xml.org/sax/features/namespace</em> (namespace 
@@ -154,7 +154,7 @@ They influence the reporting behavior in the following way:
 <li>Namespace prefixes and local parts of elements and attributes can be
     reported.
 <li>The qualified names of elements and attributes are reported.
-<li><a href="qxmlcontenthandler.html#b5fddc">QXmlContentHandler::startPrefixMapping()</a> and <a href="qxmlcontenthandler.html#052368">QXmlContentHandler::endPrefixMapping()</a> 
+<li><a href="qxmlcontenthandler.html#a587d5">QXmlContentHandler::startPrefixMapping()</a> and <a href="qxmlcontenthandler.html#3a4e72">QXmlContentHandler::endPrefixMapping()</a> 
     are called by the reader.
 <li>Attributes that declare namespaces (i.e. the attribute <em>xmlns</em> and
     attributes starting with <em>xmlns:</em> ) are reported.
@@ -198,7 +198,7 @@ to associate <em>xmlns</em> with the namespace <em>http://www.w3.org/2000/xmlns.
 As the SAX2 standard suggests <a href="qxmlsimplereader.html">QXmlSimpleReader</a> by default has
 <em>http://xml.org/sax/features/namespaces</em> set to TRUE and
 <em>http://xml.org/sax/features/namespace-prefixes</em> set to FALSE.
-When changing this behavior using <a href="qxmlsimplereader.html#7befc5">QXmlSimpleReader::setFeature()</a> 
+When changing this behavior using <a href="qxmlsimplereader.html#1f7766">QXmlSimpleReader::setFeature()</a> 
 note that the combination of both features set to
 FALSE is illegal.
 <p>
@@ -270,7 +270,7 @@ readers. Property support is however not
 required.
 <p>
 To set or query properties the following functions are provided:
-<a href="qxmlreader.html#b14640">QXmlReader::setProperty()</a>, <a href="qxmlreader.html#c60308">QXmlReader::property()</a> and <a href="qxmlreader.html#4edef7">QXmlReader::hasProperty()</a>.                      
+<a href="qxmlreader.html#6970da">QXmlReader::setProperty()</a>, <a href="qxmlreader.html#67bf3a">QXmlReader::property()</a> and <a href="qxmlreader.html#0dfd4d">QXmlReader::hasProperty()</a>.                      
 <p>
 <h2>Further reading</h2>
 <p>
@@ -282,6 +282,6 @@ can be found in the <a href="xml.html">introduction to the Qt XML module.</a>
 
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.1</div>
+<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

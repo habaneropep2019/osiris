@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qthread_unix.cpp   2.3.1   edited 2001-06-11 $
+** $Id: qt/src/kernel/qthread_unix.cpp   2.3.2   edited 2001-10-14 $
 **
 ** QThread class for Unix
 **
@@ -39,7 +39,6 @@
 
 #if defined(_OS_LINUX_)
 # define _GNU_SOURCE
-# define __USE_UNIX98
 #endif
 
 #include "qthread.h"
@@ -368,7 +367,7 @@ void QThread::msleep( unsigned long msecs )
 */
 void QThread::usleep( unsigned long usecs )
 {
-    if ( usecs > 1000000 )
+    if ( usecs >= 1000000 )
 	::sleep( usecs / 1000000 );
     ::usleep( usecs % 1000000 );
 }
@@ -512,7 +511,7 @@ bool QThread::running() const
   \code
   QWaitCondition key_pressed;
 
-  while(1) {
+  for (;;) {
      key_pressed.wait();    // This is a QWaitCondition global variable
      // Key was pressed, do something interesting
      do_something();
@@ -525,7 +524,7 @@ bool QThread::running() const
   \code
   QWaitCondition key_pressed;
 
-  while(1) {
+  for (;;) {
      getchar();
      // Causes any thread in key_pressed.wait() to return from
      // that method and continue processing
@@ -546,7 +545,7 @@ bool QThread::running() const
   int mycount=0;
 
   // Worker thread code
-  while(1) {
+  for (;;) {
      key_pressed.wait();    // This is a QWaitCondition global variable
      mymutex.lock();
      mycount++;
@@ -558,7 +557,7 @@ bool QThread::running() const
   }
 
   // Key reading thread code
-  while(1) {
+  for (;;) {
      getchar();
      mymutex.lock();
      // Sleep until there are no busy worker threads

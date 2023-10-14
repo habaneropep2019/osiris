@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/opengl/qgl_x11.cpp   2.3.1   edited 2001-01-26 $
+** $Id: qt/src/opengl/qgl_x11.cpp   2.3.2   edited 2001-08-29 $
 **
 ** Implementation of OpenGL classes for Qt
 **
@@ -271,7 +271,11 @@ bool QGLContext::chooseContext( const QGLContext* shareContext )
 	return FALSE;
 
     if ( deviceIsPixmap() && 
-	 ((XVisualInfo*)vi)->depth != paintDevice->x11Depth() ) {
+	 (((XVisualInfo*)vi)->depth != paintDevice->x11Depth() ||
+	  ((XVisualInfo*)vi)->screen != paintDevice->x11Screen() ||
+	  ((XVisualInfo*)vi)->visualid != 
+	        XVisualIDFromVisual( (Visual*) paintDevice->x11Visual() )) ) 
+    {
 	XFree( vi );
 	XVisualInfo appVisInfo;
 	memset( &appVisInfo, 0, sizeof(XVisualInfo) );
@@ -315,7 +319,11 @@ bool QGLContext::chooseContext( const QGLContext* shareContext )
     }
 
     // sharing between rgba and color-index will give wrong colors
-    if ( shareContext && ( format().rgba() != shareContext->format().rgba() ) )
+    // Also, if one context is doing direct rendering and the other renders
+    // via the X server things will go terribly wrong.
+    if ( shareContext && 
+         ((format().rgba() != shareContext->format().rgba()) ||
+          (direct != shareContext->format().directRendering()) ) )
 	shareContext = 0;
 
     cx = 0;

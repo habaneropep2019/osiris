@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qasyncimageio.cpp   2.3.1   edited 2001-01-28 $
+** $Id: qt/src/kernel/qasyncimageio.cpp   2.3.2   edited 2001-08-03 $
 **
 ** Implementation of asynchronous image/movie loading classes
 **
@@ -686,14 +686,16 @@ void QGIFFormat::disposePrevious( QImage& img, QImageConsumer* consumer )
 	    consumer->changed(QRect(l, t, r-l+1, b-t+1));
 	break;
       case RestoreImage: {
-	uchar** line = img.jumpTable();
-	preserve_trans = FALSE;
-	for (int ln=t; ln<=b; ln++) {
-	    memcpy(line[ln]+l,
-		backingstore.scanLine(ln-t),
-		r-l+1);
+	if ( frame > 0 ) {
+	    uchar** line = img.jumpTable();
+	    preserve_trans = FALSE;
+	    for (int ln=t; ln<=b; ln++) {
+		memcpy(line[ln]+l,
+		    backingstore.scanLine(ln-t),
+		    r-l+1);
+	    }
+	    consumer->changed(QRect(l, t, r-l+1, b-t+1));
 	}
-	consumer->changed(QRect(l, t, r-l+1, b-t+1));
       }
     }
     disposal = NoDisposal; // Until an extension says otherwise.
@@ -814,6 +816,13 @@ int QGIFFormat::decode(QImage& img, QImageConsumer* consumer,
 		int newtop=LM(hold[3], hold[4]);
 		int width=LM(hold[5], hold[6]);
 		int height=LM(hold[7], hold[8]);
+
+		// disbelieve ridiculous logical screen sizes,
+		// unless the image frames are also large.
+		if ( swidth/10 > QMAX(width,200) )
+		    swidth = -1;
+		if ( sheight/10 > QMAX(height,200) )
+		    sheight = -1;
 
 		if ( swidth <= 0 )
 		    swidth = newleft + width;

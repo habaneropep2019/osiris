@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/texture/main.cpp   2.3.1   edited 2001-01-26 $
+** $Id: qt/examples/texture/main.cpp   2.3.2   edited 2001-06-12 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -36,6 +36,7 @@ int main( int argc, char **argv )
     GLObjectWindow* w = new GLObjectWindow;
     w->resize( 400, 350 );
     a.setMainWidget( w );
+    w->setCaption("Qt Example - OpenGL - Texture");
     w->show();
     int result = a.exec();
     delete w;

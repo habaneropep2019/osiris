@@ -1,5 +1,5 @@
 /**********************************************************************
-** $Id: qt/src/widgets/qcombobox.cpp   2.3.1   edited 2001-04-27 $
+** $Id: qt/src/widgets/qcombobox.cpp   2.3.2   edited 2001-10-21 $
 **
 ** Implementation of QComboBox widget class
 **
@@ -96,7 +96,7 @@
   style.
 
   Combo boxes can contain pixmaps as well as texts; the
-  insert() and changeItem() functions are suitably overloaded.  For 
+  insert() and changeItem() functions are suitably overloaded.  For
   read-write combo boxes, the function clearEdit()
   is provided, to clear the displayed string without changing the
   combo box' contents.
@@ -115,9 +115,9 @@
   It is possible to constrain the input to an editable combo box using
   QValidator; see setValidator().  By default, all input is accepted.
 
-  If the combo box is not editable then it has a default focusPolicy() 
-  of \c TabFocus, i.e. it will not grab focus if clicked.  This 
-  differs from both Windows and Motif.  If the combo box is editable then it 
+  If the combo box is not editable then it has a default focusPolicy()
+  of \c TabFocus, i.e. it will not grab focus if clicked.  This
+  differs from both Windows and Motif.  If the combo box is editable then it
   has a default focusPolicy() of \c StrongFocus, i.e. it will grab focus if
   clicked.
 
@@ -221,7 +221,6 @@ struct QComboData
     ~QComboData()
     {
 	delete pop;
-	delete lBox;
     }
 
     bool usingListBox()  { return usingLBox; }
@@ -829,7 +828,7 @@ void QComboBox::changeItem( const QPixmap &im, int index )
 
 /*!
   Replaces the item at position \e index with a pixmap plus text.
-  
+
   \sa insertItem()
 */
 
@@ -1069,6 +1068,7 @@ void QComboBox::setPalette( const QPalette &palette )
 
 void QComboBox::setFont( const QFont &font )
 {
+    d->sizeHint = QSize();  // Invalidate Size Hint
     QWidget::setFont( font );
     if ( d->usingListBox() )
 	d->listBox()->setFont( font );
@@ -1381,9 +1381,12 @@ void QComboBox::popup()
 	d->listBox()->setAutoScrollBar( TRUE );
 
 #ifndef QT_NO_EFFECTS
-	if ( QApplication::isEffectEnabled( UI_AnimateCombo ) )
-	    qScrollEffect( d->listBox() );
-	else
+	if ( QApplication::isEffectEnabled( UI_AnimateCombo ) ) {
+	    if ( d->listBox()->y() < mapToGlobal(QPoint(0,0)).y() )
+		qScrollEffect( d->listBox(), QEffects::UpScroll );
+	    else
+		qScrollEffect( d->listBox() );
+	} else
 #endif
 	    d->listBox()->show();
     } else {
@@ -1750,6 +1753,13 @@ void QComboBox::setInsertionPolicy( Policy policy )
 void QComboBox::returnPressed()
 {
     QString s( d->ed->text() );
+
+    if ( s.isEmpty() ) {
+	d->ed->setText( text( currentItem() ) );
+	d->ed->selectAll();
+	return;
+    }
+
     int c = 0;
     bool doInsert = TRUE;
     if ( !d->duplicatesEnabled ) {
@@ -1977,6 +1987,7 @@ bool QComboBox::autoCompletion() const
  */
 void QComboBox::styleChange( QStyle& s )
 {
+    d->sizeHint = QSize();  // Invalidate Size Hint
     if ( d->ed )
 	d->updateLinedGeometry();
     QWidget::styleChange( s );
@@ -2008,9 +2019,11 @@ void QComboBox::setEditable( bool y )
 	    setUpListBox();
 	setUpLineEdit();
 	d->ed->show();
+	setFocusPolicy( StrongFocus );
     } else {
 	delete d->ed;
 	d->ed = 0;
+	setFocusPolicy( TabFocus );
     }
     updateGeometry();
     update();
@@ -2019,7 +2032,7 @@ void QComboBox::setEditable( bool y )
 
 void QComboBox::setUpListBox()
 {
-    d->setListBox( new QListBox( 0, "in-combo", WType_Popup ) );
+    d->setListBox( new QListBox( this, "in-combo", WType_Popup ) );
     d->listBox()->setFont( font() );
     d->listBox()->setAutoScrollBar( FALSE );
     d->listBox()->setBottomScrollBar( FALSE );

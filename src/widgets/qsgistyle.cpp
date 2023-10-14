@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qsgistyle.cpp   2.3.1   edited 2001-04-09 $
+** $Id: qt/src/widgets/qsgistyle.cpp   2.3.2   edited 2001-09-25 $
 **
 ** Implementation of Motif-like style class
 **
@@ -1362,11 +1362,17 @@ QSGIStyle::eventFilter( QObject* o, QEvent* e )
 	    if ( lastWidget && o == lastWidget &&
 		lastWidget->testWState( WState_Created )) {
 		if ( lastWidgetPalette ) {
-		    lastWidget->setPalette( *lastWidgetPalette );
+		    QPalette test = *lastWidgetPalette;
+		    test.setColor( QPalette::Active, QColorGroup::Button, test.active().midlight() );
+		    if ( test == lastWidget->palette() )
+			lastWidget->setPalette( *lastWidgetPalette );
 		    delete lastWidgetPalette;
 		    lastWidgetPalette = 0;
 		} else {
-		    lastWidget->unsetPalette();
+		    QPalette test = QApplication::palette( lastWidget );
+		    test.setColor( QPalette::Active, QColorGroup::Button, test.active().midlight() );
+		    if ( test == lastWidget->palette() )
+			lastWidget->unsetPalette();
 		}
 	    }
 	}

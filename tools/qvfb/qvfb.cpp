@@ -154,7 +154,7 @@ void QVFb::init( int display_id, int w, int h, int d, const QString &skin_name )
 	view->setFixedSize( w, h );
 	setCentralWidget( skin );
 	adjustSize();
-	view->show(); 
+	view->show();
 	if ( vis ) show();
     } else {
 	if ( !currentSkin.isEmpty() ) {
@@ -167,7 +167,7 @@ void QVFb::init( int display_id, int w, int h, int d, const QString &skin_name )
 	view->setFrameStyle( QFrame::NoFrame );
 	setCentralWidget( view );
 	resize(w,menuBar()->height()+h);
-	view->show(); 
+	view->show();
     }
 
     currentSkin = skin_name;
@@ -365,7 +365,7 @@ void QVFb::configure()
 	else
 	    d=32;
 
-	if ( w != view->displayWidth() || h != view->displayHeight() 
+	if ( w != view->displayWidth() || h != view->displayHeight()
 		|| d != view->displayDepth() || skin != currentSkin )
 	    init( id, w, h, d, skin );
     } else {
@@ -421,6 +421,6 @@ void QVFb::updateGammaLabels()
 
 QSize QVFb::sizeHint() const
 {
-    return QSize(view->displayWidth()*view->zoom(),
-	    menuBar()->height()+view->displayHeight()*view->zoom());
+    return QSize(int(view->displayWidth()*view->zoom()),
+	    int(menuBar()->height()+view->displayHeight()*view->zoom()));
 }

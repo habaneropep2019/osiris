@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/network/qsocketdevice_unix.cpp   2.3.1   edited 2001-06-11 $
+** $Id: qt/src/network/qsocketdevice_unix.cpp   2.3.2   edited 2001-09-27 $
 **
 ** Implementation of QSocketDevice class.
 **
@@ -38,13 +38,6 @@
 #include "qsocketdevice.h"
 #ifndef QT_NO_NETWORK
 
-#if defined(_OS_OSF_)
-// ask for XPG4v2 + XNS4
-#  ifndef _XOPEN_SOURCE_EXTENDED
-#    define _XOPEN_SOURCE_EXTENDED
-#  endif
-#endif
-
 #include <unistd.h>
 #include "qwindowdefs.h"
 #include <string.h>
@@ -56,35 +49,13 @@
 #  include <sys/select.h>
 #endif
 
-#if defined(_OS_OSF_)
-#  include <sys/select.h> // UGH
-#  include <strings.h> // ARGH
-#  define FNDELAY O_NONBLOCK // !!@#!()@
-// Need to get proper defines when including sys/ioctl.h - we only want
-// FIONREAD - but sys/ioctl_compat.h depends on u_int and u_long being
-// defined
-typedef unsigned int u_int;
-typedef unsigned long u_long;
-#  if defined(_XOPEN_SOURCE_EXTENDED)
-// Tru64 redefines accept() to _accept() when XNS4 is specified using
-// _XOPEN_SOURCE_EXTENDED.  Avoid it as it breaks our sources.
-// No! Find another solution! We should be using recent APIs.
-#    undef _XOPEN_SOURCE_EXTENDED
-#  endif
-#endif
-
 #include <sys/param.h>
 #include <sys/types.h>
 #include <sys/socket.h>
-#if defined(_OS_SOLARIS_) || defined(_OS_UNIXWARE7_) || defined(_OS_RELIANT_)
-// Needed for FIONREAD.
-// FIONREAD is #defined in <sys/filio.h>.
-// Have <sys/ioctl.h> include <sys/filio.h>.
-#define BSD_COMP
-#endif
 #include <sys/ioctl.h>
 #if defined(_OS_SOLARIS_) || defined(_OS_UNIXWARE7_) || defined(_OS_RELIANT_)
-#undef BSD_COMP
+// FIONREAD is #defined in <sys/filio.h> not <sys/ioctl.h>.
+#include <sys/filio.h>
 #endif
 #include <sys/file.h>
 #include <sys/time.h>
@@ -93,10 +64,6 @@ typedef unsigned long u_long;
 #include <sys/un.h>
 #include <netdb.h>
 #include <errno.h>
-
-#if defined(_OS_QNX_)
-#include <unix.h>
-#endif
 
 #ifndef UNIX_PATH_MAX
 #define UNIX_PATH_MAX    108
@@ -111,18 +78,13 @@ typedef unsigned long u_long;
 #endif
 #endif
 
-#if defined(_OS_SOLARIS_) || defined(_OS_UNIXWARE7_) || defined(_OS_RELIANT_) || defined(_OS_OS2EMX_) || defined(_OS_QNX_)
+#if defined(_OS_SOLARIS_) || defined(_OS_UNIXWARE7_) || defined(_OS_RELIANT_) || defined(_OS_OS2EMX_) || defined(_OS_QNX_) || defined(_OS_QNX6_)
 // And this then?  Unixware?
 // Also why is this defined on Solaris? Seems to be in <sys/file.h>, unguarded,
 // in both Solaris 2.5.1 and Solaris 8!
 #if !defined(FNDELAY)
 #define FNDELAY O_NDELAY
 #endif
-#endif
-
-#if defined(_OS_UNIXWARE7_)
-// UnixWare 7 redefines listen() to _listen() in socket.h
-#undef listen
 #endif
 
 
@@ -149,7 +111,7 @@ typedef unsigned long u_long;
 
 #if defined(_OS_LINUX_) && defined(__GLIBC__) && ( __GLIBC__ >= 2 )
 // new linux is Single Unix 1998, not old linux
-#define SOCKLEN_T socklen_t
+#  define SOCKLEN_T socklen_t
 #elif defined(BSD4_4)
 // BSD 4.4
 #  if defined(_OS_FREEBSD_) && __FreeBSD_version < 400000
@@ -159,29 +121,81 @@ typedef unsigned long u_long;
 #    define SOCKLEN_T socklen_t
 #  endif
 #elif defined(_OS_UNIXWARE7_) || defined(_OS_RELIANT_)
-#define SOCKLEN_T size_t
+#  define SOCKLEN_T size_t
 #elif defined(_OS_AIX_)
-#ifdef _AIX43
+#  ifdef _AIX43
 // AIX 4.3
 // The AIX 4.3 online documentation says 'size_t'. But a user asked IBM
 // and they are reported to have told him the documentation is wrong.
 // In addition 'socklen_t' is needed by many users, so...
-#define SOCKLEN_T socklen_t
-#elif _AIX42
+#    define SOCKLEN_T socklen_t
+#  elif _AIX42
 // AIX 4.2
-#define SOCKLEN_T size_t
-#else
+#    define SOCKLEN_T size_t
+#  else
 // AIX 4.1
-#define SOCKLEN_T int
-#endif
-#elif defined(_OS_QNX_)
-#define SOCKLEN_T size_t
+#    define SOCKLEN_T int
+#  endif
+#elif defined(_OS_OSF_)
+#  if defined(_POSIX_PII_SOCKET)
+#    define SOCKLEN_T socklen_t
+#  elif defined(_XOPEN_SOURCE_EXTENDED)
+#    define SOCKLEN_T size_t
+#  else
+#    define SOCKLEN_T int
+#  endif
+#elif defined(_OS_SOLARIS_)
+#  if defined(_XOPEN_SOURCE) && (_XOPEN_SOURCE-0 >= 500)
+// on Solaris 7 and better with specific feature test macros
+#    define SOCKLEN_T socklen_t
+#  elif defined(_XOPEN_SOURCE_EXTENDED)
+// on Solaris 2.6 and better with specific feature test macros
+#    define SOCKLEN_T size_t
+#  else
+// always this case in practice
+#    define SOCKLEN_T int
+#  endif
+#elif defined(_OS_QNX_) || defined(_OS_QNX6_)
+#  define SOCKLEN_T size_t
 #else
 // Most unixes are Single Unix 1995 compliant (at least by default) including
 // irix, osf1/tru64, solaris, hp-ux and old linux. We do not specify Single
 // Unix 1998 even when it is available.
-#define SOCKLEN_T int
+#  define SOCKLEN_T int
 #endif
+
+
+// Tru64 redefines accept() to _accept() when _XOPEN_SOURCE_EXTENDED is
+// defined.  This breaks our sources.
+static inline int qt_socket_accept(int s, struct sockaddr *addr, SOCKLEN_T *addrlen)
+{ return ::accept(s, addr, addrlen); }
+#if defined(accept)
+# undef accept
+#endif
+
+// Solaris redefines connect to __xnet_connect when _XOPEN_SOURCE_EXTENDED
+// is defined.  This breaks our sources.
+static inline int qt_socket_connect(int s, struct sockaddr *addr, SOCKLEN_T addrlen)
+{ return ::connect(s, addr, addrlen); }
+#if defined(connect)
+# undef connect
+#endif
+
+// Solaris redefines bind to __xnet_bind when _XOPEN_SOURCE_EXTENDED is
+// defined.  This breaks our sources.
+static inline int qt_socket_bind(int s, struct sockaddr *addr, SOCKLEN_T addrlen)
+{ return ::bind(s, addr, addrlen); }
+#if defined(bind)
+# undef bind
+#endif
+
+// UnixWare 7 redefines listen() to _listen().  This breaks our sources.
+static inline int qt_socket_listen(int s, int backlog)
+{ return ::listen(s, backlog); }
+#if defined(listen)
+# undef listen
+#endif
+
 
 // the next mess deals with EAGAIN and/or EWOULDBLOCK
 
@@ -468,7 +482,7 @@ bool QSocketDevice::connect( const QHostAddress &addr, Q_UINT16 port )
     aa.sin_port = htons( port );
     aa.sin_addr.s_addr = htonl( addr.ip4Addr() );
 
-    int r = ::connect( fd, (struct sockaddr*)&aa,
+    int r = qt_socket_connect( fd, (struct sockaddr*)&aa,
 		       sizeof(struct sockaddr_in) );
     if ( r == 0 ) {
 	fetchConnectionParameters();
@@ -533,7 +547,7 @@ bool QSocketDevice::bind( const QHostAddress &address, Q_UINT16 port )
     aa.sin_port = htons( port );
     aa.sin_addr.s_addr = htonl( address.ip4Addr() );
 
-    int r = ::bind( fd, (struct sockaddr*)&aa,sizeof(struct sockaddr_in) );
+    int r = qt_socket_bind( fd, (struct sockaddr*)&aa,sizeof(struct sockaddr_in) );
     if ( r < 0 ) {
 	switch( errno ) {
 	case EINVAL:
@@ -583,7 +597,7 @@ bool QSocketDevice::listen( int backlog )
 {
     if ( !isValid() )
 	return FALSE;
-    if ( ::listen( fd, backlog ) >= 0 )
+    if ( qt_socket_listen( fd, backlog ) >= 0 )
 	return TRUE;
     if ( !e )
 	e = Impossible;
@@ -604,7 +618,7 @@ int QSocketDevice::accept()
 	return FALSE;
     struct sockaddr aa;
     SOCKLEN_T l = sizeof(struct sockaddr);
-    int s = ::accept( fd, (struct sockaddr*)&aa, &l );
+    int s = qt_socket_accept( fd, (struct sockaddr*)&aa, &l );
     // we'll blithely throw away the stuff accept() wrote to aa
     if ( s < 0 && e == NoError ) {
 	switch( errno ) {
@@ -982,4 +996,33 @@ void QSocketDevice::fetchConnectionParameters()
 	pa = QHostAddress( ntohl( sa.sin_addr.s_addr ) );
     }
 }
+
+
+/*!
+  Returns the port number of the port this socket device is connected to. This
+  may be 0 for a while, but is set to something sensible when there is a
+  sensible value it can have.
+
+  Note that for Datagram sockets, this is the source port of the last packet
+  received.
+*/
+Q_UINT16 QSocketDevice::peerPort() const
+{
+    return pp;
+}
+
+
+/*!
+  Returns the address of the port this socket device is connected to. This may
+  be 0.0.0.0 for a while, but is set to something sensible when there is a
+  sensible value it can have.
+
+  Note that for Datagram sockets, this is the source address of the last packet
+  received.
+*/
+QHostAddress QSocketDevice::peerAddress() const
+{
+    return pa;
+}
+
 #endif //QT_NO_NETWORK

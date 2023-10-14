@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qglobal.h   2.3.1   edited 2001-06-13 $
+** $Id: qt/src/tools/qglobal.h   2.3.2   edited 2001-10-29 $
 **
 ** Global type declarations and definitions
 **
@@ -39,8 +39,8 @@
 #define QGLOBAL_H
 
 
-#define QT_VERSION	231
-#define QT_VERSION_STR	"2.3.1"
+#define QT_VERSION	232
+#define QT_VERSION_STR	"2.3.2"
 
 
 //
@@ -121,6 +121,8 @@
 #define _OS_GNU_
 #elif defined(DGUX)
 #define _OS_DGUX_
+#elif defined(__QNXNTO__)
+#define _OS_QNX6_
 #elif defined(__QNX__)
 #define _OS_QNX_
 #elif defined(_SCO_DS) || defined(M_UNIX) || defined(M_XENIX)
@@ -193,11 +195,10 @@
 #define Q_TEMPLATE_NEEDS_EXPLICIT_CONVERSION
 #define Q_SPURIOUS_NON_VOID_WARNING
 #endif
-#if __GNUC__ == 2 && __GNUC_MINOR__ >= 95
+#if __GNUC__ >= 3 || __GNUC__ == 2 && __GNUC_MINOR__ >= 95
 #define Q_DELETING_VOID_UNDEFINED
 #endif
 #if __GNUC__ == 2 && __GNUC_MINOR__ == 96
-#define Q_DELETING_VOID_UNDEFINED
 #define Q_FP_CCAST_BROKEN
 #endif
 #if (defined(__arm__) || defined(__ARMEL__)) && !defined(QT_MOC_CPP)
@@ -220,6 +221,13 @@
 #elif defined(__USLC__)
 #define _CC_USLC_
 #ifdef __EDG__ // UnixWare7
+#define _CC_EDG_
+#define Q_HAS_BOOL_TYPE
+#endif
+#elif defined(__INTEL_COMPILER)
+#define _CC_INTEL_
+#define _CC_EDG_
+#if defined(__BOOL_DEFINED)
 #define Q_HAS_BOOL_TYPE
 #endif
 #elif defined(__EDG) || defined(__EDG__)
@@ -260,6 +268,7 @@
 // this is the aCC
 #define _CC_HP_ACC_
 #define Q_HAS_BOOL_TYPE
+#define Q_DELETING_VOID_UNDEFINED
 #else
 // this is the CC
 #define _CC_HP_
@@ -536,7 +545,7 @@ Q_EXPORT bool qSysInfo( int *wordSize, bool *bigEndian );
 // Avoid dead code
 //
 
-#if defined(_CC_EDG_) || defined(_CC_WAT_)
+#if defined(_CC_EDG_) || defined(_CC_WAT_) || defined(_CC_USLC_)
 #define Q_NO_DEAD_CODE
 #endif
 
@@ -595,11 +604,9 @@ Q_EXPORT void fatal( const char *, ... )	// print fatal message and exit
 #if !defined(ASSERT)
 #if defined(CHECK_STATE)
 #if defined(QT_FATAL_ASSERT)
-#define ASSERT(x)  if ( !(x) )\
-	qFatal("ASSERT: \"%s\" in %s (%d)",#x,__FILE__,__LINE__)
+#define ASSERT(x)  ((x) ? (void)0 : qFatal("ASSERT: \"%s\" in %s (%d)",#x,__FILE__,__LINE__))
 #else
-#define ASSERT(x)  if ( !(x) )\
-	qWarning("ASSERT: \"%s\" in %s (%d)",#x,__FILE__,__LINE__)
+#define ASSERT(x)  ((x) ? (void)0 : qWarning("ASSERT: \"%s\" in %s (%d)",#x,__FILE__,__LINE__))
 #endif
 #else
 #define ASSERT(x)

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qabstractlayout.cpp   2.3.1   edited 2001-01-26 $
+** $Id: qt/src/kernel/qabstractlayout.cpp   2.3.2   edited 2001-08-15 $
 **
 ** Implementation of the abstract layout base class
 **
@@ -479,9 +479,12 @@ int QWidgetItem::heightForWidth( int w ) const
 {
     if ( isEmpty() )
 	return 0;
+    int hfw;
     if ( wid->layout() )
-	return wid->layout()->totalHeightForWidth( w );
-    return wid->heightForWidth( w );
+	hfw =  wid->layout()->totalHeightForWidth( w );
+    else
+	hfw = wid->heightForWidth( w );
+    return QMIN( hfw, wid->maximumHeight() );
 }
 
 /*!

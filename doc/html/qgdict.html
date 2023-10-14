@@ -62,8 +62,8 @@ Inherits <a href="qcollection.html">QCollection</a>.
 <li><div class="fn">int <b>hashKeyString</b> ( const QString &amp; ) (internal)</div>
 <li><div class="fn">int <b>hashKeyAscii</b> ( const char * ) (internal)</div>
 <li><div class="fn">void <b>statistics</b> () const (internal)</div>
-<li><div class="fn">virtual QDataStream&amp; <a href="#cccce4"><b>read</b></a> ( QDataStream &amp;, QCollection::Item &amp; ) </div>
-<li><div class="fn">virtual QDataStream&amp; <a href="#aebcdf"><b>write</b></a> ( QDataStream &amp;, QCollection::Item ) const</div>
+<li><div class="fn">virtual QDataStream&amp; <a href="#081538"><b>read</b></a> ( QDataStream &amp;, QCollection::Item &amp; ) </div>
+<li><div class="fn">virtual QDataStream&amp; <a href="#920606"><b>write</b></a> ( QDataStream &amp;, QCollection::Item ) const</div>
 </ul>
 <hr><h2><a name="details"></a>Detailed Description</h2>
 The QGDict class is an internal class for implementing <a href="qdict.html">QDict</a> template classes.
@@ -73,84 +73,84 @@ QGDict is a strictly internal class that acts as a base class for the
 <p>QGDict has some virtual functions that can be reimplemented to customize
 the subclasses.
 <ul>
-<li> <a href="#04d566">read</a>() reads a collection/dictionary item from a <a href="qdatastream.html">QDataStream</a>.
-<li> <a href="#708300">write</a>() writes a collection/dictionary item to a QDataStream.
+<li> <a href="#081538">read</a>() reads a collection/dictionary item from a <a href="qdatastream.html">QDataStream</a>.
+<li> <a href="#920606">write</a>() writes a collection/dictionary item to a QDataStream.
 </ul>
 Normally, you do not have to reimplement any of these functions.
 
 <hr><h2>Member Function Documentation</h2>
-<h3 class="fn"><a href="qdatastream.html">QDataStream</a>&amp; <a name="cccce4"></a>QGDict::read ( <a href="qdatastream.html">QDataStream</a> &amp; s, <a href="qcollection.html#Item">QCollection::Item</a> &amp; item ) <code>[virtual protected]</code></h3>
+<h3 class="fn"><a href="qdatastream.html">QDataStream</a>&amp; <a name="081538"></a>QGDict::read ( <a href="qdatastream.html">QDataStream</a> &amp; s, <a href="qcollection.html#Item">QCollection::Item</a> &amp; item ) <code>[virtual protected]</code></h3>
 <p>Reads a collection/dictionary item from the stream <em>s</em> and returns a
 reference to the stream.
 <p>The default implementation sets <em>item</em> to 0.
-<p>See also  <a href="#708300">write</a>().
-<h3 class="fn"><a href="qdatastream.html">QDataStream</a>&amp; <a name="aebcdf"></a>QGDict::write ( <a href="qdatastream.html">QDataStream</a> &amp; s, <a href="qcollection.html#Item">QCollection::Item</a> ) const <code>[virtual protected]</code></h3>
+<p>See also  <a href="#920606">write</a>().
+<h3 class="fn"><a href="qdatastream.html">QDataStream</a>&amp; <a name="920606"></a>QGDict::write ( <a href="qdatastream.html">QDataStream</a> &amp; s, <a href="qcollection.html#Item">QCollection::Item</a> ) const <code>[virtual protected]</code></h3>
 <p>Writes a collection/dictionary item to the stream <em>s</em> and returns a
 reference to the stream.
-<p>See also  <a href="#04d566">read</a>().
-<h3 class="fn"><a name="c6e172"></a>QGDict::QGDict ( const QGDict &amp; dict ) <code>[protected]</code></h3>
+<p>See also  <a href="#081538">read</a>().
+<h3 class="fn"><a name="566c70"></a>QGDict::QGDict ( const QGDict &amp; dict ) <code>[protected]</code></h3>
 <p>For internal use only.
-<h3 class="fn"><a name="ce8cdc"></a>QGDict::QGDict ( uint len, KeyType kt, bool caseSensitive, bool copyKeys ) <code>[protected]</code></h3>
+<h3 class="fn"><a name="52385a"></a>QGDict::QGDict ( uint len, KeyType kt, bool caseSensitive, bool copyKeys ) <code>[protected]</code></h3>
 <p>For internal use only.
-<h3 class="fn"><a name="16e886"></a>QGDict::~QGDict () <code>[protected]</code></h3>
+<h3 class="fn"><a name="d03c3f"></a>QGDict::~QGDict () <code>[protected]</code></h3>
 <p>For internal use only.
-<h3 class="fn">void <a name="28324d"></a>QGDict::clear () <code>[virtual protected]</code></h3>
+<h3 class="fn">void <a name="b294b4"></a>QGDict::clear () <code>[virtual protected]</code></h3>
 <p>For internal use only.
-<p>Reimplemented from <a href="qcollection.html#10eb2d">QCollection.</a>
-<h3 class="fn">uint <a name="1bce1f"></a>QGDict::count () const <code>[virtual]</code></h3>
+<p>Reimplemented from <a href="qcollection.html#e9c603">QCollection.</a>
+<h3 class="fn">uint <a name="4c4941"></a>QGDict::count () const <code>[virtual]</code></h3>
 <p>For internal use only.
-<p>Reimplemented from <a href="qcollection.html#649c42">QCollection.</a>
-<h3 class="fn">int <a name="a04173"></a>QGDict::hashKeyAscii ( const char * key ) <code>[protected]</code></h3>
+<p>Reimplemented from <a href="qcollection.html#2213fa">QCollection.</a>
+<h3 class="fn">int <a name="6a1c56"></a>QGDict::hashKeyAscii ( const char * key ) <code>[protected]</code></h3>
 <p>For internal use only.
-<h3 class="fn">int <a name="b2a2e0"></a>QGDict::hashKeyString ( const <a href="qstring.html">QString</a> &amp; key ) <code>[protected]</code></h3>
+<h3 class="fn">int <a name="5ef704"></a>QGDict::hashKeyString ( const <a href="qstring.html">QString</a> &amp; key ) <code>[protected]</code></h3>
 <p>For internal use only.
-<h3 class="fn">QCollection::Item <a name="00fd58"></a>QGDict::look_ascii( const char * key, QCollection::Item d, int op )</h3>
+<h3 class="fn">QCollection::Item <a name="3c9416"></a>QGDict::look_ascii( const char * key, QCollection::Item d, int op )</h3>
 <p>For internal use only.
-<h3 class="fn">QCollection::Item <a name="bc9919"></a>QGDict::look_int( long key, QCollection::Item d, int op )</h3>
+<h3 class="fn">QCollection::Item <a name="ec67b3"></a>QGDict::look_int( long key, QCollection::Item d, int op )</h3>
 <p>For internal use only.
-<h3 class="fn">QCollection::Item <a name="63cfe8"></a>QGDict::look_ptr( void * key, QCollection::Item d, int op )</h3>
+<h3 class="fn">QCollection::Item <a name="f560fa"></a>QGDict::look_ptr( void * key, QCollection::Item d, int op )</h3>
 <p>For internal use only.
-<h3 class="fn">QCollection::Item <a name="42f3bb"></a>QGDict::look_string( const QString & key, QCollection::Item d, int op )</h3>
+<h3 class="fn">QCollection::Item <a name="15a700"></a>QGDict::look_string( const QString & key, QCollection::Item d, int op )</h3>
 <p>For internal use only.
-<h3 class="fn">QGDict &amp; <a name="08f810"></a>QGDict::operator= ( const QGDict &amp; dict ) <code>[protected]</code></h3>
+<h3 class="fn">QGDict &amp; <a name="021414"></a>QGDict::operator= ( const QGDict &amp; dict ) <code>[protected]</code></h3>
 <p>For internal use only.
-<h3 class="fn"><a href="qdatastream.html">QDataStream</a> &amp; <a name="04d566"></a>QGDict::read ( <a href="qdatastream.html">QDataStream</a> &amp; s )</h3>
+<h3 class="fn"><a href="qdatastream.html">QDataStream</a> &amp; <a name="16e3c9"></a>QGDict::read ( <a href="qdatastream.html">QDataStream</a> &amp; s )</h3>
 <p>For internal use only.
-<h3 class="fn">bool <a name="612a6d"></a>QGDict::remove_ascii ( const char * key, <a href="qcollection.html#Item">QCollection::Item</a> item=0 ) <code>[protected]</code></h3>
+<h3 class="fn">bool <a name="cdeb21"></a>QGDict::remove_ascii ( const char * key, <a href="qcollection.html#Item">QCollection::Item</a> item=0 ) <code>[protected]</code></h3>
 <p>For internal use only.
-<h3 class="fn">bool <a name="da8865"></a>QGDict::remove_int ( long key, <a href="qcollection.html#Item">QCollection::Item</a> item=0 ) <code>[protected]</code></h3>
+<h3 class="fn">bool <a name="d30328"></a>QGDict::remove_int ( long key, <a href="qcollection.html#Item">QCollection::Item</a> item=0 ) <code>[protected]</code></h3>
 <p>For internal use only.
-<h3 class="fn">bool <a name="eb961c"></a>QGDict::remove_ptr ( void * key, <a href="qcollection.html#Item">QCollection::Item</a> item=0 ) <code>[protected]</code></h3>
+<h3 class="fn">bool <a name="dea4aa"></a>QGDict::remove_ptr ( void * key, <a href="qcollection.html#Item">QCollection::Item</a> item=0 ) <code>[protected]</code></h3>
 <p>For internal use only.
-<h3 class="fn">bool <a name="c4ff89"></a>QGDict::remove_string ( const <a href="qstring.html">QString</a> &amp; key, <a href="qcollection.html#Item">QCollection::Item</a> item=0 ) <code>[protected]</code></h3>
+<h3 class="fn">bool <a name="5b43c3"></a>QGDict::remove_string ( const <a href="qstring.html">QString</a> &amp; key, <a href="qcollection.html#Item">QCollection::Item</a> item=0 ) <code>[protected]</code></h3>
 <p>For internal use only.
-<h3 class="fn">void <a name="bd5f20"></a>QGDict::resize ( uint newsize ) <code>[protected]</code></h3>
+<h3 class="fn">void <a name="d71268"></a>QGDict::resize ( uint newsize ) <code>[protected]</code></h3>
 <p>For internal use only.
-<h3 class="fn">uint <a name="f92c0a"></a>QGDict::size () const</h3>
+<h3 class="fn">uint <a name="9369c2"></a>QGDict::size () const</h3>
 <p>For internal use only.
-<h3 class="fn">void <a name="322ebe"></a>QGDict::statistics () const <code>[protected]</code></h3>
+<h3 class="fn">void <a name="f6ad94"></a>QGDict::statistics () const <code>[protected]</code></h3>
 <p>For internal use only.
-<h3 class="fn">QCollection::Item <a name="b7a0e6"></a>QGDict::take_ascii( const char * key ) <code>[protected]</code></h3>
+<h3 class="fn">QCollection::Item <a name="c84510"></a>QGDict::take_ascii( const char * key ) <code>[protected]</code></h3>
 <p>For internal use only.
-<h3 class="fn">QCollection::Item <a name="6dae1f"></a>QGDict::take_int( long key ) <code>[protected]</code></h3>
+<h3 class="fn">QCollection::Item <a name="f47e53"></a>QGDict::take_int( long key ) <code>[protected]</code></h3>
 <p>For internal use only.
-<h3 class="fn">QCollection::Item <a name="8d20e5"></a>QGDict::take_ptr( void * key ) <code>[protected]</code></h3>
+<h3 class="fn">QCollection::Item <a name="08e156"></a>QGDict::take_ptr( void * key ) <code>[protected]</code></h3>
 <p>For internal use only.
-<h3 class="fn">QCollection::Item <a name="5376df"></a>QGDict::take_string( const QString & key ) <code>[protected]</code></h3>
+<h3 class="fn">QCollection::Item <a name="4549a7"></a>QGDict::take_string( const QString & key ) <code>[protected]</code></h3>
 <p>For internal use only.
-<h3 class="fn"><a href="qdatastream.html">QDataStream</a>&amp; <a name="708300"></a>QGDict::write ( <a href="qdatastream.html">QDataStream</a> &amp; s ) const</h3>
+<h3 class="fn"><a href="qdatastream.html">QDataStream</a>&amp; <a name="d7568c"></a>QGDict::write ( <a href="qdatastream.html">QDataStream</a> &amp; s ) const</h3>
 <p>For internal use only.
 <hr><p>
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.3.1"><nobr>
+<input type=hidden name="version" value="2.3.2"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
-copyright &copy; 1995-2000
+copyright &copy; 1995-2001
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.1</div>
+<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

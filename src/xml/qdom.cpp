@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/xml/qdom.cpp   2.3.1   edited 2001-01-26 $
+** $Id: qt/src/xml/qdom.cpp   2.3.2   edited 2001-09-18 $
 **
 ** Implementation of QDomDocument and related classes.
 **
@@ -394,6 +394,8 @@ bool QDOM_NodeListPrivate::operator!= ( const QDOM_NodeListPrivate& other ) cons
 
 QDOM_NodePrivate* QDOM_NodeListPrivate::item( int index )
 {
+    if ( !node_impl )
+	return 0;
     QDOM_NodePrivate* p = node_impl->first;
     int i = 0;
     if ( tagname.isNull() ) {
@@ -427,6 +429,8 @@ QDOM_NodePrivate* QDOM_NodeListPrivate::item( int index )
 
 uint QDOM_NodeListPrivate::length() const
 {
+    if ( !node_impl )
+	return 0;
     uint i = 0;
     QDOM_NodePrivate* p = node_impl->first;
     if ( tagname.isNull() ) {
@@ -988,7 +992,7 @@ void QDOM_NodePrivate::setParent( QDOM_NodePrivate* n )
 QDOM_DocumentPrivate* QDOM_NodePrivate::ownerDocument()
 {
     QDOM_NodePrivate* p = this;
-    while ( p && p->isDocumentType() )
+    while ( p && !p->isDocument() )
 	p = p->parent;
 
     return (QDOM_DocumentPrivate*)p;
@@ -2891,6 +2895,10 @@ static QString encodeAttr( const QString& str )
 	    tmp.replace( i, 1, "&amp;" );
 	    len += 4;
 	    i += 5;
+	} else if ( tmp[(int)i] == '>' && i>=2 && tmp[(int)i-1]==']' && tmp[(int)i-2]==']' ) {
+	    tmp.replace( i, 1, "&gt;" );
+	    len += 3;
+	    i += 4;
 	} else {
 	    ++i;
 	}
@@ -5318,7 +5326,7 @@ QDomNode::NodeType QDomDocument::nodeType() const
 }
 
 /*!
-  Returns TRUE
+  Returns TRUE.
 */
 bool QDomDocument::isDocument() const
 {

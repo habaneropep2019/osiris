@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qtimer.cpp   2.3.1   edited 2001-05-11 $
+** $Id: qt/src/kernel/qtimer.cpp   2.3.2   edited 2001-05-11 $
 **
 ** Implementation of QTimer class
 **
