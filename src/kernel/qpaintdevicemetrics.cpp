@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qpaintdevicemetrics.cpp   2.2.1   edited 2000-08-25 $
+** $Id: qt/src/kernel/qpaintdevicemetrics.cpp   2.2.2   edited 2000-10-21 $
 **
 ** Implementation of QPaintDeviceMetrics class
 **
@@ -52,7 +52,7 @@
 
   \code
     QPaintDeviceMetrics pdm( myWidget );
-    double aspect = (double)pdm.widthMM / (double)pdm.heightMM();
+    double aspect = (double)pdm.widthMM() / (double)pdm.heightMM();
   \endcode
 
   QPaintDeviceMetrics contains methods to provide the width and height

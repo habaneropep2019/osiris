@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qbig5codec.cpp   2.2.1   edited 2000-08-29 $
+** $Id: qt/src/tools/qbig5codec.cpp   2.2.2   edited 2000-08-29 $
 **
 ** Implementation of QBig5Codec class
 **

@@ -1,4 +1,4 @@
-.TH QFontInfo 3qt "4 October 2000" "Trolltech AS" \" -*- nroff -*-
+.TH QFontInfo 3qt "8 November 2000" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -66,7 +66,7 @@ QFontInfo \- General information about fonts
 .SH DESCRIPTION
 The QFontInfo class provides general information about fonts.
 .PP
-The QFontInfo class mirrors QFont exactly, but where QFont access functions returns set values, QFontInfo returns the values that apply to the font in use.
+The QFontInfo class mirrors QFont exactly, but where QFont access functions return set values, QFontInfo returns the values that apply to the font in use.
 .PP
 For example, when the program asks for a 25pt Courier font on a machine that has a 24pt Courier font but not a scalable one, QFont will (normally) use the 24pt Courier for rendering. In this case, QFont::pointSize() returns 25 and QFontInfo::pointSize() 24.
 .PP

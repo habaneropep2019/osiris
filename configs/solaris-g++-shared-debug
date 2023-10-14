@@ -2,6 +2,7 @@
 INTERFACE_DECL_PATH 	= .
 SYSCONF_CXX		= g++
 SYSCONF_CC		= gcc
+DASHCROSS		= 
 
 # Compiling with support libraries
 SYSCONF_CXXFLAGS_X11	= -I/usr/openwin/include
@@ -51,7 +52,7 @@ SYSCONF_MOC		= $(QTDIR)/bin/moc
 SYSCONF_UIC		= $(QTDIR)/bin/uic
 
 # Linking shared libraries
-#   - Build the $(TARGET) library, eg. lib$(TARGET).so.2.0.1
+#   - Build the $(TARGET) library, eg. lib$(TARGET).so.2.2.2
 #   - Place target in $(DESTDIR) - which has a trailing /
 #   - Usually needs to incorporate $(VER_MAJ), $(VER_MIN) and $(VER_PATCH)
 #
@@ -88,6 +89,6 @@ SYSCONF_CFLAGS_LIB	= -fPIC
 SYSCONF_CXXFLAGS_SHOBJ	= -fPIC
 SYSCONF_CFLAGS_SHOBJ	= -fPIC
 # Linking Qt
-SYSCONF_LIBS_QTLIB	= $(SYSCONF_CXXFLAGS_X11) $(QT_LIBS_MT) $(QT_LIBS_OPT)
+SYSCONF_LIBS_QTLIB	= $(SYSCONF_LFLAGS_X11) $(QT_LIBS_MT) $(QT_LIBS_OPT)
 # Linking Qt applications
 SYSCONF_LIBS_QTAPP	= 

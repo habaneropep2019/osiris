@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qmenudata.cpp   2.2.1   edited 2000-08-25 $
+** $Id: qt/src/widgets/qmenudata.cpp   2.2.2   edited 2000-11-02 $
 **
 ** Implementation of QMenuData class
 **
@@ -37,7 +37,7 @@
 
 #define	 INCLUDE_MENUITEM_DEF
 #include "qmenudata.h"
-#ifndef QT_NO_COMPLEXWIDGETS
+#ifndef QT_NO_MENUDATA
 #include "qpopupmenu.h"
 #include "qmenubar.h"
 #include "qapplication.h"
@@ -990,8 +990,10 @@ void QMenuData::setItemEnabled( int id, bool enable )
     QMenuItem *mi = findItem( id, &parent );
     if ( mi && (bool)mi->is_enabled != enable ) {
 	mi->is_enabled = enable;
+#ifndef QT_NO_ACCEL
 	if ( mi->popup() )
 	    mi->popup()->enableAccel( enable );
+#endif
 	parent->menuStateChanged();
     }
 }
@@ -1356,9 +1358,12 @@ bool QCustomMenuItem::isSeparator() const
  */
 void QMenuData::activateItemAt( int index )
 {
+#ifndef QT_NO_MENUBAR
     if ( isMenuBar )
 	( (QMenuBar*)this )->activateItemAt( index );
-    else if ( isPopupMenu ) 
+    else
+#endif
+    if ( isPopupMenu ) 
 	( (QPopupMenu*)this )->activateItemAt( index );
 }
 

@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Qt Toolkit - QDomElement Class</title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
 a:link { color: #004faf; text-decoration: none }
@@ -90,8 +90,9 @@ you want to make a real copy, use <a href="qdomnode.html#7b27fa">cloneNode</a>()
 <p>See also  <a href="#bbd00e">attribute</a>(), <a href="#137828">setAttribute</a>(), <a href="#547880">attributeNode</a>() and <a href="#d62ab8">setAttributeNode</a>().
 <p>Reimplemented from <a href="qdomnode.html#b801ac">QDomNode.</a>
 <h3 class="fn"><a href="qdomnodelist.html">QDomNodeList</a> <a name="0f90c8"></a>QDomElement::elementsByTagName ( const <a href="qstring.html">QString</a> &amp; tagname ) const <code>[virtual]</code></h3>
-<p>Returns a <a href="qdomnodelist.html">QDomNodeList</a> containing all child elements of this element
-with the name <em>tagname.</em>
+<p>Returns a <a href="qdomnodelist.html">QDomNodeList</a> containing all descendant elements of this element
+with the name <em>tagname.</em> The order they are in the node list, is the order
+they are encountered in a preorder traversal of the element tree.
 <h3 class="fn">bool <a name="687420"></a>QDomElement::hasAttribute ( const <a href="qstring.html">QString</a> &amp; name ) const</h3>
 <p>Returns TRUE is this element has an attribute with the name <em>name,</em>
 otherwise FALSE.
@@ -151,7 +152,7 @@ will return "Hello Qt &lt;xml is cool&gt;".
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.2.1"><nobr>
+<input type=hidden name="version" value="2.2.2"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -159,5 +160,5 @@ copyright &copy; 1995-2000
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.1</div>
+<td align="right"><div align="right">Qt version 2.2.2</div>
 </table></div></address></body></html>

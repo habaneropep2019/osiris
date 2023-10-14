@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qtoolbutton.h   2.2.1   edited 2000-08-25 $
+** $Id: qt/src/widgets/qtoolbutton.h   2.2.2   edited 2000-10-11 $
 **
 ** Definition of a buttom customized for tool bar use
 **
@@ -45,7 +45,7 @@
 #include "qiconset.h"
 #endif // QT_H
 
-#ifndef QT_NO_COMPLEXWIDGETS
+#ifndef QT_NO_TOOLBUTTON
 
 
 class QToolButtonPrivate;
@@ -154,6 +154,6 @@ private:	// Disabled copy constructor and operator=
 #endif
 };
 
-#endif // QT_NO_COMPLEXWIDGETS
+#endif // QT_NO_TOOLBUTTON
 
 #endif // QTOOLBUTTON_H

@@ -136,6 +136,11 @@ mocgen.o: mocgen.cpp \
 		../../include/qcollection.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
+		../../include/qconfig-qpe.h \
+		../../include/qconfig-minimal.h \
+		../../include/qconfig-small.h \
+		../../include/qconfig-medium.h \
+		../../include/qconfig-large.h \
 		../../include/qconfig.h \
 		../../include/qasciidict.h \
 		../../include/qgdict.h \
@@ -158,6 +163,11 @@ qbuffer.o: ../tools/qbuffer.cpp \
 		../../include/qiodevice.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
+		../../include/qconfig-qpe.h \
+		../../include/qconfig-minimal.h \
+		../../include/qconfig-small.h \
+		../../include/qconfig-medium.h \
+		../../include/qconfig-large.h \
 		../../include/qconfig.h \
 		../../include/qcstring.h \
 		../../include/qarray.h \
@@ -170,6 +180,11 @@ qcollection.o: ../tools/qcollection.cpp \
 		../../include/qcollection.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
+		../../include/qconfig-qpe.h \
+		../../include/qconfig-minimal.h \
+		../../include/qconfig-small.h \
+		../../include/qconfig-medium.h \
+		../../include/qconfig-large.h \
 		../../include/qconfig.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qcollection.o ../tools/qcollection.cpp
 
@@ -181,6 +196,11 @@ qcstring.o: ../tools/qcstring.cpp \
 		../../include/qshared.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
+		../../include/qconfig-qpe.h \
+		../../include/qconfig-minimal.h \
+		../../include/qconfig-small.h \
+		../../include/qconfig-medium.h \
+		../../include/qconfig-large.h \
 		../../include/qconfig.h \
 		../../include/qregexp.h \
 		../../include/qdatastream.h \
@@ -192,6 +212,11 @@ qdatastream.o: ../tools/qdatastream.cpp \
 		../../include/qiodevice.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
+		../../include/qconfig-qpe.h \
+		../../include/qconfig-minimal.h \
+		../../include/qconfig-small.h \
+		../../include/qconfig-medium.h \
+		../../include/qconfig-large.h \
 		../../include/qconfig.h \
 		../../include/qcstring.h \
 		../../include/qarray.h \
@@ -210,6 +235,11 @@ qdatetime.o: ../tools/qdatetime.cpp \
 		../../include/qshared.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
+		../../include/qconfig-qpe.h \
+		../../include/qconfig-minimal.h \
+		../../include/qconfig-small.h \
+		../../include/qconfig-medium.h \
+		../../include/qconfig-large.h \
 		../../include/qconfig.h \
 		../../include/qdatastream.h \
 		../../include/qiodevice.h
@@ -218,6 +248,11 @@ qdatetime.o: ../tools/qdatetime.cpp \
 qfile.o: ../tools/qfile.cpp \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
+		../../include/qconfig-qpe.h \
+		../../include/qconfig-minimal.h \
+		../../include/qconfig-small.h \
+		../../include/qconfig-medium.h \
+		../../include/qconfig-large.h \
 		../../include/qconfig.h \
 		../../include/qfile.h \
 		../../include/qiodevice.h \
@@ -234,6 +269,11 @@ qgarray.o: ../tools/qgarray.cpp \
 		../../include/qshared.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
+		../../include/qconfig-qpe.h \
+		../../include/qconfig-minimal.h \
+		../../include/qconfig-small.h \
+		../../include/qconfig-medium.h \
+		../../include/qconfig-large.h \
 		../../include/qconfig.h \
 		../../include/qstring.h \
 		../../include/qcstring.h \
@@ -245,6 +285,11 @@ qgdict.o: ../tools/qgdict.cpp \
 		../../include/qcollection.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
+		../../include/qconfig-qpe.h \
+		../../include/qconfig-minimal.h \
+		../../include/qconfig-small.h \
+		../../include/qconfig-medium.h \
+		../../include/qconfig-large.h \
 		../../include/qconfig.h \
 		../../include/qstring.h \
 		../../include/qcstring.h \
@@ -262,6 +307,11 @@ qglist.o: ../tools/qglist.cpp \
 		../../include/qcollection.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
+		../../include/qconfig-qpe.h \
+		../../include/qconfig-minimal.h \
+		../../include/qconfig-small.h \
+		../../include/qconfig-medium.h \
+		../../include/qconfig-large.h \
 		../../include/qconfig.h \
 		../../include/qgvector.h \
 		../../include/qdatastream.h \
@@ -276,6 +326,11 @@ qglist.o: ../tools/qglist.cpp \
 qglobal.o: ../tools/qglobal.cpp \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
+		../../include/qconfig-qpe.h \
+		../../include/qconfig-minimal.h \
+		../../include/qconfig-small.h \
+		../../include/qconfig-medium.h \
+		../../include/qconfig-large.h \
 		../../include/qconfig.h \
 		../../include/qasciidict.h \
 		../../include/qgdict.h \
@@ -292,6 +347,11 @@ qgvector.o: ../tools/qgvector.cpp \
 		../../include/qcollection.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
+		../../include/qconfig-qpe.h \
+		../../include/qconfig-minimal.h \
+		../../include/qconfig-small.h \
+		../../include/qconfig-medium.h \
+		../../include/qconfig-large.h \
 		../../include/qconfig.h \
 		../../include/qglist.h \
 		../../include/qstring.h \
@@ -307,6 +367,11 @@ qiodevice.o: ../tools/qiodevice.cpp \
 		../../include/qiodevice.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
+		../../include/qconfig-qpe.h \
+		../../include/qconfig-minimal.h \
+		../../include/qconfig-small.h \
+		../../include/qconfig-medium.h \
+		../../include/qconfig-large.h \
 		../../include/qconfig.h \
 		../../include/qcstring.h \
 		../../include/qarray.h \
@@ -323,6 +388,11 @@ qregexp.o: ../tools/qregexp.cpp \
 		../../include/qshared.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
+		../../include/qconfig-qpe.h \
+		../../include/qconfig-minimal.h \
+		../../include/qconfig-small.h \
+		../../include/qconfig-medium.h \
+		../../include/qconfig-large.h \
 		../../include/qconfig.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qregexp.o ../tools/qregexp.cpp
 
@@ -334,6 +404,11 @@ qstring.o: ../tools/qstring.cpp \
 		../../include/qshared.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
+		../../include/qconfig-qpe.h \
+		../../include/qconfig-minimal.h \
+		../../include/qconfig-small.h \
+		../../include/qconfig-medium.h \
+		../../include/qconfig-large.h \
 		../../include/qconfig.h \
 		../../include/qregexp.h \
 		../../include/qdatastream.h \
@@ -353,6 +428,11 @@ qtextcodec.o: ../tools/qtextcodec.cpp \
 		../../include/qshared.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
+		../../include/qconfig-qpe.h \
+		../../include/qconfig-minimal.h \
+		../../include/qconfig-small.h \
+		../../include/qconfig-medium.h \
+		../../include/qconfig-large.h \
 		../../include/qconfig.h \
 		../../include/qlist.h \
 		../../include/qglist.h \
@@ -378,6 +458,11 @@ qtextstream.o: ../tools/qtextstream.cpp \
 		../../include/qiodevice.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
+		../../include/qconfig-qpe.h \
+		../../include/qconfig-minimal.h \
+		../../include/qconfig-small.h \
+		../../include/qconfig-medium.h \
+		../../include/qconfig-large.h \
 		../../include/qconfig.h \
 		../../include/qcstring.h \
 		../../include/qarray.h \
@@ -393,6 +478,11 @@ qtextstream.o: ../tools/qtextstream.cpp \
 qfile_unix.o: ../tools/qfile_unix.cpp \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
+		../../include/qconfig-qpe.h \
+		../../include/qconfig-minimal.h \
+		../../include/qconfig-small.h \
+		../../include/qconfig-medium.h \
+		../../include/qconfig-large.h \
 		../../include/qconfig.h \
 		../../include/qfile.h \
 		../../include/qiodevice.h \

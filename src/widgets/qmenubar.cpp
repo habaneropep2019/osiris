@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qmenubar.cpp   2.2.1   edited 2000-09-23 $
+** $Id: qt/src/widgets/qmenubar.cpp   2.2.2   edited 2000-11-02 $
 **
 ** Implementation of QMenuBar class
 **
@@ -176,7 +176,9 @@ QMenuBar::QMenuBar( QWidget *parent, const char *name )
     : QFrame( parent, name, 0, FALSE )
 {
     isMenuBar = TRUE;
+#ifndef QT_NO_ACCEL
     autoaccel = 0;
+#endif
     irects    = 0;
     rightSide = 0; // Right of here is rigth-aligned content
     mseparator = 0;
@@ -254,7 +256,9 @@ void QMenuBar::styleChange( QStyle& old )
 
 QMenuBar::~QMenuBar()
 {
+#ifndef QT_NO_ACCEL
     delete autoaccel;
+#endif
     if ( irects )		// Avoid purify complaint.
 	delete [] irects;
 }
@@ -281,17 +285,23 @@ void QMenuBar::updateItem( int id )
 
 void QMenuBar::menuContentsChanged()
 {
+#ifndef QT_NO_ACCEL
     setupAccelerators();
+#endif
     badSize = TRUE;				// might change the size
     if ( isVisible() ) {
 	calculateRects();
 	update();
+#ifndef QT_NO_MAINWINDOW
 	if ( parent() && parent()->inherits( "QMainWindow" ) ) {
 	    ( (QMainWindow*)parent() )->triggerLayout();
 	    ( (QMainWindow*)parent() )->update();
 	}
+#endif
+#ifndef QT_NO_LAYOUT	
 	if ( parentWidget() && parentWidget()->layout() )
 	    parentWidget()->layout()->activate();
+#endif
     }
 }
 
@@ -305,7 +315,9 @@ void QMenuBar::menuContentsChanged()
 
 void QMenuBar::menuStateChanged()
 {
+#ifndef QT_NO_ACCEL
     setupAccelerators(); // ### when we have a good solution for the accel vs. focus widget problem, remove that. That is only a workaround
+#endif
     update();
 }
 
@@ -363,6 +375,7 @@ bool QMenuBar::eventFilter( QObject *object, QEvent *event )
 	    event->type() == QEvent::KeyRelease ) )
 	return FALSE;
 
+#ifndef QT_NO_ACCEL
     // look for Alt press and Alt-anything press
     if ( event->type() == QEvent::Accel ) {
 	QWidget * f = ((QWidget *)object)->focusWidget();
@@ -394,7 +407,7 @@ bool QMenuBar::eventFilter( QObject *object, QEvent *event )
 
 	return FALSE;
     }
-
+#endif
     // look for Alt release
     if ( ((QWidget*)object)->focusWidget() == object ||
 	 (object->parent() == 0 && ((QWidget*)object)->focusWidget() == 0) ) {
@@ -456,26 +469,26 @@ void QMenuBar::subHighlighted( int id )
   \internal
   Receives signals from menu accelerator.
 */
-
+#ifndef QT_NO_ACCEL
 void QMenuBar::accelActivated( int id )
 {
     if ( !isEnabled() )				// the menu bar is disabled
 	return;
     setActiveItem( indexOf( id ) );
 }
-
+#endif
 
 /*!
   \internal
   This slot receives signals from menu accelerator when it is about to be
   destroyed.
 */
-
+#ifndef QT_NO_ACCEL
 void QMenuBar::accelDestroyed()
 {
     autoaccel = 0;				// don't delete it twice!
 }
-
+#endif
 
 bool QMenuBar::tryMouseEvent( QPopupMenu *, QMouseEvent *e )
 {
@@ -575,14 +588,17 @@ void QMenuBar::hidePopups()
 
 void QMenuBar::show()
 {
+#ifndef QT_NO_ACCEL
     setupAccelerators();
+#endif
     if ( parentWidget() )
 		resize( parentWidget()->width(), height() );
     calculateRects();
     QWidget::show();
+#ifndef QT_NO_MAINWINDOW
     if ( parent() && parent()->inherits( "QMainWindow" ) ) //### ugly workaround
 		( (QMainWindow*)parent() )->triggerLayout();
-
+#endif
     raise();
 }
 
@@ -596,9 +612,10 @@ void QMenuBar::hide()
     QWidget::hide();
     setAltMode( FALSE );
     hidePopups();
-
+#ifndef QT_NO_MAINWINDOW
     if ( parent() && parent()->inherits( "QMainWindow" ) ) //### ugly workaround
 		( (QMainWindow*)parent() )->triggerLayout();
+#endif    
 }
 
 /*!
@@ -1149,6 +1166,7 @@ void QMenuBar::setWindowsAltMode( bool, int )
 
 
 /*!  Sets up keyboard accelerators for the menu bar. */
+#ifndef QT_NO_ACCEL
 
 void QMenuBar::setupAccelerators()
 {
@@ -1190,6 +1208,7 @@ void QMenuBar::setupAccelerators()
 	}
     }
 }
+#endif
 
 /*!\reimp
  */

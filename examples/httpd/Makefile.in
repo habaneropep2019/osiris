@@ -85,7 +85,7 @@ listaddonentmodules:
 	@echo 
 
 
-REQUIRES=network
+REQUIRES=network large-config
 
 ####### Sub-libraries
 

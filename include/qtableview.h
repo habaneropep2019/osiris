@@ -1,5 +1,5 @@
 /**********************************************************************
-** $Id: qt/src/widgets/qtableview.h   2.2.1   edited 2000-08-25 $
+** $Id: qt/src/widgets/qtableview.h   2.2.2   edited 2000-10-11 $
 **
 ** Definition of QTableView class
 **
@@ -42,7 +42,7 @@
 #include "qframe.h"
 #endif // QT_H
 
-#ifndef QT_NO_COMPLEXWIDGETS
+#ifndef QT_NO_TABLEVIEW
 
 class QScrollBar;
 class QCornerSquare;
@@ -269,6 +269,6 @@ inline void QTableView::updateScrollBars()
 { updateScrollBars( 0 ); }
 
 
-#endif // QT_NO_COMPLEXWIDGETS
+#endif // QT_NO_TABLEVIEW
 
 #endif // QTABLEVIEW_H

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qdialog.cpp   2.2.1   edited 2000-08-25 $
+** $Id: qt/src/kernel/qdialog.cpp   2.2.2   edited 2000-10-15 $
 **
 ** Implementation of QDialog class
 **
@@ -84,7 +84,7 @@
   Enter/Return maps to one value and pressing Escape to the other),
   QDialog supports that.  A dialog can finish by calling the slots
   accept() or reject(), and exec() returns that result.
-  
+
   Note that QDialog uses the parent widget a bit differently from
   other classes in Qt.  A dialog is always a top-level widget, but if
   it has a parent, its default location is on top of the parent, it
@@ -130,15 +130,17 @@ public:
 
   The widget flags \a f are sent to the QWidget constructor, as usual.
 
-  If you e.g. don't want a What"s this button in the titlebar of the dialog,
+  If you e.g. don't want a What's this button in the titlebar of the dialog,
   pass WStyle_Customize | WStyle_NormalBorder | WStyle_Title | WStyle_SysMenu
   here.
 
   We recommend always passing a parent.
+
+  \sa QWidget::setWFlags Qt::WidgetFlags
 */
 
 QDialog::QDialog( QWidget *parent, const char *name, bool modal, WFlags f )
-    : QWidget( parent, name, 
+    : QWidget( parent, name,
 	       (modal ? (f|WType_Modal) : f) | WType_TopLevel | WStyle_Dialog )
 {
     rescode = 0;
@@ -170,7 +172,7 @@ QDialog::~QDialog()
 
 void QDialog::setDefault( QPushButton *pushButton )
 {
-#ifndef QT_NO_COMPLEXWIDGETS
+#ifndef QT_NO_DIALOG
     QObjectList *list = queryList( "QPushButton" );
     ASSERT(list);
     QObjectListIt it( *list );
@@ -198,7 +200,7 @@ void QDialog::setDefault( QPushButton *pushButton )
  */
 void QDialog::hideDefault()
 {
-#ifndef QT_NO_COMPLEXWIDGETS
+#ifndef QT_NO_DIALOG
     QObjectList *list = queryList( "QPushButton" );
     QObjectListIt it( *list );
     QPushButton *pb;
@@ -312,11 +314,11 @@ void QDialog::keyPressEvent( QKeyEvent *e )
     //   Calls reject() if Escape is pressed.  Simulates a button
     //   click for the default button if Enter is pressed.  Move focus
     //   for the arrow keys.  Ignore the rest.
-    if ( e->state() == 0 ) {
+    if ( e->state() == 0 || ( e->state() & Keypad && e->key() == Key_Enter ) ) {
 	switch ( e->key() ) {
 	case Key_Enter:
 	case Key_Return: {
-#ifndef QT_NO_COMPLEXWIDGETS
+#ifndef QT_NO_DIALOG
 	    QObjectList *list = queryList( "QPushButton" );
 	    QObjectListIt it( *list );
 	    QPushButton *pb;
@@ -384,11 +386,11 @@ void QDialog::closeEvent( QCloseEvent *e )
   selects a suitable position and size if none has been specified yet.
 
   \warning
-  
+
   In Qt 2.x, calling show() on a modal dialog enters a local event
   loop, and work like exec(), but not returning the result code exec()
   returns. Trolltech has always warned against doing this.
-  
+
   In Qt 3.0 and later, calling show() on a modal dialog will return
   immediately, \e not enter a local event loop. The dialog will of
   course be modal.
@@ -424,12 +426,21 @@ void QDialog::show()
 	    extrah = QMAX( extrah, h );
 	}
 	delete list;
-
-	if ( w )
-	    p = QPoint( w->geometry().x() + w->width()/2,
-			w->geometry().y() + w->height()/ 2 );
-	else
+	
+	// sanity check for decoration frames. With embedding, we
+	// might get extraordinary values
+	if ( extraw >= 10 || extrah >= 40 )
+	    extraw = extrah = 0;
+	
+	if ( w ) {
+	    // Use mapToGlobal rather than geometry() in case w might
+	    // be embedded in another application
+	    QPoint pp = w->mapToGlobal( QPoint(0,0) ); 
+	    p = QPoint( pp.x() + w->width()/2,
+			pp.y() + w->height()/ 2 );
+	} else {
 	    p = QPoint( desk->width()/2, desk->height()/2 );
+	}
 
 	p = QPoint( p.x()-width()/2 - extraw,
 		    p.y()-height()/2 - extrah );
@@ -536,7 +547,7 @@ void QDialog::setGeometry( const QRect &r )
 /*!  Sets the dialog to display its extension to the right of the main
   are if \a orientation is \c Horizonal, and to display it below the
   main area if \a orientation is \c Vertical.
-  
+
   \sa orientation(), setExtension()
 */
 void QDialog::setOrientation( Orientation orientation )

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/moc/moc.y   2.2.1   edited 2000-09-29 $
+** $Id: qt/src/moc/moc.y   2.2.2   edited 2000-10-12 $
 **
 ** Parser and code generator for meta object compiler
 **
@@ -1415,12 +1415,95 @@ void replace( char *s, char c1, char c2 )
     /tmp/abc	xyz/klm		-)	/tmp/abc
  */
 
+// Code stolen from QDir::isRelativePath
+bool isRelativePath( const QString &path )
+{
+  int len = path.length();
+  if ( len == 0 )
+    return TRUE;
+  
+  int i = 0;
+#ifdef WIN32
+  if ( path[0].isLetter() && path[1] == ':' )		// drive, e.g. a:
+    i = 2;
+#endif
+  return path[i] != '/' && path[i] != '\\';
+}
+
+// Code stolen from QDir::cleanDirPath
+QString cleanDirPath( const QCString &filePath )
+{
+  QString name = filePath;
+  QString newPath;
+  
+  if ( name.isEmpty() )
+    return name;
+  
+  // already done before calling this function
+  // slashify( name );
+
+  bool addedSeparator;
+  if ( isRelativePath(name) ) {
+    addedSeparator = TRUE;
+    name.insert( 0, '/' );
+  } else {
+    addedSeparator = FALSE;
+  }
+  
+  int ePos, pos, upLevel;
+  
+  pos = ePos = name.length();
+  upLevel = 0;
+  int len;
+  
+  while ( pos && (pos = name.findRev('/',--pos)) != -1 ) {
+    len = ePos - pos - 1;
+    if ( len == 2 && name.at(pos + 1) == '.'
+      && name.at(pos + 2) == '.' ) {
+      upLevel++;
+    } else {
+      if ( len != 0 && (len != 1 || name.at(pos + 1) != '.') ) {
+        if ( !upLevel )
+          newPath = QString::fromLatin1("/")
+          + name.mid(pos + 1, len) + newPath;
+        else
+          upLevel--;
+      }
+    }
+    ePos = pos;
+  }
+  if ( addedSeparator ) {
+    while ( upLevel-- )
+      newPath.insert( 0, QString::fromLatin1("/..") );
+    if ( !newPath.isEmpty() )
+      newPath.remove( 0, 1 );
+    else
+      newPath = QString::fromLatin1(".");
+  } else {
+    if ( newPath.isEmpty() )
+      newPath = QString::fromLatin1("/");
+#if defined(_OS_FATFS_) || defined(_OS_OS2EMX_)
+    if ( name[0] == '/' ) {
+      if ( name[1] == '/' )		// "\\machine\x\ ..."
+        newPath.insert( 0, '/' );
+    } else {
+      newPath = name.left(2) + newPath;
+    }
+#endif
+  }
+  return newPath;
+}
+
 QCString combinePath( const char *infile, const char *outfile )
 {
     QCString a = infile;  replace(a.data(),'\\','/');
     QCString b = outfile; replace(b.data(),'\\','/');
     a = a.stripWhiteSpace();
     b = b.stripWhiteSpace();
+    QString aDir( cleanDirPath( a ) );
+    a = aDir;
+    QString bDir( cleanDirPath( b ) );
+    b = bDir;
     QCString r;
     int i = 0;
     int ncommondirs = 0;
@@ -2465,7 +2548,7 @@ void generateClass()		      // generate C++ source code for a class
     char *hdr1 = "/****************************************************************************\n"
 		 "** %s meta object code from reading C++ file '%s'\n**\n";
     char *hdr2 = "** Created: %s\n"
-		 "**      by: The Qt MOC ($Id: qt/src/moc/moc.y   2.2.1   edited 2000-09-29 $)\n**\n";
+		 "**      by: The Qt MOC ($Id: qt/src/moc/moc.y   2.2.2   edited 2000-10-12 $)\n**\n";
     char *hdr3 = "** WARNING! All changes made in this file will be lost!\n";
     char *hdr4 = "*****************************************************************************/\n\n";
     int   i;

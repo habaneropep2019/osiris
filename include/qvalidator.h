@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qvalidator.h   2.2.1   edited 2000-08-25 $
+** $Id: qt/src/widgets/qvalidator.h   2.2.2   edited 2000-10-11 $
 **
 ** Definition of validator classes.
 **
@@ -43,7 +43,7 @@
 #include "qstring.h"
 #endif // QT_H
 
-#ifndef QT_NO_COMPLEXWIDGETS
+#ifndef QT_NO_VALIDATOR
 
 
 class Q_EXPORT QValidator: public QObject
@@ -134,6 +134,6 @@ private:	// Disabled copy constructor and operator=
 };
 
 
-#endif // QT_NO_COMPLEXWIDGETS
+#endif // QT_NO_VALIDATOR
 
 #endif // QVALIDATOR_H

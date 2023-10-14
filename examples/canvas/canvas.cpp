@@ -339,6 +339,7 @@ Main::Main(QCanvas& c, QWidget* parent, const char* name, WFlags f) :
     edit->insertItem("Add &Circle", this, SLOT(addCircle()), CTRL+Key_C);
     edit->insertItem("Add &Hexagon", this, SLOT(addHexagon()), CTRL+Key_H);
     edit->insertItem("Add &Polygon", this, SLOT(addPolygon()), CTRL+Key_P);
+    edit->insertItem("Add &Text", this, SLOT(addText()), CTRL+Key_T);
     edit->insertItem("Add &Line", this, SLOT(addLine()), CTRL+Key_L);
     edit->insertItem("Add &Rectangle", this, SLOT(addRectangle()), CTRL+Key_R);
     edit->insertItem("Add &Sprite", this, SLOT(addSprite()), CTRL+Key_S);
@@ -516,6 +517,15 @@ void Main::addPolygon()
     pa[5] = QPoint(size*3/4,size/4);
     i->setPoints(pa);
     i->setBrush( QColor(rand()%32*8,rand()%32*8,rand()%32*8) );
+    i->move(rand()%canvas.width(),rand()%canvas.height());
+    i->setZ(rand()%256);
+    i->show();
+}
+
+void Main::addText()
+{
+    QCanvasText* i = new QCanvasText(&canvas);
+    i->setText("QCanvasText");
     i->move(rand()%canvas.width(),rand()%canvas.height());
     i->setZ(rand()%256);
     i->show();

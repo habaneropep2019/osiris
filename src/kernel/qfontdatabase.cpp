@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qfontdatabase.cpp   2.2.1   edited 2000-10-01 $
+** $Id: qt/src/kernel/qfontdatabase.cpp   2.2.2   edited 2000-10-06 $
 **
 ** Implementation of font database class.
 **
@@ -1100,7 +1100,7 @@ void add_style( QtFontCharSet *charSet, const QString& styleName,
     //#### eiriken?
 #if 0
 else
-debug("Already got it");
+qDebug("Already got it");
 #endif
     style->setSmoothlyScalable();  // cowabunga
 }
@@ -1162,7 +1162,7 @@ void newWinFont( void * p )
         // Not TTF, we enumerate the
         // transformed fonts that Windows can generate.
 #if 0
-debug("%s with quality %x",familyName.latin1(),f->elfLogFont.lfQuality);
+qDebug("%s with quality %x",familyName.latin1(),f->elfLogFont.lfQuality);
 #endif
         add_style( charSet, styleName, FALSE, FALSE, weight );
         add_style( charSet, styleName, FALSE, TRUE, weight );

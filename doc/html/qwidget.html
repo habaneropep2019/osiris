@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Qt Toolkit - QWidget Class</title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
 a:link { color: #004faf; text-decoration: none }
@@ -176,7 +176,7 @@ Inherits <a href="qobject.html">QObject</a> and <a href="qpaintdevice.html">QPai
 <li><div class="fn">virtual bool <a href="#dd25bf"><b>customWhatsThis</b></a> () const</div>
 <li><div class="fn">QWidget* <a href="#e1126f"><b>parentWidget</b></a> () const</div>
 <li><div class="fn">bool <b>testWState</b> ( uint n ) const (internal)</div>
-<li><div class="fn">bool <a href="#70dec1"><b>testWFlags</b></a> ( WFlags n ) const</div>
+<li><div class="fn">bool <a href="#70dec1"><b>testWFlags</b></a> ( WFlags f ) const</div>
 <li><div class="fn">void setPalette ( const QPalette &amp;, bool iReallyMeanIt ) <em>(obsolete)</em></div>
 <li><div class="fn">void setFont ( const QFont &amp;, bool iReallyMeanIt ) <em>(obsolete)</em></div>
 </ul>
@@ -528,12 +528,12 @@ reparentolish((),
 If it is 0 (the default), the new widget will be a top-level window.
 If not, it will be a child of <em>parent,</em> and be constrained by <em>parent's</em> geometry (Unless you specify <code>WType_TopLevel</code> as
 widget flag).
-<li><code>const char * name = 0</code> is the widget name of the new
-widget.  The widget name is little used at the moment - the
-<a href="qobject.html#af854e">dumpObjectTree</a>() debugging function uses it, and you can access it using
-<a href="qobject.html#6f3030">name</a>().  It will become more important when our visual GUI builder is
-ready (you can name a a widget in the builder, and <a href="qobject.html#c2d209">connect</a>() to it by
-name in your code).
+<li><code>const char *name = 0</code> is the widget name of the new
+widget.  You can access it using <a href="qobject.html#6f3030">name</a>().  The widget name is little
+used by programmers but is quite useful with GUI builders such as the
+Qt Designer (you can name a widget in the builder, and <a href="qobject.html#c2d209">connect</a>() to
+it by name in your code).  The <a href="qobject.html#af854e">dumpObjectTree</a>() debugging function also
+uses it.
 <li><code>WFlags f = 0</code> (where available) sets the <a
 href="qt.html#WidgetFlags">widget flags</a>; the default is good for almost
 all widgets, but to get e.g. top-level widgets without a window
@@ -738,8 +738,6 @@ whatever flags you want.
                                   WStyle_Customize | WStyle_NoBorder |
                                   WStyle_Tool );
 </pre>
-<p>The widget flags are defined in <a href="qnamespace-h.html">qnamespace.h</a> (which is included by
-<a href="qwidget-h.html">qwidget.h</a>).
 <h3 class="fn"><a name="fd072b"></a>QWidget::~QWidget ()</h3>
 <p>Destructs the widget.
 <p>All children of this widget are deleted first.
@@ -828,7 +826,7 @@ focus, i.e. it must call <a href="#43a9d9">setFocusPolicy</a>().
 <p>See also  <a href="#3af9ed">setMask</a>().
 <h3 class="fn">void <a name="60c810"></a>QWidget::clearWFlags ( WFlags f ) <code>[protected]</code></h3>
 <p>Clears the widget flags <em>f.</em>
-<p>Widget flags are internal, not meant for public use.
+<p>Widget flags are a combination of <a href="qt.html#WidgetFlags">Qt::WidgetFlags</a>.
 <p>See also  <a href="#70dec1">testWFlags</a>(), <a href="#efde14">getWFlags</a>() and <a href="#9da836">setWFlags</a>().
 <h3 class="fn">bool <a name="930c34"></a>QWidget::close () <code>[slot]</code></h3>
 <p>Closes this widget. Returns TRUE if the widget was closed, otherwise
@@ -1043,7 +1041,7 @@ only the top-level widget will thus make the choice of where to redirect
 focus.  By overriding this method for an object, you thus gain control
 of focus traversal for all child widgets.
 <p>See also  <a href="#0772f6">focusData</a>().
-<p>Reimplemented in <a href="qbutton.html#d25e76">QButton</a>, <a href="qpopupmenu.html#7069e5">QPopupMenu</a> and <a href="qscrollview.html#fe180c">QScrollView</a>.
+<p>Reimplemented in <a href="qbutton.html#d25e76">QButton</a>, <a href="qpopupmenu.html#7069e5">QPopupMenu</a>, <a href="qmultilineedit.html#53d6ef">QMultiLineEdit</a> and <a href="qscrollview.html#fe180c">QScrollView</a>.
 <h3 class="fn">void <a name="bdc4a1"></a>QWidget::focusOutEvent ( <a href="qfocusevent.html">QFocusEvent</a> * ) <code>[virtual protected]</code></h3>
 <p>This event handler can be reimplemented in a subclass to receive
 keyboard focus events (focus lost) for the widget.
@@ -1128,7 +1126,7 @@ for an overview of geometry issues with top-level widgets.
  <a href="qmag-qmag-cpp.html#geometry">qmag/qmag.cpp</a>
 <h3 class="fn">WFlags <a name="efde14"></a>QWidget::getWFlags () const <code>[protected]</code></h3>
 <p>Returns the widget flags for this this widget.
-<p>Widget flags are internal, not meant for public use.
+<p>Widget flags are a combination of <a href="qt.html#WidgetFlags">Qt::WidgetFlags</a>.
 <p>See also  <a href="#70dec1">testWFlags</a>(), <a href="#9da836">setWFlags</a>() and <a href="#60c810">clearWFlags</a>().
 <h3 class="fn">void <a name="2bbb02"></a>QWidget::grabKeyboard ()</h3>
 <p>Grabs all keyboard input.
@@ -2210,7 +2208,7 @@ time, for instance to avoid screen flicker during large changes.
 <p>Reimplemented in <a href="qheader.html#ef898e">QHeader</a>.
 <h3 class="fn">void <a name="9da836"></a>QWidget::setWFlags ( WFlags f ) <code>[virtual protected]</code></h3>
 <p>Sets the widget flags <em>f.</em>
-<p>Widget flags are internal, not meant for public use.
+<p>Widget flags are a combination of <a href="qt.html#WidgetFlags">Qt::WidgetFlags</a>.
 <p>See also  <a href="#70dec1">testWFlags</a>(), <a href="#efde14">getWFlags</a>() and <a href="#60c810">clearWFlags</a>().
 <h3 class="fn">void <a name="ccc8f7"></a>QWidget::show () <code>[virtual slot]</code></h3>
 <p>Shows the widget and its child widgets.
@@ -2347,10 +2345,10 @@ using <a href="#4a97ef">update</a>().
 geometry.
 <p>See also  <a href="qapplication.html#c9e3b3">QApplication::setStyle</a>(), <a href="#ea8b00">style</a>(), <a href="#4a97ef">update</a>() and <a href="#c04eb3">updateGeometry</a>().
 <p>Reimplemented in <a href="qpopupmenu.html#df7f4a">QPopupMenu</a>, <a href="qcombobox.html#6da1a5">QComboBox</a>, <a href="qprogressbar.html#a727ff">QProgressBar</a>, <a href="qslider.html#b22ec5">QSlider</a>, <a href="qiconview.html#2a9862">QIconView</a>, <a href="qmenubar.html#7fecb4">QMenuBar</a>, <a href="qscrollbar.html#cd5bf1">QScrollBar</a>, <a href="qmainwindow.html#be8549">QMainWindow</a>, <a href="qspinbox.html#800c31">QSpinBox</a>, <a href="qsplitter.html#70b7f4">QSplitter</a>, <a href="qlistview.html#303b09">QListView</a>, <a href="qprogressdialog.html#145ad3">QProgressDialog</a>, <a href="qtabwidget.html#f85bdb">QTabWidget</a>, <a href="qtabbar.html#7bda98">QTabBar</a>, <a href="qtabdialog.html#52271d">QTabDialog</a> and <a href="qscrollview.html#e80272">QScrollView</a>.
-<h3 class="fn">bool <a name="70dec1"></a>QWidget::testWFlags ( WFlags n ) const</h3>
-<p>Returns TRUE if any of the widget flags in <em>n</em> are set. The
-widget flags are listed in <a href="qnamespace-h.html">qnamespace.h</a>, and are strictly for
-internal use.
+<h3 class="fn">bool <a name="70dec1"></a>QWidget::testWFlags ( WFlags f ) const</h3>
+<p>Returns TRUE if any of the widget flags in <em>f</em> are set.
+<p>Widget flags are a combination of <a href="qt.html#WidgetFlags">Qt::WidgetFlags</a>.
+<p>See also  <a href="#efde14">getWFlags</a>(), <a href="#9da836">setWFlags</a>() and <a href="#60c810">clearWFlags</a>().
 <h3 class="fn">QWidget * <a name="4f5be5"></a>QWidget::topLevelWidget () const</h3>
 <p>Returns the top-level widget for this widget, i.e. the next ancestor
 widget that has a window-system frame (or at least may have one).
@@ -2488,7 +2486,7 @@ for an overview of geometry issues with top-level widgets.
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.2.1"><nobr>
+<input type=hidden name="version" value="2.2.2"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -2496,5 +2494,5 @@ copyright &copy; 1995-2000
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.1</div>
+<td align="right"><div align="right">Qt version 2.2.2</div>
 </table></div></address></body></html>

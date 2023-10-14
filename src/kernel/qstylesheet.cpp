@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qstylesheet.cpp   2.2.1   edited 2000-09-13 $
+** $Id: qt/src/kernel/qstylesheet.cpp   2.2.2   edited 2000-09-13 $
 **
 ** Implementation of the QStyleSheet class
 **

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qvbox.cpp   2.2.1   edited 2000-08-25 $
+** $Id: qt/src/widgets/qvbox.cpp   2.2.2   edited 2000-10-11 $
 **
 ** Implementation of vertical box layout widget class
 **
@@ -37,7 +37,7 @@
 
 
 #include "qvbox.h"
-#ifndef QT_NO_COMPLEXWIDGETS
+#ifndef QT_NO_VBOX
 #include "qlayout.h"
 
 // NOT REVISED

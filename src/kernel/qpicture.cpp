@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qpicture.cpp   2.2.1   edited 2000-08-25 $
+** $Id: qt/src/kernel/qpicture.cpp   2.2.2   edited 2000-10-06 $
 **
 ** Implementation of QPicture class
 **
@@ -528,7 +528,7 @@ bool QPicture::exec( QPainter *painter, QDataStream &s, int nrecords )
 		    s.device()->at( s.device()->at()+len );
 	}
 #if defined(DEBUG)
-	//debug( "device->at(): %i, strm_pos: %i len: %i", s.device()->at(), strm_pos, len );
+	//qDebug( "device->at(): %i, strm_pos: %i len: %i", s.device()->at(), strm_pos, len );
 	ASSERT( s.device()->at() - strm_pos == len );
 #endif
     }

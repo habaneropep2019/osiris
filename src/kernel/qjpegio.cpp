@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qjpegio.cpp   2.2.1   edited 2000-10-02 $
+** $Id: qt/src/kernel/qjpegio.cpp   2.2.2   edited 2000-10-19 $
 **
 ** Implementation of JPEG QImage IOHandler
 **
@@ -43,6 +43,7 @@
 
 #include <qimage.h>
 #include <qiodevice.h>
+#include <qjpegio.h>
 
 #include <stdio.h> // jpeglib needs this to be pre-included
 #include <setjmp.h>

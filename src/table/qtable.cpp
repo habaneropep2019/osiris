@@ -408,7 +408,7 @@ void QTableItem::updateEditor( int oldRow, int oldCol )
 
 /*!  Returns the edit type of an item.
 
-  \sa setEditType() EditType
+  \sa EditType
 */
 
 QTableItem::EditType QTableItem::editType() const
@@ -571,7 +571,7 @@ int QTableItem::col() const
 
   \brief A flexible and editable table widget.
 
-  QTable has been designed to us no more memory than strictly
+  QTable has been designed to use no more memory than strictly
   needed. Thus, for an empty cell, no memory at all is allocated.  In
   order to add data, create a QTableItem and fill it using
   setItem(). With QTableItem::setText() and QTableItem::setPixmap(),
@@ -642,8 +642,6 @@ int QTableItem::col() const
   case, repainting the cells using updateCell() after each change made
   is necessary. To make sure you don't waste memory, read the
   documentation of resizeData().
-
-
 */
 
 /*! \fn void QTable::currentChanged( int row, int col )
@@ -706,7 +704,15 @@ int QTableItem::col() const
   Whenever a selection changes, this signal is emitted.
 */
 
-/*!  Constructs a table of 10 * 10 cells.
+/*!
+  Constructs a table of 10 * 10 cells.
+
+  Performance is boosted by modifying the widget flags so that only part
+  of the QTableItem children is redrawn.  This may be unsuitable for custom
+  QTableItem classes, in which case \c WNorthWestGravity and \c WRepaintNoErase
+  should be cleared.
+
+  \sa QWidget::clearWFlags() Qt::WidgetFlags
 */
 
 QTable::QTable( QWidget *parent, const char *name )
@@ -717,7 +723,13 @@ QTable::QTable( QWidget *parent, const char *name )
     init( 0, 0 );
 }
 
-/*!  Constructs a table with a range of \a numRows * \a numCols cells.
+/*!
+  Constructs a table with a range of \a numRows * \a numCols cells.
+
+  Performance is boosted by modifying the widget flags so that only part of
+  the QTableItem children is redrawn.  This may be unsuitable for custom
+  QTableItem classes, in which case the widget flags should be reset using
+  QWidget::setWFlags().
 */
 
 QTable::QTable( int numRows, int numCols, QWidget *parent, const char *name )
@@ -1180,10 +1192,16 @@ void QTable::drawContents( QPainter *p, int cx, int cy, int cw, int ch )
 	    }
 
 	    // Translate painter and draw the cell
+#ifdef QT_NO_TRANSFORMATIONS // ### Need both, or will the first do? (first is in qt/main)
+	    p->translate( colp, rowp );
+	    paintCell( p, r, c, QRect( colp, rowp, colw, rowh ), isSelected( r, c ) );
+	    p->translate( -colp, -rowp );
+#else
 	    p->saveWorldMatrix();
 	    p->translate( colp, rowp );
 	    paintCell( p, r, c, QRect( colp, rowp, colw, rowh ), isSelected( r, c ) );
 	    p->restoreWorldMatrix();
+#endif
 
 	    rowp = oldrp;
 	    rowh = oldrh;
@@ -1191,11 +1209,18 @@ void QTable::drawContents( QPainter *p, int cx, int cy, int cw, int ch )
     }
 
     // draw indication of current cell
-    p->saveWorldMatrix();
     QRect focusRect = cellGeometry( curRow, curCol );
+
+#ifdef QT_NO_TRANSFORMATIONS // ### Need both, or will the first do? (first is in qt/main)
+    p->translate( focusRect.x(), focusRect.y() );
+    paintFocus( p, focusRect );
+    p->translate( -focusRect.x(), -focusRect.y() );
+#else
+    p->saveWorldMatrix();
     p->translate( focusRect.x(), focusRect.y() );
     paintFocus( p, focusRect );
     p->restoreWorldMatrix();
+#endif
 
     // Paint empty rects
     paintEmptyArea( p, cx, cy, cw, ch );
@@ -3337,15 +3362,22 @@ void QTableHeader::mousePressEvent( QMouseEvent *e )
     startPos = -1;
     setCaching( TRUE );
     resizedSection = -1;
+#ifdef QT_NO_CURSOR
+    isResizing = FALSE;
+#else
     isResizing = cursor().shape() != ArrowCursor;
     if ( !isResizing && sectionAt( pressPos ) != -1 )
 	doSelection( e );
+#endif
 }
 
 void QTableHeader::mouseMoveEvent( QMouseEvent *e )
 {
-    if ( !mousePressed || cursor().shape() != ArrowCursor ||
-	 ( ( e->state() & ControlButton ) == ControlButton &&
+    if ( !mousePressed
+#ifndef QT_NO_CURSOR
+	|| cursor().shape() != ArrowCursor
+#endif
+	 || ( ( e->state() & ControlButton ) == ControlButton &&
 	   ( orientation() == Horizontal
 	     ? table->columnMovingEnabled() : table->rowMovingEnabled() ) ) ) {
 	QHeader::mouseMoveEvent( e );

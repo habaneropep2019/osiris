@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qsplitter.h   2.2.1   edited 2000-08-25 $
+** $Id: qt/src/widgets/qsplitter.h   2.2.2   edited 2000-10-23 $
 **
 ** Defintion of  QSplitter class
 **
@@ -42,7 +42,7 @@
 #include "qvaluelist.h"
 #endif // QT_H
 
-#ifndef QT_NO_COMPLEXWIDGETS
+#ifndef QT_NO_SPLITTER
 
 class QSplitterHandle;
 class QSplitterData;
@@ -97,7 +97,6 @@ protected:
 private:
     void init();
     void recalc( bool update = FALSE );
-    int hit( QPoint p );
     void doResize();
     void storeSizes();
     void processChildEvents();
@@ -128,6 +127,6 @@ private:	// Disabled copy constructor and operator=
 #endif
 };
 
-#endif // QT_NO_COMPLEXWIDGETS
+#endif // QT_NO_SPLITTER
 
 #endif // QSPLITTER_H

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qsgistyle.cpp   2.2.1   edited 2000-09-23 $
+** $Id: qt/src/widgets/qsgistyle.cpp   2.2.2   edited 2000-10-12 $
 **
 ** Implementation of Motif-like style class
 **
@@ -389,7 +389,8 @@ QSGIStyle::drawPushButton( QPushButton* btn, QPainter* p)
     }
 
     QBrush fill = g.brush( QColorGroup::Button );
-    drawBevelButton( p, x1, y1, x2-x1+1, y2-y1+1, g, btn->isOn() || btn->isDown(), &fill );
+    if ( !btn->isFlat() || btn->isOn() || btn->isDown() )
+	drawBevelButton( p, x1, y1, x2-x1+1, y2-y1+1, g, btn->isOn() || btn->isDown(), &fill );
 
     if ( p->brush().style() != NoBrush )
 	p->setBrush( NoBrush );

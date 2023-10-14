@@ -1,4 +1,4 @@
-.TH QPainter 3qt "4 October 2000" "Trolltech AS" \" -*- nroff -*-
+.TH QPainter 3qt "8 November 2000" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -924,7 +924,7 @@ Draws a tiled \fIpixmap\fR in the specified rectangle.
 .PP
 \fI(x,y)\fR specify the top-left point in the paint device that is to be drawn onto. \fI(sx,sy)\fR specify the top-left point in \fIpixmap\fR that is to be drawn (the default is (0,0).
 .PP
-Calling drawTiledPixmap() is similar to calling drawPixmap() several times to fill (tile) an area with a pixmap, but can be much more efficient.
+Calling drawTiledPixmap() is similar to calling drawPixmap() several times to fill (tile) an area with a pixmap, but is potentially much more efficient depending on the underlying window system.
 .PP
 See also drawPixmap().
 .SH "void QPainter::drawTiledPixmap ( const QRect & r, const QPixmap & pm )"
@@ -1239,7 +1239,7 @@ See also window(), setViewport(), setViewXForm(), setWorldMatrix() and setWorldX
 .PP
 Examples:
 .(l
-drawdemo/drawdemo.cpp forever/forever.cpp
+drawdemo/drawdemo.cpp
 .)l
 .SH "void QPainter::setWindow ( const QRect & r )"
 This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts.

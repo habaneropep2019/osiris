@@ -6,4 +6,4 @@ SOURCES	= ftpmainwindow.cpp \
 		ftpview.cpp \
 		  main.cpp
 TARGET		= ftpclient
-REQUIRES=network
+REQUIRES=network full-config

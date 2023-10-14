@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qthread_p.h   2.2.1   edited 2000-09-27 $
+** $Id: qt/src/kernel/qthread_p.h   2.2.2   edited 2000-11-07 $
 **
 ** QThread class for Unix
 **
@@ -19,8 +19,8 @@
 ** packaging of this file.
 **
 ** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
-** licenses for Unix/X11 or for Qt/Embedded may use this file in accordance
-** with the Qt Commercial License Agreement provided with the Software.
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
 **
 ** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
 ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
@@ -42,6 +42,11 @@
 
 #include <errno.h>
 #include <unistd.h>
+#ifdef QWS
+#include <qptrdict.h>
+#else
+#include <qintdict.h>
+#endif
 
 
 // Thread definitions for UNIX platforms
@@ -67,9 +72,9 @@
 // Digital UNIX - 4.0 and later has a POSIX 1003.1c implementation
 //   - should we assume > 4.0?
 #  define Q_HAS_RECURSIVE_MUTEX
-#  define Q_USE_PTHREAD_MUTEX_SETKIND
-#  define Q_NORMAL_MUTEX_TYPE MUTEX_NONRECURSIVE_NP
-#  define Q_MUTEX_TYPE MUTEX_RECURSIVE_NP
+#  undef  Q_USE_PTHREAD_MUTEX_SETKIND
+#  define Q_NORMAL_MUTEX_TYPE PTHREAD_MUTEX_ERRORCHECK
+#  define Q_RECURSIVE_MUTEX_TYPE PTHREAD_MUTEX_RECURSIVE
 #elif defined(_OS_AIX_)
 // AIX 4.3.x
 #  define Q_HAS_RECURSIVE_MUTEX
@@ -963,7 +968,7 @@ public:
 	}
 
 #ifndef Q_HAS_RECURSIVE_MUTEX
-	if (mutex->d->type() == Q_MUTEX_RECURSIVE) {
+	if (mtx->d->type() == Q_MUTEX_RECURSIVE) {
 	    QRMutexPrivate *rmp = (QRMutexPrivate *) mtx->d;
 	    pthread_mutex_lock(&(rmp->mutex2));
 	    rmp->count = c;

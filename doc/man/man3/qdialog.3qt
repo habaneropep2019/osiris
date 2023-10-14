@@ -1,4 +1,4 @@
-.TH QDialog 3qt "4 October 2000" "Trolltech AS" \" -*- nroff -*-
+.TH QDialog 3qt "8 November 2000" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -109,9 +109,11 @@ The dialog is modal (blocks input to other windows) if \fImodal\fR is TRUE, and 
 .PP
 The widget flags \fIf\fR are sent to the QWidget constructor, as usual.
 .PP
-If you e.g. don't want a What"s this button in the titlebar of the dialog, pass WStyle_Customize | WStyle_NormalBorder | WStyle_Title | WStyle_SysMenu here.
+If you e.g. don't want a What's this button in the titlebar of the dialog, pass WStyle_Customize | WStyle_NormalBorder | WStyle_Title | WStyle_SysMenu here.
 .PP
 We recommend always passing a parent.
+.PP
+See also QWidget::setWFlags and Qt::WidgetFlags.
 .SH "QDialog::~QDialog ()"
 Destructs the QDialog, deleting all its children.
 .SH "void QDialog::accept () \fC[virtual protected slot]\fR"

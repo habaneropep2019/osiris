@@ -87,7 +87,7 @@ listaddonentmodules:
 	@echo 
 
 
-REQUIRES=
+REQUIRES=large-config
 
 ####### Sub-libraries
 
@@ -108,6 +108,11 @@ main.o: main.cpp \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
+		../../include/qconfig-qpe.h \
+		../../include/qconfig-minimal.h \
+		../../include/qconfig-small.h \
+		../../include/qconfig-medium.h \
+		../../include/qconfig-large.h \
 		../../include/qconfig.h \
 		../../include/qstring.h \
 		../../include/qcstring.h \
@@ -157,6 +162,11 @@ progressbar.o: progressbar.cpp \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
+		../../include/qconfig-qpe.h \
+		../../include/qconfig-minimal.h \
+		../../include/qconfig-small.h \
+		../../include/qconfig-medium.h \
+		../../include/qconfig-large.h \
 		../../include/qconfig.h \
 		../../include/qstring.h \
 		../../include/qcstring.h \
@@ -209,6 +219,11 @@ moc_progressbar.o: moc_progressbar.cpp \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
+		../../include/qconfig-qpe.h \
+		../../include/qconfig-minimal.h \
+		../../include/qconfig-small.h \
+		../../include/qconfig-medium.h \
+		../../include/qconfig-large.h \
 		../../include/qconfig.h \
 		../../include/qstring.h \
 		../../include/qcstring.h \

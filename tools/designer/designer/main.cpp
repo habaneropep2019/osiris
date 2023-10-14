@@ -286,6 +286,7 @@ int main( int argc, char *argv[] )
     }
 
     MainWindow *mw = new MainWindow( creatPid );
+    a.setMainWidget( mw );
     mw->setCaption( "Qt Designer by Trolltech" );
 
     mw->show();

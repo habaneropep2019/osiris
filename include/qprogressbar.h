@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qprogressbar.h   2.2.1   edited 2000-08-25 $
+** $Id: qt/src/widgets/qprogressbar.h   2.2.2   edited 2000-10-11 $
 **
 ** Definition of QProgressBar class
 **
@@ -42,7 +42,7 @@
 #include "qframe.h"
 #endif // QT_H
 
-#ifndef QT_NO_COMPLEXWIDGETS
+#ifndef QT_NO_PROGRESSBAR
 
 
 class QProgressBarPrivate;
@@ -127,6 +127,6 @@ inline bool QProgressBar::indicatorFollowsStyle() const
 }
 
 
-#endif // QT_NO_COMPLEXWIDGETS
+#endif // QT_NO_PROGRESSBAR
 
 #endif // QPROGRESSBAR_H

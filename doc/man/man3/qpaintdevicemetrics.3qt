@@ -1,4 +1,4 @@
-.TH QPaintDeviceMetrics 3qt "4 October 2000" "Trolltech AS" \" -*- nroff -*-
+.TH QPaintDeviceMetrics 3qt "8 November 2000" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -54,7 +54,7 @@ Sometimes it is necessary to obtain information about the physical characteristi
 .br
     QPaintDeviceMetrics pdm( myWidget );
 .br
-    double aspect = (double)pdm.widthMM / (double)pdm.heightMM();
+    double aspect = (double)pdm.widthMM() / (double)pdm.heightMM();
 .fi
 .PP
 QPaintDeviceMetrics contains methods to provide the width and height of a device in both pixels and millimeters, the number of colors the device supports, the number of bit planes, and finally the resolution of the device.

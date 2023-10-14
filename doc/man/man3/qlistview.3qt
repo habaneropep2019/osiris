@@ -1,4 +1,4 @@
-.TH QListView 3qt "4 October 2000" "Trolltech AS" \" -*- nroff -*-
+.TH QListView 3qt "8 November 2000" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -318,6 +318,8 @@ QListView emits two groups of signals: One group signals changes in selection/fo
 .PP
 In Motif style, QListView deviates fairly strongly from the look and feel of the Motif hierarchical tree view. This is done mostly to provide a usable keyboard interface and to make the list view look better with a white background.
 .PP
+\fBWarning:\fR The list view assumes ownership of all list view items and will delete them when it does not need them any more.
+.PP
 <img src=qlistview-m.png> <img src=qlistview-w.png>
 .SS "Member Type Documentation"
 .SH "QListView::SelectionMode"
@@ -345,8 +347,16 @@ See also setColumnWidth(), setColumnWidthMode() and columnWidth().
 .SH MEMBER FUNCTION DOCUMENTATION
 .SH "QListView::QListView ( QWidget * parent = 0, const char * name = 0 )"
 Constructs a new empty list view, with \fIparent\fR as a parent and \fIname\fR as object name.
+.PP
+Performance is boosted by modifying the widget flags so that only part of the QListViewItem children is redrawn. This may be unsuitable for custom QListViewItem classes, in which case \fCWNorthWestGravity\fR and \fCWRepaintNoErase\fR should be cleared.
+.PP
+See also QWidget::clearWFlags() and Qt::WidgetFlags.
 .SH "QListView::QListView ( QWidget * parent, const char * name, WFlags f )"
-Constructs a new empty list view, with \fIparent\fR as a parent and \fIname\fR as object name. The \fIf\fR parameter is passed to the QWidget constructor.
+Constructs a new empty list view, with \fIparent\fR as a parent and \fIname\fR as object name.
+.PP
+Performance is boosted by modifying the widget flags \fIf\fR so that only part of the QListViewItem children is redrawn. This may be unsuitable for custom QListViewItem classes, in which case \fCWNorthWestGravity\fR and \fCWRepaintNoErase\fR should be cleared.
+.PP
+See also QWidget::clearWFlags() and Qt::WidgetFlags.
 .SH "QListView::~QListView ()"
 Destructs the listview, deleting all items in it, and frees up all allocated resources.
 .SH "int QListView::addColumn ( const QIconSet & iconset, const QString & label, int width = -1 ) \fC[virtual]\fR"

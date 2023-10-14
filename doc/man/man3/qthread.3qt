@@ -1,4 +1,4 @@
-.TH QThread 3qt "4 October 2000" "Trolltech AS" \" -*- nroff -*-
+.TH QThread 3qt "8 November 2000" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -119,6 +119,8 @@ A QThread represents a separate thread of control within the program; it shares 
 .fi
 .PP
 This will start two threads, each of which writes Ping! 20 times to the screen and exits. The wait() calls at the end of main() are necessary because exiting main() ends the program, unceremoniously killing all other threads. Each MyThread stops executing when it reaches the end of MyThread::run(), just as an application does when it leaves main().
+.PP
+See also the paragraph on Thread Support in Qt
 .SH MEMBER FUNCTION DOCUMENTATION
 .SH "QThread::QThread ()"
 Constructs a new thread. The thread does not actually begin executing until start() is called.

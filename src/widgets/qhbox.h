@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qhbox.h   2.2.1   edited 2000-08-25 $
+** $Id: qt/src/widgets/qhbox.h   2.2.2   edited 2000-10-11 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -39,7 +39,7 @@
 #include "qwidget.h"
 #endif // QT_H
 
-#ifndef QT_NO_COMPLEXWIDGETS
+#ifndef QT_NO_HBOX
 
 #include "qframe.h"
 
@@ -62,6 +62,6 @@ private:
     QBoxLayout *lay;
 };
 
-#endif // QT_NO_COMPLEXWIDGETS
+#endif // QT_NO_HBOX
 
 #endif // QHBOX_H

@@ -9,4 +9,4 @@ SOURCES		= main.cpp \
 		../dirview/dirview.cpp
 TARGET		= fileiconview
 DEPENDPATH=../../include
-REQUIRES=iconview
+REQUIRES=iconview full-config

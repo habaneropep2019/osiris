@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qtoolbutton.cpp   2.2.1   edited 2000-08-25 $
+** $Id: qt/src/widgets/qtoolbutton.cpp   2.2.2   edited 2000-11-02 $
 **
 ** Implementation of QToolButton class
 **
@@ -36,7 +36,7 @@
 **********************************************************************/
 
 #include "qtoolbutton.h"
-#ifndef QT_NO_COMPLEXWIDGETS
+#ifndef QT_NO_TOOLBUTTON
 
 #include "qdrawutil.h"
 #include "qpainter.h"
@@ -214,6 +214,7 @@ QToolButton::QToolButton( const QPixmap &pm, const QString &textLabel,
     } else {
 	setUsesBigPixmap( FALSE );
     }
+#ifndef QT_NO_TOOLTIP
     if ( !textLabel.isEmpty() ) {
 	if ( !grouptext.isEmpty() )
 	    QToolTip::add( this, textLabel,
@@ -221,6 +222,7 @@ QToolButton::QToolButton( const QPixmap &pm, const QString &textLabel,
 	else
 	    QToolTip::add( this, textLabel );
     }
+#endif	
 }
 
 
@@ -254,6 +256,7 @@ QToolButton::QToolButton( const QIconSet& iconSet, const QString &textLabel,
     } else {
 	setUsesBigPixmap( FALSE );
     }
+#ifndef QT_NO_TOOLTIP
     if ( !textLabel.isEmpty() ) {
 	if ( !grouptext.isEmpty() )
 	    QToolTip::add( this, textLabel,
@@ -261,6 +264,7 @@ QToolButton::QToolButton( const QIconSet& iconSet, const QString &textLabel,
 	else
 	    QToolTip::add( this, textLabel );
     }
+#endif    
 }
 
 
@@ -602,9 +606,10 @@ void QToolButton::setTextLabel( const QString &newLabel )
 
 void QToolButton::setTextLabel( const QString &newLabel , bool tipToo )
 {
+#ifndef QT_NO_TOOLTIP
     if ( tipToo )
 	QToolTip::add( this, newLabel );
-
+#endif
     if ( tl == newLabel )
 	return;
 

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/i18n/main.cpp   2.2.1   edited 2000-10-03 $
+** $Id: qt/examples/i18n/main.cpp   2.2.2   edited 2000-10-03 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **

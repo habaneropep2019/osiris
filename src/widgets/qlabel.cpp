@@ -1,5 +1,5 @@
 /**********************************************************************
-** $Id: qt/src/widgets/qlabel.cpp   2.2.1   edited 2000-10-04 $
+** $Id: qt/src/widgets/qlabel.cpp   2.2.2   edited 2000-11-06 $
 **
 ** Implementation of QLabel widget class
 **
@@ -169,16 +169,16 @@ QLabel::QLabel( const QString &text, QWidget *parent, const char *name,
   \sa setText(), setBuddy(), setAlignment(), setFrameStyle(),
   setIndent()
 */
-#ifndef QT_NO_ACCEL
 QLabel::QLabel( QWidget *buddy,  const QString &text,
 		QWidget *parent, const char *name, WFlags f )
     : QFrame( parent, name, f | WMouseNoMask )
 {
     init();
+#ifndef QT_NO_ACCEL
     setBuddy( buddy );
+#endif
     setText( text );
 }
-#endif
 
 /*!
   Destructs the label.

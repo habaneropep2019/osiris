@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qdial.cpp   2.2.1   edited 2000-08-25 $
+** $Id: qt/src/widgets/qdial.cpp   2.2.2   edited 2000-10-30 $
 **
 ** Implementation of the dial widget
 **
@@ -737,7 +737,9 @@ void QDial::setNotchesVisible( bool b )
 }
 
 /*!
-  Retuns TRUE if notches are shown, else FALSE;
+  Retuns TRUE if notches are shown, else FALSE.
+
+  \sa setNotchesVisible()
 */
 
 bool QDial::notchesVisible() const

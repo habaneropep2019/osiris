@@ -4,4 +4,4 @@ HEADERS	=
 SOURCES	= main.cpp
 TARGET		= table
 DEPENDPATH	= ../../include
-REQUIRES=table
+REQUIRES=table full-config

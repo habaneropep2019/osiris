@@ -1,5 +1,5 @@
 /**********************************************************************
-** $Id: qt/src/canvas/qcanvas.cpp   2.2.1   edited 2000-09-28 $
+** $Id: qt/src/canvas/qcanvas.cpp   2.2.2   edited 2000-11-02 $
 **
 ** Implementation of QCanvas and associated classes
 **
@@ -527,6 +527,9 @@ void qt_unview(QCanvas* c)
 QCanvas::~QCanvas()
 {
     qt_unview(this);
+    QCanvasItemList all = allItems();
+    for (QCanvasItemList::Iterator it=all.begin(); it!=all.end(); ++it)
+	delete *it;
     delete [] chunks;
     delete [] grid;
     delete d;
@@ -607,7 +610,8 @@ void QCanvas::resize(int w, int h)
 */
 
 /*!  Change the efficiency tuning parameters to \a mxclusers clusters,
-each of size \a chunksize (square).  This is a slow operation.
+each of size \a chunksize (square).  This is a slow operation if you
+have many objects on the canvas.
 
 Internally, a canvas uses a low-resolution "chunk matrix" to keep
 track of all the items in the canvas. In Qt 2.2, the default for a
@@ -914,9 +918,6 @@ void QCanvas::setChanged(const QRect& area)
 /*!
 \internal
 Redraw a given area of the QCanvas.
-
-### warwick, what do you mean:
-If only_changes then only changes to the area are redrawn.
 */
 void QCanvas::drawChanges(const QRect& inarea)
 {
@@ -958,11 +959,6 @@ void QCanvas::drawChanges(const QRect& inarea)
 /*!
 \internal
 Redraw a given area of the QCanvas.
-
-### warwick, what do you mean:
-If only_changes then only changes to the area are redrawn.
-
-If one_view then only one view is updated, otherwise all are.
 */
 void QCanvas::drawArea(const QRect& inarea, QPainter* p, bool double_buffer)
 {
@@ -1381,6 +1377,7 @@ void QCanvas::setTile( int x, int y, int tilenum )
 // lesser-used data in canvas item, plus room for extension.
 // Be careful adding to this - check all usages.
 class QCanvasItemExtra {
+    QCanvasItemExtra() : vx(0.0), vy(0.0) { }
     double vx,vy;
     friend class QCanvasItem;
 };
@@ -1413,7 +1410,7 @@ perhaps QCanvasRectangle or QCanvasSprite.
 /*!
 Constructs a QCanvasItem on \a canvas.
 
-\sa setCanvas(QCanvas*)
+\sa setCanvas()
 */
 QCanvasItem::QCanvasItem(QCanvas* canvas) :
     cnv(canvas),
@@ -1490,10 +1487,12 @@ QCanvasItemExtra& QCanvasItem::extra()
 */
 void QCanvasItem::moveBy(double dx, double dy)
 {
-    removeFromChunks();
-    myx+=dx;
-    myy+=dy;
-    addToChunks();
+    if ( dx || dy ) {
+	removeFromChunks();
+	myx+=dx;
+	myy+=dy;
+	addToChunks();
+    }
 }
 
 /*! Returns TRUE is the item is animated.
@@ -2043,6 +2042,7 @@ QCanvasItemList QCanvas::collisions(const QPoint& p) const
 QCanvasItemList QCanvas::collisions(const QRect& r) const
 {
     QCanvasRectangle i(r,(QCanvas*)this);
+    i.setPen(NoPen);
     i.show(); // doesn't actually show, since we destroy it
     QCanvasItemList l = i.collisions(TRUE);
     l.sort();
@@ -2744,7 +2744,7 @@ QSize QCanvasView::sizeHint() const
   usually cover a simple rectangular area and are dealt with specially,
   but typical geometric shapes such as lines and circles would be too
   inefficiently bounded by rectangular areas - a diagonal line from one
-  corner of the canvas area to the other bound be bounded by a rectangle covering
+  corner of the canvas area to the other would be bounded by a rectangle covering
   the entire area! QCanvasPolygonalItem objects allow the area to be
   defined by a polygon - a sequence of points
   bounding the area covered by the item.
@@ -3020,8 +3020,10 @@ void QCanvasPolygonalItem::draw(QPainter & p)
 */
 void QCanvasPolygonalItem::setPen(QPen p)
 {
-    pn = p;
-    changeChunks();
+    if ( pn != p ) {
+	pn = p;
+	changeChunks();
+    }
 }
 
 /*!
@@ -3031,9 +3033,10 @@ void QCanvasPolygonalItem::setPen(QPen p)
 */
 void QCanvasPolygonalItem::setBrush(QBrush b)
 {
-    // ### if transparent, needn't add to inner chunks
-    br = b;
-    changeChunks();
+    if ( br != b) {
+	br = b;
+	changeChunks();
+    }
 }
 
 
@@ -3166,9 +3169,11 @@ QCanvasLine::~QCanvasLine()
 */
 void QCanvasLine::setPen(QPen p)
 {
-    removeFromChunks();
-    QCanvasPolygonalItem::setPen(p);
-    addToChunks();
+    if ( pen() != p ) {
+	removeFromChunks();
+	QCanvasPolygonalItem::setPen(p);
+	addToChunks();
+    }
 }
 
 /*!
@@ -3192,12 +3197,14 @@ void QCanvasLine::setPen(QPen p)
 */
 void QCanvasLine::setPoints(int xa, int ya, int xb, int yb)
 {
-    removeFromChunks();
-    x1 = xa;
-    y1 = ya;
-    x2 = xb;
-    y2 = yb;
-    addToChunks();
+    if ( x1 != xa || x2 != xb || y1 != ya || y2 != yb ) {
+	removeFromChunks();
+	x1 = xa;
+	y1 = ya;
+	x2 = xb;
+	y2 = yb;
+	addToChunks();
+    }
 }
 
 /*!
@@ -3338,10 +3345,12 @@ int QCanvasRectangle::height() const
 */
 void QCanvasRectangle::setSize(int width, int height)
 {
-    removeFromChunks();
-    w = width;
-    h = height;
-    addToChunks();
+    if ( w != width || h != height ) {
+	removeFromChunks();
+	w = width;
+	h = height;
+	addToChunks();
+    }
 }
 
 /*!
@@ -3366,6 +3375,7 @@ QPointArray QCanvasRectangle::areaPoints() const
     QPointArray pa(4);
     int pw = (pen().width()+1)/2;
     if ( pw < 1 ) pw = 1;
+    if ( pen() == NoPen ) pw = 0;
     pa[0] = QPoint((int)x()-pw,(int)y()-pw);
     pa[1] = pa[0] + QPoint(w+pw*2,0);
     pa[2] = pa[1] + QPoint(0,h+pw*2);
@@ -3453,10 +3463,12 @@ int QCanvasEllipse::height() const
 */
 void QCanvasEllipse::setSize(int width, int height)
 {
-    removeFromChunks();
-    w = width;
-    h = height;
-    addToChunks();
+    if ( w != width || h != height ) {
+	removeFromChunks();
+	w = width;
+	h = height;
+	addToChunks();
+    }
 }
 
 /*!
@@ -3486,10 +3498,12 @@ void QCanvasEllipse::setSize(int width, int height)
 */
 void QCanvasEllipse::setAngles(int start, int length)
 {
-    removeFromChunks();
-    a1 = start;
-    a2 = length;
-    addToChunks();
+    if ( a1 != start || a2 != length ) {
+	removeFromChunks();
+	a1 = start;
+	a2 = length;
+	addToChunks();
+    }
 }
 
 /*!
@@ -3568,6 +3582,7 @@ QCanvasText::QCanvasText(const QString& t, QFont f, QCanvas* canvas) :
 */
 QCanvasText::~QCanvasText()
 {
+    removeFromChunks();
 }
 
 /*!
@@ -3599,10 +3614,12 @@ void QCanvasText::setRect()
 */
 void QCanvasText::setTextFlags(int f)
 {
-    removeFromChunks();
-    flags = f;
-    setRect();
-    addToChunks();
+    if ( flags != f ) {
+	removeFromChunks();
+	flags = f;
+	setRect();
+	addToChunks();
+    }
 }
 
 /*!
@@ -3623,10 +3640,12 @@ QString QCanvasText::text() const
 */
 void QCanvasText::setText( const QString& t )
 {
-    removeFromChunks();
-    txt = t;
-    setRect();
-    addToChunks();
+    if ( txt != t ) {
+	removeFromChunks();
+	txt = t;
+	setRect();
+	addToChunks();
+    }
 }
 
 /*!
@@ -3644,10 +3663,12 @@ QFont QCanvasText::font() const
 */
 void QCanvasText::setFont( const QFont& f )
 {
-    removeFromChunks();
-    fnt = f;
-    setRect();
-    addToChunks();
+    if ( f != fnt ) {
+	removeFromChunks();
+	fnt = f;
+	setRect();
+	addToChunks();
+    }
 }
 
 /*!
@@ -3675,9 +3696,11 @@ void QCanvasText::setColor(const QColor& c)
 */
 void QCanvasText::moveBy(double dx, double dy)
 {
-    removeFromChunks();
-    brect.moveBy((int)dx, (int)dy);
-    QCanvasItem::moveBy(dx,dy);
+    if ( dx || dy ) {
+	removeFromChunks();
+	brect.moveBy((int)dx, (int)dy);
+	QCanvasItem::moveBy(dx,dy);
+    }
 }
 
 /*!

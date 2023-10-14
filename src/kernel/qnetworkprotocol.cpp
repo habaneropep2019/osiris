@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qnetworkprotocol.cpp   2.2.1   edited 2000-09-14 $
+** $Id: qt/src/kernel/qnetworkprotocol.cpp   2.2.2   edited 2000-11-07 $
 **
 ** Implementation of QNetworkProtocol class
 **

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qpushbutton.h   2.2.1   edited 2000-08-25 $
+** $Id: qt/src/widgets/qpushbutton.h   2.2.2   edited 2000-10-11 $
 **
 ** Definition of QPushButton class
 **
@@ -43,7 +43,7 @@
 #include "qiconset.h"
 #endif // QT_H
 
-#ifndef QT_NO_COMPLEXWIDGETS
+#ifndef QT_NO_PUSHBUTTON
 
 class Q_EXPORT QPushButton : public QButton
 {
@@ -130,6 +130,6 @@ private:	// Disabled copy constructor and operator=
 };
 
 
-#endif // QT_NO_COMPLEXWIDGETS
+#endif // QT_NO_PUSHBUTTON
 
 #endif // QPUSHBUTTON_H

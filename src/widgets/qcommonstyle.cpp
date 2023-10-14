@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qcommonstyle.cpp   2.2.1   edited 2000-10-03 $
+** $Id: qt/src/widgets/qcommonstyle.cpp   2.2.2   edited 2000-10-11 $
 **
 ** Implementation of the QCommonStyle class
 **
@@ -137,7 +137,7 @@ void QCommonStyle::drawComboButtonMask( QPainter *p, int x, int y, int w, int h)
  */
 void QCommonStyle::drawPushButtonLabel( QPushButton* btn, QPainter *p)
 {
-#ifndef QT_NO_COMPLEXWIDGETS
+#ifndef QT_NO_PUSHBUTTON
     QRect r = pushButtonContentsRect( btn );
     if ( btn->isDown() || btn->isOn() ){
 	int sx = 0;
@@ -200,7 +200,7 @@ int QCommonStyle::defaultFrameWidth() const
  */
 void QCommonStyle::tabbarMetrics( const QTabBar* t, int& hframe, int& vframe, int& overlap)
 {
-#ifndef QT_NO_COMPLEXWIDGETS
+#ifndef QT_NO_TABBAR
     overlap = 3;
     hframe = 24;
     vframe = 0;
@@ -213,7 +213,7 @@ void QCommonStyle::tabbarMetrics( const QTabBar* t, int& hframe, int& vframe, in
  */
 void QCommonStyle::drawTab( QPainter* p,  const  QTabBar* tb, QTab* t , bool selected )
 {
-#ifndef QT_NO_COMPLEXWIDGETS
+#ifndef QT_NO_TABBAR
     if ( tb->shape() == QTabBar::TriangularAbove || tb->shape() == QTabBar::TriangularBelow ) {
 	// triangular, above or below
 	int y;
@@ -255,7 +255,7 @@ void QCommonStyle::drawTab( QPainter* p,  const  QTabBar* tb, QTab* t , bool sel
  */
 void QCommonStyle::drawTabMask( QPainter* p,  const  QTabBar* /* tb*/ , QTab* t, bool /* selected */ )
 {
-#ifndef QT_NO_COMPLEXWIDGETS
+#ifndef QT_NO_TABBAR
     p->drawRect( t->r );
 #endif
 }
@@ -264,7 +264,7 @@ void QCommonStyle::drawTabMask( QPainter* p,  const  QTabBar* /* tb*/ , QTab* t,
  */
 QStyle::ScrollControl QCommonStyle::scrollBarPointOver( const QScrollBar* sb, int sliderStart, const QPoint& p )
 {
-#ifndef QT_NO_COMPLEXWIDGETS
+#ifndef QT_NO_SCROLLBAR
     if ( !sb->rect().contains( p ) )
 	return NoScroll;
     int sliderMin, sliderMax, sliderLength, buttonDim, pos;
@@ -332,7 +332,7 @@ void QCommonStyle::drawMenuBarItem( QPainter* p, int x, int y, int w, int h,
 				    QMenuItem* mi, QColorGroup& g,
 				    bool enabled, bool )
 {
-#ifndef QT_NO_COMPLEXWIDGETS
+#ifndef QT_NO_MENUBAR
     drawItem( p, x, y, w, h, AlignCenter|ShowPrefix|DontClip|SingleLine,
 	    g, enabled, mi->pixmap(), mi->text(), -1, &g.buttonText() );
 #endif
@@ -341,7 +341,7 @@ void QCommonStyle::drawMenuBarItem( QPainter* p, int x, int y, int w, int h,
 // doesn't really belong here... fix 3.0
 QRect QStyle::pushButtonContentsRect( QPushButton* btn )
 {
-#ifndef QT_NO_COMPLEXWIDGETS
+#ifndef QT_NO_PUSHBUTTON
     int fw = 0;
     if ( btn->isDefault() || btn->autoDefault() )
 	fw = buttonDefaultIndicatorWidth();
@@ -498,7 +498,7 @@ void QStyle::drawToolBarHandle( QPainter *p, const QRect &r, Qt::Orientation ori
 
 void QStyle::drawToolButton( QToolButton* btn, QPainter *p)
 {
-#ifndef QT_NO_COMPLEXWIDGETS
+#ifndef QT_NO_TOOLBUTTON
     if ( !btn )
 	return;
 
@@ -561,7 +561,7 @@ void QStyle::drawMenuBarItem( QPainter* p, int x, int y, int w, int h,
 				    QMenuItem* mi, QColorGroup& g,
 				    bool enabled, bool active )
 {
-#ifndef QT_NO_COMPLEXWIDGETS
+#ifndef QT_NO_MENUBAR
 #ifndef QT_NO_STYLE_SGI
     if (draw_menu_bar_impl != 0) {
 	QDrawMenuBarItemImpl impl = draw_menu_bar_impl;

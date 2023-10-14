@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/xml/qxml.cpp   2.2.1   edited 2000-09-30 $
+** $Id: qt/src/xml/qxml.cpp   2.2.2   edited 2000-10-27 $
 **
 ** Implementation of QXmlSimpleReader and related classes.
 **
@@ -731,7 +731,18 @@ QXmlInputSource::QXmlInputSource( )
 */
 QXmlInputSource::QXmlInputSource( QTextStream& stream )
 {
-    QByteArray rawData = stream.device()->readAll();
+    QByteArray rawData;
+    if ( stream.device()->isDirectAccess() ) {
+	rawData = stream.device()->readAll();
+    } else {
+	int nread = 0;
+	const int bufsize = 512;
+	while ( !stream.device()->atEnd() ) {
+	    rawData.resize( nread + bufsize );
+	    nread += stream.device()->readBlock( rawData.data()+nread, bufsize );
+	}
+	rawData.resize( nread );
+    }
     readInput( rawData );
 }
 
@@ -848,7 +859,7 @@ finished:
   interface; subclassing from this class is very convenient if you want only be
   informed of some parsing events.
 
-  See also the "<a href="xml.html#introSAX2">Introduction to SAX2</a>".
+  See also the <a href="xml.html#introSAX2">Introduction to SAX2</a>.
 
   \sa QXmlDTDHandler QXmlDeclHandler QXmlEntityResolver QXmlErrorHandler
   QXmlLexicalHandler
@@ -1048,7 +1059,7 @@ finished:
 
   You can set the error handler with QXmlReader::setErrorHandler().
 
-  See also the "<a href="xml.html#introSAX2">Introduction to SAX2</a>".
+  See also the <a href="xml.html#introSAX2">Introduction to SAX2</a>.
 
   \sa QXmlDTDHandler QXmlDeclHandler QXmlContentHandler QXmlEntityResolver
   QXmlLexicalHandler
@@ -1108,7 +1119,7 @@ finished:
   recommendation requires processors to report: notation and unparsed entity
   declarations.
 
-  See also the "<a href="xml.html#introSAX2">Introduction to SAX2</a>".
+  See also the <a href="xml.html#introSAX2">Introduction to SAX2</a>.
 
   \sa QXmlDeclHandler QXmlContentHandler QXmlEntityResolver QXmlErrorHandler
   QXmlLexicalHandler
@@ -1158,7 +1169,7 @@ finished:
   entities, it must implement this interface and register it with
   QXmlReader::setEntityResolver().
 
-  See also the "<a href="xml.html#introSAX2">Introduction to SAX2</a>".
+  See also the <a href="xml.html#introSAX2">Introduction to SAX2</a>.
 
   \sa QXmlDTDHandler QXmlDeclHandler QXmlContentHandler QXmlErrorHandler
   QXmlLexicalHandler
@@ -1208,7 +1219,7 @@ finished:
   This interface is designed after the SAX2 extension LexicalHandler. The
   functions startEntity() and endEntity() are not included though.
 
-  See also the "<a href="xml.html#introSAX2">Introduction to SAX2</a>".
+  See also the <a href="xml.html#introSAX2">Introduction to SAX2</a>.
 
   \sa QXmlDTDHandler QXmlDeclHandler QXmlContentHandler QXmlEntityResolver
   QXmlErrorHandler
@@ -1294,7 +1305,7 @@ finished:
 
   This interface is designed after the SAX2 extension DeclHandler.
 
-  See also the "<a href="xml.html#introSAX2">Introduction to SAX2</a>".
+  See also the <a href="xml.html#introSAX2">Introduction to SAX2</a>.
 
   \sa QXmlDTDHandler QXmlContentHandler QXmlEntityResolver QXmlErrorHandler
   QXmlLexicalHandler
@@ -1350,7 +1361,7 @@ finished:
   the handler classes (most of the time: do nothing). Normally this is the
   class you subclass for implementing your customized handler.
 
-  See also the "<a href="xml.html#introSAX2">Introduction to SAX2</a>".
+  See also the <a href="xml.html#introSAX2">Introduction to SAX2</a>.
 
   \sa QXmlDTDHandler QXmlDeclHandler QXmlContentHandler QXmlEntityResolver
   QXmlErrorHandler QXmlLexicalHandler
@@ -1706,7 +1717,7 @@ private:
   (do nothing) for all functions.
 
   For getting started see also the
-  "<a href="xml-sax.html#quickStart">Quick start</a>".
+  <a href="xml-sax.html#quickStart">Quick start</a>.
 
   \sa QXmlSimpleReader
 */
@@ -1880,7 +1891,7 @@ private:
   </ul>
 
   For getting started see also the
-  "<a href="xml-sax.html#quickStart">Quick start</a>".
+  <a href="xml-sax.html#quickStart">Quick start</a>.
 */
 
 //guaranteed not to be a characater
@@ -2394,48 +2405,8 @@ bool QXmlSimpleReader::parseElement()
 		    d->error = XMLERR_TAGMISMATCH;
 		    goto parseError;
 		}
-		// pop the stack and call the handler
-		if ( contentHnd ) {
-		    // report startElement first...
-		    if ( d->useNamespaces ) {
-			d->namespaceSupport.processName( tags.top(), FALSE, uri, lname );
-			t = contentHnd->startElement( uri, lname, tags.top(), d->attList );
-		    } else {
-			t = contentHnd->startElement( "", "", tags.top(), d->attList );
-		    }
-		    if ( !t ) {
-			d->error = contentHnd->errorString();
-			goto parseError;
-		    }
-		    // ... followed by endElement
-		    // ### missing namespace support!
-		    if ( !contentHnd->endElement( "","",tags.pop() ) ) {
-			d->error = contentHnd->errorString();
-			goto parseError;
-		    }
-		    // namespace support?
-		    if ( d->useNamespaces ) {
-			QStringList prefixesBefore, prefixesAfter;
-			if ( contentHnd ) {
-			    prefixesBefore = d->namespaceSupport.prefixes();
-			}
-			d->namespaceSupport.popContext();
-			// call the handler for prefix mapping
-			if ( contentHnd ) {
-			    prefixesAfter = d->namespaceSupport.prefixes();
-			    for ( QStringList::Iterator it = prefixesBefore.begin(); it != prefixesBefore.end(); ++it ) {
-				if ( prefixesAfter.contains(*it) == 0 ) {
-				    if ( !contentHnd->endPrefixMapping( *it ) ) {
-					d->error = contentHnd->errorString();
-					goto parseError;
-				    }
-				}
-			    }
-			}
-		    }
-		} else {
-		    tags.pop();
-		}
+		if ( !parseElementEmptyTag( t, uri, lname ) )
+		    goto parseError;
 		// next character
 		next();
 		break;
@@ -2477,80 +2448,16 @@ bool QXmlSimpleReader::parseElement()
 		    d->error = XMLERR_ERRORPARSINGNAME;
 		    goto parseError;
 		}
-		// pop the stack and compare it with the name
-		if ( tags.pop() != name() ) {
-		    d->error = XMLERR_TAGMISMATCH;
+		if ( !parseElementETagBegin2() )
 		    goto parseError;
-		}
-		// call the handler
-		// ### missing namespace support!
-		if ( contentHnd ) {
-		    if ( !contentHnd->endElement("","",name()) ) {
-			d->error = contentHnd->errorString();
-			goto parseError;
-		    }
-		}
-		// namespace support?
-		if ( d->useNamespaces ) {
-		    QStringList prefixesBefore, prefixesAfter;
-		    if ( contentHnd ) {
-			prefixesBefore = d->namespaceSupport.prefixes();
-		    }
-		    d->namespaceSupport.popContext();
-		    // call the handler for prefix mapping
-		    if ( contentHnd ) {
-			prefixesAfter = d->namespaceSupport.prefixes();
-			for ( QStringList::Iterator it = prefixesBefore.begin(); it != prefixesBefore.end(); ++it ) {
-			    if ( prefixesAfter.contains(*it) == 0 ) {
-				if ( !contentHnd->endPrefixMapping( *it ) ) {
-				    d->error = contentHnd->errorString();
-				    goto parseError;
-				}
-			    }
-			}
-		    }
-		}
 		break;
 	    case Attribute:
 		if ( !parseOk ) {
 		    d->error = XMLERR_ERRORPARSINGATTRIBUTE;
 		    goto parseError;
 		}
-		// add the attribute to the list
-		if ( d->useNamespaces ) {
-		    // is it a namespace declaration?
-		    d->namespaceSupport.splitName( name(), prefix, lname );
-		    if ( prefix == "xmlns" ) {
-			// namespace declaration
-			d->namespaceSupport.setPrefix( lname, string() );
-			if ( d->useNamespacePrefixes ) {
-			    d->attList.qnameList.append( name() );
-			    d->attList.uriList.append( "" );
-			    d->attList.localnameList.append( "" );
-			    d->attList.valueList.append( string() );
-			}
-			// call the handler for prefix mapping
-			if ( contentHnd ) {
-			    if ( !contentHnd->startPrefixMapping( lname, string() ) ) {
-				d->error = contentHnd->errorString();
-				goto parseError;
-			    }
-			}
-		    } else {
-			// no namespace delcaration
-			d->namespaceSupport.processName( name(), TRUE, uri, lname );
-			d->attList.qnameList.append( name() );
-			d->attList.uriList.append( uri );
-			d->attList.localnameList.append( lname );
-			d->attList.valueList.append( string() );
-		    }
-		} else {
-		    // no namespace support
-		    d->attList.qnameList.append( name() );
-		    d->attList.uriList.append( "" );
-		    d->attList.localnameList.append( "" );
-		    d->attList.valueList.append( string() );
-		}
+		if ( !parseElementAttribute( prefix, uri, lname ) )
+		    goto parseError;
 		break;
 	    case Done:
 		return TRUE;
@@ -2566,6 +2473,141 @@ bool QXmlSimpleReader::parseElement()
 parseError:
     reportParseError();
     return FALSE;
+}
+/*!
+  Helper to break down the size of the code in the case statement.
+  Return FALSE on error, otherwise TRUE.
+*/
+bool QXmlSimpleReader::parseElementEmptyTag( bool &t, QString &uri, QString &lname )
+{
+    // pop the stack and call the handler
+    if ( contentHnd ) {
+	// report startElement first...
+	if ( d->useNamespaces ) {
+	    d->namespaceSupport.processName( tags.top(), FALSE, uri, lname );
+	    t = contentHnd->startElement( uri, lname, tags.top(), d->attList );
+	} else {
+	    t = contentHnd->startElement( "", "", tags.top(), d->attList );
+	}
+	if ( !t ) {
+	    d->error = contentHnd->errorString();
+	    return FALSE;
+	}
+	// ... followed by endElement
+	// ### missing namespace support!
+	if ( !contentHnd->endElement( "","",tags.pop() ) ) {
+	    d->error = contentHnd->errorString();
+	    return FALSE;
+	}
+	// namespace support?
+	if ( d->useNamespaces ) {
+	    QStringList prefixesBefore, prefixesAfter;
+	    if ( contentHnd ) {
+		prefixesBefore = d->namespaceSupport.prefixes();
+	    }
+	    d->namespaceSupport.popContext();
+	    // call the handler for prefix mapping
+	    if ( contentHnd ) {
+		prefixesAfter = d->namespaceSupport.prefixes();
+		for ( QStringList::Iterator it = prefixesBefore.begin(); it != prefixesBefore.end(); ++it ) {
+		    if ( prefixesAfter.contains(*it) == 0 ) {
+			if ( !contentHnd->endPrefixMapping( *it ) ) {
+			    d->error = contentHnd->errorString();
+			    return FALSE;
+			}
+		    }
+		}
+	    }
+	}
+    } else {
+	tags.pop();
+    }
+    return TRUE;
+}
+/*!
+  Helper to break down the size of the code in the case statement.
+  Return FALSE on error, otherwise TRUE.
+*/
+bool QXmlSimpleReader::parseElementETagBegin2()
+{
+
+    // pop the stack and compare it with the name
+    if ( tags.pop() != name() ) {
+	d->error = XMLERR_TAGMISMATCH;
+	return FALSE;
+    }
+    // call the handler
+    // ### missing namespace support!
+    if ( contentHnd ) {
+	if ( !contentHnd->endElement("","",name()) ) {
+	    d->error = contentHnd->errorString();
+	    return FALSE;
+	}
+    }
+    // namespace support?
+    if ( d->useNamespaces ) {
+	QStringList prefixesBefore, prefixesAfter;
+	if ( contentHnd ) {
+	    prefixesBefore = d->namespaceSupport.prefixes();
+	}
+	d->namespaceSupport.popContext();
+	// call the handler for prefix mapping
+	if ( contentHnd ) {
+	    prefixesAfter = d->namespaceSupport.prefixes();
+	    for ( QStringList::Iterator it = prefixesBefore.begin(); it != prefixesBefore.end(); ++it ) {
+		if ( prefixesAfter.contains(*it) == 0 ) {
+		    if ( !contentHnd->endPrefixMapping( *it ) ) {
+			d->error = contentHnd->errorString();
+			return FALSE;
+		    }
+		}
+	    }
+	}
+    }
+    return TRUE;
+}
+/*!
+  Helper to break down the size of the code in the case statement.
+  Return FALSE on error, otherwise TRUE.
+*/
+bool QXmlSimpleReader::parseElementAttribute( QString &prefix, QString &uri, QString &lname )
+{
+    // add the attribute to the list
+    if ( d->useNamespaces ) {
+	// is it a namespace declaration?
+	d->namespaceSupport.splitName( name(), prefix, lname );
+	if ( prefix == "xmlns" ) {
+	    // namespace declaration
+	    d->namespaceSupport.setPrefix( lname, string() );
+	    if ( d->useNamespacePrefixes ) {
+		d->attList.qnameList.append( name() );
+		d->attList.uriList.append( "" );
+		d->attList.localnameList.append( "" );
+		d->attList.valueList.append( string() );
+	    }
+	    // call the handler for prefix mapping
+	    if ( contentHnd ) {
+		if ( !contentHnd->startPrefixMapping( lname, string() ) ) {
+		    d->error = contentHnd->errorString();
+		    return FALSE;
+		}
+	    }
+	} else {
+	    // no namespace delcaration
+	    d->namespaceSupport.processName( name(), TRUE, uri, lname );
+	    d->attList.qnameList.append( name() );
+	    d->attList.uriList.append( uri );
+	    d->attList.localnameList.append( lname );
+	    d->attList.valueList.append( string() );
+	}
+    } else {
+	// no namespace support
+	d->attList.qnameList.append( name() );
+	d->attList.uriList.append( "" );
+	d->attList.localnameList.append( "" );
+	d->attList.valueList.append( string() );
+    }
+    return TRUE;
 }
 
 /*!

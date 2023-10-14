@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qframe.cpp   2.2.1   edited 2000-08-25 $
+** $Id: qt/src/widgets/qframe.cpp   2.2.2   edited 2000-10-09 $
 **
 ** Implementation of QFrame widget class
 **
@@ -620,18 +620,21 @@ void QFrame::drawFrame( QPainter *p )
 	    style().drawPanel( p, r.x(), r.y(), r.width(), r.height(), g, cstyle == Sunken, lwidth );
 	break;
 #endif // fall through to Panel if QT_NO_STYLE
+
+    case PopupPanel:
+#ifndef QT_NO_STYLE
+	if ( cstyle == Plain )
+	    qDrawPlainRect( p, r, g.foreground(), lwidth );
+	else
+	    style().drawPopupPanel( p, r.x(), r.y(), r.width(), r.height(), g, lwidth );
+	break;
+#endif // fall through to Panel if QT_NO_STYLE
+
     case Panel:
 	if ( cstyle == Plain )
 	    qDrawPlainRect( p, r, g.foreground(), lwidth );
 	else
 	    qDrawShadePanel( p, r, g, cstyle == Sunken, lwidth );
-	break;
-
-    case PopupPanel:
-	if ( cstyle == Plain )
-	    qDrawPlainRect( p, r, g.foreground(), lwidth );
-	else
-	    style().drawPopupPanel( p, r.x(), r.y(), r.width(), r.height(), g, lwidth );
 	break;
 
     case WinPanel:

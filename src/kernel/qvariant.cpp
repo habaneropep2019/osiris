@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qvariant.cpp   2.2.1   edited 2000-09-07 $
+** $Id: qt/src/kernel/qvariant.cpp   2.2.2   edited 2000-10-09 $
 **
 ** Implementation of QVariant class
 **
@@ -839,9 +839,11 @@ void QVariant::load( QDataStream& s )
 	break;
     case Cursor:
 	{
+#ifndef QT_NO_CURSOR
 	    QCursor* x = new QCursor;
 	    s >> *x;
 	    d->value.ptr = x;
+#endif
 	}
 	break;
     case Bitmap:
@@ -1474,8 +1476,10 @@ const QRegion QVariant::toRegion() const
 */
 const QCursor QVariant::toCursor() const
 {
+#ifndef QT_NO_CURSOR
     if ( d->typ != Cursor )
 	return QCursor();
+#endif
 
     return *((QCursor*)d->value.ptr);
 }
@@ -1941,7 +1945,9 @@ bool QVariant::operator==( const QVariant &v ) const
 {
     switch( d->typ ) {
     case Cursor:
+#ifndef QT_NO_CURSOR
 	return v.toCursor().shape() == toCursor().shape();
+#endif
     case Bitmap:
 	return v.toBitmap().serialNumber() == toBitmap().serialNumber();
     case PointArray:

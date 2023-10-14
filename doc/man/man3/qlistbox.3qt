@@ -1,4 +1,4 @@
-.TH QListBox 3qt "4 October 2000" "Trolltech AS" \" -*- nroff -*-
+.TH QListBox 3qt "8 November 2000" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -354,7 +354,7 @@ By default, vertical and horizontal scroll bars are added and removed as necessa
 .PP
 If you need to insert other types than texts and pixmaps, you must define new classes which inherit QListBoxItem.
 .PP
-\fBWarning:\fR The list box assumes ownership of all list box items and will delete them when is does not need them any more.
+\fBWarning:\fR The list box assumes ownership of all list box items and will delete them when it does not need them any more.
 .PP
 <img src=qlistbox-m.png> <img src=qlistbox-w.png>
 .PP
@@ -388,7 +388,11 @@ This enumerated type is used by QListBox to indicate how it reacts to selection 
 In other words, \fCSingle\fR is a real single-selection list box, \fCMulti\fR a real multi-selection list box, and \fCExtended\fR list box where users can select multiple items but usually want to select either just one or a range of contiguous items, and \fCNoSelection\fR is for a list box where the user can look but not touch.
 .SH MEMBER FUNCTION DOCUMENTATION
 .SH "QListBox::QListBox ( QWidget * parent=0, const char * name=0, WFlags f=0 )"
-Constructs a list box. The arguments are passed directly to the QScrollView constructor.
+Constructs a new empty list box, with \fIparent\fR as a parent and \fIname\fR as object name.
+.PP
+Performance is boosted by modifying the widget flags \fIf\fR so that only part of the QListBoxItem children is redrawn. This may be unsuitable for custom QListBoxItem classes, in which case \fCWNorthWestGravity\fR and \fCWRepaintNoErase\fR should be cleared.
+.PP
+See also QWidget::clearWFlags() and Qt::WidgetFlags.
 .SH "QListBox::~QListBox ()"
 Destroys the list box. Deletes all list box items.
 .SH "void QListBox::centerCurrentItem ()"

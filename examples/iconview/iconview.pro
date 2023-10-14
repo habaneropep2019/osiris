@@ -4,4 +4,4 @@ HEADERS		=
 SOURCES		= main.cpp
 TARGET		= iconview
 DEPENDPATH=../../include
-REQUIRES=iconview
+REQUIRES=iconview full-config

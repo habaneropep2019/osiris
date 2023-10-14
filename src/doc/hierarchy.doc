@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/doc/hierarchy.doc   2.2.1   edited 2000-08-25 $
+** $Id: qt/doc/hierarchy.doc   2.2.2   edited 2000-08-25 $
 **
 ** Documentation for class hierarchy
 **
@@ -34,7 +34,7 @@
 **********************************************************************/
 
 #if defined(DEBUG)
-static char ident[] = "$Id: qt/doc/hierarchy.doc   2.2.1   edited 2000-08-25 $";
+static char ident[] = "$Id: qt/doc/hierarchy.doc   2.2.2   edited 2000-08-25 $";
 #endif
 
 

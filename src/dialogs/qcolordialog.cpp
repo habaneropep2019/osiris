@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/dialogs/qcolordialog.cpp   2.2.1   edited 2000-09-25 $
+** $Id: qt/src/dialogs/qcolordialog.cpp   2.2.2   edited 2000-10-13 $
 **
 ** Implementation of QColorDialog class
 **
@@ -865,6 +865,7 @@ void QColorPicker::setCol( const QPoint &pt )
 QColorPicker::QColorPicker(QWidget* parent, const char* name )
     : QFrame( parent, name )
 {
+    hue = 0; sat = 0;
     setCol( 150, 255 );
 
     QImage img( pWidth, pHeight, 32 );
@@ -1514,6 +1515,11 @@ QColor QColorDialog::getColor( QColor initial, QWidget *parent,
 {
     int allocContext = QColor::enterAllocContext();
     QColorDialog *dlg = new QColorDialog( parent, name, TRUE );  //modal
+    if ( parent && parent->icon() && !parent->icon()->isNull() )
+	dlg->setIcon( *parent->icon() );
+    else if ( qApp->mainWidget() && qApp->mainWidget()->icon() && !qApp->mainWidget()->icon()->isNull() )
+	dlg->setIcon( *qApp->mainWidget()->icon() );
+
     dlg->setCaption( QColorDialog::tr( "Select color" ) );
     dlg->setColor( initial );
     int resultCode = dlg->exec();

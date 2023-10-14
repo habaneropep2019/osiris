@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qtoolbar.cpp   2.2.1   edited 2000-08-25 $
+** $Id: qt/src/widgets/qtoolbar.cpp   2.2.2   edited 2000-10-13 $
 **
 ** Implementation of QToolBar class
 **
@@ -36,7 +36,7 @@
 **********************************************************************/
 
 #include "qtoolbar.h"
-#ifndef QT_NO_COMPLEXWIDGETS
+#ifndef QT_NO_TOOLBAR
 
 #include "qmainwindow.h"
 #include "qpushbutton.h"
@@ -54,8 +54,10 @@
 
 class QArrowWidget : public QWidget
 {
+    Q_OBJECT
+    
 public:
-    QArrowWidget( Qt::Orientation o, QWidget *parent ) : QWidget( parent ), orient( o ) {}
+    QArrowWidget( Qt::Orientation o, QWidget *parent ) : QWidget( parent, "qt_arrow_widget" ), orient( o ) {}
 
 protected:
     void paintEvent( QPaintEvent * ) {

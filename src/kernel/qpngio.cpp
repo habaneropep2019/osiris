@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qpngio.cpp   2.2.1   edited 2000-09-03 $
+** $Id: qt/src/kernel/qpngio.cpp   2.2.2   edited 2000-10-14 $
 **
 ** Implementation of PNG QImage IOHandler
 **
@@ -75,16 +75,26 @@ void iod_read_fn(png_structp png_ptr, png_bytep data, png_size_t length)
 
 
 static
-void qpiw_write_fn(png_structp png_ptr, png_bytep data, png_size_t length)
+void qpiw_write_fn( png_structp png_ptr, png_bytep data, png_size_t length )
 {
-    QPNGImageWriter* qpiw = (QPNGImageWriter*)png_get_io_ptr(png_ptr);
+    QPNGImageWriter* qpiw = (QPNGImageWriter*)png_get_io_ptr( png_ptr );
     QIODevice* out = qpiw->device();
 
-    uint nr = out->writeBlock((char*)data, length);
-    if (nr != length) {
-	png_error(png_ptr, "Write Error");
+    uint nr = out->writeBlock( (char*)data, length );
+    if ( nr != length ) {
+	png_error( png_ptr, "Write Error" );
 	return;
     }
+}
+
+
+static
+void qpiw_flush_fn( png_structp png_ptr )
+{
+    QPNGImageWriter* qpiw = (QPNGImageWriter*)png_get_io_ptr( png_ptr );
+    QIODevice* out = qpiw->device();
+
+    out->flush();
 }
 
 #if defined(Q_C_CALLBACKS)
@@ -399,7 +409,7 @@ bool QPNGImageWriter::writeImage(const QImage& image, int quality, int off_x, in
 	png_set_compression_level(png_ptr, quality);
     }
 
-    png_set_write_fn(png_ptr, (void*)this, qpiw_write_fn, 0);
+    png_set_write_fn(png_ptr, (void*)this, qpiw_write_fn, qpiw_flush_fn);
 
     info_ptr->channels =
 	(image.depth() == 32)
@@ -892,6 +902,8 @@ QPNGFormat::QPNGFormat()
 */
 QPNGFormat::~QPNGFormat()
 {
+    if ( png_ptr )
+        png_destroy_read_struct(&png_ptr, &info_ptr, 0);
 }
 
 
@@ -947,6 +959,8 @@ int QPNGFormat::decode(QImage& img, QImageConsumer* cons,
        state = Inside;
     }
 
+    if ( !png_ptr ) return 0;
+    
     if (setjmp(png_ptr->jmpbuf)) {
        png_destroy_read_struct(&png_ptr, &info_ptr, 0);
        image = 0;
@@ -1029,7 +1043,7 @@ int QPNGFormat::user_chunk(png_structp png, png_infop,
 	    png_bytep data, png_uint_32 length)
 {
 #if 0 // NOT SUPPORTED: experimental PNG animation.
-    // debug("Got %ld-byte %s chunk", length, png->chunk_name);
+    // qDebug("Got %ld-byte %s chunk", length, png->chunk_name);
     if ( 0==qstrcmp((char*)png->chunk_name, "gIFg")
 	    && length == 4 ) {
 

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qpaintdevice.h   2.2.1   edited 2000-08-25 $
+** $Id: qt/src/kernel/qpaintdevice.h   2.2.2   edited 2000-10-11 $
 **
 ** Definition of QPaintDevice class
 **
@@ -125,7 +125,7 @@ public:
     static QWSDisplay *qwsDisplay();
     virtual unsigned char * scanLine(int) const;
     virtual int bytesPerLine() const;
-    virtual QGfx * graphicsContext() const;
+    virtual QGfx * graphicsContext(bool clip_children=TRUE) const;
 #endif
 
     enum PDevCmd {

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qspinbox.cpp   2.2.1   edited 2000-09-28 $
+** $Id: qt/src/widgets/qspinbox.cpp   2.2.2   edited 2000-10-17 $
 **
 ** Implementation of QSpinBox widget class
 **
@@ -36,7 +36,7 @@
 **********************************************************************/
 
 #include "qspinbox.h"
-#ifndef QT_NO_COMPLEXWIDGETS
+#ifndef QT_NO_SPINBOX
 
 #include "qspinbox.h"
 #include "qpushbutton.h"
@@ -1001,7 +1001,13 @@ void QSpinBox::updateButtonSymbols()
 	    wm.scale( 1, -1 );
 	    upBm = dnBm.xForm( wm );
 #else
-	    upBm = dnBm;    // ### fix me!
+	    upBm.resize( w, h );
+	    p.begin( &upBm );
+	    p.eraseRect( 0, 0, w, h );
+	    a.setPoints( 3,  0, h-2,  w-1, h-2,  h-2, 0 );
+	    p.setBrush( color1 );
+	    p.drawPolygon( a );
+	    p.end();
 #endif
 	}
 	QPixmapCache::insert( dnKey, dnBm );

@@ -1,5 +1,5 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<html><head><title>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>
 Qt Toolkit - layout/layout.cpp example file
 </title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
@@ -32,7 +32,7 @@ height="100" src="face.png" alt="Home" border="0">
 
   Implementation:
 <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/layout/layout.cpp   2.2.1   edited 2000-08-31 $
+** &#36;Id&#58; qt/examples/layout/layout.cpp   2.2.2   edited 2000-11-06 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -140,14 +140,12 @@ ExampleWidget::ExampleWidget( <a href="qwidget.html">QWidget</a> *parent, const 
         // The line edit goes in the second column
         grid-&gt;<a name="addWidget"></a><a href="qgridlayout.html#70abf2">addWidget</a>( ed, row, linedCol );   
 
-        <a name="QLabel"></a><a href="qlabel.html">QLabel</a> *label = new <a href="qlabel.html">QLabel</a>( this );
+        // Make a label that is a buddy of the line edit
         <a href="qstring.html">QString</a> s;
         s.<a href="qstring.html#2eb9bc">sprintf</a>( "Line &amp;%d", row+1 );
-        label-&gt;<a name="setText"></a><a href="qlabel.html#dffb43">setText</a>( s );
+        <a name="QLabel"></a><a href="qlabel.html">QLabel</a> *label = new <a href="qlabel.html">QLabel</a>( ed, s, this );
         // The label goes in the first column.
         grid-&gt;addWidget( label, row, labelCol );
-        // show off the nice new keyboard interface in Qt 1.3
-        label-&gt;<a name="setBuddy"></a><a href="qlabel.html#191701">setBuddy</a>( ed );
     }
 
     // The multiline edit will cover the entire vertical range of the
@@ -164,7 +162,7 @@ ExampleWidget::ExampleWidget( <a href="qwidget.html">QWidget</a> *parent, const 
 
     // Add a widget at the bottom.
     <a href="qlabel.html">QLabel</a>* sb = new <a href="qlabel.html">QLabel</a>( this );
-    sb-&gt;<a href="qlabel.html#dffb43">setText</a>("Let's pretend this is a status bar");
+    sb-&gt;<a name="setText"></a><a href="qlabel.html#dffb43">setText</a>("Let's pretend this is a status bar");
     sb-&gt;<a href="qframe.html#c0d758">setFrameStyle</a>( QFrame::Panel | QFrame::Sunken );
     // This widget will use all horizontal space, and have a fixed height.
 
@@ -197,5 +195,5 @@ int main( int argc, char **argv )
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.1</div>
+<td align="right"><div align="right">Qt version 2.2.2</div>
 </table></div></address></body></html>

@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Qt Toolkit - QListView Class</title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
 a:link { color: #004faf; text-decoration: none }
@@ -214,7 +214,8 @@ QListViewItem *, const <a href="qpoint.html">QPoint</a>&, int ), etc.
 <p>In Motif style, QListView deviates fairly strongly from the look and
 feel of the Motif hierarchical tree view.  This is done mostly to
 provide a usable keyboard interface and to make the list view look
-better with a white background.
+better with a white background.<p><b>Warning:</b> The list view assumes ownership of all list view items
+and will delete them when it does not need them any more.
 <p><img src=qlistview-m.png> <img src=qlistview-w.png>
 
 <hr><h2>Member Type Documentation</h2>
@@ -256,10 +257,21 @@ width of the item with the largest width in the column.
 <p>See also  <a href="#a7b0fd">setColumnWidth</a>(), <a href="#02c7f5">setColumnWidthMode</a>() and <a href="#cd6d31">columnWidth</a>().
 <hr><h2>Member Function Documentation</h2>
 <h3 class="fn"><a name="f7a560"></a>QListView::QListView ( <a href="qwidget.html">QWidget</a> * parent = 0, const char * name = 0 )</h3>
-<p>Constructs a new empty list view, with <em>parent</em> as a parent and <em>name</em> as object name.
+<p>Constructs a new empty list view, with <em>parent</em> as a parent and <em>name</em>
+as object name.
+<p>Performance is boosted by modifying the widget flags so that only part
+of the <a href="qlistviewitem.html">QListViewItem</a> children is redrawn.  This may be unsuitable for
+custom QListViewItem classes, in which case <code>WNorthWestGravity</code> and
+<code>WRepaintNoErase</code> should be cleared.
+<p>See also  <a href="qwidget.html#60c810">QWidget::clearWFlags</a>() and <a href="qt.html#WidgetFlags">Qt::WidgetFlags</a>.
 <h3 class="fn"><a name="f2c03a"></a>QListView::QListView ( <a href="qwidget.html">QWidget</a> * parent, const char * name, WFlags f )</h3>
-<p>Constructs a new empty list view, with <em>parent</em> as a parent and <em>name</em> as object name. The <em>f</em> parameter is passed to the <a href="qwidget.html">QWidget</a>
-constructor.
+<p>Constructs a new empty list view, with <em>parent</em> as a parent and <em>name</em>
+as object name.
+<p>Performance is boosted by modifying the widget flags <em>f</em> so that only
+part of the <a href="qlistviewitem.html">QListViewItem</a> children is redrawn.  This may be unsuitable
+for custom QListViewItem classes, in which case <code>WNorthWestGravity</code> and
+<code>WRepaintNoErase</code> should be cleared.
+<p>See also  <a href="qwidget.html#60c810">QWidget::clearWFlags</a>() and <a href="qt.html#WidgetFlags">Qt::WidgetFlags</a>.
 <h3 class="fn"><a name="1131d5"></a>QListView::~QListView ()</h3>
 <p>Destructs the listview, deleting all items in it, and frees up all
 allocated resources.
@@ -715,7 +727,7 @@ Don't call this directly; call <a href="#e21af1">triggerUpdate</a>() instead.
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.2.1"><nobr>
+<input type=hidden name="version" value="2.2.2"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -723,5 +735,5 @@ copyright &copy; 1995-2000
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.1</div>
+<td align="right"><div align="right">Qt version 2.2.2</div>
 </table></div></address></body></html>

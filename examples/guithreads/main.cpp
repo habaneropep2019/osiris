@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/guithreads/main.cpp   2.2.1   edited 2000-10-02 $
+** $Id: qt/examples/guithreads/main.cpp   2.2.2   edited 2000-10-02 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **

@@ -10,6 +10,7 @@
 
 //#define QT_DEMO_LINUX
 //#define QT_DEMO_SINGLE_FLOPPY
+//#define QT_QWS_CASSIOPEIA
 //#define QT_QWS_IPAQ
 
 #ifndef QT_DLL
@@ -17,16 +18,15 @@
 #endif
 
 #define QT_NO_PROCESS
-#ifdef QT_QWS_IPAQ
+#if defined(QT_QWS_IPAQ) || defined(QT_QWS_CASSIOPEIA)
 # define QT_NO_QWS_CURSOR
 #endif
+#ifndef QT_NO_CODECS
 #define QT_NO_CODECS
+#endif
 #define QT_NO_UNICODETABLES
 #define QT_NO_IMAGEIO_BMP
 #define QT_NO_IMAGEIO_PPM
-// defined by build environment
-//#define QT_NO_IMAGEIO_JPEG
-//#define QT_NO_IMAGEIO_MNG
 #define QT_NO_ASYNC_IO
 #define QT_NO_ASYNC_IMAGE_IO
 #define QT_NO_TRUETYPE
@@ -68,14 +68,13 @@
 
 #if defined(QT_DEMO_LINUX) || defined(QT_DEMO_SINGLE_FLOPPY)
 #define QT_NO_QWS_VFB
-#ifndef QT_QWS_IPAQ
-#define QT_NO_QWS_TRANSFORMED
-#endif
+#define NO_CHECK
 #endif
 
 //The new richtext stuff requires networkprotocol
 
 #ifdef QT_DEMO_SINGLE_FLOPPY 
+#define QT_NO_QWS_TRANSFORMED
 #define QT_NO_NETWORK
 #define QT_NO_NETWORKPROTOCOL
 #else
@@ -90,9 +89,4 @@
 #define QT_NO_QWS_MATROX
 #define QT_NO_QWS_DEPTH_16
 #define QT_NO_QWS_DEPTH_32
-#endif
-
-// Doesn't compile
-#ifndef QT_NO_QWS_VOODOO3
-#define QT_NO_QWS_VOODOO3
 #endif

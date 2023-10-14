@@ -1,5 +1,5 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<html><head><title>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>
 Qt Toolkit - qglobal.h include file
 </title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
@@ -30,7 +30,7 @@ remains with Trolltech.
 <hr>
 <pre>
 /****************************************************************************
-** &#36;Id&#58; qt/src/tools/qglobal.h   2.2.1   edited 2000-10-04 $
+** &#36;Id&#58; qt/src/tools/qglobal.h   2.2.2   edited 2000-11-08 $
 **
 ** Global type declarations and definitions
 **
@@ -70,8 +70,8 @@ remains with Trolltech.
 #define QGLOBAL_H
 
 
-#define QT_VERSION      221
-#define QT_VERSION_STR  "2.2.1"
+#define QT_VERSION      222
+#define QT_VERSION_STR  "2.2.2"
 
 
 //
@@ -181,18 +181,19 @@ remains with Trolltech.
 //
 //   SYM        - Symantec C++ for both PC and Macintosh
 //   MPW        - MPW C++
-//   MWERKS     - Metroworks CodeWarrior
+//   MWERKS     - Metrowerks CodeWarrior
 //   MSVC       - Microsoft Visual C/C++
 //   BOR        - Borland/Turbo C++
 //   WAT        - Watcom C++
 //   GNU        - GNU C++
 //   COMEAU     - Comeau C++
 //   EDG        - Edison Design Group C++
-//   OC         - CenterLine ObjectCenter C++
+//   OC         - CenterLine C++
 //   SUN        - Sun C++
 //   DEC        - DEC C++
 //   HP         - HPUX C++
-//   USLC       - SCO UnixWare C++
+//   USLC       - SCO UnixWare7 C++
+//   CDS        - Reliant C++
 //   KAI        - KAI C++
 //
 
@@ -203,6 +204,7 @@ remains with Trolltech.
 #define _CC_SYM_
 #elif defined( __KCC )
 #define _CC_KAI_
+#define _CC_EDG_
 #define Q_HAS_BOOL_TYPE
 #elif defined(applec)
 #define _CC_MPW_
@@ -237,12 +239,17 @@ remains with Trolltech.
 #elif defined(__xlC__)
 #define _CC_XLC_
 #define Q_FULL_TEMPLATE_INSTANTIATION
+#if __xlC__ &gt;= 0x400
+#define Q_HAS_BOOL_TYPE
+#endif
 #if __xlC__ &lt;= 0x0306
 #define Q_TEMPLATE_NEEDS_EXPLICIT_CONVERSION
 #endif
 #elif defined(como40)
 #define _CC_EDG_
 #define _CC_COMEAU_
+#define Q_HAS_BOOL_TYPE
+#define Q_C_CALLBACKS
 #elif defined(__USLC__)
 #define _CC_USLC_
 #ifdef __EDG__ // UnixWare7
@@ -250,20 +257,24 @@ remains with Trolltech.
 #endif
 #elif defined(__EDG) || defined(__EDG__)
 // one observed on SGI DCC, the other documented
-#define Q_HAS_BOOL_TYPE
 #define _CC_EDG_
 #elif defined(OBJECTCENTER) || defined(CENTERLINE_CLPP)
 #define _CC_OC_
+#if defined(_BOOL)
+#define Q_HAS_BOOL_TYPE
+#endif
 #elif defined(__SUNPRO_CC)
 #define _CC_SUN_
 #if __SUNPRO_CC &gt;= 0x500
 #define Q_HAS_BOOL_TYPE
 #define Q_FP_CCAST_BROKEN
-#define Q_SPARCWORKS_FUNCP_BUG
 #define Q_C_CALLBACKS
 #endif
 #elif defined(__DECCXX)
 #define _CC_DEC_
+#if __DECCXX_VER &gt;= 60060005
+#define Q_HAS_BOOL_TYPE
+#endif
 #elif defined(__CDS__)
 #define _CC_CDS_
 #define Q_HAS_BOOL_TYPE
@@ -281,10 +292,6 @@ remains with Trolltech.
 #endif // __HP_aCC
 #else
 #error "Qt has not been tested with this compiler - talk to qt-bugs@trolltech.com"
-#endif
-
-#if defined(_CC_COMEAU_)
-#define Q_C_CALLBACKS
 #endif
 
 #ifndef Q_PACKED
@@ -337,13 +344,7 @@ remains with Trolltech.
 #define Q_HAS_BOOL_TYPE
 #elif _MSC_VER &gt;= 1100 || __BORLANDC__ &gt;= 0x500
 #define Q_HAS_BOOL_TYPE
-#elif defined(_CC_COMEAU_)
-#define Q_HAS_BOOL_TYPE
 #elif defined(sgi) &amp;&amp; defined(_BOOL)
-#define Q_HAS_BOOL_TYPE
-#elif defined(__DECCXX) &amp;&amp; (__DECCXX_VER &gt;= 60060005)
-#define Q_HAS_BOOL_TYPE
-#elif defined(_AIX) &amp;&amp; (__xlC__ &gt;= 0x400)
 #define Q_HAS_BOOL_TYPE
 #endif
 
@@ -632,5 +633,5 @@ Q_EXPORT void qObsolete( const char *message );
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.1</div>
+<td align="right"><div align="right">Qt version 2.2.2</div>
 </table></div></address></body></html>

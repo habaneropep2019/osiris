@@ -104,7 +104,7 @@ listaddonentmodules:
 	@echo 
 
 
-REQUIRES=
+REQUIRES=small-config
 
 ####### Sub-libraries
 
@@ -128,6 +128,11 @@ qdragapp.o: qdragapp.cpp \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
+		../../include/qconfig-qpe.h \
+		../../include/qconfig-minimal.h \
+		../../include/qconfig-small.h \
+		../../include/qconfig-medium.h \
+		../../include/qconfig-large.h \
 		../../include/qconfig.h \
 		../../include/qstring.h \
 		../../include/qcstring.h \
@@ -187,6 +192,11 @@ qtetrix.o: qtetrix.cpp \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
+		../../include/qconfig-qpe.h \
+		../../include/qconfig-minimal.h \
+		../../include/qconfig-small.h \
+		../../include/qconfig-medium.h \
+		../../include/qconfig-large.h \
 		../../include/qconfig.h \
 		../../include/qstring.h \
 		../../include/qcstring.h \
@@ -221,6 +231,7 @@ qtetrix.o: qtetrix.cpp \
 		../../include/qsizepolicy.h \
 		../../include/qlcdnumber.h \
 		../../include/qbitarray.h \
+		../../include/qlabel.h \
 		../../include/qpushbutton.h \
 		../../include/qbutton.h \
 		../../include/qiconset.h \
@@ -234,7 +245,6 @@ qtetrix.o: qtetrix.cpp \
 		../../include/qgdict.h \
 		../../include/qtranslator.h \
 		../../include/qintdict.h \
-		../../include/qlabel.h \
 		../../include/qdatetime.h
 
 qtetrixb.o: qtetrixb.cpp \
@@ -247,6 +257,11 @@ qtetrixb.o: qtetrixb.cpp \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
+		../../include/qconfig-qpe.h \
+		../../include/qconfig-minimal.h \
+		../../include/qconfig-small.h \
+		../../include/qconfig-medium.h \
+		../../include/qconfig-large.h \
 		../../include/qconfig.h \
 		../../include/qstring.h \
 		../../include/qcstring.h \
@@ -282,6 +297,7 @@ qtetrixb.o: qtetrixb.cpp \
 		qtetrix.h \
 		../../include/qlcdnumber.h \
 		../../include/qbitarray.h \
+		../../include/qlabel.h \
 		../../include/qpushbutton.h \
 		../../include/qbutton.h \
 		../../include/qiconset.h \
@@ -304,6 +320,11 @@ tetrix.o: tetrix.cpp \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
+		../../include/qconfig-qpe.h \
+		../../include/qconfig-minimal.h \
+		../../include/qconfig-small.h \
+		../../include/qconfig-medium.h \
+		../../include/qconfig-large.h \
 		../../include/qconfig.h \
 		../../include/qstring.h \
 		../../include/qcstring.h \
@@ -338,6 +359,7 @@ tetrix.o: tetrix.cpp \
 		../../include/qsizepolicy.h \
 		../../include/qlcdnumber.h \
 		../../include/qbitarray.h \
+		../../include/qlabel.h \
 		../../include/qpushbutton.h \
 		../../include/qbutton.h \
 		../../include/qiconset.h \
@@ -362,6 +384,11 @@ tpiece.o: tpiece.cpp \
 		../../include/qshared.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
+		../../include/qconfig-qpe.h \
+		../../include/qconfig-minimal.h \
+		../../include/qconfig-small.h \
+		../../include/qconfig-medium.h \
+		../../include/qconfig-large.h \
 		../../include/qconfig.h
 
 moc_qdragapp.o: moc_qdragapp.cpp \
@@ -372,6 +399,11 @@ moc_qdragapp.o: moc_qdragapp.cpp \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
+		../../include/qconfig-qpe.h \
+		../../include/qconfig-minimal.h \
+		../../include/qconfig-small.h \
+		../../include/qconfig-medium.h \
+		../../include/qconfig-large.h \
 		../../include/qconfig.h \
 		../../include/qstring.h \
 		../../include/qcstring.h \
@@ -420,6 +452,11 @@ moc_qtetrix.o: moc_qtetrix.cpp \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
+		../../include/qconfig-qpe.h \
+		../../include/qconfig-minimal.h \
+		../../include/qconfig-small.h \
+		../../include/qconfig-medium.h \
+		../../include/qconfig-large.h \
 		../../include/qconfig.h \
 		../../include/qstring.h \
 		../../include/qcstring.h \
@@ -454,6 +491,7 @@ moc_qtetrix.o: moc_qtetrix.cpp \
 		../../include/qsizepolicy.h \
 		../../include/qlcdnumber.h \
 		../../include/qbitarray.h \
+		../../include/qlabel.h \
 		../../include/qpushbutton.h \
 		../../include/qbutton.h \
 		../../include/qiconset.h \
@@ -473,6 +511,11 @@ moc_qtetrixb.o: moc_qtetrixb.cpp \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
+		../../include/qconfig-qpe.h \
+		../../include/qconfig-minimal.h \
+		../../include/qconfig-small.h \
+		../../include/qconfig-medium.h \
+		../../include/qconfig-large.h \
 		../../include/qconfig.h \
 		../../include/qstring.h \
 		../../include/qcstring.h \

@@ -85,7 +85,7 @@ listaddonentmodules:
 	@echo 
 
 
-REQUIRES=
+REQUIRES=medium-config
 
 ####### Sub-libraries
 
@@ -103,6 +103,11 @@ splitter.o: splitter.cpp \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
+		../../include/qconfig-qpe.h \
+		../../include/qconfig-minimal.h \
+		../../include/qconfig-small.h \
+		../../include/qconfig-medium.h \
+		../../include/qconfig-large.h \
 		../../include/qconfig.h \
 		../../include/qstring.h \
 		../../include/qcstring.h \

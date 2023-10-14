@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qtabwidget.h   2.2.1   edited 2000-08-25 $
+** $Id: qt/src/widgets/qtabwidget.h   2.2.2   edited 2000-10-11 $
 **
 ** Definition of QTabWidget class
 **
@@ -43,7 +43,7 @@
 #include "qiconset.h"
 #endif // QT_H
 
-#ifndef QT_NO_COMPLEXWIDGETS
+#ifndef QT_NO_TABWIDGET
 
 class QTabBar;
 class QTabWidgetData;
@@ -140,6 +140,6 @@ private:	// Disabled copy constructor and operator=
 #endif
 };
 
-#endif // QT_NO_COMPLEXWIDGETS
+#endif // QT_NO_TABWIDGET
 
 #endif // QTABWIDGET_H

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/doc/indices.doc   2.2.1   edited 2000-08-29 $
+** $Id: qt/doc/indices.doc   2.2.2   edited 2000-10-06 $
 **
 ** Miscellaneous index pages
 **
@@ -34,7 +34,7 @@
 **********************************************************************/
 
 #if defined(DEBUG)
-static char ident[] = "$Id: qt/doc/indices.doc   2.2.1   edited 2000-08-29 $";
+static char ident[] = "$Id: qt/doc/indices.doc   2.2.2   edited 2000-10-06 $";
 #endif
 
 /*! \page index.html
@@ -124,7 +124,7 @@ Overviews
 <li> <a href="i18n.html">  Internationalization (i18n) </a>
 <li> <a href="debug.html">  Debugging Techniques</a>
 <li> <a href="pictures.html">  Widget Screenshots</a>
-<li> <a href="threads.html"> Thread support in Qt </a>
+<li> <a href="threads.html"> Thread Support in Qt </a>
 </ul>
 
 </td>

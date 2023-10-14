@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qtooltip.cpp   2.2.1   edited 2000-08-28 $
+** $Id: qt/src/widgets/qtooltip.cpp   2.2.2   edited 2000-10-11 $
 **
 ** Tool Tips (or Balloon Help) for any widget or rectangle
 **
@@ -34,7 +34,7 @@
 **********************************************************************/
 
 #include "qtooltip.h"
-#ifndef QT_NO_COMPLEXWIDGETS
+#ifndef QT_NO_TOOLTIP
 #include "qlabel.h"
 #include "qptrdict.h"
 #include "qapplication.h"

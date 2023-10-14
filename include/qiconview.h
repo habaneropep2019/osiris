@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/iconview/qiconview.h   2.2.1   edited 2000-08-25 $
+** $Id: qt/src/iconview/qiconview.h   2.2.2   edited 2000-10-09 $
 **
 ** Definition of QIconView widget class
 **
@@ -82,6 +82,8 @@ class QIconViewItemLineEdit;
 
 class QStringList;
 
+#ifndef QT_NO_DRAGANDDROP
+
 /*****************************************************************************
  *
  * Class QIconDragItem
@@ -131,6 +133,8 @@ private:
     friend class QIconView;
     friend class QIconViewPrivate;
 };
+
+#endif
 
 /*****************************************************************************
  *

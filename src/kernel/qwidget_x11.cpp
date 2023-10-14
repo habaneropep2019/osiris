@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qwidget_x11.cpp   2.2.1   edited 2000-10-01 $
+** $Id: qt/src/kernel/qwidget_x11.cpp   2.2.2   edited 2000-11-06 $
 **
 ** Implementation of QWidget and QWindow classes for X11
 **
@@ -495,6 +495,8 @@ void QWidget::reparent( QWidget *parent, WFlags f, const QPoint &p,
     bool accept_drops = acceptDrops();
     if ( accept_drops )
 	setAcceptDrops( FALSE ); // dnd unregister (we will register again below)
+    if ( isTopLevel() )
+	topData()->dnd = 0; // unregister XDND atom
 
     QWidget* oldtlw = topLevelWidget();
     WId old_winid = winid;
@@ -521,7 +523,7 @@ void QWidget::reparent( QWidget *parent, WFlags f, const QPoint &p,
     QString capt= caption();
     widget_flags = f;
     clearWState( WState_Created | WState_Visible | WState_ForceHide );
-    if ( !parent || parent->isVisibleTo( 0 ) )
+    if ( isTopLevel() || (!parent || parent->isVisibleTo( 0 ) ) )
 	setWState( WState_ForceHide );	// new widgets do not show up in already visible parents
     create();
     const QObjectList *chlist = children();
@@ -857,9 +859,13 @@ static XTextProperty*
 qstring_to_xtp( const QString& s )
 {
     static XTextProperty tp = { 0, 0, 0, 0 };
+    static bool free_prop = TRUE; // we can't free tp.value in case it references
+    // the data of the static QCString below.
     if ( tp.value ) {
-	XFree( tp.value );
+	if ( free_prop )
+	    XFree( tp.value );
 	tp.value = 0;
+	free_prop = TRUE;
     }
 
     static const QTextCodec* mapper = QTextCodec::codecForLocale();
@@ -883,6 +889,7 @@ qstring_to_xtp( const QString& s )
 	tp.encoding = XA_STRING;
 	tp.format = 8;
 	tp.nitems = qcs.length();
+	free_prop = FALSE;
     }
 
     // ### If we knew WM could understand unicode, we could use
@@ -1014,12 +1021,26 @@ void QWidget::grabMouse()
     if ( !qt_nograb() ) {
 	if ( mouseGrb )
 	    mouseGrb->releaseMouse();
+#if defined(CHECK_STATE)
+	int status =
+#endif
 	XGrabPointer( x11Display(), winId(), TRUE,
 		      (uint)( ButtonPressMask | ButtonReleaseMask |
 			      PointerMotionMask | EnterWindowMask |
 			      LeaveWindowMask ),
 		      GrabModeAsync, GrabModeAsync,
 		      None, None, qt_x_time );
+#if defined(CHECK_STATE)
+	if ( status ) {
+	    const char *s =
+		status == GrabNotViewable ? "\"GrabNotViewable\"" :
+		status == AlreadyGrabbed  ? "\"AlreadyGrabbed\"" :
+		status == GrabFrozen      ? "\"GrabFrozen\"" :
+		status == GrabInvalidTime ? "\"GrabInvalidTime\"" :
+					    "<?>";
+	    qWarning( "Grabbing the mouse failed with %s", s );
+	}
+#endif
 	mouseGrb = this;
     }
 }
@@ -1041,11 +1062,25 @@ void QWidget::grabMouse( const QCursor &cursor )
     if ( !qt_nograb() ) {
 	if ( mouseGrb )
 	    mouseGrb->releaseMouse();
+#if defined(CHECK_STATE)
+	int status =
+#endif
 	XGrabPointer( x11Display(), winId(), TRUE,
 		      (uint)(ButtonPressMask | ButtonReleaseMask |
 			     PointerMotionMask | EnterWindowMask | LeaveWindowMask),
 		      GrabModeAsync, GrabModeAsync,
 		      None, cursor.handle(), qt_x_time );
+#if defined(CHECK_STATE)
+	if ( status ) {
+	    const char *s =
+		status == GrabNotViewable ? "\"GrabNotViewable\"" :
+		status == AlreadyGrabbed  ? "\"AlreadyGrabbed\"" :
+		status == GrabFrozen      ? "\"GrabFrozen\"" :
+		status == GrabInvalidTime ? "\"GrabInvalidTime\"" :
+					    "<?>";
+	    qWarning( "Grabbing the mouse failed with %s", s );
+	}
+#endif
 	mouseGrb = this;
     }
 }
@@ -1156,8 +1191,10 @@ void QWidget::setActiveWindow()
     if ( tlw->isVisible() && !tlw->topData()->embedded ) {
 	XSetInputFocus( x11Display(), tlw->winId(), RevertToNone, qt_x_time);
 	
-	if ( tlw->topData()->xic)
-	    XSetICFocus((XIC) tlw->topData()->xic);
+#ifndef NO_XIM
+	if (tlw->topData()->xic)
+	    XSetICFocus( (XIC) tlw->topData()->xic);
+#endif
     }
 }
 
@@ -1341,8 +1378,7 @@ void QWidget::showWindow()
 		XFree( (char *)h );
 	    topData()->showMode = sm == 1?3:0; // trigger reset to normal state next time
 	}
-	if ( isHidden() &&
-	     topData()->parentWinId && topData()->parentWinId != qt_xrootwin() ) {
+	if ( topData()->parentWinId && topData()->parentWinId != qt_xrootwin() ) {
 	    qt_deferred_map_add( this );
 	    return;
 	}
@@ -1897,6 +1933,9 @@ void QWidget::scroll( int dx, int dy, const QRect& r )
     if ( testWState( WState_BlockUpdates ) )
 	return;
     bool valid_rect = r.isValid();
+    bool just_update = QABS( dx ) > width() || QABS( dy ) > height();
+    if ( just_update )
+	update();
     QRect sr = valid_rect?r:visibleRect();
     int x1, y1, x2, y2, w=sr.width(), h=sr.height();
     if ( dx > 0 ) {
@@ -1924,7 +1963,7 @@ void QWidget::scroll( int dx, int dy, const QRect& r )
     Display *dpy = x11Display();
     GC gc = qt_xget_readonly_gc();
     // Want expose events
-    if ( w > 0 && h > 0 ) {
+    if ( w > 0 && h > 0 && !just_update ) {
 	XSetGraphicsExposures( dpy, gc, TRUE );
 	XCopyArea( dpy, winId(), winId(), gc, x1, y1, w, h, x2, y2);
 	XSetGraphicsExposures( dpy, gc, FALSE );
@@ -1943,6 +1982,9 @@ void QWidget::scroll( int dx, int dy, const QRect& r )
 	    ++it;
 	}
     }
+
+    if ( just_update )
+	return;
 
     // Don't let the server be bogged-down with repaint events
     bool repaint_immediately = qt_sip_count( this ) < 3;
@@ -2059,20 +2101,20 @@ void QWidget::createTLSysExtra()
 	XFontSet fontset = xic_fontset(fontMetrics().fontSet(), font().pointSize());
 
 	XVaNestedList preedit_att = XVaCreateNestedList(0,
-			XNSpotLocation, &spot,
-			XNFontSet, fontset,
-			NULL);
+							XNSpotLocation, &spot,
+							XNFontSet, fontset,
+							NULL);
 	XVaNestedList status_att = XVaCreateNestedList(0,
-			XNFontSet, fontset,
-			NULL);
+						       XNFontSet, fontset,
+						       NULL);
 
 	extra->topextra->xic = (void*)XCreateIC( qt_xim,
-			XNInputStyle, qt_xim_style,
-			XNClientWindow, winId(),
-			XNFocusWindow, winId(),
-			XNPreeditAttributes, preedit_att,
-			XNStatusAttributes, status_att,
-			0 );
+						 XNInputStyle, qt_xim_style,
+						 XNClientWindow, winId(),
+						 XNFocusWindow, winId(),
+						 XNPreeditAttributes, preedit_att,
+						 XNStatusAttributes, status_att,
+						 0 );
 
 	XFree(preedit_att);
 	XFree(status_att);
@@ -2080,6 +2122,8 @@ void QWidget::createTLSysExtra()
     } else {
 	extra->topextra->xic = 0;
     }
+#else
+    extra->topextra->xic = 0;
 #endif
 }
 

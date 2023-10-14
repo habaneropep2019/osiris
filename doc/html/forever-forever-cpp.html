@@ -1,5 +1,5 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<html><head><title>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>
 Qt Toolkit - forever/forever.cpp example file
 </title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
@@ -32,7 +32,7 @@ height="100" src="face.png" alt="Home" border="0">
   <hr>
 
   Header file: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/forever/forever.h   2.2.1   edited 2000-08-31 $
+** &#36;Id&#58; qt/examples/forever/forever.h   2.2.2   edited 2000-08-31 $
 **
 ** Definition of something or other
 **
@@ -75,7 +75,7 @@ private:
 
   Implementation:
 <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/forever/forever.cpp   2.2.1   edited 2000-08-31 $
+** &#36;Id&#58; qt/examples/forever/forever.cpp   2.2.2   edited 2000-11-07 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -130,11 +130,12 @@ void <a name="327"></a>Forever::updateCaption()
 void <a name="328"></a>Forever::paintEvent( <a name="QPaintEvent"></a><a href="qpaintevent.html">QPaintEvent</a> * )
 {
     <a name="QPainter"></a><a href="qpainter.html">QPainter</a> paint( this );                     // painter object
-    paint.<a name="setWindow"></a><a href="qpainter.html#797026">setWindow</a>( 0, 0, 1024, 1024 );        // define coordinate system
+    int w = width();
+    int h = height();
     paint.<a name="setPen"></a><a href="qpainter.html#0a6aff">setPen</a>( NoPen );                      // do not draw outline
     paint.<a name="setBrush"></a><a href="qpainter.html#38e68f">setBrush</a>( colors[rand() % numColors]);// set random brush color
-    <a name="QPoint"></a><a href="qpoint.html">QPoint</a> p1( rand()&amp;1023, rand()&amp;1023 );      // p1 = top left
-    <a href="qpoint.html">QPoint</a> p2( rand()&amp;1023, rand()&amp;1023 );      // p2 = bottom right
+    <a name="QPoint"></a><a href="qpoint.html">QPoint</a> p1( rand()%w, rand()%h );    // p1 = top left
+    <a href="qpoint.html">QPoint</a> p2( rand()%w, rand()%h );    // p2 = bottom right
     <a name="QRect"></a><a href="qrect.html">QRect</a> r( p1, p2 );
     paint.<a name="drawRect"></a><a href="qpainter.html#b29a16">drawRect</a>( r );                        // draw filled rectangle
 }
@@ -167,5 +168,5 @@ int main( int argc, char **argv )
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.1</div>
+<td align="right"><div align="right">Qt version 2.2.2</div>
 </table></div></address></body></html>

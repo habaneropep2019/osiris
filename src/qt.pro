@@ -5,7 +5,7 @@ unix:CONFIG += x11
 embedded:CONFIG -= x11
 
 TARGET		= qt
-VERSION		= 2.2.1
+VERSION		= 2.2.2
 DESTDIR		= ../lib
 DLLDESTDIR	= ../bin
 
@@ -22,10 +22,11 @@ internal:MODULES	+= $$MODULES_ENT
 CONFIG		+= $$MODULES
 
 internal:CONFIG	+= png zlib  # Done differently in external system
-embedded:CONFIG	+= png zlib
+embedded:CONFIG	+= png zlib ft
 win32:CONFIG	+= png zlib
 internal:CONFIG -= opengl
 # internal:LIBS += -lpng -lz
+# embedded:LIBS += -lgcc
 
 thread:DEFINES += QT_THREAD_SUPPORT
 
@@ -58,6 +59,8 @@ internal:LIBS += $$INTJPEGI
 internal:DEFINES += $$DEFINESI
 win32:DEFINES += QT_NO_IMAGEIO_JPEG
 
+internal:TMAKE_CXXFLAGS_EMBEDDED += -DQT_NO_QWS_VOODOO3 -DQT_NO_QWS_MATROX -DQT_NO_QWS_MACH64
+embedded:TMAKE_CXXFLAGS += $$TMAKE_CXXFLAGS_EMBEDDED
 
 win32:LIBS += $$WINLIBS
 unix:LIBS += $$X11LIBS
@@ -84,9 +87,12 @@ win32:TMAKE_CXXFLAGS   += -DUNICODE
 MNG_INCLUDEPATH		= 3rdparty/libmng
 PNG_INCLUDEPATH		= 3rdparty/libpng
 ZLIB_INCLUDEPATH	= 3rdparty/zlib
+# Rather ridiculous. Perhaps we should ships symlinks and only have one here
+FT_INCLUDEPATH		= 3rdparty/freetype2/src/shared 3rdparty/freetype2/src/sfnt 3rdparty/freetype2/include 3rdparty/freetype2/src/base 3rdparty/freetype2/config/unix 3rdparty/freetype2/config 3rdparty/freetype2/src/truetype 3rdparty/freetype2/src/type1 3rdparty/freetype2/src/psnames
 #mng:INCLUDEPATH        += $$MNG_INCLUDEPATH
 png:INCLUDEPATH        += $$PNG_INCLUDEPATH
 zlib:INCLUDEPATH       += $$ZLIB_INCLUDEPATH
+ft:INCLUDEPATH       += $$FT_INCLUDEPATH
 win32:INCLUDEPATH      += tmp
 win32-borland:INCLUDEPATH += kernel
 
@@ -355,6 +361,7 @@ tools:UNIXSOURCES += tools/qdir_unix.cpp \
 		  tools/qfileinfo_unix.cpp
 
 kernel:QWSSOURCES += kernel/qapplication_qws.cpp \
+		  kernel/qsoundqss_qws.cpp \
 		  kernel/qclipboard_qws.cpp \
 		  kernel/qcolor_qws.cpp \
 		  kernel/qcursor_qws.cpp \
@@ -587,6 +594,7 @@ embedded:HEADERS   -= $$WIDGETS_H/qcompactstyle.h
 
 embedded:HEADERS += $$KERNEL_H/qfontmanager_qws.h \
 		  $$KERNEL_H/qfontfactorybdf_qws.h \
+		  $$KERNEL_H/qsoundqss_qws.h \
 		  $$KERNEL_H/qfontfactoryttf_qws.h \
 		  $$KERNEL_H/qmemorymanager_qws.h \
 		  $$KERNEL_H/qwsmanager_qws.h \
@@ -634,10 +642,25 @@ ZLIB_SOURCES	= 3rdparty/zlib/adler32.c \
 		  3rdparty/zlib/uncompr.c \
 		  3rdparty/zlib/zutil.c
 
+FT_SOURCES =	3rdparty/freetype2/config/unix/ftsystem.c \
+		3rdparty/freetype2/src/base/ftdebug.c \
+		3rdparty/freetype2/src/base/ftinit.c \
+		3rdparty/freetype2/src/base/ftbase.c \
+		3rdparty/freetype2/src/base/ftbbox.c \
+		3rdparty/freetype2/src/base/ftraster.c \
+		3rdparty/freetype2/src/base/ftoutln.c \
+		3rdparty/freetype2/src/psnames/psdriver.c \
+		3rdparty/freetype2/src/sfnt/sfnt.c \
+		3rdparty/freetype2/src/truetype/truetype.c \
+		3rdparty/freetype2/src/type1/type1.c \
+		3rdparty/freetype2/src/type1z/type1z.c
+
 png:SOURCES    += $$PNG_SOURCES
 embedded:SOURCES    -= $$PNG_SOURCES
 zlib:SOURCES   += $$ZLIB_SOURCES
 embedded:SOURCES    -= $$ZLIB_SOURCES
+ft:SOURCES   += $$FT_SOURCES
+embedded:SOURCES    -= $$FT_SOURCES
 
 
 xml:HEADERS += $$XML_H/qxml.h $$XML_H/qdom.h
@@ -682,7 +705,6 @@ network:SOURCES    += $$NETWORK_SOURCES
 
 # Qt/Embedded
 embedded:PRECOMPH=kernel/qt.h
-embedded:INCLUDEPATH += 3rdparty/freetype2/include 3rdparty/libpng 3rdparty/zlib
 QWSSUBLIBS = freetype
 png:QWSSUBLIBS += png
 mng:QWSSUBLIBS += mng

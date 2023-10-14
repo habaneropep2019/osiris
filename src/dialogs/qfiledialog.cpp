@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/dialogs/qfiledialog.cpp   2.2.1   edited 2000-10-01 $
+** $Id: qt/src/dialogs/qfiledialog.cpp   2.2.2   edited 2000-10-26 $
 **
 ** Implementation of QFileDialog class
 **
@@ -1978,6 +1978,8 @@ static QStringList makeFiltersList( const QString &filter )
   <li> \c DirectoryOnly - Return the name of a directory and display no files in the file views of the filedialog.
   <li> \c ExistingFiles - Return the names of zero or more existing files.
   </ul>
+
+  Using setMode() you can set this mode to the file dialog.
 */
 
 /*!
@@ -2905,6 +2907,12 @@ QString QFileDialog::getOpenFileName( const QString & startWith,
 
     QFileDialog *dlg = new QFileDialog( *workingDirectory, QString::null,
 					parent, name, TRUE );
+
+    if ( parent && parent->icon() && !parent->icon()->isNull() )
+	dlg->setIcon( *parent->icon() );
+    else if ( qApp->mainWidget() && qApp->mainWidget()->icon() && !qApp->mainWidget()->icon()->isNull() )
+	dlg->setIcon( *qApp->mainWidget()->icon() );
+
     CHECK_PTR( dlg );
     if ( !caption.isNull() )
 	dlg->setCaption( caption );
@@ -3011,6 +3019,11 @@ QString QFileDialog::getSaveFileName( const QString & startWith,
 #endif
 
     QFileDialog *dlg = new QFileDialog( *workingDirectory, QString::null, parent, name, TRUE );
+    if ( parent && parent->icon() && !parent->icon()->isNull() )
+	dlg->setIcon( *parent->icon() );
+    else if ( qApp->mainWidget() && qApp->mainWidget()->icon() && !qApp->mainWidget()->icon()->isNull() )
+	dlg->setIcon( *qApp->mainWidget()->icon() );
+
     CHECK_PTR( dlg );
     if ( !caption.isNull() )
 	dlg->setCaption( caption );
@@ -4724,6 +4737,11 @@ QStringList QFileDialog::getOpenFileNames( const QString & filter,
 
     QFileDialog *dlg = new QFileDialog( *workingDirectory, QString::null,
 					parent, name, TRUE );
+    if ( parent && parent->icon() && !parent->icon()->isNull() )
+	dlg->setIcon( *parent->icon() );
+    else if ( qApp->mainWidget() && qApp->mainWidget()->icon() && !qApp->mainWidget()->icon()->isNull() )
+	dlg->setIcon( *qApp->mainWidget()->icon() );
+
     CHECK_PTR( dlg );
     dlg->setFilters( filters );
     if ( !caption.isNull() )
@@ -4823,8 +4841,6 @@ void QFileDialog::urlStart( QNetworkOperation *op )
 	else
 	    d->cdToParent->setEnabled( TRUE );
 	d->mimeTypeTimer->stop();
-	if ( !d->url.isLocalFile() )
-	    qApp->processEvents();
 	d->sortedList.clear();
 	d->pendingItems.clear();
 	d->moreFiles->clearSelection();

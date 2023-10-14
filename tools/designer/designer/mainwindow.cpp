@@ -678,8 +678,8 @@ void MainWindow::setupFileActions()
     a->addTo( menu );
 
     a = new QAction( this, 0 );
-    a->setText( tr( "Save as" ) );
-    a->setMenuText( tr( "Save &as..." ) );
+    a->setText( tr( "Save As" ) );
+    a->setMenuText( tr( "Save &As..." ) );
     a->setStatusTip( tr( "Saves the current form with a new filename" ) );
     a->setWhatsThis( tr( "Save the current form with a new filename" ) );
     connect( a, SIGNAL( activated() ), this, SLOT( fileSaveAs() ) );
@@ -687,8 +687,8 @@ void MainWindow::setupFileActions()
     a->addTo( menu );
 
     a = new QAction( this, 0 );
-    a->setText( tr( "Save all" ) );
-    a->setMenuText( tr( "Sa&ve all" ) );
+    a->setText( tr( "Save All" ) );
+    a->setMenuText( tr( "Sa&ve All" ) );
     a->setStatusTip( tr( "Saves all open forms" ) );
     a->setWhatsThis( tr( "Save all open forms" ) );
     connect( a, SIGNAL( activated() ), this, SLOT( fileSaveAll() ) );
@@ -815,7 +815,7 @@ void MainWindow::setupWindowActions()
 						     "widgets in your form.</p>") );
 	connect( actionWindowPropertyEditor, SIGNAL( toggled(bool) ), this, SLOT( windowPropertyEditor(bool) ) );
 
-	actionWindowHierarchyView = new QAction( tr( "Object Hierarchy" ), tr( "&Object Hierarchy" ), 0, this, 0, TRUE );
+	actionWindowHierarchyView = new QAction( tr( "Object Hierarchy" ), tr( "Object &Hierarchy" ), 0, this, 0, TRUE );
 	actionWindowHierarchyView->setStatusTip( tr("Toggles the Object Hierarchy view") );
 	actionWindowHierarchyView->setWhatsThis( tr("<b>Toggle the Object Hierarchy view</b>"
 						    "<p>The object hierarchy gives a quick overview about the relations "
@@ -838,22 +838,22 @@ void MainWindow::setupWindowActions()
 	actionWindowCascade->setWhatsThis( tr("Arrange all windows cascaded") );
 	connect( actionWindowCascade, SIGNAL( activated() ), workspace, SLOT( cascade() ) );
 
-	actionWindowClose = new QAction( tr( "Close" ), tr( "&Close" ), CTRL + Key_F4, this );
+	actionWindowClose = new QAction( tr( "Close" ), tr( "Cl&ose" ), CTRL + Key_F4, this );
 	actionWindowClose->setStatusTip( tr( "Closes the active window") );
 	actionWindowClose->setWhatsThis( tr( "Close the active window") );
 	connect( actionWindowClose, SIGNAL( activated() ), workspace, SLOT( closeActiveWindow() ) );
 
-	actionWindowCloseAll = new QAction( tr( "Close All" ), tr( "Close &All" ), 0, this );
+	actionWindowCloseAll = new QAction( tr( "Close All" ), tr( "Close Al&l" ), 0, this );
 	actionWindowCloseAll->setStatusTip( tr( "Closes all form windows") );
 	actionWindowCloseAll->setWhatsThis( tr( "Close all form windows") );
 	connect( actionWindowCloseAll, SIGNAL( activated() ), this, SLOT( closeAllForms() ) );
 
-    	actionWindowNext = new QAction( tr( "Next" ), tr( "&Next" ), CTRL + Key_F6, this );
+    	actionWindowNext = new QAction( tr( "Next" ), tr( "Ne&xt" ), CTRL + Key_F6, this );
 	actionWindowNext->setStatusTip( tr( "Activates the next window" ) );
 	actionWindowNext->setWhatsThis( tr( "Activate the next window" ) );
 	connect( actionWindowNext, SIGNAL( activated() ), workspace, SLOT( activateNextWindow() ) );
 
-    	actionWindowPrevious = new QAction( tr( "Previous" ), tr( "&Previous" ), CTRL + SHIFT + Key_F6, this );
+    	actionWindowPrevious = new QAction( tr( "Previous" ), tr( "Pre&vious" ), CTRL + SHIFT + Key_F6, this );
 	actionWindowPrevious->setStatusTip( tr( "Activates the previous window" ) );
 	actionWindowPrevious->setWhatsThis( tr( "Activate the previous window" ) );
 	connect( actionWindowPrevious, SIGNAL( activated() ), workspace, SLOT( activatePreviousWindow() ) );
@@ -2007,6 +2007,8 @@ bool MainWindow::eventFilter( QObject *o, QEvent *e )
 	break;
     case QEvent::Show:
 	if ( o != this )
+	    break;
+	if ( ((QShowEvent*)e)->spontaneous() )
 	    break;
 	QApplication::sendPostedEvents( workspace, QEvent::ChildInserted );
 	showEvent( (QShowEvent*)e );

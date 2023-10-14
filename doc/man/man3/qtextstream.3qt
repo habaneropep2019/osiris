@@ -1,4 +1,4 @@
-.TH QTextStream 3qt "4 October 2000" "Trolltech AS" \" -*- nroff -*-
+.TH QTextStream 3qt "8 November 2000" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -385,14 +385,20 @@ Sets the stream flags to \fIf.\fR Returns the previous stream flags.
 See also setf(), unsetf() and flags().
 .SH "QTextStream & QTextStream::operator<< ( QChar c )"
 Writes a \fCchar\fR to the stream and returns a reference to the stream.
+.PP
+The character \fIc\fR is assumed to be Latin1 encoded independent of the Encoding set for the QTextStream.
 .SH "QTextStream & QTextStream::operator<< ( char c )"
 Writes a \fCchar\fR to the stream and returns a reference to the stream.
 .SH "QTextStream & QTextStream::operator<< ( const QCString & s )"
 Writes \fIs\fR to the stream and returns a reference to the stream.
+.PP
+The string \fIs\fR is assumed to be Latin1 encoded independent of the Encoding set for the QTextStream.
 .SH "QTextStream & QTextStream::operator<< ( const QString & s )"
 Writes \fIs\fR to the stream and returns a reference to the stream.
 .SH "QTextStream & QTextStream::operator<< ( const char * s )"
 Writes a string to the stream and returns a reference to the stream.
+.PP
+The string \fIs\fR is assumed to be Latin1 encoded independent of the Encoding set for the QTextStream.
 .SH "QTextStream & QTextStream::operator<< ( double f )"
 Writes a \fCdouble\fR to the stream and returns a reference to the stream.
 .SH "QTextStream & QTextStream::operator<< ( float f )"

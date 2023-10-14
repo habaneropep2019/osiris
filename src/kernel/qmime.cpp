@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qmime.cpp   2.2.1   edited 2000-08-25 $
+** $Id: qt/src/kernel/qmime.cpp   2.2.2   edited 2000-11-02 $
 **
 ** Implementation of MIME support
 **
@@ -384,7 +384,10 @@ QString QMimeSourceFactory::makeAbsolute(const QString& abs_or_rel_name, const Q
 */
 const QMimeSource* QMimeSourceFactory::data(const QString& abs_or_rel_name, const QString& context) const
 {
-    return data(makeAbsolute(abs_or_rel_name,context));
+    const QMimeSource* r = data(makeAbsolute(abs_or_rel_name,context));
+    if ( !r && !d->path.isEmpty() )
+	r = data(abs_or_rel_name);
+    return r;
 }
 
 

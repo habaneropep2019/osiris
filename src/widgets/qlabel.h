@@ -1,5 +1,5 @@
 /**********************************************************************
-** $Id: qt/src/widgets/qlabel.h   2.2.1   edited 2000-08-25 $
+** $Id: qt/src/widgets/qlabel.h   2.2.2   edited 2000-11-06 $
 **
 ** Definition of QLabel widget class
 **
@@ -61,10 +61,8 @@ public:
     QLabel( QWidget *parent, const char *name=0, WFlags f=0 );
     QLabel( const QString &text, QWidget *parent, const char *name=0,
 	    WFlags f=0 );
-#ifndef QT_NO_ACCEL
     QLabel( QWidget * buddy, const QString &,
 	    QWidget * parent, const char * name=0, WFlags f=0 );
-#endif
     ~QLabel();
 
     QString	 text()		const	{ return ltext; }

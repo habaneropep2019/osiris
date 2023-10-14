@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qdragobject.h   2.2.1   edited 2000-08-25 $
+** $Id: qt/src/kernel/qdragobject.h   2.2.2   edited 2000-10-26 $
 **
 ** Definition of QDragObject
 **
@@ -167,7 +167,7 @@ public:
     static bool decodeLocalFiles( const QMimeSource* e, QStringList& i );
 };
 
-class QColorDrag : public QStoredDrag
+class Q_EXPORT QColorDrag : public QStoredDrag
 {
     Q_OBJECT
     QColor color;

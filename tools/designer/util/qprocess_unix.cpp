@@ -183,6 +183,9 @@ bool QProcess::start()
 	d->notifierStderr = 0;
     }
 
+#if defined(_OS_QNX_) // socketpair() is not yet implemented in QNX/RTP
+    return FALSE;
+#else
     // open sockets for piping
     if ( ::socketpair( AF_UNIX, SOCK_STREAM, 0, d->socketStdin ) ) {
 	return FALSE;
@@ -193,7 +196,8 @@ bool QProcess::start()
     if ( ::socketpair( AF_UNIX, SOCK_STREAM, 0, d->socketStderr ) ) {
 	return FALSE;
     }
-
+#endif
+    
     // construct the arguments for exec
     const char** arglist = new const char*[ d->arguments.count() + 2 ];
     arglist[0] = d->command.latin1();
@@ -339,7 +343,7 @@ void QProcess::socketRead( int fd )
     char *buffer = new char[bufsize];
     int n = ::read( fd, buffer, bufsize-1 );
 
-    if ( n == 0 ) {
+    if ( n == 0 || n == -1 ) {
 	if ( fd == d->socketStdout[0] ) {
 #if defined(QPROCESS_DEBUG)
 	    qDebug( "QProcess::socketRead(): stdout (%d) closed", fd );
@@ -349,6 +353,7 @@ void QProcess::socketRead( int fd )
 	    d->notifierStdout = 0;
 	    ::close( d->socketStdout[0] );
 	    d->socketStdout[0] = 0;
+	    delete buffer;
 	    return;
 	} else {
 #if defined(QPROCESS_DEBUG)
@@ -359,25 +364,9 @@ void QProcess::socketRead( int fd )
 	    d->notifierStderr = 0;
 	    ::close( d->socketStderr[0] );
 	    d->socketStderr[0] = 0;
+	    delete buffer;
 	    return;
 	}
-
-	/* ### just have to think what to do best
-	if ( err[ 0 ] == 0 && out[ 0 ] == 0 ) {
-	    int s;
-	    waitpid( d->pid, &s, WNOHANG );
-	    if ( WIFEXITED( s ) ) {
-		d->pid = 0;
-		int ret = WEXITSTATUS( s );
-
-		if ( ret == 0 )
-		    emit finished();
-		else
-		    emit failed();
-	    }
-	    return;
-	}
-	*/
     }
 
     buffer[n] = 0;

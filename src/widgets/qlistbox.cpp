@@ -1,5 +1,5 @@
 /**********************************************************************
-** $Id: qt/src/widgets/qlistbox.cpp   2.2.1   edited 2000-10-01 $
+** $Id: qt/src/widgets/qlistbox.cpp   2.2.2   edited 2000-10-16 $
 **
 ** Implementation of QListBox widget class
 **
@@ -278,6 +278,8 @@ const QPixmap *QListBoxItem::pixmap() const
 
 /*!
   Specifies if this item may be selected by the user or not.
+
+  \sa isSelectable()
 */
 
 void QListBoxItem::setSelectable( bool b )
@@ -646,7 +648,7 @@ int QListBoxPixmap::width( const QListBox* lb ) const
   define new classes which inherit QListBoxItem.
 
   \warning The list box assumes ownership of all list box items
-  and will delete them when is does  not need them any more.
+  and will delete them when it does not need them any more.
 
   <img src=qlistbox-m.png> <img src=qlistbox-w.png>
 
@@ -726,9 +728,15 @@ int QListBoxPixmap::width( const QListBox* lb ) const
 
 
 /*!
-  Constructs a list box.  The arguments are passed directly to the
-  QScrollView constructor.
+  Constructs a new empty list box, with \a parent as a parent and \a name
+  as object name.
 
+  Performance is boosted by modifying the widget flags \a f so that only
+  part of the QListBoxItem children is redrawn.  This may be unsuitable
+  for custom QListBoxItem classes, in which case \c WNorthWestGravity and
+  \c WRepaintNoErase should be cleared.
+
+  \sa QWidget::clearWFlags() Qt::WidgetFlags
 */
 
 QListBox::QListBox( QWidget *parent, const char *name, WFlags f )

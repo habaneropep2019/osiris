@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qscrollview.h   2.2.1   edited 2000-09-28 $
+** $Id: qt/src/widgets/qscrollview.h   2.2.2   edited 2000-10-11 $
 **
 ** Definition of QScrollView class
 **
@@ -42,7 +42,7 @@
 #include "qscrollbar.h"
 #endif // QT_H
 
-#ifndef QT_NO_COMPLEXWIDGETS
+#ifndef QT_NO_SCROLLVIEW
 
 struct QScrollViewData;
 
@@ -220,6 +220,6 @@ private:	// Disabled copy constructor and operator=
     void changeFrameRect(const QRect&);
 };
 
-#endif // QT_NO_COMPLEXWIDGETS
+#endif // QT_NO_SCROLLVIEW
 
 #endif // QSCROLLVIEW_H

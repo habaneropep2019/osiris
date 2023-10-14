@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Qt Toolkit - QDir Class</title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
 a:link { color: #004faf; text-decoration: none }
@@ -408,8 +408,7 @@ If <em>acceptAbsPath</em> is FALSE an absolute path will be appended to
 the directory path.
 <p>See also  <a href="#f225bf">absFilePath</a>(), <a href="#bf7a9f">isRelative</a>() and <a href="#ec5d7f">canonicalPath</a>().
 <h3 class="fn">QDir::FilterSpec <a name="d6b251"></a>QDir::filter() const</h3>
-<p>Returns the value set by <a href="#a8ed1d">setFilter</a>()
-<p>See also  <a href="#a8ed1d">setFilter</a>().
+<p>Returns the value set by <a href="#a8ed1d">setFilter</a>().
 <h3 class="fn">QDir <a name="6c6f60"></a>QDir::home () <code>[static]</code></h3>
 <p>Returns the home directory.
 <p>See also  <a href="#eb6a69">homeDirPath</a>().
@@ -460,8 +459,7 @@ any number of separators at the beginning of <em>dirName</em> will be removed.
 <p>Returns TRUE if successful, otherwise FALSE.
 <p>See also  <a href="#e526f6">rmdir</a>().
 <h3 class="fn"><a href="qstring.html">QString</a> <a name="b4accc"></a>QDir::nameFilter () const</h3>
-<p>Returns the string set by <a href="#35360c">setNameFilter</a>()
-<p>See also  <a href="#35360c">setNameFilter</a>().
+<p>Returns the string set by <a href="#35360c">setNameFilter</a>().
 <h3 class="fn">bool <a name="ca7255"></a>QDir::operator!= ( const QDir &amp; d ) const <code>[virtual]</code></h3>
 <p>Returns TRUE if the <em>d</em> and this dir have different path or
 different sort/filter settings, otherwise FALSE.
@@ -527,7 +525,7 @@ operating system.
 <p>Sets the filter used by <a href="#231a40">entryList</a>() and <a href="#525d4f">entryInfoList</a>(). The filter is used
 to specify the kind of files that should be returned by entryList() and
 entryInfoList().
-<p>See also  <a href="#b4accc">nameFilter</a>().
+<p>See also  <a href="#d6b251">filter</a>() and <a href="#35360c">setNameFilter</a>().
 <h3 class="fn">void <a name="aa85ef"></a>QDir::setMatchAllDirs ( bool enable ) <code>[virtual]</code></h3>
 <p>If <em>enable</em> is TRUE, all directories will be listed (even if they do not
 match the filter or the name filter), otherwise only matched directories
@@ -545,7 +543,7 @@ wildcards, You may specify several filter entries separated by a " " or a ";". I
 you want entryList() and entryInfoList() to list all files ending with
 ".cpp" and all files ending with ".h", you simply call
 dir.setNameFilter("*.cpp *.h") or dir.setNameFilter("*.cpp;*.h")
-<p>See also  <a href="#b4accc">nameFilter</a>().
+<p>See also  <a href="#b4accc">nameFilter</a>() and <a href="#a8ed1d">setFilter</a>().
 <h3 class="fn">void <a name="7f6e43"></a>QDir::setPath ( const <a href="qstring.html">QString</a> &amp; path ) <code>[virtual]</code></h3>
 <p>Sets the path of the directory. The path is cleaned of redundant ".", ".."
 and multiple separators. No check is made to ensure that a directory
@@ -559,7 +557,7 @@ an absolute path is the string "/tmp/quartz", a relative path might look like
 "src/fatlib". You can use the function <a href="#bf7a9f">isRelative</a>() to check if a QDir
 is using a relative or an absolute file path. You can call the function
 <a href="#932714">convertToAbs</a>() to convert a relative QDir to an absolute one.
-<p>See also  <a href="#abd205">path</a>(), <a href="#0f9bf8">absPath</a>(), exists, <a href="#46d1cc">cleanDirPath</a>(), <a href="#9b0e4f">dirName</a>(), <a href="#f225bf">absFilePath</a>(), <a href="#bf7a9f">isRelative</a>() and <a href="#932714">convertToAbs</a>().
+<p>See also  <a href="#abd205">path</a>(), <a href="#0f9bf8">absPath</a>(), <a href="#6872a7">exists</a>(), <a href="#46d1cc">cleanDirPath</a>(), <a href="#9b0e4f">dirName</a>(), <a href="#f225bf">absFilePath</a>(), <a href="#bf7a9f">isRelative</a>() and <a href="#932714">convertToAbs</a>().
 <h3 class="fn">void <a name="63c1e2"></a>QDir::setSorting ( int sortSpec ) <code>[virtual]</code></h3>
 <p>Sets the sorting order used by <a href="#231a40">entryList</a>() and <a href="#525d4f">entryInfoList</a>().
 <p>The <em>sortSpec</em> is specified by or-ing values from the enum
@@ -583,7 +581,7 @@ alphabetically).
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.2.1"><nobr>
+<input type=hidden name="version" value="2.2.2"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -591,5 +589,5 @@ copyright &copy; 1995-2000
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.1</div>
+<td align="right"><div align="right">Qt version 2.2.2</div>
 </table></div></address></body></html>

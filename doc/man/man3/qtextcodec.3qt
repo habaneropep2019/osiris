@@ -1,4 +1,4 @@
-.TH QTextCodec 3qt "4 October 2000" "Trolltech AS" \" -*- nroff -*-
+.TH QTextCodec 3qt "8 November 2000" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -20,10 +20,22 @@ Inherited by QEucJpCodec, QEucKrCodec, QGbkCodec, QJisCodec, QSjisCodec and QTsc
 .BI "virtual \fB~QTextCodec\fR () "
 .br
 .ti -1c
+.BI "virtual const char* \fBname\fR () const"
+.br
+.ti -1c
+.BI "virtual int \fBmibEnum\fR () const"
+.br
+.ti -1c
+.BI "virtual QTextDecoder* \fBmakeDecoder\fR () const"
+.br
+.ti -1c
 .BI "virtual QTextEncoder* \fBmakeEncoder\fR () const"
 .br
 .ti -1c
 .BI "virtual QString \fBtoUnicode\fR ( const char * " "chars" ", int len ) const"
+.br
+.ti -1c
+.BI "virtual QCString \fBfromUnicode\fR ( const QString & " "uc" ", int & lenInOut ) const"
 .br
 .ti -1c
 .BI "QCString \fBfromUnicode\fR ( const QString & uc ) const"
@@ -42,6 +54,12 @@ Inherited by QEucJpCodec, QEucKrCodec, QGbkCodec, QJisCodec, QSjisCodec and QTsc
 .br
 .ti -1c
 .BI "virtual bool \fBcanEncode\fR ( const QString & ) const"
+.br
+.ti -1c
+.BI "virtual int \fBheuristicContentMatch\fR ( const char * " "chars" ", int len ) const"
+.br
+.ti -1c
+.BI "virtual int \fBheuristicNameMatch\fR ( const char * hint ) const"
 .br
 .in -1c
 .SS "Static Public Members"
@@ -166,8 +184,32 @@ Deletes all the created codecs.
 QApplication calls this just before exiting, to delete any QTextCodec objects that may be lying around. Since various other classes hold pointers to QTextCodec objects, it is not safe to call this function earlier.
 .PP
 If you are using the utility classes (like QString) but not using QApplication, calling this function at the very end of your application can be helpful to chasing down memory leaks, as QTextCodec objects will not show up.
+.SH "QCString QTextCodec::fromUnicode ( const QString & uc, int & lenInOut ) const \fC[virtual]\fR"
+Subclasses of QTextCodec must reimplement either this function or makeEncoder(). It converts the first \fIlenInOut\fR characters of \fIuc\fR from Unicode to the encoding of the subclass. If \fIlenInOut\fR is negative or too large, the length of \fIuc\fR is used instead.
+.PP
+The value returned is the property of the caller, which is responsible for deleting it with "delete []". The length of the resulting Unicode character sequence is returned in \fIlenInOut.\fR
+.PP
+The default implementation makes an encoder with makeEncoder() and converts the input with that. Note that the default makeEncoder() implementation makes an encoder that simply calls this function, hence subclasses \fImust\fR reimplement one function or the other to avoid infinite recursion.
+.PP
+Reimplemented in QEucJpCodec, QGbkCodec, QEucKrCodec, QSjisCodec, QJisCodec and QTsciiCodec.
 .SH "QCString QTextCodec::fromUnicode ( const QString & uc ) const"
 This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts.
+.SH "int QTextCodec::heuristicContentMatch ( const char * chars, int len ) const \fC[virtual]\fR"
+Subclasses of QTextCodec must reimplement this function. It examines the first \fIlen\fR bytes of \fIchars\fR and returns a value indicating how likely it is that the string is a prefix of text encoded in the encoding of the subclass. Any negative return value indicates that the text is detectably not in the encoding (eg. it contains undefined characters). A return value of 0 indicates that the text should be decoded with this codec rather than as ASCII, but there is no particular evidence. The value should range up to \fIlen.\fR Thus, most decoders will return -1, 0, or -\fIlen.\fR
+.PP
+The characters are not null terminated.
+.PP
+See also codecForContent().
+.PP
+Reimplemented in QEucJpCodec, QJisCodec, QGbkCodec, QEucKrCodec, QSjisCodec and QTsciiCodec.
+.SH "int QTextCodec::heuristicNameMatch ( const char * hint ) const \fC[virtual]\fR"
+Returns a value indicating how likely this decoder is for decoding some format that has the given name.
+.PP
+A good match returns a positive number around the length of the string. A bad match is negative.
+.PP
+The default implementation calls simpleHeuristicNameMatch() with the name of the codec.
+.PP
+Reimplemented in QGbkCodec, QJisCodec, QEucKrCodec, QSjisCodec, QEucJpCodec and QTsciiCodec.
 .SH "QTextCodec* QTextCodec::loadCharmap ( QIODevice * iod ) \fC[static]\fR"
 Reads a POSIX2 charmap definition from \fIiod.\fR The parser recognizes the following lines:
 .PP
@@ -201,10 +243,26 @@ See also loadCharmapFile().
 A convenience function for loadCharmap().
 .SH "const char* QTextCodec::locale () \fC[static]\fR"
 Returns a string representing the current language.
+.SH "QTextDecoder* QTextCodec::makeDecoder () const \fC[virtual]\fR"
+Creates a QTextDecoder which stores enough state to decode chunks of char* data to create chunks of Unicode data. The default implementation creates a stateless decoder, which is sufficient for only the simplest encodings where each byte corresponds to exactly one Unicode character.
+.PP
+The caller is responsible for deleting the returned object.
+.PP
+Reimplemented in QEucKrCodec, QEucJpCodec, QJisCodec, QSjisCodec and QGbkCodec.
 .SH "QTextEncoder* QTextCodec::makeEncoder () const \fC[virtual]\fR"
 Creates a QTextEncoder which stores enough state to encode chunks of Unicode data as char* data. The default implementation creates a stateless encoder, which is sufficient for only the simplest encodings where each Unicode character corresponds to exactly one char.
 .PP
 The caller is responsible for deleting the returned object.
+.SH "int QTextCodec::mibEnum () const \fC[virtual]\fR"
+Subclasses of QTextCodec must reimplement this function. It returns the MIBenum (see the IANA character-sets encoding file for more information). It is important that each QTextCodec subclass return the correct unique value for this function.
+.SH "const char* QTextCodec::name () const \fC[virtual]\fR"
+Subclasses of QTextCodec must reimplement this function. It returns the name of the encoding supported by the subclass. When choosing a name for an encoding, consider these points:
+.TP
+On X11, heuristicNameMatch( const char * hint ) is used to test if a the QTextCodec can convert between Unicode and the encoding of a font with encoding \fIhint,\fR such as "iso8859-1" for Latin-1 fonts, "koi8-r" for Russian KOI8 fonts. The default algorithm of heuristicNameMatch() uses name().
+.TP
+Some applications may use this function to present encodings to the end user.
+.PP
+Reimplemented in QJisCodec, QEucJpCodec, QEucKrCodec, QGbkCodec, QTsciiCodec and QSjisCodec.
 .SH "int QTextCodec::simpleHeuristicNameMatch ( const char * name, const char * hint ) \fC[static protected]\fR"
 A simple utility function for heuristicNameMatch() - it does some very minor character-skipping so that almost-exact matches score high.
 .SH "QString QTextCodec::toUnicode ( const char * chars, int len ) const \fC[virtual]\fR"

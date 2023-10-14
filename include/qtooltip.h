@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qtooltip.h   2.2.1   edited 2000-08-25 $
+** $Id: qt/src/widgets/qtooltip.h   2.2.2   edited 2000-10-11 $
 **
 ** Definition of Tool Tips (or Balloon Help) for any widget or rectangle
 **
@@ -41,7 +41,7 @@
 #include "qtimer.h"
 #endif // QT_H
 
-#ifndef QT_NO_COMPLEXWIDGETS
+#ifndef QT_NO_TOOLTIP
 
 
 class QTipManager;
@@ -133,6 +133,6 @@ private:
 };
 
 
-#endif // QT_NO_COMPLEXWIDGETS
+#endif // QT_NO_TOOLTIP
 
 #endif // QTOOLTIP_H

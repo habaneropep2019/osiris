@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/iconview/qiconview.cpp   2.2.1   edited 2000-09-27 $
+** $Id: qt/src/iconview/qiconview.cpp   2.2.2   edited 2000-10-15 $
 **
 ** Implementation of QIconView widget class
 **
@@ -61,6 +61,7 @@
 #include "qbitmap.h"
 #include "qpixmapcache.h"
 #include "qptrdict.h"
+#include "qstringlist.h"
 
 #include <stdlib.h>
 #include <math.h>
@@ -170,6 +171,8 @@ static QPixmap *get_qiv_buffer_pixmap( const QSize &s )
  *
  *****************************************************************************/
 
+#ifndef QT_NO_DRAGANDDROP
+
 class QIconDragData
 {
 public:
@@ -204,6 +207,8 @@ struct QIconDragPrivate
     static bool decode( QMimeSource* e, QValueList<QIconDragDataItem> &lst );
 };
 
+#endif
+
 class QIconViewToolTip;
 
 class QIconViewPrivate
@@ -224,7 +229,9 @@ public:
     QIconView::Arrangement arrangement;
     QIconView::ResizeMode resizeMode;
     QSize oldSize;
+#ifndef QT_NO_DRAGANDDROP
     QValueList<QIconDragDataItem> iconDragData;
+#endif
     bool isIconDrag;
     int numDragItems, cachedW, cachedH;
     int maxItemWidth, maxItemTextLength;
@@ -405,6 +412,8 @@ void QIconViewItemLineEdit::focusOutEvent( QFocusEvent * )
 {
     item->cancelRenameItem();
 }
+
+#ifndef QT_NO_DRAGANDDROP
 
 /*****************************************************************************
  *
@@ -690,6 +699,8 @@ void QIconDragData::setTextRect( const QRect &r )
 {
     textRect_ = r;
 }
+
+#endif
 
 /*****************************************************************************
  *
@@ -2266,7 +2277,9 @@ QIconView::QIconView( QWidget *parent, const char *name, WFlags f )
     d->dropped = FALSE;
     d->adjustTimer = new QTimer( this );
     d->isIconDrag = FALSE;
+#ifndef QT_NO_DRAGANDDROP
     d->iconDragData.clear();
+#endif
     d->numDragItems = 0;
     d->updateTimer = new QTimer( this );
     d->cachedW = d->cachedH = 0;
@@ -2338,7 +2351,7 @@ void QIconView::styleChange( QStyle& old )
 	item->wordWrapDirty = TRUE;
 	item->calcRect();
     }
-    
+
     delete qiv_selection;
     qiv_selection = 0;
 }
@@ -2628,13 +2641,13 @@ int QIconView::index( const QIconViewItem *item ) const
 	return d->count - 1;
     else {
 	QIconViewItem *i = d->firstItem;
-	uint j = 0;
-	while ( i != item ) {
+	int j = 0;
+	while ( i && i != item ) {
 	    i = i->next;
 	    ++j;
 	}
 
-	return j;
+	return i ? j : -1;
     }
 }
 
@@ -3811,38 +3824,41 @@ void QIconView::contentsMousePressEvent( QMouseEvent *e )
 			       0, 0 );
 		else
 		    r = QRect( 0, 0, 0, 0 );
-		if ( d->currentItem->x() < item->x() )
-		    r.setWidth( item->x() - d->currentItem->x() + item->width() );
-		else
-		    r.setWidth( d->currentItem->x() - item->x() + d->currentItem->width() );
-		if ( d->currentItem->y() < item->y() )
-		    r.setHeight( item->y() - d->currentItem->y() + item->height() );
-		else
-		    r.setHeight( d->currentItem->y() - item->y() + d->currentItem->height() );
-		r = r.normalize();
-		QIconViewPrivate::ItemContainer *c = d->firstContainer;
-		bool alreadyIntersected = FALSE;
-		QRect redraw;
-		for ( ; c; c = c->n ) {
- 		    if ( c->rect.intersects( r ) ) {
-			alreadyIntersected = TRUE;
-			QIconViewItem *i = c->items.first();
-			for ( ; i; i = c->items.next() ) {
- 			    if ( r.intersects( i->rect() ) ) {
-				redraw = redraw.unite( i->rect() );
- 				i->setSelected( select, TRUE );
+		if ( d->currentItem ) {
+		    if ( d->currentItem->x() < item->x() )
+			r.setWidth( item->x() - d->currentItem->x() + item->width() );
+		    else
+			r.setWidth( d->currentItem->x() - item->x() + d->currentItem->width() );
+		    if ( d->currentItem->y() < item->y() )
+			r.setHeight( item->y() - d->currentItem->y() + item->height() );
+		    else
+			r.setHeight( d->currentItem->y() - item->y() + d->currentItem->height() );
+		    r = r.normalize();
+		    QIconViewPrivate::ItemContainer *c = d->firstContainer;
+		    bool alreadyIntersected = FALSE;
+		    QRect redraw;
+		    for ( ; c; c = c->n ) {
+			if ( c->rect.intersects( r ) ) {
+			    alreadyIntersected = TRUE;
+			    QIconViewItem *i = c->items.first();
+			    for ( ; i; i = c->items.next() ) {
+				if ( r.intersects( i->rect() ) ) {
+				    redraw = redraw.unite( i->rect() );
+				    i->setSelected( select, TRUE );
+				}
 			    }
+			} else {
+			    if ( alreadyIntersected )
+				break;
 			}
- 		    } else {
-  			if ( alreadyIntersected )
-  			    break;
- 		    }
+		    }
+		    redraw = redraw.unite( item->rect() );
+		    viewport()->setUpdatesEnabled( TRUE );
+		    repaintContents( redraw, FALSE );
 		}
-		item->setSelected( select, TRUE );
-		redraw = redraw.unite( item->rect() );
 		blockSignals( block );
 		viewport()->setUpdatesEnabled( TRUE );
-		repaintContents( redraw, FALSE );
+		item->setSelected( select, TRUE );
 		emit selectionChanged();
 	    } else if ( e->state() & ControlButton ) {
 		d->pressedSelected = FALSE;
@@ -4691,6 +4707,7 @@ void QIconView::emitRenamed( QIconViewItem *item )
 
 void QIconView::drawDragShapes( const QPoint &pos )
 {
+#ifndef QT_NO_DRAGANDDROP
     if ( pos == QPoint( -1, -1 ) )
 	return;
 
@@ -4732,6 +4749,7 @@ void QIconView::drawDragShapes( const QPoint &pos )
 
 	p.end();
     }
+#endif
 }
 
 /*!

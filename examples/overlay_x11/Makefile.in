@@ -90,7 +90,7 @@ listaddonentmodules:
 	@echo 
 
 
-REQUIRES=opengl
+REQUIRES=opengl full-config
 
 ####### Sub-libraries
 

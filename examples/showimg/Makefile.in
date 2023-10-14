@@ -97,7 +97,7 @@ listaddonentmodules:
 	@echo 
 
 
-REQUIRES=
+REQUIRES=full-config
 
 ####### Sub-libraries
 
@@ -115,6 +115,11 @@ main.o: main.cpp \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
+		../../include/qconfig-qpe.h \
+		../../include/qconfig-minimal.h \
+		../../include/qconfig-small.h \
+		../../include/qconfig-medium.h \
+		../../include/qconfig-large.h \
 		../../include/qconfig.h \
 		../../include/qstring.h \
 		../../include/qcstring.h \
@@ -190,6 +195,11 @@ imagetexteditor.o: imagetexteditor.cpp \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
+		../../include/qconfig-qpe.h \
+		../../include/qconfig-minimal.h \
+		../../include/qconfig-small.h \
+		../../include/qconfig-medium.h \
+		../../include/qconfig-large.h \
 		../../include/qconfig.h \
 		../../include/qstring.h \
 		../../include/qcstring.h \
@@ -257,6 +267,11 @@ showimg.o: showimg.cpp \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
+		../../include/qconfig-qpe.h \
+		../../include/qconfig-minimal.h \
+		../../include/qconfig-small.h \
+		../../include/qconfig-medium.h \
+		../../include/qconfig-large.h \
 		../../include/qconfig.h \
 		../../include/qstring.h \
 		../../include/qcstring.h \
@@ -345,6 +360,11 @@ imagefip.o: imagefip.cpp \
 		../../include/qshared.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
+		../../include/qconfig-qpe.h \
+		../../include/qconfig-minimal.h \
+		../../include/qconfig-small.h \
+		../../include/qconfig-medium.h \
+		../../include/qconfig-large.h \
 		../../include/qconfig.h \
 		../../include/qlist.h \
 		../../include/qglist.h \
@@ -409,6 +429,11 @@ moc_showimg.o: moc_showimg.cpp \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
+		../../include/qconfig-qpe.h \
+		../../include/qconfig-minimal.h \
+		../../include/qconfig-small.h \
+		../../include/qconfig-medium.h \
+		../../include/qconfig-large.h \
 		../../include/qconfig.h \
 		../../include/qstring.h \
 		../../include/qcstring.h \
@@ -453,6 +478,11 @@ moc_imagetexteditor.o: moc_imagetexteditor.cpp \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
+		../../include/qconfig-qpe.h \
+		../../include/qconfig-minimal.h \
+		../../include/qconfig-small.h \
+		../../include/qconfig-medium.h \
+		../../include/qconfig-large.h \
 		../../include/qconfig.h \
 		../../include/qstring.h \
 		../../include/qcstring.h \
@@ -498,6 +528,11 @@ moc_imagefip.o: moc_imagefip.cpp \
 		../../include/qshared.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
+		../../include/qconfig-qpe.h \
+		../../include/qconfig-minimal.h \
+		../../include/qconfig-small.h \
+		../../include/qconfig-medium.h \
+		../../include/qconfig-large.h \
 		../../include/qconfig.h \
 		../../include/qlist.h \
 		../../include/qglist.h \

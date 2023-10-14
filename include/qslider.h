@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qslider.h   2.2.1   edited 2000-08-25 $
+** $Id: qt/src/widgets/qslider.h   2.2.2   edited 2000-10-11 $
 **
 ** Definition of QSlider class
 **
@@ -43,7 +43,7 @@
 #include "qrangecontrol.h"
 #endif // QT_H
 
-#ifndef QT_NO_COMPLEXWIDGETS
+#ifndef QT_NO_SLIDER
 
 
 class QTimer;
@@ -183,6 +183,6 @@ inline QSlider::Orientation QSlider::orientation() const
 }
 
 
-#endif // QT_NO_COMPLEXWIDGETS
+#endif // QT_NO_SLIDER
 
 #endif // QSLIDER_H

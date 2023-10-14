@@ -1,5 +1,5 @@
 /**********************************************************************
-** $Id: qt/src/widgets/qlineedit.cpp   2.2.1   edited 2000-09-25 $
+** $Id: qt/src/widgets/qlineedit.cpp   2.2.2   edited 2000-10-27 $
 **
 ** Implementation of QLineEdit widget class
 **
@@ -36,7 +36,7 @@
 **********************************************************************/
 
 #include "qlineedit.h"
-#ifndef QT_NO_COMPLEXWIDGETS
+#ifndef QT_NO_LINEEDIT
 #include "qpainter.h"
 #include "qdrawutil.h"
 #include "qfontmetrics.h"
@@ -48,7 +48,7 @@
 #include "qtimer.h"
 #include "qpopupmenu.h"
 #include "qstringlist.h"
-
+#include "qguardedptr.h"
 #include <ctype.h>
 
 
@@ -281,8 +281,10 @@ void QLineEdit::setText( const QString &text )
     markAnchor = 0;
     markDrag = 0;
     end( FALSE );
+#ifndef QT_NO_VALIDATOR
     if ( validator() )
 	(void)validator()->validate( tbuf, cursorPos );
+#endif
     d->pmDirty = TRUE;
 
     update();
@@ -465,11 +467,16 @@ void QLineEdit::setMaxLength( int m )
 void QLineEdit::keyPressEvent( QKeyEvent *e )
 {
     if ( e->key() == Key_Enter || e->key() == Key_Return ) {
+#ifdef QT_NO_VALIDATOR
+	emit returnPressed();
+	e->ignore();
+#else
 	const QValidator * v = validator();
 	if ( !v || v->validate( tbuf, cursorPos ) == QValidator::Acceptable ) {
 	    emit returnPressed();
 	    e->ignore();
-	} else if ( v ) {
+	}
+	else if ( v ) {
 	    QString old( tbuf );
 	    v->fixup( tbuf );
 	    if ( old != tbuf ) {
@@ -482,6 +489,7 @@ void QLineEdit::keyPressEvent( QKeyEvent *e )
 		emit returnPressed();
 	    e->ignore();
 	}
+#endif
 	return;
     }
     if ( !d->readonly ) {
@@ -704,7 +712,7 @@ void QLineEdit::paintEvent( QPaintEvent *e )
 	int markEnd = maxMark();
 
 	p.fillRect( 0, 0, width(), height(), bg );
-	
+
 	QString display = displayText();
 	QString before = display.mid( 0, markBegin );
 	QString marked = display.mid( markBegin, markEnd - markBegin );
@@ -841,8 +849,9 @@ void QLineEdit::mousePressEvent( QMouseEvent *e )
 {
     d->dnd_startpos = e->pos();
     d->dnd_primed = FALSE;
+#ifndef QT_NO_POPUPMENU
     if ( e->button() == RightButton ) {
-	QPopupMenu *popup = new QPopupMenu( this );
+	QGuardedPtr<QPopupMenu> popup = new QPopupMenu( this );
 	int id[ 7 ];
 	id[ IdUndo ] = popup->insertItem( tr( "Undo" ) );
 	id[ IdRedo ] = popup->insertItem( tr( "Redo" ) );
@@ -872,9 +881,9 @@ void QLineEdit::mousePressEvent( QMouseEvent *e )
 	int allSelected = minMark() == 0 && maxMark() == (int)text().length();
 	popup->setItemEnabled( id[ IdSelectAll ],
 				  (bool)text().length() && !allSelected );
-	
+
 	int r = popup->exec( e->globalPos() );
-	delete popup;
+	delete (QPopupMenu *) popup;
 
 	if ( r == id[ IdUndo ] )
 	    undoInternal();
@@ -894,7 +903,7 @@ void QLineEdit::mousePressEvent( QMouseEvent *e )
 	    selectAll();
 	return;
     }
-
+#endif //QT_NO_POPUPMENU
     d->inDoubleClick = FALSE;
     int newCP = xPosToCursorPos( e->pos().x() );
     int m1 = minMark();
@@ -955,7 +964,7 @@ void QLineEdit::mouseMoveEvent( QMouseEvent *e )
 	return;
     }
 #endif
-	
+
     if ( !(e->state() & LeftButton) )
 	return;
 
@@ -1519,11 +1528,17 @@ void QLineEdit::dropEvent( QDropEvent *e )
 {
     QString str;
     QCString plain = "plain";
-    if ( !d->readonly && QTextDrag::decode( e, str, plain ) ) {
+    
+    // try text/plain
+    bool decoded = QTextDrag::decode(e, str, plain);
+    // otherwise we'll accept any kind of text (like text/uri-list)
+    if (! decoded) decoded = QTextDrag::decode(e, str);
+    
+    if ( !d->readonly && decoded) {
 	if ( e->source() == this && hasMarkedText() )
 	    deselect();
 	if ( !hasMarkedText() )
-	    setCursorPosition( e->pos().x() );
+	    setCursorPosition( xPosToCursorPos(e->pos().x()) );
 	insert( str );
 	e->accept();
     } else {
@@ -1584,14 +1599,14 @@ bool QLineEdit::validateAndSet( const QString &newText, int newPos,
 	    t[(int)i] = ' ';
     }
     t.truncate( maxLength() );
-
+#ifndef QT_NO_VALIDATOR
     const QValidator * v = validator();
 
     if ( v && v->validate( t, newPos ) == QValidator::Invalid &&
 	 v->validate( tbuf, cursorPos ) != QValidator::Invalid ) {
 	return FALSE;
     }
-
+#endif
     bool tc = ( t != tbuf );
 
     // okay, it succeeded
@@ -1619,7 +1634,7 @@ bool QLineEdit::validateAndSet( const QString &newText, int newPos,
 
 	if ( cursorPos < (int)text().length() && maxP < (int)text().length() )
 	    maxP = text().length();
-	
+
 	repaintArea( minP, maxP );
     }
     if ( tc ) {
@@ -1807,8 +1822,8 @@ void QLineEdit::setEdited( bool on )
 
 /*!  Returns the edited flag of the line edit.  If this returns FALSE,
 the line edit's contents have not been changed since the construction
-of the QLineEdit (or the last call to either setText() or setEdited( FALSE ), 
-if any).  If it returns true, the contents have been edited, or 
+of the QLineEdit (or the last call to either setText() or setEdited( FALSE ),
+if any).  If it returns true, the contents have been edited, or
 setEdited( TRUE ) has been called.
 
 \sa setEdited()

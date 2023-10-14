@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qmovie.cpp   2.2.1   edited 2000-09-27 $
+** $Id: qt/src/kernel/qmovie.cpp   2.2.2   edited 2000-10-06 $
 **
 ** Implementation of movie classes
 **
@@ -88,10 +88,10 @@
   The supported formats are MNG (if Qt is built with MNG support enabled)
   and GIF (if Qt is built with GIF support enabled).  For MNG support, you
   need to have installed libmng from
-  \link http://www.libmng.com http://www.libmng.com\endlink.
+  <a href="http://www.libmng.com/">http://www.libmng.com</a>.
 
-  Archives of animated GIFs and tools for building them can be found
-  at <a href="http://dir.yahoo.com/Arts/Visual_Arts/Animation/Computer_Animation/Animated_GIFs/">Yahoo</a>.
+  Archives of animated GIFs and tools for building them can be found at
+  <a href="http://dir.yahoo.com/Arts/Visual_Arts/Animation/Computer_Animation/Animated_GIFs/">Yahoo</a>.
 
   We are required to state: The Graphics Interchange Format(c) is the
   Copyright property of CompuServe Incorporated. GIF(sm) is a Service

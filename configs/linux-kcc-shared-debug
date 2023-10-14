@@ -2,6 +2,7 @@
 INTERFACE_DECL_PATH 	= .
 SYSCONF_CXX		= KCC
 SYSCONF_CC		= KCC
+DASHCROSS		= 
 
 # Compiling with support libraries
 SYSCONF_CXXFLAGS_X11	= -I/usr/X11R6/include
@@ -9,12 +10,12 @@ SYSCONF_CXXFLAGS_QT	= -I$(QTDIR)/include
 SYSCONF_CXXFLAGS_OPENGL	= -I/usr/X11R6/include
 
 # Compiling YACC output
-SYSCONF_CXXFLAGS_YACC     = --backend -Wno-unused --backend -Wno-parentheses
+SYSCONF_CXXFLAGS_YACC     = --diag_supress 111,177
 
 # Linking with support libraries
-SYSCONF_RPATH_X11	= 
-SYSCONF_RPATH_QT	= 
-SYSCONF_RPATH_OPENGL	= 
+SYSCONF_RPATH_X11	= -rpath/usr/X11R6/lib
+SYSCONF_RPATH_QT	= -rpath$(QTDIR)/lib
+SYSCONF_RPATH_OPENGL	= -rpath/usr/X11R6/lib
 
 # Linking with support libraries
 # X11
@@ -39,10 +40,10 @@ SYSCONF_LIBS		=
 SYSCONF_LFLAGS_SHOBJ	= --soname $(TARGET1)
 
 # Flags for threading
-SYSCONF_CFLAGS_THREAD	= 
-SYSCONF_CXXFLAGS_THREAD	= 
-SYSCONF_LFLAGS_THREAD	= 
-# SYSCONF_LIBS_THREAD	= ???
+SYSCONF_CFLAGS_THREAD	= --thread_safe
+SYSCONF_CXXFLAGS_THREAD	= --thread_safe
+SYSCONF_LFLAGS_THREAD	= --thread_safe
+SYSCONF_LIBS_THREAD	= 
 
 # Meta-object compiler
 SYSCONF_MOC		= $(QTDIR)/bin/moc
@@ -51,7 +52,7 @@ SYSCONF_MOC		= $(QTDIR)/bin/moc
 SYSCONF_UIC		= $(QTDIR)/bin/uic
 
 # Linking shared libraries
-#   - Build the $(TARGET) library, eg. lib$(TARGET).so.2.0.1
+#   - Build the $(TARGET) library, eg. lib$(TARGET).so.2.2.2
 #   - Place target in $(DESTDIR) - which has a trailing /
 #   - Usually needs to incorporate $(VER_MAJ), $(VER_MIN) and $(VER_PATCH)
 #
@@ -88,6 +89,6 @@ SYSCONF_CFLAGS_LIB	= -fPIC
 SYSCONF_CXXFLAGS_SHOBJ	= -fPIC
 SYSCONF_CFLAGS_SHOBJ	= -fPIC
 # Linking Qt
-SYSCONF_LIBS_QTLIB	= $(SYSCONF_CXXFLAGS_X11) $(QT_LIBS_MT) $(QT_LIBS_OPT)
+SYSCONF_LIBS_QTLIB	= $(SYSCONF_LFLAGS_X11) $(QT_LIBS_MT) $(QT_LIBS_OPT)
 # Linking Qt applications
 SYSCONF_LIBS_QTAPP	= 

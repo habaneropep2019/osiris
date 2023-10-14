@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qcheckbox.h   2.2.1   edited 2000-08-25 $
+** $Id: qt/src/widgets/qcheckbox.h   2.2.2   edited 2000-10-11 $
 **
 ** Definition of QCheckBox class
 **
@@ -42,7 +42,7 @@
 #include "qbutton.h"
 #endif // QT_H
 
-#ifndef QT_NO_COMPLEXWIDGETS
+#ifndef QT_NO_CHECKBOX
 
 class Q_EXPORT QCheckBox : public QButton
 {
@@ -86,6 +86,6 @@ inline void QCheckBox::setChecked( bool check )
 { setOn( check ); }
 
 
-#endif // QT_NO_COMPLEXWIDGETS
+#endif // QT_NO_CHECKBOX
 
 #endif // QCHECKBOX_H

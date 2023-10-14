@@ -1,4 +1,4 @@
-.TH QComboBox 3qt "4 October 2000" "Trolltech AS" \" -*- nroff -*-
+.TH QComboBox 3qt "8 November 2000" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -489,7 +489,7 @@ The default insertion policy is \fCAtBottom.\fR
 .PP
 See also insertionPolicy().
 .SH "void QComboBox::setListBox ( QListBox * newListBox ) \fC[virtual]\fR"
-Sets the combo box to use \fInewListBox\fR instead of the current list box or popup. As a site effect, clears the combo box of its current contents.
+Sets the combo box to use \fInewListBox\fR instead of the current list box or popup. As a side effect, clears the combo box of its current contents.
 .PP
 \fBWarning:\fR QComboBox assumes that newListBox->text(n) returns non-null for 0 <= n < newListbox->count(). This assumption is necessary because of the line edit in QComboBox.
 .SH "void QComboBox::setMaxCount ( int count ) \fC[virtual]\fR"

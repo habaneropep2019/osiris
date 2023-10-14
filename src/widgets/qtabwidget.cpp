@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qtabwidget.cpp   2.2.1   edited 2000-08-25 $
+** $Id: qt/src/widgets/qtabwidget.cpp   2.2.2   edited 2000-10-11 $
 **
 ** Implementation of QTabWidget class
 **
@@ -36,7 +36,7 @@
 **********************************************************************/
 
 #include "qtabwidget.h"
-#ifndef QT_NO_COMPLEXWIDGETS
+#ifndef QT_NO_TABWIDGET
 #include "qobjectlist.h"
 #include "qobjectdict.h"
 #include "qtabbar.h"

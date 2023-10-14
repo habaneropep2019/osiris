@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qpopupmenu.h   2.2.1   edited 2000-08-25 $
+** $Id: qt/src/widgets/qpopupmenu.h   2.2.2   edited 2000-11-02 $
 **
 ** Definition of QPopupMenu class
 **
@@ -43,7 +43,7 @@
 #include "qmenudata.h"
 #endif // QT_H
 
-#ifndef QT_NO_COMPLEXWIDGETS
+#ifndef QT_NO_POPUPMENU
 
 
 class Q_EXPORT QPopupMenu : public QFrame, public QMenuData
@@ -113,8 +113,10 @@ protected:
 private slots:
     void	subActivated( int itemId );
     void	subHighlighted( int itemId );
+#ifndef QT_NO_ACCEL
     void	accelActivated( int itemId );
     void	accelDestroyed();
+#endif
     void	modalActivation( int );
 
     void	subMenuTimer();
@@ -140,11 +142,14 @@ private:
     QRect		itemGeometry( int index ); // ## protected in 3.0
     void	updateSize();
     void	updateRow( int row );
+#ifndef QT_NO_ACCEL
     void	updateAccel( QWidget * );
     void	enableAccel( bool );
-
+#endif
     QMenuItem  *selfItem;
+#ifndef QT_NO_ACCEL
     QAccel     *autoaccel;
+#endif
     int popupActive;
     int tab;
     uint accelDisabled : 1;
@@ -169,6 +174,6 @@ private:	// Disabled copy constructor and operator=
 };
 
 
-#endif // QT_NO_COMPLEXWIDGETS
+#endif // QT_NO_POPUPMENU
 
 #endif // QPOPUPMENU_H

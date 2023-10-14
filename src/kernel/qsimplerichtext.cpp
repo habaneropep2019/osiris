@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qsimplerichtext.cpp   2.2.1   edited 2000-10-03 $
+** $Id: qt/src/kernel/qsimplerichtext.cpp   2.2.2   edited 2000-10-09 $
 **
 ** Implementation of the QSimpleRichText class
 **
@@ -321,12 +321,14 @@ void QSimpleRichText::adjustSize()
     int mw =  fm.width( 'x' ) * 80;
     int w = mw;
     d->doc->doLayout( 0,w );
-    w = int_sqrt( (5*d->doc->height) / (3*d->doc->flow()->widthUsed ) );
-    d->doc->doLayout( 0, QMIN( w, mw) );
+    if ( d->doc->flow()->widthUsed != 0 ) {
+	w = int_sqrt( (5*d->doc->height) / (3*d->doc->flow()->widthUsed ) );
+	d->doc->doLayout( 0, QMIN( w, mw) );
 
-    if ( w*3 < 5*d->doc->flow()->height ) {
-	w = int_sqrt(6*d->doc->flow()->height/3*d->doc->flow()->widthUsed);
-	d->doc->doLayout( 0,QMIN(w, mw ) );
+	if ( w*3 < 5*d->doc->flow()->height ) {
+	    w = int_sqrt(6*d->doc->flow()->height/3*d->doc->flow()->widthUsed);
+	    d->doc->doLayout( 0,QMIN(w, mw ) );
+	}
     }
 }
 

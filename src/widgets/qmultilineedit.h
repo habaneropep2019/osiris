@@ -1,5 +1,5 @@
 /**********************************************************************
-** $Id: qt/src/widgets/qmultilineedit.h   2.2.1   edited 2000-08-25 $
+** $Id: qt/src/widgets/qmultilineedit.h   2.2.2   edited 2000-10-23 $
 **
 ** Definition of QMultiLineEdit widget class
 **
@@ -44,7 +44,7 @@
 #include "qlist.h"
 #endif // QT_H
 
-#ifndef QT_NO_COMPLEXWIDGETS
+#ifndef QT_NO_MULTILINEEDIT
 
 struct QMultiLineData;
 class QMultiLineEditCommand;
@@ -206,6 +206,8 @@ protected:
     void	timerEvent( QTimerEvent * );
     void	leaveEvent( QEvent * );
     void	resizeEvent( QResizeEvent * );
+
+    bool	focusNextPrevChild( bool );
 
 #ifndef QT_NO_DRAGANDDROP
     void	dragMoveEvent( QDragMoveEvent* );
@@ -380,6 +382,6 @@ inline int QMultiLineEdit::numLines() const
     return contents->count();
 }
 
-#endif // QT_NO_COMPLEXWIDGETS
+#endif // QT_NO_MULTILINEEDIT
 
 #endif // QMULTILINED_H

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/network/qftp.cpp   2.2.1   edited 2000-09-29 $
+** $Id: qt/src/network/qftp.cpp   2.2.2   edited 2000-09-29 $
 **
 ** Implementation of QFtp class.
 **

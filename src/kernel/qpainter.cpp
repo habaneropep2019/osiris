@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qpainter.cpp   2.2.1   edited 2000-09-27 $
+** $Id: qt/src/kernel/qpainter.cpp   2.2.2   edited 2000-11-07 $
 **
 ** Implementation of QPainter, QPen and QBrush classes
 **
@@ -2351,8 +2351,13 @@ void qt_format_text( const QFontMetrics& fm, int x, int y, int w, int h,
 		if ( k < len-1 ) {
 		    k++;
 		    p++;
+#ifndef QT_NO_ACCEL
 		    if ( *p != '&' && ISPRINT(*p) )
 			cc = PREFIX | ENCCHAR(*p);// use prefix char
+#else
+		    if ( ISPRINT(*p) )
+			cc = ENCCHAR(*p);// don't underline if no accel
+#endif
 		}
 	    } else {
 		cc = ENCCHAR(*p);
@@ -2417,13 +2422,16 @@ void qt_format_text( const QFontMetrics& fm, int x, int y, int w, int h,
 	    } else if ( *p == ' ' ) {			// the space character
 		cc = ' ';
 		cw += spacewidth;
-	    } else if ( *p == '\n' || *p == '\r' ) {	// newline and carriage return
+	    } else if ( *p == '\n' ) {		// newline
 		if ( singleline ) {
-		    cc = ' ';			// convert newline and carriage return to space
+		    cc = ' ';			// convert newline to space
 		    cw += spacewidth;
 		} else {
 		    cc = BEGLINE;
 		}
+	    } else if ( *p == '\r' ) {		// ignore carriage return for now (convert to space)
+		cc = ' ';
+		cw += spacewidth;
 	    } else if ( *p == '\t' ) {		// TAB character
 		if ( expandtabs ) {
 		    int ccw = 0;
@@ -2643,7 +2651,7 @@ void qt_format_text( const QFontMetrics& fm, int x, int y, int w, int h,
     }
     cp = codes;
 #endif
-    
+
     while ( *cp ) {				// finally, draw the text
 	tw = *cp++ & WIDTHBITS;			// text width
 

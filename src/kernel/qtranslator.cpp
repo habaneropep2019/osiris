@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qtranslator.cpp   2.2.1   edited 2000-08-25 $
+** $Id: qt/src/kernel/qtranslator.cpp   2.2.2   edited 2000-10-06 $
 **
 ** Localization database support.
 **
@@ -418,13 +418,13 @@ bool QTranslator::load( const QString & filename, const QString & directory,
 
     f = ::open( QFile::encodeName(realname), O_RDONLY );
     if ( f < 0 ) {
-	// debug( "can't open %s: %s", realname.ascii(), strerror( errno ) );
+	// qDebug( "can't open %s: %s", realname.ascii(), strerror( errno ) );
 	return FALSE;
     }
 
     struct stat st;
     if ( fstat( f, &st ) ) {
-	// debug( "can't stat %s: %s", realname.ascii(), strerror( errno ) );
+	// qDebug( "can't stat %s: %s", realname.ascii(), strerror( errno ) );
 	return FALSE;
     }
     char * tmp;
@@ -433,7 +433,7 @@ bool QTranslator::load( const QString & filename, const QString & directory,
 		       MAP_FILE | MAP_PRIVATE, // swap-backed map from file
 		       f, 0 ); // from offset 0 of f
     if ( !tmp || tmp == (char*)MAP_FAILED ) {
-	// debug( "can't mmap %s: %s", filename.ascii(), strerror( errno ) );
+	// qDebug( "can't mmap %s: %s", filename.ascii(), strerror( errno ) );
 	// #### could revert to file io?
 	return FALSE;
     }

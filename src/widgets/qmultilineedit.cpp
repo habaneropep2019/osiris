@@ -1,5 +1,5 @@
 /**********************************************************************
-** $Id: qt/src/widgets/qmultilineedit.cpp   2.2.1   edited 2000-09-13 $
+** $Id: qt/src/widgets/qmultilineedit.cpp   2.2.2   edited 2000-11-04 $
 **
 ** Implementation of QMultiLineEdit widget class
 **
@@ -36,7 +36,7 @@
 **********************************************************************/
 
 #include "qmultilineedit.h"
-#ifndef QT_NO_COMPLEXWIDGETS
+#ifndef QT_NO_MULTILINEEDIT
 #include "qpainter.h"
 #include "qscrollbar.h"
 #include "qclipboard.h"
@@ -4161,6 +4161,14 @@ bool QMultiLineEdit::event( QEvent * e )
 	}
     }
     return QWidget::event( e );
+}
+
+/*! \reimp
+*/
+
+bool QMultiLineEdit::focusNextPrevChild( bool )
+{
+    return FALSE;
 }
 
 #endif

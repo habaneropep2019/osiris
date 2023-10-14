@@ -1,5 +1,5 @@
 /**********************************************************************
-** $Id: qt/src/widgets/qhgroupbox.h   2.2.1   edited 2000-08-25 $
+** $Id: qt/src/widgets/qhgroupbox.h   2.2.2   edited 2000-10-11 $
 **
 ** Definition of QHGroupBox widget class
 **
@@ -42,7 +42,7 @@
 #include "qgroupbox.h"
 #endif // QT_H
 
-#ifndef QT_NO_COMPLEXWIDGETS
+#ifndef QT_NO_HGROUPBOX
 
 class Q_EXPORT QHGroupBox : public QGroupBox
 {
@@ -59,6 +59,6 @@ private:	// Disabled copy constructor and operator=
 #endif
 };
 
-#endif // QT_NO_COMPLEXWIDGETS
+#endif // QT_NO_HGROUPBOX
 
 #endif // QHGROUPBOX_H

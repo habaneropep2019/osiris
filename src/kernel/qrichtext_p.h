@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qrichtext_p.h   2.2.1   edited 2000-08-25 $
+** $Id: qt/src/kernel/qrichtext_p.h   2.2.2   edited 2000-10-19 $
 **
 ** Definition of internal rich text classes
 **
@@ -106,7 +106,8 @@ public:
     QFont font() const;
     QString anchorHref() const;
     QString anchorName() const;
-
+    bool useLinkColor() const { return linkColor; }
+    
     bool isAnchor() const;
 
     QTextCharFormat formatWithoutCustom();
@@ -124,6 +125,7 @@ private:
     void createKey();
     QTextFormatCollection* parent;
     QTextCustomItem* custom;
+    uint linkColor : 1;
 };
 
 
@@ -178,7 +180,7 @@ public:
     enum Placement { PlaceInline = 0, PlaceLeft, PlaceRight };
     virtual Placement placement() const { return PlaceInline; }
     bool placeInline() { return placement() == PlaceInline; }
-    
+
     virtual bool breakLine() const { return ownLine(); }
     enum Clear { ClearNone, ClearLeft, ClearRight, ClearBoth }; //  move to QStyleSheetItem?
     virtual Clear clearBehind() const { return ClearNone; }
@@ -270,7 +272,7 @@ public:
     QTextCustomItem* customItemAt( int index ) const;
 
     QTextFormatCollection* formats; // make private
- 
+
 private:
     void setLength( int l );
 };
@@ -312,7 +314,7 @@ public:
     bool dirty;
     bool selected;
     int id;
-    
+
     QTextCustomItem::Clear clear;
 
     QTextFlow* flow() const;

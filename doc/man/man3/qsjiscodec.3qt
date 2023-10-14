@@ -1,4 +1,4 @@
-.TH QSjisCodec 3qt "4 October 2000" "Trolltech AS" \" -*- nroff -*-
+.TH QSjisCodec 3qt "8 November 2000" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -16,24 +16,6 @@ Inherits QTextCodec.
 .PP
 .SS "Public Members"
 .in +1c
-.ti -1c
-.BI "virtual int \fBmibEnum\fR () const"
-.br
-.ti -1c
-.BI "const char* \fBname\fR () const"
-.br
-.ti -1c
-.BI "QTextDecoder* \fBmakeDecoder\fR () const"
-.br
-.ti -1c
-.BI "QCString \fBfromUnicode\fR ( const QString & " "uc" ", int & len_in_out ) const"
-.br
-.ti -1c
-.BI "int \fBheuristicContentMatch\fR ( const char * " "chars" ", int len ) const"
-.br
-.ti -1c
-.BI "int \fBheuristicNameMatch\fR ( const char * hint ) const"
-.br
 .ti -1c
 .BI "\fBQSjisCodec\fR () "
 .br
@@ -59,6 +41,28 @@ THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND ANY EXPRE
 .SH MEMBER FUNCTION DOCUMENTATION
 .SH "QSjisCodec::QSjisCodec ()"
 Creates a Shift-JIS codec. Note that this is done automatically by the QApplication, you do not need construct your own.
+.SH "QCString QSjisCodec::fromUnicode ( const QString & uc, int & len_in_out ) const \fC[virtual]\fR"
+Reimplemented for internal reasons; the API is not affected.
+.PP
+Reimplemented from QTextCodec.
+.SH "int QSjisCodec::heuristicContentMatch ( const char * chars, int len ) const \fC[virtual]\fR"
+Reimplemented for internal reasons; the API is not affected.
+.PP
+Reimplemented from QTextCodec.
+.SH "int QSjisCodec::heuristicNameMatch ( const char * hint ) const \fC[virtual]\fR"
+Reimplemented for internal reasons; the API is not affected.
+.PP
+Reimplemented from QTextCodec.
+.SH "QTextDecoder* QSjisCodec::makeDecoder () const \fC[virtual]\fR"
+Reimplemented for internal reasons; the API is not affected.
+.PP
+Reimplemented from QTextCodec.
+.SH "int QSjisCodec::mibEnum () const \fC[virtual]\fR"
+Reimplemented for internal reasons; the API is not affected.
+.SH "const char* QSjisCodec::name () const \fC[virtual]\fR"
+Reimplemented for internal reasons; the API is not affected.
+.PP
+Reimplemented from QTextCodec.
 .SH "QString QSjisCodec::toUnicode ( const char * chars, int len ) const \fC[virtual]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .PP

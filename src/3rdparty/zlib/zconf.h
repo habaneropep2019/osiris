@@ -3,7 +3,7 @@
  * For conditions of distribution and use, see copyright notice in zlib.h 
  */
 
-/* @(#) $Id: qt/src/3rdparty/zlib/zconf.h   2.2.1   edited 2000-06-05 $ */
+/* @(#) $Id: qt/src/3rdparty/zlib/zconf.h   2.2.2   edited 2000-06-05 $ */
 
 #ifndef _ZCONF_H
 #define _ZCONF_H

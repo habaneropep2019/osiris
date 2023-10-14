@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qpixmap.h   2.2.1   edited 2000-09-15 $
+** $Id: qt/src/kernel/qpixmap.h   2.2.2   edited 2000-11-07 $
 **
 ** Definition of QPixmap class
 **
@@ -152,7 +152,7 @@ public:
 #endif
 
 #if defined(_WS_QWS_)
-    virtual QGfx * graphicsContext() const;
+    virtual QGfx * graphicsContext(bool clip_children=TRUE) const;
     virtual unsigned char * scanLine(int) const;
     virtual int bytesPerLine() const;
     QRgb * clut() const;
@@ -201,6 +201,7 @@ protected:
 	int numcols;
 	int rw;
 	int rh;
+	bool hasAlpha;
 #endif
 	Optimization optim;
     } *data;

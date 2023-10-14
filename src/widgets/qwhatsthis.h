@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qwhatsthis.h   2.2.1   edited 2000-08-25 $
+** $Id: qt/src/widgets/qwhatsthis.h   2.2.2   edited 2000-10-11 $
 **
 ** Definition of QWhatsThis class
 **
@@ -40,7 +40,7 @@
 #include "qobject.h"
 #endif // QT_H
 
-#ifndef QT_NO_COMPLEXWIDGETS
+#ifndef QT_NO_WHATSTHIS
 
 #include "qcursor.h"
 
@@ -69,6 +69,6 @@ public:
 
 };
 
-#endif // QT_NO_COMPLEXWIDGETS
+#endif // QT_NO_WHATSTHIS
 
 #endif // QWHATSTHIS_H

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qlistview.cpp   2.2.1   edited 2000-10-01 $
+** $Id: qt/src/widgets/qlistview.cpp   2.2.2   edited 2000-11-07 $
 **
 ** Implementation of QListView widget class
 **
@@ -59,6 +59,26 @@ const int Unsorted = 16383;
 
 static QBitmap * verticalLine = 0;
 static QBitmap * horizontalLine = 0;
+
+static QPixmap *buffer = 0;
+
+static void cleanupLVBuffer()
+{
+    delete buffer;
+    buffer = 0;
+}
+
+static QPixmap *getCacheBuffer( const QSize &sz )
+{
+    if ( !buffer ) {
+	qAddPostRoutine( cleanupLVBuffer );
+	buffer = new QPixmap;
+    }
+
+    if ( buffer->width() < sz.width() || buffer->height() < sz.height() )
+	buffer->resize( sz );
+    return buffer;
+}
 
 static void cleanupBitmapLines()
 {
@@ -196,6 +216,7 @@ struct QListViewPrivate
     bool clearing;
     bool makeCurrentVisibleOnUpdate;
     bool pressedSelected;
+    bool useDoubleBuffer;
 
     QSize sizeHint;
 };
@@ -569,6 +590,8 @@ void QListViewItem::insertItem( QListViewItem * newChild )
     newChild->ownHeight = 0;
     newChild->configured = FALSE;
     QListView *lv = listView();
+    if ( !lv )
+	return;
     lv->d->makeCurrentVisibleOnUpdate = FALSE;
     if ( lv && lv->hasFocus() && !lv->d->focusItem ) {
 	lv->d->focusItem = lv->firstChild();
@@ -1160,14 +1183,12 @@ void QListViewItem::setText( int column, const QString &text )
     if ( column == (int)lsc )
 	lsc = Unsorted;
     QListView * lv = listView();
-    int oldW = lv ? lv->columnWidth( column ) : 0;
     widthChanged( column );
-    if ( !lv )
-	return;
-    if ( oldW != lv->columnWidth( column ) )
-	listView()->triggerUpdate();
-    else
-	repaint();
+    if ( lv ) {
+	lv->triggerUpdate();
+	lv->d->useDoubleBuffer = TRUE;
+	lv->d->makeCurrentVisibleOnUpdate = FALSE;
+    }
 }
 
 
@@ -1228,7 +1249,12 @@ void QListViewItem::setPixmap( int column, const QPixmap & pm )
 	widthChanged( column );
 	invalidateHeight();
     }
-    repaint();
+    QListView *lv = listView();
+    if ( lv ) {
+	lv->triggerUpdate();
+	lv->d->useDoubleBuffer = TRUE;
+	lv->d->makeCurrentVisibleOnUpdate = FALSE;
+    }
 }
 
 
@@ -1349,9 +1375,9 @@ void QListViewItem::paintCell( QPainter * p, const QColorGroup & cg,
 	marg -= lv->d->minRightBearing;
     if ( isSelected() &&
 	 (column==0 || listView()->allColumnsShowFocus()) ) {
-	    p->fillRect( r - marg, 0, width - r + marg, height(),
+	p->fillRect( r - marg, 0, width - r + marg, height(),
 		     cg.brush( QColorGroup::Highlight ) );
-	    p->setPen( cg.highlightedText() );
+	p->setPen( cg.highlightedText() );
     } else {
 	p->setPen( cg.text() );
     }
@@ -1741,6 +1767,9 @@ void QListViewPrivate::Root::setup()
   provide a usable keyboard interface and to make the list view look
   better with a white background.
 
+  \warning The list view assumes ownership of all list view items
+  and will delete them when it does not need them any more.
+
   <img src=qlistview-m.png> <img src=qlistview-w.png>
 
   \internal
@@ -1748,9 +1777,16 @@ void QListViewPrivate::Root::setup()
   need to say stuff about the mouse and keyboard interface.
 */
 
-/*!  Constructs a new empty list view, with \a parent as a parent and \a
-  name as object name. The \a f parameter is passed to the QWidget
-  constructor.
+/*!
+  Constructs a new empty list view, with \a parent as a parent and \a name
+  as object name.
+
+  Performance is boosted by modifying the widget flags \a f so that only
+  part of the QListViewItem children is redrawn.  This may be unsuitable
+  for custom QListViewItem classes, in which case \c WNorthWestGravity and
+  \c WRepaintNoErase should be cleared.
+
+  \sa QWidget::clearWFlags() Qt::WidgetFlags
 */
 QListView::QListView( QWidget * parent, const char *name, WFlags f )
     : QScrollView( parent, name, f | WNorthWestGravity | WRepaintNoErase )
@@ -1759,8 +1795,15 @@ QListView::QListView( QWidget * parent, const char *name, WFlags f )
 }
 
 /*!
-  Constructs a new empty list view, with \a parent as a parent and \a
-  name as object name.
+  Constructs a new empty list view, with \a parent as a parent and \a name
+  as object name.
+
+  Performance is boosted by modifying the widget flags so that only part
+  of the QListViewItem children is redrawn.  This may be unsuitable for
+  custom QListViewItem classes, in which case \c WNorthWestGravity and
+  \c WRepaintNoErase should be cleared.
+
+  \sa QWidget::clearWFlags() Qt::WidgetFlags
 */
 QListView::QListView( QWidget * parent, const char *name )
     : QScrollView( parent, name, WNorthWestGravity | WRepaintNoErase )
@@ -1805,6 +1848,7 @@ void QListView::init()
     d->makeCurrentVisibleOnUpdate = TRUE;
     d->selectAnchor = 0;
     d->select = TRUE;
+    d->useDoubleBuffer = FALSE;
 
     setMouseTracking( TRUE );
     viewport()->setMouseTracking( TRUE );
@@ -1982,7 +2026,7 @@ void QListView::drawContentsOffset( QPainter * p, int ox, int oy,
 	    x = fx;
 	    c = fc;
 	    // draw to last interesting column
-	    while( c < lc && d->drawables ) {
+	    while ( c < lc && d->drawables ) {
 		int i = d->h->mapToLogical( c );
 		cs = d->h->cellSize( c );
 		r.setRect( x - ox, current->y - oy, cs, ih );
@@ -1992,8 +2036,24 @@ void QListView::drawContentsOffset( QPainter * p, int ox, int oy,
 		p->save();
 		p->translate( r.left(), r.top() );
 		int ac = d->h->mapToLogical( c );
-		current->i->paintCell( p, colorGroup(), ac, r.width(),
-				       columnAlignment( ac ) );
+		if ( d->useDoubleBuffer ) {
+		    QSize ps( r.width(), current->i->height() );
+		    QPixmap *pm = getCacheBuffer( ps );
+		    QPainter dp( pm );
+		    dp.translate( -r.left(), -r.top() );
+		    paintEmptyArea( &dp, r );
+		    dp.translate( r.left(), r.top() );
+		    dp.setFont( p->font() );
+		    dp.setPen( p->pen() );
+		    dp.setBrush( p->brush() );
+		    current->i->paintCell( &dp, colorGroup(), ac, r.width(),
+					   columnAlignment( ac ) );
+		    dp.end();
+		    p->drawPixmap( QPoint( 0, 0 ), *pm, QRect( 0, 0, ps.width(), ps.height() ) );
+		} else {
+		    current->i->paintCell( p, colorGroup(), ac, r.width(),
+					   columnAlignment( ac ) );
+		}
 		p->restore();
 		x += cs;
 		c++;
@@ -2570,10 +2630,15 @@ void QListView::updateContents()
 {
     if ( !isVisible() )
 	return;
+    if ( d && d->drawables ) {
+	delete d->drawables;
+	d->drawables = 0;
+    }
     viewport()->setUpdatesEnabled( FALSE );
     updateGeometries();
     viewport()->setUpdatesEnabled( TRUE );
     viewport()->repaint( FALSE );
+    d->useDoubleBuffer = FALSE;
     if ( d->makeCurrentVisibleOnUpdate )
 	ensureItemVisible( d->focusItem );
     d->makeCurrentVisibleOnUpdate = TRUE;
@@ -2631,7 +2696,6 @@ void QListView::handleSizeChange( int section, int os, int ns )
     if ( columnAlignment( section ) != AlignLeft )
 	viewport()->repaint( d->h->cellPos( actual ) - contentsX(), 0,
 			     d->h->cellSize( actual ), visibleHeight() );
-
 }
 
 
@@ -2642,7 +2706,7 @@ void QListView::handleSizeChange( int section, int os, int ns )
 
 void QListView::updateDirtyItems()
 {
-    if ( d->timer->isActive() || !d->dirtyItems)
+    if ( d->timer->isActive() || !d->dirtyItems )
 	return;
     QRect ir;
     QPtrDictIterator<void> it( *(d->dirtyItems) );
@@ -2694,10 +2758,6 @@ void QListView::triggerUpdate()
     if ( !isVisible() || !isUpdatesEnabled() )
 	return; // it will update when shown, or something.
 
-    if ( d && d->drawables ) {
-	delete d->drawables;
-	d->drawables = 0;
-    }
     d->timer->start( 0, TRUE );
 }
 
@@ -4544,6 +4604,13 @@ void QCheckListItem::init()
     exclusive = 0;
 }
 
+/*!  Destroys the item, deleting all its children, freeing up all
+  allocated resources.
+*/
+QCheckListItem::~QCheckListItem()
+{
+    delete (QCheckListItemPrivate*)reserved;
+}
 
 /*! \fn QCheckListItem::Type QCheckListItem::type() const
 
@@ -5083,7 +5150,11 @@ void QListViewItem::moveItem( QListViewItem *after )
 	return;
     if ( parent() != after->parent() ) {
 	parent()->takeItem( this );
-	after->parent()->insertItem( this );
+	if ( after->parent() )
+	    after->parent()->insertItem( this );
+	else if ( listView() )
+	    listView()->d->r->insertItem( this );
+	
     }
     moveToJustAfter( after );
     QListView *lv = listView();

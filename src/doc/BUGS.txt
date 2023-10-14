@@ -18,6 +18,9 @@ copy/paste is reported not to work for custom formats (Win32)
     Posts on qt-interest suggest that drag&drop works correctly but not
     copy/paste through the clipboard.
 
+QSpinbox
+    does only do a interpreteText() on focus out. When a dialog has a spinbox
+    and the focus is in it and the dialog is closed the text is not interpreted.
 
 Small
 -----

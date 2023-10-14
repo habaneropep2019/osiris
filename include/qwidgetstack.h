@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qwidgetstack.h   2.2.1   edited 2000-08-25 $
+** $Id: qt/src/widgets/qwidgetstack.h   2.2.2   edited 2000-10-11 $
 **
 ** Definition of QWidgetStack class
 **
@@ -44,7 +44,7 @@
 #include "qptrdict.h"
 #endif // QT_H
 
-#ifndef QT_NO_COMPLEXWIDGETS
+#ifndef QT_NO_WIDGETSTACK
 
 
 class QWidgetStackPrivate;
@@ -102,6 +102,6 @@ private:	// Disabled copy constructor and operator=
 #endif
 };
 
-#endif // QT_NO_COMPLEXWIDGETS
+#endif // QT_NO_WIDGETSTACK
 
 #endif // QWIDGETSTACK_H

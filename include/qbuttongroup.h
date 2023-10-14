@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qbuttongroup.h   2.2.1   edited 2000-08-25 $
+** $Id: qt/src/widgets/qbuttongroup.h   2.2.2   edited 2000-10-11 $
 **
 ** Definition of QButtonGroup class
 **
@@ -42,7 +42,7 @@
 #include "qgroupbox.h"
 #endif // QT_H
 
-#ifndef QT_NO_COMPLEXWIDGETS
+#ifndef QT_NO_BUTTONGROUP
 
 
 class QButton;
@@ -108,6 +108,6 @@ private:	// Disabled copy constructor and operator=
 };
 
 
-#endif // QT_NO_COMPLEXWIDGETS
+#endif // QT_NO_BUTTONGROUP
 
 #endif // QBUTTONGROUP_H

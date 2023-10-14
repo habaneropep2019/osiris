@@ -2,6 +2,7 @@
 INTERFACE_DECL_PATH 	= .
 SYSCONF_CXX		= g++
 SYSCONF_CC		= gcc
+DASHCROSS		= 
 
 # Compiling with support libraries
 SYSCONF_CXXFLAGS_X11	= -I/usr/X11R6/include
@@ -39,10 +40,10 @@ SYSCONF_LIBS		=
 SYSCONF_LFLAGS_SHOBJ	= -shared
 
 # Flags for threading
-SYSCONF_CFLAGS_THREAD	= 
-SYSCONF_CXXFLAGS_THREAD	= 
+SYSCONF_CFLAGS_THREAD	= -D_REENTRANT
+SYSCONF_CXXFLAGS_THREAD	= -D_REENTRANT
 SYSCONF_LFLAGS_THREAD	= 
-# SYSCONF_LIBS_THREAD	= ???
+SYSCONF_LIBS_THREAD	=  -lpthread
 
 # Meta-object compiler
 SYSCONF_MOC		= $(QTDIR)/bin/moc
@@ -51,7 +52,7 @@ SYSCONF_MOC		= $(QTDIR)/bin/moc
 SYSCONF_UIC		= $(QTDIR)/bin/uic
 
 # Linking shared libraries
-#   - Build the $(TARGET) library, eg. lib$(TARGET).so.2.0.1
+#   - Build the $(TARGET) library, eg. lib$(TARGET).so.2.2.2
 #   - Place target in $(DESTDIR) - which has a trailing /
 #   - Usually needs to incorporate $(VER_MAJ), $(VER_MIN) and $(VER_PATCH)
 #

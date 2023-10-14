@@ -1,4 +1,4 @@
-.TH QDomElement 3qt "4 October 2000" "Trolltech AS" \" -*- nroff -*-
+.TH QDomElement 3qt "8 November 2000" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -117,7 +117,7 @@ See also attribute(), setAttribute(), attributeNode() and setAttributeNode().
 .PP
 Reimplemented from QDomNode.
 .SH "QDomNodeList QDomElement::elementsByTagName ( const QString & tagname ) const \fC[virtual]\fR"
-Returns a QDomNodeList containing all child elements of this element with the name \fItagname.\fR
+Returns a QDomNodeList containing all descendant elements of this element with the name \fItagname.\fR The order they are in the node list, is the order they are encountered in a preorder traversal of the element tree.
 .SH "bool QDomElement::hasAttribute ( const QString & name ) const"
 Returns TRUE is this element has an attribute with the name \fIname,\fR otherwise FALSE.
 .SH "bool QDomElement::isElement () const \fC[virtual]\fR"

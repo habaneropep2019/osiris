@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qgrid.h   2.2.1   edited 2000-08-25 $
+** $Id: qt/src/widgets/qgrid.h   2.2.2   edited 2000-10-11 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -38,7 +38,7 @@
 #include "qframe.h"
 #endif // QT_H
 
-#ifndef QT_NO_COMPLEXWIDGETS
+#ifndef QT_NO_GRID
 
 class QGridLayout;
 
@@ -65,6 +65,6 @@ private:	// Disabled copy constructor and operator=
 #endif
 };
 
-#endif // QT_NO_COMPLEXWIDGETS
+#endif // QT_NO_GRID
 
 #endif // QGRID_H

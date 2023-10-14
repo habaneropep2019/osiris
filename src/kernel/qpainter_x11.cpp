@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qpainter_x11.cpp   2.2.1   edited 2000-08-25 $
+** $Id: qt/src/kernel/qpainter_x11.cpp   2.2.2   edited 2000-10-22 $
 **
 ** Implementation of QPainter class for X11
 **
@@ -1771,10 +1771,10 @@ void QPainter::drawRoundRect( int x, int y, int w, int h, int xRnd, int yRnd )
 	    int rxx2 = 2*rxx;
 	    int ryy2 = 2*ryy;
 	    QPointArray a[4];
-	    a[0].makeArc( x, y, rxx2, ryy2, 1*16*90, 16*90, wxmat );
-	    a[1].makeArc( x, y+h-ryy2, rxx2, ryy2, 2*16*90, 16*90, wxmat );
-	    a[2].makeArc( x+w-rxx2, y+h-ryy2, rxx2, ryy2, 3*16*90, 16*90, wxmat );
-	    a[3].makeArc( x+w-rxx2, y, rxx2, ryy2, 0*16*90, 16*90, wxmat );
+	    a[0].makeArc( x, y, rxx2, ryy2, 1*16*90, 16*90, xmat );
+	    a[1].makeArc( x, y+h-ryy2, rxx2, ryy2, 2*16*90, 16*90, xmat );
+	    a[2].makeArc( x+w-rxx2, y+h-ryy2, rxx2, ryy2, 3*16*90, 16*90, xmat );
+	    a[3].makeArc( x+w-rxx2, y, rxx2, ryy2, 0*16*90, 16*90, xmat );
 	    // ### is there a better way to join QPointArrays?
 	    QPointArray aa;
 	    aa.resize( a[0].size() + a[1].size() + a[2].size() + a[3].size() );
@@ -2564,8 +2564,8 @@ static void fillTile(  QPixmap *tile, const QPixmap &pixmap )
   that is to be drawn (the default is (0,0).
 
   Calling drawTiledPixmap() is similar to calling drawPixmap() several
-  times to fill (tile) an area with a pixmap, but can be much more
-  efficient.
+  times to fill (tile) an area with a pixmap, but is potentially
+  much more efficient depending on the underlying window system.
 
   \sa drawPixmap()
 */

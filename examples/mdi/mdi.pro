@@ -5,4 +5,4 @@ SOURCES		= application.cpp \
 		  main.cpp 
 TARGET		= mdi
 DEPENDPATH=../../include
-REQUIRES=workspace
+REQUIRES=workspace full-config

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qlayout.cpp   2.2.1   edited 2000-08-30 $
+** $Id: qt/src/kernel/qlayout.cpp   2.2.2   edited 2000-10-06 $
 **
 ** Implementation of layout classes
 **
@@ -505,7 +505,7 @@ static void distributeMultiBox( QArray<QLayoutStruct> &chain, int spacing,
  	}
 
     } else if ( w < minSize ) {
-	//debug( "Big multicell" );
+	//qDebug( "Big multicell" );
 	qGeomCalc( chain, start, end-start+1, 0, minSize, spacing );
 	for ( i = start; i <= end; i++ ) {
 	    if ( chain[i].minimumSize < chain[i].size )

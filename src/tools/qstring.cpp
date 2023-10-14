@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qstring.cpp   2.2.1   edited 2000-10-01 $
+** $Id: qt/src/tools/qstring.cpp   2.2.2   edited 2000-10-31 $
 **
 ** Implementation of the QString class and related Unicode functions
 **
@@ -367,8 +367,6 @@ __END__
 
 // START OF GENERATED DATA
 
-#ifndef QT_NO_UNICODETABLES
-
 static const Q_UINT8 ui_00[] = {
     10, 10, 10, 10, 10, 10, 10, 10,
     10, 10, 10, 10, 10, 10, 10, 10,
@@ -403,6 +401,8 @@ static const Q_UINT8 ui_00[] = {
     16, 16, 16, 16, 16, 16, 16, 27,
     16, 16, 16, 16, 16, 16, 16, 16,
 };
+
+#ifndef QT_NO_UNICODETABLES
 
 static const Q_UINT8 ui_01[] = {
     15, 16, 15, 16, 15, 16, 15, 16,
@@ -11100,19 +11100,7 @@ QChar::Category QChar::category() const
 #else
 // ### just ASCII
     if ( rw == 0 ) {
-	if ( cl >= '0' && cl <='9' )
-	    return Number_DecimalDigit;
-	if ( cl >= 'a' && cl <='z' )
-	    return Letter_Lowercase;
-	if ( cl >= 'A' && cl <='Z' )
-	    return Letter_Uppercase;
-	if ( cl == ' ' )
-	    return Separator_Space;
-	if ( cl == '\n' )
-	    return Separator_Line;
-	if ( cl < ' ' )
-	    return Other_Control;
-	return Symbol_Other; //#######
+	return (Category)(ui_00[cell()]);
     }
     return Letter_Uppercase; //#######
 #endif
@@ -12752,7 +12740,7 @@ QString &QString::sprintf( const char* cformat, ... )
 		  case 2: ::sprintf( out, in, width, decimals, value ); break;
 		}
 	      } break;
-	      case 'e': case 'E': case 'f': case 'g': {
+	      case 'e': case 'E': case 'f': case 'g': case 'G': {
 		double value = va_arg(ap, double);
 		switch (params) {
 		  case 0: ::sprintf( out, in, value ); break;
@@ -13902,8 +13890,8 @@ ushort QString::toUShort( bool *ok, int base ) const
   \code
   QString str("FF");
   bool ok;
-  int hex = str.toInt( &ok, "16" ); // will return 255, and ok set to TRUE
-  int dec = str.toInt( &ok, "10" ); // will return 0, and ok set to FALSE
+  int hex = str.toInt( &ok, 16 ); // will return 255, and ok set to TRUE
+  int dec = str.toInt( &ok, 10 ); // will return 0, and ok set to FALSE
   \endcode
 
   If \a ok is non-null, \a *ok is set to TRUE if there are no

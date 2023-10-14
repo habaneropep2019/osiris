@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qthread_unix.cpp   2.2.1   edited 2000-10-01 $
+** $Id: qt/src/kernel/qthread_unix.cpp   2.2.2   edited 2000-10-08 $
 **
 ** QThread class for Unix
 **
@@ -290,6 +290,7 @@ static QThreadPostEventPrivate * qthreadposteventprivate = 0;
   reaches the end of MyThread::run(), just as an application does when
   it leaves main().
 
+  See also the paragraph on <a href="threads.html">Thread Support in Qt</a>.
 */
 
 

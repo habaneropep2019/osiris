@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qtextcodec.cpp   2.2.1   edited 2000-09-30 $
+** $Id: qt/src/tools/qtextcodec.cpp   2.2.2   edited 2000-11-03 $
 **
 ** Implementation of QTextCodec class
 **
@@ -450,6 +450,9 @@ static const char * const iso8859_2locales[] = {
 static const char * const iso8859_3locales[] = {
     "eo", 0 };
 
+static const char * const iso8859_4locales[] = {
+    "ee", "ee_EE", "lt", "lt_LT", "lv", "lv_LV", 0 };
+
 static const char * const iso8859_5locales[] = {
     "bg", "bg_BG", "bulgarian", "mk", "mk_MK",
     "sp", "sp_YU", 0 };
@@ -461,16 +464,19 @@ static const char * const iso8859_7locales[] = {
     "el", "el_GR", "greek", 0 };
 
 static const char * const iso8859_8locales[] = {
-    "hebrew", "iw", "iw_IL", 0 };
+    "hebrew", "he", "he_IL", "iw", "iw_IL", 0 };
 
 static const char * const iso8859_9locales[] = {
     "tr", "tr_TR", "turkish", 0 };
 
 static const char * const iso8859_15locales[] = {
-    "fr", "fi", "french", "finnish", 0 };
+    "fr", "fi", "french", "finnish", "et", "et_EE", 0 };
 
 static const char * const koi8_ulocales[] = {
-    "uk", "uk_UA", "ukrainian", 0 };
+    "uk", "uk_UA", "ru_UA", "ukrainian", 0 };
+
+static const char * const tis_620locales[] = {
+    "th", "th_TH", "thai", 0 };
 
 
 static bool try_locale_list( const char * const locale[], const char * lang )
@@ -526,6 +532,11 @@ static QTextCodec * ru_RU_hack( const char * i ) {
 
 static QTextCodec * localeMapper = 0;
 
+void qt_set_locale_codec( QTextCodec *codec )
+{
+    localeMapper = codec;
+}
+
 /*!  Returns a pointer to the codec most suitable for this locale. */
 
 QTextCodec* QTextCodec::codecForLocale()
@@ -575,10 +586,12 @@ QTextCodec* QTextCodec::codecForLocale()
             localeMapper = codecForName( "ISO 8859-2" );
         else if ( try_locale_list( iso8859_3locales, lang ) )
             localeMapper = codecForName( "ISO 8859-3" );
+        else if ( try_locale_list( iso8859_4locales, lang ) )
+            localeMapper = codecForName( "ISO 8859-4" );
         else if ( try_locale_list( iso8859_5locales, lang ) )
             localeMapper = codecForName( "ISO 8859-5" );
         else if ( try_locale_list( iso8859_6locales, lang ) )
-            localeMapper = codecForName( "ISO 8859-6" );
+            localeMapper = codecForName( "ISO 8859-6-I" );
         else if ( try_locale_list( iso8859_7locales, lang ) )
             localeMapper = codecForName( "ISO 8859-7" );
         else if ( try_locale_list( iso8859_8locales, lang ) )
@@ -587,6 +600,8 @@ QTextCodec* QTextCodec::codecForLocale()
             localeMapper = codecForName( "ISO 8859-9" );
         else if ( try_locale_list( iso8859_15locales, lang ) )
             localeMapper = codecForName( "ISO 8859-15" );
+        else if ( try_locale_list( tis_620locales, lang ) )
+            localeMapper = codecForName( "ISO 8859-11" );
         else if ( try_locale_list( koi8_ulocales, lang ) )
             localeMapper = codecForName( "KOI8-U" );
          else if ( try_locale_list( probably_koi8_rlocales, lang ) )
@@ -1769,6 +1784,8 @@ static struct {
               0x0E50, 0x0E51, 0x0E52, 0x0E53, 0x0E54, 0x0E55, 0x0E56, 0x0E57,
               0x0E58, 0x0E59, 0x0E5A, 0x0E5B, 0xFFFD, 0xFFFD, 0xFFFD, 0xFFFD} },
 
+    // change LAST_MIB if you add more, and edit unicodevalues in
+    // kernel/qpsprinter.cpp too.
 };
 
 
@@ -1794,13 +1811,21 @@ QSimpleTextCodec::~QSimpleTextCodec()
 // what happens if strlen(chars)<len?  what happens if !chars?  if len<1?
 QString QSimpleTextCodec::toUnicode(const char* chars, int len) const
 {
+    if(len <= 0)
+        return QString::null;
+
+    int clen = qstrlen(chars);
+    len = QMIN(len, clen); // Note: NUL ends string
+
     QString r;
+    r.setUnicode(0, len);
+    QChar* uc = (QChar*)r.unicode(); // const_cast
     const unsigned char * c = (const unsigned char *)chars;
-    for( int i=0; i<len && c[i]; i++ ) { // Note: NUL ends string
+    for( int i=0; i<len; i++ ) {
         if ( c[i] > 127 )
-            r[i] = unicodevalues[forwardIndex].values[c[i]-128];
+            uc[i] = unicodevalues[forwardIndex].values[c[i]-128];
         else
-            r[i] = c[i];
+            uc[i] = c[i];
     }
     return r;
 }

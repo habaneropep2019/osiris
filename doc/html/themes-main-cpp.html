@@ -1,5 +1,5 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<html><head><title>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>
 Qt Toolkit - themes/main.cpp example file
 </title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
@@ -33,7 +33,7 @@ height="100" src="face.png" alt="Home" border="0">
   <hr>
 
   Header file of the Wood-Theme: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/themes/wood.h   2.2.1   edited 2000-08-31 $
+** &#36;Id&#58; qt/examples/themes/wood.h   2.2.2   edited 2000-08-31 $
 **
 ** Definition of something or other
 **
@@ -96,7 +96,7 @@ private:
   <hr>
 
   Implementation of the Wood-Theme: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/themes/wood.cpp   2.2.1   edited 2000-08-31 $
+** &#36;Id&#58; qt/examples/themes/wood.cpp   2.2.2   edited 2000-10-06 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -844,9 +844,7 @@ NorwegianWoodStyle::NorwegianWoodStyle( int sbext ) : <a href="qwindowsstyle.htm
 
 /*!
   Reimplementation from QStyle
-
-  \sa QStyle
-  */
+ */
 void <a name="50"></a>NorwegianWoodStyle::polish( <a href="qapplication.html">QApplication</a> *app)
 {
 
@@ -953,9 +951,7 @@ void <a name="51"></a>NorwegianWoodStyle::unPolish( <a href="qapplication.html">
 
 /*!
   Reimplementation from QStyle
-
-  \sa QStyle
-  */
+ */
 void <a name="50"></a>NorwegianWoodStyle::polish( <a href="qwidget.html">QWidget</a>* w)
 {
 
@@ -1190,9 +1186,7 @@ void <a name="54"></a>NorwegianWoodStyle::drawScrollBarControls( <a href="qpaint
 
 /*!
   Reimplementation from QStyle
-
-  \sa QStyle
-  */
+ */
 void <a name="55"></a>NorwegianWoodStyle::drawButton( <a href="qpainter.html">QPainter</a> *p, int x, int y, int w, int h,
                              const QColorGroup &amp;g, bool sunken, const QBrush* fill)
 {
@@ -1257,9 +1251,7 @@ void <a name="56"></a>NorwegianWoodStyle::drawBevelButton( <a href="qpainter.htm
 
 /*!
   Reimplementation from QStyle
-
-  \sa QStyle
-  */
+ */
 void <a name="57"></a>NorwegianWoodStyle::drawPushButton( <a href="qpushbutton.html">QPushButton</a>* btn, QPainter *p)
 {
     <a href="qcolorgroup.html">QColorGroup</a> g = btn-&gt;<a href="qwidget.html#5bc085">colorGroup</a>();
@@ -1309,9 +1301,7 @@ void <a name="57"></a>NorwegianWoodStyle::drawPushButton( <a href="qpushbutton.h
 
 /*!
   Reimplementation from QStyle
-
-  \sa QStyle
-  */
+ */
 void <a name="58"></a>NorwegianWoodStyle::drawPushButtonLabel( <a href="qpushbutton.html">QPushButton</a>* btn, QPainter *p)
 {
     <a href="qrect.html">QRect</a> r = btn-&gt;<a href="qwidget.html#e872e1">rect</a>();
@@ -1341,9 +1331,7 @@ void <a name="58"></a>NorwegianWoodStyle::drawPushButtonLabel( <a href="qpushbut
 
 /*!
   Reimplementation from QStyle
-
-  \sa QStyle
-  */
+ */
 <a href="qrect.html">QRect</a> <a name="59"></a>NorwegianWoodStyle::buttonRect( int x, int y, int w, int h){
     int d = QMIN(w,h)/2;
     int b = buttonthickness( d );
@@ -1359,9 +1347,7 @@ void <a name="58"></a>NorwegianWoodStyle::drawPushButtonLabel( <a href="qpushbut
 
 /*!
   Reimplementation from QStyle
-
-  \sa QStyle
-  */
+ */
 void <a name="60"></a>NorwegianWoodStyle::drawButtonMask( <a href="qpainter.html">QPainter</a> *p, int x, int y, int w, int h)
 {
     int d = QMIN(w,h)/2;
@@ -1373,7 +1359,7 @@ void <a name="60"></a>NorwegianWoodStyle::drawButtonMask( <a href="qpainter.html
   <hr>
 
   Header file of the Metal-Theme: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/themes/metal.h   2.2.1   edited 2000-08-31 $
+** &#36;Id&#58; qt/examples/themes/metal.h   2.2.2   edited 2000-08-31 $
 **
 ** Definition of something or other
 **
@@ -1425,7 +1411,7 @@ private:
   <hr>
 
   Implementation of the Metal-Theme: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/themes/metal.cpp   2.2.1   edited 2000-08-31 $
+** &#36;Id&#58; qt/examples/themes/metal.cpp   2.2.2   edited 2000-10-06 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -1460,9 +1446,7 @@ MetalStyle::MetalStyle() : <a href="qwindowsstyle.html">QWindowsStyle</a>() { }
 
 /*!
   Reimplementation from QStyle
-
-  \sa QStyle
-  */
+ */
 void <a name="63"></a>MetalStyle::polish( <a href="qapplication.html">QApplication</a> *app)
 {
     oldPalette = app-&gt;<a href="qapplication.html#50e250">palette</a>();
@@ -1549,9 +1533,7 @@ void <a name="63"></a>MetalStyle::polish( <a href="qapplication.html">QApplicati
 
 /*!
   Reimplementation from QStyle
-
-  \sa QStyle
-  */
+ */
 void <a name="64"></a>MetalStyle::unPolish( <a href="qapplication.html">QApplication</a> *app)
 {
     app-&gt;<a href="qapplication.html#9604e2">setPalette</a>(oldPalette, TRUE);
@@ -1560,9 +1542,7 @@ void <a name="64"></a>MetalStyle::unPolish( <a href="qapplication.html">QApplica
 
 /*!
   Reimplementation from QStyle
-
-  \sa QStyle
-  */
+ */
 void <a name="63"></a>MetalStyle::polish( <a href="qwidget.html">QWidget</a>* w)
 {
 
@@ -1630,9 +1610,7 @@ void <a name="64"></a>MetalStyle::unPolish( <a href="qwidget.html">QWidget</a>* 
 
 /*!
   Reimplementation from QStyle
-
-  \sa QStyle
-  */
+ */
 void <a name="65"></a>MetalStyle::drawButton( <a href="qpainter.html">QPainter</a> *p, int x, int y, int w, int h,
                              const QColorGroup &amp;, bool sunken, const QBrush*)
 {
@@ -1672,9 +1650,7 @@ void <a name="65"></a>MetalStyle::drawButton( <a href="qpainter.html">QPainter</
 
 /*!
   Reimplementation from QStyle
-
-  \sa QStyle
-  */
+ */
 void <a name="66"></a>MetalStyle::drawBevelButton( <a href="qpainter.html">QPainter</a> *p, int x, int y, int w, int h,
                                 const QColorGroup &amp;g, bool sunken, const QBrush* fill)
 {
@@ -1683,9 +1659,7 @@ void <a name="66"></a>MetalStyle::drawBevelButton( <a href="qpainter.html">QPain
 
 /*!
   Reimplementation from QStyle
-
-  \sa QStyle
-  */
+ */
 void <a name="67"></a>MetalStyle::drawPushButton( <a href="qpushbutton.html">QPushButton</a>* btn, QPainter *p)
 {
     <a href="qcolorgroup.html">QColorGroup</a> g = btn-&gt;<a href="qwidget.html#5bc085">colorGroup</a>();
@@ -1733,9 +1707,7 @@ void <a name="67"></a>MetalStyle::drawPushButton( <a href="qpushbutton.html">QPu
 
 /*!
   Reimplementation from QStyle
-
-  \sa QStyle
-  */
+ */
 void <a name="68"></a>MetalStyle::drawPushButtonLabel( <a href="qpushbutton.html">QPushButton</a>* btn, QPainter *p)
 {
     <a href="qrect.html">QRect</a> r = btn-&gt;<a href="qwidget.html#e872e1">rect</a>();
@@ -1782,7 +1754,7 @@ void <a name="69"></a>MetalStyle::drawPanel( <a href="qpainter.html">QPainter</a
   <hr>
 
   Header file of the example: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/themes/themes.h   2.2.1   edited 2000-08-31 $
+** &#36;Id&#58; qt/examples/themes/themes.h   2.2.2   edited 2000-08-31 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -1837,7 +1809,7 @@ private:
   <hr>
 
   Implementation of the example: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/themes/themes.cpp   2.2.1   edited 2000-08-31 $
+** &#36;Id&#58; qt/examples/themes/themes.cpp   2.2.2   edited 2000-08-31 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -2021,7 +1993,7 @@ void <a name="79"></a>Themes::selectStyleMenu( int s )
 
   Main:
 <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/themes/main.cpp   2.2.1   edited 2000-10-03 $
+** &#36;Id&#58; qt/examples/themes/main.cpp   2.2.2   edited 2000-10-03 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -2053,5 +2025,5 @@ int main( int argc, char ** argv )
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.1</div>
+<td align="right"><div align="right">Qt version 2.2.2</div>
 </table></div></address></body></html>

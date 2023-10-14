@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qdir_unix.cpp   2.2.1   edited 2000-09-20 $
+** $Id: qt/src/tools/qdir_unix.cpp   2.2.2   edited 2000-09-20 $
 **
 ** Implementation of QDirclass
 **

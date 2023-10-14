@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qfont_x11.cpp   2.2.1   edited 2000-10-03 $
+** $Id: qt/src/kernel/qfont_x11.cpp   2.2.2   edited 2000-11-06 $
 **
 ** Implementation of QFont, QFontMetrics and QFontInfo classes for X11
 **
@@ -182,7 +182,7 @@ private:
 };
 
 inline QFontInternal::QFontInternal( const QString &name )
-    : n(name.ascii()), f(0), set(0)
+    : n(name.ascii()), f(0), set(0), cmapper(0)
 {
     s.dirty = TRUE;
 }
@@ -245,8 +245,7 @@ inline QFontInternal::~QFontInternal()
 }
 
 
-static const int reserveCost   = 1024*100;
-static const int fontCacheSize = 1024*1024*4;
+static const int fontCacheSize = 1024;
 
 
 typedef QCacheIterator<QFontInternal> QFontCacheIt;
@@ -259,6 +258,7 @@ class QFontCache : public QCache<QFontInternal>
 public:
     QFontCache( int maxCost, int size=17 )
 	: QCache<QFontInternal>(maxCost,size) {}
+    ~QFontCache() { clear(); }
     void deleteItem( Item );
 };
 
@@ -1078,34 +1078,33 @@ void QFont::initFontInfo() const
 	if ( PRIV->needsSet() ) {
 	    QCString locale = setlocale(LC_CTYPE, 0);
 	    bool useLocale = FALSE;
-	
+
 	    switch (charSet()) {
 	    case Set_Ja:
+		// In case the user has set a locale, we want to use codecForLocale(),
+		// and only use codecForName if the locale is something different (as eg "de").
 		if (locale.left(2) != "ja")
 		    f->cmapper = QTextCodec::codecForName("eucJP");
 		break;
-		
 	    case Set_Ko:
 		if (locale.left(2) != "ko")
 		    f->cmapper = QTextCodec::codecForName("eucKR");
 		break;
-
 	    case Set_Zh:
 		if (locale.left(2) != "zh")
 		    f->cmapper = QTextCodec::codecForName("GBK");
 		break;
-		
 	    case Set_Zh_TW:
 		if (locale.left(5) != "zh_TW")
 		    f->cmapper = QTextCodec::codecForName("Big5");
 		break;
-		
 	    case Set_Th_TH: // ### need a codec?
 	    default:
 		useLocale = TRUE;
 	    }
-	
-	    if (useLocale) f->cmapper = QTextCodec::codecForLocale();
+
+	    if ( useLocale || !f->cmapper )
+		f->cmapper = QTextCodec::codecForLocale();
 #ifndef QT_NO_CODECS
 	} else if ( charSet() == JIS_X_0208 ) {
 	    f->cmapper = new QFontJis0208Codec;
@@ -1176,57 +1175,57 @@ static QCString setLocaleForCharSet(QFont::CharSet charset)
 	{
 	    oldlocale = setlocale(LC_CTYPE, NULL);
 	    if (oldlocale.left(2) == "ja") return (const char *) 0;
-	
+
 	    const char *locales[] =
 	    { "ja", "ja_JP", "ja_JP.EUC", "ja_JP.sjis", "ja_JP.ujis", "ja_JP.PCK",
 		  "ja_JP.UTF-8", "ja_JP.SJIS", "ja_JP.Shift_JIS", 0 };
-	
+
 	    while (setlocale(LC_CTYPE, locales[i]) == NULL) i++;
-	
+
 	    break;
 	}
-	
+
     case QFont::Set_Ko:
 	{
 	    oldlocale = setlocale(LC_CTYPE, NULL);
 	    if (oldlocale.left(2) == "ko") return (const char *) 0;
-	
+
 	    const char *locales[] =
 	    { "ko", "ko_KR", "ko_KR.EUC", 0 };
-	
+
 	    while (setlocale(LC_CTYPE, locales[i]) == NULL) i++;
-		
+
 	    break;
 	}
-	
+
     case QFont::Set_Zh: // assume GBK and/or EUC
     case QFont::Set_GBK: // assume GBK and/or EUC
 	{
 	    oldlocale = setlocale(LC_CTYPE, NULL);
 	    if (oldlocale.left(2) == "zh") return (const char *) 0;
-	
+
 	    const char *locales[] =
 	    { "zh", "zh_CN", "zh.GBK", "zh_CN.GBK", "zh_CN.GB2312", "zh_CN.EUC", 0 };
-	
+
 	    while (setlocale(LC_CTYPE, locales[i]) == NULL) i++;
-	
+
 	    break;
 	}
-	
+
     case QFont::Set_Zh_TW: // assume Big5 and/or EUC
     case QFont::Set_Big5: // assume Big5 and/or EUC
 	{
 	    oldlocale = setlocale(LC_CTYPE, NULL);
 	    if (oldlocale.left(5) == "zh_TW") return (const char *) 0;
-	
+
 	    const char *locales[] =
 	    { "zh_TW.Big5", "zh_TW.BIG5", "zh_TW", "zh_TW.EUC", 0 };
-	
+
 	    while (setlocale(LC_CTYPE, locales[i]) == NULL) i++;
-	
+
 	    break;
 	}
-	
+
     case QFont::Set_Th_TH:
     default:
 	;
@@ -1316,7 +1315,7 @@ void QFont::load() const
 		    qFatal( "QFont::load: Internal error" );
 #endif
 	    }
-	
+
 	    d->fin->set = s;
 	    // [not cached]
 	    initFontInfo();
@@ -1324,7 +1323,7 @@ void QFont::load() const
     } else {
 	XFontStruct *f = d->fin->f;
 	if ( !f ) {					// font not loaded
-	    //debug("font : %s\n",n.data());
+	    //qDebug("font : %s\n",n.data());
 	    f = XLoadQueryFont( QPaintDevice::x11AppDisplay(), n );
 	    if ( !f ) {
 		f = XLoadQueryFont( QPaintDevice::x11AppDisplay(),
@@ -1342,15 +1341,7 @@ void QFont::load() const
 		// have more memory available to the server.
 		chars = 2000;
 	    }
-	    int size = (f->max_bounds.ascent + f->max_bounds.descent) *
-		       f->max_bounds.width * chars / 8;
-	    // If we get a cache overflow, we make room for this font only
-	    if ( size > fontCache->maxCost() + reserveCost )
-		fontCache->setMaxCost( size + reserveCost );
-#if defined(CHECK_STATE)
-	    if ( !fontCache->insert(d->fin->name(), d->fin, size) )
-		qFatal( "QFont::load: Cache overflow error" );
-#endif
+	    fontCache->insert(d->fin->name(), d->fin, 1);
 	    d->fin->f = f;
 	    initFontInfo();
 	}
@@ -2103,7 +2094,7 @@ static void getExt( QString str, int len, XRectangle& ink,
     // Callers to this / this needs to be optimized.
     // Trouble is, too much caching in multiple clients will make the
     //  overall performance suffer.
-
+    
     QCString x = m->fromUnicode(str,len);
     XmbTextExtents( set, x, len, &ink, &logical );
 }

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qmenubar.h   2.2.1   edited 2000-08-25 $
+** $Id: qt/src/widgets/qmenubar.h   2.2.2   edited 2000-11-02 $
 **
 ** Definition of QMenuBar class
 **
@@ -101,9 +101,10 @@ protected:
 private slots:
     void	subActivated( int itemId );
     void	subHighlighted( int itemId );
+#ifndef QT_NO_ACCEL
     void	accelActivated( int itemId );
     void	accelDestroyed();
-
+#endif
 private:
     void	menuInsPopup( QPopupMenu * );
     void	menuDelPopup( QPopupMenu * );
@@ -125,8 +126,10 @@ private:
     int		itemAtPos( const QPoint & );
     QRect	itemRect( int item );
 
+#ifndef QT_NO_ACCEL
     void	setupAccelerators();
     QAccel     *autoaccel;
+#endif
     QRect      *irects;
     int		rightSide;
 

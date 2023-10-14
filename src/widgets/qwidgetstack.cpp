@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qwidgetstack.cpp   2.2.1   edited 2000-09-29 $
+** $Id: qt/src/widgets/qwidgetstack.cpp   2.2.2   edited 2000-10-11 $
 **
 ** Implementation of QWidgetStack class
 **
@@ -36,7 +36,7 @@
 **********************************************************************/
 
 #include "qwidgetstack.h"
-#ifndef QT_NO_COMPLEXWIDGETS
+#ifndef QT_NO_WIDGETSTACK
 
 #include "qobjectlist.h"
 #include "qobjectdict.h"

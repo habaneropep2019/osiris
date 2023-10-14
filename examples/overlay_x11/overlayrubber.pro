@@ -7,4 +7,4 @@ SOURCES		= gearwidget.cpp \
 		  rubberbandwidget.cpp
 TARGET		= overlayrubber
 DEPENDPATH	= ../include
-REQUIRES=opengl
+REQUIRES=opengl full-config

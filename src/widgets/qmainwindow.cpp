@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qmainwindow.cpp   2.2.1   edited 2000-10-03 $
+** $Id: qt/src/widgets/qmainwindow.cpp   2.2.2   edited 2000-10-16 $
 **
 ** Implementation of QMainWindow class
 **
@@ -36,7 +36,7 @@
 **********************************************************************/
 
 #include "qmainwindow.h"
-#ifndef QT_NO_COMPLEXWIDGETS
+#ifndef QT_NO_MAINWINDOW
 
 #include "qtimer.h"
 #include "qlayout.h"
@@ -1413,6 +1413,7 @@ QMainWindow::QMainWindow( QWidget * parent, const char * name, WFlags f )
 
 QMainWindow::~QMainWindow()
 {
+    delete layout();
     delete d;
 }
 
@@ -2927,7 +2928,7 @@ void QMainWindow::moveToolBar( QToolBar* t , QMouseEvent * e )
     } else if ( e->type() == QMouseEvent::MouseMove ) {
 	if ( ( e->state() & LeftButton ) != LeftButton || !d->inMovement )
 	    return;
-    } else if ( ( e->type() ==QMouseEvent::MouseMove || 
+    } else if ( ( e->type() ==QMouseEvent::MouseMove ||
 		  e->type() == QMouseEvent::MouseButtonRelease ) && !d->inMovement ) {
 	return;
     }

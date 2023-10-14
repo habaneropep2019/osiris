@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qiodevice.cpp   2.2.1   edited 2000-09-05 $
+** $Id: qt/src/tools/qiodevice.cpp   2.2.2   edited 2000-09-05 $
 **
 ** Implementation of QIODevice class
 **

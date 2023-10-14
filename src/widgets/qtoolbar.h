@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qtoolbar.h   2.2.1   edited 2000-08-25 $
+** $Id: qt/src/widgets/qtoolbar.h   2.2.2   edited 2000-10-11 $
 **
 ** Definition of QToolBar class
 **
@@ -43,7 +43,7 @@
 #include "qmainwindow.h"
 #endif // QT_H
 
-#ifndef QT_NO_COMPLEXWIDGETS
+#ifndef QT_NO_TOOLBAR
 
 class QButton;
 class QBoxLayout;
@@ -130,6 +130,6 @@ private:	// Disabled copy constructor and operator=
 #endif
 };
 
-#endif // QT_NO_COMPLEXWIDGETS
+#endif // QT_NO_TOOLBAR
 
 #endif // QTOOLBAR_H

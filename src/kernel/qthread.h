@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qthread.h   2.2.1   edited 2000-09-13 $
+** $Id: qt/src/kernel/qthread.h   2.2.2   edited 2000-10-17 $
 **
 ** Definition of QThread class
 **
@@ -38,7 +38,9 @@
 #ifndef QTHREAD_H
 #define QTHREAD_H
 
+#ifndef QT_H
 #include <qwindowdefs.h>
+#endif // QT_H
 
 #if defined(QT_THREAD_SUPPORT)
 

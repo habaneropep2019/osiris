@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qlayoutengine.cpp   2.2.1   edited 2000-08-25 $
+** $Id: qt/src/kernel/qlayoutengine.cpp   2.2.2   edited 2000-10-06 $
 **
 ** Implementation of QLayout functionality
 **
@@ -99,7 +99,7 @@ void qGeomCalc( QArray<QLayoutStruct> &chain, int start, int count, int pos,
     if ( spacerCount )
 	spacerCount -= 1; //only spacers between things
     if ( space < cMin + spacerCount*spacer ) {
-	//	debug("not enough space");
+	//	qDebug("not enough space");
 	for ( i = start; i < start+count; i++ ) {
 	    chain[i].size = chain[i].minimumSize;
 	    chain[i].done = TRUE;

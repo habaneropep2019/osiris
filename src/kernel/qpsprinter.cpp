@@ -1,5 +1,5 @@
 /**********************************************************************
-** $Id: qt/src/kernel/qpsprinter.cpp   2.2.1   edited 2000-10-01 $
+** $Id: qt/src/kernel/qpsprinter.cpp   2.2.2   edited 2000-11-03 $
 **
 ** Implementation of QPSPrinter class
 **
@@ -633,10 +633,7 @@ static const char * const ps_header[] = {
 "    defM setmatrix",			// default transformation matrix
 "    /Cx  0 d",				// reset current x position
 "    /Cy  0 d",				// reset current y position
-"    255 255 255 BC",
 "    /OMo false d",
-"    B P1",
-"    0 B BR",
 "    GS",
 "} D",
 "",
@@ -1731,26 +1728,29 @@ static const struct {
     QFont::CharSet cs;
     uint mib;
 } unicodevalues[] = {
-    { QFont::KOI8R, 2084 },
     { QFont::ISO_8859_1, 4 },
+#ifndef QT_NO_TEXTCODEC
     { QFont::ISO_8859_2, 5 },
     { QFont::ISO_8859_3, 6 },
     { QFont::ISO_8859_4, 7 },
     { QFont::ISO_8859_5, 8 },
+    { QFont::KOI8U, 2088 },
+    { QFont::KOI8R, 2084 },
     { QFont::ISO_8859_6, 82 },
     { QFont::ISO_8859_7, 10 },
     { QFont::ISO_8859_8, 85 },
     { QFont::ISO_8859_10, 13 },
     { QFont::ISO_8859_11, 2259 }, // aka tis620
-#if 0
-    // ### needs mibs for these.
-    { QFont::ISO_8859_12, 0 },
-    { QFont::ISO_8859_13, 0 },
-    { QFont::ISO_8859_14, 0 },
-    { QFont::ISO_8859_15, 0 },
-#endif
+    // ### don't have any MIB for -12: { QFont::ISO_8859_12, 0 },
+    { QFont::ISO_8859_13, 109 },
+    { QFont::ISO_8859_14, 110 },
+    { QFont::ISO_8859_15, 111 },
     // makeFixedStrings() below assumes that this is last
     { QFont::ISO_8859_9, 12 }
+#define unicodevalues_LAST QFont::ISO_8859_9
+#else
+#define unicodevalues_LAST QFont::ISO_8859_1
+#endif
 };
 
 
@@ -1852,7 +1852,6 @@ static void makeFixedStrings()
     QString vector;
     QString glyphname;
     QString unicodestring;
-    QTextCodec * codec;
     do {
 	vector.sprintf( "/FE%d [", (int)unicodevalues[i].cs );
 	glyphname = "";
@@ -1869,6 +1868,8 @@ static void makeFixedStrings()
 	    vector += glyphname;
 	}
 	// the next 128 are particular to each encoding
+#ifndef QT_NO_TEXTCODEC
+	QTextCodec * codec;
 	codec = QTextCodec::codecForMib( (int)unicodevalues[i].mib );
 	for( k=128; k<256; k++ ) {
 	    int value = 0xFFFD;
@@ -1893,11 +1894,12 @@ static void makeFixedStrings()
 	    vector += QString::fromLatin1(" /");
 	    vector += glyphname;
 	}
+#endif
 	vector += QString::fromLatin1(" ] d");
 	vector = wordwrap( vector );
 	font_vectors->insert( (int)(unicodevalues[i].cs),
 			      new QString( vector ) );
-    } while ( unicodevalues[i++].cs != QFont::ISO_8859_9 );
+    } while ( unicodevalues[i++].cs != unicodevalues_LAST );
 }
 
 
@@ -2165,11 +2167,13 @@ void QPSPrinter::setFont( const QFont & f )
 	fontsUsed += ps;
 
     QTextCodec * codec = 0;
+#ifndef QT_NO_TEXTCODEC
     i = 0;
     do {
 	if ( unicodevalues[i].cs == f.charSet() )
 	    codec = QTextCodec::codecForMib( unicodevalues[i++].mib );
-    } while( codec == 0 && unicodevalues[i++].cs != QFont::ISO_8859_9 );
+    } while( codec == 0 && unicodevalues[i++].cs != unicodevalues_LAST );
+#endif
     d->currentFontCodec = codec;
 }
 
@@ -2303,9 +2307,9 @@ QByteArray compress( const QImage & image ) {
 #endif
 		    start = None;
 		}
-		if ( start < index - tableSize )
+		if ( start < index - tableSize || start < 0 )
 		    start = None;
-		if ( end < index - tableSize + bestLength )
+		if ( end < index - tableSize + bestLength || end < bestLength )
 		    end = None;
 	    }
 	    if ( start != None && end != None ) {
@@ -2477,8 +2481,8 @@ static const char * psCap( Qt::PenCapStyle p )
 	return "1 ";
     return "0 ";
 }
-			  
-			  
+
+
 static const char * psJoin( Qt::PenJoinStyle p ) {
     if ( p == Qt::BevelJoin )
 	return "2 ";
@@ -2486,7 +2490,7 @@ static const char * psJoin( Qt::PenJoinStyle p ) {
 	return "1 ";
     return "0 ";
 }
-			  
+
 
 bool QPSPrinter::cmd( int c , QPainter *paint, QPDevCmdParam *p )
 {
@@ -2548,12 +2552,12 @@ bool QPSPrinter::cmd( int c , QPainter *paint, QPDevCmdParam *p )
 	    // we special-case for narrow solid lines with the default
 	    // cap and join styles
 	    if ( d->cpen.style() == Qt::SolidLine && d->cpen.width() == 0 &&
-		 d->cpen.capStyle() == Qt::FlatCap && 
+		 d->cpen.capStyle() == Qt::FlatCap &&
 		 d->cpen.joinStyle() == Qt::MiterJoin )
 		stream << color( d->cpen.color(), printer ) << "P1\n";
 	    else
 		stream << (int)d->cpen.style() << ' ' << d->cpen.width()
-		       << ' ' << color( d->cpen.color(), printer ) 
+		       << ' ' << color( d->cpen.color(), printer )
 		       << psCap( d->cpen.capStyle() )
 		       << psJoin( d->cpen.joinStyle() ) << "PE\n";
 	    d->dirtypen = FALSE;
@@ -2674,9 +2678,11 @@ bool QPSPrinter::cmd( int c , QPainter *paint, QPDevCmdParam *p )
     case PdcDrawText2:
 	if ( p[1].str->length() > 0 ) {
 	    QCString tmpC;
+#ifndef QT_NO_TEXTCODEC
 	    if ( d->currentFontCodec )
 		tmpC = d->currentFontCodec->fromUnicode( *p[1].str );
 	    else // #### should use 16-bit stuff here
+#endif
 		tmpC=p[1].str->local8Bit();
 	    uint spaces = 0;
 	    while( spaces < tmpC.length() && tmpC[(int)spaces] == ' ' )

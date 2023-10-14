@@ -1,5 +1,5 @@
 /**********************************************************************
-** $Id: qt/src/widgets/qgroupbox.cpp   2.2.1   edited 2000-09-06 $
+** $Id: qt/src/widgets/qgroupbox.cpp   2.2.2   edited 2000-11-02 $
 **
 ** Implementation of QGroupBox widget class
 **
@@ -36,7 +36,7 @@
 **********************************************************************/
 
 #include "qgroupbox.h"
-#ifndef QT_NO_COMPLEXWIDGETS
+#ifndef QT_NO_GROUPBOX
 #include "qlayout.h"
 #include "qpainter.h"
 #include "qbitmap.h"
@@ -145,7 +145,9 @@ void QGroupBox::init()
     align = AlignLeft;
     fs = QFrame::Box | QFrame::Sunken;
     setFrameStyle( fs );
+#ifndef QT_NO_ACCEL
     accel = 0;
+#endif    
     vbox = 0;
     grid = 0;
     d = 0;	//we use d directly to store a QSpacerItem
@@ -197,16 +199,18 @@ void QGroupBox::setTitle( const QString &title )
 {
     if ( str == title )				// no change
 	return;
+    str = title;
+#ifndef QT_NO_ACCEL
     if ( accel )
 	delete accel;
     accel = 0;
-    str = title;
     int s = QAccel::shortcutKey( title );
     if ( s ) {
 	accel = new QAccel( this, "automatic focus-change accelerator" );
 	accel->connectItem( accel->insertItem( s, 0 ),
 			    this, SLOT(fixFocus()) );
     }
+#endif
     calculateFrame();
     setTextSpacer();
     if ( layout() ) {

@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Qt Toolkit - QTextStream Class</title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
 a:link { color: #004faf; text-decoration: none }
@@ -233,14 +233,20 @@ Returns the previous stream flags.
 <p>See also  <a href="#5abe64">setf</a>(), <a href="#b844b8">unsetf</a>() and flags().
 <h3 class="fn">QTextStream &amp; <a name="1282b8"></a>QTextStream::operator&lt;&lt; ( <a href="qchar.html">QChar</a> c )</h3>
 <p>Writes a <code>char</code> to the stream and returns a reference to the stream.
+<p>The character <em>c</em> is assumed to be Latin1 encoded independent of the Encoding set
+for the QTextStream.
 <h3 class="fn">QTextStream &amp; <a name="4dbd13"></a>QTextStream::operator&lt;&lt; ( char c )</h3>
 <p>Writes a <code>char</code> to the stream and returns a reference to the stream.
 <h3 class="fn">QTextStream &amp; <a name="5ef26c"></a>QTextStream::operator&lt;&lt; ( const <a href="qcstring.html">QCString</a> &amp; s )</h3>
 <p>Writes <em>s</em> to the stream and returns a reference to the stream.
+<p>The string <em>s</em> is assumed to be Latin1 encoded independent of the Encoding set
+for the QTextStream.
 <h3 class="fn">QTextStream &amp; <a name="c35e6d"></a>QTextStream::operator&lt;&lt; ( const <a href="qstring.html">QString</a> &amp; s )</h3>
 <p>Writes <em>s</em> to the stream and returns a reference to the stream.
 <h3 class="fn">QTextStream &amp; <a name="ae92c6"></a>QTextStream::operator&lt;&lt; ( const char * s )</h3>
 <p>Writes a string to the stream and returns a reference to the stream.
+<p>The string <em>s</em> is assumed to be Latin1 encoded independent of the Encoding set
+for the QTextStream.
 <h3 class="fn">QTextStream &amp; <a name="313dfe"></a>QTextStream::operator&lt;&lt; ( double f )</h3>
 <p>Writes a <code>double</code> to the stream and returns a reference to the stream.
 <h3 class="fn">QTextStream &amp; <a name="534b4b"></a>QTextStream::operator&lt;&lt; ( float f )</h3>
@@ -403,7 +409,7 @@ the stream.
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.2.1"><nobr>
+<input type=hidden name="version" value="2.2.2"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -411,5 +417,5 @@ copyright &copy; 1995-2000
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.1</div>
+<td align="right"><div align="right">Qt version 2.2.2</div>
 </table></div></address></body></html>

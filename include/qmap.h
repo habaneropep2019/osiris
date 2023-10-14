@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qmap.h   2.2.1   edited 2000-09-30 $
+** $Id: qt/src/tools/qmap.h   2.2.2   edited 2000-11-02 $
 **
 ** Definition of QMap class
 **
@@ -347,6 +347,7 @@ public:
 	if ( !p )
 	    return 0;
 	NodePtr n = new Node( *p );
+	n->color = p->color;
 	if ( p->left ) {
 	    n->left = copy( (NodePtr)(p->left) );
 	    n->left->parent = n;

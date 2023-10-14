@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qdatetime.cpp   2.2.1   edited 2000-08-25 $
+** $Id: qt/src/tools/qdatetime.cpp   2.2.2   edited 2000-10-11 $
 **
 ** Implementation of date and time classes
 **
@@ -355,7 +355,7 @@ bool QDate::setYMD( int y, int m, int d )
     }
     jd = greg2jul( y, m, d );
 #if defined(DEBUG)
-    ASSERT( year() == y && month() == m && day() == d );
+    ASSERT( year() == (y > 99 ? y : 1900+y) && month() == m && day() == d );
 #endif
     return TRUE;
 }

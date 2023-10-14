@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qradiobutton.cpp   2.2.1   edited 2000-08-25 $
+** $Id: qt/src/widgets/qradiobutton.cpp   2.2.2   edited 2000-10-11 $
 **
 ** Implementation of QRadioButton class
 **
@@ -36,7 +36,7 @@
 **********************************************************************/
 
 #include "qradiobutton.h"
-#ifndef QT_NO_COMPLEXWIDGETS
+#ifndef QT_NO_RADIOBUTTON
 #include "qbuttongroup.h"
 #include "qpainter.h"
 #include "qdrawutil.h"

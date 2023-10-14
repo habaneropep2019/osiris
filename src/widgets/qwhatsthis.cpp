@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qwhatsthis.cpp   2.2.1   edited 2000-08-25 $
+** $Id: qt/src/widgets/qwhatsthis.cpp   2.2.2   edited 2000-10-11 $
 **
 ** Implementation of QWhatsThis class
 **
@@ -34,7 +34,7 @@
 **********************************************************************/
 
 #include "qwhatsthis.h"
-#ifndef QT_NO_COMPLEXWIDGETS
+#ifndef QT_NO_WHATSTHIS
 #include "qapplication.h"
 #include "qpaintdevicemetrics.h"
 #include "qpixmap.h"

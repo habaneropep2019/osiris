@@ -1,4 +1,4 @@
-.TH QDomDocument 3qt "4 October 2000" "Trolltech AS" \" -*- nroff -*-
+.TH QDomDocument 3qt "8 November 2000" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -196,7 +196,7 @@ Returns the document type of this document.
 .SH "QDomElement QDomDocument::documentElement () const"
 Returns the root element of the document.
 .SH "QDomNodeList QDomDocument::elementsByTagName ( const QString & tagname ) const"
-Returns a QDomNodeList, that contains all elements in the document with the tag name \fItagname.\fR
+Returns a QDomNodeList, that contains all elements in the document with the tag name \fItagname.\fR The order of the node list, is the order they are encountered in a preorder traversal of the element tree.
 .SH "QDomImplementation QDomDocument::implementation () const"
 Returns a QDomImplementation object.
 .SH "bool QDomDocument::isDocument () const \fC[virtual]\fR"

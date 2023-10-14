@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qvalidator.cpp   2.2.1   edited 2000-08-25 $
+** $Id: qt/src/widgets/qvalidator.cpp   2.2.2   edited 2000-10-11 $
 **
 ** Implementation of validator classes.
 **
@@ -36,7 +36,7 @@
 **********************************************************************/
 
 #include "qvalidator.h"
-#ifndef QT_NO_COMPLEXWIDGETS
+#ifndef QT_NO_VALIDATOR
 #include "qwidget.h"
 #include "qregexp.h"
 

@@ -1,4 +1,4 @@
-.TH QMotifStyle 3qt "4 October 2000" "Trolltech AS" \" -*- nroff -*-
+.TH QMotifStyle 3qt "8 November 2000" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -35,9 +35,6 @@ Inherited by QCDEStyle, QMotifPlusStyle and QSGIStyle.
 .br
 .ti -1c
 .BI "virtual void \fBdrawExclusiveIndicatorMask\fR ( QPainter * " "p" ", int " "x" ", int " "y" ", int, int, bool ) "
-.br
-.ti -1c
-.BI "void \fBpolishPopupMenu\fR ( QPopupMenu * ) "
 .br
 .in -1c
 .SH DESCRIPTION
@@ -138,6 +135,10 @@ Reimplemented for internal reasons; the API is not affected.
 .SH "void QMotifStyle::polish ( QPalette & pal )"
 Reimplemented for internal reasons; the API is not affected.
 .SH "void QMotifStyle::polish ( QWidget * w ) \fC[virtual]\fR"
+Reimplemented for internal reasons; the API is not affected.
+.PP
+Reimplemented from QStyle.
+.SH "void QMotifStyle::polishPopupMenu ( QPopupMenu * p ) \fC[virtual]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .PP
 Reimplemented from QStyle.

@@ -90,7 +90,7 @@ listaddonentmodules:
 	@echo 
 
 
-REQUIRES=xml
+REQUIRES=xml large-config
 
 ####### Sub-libraries
 

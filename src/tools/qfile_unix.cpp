@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qfile_unix.cpp   2.2.1   edited 2000-09-16 $
+** $Id: qt/src/tools/qfile_unix.cpp   2.2.2   edited 2000-10-20 $
 **
 ** Implementation of QFileInfo class
 **
@@ -236,7 +236,7 @@ bool QFile::open( int m )
 	} else {
 	    length = (int)st.st_size;
 	    ioIndex  = (flags() & IO_Append) == 0 ? 0 : length;
-	    if ( (flags() & !IO_Truncate) && length == 0 && isReadable() ) {
+	    if ( !(flags()&IO_Truncate) && length == 0 && isReadable() ) {
 		// try if you can read from it (if you can, it's a sequential
 		// device; e.g. a file in the /proc filesystem)
 		int c = getch();
@@ -306,7 +306,7 @@ bool QFile::open( int m, FILE *f )
 	length = INT_MAX;
     } else {
 	length = (int)st.st_size;
-	if ( (flags() & !IO_Truncate) && length == 0 && isReadable() ) {
+	if ( !(flags()&IO_Truncate) && length == 0 && isReadable() ) {
 	    // try if you can read from it (if you can, it's a sequential
 	    // device; e.g. a file in the /proc filesystem)
 	    int c = getch();

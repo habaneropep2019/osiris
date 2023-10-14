@@ -87,7 +87,7 @@ listaddonentmodules:
 	@echo 
 
 
-REQUIRES=
+REQUIRES=medium-config
 
 ####### Sub-libraries
 

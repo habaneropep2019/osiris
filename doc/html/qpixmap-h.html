@@ -1,5 +1,5 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<html><head><title>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>
 Qt Toolkit - qpixmap.h include file
 </title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
@@ -30,7 +30,7 @@ remains with Trolltech.
 <hr>
 <pre>
 /****************************************************************************
-** &#36;Id&#58; qt/src/kernel/qpixmap.h   2.2.1   edited 2000-09-15 $
+** &#36;Id&#58; qt/src/kernel/qpixmap.h   2.2.2   edited 2000-11-07 $
 **
 ** Definition of QPixmap class
 **
@@ -183,7 +183,7 @@ public:
 #endif
 
 #if defined(_WS_QWS_)
-    virtual QGfx * graphicsContext() const;
+    virtual QGfx * graphicsContext(bool clip_children=TRUE) const;
     virtual unsigned char * scanLine(int) const;
     virtual int bytesPerLine() const;
     QRgb * clut() const;
@@ -232,6 +232,7 @@ protected:
         int numcols;
         int rw;
         int rh;
+        bool hasAlpha;
 #endif
         Optimization optim;
     } *data;
@@ -324,5 +325,5 @@ Q_EXPORT QDataStream &amp;operator&gt;&gt;( QDataStream &amp;, QPixmap &amp; );
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.1</div>
+<td align="right"><div align="right">Qt version 2.2.2</div>
 </table></div></address></body></html>

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/xml/qxml.h   2.2.1   edited 2000-08-25 $
+** $Id: qt/src/xml/qxml.h   2.2.2   edited 2000-10-27 $
 **
 ** Definition of QXmlSimpleReader and related classes.
 **
@@ -333,6 +333,9 @@ private:
 
     bool parseProlog();
     bool parseElement();
+    bool parseElementEmptyTag( bool &t, QString &uri, QString &lname );
+    bool parseElementETagBegin2();
+    bool parseElementAttribute( QString &prefix, QString &uri, QString &lname );
     bool parseMisc();
     bool parseContent();
 

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qtextstream.h   2.2.1   edited 2000-09-19 $
+** $Id: qt/src/tools/qtextstream.h   2.2.2   edited 2000-10-09 $
 **
 ** Definition of QTextStream class
 **
@@ -57,7 +57,10 @@ public:
 		    UnicodeReverse, RawUnicode, UnicodeUTF8 };
 
     void	setEncoding( Encoding );
+#ifndef QT_NO_TEXTCODEC
     void	setCodec( QTextCodec* );
+#endif
+
     //    Encoding encoding() const { return cmode; }
 
     QTextStream();

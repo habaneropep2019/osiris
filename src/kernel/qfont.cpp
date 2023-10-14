@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qfont.cpp   2.2.1   edited 2000-09-02 $
+** $Id: qt/src/kernel/qfont.cpp   2.2.2   edited 2000-11-04 $
 **
 ** Implementation of QFont, QFontMetrics and QFontInfo classes
 **
@@ -1801,7 +1801,7 @@ void QFontInfo::reset( const QPainter *painter )
   \ingroup shared
 
   The QFontInfo class mirrors QFont exactly, but where QFont access
-  functions returns set values, QFontInfo returns the values that
+  functions return set values, QFontInfo returns the values that
   apply to the font in use.
 
   For example, when the program asks for a 25pt Courier font on a

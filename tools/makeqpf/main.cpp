@@ -6,6 +6,7 @@
 #include <qfont.h>
 #include <qvbox.h>
 #include <qlabel.h>
+#include <qstringlist.h>
 #ifdef _WS_QWS_
 #include <qmemorymanager_qws.h>
 #endif
@@ -45,7 +46,7 @@ public:
 		if ( attr.count() >= 7 ) {
 		    QString family = attr[0];
 		    int weight = QString(attr[4]).toInt();
-		    bool italic = QString(attr[3]) == 'y';
+		    bool italic = QString(attr[3]) == "y";
 		    QStringList sizes = attr[5];
 		    if ( sizes[0] == "0" )
 			sizes = QStringList::split(',',attr[7]);

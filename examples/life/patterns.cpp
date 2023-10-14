@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/life/patterns.cpp   2.2.1   edited 2000-08-31 $
+** $Id: qt/examples/life/patterns.cpp   2.2.2   edited 2000-08-31 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **

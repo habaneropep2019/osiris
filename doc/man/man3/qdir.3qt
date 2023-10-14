@@ -1,4 +1,4 @@
-.TH QDir 3qt "4 October 2000" "Trolltech AS" \" -*- nroff -*-
+.TH QDir 3qt "8 November 2000" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -561,9 +561,7 @@ If \fIacceptAbsPath\fR is TRUE a \fIfileName\fR starting with a separator ('/') 
 .PP
 See also absFilePath(), isRelative() and canonicalPath().
 .SH "QDir::FilterSpec QDir::filter() const"
-Returns the value set by setFilter()
-.PP
-See also setFilter().
+Returns the value set by setFilter().
 .SH "QDir QDir::home () \fC[static]\fR"
 Returns the home directory.
 .PP
@@ -628,9 +626,7 @@ Returns TRUE if successful, otherwise FALSE.
 .PP
 See also rmdir().
 .SH "QString QDir::nameFilter () const"
-Returns the string set by setNameFilter()
-.PP
-See also setNameFilter().
+Returns the string set by setNameFilter().
 .SH "bool QDir::operator!= ( const QDir & d ) const \fC[virtual]\fR"
 Returns TRUE if the \fId\fR and this dir have different path or different sort/filter settings, otherwise FALSE.
 .SH "QDir & QDir::operator= ( const QString & path )"
@@ -692,7 +688,7 @@ Sets the the current directory. Returns TRUE if successful.
 .SH "void QDir::setFilter ( int filterSpec ) \fC[virtual]\fR"
 Sets the filter used by entryList() and entryInfoList(). The filter is used to specify the kind of files that should be returned by entryList() and entryInfoList().
 .PP
-See also nameFilter().
+See also filter() and setNameFilter().
 .SH "void QDir::setMatchAllDirs ( bool enable ) \fC[virtual]\fR"
 If \fIenable\fR is TRUE, all directories will be listed (even if they do not match the filter or the name filter), otherwise only matched directories will be listed.
 .PP
@@ -706,13 +702,13 @@ Sets the name filter used by entryList() and entryInfoList().
 .PP
 The name filter is a wildcarding filter that understands "*" and "?" wildcards, You may specify several filter entries separated by a " " or a ";". If you want entryList() and entryInfoList() to list all files ending with ".cpp" and all files ending with ".h", you simply call dir.setNameFilter("*.cpp *.h") or dir.setNameFilter("*.cpp;*.h")
 .PP
-See also nameFilter().
+See also nameFilter() and setFilter().
 .SH "void QDir::setPath ( const QString & path ) \fC[virtual]\fR"
 Sets the path of the directory. The path is cleaned of redundant ".", ".." and multiple separators. No check is made to ensure that a directory with this path exists.
 .PP
 The path can be either absolute or relative. Absolute paths begin with the directory separator ('/') or a drive specification (not applicable to UNIX). Relative file names begin with a directory name or a file name and specify a path relative to the current directory. An example of an absolute path is the string "/tmp/quartz", a relative path might look like "src/fatlib". You can use the function isRelative() to check if a QDir is using a relative or an absolute file path. You can call the function convertToAbs() to convert a relative QDir to an absolute one.
 .PP
-See also path(), absPath(), exists, cleanDirPath(), dirName(), absFilePath(), isRelative() and convertToAbs().
+See also path(), absPath(), exists(), cleanDirPath(), dirName(), absFilePath(), isRelative() and convertToAbs().
 .SH "void QDir::setSorting ( int sortSpec ) \fC[virtual]\fR"
 Sets the sorting order used by entryList() and entryInfoList().
 .PP

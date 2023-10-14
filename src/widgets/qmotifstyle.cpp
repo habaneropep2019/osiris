@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qmotifstyle.cpp   2.2.1   edited 2000-08-25 $
+** $Id: qt/src/widgets/qmotifstyle.cpp   2.2.2   edited 2000-10-12 $
 **
 ** Implementation of Motif-like style class
 **
@@ -508,8 +508,9 @@ QMotifStyle::drawPushButton( QPushButton* btn, QPainter *p)
 	}
     }
 
-    drawButton( p, x1, y1, x2-x1+1, y2-y1+1, g, btn->isOn() || btn->isDown(),
-		&fill );
+    if ( !btn->isFlat() || btn->isOn() || btn->isDown() )
+	drawButton( p, x1, y1, x2-x1+1, y2-y1+1, g, btn->isOn() || btn->isDown(),
+		    &fill );
 
     if ( p->brush().style() != NoBrush )
 	p->setBrush( NoBrush );

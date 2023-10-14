@@ -1,4 +1,4 @@
-.TH QString 3qt "4 October 2000" "Trolltech AS" \" -*- nroff -*-
+.TH QString 3qt "8 November 2000" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -1125,9 +1125,9 @@ Returns the string converted to a \fCint\fR value.
 .br
   bool ok;
 .br
-  int hex = str.toInt( &ok, "16" ); // will return 255, and ok set to TRUE
+  int hex = str.toInt( &ok, 16 ); // will return 255, and ok set to TRUE
 .br
-  int dec = str.toInt( &ok, "10" ); // will return 0, and ok set to FALSE
+  int dec = str.toInt( &ok, 10 ); // will return 0, and ok set to FALSE
 .fi
 .PP
 If \fIok\fR is non-null, \fI*ok\fR is set to TRUE if there are no conceivable errors, and FALSE if the string is not a number at all, or if it has trailing garbage.

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/dialogs/qprintdialog.cpp   2.2.1   edited 2000-09-12 $
+** $Id: qt/src/dialogs/qprintdialog.cpp   2.2.2   edited 2000-10-13 $
 **
 ** Implementation of internal print dialog (X11) used by QPrinter::select().
 **
@@ -630,6 +630,11 @@ static void deleteGlobalPrintDialog()
 QPrintDialog::QPrintDialog( QPrinter *prn, QWidget *parent, const char *name )
     : QDialog( parent, name, TRUE )
 {
+    if ( parent && parent->icon() && !parent->icon()->isNull() )
+	QDialog::setIcon( *parent->icon() );
+    else if ( qApp->mainWidget() && qApp->mainWidget()->icon() && !qApp->mainWidget()->icon()->isNull() )
+	QDialog::setIcon( *qApp->mainWidget()->icon() );
+
     d = new QPrintDialogPrivate;
     d->numCopies = 1;
 

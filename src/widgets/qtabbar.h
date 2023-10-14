@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qtabbar.h   2.2.1   edited 2000-08-25 $
+** $Id: qt/src/widgets/qtabbar.h   2.2.2   edited 2000-10-11 $
 **
 ** Definition of QTab and QTabBar classes
 **
@@ -43,7 +43,7 @@
 #include "qiconset.h"
 #endif // QT_H
 
-#ifndef QT_NO_COMPLEXWIDGETS
+#ifndef QT_NO_TABBAR
 
 class Q_EXPORT QTab
 {
@@ -162,6 +162,6 @@ private:	// Disabled copy constructor and operator=
 };
 
 
-#endif // QT_NO_COMPLEXWIDGETS
+#endif // QT_NO_TABBAR
 
 #endif // QTABBAR_H

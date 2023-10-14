@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qfile.h   2.2.1   edited 2000-08-25 $
+** $Id: qt/src/tools/qfile.h   2.2.2   edited 2000-08-25 $
 **
 ** Definition of QFile class
 **

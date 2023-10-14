@@ -1,5 +1,5 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<html><head><title>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>
 Qt Toolkit - qxml.h include file
 </title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
@@ -30,7 +30,7 @@ remains with Trolltech.
 <hr>
 <pre>
 /****************************************************************************
-** &#36;Id&#58; qt/src/xml/qxml.h   2.2.1   edited 2000-08-25 $
+** &#36;Id&#58; qt/src/xml/qxml.h   2.2.2   edited 2000-10-27 $
 **
 ** Definition of QXmlSimpleReader and related classes.
 **
@@ -364,6 +364,9 @@ private:
 
     bool parseProlog();
     bool parseElement();
+    bool parseElementEmptyTag( bool &amp;t, QString &amp;uri, QString &amp;lname );
+    bool parseElementETagBegin2();
+    bool parseElementAttribute( QString &amp;prefix, QString &amp;uri, QString &amp;lname );
     bool parseMisc();
     bool parseContent();
 
@@ -676,5 +679,5 @@ inline void QXmlSimpleReader::refAddC(const QChar&amp; ch)
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.1</div>
+<td align="right"><div align="right">Qt version 2.2.2</div>
 </table></div></address></body></html>

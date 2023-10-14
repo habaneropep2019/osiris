@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qmngio.h   2.2.1   edited 2000-08-25 $
+** $Id: qt/src/kernel/qmngio.h   2.2.2   edited 2000-10-09 $
 **
 ** Definition of MNG QImage IOHandler
 **
@@ -45,6 +45,6 @@
 
 void qInitMngIO();
 
-#endif // QT_NO_IMAEGIO_MNG
+#endif // QT_NO_IMAGEIO_MNG
 
 #endif // QMNGIO_H

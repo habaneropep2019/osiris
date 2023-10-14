@@ -1,5 +1,5 @@
 /**********************************************************************
-** $Id: qt/src/widgets/qcombobox.cpp   2.2.1   edited 2000-10-01 $
+** $Id: qt/src/widgets/qcombobox.cpp   2.2.2   edited 2000-10-15 $
 **
 ** Implementation of QComboBox widget class
 **
@@ -1834,7 +1834,7 @@ void QComboBox::clearValidator()
 
 
 /*!  Sets the combo box to use \a newListBox instead of the current
-  list box or popup.  As a site effect, clears the combo box of its
+  list box or popup.  As a side effect, clears the combo box of its
   current contents.
 
   \warning QComboBox assumes that newListBox->text(n) returns

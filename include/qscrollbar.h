@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qscrollbar.h   2.2.1   edited 2000-08-25 $
+** $Id: qt/src/widgets/qscrollbar.h   2.2.2   edited 2000-10-11 $
 **
 ** Definition of QScrollBar class
 **
@@ -46,7 +46,7 @@ class QTimer;
 #include "qdrawutil.h" // REMOVE THIS IN 3.0
 #endif // QT_H
 
-#ifndef QT_NO_COMPLEXWIDGETS
+#ifndef QT_NO_SCROLLBAR
 
 
 class Q_EXPORT QScrollBar : public QWidget, public QRangeControl
@@ -184,6 +184,6 @@ inline int QScrollBar::sliderStart() const
 }
 
 
-#endif // QT_NO_COMPLEXWIDGETS
+#endif // QT_NO_SCROLLBAR
 
 #endif // QSCROLLBAR_H

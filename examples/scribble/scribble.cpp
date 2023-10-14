@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/scribble/scribble.cpp   2.2.1   edited 2000-08-31 $
+** $Id: qt/examples/scribble/scribble.cpp   2.2.2   edited 2000-10-11 $
 **
 ** Copyright ( C ) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -37,7 +37,9 @@ Canvas::Canvas( QWidget *parent, const char *name )
     if ((qApp->argc() > 0) && !buffer.load(qApp->argv()[1]))
     	buffer.fill( colorGroup().base() );
     setBackgroundMode( QWidget::PaletteBase );
+#ifndef QT_NO_CURSOR
     setCursor( Qt::crossCursor );
+#endif
 }
 
 void Canvas::save( const QString &filename, const QString &format )

@@ -1,4 +1,4 @@
-.TH QWidget 3qt "4 October 2000" "Trolltech AS" \" -*- nroff -*-
+.TH QWidget 3qt "8 November 2000" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -448,7 +448,7 @@ Inherited by QButton, QComboBox, QDial, QDialog, QFrame, QGLWidget, QHeader, QLi
 .BI "bool \fBtestWState\fR ( uint n ) const (internal)"
 .br
 .ti -1c
-.BI "bool \fBtestWFlags\fR ( WFlags n ) const"
+.BI "bool \fBtestWFlags\fR ( WFlags f ) const"
 .br
 .ti -1c
 .BI "void setPalette ( const QPalette &, bool iReallyMeanIt ) \fI(obsolete)\fR"
@@ -774,7 +774,7 @@ Every widget's constructor accepts two or three standard arguments:
 .TP
 \fCQWidget *parent = 0\fR is the parent of the new widget. If it is 0 (the default), the new widget will be a top-level window. If not, it will be a child of \fIparent,\fR and be constrained by \fIparent's\fR geometry (Unless you specify \fCWType_TopLevel\fR as widget flag).
 .TP
-\fCconst char * name = 0\fR is the widget name of the new widget. The widget name is little used at the moment - the dumpObjectTree() debugging function uses it, and you can access it using name(). It will become more important when our visual GUI builder is ready (you can name a a widget in the builder, and connect() to it by name in your code).
+\fCconst char *name = 0\fR is the widget name of the new widget. You can access it using name(). The widget name is little used by programmers but is quite useful with GUI builders such as the Qt Designer (you can name a widget in the builder, and connect() to it by name in your code). The dumpObjectTree() debugging function also uses it.
 .TP
 \fCWFlags f = 0\fR (where available) sets the widget flags; the default is good for almost all widgets, but to get e.g. top-level widgets without a window system frame you must use special flags.
 .PP
@@ -925,8 +925,6 @@ Example:
 .br
                                   WStyle_Tool );
 .fi
-.PP
-The widget flags are defined in qnamespace.h (which is included by qwidget.h).
 .SH "QWidget::~QWidget ()"
 Destructs the widget.
 .PP
@@ -1024,7 +1022,7 @@ See also setMask().
 .SH "void QWidget::clearWFlags ( WFlags f ) \fC[protected]\fR"
 Clears the widget flags \fIf.\fR
 .PP
-Widget flags are internal, not meant for public use.
+Widget flags are a combination of Qt::WidgetFlags.
 .PP
 See also testWFlags(), getWFlags() and setWFlags().
 .SH "bool QWidget::close () \fC[slot]\fR"
@@ -1234,7 +1232,7 @@ Child widgets call focusNextPrevChild() on their parent widgets, and only the to
 .PP
 See also focusData().
 .PP
-Reimplemented in QButton, QPopupMenu and QScrollView.
+Reimplemented in QButton, QPopupMenu, QMultiLineEdit and QScrollView.
 .SH "void QWidget::focusOutEvent ( QFocusEvent * ) \fC[virtual protected]\fR"
 This event handler can be reimplemented in a subclass to receive keyboard focus events (focus lost) for the widget.
 .PP
@@ -1325,7 +1323,7 @@ qmag/qmag.cpp
 .SH "WFlags QWidget::getWFlags () const \fC[protected]\fR"
 Returns the widget flags for this this widget.
 .PP
-Widget flags are internal, not meant for public use.
+Widget flags are a combination of Qt::WidgetFlags.
 .PP
 See also testWFlags(), setWFlags() and clearWFlags().
 .SH "void QWidget::grabKeyboard ()"
@@ -2432,7 +2430,7 @@ Reimplemented in QHeader.
 .SH "void QWidget::setWFlags ( WFlags f ) \fC[virtual protected]\fR"
 Sets the widget flags \fIf.\fR
 .PP
-Widget flags are internal, not meant for public use.
+Widget flags are a combination of Qt::WidgetFlags.
 .PP
 See also testWFlags(), getWFlags() and clearWFlags().
 .SH "void QWidget::show () \fC[virtual slot]\fR"
@@ -2541,8 +2539,12 @@ The default implementation updates the widget including its geometry.
 See also QApplication::setStyle(), style(), update() and updateGeometry().
 .PP
 Reimplemented in QPopupMenu, QComboBox, QProgressBar, QSlider, QIconView, QMenuBar, QScrollBar, QMainWindow, QSpinBox, QSplitter, QListView, QProgressDialog, QTabWidget, QTabBar, QTabDialog and QScrollView.
-.SH "bool QWidget::testWFlags ( WFlags n ) const"
-Returns TRUE if any of the widget flags in \fIn\fR are set. The widget flags are listed in qnamespace.h, and are strictly for internal use.
+.SH "bool QWidget::testWFlags ( WFlags f ) const"
+Returns TRUE if any of the widget flags in \fIf\fR are set.
+.PP
+Widget flags are a combination of Qt::WidgetFlags.
+.PP
+See also getWFlags(), setWFlags() and clearWFlags().
 .SH "QWidget * QWidget::topLevelWidget () const"
 Returns the top-level widget for this widget, i.e. the next ancestor widget that has a window-system frame (or at least may have one).
 .PP

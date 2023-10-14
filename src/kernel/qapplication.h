@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qapplication.h   2.2.1   edited 2000-10-03 $
+** $Id: qt/src/kernel/qapplication.h   2.2.2   edited 2000-10-03 $
 **
 ** Definition of QApplication class
 **

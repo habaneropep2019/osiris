@@ -6,8 +6,9 @@ MODULES_ENT	= network canvas table xml opengl
 MODULES		= $$MODULES_BASE $$MODULES_PRO
 enterprise:MODULES	+= $$MODULES_ENT
 
-embedded:MODULES	+= $$MODULES_ENT
 internal:MODULES	+= $$MODULES_ENT
+
+CONFIG += $$MODULES
 
 TEMPLATE    =	subdirs
 SUBDIRS     =	aclock \

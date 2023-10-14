@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qcollection.h   2.2.1   edited 2000-09-17 $
+** $Id: qt/src/tools/qcollection.h   2.2.2   edited 2000-09-17 $
 **
 ** Definition of base class for all collection classes
 **

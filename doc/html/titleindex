@@ -71,7 +71,7 @@ Qt Toolkit -  Table of Prime Numbers 2-9999 | primes.html
 Qt Toolkit -  Thanks! | credits.html
 Qt Toolkit -  The Coordinate System | coordsys.html
 Qt Toolkit -  The Feature Definition File | features.html
-Qt Toolkit -  Thread support in Qt | threads.html
+Qt Toolkit -  Thread Support in Qt | threads.html
 Qt Toolkit -  Timers | timers.html
 Qt Toolkit -  Using the Meta Object Compiler | moc.html
 Qt Toolkit -  Walkthrough: A Simple Application | simple-application.html
@@ -80,8 +80,6 @@ Qt Toolkit -  Windowsystem-specific Notes | winsystem.html
 Qt Toolkit -  Writing your own layout manager | customlayout.html
 Qt Toolkit -  Year 2000 Compliance Statement | y2k.html
 Qt Toolkit - Example Programs | examples.html
-Qt Toolkit - PCOPChannel Class | pcopchannel.html
-Qt Toolkit - PCOPChannel member list | pcopchannel-members.html
 Qt Toolkit - QAccel Class | qaccel.html
 Qt Toolkit - QAccel member list | qaccel-members.html
 Qt Toolkit - QAction Class | qaction.html
@@ -185,6 +183,8 @@ Qt Toolkit - QConnection Class | qconnection.html
 Qt Toolkit - QConnection member list | qconnection-members.html
 Qt Toolkit - QConstString Class | qconststring.html
 Qt Toolkit - QConstString member list | qconststring-members.html
+Qt Toolkit - QCopChannel Class | qcopchannel.html
+Qt Toolkit - QCopChannel member list | qcopchannel-members.html
 Qt Toolkit - QCursor Class | qcursor.html
 Qt Toolkit - QCursor member list | qcursor-members.html
 Qt Toolkit - QCustomEvent Class | qcustomevent.html

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qscrollview.cpp   2.2.1   edited 2000-09-28 $
+** $Id: qt/src/widgets/qscrollview.cpp   2.2.2   edited 2000-10-11 $
 **
 ** Implementation of QScrollView class
 **
@@ -36,7 +36,7 @@
 **********************************************************************/
 
 #include "qwidget.h"
-#ifndef QT_NO_COMPLEXWIDGETS
+#ifndef QT_NO_SCROLLVIEW
 #include "qscrollbar.h"
 #include "qobjectlist.h"
 #include "qobjectdict.h"
@@ -2438,4 +2438,4 @@ bool QScrollView::dragAutoScroll() const
 
 #endif // QT_NO_DRAGANDDROP
 
-#endif // QT_NO_COMPLEXWIDGETS
+#endif // QT_NO_SCROLLVIEW

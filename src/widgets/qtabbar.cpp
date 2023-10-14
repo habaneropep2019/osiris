@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qtabbar.cpp   2.2.1   edited 2000-10-01 $
+** $Id: qt/src/widgets/qtabbar.cpp   2.2.2   edited 2000-10-11 $
 **
 ** Implementation of QTab and QTabBar classes
 **
@@ -34,7 +34,7 @@
 **********************************************************************/
 
 #include "qtabbar.h"
-#ifndef QT_NO_COMPLEXWIDGETS
+#ifndef QT_NO_TABBAR
 #include "qaccel.h"
 #include "qbitmap.h"
 #include "qtoolbutton.h"

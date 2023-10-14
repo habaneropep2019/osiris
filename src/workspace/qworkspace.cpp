@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/workspace/qworkspace.cpp   2.2.1   edited 2000-10-03 $
+** $Id: qt/src/workspace/qworkspace.cpp   2.2.2   edited 2000-11-01 $
 **
 ** Implementation of the QWorkspace class
 **
@@ -52,6 +52,7 @@
 #include "qimage.h"
 #include "qdatetime.h"
 #include "qguardedptr.h"
+#include "qfocusdata.h"
 
 // REVISED: arnt
 
@@ -81,6 +82,9 @@
   just as you'd expect. You can provide widget flags which will be
   used for the layout of the decoration or the behaviour of the widget
   itself.
+  To change the geometry of the MDI windows it is necessary to make
+  the necessary function calls to the parentWidget() of the widget, as
+  this will move or resize the decorated window.
 
   A document window becomes active when it gets the keyboard focus.
   You can activate it using setFocus(), and the user can activate it
@@ -510,6 +514,8 @@ public:
 
     QSize minimumSizeHint() const;
 
+    QSize baseSize() const;
+
 signals:
     void showOperationMenu();
     void popupOperationMenu( const QPoint& );
@@ -535,6 +541,8 @@ protected:
     void keyPressEvent( QKeyEvent * );
     void resizeEvent( QResizeEvent * );
     bool eventFilter( QObject *, QEvent * );
+
+    bool focusNextPrevChild( bool next );
 
 private:
     QWidget* childWidget;
@@ -647,6 +655,9 @@ QWorkspace::QWorkspace( QWidget *parent, const char *name )
     a->connectItem( a->insertItem( CTRL + SHIFT + Key_Tab),
 		    this, SLOT( activatePreviousWindow() ) );
 
+    a->connectItem( a->insertItem( CTRL + Key_F4 ),
+		    this, SLOT( closeActiveWindow() ) );
+
     setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) );
 
     d->topCaption = topLevelWidget()->caption();
@@ -689,6 +700,10 @@ void QWorkspace::childEvent( QChildEvent * e)
 	    return; 	    // nothing to do
 
 	bool hasBeenHidden = w->isHidden();
+	
+	bool hasSize = w->testWState( WState_Resized );
+	bool hasPos = w->x() != 0 || w->y() != 0;
+	QRect wrect = QRect( w->x(), w->y(), w->width(), w->height() );
 	QWorkspaceChild* child = new QWorkspaceChild( w, this );
 	child->installEventFilter( this );
 	connect( child, SIGNAL( popupOperationMenu( const QPoint& ) ),
@@ -698,12 +713,19 @@ void QWorkspace::childEvent( QChildEvent * e)
 	d->windows.append( child );
 	if ( child->isVisibleTo( this ) )
 	    d->focus.append( child );
-	place( child );
 	child->internalRaise();
+
 	if ( hasBeenHidden )
 	    w->hide();
 	else if ( !isVisible() )  // that's a case were we don't receive a showEvent in time. Tricky.
 	    child->show();
+
+	place( child );
+	if ( hasSize )
+	    child->resize( wrect.width(), wrect.height() + child->baseSize().height() );
+	if ( hasPos )
+	    child->move( wrect.x(), wrect.y() );
+
 	activateWindow( w );
     } else if (e->removed() ) {
 	if ( d->windows.contains( (QWorkspaceChild*)e->child() ) ) {
@@ -925,6 +947,25 @@ void QWorkspace::resizeEvent( QResizeEvent * )
 {
     if ( d->maxWindow )
 	d->maxWindow->adjustToFullscreen();
+
+    QListIterator<QWidget> it( d->icons );
+    while ( it.current() ) {
+	QWorkspaceChild* w = (QWorkspaceChild*)it.current();
+	++it;
+	int x = w->x();
+	int y = w->y();
+	bool m = FALSE;
+	if ( x+w->width() > width() ) {
+	    m = TRUE;
+	    x = width() - w->width();
+	}
+	if ( y+w->height() > height() ) {
+	    y = height() - w->height();
+	    m = TRUE;
+	}
+	if ( m )
+	    w->move( x, y );
+    }
 
     for ( QWorkspaceChild *c = d->windows.first(); c; c = d->windows.next() ) {
 	if ( c->windowWidget() && !c->windowWidget()->testWFlags( WStyle_Tool ) )
@@ -1152,8 +1193,14 @@ void QWorkspace::showMaximizeControls()
 #ifndef QT_NO_MENUBAR
     QMenuBar* b = 0;
 
+    // Do a breadth-first search first, and query recoursively is nothing is found.
     QObjectList * l = topLevelWidget()->queryList( "QMenuBar", 0,
 						   FALSE, FALSE );
+    if ( !l || !l->count() ) {
+	if ( l )
+	    delete l;
+	l = topLevelWidget()->queryList( "QMenuBar", 0, 0, TRUE );
+    }
     if ( l && l->count() )
 	b = (QMenuBar *)l->first();
     delete l;
@@ -1432,36 +1479,43 @@ void QWorkspace::cascade()
     const int xoffset = 13;
     const int yoffset = 20;
 
-    int w = width() - d->windows.count() * xoffset;
-    int h = height() - d->windows.count() * yoffset;
+    // make a list of all relevant mdi clients
+    QList<QWorkspaceChild> widgets;
+    for ( QWorkspaceChild* wc = d->focus.first(); wc; wc = d->focus.next() ) {
+	if ( wc->windowWidget()->isVisibleTo( this ) && !wc->windowWidget()->testWFlags( WStyle_Tool ) ) {
+	    widgets.append( wc );
+	}
+    }
+
     int x = 0;
     int y = 0;
 
-    for (QWorkspaceChild* c = d->windows.first(); c; c = d->windows.next() ) {
-	if ( c->windowWidget()->isHidden() )
-	    continue;
-	if ( c->windowWidget()->testWFlags( WStyle_StaysOnTop ) ) {
-	    QPoint p = c->pos();
-	    if ( p.x()+c->width() < 0 )
-		p.setX( 0 );
-	    if ( p.x() > width() )
-		p.setX( width() - c->width() );
-	    if ( p.y() + 10 < 0 )
-		p.setY( 0 );
-	    if ( p.y() > height() )
-		p.setY( height() - c->height() );
+    setUpdatesEnabled( FALSE );
+    QListIterator<QWorkspaceChild> it( widgets );
+    while ( it.current () ) {
+	QWorkspaceChild *child = it.current();
+	++it;
+	child->setUpdatesEnabled( FALSE );
+	QSize prefSize = child->windowWidget()->sizeHint() + QSize( 0, child->baseSize().height() );
+	if ( !child->windowWidget()->sizeHint().isValid() )
+	    prefSize = QSize( width() - d->windows.count() * xoffset, height() - d->windows.count() * yoffset );
 
+	int w = prefSize.width();
+	int h = prefSize.height();
 
-	    if ( p != c->pos() )
-		c->QFrame::move( p );
-	} else {
-	    c->showNormal();
-	    c->setGeometry( x, y, w, h );
-	    x += xoffset;
-	    y += yoffset;
-	    c->internalRaise();
-	}
+	child->showNormal();
+	qApp->sendPostedEvents( 0, QEvent::ShowNormal );
+	if ( y + h > height() )
+	    y = 0;
+	if ( x + w > width() )
+	    x = 0;
+	child->setGeometry( x, y, w, h );
+	x += xoffset;
+	y += yoffset;	
+	child->internalRaise();
+	child->setUpdatesEnabled( TRUE );
     }
+    setUpdatesEnabled( TRUE );
 }
 
 /*!
@@ -1477,7 +1531,8 @@ void QWorkspace::tile()
     QWorkspaceChild* c;
     for ( c = d->windows.first(); c; c = d->windows.next() ) {
 	if ( !c->windowWidget()->isHidden() &&
-	     !c->windowWidget()->testWFlags( WStyle_StaysOnTop ) )
+	     !c->windowWidget()->testWFlags( WStyle_StaysOnTop ) &&
+	     !c->windowWidget()->testWFlags( WStyle_Tool ) )
 	    n++;
     }
 
@@ -1497,7 +1552,7 @@ void QWorkspace::tile()
     int w = width() / cols;
     int h = height() / rows;
     for ( c = d->windows.first(); c; c = d->windows.next() ) {
-	if ( c->windowWidget()->isHidden() )
+	if ( c->windowWidget()->isHidden() || c->windowWidget()->testWFlags( WStyle_Tool ) )
 	    continue;
 	if ( c->windowWidget()->testWFlags( WStyle_StaysOnTop ) ) {
 	    QPoint p = c->pos();
@@ -1515,6 +1570,7 @@ void QWorkspace::tile()
 		c->QFrame::move( p );
 	} else {
 	    c->showNormal();
+	    qApp->sendPostedEvents( 0, QEvent::ShowNormal );
 	    used[row*cols+col] = TRUE;
 	    if ( add ) {
 		c->setGeometry( col*w, row*h, w, 2*h );
@@ -1843,7 +1899,7 @@ QSize QWorkspaceChildTitleBar::sizeHint() const
 {
     constPolish();
 
-    return QSize( 196, QMAX( titleHeight, fontMetrics().lineSpacing() ) );
+    return QSize( 128, QMAX( titleHeight, fontMetrics().lineSpacing() ) );
 }
 
 
@@ -1956,20 +2012,21 @@ void QWorkspaceChild::resizeEvent( QResizeEvent * )
     childWidget->setGeometry( cr );
 }
 
+QSize QWorkspaceChild::baseSize() const
+{
+    int th = titlebar ? titlebar->sizeHint().height() : 0;
+    int ts = titlebar ? TITLEBAR_SEPARATION : 0;
+    return QSize( 2*frameWidth(), 2*frameWidth() + th + ts);
+}
+
 QSize QWorkspaceChild::minimumSizeHint() const
 {
     if ( !childWidget )
-	return QFrame::minimumSizeHint();
-
-    QSize ms( childWidget->minimumSize() );
-    if ( ms.isEmpty() )
- 	ms = childWidget->minimumSizeHint();
-
-    int th = titlebar ? titlebar->sizeHint().height() : 0;
-    int ts = titlebar ? TITLEBAR_SEPARATION : 0;
-    QSize s( ms.width() + 2*frameWidth(),
-	     ms.height() + 2*frameWidth() + th + ts);
-    return s;
+	return QFrame::minimumSizeHint() + baseSize();
+    QSize s = childWidget->minimumSize();
+    if ( s.isEmpty() )
+	s = childWidget->minimumSizeHint();
+    return s + baseSize();
 }
 
 void QWorkspaceChild::activate()
@@ -2070,13 +2127,8 @@ bool QWorkspaceChild::eventFilter( QObject * o, QEvent * e)
     case QEvent::Resize:
 	{
 	    QResizeEvent* re = (QResizeEvent*)e;
-	    if ( re->size() != windowSize && !shademode ) {
-		int th = titlebar ? titlebar->sizeHint().height() : 0;
-		int ts = titlebar ? TITLEBAR_SEPARATION : 0;
-		QSize s( re->size().width() + 2*frameWidth(),
-			 re->size().height() + 2*frameWidth() + th + ts );
-		resize( s );
-	    }
+	    if ( re->size() != windowSize && !shademode )
+		resize( re->size() + baseSize() );
 	}
 	break;
     default:
@@ -2547,6 +2599,52 @@ void QWorkspaceChild::keyPressEvent( QKeyEvent * e )
     QCursor::setPos( pos );
 }
 
+bool QWorkspaceChild::focusNextPrevChild( bool next )
+{
+    QFocusData *f = focusData();
+
+    QWidget *startingPoint = f->home();
+    QWidget *candidate = 0;
+    QWidget *w = next ? f->next() : f->prev();
+    while( !candidate && w != startingPoint ) {
+	if ( w != startingPoint &&
+	     (w->focusPolicy() & TabFocus) == TabFocus
+	     && w->isEnabled() &&!w->focusProxy() && w->isVisible() )
+	    candidate = w;
+	w = next ? f->next() : f->prev();
+    }
+
+    if ( candidate ) {
+	QObjectList *ol = queryList();
+	bool ischild = ol->findRef( candidate ) != -1;
+	delete ol;
+	if ( !ischild ) {
+	    startingPoint = f->home();
+	    QWidget *nw = next ? f->prev() : f->next();
+	    QObjectList *ol2 = queryList();
+	    QWidget *lastValid = 0;
+	    candidate = startingPoint;
+	    while ( nw != startingPoint ) {
+		if ( ( candidate->focusPolicy() & TabFocus ) == TabFocus
+		    && candidate->isEnabled() &&!candidate->focusProxy() && candidate->isVisible() )
+		    lastValid = candidate;
+		if ( ol2->findRef( nw ) == -1 ) {
+		    candidate = lastValid;
+		    break;
+		}
+		candidate = nw;
+		nw = next ? f->prev() : f->next();
+	    }
+	    delete ol2;
+	}
+    }
+
+    if ( !candidate )
+	return FALSE;
+
+    candidate->setFocus();
+    return TRUE;
+}
 
 void QWorkspaceChild::doResize()
 {

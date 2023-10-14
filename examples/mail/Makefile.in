@@ -92,7 +92,7 @@ listaddonentmodules:
 	@echo 
 
 
-REQUIRES=network
+REQUIRES=network full-config
 
 ####### Sub-libraries
 

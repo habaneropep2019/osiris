@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qaction.h   2.2.1   edited 2000-08-25 $
+** $Id: qt/src/widgets/qaction.h   2.2.2   edited 2000-08-25 $
 **
 ** Definition of QAction class
 **

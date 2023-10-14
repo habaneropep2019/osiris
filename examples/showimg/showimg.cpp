@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/showimg/showimg.cpp   2.2.1   edited 2000-08-31 $
+** $Id: qt/examples/showimg/showimg.cpp   2.2.2   edited 2000-10-05 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -598,17 +598,21 @@ void ImageViewer::rot180()
 
 void ImageViewer::copy()
 {
+#ifndef QT_NO_MIMECLIPBOARD
     QApplication::clipboard()->setImage(image); // Less information loss
+#endif
 }
 
 void ImageViewer::paste()
 {
+#ifndef QT_NO_MIMECLIPBOARD
     QImage p = QApplication::clipboard()->image();
 
     if ( !image.isNull() ) {
 	filename = "pasted";
 	setImage(p);
     }
+#endif
 }
 
 void ImageViewer::setImage(const QImage& newimage)

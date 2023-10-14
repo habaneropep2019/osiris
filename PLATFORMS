@@ -5,17 +5,18 @@ system and compiler you are using.
 
 Supported platforms and compilers:
 
-  aix-g++        hpux-cc        irix-n32       qnx-g++        unixware-g++
-  aix-xlc        hpux-g++       irix-o32       sco-g++        unixware7-cc
-  bsdi-g++       hpux-n64       linux-g++      solaris-64     unixware7-g++
-  dgux-g++       hpux-o64       netbsd-g++     solaris-cc
-  freebsd-g++    irix-64        openbsd-g++    solaris-g++
-  gnu-g++        irix-dcc       osf1-cxx       sunos-g++
-  hpux-acc	 irix-g++       osf1-g++       ultrix-g++
+  aix-g++        hpux-cc        irix-n32       qnx-g++        ultrix-g++
+  aix-xlc        hpux-g++       irix-o32       qnx-rtp-g++    unixware-g++
+  bsdi-g++       hpux-n64       linux-g++      sco-g++        unixware7-cc
+  dgux-g++       hpux-o64       netbsd-g++     solaris-64     unixware7-g++
+  freebsd-g++    irix-64        openbsd-g++    solaris-cc
+  gnu-g++        irix-dcc       osf1-cxx       solaris-g++
+  hpux-acc	 irix-g++       osf1-g++       sunos-g++
 
 Limitations:
 
   ultrix-g++ does not support shared libraries, use static.
+  qnx-rtp-g++ is experimental only. Expect problems.
 
 Compilation problems:
 

@@ -63,8 +63,8 @@
 " The Unicode Standard, version 2.0." http://www.amazon.com/exec/obidos/ASIN/0201473459/trolltech/t
 " The Unicode Standard, version 3.0." http://www.amazon.com/exec/obidos/ASIN/0201616335/trolltech/t
 " The home page for the standard" http://www.unicode.org/unicode/standard/standard.html
+" Thread Support in Qt " threads.html
 " Thread Time: The Multithreaded Programming Guide" http://www.amazon.com/exec/obidos/ASIN/0131900676/trolltech/t
-" Thread support in Qt " threads.html
 " Threads Primer: A Guide to Multithreaded Programming" http://www.amazon.com/exec/obidos/ASIN/0134436989/trolltech/t
 " Virtual Framebuffer" qvfb-qws.html
 " Win32 Multithreaded Programming" http://www.amazon.com/exec/obidos/ASIN/1565922964/trolltech/t
@@ -75,6 +75,7 @@
 " internationalization" i18n.html
 " its home page." http://www.unicode.org/unicode/standard/versions/Unicode3.0.html
 " on the web" http://developer.apple.com/techpubs/mac/HIGuidelines/HIGuidelines-2.html
+" the IANA character-sets encoding file" ftp://ftp.isi.edu/in-notes/iana/assignments/character-sets
 " the PNG specification" http://www.cdrom.com/pub/png/spec/PNG-Chunks.html#C.tEXt
 "" qwidget.html#500633
 "" simplemain
@@ -170,6 +171,7 @@
 "Linux VR " http://www.linux-vr.org/
 "ListStyle" qstylesheetitem.html#ListStyle
 "MAPS TSI" http://www.mail-abuse.org/tsi/
+"MIBenum" qtextcodec.html#b0aafb
 "MIME types" http://www.rfc-editor.org/rfc/rfc1341.txt
 "Mac OS 8 addendum." http://developer.apple.com/techpubs/mac/HIGOS8Guide/thig-2.html
 "Main tutorial page" tutorial.html
@@ -210,12 +212,6 @@
 "OpenGL module" opengl.html
 "Orientation" qt.html#Orientation
 "Overlay:" qglformat.html#c4ce7c
-"PCOPChannel" pcopchannel.html
-"PCOPChannel" pcopchannel.html#233c5d
-"PCOPChannel" pcopchannel.html#3d11b9
-"PCOPChannel" pcopchannel.html#3e44f6
-"PCOPChannel" pcopchannel.html#83f92c
-"PCOPChannel" pcopchannel.html#b9f5d7
 "PenCapStyle" qt.html#PenCapStyle
 "PenJoinStyle" qt.html#PenJoinStyle
 "PenStyle" qt.html#PenStyle
@@ -1232,6 +1228,12 @@
 "QConstString" qconststring.html
 "QConstString" qconststring.html#82b27d
 "QConstString" qconststring.html#8a0768
+"QCopChannel" qcopchannel.html
+"QCopChannel" qcopchannel.html#5adafc
+"QCopChannel" qcopchannel.html#a3662e
+"QCopChannel" qcopchannel.html#b3f06a
+"QCopChannel" qcopchannel.html#e86228
+"QCopChannel" qcopchannel.html#ebc0c1
 "QCursor" qcursor.html
 "QCursor" qcursor.html#14a5a2
 "QCursor" qcursor.html#16dc37
@@ -1681,6 +1683,7 @@
 "QDomNode" qdomnode.html#df376d
 "QDomNode" qdomnode.html#f257b2
 "QDomNode" qdomnode.html#fbabaf
+"QDomNode::childNodes" qdomnode.html#9351b0
 "QDomNode::isNull" qdomnode.html#aa255a
 "QDomNode::nodeName" qdomnode.html#08186f
 "QDomNodeList" qdomnodelist.html
@@ -3796,12 +3799,14 @@
 "QMotifPlusStyle" qmotifplusstyle.html#aa4432
 "QMotifPlusStyle" qmotifplusstyle.html#ad4cab
 "QMotifPlusStyle" qmotifplusstyle.html#b6276e
+"QMotifPlusStyle" qmotifplusstyle.html#ca809e
 "QMotifPlusStyle" qmotifplusstyle.html#d46717
 "QMotifPlusStyle" qmotifplusstyle.html#e66cfe
 "QMotifPlusStyle" qmotifplusstyle.html#fa7113
 "QMotifStyle" qmotifstyle.html
 "QMotifStyle" qmotifstyle.html#08c3da
 "QMotifStyle" qmotifstyle.html#12d920
+"QMotifStyle" qmotifstyle.html#16ea7d
 "QMotifStyle" qmotifstyle.html#197316
 "QMotifStyle" qmotifstyle.html#1a30e7
 "QMotifStyle" qmotifstyle.html#2e3c16
@@ -3918,6 +3923,7 @@
 "QMultiLineEdit" qmultilineedit.html#4e5edd
 "QMultiLineEdit" qmultilineedit.html#4ea1a9
 "QMultiLineEdit" qmultilineedit.html#52e575
+"QMultiLineEdit" qmultilineedit.html#53d6ef
 "QMultiLineEdit" qmultilineedit.html#55bc61
 "QMultiLineEdit" qmultilineedit.html#5c50df
 "QMultiLineEdit" qmultilineedit.html#5d057c
@@ -5125,13 +5131,13 @@
 "QSizePolicy::SizeType" qsizepolicy.html#SizeType
 "QSjisCodec" qsjiscodec.html
 "QSjisCodec" qsjiscodec.html#0e3d92
+"QSjisCodec" qsjiscodec.html#64aa26
+"QSjisCodec" qsjiscodec.html#8e56e1
+"QSjisCodec" qsjiscodec.html#939e34
+"QSjisCodec" qsjiscodec.html#9ede9c
 "QSjisCodec" qsjiscodec.html#ba1290
-"QSjisCodec" qtextcodec.html#144365
-"QSjisCodec" qtextcodec.html#461187
-"QSjisCodec" qtextcodec.html#7e416f
-"QSjisCodec" qtextcodec.html#b0aafb
-"QSjisCodec" qtextcodec.html#bfe11b
-"QSjisCodec" qtextcodec.html#fcf223
+"QSjisCodec" qsjiscodec.html#bfa51e
+"QSjisCodec" qsjiscodec.html#da0c52
 "QSlider" qslider.html
 "QSlider" qslider.html#026af8
 "QSlider" qslider.html#054afb
@@ -5941,20 +5947,26 @@
 "QTextBrowser" qtextbrowser.html#c8fcfc
 "QTextBrowser" qtextbrowser.html#d72702
 "QTextCodec" qtextcodec.html
+"QTextCodec" qtextcodec.html#144365
 "QTextCodec" qtextcodec.html#1b8155
 "QTextCodec" qtextcodec.html#1d8f7b
 "QTextCodec" qtextcodec.html#20e3df
 "QTextCodec" qtextcodec.html#235cd6
 "QTextCodec" qtextcodec.html#288c5c
+"QTextCodec" qtextcodec.html#461187
 "QTextCodec" qtextcodec.html#75defa
+"QTextCodec" qtextcodec.html#7e416f
 "QTextCodec" qtextcodec.html#9ee91f
 "QTextCodec" qtextcodec.html#aee6fe
+"QTextCodec" qtextcodec.html#b0aafb
 "QTextCodec" qtextcodec.html#bc4c6e
 "QTextCodec" qtextcodec.html#beb462
+"QTextCodec" qtextcodec.html#bfe11b
 "QTextCodec" qtextcodec.html#c400c7
 "QTextCodec" qtextcodec.html#d7db3c
 "QTextCodec" qtextcodec.html#f72313
 "QTextCodec" qtextcodec.html#f9b2db
+"QTextCodec" qtextcodec.html#fcf223
 "QTextCodec::codecForLocale" qtextcodec.html#20e3df
 "QTextCodec::codecForLocale()" qtextcodec.html#20e3df
 "QTextCodec::codecForName" qtextcodec.html#aee6fe
@@ -7183,6 +7195,7 @@
 "Technical FAQ" http://www.trolltech.com/faq/tech.html
 "The Coordinate System" coordsys.html
 "The plane of an overlay format." qglformat.html#575987
+"Thread Support in Qt" threads.html
 "Threads documentation" threads.html
 "Trademarks" http://www.trolltech.com/trademarks.html
 "Tree" hierarchy.html
@@ -7711,7 +7724,7 @@
 "changeTab" qtabdialog.html#37b919
 "changeTab" qtabwidget.html#8bade8
 "changed" qimageconsumer.html#96d0a9
-"channel" pcopchannel.html#83f92c
+"channel" qcopchannel.html#e86228
 "chapter 7" t7.html
 "chapter eight." t8.html
 "chapter eleven." t11.html
@@ -9026,6 +9039,7 @@
 "focusInEvent" qtextview.html#2366c4
 "focusInEvent" qwidget.html#303f18
 "focusNextPrevChild" qbutton.html#d25e76
+"focusNextPrevChild" qmultilineedit.html#53d6ef
 "focusNextPrevChild" qpopupmenu.html#7069e5
 "focusNextPrevChild" qscrollview.html#fe180c
 "focusNextPrevChild" qwidget.html#55dcde
@@ -9092,7 +9106,6 @@
 "forever/forever.cpp" forever-forever-cpp.html#setBrush
 "forever/forever.cpp" forever-forever-cpp.html#setMainWidget
 "forever/forever.cpp" forever-forever-cpp.html#setPen
-"forever/forever.cpp" forever-forever-cpp.html#setWindow
 "forever/forever.cpp" forever-forever-cpp.html#sprintf
 "forever/forever.cpp" forever-forever-cpp.html#startTimer
 "format" qdropevent.html#141ff9
@@ -9138,6 +9151,7 @@
 "fromUnicode" qeuckrcodec.html#8d1f7e
 "fromUnicode" qgbkcodec.html#c75341
 "fromUnicode" qjiscodec.html#f426f8
+"fromUnicode" qsjiscodec.html#64aa26
 "fromUnicode" qtextcodec.html#7e416f
 "fromUnicode" qtextencoder.html#6506b3
 "fromUnicode" qtsciicodec.html#9d2355
@@ -9371,12 +9385,14 @@
 "heuristicContentMatch" qeuckrcodec.html#6c64e2
 "heuristicContentMatch" qgbkcodec.html#33905d
 "heuristicContentMatch" qjiscodec.html#398490
+"heuristicContentMatch" qsjiscodec.html#939e34
 "heuristicContentMatch" qtextcodec.html#461187
 "heuristicContentMatch" qtsciicodec.html#368e50
 "heuristicNameMatch" qeucjpcodec.html#a66400
 "heuristicNameMatch" qeuckrcodec.html#7821d3
 "heuristicNameMatch" qgbkcodec.html#002b13
 "heuristicNameMatch" qjiscodec.html#999d2b
+"heuristicNameMatch" qsjiscodec.html#8e56e1
 "heuristicNameMatch" qtextcodec.html#144365
 "heuristicNameMatch" qtsciicodec.html#87cfd3
 "hide" qcanvasitem.html#c2e7f6
@@ -9418,6 +9434,7 @@
 "hotSpot" qcursor.html#f6805f
 "hour" qtime.html#2f9ab7
 "hsv" qcolor.html#b3bb23
+"http://www.libmng.com" http://www.libmng.com/
 "http://www.linux-vr.org/booting.html" http://www.linux-vr.org/booting.html
 "http://www.linux-vr.org/kernel.html" http://www.linux-vr.org/kernel.html
 "http://www.linux-vr.org/ramdisk.html" http://www.linux-vr.org/ramdisk.html
@@ -9808,7 +9825,7 @@
 "isReadable" qfileinfo.html#b1136b
 "isReadable" qiodevice.html#a52f4d
 "isReadable" qurlinfo.html#eff978
-"isRegistered" pcopchannel.html#b9f5d7
+"isRegistered" qcopchannel.html#a3662e
 "isRelative" qdir.html#bf7a9f
 "isRelative" qfileinfo.html#c9001f
 "isRelativePath" qdir.html#43f37d
@@ -10164,6 +10181,7 @@
 "makeDecoder" qeuckrcodec.html#42c97f
 "makeDecoder" qgbkcodec.html#d19813
 "makeDecoder" qjiscodec.html#db0000
+"makeDecoder" qsjiscodec.html#da0c52
 "makeDecoder" qtextcodec.html#bfe11b
 "makeEllipse" qpointarray.html#4b7cea
 "makeEncoder" qtextcodec.html#c400c7
@@ -10308,6 +10326,7 @@
 "mibEnum" qeuckrcodec.html#8082b7
 "mibEnum" qgbkcodec.html#7ee8e7
 "mibEnum" qjiscodec.html#936710
+"mibEnum" qsjiscodec.html#9ede9c
 "mibEnum" qtextcodec.html#b0aafb
 "mibEnum" qtsciicodec.html#b381cf
 "microFocusHint" qwidget.html#71f028
@@ -10506,6 +10525,7 @@
 "name" qmetaproperty.html#d1f034
 "name" qobject.html#6f3030
 "name" qsignal.html#15a208
+"name" qsjiscodec.html#bfa51e
 "name" qstylesheetitem.html#2c86f5
 "name" qtextcodec.html#fcf223
 "name" qtsciicodec.html#40d1a1
@@ -11158,6 +11178,8 @@
 "polish" qstyle.html#45065e
 "polish" qstyle.html#dff902
 "polish" qwidget.html#74292a
+"polishPopupMenu" qmotifplusstyle.html#ca809e
+"polishPopupMenu" qmotifstyle.html#16ea7d
 "polishPopupMenu" qplatinumstyle.html#a201dc
 "polishPopupMenu" qstyle.html#200b84
 "polishPopupMenu" qwindowsstyle.html#a3c2b5
@@ -11644,7 +11666,7 @@
 "readyToSend" qdatasource.html#27a6b8
 "readyToSend" qiodevicesource.html#be3f43
 "reason" qfocusevent.html#63797b
-"receive" pcopchannel.html#3e44f6
+"receive" qcopchannel.html#b3f06a
 "receive" qdatasink.html#430880
 "receiveBufferSize" qsocketdevice.html#44851e
 "receivers" qobject.html#d485d7
@@ -12075,7 +12097,7 @@
 "selectionMode" qtable.html#5b0379
 "selfMask" qpixmap.html#3a2cb4
 "selfNesting" qstylesheetitem.html#a5c31a
-"send" pcopchannel.html#3d11b9
+"send" qcopchannel.html#5adafc
 "sendBufferSize" qsocketdevice.html#bd4cae
 "sendEvent" qapplication.html#5a43f0
 "sendPostedEvents" qapplication.html#72245c
@@ -14098,7 +14120,6 @@
 "yVelocity" qcanvasitem.html#df5072
 "year" qdate.html#d53d66
 "z" qcanvasitem.html#304ea2
-"~PCOPChannel" pcopchannel.html#92c3a2
 "~QAccel" qaccel.html#f19e88
 "~QAction" qaction.html#209573
 "~QActionGroup" qactiongroup.html#e2d429
@@ -14128,11 +14149,13 @@
 "~QCanvasSprite" qcanvassprite.html#2ddb4b
 "~QCanvasText" qcanvastext.html#ced364
 "~QCanvasView" qcanvasview.html#bcb39d
+"~QCheckListItem" qchecklistitem.html#6b2c18
 "~QCollection" qcollection.html#21fbd0
 "~QColorGroup" qcolorgroup.html#cfe77c
 "~QComboBox" qcombobox.html#0bde71
 "~QConnection" qconnection.html#ee7164
 "~QConstString" qconststring.html#0b1e29
+"~QCopChannel" qcopchannel.html#ea1844
 "~QCursor" qcursor.html#0d8bff
 "~QCustomMenuItem" qcustommenuitem.html#18b032
 "~QDataStream" qdatastream.html#5aebff

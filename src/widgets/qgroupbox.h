@@ -1,5 +1,5 @@
 /**********************************************************************
-** $Id: qt/src/widgets/qgroupbox.h   2.2.1   edited 2000-08-25 $
+** $Id: qt/src/widgets/qgroupbox.h   2.2.2   edited 2000-11-02 $
 **
 ** Definition of QGroupBox widget class
 **
@@ -42,7 +42,7 @@
 #include "qframe.h"
 #endif // QT_H
 
-#ifndef QT_NO_COMPLEXWIDGETS
+#ifndef QT_NO_GROUPBOX
 
 
 class QAccel;
@@ -107,7 +107,9 @@ private:
     QString str;
     int align;
     int lenvisible;
+#ifndef QT_NO_ACCEL
     QAccel * accel;
+#endif
     QGroupBoxPrivate * d;
 
     QVBoxLayout *vbox;
@@ -125,6 +127,6 @@ private:	// Disabled copy constructor and operator=
 };
 
 
-#endif // QT_NO_COMPLEXWIDGETS
+#endif // QT_NO_GROUPBOX
 
 #endif // QGROUPBOX_H

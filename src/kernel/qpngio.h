@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qpngio.h   2.2.1   edited 2000-08-25 $
+** $Id: qt/src/kernel/qpngio.h   2.2.2   edited 2000-10-09 $
 **
 ** Definition of PNG QImage IOHandler
 **
@@ -90,6 +90,6 @@ private:
     int alignx;
 };
 
-#endif // QT_NO_IMAEGIO_PNG
+#endif // QT_NO_IMAGEIO_PNG
 
 #endif // QPNGIO_H

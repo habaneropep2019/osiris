@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qrichtext.cpp   2.2.1   edited 2000-10-02 $
+** $Id: qt/src/kernel/qrichtext.cpp   2.2.2   edited 2000-11-07 $
 **
 ** Implementation of the internal Qt classes dealing with rich text
 **
@@ -53,6 +53,27 @@
 
 
 static int qt_text_paragraph_id = 0;
+
+bool isBreakable( const QChar *c, bool checkNext = FALSE )
+{
+    char ch = c->latin1();
+    if ( ! ch ) {
+	// not latin1, need to do more sophisticated checks for asian fonts
+	uchar row = c->row();
+	if ( row < 0x11 ) // no asian font
+	    return FALSE;
+	if ( row > 0x2d && row < 0xfb || row == 0x11 ) {
+	    if ( !checkNext )
+		return TRUE;
+	    else
+		return !(c+1)->isPunct();
+	}
+    } else {
+	if ( ch == ' ' || ch == '\n' )
+	    return TRUE;
+    }
+    return FALSE;
+}
 
 class QTextTable: public QTextCustomItem
 {
@@ -744,39 +765,45 @@ static void qt_cleanup_html_map()
     html_map = 0;
 }
 
+// Avoid bloat from excessive inlining.
+static void map_insert(QMap<QCString, QChar>* map, const char* str, const QChar& ch)
+{
+    map->insert(str,ch);
+}
+
 QMap<QCString, QChar> *htmlMap()
 {
     if ( !html_map ){
 	html_map = new QMap<QCString, QChar>;
 	qAddPostRoutine( qt_cleanup_html_map );
-  	html_map->insert("lt", '<');
-  	html_map->insert("gt", '>');
-  	html_map->insert("amp", '&');
-  	html_map->insert("nbsp", 0x00a0U);
-  	html_map->insert("bull", 0x2022U);
-  	html_map->insert("aring", '\xe5');
-  	html_map->insert("oslash", '\xf8');
-  	html_map->insert("ouml", '\xf6');
-  	html_map->insert("auml", '\xe4');
-  	html_map->insert("uuml", '\xfc');
-  	html_map->insert("Ouml", '\xd6');
-  	html_map->insert("Auml", '\xc4');
-  	html_map->insert("Uuml", '\xdc');
-  	html_map->insert("szlig", '\xdf');
-  	html_map->insert("copy", '\xa9');
-  	html_map->insert("deg", '\xb0');
-  	html_map->insert("micro", '\xb5');
-  	html_map->insert("plusmn", '\xb1');
-  	html_map->insert("middot", '*');
-  	html_map->insert("quot", '\"');
-  	html_map->insert("commat", '@');
-  	html_map->insert("num", '#');
-  	html_map->insert("dollar", '$');
-  	html_map->insert("ldquo", '`');
-  	html_map->insert("rdquo", '\'');
-  	html_map->insert("sol", '/' );
-  	html_map->insert("bsol", '\\');
-  	html_map->insert("lowbar", '_');
+  	map_insert(html_map, "lt", '<');
+  	map_insert(html_map, "gt", '>');
+  	map_insert(html_map, "amp", '&');
+  	map_insert(html_map, "nbsp", 0x00a0U);
+  	map_insert(html_map, "bull", 0x2022U);
+  	map_insert(html_map, "aring", '\xe5');
+  	map_insert(html_map, "oslash", '\xf8');
+  	map_insert(html_map, "ouml", '\xf6');
+  	map_insert(html_map, "auml", '\xe4');
+  	map_insert(html_map, "uuml", '\xfc');
+  	map_insert(html_map, "Ouml", '\xd6');
+  	map_insert(html_map, "Auml", '\xc4');
+  	map_insert(html_map, "Uuml", '\xdc');
+  	map_insert(html_map, "szlig", '\xdf');
+  	map_insert(html_map, "copy", '\xa9');
+  	map_insert(html_map, "deg", '\xb0');
+  	map_insert(html_map, "micro", '\xb5');
+  	map_insert(html_map, "plusmn", '\xb1');
+  	map_insert(html_map, "middot", '*');
+  	map_insert(html_map, "quot", '\"');
+  	map_insert(html_map, "commat", '@');
+  	map_insert(html_map, "num", '#');
+  	map_insert(html_map, "dollar", '$');
+  	map_insert(html_map, "ldquo", '`');
+  	map_insert(html_map, "rdquo", '\'');
+  	map_insert(html_map, "sol", '/' );
+  	map_insert(html_map, "bsol", '\\');
+  	map_insert(html_map, "lowbar", '_');
     }
     return html_map;
 }
@@ -849,7 +876,7 @@ QString QRichText::parsePlainText(const QString& doc, int& pos, QStyleSheetItem:
     QString s;
     while( pos < int(doc.length()) &&
 	   (doc.unicode())[pos] != '<' ) {
-	if ((doc.unicode())[pos].isSpace() && (doc.unicode())[pos] != QChar(0x00a0U) ){
+	if (isBreakable( doc.unicode() + pos, pos < int(doc.length()-1) ) && (doc.unicode())[pos] != QChar(0x00a0U) ){
 
 	    if ( wsm == QStyleSheetItem::WhiteSpacePre ) {
 		if ( (doc.unicode())[pos] == ' ' )
@@ -858,13 +885,17 @@ QString QRichText::parsePlainText(const QString& doc, int& pos, QStyleSheetItem:
 		    s += (doc.unicode())[pos];
 	    }
 	    else { // non-pre mode: collapse whitespace except nbsp
-		while ( pos+1 < int(doc.length() ) &&
-			(doc.unicode())[pos+1].isSpace()  && (doc.unicode())[pos+1] != QChar(0x00a0U) )
-		    pos++;
-		if ( wsm == QStyleSheetItem::WhiteSpaceNoWrap )
-		    s += QChar(0x00a0U);
-		else
-		    s += ' ';
+		if( (doc.unicode())[pos].isSpace() ) {
+		    while ( pos+1 < int(doc.length() ) &&
+			    (doc.unicode())[pos+1].isSpace()  && (doc.unicode())[pos+1] != QChar(0x00a0U) )
+			pos++;
+		    if ( wsm == QStyleSheetItem::WhiteSpaceNoWrap )
+			s += QChar(0x00a0U);
+		    else
+			s += ' ';
+		} else {
+		    s += (doc.unicode())[pos];
+		}
 	    }
 	    pos++;
 	    if ( justOneWord )
@@ -1841,9 +1872,9 @@ void QRichTextFormatter::drawLine( QPainter* p, int ox, int oy,
     QString printString;
     int printX = 0;
     int printY = 0;
-    while ( !atEndOfLine() ) {
+    while ( current <= last ) {
 	QTextCharFormat *fmt  = format();
-	if ( !fmt->anchorHref().isEmpty() ) {
+	if ( !fmt->anchorHref().isEmpty() && fmt->useLinkColor() ) {
 	    p->setPen( ( QPaintDeviceMetrics(p->device()).depth() > 1) ? to.linkColor : cg.text() );
 	    if ( to.linkUnderline ) {
 		QFont f = fmt->font();
@@ -1900,6 +1931,13 @@ void QRichTextFormatter::drawLine( QPainter* p, int ox, int oy,
 	    //### workaround for broken courier fonts on X11
  	    for ( int i = 0; i < l; i++ ) {
  		if ( c[i] == QChar(0x00a0U) )
+ 		    c[i] = ' ';
+ 	    }
+#endif
+#ifdef _WS_WIN32_
+	    //### workaround for black squares
+ 	    for ( int i = 0; i < l; i++ ) {
+ 		if ( c[i] == '\n' || c[i] == '\r' )
  		    c[i] = ' ';
  	    }
 #endif
@@ -2232,13 +2270,13 @@ void QRichTextFormatter::makeLineLayout( QPainter* p )
 
 	// word break is possible (a) after a space, (b) after a
 	// newline, (c) before expandable item  or (d) at the end of the paragraph.
-	if ( noSpaceFound || lastc == ' ' || lastc == '\n' || current == paragraph->text.length() ){
+	if ( noSpaceFound || isBreakable(&lastc) || lastc == '\n' || current == paragraph->text.length() ){
 	    lastSpace = current - 1;
 	    lastHeight = rh;
 	    lastAsc = rasc;
 	    lastDesc = rdesc;
 	    lastWidth = currentx;
- 	    if ( lastc == ' ' )
+ 	    if ( isBreakable(&lastc) )
  		noSpaceFound = FALSE;
 	}
 	if ( lastc == '\n' )
@@ -2743,7 +2781,7 @@ void QTextTableCell::draw(int x, int y,
 
 QTextCharFormat::QTextCharFormat()
     : logicalFontSize( 3 ), stdPointSize( 12 ),
-      custom( 0 )
+      custom( 0 ), linkColor( TRUE )
 {
 }
 
@@ -2754,7 +2792,8 @@ QTextCharFormat::QTextCharFormat( const QTextCharFormat &format )
       stdPointSize( format.stdPointSize ),
       anchor_href( format.anchor_href ),
       anchor_name( format.anchor_name ),
-      parent(0), custom( format.custom )
+      parent(0), custom( format.custom ),
+      linkColor( format.linkColor )
 {
     if ( custom )
 	custom->ref();
@@ -2762,7 +2801,7 @@ QTextCharFormat::QTextCharFormat( const QTextCharFormat &format )
 
 QTextCharFormat::QTextCharFormat( const QFont &f, const QColor &c )
     : font_( f ), color_( c ), logicalFontSize( 3 ), stdPointSize( f.pointSize() ),
-      parent(0), custom( 0 )
+      parent(0), custom( 0 ), linkColor( TRUE )
 {
     createKey();
 }
@@ -2800,6 +2839,7 @@ QTextCharFormat &QTextCharFormat::operator=( const QTextCharFormat &fmt )
     anchor_href = fmt.anchor_href;
     anchor_name = fmt.anchor_name;
     custom = fmt.custom;
+    linkColor = fmt.linkColor;
     if ( custom )
 	custom->ref();
     return *this;
@@ -2820,8 +2860,10 @@ QTextCharFormat QTextCharFormat::makeTextFormat( const QStyleSheetItem *style,
     if ( style ) {
 	if ( style->name() == "font") {
 
-	    if ( attr.contains("color") )
+	    if ( attr.contains("color") ) {
 		format.color_.setNamedColor( attr["color"] );
+		format.linkColor = FALSE;
+	    }
 	    if ( attr.contains("size") ) {
 		QString a = attr["size"];
 		int n = a.toInt();

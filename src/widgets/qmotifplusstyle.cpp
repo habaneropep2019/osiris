@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qmotifplusstyle.cpp   2.2.1   edited 2000-09-23 $
+** $Id: qt/src/widgets/qmotifplusstyle.cpp   2.2.2   edited 2000-10-24 $
 **
 ** Implementation of QMotifPlusStyle class
 **
@@ -254,9 +254,11 @@ void QMotifPlusStyle::polish(QWidget *widget)
 	((QFrame *) widget)->frameStyle() == QFrame::Panel)
 	((QFrame *) widget)->setFrameStyle(QFrame::WinPanel);
 
+#ifndef QT_NO_MENUBAR
     if (widget->inherits("QMenuBar") &&
 	((QMenuBar *) widget)->frameStyle() != QFrame::NoFrame)
 	((QMenuBar *) widget)->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
+#endif
 
     if (widget->inherits("QToolBar"))
 	widget->layout()->setMargin(2);
@@ -341,8 +343,9 @@ void QMotifPlusStyle::drawPushButton(QPushButton *button, QPainter *p)
     else
 	fill = button->colorGroup().brush(QColorGroup::Button);
 
-    drawButton(p, x1, y1, x2 - x1 + 1, y2 - y1 + 1,
-	       button->colorGroup(), button->isOn() || button->isDown(), &fill);
+    if ( !button->isFlat() || button->isOn() || button->isDown() )
+	drawButton(p, x1, y1, x2 - x1 + 1, y2 - y1 + 1,
+		   button->colorGroup(), button->isOn() || button->isDown(), &fill);
 }
 
 
@@ -1103,38 +1106,37 @@ void QMotifPlusStyle::drawScrollBarControls( QPainter* p, const QScrollBar* sb,
 /*!
   \reimp
 */
-void QMotifPlusStyle::drawTab(QPainter *p, const QTabBar *tabbar, QTab *tab, bool selected)
+void QMotifPlusStyle::drawTab(QPainter *p, const QTabBar *tabbar, QTab *tab,
+			      bool selected)
 {
     QColorGroup g = tabbar->colorGroup();
-
-    p->fillRect(tab->r, g.background());
-
     QPen oldpen = p->pen();
-    QRect fr = tab->r;
+    QRect fr(tab->r);
 
     if (! selected) {
 	if (tabbar->shape() == QTabBar::RoundedAbove ||
 	    tabbar->shape() == QTabBar::TriangularAbove) {
-
+	    
     	    fr.setTop(fr.top() + 2);
 	} else {
 	    fr.setBottom(fr.bottom() - 2);
 	}
     }
-
+    
+    fr.setWidth(fr.width() - 3);
+    
     p->fillRect(fr.left() + 1, fr.top() + 1, fr.width() - 2, fr.height() - 2,
 		(selected) ? g.brush(QColorGroup::Button) : g.brush(QColorGroup::Mid));
 
     if (tabbar->shape() == QTabBar::RoundedAbove) {
 	// "rounded" tabs on top
-
 	fr.setBottom(fr.bottom() - 1);
 
 	p->setPen(g.light());
-	p->drawLine(fr.left(), fr.top() + 1, tab->r.left(), fr.bottom() - 1);
+	p->drawLine(fr.left(), fr.top() + 1, fr.left(), fr.bottom() - 1);
 	p->drawLine(fr.left() + 1, fr.top(), fr.right() - 1, fr.top());
-	if (! selected) p->drawLine(tab->r.left(), fr.bottom(),
-				    tab->r.right(), fr.bottom());
+	if (! selected) p->drawLine(fr.left(), fr.bottom(),
+				    fr.right() + 3, fr.bottom());
 
 	if (fr.left() == 0)
 	    p->drawLine(fr.left(), fr.bottom(), fr.left(), fr.bottom() + 1);
@@ -1146,21 +1148,19 @@ void QMotifPlusStyle::drawTab(QPainter *p, const QTabBar *tabbar, QTab *tab, boo
 	p->drawLine(fr.right(), fr.top() + 1, fr.right(), fr.bottom() - 1);
     } else if (tabbar->shape() == QTabBar::RoundedBelow) {
 	// "rounded" tabs on bottom
-
 	fr.setTop(fr.top() + 1);
 
-
 	p->setPen(g.dark());
-	p->drawLine(fr.right(), fr.top() - 1,
+	p->drawLine(fr.right() + 3, fr.top() - 1,
 		    fr.right() - 1, fr.top() - 1);
 	p->drawLine(fr.right() - 1, fr.top(),
 		    fr.right() - 1, fr.bottom() - 2);
 	p->drawLine(fr.right() - 1, fr.bottom() - 2,
-		    fr.left() + 2, fr.bottom() - 2);
+		    fr.left() + 2,  fr.bottom() - 2);
 	if (! selected) {
-	    p->drawLine(fr.right() - 1, fr.top() - 1,
-			fr.left() + 1, fr.top() - 1);
-
+	    p->drawLine(fr.right(), fr.top() - 1,
+			fr.left() + 1,  fr.top() - 1);
+	    
 	    if (fr.left() != 0)
 		p->drawPoint(fr.left(), fr.top() - 1);
 	}
@@ -1169,16 +1169,24 @@ void QMotifPlusStyle::drawTab(QPainter *p, const QTabBar *tabbar, QTab *tab, boo
 	p->drawLine(fr.right(), fr.top(),
 		    fr.right(), fr.bottom() - 2);
 	p->drawLine(fr.right() - 1, fr.bottom() - 1,
-		    fr.left() + 1, fr.bottom() - 1);
+		    fr.left(), fr.bottom() - 1);
 	if (! selected)
-	    p->drawLine(fr.right(), fr.top(),
-			fr.left() + 1, fr.top());
-
+	    p->drawLine(fr.right() + 3, fr.top(), fr.left(), fr.top());
+	else
+	    p->drawLine(fr.right() + 3, fr.top(), fr.right(), fr.top());
+	
 	p->setPen(g.light());
-	p->drawLine(fr.left(), fr.top(),
+	p->drawLine(fr.left(), fr.top() + 1,
 		    fr.left(), fr.bottom() - 2);
-	if (! selected && fr.left() == 0)
-	    p->drawPoint(fr.left(), fr.top() - 1);
+	
+	if (selected) {
+	    p->drawPoint(fr.left(), fr.top());
+	    if (fr.left() == 0)
+		p->drawPoint(fr.left(), fr.top() - 1);
+	
+	    p->setPen(g.button());
+	    p->drawLine(fr.left() + 2, fr.top() - 1, fr.left() + 1, fr.top() - 1);
+	}
     } else {
 	// triangular drawing code
 	QCommonStyle::drawTab(p, tabbar, tab, selected);

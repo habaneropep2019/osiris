@@ -4,3 +4,4 @@ HEADERS		=
 SOURCES		= main.cpp
 INTERFACES	= 
 TARGET		= semaphore
+REQUIRES=full-config

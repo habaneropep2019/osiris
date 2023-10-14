@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qbutton.cpp   2.2.1   edited 2000-08-25 $
+** $Id: qt/src/widgets/qbutton.cpp   2.2.2   edited 2000-11-06 $
 **
 ** Implementation of QButton widget class
 **
@@ -36,7 +36,7 @@
 **********************************************************************/
 
 #include "qbutton.h"
-#ifndef QT_NO_COMPLEXWIDGETS
+#ifndef QT_NO_BUTTON
 #include "qbuttongroup.h"
 #include "qbitmap.h"
 #include "qpainter.h"
@@ -89,10 +89,21 @@ static inline void makeDrawingPixmap()
 
 struct QButtonData
 {
-    QButtonData() : group(0), a(0) {}
+    QButtonData() {
+#ifndef QT_NO_BUTTONGROUP
+	group = 0;
+#endif
+#ifndef QT_NO_ACCEL
+	a = 0; 	
+#endif
+    }
+#ifndef QT_NO_BUTTONGROUP
     QButtonGroup *group;
+#endif
     QTimer timer;
+#ifndef QT_NO_ACCEL
     QAccel *a;
+#endif
 };
 
 
@@ -116,14 +127,20 @@ void QButton::ensureData()
 
 QButtonGroup *QButton::group() const
 {
+#ifndef QT_NO_BUTTONGROUP
     return d ? d->group : 0;
+#else
+    return 0;
+#endif
 }
 
 
 void QButton::setGroup( QButtonGroup* g )
 {
+#ifndef QT_NO_BUTTONGROUP
     ensureData();
     d->group = g;
+#endif
 }
 
 
@@ -279,10 +296,12 @@ QButton::QButton( QWidget *parent, const char *name, WFlags f )
     animation  = FALSE;				// no pending animateClick
     repeat     = FALSE;				// not in autorepeat mode
     d	       = 0;
+#ifndef QT_NO_BUTTONGROUP
     if ( parent && parent->inherits("QButtonGroup") ) {
 	setGroup((QButtonGroup*)parent);
 	group()->insert( this );		// insert into button group
     }
+#endif
     setFocusPolicy( TabFocus );
 }
 
@@ -292,8 +311,10 @@ QButton::QButton( QWidget *parent, const char *name, WFlags f )
 
 QButton::~QButton()
 {
+#ifndef QT_NO_BUTTONGROUP
     if ( group() )
 	group()->remove( this );
+#endif
     delete bpixmap;
     delete d;
 }
@@ -378,7 +399,9 @@ void QButton::setText( const QString &text )
     if ( autoresize )
 	adjustSize();
 
+#ifndef QT_NO_ACCEL
     setAccel( QAccel::shortcutKey( btext ) );
+#endif
 
     update();
     updateGeometry();
@@ -439,7 +462,11 @@ void QButton::setPixmap( const QPixmap &pixmap )
 
 int QButton::accel() const
 {
+#ifndef QT_NO_ACCEL
     return d && d->a ? d->a->key( 0 ) : 0;
+#else
+    return 0;
+#endif
 }
 
 /*!
@@ -467,6 +494,7 @@ int QButton::accel() const
 
 void QButton::setAccel( int key )
 {
+#ifndef QT_NO_ACCEL
     if ( d && d->a )
 	d->a->clear();
     if ( !key )
@@ -476,6 +504,7 @@ void QButton::setAccel( int key )
 	d->a = new QAccel( this, "buttonAccel" );
     d->a->connectItem( d->a->insertItem( key, 0 ),
 		       this, SLOT(animateClick()) );
+#endif
 }
 
 
@@ -756,16 +785,20 @@ void QButton::keyPressEvent( QKeyEvent *e )
 	break;
     case Key_Up:
     case Key_Left:
+#ifndef QT_NO_BUTTONGROUP
 	if ( group() )
 	    group()->moveFocus( e->key() );
 	else
+#endif
 	    focusNextPrevChild( FALSE );
 	break;
     case Key_Right:
     case Key_Down:
+#ifndef QT_NO_BUTTONGROUP
 	if ( group() )
 	    group()->moveFocus( e->key() );
 	else
+#endif
 	    focusNextPrevChild( TRUE );
 	break;
     case Key_Escape:
@@ -1022,8 +1055,12 @@ void QButton::setToggleType( ToggleType type )
 
 bool QButton::isExclusiveToggle() const
 {
+#ifndef QT_NO_BUTTONGROUP
     return group() && ( group()->isExclusive() ||
 			group()->isRadioButtonExclusive() &&
 			inherits( "QRadioButton" ) );
+#else
+    return FALSE;
+#endif
 }
 #endif

@@ -4,3 +4,4 @@ HEADERS		= sound.h
 SOURCES		= sound.cpp
 TARGET		= sound
 DEPENDPATH=../../include
+REQUIRES=full-config

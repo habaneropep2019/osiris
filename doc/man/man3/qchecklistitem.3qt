@@ -1,4 +1,4 @@
-.TH QCheckListItem 3qt "4 October 2000" "Trolltech AS" \" -*- nroff -*-
+.TH QCheckListItem 3qt "8 November 2000" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -33,6 +33,9 @@ Inherits QListViewItem.
 .br
 .ti -1c
 .BI "\fBQCheckListItem\fR ( QListView * " "parent" ", const QString & " "text" ", const QPixmap & ) "
+.br
+.ti -1c
+.BI "\fB~QCheckListItem\fR () "
 .br
 .ti -1c
 .BI "virtual void \fBpaintCell\fR ( QPainter *, const QColorGroup & " "cg" ", int " "column" ", int " "width" ", int alignment ) "
@@ -100,6 +103,8 @@ Constructs a checkable item with parent \fIparent,\fR text \fItext\fR and type \
 Constructs a Controller item with parent \fIparent,\fR text \fItext\fR and pixmap \fIp.\fR
 .SH "QCheckListItem::QCheckListItem ( QCheckListItem * parent, const QString & text, Type tt = Controller )"
 Constructs a checkable item with parent \fIparent,\fR text \fItext\fR and type \fItt.\fR Note that a RadioButton must be child of a Controller, otherwise it will not toggle.
+.SH "QCheckListItem::~QCheckListItem ()"
+Destroys the item, deleting all its children, freeing up all allocated resources.
 .SH "void QCheckListItem::activate () \fC[virtual protected]\fR"
 Toggle checkbox, or set radio button on.
 .PP

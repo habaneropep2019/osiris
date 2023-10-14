@@ -1,4 +1,4 @@
-.TH QTable 3qt "4 October 2000" "Trolltech AS" \" -*- nroff -*-
+.TH QTable 3qt "8 November 2000" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -318,7 +318,7 @@ Inherits QScrollView.
 .SH DESCRIPTION
 A flexible and editable table widget.
 .PP
-QTable has been designed to us no more memory than strictly needed. Thus, for an empty cell, no memory at all is allocated. In order to add data, create a QTableItem and fill it using setItem(). With QTableItem::setText() and QTableItem::setPixmap(), convenient functions for setting table text and pixmaps are provided. To clear a cell use clearCell().
+QTable has been designed to use no more memory than strictly needed. Thus, for an empty cell, no memory at all is allocated. In order to add data, create a QTableItem and fill it using setItem(). With QTableItem::setText() and QTableItem::setPixmap(), convenient functions for setting table text and pixmaps are provided. To clear a cell use clearCell().
 .PP
 QTable supports various methods for selecting cells, both with keyboard and mouse, thus for example range selection or column and row selection via appropriate header cells. You can add and remove selections using addSelection() and removeSelection(), resp., and gather information about current selections by means of numSelections(), selection(), and currentChanged().
 .PP
@@ -354,8 +354,14 @@ Unless you reimplement them this approach will however prevent you from using fu
 .SH MEMBER FUNCTION DOCUMENTATION
 .SH "QTable::QTable ( QWidget * parent = 0, const char * name = 0 )"
 Constructs a table of 10 * 10 cells.
+.PP
+Performance is boosted by modifying the widget flags so that only part of the QTableItem children is redrawn. This may be unsuitable for custom QTableItem classes, in which case \fCWNorthWestGravity\fR and \fCWRepaintNoErase\fR should be cleared.
+.PP
+See also QWidget::clearWFlags() and Qt::WidgetFlags.
 .SH "QTable::QTable ( int numRows, int numCols, QWidget * parent = 0, const char * name = 0 )"
 Constructs a table with a range of \fInumRows\fR * \fInumCols\fR cells.
+.PP
+Performance is boosted by modifying the widget flags so that only part of the QTableItem children is redrawn. This may be unsuitable for custom QTableItem classes, in which case the widget flags should be reset using QWidget::setWFlags().
 .SH "QTable::~QTable ()"
 Destructor.
 .SH "void QTable::activateNextCell () \fC[virtual protected]\fR"

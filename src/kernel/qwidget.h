@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qwidget.h   2.2.1   edited 2000-08-29 $
+** $Id: qt/src/kernel/qwidget.h   2.2.2   edited 2000-11-06 $
 **
 ** Definition of QWidget class
 **
@@ -413,12 +413,12 @@ public:
 
     QWidget *		parentWidget() const;
     bool		testWState( uint n ) const;
-    bool		testWFlags( WFlags n ) const;
+    bool		testWFlags( WFlags f ) const;
     static QWidget *	find( WId );
     static QWidgetMapper *wmapper();
 
 #if defined(_WS_QWS_)
-    virtual QGfx * graphicsContext() const;
+    virtual QGfx * graphicsContext(bool clip_children=TRUE) const;
 #endif
 
 protected:
@@ -566,6 +566,8 @@ private:
     QWExtra	*extra;
 #if defined(_WS_QWS_)
     QRegion	 req_region;			// Requested region
+    mutable QRegion	 paintable_region;	// Paintable region
+    mutable bool         paintable_region_dirty;// needs to be recalculated
     mutable QRegion      alloc_region;          // Allocated region
     mutable bool         alloc_region_dirty;    // needs to be recalculated
 
@@ -579,7 +581,6 @@ private:
     QRegion paintableRegion() const;
 
     // used to accumulate dirty region when children moved/resized.
-    void addDirtyChildRegion( const QRegion & );
     QRegion dirtyChildren;
     bool isSettingGeometry;
     friend class QWSManager;

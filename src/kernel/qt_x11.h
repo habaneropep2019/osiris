@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qt_x11.h   2.2.1   edited 2000-08-25 $
+** $Id: qt/src/kernel/qt_x11.h   2.2.2   edited 2000-08-25 $
 **
 ** Includes X11 system header files.
 **

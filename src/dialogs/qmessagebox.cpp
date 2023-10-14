@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/dialogs/qmessagebox.cpp   2.2.1   edited 2000-09-24 $
+** $Id: qt/src/dialogs/qmessagebox.cpp   2.2.2   edited 2000-10-05 $
 **
 ** Implementation of QMessageBox class
 **
@@ -1270,7 +1270,9 @@ static int textBox( QWidget *parent, QMessageBox::Icon severity,
     if ( b[2] )
 	mb->setButtonText( 3, button2Text );
 
+#ifndef QT_NO_CURSOR
     mb->setCursor( Qt::arrowCursor );
+#endif
     int reply = mb->exec();
 
     delete mb;

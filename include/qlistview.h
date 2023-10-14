@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qlistview.h   2.2.1   edited 2000-08-25 $
+** $Id: qt/src/widgets/qlistview.h   2.2.2   edited 2000-10-12 $
 **
 ** Definition of QListView widget class
 **
@@ -379,6 +379,7 @@ public:
 		    const QPixmap & );
     QCheckListItem( QListView *parent, const QString &text,
 		    const QPixmap & );
+    ~QCheckListItem();
 
     void paintCell( QPainter *,  const QColorGroup & cg,
 		    int column, int width, int alignment );

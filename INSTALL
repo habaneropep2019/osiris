@@ -8,15 +8,15 @@ where you choose to install Qt.
 1.  Unpack the archive if you have not done so already:
 
 	cd /usr/local
-	gunzip qt-x11-2.2.1.tar.gz	# uncompress the archive
-	tar xf qt-x11-2.2.1.tar	# unpack it
+	gunzip qt-x11-2.2.2.tar.gz	# uncompress the archive
+	tar xf qt-x11-2.2.2.tar	# unpack it
 
-    This creates the directory /usr/local/qt-2.2.1 containing the
+    This creates the directory /usr/local/qt-2.2.2 containing the
     files from the main archive.
 
-    Rename qt-2.2.1 to qt (or make a symlink):
+    Rename qt-2.2.2 to qt (or make a symlink):
 
-	mv qt-2.2.1 qt
+	mv qt-2.2.2 qt
 
     The rest of this file assumes that Qt is installed in /usr/local/qt.
 
@@ -37,7 +37,7 @@ where you choose to install Qt.
 
 	QTDIR=/usr/local/qt
 	PATH=$QTDIR/bin:$PATH
-	MANPATH=$QTDIR/man:$MANPATH
+	MANPATH=$QTDIR/doc/man:$MANPATH
 	LD_LIBRARY_PATH=$QTDIR/lib:$LD_LIBRARY_PATH
 
 	export QTDIR PATH MANPATH LD_LIBRARY_PATH
@@ -46,7 +46,7 @@ where you choose to install Qt.
 
 	setenv QTDIR /usr/local/qt
 	setenv PATH $QTDIR/bin:$PATH
-	setenv MANPATH $QTDIR/man:$MANPATH
+	setenv MANPATH $QTDIR/doc/man:$MANPATH
 	setenv LD_LIBRARY_PATH $QTDIR/lib:$LD_LIBRARY_PATH
 
     After you have done this, you will need to login again, or

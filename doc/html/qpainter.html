@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Qt Toolkit - QPainter Class</title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
 a:link { color: #004faf; text-decoration: none }
@@ -657,8 +657,8 @@ the output.  <em>internal</em> is, yes, internal.
 be drawn onto.  <em>(sx,sy)</em> specify the top-left point in <em>pixmap</em>
 that is to be drawn (the default is (0,0).
 <p>Calling drawTiledPixmap() is similar to calling <a href="#f3fb4a">drawPixmap</a>() several
-times to fill (tile) an area with a pixmap, but can be much more
-efficient.
+times to fill (tile) an area with a pixmap, but is potentially
+much more efficient depending on the underlying window system.
 <p>See also  <a href="#f3fb4a">drawPixmap</a>().
 <h3 class="fn">void <a name="0de014"></a>QPainter::drawTiledPixmap ( const <a href="qrect.html">QRect</a> &amp; r, const <a href="qpixmap.html">QPixmap</a> &amp; pm )</h3>
 <p>This is an overloaded member function, provided for convenience.  It differs from the above function only in what argument(s) it accepts.
@@ -946,7 +946,6 @@ an overview of coordinate transformation.
 <p>See also  <a href="#98a36a">window</a>(), <a href="#e86cf5">setViewport</a>(), <a href="#758881">setViewXForm</a>(), <a href="#f4a354">setWorldMatrix</a>() and <a href="#e31cca">setWorldXForm</a>().
 <p>Examples:
  <a href="drawdemo-drawdemo-cpp.html#setWindow">drawdemo/drawdemo.cpp</a>
- <a href="forever-forever-cpp.html#setWindow">forever/forever.cpp</a>
 <h3 class="fn">void <a name="a10cc4"></a>QPainter::setWindow ( const <a href="qrect.html">QRect</a> &amp; r )</h3>
 <p>This is an overloaded member function, provided for convenience.  It differs from the above function only in what argument(s) it accepts.
 <h3 class="fn">void <a name="f4a354"></a>QPainter::setWorldMatrix ( const <a href="qwmatrix.html">QWMatrix</a> &amp; m, bool combine=FALSE )</h3>
@@ -1200,7 +1199,7 @@ widgets that follow the current GUI style.
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.2.1"><nobr>
+<input type=hidden name="version" value="2.2.2"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -1208,5 +1207,5 @@ copyright &copy; 1995-2000
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.1</div>
+<td align="right"><div align="right">Qt version 2.2.2</div>
 </table></div></address></body></html>

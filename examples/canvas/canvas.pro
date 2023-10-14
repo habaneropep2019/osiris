@@ -4,4 +4,4 @@ HEADERS		= canvas.h
 SOURCES		= canvas.cpp main.cpp
 TARGET		= canvas
 DEPENDPATH	= ../../include
-REQUIRES=canvas
+REQUIRES=canvas large-config

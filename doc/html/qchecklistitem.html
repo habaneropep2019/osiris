@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Qt Toolkit - QCheckListItem Class</title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
 a:link { color: #004faf; text-decoration: none }
@@ -38,6 +38,7 @@ Inherits <a href="qlistviewitem.html">QListViewItem</a>.
 <li><div class="fn"><a href="#83eaa8"><b>QCheckListItem</b></a> ( QListView * parent, const QString &amp; text, Type = Controller ) </div>
 <li><div class="fn"><a href="#a803f3"><b>QCheckListItem</b></a> ( QListViewItem * parent, const QString &amp; text, const QPixmap &amp; ) </div>
 <li><div class="fn"><a href="#cbe7b2"><b>QCheckListItem</b></a> ( QListView * parent, const QString &amp; text, const QPixmap &amp; ) </div>
+<li><div class="fn"><a href="#6b2c18"><b>~QCheckListItem</b></a> () </div>
 <li><div class="fn">virtual void <a href="#95e769"><b>paintCell</b></a> ( QPainter *, const QColorGroup &amp; cg, int column, int width, int alignment ) </div>
 <li><div class="fn">virtual void <a href="#a470cd"><b>paintFocus</b></a> ( QPainter *, const QColorGroup &amp; cg, const QRect &amp; r ) </div>
 <li><div class="fn">virtual void <a href="#a3b02e"><b>setup</b></a> () </div>
@@ -88,6 +89,9 @@ be children on a Controller.
 <p>Constructs a checkable item with parent <em>parent,</em> text <em>text</em> and type
 <em>tt.</em> Note that a RadioButton must be child of a Controller, otherwise
 it will not toggle.
+<h3 class="fn"><a name="6b2c18"></a>QCheckListItem::~QCheckListItem ()</h3>
+<p>Destroys the item, deleting all its children, freeing up all
+allocated resources.
 <h3 class="fn">void <a name="4b3542"></a>QCheckListItem::activate () <code>[virtual protected]</code></h3>
 <p>Toggle checkbox, or set radio button on.
 <p>Reimplemented from <a href="qlistviewitem.html#6afc26">QListViewItem.</a>
@@ -133,7 +137,7 @@ child that is on.
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.2.1"><nobr>
+<input type=hidden name="version" value="2.2.2"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -141,5 +145,5 @@ copyright &copy; 1995-2000
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.1</div>
+<td align="right"><div align="right">Qt version 2.2.2</div>
 </table></div></address></body></html>

@@ -6,4 +6,4 @@ SOURCES		= composer.cpp \
 		  main.cpp \
 		  smtp.cpp
 TARGET		= mail
-REQUIRES=network
+REQUIRES=network full-config

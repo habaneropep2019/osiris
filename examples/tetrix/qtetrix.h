@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/tetrix/qtetrix.h   2.2.1   edited 2000-08-31 $
+** $Id: qt/examples/tetrix/qtetrix.h   2.2.2   edited 2000-11-06 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -14,6 +14,7 @@
 #include "qtetrixb.h"
 #include <qframe.h>
 #include <qlcdnumber.h>
+#include <qlabel.h>
 #include <qpushbutton.h>
 #include <qpainter.h>
 
@@ -52,9 +53,15 @@ private:
 
     QTetrixBoard  *board;
     ShowNextPiece *showNext;
+#ifndef QT_NO_LCDNUMBER
     QLCDNumber    *showScore;
     QLCDNumber    *showLevel;
     QLCDNumber    *showLines;
+#else
+    QLabel    *showScore;
+    QLabel    *showLevel;
+    QLabel    *showLines;
+#endif
     QPushButton   *quitButton;
     QPushButton   *startButton;
     QPushButton   *pauseButton;

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/network/qdns.cpp   2.2.1   edited 2000-09-10 $
+** $Id: qt/src/network/qdns.cpp   2.2.2   edited 2000-10-06 $
 **
 ** Implementation of QDns class.
 **
@@ -712,7 +712,7 @@ void QDnsAnswer::parse()
 		    // well, it's equal, but it's not the same. so we kill it,
 		    // but use its expiry time.
 #if defined(DEBUG_QDNS)
-		    debug( "killing off old %d for %s, expire was %d",
+		    qDebug( "killing off old %d for %s, expire was %d",
 			   older->t, older->domain->name().latin1(),
 			   rr->expireTime );
 #endif
@@ -721,7 +721,7 @@ void QDnsAnswer::parse()
 		    rr->deleteTime = QMAX( older->deleteTime, rr->deleteTime );
 		    older->deleteTime = 0;
 #if defined(DEBUG_QDNS)
-		    debug( "    adjusted expire is %d", rr->expireTime );
+		    qDebug( "    adjusted expire is %d", rr->expireTime );
 #endif
 		}
 		drrs->next();
@@ -930,7 +930,7 @@ void QDnsManager::cleanCache()
     QDnsDomain * d;
     Q_UINT32 thisSweep = now();
 #if defined(DEBUG_QDNS)
-    debug( "QDnsManager::cleanCache(: Called, time is %u, last was %u",
+    qDebug( "QDnsManager::cleanCache(: Called, time is %u, last was %u",
 	   thisSweep, lastSweep );
 #endif
 
@@ -1302,7 +1302,7 @@ QList<QDnsRR> * QDnsDomain::cached( const QDns * r )
 		    l->count(), r->label().ascii() );
 	    l->first();
 	    while( l->current() ) {
-		debug( "  type %d target %s address %s",
+		qDebug( "  type %d target %s address %s",
 		       l->current()->t,
 		       l->current()->target.latin1(),
 		       l->current()->address.toString().latin1() );
@@ -1365,7 +1365,7 @@ void QDnsDomain::sweep()
 	    rr->deleteTime = lastSweep; // will hit next time around
 
 #if defined(DEBUG_QDNS)
-	debug( "QDns::sweep: %s type %d expires %u %u - %s / %s",
+	qDebug( "QDns::sweep: %s type %d expires %u %u - %s / %s",
 	       rr->domain->name().latin1(), rr->t,
 	       rr->expireTime, rr->deleteTime,
 	       rr->target.latin1(), rr->address.toString().latin1());

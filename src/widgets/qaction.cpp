@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qaction.cpp   2.2.1   edited 2000-09-11 $
+** $Id: qt/src/widgets/qaction.cpp   2.2.2   edited 2000-10-15 $
 **
 ** Implementation of QAction class
 **
@@ -328,7 +328,9 @@ void QAction::setIconSet( const QIconSet& icon )
  */
 QIconSet QAction::iconSet() const
 {
-    return *d->iconset;
+    if ( d->iconset )
+	return *d->iconset;
+    return QIconSet();
 }
 
 /*!
@@ -621,6 +623,7 @@ bool QAction::addTo( QWidget* w )
 	d->update( QActionPrivate::Everything );
 	connect( btn, SIGNAL( clicked() ), this, SIGNAL( activated() ) );
 	connect( btn, SIGNAL( toggled(bool) ), this, SLOT( toolButtonToggled(bool) ) );
+	connect( btn, SIGNAL( destroyed() ), this, SLOT( objectDestroyed() ) );
 	connect( d->tipGroup, SIGNAL(showTip(const QString&)), this, SLOT(showStatusText(const QString&)) );
 	connect( d->tipGroup, SIGNAL(removeTip()), this, SLOT(clearStatusText()) );
     } else if ( w->inherits( "QPopupMenu" ) ) {
@@ -638,6 +641,7 @@ bool QAction::addTo( QWidget* w )
 	w->topLevelWidget()->className();
 	connect( mi->popup, SIGNAL(highlighted( int )), this, SLOT(menuStatusText( int )) );
 	connect( mi->popup, SIGNAL(aboutToHide()), this, SLOT(clearStatusText()) );
+	connect( mi->popup, SIGNAL( destroyed() ), this, SLOT( objectDestroyed() ) );
     } else {
 	qWarning( "QAction::addTo(), unknown object" );
 	return FALSE;
@@ -711,6 +715,7 @@ bool QAction::removeFrom( QWidget* w )
 	    ++it;
 	    if ( btn->parentWidget() == w ) {
 		d->toolbuttons.removeRef( btn );
+		disconnect( btn, SIGNAL( destroyed() ), this, SLOT( objectDestroyed() ) );
 		delete btn;
 		// no need to disconnect from statusbar
 	    }
@@ -721,10 +726,11 @@ bool QAction::removeFrom( QWidget* w )
 	while ( ( mi = it.current() ) ) {
 	    ++it;
 	    if ( mi->popup == w ) {
+		disconnect( mi->popup, SIGNAL(highlighted( int )), this, SLOT(menuStatusText(int)) );
+		disconnect( mi->popup, SIGNAL(aboutToHide()), this, SLOT(clearStatusText()) );
+		disconnect( mi->popup, SIGNAL( destroyed() ), this, SLOT( objectDestroyed() ) );
 		mi->popup->removeItem( mi->id );
 		d->menuitems.removeRef( mi );
-		disconnect( mi->popup, SIGNAL(highlighted( int )), this, SLOT(menuStatusText(int)) );
-		disconnect( mi->popup, SIGNAL(aboutToHide()), this, SLOT(clearStatusText(int)) );
 	    }
 	}
     } else {
@@ -737,17 +743,14 @@ bool QAction::removeFrom( QWidget* w )
 void QAction::objectDestroyed()
 {
     const QObject* obj = sender();
-    if ( obj->inherits( "QPopupMenu") ){
-	QListIterator<QActionPrivate::MenuItem> it( d->menuitems);
-	QActionPrivate::MenuItem* mi;
-	while ( ( mi = it.current() ) ) {
-	    ++it;
-	    if ( mi->popup == obj )
-		d->menuitems.removeRef( mi );
-	}
-    } else if ( obj->inherits( "QToolButton" ) ) {
-	d->toolbuttons.removeRef( (QToolButton*) obj );
+    QListIterator<QActionPrivate::MenuItem> it( d->menuitems);
+    QActionPrivate::MenuItem* mi;
+    while ( ( mi = it.current() ) ) {
+	++it;
+	if ( mi->popup == obj )
+	    d->menuitems.removeRef( mi );
     }
+    d->toolbuttons.removeRef( (QToolButton*) obj );
 }
 
 

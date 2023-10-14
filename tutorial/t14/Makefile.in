@@ -97,7 +97,7 @@ listaddonentmodules:
 	@echo 
 
 
-REQUIRES=
+REQUIRES=full-config
 
 ####### Sub-libraries
 

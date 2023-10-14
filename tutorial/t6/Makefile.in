@@ -85,7 +85,7 @@ listaddonentmodules:
 	@echo 
 
 
-REQUIRES=
+REQUIRES=large-config
 
 ####### Sub-libraries
 

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qobject.cpp   2.2.1   edited 2000-10-01 $
+** $Id: qt/src/kernel/qobject.cpp   2.2.2   edited 2000-10-23 $
 **
 ** Implementation of QObject class
 **
@@ -2023,6 +2023,36 @@ void QObject::activate_signal( const char *signal )
 */
 
 
+#ifdef Q_FP_CCAST_BROKEN
+#define ACTIVATE_SIGNAL_WITH_PARAM(FNAME,TYPE)				      \
+void QObject::FNAME( const char *signal, TYPE param )			      \
+{									      \
+    if ( !connections )							      \
+        return;								      \
+    QConnectionList *clist = connections->find( signal );		      \
+    if ( !clist || signalsBlocked() )					      \
+        return;								      \
+    typedef void (QObject::*RT0)();					      \
+    typedef void (QObject::*RT1)( TYPE );				      \
+    RT0 r0;								      \
+    RT1 r1;								      \
+    QConnectionListIt it(*clist);					      \
+    register QConnection *c;						      \
+    register QObject *object;						      \
+    while ( (c=it.current()) ) {					      \
+        ++it;								      \
+        object = c->object();						      \
+        object->sigSender = this;					      \
+        if ( c->numArgs() ) {						      \
+            r1 = reinterpret_cast<RT1>(*(c->member()));			      \
+            (object->*r1)( param );					      \
+        } else {							      \
+            r0 = reinterpret_cast<RT0>(*(c->member()));			      \
+            (object->*r0)();						      \
+        }								      \
+    }									      \
+}
+#else
 #define ACTIVATE_SIGNAL_WITH_PARAM(FNAME,TYPE)				      \
 void QObject::FNAME( const char *signal, TYPE param )			      \
 {									      \
@@ -2051,6 +2081,7 @@ void QObject::FNAME( const char *signal, TYPE param )			      \
 	}								      \
     }									      \
 }
+#endif
 
 // We don't want to duplicate too much text so...
 
@@ -3304,6 +3335,7 @@ QVariant QObject::property( const char *name ) const
 	return value;
 
     case QVariant::Cursor:
+#ifndef QT_NO_CURSOR
 	if ( p->gspec == QMetaProperty::Class ) {
 	    ProtoCursor m = (ProtoCursor)p->get;
 	    value = QVariant( (this->*m)() );
@@ -3320,6 +3352,9 @@ QVariant QObject::property( const char *name ) const
 	} else {
 	    ASSERT( 0 );
 	}
+#else
+	qWarning("Cursor in QVariant ignored");
+#endif
 	return value;
 
     case QVariant::IconSet:
