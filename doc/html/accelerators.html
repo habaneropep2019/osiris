@@ -16,12 +16,20 @@
 <p>
 <h1 align="center">Standard Accelerator Keys</h1>
 <p>
-Microsoft defines a large number of standard accelerators; the Open
-Group defines a somewhat smaller number.  Here is a list of the ones
-that involve letter keys, sorted alphabetically.  The boldfaced letter
-(A in About) together with Alt is Microsoft's accelerator; where the
-Open Group has a different standard we explain the difference in
-parentheses.
+Applications invariably need to define accelerator keys for actions,
+and Qt provides functions to help with that, most importantly <a href="qaccel.html#34aea3">QAccel::shortcutKey()</a>.
+<p>
+Here is Microsoft's recommendations for accelerator key choice, with
+comments about the Open Group's recommendations where they exist and
+differ.  For most commands, the Open Group either has no advice or
+agrees with Microsoft.
+<p>
+The boldfaced letter plus Alt is Microsoft's recommended choice, and
+we recommend supporting it.  For an Apply button, for example, we
+recommend <a href="qbutton.html#58c887">setText(</a> <a href="qobject.html#44b4c1">tr(</a> "&About" ) );
+<p>
+If you have conflicting commands (e.g. About and Apply buttons in the
+same dialog), you're on your own.
 <p>
 <ul>
 <li><b><u>A</u></b>bout
@@ -81,25 +89,27 @@ parentheses.
 <li><b><u>S</u></b>ize
 <li>S<b><u>p</u></b>lit
 <li><b><u>S</u></b>top
-<li><b><u>U</u></b>ndo (CDE says Ctrl-Z or Alt-Backspace)
+<li><b><u>U</u></b>ndo (CDE: Ctrl-Z or Alt-Backspace)
 <li><b><u>V</u></b>iew
 <li><b><u>W</u></b>hat's This?
 <li><b><u>W</u></b>indow
 <li><b><u>Y</u></b>es
 </ul>
 <p>
-The
-<a href="http://www.amazon.com/exec/obidos/ASIN/1556156790/trolltech/t">
-Microsoft book</a> has ISBN 1556156790.  The corresponding
-<a href="http://www.amazon.com/exec/obidos/ASIN/1859121047/trolltech/t">
-Open Group book</a> has ISBN 1859121047.  (The link does not work at
-the time of writing, since Amazon, like most book stores, does not
-supply it.  The Open Group books are <em>very</em> hard to find, and
-also rather expensive.  If you really want it, OGPubs@opengroup.org
-may be able to help.)
+There are also a lot of other keys and actions (that use other
+modifier keys).  See the Microsoft and Open Group documentation for
+details.
+<p>
+The <a
+href="http://www.amazon.com/exec/obidos/ASIN/0735605661/trolltech/t">
+Microsoft book</a> has ISBN 0735605661.  The corresponding Open Group
+book is <em>very</em> hard to find, rather expensive and we cannot recommend
+it. However, if you really want it, OGPubs@opengroup.org may be able
+to help. Ask then for ISBN 1859121047. (This ISBN is correct, but is
+not listed in any database we have seen.)
 
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.0</div>
+<td align="right"><div align="right">Qt version 2.1.1</div>
 </table></div></address></body></html>

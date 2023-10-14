@@ -1,4 +1,4 @@
-.TH QUriDrag 3qt "12 April 2000" "Troll Tech AS" \" -*- nroff -*-
+.TH QUriDrag 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -76,7 +76,7 @@ Constructs an object to drag the list of URIs in \fIuris.\fR The \fIdragSource\f
 .SH "QUriDrag::QUriDrag ( QWidget * dragSource = 0, const char * name = 0 )"
 Constructs a object to drag. You will need to call setUris() before you start the drag().
 .SH "QUriDrag::~QUriDrag ()"
-Destroys the object.
+Destructs the object.
 .SH "bool QUriDrag::canDecode ( const QMimeSource * e ) \fC[static]\fR"
 Returns TRUE if decode() would be able to decode \fIe.\fR
 .SH "bool QUriDrag::decode ( const QMimeSource * e, QStrList & l ) \fC[static]\fR"

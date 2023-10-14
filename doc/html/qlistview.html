@@ -141,7 +141,7 @@ Inherits <a href="qscrollview.html">QScrollView</a>.
 The QListView class implements a list/tree view.
 <p>
 It can display and control a hierarchy of multi-column items, and
-provides the ability to add new items at run-time, let the user
+provides the ability to add new items at any time, let the user
 select one or many items, sort the list in increasing or decreasing
 order by any column, and so on.
 <p>The simplest mode of usage is to create a QListView, add some column
@@ -254,8 +254,8 @@ width of the item with the largest width in the column.
 <h3 class="fn"><a name="f7a560"></a>QListView::QListView ( <a href="qwidget.html">QWidget</a> * parent = 0, const char * name = 0 )</h3>
 <p>Constructs a new empty list view, with <em>parent</em> as a parent and <em>name</em> as object name.
 <h3 class="fn"><a name="1131d5"></a>QListView::~QListView ()</h3>
-<p>Destroys the listview, deleting all items in it,
-and frees all allocated resources.
+<p>Destructs the listview, deleting all items in it, and frees up all
+allocated resources.
 <h3 class="fn">int <a name="d01f15"></a>QListView::addColumn ( const <a href="qiconset.html">QIconSet</a> &amp; iconset, const <a href="qstring.html">QString</a> &amp; label, int width = -1 ) <code>[virtual]</code></h3>
 <p>Adds a new column at the right end of the widget, with the header <em>label</em> and <em>iconset,</em> and returns the index of the column.
 <p>If <em>width</em> is negative, the new column will have <a href="#WidthMode">WidthMode</a> Maximum,
@@ -288,13 +288,13 @@ multi-selection list views, this function needs to iterate over <em>all</em>
 items.
 <p>See also:  <a href="#a304f8">setSelected</a>() and <a href="#562710">setMultiSelection</a>().
 <h3 class="fn">void <a name="b3e43b"></a>QListView::clicked ( <a href="qlistviewitem.html">QListViewItem</a> * item ) <code>[signal]</code></h3>
-<p>This signal is emitted whenever the user clicks (moues pressed + mouse released)
+<p>This signal is emitted whenever the user clicks (mouse pressed + mouse released)
 into the listview.
 <em>item</em> is the pointer to the clicked listview item or NULL, if the user didn't click on an item.
 <p>Note that you may not delete any <a href="qlistviewitem.html">QListViewItem</a> objects in slots
 connected to this signal.
 <h3 class="fn">void <a name="21f294"></a>QListView::clicked ( <a href="qlistviewitem.html">QListViewItem</a> * item, const <a href="qpoint.html">QPoint</a> &amp; pnt, int c ) <code>[signal]</code></h3>
-<p>This signal is emitted whenever the user clicks (moues pressed + mouse released)
+<p>This signal is emitted whenever the user clicks (mouse pressed + mouse released)
 into the listview.
 <em>item</em> is the pointer to the clicked listview item or NULL, if the user didn't click on an item.
 <em>pnt</em> is the position where the user
@@ -472,7 +472,7 @@ items that are probably on-screen.
 <p>Reimplemented for internal reasons; the API is not affected.
 <p>Reimplemented from <a href="qwidget.html#3f0fc2">QWidget.</a>
 <h3 class="fn">void <a name="599d72"></a>QListView::mouseButtonClicked ( int button, <a href="qlistviewitem.html">QListViewItem</a> * item, const <a href="qpoint.html">QPoint</a> &amp; pos, int c ) <code>[signal]</code></h3>
-<p>This signal is emitted whenever the user clicks (moues pressed + mouse released)
+<p>This signal is emitted whenever the user clicks (mouse pressed + mouse released)
 into the listview. <em>button</em> is the mouse button which the user pressed,
 <em>item</em> is the pointer to the clicked listview item or NULL, if the user didn't click on an item, and
 <em>c</em> the listview column into which the user pressed (this argument is only valid, if <em>item</em>
@@ -649,12 +649,10 @@ the list view as necessary and emits the <a href="#1a90fb">selectionChanged</a>(
 <code>Single</code> (the default), <code>Extended, Multi</code> or <code>NoSelection.</code>
 <p>See also:  <a href="#62d8ee">selectionMode</a>().
 <h3 class="fn">void <a name="49a59f"></a>QListView::setShowSortIndicator ( bool show )</h3>
-<p>It's possible that there is drawn an arrow in the header of the
-listview to indicate the sort order and column of the listview
-contents (this means this arrow is then always drawn in the
-correct column and points into the correct direction).
-To enable this, specify TRUE <em>show,</em> to disable this feature
-set <em>show</em> to FALSE.
+<p>If <em>show</em> is TRUE, draw an arrow in the header of the listview
+to indicate the sort order of the listview contents. The arrow
+will be drawn in the correct column and will point to the correct
+direction. Set <em>show</em> to FALSE to disable this feature.
 <p>See also:  <a href="qheader.html#1c1fc3">QHeader::setSortIndicator</a>().
 <h3 class="fn">void <a name="774747"></a>QListView::setSorting ( int column, bool ascending = TRUE ) <code>[virtual]</code></h3>
 <p>Set the list view to be sorted by <em>column</em> and to be sorted
@@ -677,7 +675,7 @@ in a tree view to <em>l.</em>  The default is 20.
 <p>Reimplemented for internal reasons; the API is not affected.
 <p>Reimplemented from <a href="qwidget.html#add426">QWidget.</a>
 <h3 class="fn">bool <a name="0d3019"></a>QListView::showSortIndicator () const</h3>
-<p>Returns TRUE, of the sort order and column is indicated
+<p>Returns TRUE, if the sort order and column are indicated
 in the header, else FALSE.
 <p>See also:  QListView::setSortIndicator().
 <h3 class="fn"><a href="qsize.html">QSize</a> <a name="aff14e"></a>QListView::sizeHint () const <code>[virtual]</code></h3>
@@ -709,7 +707,7 @@ Don't call this directly; call <a href="#e21af1">triggerUpdate</a>() instead.
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.1.0"><nobr>
+<input type=hidden name="version" value="2.1.1"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -717,5 +715,5 @@ copyright &copy; 1995-2000
 <a href="http://www.trolltech.com">Troll Tech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.0</div>
+<td align="right"><div align="right">Qt version 2.1.1</div>
 </table></div></address></body></html>

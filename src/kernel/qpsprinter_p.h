@@ -1,5 +1,5 @@
 /**********************************************************************
-** $Id: qt/src/kernel/qpsprinter_p.h   2.1.0   edited 2000-03-24 $
+** $Id: qt/src/kernel/qpsprinter_p.h   2.1.1   edited 2000-03-24 $
 **
 ** Definition of internal QPSPrinter class.
 ** QPSPrinter implements PostScript (tm) output via QPrinter.

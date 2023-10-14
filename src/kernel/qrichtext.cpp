@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qrichtext.cpp   2.1.0   edited 2000-04-04 $
+** $Id: qt/src/kernel/qrichtext.cpp   2.1.1   edited 2000-05-04 $
 **
 ** Implementation of the internal Qt classes dealing with rich text
 **
@@ -733,19 +733,19 @@ QMap<QCString, QChar> *htmlMap()
   	html_map->insert("amp", '&');
   	html_map->insert("nbsp", 0x00a0U);
   	html_map->insert("bull", 0x2022U);
-  	html_map->insert("aring", 'å');
-  	html_map->insert("oslash", 'ø');
-  	html_map->insert("ouml", 'ö');
-  	html_map->insert("auml", 'ä');
-  	html_map->insert("uuml", 'ü');
-  	html_map->insert("Ouml", 'Ö');
-  	html_map->insert("Auml", 'Ä');
-  	html_map->insert("Uuml", 'Ü');
-  	html_map->insert("szlig", 'ß');
-  	html_map->insert("copy", '©');
-  	html_map->insert("deg", '°');
-  	html_map->insert("micro", 'µ');
-  	html_map->insert("plusmn", '±');
+  	html_map->insert("aring", '\xe5');
+  	html_map->insert("oslash", '\xf8');
+  	html_map->insert("ouml", '\xf6');
+  	html_map->insert("auml", '\xe4');
+  	html_map->insert("uuml", '\xfc');
+  	html_map->insert("Ouml", '\xd6');
+  	html_map->insert("Auml", '\xc4');
+  	html_map->insert("Uuml", '\xdc');
+  	html_map->insert("szlig", '\xdf');
+  	html_map->insert("copy", '\xa9');
+  	html_map->insert("deg", '\xb0');
+  	html_map->insert("micro", '\xb5');
+  	html_map->insert("plusmn", '\xb1');
   	html_map->insert("middot", '*');
   	html_map->insert("quot", '\"');
     }
@@ -1807,14 +1807,14 @@ void QRichTextFormatter::drawLine( QPainter* p, int ox, int oy,
     while ( !atEndOfLine() ) {
 	QTextCharFormat *fmt  = format();
 	if ( !fmt->anchorHref().isEmpty() ) {
-	    p->setPen( to.linkColor );
+	    p->setPen( ( QPaintDeviceMetrics(p->device()).depth() > 1) ? to.linkColor : cg.text() );
 	    if ( to.linkUnderline ) {
 		QFont f = fmt->font();
 		f.setUnderline( TRUE );
 		p->setFont( f );
 	    }
 	} else {
-	    if ( fmt->color().isValid() )
+	    if ( fmt->color().isValid() && ( QPaintDeviceMetrics(p->device()).depth() > 1) )
 		p->setPen( fmt->color() );
 	    else
 		p->setPen( cg.text() );
@@ -1877,7 +1877,7 @@ void QRichTextFormatter::drawLine( QPainter* p, int ox, int oy,
 	    }
 	}
 	if ( selected )
-	    p->setPen( fmt->color() );
+	    p->setPen( ( QPaintDeviceMetrics(p->device()).depth() > 1) ? fmt->color() : cg.text() );
 	gotoNextItem( p );
 	gy = y();
     }

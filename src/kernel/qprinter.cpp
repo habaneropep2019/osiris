@@ -1,5 +1,5 @@
 /**********************************************************************
-** $Id: qt/src/kernel/qprinter.cpp   2.1.0   edited 2000-03-24 $
+** $Id: qt/src/kernel/qprinter.cpp   2.1.1   edited 2000-05-05 $
 **
 ** Implementation of QPrinter class
 **
@@ -467,7 +467,7 @@ void QPrinter::setColorMode( ColorMode newColorMode )
 }
 
 
-/*!  Returns the current color mode.  The default color more is \c
+/*!  Returns the current color mode.  The default color mode is \c
   Color.
 
   \sa setColorMode()

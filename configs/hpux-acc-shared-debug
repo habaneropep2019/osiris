@@ -26,7 +26,7 @@ SYSCONF_LIBS_YACC	= -ly
 
 # Linking applications
 SYSCONF_LINK		= aCC
-SYSCONF_LFLAGS		= 
+SYSCONF_LFLAGS		= +DA1.1e +DS1.1
 SYSCONF_LIBS		= -lm
 
 # Link flags shared objects
@@ -41,20 +41,27 @@ SYSCONF_MOC		= $(QTDIR)/bin/moc
 #   - Usually needs to incorporate $(VER_MAJ), $(VER_MIN) and $(VER_PATCH)
 #
 SYSCONF_LINK_SHLIB	= aCC
-SYSCONF_LINK_TARGET_SHARED	= lib$(TARGET).sl
-SYSCONF_LINK_LIB_SHARED	=  $(SYSCONF_LINK_SHLIB) -b  $(LFLAGS) -o $(SYSCONF_LINK_TARGET_SHARED) $(OBJECTS)  $(OBJMOC) $(LIBS) && mv $(SYSCONF_LINK_TARGET_SHARED) $(DESTDIR);
+SYSCONF_LINK_TARGET_SHARED	= lib$(TARGET).$(VER_MAJ)
+SYSCONF_LINK_LIB_SHARED	=  $(SYSCONF_LINK_SHLIB) -b -Wl,+h,$(SYSCONF_LINK_TARGET_SHARED) \
+				 $(LFLAGS) -o $(SYSCONF_LINK_TARGET_SHARED) \
+				 $(OBJECTS) $(OBJMOC) $(LIBS) && \
+				 chmod 555 $(SYSCONF_LINK_TARGET_SHARED) && \
+				 mv $(SYSCONF_LINK_TARGET_SHARED) $(DESTDIR); \
+				 cd $(DESTDIR) && \
+				 rm -f lib$(TARGET).sl lib$(TARGET).$(VER_MAJ); \
+				 ln -s $(SYSCONF_LINK_TARGET_SHARED) lib$(TARGET).sl
 
 # Linking static libraries
 #   - Build the $(TARGET) library, eg. lib$(TARGET).a
 #   - Place target in $(DESTDIR) - which has a trailing /
 #
-SYSCONF_AR		= ar cq
+SYSCONF_AR		= ar cqs
 SYSCONF_LINK_TARGET_STATIC = lib$(TARGET).a
 SYSCONF_LINK_LIB_STATIC	= rm -f $(DESTDIR)$(SYSCONF_LINK_TARGET_STATIC) ; \
 				 $(SYSCONF_AR) $(DESTDIR)$(SYSCONF_LINK_TARGET_STATIC) $(OBJECTS) $(OBJMOC) 
 # Compiling application source
-SYSCONF_CXXFLAGS	= -w -D__STRICT_ANSI__ -g
-SYSCONF_CFLAGS		= -Ae -w -g
+SYSCONF_CXXFLAGS	= +DA1.1e +DS1.1 -w -D__STRICT_ANSI__ -g
+SYSCONF_CFLAGS		= -Ae +DA1.1e +DS1.1 -w -g
 # Compiling library source
 SYSCONF_CXXFLAGS_LIB	= +Z
 SYSCONF_CFLAGS_LIB	= +Z

@@ -1,4 +1,4 @@
-.TH Qt 3qt "12 April 2000" "Troll Tech AS" \" -*- nroff -*-
+.TH Qt 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -181,6 +181,47 @@ This enum type defines the pen styles supported by Qt; ie. what sorts of lines t
 .TP
 \fCDashDotDotLine\fR - one dash, two dots, one dash, two dots...
 .IP
+.SH "Qt::RasterOp"
+This enum type is used to describe the way things are written to the paint device. Each bit of the \fIsrc\fR (what you write) interacts with the corresponding bit of the \fIdst\fR pixel. The currently defined values are: 
+.TP
+\fCCopyROP\fR - dst = src
+.TP
+\fCOrROP\fR - dst = src OR dst
+.TP
+\fCXorROP\fR - dst = src XOR dst
+.TP
+\fCNotAndROP\fR - dst = (NOT src) AND dst
+.TP
+\fCEraseROP\fR - an alias for \fCNotAndROP\fR
+.TP
+\fCNotCopyROP\fR - dst = NOT src
+.TP
+\fCNotOrROP\fR - dst = (NOT src) OR dst
+.TP
+\fCNotXorROP\fR - dst = (NOT src) XOR dst
+.TP
+\fCAndROP\fR - dst = src AND dst
+.TP
+\fCNotEraseROP\fR - an alias for \fCAndROP\fR
+.TP
+\fCNotROP\fR - dst = NOT dst
+.TP
+\fCClearROP\fR - dst = 0
+.TP
+\fCSetROP\fR - dst = 1
+.TP
+\fCNopROP\fR - dst = dst
+.TP
+\fCAndNotROP\fR - dst = src AND (NOT dst)
+.TP
+\fCOrNotROP\fR - dst = src OR (NOT dst)
+.TP
+\fCNandROP\fR - dst = NOT (src AND dst)
+.TP
+\fCNorROP\fR - dst = NOT (src OR dst)
+.IP
+.PP
+By far the most useful ones are \fCCopyROP\fR and \fCXorROP.\fR
 .SH "Qt::TextFormat"
 This enum is used in widgets that can display both plain text and rich text, e.g. QLabel. It is used for deciding whether a text string should be interpreted as the one or the other. This is normally done by passing one of the enum values to a setTextFormat() function.
 .TP
@@ -224,7 +265,7 @@ There are also a number of flags to let you customize the appearance of top-leve
 .TP
 \fCWStyle_MinMax\fR - is equal to \fCWStyle_Minimize|WStyle_Maximize\fR
 .TP
-\fCWStyle_ContextHelp\fR - adds a context help button.
+\fCWStyle_ContextHelp\fR - adds a context help button to dialogs.
 .TP
 \fCWStyle_Tool\fR - makes the window a tool window. A tool window is a small window that lives for a short time and it is typically used for creating popup windows. It there is a parent, the tool window will always be kept on top of it. If there isn't a parent, you may consider passing WStyle_StaysOnTop as well. If the window system supports it, a tool window is be decorated with a somewhat lighter frame. It can, however, be combined with \fCWStyle_NoBorder\fR as well.
 .TP

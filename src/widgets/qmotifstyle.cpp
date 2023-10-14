@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qmotifstyle.cpp   2.1.0   edited 2000-03-24 $
+** $Id: qt/src/widgets/qmotifstyle.cpp   2.1.1   edited 2000-04-28 $
 **
 ** Implementation of Motif-like style class
 **
@@ -1129,8 +1129,8 @@ void QMotifStyle::drawComboButton( QPainter *p, int x, int y, int w, int h,
     p->drawLine( ax+awh-1, sy+1, ax+awh-1, sy+sh-1 );
 
     if ( editable ) {
-	QRect r( comboButtonRect(x-1,y-1,w+2,h+2) );
-	qDrawShadePanel( p, r, g, TRUE, 1, &fill );
+	QRect r( comboButtonRect(x,y,w,h) );
+	qDrawShadePanel( p, QRect(r.x()-1, r.y()-1, r.width()-2, r.height()-2), g, TRUE, 1, &fill );
     }
 }
 

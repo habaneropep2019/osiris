@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qmovie.cpp   2.1.0   edited 2000-04-07 $
+** $Id: qt/src/kernel/qmovie.cpp   2.1.1   edited 2000-04-07 $
 **
 ** Implementation of movie classes
 **

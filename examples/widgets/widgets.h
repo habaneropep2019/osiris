@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/widgets/widgets.h   2.1.0   edited 2000-03-03 $
+** $Id: qt/examples/widgets/widgets.h   2.1.1   edited 2000-03-03 $
 **
 ** Definition of something or other
 **

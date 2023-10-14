@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qnamespace.h   2.1.0   edited 2000-04-06 $
+** $Id: qt/src/kernel/qnamespace.h   2.1.1   edited 2000-04-24 $
 **
 ** Definition of Qt namespace (as class for compiler compatibility)
 **
@@ -468,6 +468,7 @@ public:
 	RightArrow
     };
 
+    // documented in qpainter.cpp
     enum RasterOp { // raster op mode
 	CopyROP,
 	OrROP,
@@ -537,7 +538,7 @@ public:
 	WV_95 		= 0x0002,
 	WV_98		= 0x0003,
 	WV_DOS_based	= 0x000f,
-	
+
 	WV_NT 		= 0x0010,
 	WV_2000 	= 0x0020,
 	WV_NT_based	= 0x00f0

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qstyle.h   2.1.0   edited 2000-03-24 $
+** $Id: qt/src/kernel/qstyle.h   2.1.1   edited 2000-05-18 $
 **
 ** Definition of QStyle class
 **
@@ -239,7 +239,7 @@ public:
     // Binary compatibility contortions, to become virtual in 3.0
     QSize scrollBarExtent(); // ### const 3.0
     int buttonDefaultIndicatorWidth() const;
-    int toolBarHandleExtend() const; // ### virtual 3.0
+    int toolBarHandleExtend() const; // we know it's a spelling error, fixed in 2.2
     void drawToolBarHandle( QPainter *p, const QRect &r,
 			    Qt::Orientation orientation,
 			    bool highlight, const QColorGroup &cg,

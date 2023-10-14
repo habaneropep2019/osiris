@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/dragdrop/dropsite.h   2.1.0   edited 2000-01-31 $
+** $Id: qt/examples/dragdrop/dropsite.h   2.1.1   edited 2000-01-31 $
 **
 ** Drop site example implementation
 **

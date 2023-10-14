@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qclipboard_x11.cpp   2.1.0   edited 2000-03-24 $
+** $Id: qt/src/kernel/qclipboard_x11.cpp   2.1.1   edited 2000-04-27 $
 **
 ** Implementation of QClipboard class for X11
 **
@@ -31,7 +31,7 @@
 #include "qbuffer.h"
 #include "qt_x11.h"
 
-// NOT REVISED
+// REVISED: arnt
 
 /*
     ##### If we had two clipboards, one for automatic copy (ie. the normal
@@ -46,6 +46,7 @@
  *****************************************************************************/
 
 extern Time qt_x_time;			// def. in qapplication_x11.cpp
+extern Time qt_x_incr;			// def. in qapplication_x11.cpp
 extern Atom qt_selection_property;
 extern Atom qt_selection_sentinel;
 extern Atom* qt_xdnd_str_to_atom( const char *mimeType );
@@ -604,8 +605,7 @@ QByteArray QClipboardWatcher::getDataInFormat(Atom fmtatom) const
 
     if ( qt_xclb_read_property(dpy,win,qt_selection_property,TRUE,
 			       &buf,0,&type,0,FALSE) ) {
-	// ### use qt_x11_intern_atoms for faster startup
-	if ( type == XInternAtom(dpy,"INCR",FALSE) ) {
+	if ( type == qt_x_incr ) {
 	    int nbytes = buf.size() >= 4 ? *((int*)buf.data()) : 0;
 	    buf = qt_xclb_read_incremental_property( dpy, win,
 						     qt_selection_property,
@@ -618,8 +618,8 @@ QByteArray QClipboardWatcher::getDataInFormat(Atom fmtatom) const
 
 
 /*!
-  Returns a reference to a QMimeSource representation
-  of the current clipboard data.
+  Returns a reference to a QMimeSource representation of the current
+  clipboard data.
 */
 QMimeSource* QClipboard::data() const
 {
@@ -632,16 +632,15 @@ QMimeSource* QClipboard::data() const
 }
 
 /*!
-  Sets the clipboard data.  Ownership of the data is transferred
-  to the clipboard - the only way to remove this data is to set
-  something else, or to call clear().  The QDragObject subclasses
-  are reasonable things to put on the clipboard (but do not try
-  to \link QDragObject::drag() drag\endlink the same object).
-  Do not put QDragMoveEvent or QDropEvent subclasses on the clipboard,
-  as they do not belong to the event handler which receives them.
+  Sets the clipboard data.  Ownership of the data is transferred to
+  the clipboard - the only ways to remove this data is to set
+  something else, or to call clear().  The QDragObject subclasses are
+  reasonable things to put on the clipboard (but do not try to call
+  QDragObject::drag() on the same object).  Do not put QDragMoveEvent
+  or QDropEvent subclasses on the clipboard, as they do not belong to
+  the event handler which receives them.
 
-  The setText() and setPixmap() functions are shorthand ways
-  of setting the data.
+  The setText() and setPixmap() functions are simpler wrappers for this.
 */
 void QClipboard::setData( QMimeSource* src )
 {

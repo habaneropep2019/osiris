@@ -120,12 +120,8 @@ QImage.
 <p>You can display a QPixmap on the screen easily using
 e.g. <a href="qlabel.html#f3f301">QLabel::setPixmap</a>(), and all the <a href="qbutton.html">QButton</a> subclasses support
 pixmap use.
-<p>There are also convenience functions to get and set single pixels
-and to load and save the entire pixmap; these work by converting the
-pixmap to a QImage internally.
-<p>The QPixmap class is optimized by the use of <a href="shclass.html">implicit
-sharing</a>, so it is very efficient to pass QPixmap objects as
-arguments.
+<p>The QPixmap class uses lazy copying, so it is practical to pass pass
+QPixmap objects as arguments.
 <p>Note about Windows 95 and 98: On Windows 9x, the system crashes if
 you create more than approximately 1000 pixmaps, independent of the
 size of the pixmaps or installed RAM.  Windows NT does not have this
@@ -661,17 +657,17 @@ above, except that it uses a <a href="qpainter.html">QPainter</a>.
 <hr><h2>Related Functions</h2>
 <h3><a href="qdatastream.html">QDataStream</a> &amp; <a name="12eff7"></a>operator&gt;&gt; (<a href="qdatastream.html">QDataStream</a> &amp; s, QPixmap &amp; pixmap)</h3>
 <p>Reads a pixmap from the stream.
-<p>See also:  <a href="qpixmap.html#775e08">QPixmap::load</a>().
+<p>See also:  <a href="qpixmap.html#775e08">QPixmap::load</a>() and <a href="datastreamformat.html">Format of the QDataStream operators</a>
 
 <h3><a href="qdatastream.html">QDataStream</a> &amp; <a name="f20fe5"></a>operator&lt;&lt; (<a href="qdatastream.html">QDataStream</a> &amp; s, const QPixmap &amp; pixmap)</h3>
 <p>Writes a pixmap to the stream as a PNG image.
-<p>See also:  <a href="qpixmap.html#07cdad">QPixmap::save</a>().
+<p>See also:  <a href="qpixmap.html#07cdad">QPixmap::save</a>() and <a href="datastreamformat.html">Format of the QDataStream operators</a>
 
 <hr><p>
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.1.0"><nobr>
+<input type=hidden name="version" value="2.1.1"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -679,5 +675,5 @@ copyright &copy; 1995-2000
 <a href="http://www.trolltech.com">Troll Tech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.0</div>
+<td align="right"><div align="right">Qt version 2.1.1</div>
 </table></div></address></body></html>

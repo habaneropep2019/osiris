@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qgarray.cpp   2.1.0   edited 2000-03-24 $
+** $Id: qt/src/tools/qgarray.cpp   2.1.1   edited 2000-04-27 $
 **
 ** Implementation of QGArray class
 **
@@ -249,7 +249,7 @@ bool QGArray::fill( const char *d, int len, uint sz )
 	    *x++ = v;
     } else if ( sz == 2 ) {			// 16 bit elements
 	register Q_INT16 *x = (Q_INT16*)data();
-	INT16 v = *((Q_INT16*)d);
+	Q_INT16 v = *((Q_INT16*)d);
 	while ( len-- )
 	    *x++ = v;
     } else {					// any other size elements

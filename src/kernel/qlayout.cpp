@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qlayout.cpp   2.1.0   edited 2000-04-04 $
+** $Id: qt/src/kernel/qlayout.cpp   2.1.1   edited 2000-05-06 $
 **
 ** Implementation of layout classes
 **
@@ -939,7 +939,7 @@ QGridLayout::QGridLayout( int nRows, int nCols,
 
 
 /*!
-  Destroys the grid layout. Geometry management is terminated if
+  Destructs the grid layout. Geometry management is terminated if
   this is a top-level grid.
 */
 
@@ -1610,7 +1610,7 @@ QBoxLayout::QBoxLayout( Direction d,
 }
 
 /*!
-  Destroys this box.
+  Destructs this box.
 */
 
 QBoxLayout::~QBoxLayout()
@@ -1690,7 +1690,7 @@ int QBoxLayout::heightForWidth( int w ) const
 	QBoxLayout *that = (QBoxLayout*)this;
 	if ( data->dirty )
 	    that->setupGeom();
-	return that->calcHfw( w );
+	return that->calcHfw( w ) + 2*margin();
     }
     return data->hfwHeight + 2*margin();
 }
@@ -2262,11 +2262,14 @@ int QBoxLayout::calcHfw( int w )
     } else {
 	QListIterator<QBoxLayoutItem> it( data->list );
 	QBoxLayoutItem *box;
-	int space=0;
+	bool first = TRUE;
 	while ( (box=it.current()) != 0 ) {
 	    ++it;
-	    h += box->hfw( w ) + space;
-	    space = box->item->isEmpty() ? 0 : spacing();
+	    bool empty = box->item->isEmpty();
+	    h += box->hfw( w );
+	    if ( !first && !empty )
+		h += spacing();
+	    first = first && empty;
 	}
     }
     data->hfwHeight = h;
@@ -2360,7 +2363,7 @@ QHBoxLayout::QHBoxLayout( int space, const char *name )
 
 
 /*!
-  Destroys this box.
+  Destructs this box.
 */
 
 QHBoxLayout::~QHBoxLayout()
@@ -2421,7 +2424,7 @@ QVBoxLayout::QVBoxLayout( int space, const char *name )
 }
 
 /*!
-  Destroys this box.
+  Destructs this box.
 */
 
 QVBoxLayout::~QVBoxLayout()

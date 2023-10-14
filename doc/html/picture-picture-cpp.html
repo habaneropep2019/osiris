@@ -30,7 +30,7 @@ body { background: white; color: black; }
 
   Implementation:
 <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/picture/picture.cpp   2.1.0   edited 2000-02-21 $
+** &#36;Id&#58; qt/examples/picture/picture.cpp   2.1.1   edited 2000-02-21 $
 **
 ** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
@@ -106,7 +106,7 @@ PictureDisplay::~PictureDisplay()
     delete pict;
 }
 
-void <a name="376"></a>PictureDisplay::paintEvent( <a href="qpaintevent.html">QPaintEvent</a> * )
+void <a name="378"></a>PictureDisplay::paintEvent( <a href="qpaintevent.html">QPaintEvent</a> * )
 {
     <a href="qpainter.html">QPainter</a> paint( this );                     // paint widget
     if ( pict )
@@ -115,7 +115,7 @@ void <a name="376"></a>PictureDisplay::paintEvent( <a href="qpaintevent.html">QP
         paint.<a href="qpainter.html#8a59ed">drawText</a>( <a name="rect"></a><a href="qwidget.html#e872e1">rect</a>(), AlignCenter, name );
 }
 
-void <a name="377"></a>PictureDisplay::keyPressEvent( <a href="qkeyevent.html">QKeyEvent</a> *k )
+void <a name="379"></a>PictureDisplay::keyPressEvent( <a href="qkeyevent.html">QKeyEvent</a> *k )
 {
     switch ( tolower(k-&gt;<a name="ascii"></a><a href="qkeyevent.html#c3c00e">ascii</a>()) ) {
         case 'r':                               // reload
@@ -160,5 +160,5 @@ int main( int argc, char **argv )
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.0</div>
+<td align="right"><div align="right">Qt version 2.1.1</div>
 </table></div></address></body></html>

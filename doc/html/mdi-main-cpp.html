@@ -29,7 +29,7 @@ body { background: white; color: black; }
   <hr>
 
   Header file: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/mdi/application.h   2.1.0   edited 2000-02-21 $
+** &#36;Id&#58; qt/examples/mdi/application.h   2.1.1   edited 2000-02-21 $
 **
 ** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
@@ -105,7 +105,7 @@ private:
   <hr>
 
   Implementation: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/mdi/application.cpp   2.1.0   edited 2000-02-24 $
+** &#36;Id&#58; qt/examples/mdi/application.cpp   2.1.1   edited 2000-02-24 $
 **
 ** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
@@ -169,17 +169,17 @@ ApplicationWindow::ApplicationWindow()
     openIcon = QPixmap( fileopen );
     <a href="qtoolbutton.html">QToolButton</a> * fileOpen
         = new <a href="qtoolbutton.html">QToolButton</a>( openIcon, "Open File", QString::null,
-                           this, SLOT(<a href=#450>load</a>()), fileTools, "open file" );
+                           this, SLOT(<a href=#452>load</a>()), fileTools, "open file" );
 
     saveIcon = QPixmap( filesave );
     <a href="qtoolbutton.html">QToolButton</a> * fileSave
         = new <a href="qtoolbutton.html">QToolButton</a>( saveIcon, "Save File", QString::null,
-                           this, SLOT(<a href=#451>save</a>()), fileTools, "save file" );
+                           this, SLOT(<a href=#453>save</a>()), fileTools, "save file" );
 
     printIcon = QPixmap( fileprint );
     <a href="qtoolbutton.html">QToolButton</a> * filePrint
         = new <a href="qtoolbutton.html">QToolButton</a>( printIcon, "Print File", QString::null,
-                           this, SLOT(<a href=#453>print</a>()), fileTools, "print file" );
+                           this, SLOT(<a href=#455>print</a>()), fileTools, "print file" );
 
     (void)QWhatsThis::whatsThisButton( fileTools );
 
@@ -190,37 +190,37 @@ ApplicationWindow::ApplicationWindow()
     <a href="qpopupmenu.html">QPopupMenu</a> * file = new <a href="qpopupmenu.html">QPopupMenu</a>( this );
     <a href="qmainwindow.html#2fcbc3">menuBar</a>()-&gt;insertItem( "&amp;File", file );
 
-    file-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "&amp;New", this, SLOT(<a href=#449>newDoc</a>()), CTRL+Key_N );
+    file-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "&amp;New", this, SLOT(<a href=#451>newDoc</a>()), CTRL+Key_N );
 
     id = file-&gt;<a href="qmenudata.html#43c652">insertItem</a>( openIcon, "&amp;Open",
-                           this, SLOT(<a href=#450>load</a>()), CTRL+Key_O );
+                           this, SLOT(<a href=#452>load</a>()), CTRL+Key_O );
     file-&gt;<a href="qmenudata.html#a678e4">setWhatsThis</a>( id, fileOpenText );
 
     id = file-&gt;<a href="qmenudata.html#43c652">insertItem</a>( saveIcon, "&amp;Save",
-                           this, SLOT(<a href=#451>save</a>()), CTRL+Key_S );
+                           this, SLOT(<a href=#453>save</a>()), CTRL+Key_S );
     file-&gt;<a href="qmenudata.html#a678e4">setWhatsThis</a>( id, fileSaveText );
-    id = file-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "Save &amp;as...", this, SLOT(<a href=#452>saveAs</a>()) );
+    id = file-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "Save &amp;as...", this, SLOT(<a href=#454>saveAs</a>()) );
     file-&gt;<a href="qmenudata.html#a678e4">setWhatsThis</a>( id, fileSaveText );
     file-&gt;<a href="qmenudata.html#5f2cea">insertSeparator</a>();
     id = file-&gt;<a href="qmenudata.html#43c652">insertItem</a>( printIcon, "&amp;Print",
-                           this, SLOT(<a href=#453>print</a>()), CTRL+Key_P );
+                           this, SLOT(<a href=#455>print</a>()), CTRL+Key_P );
     file-&gt;<a href="qmenudata.html#a678e4">setWhatsThis</a>( id, filePrintText );
     file-&gt;<a href="qmenudata.html#5f2cea">insertSeparator</a>();
-    file-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "&amp;Close", this, SLOT(<a href=#454>closeWindow</a>()), CTRL+Key_W );
+    file-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "&amp;Close", this, SLOT(<a href=#456>closeWindow</a>()), CTRL+Key_W );
     file-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "&amp;Quit", qApp, SLOT( closeAllWindows() ), CTRL+Key_Q );
 
     windowsMenu = new <a href="qpopupmenu.html">QPopupMenu</a>( this );
     windowsMenu-&gt;setCheckable( TRUE );
     <a href="qobject.html#c2d209">connect</a>( windowsMenu, SIGNAL( aboutToShow() ),
-             this, SLOT( <a href=#457>windowsMenuAboutToShow</a>() ) );
+             this, SLOT( <a href=#459>windowsMenuAboutToShow</a>() ) );
     <a href="qmainwindow.html#2fcbc3">menuBar</a>()-&gt;insertItem( "&amp;Windows", windowsMenu );
 
     <a href="qmainwindow.html#2fcbc3">menuBar</a>()-&gt;insertSeparator();
     <a href="qpopupmenu.html">QPopupMenu</a> * help = new <a href="qpopupmenu.html">QPopupMenu</a>( this );
     <a href="qmainwindow.html#2fcbc3">menuBar</a>()-&gt;insertItem( "&amp;Help", help );
 
-    help-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "&amp;About", this, SLOT(<a href=#455>about</a>()), Key_F1);
-    help-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "About&amp;<a href="qt.html">Qt</a>", this, SLOT(<a href=#456>aboutQt</a>()));
+    help-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "&amp;About", this, SLOT(<a href=#457>about</a>()), Key_F1);
+    help-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "About&amp;<a href="qt.html">Qt</a>", this, SLOT(<a href=#458>aboutQt</a>()));
     help-&gt;<a href="qmenudata.html#5f2cea">insertSeparator</a>();
     help-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "What's &amp;This", this, SLOT(<a href="qmainwindow.html#db02bc">whatsThis</a>()), SHIFT+Key_F1);
 
@@ -238,7 +238,7 @@ ApplicationWindow::~ApplicationWindow()
     delete printer;
 }
 
-MDIWindow* <a name="449"></a>ApplicationWindow::newDoc()
+MDIWindow* <a name="451"></a>ApplicationWindow::newDoc()
 {
     MDIWindow* w = new MDIWindow( ws, 0, WDestructiveClose );
     <a href="qobject.html#c2d209">connect</a>( w, SIGNAL( message(const QString&amp;, int) ), <a href="qmainwindow.html#14153d">statusBar</a>(), SLOT( message(const QString&amp;, int )) );
@@ -252,7 +252,7 @@ MDIWindow* <a name="449"></a>ApplicationWindow::newDoc()
     return w;
 }
 
-void <a name="450"></a>ApplicationWindow::load()
+void <a name="452"></a>ApplicationWindow::load()
 {
     <a href="qstring.html">QString</a> fn = QFileDialog::getOpenFileName( QString::null, QString::null, this );
     if ( !fn.<a href="qstring.html#9a6d7e">isEmpty</a>() ) {
@@ -263,47 +263,47 @@ void <a name="450"></a>ApplicationWindow::load()
     }
 }
 
-void <a name="451"></a>ApplicationWindow::save()
+void <a name="453"></a>ApplicationWindow::save()
 {
     MDIWindow* m = (MDIWindow*)ws-&gt;activeWindow();
     if ( m )
         m-&gt;save();
 }
 
-void <a name="452"></a>ApplicationWindow::saveAs()
+void <a name="454"></a>ApplicationWindow::saveAs()
 {
     MDIWindow* m = (MDIWindow*)ws-&gt;activeWindow();
     if ( m )
         m-&gt;saveAs();
 }
 
-void <a name="453"></a>ApplicationWindow::print()
+void <a name="455"></a>ApplicationWindow::print()
 {
     MDIWindow* m = (MDIWindow*)ws-&gt;activeWindow();
     if ( m )
         m-&gt;print( printer );
 }
 
-void <a name="454"></a>ApplicationWindow::closeWindow()
+void <a name="456"></a>ApplicationWindow::closeWindow()
 {
     MDIWindow* m = (MDIWindow*)ws-&gt;activeWindow();
     if ( m )
         m-&gt;<a href="qwidget.html#930c34">close</a>();
 }
 
-void <a name="455"></a>ApplicationWindow::about()
+void <a name="457"></a>ApplicationWindow::about()
 {
     <a href="qmessagebox.html#e67950">QMessageBox::about</a>( this, "Qt Application Example",
                         "This example demonstrates simple use of\n "
                         "Qt's Multiple Document Interface (MDI).");
 }
 
-void <a name="456"></a>ApplicationWindow::aboutQt()
+void <a name="458"></a>ApplicationWindow::aboutQt()
 {
     <a href="qmessagebox.html#976755">QMessageBox::aboutQt</a>( this, "Qt Application Example" );
 }
 
-void <a name="457"></a>ApplicationWindow::windowsMenuAboutToShow()
+void <a name="459"></a>ApplicationWindow::windowsMenuAboutToShow()
 {
     windowsMenu-&gt;clear();
     int cascadeId = windowsMenu-&gt;insertItem("&amp;Cascade", ws, SLOT(cascade() ) );
@@ -316,13 +316,13 @@ void <a name="457"></a>ApplicationWindow::windowsMenuAboutToShow()
     QWidgetList windows = ws-&gt;windowList();
     for ( int i = 0; i &lt; int(windows.count()); ++i ) {
         int id = windowsMenu-&gt;insertItem(windows.at(i)-&gt;caption(),
-                                         this, SLOT( <a href=#458>windowsMenuActivated</a>( int ) ) );
+                                         this, SLOT( <a href=#460>windowsMenuActivated</a>( int ) ) );
         windowsMenu-&gt;setItemParameter( id, i );
         windowsMenu-&gt;setItemChecked( id, ws-&gt;activeWindow() == windows.at(i) );
     }
 }
 
-void <a name="458"></a>ApplicationWindow::windowsMenuActivated( int id )
+void <a name="460"></a>ApplicationWindow::windowsMenuActivated( int id )
 {
     <a href="qwidget.html">QWidget</a>* w = ws-&gt;windowList().at( id );
     if ( w )
@@ -340,7 +340,7 @@ MDIWindow::~MDIWindow()
 {
 }
 
-void <a name="445"></a>MDIWindow::load( const QString&amp; fn )
+void <a name="447"></a>MDIWindow::load( const QString&amp; fn )
 {
     filename  = fn;
     <a href="qfile.html">QFile</a> f( filename );
@@ -363,10 +363,10 @@ void <a name="445"></a>MDIWindow::load( const QString&amp; fn )
     emit message( <a href="qstring.html">QString</a>("Loaded document %1").arg(filename), 2000 );
 }
 
-void <a name="446"></a>MDIWindow::save()
+void <a name="448"></a>MDIWindow::save()
 {
     if ( filename.isEmpty() ) {
-        <a href=#447>saveAs</a>();
+        <a href=#449>saveAs</a>();
         return;
     }
 
@@ -387,18 +387,18 @@ void <a name="446"></a>MDIWindow::save()
     emit message( <a href="qstring.html">QString</a>( "File %1 saved" ).arg( filename ), 2000 );
 }
 
-void <a name="447"></a>MDIWindow::saveAs()
+void <a name="449"></a>MDIWindow::saveAs()
 {
     <a href="qstring.html">QString</a> fn = QFileDialog::getSaveFileName( filename, QString::null, this );
     if ( !fn.<a href="qstring.html#9a6d7e">isEmpty</a>() ) {
         filename = fn;
-        <a href=#446>save</a>();
+        <a href=#448>save</a>();
     } else {
         emit message( "Saving aborted", 2000 );
     }
 }
 
-void <a name="448"></a>MDIWindow::print( <a href="qprinter.html">QPrinter</a>* printer)
+void <a name="450"></a>MDIWindow::print( <a href="qprinter.html">QPrinter</a>* printer)
 {
     const int Margin = 10;
     int pageNo = 1;
@@ -440,7 +440,7 @@ void <a name="448"></a>MDIWindow::print( <a href="qprinter.html">QPrinter</a>* p
 
   Main:
 <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/mdi/main.cpp   2.1.0   edited 2000-03-30 $
+** &#36;Id&#58; qt/examples/mdi/main.cpp   2.1.1   edited 2000-03-30 $
 **
 ** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
@@ -465,5 +465,5 @@ int main( int argc, char ** argv ) {
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.0</div>
+<td align="right"><div align="right">Qt version 2.1.1</div>
 </table></div></address></body></html>

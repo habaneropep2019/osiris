@@ -34,7 +34,7 @@ Inherits <a href="qdialog.html">QDialog</a>.
 <li><span class="fn"><a href="#e1715a"><b>QMessageBox</b></a> ( QWidget * parent=0, const char * name=0 ) </span>
 <li><span class="fn"><a href="#4d160f"><b>QMessageBox</b></a> ( const QString &amp; caption, const QString &amp; text, Icon icon, int button0, int button1, int button2, QWidget * parent=0, const char * name=0, bool modal=TRUE, WFlags f=WStyle_DialogBorder ) </span>
 <li><span class="fn"><a href="#31c068"><b>~QMessageBox</b></a> () </span>
-<li><span class="fn">enum { Ok = 1, Cancel = 2, Yes = 3, No = 4, Abort = 5, Retry = 6, Ignore = 7, ButtonMask = 0x07, Default = 0x100, Escape = 0x200, FlagMask = 0x300 }</span>
+<li><span class="fn">enum { NoButton = 0, Ok = 1, Cancel = 2, Yes = 3, No = 4, Abort = 5, Retry = 6, Ignore = 7, ButtonMask = 0x07, Default = 0x100, Escape = 0x200, FlagMask = 0x300 }</span>
 <li><span class="fn">QString <a href="#f2f037"><b>text</b></a> () const</span>
 <li><span class="fn">void <a href="#f9357c"><b>setText</b></a> ( const QString &amp; ) </span>
 <li><span class="fn">Icon <a href="#b9b20f"><b>icon</b></a> () const</span>
@@ -269,6 +269,7 @@ to three buttons.
 </ul>
 <p>Each button can have one of the following values:
 <ul>
+<li><code>QMessageBox::NoButton</code>
 <li><code>QMessageBox::Ok</code>
 <li><code>QMessageBox::Cancel</code>
 <li><code>QMessageBox::Yes</code>
@@ -277,6 +278,8 @@ to three buttons.
 <li><code>QMessageBox::Retry</code>
 <li><code>QMessageBox::Ignore</code>
 </ul>
+<p>Use QMessageBox::NoButton for the later parameters to have less than
+three buttons in your messagebox.
 <p>One of the buttons can be combined with the <code>QMessageBox::Default</code> flag
 to make a default button.
 <p>One of the buttons can be combined with the <code>QMessageBox::Escape</code> flag
@@ -481,7 +484,7 @@ modal relative to <em>parent.</em>
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.1.0"><nobr>
+<input type=hidden name="version" value="2.1.1"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -489,5 +492,5 @@ copyright &copy; 1995-2000
 <a href="http://www.trolltech.com">Troll Tech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.0</div>
+<td align="right"><div align="right">Qt version 2.1.1</div>
 </table></div></address></body></html>

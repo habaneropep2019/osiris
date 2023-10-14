@@ -33,7 +33,7 @@ body { background: white; color: black; }
   <hr>
 
   Header file: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/table/table.h   2.1.0   edited 2000-04-02 $
+** &#36;Id&#58; qt/examples/table/table.h   2.1.1   edited 2000-05-01 $
 **
 ** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
@@ -116,7 +116,7 @@ protected slots:
 
 private slots:
     void editorOk();
-    void ediorCancel();
+    void editorCancel();
 
 private:
     void paintCell( <a href="qpainter.html">QPainter</a> *p, int row, int col, const QRect &amp;cr );
@@ -139,7 +139,7 @@ private:
   <hr>
 
   Implementation: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/table/table.cpp   2.1.0   edited 2000-04-06 $
+** &#36;Id&#58; qt/examples/table/table.cpp   2.1.1   edited 2000-05-01 $
 **
 ** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
@@ -216,7 +216,7 @@ Table::Table( int numRows, int numCols, QWidget *parent, const char *name )
 {
     <a href="qscrollview.html#fd1206">setResizePolicy</a>( Manual );
 
-    // create headers
+    // Create headers
     leftHeader = new <a href="qheader.html">QHeader</a>( numRows, this );
     leftHeader-&gt;setOrientation( Vertical );
     leftHeader-&gt;setTracking( TRUE );
@@ -242,7 +242,7 @@ Table::Table( int numRows, int numCols, QWidget *parent, const char *name )
     <a href="qscrollview.html#55a330">enableClipper</a>( TRUE );
     <a href="qscrollview.html#040cb5">viewport</a>()-&gt;setBackgroundMode( PaletteBase );
 
-    // preperations for contents
+    // Prepare for contents
     contents.resize( numRows * numCols );
     contents.setAutoDelete( TRUE );
     <a href="qwmatrix.html">QWMatrix</a> wm;
@@ -252,7 +252,7 @@ Table::Table( int numRows, int numCols, QWidget *parent, const char *name )
     <a href=#291>setCellPixmap</a>( 3, 3, pix );
     <a href=#290>setCellText</a>( 3, 3, "A Pixmap" );
 
-    // connect header, table and scrollbars
+    // Connect header, table and scrollbars
     <a href="qobject.html#c2d209">connect</a>( horizontalScrollBar(), SIGNAL( valueChanged( int ) ),
              topHeader, SLOT( setOffset( int ) ) );
     <a href="qobject.html#c2d209">connect</a>( verticalScrollBar(), SIGNAL( valueChanged( int ) ),
@@ -262,11 +262,11 @@ Table::Table( int numRows, int numCols, QWidget *parent, const char *name )
     <a href="qobject.html#c2d209">connect</a>( leftHeader, SIGNAL( sizeChange( int, int, int ) ),
              this, SLOT( <a href=#304>rowHeightChanged</a>( int, int, int ) ) );
 
-    // init variables
+    // Initialize variables
     curRow = curCol = 0;
     editor = 0;
 
-    // initial size
+    // Initial size
     <a href="qscrollview.html#5d37af">resize</a>( 640, 480 );
 }
 
@@ -275,9 +275,9 @@ Table::~Table()
 }
 
 /****************************************************************************
-  Two drawing functions, 1 which finds out which cells to draw
+  Two drawing functions, one which finds out which cells to draw
   and one which actually draws a cell.
-  Also one drawing function to darw empty areas.
+  Also one drawing function to draw empty areas.
 *****************************************************************************/
 
 void <a name="284"></a>Table::drawContents( <a href="qpainter.html">QPainter</a> *p, int cx, int cy, int cw, int ch )
@@ -297,21 +297,22 @@ void <a name="284"></a>Table::drawContents( <a href="qpainter.html">QPainter</a>
     if ( collast == -1 )
         collast = cols() - 1;
 
-    // go through the rows
+    // Go through the rows
     for ( int r = rowfirst; r &lt;= rowlast; ++r ) {
         // get row position and height
         int rowp = rowPos( r );
         int rowh = rowHeight( r );
 
-        // go through the columns in the row r
-        // if we know from where to where use this limits (colstart, colend), else go through all of them
+        // Go through the columns in the row r
+        // if we know from where to where, go through [colfirst, collast],
+        // else go through all of them
         for ( int c = colfirst; c &lt;= collast; ++c ) {
             // get position and width of column c
             int colp, colw;
             colp = columnPos( c );
             colw = columnWidth( c );
 
-            //  translate painter ad draw the cell
+            // Translate painter and draw the cell
             p-&gt;<a href="qpainter.html#fdf12e">saveWorldMatrix</a>();
             p-&gt;<a href="qpainter.html#ba64b6">translate</a>( colp, rowp );
             <a href=#285>paintCell</a>( p, r, c, QRect( colp, rowp, colw, rowh ) );
@@ -319,7 +320,7 @@ void <a name="284"></a>Table::drawContents( <a href="qpainter.html">QPainter</a>
         }
     }
 
-    // paint empty rects
+    // Paint empty rects
     <a href=#286>paintEmptyArea</a>( p, cx, cy, cw, ch );
 }
 
@@ -330,17 +331,17 @@ void <a name="285"></a>Table::paintCell( <a href="qpainter.html">QPainter</a>* p
     int x2 = w - 1;
     int y2 = h - 1;
 
-    // draw cell background
+    // Draw cell background
     p-&gt;<a href="qpainter.html#0f4c23">fillRect</a>( 0, 0, w, h, <a href="qwidget.html#5bc085">colorGroup</a>().brush( QColorGroup::Base ) );
 
-    // draw our lines
+    // Draw our lines
     <a href="qpen.html">QPen</a> pen( p-&gt;<a href="qpainter.html#759128">pen</a>() );
     p-&gt;<a href="qpainter.html#0a6aff">setPen</a>( gray );
     p-&gt;<a href="qpainter.html#ffde14">drawLine</a>( x2, 0, x2, y2 );
     p-&gt;<a href="qpainter.html#ffde14">drawLine</a>( 0, y2, x2, y2 );
     p-&gt;<a href="qpainter.html#0a6aff">setPen</a>( pen );
 
-    // if we are the focus cell, draw indication
+    // If we are in the focus cell, draw indication
     if ( row == curRow &amp;&amp;col == curCol ) {
         if ( hasFocus() || viewport()-&gt;hasFocus() )
             p-&gt;<a href="qpainter.html#b29a16">drawRect</a>( 0, 0, x2, y2 );
@@ -353,7 +354,7 @@ void <a name="285"></a>Table::paintCell( <a href="qpainter.html">QPainter</a>* p
         x = pix.<a href="qpixmap.html#443c1f">width</a>() + 2;
     }
 
-    // find out if contents is a number or a string
+    // Find out if contents is a number or a string
     bool num;
     bool ok1 = FALSE, ok2 = FALSE;
     <a href="qstring.html">QString</a> s( <a href=#292>cellText</a>( row, col ) );
@@ -361,20 +362,20 @@ void <a name="285"></a>Table::paintCell( <a href="qpainter.html">QPainter</a>* p
     s.toDouble( &amp;ok2 );
     num = ok1 || ok2;
 
-    // draw conetnst
+    // Draw contents
     p-&gt;<a href="qpainter.html#8a59ed">drawText</a>( x, 0, w - x, h, ( num ? AlignRight : AlignLeft ) | AlignVCenter, s );
 }
 
 void <a name="286"></a>Table::paintEmptyArea( <a href="qpainter.html">QPainter</a> *p, int cx, int cy, int cw, int ch )
 {
-    // recion of the rect we should draw
+    // Region of the rect we should draw
     <a href="qregion.html">QRegion</a> reg( <a href="qrect.html">QRect</a>( cx, cy, cw, ch ) );
-    // subtract the table from it
+    // Subtract the table from it
     reg = reg.<a href="qregion.html#3c4d11">subtract</a>( <a href="qrect.html">QRect</a>( <a href="qpoint.html">QPoint</a>( 0, 0 ), <a href=#313>tableSize</a>() ) );
     p-&gt;<a href="qpainter.html#629789">save</a>();
-    // set clip region
+    // Set clip region...
     p-&gt;<a href="qpainter.html#6d2fff">setClipRegion</a>( reg );
-    // and fill background
+    // ...and fill background
     p-&gt;<a href="qpainter.html#0f4c23">fillRect</a>( cx, cy, cw, ch, <a href="qwidget.html#5bc085">colorGroup</a>().brush( QColorGroup::Base ) );
     p-&gt;<a href="qpainter.html#24cf68">restore</a>();
 }
@@ -465,7 +466,7 @@ void <a name="294"></a>Table::contentsMousePressEvent( <a href="qmouseevent.html
     if ( curCol == -1 )
         curCol = oldCol;
 
-    // of we have a new focus cell, repaint
+    // if we have a new focus cell, repaint
     if ( curRow != oldRow || curCol != oldCol ) {
         <a href=#302>updateCell</a>( oldRow, oldCol );
         <a href=#302>updateCell</a>( curRow, curCol );
@@ -486,7 +487,7 @@ void <a name="296"></a>Table::keyPressEvent( <a href="qkeyevent.html">QKeyEvent<
     // if a cell is just editing, do some special stuff
     if ( editor ) {
         if ( e-&gt;key() == Key_Escape )
-            <a href=#317>ediorCancel</a>();
+            <a href=#317>editorCancel</a>();
         else if ( e-&gt;key() == Key_Return || e-&gt;key() == Key_Enter )
             <a href=#316>editorOk</a>();
         return;
@@ -583,7 +584,10 @@ void <a name="303"></a>Table::columnWidthChanged( int col, int, int )
 {
     <a href="qscrollview.html#88b69e">updateContents</a>( columnPos( col ), 0, <a href="qscrollview.html#97d58f">contentsWidth</a>(), <a href="qscrollview.html#c8c152">contentsHeight</a>() );
     <a href="qsize.html">QSize</a> s( <a href=#313>tableSize</a>() );
+    int w = contentsWidth();
     <a href="qscrollview.html#e4cb2e">resizeContents</a>( s.<a href="qsize.html#bda6c6">width</a>(), s.<a href="qsize.html#6f50f3">height</a>() );
+    if ( contentsWidth() &lt; w )
+        <a href="qscrollview.html#f9c109">repaintContents</a>( s.<a href="qsize.html#bda6c6">width</a>(), 0, w - s.<a href="qsize.html#bda6c6">width</a>() + 1, <a href="qscrollview.html#c8c152">contentsHeight</a>(), TRUE );
     if ( editor ) {
         <a href="qscrollview.html#aee5e9">moveChild</a>( editor, <a href=#308>columnPos</a>( curCol ) + 1, <a href=#309>rowPos</a>( curRow ) + 1 );
         editor-&gt;resize( <a href=#306>columnWidth</a>( curCol ) - 2, <a href=#307>rowHeight</a>( curRow ) - 2 );
@@ -595,7 +599,10 @@ void <a name="304"></a>Table::rowHeightChanged( int row, int, int )
 {
     <a href="qscrollview.html#88b69e">updateContents</a>( 0, <a href=#309>rowPos</a>( row ), <a href="qscrollview.html#97d58f">contentsWidth</a>(), <a href="qscrollview.html#c8c152">contentsHeight</a>() );
     <a href="qsize.html">QSize</a> s( <a href=#313>tableSize</a>() );
+    int h = contentsHeight();
     <a href="qscrollview.html#e4cb2e">resizeContents</a>( s.<a href="qsize.html#bda6c6">width</a>(), s.<a href="qsize.html#6f50f3">height</a>() );
+    if ( contentsHeight() &lt; h )
+        <a href="qscrollview.html#f9c109">repaintContents</a>( 0, <a href="qscrollview.html#c8c152">contentsHeight</a>(), <a href="qscrollview.html#97d58f">contentsWidth</a>(), h - s.<a href="qsize.html#6f50f3">height</a>() + 1, TRUE );
     if ( editor ) {
         <a href="qscrollview.html#aee5e9">moveChild</a>( editor, <a href=#308>columnPos</a>( curCol ) + 1, <a href=#309>rowPos</a>( curRow ) + 1 );
         editor-&gt;resize( <a href=#306>columnWidth</a>( curCol ) - 2, <a href=#307>rowHeight</a>( curRow ) - 2 );
@@ -686,10 +693,10 @@ void <a name="316"></a>Table::editorOk()
     if ( !editor )
         return;
     <a href=#290>setCellText</a>( curRow, curCol, editor-&gt;text() );
-    <a href=#317>ediorCancel</a>();
+    <a href=#317>editorCancel</a>();
 }
 
-void <a name="317"></a>Table::ediorCancel()
+void <a name="317"></a>Table::editorCancel()
 {
     if ( !editor )
         return;
@@ -705,7 +712,7 @@ void <a name="317"></a>Table::ediorCancel()
 
   Main:
 <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/table/main.cpp   2.1.0   edited 2000-04-02 $
+** &#36;Id&#58; qt/examples/table/main.cpp   2.1.1   edited 2000-04-02 $
 **
 ** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
@@ -743,5 +750,5 @@ int main( int argc, char **argv )
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.0</div>
+<td align="right"><div align="right">Qt version 2.1.1</div>
 </table></div></address></body></html>

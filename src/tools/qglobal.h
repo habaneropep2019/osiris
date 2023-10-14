@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qglobal.h   2.1.0   edited 2000-04-12 $
+** $Id: qt/src/tools/qglobal.h   2.1.1   edited 2000-05-25 $
 **
 ** Global type declarations and definitions
 **
@@ -27,8 +27,8 @@
 #define QGLOBAL_H
 
 
-#define QT_VERSION	210
-#define QT_VERSION_STR	"2.1.0"
+#define QT_VERSION	211
+#define QT_VERSION_STR	"2.1.1"
 
 
 //
@@ -171,6 +171,7 @@
 #endif
 #elif defined(__xlC__)
 #define _CC_XLC_
+#define Q_FULL_TEMPLATE_INSTANTIATION
 #elif defined(como40)
 #define _CC_EDG_
 #define _CC_COMEAU_
@@ -417,6 +418,7 @@ Q_EXPORT bool qSysInfo( int *wordSize, bool *bigEndian );
 #pragma warning(disable: 4800)
 #elif defined(_CC_BOR_)
 #pragma option -w-inl
+#pragma option -w-aus
 #pragma warn -inl
 #pragma warn -pia
 #pragma warn -ccc

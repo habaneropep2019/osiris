@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qimage.h   2.1.0   edited 2000-04-05 $
+** $Id: qt/src/kernel/qimage.h   2.1.1   edited 2000-04-05 $
 **
 ** Definition of QImage and QImageIO classes
 **

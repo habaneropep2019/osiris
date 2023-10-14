@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qcheckbox.cpp   2.1.0   edited 2000-04-03 $
+** $Id: qt/src/widgets/qcheckbox.cpp   2.1.1   edited 2000-05-07 $
 **
 ** Implementation of QCheckBox class
 **
@@ -84,7 +84,7 @@
 */
 
 QCheckBox::QCheckBox( QWidget *parent, const char *name )
-	: QButton( parent, name, WResizeNoErase | WMouseNoMask )
+	: QButton( parent, name, WRepaintNoErase | WResizeNoErase | WMouseNoMask )
 {
     setToggleButton( TRUE );
 }
@@ -96,7 +96,7 @@ QCheckBox::QCheckBox( QWidget *parent, const char *name )
 */
 
 QCheckBox::QCheckBox( const QString &text, QWidget *parent, const char *name )
-	: QButton( parent, name, WResizeNoErase | WMouseNoMask )
+	: QButton( parent, name, WRepaintNoErase | WResizeNoErase | WMouseNoMask )
 {
     setText( text );
     setToggleButton( TRUE );
@@ -308,46 +308,44 @@ void QCheckBox::resizeEvent( QResizeEvent* )
 */
 void QCheckBox::updateMask()
 {
-
     QBitmap bm(width(),height());
-    {
-	int x, y, w, h;
-	GUIStyle gs = style().guiStyle();
-	bm.fill(color0);
-	QPainter p( &bm, this );
+    bm.fill(color0);
+    QPainter p( &bm, this );
+    int x, y, w, h;
+    GUIStyle gs = style().guiStyle();
+    QFontMetrics fm = fontMetrics();
+    QSize lsz = fm.size(ShowPrefix, text());
+    QSize sz = style().indicatorSize();
+    y = 0;
+    x = sz.width() + extraWidth(gs);
+    w = width() - x;
+    h = height();
 
-	QColorGroup cg(color1,color1,color1,color1,color1,color1,color1,color1, color0);
-	QFontMetrics fm = fontMetrics();
-	QSize lsz = fm.size(ShowPrefix, text());
-	QSize sz = style().indicatorSize();
-	x = gs == MotifStyle ? 1 : 0;
-	y = (height() - lsz.height() + fm.height() - sz.height())/2;
+    QColorGroup cg(color1,color1,color1,color1,color1,color1,color1,color1,color0);
 
-	style().drawIndicatorMask(&p, x, y, sz.width(), sz.height(), state() );
+    style().drawItem( &p, x, y, w, h,
+		      AlignLeft|AlignVCenter|ShowPrefix,
+		      cg, TRUE,
+		      pixmap(), text() );
+    x = 0;
+    y = (height() - lsz.height() + fm.height() - sz.height())/2;
+	
+    style().drawIndicatorMask(&p, x, y, sz.width(), sz.height(), state() );
 
-	sz = style().indicatorSize();
+    if ( hasFocus() ) {
 	y = 0;
-	x = sz.width() + extraWidth( gs );
-	w = width() - x;
-	h = height();
-	style().drawItem( &p, x, y, w, h,
-			  AlignLeft|AlignVCenter|ShowPrefix,
-			  cg, TRUE,
-			  pixmap(), text() );
+	x = sz.width() + extraWidth(gs);
+	QRect br = style().itemRect( &p, x, y, w, h,
+				     AlignLeft|AlignVCenter|ShowPrefix,
+				     isEnabled(),
+				     pixmap(), text() );
+	br.setLeft( br.left()-3 );
+	br.setRight( br.right()+2 );
+	br.setTop( br.top()-2 );
+	br.setBottom( br.bottom()+2);
+	br = br.intersect( QRect(0,0,width(),height()) );
 
-	if ( hasFocus() ) {
-	    QRect br = style().itemRect( &p, x, y, w, h,
-					 AlignLeft|AlignVCenter|ShowPrefix,
-					 isEnabled(),
-					 pixmap(), text() );
-	    br.setLeft( br.left()-3 );
-	    br.setRight( br.right()+2 );
-	    br.setTop( br.top()-2 );
-	    br.setBottom( br.bottom()+2);
-	    br = br.intersect( QRect(0,0,width(),height()) );
-
-	    style().drawFocusRect( &p, br, cg );
-	}
+	style().drawFocusRect( &p, br, cg );
     }
     setMask(bm);
 }

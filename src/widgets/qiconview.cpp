@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qiconview.cpp   2.1.0   edited 2000-04-11 $
+** $Id: qt/src/widgets/qiconview.cpp   2.1.1   edited 2000-05-25 $
 **
 ** Implementation of QIconView widget class
 **
@@ -170,6 +170,7 @@ public:
     QRect iconRect_, textRect_;
     QString key_;
 
+    bool operator==( const QIconDragData &i ) const;
 };
 
 class QIconDragDataItem
@@ -179,9 +180,7 @@ public:
     QIconDragDataItem( const QIconDragItem &i1, const QIconDragData &i2 ) : data( i1 ), item( i2 ) {}
     QIconDragItem data;
     QIconDragData item;
-#if defined(Q_FULL_TEMPLATE_INSTANTIATION)
     bool operator== ( const QIconDragDataItem& ) const;
-#endif
 };
 
 struct QIconDragPrivate
@@ -224,7 +223,6 @@ public:
     bool resortItemsWhenInsert, sortDirection;
     bool wordWrapIconText;
     int cachedContentsX, cachedContentsY;
-    int resizeEvents;
     QBrush itemTextBrush;
     bool drawAllBack;
     QRegion clipRegion;
@@ -237,6 +235,7 @@ public:
     bool showTips;
     QPixmapCache maskCache;
     bool pressedSelected;
+    bool dragging;
 
     struct ItemContainer {
 	ItemContainer( ItemContainer *pr, ItemContainer *nx, const QRect &r )
@@ -452,9 +451,28 @@ void QIconDragItem::setData( const QByteArray &d )
 
 /*! \reimp */
 
-bool QIconDragItem::operator== ( const QIconDragItem &i ) const
+bool QIconDragItem::operator==( const QIconDragItem &i ) const
 {
     return ba == i.ba;
+}
+
+/*!
+  \reimp
+*/
+
+bool QIconDragDataItem::operator==( const QIconDragDataItem &i ) const
+{
+    return ( i.item == item &&
+	     i.data == data );
+}
+
+/*!
+  \reimp
+*/
+
+bool QIconDragData::operator==( const QIconDragData &i ) const
+{
+    return key_ == i.key_;
 }
 
 /*****************************************************************************
@@ -693,9 +711,9 @@ void QIconDragData::setTextRect( const QRect &r )
 
   As the iconview is designed to use DnD, the iconview item has
   methods for DnD too which may be reimplemented.
-  
+
   The class is designed to be very similar to QListView and QListBox
-  in use, both via instantiation and subclassing.  
+  in use, both via instantiation and subclassing.
 */
 
 /*!
@@ -889,7 +907,7 @@ void QIconViewItem::setPixmap( const QPixmap &icon )
   Sets \a text as text of the iconview item. If \a recalc is TRUE, the
   iconview's layout is recalculated. If \a redraw is TRUE (the
   default), the icon view is repainted.
-  
+
   \sa text()
 */
 
@@ -1009,7 +1027,7 @@ QString QIconViewItem::key() const
   Returns the icon of the iconview item. Normally you will set the
   pixmap if the item with setPixmap(), but sometimes it's inconvenient
   to call setText() for each item, so you can subclass QIconViewItem,
-  reimplement this method and return a pointer to the item's pixmap. 
+  reimplement this method and return a pointer to the item's pixmap.
   If you do this you have to call calcRect() manually each time the
   size of this pixmap changes!
 
@@ -1116,20 +1134,20 @@ void QIconViewItem::setSelected( bool s )
   cb.
 
   If \a s is FALSE, the item is unselected.
-  
+
   If \a s is TRUE and QIconView::selectionMode() is \c Single, the item
   is selected, and the item which was selected is unselected.
 
   If \a s is TRUE and QIconView::selectionMode() is \c Extended, the item
   is selected. If \a cb is TRUE, the other items of the iconview are
   not touched. If \a cb is FALSE all other items are unselected.
-  
+
   If \a s is TRUE and QIconView::selectionMode() is \c Multi the item
   is selected.
 
   Note that \a cb is used only if QIconView::selectionMode() is \c
   Extended.
-  
+
   All items whose selection status change repaint themselves.
 */
 
@@ -1344,7 +1362,7 @@ QRect QIconViewItem::textRect( bool relative ) const
 
 /*!
   Returns the bounding rectangle of the item's icon.
-  
+
   If \a relative is FALSE the returned rectangle is relative to the
   origin of the iconview's contents coordinate system. If \a relative
   is TRUE the rectangle is relative to the origin of the item's
@@ -1502,7 +1520,7 @@ void QIconViewItem::removeRenameBox()
 }
 
 /*! This virtual function is responsible for calculating the
-  rectangles returned by rect(), textRect() and pixmapRect(). 
+  rectangles returned by rect(), textRect() and pixmapRect().
   setRect(), setTextRect() and setPixmapRect() are provided mainly for
   reimplementations of this function.
 */
@@ -1861,9 +1879,35 @@ void QIconViewItem::checkRect()
 
 /*!
   \class QIconView qiconview.h
-  \brief The QIconView class
+  \brief The QIconView class provides an area with movable labelled icons.
 
   \ingroup advanced
+
+  It can display and control a grid or other 2-d layout of items, and
+  provides the ability to add or remove new items at any time, lets
+  the user select one or may items, rearrange the items, provides drag
+  and drop of items, and so on.
+
+  Each item (a QIconViewItem) contains a text and a pixmap (the icon itself).
+
+  The simplest usage of QIconView is to create the object, create some
+  QIconViewItems with the view as parent, set the view's geometry, and
+  show it.
+  
+  When an item is inserted, QIconView allocates a spot for it. The
+  default Arrangement is \c LeftToRight - QIconView fills up the
+  leftmost column first, then goes rightwards. You can change that
+  using setArrangement(), or insert items in a specified position by
+  calling the appropriate constructors or QIconViewItem::insertItem(),
+  or sort while the view is on-screen using setSorting() and/or
+  sort().
+
+  Each (\link QIconViewItem::isSelectable() selectable\endlink) item
+  can be selected, and the view provides various SelectionMode
+  settings. The default is \c Single - when one item is selected, the
+  previously selected item is unselected.
+
+  
 
   The QIconView provides a widget which can contain lots of iconview
   items which can be selected, dragged and so on.
@@ -1915,7 +1959,7 @@ void QIconViewItem::checkRect()
   provides some methods for extended DnD too. To use DnD correctly in
   the iconview, please read following instructions:
 
-  There are two different ways to do that, depending what you want. 
+  There are two different ways to do that, depending what you want.
   The first case is the simple one, in which case just the dragobject
   you created is dragged around. If you want, that drag shapes (the
   rectangles of the dragged items with exact positions) are drawn, you
@@ -1936,7 +1980,7 @@ void QIconViewItem::checkRect()
   The first part is starting drags: If you want to use extended DnD in
   the QIconView, you should use QIconDrag (or a derived class from
   that) as dragobject and in dragObject() create such an object and
-  return it. Before returning it, fill it there with QIconDragItems. 
+  return it. Before returning it, fill it there with QIconDragItems.
   Normally such a drag should offer data of each selected item. So in
   dragObject() you should iterate over all items, create for each
   selected item a QIconDragItem and append this with
@@ -2172,6 +2216,7 @@ QIconView::QIconView( QWidget *parent, const char *name, WFlags f )
     }
 
     d = new QIconViewPrivate;
+    d->dragging = FALSE;
     d->firstItem = 0;
     d->lastItem = 0;
     d->count = 0;
@@ -2210,7 +2255,6 @@ QIconView::QIconView( QWidget *parent, const char *name, WFlags f )
     d->cachedContentsX = d->cachedContentsY = -1;
     d->clearing = FALSE;
     d->fullRedrawTimer = new QTimer( this );
-    d->resizeEvents = 0;
     d->itemTextBrush = NoBrush;
     d->drawAllBack = TRUE;
     QFont fo( font() );
@@ -2618,7 +2662,7 @@ void QIconView::setCurrentItem( QIconViewItem *item )
   cb.
 
   If \a s is FALSE, \a item is unselected.
-  
+
   If \a s is TRUE and QIconView::selectionMode() is \c Single, \a item
   is selected, and the item which was selected is unselected.
 
@@ -2626,13 +2670,13 @@ void QIconView::setCurrentItem( QIconViewItem *item )
   item is selected. If \a cb is TRUE, the other items of the iconview
   are not touched. If \a cb is FALSE (the default) all other items are
   unselected.
-  
+
   If \a s is TRUE and QIconView::selectionMode() is \c Multi \a item
   is selected.
 
   Note that \a cb is used only if QIconView::selectionMode() is \c
   Extended. \a cb defaults to FALSE.
-  
+
   All items whose selection status change repaint themselves.
 */
 
@@ -2725,6 +2769,7 @@ void QIconView::doAutoScroll()
     p.setPen( QPen( color0, 1 ) );
     p.setBrush( NoBrush );
     drawRubber( &p );
+    d->dragging = FALSE;
     p.end();
 
     *d->rubber = r;
@@ -2743,6 +2788,7 @@ void QIconView::doAutoScroll()
     p.setPen( QPen( color0, 1 ) );
     p.setBrush( NoBrush );
     drawRubber( &p );
+    d->dragging = TRUE;
 
     p.end();
 
@@ -2776,6 +2822,9 @@ void QIconView::doAutoScroll()
 
 void QIconView::drawContents( QPainter *p, int cx, int cy, int cw, int ch )
 {
+    if ( d->dragging &&& d->rubber )
+	drawRubber( p );
+
     QRect r = QRect( cx, cy, cw, ch );
 
     QIconViewPrivate::ItemContainer *c = d->firstContainer;
@@ -2832,6 +2881,9 @@ void QIconView::drawContents( QPainter *p, int cx, int cy, int cw, int ch )
 	 d->currentItem->rect().intersects( r ) ) {
 	d->currentItem->paintFocus( p, colorGroup() );
     }
+
+    if ( d->dragging &&& d->rubber )
+	drawRubber( p );
 }
 
 /*!
@@ -3803,7 +3855,7 @@ void QIconView::contentsMouseReleaseEvent( QMouseEvent *e )
 	p.setBrush( NoBrush );
 
 	drawRubber( &p );
-
+	d->dragging = FALSE;
 	p.end();
 
 	if ( ( d->rubber->topLeft() - d->rubber->bottomRight() ).manhattanLength() >
@@ -3907,6 +3959,7 @@ void QIconView::contentsMouseDoubleClickEvent( QMouseEvent *e )
 
 void QIconView::contentsDragEnterEvent( QDragEnterEvent *e )
 {
+    d->dragging = TRUE;
     d->drawDragShapes = TRUE;
     d->tmpCurrentItem = 0;
     initDragEnter( e );
@@ -3924,6 +3977,7 @@ void QIconView::contentsDragMoveEvent( QDragMoveEvent *e )
     if ( e->pos() == d->oldDragPos )
 	return;
     drawDragShapes( d->oldDragPos );
+    d->dragging = FALSE;
 
     QIconViewItem *old = d->tmpCurrentItem;
     d->tmpCurrentItem = 0;
@@ -3931,27 +3985,22 @@ void QIconView::contentsDragMoveEvent( QDragMoveEvent *e )
     QIconViewItem *item = findItem( e->pos() );
 
     if ( item ) {
-	if ( item != old ) {
-	    if ( old ) {
-		old->dragLeft();
-		repaintItem( old );
-	    }
-	    item->dragEntered();
+	if ( old ) {
+	    old->dragLeft();
+	    repaintItem( old );
 	}
-
+	item->dragEntered();
 	if ( item->acceptDrop( e ) )
 	    e->acceptAction();
 	else
 	    e->ignore();
 
 	d->tmpCurrentItem = item;
-	if ( d->tmpCurrentItem != old ) {
-	    QPainter p;
-	    p.begin( viewport() );
-	    p.translate( -contentsX(), -contentsY() );
-	    item->paintFocus( &p, colorGroup() );
-	    p.end();
-	}
+	QPainter p;
+	p.begin( viewport() );
+	p.translate( -contentsX(), -contentsY() );
+	item->paintFocus( &p, colorGroup() );
+	p.end();
     } else {
 	e->acceptAction();
 	if ( old ) {
@@ -3962,6 +4011,7 @@ void QIconView::contentsDragMoveEvent( QDragMoveEvent *e )
 
     d->oldDragPos = e->pos();
     drawDragShapes( e->pos() );
+    d->dragging = TRUE;
 }
 
 /*!
@@ -3972,6 +4022,7 @@ void QIconView::contentsDragLeaveEvent( QDragLeaveEvent * )
 {
     if ( !d->dropped )
 	drawDragShapes( d->oldDragPos );
+    d->dragging = FALSE;
 
     if ( d->tmpCurrentItem ) {
 	repaintItem( d->tmpCurrentItem );
@@ -3990,6 +4041,7 @@ void QIconView::contentsDragLeaveEvent( QDragLeaveEvent * )
 void QIconView::contentsDropEvent( QDropEvent *e )
 {
     d->dropped = TRUE;
+    d->dragging = FALSE;
     drawDragShapes( d->oldDragPos );
 
     if ( d->tmpCurrentItem )
@@ -4072,17 +4124,12 @@ void QIconView::contentsDropEvent( QDropEvent *e )
 
 void QIconView::resizeEvent( QResizeEvent* e )
 {
-    d->resizeEvents++;
-    if ( d->resizeMode == Adjust )
-	d->oldSize = e->oldSize();
     QScrollView::resizeEvent( e );
     if ( d->resizeMode == Adjust ) {
+	d->oldSize = e->oldSize();
 	if ( d->adjustTimer->isActive() )
 	    d->adjustTimer->stop();
-	if ( d->resizeEvents > 2 )
-	    d->adjustTimer->start( 100, TRUE );
-	else
-	    arrangeItemsInGrid( FALSE );
+	d->adjustTimer->start( 100, TRUE );
     }
 }
 
@@ -4677,6 +4724,19 @@ bool QIconView::eventFilter( QObject * o, QEvent * e )
     case QEvent::Enter:
 	enterEvent( e );
 	return TRUE;
+    case QEvent::Paint:
+	if ( o == viewport() ) {
+	    if ( d->dragging ) {
+		if ( !d->rubber )
+		    drawDragShapes( d->oldDragPos );
+	    }
+	    viewportPaintEvent( (QPaintEvent*)e );
+	    if ( d->dragging ) {
+		if ( !d->rubber )
+		    drawDragShapes( d->oldDragPos );
+	    }
+	}
+	return TRUE;
     default:
 	// nothing
 	break;
@@ -4982,7 +5042,7 @@ static int cmpIconViewItems( const void *n1, const void *n2 )
 /*!
   Sorts the items of the listview and re-arranges them afterwards. If
   \a ascending is TRUE, the items are sorted in increasing order, else
-  in decreasing order. For sorting QIconViewItem::compare() is used. 
+  in decreasing order. For sorting QIconViewItem::compare() is used.
   The default sort direction is set to the sort dicrection you set
   here.
 

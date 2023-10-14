@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/extensions/opengl/examples/texture/gltexobj.cpp   2.1.0   edited 2000-02-23 $
+** $Id: qt/extensions/opengl/examples/texture/gltexobj.cpp   2.1.1   edited 2000-02-23 $
 **
 ** Implementation of GLTexobj
 ** This is a simple QGLWidget demonstrating the use of QImages for textures.

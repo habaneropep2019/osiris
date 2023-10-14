@@ -1,4 +1,4 @@
-.TH QWidget 3qt "12 April 2000" "Troll Tech AS" \" -*- nroff -*-
+.TH QWidget 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -843,7 +843,7 @@ The background is what the widget contains when paintEvent() is called. To minim
 .TP
 \fCNoBackground\fR - the widget is not cleared before paintEvent(). If the widget's paint event always draws on all the pixels, using this mode can be both fast and flicker-free.
 .TP
-\fCFixedColor\fR - the widget is cleared to a fixed color, normally different from all the ones in the palette(). Set using BackgroundColor().
+\fCFixedColor\fR - the widget is cleared to a fixed color, normally different from all the ones in the palette(). Set using setBackgroundColor().
 .TP
 \fCFixedPixmap\fR - the widget is cleared to a fixed pixmap, normally different from all the ones in the palette(). Set using setBackgroundPixmap().
 .IP
@@ -1863,7 +1863,7 @@ The default implementation calls updateMask() if the widget has automatic maskin
 .PP
 See also: moveEvent(), event(), resize(), QResizeEvent and paintEvent().
 .PP
-Reimplemented in QScrollView, QSplitter, QFileDialog, QTabWidget, QScrollBar, QMultiLineEdit, QPushButton, QListView, QCheckBox, QSlider, QMenuBar, QMainWindow, QToolBar, QWidgetStack, QTabDialog, QRadioButton, QTabBar, QGLWidget, QComboBox, QWorkspace, QTableView, QListBox, QGroupBox, QLineEdit, QSpinBox, QFrame, QXtWidget, QProgressDialog, QMessageBox and QTextView.
+Reimplemented in QScrollView, QSplitter, QFileDialog, QTabWidget, QScrollBar, QMultiLineEdit, QPushButton, QListView, QCheckBox, QSlider, QMenuBar, QMainWindow, QStatusBar, QToolBar, QWidgetStack, QTabDialog, QRadioButton, QTabBar, QGLWidget, QComboBox, QWorkspace, QTableView, QListBox, QGroupBox, QLineEdit, QSpinBox, QFrame, QXtWidget, QProgressDialog, QMessageBox and QTextView.
 .SH "void QWidget::scroll ( int dx, int dy )"
 Scrolls the contents of the widget \fIdx\fR pixels rightwards and \fIdy\fR pixels downwards. If \fIdx/dy\fR is negative, the scroll direction is leftwards/upwards. Child widgets are moved accordingly.
 .PP
@@ -2247,6 +2247,8 @@ Examples:
 .(l
 popup/popup.cpp qmag/qmag.cpp
 .)l
+.PP
+Reimplemented in QGLWidget.
 .SH "void QWidget::setName ( const char * name ) \fC[virtual]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .PP
@@ -2437,7 +2439,7 @@ The default implementation returns a value which means that the widget can be fr
 .PP
 See also: sizeHint(), QLayout, QSizePolicy and updateGeometry().
 .PP
-Reimplemented in QLabel, QScrollBar, QSlider, QPushButton, QTabBar, QWorkspace, QToolButton, QLCDNumber, QFrame, QLineEdit, QHeader, QCheckBox, QSpinBox, QMultiLineEdit, QProgressBar, QScrollView, QRadioButton, QIconView, QSplitter and QSizeGrip.
+Reimplemented in QLabel, QScrollBar, QSlider, QPushButton, QTabBar, QWorkspace, QToolButton, QLCDNumber, QTabWidget, QFrame, QLineEdit, QHeader, QCheckBox, QSpinBox, QMultiLineEdit, QProgressBar, QScrollView, QRadioButton, QIconView, QSplitter and QSizeGrip.
 .SH "QStyle& QWidget::style () const"
 Returns the GUI style for this widget
 .PP
@@ -2451,11 +2453,20 @@ The default implementation updates the widget including its geometry.
 .PP
 See also: QApplication::setStyle(), style(), update() and updateGeometry().
 .PP
-Reimplemented in QPopupMenu, QComboBox, QSplitter, QListView, QProgressDialog, QProgressBar, QSlider, QTabWidget, QIconView, QMenuBar, QScrollBar, QMainWindow, QSpinBox and QTabDialog.
+Reimplemented in QPopupMenu, QComboBox, QSplitter, QListView, QProgressDialog, QProgressBar, QSlider, QTabWidget, QIconView, QMenuBar, QScrollBar, QMainWindow, QSpinBox, QTabBar, QTabDialog and QScrollView.
 .SH "bool QWidget::testWFlags ( WFlags n ) const"
 Returns TRUE if any of the widget flags in \fIn\fR are set. The widget flags are listed in qnamespace.h, and are strictly for internal use.
 .SH "QWidget * QWidget::topLevelWidget () const"
-Returns the top-level widget for this widget, i.e. the grandparent widget that has a window-system frame (or at least may have one) and has no parent widget inside this application.
+Returns the top-level widget for this widget, i.e. the next ancestor widget that has a window-system frame (or at least may have one).
+.PP
+If the widget is a top-level, the widget itself is returned.
+.PP
+Typical usage is changing the window caption:
+.PP
+.nf
+.br
+    aWidget->topLevelWidget()->setCaption( "New Caption" );
+.fi
 .PP
 See also: isTopLevel().
 .SH "void QWidget::unsetCursor () \fC[virtual]\fR"

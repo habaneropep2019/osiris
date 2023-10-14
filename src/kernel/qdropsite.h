@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qdropsite.h   2.1.0   edited 2000-03-24 $
+** $Id: qt/src/kernel/qdropsite.h   2.1.1   edited 2000-03-24 $
 **
 ** Definitation of Drag and Drop support
 **

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/buttongroups/buttongroups.cpp   2.1.0   edited 2000-04-04 $
+** $Id: qt/examples/buttongroups/buttongroups.cpp   2.1.1   edited 2000-04-04 $
 **
 ** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **

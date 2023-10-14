@@ -28,7 +28,7 @@ remains with Troll Tech.
 <hr>
 <pre>
 /**********************************************************************
-** &#36;Id&#58; qt/src/widgets/qcombobox.h   2.1.0   edited 2000-03-24 $
+** &#36;Id&#58; qt/src/widgets/qcombobox.h   2.1.1   edited 2000-05-18 $
 **
 ** Definition of QComboBox class
 **
@@ -139,7 +139,7 @@ public:
 
     virtual void        setListBox( QListBox * );
     QListBox *  listBox() const;
-    
+
     QLineEdit*  lineEdit() const;
 
     virtual void        setAutoCompletion( bool );
@@ -168,7 +168,7 @@ private slots:
     void        internalClickTimeout();
     void        returnPressed();
     void        showMore();
-    
+
 protected:
     void        paintEvent( QPaintEvent * );
     void        resizeEvent( QResizeEvent * );
@@ -184,6 +184,8 @@ protected:
     void updateMask();
 
 private:
+    void     setUpListBox();
+    void     setUpLineEdit();
     void        popDownListBox();
     void        reIndex();
     void        currentChanged();
@@ -206,5 +208,5 @@ private:        // Disabled copy constructor and operator=
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.0</div>
+<td align="right"><div align="right">Qt version 2.1.1</div>
 </table></div></address></body></html>

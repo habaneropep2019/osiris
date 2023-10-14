@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qpushbutton.cpp   2.1.0   edited 2000-03-24 $
+** $Id: qt/src/widgets/qpushbutton.cpp   2.1.1   edited 2000-04-28 $
 **
 ** Implementation of QPushButton class
 **
@@ -313,8 +313,6 @@ void QPushButton::setAutoDefault( bool enable )
 {
     if ( (bool)autoDefButton == enable )
 	return;
-    if ( !topLevelWidget()->inherits("QDialog") )		// not a dialog
-	return;
     autoDefButton = enable;
     if ( isVisible() ) {
 	update();
@@ -352,10 +350,8 @@ void QPushButton::setDefault( bool enable )
 {
     if ( (bool)defButton == enable )
 	return;					// no change
-    if ( !topLevelWidget()->inherits("QDialog") )		// not a dialog
-	return;
     defButton = enable;
-    if ( defButton )
+    if ( defButton && topLevelWidget()->inherits( "QDialog" ) )
  	((QDialog*)topLevelWidget())->setDefault( this );
     update();
 }
@@ -407,8 +403,7 @@ QSize QPushButton::sizeHint() const
 	// microsoft's size specifications
 	if ( h <= 25 )
 	    h = 22;
-	if ( w < 85 && !pixmap() &&
-	     topLevelWidget()->inherits( "QDialog" ) )
+	if ( w < 85 && !pixmap() && ( isDefault() || autoDefault() ) )
 	    w = 80;
     }
 

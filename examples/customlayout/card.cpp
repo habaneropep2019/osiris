@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/customlayout/card.cpp   2.1.0   edited 2000-02-21 $
+** $Id: qt/examples/customlayout/card.cpp   2.1.1   edited 2000-02-21 $
 **
 ** Implementing your own layout: flow example
 **

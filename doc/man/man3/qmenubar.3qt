@@ -1,4 +1,4 @@
-.TH QMenuBar 3qt "12 April 2000" "Troll Tech AS" \" -*- nroff -*-
+.TH QMenuBar 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -214,7 +214,7 @@ Returns the height that the menu would resize itself to if its parent (and hence
 .PP
 Reimplemented from QWidget.
 .SH "void QMenuBar::hide () \fC[virtual]\fR"
-Reimplements QWidget::hide() in order to deselect any selected item.
+Reimplements QWidget::hide() in order to deselect any selected item and calls setUpLayout() for the mainwindow.
 .PP
 Examples:
 .(l

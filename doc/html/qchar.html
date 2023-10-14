@@ -41,15 +41,6 @@ The QChar class provides a light-weight Unicode character.
 <li><span class="fn">enum <a href="#Direction"><b>Direction</b></a> { DirL, DirR, DirEN, DirES, DirET, DirAN, DirCS, DirB, DirS, DirWS, DirON, DirLRE, DirLRO, DirAL, DirRLE, DirRLO, DirPDF, DirNSM, DirBN }</span>
 <li><span class="fn">enum <a href="#Decomposition"><b>Decomposition</b></a> { Single, Canonical, Font, NoBreak, Initial, Medial, Final, Isolated, Circle, Super, Sub, Vertical, Wide, Narrow, Small, Square, Compat, Fraction }</span>
 <li><span class="fn">enum <a href="#Joining"><b>Joining</b></a> { OtherJoining, Dual, Right, Center }</span>
-<li><span class="fn">bool <a href="#ba633a"><b>isNull</b></a> () const</span>
-<li><span class="fn">bool <a href="#55227d"><b>isPrint</b></a> () const</span>
-<li><span class="fn">bool <a href="#51bc57"><b>isPunct</b></a> () const</span>
-<li><span class="fn">bool <a href="#9744c0"><b>isSpace</b></a> () const</span>
-<li><span class="fn">bool <a href="#6835cd"><b>isMark</b></a> () const</span>
-<li><span class="fn">bool <a href="#1039b9"><b>isLetter</b></a> () const</span>
-<li><span class="fn">bool <a href="#a4bc0b"><b>isNumber</b></a> () const</span>
-<li><span class="fn">bool <a href="#93a7ff"><b>isLetterOrNumber</b></a> () const</span>
-<li><span class="fn">bool <a href="#2f74af"><b>isDigit</b></a> () const</span>
 <li><span class="fn">int <a href="#de6afe"><b>digitValue</b></a> () const</span>
 <li><span class="fn">QChar <a href="#808b66"><b>lower</b></a> () const</span>
 <li><span class="fn">QChar <a href="#2ca291"><b>upper</b></a> () const</span>
@@ -62,6 +53,15 @@ The QChar class provides a light-weight Unicode character.
 <li><span class="fn">Decomposition <a href="#3ebfb3"><b>decompositionTag</b></a> () const</span>
 <li><span class="fn">char <a href="#3a7c7e"><b>latin1</b></a> () const</span>
 <li><span class="fn">ushort <a href="#93cde1"><b>unicode</b></a> () const</span>
+<li><span class="fn">bool <a href="#ba633a"><b>isNull</b></a> () const</span>
+<li><span class="fn">bool <a href="#55227d"><b>isPrint</b></a> () const</span>
+<li><span class="fn">bool <a href="#51bc57"><b>isPunct</b></a> () const</span>
+<li><span class="fn">bool <a href="#9744c0"><b>isSpace</b></a> () const</span>
+<li><span class="fn">bool <a href="#6835cd"><b>isMark</b></a> () const</span>
+<li><span class="fn">bool <a href="#1039b9"><b>isLetter</b></a> () const</span>
+<li><span class="fn">bool <a href="#a4bc0b"><b>isNumber</b></a> () const</span>
+<li><span class="fn">bool <a href="#93a7ff"><b>isLetterOrNumber</b></a> () const</span>
+<li><span class="fn">bool <a href="#2f74af"><b>isDigit</b></a> () const</span>
 <li><span class="fn">uchar&amp; <a href="#77ceb8"><b>cell</b></a> () </span>
 <li><span class="fn">uchar&amp; <a href="#ea6f53"><b>row</b></a> () </span>
 <li><span class="fn">uchar <a href="#15e807"><b>cell</b></a> () const</span>
@@ -248,7 +248,7 @@ ie. ASCII NUL.
 <p>See also:  <a href="#2f74af">isDigit</a>().
 <h3 class="fn">bool <a name="55227d"></a>QChar::isPrint () const</h3>
 <p>Returns whether the character is a printable character.  This is
-and character of category Cc or Cn.  Note that this gives no indication
+any character not of category Cc or Cn.  Note that this gives no indication
 of whether the character is available in some font.
 <h3 class="fn">bool <a name="51bc57"></a>QChar::isPunct () const</h3>
 <p>Returns whether the character is puntuation (Punctuation_* categories).
@@ -359,7 +359,7 @@ of the ASCII/Latin1 character <em>ch.</em>
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.1.0"><nobr>
+<input type=hidden name="version" value="2.1.1"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -367,5 +367,5 @@ copyright &copy; 1995-2000
 <a href="http://www.trolltech.com">Troll Tech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.0</div>
+<td align="right"><div align="right">Qt version 2.1.1</div>
 </table></div></address></body></html>

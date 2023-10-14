@@ -1,4 +1,4 @@
-.TH QGridLayout 3qt "12 April 2000" "Troll Tech AS" \" -*- nroff -*-
+.TH QGridLayout 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -169,7 +169,7 @@ Constructs a new grid with \fInRows\fR rows and \fInCols\fR columns, If \fIspace
 .PP
 You have to insert this grid into another layout. You can insert widgets and layouts in this layout at any time, but layout will not be performed before it is inserted.
 .SH "QGridLayout::~QGridLayout ()"
-Destroys the grid layout. Geometry management is terminated if this is a top-level grid.
+Destructs the grid layout. Geometry management is terminated if this is a top-level grid.
 .SH "void QGridLayout::add ( QLayoutItem * item, int row, int col ) \fC[protected]\fR"
 Adds \fIitem\fR at position \fIrow, col.\fR The layout takes over ownership of \fIitem.\fR
 .SH "void QGridLayout::addColSpacing ( int col, int minsize )"

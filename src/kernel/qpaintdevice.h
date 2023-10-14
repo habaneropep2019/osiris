@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qpaintdevice.h   2.1.0   edited 2000-03-24 $
+** $Id: qt/src/kernel/qpaintdevice.h   2.1.1   edited 2000-03-24 $
 **
 ** Definition of QPaintDevice class
 **

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/doc/network.doc   2.1.0   edited 2000-03-27 $
+** $Id: qt/doc/network.doc   2.1.1   edited 2000-05-18 $
 **
 ** Documentation for network programming
 **
@@ -22,7 +22,7 @@
 *****************************************************************************/
 
 #if defined(DEBUG)
-static char ident[] = "$Id: qt/doc/network.doc   2.1.0   edited 2000-03-27 $";
+static char ident[] = "$Id: qt/doc/network.doc   2.1.1   edited 2000-05-18 $";
 #endif
 
 

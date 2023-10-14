@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/extensions/opengl/examples/glpixmap/globjwin.h   2.1.0   edited 2000-02-23 $
+** $Id: qt/extensions/opengl/examples/glpixmap/globjwin.h   2.1.1   edited 2000-02-23 $
 **
 ** Definition of GLObjectWindow widget class
 ** The GLObjectWindow contains a GLBox and three sliders connected to

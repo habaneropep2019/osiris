@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qstatusbar.cpp   2.1.0   edited 2000-03-28 $
+** $Id: qt/src/widgets/qstatusbar.cpp   2.1.1   edited 2000-05-05 $
 **
 ** Implementation of QStatusBar class
 **
@@ -248,6 +248,8 @@ void QStatusBar::setSizeGripEnabled(bool enabled)
 	    d->resizer = 0;
 	}
 	reformat();
+	if ( d->resizer && isVisible() )
+	    d->resizer->show();
     }
 }
 
@@ -280,7 +282,6 @@ void QStatusBar::reformat()
     }
 
     l->addStretch( 0 );
-
 
     while ( item ) {
 	l->addWidget( item->w, item->s );
@@ -407,4 +408,25 @@ void QStatusBar::paintEvent( QPaintEvent * )
 	p.drawText( 6, 0, width() - 12, height(), AlignVCenter + SingleLine,
 		    d->tempItem );
     }
+}
+
+/*! \reimp
+*/
+void QStatusBar::resizeEvent( QResizeEvent * )
+{
+    for ( QStatusBarPrivate::SBItem* item = d->items.first(); item; item = d->items.next() )
+    {
+        item->w->setMaximumWidth( width() - d->box->totalMinimumSize().width() );
+    }
+}
+
+/*!
+  \reimp
+*/
+
+bool QStatusBar::event( QEvent *e )
+{
+    if ( e->type() == QEvent::LayoutHint )
+	update();
+    return QWidget::event( e );
 }

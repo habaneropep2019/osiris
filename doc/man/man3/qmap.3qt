@@ -1,4 +1,4 @@
-.TH QMap 3qt "12 April 2000" "Troll Tech AS" \" -*- nroff -*-
+.TH QMap 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -211,10 +211,10 @@ The second approach uses the operator[]. But be warned: If you don't know that t
 .br
         const QMap<QString,QString>& map2 = map;
 .br
-        str << map["Weis"] << map["Reggie"] << endl;
+        str << map2["Weis"] << map2["Reggie"] << endl;
 .fi
 .PP
-The code fragment will print out "Weis", "" and the second part will print "Weis", "". In addition the first fragment inserted an empty entry with key "Ettrich". The second one did not insert an empty entry with key "Reggie" because the const operator[] was used which can not do insertion. So if you are not sure whether a certain element is in the map you should use find() and iterators.
+The code fragment will print out "Torben", "" and the second part will print "Torben", "". In addition the first fragment inserted an empty entry with key "Ettrich". The second one did not insert an empty entry with key "Reggie" because the const operator[] was used which can not do insertion. So if you are not sure whether a certain element is in the map you should use find() and iterators.
 .PP
 If you just want to know whether a certain key is contained in the map, the the contains() function is what you are looking for. In addition count() tells you how many keys there are currently in the map.
 .PP

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qimage.cpp   2.1.0   edited 2000-04-07 $
+** $Id: qt/src/kernel/qimage.cpp   2.1.1   edited 2000-05-22 $
 **
 ** Implementation of QImage and QImageIO classes
 **
@@ -275,7 +275,7 @@ static void read_xpm_image_or_array( QImageIO *, const char **, QImage & );
   Note that it's possible to squeeze the XPM variable a little bit by
   using an unusual declaration:
 
-  \example
+  \code
     static const char * const start_xpm[]={
         "16 15 8 1",
         "a c #cec6bd",
@@ -2653,6 +2653,7 @@ bool QImage::save( const QString &fileName, const char* format ) const
   \relates QImage
   Writes an image to the stream as a PNG image.
   \sa QImage::save()
+  \link datastreamformat.html Format of the QDataStream operators \endlink
 */
 
 QDataStream &operator<<( QDataStream &s, const QImage &image )
@@ -2673,6 +2674,7 @@ QDataStream &operator<<( QDataStream &s, const QImage &image )
   \relates QImage
   Reads an image from the stream.
   \sa QImage::load()
+  \link datastreamformat.html Format of the QDataStream operators \endlink
 */
 
 QDataStream &operator>>( QDataStream &s, QImage &image )

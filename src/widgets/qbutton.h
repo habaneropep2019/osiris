@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qbutton.h   2.1.0   edited 2000-03-24 $
+** $Id: qt/src/widgets/qbutton.h   2.1.1   edited 2000-04-11 $
 **
 ** Definition of QButton widget class
 **
@@ -44,7 +44,7 @@ class Q_EXPORT QButton : public QWidget
     Q_PROPERTY( int accel READ accel WRITE setAccel )
     Q_PROPERTY( bool toggleButton READ isToggleButton )
     Q_PROPERTY( ToggleType toggleType READ toggleType )
-    Q_PROPERTY( bool down READ isDown WRITE setDown )
+    Q_PROPERTY( bool down READ isDown WRITE setDown DESIGNABLE false  )
     Q_PROPERTY( bool on READ isOn )
     Q_PROPERTY( ToggleState toggleState READ state )
     Q_PROPERTY( bool autoResize READ autoResize WRITE setAutoResize )

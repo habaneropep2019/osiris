@@ -1,4 +1,4 @@
-.TH QTabBar 3qt "12 April 2000" "Troll Tech AS" \" -*- nroff -*-
+.TH QTabBar 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -98,7 +98,7 @@ Inherits QWidget.
 .br
 .in -1c
 .SS "Properties"
-<table border=1 cellpadding=3 cellspacing=0> <tr><th>Type<th>Name<th>READ<th>WRITE<th>Options <tr><td>Shape<td>shape<td>shape<td>setShape<td>&nbsp; <tr><td>int<td>currentTab<td>currentTab<td>&nbsp;<td>&nbsp; <tr><td>int<td>keyboardFocusTab<td>keyboardFocusTab<td>&nbsp;<td>&nbsp; </table>
+<table border=1 cellpadding=3 cellspacing=0> <tr><th>Type<th>Name<th>READ<th>WRITE<th>Options <tr><td>Shape<td>shape<td>shape<td>setShape<td>&nbsp; <tr><td>int<td>currentTab<td>currentTab<td>setCurrentTab<td>&nbsp; <tr><td>int<td>keyboardFocusTab<td>keyboardFocusTab<td>&nbsp;<td>&nbsp; </table>
 .SH DESCRIPTION
 The QTabBar class provides a tab bar, for use in e.g. tabbed dialogs.
 .PP
@@ -239,6 +239,10 @@ Reimplemented for internal reasons; the API is not affected.
 .PP
 Reimplemented from QWidget.
 .SH "QSizePolicy QTabBar::sizePolicy () const \fC[virtual]\fR"
+Reimplemented for internal reasons; the API is not affected.
+.PP
+Reimplemented from QWidget.
+.SH "void QTabBar::styleChange ( QStyle & old ) \fC[virtual protected]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .PP
 Reimplemented from QWidget.

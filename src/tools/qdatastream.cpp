@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qdatastream.cpp   2.1.0   edited 2000-03-24 $
+** $Id: qt/src/tools/qdatastream.cpp   2.1.1   edited 2000-05-22 $
 **
 ** Implementation of QDataStream class
 **
@@ -86,8 +86,11 @@
   length of the string including the NUL byte, followed by all the
   characters of the string including the NUL byte. Similarly when
   reading a string, 4 bytes are read to create the 32-bit length value,
-  then that many characters for the string including the NUL. If you
-  want a "parsing" input stream, see QTextStream. If you just want the
+  then that many characters for the string including the NUL. For a complete
+  description of all Qt types supporting data streaming see \link
+  datastreamformat.html Format of the QDataStream operators \endlink .
+
+  If you want a "parsing" input stream, see QTextStream. If you just want the
   data to be human-readable to aid in debugging, you can set the data
   stream into printable data mode with setPrintableData(). The data is
   then written slower, in a human readable bloated form that is sufficient

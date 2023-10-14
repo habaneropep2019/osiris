@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qmenudata.cpp   2.1.0   edited 2000-04-06 $
+** $Id: qt/src/widgets/qmenudata.cpp   2.1.1   edited 2000-04-12 $
 **
 ** Implementation of QMenuData class
 **
@@ -583,9 +583,9 @@ int QMenuData::insertItem( const QIconSet& icon,
 /*!\overload
   Inserts a menu item that consists of the widget \a widget.
 
-  This only works with popup menus. It is not supported for menu bars.
-  Ownership of \a widget is transferred to the popup menu.
-
+  Ownership of \a widget is transferred to the popup menu or the
+  menubar.
+  
   Theoretically, any widget can be inserted into a popup menu. In
   practise, this only makes sense with certain widgets.
 

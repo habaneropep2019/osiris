@@ -1,4 +1,4 @@
-.TH QBrush 3qt "12 April 2000" "Troll Tech AS" \" -*- nroff -*-
+.TH QBrush 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -223,16 +223,12 @@ See also: setStyle().
 .SH RELATED FUNCTION DOCUMENTATION
 .SH "QDataStream & operator>> (QDataStream & s, QBrush & b)"
 Reads a brush from the stream and returns a reference to the stream.
+.PP
+See also: Format of the QDataStream operators
 .SH "QDataStream & operator<< (QDataStream & s, const QBrush & b)"
 Writes a brush to the stream and returns a reference to the stream.
 .PP
-The serialization format is:
-.IP 1
-The brush style (Q_UINT8)
-.IP 2
-The brush color (QColor)
-.IP 3
- If style == \fCCustomPattern:\fR the brush pixmap (QPixmap)
+See also:  Format of the QDataStream operators
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qbrush.html
 .SH COPYRIGHT

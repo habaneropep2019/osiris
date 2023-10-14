@@ -1,4 +1,4 @@
-.TH QDragObject 3qt "12 April 2000" "Troll Tech AS" \" -*- nroff -*-
+.TH QDragObject 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -94,7 +94,7 @@ Constructs a drag object which is a child of \fIdragSource\fR and named \fIname.
 .PP
 Note that the drag object will be deleted when \fIdragSource\fR is.
 .SH "QDragObject::~QDragObject () \fC[virtual]\fR"
-Destroys the drag object, cancelling any drag-and-drop operation in which it is involved, and frees up the storage used.
+Destructs the drag object, cancelling any drag-and-drop operation in which it is involved, and frees up the storage used.
 .SH "bool QDragObject::drag ()"
 Starts a drag operation using the contents of this object, using DragDefault mode.
 .PP

@@ -663,7 +663,7 @@ If the widget's paint event always draws on all the pixels, using
 this mode can be both fast and flicker-free.
 <li> <code>FixedColor</code> - the widget is cleared to a fixed color,
 normally different from all the ones in the <a href="#6f3964">palette</a>().  Set using
-BackgroundColor().
+<a href="#721b7d">setBackgroundColor</a>().
 <li> <code>FixedPixmap</code> - the widget is cleared to a fixed pixmap,
 normally different from all the ones in the palette().  Set using
 <a href="#a6c4d9">setBackgroundPixmap</a>().
@@ -1643,7 +1643,7 @@ this handler.
 has <a href="#c7a335">automatic masking</a>
 enabled.
 <p>See also:  <a href="#be1a92">moveEvent</a>(), <a href="#f30772">event</a>(), <a href="#9775bb">resize</a>(), <a href="qresizeevent.html">QResizeEvent</a> and <a href="#ef2069">paintEvent</a>().
-<p>Reimplemented in <a href="qscrollview.html#6894d2">QScrollView</a>, <a href="qsplitter.html#cfbfe3">QSplitter</a>, <a href="qfiledialog.html#00aa85">QFileDialog</a>, <a href="qtabwidget.html#74c190">QTabWidget</a>, <a href="qscrollbar.html#eeb021">QScrollBar</a>, <a href="qmultilineedit.html#439834">QMultiLineEdit</a>, <a href="qpushbutton.html#c5fd41">QPushButton</a>, <a href="qlistview.html#593f39">QListView</a>, <a href="qcheckbox.html#c504d5">QCheckBox</a>, <a href="qslider.html#0ba599">QSlider</a>, <a href="qmenubar.html#056999">QMenuBar</a>, <a href="qmainwindow.html#c1fe7b">QMainWindow</a>, <a href="qtoolbar.html#ac1281">QToolBar</a>, <a href="qwidgetstack.html#d77a56">QWidgetStack</a>, <a href="qtabdialog.html#c54e49">QTabDialog</a>, <a href="qradiobutton.html#d66964">QRadioButton</a>, <a href="qtabbar.html#800c84">QTabBar</a>, <a href="qglwidget.html#9448bf">QGLWidget</a>, <a href="qcombobox.html#a878ac">QComboBox</a>, <a href="qworkspace.html#e59651">QWorkspace</a>, <a href="qtableview.html#4c6d85">QTableView</a>, <a href="qlistbox.html#561759">QListBox</a>, <a href="qgroupbox.html#c087b8">QGroupBox</a>, <a href="qlineedit.html#0ea538">QLineEdit</a>, <a href="qspinbox.html#663850">QSpinBox</a>, <a href="qframe.html#e92816">QFrame</a>, <a href="qxtwidget.html#70897b">QXtWidget</a>, <a href="qprogressdialog.html#8a3a5a">QProgressDialog</a>, <a href="qmessagebox.html#304e1d">QMessageBox</a> and <a href="qtextview.html#df023b">QTextView</a>.
+<p>Reimplemented in <a href="qscrollview.html#6894d2">QScrollView</a>, <a href="qsplitter.html#cfbfe3">QSplitter</a>, <a href="qfiledialog.html#00aa85">QFileDialog</a>, <a href="qtabwidget.html#74c190">QTabWidget</a>, <a href="qscrollbar.html#eeb021">QScrollBar</a>, <a href="qmultilineedit.html#439834">QMultiLineEdit</a>, <a href="qpushbutton.html#c5fd41">QPushButton</a>, <a href="qlistview.html#593f39">QListView</a>, <a href="qcheckbox.html#c504d5">QCheckBox</a>, <a href="qslider.html#0ba599">QSlider</a>, <a href="qmenubar.html#056999">QMenuBar</a>, <a href="qmainwindow.html#c1fe7b">QMainWindow</a>, <a href="qstatusbar.html#968d26">QStatusBar</a>, <a href="qtoolbar.html#ac1281">QToolBar</a>, <a href="qwidgetstack.html#d77a56">QWidgetStack</a>, <a href="qtabdialog.html#c54e49">QTabDialog</a>, <a href="qradiobutton.html#d66964">QRadioButton</a>, <a href="qtabbar.html#800c84">QTabBar</a>, <a href="qglwidget.html#9448bf">QGLWidget</a>, <a href="qcombobox.html#a878ac">QComboBox</a>, <a href="qworkspace.html#e59651">QWorkspace</a>, <a href="qtableview.html#4c6d85">QTableView</a>, <a href="qlistbox.html#561759">QListBox</a>, <a href="qgroupbox.html#c087b8">QGroupBox</a>, <a href="qlineedit.html#0ea538">QLineEdit</a>, <a href="qspinbox.html#663850">QSpinBox</a>, <a href="qframe.html#e92816">QFrame</a>, <a href="qxtwidget.html#70897b">QXtWidget</a>, <a href="qprogressdialog.html#8a3a5a">QProgressDialog</a>, <a href="qmessagebox.html#304e1d">QMessageBox</a> and <a href="qtextview.html#df023b">QTextView</a>.
 <h3 class="fn">void <a name="3800cc"></a>QWidget::scroll ( int dx, int dy )</h3>
 <p>Scrolls the contents of the widget <em>dx</em> pixels rightwards and <em>dy</em>
 pixels downwards.  If <em>dx/dy</em> is negative, the scroll direction is
@@ -2044,6 +2044,7 @@ even if no buttons are pressed down.
 <p>Examples:
  <a href="popup-popup-cpp.html#setMouseTracking">popup/popup.cpp</a>
  <a href="qmag-qmag-cpp.html#setMouseTracking">qmag/qmag.cpp</a>
+<p>Reimplemented in <a href="qglwidget.html#7793ca">QGLWidget</a>.
 <h3 class="fn">void <a name="9e8a94"></a>QWidget::setName ( const char * name ) <code>[virtual]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
 <p>Reimplemented from <a href="qobject.html#f80913">QObject.</a>
@@ -2246,7 +2247,7 @@ only. Widgets that can provide scrollbars (usually subclasses of
 <a href="qscrollview.html">QScrollView</a>) tend to specify that they can use additional space, and
 that they can survive on less than sizeHint().
 <p>See also:  <a href="#290bcd">sizeHint</a>(), <a href="qlayout.html">QLayout</a>, <a href="qsizepolicy.html">QSizePolicy</a> and <a href="#c04eb3">updateGeometry</a>().
-<p>Reimplemented in <a href="qlabel.html#26e1d9">QLabel</a>, <a href="qscrollbar.html#d8b2e1">QScrollBar</a>, <a href="qslider.html#f103e0">QSlider</a>, <a href="qpushbutton.html#df0c4a">QPushButton</a>, <a href="qtabbar.html#c0939d">QTabBar</a>, <a href="qworkspace.html#02b4d2">QWorkspace</a>, <a href="qtoolbutton.html#9072c7">QToolButton</a>, <a href="qlcdnumber.html#d03a31">QLCDNumber</a>, <a href="qframe.html#43e488">QFrame</a>, <a href="qlineedit.html#b78cb1">QLineEdit</a>, <a href="qheader.html#9df67b">QHeader</a>, <a href="qcheckbox.html#dfd0ed">QCheckBox</a>, <a href="qspinbox.html#31af00">QSpinBox</a>, <a href="qmultilineedit.html#5d057c">QMultiLineEdit</a>, <a href="qprogressbar.html#f3a295">QProgressBar</a>, <a href="qscrollview.html#bd5724">QScrollView</a>, <a href="qradiobutton.html#36f2f6">QRadioButton</a>, <a href="qiconview.html#a4c733">QIconView</a>, <a href="qsplitter.html#1e3476">QSplitter</a> and <a href="qsizegrip.html#2c314a">QSizeGrip</a>.
+<p>Reimplemented in <a href="qlabel.html#26e1d9">QLabel</a>, <a href="qscrollbar.html#d8b2e1">QScrollBar</a>, <a href="qslider.html#f103e0">QSlider</a>, <a href="qpushbutton.html#df0c4a">QPushButton</a>, <a href="qtabbar.html#c0939d">QTabBar</a>, <a href="qworkspace.html#02b4d2">QWorkspace</a>, <a href="qtoolbutton.html#9072c7">QToolButton</a>, <a href="qlcdnumber.html#d03a31">QLCDNumber</a>, <a href="qtabwidget.html#e08477">QTabWidget</a>, <a href="qframe.html#43e488">QFrame</a>, <a href="qlineedit.html#b78cb1">QLineEdit</a>, <a href="qheader.html#9df67b">QHeader</a>, <a href="qcheckbox.html#dfd0ed">QCheckBox</a>, <a href="qspinbox.html#31af00">QSpinBox</a>, <a href="qmultilineedit.html#5d057c">QMultiLineEdit</a>, <a href="qprogressbar.html#f3a295">QProgressBar</a>, <a href="qscrollview.html#bd5724">QScrollView</a>, <a href="qradiobutton.html#36f2f6">QRadioButton</a>, <a href="qiconview.html#a4c733">QIconView</a>, <a href="qsplitter.html#1e3476">QSplitter</a> and <a href="qsizegrip.html#2c314a">QSizeGrip</a>.
 <h3 class="fn"><a href="qstyle.html">QStyle</a>&amp; <a name="ea8b00"></a>QWidget::style () const</h3>
 <p>Returns the GUI style for this widget
 <p>See also:  <a href="#2e958b">QWidget::setStyle</a>(), <a href="qapplication.html#c9e3b3">QApplication::setStyle</a>() and <a href="qapplication.html#349f2d">QApplication::style</a>().
@@ -2260,15 +2261,18 @@ using <a href="#4a97ef">update</a>().
 <p>The default implementation updates the widget including its
 geometry.
 <p>See also:  <a href="qapplication.html#c9e3b3">QApplication::setStyle</a>(), <a href="#ea8b00">style</a>(), <a href="#4a97ef">update</a>() and <a href="#c04eb3">updateGeometry</a>().
-<p>Reimplemented in <a href="qpopupmenu.html#df7f4a">QPopupMenu</a>, <a href="qcombobox.html#6da1a5">QComboBox</a>, <a href="qsplitter.html#70b7f4">QSplitter</a>, <a href="qlistview.html#303b09">QListView</a>, <a href="qprogressdialog.html#145ad3">QProgressDialog</a>, <a href="qprogressbar.html#a727ff">QProgressBar</a>, <a href="qslider.html#b22ec5">QSlider</a>, <a href="qtabwidget.html#f85bdb">QTabWidget</a>, <a href="qiconview.html#2a9862">QIconView</a>, <a href="qmenubar.html#7fecb4">QMenuBar</a>, <a href="qscrollbar.html#cd5bf1">QScrollBar</a>, <a href="qmainwindow.html#be8549">QMainWindow</a>, <a href="qspinbox.html#800c31">QSpinBox</a> and <a href="qtabdialog.html#52271d">QTabDialog</a>.
+<p>Reimplemented in <a href="qpopupmenu.html#df7f4a">QPopupMenu</a>, <a href="qcombobox.html#6da1a5">QComboBox</a>, <a href="qsplitter.html#70b7f4">QSplitter</a>, <a href="qlistview.html#303b09">QListView</a>, <a href="qprogressdialog.html#145ad3">QProgressDialog</a>, <a href="qprogressbar.html#a727ff">QProgressBar</a>, <a href="qslider.html#b22ec5">QSlider</a>, <a href="qtabwidget.html#f85bdb">QTabWidget</a>, <a href="qiconview.html#2a9862">QIconView</a>, <a href="qmenubar.html#7fecb4">QMenuBar</a>, <a href="qscrollbar.html#cd5bf1">QScrollBar</a>, <a href="qmainwindow.html#be8549">QMainWindow</a>, <a href="qspinbox.html#800c31">QSpinBox</a>, <a href="qtabbar.html#7bda98">QTabBar</a>, <a href="qtabdialog.html#52271d">QTabDialog</a> and <a href="qscrollview.html#e80272">QScrollView</a>.
 <h3 class="fn">bool <a name="70dec1"></a>QWidget::testWFlags ( WFlags n ) const</h3>
 <p>Returns TRUE if any of the widget flags in <em>n</em> are set. The
 widget flags are listed in <a href="qnamespace-h.html">qnamespace.h</a>, and are strictly for
 internal use.
 <h3 class="fn">QWidget * <a name="4f5be5"></a>QWidget::topLevelWidget () const</h3>
-<p>Returns the top-level widget for this widget, i.e. the grandparent
-widget that has a window-system frame (or at least may have one) and
-has no parent widget inside this application.
+<p>Returns the top-level widget for this widget, i.e. the next ancestor
+widget that has a window-system frame (or at least may have one).
+<p>If the widget is a top-level, the widget itself is returned.
+<p>Typical usage is changing the window caption:
+<p><pre>    aWidget-&gt;topLevelWidget()-&gt;setCaption( "New Caption" );
+</pre>
 <p>See also:  <a href="#08e823">isTopLevel</a>().
 <h3 class="fn">void <a name="76fa75"></a>QWidget::unsetCursor () <code>[virtual]</code></h3>
 <p>Unset the cursor for this widget. The widget will use the cursor of
@@ -2398,7 +2402,7 @@ for an overview of geometry issues with top-level widgets.
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.1.0"><nobr>
+<input type=hidden name="version" value="2.1.1"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -2406,5 +2410,5 @@ copyright &copy; 1995-2000
 <a href="http://www.trolltech.com">Troll Tech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.0</div>
+<td align="right"><div align="right">Qt version 2.1.1</div>
 </table></div></address></body></html>

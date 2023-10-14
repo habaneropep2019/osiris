@@ -21,7 +21,7 @@ body { background: white; color: black; }
 
 <h1 align=center>QClipboard Class Reference</h1><br clear="all">
 <p>
-The QClipboard class provides access to the window systems clipboard.
+The QClipboard class provides access to the window system clipboard.
 <a href="#details">More...</a>
 <p>
 <code>#include &lt;<a href="qclipboard-h.html">qclipboard.h</a>&gt;</code>
@@ -49,16 +49,14 @@ Inherits <a href="qobject.html">QObject</a>.
 <li><span class="fn">virtual void <b>connectNotify</b> ( const char * ) (internal)</span>
 </ul>
 <hr><h2><a name="details"></a>Detailed Description</h2>
-The QClipboard class provides access to the window systems clipboard.
+The QClipboard class provides access to the window system clipboard.
 <p>
 The clipboard offers a simple mechanism to copy and paste data between
 applications.
-<p>QClipboard supports the same data types that
-<a href="qdragobject.html">drag and drop</a> supports, and uses much
-of the same mechanisms.
-<p>Only a single QClipboard object may exist in an application. This is
-because QClipboard is a shared window system resource.  Call
-<a href="qapplication.html#12a5ae">QApplication::clipboard</a>() to access the clipboard.
+<p>QClipboard supports the same data types that <a href="qdragobject.html">QDragObject</a> does, and uses
+similar mechanisms.
+<p>Only there is a single QClipboard object in an application, and you
+can gain access to it using <a href="qapplication.html#12a5ae">QApplication::clipboard</a>().
 <p>Example:
 <pre>    <a href="qclipboard.html">QClipboard</a> *cb = QApplication::clipboard();
     <a href="qstring.html">QString</a> text;
@@ -71,70 +69,64 @@ because QClipboard is a shared window system resource.  Call
     // Copy text into the clipboard
     cb-&gt;<a href="#f6fc41">setText</a>( "This text can be pasted by other programs" );
 </pre>
-<p>QClipboard features some convenience functions to access common data types.
-The methods <a href="#f6fc41">setText</a>() and <a href="#c55d73">text</a>() allow to exchange unicode text easily over
-the clipboard, while <a href="#5e49c3">setPixmap</a>(), <a href="#ede7fd">setImage</a>() and <a href="#54ee2d">pixmap</a>(), <a href="#5d6810">image</a>() allow
-to exchange <a href="qpixmap.html">QPixmap</a> and <a href="qimage.html">QImage</a> between applications.
-<p>The most flexible methods are <a href="#c99eef">data</a>() and <a href="#77a717">setData</a>(). They allow to put
-a <a href="qmimesource.html">QMimeSource</a>() on the clipboard or retrieve it from the clipboard.
-This does not only allow you to put all kind of data type on the clipboard.
-In addition it allows you to exchange some information using different data types.
-For example you want to put a sound on the clipboard. Since
-you can not know exactly what kind of formats the other application understands
-you can feature multiple formats at once. This functionality is provided by
-QMimeSource. The application which retrieves the data from the clipboard receives
-a QMimeSource, too, and can select one of the offered data types.
+<p>QClipboard features some convenience functions to access common data
+types: The methods <a href="#f6fc41">setText</a>() allows exchanging unicode text easily
+over the clipboard, while <a href="#5e49c3">setPixmap</a>() <a href="#ede7fd">setImage</a>() allows to exchange
+<a href="qpixmap.html">QPixmap</a> and <a href="qimage.html">QImage</a> between applications.  <a href="#77a717">setData</a>() is the ultimate
+in flexibility: It allows you to add any <a href="qmimesource.html">QMimeSource</a> onto the
+clipboard.  (There are corresponding getters for each of these,
+e.g. <a href="#c55d73">text</a>().)
 <p>You can clear the clipboard by calling the method <a href="#9088ae">clear</a>().
 
 <hr><h2>Member Function Documentation</h2>
 <h3 class="fn">void <a name="9088ae"></a>QClipboard::clear ()</h3>
 <p>Clears the clipboard contents.
 <h3 class="fn"><a href="qmimesource.html">QMimeSource</a>* <a name="c99eef"></a>QClipboard::data () const</h3>
-<p>Returns a reference to a <a href="qmimesource.html">QMimeSource</a> representation
-of the current clipboard data.
+<p>Returns a reference to a <a href="qmimesource.html">QMimeSource</a> representation of the current
+clipboard data.
 <h3 class="fn">void <a name="5ad39c"></a>QClipboard::dataChanged () <code>[signal]</code></h3>
 <p>This signal is emitted when the clipboard data is changed.
 <h3 class="fn">bool <a name="54df16"></a>QClipboard::event ( <a href="qevent.html">QEvent</a> * e ) <code>[virtual protected]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
 <p>Reimplemented from <a href="qobject.html#c8b023">QObject.</a>
 <h3 class="fn"><a href="qimage.html">QImage</a> <a name="5d6810"></a>QClipboard::image () const</h3>
-<p>Returns the clipboard image, or a null image if the clipboard does not contain
-an image. In addition a null image may be returned if Qt does not
-understand the provided image format.
-<p>See also:  <a href="#ede7fd">setImage</a>(), <a href="#54ee2d">pixmap</a>() and <a href="#c99eef">data</a>().
+<p>Returns the clipboard image, or a null image if the clipboard does
+not contain an image, or if it contains an image in an unsupported
+image format.
+<p>See also:  <a href="#ede7fd">setImage</a>(), <a href="#54ee2d">pixmap</a>(), <a href="#c99eef">data</a>() and <a href="qimage.html#762534">QImage::isNull</a>().
 <h3 class="fn"><a href="qpixmap.html">QPixmap</a> <a name="54ee2d"></a>QClipboard::pixmap () const</h3>
-<p>Returns the clipboard pixmap, or null if the clipboard does not contain
-any pixmap. Note that this usually looses more information than <a href="#5d6810">image</a>().
-<p>See also:  <a href="#5e49c3">setPixmap</a>(), <a href="#5d6810">image</a>() and <a href="#c99eef">data</a>().
+<p>Returns the clipboard pixmap, or null if the clipboard does not
+contain any pixmap. Note that this can lose information - for
+example, if the image is 24-bit and the display 8-bit the result is
+converted to 8 bits, and if the image has an alpha channel the
+result just has a mask.
+<p>See also:  <a href="#5e49c3">setPixmap</a>(), <a href="#5d6810">image</a>(), <a href="#c99eef">data</a>() and <a href="qpixmap.html#f34554">QPixmap::convertFromImage</a>().
 <h3 class="fn">void <a name="77a717"></a>QClipboard::setData ( <a href="qmimesource.html">QMimeSource</a> * src )</h3>
-<p>Sets the clipboard data.  Ownership of the data is transferred
-to the clipboard - the only way to remove this data is to set
-something else, or to call <a href="#9088ae">clear</a>().  The <a href="qdragobject.html">QDragObject</a> subclasses
-are reasonable things to put on the clipboard (but do not try
-to <a href="qdragobject.html#5655f5">drag</a> the same object).
-Do not put <a href="qdragmoveevent.html">QDragMoveEvent</a> or <a href="qdropevent.html">QDropEvent</a> subclasses on the clipboard,
-as they do not belong to the event handler which receives them.
-<p>The <a href="#f6fc41">setText</a>() and <a href="#5e49c3">setPixmap</a>() functions are shorthand ways
-of setting the data.
+<p>Sets the clipboard data.  Ownership of the data is transferred to
+the clipboard - the only ways to remove this data is to set
+something else, or to call <a href="#9088ae">clear</a>().  The <a href="qdragobject.html">QDragObject</a> subclasses are
+reasonable things to put on the clipboard (but do not try to call
+<a href="qdragobject.html#5655f5">QDragObject::drag</a>() on the same object).  Do not put <a href="qdragmoveevent.html">QDragMoveEvent</a>
+or <a href="qdropevent.html">QDropEvent</a> subclasses on the clipboard, as they do not belong to
+the event handler which receives them.
+<p>The <a href="#f6fc41">setText</a>() and <a href="#5e49c3">setPixmap</a>() functions are simpler wrappers for this.
 <h3 class="fn">void <a name="ede7fd"></a>QClipboard::setImage ( const <a href="qimage.html">QImage</a> &amp; image )</h3>
 <p>Copies <em>image</em> into the clipboard.
-<p>This is just a shorthand for:
+<p>This is shorthand for:
 <pre>    setData(new QImageDrag(image))
 </pre>
 <p>See also:  <a href="#5d6810">image</a>(), <a href="#5e49c3">setPixmap</a>() and <a href="#77a717">setData</a>().
 <h3 class="fn">void <a name="5e49c3"></a>QClipboard::setPixmap ( const <a href="qpixmap.html">QPixmap</a> &amp; pixmap )</h3>
-<p>Copies <em>pixmap</em> into the clipboard.
-Note that this usually looses more information than <a href="#ede7fd">setImage</a>(),
-as the data may be converted to an image for transfer.
+<p>Copies <em>pixmap</em> into the clipboard.  Note that this is slower than
+<a href="#ede7fd">setImage</a>() - it needs to convert the <a href="qpixmap.html">QPixmap</a> to a <a href="qimage.html">QImage</a> first.
 <p>See also:  <a href="#54ee2d">pixmap</a>(), <a href="#ede7fd">setImage</a>() and <a href="#77a717">setData</a>().
 <h3 class="fn">void <a name="f6fc41"></a>QClipboard::setText ( const <a href="qstring.html">QString</a> &amp; text )</h3>
 <p>Copies <em>text</em> into the clipboard.
 <p>See also:  <a href="#c55d73">text</a>() and <a href="#77a717">setData</a>().
 <h3 class="fn"><a href="qstring.html">QString</a> <a name="c55d73"></a>QClipboard::text () const</h3>
-<p>Returns the clipboard text, or a
-<a href="qstring.html#367622">null string</a>
+<p>Returns the clipboard text, or a null string
 if the clipboard does not contain any text.
-<p>See also:  <a href="#f6fc41">setText</a>() and <a href="#c99eef">data</a>().
+<p>See also:  <a href="#f6fc41">setText</a>(), <a href="#c99eef">data</a>() and QString::operator!().
 <h3 class="fn">void <a name="8fafb1"></a>QClipboard::connectNotify ( const char * ) <code>[virtual protected]</code></h3>
 <p>For internal use only.
 <p>Reimplemented from <a href="qobject.html#5ff2b9">QObject.</a>
@@ -142,7 +134,7 @@ if the clipboard does not contain any text.
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.1.0"><nobr>
+<input type=hidden name="version" value="2.1.1"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -150,5 +142,5 @@ copyright &copy; 1995-2000
 <a href="http://www.trolltech.com">Troll Tech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.0</div>
+<td align="right"><div align="right">Qt version 2.1.1</div>
 </table></div></address></body></html>

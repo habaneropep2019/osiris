@@ -1,4 +1,4 @@
-.TH QString 3qt "12 April 2000" "Troll Tech AS" \" -*- nroff -*-
+.TH QString 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -678,7 +678,7 @@ Example:
 .br
     QString a;          // a.unicode() == 0,  a.length() == 0
 .br
-    QString b == "";    // b.unicode() == "", b.length() == 0
+    QString b = "";     // b.unicode() == "", b.length() == 0
 .br
     a.isNull();         // TRUE, because a.unicode() == 0
 .br
@@ -1080,7 +1080,7 @@ Returns the string converted to an \fCunsigned short\fR value.
 .PP
 If \fIok\fR is non-null, \fI*ok\fR is set to TRUE if there are no conceivable errors, and FALSE if the string is not a number at all, or if it has trailing garbage.
 .SH "void QString::truncate ( uint newLen )"
-Truncates the string at position \fInewLen.\fR If newLen is less than the current length, this is equivalent to setLength( newLen ). Otherwise, nothing happens.
+Truncates the string at position \fInewLen\fR if newLen is less than the current length . Otherwise, nothing happens.
 .PP
 Example:
 .PP
@@ -1092,8 +1092,6 @@ Example:
 .fi
 .PP
 In Qt 1.x, it was possible to "truncate" a string to a longer length. This is no longer possible.
-.PP
-See also: setLength().
 .SH "const QChar* QString::unicode () const"
 Returns the Unicode representation of the string. The result remains valid until the string is modified.
 .SH "QString QString::upper () const"
@@ -1120,6 +1118,8 @@ This function returns the QString ordered visually. Useful for painting the stri
 .SH RELATED FUNCTION DOCUMENTATION
 .SH "QDataStream & operator>> (QDataStream & s, QString & str)"
 Reads a string from the stream.
+.PP
+See also: Format of the QDataStream operators
 .SH "QString operator+ (const char * s1, const QString & s2)"
 Returns the concatenated string of s1 and s2.
 .SH "bool operator<= (const char * s1, const QString & s2)"
@@ -1133,7 +1133,7 @@ Returns the concatenated string of s1 and s2.
 .SH "QDataStream & operator<< (QDataStream & s, const QString & str)"
 Writes a string to the stream.
 .PP
-Output format: isNull() ? [0xffffffff] : [length (Q_UINT32) data...].
+See also: Format of the QDataStream operators
 .SH "bool operator== (const QString & s1, const QString & s2)"
 Returns TRUE if the two strings are equal, or FALSE if they are different. A null string is different from an empty, non-null string.
 .PP

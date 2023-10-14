@@ -28,7 +28,7 @@ body { background: white; color: black; }
   <hr>
 
   Header file: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/qwerty/qwerty.h   2.1.0   edited 2000-01-31 $
+** &#36;Id&#58; qt/examples/qwerty/qwerty.h   2.1.1   edited 2000-04-19 $
 **
 ** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
@@ -59,6 +59,8 @@ public slots:
     bool save();
     void print();
     void addEncoding();
+    void toUpper();
+    void toLower();
 
 protected:
     void resizeEvent( <a href="qresizeevent.html">QResizeEvent</a> * );
@@ -85,7 +87,7 @@ private:
   <hr>
 
   Implementation: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/qwerty/qwerty.cpp   2.1.0   edited 2000-02-21 $
+** &#36;Id&#58; qt/examples/qwerty/qwerty.cpp   2.1.1   edited 2000-04-27 $
 **
 ** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
@@ -116,6 +118,7 @@ Editor::Editor( <a href="qwidget.html">QWidget</a> * parent , const char * name 
     : <a href="qwidget.html">QWidget</a>( parent, name, WDestructiveClose )
 {
     m = new <a href="qmenubar.html">QMenuBar</a>( this, "menu" );
+
     <a href="qpopupmenu.html">QPopupMenu</a> * file = new <a href="qpopupmenu.html">QPopupMenu</a>();
     CHECK_PTR( file );
     m-&gt;insertItem( "&amp;File", file );
@@ -136,10 +139,16 @@ Editor::Editor( <a href="qwidget.html">QWidget</a> * parent , const char * name 
     <a href="qobject.html#c2d209">connect</a>( save_as, SIGNAL(activated(int)), this, SLOT(<a href=#335>saveAsEncoding</a>(int)) );
     <a href=#330>rebuildCodecList</a>();
 
+    <a href="qpopupmenu.html">QPopupMenu</a> * edit = new <a href="qpopupmenu.html">QPopupMenu</a>();
+    CHECK_PTR( edit );
+    m-&gt;insertItem( "&amp;Edit", edit );
+
+    edit-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "To &amp;uppercase",   this, SLOT(<a href=#341>toUpper</a>()),   ALT+Key_U );
+    edit-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "To &amp;lowercase",   this, SLOT(<a href=#342>toLower</a>()),   ALT+Key_L );
+
     changed = FALSE;
     e = new <a href="qmultilineedit.html">QMultiLineEdit</a>( this, "editor" );
-    <a href="qobject.html#c2d209">connect</a>( e, SIGNAL( <a href=#341>textChanged</a>() ), this, SLOT( <a href=#341>textChanged</a>() ) );
-    e-&gt;setFont( <a href="qfont.html">QFont</a>("Helvetica", 24) );
+    <a href="qobject.html#c2d209">connect</a>( e, SIGNAL( <a href=#343>textChanged</a>() ), this, SLOT( <a href=#343>textChanged</a>() ) );
 
     e-&gt;setFocus();
 }
@@ -329,7 +338,17 @@ void <a name="340"></a>Editor::closeEvent( <a href="qcloseevent.html">QCloseEven
     }
 }
 
-void <a name="341"></a>Editor::textChanged()
+void <a name="341"></a>Editor::toUpper()
+{
+    e-&gt;setText(e-&gt;text().upper());
+}
+
+void <a name="342"></a>Editor::toLower()
+{
+    e-&gt;setText(e-&gt;text().lower());
+}
+
+void <a name="343"></a>Editor::textChanged()
 {
     changed = TRUE;
 }
@@ -340,7 +359,7 @@ void <a name="341"></a>Editor::textChanged()
 
   Main:
 <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/qwerty/main.cpp   2.1.0   edited 2000-01-31 $
+** &#36;Id&#58; qt/examples/qwerty/main.cpp   2.1.1   edited 2000-01-31 $
 **
 ** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
@@ -371,5 +390,5 @@ int main( int argc, char **argv )
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.0</div>
+<td align="right"><div align="right">Qt version 2.1.1</div>
 </table></div></address></body></html>

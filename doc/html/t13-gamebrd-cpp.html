@@ -59,15 +59,15 @@ GameBoard::GameBoard( <a href="qwidget.html">QWidget</a> *parent, const char *na
     <a href="qobject.html#c2d209">connect</a>( cannonField, SIGNAL(forceChanged(int)),
              force, SLOT(setValue(int)) );
 
-    <a href="qobject.html#c2d209">connect</a>( cannonField, SIGNAL(<a href=#576>hit</a>()),
-             this, SLOT(<a href=#576>hit</a>()) );
-    <a href="qobject.html#c2d209">connect</a>( cannonField, SIGNAL(<a href=#577>missed</a>()),
-             this, SLOT(<a href=#577>missed</a>()) );
+    <a href="qobject.html#c2d209">connect</a>( cannonField, SIGNAL(<a href=#583>hit</a>()),
+             this, SLOT(<a href=#583>hit</a>()) );
+    <a href="qobject.html#c2d209">connect</a>( cannonField, SIGNAL(<a href=#584>missed</a>()),
+             this, SLOT(<a href=#584>missed</a>()) );
 
     <a href="qpushbutton.html">QPushButton</a> *shoot = new <a href="qpushbutton.html">QPushButton</a>( "&amp;Shoot", this, "shoot" );
     shoot-&gt;<a href="qwidget.html#dde00b">setFont</a>( <a href="qfont.html">QFont</a>( "Times", 18, QFont::Bold ) );
 
-    <a href="qobject.html#c2d209">connect</a>( shoot, SIGNAL(clicked()), SLOT(<a href=#575>fire</a>()) );
+    <a href="qobject.html#c2d209">connect</a>( shoot, SIGNAL(clicked()), SLOT(<a href=#582>fire</a>()) );
     <a href="qobject.html#c2d209">connect</a>( cannonField, SIGNAL(canShoot(bool)),
              shoot, SLOT(<a href="qwidget.html#f996ef">setEnabled</a>(bool)) );
 
@@ -75,7 +75,7 @@ GameBoard::GameBoard( <a href="qwidget.html">QWidget</a> *parent, const char *na
         = new <a href="qpushbutton.html">QPushButton</a>( "&amp;New Game", this, "newgame" );
     restart-&gt;<a href="qwidget.html#dde00b">setFont</a>( <a href="qfont.html">QFont</a>( "Times", 18, QFont::Bold ) );
 
-    <a href="qobject.html#c2d209">connect</a>( restart, SIGNAL(clicked()), this, SLOT(<a href=#578>newGame</a>()) );
+    <a href="qobject.html#c2d209">connect</a>( restart, SIGNAL(clicked()), this, SLOT(<a href=#585>newGame</a>()) );
 
     hits = new <a href="qlcdnumber.html">QLCDNumber</a>( 2, this, "hits" );
     shotsLeft = new <a href="qlcdnumber.html">QLCDNumber</a>( 2, this, "shotsleft" );
@@ -107,10 +107,10 @@ GameBoard::GameBoard( <a href="qwidget.html">QWidget</a> *parent, const char *na
     force-&gt;setValue( 25 );
     angle-&gt;<a href="qwidget.html#666b3c">setFocus</a>();
 
-    <a href=#578>newGame</a>();
+    <a href=#585>newGame</a>();
 }
 
-void <a name="575"></a>GameBoard::fire()
+void <a name="582"></a>GameBoard::fire()
 {
     if ( cannonField-&gt;gameOver() || cannonField-&gt;isShooting() )
         return;
@@ -118,7 +118,7 @@ void <a name="575"></a>GameBoard::fire()
     cannonField-&gt;shoot();
 }
 
-void <a name="576"></a>GameBoard::hit()
+void <a name="583"></a>GameBoard::hit()
 {
     hits-&gt;display( hits-&gt;intValue() + 1 );
     if ( shotsLeft-&gt;intValue() == 0 )
@@ -127,13 +127,13 @@ void <a name="576"></a>GameBoard::hit()
         cannonField-&gt;newTarget();
 }
 
-void <a name="577"></a>GameBoard::missed()
+void <a name="584"></a>GameBoard::missed()
 {
     if ( shotsLeft-&gt;intValue() == 0 )
         cannonField-&gt;setGameOver();
 }
 
-void <a name="578"></a>GameBoard::newGame()
+void <a name="585"></a>GameBoard::newGame()
 {
     shotsLeft-&gt;display( 15 );
     hits-&gt;display( 0 );
@@ -146,5 +146,5 @@ void <a name="578"></a>GameBoard::newGame()
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.0</div>
+<td align="right"><div align="right">Qt version 2.1.1</div>
 </table></div></address></body></html>

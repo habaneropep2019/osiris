@@ -1,5 +1,5 @@
 /**********************************************************************
-** $Id: qt/src/widgets/qgroupbox.cpp   2.1.0   edited 2000-04-04 $
+** $Id: qt/src/widgets/qgroupbox.cpp   2.1.1   edited 2000-04-21 $
 **
 ** Implementation of QGroupBox widget class
 **
@@ -184,6 +184,13 @@ void QGroupBox::setTitle( const QString &title )
     }
     calculateFrame();
     setTextSpacer();
+    if ( vbox ) {
+	vbox->activate();
+	QSize s( size() );
+	QSize ms( minimumSizeHint() );
+	resize( QMAX( s.width(), ms.width() ),
+		QMAX( s.height(), ms.height() ) );
+    }
     if ( isVisible() ) {
 	update();
 	updateGeometry();
@@ -386,6 +393,9 @@ void QGroupBox::setColumnLayout(int columns, Orientation direction)
     vbox = 0;
     grid = 0;
 
+    if ( columns < 0 ) // if 0, we create the vbox but not the grid. See below.
+	return;
+
     vbox = new QVBoxLayout( this, 8, 0 );
 
     QSpacerItem *spacer = new QSpacerItem( 0, 0, QSizePolicy::Minimum,
@@ -397,7 +407,7 @@ void QGroupBox::setColumnLayout(int columns, Orientation direction)
     nCols = 0;
     nRows = 0;
     dir = direction;
-    
+
     // Send all child events and ignore them. Otherwise we will end up
     // with doubled insertion. This won't do anything because nCols ==
     // nRows == 0.
@@ -541,7 +551,7 @@ void QGroupBox::calculateFrame()
 
 
 
-/*! \reimp 
+/*! \reimp
  */
 void QGroupBox::focusInEvent( QFocusEvent * )
 { // note no call to super

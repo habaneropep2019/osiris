@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qfontdatabase.cpp   2.1.0   edited 2000-03-24 $
+** $Id: qt/src/kernel/qfontdatabase.cpp   2.1.1   edited 2000-05-24 $
 **
 ** Implementation of font database class.
 **
@@ -1096,7 +1096,7 @@ void newWinFont( void * p )
     const TCHAR* tc = f->elfLogFont.lfFaceName;
 
     QString familyName;
-    if ( qt_winver == Qt::WV_NT ) {
+    if ( qt_winver & Qt::WV_NT_based ) {
 	familyName = qt_winQString((void*)tc);
     } else {
 	familyName = QString::fromLocal8Bit((const char*)tc);
@@ -1126,7 +1126,7 @@ void newWinFont( void * p )
     tc = (TCHAR*)f->elfStyle;
 
     QString styleName;
-    if ( qt_winver == Qt::WV_NT ) {
+    if ( qt_winver & Qt::WV_NT_based ) {
 	styleName = qt_winQString((void*)tc);
     } else {
 	styleName = QString::fromLocal8Bit((const char*)tc);
@@ -1171,7 +1171,7 @@ void populate_database(const QString& fam)
     QWidget dummy;
     QPainter p( &dummy );
 
-    if ( qt_winver == Qt::WV_NT ) {
+    if ( qt_winver & Qt::WV_NT_based ) {
 	LOGFONT lf;
 	lf.lfCharSet = DEFAULT_CHARSET;
 	if ( fam.isNull() ) {
@@ -1181,7 +1181,7 @@ void populate_database(const QString& fam)
 		sizeof(TCHAR)*QMIN(fam.length()+1,32));  // 32 = Windows hard-coded
 	}
 	lf.lfPitchAndFamily = 0;
-#if 1
+#if 0
 	EnumFontFamiliesEx( dummy.handle(), &lf,
 	    (FONTENUMPROC)storeFont, (LPARAM)db, 0 );
 #else
@@ -1300,6 +1300,46 @@ static QFont::CharSet getCharSet( const QString &name )
     if ( name == "iso10646-1" )
 	return QFont::Unicode;
     return QFont::AnyCharSet;
+}
+
+static const QString getCharSet( QFont::CharSet set)
+{
+    if ( set == QFont::ISO_8859_1 )
+        return "iso8859-1";
+    if ( set == QFont::ISO_8859_2 )
+        return "iso8859-2";
+    if ( set == QFont::ISO_8859_3 )
+        return "iso8859-3";
+    if ( set == QFont::ISO_8859_4 )
+        return "iso8859-4";
+    if ( set == QFont::ISO_8859_5 )
+        return "iso8859-5";
+    if ( set == QFont::ISO_8859_6 )
+        return "iso8859-6";
+    if ( set == QFont::ISO_8859_7 )
+        return "iso8859-7";
+    if ( set == QFont::ISO_8859_8 )
+        return "iso8859-8";
+    if ( set == QFont::ISO_8859_9 )
+        return "iso8859-9";
+    if ( set == QFont::ISO_8859_10 )
+        return "iso8859-10";
+    if ( set == QFont::ISO_8859_11 )
+        return "iso8859-11";
+    if ( set == QFont::ISO_8859_12 )
+        return "iso8859-12";
+    if ( set == QFont::ISO_8859_13 )
+        return "iso8859-13";
+    if ( set == QFont::ISO_8859_14 )
+        return "iso8859-14";
+    if ( set == QFont::ISO_8859_15 )
+        return "iso8859-15";
+    if ( set == QFont::KOI8R )
+        return "koi8-r";
+    if ( set == QFont::Unicode )
+        return "iso10646-1";
+
+    return "Unknown";
 }
 
 static QString getCharSetName( const char * registry, const char *encoding )
@@ -1754,7 +1794,10 @@ QValueList<int> QFontDatabase::pointSizes( const QString &family,
 QFont QFontDatabase::font( const QString family, const QString &style,
 			   int pointSize, const QString charSet )
 {
-    const QtFontStyle *sty = getStyle( d, family, style, charSet );
+    const QtFontStyle *sty;
+
+    sty =  charSet ? getStyle( d, family, style, charSet ) :
+                     getStyle( d, family, style, getCharSet(qApp->font().charSet()) );
     if ( !sty ) {
 	qWarning( "QFontDatabase::font: Style not found for\n"
 		  "%s, %s, %s", (const char*)family,

@@ -1,4 +1,4 @@
-.TH QListView 3qt "12 April 2000" "Troll Tech AS" \" -*- nroff -*-
+.TH QListView 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -285,7 +285,7 @@ Inherits QScrollView.
 .SH DESCRIPTION
 The QListView class implements a list/tree view.
 .PP
-It can display and control a hierarchy of multi-column items, and provides the ability to add new items at run-time, let the user select one or many items, sort the list in increasing or decreasing order by any column, and so on.
+It can display and control a hierarchy of multi-column items, and provides the ability to add new items at any time, let the user select one or many items, sort the list in increasing or decreasing order by any column, and so on.
 .PP
 The simplest mode of usage is to create a QListView, add some column headers using setColumn(), create one or more QListViewItem objects with the QListView as parent, set up the list view's geometry(), and show() it.
 .PP
@@ -345,7 +345,7 @@ See also: setColumnWidth(), setColumnWidthMode() and columnWidth().
 .SH "QListView::QListView ( QWidget * parent = 0, const char * name = 0 )"
 Constructs a new empty list view, with \fIparent\fR as a parent and \fIname\fR as object name.
 .SH "QListView::~QListView ()"
-Destroys the listview, deleting all items in it, and frees all allocated resources.
+Destructs the listview, deleting all items in it, and frees up all allocated resources.
 .SH "int QListView::addColumn ( const QIconSet & iconset, const QString & label, int width = -1 ) \fC[virtual]\fR"
 Adds a new column at the right end of the widget, with the header \fIlabel\fR and \fIiconset,\fR and returns the index of the column.
 .PP
@@ -380,11 +380,11 @@ Sets all items to be not selected, updates the list view as necessary and emits 
 .PP
 See also: setSelected() and setMultiSelection().
 .SH "void QListView::clicked ( QListViewItem * item ) \fC[signal]\fR"
-This signal is emitted whenever the user clicks (moues pressed + mouse released) into the listview. \fIitem\fR is the pointer to the clicked listview item or NULL, if the user didn't click on an item.
+This signal is emitted whenever the user clicks (mouse pressed + mouse released) into the listview. \fIitem\fR is the pointer to the clicked listview item or NULL, if the user didn't click on an item.
 .PP
 Note that you may not delete any QListViewItem objects in slots connected to this signal.
 .SH "void QListView::clicked ( QListViewItem * item, const QPoint & pnt, int c ) \fC[signal]\fR"
-This signal is emitted whenever the user clicks (moues pressed + mouse released) into the listview. \fIitem\fR is the pointer to the clicked listview item or NULL, if the user didn't click on an item. \fIpnt\fR is the position where the user has clicked, and \fIc\fR the column into which the user clicked.
+This signal is emitted whenever the user clicks (mouse pressed + mouse released) into the listview. \fIitem\fR is the pointer to the clicked listview item or NULL, if the user didn't click on an item. \fIpnt\fR is the position where the user has clicked, and \fIc\fR the column into which the user clicked.
 .PP
 Note that you may not delete any QListViewItem objects in slots connected to this signal.
 .SH "void QListView::collapsed ( QListViewItem * item ) \fC[signal]\fR"
@@ -568,7 +568,7 @@ Reimplemented for internal reasons; the API is not affected.
 .PP
 Reimplemented from QWidget.
 .SH "void QListView::mouseButtonClicked ( int button, QListViewItem * item, const QPoint & pos, int c ) \fC[signal]\fR"
-This signal is emitted whenever the user clicks (moues pressed + mouse released) into the listview. \fIbutton\fR is the mouse button which the user pressed, \fIitem\fR is the pointer to the clicked listview item or NULL, if the user didn't click on an item, and \fIc\fR the listview column into which the user pressed (this argument is only valid, if \fIitem\fR is not NULL!)
+This signal is emitted whenever the user clicks (mouse pressed + mouse released) into the listview. \fIbutton\fR is the mouse button which the user pressed, \fIitem\fR is the pointer to the clicked listview item or NULL, if the user didn't click on an item, and \fIc\fR the listview column into which the user pressed (this argument is only valid, if \fIitem\fR is not NULL!)
 .PP
 Note that you may not delete any QListViewItem objects in slots connected to this signal.
 .SH "void QListView::mouseButtonPressed ( int button, QListViewItem * item, const QPoint & pos, int c ) \fC[signal]\fR"
@@ -709,7 +709,7 @@ Sets the list view's selection mode, which may be one of \fCSingle\fR (the defau
 .PP
 See also: selectionMode().
 .SH "void QListView::setShowSortIndicator ( bool show )"
-It's possible that there is drawn an arrow in the header of the listview to indicate the sort order and column of the listview contents (this means this arrow is then always drawn in the correct column and points into the correct direction). To enable this, specify TRUE \fIshow,\fR to disable this feature set \fIshow\fR to FALSE.
+If \fIshow\fR is TRUE, draw an arrow in the header of the listview to indicate the sort order of the listview contents. The arrow will be drawn in the correct column and will point to the correct direction. Set \fIshow\fR to FALSE to disable this feature.
 .PP
 See also: QHeader::setSortIndicator().
 .SH "void QListView::setSorting ( int column, bool ascending = TRUE ) \fC[virtual]\fR"
@@ -739,7 +739,7 @@ Reimplemented for internal reasons; the API is not affected.
 .PP
 Reimplemented from QWidget.
 .SH "bool QListView::showSortIndicator () const"
-Returns TRUE, of the sort order and column is indicated in the header, else FALSE.
+Returns TRUE, if the sort order and column are indicated in the header, else FALSE.
 .PP
 See also: QListView::setSortIndicator().
 .SH "QSize QListView::sizeHint () const \fC[virtual]\fR"

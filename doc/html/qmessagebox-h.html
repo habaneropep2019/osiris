@@ -28,7 +28,7 @@ remains with Troll Tech.
 <hr>
 <pre>
 /****************************************************************************
-** &#36;Id&#58; qt/src/dialogs/qmessagebox.h   2.1.0   edited 2000-03-24 $
+** &#36;Id&#58; qt/src/dialogs/qmessagebox.h   2.1.1   edited 2000-04-19 $
 **
 ** Definition of QMessageBox class
 **
@@ -82,8 +82,8 @@ public:
                  WFlags f=WStyle_DialogBorder  );
    ~QMessageBox();
 
-    enum { Ok = 1, Cancel = 2, Yes = 3, No = 4, Abort = 5, Retry = 6,
-           Ignore = 7, ButtonMask = 0x07,
+    enum { NoButton = 0, Ok = 1, Cancel = 2, Yes = 3, No = 4, Abort = 5,
+           Retry = 6, Ignore = 7, ButtonMask = 0x07,
            Default = 0x100, Escape = 0x200, FlagMask = 0x300 };
 
     static int information( QWidget *parent, const QString &amp;caption,
@@ -186,5 +186,5 @@ private:        // Disabled copy constructor and operator=
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.0</div>
+<td align="right"><div align="right">Qt version 2.1.1</div>
 </table></div></address></body></html>

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qtl.h   2.1.0   edited 2000-03-28 $
+** $Id: qt/src/tools/qtl.h   2.1.1   edited 2000-03-28 $
 **
 ** Definition of Qt template library classes
 **

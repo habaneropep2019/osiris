@@ -1,4 +1,4 @@
-.TH QButtonGroup 3qt "12 April 2000" "Troll Tech AS" \" -*- nroff -*-
+.TH QButtonGroup 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -168,7 +168,7 @@ Returns TRUE if the button group is exclusive, otherwise FALSE.
 .PP
 See also: setExclusive().
 .SH "bool QButtonGroup::isRadioButtonExclusive () const"
-Returns whether this button group will treat radio buttons as mutually exclusive.
+Returns whether this button group will treat radio buttons as mutually exclusive. The default is TRUE.
 .PP
 See also: setRadioButtonExclusive().
 .SH "void QButtonGroup::moveFocus ( int key ) \fC[virtual]\fR"
@@ -185,6 +185,8 @@ Removes a button from the button group.
 See also: insert().
 .SH "QButton * QButtonGroup::selected ()"
 Returns a pointer to the selected radio button in this group, if one exists, or 0 if there is no selected radio button in this group.
+.PP
+\fBWarning: \fRIn future versions of Qt, the selected toggle button will be returned.
 .SH "void QButtonGroup::setButton ( int id ) \fC[virtual]\fR"
 Sets the button with id \fIid\fR to be on, and if this is an exclusive group, all other button in the group to be off.
 .SH "void QButtonGroup::setExclusive ( bool enable ) \fC[virtual]\fR"
@@ -196,7 +198,7 @@ The default setting is FALSE.
 .PP
 See also: isExclusive().
 .SH "void QButtonGroup::setRadioButtonExclusive ( bool on ) \fC[virtual]\fR"
-If \fIon\fR is TRUE, this button group will treat radio buttons as mutually exclusive, and other buttons according to isExclusive(). This function is called automatically whenever a QRadioButton is inserted, so you should normally never have to call it.
+If \fIon\fR is TRUE, this button group will treat radio buttons as mutually exclusive, and other buttons according to isExclusive().
 .SH "void QButtonGroup::buttonClicked () \fC[protected slot]\fR"
 For internal use only.
 .SH "void QButtonGroup::buttonPressed () \fC[protected slot]\fR"

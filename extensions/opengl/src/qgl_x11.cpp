@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/extensions/opengl/src/qgl_x11.cpp   2.1.0   edited 2000-04-06 $
+** $Id: qt/extensions/opengl/src/qgl_x11.cpp   2.1.1   edited 2000-05-19 $
 **
 ** Implementation of OpenGL classes for Qt
 **
@@ -417,6 +417,29 @@ void *QGLContext::tryVisual( const QGLFormat& f, int bufDepth )
     int i = 0;
     spec[i++] = GLX_LEVEL;
     spec[i++] = f.plane();
+
+#if defined(GLX_VERSION_1_1) && defined(GLX_EXT_visual_info)
+    static bool useTranspExt = FALSE;
+    static bool useTranspExtChecked = FALSE;
+    if ( f.plane() && !useTranspExtChecked && paintDevice ) {
+	QCString estr( glXQueryExtensionsString( paintDevice->x11Display(),
+						 paintDevice->x11Screen() ) );
+	useTranspExt = estr.contains( "GLX_EXT_visual_info" );
+	//# (A bit simplistic; that could theoretically be a substring)
+	if ( useTranspExt ) {
+	    QCString cstr( glXGetClientString( paintDevice->x11Display(),
+					       GLX_VENDOR ) );
+	    useTranspExt = !cstr.contains( "Xi Graphics" ); // bug workaround
+	}
+	useTranspExtChecked = TRUE;
+    }
+    if ( f.plane() && useTranspExt ) {
+	// Required to avoid non-transparent overlay visual(!) on some systems
+	spec[i++] = GLX_TRANSPARENT_TYPE_EXT;
+	spec[i++] = GLX_TRANSPARENT_INDEX_EXT; //# Depending on format, really
+    }
+#endif
+
     if ( f.doubleBuffer() )
 	spec[i++] = GLX_DOUBLEBUFFER;
     if ( f.depth() ) {
@@ -454,7 +477,8 @@ void *QGLContext::tryVisual( const QGLFormat& f, int bufDepth )
 		spec[i++] = 1;
 	    }
         }
-    } else {
+    }
+    else {
 	spec[i++] = GLX_BUFFER_SIZE;
 	spec[i++] = bufDepth;
     }
@@ -593,7 +617,7 @@ class QGLOverlayWidget : public QGLWidget
 public:
     QGLOverlayWidget( const QGLFormat& format, QGLWidget* parent, 
 		      const char* name=0 );
-    
+
 protected:
     void		initializeGL();
     void		paintGL();
@@ -603,7 +627,10 @@ protected:
     void		mouseMoveEvent( QMouseEvent* e );
     void		mouseReleaseEvent( QMouseEvent* e );
     void		mouseDoubleClickEvent( QMouseEvent* e );
+    void		enterEvent( QEvent* );
+    void		leaveEvent( QEvent* );
 
+    
 private:
     QGLWidget*		realWidget;
 
@@ -621,6 +648,7 @@ QGLOverlayWidget::QGLOverlayWidget( const QGLFormat& format, QGLWidget* parent,
 {
     realWidget = parent;
 }
+
 
 
 void QGLOverlayWidget::initializeGL()
@@ -667,6 +695,16 @@ void QGLOverlayWidget::mouseDoubleClickEvent( QMouseEvent* e )
     QApplication::sendEvent( realWidget, e );
 }
 
+void QGLOverlayWidget::enterEvent( QEvent* e )
+{
+    QApplication::sendEvent( realWidget, e );
+}
+
+void QGLOverlayWidget::leaveEvent( QEvent* e )
+{
+    QApplication::sendEvent( realWidget, e );
+}
+
 #include "qgl_x11.moc"
 
 /*****************************************************************************
@@ -676,6 +714,7 @@ void QGLOverlayWidget::mouseDoubleClickEvent( QMouseEvent* e )
 void QGLWidget::init( const QGLFormat& format, const QGLWidget* shareWidget )
 {
     glcx = 0;
+    olw = 0;
     autoSwap = TRUE;
     if ( shareWidget )
 	setContext( new QGLContext( format, this ), shareWidget->context() );
@@ -690,7 +729,6 @@ void QGLWidget::init( const QGLFormat& format, const QGLWidget* shareWidget )
 				    this, olwName );
 	if ( olw->isValid() ) {
 	    olw->setAutoBufferSwap( FALSE );
-	    olw->setGeometry( rect() );
 	    olw->setFocusProxy( this );
 	}
 	else {
@@ -699,9 +737,14 @@ void QGLWidget::init( const QGLFormat& format, const QGLWidget* shareWidget )
 	    glcx->glFormat.setOverlay( FALSE );
 	}
     }
-    else {
-	olw = 0;
-    }
+}
+
+
+void QGLWidget::setMouseTracking( bool enable )
+{
+    if ( olw )
+	olw->setMouseTracking( enable );
+    QWidget::setMouseTracking( enable );
 }
 
 
@@ -773,8 +816,11 @@ void QGLWidget::setContext( QGLContext *context,
 	return;
     }
 
-    if ( glcx->windowCreated() || glcx->deviceIsPixmap() )
+    if ( glcx->windowCreated() || glcx->deviceIsPixmap() ) {
+	if ( deleteOldContext )
+	    delete oldcx;
 	return;
+    }
 
     bool visible = isVisible();
     if ( visible )

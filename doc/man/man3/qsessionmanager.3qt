@@ -1,4 +1,4 @@
-.TH QSessionManager 3qt "12 April 2000" "Troll Tech AS" \" -*- nroff -*-
+.TH QSessionManager 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -70,11 +70,13 @@ Inherits QObject.
 .SH DESCRIPTION
 The QSessionManager class provides access to the session manager.
 .PP
-The QSessionManager class provides access to the session manager during a session management action. In Qt, session management actions are handled in the two virtual functions QApplication::commitData() and QApplication::saveState(). Both functions provide a reference to a session manager object as argument, thus allowing the application to communicate with the session manager.
+The session manager is responsible for session management, most importantly interruption and resumption.
 .PP
-During a session management action, i.e. within one of the two mentioned functions, no user interaction is possible, \fIunless\fR the application got explicit permission from the session manager. An ordinary permission can be requested with allowsInteraction(). With allowsErrorInteraction(), applications can ask for a higher priority interaction permission in case an error occured.
+QSessionManager provides an interface between the application and the session manager, so that the program can work well with the session manager. In Qt, the session management requests for action are handled by the two virtual functions QApplication::commitData() and QApplication::saveState(). Both functions provide a reference to a session manager object as argument, thus allowing the application to communicate with the session manager.
 .PP
-Another important function is cancel(), which asks the session manager to cancel the shutdown process.
+During a session management action, i.e. within one of the two mentioned functions, no user interaction is possible, \fIunless\fR the application got explicit permission from the session manager. You can ask for mermission by calling allowsInteraction() or, if it's really urgent, allowsErrorInteraction(). Qt does not enforce this, but the session manager may. Perhaps.
+.PP
+You can try to abort the shutdown process by calling cancel. The default commitData() function does that if some top-level window rejected its closeEvent().
 .PP
 For sophisticated session managers as provided on Unix/X11, QSessionManager offers further possibilites to fine-tune an application's session management behaviour: setRestartCommand(), setDiscardCommand(), setRestartHint(), setProperty(), requestPhase2(). Please see the respective function descriptions for further details.
 .SS "Member Type Documentation"
@@ -93,17 +95,17 @@ This enum type defines the circumstances under which this application wants to b
 The default hint is \fCRestartIfRunning.\fR
 .SH MEMBER FUNCTION DOCUMENTATION
 .SH "bool QSessionManager::allowsErrorInteraction ()"
-Like allowsInteraction() but tells the session manager in addition that an error occured. Session managers may treat error interaction requests with higher priority. That means it is more likely that an error interaction is granted. However, you are still not guaranteed that the session manager will grant your request.
+Like allowsInteraction() but tells the session manager in addition that an error occured. Session managers may give error interaction request higher priority. That means it is more likely that an error interaction is granted. However, you are still not guaranteed that the session manager will grant your request.
 .PP
 See also: allowsInteraction(), release() and cancel().
 .SH "bool QSessionManager::allowsInteraction ()"
 Asks the session manager for permission to interact with the user. Returns TRUE if the interaction was granted, FALSE otherwise.
 .PP
-The rationale behind this is to make it possible to synchronize user interaction during a shutdown. Advanced session managers on multitasking operating systems may ask all applications simultaniously to commit their data, which results in a much faster shutdown.
+The rationale behind this mechanism is to make it possible to synchronize user interaction during a shutdown. Advanced session managers may ask all applications simultaniously to commit their data, resulting in a much faster shutdown.
 .PP
-After the interaction we recommend releasing the user interaction semaphore with a call to release(). This way, other applications may get the chance to interact with the user while your application is still busy saving data.
+When the interaction is done we strongyl recommend releasing the user interaction semaphore with a call to release(). This way, other applications may get the chance to interact with the user while your application is still busy saving data. (The sempahore is implictly released when the application exits.)
 .PP
-If the user decides to cancel the shutdown process during the interaction phase, you must tell the session manager by calling to cancel().
+If the user decides to cancel the shutdown process during the interaction phase, you must tell the session manager so by calling cancel().
 .PP
 Here's an example usage of the mentioned functions that may occur in the QApplication::commitData() function of an application:
 .PP
@@ -176,9 +178,11 @@ Releases the session manager's interaction semaphore after an interaction phase.
 .PP
 See also: allowsInteraction() and allowsErrorInteraction().
 .SH "void QSessionManager::requestPhase2 ()"
-Requests a second session management phase for the application. The application may then simply return from the QApplication::commitData() or QApplication::saveState() function. The respective function will be called again after the first session management phase has been finished, this time with isPhase2() returning TRUE.
+Requests a second session management phase for the application. The application may then return immediately from the QApplication::commitData() or QApplication::saveState() function, and they will be called again once most/all other applications have finished their session management.
 .PP
 The two phases are useful for applications like X11 window manager, that need to store informations about other application's windows and therefore have to wait until these applications finished their respective session management tasks.
+.PP
+Note that if another application has requested a second phase, it may get called before, simultaneously with, or after your application's second phase.
 .PP
 See also: isPhase2().
 .SH "QStringList QSessionManager::restartCommand () const"

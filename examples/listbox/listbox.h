@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/listbox/listbox.h   2.1.0   edited 2000-02-09 $
+** $Id: qt/examples/listbox/listbox.h   2.1.1   edited 2000-02-09 $
 **
 ** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **

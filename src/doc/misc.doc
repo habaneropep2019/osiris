@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/doc/misc.doc   2.1.0   edited 2000-04-06 $
+** $Id: qt/doc/misc.doc   2.1.1   edited 2000-05-25 $
 **
 ** Miscellaneous documentation that doesn't fit anywhere else
 **
@@ -223,7 +223,7 @@ When using Qt without a window manager on Unix/X11, you will very
 likely experience focus problems. Without a window manager, there is
 no focus handling on X11, and no concept of an active window
 either. If you want your application to work in such an environment,
-you have to explicitely mark a window as active \e after showing it:
+you have to explicitly mark a window as active \e after showing it:
 
 \code
  yourWindow->show();
@@ -233,7 +233,7 @@ you have to explicitely mark a window as active \e after showing it:
 Note that setActiveWindow() won't work if the widget does not become
 phyiscally visible during this event cycle. However, without a window
 manager running, this is guaranteed to happen. For the curious reader:
-setActiveWindow() emulates a window manager by explicitely setting the
+setActiveWindow() emulates a window manager by explicitly setting the
 X Input Focus to a widget's toplevel window.
 
 */
@@ -302,6 +302,86 @@ items that the user can select, drag around, rename, delete and more.
 
 <p>Compared to the previous release, we have managed to reduce overall
 memory consumption while improving execution speed and features.
+
+*/
+
+/*! \page changes211.html
+<title>Change Notes for Qt 2.1.1</title>
+</head><body bgcolor="#ffffff">
+\postheader
+
+<h1 align=center>Change Notes for Qt 2.1.1</h1>
+
+
+<p>Qt 2.1.1 is a bugfix release. It keeps both forward and backward
+compatibility (source and binary) with Qt 2.1.
+
+<h2>General</h2>
+<ul>
+<li> Many documentation improvements
+
+<li> Various compilation problems relating to particular versions of xlC,
+MipsPRO, Solaris, Japanese Windows, old X11 libraries, and gcc 2.7.2
+fixed
+
+<li> 64bit HP build targets added
+
+<li> Qt OpenGL Extension updated; see details in qt/extensions/opengl/CHANGES
+
+<li> As usual, many minor bugfixes, too small to be mentioned here.
+
+</ul>
+
+<h2>Specific</h2>
+<ul>
+
+<li> QToolbar:	fix of layout-saving when moving out of dock
+
+<li> QAccel:		Support for non-alphanumeric keys
+
+<li> QPrinter:	Better tolerance for PS interpreter peculiarities
+
+<li> QPainter:	drawText() with rasterOp on Windows
+
+<li> QIconView:	Drawing fixes
+
+<li> QDate:		Ensure invalid status when created with invalid values
+
+<li> Motif Dnd:	Fix possible crash
+
+<li> QWorkSpace:	Proper minmize/maximize activation
+
+<li> QListBox:	Optimization: better performance for lists with thousands of
+		elements. Selection problem fixed.
+		
+<li> QFont:		Fontset matching fix for X11
+
+<li> QMultiLineEdit:	Wordwrap/selection workaround
+
+<li> QTabBar:	Refresh layout after style change. Optimization.
+
+<li> QTimer:		Zero-timers on Windows speedup
+
+<li> QFileDialog:	Correct caption on Windows
+
+<li> QComboBox:	Accept only left button. Do proper font propagation.
+
+<li> QMenuBar:	Accept only left button
+
+<li> QDialog:	Modal dialogs after QApplication::exec() returns
+
+<li> QWidget:	Optimization: fewer server roundtrips
+
+<li> QCheckBox:	Fixed mask drawing
+
+<li> QSpinBox:	Accept '-' key, for negative values
+
+<li>Dnd:		Allow disabling on X11
+	
+<li>QFontDatabase:	Use QApplication's charset as default,
+		and fixed garbage on Win2000
+
+</ul>
 
 */
 
@@ -579,7 +659,7 @@ of the many example programs in the <tt>qt/examples</tt> directory.
 
 You can order Qt Professional Edition by printing out an
 <a href="http://www.trolltech.com/purchase/orderform.html">order form</a>
-and faxing it to <strong><nobr>+47 22 80 63 80</nobr></strong>. For prices, please see the
+and faxing it to <strong><nobr>+47 21 60 48 01</nobr></strong>. For prices, please see the
 <a href="http://www.trolltech.com/pricing.html">Pricing and Availability page.</a><p>
 
 We accept payment by:
@@ -604,7 +684,7 @@ NORWAY<br>
 </strong>
 <p>For questions regarding purchase and pricing, please contact us at
 <a href="mailto:sales@trolltech.com">sales@trolltech.com</a> or phone
-<nobr><b>+47 22 80 63 91</b></nobr>
+<nobr><b>+47 21 60 48 91</b></nobr>
 */
 
 
@@ -832,15 +912,15 @@ see if the issue is already solved!
 <td width=3% rowspan=4><br></td>
 <tr>
 <td width=3%><br></td>
-<td width="44%" valign="top"> General inquiries: +47 22 80 63 90<br>
-Sales department: +47 22 80 63 91</td>
+<td width="44%" valign="top"> General inquiries: +47 21 60 48 00<br>
+Sales department: +47 21 60 48 91</td>
 <td width=3% rowspan=3><br></td>
 <td width="44%" valign="top" rowspan=3> Waldemar Thranes gate 98B<br> N-0175 Oslo<br> Norway</td></tr>
 <tr>
 <td colspan=2><strong>Telefax</strong></td>
 <tr>
 <td width=3%><br></td>
-<td width="44%" valign="top"> All inquiries: +47 22 80 63 80</td>
+<td width="44%" valign="top"> All inquiries: +47 21 60 48 01</td>
 </table>
 
 */

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qmenubar.cpp   2.1.0   edited 2000-04-06 $
+** $Id: qt/src/widgets/qmenubar.cpp   2.1.1   edited 2000-05-03 $
 **
 ** Implementation of QMenuBar class
 **
@@ -334,7 +334,7 @@ void QMenuBar::frameChanged()
 
 bool QMenuBar::eventFilter( QObject *object, QEvent *event )
 {
-    if ( object == parent() && object && !object->inherits( "QToolBar" ) && 
+    if ( object == parent() && object && !object->inherits( "QToolBar" ) &&
 	 event->type() == QEvent::Resize ) {
 	QResizeEvent *e = (QResizeEvent *)event;
 	int w = e->size().width();
@@ -562,14 +562,18 @@ void QMenuBar::show()
 {
     setupAccelerators();
     if ( parentWidget() )
-	resize( parentWidget()->width(), height() );
+		resize( parentWidget()->width(), height() );
     calculateRects();
     QWidget::show();
+    if ( parent() && parent()->inherits( "QMainWindow" ) ) //### ugly workaround
+		( (QMainWindow*)parent() )->triggerLayout();
+
     raise();
 }
 
 /*!
-  Reimplements QWidget::hide() in order to deselect any selected item.
+  Reimplements QWidget::hide() in order to deselect any selected item and
+  calls setUpLayout() for the mainwindow.
 */
 
 void QMenuBar::hide()
@@ -577,8 +581,10 @@ void QMenuBar::hide()
     QWidget::hide();
     setAltMode( FALSE );
     hidePopups();
-}
 
+    if ( parent() && parent()->inherits( "QMainWindow" ) ) //### ugly workaround
+		( (QMainWindow*)parent() )->triggerLayout();
+}
 
 /*!
   \internal
@@ -855,8 +861,7 @@ void QMenuBar::drawContents( QPainter *p )
 */
 void QMenuBar::mousePressEvent( QMouseEvent *e )
 {
-    if ( e->button() != LeftButton &&
-	 e->button() != RightButton )
+    if ( e->button() != LeftButton )
 	return;
     mouseBtDn = TRUE;				// mouse button down
     int item = itemAtPos( e->pos() );
@@ -870,8 +875,7 @@ void QMenuBar::mousePressEvent( QMouseEvent *e )
 */
 void QMenuBar::mouseReleaseEvent( QMouseEvent *e )
 {
-    if ( e->button() != LeftButton &&
-	 e->button() != RightButton )
+    if ( e->button() != LeftButton )
 	return;
     mouseBtDn = FALSE;				// mouse button up
     int item = itemAtPos( e->pos() );
@@ -944,6 +948,8 @@ void QMenuBar::keyPressEvent( QKeyEvent *e )
 
     case Key_Up:
     case Key_Down:
+    case Key_Enter:
+    case Key_Return:
 	if ( style() == WindowsStyle )
 	    setActiveItem( actItem );
 	break;
@@ -1071,7 +1077,7 @@ void QMenuBar::setActiveItem( int i, bool show, bool activate_first_item )
     }
 
     hidePopups();
-    
+
     if ( actItem < 0 || !popupvisible || !mi  )
 	return;
 

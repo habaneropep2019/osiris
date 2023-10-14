@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qlistview.cpp   2.1.0   edited 2000-04-05 $
+** $Id: qt/src/widgets/qlistview.cpp   2.1.1   edited 2000-05-12 $
 **
 ** Implementation of QListView widget class
 **
@@ -619,6 +619,8 @@ void QListViewItem::takeItem( QListViewItem * item )
 		lv->d->dirtyItems->take( (void *)item );
 	    }
 	}
+
+	item->setSelected( FALSE );
 
 #if 0
 	// ##### do we really want that???
@@ -1284,7 +1286,7 @@ void QListViewItem::paintCell( QPainter * p, const QColorGroup & cg,
 	// try until we have a column info....
 	while ( !ci ) {
 	    ci = (QListViewPrivate::ItemColumnInfo*)columns;
-	    for ( int i = 0; i < column; ++i )
+	    for ( int i = 0; ci && (i < column); ++i )
 		ci = ci->next;
 
 	    if ( !ci ) {
@@ -1634,7 +1636,7 @@ void QListViewPrivate::Root::setup()
   \ingroup advanced
 
   It can display and control a hierarchy of multi-column items, and
-  provides the ability to add new items at run-time, let the user
+  provides the ability to add new items at any time, let the user
   select one or many items, sort the list in increasing or decreasing
   order by any column, and so on.
 
@@ -1767,6 +1769,7 @@ QListView::QListView( QWidget * parent, const char *name )
     d->pressedItem = 0;
     d->makeCurrentVisibleOnUpdate = TRUE;
     d->selectAnchor = 0;
+    d->select = TRUE;
 
     setMouseTracking( TRUE );
     viewport()->setMouseTracking( TRUE );
@@ -1800,12 +1803,10 @@ QListView::QListView( QWidget * parent, const char *name )
 }
 
 /*!
-  It's possible that there is drawn an arrow in the header of the
-  listview to indicate the sort order and column of the listview
-  contents (this means this arrow is then always drawn in the
-  correct column and points into the correct direction).
-  To enable this, specify TRUE \a show, to disable this feature
-  set \a show to FALSE.
+  If \a show is TRUE, draw an arrow in the header of the listview
+  to indicate the sort order of the listview contents. The arrow
+  will be drawn in the correct column and will point to the correct
+  direction. Set \a show to FALSE to disable this feature.
 
   \sa QHeader::setSortIndicator()
 */
@@ -1818,7 +1819,7 @@ void QListView::setShowSortIndicator( bool show )
 }
 
 /*!
-  Returns TRUE, of the sort order and column is indicated
+  Returns TRUE, if the sort order and column are indicated
   in the header, else FALSE.
 
   \sa QListView::setSortIndicator()
@@ -1829,8 +1830,10 @@ bool QListView::showSortIndicator() const
     return d->sortIndicator;
 }
 
-/*!  Destroys the listview, deleting all items in it,
-  and frees all allocated resources.  */
+/*!
+  Destructs the listview, deleting all items in it, and frees up all
+  allocated resources.
+*/
 
 QListView::~QListView()
 {
@@ -1939,7 +1942,7 @@ void QListView::drawContentsOffset( QPainter * p, int ox, int oy,
 	    x = fx;
 	    c = fc;
 	    // draw to last interesting column
-	    while( c < lc ) {
+	    while( c < lc && d->drawables ) {
 		int i = d->h->mapToLogical( c );
 		cs = d->h->cellSize( c );
 		r.setRect( x - ox, current->y - oy, cs, ih );
@@ -2947,7 +2950,7 @@ void QListViewItem::widthChanged( int c ) const
 
 /*! \fn void QListView::clicked( QListViewItem *item )
 
-  This signal is emitted whenever the user clicks (moues pressed + mouse released)
+  This signal is emitted whenever the user clicks (mouse pressed + mouse released)
   into the listview.
   \a item is the pointer to the clicked listview item or NULL, if the user didn't click on an item.
 
@@ -2958,7 +2961,7 @@ void QListViewItem::widthChanged( int c ) const
 /*!
   \fn void QListView::mouseButtonClicked(int button, QListViewItem * item, const QPoint & pos, int c)
 
-  This signal is emitted whenever the user clicks (moues pressed + mouse released)
+  This signal is emitted whenever the user clicks (mouse pressed + mouse released)
   into the listview. \a button is the mouse button which the user pressed,
   \a item is the pointer to the clicked listview item or NULL, if the user didn't click on an item, and
   \a c the listview column into which the user pressed (this argument is only valid, if \a item
@@ -2983,7 +2986,7 @@ void QListViewItem::widthChanged( int c ) const
 
 /*! \fn void QListView::clicked( QListViewItem *item, const QPoint &pnt, int c )
 
-  This signal is emitted whenever the user clicks (moues pressed + mouse released)
+  This signal is emitted whenever the user clicks (mouse pressed + mouse released)
   into the listview.
   \a item is the pointer to the clicked listview item or NULL, if the user didn't click on an item.
   \a pnt is the position where the user
@@ -3131,8 +3134,11 @@ void QListView::contentsMousePressEvent( QMouseEvent * e )
     }
     i->activate();
     activatedByClick = FALSE;
-
-    setCurrentItem( i );
+    
+    if ( i != d->focusItem )
+	setCurrentItem( i );
+    else
+	repaintItem( i );
 
     d->pressedSelected = i && i->isSelected();
 

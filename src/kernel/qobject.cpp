@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qobject.cpp   2.1.0   edited 2000-04-06 $
+** $Id: qt/src/kernel/qobject.cpp   2.1.1   edited 2000-05-23 $
 **
 ** Implementation of QObject class
 **
@@ -191,7 +191,7 @@ static QCString qt_rmWS( const char *src )
 }
 
 
-// Event functions, implemented in qapp_xxx.cpp
+// Event functions, implemented in qapplication_xxx.cpp
 
 int   qStartTimer( int interval, QObject *obj );
 bool  qKillTimer( int id );

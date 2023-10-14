@@ -21,7 +21,7 @@ body { background: white; color: black; }
 
 <h1 align=center>QIconView Class Reference</h1><br clear="all">
 <p>
-The QIconView class
+The QIconView class provides an area with movable labelled icons.
 <a href="#details">More...</a>
 <p>
 <code>#include &lt;<a href="qiconview-h.html">qiconview.h</a>&gt;</code>
@@ -155,9 +155,28 @@ Inherits <a href="qscrollview.html">QScrollView</a>.
 <tr><td>uint<td>count<td>count<td>&nbsp;<td>&nbsp;
 </table>
 <hr><h2><a name="details"></a>Detailed Description</h2>
-The QIconView class
+The QIconView class provides an area with movable labelled icons.
 <p>
-The QIconView provides a widget which can contain lots of iconview
+It can display and control a grid or other 2-d layout of items, and
+provides the ability to add or remove new items at any time, lets
+the user select one or may items, rearrange the items, provides drag
+and drop of items, and so on.
+<p>Each item (a <a href="qiconviewitem.html">QIconViewItem</a>) contains a text and a pixmap (the icon itself).
+<p>The simplest usage of QIconView is to create the object, create some
+QIconViewItems with the view as parent, set the view's geometry, and
+show it.
+<p>When an item is inserted, QIconView allocates a spot for it. The
+default <a href="#Arrangement">Arrangement</a> is <code>LeftToRight</code> - QIconView fills up the
+leftmost column first, then goes rightwards. You can change that
+using <a href="#6d0e1b">setArrangement</a>(), or insert items in a specified position by
+calling the appropriate constructors or QIconViewItem::insertItem(),
+or sort while the view is on-screen using <a href="#bb74b6">setSorting</a>() and/or
+<a href="#e9e83a">sort</a>().
+<p>Each (<a href="qiconviewitem.html#1f9f1b">selectable</a>) item
+can be selected, and the view provides various <a href="#SelectionMode">SelectionMode</a>
+settings. The default is <code>Single</code> - when one item is selected, the
+previously selected item is unselected.
+<p>The QIconView provides a widget which can contain lots of iconview
 items which can be selected, dragged and so on.
 <p>Items can be inserted in a grid and can flow from top to bottom
 (TopToBottom) or from left to right (LeftToRight). The text can be
@@ -195,7 +214,7 @@ several signals which are emitted by the QIconView.
 moved inside the iconview itself using DnD. So the QIconView
 provides some methods for extended DnD too. To use DnD correctly in
 the iconview, please read following instructions:
-<p>There are two different ways to do that, depending what you want. 
+<p>There are two different ways to do that, depending what you want.
 The first case is the simple one, in which case just the dragobject
 you created is dragged around. If you want, that drag shapes (the
 rectangles of the dragged items with exact positions) are drawn, you
@@ -213,7 +232,7 @@ more and complex things:
 <p>The first part is starting drags: If you want to use extended DnD in
 the QIconView, you should use <a href="qicondrag.html">QIconDrag</a> (or a derived class from
 that) as dragobject and in <a href="#fb21b5">dragObject</a>() create such an object and
-return it. Before returning it, fill it there with QIconDragItems. 
+return it. Before returning it, fill it there with QIconDragItems.
 Normally such a drag should offer data of each selected item. So in
 dragObject() you should iterate over all items, create for each
 selected item a <a href="qicondragitem.html">QIconDragItem</a> and append this with
@@ -642,7 +661,7 @@ and flickerfree.
 <h3 class="fn">void <a name="e9e83a"></a>QIconView::sort ( bool ascending = TRUE ) <code>[virtual]</code></h3>
 <p>Sorts the items of the listview and re-arranges them afterwards. If
 <em>ascending</em> is TRUE, the items are sorted in increasing order, else
-in decreasing order. For sorting <a href="qiconviewitem.html#26ab3f">QIconViewItem::compare</a>() is used. 
+in decreasing order. For sorting <a href="qiconviewitem.html#26ab3f">QIconViewItem::compare</a>() is used.
 The default sort direction is set to the sort dicrection you set
 here.
 <p>See also:  <a href="qiconviewitem.html#3dd534">QIconViewItem::key</a>(), <a href="qiconviewitem.html#5ed08f">QIconViewItem::setKey</a>(), <a href="qiconviewitem.html#26ab3f">QIconViewItem::compare</a>(), <a href="#bb74b6">QIconView::setSorting</a>() and <a href="#2279f0">QIconView::sortDirection</a>().
@@ -679,7 +698,7 @@ if it gets displayed truncated.
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.1.0"><nobr>
+<input type=hidden name="version" value="2.1.1"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -687,5 +706,5 @@ copyright &copy; 1995-2000
 <a href="http://www.trolltech.com">Troll Tech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.0</div>
+<td align="right"><div align="right">Qt version 2.1.1</div>
 </table></div></address></body></html>

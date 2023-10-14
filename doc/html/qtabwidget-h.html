@@ -28,7 +28,7 @@ remains with Troll Tech.
 <hr>
 <pre>
 /****************************************************************************
-** &#36;Id&#58; qt/src/widgets/qtabwidget.h   2.1.0   edited 2000-03-24 $
+** &#36;Id&#58; qt/src/widgets/qtabwidget.h   2.1.1   edited 2000-04-26 $
 **
 ** Definition of QTabWidget class
 **
@@ -94,7 +94,7 @@ public:
 
     void showPage( QWidget * );
     void removePage( QWidget * );
-    QString tabLabel( QWidget * );
+    QString tabLabel( QWidget * ); //### const in 3.0
 
     QWidget * currentPage() const;
 
@@ -108,7 +108,8 @@ public:
     int margin() const;
     void setMargin( int );
 
-
+    QSizePolicy sizePolicy() const;
+    
 protected:
     void showEvent( QShowEvent * );
     void resizeEvent( QResizeEvent * );
@@ -150,5 +151,5 @@ private:        // Disabled copy constructor and operator=
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.0</div>
+<td align="right"><div align="right">Qt version 2.1.1</div>
 </table></div></address></body></html>

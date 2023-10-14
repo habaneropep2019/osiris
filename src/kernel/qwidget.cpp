@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qwidget.cpp   2.1.0   edited 2000-04-06 $
+** $Id: qt/src/kernel/qwidget.cpp   2.1.1   edited 2000-05-21 $
 **
 ** Implementation of QWidget class
 **
@@ -537,7 +537,7 @@ windows.<ul>
 WStyle_* flags should be used to build the window.
 
 <li> \c WStyle_NormalBorder - gives the window a normal border. Cannot
-be combined with \c WStyle_DialogBorder or \c WStyle_NoBorder. 
+be combined with \c WStyle_DialogBorder or \c WStyle_NoBorder.
 
 <li> \c WStyle_DialogBorder - gives the window a thin dialog border.
 Cannot be combined with \c WStyle_NormalBorder or \c WStyle_NoBorder.
@@ -574,7 +574,7 @@ setActiveWindow() manually )
 
 <li> \c WStyle_MinMax - is equal to \c WStyle_Minimize|WStyle_Maximize
 
-<li> \c WStyle_ContextHelp - adds a context help button.
+<li> \c WStyle_ContextHelp - adds a context help button to dialogs.
 
 <li> \c WStyle_Tool - makes the window a tool window.  A tool window
 is a small window that lives for a short time and it is typically used
@@ -1642,9 +1642,17 @@ QPoint QWidget::mapFromParent( const QPoint &pos ) const
 
 
 /*!
-  Returns the top-level widget for this widget, i.e. the grandparent
-  widget that has a window-system frame (or at least may have one) and
-  has no parent widget inside this application.
+
+  Returns the top-level widget for this widget, i.e. the next ancestor
+  widget that has a window-system frame (or at least may have one).
+
+  If the widget is a top-level, the widget itself is returned.
+
+  Typical usage is changing the window caption:
+
+  \code
+    aWidget->topLevelWidget()->setCaption( "New Caption" );
+  \endcode
 
   \sa isTopLevel()
 */
@@ -1785,11 +1793,11 @@ void QWidget::setBackgroundFromMode()
 	    break;
 	}
     }
-    QPixmap * p = colorGroup().brush( r ).pixmap();
+    QPixmap * p = palette().active().brush( r ).pixmap();
     if ( p )
 	setBackgroundPixmapDirect( *p );
     else
-	setBackgroundColorDirect( colorGroup().color( r ) );
+	setBackgroundColorDirect( palette().active().color( r ) );
 }
 
 /*!
@@ -1834,7 +1842,7 @@ QWidget::BackgroundMode QWidget::backgroundMode() const
   this mode can be both fast and flicker-free.
   <li> \c FixedColor - the widget is cleared to a fixed color,
   normally different from all the ones in the palette().  Set using
-  BackgroundColor().
+  setBackgroundColor().
   <li> \c FixedPixmap - the widget is cleared to a fixed pixmap,
   normally different from all the ones in the palette().  Set using
   setBackgroundPixmap().
@@ -2029,7 +2037,7 @@ const QColorGroup &QWidget::colorGroup() const
 /*!
   Sets the widget palette to \e palette and informs all children about the change.
 
-  \sa QApplication::setPalette(), palette(), paletteChange(), unsetPalette(),
+  \sa QApplication::setPalette(), palette(), paletteChange(), unsetPalette()
   colorGroup()
 */
 
@@ -3161,7 +3169,7 @@ void QWidget::show()
 	raise();
     }
 
-    if ( testWFlags(WType_TopLevel) && !isPopup() ) {
+    if ( testWFlags(WType_TopLevel) && !isPopup() && qstrcmp(name(),"toolTipTip")!=0 ) {
 	while ( QApplication::activePopupWidget() )
 	    QApplication::activePopupWidget()->hide();
     }
@@ -4685,7 +4693,7 @@ void  QWidget::reparent( QWidget *parent, const QPoint & p,
   work. The borderless window is requested using MOTIF hints, which
   are at least partially supported by virtually all modern window
   managers.
-  
+
   An alternative would be to bypass the window manager at all and to
   create a window with the WX11BypassWM flag. This has other severe
   problems, though, like totally broken keyboard focus and very
@@ -4718,6 +4726,7 @@ void QWidget::showFullScreen()
     extern void qt_wait_for_window_manager( WId win ); // defined in qwidget_x11.cpp
     qt_wait_for_window_manager( winId() );
 #endif
-    
+
     setActiveWindow();
 }
+

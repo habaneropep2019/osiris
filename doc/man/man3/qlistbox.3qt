@@ -1,4 +1,4 @@
-.TH QListBox 3qt "12 April 2000" "Troll Tech AS" \" -*- nroff -*-
+.TH QListBox 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -425,11 +425,11 @@ Deselects all items, if possible.
 .PP
 Note that a single-selection listbox will automatically select an item if it has keyboard focus.
 .SH "void QListBox::clicked ( QListBoxItem * item ) \fC[signal]\fR"
-This signal is emitted whenever the user clicks (moues pressed + mouse released) into the listbox. \fIitem\fR is the pointer to the clicked listbox item or NULL, if the user didn't click on an item.
+This signal is emitted whenever the user clicks (mouse pressed + mouse released) into the listbox. \fIitem\fR is the pointer to the clicked listbox item or NULL, if the user didn't click on an item.
 .PP
 Note that you may not delete any QListBoxItem objects in slots connected to this signal.
 .SH "void QListBox::clicked ( QListBoxItem * item, const QPoint & pnt ) \fC[signal]\fR"
-This signal is emitted whenever the user clicks (moues pressed + mouse released) into the listbox. \fIitem\fR is the pointer to the clicked listbox item or NULL, if the user didn't click on an item. \fIpnt\fR is the position where the user has clicked.
+This signal is emitted whenever the user clicks (mouse pressed + mouse released) into the listbox. \fIitem\fR is the pointer to the clicked listbox item or NULL, if the user didn't click on an item. \fIpnt\fR is the position where the user has clicked.
 .PP
 Note that you may not delete any QListBoxItem objects in slots connected to this signal.
 .SH "QListBox::LayoutMode QListBox::columnMode() const"
@@ -593,7 +593,7 @@ Reimplemented for internal reasons; the API is not affected.
 .PP
 Reimplemented from QWidget.
 .SH "void QListBox::mouseButtonClicked ( int button, QListBoxItem * item, const QPoint & pos ) \fC[signal]\fR"
-This signal is emitted whenever the user clicks (moues pressed + mouse released) into the listbox. \fIbutton\fR is the mouse button, which the user pressed. \fIitem\fR is the pointer to the clicked listbox item or NULL, if the user didn't click on an item. \fIpos\fR is the position where the user has clicked.
+This signal is emitted whenever the user clicks (mouse pressed + mouse released) into the listbox. \fIbutton\fR is the mouse button, which the user pressed. \fIitem\fR is the pointer to the clicked listbox item or NULL, if the user didn't click on an item. \fIpos\fR is the position where the user has clicked.
 .PP
 Note that you may not delete any QListBoxItem objects in slots connected to this signal.
 .SH "void QListBox::mouseButtonPressed ( int button, QListBoxItem * item, const QPoint & pos ) \fC[signal]\fR"

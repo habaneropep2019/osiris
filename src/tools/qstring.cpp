@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qstring.cpp   2.1.0   edited 2000-03-27 $
+** $Id: qt/src/tools/qstring.cpp   2.1.1   edited 2000-05-22 $
 **
 ** Implementation of the QString class and related Unicode functions
 **
@@ -10968,7 +10968,7 @@ Constructs a QChar for the character with Unicode code point \a rc.
 
 /*!
   Returns whether the character is a printable character.  This is
-  and character of category Cc or Cn.  Note that this gives no indication
+  any character not of category Cc or Cn.  Note that this gives no indication
   of whether the character is available in some font.
 */
 bool QChar::isPrint() const
@@ -12257,7 +12257,7 @@ QString &QString::operator=( const char *str )
   Example:
   \code
     QString a;		// a.unicode() == 0,  a.length() == 0
-    QString b == "";	// b.unicode() == "", b.length() == 0
+    QString b = "";	// b.unicode() == "", b.length() == 0
     a.isNull();		// TRUE, because a.unicode() == 0
     a.isEmpty();	// TRUE, because a.length() == 0
     b.isNull();		// FALSE, because b.unicode() != 0
@@ -12289,9 +12289,8 @@ QString &QString::operator=( const char *str )
 */
 
 /*!
-  Truncates the string at position \a newLen. If newLen is less than the
-  current length, this is equivalent to setLength( newLen ). Otherwise,
-  nothing happens.
+  Truncates the string at position \a newLen if newLen is less than the
+  current length . Otherwise, nothing happens.
 
   Example:
   \code
@@ -12302,7 +12301,6 @@ QString &QString::operator=( const char *str )
   In Qt 1.x, it was possible to "truncate" a string to a longer
   length.  This is no longer possible.
 
-  \sa setLength()
 */
 
 void QString::truncate( uint newLen )
@@ -12311,7 +12309,8 @@ void QString::truncate( uint newLen )
 	setLength( newLen );
 }
 
-/*!  Ensures that at least \a newLen characters are allocated, and
+/*### Make this public in 3.0
+  Ensures that at least \a newLen characters are allocated, and
   sets the length to \a newLen.  This function always detaches the
   string from other references to the same data.  Any new space
   allocated is \e not defined.
@@ -12632,7 +12631,7 @@ QString &QString::sprintf( const char* cformat, ... )
 	    int* n = va_arg(ap, int*);
 	    *n = result.length();
 	} else {
-	    char in[64], out[128];
+	    char in[64], out[330];
 	    strncpy(in,f.latin1(),63);
 	    char fch = format[pos+len].latin1();
 	    in[f.length()] = fch;
@@ -14683,7 +14682,7 @@ bool operator>=( const char *s1, const QString &s2 )
   \relates QString
   Writes a string to the stream.
 
-  Output format: isNull() ? [0xffffffff] : [length (Q_UINT32) data...]
+  \sa \link datastreamformat.html Format of the QDataStream operators \endlink
 */
 
 QDataStream &operator<<( QDataStream &s, const QString &str )
@@ -14729,6 +14728,8 @@ QDataStream &operator<<( QDataStream &s, const QString &str )
 /*!
   \relates QString
   Reads a string from the stream.
+
+  \sa \link datastreamformat.html Format of the QDataStream operators \endlink
 */
 
 QDataStream &operator>>( QDataStream &s, QString &str )

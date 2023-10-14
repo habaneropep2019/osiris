@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qstyle.cpp   2.1.0   edited 2000-03-24 $
+** $Id: qt/src/kernel/qstyle.cpp   2.1.1   edited 2000-05-18 $
 **
 ** Implementation of QStyle class
 **
@@ -192,7 +192,7 @@ void QStyle::unPolish( QWidget*)
 /*!
   Late initialization of the QApplication object.
 
-  \sa unPolish
+  \sa unPolish(QApplication*)
  */
 void QStyle::polish( QApplication*)
 {
@@ -201,7 +201,7 @@ void QStyle::polish( QApplication*)
 /*!
   Redo the application polish
 
-  \sa polish
+  \sa polish(QApplication*)
  */
 void QStyle::unPolish( QApplication*)
 {
@@ -212,7 +212,7 @@ void QStyle::unPolish( QApplication*)
   function it has the chance to change the palette according to these
   requirements.
 
-  \sa unPolish, QPalette, QApplication::setPalette()
+  \sa QPalette, QApplication::setPalette()
  */
 void QStyle::polish( QPalette&)
 {
@@ -353,8 +353,15 @@ QRect QStyle::buttonRect( int x, int y, int w, int h){
 
   \sa drawButtonMask()
 */
-void QStyle::drawButtonMask( QPainter *, int , int , int , int )
+void QStyle::drawButtonMask( QPainter * p, int x, int y, int w, int h )
 {
+    QPen oldPen = p->pen();
+    QBrush oldBrush = p->brush();
+
+    p->fillRect( x, y, w, h, QBrush(color1) );
+
+    p->setBrush( oldBrush );
+    p->setPen( oldPen );
 }
 
 /*!
@@ -764,13 +771,14 @@ QSize QStyle::scrollBarExtent()
 }
 
 /*!
-  Returns the extend (height or width depending on the orientation) which a toolbar
+  Returns the extent (height or width depending on the orientation) which a toolbar
   handle has.
 
   WARNING: Because of binary compatibility this method is NOT virtual, so reimplementing
   it in Qt 2.x doesn't make sense. In the next major release this method will become virtual!
-*/
-
+  
+  Note: we know it's a spelling error, fixed in 2.2. The correct name of the function is toolBarHandleExtent()
+ */
 int QStyle::toolBarHandleExtend() const
 {
     if ( guiStyle() == Qt::MotifStyle )

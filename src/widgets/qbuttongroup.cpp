@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qbuttongroup.cpp   2.1.0   edited 2000-03-24 $
+** $Id: qt/src/widgets/qbuttongroup.cpp   2.1.1   edited 2000-05-24 $
 **
 ** Implementation of QButtonGroup class
 **
@@ -151,7 +151,7 @@ void QButtonGroup::init()
     CHECK_PTR( buttons );
     buttons->setAutoDelete( TRUE );
     excl_grp = FALSE;
-    radio_excl = FALSE;
+    radio_excl = TRUE;
 }
 
 /*! \reimp */
@@ -246,8 +246,6 @@ int QButtonGroup::insert( QButton *button, int id )
     connect( button, SIGNAL(clicked()) , SLOT(buttonClicked()) );
     connect( button, SIGNAL(toggled(bool)) , SLOT(buttonToggled(bool)) );
 
-    if ( button->inherits( "QRadioButton" ) )
-	setRadioButtonExclusive( TRUE );
     if ( button->isToggleButton() && !button->isOn() &&
 	 selected() && (selected()->focusPolicy() & TabFocus) != 0 )
 	button->setFocusPolicy( (FocusPolicy)(button->focusPolicy() &
@@ -458,7 +456,7 @@ void QButtonGroup::setButton( int id )
   \fn bool QButtonGroup::isRadioButtonExclusive () const
 
   Returns whether this button group will treat radio buttons as
-  mutually exclusive.
+  mutually exclusive. The default is TRUE.
 
   \sa setRadioButtonExclusive()
 */
@@ -466,9 +464,7 @@ void QButtonGroup::setButton( int id )
 /*!
   If \a on is TRUE, this button group will treat radio buttons as
   mutually exclusive, and other buttons according to
-  isExclusive(). This function is called automatically whenever a
-  QRadioButton is inserted, so you should normally never have to call
-  it.
+  isExclusive(). 
 */
 
 void QButtonGroup::setRadioButtonExclusive( bool on)
@@ -570,6 +566,8 @@ void QButtonGroup::moveFocus( int key )
 
 /*!  Returns a pointer to the selected radio button in this group, if
   one exists, or 0 if there is no selected radio button in this group.
+
+  <b>Warning: </b>In future versions of Qt, the selected toggle button will be returned.
 */
 
 QButton * QButtonGroup::selected()

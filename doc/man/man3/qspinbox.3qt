@@ -1,4 +1,4 @@
-.TH QSpinBox 3qt "12 April 2000" "Troll Tech AS" \" -*- nroff -*-
+.TH QSpinBox 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -160,7 +160,7 @@ Most spin boxes are directional, but QSpinBox can also operate as a circular spi
 .PP
 The displayed value can be prepended and/or appended with an arbitrary string indicating for example the unit of measurement. See setPrefix() and setSuffix().
 .PP
-Normally, the spin box displays up and down arrows in the buttons. You can use setButtonSymbols() to change the display to show + and - symbols, if this is clearer for your intended purpose. In either case, the + and - keys and up and down arrow keys always work.
+Normally, the spin box displays up and down arrows in the buttons. You can use setButtonSymbols() to change the display to show + and - symbols, if this is clearer for your intended purpose. In either case, the up and down arrow keys always work.
 .PP
 It is often desirable to give the user a special, often default, choice in addition to the range of numeric values. See setSpecialValueText() for how to do this with QSpinBox.
 .PP
@@ -190,7 +190,7 @@ QSpinBox can easily be subclassed to allow the user to input other things than a
 .br
     {
 .br
-      return int(currentValueText().toFloat()*10);
+      return int(text().toFloat()*10);
 .br
     }
 .br

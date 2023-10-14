@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qtoolbutton.cpp   2.1.0   edited 2000-04-01 $
+** $Id: qt/src/widgets/qtoolbutton.cpp   2.1.1   edited 2000-04-12 $
 **
 ** Implementation of QToolButton class
 **
@@ -67,8 +67,8 @@ public:
   a tool button usually doesn't show a text label, but an icon.  Its
   classic usage is to select tools, for example the "pen"-tool in a
   drawing program. This would be implemented with a QToolButton as
-  toggle button (see setToggleButton() ). 
-  
+  toggle button (see setToggleButton() ).
+
   QToolButton supports auto-raising. In auto-raise mode, the button
   draws a 3D frame only when the mouse points at it.  The feature is
   automatically turned on when a button is used inside a QToolBar.
@@ -99,7 +99,7 @@ public:
 
 
 /*!
-  Constructs an empty tool button. 
+  Constructs an empty tool button.
 */
 
 QToolButton::QToolButton( QWidget * parent, const char *name )
@@ -594,14 +594,18 @@ void QToolButton::setTextLabel( const QString &newLabel )
 
 void QToolButton::setTextLabel( const QString &newLabel , bool tipToo )
 {
-    tl = newLabel;
-    if ( !tipToo )
-	return;
-
-    if ( usesTextLabel() )
-	QToolTip::remove( this );
-    else
+    if ( tipToo )
 	QToolTip::add( this, newLabel );
+
+    if ( tl == newLabel )
+	return;
+    
+    tl = newLabel;
+    if ( usesTextLabel() && isVisible() ) {
+	update();
+	updateGeometry();
+    }
+    
 }
 
 /*!

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qtabwidget.cpp   2.1.0   edited 2000-04-03 $
+** $Id: qt/src/widgets/qtabwidget.cpp   2.1.1   edited 2000-04-26 $
 **
 ** Implementation of QTabWidget class
 **
@@ -631,3 +631,11 @@ bool QTabWidget::eventFilter( QObject *o, QEvent * e)
     return FALSE;
 }
 
+
+/*!\reimp
+ */
+
+QSizePolicy QTabWidget::sizePolicy() const
+{
+    return QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding );
+}

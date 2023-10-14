@@ -1,4 +1,4 @@
-.TH QRect 3qt "12 April 2000" "Troll Tech AS" \" -*- nroff -*-
+.TH QRect 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -564,10 +564,12 @@ xform/xform.cpp desktop/desktop.cpp movies/main.cpp
 Returns TRUE if \fIr1\fR and \fIr2\fR are equal, or FALSE if they are different.
 .SH "QDataStream & operator>> (QDataStream & s, QRect & r)"
 Reads a QRect from the stream and returns a reference to the stream.
+.PP
+See also: Format of the QDataStream operators
 .SH "QDataStream & operator<< (QDataStream & s, const QRect & r)"
 Writes a QRect to the stream and returns a reference to the stream.
 .PP
-Serialization format: [left (Q_INT32), top (Q_INT32), right (Q_INT32), bottom (Q_INT32)].
+See also: Format of the QDataStream operators
 .SH "bool operator!= (const QRect & r1, const QRect & r2)"
 Returns TRUE if \fIr1\fR and \fIr2\fR are different, or FALSE if they are equal.
 .SH "SEE ALSO"

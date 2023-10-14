@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qstatusbar.h   2.1.0   edited 2000-03-24 $
+** $Id: qt/src/widgets/qstatusbar.h   2.1.1   edited 2000-05-05 $
 **
 ** Definition of QStatusBar class
 **
@@ -54,10 +54,11 @@ public slots:
 
 protected:
     void paintEvent( QPaintEvent * );
+    void resizeEvent( QResizeEvent * );
 
     void reformat();
     void hideOrShow();
-
+    bool event( QEvent *);
 private:
     QStatusBarPrivate * d;
 private:	// Disabled copy constructor and operator=

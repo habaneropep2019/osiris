@@ -1,4 +1,4 @@
-.TH QMessageBox 3qt "12 April 2000" "Troll Tech AS" \" -*- nroff -*-
+.TH QMessageBox 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -31,7 +31,7 @@ Inherits QDialog.
 .BI "\fB~QMessageBox\fR ()"
 .br
 .ti -1c
-.BI "enum { Ok = 1, Cancel = 2, Yes = 3, No = 4, Abort = 5, Retry = 6, Ignore = 7, ButtonMask = 0x07, Default = 0x100, Escape = 0x200, FlagMask = 0x300 }"
+.BI "enum { NoButton = 0, Ok = 1, Cancel = 2, Yes = 3, No = 4, Abort = 5, Retry = 6, Ignore = 7, ButtonMask = 0x07, Default = 0x100, Escape = 0x200, FlagMask = 0x300 }"
 .br
 .ti -1c
 .BI "QString \fBtext\fR () const"
@@ -381,6 +381,8 @@ The \fIicon\fR must be one of:
 .PP
 Each button can have one of the following values:
 .TP
+\fCQMessageBox::NoButton\fR
+.TP
 \fCQMessageBox::Ok\fR
 .TP
 \fCQMessageBox::Cancel\fR
@@ -394,6 +396,8 @@ Each button can have one of the following values:
 \fCQMessageBox::Retry\fR
 .TP
 \fCQMessageBox::Ignore\fR
+.PP
+Use QMessageBox::NoButton for the later parameters to have less than three buttons in your messagebox.
 .PP
 One of the buttons can be combined with the \fCQMessageBox::Default\fR flag to make a default button.
 .PP

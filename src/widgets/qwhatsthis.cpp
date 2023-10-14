@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qwhatsthis.cpp   2.1.0   edited 2000-03-24 $
+** $Id: qt/src/widgets/qwhatsthis.cpp   2.1.1   edited 2000-05-18 $
 **
 ** Implementation of QWhatsThis class
 **
@@ -369,6 +369,8 @@ bool QWhatsThisPrivate::eventFilter( QObject * o, QEvent * e )
 		      kev->key() != Key_Meta )  // not a modifier key
 		leaveWhatsThisMode();
 
+	} else if ( e->type() == QEvent::MouseButtonDblClick ) {
+	    return TRUE;
 	}
 	break;
     case Inactive:

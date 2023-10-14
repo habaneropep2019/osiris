@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/extensions/opengl/examples/overlay_x11/gearwidget.h   2.1.0   edited 2000-01-31 $
+** $Id: qt/extensions/opengl/examples/overlay_x11/gearwidget.h   2.1.1   edited 2000-01-31 $
 **
 ** Definition of a simple Qt OpenGL widget
 **

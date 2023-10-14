@@ -1,4 +1,4 @@
-.TH QFontMetrics 3qt "12 April 2000" "Troll Tech AS" \" -*- nroff -*-
+.TH QFontMetrics 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -172,7 +172,7 @@ Due to the different actual character heights, the height of the bounding rectan
 .PP
 See also: width() and QPainter::boundingRect().
 .SH "QRect QFontMetrics::boundingRect ( int x, int y, int w, int h, int flgs, const QString & str, int len=-1, int tabstops=0, int * tabarray=0, char ** intern=0 ) const"
-Returns the bounding rectangle of the first \fIlen\fR characters of \fIstr,\fR which is the set of pixels the text would cover if drawn at (0,0).
+Returns the bounding rectangle of the first \fIlen\fR characters of \fIstr,\fR which is the set of pixels the text would cover if drawn at (0,0). The drawing, and hence the bounding rectangle, is constrained to the rectangle \fI(x,y,w,h).\fR
 .PP
 If \fIlen\fR is negative (default value), the whole string is used.
 .PP

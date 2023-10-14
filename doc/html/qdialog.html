@@ -58,13 +58,13 @@ Inherits <a href="qwidget.html">QWidget</a>.
 <hr><h2><a name="details"></a>Detailed Description</h2>
 The QDialog class is the base class of dialog windows.
 <p>
-A dialog window is a widget used to communicate with the user. It offers
-mechanisms such as default buttons.
-<p>The dialog window can either be modeless or modal. A modeless dialog is
-a normal window, while a modal window must be finished before the user
-can continue with other parts of the program.  The third constructor
-argument must be set to TRUE to create a modal dialog, otherwise it will
-create a modeless dialog.
+A dialog window is a widget used to communicate with the user. It
+offers mechanisms such as modality and default buttons.
+<p>The dialog window can either be modeless or modal. A modeless dialog
+is a normal secondary window, while a modal window must be finished
+before the user can continue with other parts of the program. The
+third constructor argument must be set to TRUE to create a modal
+dialog, otherwise it will create a modeless dialog.
 <p>Example (your own modal dialog):
 <pre>    class Modal : public QDialog {
         Q_OBJECT
@@ -84,9 +84,11 @@ create a modeless dialog.
         <a href="qobject.html#c2d209">connect</a>( cancel, SIGNAL(clicked()), SLOT(<a href="#5185f6">reject</a>()) );
     }
 </pre>
-<p>Note that the parent widget has an additional meaning for modal
-dialogs.  A modal dialog is placed on top of the parent widget. The
-dialog is centered on the screen if the parent widget is zero.
+<p>Note that the parent widget has an additional meaning for dialogs.
+A dialog is placed on top of the parent widget and associated with
+it (i.e. it stays on top of its parent and shares certain resources,
+for example a common taskbar entry). If the parent widget is zero,
+the dialog is centered on the screen.
 <p>You would normally call <a href="#633670">exec</a>() to start a modal dialog. This enters
 a local event loop, which is terminated when the modal dialog calls
 <a href="#c2ca17">done</a>() (or <a href="#6b808e">accept</a>() or <a href="#5185f6">reject</a>()).
@@ -96,9 +98,6 @@ a local event loop, which is terminated when the modal dialog calls
        // ok was pressed, then fetch the interesting dialog data
     }
 </pre>
-<p>Modeless dialogs behave just like ordinary toplevel widgets. The only difference
-is that they have the default button mechanism.
-<p>See also:  <a href="qtabdialog.html">QTabDialog</a>, <a href="qwidget.html">QWidget</a>, <a href="qsemimodal.html">QSemiModal</a> and <a href="guibooks.html#fowler">GUI Design Handbook: Dialogs, Standard.</a>
 
 <hr><h2>Member Function Documentation</h2>
 <h3 class="fn"><a name="11408c"></a>QDialog::QDialog ( <a href="qwidget.html">QWidget</a> * parent=0, const char * name=0, bool modal=FALSE, WFlags f=0 )</h3>
@@ -194,7 +193,7 @@ calling <a href="#c2ca17">done</a>().
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.1.0"><nobr>
+<input type=hidden name="version" value="2.1.1"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -202,5 +201,5 @@ copyright &copy; 1995-2000
 <a href="http://www.trolltech.com">Troll Tech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.0</div>
+<td align="right"><div align="right">Qt version 2.1.1</div>
 </table></div></address></body></html>

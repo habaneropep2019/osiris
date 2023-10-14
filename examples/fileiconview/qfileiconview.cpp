@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/fileiconview/qfileiconview.cpp   2.1.0   edited 2000-03-11 $
+** $Id: qt/examples/fileiconview/qfileiconview.cpp   2.1.1   edited 2000-04-15 $
 **
 ** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
@@ -421,7 +421,7 @@ void QtFileIconViewItem::dropped( QDropEvent *e, const QValueList<QIconDragItem>
 	str = "Copy\n\n";
     else
 	str = "Move\n\n";
-    for ( uint i = 0; i < lst.count(); ++i ) 
+    for ( uint i = 0; i < lst.count(); ++i )
 	str += QString( "   %1\n" ).arg( lst.at( i ) );
     str += QString( "\n"
 		    "To\n\n"
@@ -503,6 +503,7 @@ QtFileIconView::QtFileIconView( const QString &dir, QWidget *parent, const char 
 
     setAutoArrange( TRUE );
     setSorting( TRUE );
+    openItem = 0;
 }
 
 void QtFileIconView::openFolder()
@@ -683,7 +684,8 @@ void QtFileIconView::keyPressEvent( QKeyEvent *e )
 
 void QtFileIconView::slotDropped( QDropEvent *e, const QValueList<QIconDragItem> & )
 {
-    openItem->timer.stop();
+    if ( openItem )
+	openItem->timer.stop();
     if ( !QUriDrag::canDecode( e ) ) {
 	e->ignore();
 	return;
@@ -707,6 +709,7 @@ void QtFileIconView::slotDropped( QDropEvent *e, const QValueList<QIconDragItem>
     if ( e->action() == QDropEvent::Move )
 	QMessageBox::information( this, "Remove" , str, "Not Implemented" );
     e->acceptAction();
+    openItem = 0;
 }
 
 void QtFileIconView::viewLarge()

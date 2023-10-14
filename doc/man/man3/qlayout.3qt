@@ -1,4 +1,4 @@
-.TH QLayout 3qt "12 April 2000" "Troll Tech AS" \" -*- nroff -*-
+.TH QLayout 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -177,7 +177,7 @@ Constructs a new child QLayout, If \fIspace\fR is -1, this QLayout inherits its 
 .PP
 This layout has to be inserted into another layout before geometry management will work.
 .SH "QLayout::~QLayout ()"
-Destroys the layout, deleting all child layouts. Geometry management stops when a toplevel layout is deleted.
+Destructs the layout, deleting all child layouts. Geometry management stops when a toplevel layout is deleted.
 .SH "bool QLayout::activate ()"
 Redoes the layout for mainWidget(). You should generally not need to call this, as it is automatically called at most appropriate times.
 .PP

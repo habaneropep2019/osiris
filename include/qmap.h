@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qmap.h   2.1.0   edited 2000-04-06 $
+** $Id: qt/src/tools/qmap.h   2.1.1   edited 2000-05-22 $
 **
 ** Definition of QMap class
 **
@@ -564,9 +564,9 @@ protected:
 template<class Key, class T>
 inline QDataStream& operator>>( QDataStream& s, QMap<Key,T>& m ) {
     m.clear();
-    uint c;
+    Q_UINT32 c;
     s >> c;
-    for( uint i = 0; i < c; ++i ) {
+    for( Q_UINT32 i = 0; i < c; ++i ) {
 	Key k; T t;
 	s >> k >> t;
 	m.insert( k, t );
@@ -577,7 +577,7 @@ inline QDataStream& operator>>( QDataStream& s, QMap<Key,T>& m ) {
 
 template<class Key, class T>
 inline QDataStream& operator<<( QDataStream& s, const QMap<Key,T>& m ) {
-    s << m.count();
+    s << (Q_UINT32)m.count();
     QMapConstIterator<Key,T> it = m.begin();
     for( ; it != m.end(); ++it )
 	s << it.key() << it.data();

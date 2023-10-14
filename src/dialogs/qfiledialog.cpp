@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/dialogs/qfiledialog.cpp   2.1.0   edited 2000-04-06 $
+** $Id: qt/src/dialogs/qfiledialog.cpp   2.1.1   edited 2000-05-15 $
 **
 ** Implementation of QFileDialog class
 **
@@ -465,6 +465,10 @@ static void cleanup() {
     endCopyIcon = 0;
     delete goBackIcon;
     goBackIcon = 0;
+#if defined (_WS_WIN_)
+    delete fileIconProvider;
+    fileIconProvider = 0;
+#endif
 }
 
 #if defined(_WS_WIN_)
@@ -500,9 +504,9 @@ static void makeVariables() {
 	multiColumnListViewIcon = new QPixmap( (const char **)mclistview_xpm);
 	cdToParentIcon = new QPixmap( (const char **)cdtoparent_xpm);
 	newFolderIcon = new QPixmap( (const char **)newfolder_xpm);
-	previewInfoViewIcon 
+	previewInfoViewIcon
 	    = new QPixmap( (const char **)previewinfoview_xpm );
-	previewContentsViewIcon 
+	previewContentsViewIcon
 	    = new QPixmap( (const char **)previewcontentsview_xpm );
 	startCopyIcon = new QPixmap( (const char **)start_xpm );
 	endCopyIcon = new QPixmap( (const char **)end_xpm );
@@ -803,7 +807,7 @@ void QFDProgressDialog::setWriteLabel( const QString &s )
  *
  ************************************************************************/
 
-#if !defined(_CC_SUN_) // Work around bug 4325168 in SunPro 5.0 and 6.0 EA
+#if !defined(_CC_SUN_) // Work around bug 4328291/4325168 (SunPro 5.0/6.0 EA)
 inline
 #endif
 int sun4325168Workaround( QCollection::Item n1, QCollection::Item n2 ) {
@@ -2841,7 +2845,7 @@ QString QFileDialog::getOpenFileName( const QString & startWith,
 #if defined(_WS_WIN_)
     if ( qApp->style() == WindowsStyle )
 	return winGetOpenFileName( initialSelection, filter, workingDirectory,
-				   parent, name );
+				   parent, name, caption );
 #endif
 
     QFileDialog *dlg = new QFileDialog( *workingDirectory, QString::null,
@@ -2947,7 +2951,7 @@ QString QFileDialog::getSaveFileName( const QString & startWith,
 #if defined(_WS_WIN_)
     if ( qApp->style() == WindowsStyle )
 	return winGetSaveFileName( initialSelection, filter, workingDirectory,
-				   parent, name );
+				   parent, name, caption );
 #endif
 
     QFileDialog *dlg = new QFileDialog( *workingDirectory, QString::null, parent, name, TRUE );
@@ -3138,7 +3142,10 @@ bool QFileDialog::trySetSelection( bool isDir, const QUrlOperator &u, bool updat
     if ( updatelined && !d->currentFileName.isEmpty() ) {
 	// If the selection is valid, or if its a directory, allow OK.
 	if ( !d->currentFileName.isNull() || isDir ) {
-	    nameEdit->setText( u.fileName() );
+	    if ( u.fileName() != ".." )
+		nameEdit->setText( u.fileName() );
+	    else
+		nameEdit->setText("");
 	} else
 	    nameEdit->setText( QString::fromLatin1("") );
     }
@@ -3384,7 +3391,7 @@ void QFileDialog::selectDirectoryOrFile( QListViewItem * newItem )
 	d->currentFileName = d->url;
 	accept();
     }
-    if ( !oldName.isEmpty() )
+    if ( !oldName.isEmpty() && mode() != Directory )
 	nameEdit->setText( oldName );
 }
 
@@ -4594,7 +4601,7 @@ QStringList QFileDialog::getOpenFileNames( const QString & filter,
 
 #if defined(_WS_WIN_)
     if ( qApp->style() == WindowsStyle )
-	return winGetOpenFileNames( filter, workingDirectory, parent, name );
+	return winGetOpenFileNames( filter, workingDirectory, parent, name, caption );
 #endif
 
     QFileDialog *dlg = new QFileDialog( *workingDirectory, QString::null,
@@ -4686,6 +4693,7 @@ void QFileDialog::urlStart( QNetworkOperation *op )
 	return;
 
     if ( op->operation() == QNetworkProtocol::OpListChildren ) {
+	d->mimeTypeTimer->stop();
 	qApp->processEvents();
 	d->sortedList.clear();
 	d->pendingItems.clear();
@@ -4843,9 +4851,10 @@ void QFileDialog::insertEntry( const QValueList<QUrlInfo> &lst, QNetworkOperatio
 
 	// check for hidden files
 	// #### todo make this work on windows
-	if ( !bShowHiddenFiles && inf.name() != ".." &&
-	     inf.name()[ 0 ] == QChar( '.' ) )
-	    continue;
+	if ( !bShowHiddenFiles && inf.name() != ".." ) {
+	    if ( inf.name()[ 0 ] == QChar( '.' ) )
+		continue;
+	}
 
 	if ( !d->url.isLocalFile() ) {
 	    QFileDialogPrivate::File * i = 0;
@@ -5080,6 +5089,9 @@ void QFileDialog::setContentsPreview( QWidget *w, QFilePreview *preview )
 
 void QFileDialog::resortDir()
 {
+    d->mimeTypeTimer->stop();
+    d->pendingItems.clear();
+
     QFileDialogPrivate::File *item = 0;
     QFileDialogPrivate::MCItem *item2 = 0;
 
@@ -5170,6 +5182,8 @@ void QFileDialog::doMimeTypeLookup()
 	    qApp->processEvents();
 	    files->setUpdatesEnabled( FALSE );
 	    files->viewport()->setUpdatesEnabled( FALSE );
+	    if ( item != d->pendingItems.first() )
+		return;
 	    item->setPixmap( 0, *p );
 	    qApp->processEvents();
 	    files->setUpdatesEnabled( TRUE );
@@ -5187,7 +5201,8 @@ void QFileDialog::doMimeTypeLookup()
 		}
 	    }
 	}
-	d->pendingItems.removeFirst();
+	if ( d->pendingItems.count() )
+	    d->pendingItems.removeFirst();
     }
 
     if ( d->moreFiles->isVisible() ) {
@@ -5196,7 +5211,8 @@ void QFileDialog::doMimeTypeLookup()
 	files->viewport()->repaint( r, FALSE );
     }
 
-    d->mimeTypeTimer->start( 0 );
+    if ( d->pendingItems.count() )
+	d->mimeTypeTimer->start( 0 );
 }
 
 /*!

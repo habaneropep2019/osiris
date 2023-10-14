@@ -150,7 +150,7 @@ integer &lt;= -2) is generated.
 <p>See also:  <a href="#84fb45">setExclusive</a>().
 <h3 class="fn">bool <a name="19c73a"></a>QButtonGroup::isRadioButtonExclusive () const</h3>
 <p>Returns whether this button group will treat radio buttons as
-mutually exclusive.
+mutually exclusive. The default is TRUE.
 <p>See also:  <a href="#34f3b2">setRadioButtonExclusive</a>().
 <h3 class="fn">void <a name="f5b0ba"></a>QButtonGroup::moveFocus ( int key ) <code>[virtual]</code></h3>
 <p>Moves the keyboard focus according to <em>key,</em> and if appropriate
@@ -171,6 +171,7 @@ The <em>id</em> argument is the button's identifier.
 <h3 class="fn"><a href="qbutton.html">QButton</a> * <a name="728200"></a>QButtonGroup::selected ()</h3>
 <p>Returns a pointer to the selected radio button in this group, if
 one exists, or 0 if there is no selected radio button in this group.
+<p><b>Warning: </b>In future versions of Qt, the selected toggle button will be returned.
 <h3 class="fn">void <a name="c929c9"></a>QButtonGroup::setButton ( int id ) <code>[virtual]</code></h3>
 <p>Sets the button with id <em>id</em> to be on, and if this is an
 exclusive group, all other button in the group to be off.
@@ -185,9 +186,7 @@ switched on at the same time.
 <h3 class="fn">void <a name="34f3b2"></a>QButtonGroup::setRadioButtonExclusive ( bool on ) <code>[virtual]</code></h3>
 <p>If <em>on</em> is TRUE, this button group will treat radio buttons as
 mutually exclusive, and other buttons according to
-<a href="#98c7e9">isExclusive</a>(). This function is called automatically whenever a
-<a href="qradiobutton.html">QRadioButton</a> is inserted, so you should normally never have to call
-it.
+<a href="#98c7e9">isExclusive</a>().
 <h3 class="fn">void <a name="c0ee01"></a>QButtonGroup::buttonClicked () <code>[protected slot]</code></h3>
 <p>For internal use only.
 <h3 class="fn">void <a name="dee3f1"></a>QButtonGroup::buttonPressed () <code>[protected slot]</code></h3>
@@ -200,7 +199,7 @@ it.
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.1.0"><nobr>
+<input type=hidden name="version" value="2.1.1"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -208,5 +207,5 @@ copyright &copy; 1995-2000
 <a href="http://www.trolltech.com">Troll Tech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.0</div>
+<td align="right"><div align="right">Qt version 2.1.1</div>
 </table></div></address></body></html>

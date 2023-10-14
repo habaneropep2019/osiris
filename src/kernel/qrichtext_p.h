@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qrichtext_p.h   2.1.0   edited 2000-03-30 $
+** $Id: qt/src/kernel/qrichtext_p.h   2.1.1   edited 2000-04-19 $
 **
 ** Definition of internal rich text classes
 **

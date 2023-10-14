@@ -28,7 +28,7 @@ remains with Troll Tech.
 <hr>
 <pre>
 /****************************************************************************
-** &#36;Id&#58; qt/extensions/opengl/src/qgl.h   2.1.0   edited 2000-03-24 $
+** &#36;Id&#58; qt/extensions/opengl/src/qgl.h   2.1.1   edited 2000-05-19 $
 **
 ** Definition of OpenGL classes for Qt
 **
@@ -56,8 +56,8 @@ remains with Troll Tech.
 #define QGL_H
 
 
-#define QGL_VERSION     430
-#define QGL_VERSION_STR "4.3"
+#define QGL_VERSION     440
+#define QGL_VERSION_STR "4.4"
 
 const char *qGLVersion();
 
@@ -81,9 +81,7 @@ const char *qGLVersion();
 #include &lt;GL/gl.h&gt;
 #include &lt;GL/glu.h&gt;
 
-
-
-
+class QColorMap;
 class <a href="qpixmap.html">QPixmap</a>;
 #if defined(Q_GLX)
 class QGLOverlayWidget;
@@ -215,6 +213,7 @@ protected:
     HDC                 dc;
     WId                 win;
     int                 pixelFormatId;
+    QColorMap*          cmap;
 #elif defined(Q_GLX)
     void*               vi;
     void*               cx;
@@ -280,6 +279,8 @@ public:
 
     virtual void        makeOverlayCurrent();
     const QGLContext*   overlayContext() const;
+
+    void                setMouseTracking( bool enable );
 
 public slots:
     virtual void        updateGL();
@@ -464,5 +465,5 @@ inline bool QGLWidget::autoBufferSwap() const
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.0</div>
+<td align="right"><div align="right">Qt version 2.1.1</div>
 </table></div></address></body></html>

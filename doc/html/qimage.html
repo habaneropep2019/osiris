@@ -210,12 +210,11 @@ bits, <em>numColors</em> and <em>bitOrder</em> endianness.
 <p>Errors are silently ignored.
 <p>Note that it's possible to squeeze the XPM variable a little bit by
 using an unusual declaration:
-<p>\example
-static const char * const start_xpm[]={
-"16 15 8 1",
-"a c #cec6bd",
-....
-\endcode
+<p><pre>    static const char * const start_xpm[]={
+        "16 15 8 1",
+        "a c #cec6bd",
+    ....
+</pre>
 <p>The extra <code>const</code> makes the entire definition read-only, which is
 slightly more efficient e.g. when the code is in a shared library,
 and ROMable when the application is to be stored in ROM.
@@ -591,17 +590,17 @@ all the texts key/languaage pairs set by <a href="#b6b97e">setText</a>() for thi
 <hr><h2>Related Functions</h2>
 <h3><a href="qdatastream.html">QDataStream</a> &amp; <a name="8df32f"></a>operator&lt;&lt; (<a href="qdatastream.html">QDataStream</a> &amp; s, const QImage &amp; image)</h3>
 <p>Writes an image to the stream as a PNG image.
-<p>See also:  <a href="qimage.html#f5d19f">QImage::save</a>().
+<p>See also:  <a href="qimage.html#f5d19f">QImage::save</a>() and <a href="datastreamformat.html">Format of the QDataStream operators</a>
 
 <h3><a href="qdatastream.html">QDataStream</a> &amp; <a name="d5afcd"></a>operator&gt;&gt; (<a href="qdatastream.html">QDataStream</a> &amp; s, QImage &amp; image)</h3>
 <p>Reads an image from the stream.
-<p>See also:  <a href="qimage.html#081350">QImage::load</a>().
+<p>See also:  <a href="qimage.html#081350">QImage::load</a>() and <a href="datastreamformat.html">Format of the QDataStream operators</a>
 
 <hr><p>
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.1.0"><nobr>
+<input type=hidden name="version" value="2.1.1"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -609,5 +608,5 @@ copyright &copy; 1995-2000
 <a href="http://www.trolltech.com">Troll Tech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.0</div>
+<td align="right"><div align="right">Qt version 2.1.1</div>
 </table></div></address></body></html>

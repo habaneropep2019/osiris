@@ -1,4 +1,4 @@
-.TH QImage 3qt "12 April 2000" "Troll Tech AS" \" -*- nroff -*-
+.TH QImage 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -377,9 +377,16 @@ Errors are silently ignored.
 .PP
 Note that it's possible to squeeze the XPM variable a little bit by using an unusual declaration:
 .PP
-\\example static const char * const start_xpm[]={ "16 15 8 1", "a c #cec6bd",
-....
-\\endcode
+.nf
+.br
+    static const char * const start_xpm[]={
+.br
+        "16 15 8 1",
+.br
+        "a c #cec6bd",
+.br
+    ....
+.fi
 .PP
 The extra \fCconst\fR makes the entire definition read-only, which is slightly more efficient e.g. when the code is in a shared library, and ROMable when the application is to be stored in ROM.
 .PP
@@ -740,11 +747,11 @@ See also: height(), size() and rect().
 .SH "QDataStream & operator<< (QDataStream & s, const QImage & image)"
 Writes an image to the stream as a PNG image.
 .PP
-See also: QImage::save().
+See also: QImage::save() and Format of the QDataStream operators
 .SH "QDataStream & operator>> (QDataStream & s, QImage & image)"
 Reads an image from the stream.
 .PP
-See also:  QImage::load().
+See also:  QImage::load() and Format of the QDataStream operators
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qimage.html
 .SH COPYRIGHT

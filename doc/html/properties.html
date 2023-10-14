@@ -17,41 +17,59 @@ Qt Toolkit - Properties
 <p>
 <h1 align=center>Properties</h1><br clear="all">
 <p>
-Qt provides a sophisticated property system similar to those of other
-application development frameworks shipped by certain compiler
-vendors. However, as a compiler-independent multi-platform library, Qt
-cannot rely on non-standard compiler features like
-"__property" or "[property]". Our solution works with any standard C++
-compiler on every platform we support. It's based on the <a href="metaobjects.html">Meta Object System</a> that also provides
-object communication through signals and slots.
+Qt provides a sophisticated property system similar to those shipped
+by some compiler vendors. However, as a compiler- and
+platform-independent library, Qt cannot rely on non-standard compiler
+features like <code>__property</code> or <code>[property].</code> Our solution works with
+any standard C++ compiler on every platform we support. It's based on
+the <a href="metaobjects.html">Meta Object System</a> that also
+provides object communication through signals and slots.
 <p>
-The "Q_PROPERTY" macro in a class declaration declares a
-property. Properties can only be declared in classes that inherit <a href="qobject.html">QObject</a>. A second macro "Q_OVERRIDE" can be used to override certain
+The <code>Q_PROPERTY</code> macro in a class declaration declares a
+property. Properties can only be declared in classes that inherit <a href="qobject.html">QObject</a>. A second macro - <code>Q_OVERRIDE</code> - can be used to override some
 aspects of an inherited property in a subclass.
 <p>
 To the outer world, a property appears quite similar to a data
 member. However, properties have several features that distinguish
-them from data members:
+them from ordinary data members:
 <p>
 <ul>
-<li> an associated read method.
-<li> an optional associated write method (so-called writeable
-properties).
-<li> an optional method or attribute "stored" that indicates persistance.
-<li> an optional reset method to set a property back to its context
-specific default value.  
+<li> a read method.  This always exists.
+<li> a write method.  Optional: read-only properties like <a href="qwidget.html#32dcd0">QWidget::isDesktop()</a> do not have this.
+<li> an attribute "stored" that indicates persistence.  Most
+properties are stored, but a few janus-faced properties like <a href="qwidget.html#033e1b">QWidget::minimumWidth()</a> aren't: That property is just way of looking
+at <a href="qwidget.html#5ac2ae">QWidget::minimumSize()</a>, it has no data of its own.
+<li> a reset method to set a property back to its context specific
+default value.  Very unusual, but e.g. <a href="qwidget.html#3a7237">QWidget::font()</a> needs it:
+The default is to follow its surroundings, and no call to <a href="qwidget.html#26de4b">QWidget::setFont()</a> can mean that.
 <li> an attribute "designable" that indicates whether a property is
-considered to be designable in a GUI Designer.
+considered to be designable in a GUI Designer.  Most are, but e.g. <a href="qbutton.html#d0e4de">QButton::isDown()</a> can't be designed.  The user can press buttons, and
+the application programmer can make the program press its own buttons,
+but a GUI design tool can't press buttons.
+<p>
 </ul>
 <p>
-In addition, properties can be read and written through generic
-functions in QObject without knowing anything about the actual
-class. Through the <a href="qmetaobject.html">Meta Object</a> of a class,
-it is possible to query all available properties of a given instance
-of a class, again without knowing anything about the class apart from
-the fact that it inherits QObject.
+Properties can be read and written through generic functions in
+QObject without knowing anything about class in use.  These two are
+equivalent:
 <p>
-Here's an example:
+<pre>    //QButton * b and QObject * o point to the same button
+    b-&gt;setDown( TRUE );
+    o-&gt;setProperty( "down", TRUE );
+</pre>
+<p>
+Equivalent, that is, except that the first is faster, and that the
+first gives much better diagnostics at compile time.  When accessible,
+the first is preferred.  However, since you can get a list of all
+available properties for any QObject through its <a href="qmetaobject.html">metaObject()</a> setProperty() can give you control over classes
+that weren't available at compile time.
+<p>
+As well las QObject::setProperty(), there is a <a href="qobject.html#d1c761">QObject::property()</a>. <a href="qmetaobject.html#d6f94c">QMetaObject::propertyNames()</a> returns the names
+of all available properties.  <a href="qmetaobject.html#20d1ee">QMetaObject::property()</a> returns the
+property data for a named property: a <a href="qmetaproperty.html">QMetaProperty</a> object.
+<p>
+Here's a simple example that shows the most important property
+functions in use/.
 <p>
 <pre>    class MyClass : public QObject
     {
@@ -68,32 +86,29 @@ Here's an example:
 <p>
 The class has a property "priority" that is not yet known to the meta
 object system. In order to make the property known, you have to
-declare it with the "Q_PROPERTY" macro. The syntax is as follows:
+declare it with the <code>Q_PROPERTY</code> macro. The syntax is as follows:
 <p>
-<pre>Q_PROPERTY( type name READ getFunction [ WRITE setFunction] )
+<pre>Q_PROPERTY( type name READ getFunction [WRITE setFunction]
+            [STORED bool] [DESIGNABLE bool] [RESET resetFunction])
 </pre>
 <p>
-For the declaration to be valid, the get function has to return either
-the type itself or a pointer respectively a reference to it. The
-optional write function has to return void and to take exactly one
-argument, either the type itself or a pointer respectively a const
-reference to it. For obvious reasons, get functions have to be
-declared const. The meta object compiler will ensure all these
-constraints. Invalid properties, i.e. properties with an invalid type
-or illegal get function, will not show up in the property system.
+For the declaration to be valid, the get function has to be const and
+to return either the type itself, a pointer to it, or a reference to
+it. The optional write function has to return void and to take exactly
+one argument, either the type itself, a pointer or a const reference
+to it. The meta object compiler enforces this.
 <p>
 The type of a property can be everything <a href="qvariant.html">QVariant</a> provides or an
 enumeration type declared in the class itself. Since <code>MyClass</code> uses
 the enumeration type <code>Priority</code> for the property, this type has to be
 registered with the property system as well. This way it will be
-possible to set any value just by its textual name, simply with 
+possible to set a value by name, like this:
 <p>
 <pre>   obj-&gt;setProperty( "priority", "VeryHigh" );
 </pre>
 <p>
-Enumeration types are registered with the "Q_ENUMS" macro.
-<p>
-Here's the final class declaration including the property declaration:
+Enumeration types are registered with the <code>Q_ENUMS</code> macro.  Here's the
+final class declaration including the property declaration:
 <p>
 <pre>    class MyClass : public QObject
     {
@@ -110,40 +125,28 @@ Here's the final class declaration including the property declaration:
     };
 </pre>
 <p>
-Another macro similar to "Q_ENUMS" is "Q_SETS". It also registers an
-enumeration type but marks it in addition as "set", i.e. the single
-enumeration values can be or'ed together
+Another similar macro is <code>Q_SETS.</code> Like <code>Q_ENUMS,</code> it registers an
+enumeration type but marks it in addition as "set", i.e. the
+enumeration values can be or'ed together.  An I/O class might have
+enumeration values "Read" and "Write" and accept "Read|Write": Such an
+enum is best handled with <code>Q_SETS,</code> not <code>Q_ENUMS.</code>
 <p>
-Other keywords in the "Q_PROPERTY" section are:
-<ul>
-<li> <code>STORED</code> - followed by either <code>true,</code> <code>false</code> or a boolean
-function. Declares whether the property's value shall be stored for
-persistance. Stored makes only sense for writeable properties. The
-default value is <code>true.</code>
-<li> <code>DESIGNABLE</code> - followed by either <code>true</code> or <code>false.</code> Declares,
-whether a property is considered to be designable in a GUI Designer.
-The default is <code>true</code> for writeable properties, otherwise <code>false.</code>
-<li> <code>RESET</code> - followed by a non-const void function. Can be used by
-a GUI designer to set a property's value back to its context specific
-default value.
-</ul>
+The remaining keywords in the <code>Q_PROPERTY</code> section are <code>STORED,</code> <code>DESIGNABLE</code> and <code>RESET.</code>
 <p>
-Properties of an object can be read and set through <a href="qobject.html#d1c761">QObject::property()</a> and <a href="qobject.html#f5fc85">QObject::setProperty()</a>. All properties
-available for a given object can be queried through the object's meta
-object. The meta object is accessible through <a href="qobject.html#6a902d">QObject::metaObject()</a>. See <a href="qmetaobject.html#d6f94c">QMetaObject::propertyNames()</a>, <a href="qmetaobject.html#20d1ee">QMetaObject::property()</a> and <a href="qmetaproperty.html">QMetaProperty</a> for details.
+<code>STORED</code> declares whether the property's value is stored in the
+object. Stored makes only sense for writeable properties. The default
+value is <code>true.</code>
 <p>
-Connected to the property system is an additional macro, "Q_CLASSINFO",
-that can be used to attach additional name/value-pairs to a classes'
-meta object, for example:
+<code>DESIGNABLE</code> declares whether this property is suited for
+modification by a GUI designer program.  The default is <code>true</code> for
+writable properties, otherwise <code>false.</code>
 <p>
-<pre>Q_CLASSINFO( "Status", "Very nice class")
-</pre>
-<p>
-Like other meta data, class information is accessible at runtime
-through the meta object, see <a href="qmetaobject.html#2dc991">QMetaObject::classInfo()</a> for details.
+<code>RESET</code> names a function that will set the property to its default
+state (which may have changed since initialization).  The function
+must return void and take no arguments.
 
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.0</div>
+<td align="right"><div align="right">Qt version 2.1.1</div>
 </table></div></address></body></html>

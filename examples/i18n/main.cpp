@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/i18n/main.cpp   2.1.0   edited 2000-02-16 $
+** $Id: qt/examples/i18n/main.cpp   2.1.1   edited 2000-05-24 $
 **
 ** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
@@ -24,6 +24,7 @@ int main( int argc, char** argv )
 	int i = QMessageBox::information(0, "Language?", "Which language?",
 		    "Deutsch", "English", "Norsk" );
 	switch ( i ) {
+	  case -1: return 0;
 	  case 0: lang = "de"; break;
 	  case 1: lang = "en"; break;
 	  case 2: lang = "no"; break;

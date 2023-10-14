@@ -20,43 +20,62 @@ Qt Toolkit - Timers
 <a href="qobject.html">QObject</a>, the base class of all Qt objects, provides the basic timer
 support in Qt. With <a href="qobject.html#906d99">QObject::startTimer()</a>, you start a timer with
 an <em>interval</em> in milliseconds as argument. The function returns a
-unique integer identifier for the timer, the so-called timer id. The
-timer will now "fire" every <em>interval</em> milliseconds, until you
-explicitely call <a href="qobject.html#f5e328">QObject::killTimer()</a> with the respective timer id.
+unique integer timer id. The timer will now "fire" every <em>interval</em>
+milliseconds, until you explicitly call <a href="qobject.html#f5e328">QObject::killTimer()</a> with
+the timer id.
 <p>
-Whenever a timer fires, it sends a <a href="qtimerevent.html">timer event</a> to the respective object. For this mechanism to work, the
-application has to run in an event loop. You start an event loop with
-<a href="qapplication.html#7076af">QApplication::exec()</a>. When a timer fires, the application wakes up
-and the flow of control leaves the event loop until the timer event is
-prosessed. A timer cannot fire while your application is busy doing
-calculations. In that case it will fire immediately after the program
-returned to the event loop. In other words: the accuracy of timers
-depends on the granularity of your application.
+For this mechanism to work, the application has to run in an event
+loop. You start an event loop with <a href="qapplication.html#7076af">QApplication::exec()</a>. When a
+timer fires, the application sends a QTimerEvent, and the flow of
+control leaves the event loop until the timer event is prosessed. This
+implies that a timer cannot fire while your application is busy doing
+something else. In other words: the accuracy of timers depends on the
+granularity of your application.
 <p>
 There is practically no upper limit for the interval value (more than
 one year).  The accuracy depends on the underlying operating
-system. Windows 95 has 55 millisecond (18.2 times per second)
+system. Windows 95/98 has 55 millisecond (18.2 times per second)
 accuracy; other systems that we have tested (UNIX X11, Windows NT and
 OS/2) can handle 1 millisecond intervals.
 <p>
-Usually you won't utilize timers directly, but use the class <a href="qtimer.html">QTimer</a>
-instead. QTimer provides a high-level programming interface with
-one-shot timers and timer signals instead of events.
+The main API for the timer functionality is <a href="qtimer.html">QTimer</a>.  That class
+provides regular timers that emit a signal when the timer fires, and
+inherit <a href="qobject.html">QObject</a> so that it fits well into the ownership structure
+of most GUI programs.  The normal way of using it is like this excerpt
+from a Qt example program:
 <p>
-Here is a framework for an example that combines object communication
-via signals and slots with a QTimer object. It demonstrates how to
-utilize timers to perform intensive calculations in a single-threaded
-application without blocking the user interface.
+<pre>    <a href="qtimer.html">QTimer</a> * counter = new <a href="qtimer.html">QTimer</a>( this );
+    connect( counter, SIGNAL(timeout()),
+             this, SLOT(updateCaption()) );
+    counter-&gt;<a href="qtimer.html#3aafb5">start</a>( 1000 );
+</pre>
 <p>
-  Example:
-  <pre>    //
-    // The Mandelbrot class uses a QTimer to calculate the mandelbrot
-    // set one scanline at a time without blocking the CPU.
-    // It inherits QObject to use signals and slots.
-    // Calling start() starts the calculation. The done() signal is
-    // emitted when it has finished.
-    // Note that this example is not complete. Feel free to complete it.
-    //
+The counter timer is made into a child of this widget, so that when
+this widget is deleted, the timer is deleted too.  Next, its timeout
+signal is connected to the slot that will do the work, and finally
+it's started.
+<p>
+QTimer also provides a simple one-shot timer API.  <a href="qbutton.html">QButton</a> uses it
+to show the button being pressed down and then (0.1 second later) be
+released when the keyboard is used to "press" a button, for example:
+<p>
+<pre>    <a href="qtimer.html#37790c">QTimer::singleShot</a>( 100, this, SLOT(animateTimeout()) );
+</pre>
+<p>
+0.1 seconds after this line of code is executed, the same button's
+animateTimeout() slot is called.
+<p>
+Here is an outline of a slightly longer example that combines object
+communication via signals and slots with a QTimer object. It
+demonstrates how to utilize timers to perform intensive calculations
+in a single-threaded application without blocking the user interface.
+<p>
+  <pre>    // The Mandelbrot class uses a QTimer to calculate the mandelbrot
+    // set one scanline at a time without blocking the CPU.  It
+    // inherits QObject to use signals and slots.  Calling start()
+    // starts the calculation. The done() signal is emitted when it
+    // has finished.  Note that this example is not complete, just an
+    // outline.
 
     class Mandelbrot : public QObject
     {
@@ -116,5 +135,5 @@ application without blocking the user interface.
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.0</div>
+<td align="right"><div align="right">Qt version 2.1.1</div>
 </table></div></address></body></html>

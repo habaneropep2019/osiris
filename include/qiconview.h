@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qiconview.h   2.1.0   edited 2000-04-05 $
+** $Id: qt/src/widgets/qiconview.h   2.1.1   edited 2000-04-24 $
 **
 ** Definition of QIconView widget class
 **
@@ -242,7 +242,7 @@ class Q_EXPORT QIconView : public QScrollView
     friend class QIconViewToolTip;
 
     Q_OBJECT
-    // #### sorting and soring direction dont work
+    // #### sorting and sort direction do not work
     Q_ENUMS( SelectionMode ItemTextPos Arrangement ResizeMode )
     Q_PROPERTY( bool sorting READ sorting )
     Q_PROPERTY( bool sortDirection READ sortDirection )

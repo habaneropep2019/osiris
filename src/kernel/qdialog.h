@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qdialog.h   2.1.0   edited 2000-03-24 $
+** $Id: qt/src/kernel/qdialog.h   2.1.1   edited 2000-04-25 $
 **
 ** Definition of QDialog class
 **
@@ -74,6 +74,7 @@ private:
     int		rescode;
     uint	did_move   : 1;
     uint	did_resize : 1;
+    uint 	in_loop: 1;
     QPushButton* mainDef;
 
 private:	// Disabled copy constructor and operator=

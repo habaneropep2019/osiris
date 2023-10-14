@@ -15,7 +15,7 @@ MOC	=	$(SYSCONF_MOC)
 
 DESTDIR = ../../../lib/
 VER_MAJ = 4
-VER_MIN = 2
+VER_MIN = 4
 VER_PATCH = 0
 TARGET	= qgl
 TARGET1 = lib$(TARGET).so.$(VER_MAJ)

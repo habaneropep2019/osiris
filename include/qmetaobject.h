@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qmetaobject.h   2.1.0   edited 2000-03-29 $
+** $Id: qt/src/kernel/qmetaobject.h   2.1.1   edited 2000-05-09 $
 **
 ** Definition of QMetaObject class
 **
@@ -55,7 +55,7 @@ struct QMetaEnum 				// enumerator meta data
     bool set;					// Wether enum has to be treated as a set
 };
 
-class QMetaProperty 				// property meta data
+class Q_EXPORT QMetaProperty 			// property meta data
 {
 public:
     QMetaProperty();

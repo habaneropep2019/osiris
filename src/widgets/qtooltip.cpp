@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qtooltip.cpp   2.1.0   edited 2000-04-06 $
+** $Id: qt/src/widgets/qtooltip.cpp   2.1.1   edited 2000-05-24 $
 **
 ** Tool Tips (or Balloon Help) for any widget or rectangle
 **
@@ -47,8 +47,7 @@ class QTipLabel : public QLabel
 public:
     QTipLabel(const QString& text) : QLabel( 0, "toolTipTip",
 			  WStyle_StaysOnTop +
-			  WStyle_Customize + WStyle_NoBorder + WStyle_Tool +
-			   WX11BypassWM )
+			  WStyle_Customize + WStyle_NoBorder + WStyle_Tool )
     {
 	setMargin(1);
 	setIndent(0);
@@ -651,7 +650,7 @@ void QToolTip::setPalette( const QPalette &palette )
   tips on regions that can move within the widget (most often because
   the widget's contents can scroll).
 
-  \a parent is widget you want to add dynamic tool tips to and \a
+  \a parent is the widget you want to add dynamic tool tips to and \a
   group (optional) is the tool tip group they should belong to.
 
   \sa maybeTip().
@@ -839,7 +838,7 @@ void QToolTip::tip( const QRect & rect, const QString &text,
 
 
 /*!
-  Removes all tool tips for this widget immediately.
+  Removes all tool tips for this tooltip's parent widget immediately.
 */
 
 void QToolTip::clear()
@@ -879,7 +878,7 @@ void QToolTip::clear()
   \class QToolTipGroup qtooltip.h
 
   \brief The QToolTipGroup class collects tool tips into natural groups.
-  
+
   \ingroup helpsystem
 
   Tool tips can display \e two texts, the one in the tip and

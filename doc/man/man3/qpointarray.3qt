@@ -1,4 +1,4 @@
-.TH QPointArray 3qt "12 April 2000" "Troll Tech AS" \" -*- nroff -*-
+.TH QPointArray 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -20,6 +20,9 @@ Inherits QArray.
 .in +1c
 .ti -1c
 .BI "\fBQPointArray\fR ()"
+.br
+.ti -1c
+.BI "\fB~QPointArray\fR ()"
 .br
 .ti -1c
 .BI "\fBQPointArray\fR ( int size )"
@@ -149,6 +152,8 @@ Equivalent to setPoints(nPoints,points).
 Constructs a point array with room for \fIsize\fR points. Makes a null array if \fIsize\fR == 0.
 .PP
 See also: resize() and isNull().
+.SH "QPointArray::~QPointArray ()"
+Destructs the point array.
 .SH "QRect QPointArray::boundingRect () const"
 Returns the bounding rectangle of the points in the array, or QRect(0,0,0,0) if the array is empty.
 .SH "QPointArray QPointArray::copy () const"
@@ -270,14 +275,12 @@ For internal use only.
 .SH RELATED FUNCTION DOCUMENTATION
 .SH "QDataStream & operator>> (QDataStream & s, QPointArray & a)"
 Reads a point array from the stream and returns a reference to the stream.
+.PP
+See also: Format of the QDataStream operators
 .SH "QDataStream & operator<< (QDataStream & s, const QPointArray & a)"
 Writes a point array to the stream and returns a reference to the stream.
 .PP
-The serialization format is:
-.IP 1
-The array size (Q_UINT32)
-.IP 2
- The array points (QPoint)
+See also:  Format of the QDataStream operators
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qpointarray.html
 .SH COPYRIGHT

@@ -490,7 +490,7 @@ png:SOURCES    += $$PNG_SOURCES
 zlib:SOURCES   += $$ZLIB_SOURCES
 
 TARGET		= qt
-VERSION		= 2.1.0
+VERSION		= 2.1.1
 DESTDIR		= ../lib
 DLLDESTDIR	= ../bin
 

@@ -1,4 +1,4 @@
-.TH QPoint 3qt "12 April 2000" "Troll Tech AS" \" -*- nroff -*-
+.TH QPoint 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -301,7 +301,7 @@ Returns the QPoint formed by changing the sign of both components of \fIp,\fR eq
 .SH "QDataStream & operator<< (QDataStream & s, const QPoint & p)"
 Writes a QPoint to the stream and returns a reference to the stream.
 .PP
-Serialization format: [x (Q_INT32), y (Q_INT32)].
+See also: Format of the QDataStream operators
 .SH "QPoint operator/ (const QPoint & p, int c)"
 Returns the QPoint formed by dividing both components of \fIp\fR by \fIc.\fR
 .SH "QPoint operator* (const QPoint & p, double c)"
@@ -312,6 +312,8 @@ Note that the result is truncated.
 Returns the QPoint formed by multiplying both components of \fIp\fR by \fIc.\fR
 .SH "QDataStream & operator>> (QDataStream & s, QPoint & p)"
 Reads a QPoint from the stream and returns a reference to the stream.
+.PP
+See also: Format of the QDataStream operators
 .SH "bool operator!= (const QPoint & p1, const QPoint & p2)"
 Returns TRUE if \fIp1\fR and \fIp2\fR are different, or FALSE if they are equal.
 .SH "bool operator== (const QPoint & p1, const QPoint & p2)"

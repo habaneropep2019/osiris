@@ -120,8 +120,7 @@ See <a href="#ad4232">setPrefix</a>() and <a href="#38a1a4">setSuffix</a>().
 <p>Normally, the spin box displays up and down arrows in the buttons.
 You can use <a href="#1a2b08">setButtonSymbols</a>() to change the display to
 show + and - symbols, if this is clearer for your intended purpose.
-In either case, the + and - keys and up and down arrow keys
-always work.
+In either case, the up and down arrow keys always work.
 <p>It is often desirable to give the user a special, often default,
 choice in addition to the range of numeric values.  See
 <a href="#a89689">setSpecialValueText</a>() for how to do this with QSpinBox.
@@ -145,7 +144,7 @@ would be 0 to 100:
 
     int         mapTextToValue( bool* ok )
     {
-      return int(currentValueText().toFloat()*10);
+      return int(text().toFloat()*10);
     }
 
   };
@@ -386,7 +385,7 @@ times.
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.1.0"><nobr>
+<input type=hidden name="version" value="2.1.1"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -394,5 +393,5 @@ copyright &copy; 1995-2000
 <a href="http://www.trolltech.com">Troll Tech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.0</div>
+<td align="right"><div align="right">Qt version 2.1.1</div>
 </table></div></address></body></html>

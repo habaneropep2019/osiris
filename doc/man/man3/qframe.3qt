@@ -1,4 +1,4 @@
-.TH QFrame 3qt "12 April 2000" "Troll Tech AS" \" -*- nroff -*-
+.TH QFrame 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -206,12 +206,12 @@ This function is reimplemented by subclasses that draw something inside the fram
 See also: contentsRect(), QPainter::setClipRect() and drawContentsMask().
 .PP
 Reimplemented in QPopupMenu, QMenuBar, QLabel, QProgressBar and QLCDNumber.
-.SH "void QFrame::drawContentsMask ( QPainter * ) \fC[virtual protected]\fR"
+.SH "void QFrame::drawContentsMask ( QPainter * p ) \fC[virtual protected]\fR"
 Virtual function that draws the mask of the frame's contents.
 .PP
 If you reimplemented drawContents(QPainter*) and your widget should support transparency you probably have to re-implement this function as well.
 .PP
-The default implementation is empty.
+The default implementation masks the contents-rect.
 .PP
 See also: drawContents(), updateMask(), QWidget::setAutoMask(), contentsRect() and QPainter::setClipRect().
 .PP

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/widgets/widgets.cpp   2.1.0   edited 2000-03-24 $
+** $Id: qt/examples/widgets/widgets.cpp   2.1.1   edited 2000-05-05 $
 **
 ** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **

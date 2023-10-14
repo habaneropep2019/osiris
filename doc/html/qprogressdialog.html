@@ -95,16 +95,18 @@ parameter <a href="#15c931">totalSteps</a>() at the end.
 operation, Use <a href="#655aa3">setAutoReset</a>() and <a href="#fe025f">setAutoClose</a>() to change this
 behavior.
 <p>There are two ways of using QProgressDialog, modal and non-modal.
-<p>Using a modal QProgressDialog is simpler for the programmer, but it
-freezes the application, making it inaccessible to the user for the
-duration of the operation.  Do the operation in a loop, calling
-<a href="#7d91b8">setProgress()</a> at intervals, and checking for cancellation with
+<p>Using a modal QProgressDialog is simpler for the programmer, but you
+have to call qApp->processEvents() to keep the event loop running
+and prevent the application from freezing. Do the operation in a loop,
+calling <a href="#7d91b8">setProgress()</a> at intervals, and checking for cancellation with
 <a href="#3e1de0">wasCancelled</a>().
 <p>Example:
 <pre>    <a href="qprogressdialog.html">QProgressDialog</a> progress( "Copying files...", "Abort Copy", numFiles,
                                 this, "progress", TRUE );
     for (int i=0; i&lt;numFiles; i++) {
         progress.<a href="#7d91b8">setProgress</a>( i );
+        qApp-&gt;processEvents();
+
         if ( progress.<a href="#3e1de0">wasCancelled</a>() )
             break;
         ... // copy one file
@@ -250,7 +252,7 @@ so do not pass the address of an object on the stack.
 The label becomes owned by the
 progress dialog and will be deleted when necessary,
 so do not pass the address of an object on the stack.
-<p>See also:  <a href="#86e8e2">setLabelText</a>() and <a href="#c008bf">label</a>().
+<p>See also:  <a href="#86e8e2">setLabelText</a>().
 <p>Examples:
  <a href="progress-progress-cpp.html#setLabel">progress/progress.cpp</a>
 <h3 class="fn">void <a name="86e8e2"></a>QProgressDialog::setLabelText ( const <a href="qstring.html">QString</a> &amp; text ) <code>[slot]</code></h3>
@@ -306,7 +308,7 @@ be needed in user code.
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.1.0"><nobr>
+<input type=hidden name="version" value="2.1.1"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -314,5 +316,5 @@ copyright &copy; 1995-2000
 <a href="http://www.trolltech.com">Troll Tech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.0</div>
+<td align="right"><div align="right">Qt version 2.1.1</div>
 </table></div></address></body></html>

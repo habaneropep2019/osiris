@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qwidget.h   2.1.0   edited 2000-04-03 $
+** $Id: qt/src/kernel/qwidget.h   2.1.1   edited 2000-05-18 $
 **
 ** Definition of QWidget class
 **
@@ -360,12 +360,12 @@ public:
     virtual void	setAcceptDrops( bool on );
 
     // transparency and pseudo transparency
-    
+
     virtual void	setAutoMask(bool);
     bool		autoMask() const;
-    
+
     enum BackgroundOrigin { WidgetOrigin, ParentOrigin };
-    
+
     void setBackgroundOrigin( BackgroundOrigin );
     BackgroundOrigin backgroundOrigin() const;
 
@@ -698,6 +698,7 @@ inline void QWidget::constPolish() const
         that->setWState(WState_Polished); // be on the safe side...
     }
 }
+
 
 // Extra QWidget data
 //  - to minimize memory usage for members that are seldom used.

@@ -1,4 +1,4 @@
-.TH QChar 3qt "12 April 2000" "Troll Tech AS" \" -*- nroff -*-
+.TH QChar 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -56,33 +56,6 @@ QChar \- Light-weight Unicode character
 .BI "enum \fBJoining\fR { OtherJoining, Dual, Right, Center }"
 .br
 .ti -1c
-.BI "bool \fBisNull\fR () const"
-.br
-.ti -1c
-.BI "bool \fBisPrint\fR () const"
-.br
-.ti -1c
-.BI "bool \fBisPunct\fR () const"
-.br
-.ti -1c
-.BI "bool \fBisSpace\fR () const"
-.br
-.ti -1c
-.BI "bool \fBisMark\fR () const"
-.br
-.ti -1c
-.BI "bool \fBisLetter\fR () const"
-.br
-.ti -1c
-.BI "bool \fBisNumber\fR () const"
-.br
-.ti -1c
-.BI "bool \fBisLetterOrNumber\fR () const"
-.br
-.ti -1c
-.BI "bool \fBisDigit\fR () const"
-.br
-.ti -1c
 .BI "int \fBdigitValue\fR () const"
 .br
 .ti -1c
@@ -117,6 +90,33 @@ QChar \- Light-weight Unicode character
 .br
 .ti -1c
 .BI "ushort \fBunicode\fR () const"
+.br
+.ti -1c
+.BI "bool \fBisNull\fR () const"
+.br
+.ti -1c
+.BI "bool \fBisPrint\fR () const"
+.br
+.ti -1c
+.BI "bool \fBisPunct\fR () const"
+.br
+.ti -1c
+.BI "bool \fBisSpace\fR () const"
+.br
+.ti -1c
+.BI "bool \fBisMark\fR () const"
+.br
+.ti -1c
+.BI "bool \fBisLetter\fR () const"
+.br
+.ti -1c
+.BI "bool \fBisNumber\fR () const"
+.br
+.ti -1c
+.BI "bool \fBisLetterOrNumber\fR () const"
+.br
+.ti -1c
+.BI "bool \fBisDigit\fR () const"
 .br
 .ti -1c
 .BI "uchar& \fBcell\fR ()"
@@ -341,7 +341,7 @@ Returns whether the character is a number (of any sort - Number_* categories).
 .PP
 See also: isDigit().
 .SH "bool QChar::isPrint () const"
-Returns whether the character is a printable character. This is and character of category Cc or Cn. Note that this gives no indication of whether the character is available in some font.
+Returns whether the character is a printable character. This is any character not of category Cc or Cn. Note that this gives no indication of whether the character is available in some font.
 .SH "bool QChar::isPunct () const"
 Returns whether the character is puntuation (Punctuation_* categories).
 .SH "bool QChar::isSpace () const"

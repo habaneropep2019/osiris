@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qcstring.h   2.1.0   edited 2000-03-24 $
+** $Id: qt/src/tools/qcstring.h   2.1.1   edited 2000-03-24 $
 **
 ** Definition of the extended char array operations,
 ** and QByteArray and QCString classes

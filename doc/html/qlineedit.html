@@ -46,6 +46,7 @@ Inherits <a href="qwidget.html">QWidget</a>.
 <li><span class="fn">bool <a href="#0f605d"><b>isReadOnly</b></a> () const</span>
 <li><span class="fn">virtual void <a href="#5060f7"><b>setValidator</b></a> ( const QValidator * ) </span>
 <li><span class="fn">const QValidator* <a href="#e137ba"><b>validator</b></a> () const</span>
+<li><span class="fn">virtual QSize <a href="#2dc45e"><b>sizeHint</b></a> () const</span>
 <li><span class="fn">virtual QSize <a href="#6abfdb"><b>minimumSizeHint</b></a> () const</span>
 <li><span class="fn">virtual void <a href="#1e7442"><b>setSelection</b></a> ( int, int ) </span>
 <li><span class="fn">virtual void <a href="#8a60bb"><b>setCursorPosition</b></a> ( int ) </span>
@@ -417,7 +418,8 @@ allowing arbitrary constraints on the text which the user can edit.
 is no input validator (ie. any input is accepted up to <a href="#f73b5f">maxLength</a>()).
 <p>See also:  <a href="#e137ba">validator</a>() and <a href="qvalidator.html">QValidator</a>.
 <h3 class="fn"><a href="qsize.html">QSize</a> <a name="2dc45e"></a>QLineEdit::sizeHint () const <code>[virtual]</code></h3>
-<p>Reimplemented for internal reasons; the API is not affected.
+<p>Returns a recommended size for the widget.
+<p>The width returned is enough for a few characters, typically 15 to 20.
 <p>Reimplemented from <a href="qwidget.html#290bcd">QWidget.</a>
 <h3 class="fn"><a href="qsizepolicy.html">QSizePolicy</a> <a name="b78cb1"></a>QLineEdit::sizePolicy () const <code>[virtual]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
@@ -443,7 +445,7 @@ validator has been set.
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.1.0"><nobr>
+<input type=hidden name="version" value="2.1.1"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -451,5 +453,5 @@ copyright &copy; 1995-2000
 <a href="http://www.trolltech.com">Troll Tech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.0</div>
+<td align="right"><div align="right">Qt version 2.1.1</div>
 </table></div></address></body></html>

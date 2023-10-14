@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/q1xcompatibility.h   2.1.0   edited 2000-03-24 $
+** $Id: qt/src/kernel/q1xcompatibility.h   2.1.1   edited 2000-03-24 $
 **
 ** Various macros etc. to ease porting from Qt 1.x to 2.0.  THIS FILE
 ** WILL CHANGE OR DISAPPEAR IN THE NEXT VERSION OF Qt.

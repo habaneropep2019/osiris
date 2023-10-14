@@ -28,7 +28,7 @@ remains with Troll Tech.
 <hr>
 <pre>
 /****************************************************************************
-** &#36;Id&#58; qt/src/widgets/qscrollview.h   2.1.0   edited 2000-03-24 $
+** &#36;Id&#58; qt/src/widgets/qscrollview.h   2.1.1   edited 2000-04-28 $
 **
 ** Definition of QScrollView class
 **
@@ -84,6 +84,7 @@ public:
     virtual void setResizePolicy( ResizePolicy );
     ResizePolicy resizePolicy() const;
 
+    void styleChange(QStyle&amp;);
     void removeChild(QWidget* child);
     virtual void addChild( QWidget* child, int x=0, int y=0 );
     virtual void moveChild( QWidget* child, int x, int y );
@@ -124,8 +125,9 @@ public:
     void        updateContents( const QRect&amp; r );
     void        repaintContents( int x, int y, int w, int h, bool erase=TRUE );
     void        repaintContents( const QRect&amp; r, bool erase=TRUE );
-
+//### make this const in 3.0
     void        contentsToViewport(int x, int y, int&amp; vx, int&amp; vy);
+//### make this const in 3.0
     void        viewportToContents(int vx, int vy, int&amp; x, int&amp; y);
     QPoint      contentsToViewport(const QPoint&amp;);
     QPoint      viewportToContents(const QPoint&amp;);
@@ -226,5 +228,5 @@ private:        // Disabled copy constructor and operator=
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.0</div>
+<td align="right"><div align="right">Qt version 2.1.1</div>
 </table></div></address></body></html>

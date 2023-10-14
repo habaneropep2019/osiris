@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qpixmap.cpp   2.1.0   edited 2000-04-05 $
+** $Id: qt/src/kernel/qpixmap.cpp   2.1.1   edited 2000-05-22 $
 **
 ** Implementation of QPixmap class
 **
@@ -68,13 +68,8 @@
   e.g. QLabel::setPixmap(), and all the QButton subclasses support
   pixmap use.
 
-  There are also convenience functions to get and set single pixels
-  and to load and save the entire pixmap; these work by converting the
-  pixmap to a QImage internally.
-
-  The QPixmap class is optimized by the use of \link shclass.html implicit
-  sharing\endlink, so it is very efficient to pass QPixmap objects as
-  arguments.
+  The QPixmap class uses lazy copying, so it is practical to pass pass
+  QPixmap objects as arguments.
 
   Note about Windows 95 and 98: On Windows 9x, the system crashes if
   you create more than approximately 1000 pixmaps, independent of the
@@ -951,7 +946,9 @@ QPixmap QPixmap::grabWidget( QWidget * widget, int x, int y, int w, int h )
 /*!
   \relates QPixmap
   Writes a pixmap to the stream as a PNG image.
+
   \sa QPixmap::save()
+  \link datastreamformat.html Format of the QDataStream operators \endlink
 */
 
 QDataStream &operator<<( QDataStream &s, const QPixmap &pixmap )
@@ -972,6 +969,7 @@ QDataStream &operator<<( QDataStream &s, const QPixmap &pixmap )
   \relates QPixmap
   Reads a pixmap from the stream.
   \sa QPixmap::load()
+  \link datastreamformat.html Format of the QDataStream operators \endlink
 */
 
 QDataStream &operator>>( QDataStream &s, QPixmap &pixmap )

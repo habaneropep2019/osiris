@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/dialogs/qmessagebox.cpp   2.1.0   edited 2000-04-12 $
+** $Id: qt/src/dialogs/qmessagebox.cpp   2.1.1   edited 2000-04-19 $
 **
 ** Implementation of QMessageBox class
 **
@@ -513,6 +513,7 @@ QMessageBox::QMessageBox( QWidget *parent, const char *name )
 
   Each button can have one of the following values:
   <ul>
+  <li>\c QMessageBox::NoButton
   <li>\c QMessageBox::Ok
   <li>\c QMessageBox::Cancel
   <li>\c QMessageBox::Yes
@@ -521,6 +522,9 @@ QMessageBox::QMessageBox( QWidget *parent, const char *name )
   <li>\c QMessageBox::Retry
   <li>\c QMessageBox::Ignore
   </ul>
+
+  Use QMessageBox::NoButton for the later parameters to have less than
+  three buttons in your messagebox.
 
   One of the buttons can be combined with the \c QMessageBox::Default flag
   to make a default button.

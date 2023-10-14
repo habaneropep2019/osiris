@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qvaluestack.h   2.1.0   edited 2000-03-29 $
+** $Id: qt/src/tools/qvaluestack.h   2.1.1   edited 2000-03-29 $
 **
 ** Definition of QValueStack class
 **

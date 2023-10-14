@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qwidget_x11.cpp   2.1.0   edited 2000-04-06 $
+** $Id: qt/src/kernel/qwidget_x11.cpp   2.1.1   edited 2000-05-18 $
 **
 ** Implementation of QWidget and QWindow classes for X11
 **
@@ -237,7 +237,7 @@ void QWidget::create( WId window, bool initializeWindow, bool destroyOldWindow)
 	if ( !testWFlags(WStyle_Customize) )
 	    setWFlags( WStyle_NormalBorder | WStyle_Title | WStyle_MinMax | WStyle_SysMenu  );
     } else if ( !(desktop || popup) ) {
-	
+
 	ulong wsa_mask = 0;
 
 	if ( testWFlags(WStyle_Customize) ) {	// customize top-level widget
@@ -270,7 +270,7 @@ void QWidget::create( WId window, bool initializeWindow, bool destroyOldWindow)
 	    else
 		setWFlags( WStyle_NormalBorder | WStyle_Title | WStyle_MinMax | WStyle_SysMenu  );
 	}
-	
+
 	if ( testWFlags( WX11BypassWM ) ) {
 	    wsa.override_redirect = TRUE;
 	    wsa_mask |= CWOverrideRedirect;
@@ -325,8 +325,8 @@ void QWidget::create( WId window, bool initializeWindow, bool destroyOldWindow)
 	}
 
 	XClassHint class_hint;
-	class_hint.res_name = title;		// app name and widget name
-	class_hint.res_class = name() ? (char *)name() : title;
+	class_hint.res_class = title; 	// app name and widget name
+	class_hint.res_name = name() ? (char *)name() : title;
 	XSetWMProperties( dpy, id, 0, 0, 0, 0, &size_hints, &wm_hints,
 			  &class_hint );
 	XResizeWindow( dpy, id, crect.width(), crect.height() );
@@ -488,11 +488,11 @@ void QWidget::reparent( QWidget *parent, WFlags f, const QPoint &p,
     WId old_winid = winid;
     if ( testWFlags(WType_Desktop) )
 	old_winid = 0;
-    
+
     setWinId( 0 );
     if ( isTopLevel() )
 	topData()->parentWinId = 0;
-    
+
 
     if ( parentObj ) {				// remove from parent
 	parentObj->removeChild( this );
@@ -513,6 +513,7 @@ void QWidget::reparent( QWidget *parent, WFlags f, const QPoint &p,
 	setWState( WState_ForceHide );	// new widgets do not show up in already visible parents
     create();
     const QObjectList *chlist = children();
+    QWidget* dndchild = 0; // remember one of the children accepting drops
     if ( chlist ) {				// reparent children
 	QObjectListIt it( *chlist );
 	QObject *obj;
@@ -522,6 +523,8 @@ void QWidget::reparent( QWidget *parent, WFlags f, const QPoint &p,
 		if ( !w->isTopLevel() ) {
 		    XReparentWindow( x11Display(), w->winId(), winId(),
 				     w->geometry().x(), w->geometry().y() );
+		    if ( w->acceptDrops() )
+			dndchild = w ;
 		} else if ( w->isPopup()
 			    || w->testWFlags(WStyle_DialogBorder)
 			    || w->testWFlags(WStyle_Dialog)
@@ -558,7 +561,10 @@ void QWidget::reparent( QWidget *parent, WFlags f, const QPoint &p,
 
     if ( accept_drops )
 	setAcceptDrops( TRUE );
-
+    else if ( dndchild ) {
+	dndchild->clearWState(WState_DND); // reset this widget
+	dndchild->setAcceptDrops( TRUE ); // the new top-level will accept drops
+    }
     QCustomEvent e( QEvent::Reparent, 0 );
     QApplication::sendEvent( this, &e );
 }
@@ -619,7 +625,13 @@ void QWidget::setMicroFocusHint(int x, int y, int width, int height, bool text)
     if ( text ) {
 	QWidget* tlw = topLevelWidget();
 	if ( tlw->extra && tlw->extra->topextra && tlw->extra->topextra->xic ) {
-	    QPoint p = tlw->mapFromGlobal(mapToGlobal(QPoint(x,y)));
+	    QPoint p( x, y );
+	    QWidget * w = this;
+	    QWidget * tlw = topLevelWidget();
+	    while ( w != tlw ) {
+		p = w->mapToParent( p );
+		w = w->parentWidget();
+	    }
 	    XPoint spot;
 	    spot.x = p.x();
 	    spot.y = p.y()+height;
@@ -1301,7 +1313,7 @@ void QWidget::showWindow()
 		XFree( (char *)h );
 	    topData()->showMode = sm == 1?3:0; // trigger reset to normal state next time
 	}
-	if ( testWFlags(WState_ForceHide) && 
+	if ( testWFlags(WState_ForceHide) &&
 	     topData()->parentWinId && topData()->parentWinId != qt_xrootwin() ) {
 	    qt_deferred_map_add( this );
 	    return;
@@ -1366,7 +1378,7 @@ bool QWidget::isMinimized() const
     return qt_wstate_iconified( winId() );
 }
 
-
+// ### ### this really needs to wait for a maximum of 0.N seconds
 void qt_wait_for_window_manager( WId win )
 {
     QApplication::flushX();
@@ -1383,7 +1395,7 @@ void qt_wait_for_window_manager( WId win )
 
   Calling this function has no effect for other than \link isTopLevel()
   top-level widgets\endlink.
-  
+
   On X11, this function may not work properly with certain window
   managers. See the \link geometry.html Window Geometry
   documentation\endlink for details on why.
@@ -1582,10 +1594,10 @@ void QWidget::internalSetGeometry( int x, int y, int w, int h, bool isMove )
 	    QApplication::sendEvent( this, &e );
 	}
 	if ( isResize ) {
-	    
+
 	    // set config pending only on resize, see qapplication_x11.cpp, translateConfigEvent()
 	    setWState( WState_ConfigPending );
-	    
+
 	    QResizeEvent e( size(), oldSize );
 	    QApplication::sendEvent( this, &e );
 	}

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qapplication_x11.cpp   2.1.0   edited 2000-04-06 $
+** $Id: qt/src/kernel/qapplication_x11.cpp   2.1.1   edited 2000-05-09 $
 **
 ** Implementation of X11 startup routines and event handling
 **
@@ -88,6 +88,10 @@ static int qt_thread_pipe[2];
 #include <bstring.h>
 #endif
 
+#if defined(_OS_AIX_)
+#include <strings.h>
+#endif
+
 #if defined(_OS_AIX_) && defined(_CC_GNU_)
 #include <sys/time.h>
 #include <sys/select.h>
@@ -153,6 +157,43 @@ const int XKeyRelease = KeyRelease;
 #undef KeyPress
 #undef KeyRelease
 
+#if defined(_OS_AIX_) && !defined(bzero)
+// For FD_ZERO, which the X11 libraries define to use bzero(), even
+// though the system libraries don't have that function.
+#define bzero( s, n ) memset( (s), 0, (n) )
+#endif
+
+// Fix old X libraries
+#ifndef XK_KP_Home
+#define XK_KP_Home              0xFF95
+#endif
+#ifndef XK_KP_Left
+#define XK_KP_Left              0xFF96
+#endif
+#ifndef XK_KP_Up
+#define XK_KP_Up                0xFF97
+#endif
+#ifndef XK_KP_Right
+#define XK_KP_Right             0xFF98
+#endif
+#ifndef XK_KP_Down
+#define XK_KP_Down              0xFF99
+#endif
+#ifndef XK_KP_Prior
+#define XK_KP_Prior             0xFF9A
+#endif
+#ifndef XK_KP_Next
+#define XK_KP_Next              0xFF9B
+#endif
+#ifndef XK_KP_End
+#define XK_KP_End               0xFF9C
+#endif
+#ifndef XK_KP_Insert
+#define XK_KP_Insert            0xFF9E
+#endif
+#ifndef XK_KP_Delete
+#define XK_KP_Delete            0xFF9F
+#endif
 
 /*****************************************************************************
   Internal variables and functions
@@ -193,23 +234,24 @@ static GC	app_gc_ro	= 0;		// read-only GC
 static GC	app_gc_tmp	= 0;		// temporary GC
 static GC	app_gc_ro_m	= 0;		// read-only GC (monochrome)
 static GC	app_gc_tmp_m	= 0;		// temporary GC (monochrome)
-Atom		qt_wm_protocols;		// window manager protocols
-Atom		qt_wm_delete_window;		// delete window protocol
-Atom 		qt_wm_take_focus;		// take focus window protocol
-static Atom	qt_qt_scrolldone;		// scroll synchronization
-Atom	qt_net_wm_context_help; 	// context help
+Atom		qt_wm_protocols		= 0;	// window manager protocols
+Atom		qt_wm_delete_window	= 0;	// delete window protocol
+Atom 		qt_wm_take_focus	= 0;	// take focus window protocol
+static Atom	qt_qt_scrolldone 	= 0;	// scroll synchronization
+Atom		qt_net_wm_context_help	= 0;	// context help
 
-static Atom	qt_xsetroot_id;
-Atom		qt_selection_property;
-Atom		qt_selection_sentinel;
-Atom		qt_wm_state;
-static Atom 	qt_desktop_properties;   	// Qt desktop properties
-static Atom 	qt_resource_manager;		// X11 Resource manager
-Atom 		qt_sizegrip;			// sizegrip
-Atom 		qt_wm_client_leader;
-Atom 		qt_window_role;
-Atom 		qt_sm_client_id;
-Atom 		qt_xa_motif_wm_hints;
+static Atom	qt_xsetroot_id		= 0;
+Atom		qt_selection_property	= 0;
+Atom		qt_selection_sentinel	= 0;
+Atom		qt_wm_state		= 0;
+static Atom 	qt_desktop_properties	= 0;	// Qt desktop properties
+static Atom 	qt_resource_manager	= 0;	// X11 Resource manager
+Atom 		qt_sizegrip		= 0;	// sizegrip
+Atom 		qt_wm_client_leader	= 0;
+Atom 		qt_window_role		= 0;
+Atom 		qt_sm_client_id		= 0;
+Atom 		qt_xa_motif_wm_hints	= 0;
+Atom 		qt_x_incr		= 0;
 
 static Window	mouseActWindow	     = 0;	// window where mouse is
 static int	mouseButtonPressed   = 0;	// last mouse button pressed
@@ -323,6 +365,7 @@ extern void qt_xdnd_handle_selection_request( const XSelectionRequestEvent * );
 extern bool qt_xdnd_handle_badwindow();
 
 extern void qt_motifdnd_handle_msg( QWidget *, const XEvent *, bool );
+extern void qt_x11_motifdnd_init();
 
 // client message atoms
 extern Atom qt_xdnd_enter;
@@ -876,6 +919,10 @@ void qt_init_internal( int *argcptr, char **argv, Display *display )
 	appDpy  = display;
 	app_Xfd = XConnectionNumber( appDpy );
 
+	// Install default error handlers
+
+	XSetErrorHandler( qt_x_errhandler );
+	XSetIOErrorHandler( qt_xio_errhandler );
     } else {
 	// Qt controls everything (default)
 
@@ -1074,8 +1121,10 @@ void qt_init_internal( int *argcptr, char **argv, Display *display )
 	qt_x11_intern_atom( "WINDOW_ROLE", &qt_window_role);
 	qt_x11_intern_atom( "SM_CLIENT_ID", &qt_sm_client_id);
 	qt_x11_intern_atom( "_MOTIF_WM_HINTS", &qt_xa_motif_wm_hints );
+	qt_x11_intern_atom( "INCR", &qt_x_incr );
 
 	qt_xdnd_setup();
+	qt_x11_motifdnd_init();
 
 	// Finally create all atoms
 	qt_x11_process_intern_atoms();
@@ -1099,10 +1148,11 @@ void qt_init_internal( int *argcptr, char **argv, Display *display )
 		      FocusChangeMask | PropertyChangeMask
 		      );
     }
-// XIM segfaults on Solaris with C locale!
-// Let's hope the "en_US" locale is installed on all systems with a C locale,
-// otherwise we'll have to modify the source more extensively
-#if defined (_OS_SOLARIS_)
+// XIM segfaults on Solaris with "C" locale!
+// The idea was that the "en_US" locale is maybe installed on all systems
+// with a "C" locale and could be used as a fallback instead of "C". This
+// is not the case. We'll have to find something better...
+#if defined (_OS_SOLARIS_) && !defined(NO_XIM)
     const char* locale = ::setlocale( LC_ALL, "" );
     if ( !locale || ::strcmp( locale, "C" ) == 0 ) {
 	locale = ::setlocale( LC_ALL, "en_US" );
@@ -1281,9 +1331,9 @@ bool qt_wstate_iconified( WId winid )
 
 /*!
   \relates QApplication
-  Adds a global routine that will be called from the QApplication destructor.
-  This function is normally used to add cleanup routines.
 
+  Adds a global routine that will be called from the QApplication
+  destructor.  This function is normally used to add cleanup routines.
 
   The function given by \a p should take no arguments and return
   nothing, like this:
@@ -1293,6 +1343,7 @@ bool qt_wstate_iconified( WId winid )
     static void cleanup_ptr()
     {
 	delete [] global_ptr;
+	global_ptr = 0;
     }
 
     void init_ptr()
@@ -1407,22 +1458,25 @@ GC qt_xget_temp_gc( bool monochrome )		// get temporary GC
 
 /*!
   \fn QWidget *QApplication::mainWidget() const
-  Returns the main application widget, or 0 if there is not a defined
-  main widget.
+
+  Returns the main application widget, or a null pointer if there is
+  not a defined main widget.
+
   \sa setMainWidget()
 */
 
 /*!
   Sets the main widget of the application.
 
-  The special thing about the main widget is that destroying the main
-  widget (i.e. the program calls QWidget::close() or the user
-  double-clicks the window close box) will leave the main event loop and
-  \link QApplication::quit() exit the application\endlink.
+  The main widget is like any other, in most respects except that if
+  it is deleted, the application exits.
+
+  You need not have a main widget; conecting lastWindowClosed() to quit() is
+  another alternative.
 
   For X11, this function also resizes and moves the main widget
-  according to the \e -geometry command-line option, so you should
-  \link QWidget::setGeometry() set the default geometry\endlink before
+  according to the \e -geometry command-line option, so you should set
+  the default geometry (using \l QWidget::setGeometry()) before
   calling setMainWidget().
 
   \sa mainWidget(), exec(), quit()
@@ -1479,36 +1533,39 @@ static QCursorList *cursorStack = 0;
 
 /*!
   \fn QCursor *QApplication::overrideCursor()
+
   Returns the active application override cursor.
 
-  This function returns 0 if no application cursor has been defined (i.e. the
-  internal cursor stack is empty).
+  This function returns 0 if no application cursor has been defined
+  (i.e. the internal cursor stack is empty).
 
   \sa setOverrideCursor(), restoreOverrideCursor()
 */
 
 /*!
-  Sets the application override cursor to \e cursor.
+  Sets the application override cursor to \a cursor.
 
-  Application override cursor are intended for showing the user that the
-  application is in a special state, for example during an operation that
-  might take some time.
+  Application override cursors are intended for showing the user that
+  the application is in a special state, for example during an
+  operation that might take some time.
 
-  This cursor will be displayed in all application widgets until
-  restoreOverrideCursor() or another setOverrideCursor() is called.
+  This cursor will be displayed in all the widgets of the application
+  until restoreOverrideCursor() or another setOverrideCursor() is
+  called.
 
-  Application cursors are stored on an internal stack. setOverrideCursor()
-  pushes the cursor onto the stack, and restoreOverrideCursor() pops the
-  active cursor off the stack.	Every setOverrideCursor() must have an
-  corresponding restoreOverrideCursor(), otherwise the stack will get out
-  of sync. overrideCursor() returns 0 if the cursor stack is empty.
+  Application cursors are stored on an internal stack.
+  setOverrideCursor() pushes the cursor onto the stack, and
+  restoreOverrideCursor() pops the active cursor off the stack. Every
+  setOverrideCursor() must eventually be followed by a corresponding
+  restoreOverrideCursor(), otherwise the stack will never be emptied.
 
-  If \e replace is TRUE, the new cursor will replace the last override
-  cursor.
+  If \a replace is TRUE, the new cursor will replace the last override
+  cursor (the stack keeps its depth). If \a replace is FALSE, the new
+  stack is pushed onto the top of the stack.
 
   Example:
   \code
-    QApplication::setOverrideCursor( waitCursor );
+    QApplication::setOverrideCursor( Qt::waitCursor );
     calculateHugeMandelbrot();			// lunch time...
     QApplication::restoreOverrideCursor();
   \endcode
@@ -1542,17 +1599,11 @@ void QApplication::setOverrideCursor( const QCursor &cursor, bool replace )
 }
 
 /*!
-  Restores the effect of setOverrideCursor().
+  Undoes the last setOverrideCursor().
 
   If setOverrideCursor() has been called twice, calling
-  restoreOverrideCursor() will activate the first cursor set.  Calling
+  restoreOverrideCursor() will activate the first cursor set. Calling
   this function a second time restores the original widgets cursors.
-
-  Application cursors are stored on an internal stack. setOverrideCursor()
-  pushes the cursor onto the stack, and restoreOverrideCursor() pops the
-  active cursor off the stack.	Every setOverrideCursor() must have an
-  corresponding restoreOverrideCursor(), otherwise the stack will get out
-  of sync. overrideCursor() returns 0 if the cursor stack is empty.
 
   \sa setOverrideCursor(), overrideCursor().
 */
@@ -1584,6 +1635,7 @@ void QApplication::restoreOverrideCursor()
 
 /*!
   \fn bool QApplication::hasGlobalMouseTracking()
+
   Returns TRUE if global mouse tracking is enabled, otherwise FALSE.
 
   \sa setGlobalMouseTracking()
@@ -1602,9 +1654,18 @@ void QApplication::restoreOverrideCursor()
   mouseMoveEvent().  For a widget to get mouse move events when no button
   is depressed, it must do QWidget::setMouseTracking(TRUE).
 
-  This function has an internal counter.  Each
+  This function uses an internal counter.  Each
   setGlobalMouseTracking(TRUE) must have a corresponding
-  setGlobalMouseTracking(FALSE).
+  setGlobalMouseTracking(FALSE):
+  \code
+    // at this point global mouse tracking is off
+    QApplication::setGlobalMouseTracking( TRUE );
+    QApplication::setGlobalMouseTracking( TRUE );
+    QApplication::setGlobalMouseTracking( FALSE );
+    // at this point it's still on
+    QApplication::setGlobalMouseTracking( FALSE );
+    // but now it's off
+  \endcode
 
   \sa hasGlobalMouseTracking(), QWidget::hasMouseTracking()
 */
@@ -1694,9 +1755,11 @@ Window qt_x11_findClientWindow( Window win, Atom property, bool leaf )
   Returns a pointer to the widget at global screen position \a (x,y), or a
   null pointer if there is no Qt widget there.
 
-  If \a child is FALSE and there is a child widget at position \a (x,y),
-  the top-level widget containing it is returned.  If \a child is TRUE
-  the child widget at position \a (x,y) is returned.
+  If \a child is FALSE and there is a child widget at position \a
+  (x,y), the top-level widget containing it is returned. If \a child
+  is TRUE the child widget at position \a (x,y) is returned.
+
+  This function is normally rather slow.
 
   \sa QCursor::pos(), QWidget::grabMouse(), QWidget::grabKeyboard()
 */
@@ -1758,8 +1821,9 @@ QWidget *QApplication::widgetAt( int x, int y, bool child )
 
 
 /*!
-  Flushes the X event queue in the X11 implementation.
-  Does nothing on other platforms.
+  Flushes the X event queue in the X11 implementation. This normally
+  returns almost immediately. Does nothing on other platforms.
+
   \sa syncX()
 */
 
@@ -1770,8 +1834,9 @@ void QApplication::flushX()
 }
 
 /*!
-  Synchronizes with the X server in the X11 implementation.
-  Does nothing on other platforms.
+  Synchronizes with the X server in the X11 implementation. This
+  normally takes some time. Does nothing on other platforms.
+
   \sa flushX()
 */
 
@@ -2031,18 +2096,18 @@ static int sn_activate()
  *****************************************************************************/
 
 /*!
-  Enters the main event loop and waits until exit() is called or
-  the \link setMainWidget() main widget\endlink is destroyed.
-  Returns the value that was specified to exit(), which is 0 if
-  exit() is called via quit().
+  Enters the main event loop and waits until exit() is called or the
+  main widget is destroyed, and Returns the value that was set via to
+  exit() (which is 0 if exit() is called via quit()).
 
-  It is necessary to call this function to start event handling.
-  The main event loop receives \link QWidget::event() events\endlink from
-  the window system and dispatches these to the application widgets.
+  It is necessary to call this function to start event handling. The
+  main event loop receives events from the window system and
+  dispatches these to the application widgets.
 
-  Generally, no user interaction can take place before calling exec().
-  As a special case, modal widgets like QMessageBox can be used before
-  calling exec(), because modal widget have a local event loop.
+  Generally speaking, no user interaction can take place before
+  calling exec(). As a special case, modal widgets like QMessageBox
+  can be used before calling exec(), because modal widgets call exec()
+  to start a local event loop.
 
   To make your application perform idle processing, i.e. executing a
   special function whenever there are no pending events, use a QTimer
@@ -2065,8 +2130,8 @@ int QApplication::exec()
   Processes the next event and returns TRUE if there was an event
   (excluding posted events or zero-timer events) to process.
 
-  This function returns immediately if \e canWait is FALSE. It might go
-  into a sleep/wait state if \e canWait is TRUE.
+  This function returns immediately if \a canWait is FALSE. It might go
+  into a sleep/wait state if \a canWait is TRUE.
 
   \sa processEvents()
 */
@@ -2243,15 +2308,14 @@ int QApplication::x11ClientMessage(QWidget* w, XEvent* event, bool passive_only)
 }
 
 
-/*!
-  Returns
-  1 if the event was consumed by special handling,
-  0 if the event was consumed by normal handling, and
-  -1 if the event was for an unrecognized widget.
+/*! This virtual does the core processing of individual X events,
+normally by dispatching Qt events to the right destination.
 
-  \internal
+It returns 1 if the event was consumed by special handling, 0 if the
+event was consumed by normal handling, and -1 if the event was for an
+unrecognized widget.
 
-  This documentation is unclear.
+\sa x11EventFilter()
 */
 int QApplication::x11ProcessEvent( XEvent* event )
 {
@@ -2395,7 +2459,8 @@ int QApplication::x11ProcessEvent( XEvent* event )
 	break;
 
     case ConfigureNotify:			// window move/resize event
-	widget->translateConfigEvent( event );
+	if ( event->xconfigure.event == event->xconfigure.window )
+	    widget->translateConfigEvent( event );
 	break;
 
     case XFocusIn: {				// got focus
@@ -2596,8 +2661,8 @@ int QApplication::x11ProcessEvent( XEvent* event )
 
 
 /*!
-  Processes pending events, for \a maxtime milliseconds or until there
-  are no more events to process, then return.
+  Processes pending events for \a maxtime milliseconds or until there
+  are no more events to process, whichever is shorter.
 
   You can call this function occasionally when you program is busy doing a
   long operation (e.g. copying a file).
@@ -2619,12 +2684,14 @@ void QApplication::processEvents( int maxtime )
 /*!
   This virtual function is only implemented under X11.
 
-  If you create an application that inherits QApplication and reimplement this
-  function, you get direct access to all X events that the are received
-  from the X server.
+  If you create an application that inherits QApplication and
+  reimplement this function, you get direct access to all X events
+  that the are received from the X server.
 
-  Return TRUE if you want to stop the event from being dispatched, or return
-  FALSE for normal event dispatching.
+  Return TRUE if you want to stop the event from being processed, or
+  return FALSE for normal event dispatching.
+
+  \sa x11ProcessEvent()
 */
 
 bool QApplication::x11EventFilter( XEvent * )
@@ -4078,6 +4145,8 @@ bool QETWidget::translateConfigEvent( const XEvent *event )
 		break;
 	    if (x11Event( &otherEvent ) )
 		break;
+	    if ( otherEvent.xconfigure.event != otherEvent.xconfigure.window )
+		break;
 	    newSize.setWidth( otherEvent.xconfigure.width );
 	    newSize.setHeight( otherEvent.xconfigure.height );
 	    if ( otherEvent.xconfigure.send_event || trust ) {
@@ -4150,10 +4219,10 @@ bool QETWidget::translateCloseEvent( const XEvent * )
   flash time is the time requried to display, invert and restore the
   caret display: A full flash cycle.  Usually, the text cursor is
   displayed for \a msecs/2 millisecnds, then hidden for \a msecs/2
-  milliseconds.
+  milliseconds, but this may vary.
 
-  Under windows, calling this function sets the double click
-  interval for all windows.
+  Note that on Microsoft Windows, calling this function sets the
+  cursor flash time for all windows.
 
   \sa cursorFlashTime()
  */
@@ -4164,11 +4233,12 @@ void  QApplication::setCursorFlashTime( int msecs )
 
 
 /*!
-  Returns the text cursor's flash time in milliseconds. The flash time is the
-  time requried to display, invert and restore the caret display.
+  Returns the text cursor's flash time in milliseconds. The flash time
+  is the time requried to display, invert and restore the caret
+  display.
 
-  The default value is 1000 milliseconds. Under Windows, the control
-  panel value is used.
+  The default value on X11 is 1000 milliseconds. On Windows, the
+  control panel value is used.
 
   Widgets should not cache this value since it may vary any time the
   user changes the global desktop settings.
@@ -4184,8 +4254,8 @@ int QApplication::cursorFlashTime()
   Sets the time limit that distinguishes a double click from two
   consecutive mouse clicks to \a ms milliseconds.
 
-  Under windows, calling this function sets the double click
-  interval for all windows.
+  Note that on Microsoft Windows, calling this function sets the
+  double click interval for all windows.
 
   \sa doubleClickInterval()
 */
@@ -4199,7 +4269,7 @@ void QApplication::setDoubleClickInterval( int ms )
 /*!
   Returns the maximum duration for a double click.
 
-  The default value is 400 milliseconds. Under Windows, the control
+  The default value on X11 is 400 milliseconds. On Windows, the control
   panel value is used.
 
   \sa setDoubleClickInterval()
@@ -4216,8 +4286,8 @@ int QApplication::doubleClickInterval()
   rotated.
 
   If this number exceeds the number of visible lines in a certain
-  widget, the widget should interpreted the scroll operation as a
-  single page up / page down operation instead.
+  widget, the widget should interpret the scroll operation as a single
+  page up / page down operation instead.
 
   \sa wheelScrollLines()
  */

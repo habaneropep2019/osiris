@@ -50,21 +50,24 @@ Inherits <a href="qobject.html">QObject</a>.
 <hr><h2><a name="details"></a>Detailed Description</h2>
 The QSessionManager class provides access to the session manager.
 <p>
-The QSessionManager class provides access to the session manager
-during a <a href="session.html">session management</a> action.  In
-Qt, session management actions are handled in the two virtual
-functions <a href="qapplication.html#d7ce0a">QApplication::commitData</a>() and <a href="qapplication.html#7bd5f2">QApplication::saveState</a>().
-Both functions provide a reference to a session manager object as
-argument, thus allowing the application to communicate with the
-session manager.
+The session manager is responsible for session management, most
+importantly interruption and resumption.
+<p>QSessionManager provides an interface between the application and
+the session manager, so that the program can work well with the
+session manager. In Qt, the session management requests for action
+are handled by the two virtual functions <a href="qapplication.html#d7ce0a">QApplication::commitData</a>()
+and <a href="qapplication.html#7bd5f2">QApplication::saveState</a>(). Both functions provide a reference to
+a session manager object as argument, thus allowing the application
+to communicate with the session manager.
 <p>During a session management action, i.e. within one of the two
 mentioned functions, no user interaction is possible, <em>unless</em> the
-application got explicit permission from the session manager.  An
-ordinary permission can be requested with <a href="#6fcc61">allowsInteraction</a>().  With
-<a href="#4a20f8">allowsErrorInteraction</a>(), applications can ask for a higher priority
-interaction permission in case an error occured.
-<p>Another important function is <a href="#d38fd9">cancel</a>(), which asks the session
-manager to cancel the shutdown process.
+application got explicit permission from the session manager. You
+can ask for mermission by calling <a href="#6fcc61">allowsInteraction</a>() or, if it's
+really urgent, <a href="#4a20f8">allowsErrorInteraction</a>(). Qt does not enforce this,
+but the session manager may. Perhaps.
+<p>You can try to abort the shutdown process by calling cancel. The
+default commitData() function does that if some top-level window
+rejected its closeEvent().
 <p>For sophisticated session managers as provided on Unix/X11,
 QSessionManager offers further possibilites to fine-tune an
 application's session management behaviour: <a href="#d4b216">setRestartCommand</a>(),
@@ -92,26 +95,26 @@ automatically.
 <hr><h2>Member Function Documentation</h2>
 <h3 class="fn">bool <a name="4a20f8"></a>QSessionManager::allowsErrorInteraction ()</h3>
 <p>Like <a href="#6fcc61">allowsInteraction</a>() but tells the session manager in addition
-that an error occured.  Session managers may treat error interaction
-requests with higher priority.  That means it is more likely that an
-error interaction is granted.  However, you are still not guaranteed
-that the session manager will grant your request.
+that an error occured. Session managers may give error interaction
+request higher priority. That means it is more likely that an error
+interaction is granted. However, you are still not guaranteed that
+the session manager will grant your request.
 <p>See also:  <a href="#6fcc61">allowsInteraction</a>(), <a href="#d8888c">release</a>() and <a href="#d38fd9">cancel</a>().
 <h3 class="fn">bool <a name="6fcc61"></a>QSessionManager::allowsInteraction ()</h3>
 <p>Asks the session manager for permission to interact with the
 user.  Returns TRUE if the interaction was granted, FALSE
 otherwise.
-<p>The rationale behind this is to make it possible to synchronize user
-interaction during a shutdown.  Advanced session managers on
-multitasking operating systems may ask all applications
-simultaniously to commit their data, which results in a much faster
-shutdown.
-<p>After the interaction we recommend releasing the user interaction
-semaphore with a call to <a href="#d8888c">release</a>().  This way, other applications
-may get the chance to interact with the user while your application
-is still busy saving data.
+<p>The rationale behind this mechanism is to make it possible to
+synchronize user interaction during a shutdown. Advanced session
+managers may ask all applications simultaniously to commit their
+data, resulting in a much faster shutdown.
+<p>When the interaction is done we strongyl recommend releasing the
+user interaction semaphore with a call to <a href="#d8888c">release</a>(). This way, other
+applications may get the chance to interact with the user while your
+application is still busy saving data. (The sempahore is implictly
+released when the application exits.)
 <p>If the user decides to cancel the shutdown process during the
-interaction phase, you must tell the session manager by calling to
+interaction phase, you must tell the session manager so by calling
 <a href="#d38fd9">cancel</a>().
 <p>Here's an example usage of the mentioned functions that may occur
 in the <a href="qapplication.html#d7ce0a">QApplication::commitData</a>() function of an application:
@@ -143,9 +146,8 @@ in the <a href="qapplication.html#d7ce0a">QApplication::commitData</a>() functio
 you may want to try <a href="#4a20f8">allowsErrorInteraction</a>() instead.
 <p>See also:  <a href="qapplication.html#d7ce0a">QApplication::commitData</a>(), <a href="#d8888c">release</a>() and <a href="#d38fd9">cancel</a>().
 <h3 class="fn">void <a name="d38fd9"></a>QSessionManager::cancel ()</h3>
-<p>Tells the session manager to cancel the shutdown process.
-Applications should not call this function without asking the user
-first.
+<p>Tells the session manager to cancel the shutdown process.   Applications
+should not call this function without asking the user first.
 <p>See also:  <a href="#6fcc61">allowsInteraction</a>() and <a href="#4a20f8">allowsErrorInteraction</a>().
 <h3 class="fn"><a href="qstringlist.html">QStringList</a> <a name="121c51"></a>QSessionManager::discardCommand () const</h3>
 <p>Returns the currently set discard command.
@@ -159,16 +161,18 @@ session management phase.
 interaction phase.
 <p>See also:  <a href="#6fcc61">allowsInteraction</a>() and <a href="#4a20f8">allowsErrorInteraction</a>().
 <h3 class="fn">void <a name="f86434"></a>QSessionManager::requestPhase2 ()</h3>
-<p>Requests a second session management phase for the application.  The
-application may then simply return from the
-<a href="qapplication.html#d7ce0a">QApplication::commitData</a>() or <a href="qapplication.html#7bd5f2">QApplication::saveState</a>() function.
-The respective function will be called again after the first session
-management phase has been finished, this time with <a href="#6711e2">isPhase2</a>()
-returning TRUE.
+<p>Requests a second session management phase for the application. The
+application may then return immediately from the
+<a href="qapplication.html#d7ce0a">QApplication::commitData</a>() or <a href="qapplication.html#7bd5f2">QApplication::saveState</a>() function,
+and they will be called again once most/all other applications have
+finished their session management.
 <p>The two phases are useful for applications like X11 window manager,
 that need to store informations about other application's windows
 and therefore have to wait until these applications finished their
 respective session management tasks.
+<p>Note that if another application has requested a second phase, it
+may get called before, simultaneously with, or after your
+application's second phase.
 <p>See also:  <a href="#6711e2">isPhase2</a>().
 <h3 class="fn"><a href="qstringlist.html">QStringList</a> <a name="798f87"></a>QSessionManager::restartCommand () const</h3>
 <p>Returns the currently set restart command.
@@ -178,7 +182,7 @@ respective session management tasks.
 <code>RestartIfRunning.</code>
 <p>See also:  <a href="#1777d7">setRestartHint</a>().
 <h3 class="fn"><a href="qstring.html">QString</a> <a name="de412c"></a>QSessionManager::sessionId () const</h3>
-<p>Returns the identifier of the current <a href="session.html">session</a>.
+<p>Returns the identifier of the current session.
 <p>If the application has been restored from an earlier session, this
 identifier is the same as it was in that previous session.
 <p>See also:  <a href="qapplication.html#ff3642">QApplication::sessionId</a>().
@@ -208,7 +212,7 @@ marking the data with the unique <a href="#de412c">sessionId</a>(), you will be 
 restore the application in a future session.
 <p>See also:  <a href="#798f87">restartCommand</a>(), <a href="#776cce">setDiscardCommand</a>() and <a href="#1777d7">setRestartHint</a>().
 <h3 class="fn">void <a name="1777d7"></a>QSessionManager::setRestartHint ( <a href="qsessionmanager.html#RestartHint">RestartHint</a> hint )</h3>
-<p>Sets the application's restart hint to <em>hint.</em>  On application
+<p>Sets the application's restart hint to <em>hint.</em> On application
 start-up the hint is set to <code>RestartIfRunning.</code>
 <p>Note that these flags are only hints, a session manager may or may
 not obey them.
@@ -220,7 +224,7 @@ application's startup.
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.1.0"><nobr>
+<input type=hidden name="version" value="2.1.1"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -228,5 +232,5 @@ copyright &copy; 1995-2000
 <a href="http://www.trolltech.com">Troll Tech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.0</div>
+<td align="right"><div align="right">Qt version 2.1.1</div>
 </table></div></address></body></html>

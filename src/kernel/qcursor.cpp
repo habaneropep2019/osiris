@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qcursor.cpp   2.1.0   edited 2000-03-24 $
+** $Id: qt/src/kernel/qcursor.cpp   2.1.1   edited 2000-05-22 $
 **
 ** Implementation of QCursor class
 **
@@ -89,6 +89,8 @@
 /*!
   \relates QCursor
   Writes the cursor \a c to the stream \a s.
+
+  \sa \link datastreamformat.html Format of the QDataStream operators \endlink
 */
 
 QDataStream &operator<<( QDataStream &s, const QCursor &c )
@@ -104,6 +106,8 @@ QDataStream &operator<<( QDataStream &s, const QCursor &c )
 /*!
   \relates QCursor
   Reads a cursor from the stream \a s and sets \a c to the read data.
+
+  \sa \link datastreamformat.html Format of the QDataStream operators \endlink
 */
 
 QDataStream &operator>>( QDataStream &s, QCursor &c )

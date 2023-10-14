@@ -66,8 +66,10 @@ clean:
 ####### Compile
 
 qnp.o: qnp.cpp \
-		../../../src/kernel/qpsprinter_p.h \
-		qnp.h
+		qnp.h \
+		npapi.h \
+		npunix.c \
+		npwin.cpp
 
 moc_qnp.o: moc_qnp.cpp \
 		qnp.h

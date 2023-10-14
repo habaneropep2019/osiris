@@ -109,8 +109,9 @@ For example, a <code>char*</code> is written as a 32-bit integer equal to the
 length of the string including the NUL byte, followed by all the
 characters of the string including the NUL byte. Similarly when
 reading a string, 4 bytes are read to create the 32-bit length value,
-then that many characters for the string including the NUL. If you
-want a "parsing" input stream, see <a href="qtextstream.html">QTextStream</a>. If you just want the
+then that many characters for the string including the NUL. For a complete
+description of all Qt types supporting data streaming see <a href="datastreamformat.html">Format of the QDataStream operators</a> .
+<p>If you want a "parsing" input stream, see <a href="qtextstream.html">QTextStream</a>. If you just want the
 data to be human-readable to aid in debugging, you can set the data
 stream into printable data mode with <a href="#445079">setPrintableData</a>(). The data is
 then written slower, in a human readable bloated form that is sufficient
@@ -328,7 +329,7 @@ stream.
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.1.0"><nobr>
+<input type=hidden name="version" value="2.1.1"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -336,5 +337,5 @@ copyright &copy; 1995-2000
 <a href="http://www.trolltech.com">Troll Tech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.0</div>
+<td align="right"><div align="right">Qt version 2.1.1</div>
 </table></div></address></body></html>

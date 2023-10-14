@@ -16,19 +16,22 @@
 <p>
 <h1 align=center>Qt Template Library</h1><br clear="all">
 <p>
-In contrast to the containers based on <a href="qcollection.html">QCollection</a>, the Qt template
-library implements a value-based approach comparable to the C++
-Standard Template Library (STL).
+Thq Qt Template Library is a set of templates within Qt dealing with
+containers of objects.  It provides a list of objects, a stack of
+objects, a map (or dictionary) from one type to another, and
+associated iterators and algorithms.
 <p>
-It currently provides the containers <a href="qmap.html">QMap</a>, <a href="qvaluelist.html">QValueList</a> and <a href="qvaluestack.html">QValueStack</a> plus a set of iterators and algorithms operating on these
-classes. For convenience, it also includes a predefined class <a href="qstringlist.html">QStringList</a> that stores a list of unicode string with useful
-string-specific functions such as QStringList::grep(),
-QStringList::split(), and QStringList::join().
+Qt also contains similar classes that deal with pointers to objects;
+<a href="qvaluelist.html">QValueList</a> vs. <a href="qlist.html">QList</a>, etc.  Compared to the pointer-based
+templates, the QTL offers easy copying of the container, real support
+for classes that e.g. require constructors, expand to much more object
+code, can often be a bit faster, require that the objects stored can
+be copied, and finally, have a worse record of compiler problems.
 <p>
-While QCollection and friends store pointers to objects, these classes
-store copies of the actual objects,
-i.e. values. Both concepts have their specific pros and cons,
-depending on the kind of data you want to store.
+Compared to the STL, the QTL contains only the most important features
+of the STL, has more regular funcion naming, has no platform
+differences, is often a little slower and often expands to less object
+code.
 <p>
 If you can not make copies of the objects you want to store you are
 better off with QCollection and friends. They were designed to handle
@@ -230,5 +233,5 @@ The same applies to QStringList, QValueStack and QMap.
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.0</div>
+<td align="right"><div align="right">Qt version 2.1.1</div>
 </table></div></address></body></html>

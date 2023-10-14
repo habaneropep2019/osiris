@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qstring.h   2.1.0   edited 2000-03-24 $
+** $Id: qt/src/tools/qstring.h   2.1.1   edited 2000-05-20 $
 **
 ** Definition of the QString class, and related Unicode
 ** functions.
@@ -121,16 +121,6 @@ public:
 
     // ****** WHEN ADDING FUNCTIONS, CONSIDER ADDING TO QCharRef TOO
 
-    bool isNull() const { return unicode()==0; }
-    bool isPrint() const;
-    bool isPunct() const;
-    bool isSpace() const;
-    bool isMark() const;
-    bool isLetter() const;
-    bool isNumber() const;
-    bool isLetterOrNumber() const;
-    bool isDigit() const;
-
     int digitValue() const;
     QChar lower() const;
     QChar upper() const;
@@ -149,6 +139,16 @@ public:
     // like all ifdef'd code this is undocumented
     operator char() const { return latin1(); }
 #endif
+
+    bool isNull() const { return unicode()==0; }
+    bool isPrint() const;
+    bool isPunct() const;
+    bool isSpace() const;
+    bool isMark() const;
+    bool isLetter() const;
+    bool isNumber() const;
+    bool isLetterOrNumber() const;
+    bool isDigit() const;
 
     uchar& cell() { return cl; }
     uchar& row() { return rw; }
@@ -468,6 +468,9 @@ public:
 
     // all this is not documented: We just say "like QChar" and let it be.
 #if 1
+    ushort unicode() const { return s.constref(p).unicode(); }
+    char latin1() const { return s.constref(p).latin1(); }
+
     // An operator= for each QChar cast constructor...
     QCharRef operator=(char c ) { s.ref(p)=c; return *this; }
     QCharRef operator=(uchar c ) { s.ref(p)=c; return *this; }
@@ -481,9 +484,6 @@ public:
     operator QChar () const { return s.constref(p); }
 
     // each function...
-    ushort unicode() const { return s.constref(p).unicode(); }
-    char latin1() const { return s.constref(p).latin1(); }
-
     bool isNull() const { return unicode()==0; }
     bool isPrint() const { return s.constref(p).isPrint(); }
     bool isPunct() const { return s.constref(p).isPunct(); }

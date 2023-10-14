@@ -1,4 +1,4 @@
-.TH QByteArray 3qt "12 April 2000" "Troll Tech AS" \" -*- nroff -*-
+.TH QByteArray 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -364,9 +364,11 @@ The checksum is independent of the byte order (endianness).
 .SH "QDataStream & operator<< (QDataStream & s, const QByteArray & a)"
 Writes a byte array to a stream and returns a reference to the stream.
 .PP
-The serialization format is the byte array size (\fCQ_UINT32)\fR followed by this number of bytes.
+See also: Format of the QDataStream operators
 .SH "QDataStream & operator>> (QDataStream & s, QByteArray & a)"
 Reads a byte array from a stream and returns a reference to the stream.
+.PP
+See also:  Format of the QDataStream operators
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qbytearray.html
 .SH COPYRIGHT

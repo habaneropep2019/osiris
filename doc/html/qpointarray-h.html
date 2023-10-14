@@ -28,7 +28,7 @@ remains with Troll Tech.
 <hr>
 <pre>
 /****************************************************************************
-** &#36;Id&#58; qt/src/kernel/qpointarray.h   2.1.0   edited 2000-03-24 $
+** &#36;Id&#58; qt/src/kernel/qpointarray.h   2.1.1   edited 2000-05-15 $
 **
 ** Definition of QPointArray class
 **
@@ -69,6 +69,7 @@ class Q_EXPORT <a href="qpointarray.html">QPointArray</a> : public <a href="qarr
 {
 public:
     QPointArray() {}
+    ~QPointArray() {}
     QPointArray( int size ) : QArray&lt;QPoint&gt;( size ) {}
     QPointArray( const QPointArray &amp;a ) : QArray&lt;QPoint&gt;( a ) {}
     QPointArray( const QRect &amp;r, bool closed=FALSE );
@@ -131,5 +132,5 @@ inline void QPointArray::setPoint( uint i, const QPoint &amp;p )
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.0</div>
+<td align="right"><div align="right">Qt version 2.1.1</div>
 </table></div></address></body></html>

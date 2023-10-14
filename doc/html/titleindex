@@ -3,8 +3,10 @@ About Troll Tech | troll.html
 About Unicode | unicode.html
 Books about GUI | guibooks.html
 Change Notes Qt 2.1 | changes21.html
+Change Notes for Qt 2.1.1 | changes211.html
 Common Problems | commonproblems.html
 Food-for-thought Easter Egg | qnetworkegg.html
+Format of the QDataStream operators | datastreamformat.html
 How-To Buy Qt | buyhowto.html
 How-To Report A Bug | bughowto.html
 Key Features in Qt 2.1 | keyfeatures21.html

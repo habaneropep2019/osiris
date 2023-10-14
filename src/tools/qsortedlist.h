@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qsortedlist.h   2.1.0   edited 2000-03-25 $
+** $Id: qt/src/tools/qsortedlist.h   2.1.1   edited 2000-03-25 $
 **
 ** Definition of QList template/macro class
 **

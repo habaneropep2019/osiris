@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/dialogs/qfontdialog.cpp   2.1.0   edited 2000-03-24 $
+** $Id: qt/src/dialogs/qfontdialog.cpp   2.1.1   edited 2000-05-06 $
 **
 ** Implementation of QFontDialog
 **
@@ -307,7 +307,7 @@ QFontDialog::QFontDialog( QWidget *parent, const char *name,
     d->familyEdit->setFocus();
 }
 
-/*! Destroys the font dialog and frees up its storage. */
+/*! Destructs the font dialog and frees up its storage. */
 
 QFontDialog::~QFontDialog()
 {

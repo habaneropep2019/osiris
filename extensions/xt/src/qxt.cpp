@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/extensions/xt/src/qxt.cpp   2.1.0   edited 2000-04-11 $
+** $Id: qt/extensions/xt/src/qxt.cpp   2.1.1   edited 2000-04-11 $
 **
 ** Implementation of Qt extension classes for Xt/Motif support.
 **

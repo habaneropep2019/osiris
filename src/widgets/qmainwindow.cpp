@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qmainwindow.cpp   2.1.0   edited 2000-04-07 $
+** $Id: qt/src/widgets/qmainwindow.cpp   2.1.1   edited 2000-05-24 $
 **
 ** Implementation of QMainWindow class
 **
@@ -407,6 +407,8 @@ void QToolLayout::init()
 {
     cached_width = 0;
     cached_height = 0;
+    cached_hfw = -1;
+    cached_wfh = -1;
 }
 
 QToolLayout::~QToolLayout()
@@ -998,8 +1000,13 @@ static void saveToolLayout( QMainWindowPrivate *d, QMainWindow::ToolBarDock dock
     int i = dl->findRef( t );
     if ( i == -1 )
 	return;
-    if ( i + 1 < (int)dl->count() )
-	dl->at( i + 1 )->nl = TRUE;
+    if ( i + 1 < (int)dl->count() && !dl->at( i + 1 )->nl ) {
+	if ( t->nl )
+	    dl->at( i + 1 )->nl = t->nl;
+	else if ( i - 1 >= 0 )
+	    dl->at( i + 1 )->nl = tb_pos( dl->at( i - 1 )->t, dl->at( i - 1 )->t->orientation(), TRUE ) !=
+				  tb_pos( dl->at( i + 1 )->t, dl->at( i + 1 )->t->orientation(), TRUE );
+    }
 }
 
 static void findNewToolbarPlace( QMainWindowPrivate *d, QToolBar *tb, QMainWindow::ToolBarDock dock,
@@ -1728,6 +1735,9 @@ void QMainWindow::moveToolBar( QToolBar *toolBar, ToolBarDock edge, QToolBar *re
     if ( !toolBar )
 	return;
 
+    if ( !isDockEnabled( edge ) )
+	return;
+
     // if the toolbar is just moved a bit (offset change), but the order in the dock doesn't change,
     // then don't do the hard work
     if ( relative == toolBar || ipos == QMainWindowPrivate::SameIndex ) {
@@ -1798,7 +1808,7 @@ void QMainWindow::moveToolBar( QToolBar *toolBar, ToolBarDock edge, QToolBar *re
 	    dl = d->hidden;
 	}
 
-	// if the dock couldn't be dound
+	// if the dock couldn't be found
 	if ( !dl ) {
 	    if ( edge != Minimized ) {
 		ct->oldDock = edge;
@@ -2424,7 +2434,7 @@ bool QMainWindow::rightJustification() const
 
 void QMainWindow::triggerLayout( bool deleteLayout )
 {
-    if ( !deleteLayout ) {
+    if ( !deleteLayout && d->tll ) {
 	if ( d->hidden && !d->hidden->isEmpty() ) {
 	    int visibles = 0;
 	    d->hideDock->show();
@@ -2654,14 +2664,14 @@ void QMainWindow::moveToolBar( QToolBar* t , QMouseEvent * e )
 	    int left = menu.insertItem( tr( "&Left" ) );
 	    menu.setItemEnabled( left, isDockEnabled( Left ) && isDockEnabled( t, Left ) );
 	    int right = menu.insertItem( tr( "&Right" ) );
-	    menu.setItemEnabled( left, isDockEnabled( Right ) && isDockEnabled( t, Right ) );
+	    menu.setItemEnabled( right, isDockEnabled( Right ) && isDockEnabled( t, Right ) );
 	    int top = menu.insertItem( tr( "&Top" ) );
-	    menu.setItemEnabled( left, isDockEnabled( Top ) && isDockEnabled( t, Top ) );
+	    menu.setItemEnabled( top, isDockEnabled( Top ) && isDockEnabled( t, Top ) );
 	    int bottom = menu.insertItem( tr( "&Bottom" ) );
-	    menu.setItemEnabled( left, isDockEnabled( Bottom ) && isDockEnabled( t, Bottom ) );
+	    menu.setItemEnabled( bottom, isDockEnabled( Bottom ) && isDockEnabled( t, Bottom ) );
 	    menu.insertSeparator();
 	    int hide = menu.insertItem( tr( "&Hide" ) );
-	    menu.setItemEnabled( left, isDockEnabled( Minimized ) && isDockEnabled( t, Minimized ) );
+	    menu.setItemEnabled( hide, isDockEnabled( Minimized ) && isDockEnabled( t, Minimized ) );
 	    int res = menu.exec( e->globalPos() );
 	    if ( res == left )
 		moveToolBar( t, Left );
@@ -2989,7 +2999,7 @@ QList<QToolBar> QMainWindow::toolBars( ToolBarDock dock ) const
 
   The default is TRUE.
 
-  \sa setDockEnabled(), toolbarsMovable(), setOpaqueMoving()
+  \sa setDockEnabled(), toolBarsMovable(), setOpaqueMoving()
 */
 
 void QMainWindow::setToolBarsMovable( bool enable )
@@ -3007,7 +3017,7 @@ void QMainWindow::setToolBarsMovable( bool enable )
 /*!
   Returns whether or not the toolbars of this main window are movable.
 
-  \sa setToolbarsMovable()
+  \sa setToolBarsMovable()
 */
 
 bool QMainWindow::toolBarsMovable() const

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qpainter.h   2.1.0   edited 2000-03-31 $
+** $Id: qt/src/kernel/qpainter.h   2.1.1   edited 2000-03-31 $
 **
 ** Definition of QPainter class
 **

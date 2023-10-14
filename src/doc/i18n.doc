@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/doc/i18n.doc   2.1.0   edited 2000-03-24 $
+** $Id: qt/doc/i18n.doc   2.1.1   edited 2000-05-18 $
 **
 ** Explanation of moc and the meta object system
 **
@@ -442,7 +442,7 @@ support in Solaris<sup class="tm"><font size="-1">TM</font></sup> 7</a>.
 
 <h2>Notes about locales on X11</h2>
 
-Many Unix distributations in only partial support for some locales -
+Many Unix distributations contain only partial support for some locales -
 for example, if you have a <tt>/usr/share/locale/ja_JP.EUC</tt>
 directory, this does not necessarily mean you can display Japanese text
 - you also need JIS encoded fonts (or Unicode fonts), and that

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/doc/qdict.doc   2.1.0   edited 2000-03-24 $
+** $Id: qt/doc/qdict.doc   2.1.1   edited 2000-05-18 $
 **
 ** QDict and QDictIterator class documentation
 **
@@ -379,7 +379,7 @@
 	QDictIterator<char> it( dict ); // iterator for dict
 
         while ( it.current() ) {
-	    printf( "%s -> %s\n", it.currentKey(), it.current() );
+	    printf( "%s -> %s\n", it.currentKey().latin1(), it.current() );
 	    ++it;
 	}
     }

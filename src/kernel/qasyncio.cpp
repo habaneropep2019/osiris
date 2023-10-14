@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qasyncio.cpp   2.1.0   edited 2000-03-24 $
+** $Id: qt/src/kernel/qasyncio.cpp   2.1.1   edited 2000-05-06 $
 **
 ** Implementation of asynchronous I/O classes
 **
@@ -42,7 +42,7 @@
 
 
 /*!
-  Destroys the async IO object.
+  Destructs the async IO object.
 */
 QAsyncIO::~QAsyncIO()
 {
@@ -213,7 +213,7 @@ QIODeviceSource::QIODeviceSource(QIODevice* device, int buffer_size) :
 }
 
 /*!
-  Destroys the QIODeviceSource, deleting the QIODevice from which it was
+  Destructs the QIODeviceSource, deleting the QIODevice from which it was
   constructed.
 */
 QIODeviceSource::~QIODeviceSource()

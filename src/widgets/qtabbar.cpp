@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qtabbar.cpp   2.1.0   edited 2000-03-27 $
+** $Id: qt/src/widgets/qtabbar.cpp   2.1.1   edited 2000-05-18 $
 **
-** Implementation of QTabBar class
+** Implementation of QTab and QTabBar classes
 **
 ** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
@@ -45,24 +45,22 @@
 */
 
 
-/*! Destructs the tab and frees all allocated resource */
+/*! \fn QTab::QTab( const QString& text )
+  Constructs a tab with a \a text.
+*/
+
+
+/*! \fn QTab::QTab( const QIconSet& icon, const QString& text )
+  Constructs a tab with an \a icon and a \a text.
+*/
+
+
+/*! Destructs the tab and frees up all allocated resources */
 
 QTab::~QTab()
 {
     delete iconset;
 }
-
-// this struct can be expanded without breaking binary compatibility
-struct QTabPrivate {
-    int id;
-    int focus;
-    QAccel * a;
-    QTabBar::Shape s;
-    QToolButton* rightB;
-    QToolButton* leftB;
-    bool  scrolls;
-};
-
 
 
 /*!
@@ -125,6 +123,18 @@ struct QTabPrivate {
   </ul>
 */
 
+
+struct QTabPrivate {
+    int id;
+    int focus;
+    QAccel * a;
+    QTabBar::Shape s;
+    QToolButton* rightB;
+    QToolButton* leftB;
+    bool  scrolls;
+};
+
+
 /*!
   \fn void QTabBar::selected( int id )
 
@@ -135,6 +145,7 @@ struct QTabPrivate {
   show() is guaranteed to emit this signal, so that you can display
   your page in a slot connected to this signal.
 */
+
 
 /*!
   Constructs a new, empty tab bar.
@@ -536,6 +547,8 @@ QTab * QTabBar::selectTab( const QPoint & p ) const
 */
 void QTabBar::mousePressEvent( QMouseEvent * e )
 {
+    if ( e->button() != LeftButton )
+	return;
     QTab * t = selectTab( e->pos() );
     if ( t != 0 && t == selectTab( e->pos() ) && t->enabled ) {
 	setCurrentTab( t );
@@ -683,6 +696,7 @@ void QTabBar::keyPressEvent( QKeyEvent * e )
 
 /*!  Returns a pointer to the tab with ID \a id, or 0 if there is no
   such tab.
+
 */
 
 QTab * QTabBar::tab( int id )
@@ -693,6 +707,7 @@ QTab * QTabBar::tab( int id )
 	    return t;
     return 0;
 }
+
 
 /*!
   The list of QTab objects added.
@@ -763,6 +778,16 @@ void QTabBar::layoutTabs()
 /*!
   \reimp
 */
+
+void QTabBar::styleChange( QStyle& old )
+{
+	layoutTabs();
+	QWidget::styleChange( old );
+}
+
+/*!
+  \reimp
+*/
 void QTabBar::focusInEvent( QFocusEvent * )
 {
     QTab *t = l->first();
@@ -814,6 +839,7 @@ void QTabBar::focusOutEvent( QFocusEvent * )
 	    p.fillRect( QRect( r.left() + ( r.width() -w ) / 2 - 4,
 				   r.top() + ( r.height()-h ) / 2 - 1,
 			       w + 2, h + 2 ), colorGroup().brush(QColorGroup::Background ) );
+	    style().drawTab( &p, this, t, TRUE );
 	    paintLabel( &p, QRect( r.left() + ( r.width() -w ) /2 - 3,
 				   r.top() + ( r.height()-h ) / 2,
 				   w, h ), t, FALSE );

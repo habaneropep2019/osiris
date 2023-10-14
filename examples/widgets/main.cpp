@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/widgets/main.cpp   2.1.0   edited 2000-03-02 $
+** $Id: qt/examples/widgets/main.cpp   2.1.1   edited 2000-05-20 $
 **
 ** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
@@ -14,7 +14,6 @@
 #include <qcdestyle.h>
 #include <qwindowsstyle.h>
 #include <qplatinumstyle.h>
-
 
 class MyWidgetView : public WidgetView
 {

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/dialogs/qprintdialog.cpp   2.1.0   edited 2000-03-29 $
+** $Id: qt/src/dialogs/qprintdialog.cpp   2.1.1   edited 2000-03-29 $
 **
 ** Implementation of internal print dialog (X11) used by QPrinter::select().
 **

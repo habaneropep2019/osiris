@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qpointarray.cpp   2.1.0   edited 2000-03-24 $
+** $Id: qt/src/kernel/qpointarray.cpp   2.1.1   edited 2000-05-22 $
 **
 ** Implementation of QPointArray class
 **
@@ -130,6 +130,13 @@ QPointArray::QPointArray( int nPoints, const QCOORD *points )
 {
     setPoints( nPoints, points );
 }
+
+
+/*!
+  \fn QPointArray::~QPointArray()
+
+  Destructs the point array.
+*/
 
 
 /*!
@@ -937,11 +944,7 @@ QPointArray QPointArray::quadBezier() const
   \relates QPointArray
   Writes a point array to the stream and returns a reference to the stream.
 
-  The serialization format is:
-  <ol>
-  <li> The array size (Q_UINT32)
-  <li> The array points (QPoint)
-  </ol>
+  \sa \link datastreamformat.html Format of the QDataStream operators \endlink
 */
 
 QDataStream &operator<<( QDataStream &s, const QPointArray &a )
@@ -957,6 +960,8 @@ QDataStream &operator<<( QDataStream &s, const QPointArray &a )
 /*!
   \relates QPointArray
   Reads a point array from the stream and returns a reference to the stream.
+
+  \sa \link datastreamformat.html Format of the QDataStream operators \endlink
 */
 
 QDataStream &operator>>( QDataStream &s, QPointArray &a )

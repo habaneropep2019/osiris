@@ -239,7 +239,7 @@ example, use viewport()-><a href="qwidget.html#eeb59b">setMouseTracking</a>(TRUE
 QScrollView (since drag-and-drop events propagate to the parent), but
 to work out what logical position in the view, you would need to map
 the drop co-ordinate from being relative to the QScrollView to being
-relative to the contents - use the function mapToContents() for this.
+relative to the contents - use the function <a href="#0eca58">viewportToContents</a>() for this.
 <p>To handle mouse events on the scrolling area, subclass scrollview as
 you would subclass other widgets, but rather than overriding
 <a href="qwidget.html#fb611b">mousePressEvent</a>(), reimplement <a href="#527711">viewportMousePressEvent</a>() instead (if
@@ -247,6 +247,24 @@ you reimplement mousePressEvent() you'll only get called when part of the
 QScrollView is clicked - and the only such part is the "corner" (if
 you don't set a cornerWidget()) and the frame, everything else being
 covered up by the viewport, clipper, or scrollbars.
+<p>When you contruct a QScrollView, some of the widget flags apply to the
+viewport(), instead of being sent to the <a href="qwidget.html">QWidget</a> constructor for the
+QScrollView. This applies to <code>WResizeNoErase, WNorthWestGravity, WRepaintNoErase</code> and <code>WPaintClever.</code> See <a href="qt.html#WidgetFlags">Qt::WidgetFlags</a> for
+documentation about these flags.  Here are some examples: <ul>
+<li> An image manipulation widget would use <code>WResizeNoErase|WNorthWestGravity,</code> because the widget draws all pixels
+itself and when the size increases, it only needs a paint event for
+the new part, since the old part remains unchanged.
+<li>A word processing widget might use <code>WResizeNoErase</code> and repaint
+itself line by line to get a less flickery resizing. If the widget is
+in a mode where no text justification can take place, it might use <code>WNorthWestGravity</code> too, so that it would only get a repaint for the
+newly visible parts.
+<li>A scrolling game widget where the background scrolls as the
+characters move might use <code>WRepaintNoErase</code> (in addition to <code>WNorthWestGravity</code> and <code>WResizeNoErase)</code> so that the window system
+background does not flash in and out during scrolling.
+</ul><p><b>Warning:</b> WResizeNoErase is currently set by default, i.e. you always
+have to clear the background manually in scrollview subclasses. This
+will change in a future version of Qt, and we recommend specifying the
+flag explicitly.
 <p><img src=qscrollview-m.png> <img src=qscrollview-w.png>
 <p>Examples:
  <a href="scrollview-scrollview-cpp.html#QScrollView">scrollview/scrollview.cpp</a>
@@ -276,11 +294,10 @@ too tall to fit and not else.  This is the default.
  <a href="scrollview-scrollview-cpp.html#QScrollView::ScrollBarMode">scrollview/scrollview.cpp</a>
 <hr><h2>Member Function Documentation</h2>
 <h3 class="fn"><a name="dc5598"></a>QScrollView::QScrollView ( <a href="qwidget.html">QWidget</a> * parent=0, const char * name=0, WFlags f=0 )</h3>
-<p>Constructs a QScrollView.
-<p>If you intend to add child widgets, you may see improved refresh
-if you include <code>WPaintClever</code> in the widgets flags, <em>f.</em>  <code>WPaintClever</code>
-as well as <code>WNorthWestGravity</code> and <code>WRepaintNoErase</code>
-is propagated to the <a href="#040cb5">viewport</a>() widget.
+<p>Constructs a QScrollView with a <em>parent,</em> a <em>name</em> and widget
+flags <em>f.</em>
+<p>The widget flags <code>WNorthWestGravity, WRepaintNoErase</code> and <code>WPaintClever</code> are propagated to the <a href="#040cb5">viewport</a>() widget. The other
+widget flags are propagated to the parent constructor as usual.
 <h3 class="fn"><a name="13f41e"></a>QScrollView::~QScrollView ()</h3>
 <p>Destructs the QScrollView.  Any children added with <a href="#e4d759">addChild</a>()
 will be destructed.
@@ -590,6 +607,9 @@ scrollbars.
 <h3 class="fn"><a href="qsizepolicy.html">QSizePolicy</a> <a name="bd5724"></a>QScrollView::sizePolicy () const <code>[virtual]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
 <p>Reimplemented from <a href="qwidget.html#2d5d13">QWidget.</a>
+<h3 class="fn">void <a name="e80272"></a>QScrollView::styleChange ( <a href="qstyle.html">QStyle</a> &amp; old ) <code>[virtual]</code></h3>
+<p>Reimplemented for internal reasons; the API is not affected.
+<p>Reimplemented from <a href="qwidget.html#7a14f4">QWidget.</a>
 <h3 class="fn">int <a name="24b1e7"></a>QScrollView::topMargin () const <code>[protected]</code></h3>
 <p>Returns the current top margin.
 <p>See also:  <a href="#3a0368">setMargins</a>().
@@ -725,7 +745,7 @@ events sent to the viewport.
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.1.0"><nobr>
+<input type=hidden name="version" value="2.1.1"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -733,5 +753,5 @@ copyright &copy; 1995-2000
 <a href="http://www.trolltech.com">Troll Tech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.0</div>
+<td align="right"><div align="right">Qt version 2.1.1</div>
 </table></div></address></body></html>

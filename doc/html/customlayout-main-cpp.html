@@ -31,7 +31,7 @@ body { background: white; color: black; }
   <hr>
 
   Header file of the Flow-Layout: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/customlayout/flow.h   2.1.0   edited 2000-01-31 $
+** &#36;Id&#58; qt/examples/customlayout/flow.h   2.1.1   edited 2000-01-31 $
 **
 ** Definition of simple flow layout for custom layout example
 **
@@ -89,7 +89,7 @@ private:
   <hr>
 
   Implementation of the Flow-Layout: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/customlayout/flow.cpp   2.1.0   edited 2000-01-31 $
+** &#36;Id&#58; qt/examples/customlayout/flow.cpp   2.1.1   edited 2000-01-31 $
 **
 ** Implementing your own layout: flow example
 **
@@ -114,24 +114,24 @@ private:
 
 };
 
-uint <a name="415"></a>SimpleFlowIterator::count() const
+uint <a name="417"></a>SimpleFlowIterator::count() const
 {
     return list-&gt;<a href="qlist.html#816005">count</a>();
 }
 
-<a href="qlayoutitem.html">QLayoutItem</a> *<a name="416"></a>SimpleFlowIterator::current()
+<a href="qlayoutitem.html">QLayoutItem</a> *<a name="418"></a>SimpleFlowIterator::current()
 {
-    return idx &lt; int(<a href=#415>count</a>()) ? list-&gt;<a href="qlist.html#0812c4">at</a>(idx) : 0;
+    return idx &lt; int(<a href=#417>count</a>()) ? list-&gt;<a href="qlist.html#0812c4">at</a>(idx) : 0;
 }
 
-<a href="qlayoutitem.html">QLayoutItem</a> *<a name="417"></a>SimpleFlowIterator::next()
+<a href="qlayoutitem.html">QLayoutItem</a> *<a name="419"></a>SimpleFlowIterator::next()
 {
     idx++; return current();
 }
 
-<a href="qlayoutitem.html">QLayoutItem</a> *<a name="418"></a>SimpleFlowIterator::takeCurrent()
+<a href="qlayoutitem.html">QLayoutItem</a> *<a name="420"></a>SimpleFlowIterator::takeCurrent()
 {
-    return idx &lt; int(<a href=#415>count</a>()) ? list-&gt;<a href="qlist.html#0f1003">take</a>( idx ) : 0;
+    return idx &lt; int(<a href=#417>count</a>()) ? list-&gt;<a href="qlist.html#0f1003">take</a>( idx ) : 0;
 }
 
 SimpleFlow::~SimpleFlow()
@@ -139,7 +139,7 @@ SimpleFlow::~SimpleFlow()
     deleteAllItems();
 }
 
-int <a name="406"></a>SimpleFlow::heightForWidth( int w ) const
+int <a name="408"></a>SimpleFlow::heightForWidth( int w ) const
 {
     if ( cached_width != w ) {
         //Not all C++ compilers support "mutable" yet:
@@ -151,38 +151,38 @@ int <a name="406"></a>SimpleFlow::heightForWidth( int w ) const
     return cached_hfw;
 }
 
-void <a name="407"></a>SimpleFlow::addItem( <a href="qlayoutitem.html">QLayoutItem</a> *item)
+void <a name="409"></a>SimpleFlow::addItem( <a href="qlayoutitem.html">QLayoutItem</a> *item)
 {
     list.<a href="qlist.html#687e74">append</a>( item );
 }
 
-bool <a name="408"></a>SimpleFlow::hasHeightForWidth() const
+bool <a name="410"></a>SimpleFlow::hasHeightForWidth() const
 {
     return TRUE;
 }
 
-<a href="qsize.html">QSize</a> <a name="409"></a>SimpleFlow::sizeHint() const
+<a href="qsize.html">QSize</a> <a name="411"></a>SimpleFlow::sizeHint() const
 {
     return minimumSize();
 }
 
-<a href="qsizepolicy.html#ExpandData">QSizePolicy::ExpandData</a> <a name="410"></a>SimpleFlow::expanding() const
+<a href="qsizepolicy.html#ExpandData">QSizePolicy::ExpandData</a> <a name="412"></a>SimpleFlow::expanding() const
 {
     return QSizePolicy::NoDirection;
 }
 
-<a href="qlayoutiterator.html">QLayoutIterator</a> <a name="411"></a>SimpleFlow::iterator()
+<a href="qlayoutiterator.html">QLayoutIterator</a> <a name="413"></a>SimpleFlow::iterator()
 {
     return QLayoutIterator( new SimpleFlowIterator( &amp;list ) );
 }
 
-void <a name="412"></a>SimpleFlow::setGeometry( const QRect &amp;r )
+void <a name="414"></a>SimpleFlow::setGeometry( const QRect &amp;r )
 {
     <a href="qlayout.html#0d8bbc">QLayout::setGeometry</a>( r );
-    <a href=#413>doLayout</a>( r );
+    <a href=#415>doLayout</a>( r );
 }
 
-int <a name="413"></a>SimpleFlow::doLayout( const QRect &amp;r, bool testonly )
+int <a name="415"></a>SimpleFlow::doLayout( const QRect &amp;r, bool testonly )
 {
     int x = r.x();
     int y = r.y();
@@ -206,7 +206,7 @@ int <a name="413"></a>SimpleFlow::doLayout( const QRect &amp;r, bool testonly )
     return y + h - r.y();
 }
 
-<a href="qsize.html">QSize</a> <a name="414"></a>SimpleFlow::minimumSize() const
+<a href="qsize.html">QSize</a> <a name="416"></a>SimpleFlow::minimumSize() const
 {
     <a href="qsize.html">QSize</a> s(0,0);
     <a href="qlistiterator.html">QListIterator</a>&lt;<a href="qlayoutitem.html">QLayoutItem</a>&gt; it(list);
@@ -223,7 +223,7 @@ int <a name="413"></a>SimpleFlow::doLayout( const QRect &amp;r, bool testonly )
   <hr>
 
   Header file of the Border-Layout: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/customlayout/border.h   2.1.0   edited 2000-01-31 $
+** &#36;Id&#58; qt/examples/customlayout/border.h   2.1.1   edited 2000-01-31 $
 **
 ** Definition of simple flow layout for custom layout example
 **
@@ -330,7 +330,7 @@ private:
   <hr>
 
   Implementation of the Border-Layout: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/customlayout/border.cpp   2.1.0   edited 2000-02-21 $
+** &#36;Id&#58; qt/examples/customlayout/border.cpp   2.1.1   edited 2000-02-21 $
 **
 ** Implementing your own layout: flow example
 **
@@ -361,33 +361,33 @@ private:
 
 };
 
-uint <a name="430"></a>BorderLayoutIterator::count() const
+uint <a name="432"></a>BorderLayoutIterator::count() const
 {
     return list-&gt;<a href="qlist.html#816005">count</a>();
 }
 
-<a href="qlayoutitem.html">QLayoutItem</a> *<a name="431"></a>BorderLayoutIterator::current()
+<a href="qlayoutitem.html">QLayoutItem</a> *<a name="433"></a>BorderLayoutIterator::current()
 {
     return idx &lt; (int)count() ? list-&gt;<a href="qlist.html#0812c4">at</a>( idx )-&gt;item : 0;
 }
 
-BorderLayout::BorderLayoutStruct *<a name="432"></a>BorderLayoutIterator::currentStruct()
+BorderLayout::BorderLayoutStruct *<a name="434"></a>BorderLayoutIterator::currentStruct()
 {
     return idx &lt; (int)count() ? list-&gt;<a href="qlist.html#0812c4">at</a>( idx ) : 0;
 }
 
-void <a name="433"></a>BorderLayoutIterator::toFirst()
+void <a name="435"></a>BorderLayoutIterator::toFirst()
 {
     idx = 0;
 }
 
-<a href="qlayoutitem.html">QLayoutItem</a> *<a name="434"></a>BorderLayoutIterator::next()
+<a href="qlayoutitem.html">QLayoutItem</a> *<a name="436"></a>BorderLayoutIterator::next()
 {
     idx++;
     return current();
 }
 
-<a href="qlayoutitem.html">QLayoutItem</a> *<a name="435"></a>BorderLayoutIterator::takeCurrent()
+<a href="qlayoutitem.html">QLayoutItem</a> *<a name="437"></a>BorderLayoutIterator::takeCurrent()
 {
     BorderLayout::BorderLayoutStruct *b
         = idx &lt; int( list-&gt;<a href="qlist.html#816005">count</a>() ) ? list-&gt;<a href="qlist.html#0f1003">take</a>(  idx  ) : 0;
@@ -396,9 +396,9 @@ void <a name="433"></a>BorderLayoutIterator::toFirst()
     return item;
 }
 
-BorderLayoutIterator &amp;<a href=#436><a name="436"></a>BorderLayoutIterator::operator</a>++()
+BorderLayoutIterator &amp;<a href=#438><a name="438"></a>BorderLayoutIterator::operator</a>++()
 {
-    <a href=#434>next</a>();
+    <a href=#436>next</a>();
     return *this;
 }
 
@@ -407,56 +407,56 @@ BorderLayout::~BorderLayout()
     deleteAllItems();
 }
 
-void <a name="419"></a>BorderLayout::addItem( <a href="qlayoutitem.html">QLayoutItem</a> *item )
+void <a name="421"></a>BorderLayout::addItem( <a href="qlayoutitem.html">QLayoutItem</a> *item )
 {
-    <a href=#421>add</a>( item, West );
+    <a href=#423>add</a>( item, West );
 }
 
-void <a name="420"></a>BorderLayout::addWidget( <a href="qwidget.html">QWidget</a> *widget, Position pos )
+void <a name="422"></a>BorderLayout::addWidget( <a href="qwidget.html">QWidget</a> *widget, Position pos )
 {
-    <a href=#421>add</a>( new BorderWidgetItem( widget ), pos );
+    <a href=#423>add</a>( new BorderWidgetItem( widget ), pos );
 }
 
-void <a name="421"></a>BorderLayout::add( <a href="qlayoutitem.html">QLayoutItem</a> *item, Position pos )
+void <a name="423"></a>BorderLayout::add( <a href="qlayoutitem.html">QLayoutItem</a> *item, Position pos )
 {
     list.<a href="qlist.html#687e74">append</a>( new BorderLayoutStruct( item, pos ) );
     sizeDirty = TRUE; msizeDirty = TRUE;
-    <a href=#429>calcSize</a>( SizeHint ); calcSize( Minimum );
+    <a href=#431>calcSize</a>( SizeHint ); calcSize( Minimum );
 }
 
-bool <a name="422"></a>BorderLayout::hasHeightForWidth() const
+bool <a name="424"></a>BorderLayout::hasHeightForWidth() const
 {
     return FALSE;
 }
 
-<a href="qsize.html">QSize</a> <a name="423"></a>BorderLayout::sizeHint() const
+<a href="qsize.html">QSize</a> <a name="425"></a>BorderLayout::sizeHint() const
 {
     return cached;
 }
 
-<a href="qsize.html">QSize</a> <a name="424"></a>BorderLayout::minimumSize() const
+<a href="qsize.html">QSize</a> <a name="426"></a>BorderLayout::minimumSize() const
 {
     return cached;
 }
 
-<a href="qsizepolicy.html#ExpandData">QSizePolicy::ExpandData</a> <a name="425"></a>BorderLayout::expanding() const
+<a href="qsizepolicy.html#ExpandData">QSizePolicy::ExpandData</a> <a name="427"></a>BorderLayout::expanding() const
 
 {
     return QSizePolicy::BothDirections;
 }
 
-<a href="qlayoutiterator.html">QLayoutIterator</a> <a name="426"></a>BorderLayout::iterator()
+<a href="qlayoutiterator.html">QLayoutIterator</a> <a name="428"></a>BorderLayout::iterator()
 {
     return QLayoutIterator( new BorderLayoutIterator( &amp;list ) );
 }
 
-void <a name="427"></a>BorderLayout::setGeometry( const QRect &amp;rct )
+void <a name="429"></a>BorderLayout::setGeometry( const QRect &amp;rct )
 {
     <a href="qlayout.html#0d8bbc">QLayout::setGeometry</a>( rct );
-    <a href=#428>doLayout</a>( rct );
+    <a href=#430>doLayout</a>( rct );
 }
 
-void <a name="428"></a>BorderLayout::doLayout( const QRect &amp;rct, bool /*testonly*/ )
+void <a name="430"></a>BorderLayout::doLayout( const QRect &amp;rct, bool /*testonly*/ )
 {
     int ew = 0, ww = 0, nh = 0, sh = 0;
     int h = 0;
@@ -505,7 +505,7 @@ void <a name="428"></a>BorderLayout::doLayout( const QRect &amp;rct, bool /*test
         center-&gt;item-&gt;setGeometry( <a href="qrect.html">QRect</a>( ww, nh, rct.width() - ew - ww, h ) );
 }
 
-void <a name="429"></a>BorderLayout::calcSize( SizeType st )
+void <a name="431"></a>BorderLayout::calcSize( SizeType st )
 {
     if ( ( st == Minimum &amp;&amp; !msizeDirty ) ||
          ( st == SizeHint &amp;&amp; !sizeDirty ) )
@@ -558,7 +558,7 @@ void <a name="429"></a>BorderLayout::calcSize( SizeType st )
   <hr>
 
   Header file of the Card-Layout: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/customlayout/card.h   2.1.0   edited 2000-01-31 $
+** &#36;Id&#58; qt/examples/customlayout/card.h   2.1.1   edited 2000-01-31 $
 **
 ** Definition of simple flow layout for custom layout example
 **
@@ -603,7 +603,7 @@ private:
   <hr>
 
   Implementation of the Card-Layout: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/customlayout/card.cpp   2.1.0   edited 2000-02-21 $
+** &#36;Id&#58; qt/examples/customlayout/card.cpp   2.1.1   edited 2000-02-21 $
 **
 ** Implementing your own layout: flow example
 **
@@ -628,22 +628,22 @@ private:
     <a href="qlist.html">QList</a>&lt;<a href="qlayoutitem.html">QLayoutItem</a>&gt; *list;
 };
 
-<a href="qlayoutitem.html">QLayoutItem</a> *<a name="442"></a>CardLayoutIterator::current()
+<a href="qlayoutitem.html">QLayoutItem</a> *<a name="444"></a>CardLayoutIterator::current()
 {
     return idx &lt; int( list-&gt;<a href="qlist.html#816005">count</a>() ) ? list-&gt;<a href="qlist.html#0812c4">at</a>( idx ) : 0;
 }
 
-<a href="qlayoutitem.html">QLayoutItem</a> *<a name="443"></a>CardLayoutIterator::next()
+<a href="qlayoutitem.html">QLayoutItem</a> *<a name="445"></a>CardLayoutIterator::next()
 {
     idx++; return current();
 }
 
-<a href="qlayoutitem.html">QLayoutItem</a> *<a name="444"></a>CardLayoutIterator::takeCurrent()
+<a href="qlayoutitem.html">QLayoutItem</a> *<a name="446"></a>CardLayoutIterator::takeCurrent()
 {
     return idx &lt; int( list-&gt;<a href="qlist.html#816005">count</a>() ) ?list-&gt;<a href="qlist.html#0f1003">take</a>( idx ) : 0;
 }
 
-<a href="qlayoutiterator.html">QLayoutIterator</a> <a name="437"></a>CardLayout::iterator()
+<a href="qlayoutiterator.html">QLayoutIterator</a> <a name="439"></a>CardLayout::iterator()
 {
     return QLayoutIterator(  new CardLayoutIterator( &amp;list )  );
 }
@@ -653,12 +653,12 @@ CardLayout::~CardLayout()
     deleteAllItems();
 }
 
-void <a name="438"></a>CardLayout::addItem(  <a href="qlayoutitem.html">QLayoutItem</a> *item  )
+void <a name="440"></a>CardLayout::addItem(  <a href="qlayoutitem.html">QLayoutItem</a> *item  )
 {
     list.<a href="qlist.html#687e74">append</a>( item );
 }
 
-void <a name="439"></a>CardLayout::setGeometry( const QRect &amp;rct )
+void <a name="441"></a>CardLayout::setGeometry( const QRect &amp;rct )
 {
     <a href="qlayout.html#0d8bbc">QLayout::setGeometry</a>( rct );
 
@@ -682,7 +682,7 @@ void <a name="439"></a>CardLayout::setGeometry( const QRect &amp;rct )
     }
 }
 
-<a href="qsize.html">QSize</a> <a name="440"></a>CardLayout::sizeHint() const
+<a href="qsize.html">QSize</a> <a name="442"></a>CardLayout::sizeHint() const
 {
     <a href="qsize.html">QSize</a> s(0,0);
     int n = list.<a href="qlist.html#816005">count</a>();
@@ -697,7 +697,7 @@ void <a name="439"></a>CardLayout::setGeometry( const QRect &amp;rct )
     return s + n*QSize(<a href="qlayout.html#47a259">spacing</a>(),<a href="qlayout.html#47a259">spacing</a>());
 }
 
-<a href="qsize.html">QSize</a> <a name="441"></a>CardLayout::minimumSize() const
+<a href="qsize.html">QSize</a> <a name="443"></a>CardLayout::minimumSize() const
 {
     <a href="qsize.html">QSize</a> s(0,0);
     int n = list.<a href="qlist.html#816005">count</a>();
@@ -716,7 +716,7 @@ void <a name="439"></a>CardLayout::setGeometry( const QRect &amp;rct )
 
   Main:
 <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/customlayout/main.cpp   2.1.0   edited 2000-03-14 $
+** &#36;Id&#58; qt/examples/customlayout/main.cpp   2.1.1   edited 2000-03-14 $
 **
 ** Main for custom layout example
 **
@@ -812,5 +812,5 @@ int main( int argc, char **argv )
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.0</div>
+<td align="right"><div align="right">Qt version 2.1.1</div>
 </table></div></address></body></html>

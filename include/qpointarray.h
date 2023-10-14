@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qpointarray.h   2.1.0   edited 2000-03-24 $
+** $Id: qt/src/kernel/qpointarray.h   2.1.1   edited 2000-05-15 $
 **
 ** Definition of QPointArray class
 **
@@ -40,6 +40,7 @@ class Q_EXPORT QPointArray : public QArray<QPoint>
 {
 public:
     QPointArray() {}
+    ~QPointArray() {}
     QPointArray( int size ) : QArray<QPoint>( size ) {}
     QPointArray( const QPointArray &a ) : QArray<QPoint>( a ) {}
     QPointArray( const QRect &r, bool closed=FALSE );

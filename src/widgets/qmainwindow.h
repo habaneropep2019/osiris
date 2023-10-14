@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qmainwindow.h   2.1.0   edited 2000-03-24 $
+** $Id: qt/src/widgets/qmainwindow.h   2.1.1   edited 2000-04-18 $
 **
 ** Definition of QMainWindow class
 **
@@ -25,13 +25,6 @@
 
 #ifndef QMAINWINDOW_H
 #define QMAINWINDOW_H
-
-#if defined(Q_TEMPLATE_NEEDS_CLASS_DECLARATION) && defined(QLIST_H)
-#warning Qt warning:
-#warning Header file qlist.h is included before qmainwindow.h.
-#warning This will cause errors on this compiler because of improper template support.
-#warning Try changing the order of inclusion of your header files.
-#endif
 
 #ifndef QT_H
 #include "qwidget.h"

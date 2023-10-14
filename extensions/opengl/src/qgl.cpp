@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/extensions/opengl/src/qgl.cpp   2.1.0   edited 2000-03-24 $
+** $Id: qt/extensions/opengl/src/qgl.cpp   2.1.1   edited 2000-05-19 $
 **
 ** Implementation of OpenGL classes for Qt
 **
@@ -716,6 +716,12 @@ QGLContext::QGLContext( const QGLFormat &format, QPaintDevice *device )
     valid = FALSE;
 #if defined(Q_GLX)
     gpm = 0;
+#endif
+#if defined(Q_WGL)
+    dc = 0;
+    win = 0;
+    pixelFormatId = 0;
+    cmap = 0;
 #endif
     crWin = FALSE;
     initDone = FALSE;
@@ -1495,6 +1501,12 @@ void QGLWidget::paintEvent( QPaintEvent * )
 
 
 /*!
+  \fn void QGLWidget::setMouseTracking( bool enable )
+  \reimp
+*/
+
+
+/*!
   Renders the current scene on a pixmap and returns it.
 
   You may use this method on both visible and invisible QGLWidgets.
@@ -1532,7 +1544,7 @@ QPixmap QGLWidget::renderPixmap( int w, int h, bool useContext )
 	return pm;
 
     QGLFormat fmt = format();
-    //    fmt.setDirectRendering( FALSE );		// No direct rendering
+    fmt.setDirectRendering( FALSE );		// No direct rendering
     QGLContext* pcx = new QGLContext( fmt, &pm );
     QGLContext* ocx = (QGLContext*)context();
     setContext( pcx, 0, FALSE );

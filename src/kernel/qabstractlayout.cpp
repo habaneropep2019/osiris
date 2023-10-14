@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qabstractlayout.cpp   2.1.0   edited 2000-03-29 $
+** $Id: qt/src/kernel/qabstractlayout.cpp   2.1.1   edited 2000-05-06 $
 **
 ** Implementation of the abstract layout base class
 **
@@ -999,6 +999,10 @@ bool QLayout::eventFilter( QObject *o, QEvent *e )
 	    }
 	}
 	break;
+    case QEvent::HideToParent:
+    case QEvent::ShowToParent:
+	QApplication::postEvent( o, new QEvent( QEvent::LayoutHint ) );
+	break;
     case QEvent::LayoutHint:
 	activate(); //######## Check that LayoutHint events are collapsed
 	break;
@@ -1107,9 +1111,8 @@ QSize QLayout::totalMaximumSize() const
 
 
 /*!
-  Destroys the layout,
-  deleting all child layouts. Geometry management stops when
-  a toplevel layout is deleted.
+  Destructs the layout, deleting all child layouts.
+  Geometry management stops when a toplevel layout is deleted.
   \internal
   The layout classes will probably be fatally confused if you delete
   a sublayout.

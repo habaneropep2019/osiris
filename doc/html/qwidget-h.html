@@ -28,7 +28,7 @@ remains with Troll Tech.
 <hr>
 <pre>
 /****************************************************************************
-** &#36;Id&#58; qt/src/kernel/qwidget.h   2.1.0   edited 2000-04-03 $
+** &#36;Id&#58; qt/src/kernel/qwidget.h   2.1.1   edited 2000-05-18 $
 **
 ** Definition of QWidget class
 **
@@ -389,12 +389,12 @@ public:
     virtual void        setAcceptDrops( bool on );
 
     // transparency and pseudo transparency
-    
+
     virtual void        setAutoMask(bool);
     bool                autoMask() const;
-    
+
     enum BackgroundOrigin { WidgetOrigin, ParentOrigin };
-    
+
     void setBackgroundOrigin( BackgroundOrigin );
     BackgroundOrigin backgroundOrigin() const;
 
@@ -728,6 +728,7 @@ inline void QWidget::constPolish() const
     }
 }
 
+
 // Extra QWidget data
 //  - to minimize memory usage for members that are seldom used.
 //  - top-level widgets have extra extra data to reduce cost further
@@ -791,5 +792,5 @@ struct QWExtra {
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.0</div>
+<td align="right"><div align="right">Qt version 2.1.1</div>
 </table></div></address></body></html>

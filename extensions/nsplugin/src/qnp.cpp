@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/extensions/nsplugin/src/qnp.cpp   2.1.0   edited 2000-03-25 $
+** $Id: qt/extensions/nsplugin/src/qnp.cpp   2.1.1   edited 2000-04-26 $
 **
 ** Implementation of Qt extension classes for Netscape Plugin support.
 **
@@ -58,9 +58,6 @@
 #include <qobjectlist.h>
 
 #include <qprinter.h>
-#ifdef _WS_X11_
-#include "../../../src/kernel/qpsprinter_p.h"
-#endif
 #include <qfile.h>
 #include <qpainter.h>
 #include <q1xcompatibility.h>

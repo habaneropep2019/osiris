@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/extensions/opengl/src/qgl.h   2.1.0   edited 2000-03-24 $
+** $Id: qt/extensions/opengl/src/qgl.h   2.1.1   edited 2000-05-19 $
 **
 ** Definition of OpenGL classes for Qt
 **
@@ -27,8 +27,8 @@
 #define QGL_H
 
 
-#define QGL_VERSION	430
-#define QGL_VERSION_STR	"4.3"
+#define QGL_VERSION	440
+#define QGL_VERSION_STR	"4.4"
 
 const char *qGLVersion();
 
@@ -52,9 +52,7 @@ const char *qGLVersion();
 #include <GL/gl.h>
 #include <GL/glu.h>
 
-
-
-
+class QColorMap;
 class QPixmap;
 #if defined(Q_GLX)
 class QGLOverlayWidget;
@@ -186,6 +184,7 @@ protected:
     HDC			dc;
     WId			win;
     int			pixelFormatId;
+    QColorMap*		cmap;
 #elif defined(Q_GLX)
     void*		vi;
     void*		cx;
@@ -251,6 +250,8 @@ public:
 
     virtual void	makeOverlayCurrent();
     const QGLContext*	overlayContext() const;
+
+    void		setMouseTracking( bool enable );
 
 public slots:
     virtual void	updateGL();

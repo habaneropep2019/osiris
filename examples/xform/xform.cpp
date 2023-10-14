@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/xform/xform.cpp   2.1.0   edited 2000-02-29 $
+** $Id: qt/examples/xform/xform.cpp   2.1.1   edited 2000-02-29 $
 **
 ** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **

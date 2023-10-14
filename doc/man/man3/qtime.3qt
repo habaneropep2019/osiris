@@ -1,4 +1,4 @@
-.TH QTime 3qt "12 April 2000" "Troll Tech AS" \" -*- nroff -*-
+.TH QTime 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -266,10 +266,12 @@ Returns the time of this object in a textual format. Milliseconds are not includ
 .SH RELATED FUNCTION DOCUMENTATION
 .SH "QDataStream & operator>> (QDataStream & s, QTime & t)"
 Reads a time from the stream.
+.PP
+See also: Format of the QDataStream operators
 .SH "QDataStream & operator<< (QDataStream & s, const QTime & t)"
 Writes a time to the stream.
 .PP
-Serialization format: [Q_UINT32], milliseconds since midnight.
+See also:  Format of the QDataStream operators
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qtime.html
 .SH COPYRIGHT

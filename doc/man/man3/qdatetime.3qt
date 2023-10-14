@@ -1,4 +1,4 @@
-.TH QDateTime 3qt "12 April 2000" "Troll Tech AS" \" -*- nroff -*-
+.TH QDateTime 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -208,9 +208,11 @@ This function uses QDate::dayName(), QDate::monthName(), and QTime::toString() t
 .SH "QDataStream & operator<< (QDataStream & s, const QDateTime & dt)"
 Writes a datetime to the stream.
 .PP
-Serialization format: [QDate QTime].
+See also: Format of the QDataStream operators
 .SH "QDataStream & operator>> (QDataStream & s, QDateTime & dt)"
 Reads a datetime from the stream.
+.PP
+See also:  Format of the QDataStream operators
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qdatetime.html
 .SH COPYRIGHT

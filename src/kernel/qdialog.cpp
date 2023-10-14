@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qdialog.cpp   2.1.0   edited 2000-03-24 $
+** $Id: qt/src/kernel/qdialog.cpp   2.1.1   edited 2000-05-19 $
 **
 ** Implementation of QDialog class
 **
@@ -39,14 +39,14 @@
   \ingroup dialogs
   \ingroup abstractwidgets
 
-  A dialog window is a widget used to communicate with the user. It offers
-  mechanisms such as default buttons.
+  A dialog window is a widget used to communicate with the user. It
+  offers mechanisms such as modality and default buttons.
 
-  The dialog window can either be modeless or modal. A modeless dialog is
-  a normal window, while a modal window must be finished before the user
-  can continue with other parts of the program.	 The third constructor
-  argument must be set to TRUE to create a modal dialog, otherwise it will
-  create a modeless dialog.
+  The dialog window can either be modeless or modal. A modeless dialog
+  is a normal secondary window, while a modal window must be finished
+  before the user can continue with other parts of the program. The
+  third constructor argument must be set to TRUE to create a modal
+  dialog, otherwise it will create a modeless dialog.
 
   Example (your own modal dialog):
   \code
@@ -69,9 +69,11 @@
     }
   \endcode
 
-  Note that the parent widget has an additional meaning for modal
-  dialogs.  A modal dialog is placed on top of the parent widget. The
-  dialog is centered on the screen if the parent widget is zero.
+  Note that the parent widget has an additional meaning for dialogs.
+  A dialog is placed on top of the parent widget and associated with
+  it (i.e. it stays on top of its parent and shares certain resources,
+  for example a common taskbar entry). If the parent widget is zero,
+  the dialog is centered on the screen.
 
   You would normally call exec() to start a modal dialog. This enters
   a local event loop, which is terminated when the modal dialog calls
@@ -84,12 +86,6 @@
        // ok was pressed, then fetch the interesting dialog data
     }
   \endcode
-
-  Modeless dialogs behave just like ordinary toplevel widgets. The only difference
-  is that they have the default button mechanism.
-
-  \sa QTabDialog QWidget QSemiModal
-  <a href="guibooks.html#fowler">GUI Design Handbook: Dialogs, Standard.</a>
 */
 
 
@@ -101,7 +97,7 @@
 
   The \a f argument is the \link QWidget::QWidget() widget flags,
   \endlink which can be used to customize the window frame style.
-  
+
   If you e.g. don't want a What"s this button in the titlebar of the dialog,
   pass WStyle_Customize | WStyle_NormalBorder | WStyle_Title | WStyle_SysMenu
   here.
@@ -122,6 +118,7 @@ QDialog::QDialog( QWidget *parent, const char *name, bool modal, WFlags f )
     rescode = 0;
     did_move = FALSE;
     did_resize = FALSE;
+    in_loop = FALSE;
     mainDef = 0;
 }
 
@@ -416,8 +413,10 @@ void QDialog::show()
 	move( p );
     }
     QWidget::show();
-    if ( testWFlags(WType_Modal) )
+    if ( testWFlags(WType_Modal) && !in_loop ) {
+	in_loop = TRUE;
 	qApp->enter_loop();
+    }
 }
 
 /*!\reimp
@@ -425,10 +424,11 @@ void QDialog::show()
 void QDialog::hide()
 {
     // Reimplemented to exit a modal when the dialog is hidden.
-    bool ex = testWState(WState_Visible) && testWFlags(WType_Modal);
     QWidget::hide();
-    if ( ex )
+    if ( in_loop ) {
+	in_loop = FALSE;
 	qApp->exit_loop();
+    }
 }
 
 

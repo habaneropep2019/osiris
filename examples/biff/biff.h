@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/biff/biff.h   2.1.0   edited 2000-01-31 $
+** $Id: qt/examples/biff/biff.h   2.1.1   edited 2000-01-31 $
 **
 ** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **

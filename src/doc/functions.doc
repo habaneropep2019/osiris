@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/doc/functions.doc   2.1.0   edited 2000-03-24 $
+** $Id: qt/doc/functions.doc   2.1.1   edited 2000-05-18 $
 **
 ** Documentation for class overview
 **
@@ -22,7 +22,7 @@
 *****************************************************************************/
 
 #if defined(DEBUG)
-static char ident[] = "$Id: qt/doc/functions.doc   2.1.0   edited 2000-03-24 $";
+static char ident[] = "$Id: qt/doc/functions.doc   2.1.1   edited 2000-05-18 $";
 #endif
 
 

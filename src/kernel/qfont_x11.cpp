@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qfont_x11.cpp   2.1.0   edited 2000-03-24 $
+** $Id: qt/src/kernel/qfont_x11.cpp   2.1.1   edited 2000-04-22 $
 **
 ** Implementation of QFont, QFontMetrics and QFontInfo classes for X11
 **
@@ -1254,7 +1254,7 @@ QCString QFont_Private::findFont( bool *exact )
 		      familyName.ascii(), wt, slant, size, xdpi, ydpi,
 		      familyName.ascii(), slant, size, xdpi, ydpi,
 		      familyName.ascii(), slant2, size, xdpi, ydpi,
-		      slant, wt, size, xdpi, ydpi,
+		      wt, slant, size, xdpi, ydpi,
 		      slant, size, xdpi, ydpi,
 		      size, xdpi, ydpi );
 	} else {
@@ -1274,11 +1274,10 @@ QCString QFont_Private::findFont( bool *exact )
 		      familyName.ascii(), wt, slant, size, xdpi, ydpi,
 		      familyName.ascii(), slant, size, xdpi, ydpi,
 		      familyName.ascii(), slant2, size, xdpi, ydpi,
-		      slant, wt, size, xdpi, ydpi,
+		      wt, slant, size, xdpi, ydpi,
 		      slant, size, xdpi, ydpi,
 		      size, xdpi, ydpi );
 	}
-
 	return s;
     } else {
 	int score;

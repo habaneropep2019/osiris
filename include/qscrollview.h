@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qscrollview.h   2.1.0   edited 2000-03-24 $
+** $Id: qt/src/widgets/qscrollview.h   2.1.1   edited 2000-04-28 $
 **
 ** Definition of QScrollView class
 **
@@ -55,6 +55,7 @@ public:
     virtual void setResizePolicy( ResizePolicy );
     ResizePolicy resizePolicy() const;
 
+    void styleChange(QStyle&);
     void removeChild(QWidget* child);
     virtual void addChild( QWidget* child, int x=0, int y=0 );
     virtual void moveChild( QWidget* child, int x, int y );
@@ -95,8 +96,9 @@ public:
     void	updateContents( const QRect& r );
     void	repaintContents( int x, int y, int w, int h, bool erase=TRUE );
     void	repaintContents( const QRect& r, bool erase=TRUE );
-
+//### make this const in 3.0
     void	contentsToViewport(int x, int y, int& vx, int& vy);
+//### make this const in 3.0
     void	viewportToContents(int vx, int vy, int& x, int& y);
     QPoint	contentsToViewport(const QPoint&);
     QPoint	viewportToContents(const QPoint&);

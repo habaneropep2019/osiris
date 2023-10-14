@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/extensions/opengl/examples/box/globjwin.cpp   2.1.0   edited 2000-01-31 $
+** $Id: qt/extensions/opengl/examples/box/globjwin.cpp   2.1.1   edited 2000-01-31 $
 **
 ** Implementation of GLObjectWindow widget class
 **

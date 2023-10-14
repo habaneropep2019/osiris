@@ -125,7 +125,7 @@ disabled in groups with <a href="qtooltipgroup.html#9dae46">QToolTipGroup::setEn
 <p>Constructs a tool tip object.  This is necessary only if you need tool
 tips on regions that can move within the widget (most often because
 the widget's contents can scroll).
-<p><em>parent</em> is widget you want to add dynamic tool tips to and <em>group</em> (optional) is the tool tip group they should belong to.
+<p><em>parent</em> is the widget you want to add dynamic tool tips to and <em>group</em> (optional) is the tool tip group they should belong to.
 <p>See also:  <a href="#5d07ec">maybeTip</a>().
 <h3 class="fn">void <a name="f42c73"></a>QToolTip::add ( <a href="qwidget.html">QWidget</a> * widget, const <a href="qrect.html">QRect</a> &amp; rect, const <a href="qstring.html">QString</a> &amp; text ) <code>[static]</code></h3>
 <p>Adds a tool tip to a fixed rectangle within <em>widget. text</em> is
@@ -150,7 +150,7 @@ text emitted from <em>group.</em>  QToolTip makes deep copies of both
 strings.
 <p>Normally, <em>longText</em> is shown in a status bar or similar.
 <h3 class="fn">void <a name="d00740"></a>QToolTip::clear () <code>[protected]</code></h3>
-<p>Removes all tool tips for this widget immediately.
+<p>Removes all tool tips for this tooltip's parent widget immediately.
 <h3 class="fn">bool <a name="107998"></a>QToolTip::enabled () <code>[static]</code></h3>
 <p>Returns whether tooltips are enabled globally.
 <p>See also:  <a href="#d143fe">setEnabled</a>().
@@ -226,7 +226,7 @@ has to reinstate it each time.
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.1.0"><nobr>
+<input type=hidden name="version" value="2.1.1"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -234,5 +234,5 @@ copyright &copy; 1995-2000
 <a href="http://www.trolltech.com">Troll Tech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.0</div>
+<td align="right"><div align="right">Qt version 2.1.1</div>
 </table></div></address></body></html>

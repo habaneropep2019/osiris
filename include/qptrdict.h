@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qptrdict.h   2.1.0   edited 2000-03-24 $
+** $Id: qt/src/tools/qptrdict.h   2.1.1   edited 2000-03-24 $
 **
 ** Definition of QPtrDict template class
 **

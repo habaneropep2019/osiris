@@ -1,5 +1,5 @@
 /**********************************************************************
-** $Id: qt/src/kernel/qpsprinter.cpp   2.1.0   edited 2000-03-24 $
+** $Id: qt/src/kernel/qpsprinter.cpp   2.1.1   edited 2000-04-12 $
 **
 ** Implementation of QPSPrinter class
 **
@@ -2497,7 +2497,7 @@ void QPSPrinter::drawImage( QPainter *paint, const QPoint &pnt,
     QColor fgCol = paint->pen().color();
     QColor bgCol = paint->backgroundColor();
 
-    if ( width * height > 21840 ) { // 65535/3, tolerance for broken printers
+    if ( width * height > 21830 ) { // 65535/3, tolerance for broken printers
 	delete d->savedImage;
 	d->savedImage = 0;
 	stream << "/sl " << width*3 << " string d\n"

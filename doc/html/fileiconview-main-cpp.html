@@ -30,7 +30,7 @@ body { background: white; color: black; }
   <hr>
 
   Header file of the fileiconview: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/fileiconview/qfileiconview.h   2.1.0   edited 2000-03-02 $
+** &#36;Id&#58; qt/examples/fileiconview/qfileiconview.h   2.1.1   edited 2000-03-02 $
 **
 ** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
@@ -204,7 +204,7 @@ protected:
   <hr>
 
   Implementation of the fileiconview: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/fileiconview/qfileiconview.cpp   2.1.0   edited 2000-03-11 $
+** &#36;Id&#58; qt/examples/fileiconview/qfileiconview.cpp   2.1.1   edited 2000-04-15 $
 **
 ** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
@@ -625,7 +625,7 @@ void <a name="190"></a>QtFileIconViewItem::dropped( <a href="qdropevent.html">QD
         str = "Copy\n\n";
     else
         str = "Move\n\n";
-    for ( uint i = 0; i &lt; lst.<a href="qlist.html#816005">count</a>(); ++i ) 
+    for ( uint i = 0; i &lt; lst.<a href="qlist.html#816005">count</a>(); ++i )
         str += QString( "   %1\n" ).arg( lst.<a href="qlist.html#0812c4">at</a>( i ) );
     str += QString( "\n"
                     "To\n\n"
@@ -707,6 +707,7 @@ QtFileIconView::QtFileIconView( const QString &amp;dir, QWidget *parent, const c
 
     setAutoArrange( TRUE );
     setSorting( TRUE );
+    openItem = 0;
 }
 
 void <a name="193"></a>QtFileIconView::openFolder()
@@ -887,7 +888,8 @@ void <a name="201"></a>QtFileIconView::keyPressEvent( <a href="qkeyevent.html">Q
 
 void <a name="202"></a>QtFileIconView::slotDropped( <a href="qdropevent.html">QDropEvent</a> *e, const QValueList&lt;<a href="qicondragitem.html">QIconDragItem</a>&gt; &amp; )
 {
-    openItem-&gt;timer.stop();
+    if ( openItem )
+        openItem-&gt;timer.stop();
     if ( !QUriDrag::canDecode( e ) ) {
         e-&gt;<a href="qdropevent.html#6c4844">ignore</a>();
         return;
@@ -911,6 +913,7 @@ void <a name="202"></a>QtFileIconView::slotDropped( <a href="qdropevent.html">QD
     if ( e-&gt;<a href="qdropevent.html#bfcdf4">action</a>() == QDropEvent::Move )
         <a href="qmessagebox.html#2e454b">QMessageBox::information</a>( this, "Remove" , str, "Not Implemented" );
     e-&gt;<a href="qdropevent.html#2a39a0">acceptAction</a>();
+    openItem = 0;
 }
 
 void <a name="203"></a>QtFileIconView::viewLarge()
@@ -1031,7 +1034,7 @@ void <a name="214"></a>QtFileIconView::setViewMode( ViewMode m )
   <hr>
 
   Header file of the mainwindow: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/fileiconview/mainwindow.h   2.1.0   edited 2000-03-02 $
+** &#36;Id&#58; qt/examples/fileiconview/mainwindow.h   2.1.1   edited 2000-03-02 $
 **
 ** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
@@ -1097,7 +1100,7 @@ protected slots:
   <hr>
 
   Implementation of the mainwindow: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/fileiconview/mainwindow.cpp   2.1.0   edited 2000-03-02 $
+** &#36;Id&#58; qt/examples/fileiconview/mainwindow.cpp   2.1.1   edited 2000-03-02 $
 **
 ** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
@@ -1332,7 +1335,7 @@ void <a name="232"></a>FileMainWindow::disableMkdir()
 
   Main:
 <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/fileiconview/main.cpp   2.1.0   edited 2000-02-03 $
+** &#36;Id&#58; qt/examples/fileiconview/main.cpp   2.1.1   edited 2000-02-03 $
 **
 ** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
@@ -1361,5 +1364,5 @@ int main( int argc, char **argv )
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.0</div>
+<td align="right"><div align="right">Qt version 2.1.1</div>
 </table></div></address></body></html>

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/listbox/listbox.cpp   2.1.0   edited 2000-03-23 $
+** $Id: qt/examples/listbox/listbox.cpp   2.1.1   edited 2000-04-19 $
 **
 ** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
@@ -115,7 +115,7 @@ ListBoxDemo::ListBoxDemo()
     v->addStretch( 100 );
 
     int i = 0;
-    while( ++i <= 256 )
+    while( ++i <= 2560 )
         l->insertItem( QString::fromLatin1( "Item " ) + QString::number( i ),
                        i );
     columns->setRange( 1, 256 );

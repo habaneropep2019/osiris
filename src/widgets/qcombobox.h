@@ -1,5 +1,5 @@
 /**********************************************************************
-** $Id: qt/src/widgets/qcombobox.h   2.1.0   edited 2000-03-24 $
+** $Id: qt/src/widgets/qcombobox.h   2.1.1   edited 2000-05-18 $
 **
 ** Definition of QComboBox class
 **
@@ -110,7 +110,7 @@ public:
 
     virtual void	setListBox( QListBox * );
     QListBox * 	listBox() const;
-    
+
     QLineEdit*	lineEdit() const;
 
     virtual void	setAutoCompletion( bool );
@@ -139,7 +139,7 @@ private slots:
     void	internalClickTimeout();
     void	returnPressed();
     void	showMore();
-    
+
 protected:
     void	paintEvent( QPaintEvent * );
     void	resizeEvent( QResizeEvent * );
@@ -155,6 +155,8 @@ protected:
     void updateMask();
 
 private:
+    void     setUpListBox();
+    void     setUpLineEdit();
     void	popDownListBox();
     void	reIndex();
     void	currentChanged();

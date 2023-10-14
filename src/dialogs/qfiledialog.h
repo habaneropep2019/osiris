@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/dialogs/qfiledialog.h   2.1.0   edited 2000-03-28 $
+** $Id: qt/src/dialogs/qfiledialog.h   2.1.1   edited 2000-03-28 $
 **
 ** Definition of QFileDialog class
 **

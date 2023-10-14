@@ -1,4 +1,4 @@
-.TH QIconView 3qt "12 April 2000" "Troll Tech AS" \" -*- nroff -*-
+.TH QIconView 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -6,7 +6,7 @@
 .ad l
 .nh
 .SH NAME
-QIconView \- The QIconView class
+QIconView \- Area with movable labelled icons
 \fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
 .br
 .SH SYNOPSIS
@@ -304,7 +304,17 @@ Inherits QScrollView.
 .SS "Properties"
 <table border=1 cellpadding=3 cellspacing=0> <tr><th>Type<th>Name<th>READ<th>WRITE<th>Options <tr><td>bool<td>sorting<td>sorting<td>&nbsp;<td>&nbsp; <tr><td>bool<td>sortDirection<td>sortDirection<td>&nbsp;<td>&nbsp; <tr><td>SelectionMode<td>selectionMode<td>selectionMode<td>setSelectionMode<td>&nbsp; <tr><td>int<td>gridX<td>gridX<td>setGridX<td>&nbsp; <tr><td>int<td>gridY<td>gridY<td>setGridY<td>&nbsp; <tr><td>int<td>spacing<td>spacing<td>setSpacing<td>&nbsp; <tr><td>ItemTextPos<td>itemTextPos<td>itemTextPos<td>setItemTextPos<td>&nbsp; <tr><td>QBrush<td>itemTextBackground<td>itemTextBackground<td>setItemTextBackground<td>&nbsp; <tr><td>Arrangement<td>arrangement<td>arrangement<td>setArrangement<td>&nbsp; <tr><td>ResizeMode<td>resizeMode<td>resizeMode<td>setResizeMode<td>&nbsp; <tr><td>int<td>maxItemWidth<td>maxItemWidth<td>setMaxItemWidth<td>&nbsp; <tr><td>int<td>maxItemTextLength<td>maxItemTextLength<td>setMaxItemTextLength<td>&nbsp; <tr><td>bool<td>autoArrange<td>autoArrange<td>setAutoArrange<td>&nbsp; <tr><td>bool<td>itemsMovable<td>itemsMovable<td>setItemsMovable<td>&nbsp; <tr><td>bool<td>wordWrapIconText<td>wordWrapIconText<td>setWordWrapIconText<td>&nbsp; <tr><td>bool<td>showToolTips<td>showToolTips<td>setShowToolTips<td>&nbsp; <tr><td>uint<td>count<td>count<td>&nbsp;<td>&nbsp; </table>
 .SH DESCRIPTION
-The QIconView class
+The QIconView class provides an area with movable labelled icons.
+.PP
+It can display and control a grid or other 2-d layout of items, and provides the ability to add or remove new items at any time, lets the user select one or may items, rearrange the items, provides drag and drop of items, and so on.
+.PP
+Each item (a QIconViewItem) contains a text and a pixmap (the icon itself).
+.PP
+The simplest usage of QIconView is to create the object, create some QIconViewItems with the view as parent, set the view's geometry, and show it.
+.PP
+When an item is inserted, QIconView allocates a spot for it. The default Arrangement is \fCLeftToRight\fR - QIconView fills up the leftmost column first, then goes rightwards. You can change that using setArrangement(), or insert items in a specified position by calling the appropriate constructors or QIconViewItem::insertItem(), or sort while the view is on-screen using setSorting() and/or sort().
+.PP
+Each (selectable) item can be selected, and the view provides various SelectionMode settings. The default is \fCSingle\fR - when one item is selected, the previously selected item is unselected.
 .PP
 The QIconView provides a widget which can contain lots of iconview items which can be selected, dragged and so on.
 .PP

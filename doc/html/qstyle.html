@@ -172,7 +172,7 @@ buttons.
 <p>Draws a press-sensitive shape in the style of a full featured  push button
 <p>See also:  <a href="#159da3">buttonRect</a>().
 <p>Reimplemented in <a href="qplatinumstyle.html#86449b">QPlatinumStyle</a>, <a href="qmotifstyle.html#12d920">QMotifStyle</a> and <a href="qwindowsstyle.html#eccec8">QWindowsStyle</a>.
-<h3 class="fn">void <a name="da4c15"></a>QStyle::drawButtonMask ( <a href="qpainter.html">QPainter</a> *, int, int, int, int ) <code>[virtual]</code></h3>
+<h3 class="fn">void <a name="da4c15"></a>QStyle::drawButtonMask ( <a href="qpainter.html">QPainter</a> * p, int x, int y, int w, int h ) <code>[virtual]</code></h3>
 <p>Draw the mask of a pushbutton. Useful if a rounded pushbuttons needs
 to be transparent because the style uses a fancy background pixmap.
 <p>See also:  drawButtonMask().
@@ -329,13 +329,13 @@ dragging.
 height <em>h.</em>
 <h3 class="fn">void <a name="e4606f"></a>QStyle::polish ( <a href="qapplication.html">QApplication</a> * ) <code>[virtual]</code></h3>
 <p>Late initialization of the <a href="qapplication.html">QApplication</a> object.
-<p>See also:  unPolish.
+<p>See also:  <a href="#66dbbf">unPolish</a>(<a href="qapplication.html">QApplication</a>*).
 <p>Reimplemented in <a href="qmotifstyle.html#bced3c">QMotifStyle</a>.
 <h3 class="fn">void <a name="45065e"></a>QStyle::polish ( <a href="qpalette.html">QPalette</a> &amp; ) <code>[virtual]</code></h3>
 <p>The style may have certain requirements for color palettes.  In this
 function it has the chance to change the palette according to these
 requirements.
-<p>See also:  unPolish, <a href="qpalette.html">QPalette</a> and <a href="qapplication.html#9604e2">QApplication::setPalette</a>().
+<p>See also:  <a href="qpalette.html">QPalette</a> and <a href="qapplication.html#9604e2">QApplication::setPalette</a>().
 <h3 class="fn">void <a name="dff902"></a>QStyle::polish ( <a href="qwidget.html">QWidget</a> * ) <code>[virtual]</code></h3>
 <p>Initializes the appearance of a widget.
 <p>This function is called for every widget, after it has been fully
@@ -405,10 +405,11 @@ and subclasses will be able to reimplement <a href="#f0c4a9">scrollBarExtent</a>
 <p>TODO.
 <p>Reimplemented in <a href="qmotifstyle.html#62cfc0">QMotifStyle</a>, <a href="qwindowsstyle.html#247390">QWindowsStyle</a> and <a href="qcommonstyle.html#19554c">QCommonStyle</a>.
 <h3 class="fn">int <a name="ef20b8"></a>QStyle::toolBarHandleExtend () const</h3>
-<p>Returns the extend (height or width depending on the orientation) which a toolbar
+<p>Returns the extent (height or width depending on the orientation) which a toolbar
 handle has.
 <p>WARNING: Because of binary compatibility this method is NOT virtual, so reimplementing
-it in Qt 2.x doesn't make sense. In the next major release this method will become virtual!.
+it in Qt 2.x doesn't make sense. In the next major release this method will become virtual!
+<p>Note: we know it's a spelling error, fixed in 2.2. The correct name of the function is toolBarHandleExtent().
 <h3 class="fn"><a href="qrect.html">QRect</a> <a name="530dfb"></a>QStyle::toolButtonRect ( int x, int y, int w, int h )</h3>
 <p>Returns the rectangle available for contents in a tool
 button. Usually this is the entire rectangle minus the border, but
@@ -417,7 +418,7 @@ it may also be smaller when you think about rounded buttons.
 <p>See also:  <a href="#4c6e10">drawToolButton</a>().
 <h3 class="fn">void <a name="66dbbf"></a>QStyle::unPolish ( <a href="qapplication.html">QApplication</a> * ) <code>[virtual]</code></h3>
 <p>Redo the application polish
-<p>See also:  polish.
+<p>See also:  <a href="#45065e">polish</a>(<a href="qapplication.html">QApplication</a>*).
 <h3 class="fn">void <a name="a9e34a"></a>QStyle::unPolish ( <a href="qwidget.html">QWidget</a> * ) <code>[virtual]</code></h3>
 <p>Undos the initializataion of a widget's appearance
 <p>This function is the counterpart to polish. Is is called for every
@@ -429,7 +430,7 @@ them again.
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.1.0"><nobr>
+<input type=hidden name="version" value="2.1.1"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -437,5 +438,5 @@ copyright &copy; 1995-2000
 <a href="http://www.trolltech.com">Troll Tech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.0</div>
+<td align="right"><div align="right">Qt version 2.1.1</div>
 </table></div></address></body></html>

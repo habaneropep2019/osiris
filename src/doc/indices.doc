@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/doc/indices.doc   2.1.0   edited 2000-03-27 $
+** $Id: qt/doc/indices.doc   2.1.1   edited 2000-05-25 $
 **
 ** Miscellaneous index pages
 **
@@ -22,7 +22,7 @@
 *****************************************************************************/
 
 #if defined(DEBUG)
-static char ident[] = "$Id: qt/doc/indices.doc   2.1.0   edited 2000-03-27 $";
+static char ident[] = "$Id: qt/doc/indices.doc   2.1.1   edited 2000-05-25 $";
 #endif
 
 /*! \page index.html
@@ -61,8 +61,9 @@ What´s New
 </td>
 <td valign=top>
 <ul>
-<li> <a href="keyfeatures21.html">  Key Features in Qt-2.1</a>
-<li> <a href="changes21.html">  Detailed Changes Notes</a>
+<li> <a href="keyfeatures21.html">  Key Features in Qt 2.1</a>
+<li> <a href="changes21.html">  Detailed Change Notes for Qt 2.1</a>
+<li> <a href="changes211.html">  Detailed Change Notes for Qt 2.1.1</a>
 <li> <a href="porting.html">  Porting from Qt 1.x to Qt 2.0</a>
 </ul>
 </td>

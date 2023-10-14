@@ -1,4 +1,4 @@
-.TH QBitArray 3qt "12 April 2000" "Troll Tech AS" \" -*- nroff -*-
+.TH QBitArray 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -329,17 +329,15 @@ See also: QBitArray::operator&=().
 .SH "QDataStream & operator<< (QDataStream & s, const QBitArray & a)"
 Writes a bit array to a stream.
 .PP
-Serialization format:
-.IP 1
-The array size (Q_UINT32)
-.IP 2
-The array bits, (size+7)/8 bytes
+See also: Format of the QDataStream operators
 .SH "QBitArray operator| (const QBitArray & a1, const QBitArray & a2)"
 Returns the OR result between the bit arrays \fIa1\fR and \fIa2.\fR
 .PP
 See also: QBitArray::operator|=().
 .SH "QDataStream & operator>> (QDataStream & s, QBitArray & a)"
 Reads a bit array from a stream.
+.PP
+See also:  Format of the QDataStream operators
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qbitarray.html
 .SH COPYRIGHT

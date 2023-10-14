@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/extensions/opengl/examples/sharedbox/glbox.cpp   2.1.0   edited 2000-01-31 $
+** $Id: qt/extensions/opengl/examples/sharedbox/glbox.cpp   2.1.1   edited 2000-05-02 $
 **
 ** Implementation of GLBox
 ** This is a simple QGLWidget displaying a box
@@ -74,6 +74,7 @@ void GLBox::initializeGL()
 
 GLBox::~GLBox()
 {
+    makeCurrent();				// We're going to do gl calls
     if ( localDisplayList != 0 ) {		// Did we make our own?
 	glDeleteLists( localDisplayList, 1 );	// Yes, delete it
 	qDebug( "GLBox %s deleted private display list.", name() );

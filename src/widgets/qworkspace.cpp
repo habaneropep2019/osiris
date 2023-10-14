@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qworkspace.cpp   2.1.0   edited 2000-04-06 $
+** $Id: qt/src/widgets/qworkspace.cpp   2.1.1   edited 2000-05-15 $
 **
 ** Implementation of the QWorkspace class
 **
@@ -874,9 +874,16 @@ void QWorkspace::hideMaximizeControls()
 
 void QWorkspace::closeActiveWindow()
 {
+    bool isMax = ( d->maxWindow != 0);
+
     QWidget* w = activeWindow();
     if ( w )
 	w->close();
+
+    activateNextWindow();
+
+    if (d->active && isMax && !d->active->testWState( WState_ForceHide ))
+	d->active->showMaximized();
 }
 
 void QWorkspace::normalizeActiveWindow()
@@ -931,7 +938,7 @@ void QWorkspace::operationMenuAboutToShow()
 	d->popup->setItemEnabled( 4, FALSE );
     }
 
-    if (  !d->active->testWFlags( WStyle_MinMax ) ) {
+    if (  !d->active->windowWidget()->testWFlags( WStyle_MinMax ) ) {
 	d->popup->setItemEnabled( 4, FALSE );
 	d->popup->setItemEnabled( 5, FALSE );
     }

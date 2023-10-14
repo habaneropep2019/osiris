@@ -1,4 +1,4 @@
-.TH QPalette 3qt "12 April 2000" "Troll Tech AS" \" -*- nroff -*-
+.TH QPalette 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -232,17 +232,12 @@ Use setActive() instead.
 .SH RELATED FUNCTION DOCUMENTATION
 .SH "QDataStream & operator>> (QDataStream & s, QPalette & p)"
 Reads a palette from the stream and returns a reference to the stream.
+.PP
+See also: Format of the QDataStream operators
 .SH "QDataStream & operator<< (QDataStream & s, const QPalette & p)"
 Writes a palette to the stream and returns a reference to the stream.
 .PP
-Serialization format:
-.IP 1
-QColorGroup active
-.IP 2
-QColorGroup disabled
-.IP 3
- QColorGroup inactive
-The color groups are serialized in the listed order.
+See also:  Format of the QDataStream operators
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qpalette.html
 .SH COPYRIGHT

@@ -89,15 +89,16 @@ functions manipulate the list: <a href="#7e5e75">insertItem</a>(), <a href="#c94
 combined with modifiers (<code>SHIFT, CTRL, ALT</code> or <code>UNICODE_ACCEL).</code>  For example, <code>CTRL + Key_P</code> could be a
 shortcut for printing a document. The key codes are listed in
 <a href="qnamespace-h.html">qnamespace.h</a>. As an alternative, use <code>UNICODE_ACCEL</code> with the
-unicode value of the character. For example, <code>UNICODE_ACCEL +
-'A'</code> gies the same accelerator as <code>Key_A.</code>
+unicode code point of the character. For example,
+<code>UNICODE_ACCEL + 'A'</code> gies the same accelerator as <code>Key_A.</code>
 <p>When an accelerator key is pressed, the accelerator sends out the
 signal <a href="#5b3b67">activated</a>() with a number that identifies this particular
 accelerator item.  Accelerator items can also be individually
 connected, so that two different keys will activate two different
 slots (see <a href="#5625cd">connectItem</a>() and <a href="#d8d5ff">disconnectItem</a>()).
-<p>Use <a href="#133d7c">setEnabled</a>() to enable/disable all items in the accelerator,
-or <a href="#58cae2">setItemEnabled</a>() to enable/disable individual items.
+<p>Use <a href="#133d7c">setEnabled</a>() to enable/disable all items in the accelerator, or
+<a href="#58cae2">setItemEnabled</a>() to enable/disable individual items.  An item is
+active only when the QAccel is enabled and the item itself is.
 <p>The function <a href="#d5b55e">setWhatsThis</a>() specifies the What's This text for an
 accelerator item.
 <p>A QAccel object handles key events to the <a href="qwidget.html#4f5be5">QWidget::topLevelWidget</a>()
@@ -121,19 +122,17 @@ accelerator operates on <em>parent.</em>
 <em>parent.</em>
 <p>This constructor is not needed for normal application programming.
 <h3 class="fn"><a name="f19e88"></a>QAccel::~QAccel ()</h3>
-<p>Destructs the accelerator object.
+<p>Destructs the accelerator object and frees all allocated resources.
 <h3 class="fn">void <a name="5b3b67"></a>QAccel::activated ( int id ) <code>[signal]</code></h3>
 <p>This signal is emitted when an accelerator key is pressed. <em>id</em> is
 a number that identifies this particular accelerator item.
 <h3 class="fn">void <a name="355d1f"></a>QAccel::clear ()</h3>
 <p>Removes all accelerator items.
 <h3 class="fn">bool <a name="5625cd"></a>QAccel::connectItem ( int id, const <a href="qobject.html">QObject</a> * receiver, const char * member )</h3>
-<p>Connects an accelerator item to a slot/signal in another object.
-<p><em>id</em> is the accelerator item id.
-<em>receiver</em> is the object to receive a signal.
-<em>member</em> is a slot or signal function in the receiver.
+<p>Connects the accelerator item <em>id</em> to the slot \member of <em>receiver.</em>
 <p><pre>    a-&gt;connectItem( 201, mainView, SLOT(quit()) );
 </pre>
+<p>Of course, you can also send a signal as <em>member.</em>
 <p>See also:  <a href="#d8d5ff">disconnectItem</a>().
 <h3 class="fn">uint <a name="9278dc"></a>QAccel::count () const</h3>
 <p>Returns the number of accelerator items in this accelerator.
@@ -184,12 +183,14 @@ to call it in application code.
 <h3 class="fn">void <a name="133d7c"></a>QAccel::setEnabled ( bool enable )</h3>
 <p>Enables the accelerator if <em>enable</em> is TRUE, or disables it if
 <em>enable</em> is FALSE.
-<p>Individual keys can also be enabled or disabled.
+<p>Individual keys can also be enabled or disabled using
+<a href="#58cae2">setItemEnabled</a>().  To work, a key must be an enabled item in an
+enabled QAccel.
 <p>See also:  <a href="#433bef">isEnabled</a>() and <a href="#58cae2">setItemEnabled</a>().
 <h3 class="fn">void <a name="58cae2"></a>QAccel::setItemEnabled ( int id, bool enable )</h3>
-<p>Enables or disables an accelerator item.
-<em>id</em> is the item identifier.
-<em>enable</em> specifies whether the item should be enabled or disabled.
+<p>Enables the accelerator key <em>item</em> if <em>enable</em> is TRUE, and
+disables <em>item</em> if <em>enable</em> is FALSE.
+<p>To work, a key must be an enabled item in an enabled QAccel.
 <p>See also:  <a href="#8a96c1">isItemEnabled</a>() and <a href="#433bef">isEnabled</a>().
 <h3 class="fn">void <a name="d5b55e"></a>QAccel::setWhatsThis ( int id, const <a href="qstring.html">QString</a> &amp; text )</h3>
 <p>Sets a Whats This help for the accelerator item <em>id</em> to <em>text.</em>
@@ -220,9 +221,6 @@ translatable accelerator values for menus:
         file-&gt;<a href="qmenudata.html#43c652">insertItem</a>( p1, tr("&amp;Open..."), this, SLOT(open()),
             <a href="#7c073d">QAccel::stringToKey</a>(tr("Ctrl+O")) );
 </pre>
-<p>Note that this function currently only supports character
-accelerators (unlike <a href="#8ecf54">keyToString</a>() which can produce
-Ctrl+Backspace, etc. from the appropriate key codes).
 <h3 class="fn"><a href="qstring.html">QString</a> <a name="17d0b3"></a>QAccel::whatsThis ( int id ) const</h3>
 <p>Returns the Whats This help text for the specified item <em>id</em> or
 QString::null if no text has been defined yet.
@@ -235,7 +233,7 @@ QString::null if no text has been defined yet.
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.1.0"><nobr>
+<input type=hidden name="version" value="2.1.1"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -243,5 +241,5 @@ copyright &copy; 1995-2000
 <a href="http://www.trolltech.com">Troll Tech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.0</div>
+<td align="right"><div align="right">Qt version 2.1.1</div>
 </table></div></address></body></html>

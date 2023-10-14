@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qt_x11.h   2.1.0   edited 2000-03-29 $
+** $Id: qt/src/kernel/qt_x11.h   2.1.1   edited 2000-05-13 $
 **
 ** Includes X11 system header files.
 **
@@ -59,8 +59,6 @@
 #include <X11/Xutil.h>
 #include <X11/Xos.h>
 #include <X11/Xatom.h>
-#include <X11/extensions/shape.h>
-
 
 
 //#define QT_NO_SHAPE

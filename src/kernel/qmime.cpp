@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qmime.cpp   2.1.0   edited 2000-04-06 $
+** $Id: qt/src/kernel/qmime.cpp   2.1.1   edited 2000-04-06 $
 **
 ** Implementation of MIME support
 **

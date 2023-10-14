@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/helpviewer/helpwindow.h   2.1.0   edited 2000-03-21 $
+** $Id: qt/examples/helpviewer/helpwindow.h   2.1.1   edited 2000-03-21 $
 **
 ** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **

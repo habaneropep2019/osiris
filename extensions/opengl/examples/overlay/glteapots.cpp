@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/extensions/opengl/examples/overlay/glteapots.cpp   2.1.0   edited 2000-01-31 $
+** $Id: qt/extensions/opengl/examples/overlay/glteapots.cpp   2.1.1   edited 2000-05-19 $
 **
 ** Implementation of GLTeapots
 ** This is a QGLWidget displaying a group of teapots and a rubber-band
@@ -288,7 +288,6 @@ void GLTeapots::mousePressEvent( QMouseEvent* e )
     rubberP1 = e->pos();
     rubberP2 = rubberP1;
     rubberOn = TRUE;
-    setMouseTracking( TRUE );
 }
 
 /*!
@@ -314,7 +313,6 @@ void GLTeapots::mouseReleaseEvent( QMouseEvent* )
 	rubberOn = FALSE;
 	updateOverlayGL();
     }
-    setMouseTracking( FALSE );
 }
 
 

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qvariant.h   2.1.0   edited 2000-04-03 $
+** $Id: qt/src/kernel/qvariant.h   2.1.1   edited 2000-04-18 $
 **
 ** Definition of QVariant class
 **
@@ -25,13 +25,6 @@
 
 #ifndef QVARIANT_H
 #define QVARIANT_H
-
-#if defined(Q_TEMPLATE_NEEDS_CLASS_DECLARATION) && ( defined(QVALUELIST_H) || defined(QMAP_H) )
-#warning Qt warning:
-#warning Header file qvaluelist.h or qmap.h is included before qvariant.h.
-#warning This will cause errors on this compiler because of improper template support.
-#warning Try changing the order of inclusion of your header files.
-#endif
 
 #ifndef QT_H
 #include "qstring.h"

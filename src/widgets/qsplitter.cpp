@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qsplitter.cpp   2.1.0   edited 2000-03-27 $
+** $Id: qt/src/widgets/qsplitter.cpp   2.1.1   edited 2000-05-13 $
 **
 **  Splitter widget
 **
@@ -210,7 +210,7 @@ static QSize minSize( const QWidget *w )
 {
     QSize min = w->minimumSize();
     QSize s;
-    if ( (min.height() <= 0 || min.width() <= 0 )   )
+    if ( min.height() <= 0 || min.width() <= 0 )
 	s = w->minimumSizeHint();
     if ( min.height() > 0 )
 	s.setHeight( min.height() );
@@ -731,7 +731,7 @@ void QSplitter::recalc( bool update )
 		minl += pick( minS );
 		maxl += pick( s->wid->maximumSize() );
 		mint = QMAX( mint, trans( minS ));
-		int tm = pick( s->wid->maximumSize() );
+		int tm = trans( s->wid->maximumSize() );
 		if ( tm > 0 )
 		    maxt = QMIN( maxt, tm );
 	    }

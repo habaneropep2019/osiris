@@ -1,4 +1,4 @@
-.TH QButton 3qt "12 April 2000" "Troll Tech AS" \" -*- nroff -*-
+.TH QButton 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -142,7 +142,7 @@ Inherited by QCheckBox, QPushButton, QRadioButton and QToolButton.
 .br
 .in -1c
 .SS "Properties"
-<table border=1 cellpadding=3 cellspacing=0> <tr><th>Type<th>Name<th>READ<th>WRITE<th>Options <tr><td>QString<td>text<td>text<td>setText<td>&nbsp; <tr><td>QPixmap<td>pixmap<td>pixmap<td>setPixmap<td>&nbsp; <tr><td>int<td>accel<td>accel<td>setAccel<td>&nbsp; <tr><td>bool<td>toggleButton<td>isToggleButton<td>&nbsp;<td>&nbsp; <tr><td>ToggleType<td>toggleType<td>toggleType<td>&nbsp;<td>&nbsp; <tr><td>bool<td>down<td>isDown<td>setDown<td>&nbsp; <tr><td>bool<td>on<td>isOn<td>&nbsp;<td>&nbsp; <tr><td>ToggleState<td>toggleState<td>state<td>&nbsp;<td>&nbsp; <tr><td>bool<td>autoResize<td>autoResize<td>setAutoResize<td>&nbsp; <tr><td>bool<td>autoRepeat<td>autoRepeat<td>setAutoRepeat<td>&nbsp; <tr><td>bool<td>exclusiveToggle<td>isExclusiveToggle<td>&nbsp;<td>&nbsp; </table>
+<table border=1 cellpadding=3 cellspacing=0> <tr><th>Type<th>Name<th>READ<th>WRITE<th>Options <tr><td>QString<td>text<td>text<td>setText<td>&nbsp; <tr><td>QPixmap<td>pixmap<td>pixmap<td>setPixmap<td>&nbsp; <tr><td>int<td>accel<td>accel<td>setAccel<td>&nbsp; <tr><td>bool<td>toggleButton<td>isToggleButton<td>&nbsp;<td>&nbsp; <tr><td>ToggleType<td>toggleType<td>toggleType<td>&nbsp;<td>&nbsp; <tr><td>bool<td>down<td>isDown<td>setDown<td> DESIGNABLE false <tr><td>bool<td>on<td>isOn<td>&nbsp;<td>&nbsp; <tr><td>ToggleState<td>toggleState<td>state<td>&nbsp;<td>&nbsp; <tr><td>bool<td>autoResize<td>autoResize<td>setAutoResize<td>&nbsp; <tr><td>bool<td>autoRepeat<td>autoRepeat<td>setAutoRepeat<td>&nbsp; <tr><td>bool<td>exclusiveToggle<td>isExclusiveToggle<td>&nbsp;<td>&nbsp; </table>
 .SH DESCRIPTION
 The QButton class is the abstract base class of button widgets, providing functionality common to buttons.
 .PP
@@ -187,7 +187,7 @@ If the button is a text button with "&" in its text, QButton creates an automati
     QPushButton *p = new QPushButton( "Ro&ck && Roll", this );
 .fi
 .PP
-In this example, when the user presses Alt-C the button will animate a click.
+In this example, when the user presses Alt-C the button will call animateClick().
 .PP
 You can also set a custom accelerator using the setAccel() function. This is useful mostly for pixmap buttons since they have no automatic accelerator.
 .PP

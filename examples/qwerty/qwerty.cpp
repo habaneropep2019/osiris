@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/qwerty/qwerty.cpp   2.1.0   edited 2000-02-21 $
+** $Id: qt/examples/qwerty/qwerty.cpp   2.1.1   edited 2000-04-27 $
 **
 ** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
@@ -32,6 +32,7 @@ Editor::Editor( QWidget * parent , const char * name )
     : QWidget( parent, name, WDestructiveClose )
 {
     m = new QMenuBar( this, "menu" );
+
     QPopupMenu * file = new QPopupMenu();
     CHECK_PTR( file );
     m->insertItem( "&File", file );
@@ -52,10 +53,16 @@ Editor::Editor( QWidget * parent , const char * name )
     connect( save_as, SIGNAL(activated(int)), this, SLOT(saveAsEncoding(int)) );
     rebuildCodecList();
 
+    QPopupMenu * edit = new QPopupMenu();
+    CHECK_PTR( edit );
+    m->insertItem( "&Edit", edit );
+
+    edit->insertItem( "To &uppercase",   this, SLOT(toUpper()),   ALT+Key_U );
+    edit->insertItem( "To &lowercase",   this, SLOT(toLower()),   ALT+Key_L );
+
     changed = FALSE;
     e = new QMultiLineEdit( this, "editor" );
     connect( e, SIGNAL( textChanged() ), this, SLOT( textChanged() ) );
-    e->setFont( QFont("Helvetica", 24) );
 
     e->setFocus();
 }
@@ -245,6 +252,16 @@ void Editor::closeEvent( QCloseEvent *event )
 	    break;
 	}
     }
+}
+
+void Editor::toUpper()
+{
+    e->setText(e->text().upper());
+}
+
+void Editor::toLower()
+{
+    e->setText(e->text().lower());
 }
 
 void Editor::textChanged()

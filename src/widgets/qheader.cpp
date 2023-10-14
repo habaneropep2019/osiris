@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qheader.cpp   2.1.0   edited 2000-04-06 $
+** $Id: qt/src/widgets/qheader.cpp   2.1.1   edited 2000-05-24 $
 **
 ** Implementation of QHeader widget class (table header)
 **
@@ -1040,7 +1040,7 @@ void QHeader::setResizeEnabled( bool enable, int section )
     if ( section < 0 ) {
 	d->resize.fill( enable );
 	// and future ones...
-	d->clicks_default = enable;
+	d->resize_default = enable;
     } else if ( section < count() ) {
 	d->resize[ section ] = enable;
     }

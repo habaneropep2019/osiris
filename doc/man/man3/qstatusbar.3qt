@@ -1,4 +1,4 @@
-.TH QStatusBar 3qt "12 April 2000" "Troll Tech AS" \" -*- nroff -*-
+.TH QStatusBar 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -125,6 +125,10 @@ See also: removeWidget().
 Removes any temporary message being shown.
 .PP
 See also: message().
+.SH "bool QStatusBar::event ( QEvent * e ) \fC[virtual protected]\fR"
+Reimplemented for internal reasons; the API is not affected.
+.PP
+Reimplemented from QObject.
 .SH "void QStatusBar::hideOrShow () \fC[protected]\fR"
 Ensures that the right widgets are visible. Used by message() and clear().
 .SH "bool QStatusBar::isSizeGripEnabled () const"
@@ -151,6 +155,10 @@ This function may cause some flicker.
 Note that \fIwidget\fR is not deleted.
 .PP
 See also: addWidget().
+.SH "void QStatusBar::resizeEvent ( QResizeEvent * ) \fC[virtual protected]\fR"
+Reimplemented for internal reasons; the API is not affected.
+.PP
+Reimplemented from QWidget.
 .SH "void QStatusBar::setSizeGripEnabled ( bool enabled )"
 Enables or disables the QSizeGrip in the bottom right of the status bar. By default, the size grip is enabled.
 .PP

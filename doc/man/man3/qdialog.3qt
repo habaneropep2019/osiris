@@ -1,4 +1,4 @@
-.TH QDialog 3qt "12 April 2000" "Troll Tech AS" \" -*- nroff -*-
+.TH QDialog 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -81,9 +81,9 @@ Inherited by QColorDialog, QFileDialog, QFontDialog, QInputDialog, QMessageBox, 
 .SH DESCRIPTION
 The QDialog class is the base class of dialog windows.
 .PP
-A dialog window is a widget used to communicate with the user. It offers mechanisms such as default buttons.
+A dialog window is a widget used to communicate with the user. It offers mechanisms such as modality and default buttons.
 .PP
-The dialog window can either be modeless or modal. A modeless dialog is a normal window, while a modal window must be finished before the user can continue with other parts of the program. The third constructor argument must be set to TRUE to create a modal dialog, otherwise it will create a modeless dialog.
+The dialog window can either be modeless or modal. A modeless dialog is a normal secondary window, while a modal window must be finished before the user can continue with other parts of the program. The third constructor argument must be set to TRUE to create a modal dialog, otherwise it will create a modeless dialog.
 .PP
 Example (your own modal dialog):
 .PP
@@ -123,7 +123,7 @@ Example (your own modal dialog):
     }
 .fi
 .PP
-Note that the parent widget has an additional meaning for modal dialogs. A modal dialog is placed on top of the parent widget. The dialog is centered on the screen if the parent widget is zero.
+Note that the parent widget has an additional meaning for dialogs. A dialog is placed on top of the parent widget and associated with it (i.e. it stays on top of its parent and shares certain resources, for example a common taskbar entry). If the parent widget is zero, the dialog is centered on the screen.
 .PP
 You would normally call exec() to start a modal dialog. This enters a local event loop, which is terminated when the modal dialog calls done() (or accept() or reject()).
 .PP
@@ -139,10 +139,6 @@ Example (using a modal dialog):
 .br
     }
 .fi
-.PP
-Modeless dialogs behave just like ordinary toplevel widgets. The only difference is that they have the default button mechanism.
-.PP
-See also: QTabDialog, QWidget, QSemiModal and GUI Design Handbook: Dialogs, Standard.
 .SH MEMBER FUNCTION DOCUMENTATION
 .SH "QDialog::QDialog ( QWidget * parent=0, const char * name=0, bool modal=FALSE, WFlags f=0 )"
 Constructs a dialog named \fIname,\fR which has a parent widget \fIparent.\fR

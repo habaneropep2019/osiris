@@ -1,4 +1,4 @@
-.TH QToolTip 3qt "12 April 2000" "Troll Tech AS" \" -*- nroff -*-
+.TH QToolTip 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -144,7 +144,7 @@ See also: QStatusBar, QWhatsThis, QToolTipGroup and GUI Design Handbook: Tool Ti
 .SH "QToolTip::QToolTip ( QWidget * parent, QToolTipGroup * group = 0 )"
 Constructs a tool tip object. This is necessary only if you need tool tips on regions that can move within the widget (most often because the widget's contents can scroll).
 .PP
-\fIparent\fR is widget you want to add dynamic tool tips to and \fIgroup\fR (optional) is the tool tip group they should belong to.
+\fIparent\fR is the widget you want to add dynamic tool tips to and \fIgroup\fR (optional) is the tool tip group they should belong to.
 .PP
 See also: maybeTip().
 .SH "void QToolTip::add ( QWidget * widget, const QRect & rect, const QString & text ) \fC[static]\fR"
@@ -166,7 +166,7 @@ Adds a tool tip to \fIwidget,\fR and to tool tip group \fIgroup.\fR
 .PP
 Normally, \fIlongText\fR is shown in a status bar or similar.
 .SH "void QToolTip::clear () \fC[protected]\fR"
-Removes all tool tips for this widget immediately.
+Removes all tool tips for this tooltip's parent widget immediately.
 .SH "bool QToolTip::enabled () \fC[static]\fR"
 Returns whether tooltips are enabled globally.
 .PP

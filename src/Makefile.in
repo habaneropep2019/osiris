@@ -16,7 +16,7 @@ MOC	=	$(SYSCONF_MOC)
 DESTDIR = ../lib/
 VER_MAJ = 2
 VER_MIN = 1
-VER_PATCH = 0
+VER_PATCH = 1
 TARGET	= qt
 TARGET1 = lib$(TARGET).so.$(VER_MAJ)
 
@@ -2183,18 +2183,17 @@ kernel/qaccel.o: kernel/qaccel.cpp \
 		kernel/qguardedptr.h
 
 kernel/qapplication.o: kernel/qapplication.cpp \
-		kernel/qapplication.h \
-		kernel/qwidget.h \
-		kernel/qwindowdefs.h \
+		kernel/qobjectlist.h \
+		kernel/qobject.h \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
+		kernel/qwindowdefs.h \
 		tools/qstring.h \
 		tools/qcstring.h \
 		tools/qarray.h \
 		tools/qgarray.h \
 		tools/qshared.h \
 		kernel/qnamespace.h \
-		kernel/qobject.h \
 		kernel/qevent.h \
 		kernel/qregion.h \
 		kernel/qrect.h \
@@ -2209,6 +2208,14 @@ kernel/qapplication.o: kernel/qapplication.cpp \
 		tools/qdatastream.h \
 		tools/qiodevice.h \
 		tools/qregexp.h \
+		kernel/qobjectdict.h \
+		kernel/qmetaobject.h \
+		kernel/qconnection.h \
+		tools/qstrlist.h \
+		tools/qasciidict.h \
+		tools/qgdict.h \
+		kernel/qapplication.h \
+		kernel/qwidget.h \
 		kernel/qpaintdevice.h \
 		kernel/qpalette.h \
 		kernel/qcolor.h \
@@ -2219,15 +2226,8 @@ kernel/qapplication.o: kernel/qapplication.cpp \
 		kernel/qfontinfo.h \
 		kernel/qstyle.h \
 		kernel/qsizepolicy.h \
-		tools/qasciidict.h \
-		tools/qgdict.h \
 		kernel/qtranslator.h \
 		tools/qintdict.h \
-		kernel/qobjectlist.h \
-		kernel/qobjectdict.h \
-		kernel/qmetaobject.h \
-		kernel/qconnection.h \
-		tools/qstrlist.h \
 		kernel/qwidgetlist.h \
 		kernel/qwidgetintdict.h \
 		widgets/qwindowsstyle.h \

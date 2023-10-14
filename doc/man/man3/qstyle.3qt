@@ -1,4 +1,4 @@
-.TH QStyle 3qt "12 April 2000" "Troll Tech AS" \" -*- nroff -*-
+.TH QStyle 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -300,7 +300,7 @@ Draws a press-sensitive shape in the style of a full featured push button
 See also: buttonRect().
 .PP
 Reimplemented in QPlatinumStyle, QMotifStyle and QWindowsStyle.
-.SH "void QStyle::drawButtonMask ( QPainter *, int, int, int, int ) \fC[virtual]\fR"
+.SH "void QStyle::drawButtonMask ( QPainter * p, int x, int y, int w, int h ) \fC[virtual]\fR"
 Draw the mask of a pushbutton. Useful if a rounded pushbuttons needs to be transparent because the style uses a fancy background pixmap.
 .PP
 See also: drawButtonMask().
@@ -457,13 +457,13 @@ Returns the width of the menu button indicator for a given button height \fIh.\f
 .SH "void QStyle::polish ( QApplication * ) \fC[virtual]\fR"
 Late initialization of the QApplication object.
 .PP
-See also: unPolish.
+See also: unPolish(QApplication*).
 .PP
 Reimplemented in QMotifStyle.
 .SH "void QStyle::polish ( QPalette & ) \fC[virtual]\fR"
 The style may have certain requirements for color palettes. In this function it has the chance to change the palette according to these requirements.
 .PP
-See also: unPolish, QPalette and QApplication::setPalette().
+See also: QPalette and QApplication::setPalette().
 .SH "void QStyle::polish ( QWidget * ) \fC[virtual]\fR"
 Initializes the appearance of a widget.
 .PP
@@ -523,9 +523,11 @@ TODO.
 .PP
 Reimplemented in QMotifStyle, QWindowsStyle and QCommonStyle.
 .SH "int QStyle::toolBarHandleExtend () const"
-Returns the extend (height or width depending on the orientation) which a toolbar handle has.
+Returns the extent (height or width depending on the orientation) which a toolbar handle has.
 .PP
-WARNING: Because of binary compatibility this method is NOT virtual, so reimplementing it in Qt 2.x doesn't make sense. In the next major release this method will become virtual!.
+WARNING: Because of binary compatibility this method is NOT virtual, so reimplementing it in Qt 2.x doesn't make sense. In the next major release this method will become virtual!
+.PP
+Note: we know it's a spelling error, fixed in 2.2. The correct name of the function is toolBarHandleExtent().
 .SH "QRect QStyle::toolButtonRect ( int x, int y, int w, int h )"
 Returns the rectangle available for contents in a tool button. Usually this is the entire rectangle minus the border, but it may also be smaller when you think about rounded buttons.
 .PP
@@ -535,7 +537,7 @@ See also: drawToolButton().
 .SH "void QStyle::unPolish ( QApplication * ) \fC[virtual]\fR"
 Redo the application polish
 .PP
-See also: polish.
+See also: polish(QApplication*).
 .SH "void QStyle::unPolish ( QWidget * ) \fC[virtual]\fR"
 Undos the initializataion of a widget's appearance
 .PP

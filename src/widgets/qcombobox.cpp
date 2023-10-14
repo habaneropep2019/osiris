@@ -1,5 +1,5 @@
 /**********************************************************************
-** $Id: qt/src/widgets/qcombobox.cpp   2.1.0   edited 2000-03-24 $
+** $Id: qt/src/widgets/qcombobox.cpp   2.1.1   edited 2000-05-18 $
 **
 ** Implementation of QComboBox widget class
 **
@@ -258,7 +258,7 @@ void QComboData::updateLinedGeometry()
     QRect r( combo->style().comboButtonRect( 0, 0, combo->width(), combo->height() ) );
     if ( pix && pix->width() < r.width() )
 	r.setLeft( r.left() + pix->width() + 4 );
-    if ( r != ed->rect() )
+    if ( r != ed->geometry() )
 	ed->setGeometry( r );
 }
 
@@ -327,26 +327,12 @@ static inline bool checkIndex( const char *method, const char * name,
 QComboBox::QComboBox( QWidget *parent, const char *name )
     : QWidget( parent, name, WResizeNoErase )
 {
+    d = new QComboData( this );
     if ( style() == WindowsStyle ) {
-	d = new QComboData( this );
-	d->setListBox( new QListBox( 0, "in-combo", WType_Popup ) );
-	d->listBox()->setAutoScrollBar( FALSE );
-	d->listBox()->setBottomScrollBar( FALSE );
-	d->listBox()->setAutoBottomScrollBar( FALSE );
-	d->listBox()->setFrameStyle( QFrame::Box | QFrame::Plain );
-	d->listBox()->setLineWidth( 1 );
-	d->listBox()->resize( 100, 10 );
-
-	connect( d->listBox(), SIGNAL(selected(int)),
-			     SLOT(internalActivate(int)) );
-	connect( d->listBox(), SIGNAL(highlighted(int)),
-			     SLOT(internalHighlight(int)));
-	d->showTimer = new QTimer( this );
-	connect( d->showTimer, SIGNAL( timeout() ),
-		 this, SLOT( showMore() ) );
+	setUpListBox();
     } else {
-	d = new QComboData( this );
 	d->setPopupMenu( new QComboBoxPopup );
+	d->popup()->setFont( font() );
 	connect( d->popup(), SIGNAL(activated(int)),
 			     SLOT(internalActivate(int)) );
 	connect( d->popup(), SIGNAL(highlighted(int)),
@@ -383,18 +369,7 @@ QComboBox::QComboBox( bool rw, QWidget *parent, const char *name )
     : QWidget( parent, name, WResizeNoErase )
 {
     d = new QComboData( this );
-    d->setListBox( new QListBox( 0, "in-combo", WType_Popup ) );
-    d->listBox()->setAutoScrollBar( FALSE );
-    d->listBox()->setBottomScrollBar( FALSE );
-    d->listBox()->setAutoBottomScrollBar( FALSE );
-    d->listBox()->setFrameStyle( QFrame::Box | QFrame::Plain );
-    d->listBox()->setLineWidth( 1 );
-    d->listBox()->resize( 100, 10 );
-
-    connect( d->listBox(), SIGNAL(selected(int)),
-	     SLOT(internalActivate(int)) );
-    connect( d->listBox(), SIGNAL(highlighted(int)),
-	     SLOT(internalHighlight(int)));
+    setUpListBox();
 
     d->current = 0;
     d->maxCount = INT_MAX;
@@ -413,19 +388,9 @@ QComboBox::QComboBox( bool rw, QWidget *parent, const char *name )
 
     setFocusPolicy( StrongFocus );
 
-    if ( rw ) {
-	d->ed = new QLineEdit( this, "combo edit" );
-	connect (d->ed, SIGNAL( textChanged( const QString& ) ),
-		 this, SIGNAL( textChanged( const QString& ) ) );
-	d->ed->setFrame( FALSE );
-	d->updateLinedGeometry();//ed->setGeometry(style().comboButtonRect( 0, 0, width(), height() ));
-	d->ed->installEventFilter( this );
-	setFocusProxy( d->ed );
-
-	connect( d->ed, SIGNAL(returnPressed()), SLOT(returnPressed()) );
-    } else {
-	d->ed = 0;
-    }
+    d->ed = 0;
+    if ( rw )
+	setUpLineEdit();
     setBackgroundMode( PaletteButton );
     setPalettePropagation( AllChildren );
     setFontPropagation( AllChildren );
@@ -955,7 +920,7 @@ QSize QComboBox::sizeHint() const
 	if ( h > maxH )
 	    maxH = h;
     }
-    if ( maxH <= 17 && style() == WindowsStyle || parentWidget() &&
+    if ( maxH <= 20 && style() == WindowsStyle || parentWidget() &&
 	 ( parentWidget()->inherits( "QToolBar" ) ||
 	   parentWidget()->inherits( "QDialog" ) && d->ed ) )
 	maxH = 12;
@@ -1231,6 +1196,8 @@ QRect QComboBox::arrowRect() const
 
 void QComboBox::mousePressEvent( QMouseEvent *e )
 {
+    if ( e->button() != LeftButton )
+	return;
     if ( d->discardNextMousePress ) {
 	d->discardNextMousePress = FALSE;
 	return;
@@ -1755,32 +1722,6 @@ void QComboBox::returnPressed()
 {
     QString s( d->ed->text() );
     int c = 0;
-    switch ( insertionPolicy() ) {
-    case AtCurrent:
-	if ( s != text( currentItem() ) )
-	    changeItem( s, currentItem() );
-	emit activated( currentItem() );
-	emit activated( s );
-	return;
-    case NoInsertion:
-	emit activated( s );
-	return;
-    case AtTop:
-	c = 0;
-	break;
-    case AtBottom:
-	c = count();
-	break;
-    case BeforeCurrent:
-	c = currentItem();
-	break;
-    case AfterCurrent:
-	c = currentItem() + 1;
-	break;
-    }
-    if ( count() == d->maxCount )
-	removeItem( count() - 1 );
-
     bool doInsert = TRUE;
     if ( !d->duplicatesEnabled ) {
 	for ( int i = 0; i < count(); ++i ) {
@@ -1792,8 +1733,36 @@ void QComboBox::returnPressed()
 	}
     }
 
-    if ( doInsert )
+    if ( doInsert ) {
+	if ( count() == d->maxCount )
+	    removeItem( count() - 1 );
+	
+	switch ( insertionPolicy() ) {
+	case AtCurrent:
+	    if ( s != text( currentItem() ) )
+		changeItem( s, currentItem() );
+	    emit activated( currentItem() );
+	    emit activated( s );
+	    return;
+	case NoInsertion:
+	    emit activated( s );
+	    return;
+	case AtTop:
+	    c = 0;
+	    break;
+	case AtBottom:
+	    c = count();
+	    break;
+	case BeforeCurrent:
+	    c = currentItem();
+	    break;
+	case AfterCurrent:
+	    c = currentItem() + 1;
+	    break;
+	}
 	insertItem( s, c );
+    }
+
     setCurrentItem( c );
     emit activated( c );
     emit activated( s );
@@ -1866,6 +1835,7 @@ void QComboBox::setListBox( QListBox * newListBox )
     newListBox->reparent( 0, WType_Popup, QPoint(0,0), FALSE );
     d->setListBox( newListBox );
 
+    d->listBox()->setFont( font() );
     d->listBox()->setAutoScrollBar( FALSE );
     d->listBox()->setBottomScrollBar( FALSE );
     d->listBox()->setAutoBottomScrollBar( FALSE );
@@ -1994,4 +1964,39 @@ void QComboBox::showMore()
 	d->listBox()->setVScrollBarMode( QScrollView::Auto );
 	d->showTimer->stop();
     }
+}
+
+
+void QComboBox::setUpListBox()
+{
+    d->setListBox( new QListBox( 0, "in-combo", WType_Popup ) );
+    d->listBox()->setFont( font() );
+    d->listBox()->setAutoScrollBar( FALSE );
+    d->listBox()->setBottomScrollBar( FALSE );
+    d->listBox()->setAutoBottomScrollBar( FALSE );
+    d->listBox()->setFrameStyle( QFrame::Box | QFrame::Plain );
+    d->listBox()->setLineWidth( 1 );
+    d->listBox()->resize( 100, 10 );
+
+    connect( d->listBox(), SIGNAL(selected(int)),
+	     SLOT(internalActivate(int)) );
+    connect( d->listBox(), SIGNAL(highlighted(int)),
+	     SLOT(internalHighlight(int)));
+    d->showTimer = new QTimer( this );
+    connect( d->showTimer, SIGNAL( timeout() ),
+	     this, SLOT( showMore() ) );
+}
+
+
+void QComboBox::setUpLineEdit()
+{
+    d->ed = new QLineEdit( this, "combo edit" );
+    connect (d->ed, SIGNAL( textChanged( const QString& ) ),
+	     this, SIGNAL( textChanged( const QString& ) ) );
+    d->ed->setFrame( FALSE );
+    d->updateLinedGeometry();
+    d->ed->installEventFilter( this );
+    setFocusProxy( d->ed );
+
+    connect( d->ed, SIGNAL(returnPressed()), SLOT(returnPressed()) );
 }

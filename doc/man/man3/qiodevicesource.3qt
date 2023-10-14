@@ -1,4 +1,4 @@
-.TH QIODeviceSource 3qt "12 April 2000" "Troll Tech AS" \" -*- nroff -*-
+.TH QIODeviceSource 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -48,7 +48,7 @@ This class encapsulates retrieving data from a QIODevice (such as a QFile).
 .SH "QIODeviceSource::QIODeviceSource ( QIODevice * device, int buffer_size=4096 )"
 Constructs a QIODeviceSource from a pointer to an QIODevice. The QIODevice \fImust\fR be dynamically allocated, becomes owned by the QIODeviceSource, and will be deleted when the QIODeviceSource destructs. \fIbuffer_size\fR determines the size of buffering to use between asynchronous operations. The higher \fIbuffer_size,\fR the more efficient but the less interleaved the operation will be with other processing.
 .SH "QIODeviceSource::~QIODeviceSource ()"
-Destroys the QIODeviceSource, deleting the QIODevice from which it was constructed.
+Destructs the QIODeviceSource, deleting the QIODevice from which it was constructed.
 .SH "void QIODeviceSource::enableRewind ( bool on ) \fC[virtual]\fR"
 Enables rewinding. No special action is taken.
 .PP

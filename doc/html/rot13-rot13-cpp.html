@@ -30,7 +30,7 @@ body { background: white; color: black; }
   <hr>
 
   Header file: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/rot13/rot13.h   2.1.0   edited 2000-01-31 $
+** &#36;Id&#58; qt/examples/rot13/rot13.h   2.1.1   edited 2000-01-31 $
 **
 ** Definition of something or other
 **
@@ -70,7 +70,7 @@ private:
 
   Implementation:
 <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/rot13/rot13.cpp   2.1.0   edited 2000-01-31 $
+** &#36;Id&#58; qt/examples/rot13/rot13.cpp   2.1.1   edited 2000-01-31 $
 **
 ** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
 **
@@ -90,8 +90,8 @@ Rot13::Rot13()
 {
     left = new <a name="QMultiLineEdit"></a><a href="qmultilineedit.html">QMultiLineEdit</a>( this, "left" );
     right = new <a href="qmultilineedit.html">QMultiLineEdit</a>( this, "right" );
-    <a name="connect"></a><a href="qobject.html#c2d209">connect</a>( left, SIGNAL(textChanged()), this, SLOT(<a name="changeRight"></a><a href="#346">changeRight</a>()) );
-    <a href="qobject.html#c2d209">connect</a>( right, SIGNAL(textChanged()), this, SLOT(<a name="changeLeft"></a><a href="#345">changeLeft</a>()) );
+    <a name="connect"></a><a href="qobject.html#c2d209">connect</a>( left, SIGNAL(textChanged()), this, SLOT(<a name="changeRight"></a><a href="#348">changeRight</a>()) );
+    <a href="qobject.html#c2d209">connect</a>( right, SIGNAL(textChanged()), this, SLOT(<a name="changeLeft"></a><a href="#347">changeLeft</a>()) );
 
     <a name="QPushButton"></a><a href="qpushbutton.html">QPushButton</a> * quit = new <a href="qpushbutton.html">QPushButton</a>( "&amp;Quit", this );
     quit-&gt;<a name="setFocusPolicy"></a><a href="qwidget.html#43a9d9">setFocusPolicy</a>( NoFocus );
@@ -105,21 +105,21 @@ Rot13::Rot13()
     left-&gt;setFocus();
 }
 
-void <a name="345"></a>Rot13::changeLeft()
+void <a name="347"></a>Rot13::changeLeft()
 {
     left-&gt;blockSignals( TRUE );
-    left-&gt;setText( <a name="rot13"></a><a href="#347">rot13</a>( right-&gt;text() ) );
+    left-&gt;setText( <a name="rot13"></a><a href="#349">rot13</a>( right-&gt;text() ) );
     left-&gt;blockSignals( FALSE );
 }
 
-void <a name="346"></a>Rot13::changeRight()
+void <a name="348"></a>Rot13::changeRight()
 {
     right-&gt;blockSignals( TRUE );
-    right-&gt;setText( <a href=#347>rot13</a>( left-&gt;text() ) );
+    right-&gt;setText( <a href=#349>rot13</a>( left-&gt;text() ) );
     right-&gt;blockSignals( FALSE );
 }
 
-<a name="QString"></a><a href="qstring.html">QString</a> <a name="347"></a>Rot13::rot13( const QString &amp; input ) const
+<a name="QString"></a><a href="qstring.html">QString</a> <a name="349"></a>Rot13::rot13( const QString &amp; input ) const
 {
     <a href="qstring.html">QString</a> r = input;
     int i = r.length();
@@ -147,5 +147,5 @@ int main( int argc, char ** argv )
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.0</div>
+<td align="right"><div align="right">Qt version 2.1.1</div>
 </table></div></address></body></html>

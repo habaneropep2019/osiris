@@ -1,4 +1,4 @@
-.TH QCString 3qt "12 April 2000" "Troll Tech AS" \" -*- nroff -*-
+.TH QCString 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -820,7 +820,7 @@ See also: strcpy().
 .SH "QDataStream & operator<< (QDataStream & s, const QCString & str)"
 Writes a string to the stream.
 .PP
-Output format: [length (Q_UINT32) data...].
+See also: Format of the QDataStream operators
 .SH "int strncmp (const char * str1, const char * str2, uint len)"
 A safe strncmp() function that overrides the one defined by the C library. The original strncmp() function has been renamed cstrncmp().
 .PP
@@ -862,6 +862,8 @@ Returns TRUE if \fIs1\fR is alphabetically greater than \fIs2,\fR otherwise FALS
 Equivalent to \fCstrcmp(s1,s2) > 0\fR
 .SH "QDataStream & operator>> (QDataStream & s, QCString & str)"
 Reads a string from the stream.
+.PP
+See also: Format of the QDataStream operators
 .SH "bool operator<= (const QCString & s1, const char * s2)"
 Returns TRUE if \fIs1\fR is alphabetically less than or equal to \fIs2,\fR otherwise FALSE.
 .PP

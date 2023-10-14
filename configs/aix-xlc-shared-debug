@@ -55,7 +55,7 @@ SYSCONF_LINK_LIB_STATIC	= rm -f $(DESTDIR)$(SYSCONF_LINK_TARGET_STATIC) ; \
 				 ranlib $(DESTDIR)$(SYSCONF_LINK_TARGET_STATIC)
 # Compiling application source
 SYSCONF_CXXFLAGS	= -+ -qstrict -D_BSD -g
-SYSCONF_CFLAGS		= -qlanglvl=classic -qstrict -D_BSD -g
+SYSCONF_CFLAGS		= -qstrict -D_BSD -g
 # Compiling library source
 SYSCONF_CXXFLAGS_LIB	= 
 SYSCONF_CFLAGS_LIB	= 

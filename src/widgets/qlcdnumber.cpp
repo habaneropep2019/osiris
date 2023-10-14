@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qlcdnumber.cpp   2.1.0   edited 2000-03-24 $
+** $Id: qt/src/widgets/qlcdnumber.cpp   2.1.1   edited 2000-05-05 $
 **
 ** Implementation of QLCDNumber class
 **
@@ -585,6 +585,8 @@ void QLCDNumber::setBinMode()
 void QLCDNumber::setMode( Mode m )
 {
     base = m;
+
+    repaint( contentsRect() );
 }
 
 

@@ -1,4 +1,4 @@
-.TH QAccel 3qt "12 April 2000" "Troll Tech AS" \" -*- nroff -*-
+.TH QAccel 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -121,11 +121,11 @@ In most cases, you will not need to use this class directly. Use QMenuData::inse
 .PP
 A QAccel contains a list of accelerator items. The following functions manipulate the list: insertItem(), removeItem(), clear(), key(), findKey().
 .PP
-Each accelerator item consists of an identifier and a keyboard code combined with modifiers (\fCSHIFT, CTRL, ALT\fR or \fCUNICODE_ACCEL).\fR For example, \fCCTRL + Key_P\fR could be a shortcut for printing a document. The key codes are listed in qnamespace.h. As an alternative, use \fCUNICODE_ACCEL\fR with the unicode value of the character. For example, \fCUNICODE_ACCEL + 'A'\fR gies the same accelerator as \fCKey_A.\fR
+Each accelerator item consists of an identifier and a keyboard code combined with modifiers (\fCSHIFT, CTRL, ALT\fR or \fCUNICODE_ACCEL).\fR For example, \fCCTRL + Key_P\fR could be a shortcut for printing a document. The key codes are listed in qnamespace.h. As an alternative, use \fCUNICODE_ACCEL\fR with the unicode code point of the character. For example, \fCUNICODE_ACCEL + 'A'\fR gies the same accelerator as \fCKey_A.\fR
 .PP
 When an accelerator key is pressed, the accelerator sends out the signal activated() with a number that identifies this particular accelerator item. Accelerator items can also be individually connected, so that two different keys will activate two different slots (see connectItem() and disconnectItem()).
 .PP
-Use setEnabled() to enable/disable all items in the accelerator, or setItemEnabled() to enable/disable individual items.
+Use setEnabled() to enable/disable all items in the accelerator, or setItemEnabled() to enable/disable individual items. An item is active only when the QAccel is enabled and the item itself is.
 .PP
 The function setWhatsThis() specifies the What's This text for an accelerator item.
 .PP
@@ -153,20 +153,20 @@ Constructs a QAccel object that operates on \fIwatch,\fR but is a child of \fIpa
 .PP
 This constructor is not needed for normal application programming.
 .SH "QAccel::~QAccel ()"
-Destructs the accelerator object.
+Destructs the accelerator object and frees all allocated resources.
 .SH "void QAccel::activated ( int id ) \fC[signal]\fR"
 This signal is emitted when an accelerator key is pressed. \fIid\fR is a number that identifies this particular accelerator item.
 .SH "void QAccel::clear ()"
 Removes all accelerator items.
 .SH "bool QAccel::connectItem ( int id, const QObject * receiver, const char * member )"
-Connects an accelerator item to a slot/signal in another object.
-.PP
-\fIid\fR is the accelerator item id. \fIreceiver\fR is the object to receive a signal. \fImember\fR is a slot or signal function in the receiver.
+Connects the accelerator item \fIid\fR to the slot \\member of \fIreceiver.\fR
 .PP
 .nf
 .br
     a->connectItem( 201, mainView, SLOT(quit()) );
 .fi
+.PP
+Of course, you can also send a signal as \fImember.\fR
 .PP
 See also: disconnectItem().
 .SH "uint QAccel::count () const"
@@ -223,11 +223,13 @@ Make sure that the accelerator is watching the correct event filter. This functi
 .SH "void QAccel::setEnabled ( bool enable )"
 Enables the accelerator if \fIenable\fR is TRUE, or disables it if \fIenable\fR is FALSE.
 .PP
-Individual keys can also be enabled or disabled.
+Individual keys can also be enabled or disabled using setItemEnabled(). To work, a key must be an enabled item in an enabled QAccel.
 .PP
 See also: isEnabled() and setItemEnabled().
 .SH "void QAccel::setItemEnabled ( int id, bool enable )"
-Enables or disables an accelerator item. \fIid\fR is the item identifier. \fIenable\fR specifies whether the item should be enabled or disabled.
+Enables the accelerator key \fIitem\fR if \fIenable\fR is TRUE, and disables \fIitem\fR if \fIenable\fR is FALSE.
+.PP
+To work, a key must be an enabled item in an enabled QAccel.
 .PP
 See also: isItemEnabled() and isEnabled().
 .SH "void QAccel::setWhatsThis ( int id, const QString & text )"
@@ -257,8 +259,6 @@ A common usage of this function is to provide translatable accelerator values fo
 .br
             QAccel::stringToKey(tr("Ctrl+O")) );
 .fi
-.PP
-Note that this function currently only supports character accelerators (unlike keyToString() which can produce Ctrl+Backspace, etc. from the appropriate key codes).
 .SH "QString QAccel::whatsThis ( int id ) const"
 Returns the Whats This help text for the specified item \fIid\fR or QString::null if no text has been defined yet.
 .PP

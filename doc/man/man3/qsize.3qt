@@ -1,4 +1,4 @@
-.TH QSize 3qt "12 April 2000" "Troll Tech AS" \" -*- nroff -*-
+.TH QSize 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -261,9 +261,11 @@ Note that the result is truncated.
 .SH "QDataStream & operator<< (QDataStream & s, const QSize & sz)"
 Writes the size to the stream and returns a reference to the stream.
 .PP
-Serialization format: [width (Q_INT32), height (Q_INT32)].
+See also: Format of the QDataStream operators
 .SH "QDataStream & operator>> (QDataStream & s, QSize & sz)"
 Reads the size from the stream and returns a reference to the stream.
+.PP
+See also: Format of the QDataStream operators
 .SH "QSize operator- (const QSize & s1, const QSize & s2)"
 Returns \fIs2\fR subtracted from \fIs1;\fR each component is subtracted separately.
 .SH "QSize operator* (double c, const QSize & s)"

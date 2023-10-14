@@ -1,4 +1,4 @@
-.TH QScrollView 3qt "12 April 2000" "Troll Tech AS" \" -*- nroff -*-
+.TH QScrollView 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -364,9 +364,19 @@ Normally you will use the first or third method if you want any child widgets in
 .PP
 Note that the widget you see in the scrolled area is the viewport() widget, not the QScrollView itself. So, to turn mouse tracking on for example, use viewport()->setMouseTracking(TRUE).
 .PP
-To enable drag-and-drop, you would setAcceptDrops(TRUE) on the QScrollView (since drag-and-drop events propagate to the parent), but to work out what logical position in the view, you would need to map the drop co-ordinate from being relative to the QScrollView to being relative to the contents - use the function mapToContents() for this.
+To enable drag-and-drop, you would setAcceptDrops(TRUE) on the QScrollView (since drag-and-drop events propagate to the parent), but to work out what logical position in the view, you would need to map the drop co-ordinate from being relative to the QScrollView to being relative to the contents - use the function viewportToContents() for this.
 .PP
 To handle mouse events on the scrolling area, subclass scrollview as you would subclass other widgets, but rather than overriding mousePressEvent(), reimplement viewportMousePressEvent() instead (if you reimplement mousePressEvent() you'll only get called when part of the QScrollView is clicked - and the only such part is the "corner" (if you don't set a cornerWidget()) and the frame, everything else being covered up by the viewport, clipper, or scrollbars.
+.PP
+When you contruct a QScrollView, some of the widget flags apply to the viewport(), instead of being sent to the QWidget constructor for the QScrollView. This applies to \fCWResizeNoErase, WNorthWestGravity, WRepaintNoErase\fR and \fCWPaintClever.\fR See Qt::WidgetFlags for documentation about these flags. Here are some examples: 
+.TP
+An image manipulation widget would use \fCWResizeNoErase|WNorthWestGravity,\fR because the widget draws all pixels itself and when the size increases, it only needs a paint event for the new part, since the old part remains unchanged.
+.TP
+A word processing widget might use \fCWResizeNoErase\fR and repaint itself line by line to get a less flickery resizing. If the widget is in a mode where no text justification can take place, it might use \fCWNorthWestGravity\fR too, so that it would only get a repaint for the newly visible parts.
+.TP
+A scrolling game widget where the background scrolls as the characters move might use \fCWRepaintNoErase\fR (in addition to \fCWNorthWestGravity\fR and \fCWResizeNoErase)\fR so that the window system background does not flash in and out during scrolling.
+.PP
+\fBWarning:\fR WResizeNoErase is currently set by default, i.e. you always have to clear the background manually in scrollview subclasses. This will change in a future version of Qt, and we recommend specifying the flag explicitly.
 .PP
 <img src=qscrollview-m.png> <img src=qscrollview-w.png>
 .PP
@@ -402,9 +412,9 @@ scrollview/scrollview.cpp
 .)l
 .SH MEMBER FUNCTION DOCUMENTATION
 .SH "QScrollView::QScrollView ( QWidget * parent=0, const char * name=0, WFlags f=0 )"
-Constructs a QScrollView.
+Constructs a QScrollView with a \fIparent,\fR a \fIname\fR and widget flags \fIf.\fR
 .PP
-If you intend to add child widgets, you may see improved refresh if you include \fCWPaintClever\fR in the widgets flags, \fIf.\fR \fCWPaintClever\fR as well as \fCWNorthWestGravity\fR and \fCWRepaintNoErase\fR is propagated to the viewport() widget.
+The widget flags \fCWNorthWestGravity, WRepaintNoErase\fR and \fCWPaintClever\fR are propagated to the viewport() widget. The other widget flags are propagated to the parent constructor as usual.
 .SH "QScrollView::~QScrollView ()"
 Destructs the QScrollView. Any children added with addChild() will be destructed.
 .SH "void QScrollView::addChild ( QWidget * child, int x=0, int y=0 ) \fC[virtual]\fR"
@@ -735,6 +745,10 @@ Reimplemented for internal reasons; the API is not affected.
 .PP
 Reimplemented from QWidget.
 .SH "QSizePolicy QScrollView::sizePolicy () const \fC[virtual]\fR"
+Reimplemented for internal reasons; the API is not affected.
+.PP
+Reimplemented from QWidget.
+.SH "void QScrollView::styleChange ( QStyle & old ) \fC[virtual]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .PP
 Reimplemented from QWidget.
