@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qsjiscodec.cpp   2.2.3   edited 2000-08-25 $
+** $Id: qt/src/tools/qsjiscodec.cpp   2.2.4   edited 2001-01-23 $
 **
 ** Implementation of QSjisCodec class
 **
@@ -148,13 +148,15 @@ QCString QSjisCodec::fromUnicode(const QString& uc, int& len_in_out) const
 	    // JIS X 0212 (can't be encoded in ShiftJIS !)
 	    *cursor++ = 0x81;	// white square
 	    *cursor++ = 0xa0;	// white square
+	} else if ( ch.unicode() == 0xa0 ) {
+	    *cursor++ = ' ';
 	} else {
 	    // Error
 	    *cursor++ = '?';	// unknown char
 	}
     }
     len_in_out = cursor - (uchar*)rstr.data();
-    *cursor = 0;
+    rstr.truncate(len_in_out);
     return rstr;
 }
 
@@ -231,7 +233,8 @@ int QSjisCodec::heuristicNameMatch(const char* hint) const
 	if ((qstricmp(p, "mscode") == 0) ||
 	    (qstricmp(p, "PCK") == 0) ||
 	    (qstricmp(p, "SJIS") == 0) ||
-	    (qstricmp(p, "ShiftJIS") == 0)) {
+	    (simpleHeuristicNameMatch(p, "ShiftJIS") > 0) ||
+	    (simpleHeuristicNameMatch(p, "x-sjis") > 0)) {
 	    return score + 4;
 	}
     }

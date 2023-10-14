@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qpngio.cpp   2.2.3   edited 2000-11-23 $
+** $Id: qt/src/kernel/qpngio.cpp   2.2.4   edited 2001-01-03 $
 **
 ** Implementation of PNG QImage IOHandler
 **
@@ -225,6 +225,20 @@ void setup_qt( QImage& image, png_structp png_ptr, png_infop info_ptr )
     }
 }
 
+
+#if defined(Q_C_CALLBACKS)
+extern "C" {
+#endif
+static void qt_png_warning(png_structp /*png_ptr*/, png_const_charp message)
+{
+    qWarning("libpng warning: %s", message);
+}
+
+#if defined(Q_C_CALLBACKS)
+}
+#endif
+
+
 static
 void read_png_image(QImageIO* iio)
 {
@@ -238,6 +252,8 @@ void read_png_image(QImageIO* iio)
 	iio->setStatus(-1);
 	return;
     }
+
+    png_set_error_fn(png_ptr, 0, 0, &qt_png_warning);
 
     info_ptr = png_create_info_struct(png_ptr);
     if (!info_ptr) {
@@ -298,6 +314,9 @@ png_get_valid(png_ptr, info_ptr, PNG_INFO_tRNS)
 	}
     }
 #endif
+
+    image.setDotsPerMeterX(png_get_x_pixels_per_meter(png_ptr,info_ptr));
+    image.setDotsPerMeterY(png_get_y_pixels_per_meter(png_ptr,info_ptr));
 
     delete [] row_pointers;
 
@@ -388,6 +407,8 @@ bool QPNGImageWriter::writeImage(const QImage& image, int quality, int off_x, in
 	return FALSE;
     }
 
+    png_set_error_fn(png_ptr, 0, 0, &qt_png_warning);
+
     info_ptr = png_create_info_struct(png_ptr);
     if (!info_ptr) {
 	png_destroy_write_struct(&png_ptr, 0);
@@ -465,6 +486,12 @@ bool QPNGImageWriter::writeImage(const QImage& image, int quality, int off_x, in
 
     if ( image.hasAlphaBuffer() ) {
 	info_ptr->sig_bit.alpha = 8;
+    }
+
+    // Swap ARGB to RGBA (normal PNG format) before saving on
+    // BigEndian machines
+    if ( QImage::systemByteOrder() == QImage::BigEndian ) {
+	png_set_swap_alpha(png_ptr);
     }
 
     // Qt==ARGB==Big(ARGB)==Little(BGRA)
@@ -897,6 +924,7 @@ QPNGFormat::QPNGFormat()
     info_ptr = 0;
 }
 
+
 /*!
   Destructs a QPNGFormat.
 */
@@ -905,9 +933,6 @@ QPNGFormat::~QPNGFormat()
     if ( png_ptr )
         png_destroy_read_struct(&png_ptr, &info_ptr, 0);
 }
-
-
-
 
 
 /*!
@@ -922,50 +947,52 @@ int QPNGFormat::decode(QImage& img, QImageConsumer* cons,
     image = &img;
 
     if ( state != Inside ) {
-       png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, 0, 0, 0);
-       png_set_compression_level(png_ptr, 9);
-       if (!png_ptr) {
-	  info_ptr = 0;
-	  image = 0;
-	  return -1;
-       }
+	png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, 0, 0, 0);
+	if (!png_ptr) {
+	    info_ptr = 0;
+	    image = 0;
+		return -1;
+	}
 
-       info_ptr = png_create_info_struct(png_ptr);
-       if (!info_ptr) {
-	  png_destroy_read_struct(&png_ptr, &info_ptr, 0);
-	  image = 0;
-	  return -1;
-       }
+	png_set_error_fn(png_ptr, 0, 0, &qt_png_warning);
+	png_set_compression_level(png_ptr, 9);
 
-       if (setjmp((png_ptr)->jmpbuf)) {
-	  png_destroy_read_struct(&png_ptr, &info_ptr, 0);
-	  image = 0;
-	  return -1;
-       }
+	info_ptr = png_create_info_struct(png_ptr);
+	if (!info_ptr) {
+	    png_destroy_read_struct(&png_ptr, &info_ptr, 0);
+	    image = 0;
+	    return -1;
+	}
 
-       png_set_progressive_read_fn(png_ptr, (void *)this,
-	  info_callback, row_callback, end_callback);
+	if (setjmp((png_ptr)->jmpbuf)) {
+	    png_destroy_read_struct(&png_ptr, &info_ptr, 0);
+	    image = 0;
+	    return -1;
+	}
+
+	png_set_progressive_read_fn(png_ptr, (void *)this,
+	                            info_callback, row_callback, end_callback);
 
 #ifdef PNG_USER_CHUNK_SUPPORTED
-       png_set_user_chunk_fn(png_ptr, user_chunk_callback);
+	png_set_user_chunk_fn(png_ptr, user_chunk_callback);
 #endif
 
-       if ( state != MovieStart && *buffer != 0211 ) {
-	   // Good, no signature - the preferred way to concat PNG images.
-	   // Skip them.
-	   png_set_sig_bytes(png_ptr, 8);
-       }
+	if ( state != MovieStart && *buffer != 0211 ) {
+	    // Good, no signature - the preferred way to concat PNG images.
+	    // Skip them.
+	    png_set_sig_bytes(png_ptr, 8);
+	}
 
-       state = Inside;
+	state = Inside;
     }
 
     if ( !png_ptr ) return 0;
     
     if (setjmp(png_ptr->jmpbuf)) {
-       png_destroy_read_struct(&png_ptr, &info_ptr, 0);
-       image = 0;
-       state = MovieStart;
-       return -1;
+	png_destroy_read_struct(&png_ptr, &info_ptr, 0);
+	image = 0;
+	state = MovieStart;
+	return -1;
     }
     unused_data = 0;
     png_process_data(png_ptr, info_ptr, (png_bytep)buffer, length);
@@ -989,7 +1016,7 @@ void QPNGFormat::info(png_structp png, png_infop)
 }
 
 void QPNGFormat::row(png_structp png, png_bytep new_row,
-   png_uint_32 row_num, int)
+    png_uint_32 row_num, int)
 {
     uchar* old_row = image->scanLine(row_num);
     png_progressive_combine_row(png, old_row, new_row);

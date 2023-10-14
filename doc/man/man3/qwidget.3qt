@@ -1,4 +1,4 @@
-.TH QWidget 3qt "12 December 2000" "Trolltech AS" \" -*- nroff -*-
+.TH QWidget 3qt "1 Febrary 2001" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -362,6 +362,9 @@ Inherited by QButton, QComboBox, QDial, QDialog, QFrame, QGLWidget, QHeader, QLi
 .br
 .ti -1c
 .BI "virtual QSize \fBminimumSizeHint\fR () const"
+.br
+.ti -1c
+.BI "virtual QSizePolicy \fBsizePolicy\fR () const"
 .br
 .ti -1c
 .BI "void \fBsetSizePolicy\fR ( QSizePolicy ) "
@@ -1217,7 +1220,7 @@ The default implementation updates the widget if it accepts focus (see focusPoli
 .PP
 See also focusOutEvent(), setFocusPolicy(), keyPressEvent(), keyReleaseEvent(), event() and QFocusEvent.
 .PP
-Reimplemented in QListBox, QTabBar, QLineEdit, QSlider, QGroupBox, QComboBox, QPushButton, QButton, QMultiLineEdit, QPopupMenu, QMenuBar, QTable, QDial, QListView and QTextView.
+Reimplemented in QListBox, QTabBar, QLineEdit, QSlider, QGroupBox, QComboBox, QPushButton, QButton, QMultiLineEdit, QPopupMenu, QMenuBar, QTable, QDial, QListView, QTextView and QRadioButton.
 .SH "bool QWidget::focusNextPrevChild ( bool next ) \fC[virtual protected]\fR"
 Finds a new widget to give the keyboard focus to, as appropriate for Tab/shift-Tab, and returns TRUE if is can find a new widget and FALSE if it can't,
 .PP
@@ -1753,7 +1756,7 @@ update() and repaint() can be used to force a paint event.
 .PP
 See also event(), repaint(), update(), QPainter, QPixmap and QPaintEvent.
 .PP
-Reimplemented in QTabDialog, QSizeGrip, QButton, QFrame, QGLWidget, QStatusBar, QGroupBox, QDial, QTableView, QHeader, QScrollBar, QLineEdit, QMainWindow, QTabBar, QPopupMenu, QSlider and QComboBox.
+Reimplemented in QTabDialog, QSizeGrip, QButton, QFrame, QGLWidget, QStatusBar, QGroupBox, QDial, QTableView, QHeader, QScrollBar, QToolBar, QLineEdit, QMainWindow, QTabBar, QPopupMenu, QSlider and QComboBox.
 .SH "const QPalette & QWidget::palette () const"
 Returns the widget palette.
 .PP
@@ -1857,7 +1860,7 @@ See also update(), paintEvent(), setUpdatesEnabled() and erase().
 .PP
 Examples:
 .(l
-xform/xform.cpp qmag/qmag.cpp forever/forever.cpp
+xform/xform.cpp qmag/qmag.cpp
 .)l
 .SH "void QWidget::repaint () \fC[slot]\fR"
 This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts.
@@ -1924,7 +1927,7 @@ The default implementation calls updateMask() if the widget has automatic maskin
 .PP
 See also moveEvent(), event(), resize(), QResizeEvent and paintEvent().
 .PP
-Reimplemented in QScrollBar, QMultiLineEdit, QToolBar, QCheckBox, QSlider, QWidgetStack, QTabDialog, QRadioButton, QTabBar, QDial, QComboBox, QWorkspace, QGroupBox, QLineEdit, QSpinBox, QDialog, QProgressDialog, QMessageBox, QScrollView, QSplitter, QFileDialog, QTabWidget, QPushButton, QListView, QMenuBar, QStatusBar, QGLWidget, QTableView, QListBox, QFrame, QXtWidget, QTable, QTextView and QLabel.
+Reimplemented in QScrollBar, QMultiLineEdit, QCheckBox, QSlider, QWidgetStack, QTabDialog, QRadioButton, QTabBar, QDial, QComboBox, QWorkspace, QGroupBox, QLineEdit, QSpinBox, QDialog, QProgressDialog, QMessageBox, QScrollView, QSplitter, QFileDialog, QTabWidget, QPushButton, QListView, QMenuBar, QMainWindow, QStatusBar, QToolBar, QGLWidget, QTableView, QListBox, QFrame, QXtWidget, QTable, QTextView and QLabel.
 .SH "void QWidget::scroll ( int dx, int dy, const QRect & r )"
 Scrolls \fIr dx\fR pixels to the right and \fIdy\fR downwards. Both \fIdx\fR and \fIdy\fR may be negative.
 .PP
@@ -1957,7 +1960,9 @@ Sets the top-level widget containing this widget to be the active window.
 .PP
 An active window is a visible top-level window that has the keyboard input focus.
 .PP
-This function performs the same operation as clicking the mouse on the title bar of a top-level window, at least on Windows. On X11, the result depends on the Window Manager. If you want to ensure that the window is stacked on top as well, call raise() in addition. Note that the window has be to visible, otherwise setActiveWindow() has no effect.
+This function performs the same operation as clicking the mouse on the title bar of a top-level window. On X11, the result depends on the Window Manager. If you want to ensure that the window is stacked on top as well, call raise() in addition. Note that the window has be to visible, otherwise setActiveWindow() has no effect.
+.PP
+On Windows, if you are calling this when the application is not currently the active one then it will not make it the active window. It will flash the task bar entry blue to indicate that the window has done something. This is due to Microsoft not allowing an application to interrupt what the user is currently doing in another application.
 .PP
 See also isActiveWindow(), topLevelWidget() and show().
 .PP
@@ -2443,8 +2448,9 @@ See also showEvent(), hide(), showMinimized(), showMaximized(), showNormal(), is
 .PP
 Examples:
 .(l
-showimg/main.cpp rangecontrols/main.cpp validator/main.cpp listviews/main.cpp aclock/main.cpp checklists/main.cpp drawlines/connect.cpp dclock/main.cpp xform/xform.cpp cursor/cursor.cpp layout/layout.cpp tetrix/tetrix.cpp buttongroups/main.cpp life/main.cpp i18n/main.cpp drawdemo/drawdemo.cpp lineedits/main.cpp popup/popup.cpp listbox/main.cpp menu/menu.cpp progress/progress.cpp qmag/qmag.cpp splitter/splitter.cpp progressbar/main.cpp tooltip/main.cpp richtext/main.cpp qwerty/main.cpp forever/forever.cpp rot13/rot13.cpp scrollview/scrollview.cpp movies/main.cpp picture/picture.cpp hello/main.cpp listboxcombo/main.cpp biff/main.cpp tictac/main.cpp customlayout/main.cpp
-.)l
+showimg/main.cpp rangecontrols/main.cpp validator/main.cpp listviews/main.cpp aclock/main.cpp checklists/main.cpp drawlines/connect.cpp dclock/main.cpp xform/xform.cpp cursor/cursor.cpp layout/layout.cpp tetrix/tetrix.cpp buttongroups/main.cpp life/main.cpp i18n/main.cpp drawdemo/drawdemo.cpp lineedits/main.cpp popup/popup.cpp listbox/main.cpp menu/menu.cpp progress/progress.cpp qmag/qmag.cpp splitter/splitter.cpp progressbar/main.cpp tooltip/main.cpp richtext/main.cpp qwerty/main.cpp forever/forever.cpp rot13/rot13.cpp xml/tagreader
+.)l-with-features/tagreader.cpp
+scrollview/scrollview.cpp movies/main.cpp picture/picture.cpp hello/main.cpp listboxcombo/main.cpp biff/main.cpp tictac/main.cpp customlayout/main.cpp
 .PP
 Reimplemented in QTableView, QTabBar, QMenuBar, QWidgetStack, QToolBar, QWizard, QSemiModal, QMainWindow, QListView, QDialog, QScrollView, QTabDialog, QPopupMenu and QProgressBar.
 .SH "void QWidget::showEvent ( QShowEvent * ) \fC[virtual protected]\fR"
@@ -2510,6 +2516,14 @@ Reimplemented in QGroupBox, QToolButton, QSlider, QTable, QCheckBox, QProgressDi
 Returns the widget size increment.
 .PP
 See also setSizeIncrement(), minimumSize() and maximumSize().
+.SH "QSizePolicy QWidget::sizePolicy () const \fC[virtual]\fR"
+Returns the default layout behaviour of this widget.
+.PP
+If there is a QLayout that manages this widget's children, the size policy specified by that layout is used. If there is no such QLayout, the result of this function is used.
+.PP
+See also setSizePolicy(), sizeHint(), QLayout, QSizePolicy and updateGeometry().
+.PP
+Reimplemented in QSlider, QPushButton, QProgressBar, QRadioButton, QLabel, QScrollBar, QTabBar, QWorkspace, QToolButton, QLCDNumber, QTabWidget, QFrame, QLineEdit, QHeader, QCheckBox, QSpinBox, QMultiLineEdit, QScrollView, QIconView, QSplitter and QSizeGrip.
 .SH "void QWidget::stackUnder ( QWidget * w ) \fC[slot]\fR"
 Places the widget under \fIw\fR in the parent widget's stack.
 .PP

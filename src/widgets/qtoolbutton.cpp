@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qtoolbutton.cpp   2.2.3   edited 2000-12-04 $
+** $Id: qt/src/widgets/qtoolbutton.cpp   2.2.4   edited 2000-12-14 $
 **
 ** Implementation of QToolButton class
 **
@@ -608,12 +608,15 @@ void QToolButton::setTextLabel( const QString &newLabel )
 
 void QToolButton::setTextLabel( const QString &newLabel , bool tipToo )
 {
-#ifndef QT_NO_TOOLTIP
-    if ( tipToo )
-	QToolTip::add( this, newLabel );
-#endif
     if ( tl == newLabel )
 	return;
+
+#ifndef QT_NO_TOOLTIP
+    if ( tipToo ) {
+        QToolTip::remove( this );
+        QToolTip::add( this, newLabel );
+    }
+#endif
 
     tl = newLabel;
     if ( usesTextLabel() && isVisible() ) {

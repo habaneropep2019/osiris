@@ -120,8 +120,12 @@ public:
 		    int weight = QString(attr[4]).toInt();
 		    bool italic = QString(attr[3]) == "y";
 		    QStringList sizes = attr[5];
-		    if ( sizes[0] == "0" )
-			sizes = QStringList::split(',',attr[7]);
+		    if ( sizes[0] == "0" ) {
+			if ( attr[7].isNull() )
+			    sizes = QStringList::split(',',attr[6]);
+			else
+			    sizes = QStringList::split(',',attr[7]);
+		    }
 		    for (QStringList::Iterator it = sizes.begin(); it != sizes.end(); ++it) {
 			int pointSize = (*it).toInt()/10;
 			if ( pointSize )

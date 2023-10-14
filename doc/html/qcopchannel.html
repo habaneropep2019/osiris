@@ -27,13 +27,19 @@ This class provides communication capabilities between several clients.
 <a href="#details">More...</a>
 <p>
 <code>#include &lt;<a href="qwsdisplay_qws-h.html">qwsdisplay_qws.h</a>&gt;</code>
+<p>
+Inherits <a href="qobject.html">QObject</a>.
 <p><a href="qcopchannel-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><div class="fn"><a href="#ebc0c1"><b>QCopChannel</b></a> ( const QCString &amp; channel ) </div>
+<li><div class="fn"><a href="#5116d5"><b>QCopChannel</b></a> ( const QCString &amp; channel, QObject * parent=0, const char * name=0 ) </div>
 <li><div class="fn">virtual <a href="#ea1844"><b>~QCopChannel</b></a> () </div>
 <li><div class="fn">QCString <a href="#e86228"><b>channel</b></a> () const</div>
 <li><div class="fn">virtual void <a href="#b3f06a"><b>receive</b></a> ( const QCString &amp; msg, const QByteArray &amp; data ) </div>
+</ul>
+<h2>Signals</h2>
+<ul>
+<li><div class="fn">void <a href="#66e0ae"><b>received</b></a> ( const QCString &amp; msg, const QByteArray &amp; data ) </div>
 </ul>
 <h2>Static Public Members</h2>
 <ul>
@@ -49,15 +55,17 @@ communicate inside of the same address space or between different processes.
 <p>Currently, this facility is only available on Qt/Embedded as on X11
 and Windows we are exploring the use of existing standard such as
 DCOP and COM.
-<p>QCopChannel is an abstract base class. Important functions like <a href="#5adafc">send</a>()
-and <a href="#a3662e">isRegistered</a>() are static and therefore usable without an object.
-In order to <em>listen</em> to the traffic on channel you have to subclass
-from QCopChannel and provide an implementation for <a href="#b3f06a">receive</a>().
+<p>QCopChannel contains important functions like <a href="#5adafc">send</a>() and <a href="#a3662e">isRegistered</a>()
+which are static and therefore usable without an object.
+<p>In order to <em>listen</em> to the traffic on the channel, you should either
+subclass from QCopChannel and provide an re-implementation for <a href="#b3f06a">receive</a>(),
+or you should <a href="qobject.html#c2d209">connect</a>() to the <a href="#66e0ae">received</a>() signal.
 
 <hr><h2>Member Function Documentation</h2>
-<h3 class="fn"><a name="ebc0c1"></a>QCopChannel::QCopChannel ( const <a href="qcstring.html">QCString</a> &amp; channel )</h3>
+<h3 class="fn"><a name="5116d5"></a>QCopChannel::QCopChannel ( const <a href="qcstring.html">QCString</a> &amp; channel, <a href="qobject.html">QObject</a> * parent=0, const char * name=0 )</h3>
 <p>Constructs a QCop channel and registers it with the server under the name
-<em>channel.</em>
+<em>channel.</em> The standard <em>parent</em> and <em>name</em> arguments are passed on
+to the <a href="qobject.html">QObject</a> constructor.
 <h3 class="fn"><a name="ea1844"></a>QCopChannel::~QCopChannel () <code>[virtual]</code></h3>
 <p>Destructs the client's side end of the channel and notifies the server
 about the closing. The server itself keeps the channel open until the
@@ -68,11 +76,15 @@ last registered client detaches.
 <p>Queries the server for the existance of <em>channel.</em>
 <p>Returns TRUE if <em>channel</em> is registered.
 <h3 class="fn">void <a name="b3f06a"></a>QCopChannel::receive ( const <a href="qcstring.html">QCString</a> &amp; msg, const <a href="qbytearray.html">QByteArray</a> &amp; data ) <code>[virtual]</code></h3>
-<p>This abstract virtual function allows subclasses of QCopChannel to
+<p>This virtual function allows subclasses of QCopChannel to
 process data received from their channel.
-Note that the format of <em>data</em> has to be well defined in order to
+<p>The default implementation emits the <a href="#66e0ae">received</a>() signal.
+<p>Note that the format of <em>data</em> has to be well defined in order to
 demarshall the contained information.
 <p>See also  <a href="#5adafc">send</a>().
+<h3 class="fn">void <a name="66e0ae"></a>QCopChannel::received ( const <a href="qcstring.html">QCString</a> &amp; msg, const <a href="qbytearray.html">QByteArray</a> &amp; data ) <code>[signal]</code></h3>
+<p>This signal is emitted whenever the <a href="#b3f06a">receive</a>() function gets incoming
+data.
 <h3 class="fn">bool <a name="6240a5"></a>QCopChannel::send ( const <a href="qcstring.html">QCString</a> &amp; channel, const <a href="qcstring.html">QCString</a> &amp; msg ) <code>[static]</code></h3>
 <p>Send the message <em>msg</em> on <em>channel.</em> The message will be distributed
 to all clients subscribed to the channel.
@@ -85,7 +97,7 @@ auxiliary data.
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.2.3"><nobr>
+<input type=hidden name="version" value="2.2.4"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -93,5 +105,5 @@ copyright &copy; 1995-2000
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.3</div>
+<td align="right"><div align="right">Qt version 2.2.4</div>
 </table></div></address></body></html>

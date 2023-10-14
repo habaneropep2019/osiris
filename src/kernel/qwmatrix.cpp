@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qwmatrix.cpp   2.2.3   edited 2000-08-25 $
+** $Id: qt/src/kernel/qwmatrix.cpp   2.2.4   edited 2000-08-25 $
 **
 ** Implementation of QWMatrix class
 **

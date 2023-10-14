@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/network/qdns.cpp   2.2.3   edited 2000-11-09 $
+** $Id: qt/src/network/qdns.cpp   2.2.4   edited 2000-11-09 $
 **
 ** Implementation of QDns class.
 **

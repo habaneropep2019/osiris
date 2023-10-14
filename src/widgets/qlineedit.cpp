@@ -1,5 +1,5 @@
 /**********************************************************************
-** $Id: qt/src/widgets/qlineedit.cpp   2.2.3   edited 2000-10-27 $
+** $Id: qt/src/widgets/qlineedit.cpp   2.2.4   edited 2000-12-21 $
 **
 ** Implementation of QLineEdit widget class
 **
@@ -943,6 +943,9 @@ void QLineEdit::doDrag()
     QTextDrag *tdo = new QTextDrag( markedText(), this );
     if ( tdo->drag() ) {
 	// ##### Delete original (but check if it went to me)
+#if defined (_WS_WIN_)
+        del();
+#endif
     }
 }
 

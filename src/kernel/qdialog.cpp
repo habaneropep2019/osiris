@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qdialog.cpp   2.2.3   edited 2000-12-10 $
+** $Id: qt/src/kernel/qdialog.cpp   2.2.4   edited 2000-12-10 $
 **
 ** Implementation of QDialog class
 **

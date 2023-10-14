@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qcstring.cpp   2.2.3   edited 2000-10-13 $
+** $Id: qt/src/tools/qcstring.cpp   2.2.4   edited 2001-01-11 $
 **
 ** Implementation of extended char array operations, and QByteArray and
 ** QCString classes
@@ -568,10 +568,17 @@ QCString::QCString( const char *str, uint maxsize )
 bool QCString::resize( uint len )
 {
     detach();
+    uint oldlen = length();
     if ( !QByteArray::resize(len) )
 	return FALSE;
     if ( len )
 	*(data()+len-1) = '\0';
+
+    // if we are resized > 0, and the old length was zero, we make sure that it
+    // doesn't change
+    if (len > 0 && oldlen == 0)
+	*(data()) = '\0';
+
     return TRUE;
 }
 

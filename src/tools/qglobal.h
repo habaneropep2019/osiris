@@ -1,11 +1,11 @@
 /****************************************************************************
-** $Id: qt/src/tools/qglobal.h   2.2.3   edited 2000-12-12 $
+** $Id: qt/src/tools/qglobal.h   2.2.4   edited 2001-02-01 $
 **
 ** Global type declarations and definitions
 **
 ** Created : 920529
 **
-** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+** Copyright (C) 1992-2001 Trolltech AS.  All rights reserved.
 **
 ** This file is part of the tools module of the Qt GUI Toolkit.
 **
@@ -39,8 +39,8 @@
 #define QGLOBAL_H
 
 
-#define QT_VERSION	223
-#define QT_VERSION_STR	"2.2.3"
+#define QT_VERSION	224
+#define QT_VERSION_STR	"2.2.4"
 
 
 //
@@ -67,6 +67,7 @@
 //   UNIXWARE	- SCO UnixWare
 //   GNU	- GNU Hurd
 //   DGUX	- DG Unix
+//   DYNIX	- Dynix
 //   UNIX	- Any UNIX bsd/sysv system
 //
 
@@ -128,6 +129,8 @@
 #define _OS_UNIXWARE7_
 #elif !defined(_SCO_DS) && defined(__USLC__) && defined(__SCO_VERSION__)
 #define _OS_UNIXWARE7_
+#elif defined(_SEQUENT_)
+#define _OS_DYNIX_
 #else
 #error "Qt has not been ported to this OS - talk to qt-bugs@trolltech.com"
 #endif
@@ -171,10 +174,6 @@
 
 #if defined(__SC__)
 #define _CC_SYM_
-#elif defined( __KCC )
-#define _CC_KAI_
-#define _CC_EDG_
-#define Q_HAS_BOOL_TYPE
 #elif defined(applec)
 #define _CC_MPW_
 #elif defined(__MWERKS__)
@@ -220,24 +219,34 @@
 #ifdef __EDG__ // UnixWare7
 #define Q_HAS_BOOL_TYPE
 #endif
-#elif defined(__DECCXX)
+#elif defined(__EDG) || defined(__EDG__)
+// __EDG observed on SGI DCC, MIPSpro 7.3.1.1 and KAI C++
+// __EDG__ documented in EDG online docs, observed on Compaq C++
+#define _CC_EDG_
+// the EDG documentation says that _BOOL is defined when the compiler has bool
+// but Compaq seem to have disabled this
+#if defined(__DECCXX)
 #define _CC_DEC_
 #if __DECCXX_VER >= 60060005
 #define Q_HAS_BOOL_TYPE
 #endif
-#elif defined(__EDG) || defined(__EDG__)
-// one observed on SGI DCC, the other documented
-#define _CC_EDG_
-#elif defined(OBJECTCENTER) || defined(CENTERLINE_CLPP)
-#define _CC_OC_
-#if defined(_BOOL)
+#elif defined( __KCC )
+#define _CC_KAI_
+#endif
+#if defined(_BOOL) && !defined(Q_HAS_BOOL_TYPE)
 #define Q_HAS_BOOL_TYPE
 #endif
+#elif defined(OBJECTCENTER) || defined(CENTERLINE_CLPP)
+#define _CC_OC_
 #elif defined(__SUNPRO_CC)
 #define _CC_SUN_
 #if __SUNPRO_CC >= 0x500
+#if defined(__SUNPRO_CC_COMPAT) && __SUNPRO_CC_COMPAT < 5
+// 4.2 compatibility mode triggered by -compat=4
+#else
 #define Q_HAS_BOOL_TYPE
 #define Q_C_CALLBACKS
+#endif
 #endif
 #elif defined(__CDS__)
 #define _CC_CDS_
@@ -266,25 +275,31 @@
 
 #if defined(_OS_MAC_)
 #define _WS_MAC_
+#define Q_WS_MAC
 #elif defined(_OS_MSDOS_)
 #define _WS_WIN16_
 #error "Qt requires Win32 and does not work with Windows 3.x"
 #elif defined(_WIN32_X11_)
 #define _WS_X11_
+#define Q_WS_X11
 #elif defined(_OS_WIN32_)
 #define _WS_WIN32_
+#define Q_WS_WIN32
 #elif defined(_OS_OS2_)
 #error "Qt does not work with OS/2 Presentation Manager or Workplace Shell"
 #elif defined(_OS_UNIX_)
 #ifdef QWS
 #define _WS_QWS_
+#define Q_WS_QWS
 #else
 #define _WS_X11_
+#define Q_WS_X11
 #endif
 #endif
 
 #if defined(_WS_WIN16_) || defined(_WS_WIN32_)
 #define _WS_WIN_
+#define Q_WS_WIN
 #endif
 
 

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qsplitter.cpp   2.2.3   edited 2000-11-11 $
+** $Id: qt/src/widgets/qsplitter.cpp   2.2.4   edited 2000-11-11 $
 **
 **  Splitter widget
 **

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qeucjpcodec.cpp   2.2.3   edited 2000-08-25 $
+** $Id: qt/src/tools/qeucjpcodec.cpp   2.2.4   edited 2001-01-23 $
 **
 ** Implementation of QEucJpCodec class
 **
@@ -194,13 +194,15 @@ QCString QEucJpCodec::fromUnicode(const QString& uc, int& len_in_out) const
 	    *cursor++ = Ss3;
 	    *cursor++ = (j >> 8)   | 0x80;
 	    *cursor++ = (j & 0xff) | 0x80;
+	} else if ( ch.unicode() == 0xa0 ) {
+	    *cursor++ = ' ';
 	} else {
 	    // Error
 	    *cursor++ = '?';	// unknown char
 	}
     }
     len_in_out = cursor - (uchar*)rstr.data();
-    *cursor = 0;
+    rstr.truncate(len_in_out);
     return rstr;
 }
 
@@ -308,7 +310,9 @@ int QEucJpCodec::heuristicNameMatch(const char* hint) const
     if (p) {
 	if ((qstricmp(p, "AJEC") == 0) ||
 	    (qstricmp(p, "eucJP") == 0) ||
-	    (qstricmp(p, "ujis") == 0)) {
+	    (qstricmp(p, "ujis") == 0) ||
+	    (simpleHeuristicNameMatch(p, "eucJP") > 0) ||
+	    (simpleHeuristicNameMatch(p, "x-euc-jp") > 0)) {
 	    return score + 4;
 	}
 	// there exists ja_JP.EUC, ko_KR.EUC, zh_CN.EUC and zh_TW.EUC

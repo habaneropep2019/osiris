@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qprinter_x11.cpp   2.2.3   edited 2000-12-06 $
+** $Id: qt/src/kernel/qprinter_x11.cpp   2.2.4   edited 2000-12-06 $
 **
 ** Implementation of QPrinter class for X11
 **

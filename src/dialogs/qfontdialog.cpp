@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/dialogs/qfontdialog.cpp   2.2.3   edited 2000-08-25 $
+** $Id: qt/src/dialogs/qfontdialog.cpp   2.2.4   edited 2001-01-15 $
 **
 ** Implementation of QFontDialog
 **
@@ -502,7 +502,7 @@ bool QFontDialog::eventFilter( QObject * o , QEvent * e )
 
 void QFontDialog::updateFamilies()
 {
-    d->familyNames = d->fdb.families();
+    d->familyNames = d->fdb.families( FALSE );
     QStringList newList;
     QString s;
     QStringList::Iterator it = d->familyNames.begin();
@@ -533,7 +533,7 @@ void QFontDialog::updateScripts()
 {
     d->scriptCombo->clear();
 
-    d->charSetNames = d->fdb.charSets( d->family );
+    d->charSetNames = d->fdb.charSets( d->family, FALSE );
 
     if ( d->charSetNames.isEmpty() ) {
 	qWarning( "QFontDialog::updateFamilies: Internal error, "
@@ -543,7 +543,7 @@ void QFontDialog::updateScripts()
     }
 
     QStringList::Iterator it = d->charSetNames.begin();
-    for ( ; it != d->charSetNames.end() ; ++it )
+    for ( ; it != d->charSetNames.end() ; ++it ) 
 	d->scriptCombo->insertItem( d->fdb.verboseCharSetName(*it) );
 }
 

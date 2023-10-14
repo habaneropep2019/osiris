@@ -1,4 +1,4 @@
-.TH QListViewItem 3qt "12 December 2000" "Trolltech AS" \" -*- nroff -*-
+.TH QListViewItem 3qt "1 Febrary 2001" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -394,10 +394,12 @@ Paints a set of branches from this item to (some of) its children.
 The update rectangle is in an undefined state when this function is called; this function must draw on \fIall\fR of the pixels.
 .PP
 See also paintCell() and QListView::drawContentsOffset().
+.PP
+Reimplemented in QCheckListItem.
 .SH "void QListViewItem::paintCell ( QPainter * p, const QColorGroup & cg, int column, int width, int align ) \fC[virtual]\fR"
 This virtual function paints the contents of one column of one item.
 .PP
-\fIp\fR is a QPainter open on the relevant paint device. \fIpa\fR is translated so 0, 0 is the top left pixel in the cell and \fIwidth-1,\fR height()-1 is the bottom right pixel \fIin\fR the cell. The other properties of \fIp\fR (pen, brush etc) are undefined. \fIcg\fR is the color group to use. \fIcolumn\fR is the logical column number within the item that is to be painted; 0 is the column which may contain a tree.
+\fIp\fR is a QPainter open on the relevant paint device. \fIp\fR is translated so 0, 0 is the top left pixel in the cell and \fIwidth-1,\fR height()-1 is the bottom right pixel \fIin\fR the cell. The other properties of \fIp\fR (pen, brush etc) are undefined. \fIcg\fR is the color group to use. \fIcolumn\fR is the logical column number within the item that is to be painted; 0 is the column which may contain a tree.
 .PP
 This function may use QListView::itemMargin() for readability spacing on the left and right sides of information such as text, and should honor isSelected() and QListView::allColumnsShowFocus().
 .PP

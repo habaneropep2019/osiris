@@ -1,5 +1,5 @@
 /**********************************************************************
-** $Id: qt/src/widgets/qcombobox.cpp   2.2.3   edited 2000-12-07 $
+** $Id: qt/src/widgets/qcombobox.cpp   2.2.4   edited 2001-01-10 $
 **
 ** Implementation of QComboBox widget class
 **
@@ -1508,8 +1508,10 @@ bool QComboBox::eventFilter( QObject *object, QEvent *event )
 		}
 		if ( foundAt > -1 ) {
 		    it = text( foundAt );
-		    d->ed->validateAndSet( it, ct.length(),
+            if ( !d->ed->hasMarkedText() ) {
+                d->ed->validateAndSet( it, ct.length(),
 					   ct.length(), it.length() );
+            }
 		}
 	    }
 	}

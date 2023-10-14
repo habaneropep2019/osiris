@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/doc/tutorial.doc   2.2.3   edited 2000-10-19 $
+** $Id: qt/doc/tutorial.doc   2.2.4   edited 2001-01-15 $
 **
 ** Tutorial
 **
@@ -551,7 +551,7 @@ there because we use Qt's automatic layout support.
 
 MyWidget is now derived from QVBox instead of QWidget. That way we use
 the layout of the QVBox (which places all of its children vertically
-inside itself). Resizes are handled automatically by the QBVox and
+inside itself). Resizes are handled automatically by the QVBox and
 therefore by MyWidget too, now.
 
 \skip lcd

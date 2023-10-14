@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qwindowdefs.h   2.2.3   edited 2000-12-12 $
+** $Id: qt/src/kernel/qwindowdefs.h   2.2.4   edited 2000-12-12 $
 **
 ** Definition of general window system dependent functions, types and
 ** constants

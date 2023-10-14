@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qcursor.cpp   2.2.3   edited 2000-11-03 $
+** $Id: qt/src/kernel/qcursor.cpp   2.2.4   edited 2000-11-03 $
 **
 ** Implementation of QCursor class
 **

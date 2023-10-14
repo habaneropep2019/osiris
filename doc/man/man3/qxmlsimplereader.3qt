@@ -1,4 +1,4 @@
-.TH QXmlSimpleReader 3qt "12 December 2000" "Trolltech AS" \" -*- nroff -*-
+.TH QXmlSimpleReader 3qt "1 Febrary 2001" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -55,6 +55,11 @@ does not parse any external entities
 can do namespace processing
 .PP
 For getting started see also the Quick start
+.PP
+Examples:
+.(l
+xml/tagreader/tagreader.cpp xml/tagreader
+.)l-with-features/tagreader.cpp
 .SH MEMBER FUNCTION DOCUMENTATION
 .SH "QXmlDTDHandler* QXmlSimpleReader::DTDHandler () const \fC[virtual]\fR"
 Reimplemented for internal reasons; the API is not affected.
@@ -103,6 +108,11 @@ Reimplemented from QXmlReader.
 .SH "bool QXmlSimpleReader::parse ( const QXmlInputSource & input ) \fC[virtual]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .PP
+Examples:
+.(l
+xml/tagreader/tagreader.cpp xml/tagreader
+.)l-with-features/tagreader.cpp
+.PP
 Reimplemented from QXmlReader.
 .SH "void* QXmlSimpleReader::property ( const QString &, bool * ok = 0 ) const \fC[virtual]\fR"
 Returns 0 since this class does not support any properties.
@@ -110,6 +120,11 @@ Returns 0 since this class does not support any properties.
 Reimplemented from QXmlReader.
 .SH "void QXmlSimpleReader::setContentHandler ( QXmlContentHandler * handler ) \fC[virtual]\fR"
 Reimplemented for internal reasons; the API is not affected.
+.PP
+Examples:
+.(l
+xml/tagreader/tagreader.cpp xml/tagreader
+.)l-with-features/tagreader.cpp
 .PP
 Reimplemented from QXmlReader.
 .SH "void QXmlSimpleReader::setDTDHandler ( QXmlDTDHandler * handler ) \fC[virtual]\fR"
@@ -140,6 +155,11 @@ http://xml.org/sax/features/namespace-prefixes: if this feature is TRUE, the the
 http://trolltech.com/xml/features/report-whitespace-only-CharData: if this feature is TRUE, CharData that consists only of whitespace (and no other characters) is not reported via QXmlContentHandler::characters()
 .PP
 See also feature() and hasFeature().
+.PP
+Examples:
+.(l
+xml/tagreader
+.)l-with-features/tagreader.cpp
 .PP
 Reimplemented from QXmlReader.
 .SH "void QXmlSimpleReader::setLexicalHandler ( QXmlLexicalHandler * handler ) \fC[virtual]\fR"

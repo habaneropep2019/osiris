@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qscrollview.cpp   2.2.3   edited 2000-10-11 $
+** $Id: qt/src/widgets/qscrollview.cpp   2.2.4   edited 2000-12-13 $
 **
 ** Implementation of QScrollView class
 **
@@ -768,22 +768,18 @@ void QScrollView::updateScrollBars()
     }
 
     // Configure scrollbars that we will show
-    if ( showv ) {
 	if ( needv ) {
 	    d->vbar.setRange( 0, contentsHeight()-porth );
 	    d->vbar.setSteps( QScrollView::d->vbar.lineStep(), porth );
 	} else {
 	    d->vbar.setRange( 0, 0 );
 	}
-    }
-    if ( showh ) {
 	if ( needh ) {
 	    d->hbar.setRange( 0, contentsWidth()-portw );
 	    d->hbar.setSteps( QScrollView::d->hbar.lineStep(), portw );
 	} else {
 	    d->hbar.setRange( 0, 0 );
 	}
-    }
 
     // Position the scrollbars, viewport, and corner widget.
     int bottom;
@@ -998,7 +994,7 @@ QScrollView::ScrollBarMode QScrollView::hScrollBarMode() const
 
   \sa hScrollBarMode(), setVScrollBarMode()
 */
-void  QScrollView::setHScrollBarMode( ScrollBarMode mode )
+void QScrollView::setHScrollBarMode( ScrollBarMode mode )
 {
     if (d->hMode != mode) {
 	d->hMode = mode;

@@ -63,7 +63,6 @@ Inherits <a href="qwidget.html">QWidget</a>.
 <li><div class="fn">int cellPos ( int ) const <em>(obsolete)</em></div>
 <li><div class="fn">int cellAt ( int ) const <em>(obsolete)</em></div>
 <li><div class="fn">int <a href="#873b80"><b>offset</b></a> () const</div>
-<li><div class="fn">QSizePolicy <b>sizePolicy</b> () const</div>
 <li><div class="fn">int <a href="#900a80"><b>mapToSection</b></a> ( int index ) const</div>
 <li><div class="fn">int <a href="#a5a6ff"><b>mapToIndex</b></a> ( int section ) const</div>
 <li><div class="fn">int mapToLogical ( int ) const <em>(obsolete)</em></div>
@@ -127,8 +126,8 @@ the API of QHeader works with the section numbers.
 <h3 class="fn"><a name="9983e0"></a>QHeader::QHeader ( <a href="qwidget.html">QWidget</a> * parent=0, const char * name=0 )</h3>
 <p>Constructs a horizontal header.
 <p>The <em>parent</em> and <em>name</em> arguments are sent to the <a href="qwidget.html">QWidget</a> constructor.
-<h3 class="fn"><a name="9a5fe9"></a>QHeader::QHeader ( int n, <a href="qwidget.html">QWidget</a> * parent=0, const char * name=0 )</h3>
-<p>Constructs a horizontal header with <em>n</em> sections.
+<h3 class="fn"><a name="9a5fe9"></a>QHeader::QHeader ( int <a href="n.html">n</a>, <a href="qwidget.html">QWidget</a> * parent=0, const char * name=0 )</h3>
+<p>Constructs a horizontal header with <em><a href="n.html">n</a></em> sections.
 <p>The <em>parent</em> and <em>name</em> arguments are sent to the <a href="qwidget.html">QWidget</a> constructor.
 <h3 class="fn"><a name="8ef76c"></a>QHeader::~QHeader ()</h3>
 <p>Destructs the header.
@@ -334,6 +333,9 @@ typically connected to a slot that repaints the table.
 <h3 class="fn"><a href="qsize.html">QSize</a> <a name="24d828"></a>QHeader::sizeHint () const <code>[virtual]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
 <p>Reimplemented from <a href="qwidget.html#290bcd">QWidget.</a>
+<h3 class="fn"><a href="qsizepolicy.html">QSizePolicy</a> <a name="9df67b"></a>QHeader::sizePolicy () const <code>[virtual]</code></h3>
+<p>Reimplemented for internal reasons; the API is not affected.
+<p>Reimplemented from <a href="qwidget.html#2d5d13">QWidget.</a>
 <h3 class="fn">bool <a name="6be9b1"></a>QHeader::tracking () const</h3>
 <p>Returns TRUE if tracking is on, FALSE otherwise.
 <p>See also  <a href="#fa228a">setTracking</a>().
@@ -341,7 +343,7 @@ typically connected to a slot that repaints the table.
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.2.3"><nobr>
+<input type=hidden name="version" value="2.2.4"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -349,5 +351,5 @@ copyright &copy; 1995-2000
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.3</div>
+<td align="right"><div align="right">Qt version 2.2.4</div>
 </table></div></address></body></html>

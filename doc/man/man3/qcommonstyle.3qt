@@ -1,4 +1,4 @@
-.TH QCommonStyle 3qt "12 December 2000" "Trolltech AS" \" -*- nroff -*-
+.TH QCommonStyle 3qt "1 Febrary 2001" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -19,25 +19,7 @@ Inherited by QMotifStyle and QWindowsStyle.
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "void \fBdrawComboButton\fR ( QPainter * " "p" ", int " "x" ", int " "y" ", int " "w" ", int " "h" ", const QColorGroup & " "g" ", bool " "sunken" " = FALSE, bool " "editable" " = FALSE, bool " "enabled" " = TRUE, const QBrush * " "fill" " = 0 ) "
-.br
-.ti -1c
-.BI "void \fBdrawComboButtonMask\fR ( QPainter * " "p" ", int " "x" ", int " "y" ", int " "w" ", int h ) "
-.br
-.ti -1c
-.BI "void \fBgetButtonShift\fR ( int & " "x" ", int & y ) "
-.br
-.ti -1c
-.BI "int \fBdefaultFrameWidth\fR () const"
-.br
-.ti -1c
 .BI "ScrollControl \fBscrollBarPointOver\fR ( const QScrollBar * " "sb" ", int " "sliderStart" ", const QPoint & p ) "
-.br
-.ti -1c
-.BI "void \fBdrawSliderMask\fR ( QPainter * " "p" ", int " "x" ", int " "y" ", int " "w" ", int " "h" ", Orientation, bool " "tickAbove" ", bool tickBelow ) "
-.br
-.ti -1c
-.BI "int \fBmaximumSliderDragDistance\fR () const"
 .br
 .ti -1c
 .BI "void \fBdrawMenuBarItem\fR ( QPainter * " "p" ", int " "x" ", int " "y" ", int " "w" ", int " "h" ", QMenuItem * " "mi" ", QColorGroup & " "g" ", bool " "enabled" ", bool active ) "
@@ -56,6 +38,18 @@ Reimplemented from QStyle.
 Reimplemented for internal reasons; the API is not affected.
 .PP
 Reimplemented from QStyle.
+.SH "int QCommonStyle::defaultFrameWidth () const \fC[virtual]\fR"
+Reimplemented for internal reasons; the API is not affected.
+.PP
+Reimplemented from QStyle.
+.SH "void QCommonStyle::drawComboButton ( QPainter * p, int x, int y, int w, int h, const QColorGroup & g, bool sunken = FALSE, bool = FALSE, bool = TRUE, const QBrush * fill = 0 ) \fC[virtual]\fR"
+Reimplemented for internal reasons; the API is not affected.
+.PP
+Reimplemented from QStyle.
+.SH "void QCommonStyle::drawComboButtonMask ( QPainter * p, int x, int y, int w, int h ) \fC[virtual]\fR"
+Reimplemented for internal reasons; the API is not affected.
+.PP
+Reimplemented from QStyle.
 .SH "void QCommonStyle::drawPushButtonLabel ( QPushButton * btn, QPainter * p ) \fC[virtual]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .PP
@@ -64,10 +58,22 @@ Reimplemented from QStyle.
 Reimplemented for internal reasons; the API is not affected.
 .PP
 Reimplemented from QStyle.
+.SH "void QCommonStyle::drawSliderMask ( QPainter * p, int x, int y, int w, int h, Orientation, bool, bool ) \fC[virtual]\fR"
+Reimplemented for internal reasons; the API is not affected.
+.PP
+Reimplemented from QStyle.
 .SH "void QCommonStyle::drawTab ( QPainter * p, const QTabBar * tb, QTab * t, bool selected )"
 Reimplemented for internal reasons; the API is not affected.
 .SH "void QCommonStyle::drawTabMask ( QPainter * p, const QTabBar *, QTab * t, bool )"
 Reimplemented for internal reasons; the API is not affected.
+.SH "void QCommonStyle::getButtonShift ( int & x, int & y ) \fC[virtual]\fR"
+Reimplemented for internal reasons; the API is not affected.
+.PP
+Reimplemented from QStyle.
+.SH "int QCommonStyle::maximumSliderDragDistance () const \fC[virtual]\fR"
+Reimplemented for internal reasons; the API is not affected.
+.PP
+Reimplemented from QStyle.
 .SH "int QCommonStyle::popupSubmenuIndicatorWidth ( const QFontMetrics & fm ) \fC[virtual]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .PP

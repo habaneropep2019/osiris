@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/mdi/application.cpp   2.2.3   edited 2000-08-31 $
+** $Id: qt/examples/mdi/application.cpp   2.2.4   edited 2001-01-27 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -237,8 +237,10 @@ void ApplicationWindow::windowsMenuAboutToShow()
 void ApplicationWindow::windowsMenuActivated( int id )
 {
     QWidget* w = ws->windowList().at( id );
-    if ( w )
+    if ( w ) {
+	w->showNormal();
 	w->setFocus();
+    }
 }
 
 MDIWindow::MDIWindow( QWidget* parent, const char* name, int wflags )

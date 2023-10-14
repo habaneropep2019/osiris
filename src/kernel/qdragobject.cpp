@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qdragobject.cpp   2.2.3   edited 2000-10-03 $
+** $Id: qt/src/kernel/qdragobject.cpp   2.2.4   edited 2000-10-03 $
 **
 ** Implementation of Drag and Drop support
 **

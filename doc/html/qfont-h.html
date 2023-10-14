@@ -30,7 +30,7 @@ remains with Trolltech.
 <hr>
 <pre>
 /****************************************************************************
-** &#36;Id&#58; qt/src/kernel/qfont.h   2.2.3   edited 2000-09-02 $
+** &#36;Id&#58; qt/src/kernel/qfont.h   2.2.4   edited 2001-01-15 $
 **
 ** Definition of QFont class
 **
@@ -117,6 +117,10 @@ public:
                      Set_GBK,
                      Set_Big5,
 
+                     TSCII,
+                     KOI8U,
+                     CP1251,
+                     PT154,
                      /* The following are font-specific encodings that
                         we shouldn't need in a perfect world.
                      */
@@ -126,9 +130,7 @@ public:
                      JIS_X_0208 = 0xc0, Enc16 = JIS_X_0208,
                      KSC_5601,
                      GB_2312,
-                     Big5,
-                     TSCII,
-                     KOI8U
+                     Big5
     };
     enum StyleHint { Helvetica, Times, Courier, OldEnglish,  System, AnyStyle,
                      SansSerif  = Helvetica,
@@ -282,5 +284,5 @@ Q_EXPORT QDataStream &amp;operator&gt;&gt;( QDataStream &amp;, QFont &amp; );
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.3</div>
+<td align="right"><div align="right">Qt version 2.2.4</div>
 </table></div></address></body></html>

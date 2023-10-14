@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qabstractlayout.cpp   2.2.3   edited 2000-11-30 $
+** $Id: qt/src/kernel/qabstractlayout.cpp   2.2.4   edited 2000-11-29 $
 **
 ** Implementation of the abstract layout base class
 **

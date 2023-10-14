@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qtsciicodec.h   2.2.3   edited 2000-08-16 $
+** $Id: qt/src/tools/qtsciicodec.h   2.2.4   edited 2000-08-16 $
 **
 ** Definition of QTSCIICodec class
 **

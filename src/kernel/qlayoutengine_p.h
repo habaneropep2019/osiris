@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qlayoutengine_p.h   2.2.3   edited 2000-08-25 $
+** $Id: qt/src/kernel/qlayoutengine_p.h   2.2.4   edited 2000-08-25 $
 **
 ** Internal header file. 
 **

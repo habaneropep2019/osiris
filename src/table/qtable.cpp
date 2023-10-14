@@ -466,8 +466,10 @@ QSize QTableItem::sizeHint() const
 	s.setWidth( s.width() + 2 );
     }
 
-    s.setWidth( s.width() + table()->fontMetrics().width( text() ) + 10 );
-    return s;
+    if ( !wordwrap )
+	return QSize( s.width() + table()->fontMetrics().width( text() ) + 10, QMAX( s.height(), table()->fontMetrics().height() ) );
+    QRect r = table()->fontMetrics().boundingRect( 0, 0, table()->columnWidth( col() ), 0, wordwrap ? (alignment() | WordBreak) : alignment(), txt );
+    return QSize( s.width() + r.width(), QMAX( s.height(), r.height() ) );
 }
 
 /*!  Creates a multi-cell QTableItem covering \a rs rows and \a cs columns.
@@ -3441,11 +3443,11 @@ void QTableHeader::mouseReleaseEvent( QMouseEvent *e )
 {
     autoScrollTimer->stop();
     mousePressed = FALSE;
+    bool hasCached = resizedSection != -1;
+    setCaching( FALSE );
     QHeader::mouseReleaseEvent( e );
     line1->hide();
     line2->hide();
-    bool hasCached = resizedSection != -1;
-    setCaching( FALSE );
     if ( hasCached ) {
 	emit sectionSizeChanged( resizedSection );
 	updateStretches();
@@ -3709,6 +3711,11 @@ void QTableHeader::swapSections( int oldIdx, int newIdx )
 	setLabel( newIdx, is, l );
     else
 	setLabel( newIdx, l );
+
+    int w1 = sectionSize( oldIdx );
+    int w2 = sectionSize( newIdx );
+    resizeSection( oldIdx, w2 );
+    resizeSection( newIdx, w1 );
 
     if ( orientation() == Horizontal )
 	table->swapColumns( oldIdx, newIdx );

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qgvector.cpp   2.2.3   edited 2000-08-25 $
+** $Id: qt/src/tools/qgvector.cpp   2.2.4   edited 2001-01-25 $
 **
 ** Implementation of QGVector class
 **
@@ -68,7 +68,7 @@
   the QVector collection class.
 
   QGVector has some virtual functions that may be reimplemented in
-  subclasses to to customize behavior.
+  subclasses to customize behavior.
 
   <ul>
   <li> compareItems() compares two collection/vector items.
@@ -182,6 +182,10 @@ QGVector::QGVector( const QGVector &a )		// make copy of other vector
 {
     len = a.len;
     numItems = a.numItems;
+    if ( len == 0 ) {
+	vec = 0;
+	return;
+    }
     vec = NEW(Item,len);
     CHECK_PTR( vec );
     for ( uint i=0; i<len; i++ ) {
@@ -209,6 +213,10 @@ QGVector& QGVector::operator=( const QGVector &v )
     clear();					// first delete old vector
     len = v.len;
     numItems = v.numItems;
+    if ( len == 0 ) {
+	vec = 0;
+	return *this;
+    }
     vec = NEW(Item,len);				// create new vector
     CHECK_PTR( vec );
     for ( uint i=0; i<len; i++ ) {		// copy elements
@@ -349,6 +357,11 @@ bool QGVector::resize( uint newsize )		// resize array
 	    return TRUE;
 	}
 #if defined(DONT_USE_REALLOC)
+	if ( newsize == 0 ) {
+	    DELETE(vec);
+	    vec = 0;
+	    return FALSE;
+	}
 	Item *newvec = NEW(Item,newsize);		// manual realloc
 	memcpy( newvec, vec, (len < newsize ? len : newsize)*sizeof(Item) );
 	DELETE(vec);

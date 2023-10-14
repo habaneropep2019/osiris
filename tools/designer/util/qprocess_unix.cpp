@@ -33,7 +33,7 @@
 extern "C" {
 #endif
 
-#if defined(_OS_OSF_) || ( defined(_OS_IRIX_) && defined(_CC_GNU_) )
+#if defined(_OS_IRIX_) && defined(_CC_GNU_)
 static void qt_C_sigchldHnd();
 #else
 static void qt_C_sigchldHnd( int );
@@ -43,7 +43,7 @@ static void qt_C_sigchldHnd( int );
 }
 #endif
 
-#if defined(_OS_OSF_) || ( defined(_OS_IRIX_) && defined(_CC_GNU_) )
+#if defined(_OS_IRIX_) && defined(_CC_GNU_)
 void qt_C_sigchldHnd()
 #else
 void qt_C_sigchldHnd( int )

@@ -1,4 +1,4 @@
-.TH QCopChannel 3qt "12 December 2000" "Trolltech AS" \" -*- nroff -*-
+.TH QCopChannel 3qt "1 Febrary 2001" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -12,10 +12,12 @@ QCopChannel \- This class provides communication capabilities between several cl
 .PP
 \fC#include <qwsdisplay_qws.h>\fR
 .PP
+Inherits QObject.
+.PP
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQCopChannel\fR ( const QCString & channel ) "
+.BI "\fBQCopChannel\fR ( const QCString & " "channel" ", QObject * " "parent" "=0, const char * " "name" "=0 ) "
 .br
 .ti -1c
 .BI "virtual \fB~QCopChannel\fR () "
@@ -25,6 +27,12 @@ QCopChannel \- This class provides communication capabilities between several cl
 .br
 .ti -1c
 .BI "virtual void \fBreceive\fR ( const QCString & " "msg" ", const QByteArray & data ) "
+.br
+.in -1c
+.SS "Signals"
+.in +1c
+.ti -1c
+.BI "void \fBreceived\fR ( const QCString & " "msg" ", const QByteArray & data ) "
 .br
 .in -1c
 .SS "Static Public Members"
@@ -46,10 +54,12 @@ The Qt Cop (QCOP) is a COmmunication Protocol, allowing clients to communicate i
 .PP
 Currently, this facility is only available on Qt/Embedded as on X11 and Windows we are exploring the use of existing standard such as DCOP and COM.
 .PP
-QCopChannel is an abstract base class. Important functions like send() and isRegistered() are static and therefore usable without an object. In order to \fIlisten\fR to the traffic on channel you have to subclass from QCopChannel and provide an implementation for receive().
+QCopChannel contains important functions like send() and isRegistered() which are static and therefore usable without an object.
+.PP
+In order to \fIlisten\fR to the traffic on the channel, you should either subclass from QCopChannel and provide an re-implementation for receive(), or you should connect() to the received() signal.
 .SH MEMBER FUNCTION DOCUMENTATION
-.SH "QCopChannel::QCopChannel ( const QCString & channel )"
-Constructs a QCop channel and registers it with the server under the name \fIchannel.\fR
+.SH "QCopChannel::QCopChannel ( const QCString & channel, QObject * parent=0, const char * name=0 )"
+Constructs a QCop channel and registers it with the server under the name \fIchannel.\fR The standard \fIparent\fR and \fIname\fR arguments are passed on to the QObject constructor.
 .SH "QCopChannel::~QCopChannel () \fC[virtual]\fR"
 Destructs the client's side end of the channel and notifies the server about the closing. The server itself keeps the channel open until the last registered client detaches.
 .SH "QCString QCopChannel::channel () const"
@@ -59,9 +69,15 @@ Queries the server for the existance of \fIchannel.\fR
 .PP
 Returns TRUE if \fIchannel\fR is registered.
 .SH "void QCopChannel::receive ( const QCString & msg, const QByteArray & data ) \fC[virtual]\fR"
-This abstract virtual function allows subclasses of QCopChannel to process data received from their channel. Note that the format of \fIdata\fR has to be well defined in order to demarshall the contained information.
+This virtual function allows subclasses of QCopChannel to process data received from their channel.
+.PP
+The default implementation emits the received() signal.
+.PP
+Note that the format of \fIdata\fR has to be well defined in order to demarshall the contained information.
 .PP
 See also send().
+.SH "void QCopChannel::received ( const QCString & msg, const QByteArray & data ) \fC[signal]\fR"
+This signal is emitted whenever the receive() function gets incoming data.
 .SH "bool QCopChannel::send ( const QCString & channel, const QCString & msg ) \fC[static]\fR"
 Send the message \fImsg\fR on \fIchannel.\fR The message will be distributed to all clients subscribed to the channel.
 .PP

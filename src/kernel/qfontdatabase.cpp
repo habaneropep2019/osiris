@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qfontdatabase.cpp   2.2.3   edited 2000-10-06 $
+** $Id: qt/src/kernel/qfontdatabase.cpp   2.2.4   edited 2001-01-15 $
 **
 ** Implementation of font database class.
 **
@@ -363,6 +363,7 @@ public:
     QFontDatabasePrivate(){
         namesDirty          = TRUE;
         familiesDirty       = TRUE;
+        forLocale = TRUE;
         foundryDict.setAutoDelete( TRUE );
     }
 
@@ -381,6 +382,7 @@ private:
 
     bool namesDirty;
     bool familiesDirty;
+    bool forLocale;
 
     void addFoundry( QtFontFoundry *f )
         { foundryDict.insert( f->name(), f ); }
@@ -783,7 +785,7 @@ static bool localeNeedsSet()
 const QStringList &QFontDatabasePrivate::families( bool onlyForLocale ) const
 {
     QFontDatabasePrivate *that = (QFontDatabasePrivate*)this; // Mutable
-    if ( familiesDirty ) {
+    if ( familiesDirty || forLocale != onlyForLocale ) {
         QDict<QtFontFoundry> firstFoundryForFamily;
         QDict<int> doubles;
         QtFontFoundry *foundry;
@@ -793,7 +795,7 @@ const QStringList &QFontDatabasePrivate::families( bool onlyForLocale ) const
             QStringList l = foundry->families();
             for ( QStringList::Iterator it = l.begin(); it != l.end(); ++it ) {
                 if ( onlyForLocale ) {
-                     const QtFontFamily *tmp = foundry->family( *it );
+		    const QtFontFamily *tmp = foundry->family( *it );
                      if ( !tmp ) {
                          qWarning( "QFontDatabasePrivate::families:"
                                    "Internal error, %s not found.",
@@ -829,6 +831,7 @@ const QStringList &QFontDatabasePrivate::families( bool onlyForLocale ) const
         }
         that->familyNames.sort();
         that->familiesDirty = FALSE;
+        that->forLocale = onlyForLocale;
     }
     return familyNames;
 }
@@ -1280,7 +1283,7 @@ static QFont::CharSet getCharSet( const char * registry, const char *encoding )
 		(qstrcmp( encoding, "r" ) == 0 ||
 		 qstrcmp( encoding, "1" ) == 0) ) {
 	return QFont::KOI8R;
-    } else if ( strcmp( registry, "koi8" ) == 0 &&
+    } else if ( qstrcmp( registry, "koi8" ) == 0 &&
 		qstrcmp( encoding, "u" ) == 0) {
 	return QFont::KOI8U;
     } else if ( qstrcmp( registry, "tscii" ) == 0 &&
@@ -1289,6 +1292,12 @@ static QFont::CharSet getCharSet( const char * registry, const char *encoding )
     } else if ( qstrcmp( registry, "tis620" ) == 0 &&
 		qstrcmp( encoding, "0" ) == 0 ) {
 	return QFont::TIS620;
+    } else if ( qstrcmp( encoding, "cp1251" ) == 0 ||
+  		 qstrcmp( encoding, "1251" ) == 0)  {
+  	return QFont::CP1251;
+    } else if ( qstrcmp( encoding, "cp154" ) == 0 ||
+  		 qstrcmp( encoding, "154" ) == 0)  {
+  	return QFont::PT154;
     } else if ( qstrcmp( registry, "iso10646" ) == 0 ) {
 	return QFont::Unicode;
     }
@@ -1338,6 +1347,14 @@ static QFont::CharSet getCharSet( const QString &name )
         return QFont::TIS620;
     if ( name == "tscii-0" )
 	return QFont::TSCII;
+    if ( name == "microsoft-cp1251" )
+	return QFont::CP1251;
+    if ( name == "windows-1251" )
+ 	return QFont::CP1251;
+    if ( name == "paratype-cp154" )
+	return QFont::PT154;
+    if ( name == "paratype-154" )
+ 	return QFont::PT154;
     if ( name == "iso10646-1" )
         return QFont::Unicode;
     return QFont::AnyCharSet;
@@ -1380,6 +1397,10 @@ static const QString getCharSet( QFont::CharSet set)
         return "koi8-r";
     case QFont::KOI8U:
         return "koi8-u";
+    case QFont::CP1251:
+        return "microsoft-cp1251";
+    case QFont::PT154:
+        return "paratype-cp154";
     case QFont::Unicode:
         return "iso10646-1";
     default:
@@ -1427,32 +1448,38 @@ static QString getCharSetName( QFont::CharSet cs )
         name = "Hebrew (ISO 8859-8)";
         break;
     case QFont::ISO_8859_9:
-        name = "Turkish(ISO 8859-9)";
+        name = "Turkish (ISO 8859-9)";
         break;
     case QFont::ISO_8859_10:
-        name = "Nordic(ISO 8859-10)";
+        name = "Nordic (ISO 8859-10)";
         break;
     case QFont::ISO_8859_11:
-        name = "Thai(ISO 8859-11)";
+        name = "Thai (ISO 8859-11)";
         break;
     case QFont::ISO_8859_12:
-        name = "Devanagari(Hindi)(ISO 8859-12)";
+        name = "Devanagari (Hindi) (ISO 8859-12)";
         break;
     case QFont::ISO_8859_13:
-        name = "Baltic(ISO 8859-13)";
+        name = "Baltic (ISO 8859-13)";
         break;
     case QFont::ISO_8859_14:
-        name = "Celtic(ISO 8859-14)";
+        name = "Celtic (ISO 8859-14)";
         break;
     case QFont::ISO_8859_15:
-        name = "French/Finnish/Euro(ISO 8859-15)";
+        name = "French/Finnish/Euro (ISO 8859-15)";
         break;
     case QFont::KOI8R:
-        name = "Cyrillic (KOI8-R)";
+        name = "Russian Cyrillic (KOI8-R)";
         break;
     case QFont::KOI8U:
-        name = "Ukrainian (KOI8-U)";
+        name = "Ukrainian Cyrillic (KOI8-U)";
         break;
+    case QFont::CP1251:
+        name = "Windows Cyrillic (CP 1251)";
+        break;
+    case QFont::PT154:
+        name = "Asian Cyrillic (PT 154)";
+	break;
     case QFont::TSCII:
 	name = "Tamil (TSCII)";
 	break;
@@ -1571,6 +1598,18 @@ static QString getCharSetSample( QFont::CharSet cs )
         sample += QChar(0x0436);
         sample += QChar(0x2560);
         break;
+    case QFont::CP1251:
+ 	sample += QChar(0x0414);
+ 	sample += QChar(0x0490);
+ 	sample += QChar(0x040E);
+ 	sample += QChar(0x20AC);
+  	break;
+    case QFont::PT154:
+ 	sample += QChar(0x0496);
+ 	sample += QChar(0x04E8);
+ 	sample += QChar(0x04D8);
+ 	sample += QChar(0x04AE);
+  	break;
     case QFont::Unicode:
         sample = "Aa";
         sample += QChar(0x01A7); // Latin B

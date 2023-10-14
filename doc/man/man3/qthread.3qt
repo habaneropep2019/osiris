@@ -1,4 +1,4 @@
-.TH QThread 3qt "12 December 2000" "Trolltech AS" \" -*- nroff -*-
+.TH QThread 3qt "1 Febrary 2001" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -147,7 +147,7 @@ System independent sleep. This causes the current thread to sleep for \fIsecs\fR
 .SH "void QThread::start ()"
 This begins actual execution of the thread by calling run(), which should be reimplemented in a QThread subclass to contain your code. If you try to start a thread that is already running, this call will wait until the thread has finished, and then restart the thread.
 .SH "void QThread::usleep ( unsigned long usecs ) \fC[static protected]\fR"
-System independent sleep. This causes the current rhead to sleep for \fIusecs\fR microseconds.
+System independent sleep. This causes the current thread to sleep for \fIusecs\fR microseconds.
 .SH "bool QThread::wait ( unsigned long time = ULONG_MAX )"
 This allows similar functionality to POSIX pthread_join. A thread calling this will block until one of 2 conditions is met:
 .TP

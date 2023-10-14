@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qobject.h   2.2.3   edited 2000-08-25 $
+** $Id: qt/src/kernel/qobject.h   2.2.4   edited 2001-01-26 $
 **
 ** Definition of QObject class
 **
@@ -235,7 +235,12 @@ public:
 };
 
 #ifdef QT_NO_TRANSLATION
-inline QString QObject::tr(const char* s) { return QString(s); }
+inline QString QObject::tr( const char *s ) {
+    return QString::fromLatin1( s );
+}
+inline QString QObject::tr( const char *s, const char * ) {
+    return QString::fromLatin1( s );
+}
 #endif
 
 

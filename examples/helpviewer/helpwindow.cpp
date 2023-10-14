@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/helpviewer/helpwindow.cpp   2.2.3   edited 2000-08-31 $
+** $Id: qt/examples/helpviewer/helpwindow.cpp   2.2.4   edited 2001-01-10 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -225,7 +225,7 @@ void HelpWindow::aboutQt()
 
 void HelpWindow::openFile()
 {
-#ifndef QT_NO_FILEDIALOG 
+#ifndef QT_NO_FILEDIALOG
     QString fn = QFileDialog::getOpenFileName( QString::null, QString::null, this );
     if ( !fn.isEmpty() )
 	browser->setSource( fn );
@@ -258,7 +258,9 @@ void HelpWindow::print()
 	QRect view( body );
 	int page = 1;
 	do {
+	    p.setClipRect( body );
 	    richText.draw( &p, body.left(), body.top(), view, colorGroup() );
+	    p.setClipping( FALSE );
 	    view.moveBy( 0, body.height() );
 	    p.translate( 0 , -body.height() );
 	    p.setFont( font );

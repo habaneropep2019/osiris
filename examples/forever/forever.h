@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/forever/forever.h   2.2.3   edited 2000-08-31 $
+** $Id: qt/examples/forever/forever.h   2.2.4   edited 2001-01-03 $
 **
 ** Definition of something or other
 **
@@ -27,7 +27,6 @@ class Forever : public QWidget
 public:
     Forever( QWidget *parent=0, const char *name=0 );
 protected:
-    void	paintEvent( QPaintEvent * );
     void	timerEvent( QTimerEvent * );
 private slots:
     void	updateCaption();

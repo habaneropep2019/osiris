@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qscrollbar.cpp   2.2.3   edited 2000-10-11 $
+** $Id: qt/src/widgets/qscrollbar.cpp   2.2.4   edited 2001-01-08 $
 **
 ** Implementation of QScrollBar class
 **
@@ -250,7 +250,7 @@ void QScrollBar::init()
 	setBackgroundMode( PaletteMid );
     else
 	setBackgroundMode( PaletteBackground );
-    
+
     if ( orient == Horizontal )
 	setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Fixed ) );
     else
@@ -598,6 +598,8 @@ void QScrollBar::mouseReleaseEvent( QMouseEvent *e )
 	    emit valueChanged( value() );
     }
     drawControls( tmp, pressedControl );
+    if ( e->button() == MidButton )
+	repaint( FALSE );
 }
 
 

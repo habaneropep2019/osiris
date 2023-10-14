@@ -860,6 +860,9 @@ transformation.</a>
  <a href="trivial-trivial-cpp.html#setClipRect">trivial/trivial.cpp</a>
 <h3 class="fn">void <a name="2c14e9"></a>QPainter::setClipRect ( const <a href="qrect.html">QRect</a> &amp; r )</h3>
 <p>This is an overloaded member function, provided for convenience.  It differs from the above function only in what argument(s) it accepts.
+<p>If the rectangle is invalid, the rectangle will be normalized() before the clipping region is set. This semantics will change in Qt-3
+and an invalid rectangle will clip the painter to an empty rectangle.
+<p>See also  <a href="qrect.html#4cc055">QRect::isValid</a>() and <a href="qrect.html#75e42c">QRect::normalize</a>().
 <h3 class="fn">void <a name="6d2fff"></a>QPainter::setClipRegion ( const <a href="qregion.html">QRegion</a> &amp; rgn )</h3>
 <p>Sets the clip region to <em>rgn</em> and enables clipping.
 <p>Note that the clip region is given in physical device coordinates and
@@ -1199,7 +1202,7 @@ widgets that follow the current GUI style.
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.2.3"><nobr>
+<input type=hidden name="version" value="2.2.4"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -1207,5 +1210,5 @@ copyright &copy; 1995-2000
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.3</div>
+<td align="right"><div align="right">Qt version 2.2.4</div>
 </table></div></address></body></html>

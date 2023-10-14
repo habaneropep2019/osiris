@@ -37,7 +37,6 @@ Inherits <a href="qtableview.html">QTableView</a>.
 <li><div class="fn">QString <a href="#7b24e5"><b>textLine</b></a> ( int line ) const</div>
 <li><div class="fn">int <a href="#6e6f9c"><b>numLines</b></a> () const</div>
 <li><div class="fn">virtual QSize <a href="#c206e0"><b>minimumSizeHint</b></a> () const</div>
-<li><div class="fn">QSizePolicy <b>sizePolicy</b> () const</div>
 <li><div class="fn">virtual void <a href="#d9138c"><b>insertLine</b></a> ( const QString &amp; s, int line = -1 ) </div>
 <li><div class="fn">virtual void <a href="#7c07f3"><b>insertAt</b></a> ( const QString &amp; s, int line, int col, bool mark = FALSE ) </div>
 <li><div class="fn">virtual void <a href="#fddff1"><b>removeLine</b></a> ( int line ) </div>
@@ -123,7 +122,6 @@ Inherits <a href="qtableview.html">QTableView</a>.
 <li><div class="fn">virtual void <a href="#a74781"><b>paintCell</b></a> ( QPainter *, int row, int col ) </div>
 <li><div class="fn">virtual void <a href="#eeb683"><b>keyPressEvent</b></a> ( QKeyEvent * ) </div>
 <li><div class="fn">virtual void <a href="#0fa015"><b>focusInEvent</b></a> ( QFocusEvent * ) </div>
-<li><div class="fn">void <b>timerEvent</b> ( QTimerEvent * ) </div>
 <li><div class="fn">bool <a href="#10d311"><b>hasMarkedText</b></a> () const</div>
 <li><div class="fn">QString <a href="#21ee74"><b>markedText</b></a> () const</div>
 <li><div class="fn">int <a href="#a2cff8"><b>textWidth</b></a> ( int ) </div>
@@ -658,6 +656,9 @@ words, set the wrap policy to <code>Anywhere</code> (see <a href="#73b297">setWr
 <h3 class="fn"><a href="qsize.html">QSize</a> <a name="871fc9"></a>QMultiLineEdit::sizeHint () const <code>[virtual]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
 <p>Reimplemented from <a href="qwidget.html#290bcd">QWidget.</a>
+<h3 class="fn"><a href="qsizepolicy.html">QSizePolicy</a> <a name="5d057c"></a>QMultiLineEdit::sizePolicy () const <code>[virtual]</code></h3>
+<p>Reimplemented for internal reasons; the API is not affected.
+<p>Reimplemented from <a href="qwidget.html#2d5d13">QWidget.</a>
 <h3 class="fn"><a href="qstring.html">QString</a> <a name="52e575"></a>QMultiLineEdit::stringShown ( int row ) const <code>[protected]</code></h3>
 <p>Returns the string shown at line <em>row,</em> including
 processing of the <a href="#5dc29b">echoMode</a>().
@@ -679,6 +680,10 @@ or a <a href="qstring.html#367622">null string</a> if <em>line</em> is invalid.
 NOTE: only appropriate for whole lines.
 <h3 class="fn">int <a name="a2cff8"></a>QMultiLineEdit::textWidth ( int line ) <code>[protected]</code></h3>
 <p>Returns the width in pixels of the text at line <em>line.</em>
+<h3 class="fn">void <a name="0cf52b"></a>QMultiLineEdit::timerEvent ( <a href="qtimerevent.html">QTimerEvent</a> * ) <code>[virtual protected]</code></h3>
+<p>Reimplemented for internal reasons; the API is not affected.
+Present for binary compatibility only!.
+<p>Reimplemented from <a href="qobject.html#cc83af">QObject.</a>
 <h3 class="fn">void <a name="3cc5da"></a>QMultiLineEdit::undo () <code>[slot]</code></h3>
 <p>Undoes the last text operation.
 <h3 class="fn">void <a name="29abf1"></a>QMultiLineEdit::undoAvailable ( bool yes ) <code>[signal]</code></h3>
@@ -708,7 +713,7 @@ mode.
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.2.3"><nobr>
+<input type=hidden name="version" value="2.2.4"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -716,5 +721,5 @@ copyright &copy; 1995-2000
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.3</div>
+<td align="right"><div align="right">Qt version 2.2.4</div>
 </table></div></address></body></html>

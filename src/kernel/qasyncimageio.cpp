@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qasyncimageio.cpp   2.2.3   edited 2000-08-25 $
+** $Id: qt/src/kernel/qasyncimageio.cpp   2.2.4   edited 2001-01-28 $
 **
 ** Implementation of asynchronous image/movie loading classes
 **
@@ -755,7 +755,7 @@ int QGIFFormat::decode(QImage& img, QImageConsumer* consumer,
 		    globalcmap = new QRgb[gncols+1]; // +1 for trans_index
 		    globalcmap[gncols] = 0x00000000;
 		} else {
-		    state=ImageDescriptor;
+		    state=Introducer;
 		}
 	    }
 	    break;
@@ -768,12 +768,13 @@ int QGIFFormat::decode(QImage& img, QImageConsumer* consumer,
 			rgb &= 0x00ffffff;
 		}
 		if ( state == LocalColorMap ) {
-		    img.setColor(ccount, rgb);
+		    if ( ccount < img.numColors() )
+			img.setColor(ccount, rgb);
 		} else {
 		    globalcmap[ccount] = rgb;
 		}
 		if (++ccount >= ncols) {
-		    if ( ncols < 256 && state == LocalColorMap )
+		    if ( ncols < img.numColors() && state == LocalColorMap )
 			img.setColor(ncols,0x00000000);
 		    if ( state == LocalColorMap )
 			state=TableImageLZWSize;
@@ -834,8 +835,8 @@ int QGIFFormat::decode(QImage& img, QImageConsumer* consumer,
 		top = newtop;
 
 		// Sanity check frame size - must fit on "screen".
-		if (left >= swidth) left=swidth-1;
-		if (top >= sheight) top=sheight-1;
+		if (left >= swidth) left=QMAX(0, swidth-1);
+		if (top >= sheight) top=QMAX(0, sheight-1);
 		if (left+width >= swidth) {
 		    if ( width <= swidth )
 			left=swidth-width;
@@ -849,8 +850,8 @@ int QGIFFormat::decode(QImage& img, QImageConsumer* consumer,
 			height=sheight-top;
 		}
 
-		right=left+width-1;
-		bottom=top+height-1;
+		right=QMAX( 0, left+width-1);
+		bottom=QMAX(0, top+height-1);
 		lcmap=!!(hold[9]&0x80);
 		interlace=!!(hold[9]&0x40);
 		//bool lcmsortflag=!!(hold[9]&0x20);
@@ -905,6 +906,8 @@ int QGIFFormat::decode(QImage& img, QImageConsumer* consumer,
 		} else {
 		    if (gcmap) {
 			int n=ncols; if (n<256) n++; // +1 for trans_index
+			if ( !img.colorTable() || img.numColors() < n )
+			    img.setNumColors( n );
 			memcpy(img.colorTable(), globalcmap,
 			    n * sizeof(QRgb));
 		    }
@@ -986,9 +989,9 @@ int QGIFFormat::decode(QImage& img, QImageConsumer* consumer,
 			firstcode=oldcode=code;
 			if (!out_of_bounds) {
 			    if (firstcode==trans) {
-				if ( !preserve_trans )
+				if ( !preserve_trans && line )
 				    line[y][x] = trans_index;
-			    } else {
+			    } else if ( line ) {
 				line[y][x] = firstcode;
 			    }
 			}
@@ -1124,7 +1127,7 @@ int QGIFFormat::decode(QImage& img, QImageConsumer* consumer,
 		int delay=count>3 ? LM(hold[2], hold[3]) : 0;
 		bool havetrans=hold[1]&0x1;
 		int newtrans=havetrans ? hold[4] : -1;
-		if (newtrans >= ncols) {
+		if (newtrans > ncols) {
 		    // Ignore invalid transparency.
 		    newtrans=-1;
 		}
@@ -1132,7 +1135,7 @@ int QGIFFormat::decode(QImage& img, QImageConsumer* consumer,
 		    preserve_trans = TRUE;
 		if (newtrans != trans) {
 		    if (trans >= 0 && trans < gncols) {
-			if (globalcmap)
+			if (globalcmap && trans_index >=0 && trans_index < gncols)
 			    globalcmap[trans_index]|=0xff000000;
 		    }
 		    trans = newtrans;
@@ -1141,7 +1144,7 @@ int QGIFFormat::decode(QImage& img, QImageConsumer* consumer,
 		    else
 			trans_index = newtrans;
 		    if (trans >= 0 && trans < gncols) {
-			if (globalcmap)
+			if (globalcmap && trans_index >=0 && trans_index < gncols)
 			    globalcmap[trans_index]&=0x00ffffff;
 		    }
 		}
@@ -1205,7 +1208,17 @@ void QGIFFormat::nextY(QImage& img, QImageConsumer* consumer)
 	    if (consumer && !out_of_bounds)
 		consumer->changed(QRect(left, y, right-left+1, my+1));
 	    y+=8;
-	    if (y>bottom) { interlace++; y=top+4; }
+	    if (y>bottom) {
+		interlace++; y=top+4;
+		if (y > bottom) { // for really broken GIFs with bottom < 5
+		    interlace=2;
+		    y = top + 2;
+		    if (y > bottom) { // for really broken GIF with bottom < 3
+			interlace = 0;
+			y = top + 1;
+		    }
+		}
+	    }
 	} break;
       case 2:
 	{
@@ -1218,8 +1231,14 @@ void QGIFFormat::nextY(QImage& img, QImageConsumer* consumer)
 	    if (consumer && !out_of_bounds)
 		consumer->changed(QRect(left, y, right-left+1, my+1));
 	    y+=8;
-	    if (y>bottom) { interlace++; y=top+2; }
-	} break;
+	    if (y>bottom) {
+		interlace++; y=top+2;
+		if (y > bottom) { // for really broken GIF with bottom < 3
+		    interlace = 3;
+		    y = top + 1;
+		}
+	    }
+  	} break;
       case 3:
 	{
 	    int i;

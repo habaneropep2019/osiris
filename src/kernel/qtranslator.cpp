@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qtranslator.cpp   2.2.3   edited 2000-10-06 $
+** $Id: qt/src/kernel/qtranslator.cpp   2.2.4   edited 2000-10-06 $
 **
 ** Localization database support.
 **

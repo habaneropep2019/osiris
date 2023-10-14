@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/aclock/aclock.cpp   2.2.3   edited 2000-08-31 $
+** $Id: qt/examples/aclock/aclock.cpp   2.2.4   edited 2000-08-31 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **

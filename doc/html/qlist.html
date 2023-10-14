@@ -286,7 +286,7 @@ All items must be inserted with inSort() to maintain the sorting order.
 <p>The <em>item</em> must not be a null pointer.
 <p>Please note that inSort is slow. If you want to insert lots of items
 in a list and sort after inserting then you should use <a href="#38f92e">sort</a>().
-inSort() takes up to O(n) compares. That means inserting n items in
+inSort() takes up to O(<a href="n.html">n</a>) compares. That means inserting n items in
 your list will need O(n^2) compares while sort() only needs O(n*logn)
 for the same task. So you inSort() only if you already have a pre-sorted
 list and want to insert only few additional items.
@@ -427,7 +427,7 @@ to the new current item.
 <p>See also  <a href="#2eb9eb">remove</a>(), <a href="#42ff86">clear</a>(), <a href="qcollection.html#a3fc3c">setAutoDelete</a>() and <a href="#fd9ebf">current</a>().
 <h3 class="fn">void <a name="38f92e"></a>QList::sort ()</h3>
 <p>Sorts the list by the result of the virtual <a href="qglist.html#fe1336">compareItems</a>() function.
-<p>The Heap-Sort algorithm is used for sorting.  It sorts n items with
+<p>The Heap-Sort algorithm is used for sorting.  It sorts <a href="n.html">n</a> items with
 O(n*log n) compares.  This is the asymptotic optimal solution of the
 sorting problem.
 <p>If the items in your list support operator< and operator== then you
@@ -479,7 +479,7 @@ will be undefined.
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.2.3"><nobr>
+<input type=hidden name="version" value="2.2.4"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -487,5 +487,5 @@ copyright &copy; 1995-2000
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.3</div>
+<td align="right"><div align="right">Qt version 2.2.4</div>
 </table></div></address></body></html>

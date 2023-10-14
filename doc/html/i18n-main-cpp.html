@@ -36,7 +36,7 @@ height="100" src="face.png" alt="Home" border="0">
   <hr>
 
   Header file: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/i18n/mywidget.h   2.2.3   edited 2000-08-31 $
+** &#36;Id&#58; qt/examples/i18n/mywidget.h   2.2.4   edited 2000-08-31 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -75,7 +75,7 @@ private:
   <hr>
 
   Implementation: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/i18n/mywidget.cpp   2.2.3   edited 2000-08-31 $
+** &#36;Id&#58; qt/examples/i18n/mywidget.cpp   2.2.4   edited 2000-08-31 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -126,7 +126,7 @@ MyWidget::MyWidget( <a href="qwidget.html">QWidget</a>* parent, const char* name
     (void)new <a href="qradiobutton.html">QRadioButton</a>( <a href="qobject.html#ba30fb">tr</a>( "Isometric" ), gbox ); 
     (void)new <a href="qradiobutton.html">QRadioButton</a>( <a href="qobject.html#ba30fb">tr</a>( "Oblique" ), gbox ); 
 
-    <a href=#183>initChoices</a>(central); 
+    <a href=#186>initChoices</a>(central); 
 }
 
 static const char* choices[] = {
@@ -136,14 +136,14 @@ static const char* choices[] = {
     0
 }; 
 
-void <a name="183"></a>MyWidget::initChoices(<a href="qwidget.html">QWidget</a>* parent)
+void <a name="186"></a>MyWidget::initChoices(<a href="qwidget.html">QWidget</a>* parent)
 {
     <a href="qlistbox.html">QListBox</a>* lb = new <a href="qlistbox.html">QListBox</a>( parent ); 
     for ( int i = 0; choices[i]; i++ )
         lb-&gt;<a href="qlistbox.html#1527aa">insertItem</a>( <a href="qobject.html#ba30fb">tr</a>( choices[i] ) ); 
 }
 
-void <a name="184"></a>MyWidget::closeEvent(<a href="qcloseevent.html">QCloseEvent</a>* e)
+void <a name="187"></a>MyWidget::closeEvent(<a href="qcloseevent.html">QCloseEvent</a>* e)
 {
     <a href="qwidget.html#e72517">QWidget::closeEvent</a>(e);
     emit closed();
@@ -155,7 +155,7 @@ void <a name="184"></a>MyWidget::closeEvent(<a href="qcloseevent.html">QCloseEve
 
   Main:
 <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/i18n/main.cpp   2.2.3   edited 2000-10-03 $
+** &#36;Id&#58; qt/examples/i18n/main.cpp   2.2.4   edited 2000-10-03 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -325,5 +325,5 @@ int main( int argc, char** argv )
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.3</div>
+<td align="right"><div align="right">Qt version 2.2.4</div>
 </table></div></address></body></html>

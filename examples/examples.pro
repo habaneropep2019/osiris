@@ -84,7 +84,5 @@ embedded:SUBDIRS += winmanager \
 		kiosk \
 		launcher
 
-embedded:SUBDIRS -= showimg
-
 X11DIRS	    =   biff \
 		desktop

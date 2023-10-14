@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qgbkcodec.cpp   2.2.3   edited 2000-08-25 $
+** $Id: qt/src/tools/qgbkcodec.cpp   2.2.4   edited 2001-01-23 $
 **
 ** Implementation of QGbkCodec template/macro class
 **
@@ -114,13 +114,15 @@ QCString QGbkCodec::fromUnicode(const QString& uc, int& len_in_out) const
 	    // GBK
 	    *cursor++ = (j >> 8)   | 0x80;
 	    *cursor++ = j & 0xff;
+	} else if ( ch.unicode() == 0xa0 ) {
+	    *cursor++ = ' ';
 	} else {
 	    // Error
 	    *cursor++ = '?';	// unknown char
 	}
     }
     len_in_out = cursor - (uchar*)rstr.data();
-    *cursor = 0;
+    rstr.truncate(len_in_out);
     return rstr;
 }
 

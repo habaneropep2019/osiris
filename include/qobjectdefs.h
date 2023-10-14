@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qobjectdefs.h   2.2.3   edited 2000-09-17 $
+** $Id: qt/src/kernel/qobjectdefs.h   2.2.4   edited 2000-09-17 $
 **
 ** Macros and definitions related to QObject
 **

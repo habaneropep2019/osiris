@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/network/qsocket.cpp   2.2.3   edited 2000-12-11 $
+** $Id: qt/src/network/qsocket.cpp   2.2.4   edited 2001-01-15 $
 **
 ** Implementation of QSocket class.
 **
@@ -242,7 +242,7 @@ void QSocket::connectToHost( const QString &host, Q_UINT16 port )
     qDebug( "QSocket (%s)::connectToHost: host %s, port %d",
 	    name(), host.ascii(), port );
 #endif
-    setSocket( -1 );
+    setSocketIntern( -1 );
 
     d->state = HostLookup;
     d->host = host;
@@ -643,24 +643,28 @@ void QSocket::flush()
 		s = a ? a->size() : 0;
 	    }
 	    nwritten = d->socket->writeBlock( out.data(), i );
+	    if ( d->wsn )
+		d->wsn->setEnabled( FALSE ); // the QSocketNotifier documentation says so
 	} else {
 	    // Big block, write it immediately
 	    i = a->size() - d->windex;
 	    nwritten = d->socket->writeBlock( a->data() + d->windex, i );
+	    if ( d->wsn )
+		d->wsn->setEnabled( FALSE ); // the QSocketNotifier documentation says so
 	}
 	if ( nwritten ) {
-	    consumeWriteBuf( nwritten );
-	    consumed += nwritten;
+	    if ( consumeWriteBuf( nwritten ) )
+		consumed += nwritten;
 	}
 	if ( nwritten < i )
 	    osBufferFull = TRUE;
     }
     if ( consumed > 0 ) {
-	emit bytesWritten( consumed );
 #if defined(QSOCKET_DEBUG)
 	qDebug( "QSocket (%s): flush: wrote %d bytes, %d left",
 		name(), consumed, d->wsize );
 #endif
+	emit bytesWritten( consumed );
     }
     if ( d->state == Closing && d->wsize == 0 ) {
 #if defined(QSOCKET_DEBUG)
@@ -1013,6 +1017,8 @@ void QSocket::sn_read()
 #if defined(CHECK_RANGE)
 		qWarning( "QSocket::sn_read (%s): Close error", name() );
 #endif
+		if (d->rsn)
+		    d->rsn->setEnabled( FALSE );
 		emit error( ErrSocketRead );	// socket close error
 		return;
 	    }
@@ -1038,15 +1044,21 @@ void QSocket::sn_read()
 	    }
 	}
 	if ( nread < 0 ) {
+	    if ( d->socket->error() == QSocketDevice::NoError ) {
+		// all is fine
+		return;
+	    }
 #if defined(CHECK_RANGE)
 	    qWarning( "QSocket::sn_read: Read error" );
 #endif
 	    delete a;
+	    if (d->rsn)
+		d->rsn->setEnabled( FALSE );
 	    emit error( ErrSocketRead );	// socket read error
 	    return;
 	}
 	if ( nread != (int)a->size() ) {		// unexpected
-#if defined(CHECK_RANGE)
+#if defined(CHECK_RANGE) && !defined(_OS_WIN32_)
 	    qWarning( "QSocket::sn_read: Unexpected short read" );
 #endif
 	    a->resize( nread );
@@ -1077,6 +1089,8 @@ void QSocket::tryConnection()
 	qDebug( "QSocket (%s): sn_write: Got connection to %s",
 		name(), peerName().ascii() );
 #endif
+	if ( d->rsn )
+	    d->rsn->setEnabled( TRUE );
 	emit connected();
     } else {
 	d->state = Idle;
@@ -1097,7 +1111,6 @@ int QSocket::socket() const
     return d->socket->socket();
 }
 
-
 /*!
   Sets the socket to use \a socket and the state() to \c Connected. The socket
   should already be connected.
@@ -1108,43 +1121,56 @@ int QSocket::socket() const
 
 void QSocket::setSocket( int socket )
 {
+    setSocketIntern( socket );
+    d->state = Connection;
+    d->rsn->setEnabled( TRUE );
+}
+
+
+/*!
+  Sets the socket to \a socket. This is both used by setSocket() and
+  connectToHost() and can be used also on unconnected sockets.
+*/
+
+void QSocket::setSocketIntern( int socket )
+{
     QSocketDevice *sd;
     if ( socket >= 0 )
-	sd = new QSocketDevice( socket, QSocketDevice::Stream );
+        sd = new QSocketDevice( socket, QSocketDevice::Stream );
     else
-	sd = new QSocketDevice( QSocketDevice::Stream );
-
+        sd = new QSocketDevice( QSocketDevice::Stream );
+ 
     if ( state() != Idle )
-	close();
+        close();
     // close may not have actually deleted the thing.  so, we brutally
     // Act.
     delete d;
-
+ 
     d = new QSocketPrivate( this );
     d->socket = sd;
     d->socket->setBlocking( FALSE );
     d->socket->setAddressReusable( TRUE );
-    d->state = Connection;
+    d->state = Idle;
     d->rsn = new QSocketNotifier( d->socket->socket(), QSocketNotifier::Read,
-				  this, "read" );
+                                  this, "read" );
     d->wsn = new QSocketNotifier( d->socket->socket(), QSocketNotifier::Write,
-				  this, "write" );
+                                  this, "write" );
     connect( d->rsn, SIGNAL(activated(int)), SLOT(sn_read()) );
-    d->rsn->setEnabled( TRUE );
+    d->rsn->setEnabled( FALSE );
     connect( d->wsn, SIGNAL(activated(int)), SLOT(sn_write()) );
     d->wsn->setEnabled( FALSE );
     // Initialize the IO device flags
     setFlags( IO_Direct );
     setStatus( IO_Ok );
     open( IO_ReadWrite );
-
+ 
     // hm... this is not very nice.
     d->host = QString::null;
     d->port = 0;
 #ifndef QT_NO_DNS
     delete d->dns;
     d->dns = 0;
-#endif
+#endif                                                                                                                                                                                
 }
 
 

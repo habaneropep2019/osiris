@@ -1,4 +1,4 @@
-.TH QScrollBar 3qt "12 December 2000" "Trolltech AS" \" -*- nroff -*-
+.TH QScrollBar 3qt "1 Febrary 2001" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -42,9 +42,6 @@ Inherits QRangeControl and QWidget.
 .br
 .ti -1c
 .BI "virtual void \fBsetPalette\fR ( const QPalette & ) "
-.br
-.ti -1c
-.BI "QSizePolicy \fBsizePolicy\fR () const"
 .br
 .ti -1c
 .BI "void \fBsetMinValue\fR ( int ) "
@@ -260,6 +257,10 @@ See also tracking().
 .SH "void QScrollBar::setValue ( int i )"
 Reimplemented for internal reasons; the API is not affected.
 .SH "QSize QScrollBar::sizeHint () const \fC[virtual]\fR"
+Reimplemented for internal reasons; the API is not affected.
+.PP
+Reimplemented from QWidget.
+.SH "QSizePolicy QScrollBar::sizePolicy () const \fC[virtual]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .PP
 Reimplemented from QWidget.

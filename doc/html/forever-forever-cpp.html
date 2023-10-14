@@ -32,7 +32,7 @@ height="100" src="face.png" alt="Home" border="0">
   <hr>
 
   Header file: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/forever/forever.h   2.2.3   edited 2000-08-31 $
+** &#36;Id&#58; qt/examples/forever/forever.h   2.2.4   edited 2001-01-03 $
 **
 ** Definition of something or other
 **
@@ -58,7 +58,6 @@ class Forever : public QWidget
 public:
     Forever( <a href="qwidget.html">QWidget</a> *parent=0, const char *name=0 );
 protected:
-    void        paintEvent( <a href="qpaintevent.html">QPaintEvent</a> * );
     void        timerEvent( <a href="qtimerevent.html">QTimerEvent</a> * );
 private slots:
     void        updateCaption();
@@ -75,7 +74,7 @@ private:
 
   Implementation:
 <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/forever/forever.cpp   2.2.3   edited 2000-11-07 $
+** &#36;Id&#58; qt/examples/forever/forever.cpp   2.2.4   edited 2001-01-03 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -111,11 +110,11 @@ Forever::Forever( <a name="QWidget"></a><a href="qwidget.html">QWidget</a> *pare
     <a name="startTimer"></a><a href="qobject.html#906d99">startTimer</a>( 0 );                            // run continuous timer
     <a name="QTimer"></a><a href="qtimer.html">QTimer</a> * counter = new <a href="qtimer.html">QTimer</a>( this );
     <a name="connect"></a><a href="qobject.html#c2d209">connect</a>( counter, SIGNAL(timeout()),
-             this, SLOT(<a name="updateCaption"></a><a href="#327">updateCaption</a>()) );
+             this, SLOT(<a name="updateCaption"></a><a href="#330">updateCaption</a>()) );
     counter-&gt;<a name="start"></a><a href="qtimer.html#3aafb5">start</a>( 1000 );
 }
 
-void <a name="327"></a>Forever::updateCaption()
+void <a name="330"></a>Forever::updateCaption()
 {
     <a name="QString"></a><a href="qstring.html">QString</a> s;
     s.<a name="sprintf"></a><a href="qstring.html#2eb9bc">sprintf</a>( "forever - %d rectangles/second", rectangles );
@@ -124,30 +123,21 @@ void <a name="327"></a>Forever::updateCaption()
 }
 
 //
-// Handles paint events for the Forever widget.
-//
-
-void <a name="328"></a>Forever::paintEvent( <a name="QPaintEvent"></a><a href="qpaintevent.html">QPaintEvent</a> * )
-{
-    <a name="QPainter"></a><a href="qpainter.html">QPainter</a> paint( this );                     // painter object
-    int w = width();
-    int h = height();
-    paint.<a name="setPen"></a><a href="qpainter.html#0a6aff">setPen</a>( NoPen );                      // do not draw outline
-    paint.<a name="setBrush"></a><a href="qpainter.html#38e68f">setBrush</a>( colors[rand() % numColors]);// set random brush color
-    <a name="QPoint"></a><a href="qpoint.html">QPoint</a> p1( rand()%w, rand()%h );    // p1 = top left
-    <a href="qpoint.html">QPoint</a> p2( rand()%w, rand()%h );    // p2 = bottom right
-    <a name="QRect"></a><a href="qrect.html">QRect</a> r( p1, p2 );
-    paint.<a name="drawRect"></a><a href="qpainter.html#b29a16">drawRect</a>( r );                        // draw filled rectangle
-}
-
-//
 // Handles timer events for the Forever widget.
 //
 
-void <a name="329"></a>Forever::timerEvent( <a name="QTimerEvent"></a><a href="qtimerevent.html">QTimerEvent</a> * )
+void <a name="331"></a>Forever::timerEvent( <a name="QTimerEvent"></a><a href="qtimerevent.html">QTimerEvent</a> * )
 {
+    <a name="QPainter"></a><a href="qpainter.html">QPainter</a> paint( this );                     // painter object
+    paint.<a name="setPen"></a><a href="qpainter.html#0a6aff">setPen</a>( NoPen );                      // do not draw outline
+    int w = width();
+    int h = height();
     for ( int i=0; i&lt;100; i++ ) {
-        <a name="repaint"></a><a href="qwidget.html#977d49">repaint</a>( FALSE );                       // repaint, don't erase
+        paint.<a name="setBrush"></a><a href="qpainter.html#38e68f">setBrush</a>( colors[i % numColors]); // set random brush color
+        <a name="QPoint"></a><a href="qpoint.html">QPoint</a> p1( rand()%w, rand()%h );        // p1 = top left
+        <a href="qpoint.html">QPoint</a> p2( rand()%w, rand()%h );        // p2 = bottom right
+        <a name="QRect"></a><a href="qrect.html">QRect</a> r( p1, p2 );
+        paint.<a name="drawRect"></a><a href="qpainter.html#b29a16">drawRect</a>( r );                    // draw filled rectangle
         rectangles++;
     }
 }
@@ -168,5 +158,5 @@ int main( int argc, char **argv )
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.3</div>
+<td align="right"><div align="right">Qt version 2.2.4</div>
 </table></div></address></body></html>

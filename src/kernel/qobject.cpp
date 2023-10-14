@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qobject.cpp   2.2.3   edited 2000-12-07 $
+** $Id: qt/src/kernel/qobject.cpp   2.2.4   edited 2000-12-07 $
 **
 ** Implementation of QObject class
 **

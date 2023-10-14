@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qrichtext.cpp   2.2.3   edited 2000-12-07 $
+** $Id: qt/src/kernel/qrichtext.cpp   2.2.4   edited 2001-01-31 $
 **
 ** Implementation of the internal Qt classes dealing with rich text
 **
@@ -139,6 +139,15 @@ bool QTextOptions::inSelection( const QtTriple& pos ) const
     return (pos >= t )  && (pos < selend);
 }
 
+struct QPixmapInt
+{
+    QPixmapInt() : ref( 0 ) {}
+    QPixmap pm;
+    int	    ref;
+};
+
+static QMap<QString, QPixmapInt> *pixmap_map = 0;
+
 QTextImage::QTextImage(const QMap<QString, QString> &attr, const QString& context,
 		       const QMimeSourceFactory &factory)
 {
@@ -149,45 +158,59 @@ QTextImage::QTextImage(const QMap<QString, QString> &attr, const QString& contex
 	height = attr["height"].toInt();
 
     reg = 0;
-    QImage img;
     QString imageName = attr["src"];
 
     if (!imageName)
 	imageName = attr["source"];
 
     if ( !imageName.isEmpty() ) {
-	const QMimeSource* m =
-			factory.data( imageName, context );
-	if ( !m ) {
-	    qWarning("QTextImage: no mimesource for %s", imageName.latin1() );
-	}
-	else {
-	    if ( !QImageDrag::decode( m, img ) ) {
-		qWarning("QTextImage: cannot decode %s", imageName.latin1() );
+	imgId = QString( "%1,%2,%3" ).arg( imageName ).arg( width ).arg( height );
+	if ( !pixmap_map )
+	    pixmap_map = new QMap<QString, QPixmapInt>;
+	if ( pixmap_map->contains( imgId ) ) {
+	    QPixmapInt& pmi = pixmap_map->operator[](imgId);
+	    pm = pmi.pm;
+	    pmi.ref++;
+	} else {
+	    QImage img;
+	    const QMimeSource* m =
+		factory.data( imageName, context );
+	    if ( !m ) {
+		qWarning("QTextImage: no mimesource for %s", imageName.latin1() );
+	    }
+	    else {
+		if ( !QImageDrag::decode( m, img ) ) {
+		    qWarning("QTextImage: cannot decode %s", imageName.latin1() );
+		}
+	    }
+	
+	    if ( !img.isNull() ) {
+		if ( width == 0 ) {
+		    width = img.width();
+		    if ( height != 0 ) {
+			width = img.width() * height / img.height();
+		    }
+		}
+		if ( height == 0 ) {
+		    height = img.height();
+		    if ( width != img.width() ) {
+			height = img.height() * width / img.width();
+		    }
+		}
+		
+		if ( img.width() != width || img.height() != height ){
+		    img = img.smoothScale(width, height);
+		    width = img.width();
+		    height = img.height();
+		}
+		pm.convertFromImage( img );
+	    }
+	    if ( !pm.isNull() ) {
+		QPixmapInt& pmi = pixmap_map->operator[](imgId);
+		pmi.pm = pm;
+		pmi.ref++;
 	    }
 	}
-    }
-
-    if ( !img.isNull() ) {
-	if ( width == 0 ) {
-	    width = img.width();
-	    if ( height != 0 ) {
-		width = img.width() * height / img.height();
-	    }
-	}
-	if ( height == 0 ) {
-	    height = img.height();
-	    if ( width != img.width() ) {
-		height = img.height() * width / img.width();
-	    }
-	}
-
-	if ( img.width() != width || img.height() != height ){
-	    img = img.smoothScale(width, height);
-	    width = img.width();
-	    height = img.height();
-	}
-	pm.convertFromImage( img );
 	if ( pm.mask() ) {
 	    QRegion mask( *pm.mask() );
 	    QRegion all( 0, 0, pm.width(), pm.height() );
@@ -210,6 +233,17 @@ QTextImage::QTextImage(const QMap<QString, QString> &attr, const QString& contex
 
 QTextImage::~QTextImage()
 {
+    if ( pixmap_map && pixmap_map->contains( imgId ) ) {
+	QPixmapInt& pmi = pixmap_map->operator[](imgId);
+	pmi.ref--;
+	if ( !pmi.ref ) {
+	    pixmap_map->remove( imgId );
+	    if ( pixmap_map->isEmpty() ) {
+		delete pixmap_map;
+		pixmap_map = 0;
+	    }
+	}
+    }
 }
 
 void QTextImage::realize( QPainter* p )
@@ -1879,14 +1913,19 @@ void QRichTextFormatter::drawLine( QPainter* p, int ox, int oy,
     while ( current <= last ) {
 	QTextCharFormat *fmt  = format();
 	if ( !fmt->anchorHref().isEmpty() && fmt->useLinkColor() ) {
-	    p->setPen( ( QPaintDeviceMetrics(p->device()).depth() > 1) ? to.linkColor : cg.text() );
+	    if ( QPaintDeviceMetrics(p->device()).depth() > 1 ||
+		 p->device()->devType() == QInternal::Printer)
+		p->setPen( to.linkColor );
+	    else
+		p->setPen( cg.text() );
 	    if ( to.linkUnderline ) {
 		QFont f = fmt->font();
 		f.setUnderline( TRUE );
 		p->setFont( f );
 	    }
 	} else {
-	    if ( fmt->color().isValid() && ( QPaintDeviceMetrics(p->device()).depth() > 1) )
+	    if ( fmt->color().isValid() && ( QPaintDeviceMetrics(p->device()).depth() > 1 ||
+		p->device()->devType() == QInternal::Printer ) )
 		p->setPen( fmt->color() );
 	    else
 		p->setPen( cg.text() );
@@ -1968,7 +2007,7 @@ void QRichTextFormatter::drawLine( QPainter* p, int ox, int oy,
 	
 	}
 	if ( selected )
-	    p->setPen( ( QPaintDeviceMetrics(p->device()).depth() > 1) ? fmt->color() : cg.text() );
+	    p->setPen( ( isPrint || QPaintDeviceMetrics(p->device()).depth() > 1) ? fmt->color() : cg.text() );
 	
 	if ( isPrint && !printString.isEmpty() && !paragraph->text.haveSameFormat( current, current + 1) ) {
 	    p->drawText( printX, printY, printString );

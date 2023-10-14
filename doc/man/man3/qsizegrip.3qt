@@ -1,4 +1,4 @@
-.TH QSizeGrip 3qt "12 December 2000" "Trolltech AS" \" -*- nroff -*-
+.TH QSizeGrip 3qt "1 Febrary 2001" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -24,9 +24,6 @@ Inherits QWidget.
 .br
 .ti -1c
 .BI "virtual QSize \fBsizeHint\fR () const"
-.br
-.ti -1c
-.BI "QSizePolicy \fBsizePolicy\fR () const"
 .br
 .in -1c
 .SS "Protected Members"
@@ -75,6 +72,10 @@ Paints the resize grip - small diagonal textured lines in the lower right-hand c
 Reimplemented from QWidget.
 .SH "QSize QSizeGrip::sizeHint () const \fC[virtual]\fR"
 Returns a small size.
+.PP
+Reimplemented from QWidget.
+.SH "QSizePolicy QSizeGrip::sizePolicy () const \fC[virtual]\fR"
+Reimplemented for internal reasons; the API is not affected.
 .PP
 Reimplemented from QWidget.
 .SH "SEE ALSO"

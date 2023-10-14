@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qstring.cpp   2.2.3   edited 2000-12-11 $
+** $Id: qt/src/tools/qstring.cpp   2.2.4   edited 2001-01-16 $
 **
 ** Implementation of the QString class and related Unicode functions
 **
@@ -13930,10 +13930,6 @@ double QString::toDouble( bool *ok ) const
     char *end;
 
     QCString a = latin1();
-    // Just latin1() is not sufficient, since U0131 would look like '1'.
-    for (uint i=0; i<d->len; i++)
-	if ( d->unicode[i].row() )
-	    a[(int)i]='z';
 
     double val = strtod( a.data() ? a.data() : "", &end );
     if ( ok )

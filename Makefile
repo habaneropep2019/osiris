@@ -29,7 +29,7 @@ sub-tools: sub-src FORCE
 	cd tools; $(MAKE)
 
 symlinks: .buildopts
-	@cd include; rm -f q*.h; ln -s ../src/*/q*.h .; ln -s ../extensions/*/src/q*.h .; rm -f q*_p.h
+	@cd include; rm -f q*.h; ln -s $(QTDIR)/src/*/q*.h .; ln -s $(QTDIR)/extensions/*/src/q*.h .; rm -f q*_p.h
 
 sub-src: src-moc src-mt .buildopts FORCE
 	cd src; $(MAKE)

@@ -1,4 +1,4 @@
-.TH QLabel 3qt "12 December 2000" "Trolltech AS" \" -*- nroff -*-
+.TH QLabel 3qt "1 Febrary 2001" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -66,9 +66,6 @@ Inherits QFrame.
 .br
 .ti -1c
 .BI "void \fBsetScaledContents\fR ( bool ) "
-.br
-.ti -1c
-.BI "QSizePolicy \fBsizePolicy\fR () const"
 .br
 .ti -1c
 .BI "virtual void \fBsetBuddy\fR ( QWidget * ) "
@@ -160,8 +157,9 @@ See also QLineEdit, QTextView, QPixmap, QMovie and GUI Design Handbook: Label
 .PP
 Examples:
 .(l
-cursor/cursor.cpp layout/layout.cpp popup/popup.cpp menu/menu.cpp progress/progress.cpp qmag/qmag.cpp movies/main.cpp customlayout/main.cpp
-.)l
+cursor/cursor.cpp layout/layout.cpp popup/popup.cpp menu/menu.cpp progress/progress.cpp qmag/qmag.cpp xml/tagreader
+.)l-with-features/tagreader.cpp
+movies/main.cpp customlayout/main.cpp
 .SH MEMBER FUNCTION DOCUMENTATION
 .SH "QLabel::QLabel ( QWidget * buddy, const QString & text, QWidget * parent, const char * name=0, WFlags f=0 )"
 Constructs a label with a text and a buddy.
@@ -386,6 +384,10 @@ Examples:
 .(l
 layout/layout.cpp
 .)l
+.PP
+Reimplemented from QWidget.
+.SH "QSizePolicy QLabel::sizePolicy () const \fC[virtual]\fR"
+Reimplemented for internal reasons; the API is not affected.
 .PP
 Reimplemented from QWidget.
 .SH "QString QLabel::text () const"

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qwidget.cpp   2.2.3   edited 2000-12-04 $
+** $Id: qt/src/kernel/qwidget.cpp   2.2.4   edited 2000-12-20 $
 **
 ** Implementation of QWidget class
 **
@@ -594,8 +594,8 @@ this has to be combined with WStyle_SysMenu for it to work.
 <li> \c WStyle_Maximize - adds a maximize button.  Note that on Windows
 this has to be combined with WStyle_SysMenu for it to work.
 
-<li> \c WStyle_MinMax - is equal to \c WStyle_Minimize|WStyle_Maximize.  
-Note that on Windows this has to be combined with WStyle_SysMenu for 
+<li> \c WStyle_MinMax - is equal to \c WStyle_Minimize|WStyle_Maximize.
+Note that on Windows this has to be combined with WStyle_SysMenu for
 it to work.
 
 <li> \c WStyle_ContextHelp - adds a context help button to dialogs.
@@ -778,7 +778,7 @@ QWidget::~QWidget()
 
     if ( isTopLevel() && !isHidden() && winId() )
 	hide();
-    
+
     // A parent widget must destroy all its children before destroying itself
     if ( childObjects ) {			// delete children objects
 	QObjectListIt it(*childObjects);
@@ -1067,7 +1067,7 @@ QWidget *QWidget::find( WId id )
 
 /*!
   \fn void QWidget::setWFlags( WFlags f )
-  
+
   Sets the widget flags \a f.
 
   Widget flags are a combination of Qt::WidgetFlags.
@@ -1077,7 +1077,7 @@ QWidget *QWidget::find( WId id )
 
 /*!
   \fn void QWidget::clearWFlags( WFlags f )
-  
+
   Clears the widget flags \a f.
 
   Widget flags are a combination of Qt::WidgetFlags.
@@ -3568,40 +3568,30 @@ bool QWidget::close( bool alsoDelete )
     if ( is_closing )
 	return TRUE;
     is_closing = 1;
-
-    WId	 id	= winId();
+    WId id	= winId();
     bool isMain = qApp->mainWidget() == this;
     bool checkLastWindowClosed = isTopLevel() && !isPopup();
     QCloseEvent e;
     QApplication::sendEvent( this, &e );
-    bool accept = e.isAccepted();
-    if ( !QWidget::find(id) ) {			// widget was deleted
-	accept = TRUE;
-    } else {
-	if ( accept ) {
-	    hide();
-	    if ( alsoDelete || testWFlags(WDestructiveClose) ) {
-		if ( checkLastWindowClosed
-		     && qApp->receivers(SIGNAL(lastWindowClosed()))
-		     && noMoreToplevels() )
-		    emit qApp->lastWindowClosed();
-		if ( isMain )
-		    qApp->quit();
-		delete this;
-		return TRUE;
-	    }
-	}
+    bool deleted = !QWidget::find(id);
+    if ( !deleted && !e.isAccepted() ) {
+	is_closing = 0;
+	return FALSE;
     }
-    if ( accept ) {	// last window closed?
-	if ( checkLastWindowClosed
-	     && qApp->receivers(SIGNAL(lastWindowClosed()))
-	     && noMoreToplevels() )
-	    emit qApp->lastWindowClosed();
-	if ( isMain )
-	    qApp->quit();
-    }
+    if ( !deleted )
+	hide();
+    if ( checkLastWindowClosed
+	 && qApp->receivers(SIGNAL(lastWindowClosed()))
+	 && noMoreToplevels() )
+	emit qApp->lastWindowClosed();
+    if ( isMain )
+	qApp->quit();
+    if ( deleted ) 
+	return TRUE;
     is_closing = 0;
-    return accept;
+    if ( alsoDelete || testWFlags(WDestructiveClose) )
+	delete this;
+    return TRUE;
 }
 
 

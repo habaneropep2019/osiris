@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/network/qsocketdevice_unix.cpp   2.2.3   edited 2000-11-03 $
+** $Id: qt/src/network/qsocketdevice_unix.cpp   2.2.4   edited 2001-01-21 $
 **
 ** Implementation of QSocketDevice class.
 **
@@ -41,15 +41,32 @@
 #include <string.h>
 
 #if defined(_OS_AIX_)
+// Please add comments! Which version of AIX? Why?
+// Adding #defines specifying BSD compatibility ought to be enough.
 #include <strings.h>
 #include <sys/select.h>
+#endif
+
+#if defined(_OS_OSF_) && defined(_XOPEN_SOURCE_EXTENDED)
+// Tru64 redefines accept() to _accept() when XNS4 is specified using
+// _XOPEN_SOURCE_EXTENDED.  Avoid it as it breaks our sources.
+#undef _XOPEN_SOURCE_EXTENDED
 #endif
 
 #include <unistd.h>
 #include <sys/param.h>
 #include <sys/types.h>
 #include <sys/socket.h>
+#if defined(_OS_SOLARIS_) || defined(_OS_UNIXWARE7_)
+// Needed for FIONREAD.
+// FIONREAD is #defined in <sys/filio.h>.
+// Have <sys/ioctl.h> include <sys/filio.h>.
+#define BSD_COMP
+#endif
 #include <sys/ioctl.h>
+#if defined(_OS_SOLARIS_) || defined(_OS_UNIXWARE7_)
+#undef BSD_COMP
+#endif
 #include <sys/file.h>
 #include <sys/time.h>
 #include <fcntl.h>
@@ -75,13 +92,10 @@
 #endif
 #endif
 
-#if defined(_OS_SOLARIS_) || defined(_OS_UNIXWARE7_)
-// this should perhaps be included for all unixware versions?
-#include <sys/filio.h>
-#endif
-
 #if defined(_OS_SOLARIS_) || defined(_OS_UNIXWARE7_) || defined(_OS_OS2EMX_) || defined(_OS_QNX_)
-// and this then?  unixware?
+// And this then?  Unixware?
+// Also why is this defined on Solaris? Seems to be in <sys/file.h>, unguarded,
+// in both Solaris 2.5.1 and Solaris 8!
 #if !defined(FNDELAY)
 #define FNDELAY O_NDELAY
 #endif
@@ -100,17 +114,22 @@
 #define FIONREAD TIOCINQ
 #endif
 
-// this mess (it's not yet a mess but I'm sure it'll be one before
-// it's done) defines SOCKLEN_T to socklen_t or whatever else, for
-// this system.  Single Unix 2 says it's to be socklen_t, classically
-// it's int, who knows what it might be on different modern unixes.
+// This mess (it's not yet a mess but I'm sure it'll be one before it's
+// done) defines SOCKLEN_T to socklen_t or whatever else, for this system.
+// Single Unix 1998 says it's to be socklen_t, classically (XNS4) it's int,
+// who knows what it might be on different modern unixes.  size_t seems to
+// have been a short-lived non-LP64 compatible error on most decent systems.
+//
+// Short answer: Single Unix 1995 with XNS4 seems to be the default on most
+// modern unixes and you have to explicitly _ask_ for Single Unix 1998 by
+// setting for example _XOPEN_SOURCE=500 and we don't do that.
 
 #if defined(SOCKLEN_T)
 #undef SOCKLEN_T
 #endif
 
 #if defined(_OS_LINUX_) && defined(__GLIBC__) && ( __GLIBC__ >= 2 )
-// new linux, not old
+// new linux is Single Unix 1998, not old linux
 #define SOCKLEN_T socklen_t
 #elif defined(BSD4_4)
 // freebsd
@@ -118,13 +137,23 @@
 #elif defined(_OS_UNIXWARE7_)
 #define SOCKLEN_T size_t
 #elif defined(_OS_AIX_)
-// aix 4.3.3 according to the online documentation
+#ifdef _AIX42
+// AIX 4.2 and better.
+// The AIX 4.3 online documentation says 'size_t' and it worked so far.
+// However this is not at all 64-bit safe and not Unix 98 or even Unix 95
+// compliant. This is only compliant to some bogus POSIX draft. There must
+// be some way to use 'socklen_t' or at least revert to 'int'.
 #define SOCKLEN_T size_t
+#else
+// AIX 4.1
+#define SOCKLEN_T int
+#endif
 #elif defined(_OS_QNX_)
 #define SOCKLEN_T size_t
 #else
-// most unixes, including at least irix, osf1/du/tru64, solaris, hp-ux
-// and old linux
+// Most unixes are Single Unix 1995 compliant (at least by default) including
+// irix, osf1/tru64, solaris, hp-ux and old linux. We do not specify Single
+// Unix 1998 even when it is available.
 #define SOCKLEN_T int
 #endif
 
@@ -134,8 +163,7 @@
 #error "requires EAGAIN or EWOULDBLOCK"
 #endif
 
-// if one is there, define the other one similarly, so we can switch()
-// easily
+// if one is there, define the other one similarly, so we can switch() easily
 #if defined(EAGAIN) && !defined(EWOULDBLOCK)
 #define EWOULDBLOCK EAGAIN
 #endif

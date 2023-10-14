@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qregion_x11.cpp   2.2.3   edited 2000-08-25 $
+** $Id: qt/src/kernel/qregion_x11.cpp   2.2.4   edited 2001-01-29 $
 **
 ** Implementation of QRegion class for X11
 **
@@ -83,6 +83,11 @@ QRegion::QRegion( bool is_null )
 
 /*!
 \overload
+
+If the rectangle is invalid, the rectangle will be normalized() before the region is created. This semantics will change in Qt-3
+and an invalid rectangle will construct an empty region.
+
+\sa QRect::isValid() QRect::normalize()
  */
 
 QRegion::QRegion( const QRect &r, RegionType t )
@@ -342,7 +347,7 @@ bool QRegion::contains( const QPoint &p ) const
 
 bool QRegion::contains( const QRect &r ) const
 {
-    return XRectInRegion( data->rgn, r.left(), r.right(),
+    return XRectInRegion( data->rgn, r.left(), r.top(),
 			  r.width(), r.height() ) != RectangleOut;
 }
 

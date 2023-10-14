@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qapplication_x11.cpp   2.2.3   edited 2000-12-07 $
+** $Id: qt/src/kernel/qapplication_x11.cpp   2.2.4   edited 2001-02-01 $
 **
 ** Implementation of X11 startup routines and event handling
 **
@@ -93,11 +93,12 @@
 #if defined(_OS_UNIX_)
 
 #if defined(_OS_SOLARIS_) || defined(_OS_UNIXWARE7_)
-#  define BSD_COMP // needed for FIONREAD
+// Needed for FIONREAD.
+// FIONREAD is #defined in <sys/filio.h>.
+// Have <sys/ioctl.h> include <sys/filio.h>.
+#  define BSD_COMP
 #endif
-
 #include <sys/ioctl.h>
-
 #if defined(_OS_SOLARIS_) || defined(_OS_UNIXWARE7_)
 #  undef BSD_COMP
 #endif
@@ -105,6 +106,10 @@
 #if defined(_OS_SCO_)
 #  include <strings.h>
 #  include <sys/socket.h> // for FIONREAD on SCO OpenServer 5.0.x
+#endif
+
+#if defined(_OS_DYNIX_)
+#  include <sys/sockio.h> // for FIONREAD on Dynix 4.x
 #endif
 
 static int qt_thread_pipe[2];
@@ -118,14 +123,19 @@ static int qt_thread_pipe[2];
 #endif
 
 #if defined(_OS_IRIX_)
+// Please add comments! Which version of Irix?
+// Why <bstring.h> instead of <strings.h>?
 #include <bstring.h>
 #endif
 
 #if defined(_OS_AIX_) || defined(_OS_UNIXWARE7_)
+// Please add comments! Which version of AIX? Why?
 #include <strings.h>
 #endif
 
 #if defined(_OS_AIX_) && defined(_CC_GNU_)
+// Please add comments! Which version of AIX? Why?
+// Adding some #defines like the IBM compiler does ought to be enough.
 #include <sys/time.h>
 #include <sys/select.h>
 #include <unistd.h>
@@ -787,11 +797,12 @@ static void qt_set_x11_resources( const char* font = 0, const char* fg = 0,
 	int l = 0, r;
 	QCString apn = appName;
 	int apnl = apn.length();
+	int resl = res.length();
 
-	while( (unsigned) l < res.length()) {
-	    r = res.find( "\n", l );
+	while (l < resl) {
+	    r = res.find( '\n', l );
 	    if ( r < 0 )
-		r = res.length();
+		r = resl;
 	    while ( isspace(res[l]) )
 		l++;
 	    bool mine = FALSE;
@@ -2726,7 +2737,59 @@ int QApplication::x11ProcessEvent( XEvent* event )
 	    }
 	} else if ( widget ) { // widget properties
 	    // nothing yet
-	}
+	    if (widget->isTopLevel() &&
+		widget->winId() == event->xproperty.window &&
+		event->xproperty.atom == qt_wm_state) {
+		if (event->xproperty.state == PropertyDelete) {
+		    // the window manager has removed the WM State property, so it
+		    // is now in the withdrawn state (ICCCM 4.1.3.1)
+		    // we are free to reuse this window
+		    widget->topData()->parentWinId = 0;
+		    if ( qt_deferred_map_contains( widget ) ) {
+			qt_deferred_map_take( widget );
+			XMapWindow( appDpy, widget->winId() );
+		    }
+		} else if (widget->topData()->parentWinId != appRootWin) {
+                    // the window manager has changed the WM State property... we are
+		    // wanting to see if we are withdrawn so that we can reuse this
+		    // window... we only do this check *IF* we haven't been reparented
+		    // to root (the parentWinId != appRootWin) check above
+
+                    Atom type;
+                    int format;
+                    ulong  nitems, after;
+                    unsigned char *data;
+                    if (XGetWindowProperty(appDpy, widget->winId(),
+					   qt_wm_state,
+                                           0, 2, FALSE, qt_wm_state, &type,
+                                           &format, &nitems, &after,
+                                           &data ) == Success &&
+                        type == qt_wm_state && format == 32 && nitems > 0) {
+                        long *state = (long *) data;
+                        switch (state[0]) {
+			case WithdrawnState:
+			    // if we are in the withdrawn state, we are free to reuse
+			    // this window provided we remove the WM_STATE property
+			    // (ICCCM 4.1.3.1)
+			    XDeleteProperty(appDpy, widget->winId(), qt_wm_state);
+
+			    // set the parent id to zero, so that show() will work again
+			    widget->topData()->parentWinId = 0;
+			    if ( qt_deferred_map_contains( widget ) ) {
+				qt_deferred_map_take( widget );
+				XMapWindow( appDpy, widget->winId() );
+			    }
+                            break;
+                        default:
+                            break;
+                        }
+                    }
+
+                    if (data)
+                        XFree(data);
+                }
+            }
+        }
 	return 0;
     }
 
@@ -2794,7 +2857,7 @@ int QApplication::x11ProcessEvent( XEvent* event )
 	if ( keywidget ) // should always exist
 	    keywidget->translateKeyEvent( event, grabbed );
     }
-    break;
+	break;
 
     case GraphicsExpose:
     case Expose:				// paint event
@@ -2821,13 +2884,22 @@ int QApplication::x11ProcessEvent( XEvent* event )
 	    break;
 	setActiveWindow( widget );
     }
-    break;
+	break;
 
     case XFocusOut:				// lost focus
 	if ( widget == desktop() )
 	    break;
  	if ( !widget->isTopLevel() )
 	    break;
+	if (event->xfocus.mode == NotifyWhileGrabbed && inPopupMode()) {
+	    QWidget* popup = QApplication::activePopupWidget();
+	    if ( popup ) {
+		// Danger - make sure we don't lock the server
+		do {
+		    popup->close();
+		} while ( (popup = qApp->activePopupWidget()) );
+	    }
+	}
 	if ( event->xfocus.mode != NotifyNormal )
 	    break;
 	if ( event->xfocus.detail != NotifyAncestor &&
@@ -2840,28 +2912,42 @@ int QApplication::x11ProcessEvent( XEvent* event )
 
     case EnterNotify: {			// enter window
 	qt_x_time = event->xcrossing.time;
+
+	// 	// check PointerRoot focus
+	// 	if ( event->xcrossing.focus &&
+	// 	     widget->isTopLevel() && !widget->isDesktop () &&
+	// 	     event->xcrossing.detail != NotifyInferior &&!inPopupMode() )
+	// 	    setActiveWindow (widget);
+
 	if ( QWidget::mouseGrabber()  && widget != QWidget::mouseGrabber() )
 	    break;
  	if ( inPopupMode() && widget->topLevelWidget() != activePopupWidget() )
  	    break;
-	if ( event->xcrossing.mode != NotifyNormal ||
-	     event->xcrossing.detail == NotifyVirtual  ||
-	     event->xcrossing.detail == NotifyNonlinearVirtual )
-	    break;
+ 	if ( event->xcrossing.mode != NotifyNormal ||
+ 	     event->xcrossing.detail == NotifyVirtual  ||
+ 	     event->xcrossing.detail == NotifyNonlinearVirtual )
+ 	    break;
 	qt_dispatchEnterLeave( widget, QWidget::find( curWin ) );
 	curWin = widget->winId();
 	widget->translateMouseEvent( event ); //we don't get MotionNotify, emulate it
     }
-    break;
+	break;
 
     case LeaveNotify: {			// leave window
 	qt_x_time = event->xcrossing.time;
+
+	// 	// check PointerRoot focus
+	// 	if ( event->xcrossing.focus &&
+	// 	     widget->isTopLevel() && !widget->isDesktop () &&
+	// 	     event->xcrossing.detail != NotifyInferior &&!inPopupMode() )
+	// 	    setActiveWindow ( 0 );
+
 	if ( QWidget::mouseGrabber()  && widget != QWidget::mouseGrabber() )
 	    break;
-	if ( widget->winId() != curWin )
-	    break;
-	if ( event->xcrossing.mode != NotifyNormal )
-	    break;
+ 	if ( curWin && widget->winId() != curWin )
+ 	    break;
+ 	if ( event->xcrossing.mode != NotifyNormal )
+ 	    break;
 	if ( !widget->isDesktop() )
 	    widget->translateMouseEvent( event ); //we don't get MotionNotify, emulate it
 
@@ -2873,18 +2959,20 @@ int QApplication::x11ProcessEvent( XEvent* event )
 		XPutBackEvent( widget->x11Display(), &ev );
 		break;
 	    }
-	    if (  ev.xcrossing.mode != NotifyNormal ||
-		 ev.xcrossing.detail == NotifyVirtual  ||
-		 ev.xcrossing.detail == NotifyNonlinearVirtual )
-		continue;
+ 	    if (  ev.xcrossing.mode != NotifyNormal ||
+		  ev.xcrossing.detail == NotifyVirtual  ||
+		  ev.xcrossing.detail == NotifyNonlinearVirtual )
+ 		continue;
 	    enter = QWidget::find( ev.xcrossing.window );
 	    break;
 	}
 
+	if ( !curWin )
+	    qt_dispatchEnterLeave( widget, 0 );
 	qt_dispatchEnterLeave( enter, widget );
 	curWin = enter ? enter->winId() : 0;
     }
-    break;
+	break;
 
     case UnmapNotify:			// window hidden
 	if ( widget->isTopLevel() && widget->isVisible() && !widget->isPopup() ) {
@@ -3200,25 +3288,24 @@ void QApplication::openPopup( QWidget *popup )
 	(*activeBeforePopup) = active_window;
     }
     popupWidgets->append( popup );		// add to end of list
-    if ( popupWidgets->count() == 1 && !qt_nograb() ){ // grab mouse/keyboard
-	int r;
-	r = XGrabKeyboard( popup->x11Display(), popup->winId(), TRUE,
-			   GrabModeSync, GrabModeAsync, CurrentTime );
-	if ( (popupGrabOk = (r == GrabSuccess)) ) {
-	    r = XGrabPointer( popup->x11Display(), popup->winId(), TRUE,
+    if ( popupWidgets->count() == 1 && !qt_nograb() ){ // grab mouse
+	int r = XGrabPointer( popup->x11Display(), popup->winId(), TRUE,
 			      (uint)(ButtonPressMask | ButtonReleaseMask |
 				     ButtonMotionMask | EnterWindowMask |
 				     LeaveWindowMask | PointerMotionMask),
 			      GrabModeSync, GrabModeAsync,
 			      None, None, CurrentTime );
-	    if ( (popupGrabOk = (r == GrabSuccess)) ) {
-		XAllowEvents( popup->x11Display(), SyncPointer, CurrentTime );
-	    } else {
-		XUngrabKeyboard( popup->x11Display(), CurrentTime );
-	    }
+	if ( (popupGrabOk = (r == GrabSuccess)) ) {
+	    XAllowEvents( popup->x11Display(), SyncPointer, CurrentTime );
+	}
+	if ( !active_window ) {
+	    QWidget *tlw = popup->topLevelWidget();
+	    XSetInputFocus( tlw->x11Display(), tlw->winId(), RevertToNone, CurrentTime );
+	} else {
+	    XSetInputFocus( active_window->x11Display(), active_window->winId(), RevertToNone, CurrentTime );
 	}
     } else if ( popupGrabOk ) {
-	 XAllowEvents(  popup->x11Display(), SyncPointer, CurrentTime );
+	XAllowEvents(  popup->x11Display(), SyncPointer, CurrentTime );
     }
 
     // popups are not focus-handled by the window system (the first
@@ -3246,7 +3333,6 @@ void QApplication::closePopup( QWidget *popup )
 	delete popupWidgets;
 	popupWidgets = 0;
 	if ( !qt_nograb() && popupGrabOk ) {	// grabbing not disabled
-	    XUngrabKeyboard( popup->x11Display(), CurrentTime );
 	    if ( mouseButtonState != 0
 		 || popup->geometry(). contains(QPoint(mouseGlobalXPos, mouseGlobalYPos) ) )
 		{	// mouse release event or inside

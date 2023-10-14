@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qurl.cpp   2.2.3   edited 2000-11-23 $
+** $Id: qt/src/kernel/qurl.cpp   2.2.4   edited 2001-01-10 $
 **
 ** Implementation of QUrl class
 **
@@ -993,8 +993,10 @@ QString QUrl::dirPath() const
 {
     if ( path().isEmpty() )
 	return QString::null;
-
-    QString s = QFileInfo( path() ).dirPath();
+    
+    QString s = path();
+    s += "/";
+    s = QFileInfo( s ).dirPath();
     if ( s[ (int)s.length() - 1 ] != '/' )
 	s += "/";
     return s;

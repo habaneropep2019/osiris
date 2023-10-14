@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/xml/qxml.cpp   2.2.3   edited 2000-11-22 $
+** $Id: qt/src/xml/qxml.cpp   2.2.4   edited 2001-01-15 $
 **
 ** Implementation of QXmlSimpleReader and related classes.
 **
@@ -2479,51 +2479,54 @@ parseError:
   Helper to break down the size of the code in the case statement.
   Return FALSE on error, otherwise TRUE.
 */
-bool QXmlSimpleReader::parseElementEmptyTag( bool &t, QString &uri, QString &lname )
+// ### Remove t argument in Qt 3.0 -- I don't need it. The same should be true for uri and lname.
+bool QXmlSimpleReader::parseElementEmptyTag( bool &, QString &uri, QString &lname )
 {
     // pop the stack and call the handler
     if ( contentHnd ) {
-	// report startElement first...
 	if ( d->useNamespaces ) {
+	    // report startElement first...
 	    d->namespaceSupport.processName( tags.top(), FALSE, uri, lname );
-	    t = contentHnd->startElement( uri, lname, tags.top(), d->attList );
-	} else {
-	    t = contentHnd->startElement( "", "", tags.top(), d->attList );
-	}
-	if ( !t ) {
-	    d->error = contentHnd->errorString();
-	    return FALSE;
-	}
-	// ... followed by endElement
-	// ### missing namespace support!
-	if ( !contentHnd->endElement( "","",tags.pop() ) ) {
-	    d->error = contentHnd->errorString();
-	    return FALSE;
-	}
-	// namespace support?
-	if ( d->useNamespaces ) {
+	    if ( !contentHnd->startElement( uri, lname, tags.top(), d->attList ) ) {
+		goto error;
+	    }
+	    // ... followed by endElement...
+	    if ( !contentHnd->endElement( uri, lname, tags.pop() ) ) {
+		goto error;
+	    }
+	    // ... followed by endPrefixMapping
 	    QStringList prefixesBefore, prefixesAfter;
 	    if ( contentHnd ) {
 		prefixesBefore = d->namespaceSupport.prefixes();
 	    }
 	    d->namespaceSupport.popContext();
 	    // call the handler for prefix mapping
-	    if ( contentHnd ) {
-		prefixesAfter = d->namespaceSupport.prefixes();
-		for ( QStringList::Iterator it = prefixesBefore.begin(); it != prefixesBefore.end(); ++it ) {
-		    if ( prefixesAfter.contains(*it) == 0 ) {
-			if ( !contentHnd->endPrefixMapping( *it ) ) {
-			    d->error = contentHnd->errorString();
-			    return FALSE;
-			}
+	    prefixesAfter = d->namespaceSupport.prefixes();
+	    for ( QStringList::Iterator it = prefixesBefore.begin(); it != prefixesBefore.end(); ++it ) {
+		if ( prefixesAfter.contains(*it) == 0 ) {
+		    if ( !contentHnd->endPrefixMapping( *it ) ) {
+			goto error;
 		    }
 		}
+	    }
+	} else {
+	    // report startElement first...
+	    if ( !contentHnd->startElement( "", "", tags.top(), d->attList ) ) {
+		goto error;
+	    }
+	    // ... followed by endElement
+	    if ( !contentHnd->endElement( "","",tags.pop() ) ) {
+		goto error;
 	    }
 	}
     } else {
 	tags.pop();
+	d->namespaceSupport.popContext();
     }
     return TRUE;
+error:
+    d->error = contentHnd->errorString();
+    return FALSE;
 }
 /*!
   Helper to break down the size of the code in the case statement.
@@ -2538,14 +2541,21 @@ bool QXmlSimpleReader::parseElementETagBegin2()
 	return FALSE;
     }
     // call the handler
-    // ### missing namespace support!
     if ( contentHnd ) {
-	if ( !contentHnd->endElement("","",name()) ) {
-	    d->error = contentHnd->errorString();
-	    return FALSE;
+	if ( d->useNamespaces ) {
+	    QString uri, lname;
+	    d->namespaceSupport.processName( name(), FALSE, uri, lname );
+	    if ( !contentHnd->endElement( uri, lname, name() ) ) {
+		d->error = contentHnd->errorString();
+		return FALSE;
+	    }
+	} else {
+	    if ( !contentHnd->endElement("","",name()) ) {
+		d->error = contentHnd->errorString();
+		return FALSE;
+	    }
 	}
     }
-    // namespace support?
     if ( d->useNamespaces ) {
 	QStringList prefixesBefore, prefixesAfter;
 	if ( contentHnd ) {
@@ -2571,6 +2581,7 @@ bool QXmlSimpleReader::parseElementETagBegin2()
   Helper to break down the size of the code in the case statement.
   Return FALSE on error, otherwise TRUE.
 */
+// ### Remove arguments in Qt 3.0? I think, I don't need them.
 bool QXmlSimpleReader::parseElementAttribute( QString &prefix, QString &uri, QString &lname )
 {
     // add the attribute to the list

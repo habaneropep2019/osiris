@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/workspace/qworkspace.cpp   2.2.3   edited 2000-11-16 $
+** $Id: qt/src/workspace/qworkspace.cpp   2.2.4   edited 2001-01-31 $
 **
 ** Implementation of the QWorkspace class
 **
@@ -1062,10 +1062,12 @@ void QWorkspace::maximizeWindow( QWidget* w)
 
 void QWorkspace::showWindow( QWidget* w)
 {
-    if ( d->maxWindow )
+    if ( d->maxWindow && w->testWFlags( WStyle_MinMax ) && !w->testWFlags( WStyle_Tool) )
 	maximizeWindow( w );
     else
 	normalizeWindow( w );
+    if ( d->maxWindow )
+	d->maxWindow->raise();
 }
 
 
@@ -1492,13 +1494,16 @@ void QWorkspace::cascade()
 
     setUpdatesEnabled( FALSE );
     QListIterator<QWorkspaceChild> it( widgets );
+    int children = d->windows.count() - 1;
     while ( it.current () ) {
 	QWorkspaceChild *child = it.current();
 	++it;
 	child->setUpdatesEnabled( FALSE );
 	QSize prefSize = child->windowWidget()->sizeHint() + QSize( 0, child->baseSize().height() );
 	if ( !child->windowWidget()->sizeHint().isValid() )
-	    prefSize = QSize( width() - d->windows.count() * xoffset, height() - d->windows.count() * yoffset );
+	    prefSize = QSize( width() - children * xoffset, height() - children * yoffset );
+
+	prefSize = prefSize.boundedTo( QSize( size().width() - xoffset * children, size().height() - yoffset * children ) );
 
 	int w = prefSize.width();
 	int h = prefSize.height();

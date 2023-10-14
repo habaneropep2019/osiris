@@ -1,4 +1,4 @@
-.TH QToolBar 3qt "12 December 2000" "Trolltech AS" \" -*- nroff -*-
+.TH QToolBar 3qt "1 Febrary 2001" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -56,9 +56,6 @@ Inherits QWidget.
 .BI "bool \fBisVerticalStretchable\fR () const"
 .br
 .ti -1c
-.BI "bool \fBeventFilter\fR ( QObject *, QEvent * ) "
-.br
-.ti -1c
 .BI "virtual void \fBsetLabel\fR ( const QString & ) "
 .br
 .ti -1c
@@ -77,10 +74,7 @@ Inherits QWidget.
 .SS "Protected Members"
 .in +1c
 .ti -1c
-.BI "void \fBpaintEvent\fR ( QPaintEvent * ) "
-.br
-.ti -1c
-.BI "void \fBresizeEvent\fR ( QResizeEvent * ) "
+.BI "virtual void \fBpaintEvent\fR ( QPaintEvent * ) "
 .br
 .in -1c
 .SS "Properties"
@@ -124,10 +118,26 @@ Clears the toolbar, deleting all childwidgets.
 Reimplemented for internal reasons; the API is not affected.
 .PP
 Reimplemented from QObject.
+.SH "bool QToolBar::eventFilter ( QObject * obj, QEvent * e ) \fC[virtual]\fR"
+Reimplemented for internal reasons; the API is not affected.
+.PP
+Reimplemented from QObject.
 .SH "void QToolBar::hide () \fC[virtual]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .PP
 Reimplemented from QWidget.
+.SH "bool QToolBar::isHorizontalStretchable () const"
+Returns whether the toolbar is stretchable horizontally.
+.PP
+A stretchable toolbar fills all available width in a toolbar dock. A non-stretchable toolbar usually gets just the space it needs.
+.PP
+See also setHorizontalStretchable(), setVerticalStretchable() and isVerticalStretchable().
+.SH "bool QToolBar::isVerticalStretchable () const"
+Returns whether the toolbar is stretchable vertically.
+.PP
+A stretchable toolbar fills all available height in a toolbar dock. A non-stretchable toolbar usually gets just the space it needs.
+.PP
+See also setHorizontalStretchable(), setVerticalStretchable() and isHorizontalStretchable().
 .SH "QString QToolBar::label () const"
 Returns the label of this tool bar.
 .PP
@@ -140,6 +150,26 @@ Reimplemented for internal reasons; the API is not affected.
 Reimplemented for internal reasons; the API is not affected.
 .PP
 Reimplemented from QWidget.
+.SH "Orientation QToolBar::orientation () const"
+Returns the current orientation of the toolbar.
+.SH "void QToolBar::orientationChanged ( Orientation newOrientation ) \fC[signal]\fR"
+This signal is emitted when the toolbar changed its orientation to \fInewOrientation.\fR
+.SH "void QToolBar::paintEvent ( QPaintEvent * ) \fC[virtual protected]\fR"
+Paint the handle. The Motif style is rather close to Netscape and even closer to KDE.
+.PP
+Reimplemented from QWidget.
+.SH "void QToolBar::resizeEvent ( QResizeEvent * e ) \fC[virtual protected]\fR"
+Reimplemented for internal reasons; the API is not affected.
+.PP
+Reimplemented from QWidget.
+.SH "void QToolBar::setHorizontalStretchable ( bool b )"
+Sets the toolbar to be horizontally stretchable if \fIb\fR is TRUE, or non-stretchable otherwise.
+.PP
+A stretchable toolbar fills the available width in a toolbar dock. A non-stretchable toolbar usually gets just the space it needs.
+.PP
+The default is FALSE.
+.PP
+See also QMainWindow::setRightJustification(), isHorizontalStretchable(), setVerticalStretchable() and isVerticalStretchable().
 .SH "void QToolBar::setLabel ( const QString & label ) \fC[virtual]\fR"
 Sets the label of this tool bar to \fIlabel.\fR The label is not currently used; it will be used in a forthcoming tool bar configuration dialog.
 .PP
@@ -156,6 +186,14 @@ Sets \fIw\fR to be expanded if this toolbar is requested to stretch (because QMa
 If you call setStretchableWidget() and the toolbar is not stretchable yet, setStretchable( ) is called.
 .PP
 See also QMainWindow::setRightJustification(), setVerticalStretchable() and setHorizontalStretchable().
+.SH "void QToolBar::setVerticalStretchable ( bool b )"
+Sets the toolbar to be vertically stretchable if \fIb\fR is TRUE, or non-stretchable otherwise.
+.PP
+A stretchable toolbar fills the available height in a toolbar dock. A non-stretchable toolbar usually gets just the space it needs.
+.PP
+The default is FALSE.
+.PP
+See also QMainWindow::setRightJustification(), isVerticalStretchable(), setHorizontalStretchable() and isHorizontalStretchable().
 .SH "void QToolBar::show () \fC[virtual]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .PP

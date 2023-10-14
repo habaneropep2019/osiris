@@ -55,7 +55,6 @@ Inherits <a href="qwidget.html">QWidget</a>.
 <li><div class="fn">virtual void <a href="#cd8c4a"><b>setCurrentItem</b></a> ( int index ) </div>
 <li><div class="fn">bool autoResize () const <em>(obsolete)</em></div>
 <li><div class="fn">virtual void setAutoResize ( bool ) <em>(obsolete)</em></div>
-<li><div class="fn">virtual QSizePolicy <b>sizePolicy</b> () const</div>
 <li><div class="fn">virtual void <a href="#23782f"><b>setBackgroundColor</b></a> ( const QColor &amp; ) </div>
 <li><div class="fn">virtual void <a href="#11ba97"><b>setPalette</b></a> ( const QPalette &amp; ) </div>
 <li><div class="fn">virtual void <a href="#83c8a0"><b>setFont</b></a> ( const QFont &amp; ) </div>
@@ -406,7 +405,7 @@ inserted at the bottom of the list. </ul>
 <h3 class="fn">void <a name="cf750c"></a>QComboBox::setListBox ( <a href="qlistbox.html">QListBox</a> * newListBox ) <code>[virtual]</code></h3>
 <p>Sets the combo box to use <em>newListBox</em> instead of the current
 list box or popup.  As a side effect, clears the combo box of its
-current contents.<p><b>Warning:</b> QComboBox assumes that newListBox-><a href="#2dd3f6">text</a>(n) returns
+current contents.<p><b>Warning:</b> QComboBox assumes that newListBox-><a href="#2dd3f6">text</a>(<a href="n.html">n</a>) returns
 non-null for 0 &lt;= n &lt; newListbox-><a href="#6eface">count</a>().  This assumption is
 necessary because of the line edit in QComboBox.
 <h3 class="fn">void <a name="523689"></a>QComboBox::setMaxCount ( int count ) <code>[virtual]</code></h3>
@@ -435,6 +434,8 @@ is disregarded in Motif 1.x style.  The default limit is ten lines.
 <p>Returns the current maximum on-screen size of the combo box.  The
 default is ten lines.
 <p>See also  <a href="#00bb6f">setSizeLimit</a>(), <a href="#6eface">count</a>() and <a href="#708ed8">maxCount</a>().
+<h3 class="fn"><a href="qsizepolicy.html">QSizePolicy</a> <a name="dbdb6d"></a>QComboBox::sizePolicy () const <code>[virtual]</code></h3>
+<p>Reimplemented for internal reasons; the API is not affected.
 <h3 class="fn">void <a name="6da1a5"></a>QComboBox::styleChange ( <a href="qstyle.html">QStyle</a> &amp; s ) <code>[virtual protected]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
 <p>Reimplemented from <a href="qwidget.html#7a14f4">QWidget.</a>
@@ -457,7 +458,7 @@ box if there is any, or else 0.
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.2.3"><nobr>
+<input type=hidden name="version" value="2.2.4"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -465,5 +466,5 @@ copyright &copy; 1995-2000
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.3</div>
+<td align="right"><div align="right">Qt version 2.2.4</div>
 </table></div></address></body></html>

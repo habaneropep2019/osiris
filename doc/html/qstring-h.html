@@ -30,7 +30,7 @@ remains with Trolltech.
 <hr>
 <pre>
 /****************************************************************************
-** &#36;Id&#58; qt/src/tools/qstring.h   2.2.3   edited 2000-09-20 $
+** &#36;Id&#58; qt/src/tools/qstring.h   2.2.4   edited 2001-01-23 $
 **
 ** Definition of the QString class, and related Unicode
 ** functions.
@@ -83,7 +83,7 @@ class <a href="qregexp.html">QRegExp</a>;
 class <a href="qstring.html">QString</a>;
 class <a href="qcharref.html">QCharRef</a>;
 
-class Q_EXPORT Q_PACKED QChar {
+class Q_EXPORT <a href="qchar.html">QChar</a> {
 public:
     QChar();
     QChar( char c );
@@ -230,7 +230,7 @@ private:
 #endif
     enum { net_ordered = 0 };
 #endif
-};
+} Q_PACKED;
 
 inline QChar::QChar()
 {
@@ -858,5 +858,5 @@ extern Q_EXPORT QString qt_winMB2QString( const char* mb, int len=-1 );
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.3</div>
+<td align="right"><div align="right">Qt version 2.2.4</div>
 </table></div></address></body></html>

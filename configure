@@ -2,7 +2,7 @@
 #
 # Configures to build the Qt library
 #
-# Copyright 1999-2000 Trolltech AS.  All rights reserved.
+# Copyright 1999-2001 Trolltech AS.  All rights reserved.
 #
 
 # To remove the need for the first test, do this:
@@ -10,8 +10,8 @@
 
 relpath=`dirname $0`
 relpath=`(cd $relpath; pwd)`
-HELP=
 
+HELP=no
 if [ "$1" = -h -o "$1" = -help -o "$1" = --help ]
 then
     HELP=yes
@@ -59,6 +59,7 @@ if [ -f configs/linux-generic-g++-shared ]
 then
     EMB="/Embedded"
     QCONFIG=prompted
+    QWS_QVFB=prompted
     DEPTHS=prompted
     FT=yes
 else
@@ -213,10 +214,17 @@ fi
 fi # help
 
 # Defaults
-
+#
+# Short parenthesis:
+# Initialize all variables (for example "no" will do) so that they can be
+# tested for equality like in [ "$FOO" = "yes" ].
+# Alternatively keep them empty but use tests like [ "x$FOO" = "xyes" ] or
+# [ -n "$FOO" ].
+# In any case be consistent. This is to handle shells like the BSDi shell.
+ 
 KDE=no
 GPLUSPLUS_EXCEPTIONS=default
-VERBOSE=
+VERBOSE=no
 DEBUG=no
 SHARED=yes
 GIF=no
@@ -272,6 +280,9 @@ while [ -n "$1" ]; do
 	;;
    -qvfb)
 	QWS_QVFB=y
+	;;
+   -no-qvfb)
+	QWS_QVFB=n
 	;;
    -vnc)
 	QWS_VNC=y
@@ -418,10 +429,11 @@ then
 	esac
     else
 	##### Generate?  Look in configs/?
-	PLATFORMS="aix-g++ aix-xlc bsdi-g++ dgux-g++ freebsd-g++ gnu-g++ hpux-acc
-	    hpux-cc hpux-g++ hpux-n64 hpux-o64 irix-64 irix-g++ irix-n32 irix-o32
-	    linux-g++ netbsd-g++ openbsd-g++ osf1-cxx osf1-g++ qnx-rtp-g++
-	    sco-g++ solaris-cc-gcc solaris-cc solaris-64 solaris-g++ sunos-g++
+	PLATFORMS="aix-g++ aix-xlc bsdi-g++ dgux-g++ dynix-g++ freebsd-g++
+	    hpux-acc hpux-cc hpux-g++ hpux-n64 hpux-o64 hurd-g++
+	    irix-64 irix-g++ irix-n32 irix-o32 linux-cxx linux-g++ linux-kcc
+	    netbsd-g++ openbsd-g++ osf1-cxx osf1-g++ qnx-rtp-g++ sco-g++
+	    solaris-cc-gcc solaris-cc solaris-64 solaris-g++ sunos-g++
 	    ultrix-g++ unixware-g++ unixware7-cc unixware7-g++"
     fi
 
@@ -447,11 +459,14 @@ then
      GNU:*)
 	PLATFORM=hurd-g++
 	;;
-     BSD/386:*)
+     BSD/OS:*|BSD/386:*)
 	PLATFORM=bsdi-g++
 	;;
      dgux:*)
 	PLATFORM=dgux-g++
+	;;
+     dynix:*)
+	PLATFORM=dynix-g++
 	;;
      ULTRIX:*)
 	PLATFORM=ultrix-g++
@@ -473,7 +488,7 @@ then
 	PLATFORM=irix-n32
 	#PLATFORM=irix-o32
 	PLATFORM_NOTES="
-	    - Also available for IRIX: irix-g++ irix-o32
+	    - Also available for IRIX: irix-64 irix-g++ irix-o32
 	"
 	;;
      HP-UX:*)
@@ -487,10 +502,10 @@ then
 	"
 	;;
      OSF1:*)
-	#PLATFORM=osf1-cxx
-	PLATFORM=osf1-g++
+	PLATFORM=osf1-cxx
+	#PLATFORM=osf1-g++
 	PLATFORM_NOTES="
-	    - Also available for OSF1: osf1-cxx
+	    - Also available for OSF1: osf1-g++
 	"
 	;;
      Linux:*)
@@ -632,7 +647,7 @@ if [ -z "$QWS_ACCEL_MATROX" -a -n "$EMB" ]
 then
     QT_CXX="$QT_CXX -DQT_NO_QWS_MATROX"
 fi
-if [ -z "$QWS_QVFB" -a -n "$EMB" ]
+if [ "$QWS_QVFB" = "n" -a -n "$EMB" ]
 then
     QT_CXX="$QT_CXX -DQT_NO_QWS_VFB"
 fi
@@ -765,6 +780,19 @@ then
     fi
 fi
 
+if [ "$QWS_QVFB" = prompted ]
+then
+    echo
+    echo "Enable Qt Virtual Framebuffer support for development on X11 (default yes)"
+    read QWS_QVFB
+    if [ "$QWS_QVFB" != n -a "$QWS_QVFB" != no ]
+    then
+	QWS_QVFB=y
+    else
+	QWS_QVFB=n
+    fi
+fi
+
 # Auto-detect opengl support
 
 if echo $MODULES | grep >/dev/null opengl
@@ -829,8 +857,8 @@ then
 	    fi
 	done
 	if [ ! -z "$FOUND_LIB" -a  ! "x$THREAD" = "xyes" -a ! -z "$F" ]; then
-	    LDD_P=`which ldd`
-	    if [ ! -z $LDD_P ]; then
+	    LDD_P=`which ldd 2>/dev/null`
+	    if [ ! -z "$LDD_P" ]; then
 	        for a in $FOUND_LIB; do
 		    if $LDD_P $a 2>/dev/null | grep -i thread >/dev/null 2>&1
 		    then
@@ -1022,7 +1050,7 @@ EOF
 
 Qt/Embedded only:
 
-    -localconfig ....... Use src/tools/qconfig-local.h rather than the
+    -qconfig local ..... Use src/tools/qconfig-local.h rather than the
 			 default ($QCONFIG).
 
     -depths list ....... Comma-separated list of supported bit-per-pixel
@@ -1186,7 +1214,7 @@ else
     echo
 fi
 
-if [ -n "$VERBOSE" ]
+if [ "$VERBOSE" = "yes" ]
 then
     echo "Compile flags.... $QT_CXX $I_FLAGS"
     echo "Link flags....... $QT_LIBS"

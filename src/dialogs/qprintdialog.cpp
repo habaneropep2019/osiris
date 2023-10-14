@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/dialogs/qprintdialog.cpp   2.2.3   edited 2000-12-06 $
+** $Id: qt/src/dialogs/qprintdialog.cpp   2.2.4   edited 2000-12-15 $
 **
 ** Implementation of internal print dialog (X11) used by QPrinter::select().
 **
@@ -1372,7 +1372,8 @@ void QPrintDialog::addButton( QPushButton *but )
 
 void QPrintDialog::fileNameEditChanged( const QString &text )
 {
-    d->ok->setEnabled( !text.isEmpty() );
+    if ( d->fileName->isEnabled() )
+        d->ok->setEnabled( !text.isEmpty() );
 }
 
 #endif

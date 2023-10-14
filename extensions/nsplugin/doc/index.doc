@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/extensions/nsplugin/doc/index.doc   2.2.3   edited 2000-08-31 $
+** $Id: qt/extensions/nsplugin/doc/index.doc   2.2.4   edited 2001-01-02 $
 **
 ** Index page
 **
@@ -8,7 +8,7 @@
 *****************************************************************************/
 
 #if defined(DEBUG)
-static char ident[] = "$Id: qt/extensions/nsplugin/doc/index.doc   2.2.3   edited 2000-08-31 $";
+static char ident[] = "$Id: qt/extensions/nsplugin/doc/index.doc   2.2.4   edited 2001-01-02 $";
 #endif
 
 /*! \page nsplugin.html
@@ -49,8 +49,14 @@ WWW browser supporting the same protocol.
  <li>Build the Netscape Plugin extension library, found in the
 	<tt>extensions/nsplugin/src</tt> directory of your Qt distribution.
 	This produces a static library to be linked with your plugin code.
- <li>Read the <a href="annotated.html">plugin class documentation</a>, and
-	examine the <a href="examples.html">example plugins</a>.
+ <li>Read the NSPlugin components in the
+	<a href="annotated.html">class documentation</a>.
+ <li>Examine the example plugins:
+    <ul>
+     <li><a href=trivial-trivial-cpp.html>Trivial example</a>
+     <li><a href=qtimage-qtimage-cpp.html>Image example</a>
+     <li><a href=grapher-grapher-cpp.html>Graphing example</a>
+    </ul>
  <li>Do most of your development as a stand-alone Qt application - debugging
 	Netscape Plugins is cumbersome.  You may want to use <tt>signal(2)</tt>
 	in your plugin to enable core-dumps if your browser disables them.

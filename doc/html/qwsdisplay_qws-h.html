@@ -30,7 +30,7 @@ remains with Trolltech.
 <hr>
 <pre>
 /****************************************************************************
-** &#36;Id&#58; qt/src/kernel/qwsdisplay_qws.h   2.2.3   edited 2000-12-12 $
+** &#36;Id&#58; qt/src/kernel/qwsdisplay_qws.h   2.2.4   edited 2001-01-30 $
 **
 ** QWS display
 **
@@ -64,6 +64,7 @@ remains with Trolltech.
 #ifndef QWSDISPLAY_H
 #define QWSDISPLAY_H
 
+#include "qobject.h"
 #include "qregion.h"
 #include "qlock_qws.h"
 #include "qwindowdefs.h"
@@ -95,10 +96,11 @@ public:
 class QCopChannelPrivate;
 class QWSClient;
 
-class <a href="qcopchannel.html">QCopChannel</a>
+class <a href="qcopchannel.html">QCopChannel</a> : public QObject
 {
+    Q_OBJECT
 public:
-    QCopChannel( const QCString&amp; channel );
+    QCopChannel( const QCString&amp; channel, QObject* parent=0, const char* name=0 );
     virtual ~QCopChannel();
 
     QCString channel() const;
@@ -108,7 +110,11 @@ public:
     static bool send( const QCString &amp;channel, const QCString &amp;msg,
                       const QByteArray &amp;data );
 
-    virtual void receive( const QCString &amp;msg, const QByteArray &amp;data ) = 0;
+    virtual void receive( const QCString &amp;msg, const QByteArray &amp;data );
+
+signals:
+    void received( const QCString &amp;msg, const QByteArray &amp;data );
+
 private:
     // server side
     static void registerChannel( const QString &amp;ch, const QWSClient *cl );
@@ -197,5 +203,5 @@ extern QWSDisplay *qt_fbdpy;
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.3</div>
+<td align="right"><div align="right">Qt version 2.2.4</div>
 </table></div></address></body></html>

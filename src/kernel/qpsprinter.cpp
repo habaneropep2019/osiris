@@ -1,5 +1,5 @@
 /**********************************************************************
-** $Id: qt/src/kernel/qpsprinter.cpp   2.2.3   edited 2000-12-12 $
+** $Id: qt/src/kernel/qpsprinter.cpp   2.2.4   edited 2001-01-29 $
 **
 ** Implementation of QPSPrinter class
 **
@@ -253,37 +253,29 @@ static const char * const ps_header[] = {
 "} D",
 "",
 "/sl D0", // slow implementation, but strippable by stripHeader
-"/QCIF D0 /Bcomp D0 /Bycomp D0 /QCIstr1 D0 /QCIstr1 D0 /QCIindex D0",
+"/QCIgray D0 /QCIcolor D0 /QCIindex D0",
 "/QCI {", // as colorimage but without the last two arguments
 "  /colorimage where {",
 "    pop",
 "    false 3 colorimage",
-"  }{", // the hard way, based on PD code by John Walker <kelvin@autodesk.com>
-"    /QCIF ED",
-"    /mat ED",
-"    /Bcomp ED",
-"    /h ED",
-"    /w ED",
-"    /Bycomp Bcomp 7 add 8 idiv d",
-"    w h Bcomp mat",
-"    /QCIstr2 sl length 3 idiv string d",
-"    { Function exec",
-"      /QCIstr1 ED",
-"      0 1 QCIstr1 length 3 idiv 1 sub {",
-"        /QCIindex ED",
-"        /x QCIindex 3 mul d",
-"        QCIstr2 QCIindex",
-"        QCIstr1 x       get 0.30 mul",
-"        QCIstr1 x 1 add get 0.59 mul",
-"        QCIstr1 x 2 add get 0.11 mul",
-"        add add cvi",
-"        put",
-"      } for",
-"      QCIstr2",
-"    }",
-"    image",
+"  }{",  // the hard way, based on PD code by John Walker <kelvin@autodesk.com>
+"    exec /QCIcolor ED",
+"    /QCIgray QCIcolor length 3 idiv string d",
+"    0 1 QCIcolor length 3 idiv 1 sub",
+"    { /QCIindex ED",
+"      /x QCIindex 3 mul d",
+"      QCIgray QCIindex",
+"      QCIcolor x       get 0.30 mul",
+"      QCIcolor x 1 add get 0.59 mul",
+"      QCIcolor x 2 add get 0.11 mul",
+"      add add cvi",
+"      put",
+"    } for",
+"    QCIgray image",
 "  } ifelse",
 "} D",
+"",
+"/defM matrix d",
 "",
 "/BF {",				// brush fill
 "   GS",
@@ -371,7 +363,6 @@ static const char * const ps_header[] = {
 "    mat SM",
 "} D",
 "",
-"/defM D0",
 "",
 "/C D0",
 "",
@@ -599,6 +590,13 @@ static const char * const ps_header[] = {
 "  definefont pop",
 "} D",
 "",
+"/MSF {",				// newname slant fontname (this is used for fonts where we don't need an encoding)
+"  findfont exch",			// newname font slant
+"  /slant exch d",			// newname font
+"  [ 1 0 slant 1 0 0 ] makefont",
+"  definefont pop",
+"} D",
+"",
 "/DF {",				// newname pointsize fontmame
 "  findfont",
 "  /FONTSIZE 3 -1 roll d [ FONTSIZE 0 0 FONTSIZE -1 mul 0 0 ] makefont",
@@ -630,17 +628,16 @@ static const char * const ps_header[] = {
 "",
 "/QI {",
 "    /C save d",
-"    defM setmatrix",			// default transformation matrix
+"    pageinit",
 "    /Cx  0 d",				// reset current x position
 "    /Cy  0 d",				// reset current y position
 "    /OMo false d",
-"    GS",
 "} D",
 "",
 "/QP {",				// show page
-"    GR",
 "    C restore",
 "    showpage",
+
 "} D",
 0 };
 
@@ -1745,6 +1742,8 @@ static const struct {
     { QFont::ISO_8859_13, 109 },
     { QFont::ISO_8859_14, 110 },
     { QFont::ISO_8859_15, 111 },
+    { QFont::CP1251, 2251 },
+    { QFont::PT154, 0 },
     // makeFixedStrings() below assumes that this is last
     { QFont::ISO_8859_9, 12 }
 #define unicodevalues_LAST QFont::ISO_8859_9
@@ -1973,20 +1972,20 @@ static const struct {
     const char * light;
     const char * lightItalic;
 } postscriptFontNames[] = {
-    { "arial", "Arial", 0, 0, 0, 0, 0 },
-    { "avantgarde", "AvantGarde-Book", 0, 0, 0, 0, 0 },
+    { "arial", "Arial", "Arial-Italic", "Arial-Bold", "Arial-BoldItalic", 0, 0 },
+    { "avantgarde", "AvantGarde-Book", "AvantGarde-BookOblique", "AvantGarde-Demi", "AvantGarde-DemiOblique", 0, 0 },
     { "charter", "CharterBT-Roman", 0, 0, 0, 0, 0 },
-    { "courier", "Courier", 0, 0, 0, 0, 0 },
+    { "courier", "Courier", "Courier-Oblique", "Courier-Bold", "Courier-BoldOblique", 0, 0 },
     { "garamond", "Garamond-Regular", 0, 0, 0, 0, 0 },
     { "gillsans", "GillSans", 0, 0, 0, 0, 0 },
-    { "helvetica",
-      "Helvetica", "Helvetica-Oblique",
-      "Helvetica-Bold", "Helvetica-BoldOblique",
-      "Helvetica", "Helvetica-Oblique" },
+    { "helvetica", "Helvetica", "Helvetica-Oblique", "Helvetica-Bold", "Helvetica-BoldOblique", "Helvetica", "Helvetica-Oblique" },
     { "new century schoolbook", "NewCenturySchlbk-Roman", 0, 0, 0, 0, 0 },
     { "symbol", "Symbol", "Symbol", "Symbol", "Symbol", "Symbol", "Symbol" },
+    { "tahoma", "Helvetica", "Helvetica-Oblique", "Helvetica-Bold", "Helvetica-BoldOblique", "Helvetica", "Helvetica-Oblique" },
     { "terminal", "Courier", 0, 0, 0, 0, 0 },
-    { "times new roman", "TimesNewRoman", 0, 0, 0, 0, 0 },
+    { "times", "Times", "Times-Italic", "Times-Bold", "Times-BoldItalic", 0, 0 },
+    { "times new roman", "Times", "Times-Italic", "Times-Bold", "Times-BoldItalic", 0, 0 },
+    { "verdana", "Helvetica", "Helvetica-Oblique", "Helvetica-Bold", "Helvetica-BoldOblique", "Helvetica", "Helvetica-Oblique" },
     { "utopia", "Utopia-Regular", 0, 0, 0, 0, 0 },
     { 0, 0, 0, 0, 0, 0, 0 }
 };
@@ -2085,13 +2084,6 @@ void QPSPrinter::setFont( const QFont & f )
 
     QString key;
     int cs = (int)f.charSet();
-    if ( cs == QFont::AnyCharSet ) {
-	QIntDictIterator<void> it( d->headerEncodings );
-	if ( it.current() )
-	    cs = it.currentKey();
-	else
-	    cs = QFont::Latin1;
-    }
 
     key.sprintf( "%s %d %d", ps.ascii(), f.pointSize(), cs );
     QString * tmp;
@@ -2125,8 +2117,12 @@ void QPSPrinter::setFont( const QFont & f )
 		fontName = *tmp;
 	    } else {
 		fontName.sprintf( "/F%d", ++d->headerFontNumber );
-		d->fontStream << fontName << fontEncoding << "/"
-			      << ps << " MF\n";
+		if ( cs != QFont::AnyCharSet ) // anyCharset will use the default cs of the font
+		    d->fontStream << fontName << fontEncoding << "/"
+				  << ps << " MF\n";
+		else
+		    d->fontStream << fontName << " 0 /"
+				  << ps << " MSF\n";
 		d->headerFontNames.insert( key2, new QString( fontName ) );
 	    }
 	    ++d->headerFontNumber;
@@ -2149,7 +2145,10 @@ void QPSPrinter::setFont( const QFont & f )
 		fontName = *tmp;
 	    } else {
 		fontName.sprintf( "/F%d", ++d->pageFontNumber );
-		stream << fontName << fontEncoding << "/" << ps << " MF\n";
+		if ( cs != QFont::AnyCharSet )
+		    stream << fontName << fontEncoding << "/" << ps << " MF\n";
+		else
+		    stream << fontName << " 0 /" << ps << " MSF\n";
 		d->pageFontNames.insert( key2, new QString( fontName ) );
 	    }
 	    ++d->pageFontNumber;
@@ -2247,43 +2246,93 @@ QByteArray compress( const QImage & image ) {
     if ( image.depth() == 8 ) {
 	for( y=0; y < image.height(); y++ ) {
 	    uchar * s = image.scanLine( y );
-	    for( x=0; x < image.width(); x++ )
-		pixel[i++] = ( image.color( s[x] ) ) & RGB_MASK;
+	    for( int x=0; x < image.width(); x++ ) {
+ 		pixel[i] = image.color( s[x] );
+		if ( qAlpha( pixel[i] )< 0x40 ) // 25% alpha, convert to white
+		    pixel[i] = qRgb( 0xff, 0xff, 0xff );
+		else
+		    pixel[i] &= RGB_MASK;
+		i++;
+	    }
 	}
     } else {
 	for( y=0; y < image.height(); y++ ) {
 	    QRgb * s = (QRgb*)(image.scanLine( y ));
-	    for( x=0; x < image.width(); x++ )
-		pixel[i++] = (*s++) & RGB_MASK;
+		for( x=0; x < image.width(); x++ ) {
+		    pixel[i] = (*s++);
+		    if ( qAlpha( pixel[i] ) < 0x40 ) // 25% alpha, convert to white -                   
+			pixel[i] = qRgb( 0xff, 0xff, 0xff );
+		    else
+			pixel[i] &= RGB_MASK;
+		    i++;
+	   }
 	}
     }
 
     pixel[size] = 0;
 
+    /* this compression function emits blocks of data, where each
+       block is an unquoted series of pixels, or a quote from earlier
+       pixels. if the six-letter string "banana" were a six-pixel
+       image, it would be an nquoted "ban" block followed by a 3-pixel
+       quote from -2.  note that the final "a" is then copied from the
+       second "a", which is copied from the first "a" in the same copy
+       operation.
+
+       the scanning for quotable blocks uses a cobol-like loop and a
+       hash table: we know how many pixels we need to quote, hash the
+       first and last pixel we need, and then go backwards in time
+       looking for some spot where those pixels of those two colours
+       occur at the right distance from each other.
+
+       when we find a spot, we'll try a string-compare of all the
+       intervening pixels. we only do a maximum of 128 both-ends
+       compares or 64 full-string compares. it's more important to be
+       fast than get the ultimate in compression. */
+
     for( i=0; i < hashSize; i++ )
 	mostRecentPixel[i] = None;
-
     int index = 0;
     int emittedUntil = 0;
     QByteArray out( 49 );
     int outOffset = 0;
     int outBit = 0;
+    /* we process pixels serially, emitting as necessary/possible. */
     while( index <= size ) {
+	/* bestCandidate is the start of the best known quote area and
+           bestLength its length. */
 	int bestCandidate = None;
 	int bestLength = 0;
+	/* pick up the most recent pixels of the two colours we want,
+           and mark the pixel we're lookin at as being the new most
+           recent pixel in its chain. */
 	i = index % tableSize;
 	int h = pixel[index] % hashSize;
+	/* start and end point to the stard and end of the current
+           candidate are. they may or may not point to something that
+           actually can be quoted. */
 	int start, end;
 	start = end = pastPixel[i] = mostRecentPixel[h];
 	mostRecentPixel[h] = index;
+	/* if our first candidate quote is unusable, or we don't need
+	   to quote because we've already emitted something for this
+	   pixel, just skip. */
 	if ( start < index - tableSize || index >= size ||
 	     emittedUntil > index)
 	    start = end = None;
+	/* attempts count how much work we've done trying to find
+           something quotable for this pixel. */
 	int attempts = 0;
+	/* scan for suitable quote candidates: not too far back, and
+	   if we've found one that's as big as it can possibly get,
+	   we don't look for more. */
 	while( start != None && end != None &&
 	       bestLength < maxQuoteLength &&
 	       start >= index - tableSize &&
 	       end >= index - tableSize + bestLength ) {
+	    /* scan backwards, looking for something good enough to
+	       try a (slow) string comparison. we maintain indexes to
+	       the start and the end of the quote candidate here. */
 	    while( start != None && end != None &&
 		   ( pixel[start] != pixel[index] ||
 		     pixel[end] != pixel[index+bestLength] ) ) {
@@ -2291,37 +2340,52 @@ QByteArray compress( const QImage & image ) {
 		    start = None;
 		} else if ( pixel[end] % hashSize ==
 			    pixel[index+bestLength] % hashSize ) {
+		    /* we move the area along the end index' chain. */
 		    end = pastPixel[end%tableSize];
 		    start = end - bestLength;
 		} else if ( pixel[start] % hashSize ==
 			    pixel[index] % hashSize ) {
+		    /* ... or along the start index' chain. */
 		    start = pastPixel[start%tableSize];
 		    end = start + bestLength;
 		} else {
 #if 0
-		    // this "should never happen"
+		    /* this should never happen: both the start and
+		       the end pointers ran off their tracks. */
 		    qDebug( "oops! %06x %06x %06x %06x %5d %5d %5d %d",
 			    pixel[start], pixel[end],
 			    pixel[index], pixel[index+bestLength],
 			    start, end, index, bestLength );
 #endif
+		    /* but if it should happen, no problem. we'll just
+		       say we found nothing, and the compression will
+		       be a bit worse. */
 		    start = None;
 		}
-		if ( start < index - tableSize || start < 0 )
+		/* if we've moved either index too far to use the
+		   quote candidate, let's just give up here. there's
+		   also a guard against "start" insanity. */
+		if ( start < index - tableSize || start < 0 || start >= index )
 		    start = None;
 		if ( end < index - tableSize + bestLength || end < bestLength )
 		    end = None;
 	    }
+	    /* ok, now start and end point to an area of suitable
+	       length whose first and last points match, or one/both
+	       is/are set to None. */
 	    if ( start != None && end != None ) {
+		/* slow string compare... */
 		int length = 0;
 		while( length < maxQuoteLength &&
 		       index+length < size &&
 		       pixel[start+length] == pixel[index+length] )
 		    length++;
-		if ( start + length > index ) {
-		    // when the compressor does run length-like stuff,
-		    // the decompression is faster if we can move the
-		    // quote point further back
+		/* if we've found something that overlaps the index
+		   point, maybe we can move the quote point back?  if
+		   we're copying 10 pixels from 8 pixels back (an
+		   overlap of 2), that'll be faster than copying from
+		   4 pixels back (an overlap of 6). */
+		if ( start + length > index && length > 0 ) {
 		    int d = index-start;
 		    int equal = TRUE;
 		    while( equal && start + length > index &&
@@ -2336,6 +2400,8 @@ QByteArray compress( const QImage & image ) {
 			    start -= d;
 		    }
 		}
+		/* if what we have is longer than the best previous
+		   candidate, we'll use this one. */
 		if ( length > bestLength ) {
 		    attempts = 0;
 		    bestCandidate = start;
@@ -2343,7 +2409,11 @@ QByteArray compress( const QImage & image ) {
 		    if ( length < maxQuoteLength && index + length < size )
 			end = mostRecentPixel[pixel[index+length]%hashSize];
 		} else {
-		    if ( attempts++ > 64 ) {
+		    /* and if it isn't, we'll try some more. but we'll
+		       count each string compare extra, since they're
+		       so expensive. */
+		    attempts += 2;
+		    if ( attempts > 128 ) {
 			start = None;
 		    } else if ( pastPixel[start%tableSize] + bestLength <
 				pastPixel[end%tableSize] ) {
@@ -2354,13 +2424,20 @@ QByteArray compress( const QImage & image ) {
 			start = end - bestLength;
 		    }
 		}
-		if ( start < index - tableSize )
+		/* again, if we can't make use of the current quote
+		   candidate, we don't try any more */
+		if ( start < index - tableSize || start < 0 || start > size+1 )
 		    start = None;
-		if ( end < index - tableSize + bestLength )
+		if ( end < index - tableSize + bestLength || end < 0 || end > size+1 )
 		    end = None;
 	    }
 	}
+	/* at this point, bestCandidate is a candidate of bestLength
+	   length, or else it's None. if we have such a candidate, or
+	   we're at the end, we have to emit all unquoted data. */
 	if ( index == size || bestCandidate != None ) {
+	    /* we need a double loop, because there's a maximum length
+	       on the "unquoted data" section. */
 	    while( emittedUntil < index ) {
 		int l = QMIN( 8, index - emittedUntil );
 		emitBits( out, outOffset, outBit,
@@ -2378,6 +2455,7 @@ QByteArray compress( const QImage & image ) {
 		}
 	    }
 	}
+	/* if we have some quoted data we can output, do it. */
 	if ( bestCandidate != None ) {
 	    emitBits( out, outOffset, outBit,
 		      1, 1 );
@@ -2411,10 +2489,13 @@ QByteArray compress( const QImage & image ) {
 	}
 	index++;
     }
+    /* we've output all the data; time to clean up and finish off the
+       last characters. */
     if ( outBit )
 	outOffset++;
     out.truncate( outOffset );
     i = 0;
+    /* we have to make sure the date is encoded in a stylish way :) */
     while( i < outOffset ) {
 	uchar c = out[i];
 	c += 42;
@@ -3065,6 +3146,10 @@ static QString stripHeader( const QString & header, const char * data,
 	    used[*tmp] = 0x10000000;
 	    delete tmp;
 	}
+	if ( (tmp = ids.take("MSF")) != 0 ) {
+	    used[*tmp] = 0x10000000;
+	    delete tmp;
+	}
 	if ( (tmp = ids.take("ND")) != 0 ) {
 	    used[*tmp] = 0x10000000;
 	    delete tmp;
@@ -3213,17 +3298,17 @@ void QPSPrinter::emitHeader( bool finished )
 
     if ( !printer->fullPage() )
 	stream << "% lazy-margin hack: QPrinter::setFullPage(FALSE)\n"
-	       << printer->margins().width() << " "
+	       << "/pageinit { " << printer->margins().width() << " "
 	       << printer->margins().height() << " translate\n";
     if ( printer->orientation() == QPrinter::Portrait ) {
 	QPaintDeviceMetrics m( printer );
 	stream << "% " << m.widthMM() << "*" << m.heightMM()
 	       << "mm (portrait)\n0 " << m.height()
-	       << " translate 1 -1 scale/defM matrix CM d\n";
+	       << " translate 1 -1 scale/defM matrix CM d } d\n";
     } else {
 	QPaintDeviceMetrics m( printer );
 	stream << "% " << m.heightMM() << "*" << m.widthMM()
-	       << " mm (landscape)\n90 rotate 1 -1 scale/defM matrix CM d\n";
+	       << " mm (landscape)\n/pageinit { 90 rotate 1 -1 scale/defM matrix CM d } d\n";
     }
 
     if ( d->fontBuffer->buffer().size() ) {
@@ -3265,10 +3350,8 @@ void QPSPrinter::newPageSetup( QPainter *paint )
 }
 
 
-/*
-  Called whenever a restore has been done. Currently done at the top of a
-  new page and whenever clipping is turned off.
- */
+/* Called whenever a restore has been done. Currently done at the top of a
+  new page and whenever clipping is turned off. */
 void QPSPrinter::resetDrawingTools( QPainter *paint )
 {
     QPDevCmdParam param[1];

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qtimer.cpp   2.2.3   edited 2000-08-25 $
+** $Id: qt/src/kernel/qtimer.cpp   2.2.4   edited 2001-01-19 $
 **
 ** Implementation of QTimer class
 **
@@ -39,6 +39,7 @@
 #include "qsignal.h"
 #include "qobjectlist.h"
 #include "qobjectdict.h"
+#include "qapplication.h"
 
 // NOT REVISED
 /*!
@@ -232,6 +233,7 @@ void sst_init()
 class QSingleShotTimer : public QObject
 {
 public:
+    QSingleShotTimer() : QObject( qApp ) {}
     bool    start( int msec, QObject *r, const char * m );
 protected:
     bool    event( QEvent * );

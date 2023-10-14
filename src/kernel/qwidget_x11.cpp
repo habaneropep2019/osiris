@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qwidget_x11.cpp   2.2.3   edited 2000-11-14 $
+** $Id: qt/src/kernel/qwidget_x11.cpp   2.2.4   edited 2001-01-19 $
 **
 ** Implementation of QWidget and QWindow classes for X11
 **
@@ -492,11 +492,14 @@ void QWidget::reparent( QWidget *parent, WFlags f, const QPoint &p,
 	oldcurs = cursor();
 	unsetCursor();
     }
+    bool topdata_dnd = FALSE;
     bool accept_drops = acceptDrops();
     if ( accept_drops )
 	setAcceptDrops( FALSE ); // dnd unregister (we will register again below)
-    if ( isTopLevel() )
+    if ( isTopLevel() ) {
+	topdata_dnd = topData()->dnd;
 	topData()->dnd = 0; // unregister XDND atom
+    }
 
     QWidget* oldtlw = topLevelWidget();
     WId old_winid = winid;
@@ -527,7 +530,6 @@ void QWidget::reparent( QWidget *parent, WFlags f, const QPoint &p,
 	setWState( WState_ForceHide );	// new widgets do not show up in already visible parents
     create();
     const QObjectList *chlist = children();
-    QWidget* dndchild = 0; // remember one of the children accepting drops
     if ( chlist ) {				// reparent children
 	QObjectListIt it( *chlist );
 	QObject *obj;
@@ -537,8 +539,6 @@ void QWidget::reparent( QWidget *parent, WFlags f, const QPoint &p,
 		if ( !w->isTopLevel() ) {
 		    XReparentWindow( x11Display(), w->winId(), winId(),
 				     w->geometry().x(), w->geometry().y() );
-		    if ( w->acceptDrops() )
-			dndchild = w ;
 		} else if ( w->isPopup()
 			    || w->testWFlags(WStyle_DialogBorder)
 			    || w->testWFlags(WStyle_Dialog)
@@ -572,13 +572,12 @@ void QWidget::reparent( QWidget *parent, WFlags f, const QPoint &p,
 
     reparentFocusWidgets( oldtlw );
 
-
+    // re-register dnd
     if ( accept_drops )
 	setAcceptDrops( TRUE );
-    else if ( dndchild ) {
-	dndchild->clearWState(WState_DND); // reset this widget
-	dndchild->setAcceptDrops( TRUE ); // the new top-level will accept drops
-    }
+    if (topdata_dnd)
+	qt_dnd_enable(this, topdata_dnd);
+
     QCustomEvent e( QEvent::Reparent, 0 );
     QApplication::sendEvent( this, &e );
 }
@@ -1179,11 +1178,16 @@ QWidget *QWidget::keyboardGrabber()
   focus.
 
   This function performs the same operation as clicking the mouse on
-  the title bar of a top-level window, at least on Windows. On X11,
-  the result depends on the Window Manager. If you want to ensure that
-  the window is stacked on top as well, call raise() in addition. Note
-  that the window has be to visible, otherwise setActiveWindow() has
-  no effect.
+  the title bar of a top-level window. On X11, the result depends on
+  the Window Manager. If you want to ensure that the window is stacked
+  on top as well, call raise() in addition. Note that the window has be
+  to visible, otherwise setActiveWindow() has no effect.
+
+  On Windows, if you are calling this when the application is not
+  currently the active one then it will not make it the active window.  It
+  will flash the task bar entry blue to indicate that the window has done
+  something.  This is due to Microsoft not allowing an application to
+  interrupt what the user is currently doing in another application.
 
   \sa isActiveWindow(), topLevelWidget(), show()
 */
@@ -1193,7 +1197,7 @@ void QWidget::setActiveWindow()
     QWidget *tlw = topLevelWidget();
     if ( tlw->isVisible() && !tlw->topData()->embedded ) {
 	XSetInputFocus( x11Display(), tlw->winId(), RevertToNone, qt_x_time);
-	
+
 #ifndef NO_XIM
 	if (tlw->topData()->xic)
 	    XSetICFocus( (XIC) tlw->topData()->xic);

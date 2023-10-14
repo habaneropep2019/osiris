@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/doc/qcache.doc   2.2.3   edited 2000-08-25 $
+** $Id: qt/doc/qcache.doc   2.2.4   edited 2000-12-19 $
 **
 ** QCache and QCacheIterator class documentation
 **
@@ -181,7 +181,7 @@
 /*!
   \fn bool QCache::isEmpty() const
 
-  Returns TRUE if the cache is empty, or TRUE if there is at least one
+  Returns TRUE if the cache is empty, or FALSE if there is at least one
   object in it.
 */
 

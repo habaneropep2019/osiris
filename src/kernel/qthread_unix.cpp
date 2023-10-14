@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qthread_unix.cpp   2.2.3   edited 2000-12-07 $
+** $Id: qt/src/kernel/qthread_unix.cpp   2.2.4   edited 2001-01-21 $
 **
 ** QThread class for Unix
 **
@@ -35,7 +35,13 @@
 **
 **********************************************************************/
 
+// What's up here? Please add comments!
+// Is this a way to ask the pre-Single Unix 1998 GNU C library to bring
+// in relevant extensions?
 #define _GNU_SOURCE
+// What's up here? Please add comments!
+// Is this a way to ask for the Single Unix 1998 interface?
+// Isn't _XOPEN_SOURCE=500 a more common way to obtain the same result?
 #define __USE_UNIX98
 
 #include "qthread.h"
@@ -359,7 +365,7 @@ void QThread::msleep( unsigned long msecs )
 
 
 /*!
-  System independent sleep.  This causes the current rhead to sleep for
+  System independent sleep.  This causes the current thread to sleep for
   \a usecs microseconds
 */
 void QThread::usleep( unsigned long usecs )

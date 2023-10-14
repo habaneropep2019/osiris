@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/doc/examples.doc   2.2.3   edited 2000-08-25 $
+** $Id: qt/doc/examples.doc   2.2.4   edited 2001-01-23 $
 **
 ** Documentation for the examples
 **
@@ -34,7 +34,7 @@
 **********************************************************************/
 
 #if defined(DEBUG)
-static char ident[] = "$Id: qt/doc/examples.doc   2.2.3   edited 2000-08-25 $";
+static char ident[] = "$Id: qt/doc/examples.doc   2.2.4   edited 2001-01-23 $";
 #endif
 
 
@@ -1286,4 +1286,70 @@ static char ident[] = "$Id: qt/doc/examples.doc   2.2.3   edited 2000-08-25 $";
 
   Main:
 
+*/
+
+
+/*! \example xml/tagreader/tagreader.cpp
+
+  <h1 align=center>A tiny SAX2 parser</h1><br clear="all">    
+ 
+  This example presents a small <a href="xml-sax.html">SAX2</a> 
+  reader that outputs the names of all elements in an
+  XML document on the command line. The element names are 
+  indented corresponding to their nesting
+ 
+  This example is thoroughly explained in a 
+  <a href="xml-sax-walkthrough.html">walkthrough</a>.
+ 
+  <hr>
+ 
+  Header file:
+ 
+  \include xml/tagreader/structureparser.h
+ 
+  <hr>
+ 
+  Implementation:
+ 
+  \include xml/tagreader/structureparser.cpp
+ 
+  <hr>
+ 
+  Main:
+ 
+*/
+
+
+     
+/*! \example xml/tagreader-with-features/tagreader.cpp
+
+
+  <h1 align=center>Demonstration of SAX2 features</h1><br clear="all"> 
+ 
+  This example presents a small <a href="xml-sax.html">SAX2</a>
+  reader that outputs the qualified names and the
+  respective namespace URIs of all elements and attributes in an
+  XML file. Additionally the tree structure of the document is displayed.
+
+  In three listviews the program shows the different output of the reader
+  depending on how the SAX2 <a href="xml-sax.html#namespaces">features</a>
+  http://xml.org/sax/features/namespaces and
+  http://xml.org/sax/features/namespace-prefixes are set.
+
+  <hr>
+ 
+  Header file:
+ 
+  \include xml/tagreader-with-features/structureparser.h
+ 
+  <hr>
+ 
+  Implementation:
+ 
+  \include xml/tagreader-with-features/structureparser.cpp
+ 
+  <hr>
+ 
+  Main:
+ 
 */

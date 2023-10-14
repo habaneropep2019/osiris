@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/forever/forever.cpp   2.2.3   edited 2000-11-07 $
+** $Id: qt/examples/forever/forever.cpp   2.2.4   edited 2001-01-03 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -51,30 +51,21 @@ void Forever::updateCaption()
 
 
 //
-// Handles paint events for the Forever widget.
-//
-
-void Forever::paintEvent( QPaintEvent * )
-{
-    QPainter paint( this );			// painter object
-    int w = width();
-    int h = height();
-    paint.setPen( NoPen );			// do not draw outline
-    paint.setBrush( colors[rand() % numColors]);// set random brush color
-    QPoint p1( rand()%w, rand()%h );	// p1 = top left
-    QPoint p2( rand()%w, rand()%h );	// p2 = bottom right
-    QRect r( p1, p2 );
-    paint.drawRect( r );			// draw filled rectangle
-}
-
-//
 // Handles timer events for the Forever widget.
 //
 
 void Forever::timerEvent( QTimerEvent * )
 {
+    QPainter paint( this );			// painter object
+    paint.setPen( NoPen );			// do not draw outline
+    int w = width();
+    int h = height();
     for ( int i=0; i<100; i++ ) {
-	repaint( FALSE );			// repaint, don't erase
+	paint.setBrush( colors[i % numColors]); // set random brush color
+	QPoint p1( rand()%w, rand()%h );	// p1 = top left
+	QPoint p2( rand()%w, rand()%h );	// p2 = bottom right
+	QRect r( p1, p2 );
+	paint.drawRect( r );			// draw filled rectangle
 	rectangles++;
     }
 }

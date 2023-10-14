@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/texture/gltexobj.cpp   2.2.3   edited 2000-11-17 $
+** $Id: qt/examples/texture/gltexobj.cpp   2.2.4   edited 2000-11-17 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **

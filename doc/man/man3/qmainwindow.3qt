@@ -1,4 +1,4 @@
-.TH QMainWindow 3qt "12 December 2000" "Trolltech AS" \" -*- nroff -*-
+.TH QMainWindow 3qt "1 Febrary 2001" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -137,7 +137,7 @@ Inherits QWidget.
 .SS "Protected Members"
 .in +1c
 .ti -1c
-.BI "void \fBresizeEvent\fR ( QResizeEvent * ) "
+.BI "virtual void \fBresizeEvent\fR ( QResizeEvent * ) "
 .br
 .ti -1c
 .BI "virtual void \fBchildEvent\fR ( QChildEvent * ) "
@@ -306,6 +306,10 @@ Reimplemented from QWidget.
 This signal is called whenever the setUsesBigPixmaps() is called with a value which is different from the current setting. All relevant widgets must connect to this signal.
 .SH "void QMainWindow::removeToolBar ( QToolBar * toolBar )"
 Removes \fItoolBar\fR from this main window's docking area, if \fItoolBar\fR is non-null and known by this main window.
+.SH "void QMainWindow::resizeEvent ( QResizeEvent * ) \fC[virtual protected]\fR"
+Monitors events to ensure layout is updated.
+.PP
+Reimplemented from QWidget.
 .SH "bool QMainWindow::rightJustification () const"
 Returns TRUE if this main windows right-justifies its toolbars, and FALSE if it uses a ragged right edge.
 .PP

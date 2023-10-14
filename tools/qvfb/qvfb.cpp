@@ -24,6 +24,7 @@
 #include <qfiledialog.h>
 #include <qspinbox.h>
 #include <qradiobutton.h>
+#include <qimage.h>
 
 #include "qvfb.h"
 #include "qvfbview.h"
@@ -202,10 +203,10 @@ void QVFb::setZoom4()
 
 void QVFb::saveImage()
 {
+    QImage img = view->image();
     QString filename = QFileDialog::getSaveFileName("snapshot.png", "*.png", this, "", "Save snapshot...");
-    if ( !!filename ) {
-	view->saveAs(filename);
-    }
+    if ( !!filename )
+	img.save(filename,"PNG");
 }
 
 void QVFb::toggleAnimation()

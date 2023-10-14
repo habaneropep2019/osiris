@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/doc/credits.doc   2.2.3   edited 2000-08-25 $
+** $Id: qt/doc/credits.doc   2.2.4   edited 2001-01-26 $
 **
 ** Credits file - all the qt-bugs stuff
 **
@@ -34,7 +34,7 @@
 **********************************************************************/
 
 #if defined(DEBUG)
-static char ident[] = "$Id: qt/doc/credits.doc   2.2.3   edited 2000-08-25 $";
+static char ident[] = "$Id: qt/doc/credits.doc   2.2.4   edited 2001-01-26 $";
 #endif
 
 // the list is up to an including /local/qt/mail/qt-bugs/1715
@@ -295,6 +295,8 @@ Oliver Eiden &lt;o.eiden <i>at</i> pop.ruhr.de&gt;<br>
 Thomas Rath &lt;rath <i>at</i> mac-info-link.de&gt;<br>
 Sandro Sigala &lt;ssigala <i>at</i> globalnet.it&gt;<br>
 Don Sanders &lt;sanders <i>at</i> kde.org&gt;<br>
+Dirk Mueller &lt;mueller <i>at</i> kde.org&gt;<br>
+Sivan Toledo
 
 </blockquote>
 

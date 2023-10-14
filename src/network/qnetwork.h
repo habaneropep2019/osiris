@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/network/qnetwork.h   2.2.3   edited 2000-09-12 $
+** $Id: qt/src/network/qnetwork.h   2.2.4   edited 2000-09-12 $
 **
 ** Definition of qInitNetworkProtocols function.
 **

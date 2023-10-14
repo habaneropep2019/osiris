@@ -1,3 +1,4 @@
+
 TEMPLATE	= lib
 CONFIG		+= qt warn_on release
 
@@ -6,7 +7,7 @@ embedded:CONFIG -= x11
 
 TARGET		= qt
 embedded:TARGET	= qte
-VERSION		= 2.2.3
+VERSION		= 2.2.4
 DESTDIR		= ../lib
 DLLDESTDIR	= ../bin
 
@@ -29,6 +30,8 @@ internal:CONFIG -= opengl
 # internal:LIBS += -lpng -lz
 # embedded:LIBS += -lgcc
 
+# thread:CONFIG += opengl
+# thread:TARGET = qt-mt
 thread:DEFINES += QT_THREAD_SUPPORT
 
 embedded:CONFIG -= opengl
@@ -61,13 +64,13 @@ internal:DEFINES += $$DEFINESI
 win32:DEFINES += QT_NO_IMAGEIO_JPEG
 
 internal:TMAKE_CXXFLAGS_EMBEDDED += -DQT_NO_QWS_VOODOO3 -DQT_NO_QWS_MATROX -DQT_NO_QWS_MACH64
-internal:TMAKE_CXXFLAGS_EMBEDDED += -DQT_NO_QWS_VGA_16 
+internal:TMAKE_CXXFLAGS_EMBEDDED += -DQT_NO_QWS_VGA_16
 #internal:TMAKE_CXXFLAGS_EMBEDDED += -DQT_NO_QWS_VFB
 #internal:TMAKE_CXXFLAGS_EMBEDDED += -DQT_NO_QWS_TRANSFORMED
-internal:TMAKE_CXXFLAGS_EMBEDDED += -DQT_NO_QWS_DEPTH_4 
-internal:TMAKE_CXXFLAGS_EMBEDDED += -DQT_NO_QWS_DEPTH_8 
-#internal:TMAKE_CXXFLAGS_EMBEDDED += -DQT_NO_QWS_DEPTH_16 
-internal:TMAKE_CXXFLAGS_EMBEDDED += -DQT_NO_QWS_DEPTH_24 
+internal:TMAKE_CXXFLAGS_EMBEDDED += -DQT_NO_QWS_DEPTH_4
+internal:TMAKE_CXXFLAGS_EMBEDDED += -DQT_NO_QWS_DEPTH_8
+#internal:TMAKE_CXXFLAGS_EMBEDDED += -DQT_NO_QWS_DEPTH_16
+internal:TMAKE_CXXFLAGS_EMBEDDED += -DQT_NO_QWS_DEPTH_24
 #internal:TMAKE_CXXFLAGS_EMBEDDED += -DQT_NO_QWS_DEPTH_32
 embedded:TMAKE_CXXFLAGS += $$TMAKE_CXXFLAGS_EMBEDDED
 
@@ -96,8 +99,7 @@ win32:TMAKE_CXXFLAGS   += -DUNICODE
 MNG_INCLUDEPATH		= 3rdparty/libmng
 PNG_INCLUDEPATH		= 3rdparty/libpng
 ZLIB_INCLUDEPATH	= 3rdparty/zlib
-# Rather ridiculous. Perhaps we should ships symlinks and only have one here
-FT_INCLUDEPATH		= 3rdparty/freetype2/src/shared 3rdparty/freetype2/src/sfnt 3rdparty/freetype2/include 3rdparty/freetype2/src/base 3rdparty/freetype2/config/unix 3rdparty/freetype2/config 3rdparty/freetype2/src/truetype 3rdparty/freetype2/src/type1 3rdparty/freetype2/src/psnames
+FT_INCLUDEPATH		= 3rdparty/freetype/src 3rdparty/freetype/include 3rdparty/freetype/builds/unix
 #mng:INCLUDEPATH        += $$MNG_INCLUDEPATH
 png:INCLUDEPATH        += $$PNG_INCLUDEPATH
 zlib:INCLUDEPATH       += $$ZLIB_INCLUDEPATH
@@ -374,6 +376,7 @@ kernel:QWSSOURCES += kernel/qapplication_qws.cpp \
 		  kernel/qclipboard_qws.cpp \
 		  kernel/qcolor_qws.cpp \
 		  kernel/qcursor_qws.cpp \
+		  kernel/qdirectpainter_qws.cpp \
 		  kernel/qdnd_qws.cpp \
 		  kernel/qfont_qws.cpp \
 		  kernel/qpixmap_qws.cpp \
@@ -397,12 +400,11 @@ kernel:QWSSOURCES += kernel/qapplication_qws.cpp \
 		  kernel/qwsmouse_qws.cpp \
 		  kernel/qwsmanager_qws.cpp \
 		  kernel/qwsdefaultdecoration_qws.cpp \
-		  kernel/qwsaquadecoration_qws.cpp \
+		  kernel/qwshydrodecoration_qws.cpp \
 		  kernel/qwsbeosdecoration_qws.cpp \
 		  kernel/qwskdedecoration_qws.cpp \
 		  kernel/qwswindowsdecoration_qws.cpp \
 		  kernel/qwskde2decoration_qws.cpp \
-		  kernel/qwsqpedecoration_qws.cpp \
 		  kernel/qwsproperty_qws.cpp \
 		  kernel/qlock_qws.cpp \
 		  kernel/qwsregionmanager_qws.cpp \
@@ -610,17 +612,17 @@ embedded:HEADERS   -= $$WIDGETS_H/qcompactstyle.h
 
 embedded:HEADERS += $$KERNEL_H/qfontmanager_qws.h \
 		  $$KERNEL_H/qfontfactorybdf_qws.h \
+		  $$KERNEL_H/qdirectpainter_qws.h \
 		  $$KERNEL_H/qsoundqss_qws.h \
 		  $$KERNEL_H/qfontfactoryttf_qws.h \
 		  $$KERNEL_H/qmemorymanager_qws.h \
 		  $$KERNEL_H/qwsmanager_qws.h \
 		  $$KERNEL_H/qwsdefaultdecoration_qws.h \
-		  $$KERNEL_H/qwsaquadecoration_qws.h \
+		  $$KERNEL_H/qwshydrodecoration_qws.h \
 		  $$KERNEL_H/qwsbeosdecoration_qws.h \
 		  $$KERNEL_H/qwskdedecoration_qws.h \
 		  $$KERNEL_H/qwswindowsdecoration_qws.h \
 		  $$KERNEL_H/qwskde2decoration_qws.h \
-		  $$KERNEL_H/qwsqpedecoration_qws.h \
 		  $$KERNEL_H/qgfx_qws.h \
 		  $$KERNEL_H/qgfxraster_qws.h \
 		  $$KERNEL_H/qgfxlinuxfb_qws.h \
@@ -665,20 +667,26 @@ ZLIB_SOURCES	= 3rdparty/zlib/adler32.c \
 		  3rdparty/zlib/uncompr.c \
 		  3rdparty/zlib/zutil.c
 
-FT_SOURCES =	3rdparty/freetype2/config/unix/ftsystem.c \
-		3rdparty/freetype2/src/base/ftdebug.c \
-		3rdparty/freetype2/src/base/ftinit.c \
-		3rdparty/freetype2/src/base/ftbase.c \
-		3rdparty/freetype2/src/base/ftbbox.c \
-		3rdparty/freetype2/src/base/ftraster.c \
-		3rdparty/freetype2/src/base/ftoutln.c \
-		3rdparty/freetype2/src/psnames/psdriver.c \
-		3rdparty/freetype2/src/sfnt/sfnt.c \
-		3rdparty/freetype2/src/truetype/truetype.c \
-		3rdparty/freetype2/src/type1/type1.c
-
-# Not needed.
-#		3rdparty/freetype2/src/type1z/type1z.c
+FT_SOURCES =	\
+		3rdparty/freetype/builds/unix/ftsystem.c \
+		3rdparty/freetype/src/base/ftdebug.c \
+		3rdparty/freetype/src/base/ftinit.c \
+		3rdparty/freetype/src/base/ftbase.c \
+		3rdparty/freetype/src/base/ftglyph.c \
+		3rdparty/freetype/src/base/ftmm.c \
+		3rdparty/freetype/src/base/ftbbox.c \
+		3rdparty/freetype/src/autohint/autohint.c \
+		3rdparty/freetype/src/cache/ftcache.c \
+		3rdparty/freetype/src/cff/cff.c \
+		3rdparty/freetype/src/cid/type1cid.c \
+		3rdparty/freetype/src/psaux/psaux.c \
+		3rdparty/freetype/src/psnames/psmodule.c \
+		3rdparty/freetype/src/raster/raster.c \
+		3rdparty/freetype/src/sfnt/sfnt.c \
+		3rdparty/freetype/src/smooth/smooth.c \
+		3rdparty/freetype/src/truetype/truetype.c \
+		3rdparty/freetype/src/type1/type1.c \
+		3rdparty/freetype/src/winfonts/winfnt.c
 
 png:DYNSOURCES    += $$PNG_SOURCES
 zlib:DYNSOURCES   += $$ZLIB_SOURCES
@@ -739,7 +747,7 @@ embedded:STATICSUBLIBS = $$QWSSUBLIBS
 static:SUBLIBS += $$STATICSUBLIBS
 embedded:MAKELIBz = $(MAKE) -C 3rdparty/zlib -f Makefile$$DASHCROSS; \
 			cp 3rdparty/zlib/libz.a tmp
-embedded:MAKELIBfreetype = $(MAKE) -C 3rdparty/freetype2 CONFIG_MK=config$$DASHCROSS.mk OBJ_DIR=../../tmp \
+embedded:MAKELIBfreetype = $(MAKE) -C 3rdparty/freetype CONFIG_MK=config$$DASHCROSS.mk OBJ_DIR=../../tmp \
 			    ../../tmp/libfreetype.a
 embedded:MAKELIBpng = $(MAKE) -C 3rdparty/libpng \
 			    -f scripts/makefile.linux$$DASHCROSS; \

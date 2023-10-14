@@ -30,7 +30,7 @@ height="100" src="face.png" alt="Home" border="0">
   <hr>
 
   Header file: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/life/life.h   2.2.3   edited 2000-08-31 $
+** &#36;Id&#58; qt/examples/life/life.h   2.2.4   edited 2000-08-31 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -92,7 +92,7 @@ private:
   <hr>
 
   Implementation: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/life/life.cpp   2.2.3   edited 2000-08-31 $
+** &#36;Id&#58; qt/examples/life/life.cpp   2.2.4   edited 2000-08-31 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -123,12 +123,12 @@ LifeWidget::LifeWidget( int s, QWidget *parent, const char *name )
                    MAXSIZE * SCALE + 2 * BORDER );
     <a href="qwidget.html#832223">setSizeIncrement</a>( SCALE, SCALE);
 
-    <a href=#175>clear</a>();
+    <a href=#178>clear</a>();
     <a href="qwidget.html#9ff9d8">resize</a>( maxi * SCALE + 2 * BORDER , maxj * SCALE + 2 * BORDER );
 
 }
 
-void <a name="175"></a>LifeWidget::clear()
+void <a name="178"></a>LifeWidget::clear()
 {
     current = 0;
     for ( int t = 0; t &lt; 2; t++ )
@@ -143,13 +143,13 @@ void <a name="175"></a>LifeWidget::clear()
 // this is not in general TRUE, but in practice it's good enough for
 // this program
 
-void <a name="176"></a>LifeWidget::resizeEvent( <a href="qresizeevent.html">QResizeEvent</a> * e )
+void <a name="179"></a>LifeWidget::resizeEvent( <a href="qresizeevent.html">QResizeEvent</a> * e )
 {
     maxi = (e-&gt;size().width()  - 2 * BORDER) / SCALE;
     maxj = (e-&gt;size().height() - 2 * BORDER) / SCALE;
 }
 
-void <a name="177"></a>LifeWidget::setPoint( int i, int j )
+void <a name="180"></a>LifeWidget::setPoint( int i, int j )
 {
     if ( i &lt; 1 || i &gt; maxi || j &lt; 1 || j &gt; maxi )
         return;
@@ -157,25 +157,25 @@ void <a name="177"></a>LifeWidget::setPoint( int i, int j )
     <a href="qwidget.html#f084e3">repaint</a>( index2pos(i), index2pos(j), SCALE, SCALE, FALSE );
 }
 
-void <a name="178"></a>LifeWidget::mouseHandle( const QPoint &amp;pos )
+void <a name="181"></a>LifeWidget::mouseHandle( const QPoint &amp;pos )
 {
     int i = pos2index( pos.x() );
     int j = pos2index( pos.y() );
-    <a href=#177>setPoint</a>( i, j );
+    <a href=#180>setPoint</a>( i, j );
 }
 
-void <a name="179"></a>LifeWidget::mouseMoveEvent( <a href="qmouseevent.html">QMouseEvent</a> *e )
+void <a name="182"></a>LifeWidget::mouseMoveEvent( <a href="qmouseevent.html">QMouseEvent</a> *e )
 {
-    <a href=#178>mouseHandle</a>( e-&gt;pos() );
+    <a href=#181>mouseHandle</a>( e-&gt;pos() );
 }
 
-void <a name="180"></a>LifeWidget::mousePressEvent( <a href="qmouseevent.html">QMouseEvent</a> *e )
+void <a name="183"></a>LifeWidget::mousePressEvent( <a href="qmouseevent.html">QMouseEvent</a> *e )
 {
     if ( e-&gt;button() == QMouseEvent::LeftButton )
-        <a href=#178>mouseHandle</a>( e-&gt;pos() );
+        <a href=#181>mouseHandle</a>( e-&gt;pos() );
 }
 
-void <a name="181"></a>LifeWidget::nextGeneration()
+void <a name="184"></a>LifeWidget::nextGeneration()
 {
     for ( int i = 1; i &lt;= MAXSIZE; i++ ) {
         for ( int j = 1; j &lt;= MAXSIZE; j++ ) {
@@ -196,7 +196,7 @@ void <a name="181"></a>LifeWidget::nextGeneration()
     <a href="qwidget.html#f084e3">repaint</a>( FALSE );           // repaint without erase
 }
 
-void <a name="182"></a>LifeWidget::paintEvent( <a href="qpaintevent.html">QPaintEvent</a> * e )
+void <a name="185"></a>LifeWidget::paintEvent( <a href="qpaintevent.html">QPaintEvent</a> * e )
 {
     int starti = pos2index( e-&gt;<a href="qpaintevent.html#6177d5">rect</a>().left() );
     int stopi  = pos2index( e-&gt;<a href="qpaintevent.html#6177d5">rect</a>().right() );
@@ -228,7 +228,7 @@ void <a name="182"></a>LifeWidget::paintEvent( <a href="qpaintevent.html">QPaint
 
   Main:
 <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/life/main.cpp   2.2.3   edited 2000-08-31 $
+** &#36;Id&#58; qt/examples/life/main.cpp   2.2.4   edited 2000-08-31 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -275,5 +275,5 @@ int main( int argc, char **argv )
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.3</div>
+<td align="right"><div align="right">Qt version 2.2.4</div>
 </table></div></address></body></html>

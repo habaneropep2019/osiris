@@ -250,10 +250,10 @@
 "QTextView/paperColorGroup" qtextview.html#8cca20
 "QTextView/text" qtextview.html#fe896b
 "QTextView/textFormat" qtextview.html#e47be4
-"QToolBar/hStretchable" qtoolbar.html
+"QToolBar/hStretchable" qtoolbar.html#511ffc
 "QToolBar/label" qtoolbar.html#258409
 "QToolBar/orientation" qtoolbar.html#340b00
-"QToolBar/vStretchable" qtoolbar.html
+"QToolBar/vStretchable" qtoolbar.html#6dbf4a
 "QToolButton/autoRaise" qtoolbutton.html#4777fb
 "QToolButton/offIconSet" qtoolbutton.html#aef187
 "QToolButton/onIconSet" qtoolbutton.html#7a665b

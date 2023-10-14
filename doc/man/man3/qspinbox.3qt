@@ -1,4 +1,4 @@
-.TH QSpinBox 3qt "12 December 2000" "Trolltech AS" \" -*- nroff -*-
+.TH QSpinBox 3qt "1 Febrary 2001" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -63,9 +63,6 @@ Inherits QFrame and QRangeControl.
 .br
 .ti -1c
 .BI "const QValidator* \fBvalidator\fR () const"
-.br
-.ti -1c
-.BI "QSizePolicy \fBsizePolicy\fR () const"
 .br
 .ti -1c
 .BI "void \fBsetMinValue\fR ( int ) "
@@ -351,6 +348,10 @@ Setting wrapping to TRUE will allow the value to be stepped from the highest val
 .PP
 See also wrapping(), minValue(), maxValue() and setRange().
 .SH "QSize QSpinBox::sizeHint () const \fC[virtual]\fR"
+Reimplemented for internal reasons; the API is not affected.
+.PP
+Reimplemented from QWidget.
+.SH "QSizePolicy QSpinBox::sizePolicy () const \fC[virtual]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .PP
 Reimplemented from QWidget.

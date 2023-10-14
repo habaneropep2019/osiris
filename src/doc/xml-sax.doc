@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: qt/doc/xml-sax.doc   2.2.3   edited 2000-10-25 $
+** $Id: qt/doc/xml-sax.doc   2.2.4   edited 2001-01-23 $
 **
-** Documentation on the sax interface of the xml module
+** Documentation on the xml module
 **
 ** Copyright (C) 2000 Trolltech AS.  All rights reserved.
 **
@@ -35,281 +35,283 @@
 
 /*! \page xml-sax.html
 
-\title How to use the Qt SAX2 classes
+\title The Qt SAX2 implementation
 
-For a general discussion of the XML topics in Qt and an introduction to
-SAX2 see the document "<a href="xml.html">Qt XML Module</a>".
+<h2><a name="introSAX2">Introduction to SAX2</a></h2>
 
+The SAX2 interface is an event-driven mechanism to provide the user with
+document information. "Event" in this context has nothing to do with the
+term "event" you probably know from windowing systems; it means that the
+parser reports certain document information while parsing the document.
+These reported information is referred to as "event".
 
-
-
-
-
-<h2><a name="quickStart">Quick start</h2>
-
-Before reading this section you should have read the
-"<a href="xml.html#introSAX2">Introduction to SAX2</a>".
-
-In this section we will present a small example for a reader that outputs
-the names of all start tags of an XML document. The start tags are indented
-corresponding to their nesting level.
-
-At first you have to implement the functions of the handler classes you are
-intrested in. In our case we are only interested in three:
-\l QXmlContentHandler::startDocument(),
-\l QXmlContentHandler::startElement() and
-\l QXmlContentHandler::endElement().
-For this purpose we use a subclass of the \l QXmlDefaultHandler (remember
-that the handler classes are abstract classes and the default handler class
-is a default implementation that does not change the parsing behavior):
-\code
-#include <iostream.h>
-#include <qstring.h>
-#include <qfile.h>
-#include <qxml.h>
-
-class StructureParser : public QXmlDefaultHandler
-{
-public:
-    bool startDocument()
-    {
-	indent = "";
-	return TRUE;
-    }
-    bool startElement( const QString&, const QString&, const QString& qName, const QXmlAttributes& )
-    {
-	cout << indent << qName << endl;
-	indent += " ";
-	return TRUE;
-    }
-    bool endElement( const QString&, const QString&, const QString& )
-    {
-	indent.remove( 0, 1 );
-	return TRUE;
-    }
-private:
-    QString indent;
-};
+To make it less abstract consider the following example:
+\code 
+<quote>To make it less abstract consider the following example:</quote>
 \endcode
 
-The next step is to make an instance of the handler. Then you create a
-\l QXmlInputSource for the XML that should be parsed. After that set up the
-reader (in our case we simply have to set the content handler) and start
-the parsing:
-\code
-int main( int argc, char **argv )
-{
-    for ( int i=1; i<argc; i++ ) {
-	StructureParser handler;
-	QFile xmlFile( argv[i] );
-	QXmlInputSource source( xmlFile );
-	QXmlSimpleReader reader;
-	reader.setContentHandler( &handler );
-	reader.parse( source );
-    }
-    return 0;
-}
-\endcode
+Whilst reading (a SAX2 parser is usually referred to as "reader") 
+the above document three events would be triggered:
+<OL>
+<LI> A start tag occurs (<tt>&lt;quote&gt;</tt>).
+<LI> Character data (i.e. text) is found.
+<LI> An end tag is parsed (<tt>&lt;/quote&gt;</tt>).
+</OL>
 
-Consider the following XML file:
-\code
-<animals>
-<mammals>
-  <monkeys> <gorilla/> <orang-utan/> </monkeys>
-</mammals>
-<birds> <pigeon/> <penguin/> </birds>
-</animals>
-\endcode
+Each time such an event occurs the parser reports it so that 
+a suitable event handling routine can be invoked.
 
-The program will produce the following output:
-\code
-animals
- mammals
-  monkeys
-   gorilla
-   orang-utan
- birds
-  pigeon
-  penguin
-\endcode
+Whilst this is a fast and simple approach to read XML documents
+manipulation is difficult because data are not stored, simply handled
+and discarded serially. This is when the \link xml-dom.html DOM interface 
+\endlink comes handy.
 
-This small example is in so far incomplete since no error handling is done.
-You should always install an error handler (with \l
-QXmlReader::setErrorHandler()). This allows you to report
-parsing errors to the user.
+The Qt XML module provides an
+abstract class, \l QXmlReader, that defines the interface for potential 
+SAX2 readers.
+At the moment Qt ships with one reader implementation, \l
+QXmlSimpleReader.
 
-
-
-
-
-
-<h2><a name="namespaces">Namespaces</h2>
-
-Namespaces are a concept introduced to XML to allow a more modular design.
-Details on namespaces can be found at
-<a href="http://www.w3.org/TR/REC-xml-names/">http://www.w3.org/TR/REC-xml-names/</a>.
-
-Namespaces do not change the parsing behavior. They are only reported
-through the handler.
-
-You have to declare the namespace first. After that you can apply the
-namespace to element names or attribute names.
-
-Namespaces are declared like attributes; they are attributes, strictly
-speaking. You can declare a namespace prefix \c fnord to the namespace name
-\c http://trolltech.com/fnord/ with the attribute \c
-xmlns:fnord="http://trolltech.com/fnord/" (remark: namespaces are URI
-references; this does not mean that there must be any data available at the
-address; they are simply unique names, not more).  There is also one
-default namespace that can be declared: \c xmlns.
-
-Namespaces can be used for element names and attribute names by prepending
-the prefix with a ":" to the name. If an element name does not have a
-prefix, the default namespace is applied (the default namespace is not
-applied to attributes).
-
-Example:
-\code
-<fnord:document xmlns:fnord = 'http://trolltech.com/fnord/'
-                xmlns       = 'http://trolltech.com/' >
-    <element1 a = '42' fnord:b = '23'>Eris</element1>
-    <fnord:element2 c = '42' fnord:d = '23'>Discordia</fnord:element2>
-</fnord:document>
-\endcode
-In this example the elements and attributes have the namespaces:
+The reader reports parsing events through special handler classes. In Qt
+the following ones are available:
 <ul>
-<li> \c document has the namespace URI \c http://trolltech.com/fnord/
-<li> \c element1 has the namespace URI \c http://trolltech.com/
-<li> \c element2 has the namespace URI \c http://trolltech.com/fnord/
-<li> \c a and c  have no namespace URIs
-<li> \c b and d  have the namespace URI \c http://trolltech.com/fnord/
+<li>\l QXmlContentHandler
+    reports events related to the content of a document (e.g. the start tag
+    or characters).
+<li>\l QXmlDTDHandler
+    reports events related to the DTD (e.g. notation declarations).
+<li>\l QXmlErrorHandler
+    reports errors or warnings that occurred during parsing.
+<li>\l QXmlEntityResolver
+    reports external entities during parsing and allows the user to resolve
+    external entities him- or herself instead of leaving it to the reader.
+<li>\l QXmlDeclHandler
+    reports further DTD related events (e.g. attribute declarations).
+    Usually users are not interested in them, but under certain circumstances
+    this class comes handy.
+<li>\l QXmlLexicalHandler
+    reports events related to the lexical structure of the document
+    (the beginning of the DTD, comments etc.). Occasionally this
+    might be useful.
 </ul>
 
-The following terms are used to distinguish the parts of the names with
-namespaces:
+These classes are abstract classes describing the interface. The
+\l QXmlDefaultHandler class provides a "do nothing" default implementation for
+all of them. Therefore users need to overload only the
+QXmlDefaultHandler functions they are interested in. 
+
+To read input XML data a special class \l QXmlInputSource is used.
+
+Apart from the already mentioned ones the following SAX2 support classes 
+provide the user with useful functionality:
 <ul>
-<li><i>Qualified name</i>
-    is the name as it appears in the document (in the example \c
-    fnord:element2 is a qualified name).
-<li><i>Namespace prefix</i>
-    is the prefix in a name, i.e. the part before the ":"  (in the example
-    \c fnord is a namespace prefix).
-<li><i>Local part</i>
-    is the name without the prefix (and without the ":"), i.e. the part
-    after the ":" (in the example \c element2 is a local part).
+<li> \l QXmlAttributes
+     is used to pass attributes in a start element event.
+<li> \l QXmlLocator
+     is used to obtain the actual parsing position of an event.
+<li> \l QXmlNamespaceSupport
+     is used to easily implement <a href="xml.html#namespaces">namespace</a>
+     support for a reader.
+     Note that namespaces do not change the parsing 
+     behavior. They are only reported through the handler.
 </ul>
-If an element does not have a ":", this means that there is no namespace
-prefix and the local part is the same as the qualified name (in the example
-\c element1 has no namespace prefix and the qualified name and the local
-part are both \c element1).
 
-You can configure the behavior of the reader concerning namespace
-processing. This is done with the features
-\c http://xml.org/features/namespaces and
-\c http://xml.org/features/namespace-prefixes (for details on features see
-the section "<a href="#featuresAndProperties">Features and properties</a>").
 
-There are four reporting behaviors that are influenced by this features:
+<h2><a name="features">Features</a></h2>
+ 
+The behaviour of an XML reader depends on whether it supports certain
+optional features or not. 
+As an example a reader can have the feature 
+"report attributes used for <a href="xml.html#namespaces">namespace</a>  declarations
+and prefixes along with the local name of a tag".  
+Like every other feature this has a unique name represented by a URI:
+it is called \e http://xml.org/sax/features/namespace-prefixes.
+
+The Qt SAX2 implementation allows you to find out whether the 
+reader has this ability using \l QXmlReader::hasFeature().
+If the return value is TRUE it is possible to
+turn the relevant feature on and off.
+To do this use \l QXmlReader::setFeature(). Whether a supported feature
+is on or off (TRUE or FALSE) can be queried using  \l QXmlReader::feature().
+
+Consider the example 
+\code 
+<document xmlns:book = 'http://trolltech.com/fnord/book/'
+          xmlns      = 'http://trolltech.com/fnord/' >
+\endcode
+A reader not supporting the
+\e http://xml.org/sax/features/namespace-prefixes feature would clearly
+report the element name \e document but not its attributes \e xmlns:book and \e xmlns
+with their values. A
+reader with the feature \e http://xml.org/sax/features/namespace-prefixes
+reports the namespace attributes if \l QXmlReader::feature() is TRUE and 
+disregards them if the feature is FALSE.
+
+
+Other features include \e http://xml.org/sax/features/namespace (namespace 
+processing, implies \e http://xml.org/sax/features/namespace-prefixes) or
+\e http://xml.org/sax/features/validation (the ability to report validation
+errors). 
+
+Whilst SAX2 leaves it to the user to define and implement whatever
+features are required, support for \e http://xml.org/sax/features/namespace
+(and thus \e http://xml.org/sax/features/namespace-prefixes) is
+mandantory. Accordingly \l QXmlSimpleReader, the implementation
+of \l QXmlReader that comes with the Qt XML module, supports both of them,
+and therefore can do namespace processing.
+
+Being a non-validating parser \l QXmlSimpleReader 
+does not support \e http://xml.org/sax/features/validation
+and other features.
+
+
+<h2><a name="namespaces">Namespace support via features</a></h2>
+
+As we have seen in the \link #features previous section \endlink
+we can configure the behavior of the reader when it comes to namespace
+processing. This is done by setting and unsetting the 
+\e http://xml.org/sax/features/namespaces and
+\e http://xml.org/sax/features/namespace-prefixes features.
+ 
+They influence the reporting behavior in the following way:
 <ol>
-<li>The namespace prefix and local part of elements and attributes are
+<li>Namespace prefixes and local parts of elements and attributes can be
     reported.
-<li>The qualified name of elements and attributes are reported.
-<li>The startPrefixMapping() and endPrefixMapping() functions of the
-    \l QXmlContentHandler are called.
-<li>Attributes that declare namespaces (i.e. the attribute \c xmlns and
-    attributes starting with \c xmlns:) are reported.
+<li>The qualified names of elements and attributes are reported.
+<li>\l QXmlContentHandler::startPrefixMapping() and \l 
+QXmlContentHandler::endPrefixMapping() 
+    are called by the reader.
+<li>Attributes that declare namespaces (i.e. the attribute \e xmlns and
+    attributes starting with \e xmlns: ) are reported.
 </ol>
 
-SAX2 requires the following behavior:
+Consider the following element:
+
+\code
+<author xmlns:fnord = 'http://trolltech.com/fnord/'
+             title="Ms" 
+             fnord:title="Goddess" 
+             name="Eris Kallisti"/>
+\endcode
+
+With \e http://xml.org/sax/features/namespace-prefixes set to TRUE 
+the reader will report four attributes, with the \e namespace-prefixes
+feature set to FALSE only three: The \e xmlns:fnord attribute defining
+a namespace is then "unvisible" for the reader.
+
+The \e http://xml.org/sax/features/namespaces feature on the other hand 
+is responsible for reporting local names, namespace prefixes and -URIs.
+With \e http://xml.org/sax/features/namespaces set to TRUE
+the parser will report \e title as the local name of \e fnord:title
+attribute, \e fnord being the namespace prefix and \e http://trolltech.com/fnord/
+as the namespace URI.
+When \e http://xml.org/sax/features/namespaces is FALSE none of them are
+reported.
+
+In the current implementation the Qt XML classes follow the definition
+that the prefix \e xmlns itself isn't associated with any namespace at all
+(see <a href="http://www.w3.org/TR/1999/REC-xml-names-19990114/#ns-using"> 
+http://www.w3.org/TR/1999/REC-xml-names-19990114/#ns-using</a>).
+Therefore even with \e http://xml.org/sax/features/namespaces and
+\e http://xml.org/sax/features/namespace-prefixes both set to TRUE
+the reader won't return either a local name, a namespace prefix or
+a namespace URI for \e  xmlns:fnord.
+
+This might be changed in the future following the W3C suggestion
+<a href="http://www.w3.org/2000/xmlns/">http://www.w3.org/2000/xmlns/</a> 
+to associate \e xmlns with the namespace \e http://www.w3.org/2000/xmlns. 
+
+
+As the SAX2 standard suggests \l QXmlSimpleReader by default has
+\e http://xml.org/sax/features/namespaces set to TRUE and
+\e http://xml.org/sax/features/namespace-prefixes set to FALSE.
+When changing this behavior using \l QXmlSimpleReader::setFeature() 
+note that the combination of both features set to
+FALSE is illegal.
+
+For a practical demonstration of how the two features affect the 
+output of the reader run the 
+<a href="xml-tagreader-with-features-tagreader-cpp.html">tagreader with features example</a>.
+
+<h3><a name="sax2namespaces">Summary</a></h3>
+
+\l QXmlSimpleReader implements the following behavior (the value in 
+parentheses denotes to the SAX2 requirements if they differ from the
+Qt implementation:
 <table border="1">
 <tr>
-    <th>namespaces</th><th>namespace-prefixes</th>
-    <th>Namespace prefix and local part</th><th>Qualified names</th>
-    <th>Prefix mapping</th><th>xmlns attributes</th>
+    <th>namespaces</th>
+    <th>namespace-prefixes</th>
+    <th>Namespace prefix and local part</th>
+    <th>Qualified names</th>
+    <th>Prefix mapping</th>
+    <th>xmlns attributes</th>
 </tr>
 <tr>
-    <td>TRUE</td><td>FALSE</td>
-    <td>Yes</td><td>Unknown</td>
-    <td>Yes</td><td>No</td>
+    <td>TRUE</td>
+    <td>FALSE</td>
+    <td>Yes</td>
+    <td>Yes <font color="#808080">(Unknown)</font></td>
+    <td>Yes</td>
+    <td>No</td>
 </tr>
 <tr>
-    <td>TRUE</td><td>TRUE</td>
-    <td>Yes</td><td>Yes</td>
-    <td>Yes</td><td>Yes</td>
+    <td>TRUE</td>
+    <td>TRUE</td>
+    <td>Yes</td>
+    <td>Yes</td>
+    <td>Yes</td>
+    <td>Yes</td>
 </tr>
 <tr>
-    <td>FALSE</td><td>TRUE</td>
-    <td>Unknown</td><td>Yes</td>
-    <td>Unknown</td><td>Yes</td>
+    <td>FALSE</td>
+    <td>TRUE</td>
+    <td>No <font color="#808080">(Unknown)</font></td>
+    <td>Yes</td>
+    <td>No <font color="#808080">(Unknown)</font></td>
+    <td>Yes</td>
 </tr>
+<tr>
+    <td>FALSE</td>
+    <td>FALSE</td>
+    <td colspan=4 align=center><font color="#808080">(Illegal)</font></td>
 </table>
-The combination that both features (namespaces and namespace-prefixes) are
-FALSE is an illegal combination.
-
-\l QXmlSimpleReader implements the following behavior:
-<table border="1">
-<tr>
-    <th>namespaces</th><th>namespace-prefixes</th>
-    <th>Namespace prefix and local part</th><th>Qualified names</th>
-    <th>Prefix mapping</th><th>xmlns attributes</th>
-</tr>
-<tr>
-    <td>TRUE</td><td>FALSE</td>
-    <td>Yes</td><td>Yes</td>
-    <td>Yes</td><td>No</td>
-</tr>
-<tr>
-    <td>TRUE</td><td>TRUE</td>
-    <td>Yes</td><td>Yes</td>
-    <td>Yes</td><td>Yes</td>
-</tr>
-<tr>
-    <td>FALSE</td><td>TRUE</td>
-    <td>No</td><td>Yes</td>
-    <td>No</td><td>Yes</td>
-</tr>
-</table>
-
-The default settings are
-\c http://xml.org/features/namespaces is \c TRUE and
-\c http://xml.org/features/namespace-prefixes is \c FALSE.
+ 
 
 
-
-
-
-
-<h2><a name="featuresAndProperties">Features and properties</h2>
-
-SAX2 allows you to set and query features and properties of an XML reader.
-
-Features are simply options that change the behavior of the reader. Every
-feature has a unique name, represented as an URI, and a value which can be
-TRUE or FALSE.
+<h2><a name="properties">Properties</a></h2>   
 
 Properties are a more general concept. They also have a unique name,
-represented as an URI, but their value is \c void*. So nearly everything
-can be used for a property values. This concept involves some danger,
-though: there are no means to get type-safety; the user has to take care
-that he passes the correct type. Properties are useful if a reader supports
-special handler classes, e.g.
+represented as an URI, but their value is \c void*. Thus nearly everything
+can be used as a property value. This concept involves some danger,
+though: there are no means to ensure type-safety; the user must take care
+that he or she passes the correct type. Properties are useful if a reader supports
+special handler classes.
 
-The URIs used for features and properties are often URLs like
-\c http://xml.org/sax/features/namespace. This does not mean that there
-must be any data at the address. It is simply a way to define unique names,
-not more.
-
-Everybody can define and use new SAX2 features and properties for his
-readers. There are only two features and no properties that a SAX2 reader
-must support: \c http://xml.org/sax/features/namespaces and \c
-http://xml.org/sax/features/namespace-prefixes.
-
-Features can be set or queried with the three following three functions:
-\l QXmlReader::setFeature(), \l QXmlReader::feature() and \l
-QXmlReader::hasFeature().
-
-Properties can be set or queried with similar functions:
+<!-- example! -->
+ 
+The URIs used for features and properties often look like URLs, e.g. 
+\c http://xml.org/sax/features/namespace. This does not mean that whatsoever
+data is required at this address. It is simply a way to define unique names.
+ 
+Everybody can define and use new SAX2 properties for his or her
+readers. Property support is however not
+required.
+ 
+To set or query properties the following functions are provided:
 \l QXmlReader::setProperty(), \l QXmlReader::property() and \l
-QXmlReader::hasProperty().
+QXmlReader::hasProperty().                      
+
+
+                                                                  
+
+
+<h2>Further reading</h2>
+
+For a practical example on how to use the Qt SAX2 classes see the 
+\link xml-sax-walkthrough.html tagreader walkthrough. \endlink
+
+More information about XML (e.g. <a href="xml.html#namespaces">namespace</a>)
+can be found in the \link xml.html introduction to the Qt XML module. \endlink
 
 */

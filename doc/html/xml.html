@@ -19,167 +19,205 @@ height="100" src="face.png" alt="Home" border="0">
 </div>
 </table>
 <h1 align=center> Qt XML Module</h1><br clear="all">
-The XML module provides a well-formed XML parser with SAX2 (Simple API for
-XML) interface plus an implementation of the DOM Level 1 (Document Object
+The XML module provides a well-formed XML parser using the SAX2 (Simple API for
+XML) interface plus an implementation of the DOM Level 2 (Document Object
 Model).
 <p>
-This document assumes that you are familiar with the XML terminology. It
-provides you with information how to use the XML classes in Qt. For basic
-information on XML you should look at another place
-(e.g. <a href="http://www.w3.org/XML/">http://www.w3.org/XML/</a>).
+This document assumes that you are familiar with the essentials of XML. It
+provides you with information on the XML module in Qt
+and explains some often neglected XML features that 
+will help you make the best use of the Qt XML classes. 
 <p>
-<h2><a name="overview">Overview of the XML architecture in Qt</h2>
+We will however not teach XML basics. If you wish to learn 
+more about XML please refer to other sources,
+e.g. <a href="http://www.w3.org/XML/">http://www.w3.org/XML/</a>.
 <p>
-The Qt XML Module provides two interfaces for XML: SAX2 and DOM Level 1.
+<h2><a name="overview">Overview of the XML architecture in Qt</a></h2>
 <p>
-SAX2 is a very popular Java interface for XML parsers. It was also adopted
-for other languages. The interface in Qt is designed after the Java
-interface. The naming was adjusted to fit the Qt naming conventions.
+The Qt XML Module provides two interfaces for XML: SAX2 and DOM Level 2.
+<p>
+SAX is an event-based standard interface for XML parsers.
+The Qt interface follows the design of the SAX2 Java implementation.
+Its naming scheme was adapted to fit the Qt naming conventions.
 Details on SAX2 can be found at
 <a href="http://www.megginson.com/SAX/">http://www.megginson.com/SAX/</a>.
 <p>
-Support for SAX2 filters and the reader factory are missing at the moment.
-Furthermore all classes that are in the Java interface for SAX1
-compatibility are omitted.
+Support for SAX2 filters and the reader factory are under development.
+Furthermore the Qt implementation does not include the SAX1 compatibility classes 
+present in the Java interface. 
 <p>
-DOM Level 1 is a W3C Recommendation for XML interfaces. Details and the
-specification of DOM Level 1 can be found at
+For an introduction to Qt's SAX2 classes see
+"<a href="xml-sax.html">The Qt SAX2 implementation</a>". 
+A code example is discussed in the "<a href="xml-sax-walkthrough.html">tagreader
+walkthrough</a>".
+<p>
+DOM Level 2 is a W3C Recommendation for XML interfaces that maps the
+constituents of an XML document to a tree structure. Details and the
+specification of DOM Level 2 can be found at
 <a href="http://www.w3.org/DOM/">http://www.w3.org/DOM/</a>.
+More information about the DOM classes in Qt is provided in the
+<a href="xml-dom.html">Qt XML DOM overview</a>.
 <p>
-See also the file
-"<a href="xml-sax.html">How to use the Qt SAX2 classes</a>"
-for a description of the usage of SAX2.
+<h2><a name="namespaces">An introduction to namespaces</a></h2>
 <p>
-<h2><a name="introSAX2">Introduction to SAX2</h2>
+Parts of the Qt XML module documentation assume that you are
+familiar with XML namespaces. Here we present a brief introduction;
+skip to "Qt XML
+documentation conventions" if you know this material.
 <p>
-The SAX2 interface is a event-driven mechanism to provide the user with
-document information. "Event" in this context has nothing to do with the
-term "event" you probably know from windowing systems; it means that the
-parser reports certain document information while he parses the document.
-These reported information is referred to as "event".
+Namespaces are a concept introduced into XML to allow a more modular design.
+With their help data processing software can easily
+resolve naming conflicts in XML documents. 
 <p>
-The parser in SAX2 is normally referred to as "reader". There is an
-abstract class, <a href="qxmlreader.html">QXmlReader</a>, which defines the interface for all readers.
-At the moment Qt provides one implementation of a reader, <a href="qxmlsimplereader.html">QXmlSimpleReader</a>.
+Consider the following example:
 <p>
-The SAX2 interface gives you a serial access to the information in the
-document; i.e. the reader will parse the document serially and he will
-report the parsing events as soon as he finds the information in the
-document.
+<pre>&lt;document&gt;
+&lt;book&gt;
+  &lt;title&gt;Practical XML&lt;/title&gt;
+  &lt;author title="Ms" name="Eris Kallisti"/&gt;
+  &lt;chapter&gt;
+    &lt;title&gt;A Namespace Called fnord&lt;/title&gt;  
+  &lt;/chapter&gt; 
+&lt;/book&gt;
+&lt;/document&gt;
+</pre>
 <p>
-The reader reports parsing events through special handler classes. The user
-has to install a certain handler class if he wants to get informed about
-parsing events. The following handler classes are available:
+Here we find three different uses of the name <em>title.</em> If you wish
+to process this document you will encounter problems
+because each of the <em>titles</em> should be displayed in a different manner --
+even though they have the same name.
+<p>
+The solution would be to have some means of identifying the 
+first occurence of <em>title</em> as the title of a book, i.e. 
+to use the <em>title</em> element of a 
+book namespace to distinguish it from for example the chapter title, e.g.:
+<pre>&lt;book:title&gt;Practical XML&lt;/book:title&gt;
+</pre>
+<p>
+<em>book</em> in this case is
+a <em>prefix</em> denoting the namespace.
+<p>
+Before we can apply a
+namespace to element or attribute names we must declare it.
+<p>
+Namespaces are URIs like <em>http://trolltech.com/fnord/book/.</em>
+This does not mean that data must be available at this
+address; the URI is simply used to provide a unique name.
+<p>
+We declare namespaces in the same way as 
+attributes; strictly speaking they <em>are</em> attributes. 
+To make for example <em>http://trolltech.com/fnord/</em> the document's
+default XML namespace <em>xmlns</em> we write
+<p>
+<pre>xmlns="http://trolltech.com/fnord/"
+</pre>
+<p>
+To distinguish the <em>http://trolltech.com/fnord/book/</em> namespace
+from the default, we have to supply it with a prefix:
+<p>
+<pre>xmlns:book="http://trolltech.com/fnord/book/"
+</pre>
+<p>
+A namespace that is declared like this can be applied
+to element and attribute names by prepending the appropriate
+prefix and a ":" delimiter. We have already seen this with
+the <em>book:title</em> element.
+<p>
+Element names without a prefix belong to the default namespace.
+This rule does not apply to attributes: an attribute 
+without a prefix does not belong to any of the declared
+XML namespaces at all.
+Attributes always belong to the "traditional" namespace
+of the element in which they appear. A "traditional" namespace
+is not an XML namespace, it simply means that all attribute names
+belonging to one element must be different. Later we will see how
+to assign an XML namespace to an attribute.
+<p>
+Due to the fact that attributes without prefixes are not in any 
+XML namespace there is 
+no collision between the attribute <em>title</em> (that belongs to the 
+<em>author</em> element) and for example the <em>title</em> element within a <em>chapter.</em>
+<p>
+Lets clarify matters with an example:
+<pre>&lt;document xmlns:book = 'http://trolltech.com/fnord/book/'
+          xmlns      = 'http://trolltech.com/fnord/' &gt;
+&lt;book&gt;
+  &lt;book:title&gt;Practical XML&lt;/book:title&gt;
+  &lt;book:author xmlns:fnord = 'http://trolltech.com/fnord/'
+               title="Ms" 
+               fnord:title="Goddess" 
+               name="Eris Kallisti"/&gt;
+  &lt;chapter&gt;
+    &lt;title&gt;A Namespace Called fnord&lt;/title&gt;
+  &lt;/chapter&gt;
+&lt;/book&gt;
+&lt;/document&gt;
+</pre>
+<p>
+Within the <em>document</em> element we have two namespaces declared.
+The default namespace <em>http://trolltech.com/fnord/</em> 
+applies to the <em>book</em> element, the <em>chapter</em> element,
+the appropriate <em>title</em> element and of course to <em>document</em> itself.
+<p>
+The <em>book:author</em> and <em>book:title</em> elements 
+belong to the namespace with the
+URI <em>http://trolltech.com/fnord/book/.</em>
+<p>
+The two <em>book:author</em> attributes <em>title</em> and <em>name</em> have no XML namespace
+assigned. 
+They are only members of the "traditional" namespace of the element
+<em>book:author,</em> meaning that for example two <em>title</em> attributes 
+in <em>book:author</em> are forbidden.
+<p>
+In the above example we circumvent the last rule by adding a <em>title</em>
+attribute from the <em>http://trolltech.com/fnord/</em> namespace to <em>book:author:</em> 
+the <em>fnord:title</em> comes from the namespace with the prefix <em>fnord</em>
+that is declared in the <em>book:author</em> element. 
+<p>
+Clearly the <em>fnord</em> namespace has the same namespace URI as the
+default namespace. So why didn't we simply use the 
+default namespace we'd already declared? The answer is quite complex:
+<UL>
+<LI>attributes without a prefix don't belong to any XML namespace at all,
+even not to the default namespace;
+<LI>additionaly omitting the prefix would lead to a <em>title-title</em> clash;
+<LI>writing it as <em>xmlns:title</em> would declare a new namespace with
+the prefix <em>title</em> instead of applying the default <em>xmlns</em> namespace. 
+</UL>
+<p>
+With the Qt XML classes elements and attributes can be accessed in two ways: either 
+by refering to their qualified names consisting of the namespace prefix
+and the "real" name (or <em>local</em> name) or 
+by the combination of local name and namespace URI.
+<p>
+More information on XML namespaces can be found at
+<a href="http://www.w3.org/TR/REC-xml-names/">http://www.w3.org/TR/REC-xml-names/</a>.
+<p>
+<h2><a name="conventions">Conventions used in Qt XML documentation</a></h2>
+<p>
+The following terms are used to distinguish the parts of names within the context of
+namespaces:
 <ul>
-<li><a href="qxmlcontenthandler.html">QXmlContentHandler</a>
-    reports events related to the content of a document (e.g. a start tag,
-    characters, etc.)
-<li><a href="qxmldtdhandler.html">QXmlDTDHandler</a>
-    reports events related to the DTD (e.g. a notation declaration)
-<li><a href="qxmlerrorhandler.html">QXmlErrorHandler</a>
-    reports errors or warnings that occurred during parsing
-<li><a href="qxmlentityresolver.html">QXmlEntityResolver</a>
-    reports external entities during parsing and allows the user to resolve
-    external entities himself instead of letting the reader to try it.
-<li><a href="qxmldeclhandler.html">QXmlDeclHandler</a>
-    reports more DTD related events (e.g. an attribute declaration, etc.).
-    There might be rare occasions you are interested in these.
-<li><a href="qxmllexicalhandler.html">QXmlLexicalHandler</a>
-    reports events related to the lexical structure of the document (e.g.
-    the beginning of the DTD, comments, etc.) There might be rare occasions
-    you are interested in these.
+<li>The <i>qualified name</i>
+    is the name as it appears in the document. (In the above example <em>book:title</em> is a qualified name.)
+<li>A <i>namespace prefix</i> in a qualified name
+    is the part to the left of the ":".  (<em>book</em> is the namespace prefix in 
+    <em>book:title.)</em>
+<li>The <i>local part</i> of a name (also refered to as the <i>local name</i>) appears 
+    to the right of the ":".
+    (Thus <em>title</em> is the local part of <em>book:title.)</em>
+<li>The <I>namespace URI</I> ("Uniform Resource Identifier") is a unique
+    identifier for a namespace. It looks like a URL
+    (e.g. <em>http://trolltech.com/fnord/</em> ) but does not require 
+    data to be accessible by the given protocol at the named address.
 </ul>
 <p>
-These classes are all abstract classes describing the interface. SAX2
-provides a default implementation of all these handler classes (<a href="qxmldefaulthandler.html">QXmlDefaultHandler)</a>. So a user has only to implement the functions he is
-really interested in. The default implementation is "do nothing".
-<p>
-The input XML data is read through a special class, <a href="qxmlinputsource.html">QXmlInputSource</a>.
-<p>
-There are some more classes for SAX2 support:
-<ul>
-<li> <a href="qxmlattributes.html">QXmlAttributes</a>
-     is used to pass attributes in a start element event.
-<li> <a href="qxmllocator.html">QXmlLocator</a>
-     is used to get the actual parsing position of an event.
-<li> <a href="qxmlnamespacesupport.html">QXmlNamespaceSupport</a>
-     is used to easily implement namespace support for a reader.
-</ul>
-<p>
-For a more detailed description of the usage see the document
-"<a href="xml-sax.html">How to use the Qt SAX2 classes</a>".
-<p>
-<h2><a name="introDOM">Introduction to DOM</h2>
-<p>
-DOM provides an interface to access and change the content and structore of
-an XML file. DOM gives a hierarchical view of the document (tree). All
-nodes in this tree are subclasses of <a href="qdomnode.html">QDomNode</a>.
-<p>
-The following table lists all node classes and the node classes that can be
-children of them:
-<table>
-<tr>
-    <th align="left">Node type</th>
-    <th align="left">Possible children</th>
-</tr>
-<tr>
-    <td><a href="qdomdocument.html">QDomDocument</a> </td>
-    <td><a href="qdomelement.html">QDomElement</a> (maximum of one), <a href="qdomprocessinginstruction.html">QDomProcessingInstruction</a>,
-        <a href="qdomcomment.html">QDomComment</a>, <a href="qdomdocumenttype.html">QDomDocumentType</a> </td>
-</tr>
-<tr>
-    <td><a href="qdomdocumentfragment.html">QDomDocumentFragment</a> </td>
-    <td><a href="qdomelement.html">QDomElement</a>, <a href="qdomprocessinginstruction.html">QDomProcessingInstruction</a>, <a href="qdomcomment.html">QDomComment</a>,
-        <a href="qdomtext.html">QDomText</a>, <a href="qdomcdatasection.html">QDomCDATASection</a>, <a href="qdomentityreference.html">QDomEntityReference</a> </td>
-</tr>
-<tr><td><a href="qdomdocumenttype.html">QDomDocumentType</a> </td>
-    <td>no children </td>
-</tr>
-<tr><td><a href="qdomentityreference.html">QDomEntityReference</a> </td>
-    <td><a href="qdomelement.html">QDomElement</a>, <a href="qdomprocessinginstruction.html">QDomProcessingInstruction</a>, <a href="qdomcomment.html">QDomComment</a>,
-        <a href="qdomtext.html">QDomText</a>, <a href="qdomcdatasection.html">QDomCDATASection</a>, <a href="qdomentityreference.html">QDomEntityReference</a> </td>
-</tr>
-<tr><td><a href="qdomelement.html">QDomElement</a> </td>
-    <td><a href="qdomelement.html">QDomElement</a>, <a href="qdomtext.html">QDomText</a>, <a href="qdomcomment.html">QDomComment</a>,
-        <a href="qdomprocessinginstruction.html">QDomProcessingInstruction</a>, <a href="qdomcdatasection.html">QDomCDATASection</a>,
-        <a href="qdomentityreference.html">QDomEntityReference</a> </td>
-</tr>
-<tr><td><a href="qdomattr.html">QDomAttr</a> </td>
-    <td><a href="qdomtext.html">QDomText</a>, <a href="qdomentityreference.html">QDomEntityReference</a> </td>
-</tr>
-<tr><td><a href="qdomprocessinginstruction.html">QDomProcessingInstruction</a> </td>
-    <td>no children </td>
-</tr>
-<tr><td><a href="qdomcomment.html">QDomComment</a> </td>
-    <td>no children </td>
-</tr>
-<tr><td><a href="qdomtext.html">QDomText</a> </td>
-    <td>no children </td>
-</tr>
-<tr><td><a href="qdomcdatasection.html">QDomCDATASection</a> </td>
-    <td>no children </td>
-</tr>
-<tr><td><a href="qdomentity.html">QDomEntity</a> </td>
-    <td><a href="qdomelement.html">QDomElement</a>, <a href="qdomprocessinginstruction.html">QDomProcessingInstruction</a>, <a href="qdomcomment.html">QDomComment</a>,
-        <a href="qdomtext.html">QDomText</a>, <a href="qdomcdatasection.html">QDomCDATASection</a>, <a href="qdomentityreference.html">QDomEntityReference</a> </td>
-</tr>
-<tr><td><a href="qdomnotation.html">QDomNotation</a> </td>
-    <td>no children </td>
-</tr>
-</table>
-<p>
-There are also two collection classes: <a href="qdomnodelist.html">QDomNodeList</a> is a list of nodes
-and <a href="qdomnamednodemap.html">QDomNamedNodeMap</a> is used to handle unordered sets of nodes
-(especially used for attributes).
-<p>
-The class <a href="qdomimplementation.html">QDomImplementation</a> allows to query features of the
-DOM implementation.
-<p>
-For getting started and for a description of the basic usage, take a look
-at the documentation of <a href="qdomdocument.html">QDomDocument</a>.
+Elements without a ":" (like <em>chapter</em> in the example) do not have a namespace
+prefix. In this case the local part and the qualified name 
+are identical (i.e. <em>chapter).</em>
 
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.3</div>
+<td align="right"><div align="right">Qt version 2.2.4</div>
 </table></div></address></body></html>

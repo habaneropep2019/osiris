@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/opengl/qgl.h   2.2.3   edited 2000-12-06 $
+** $Id: qt/src/opengl/qgl.h   2.2.4   edited 2000-12-06 $
 **
 ** Definition of OpenGL classes for Qt
 **

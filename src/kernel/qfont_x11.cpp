@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qfont_x11.cpp   2.2.3   edited 2000-12-11 $
+** $Id: qt/src/kernel/qfont_x11.cpp   2.2.4   edited 2001-01-28 $
 **
 ** Implementation of QFont, QFontMetrics and QFontInfo classes for X11
 **
@@ -338,6 +338,8 @@ static struct {
     { "ta_TA.TSCII", QFont::TSCII },
     { "TSCII", QFont::TSCII },
     { "KOI8-U", QFont::KOI8U },
+    { "CP 1251", QFont::CP1251 },
+    { "PT 154", QFont::PT154 },
     { 0, /* anything */ QFont::ISO_8859_1 }
 };
 
@@ -473,7 +475,7 @@ static QFont::CharSet c8859[] = { QFont::ISO_8859_1,  QFont::ISO_8859_2,
 				  QFont::ISO_8859_5,  QFont::ISO_8859_6,
 				  QFont::ISO_8859_7,  QFont::ISO_8859_8,
 				  QFont::ISO_8859_9,  QFont::ISO_8859_10,
-				  QFont::ISO_8859_9,  QFont::ISO_8859_12,
+				  QFont::ISO_8859_11,  QFont::ISO_8859_12,
 				  QFont::ISO_8859_13, QFont::ISO_8859_14,
 				  QFont::ISO_8859_15 };
 
@@ -509,7 +511,7 @@ static bool fillFontDef( const QCString &xlfd, QFontDef *fd,
 	if ( sscanf( tokens[CharsetEncoding], "%u", &tmp ) == 1 &&
 	     tmp >= 1 && tmp <= 15 ) {
 	    fd->charSet = c8859[tmp-1];
-	    if ( tmp == 8 || tmp == 6 ) { // hebrew and arabic
+	    if ( encodingName && ( tmp == 8 || tmp == 6 ) ) { // hebrew and arabic
 		*encodingName += "-I";
 	    }
 	}
@@ -538,6 +540,12 @@ static bool fillFontDef( const QCString &xlfd, QFontDef *fd,
 	fd->charSet = QFont::GB_2312;
     } else if( qstrncmp( tokens[CharsetRegistry], "big5", 4 ) == 0 ) {
 	fd->charSet = QFont::Big5;
+    } else if( qstrcmp( tokens[CharsetEncoding], "cp1251" ) == 0 ||
+  	       (qstrcmp( tokens[CharsetEncoding], "1251" ) == 0 ) ) {
+  	fd->charSet = QFont::CP1251;
+    } else if( qstrcmp( tokens[CharsetEncoding], "cp154" ) == 0 ||
+  	       (qstrcmp( tokens[CharsetEncoding], "154" ) == 0 ) ) {
+  	fd->charSet = QFont::PT154;
     } else {
 	fd->charSet = QFont::AnyCharSet;
     }
@@ -1422,8 +1430,8 @@ int QFont_Private::fontMatchScore( char	 *fontName,	 QCString &buffer,
        else
 	       exactMatch = FALSE;
     } else if ( charSet() == KOI8U ) {
-       if ( strcmp( tokens[CharsetRegistry], "koi8" ) == 0 &&
-	    strcmp( tokens[CharsetEncoding], "u" ) == 0 )
+       if ( qstrcmp( tokens[CharsetRegistry], "koi8" ) == 0 &&
+	    qstrcmp( tokens[CharsetEncoding], "u" ) == 0 )
 	    score |= CharSetScore;
 	else
 	    exactMatch = FALSE;
@@ -1473,6 +1481,18 @@ int QFont_Private::fontMatchScore( char	 *fontName,	 QCString &buffer,
 	    score |= CharSetScore;
 	else
 	    exactMatch = FALSE;
+    } else if ( charSet() == CP1251 ) {
+        if  (qstrcmp( tokens[CharsetEncoding], "cp1251" ) == 0 ||
+                qstrcmp( tokens[CharsetEncoding], "1251" ) == 0)
+                  score |= CharSetScore;
+          else
+                  exactMatch = FALSE;
+    } else if ( charSet() == PT154 ) {
+        if  (qstrcmp( tokens[CharsetEncoding], "cp154" ) == 0 ||
+                qstrcmp( tokens[CharsetEncoding], "154" ) == 0)
+                  score |= CharSetScore;
+          else
+                  exactMatch = FALSE;
     } else if ( qstrcmp( tokens[CharsetRegistry], "iso10646" ) == 0 ) {
 	// Yes...
 	score |= CharSetScore;
@@ -1977,16 +1997,17 @@ int QFontMetrics::printerAdjusted(int val) const
 	 painter->device()->devType() == QInternal::Printer) {
 	painter->cfont.handle();
 	// ### printer font metrics hack
-	if ( painter->device() &&
-	     painter->device()->devType() == QInternal::Printer &&
-	     painter->cfont.d->printerHackFont ) {
-	    painter->cfont.d->printerHackFont->handle();
-	    val = val * painter->cfont.pointSize() / 64;
-	}
-	return val;
+// 	if ( painter->device() &&
+// 	     painter->device()->devType() == QInternal::Printer &&
+// 	     painter->cfont.d->printerHackFont ) {
+// 	    painter->cfont.d->printerHackFont->handle();
+// 	    val = val * painter->cfont.pointSize() / 64;
+// 	}
 	// this was wrong.
-	//int res = QPaintDevice::x11AppDpiY();
-	// return ( val * 72 + 36 ) / res; // PostScript is 72dpi
+	//return val;
+	int res = QPaintDevice::x11AppDpiY();
+	return ( val * 75 + 36 ) / res; // PostScript is 72dpi, but 75 gives a little more spacing as some
+	// fonts would be too close together otherwise.
     } else {
 	return val;
     }
@@ -2031,21 +2052,49 @@ int QFontMetrics::descent() const
     return printerAdjusted(DESCENT(ext->max_ink_extent,ext->max_logical_extent));
 }
 
-inline bool inFont(XFontStruct *f, QChar ch)
+inline bool inFont(const QTextCodec *mapper, XFontStruct *f, QChar ch)
 {
+    XCharStruct *xcs = 0;
+
+    if ( mapper ) {
+	int l = 1;
+	QCString c = mapper->fromUnicode(ch,l);
+	if ( c.length() == 1 )
+	    ch = c[0];
+	else
+	    ch = QChar( *((ushort *)c.data()) ); // this *is* ugly
+    }
+
     if ( f->max_byte1 ) {
-	return ch.cell() >= f->min_char_or_byte2
-	    && ch.cell() <= f->max_char_or_byte2
-	    && ch.row() >= f->min_byte1
-	    && ch.row() <= f->max_byte1;
+	if ( ch.cell() >= f->min_char_or_byte2
+	     && ch.cell() <= f->max_char_or_byte2
+	     && ch.row() >= f->min_byte1
+	     && ch.row() <= f->max_byte1 )
+	    if( f->per_char )
+		xcs = f->per_char + ((ch.row() - f->min_byte1)
+				     * (f->max_char_or_byte2 - f->min_char_or_byte2 + 1)
+				     + ch.cell() - f->min_char_or_byte2);
+	    else
+		xcs = &f->max_bounds;
     } else if ( ch.row() ) {
 	uint ch16 = ch.unicode();
-	return ch16 >= f->min_char_or_byte2
-	    && ch16 <= f->max_char_or_byte2;
+	if ( ch16 >= f->min_char_or_byte2
+	     && ch16 <= f->max_char_or_byte2 )
+	    if( f->per_char )
+		xcs = f->per_char + ch16 - f->min_char_or_byte2;
+	    else
+		xcs = &f->max_bounds;
     } else {
-	return ch.cell() >= f->min_char_or_byte2
-	    && ch.cell() <= f->max_char_or_byte2;
+	if ( ch.cell() >= f->min_char_or_byte2
+	     && ch.cell() <= f->max_char_or_byte2 )
+	    if( f->per_char )
+		xcs = f->per_char + ch.cell() - f->min_char_or_byte2;
+	    else
+		xcs = &f->max_bounds;
     }
+    if ( !xcs || (xcs->width == 0 && xcs->ascent + xcs->descent == 0) )
+	return FALSE;
+    return TRUE;
 }
 
 /*!
@@ -2054,12 +2103,7 @@ inline bool inFont(XFontStruct *f, QChar ch)
 bool QFontMetrics::inFont(QChar ch) const
 {
     XFontStruct *f = FS;
-    if ( f && !mapper() ) {
-	return ::inFont( f, ch );
-    } else if ( mapper() ) {
-	return mapper()->canEncode(ch);
-    }
-    return TRUE; // ###### XFontSet range?
+    return ::inFont( mapper(), f, ch );
 }
 
 static
@@ -2073,30 +2117,46 @@ XCharStruct* charStr(const QTextCodec* mapper, XFontStruct *f, QChar ch)
     if ( mapper ) {
 	int l = 1;
 	QCString c = mapper->fromUnicode(ch,l);
-	// #### What if c.length()>1 ?
-	ch = c[0];
+	if ( c.length() == 1 )
+	    ch = c[0];
+	else
+	    ch = QChar( *((ushort *)c.data()) ); // this *is* ugly
     }
 
     if ( f->max_byte1 ) {
 	if ( !(ch.cell() >= f->min_char_or_byte2
-	    && ch.cell() <= f->max_char_or_byte2
-	    && ch.row() >= f->min_byte1
-	    && ch.row() <= f->max_byte1) )
+	       && ch.cell() <= f->max_char_or_byte2
+	       && ch.row() >= f->min_byte1
+	       && ch.row() <= f->max_byte1) ) {
 	    ch = QChar((ushort)f->default_char);
+	    if ( !(ch.cell() >= f->min_char_or_byte2
+		   && ch.cell() <= f->max_char_or_byte2
+		   && ch.row() >= f->min_byte1
+		   && ch.row() <= f->max_byte1) )
+		return f->per_char;
+	}
 	return f->per_char +
 	    ((ch.row() - f->min_byte1)
-		    * (f->max_char_or_byte2 - f->min_char_or_byte2 + 1)
-		+ ch.cell() - f->min_char_or_byte2);
+	     * (f->max_char_or_byte2 - f->min_char_or_byte2 + 1)
+	     + ch.cell() - f->min_char_or_byte2);
     } else if ( ch.row() ) {
 	uint ch16 = ch.unicode();
 	if ( !(ch16 >= f->min_char_or_byte2
-	    && ch16 <= f->max_char_or_byte2) )
+	       && ch16 <= f->max_char_or_byte2) ) {
 	    ch16 = f->default_char;
-	return f->per_char + ch16;
+	    if ( !(ch16 >= f->min_char_or_byte2
+		   && ch16 <= f->max_char_or_byte2) )
+		return f->per_char;
+	}
+	return f->per_char + ch16 - f->min_char_or_byte2;
     } else {
 	if ( !( ch.cell() >= f->min_char_or_byte2
-	    && ch.cell() <= f->max_char_or_byte2) )
+		&& ch.cell() <= f->max_char_or_byte2) ) {
 	    ch = QChar((uchar)f->default_char);
+	    if ( !( ch.cell() >= f->min_char_or_byte2
+		    && ch.cell() <= f->max_char_or_byte2) )
+		return f->per_char;
+	}
 	return f->per_char + ch.cell() - f->min_char_or_byte2;
     }
 }
@@ -2613,8 +2673,7 @@ static bool fontExists( const QString &fontName )
 void QFontInternal::computeLineWidth()
 {
     char *tokens[fontFields];
-    QCString buffer(256);		// X font name always <= 255 chars
-    qstrcpy( buffer.data(), name() );
+    QCString buffer(name(), 255);		// X font name always <= 255 chars
     if ( !qParseXFontName(buffer, tokens) ) {
 	lw   = 1;                   // name did not conform to X LFD
 	xres = QPaintDevice::x11AppDpiX();

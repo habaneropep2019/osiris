@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qlistview.h   2.2.3   edited 2000-10-12 $
+** $Id: qt/src/widgets/qlistview.h   2.2.4   edited 2000-10-12 $
 **
 ** Definition of QListView widget class
 **

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qfont.cpp   2.2.3   edited 2000-11-04 $
+** $Id: qt/src/kernel/qfont.cpp   2.2.4   edited 2001-01-15 $
 **
 ** Implementation of QFont, QFontMetrics and QFontInfo classes
 **
@@ -199,6 +199,8 @@
        <a href="ftp://ftp.nordu.net/rfc/rfc1489.txt">RFC 1489.</a>
    <li> \c QFont::KOI8U - KOI8-U, Cyrillic/Ukrainian, defined in
        <a href="ftp://ftp.nordu.net/rfc/rfc2319.txt">RFC 2319.</a>
+  <li> \c QFont::CP1251, Microsoft Cyrillic encoding
+  <li> \c QFont::PT154, Paratype Asian Cyrillic encoding
    <li> \c QFont::AnyCharSet - whatever is handiest.
   <li> \c QFont::Set_Ja, Japanese
   <li> \c QFont::Set_Ko, Korean
@@ -1016,10 +1018,10 @@ QString QFont::encodingName( CharSet cs )
         result = "iso8859-15";
         break;
     case QFont::KOI8R:
-        result = "KOI8-R";
+        result = "koi8-r";
         break;
     case QFont::KOI8U:
-        result = "KOI8-U";
+        result = "koi8-u";
         break;
     case QFont::Set_Ja:
         result = "Set_Ja";
@@ -1065,6 +1067,11 @@ QString QFont::encodingName( CharSet cs )
         break;
     case QFont::TSCII:
 	result = "TSCII";
+	break;
+    case QFont::CP1251:
+	result = "cp1251";
+    case QFont::PT154:
+        result = "pt154";
 	break;
     }
     return result;

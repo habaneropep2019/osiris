@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qmenudata.h   2.2.3   edited 2000-11-30 $
+** $Id: qt/src/widgets/qmenudata.h   2.2.4   edited 2000-11-30 $
 **
 ** Definition of QMenuData class
 **

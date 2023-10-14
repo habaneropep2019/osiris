@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/doc/indices.doc   2.2.3   edited 2000-12-05 $
+** $Id: qt/doc/indices.doc   2.2.4   edited 2001-01-23 $
 **
 ** Miscellaneous index pages
 **
@@ -34,7 +34,7 @@
 **********************************************************************/
 
 #if defined(DEBUG)
-static char ident[] = "$Id: qt/doc/indices.doc   2.2.3   edited 2000-12-05 $";
+static char ident[] = "$Id: qt/doc/indices.doc   2.2.4   edited 2001-01-23 $";
 #endif
 
 /*! \page index.html
@@ -70,7 +70,7 @@ What´s New
 <ul>
 <li> <a href="installation.html">Installation</a>
 <li> <a href="tutorial.html">Tutorial</a>
-<li> <a href="simple-application.html">Walkthrough</a>
+<li> <a href="walkthroughs.html">Walkthroughs</a>
 <li> <a href="examples.html">Examples</a>
 </ul>
 </td>
@@ -456,4 +456,22 @@ Useful classes not fitting into any other category.
 */
 
 
+/*! \page walkthroughs.html
+ 
+\title Walkthroughs
+ 
+Walkthroughs provide a careful step-by-step explanation of example code.
+ 
+The covered example programs show how to use certain classes
+or deal with programming techniques and Qt basics.
+ 
+Walkthroughs are especially aimed at Qt novices and not so experienced
+programmers and try to make learning Qt as painless as possible.
 
+<ul>
+<li><a href="simple-application.html">A simple Qt application</a>
+<li><a href="xml-sax-walkthrough.html">A simple SAX2 parser featuring 
+    the Qt XML module</a>
+</ul>
+ 
+*/     

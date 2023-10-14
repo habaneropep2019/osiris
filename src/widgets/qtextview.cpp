@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qtextview.cpp   2.2.3   edited 2000-08-25 $
+** $Id: qt/src/widgets/qtextview.cpp   2.2.4   edited 2001-01-31 $
 **
 ** Implementation of the QTextView class
 **
@@ -480,7 +480,7 @@ const QColor& QTextView::linkColor() const
 }
 
 /*!
-  Defines wether or not links should be displayed underlined.
+  Defines whether or not links should be displayed underlined.
  */
 void QTextView::setLinkUnderline( bool u)
 {
@@ -488,7 +488,7 @@ void QTextView::setLinkUnderline( bool u)
 }
 
 /*!
-  Returns wether or not links should be displayed underlined.
+  Returns whether or not links should be displayed underlined.
  */
 bool QTextView::linkUnderline() const
 {
@@ -924,7 +924,7 @@ void QTextView::keyPressEvent( QKeyEvent * e)
     case Key_PageDown:
 	scrollBy( 0, visibleHeight() );
 	break;
-#ifndef QT_NO_DRAGANDDROP
+#ifndef QT_NO_CLIPBOARD
     case Key_F16: // Copy key on Sun keyboards
 	copy();
 	break;

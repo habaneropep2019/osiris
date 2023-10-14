@@ -326,6 +326,7 @@ a non-GUI server and a GUI client.
  <a href="qwerty-main-cpp.html#QApplication">qwerty/main.cpp</a>
  <a href="forever-forever-cpp.html#QApplication">forever/forever.cpp</a>
  <a href="rot13-rot13-cpp.html#QApplication">rot13/rot13.cpp</a>
+ <a href="xml-tagreader-with-features-tagreader-cpp.html#QApplication">xml/tagreader-with-features/tagreader.cpp</a>
  <a href="desktop-desktop-cpp.html#QApplication">desktop/desktop.cpp</a>
  <a href="scrollview-scrollview-cpp.html#QApplication">scrollview/scrollview.cpp</a>
  <a href="qfd-qfd-cpp.html#QApplication">qfd/qfd.cpp</a>
@@ -655,6 +656,7 @@ achieved by using <a href="#5e4efb">processEvents</a>() and <a href="#72f868">pr
  <a href="qwerty-main-cpp.html#exec">qwerty/main.cpp</a>
  <a href="forever-forever-cpp.html#exec">forever/forever.cpp</a>
  <a href="rot13-rot13-cpp.html#exec">rot13/rot13.cpp</a>
+ <a href="xml-tagreader-with-features-tagreader-cpp.html#exec">xml/tagreader-with-features/tagreader.cpp</a>
  <a href="scrollview-scrollview-cpp.html#exec">scrollview/scrollview.cpp</a>
  <a href="qfd-qfd-cpp.html#exec">qfd/qfd.cpp</a>
  <a href="addressbook-main-cpp.html#exec">addressbook/main.cpp</a>
@@ -1101,6 +1103,7 @@ calling setMainWidget().
  <a href="richtext-main-cpp.html#setMainWidget">richtext/main.cpp</a>
  <a href="forever-forever-cpp.html#setMainWidget">forever/forever.cpp</a>
  <a href="rot13-rot13-cpp.html#setMainWidget">rot13/rot13.cpp</a>
+ <a href="xml-tagreader-with-features-tagreader-cpp.html#setMainWidget">xml/tagreader-with-features/tagreader.cpp</a>
  <a href="qfd-qfd-cpp.html#setMainWidget">qfd/qfd.cpp</a>
  <a href="addressbook-main-cpp.html#setMainWidget">addressbook/main.cpp</a>
  <a href="picture-picture-cpp.html#setMainWidget">picture/picture.cpp</a>
@@ -1159,7 +1162,7 @@ the initial colors or the system defaults. This is necessary since
 certain styles have to adapt the color palette to be fully
 style-guide compliant.
 <p>See also  <a href="#349f2d">style</a>(), <a href="qstyle.html">QStyle</a>, <a href="#9604e2">setPalette</a>() and <a href="#a4154f">desktopSettingsAware</a>().
-<h3 class="fn">void <a name="01e5d9"></a>QApplication::setWheelScrollLines ( int n ) <code>[static]</code></h3>
+<h3 class="fn">void <a name="01e5d9"></a>QApplication::setWheelScrollLines ( int <a href="n.html">n</a> ) <code>[static]</code></h3>
 <p>Sets the number of lines to scroll when the mouse wheel is
 rotated.
 <p>If this number exceeds the number of visible lines in a certain
@@ -1173,7 +1176,7 @@ in the application. Will repaint all widgets if the color is changed.
 <p>The default color is <code>darkBlue.</code>
 <p>See also  <a href="#48a523">winStyleHighlightColor</a>().
 <h3 class="fn">int <a name="fcd4e3"></a>QApplication::startDragDistance () <code>[static]</code></h3>
-<p>If you support drag'n'drop in you application and a drag should
+<p>If you support drag'<a href="n.html">n</a>'drop in you application and a drag should
 start after a mouse click and after moving the mouse a certain
 distance, you should use the value which this method returns as the
 distance. So if the mouse position of the click is stored in <code>startPos</code> and the current position (e.g. in the mouse move event) is
@@ -1186,7 +1189,7 @@ like this:
 <p>The default value is set to 4 pixels.
 <p>See also  <a href="#025121">setStartDragDistance</a>(), <a href="#eb25e9">startDragTime</a>() and <a href="qpoint.html#8be8cf">QPoint::manhattanLength</a>().
 <h3 class="fn">int <a name="eb25e9"></a>QApplication::startDragTime () <code>[static]</code></h3>
-<p>If you support drag'n'drop in you application and a drag should
+<p>If you support drag'<a href="n.html">n</a>'drop in you application and a drag should
 start after a mouse click and after a certain time elapsed, you
 should use the value which this method returns as delay (in ms).
 <p>Qt internally uses also this delay e.g. in <a href="qmultilineedit.html">QMultiLineEdit</a> for
@@ -1469,7 +1472,7 @@ or to FALSE if this is a little-endian machine.
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.2.3"><nobr>
+<input type=hidden name="version" value="2.2.4"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -1477,5 +1480,5 @@ copyright &copy; 1995-2000
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.3</div>
+<td align="right"><div align="right">Qt version 2.2.4</div>
 </table></div></address></body></html>

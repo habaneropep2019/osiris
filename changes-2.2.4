@@ -1,0 +1,159 @@
+
+Qt 2.2.4 is a bugfix release. It keeps both forward and backward
+compatibility (source and binary) with Qt 2.2.3
+
+
+****************************************************************************
+*			    General					   *
+****************************************************************************
+
+- Platform and Compiler fixes for AIX and BSDi. Building a Qt DLL with
+  the Borland Builder is again supported.
+
+- Printing quality and postscript output on X11 has been improved.
+  The page and text formatting now handles different Windows versions
+  correctly.
+
+- Image loading of PNG and GIF files is much more robust against broken
+  files.
+
+- On X11, popup menus do not grab the keyboard anymore, but rely on
+  and enforce the application to have focus. This works around an X11
+  bug where deadkeys do not work while the keyboard is grabbed.
+
+- Many minor bugfixes and small improvements, see detailed lists below.
+
+****************************************************************************
+*			   Library					   *
+****************************************************************************
+
+- QScrollview	    Wheels scrolls even if there are no scrollbars
+
+- QSlider	    Calls virtual function setValue properly
+
+- QImage	    Improve loading of bmp files
+		    Improving reading of PNG images, and redirect warnings
+		    to qWarning
+		    32bit images with 8bit Alpha are saved correctly as
+		    PNG on big endian machines
+		    Make loading of broken GIF images and animated GIF files
+		    more robust, some bugfixes
+
+- Drag'n'Drop	    Fix the lost character problem when dragging text
+		    Make dnd work after showFullscreen/showNormal
+		    Delete text that is dragged from a QLineEdit
+
+- QToolButton	    Removes the old tooltip before setting the new one
+
+- QToolBar	    Separators use the correct style
+
+- QPrintDialog	    OK button is no longer disabled initially
+
+- QThread	    Fix crash when destroying a QThread that had never
+		    been started
+		    QWaitCondition::wakeAll resets event state after waking
+		    up waiting threads
+
+- QPainter	    Scale fonts correctly when painter has a transformation
+		    matrix		
+
+- QPrinter	    Handle disconnected network printers properly
+		    Use user-settings correctly
+		    Improve postscript output for non-75dpi displays and
+		    transparent images
+		    Improve page and text formatting on the different
+		    Windows versions
+		    Improve printing of colored contents for black&white
+		    printers
+
+- QSimpleRichText   Handle external paint devices properly
+
+- QTable	    Swapping of columns and rows doesn't mismatch sizes
+		    Fix calculation of item size hints
+
+- QGroupBox	    Include margin in size hints
+
+- QCanvas	    Better animation handling
+		    Cosmetic corrections
+
+- QSocket	    Be able to send large data on Windows
+
+- QSocketDevice     Workaround a Windows bug concerning the size of the
+		    send buffer
+
+- QFtp		    Put data more effectively
+		    Correct file permissions
+
+- QUrl		    Appends "/" to directories correctly
+
+- QCString	    Resizing a NULL string keeps length at zero
+		    Include null termination in size calculation
+
+- QColor	    Set named colors correctly
+
+- QApplication	    Avoid out-of-bounds read in commandline parsing
+
+- QFont/QFontDatabase
+		    Enumerate charsets that don't fit to the current locale
+		    Improve stability for broken X11 fonts
+		    Support Ukraine and Bulgarian font encodings on X11
+
+- QTextCodec	    Improve recognition of Asian encodings
+
+- QXml		    Report namespace at endElement
+
+- QWorkspace	    Cascading limits window size to workspace size
+
+- QFileDialog	    Setup correctly for non-existing directories
+		    Previews the correct file in ExistingFiles mode
+
+****************************************************************************
+*			   Extensions					   *
+****************************************************************************
+
+- QXt		    Works better with Exceed X
+
+****************************************************************************
+*			      Other					   *
+****************************************************************************
+
+- Meta Object Compiler (moc)
+		    Further improvements in namespace support
+
+- MSVC Integration  Setup Qt settings correctly
+
+****************************************************************************
+*			   Third party					   *
+****************************************************************************
+
+- PNG		    Fix a coredump in error message handling
+
+****************************************************************************
+*               Changes that might affect runtime behavior                 *
+****************************************************************************
+
+- QRegion	    Fixed QRegion::contains(const QRect&) function in X11
+		    version. Same behaviour as in Windows version now.
+
+****************************************************************************
+*		    Qt/Embedded-specific changes		           *
+****************************************************************************
+
+- Binary compatibility is NOT maintained with previous Qt/Embedded release,
+   you will need to recompile any old executables to use with this release.
+
+- Source compatibility is NOT maintained with Qt/Embedded-specific functions.
+   You may get minor compilation errors if you have used previous
+
+- QCopChannel now inherits QObject. If you have multiply-inherited a QObject
+   subclass and QCopChannel, you should instead connect your QObject to the
+   QCopChannel::received() signal.
+
+- The identifier "TTF" in fontdir is now "FT". This reflects the fact that
+   the FreeType library supports Type1, Windows FNT, and other font formats
+   in addition to TrueType. FreeType 2.0.1 is now used (src/3rdparty/freetype).
+
+- 16bpp support in QVFb.
+
+- QDirectPainter experimental direct-video access.
+

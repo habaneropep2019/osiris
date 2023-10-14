@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qpixmapcache.cpp   2.2.3   edited 2000-09-06 $
+** $Id: qt/src/kernel/qpixmapcache.cpp   2.2.4   edited 2000-09-06 $
 **
 ** Implementation of QPixmapCache class
 **

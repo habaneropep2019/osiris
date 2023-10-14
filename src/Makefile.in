@@ -17,7 +17,7 @@ UIC	=	$(SYSCONF_UIC)
 DESTDIR = ../lib/
 VER_MAJ = 2
 VER_MIN = 2
-VER_PATCH = 3
+VER_PATCH = 4
 TARGET	= qt$(QT_THREAD_SUFFIX)
 TARGET1 = lib$(TARGET).so.$(VER_MAJ)
 
@@ -60,17 +60,25 @@ ZLIB_OBJECTS = 3rdparty/zlib/adler32.o \
 		3rdparty/zlib/trees.o \
 		3rdparty/zlib/uncompr.o \
 		3rdparty/zlib/zutil.o
-FT_OBJECTS = 3rdparty/freetype2/config/unix/ftsystem.o \
-		3rdparty/freetype2/src/base/ftdebug.o \
-		3rdparty/freetype2/src/base/ftinit.o \
-		3rdparty/freetype2/src/base/ftbase.o \
-		3rdparty/freetype2/src/base/ftbbox.o \
-		3rdparty/freetype2/src/base/ftraster.o \
-		3rdparty/freetype2/src/base/ftoutln.o \
-		3rdparty/freetype2/src/psnames/psdriver.o \
-		3rdparty/freetype2/src/sfnt/sfnt.o \
-		3rdparty/freetype2/src/truetype/truetype.o \
-		3rdparty/freetype2/src/type1/type1.o
+FT_OBJECTS = 3rdparty/freetype/builds/unix/ftsystem.o \
+		3rdparty/freetype/src/base/ftdebug.o \
+		3rdparty/freetype/src/base/ftinit.o \
+		3rdparty/freetype/src/base/ftbase.o \
+		3rdparty/freetype/src/base/ftglyph.o \
+		3rdparty/freetype/src/base/ftmm.o \
+		3rdparty/freetype/src/base/ftbbox.o \
+		3rdparty/freetype/src/autohint/autohint.o \
+		3rdparty/freetype/src/cache/ftcache.o \
+		3rdparty/freetype/src/cff/cff.o \
+		3rdparty/freetype/src/cid/type1cid.o \
+		3rdparty/freetype/src/psaux/psaux.o \
+		3rdparty/freetype/src/psnames/psmodule.o \
+		3rdparty/freetype/src/raster/raster.o \
+		3rdparty/freetype/src/sfnt/sfnt.o \
+		3rdparty/freetype/src/smooth/smooth.o \
+		3rdparty/freetype/src/truetype/truetype.o \
+		3rdparty/freetype/src/type1/type1.o \
+		3rdparty/freetype/src/winfonts/winfnt.o
 
 
 OBJECTS_tools = tools/qdir_unix.o \
@@ -612,27 +620,43 @@ REQUIRES=
 		3rdparty/zlib/zlib.h \
 		3rdparty/zlib/zconf.h
 
-3rdparty/freetype2/config/unix/ftsystem.o: 3rdparty/freetype2/config/unix/ftsystem.c
+3rdparty/freetype/builds/unix/ftsystem.o: 3rdparty/freetype/builds/unix/ftsystem.c
 
-3rdparty/freetype2/src/base/ftdebug.o: 3rdparty/freetype2/src/base/ftdebug.c
+3rdparty/freetype/src/base/ftdebug.o: 3rdparty/freetype/src/base/ftdebug.c
 
-3rdparty/freetype2/src/base/ftinit.o: 3rdparty/freetype2/src/base/ftinit.c
+3rdparty/freetype/src/base/ftinit.o: 3rdparty/freetype/src/base/ftinit.c
 
-3rdparty/freetype2/src/base/ftbase.o: 3rdparty/freetype2/src/base/ftbase.c
+3rdparty/freetype/src/base/ftbase.o: 3rdparty/freetype/src/base/ftbase.c
 
-3rdparty/freetype2/src/base/ftbbox.o: 3rdparty/freetype2/src/base/ftbbox.c
+3rdparty/freetype/src/base/ftglyph.o: 3rdparty/freetype/src/base/ftglyph.c
 
-3rdparty/freetype2/src/base/ftraster.o: 3rdparty/freetype2/src/base/ftraster.c
+3rdparty/freetype/src/base/ftmm.o: 3rdparty/freetype/src/base/ftmm.c
 
-3rdparty/freetype2/src/base/ftoutln.o: 3rdparty/freetype2/src/base/ftoutln.c
+3rdparty/freetype/src/base/ftbbox.o: 3rdparty/freetype/src/base/ftbbox.c
 
-3rdparty/freetype2/src/psnames/psdriver.o: 3rdparty/freetype2/src/psnames/psdriver.c
+3rdparty/freetype/src/autohint/autohint.o: 3rdparty/freetype/src/autohint/autohint.c
 
-3rdparty/freetype2/src/sfnt/sfnt.o: 3rdparty/freetype2/src/sfnt/sfnt.c
+3rdparty/freetype/src/cache/ftcache.o: 3rdparty/freetype/src/cache/ftcache.c
 
-3rdparty/freetype2/src/truetype/truetype.o: 3rdparty/freetype2/src/truetype/truetype.c
+3rdparty/freetype/src/cff/cff.o: 3rdparty/freetype/src/cff/cff.c
 
-3rdparty/freetype2/src/type1/type1.o: 3rdparty/freetype2/src/type1/type1.c
+3rdparty/freetype/src/cid/type1cid.o: 3rdparty/freetype/src/cid/type1cid.c
+
+3rdparty/freetype/src/psaux/psaux.o: 3rdparty/freetype/src/psaux/psaux.c
+
+3rdparty/freetype/src/psnames/psmodule.o: 3rdparty/freetype/src/psnames/psmodule.c
+
+3rdparty/freetype/src/raster/raster.o: 3rdparty/freetype/src/raster/raster.c
+
+3rdparty/freetype/src/sfnt/sfnt.o: 3rdparty/freetype/src/sfnt/sfnt.c
+
+3rdparty/freetype/src/smooth/smooth.o: 3rdparty/freetype/src/smooth/smooth.c
+
+3rdparty/freetype/src/truetype/truetype.o: 3rdparty/freetype/src/truetype/truetype.c
+
+3rdparty/freetype/src/type1/type1.o: 3rdparty/freetype/src/type1/type1.c
+
+3rdparty/freetype/src/winfonts/winfnt.o: 3rdparty/freetype/src/winfonts/winfnt.c
 
 
 
@@ -5696,7 +5720,21 @@ kernel/qtimer.o: kernel/qtimer.cpp \
 		kernel/qconnection.h \
 		tools/qstrlist.h \
 		tools/qasciidict.h \
-		tools/qgdict.h
+		tools/qgdict.h \
+		kernel/qapplication.h \
+		kernel/qwidget.h \
+		kernel/qpaintdevice.h \
+		kernel/qpalette.h \
+		kernel/qcolor.h \
+		kernel/qbrush.h \
+		kernel/qcursor.h \
+		kernel/qfont.h \
+		kernel/qfontmetrics.h \
+		kernel/qfontinfo.h \
+		kernel/qstyle.h \
+		kernel/qsizepolicy.h \
+		kernel/qtranslator.h \
+		tools/qintdict.h
 
 kernel/qurl.o: kernel/qurl.cpp \
 		kernel/qurl.h \

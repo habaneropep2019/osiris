@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/network/qsocket.h   2.2.3   edited 2000-09-12 $
+** $Id: qt/src/network/qsocket.h   2.2.4   edited 2001-01-10 $
 **
 ** Definition of QSocket class.
 **
@@ -127,6 +127,7 @@ private:
     bool	 consumeWriteBuf( int nbytes );
     bool	 scanNewline( QByteArray * = 0 );
     void	 tryConnection();
+    void         setSocketIntern( int socket );
 
 private:	// Disabled copy constructor and operator=
 #if defined(Q_DISABLE_COPY)

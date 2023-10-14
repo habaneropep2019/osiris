@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qeuckrcodec.cpp   2.2.3   edited 2000-08-28 $
+** $Id: qt/src/tools/qeuckrcodec.cpp   2.2.4   edited 2001-01-23 $
 **
 ** Implementation of QEucKrCodec class
 **
@@ -136,13 +136,15 @@ QCString QEucKrCodec::fromUnicode(const QString& uc, int& len_in_out) const
       // KSC 5601
       *cursor++ = (j >> 8)   | 0x80;
       *cursor++ = (j & 0xff) | 0x80;
+    } else if ( ch.unicode() == 0xa0 ) {
+	    *cursor++ = ' ';
     } else {
       // Error
       *cursor++ = '?';	// unknown char
     }
   }
   len_in_out = cursor - (uchar*)rstr.data();
-  *cursor = 0;
+  rstr.truncate(len_in_out);
   return rstr;
 }
 

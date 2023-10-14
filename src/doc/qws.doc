@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/doc/qws.doc   2.2.3   edited 2000-12-12 $
+** $Id: qt/doc/qws.doc   2.2.4   edited 2001-01-30 $
 **
 ** Qt/Embedded (Qt on QWS) documentation
 **
@@ -512,6 +512,128 @@ Qt/Embedded ships with support for the NEC Vr41XX touchpanel
 and the iPAQ touchpanel.
 These are subclasses of QCalibratedMouseHandler which is in turn
 a subclass of QMouseHandler in <tt>kernel/qwsmouse_qws.cpp</tt>.
+
+Writing a custom touch panel handler for Qt/Embedded is not as
+hard as the QVrTPanelHandlerPrivate class makes it look.
+The Vr41XX touch panel handler is complex; it handles filtering of
+noisy input data, and it generates mouse release events by using a
+timer. 
+
+Many touch panel devices have a much simpler interface, so a
+port to  Qt/Embedded can be written in a few minutes, without expert
+knowledge of Qt/Embedded.
+
+The Qt/Embedded release contains an example touch panel handler in the
+class QCustomTPanelHandlerPrivate, located in the file
+<tt>$QTDIR/src/kernel/qwsmouse_qws.cpp</tt>. It is protected by<tt>#ifdef
+QWS_CUSTOMTOUCHPANEL</tt>.
+
+The example reads data from /dev/ts with the following format:
+Each packet consists of 5 bytes. 
+<ul>
+<li>Byte 0 gives status information, in particular, bit 6 (0x40)
+is 1 when the stylus is down, 0 if it is released.
+<li> Bytes 1 and 2 give the x position;
+<li> Bytes 3 and 4 give the y position;
+</ul>
+
+To enable this driver, uncomment the line <tt>#define QWS_CUSTOMTOUCHPANEL</tt>
+in the file qwsmouse_qws.cpp.
+
+Chances are, your touch panel device will not match exactly the
+example device.  As an example, take a hypothetical device located at
+/dev/touchpanel. This device uses 6-byte packets. Byte 0 and 1 give
+status and pressure information. In particular, bit 5 (0x20) of byte 1
+tells whether the stylus is down or up. Bytes 2 and 3 give x position and
+bytes 4 and 5 give y position.
+
+Pressure information is not necessary for basic Qt/Embedded operation,
+so we will ignore that for now. The following shows the modified touch
+panel handler for the hypothetical device, with  comments marked with
+<tt>//***<tt> indicating the changes made. You can also see some printf
+calls left over from the (hypothetical) debugging.
+
+\code
+//*** Modified Trolltech's example handler to handle the
+//*** hypothetical touch panel.
+QCustomTPanelHandlerPrivate::QCustomTPanelHandlerPrivate( MouseProtocol, QString )
+{
+    //*** changed device name to /dev/touchpanel
+
+    if ((mouseFD = open( "/dev/touchpanel", O_RDONLY)) < 0) {
+        qWarning( "Cannot open /dev/touchpanel (%s)", strerror(errno));
+	return;
+    } 
+    //*** removed the delay since our device does not need it.
+    //else {
+    //    sleep(1);
+    //}
+
+    QSocketNotifier *mouseNotifier;
+    mouseNotifier = new QSocketNotifier( mouseFD, QSocketNotifier::Read,
+					 this );
+    connect(mouseNotifier, SIGNAL(activated(int)),this, SLOT(readMouseData()));
+}
+
+QCustomTPanelHandlerPrivate::~QCustomTPanelHandlerPrivate()
+{
+    if (mouseFD >= 0)
+	close(mouseFD);
+}
+
+struct CustomTPdata {
+
+  unsigned char status;
+  unsigned short xpos;
+  unsigned short ypos;
+
+};
+
+void QCustomTPanelHandlerPrivate::readMouseData()
+{
+    if(!qt_screen)
+	return;
+    CustomTPdata data;
+
+    //*** changed size to 6 bytes
+    unsigned char data2[6];
+
+    int ret;
+
+    //*** read 6 bytes
+    ret=read(mouseFD,data2,6);
+
+    if(ret==6) { //*** change to 6
+        //*** all the indexes changed:
+	data.status=data2[1]; 
+	data.xpos=(data2[2] << 8) | data2[3];
+	data.ypos=(data2[4] << 8) | data2[5];
+	QPoint q;
+	q.setX(data.xpos);
+	q.setY(data.ypos);
+	mousePos=q;
+	if(data.status & 0x20) { //*** Changed to 0x20 (bit 5)
+          emit mouseChanged(mousePos,Qt::LeftButton);
+          //printf( "Stylus press/move %d,%d\n", data.xpos, data.ypos );
+	} else {
+	  emit mouseChanged(mousePos,0);
+          //printf( "Stylus release %d,%d\n", data.xpos, data.ypos );
+	}
+    }
+    if(ret<0) { 
+	qDebug("Error %s",strerror(errno));
+    }
+}
+\endcode
+
+Once you have your touch panel handler working, you may choose to keep
+it like it is. However, if you want to switch between different
+mouse/touch panel devices at run time, you will have to modify
+QWSServer::newMouseHandler() (also in qwsmouse_qws.cpp) to instantiate
+your new handler(s). You will also need to add to the enum
+<tt>MouseProtocol</tt> and the table <tt>mouseConfig[]</tt>. Note that
+the precise details on how mouse and touch panel drivers are instantiated
+may have to be changed in future versions of Qt/Embedded.
 
 */
 

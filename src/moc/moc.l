@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/moc/moc.l   2.2.3   edited 2000-08-31 $
+** $Id: qt/src/moc/moc.l   2.2.4   edited 2000-08-31 $
 **
 ** Lexical analyzer for meta object compiler
 **

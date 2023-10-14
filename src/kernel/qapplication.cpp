@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qapplication.cpp   2.2.3   edited 2000-12-08 $
+** $Id: qt/src/kernel/qapplication.cpp   2.2.4   edited 2001-01-14 $
 **
 ** Implementation of QApplication class
 **
@@ -2428,7 +2428,7 @@ void Q_EXPORT qt_dispatchEnterLeave( QWidget* enter, QWidget* leave ) {
     if ( leave && !sameWindow ) {
 	w = leave;
 	do {
-	    leaveList.prepend( w );
+	    leaveList.append( w );
 	} while ( !w->isTopLevel() && (w = w->parentWidget() ) );
     }
     if ( enter && !sameWindow ) {
@@ -2463,7 +2463,7 @@ void Q_EXPORT qt_dispatchEnterLeave( QWidget* enter, QWidget* leave ) {
 
 	w = leave;
 	while ( w != wleave ) {
-	    leaveList.prepend( w );
+	    leaveList.append( w );
 	    w = w->parentWidget();
 	}
 	w = enter;

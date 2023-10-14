@@ -1,4 +1,4 @@
-.TH QObject 3qt "12 December 2000" "Trolltech AS" \" -*- nroff -*-
+.TH QObject 3qt "1 Febrary 2001" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -14,7 +14,7 @@ QObject \- The base class of all Qt objects
 .PP
 Inherits Qt.
 .PP
-Inherited by QAccel, QAction, QApplication, QAuServer, QCanvas, QClipboard, QDataPump, QDns, QDnsSocket, QDragManager, QDragObject, QFileIconProvider, QGuardedPtrPrivate, QLayout, QNPInstance, QNetworkOperation, QNetworkProtocol, QSenderObject, QServerSocket, QSessionManager, QSignal, QSignalMapper, QSocket, QSocketNotifier, QSound, QStyle, QStyleSheet, QTimer, QToolTipGroup, QTranslator, QUrlOperator, QValidator and QWidget.
+Inherited by QAccel, QAction, QApplication, QAuServer, QCanvas, QClipboard, QCopChannel, QDataPump, QDns, QDnsSocket, QDragManager, QDragObject, QFileIconProvider, QGuardedPtrPrivate, QLayout, QNPInstance, QNetworkOperation, QNetworkProtocol, QSenderObject, QServerSocket, QSessionManager, QSignal, QSignalMapper, QSocket, QSocketNotifier, QSound, QStyle, QStyleSheet, QTimer, QToolTipGroup, QTranslator, QUrlOperator, QValidator and QWidget.
 .PP
 .SS "Public Members"
 .in +1c
@@ -515,7 +515,7 @@ The reimplementation of this virtual function must return TRUE if the event shou
 .PP
 See also installEventFilter().
 .PP
-Reimplemented in QScrollView, QMainWindow, QTabWidget, QFontDialog, QFileDialog, QSpinBox, QLayout, QSGIStyle, QAccel, QListView, QComboBox, QTable, QWorkspace, QMotifPlusStyle, QIconView, QMenuBar and QWizard.
+Reimplemented in QScrollView, QToolBar, QMainWindow, QTabWidget, QFontDialog, QFileDialog, QSpinBox, QLayout, QSGIStyle, QAccel, QListView, QComboBox, QTable, QWorkspace, QMotifPlusStyle, QIconView, QMenuBar and QWizard.
 .SH "bool QObject::highPriority () const"
 Returns TRUE if the object is a high priority object, or FALSE if it is a standard priority object.
 .PP
@@ -868,7 +868,7 @@ QTimer provides a higher-level interface to the timer functionality, and also mo
 .PP
 See also startTimer(), killTimer(), killTimers() and event().
 .PP
-Reimplemented in QPopupMenu.
+Reimplemented in QPopupMenu and QMultiLineEdit.
 .SH "QString QObject::tr ( const char * text, const char * comment ) \fC[static]\fR"
 Returns a translated version of \fItext\fR in context QObject and and with \fIcomment,\fR or \fItext\fR if there is no appropriate translated version. All QObject subclasses which use the Q_OBJECT macro have a reimplementation of this function which uses the relevant class name as context.
 .PP

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/network/qftp.h   2.2.3   edited 2000-08-25 $
+** $Id: qt/src/network/qftp.h   2.2.4   edited 2001-01-13 $
 **
 ** Definition of QFtp class.
 **
@@ -72,7 +72,8 @@ protected:
     bool connectionReady, passiveMode;
     int getTotalSize, getDoneSize;
     bool startGetOnFail;
-    int putToWrite, putWritten, putOffset;
+    int putToWrite, putWritten;
+    int putOffset; // not in use
     bool errorInListChildren;
 
 private:

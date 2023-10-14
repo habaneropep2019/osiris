@@ -289,12 +289,16 @@ void CCommands::addSharedSettings( CComPtr<IConfiguration> pConfig )
     const CComBSTR compiler("cl.exe");
     const CComBSTR linker("link.exe");
     const CComBSTR dllDefine("/D QT_DLL");
-    const CComBSTR qtInclude("/I \"$(QTDIR)\\include\"");
+    const CComBSTR incPath(" /I$(QTDIR)\\include");
     const CComBSTR staticLib("$(QTDIR)\\lib\\qt.lib");
-    const CComBSTR sharedLib("$(QTDIR)\\lib\\qt223.lib $(QTDIR)\\lib\\qtmain.lib");
+    const CComBSTR sharedLib("$(QTDIR)\\lib\\qt224.lib $(QTDIR)\\lib\\qtmain.lib");
+    const CComBSTR defLibs( "kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib" );
+    const CComBSTR sysLibs( "kernel32.lib user32.lib gdi32.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib imm32.lib wsock32.lib" );
 
     VERIFY_OK(pConfig->AddToolSettings( compiler, dllDefine, CComVariant(VARIANT_FALSE) ));
-    VERIFY_OK(pConfig->AddToolSettings( compiler, qtInclude, CComVariant(VARIANT_FALSE) ));
+    VERIFY_OK(pConfig->AddToolSettings( compiler, incPath, CComVariant(VARIANT_FALSE) ));
+    VERIFY_OK(pConfig->RemoveToolSettings( linker, defLibs, CComVariant(VARIANT_FALSE) ));
+    VERIFY_OK(pConfig->AddToolSettings( linker, sysLibs, CComVariant(VARIANT_FALSE) ));    
     VERIFY_OK(pConfig->RemoveToolSettings( linker, staticLib, CComVariant(VARIANT_FALSE) ));
     VERIFY_OK(pConfig->AddToolSettings( linker, sharedLib, CComVariant(VARIANT_FALSE) ));
     m_pApplication->PrintToOutputWindow( CComBSTR("\t\tadded Qt shared library") );
@@ -305,12 +309,16 @@ void CCommands::addStaticSettings( CComPtr<IConfiguration> pConfig )
     const CComBSTR compiler("cl.exe");
     const CComBSTR linker("link.exe");
     const CComBSTR dllDefine("/D QT_DLL");
-    const CComBSTR qtInclude("/I \"$(QTDIR)\\include\"");
+    const CComBSTR incPath(" /I$(QTDIR)\\include");
     const CComBSTR staticLib("$(QTDIR)\\lib\\qt.lib");
-    const CComBSTR sharedLib("$(QTDIR)\\lib\\qt223.lib $(QTDIR)\\lib\\qtmain.lib");
+    const CComBSTR sharedLib("$(QTDIR)\\lib\\qt224.lib $(QTDIR)\\lib\\qtmain.lib");
+    const CComBSTR defLibs( "kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib" );
+    const CComBSTR sysLibs( "kernel32.lib user32.lib gdi32.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib imm32.lib wsock32.lib" );
 
     VERIFY_OK(pConfig->RemoveToolSettings( compiler, dllDefine, CComVariant(VARIANT_FALSE) ));
-    VERIFY_OK(pConfig->AddToolSettings( compiler, qtInclude, CComVariant(VARIANT_FALSE) ));
+    VERIFY_OK(pConfig->AddToolSettings( compiler, incPath, CComVariant(VARIANT_FALSE) ));
+    VERIFY_OK(pConfig->RemoveToolSettings( linker, defLibs, CComVariant(VARIANT_FALSE) ));
+    VERIFY_OK(pConfig->AddToolSettings( linker, sysLibs, CComVariant(VARIANT_FALSE) ));    
     VERIFY_OK(pConfig->RemoveToolSettings( linker, sharedLib, CComVariant(VARIANT_FALSE) ));
     VERIFY_OK(pConfig->AddToolSettings( linker, staticLib, CComVariant(VARIANT_FALSE) ));
     m_pApplication->PrintToOutputWindow( CComBSTR("\t\tadded Qt static library") );

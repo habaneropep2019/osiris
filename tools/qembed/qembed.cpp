@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/tools/qembed/qembed.cpp   2.2.3   edited 2000-11-16 $
+** $Id: qt/tools/qembed/qembed.cpp   2.2.4   edited 2000-12-18 $
 **
 ** Utility program for embedding binary data into a C/C++ source code.
 ** It reads a binary file and generates a C array with the binary data.
@@ -27,6 +27,7 @@
 #include <qimage.h>
 #include <qdict.h>
 #include <ctype.h>
+#include <time.h>
 #include <stdlib.h>
 
 void    embedData( const QByteArray &input, QFile *output );
@@ -72,7 +73,8 @@ int main( int argc, char **argv )
 
   // Embed data for all input files
 
-    long l = random();
+    srand( time(0) );
+    long l = rand();
     out << "#ifndef _" << l << endl;
     out << "#define _" << l << endl;
 

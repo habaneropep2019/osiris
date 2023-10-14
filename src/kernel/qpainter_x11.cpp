@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qpainter_x11.cpp   2.2.3   edited 2000-10-22 $
+** $Id: qt/src/kernel/qpainter_x11.cpp   2.2.4   edited 2001-01-23 $
 **
 ** Implementation of QPainter class for X11
 **
@@ -1350,6 +1350,12 @@ void QPainter::setClipping( bool enable )
 
 /*!
   \overload void QPainter::setClipRect( const QRect &r )
+
+  If the rectangle is invalid, the rectangle will be normalized() before the clipping region is set. This semantics will change in Qt-3
+  and an invalid rectangle will clip the painter to an empty rectangle.
+
+  \sa QRect::isValid() QRect::normalize()
+
 */
 
 void QPainter::setClipRect( const QRect &r )
@@ -2732,8 +2738,8 @@ void QPainter::drawText( int x, int y, const QString &str, int len )
 		ty = -abbox.y();	// text position - off-by-one?
 		if ( aw == 0 || ah == 0 )
 		    return;
-		double rx = mat1.m11() * cfont.pointSizeFloat() / newSize;
-		double ry = mat1.m22() * cfont.pointSizeFloat() / newSize;
+		double rx = mat1.m11() * (double)w / (double)aw;
+		double ry = mat1.m22() * (double)h / (double)ah;
 		mat2 = QWMatrix( rx, 0, 0, ry, 0, 0 );
 	    } else {
 		mat2 = QPixmap::trueMatrix( mat1, w, h );

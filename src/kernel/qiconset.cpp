@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qiconset.cpp   2.2.3   edited 2000-11-08 $
+** $Id: qt/src/kernel/qiconset.cpp   2.2.4   edited 2000-11-08 $
 **
 ** Implementation of QIconSet class
 **

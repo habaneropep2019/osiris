@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qfont.h   2.2.3   edited 2000-09-02 $
+** $Id: qt/src/kernel/qfont.h   2.2.4   edited 2001-01-15 $
 **
 ** Definition of QFont class
 **
@@ -86,6 +86,10 @@ public:
 		     Set_GBK,
 		     Set_Big5,
 
+		     TSCII,
+		     KOI8U,
+		     CP1251,
+		     PT154,
 		     /* The following are font-specific encodings that
 			we shouldn't need in a perfect world.
 		     */
@@ -95,9 +99,7 @@ public:
 		     JIS_X_0208 = 0xc0, Enc16 = JIS_X_0208,
 		     KSC_5601,
 		     GB_2312,
-		     Big5,
-		     TSCII,
-		     KOI8U
+		     Big5
     };
     enum StyleHint { Helvetica, Times, Courier, OldEnglish,  System, AnyStyle,
 		     SansSerif	= Helvetica,

@@ -1,5 +1,5 @@
 /**********************************************************************
-** $Id: qt/src/widgets/qgroupbox.cpp   2.2.3   edited 2000-11-02 $
+** $Id: qt/src/widgets/qgroupbox.cpp   2.2.4   edited 2001-01-25 $
 **
 ** Implementation of QGroupBox widget class
 **
@@ -147,7 +147,7 @@ void QGroupBox::init()
     setFrameStyle( fs );
 #ifndef QT_NO_ACCEL
     accel = 0;
-#endif    
+#endif
     vbox = 0;
     grid = 0;
     d = 0;	//we use d directly to store a QSpacerItem
@@ -166,7 +166,7 @@ void QGroupBox::setTextSpacer()
     if ( lenvisible ) {
 	QFontMetrics fm = fontMetrics();
 	h = fm.height();
-	w = fm.width( str, lenvisible ) + 2*fm.width(QChar(' '));
+	w = fm.width( str, lenvisible ) + 2*fm.width( "xx" );
 	if ( layout() ) {
 	    int m = layout()->margin();
 	    // do we have a child layout?
@@ -220,7 +220,7 @@ void QGroupBox::setTitle( const QString &title )
 	resize( QMAX( s.width(), ms.width() ),
 		QMAX( s.height(), ms.height() ) );
     }
-    
+
     update();
     updateGeometry();
 }
@@ -610,7 +610,8 @@ void QGroupBox::fontChange( const QFont & oldFont )
 
 QSize QGroupBox::sizeHint() const
 {
-    int tw = QFontMetrics( font() ).width( title() );
+    QFontMetrics fm( font() );
+    int tw = fm.width( title() ) + 2 * fm.width( "xx" );
 
     QSize s;
     if ( layout() ) {

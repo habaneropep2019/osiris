@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/opengl/qgl.cpp   2.2.3   edited 2000-12-07 $
+** $Id: qt/src/opengl/qgl.cpp   2.2.4   edited 2000-12-18 $
 **
 ** Implementation of OpenGL classes for Qt
 **
@@ -1565,6 +1565,7 @@ QPixmap QGLWidget::renderPixmap( int w, int h, bool useContext )
 
     QGLFormat fmt = format();
     fmt.setDirectRendering( FALSE );		// No direct rendering
+    fmt.setDoubleBuffer( FALSE );		// We don't need dbl buf
     QGLContext* pcx = new QGLContext( fmt, &pm );
     QGLContext* ocx = (QGLContext*)context();
     setContext( pcx, 0, FALSE );

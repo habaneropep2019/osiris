@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/customlayout/main.cpp   2.2.3   edited 2000-08-31 $
+** $Id: qt/examples/customlayout/main.cpp   2.2.4   edited 2000-08-31 $
 **
 ** Main for custom layout example
 **

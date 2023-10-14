@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qmenubar.cpp   2.2.3   edited 2000-11-02 $
+** $Id: qt/src/widgets/qmenubar.cpp   2.2.4   edited 2000-11-02 $
 **
 ** Implementation of QMenuBar class
 **

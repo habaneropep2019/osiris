@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qimage.cpp   2.2.3   edited 2000-11-23 $
+** $Id: qt/src/kernel/qimage.cpp   2.2.4   edited 2001-01-31 $
 **
 ** Implementation of QImage and QImageIO classes
 **
@@ -4048,11 +4048,13 @@ bool read_dib( QDataStream& s, int offset, int startpos, QImage& image )
 		break;
 	    b = buf24;
 	    while ( p < end ) {
-  	    	c = (nbits == 16)?*(unsigned short*)b:*(int *)b;
-  		*p++ = qRgb(((c & red_mask) >> red_shift) * red_scale,
+		c = *(uchar*)b | *(uchar*)(b+1)<<8;
+		if (nbits != 16)
+		    c |= *(uchar*)(b+2)<<16;
+		*p++ = qRgb(((c & red_mask) >> red_shift) * red_scale,
 					((c & green_mask) >> green_shift) * green_scale,
-  					((c & blue_mask) >> blue_shift)) * blue_scale;
-  		b += nbits/8;
+					((c & blue_mask) >> blue_shift)) * blue_scale;
+		b += nbits/8;
 	    }
 	}
 	delete[] buf24;
@@ -4479,22 +4481,21 @@ static void write_pbm_image( QImageIO *iio )
 	    break;
 
 	case 32: {
-	    str.insert(1, '6');
+	    str.insert(1, gray ? '5' : '6');
 	    str.append("255\n");
 	    if ((uint)out->writeBlock(str, str.length()) != str.length()) {
 		iio->setStatus(1);
 		return;
 	    }
-	    uchar *buf = new uchar[w*3];
+	    uint bpl = w*(gray ? 1 : 3);
+	    uchar *buf = new uchar[bpl];
 	    for (uint y=0; y<h; y++) {
 		QRgb  *b = (QRgb*)image.scanLine(y);
 		uchar *p = buf;
-		uchar *end = buf+w*3;
+		uchar *end = buf+bpl;
 		if ( gray ) {
 		    while ( p < end ) {
 			uchar g = (uchar)qGray(*b++);
-			*p++ = g;
-			*p++ = g;
 			*p++ = g;
 		    }
 		} else {
@@ -4505,7 +4506,7 @@ static void write_pbm_image( QImageIO *iio )
 			*p++ = qBlue(rgb);
 		    }
 		}
-		if ( w*3 != (uint)out->writeBlock((char*)buf, w*3) ) {
+		if ( bpl != (uint)out->writeBlock((char*)buf, bpl) ) {
 		    iio->setStatus(1);
 		    return;
 		}
@@ -5455,9 +5456,8 @@ QGfx * QImage::graphicsContext()
 	QRgb * tmp=colorTable();
 	int nc=numColors();
 	if(tmp==0) {
-	    tmp=new QRgb[depth()==1 ? 2 : 256];
-	    tmp[0]=qRgb(255,255,255);
-	    tmp[1]=qRgb(0,0,0);
+	    static QRgb table[2] = { qRgb(255,255,255), qRgb(0,0,0) };
+	    tmp=table;
 	    nc=2;
 	}
 	ret->setClut(tmp,nc);

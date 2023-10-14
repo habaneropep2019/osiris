@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/overlay_x11/rubberbandwidget.h   2.2.3   edited 2000-08-31 $
+** $Id: qt/examples/overlay_x11/rubberbandwidget.h   2.2.4   edited 2000-08-31 $
 **
 ** Definition of a widget that draws a rubberband. Designed to be used 
 ** in an X11 overlay visual

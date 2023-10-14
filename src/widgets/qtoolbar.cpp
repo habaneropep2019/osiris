@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qtoolbar.cpp   2.2.3   edited 2000-12-01 $
+** $Id: qt/src/widgets/qtoolbar.cpp   2.2.4   edited 2001-01-08 $
 **
 ** Implementation of QToolBar class
 **
@@ -55,7 +55,7 @@
 class QArrowWidget : public QWidget
 {
     Q_OBJECT
-    
+
 public:
     QArrowWidget( Qt::Orientation o, QWidget *parent ) : QWidget( parent, "qt_arrow_widget" ), orient( o ) {}
 
@@ -348,7 +348,8 @@ QToolBar::~QToolBar()
 
 void QToolBar::addSeparator()
 {
-    (void) new QToolBarSeparator( orientation(), this, "tool bar separator" );
+    QToolBarSeparator *s = new QToolBarSeparator( orientation(), this, "tool bar separator" );
+    s->setStyle( &style() );
 }
 
 
@@ -899,9 +900,10 @@ void QToolBar::emulateButtonClicked()
 	emit d->button->released();
 	emit d->button->clicked();
     }
-    d->button = 0;
-
-    QTimer::singleShot( 0, this, SLOT( updateArrowStuff() ) );
+    if ( d ) { // we might got deleted, so check to be sure
+	d->button = 0;
+	QTimer::singleShot( 0, this, SLOT( updateArrowStuff() ) );
+    }
 }
 
 void QToolBar::paintToolBar()

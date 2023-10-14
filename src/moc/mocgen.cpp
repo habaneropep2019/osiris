@@ -1,4 +1,4 @@
-/* Automatically generated at Trolltech by mkdists, Qt 2.2.3 */
+/* Automatically generated at Trolltech by mkdists, Qt 2.2.4 */
 #ifndef lint
 static char yysccsid[] = "@(#)yaccpar	1.9 (Berkeley) 02/21/93";
 #endif
@@ -1476,7 +1476,7 @@ bool isRelativePath( const QString &path )
   int len = path.length();
   if ( len == 0 )
     return TRUE;
-  
+
   int i = 0;
 #ifdef WIN32
   if ( path[0].isLetter() && path[1] == ':' )		// drive, e.g. a:
@@ -1490,10 +1490,10 @@ QString cleanDirPath( const QCString &filePath )
 {
   QString name = filePath;
   QString newPath;
-  
+
   if ( name.isEmpty() )
     return name;
-  
+
   // already done before calling this function
   // slashify( name );
 
@@ -1504,13 +1504,13 @@ QString cleanDirPath( const QCString &filePath )
   } else {
     addedSeparator = FALSE;
   }
-  
+
   int ePos, pos, upLevel;
-  
+
   pos = ePos = name.length();
   upLevel = 0;
   int len;
-  
+
   while ( pos && (pos = name.findRev('/',--pos)) != -1 ) {
     len = ePos - pos - 1;
     if ( len == 2 && name.at(pos + 1) == '.'
@@ -1939,12 +1939,18 @@ QCString qualifiedSuperclassName()
     }
 }
 
-QCString unQualifiedSuperclassName()
+QCString specialQualifiedSuperclassName()
 {
+#if defined(_CC_MSVC_)
+    // MSVC doesn't grok the code NS::A::func() in a virtual method of a class B that 
+    // inherits A, but is defined outside the namespace NS.
     int i = superclassName.findRev( "::" );
     if ( i < 0 )
 	return superclassName;
     return superclassName.right( superclassName.length() - i - 2 );
+#else
+    return superclassName;
+#endif
 }
 
 const int Slot_Num   = 1;
@@ -2635,7 +2641,7 @@ void generateClass()		      // generate C++ source code for a class
     char *hdr1 = "/****************************************************************************\n"
 		 "** %s meta object code from reading C++ file '%s'\n**\n";
     char *hdr2 = "** Created: %s\n"
-		 "**      by: The Qt MOC ($Id: qt/src/moc/moc.y   2.2.3   edited 2000-12-11 $)\n**\n";
+		 "**      by: The Qt MOC ($Id: qt/src/moc/moc.y   2.2.4   edited 2001-01-04 $)\n**\n";
     char *hdr3 = "** WARNING! All changes made in this file will be lost!\n";
     char *hdr4 = "*****************************************************************************/\n\n";
     int   i;
@@ -2675,7 +2681,6 @@ void generateClass()		      // generate C++ source code for a class
 	fprintf( out, hdr2, (const char*)dstr );
 	fprintf( out, hdr3 );
 	fprintf( out, hdr4 );
-	fprintf( out, "#define Q_MOC_%s\n", className.data() );
 	fprintf( out, "#if !defined(Q_MOC_OUTPUT_REVISION)\n" );
 	fprintf( out, "#define Q_MOC_OUTPUT_REVISION %d\n", formatRevision );
 	fprintf( out, "#elif Q_MOC_OUTPUT_REVISION != %d\n", formatRevision );
@@ -2712,7 +2717,7 @@ void generateClass()		      // generate C++ source code for a class
     fprintf( out, "    if ( metaObj )\n\treturn;\n" );
     fprintf( out, "    if ( qstrcmp(%s::className(), \"%s\") != 0 )\n"
 	          "\tbadSuperclassWarning(\"%s\",\"%s\");\n",
-             (const char*)unQualifiedSuperclassName(), (const char*)qualifiedSuperclassName(),
+             (const char*)specialQualifiedSuperclassName(), (const char*)qualifiedSuperclassName(),
              (const char*)qualifiedClassName(), (const char*)qualifiedSuperclassName() );
     fprintf( out, "    (void) staticMetaObject();\n");
     fprintf( out, "}\n\n");
@@ -3035,7 +3040,7 @@ void checkIdentifier( const char* ident )
 	++p;
     }
 }
-#line 3038 "y.tab.c"
+#line 3043 "y.tab.c"
 #define YYABORT goto yyabort
 #define YYREJECT goto yyabort
 #define YYACCEPT goto yyaccept
@@ -4094,7 +4099,7 @@ case 320:
 #line 1197 "moc.y"
 { qtSets.append( yyvsp[-1].string ); }
 break;
-#line 4097 "y.tab.c"
+#line 4102 "y.tab.c"
     }
     yyssp -= yym;
     yystate = *yyssp;

@@ -1,5 +1,5 @@
 /**********************************************************************
-** $Id: qt/src/widgets/qmultilineedit.cpp   2.2.3   edited 2000-11-27 $
+** $Id: qt/src/widgets/qmultilineedit.cpp   2.2.4   edited 2001-01-29 $
 **
 ** Implementation of QMultiLineEdit widget class
 **
@@ -1119,7 +1119,14 @@ void QMultiLineEdit::keyPressEvent( QKeyEvent *e )
 	case Key_Down:
 	    setTopCell( topCell() + 1 );
 	    break;
-	case Key_Next:
+	case Key_Home:
+	    setCursorPosition(0,0, e->state() & ShiftButton );
+	    break;
+	case Key_End:
+	    setCursorPosition( numLines()-1, lineLength( numLines()-1 ),
+			       e->state() & ShiftButton );
+	    break;
+        case Key_Next:
 	    setTopCell( topCell() + pageSize );
 	    break;
 	case Key_Prior:
@@ -3639,11 +3646,14 @@ void QMultiLineEdit::setWordWrap( WordWrap mode )
 	d->marg_extra = 8;
 	if ( DYNAMIC_WRAP )
 	    clearTableFlags( Tbl_autoHScrollBar );
+        else
+            setTableFlags( Tbl_autoHScrollBar );
     } else {
 	d->marg_extra = 0;
 	setTableFlags( Tbl_autoHScrollBar );
     }
-    setText( text() );
+    if ( !text().isEmpty() )
+        setText( text() );
 }
 
 /*!

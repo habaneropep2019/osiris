@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qlistview.cpp   2.2.3   edited 2000-12-07 $
+** $Id: qt/src/widgets/qlistview.cpp   2.2.4   edited 2001-01-25 $
 **
 ** Implementation of QListView widget class
 **
@@ -1190,9 +1190,9 @@ void QListViewItem::setText( int column, const QString &text )
     QListView * lv = listView();
     widthChanged( column );
     if ( lv ) {
-	lv->triggerUpdate();
 	lv->d->useDoubleBuffer = TRUE;
 	lv->d->makeCurrentVisibleOnUpdate = FALSE;
+	lv->triggerUpdate();
     }
 }
 
@@ -1256,9 +1256,9 @@ void QListViewItem::setPixmap( int column, const QPixmap & pm )
     }
     QListView *lv = listView();
     if ( lv ) {
-	lv->triggerUpdate();
 	lv->d->useDoubleBuffer = TRUE;
 	lv->d->makeCurrentVisibleOnUpdate = FALSE;
+	lv->triggerUpdate();
     }
 }
 
@@ -1289,7 +1289,7 @@ const QPixmap * QListViewItem::pixmap( int column ) const
 
 /*!  This virtual function paints the contents of one column of one item.
 
-  \a p is a QPainter open on the relevant paint device.  \a pa is
+  \a p is a QPainter open on the relevant paint device.  \a p is
   translated so 0, 0 is the top left pixel in the cell and \a width-1,
   height()-1 is the bottom right pixel \e in the cell.  The other
   properties of \a p (pen, brush etc) are undefined.  \a cg is the
@@ -2630,8 +2630,12 @@ void QListView::show()
 
 void QListView::updateContents()
 {
-    if ( !isVisible() )
+    if ( !isVisible() ) {
+	// Not in response to a setText/setPixmap any more.
+	d->useDoubleBuffer = FALSE;
+
 	return;
+    }
     if ( d && d->drawables ) {
 	delete d->drawables;
 	d->drawables = 0;
@@ -2757,8 +2761,12 @@ void QListView::enabledChange( bool e )
 
 void QListView::triggerUpdate()
 {
-    if ( !isVisible() || !isUpdatesEnabled() )
+    if ( !isVisible() || !isUpdatesEnabled() ) {
+	// Not in response to a setText/setPixmap any more.
+	d->useDoubleBuffer = FALSE;
+
 	return; // it will update when shown, or something.
+    }
 
     d->timer->start( 0, TRUE );
 }

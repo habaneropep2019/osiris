@@ -11,7 +11,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>411</width>
+            <width>407</width>
             <height>261</height>
         </rect>
     </property>
@@ -70,6 +70,13 @@
                     <property stdset="1">
                         <name>sizeType</name>
                         <enum>Expanding</enum>
+                    </property>
+                    <property>
+                        <name>sizeHint</name>
+                        <size>
+                            <width>20</width>
+                            <height>20</height>
+                        </size>
                     </property>
                     <property>
                         <name>sizeHint</name>
@@ -303,11 +310,7 @@
                     </property>
                     <property stdset="1">
                         <name>text</name>
-                        <string>16 bit (unsupported)</string>
-                    </property>
-                    <property stdset="1">
-                        <name>enabled</name>
-                        <bool>false</bool>
+                        <string>16 bit</string>
                     </property>
                 </widget>
                 <widget>

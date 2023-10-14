@@ -22,6 +22,7 @@
 
 #define QTE_PIPE "/tmp/.QtEmbedded-%1"
 
+#include <qapplication.h>
 #include <qimage.h>
 #include <qbitmap.h>
 #include <qtimer.h>
@@ -51,6 +52,7 @@ QVFbView::QVFbView( int display_id, int w, int h, int d, QWidget *parent,
 	case 1:
 	case 4:
 	case 8:
+	case 16:
 	case 32:
 	    break;
 	
@@ -155,6 +157,9 @@ void QVFbView::setZoom( double z )
 	zoom = z;
 	setDirty(QRect(0,0,hdr->width,hdr->height));
 	resizeContents( int(hdr->width*z), int(hdr->height*z) );
+	updateGeometry();
+	qApp->sendPostedEvents();
+	topLevelWidget()->adjustSize();
 	drawScreen();
     }
 }
@@ -226,17 +231,14 @@ void QVFbView::timeout()
 {
     lock();
     if ( animation ) {
-	    // ### Could use img from drawScreen, with offset, but we do it
-	    // ### this way for now to exercise QAnimationWriter.
 	    QRect r( hdr->update );
 	    r = r.intersect( QRect(0, 0, hdr->width, hdr->height ) );
 	    if ( r.isEmpty() ) {
 		animation->appendBlankFrame();
 	    } else {
-		QImage img( data + hdr->dataoffset + r.y() * hdr->linestep,
-			hdr->width, r.height(), hdr->depth, hdr->clut,
-			hdr->depth == 1 ? 0 : 256, QImage::LittleEndian );
-		animation->appendFrame(img,QPoint(0,r.y()));
+		int l;
+		QImage img = getBuffer( r, l );
+		animation->appendFrame(img,QPoint(r.x(),r.y()));
 	    }
     }
     if ( hdr->dirty ) {
@@ -245,13 +247,26 @@ void QVFbView::timeout()
     unlock();
 }
 
-QImage QVFbView::getBuffer( const QRect &r, int &leading )
+QImage QVFbView::getBuffer( const QRect &r, int &leading ) const
 {
-    if ( hdr->depth == 1 || hdr->depth >= 8 ) {
-	leading = r.x();
-	return QImage( data + hdr->dataoffset + r.y() * hdr->linestep,
-		    hdr->width, r.height(), hdr->depth, hdr->clut,
-		    hdr->depth == 1 ? 0 : 256, QImage::LittleEndian );
+    if ( hdr->depth == 16 ) {
+	static unsigned char *imgData = 0;
+	if ( !imgData ) {
+	    int bpl = ((hdr->width*32+31)/32)*4;
+	    imgData = new unsigned char [ bpl * hdr->height ];
+	}
+	QImage img( imgData, r.width(), r.height(), 32, 0, 0, QImage::IgnoreEndian );
+	for ( int row = 0; row < r.height(); row++ ) {
+	    QRgb *dptr = (QRgb*)img.scanLine( row );
+	    ushort *sptr = (ushort*)(data + hdr->dataoffset + (r.y()+row)*hdr->linestep);
+	    sptr += r.x();
+	    for ( int col=0; col < r.width(); col++ ) {
+		ushort s = *sptr++;
+		*dptr++ = qRgb((s>>11)*255/31,((s>>5)&0x3f)*255/63,(s&0x1f)*255/31);
+	    }
+	}
+	leading = 0;
+	return img;
     } else if ( hdr->depth == 4 ) {
 	static unsigned char *imgData = 0;
 	if ( !imgData ) {
@@ -279,8 +294,12 @@ QImage QVFbView::getBuffer( const QRect &r, int &leading )
 	}
 	leading = 0;
 	return img;
+    } else {
+	leading = r.x();
+	return QImage( data + hdr->dataoffset + r.y() * hdr->linestep,
+		    hdr->width, r.height(), hdr->depth, hdr->clut,
+		    hdr->depth == 1 ? 0 : 256, QImage::LittleEndian );
     }
-
     return QImage();
 }
 
@@ -294,7 +313,7 @@ void QVFbView::drawScreen()
     QRect r( hdr->update );
     hdr->dirty = FALSE;
     hdr->update = QRect();
-//    qDebug( "update %d, %d, %dx%d", r.y(), r.x(), r.width(), r.height() );
+    // qDebug( "update %d, %d, %dx%d", r.y(), r.x(), r.width(), r.height() );
     r = r.intersect( QRect(0, 0, hdr->width, hdr->height ) );
     if ( !r.isEmpty() )  {
 	if ( int(zoom) != zoom ) {
@@ -386,18 +405,19 @@ void QVFbView::keyPressEvent( QKeyEvent *e )
 
 void QVFbView::keyReleaseEvent( QKeyEvent *e )
 {
-    sendKeyboardData(e->text()[0].unicode(), e->key(), 
+    sendKeyboardData(e->ascii(), e->key(), 
 		     e->state()&(ShiftButton|ControlButton|AltButton),
 		     FALSE, e->isAutoRepeat());
 }
 
 
-void QVFbView::saveAs( const QString& filename )
+QImage QVFbView::image() const
 {
-    QImage img( data + hdr->dataoffset,
-		hdr->width, hdr->height, hdr->depth, hdr->clut,
-		256, QImage::LittleEndian );
-    img.save(filename,"PNG");
+    ((QVFbView*)this)->lock();
+    int l;
+    QImage r = getBuffer( QRect(0, 0, hdr->width, hdr->height), l ).copy();
+    ((QVFbView*)this)->unlock();
+    return r;
 }
 
 void QVFbView::startAnimation( const QString& filename )

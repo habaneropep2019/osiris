@@ -1,5 +1,5 @@
 /**********************************************************************
-** $Id: qt/src/canvas/qcanvas.cpp   2.2.3   edited 2000-12-08 $
+** $Id: qt/src/canvas/qcanvas.cpp   2.2.4   edited 2001-01-25 $
 **
 ** Implementation of QCanvas and associated classes
 **
@@ -2268,15 +2268,7 @@ QCanvasPixmapArray::QCanvasPixmapArray()
 }
 
 /*!
-Constructs a QCanvasPixmapArray from files.
-
-The fc parameter sets the number of frames to be
-loaded for this image.  If \a fc is not 0, the
-filenames should contain a "%1",
-strings such as "foo%1.png".  The actual
-filenames are formed by replacing the %1 with each integer
-from 0 to fc-1, with leading zeroes sufficient for 4 digits.
-eg. foo0000.png, foo0001.png, foo0002.png, etc.
+Constructs a QCanvasPixmapArray from files. See readPixmaps() for details.
 */
 QCanvasPixmapArray::QCanvasPixmapArray(const QString& datafilenamepattern, int fc)
 {
@@ -2323,12 +2315,20 @@ void QCanvasPixmapArray::reset()
 }
 
 /*!
-  Read new pixmaps into the array.
+  Sets the array to \a fc pixmaps, read from files.
+
+  If \a fc is not 0, the
+  filenames should contain a "%1",
+  strings such as "foo%1.png".  The actual
+  filenames are formed by replacing the %1 with each integer
+  from 0 to fc-1, with leading zeroes sufficient for 4 digits.
+  eg. foo0000.png, foo0001.png, foo0002.png, etc.
 */
 bool QCanvasPixmapArray::readPixmaps(const QString& datafilenamepattern, int fc)
 {
     return readPixmaps(datafilenamepattern,fc,FALSE);
 }
+
 /*!
   When testing sprite collision detection
   the default is to use the image mask of the sprite.  By using
@@ -2389,9 +2389,18 @@ Returns the \a i-th pixmap in the array.
 /*!
 Replaces the \a i-th pixmap by \a p.  Note that \a p
 becomes owned by the array - it will be deleted later.
+
+If \a i is more than count()-1, the array is extended to make room.
 */
 void QCanvasPixmapArray::setImage(int i, QCanvasPixmap* p)
 {
+    if ( i >= framecount ) {
+	QCanvasPixmap** newimg = new QCanvasPixmap*[i+1];
+	memcpy(newimg, img, sizeof(newimg[0])*framecount);
+	framecount = i+1;
+	delete [] img;
+	img = newimg;
+    }
     delete img[i]; img[i]=p;
 }
 
@@ -3513,8 +3522,9 @@ void QCanvasEllipse::setAngles(int start, int length)
 QPointArray QCanvasEllipse::areaPoints() const
 {
     QPointArray r;
-    // ##### makeArc is not a very pretty ellipse
     r.makeArc(int(x()-w/2.0-1),int(y()-h/2.0-1),w+2,h+3,a1,a2);
+    r.resize(r.size()+1);
+    r.setPoint(r.size()-1,x(),y());
     return r;
 }
 

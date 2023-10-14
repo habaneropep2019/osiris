@@ -1,4 +1,4 @@
-.TH QComboBox 3qt "12 December 2000" "Trolltech AS" \" -*- nroff -*-
+.TH QComboBox 3qt "1 Febrary 2001" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -84,9 +84,6 @@ Inherits QWidget.
 .br
 .ti -1c
 .BI "virtual void setAutoResize ( bool ) \fI(obsolete)\fR"
-.br
-.ti -1c
-.BI "virtual QSizePolicy \fBsizePolicy\fR () const"
 .br
 .ti -1c
 .BI "virtual void \fBsetBackgroundColor\fR ( const QColor & ) "
@@ -527,6 +524,8 @@ Reimplemented from QWidget.
 Returns the current maximum on-screen size of the combo box. The default is ten lines.
 .PP
 See also setSizeLimit(), count() and maxCount().
+.SH "QSizePolicy QComboBox::sizePolicy () const \fC[virtual]\fR"
+Reimplemented for internal reasons; the API is not affected.
 .SH "void QComboBox::styleChange ( QStyle & s ) \fC[virtual protected]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .PP

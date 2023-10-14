@@ -1,4 +1,4 @@
-.TH QPainter 3qt "12 December 2000" "Trolltech AS" \" -*- nroff -*-
+.TH QPainter 3qt "1 Febrary 2001" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -1158,6 +1158,10 @@ qtimage/qtimage.cpp grapher/grapher.cpp progress/progress.cpp splitter/splitter.
 .)l
 .SH "void QPainter::setClipRect ( const QRect & r )"
 This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts.
+.PP
+If the rectangle is invalid, the rectangle will be normalized() before the clipping region is set. This semantics will change in Qt-3 and an invalid rectangle will clip the painter to an empty rectangle.
+.PP
+See also QRect::isValid() and QRect::normalize().
 .SH "void QPainter::setClipRegion ( const QRegion & rgn )"
 Sets the clip region to \fIrgn\fR and enables clipping.
 .PP

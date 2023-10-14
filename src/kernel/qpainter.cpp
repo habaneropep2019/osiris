@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qpainter.cpp   2.2.3   edited 2000-11-07 $
+** $Id: qt/src/kernel/qpainter.cpp   2.2.4   edited 2001-01-05 $
 **
 ** Implementation of QPainter, QPen and QBrush classes
 **
@@ -409,8 +409,8 @@ QPainter::QPainter()
 QPainter::QPainter( const QPaintDevice *pd )
 {
     init();
-    begin( pd );
-    flags |= CtorBegin;
+    if ( begin( pd ) )
+	flags |= CtorBegin;
 }
 
 
@@ -425,8 +425,8 @@ QPainter::QPainter( const QPaintDevice *pd,
 		    const QWidget *copyAttributes )
 {
     init();
-    begin( pd, copyAttributes );
-    flags |= CtorBegin;
+    if ( begin( pd, copyAttributes ) )
+	flags |= CtorBegin;
 }
 
 

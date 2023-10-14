@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qstring.h   2.2.3   edited 2000-09-20 $
+** $Id: qt/src/tools/qstring.h   2.2.4   edited 2001-01-23 $
 **
 ** Definition of the QString class, and related Unicode
 ** functions.
@@ -52,7 +52,7 @@ class QRegExp;
 class QString;
 class QCharRef;
 
-class Q_EXPORT Q_PACKED QChar {
+class Q_EXPORT QChar {
 public:
     QChar();
     QChar( char c );
@@ -199,7 +199,7 @@ private:
 #endif
     enum { net_ordered = 0 };
 #endif
-};
+} Q_PACKED;
 
 inline QChar::QChar()
 {

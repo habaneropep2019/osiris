@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qjiscodec.cpp   2.2.3   edited 2000-08-25 $
+** $Id: qt/src/tools/qjiscodec.cpp   2.2.4   edited 2001-01-15 $
 **
 ** Implementation of QJisCodec class
 **
@@ -342,7 +342,7 @@ int QJisCodec::heuristicNameMatch(const char* hint) const
     if (p) {
 	if ((qstricmp(p, "JIS") == 0) ||
 	    (qstricmp(p, "JIS7") == 0) ||
-	    (qstricmp(p, "ISO-2022-JP") == 0)) {
+	    (simpleHeuristicNameMatch("ISO-2022-JP", p) > 0)) {
 	    return score + 4;
 	}
     }

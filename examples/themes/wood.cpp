@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/themes/wood.cpp   2.2.3   edited 2000-10-06 $
+** $Id: qt/examples/themes/wood.cpp   2.2.4   edited 2000-10-06 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **

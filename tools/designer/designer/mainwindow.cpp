@@ -2616,6 +2616,7 @@ void MainWindow::writeConfig()
     config.writeEntry( "HierarchyView", actionWindowHierarchyView->isOn() );
     config.writeEntry( "FormList", actionWindowFormList->isOn() );
 
+#ifndef Q_TEMPLATE_NEEDS_CLASS_DECLARATION
     QList<QToolBar> tbl;
     ToolBarDock da[] = { Left, Right, Top, Bottom, Minimized };
     QMap< QString, int > docks;
@@ -2649,7 +2650,8 @@ void MainWindow::writeConfig()
     s << indices;
     s << nls;
     s << eos;
-
+#endif
+    
     config.setGroup( "CustomWidgets" );
 
     QList<MetaDataBase::CustomWidget> *lst = MetaDataBase::customWidgets();

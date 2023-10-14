@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qtextcodec.cpp   2.2.3   edited 2000-12-07 $
+** $Id: qt/src/tools/qtextcodec.cpp   2.2.4   edited 2001-01-23 $
 **
 ** Implementation of QTextCodec class
 **
@@ -454,8 +454,14 @@ static const char * const iso8859_4locales[] = {
     "ee", "ee_EE", "lt", "lt_LT", "lv", "lv_LV", 0 };
 
 static const char * const iso8859_5locales[] = {
-    "bg", "bg_BG", "bulgarian", "mk", "mk_MK",
+    "mk", "mk_MK",
     "sp", "sp_YU", 0 };
+
+static const char * const cp_1251locales[] = {
+    "be", "be_BY", "bg", "bg_BG", "bulgarian", 0 };
+
+static const char * const pt_154locales[] = {
+    "ba_RU", "ky", "ky_KG", "kk", "kk_KZ", 0 };
 
 static const char * const iso8859_6locales[] = {
     "ar_AA", "ar_SA", "arabic", 0 };
@@ -604,6 +610,10 @@ QTextCodec* QTextCodec::codecForLocale()
             localeMapper = codecForName( "ISO 8859-11" );
         else if ( try_locale_list( koi8_ulocales, lang ) )
             localeMapper = codecForName( "KOI8-U" );
+        else if ( try_locale_list( cp_1251locales, lang ) )
+            localeMapper = codecForName( "CP 1251" );
+        else if ( try_locale_list( pt_154locales, lang ) )
+            localeMapper = codecForName( "PT 154" );
          else if ( try_locale_list( probably_koi8_rlocales, lang ) )
             localeMapper = ru_RU_hack( lang );
         else if (!lang || !(localeMapper = codecForName(lang) ))
@@ -803,7 +813,7 @@ QCString QTextCodec::fromUnicode(const QString& uc) const
 QString QTextCodec::toUnicode(const QByteArray& a, int len) const
 {
     int l = a.size();
-    if( l > 0 && a.data()[l - 1] == '\0' ) l--;
+    if( l > 0 && a.data()[l - 1] == '\0' && a.data()[ l - 2 ] == 0 ) l--;
     l = QMIN( l, len );
     return toUnicode( a.data(), l );
 }
@@ -814,7 +824,7 @@ QString QTextCodec::toUnicode(const QByteArray& a, int len) const
 QString QTextCodec::toUnicode(const QByteArray& a) const
 {
     int l = a.size();
-    if( l > 0 && a.data()[l - 1] == '\0' ) l--;
+    if( l > 0 && a.data()[l - 1] == '\0'  && a.data()[ l - 2 ] == 0 ) l--;
     return toUnicode( a.data(), l );
 }
 
@@ -1607,6 +1617,23 @@ static struct {
 
     // $ for a in CP* ; do ( awk '/^0x[89ABCDEF]/{ print $1, $2 }' < $a ) | sort | sed -e 's/#UNDEF.*$/0xFFFD/' | cut -c6- | paste '-d ' - - - - - - - - | sed -e 's/ /, /g' -e 's/$/,/' -e '$ s/,$/} },/' -e '1 s/^/{ /' > ~/tmp/$a ; done
 
+    { "PT 154", 0,  // unknown mib
+        {     0x0496, 0x0492, 0x201A, 0x0493, 0x201E, 0x2026, 0x2020, 0x04AE,    
+	      0x04B2, 0x04AF, 0x04A0, 0x2039, 0x04A2, 0x049A, 0x04BA, 0x04B8,    
+	      0x0497, 0x2018, 0x2019, 0x201C, 0x201D, 0x2022, 0x2013, 0x2014,    
+	      0x04B3, 0x2122, 0x04A1, 0x203A, 0x04A3, 0x049B, 0x04BB, 0x04B9,    
+	      0x00A0, 0x040E, 0x045E, 0x0408, 0x04E8, 0x0498, 0x04B0, 0x00A7,
+	      0x0401, 0x00A9, 0x04D8, 0x00AB, 0x00AC, 0x00AD, 0x00AE, 0x049C,
+	      0x00B0, 0x04B1, 0x0406, 0x0456, 0x0499, 0x04E9, 0x00B6, 0x00B7,
+	      0x0451, 0x2116, 0x04D9, 0x00BB, 0x0458, 0x04AA, 0x04AB, 0x049D,
+              0x0410, 0x0411, 0x0412, 0x0413, 0x0414, 0x0415, 0x0416, 0x0417,
+              0x0418, 0x0419, 0x041A, 0x041B, 0x041C, 0x041D, 0x041E, 0x041F,
+              0x0420, 0x0421, 0x0422, 0x0423, 0x0424, 0x0425, 0x0426, 0x0427,
+              0x0428, 0x0429, 0x042A, 0x042B, 0x042C, 0x042D, 0x042E, 0x042F,
+              0x0430, 0x0431, 0x0432, 0x0433, 0x0434, 0x0435, 0x0436, 0x0437,
+              0x0438, 0x0439, 0x043A, 0x043B, 0x043C, 0x043D, 0x043E, 0x043F,
+              0x0440, 0x0441, 0x0442, 0x0443, 0x0444, 0x0445, 0x0446, 0x0447,
+              0x0448, 0x0449, 0x044A, 0x044B, 0x044C, 0x044D, 0x044E, 0x044F} },
     { "CP 874", 0, //### what is the mib?
         { 0x20AC, 0xFFFD, 0xFFFD, 0xFFFD, 0xFFFD, 0x2026, 0xFFFD, 0xFFFD,
               0xFFFD, 0xFFFD, 0xFFFD, 0xFFFD, 0xFFFD, 0xFFFD, 0xFFFD, 0xFFFD,
@@ -1788,7 +1815,7 @@ static struct {
               0xFFFD, 0xFFFD, 0xFFFD, 0xFFFD, 0xFFFD, 0xFFFD, 0xFFFD, 0xFFFD,
               0xFFFD, 0xFFFD, 0xFFFD, 0xFFFD, 0xFFFD, 0xFFFD, 0xFFFD, 0xFFFD,
               0xFFFD, 0xFFFD, 0xFFFD, 0xFFFD, 0xFFFD, 0xFFFD, 0xFFFD, 0xFFFD,
-              0xFFFD, 0x0E01, 0x0E02, 0x0E03, 0x0E04, 0x0E05, 0x0E06, 0x0E07,
+              0x00A0, 0x0E01, 0x0E02, 0x0E03, 0x0E04, 0x0E05, 0x0E06, 0x0E07,
               0x0E08, 0x0E09, 0x0E0A, 0x0E0B, 0x0E0C, 0x0E0D, 0x0E0E, 0x0E0F,
               0x0E10, 0x0E11, 0x0E12, 0x0E13, 0x0E14, 0x0E15, 0x0E16, 0x0E17,
               0x0E18, 0x0E19, 0x0E1A, 0x0E1B, 0x0E1C, 0x0E1D, 0x0E1E, 0x0E1F,
@@ -1868,6 +1895,8 @@ QCString QSimpleTextCodec::fromUnicode(const QString& uc, int& len ) const
             (*reverseMap)[i] = (char)i;
         for( ;i < m; i++ )
             (*reverseMap)[i] = '?';
+	// small hack to map nbsp to space for all simple codecs. Looks way better than a question mark.
+	(*reverseMap)[0xa0] = ' ';
         for( i=128; i<256; i++ ) {
             int u = unicodevalues[forwardIndex].values[i-128];
             if ( u < m )
@@ -1920,7 +1949,10 @@ int QSimpleTextCodec::heuristicNameMatch(const char* hint) const
 	if( !i )
 	    i = simpleHeuristicNameMatch("tis-620", hint);
 	if( i ) return i;
-    }
+    } else if (( hint[0]=='m' ) && ( QCString(hint) == "microsoft-cp1251" ))
+         return QTextCodec::heuristicNameMatch("cp1251");
+    else if (( hint[0]=='w' ) && ( QCString(hint) == "windows-1251" ))
+         return QTextCodec::heuristicNameMatch("cp1251")-1;
     return QTextCodec::heuristicNameMatch(hint);
 }
 

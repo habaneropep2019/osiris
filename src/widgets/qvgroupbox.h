@@ -1,5 +1,5 @@
 /**********************************************************************
-** $Id: qt/src/widgets/qvgroupbox.h   2.2.3   edited 2000-10-11 $
+** $Id: qt/src/widgets/qvgroupbox.h   2.2.4   edited 2000-10-11 $
 **
 ** Definition of QVGroupBox widget class
 **

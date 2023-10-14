@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/dialogs/qfiledialog.cpp   2.2.3   edited 2000-11-30 $
+** $Id: qt/src/dialogs/qfiledialog.cpp   2.2.4   edited 2001-01-31 $
 **
 ** Implementation of QFileDialog class
 **
@@ -2196,6 +2196,7 @@ void QFileDialog::init()
     d->geometryDirty = TRUE;
     d->types = new QComboBox( TRUE, this, "file types" );
     d->types->setDuplicatesEnabled( FALSE );
+    d->types->setEditable( FALSE );
     connect( d->types, SIGNAL(activated(const QString&)),
 	     this, SLOT(setFilter(const QString&)) );
 
@@ -2439,6 +2440,7 @@ void QFileDialog::init()
 
 void QFileDialog::fileNameEditReturnPressed()
 {
+    d->oldUrl = d->url;
     if ( !isDirectoryMode( d->mode ) ) {
 	okClicked();
     } else {
@@ -2519,7 +2521,7 @@ QFileDialog::~QFileDialog()
   Returns the selected file name.
 
   If a file name was selected, the returned string contains the
-  absolute path name.  The returned string is a null string if no file
+  absolute path name.  The returned string is an empty string if no file
   name was selected.
 
   \sa QString::isNull(), QFileDialog::selectedFiles(), QFileDialog::selectedFilter()
@@ -2748,7 +2750,6 @@ void QFileDialog::setDir( const QDir &dir )
 
 void QFileDialog::setUrl( const QUrlOperator &url )
 {
-    d->oldUrl = d->url;
     QString nf = d->url.nameFilter();
     d->url = QUrl( d->url, url.toString( FALSE, FALSE ) );
     d->url.setNameFilter( nf );
@@ -3080,9 +3081,12 @@ void QFileDialog::okClicked()
 	    d->ignoreReturn = FALSE;
 	    return;
 	}
-	d->currentFileName = d->url.toString();//dirPath();
-	accept();
-	return;
+        QUrlInfo f( d->url, nameEdit->text() );
+        if ( f.isDir() ) {
+            d->currentFileName = d->url + f.name();
+	    accept();
+	    return;
+        }
     }
 
     // if we're in multi-selection mode and something is selected,
@@ -3102,6 +3106,12 @@ void QFileDialog::okClicked()
 		return;
 	    }
 	}
+    }
+
+    if ( mode() == AnyFile ) {
+        d->currentFileName = d->url + nameEdit->text();
+        accept();
+        return;
     }
 
     // If selection is valid, return it, else try
@@ -3399,6 +3409,7 @@ void QFileDialog::listBoxSelectionChanged()
 
     nameEdit->clear();
     QString str;
+    QListBoxItem * j = 0;
     QListBoxItem * i = d->moreFiles->item( 0 );
     int index = 0;
     files->blockSignals( TRUE );
@@ -3408,18 +3419,20 @@ void QFileDialog::listBoxSelectionChanged()
 		files->setSelected( ( (QFileDialogPrivate::MCItem *)i )->i, i->selected() );
 	}
 	if ( d->moreFiles->isSelected( i )
-	     && !( (QFileDialogPrivate::File*)( (QFileDialogPrivate::MCItem *)i )->i )->info.isDir() )
+        && !( (QFileDialogPrivate::File*)( (QFileDialogPrivate::MCItem *)i )->i )->info.isDir() ) {
 	    str += QString( "\"%1\" " ).arg( i->text() );
+        if ( j == 0 )
+            j = i;
+    }
 	i = d->moreFiles->item( ++index );
     }
     files->blockSignals( FALSE );
     nameEdit->setText( str );
     nameEdit->setCursorPosition( str.length() );
     okB->setEnabled( TRUE );
-    if ( d->preview && d->preview->isVisible() && d->moreFiles->item( d->moreFiles->currentItem() ) ) {
+	if ( d->preview && d->preview->isVisible() && j ) {
 	QUrl u = QUrl( d->url, 
-		       ( (QFileDialogPrivate::File*)( (QFileDialogPrivate::MCItem*)d->
-						      moreFiles->item( d->moreFiles->currentItem() ) )->i )->info.name() );
+		       ( (QFileDialogPrivate::File*)( (QFileDialogPrivate::MCItem*)j )->i )->info.name() );
 	if ( d->infoPreviewer )
 	    d->infoPreviewer->previewUrl( u );
 	if ( d->contentsPreviewer )
@@ -3728,7 +3741,7 @@ void QFileDialog::cdUpClicked()
 
 void QFileDialog::newFolderClicked()
 {
-    QString dirname( tr( "New Folder 1" ) );
+    QString foldername( tr( "New Folder 1" ) );
     int i = 0;
     QStringList lst;
     QListViewItemIterator it( files );
@@ -3737,10 +3750,10 @@ void QFileDialog::newFolderClicked()
 	    lst.append( it.current()->text( 0 ) );
 
     if ( !lst.count() == 0 )
-	while ( lst.contains( dirname ) )
-	    dirname = tr( "New Folder %1" ).arg( ++i );
+	while ( lst.contains( foldername ) )
+	    foldername = tr( "New Folder %1" ).arg( ++i );
 
-    d->url.mkdir( dirname );
+    d->url.mkdir( foldername );
 }
 
 void QFileDialog::createdDirectory( const QUrlInfo &info, QNetworkOperation * )
@@ -3904,7 +3917,15 @@ void QFileDialog::setMode( Mode newMode )
 	QUrlInfo f( d->url, "." );
 	trySetSelection( f.isDir(), d->url, TRUE );
     }
-    QString okt = mode() == AnyFile ? tr("Save") : tr("Open");
+    
+    QString okt;
+    if ( mode() == AnyFile )
+        okt = tr("Save");
+    else if ( mode() == Directory || mode() == DirectoryOnly )
+        okt = tr("OK");
+    else
+        okt = tr("Open");
+    
     okB->setText( okt );
 }
 
@@ -5015,8 +5036,8 @@ void QFileDialog::insertEntry( const QValueList<QUrlInfo> &lst, QNetworkOperatio
 	    i = new QFileDialogPrivate::File( d, &inf, files );
 	    i2 = new QFileDialogPrivate::MCItem( d->moreFiles, i );
 
-	    if ( ( d->mode == ExistingFiles && inf.isDir() ) ||
-		 isDirectoryMode( d->mode ) ) {
+	    if ( d->mode == ExistingFiles && inf.isDir() ||
+                ( isDirectoryMode( d->mode ) && inf.isFile() ) ) {
 		i->setSelectable( FALSE );
 		i2->setSelectable( FALSE );
 	    }
@@ -5283,8 +5304,8 @@ void QFileDialog::resortDir()
 	item2 = new QFileDialogPrivate::MCItem( d->moreFiles, item, item2 );
 	item->i = item2;
 	d->pendingItems.append( item );
-	if ( d->mode == ExistingFiles && item->info.isDir() ||
-	     isDirectoryMode( d->mode ) ) {
+	if ( d->mode == ExistingFiles && item->info.isDir() || 
+            ( isDirectoryMode( d->mode ) && item->info.isFile() ) ) {
 	    item->setSelectable( FALSE );
 	    item2->setSelectable( FALSE );
 	}

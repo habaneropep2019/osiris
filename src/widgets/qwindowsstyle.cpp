@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qwindowsstyle.cpp   2.2.3   edited 2000-11-17 $
+** $Id: qt/src/widgets/qwindowsstyle.cpp   2.2.4   edited 2000-11-17 $
 **
 ** Implementation of Windows-like style class
 **

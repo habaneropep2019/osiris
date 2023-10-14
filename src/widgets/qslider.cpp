@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qslider.cpp   2.2.3   edited 2000-10-11 $
+** $Id: qt/src/widgets/qslider.cpp   2.2.4   edited 2000-12-13 $
 **
 ** Implementation of QSlider class
 **
@@ -686,7 +686,7 @@ void QSlider::moveSlider( int pos )
 	emit sliderMoved( sliderVal );
     }
     if ( tracking() && sliderVal != value() ) {
-	directSetValue( sliderVal );
+	setValue( sliderVal );
 	emit valueChanged( sliderVal );
     }
 

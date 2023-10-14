@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/xml/qdom.cpp   2.2.3   edited 2000-12-12 $
+** $Id: qt/src/xml/qdom.cpp   2.2.4   edited 2000-12-12 $
 **
 ** Implementation of QDomDocument and related classes.
 **

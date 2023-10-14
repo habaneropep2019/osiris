@@ -33,7 +33,7 @@ The QRegion class specifies a clip region for a painter.
 <li><div class="fn">enum <a href="#RegionType"><b>RegionType</b></a> { Rectangle, Ellipse }</div>
 <li><div class="fn"><a href="#075f5f"><b>QRegion</b></a> () </div>
 <li><div class="fn"><a href="#429945"><b>QRegion</b></a> ( int x, int y, int w, int h, RegionType = Rectangle ) </div>
-<li><div class="fn"><a href="#90cf17"><b>QRegion</b></a> ( const QRect &amp;, RegionType = Rectangle ) </div>
+<li><div class="fn"><b>QRegion</b> ( const QRect &amp;, RegionType = Rectangle ) </div>
 <li><div class="fn"><a href="#20604c"><b>QRegion</b></a> ( const QPointArray &amp;, bool winding=FALSE ) </div>
 <li><div class="fn"><a href="#1f2054"><b>QRegion</b></a> ( const QRegion &amp; ) </div>
 <li><div class="fn"><a href="#7d1028"><b>QRegion</b></a> ( const QBitmap &amp; ) </div>
@@ -131,8 +131,6 @@ down painting when used.
 <p>If <em>t</em> is <code>Rectangle,</code> the region is the filled rectangle (<em>x, y, w, h).</em> If <em>t</em> is <code>Ellipse,</code> the region is the filled
 ellipse ellipse with center at (<em>x</em> + <em>w</em> / 2, <em>y</em> + <em>h</em> / 2) and 
 size (<em>w</em> ,<em>h</em> ).
-<h3 class="fn"><a name="90cf17"></a>QRegion::QRegion ( const <a href="qrect.html">QRect</a> &amp; r, <a href="qregion.html#RegionType">RegionType</a> t = Rectangle )</h3>
-<p>This is an overloaded member function, provided for convenience.  It differs from the above function only in what argument(s) it accepts.
 <h3 class="fn"><a name="76d92e"></a>QRegion::~QRegion ()</h3>
 <p>Destructs the region.
 <h3 class="fn"><a href="qrect.html">QRect</a> <a name="79eb9f"></a>QRegion::boundingRect () const</h3>
@@ -255,7 +253,7 @@ the stream.
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.2.3"><nobr>
+<input type=hidden name="version" value="2.2.4"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -263,5 +261,5 @@ copyright &copy; 1995-2000
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.3</div>
+<td align="right"><div align="right">Qt version 2.2.4</div>
 </table></div></address></body></html>

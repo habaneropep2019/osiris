@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qrichtext_p.h   2.2.3   edited 2000-10-19 $
+** $Id: qt/src/kernel/qrichtext_p.h   2.2.4   edited 2001-01-31 $
 **
 ** Definition of internal rich text classes
 **
@@ -400,6 +400,7 @@ private:
     QPixmap pm;
     Placement place;
     int tmpwidth;
+    QString imgId;
 };
 
 

@@ -29,7 +29,7 @@ The QObject class is the base class of all Qt objects.
 <code>#include &lt;<a href="qobject-h.html">qobject.h</a>&gt;</code>
 <p>
 Inherits <a href="qt.html">Qt</a>.
-<p>Inherited by <a href="qaccel.html">QAccel</a>, <a href="qaction.html">QAction</a>, <a href="qapplication.html">QApplication</a>, QAuServer, <a href="qcanvas.html">QCanvas</a>, <a href="qclipboard.html">QClipboard</a>, <a href="qdatapump.html">QDataPump</a>, <a href="qdns.html">QDns</a>, QDnsSocket, QDragManager, <a href="qdragobject.html">QDragObject</a>, <a href="qfileiconprovider.html">QFileIconProvider</a>, QGuardedPtrPrivate, <a href="qlayout.html">QLayout</a>, <a href="qnpinstance.html">QNPInstance</a>, <a href="qnetworkoperation.html">QNetworkOperation</a>, <a href="qnetworkprotocol.html">QNetworkProtocol</a>, QSenderObject, <a href="qserversocket.html">QServerSocket</a>, <a href="qsessionmanager.html">QSessionManager</a>, <a href="qsignal.html">QSignal</a>, <a href="qsignalmapper.html">QSignalMapper</a>, <a href="qsocket.html">QSocket</a>, <a href="qsocketnotifier.html">QSocketNotifier</a>, <a href="qsound.html">QSound</a>, <a href="qstyle.html">QStyle</a>, <a href="qstylesheet.html">QStyleSheet</a>, <a href="qtimer.html">QTimer</a>, <a href="qtooltipgroup.html">QToolTipGroup</a>, <a href="qtranslator.html">QTranslator</a>, <a href="qurloperator.html">QUrlOperator</a>, <a href="qvalidator.html">QValidator</a> and <a href="qwidget.html">QWidget</a>.
+<p>Inherited by <a href="qaccel.html">QAccel</a>, <a href="qaction.html">QAction</a>, <a href="qapplication.html">QApplication</a>, QAuServer, <a href="qcanvas.html">QCanvas</a>, <a href="qclipboard.html">QClipboard</a>, <a href="qcopchannel.html">QCopChannel</a>, <a href="qdatapump.html">QDataPump</a>, <a href="qdns.html">QDns</a>, QDnsSocket, QDragManager, <a href="qdragobject.html">QDragObject</a>, <a href="qfileiconprovider.html">QFileIconProvider</a>, QGuardedPtrPrivate, <a href="qlayout.html">QLayout</a>, <a href="qnpinstance.html">QNPInstance</a>, <a href="qnetworkoperation.html">QNetworkOperation</a>, <a href="qnetworkprotocol.html">QNetworkProtocol</a>, QSenderObject, <a href="qserversocket.html">QServerSocket</a>, <a href="qsessionmanager.html">QSessionManager</a>, <a href="qsignal.html">QSignal</a>, <a href="qsignalmapper.html">QSignalMapper</a>, <a href="qsocket.html">QSocket</a>, <a href="qsocketnotifier.html">QSocketNotifier</a>, <a href="qsound.html">QSound</a>, <a href="qstyle.html">QStyle</a>, <a href="qstylesheet.html">QStyleSheet</a>, <a href="qtimer.html">QTimer</a>, <a href="qtooltipgroup.html">QToolTipGroup</a>, <a href="qtranslator.html">QTranslator</a>, <a href="qurloperator.html">QUrlOperator</a>, <a href="qvalidator.html">QValidator</a> and <a href="qwidget.html">QWidget</a>.
 <p><a href="qobject-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
@@ -403,7 +403,7 @@ event should be stopped, or FALSE if the event should be dispatched normally.<p>
 If you return FALSE, Qt sends the event to the deleted object and the
 program will crash.
 <p>See also  <a href="#b59963">installEventFilter</a>().
-<p>Reimplemented in <a href="qscrollview.html#0ac2b8">QScrollView</a>, <a href="qmainwindow.html#cc031a">QMainWindow</a>, <a href="qtabwidget.html#92e551">QTabWidget</a>, <a href="qfontdialog.html#224fd0">QFontDialog</a>, <a href="qfiledialog.html#ff0700">QFileDialog</a>, <a href="qspinbox.html#e69a3c">QSpinBox</a>, <a href="qlayout.html#d4f527">QLayout</a>, <a href="qsgistyle.html#bc36f8">QSGIStyle</a>, <a href="qaccel.html#01f967">QAccel</a>, <a href="qlistview.html#981566">QListView</a>, <a href="qcombobox.html#f75507">QComboBox</a>, <a href="qtable.html#73c113">QTable</a>, <a href="qworkspace.html#8fa936">QWorkspace</a>, <a href="qmotifplusstyle.html#ad4cab">QMotifPlusStyle</a>, <a href="qiconview.html#f0abe4">QIconView</a>, <a href="qmenubar.html#90adf4">QMenuBar</a> and <a href="qwizard.html#0011bd">QWizard</a>.
+<p>Reimplemented in <a href="qscrollview.html#0ac2b8">QScrollView</a>, <a href="qtoolbar.html#680d2d">QToolBar</a>, <a href="qmainwindow.html#cc031a">QMainWindow</a>, <a href="qtabwidget.html#92e551">QTabWidget</a>, <a href="qfontdialog.html#224fd0">QFontDialog</a>, <a href="qfiledialog.html#ff0700">QFileDialog</a>, <a href="qspinbox.html#e69a3c">QSpinBox</a>, <a href="qlayout.html#d4f527">QLayout</a>, <a href="qsgistyle.html#bc36f8">QSGIStyle</a>, <a href="qaccel.html#01f967">QAccel</a>, <a href="qlistview.html#981566">QListView</a>, <a href="qcombobox.html#f75507">QComboBox</a>, <a href="qtable.html#73c113">QTable</a>, <a href="qworkspace.html#8fa936">QWorkspace</a>, <a href="qmotifplusstyle.html#ad4cab">QMotifPlusStyle</a>, <a href="qiconview.html#f0abe4">QIconView</a>, <a href="qmenubar.html#90adf4">QMenuBar</a> and <a href="qwizard.html#0011bd">QWizard</a>.
 <h3 class="fn">bool <a name="78bb25"></a>QObject::highPriority () const</h3>
 <p>Returns TRUE if the object is a high priority object, or FALSE if it is a
 standard priority object.
@@ -685,7 +685,7 @@ timer events for the object.
 <p><a href="qtimer.html">QTimer</a> provides a higher-level interface to the timer functionality,
 and also more general information about timers.
 <p>See also  <a href="#906d99">startTimer</a>(), <a href="#f5e328">killTimer</a>(), <a href="#66592d">killTimers</a>() and <a href="#c8b023">event</a>().
-<p>Reimplemented in <a href="qpopupmenu.html#3ff1d5">QPopupMenu</a>.
+<p>Reimplemented in <a href="qpopupmenu.html#3ff1d5">QPopupMenu</a> and <a href="qmultilineedit.html#0cf52b">QMultiLineEdit</a>.
 <h3 class="fn"><a href="qstring.html">QString</a> <a name="ba30fb"></a>QObject::tr ( const char * text, const char * comment ) <code>[static]</code></h3>
 <p>Returns a translated version of <em>text</em> in context QObject and and
 with <em>comment,</em> or <em>text</em> if there is no appropriate translated
@@ -720,7 +720,7 @@ which inherits type <em>type.</em>
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.2.3"><nobr>
+<input type=hidden name="version" value="2.2.4"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -728,5 +728,5 @@ copyright &copy; 1995-2000
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.3</div>
+<td align="right"><div align="right">Qt version 2.2.4</div>
 </table></div></address></body></html>

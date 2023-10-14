@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/overlay/glteapots.cpp   2.2.3   edited 2000-08-31 $
+** $Id: qt/examples/overlay/glteapots.cpp   2.2.4   edited 2000-08-31 $
 **
 ** Implementation of GLTeapots
 ** This is a QGLWidget displaying a group of teapots and a rubber-band

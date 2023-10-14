@@ -1,4 +1,4 @@
-.TH QCache 3qt "12 December 2000" "Trolltech AS" \" -*- nroff -*-
+.TH QCache 3qt "1 Febrary 2001" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -132,7 +132,7 @@ The parameter \fIp\fR is internal and should be left at the default value (0).
 .PP
 \fBWarning:\fR If this function returns FALSE, you must delete \fId\fR yourself. Additionally, be very careful about using \fId\fR after calling this function, as any other insertions into the cache, from anywhere in the application, or within Qt itself, could cause the object to be discarded from the cache, and the pointer to become invalid.
 .SH "bool QCache::isEmpty () const"
-Returns TRUE if the cache is empty, or TRUE if there is at least one object in it.
+Returns TRUE if the cache is empty, or FALSE if there is at least one object in it.
 .SH "int QCache::maxCost () const"
 Returns the maximum allowed total cost of the cache.
 .PP

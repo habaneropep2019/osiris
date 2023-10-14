@@ -39,11 +39,11 @@ public:
 
     int rate() { return refreshRate; }
     bool animating() const { return !!animation; }
+    QImage image() const;
 
 public slots:
     void setRate( int );
     void setZoom( double );
-    void saveAs( const QString& );
     void startAnimation( const QString& );
     void stopAnimation();
 
@@ -54,7 +54,7 @@ protected:
     void initLock();
     void lock();
     void unlock();
-    QImage getBuffer( const QRect &r, int &leading );
+    QImage getBuffer( const QRect &r, int &leading ) const;
     void drawScreen();
     void sendMouseData( const QPoint &pos, int buttons );
     void sendKeyboardData( int unicode, int keycode, int modifiers,

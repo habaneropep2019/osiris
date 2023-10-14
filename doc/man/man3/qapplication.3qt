@@ -1,4 +1,4 @@
-.TH QApplication 3qt "12 December 2000" "Trolltech AS" \" -*- nroff -*-
+.TH QApplication 3qt "1 Febrary 2001" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -398,8 +398,9 @@ While Qt is not optimized or designed for writing non-GUI programs, it's possibl
 .PP
 Examples:
 .(l
-showimg/main.cpp action/main.cpp rangecontrols/main.cpp iconview/main.cpp validator/main.cpp themes/main.cpp listviews/main.cpp aclock/main.cpp checklists/main.cpp drawlines/connect.cpp dclock/main.cpp wizard/main.cpp xform/xform.cpp application/main.cpp cursor/cursor.cpp layout/layout.cpp helpviewer/main.cpp buttongroups/main.cpp life/main.cpp i18n/main.cpp drawdemo/drawdemo.cpp lineedits/main.cpp popup/popup.cpp fileiconview/main.cpp listbox/main.cpp menu/menu.cpp progress/progress.cpp scribble/main.cpp qmag/qmag.cpp tabdialog/main.cpp splitter/splitter.cpp progressbar/main.cpp tooltip/main.cpp richtext/main.cpp qwerty/main.cpp forever/forever.cpp rot13/rot13.cpp desktop/desktop.cpp scrollview/scrollview.cpp qfd/qfd.cpp addressbook/main.cpp movies/main.cpp picture/picture.cpp hello/main.cpp listboxcombo/main.cpp biff/main.cpp tictac/main.cpp customlayout/main.cpp mdi/main.cpp dirview/main.cpp
-.)l
+showimg/main.cpp action/main.cpp rangecontrols/main.cpp iconview/main.cpp validator/main.cpp themes/main.cpp listviews/main.cpp aclock/main.cpp checklists/main.cpp drawlines/connect.cpp dclock/main.cpp wizard/main.cpp xform/xform.cpp application/main.cpp cursor/cursor.cpp layout/layout.cpp helpviewer/main.cpp buttongroups/main.cpp life/main.cpp i18n/main.cpp drawdemo/drawdemo.cpp lineedits/main.cpp popup/popup.cpp fileiconview/main.cpp listbox/main.cpp menu/menu.cpp progress/progress.cpp scribble/main.cpp qmag/qmag.cpp tabdialog/main.cpp splitter/splitter.cpp progressbar/main.cpp tooltip/main.cpp richtext/main.cpp qwerty/main.cpp forever/forever.cpp rot13/rot13.cpp xml/tagreader
+.)l-with-features/tagreader.cpp
+desktop/desktop.cpp scrollview/scrollview.cpp qfd/qfd.cpp addressbook/main.cpp movies/main.cpp picture/picture.cpp hello/main.cpp listboxcombo/main.cpp biff/main.cpp tictac/main.cpp customlayout/main.cpp mdi/main.cpp dirview/main.cpp
 .SH MEMBER FUNCTION DOCUMENTATION
 .SH "QApplication::QApplication ( int & argc, char ** argv )"
 Initializes the window system and constructs an application object with the command line arguments \fIargc\fR and \fIargv.\fR
@@ -712,8 +713,9 @@ See also quit(), exit(), processEvents() and setMainWidget().
 .PP
 Examples:
 .(l
-showimg/main.cpp action/main.cpp rangecontrols/main.cpp iconview/main.cpp validator/main.cpp themes/main.cpp listviews/main.cpp aclock/main.cpp checklists/main.cpp drawlines/connect.cpp dclock/main.cpp mainlyQt/editor.cpp xform/xform.cpp application/main.cpp cursor/cursor.cpp layout/layout.cpp helpviewer/main.cpp buttongroups/main.cpp life/main.cpp i18n/main.cpp drawdemo/drawdemo.cpp lineedits/main.cpp popup/popup.cpp fileiconview/main.cpp listbox/main.cpp menu/menu.cpp progress/progress.cpp scribble/main.cpp qmag/qmag.cpp tabdialog/main.cpp splitter/splitter.cpp progressbar/main.cpp tooltip/main.cpp richtext/main.cpp qwerty/main.cpp forever/forever.cpp rot13/rot13.cpp scrollview/scrollview.cpp qfd/qfd.cpp addressbook/main.cpp movies/main.cpp picture/picture.cpp hello/main.cpp listboxcombo/main.cpp biff/main.cpp tictac/main.cpp customlayout/main.cpp mdi/main.cpp dirview/main.cpp
-.)l
+showimg/main.cpp action/main.cpp rangecontrols/main.cpp iconview/main.cpp validator/main.cpp themes/main.cpp listviews/main.cpp aclock/main.cpp checklists/main.cpp drawlines/connect.cpp dclock/main.cpp mainlyQt/editor.cpp xform/xform.cpp application/main.cpp cursor/cursor.cpp layout/layout.cpp helpviewer/main.cpp buttongroups/main.cpp life/main.cpp i18n/main.cpp drawdemo/drawdemo.cpp lineedits/main.cpp popup/popup.cpp fileiconview/main.cpp listbox/main.cpp menu/menu.cpp progress/progress.cpp scribble/main.cpp qmag/qmag.cpp tabdialog/main.cpp splitter/splitter.cpp progressbar/main.cpp tooltip/main.cpp richtext/main.cpp qwerty/main.cpp forever/forever.cpp rot13/rot13.cpp xml/tagreader
+.)l-with-features/tagreader.cpp
+scrollview/scrollview.cpp qfd/qfd.cpp addressbook/main.cpp movies/main.cpp picture/picture.cpp hello/main.cpp listboxcombo/main.cpp biff/main.cpp tictac/main.cpp customlayout/main.cpp mdi/main.cpp dirview/main.cpp
 .SH "void QApplication::exit ( int retcode=0 ) \fC[static]\fR"
 Tells the application to exit with a return code.
 .PP
@@ -1105,8 +1107,9 @@ See also mainWidget(), exec() and quit().
 .PP
 Examples:
 .(l
-rangecontrols/main.cpp iconview/main.cpp validator/main.cpp themes/main.cpp listviews/main.cpp aclock/main.cpp checklists/main.cpp drawlines/connect.cpp dclock/main.cpp mainlyQt/editor.cpp xform/xform.cpp cursor/cursor.cpp layout/layout.cpp buttongroups/main.cpp life/main.cpp i18n/main.cpp drawdemo/drawdemo.cpp lineedits/main.cpp popup/popup.cpp fileiconview/main.cpp listbox/main.cpp menu/menu.cpp progress/progress.cpp scribble/main.cpp qmag/qmag.cpp tabdialog/main.cpp splitter/splitter.cpp progressbar/main.cpp tooltip/main.cpp richtext/main.cpp forever/forever.cpp rot13/rot13.cpp qfd/qfd.cpp addressbook/main.cpp picture/picture.cpp hello/main.cpp listboxcombo/main.cpp biff/main.cpp tictac/main.cpp customlayout/main.cpp dirview/main.cpp
-.)l
+rangecontrols/main.cpp iconview/main.cpp validator/main.cpp themes/main.cpp listviews/main.cpp aclock/main.cpp checklists/main.cpp drawlines/connect.cpp dclock/main.cpp mainlyQt/editor.cpp xform/xform.cpp cursor/cursor.cpp layout/layout.cpp buttongroups/main.cpp life/main.cpp i18n/main.cpp drawdemo/drawdemo.cpp lineedits/main.cpp popup/popup.cpp fileiconview/main.cpp listbox/main.cpp menu/menu.cpp progress/progress.cpp scribble/main.cpp qmag/qmag.cpp tabdialog/main.cpp splitter/splitter.cpp progressbar/main.cpp tooltip/main.cpp richtext/main.cpp forever/forever.cpp rot13/rot13.cpp xml/tagreader
+.)l-with-features/tagreader.cpp
+qfd/qfd.cpp addressbook/main.cpp picture/picture.cpp hello/main.cpp listboxcombo/main.cpp biff/main.cpp tictac/main.cpp customlayout/main.cpp dirview/main.cpp
 .SH "void QApplication::setOverrideCursor ( const QCursor & cursor, bool replace=FALSE ) \fC[static]\fR"
 Sets the application override cursor to \fIcursor.\fR
 .PP

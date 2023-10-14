@@ -12,7 +12,8 @@ framebuffer.
 
 To use the virtual framebuffer:
 
-1. Ensure QT_NO_QWS_VFB is not set in qconfig.h
+1. Ensure QT_NO_QWS_VFB is not set in qconfig.h (when you configure Qt,
+    add the -qvfb option).
 2. Start qvfb (qvfb should be compiled as a normal Qt/X11 application,
     NOT as a Qt/Embedded application!).
 3. Start a Qt/Embedded server (i.e. construct QApplication with
