@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qcolor.cpp   2.3.0   edited 2001-01-26 $
+** $Id: qt/src/kernel/qcolor.cpp   2.3.1   edited 2001-03-26 $
 **
 ** Implementation of QColor class
 **
@@ -799,6 +799,12 @@ QDataStream &operator>>( QDataStream &s, QColor &c )
 */
 
 /*!
+  \fn int qAlpha( QRgb rgba )
+  \relates QColor
+  Returns the alpha component of the RGBA quadruplet \e rgb.
+*/
+
+/*!
   \fn QRgb qRgb( int r, int g, int b )
   \relates QColor
   Returns the RGB triplet \a (r,g,b).
@@ -811,7 +817,7 @@ QDataStream &operator>>( QDataStream &s, QColor &c )
 /*!
   \fn QRgb qRgba( int r, int g, int b, int a )
   \relates QColor
-  Returns the RGBA triplet \a (r,g,b,a).
+  Returns the RGBA quadruplet \a (r,g,b,a).
 
   The return type \e QRgb is equivalent to \c unsigned \c int.
 

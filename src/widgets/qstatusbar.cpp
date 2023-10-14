@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qstatusbar.cpp   2.3.0   edited 2001-01-26 $
+** $Id: qt/src/widgets/qstatusbar.cpp   2.3.1   edited 2001-05-22 $
 **
 ** Implementation of QStatusBar class
 **
@@ -288,7 +288,7 @@ void QStatusBar::reformat()
     if ( d->box )
 	delete d->box;
     d->box = new QVBoxLayout( this );
-    d->box->addSpacing( 3 );
+    d->box->addSpacing( 5 );
 
     QBoxLayout* l = new QHBoxLayout( d->box );
     l->addSpacing( 3 );
@@ -318,11 +318,9 @@ void QStatusBar::reformat()
 	maxH = QMAX( maxH, d->resizer->sizeHint().height() );
 	l->addSpacing( 2 );
 	l->addWidget( d->resizer, 0, AlignBottom );
-	l->addSpacing( 2 );
     }
 #endif
     l->addStrut( maxH );
-    d->box->addSpacing( 2 );
     d->box->activate();
     repaint();
 }
@@ -419,7 +417,7 @@ void QStatusBar::paintEvent( QPaintEvent * )
     QPainter p( this );
     QStatusBarPrivate::SBItem* item = d->items.first();
     while ( item ) {
-	if ( !haveMessage || item->p )
+	if ( (!haveMessage || item->p) && item->w->isVisible() )
 	    qDrawShadeRect( &p, item->w->x()-1, item->w->y()-1,
 			    item->w->width()+2, item->w->height()+2,
 			    colorGroup(), TRUE, 1, 0, 0 );

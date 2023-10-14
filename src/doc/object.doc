@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/doc/object.doc   2.3.0   edited 2001-01-26 $
+** $Id: qt/doc/object.doc   2.3.1   edited 2001-04-05 $
 **
 ** Explanation of the Qt object model
 **
@@ -463,7 +463,7 @@ filters.
 
 Finally, many applications want to create and send their own events.
 
-Creatint an event of a built-in type is very simple: Create an object
+Creating an event of a built-in type is very simple: Create an object
 of the relevant type, and then call \l QApplication::sendEvent() or \l
 QApplication::postEvent().
 

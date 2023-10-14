@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qthread_p.h   2.3.0   edited 2001-02-21 $
+** $Id: qt/src/kernel/qthread_p.h   2.3.1   edited 2001-06-11 $
 **
 ** QThread class for Unix
 **
@@ -38,6 +38,7 @@
 #ifndef QTHREAD_P_H
 #define QTHREAD_P_H
 
+#define gettimeofday __hide_gettimeofday
 #include <qglobal.h>
 
 #include <errno.h>
@@ -47,6 +48,11 @@
 #else
 #include <qintdict.h>
 #endif
+#include <time.h>
+#include <sys/time.h>
+
+#undef	gettimeofday
+extern "C" int gettimeofday( struct timeval *, struct timezone * );
 
 
 // Thread definitions for UNIX platforms
@@ -452,9 +458,12 @@ public:
 
 	int ret;
 	if (time != ULONG_MAX) {
+	    struct timeval tv;
+	    gettimeofday(&tv, 0);
+
 	    timespec ti;
-	    ti.tv_sec = (time / 1000);
-	    ti.tv_nsec = (time % 1000) * 1000000;
+	    ti.tv_sec = tv.tv_sec + (time / 1000);
+	    ti.tv_nsec = (tv.tv_usec * 1000) + (time % 1000) * 1000000;
 
 	    ret = cond_timedwait(&(cond), &(mutex.d->mutex), &ti);
 	} else {
@@ -508,9 +517,12 @@ public:
 
 	int ret;
 	if (time != ULONG_MAX) {
+	    struct timeval tv;
+	    gettimeofday(&tv, 0);
+
 	    timespec ti;
-	    ti.tv_sec = (time / 1000);
-	    ti.tv_nsec = (time % 1000) * 1000000;
+	    ti.tv_sec = tv.tv_sec + (time / 1000);
+	    ti.tv_nsec = (tv.tv_usec * 1000) + (time % 1000) * 1000000;
 
 	    ret = cond_timedwait(&(cond), &(mtx->d->mutex), &ti);
 	} else {
@@ -910,9 +922,12 @@ public:
 
 	int ret;
 	if (time != ULONG_MAX) {
+	    struct timeval tv;
+	    gettimeofday(&tv, 0);
+
 	    timespec ti;
-	    ti.tv_sec = (time / 1000);
-	    ti.tv_nsec = (time % 1000) * 1000000;
+	    ti.tv_sec = tv.tv_sec + (time / 1000);
+	    ti.tv_nsec = (tv.tv_usec * 1000) + (time % 1000) * 1000000;
 
 	    ret = pthread_cond_timedwait(&(cond), &(mutex.d->mutex), &ti);
 	} else {
@@ -966,9 +981,12 @@ public:
 
 	int ret;
 	if (time != ULONG_MAX) {
+	    struct timeval tv;
+	    gettimeofday(&tv, 0);
+
 	    timespec ti;
-	    ti.tv_sec = (time / 1000);
-	    ti.tv_nsec = (time % 1000) * 1000000;
+	    ti.tv_sec = tv.tv_sec + (time / 1000);
+	    ti.tv_nsec = (tv.tv_usec * 1000) + (time % 1000) * 1000000;
 
 	    ret = pthread_cond_timedwait(&(cond), &(mtx->d->mutex), &ti);
 	} else {

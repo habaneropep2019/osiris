@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qpalette.h   2.3.0   edited 2001-01-26 $
+** $Id: qt/src/kernel/qpalette.h   2.3.1   edited 2001-05-08 $
 **
 ** Definition of QColorGroup and QPalette classes
 **
@@ -157,6 +157,8 @@ private:
 	int	    ser_no;
 	QColorGroup inactive;
     } *data;
+    static QPalData *defPalData;
+    static void cleanupDefPal();
 };
 
 

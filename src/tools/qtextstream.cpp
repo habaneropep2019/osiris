@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qtextstream.cpp   2.3.0   edited 2001-02-08 $
+** $Id: qt/src/tools/qtextstream.cpp   2.3.1   edited 2001-03-12 $
 **
 ** Implementation of QTextStream class
 **
@@ -2164,7 +2164,7 @@ void QTextStream::setEncoding( Encoding e )
 	internalOrder = TRUE;
 	break;
     case UnicodeUTF8:
-#ifndef QT_NO_CODECS
+#ifndef QT_NO_TEXTCODEC
 	mapper = QTextCodec::codecForMib( 106 );
 	latin1 = FALSE;
 	doUnicodeHeader = TRUE;

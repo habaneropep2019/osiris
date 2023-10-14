@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qdnd_x11.cpp   2.3.0   edited 2001-02-10 $
+** $Id: qt/src/kernel/qdnd_x11.cpp   2.3.1   edited 2001-02-10 $
 **
 ** XDND implementation for Qt.  See http://www.cco.caltech.edu/~jafl/xdnd/
 **

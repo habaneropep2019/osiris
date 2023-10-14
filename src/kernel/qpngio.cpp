@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qpngio.cpp   2.3.0   edited 2001-01-26 $
+** $Id: qt/src/kernel/qpngio.cpp   2.3.1   edited 2001-03-19 $
 **
 ** Implementation of PNG QImage IOHandler
 **
@@ -456,10 +456,12 @@ bool QPNGImageWriter::writeImage(const QImage& image, int quality, int off_x, in
        png_set_packswap(png_ptr);
 #endif
 
+    png_colorp palette = 0;
+    png_bytep copy_trans = 0;
     if (image.numColors()) {
 	// Paletted
         int num_palette = image.numColors();
-	png_colorp palette = new png_color[num_palette];
+	palette = new png_color[num_palette];
 	png_set_PLTE(png_ptr, info_ptr, palette, num_palette);
 	int* trans = new int[num_palette];
 	int num_trans = 0;
@@ -476,7 +478,7 @@ bool QPNGImageWriter::writeImage(const QImage& image, int quality, int off_x, in
 	    }
 	}
 	if (num_trans) {
-	    png_bytep copy_trans = new png_byte[num_trans];
+	    copy_trans = new png_byte[num_trans];
 	    for (int i=0; i<num_trans; i++)
 		copy_trans[i] = trans[i];
 	    png_set_tRNS(png_ptr, info_ptr, copy_trans, num_trans, 0);
@@ -559,7 +561,7 @@ bool QPNGImageWriter::writeImage(const QImage& image, int quality, int off_x, in
     row_pointers=new png_bytep[height];
     uint y;
     for (y=0; y<height; y++) {
-	    row_pointers[y]=jt[y];
+	row_pointers[y]=jt[y];
     }
     png_write_image(png_ptr, row_pointers);
     delete [] row_pointers;
@@ -567,10 +569,10 @@ bool QPNGImageWriter::writeImage(const QImage& image, int quality, int off_x, in
     png_write_end(png_ptr, info_ptr);
     frames_written++;
 
-    if (image.numColors())
-	delete [] info_ptr->palette;
-    if (png_get_valid(png_ptr, info_ptr, PNG_INFO_tRNS))
-	delete [] info_ptr->trans;
+    if ( palette )
+	delete [] palette;
+    if ( copy_trans )
+	delete [] copy_trans;
 
     png_destroy_write_struct(&png_ptr, &info_ptr);
 

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/xml/qxml.cpp   2.3.0   edited 2001-02-18 $
+** $Id: qt/src/xml/qxml.cpp   2.3.1   edited 2001-02-18 $
 **
 ** Implementation of QXmlSimpleReader and related classes.
 **

@@ -1,5 +1,5 @@
 /**********************************************************************
-** $Id: qt/src/widgets/qlineedit.cpp   2.3.0   edited 2001-02-06 $
+** $Id: qt/src/widgets/qlineedit.cpp   2.3.1   edited 2001-05-11 $
 **
 ** Implementation of QLineEdit widget class
 **
@@ -86,7 +86,7 @@ struct QLineEditPrivate {
 	dndTimer( l, "DnD Timer" ),
 	inDoubleClick( FALSE ), offsetDirty( FALSE ),
 	undo(TRUE), needundo( FALSE ), ignoreUndoWithDel( FALSE ),
-	mousePressed( FALSE ), dnd_primed( FALSE ) {}
+	mousePressed( FALSE ), dnd_primed( FALSE ), passwordChar( '*' ) {}
 
     bool frame;
     QLineEdit::EchoMode mode;
@@ -107,6 +107,7 @@ struct QLineEditPrivate {
     bool mousePressed;
     QPoint dnd_startpos;
     bool dnd_primed;
+    QChar passwordChar;
 };
 
 
@@ -355,7 +356,7 @@ QString QLineEdit::displayText() const
 	res = QString::fromLatin1("");
 	break;
     case Password:
-	res.fill( '*', tbuf.length() );
+	res.fill( d->passwordChar, tbuf.length() );
 	break;
     }
     return res;
@@ -540,6 +541,10 @@ void QLineEdit::keyPressEvent( QKeyEvent *e )
 	case Key_K:
 	    if ( !d->readonly && cursorPos < (int)tbuf.length() ) {
 		QString t( tbuf );
+		if ( d->undoList.isEmpty() || d->undoList.last().str != tbuf ) {
+		    d->undoList += QLineEditUndoItem(tbuf, cursorPos );
+		    d->redoList.clear();
+		}
 		t.truncate( cursorPos );
 		validateAndSet( t, cursorPos, cursorPos, cursorPos );
 	    }
@@ -941,12 +946,7 @@ void QLineEdit::doDrag()
 {
     d->dnd_primed = FALSE;
     QTextDrag *tdo = new QTextDrag( markedText(), this );
-    if ( tdo->drag() ) {
-	// ##### Delete original (but check if it went to me)
-#if defined (_WS_WIN_)
-        del();
-#endif
-    }
+    tdo->drag();
 }
 
 #endif // QT_NO_DRAGANDDROP
@@ -1000,8 +1000,9 @@ void QLineEdit::mouseReleaseEvent( QMouseEvent * e )
     d->dnd_primed = FALSE;
     if ( d->dndTimer.isActive() ) {
 	d->dndTimer.stop();
-	deselect();
-	setCursorPosition( xPosToCursorPos( e->pos().x() ) );
+	int ncp = xPosToCursorPos( e->pos().x() );
+	setSelection( ncp, 0 );
+	setCursorPosition( ncp );
 	return;
     }
     if ( d->inDoubleClick ) {
@@ -1535,15 +1536,15 @@ void QLineEdit::dropEvent( QDropEvent *e )
 {
     QString str;
     QCString plain = "plain";
-    
+
     // try text/plain
     bool decoded = QTextDrag::decode(e, str, plain);
     // otherwise we'll accept any kind of text (like text/uri-list)
     if (! decoded) decoded = QTextDrag::decode(e, str);
-    
+
     if ( !d->readonly && decoded) {
 	if ( e->source() == this && hasMarkedText() )
-	    deselect();
+	    del();
 	if ( !hasMarkedText() )
 	    setCursorPosition( xPosToCursorPos(e->pos().x()) );
 	insert( str );
@@ -1981,6 +1982,7 @@ void QLineEdit::undoInternal()
     d->redoList += QLineEditUndoItem(tbuf, cursorPos );
     setText( d->undoList.last().str );
     setCursorPosition( d->undoList.last().pos );
+    markAnchor = cursorPos;
     d->undoList.remove( d->undoList.fromLast() );
     if ( d->undoList.count() > 10 )
 	d->undoList.remove( d->undoList.begin() );
@@ -1996,8 +1998,33 @@ void QLineEdit::redoInternal()
     d->undoList += QLineEditUndoItem(tbuf, cursorPos );
     setText( d->redoList.last().str );
     setCursorPosition( d->redoList.last().pos );
+    markAnchor = cursorPos;
     d->redoList.remove( d->redoList.fromLast() );
     d->undo = TRUE;
     d->needundo = TRUE;
 }
+#endif
+
+
+#if defined(Q_INCOMPATIBLE_3_0_ADDONS)
+bool QLineEdit::getSelection( int *start, int *end )
+{
+    if( !hasMarkedText() )
+	return false;
+
+    *start = minMark();
+    *end = maxMark();
+    return true;
+}
+
+void QLineEdit::setPasswordChar( QChar c )
+{
+    d->passwordChar = c;
+}
+
+QChar QLineEdit::passwordChar() const
+{
+    return d->passwordChar;
+}
+
 #endif

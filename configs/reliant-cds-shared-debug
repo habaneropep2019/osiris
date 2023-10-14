@@ -1,7 +1,7 @@
 # Compiling
 INTERFACE_DECL_PATH 	= .
 SYSCONF_CXX		= CC
-SYSCONF_CC		= CC
+SYSCONF_CC		= cc
 DASHCROSS		= 
 
 # Compiling with support libraries
@@ -34,16 +34,16 @@ SYSCONF_LIBS_YACC	=
 # Linking applications
 SYSCONF_LINK		= CC
 SYSCONF_LFLAGS		= 
-SYSCONF_LIBS		= -lCFrun -lC -lsocket -lnsl -lm -ldl -lm
+SYSCONF_LIBS		= -lresolv -lsocket -lnsl -ldl -lm
 
 # Link flags for shared objects
 SYSCONF_LFLAGS_SHOBJ	= -G -h $(TARGET1)
 
 # Flags for threading
-SYSCONF_CFLAGS_THREAD	= 
+SYSCONF_CFLAGS_THREAD	= -K pthread
 SYSCONF_CXXFLAGS_THREAD	= 
-SYSCONF_LFLAGS_THREAD	= 
-# SYSCONF_LIBS_THREAD	= ???
+SYSCONF_LFLAGS_THREAD	= -K pthread
+SYSCONF_LIBS_THREAD	= 
 
 # Meta-object compiler
 SYSCONF_MOC		= $(QTDIR)/bin/moc

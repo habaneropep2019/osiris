@@ -180,6 +180,7 @@ static void exitHandler( int )
     exit( -1 );
 }
 
+#ifdef NO_DEBUG
 #if defined(_OS_IRIX_) && defined(_CC_GNU_)
 static void crashHandler()
 #else
@@ -189,6 +190,7 @@ static void crashHandler( int )
     MainWindow::self->saveAllTemp();
     ::exit( -1 );
 }
+#endif
 
 #if defined(Q_C_CALLBACKS)
 }

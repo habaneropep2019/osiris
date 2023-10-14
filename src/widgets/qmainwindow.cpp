@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qmainwindow.cpp   2.3.0   edited 2001-01-26 $
+** $Id: qt/src/widgets/qmainwindow.cpp   2.3.1   edited 2001-05-14 $
 **
 ** Implementation of QMainWindow class
 **
@@ -330,7 +330,7 @@ QMainWindowPrivate::ToolBar * QMainWindowPrivate::takeToolBarFromDock( QToolBar 
 	    if ( p < (int)l->count() - 1 && tb->nl )
 		l->at( p + 1 )->nl = TRUE;
 	    tb->oldIndex = p;
-	}	
+	}
 	return l->take( p );
     }
     return 0;
@@ -1701,7 +1701,12 @@ void QMainWindow::addToolBar( QToolBar * toolBar,
 	return;
 
     if ( toolBar->mw ) {
+	QMainWindow *old_mw = toolBar->mw;
 	toolBar->mw->removeToolBar( toolBar );
+	if ( old_mw != this ) {
+	    toolBar->removeEventFilter( old_mw );
+	    toolBar->reparent( this, 0, QPoint( 0, 0 ), TRUE );
+	}
 	toolBar->mw = this;
     }
 
@@ -1818,7 +1823,6 @@ void QMainWindow::moveToolBar( QToolBar *toolBar, ToolBarDock edge, QToolBar *re
     else
 	o = Qt::Vertical;
 
-    bool recalc = FALSE;
     // if the toolbar is valid
     if ( ct ) {
 	// enable the dock where it will be moved to
@@ -1856,8 +1860,7 @@ void QMainWindow::moveToolBar( QToolBar *toolBar, ToolBarDock edge, QToolBar *re
 	    if ( edge != Minimized ) {
 		ct->oldDock = edge;
 		ct->oldIndex = dl->findRef( ct );
-	    } else
-		recalc = TRUE;
+	    }
 	    delete ct;
 	    return;
 	}
@@ -1866,7 +1869,7 @@ void QMainWindow::moveToolBar( QToolBar *toolBar, ToolBarDock edge, QToolBar *re
 	    ct->hiddenBefore = 0;
 	    ct->hiddenAfter = 0;
 	}
-	
+
 	// if the toolbar is restored from the minimized dock,
 	// try to find exactly the place and move it there
 	if ( oldDock == d->hidden ) {
@@ -1958,7 +1961,7 @@ void QMainWindow::moveToolBar( QToolBar *toolBar, ToolBarDock edge, QToolBar *re
 
 	    // and finally move the toolbar to the calculated index
 	    dl->insert( i, ct );
-	
+
 	    // do some new-line corrections
 	    if ( oldDock != d->hidden ) {
 		bool after = ipos == QMainWindowPrivate::After;
@@ -1984,12 +1987,11 @@ void QMainWindow::moveToolBar( QToolBar *toolBar, ToolBarDock edge, QToolBar *re
 		}
 	    }
 	}
-	
+
 	if ( edge != Minimized ) {
 	    ct->oldDock = edge;
 	    ct->oldIndex = dl->findRef( ct );
-	} else
-	    recalc = TRUE;
+	}
     } else {
 	addToolBar( toolBar, edge, nl );
 	QMainWindowPrivate::ToolBarDock *dummy;
@@ -2354,7 +2356,7 @@ bool QMainWindow::event( QEvent * e ) //### remove 3.0
 	d->mc->removeEventFilter( this );
 	d->mc = 0;
     }
-	
+
     return QWidget::event( e );
 }
 
@@ -2595,17 +2597,12 @@ QMainWindow::ToolBarDock QMainWindow::findDockArea( const QPoint &pos, QRect &re
 	h1++;
     h1 += d->hideDock->isVisible() ? d->hideDock->height() + 1 : 0;
     int h2 = d->sb ? d->sb->height() : 0;
-    bool hasTop, hasBottom, hasLeft, hasRight;
-    hasTop = hasBottom = hasLeft= hasRight = FALSE;
+    bool hasTop = FALSE, hasBottom = FALSE;
     if ( d->mc ) {
-	if ( d->mc->x() > 0 ) {
-	    hasLeft = TRUE;
+	if ( d->mc->x() > 0 )
 	    left = d->mc->x();
-	}
-	if ( d->mc->x() + d->mc->width() < width() ) {
-	    hasRight = TRUE;
+	if ( d->mc->x() + d->mc->width() < width() )
 	    right = width() - ( d->mc->x() + d->mc->width() );
-	}
 	if ( d->mc->y() > h1 ) {
 	    hasTop = TRUE;
 	    top = d->mc->y() - h1;
@@ -2617,14 +2614,10 @@ QMainWindow::ToolBarDock QMainWindow::findDockArea( const QPoint &pos, QRect &re
     }
 
     // some checks...
-    if ( left < 20 ) {
-	hasLeft = FALSE;
+    if ( left < 20 )
 	left = 10;
-    }
-    if ( right < 20 ) {
-	hasRight = FALSE;
+    if ( right < 20 )
 	right = 10;
-    }
     if ( top < 20 ) {
 	hasTop = FALSE;
 	top = 10;
@@ -2752,12 +2745,12 @@ void QMainWindow::moveToolBar( QToolBar* t , QMouseEvent * e )
 	    if ( e->x() > 10 )
 		return;
 	}
-	
+
 	if ( t->orientation() == Vertical ) {
 	    if ( e->y() > 10 )
 		return;
 	}
-	
+
 	if ( ( e->button() & RightButton ) ) {
 	    if ( !isDockMenuEnabled() )
 		return;
@@ -2907,7 +2900,7 @@ void QMainWindow::moveToolBar( QToolBar* t , QMouseEvent * e )
 	    delete d->rectPainter;
 	    d->rectPainter = 0;
 	}
-	
+
 	if ( !d->opaque ) {
 	    if ( d->hideDock && d->hideDock->isVisible() )
 		d->hideDock->repaint( TRUE );

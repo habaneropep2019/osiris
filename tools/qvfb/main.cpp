@@ -39,6 +39,7 @@ int main( int argc, char *argv[] )
     int depth = 32;
     bool cursor = TRUE;
     QString displaySpec( ":0" );
+    QString skin;
 
     for ( int i = 1; i < argc; i++ ){
 	QString arg = argv[i];
@@ -46,6 +47,8 @@ int main( int argc, char *argv[] )
 	    width = atoi( argv[++i] );
 	} else if ( arg == "-height" ) {
 	    height = atoi( argv[++i] );
+	} else if ( arg == "-skin" ) {
+	    skin = argv[++i];
 	} else if ( arg == "-depth" ) {
 	    depth = atoi( argv[++i] );
 	} else if ( arg == "-nocursor" ) {
@@ -69,14 +72,12 @@ int main( int argc, char *argv[] )
 
     qDebug( "Using display %d", displayId );
 
-    QVFb *mw = new QVFb( displayId, width, height, depth );
-    app.setMainWidget( mw );
-    mw->enableCursor(cursor);
-    mw->show();
+    QVFb mw( displayId, width, height, depth, skin );
+    app.setMainWidget( &mw );
+    mw.enableCursor(cursor);
+    mw.show();
 
-    app.exec();
-
-    delete mw;
+    return app.exec();
 }
 
 

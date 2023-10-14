@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qmenudata.cpp   2.3.0   edited 2001-01-26 $
+** $Id: qt/src/widgets/qmenudata.cpp   2.3.1   edited 2001-05-02 $
 **
 ** Implementation of QMenuData class
 **
@@ -256,9 +256,8 @@ int QMenuData::insertAny( const QString *text, const QPixmap *pixmap,
 	mi->accel_key = Qt::Key_unknown;
 	if ( pixmap )
 	    mi->pixmap_data = new QPixmap( *pixmap );
-	mi->popup_menu = popup;
-	if ( popup )
-	    popup->selfItem = mi;
+	if ( (mi->popup_menu = popup) ) 
+	    menuInsPopup( popup );
 	if ( iconset )
 	    mi->iconset_data = new QIconSet( *iconset );
     }
@@ -697,10 +696,8 @@ void QMenuData::removeItemAt( int index )
 	return;
     }
     QMenuItem *mi = mitems->at( index );
-    if ( mi->popup_menu ) {
-	mi->popup_menu->selfItem = 0;
+    if ( mi->popup_menu )
 	menuDelPopup( mi->popup_menu );
-    }
     mitems->remove();
     if ( !QApplication::closingDown() )		// avoid trouble
 	menuContentsChanged();
@@ -716,10 +713,8 @@ void QMenuData::clear()
 {
     register QMenuItem *mi = mitems->first();
     while ( mi ) {
-	if ( mi->popup_menu ) {
-	    mi->popup_menu->selfItem = 0;
+	if ( mi->popup_menu )
 	    menuDelPopup( mi->popup_menu );
-	}
 	mitems->remove();
 	mi = mitems->current();
     }
@@ -1351,8 +1346,8 @@ bool QCustomMenuItem::isSeparator() const
 
 
 /*!
-  Activates the menu item at index \a index. 
-  
+  Activates the menu item at index \a index.
+
   If the index is invalid (for example -1), the object itself is
   deactivated.
  */
@@ -1363,7 +1358,7 @@ void QMenuData::activateItemAt( int index )
 	( (QMenuBar*)this )->activateItemAt( index );
     else
 #endif
-    if ( isPopupMenu ) 
+    if ( isPopupMenu )
 	( (QPopupMenu*)this )->activateItemAt( index );
 }
 

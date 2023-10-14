@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qfont.cpp   2.3.0   edited 2001-01-26 $
+** $Id: qt/src/kernel/qfont.cpp   2.3.1   edited 2001-04-19 $
 **
 ** Implementation of QFont, QFontMetrics and QFontInfo classes
 **
@@ -1313,16 +1313,22 @@ QString QFont::key() const
     if ( d->req.rawMode )
         return d->req.family.lower();
     QString family = d->req.family.lower();
-    int len = family.length()*2 +
-        2 +  // point size
-        1 +  // font bits
-        1 +  // weight
-        1 +  // hint
-        1;   // char set
+    QString addStyle = d->req.addStyle.lower();
+    int len = family.length() * 2 +
+	      addStyle.length() * 2 +
+	      2 +  // point size
+	      1 +  // font bits
+	      1 +  // weight
+	      1 +  // hint
+	      1;   // char set
     QByteArray buf(len);
     uchar *p = (uchar *)buf.data();
     memcpy( (char *)p, (char *)family.unicode(), family.length()*2 );
     p += family.length()*2;
+    if (addStyle.length() > 0) {
+	memcpy( (char *)p, (char *)addStyle.unicode(), addStyle.length() * 2);
+	p += addStyle.length() * 2;
+    }
     *((Q_UINT16*)p) = d->req.pointSize;
     p += 2;
     *p++ = get_font_bits( d->req );

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/trayicon/trayicon.h   2.3.0   edited 2001-02-19 $
+** $Id: qt/examples/trayicon/trayicon.h   2.3.1   edited 2001-02-19 $
 **
 ** Definition of QTrayIcon class
 **

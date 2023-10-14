@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qmime.cpp   2.3.0   edited 2001-01-26 $
+** $Id: qt/src/kernel/qmime.cpp   2.3.1   edited 2001-05-18 $
 **
 ** Implementation of MIME support
 **
@@ -441,6 +441,7 @@ static QMimeSourceFactory* defaultfactory = 0;
 void qt_cleanup_defaultfactory()
 {
     delete defaultfactory;
+    defaultfactory = 0;
 }
 
 /*!

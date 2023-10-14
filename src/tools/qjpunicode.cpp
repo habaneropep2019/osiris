@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qjpunicode.cpp   2.3.0   edited 2001-01-26 $
+** $Id: qt/src/tools/qjpunicode.cpp   2.3.1   edited 2001-05-15 $
 **
 ** Implementation of QJpUnicodeConv class
 **
@@ -150,12 +150,13 @@ inline uint Jisx0208ToSjis(uint jis)
 }
 
 static uint SjisToJisx0208(uint h, uint l);
+#if 0
 static
 inline uint SjisToJisx0208(uint sjis)
 {
     return SjisToJisx0208((sjis & 0xff00) >> 8, (sjis & 0x00ff));
 }
-
+#endif
 static uint Jisx0201ToUnicode11(uint h, uint l);
 static uint Jisx0208ToUnicode11(uint h, uint l);
 static uint Jisx0212ToUnicode11(uint h, uint l);

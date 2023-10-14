@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qslider.cpp   2.3.0   edited 2001-01-26 $
+** $Id: qt/src/widgets/qslider.cpp   2.3.1   edited 2001-05-25 $
 **
 ** Implementation of QSlider class
 **
@@ -687,7 +687,9 @@ void QSlider::moveSlider( int pos )
     }
     if ( tracking() && sliderVal != value() ) {
 	setValue( sliderVal );
-	emit valueChanged( sliderVal );
+	// ### Why do we emit the valueChanged signal here?  It will get emitted in 
+	// valueChange() anyway...
+	//emit valueChanged( sliderVal );
     }
 
     switch ( (GUIStyle)style() ) {
@@ -956,6 +958,8 @@ void QSlider::drawTicks( QPainter *p, const QColorGroup& g, int dist, int w,
     p->setPen( g.foreground() );
     int v = minValue();
     int fudge = slideLength() / 2 + 1;
+    if(!i) 
+	i = 1;
     while ( v <= maxValue() + 1 ) {
 	int pos = positionFromValue( v ) + fudge;
 	if ( orient == Horizontal )

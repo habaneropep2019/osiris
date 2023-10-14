@@ -458,17 +458,17 @@ executed when the signal is emitted:
 <p>
 <pre>   [...]
    public slots:
-       void MyWidget::setLocation (pair&amp;lt;int,int&amp;gt; location);
+       void MyWidget::setLocation (pair&lt;int,int&gt; location);
 
    [...]
    public signals:
-       void MyObject::moved (pair&amp;lt;int,int&amp;gt; location);
+       void MyObject::moved (pair&lt;int,int&gt; location);
 </pre>
 <p>
 However, you can work around this limitation by explicitly typedef'ing
 the parameter types, like this:
 <p>
-<pre>   typedef pair&amp;lt;int,int&amp;gt; IntPair; 
+<pre>   typedef pair&lt;int,int&gt; IntPair;       
    [...]
    public slots:
        void MyWidget::setLocation (IntPair location);
@@ -479,6 +479,42 @@ the parameter types, like this:
 </pre>
 <p>
 This will work as expected.
+<p>
+<h4>Namespace of parent class must be specified even if it is the same as
+that of the subclass</h4>
+<p>
+In the following example, classes x::A and x::B are defined:
+<p>
+<pre>    namespace x {
+        class A : public QObject {
+            Q_OBJECT
+
+        public:
+            ...
+        };
+    }
+
+    namespace x {
+        class B : public A {
+            Q_OBJECT
+
+        public:
+            ...
+        };
+    }
+</pre>
+<p>
+Unfortunately, moc will not understand the
+<pre>        class B : public A {
+</pre>
+<p>
+line. You have either to write
+<pre>        class B : public x::A {
+</pre>
+<p>
+or define classes A and B in the same namespace block.
+<p>
+This limitation will disappear with Qt 3.0.
 <p>
 <h4>Properties need to be declared before the public section that
 contains the respective get and set functions</h4>
@@ -522,5 +558,5 @@ beginning of the class declaration, right after Q_OBJECT:
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.0</div>
+<td align="right"><div align="right">Qt version 2.3.1</div>
 </table></div></address></body></html>

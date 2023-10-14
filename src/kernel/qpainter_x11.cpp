@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qpainter_x11.cpp   2.3.0   edited 2001-02-26 $
+** $Id: qt/src/kernel/qpainter_x11.cpp   2.3.1   edited 2001-05-22 $
 **
 ** Implementation of QPainter class for X11
 **
@@ -370,7 +370,7 @@ static void cleanup_gc_cache()
     qDebug( "Number of cache creates = %d", g_numcreates );
     qDebug( "Number of cache faults = %d", g_numfaults );
     for ( int i=0; i<gc_cache_size; i++ ) {
-	QString	    str;
+	QCString    str;
 	QBuffer	    buf( str );
 	buf.open(IO_ReadWrite);
 	QTextStream s(&buf);
@@ -399,7 +399,7 @@ static bool obtain_gc( void **ref, GC *gc, uint pix, Display *dpy, HANDLE hd )
     QGCC *g = gc_cache[k];
     QGCC *prev = 0;
 
-#define NOMATCH (g->gc && g->pix != pix)
+#define NOMATCH (g->gc && (g->pix != pix || g->count > 0 ) )
 
     if ( NOMATCH ) {
 	prev = g;
@@ -415,7 +415,9 @@ static bool obtain_gc( void **ref, GC *gc, uint pix, Display *dpy, HANDLE hd )
 			g->pix	 = pix;
 			g->count = 1;
 			g->hits	 = 1;
+			g->clip_serial = 0;
 			XSetForeground( dpy, g->gc, pix );
+			XSetClipMask( dpy, g->gc, None );
 			gc_cache[k]   = prev;
 			gc_cache[k-1] = g;
 			*ref = (void *)g;
@@ -505,15 +507,13 @@ typedef struct _qt_ft_draw {
 static qt_ft_draw   *qt_ft_head;
 
 XftDraw *
-qt_lookup_ft_draw (Drawable draw, QPaintDevice *pdev, QRegion *crgn)
+qt_lookup_ft_draw (Drawable draw, bool paintEventClipOn, QRegion *crgn)
 {
     qt_ft_draw	**prev, *qt_ft;
 
     for (prev = &qt_ft_head; (qt_ft = *prev); prev = &qt_ft->next)
-	if (qt_ft->draw == draw)
-	{
-	    if (!qt_ft->ftdraw)
-	    {
+	if (qt_ft->draw == draw) {
+	    if (!qt_ft->ftdraw) {
 		if (qt_ft->visual)
 		    qt_ft->ftdraw = XftDrawCreate (qt_ft->dpy,
 						   qt_ft->draw,
@@ -522,61 +522,46 @@ qt_lookup_ft_draw (Drawable draw, QPaintDevice *pdev, QRegion *crgn)
 		else
 		    qt_ft->ftdraw = XftDrawCreateBitmap (qt_ft->dpy,
 							 (Pixmap) qt_ft->draw);
-		if (!qt_ft->ftdraw)
-		{
+		if (!qt_ft->ftdraw) {
 		    *prev = qt_ft->next;
 		    free (qt_ft);
 		    return 0;
 		}
 	    }
 
-	    if (prev != &qt_ft_head)
-	    {
+	    if (prev != &qt_ft_head) {
 		*prev = qt_ft->next;
 		qt_ft->next = qt_ft_head;
 		qt_ft_head = qt_ft;
 	    }
-	    if (crgn != 0)
-	    {
-		if (pdev == paintEventDevice)
-		{
+	    if (crgn != 0) {
+		if ( paintEventClipOn ) {
 		    QRegion rgn;
 		    if (qt_ft->clip_serial < gc_cache_clip_serial ||
-			qt_ft->clip_bad)
-		    {
+			qt_ft->clip_bad) {
 			rgn = crgn->intersect (*paintEventClipRegion);
 			XftDrawSetClip (qt_ft->ftdraw, rgn.handle());
 			qt_ft->clip_serial = gc_cache_clip_serial;
 			qt_ft->clip_bad = FALSE;
 		    }
-		}
-		else
-		{
-		    if (qt_ft->clip_serial || qt_ft->clip_bad)
-		    {
+		} else {
+		    if (qt_ft->clip_serial || qt_ft->clip_bad) {
 			XftDrawSetClip (qt_ft->ftdraw, crgn->handle());
 			qt_ft->clip_serial = 0;
 			qt_ft->clip_bad = FALSE;
 		    }
 		}
-	    }
-	    else
-	    {
-		if (pdev == paintEventDevice)
-		{
+	    } else {
+		if ( paintEventClipOn ) {
 		    if (qt_ft->clip_serial < gc_cache_clip_serial ||
-			qt_ft->clip_bad)
-		    {
+			qt_ft->clip_bad) {
 			XftDrawSetClip (qt_ft->ftdraw,
 					paintEventClipRegion->handle());
 			qt_ft->clip_serial = gc_cache_clip_serial;
 			qt_ft->clip_bad = FALSE;
 		    }
-		}
-		else
-		{
-		    if (qt_ft->clip_serial || qt_ft->clip_bad)
-		    {
+		} else {
+		    if (qt_ft->clip_serial || qt_ft->clip_bad) {
 			XftDrawSetClip (qt_ft->ftdraw, 0);
 			qt_ft->clip_serial = 0;
 			qt_ft->clip_bad = FALSE;
@@ -784,9 +769,9 @@ void QPainter::updatePen()
     }
 
     int	ps = cpen.style();
-    bool cacheIt = !testf(ClipOn|MonoDev|NoCache) &&
-		   (ps == NoPen || ps == SolidLine) &&
-		   cpen.width() == 0 && rop == CopyROP;
+    bool cacheIt = (!testf(ClipOn|MonoDev|NoCache) &&
+		    (ps == NoPen || ps == SolidLine) &&
+		    cpen.width() == 0 && rop == CopyROP);
 
     bool obtained = FALSE;
     bool internclipok = hasClipping();
@@ -815,7 +800,7 @@ void QPainter::updatePen()
     }
 
     if ( !internclipok ) {
-	if ( pdev == paintEventDevice ) {
+	if ( testf(PaintEventClipOn) ) {
 	    if ( penRef &&((QGCC*)penRef)->clip_serial < gc_cache_clip_serial ) {
 		XSetRegion( dpy, gc, paintEventClipRegion->handle() );
 		((QGCC*)penRef)->clip_serial = gc_cache_clip_serial;
@@ -826,6 +811,11 @@ void QPainter::updatePen()
 	    XSetClipMask( dpy, gc, None );
 	    ((QGCC*)penRef)->clip_serial = 0;
 	}
+
+#ifdef QT_XFT
+	qt_invalidate_ft_clip(hd);
+#endif // QT_XFT
+
     }
 
     if ( obtained )
@@ -844,41 +834,46 @@ void QPainter::updatePen()
     */
     int dot = cpen.width();			// width of a dot
     int fudge = 1;
+    bool allow_zero_lw = TRUE;
     if ( dot <= 1 ) {
 	dot = 3;
 	fudge = 2;
     }
 
     switch( ps ) {
-	case NoPen:
-	case SolidLine:
-	    s = LineSolid;
-	    break;
-	case DashLine:
-	    dashes[0] = fudge * 3 * dot;
-	    dashes[1] = fudge * dot;
-	    dash_len = 2;
-	    break;
-	case DotLine:
-	    dashes[0] = dot;
-	    dashes[1] = dot;
-	    dash_len = 2;
-	    break;
-	case DashDotLine:
-	    dashes[0] = 3 * dot;
-	    dashes[1] = fudge * dot;
-	    dashes[2] = dot;
-	    dashes[3] = fudge * dot;
-	    dash_len = 4;
-	    break;
-	case DashDotDotLine:
-	    dashes[0] = 3 * dot;
-	    dashes[1] = dot;
-	    dashes[2] = dot;
-	    dashes[3] = dot;
-	    dashes[4] = dot;
-	    dashes[5] = dot;
-	    dash_len = 6;
+    case NoPen:
+    case SolidLine:
+	s = LineSolid;
+	break;
+    case DashLine:
+	dashes[0] = fudge * 3 * dot;
+	dashes[1] = fudge * dot;
+	dash_len = 2;
+	allow_zero_lw = FALSE;
+	break;
+    case DotLine:
+	dashes[0] = dot;
+	dashes[1] = dot;
+	dash_len = 2;
+	allow_zero_lw = FALSE;
+	break;
+    case DashDotLine:
+	dashes[0] = 3 * dot;
+	dashes[1] = fudge * dot;
+	dashes[2] = dot;
+	dashes[3] = fudge * dot;
+	dash_len = 4;
+	allow_zero_lw = FALSE;
+	break;
+    case DashDotDotLine:
+	dashes[0] = 3 * dot;
+	dashes[1] = dot;
+	dashes[2] = dot;
+	dashes[3] = dot;
+	dashes[4] = dot;
+	dashes[5] = dot;
+	dash_len = 6;
+	allow_zero_lw = FALSE;
     }
     ASSERT( dash_len <= (int) sizeof(dashes) );
 
@@ -914,7 +909,9 @@ void QPainter::updatePen()
 	XSetDashes( dpy, gc, 0, dashes, dash_len );
 	s = bg_mode == TransparentMode ? LineOnOffDash : LineDoubleDash;
     }
-    XSetLineAttributes( dpy, gc, cpen.width(), s, cp, jn );
+    XSetLineAttributes( dpy, gc,
+			(! allow_zero_lw && cpen.width() == 0) ? 1 : cpen.width(),
+			s, cp, jn );
 }
 
 
@@ -1004,7 +1001,7 @@ static uchar *pat_tbl[] = {
     }
 
     if ( !internclipok ) {
-	if ( pdev == paintEventDevice ) {
+	if ( testf(PaintEventClipOn) ) {
 	    if ( brushRef &&((QGCC*)brushRef)->clip_serial < gc_cache_clip_serial ) {
 		XSetRegion( dpy, gc_brush, paintEventClipRegion->handle() );
 		((QGCC*)brushRef)->clip_serial = gc_cache_clip_serial;
@@ -1131,7 +1128,7 @@ bool QPainter::begin( const QPaintDevice *pd )
 	return FALSE;
     }
 
-    bool reinit = flags != IsStartingUp;	// 2nd or 3rd etc. time called
+    bool reinit = !testf(IsStartingUp);	// 2nd or 3rd etc. time called
     flags = IsActive | DirtyFont;		// init flags
     int dt = pdev->devType();			// get the device type
 
@@ -1163,6 +1160,9 @@ bool QPainter::begin( const QPaintDevice *pd )
 	setf(NoCache);
 	setf(UsePrivateCx);
     }
+
+    if (pdev == paintEventDevice)
+	setf(PaintEventClipOn);
 
     pdev->painters++;				// also tell paint device
     bro = curPt = QPoint( 0, 0 );
@@ -1500,7 +1500,7 @@ void QPainter::setClipping( bool enable )
     }
     if ( enable ) {
 	QRegion rgn = crgn;
-	if ( pdev == paintEventDevice )
+	if ( testf(PaintEventClipOn) )
 	    rgn = rgn.intersect( *paintEventClipRegion );
 	if ( penRef )
 	    updatePen();
@@ -1509,7 +1509,7 @@ void QPainter::setClipping( bool enable )
 	    updateBrush();
 	XSetRegion( dpy, gc_brush, rgn.handle() );
     } else {
-	if ( pdev == paintEventDevice ) {
+	if ( testf(PaintEventClipOn) ) {
 	    XSetRegion( dpy, gc, paintEventClipRegion->handle() );
 	    XSetRegion( dpy, gc_brush, paintEventClipRegion->handle() );
 	} else {
@@ -1517,9 +1517,10 @@ void QPainter::setClipping( bool enable )
 	    XSetClipMask( dpy, gc_brush, None );
 	}
     }
+
 #ifdef QT_XFT
     qt_invalidate_ft_clip (hd);
-#endif
+#endif // QT_XFT
 }
 
 
@@ -1878,7 +1879,7 @@ void QPainter::drawWinFocusRect( int x, int y, int w, int h,
 	fix_neg_rect( &x, &y, &w, &h );
     }
     XSetDashes( dpy, gc, 0, winfocus_line, 2 );
-    XSetLineAttributes( dpy, gc, 0, LineOnOffDash, CapButt, JoinMiter );
+    XSetLineAttributes( dpy, gc, 1, LineOnOffDash, CapButt, JoinMiter );
 
     XDrawRectangle( dpy, hd, gc, x, y, w-1, h-1 );
     XSetLineAttributes( dpy, gc, 0, LineSolid, CapButt, JoinMiter );
@@ -2447,10 +2448,12 @@ void QPainter::drawPolygon( const QPointArray &a, bool winding,
     if ( winding )				// set to winding fill rule
 	XSetFillRule( dpy, gc_brush, WindingRule );
 
-    int x1, y1, x2, y2;				// connect last to first point
-    pa.point( index+npoints-1, &x1, &y1 );
-    pa.point( index, &x2, &y2 );
-    bool closed = x1 == x2 && y1 == y2;
+    if ( pa[index] != pa[index+npoints-1] ){   // close open pointarray
+	pa.detach();
+    	pa.resize( index+npoints+1 );
+    	pa.setPoint( index+npoints, pa[index] );
+    	npoints++;
+    }
 
     if ( cbrush.style() != NoBrush ) {		// draw filled polygon
 	XFillPolygon( dpy, hd, gc_brush,
@@ -2460,8 +2463,6 @@ void QPainter::drawPolygon( const QPointArray &a, bool winding,
     if ( cpen.style() != NoPen ) {		// draw outline
 	XDrawLines( dpy, hd, gc, (XPoint*)(pa.shortPoints( index, npoints )),
 		    npoints, CoordModeOrigin );
-	if ( !closed )
-	    XDrawLine( dpy, hd, gc, x1, y1, x2, y2 );
     }
     if ( winding )				// set to normal fill rule
 	XSetFillRule( dpy, gc_brush, EvenOddRule );
@@ -2593,7 +2594,7 @@ void QPainter::drawPixmap( int x, int y, const QPixmap &pixmap,
 		int dx, dy;
 		mat.map( 0, 0, &dx, &dy );
 		uint save_flags = flags;
-		flags = IsActive | (save_flags & ClipOn);
+		flags = IsActive | (save_flags & ( ClipOn | PaintEventClipOn ) );
 		drawPixmap( x-dx, y-dy, pm );
 		flags = save_flags;
 		return;
@@ -2605,7 +2606,7 @@ void QPainter::drawPixmap( int x, int y, const QPixmap &pixmap,
     QBitmap *mask = (QBitmap *)pixmap.mask();
     bool mono = pixmap.depth() == 1;
 
-    if ( mask && !hasClipping() && pdev != paintEventDevice ) {
+    if ( mask && !hasClipping() && !testf(PaintEventClipOn) ) {
 	if ( mono ) {				// needs GCs pen color
 	    bool selfmask = pixmap.data->selfmask;
 	    if ( selfmask ) {
@@ -2623,11 +2624,16 @@ void QPainter::drawPixmap( int x, int y, const QPixmap &pixmap,
 	    XSetFillStyle( dpy, gc, FillSolid );
 	    if ( !selfmask ) {
 		XSetClipOrigin( dpy, gc, 0, 0 );
-		if ( pdev == paintEventDevice )
+		if ( testf(PaintEventClipOn) )
 		    XSetRegion( dpy, gc, paintEventClipRegion->handle() );
 		else
 		    XSetClipMask( dpy, gc, None );
 	    }
+
+#ifdef QT_XFT
+	    qt_invalidate_ft_clip (hd);
+#endif // QT_XFT
+
 	} else {
 	    bitBlt( pdev, x, y, &pixmap, sx, sy, sw, sh, (RasterOp)rop );
 	}
@@ -2640,7 +2646,7 @@ void QPainter::drawPixmap( int x, int y, const QPixmap &pixmap,
 	// Implies that clipping is on, either explicit or implicit
 	// Create a new mask that combines the mask with the clip region
 
-	if ( pdev == paintEventDevice ) {
+	if ( testf(PaintEventClipOn) ) {
 	    if ( hasClipping() )
 		rgn = rgn.intersect( *paintEventClipRegion );
 	    else
@@ -2685,6 +2691,11 @@ void QPainter::drawPixmap( int x, int y, const QPixmap &pixmap,
     if ( mask ) {				// restore clipping
 	XSetClipOrigin( dpy, gc, 0, 0 );
 	XSetRegion( dpy, gc, rgn.handle() );
+
+#ifdef QT_XFT
+	qt_invalidate_ft_clip (hd);
+#endif // QT_XFT
+
 	delete mask;				// delete comb, created above
     }
 }
@@ -2912,10 +2923,8 @@ void QPainter::drawText( int x, int y, const QString &str, int len )
 		ty = -abbox.y();	// text position - off-by-one?
 		if ( aw == 0 || ah == 0 )
 		    return;
-// ###		double rx = mat1.m11() * (double)w / (double)aw;
-//		double ry = mat1.m22() * (double)h / (double)ah;
-		double rx = mat1.m11() * cfont.pointSizeFloat() / newSize;
-		double ry = mat1.m22() * cfont.pointSizeFloat() / newSize;
+		double rx = mat1.m11() * (double)w / (double)aw;
+		double ry = mat1.m22() * (double)h / (double)ah;
 		mat2 = QWMatrix( rx, 0, 0, ry, 0, 0 );
 	    } else {
 		mat2 = QPixmap::trueMatrix( mat1, w, h );
@@ -3027,50 +3036,47 @@ void QPainter::drawText( int x, int y, const QString &str, int len )
 	    len = v.length();
 #endif
 #ifdef QT_XFT
+            XftFont	    *ft = 0;
+            XftDraw	    *draw;
+            XftColor    color;
 	    if (qt_use_xft ())
-	    {
-		XftFont	    *ft;
-		XftDraw	    *draw;
-		XftColor    color;
-
 		ft = (XftFont *)qt_ft_font (&cfont);
-		if (ft && (draw = qt_lookup_ft_draw (hd, pdev,
-						     testf(ClipOn) ? &crgn :
-						     0)))
-		{
-		    unsigned short   *tstr;
-		    unsigned short  *tshort, c;
-		    int i;
 
-		    tshort = new unsigned short[len];
-		    tstr = (unsigned short *) v.unicode();
-		    for (i = 0; i < len; i++)
-		    {
-			c = tstr[i];
-			tshort[i] = htons( c );
-		    }
-		    if ( bg_mode != TransparentMode )
-		    {
-			XGlyphInfo	extents;
-			XftTextExtents16 (dpy, ft, tshort, len, &extents);
-			color.color.red = backgroundColor().red() | backgroundColor().red() << 8;
-			color.color.green = backgroundColor().green() | backgroundColor().green() << 8;
-			color.color.blue = backgroundColor().blue() | backgroundColor().blue() << 8;
-			color.color.alpha = 0xffff;
-			color.pixel = backgroundColor().pixel();
-			XftDrawRect (draw, &color, x, y - ft->ascent,
-				     extents.xOff, ft->ascent + ft->descent);
-		    }
-		    color.color.red = cpen.color().red() | cpen.color().red() << 8;
-		    color.color.green = cpen.color().green() | cpen.color().green() << 8;
-		    color.color.blue = cpen.color().blue() | cpen.color().blue() << 8;
-		    color.color.alpha = 0xffff;
-		    color.pixel = cpen.color().pixel();
-		    XftDrawString16 (draw, &color, ft, x, y, tshort, len);
-		    delete [] tshort;
-		}
-	    }
-	    else
+            if (ft && (draw = qt_lookup_ft_draw (hd,
+						 testf(PaintEventClipOn),
+						 testf(ClipOn) ? &crgn : 0)))
+            {
+                unsigned short   *tstr;
+                unsigned short  *tshort, c;
+                int i;
+
+                tshort = new unsigned short[len];
+                tstr = (unsigned short *) v.unicode();
+                for (i = 0; i < len; i++)
+                {
+                    c = tstr[i];
+                    tshort[i] = htons( c );
+                }
+                if ( bg_mode != TransparentMode )
+                {
+                    XGlyphInfo	extents;
+                    XftTextExtents16 (dpy, ft, tshort, len, &extents);
+                    color.color.red = backgroundColor().red() | backgroundColor().red() << 8;
+                    color.color.green = backgroundColor().green() | backgroundColor().green() << 8;
+                    color.color.blue = backgroundColor().blue() | backgroundColor().blue() << 8;
+                    color.color.alpha = 0xffff;
+                    color.pixel = backgroundColor().pixel();
+                    XftDrawRect (draw, &color, x, y - ft->ascent,
+                                 extents.xOff, ft->ascent + ft->descent);
+                }
+                color.color.red = cpen.color().red() | cpen.color().red() << 8;
+                color.color.green = cpen.color().green() | cpen.color().green() << 8;
+                color.color.blue = cpen.color().blue() | cpen.color().blue() << 8;
+                color.color.alpha = 0xffff;
+                color.pixel = cpen.color().pixel();
+                XftDrawString16 (draw, &color, ft, x, y, tshort, len);
+                delete [] tshort;
+	    } else
 #endif
 	    {
 	    if ( bg_mode == TransparentMode )

@@ -1,5 +1,5 @@
 /**********************************************************************
-** $Id: qt/src/widgets/qlabel.cpp   2.3.0   edited 2001-02-20 $
+** $Id: qt/src/widgets/qlabel.cpp   2.3.1   edited 2001-05-23 $
 **
 ** Implementation of QLabel widget class
 **
@@ -531,6 +531,8 @@ QSize QLabel::sizeForWidth( int w ) const
 	    br = fm.boundingRect( 0, 0, w/4, 2000, alignment(), text() );
 	// adjust so "Yes" and "yes" will have the same height
 	int h = fm.lineSpacing();
+	if ( h <= 0 ) // for broken fonts....
+	    h = 14;
 	br.setHeight( ((br.height() + h-1) / h)*h - fm.leading() );
 	if ( indent() > 0 ) {
 	    if ( (align & AlignLeft) || (align & AlignRight ) )
@@ -884,7 +886,6 @@ void QLabel::updateLabel( QSize oldSizeHint )
         update(cr.x(), cr.y(), cr.width(), cr.height());
     } else {
         update(cr.x(), cr.y(), cr.width(), cr.height());
-	updateGeometry();
 	if ( autoMask() )
 	    updateMask();
     }

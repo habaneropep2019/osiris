@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qtabwidget.cpp   2.3.0   edited 2001-03-01 $
+** $Id: qt/src/widgets/qtabwidget.cpp   2.3.1   edited 2001-03-21 $
 **
 ** Implementation of QTabWidget class
 **
@@ -453,7 +453,8 @@ void QTabWidget::removePage( QWidget * w )
 	d->stack->removeWidget( w );
 	d->tabs->removeTab( d->tabs->tab(id) );
 	setUpLayout();
-	if ( !currentPage() && d->stack->frameStyle() != QFrame::NoFrame )
+	
+	if ( d->tabs->count() == 0 ) 
 	    d->stack->setFrameStyle( QFrame::NoFrame );
     }
 }

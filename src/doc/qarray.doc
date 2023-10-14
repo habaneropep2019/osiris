@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/doc/qarray.doc   2.3.0   edited 2001-01-26 $
+** $Id: qt/doc/qarray.doc   2.3.1   edited 2001-05-04 $
 **
 ** QArray class documentation
 **
@@ -216,7 +216,7 @@
   Returns TRUE if the array is empty, i.e. size() == 0, otherwise FALSE.
 
   isEmpty() is equivalent with isNull() for QArray.  Note that this is not
-  the case for QString::isEmpty().
+  the case for QCString::isEmpty().
 */
 
 /*!

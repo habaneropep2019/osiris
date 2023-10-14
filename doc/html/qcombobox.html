@@ -157,8 +157,11 @@ The default policy is is <code>AtBottom,</code> you can change it using
 <a href="#f1bfd2">setInsertionPolicy</a>().
 <p>It is possible to constrain the input to an editable combo box using
 <a href="qvalidator.html">QValidator</a>; see <a href="#32a346">setValidator</a>().  By default, all input is accepted.
-<p>A combo box has a default <a href="qwidget.html#504321">focusPolicy</a>() of <code>TabFocus,</code> i.e. it will
-not grab focus if clicked.  This differs from both Windows and Motif.
+<p>If the combo box is not editable then it has a default <a href="qwidget.html#504321">focusPolicy</a>() 
+of <code>TabFocus,</code> i.e. it will not grab focus if clicked.  This 
+differs from both Windows and Motif.  If the combo box is editable then it 
+has a default focusPolicy() of <code>StrongFocus,</code> i.e. it will grab focus if
+clicked.
 <p><img src="qcombo1-m.png">(Motif 1, read-only)<br clear=all>
 <img src="qcombo2-m.png">(Motif 2, read-write)<br clear=all>
 <img src="qcombo3-m.png">(Motif 2, read-only)<br clear=all>
@@ -456,7 +459,7 @@ box if there is any, or else 0.
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.3.0"><nobr>
+<input type=hidden name="version" value="2.3.1"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -464,5 +467,5 @@ copyright &copy; 1995-2000
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.0</div>
+<td align="right"><div align="right">Qt version 2.3.1</div>
 </table></div></address></body></html>

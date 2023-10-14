@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qdial.cpp   2.3.0   edited 2001-01-26 $
+** $Id: qt/src/widgets/qdial.cpp   2.3.1   edited 2001-03-13 $
 **
 ** Implementation of the dial widget
 **
@@ -284,7 +284,12 @@ void QDial::repaintScreen( const QRect *cr )
     te.setHeight(te.height()+2);
     // erase background of dial
     if ( !d->onlyOutside ) {
+#ifdef _WS_QWS_
+	// brush polygon fills too slow in Qt/Embedded
+	p.drawRect( te );
+#else
 	p.drawEllipse( te );
+#endif
     }
 
     // erase remaining space around the dial

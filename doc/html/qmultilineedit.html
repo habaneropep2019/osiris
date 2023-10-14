@@ -621,8 +621,9 @@ that characters typed replace characters in the editor.
 <p>If <em>on</em> is FALSE, this multi line edit accepts text input.
 Scrolling and cursor movements are accepted in any case.
 <p>See also  <a href="#04714a">isReadOnly</a>() and <a href="qwidget.html#f996ef">QWidget::setEnabled</a>().
-<h3 class="fn">void <a name="32b255"></a>QMultiLineEdit::setSelection ( int, int, int, int ) <code>[virtual]</code></h3>
-<p>Not supported at this time.
+<h3 class="fn">void <a name="32b255"></a>QMultiLineEdit::setSelection ( int row_from, int col_from, int row_to, int col_to ) <code>[virtual]</code></h3>
+<p>Marks the text starting at <em>row_from, col_from</em> and ending
+at row_to, col_to.
 <h3 class="fn">void <a name="d5e499"></a>QMultiLineEdit::setText ( const <a href="qstring.html">QString</a> &amp; s ) <code>[virtual slot]</code></h3>
 <p>Sets the text to <em>s,</em> removing old text, if any.
 <p>Examples:
@@ -713,7 +714,7 @@ mode.
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.3.0"><nobr>
+<input type=hidden name="version" value="2.3.1"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -721,5 +722,5 @@ copyright &copy; 1995-2000
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.0</div>
+<td align="right"><div align="right">Qt version 2.3.1</div>
 </table></div></address></body></html>

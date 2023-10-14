@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qtoolbutton.cpp   2.3.0   edited 2001-02-02 $
+** $Id: qt/src/widgets/qtoolbutton.cpp   2.3.1   edited 2001-02-02 $
 **
 ** Implementation of QToolButton class
 **

@@ -1,5 +1,5 @@
 '\" t
-.TH QTable 3qt "5 March 2001" "Trolltech AS" \" -*- nroff -*-
+.TH QTable 3qt "13 June 2001" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2001 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -408,7 +408,7 @@ Returns the column which is at \fIpos. pos\fR has to be given in contents coordi
 .SH "void QTable::columnClicked ( int col ) \fC[virtual protected slot]\fR"
 This function is called when the column \fCcol\fR has been clicked. The default implementation sorts this column if sorting() is TRUE.
 .SH "void QTable::columnIndexChanged ( int, int, int ) \fC[virtual protected slot]\fR"
-This function is called if the order of the columns has been changed. If you want to change the order programmatically, call QHeader::moveSection() on the horizontalHeader() or verticalHeader().
+This function is called if the order of the columns has been changed. If you want to change the order programmatically, call swapRows() or swapColumns().
 .SH "bool QTable::columnMovingEnabled () const"
 Returns whether columns can be moved by the user.
 .SH "int QTable::columnPos ( int col ) const \fC[virtual]\fR"
@@ -581,7 +581,7 @@ Returns the height of the row \fIrow.\fR
 .SH "void QTable::rowHeightChanged ( int row ) \fC[virtual protected slot]\fR"
 Call this function whenever the height of row \fIrow\fR has changed in order to rearrange its contents.
 .SH "void QTable::rowIndexChanged ( int, int, int ) \fC[virtual protected slot]\fR"
-This function is called if the order of the rows has been changed. If you want to change the order programmatically, call QHeader::moveSection() on the horizontalHeader() or verticalHeader().
+This function is called if the order of the rows has been changed. If you want to change the order programmatically, call swapRows() or swapColumns().
 .SH "bool QTable::rowMovingEnabled () const"
 Returns whether rows can be moved by the user.
 .SH "int QTable::rowPos ( int row ) const \fC[virtual]\fR"
@@ -720,4 +720,4 @@ In case of content or formattting problems with this manual page, please
 report them to
 .BR qt-bugs@trolltech.com .
 Please include the name of the manual page (qtable.3qt) and the Qt
-version (2.3.0).
+version (2.3.1).

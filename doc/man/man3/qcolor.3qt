@@ -1,5 +1,5 @@
 '\" t
-.TH QColor 3qt "5 March 2001" "Trolltech AS" \" -*- nroff -*-
+.TH QColor 3qt "13 June 2001" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2001 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -155,6 +155,9 @@ QColor \- Colors based on RGB
 .br
 .ti -1c
 .BI "int \fBqGreen\fR (QRgb " "rgb" ")"
+.br
+.ti -1c
+.BI "int \fBqAlpha\fR (QRgb " "rgba" ")"
 .br
 .ti -1c
 .BI "int \fBqGray\fR (int " "r" ", int " "g" ", int " "b" ")"
@@ -503,7 +506,7 @@ Examples:
 desktop/desktop.cpp
 .)l
 .SH "QRgb qRgba (int r, int g, int b, int a)"
-Returns the RGBA triplet \fI(r,g,b,a).\fR
+Returns the RGBA quadruplet \fI(r,g,b,a).\fR
 .PP
 The return type \fIQRgb\fR is equivalent to \fCunsigned int.\fR
 .PP
@@ -525,6 +528,8 @@ Examples:
 .(l
 qmag/qmag.cpp
 .)l
+.SH "int qAlpha (QRgb rgba)"
+Returns the alpha component of the RGBA quadruplet \fIrgb.\fR
 .SH "int qGray (int r, int g, int b)"
 Returns a gray value 0..255 from the \fI(r,g,b)\fR triplet.
 .PP
@@ -558,4 +563,4 @@ In case of content or formattting problems with this manual page, please
 report them to
 .BR qt-bugs@trolltech.com .
 Please include the name of the manual page (qcolor.3qt) and the Qt
-version (2.3.0).
+version (2.3.1).

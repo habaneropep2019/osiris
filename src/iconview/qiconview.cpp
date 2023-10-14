@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/iconview/qiconview.cpp   2.3.0   edited 2001-03-02 $
+** $Id: qt/src/iconview/qiconview.cpp   2.3.1   edited 2001-04-11 $
 **
 ** Implementation of QIconView widget class
 **
@@ -1466,6 +1466,8 @@ void QIconViewItem::rename()
 {
     if ( !view )
 	return;
+    if ( renameBox )
+	removeRenameBox();
     oldRect = rect();
     QVBox *box = new QVBox( view->viewport() );
     renameBox = new QIconViewItemLineEdit( itemText, box, this );
@@ -3087,7 +3089,8 @@ void QIconView::showEvent( QShowEvent * )
 {
     if ( d->dirty ) {
 	resizeContents( viewport()->width(), viewport()->height() );
-	arrangeItemsInGrid( FALSE );
+	if ( autoArrange() )
+	    arrangeItemsInGrid( FALSE );
     }
     QScrollView::show();
 }
@@ -3151,13 +3154,13 @@ QIconViewItem *QIconView::findItem( const QString &text ) const
 
     QIconViewItem *item = d->currentItem;
     for ( ; item; item = item->next ) {
-	if ( item->text().lower().left( text.length() ) == text )
+	if ( item->text().lower().left( text.length() ) == text.lower() )
 	    return item;
     }
 
     item = d->firstItem;
     for ( ; item && item != d->currentItem; item = item->next ) {
-	if ( item->text().lower().left( text.length() ) == text )
+	if ( item->text().lower().left( text.length() ) == text.lower() )
 	    return item;
     }
 

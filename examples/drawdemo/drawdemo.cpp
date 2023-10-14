@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/drawdemo/drawdemo.cpp   2.3.0   edited 2001-01-26 $
+** $Id: qt/examples/drawdemo/drawdemo.cpp   2.3.1   edited 2001-04-26 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -234,7 +234,9 @@ void DrawView::printIt()
 {
 #ifndef QT_NO_PRINTER
     if ( printer->setup( this ) ) {
-        QPainter paint( printer );
+        QPainter paint;
+	if ( !paint.begin( printer ) )
+	    return;
         drawIt( &paint );
     }
 #endif

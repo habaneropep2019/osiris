@@ -105,6 +105,8 @@ static QAlphaWidget* blend = 0;
 QAlphaWidget::QAlphaWidget( QWidget* w, WFlags f )
     : QWidget( 0, 0, f )
 {
+    setEnabled( FALSE );
+
     pm.setOptimization( QPixmap::BestOptim );
     setBackgroundMode( NoBackground );
     widget = (QAccessWidget*)w;
@@ -125,6 +127,8 @@ void QAlphaWidget::paintEvent( QPaintEvent* )
 */
 void QAlphaWidget::run( int time )
 {
+    grabMouse();
+
     duration = time;
 
     if ( duration < 0 )
@@ -138,6 +142,7 @@ void QAlphaWidget::run( int time )
 
     showWidget = TRUE;
     widget->installEventFilter( this );
+    qApp->installEventFilter( this );
 
     move( widget->geometry().x(),widget->geometry().y() );
     resize( widget->size().width(), widget->size().height() );
@@ -174,14 +179,29 @@ bool QAlphaWidget::eventFilter( QObject* o, QEvent* e )
 {
     switch ( e->type() ) {
     case QEvent::Move:
+	if ( o != widget )
+	    break;
 	move( widget->geometry().x(),widget->geometry().y() );
 	update();
 	break;
     case QEvent::Hide:
     case QEvent::Close:
+	if ( o != widget )
+	    break;
+    case QEvent::MouseButtonPress:
 	showWidget = FALSE;
 	render();
 	break;
+    case QEvent::KeyPress:
+	{
+	    QKeyEvent *ke = (QKeyEvent*)e;
+	    if ( ke->key() == Key_Escape )
+		showWidget = FALSE;
+	    else
+		duration = 0;
+	    render();
+	    break;
+	}
     default:
 	break;
     }
@@ -215,11 +235,13 @@ void QAlphaWidget::render()
         elapsed = tempel;
 
     alpha = double(tempel) / duration;
-    if ( alpha >= 1 || !showWidget) {
+    if ( alpha >= 1 || !showWidget ) {
 	anim.stop();
 	widget->removeEventFilter( this );
 	widget->clearWState( WState_Visible );
 	widget->setWState( WState_ForceHide );
+	if ( QWidget::mouseGrabber() == this )
+	    releaseMouse();
 	
 	if ( showWidget ) {
 	    BackgroundMode bgm = widget->backgroundMode();
@@ -228,6 +250,8 @@ void QAlphaWidget::render()
 	    widget->clearWState( WState_Visible ); // prevent update in setBackgroundMode
 	    widget->setBackgroundMode( bgm );
 	    widget->setWState( WState_Visible );
+	} else {
+	    widget->hide();
 	}
 	blend = 0;
 	QTimer::singleShot( 0, this, SLOT(goodBye()) );
@@ -254,21 +278,28 @@ void QAlphaWidget::alphaBlend()
     const double ia = 1-alpha;
     const int sw = front.width();
     const int sh = front.height();
-    Q_UINT32** md = (Q_UINT32**)mixed.jumpTable();
-    Q_UINT32** bd = (Q_UINT32**)back.jumpTable();
-    Q_UINT32** fd = (Q_UINT32**)front.jumpTable();
+    switch( front.depth() ) {
+    case 32:
+	{
+	    Q_UINT32** md = (Q_UINT32**)mixed.jumpTable();
+	    Q_UINT32** bd = (Q_UINT32**)back.jumpTable();
+	    Q_UINT32** fd = (Q_UINT32**)front.jumpTable();
 
-    for (int sy = 0; sy < sh; sy++ ) {
-	Q_UINT32* bl = ((Q_UINT32*)bd[sy]);
-	Q_UINT32* fl = ((Q_UINT32*)fd[sy]);
-	for (int sx = 0; sx < sw; sx++ ) {
-	    Q_UINT32 bp = bl[sx];
-	    Q_UINT32 fp = fl[sx];
+	    for (int sy = 0; sy < sh; sy++ ) {
+		Q_UINT32* bl = ((Q_UINT32*)bd[sy]);
+		Q_UINT32* fl = ((Q_UINT32*)fd[sy]);
+		for (int sx = 0; sx < sw; sx++ ) {
+		    Q_UINT32 bp = bl[sx];
+		    Q_UINT32 fp = fl[sx];
 
-	    ((Q_UINT32*)(md[sy]))[sx] =  qRgb(int (qRed(bp)*ia + qRed(fp)*alpha),
-					    int (qGreen(bp)*ia + qGreen(fp)*alpha),
-					    int (qBlue(bp)*ia + qBlue(fp)*alpha) );
+		    ((Q_UINT32*)(md[sy]))[sx] =  qRgb(int (qRed(bp)*ia + qRed(fp)*alpha),
+						    int (qGreen(bp)*ia + qGreen(fp)*alpha),
+						    int (qBlue(bp)*ia + qBlue(fp)*alpha) );
+		}
+	    }
 	}
+    default:
+	break;
     }
 }
 
@@ -324,6 +355,7 @@ static QRollEffect* roll = 0;
 QRollEffect::QRollEffect( QWidget* w, WFlags f, DirFlags orient )
     : QWidget( 0, 0, f ), orientation(orient)
 {
+    setEnabled( FALSE );
     widget = (QAccessWidget*) w;
     ASSERT( widget );
 
@@ -366,21 +398,37 @@ void QRollEffect::paintEvent( QPaintEvent* )
 */
 bool QRollEffect::eventFilter( QObject* o, QEvent* e )
 {
-    switch ( e->type() )
-	{
+    switch ( e->type() ) {
 	case QEvent::Move:
+	    if ( o != widget )
+		break;
 	    move( widget->geometry().x(),widget->geometry().y() );
 	    update();
 	    break;
 	case QEvent::Hide:
 	case QEvent::Close:
+	    if ( o != widget )
+		break;
 	    showWidget = FALSE;
 	    done = TRUE;
 	    scroll();
 	    break;
+	case QEvent::MouseButtonPress:
+	    showWidget = FALSE;
+	    done = TRUE;
+	    break;
+	case QEvent::KeyPress:
+	    {
+		QKeyEvent *ke = (QKeyEvent*)e;
+		if ( ke->key() == Key_Escape )
+		    showWidget = FALSE;
+		done = TRUE;
+		scroll();
+		break;
+	    }
 	default:
 	    break;
-	}
+    }
     return QWidget::eventFilter( o, e );
 }
 
@@ -408,13 +456,14 @@ void QRollEffect::run( int time )
     if ( !widget )
 	return;
 
+    grabMouse();
+
     duration  = time;
     elapsed = 0;
 
     if ( duration < 0 )
 	duration = QMIN( QMAX((totalWidth - currentWidth) +
 			      (totalHeight - currentHeight), 100 ), 300 );
-
     connect( &anim, SIGNAL(timeout()), this, SLOT(scroll()));
 
     widget->setWState( WState_Visible );
@@ -426,6 +475,7 @@ void QRollEffect::run( int time )
     show();
 
     widget->installEventFilter( this );
+    qApp->installEventFilter( this );
 
     showWidget = TRUE;
     done = FALSE;
@@ -488,11 +538,16 @@ void QRollEffect::scroll()
 	anim.stop();
 	widget->removeEventFilter( this );
 	BackgroundMode bgm = widget->backgroundMode();
+	widget->clearWState( WState_Visible );
+	widget->setWState( WState_ForceHide );
+	if ( QWidget::mouseGrabber() == this )
+	    releaseMouse();
+
 	if ( showWidget ) {
-	    widget->clearWState( WState_Visible );
-	    widget->setWState( WState_ForceHide );
 	    widget->setBackgroundMode( NoBackground );
 	    widget->show();
+	} else {
+	    widget->hide();
 	}
 	hide();
 	if ( showWidget) {

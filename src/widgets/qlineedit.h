@@ -1,5 +1,5 @@
 /**********************************************************************
-** $Id: qt/src/widgets/qlineedit.h   2.3.0   edited 2001-02-06 $
+** $Id: qt/src/widgets/qlineedit.h   2.3.1   edited 2001-04-04 $
 **
 ** Definition of QLineEdit widget class
 **
@@ -130,6 +130,11 @@ public:
 
     bool	hasMarkedText() const;
     QString	markedText() const;
+#if defined(Q_INCOMPATIBLE_3_0_ADDONS)
+    bool 	getSelection( int *start, int *end );
+    void 	setPasswordChar( QChar c );
+    QChar 	passwordChar() const;
+#endif    
 
 public slots:
     virtual void setText( const QString &);
@@ -211,7 +216,6 @@ private:	// Disabled copy constructor and operator=
     QLineEdit &operator=( const QLineEdit & );
 #endif
 };
-
 
 #endif // QT_NO_LINEEDIT
 

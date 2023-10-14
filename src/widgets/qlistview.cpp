@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qlistview.cpp   2.3.0   edited 2001-03-01 $
+** $Id: qt/src/widgets/qlistview.cpp   2.3.1   edited 2001-05-03 $
 **
 ** Implementation of QListView widget class
 **
@@ -214,7 +214,6 @@ struct QListViewPrivate
     QTimer *scrollTimer;
 
     bool clearing;
-    bool makeCurrentVisibleOnUpdate;
     bool pressedSelected;
     bool useDoubleBuffer;
 
@@ -231,7 +230,7 @@ static QPoint activatedP;
   \class QListViewItem qlistview.h
   \brief The QListViewItem class implements a list view item.
 
-  A list viev item is a multi-column object capable of displaying
+  A list view item is a multi-column object capable of displaying
   itself.  Its design has the following main goals: <ul> <li> Work
   quickly and well for \e large sets of data. <li> Be easy to use in
   the simple case. </ul>
@@ -592,7 +591,6 @@ void QListViewItem::insertItem( QListViewItem * newChild )
     QListView *lv = listView();
     if ( !lv )
 	return;
-    lv->d->makeCurrentVisibleOnUpdate = FALSE;
     if ( lv && lv->hasFocus() && !lv->d->focusItem ) {
 	lv->d->focusItem = lv->firstChild();
 	lv->repaintItem( lv->d->focusItem );
@@ -1191,7 +1189,6 @@ void QListViewItem::setText( int column, const QString &text )
     widthChanged( column );
     if ( lv ) {
 	lv->d->useDoubleBuffer = TRUE;
-	lv->d->makeCurrentVisibleOnUpdate = FALSE;
 	lv->triggerUpdate();
     }
 }
@@ -1257,7 +1254,6 @@ void QListViewItem::setPixmap( int column, const QPixmap & pm )
     QListView *lv = listView();
     if ( lv ) {
 	lv->d->useDoubleBuffer = TRUE;
-	lv->d->makeCurrentVisibleOnUpdate = FALSE;
 	lv->triggerUpdate();
     }
 }
@@ -1393,8 +1389,10 @@ void QListViewItem::paintCell( QPainter * p, const QColorGroup & cg,
     }
 
     if ( !t.isEmpty() ) {
-	p->drawText( r, 0, width-marg-r, height(),
-		     align | AlignVCenter, t );
+	if ( ! (align & AlignTop | align & AlignBottom) )
+            align |= AlignVCenter;
+        p->drawText( r, 0, width-marg-r, height(),
+            align, t );
     }
 }
 
@@ -1850,7 +1848,6 @@ void QListView::init()
     d->ellipsisWidth = fontMetrics().width( "..." ) * 2;
     d->highlighted = 0;
     d->pressedItem = 0;
-    d->makeCurrentVisibleOnUpdate = TRUE;
     d->selectAnchor = 0;
     d->select = TRUE;
     d->useDoubleBuffer = FALSE;
@@ -2492,7 +2489,7 @@ void QListView::setColumnText( int column, const QIconSet& iconset, const QStrin
 */
 void QListView::setColumnWidth( int column, int w )
 {
-    if ( column < d->h->count() && d->h->cellSize( column ) != w ) {
+    if ( column < d->h->count() && d->h->sectionSize( column ) != w ) {
 	d->h->resizeSection( column, w );
 	viewport()->update();
     }
@@ -2647,9 +2644,6 @@ void QListView::updateContents()
     viewport()->setUpdatesEnabled( TRUE );
     viewport()->repaint( FALSE );
     d->useDoubleBuffer = FALSE;
-    if ( d->makeCurrentVisibleOnUpdate )
-	ensureItemVisible( d->focusItem );
-    d->makeCurrentVisibleOnUpdate = TRUE;
 }
 
 
@@ -3205,7 +3199,6 @@ void QListView::contentsMousePressEvent( QMouseEvent * e )
 	    if ( x1 >= 0 && x1 < treeStepSize() ) {
 		bool close = i->isOpen();
 		setOpen( i, !i->isOpen() );
-		d->makeCurrentVisibleOnUpdate = FALSE;
 		qApp->processEvents();
 		if ( !d->focusItem ) {
 		    d->focusItem = i;
@@ -3281,8 +3274,8 @@ void QListView::contentsMousePressEvent( QMouseEvent * e )
 		    d->pressedSelected = FALSE;
 		} else if ( !oldCurrent || !i || oldCurrent == i ) {
 		    if ( (bool)i->selected != d->select ) {
-			changed = TRUE;
 			i->setSelected( d->select );
+			changed = TRUE;
 		    }
 		} else {
 		    bool down = oldCurrent->itemPos() < i->itemPos();
@@ -3561,13 +3554,11 @@ void QListView::doAutoScroll()
 		// also (de)select the ones in between
 		QListViewItem * b = d->focusItem;
 		bool down = ( itemPos( c ) > itemPos( b ) );
-                if ( itemAt( QCursor::pos() ) ) {
-                    while( b && b != c ) {
-                        if ( b->isSelectable() )
-                            setSelected( b, d->select );
-                        b = down ? b->itemBelow() : b->itemAbove();
-                    }
-                }
+		while( b && b != c ) {
+		    if ( b->isSelectable() )
+			setSelected( b, d->select );
+		    b = down ? b->itemBelow() : b->itemAbove();
+		}
 		if ( c->isSelectable() )
 		    setSelected( c, d->select );
 	    }
@@ -5002,12 +4993,28 @@ QSize QListView::minimumSizeHint() const
 void QListView::setOpen( QListViewItem * item, bool open )
 {
     if ( !item ||
-	 item->isOpen() == open ||
-	 (open && !item->childCount() && !item->isExpandable()) )
+	item->isOpen() == open ||
+	(open && !item->childCount() && !item->isExpandable()) )
 	return;
+
+    QListViewItem* nextParent = NULL;
+    if ( open && !(item->isOpen()) )
+	nextParent = item->itemBelow();
 
     item->setOpen( open );
 
+    if ( open ) {
+	QListViewItem* lastChild;
+	if ( !nextParent ) {
+	    lastChild = item;
+	    for ( int i=0;i<item->childCount();++i )
+		lastChild = lastChild->itemBelow();
+	} else {
+	    lastChild = nextParent->itemAbove();
+	}
+	ensureItemVisible( lastChild );
+	ensureItemVisible( item );
+    }
     if ( d->drawables )
 	d->drawables->clear();
     buildDrawableList();
@@ -5051,8 +5058,9 @@ void QListView::setRootIsDecorated( bool enable )
 {
     if ( enable != (bool)d->rootIsExpandable ) {
 	d->rootIsExpandable = enable;
-	if ( isVisible() )
+	if ( isVisible() ) {
 	    triggerUpdate();
+	}
     }
 }
 
@@ -5173,8 +5181,9 @@ void QListViewItem::moveItem( QListViewItem *after )
     }
     moveToJustAfter( after );
     QListView *lv = listView();
-    if ( lv )
+    if ( lv ) {
 	lv->triggerUpdate();
+    }
 }
 
 /*!  \reimp */

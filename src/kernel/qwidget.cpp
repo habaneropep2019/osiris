@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qwidget.cpp   2.3.0   edited 2001-01-26 $
+** $Id: qt/src/kernel/qwidget.cpp   2.3.1   edited 2001-05-22 $
 **
 ** Implementation of QWidget class
 **
@@ -1266,7 +1266,8 @@ void QWidget::setEnabled( bool enable )
     else
 	setWState( WState_ForceDisabled );
 
-    if ( !isTopLevel() && !parentWidget()->isEnabled() && enable )
+    if ( !isTopLevel() && parentWidget() &&
+	 !parentWidget()->isEnabled() && enable )
 	return; // nothing we can do
 
     if ( enable ) {
@@ -2588,19 +2589,6 @@ void QWidget::setFocus()
     if ( f->it.current() == this && qApp->focusWidget() == this )
 	return;
 
-    // ### why do we do this twice? - bad merge?
-
-    f->it.toFirst();
-    while ( f->it.current() != this && !f->it.atLast() )
-	++f->it;
-    // at this point, the iterator should point to 'this'.  if it
-    // does not, 'this' must not be in the list - an error, but
-    // perhaps possible.  fix it.
-    if ( f->it.current() != this ) {
-	f->focusWidgets.append( this );
-	f->it.toLast();
-    }
-
     f->it.toFirst();
     while ( f->it.current() != this && !f->it.atLast() )
 	++f->it;
@@ -3586,7 +3574,7 @@ bool QWidget::close( bool alsoDelete )
 	emit qApp->lastWindowClosed();
     if ( isMain )
 	qApp->quit();
-    if ( deleted ) 
+    if ( deleted )
 	return TRUE;
     is_closing = 0;
     if ( alsoDelete || testWFlags(WDestructiveClose) )
@@ -4963,7 +4951,9 @@ void QWidget::showFullScreen()
     }
     if ( topData()->normalGeometry.width() < 0 )
 	topData()->normalGeometry = QRect( pos(), size() );
-    reparent( 0, WType_TopLevel | WStyle_Customize | WStyle_NoBorderEx | WStyle_StaysOnTop,
+    reparent( 0, WType_TopLevel | WStyle_Customize | WStyle_NoBorderEx |
+	      // preserve some widget flags
+	      (getWFlags() & 0xffff0000),
 	      QPoint(0,0) );
     topData()->fullscreen = 1;
     resize( qApp->desktop()->size() );

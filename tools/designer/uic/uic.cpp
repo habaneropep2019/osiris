@@ -33,8 +33,6 @@
 #include <qregexp.h>
 #include <zlib.h>
 
-#undef main
-
 static QString mkBool( bool b )
 {
     return b? "TRUE" : "FALSE";
@@ -55,10 +53,10 @@ static bool toBool( const QString& s )
 static QString fixString( const QString &str )
 {
     QString s( str );
-    s = s.replace( QRegExp( "\\\\" ), "\\\\" );
-    s = s.replace( QRegExp( "\"" ), "\\\"" );
-    s = s.replace( QRegExp( "\n" ), "\\n" );
-    s = s.replace( QRegExp( "\r" ), "\\r" );
+    s.replace( QRegExp( "\\\\" ), "\\\\" );
+    s.replace( QRegExp( "\"" ), "\\\"" );
+    s.replace( QRegExp( "\n" ), "\\n\"\n\"" );
+    s.replace( QRegExp( "\r" ), "\\r" );
 
     bool onlyAscii = TRUE;
     unsigned int i;

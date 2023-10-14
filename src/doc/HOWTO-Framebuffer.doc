@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/doc/HOWTO-Framebuffer.doc   2.3.0   edited 2001-01-26 $
+** $Id: qt/doc/HOWTO-Framebuffer.doc   2.3.1   edited 2001-04-12 $
 **
 ** Windowsystem-specific pages
 **
@@ -34,7 +34,7 @@
 **********************************************************************/
 
 #if defined(DEBUG)
-static char ident[] = "$Id: qt/doc/HOWTO-Framebuffer.doc   2.3.0   edited 2001-01-26 $";
+static char ident[] = "$Id: qt/doc/HOWTO-Framebuffer.doc   2.3.1   edited 2001-04-12 $";
 #endif
 
 /*! \page HOWTO-framebuffer.html
@@ -205,7 +205,7 @@ int main()
 
     // Open the file for reading and writing
     fbfd = open("/dev/fb0", O_RDWR);
-    if (!fbfd) {
+    if (fbfd < 0) {
 	printf("Error: cannot open framebuffer device.\n");
 	exit(1);
     }

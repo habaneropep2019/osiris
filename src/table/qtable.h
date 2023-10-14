@@ -95,7 +95,7 @@ public:
 
     QTableItem( QTable *table, EditType et, const QString &text );
     QTableItem( QTable *table, EditType et, const QString &text,
-		const QPixmap &p );
+                const QPixmap &p );
     virtual ~QTableItem();
 
     virtual QPixmap pixmap() const;
@@ -127,7 +127,7 @@ public:
     int col() const;
 
     virtual void paint( QPainter *p, const QColorGroup &cg,
-			const QRect &cr, bool selected );
+                        const QRect &cr, bool selected );
 
     void updateEditor( int oldRow, int oldCol );
 
@@ -167,7 +167,7 @@ class Q_EXPORT QTable : public QScrollView
 public:
     QTable( QWidget *parent = 0, const char *name = 0 );
     QTable( int numRows, int numCols,
-	    QWidget *parent = 0, const char *name = 0 );
+            QWidget *parent = 0, const char *name = 0 );
     ~QTable();
 
     QHeader *horizontalHeader() const;
@@ -220,7 +220,7 @@ public:
     bool rowMovingEnabled() const;
 
     virtual void sortColumn( int col, bool ascending = TRUE,
-			     bool wholeRows = FALSE );
+                             bool wholeRows = FALSE );
     bool sorting() const;
 
     virtual void takeItem( QTableItem *i );
@@ -230,7 +230,7 @@ public:
     virtual void clearCellWidget( int row, int col );
 
     virtual void paintCell( QPainter *p, int row, int col,
-			    const QRect &cr, bool selected );
+                            const QRect &cr, bool selected );
     virtual void paintFocus( QPainter *p, const QRect &r );
     QSize sizeHint() const;
 
@@ -311,11 +311,11 @@ private:
 
     void updateGeometries();
     void repaintSelections( QTableSelection *oldSelection,
-			    QTableSelection *newSelection,
-			    bool updateVertical = TRUE,
-			    bool updateHorizontal = TRUE );
+                            QTableSelection *newSelection,
+                            bool updateVertical = TRUE,
+                            bool updateHorizontal = TRUE );
     QRect rangeGeometry( int topRow, int leftCol,
-			 int bottomRow, int rightCol, bool &optimize );
+                         int bottomRow, int rightCol, bool &optimize );
     void fixRow( int &row, int y );
     void fixCol( int &col, int x );
 
@@ -367,9 +367,9 @@ class Q_EXPORT QTableHeader : public QHeader
     Q_OBJECT
 public:
     enum SectionState {
-	Normal,
-	Bold,
-	Selected
+        Normal,
+        Bold,
+        Selected
     };
 
     QTableHeader( int, QTable *t, QWidget *parent=0, const char *name=0 );

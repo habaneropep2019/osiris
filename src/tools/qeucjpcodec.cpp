@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qeucjpcodec.cpp   2.3.0   edited 2001-01-26 $
+** $Id: qt/src/tools/qeucjpcodec.cpp   2.3.1   edited 2001-01-26 $
 **
 ** Implementation of QEucJpCodec class
 **

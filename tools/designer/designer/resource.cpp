@@ -1318,6 +1318,17 @@ void Resource::setObjectProperty( QObject* obj, const QString &prop, const QDomE
 	MetaDataBase::setPropertyComment( obj, prop, comment );
     }
 
+    if ( e.tagName() == "pixmap" ) {
+	QPixmap pix = loadPixmap( e );
+	v = QVariant( pix );
+    } else if ( e.tagName() == "iconset" ) {
+	QPixmap pix;
+	pix.convertFromImage( loadFromCollection( v.toString() ) );
+	v = QVariant( QIconSet( pix ) );
+    } else if ( e.tagName() == "image" ) {
+	v = QVariant( loadFromCollection( v.toString() ) );
+    }
+
     if ( !p ) {
 	if ( !previewMode )
 	    MetaDataBase::setFakeProperty( obj, prop, v );
@@ -1334,16 +1345,7 @@ void Resource::setObjectProperty( QObject* obj, const QString &prop, const QDomE
     }
 
 
-    if ( e.tagName() == "pixmap" ) {
-	QPixmap pix = loadPixmap( e );
-	v = QVariant( pix );
-    } else if ( e.tagName() == "iconset" ) {
-	QPixmap pix;
-	pix.convertFromImage( loadFromCollection( v.toString() ) );
-	v = QVariant( QIconSet( pix ) );
-    } else if ( e.tagName() == "image" ) {
-	v = QVariant( loadFromCollection( v.toString() ) );
-    } else if ( e.tagName() == "palette" ) {
+    if ( e.tagName() == "palette" ) {
 	QDomElement n = e.firstChild().toElement();
 	QPalette p;
 	while ( !n.isNull() ) {
@@ -1575,7 +1577,7 @@ void Resource::saveConnections( QTextStream &ts, int indent )
 		continue;
 	}
 	
-	if ( conn.receiver->inherits( "CustomWidget" ) ) {
+	if ( conn.receiver->inherits( "CustomWidget" ) && !formwindow->isMainContainer( (QWidget*)conn.receiver ) ) {
 	    MetaDataBase::CustomWidget *cw = ( (CustomWidget*)conn.receiver )->customWidget();
 	    if ( cw && !cw->hasSlot( conn.slot ) )
 		continue;
@@ -1851,7 +1853,7 @@ void Resource::saveMetaInfo( QTextStream &ts, int indent )
 	ts << makeIndent( indent ) << "<include location=\"" << (*it).location << "\">" << (*it).header << "</include>" << endl;
     QStringList forwards = MetaDataBase::forwards( formwindow );
     for ( QStringList::Iterator it2 = forwards.begin(); it2 != forwards.end(); ++it2 )
-	ts << makeIndent( indent ) << "<forward>" << *it2 << "</forward>" << endl;
+	ts << makeIndent( indent ) << "<forward>" << entitize( *it2 ) << "</forward>" << endl;
     if ( formwindow && !formwindow->savePixmapInline() )
 	ts << makeIndent( indent ) << "<pixmapfunction>" << formwindow->pixmapLoaderFunction() << "</pixmapfunction>" << endl;
 }

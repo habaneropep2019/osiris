@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qasyncimageio.cpp   2.3.0   edited 2001-01-28 $
+** $Id: qt/src/kernel/qasyncimageio.cpp   2.3.1   edited 2001-01-28 $
 **
 ** Implementation of asynchronous image/movie loading classes
 **

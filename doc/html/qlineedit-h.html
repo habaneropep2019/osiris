@@ -30,7 +30,7 @@ remains with Trolltech.
 <hr>
 <pre>
 /**********************************************************************
-** &#36;Id&#58; qt/src/widgets/qlineedit.h   2.3.0   edited 2001-02-06 $
+** &#36;Id&#58; qt/src/widgets/qlineedit.h   2.3.1   edited 2001-04-04 $
 **
 ** Definition of QLineEdit widget class
 **
@@ -161,6 +161,11 @@ public:
 
     bool        hasMarkedText() const;
     QString     markedText() const;
+#if defined(Q_INCOMPATIBLE_3_0_ADDONS)
+    bool        getSelection( int *start, int *end );
+    void        setPasswordChar( QChar c );
+    QChar       passwordChar() const;
+#endif    
 
 public slots:
     virtual void setText( const QString &amp;);
@@ -243,7 +248,6 @@ private:        // Disabled copy constructor and operator=
 #endif
 };
 
-
 #endif // QT_NO_LINEEDIT
 
 #endif // QLINEEDIT_H
@@ -252,5 +256,5 @@ private:        // Disabled copy constructor and operator=
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.0</div>
+<td align="right"><div align="right">Qt version 2.3.1</div>
 </table></div></address></body></html>

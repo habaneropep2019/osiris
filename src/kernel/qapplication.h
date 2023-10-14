@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qapplication.h   2.3.0   edited 2001-02-08 $
+** $Id: qt/src/kernel/qapplication.h   2.3.1   edited 2001-03-19 $
 **
 ** Definition of QApplication class
 **
@@ -399,10 +399,15 @@ inline bool QApplication::sendEvent( QObject *receiver, QEvent *event )
 #ifdef QT_NO_TRANSLATION
 // Simple versions
 inline QString QApplication::translate( const char *, const char *key ) const
-{ return key; }
-inline QString	QApplication::translate( const char *, const char *key,
-			    const char * ) const
-{ return key; }
+{
+    return QString::fromLatin1( key );
+}
+
+inline QString QApplication::translate( const char *, const char *key,
+					const char * ) const
+{
+    return QString::fromLatin1( key );
+}
 #endif
 
 #endif // QAPPLICATION_H

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qpushbutton.cpp   2.3.0   edited 2001-01-26 $
+** $Id: qt/src/widgets/qpushbutton.cpp   2.3.1   edited 2001-05-30 $
 **
 ** Implementation of QPushButton class
 **
@@ -402,7 +402,11 @@ QSize QPushButton::sizeHint() const
 	QSize sz = fm.size( ShowPrefix, s );
 	w = sz.width() + style().buttonMargin();
 	h = sz.height() + sz.height()/8 + 4 + style().buttonMargin();
+#ifndef _WS_QWS_
 	w += h;
+#else
+	w += sz.height()/8 + 4;
+#endif
     }
 
 
@@ -430,7 +434,7 @@ QSize QPushButton::sizeHint() const
 	    h = 22;
 	if ( w < 85 && !pixmap() && ( isDefault() || autoDefault() ) )
 	    w = 80;
-     } else if ( !pixmap() && (isDefault() || autoDefault() ) ) {
+     } else if ( !pixmap() && ( isDefault() || autoDefault() ) ) {
 	 // un-unglify motifstyles until we fix boxlayout to treat
 	 // pushbuttons differently
 	 if ( w < 80 )
@@ -604,6 +608,8 @@ void QPushButton::focusOutEvent( QFocusEvent *e )
 #endif
 
     QButton::focusOutEvent( e );
+    if ( popup() && popup()->isVisible() )	// restore pressed status
+	setDown( TRUE );
 }
 
 
@@ -679,7 +685,7 @@ void QPushButton::setIconSet( const QIconSet& icon )
 	delete (::d(this)->iconset);
 	::d(this)->iconset = 0;
     }
-	
+
     update();
     updateGeometry();
 }
@@ -715,7 +721,7 @@ void QPushButton::popupPressed()
     QPopupMenu* popup = ::d( this )->popup;
     if ( isDown() && popup ) {
 	bool horizontal = TRUE;
-	bool topLeft = TRUE;
+	bool topLeft = TRUE;			// ### always TRUE
 #ifndef QT_NO_TOOLBAR
 	if ( parentWidget() && parentWidget()->inherits("QToolBar") ) {
 	    if ( ( (QToolBar*) parentWidget() )->orientation() == Vertical )

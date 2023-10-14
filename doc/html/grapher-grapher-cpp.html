@@ -288,11 +288,13 @@ void <a name="109"></a>Graph::paintBar(<a href="qpaintevent.html">QPaintEvent</a
             int bw = (w-w/4-x)/(data.<a href="qlist.html#816005">count</a>()-i);
             int bh = int((h-h/4-1)*rowdata[0].dbl/max);
             p.<a name="drawRect"></a><a href="qpainter.html#b29a16">drawRect</a>( w/8+x, h-h/8-1-bh, bw, bh );
-            if (model.colType(1) == GraphModel::Label) {
+
+            // ### This causes a crash, so comment out for now      
+            /*if (model.colType(1) == GraphModel::Label) {
                 p.<a href="qpainter.html#8a59ed">drawText</a>(w/8+x, h-h/8, bw, fh+h/8,
                     WordBreak|AlignTop|AlignHCenter,
                     *rowdata[1].str);
-            }
+            }*/
             i++;
             x+=bw;
         }
@@ -390,9 +392,11 @@ void <a name="110"></a>Graph::paintPie(<a href="qpaintevent.html">QPaintEvent</a
             double a = rowdata[0].dbl * 360 / total * M_PI / 180;
             int x = int(cos(apos+a/2)*w*5/16 + w/2 + 0.5);
             int y = int(sin(apos+a/2)*h*5/16 + h/2 + 0.5);
-            p.<a href="qpainter.html#8a59ed">drawText</a>(x-w/8, y-h/8, w/4, h/4,
+
+            // ### This causes a crash, so comment out for now
+            /*p.<a href="qpainter.html#8a59ed">drawText</a>(x-w/8, y-h/8, w/4, h/4,
                 WordBreak|AlignCenter,
-                *rowdata[1].str);
+                *rowdata[1].str);*/
             apos += a;
         }
     }
@@ -690,5 +694,5 @@ public:
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.0</div>
+<td align="right"><div align="right">Qt version 2.3.1</div>
 </table></div></address></body></html>

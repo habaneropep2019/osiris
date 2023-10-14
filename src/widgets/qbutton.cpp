@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qbutton.cpp   2.3.0   edited 2001-01-26 $
+** $Id: qt/src/widgets/qbutton.cpp   2.3.1   edited 2001-03-24 $
 **
 ** Implementation of QButton widget class
 **
@@ -94,7 +94,7 @@ struct QButtonData
 	group = 0;
 #endif
 #ifndef QT_NO_ACCEL
-	a = 0; 	
+	a = 0;
 #endif
     }
 #ifndef QT_NO_BUTTONGROUP
@@ -781,6 +781,10 @@ void QButton::keyPressEvent( QKeyEvent *e )
 		buttonDown = TRUE;
 		repaint( FALSE );
 	    }
+	    if ( inherits("QPushButton") )
+		emit pressed();
+	    else
+		e->ignore();
 	}
 	break;
     case Key_Up:

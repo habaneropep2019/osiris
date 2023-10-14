@@ -1,5 +1,5 @@
 '\" t
-.TH QFtp 3qt "5 March 2001" "Trolltech AS" \" -*- nroff -*-
+.TH QFtp 3qt "13 June 2001" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2001 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -91,17 +91,17 @@ Some operations require a data connection to the server. If this connection coul
 This method is called when new data arrived on the data socket.
 .SH "void QFtp::error ( int code ) \fC[protected slot]\fR"
 Reimplemented for internal reasons; the API is not affected.
-.SH "void QFtp::operationGet ( QNetworkOperation * ) \fC[virtual protected]\fR"
+.SH "void QFtp::operationGet ( QNetworkOperation * op ) \fC[virtual protected]\fR"
 Reimplemented for internal reasons; the API is not affected.
-.SH "void QFtp::operationListChildren ( QNetworkOperation * ) \fC[virtual protected]\fR"
+.SH "void QFtp::operationListChildren ( QNetworkOperation * op ) \fC[virtual protected]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .SH "void QFtp::operationMkDir ( QNetworkOperation * op ) \fC[virtual protected]\fR"
 Reimplemented for internal reasons; the API is not affected.
-.SH "void QFtp::operationPut ( QNetworkOperation * ) \fC[virtual protected]\fR"
+.SH "void QFtp::operationPut ( QNetworkOperation * op ) \fC[virtual protected]\fR"
 Reimplemented for internal reasons; the API is not affected.
-.SH "void QFtp::operationRemove ( QNetworkOperation * ) \fC[virtual protected]\fR"
+.SH "void QFtp::operationRemove ( QNetworkOperation * op ) \fC[virtual protected]\fR"
 Reimplemented for internal reasons; the API is not affected.
-.SH "void QFtp::operationRename ( QNetworkOperation * ) \fC[virtual protected]\fR"
+.SH "void QFtp::operationRename ( QNetworkOperation * op ) \fC[virtual protected]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .SH "void QFtp::parseDir ( const QString & buffer, QUrlInfo & info ) \fC[protected]\fR"
 Parses \fIbuffer,\fR which is one line of a directory list which came from the FTP server, and sets the values which have been parsed to \fIinfo.\fR
@@ -135,4 +135,4 @@ In case of content or formattting problems with this manual page, please
 report them to
 .BR qt-bugs@trolltech.com .
 Please include the name of the manual page (qftp.3qt) and the Qt
-version (2.3.0).
+version (2.3.1).

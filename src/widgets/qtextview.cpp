@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qtextview.cpp   2.3.0   edited 2001-02-01 $
+** $Id: qt/src/widgets/qtextview.cpp   2.3.1   edited 2001-06-13 $
 **
 ** Implementation of the QTextView class
 **
@@ -221,6 +221,7 @@ void QTextView::setText( const QString& text, const QString& context)
     delete d->doc_;
     delete formats; //#### fix inheritance structure in rich text
     d->doc_ = 0;
+    d->selection = FALSE;
 
     d->original_txt = text;
     d->contxt = context;
@@ -269,18 +270,25 @@ void QTextView::setText( const QString& text )
   Appends \a text to the current text.
 
   Useful for log viewers.
+
+  \warning This function has known problems (incorrect painting and
+  layouting). If this problem occures to you, use setText( text() +
+  theNewText ) instead. The new richtext engine, which is part of Qt
+  3.0, is able to handle append(), insert(), etc. properly.
 */
 void QTextView::append( const QString& text )
 {
     richText().append( text,  mimeSourceFactory(), styleSheet() );
-    int y = contentsHeight();
-    int h = richText().lastChild()->bottomMargin();
-    if ( d->fcresize ) {
-	d->fcresize->updateLayout();
-	doResize();
-    } else
-	updateLayout();
-    updateContents( contentsX(), y-h, visibleWidth(), h );
+    if ( isVisible() ) {
+	int y = contentsHeight();
+	int h = richText().lastChild()->bottomMargin();
+	if ( d->fcresize ) {
+	    d->fcresize->updateLayout();
+	    doResize();
+	} else
+	    updateLayout();
+	updateContents( contentsX(), y-h, visibleWidth(), h );
+    }
     d->original_txt += text;
 }
 
@@ -676,7 +684,7 @@ void QTextView::viewportMouseReleaseEvent( QMouseEvent* e )
 	d->scrollTimer->stop();
 #ifndef QT_NO_CLIPBOARD
 	if ( d->dragselection ) {
-#if !defined(_WS_X11_)
+#if defined(_WS_X11_)
 	    if ( style() == MotifStyle )
 		copy();
 #endif
@@ -714,13 +722,14 @@ QString QTextView::selectedText() const
 
     if ( d->selstart.a == d->selend.a && d->selstart.b == d->selend.b )
 	return it.text().mid( d->selstart.c, d->selend.c - d->selstart.c );
-    
+
     int column = 0;
     QString txt;
     QString s = it.text().mid( d->selstart.c );
     while ( it.position() < d->selend ) {
 	if ( !s.isEmpty() ) {
-	    if ( column + s.length() > 79 ) {
+	    if ( column + s.length() > 79 &&
+		it.outmostParagraph()->style->whiteSpaceMode() == QStyleSheetItem::WhiteSpaceNormal ) {
 		txt += '\n';
 		column = 0;
 	    }

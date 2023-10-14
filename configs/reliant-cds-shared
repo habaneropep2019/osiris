@@ -1,7 +1,7 @@
 # Compiling
 INTERFACE_DECL_PATH 	= .
 SYSCONF_CXX		= CC
-SYSCONF_CC		= CC
+SYSCONF_CC		= cc
 DASHCROSS		= 
 
 # Compiling with support libraries
@@ -34,16 +34,16 @@ SYSCONF_LIBS_YACC	=
 # Linking applications
 SYSCONF_LINK		= CC
 SYSCONF_LFLAGS		= 
-SYSCONF_LIBS		= -lCFrun -lC -lsocket -lnsl -lm -ldl -lm
+SYSCONF_LIBS		= -lresolv -lsocket -lnsl -ldl -lm
 
 # Link flags for shared objects
 SYSCONF_LFLAGS_SHOBJ	= -G -h $(TARGET1)
 
 # Flags for threading
-SYSCONF_CFLAGS_THREAD	= 
+SYSCONF_CFLAGS_THREAD	= -K pthread
 SYSCONF_CXXFLAGS_THREAD	= 
-SYSCONF_LFLAGS_THREAD	= 
-# SYSCONF_LIBS_THREAD	= ???
+SYSCONF_LFLAGS_THREAD	= -K pthread
+SYSCONF_LIBS_THREAD	= 
 
 # Meta-object compiler
 SYSCONF_MOC		= $(QTDIR)/bin/moc
@@ -77,8 +77,8 @@ SYSCONF_LINK_TARGET_STATIC = lib$(TARGET).a
 SYSCONF_LINK_LIB_STATIC	= rm -f $(DESTDIR)$(SYSCONF_LINK_TARGET_STATIC) ; \
 				 $(SYSCONF_AR) $(DESTDIR)$(SYSCONF_LINK_TARGET_STATIC) $(OBJECTS) $(OBJMOC) 
 # Compiling application source
-SYSCONF_CXXFLAGS	= 
-SYSCONF_CFLAGS		= 
+SYSCONF_CXXFLAGS	= -O
+SYSCONF_CFLAGS		= -O
 # Default link type (static linking is still be used where required)
 SYSCONF_LINK_LIB	= $(SYSCONF_LINK_LIB_SHARED)
 SYSCONF_LINK_TARGET	= $(SYSCONF_LINK_TARGET_SHARED)

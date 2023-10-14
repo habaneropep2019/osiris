@@ -204,7 +204,7 @@ own subclass of QTableItem and reimplement the <a href="qtableitem.html#769073">
 method.
 <p>If your application stores its data already in a way that allocating
 a QTableItem for each data containing cell seems inappropriate, you
-can reimplement <a href="#a488b8">QTable::paintCell</a>() and draw the contents directly. 
+can reimplement <a href="#a488b8">QTable::paintCell</a>() and draw the contents directly.
 You should also reimplement QTable::paintCell() if you wish to change
 the alignment of your items in the QTable.
 <p>Unless you reimplement them this approach will however prevent you
@@ -286,8 +286,7 @@ clicked. The default implementation sorts this column if
 <h3 class="fn">void <a name="48dc9b"></a>QTable::columnIndexChanged ( int, int, int ) <code>[virtual protected slot]</code></h3>
 <p>This function is called if the order of the columns has been
 changed. If you want to change the order programmatically, call
-<a href="qheader.html#4d544c">QHeader::moveSection</a>() on the <a href="#beea6c">horizontalHeader</a>() or
-<a href="#014f16">verticalHeader</a>().
+<a href="#a05058">swapRows</a>() or <a href="#b9aca9">swapColumns</a>().
 <h3 class="fn">bool <a name="4384d3"></a>QTable::columnMovingEnabled () const</h3>
 <p>Returns whether columns can be moved by the user.
 <h3 class="fn">int <a name="937676"></a>QTable::columnPos ( int col ) const <code>[virtual]</code></h3>
@@ -432,7 +431,7 @@ been set for this cell so far, item() returns 0.
 <p>If you want to draw custom cell content you have to reimplement
 paintCell() to do the custom drawing, or else subclass <a href="qtableitem.html">QTableItem</a>
 and reimplement <a href="qtableitem.html#769073">QTableItem::paint</a>().
-<p>If you want to change the alignment of your items then you will need to 
+<p>If you want to change the alignment of your items then you will need to
 reimplement paintCell().
 <p>Reimplementing this function is probably better e.g. for data you
 retrieve from a database and draw at once, while using
@@ -483,8 +482,7 @@ changed in order to rearrange its contents.
 <h3 class="fn">void <a name="e541b1"></a>QTable::rowIndexChanged ( int, int, int ) <code>[virtual protected slot]</code></h3>
 <p>This function is called if the order of the rows has been
 changed. If you want to change the order programmatically, call
-<a href="qheader.html#4d544c">QHeader::moveSection</a>() on the <a href="#beea6c">horizontalHeader</a>() or
-<a href="#014f16">verticalHeader</a>().
+<a href="#a05058">swapRows</a>() or <a href="#b9aca9">swapColumns</a>().
 <h3 class="fn">bool <a name="61d09c"></a>QTable::rowMovingEnabled () const</h3>
 <p>Returns whether rows can be moved by the user.
 <h3 class="fn">int <a name="147089"></a>QTable::rowPos ( int row ) const <code>[virtual]</code></h3>
@@ -624,7 +622,7 @@ the relevant item does not exist or includes no text.
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.3.0"><nobr>
+<input type=hidden name="version" value="2.3.1"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -632,5 +630,5 @@ copyright &copy; 1995-2000
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.0</div>
+<td align="right"><div align="right">Qt version 2.3.1</div>
 </table></div></address></body></html>

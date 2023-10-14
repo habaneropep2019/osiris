@@ -2,13 +2,13 @@
 TEMPLATE	= lib
 CONFIG		+= qt warn_on release
 
-unix:CONFIG += x11 
+unix:CONFIG += x11
 #xft internal
 embedded:CONFIG -= x11
 
 TARGET		= qt
 embedded:TARGET	= qte
-VERSION		= 2.3.0
+VERSION		= 2.3.1
 DESTDIR		= ../lib
 DLLDESTDIR	= ../bin
 
@@ -24,7 +24,6 @@ internal:MODULES	+= $$MODULES_ENT
 
 CONFIG		+= $$MODULES
 
-unix:LIBS += -lm
 internal:CONFIG	+= png zlib  # Done differently in external system
 embedded:CONFIG	+= png zlib ft
 win32:CONFIG	+= png zlib

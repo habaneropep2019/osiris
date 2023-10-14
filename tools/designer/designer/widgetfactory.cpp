@@ -822,6 +822,11 @@ void WidgetFactory::initChangedProperties( QObject *o )
     } else if ( o->inherits( "QTabWidget" ) || o->inherits( "QWizard" ) ) {
 	MetaDataBase::setPropertyChanged( o, "pageTitle", TRUE );
 	MetaDataBase::setPropertyChanged( o, "pageName", TRUE );
+#ifndef QT_NO_TABLE
+    } else if ( o->inherits( "QTable" ) ) {
+	MetaDataBase::setPropertyChanged( o, "numRows", TRUE );
+	MetaDataBase::setPropertyChanged( o, "numCols", TRUE );
+#endif
     }
 }
 

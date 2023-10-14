@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qpixmap_x11.cpp   2.3.0   edited 2001-01-26 $
+** $Id: qt/src/kernel/qpixmap_x11.cpp   2.3.1   edited 2001-06-07 $
 **
 ** Implementation of QPixmap class for X11
 **
@@ -301,7 +301,7 @@ void QPixmap::init( int w, int h, int d, bool bitmap, Optimization optim )
     hd = (HANDLE)XCreatePixmap( x11Display(), DefaultRootWindow(x11Display()),
 				w, h, data->d );
 #ifdef QT_XFT
-    qt_create_ft_draw (x11Display (), hd, 
+    qt_create_ft_draw (x11Display (), hd,
 		       data->d == 1 ? 0 : (Visual *) x11Visual (),
 		       x11Colormap ());
 #endif
@@ -550,7 +550,7 @@ QImage QPixmap::convertToImage() const
     int	    d  = depth();
     bool    mono = d == 1;
     Visual *visual = (Visual *)x11Visual();
-    bool    trucol = (visual->c_class == TrueColor) && !mono;
+    bool    trucol = (visual->c_class == TrueColor) && !mono && d > 8;
 
     if ( d > 1 && d <= 8 )			// set to nearest valid depth
 	d = 8;					//   2..8 ==> 8
@@ -1373,7 +1373,7 @@ bool QPixmap::convertFromImage( const QImage &img, int conversion_flags )
 				    w, h, dd );
 #ifdef QT_XFT
 	qt_create_ft_draw (x11Display (), hd,
-			   dd == 1 ? 0 : (Visual *) x11Visual (), 
+			   dd == 1 ? 0 : (Visual *) x11Visual (),
 			   x11Colormap ());
 #endif
     }

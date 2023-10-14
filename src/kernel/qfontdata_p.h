@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qfontdata_p.h   2.3.0   edited 2001-02-13 $
+** $Id: qt/src/kernel/qfontdata_p.h   2.3.1   edited 2001-04-19 $
 **
 ** Definition of internal QFontData struct
 **
@@ -57,7 +57,8 @@
 
 struct QFontDef {				// font definition
     QString	family;
-    short	pointSize;
+    QString	addStyle;
+    int		pointSize;
     uint	styleHint	: 8;
     uint	styleStrategy	: 8;
     uint	charSet		: 8;

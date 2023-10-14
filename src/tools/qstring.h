@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qstring.h   2.3.0   edited 2001-01-26 $
+** $Id: qt/src/tools/qstring.h   2.3.1   edited 2001-04-03 $
 **
 ** Definition of the QString class, and related Unicode
 ** functions.
@@ -534,7 +534,7 @@ public:
     bool startsWith( const QString& ) const;
 
 private:
-    QString( int size, bool dummy );		// allocate size incl. \0
+    QString( int size, bool /*dummy*/ );	// allocate size incl. \0
 
     void deref();
     void real_detach();

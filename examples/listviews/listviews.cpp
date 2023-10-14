@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/listviews/listviews.cpp   2.3.0   edited 2001-01-26 $
+** $Id: qt/examples/listviews/listviews.cpp   2.3.1   edited 2001-05-25 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -144,7 +144,7 @@ ListViews::ListViews( QWidget *parent, const char *name )
 	     this, SLOT( slotMessageChanged() ) );
 
     messages->setSelectionMode( QListView::Extended );
-    // some preperationes
+    // some preparations
     folders->firstChild()->setOpen( TRUE );
     folders->firstChild()->firstChild()->setOpen( TRUE );
     folders->setCurrentItem( folders->firstChild()->firstChild()->firstChild() );

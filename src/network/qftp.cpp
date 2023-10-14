@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/network/qftp.cpp   2.3.0   edited 2001-01-26 $
+** $Id: qt/src/network/qftp.cpp   2.3.1   edited 2001-03-30 $
 **
 ** Implementation of QFtp class.
 **
@@ -131,8 +131,9 @@ QFtp::~QFtp()
   \reimp
 */
 
-void QFtp::operationListChildren( QNetworkOperation * )
+void QFtp::operationListChildren( QNetworkOperation *op )
 {
+    op->setState( StInProgress );
     errorInListChildren = FALSE;
 #if defined(QFTP_DEBUG)
     qDebug( "QFtp: switch command socket to passive mode!" );
@@ -163,8 +164,9 @@ void QFtp::operationMkDir( QNetworkOperation *op )
   \reimp
 */
 
-void QFtp::operationRemove( QNetworkOperation * )
+void QFtp::operationRemove( QNetworkOperation *op )
 {
+    op->setState( StInProgress );
     QString path = url()->path().isEmpty() ? QString( "/" ) : url()->path();
     QString cmd = "CWD " + path + "\r\n";
 #if defined(QFTP_COMMANDSOCKET_DEBUG)
@@ -177,8 +179,9 @@ void QFtp::operationRemove( QNetworkOperation * )
   \reimp
 */
 
-void QFtp::operationRename( QNetworkOperation * )
+void QFtp::operationRename( QNetworkOperation *op )
 {
+    op->setState( StInProgress );
     QString path = url()->path().isEmpty() ? QString( "/" ) : url()->path();
     QString cmd = "CWD " + path + "\r\n";
 #if defined(QFTP_COMMANDSOCKET_DEBUG)
@@ -191,8 +194,9 @@ void QFtp::operationRename( QNetworkOperation * )
   \reimp
 */
 
-void QFtp::operationGet( QNetworkOperation * )
+void QFtp::operationGet( QNetworkOperation *op )
 {
+    op->setState( StInProgress );
 #if defined(QFTP_COMMANDSOCKET_DEBUG)
     qDebug( "QFtp S: TYPE I" );
 #endif
@@ -203,8 +207,9 @@ void QFtp::operationGet( QNetworkOperation * )
   \reimp
 */
 
-void QFtp::operationPut( QNetworkOperation * )
+void QFtp::operationPut( QNetworkOperation *op )
 {
+    op->setState( StInProgress );
 #if defined(QFTP_COMMANDSOCKET_DEBUG)
     qDebug( "QFtp S: TYPE I" );
 #endif
@@ -448,9 +453,10 @@ void QFtp::closed()
 void QFtp::readyRead()
 {
     QCString s;
-    s.resize( commandSocket->bytesAvailable() + 1 );
-    commandSocket->readBlock( s.data(), commandSocket->bytesAvailable() );
-    s[ (int)(s.size() - 1) ] = '\0';
+    int bytesAvailable = commandSocket->bytesAvailable();
+    s.resize( bytesAvailable + 1 );
+    commandSocket->readBlock( s.data(), bytesAvailable );
+    s[ bytesAvailable ] = '\0';
 
     if ( !url() )
 	return;

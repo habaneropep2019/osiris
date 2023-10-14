@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qaction.cpp   2.3.0   edited 2001-01-26 $
+** $Id: qt/src/widgets/qaction.cpp   2.3.1   edited 2001-05-15 $
 **
 ** Implementation of QAction class
 **
@@ -104,8 +104,10 @@ public:
     QString statustip;
     QString whatsthis;
     int key;
+#ifndef QT_NO_ACCEL
     QAccel* accel;
     int accelid;
+#endif
     uint enabled : 1;
     uint toggleaction :1;
     uint on : 1;
@@ -121,7 +123,7 @@ public:
 
     enum Update { Everything, Icons, State }; // Everything means everything but icons and state
     void update( Update upd = Everything );
-    
+
     QString menuText() const;
     QString toolTip() const;
     QString statusTip() const;
@@ -130,8 +132,10 @@ public:
 QActionPrivate::QActionPrivate()
 {
     iconset = 0;
+#ifndef QT_NO_ACCEL
     accel = 0;
     accelid = 0;
+#endif
     key = 0;
     enabled = 1;
     toggleaction  = 0;
@@ -170,7 +174,9 @@ QActionPrivate::~QActionPrivate()
 	}
     }
 
+#ifndef QT_NO_ACCEL
     delete accel;
+#endif
     delete iconset;
     delete tipGroup;
 }
@@ -180,8 +186,10 @@ void QActionPrivate::update( Update upd )
     for ( QListIterator<MenuItem> it( menuitems); it.current(); ++it ) {
 	MenuItem* mi = it.current();
 	QString t = menuText();
+#ifndef QT_NO_ACCEL
 	if ( key )
 	    t += '\t' + QAccel::keyToString( key );
+#endif
 	switch ( upd ) {
 	case State:
 	    mi->popup->setItemEnabled( mi->id, enabled );
@@ -237,8 +245,10 @@ QString QActionPrivate::menuText() const
 QString QActionPrivate::toolTip() const
 {
     if ( tooltip.isNull() ) {
+#ifndef QT_NO_ACCEL
 	if ( accel )
 	    return text + " (" + QAccel::keyToString( accel->key( accelid )) + ")";
+#endif
 	return text;
     }
     return tooltip;
@@ -464,8 +474,10 @@ QString QAction::statusTip() const
 void QAction::setWhatsThis( const QString& whatsThis )
 {
     d->whatsthis = whatsThis;
+#ifndef QT_NO_ACCEL
     if ( !d->whatsthis.isEmpty() && d->accel )
 	d->accel->setWhatsThis( d->accelid, d->whatsthis );
+#endif
     d->update();
 }
 
@@ -491,12 +503,17 @@ QString QAction::whatsThis() const
 void QAction::setAccel( int key )
 {
     d->key = key;
+#ifndef QT_NO_ACCEL
     delete d->accel;
     d->accel = 0;
+#endif
 
-    if ( !key )
+    if ( !key ) {
+	d->update();
 	return;
+    }
 
+#ifndef QT_NO_ACCEL
     QObject* p = parent();
     while ( p && !p->isWidgetType() ) {
 	p = p->parent();
@@ -511,6 +528,7 @@ void QAction::setAccel( int key )
 #if defined(CHECK_STATE)
     else
 	qWarning( "QAction::setAccel()  (%s) requires widget in parent chain.", name( "unnamed" ) );
+#endif
 #endif
     d->update();
 }
@@ -600,8 +618,10 @@ bool QAction::isOn() const
 void QAction::setEnabled( bool enable )
 {
     d->enabled = enable;
+#ifndef QT_NO_ACCEL
     if ( d->accel )
 	d->accel->setEnabled( enable );
+#endif
     d->update( QActionPrivate::State );
 }
 
@@ -642,7 +662,8 @@ void QAction::toolButtonToggled( bool on )
 bool QAction::addTo( QWidget* w )
 {
     if ( w->inherits( "QToolBar" ) ) {
-	QToolButton* btn = new QToolButton( (QToolBar*) w );
+	QCString bname = name() + QCString( "_action_button" );
+	QToolButton* btn = new QToolButton( (QToolBar*) w, bname );
 	btn->setToggleButton( d->toggleaction );
 	d->toolbuttons.append( btn );
 	if ( d->iconset )
@@ -713,7 +734,7 @@ void QAction::menuStatusText( int id )
 	    break;
 	}
     }
-    
+
     if ( !text.isEmpty() )
 	showStatusText( text );
 }

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qurl.cpp   2.3.0   edited 2001-02-05 $
+** $Id: qt/src/kernel/qurl.cpp   2.3.1   edited 2001-05-31 $
 **
 ** Implementation of QUrl class
 **
@@ -532,9 +532,9 @@ bool QUrl::parse( const QString& url )
     static uchar table[ 12 ][ 8 ] = {
      /* None       InputAlpha  InputDigit  InputSlash  InputColon  InputAt     InputHash   InputQuery */
 	{ 0,       Protocol,   0,          Path,       0,          0,          0,          0,         }, // Init
-	{ 0,       Protocol,   0,          0,          Separator1, 0,          0,          0,         }, // Protocol
+	{ 0,       Protocol,   Protocol,   0,          Separator1, 0,          0,          0,         }, // Protocol
 	{ 0,       Path,       Path,       Separator2, 0,          0,          0,          0,         }, // Separator1
-	{ 0,       Path,       Path,          Separator3, 0,          0,          0,          0,         }, // Separator2
+	{ 0,       Path,       Path,       Separator3, 0,          0,          0,          0,         }, // Separator2
 	{ 0,       User,       User,       Separator3, Pass,       Host,       0,          0,         }, // Separator3
 	{ 0,       User,       User,       User,       Pass,       Host,       User,       User,      }, // User
 	{ 0,       Pass,       Pass,       Pass,       Pass,       Host,       Pass,       Pass,      }, // Pass
@@ -562,10 +562,13 @@ bool QUrl::parse( const QString& url )
     table[ 4 ][ 1 ] = User;
     table[ 4 ][ 2 ] = User;
     if ( cs == -1 || forceRel ) { // we have a relative file
-	if ( url.find( ':' ) == -1 || forceRel )
+	if ( url.find( ':' ) == -1 || forceRel ) {
 	    table[ 0 ][ 1 ] = Path;
-	else
+	    // Filenames may also begin with a digit
+	    table[ 0 ][ 2 ] = Path;
+	} else {
 	    table[ 0 ][ 1 ] = Protocol;
+	}
 	relPath = TRUE;
     } else { // some checking
 	table[ 0 ][ 1 ] = Protocol;
@@ -995,11 +998,15 @@ QString QUrl::dirPath() const
 	return QString::null;
     
     QString s = path();
-    // ### Why add a slash to the path before calling dirPath()??!
-    // s += "/";
-    s = QFileInfo( s ).dirPath( TRUE );
-    if ( s[ (int)s.length() - 1 ] != '/' )
-	s += "/";
+    // ### If anything is broken with regards to the directories in QFileDialog
+    // et al, then this is probably the place to look
+//    if ( s.right( 1 ) != "/" )
+//	s += "/";
+    s = QFileInfo( s ).dirPath();
+
+//    s = QFileInfo( s ).dirPath( TRUE );
+//    if ( s[ (int)s.length() - 1 ] != '/' )
+//	s += "/";
     return s;
 }
 
@@ -1018,18 +1025,22 @@ void QUrl::encode( QString& url )
     int newlen = 0;
 
     for ( int i = 0; i < oldlen ;++i ) {
-	if ( QString( "<>#@\"&%$:,;?={}|^~[]\'`\\ \n\t\r" ).contains( url[ i ].unicode() ) ) {
+	ushort inCh = url[ i ].unicode();
+
+	if ( inCh >= 128 ||
+	     QString( "<>#@\"&%$:,;?={}|^~[]\'`\\ \n\t\r" ).contains(inCh) ) {
 	    newUrl[ newlen++ ] = QChar( '%' );
 
-	    ushort c = url[ i ].unicode() / 16;
+	    ushort c = inCh / 16;
 	    c += c > 9 ? 'A' - 10 : '0';
 	    newUrl[ newlen++ ] = c;
 
-	    c = url[ i ].unicode() % 16;
+	    c = inCh % 16;
 	    c += c > 9 ? 'A' - 10 : '0';
 	    newUrl[ newlen++ ] = c;
-	} else
+	} else {
 	    newUrl[ newlen++ ] = url[ i ];
+	}
     }
 
     url = newUrl;

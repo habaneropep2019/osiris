@@ -41,6 +41,16 @@ public:
     bool animating() const { return !!animation; }
     QImage image() const;
 
+    void setGamma(double gr, double gg, double gb);
+    double gammaRed() const { return gred; }
+    double gammaGreen() const { return ggreen; }
+    double gammaBlue() const { return gblue; }
+    void getGamma(int i, QRgb& rgb);
+    void skinKeyPressEvent( QKeyEvent *e ) { keyPressEvent(e); }
+    void skinKeyReleaseEvent( QKeyEvent *e ) { keyReleaseEvent(e); }
+
+    double zoom() const { return zm; }
+
 public slots:
     void setRate( int );
     void setZoom( double );
@@ -73,6 +83,15 @@ private:
     int shmId;
     unsigned char *data;
     QVFbHeader *hdr;
+    int viewdepth; // "faked" depth
+    int rsh;
+    int gsh;
+    int bsh;
+    int rmax;
+    int gmax;
+    int bmax;
+    double gred, ggreen, gblue;
+    QRgb* gammatable;
     int lockId;
     QTimer *timer;
     int mouseFd;
@@ -82,6 +101,6 @@ private:
     QString keyboardPipe;
     QAnimationWriter *animation;
     int displayid;
-    double zoom;
+    double zm;
 };
 

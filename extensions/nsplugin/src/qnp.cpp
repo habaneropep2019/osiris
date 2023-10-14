@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/extensions/nsplugin/src/qnp.cpp   2.3.0   edited 2001-02-09 $
+** $Id: qt/extensions/nsplugin/src/qnp.cpp   2.3.1   edited 2001-03-23 $
 **
 ** Implementation of Qt extension classes for Netscape Plugin support.
 **
@@ -344,12 +344,6 @@ public:
 	{
 	    checkFocussedWidget();
 	}
-
-#ifdef _WS_WIN_
-        // Without this then widgets will not show in Windows at all
-        if ( event->type() == QEvent::Show || event->type() == QEvent::Paint )
-            QApplication::sendPostedEvents();
-#endif
 
 	return QApplication::notify( obj, event );
     }
@@ -1248,6 +1242,19 @@ void QNPWidget::leaveInstance()
 QNPInstance* QNPWidget::instance()
 {
     return pi->instance;
+}
+
+/*!
+  This is needed in order to show plugins correctly on Windows.  Does nothing on X11.
+
+  \reimp
+*/
+void QNPWidget::show()
+{
+#ifdef _WS_WIN_
+    // ### This is a hack until I can figure out why just calling show() never works.
+    ShowWindow( winId(), SW_SHOW );
+#endif
 }
 
 class QFixableWidget : public QWidget {

@@ -8,7 +8,7 @@ CC	=	$(SYSCONF_CC) $(QT_C_MT)
 CFLAGS	=	$(SYSCONF_CFLAGS) $(SYSCONF_CFLAGS_LIB) $(QT_CFLAGS_OPT)
 INCPATH =	
 LFLAGS	=	$(SYSCONF_LFLAGS_OPENGL) $(SYSCONF_LFLAGS_X11) $(SYSCONF_RPATH_X11) $(SYSCONF_LFLAGS) $(QT_LFLAGS_MT)
-LIBS	=	$(SUBLIBS) -lm $(SYSCONF_LIBS_OPENGL) $(SYSCONF_LIBS_X11) $(SYSCONF_LIBS_QTLIB)
+LIBS	=	$(SUBLIBS) $(SYSCONF_LIBS_OPENGL) $(SYSCONF_LIBS_X11) $(SYSCONF_LIBS_QTLIB)
 MOC	=	$(SYSCONF_MOC)
 UIC	=	$(SYSCONF_UIC)
 
@@ -17,7 +17,7 @@ UIC	=	$(SYSCONF_UIC)
 DESTDIR = ../lib/
 VER_MAJ = 2
 VER_MIN = 3
-VER_PATCH = 0
+VER_PATCH = 1
 TARGET	= qt$(QT_THREAD_SUFFIX)
 TARGET1 = lib$(TARGET).so.$(VER_MAJ)
 
@@ -2204,6 +2204,7 @@ kernel/qapplication_x11.o: kernel/qapplication_x11.cpp \
 		widgets/qcommonstyle.h \
 		widgets/qmotifplusstyle.h \
 		widgets/qmotifstyle.h \
+		widgets/qsgistyle.h \
 		kernel/qthread.h \
 		tools/qfile.h \
 		kernel/qt_x11.h
@@ -3117,6 +3118,7 @@ kernel/qapplication.o: kernel/qapplication.cpp \
 		kernel/qimage.h \
 		kernel/qpixmap.h \
 		kernel/qsessionmanager.h \
+		kernel/qclipboard.h \
 		kernel/qthread.h \
 		tools/qvaluestack.h
 
@@ -4191,6 +4193,7 @@ kernel/qmovie.o: kernel/qmovie.cpp \
 		kernel/qmovie.h \
 		tools/qfile.h \
 		tools/qbuffer.h \
+		kernel/qpixmapcache.h \
 		kernel/qasyncio.h \
 		kernel/qsignal.h \
 		kernel/qasyncimageio.h \
@@ -5186,21 +5189,7 @@ kernel/qtimer.o: kernel/qtimer.cpp \
 		kernel/qconnection.h \
 		tools/qstrlist.h \
 		tools/qasciidict.h \
-		tools/qgdict.h \
-		kernel/qapplication.h \
-		kernel/qwidget.h \
-		kernel/qpaintdevice.h \
-		kernel/qpalette.h \
-		kernel/qcolor.h \
-		kernel/qbrush.h \
-		kernel/qcursor.h \
-		kernel/qfont.h \
-		kernel/qfontmetrics.h \
-		kernel/qfontinfo.h \
-		kernel/qstyle.h \
-		kernel/qsizepolicy.h \
-		kernel/qtranslator.h \
-		tools/qintdict.h
+		tools/qgdict.h
 
 kernel/qurl.o: kernel/qurl.cpp \
 		kernel/qurl.h \

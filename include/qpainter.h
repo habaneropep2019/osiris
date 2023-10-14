@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qpainter.h   2.3.0   edited 2001-01-26 $
+** $Id: qt/src/kernel/qpainter.h   2.3.1   edited 2001-04-25 $
 **
 ** Definition of QPainter class
 **
@@ -282,7 +282,7 @@ private:
 	   VxF=0x10, WxF=0x20, ClipOn=0x40, SafePolygon=0x80, MonoDev=0x100,
 	   DirtyFont=0x200, DirtyPen=0x400, DirtyBrush=0x800,
 	   RGBColor=0x1000, FontMet=0x2000, FontInf=0x4000, CtorBegin=0x8000,
-           UsePrivateCx = 0x10000, VolatileDC = 0x20000 };
+           UsePrivateCx=0x10000, VolatileDC=0x20000, PaintEventClipOn=0x40000 };
     uint	flags;
     bool	testf( uint b ) const { return (flags&b)!=0; }
     void	setf( uint b )	{ flags |= b; }

@@ -1,5 +1,5 @@
 /**********************************************************************
-** $Id: qt/src/widgets/qmultilineedit.cpp   2.3.0   edited 2001-02-27 $
+** $Id: qt/src/widgets/qmultilineedit.cpp   2.3.1   edited 2001-03-30 $
 **
 ** Implementation of QMultiLineEdit widget class
 **
@@ -302,7 +302,11 @@ static int defTabStop = 8;
 
 static int tabStopDist( const QFontMetrics &fm )
 {
-    return defTabStop*fm.width( QChar('x') );
+    int dist;
+    dist = fm.width( QChar('x' ));
+    if( dist == 0 )
+       dist = fm.maxWidth();
+    return defTabStop*dist;
 }
 
 
@@ -722,7 +726,7 @@ void QMultiLineEdit::paintCell( QPainter *painter, int row, int )
 
     if ( row == cursorY && cursorOn && !readOnly ) {
 	int cursorPos = QMIN( (int)s.length(), cursorX );
-	int cXPos   = mapToView( cursorPos, row );
+	int cXPos   = QMAX( mapToView( cursorPos, row ), 0 );
 	int cYPos   = 0;
 	if ( hasFocus() || d->dnd_forcecursor ) {
 	    p.setPen( g.text() );
@@ -2399,6 +2403,7 @@ void QMultiLineEdit::dropEvent( QDropEvent* event )
 	    insert(text, TRUE);
 	}
 	update();
+	emit textChanged();
     }
 }
 
@@ -3345,20 +3350,14 @@ int QMultiLineEdit::hMargin() const
 }
 
 /*!
-  Not supported at this time.
+  Marks the text starting at \a row_from, \a col_from and ending
+  at row_to, col_to.
 */
-void QMultiLineEdit::setSelection( int /*row_from*/, int /*col_from*/,
-				   int /*row_to*/, int /*col_to*/ )
+void QMultiLineEdit::setSelection( int row_from, int col_from,
+				   int row_to, int col_to )
 {
-    /*
-    markAnchorY = row_from;
-    markAnchorX = col_from;
-    markDragY = row_to;
-    markDragX = col_to;
-
-    turnMark( TRUE );
-    */
-    qFatal("Not implemented: setSelection");
+    setCursorPosition( row_from, col_from, FALSE );
+    setCursorPosition( row_to, col_to, TRUE );
 }
 
 

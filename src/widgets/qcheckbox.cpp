@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qcheckbox.cpp   2.3.0   edited 2001-01-26 $
+** $Id: qt/src/widgets/qcheckbox.cpp   2.3.1   edited 2001-04-18 $
 **
 ** Implementation of QCheckBox class
 **
@@ -198,8 +198,8 @@ QSize QCheckBox::sizeHint() const
 	sz.setHeight( bmsz.height() );
 
     return sz + QSize( bmsz.width() + (style()==MotifStyle ? 1 : 0)
-			+ (text().isEmpty() ? 0 : 4 + extraWidth(gs)),
-			4 ).expandedTo( QApplication::globalStrut() );
+	+ (text().isEmpty() ? 0 : 4 + extraWidth(gs)),
+	4 ).expandedTo( QApplication::globalStrut() );
 }
 
 
@@ -217,6 +217,8 @@ void QCheckBox::drawButton( QPainter *paint )
     QSize lsz = fm.size(ShowPrefix, text());
     QSize sz = style().indicatorSize();
     x = gs == MotifStyle ? 1 : 0;
+    if ( text().isEmpty() )
+	x += 1;
     y = (height() - lsz.height() + fm.height() - sz.height())/2;
 
 #ifndef QT_NO_TEXTSTREAM
@@ -308,7 +310,16 @@ void QCheckBox::drawButtonLabel( QPainter *p )
 	br.setBottom( br.bottom()+2);
 	br = br.intersect( QRect(0,0,width(),height()) );
 
-	style().drawFocusRect(p, br, colorGroup());
+	if ( !text().isEmpty() )
+	    style().drawFocusRect(p, br, colorGroup());
+	else {
+	    br.setRight( br.left() );
+	    br.setLeft( br.left()-16 );
+	    br.setTop( br.top() );
+	    br.setBottom( br.bottom() );
+	    style().drawFocusRect( p, br, colorGroup() );
+	}
+
     }
 }
 
@@ -373,10 +384,18 @@ void QCheckBox::updateMask()
 	br.setLeft( br.left()-3 );
 	br.setRight( br.right()+2 );
 	br.setTop( br.top()-2 );
-	br.setBottom( br.bottom()+2);
+	br.setBottom( br.bottom()+2 );
 	br = br.intersect( QRect(0,0,width(),height()) );
 
-	style().drawFocusRect( &p, br, cg );
+	if ( !text().isEmpty() )
+	    style().drawFocusRect( &p, br, cg );
+	else {
+	    br.setRight( br.left() );
+	    br.setLeft( br.left()-17 );
+	    br.setTop( br.top() );
+	    br.setBottom( br.bottom() );
+	    style().drawFocusRect( &p, br, cg );
+	}
     }
     setMask(bm);
 }

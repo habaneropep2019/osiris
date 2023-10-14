@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qapplication.cpp   2.3.0   edited 2001-02-15 $
+** $Id: qt/src/kernel/qapplication.cpp   2.3.1   edited 2001-05-25 $
 **
 ** Implementation of QApplication class
 **
@@ -56,6 +56,7 @@
 #include "qtextcodec.h"
 #include "qpngio.h"
 #include "qsessionmanager.h"
+#include "qclipboard.h"
 
 #if defined(QT_THREAD_SUPPORT)
 #include "qthread.h"
@@ -303,6 +304,7 @@ QWidgetList *QApplication::popupWidgets = 0;	// has keyboard input focus
 
 static bool	   makeqdevel	 = FALSE;	// developer tool needed?
 static QWidget	  *desktopWidget = 0;		// root window widget
+extern QObject	  *qt_clipboard;		// global clipboard object
 #ifndef QT_NO_TRANSLATION
 static QTextCodec *default_codec = 0;		// root window widget
 #endif
@@ -788,8 +790,6 @@ QWidget *QApplication::activeModalWidget()
     return 0;
 }
 
-
-
 /*!
   Cleans up any window system resources that were allocated by this
   application.  Sets the global variable \c qApp to null.
@@ -800,6 +800,10 @@ QApplication::~QApplication()
     delete desktopWidget;
     desktopWidget = 0;
     is_app_closing = TRUE;
+#ifndef QT_NO_CLIPBOARD
+    delete qt_clipboard;
+    qt_clipboard = 0;
+#endif
     QWidget::destroyMapper();
 #ifndef QT_NO_PALETTE
     delete qt_std_pal;
@@ -1666,8 +1670,9 @@ bool QApplication::notify( QObject *receiver, QEvent *event )
     }
 
     // throw away mouse events to disabled widgets
-    if ( event->type() <= QEvent::MouseMove &&
-	 event->type() >= QEvent::MouseButtonPress &&
+    if ( (( event->type() <= QEvent::MouseMove &&
+	 event->type() >= QEvent::MouseButtonPress ) || 
+	 event->type() == QEvent::Wheel ) &&
 	 ( receiver->isWidgetType() &&
 	   !((QWidget *)receiver)->isEnabled() ) )
 	return FALSE;
@@ -2371,7 +2376,8 @@ void QApplication::setActiveWindow( QWidget* act )
 		   acg.mid() != icg.mid() ||
 		   acg.midlight() != icg.midlight() ||
 		   acg.shadow() != icg.shadow() ||
-		   (  w->parentWidget() && w->parentWidget()->inherits( "QScrollView" ) &&
+		   (  w->parentWidget() && w->parentWidget()->inherits( "QScrollView" ) 
+		   && !w->parentWidget()->inherits( "QCanvasView" ) &&
 		      ( qstrcmp( w->name(), "qt_clipped_viewport" ) == 0 ||
 			qstrcmp( w->name(), "qt_viewport" ) == 0 ) ) ) )
 		w->update();
@@ -2513,6 +2519,22 @@ QWidget *QApplication::desktop()
     return desktopWidget;
 }
 
+/*!
+  Returns a pointer to the application global clipboard.
+*/
+
+QClipboard *QApplication::clipboard()
+{
+#ifndef QT_NO_CLIPBOARD
+    if ( qt_clipboard == 0 ) {
+	qt_clipboard = new QClipboard;
+	CHECK_PTR( qt_clipboard );
+    }
+    return (QClipboard *)qt_clipboard;
+#else
+    return 0;
+#endif    
+}
 
 /*!
   By default, Qt will try to get the current standard colors, fonts
@@ -2799,7 +2821,7 @@ void QApplication::setStartDragTime( int ms )
   Qt internally uses also this delay e.g. in QMultiLineEdit for
   starting a drag.
 
-  The default value is set to 250 ms.
+  The default value is set to 500 ms.
 
   \sa setStartDragTime(), startDragDistance()
 */

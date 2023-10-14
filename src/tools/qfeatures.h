@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qfeatures.h   2.3.0   edited 2001-02-13 $
+** $Id: qt/src/tools/qfeatures.h   2.3.1   edited 2001-06-13 $
 **
 ** Global feature selection
 **
@@ -259,7 +259,7 @@
 /*!
     Properties
 */
-#if defined(QT_NO_STRINGLIST) || defined(QT_NO_ICONSET)
+#if defined(QT_NO_STRINGLIST) || defined(QT_NO_ICONSET) || defined(QT_NO_VARIANT)
 # define QT_NO_PROPERTIES
 #endif
 

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/i18n/main.cpp   2.3.0   edited 2001-01-26 $
+** $Id: qt/examples/i18n/main.cpp   2.3.1   edited 2001-06-07 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -98,7 +98,7 @@ int main( int argc, char** argv )
     QApplication app( argc, argv );
 
     const char* qm[]=
-	{ "de", "el", "en", "eo", "fr", "it", "jp", "ko", "no", "ru", 0 };
+	{ "cs", "de", "el", "en", "eo", "fr", "it", "jp", "ko", "no", "ru", "zh", 0 };
 
 #if defined(_OS_UNIX_)
     srand(getpid()<<2);

@@ -1,5 +1,5 @@
 /**********************************************************************
-** $Id: qt/src/widgets/qlistbox.cpp   2.3.0   edited 2001-03-01 $
+** $Id: qt/src/widgets/qlistbox.cpp   2.3.1   edited 2001-06-08 $
 **
 ** Implementation of QListBox widget class
 **
@@ -526,7 +526,7 @@ int QListBoxPixmap::height( const QListBox* lb ) const
     if ( text().isEmpty() )
 	h = pm.height();
     else
-	h = QMAX( pm.height(), lb->fontMetrics().lineSpacing() + 1 );
+	h = QMAX( pm.height(), lb->fontMetrics().lineSpacing() + 2 );
     return QMAX( h, QApplication::globalStrut().height() );
 }
 
@@ -2720,6 +2720,8 @@ different.
 
 int QListBox::numRows() const
 {
+    if ( count() == 0 )
+	return 0;
     if ( d->rowModeWins && d->rowMode == FixedNumber )
 	return d->numRows;
     doLayout();
@@ -3525,6 +3527,8 @@ void QListBox::resizeEvent( QResizeEvent *e )
 	ensureCurrentVisible();
 	if ( d->current )
 	    viewport()->repaint( itemRect( d->current ), FALSE );
+    } else if ( ( d->columnMode == FitToWidth || d->rowMode == FitToHeight ) && !(isVisible()) ) {
+	QScrollView::resizeEvent( e );
     } else if ( d->layoutDirty ) {
 	d->resizeTimer->start( 100, TRUE );
 	resizeContents( contentsWidth() - ( e->oldSize().width() - e->size().width() ),

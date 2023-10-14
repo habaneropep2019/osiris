@@ -1,5 +1,5 @@
 /**********************************************************************
-** $Id: qt/src/canvas/qcanvas.cpp   2.3.0   edited 2001-02-24 $
+** $Id: qt/src/canvas/qcanvas.cpp   2.3.1   edited 2001-04-23 $
 **
 ** Implementation of QCanvas and associated classes
 **
@@ -522,7 +522,7 @@ void qt_unview(QCanvas* c)
 }
 
 /*!
-  Destructs the canvas.  Does \e not destroy items on the canvas.
+  Destructs the canvas.  Does also destroy all items on the canvas.
 */
 QCanvas::~QCanvas()
 {
@@ -966,6 +966,7 @@ Redraw a given area of the QCanvas.
 void QCanvas::drawArea(const QRect& inarea, QPainter* p, bool double_buffer)
 {
     QRect area=inarea.intersect(QRect(0,0,width(),height()));
+    if ( area.isEmpty() ) return;
 
     if ( !dblbuf )
 	double_buffer = FALSE;
@@ -2652,7 +2653,7 @@ void QCanvasSprite::draw(QPainter& painter)
   usual QWidget parameters may also be supplied.
 */
 QCanvasView::QCanvasView(QCanvas* canvas, QWidget* parent, const char* name, WFlags f) :
-    QScrollView(parent,name,f)
+    QScrollView(parent,name,f|WRepaintNoErase|WResizeNoErase|WNorthWestGravity)
 {
     viewing = 0;
     setCanvas(canvas);

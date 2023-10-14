@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qvariant.cpp   2.3.0   edited 2001-01-26 $
+** $Id: qt/src/kernel/qvariant.cpp   2.3.1   edited 2001-06-13 $
 **
 ** Implementation of QVariant class
 **
@@ -37,7 +37,7 @@
 
 #include "qvariant.h"
 
-#ifndef QT_NO_PROPERTIES
+#ifndef QT_NO_VARIANT
 
 #include "qstring.h"
 #include "qfont.h"
@@ -2021,4 +2021,4 @@ bool QVariant::operator!=( const QVariant &v ) const
     return !( v == *this );
 }
 
-#endif // QT_NO_PROPERTIES
+#endif // QT_NO_VARIANT

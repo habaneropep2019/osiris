@@ -30,7 +30,7 @@ remains with Trolltech.
 <hr>
 <pre>
 /****************************************************************************
-** &#36;Id&#58; qt/src/kernel/qapplication.h   2.3.0   edited 2001-02-08 $
+** &#36;Id&#58; qt/src/kernel/qapplication.h   2.3.1   edited 2001-03-19 $
 **
 ** Definition of QApplication class
 **
@@ -430,10 +430,15 @@ inline bool QApplication::sendEvent( QObject *receiver, QEvent *event )
 #ifdef QT_NO_TRANSLATION
 // Simple versions
 inline QString QApplication::translate( const char *, const char *key ) const
-{ return key; }
-inline QString  QApplication::translate( const char *, const char *key,
-                            const char * ) const
-{ return key; }
+{
+    return QString::fromLatin1( key );
+}
+
+inline QString QApplication::translate( const char *, const char *key,
+                                        const char * ) const
+{
+    return QString::fromLatin1( key );
+}
 #endif
 
 #endif // QAPPLICATION_H
@@ -442,5 +447,5 @@ inline QString  QApplication::translate( const char *, const char *key,
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.0</div>
+<td align="right"><div align="right">Qt version 2.3.1</div>
 </table></div></address></body></html>

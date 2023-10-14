@@ -1,4 +1,4 @@
-/* Automatically generated at Trolltech by mkdists, Qt 2.3.0 */
+/* Automatically generated at Trolltech by mkdists, Qt 2.3.1 */
 #ifndef lint
 static char yysccsid[] = "@(#)yaccpar	1.9 (Berkeley) 02/21/93";
 #endif
@@ -2641,7 +2641,7 @@ void generateClass()		      // generate C++ source code for a class
     char *hdr1 = "/****************************************************************************\n"
 		 "** %s meta object code from reading C++ file '%s'\n**\n";
     char *hdr2 = "** Created: %s\n"
-		 "**      by: The Qt MOC ($Id: qt/src/moc/moc.y   2.3.0   edited 2001-02-20 $)\n**\n";
+		 "**      by: The Qt MOC ($Id: qt/src/moc/moc.y   2.3.1   edited 2001-04-23 $)\n**\n";
     char *hdr3 = "** WARNING! All changes made in this file will be lost!\n";
     char *hdr4 = "*****************************************************************************/\n\n";
     int   i;

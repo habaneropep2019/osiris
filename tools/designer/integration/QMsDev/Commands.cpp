@@ -939,6 +939,7 @@ STDMETHODIMP CCommands::QMsDevNewQtDialog()
     CFileDialog fd( FALSE, "ui", "NewDialog.ui", OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_PATHMUSTEXIST, 
 	"User Interface File (*.ui)|*.ui|"
 	"All Files (*.*)|*.*||", NULL);
+    fd.m_ofn.lpstrInitialDir = filepath;
     int result = fd.DoModal();
     if ( result == IDCANCEL ) {
 	VERIFY_OK(m_pApplication->EnableModeless(VARIANT_TRUE));

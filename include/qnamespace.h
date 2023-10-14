@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qnamespace.h   2.3.0   edited 2001-01-26 $
+** $Id: qt/src/kernel/qnamespace.h   2.3.1   edited 2001-04-03 $
 **
 ** Definition of Qt namespace (as class for compiler compatibility)
 **
@@ -173,6 +173,7 @@ public:
 	WRepaintNoErase		= 0x00800000,
 	WX11BypassWM		= 0x01000000,
 	WGroupLeader 		= 0x02000000
+	// WWinOwnDC		= 0x10000000   Reserved 
     };
 
     // Image conversion flags.  The unusual ordering is caused by

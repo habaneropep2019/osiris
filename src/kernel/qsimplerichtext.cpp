@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qsimplerichtext.cpp   2.3.0   edited 2001-01-26 $
+** $Id: qt/src/kernel/qsimplerichtext.cpp   2.3.1   edited 2001-05-26 $
 **
 ** Implementation of the QSimpleRichText class
 **
@@ -248,6 +248,10 @@ void QSimpleRichText::draw( QPainter* p,  int x, int y, const QRegion& clipRegio
     d->doc->draw(p, x, y, 0, 0, r.x(), r.y(), r.width(), r.height(), bg, cg,
 		 QTextOptions( paper, d->linkColor, d->linkUnderline ) );
     if (paper) {
+#ifndef QT_NO_TRANSFORMATIONS
+	QWMatrix wm = p->worldMatrix();
+	bg.translate( int(wm.dx()), int(wm.dy()) );
+#endif
 	p->setClipRegion(bg);
 	if ( paper->pixmap() )
 	    p->drawTiledPixmap( r, *paper->pixmap());

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qpopupmenu.cpp   2.3.0   edited 2001-02-15 $
+** $Id: qt/src/widgets/qpopupmenu.cpp   2.3.1   edited 2001-05-22 $
 **
 ** Implementation of QPopupMenu class
 **
@@ -395,16 +395,10 @@ void QPopupMenu::popup( const QPoint &pos, int indexAtPoint )
     if (parentMenu && parentMenu->actItem == -1){
 	//reuse
 	parentMenu->menuDelPopup( this );
-	selfItem = 0;
 	parentMenu = 0;
     }
     // #### should move to QWidget - anything might need this functionality,
     // #### since anything can have WType_Popup window flag.
-
-    if ( mitems->count() == 0 )			// oops, empty
-	insertSeparator();			// Save Our Souls
-    if ( badSize )
-	updateSize();
 
     QPoint mouse = QCursor::pos();
     snapToMouse = snapToMouse && pos == mouse;
@@ -417,6 +411,11 @@ void QPopupMenu::popup( const QPoint &pos, int indexAtPoint )
 	emit aboutToShow();
 	updateSize();
     }
+
+    if ( mitems->count() == 0 )			// oops, empty
+	insertSeparator();			// Save Our Souls
+    if ( badSize )
+	updateSize();
 
     QWidget *desktop = QApplication::desktop();
     int sw = desktop->width();			// screen width
@@ -438,7 +437,7 @@ void QPopupMenu::popup( const QPoint &pos, int indexAtPoint )
 	if ( x < sx )
 	    x = mouse.x();
 	if ( y < sy )
-	    y = sh - h;
+	    y = sy;
     }
 
     if ( x+w > sw )				// the complete widget must
@@ -981,11 +980,10 @@ void QPopupMenu::updateAccel( QWidget *parent )
 	if ( mi->popup() && parent ) {		// call recursively
 	    // reuse
 	    QPopupMenu* popup = mi->popup();
-	    if (!popup->avoid_circularity) {
+	    if ( !popup->avoid_circularity ) {
 		popup->avoid_circularity = 1;
 		if (popup->parentMenu)
 		    popup->parentMenu->menuDelPopup(popup);
-		popup->selfItem  = mi;
 		menuInsPopup(popup);
 		popup->updateAccel( parent );
 		popup->avoid_circularity = 0;
@@ -1054,6 +1052,11 @@ void QPopupMenu::show()
 
 void QPopupMenu::hide()
 {
+    if ( syncMenu == this && qApp ) {
+	qApp->exit_loop();
+	syncMenu = 0;
+    }
+
     if ( !isVisible() ) {
 	QWidget::hide();
   	return;
@@ -1064,11 +1067,6 @@ void QPopupMenu::hide()
     mouseBtDn = FALSE;				// mouse button up
     hidePopups();
     QWidget::hide();
-    if ( syncMenu == this && qApp ) {
-	qApp->exit_loop();
-	syncMenu = 0;
-    }
-
 }
 
 
@@ -1107,7 +1105,7 @@ int QPopupMenu::itemHeight( QMenuItem *mi ) const
 void QPopupMenu::drawItem( QPainter* p, int tab_, QMenuItem* mi,
 			   bool act, int x, int y, int w, int h)
 {
-    bool dis = (selfItem && !selfItem->isEnabled()) || !mi->isEnabled();
+    bool dis = !mi->isEnabled();
     if ( mi->custom() && mi->custom()->fullSpan() ) {
 	QMenuItem dummy;
 	style().drawPopupMenuItem(p, checkable, maxPMWidth, tab_, &dummy, palette(),
@@ -1276,9 +1274,11 @@ void QPopupMenu::mouseMoveEvent( QMouseEvent *e )
     if ( parentMenu && parentMenu->isPopupMenu ) {
 	QPopupMenu* p = (QPopupMenu*)parentMenu;
 	int myIndex;
+	QPoint pPos;
 
 	p->findPopup( this, &myIndex );
-	if ( p->actItem != myIndex )
+	pPos = p->mapFromParent( mapToGlobal( e->pos() ) );
+	if ( p->actItem != myIndex && !p->rect().contains( pPos ) )
 	    p->setActiveItem( myIndex );
     }
 
@@ -1614,7 +1614,6 @@ void QPopupMenu::subMenuTimer() {
 	// reuse
 	if (popup->parentMenu)
 	    popup->parentMenu->menuDelPopup(popup);
-	popup->selfItem  = mi;
 	menuInsPopup(popup);
     }
 

@@ -210,7 +210,7 @@
 #include <qvgroupbox.h>
 #include <qwhatsthis.h>
 #include <qwidgetstack.h>
-#include <qcompactstyle.h>
+
 #endif // WIDGETS
 #ifdef QT_MODULE_DIALOGS
 #include <qcolordialog.h>

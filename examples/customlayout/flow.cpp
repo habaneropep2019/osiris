@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/customlayout/flow.cpp   2.3.0   edited 2001-01-26 $
+** $Id: qt/examples/customlayout/flow.cpp   2.3.1   edited 2001-01-26 $
 **
 ** Implementing your own layout: flow example
 **

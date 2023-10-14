@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/life/main.cpp   2.3.0   edited 2001-02-20 $
+** $Id: qt/examples/life/main.cpp   2.3.1   edited 2001-02-20 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **

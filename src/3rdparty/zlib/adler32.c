@@ -3,7 +3,7 @@
  * For conditions of distribution and use, see copyright notice in zlib.h 
  */
 
-/* @(#) $Id: qt/src/3rdparty/zlib/adler32.c   2.3.0   edited 2001-01-26 $ */
+/* @(#) $Id: qt/src/3rdparty/zlib/adler32.c   2.3.1   edited 2001-01-26 $ */
 
 #include "zlib.h"
 

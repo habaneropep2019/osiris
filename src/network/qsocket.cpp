@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/network/qsocket.cpp   2.3.0   edited 2001-02-12 $
+** $Id: qt/src/network/qsocket.cpp   2.3.1   edited 2001-02-12 $
 **
 ** Implementation of QSocket class.
 **

@@ -27,17 +27,21 @@ HEADERS =	qvfb.h \
 		qvfbview.h \
 		qvfbhdr.h \
 		qvfbratedlg.h \
-		qanimationwriter.h
+		qanimationwriter.h \
+		gammaview.h \
+		skin.h
 SOURCES =	qvfb.cpp \
 		qvfbview.cpp \
 		qvfbratedlg.cpp \
 		main.cpp \
-		qanimationwriter.cpp
+		qanimationwriter.cpp \
+		skin.cpp
 OBJECTS =	qvfb.o \
 		qvfbview.o \
 		qvfbratedlg.o \
 		main.o \
 		qanimationwriter.o \
+		skin.o \
 		config.o
 INTERFACES =    config.ui
 UICDECLS =      config.h
@@ -45,10 +49,12 @@ UICIMPLS =      config.cpp
 SRCMOC	=	moc_qvfb.cpp \
 		moc_qvfbview.cpp \
 		moc_qvfbratedlg.cpp \
+		moc_gammaview.cpp \
 		moc_config.cpp
 OBJMOC	=	moc_qvfb.o \
 		moc_qvfbview.o \
 		moc_qvfbratedlg.o \
+		moc_gammaview.o \
 		moc_config.o
 
 
@@ -167,6 +173,8 @@ qvfb.o: qvfb.cpp \
 		../../include/qintdict.h \
 		../../include/qmessagebox.h \
 		../../include/qdialog.h \
+		../../include/qcombobox.h \
+		../../include/qlabel.h \
 		../../include/qfiledialog.h \
 		../../include/qdir.h \
 		../../include/qstrlist.h \
@@ -191,6 +199,7 @@ qvfb.o: qvfb.cpp \
 		../../include/qurlinfo.h \
 		../../include/qdict.h \
 		../../include/qqueue.h \
+		../../include/qslider.h \
 		../../include/qspinbox.h \
 		../../include/qradiobutton.h \
 		../../include/qbutton.h \
@@ -199,7 +208,8 @@ qvfb.o: qvfb.cpp \
 		../../include/qmainwindow.h \
 		qvfbview.h \
 		qvfbratedlg.h \
-		config.h
+		config.h \
+		skin.h
 
 qvfbview.o: qvfbview.cpp \
 		qvfbview.h \
@@ -390,6 +400,62 @@ qanimationwriter.o: qanimationwriter.cpp \
 		../../include/qregexp.h \
 		../../include/qfile.h
 
+skin.o: skin.cpp \
+		../../include/qbitmap.h \
+		../../include/qpixmap.h \
+		../../include/qpaintdevice.h \
+		../../include/qwindowdefs.h \
+		../../include/qobjectdefs.h \
+		../../include/qglobal.h \
+		../../include/qfeatures.h \
+		../../include/qconfig.h \
+		../../include/qstring.h \
+		../../include/qcstring.h \
+		../../include/qarray.h \
+		../../include/qgarray.h \
+		../../include/qshared.h \
+		../../include/qnamespace.h \
+		../../include/qrect.h \
+		../../include/qsize.h \
+		../../include/qpoint.h \
+		../../include/qcolor.h \
+		../../include/qtextstream.h \
+		../../include/qiodevice.h \
+		../../include/qfile.h \
+		skin.h \
+		../../include/qwidget.h \
+		../../include/qobject.h \
+		../../include/qevent.h \
+		../../include/qregion.h \
+		../../include/qmime.h \
+		../../include/qlist.h \
+		../../include/qglist.h \
+		../../include/qcollection.h \
+		../../include/qstringlist.h \
+		../../include/qvaluelist.h \
+		../../include/qdatastream.h \
+		../../include/qregexp.h \
+		../../include/qpalette.h \
+		../../include/qbrush.h \
+		../../include/qcursor.h \
+		../../include/qfont.h \
+		../../include/qfontmetrics.h \
+		../../include/qfontinfo.h \
+		../../include/qstyle.h \
+		../../include/qsizepolicy.h \
+		qvfb.h \
+		../../include/qmainwindow.h \
+		qvfbview.h \
+		../../include/qscrollview.h \
+		../../include/qframe.h \
+		../../include/qscrollbar.h \
+		../../include/qrangecontrol.h \
+		../../include/qdrawutil.h \
+		../../include/qpainter.h \
+		../../include/qpen.h \
+		../../include/qpointarray.h \
+		../../include/qwmatrix.h
+
 config.h: config.ui
 	$(UIC) config.ui -o $(INTERFACE_DECL_PATH)/config.h
 
@@ -531,6 +597,46 @@ moc_qvfbratedlg.o: moc_qvfbratedlg.cpp \
 		../../include/qstyle.h \
 		../../include/qsizepolicy.h
 
+moc_gammaview.o: moc_gammaview.cpp \
+		gammaview.h \
+		../../include/qwidget.h \
+		../../include/qwindowdefs.h \
+		../../include/qobjectdefs.h \
+		../../include/qglobal.h \
+		../../include/qfeatures.h \
+		../../include/qconfig.h \
+		../../include/qstring.h \
+		../../include/qcstring.h \
+		../../include/qarray.h \
+		../../include/qgarray.h \
+		../../include/qshared.h \
+		../../include/qnamespace.h \
+		../../include/qobject.h \
+		../../include/qevent.h \
+		../../include/qregion.h \
+		../../include/qrect.h \
+		../../include/qsize.h \
+		../../include/qpoint.h \
+		../../include/qmime.h \
+		../../include/qlist.h \
+		../../include/qglist.h \
+		../../include/qcollection.h \
+		../../include/qstringlist.h \
+		../../include/qvaluelist.h \
+		../../include/qdatastream.h \
+		../../include/qiodevice.h \
+		../../include/qregexp.h \
+		../../include/qpaintdevice.h \
+		../../include/qpalette.h \
+		../../include/qcolor.h \
+		../../include/qbrush.h \
+		../../include/qcursor.h \
+		../../include/qfont.h \
+		../../include/qfontmetrics.h \
+		../../include/qfontinfo.h \
+		../../include/qstyle.h \
+		../../include/qsizepolicy.h
+
 moc_config.o: moc_config.cpp \
 		config.h
 
@@ -542,6 +648,9 @@ moc_qvfbview.cpp: qvfbview.h
 
 moc_qvfbratedlg.cpp: qvfbratedlg.h
 	$(MOC) qvfbratedlg.h -o moc_qvfbratedlg.cpp
+
+moc_gammaview.cpp: gammaview.h
+	$(MOC) gammaview.h -o moc_gammaview.cpp
 
 moc_config.cpp: config.h
 	$(MOC) config.h -o moc_config.cpp

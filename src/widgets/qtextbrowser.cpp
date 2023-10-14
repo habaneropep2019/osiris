@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qtextbrowser.cpp   2.3.0   edited 2001-01-26 $
+** $Id: qt/src/widgets/qtextbrowser.cpp   2.3.1   edited 2001-01-26 $
 **
 ** Implementation of the QTextView class
 **

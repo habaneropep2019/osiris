@@ -8,7 +8,7 @@
    subject to change. Applications should only use zlib.h.
  */
 
-/* @(#) $Id: qt/src/3rdparty/zlib/zutil.h   2.3.0   edited 2001-01-26 $ */
+/* @(#) $Id: qt/src/3rdparty/zlib/zutil.h   2.3.1   edited 2001-01-26 $ */
 
 #ifndef _Z_UTIL_H
 #define _Z_UTIL_H

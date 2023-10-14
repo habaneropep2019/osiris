@@ -49,6 +49,7 @@ Provides information about available fonts. | QFontDatabase
 Provides nothing and does nothing. | QDropSite
 SGI Look and Feel | QSGIStyle
 Server-specific functionality in Qt/Embedded | QWSServer
+Server-specific functionality in Qt/Embedded | QWSWindow
 Simple stored-value drag object for arbitrary MIME data. | QStoredDrag
 State-based decoder | QTextDecoder
 State-based encoder | QTextEncoder

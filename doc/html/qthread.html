@@ -104,7 +104,8 @@ it leaves main().
 until <a href="#fdfda3">start</a>() is called.
 <h3 class="fn"><a name="1d6c87"></a>QThread::~QThread () <code>[virtual]</code></h3>
 <p>QThread destructor. Note that deleting a QThread object will not stop
-the execution of the thread it represents.
+the execution of the thread it represents, and that deleting a QThread
+object while the thread is running is unsafe.
 <h3 class="fn">HANDLE <a name="16582e"></a>QThread::currentThread () <code>[static]</code></h3>
 <p>This returns the thread handle of the currently executing thread.  The
 handle returned by this function is used for internal reasons and
@@ -162,7 +163,7 @@ if the wait timed out.
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.3.0"><nobr>
+<input type=hidden name="version" value="2.3.1"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -170,5 +171,5 @@ copyright &copy; 1995-2000
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.0</div>
+<td align="right"><div align="right">Qt version 2.3.1</div>
 </table></div></address></body></html>

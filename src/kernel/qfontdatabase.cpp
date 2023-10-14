@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qfontdatabase.cpp   2.3.0   edited 2001-03-05 $
+** $Id: qt/src/kernel/qfontdatabase.cpp   2.3.1   edited 2001-06-04 $
 **
 ** Implementation of font database class.
 **
@@ -856,6 +856,7 @@ const QStringList &QFontDatabasePrivate::families( bool onlyForLocale ) const
         QDict<int> doubles;
         QtFontFoundry *foundry;
         QString s;
+        that->familyNames.clear();
         QDictIterator<QtFontFoundry> iter( foundryDict );
         for( ; (foundry = iter.current()) ; ++iter ) {
             QStringList l = foundry->families();
@@ -1048,13 +1049,8 @@ static void addStyle( XftFontSet *styles, QtFontCharSet *charSet )
 	    style->lesserItal = FALSE;
 	    style->weightString = QtWeightString(XftWeightToQtWeight(weight_value));
 	    style->setSmoothlyScalable();
-	    if ( fixed_pitch != XFT_PROPORTIONAL ) {
+	    if ( fixed_pitch >= XFT_MONO )
 		style->setFixedPitch();
-// 		char *family;
-// 		XftPatternGetString (styles->fonts[style_i],
-// 				  XFT_FAMILY, 0, &family );
-// 		qDebug("adding fixed style to family %s!", family);
-	    }
 	    charSet->addStyle (style);
 	}
     }
@@ -1228,13 +1224,15 @@ void QFontDatabase::createDatabase()
 					      XFT_FOUNDRY, XftTypeString, foundry_name,
 					      XFT_FAMILY, XftTypeString, family_name,
 					      XFT_ENCODING, XftTypeString, "iso10646-1",
-					      0, XFT_STYLE, XFT_WEIGHT, XFT_SLANT, 0);
+					      0, XFT_STYLE, XFT_WEIGHT, XFT_SLANT,
+					      XFT_SPACING, 0);
 			} else {
 			    styles =
 				XftListFonts (qt_xdisplay (), qt_xscreen(),
 					      XFT_FAMILY, XftTypeString, family_name,
 					      XFT_ENCODING, XftTypeString, "iso10646-1",
-					      0, XFT_STYLE, XFT_WEIGHT, XFT_SLANT, 0);
+					      0, XFT_STYLE, XFT_WEIGHT, XFT_SLANT,
+					      XFT_SPACING, 0);
 			}
 
 #if 0
@@ -1245,104 +1243,107 @@ void QFontDatabase::createDatabase()
 			int styles_i = 0;
 			if ( styles_i < styles->nfont ) {
 			    XftFont *ft;
-//			    qDebug("trying to open font");
+			    // qDebug("trying to open font");
 			    if ( foundry_name ) {
-				ft = XftFontOpen (qt_xdisplay(),
-						  QPaintDevice::x11AppScreen(),
-						  XFT_ENCODING, XftTypeString, "iso10646-1",
-						  XFT_FOUNDRY, XftTypeString, foundry_name,
-						  XFT_FAMILY, XftTypeString, family_name,
-//						  XFT_FAMILY, XftTypeString, "serif",
-//						  XFT_WEIGHT, XftTypeInteger, XFT_WEIGHT_MEDIUM,
-//						  XFT_SLANT, XftTypeInteger, XFT_SLANT_ROMAN,
-//						  XFT_SIZE, XftTypeDouble, 12.,
-//						  XFT_SPACING, XftTypeInteger, 0,
-						  0);
+				ft =
+				    XftFontOpen(qt_xdisplay(),
+						QPaintDevice::x11AppScreen(),
+						XFT_ENCODING, XftTypeString, "iso10646-1",
+						XFT_FOUNDRY, XftTypeString, foundry_name,
+						XFT_FAMILY, XftTypeString, family_name,
+						// XFT_FAMILY, XftTypeString, "serif",
+						// XFT_WEIGHT, XftTypeInteger, XFT_WEIGHT_MEDIUM,
+						// XFT_SLANT, XftTypeInteger, XFT_SLANT_ROMAN,
+						// XFT_SIZE, XftTypeDouble, 12.,
+						// XFT_SPACING, XftTypeInteger, 0,
+						0);
 			    } else {
 				ft = XftFontOpen (qt_xdisplay(),
 						  QPaintDevice::x11AppScreen(),
 						  XFT_ENCODING, XftTypeString, "iso10646-1",
 						  XFT_FAMILY, XftTypeString, family_name,
-//						  XFT_FAMILY, XftTypeString, "serif",
-//						  XFT_WEIGHT, XftTypeInteger, XFT_WEIGHT_MEDIUM,
-//						  XFT_SLANT, XftTypeInteger, XFT_SLANT_ROMAN,
-//						  XFT_SIZE, XftTypeDouble, 12.,
-//						  XFT_SPACING, XftTypeInteger, 0,
+						  // XFT_FAMILY, XftTypeString, "serif",
+						  // XFT_WEIGHT, XftTypeInteger, XFT_WEIGHT_MEDIUM,
+						  // XFT_SLANT, XftTypeInteger, XFT_SLANT_ROMAN,
+						  // XFT_SIZE, XftTypeDouble, 12.,
+						  // XFT_SPACING, XftTypeInteger, 0,
 						  0);
 			    }
-			    // now we check if various glyphs exist and build up the available charsets from this.
-			    // a bit hacky, but gives backwards compatibility to xlfd font handling.
+			    // now we check if various glyphs exist and build up the
+			    // available charsets from this. a bit hacky, but gives
+			    // backwards compatibility to xlfd font handling.
+
 			    if ( !ft )
 				qDebug("font not loaded!!!");
 			    else {
-// 				int fixed_pitch;
-// 				XftPatternGetInteger( ft->pattern, XFT_SPACING, 0, &fixed_pitch );
-// 				qDebug("font loaded: %s fixedPitch: %d", family_name, fixed_pitch);
+				// int fixed_pitch;
+				// XftPatternGetInteger( ft->pattern, XFT_SPACING, 0, &fixed_pitch );
+				// qDebug("font loaded: %s fixedPitch: %d", family_name, fixed_pitch);
 				int chSet;
 				for ( chSet = 0; chSet <= QFont::PT154; chSet++ ) {
 				    QChar ch;
 				    bool ignore = false;
 				    switch( chSet ) {
-					case QFont::ISO_8859_1:
-					    ch = 0x30; break;
-					case QFont::AnyCharSet:
-					    ignore = true; break;
-					case QFont::ISO_8859_2:
-					    ch = 0x0102; break;
-					case QFont::ISO_8859_3:
-					    ch = 0x0108; break;
-					case QFont::ISO_8859_4:
-					    ch = 0x0100; break;
-					case QFont::KOI8U:
-					case QFont::ISO_8859_5:
-					    ch = 0x454; break;
-					case QFont::CP1251:
-					    ch = 0x490; break;
-					case QFont::PT154:
-					    ch = 0x04b3; break;
-					case QFont::KOI8R:
-					    ch = 0x0410; break;
-					case QFont::ISO_8859_6:
-					    ch = 0x0630; break;
-					case QFont::ISO_8859_7:
-					    ch = 0x0390; break;
-					case QFont::ISO_8859_8:
-					    ch = 0x05d0; break;
-					case QFont::ISO_8859_9:
-					    ch = 0x011d; break;
-					case QFont::ISO_8859_10:
-					    ch = 0x0104; break;
-					case QFont::Set_Th_TH:
-					case QFont::TIS620:
-					    ch = 0x0e10; break;
-					case QFont::ISO_8859_12:
-					    ignore = true;
-					case QFont::ISO_8859_13:
-					    ch = 0x0156; break;
-					case QFont::ISO_8859_14:
-					    ch = 0x0174; break;
-					case QFont::ISO_8859_15:
-					    ch = 0x0152; break;
-					case QFont::Set_Ja:
-					    ch = 0x3050; break;
-					case QFont::Set_Ko:
-					    ch = 0xac00; break;
-					case QFont::Set_Zh:
-					case QFont::Set_GBK:
-					    ch = 0x4e13; break;
-					case QFont::Set_Zh_TW:
-					case QFont::Set_Big5:
-					    ch = 0x4e0f; break;
-					case QFont::Unicode:
-					    ignore = true;
-					case QFont::TSCII:
-					    ch =0x0b90; break;
-					default:
-					    qWarning("QFontDatabase::charset out of range!");
+				    case QFont::ISO_8859_1:
+					ch = 0x30; break;
+				    case QFont::AnyCharSet:
+					ignore = true; break;
+				    case QFont::ISO_8859_2:
+					ch = 0x0102; break;
+				    case QFont::ISO_8859_3:
+					ch = 0x0108; break;
+				    case QFont::ISO_8859_4:
+					ch = 0x0100; break;
+				    case QFont::KOI8U:
+				    case QFont::ISO_8859_5:
+					ch = 0x454; break;
+				    case QFont::CP1251:
+					ch = 0x490; break;
+				    case QFont::PT154:
+					ch = 0x04b3; break;
+				    case QFont::KOI8R:
+					ch = 0x0410; break;
+				    case QFont::ISO_8859_6:
+					ch = 0x0630; break;
+				    case QFont::ISO_8859_7:
+					ch = 0x0390; break;
+				    case QFont::ISO_8859_8:
+					ch = 0x05d0; break;
+				    case QFont::ISO_8859_9:
+					ch = 0x011d; break;
+				    case QFont::ISO_8859_10:
+					ch = 0x0104; break;
+				    case QFont::Set_Th_TH:
+				    case QFont::TIS620:
+					ch = 0x0e10; break;
+				    case QFont::ISO_8859_12:
+					ignore = true;
+				    case QFont::ISO_8859_13:
+					ch = 0x0156; break;
+				    case QFont::ISO_8859_14:
+					ch = 0x0174; break;
+				    case QFont::ISO_8859_15:
+					ch = 0x0152; break;
+				    case QFont::Set_Ja:
+					ch = 0x3050; break;
+				    case QFont::Set_Ko:
+					ch = 0xac00; break;
+				    case QFont::Set_Zh:
+				    case QFont::Set_GBK:
+					ch = 0x4e13; break;
+				    case QFont::Set_Zh_TW:
+				    case QFont::Set_Big5:
+					ch = 0x4e0f; break;
+				    case QFont::Unicode:
+					ignore = true;
+				    case QFont::TSCII:
+					ch =0x0b90; break;
+				    default:
+					qWarning("QFontDatabase::charset out of range!");
 				    }
-				    if ( ignore || !XftGlyphExists( qt_xdisplay(), ft, ch.unicode() ) ) 
+				    if ( ignore || !XftGlyphExists( qt_xdisplay(), ft, ch.unicode() ) )
 					continue;
-				
+
 				    encoding_value = xlfdEncodingName( chSet );
 				    QtFontCharSet *charSet =
 					family->charSetDict.find ( encoding_value );
@@ -1449,6 +1450,11 @@ void QFontDatabase::createDatabase()
             } else {
                 QCString ps = tokens[PointSize];
                 int pSize = ps.toInt()/10;
+                int r = atoi(tokens[ResolutionY]);
+                if ( r && QPaintDevice::x11AppDpiY() && r != QPaintDevice::x11AppDpiY() ) { // not "0" or "*", or required DPI
+                    // calculate actual pointsize for display DPI
+                    pSize = ( 2*pSize*r + QPaintDevice::x11AppDpiY() ) / (QPaintDevice::x11AppDpiY() * 2);
+                }
                 if ( pSize != 0 ) {
                     style->addPointSize( pSize );
                 }
@@ -1500,7 +1506,7 @@ void add_style( QtFontCharSet *charSet, const QString& styleName,
         weightString = "Light";
     } else if ( weight <= QFont::Normal ) {
         weight = QFont::Normal;
-        weightString = "Regular";
+        weightString = "Normal";
     } else if ( weight <= QFont::DemiBold ) {
         weight = QFont::DemiBold;
         weightString = "DemiBold";
@@ -1787,6 +1793,16 @@ static QFont::CharSet getCharSet( const QString &name )
         return QFont::KOI8U;
     if ( name == "tis620-0" )
         return QFont::TIS620;
+    if ( name == "jisx0201.1976-0" )
+	return QFont::JIS_X_0201;
+    if ( name == "jisx0208.1983-0" )
+	return QFont::Set_Ja;
+    if ( name == "ksc5601.1987-0" )
+	return QFont::Set_Ko;
+    if ( name == "gb2312.1980-0" )
+	return QFont::Set_GBK;
+    if ( name == "big5-0" )
+	return QFont::Set_Big5;
     if ( name == "tscii-0" )
 	return QFont::TSCII;
     if ( name == "microsoft-cp1251" )
@@ -1825,8 +1841,9 @@ static const QString getCharSet( QFont::CharSet set)
         return "iso8859-9";
     case QFont::ISO_8859_10:
         return "iso8859-10";
-    case QFont::ISO_8859_11:
-        return "iso8859-11";
+	case QFont::TIS620: //same as 8859-11
+	case QFont::Set_Th_TH:
+        return "tis620-0";
     case QFont::ISO_8859_12:
         return "iso8859-12";
     case QFont::ISO_8859_13:
@@ -1839,13 +1856,31 @@ static const QString getCharSet( QFont::CharSet set)
         return "koi8-r";
     case QFont::KOI8U:
         return "koi8-u";
-    case QFont::CP1251:
+    case QFont::JIS_X_0201:
+	return "jisx0201.1976-0";
+    case QFont::Set_Ja:
+    case QFont::JIS_X_0208:
+	return "jisx0208.1983-0";
+    case QFont::Set_Ko:
+    case QFont::KSC_5601:
+	return "ksc5601.1987-0";
+    case QFont::Set_Zh:
+    case QFont::Set_GBK:
+    case QFont::GB_2312:
+	return "gb2312.1980-0";
+    case QFont::Set_Zh_TW:
+    case QFont::Set_Big5:
+    case QFont::Big5:
+	return "big5-0";
+    case QFont::TSCII:
+	return "tscii-0";
+     case QFont::CP1251:
         return "microsoft-cp1251";
     case QFont::PT154:
         return "paratype-cp154";
     case QFont::Unicode:
         return "iso10646-1";
-    default:
+      default:
         break;
     }
     return "Unknown";
@@ -2370,9 +2405,16 @@ QFont QFontDatabase::font( const QString family, const QString &style,
     sty = getStyle( d, family, style, chSet );
 
     if ( !sty ) {
+	const char *f = family, *s = style, *c = chSet;
+	if (! f)
+	    f = "none";
+	if (! s)
+	    s = "none";
+	if (! c)
+	    c = "none";
+
 	qWarning( "QFontDatabase::font: Style not found for\n"
-		  "%s, %s, %s", (const char*)family,
-		  (const char*)style, (const char*)chSet );
+		  "%s, %s, %s", f, s, c);
 	return QFont();
     }
     return sty->font( family, pointSize );
@@ -2485,10 +2527,10 @@ void QFontDatabase::createDatabase()
         if(!family) {
             family=new QtFontFamily(foundry,familyname);
             foundry->addFamily(family);
-            mycharset=new QtFontCharSet(family,"iso646");
+            mycharset=new QtFontCharSet(family,"iso10646");
             family->addCharSet(mycharset);
         }
-        mycharset=family->charSetDict.find("iso646");
+        mycharset=family->charSetDict.find("iso10646");
         QString weightString;
         int weight=qdf->weight;
         if ( weight <= QFont::Light ) {

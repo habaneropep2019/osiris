@@ -38,6 +38,7 @@
 #include <sys/sem.h>
 #include <fcntl.h>
 #include <errno.h>
+#include <math.h>
 
 QVFbView::QVFbView( int display_id, int w, int h, int d, QWidget *parent,
 		    const char *name, uint flags )
@@ -46,10 +47,14 @@ QVFbView::QVFbView( int display_id, int w, int h, int d, QWidget *parent,
     displayid = display_id;
     viewport()->setMouseTracking( TRUE );
     viewport()->setFocusPolicy( StrongFocus );
-    zoom = 1;
+    zm = 1;
     animation = 0;
+    int actualdepth=d;
 
     switch ( d ) {
+	case 12:
+	    actualdepth=16;
+	    break;
 	case 1:
 	case 4:
 	case 8:
@@ -65,14 +70,15 @@ QVFbView::QVFbView( int display_id, int w, int h, int d, QWidget *parent,
     keyboardPipe = QString(QT_VFB_KEYBOARD_PIPE).arg(display_id);
 
     unlink( mousePipe.latin1() );
-    mknod( mousePipe.latin1(), S_IFIFO | 0666, 0 );
+    mkfifo( mousePipe.latin1(), 0666 ); 
+    
     mouseFd = open( mousePipe.latin1(), O_RDWR | O_NDELAY );
     if ( mouseFd == -1 ) {
 	qFatal( "Cannot open mouse pipe" );
     }
 
     unlink( keyboardPipe );
-    mknod( keyboardPipe, S_IFIFO | 0666, 0 );
+    mkfifo( keyboardPipe, 0666 );
     keyboardFd = open( keyboardPipe, O_RDWR | O_NDELAY );
     if ( keyboardFd == -1 ) {
 	qFatal( "Cannot open keyboard pipe" );
@@ -84,7 +90,7 @@ QVFbView::QVFbView( int display_id, int w, int h, int d, QWidget *parent,
     if ( d == 1 )
 	bpl = (w*d+7)/8;
     else
-	bpl = ((w*d+31)/32)*4;
+	bpl = ((w*actualdepth+31)/32)*4;
     
     int dataSize = bpl * h + 1024;
     shmId = shmget( key, dataSize, IPC_CREAT|0666);
@@ -103,7 +109,8 @@ QVFbView::QVFbView( int display_id, int w, int h, int d, QWidget *parent,
     hdr = (QVFbHeader *)data;
     hdr->width = w;
     hdr->height = h;
-    hdr->depth = d;
+    viewdepth = d;
+    hdr->depth = actualdepth;
     hdr->linestep = bpl;
     hdr->numcols = 0;
     hdr->dataoffset = 1024;
@@ -114,6 +121,8 @@ QVFbView::QVFbView( int display_id, int w, int h, int d, QWidget *parent,
     timer = new QTimer( this );
     connect( timer, SIGNAL(timeout()), this, SLOT(timeout()) );
 
+    gammatable=0;
+    setGamma(1.0,1.0,1.0);
     setRate( 30 );
 }
 
@@ -128,6 +137,65 @@ QVFbView::~QVFbView()
     ::close( keyboardFd );
     unlink( mousePipe );
     unlink( keyboardPipe );
+}
+
+void QVFbView::setGamma(double gr, double gg, double gb)
+{
+    if ( viewdepth < 12 )
+	return; // not implemented
+
+    gred=gr; ggreen=gg; gblue=gb;
+
+    switch ( viewdepth ) {
+      case 12:
+	rsh = 12;
+	gsh = 7;
+	bsh = 1;
+	rmax = 15;
+	gmax = 15;
+	bmax = 15;
+	break;
+      case 16:
+	rsh = 11;
+	gsh = 5;
+	bsh = 0;
+	rmax = 31;
+	gmax = 63;
+	bmax = 31;
+	break;
+      case 32:
+	rsh = 16;
+	gsh = 8;
+	bsh = 0;
+	rmax = 255;
+	gmax = 255;
+	bmax = 255;
+    }
+    int mm = QMAX(rmax,QMAX(gmax,bmax))+1;
+    if ( gammatable )
+	delete [] gammatable;
+    gammatable = new QRgb[mm];
+    for (int i=0; i<mm; i++) {
+	int r = int(pow(i,gr)*255/rmax);
+	int g = int(pow(i,gg)*255/gmax);
+	int b = int(pow(i,gb)*255/bmax);
+	if ( r > 255 ) r = 255;
+	if ( g > 255 ) g = 255;
+	if ( b > 255 ) b = 255;
+	gammatable[i] = qRgb(r,g,b);
+//qDebug("%d: %d,%d,%d",i,r,g,b);
+    }
+
+    setDirty(rect());
+}
+
+void QVFbView::getGamma(int i, QRgb& rgb)
+{
+    if ( i > 255 ) i = 255;
+    if ( i < 0 ) i = 0;
+    rgb = qRgb(qRed(gammatable[i*rmax/255]),
+               qGreen(gammatable[i*rmax/255]),
+               qBlue(gammatable[i*rmax/255]));
 }
 
 int QVFbView::displayId() const
@@ -147,15 +215,15 @@ int QVFbView::displayHeight() const
 
 int QVFbView::displayDepth() const
 {
-    return hdr->depth;
+    return viewdepth;
 }
 
 
 
 void QVFbView::setZoom( double z )
 {
-    if ( zoom != z ) {
-	zoom = z;
+    if ( zm != z ) {
+	zm = z;
 	setDirty(QRect(0,0,hdr->width,hdr->height));
 	resizeContents( int(hdr->width*z), int(hdr->height*z) );
 	updateGeometry();
@@ -256,7 +324,8 @@ void QVFbView::timeout()
 
 QImage QVFbView::getBuffer( const QRect &r, int &leading ) const
 {
-    switch ( hdr->depth ) {
+    switch ( viewdepth ) {
+      case 12:
       case 16: {
 	static unsigned char *imgData = 0;
 	if ( !imgData ) {
@@ -264,13 +333,20 @@ QImage QVFbView::getBuffer( const QRect &r, int &leading ) const
 	    imgData = new unsigned char [ bpl * hdr->height ];
 	}
 	QImage img( imgData, r.width(), r.height(), 32, 0, 0, QImage::IgnoreEndian );
+	const int rsh = viewdepth == 12 ? 12 : 11;
+	const int gsh = viewdepth == 12 ? 7 : 5;
+	const int bsh = viewdepth == 12 ? 1 : 0;
+	const int rmax = viewdepth == 12 ? 15 : 31;
+	const int gmax = viewdepth == 12 ? 15 : 63;
+	const int bmax = viewdepth == 12 ? 15 : 31;
 	for ( int row = 0; row < r.height(); row++ ) {
 	    QRgb *dptr = (QRgb*)img.scanLine( row );
 	    ushort *sptr = (ushort*)(data + hdr->dataoffset + (r.y()+row)*hdr->linestep);
 	    sptr += r.x();
 	    for ( int col=0; col < r.width(); col++ ) {
 		ushort s = *sptr++;
-		*dptr++ = qRgb((s>>11)*255/31,((s>>5)&0x3f)*255/63,(s&0x1f)*255/31);
+		*dptr++ = qRgb(qRed(gammatable[(s>>rsh)&rmax]),qGreen(gammatable[(s>>gsh)&gmax]),qBlue(gammatable[(s>>bsh)&bmax]));
+		//*dptr++ = qRgb(((s>>rsh)&rmax)*255/rmax,((s>>gsh)&gmax)*255/gmax,((s>>bsh)&bmax)*255/bmax);
 	    }
 	}
 	leading = 0;
@@ -339,32 +415,32 @@ void QVFbView::drawScreen()
     // qDebug( "update %d, %d, %dx%d", r.y(), r.x(), r.width(), r.height() );
     r = r.intersect( QRect(0, 0, hdr->width, hdr->height ) );
     if ( !r.isEmpty() )  {
-	if ( int(zoom) != zoom ) {
-	    r.rLeft() = int(int(r.left()*zoom)/zoom);
-	    r.rTop() = int(int(r.top()*zoom)/zoom);
-	    r.rRight() = int(int(r.right()*zoom+zoom+0.0000001)/zoom+1.9999);
-	    r.rBottom() = int(int(r.bottom()*zoom+zoom+0.0000001)/zoom+1.9999);
+	if ( int(zm) != zm ) {
+	    r.rLeft() = int(int(r.left()*zm)/zm);
+	    r.rTop() = int(int(r.top()*zm)/zm);
+	    r.rRight() = int(int(r.right()*zm+zm+0.0000001)/zm+1.9999);
+	    r.rBottom() = int(int(r.bottom()*zm+zm+0.0000001)/zm+1.9999);
 	    r.rRight() = QMIN(r.right(),hdr->width-1);
 	    r.rBottom() = QMIN(r.bottom(),hdr->height-1);
 	}
 	int leading;
 	QImage img( getBuffer( r, leading ) );
 	QPixmap pm;
-	if ( zoom == 1 ) {
+	if ( zm == 1 ) {
 	    pm.convertFromImage( img );
-	} else if ( int(zoom) == zoom ) {
+	} else if ( int(zm) == zm ) {
 	    QWMatrix m;
-	    m.scale(zoom,zoom);
+	    m.scale(zm,zm);
 	    pm.convertFromImage( img );
 	    pm = pm.xForm(m);
 	} else {
-	    pm.convertFromImage( img.smoothScale(int(img.width()*zoom),int(img.height()*zoom)) );
+	    pm.convertFromImage( img.smoothScale(int(img.width()*zm),int(img.height()*zm)) );
 	}
 	unlock();
 	p.setPen( black );
 	p.setBrush( white );
-	p.drawPixmap( int(r.x()*zoom), int(r.y()*zoom), pm,
-			int(leading*zoom), 0, pm.width(), pm.height() );
+	p.drawPixmap( int(r.x()*zm), int(r.y()*zm), pm,
+			int(leading*zm), 0, pm.width(), pm.height() );
     } else {
 	unlock();
     }
@@ -383,8 +459,8 @@ void QVFbView::viewportPaintEvent( QPaintEvent *pe )
 {
     QRect r( pe->rect() );
     r.moveBy( contentsX(), contentsY() );
-    r = QRect(int(r.x()/zoom),int(r.y()/zoom),
-	    int(r.width()/zoom)+1,int(r.height()/zoom)+1);
+    r = QRect(int(r.x()/zm),int(r.y()/zm),
+	    int(r.width()/zm)+1,int(r.height()/zm)+1);
     setDirty(r);
     drawScreen();
 }
@@ -399,22 +475,22 @@ void QVFbView::setDirty( const QRect& r )
 
 void QVFbView::contentsMousePressEvent( QMouseEvent *e )
 {
-    sendMouseData( e->pos()/zoom, e->stateAfter() );
+    sendMouseData( e->pos()/zm, e->stateAfter() );
 }
 
 void QVFbView::contentsMouseDoubleClickEvent( QMouseEvent *e )
 {
-    sendMouseData( e->pos()/zoom, e->stateAfter() );
+    sendMouseData( e->pos()/zm, e->stateAfter() );
 }
 
 void QVFbView::contentsMouseReleaseEvent( QMouseEvent *e )
 {
-    sendMouseData( e->pos()/zoom, e->stateAfter() );
+    sendMouseData( e->pos()/zm, e->stateAfter() );
 }
 
 void QVFbView::contentsMouseMoveEvent( QMouseEvent *e )
 {
-    sendMouseData( e->pos()/zoom, e->state() );
+    sendMouseData( e->pos()/zm, e->state() );
 }
 
 

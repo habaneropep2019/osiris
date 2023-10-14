@@ -1,8 +1,8 @@
 TEMPLATE	= app
-CONFIG		= qt warn_on release
+CONFIG		+= qt warn_on release
 HEADERS		= trayicon.h
 SOURCES		= main.cpp \
 		  trayicon.cpp \
 		  trayicon_win.cpp
-INTERFACES	= 
+INTERFACES	=
 TARGET		= trayicon

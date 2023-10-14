@@ -63,6 +63,7 @@ Qt Toolkit -  Qt Template library | qtl.html
 Qt Toolkit -  Qt Workspace Module | workspace.html
 Qt Toolkit -  Qt XML Module | xml.html
 Qt Toolkit -  Qt/Embedded Case Study - Cassiopeia E-100 | casestudy-qws.html
+Qt Toolkit -  Qt/Embedded Performance Tuning | performance-qws.html
 Qt Toolkit -  Qt/Embedded Pointer Handling | pointer-qws.html
 Qt Toolkit -  Qt/Embedded Virtual Framebuffer | qvfb-qws.html
 Qt Toolkit -  Qt/Embedded environment variables | envvars.html
@@ -720,6 +721,8 @@ Qt Toolkit - QWSMouseHandler Class | qwsmousehandler.html
 Qt Toolkit - QWSMouseHandler member list | qwsmousehandler-members.html
 Qt Toolkit - QWSServer Class | qwsserver.html
 Qt Toolkit - QWSServer member list | qwsserver-members.html
+Qt Toolkit - QWSWindow Class | qwswindow.html
+Qt Toolkit - QWSWindow member list | qwswindow-members.html
 Qt Toolkit - QWaitCondition Class | qwaitcondition.html
 Qt Toolkit - QWaitCondition member list | qwaitcondition-members.html
 Qt Toolkit - QWhatsThis Class | qwhatsthis.html

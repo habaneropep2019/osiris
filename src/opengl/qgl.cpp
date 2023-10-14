@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/opengl/qgl.cpp   2.3.0   edited 2001-01-26 $
+** $Id: qt/src/opengl/qgl.cpp   2.3.1   edited 2001-04-03 $
 **
 ** Implementation of OpenGL classes for Qt
 **
@@ -1139,7 +1139,7 @@ bool QGLContext::create( const QGLContext* shareContext )
 
 QGLWidget::QGLWidget( QWidget *parent, const char *name,
 		      const QGLWidget* shareWidget, WFlags f )
-    : QWidget( parent, name, f )
+    : QWidget( parent, name, f | 0x10000000 )	// WWinOwnDC
 {
     init( QGLFormat::defaultFormat(), shareWidget );
 }
@@ -1177,7 +1177,7 @@ QGLWidget::QGLWidget( QWidget *parent, const char *name,
 QGLWidget::QGLWidget( const QGLFormat &format, QWidget *parent,
 		      const char *name, const QGLWidget* shareWidget,
 		      WFlags f )
-    : QWidget( parent, name, f )
+    : QWidget( parent, name, f | 0x10000000 )	// WWinOwnDC
 {
     init( format, shareWidget );
 }

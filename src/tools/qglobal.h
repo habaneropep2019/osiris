@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qglobal.h   2.3.0   edited 2001-03-05 $
+** $Id: qt/src/tools/qglobal.h   2.3.1   edited 2001-06-13 $
 **
 ** Global type declarations and definitions
 **
@@ -39,8 +39,8 @@
 #define QGLOBAL_H
 
 
-#define QT_VERSION	230
-#define QT_VERSION_STR	"2.3.0"
+#define QT_VERSION	231
+#define QT_VERSION_STR	"2.3.1"
 
 
 //
@@ -95,8 +95,8 @@
 #define _OS_HPUX_
 #elif defined(ultrix) || defined(__ultrix) || defined(__ultrix__)
 #define _OS_ULTRIX_
-#elif defined(reliantunix)
-#define _OS_RELIANTUNIX_
+#elif defined(sinix)
+#define _OS_RELIANT_
 #elif defined(linux) || defined(__linux) || defined(__linux__)
 #define _OS_LINUX_
 #elif defined(__FreeBSD__)
@@ -244,16 +244,16 @@
 #elif defined(__SUNPRO_CC)
 #define _CC_SUN_
 #if __SUNPRO_CC >= 0x500
-#if defined(__SUNPRO_CC_COMPAT) && __SUNPRO_CC_COMPAT < 5
-// 4.2 compatibility mode triggered by -compat=4
-#else
+#if defined(_BOOL)
 #define Q_HAS_BOOL_TYPE
+#endif
 #define Q_C_CALLBACKS
 #endif
-#endif
-#elif defined(__CDS__)
+#elif defined(sinix)
 #define _CC_CDS_
+#if defined(_BOOL)
 #define Q_HAS_BOOL_TYPE
+#endif
 #elif defined(_OS_HPUX_)
 // this test is from aCC online help
 #if defined(__HP_aCC) || __cplusplus >= 199707L

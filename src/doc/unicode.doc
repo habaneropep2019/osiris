@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/doc/unicode.doc   2.3.0   edited 2001-01-26 $
+** $Id: qt/doc/unicode.doc   2.3.1   edited 2001-01-26 $
 **
 ** Documentation of Unicode support in Qt.
 **
@@ -32,7 +32,7 @@
 ** not clear to you.
 **
 **********************************************************************/
-// $Id: qt/doc/unicode.doc   2.3.0   edited 2001-01-26 $
+// $Id: qt/doc/unicode.doc   2.3.1   edited 2001-01-26 $
 
 /*! \page unicode.html
   

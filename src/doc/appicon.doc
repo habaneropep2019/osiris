@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/doc/appicon.doc   2.3.0   edited 2001-01-26 $
+** $Id: qt/doc/appicon.doc   2.3.1   edited 2001-05-02 $
 **
 ** Qt Application Icon Usage Documentation
 **
@@ -76,9 +76,5 @@ represented with your icon in e.g. Explorer.
 If you do not use tmake, the necessary steps are: First, run the "rc"
 program on the .rc file, then link your application with the resulting
 .res file.
-
-If an application icon has been set in this way, Qt will also use it in
-all top-level windows where you do not specify another icon using
-QWidget::setIcon().
 
 */

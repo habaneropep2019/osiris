@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/dialogs/qfiledialog.cpp   2.3.0   edited 2001-02-18 $
+** $Id: qt/src/dialogs/qfiledialog.cpp   2.3.1   edited 2001-06-11 $
 **
 ** Implementation of QFileDialog class
 **
@@ -3023,12 +3023,12 @@ QString QFileDialog::getSaveFileName( const QString & startWith,
 #endif
 
     QFileDialog *dlg = new QFileDialog( *workingDirectory, QString::null, parent, name, TRUE );
+    CHECK_PTR( dlg );
     if ( parent && parent->icon() && !parent->icon()->isNull() )
 	dlg->setIcon( *parent->icon() );
     else if ( qApp->mainWidget() && qApp->mainWidget()->icon() && !qApp->mainWidget()->icon()->isNull() )
 	dlg->setIcon( *qApp->mainWidget()->icon() );
 
-    CHECK_PTR( dlg );
     if ( !caption.isNull() )
 	dlg->setCaption( caption );
     else
@@ -3080,19 +3080,22 @@ void QFileDialog::okClicked()
 	    d->ignoreReturn = FALSE;
 	    return;
 	}
-        QUrlInfo f( d->url, nameEdit->text() );
-        if ( f.isDir() ) {
-            d->currentFileName = d->url + f.name();
+	QUrlInfo f( d->url, nameEdit->text() );
+	if ( f.isDir() ) {
+	    d->currentFileName = d->url;
+	    if ( d->currentFileName.right(1) != "/" )
+		d->currentFileName += '/';
+	    d->currentFileName += f.name();
 	    accept();
 	    return;
-        }
+	}
     }
 
     // if we're in multi-selection mode and something is selected,
     // accept it and be done.
     if ( mode() == ExistingFiles ) {
 	QListViewItem * i = files->firstChild();
-	while( i ) {
+	while ( i ) {
 	    if ( i->isSelected() ) {
 		accept();
 		return;
@@ -3108,9 +3111,9 @@ void QFileDialog::okClicked()
     }
 
     if ( mode() == AnyFile ) {
-	QUrlInfo f( d->url, nameEdit->text() );
-        if ( !f.isDir() ) {
-	    d->currentFileName = d->url + nameEdit->text();
+	QUrlOperator u( d->url, nameEdit->text() );
+	if ( !u.isDir() ) {
+	    d->currentFileName = u;
 	    emit fileSelected( selectedFile() );
 	    accept();
 	    return;
@@ -3436,7 +3439,7 @@ void QFileDialog::listBoxSelectionChanged()
     nameEdit->setCursorPosition( str.length() );
     okB->setEnabled( TRUE );
 	if ( d->preview && d->preview->isVisible() && j ) {
-	QUrl u = QUrl( d->url, 
+	QUrl u = QUrl( d->url,
 		       ( (QFileDialogPrivate::File*)( (QFileDialogPrivate::MCItem*)j )->i )->info.name() );
 	if ( d->infoPreviewer )
 	    d->infoPreviewer->previewUrl( u );
@@ -3837,7 +3840,7 @@ QString QFileDialog::getExistingDirectory( const QString & dir,
     if ( u.isLocalFile() ) {
 	if ( !dir_.isEmpty() ) {
 	    QFileInfo f( u.path() );
-        if ( f.exists() ) 
+        if ( f.exists() )
         if ( f.isDir() ) {
 		dialog->setDir( dir_ );
 		wd = dir_;
@@ -3930,7 +3933,7 @@ void QFileDialog::setMode( Mode newMode )
 	QUrlInfo f( d->url, "." );
 	trySetSelection( f.isDir(), d->url, TRUE );
     }
-    
+
     QString okt;
     if ( mode() == AnyFile )
         okt = tr("Save");
@@ -3938,7 +3941,7 @@ void QFileDialog::setMode( Mode newMode )
         okt = tr("OK");
     else
         okt = tr("Open");
-    
+
     okB->setText( okt );
 }
 
@@ -4784,12 +4787,12 @@ QStringList QFileDialog::getOpenFileNames( const QString & filter,
 
     QFileDialog *dlg = new QFileDialog( *workingDirectory, QString::null,
 					parent, name, TRUE );
+    CHECK_PTR( dlg );
     if ( parent && parent->icon() && !parent->icon()->isNull() )
 	dlg->setIcon( *parent->icon() );
     else if ( qApp->mainWidget() && qApp->mainWidget()->icon() && !qApp->mainWidget()->icon()->isNull() )
 	dlg->setIcon( *qApp->mainWidget()->icon() );
 
-    CHECK_PTR( dlg );
     dlg->setFilters( filters );
     if ( !caption.isNull() )
 	dlg->setCaption( caption );
@@ -4799,21 +4802,7 @@ QStringList QFileDialog::getOpenFileNames( const QString & filter,
     QString result;
     QStringList lst;
     if ( dlg->exec() == QDialog::Accepted ) {
-	QListViewItem * i = dlg->files->firstChild();
-	while( i ) {
-	    if ( i->isSelected() ) {
-		QUrl u = QUrl( dlg->d->url, ((QFileDialogPrivate::File*)i)->info.name() );
-		if ( u.isLocalFile() ) {
-		    QString s = u.toString();
-		    if ( s.left( 5 ) == "file:" )
-			s.remove( 0, 5 );
-		    lst << s;
-		} else {
-		    lst << u.toString();
-		}
-	    }
-	    i = i->nextSibling();
-	}
+	lst = dlg->selectedFiles();
 	*workingDirectory = dlg->d->url;
     }
     delete dlg;
@@ -4936,7 +4925,8 @@ void QFileDialog::urlFinished( QNetworkOperation *op )
 	    d->progressDia = 0;
 	}
 
-	QMessageBox::critical( this, tr( "ERROR" ), op->protocolDetail() );
+	if ( isVisible() )
+	    QMessageBox::critical( this, tr( "ERROR" ), op->protocolDetail() );
 
 	int ecode = op->errorCode();
 	if ( ecode == QNetworkProtocol::ErrListChlidren || ecode == QNetworkProtocol::ErrParse ||
@@ -5325,7 +5315,7 @@ void QFileDialog::resortDir()
 	item2 = new QFileDialogPrivate::MCItem( d->moreFiles, item, item2 );
 	item->i = item2;
 	d->pendingItems.append( item );
-	if ( d->mode == ExistingFiles && item->info.isDir() || 
+	if ( d->mode == ExistingFiles && item->info.isDir() ||
             ( isDirectoryMode( d->mode ) && item->info.isFile() ) ) {
 	    item->setSelectable( FALSE );
 	    item2->setSelectable( FALSE );

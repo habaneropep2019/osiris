@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/network/qsocketdevice_unix.cpp   2.3.0   edited 2001-02-20 $
+** $Id: qt/src/network/qsocketdevice_unix.cpp   2.3.1   edited 2001-06-11 $
 **
 ** Implementation of QSocketDevice class.
 **
@@ -60,6 +60,11 @@
 #  include <sys/select.h> // UGH
 #  include <strings.h> // ARGH
 #  define FNDELAY O_NONBLOCK // !!@#!()@
+// Need to get proper defines when including sys/ioctl.h - we only want
+// FIONREAD - but sys/ioctl_compat.h depends on u_int and u_long being
+// defined
+typedef unsigned int u_int;
+typedef unsigned long u_long;
 #  if defined(_XOPEN_SOURCE_EXTENDED)
 // Tru64 redefines accept() to _accept() when XNS4 is specified using
 // _XOPEN_SOURCE_EXTENDED.  Avoid it as it breaks our sources.
@@ -71,14 +76,14 @@
 #include <sys/param.h>
 #include <sys/types.h>
 #include <sys/socket.h>
-#if defined(_OS_SOLARIS_) || defined(_OS_UNIXWARE7_)
+#if defined(_OS_SOLARIS_) || defined(_OS_UNIXWARE7_) || defined(_OS_RELIANT_)
 // Needed for FIONREAD.
 // FIONREAD is #defined in <sys/filio.h>.
 // Have <sys/ioctl.h> include <sys/filio.h>.
 #define BSD_COMP
 #endif
 #include <sys/ioctl.h>
-#if defined(_OS_SOLARIS_) || defined(_OS_UNIXWARE7_)
+#if defined(_OS_SOLARIS_) || defined(_OS_UNIXWARE7_) || defined(_OS_RELIANT_)
 #undef BSD_COMP
 #endif
 #include <sys/file.h>
@@ -106,7 +111,7 @@
 #endif
 #endif
 
-#if defined(_OS_SOLARIS_) || defined(_OS_UNIXWARE7_) || defined(_OS_OS2EMX_) || defined(_OS_QNX_)
+#if defined(_OS_SOLARIS_) || defined(_OS_UNIXWARE7_) || defined(_OS_RELIANT_) || defined(_OS_OS2EMX_) || defined(_OS_QNX_)
 // And this then?  Unixware?
 // Also why is this defined on Solaris? Seems to be in <sys/file.h>, unguarded,
 // in both Solaris 2.5.1 and Solaris 8!
@@ -146,9 +151,14 @@
 // new linux is Single Unix 1998, not old linux
 #define SOCKLEN_T socklen_t
 #elif defined(BSD4_4)
-// freebsd
-#define SOCKLEN_T socklen_t
-#elif defined(_OS_UNIXWARE7_)
+// BSD 4.4
+#  if defined(_OS_FREEBSD_) && __FreeBSD_version < 400000
+// FreeBSD 4.0 and higher
+#    define SOCKLEN_T int
+#  else
+#    define SOCKLEN_T socklen_t
+#  endif
+#elif defined(_OS_UNIXWARE7_) || defined(_OS_RELIANT_)
 #define SOCKLEN_T size_t
 #elif defined(_OS_AIX_)
 #ifdef _AIX43
@@ -314,7 +324,7 @@ void QSocketDevice::setBlocking( bool enable )
 	return;
     int tmp = ::fcntl(fd, F_GETFL, 0);
     if ( tmp >= 0 )
-	tmp = fcntl( fd, F_SETFL, enable ? (tmp&!FNDELAY) : (tmp|FNDELAY) );
+	tmp = fcntl( fd, F_SETFL, enable ? (tmp&~FNDELAY) : (tmp|FNDELAY) );
     if ( tmp >= 0 )
 	return;
     if ( e )

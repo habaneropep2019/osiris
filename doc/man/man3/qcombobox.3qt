@@ -1,5 +1,5 @@
 '\" t
-.TH QComboBox 3qt "5 March 2001" "Trolltech AS" \" -*- nroff -*-
+.TH QComboBox 3qt "13 June 2001" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2001 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -242,7 +242,7 @@ When the user enters a new string in a read-write combo, the widget may or may n
 .PP
 It is possible to constrain the input to an editable combo box using QValidator; see setValidator(). By default, all input is accepted.
 .PP
-A combo box has a default focusPolicy() of \fCTabFocus,\fR i.e. it will not grab focus if clicked. This differs from both Windows and Motif.
+If the combo box is not editable then it has a default focusPolicy() of \fCTabFocus,\fR i.e. it will not grab focus if clicked. This differs from both Windows and Motif. If the combo box is editable then it has a default focusPolicy() of \fCStrongFocus,\fR i.e. it will grab focus if clicked.
 .PP
 .ce 1
 .B "[Image Omitted]"
@@ -592,4 +592,4 @@ In case of content or formattting problems with this manual page, please
 report them to
 .BR qt-bugs@trolltech.com .
 Please include the name of the manual page (qcombobox.3qt) and the Qt
-version (2.3.0).
+version (2.3.1).

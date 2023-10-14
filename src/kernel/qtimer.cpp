@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qtimer.cpp   2.3.0   edited 2001-01-26 $
+** $Id: qt/src/kernel/qtimer.cpp   2.3.1   edited 2001-05-11 $
 **
 ** Implementation of QTimer class
 **
@@ -39,7 +39,6 @@
 #include "qsignal.h"
 #include "qobjectlist.h"
 #include "qobjectdict.h"
-#include "qapplication.h"
 
 // NOT REVISED
 /*!
@@ -107,9 +106,8 @@ const int INV_TIMER = -1;			// invalid timer id
 */
 
 QTimer::QTimer( QObject *parent, const char *name )
-    : QObject( parent, name )
+    : QObject( parent, name ), id(INV_TIMER), single(FALSE)
 {
-    id = INV_TIMER;
 }
 
 /*!
@@ -148,7 +146,7 @@ QTimer::~QTimer()
 
 int QTimer::start( int msec, bool sshot )
 {
-    if ( id >=0 && !msec && sshot == single )
+    if ( id >=0 && !msec && single && sshot)
 	return id;
     if ( id != INV_TIMER )			// stop running timer
 	stop();
@@ -233,7 +231,6 @@ void sst_init()
 class QSingleShotTimer : public QObject
 {
 public:
-    QSingleShotTimer() : QObject( qApp ) {}
     bool    start( int msec, QObject *r, const char * m );
 protected:
     bool    event( QEvent * );
@@ -242,8 +239,8 @@ private:
     int	    timerId;
 };
 
-int  qStartTimer( int interval, QObject *obj ); // implemented in qapp_xxx.cpp
-bool qKillTimer( int id );
+extern int  qStartTimer( int interval, QObject *obj ); // implemented in qapp_xxx.cpp
+extern bool qKillTimer( int id );
 
 bool QSingleShotTimer::start( int msec, QObject *r, const char *m )
 {

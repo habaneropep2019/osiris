@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qmenubar.cpp   2.3.0   edited 2001-01-26 $
+** $Id: qt/src/widgets/qmenubar.cpp   2.3.1   edited 2001-05-02 $
 **
 ** Implementation of QMenuBar class
 **
@@ -415,8 +415,6 @@ bool QMenuBar::eventFilter( QObject *object, QEvent *event )
 	     event->type() == QEvent::KeyRelease &&
 	     (((QKeyEvent *)event)->key() == Key_Alt ||
 	      ((QKeyEvent *)event)->key() == Key_Meta) ) {
-	    if ( !hasmouse || actItem < 0 )
-		setActiveItem( 0, FALSE );
 	    setAltMode( TRUE );
 	    if ( object->parent() )
 		object->removeEventFilter( this );
@@ -554,7 +552,6 @@ void QMenuBar::openActPopup()
 	// reuse
 	if (popup->parentMenu)
 	    popup->parentMenu->menuDelPopup(popup);
-	popup->selfItem  = mitems->at(actItem);
 	menuInsPopup(popup);
     }
 
@@ -615,7 +612,7 @@ void QMenuBar::hide()
 #ifndef QT_NO_MAINWINDOW
     if ( parent() && parent()->inherits( "QMainWindow" ) ) //### ugly workaround
 		( (QMainWindow*)parent() )->triggerLayout();
-#endif    
+#endif
 }
 
 /*!
@@ -942,8 +939,8 @@ void QMenuBar::mouseMoveEvent( QMouseEvent *e )
 		if ( actItem == item )
 		    actItem = -1; // trigger update
 	    }
-	    setActiveItem( item, FALSE, FALSE );
 	}
+	setActiveItem( item, FALSE, FALSE );
 	return;
     }
     if ( item != actItem && item >= 0  && ( popupvisible || mouseBtDn ) )
@@ -1200,7 +1197,6 @@ void QMenuBar::setupAccelerators()
 	    QPopupMenu* popup = mi->popup();
 	    if (popup->parentMenu)
 		popup->parentMenu->menuDelPopup(popup);
-	    popup->selfItem  = mi;
 	    menuInsPopup(popup);
 	    popup->updateAccel( this );
 	    if ( !popup->isEnabled() )
@@ -1223,10 +1219,16 @@ bool QMenuBar::customWhatsThis() const
  */
 void QMenuBar::focusInEvent( QFocusEvent * )
 {
-    if ( actItem < 0 )
-	setActiveItem( 0, FALSE );
-    else if ( !popupvisible )
+    if ( actItem < 0 ) {
+	int i = -1;
+	while ( actItem < 0 && ++i < (int) mitems->count() ) {
+	    QMenuItem* mi = mitems->at( i );
+	    if ( mi && mi->isEnabled() && !mi->isSeparator() )
+		setActiveItem( i, FALSE );
+	}
+    } else if ( !popupvisible ) {
 	updateItem( idAt( actItem ) );
+    }
 }
 
 /*!\reimp

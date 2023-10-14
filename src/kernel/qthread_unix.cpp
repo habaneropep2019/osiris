@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qthread_unix.cpp   2.3.0   edited 2001-02-20 $
+** $Id: qt/src/kernel/qthread_unix.cpp   2.3.1   edited 2001-06-11 $
 **
 ** QThread class for Unix
 **
@@ -358,7 +358,7 @@ void QThread::sleep( unsigned long secs )
 */
 void QThread::msleep( unsigned long msecs )
 {
-    ::usleep( msecs * 1000);
+    QThread::usleep(msecs * 1000);
 }
 
 
@@ -368,7 +368,9 @@ void QThread::msleep( unsigned long msecs )
 */
 void QThread::usleep( unsigned long usecs )
 {
-    ::usleep( usecs );
+    if ( usecs > 1000000 )
+	::sleep( usecs / 1000000 );
+    ::usleep( usecs % 1000000 );
 }
 
 
@@ -384,7 +386,8 @@ QThread::QThread()
 
 /*!
   QThread destructor. Note that deleting a QThread object will not stop
-  the execution of the thread it represents.
+  the execution of the thread it represents, and that deleting a QThread
+  object while the thread is running is unsafe.
 */
 QThread::~QThread()
 {

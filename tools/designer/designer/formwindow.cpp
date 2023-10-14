@@ -1860,16 +1860,20 @@ bool FormWindow::hasInsertedChildren( QWidget *w ) const
     if ( !w )
 	return FALSE;
     QObjectList *l = w->queryList( "QWidget" );
-    if ( !l || !l->first() )
+    if ( !l || !l->first() ) {
+	delete l;
 	return FALSE;
+    }
 
     for ( QObject *o = l->first(); o; o = l->next() ) {
 	if ( o->isWidgetType() &&
 	     ( (QWidget*)o )->isVisibleTo( (FormWindow*)this ) &&
-	     insertedWidgets.find( (QWidget*)o ) )
+	     insertedWidgets.find( (QWidget*)o ) ) {
+	    delete l;
 	    return TRUE;
+	}
     }
-
+    delete l;
     return FALSE;
 }
 

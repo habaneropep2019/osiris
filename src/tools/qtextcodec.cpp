@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qtextcodec.cpp   2.3.0   edited 2001-03-02 $
+** $Id: qt/src/tools/qtextcodec.cpp   2.3.1   edited 2001-03-12 $
 **
 ** Implementation of QTextCodec class
 **
@@ -39,8 +39,8 @@
 #ifndef QT_NO_TEXTCODEC
 
 #include "qlist.h"
-#ifndef QT_NO_CODECS
 #include "qutfcodec.h"
+#ifndef QT_NO_CODECS
 #include "qgbkcodec.h"
 #include "qeucjpcodec.h"
 #include "qjiscodec.h"
@@ -566,10 +566,10 @@ QTextCodec* QTextCodec::codecForLocale()
 #ifdef _WS_X11_
     // use LC_CTYPE if LANG is not available, as X11 uses it too, and we otherwise get inconsitencies between
     // XmbLookupString and the Qt input mapper
-    if ( !lang || lang[0] == 0 ) 
+    if ( !lang || lang[0] == 0 )
 	lang = qstrdup( getenv("LC_CTYPE") );
 #endif
-    
+
     char * p = lang ? strchr( lang, '.' ) : 0;
     if ( !p || *p != '.' ) {
         // Some versions of setlocale return encoding, others not.
@@ -957,6 +957,8 @@ struct QMultiByteUnicodeTable {
     QMultiByteUnicodeTable* multibyte;
 };
 
+#ifndef QT_NO_CODECS
+
 static int getByte(char* &cursor)
 {
     int byte = 0;
@@ -971,7 +973,6 @@ static int getByte(char* &cursor)
     return byte&0xff;
 }
 
-#ifndef QT_NO_CODECS
 class QTextCodecFromIOD;
 
 class QTextCodecFromIODDecoder : public QTextDecoder {
@@ -1640,10 +1641,10 @@ static struct {
     // $ for a in CP* ; do ( awk '/^0x[89ABCDEF]/{ print $1, $2 }' < $a ) | sort | sed -e 's/#UNDEF.*$/0xFFFD/' | cut -c6- | paste '-d ' - - - - - - - - | sed -e 's/ /, /g' -e 's/$/,/' -e '$ s/,$/} },/' -e '1 s/^/{ /' > ~/tmp/$a ; done
 
     { "PT 154", 0,  // unknown mib
-        {     0x0496, 0x0492, 0x201A, 0x0493, 0x201E, 0x2026, 0x2020, 0x04AE,    
-	      0x04B2, 0x04AF, 0x04A0, 0x2039, 0x04A2, 0x049A, 0x04BA, 0x04B8,    
-	      0x0497, 0x2018, 0x2019, 0x201C, 0x201D, 0x2022, 0x2013, 0x2014,    
-	      0x04B3, 0x2122, 0x04A1, 0x203A, 0x04A3, 0x049B, 0x04BB, 0x04B9,    
+        {     0x0496, 0x0492, 0x201A, 0x0493, 0x201E, 0x2026, 0x2020, 0x04AE,
+	      0x04B2, 0x04AF, 0x04A0, 0x2039, 0x04A2, 0x049A, 0x04BA, 0x04B8,
+	      0x0497, 0x2018, 0x2019, 0x201C, 0x201D, 0x2022, 0x2013, 0x2014,
+	      0x04B3, 0x2122, 0x04A1, 0x203A, 0x04A3, 0x049B, 0x04BB, 0x04B9,
 	      0x00A0, 0x040E, 0x045E, 0x0408, 0x04E8, 0x0498, 0x04B0, 0x00A7,
 	      0x0401, 0x00A9, 0x04D8, 0x00AB, 0x00AC, 0x00AD, 0x00AE, 0x049C,
 	      0x00B0, 0x04B1, 0x0406, 0x0456, 0x0499, 0x04E9, 0x00B6, 0x00B7,
@@ -2101,6 +2102,8 @@ int QLatin1Codec::heuristicContentMatch(const char* chars, int len) const
 static void setupBuiltinCodecs()
 {
     (void)new QLatin1Codec;
+    (void)new QUtf8Codec;
+    (void)new QUtf16Codec;
 
 #ifndef QT_NO_CODECS
     int i = 0;
@@ -2114,8 +2117,6 @@ static void setupBuiltinCodecs()
     (void)new QEucKrCodec;
     (void)new QGbkCodec;
     (void)new QBig5Codec;
-    (void)new QUtf8Codec;
-    (void)new QUtf16Codec;
     (void)new QHebrewCodec;
     (void)new QArabicCodec;
     (void)new QTsciiCodec;

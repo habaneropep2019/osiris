@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qstring.cpp   2.3.0   edited 2001-03-01 $
+** $Id: qt/src/tools/qstring.cpp   2.3.1   edited 2001-05-30 $
 **
 ** Implementation of the QString class and related Unicode functions
 **
@@ -11492,14 +11492,11 @@ int QLigature::match(QString & str, unsigned int index)
     return 0;
 }
 
-#endif
-
-
 
 // This function is used by format()
 // This function caters for Non-spacing marks by looking for
 // the next non non-spacing mark character and check its connectivity.
-static inline bool check_left(QString & str, int index) 
+static inline bool check_left(QString & str, int index)
 {
     if  (index < (int)str.length()) {
 	const QChar &ch = str[index];
@@ -11520,7 +11517,7 @@ static inline bool check_left(QString & str, int index)
 // This function is used by format()
 // This function caters for Non-spacing marks by looking for
 // the previous non non-spacing mark character and check its connectivity.
-static inline bool check_right(QString & str, int index) 
+static inline bool check_right(QString & str, int index)
 {
     if (index > 0) {
 	index--;
@@ -11544,7 +11541,7 @@ static inline bool format(QChar::Decomposition tag, QString & str,
 			  int index, int len)
 {
     unsigned int l = index + len;
-    
+
     bool left = FALSE, right = FALSE;
 
     // our ligature is connectable from left :
@@ -11572,6 +11569,7 @@ static inline bool format(QChar::Decomposition tag, QString & str,
 	return (!right && !left);
     }
 } // format()
+#endif
 
 /*
   QString::compose() and visual() were developed by Gordon Tisher
@@ -12515,7 +12513,7 @@ QString QString::arg(const QString& a, int fieldwidth) const
 
     if ( !findArg( pos, len ) ) {
 	qWarning( "QString::arg(): Argument missing: %s, %s",
-		  (const char *)this, (const char *)a );
+		  latin1(), a.latin1() );
 	// Make sure the text at least appears SOMEWHERE
 	r += ' ';
 	pos = r.length();
@@ -12652,7 +12650,7 @@ bool QString::findArg(int& pos, int& len) const
   arbitrary list of arguments.  The format string supports all
   the escape sequences of printf() in the standard C library.
 
-  The %s escape sequence expects a utf8() encoded string. 
+  The %s escape sequence expects a utf8() encoded string.
   The format string \e cformat is expected to be in latin1. If you need a unicode
   format string, use QString::arg() instead. For typesafe
   string building, with full Unicode support, you can use QTextOStream
@@ -13591,7 +13589,7 @@ QString &QString::insert( uint index, QChar c )	// insert char
 QString &QString::remove( uint index, uint len )
 {
     uint olen = length();
-    if ( index >= olen  ) {		
+    if ( index >= olen  ) {
         // range problems
     } else if ( index + len >= olen ) {  // index ok
         setLength( index );
@@ -13855,7 +13853,7 @@ ulong QString::toULong( bool *ok, int base ) const
     const QChar *p = unicode();
     ulong val=0;
     int l = length();
-    const ulong max_mult = 429496729;		// UINT_MAX/10, rounded down
+    const ulong max_mult = UINT_MAX / base;
     bool is_ok = FALSE;
     if ( !p )
 	goto bye;
@@ -14454,13 +14452,13 @@ QCString QString::local8Bit() const
     return latin1();
 #else
 #ifdef _WS_X11_
-    static QTextCodec* codec = QTextCodec::codecForLocale();
+    QTextCodec* codec = QTextCodec::codecForLocale();
     return codec
 	    ? codec->fromUnicode(*this)
 	    : QCString(latin1());
 #endif
 #ifdef _WS_MAC_
-    static QTextCodec* codec = QTextCodec::codecForLocale();
+    QTextCodec* codec = QTextCodec::codecForLocale();
     return codec
 	    ? codec->fromUnicode(*this)
 	    : QCString(latin1());
@@ -14493,14 +14491,14 @@ QString QString::fromLocal8Bit(const char* local8Bit, int len)
     if ( !local8Bit )
 	return QString::null;
 #ifdef _WS_X11_
-    static QTextCodec* codec = QTextCodec::codecForLocale();
+    QTextCodec* codec = QTextCodec::codecForLocale();
     if ( len < 0 ) len = qstrlen(local8Bit);
     return codec
 	    ? codec->toUnicode(local8Bit, len)
 	    : QString::fromLatin1(local8Bit,len);
 #endif
 #ifdef _WS_MAC_
-    static QTextCodec* codec = QTextCodec::codecForLocale();
+    QTextCodec* codec = QTextCodec::codecForLocale();
     if ( len < 0 ) len = qstrlen(local8Bit);
     return codec
 	    ? codec->toUnicode(local8Bit, len)

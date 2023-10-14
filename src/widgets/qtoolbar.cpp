@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qtoolbar.cpp   2.3.0   edited 2001-02-17 $
+** $Id: qt/src/widgets/qtoolbar.cpp   2.3.1   edited 2001-05-27 $
 **
 ** Implementation of QToolBar class
 **
@@ -854,7 +854,11 @@ void QToolBar::setupArrowMenu()
 			QString s = b->textLabel();
 			if ( s.isEmpty() )
 			    s = "";
-			int id = d->menu->insertItem( b->iconSet(), s );
+			int id;
+			if ( b->popup() && b->popupDelay() == 0 )
+			    id = d->menu->insertItem( b->iconSet(), s, b->popup() );
+			else
+			    id = d->menu->insertItem( b->iconSet(), s );
 			d->hiddenItems.insert( id, b );
 			if ( b->isToggleButton() )
 			    d->menu->setItemChecked( id, b->isOn() );

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/network/qdns.cpp   2.3.0   edited 2001-02-22 $
+** $Id: qt/src/network/qdns.cpp   2.3.1   edited 2001-06-11 $
 **
 ** Implementation of QDns class.
 **
@@ -774,13 +774,7 @@ void QDnsAnswer::notify()
 		((QDnsUgleHack*)dns)->ugle( TRUE );
 	    } else {
 		QStringList n = dns->qualifiedNames();
-		int i = n.count();
-		bool found = FALSE;
-		while( i-- > 0 && !found )
-		    // ######## O(n*n)!! should use iterator!
-		    if ( n[i] == query->l )
-			found = TRUE;
-		if ( found )
+		if ( n.contains(query->l) )
 		    ((QDnsUgleHack*)dns)->ugle();
 #if defined(DEBUG_QDNS)
 		else
@@ -997,7 +991,7 @@ void QDnsManager::answer()
 
     // at this point queries[i] is whatever we asked for.
 
-    if ( (Q_UINT8)(a[2]) & 0x80 == 0 ) {
+    if ( ( (Q_UINT8)(a[2]) & 0x80 ) == 0 ) {
 #if defined(DEBUG_QDNS)
 	qDebug( "DNS Manager: received a query" );
 #endif
@@ -1533,10 +1527,10 @@ QDns::QDns( const QHostAddress & address, QDns::RecordType rr )
 QDns::~QDns()
 {
     uint q = 0;
-    QDnsQuery * query;
     QDnsManager * m = QDnsManager::manager();
-    while( q < m->queries.size() && (query=m->queries[q]) != 0 ) {
-	if ( query->dns )
+    while( q < m->queries.size() ) {
+	QDnsQuery * query=m->queries[q];
+	if ( query && query->dns )
 	    (void)query->dns->take( (void*) this );
 	q++;
     }
@@ -1964,11 +1958,11 @@ QString QDns::canonicalName() const
 
 #include <sys/types.h>
 #include <netinet/in.h>
-#if defined (_OS_SCO_) || defined (_OS_AIX_)
+#if defined (_OS_SCO_) || defined (_OS_AIX_) || defined(_OS_FREEBSD_)
 # define class c_class
 #endif
 #include <arpa/nameser.h>
-#if defined (_OS_SCO_) || defined (_OS_AIX_)
+#if defined (_OS_SCO_) || defined (_OS_AIX_) || defined(_OS_FREEBSD_)
 # undef class
 #endif
 #include <resolv.h>

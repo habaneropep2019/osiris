@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/doc/moc.doc   2.3.0   edited 2001-02-21 $
+** $Id: qt/doc/moc.doc   2.3.1   edited 2001-05-15 $
 **
 ** Moc usage, expanded from the manual page
 **
@@ -527,18 +527,18 @@ executed when the signal is emitted:
 \code
    [...]
    public slots:
-       void MyWidget::setLocation (pair&lt;int,int&gt; location);
+       void MyWidget::setLocation (pair<int,int> location);
 
    [...]
    public signals:
-       void MyObject::moved (pair&lt;int,int&gt; location);
+       void MyObject::moved (pair<int,int> location);
 \endcode
 
 However, you can work around this limitation by explicitly typedef'ing
 the parameter types, like this:
 
 \code
-   typedef pair&lt;int,int&gt; IntPair;	
+   typedef pair<int,int> IntPair;	
    [...]
    public slots:
        void MyWidget::setLocation (IntPair location);
@@ -549,6 +549,43 @@ the parameter types, like this:
 \endcode
 
 This will work as expected.
+
+<h4>Namespace of parent class must be specified even if it is the same as
+that of the subclass</h4>
+
+In the following example, classes x::A and x::B are defined:
+
+\code
+    namespace x {
+	class A : public QObject {
+	    Q_OBJECT
+
+	public:
+	    ...
+	};
+    }
+
+    namespace x {
+	class B : public A {
+	    Q_OBJECT
+
+	public:
+	    ...
+	};
+    }
+\endcode
+
+Unfortunately, moc will not understand the
+\code
+	class B : public A {
+\endcode
+line. You have either to write
+\code
+	class B : public x::A {
+\endcode
+or define classes A and B in the same namespace block.
+
+This limitation will disappear with Qt 3.0.
 
 <h4>Properties need to be declared before the public section that
 contains the respective get and set functions</h4>

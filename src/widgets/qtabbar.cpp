@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qtabbar.cpp   2.3.0   edited 2001-02-13 $
+** $Id: qt/src/widgets/qtabbar.cpp   2.3.1   edited 2001-03-13 $
 **
 ** Implementation of QTab and QTabBar classes
 **
@@ -140,7 +140,9 @@ QTab::~QTab()
 struct QTabPrivate {
     int id;
     int focus;
+#ifndef QT_NO_ACCEL
     QAccel * a;
+#endif
     QTabBar::Shape s;
     QToolButton* rightB;
     QToolButton* leftB;
@@ -170,7 +172,9 @@ QTabBar::QTabBar( QWidget * parent, const char *name )
     d = new QTabPrivate;
     d->id = 0;
     d->focus = 0;
+#ifndef QT_NO_ACCEL
     d->a = new QAccel( this, "tab accelerators" );
+#endif
     d->s = RoundedAbove;
     d->scrolls = FALSE;
     d->leftB = new QToolButton( LeftArrow, this );
@@ -185,7 +189,9 @@ QTabBar::QTabBar( QWidget * parent, const char *name )
     setFocusPolicy( TabFocus );
     setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed ) );
 
+#ifndef QT_NO_ACCEL
     connect( d->a, SIGNAL(activated(int)), this, SLOT(setCurrentTab(int)) );
+#endif
 }
 
 
@@ -244,9 +250,11 @@ int QTabBar::insertTab( QTab * newTab, int index )
     updateArrowButtons();
     makeVisible( tab( currentTab() ) );
 
+#ifndef QT_NO_ACCEL
     int p = QAccel::shortcutKey( newTab->label );
     if ( p )
 	d->a->insertItem( p, newTab->id );
+#endif
 
     return newTab->id;
 }
@@ -285,7 +293,9 @@ void QTabBar::setTabEnabled( int id, bool enabled )
 	if ( t && t->id == id ) {
 	    if ( t->enabled != enabled ) {
 		t->enabled = enabled;
+#ifndef QT_NO_ACCEL
 		d->a->setItemEnabled( t->id, enabled );
+#endif
 		QRect r( t->r );
 		if ( !enabled && id == currentTab() ) {
 		    QPoint p1( t->r.center() ), p2;

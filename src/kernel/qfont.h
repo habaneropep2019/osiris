@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qfont.h   2.3.0   edited 2001-02-01 $
+** $Id: qt/src/kernel/qfont.h   2.3.1   edited 2001-04-19 $
 **
 ** Definition of QFont class
 **
@@ -218,6 +218,7 @@ private:
     void       *textMetric() const;
 #endif
 
+    friend class QFont_Private;
     friend class QFontInternal;
     friend class QFontMetrics;
     friend class QFontInfo;

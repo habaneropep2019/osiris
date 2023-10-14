@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qwidget_x11.cpp   2.3.0   edited 2001-02-27 $
+** $Id: qt/src/kernel/qwidget_x11.cpp   2.3.1   edited 2001-05-14 $
 **
 ** Implementation of QWidget and QWindow classes for X11
 **
@@ -92,6 +92,8 @@ extern Atom qt_window_role;		// defined in qapplication_x11.cpp
 extern Atom qt_sm_client_id;		// defined in qapplication_x11.cpp
 extern Atom qt_net_wm_context_help;	// defined in qapplication_x11.cpp
 extern Atom qt_xa_motif_wm_hints;	// defined in qapplication_x11.cpp
+extern bool qt_broken_wm;		// defined in qapplication_x11.cpp
+
 
 const uint stdWidgetEventMask =			// X event mask
 	(uint)(
@@ -517,9 +519,15 @@ void QWidget::reparent( QWidget *parent, WFlags f, const QPoint &p,
 	old_winid = 0;
 
     setWinId( 0 );
+
+    // hide and reparent our own window away. Otherwise we might get
+    // destroyed when emitting the child remove event below. See QWorkspace.
+    XUnmapWindow( x11Display(), old_winid );
+    XReparentWindow( x11Display(), old_winid,
+		     RootWindow( x11Display(), x11Screen() ), 0, 0 );
+
     if ( isTopLevel() )
 	topData()->parentWinId = 0;
-
 
     if ( parentObj ) {				// remove from parent
 	parentObj->removeChild( this );
@@ -661,8 +669,8 @@ void QWidget::setMicroFocusHint(int x, int y, int width, int height, bool text)
 	    spot.y = p.y()+height;
 	    XIC xic = (XIC)tlw->extra->topextra->xic;
 	    XVaNestedList preedit_attr;
-	    preedit_attr = XVaCreateNestedList(0, XNSpotLocation, &spot, 0);
-	    XSetICValues(xic, XNPreeditAttributes, preedit_attr, 0);
+	    preedit_attr = XVaCreateNestedList(0, XNSpotLocation, &spot, (char *) 0);
+	    XSetICValues(xic, XNPreeditAttributes, preedit_attr, (char *) 0);
 	    XFree(preedit_attr);
 	}
     }
@@ -721,14 +729,14 @@ void QWidget::setFontSys()
 					font().pointSize());
 
 	XVaNestedList preedit_att = XVaCreateNestedList( 0, XNFontSet, fontset,
-							 NULL );
+							 (char *) NULL );
 	XVaNestedList status_att = XVaCreateNestedList( 0, XNFontSet, fontset,
-							NULL );
+							(char *) NULL );
 
 	XSetICValues( xic,
 		      XNPreeditAttributes, preedit_att,
 		      XNStatusAttributes, status_att,
-		      0 );
+		      (char *) 0 );
 
 	XFree(preedit_att);
 	XFree(status_att);
@@ -1529,7 +1537,8 @@ void QWidget::showNormal()
 {
     if ( isTopLevel() ) {
 	if ( topData()->fullscreen ) {
-	    reparent( 0, WType_TopLevel, QPoint(0,0) );
+	    // when reparenting, preserve some widget flags
+	    reparent( 0, WType_TopLevel | (getWFlags() & 0xffff0000), QPoint(0,0) );
 	    topData()->fullscreen = 0;
 	}
 	QRect r = topData()->normalGeometry;
@@ -1698,9 +1707,14 @@ void QWidget::internalSetGeometry( int x, int y, int w, int h, bool isMove )
 	do_size_hints( this, extra );
     }
 
-    if ( isMove )
-	XMoveResizeWindow( dpy, winid, pos().x(), pos().y(), w, h ); // pos() is right according to ICCCM 4.1.5
-    else if ( isResize )
+    if ( isMove ) {
+	if (! qt_broken_wm)
+	     // pos() is right according to ICCCM 4.1.5
+	    XMoveResizeWindow( dpy, winid, pos().x(), pos().y(), w, h );
+	else
+	    // work around 4Dwm's incompliance with ICCCM 4.1.5
+	    XMoveResizeWindow( dpy, winid, x, y, w, h);
+    } else if ( isResize )
 	XResizeWindow( dpy, winid, w, h );
 
     if ( isVisible() ) {
@@ -2122,18 +2136,18 @@ void QWidget::createTLSysExtra()
 	XVaNestedList preedit_att = XVaCreateNestedList(0,
 							XNSpotLocation, &spot,
 							XNFontSet, fontset,
-							NULL);
+							(char *) NULL);
 	XVaNestedList status_att = XVaCreateNestedList(0,
 						       XNFontSet, fontset,
-						       NULL);
+						       (char *) NULL);
 
 	extra->topextra->xic = (void*)XCreateIC( qt_xim,
 						 XNInputStyle, qt_xim_style,
-						 XNClientWindow, winId(),
-						 XNFocusWindow, winId(),
+						 XNClientWindow, (void *) winId(),
+						 XNFocusWindow, (void *) winId(),
 						 XNPreeditAttributes, preedit_att,
 						 XNStatusAttributes, status_att,
-						 0 );
+						 (char *) 0 );
 
 	XFree(preedit_att);
 	XFree(status_att);

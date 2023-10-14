@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/themes/metal.cpp   2.3.0   edited 2001-02-15 $
+** $Id: qt/examples/themes/metal.cpp   2.3.1   edited 2001-03-22 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -32,7 +32,11 @@
 
 
 
-MetalStyle::MetalStyle() : QWindowsStyle() { }
+MetalStyle::MetalStyle() : QWindowsStyle() 
+{ 
+    setScrollBarExtent( 18 );
+    
+}
 
 /*!
   Reimplementation from QStyle
@@ -429,7 +433,7 @@ void MetalStyle::drawSlider( QPainter *p, int x, int y, int w, int h,
 			     const QColorGroup &, Orientation orient, 
 			     bool /*tickAbove*/, bool /*tickBelow*/ )
 {
-    drawMetalButton( p, x, y, w, h, FALSE, orient != Horizontal );
+    drawMetalButton( p, x, y, w, h, FALSE, orient == Horizontal );
 }
 
 

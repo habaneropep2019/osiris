@@ -1,5 +1,5 @@
 '\" t
-.TH QUrlOperator 3qt "5 March 2001" "Trolltech AS" \" -*- nroff -*-
+.TH QUrlOperator 3qt "13 June 2001" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2001 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -219,7 +219,7 @@ This means if \fIlocation\fR is not empty and relative, it must not contain any 
 .PP
 See also copy().
 .SH "void QUrlOperator::getNetworkProtocol () \fC[protected]\fR"
-Finds a network protocol for the URL.
+Finds a network protocol for the URL and deletes the old network protocol.
 .SH "QUrlInfo QUrlOperator::info ( const QString & entry ) const \fC[virtual]\fR"
 Returns the URL information for the child \fIentry\fR or en empty QUrlInfo object of there is no information available about \fIentry.\fR
 .SH "bool QUrlOperator::isDir ( bool * ok = 0 ) \fC[virtual]\fR"
@@ -339,4 +339,4 @@ In case of content or formattting problems with this manual page, please
 report them to
 .BR qt-bugs@trolltech.com .
 Please include the name of the manual page (qurloperator.3qt) and the Qt
-version (2.3.0).
+version (2.3.1).

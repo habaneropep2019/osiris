@@ -637,7 +637,7 @@ int QTableItem::col() const
 
   If your application stores its data already in a way that allocating
   a QTableItem for each data containing cell seems inappropriate, you
-  can reimplement QTable::paintCell() and draw the contents directly. 
+  can reimplement QTable::paintCell() and draw the contents directly.
   You should also reimplement QTable::paintCell() if you wish to change
   the alignment of your items in the QTable.
 
@@ -1165,6 +1165,9 @@ void QTable::drawContents( QPainter *p, int cx, int cy, int cw, int ch )
 	int rowp = rowPos( r );
 	int rowh = rowHeight( r );
 
+	if ( rowh == 0 )
+	    continue;
+	
 	// Go through the columns in row r
 	// if we know from where to where, go through [colfirst, collast],
 	// else go through all of them
@@ -1176,6 +1179,9 @@ void QTable::drawContents( QPainter *p, int cx, int cy, int cw, int ch )
 	    int oldrp = rowp;
 	    int oldrh = rowh;
 
+	    if ( colw == 0 )
+		continue;
+	
 	    QTableItem *itm = item( r, c );
 	    if ( itm &&
 		 ( itm->colSpan() > 1 || itm->rowSpan() > 1 ) ) {
@@ -1238,7 +1244,7 @@ void QTable::drawContents( QPainter *p, int cx, int cy, int cw, int ch )
   paintCell() to do the custom drawing, or else subclass QTableItem
   and reimplement QTableItem::paint().
 
-  If you want to change the alignment of your items then you will need to 
+  If you want to change the alignment of your items then you will need to
   reimplement paintCell().
 
   Reimplementing this function is probably better e.g. for data you
@@ -1321,12 +1327,10 @@ void QTable::paintEmptyArea( QPainter *p, int cx, int cy, int cw, int ch )
     QRegion reg( QRect( cx, cy, cw, ch ) );
     // Subtract the table from it
     reg = reg.subtract( QRect( QPoint( 0, 0 ), tableSize() ) );
-    p->save();
-    // Set clip region...
-    p->setClipRegion( reg );
-    // ...and fill background
-    p->fillRect( cx, cy, cw, ch, colorGroup().brush( QColorGroup::Base ) );
-    p->restore();
+    // And draw the rectangles (transformed as needed)
+    QArray<QRect> r = reg.rects();
+    for (int i=0; i<(int)r.count(); i++)
+	p->fillRect( r[i], colorGroup().brush( QColorGroup::Base ) );
 }
 
 /*!  Returns the QTableItem representing the contents of the cell \a
@@ -1691,6 +1695,10 @@ void QTable::contentsMousePressEvent( QMouseEvent* e )
     pressedCol = tmpCol;
     fixRow( tmpRow, e->pos().y() );
     fixCol( tmpCol, e->pos().x() );
+    if ( e->button() != LeftButton ) {
+	emit pressed( tmpRow, tmpCol, e->button(), e->pos() );
+	return;
+    }
 
     if ( ( e->state() & ShiftButton ) == ShiftButton ) {
 	if ( selMode != NoSelection ) {
@@ -1734,6 +1742,8 @@ void QTable::contentsMousePressEvent( QMouseEvent* e )
 
 void QTable::contentsMouseDoubleClickEvent( QMouseEvent *e )
 {
+    if ( e->button() != LeftButton )
+	return;
     int tmpRow = rowAt( e->pos().y() );
     int tmpCol = columnAt( e->pos().x() );
     if ( tmpRow != -1 && tmpCol != -1 ) {
@@ -1826,6 +1836,8 @@ void QTable::doAutoScroll()
 
 void QTable::contentsMouseReleaseEvent( QMouseEvent *e )
 {
+    if ( e->button() != LeftButton )
+	return;
     mousePressed = FALSE;
     autoScrollTimer->stop();
     if ( pressedRow == curRow && pressedCol == curCol )
@@ -2206,8 +2218,7 @@ void QTable::updateColWidgets( int col )
 
 /*!  This function is called if the order of the columns has been
   changed. If you want to change the order programmatically, call
-  QHeader::moveSection() on the horizontalHeader() or
-  verticalHeader().
+  swapRows() or swapColumns().
 */
 
 void QTable::columnIndexChanged( int, int, int )
@@ -2218,8 +2229,7 @@ void QTable::columnIndexChanged( int, int, int )
 
 /*!  This function is called if the order of the rows has been
   changed. If you want to change the order programmatically, call
-  QHeader::moveSection() on the horizontalHeader() or
-  verticalHeader().
+  swapRows() or swapColumns().
 */
 
 void QTable::rowIndexChanged( int, int, int )
@@ -3348,6 +3358,8 @@ void QTableHeader::paintEvent( QPaintEvent *e )
 
 void QTableHeader::paintSection( QPainter *p, int index, QRect fr )
 {
+    if ( sectionSize( index ) == 0 )
+	return;
     int section = mapToSection( index );
     if ( section < 0 )
 	return;
@@ -3370,6 +3382,8 @@ static int real_pos( const QPoint &p, Qt::Orientation o )
 
 void QTableHeader::mousePressEvent( QMouseEvent *e )
 {
+    if ( e->button() != LeftButton )
+	return;
     QHeader::mousePressEvent( e );
     mousePressed = TRUE;
     pressPos = real_pos( e->pos(), orientation() );
@@ -3451,6 +3465,8 @@ bool QTableHeader::doSelection( QMouseEvent *e )
 
 void QTableHeader::mouseReleaseEvent( QMouseEvent *e )
 {
+    if ( e->button() != LeftButton )
+	return;
     autoScrollTimer->stop();
     mousePressed = FALSE;
     bool hasCached = resizedSection != -1;
@@ -3582,6 +3598,7 @@ void QTableHeader::updateSelections()
     table->repaintSelections( &oldSelection, table->currentSel,
 			      orientation() == Horizontal,
 			      orientation() == Vertical );
+    emit table->selectionChanged();
 }
 
 void QTableHeader::saveStates()

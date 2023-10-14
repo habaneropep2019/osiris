@@ -1,5 +1,5 @@
 /**********************************************************************
-** $Id: qt/src/widgets/qcombobox.cpp   2.3.0   edited 2001-03-02 $
+** $Id: qt/src/widgets/qcombobox.cpp   2.3.1   edited 2001-04-27 $
 **
 ** Implementation of QComboBox widget class
 **
@@ -115,8 +115,11 @@
   It is possible to constrain the input to an editable combo box using
   QValidator; see setValidator().  By default, all input is accepted.
 
-  A combo box has a default focusPolicy() of \c TabFocus, i.e. it will
-  not grab focus if clicked.  This differs from both Windows and Motif.
+  If the combo box is not editable then it has a default focusPolicy() 
+  of \c TabFocus, i.e. it will not grab focus if clicked.  This 
+  differs from both Windows and Motif.  If the combo box is editable then it 
+  has a default focusPolicy() of \c StrongFocus, i.e. it will grab focus if
+  clicked.
 
   <img src="qcombo1-m.png">(Motif 1, read-only)<br clear=all>
   <img src="qcombo2-m.png">(Motif 2, read-write)<br clear=all>

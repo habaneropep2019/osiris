@@ -32,7 +32,7 @@ height="100" src="face.png" alt="Home" border="0">
 
   Implementation:
 <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/drawdemo/drawdemo.cpp   2.3.0   edited 2001-01-26 $
+** &#36;Id&#58; qt/examples/drawdemo/drawdemo.cpp   2.3.1   edited 2001-04-26 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -261,7 +261,9 @@ void <a name="195"></a>DrawView::printIt()
 {
 #ifndef QT_NO_PRINTER
     if ( printer-&gt;<a name="setup"></a><a href="qprinter.html#a36243">setup</a>( this ) ) {
-        <a href="qpainter.html">QPainter</a> paint( printer );
+        <a href="qpainter.html">QPainter</a> paint;
+        if ( !paint.<a name="begin"></a><a href="qpainter.html#59f1bb">begin</a>( printer ) )
+            return;
         <a name="drawIt"></a><a href="#194">drawIt</a>( &amp;paint );
     }
 #endif
@@ -305,5 +307,5 @@ int main( int argc, char **argv )
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.0</div>
+<td align="right"><div align="right">Qt version 2.3.1</div>
 </table></div></address></body></html>

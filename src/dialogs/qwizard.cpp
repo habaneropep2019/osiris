@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/dialogs/qwizard.cpp   2.3.0   edited 2001-01-26 $
+** $Id: qt/src/dialogs/qwizard.cpp   2.3.1   edited 2001-05-15 $
 **
 ** Implementation of QWizard class.
 **
@@ -272,20 +272,22 @@ void QWizard::back()
 */
 void QWizard::next()
 {
-    int i = 0;
-    while( i < (int)d->pages.size() && d->pages[i] &&
-	   d->current && d->pages[i]->w != d->current->w )
+    if ( nextButton()->isEnabled() ) {
+	int i = 0;
+	while( i < (int)d->pages.size() && d->pages[i] &&
+	    d->current && d->pages[i]->w != d->current->w )
+	    i++;
 	i++;
-    i++;
-    while( i <= (int)d->pages.size()-1 &&
-	   ( !d->pages[i] || !appropriate( d->pages[i]->w ) ) )
-	i++;
-    // if we fell of the end of the world, step back
-    while ( i > 0 && (i >= (int)d->pages.size() || !d->pages[i] ) )
-	i--;
-    if ( d->pages.at( i ) ) {
-	d->pages[i]->back = d->current ? d->current->w : 0;
-	showPage( d->pages[i]->w );
+	while( i <= (int)d->pages.size()-1 &&
+	    ( !d->pages[i] || !appropriate( d->pages[i]->w ) ) )
+	    i++;
+	// if we fell of the end of the world, step back
+	while ( i > 0 && (i >= (int)d->pages.size() || !d->pages[i] ) )
+	    i--;
+	if ( d->pages.at( i ) && d->pages.at( i ) != d->current ) {
+	    d->pages[i]->back = d->current ? d->current->w : 0;
+	    showPage( d->pages[i]->w );
+	}
     }
 }
 
@@ -597,6 +599,15 @@ void QWizard::layOutButtonRow( QHBoxLayout * layout )
 	d->nextButton->show();
 	d->finishButton->hide();
 	h->addWidget( d->nextButton );
+    }
+
+    // if last page is disabled - show finished btn. at lastpage-1
+    i = d->pages.count()-1;
+    if ( i >= 0 && !appropriate( d->pages.at( i )->w ) &&
+	 d->current == d->pages.at( d->pages.count()-2 ) ) {
+	d->nextButton->hide();
+	d->finishButton->show();
+	h->addWidget( d->finishButton );
     }
 
     if ( hasHelp ) {

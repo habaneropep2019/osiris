@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qrect.cpp   2.3.0   edited 2001-01-26 $
+** $Id: qt/src/kernel/qrect.cpp   2.3.1   edited 2001-06-07 $
 **
 ** Implementation of QRect class
 **

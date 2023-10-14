@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/extensions/xt/src/qxt.cpp   2.3.0   edited 2001-01-26 $
+** $Id: qt/extensions/xt/src/qxt.cpp   2.3.1   edited 2001-03-30 $
 **
 ** Implementation of Qt extension classes for Xt/Motif support.
 **
@@ -586,8 +586,8 @@ void QXtWidget::moveEvent( QMoveEvent* )
     c.type = ConfigureNotify;
     c.event = winId();
     c.window = winId();
-    c.x = x();
-    c.y = y();
+    c.x = geometry().x();
+    c.y = geometry().y();
     c.width = width();
     c.height = height();
     c.border_width = 0;
@@ -607,8 +607,8 @@ void QXtWidget::resizeEvent( QResizeEvent* )
     c.type = ConfigureNotify;
     c.event = winId();
     c.window = winId();
-    c.x = x();
-    c.y = y();
+    c.x = geometry().x();
+    c.y = geometry().y();
     c.width = width();
     c.height = height();
     c.border_width = 0;

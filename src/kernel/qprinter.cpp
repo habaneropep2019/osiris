@@ -1,5 +1,5 @@
 /**********************************************************************
-** $Id: qt/src/kernel/qprinter.cpp   2.3.0   edited 2001-02-22 $
+** $Id: qt/src/kernel/qprinter.cpp   2.3.1   edited 2001-02-22 $
 **
 ** Implementation of QPrinter class
 **

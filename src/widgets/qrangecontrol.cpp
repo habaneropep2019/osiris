@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qrangecontrol.cpp   2.3.0   edited 2001-01-26 $
+** $Id: qt/src/widgets/qrangecontrol.cpp   2.3.1   edited 2001-06-08 $
 **
 ** Implementation of QRangeControl class
 **
@@ -114,8 +114,9 @@ QRangeControl::QRangeControl()
     maxVal  = 99;
     line    = 1;
     page    = 10;
-    val	    = prevVal = 0;
-    d       = 0;
+    val	    = 0;
+    prevVal = -1;
+    d	    = 0;
 }
 
 /*!
@@ -131,12 +132,13 @@ QRangeControl::QRangeControl( int minValue, int maxValue,
 			      int lineStep, int pageStep,
 			      int value )
 {
-    minVal = minValue;
-    maxVal = maxValue;
-    line   = QABS( lineStep );
-    page   = QABS( pageStep );
-    val	   = prevVal = bound( value );
-    d       = 0;
+    minVal  = minValue;
+    maxVal  = maxValue;
+    line    = QABS( lineStep );
+    page    = QABS( pageStep );
+    prevVal = minVal - 1;
+    val	    = bound( value );
+    d	    = 0;
 }
 
 
@@ -179,8 +181,9 @@ QRangeControl::QRangeControl( int minValue, int maxValue,
 
 void QRangeControl::setValue( int value )
 {
+    int lprevVal = prevVal;
     directSetValue( value );
-    if ( prevVal != val )
+    if ( lprevVal != val || prevVal != val )
 	valueChange();
 }
 
@@ -321,7 +324,8 @@ void QRangeControl::setRange( int minValue, int maxValue )
     int tmp = bound( val );
     rangeChange();
     if ( tmp != val ) {
-	prevVal = tmp;
+	prevVal = val;
+	val = tmp;
 	valueChange();
     }
 }

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qtooltip.cpp   2.3.0   edited 2001-01-26 $
+** $Id: qt/src/widgets/qtooltip.cpp   2.3.1   edited 2001-04-02 $
 **
 ** Tool Tips (or Balloon Help) for any widget or rectangle
 **
@@ -498,15 +498,16 @@ void QTipManager::showTip()
     if ( label->text().length() ) {
 	label->move( p );
 
-	
+#ifndef QT_NO_EFFECTS
 	if ( QApplication::isEffectEnabled( UI_AnimateTooltip ) == FALSE ||
 	     previousTip || preventAnimation )
 	    label->show();
-#ifndef QT_NO_EFFECTS
 	else if ( QApplication::isEffectEnabled( UI_FadeTooltip ) )
 	    qFadeEffect( label );
 	else
 	    qScrollEffect( label );
+#else
+	label->show();
 #endif
 
 	label->raise();
@@ -545,7 +546,8 @@ void QTipManager::hideTip()
     currentTip = 0;
     if ( previousTip && previousTip->autoDelete )
 	remove( widget, previousTip->rect );
-    widget = 0;
+    if ( !widget.isNull() )	// QGuardedPtr::operator=() is costly in 2.3
+	widget = 0;
 }
 
 void  QTipManager::hideTipAndSleep()

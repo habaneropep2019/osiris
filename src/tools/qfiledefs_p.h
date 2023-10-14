@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qfiledefs_p.h   2.3.0   edited 2001-02-18 $
+** $Id: qt/src/tools/qfiledefs_p.h   2.3.1   edited 2001-02-18 $
 **
 ** Common macros and system include files for QFile, QFileInfo and QDir.
 **

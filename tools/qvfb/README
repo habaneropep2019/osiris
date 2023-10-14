@@ -26,6 +26,24 @@ qvfb supports the following command line options:
 [-depth depth]   the depth of the virtual framebuffer (1,4,8 or 32, default: 8).
 [-nocursor]      do not display the X11 cursor in the framebuffer window.
 [-qwsdisplay]    the Qt/Embedded display ID, e.g. -qwsdisplay :1 (default :0).
+[-skin skinfile] tells qvfb to load a skin file, e.g. -skin pda.skin
+
+Please refer to the file "pda.skin" as an example of what a skin file looks like.
+The format for skin files is:
+    Image filename of skin with buttons in their up positions
+    Image filename of skin with buttons in their down positions
+    X offset of top left corner of the virtual screen on the skin image
+    Y offset of top left corner of the virtual screen on the skin image
+    Width of the virtual screen on the skin image
+    Height of the virtual screen on the skin image
+    Number of defined button regions
+Then for each button region the format is:
+    Button identifier
+    Qt scan codes to generate for the button
+    Top left X coordinate of the button region
+    Top left Y coordinate of the button region
+    Bottom right X coordinate of the button region
+    Bottom right Y coordinate of the button region
 
 The virtual framebuffer is a development tool only.  No security issues have
 been considered in the virtual framebuffer design.  It should not be used

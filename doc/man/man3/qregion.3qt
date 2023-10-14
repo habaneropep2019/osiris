@@ -1,5 +1,5 @@
 '\" t
-.TH QRegion 3qt "5 March 2001" "Trolltech AS" \" -*- nroff -*-
+.TH QRegion 3qt "13 June 2001" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2001 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -165,6 +165,8 @@ Example of using complex regions:
 .fi
 .PP
 QRegion is an implicitely shared class.
+.PP
+Due to window system limitations, the width and height of a region is limited to 65535 on Unix/X11.
 .PP
 See also QPainter::setClipRegion() and QPainter::setClipRect().
 .SS "Member Type Documentation"
@@ -363,4 +365,4 @@ In case of content or formattting problems with this manual page, please
 report them to
 .BR qt-bugs@trolltech.com .
 Please include the name of the manual page (qregion.3qt) and the Qt
-version (2.3.0).
+version (2.3.1).

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qtooltip.h   2.3.0   edited 2001-01-26 $
+** $Id: qt/src/widgets/qtooltip.h   2.3.1   edited 2001-01-26 $
 **
 ** Definition of Tool Tips (or Balloon Help) for any widget or rectangle
 **

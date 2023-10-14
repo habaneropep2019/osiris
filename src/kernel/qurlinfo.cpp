@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qurlinfo.cpp   2.3.0   edited 2001-01-26 $
+** $Id: qt/src/kernel/qurlinfo.cpp   2.3.1   edited 2001-03-08 $
 **
 ** Implementation of QUrlInfo class
 **
@@ -417,8 +417,6 @@ bool QUrlInfo::greaterThan( const QUrlInfo &i1, const QUrlInfo &i2,
     default:
 	return FALSE;
     }
-
-    return FALSE;
 }
 
 /*!
@@ -452,8 +450,6 @@ bool QUrlInfo::equal( const QUrlInfo &i1, const QUrlInfo &i2,
     default:
 	return FALSE;
     }
-
-    return FALSE;
 }
 
 /*!

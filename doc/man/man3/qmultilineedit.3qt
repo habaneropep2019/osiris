@@ -1,5 +1,5 @@
 '\" t
-.TH QMultiLineEdit 3qt "5 March 2001" "Trolltech AS" \" -*- nroff -*-
+.TH QMultiLineEdit 3qt "13 June 2001" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2001 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -836,8 +836,8 @@ See also isOverwriteMode().
 If \fIon\fR is FALSE, this multi line edit accepts text input. Scrolling and cursor movements are accepted in any case.
 .PP
 See also isReadOnly() and QWidget::setEnabled().
-.SH "void QMultiLineEdit::setSelection ( int, int, int, int ) \fC[virtual]\fR"
-Not supported at this time.
+.SH "void QMultiLineEdit::setSelection ( int row_from, int col_from, int row_to, int col_to ) \fC[virtual]\fR"
+Marks the text starting at \fIrow_from, col_from\fR and ending at row_to, col_to.
 .SH "void QMultiLineEdit::setText ( const QString & s ) \fC[virtual slot]\fR"
 Sets the text to \fIs,\fR removing old text, if any.
 .PP
@@ -943,4 +943,4 @@ In case of content or formattting problems with this manual page, please
 report them to
 .BR qt-bugs@trolltech.com .
 Please include the name of the manual page (qmultilineedit.3qt) and the Qt
-version (2.3.0).
+version (2.3.1).

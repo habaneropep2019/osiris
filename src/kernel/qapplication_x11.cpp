@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qapplication_x11.cpp   2.3.0   edited 2001-02-27 $
+** $Id: qt/src/kernel/qapplication_x11.cpp   2.3.1   edited 2001-06-07 $
 **
 ** Implementation of X11 startup routines and event handling
 **
@@ -43,8 +43,18 @@
 #include "qglobal.h"
 
 // XPG4v2 needed by FD_* macros.
-#ifndef _XOPEN_SOURCE_EXTENDED
-#  define _XOPEN_SOURCE_EXTENDED
+#if !defined(_OS_LINUX_) && !defined(_OS_SCO_) && !defined(_OS_AIX_) && !defined(_OS_RELIANT_)
+#  ifndef _XOPEN_SOURCE_EXTENDED
+#    define _XOPEN_SOURCE_EXTENDED 1
+#  endif
+#endif
+
+#if defined(_OS_OSF_)
+#  define _OSF_SOURCE // for FIONREAD on Tru64 4.0f
+#endif
+#if defined(_OS_HPUX_) && !defined(_HPUX_SOURCE)
+// needed for ioctl() and FIONREAD
+#  define _HPUX_SOURCE
 #endif
 
 // XPG5 would be needed to request the BSD b*() and strcasecmp() functions.
@@ -78,6 +88,7 @@
 #include "qwhatsthis.h" // ######## dependency
 #include "qwindowsstyle.h" // ######## dependency
 #include "qmotifplusstyle.h" // ######## dependency
+#include "qsgistyle.h" // ### dependency
 #include <stdlib.h>
 #ifndef QT_NO_SM_SUPPORT
 #include <pwd.h>
@@ -102,21 +113,14 @@
 
 #if defined(_OS_UNIX_)
 
-#if defined(_OS_SOLARIS_) || defined(_OS_UNIXWARE7_)
+#if defined(_OS_SOLARIS_) || defined(_OS_UNIXWARE7_) || defined(_OS_RELIANT_)
 // Needed for FIONREAD.
 // FIONREAD is #defined in <sys/filio.h>.
 // Have <sys/ioctl.h> include <sys/filio.h>.
 #  define BSD_COMP
 #endif
-#if defined(_OS_OSF_)
-#  define _OSF_SOURCE // for FIONREAD on Tru64 4.0f
-#endif
-#if defined(_OS_HPUX_)
-// needed for ioctl() and FIONREAD
-#  define _HPUX_SOURCE
-#endif
 #include <sys/ioctl.h>
-#if defined(_OS_SOLARIS_) || defined(_OS_UNIXWARE7_)
+#if defined(_OS_SOLARIS_) || defined(_OS_UNIXWARE7_) || defined(_OS_RELIANT_)
 #  undef BSD_COMP
 #endif
 #if defined(_OS_OSF_)
@@ -148,11 +152,7 @@ static int qt_thread_pipe[2];
 #if defined(_OS_OSF_)
 // This is one way to request BSD b*() string functions.
 // On Tru64 another way would be to define _OSF_SOURCE.
-#  include <strings.h>
-#endif
-
-#if defined(_OS_SCO_)
-#  include <strings.h>
+#include <strings.h>
 #endif
 
 #if defined(_OS_IRIX_)
@@ -161,7 +161,7 @@ static int qt_thread_pipe[2];
 #include <bstring.h>
 #endif
 
-#if defined(_OS_AIX_) || defined(_OS_UNIXWARE7_) || defined (_OS_HPUX_)
+#if defined(_OS_AIX_) || defined (_OS_HPUX_) || defined(_OS_SCO_) || defined(_OS_UNIXWARE7_) || defined(_OS_RELIANT_)
 // Please add comments! Which version of AIX? Why?
 // needed for strcasecmp() on HP-UX 10.xx
 #include <strings.h>
@@ -331,6 +331,7 @@ Atom		qt_wm_state		= 0;
 static Atom 	qt_desktop_properties	= 0;	// Qt desktop properties
 static Atom 	qt_input_encoding 		= 0;	// Qt desktop properties
 static Atom 	qt_resource_manager	= 0;	// X11 Resource manager
+static Atom	qt_4dwm_desks_manager	= 0;	// 4Dwm detection
 Atom 		qt_sizegrip		= 0;	// sizegrip
 Atom 		qt_wm_client_leader	= 0;
 Atom 		qt_window_role		= 0;
@@ -338,8 +339,9 @@ Atom 		qt_sm_client_id		= 0;
 Atom 		qt_xa_motif_wm_hints	= 0;
 Atom 		qt_kwin_running	= 0;
 Atom 		qt_kwm_running	= 0;
-Atom 		qt_gbackground_properties	= 0;
+Atom		qt_gbackground_properties	= 0;
 Atom 		qt_x_incr		= 0;
+bool		qt_broken_wm		= FALSE;
 
 static Window	mouseActWindow	     = 0;	// window where mouse is
 static int	mouseButtonPressed   = 0;	// last mouse button pressed
@@ -710,6 +712,32 @@ static void qt_x11_process_intern_atoms()
 	create_atoms_now = TRUE;
     }
 }
+
+
+static void qt_x11_detect_broken_wm()
+{
+    char *brokenwm = getenv("QT_BROKENWM_WORKAROUND");
+    if (brokenwm && brokenwm[0]) {
+	qt_broken_wm = TRUE;
+	return;
+    }
+
+    Atom type;
+    int format;
+    ulong  nitems, after;
+    uchar *data;
+
+    if (XGetWindowProperty(appDpy, appRootWin, qt_4dwm_desks_manager, 0, 1,
+			   FALSE, AnyPropertyType, &type, &format,
+			   &nitems, &after, &data) == Success && nitems) {
+	// detected SGI's 4dwm
+	qt_broken_wm = TRUE;
+
+	if (data)
+	    XFree(data);
+    }
+}
+
 
 static bool seems_like_KDE_is_running = FALSE;
 
@@ -1082,11 +1110,11 @@ void QApplication::create_xim()
 	XIMCallback destroy;
 	destroy.callback = (XIMProc)xim_destroy_callback;
 	destroy.client_data = 0;
-	if ( XSetIMValues( qt_xim, XNDestroyCallback, &destroy, 0 ) != 0 )
+	if ( XSetIMValues( qt_xim, XNDestroyCallback, &destroy, (char *) 0 ) != 0 )
 	    qWarning( "Xlib dosn't support destroy callback");
 #endif
 	XIMStyles *styles=0;
-	XGetIMValues(qt_xim, XNQueryInputStyle, &styles, 0, 0);
+	XGetIMValues(qt_xim, XNQueryInputStyle, &styles, (char *) 0, (char *) 0);
 	if ( styles ) {
 	    int i;
 	    for ( i = 0; !qt_xim_style && i < styles->count_styles; i++ )
@@ -1300,6 +1328,11 @@ void qt_init_internal( int *argcptr, char **argv, Display *display )
 	QPaintDevice::x_appvisual      = vis;
 	QPaintDevice::x_appdefvisual   = TRUE;
 
+	// work around a bug in vnc where DisplayCells returns 8 when Xvnc is run
+	// with depth 8
+	if (QPaintDevice::x_appdepth == 8)
+	    QPaintDevice::x_appcells = 256;
+
 	if ( qt_visual_option == TrueColor ||	// find custom visual
 	     QApplication::colorSpec() == QApplication::ManyColor ) {
 	    vis = find_truecolor_visual( appDpy, &QPaintDevice::x_appdepth,
@@ -1344,6 +1377,7 @@ void qt_init_internal( int *argcptr, char **argv, Display *display )
 	qt_x11_intern_atom( "KWIN_RUNNING", &qt_kwin_running );
 	qt_x11_intern_atom( "KWM_RUNNING", &qt_kwm_running );
 	qt_x11_intern_atom( "GNOME_BACKGROUND_PROPERTIES", &qt_gbackground_properties );
+	qt_x11_intern_atom( "_SGI_DESKS_MANAGER", &qt_4dwm_desks_manager );
 	qt_x11_intern_atom( "INCR", &qt_x_incr );
 
 	qt_xdnd_setup();
@@ -1351,6 +1385,9 @@ void qt_init_internal( int *argcptr, char **argv, Display *display )
 
 	// Finally create all atoms
 	qt_x11_process_intern_atoms();
+
+	// workaround buggy window managers (like 4Dwm)
+	qt_x11_detect_broken_wm();
 
 	// Misc. initialization
 
@@ -2491,7 +2528,8 @@ int QApplication::exec()
     quit_code = 0;
 
 #if defined(QT_THREAD_SUPPORT)
-    qApp->unlock(FALSE);
+    if (qt_is_gui_used)
+	qApp->unlock(FALSE);
 #endif
 
     enter_loop();
@@ -2940,21 +2978,18 @@ int QApplication::x11ProcessEvent( XEvent* event )
 	    widget->translateConfigEvent( event );
 	break;
 
-    case XFocusIn: {				// got focus
+    case XFocusIn:				// got focus
 	if ( widget == desktop() )
 	    break;
  	if ( inPopupMode() ) // some delayed focus event to ignore
  	    break;
  	if ( !widget->isTopLevel() )
 	    break;
-	if ( event->xfocus.mode != NotifyNormal )
-	    break;
 	if ( event->xfocus.detail != NotifyAncestor &&
 	     event->xfocus.detail != NotifyInferior &&
 	     event->xfocus.detail != NotifyNonlinear )
 	    break;
 	setActiveWindow( widget );
-    }
 	break;
 
     case XFocusOut:				// lost focus
@@ -3825,12 +3860,17 @@ bool QETWidget::translateMouseEvent( const XEvent *event )
 	return TRUE;
 
     if ( event->type == MotionNotify ) { // mouse move
+	// in a dualhead setup, don't process move events from a different screen
+	if (event->xmotion.root != appRootWin)
+	    return FALSE;
+
 	XMotionEvent lastMotion = event->xmotion;
 	while( XPending( appDpy ) )  { // compres mouse moves
 	    XNextEvent( appDpy, &nextEvent );
 	    if ( nextEvent.type == ConfigureNotify
 		 || nextEvent.type == PropertyNotify
-		 || nextEvent.type == Expose) {
+		 || nextEvent.type == Expose
+		 || nextEvent.type == NoExpose ) {
 		qApp->x11ProcessEvent( &nextEvent );
 		continue;
 	    } else if ( nextEvent.type != MotionNotify ||
@@ -3877,57 +3917,57 @@ bool QETWidget::translateMouseEvent( const XEvent *event )
 	globalPos.ry() = event->xbutton.y_root;
 	state = translateButtonState( event->xbutton.state );
 	switch ( event->xbutton.button ) {
-	    case Button1: button = LeftButton;   goto DoFocus;
-	    case Button2: button = MidButton;    goto DoFocus;
-	    case Button3: button = RightButton;       DoFocus:
-		if ( isEnabled() && event->type == ButtonPress ) {
-		    QWidget* w = this;
-		    while ( w->focusProxy() )
-			w = w->focusProxy();
-		    if ( w->focusPolicy() & QWidget::ClickFocus ) {
-			QFocusEvent::setReason( QFocusEvent::Mouse);
-			w->setFocus();
-			QFocusEvent::resetReason();
-		    }
+	case Button1: button = LeftButton;   goto DoFocus;
+	case Button2: button = MidButton;    goto DoFocus;
+	case Button3: button = RightButton;       DoFocus:
+	    if ( isEnabled() && event->type == ButtonPress ) {
+		QWidget* w = this;
+		while ( w->focusProxy() )
+		    w = w->focusProxy();
+		if ( w->focusPolicy() & QWidget::ClickFocus ) {
+		    QFocusEvent::setReason( QFocusEvent::Mouse);
+		    w->setFocus();
+		    QFocusEvent::resetReason();
 		}
-		break;
-	    case Button4:
-	    case Button5:
-		// the fancy mouse wheel.
+	    }
+	    break;
+	case Button4:
+	case Button5:
+	    // the fancy mouse wheel.
 
-		// take care about grabbing.  We do this here since it
-		// is clear that we return anyway
-		if ( qApp->inPopupMode() && popupGrabOk )
-		    XAllowEvents( x11Display(), SyncPointer, CurrentTime );
+	    // take care about grabbing.  We do this here since it
+	    // is clear that we return anyway
+	    if ( qApp->inPopupMode() && popupGrabOk )
+		XAllowEvents( x11Display(), SyncPointer, CurrentTime );
 
-		// We are only interested in ButtonPress.
-		if (event->type == ButtonPress ){
+	    // We are only interested in ButtonPress.
+	    if (event->type == ButtonPress ){
 
-		    // compress wheel events (the X Server will simply
-		    // send a button press for each single notch,
-		    // regardless whether the application can catch up
-		    // or not)
-		    int delta = 1;
-		    XEvent xevent;
-		    while ( XCheckTypedWindowEvent(x11Display(),winId(),
-						   ButtonPress,&xevent) ){
-			if (xevent.xbutton.button != event->xbutton.button){
-			    XPutBackEvent(x11Display(), &xevent);
-			    break;
-			}
-			delta++;
+		// compress wheel events (the X Server will simply
+		// send a button press for each single notch,
+		// regardless whether the application can catch up
+		// or not)
+		int delta = 1;
+		XEvent xevent;
+		while ( XCheckTypedWindowEvent(x11Display(),winId(),
+					       ButtonPress,&xevent) ){
+		    if (xevent.xbutton.button != event->xbutton.button){
+			XPutBackEvent(x11Display(), &xevent);
+			break;
 		    }
-
-		    // the delta is defined as multiples of
-		    // WHEEL_DELTA, which is set to 120. Future wheels
-		    // may offer a finer-resolution.  A positive delta
-		    // indicates forward rotation, a negative one
-		    // backward rotation respectively.
-		    delta *= 120*(event->xbutton.button == Button4?1:-1);
-
-		    translateWheelEvent( globalPos.x(), globalPos.y(), delta, state );
+		    delta++;
 		}
-		return TRUE;
+
+		// the delta is defined as multiples of
+		// WHEEL_DELTA, which is set to 120. Future wheels
+		// may offer a finer-resolution.  A positive delta
+		// indicates forward rotation, a negative one
+		// backward rotation respectively.
+		delta *= 120*(event->xbutton.button == Button4?1:-1);
+
+		translateWheelEvent( globalPos.x(), globalPos.y(), delta, state );
+	    }
+	    return TRUE;
 	}
 	if ( event->type == ButtonPress ) {	// mouse button pressed
 	    qt_button_down = findChildWidget( this, pos );	//magic for masked widgets
@@ -3936,7 +3976,7 @@ bool QETWidget::translateMouseEvent( const XEvent *event )
 	    if ( mouseActWindow == event->xbutton.window &&
 		 mouseButtonPressed == button &&
 		 (long)event->xbutton.time -(long)mouseButtonPressTime
-		       < QApplication::doubleClickInterval() &&
+		 < QApplication::doubleClickInterval() &&
 		 QABS(event->xbutton.x - mouseXPos) < 5 &&
 		 QABS(event->xbutton.y - mouseYPos) < 5 ) {
 		type = QEvent::MouseButtonDblClick;
@@ -3989,16 +4029,16 @@ bool QETWidget::translateMouseEvent( const XEvent *event )
 	}
 
 	switch ( type ) {
-	    case QEvent::MouseButtonPress:
-	    case QEvent::MouseButtonDblClick:
-		popupButtonFocus = popupChild;
-		popupOfPopupButtonFocus = popup;
-		break;
-	    case QEvent::MouseButtonRelease:
-		releaseAfter = TRUE;
-		break;
-	    default:
-		break;				// nothing for mouse move
+	case QEvent::MouseButtonPress:
+	case QEvent::MouseButtonDblClick:
+	    popupButtonFocus = popupChild;
+	    popupOfPopupButtonFocus = popup;
+	    break;
+	case QEvent::MouseButtonRelease:
+	    releaseAfter = TRUE;
+	    break;
+	default:
+	    break;				// nothing for mouse move
 	}
 
 	Display* dpy = x11Display(); // store display, send() may destroy us
@@ -4032,8 +4072,8 @@ bool QETWidget::translateMouseEvent( const XEvent *event )
 		manualGrab = TRUE;		// need to manually grab
 		XGrabPointer( dpy, mouseActWindow, FALSE,
 			      (uint)(ButtonPressMask | ButtonReleaseMask |
-			      ButtonMotionMask |
-			      EnterWindowMask | LeaveWindowMask),
+				     ButtonMotionMask |
+				     EnterWindowMask | LeaveWindowMask),
 			      GrabModeAsync, GrabModeAsync,
 			      None, None, CurrentTime );
 	    }
@@ -5026,12 +5066,16 @@ bool QApplication::isEffectEnabled( Qt::UIEffect effect )
     case UI_AnimateMenu:
 	return animate_menu;
     case UI_FadeMenu:
-	return fade_menu;
+	    if ( QColor::numBitPlanes() < 16 )
+		return FALSE;
+	    return fade_menu;
     case UI_AnimateCombo:
 	return animate_combo;
     case UI_AnimateTooltip:
 	return animate_tooltip;
     case UI_FadeTooltip:
+	if ( QColor::numBitPlanes() < 16 )
+	    return FALSE;
 	return fade_tooltip;
     default:
 	return animate_ui;

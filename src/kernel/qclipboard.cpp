@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qclipboard.cpp   2.3.0   edited 2001-01-26 $
+** $Id: qt/src/kernel/qclipboard.cpp   2.3.1   edited 2001-04-21 $
 **
 ** Implementation of QClipboard class
 **
@@ -110,11 +110,11 @@ QClipboard::QClipboard( QObject *parent, const char *name )
   You should never delete the clipboard. QApplication will do this when
   the application terminates.
 */
-
+#ifndef _WS_WIN32_
 QClipboard::~QClipboard()
 {
 }
-
+#endif
 
 /*!
   \fn void QClipboard::dataChanged()
@@ -126,28 +126,6 @@ QClipboard::~QClipboard()
 /*****************************************************************************
   QApplication member functions related to QClipboard.
  *****************************************************************************/
-
-extern QObject *qt_clipboard;			// defined in qapp_xyz.cpp
-
-static void cleanupClipboard()
-{
-    delete qt_clipboard;
-    qt_clipboard = 0;
-}
-
-/*!
-  Returns a pointer to the application global clipboard.
-*/
-
-QClipboard *QApplication::clipboard()
-{
-    if ( qt_clipboard == 0 ) {
-	qt_clipboard = new QClipboard;
-	CHECK_PTR( qt_clipboard );
-	qAddPostRoutine( cleanupClipboard );
-    }
-    return (QClipboard *)qt_clipboard;
-}
 
 #ifndef QT_NO_MIMECLIPBOARD
 // text handling is done directly in qclipboard_qws, for now

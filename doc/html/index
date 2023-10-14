@@ -4072,7 +4072,6 @@
 "QNPInstance::getJavaPeer" qnpinstance.html#847452
 "QNPInstance::newStream" qnpinstance.html#c46d2e
 "QNPInstance::newStreamCreated" qnpinstance.html#92de40
-"QNPInstance::newWindow" qnpinstance.html#06d96d
 "QNPStream" qnpstream.html
 "QNPStream" qnpstream.html#0e5d2f
 "QNPStream" qnpstream.html#101533
@@ -4090,6 +4089,7 @@
 "QNPStream*" qnpstream.html
 "QNPWidget" qnpwidget.html
 "QNPWidget" qnpwidget.html#014eb0
+"QNPWidget" qnpwidget.html#249a75
 "QNPWidget" qnpwidget.html#2a2f76
 "QNPWidget" qnpwidget.html#336c07
 "QNPWidget" qnpwidget.html#6c07f4
@@ -6597,18 +6597,50 @@
 "QWSMouseHandler" qwsmousehandler.html
 "QWSMouseHandler" qwsmousehandler.html#a1dd74
 "QWSServer" qwsserver.html
+"QWSServer" qwsserver.html#022b1f
+"QWSServer" qwsserver.html#118beb
+"QWSServer" qwsserver.html#1451c1
+"QWSServer" qwsserver.html#21f2e6
 "QWSServer" qwsserver.html#259b8b
+"QWSServer" qwsserver.html#275bb5
+"QWSServer" qwsserver.html#3e54c2
 "QWSServer" qwsserver.html#5ddd1d
+"QWSServer" qwsserver.html#5e6c49
 "QWSServer" qwsserver.html#7cfed5
+"QWSServer" qwsserver.html#854369
 "QWSServer" qwsserver.html#89be3c
 "QWSServer" qwsserver.html#90585c
+"QWSServer" qwsserver.html#970e43
 "QWSServer" qwsserver.html#97ee9f
 "QWSServer" qwsserver.html#a34530
+"QWSServer" qwsserver.html#a693cd
+"QWSServer" qwsserver.html#afa219
 "QWSServer" qwsserver.html#b4dc20
 "QWSServer" qwsserver.html#b8d3e4
+"QWSServer" qwsserver.html#bd1d86
 "QWSServer" qwsserver.html#bf4fdc
+"QWSServer" qwsserver.html#d344c1
+"QWSServer" qwsserver.html#da677f
+"QWSServer" qwsserver.html#dce3d4
+"QWSServer" qwsserver.html#e5bf3d
 "QWSServer" qwsserver.html#eabcd7
+"QWSServer" qwsserver.html#ee7ae1
 "QWSServer" qwsserver.html#f261cb
+"QWSWindow" qwswindow.html
+"QWSWindow" qwswindow.html#008dee
+"QWSWindow" qwswindow.html#0a7841
+"QWSWindow" qwswindow.html#393041
+"QWSWindow" qwswindow.html#394ccb
+"QWSWindow" qwswindow.html#4291bc
+"QWSWindow" qwswindow.html#5486f7
+"QWSWindow" qwswindow.html#5ac7bc
+"QWSWindow" qwswindow.html#5c5d47
+"QWSWindow" qwswindow.html#5d22c3
+"QWSWindow" qwswindow.html#79b41d
+"QWSWindow" qwswindow.html#a02138
+"QWSWindow" qwswindow.html#a85263
+"QWSWindow" qwswindow.html#d8d5f9
+"QWSWindow" qwswindow.html#edf896
 "QWaitCondition" qwaitcondition.html
 "QWaitCondition" qwaitcondition.html#4f13ff
 "QWaitCondition" qwaitcondition.html#7f241d
@@ -6923,7 +6955,6 @@
 "QWidget::style" qwidget.html#ea8b00
 "QWidget::update()" qwidget.html#4a97ef
 "QWidget::wheelEvent" qwidget.html#cd6485
-"QWidget::winId" qwidget.html#6dceaf
 "QWidgetItem" qwidgetitem.html
 "QWidgetItem" qwidgetitem.html#1d8016
 "QWidgetItem" qwidgetitem.html#2adfc3
@@ -7463,6 +7494,7 @@
 "allItems" qcanvas.html#da5f6f
 "allWidgets" qapplication.html#9473d7
 "alloc" qcolor.html#7908bd
+"allocation" qwswindow.html#5ac7bc
 "allowedInContext" qstylesheetitem.html#134d33
 "allowsErrorInteraction" qsessionmanager.html#4a20f8
 "allowsInteraction" qsessionmanager.html#6fcc61
@@ -7760,6 +7792,7 @@
 "canvas" qcanvasview.html#0c4991
 "capStyle" qpen.html#60e2c3
 "caption" qwidget.html#4ae7ff
+"caption" qwswindow.html#393041
 "cascade" qworkspace.html#0e59d0
 "caseSensitive" qregexp.html#92bf0e
 "category" qchar.html#add64e
@@ -7925,6 +7958,8 @@
 "clicked" qlistview.html#21f294
 "clicked" qtable.html#ddc99d
 "clicked()" qbutton.html#5af7e7
+"client" qwswindow.html#394ccb
+"clientWindows" qwsserver.html#118beb
 "clipRegion" qpainter.html#49378e
 "clipboard" qapplication.html#12a5ae
 "clipboard" qclipboard.html
@@ -7945,6 +7980,8 @@
 "closeEvent" qprogressdialog.html#1a8911
 "closeEvent" qwidget.html#e72517
 "closeEvent() in the Application Walkthrough" simple-application.html#closeEvent
+"closeKeyboard" qwsserver.html#da677f
+"closeMouse" qwsserver.html#022b1f
 "closed" qftp.html#a6a865
 "closedown" qwsserver.html#b8d3e4
 "closingDown" qapplication.html#e7de42
@@ -8778,6 +8815,7 @@
 "drawdemo/drawdemo.cpp" drawdemo-drawdemo-cpp.html#QString
 "drawdemo/drawdemo.cpp" drawdemo-drawdemo-cpp.html#QWMatrix
 "drawdemo/drawdemo.cpp" drawdemo-drawdemo-cpp.html#ascent
+"drawdemo/drawdemo.cpp" drawdemo-drawdemo-cpp.html#begin
 "drawdemo/drawdemo.cpp" drawdemo-drawdemo-cpp.html#connect
 "drawdemo/drawdemo.cpp" drawdemo-drawdemo-cpp.html#descent
 "drawdemo/drawdemo.cpp" drawdemo-drawdemo-cpp.html#drawEllipse
@@ -8843,6 +8881,7 @@
 "emitRenamed" qiconview.html#d5aa9d
 "emitSelectionChanged" qiconview.html#d84aa4
 "enableClipper" qscrollview.html#55a330
+"enablePainting" qwsserver.html#5e6c49
 "enableRewind" qdatasource.html#643ffb
 "enableRewind" qiodevicesource.html#00c60e
 "enabled" qcanvasitem.html#9b0dad
@@ -9340,7 +9379,6 @@
 "grapher/grapher.cpp" grapher-grapher-cpp.html#QFontMetrics
 "grapher/grapher.cpp" grapher-grapher-cpp.html#QNPInstance
 "grapher/grapher.cpp" grapher-grapher-cpp.html#QNPStream
-"grapher/grapher.cpp" grapher-grapher-cpp.html#QNPWidget
 "grapher/grapher.cpp" grapher-grapher-cpp.html#QNPlugin
 "grapher/grapher.cpp" grapher-grapher-cpp.html#QPaintEvent
 "grapher/grapher.cpp" grapher-grapher-cpp.html#QPainter
@@ -9496,6 +9534,7 @@
 "hide" qtoolbar.html#8a8db1
 "hide" qtooltip.html#3414b6
 "hide" qwidget.html#bc7c6a
+"hide" qwswindow.html#008dee
 "hideColumn" qtable.html#f35b84
 "hideEvent" qwidget.html#bb74a8
 "hideOrShow" qstatusbar.html#e7dcf1
@@ -9853,6 +9892,7 @@
 "isFixedPitch" qfontdatabase.html#e03ae8
 "isFlat" qpushbutton.html#8c4784
 "isFocusEnabled" qwidget.html#a324b0
+"isFullyObscured" qwswindow.html#edf896
 "isGenerated" qiconset.html#5a1af1
 "isGrayscale" qimage.html#5d4436
 "isHidden" qwidget.html#06a23b
@@ -9906,6 +9946,7 @@
 "isOpen" qlistview.html#cb60e3
 "isOpen" qlistviewitem.html#49d888
 "isOverwriteMode" qmultilineedit.html#f3dcd8
+"isPartiallyObscured" qwswindow.html#5d22c3
 "isPhase2" qsessionmanager.html#6711e2
 "isPopup" qwidget.html#5eb5c5
 "isPrint" qchar.html#55227d
@@ -9984,6 +10025,7 @@
 "isValid" qvariant.html#83b746
 "isVerticalStretchable" qtoolbar.html#ed4874
 "isVisible" qwidget.html#57d026
+"isVisible" qwswindow.html#a85263
 "isVisibleTo" qwidget.html#455e08
 "isVisibleToTLW" qwidget.html#527c5e
 "isWidgetType" qobject.html#cf6203
@@ -10238,6 +10280,7 @@
 "lower" qcstring.html#853bc9
 "lower" qstring.html#60ca26
 "lower" qwidget.html#30c0a6
+"lower" qwswindow.html#4291bc
 "lowered." qwidget.html#30c0a6
 "m11" qwmatrix.html#4d9dbb
 "m12" qwmatrix.html#696920
@@ -10632,6 +10675,7 @@
 "name" qtextcodec.html#fcf223
 "name" qtsciicodec.html#40d1a1
 "name" qurlinfo.html#7c7614
+"name" qwswindow.html#d8d5f9
 "nameFilter" qdir.html#b4accc
 "nameFilter" qurloperator.html#403dda
 "nameToType" qvariant.html#96fb68
@@ -10768,6 +10812,8 @@
 "open" qiodevice.html#815d1e
 "open" qsocket.html#5cd071
 "open" qsocketdevice.html#01b012
+"openKeyboard" qwsserver.html#854369
+"openMouse" qwsserver.html#afa219
 "operation" qnetworkoperation.html#71fd13
 "operationGet" qftp.html#7a9e7b
 "operationGet" qlocalfs.html#1e737f
@@ -11366,9 +11412,11 @@
 "printerName" qprinter.html#d7eaab
 "printerSelectionOption" qprinter.html#05cd2e
 "printerSetup" menu-menu-cpp.html#279
+"processEventQueue" qwsserver.html#970e43
 "processEvents" qapplication.html#5e4efb
 "processEvents" qapplication.html#caa015
 "processKeyEvent" qwskeyboardhandler.html#14aaf8
+"processKeyEvent" qwsserver.html#dce3d4
 "processName" qxmlnamespacesupport.html#15cc55
 "processOneEvent" qapplication.html#72f868
 "processOperation" qnetworkprotocol.html#2dbbc8
@@ -11675,7 +11723,6 @@
 "qtimage/qtimage.cpp" qtimage-qtimage-cpp.html#QMouseEvent
 "qtimage/qtimage.cpp" qtimage-qtimage-cpp.html#QNPInstance
 "qtimage/qtimage.cpp" qtimage-qtimage-cpp.html#QNPStream
-"qtimage/qtimage.cpp" qtimage-qtimage-cpp.html#QNPWidget
 "qtimage/qtimage.cpp" qtimage-qtimage-cpp.html#QNPlugin
 "qtimage/qtimage.cpp" qtimage-qtimage-cpp.html#QPaintEvent
 "qtimage/qtimage.cpp" qtimage-qtimage-cpp.html#QPainter
@@ -11733,6 +11780,7 @@
 "rTop" qrect.html#b4d2e1
 "radio buttons" qradiobutton.html
 "raise" qwidget.html#15da8e
+"raise" qwswindow.html#79b41d
 "raiseWidget" qwidgetstack.html#271afe
 "rangeChange" qdial.html#5af4ed
 "rangeChange" qrangecontrol.html#759b5a
@@ -11804,6 +11852,7 @@
 "reformat" qstatusbar.html#edefd3
 "refresh" qfileinfo.html#0d5021
 "refresh" qsplitter.html#04572b
+"refresh" qwsserver.html#275bb5
 "region" qpaintevent.html#41a489
 "region" qwsdecoration.html#f9a65e
 "registerDecoderFactory" qimagedecoder.html#be4913
@@ -11930,6 +11979,7 @@
 "report it as a bug" bughowto.html
 "requestPhase2" qsessionmanager.html#f86434
 "requestRead" qnpstream.html#bd563c
+"requested" qwswindow.html#5486f7
 "rereadDir" qfiledialog.html#fc531e
 "reset" qglcontext.html#091063
 "reset" qiconset.html#a5444c
@@ -12126,6 +12176,8 @@
 "scale" qwmatrix.html#a5e455
 "scaleFont" qstylesheet.html#bd9d70
 "scanLine" qimage.html#24e4e0
+"screenSaverActivate" qwsserver.html#a693cd
+"screenSaverActive" qwsserver.html#e5bf3d
 "scribble/main.cpp" scribble-main-cpp.html
 "scribble/main.cpp" scribble-main-cpp.html#QApplication
 "scribble/main.cpp" scribble-main-cpp.html#QApplication::desktop
@@ -12218,8 +12270,10 @@
 "sendBufferSize" qsocketdevice.html#bd4cae
 "sendEvent" qapplication.html#5a43f0
 "sendKeyEvent" qwsserver.html#b4dc20
+"sendMouseEvent" qwsserver.html#21f2e6
 "sendPostedEvents" qapplication.html#72245c
 "sendPostedEvents" qapplication.html#e0e9e5
+"sendPropertyNotifyEvent" qwsserver.html#bd1d86
 "sendTo" qdatasource.html#65aca3
 "sendTo" qiodevicesource.html#6c9658
 "sender" qobject.html#2b5d74
@@ -12244,6 +12298,7 @@
 "setActive" qpalette.html#ef09be
 "setActiveItem" qpopupmenu.html#df3577
 "setActiveWindow" qwidget.html#98f8cc
+"setActiveWindow" qwswindow.html#5c5d47
 "setActiveWindow" qxtwidget.html#be834c
 "setAddress" qhostaddress.html#0973ed
 "setAddressReusable" qsocketdevice.html#eda108
@@ -12713,6 +12768,7 @@
 "setMode" qfiledialog.html#002fa6
 "setMode" qiodevice.html#887737
 "setMode" qlcdnumber.html#b7f1d1
+"setMouseHandler" qwsserver.html#ee7ae1
 "setMouseTracking" qglwidget.html#7793ca
 "setMouseTracking" qwidget.html#eeb59b
 "setMovie" qlabel.html#60de9f
@@ -13163,6 +13219,7 @@
 "show" qlistview.html#8b5aca
 "show" qmainwindow.html#e71bb3
 "show" qmenubar.html#768e1b
+"show" qnpwidget.html#249a75
 "show" qpopupmenu.html#4f61ef
 "show" qprogressbar.html#b506d8
 "show" qscrollview.html#88277a
@@ -13174,6 +13231,7 @@
 "show" qwidget.html#ccc8f7
 "show" qwidgetstack.html#a4b010
 "show" qwizard.html#66d420
+"show" qwswindow.html#0a7841
 "showChild" qscrollview.html#5cb8e3
 "showColumn" qtable.html#dc5724
 "showEvent" qheader.html#54a441
@@ -13870,7 +13928,6 @@
 "trivial/trivial.cpp" trivial-trivial-cpp.html
 "trivial/trivial.cpp" trivial-trivial-cpp.html#QMouseEvent
 "trivial/trivial.cpp" trivial-trivial-cpp.html#QNPInstance
-"trivial/trivial.cpp" trivial-trivial-cpp.html#QNPWidget
 "trivial/trivial.cpp" trivial-trivial-cpp.html#QNPlugin
 "trivial/trivial.cpp" trivial-trivial-cpp.html#QPaintEvent
 "trivial/trivial.cpp" trivial-trivial-cpp.html#QPainter
@@ -14149,12 +14206,15 @@
 "widthUsed" qsimplerichtext.html#a83750
 "wildcard" qregexp.html#f5534a
 "winId" qwidget.html#6dceaf
+"winId" qwswindow.html#a02138
 "winStyleHighlightColor" qapplication.html#48a523
 "winding" qcanvaspolygonalitem.html#f9d6eb
 "window" qpainter.html#98a36a
 "windowActivated" qworkspace.html#e6df04
+"windowAt" qwsserver.html#3e54c2
 "windowCreated" qglcontext.html#1b5482
 "windowList" qworkspace.html#1abb6e
+"windowList" qwsserver.html#d344c1
 "wizard/main.cpp" wizard-main-cpp.html
 "wizard/main.cpp" wizard-main-cpp.html#QApplication
 "wmapper" qwidget.html#e04160
@@ -14484,6 +14544,7 @@
 "~QVector" qvector.html#223613
 "~QWSDecoration" qwsdecoration.html#61df80
 "~QWSMouseHandler" qwsmousehandler.html#41e91f
+"~QWSServer" qwsserver.html#546a68
 "~QWaitCondition" qwaitcondition.html#c465fc
 "~QWhatsThis" qwhatsthis.html#be24ee
 "~QWidget" qwidget.html#fd072b

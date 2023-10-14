@@ -1,6 +1,6 @@
 .TH moc 1 "20 January 2001" "Trolltech AS" \" -*- nroff -*-
 .\"
-.\" $Id: qt/src/moc/moc.1   2.3.0   edited 2001-02-21 $
+.\" $Id: qt/src/moc/moc.1   2.3.1   edited 2001-05-15 $
 .\"
 .\" Copyright 1992-2001 Trolltech AS.  All rights reserved.
 .\"
@@ -475,6 +475,54 @@ public signals:
 .in -4
 .PP
 This will work as expected.
+
+.SS "Namespace of parent class must be specified even if it is the same as that of the subclass"
+.PP
+In the following example, classes x::A and x::B are defined:
+.PP
+.in +4
+.nf
+namespace x {
+    class A : public QObject {
+        Q_OBJECT
+
+    public:
+        ...
+    };
+}
+
+namespace x {
+    class B : public A {
+        Q_OBJECT
+
+    public:
+        ...
+    };
+}
+.fi
+.in -4
+.PP
+Unfortunately,
+.B moc
+will not understand the
+.PP
+.in +4
+.nf
+    class B : public A {
+.fi
+.in -4
+.PP
+line. You have either to write
+.PP
+.in +4
+.nf
+    class B : public x::A {
+.fi
+.in -4
+.PP
+or define classes A and B in the same namespace block.
+.PP
+This limitation will disappear with Qt 3.0.
 
 .SS "Properties need to be declared before the public section that contains the respective get and set functions"
 .PP

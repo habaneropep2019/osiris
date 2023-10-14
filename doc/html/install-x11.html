@@ -50,6 +50,8 @@ where you choose to install Qt.
         <tr><td>PATH               <td> to locate the moc program and other Qt tools
         <tr><td>MANPATH            <td> to access the Qt man pages
         <tr><td>LD_LIBRARY_PATH    <td> for the shared Qt library
+        <tr><td>QT_FONTPATH        <td> optional. A list of directories where Qt can find type1 or true type fonts for
+                                        print embedding. 
 </table>
 <p>
     This is done like this:
@@ -73,6 +75,16 @@ where you choose to install Qt.
         setenv MANPATH $QTDIR/man:$MANPATH
         setenv LD_LIBRARY_PATH $QTDIR/lib:$LD_LIBRARY_PATH
 </pre>
+<p>
+    If you have some true type or type1 fonts installed in non
+    standard places, you might want to set the QT_FONTPATH environment
+    variable to point to these directories. This is not needed, when
+    all fonts are accessed through local font directories or a local
+    font server, as Qt will automatically scan the fontpath and the
+    font servers configuration file. All directories in the fontpath
+    will need to have a valid fonts.dir file, so Qt can map from X11
+    font names to the corresponding embeddable font.
+</p>
 <p>
     After you have done this, you will need to login again, or
     re-source the profile before continuing, so that at least $QTDIR
@@ -127,5 +139,5 @@ You're done.  Qt is now installed.
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.0</div>
+<td align="right"><div align="right">Qt version 2.3.1</div>
 </table></div></address></body></html>

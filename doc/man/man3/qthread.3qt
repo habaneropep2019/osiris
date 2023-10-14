@@ -1,5 +1,5 @@
 '\" t
-.TH QThread 3qt "5 March 2001" "Trolltech AS" \" -*- nroff -*-
+.TH QThread 3qt "13 June 2001" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2001 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -125,7 +125,7 @@ See also the paragraph on Thread Support in Qt
 .SH "QThread::QThread ()"
 Constructs a new thread. The thread does not actually begin executing until start() is called.
 .SH "QThread::~QThread () \fC[virtual]\fR"
-QThread destructor. Note that deleting a QThread object will not stop the execution of the thread it represents.
+QThread destructor. Note that deleting a QThread object will not stop the execution of the thread it represents, and that deleting a QThread object while the thread is running is unsafe.
 .SH "HANDLE QThread::currentThread () \fC[static]\fR"
 This returns the thread handle of the currently executing thread. The handle returned by this function is used for internal reasons and should not be used in any application code. On Windows, the returned value is a pseudo handle for the current thread, and it can not be used for numerical comparison.
 .SH "void QThread::exit () \fC[static]\fR"
@@ -175,4 +175,4 @@ In case of content or formattting problems with this manual page, please
 report them to
 .BR qt-bugs@trolltech.com .
 Please include the name of the manual page (qthread.3qt) and the Qt
-version (2.3.0).
+version (2.3.1).

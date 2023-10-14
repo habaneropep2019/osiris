@@ -47,7 +47,7 @@
  *
  */
 
-/* @(#) $Id: qt/src/3rdparty/zlib/deflate.c   2.3.0   edited 2001-01-26 $ */
+/* @(#) $Id: qt/src/3rdparty/zlib/deflate.c   2.3.1   edited 2001-01-26 $ */
 
 #include "deflate.h"
 

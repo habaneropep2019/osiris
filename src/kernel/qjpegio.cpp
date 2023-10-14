@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qjpegio.cpp   2.3.0   edited 2001-01-26 $
+** $Id: qt/src/kernel/qjpegio.cpp   2.3.1   edited 2001-01-26 $
 **
 ** Implementation of JPEG QImage IOHandler
 **

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qfileinfo_unix.cpp   2.3.0   edited 2001-02-19 $
+** $Id: qt/src/tools/qfileinfo_unix.cpp   2.3.1   edited 2001-03-06 $
 **
 ** Implementation of QFileInfo class
 **
@@ -341,7 +341,7 @@ void QFileInfo::doStat() const
 
     r = STAT( QFile::encodeName(fn), b );
 
-    if ( r != 0 ) {
+    if ( r != 0 && !that->fic->isSymLink ) {
 	delete that->fic;
 	that->fic = 0;
     }

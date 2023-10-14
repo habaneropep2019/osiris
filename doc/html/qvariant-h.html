@@ -30,7 +30,7 @@ remains with Trolltech.
 <hr>
 <pre>
 /****************************************************************************
-** &#36;Id&#58; qt/src/kernel/qvariant.h   2.3.0   edited 2001-01-26 $
+** &#36;Id&#58; qt/src/kernel/qvariant.h   2.3.1   edited 2001-06-13 $
 **
 ** Definition of QVariant class
 **
@@ -73,7 +73,7 @@ remains with Trolltech.
 #include "qstring.h"
 #endif // QT_H
 
-#ifndef QT_NO_PROPERTIES
+#ifndef QT_NO_VARIANT
 
 class <a href="qstring.html">QString</a>;
 class <a href="qcstring.html">QCString</a>;
@@ -347,7 +347,7 @@ Q_EXPORT QDataStream&amp; operator&lt;&lt; ( QDataStream&amp; s, const QVariant&
 Q_EXPORT QDataStream&amp; operator&gt;&gt; ( QDataStream&amp; s, QVariant::Type&amp; p );
 Q_EXPORT QDataStream&amp; operator&lt;&lt; ( QDataStream&amp; s, const QVariant::Type p );
 
-#endif // QT_NO_PROPERTIES
+#endif // QT_NO_VARIANT
 
 #endif // QVARIANT_H
 
@@ -355,5 +355,5 @@ Q_EXPORT QDataStream&amp; operator&lt;&lt; ( QDataStream&amp; s, const QVariant:
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.3.0</div>
+<td align="right"><div align="right">Qt version 2.3.1</div>
 </table></div></address></body></html>

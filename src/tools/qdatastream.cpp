@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qdatastream.cpp   2.3.0   edited 2001-01-26 $
+** $Id: qt/src/tools/qdatastream.cpp   2.3.1   edited 2001-04-23 $
 **
 ** Implementation of QDataStream class
 **
@@ -521,7 +521,7 @@ QDataStream &QDataStream::operator>>( Q_INT64 &i )
     } else if ( noswap ) {			// no conversion needed
 	dev->readBlock( (char *)&i, sizeof(Q_INT64) );
     } else {					// swap bytes
-	register uchar *p = (uchar *)(&i);
+	uchar *p = (uchar *)(&i);
 	char b[sizeof(Q_INT64)];
 	dev->readBlock( b, sizeof(Q_INT64) );
 	if ( sizeof(Q_INT64) == 8 ) {
@@ -797,7 +797,7 @@ QDataStream &QDataStream::operator<<( Q_INT64 i )
     } else if ( noswap ) {			// no conversion needed
 	dev->writeBlock( (char *)&i, sizeof(Q_INT64) );
     } else {					// swap bytes
-	register uchar *p = (uchar *)(&i);
+	uchar *p = (uchar *)(&i);
 	char b[sizeof(Q_INT64)];
 	if ( sizeof(Q_INT64) == 8 ) {
 	    b[7] = *p++;
