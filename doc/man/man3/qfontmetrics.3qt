@@ -1,5 +1,5 @@
-.TH QFontMetrics 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QFontMetrics 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QFontMetrics \- Font metrics information about fonts
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -17,16 +15,16 @@ QFontMetrics \- Font metrics information about fonts
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQFontMetrics\fR ( const QFont & )"
+.BI "\fBQFontMetrics\fR ( const QFont & ) "
 .br
 .ti -1c
-.BI "\fBQFontMetrics\fR ( const QFontMetrics & )"
+.BI "\fBQFontMetrics\fR ( const QFontMetrics & ) "
 .br
 .ti -1c
-.BI "\fB~QFontMetrics\fR ()"
+.BI "\fB~QFontMetrics\fR () "
 .br
 .ti -1c
-.BI "QFontMetrics& \fBoperator=\fR ( const QFontMetrics & )"
+.BI "QFontMetrics& \fBoperator=\fR ( const QFontMetrics & ) "
 .br
 .ti -1c
 .BI "int \fBascent\fR () const"
@@ -68,7 +66,7 @@ QFontMetrics \- Font metrics information about fonts
 .BI "int \fBwidth\fR ( QChar ) const"
 .br
 .ti -1c
-.BI "int \fBwidth\fR ( char c ) const"
+.BI "int width ( char c ) const \fI(obsolete)\fR"
 .br
 .ti -1c
 .BI "QRect \fBboundingRect\fR ( const QString &, int " "len" " = -1 ) const"
@@ -95,15 +93,23 @@ QFontMetrics \- Font metrics information about fonts
 .SH DESCRIPTION
 The QFontMetrics class provides font metrics information about fonts.
 .PP
-QFontMetrics functions calculate size of characters and strings for a given font.
+QFontMetrics functions calculate size of characters and strings for a given font. There are three ways you can create a QFontMetrics object:
 .PP
-There are three ways you can create a QFontMetrics object:
-.IP 1
-The QFontMetrics constructor with a QFont creates a font metrics object for a screen-compatible font, i.e. the font must not be a printer font.
-.IP 2
-QWidget::fontMetrics() returns the font metrics for a widget's font. This is equivalent to QFontMetrics(widget->font()). Setting a new font for the widget later will not affect the font metrics object.
-.IP 3
+The QFontMetrics constructor with a QFont creates a font metrics object for a screen-compatible font, i.e. the font can not be a printer font.
+.PP
+QWidget::fontMetrics() returns the font metrics for a widget's font. This is equivalent to QFontMetrics(widget->font()). Setting a new font for the widget later does not affect the font metrics object.
+.PP
 QPainter::fontMetrics() returns the font metrics for a painter's current font. The font metrics object is automatically updated if somebody sets a new painter font (unlike the two above cases, which take a "snapshot" of a font).
+.PP
+Once created, the object provides functions to access the individual metrics of the font, its characters, and for strings rendered in this font.
+.PP
+There are several functions that operate on the font: ascent(), descent(), height(), leading() and lineSpacing() return the basic size properties of the font, and underlinePos(), strikeOutPos() and lineWidth() return properties of the line that underlines or strikes out the characters. These functions are all fast.
+.PP
+There are also some functions that operate on the set of glyphs in the font: minLeftBearing(), minRightBearing() and maxWidth(). These are by necessity slow, and we recommend avoiding them if possible.
+.PP
+For each character, you can get its width(), leftBearing() and rightBearing() and find out whether it is in the font using inFont(). You can also treat the character as a string, and use the string functions on it.
+.PP
+The string functions include width(), to return the width of a string in pixels (or points, for a printer), boundingRect(), to return the rectangle necessary to render a string, and size(), to return the size of that rectangle.
 .PP
 Example:
 .PP
@@ -118,7 +124,7 @@ Example:
     int h = fm.height();
 .fi
 .PP
-See also: QFont and QFontInfo.
+See also QFont and QFontInfo.
 .PP
 Examples:
 .(l
@@ -128,9 +134,9 @@ grapher/grapher.cpp xform/xform.cpp drawdemo/drawdemo.cpp scrollview/scrollview.
 .SH "QFontMetrics::QFontMetrics ( const QFont & font )"
 Constructs a font metrics object for \fIfont.\fR
 .PP
-The font must be screen-compatible, i.e. a font you use when drawing text in widgets or pixmaps. If \fIfont\fR is a printer font, you'll probably get wrong results.
+The font must be screen-compatible, i.e. a font you use when drawing text in QWidget or QPixmap objects, not QPicture or QPrinter. If \fIfont\fR is a printer font, you'll probably get wrong results.
 .PP
-Use the QPainter::fontMetrics() to get the font metrics when painting. This is a little slower than using this constructor, but it always gives correct results.
+Use QPainter::fontMetrics() to get the font metrics when painting. This is a little slower than using this constructor, but it always gives correct results.
 .SH "QFontMetrics::QFontMetrics ( const QFontMetrics & fm )"
 Constructs a copy of \fIfm.\fR
 .SH "QFontMetrics::~QFontMetrics ()"
@@ -140,7 +146,7 @@ Returns the maximum ascent of the font.
 .PP
 The ascent is the distance from the base line to the uppermost line where pixels may be drawn.
 .PP
-See also: descent().
+See also descent().
 .PP
 Examples:
 .(l
@@ -153,7 +159,7 @@ Note that the bounding rectangle may extend to the left of (0,0), e.g. for itali
 .PP
 Note that the rectangle usually extends both above and below the base line.
 .PP
-See also: width().
+See also width().
 .PP
 Examples:
 .(l
@@ -168,9 +174,9 @@ Note that the bounding rectangle may extend to the left of (0,0), e.g. for itali
 .PP
 Newline characters are processed as regular characters, \fInot\fR as linebreaks.
 .PP
-Due to the different actual character heights, the height of the bounding rectangle of "Yes" and "yes" may be different.
+Due to the different actual character heights, the height of the bounding rectangle of e.g. "Yes" and "yes" may be different.
 .PP
-See also: width() and QPainter::boundingRect().
+See also width() and QPainter::boundingRect().
 .SH "QRect QFontMetrics::boundingRect ( int x, int y, int w, int h, int flgs, const QString & str, int len=-1, int tabstops=0, int * tabarray=0, char ** intern=0 ) const"
 Returns the bounding rectangle of the first \fIlen\fR characters of \fIstr,\fR which is the set of pixels the text would cover if drawn at (0,0). The drawing, and hence the bounding rectangle, is constrained to the rectangle \fI(x,y,w,h).\fR
 .PP
@@ -218,13 +224,13 @@ The bounding rectangle given by this function is somewhat larger than that calcu
 .PP
 The \fIinternal\fR argument is for internal purposes.
 .PP
-See also: width(), QPainter::boundingRect() and Qt::AlignmentFlags.
+See also width(), QPainter::boundingRect() and Qt::AlignmentFlags.
 .SH "int QFontMetrics::descent () const"
 Returns the maximum descent of the font.
 .PP
 The descent is the distance from the base line to the lowermost line where pixels may be drawn. (Note that this is different from X, which adds 1 pixel.)
 .PP
-See also: ascent().
+See also ascent().
 .PP
 Examples:
 .(l
@@ -235,7 +241,7 @@ Returns the height of the font.
 .PP
 This is always equal to ascent()+descent()+1 (the 1 is for the base line).
 .PP
-See also: leading() and lineSpacing().
+See also leading() and lineSpacing().
 .PP
 Examples:
 .(l
@@ -248,21 +254,21 @@ Returns the leading of the font.
 .PP
 This is the natural inter-line spacing.
 .PP
-See also: height() and lineSpacing().
+See also height() and lineSpacing().
 .SH "int QFontMetrics::leftBearing ( QChar ch ) const"
 Returns the left bearing of character \fIch\fR in the font.
 .PP
 The left bearing is the rightward distance of the left-most pixel of the character from the logical origin of the character. This value is negative if the pixels of the character extend to the left of the logical origin.
 .PP
-\fISee width(QChar) for a graphical description of this metric.\fR
+See width(QChar) for a graphical description of this metric.
 .PP
-See also: rightBearing(QChar), minLeftBearing() and width().
+See also rightBearing(QChar), minLeftBearing() and width().
 .SH "int QFontMetrics::lineSpacing () const"
 Returns the distance from one base line to the next.
 .PP
 This value is always equal to leading()+height().
 .PP
-See also: height() and leading().
+See also height() and leading().
 .PP
 Examples:
 .(l
@@ -271,7 +277,7 @@ scrollview/scrollview.cpp
 .SH "int QFontMetrics::lineWidth () const"
 Returns the width of the underline and strike-out lines, adjusted for the point size of the font.
 .PP
-See also: underlinePos() and strikeOutPos().
+See also underlinePos() and strikeOutPos().
 .SH "int QFontMetrics::maxWidth () const"
 Returns the width of the widest character in the font.
 .SH "int QFontMetrics::minLeftBearing () const"
@@ -279,13 +285,17 @@ Returns the minimum left bearing of the font.
 .PP
 This is the smallest leftBearing(char) of all characters in the font.
 .PP
-See also: minRightBearing() and leftBearing(char).
+Note that this function can be very slow if the font is big.
+.PP
+See also minRightBearing() and leftBearing(char).
 .SH "int QFontMetrics::minRightBearing () const"
 Returns the minimum right bearing of the font.
 .PP
 This is the smallest rightBearing(char) of all characters in the font.
 .PP
-See also: minLeftBearing() and rightBearing(char).
+Note that this function can be very slow if the font is big.
+.PP
+See also minLeftBearing() and rightBearing(char).
 .SH "QFontMetrics & QFontMetrics::operator= ( const QFontMetrics & fm )"
 Font metrics assignment.
 .SH "int QFontMetrics::rightBearing ( QChar ch ) const"
@@ -293,9 +303,9 @@ Returns the right bearing of character \fIch\fR in the font.
 .PP
 The right bearing is the leftward distance of the right-most pixel of the character from the logical origin of a subsequent character. This value is negative if the pixels of the character extend to the right of the width() of the character.
 .PP
-\fISee width() for a graphical description of this metric.\fR
+See width() for a graphical description of this metric.
 .PP
-See also: leftBearing(char), minRightBearing() and width().
+See also leftBearing(char), minRightBearing() and width().
 .SH "QSize QFontMetrics::size ( int flgs, const QString & str, int len=-1, int tabstops=0, int * tabarray=0, char ** intern=0 ) const"
 Returns the size in pixels of the first \fIlen\fR characters of \fIstr.\fR
 .PP
@@ -321,42 +331,44 @@ Despite the different actual character heights, the heights of the bounding rect
 .PP
 The \fIinternal\fR argument is for internal purposes.
 .PP
-See also: boundingRect().
+See also boundingRect().
 .SH "int QFontMetrics::strikeOutPos () const"
 Returns the distance from the base line to where the strike-out line should be drawn.
 .PP
-See also: underlinePos() and lineWidth().
+See also underlinePos() and lineWidth().
 .SH "int QFontMetrics::underlinePos () const"
 Returns the distance from the base line to where an underscore should be drawn.
 .PP
-See also: strikeOutPos() and lineWidth().
+See also strikeOutPos() and lineWidth().
 .SH "int QFontMetrics::width ( QChar ch ) const"
-Returns the logical width of a \fIch\fR in pixels. This is a distance appropriate for drawing a subsequent character after \fIch.\fR
+<img src="bearings.png" align=right> Returns the logical width of a \fIch\fR in pixels. This is a distance appropriate for drawing a subsequent character after \fIch.\fR
 .PP
-<img src=bearings.png align=right> Some of the metrics are described in the image to the right. The tall dark rectangle covers the logical width() of a character. The shorter pale rectangles cover the left and right bearings of the characters. Notice that the bearings of "f" in this particular font are both negative, while the bearings of "o" are both positive.
+Some of the metrics are described in the image to the right. The tall dark rectangle covers the logical width() of a character. The shorter pale rectangles cover leftBearing() and rightBearing() of the characters. Notice that the bearings of "f" in this particular font are both negative, while the bearings of "o" are both positive.
 .PP
-See also: boundingRect().
+See also boundingRect().
 .SH "int QFontMetrics::width ( const QString & str, int len = -1 ) const"
 Returns the width in pixels of the first \fIlen\fR characters of \fIstr.\fR
 .PP
-If \fIlen\fR is negative (default value), the whole string is used.
+If \fIlen\fR is negative (the default value is), the whole string is used.
 .PP
-Note that this value is \fInot\fR equal to boundingRect().width(); boundingRect() returns a rectangle describing the pixels this string will cover whereas width() returns the distance to where the next string should be drawn. Thus, width(stra)+width(strb) is always equal to width(stra+strb). This is almost never the case with boundingRect().
+Note that this value is \fInot\fR equal to boundingRect().width(); boundingRect() returns a rectangle describing the pixels this string will cover whereas width() returns the distance to where the next string should be drawn.
 .PP
-See also: boundingRect().
+See also boundingRect().
 .PP
 Examples:
 .(l
 drawdemo/drawdemo.cpp scrollview/scrollview.cpp movies/main.cpp
 .)l
 .SH "int QFontMetrics::width ( char c ) const"
+\fBThis function is obsolete.\fR It is provided to keep old source working, and will probably be removed in a future version of Qt. We strongly advise against using it in new code.
+.PP
 This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts.
 .PP
 Provided to aid porting from Qt 1.x.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qfontmetrics.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

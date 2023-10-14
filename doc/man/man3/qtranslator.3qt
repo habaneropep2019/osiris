@@ -1,5 +1,5 @@
-.TH QTranslator 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QTranslator 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QTranslator \- Internationalization support for text output
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -19,52 +17,73 @@ Inherits QObject.
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQTranslator\fR ( QObject * " "parent" ", const char * " "name" " = 0 )"
+.BI "\fBQTranslator\fR ( QObject * " "parent" ", const char * " "name" " = 0 ) "
 .br
 .ti -1c
-.BI "\fB~QTranslator\fR ()"
+.BI "\fB~QTranslator\fR () "
 .br
 .ti -1c
-.BI "virtual QString \fBfind\fR ( const char *, const char * ) const"
+.BI "QString \fBfind\fR ( const char *, const char *, const char * ) const"
 .br
 .ti -1c
-.BI "bool \fBload\fR ( const QString & " "filename" ", const QString & directory = QString::null, const QString & search_delimiters = QString::null, const QString & suffix = QString::null )"
+.BI "virtual QString find ( const char *, const char * ) const \fI(obsolete)\fR"
+.br
+.ti -1c
+.BI "QTranslatorMessage \fBfindMessage\fR ( const char *, const char *, const char * ) const"
+.br
+.ti -1c
+.BI "bool \fBload\fR ( const QString & " "filename" ", const QString & directory = QString::null, const QString & search_delimiters = QString::null, const QString & suffix = QString::null ) "
 .br
 .ti -1c
 .BI "enum \fBSaveMode\fR { Everything, Stripped }"
 .br
 .ti -1c
-.BI "bool \fBsave\fR ( const QString & " "filename" ", SaveMode " "mode" " = Everything )"
+.BI "bool \fBsave\fR ( const QString & " "filename" ", SaveMode " "mode" " = Everything ) "
 .br
 .ti -1c
-.BI "void \fBclear\fR ()"
+.BI "void \fBclear\fR () "
 .br
 .ti -1c
-.BI "void \fBinsert\fR ( const char *, const char *, const QString & )"
+.BI "void \fBinsert\fR ( const QTranslatorMessage & ) "
 .br
 .ti -1c
-.BI "void \fBremove\fR ( const char *, const char * )"
+.BI "void insert ( const char *, const char *, const QString & ) \fI(obsolete)\fR"
 .br
 .ti -1c
-.BI "bool \fBcontains\fR ( const char *, const char * ) const"
+.BI "void \fBremove\fR ( const QTranslatorMessage & ) "
 .br
 .ti -1c
-.BI "void \fBsqueeze\fR ()"
+.BI "void remove ( const char *, const char * ) \fI(obsolete)\fR"
 .br
 .ti -1c
-.BI "void \fBunsqueeze\fR ()"
+.BI "bool \fBcontains\fR ( const char *, const char *, const char * ) const"
+.br
+.ti -1c
+.BI "bool contains ( const char *, const char * ) const \fI(obsolete)\fR"
+.br
+.ti -1c
+.BI "void \fBsqueeze\fR ( SaveMode ) "
+.br
+.ti -1c
+.BI "void \fBsqueeze\fR () "
+.br
+.ti -1c
+.BI "void \fBunsqueeze\fR () "
+.br
+.ti -1c
+.BI "QValueList<QTranslatorMessage> \fBmessages\fR () const"
 .br
 .in -1c
 .SH DESCRIPTION
 The QTranslator class provides internationalization support for text output.
 .PP
-The class is conceptually very simple: An object of this class contains a set of translations from the reference language to a target language, and provides functions to add, look up and remove such translations as well as the ability to load and save the object to a file.
+An object of this class contains a set of QTranslatorMessage objects, each of which specifies a translation from a source language to a target language. QTranslator provides functions to look up such translations, add new ones, remove, load and save them, etc.
 .PP
-The most common use of QTranslator is expected to be loading one from a file, installing it using QApplication::installTranslator(), and using it via QObject::tr(). Like this:
+The most common use of QTranslator is expected to be loading a translator file, installing it using QApplication::installTranslator(), and using it via QObject::tr(), like this:
 .PP
 .nf
 .br
-  main( int argc, char** argv )
+  int main( int argc, char ** argv )
 .br
   {
 .br
@@ -90,13 +109,35 @@ The most common use of QTranslator is expected to be loading one from a file, in
   }
 .fi
 .PP
-Slightly more advanced usage of QTranslator includes direct lookup using find(), adding new translations using insert() and removing existing ones using remove() or even clear(), and testing whether the QTranslator contains a translation using contains().
+Most applications will never need to do anything else with this class. However, applications that work on translator files need the other functions in this class.
 .PP
-The hash() function mentioned is a variant on the standard ELF hash, modified to work well with Unicode strings in UCS-2 format. Its algorithm is not specified beyond the fact that it will remain unchanged in future versions of Qt.
+It is possible to do lookup using findMessage() (as tr() and QApplication::translate() do) and contains(), insert a new translation message using insert() and removing them using remove().
 .PP
-To examine the contents of a QTranslator, use QTranslatorIterator.
+Since end-user programs and translation tools have rather different requirements, QTranslator can use stripped translator files in a way that uses a minimum of memory and provides very little functionality other than findMessage().
 .PP
-See also: QTranslatorIterator, QApplication::installTranslator, QApplication::removeTranslator(), QObject::tr() and QApplication::translate().
+Thus, load() may not load enough information to make anything more than findMessage() work. save() has an argument indicating whether to save just this minimum of information, or everything.
+.PP
+Everything means that for each translation item the following information is kept: 
+.TP
+The \fItranslated text\fR - the return value from tr().
+.TP
+The input key: 
+.TP
+The \fIsource text\fR - the argument to tr(), normally.
+.TP
+The \fIcontext\fR - usually the class name for the tr() caller.
+.TP
+The \fIcomment\fR - a comment which helps disambiguate different uses of the same text in the same context.
+.PP
+The minimum is, for each item, just the information that is necessary for findMessage() to return the right text. This may include the source, context and comment, but usually is just a hash value and the translated text.
+.PP
+For example, the "Cancel" in a dialog might have "Anuluj" when the program runs in Polish, in which case the source text would be "Cancel", the context would (normally) be the dialog's class name, there would normally be no comment, and the translated text would be "Anuluj".
+.PP
+But it's not always so simple: The Spanish version of a printer dialog with settings for two-sided printing and binding would probably require both "Activado" and "Activada" as translations for "Enabled". In this case, the source text would be "Enabled" in both cases and the context would be the dialog's class name, but the two items would have disambiguating comments such as "two-sided printing" for one and "binding" for the other. The comment enables the translator to choose the appropriate gender for the Spanish version, and Qt to distinguish between translations.
+.PP
+Note that when QTranslator loads a stripped file, most functions do not work. The functions that do work with stripped files are explicitly documented as such.
+.PP
+See also QTranslatorMessage, QApplication::installTranslator(), QApplication::removeTranslator(), QObject::tr() and QApplication::translate().
 .PP
 Examples:
 .(l
@@ -104,12 +145,13 @@ i18n/main.cpp
 .)l
 .SS "Member Type Documentation"
 .SH "QTranslator::SaveMode"
-This enum type defines how QTranslator can write translation files. There are currently only two modes: 
+This enum type defines how QTranslator can write translation files. There are two modes:
 .TP
-\fCEverything\fR - files are saved with all contennts
+\fCEverything\fR - files are saved with all contents
 .TP
-\fCStripped\fR - files are saved with just what's needed for end-user use of the files.
-.IP
+\fCStripped\fR - files are saved with just what's needed for end-users
+.PP
+Note that when QTranslator loads a stripped file, most functions do not work. The functions that do work with stripped files are explicitly documented as such.
 .SH MEMBER FUNCTION DOCUMENTATION
 .SH "QTranslator::QTranslator ( QObject * parent, const char * name = 0 )"
 Constructs an empty message file, not connected to any file.
@@ -117,14 +159,44 @@ Constructs an empty message file, not connected to any file.
 Destructs the object and frees any allocated resources.
 .SH "void QTranslator::clear ()"
 Empties this translator of all contents.
-.SH "bool QTranslator::contains ( const char * scope, const char * key ) const"
-Returns TRUE if this message file contains a message with hash value \fIh,\fR and FALSE if it does not.
+.PP
+This function works with stripped translator files.
+.SH "bool QTranslator::contains ( const char * context, const char * sourceText, const char * comment ) const"
+Returns TRUE if this message file contains a message with the key ( \fIcontext, sourceText, comment\fR ), and FALSE if it does not.
+.PP
+This function works with stripped translator files.
 .PP
 (This is is a one-liner that calls find().).
-.SH "QString QTranslator::find ( const char * scope, const char * message ) const \fC[virtual]\fR"
-Returns the translation for (\fIscope, key),\fR or QString::null in case there is none in this translator.
-.SH "void QTranslator::insert ( const char * scope, const char * message, const QString & translation )"
-Inserts \fItranslation\fR of \fImessage\fR into this message file.
+.SH "bool QTranslator::contains ( const char * context, const char * sourceText ) const"
+\fBThis function is obsolete.\fR It is provided to keep old source working, and will probably be removed in a future version of Qt. We strongly advise against using it in new code.
+.PP
+This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts.
+.PP
+This version of the function assumes that the comment is "".
+.SH "QString QTranslator::find ( const char * context, const char * sourceText, const char * comment ) const"
+Returns the translation for the key ( \fIcontext, sourceText, comment\fR ), or QString::null if there is none in this translator.
+.PP
+This function works with stripped translator files.
+.PP
+See also findMessage.
+.SH "QString QTranslator::find ( const char * context, const char * sourceText ) const \fC[virtual]\fR"
+\fBThis function is obsolete.\fR It is provided to keep old source working, and will probably be removed in a future version of Qt. We strongly advise against using it in new code.
+.PP
+This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts.
+.PP
+Returns the translation for the key ( \fIcontext, sourceText,\fR "" ), or QString::null if there is none in this translator.
+.SH "QTranslatorMessage QTranslator::findMessage ( const char * context, const char * sourceText, const char * comment ) const"
+Returns the QTranslatorMessage for the key ( \fIcontext, sourceText, comment\fR ).
+.SH "void QTranslator::insert ( const QTranslatorMessage & message )"
+Inserts \fImessage\fR into this message file.
+.PP
+This function does \fInot\fR work with stripped translator files. It may seem to, but that is not dependable.
+.PP
+See also remove().
+.SH "void QTranslator::insert ( const char * context, const char * sourceText, const QString & translation )"
+\fBThis function is obsolete.\fR It is provided to keep old source working, and will probably be removed in a future version of Qt. We strongly advise against using it in new code.
+.PP
+This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts.
 .SH "bool QTranslator::load ( const QString & filename, const QString & directory = QString::null, const QString & search_delimiters = QString::null, const QString & suffix = QString::null )"
 Loads \fIfilename,\fR which may be an absolute file name or relative to \fIdirectory.\fR If the full filename does not exist, other filenames are tried in the following order:
 .IP 1
@@ -134,42 +206,61 @@ Filename with text after a character in \fIsearch_delimiters\fR stripped ("_." i
 .IP 3
 Filename stripped and \fIsuffix\fR appended.
 .IP 4
-Filename stripped further, etc. For example, load("foo_bar.baz", "/opt/foolib") will search for:
+Filename stripped further, etc.
+.PP
+For example, an application running in the fr_CA locale (Frech-speaking Canada) might call load("foo.fr_ca", "/opt/foolib"), which would then try to open these files:
 .IP 1
-/opt/foolib/foo_bar.baz
+/opt/foolib/foo.fr_ca
 .IP 2
-/opt/foolib/foo_bar.baz.qm
+/opt/foolib/foo.fr_ca.qm
 .IP 3
-/opt/foolib/foo_bar
+/opt/foolib/foo.fr
 .IP 4
-/opt/foolib/foo_bar.qm
+/opt/foolib/foo.fr.qm
 .IP 5
 /opt/foolib/foo
 .IP 6
 /opt/foolib/foo.qm
 .PP
-Examples:
-.(l
-i18n/main.cpp
-.)l
-.SH "void QTranslator::remove ( const char * scope, const char * message )"
-Removes the string for \fIh\fR from this message file. If there is no string for h, this function does nothing.
-.SH "bool QTranslator::save ( const QString & filename, SaveMode = Everything )"
-Saves this message file to \fIfilename,\fR overwriting the previous contents of \fIfilename.\fR
+See also save().
+.SH "QValueList<QTranslatorMessage> QTranslator::messages () const"
+Returns a list of the messages in the translator. This function is somewhat slow; since it's seldom called it's optimized for simplicity and small size, not speed.
+.SH "void QTranslator::remove ( const QTranslatorMessage & message )"
+Removes \fImessage\fR from this translator.
 .PP
-See also: load().
+This function works with stripped translator files.
+.PP
+See also insert().
+.SH "void QTranslator::remove ( const char * context, const char * sourceText )"
+\fBThis function is obsolete.\fR It is provided to keep old source working, and will probably be removed in a future version of Qt. We strongly advise against using it in new code.
+.PP
+This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts.
+.PP
+Removes the translation associated to the key ( \fIcontext, sourceText,\fR "" ) from this translator.
+.SH "bool QTranslator::save ( const QString & filename, SaveMode mode = Everything )"
+Saves this message file to \fIfilename,\fR overwriting the previous contents of \fIfilename.\fR If \fImode\fR is \fCEverything\fR (this is the default), all the information is preserved. If \fImode\fR is \fCStripped,\fR all information that is not necessary for findMessage() is stripped away.
+.PP
+See also load().
+.SH "void QTranslator::squeeze ( SaveMode mode )"
+Converts this message file to the compact format used to store message files on disk.
+.PP
+You should never need to call this directly; save() and other functions call it as necessary.
+.PP
+See also save() and unsqueeze().
 .SH "void QTranslator::squeeze ()"
-Converts this message file to the compact format used to store message files on disk. You should never need to call this directly; save() and other functions call it as necessary.
+This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts.
+.PP
+This function calls squeeze( Everything ). It is provided for compatibility; in Qt 3.0 it will be replaced by a default argument.
 .SH "void QTranslator::unsqueeze ()"
 Converts this message file into an easily modifiable data structure, less compact than the format used in the files.
 .PP
-You should never need to call this function; it is called by insert() etc. as necessary.
+You should never need to call this function; it is called by insert() and friends as necessary.
 .PP
-See also:  squeeze().
+See also  squeeze().
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qtranslator.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

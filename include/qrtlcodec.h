@@ -24,6 +24,8 @@
 #include "qtextcodec.h"
 #endif // QT_H
 
+#ifndef QT_NO_CODECS
+
 class Q_EXPORT QHebrewCodec : public QTextCodec {
 public:
     virtual int mibEnum() const;
@@ -55,3 +57,4 @@ protected:
 
 #endif
 
+#endif

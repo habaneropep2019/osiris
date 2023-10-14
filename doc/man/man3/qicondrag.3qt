@@ -1,15 +1,15 @@
-.TH QIconDrag 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QIconDrag 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
 .ad l
 .nh
 .SH NAME
-QIconDrag \- The QIconDrag is the drag object which is used for moving items in the iconview
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
+QIconDrag \- The drag object which is used for moving items in the iconview
+<h1 align=center>QIconDrag Class Reference
 .br
-.SH SYNOPSIS
+<small>[ iconview module ]</small></h1>
 .br
 .PP
 \fC#include <qiconview.h>\fR
@@ -19,10 +19,10 @@ Inherits QDragObject.
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "virtual \fB~QIconDrag\fR ()"
+.BI "virtual \fB~QIconDrag\fR () "
 .br
 .ti -1c
-.BI "void \fBappend\fR ( const QIconDragItem & " "item" ", const QRect & " "pr" ", const QRect & tr )"
+.BI "void \fBappend\fR ( const QIconDragItem & " "item" ", const QRect & " "pr" ", const QRect & tr ) "
 .br
 .ti -1c
 .BI "virtual QByteArray \fBencodedData\fR ( const char * mime ) const"
@@ -31,11 +31,11 @@ Inherits QDragObject.
 .SS "Static Public Members"
 .in +1c
 .ti -1c
-.BI "bool \fBcanDecode\fR ( QMimeSource * e )"
+.BI "bool \fBcanDecode\fR ( QMimeSource * e ) "
 .br
 .in -1c
 .SH DESCRIPTION
-The QIconDrag is the drag object which is used for moving items in the iconview
+The QIconDrag class is the drag object which is used for moving items in the iconview
 .PP
 The QIconDrag is the drag object which is used for moving items in the iconview. The QIconDrag stores exact informations about the positions of the items, which are dragged, so that each iconview is able to draw drag shapes in correct positions. Also the data of each dragged item is stored here.
 .PP
@@ -52,7 +52,7 @@ Destructor.
 .SH "void QIconDrag::append ( const QIconDragItem & i, const QRect & pr, const QRect & tr )"
 Appends an icon drag item which should be stored in this dragobject and the geometry of it.
 .PP
-See also: QIconDragItem.
+See also QIconDragItem.
 .SH "bool QIconDrag::canDecode ( QMimeSource * e ) \fC[static]\fR"
 Returns TRUE if \fIe\fR can be decoded by the QIconDrag, else FALSE.
 .SH "QByteArray QIconDrag::encodedData ( const char * mime ) const \fC[virtual]\fR"
@@ -62,7 +62,7 @@ Reimplemented for internal reasons; the API is not affected.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qicondrag.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

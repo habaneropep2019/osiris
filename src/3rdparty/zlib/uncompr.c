@@ -3,7 +3,7 @@
  * For conditions of distribution and use, see copyright notice in zlib.h 
  */
 
-/* @(#) $Id: qt/src/3rdparty/zlib/uncompr.c   2.1.1   edited 2000-01-31 $ */
+/* @(#) $Id: qt/src/3rdparty/zlib/uncompr.c   2.2.0   edited 2000-06-07 $ */
 
 #include "zlib.h"
 
@@ -22,7 +22,7 @@
    enough memory, Z_BUF_ERROR if there was not enough room in the output
    buffer, or Z_DATA_ERROR if the input data was corrupted.
 */
-int ZEXPORT uncompress (dest, destLen, source, sourceLen)
+int Q_ZEXPORT uncompress (dest, destLen, source, sourceLen)
     Bytef *dest;
     uLongf *destLen;
     const Bytef *source;

@@ -1,37 +1,51 @@
 /****************************************************************************
-** $Id: qt/src/tools/qbig5codec.cpp   2.1.1   edited 2000-03-24 $
+** $Id: qt/src/tools/qbig5codec.cpp   2.2.0   edited 2000-08-29 $
 **
 ** Implementation of QBig5Codec class
 **
 ** Created : 990713
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the tools module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 // Most of the code here was originally written by Ming-Che Chuang and
 // is included in Qt with the author's permission, and the grateful
-// thanks of the Troll Tech team.
+// thanks of the Trolltech team.
 
 // (Note: Ming-Che's code is also QPL'd, ref mail to into@trolltech.com)
 
 #include "qbig5codec.h"
 
-static unsigned int qt_UnicodeToBig5(unsigned int unicode);
+#ifndef QT_NO_CODECS
+
+unsigned int qt_UnicodeToBig5(unsigned int unicode);
 static unsigned int qt_Big5ToUnicode(unsigned int code);
 static bool big5ucs(unsigned char *s,unsigned char *t);
 static bool ucsbig5(unsigned char *s,unsigned char *t);
@@ -109,8 +123,8 @@ const char* QBig5Codec::name() const
 
 int QBig5Codec::heuristicNameMatch(const char* hint) const
 {
-  if (strnicmp(hint, "Big5", 4) == 0 ) return 4;
-  else if (strnicmp(hint, "zh_TW.Big5", 10) == 0) return 10;
+  if (qstrnicmp(hint, "Big5", 4) == 0 ) return 4;
+  else if (qstrnicmp(hint, "zh_TW.Big5", 10) == 0) return 10;
   else  return QTextCodec::heuristicNameMatch(hint);
 }
 
@@ -146,7 +160,7 @@ int QBig5Codec::heuristicContentMatch(const char* chars, int len) const
   return score;
 }
 
-static  unsigned int qt_UnicodeToBig5(unsigned int unicode)
+unsigned int qt_UnicodeToBig5(unsigned int unicode)
 {
   unsigned char source[2],target[2];
   source[0]=(unicode>>8);
@@ -7995,4 +8009,4 @@ static bool ucsbig5(unsigned char *s,unsigned char *t)
 	} else return FALSE;
 }
 
-
+#endif

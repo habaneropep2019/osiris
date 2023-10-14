@@ -1,5 +1,5 @@
-.TH QCloseEvent 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QCloseEvent 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QCloseEvent \- Parameters that describe a close event
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -19,16 +17,16 @@ Inherits QEvent.
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQCloseEvent\fR ()"
+.BI "\fBQCloseEvent\fR () "
 .br
 .ti -1c
 .BI "bool \fBisAccepted\fR () const"
 .br
 .ti -1c
-.BI "void \fBaccept\fR ()"
+.BI "void \fBaccept\fR () "
 .br
 .ti -1c
-.BI "void \fBignore\fR ()"
+.BI "void \fBignore\fR () "
 .br
 .in -1c
 .SH DESCRIPTION
@@ -50,7 +48,7 @@ QObject emits the destroyed() signal when it is deleted. This is a useful signal
 .PP
 If the last toplevel window is closed, the QApplication::lastWindowClosed() signal is emitted.
 .PP
-See also: QWidget::close(), QWidget::hide(), QObject::destroyed(), QApplication::setMainWidget(), QApplication::lastWindowClosed(), QApplication::exec() and QApplication::quit().
+See also QWidget::close(), QWidget::hide(), QObject::destroyed(), QApplication::setMainWidget(), QApplication::lastWindowClosed(), QApplication::exec() and QApplication::quit().
 .PP
 Examples:
 .(l
@@ -68,7 +66,7 @@ The accept flag is not set by default.
 .PP
 If you choose to accept in QWidget::closeEvent(), the widget will be hidden. If the widget's WDestructiveClose flag is set, it is also destroyed.
 .PP
-See also: ignore() and QWidget::hide().
+See also ignore() and QWidget::hide().
 .PP
 Examples:
 .(l
@@ -81,15 +79,15 @@ Clearing the accept flag indicates that the receiver of this event does not want
 .PP
 The accept flag is not set by default.
 .PP
-See also: accept().
+See also accept().
 .SH "bool QCloseEvent::isAccepted () const"
 Returns TRUE if the receiver of the event has agreed to close the widget.
 .PP
-See also:  accept() and ignore().
+See also  accept() and ignore().
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qcloseevent.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

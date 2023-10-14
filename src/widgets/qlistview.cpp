@@ -1,29 +1,42 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qlistview.cpp   2.1.1   edited 2000-05-12 $
+** $Id: qt/src/widgets/qlistview.cpp   2.2.0   edited 2000-08-30 $
 **
 ** Implementation of QListView widget class
 **
 ** Created : 970809
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the widgets module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #include "qlistview.h"
+#ifndef QT_NO_LISTVIEW
 #include "qtimer.h"
 #include "qheader.h"
 #include "qpainter.h"
@@ -101,12 +114,13 @@ struct QListViewPrivate
 
     class ItemColumnInfo {
     public:
-	ItemColumnInfo(): pm( 0 ), next( 0 ), truncated( FALSE ), width( 0 ) {}
+	ItemColumnInfo(): pm( 0 ), next( 0 ), truncated( FALSE ), dirty( FALSE ), width( 0 ) {}
 	~ItemColumnInfo() { delete pm; delete next; }
 	QString text, tmpText;
 	QPixmap * pm;
 	ItemColumnInfo * next;
-	bool truncated;
+	uint truncated : 1;
+	uint dirty : 1;
 	int width;
     };
 
@@ -183,6 +197,7 @@ struct QListViewPrivate
     bool makeCurrentVisibleOnUpdate;
     bool pressedSelected;
 
+    QSize sizeHint;
 };
 
 // these should probably be in QListViewPrivate, for future thread safety
@@ -241,7 +256,7 @@ static QPoint activatedP;
     }
   \endcode
 
-  Also there is now an interator class to traverse a tree of list view items.
+  Also there is now an iterator class to traverse a tree of list view items.
   To iterate over all items of a list view, do:
 
   \code
@@ -591,6 +606,7 @@ void QListViewItem::takeItem( QListViewItem * item )
 	return;
 
     QListView *lv = listView();
+    bool was_selected = FALSE;
     if ( lv && !lv->d->clearing ) {
 
 	if ( lv->d->iterators ) {
@@ -635,7 +651,7 @@ void QListViewItem::takeItem( QListViewItem * item )
 #endif
 
 	if ( lv->d->focusItem ) {
-	    bool was_selected = lv->d->focusItem->isSelected();
+	    was_selected = lv->d->focusItem->isSelected();
 	    const QListViewItem * c = lv->d->focusItem;
 	    while( c && c != item )
 		c = c->parentItem;
@@ -647,8 +663,6 @@ void QListViewItem::takeItem( QListViewItem * item )
 		else
 		    lv->d->focusItem = 0;
 		emit lv->currentChanged( lv->d->focusItem );
-		if ( was_selected )
-		    emit lv->selectionChanged();
 	    }
 	}
 
@@ -669,6 +683,9 @@ void QListViewItem::takeItem( QListViewItem * item )
     item->ownHeight = 0;
     item->maybeTotalHeight = -1;
     item->configured = FALSE;
+
+    if ( was_selected )
+	emit lv->selectionChanged();
 }
 
 
@@ -739,10 +756,6 @@ void QListViewItem::sortChildItems( int column, bool ascending )
 	return;
 
     if ( column < 0 )
-	return;
-
-    // more dubiously - only sort if the child items "exist"
-    if ( !isOpen() || !childCount() )
 	return;
 
     lsc = column;
@@ -905,6 +918,7 @@ void QListViewItem::setup()
 	    ph = QMAX( ph, pixmap( i )->height() );
     }
     int h = QMAX( v->d->fontMetricsHeight, ph ) + 2*v->itemMargin();
+    h = QMAX( h, QApplication::globalStrut().height());
     if ( h % 2 > 0 )
 	h++;
     setHeight( h );
@@ -1138,6 +1152,7 @@ void QListViewItem::setText( int column, const QString &text )
     if ( l->text == text )
 	return;
 
+    l->dirty = TRUE;
     l->text = text;
     if ( column == (int)lsc )
 	lsc = Unsorted;
@@ -1296,8 +1311,9 @@ void QListViewItem::paintCell( QPainter * p, const QColorGroup & cg,
 	}
 
 	// if the column width changed and this item was not painted since this change
-	if ( ci && ci->width != width || ci->text != t ) {
-	    QFontMetrics fm( lv->fontMetrics() );
+	if ( ci && ( ci->width != width || ci->text != t || ci->dirty ) ) {
+	    ci->dirty = FALSE;
+	    QFontMetrics fm( p->fontMetrics() );
 	    ci->width = width;
 	    ci->truncated = FALSE;
 	    // if we have to do the ellipsis thingy calc the truncated text
@@ -1369,7 +1385,7 @@ int QListViewItem::width( const QFontMetrics& fm,
     const QPixmap * pm = pixmap( c );
     if ( pm )
 	w += pm->width() + lv->itemMargin(); // ### correct margin stuff?
-    return w;
+    return QMAX( w, QApplication::globalStrut().width() );
 }
 
 
@@ -1405,7 +1421,7 @@ void QListViewItem::paintFocus( QPainter *p, const QColorGroup &cg,
 void QListViewItem::paintBranches( QPainter * p, const QColorGroup & cg,
 				   int w, int y, int h, GUIStyle s )
 {
-    p->fillRect( 0, 0, w, h, cg.brush( QColorGroup::Base ) );
+    listView()->paintEmptyArea( p, QRect( 0, 0, w, h ) );
     QListViewItem * child = firstChild();
     int linetop = 0, linebot = 0;
 
@@ -1641,7 +1657,7 @@ void QListViewPrivate::Root::setup()
   order by any column, and so on.
 
   The simplest mode of usage is to create a QListView, add some column
-  headers using setColumn(), create one or more QListViewItem objects
+  headers using addColumn(), create one or more QListViewItem objects
   with the QListView as parent, set up the list view's geometry(), and
   show() it.
 
@@ -1730,10 +1746,26 @@ void QListViewPrivate::Root::setup()
 */
 
 /*!  Constructs a new empty list view, with \a parent as a parent and \a
-  name as object name. */
+  name as object name. The \a f parameter is passed to the QWidget
+  constructor.
+*/
+QListView::QListView( QWidget * parent, const char *name, WFlags f )
+    : QScrollView( parent, name, f | WNorthWestGravity | WRepaintNoErase )
+{
+    init();
+}
 
+/*!
+  Constructs a new empty list view, with \a parent as a parent and \a
+  name as object name.
+*/
 QListView::QListView( QWidget * parent, const char *name )
     : QScrollView( parent, name, WNorthWestGravity | WRepaintNoErase )
+{
+    init();
+}
+
+void QListView::init()
 {
     d = new QListViewPrivate;
     d->vci = 0;
@@ -1813,9 +1845,14 @@ QListView::QListView( QWidget * parent, const char *name )
 
 void QListView::setShowSortIndicator( bool show )
 {
+    if ( show == d->sortIndicator )
+	return;
+
     d->sortIndicator = show;
-    if ( d->sortcolumn != Unsorted )
+    if ( d->sortcolumn != Unsorted && d->sortIndicator )
 	d->h->setSortIndicator( d->sortcolumn, d->ascending );
+    else
+	d->h->setSortIndicator( -1 );
 }
 
 /*!
@@ -2386,6 +2423,7 @@ void QListView::setColumnWidth( int column, int w )
 {
     if ( column < d->h->count() && d->h->cellSize( column ) != w ) {
 	d->h->resizeSection( column, w );
+	viewport()->update();
     }
 }
 
@@ -2429,7 +2467,7 @@ int QListView::columnWidth( int c ) const
 
 
 /*!
-  Sets column \c to behave according to \a mode.  The default depends
+  Sets column \a c to behave according to \a mode.  The default depends
   on whether the width argument to addColumn was positive or negative.
 
   \sa QListViewItem::width()
@@ -2529,9 +2567,9 @@ void QListView::updateContents()
 {
     if ( !isVisible() )
 	return;
-    //viewport()->setUpdatesEnabled( TRUE ); // ### what should setting it two times to TRUE bring? :-)
+    viewport()->setUpdatesEnabled( FALSE );
     updateGeometries();
-    //viewport()->setUpdatesEnabled( TRUE );
+    viewport()->setUpdatesEnabled( TRUE );
     viewport()->repaint( FALSE );
     if ( d->makeCurrentVisibleOnUpdate )
 	ensureItemVisible( d->focusItem );
@@ -2548,7 +2586,7 @@ void QListView::updateGeometries()
 	 tw < d->h->offset() + d->h->width() )
 	horizontalScrollBar()->setValue( tw - QListView::d->h->width() );
     resizeContents( tw, th );
-    if ( d->h->testWState( WState_ForceHide ) ) {
+    if ( d->h->isHidden() ) {
 	setMargins( 0, 0, 0, 0 );
     } else {
 	QSize hs( d->h->sizeHint() );
@@ -3134,7 +3172,7 @@ void QListView::contentsMousePressEvent( QMouseEvent * e )
     }
     i->activate();
     activatedByClick = FALSE;
-    
+
     if ( i != d->focusItem )
 	setCurrentItem( i );
     else
@@ -3249,7 +3287,8 @@ void QListView::contentsMouseReleaseEvent( QMouseEvent * e )
 
     if ( d->selectionMode == Extended &&
 	 d->focusItem == d->pressedItem &&
-	 d->pressedSelected && d->focusItem ) {
+	 d->pressedSelected && d->focusItem &&
+ 	 e->button() == LeftButton) {
 	bool block = signalsBlocked();
 	blockSignals( TRUE );
 	clearSelection();
@@ -3467,7 +3506,6 @@ void QListView::doAutoScroll()
 
 void QListView::focusInEvent( QFocusEvent *e )
 {
-    d->buttonDown = FALSE;
     if ( d->focusItem )
 	repaintItem( d->focusItem );
     else if ( firstChild() && e->reason() != QFocusEvent::Mouse ) {
@@ -3493,8 +3531,10 @@ void QListView::focusOutEvent( QFocusEvent * )
 
 void QListView::keyPressEvent( QKeyEvent * e )
 {
-    if ( !e || !firstChild() )
+    if ( !e || !firstChild() ) {
+	e->ignore();
 	return; // subclass bug
+    }
 
     QListViewItem* oldCurrent = currentItem();
     if ( !oldCurrent ) {
@@ -3575,7 +3615,13 @@ void QListView::keyPressEvent( QKeyEvent * e )
 		i = i2;
 	    }
 	} else {
-	    i = i2;
+	    if ( !i2 ) {
+		// list is shorter than the view, goto last item
+		while( (i2 = i->itemBelow()) != 0 )
+		    i = i2;
+	    } else {
+		i = i2;
+	    }
 	}
 	d->currentPrefix.truncate( 0 );
 	break;
@@ -3954,6 +4000,7 @@ void QListView::invertSelection()
 	it.current()->setSelected( !it.current()->isSelected() );
     blockSignals( b );
     emit selectionChanged();
+    triggerUpdate();
 }
 
 
@@ -3997,14 +4044,13 @@ QListViewItem * QListView::selectedItem() const
 
 void QListView::setCurrentItem( QListViewItem * i )
 {
-    if ( !i && firstChild() && firstChild() &&
-	 ( firstChild()->firstChild() || firstChild()->nextSibling() ) )
+    if ( !i || d->focusItem == i )
 	return;
 
     QListViewItem * prev = d->focusItem;
     d->focusItem = i;
 
-    if ( i != prev ) {
+    if ( i != prev) {
 	if ( i && d->selectionMode == Single ) {
 	    bool changed = FALSE;
 	    if ( prev && prev->selected ) {
@@ -4111,7 +4157,8 @@ QRect QListView::itemRect( const QListViewItem * i ) const
 
 void QListView::setSorting( int column, bool ascending )
 {
-    if ( column == -1 ) column = Unsorted;
+    if ( column == -1 )
+	column = Unsorted;
 
     if ( d->sortcolumn == column && d->ascending == ascending )
 	return;
@@ -4120,6 +4167,9 @@ void QListView::setSorting( int column, bool ascending )
     d->sortcolumn = column;
     if ( d->sortcolumn != Unsorted && d->sortIndicator )
 	d->h->setSortIndicator( d->sortcolumn, d->ascending );
+    else
+	d->h->setSortIndicator( -1 );
+
     triggerUpdate();
 }
 
@@ -4240,6 +4290,7 @@ void QListView::reconfigureItems()
     d->minRightBearing = fontMetrics().minRightBearing();
     d->ellipsisWidth = fontMetrics().width( "..." ) * 2;
     d->r->setOpen( FALSE );
+    d->r->configured = FALSE;
     d->r->setOpen( TRUE );
 }
 
@@ -4309,7 +4360,7 @@ bool QListView::allColumnsShowFocus() const
 
   Returns 0 if there is no first item.
 
-  \sa itemAt() itemBelow() itemAbove()
+  \sa itemAt() QListViewItem::itemBelow() QListViewItem::itemAbove()
 */
 
 QListViewItem * QListView::firstChild() const
@@ -4392,6 +4443,10 @@ static const char * const def_item_xpm[] = {
 static QPixmap *defaultIcon = 0;
 static const int BoxSize = 16;
 
+struct QCheckListItemPrivate
+{
+    bool enabled;
+};
 
 /*!
   Constructs a checkable item with parent \a parent, text \a text and type
@@ -4475,7 +4530,8 @@ QCheckListItem::QCheckListItem( QListViewItem *parent, const QString &text,
 void QCheckListItem::init()
 {
     on = FALSE;
-    reserved = 0;
+    reserved = new QCheckListItemPrivate;
+    ( (QCheckListItemPrivate*)reserved )->enabled = TRUE;
     if ( !defaultIcon )
 	defaultIcon = new QPixmap( (const char **)def_item_xpm );
     if ( myType == Controller ) {
@@ -4530,13 +4586,33 @@ void QCheckListItem::activate()
     }
 }
 
+/*!  Enables/Disables the item depending on what you pass as \a b
+  parameter. If the item is disabled, the user can't change the state
+  (see setOn()/isOn()) of the item.
+*/
+
+void QCheckListItem::setEnabled( bool b )
+{
+    ( (QCheckListItemPrivate*)reserved )->enabled = b;
+}
+
+/*!  Retuns whether the item is enabled or disabled.
+
+  \sa setEnabled()
+*/
+
+bool QCheckListItem::isEnabled() const
+{
+    return ( (QCheckListItemPrivate*)reserved )->enabled;
+}
+
 /*!
   Sets this button on if \a b is TRUE, off otherwise. Maintains radio button
   exclusivity.
  */
 void QCheckListItem::setOn( bool b  )
 {
-    if ( listView() && !listView()->isEnabled() )
+    if ( listView() && !listView()->isEnabled() || !isEnabled() )
 	return;
 
     if ( b == on )
@@ -4577,6 +4653,7 @@ void QCheckListItem::setup()
     QListViewItem::setup();
     int h = height();
     h = QMAX( BoxSize, h );
+    h = QMAX( h, QApplication::globalStrut().height() );
     setHeight( h );
 }
 
@@ -4595,7 +4672,7 @@ int QCheckListItem::width( const QFontMetrics& fm, const QListView* lv, int colu
 	    r += BoxSize + 4;
 	}
     }
-    return r;
+    return QMAX( r, QApplication::globalStrut().width() );
 }
 
 /*!
@@ -4634,7 +4711,10 @@ void QCheckListItem::paintCell( QPainter * p, const QColorGroup & cg,
 	int y = (height() - BoxSize) / 2;
 	//	p->setPen( QPen( cg.text(), winStyle ? 2 : 1 ) );
 	if ( myType == CheckBox ) {
-	    p->setPen( QPen( cg.text(), 2 ) );
+	    if ( isEnabled() )
+		p->setPen( QPen( cg.text(), 2 ) );
+	    else
+		p->setPen( QPen( listView()->palette().color( QPalette::Disabled, QColorGroup::Text ), 2 ) );
 	    p->drawRect( x+marg, y+2, BoxSize-4, BoxSize-4 );
 	    /////////////////////
 	    x++;
@@ -4662,21 +4742,24 @@ void QCheckListItem::paintCell( QPainter * p, const QColorGroup & cg,
 	    if ( winStyle ) {
 #define QCOORDARRLEN(x) sizeof(x)/(sizeof(QCOORD)*2)
 
-		static QCOORD pts1[] = {		// dark lines
+		static const QCOORD pts1[] = {		// dark lines
 		    1,9, 1,8, 0,7, 0,4, 1,3, 1,2, 2,1, 3,1, 4,0, 7,0, 8,1, 9,1 };
-		static QCOORD pts2[] = {		// black lines
+		static const QCOORD pts2[] = {		// black lines
 		    2,8, 1,7, 1,4, 2,3, 2,2, 3,2, 4,1, 7,1, 8,2, 9,2 };
-		static QCOORD pts3[] = {		// background lines
+		static const QCOORD pts3[] = {		// background lines
 		    2,9, 3,9, 4,10, 7,10, 8,9, 9,9, 9,8, 10,7, 10,4, 9,3 };
-		static QCOORD pts4[] = {		// white lines
+		static const QCOORD pts4[] = {		// white lines
 		    2,10, 3,10, 4,11, 7,11, 8,10, 9,10, 10,9, 10,8, 11,7,
 		    11,4, 10,3, 10,2 };
-		// static QCOORD pts5[] = {		// inner fill
+		// static const QCOORD pts5[] = {		// inner fill
 		//    4,2, 7,2, 9,4, 9,7, 7,9, 4,9, 2,7, 2,4 };
 		//QPointArray a;
 		//	p->eraseRect( x, y, w, h );
 
-		p->setPen( cg.text() );
+		if ( isEnabled() )
+		    p->setPen( cg.text() );
+		else
+		    p->setPen( QPen( listView()->palette().color( QPalette::Disabled, QColorGroup::Text ) ) );
 		QPointArray a( QCOORDARRLEN(pts1), pts1 );
 		a.translate( x, y );
 		//p->setPen( cg.dark() );
@@ -4706,7 +4789,10 @@ void QCheckListItem::paintCell( QPainter * p, const QColorGroup & cg,
 		}
 
 	    } else { //motif
-		p->setPen( QPen( cg.text() ) );
+		if ( isEnabled() )
+		    p->setPen( QPen( cg.text() ) );
+		else
+		    p->setPen( QPen( listView()->palette().color( QPalette::Disabled, QColorGroup::Text ) ) );
 		QPointArray a;
 		int cx = BoxSize/2 - 1;
 		int cy = height()/2;
@@ -4717,7 +4803,10 @@ void QCheckListItem::paintCell( QPainter * p, const QColorGroup & cg,
 		    e--;
 		}
 		if ( on ) {
-		    p->setPen( QPen( cg.text()) );
+		    if ( isEnabled() )
+			p->setPen( QPen( cg.text()) );
+		    else
+			p->setPen( QPen( listView()->palette().color( QPalette::Disabled, QColorGroup::Text ) ) );
 		    QBrush   saveBrush = p->brush();
 		    p->setBrush( cg.text() );
 		    e = e - 2;
@@ -4731,6 +4820,7 @@ void QCheckListItem::paintCell( QPainter * p, const QColorGroup & cg,
     }
 
     p->translate( r, 0 );
+    p->setPen( QPen( cg.text() ) );
     QListViewItem::paintCell( p, cg, column, width - r, align );
 }
 
@@ -4759,10 +4849,10 @@ void QCheckListItem::paintFocus( QPainter *p, const QColorGroup & cg,
 /*!
   Fills the rectangle. No decoration is drawn.
  */
-void QCheckListItem::paintBranches( QPainter * p, const QColorGroup & cg,
+void QCheckListItem::paintBranches( QPainter * p, const QColorGroup &,
 			    int w, int, int h, GUIStyle)
 {
-    p->fillRect( 0, 0, w, h, cg.brush( QColorGroup::Base ) );
+    listView()->paintEmptyArea( p, QRect( 0, 0, w, h ) );
 }
 
 
@@ -4770,6 +4860,9 @@ void QCheckListItem::paintBranches( QPainter * p, const QColorGroup & cg,
 */
 QSize QListView::sizeHint() const
 {
+    if ( isVisibleTo(0) && d->sizeHint.isValid() )
+	return d->sizeHint;
+
     //    This is as wide as QHeader::sizeHint() recommends and tall
     //    enough for perhaps 10 items.
 
@@ -4796,7 +4889,8 @@ QSize QListView::sizeHint() const
     else if ( s.width() *3 < s.height() )
 	s.setHeight( s.width() * 3 );
 
-    return s;
+    d->sizeHint = s;
+    return d->sizeHint;
 }
 
 
@@ -4890,7 +4984,8 @@ bool QListView::rootIsDecorated() const
 
 
 /*!  Ensures that \a i is made visible, scrolling the list view
-  vertically as required.
+  vertically as required and opens (expands)also all parent items if they
+  hide their children.
 
   \sa itemRect() QScrollView::ensureVisible()
 */
@@ -4899,6 +4994,14 @@ void QListView::ensureItemVisible( const QListViewItem * i )
 {
     if ( !i )
 	return;
+
+    QListViewItem *parent = i->parent();
+    while ( parent ) {
+	if ( !parent->isOpen() )
+	    parent->setOpen( TRUE );
+	parent = parent->parent();
+    }
+
     if ( d->r->maybeTotalHeight < 0 )
 	updateGeometries();
     int y = itemPos( i );
@@ -4965,6 +5068,25 @@ void QListViewItem::moveToJustAfter( QListViewItem * olderSibling )
     }
 }
 
+
+/*! Moves this item after the item \a after. This means it will get
+the sibling exactly after the item \a after. To move an item in the
+hierarchy, use takeItem() and insertItem().
+*/
+
+void QListViewItem::moveItem( QListViewItem *after )
+{
+    if ( !after )
+	return;
+    if ( parent() != after->parent() ) {
+	parent()->takeItem( this );
+	after->parent()->insertItem( this );
+    }
+    moveToJustAfter( after );
+    QListView *lv = listView();
+    if ( lv )
+	lv->triggerUpdate();
+}
 
 /*!  \reimp */
 
@@ -5040,7 +5162,6 @@ void QListView::takeItem( QListViewItem * i )
     d->r->takeItem( i );
 }
 
-
 /**********************************************************************
  *
  * Class QListViewItemIterator
@@ -5100,9 +5221,9 @@ void QListView::takeItem( QListViewItem * i )
 
   \endcode
 
-  Using a QListViewItemIterator is a convinient way to traverse the
+  Using a QListViewItemIterator is a convenient way to traverse the
   tree of QListViewItems of a QListView. It makes especially operating
-  on a hirarchical QListView easy.
+  on a hierarchical QListView easy.
 
   Also, multiple QListViewItemIterators can operate on the tree of
   QListViewItems.  A QListView knows about all iterators which are
@@ -5247,7 +5368,7 @@ const QListViewItemIterator QListViewItemIterator::operator++( int )
 
 /*!
   Sets the current item to the item \e j positions after the current
-  item in the QListViewItem hirarchie. If this item is beyond the last
+  item in the QListViewItem hierarchy. If this item is beyond the last
   item, the current item is set to null.
 
   The new current item (or null, if the new current item is null) is returned.
@@ -5339,7 +5460,7 @@ const QListViewItemIterator QListViewItemIterator::operator--( int )
 }
 
 /*!  Sets the current item to the item \e j positions before the
-  current item in the QListViewItem hirarchie. If this item is above
+  current item in the QListViewItem hierarchy. If this item is above
   the first item, the current item is set to null.  The new current
   item (or null, if the new current item is null) is returned.
 */
@@ -5491,3 +5612,4 @@ void QListView::selectRange( QListViewItem *from, QListViewItem *to, bool invert
 	emit selectionChanged();
     }
 }
+#endif // QT_NO_LISTVIEW

@@ -1,5 +1,5 @@
-.TH QCache 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QCache 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QCache \- Template class that provides a cache based on \fCQString\fR keys
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -22,10 +20,10 @@ Inherits QGCache.
 .BI "\fBQCache\fR ( const QCache<type> & c ) (internal)"
 .br
 .ti -1c
-.BI "\fBQCache\fR ( int " "maxCost" "=100, int " "size" "=17, bool " "caseSensitive" "=TRUE )"
+.BI "\fBQCache\fR ( int " "maxCost" "=100, int " "size" "=17, bool " "caseSensitive" "=TRUE ) "
 .br
 .ti -1c
-.BI "\fB~QCache\fR ()"
+.BI "\fB~QCache\fR () "
 .br
 .ti -1c
 .BI "QCache<type>& \fBoperator=\fR ( const QCache<type> & c ) (internal)"
@@ -37,7 +35,7 @@ Inherits QGCache.
 .BI "int \fBtotalCost\fR () const"
 .br
 .ti -1c
-.BI "void \fBsetMaxCost\fR ( int m )"
+.BI "void \fBsetMaxCost\fR ( int m ) "
 .br
 .ti -1c
 .BI "virtual uint \fBcount\fR () const"
@@ -49,16 +47,16 @@ Inherits QGCache.
 .BI "bool \fBisEmpty\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBclear\fR ()"
+.BI "virtual void \fBclear\fR () "
 .br
 .ti -1c
-.BI "bool \fBinsert\fR ( const QString & " "k" ", const type * " "d" ", int " "c" "=1, int " "p" "=0 )"
+.BI "bool \fBinsert\fR ( const QString & " "k" ", const type * " "d" ", int " "c" "=1, int " "p" "=0 ) "
 .br
 .ti -1c
-.BI "bool \fBremove\fR ( const QString & k )"
+.BI "bool \fBremove\fR ( const QString & k ) "
 .br
 .ti -1c
-.BI "type* \fBtake\fR ( const QString & k )"
+.BI "type* \fBtake\fR ( const QString & k ) "
 .br
 .ti -1c
 .BI "type* \fBfind\fR ( const QString & " "k" ", bool " "ref" "=TRUE ) const"
@@ -89,7 +87,7 @@ There is a QCacheIterator which may be used to traverse the items in the cache i
 .PP
 In QCache, the cache items are accessed via QString keys, which are Unicode strings. If you want to use non-Unicode, plain 8-bit \fCchar*\fR keys, use the QAsciiCache template. A QCache has the same performace as a QAsciiCache.
 .PP
-See also: QCacheIterator, QAsciiCache, QIntCache and Collection Classes
+See also QCacheIterator, QAsciiCache, QIntCache and Collection Classes
 .SH MEMBER FUNCTION DOCUMENTATION
 .SH "QCache::QCache ( int maxCost=100, int size=17, bool caseSensitive=TRUE )"
 Constructs a cache with the following properties:
@@ -112,13 +110,13 @@ Removes all items from the cache, and deletes them if auto-deletion has been ena
 .PP
 All cache iterators that operate this on cache are reset.
 .PP
-See also: remove() and take().
+See also remove() and take().
 .PP
 Reimplemented from QCollection.
 .SH "uint QCache::count () const \fC[virtual]\fR"
 Returns the number of items in the cache.
 .PP
-See also: totalCost().
+See also totalCost().
 .PP
 Reimplemented from QCollection.
 .SH "type * QCache::find ( const QString & k, bool ref=TRUE ) const"
@@ -138,7 +136,7 @@ Returns TRUE if the cache is empty, or TRUE if there is at least one object in i
 .SH "int QCache::maxCost () const"
 Returns the maximum allowed total cost of the cache.
 .PP
-See also: setMaxCost() and totalCost().
+See also setMaxCost() and totalCost().
 .SH "type * QCache::operator[] ( const QString & k ) const"
 Returns the item associated with \fIk,\fR or null if \fIk\fR does not exist in the cache, and moves the item to the front of the LRU list.
 .PP
@@ -146,7 +144,7 @@ If there are two or more items with equal keys, then the one that was inserted l
 .PP
 This is the same as find( k, TRUE ).
 .PP
-See also: find().
+See also find().
 .SH "bool QCache::remove ( const QString & k )"
 Removes the item associated with \fIk,\fR and returns TRUE if the item was present in the cache or FALSE if it was not.
 .PP
@@ -156,11 +154,11 @@ If there are two or more items with equal keys, then the one that was inserted l
 .PP
 All iterators that refer to the removed item are set to point to the next item in the cache's traversal order.
 .PP
-See also: take() and clear().
+See also take() and clear().
 .SH "void QCache::setMaxCost ( int m )"
 Sets the maximum allowed total cost of the cache to \fIm.\fR If the current total cost is above \fIm,\fR some items are deleted immediately.
 .PP
-See also: maxCost() and totalCost().
+See also maxCost() and totalCost().
 .SH "uint QCache::size () const"
 Returns the size of the hash array used to implement the cache. This should be a bit bigger than count() is likely to be.
 .SH "void QCache::statistics () const"
@@ -172,11 +170,11 @@ If there are two or more items with equal keys, then the one that was inserted l
 .PP
 All iterators that refer to the taken item are set to point to the next item in the cache's traversal order.
 .PP
-See also: remove() and clear().
+See also remove() and clear().
 .SH "int QCache::totalCost () const"
 Returns the total cost of the items in the cache. This is an integer in the range 0 to maxCost().
 .PP
-See also: setMaxCost().
+See also setMaxCost().
 .SH "QCache::QCache ( const QCache<type> & c )"
 For internal use only.
 .SH "QCache<type>& QCache::operator= ( const QCache<type> & c )"
@@ -184,7 +182,7 @@ For internal use only.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qcache.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

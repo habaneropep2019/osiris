@@ -1,27 +1,39 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qimage.h   2.1.1   edited 2000-04-05 $
+** $Id: qt/src/kernel/qimage.h   2.2.0   edited 2000-08-25 $
 **
 ** Definition of QImage and QImageIO classes
 **
 ** Created : 950207
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the kernel module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #ifndef QIMAGE_H
 #define QIMAGE_H
@@ -33,7 +45,7 @@
 #endif // QT_H
 
 class QImageDataMisc; // internal
-
+#ifndef QT_NO_IMAGE_TEXT
 class QImageTextKeyLang {
 public:
     QImageTextKeyLang(const char* k, const char* l) : key(k), lang(l) { }
@@ -47,7 +59,7 @@ public:
     int operator == (const QImageTextKeyLang& other) const
 	{ return key==other.key && lang==other.lang; }
 };
-
+#endif //QT_NO_IMAGE_TEXT
 
 
 class Q_EXPORT QImage
@@ -76,7 +88,8 @@ public:
     void	detach();
     QImage	copy()		const;
     QImage	copy(int x, int y, int w, int h, int conversion_flags=0) const;
-    QImage	copy(QRect&)	const;
+    QImage	copy(QRect&)	const; // constness srong - REMOVE in Qt 3.0
+    QImage	copy(const QRect&)	const;
 
     bool	isNull()	const	{ return data->bits == 0; }
 
@@ -105,6 +118,10 @@ public:
     int		numBytes()	const;
     int		bytesPerLine()	const;
 
+#ifdef _WS_QWS_
+    QGfx * graphicsContext();
+#endif
+    
     bool	create( int width, int height, int depth, int numColors=0,
 			Endian bitOrder=IgnoreEndian );
     bool	create( const QSize&, int depth, int numColors=0,
@@ -115,11 +132,14 @@ public:
     void	invertPixels( bool invertAlpha = TRUE );
 
     QImage	convertDepth( int ) const;
+#ifndef QT_NO_IMAGE_TRUECOLOR
     QImage	convertDepthWithPalette( int, QRgb* p, int pc, int cf=0 ) const;
+#endif
     QImage	convertDepth( int, int conversion_flags ) const;
     QImage	convertBitOrder( Endian ) const;
+#ifndef QT_NO_IMAGE_SMOOTHSCALE
     QImage	smoothScale(int width, int height) const;
-
+#endif
     QImage	createAlphaMask( int conversion_flags=0 ) const;
     QImage	createHeuristicMask( bool clipTight=TRUE ) const;
 
@@ -133,14 +153,17 @@ public:
     static const char* imageFormat( const QString &fileName );
     static QStrList inputFormats();
     static QStrList outputFormats();
+#ifndef QT_NO_STRINGLIST
     static QStringList inputFormatList();
     static QStringList outputFormatList();
-
+#endif
     bool	load( const QString &fileName, const char* format=0 );
     bool	loadFromData( const uchar *buf, uint len,
 			      const char *format=0 );
-    bool	loadFromData( QByteArray data, const char *format=0 );
-    bool	save( const QString &fileName, const char* format ) const;
+    bool	loadFromData( QByteArray data, const char* format=0 );
+    bool	save( const QString &fileName, const char* format ) const; // ### remove 3.0
+    bool	save( const QString &fileName, const char* format,
+		      int quality ) const; // ### change to quality=-1 in 3.0
 
     bool	valid( int x, int y ) const;
     int		pixelIndex( int x, int y ) const;
@@ -154,13 +177,14 @@ public:
     void setDotsPerMeterY(int);
     QPoint offset() const;
     void setOffset(const QPoint&);
+#ifndef QT_NO_IMAGE_TEXT
     QValueList<QImageTextKeyLang> textList() const;
     QStringList textLanguages() const;
     QStringList textKeys() const;
     QString text(const char* key, const char* lang=0) const;
     QString text(const QImageTextKeyLang&) const;
     void setText(const char* key, const char* lang, const QString&);
-
+#endif
 private:
     void	init();
     void	reinit();
@@ -180,13 +204,15 @@ private:
 	int	dpmx;				// dots per meter X (or 0)
 	int	dpmy;				// dots per meter Y (or 0)
 	QPoint	offset;				// offset in pixels
+#ifndef QT_NO_IMAGE_TEXT
 	QImageDataMisc* misc;			// less common stuff
+#endif
 	bool    bits_mine;			// this allocated bits
 	bool    ctbl_mine;			// this allocated ctbl
     } *data;
-
+#ifndef QT_NO_IMAGE_TEXT
     QImageDataMisc& misc() const;
-
+#endif
     friend Q_EXPORT void bitBlt( QImage* dst, int dx, int dy,
 				 const QImage* src, int sx, int sy,
 				 int sw, int sh, int conversion_flags );
@@ -195,12 +221,16 @@ private:
 
 // QImage stream functions
 
+#ifndef QT_NO_DATASTREAM
 Q_EXPORT QDataStream &operator<<( QDataStream &, const QImage & );
 Q_EXPORT QDataStream &operator>>( QDataStream &, QImage & );
-
+#endif
 
 class QIODevice;
 typedef void (*image_io_handler)( QImageIO * ); // image IO handler
+
+
+struct QImageIOData; //### use instead of params in 3.0
 
 
 class Q_EXPORT QImageIO
@@ -248,7 +278,7 @@ private:
     QCString	frmt;				// image format
     QIODevice  *iodev;				// IO device
     QString	fname;				// file name
-    char       *params;				// image parameters
+    char       *params;				// image parameters //### change to QImageIOData *d in 3.0
     QString     descr;				// image description
 
 private:	// Disabled copy constructor and operator=
@@ -298,7 +328,13 @@ inline int QImage::bytesPerLine() const
     return data->h ? data->nbytes/data->h : 0;
 }
 
+// REMOVE in Qt 3.0
 inline QImage QImage::copy(QRect& r) const
+{
+    return copy(r.x(), r.y(), r.width(), r.height());
+}
+
+inline QImage QImage::copy(const QRect& r) const
 {
     return copy(r.x(), r.y(), r.width(), r.height());
 }

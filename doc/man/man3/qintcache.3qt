@@ -1,5 +1,5 @@
-.TH QIntCache 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QIntCache 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QIntCache \- Template class that provides a cache based on \fClong\fR keys
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -22,10 +20,10 @@ Inherits QGCache.
 .BI "\fBQIntCache\fR ( const QIntCache<type> & c ) (internal)"
 .br
 .ti -1c
-.BI "\fBQIntCache\fR ( int " "maxCost" "=100, int " "size" "=17 )"
+.BI "\fBQIntCache\fR ( int " "maxCost" "=100, int " "size" "=17 ) "
 .br
 .ti -1c
-.BI "\fB~QIntCache\fR ()"
+.BI "\fB~QIntCache\fR () "
 .br
 .ti -1c
 .BI "QIntCache<type>& \fBoperator=\fR ( const QIntCache<type> & c ) (internal)"
@@ -37,7 +35,7 @@ Inherits QGCache.
 .BI "int \fBtotalCost\fR () const"
 .br
 .ti -1c
-.BI "void \fBsetMaxCost\fR ( int m )"
+.BI "void \fBsetMaxCost\fR ( int m ) "
 .br
 .ti -1c
 .BI "virtual uint \fBcount\fR () const"
@@ -49,16 +47,16 @@ Inherits QGCache.
 .BI "bool \fBisEmpty\fR () const"
 .br
 .ti -1c
-.BI "bool \fBinsert\fR ( long " "k" ", const type * " "d" ", int " "c" "=1, int " "p" "=0 )"
+.BI "bool \fBinsert\fR ( long " "k" ", const type * " "d" ", int " "c" "=1, int " "p" "=0 ) "
 .br
 .ti -1c
-.BI "bool \fBremove\fR ( long k )"
+.BI "bool \fBremove\fR ( long k ) "
 .br
 .ti -1c
-.BI "type* \fBtake\fR ( long k )"
+.BI "type* \fBtake\fR ( long k ) "
 .br
 .ti -1c
-.BI "virtual void \fBclear\fR ()"
+.BI "virtual void \fBclear\fR () "
 .br
 .ti -1c
 .BI "type* \fBfind\fR ( long " "k" ", bool " "ref" "=TRUE ) const"
@@ -87,7 +85,7 @@ When removing a cache item, the virtual function QCollection::deleteItem() is ca
 .PP
 There is a QIntCacheIterator which may be used to traverse the items in the cache in arbitrary order.
 .PP
-See also: QIntCacheIterator, QCache, QAsciiCache and Collection Classes
+See also QIntCacheIterator, QCache, QAsciiCache and Collection Classes
 .SH MEMBER FUNCTION DOCUMENTATION
 .SH "QIntCache::QIntCache ( int maxCost=100, int size=17 )"
 Constructs a cache with the following properties:
@@ -106,17 +104,17 @@ Removes all items from the cache, and deletes them if auto-deletion has been ena
 .PP
 All cache iterators that operate this on cache are reset.
 .PP
-See also: remove() and take().
+See also remove() and take().
 .PP
 Reimplemented from QCollection.
 .SH "uint QIntCache::count () const \fC[virtual]\fR"
 Returns the number of items in the cache.
 .PP
-See also: totalCost().
+See also totalCost().
 .PP
 Reimplemented from QCollection.
 .SH "type * QIntCache::find ( long k, bool ref=TRUE ) const"
-Returns the item associated with \\ k, or null if the key does not exist in the cache. If \fIref\fR is TRUE (the default), the item is moved to the front of the LRU list.
+Returns the item associated with \fIk,\fR or null if the key does not exist in the cache. If \fIref\fR is TRUE (the default), the item is moved to the front of the LRU list.
 .PP
 If there are two or more items with equal keys, then the one that was inserted last is returned.
 .SH "bool QIntCache::insert ( long k, const type * d, int c=1, int p=0 )"
@@ -132,7 +130,7 @@ Returns TRUE if the cache is empty, or TRUE if there is at least one object in i
 .SH "int QIntCache::maxCost () const"
 Returns the maximum allowed total cost of the cache.
 .PP
-See also: setMaxCost() and totalCost().
+See also setMaxCost() and totalCost().
 .SH "type * QIntCache::operator[] ( long k ) const"
 Returns the item associated with \fIk,\fR or null if \fIk\fR does not exist in the cache, and moves the item to the front of the LRU list.
 .PP
@@ -140,7 +138,7 @@ If there are two or more items with equal keys, then the one that was inserted l
 .PP
 This is the same as find( k, TRUE ).
 .PP
-See also: find().
+See also find().
 .SH "bool QIntCache::remove ( long k )"
 Removes the item associated with \fIk,\fR and returns TRUE if the item was present in the cache or FALSE if it was not.
 .PP
@@ -150,11 +148,11 @@ If there are two or more items with equal keys, then the one that was inserted l
 .PP
 All iterators that refer to the removed item are set to point to the next item in the cache's traversal order.
 .PP
-See also: take() and clear().
+See also take() and clear().
 .SH "void QIntCache::setMaxCost ( int m )"
 Sets the maximum allowed total cost of the cache to \fIm.\fR If the current total cost is above \fIm,\fR some items are removed immediately.
 .PP
-See also: maxCost() and totalCost().
+See also maxCost() and totalCost().
 .SH "uint QIntCache::size () const"
 Returns the size of the hash array used to implement the cache. This should be a bit bigger than count() is likely to be.
 .SH "void QIntCache::statistics () const"
@@ -166,11 +164,11 @@ If there are two or more items with equal keys, then the one that was inserted l
 .PP
 All iterators that refer to the taken item are set to point to the next item in the cache's traversal order.
 .PP
-See also: remove() and clear().
+See also remove() and clear().
 .SH "int QIntCache::totalCost () const"
 Returns the total cost of the items in the cache. This is an integer in the range 0 to maxCost().
 .PP
-See also: setMaxCost().
+See also setMaxCost().
 .SH "QIntCache::QIntCache ( const QIntCache<type> & c )"
 For internal use only.
 .SH "QIntCache<type>& QIntCache::operator= ( const QIntCache<type> & c )"
@@ -178,7 +176,7 @@ For internal use only.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qintcache.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

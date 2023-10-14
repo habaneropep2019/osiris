@@ -1,29 +1,42 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qmotifstyle.cpp   2.1.1   edited 2000-04-28 $
+** $Id: qt/src/widgets/qmotifstyle.cpp   2.2.0   edited 2000-08-25 $
 **
 ** Implementation of Motif-like style class
 **
 ** Created : 981231
 **
-** Copyright (C) 1998-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1998-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the widgets module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #include "qmotifstyle.h"
+#ifndef QT_NO_STYLE_MOTIF
 #include "qapplication.h"
 #include "qpainter.h"
 #include "qdrawutil.h" // for now
@@ -50,7 +63,7 @@
   This class implements the Motif look and feel. It almost completely
   resembles the original Motif look as defined by the Open Group, but
   also contains minor improvements. The Motif style is Qt's default
-  GUI style on UNIX plattforms.
+  GUI style on UNIX platforms.
 */
 
 /*!
@@ -68,6 +81,11 @@ QMotifStyle::QMotifStyle( bool useHighlightCols ) : QCommonStyle(MotifStyle)
 #define Q_NICE_MOTIF_DEFAULT_BUTTON
 #ifdef Q_NICE_MOTIF_DEFAULT_BUTTON
     setButtonDefaultIndicatorWidth( 3 );
+#endif
+
+#define Q_NICE_MOTIF_SLIDER_THICKNESS
+#ifdef Q_NICE_MOTIF_SLIDER_THICKNESS
+    setSliderThickness(24);
 #endif
 }
 
@@ -609,7 +627,7 @@ void QMotifStyle::drawTabMask( QPainter* p,  const  QTabBar* tb, QTab* t, bool s
 
 #define HORIZONTAL	(sb->orientation() == QScrollBar::Horizontal)
 #define VERTICAL	!HORIZONTAL
-#define MOTIF_BORDER	defaultFrameWidth();
+#define MOTIF_BORDER	defaultFrameWidth()
 #define SLIDER_MIN	9 // ### motif says 6 but that's too small
 
 
@@ -772,7 +790,7 @@ void QMotifStyle::drawSliderGroove( QPainter *p,
 				      const QColorGroup& g, QCOORD /*c */,
 				      Orientation )
 {
-    qDrawShadePanel( p, x, y, w, h, g, TRUE );
+    qDrawShadePanel( p, x, y, w, h, g, TRUE, 1, &g.brush( QColorGroup::Mid ) );
 }
 
 
@@ -781,7 +799,7 @@ void QMotifStyle::drawSliderGroove( QPainter *p,
 
 int QMotifStyle::splitterWidth() const
 {
-    return 10;
+    return QMAX( 10, QApplication::globalStrut().width() );
 }
 
 
@@ -1062,7 +1080,6 @@ void QMotifStyle::drawPopupMenuItem( QPainter* p, bool checkable, int maxpmw, in
     }
 }
 
-
 static int get_combo_extra_width( int h, int *return_awh=0 )
 {
     int awh;
@@ -1130,7 +1147,7 @@ void QMotifStyle::drawComboButton( QPainter *p, int x, int y, int w, int h,
 
     if ( editable ) {
 	QRect r( comboButtonRect(x,y,w,h) );
-	qDrawShadePanel( p, QRect(r.x()-1, r.y()-1, r.width()-2, r.height()-2), g, TRUE, 1, &fill );
+	qDrawShadePanel( p, QRect(r.x()-1, r.y()-1, r.width()+2, r.height()+2), g, TRUE, 1, &fill );
     }
 }
 
@@ -1153,3 +1170,4 @@ QRect QMotifStyle::comboButtonFocusRect( int x, int y, int w, int h)
 			  ew, awh, ax, ay, sh, dh, sy );
     return QRect(ax-2, ay-2, awh+4, awh+sh+dh+4);
 }
+#endif

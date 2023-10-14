@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: qt/examples/desktop/desktop.cpp   2.1.1   edited 2000-03-02 $
+** $Id: qt/examples/desktop/desktop.cpp   2.2.0   edited 2000-08-31 $
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -258,7 +258,7 @@ void DesktopWidget::paintEvent( QPaintEvent * )
     bitBlt( this, x, y, &offscreen );
 }
 
-void desktopWidget( const char *s = "Troll Tech" )
+void desktopWidget( const char *s = "Trolltech" )
 {
     DesktopWidget *t = new DesktopWidget(s);
     t->update();
@@ -266,7 +266,7 @@ void desktopWidget( const char *s = "Troll Tech" )
     delete t;
 }
 
-void desktopText( const char *s = "Troll Tech" )
+void desktopText( const char *s = "Trolltech" )
 {
     const int border = 20;
 

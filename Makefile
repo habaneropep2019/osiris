@@ -3,40 +3,45 @@
 # Main Makefile for building the Qt library, examples and tutorial.
 # Read PORTING for instructions how to port Qt to a new platform.
 
+SHELL=/bin/sh
 
-all:  moc src util tutorial examples
+init: FORCE
+	@$(MAKE) QTDIR=`pwd` all
+
+all: symlinks  src-moc src-mt sub-src sub-tools sub-tutorial sub-examples
 	@echo
 	@echo "The Qt library is now built in ./lib"
 	@echo "The Qt examples are built in the directories in ./examples"
 	@echo "The Qt tutorials are built in the directories in ./tutorial"
 	@echo
-	@echo "Enjoy!   - the Troll Tech team"
+	@echo 'Note: be sure to set $$QTDIR to point to here or to wherever'
+	@echo '      you move these directories.'
+	@echo
+	@echo "Enjoy!   - the Trolltech team"
 	@echo
 
-moc: .buildopts FORCE
+src-moc: .buildopts symlinks  FORCE
 	cd src/moc; $(MAKE)
-	-mkdir bin
 	-rm -f bin/moc
 	cp src/moc/moc bin/moc
 
-util: mergetr msg2qm
+sub-tools: sub-src FORCE
+	cd tools; $(MAKE)
 
-mergetr: src FORCE
-	cd src/util/mergetr; $(MAKE)
-	cp src/util/mergetr/mergetr bin/mergetr
+symlinks: .buildopts
+	@cd include; rm -f q*.h; ln -s ../src/*/q*.h .; ln -s ../extensions/*/src/q*.h .; rm -f q*_p.h
 
-msg2qm: src FORCE
-	cd src/util/msg2qm; $(MAKE)
-	cp src/util/msg2qm/msg2qm bin/msg2qm
+sub-src: src-moc src-mt .buildopts FORCE
+	cd src; $(MAKE)
 
-symlinks:
-	@cd include; rm -f q*.h; ln -s ../src/*/q*.h . ; ln -s ../extensions/*/src/q*.h .
+src-mt: src-moc .buildopts FORCE
+	$(MAKE) -f src-mt.mk
 
-src: moc .buildopts FORCE
-	cd $@; $(MAKE)
+sub-tutorial: sub-src FORCE
+	cd tutorial; $(MAKE)
 
-tutorial examples: src FORCE
-	cd $@; $(MAKE)
+sub-examples: sub-src FORCE
+	cd examples; $(MAKE)
 
 clean:
 	-rm .buildopts
@@ -52,11 +57,11 @@ depend:
 
 .buildopts: Makefile
 	@echo
-	@echo '  You must run the configure script before you can build Qt.'
+	@echo '  Qt must first be configured using the "configure" script.'
 	@echo
-	@echo '  The make process will now abort with an error.'
+	@echo '  The make process will now run this...'
 	@echo
-	@exit 1
+	@./configure -frommake
 
 dep: depend
 

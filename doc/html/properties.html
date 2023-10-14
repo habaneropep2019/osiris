@@ -1,11 +1,15 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><title>
-Qt Toolkit - Properties
-</title></head><body bgcolor="#ffffff">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><title>Qt Toolkit -  Properties</title><style type="text/css"><!--
+h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
+a:link { color: #004faf; text-decoration: none }
+a:visited { color: #672967; text-decoration: none }body { background: white; color: black; }
+--></style></head><body bgcolor="#ffffff">
 <p>
-<a href="index.html">
-<img width="122" height="65" src="qtlogo.png" alt="Home"
-  align="left" border="0">
-</a><div align=right><img src="dochead.png" width="472" height="27"><br>
+<table width="100%">
+<tr><td><a href="index.html">
+<img width="100" height="100" src="qtlogo.png"
+alt="Home" border="0"><img width="100"
+height="100" src="face.png" alt="Home" border="0">
+</a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
 - <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
@@ -13,10 +17,8 @@ Qt Toolkit - Properties
 - <a href="index.html">Home</a>
 - <a href="topicals.html"><b>Structure</b></a>
 </div>
-<br clear=all>
-<p>
-<h1 align=center>Properties</h1><br clear="all">
-<p>
+</table>
+<h1 align=center> Properties</h1><br clear="all">
 Qt provides a sophisticated property system similar to those shipped
 by some compiler vendors. However, as a compiler- and
 platform-independent library, Qt cannot rely on non-standard compiler
@@ -64,12 +66,13 @@ the first is preferred.  However, since you can get a list of all
 available properties for any QObject through its <a href="qmetaobject.html">metaObject()</a> setProperty() can give you control over classes
 that weren't available at compile time.
 <p>
-As well las QObject::setProperty(), there is a <a href="qobject.html#d1c761">QObject::property()</a>. <a href="qmetaobject.html#d6f94c">QMetaObject::propertyNames()</a> returns the names
-of all available properties.  <a href="qmetaobject.html#20d1ee">QMetaObject::property()</a> returns the
-property data for a named property: a <a href="qmetaproperty.html">QMetaProperty</a> object.
+As well as QObject::setProperty(), there is a <a href="qobject.html#d1c761">QObject::property()</a>.
+<a href="qmetaobject.html#d6f94c">QMetaObject::propertyNames()</a> returns the names of all available
+properties.  <a href="qmetaobject.html#20d1ee">QMetaObject::property()</a> returns the property data for
+a named property: a <a href="qmetaproperty.html">QMetaProperty</a> object.
 <p>
 Here's a simple example that shows the most important property
-functions in use/.
+functions in use:
 <p>
 <pre>    class MyClass : public QObject
     {
@@ -134,7 +137,7 @@ enum is best handled with <code>Q_SETS,</code> not <code>Q_ENUMS.</code>
 The remaining keywords in the <code>Q_PROPERTY</code> section are <code>STORED,</code> <code>DESIGNABLE</code> and <code>RESET.</code>
 <p>
 <code>STORED</code> declares whether the property's value is stored in the
-object. Stored makes only sense for writeable properties. The default
+object. Stored makes only sense for writable properties. The default
 value is <code>true.</code>
 <p>
 <code>DESIGNABLE</code> declares whether this property is suited for
@@ -147,6 +150,6 @@ must return void and take no arguments.
 
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.1</div>
+<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.2.0</div>
 </table></div></address></body></html>

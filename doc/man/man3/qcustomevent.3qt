@@ -1,5 +1,5 @@
-.TH QCustomEvent 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QCustomEvent 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QCustomEvent \- Support for custom events
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -19,16 +17,16 @@ Inherits QEvent.
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQCustomEvent\fR ( int type )"
+.BI "\fBQCustomEvent\fR ( int type ) "
 .br
 .ti -1c
-.BI "\fBQCustomEvent\fR ( Type " "type" ", void * data )"
+.BI "\fBQCustomEvent\fR ( Type " "type" ", void * data ) "
 .br
 .ti -1c
 .BI "void* \fBdata\fR () const"
 .br
 .ti -1c
-.BI "void \fBsetData\fR ( void * data )"
+.BI "void \fBsetData\fR ( void * data ) "
 .br
 .in -1c
 .SH DESCRIPTION
@@ -91,24 +89,24 @@ Example:
   }
 .fi
 .PP
-See also: QWidget::customEvent() and QApplication::notify().
+See also QWidget::customEvent() and QApplication::notify().
 .SH MEMBER FUNCTION DOCUMENTATION
 .SH "QCustomEvent::QCustomEvent ( Type type, void * data )"
-Constructs a custom event object with the event type \fItype\fR and a pointer to \fIdata.\fR (Note that any int value may safely be casted to QEvent::Type).
+Constructs a custom event object with the event type \fItype\fR and a pointer to \fIdata.\fR (Note that any int value may safely be cast to QEvent::Type).
 .SH "QCustomEvent::QCustomEvent ( int type )"
 Constructs a custom event object with event type \fItype.\fR The value of \fItype\fR must be at least as large as QEvent::User. The data pointer is set to 0.
 .SH "void * QCustomEvent::data () const"
 Returns a pointer to the generic event data.
 .PP
-See also: setData().
+See also setData().
 .SH "void QCustomEvent::setData ( void * data )"
 Sets the generic data pointer to \fIdata.\fR
 .PP
-See also:  data().
+See also  data().
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qcustomevent.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

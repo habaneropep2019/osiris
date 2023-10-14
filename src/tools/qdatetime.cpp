@@ -1,27 +1,39 @@
 /****************************************************************************
-** $Id: qt/src/tools/qdatetime.cpp   2.1.1   edited 2000-05-22 $
+** $Id: qt/src/tools/qdatetime.cpp   2.2.0   edited 2000-08-25 $
 **
 ** Implementation of date and time classes
 **
 ** Created : 940124
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the tools module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #define gettimeofday	__hide_gettimeofday
 #include "qdatetime.h"
@@ -40,7 +52,7 @@
 #include <dos.h>
 #elif defined(_OS_OS2_)
 #include <os2.h>
-#elif defined(UNIX)
+#elif defined(_OS_UNIX_)
 #include <sys/time.h>
 #include <unistd.h>
 #undef	gettimeofday
@@ -56,15 +68,15 @@ static const uint MSECS_PER_HOUR= 3600000;
 static const uint SECS_PER_MIN	= 60;
 static const uint MSECS_PER_MIN = 60000;
 
-static short monthDays[] ={0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+static const short monthDays[] ={0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
 // ##### Localize.
 
-const char *QDate::monthNames[] = {
+const char * const QDate::monthNames[] = {
     "Jan", "Feb", "Mar", "Apr", "May", "Jun",
     "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
 
-const char *QDate::weekdayNames[] ={
+const char * const QDate::weekdayNames[] ={
     "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun" };
 
 
@@ -706,7 +718,7 @@ bool QTime::setHMS( int h, int m, int s, int ms )
 }
 
 /*!
-  Returns a QTime object containg a time \a nsecs seconds later than
+  Returns a QTime object containing a time \a nsecs seconds later than
   the time of this object (or earlier if \a ms is negative).
 
   Note that the time will wrap if it passes midnight.
@@ -881,7 +893,7 @@ bool QTime::currentTime( QTime *ct )
 	     t.second*1000 + t.hsecond*10;
     return (t.hour== 0 && t.minute == 0);
 
-#elif defined(UNIX)
+#elif defined(_OS_UNIX_)
 
     struct timeval tv;
     gettimeofday( &tv, 0 );
@@ -1340,6 +1352,7 @@ QDateTime QDateTime::currentDateTime()
   Date/time stream functions
  *****************************************************************************/
 
+#ifndef QT_NO_DATASTREAM
 /*!
   \relates QDate
   Writes the date to the stream.
@@ -1418,3 +1431,4 @@ QDataStream &operator>>( QDataStream &s, QDateTime &dt )
     s >> dt.d >> dt.t;
     return s;
 }
+#endif //QT_NO_DATASTREAM

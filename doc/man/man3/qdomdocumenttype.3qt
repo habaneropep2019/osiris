@@ -1,0 +1,93 @@
+.TH QDomDocumentType 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
+.\" license file included in the distribution for a complete license
+.\" statement.
+.\"
+.ad l
+.nh
+.SH NAME
+QDomDocumentType \- The representation of the DTD in the document tree
+<h1 align=center>QDomDocumentType Class Reference
+.br
+<small>[ XML module ]</small></h1>
+.br
+.PP
+\fC#include <qdom.h>\fR
+.PP
+Inherits QDomNode.
+.PP
+.SS "Public Members"
+.in +1c
+.ti -1c
+.BI "\fBQDomDocumentType\fR () "
+.br
+.ti -1c
+.BI "\fBQDomDocumentType\fR ( const QDomDocumentType & x ) "
+.br
+.ti -1c
+.BI "QDomDocumentType& \fBoperator=\fR ( const QDomDocumentType & ) "
+.br
+.ti -1c
+.BI "\fB~QDomDocumentType\fR () "
+.br
+.ti -1c
+.BI "virtual QString \fBname\fR () const"
+.br
+.ti -1c
+.BI "virtual QDomNamedNodeMap \fBentities\fR () const"
+.br
+.ti -1c
+.BI "virtual QDomNamedNodeMap \fBnotations\fR () const"
+.br
+.ti -1c
+.BI "virtual QDomNode::NodeType \fBnodeType\fR () const"
+.br
+.ti -1c
+.BI "virtual bool \fBisDocumentType\fR () const"
+.br
+.in -1c
+.SH DESCRIPTION
+The QDomDocumentType class is the representation of the DTD in the document tree.
+.PP
+The QDomDocumentType class allows readonly access to some of the data structures in the DTD: it can return a map of all entities() and notations().
+.PP
+In addition the function name() returns the name of the document type as specified in the <!DOCTYPE name> tag.
+.PP
+See also QDomDocument.
+.SH MEMBER FUNCTION DOCUMENTATION
+.SH "QDomDocumentType::QDomDocumentType ()"
+Creates an empty QDomDocumentType object.
+.SH "QDomDocumentType::QDomDocumentType ( const QDomDocumentType & n )"
+Copy constructor.
+.SH "QDomDocumentType::~QDomDocumentType ()"
+Destructor.
+.SH "QDomNamedNodeMap QDomDocumentType::entities () const \fC[virtual]\fR"
+Returns a map of all entities described in the DTD.
+.SH "bool QDomDocumentType::isDocumentType () const \fC[virtual]\fR"
+This function overloads QDomNode::isDocumentType().
+.PP
+See also nodeType() and QDomNode::toDocumentType().
+.PP
+Reimplemented from QDomNode.
+.SH "QString QDomDocumentType::name () const \fC[virtual]\fR"
+Returns the name of the document type as specified in the <!DOCTYPE name> tag.
+.PP
+See also nodeName().
+.SH "QDomNode::NodeType QDomDocumentType::nodeType() const \fC[virtual]\fR"
+Returns \fCDocumentTypeNode.\fR
+.PP
+See also isDocumentType() and QDomNode::toDocumentType().
+.PP
+Reimplemented from QDomNode.
+.SH "QDomNamedNodeMap QDomDocumentType::notations () const \fC[virtual]\fR"
+Returns a map of all notations described in the DTD.
+.SH "QDomDocumentType& QDomDocumentType::operator= ( const QDomDocumentType & n )"
+Assignement operator.
+.SH "SEE ALSO"
+.BR http://doc.trolltech.com/qdomdocumenttype.html
+.SH COPYRIGHT
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
+license file included in the distribution for a complete license
+statement.
+.SH AUTHOR
+Generated automatically from the source code.

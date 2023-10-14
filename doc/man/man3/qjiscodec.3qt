@@ -1,5 +1,5 @@
-.TH QJisCodec 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QJisCodec 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QJisCodec \- Provides conversion to and from JIS character sets
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -50,7 +48,7 @@ The QJisCodec class subclasses QTextCodec to provide support for JIS X 0201 Lati
 .PP
 The environment variable \fCUNICODEMAP_JP\fR can be used to fine-tune how QJpUnicodeConv, QEucJpCodec, QJisCodec and QSjisCodec do their work. The QJpUnicodeConv documentation describes how to use this variable.
 .PP
-It was largely written by Serika Kurusugawa a.k.a. Junji Takagi, and is included in Qt with the author's permission, and the grateful thanks of the Troll Tech team. Here is the copyright statement for that code:
+It was largely written by Serika Kurusugawa a.k.a. Junji Takagi, and is included in Qt with the author's permission, and the grateful thanks of the Trolltech team. Here is the copyright statement for that code:
 .PP
 Copyright (c) 1999 Serika Kurusugawa, All rights reserved.
 .PP
@@ -67,25 +65,25 @@ For internal use only.
 .SH "QCString QJisCodec::fromUnicode ( const QString & uc, int & len_in_out ) const \fC[virtual]\fR"
 For internal use only.
 .PP
-Reimplemented from QTextCodec.
+Reimplemented from QSjisCodec.
 .SH "int QJisCodec::heuristicContentMatch ( const char * chars, int len ) const \fC[virtual]\fR"
 For internal use only.
 .PP
-Reimplemented from QTextCodec.
+Reimplemented from QSjisCodec.
 .SH "int QJisCodec::heuristicNameMatch ( const char * hint ) const \fC[virtual]\fR"
 For internal use only.
 .PP
-Reimplemented from QTextCodec.
+Reimplemented from QSjisCodec.
 .SH "QTextDecoder* QJisCodec::makeDecoder () const \fC[virtual]\fR"
 For internal use only.
 .PP
-Reimplemented from QTextCodec.
+Reimplemented from QSjisCodec.
 .SH "int QJisCodec::mibEnum () const \fC[virtual]\fR"
 For internal use only.
 .SH "const char* QJisCodec::name () const \fC[virtual]\fR"
 For internal use only.
 .PP
-Reimplemented from QTextCodec.
+Reimplemented from QSjisCodec.
 .SH "QString QJisCodec::toUnicode ( const char * chars, int len ) const \fC[virtual]\fR"
 For internal use only.
 .PP
@@ -93,7 +91,7 @@ Reimplemented from QTextCodec.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qjiscodec.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

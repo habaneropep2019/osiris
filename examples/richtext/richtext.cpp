@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: qt/examples/richtext/richtext.cpp   2.1.1   edited 2000-01-31 $
+** $Id: qt/examples/richtext/richtext.cpp   2.2.0   edited 2000-08-31 $
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -83,7 +83,7 @@ MyRichText::MyRichText( QWidget *parent, const char *name )
     view = new QTextView( this );
     view->setText( "This is a <b>Test</b> with <i>italic</i> <u>stuff</u>" );
     QBrush paper;
-    paper.setPixmap( QPixmap( "../themes/marble.xpm" ) );
+    paper.setPixmap( QPixmap( "../richtext/marble.png" ) );
     view->setPaper( paper );
 
     view->setText( sayings[0] );

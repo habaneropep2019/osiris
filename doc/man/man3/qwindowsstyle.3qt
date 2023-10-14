@@ -1,5 +1,5 @@
-.TH QWindowsStyle 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QWindowsStyle 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QWindowsStyle \- Windows Look and Feel
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -21,31 +19,31 @@ Inherited by QPlatinumStyle.
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQWindowsStyle\fR ()"
+.BI "\fBQWindowsStyle\fR () "
 .br
 .ti -1c
-.BI "virtual \fB~QWindowsStyle\fR ()"
+.BI "virtual \fB~QWindowsStyle\fR () "
 .br
 .ti -1c
-.BI "virtual void \fBdrawButton\fR ( QPainter * " "p" ", int " "x" ", int " "y" ", int " "w" ", int " "h" ", const QColorGroup & " "g" ", bool " "sunken" " = FALSE, const QBrush * " "fill" " = 0 )"
+.BI "virtual void \fBdrawButton\fR ( QPainter * " "p" ", int " "x" ", int " "y" ", int " "w" ", int " "h" ", const QColorGroup & " "g" ", bool " "sunken" " = FALSE, const QBrush * " "fill" " = 0 ) "
 .br
 .ti -1c
-.BI "virtual void \fBdrawExclusiveIndicatorMask\fR ( QPainter * " "p" ", int " "x" ", int " "y" ", int " "w" ", int " "h" ", bool on )"
+.BI "virtual void \fBdrawExclusiveIndicatorMask\fR ( QPainter * " "p" ", int " "x" ", int " "y" ", int " "w" ", int " "h" ", bool on ) "
 .br
 .ti -1c
-.BI "virtual void \fBdrawSliderMask\fR ( QPainter * " "p" ", int " "x" ", int " "y" ", int " "w" ", int " "h" ", Orientation, bool " "tickAbove" ", bool tickBelow )"
+.BI "virtual void \fBdrawSliderMask\fR ( QPainter * " "p" ", int " "x" ", int " "y" ", int " "w" ", int " "h" ", Orientation, bool " "tickAbove" ", bool tickBelow ) "
 .br
 .in -1c
 .SS "Protected Members"
 .in +1c
 .ti -1c
-.BI "void \fBdrawWinShades\fR ( QPainter * " "p" ", int " "x" ", int " "y" ", int " "w" ", int " "h" ", const QColor & " "c1" ", const QColor & " "c2" ", const QColor & " "c3" ", const QColor & " "c4" ", const QBrush * fill )"
+.BI "void \fBdrawWinShades\fR ( QPainter * " "p" ", int " "x" ", int " "y" ", int " "w" ", int " "h" ", const QColor & " "c1" ", const QColor & " "c2" ", const QColor & " "c3" ", const QColor & " "c4" ", const QBrush * fill ) "
 .br
 .in -1c
 .SH DESCRIPTION
 Windows Look and Feel
 .PP
-This class implements the look and feel known from the Windows plattform. Naturally it is also Qt's default GUI style on Windows.
+This class implements the look and feel known from the Windows platform. Naturally it is also Qt's default GUI style on Windows.
 .SH MEMBER FUNCTION DOCUMENTATION
 .SH "QWindowsStyle::QWindowsStyle ()"
 Constructs a QWindowsStyle.
@@ -89,7 +87,7 @@ Reimplemented from QStyle.
 Reimplemented for internal reasons; the API is not affected.
 .PP
 Reimplemented from QStyle.
-.SH "void QWindowsStyle::drawIndicator ( QPainter * p, int x, int y, int w, int h, const QColorGroup & g, int s, bool down = FALSE, bool = TRUE ) \fC[virtual]\fR"
+.SH "void QWindowsStyle::drawIndicator ( QPainter * p, int x, int y, int w, int h, const QColorGroup & g, int s, bool down = FALSE, bool enabled = TRUE ) \fC[virtual]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .PP
 Reimplemented from QStyle.
@@ -129,14 +127,10 @@ Reimplemented from QStyle.
 Reimplemented for internal reasons; the API is not affected.
 .PP
 Reimplemented from QStyle.
-.SH "void QWindowsStyle::drawTab ( QPainter * p, const QTabBar * tb, QTab * t, bool selected ) \fC[virtual]\fR"
+.SH "void QWindowsStyle::drawTab ( QPainter * p, const QTabBar * tb, QTab * t, bool selected )"
 Reimplemented for internal reasons; the API is not affected.
-.PP
-Reimplemented from QStyle.
-.SH "void QWindowsStyle::drawTabMask ( QPainter * p, const QTabBar * tb, QTab * t, bool selected ) \fC[virtual]\fR"
+.SH "void QWindowsStyle::drawTabMask ( QPainter * p, const QTabBar * tb, QTab * t, bool selected )"
 Reimplemented for internal reasons; the API is not affected.
-.PP
-Reimplemented from QStyle.
 .SH "void QWindowsStyle::drawWinShades ( QPainter * p, int x, int y, int w, int h, const QColor & c1, const QColor & c2, const QColor & c3, const QColor & c4, const QBrush * fill ) \fC[protected]\fR"
 This function draws a rectangle with two pixel line width. It is called from qDrawWinButton() and qDrawWinPanel().
 .PP
@@ -183,14 +177,12 @@ Reimplemented from QStyle.
 Reimplemented for internal reasons; the API is not affected.
 .PP
 Reimplemented from QStyle.
-.SH "void QWindowsStyle::tabbarMetrics ( const QTabBar * t, int & hframe, int & vframe, int & overlap ) \fC[virtual]\fR"
+.SH "void QWindowsStyle::tabbarMetrics ( const QTabBar * t, int & hframe, int & vframe, int & overlap )"
 Reimplemented for internal reasons; the API is not affected.
-.PP
-Reimplemented from QStyle.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qwindowsstyle.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

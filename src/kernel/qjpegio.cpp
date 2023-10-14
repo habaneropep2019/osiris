@@ -1,29 +1,45 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qjpegio.cpp   2.1.1   edited 2000-03-29 $
+** $Id: qt/src/kernel/qjpegio.cpp   2.2.0   edited 2000-08-25 $
 **
 ** Implementation of JPEG QImage IOHandler
 **
 ** Created : 990521
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the kernel module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
-#ifdef QT_JPEG_SUPPORT
+#define QT_CLEAN_NAMESPACE
+
+#include "qfeatures.h"
+
+#ifndef QT_NO_IMAGEIO_JPEG
 
 #include <qimage.h>
 #include <qiodevice.h>
@@ -287,7 +303,7 @@ my_jpeg_destination_mgr::my_jpeg_destination_mgr(QImageIO* iioptr)
 }
 
 
-int qt_jpeg_quality = 75; // Global (no provision for parameters)
+int qt_jpeg_quality = 75; //### remove 3.0 ?
 
 static
 void write_jpeg_image(QImageIO* iio)
@@ -334,7 +350,21 @@ void write_jpeg_image(QImageIO* iio)
 	}
 
 	jpeg_set_defaults(&cinfo);
-	jpeg_set_quality(&cinfo, qt_jpeg_quality, TRUE /* limit to baseline-JPEG values */);
+	int quality = qt_jpeg_quality;
+	if ( iio->parameters() ) {
+	    bool ok = FALSE;
+	    int iq = QString::fromLatin1( iio->parameters() ).toInt( &ok );
+	    if ( ok && iq >= 0 ) {
+		if ( iq > 100 ) {
+#if defined(CHECK_RANGE)
+		    qWarning( "JPEG: image quality %d out of range", iq );
+#endif
+		    iq = 100;
+		}
+		quality = iq;
+	    }
+	}
+	jpeg_set_quality(&cinfo, quality, TRUE /* limit to baseline-JPEG values */);
 
 	jpeg_start_compress(&cinfo, TRUE);
 
@@ -420,7 +450,7 @@ void write_jpeg_image(QImageIO* iio)
 
 void qInitJpegIO()
 {
-#ifdef QT_JPEG_SUPPORT
+#ifndef QT_NO_IMAGEIO_JPEG
     // Not much to go on - just 3 bytes: 0xFF, M_SOI, 0xFF
     // Even the third is not strictly specified as required.
     QImageIO::defineIOHandler("JPEG", "^\377\330\377", 0, read_jpeg_image, write_jpeg_image);

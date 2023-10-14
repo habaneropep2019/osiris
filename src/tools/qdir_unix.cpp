@@ -1,31 +1,45 @@
 /****************************************************************************
-** $Id: qt/src/tools/qdir_unix.cpp   2.1.1   edited 2000-03-24 $
+** $Id: qt/src/tools/qdir_unix.cpp   2.2.0   edited 2000-08-25 $
 **
 ** Implementation of QDirclass
 **
 ** Created : 950628
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the tools module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses for Unix/X11 or for Qt/Embedded may use this file in accordance
+** with the Qt Commercial License Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #include "qglobal.h"
 
 #include "qdir.h"
+#ifndef QT_NO_DIR
+
 #include "qfileinfo.h"
 #include "qfiledefs_p.h"
 #include "qregexp.h"
@@ -47,9 +61,19 @@ extern int qt_cmp_si( const void *, const void * );
 }
 #endif
 
+
 void QDir::slashify( QString& )
 {
-    return;
+}
+
+QString QDir::homeDirPath()
+{
+    QString d;
+    d = QFile::decodeName(getenv("HOME"));
+    slashify( d );
+    if ( d.isNull() )
+	d = rootDirPath();
+    return d;
 }
 
 QString QDir::canonicalPath() const
@@ -65,6 +89,7 @@ QString QDir::canonicalPath() const
     }
     CHDIR( cur );
 
+    slashify( r );
     return r;
 }
 
@@ -129,6 +154,7 @@ QString QDir::currentDirPath()
 	qWarning( "QDir::currentDirPath: stat(\".\") failed" );
 #endif
     }
+    slashify( result );
     return result;
 }
 
@@ -194,53 +220,53 @@ bool QDir::readDirEntries( const QString &nameFilter,
 	fi.setFile( *this, fn );
 	if ( !match( filters, fn ) && !(allDirs && fi.isDir()) )
 	     continue;
-	     if  ( (doDirs && fi.isDir()) || (doFiles && fi.isFile()) ) {
-		 if ( noSymLinks && fi.isSymLink() )
-		     continue;
-		 if ( (filterSpec & RWEMask) != 0 )
-		     if ( (doReadable && !fi.isReadable()) ||
-			  (doWritable && !fi.isWritable()) ||
-			  (doExecable && !fi.isExecutable()) )
-			 continue;
-		 if ( !doHidden && fn[0] == '.' &&
-		      fn != QString::fromLatin1(".")
-		      && fn != QString::fromLatin1("..") )
-		     continue;
-		 fiList->append( new QFileInfo( fi ) );
-	     }
-	     }
-	if ( closedir(dir) != 0 ) {
+	if  ( (doDirs && fi.isDir()) || (doFiles && fi.isFile()) ) {
+	    if ( noSymLinks && fi.isSymLink() )
+	        continue;
+	    if ( (filterSpec & RWEMask) != 0 )
+	        if ( (doReadable && !fi.isReadable()) ||
+	             (doWritable && !fi.isWritable()) ||
+	             (doExecable && !fi.isExecutable()) )
+	            continue;
+	    if ( !doHidden && fn[0] == '.' &&
+	         fn != QString::fromLatin1(".")
+	         && fn != QString::fromLatin1("..") )
+	        continue;
+	    fiList->append( new QFileInfo( fi ) );
+	}
+    }
+    if ( closedir(dir) != 0 ) {
 #if defined(CHECK_NULL)
-	    qWarning( "QDir::readDirEntries: Cannot close the directory: %s (UTF8)",
-		      dPath.utf8().data() );
+	qWarning( "QDir::readDirEntries: Cannot close the directory: %s",
+		  dPath.local8Bit().data() );
 #endif
-	}
+    }
 
-	// Sort...
-	QDirSortItem* si= new QDirSortItem[fiList->count()];
-	QFileInfo* itm;
-	i=0;
-	for (itm = fiList->first(); itm; itm = fiList->next())
-	    si[i++].item = itm;
-	qt_cmp_si_sortSpec = sortSpec;
-	qsort( si, i, sizeof(si[0]), qt_cmp_si );
-	// put them back in the list
-	fiList->setAutoDelete( FALSE );
-	fiList->clear();
-	int j;
-	for ( j=0; j<i; j++ ) {
-	    fiList->append( si[j].item );
-	    fList->append( si[j].item->fileName() );
-	}
-	delete [] si;
-	fiList->setAutoDelete( TRUE );
+    // Sort...
+    QDirSortItem* si= new QDirSortItem[fiList->count()];
+    QFileInfo* itm;
+    i=0;
+    for (itm = fiList->first(); itm; itm = fiList->next())
+	si[i++].item = itm;
+    qt_cmp_si_sortSpec = sortSpec;
+    qsort( si, i, sizeof(si[0]), qt_cmp_si );
+    // put them back in the list
+    fiList->setAutoDelete( FALSE );
+    fiList->clear();
+    int j;
+    for ( j=0; j<i; j++ ) {
+	fiList->append( si[j].item );
+	fList->append( si[j].item->fileName() );
+    }
+    delete [] si;
+    fiList->setAutoDelete( TRUE );
 
-	if ( filterSpec == (FilterSpec)filtS && sortSpec == (SortSpec)sortS &&
-	     nameFilter == nameFilt )
-	    dirty = FALSE;
-	else
-	    dirty = TRUE;
-	return TRUE;
+    if ( filterSpec == (FilterSpec)filtS && sortSpec == (SortSpec)sortS &&
+	 nameFilter == nameFilt )
+	dirty = FALSE;
+    else
+	dirty = TRUE;
+    return TRUE;
 }
 
 const QFileInfoList * QDir::drives()
@@ -257,3 +283,4 @@ const QFileInfoList * QDir::drives()
 
     return knownMemoryLeak;
 }
+#endif //QT_NO_DIR

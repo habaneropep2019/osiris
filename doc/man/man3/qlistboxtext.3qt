@@ -1,5 +1,5 @@
-.TH QListBoxText 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QListBoxText 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QListBoxText \- List box items with text
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -19,16 +17,16 @@ Inherits QListBoxItem.
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQListBoxText\fR ( QListBox * " "listbox" ", const QString & text=QString::null )"
+.BI "\fBQListBoxText\fR ( QListBox * " "listbox" ", const QString & text=QString::null ) "
 .br
 .ti -1c
-.BI "\fBQListBoxText\fR ( const QString & text=QString::null )"
+.BI "\fBQListBoxText\fR ( const QString & text=QString::null ) "
 .br
 .ti -1c
-.BI "\fBQListBoxText\fR ( QListBox * " "listbox" ", const QString & " "text" ", QListBoxItem * after )"
+.BI "\fBQListBoxText\fR ( QListBox * " "listbox" ", const QString & " "text" ", QListBoxItem * after ) "
 .br
 .ti -1c
-.BI "\fB~QListBoxText\fR ()"
+.BI "\fB~QListBoxText\fR () "
 .br
 .ti -1c
 .BI "virtual int \fBheight\fR ( const QListBox * ) const"
@@ -40,7 +38,7 @@ Inherits QListBoxItem.
 .SS "Protected Members"
 .in +1c
 .ti -1c
-.BI "virtual void \fBpaint\fR ( QPainter * )"
+.BI "virtual void \fBpaint\fR ( QPainter * ) "
 .br
 .in -1c
 .SH DESCRIPTION
@@ -48,7 +46,7 @@ The QListBoxText class provides list box items with text.
 .PP
 The text is drawn in the widget's current font. If you need several different fonts, you have to make your own subclass of QListBoxItem.
 .PP
-See also: QListBox and QListBoxItem.
+See also QListBox and QListBoxItem.
 .SH MEMBER FUNCTION DOCUMENTATION
 .SH "QListBoxText::QListBoxText ( QListBox * listbox, const QString & text, QListBoxItem * after )"
 Constructs a list box item in listbox \fIlisttbox\fR showing the text \fItext.\fR The item gets inserted after the item \fIafter.\fR
@@ -61,7 +59,7 @@ Destroys the item.
 .SH "int QListBoxText::height ( const QListBox * lb ) const \fC[virtual]\fR"
 Returns the height of a line of text.
 .PP
-See also: paint() and width().
+See also paint() and width().
 .PP
 Reimplemented from QListBoxItem.
 .SH "void QListBoxText::paint ( QPainter * painter ) \fC[virtual protected]\fR"
@@ -71,13 +69,13 @@ Reimplemented from QListBoxItem.
 .SH "int QListBoxText::width ( const QListBox * lb ) const \fC[virtual]\fR"
 Returns the width of this line.
 .PP
-See also: paint() and height().
+See also paint() and height().
 .PP
 Reimplemented from QListBoxItem.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qlistboxtext.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

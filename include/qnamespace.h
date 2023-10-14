@@ -1,27 +1,39 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qnamespace.h   2.1.1   edited 2000-04-24 $
+** $Id: qt/src/kernel/qnamespace.h   2.2.0   edited 2000-08-28 $
 **
 ** Definition of Qt namespace (as class for compiler compatibility)
 **
 ** Created : 980927
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the kernel module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #ifndef QNAMESPACE_H
 #define QNAMESPACE_H
@@ -59,15 +71,16 @@ public:
 
     // documented in qevent.cpp
     enum ButtonState {				// mouse/keyboard state values
-	NoButton	= 0x00,
-	LeftButton	= 0x01,
-	RightButton	= 0x02,
-	MidButton	= 0x04,
-	MouseButtonMask = 0x07,
-	ShiftButton	= 0x08,
-	ControlButton   = 0x10,
-	AltButton	= 0x20,
-	KeyButtonMask   = 0x38
+	NoButton	= 0x0000,
+	LeftButton	= 0x0001,
+	RightButton	= 0x0002,
+	MidButton	= 0x0004,
+	MouseButtonMask = 0x0007,
+	ShiftButton	= 0x0008,
+	ControlButton   = 0x0010,
+	AltButton	= 0x0020,
+	KeyButtonMask	= 0x0038,
+	Keypad		= 0x4000
     };
 
     // documented in qobject.cpp
@@ -117,7 +130,7 @@ public:
 	WState_Reserved1	= 0x00010000,
 	WState_Reserved2	= 0x00020000,
 	WState_Reserved3	= 0x00040000,
-	WState_Reserved4	= 0x00080000,
+	WState_Maximized	= 0x00080000,
 	WState_TranslateBackground = 0x00100000,
 	WState_ForceDisabled	= 0x00200000,
 	WState_Exposed		= 0x00400000
@@ -158,7 +171,8 @@ public:
 	WMouseNoMask		= 0x00200000,
 	WNorthWestGravity	= 0x00400000,
 	WRepaintNoErase		= 0x00800000,
-	WX11BypassWM		= 0x01000000
+	WX11BypassWM		= 0x01000000,
+	WGroupLeader 		= 0x02000000
     };
 
     // Image conversion flags.  The unusual ordering is caused by
@@ -288,6 +302,7 @@ public:
 	Key_Menu = 0x1055,
 	Key_Hyper_L = 0x1056,
 	Key_Hyper_R = 0x1057,
+	Key_Help = 0x1058,
 	Key_Space = 0x20,		// 7 bit printable ASCII
 	Key_Any = Key_Space,
 	Key_Exclam = 0x21,
@@ -544,6 +559,15 @@ public:
 	WV_NT_based	= 0x00f0
     };
 
+    enum UIEffect {
+	UI_General,
+	UI_AnimateMenu,
+	UI_FadeMenu,
+	UI_AnimateCombo,
+	UI_AnimateTooltip,
+	UI_FadeTooltip
+    };
+
 
     // Global cursors
 
@@ -571,7 +595,6 @@ public:
 	RichText,
 	AutoText
     };
-
 };
 
 

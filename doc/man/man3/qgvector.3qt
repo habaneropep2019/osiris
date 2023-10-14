@@ -1,5 +1,5 @@
-.TH QGVector 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QGVector 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QGVector \- Internal class for implementing Qt collection classes
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -27,7 +25,7 @@ Inherited by QVector.
 .BI "QDataStream& \fBwrite\fR ( QDataStream & ) const (internal)"
 .br
 .ti -1c
-.BI "virtual int \fBcompareItems\fR ( Item, Item )"
+.BI "virtual int \fBcompareItems\fR ( Item, Item ) "
 .br
 .in -1c
 .SS "Protected Members"
@@ -63,7 +61,7 @@ Inherited by QVector.
 .BI "bool \fBremove\fR ( uint index ) (internal)"
 .br
 .ti -1c
-.BI "Item \fBtake\fR ( uint index )"
+.BI "Item \fBtake\fR ( uint index ) "
 .br
 .ti -1c
 .BI "virtual void \fBclear\fR () (internal)"
@@ -102,7 +100,7 @@ Inherited by QVector.
 .BI "void \fBtoList\fR ( QGList * ) const (internal)"
 .br
 .ti -1c
-.BI "virtual QDataStream& \fBread\fR ( QDataStream &, Item & )"
+.BI "virtual QDataStream& \fBread\fR ( QDataStream &, Item & ) "
 .br
 .ti -1c
 .BI "virtual QDataStream& \fBwrite\fR ( QDataStream &, Item ) const"
@@ -113,7 +111,7 @@ The QGVector class is an internal class for implementing Qt collection classes.
 .PP
 QGVector is a strictly internal class that acts as a base class for the QVector collection class.
 .PP
-QGVector has some virtual functions that may be reimplemented in subclasses to to customize behavor.
+QGVector has some virtual functions that may be reimplemented in subclasses to to customize behavior.
 .TP
 compareItems() compares two collection/vector items.
 .TP
@@ -154,17 +152,15 @@ Reads a collection/vector item from the stream \fIs\fR and returns a reference t
 .PP
 The default implementation sets \fIitem\fR to 0.
 .PP
-See also: write().
+See also write().
 .SH "uint QGVector::size () const \fC[protected]\fR"
-For internal use only.
-.SH "Item QGVector::take ( uint index ) \fC[protected]\fR"
 For internal use only.
 .SH "QDataStream & QGVector::write ( QDataStream & s, Item ) const \fC[virtual protected]\fR"
 Writes a collection/vector item to the stream \fIs\fR and returns a reference to the stream.
 .PP
 The default implementation does nothing.
 .PP
-See also: read().
+See also read().
 .SH "QGVector::QGVector () \fC[protected]\fR"
 For internal use only.
 .SH "QGVector::QGVector ( const QGVector & a ) \fC[protected]\fR"
@@ -210,7 +206,7 @@ For internal use only.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qgvector.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

@@ -1,5 +1,5 @@
-.TH QCheckBox 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QCheckBox 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QCheckBox \- Check box with a text label
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -19,22 +17,25 @@ Inherits QButton.
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQCheckBox\fR ( QWidget * " "parent" ", const char * " "name" "=0 )"
+.BI "\fBQCheckBox\fR ( QWidget * " "parent" ", const char * " "name" "=0 ) "
 .br
 .ti -1c
-.BI "\fBQCheckBox\fR ( const QString & " "text" ", QWidget * " "parent" ", const char * " "name" "=0 )"
+.BI "\fBQCheckBox\fR ( const QString & " "text" ", QWidget * " "parent" ", const char * " "name" "=0 ) "
 .br
 .ti -1c
 .BI "bool \fBisChecked\fR () const"
 .br
 .ti -1c
-.BI "void \fBsetChecked\fR ( bool check )"
+.BI "void \fBsetChecked\fR ( bool check ) "
 .br
 .ti -1c
-.BI "void \fBsetNoChange\fR ()"
+.BI "void \fBsetNoChange\fR () "
 .br
 .ti -1c
-.BI "void \fBsetTristate\fR ( bool " "y" "=TRUE )"
+.BI "void \fBsetTristate\fR ( bool " "y" "=TRUE ) "
+.br
+.ti -1c
+.BI "bool \fBisTristate\fR () const"
 .br
 .in -1c
 .SS "Important Inherited Members"
@@ -43,7 +44,7 @@ Inherits QButton.
 .BI "QString \fBtext\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetText\fR ( const QString & text )"
+.BI "virtual void \fBsetText\fR ( const QString & text ) "
 .br
 .ti -1c
 .BI "QString \fBtext\fR () const"
@@ -52,19 +53,19 @@ Inherits QButton.
 .BI "const QPixmap* \fBpixmap\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetPixmap\fR ( const QPixmap & pixmap )"
+.BI "virtual void \fBsetPixmap\fR ( const QPixmap & pixmap ) "
 .br
 .ti -1c
 .BI "int \fBaccel\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetAccel\fR ( int key )"
+.BI "virtual void \fBsetAccel\fR ( int key ) "
 .br
 .ti -1c
 .BI "bool \fBisToggleButton\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetDown\fR ( bool enable )"
+.BI "virtual void \fBsetDown\fR ( bool enable ) "
 .br
 .ti -1c
 .BI "bool \fBisDown\fR () const"
@@ -82,35 +83,35 @@ Inherits QButton.
 .BI "QButtonGroup* \fBgroup\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetAutoRepeat\fR ( bool enable )"
+.BI "virtual void \fBsetAutoRepeat\fR ( bool enable ) "
 .br
 .ti -1c
-.BI "void \fBtoggle\fR ()"
+.BI "void \fBtoggle\fR () "
 .br
 .ti -1c
-.BI "void \fBpressed\fR ()"
+.BI "void \fBpressed\fR () "
 .br
 .ti -1c
-.BI "void \fBreleased\fR ()"
+.BI "void \fBreleased\fR () "
 .br
 .ti -1c
-.BI "void \fBclicked\fR ()"
+.BI "void \fBclicked\fR () "
 .br
 .ti -1c
-.BI "void \fBtoggled\fR ( bool on )"
+.BI "void \fBtoggled\fR ( bool on ) "
 .br
 .ti -1c
-.BI "void \fBstateChanged\fR ( int state )"
+.BI "void \fBstateChanged\fR ( int state ) "
 .br
 .in -1c
 .SS "Properties"
-<table border=1 cellpadding=3 cellspacing=0> <tr><th>Type<th>Name<th>READ<th>WRITE<th>Options <tr><td>bool<td>checked<td>isChecked<td>setChecked<td>&nbsp; </table>
+<table border=1 cellpadding=3 cellspacing=0> <tr><th>Type<th>Name<th>READ<th>WRITE<th>Options <tr><td>bool<td>checked<td>isChecked<td>setChecked<td>&nbsp; <tr><td>bool<td>tristate<td>isTristate<td>setTristate<td>&nbsp; </table>
 .SH DESCRIPTION
 The QCheckBox widget provides a check box with a text label.
 .PP
 QCheckBox and QRadioButton are both option buttons. That is, they can be switched on (checked) or off (unchecked). The classes differ in how the choices for the user are restricted. Radio buttons define a "one of many" choice, while check-boxes provide "many of many" choices.
 .PP
-While it is technically possible to imlement radio-behaviour with check boxes and vice versa, it's strongly recommended to stick with the well-known semantics. Otherwise your users would be pretty confused.
+While it is technically possible to implement radio-behaviour with check boxes and vice versa, it's strongly recommended to stick with the well-known semantics. Otherwise your users would be pretty confused.
 .PP
 Use QButtonGroup to group check-buttons visually.
 .PP
@@ -120,11 +121,11 @@ In addition to the usual checked and unchecked states, QCheckBox optionally prov
 .PP
 <img src=qchkbox-m.png> <img src=qchkbox-w.png>
 .PP
-See also: QButton, QRadioButton and Fowler: Check Box.
+See also QButton, QRadioButton and Fowler: Check Box.
 .PP
 Examples:
 .(l
-xform/xform.cpp
+xform/xform.cpp i18n/main.cpp
 .)l
 .SH MEMBER FUNCTION DOCUMENTATION
 .SH "QCheckBox::QCheckBox ( QWidget * parent, const char * name=0 )"
@@ -146,12 +147,16 @@ Reimplemented from QButton.
 .SH "bool QCheckBox::isChecked () const"
 Returns TRUE if the check box is checked, or FALSE if it is not checked.
 .PP
-See also: setChecked().
+See also setChecked().
 .PP
 Examples:
 .(l
 xform/xform.cpp
 .)l
+.SH "bool QCheckBox::isTristate () const"
+Returns TRUE if the checkbox is a tristate checkbox. Otherwise returns FALSE.
+.PP
+See also setTristate().
 .SH "void QCheckBox::resizeEvent ( QResizeEvent * ) \fC[virtual protected]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .PP
@@ -159,17 +164,17 @@ Reimplemented from QWidget.
 .SH "void QCheckBox::setChecked ( bool check )"
 Checks the check box if \fIcheck\fR is TRUE, or unchecks it if \fIcheck\fR is FALSE.
 .PP
-See also: isChecked().
+See also isChecked().
 .SH "void QCheckBox::setNoChange ()"
 Sets the checkbox into the "no change" state.
 .PP
-See also: setTristate().
+See also setTristate().
 .SH "void QCheckBox::setTristate ( bool y=TRUE )"
 Makes the check box a tristate check box if \fIy\fR is TRUE. A tristate check box provides an additional state NoChange.
 .PP
 Use tristate check boxes whenever you need to give the user the option of neither setting nor unsetting an option. A typical example is the "Italic" check box in the font dialog of a word processor when the marked text is partially Italic and partially not.
 .PP
-See also: setNoChange(), stateChanged() and state().
+See also isTristate(), setNoChange(), stateChanged() and state().
 .SH "QSize QCheckBox::sizeHint () const \fC[virtual]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .PP
@@ -185,7 +190,7 @@ Reimplemented from QWidget.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qcheckbox.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

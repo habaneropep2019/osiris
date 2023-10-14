@@ -1,5 +1,5 @@
-.TH QGrid 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QGrid 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QGrid \- Performs geometry management on its children
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -22,13 +20,13 @@ Inherits QFrame.
 .BI "enum \fBDirection\fR { Horizontal, Vertical }"
 .br
 .ti -1c
-.BI "\fBQGrid\fR ( int " "n" ", QWidget * " "parent" "=0, const char * " "name" "=0, WFlags " "f" "=0 )"
+.BI "\fBQGrid\fR ( int " "n" ", QWidget * " "parent" "=0, const char * " "name" "=0, WFlags " "f" "=0 ) "
 .br
 .ti -1c
-.BI "\fBQGrid\fR ( int " "n" ", Direction, QWidget * " "parent" "=0, const char * " "name" "=0, WFlags " "f" "=0 )"
+.BI "\fBQGrid\fR ( int " "n" ", Direction, QWidget * " "parent" "=0, const char * " "name" "=0, WFlags " "f" "=0 ) "
 .br
 .ti -1c
-.BI "void \fBsetSpacing\fR ( int )"
+.BI "void \fBsetSpacing\fR ( int ) "
 .br
 .in -1c
 .SH DESCRIPTION
@@ -42,7 +40,7 @@ Use setMargin() to add space around the edge, and use setSpacing() to add space 
 .PP
 For more general control over grid layout, including multi-column and multi-row widgets, use the QGridLayout class directly.
 .PP
-See also: QVBox and QHBox.
+See also QVBox and QHBox.
 .SH MEMBER FUNCTION DOCUMENTATION
 .SH "QGrid::QGrid ( int n, QWidget * parent=0, const char * name=0, WFlags f=0 )"
 Constructs a grid widget with parent \fIparent\fR and name \fIname. n\fR specifies the number of columns.
@@ -61,7 +59,7 @@ Reimplemented from QWidget.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qgrid.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

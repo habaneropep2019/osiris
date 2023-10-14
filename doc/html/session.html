@@ -1,10 +1,15 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><title>Session Management</title>
-</head><body bgcolor="#ffffff">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><title>Qt Toolkit -  Session Management</title><style type="text/css"><!--
+h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
+a:link { color: #004faf; text-decoration: none }
+a:visited { color: #672967; text-decoration: none }body { background: white; color: black; }
+--></style></head><body bgcolor="#ffffff">
 <p>
-<a href="index.html">
-<img width="122" height="65" src="qtlogo.png" alt="Home"
-  align="left" border="0">
-</a><div align=right><img src="dochead.png" width="472" height="27"><br>
+<table width="100%">
+<tr><td><a href="index.html">
+<img width="100" height="100" src="qtlogo.png"
+alt="Home" border="0"><img width="100"
+height="100" src="face.png" alt="Home" border="0">
+</a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
 - <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
@@ -12,10 +17,8 @@
 - <a href="index.html">Home</a>
 - <a href="topicals.html"><b>Structure</b></a>
 </div>
-<br clear=all>
-<p>
-<h1 align=center>Session Management</h1><br clear="all">
-<p>
+</table>
+<h1 align=center> Session Management</h1><br clear="all">
 <h2> Definitions </h2>
 <p>
 A <em>session</em> is a group of applications running, each of which has a
@@ -40,14 +43,14 @@ the user when she wants to log out. A system might, however, also
 perform an automatic shutdown in an emergency case, when for example
 the power is about to be lost. Clearly there is one big difference
 between both shutdowns. During the first, the user may want to
-interact with the application, telling exactely which files should be
+interact with the application, telling exactly which files should be
 saved and which should be discarded. In the latter case, there's no
 time for interaction. There may not even be a user sitting in front of
 the machine!
 <p>
-<h2> Protocols and support on different plattforms</h2>
+<h2> Protocols and support on different platforms</h2>
 <p>
-On MS-Windows, there is nothing like completele session management for
+On MS-Windows, there is nothing like complete session management for
 applications yet, i.e. no restoring of previous sessions.  Windows does,
 however, support graceful logouts where applications have the chance
 to cancel the process after getting confirmation from the user. This
@@ -55,14 +58,14 @@ is the functionality that corresponds to the
 <a href="qapplication.html#d7ce0a">QApplication::commitData()</a> method.
 <p>
 X11 on the other hand supports complete session management since
-X11R6. Within the life-time of Qt-2.0, virtually all popuplar Unix/X11
+X11R6. Within the life-time of Qt-2.0, virtually all popular Unix/X11
 desktops will very likely support the XConsortium standard.
 <p>
 <h2> Getting session management to work with Qt </h2>
 <p>
 In any case you should reimplement <a href="qapplication.html#d7ce0a">QApplication::commitData()</a> to
-enable your appliation to take part in the graceful logout process. If
-you target the MS-Windows plattform only, this is all you can and have
+enable your application to take part in the graceful logout process. If
+you target the MS-Windows platform only, this is all you can and have
 to provide. Ideally, your application should provide a shutdown dialog
 similar to the following one:
 <p>
@@ -75,8 +78,8 @@ For complete session management yet only supported on X11R6, you also
 have to take care of saving the state of the application and
 potentially restore the state in the next life cycle of the session.
 This saving is done by reimplementing <a href="qapplication.html#7bd5f2">QApplication::saveState()</a>. All state data you are saving in this
-function, shall be marked with the session identifier <a href="qapplication.html#ff3642">QApplication::sessionId()</a>. This appliation specific identifier is
-globally unqiue, so no clashes will happen.
+function, shall be marked with the session identifier <a href="qapplication.html#ff3642">QApplication::sessionId()</a>. This application specific identifier is
+globally unique, so no clashes will happen.
 <p>
 Restauration is usually done in the application's main()
 function. Check if <a href="qapplication.html#4940d8">QApplication::isSessionRestored()</a> is <code>TRUE.</code> If
@@ -92,7 +95,7 @@ toplevel widgets end up with their prior object name again.
 <p>
 <h2> Testing and debugging session management </h2>
 <p>
-As mentioned ealier, session management support on Windows is fairly
+As mentioned earlier, session management support on Windows is fairly
 limited due to the lack of this functionality in the Windows operating
 system itself. Simply shut the session down and verify that your
 application behaves as wanted. It may be a good idea to launch another
@@ -144,6 +147,6 @@ however, stable and useful enough to serve as testing environment.
 
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.1</div>
+<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.2.0</div>
 </table></div></address></body></html>

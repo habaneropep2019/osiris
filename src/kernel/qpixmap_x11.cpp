@@ -1,27 +1,39 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qpixmap_x11.cpp   2.1.1   edited 2000-03-24 $
+** $Id: qt/src/kernel/qpixmap_x11.cpp   2.2.0   edited 2000-08-25 $
 **
 ** Implementation of QPixmap class for X11
 **
 ** Created : 940501
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the kernel module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses for Unix/X11 may use this file in accordance with the Qt Commercial
+** License Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #include "qglobal.h"
 
@@ -161,7 +173,7 @@ static bool qt_create_mitshm_buffer( const QPaintDevice* dev, int w, int h )
   Internal functions
  *****************************************************************************/
 
-extern uchar *qt_get_bitflip_array();		// defined in qimage.cpp
+extern const uchar *qt_get_bitflip_array();		// defined in qimage.cpp
 
 static uchar *flip_bits( const uchar *bits, int len )
 {
@@ -169,7 +181,7 @@ static uchar *flip_bits( const uchar *bits, int len )
     const uchar *end = p + len;
     uchar *newdata = new uchar[len];
     uchar *b = newdata;
-    uchar *f = qt_get_bitflip_array();
+    const uchar *f = qt_get_bitflip_array();
     while ( p < end )
 	*b++ = f[*p++];
     return newdata;
@@ -206,7 +218,6 @@ static uint n_bits( uint v )
     return i;
 }
 
-
 static uint *red_scale_table   = 0;
 static uint *green_scale_table = 0;
 static uint *blue_scale_table  = 0;
@@ -235,7 +246,7 @@ static void build_scale_table( uint **table, uint nBits )
 	if ( firstTable ) {
 	    qAddPostRoutine( cleanup_scale_tables );
 	    firstTable = FALSE;
-	}	
+	}
 	*table = new uint[256];
     }
     int   maxVal   = (1 << nBits) - 1;
@@ -563,16 +574,16 @@ QImage QPixmap::convertToImage() const
     bool ale = alpha.bitOrder() == QImage::LittleEndian;
 
     if ( trucol ) {				// truecolor
-	uint red_mask	 = (uint)visual->red_mask;
-	uint green_mask	 = (uint)visual->green_mask;
-	uint blue_mask	 = (uint)visual->blue_mask;
-	int  red_shift	 = highest_bit( red_mask )   - 7;
-	int  green_shift = highest_bit( green_mask ) - 7;
-	int  blue_shift	 = highest_bit( blue_mask )  - 7;
+	const uint red_mask	 = (uint)visual->red_mask;
+	const uint green_mask	 = (uint)visual->green_mask;
+	const uint blue_mask	 = (uint)visual->blue_mask;
+	const int  red_shift	 = highest_bit( red_mask )   - 7;
+	const int  green_shift = highest_bit( green_mask ) - 7;
+	const int  blue_shift	 = highest_bit( blue_mask )  - 7;
 
-	uint red_bits    = n_bits( red_mask );
-	uint green_bits  = n_bits( green_mask );
-	uint blue_bits   = n_bits( blue_mask );
+	const uint red_bits    = n_bits( red_mask );
+	const uint green_bits  = n_bits( green_mask );
+	const uint blue_bits   = n_bits( blue_mask );
 
 	static uint red_table_bits   = 0;
 	static uint green_table_bits = 0;
@@ -797,10 +808,12 @@ QImage QPixmap::convertToImage() const
 	}
 	delete [] carr;
     }
-    if ( data->optim != BestOptim )		// throw away image data
+    if ( data->optim != BestOptim ) {		// throw away image data
 	qSafeXDestroyImage( xi );
-    else					// keep ximage data
+	((QPixmap*)this)->data->ximage = 0;
+    } else					// keep ximage data
 	((QPixmap*)this)->data->ximage = xi;
+
     return image;
 }
 
@@ -911,7 +924,7 @@ bool QPixmap::convertFromImage( const QImage &img, int conversion_flags )
 		QRgb c1 = image.color(1);
 		conv8 = QMIN(c0,c1) != qRgb(0,0,0) || QMAX(c0,c1) != qRgb(255,255,255);
 	    } else {
-		// eg. 1-colour monochrome images (they do exist).
+		// eg. 1-color monochrome images (they do exist).
 		conv8 = TRUE;
 	    }
 	}
@@ -934,7 +947,7 @@ bool QPixmap::convertFromImage( const QImage &img, int conversion_flags )
 	    uchar *p, *b, *end;
 	    int y;
 	    if ( image.bitOrder() == QImage::BigEndian ) {
-		uchar *f = (uchar *)qt_get_bitflip_array();
+		const uchar *f = qt_get_bitflip_array();
 		b = tmp_bits;
 		for ( y=0; y<h; y++ ) {
 		    p = image.scanLine( y );
@@ -1069,71 +1082,125 @@ bool QPixmap::convertFromImage( const QImage &img, int conversion_flags )
 	    src = image.scanLine( y );
 	    dst = newbits + xi->bytes_per_line*y;
 	    p	= (QRgb *)src;
-	    for ( int x=0; x<w; x++ ) {
-		if ( d8 ) {
-		    pixel = pix[*src++];
-		} else {
-		    r = qRed  ( *p );
-		    g = qGreen( *p );
-		    b = qBlue ( *p++ );
 
-		    if ( dither_tc ) {
-			// Dither truecolor
-			int thres = D[x%16][y%16];
-			if ( r <= (255-(1<<(8-rbits))) && ((r<<rbits) & 255)
-				> thres)
-			    r += (1<<(8-rbits));
-			if ( g <= (255-(1<<(8-gbits))) && ((g<<gbits) & 255)
-				> thres)
-			    g += (1<<(8-gbits));
-			if ( b <= (255-(1<<(8-bbits))) && ((b<<bbits) & 255)
-				> thres)
-			    b += (1<<(8-bbits));
-		    }
+#define GET_RGB \
+		r = qRed  ( *p ); \
+		g = qGreen( *p ); \
+		b = qBlue ( *p++ ); \
+		r = red_shift   > 0 \
+		    ? r << red_shift   : r >> -red_shift; \
+		g = green_shift > 0 \
+		    ? g << green_shift : g >> -green_shift; \
+		b = blue_shift  > 0 \
+		    ? b << blue_shift  : b >> -blue_shift;
 
-		    r = red_shift   > 0
-			? r << red_shift   : r >> -red_shift;
-		    g = green_shift > 0
-			? g << green_shift : g >> -green_shift;
-		    b = blue_shift  > 0
-			? b << blue_shift  : b >> -blue_shift;
-
-		    pixel = (b & blue_mask)|(g & green_mask) | (r & red_mask);
+#define GET_PIXEL \
+		if ( d8 ) pixel = pix[*src++]; \
+		else { \
+		    GET_RGB \
+		    pixel = (b & blue_mask)|(g & green_mask) | (r & red_mask); \
 		}
+
+#define GET_PIXEL_DITHER_TC \
+		r = qRed  ( *p ); \
+		g = qGreen( *p ); \
+		b = qBlue ( *p++ ); \
+		int thres = D[x%16][y%16]; \
+		if ( r <= (255-(1<<(8-rbits))) && ((r<<rbits) & 255) \
+			> thres) \
+		    r += (1<<(8-rbits)); \
+		if ( g <= (255-(1<<(8-gbits))) && ((g<<gbits) & 255) \
+			> thres) \
+		    g += (1<<(8-gbits)); \
+		if ( b <= (255-(1<<(8-bbits))) && ((b<<bbits) & 255) \
+			> thres) \
+		    b += (1<<(8-bbits)); \
+		r = red_shift   > 0 \
+		    ? r << red_shift   : r >> -red_shift; \
+		g = green_shift > 0 \
+		    ? g << green_shift : g >> -green_shift; \
+		b = blue_shift  > 0 \
+		    ? b << blue_shift  : b >> -blue_shift; \
+		pixel = (b & blue_mask)|(g & green_mask) | (r & red_mask);
+
+	    int x;
+	    if ( dither_tc ) {
 		switch ( bppc ) {
-		    case 8:
-			*dst++ = pixel;
-			break;
 		    case 16:			// 16 bit MSB
-			*dst++ = (pixel >> 8);
-			*dst++ = pixel;
+			for ( x=0; x<w; x++ ) {
+			    GET_PIXEL_DITHER_TC
+			    *dst++ = (pixel >> 8);
+			    *dst++ = pixel;
+			}
 			break;
 		    case 17:			// 16 bit LSB
-			*dst++ = pixel;
-			*dst++ = pixel >> 8;
+			for ( x=0; x<w; x++ ) {
+			    GET_PIXEL_DITHER_TC
+			    *dst++ = pixel;
+			    *dst++ = pixel >> 8;
+			}
+			break;
+		    default:
+			qFatal("Logic error");
+		}
+	    } else {
+		switch ( bppc ) {
+		    case 8:			// 8 bit
+			for ( x=0; x<w; x++ ) {
+			    pixel = pix[*src++];
+			    *dst++ = pixel;
+			}
+			break;
+		    case 16:			// 16 bit MSB
+			for ( x=0; x<w; x++ ) {
+			    GET_PIXEL
+			    *dst++ = (pixel >> 8);
+			    *dst++ = pixel;
+			}
+			break;
+		    case 17:			// 16 bit LSB
+			for ( x=0; x<w; x++ ) {
+			    GET_PIXEL
+			    *dst++ = pixel;
+			    *dst++ = pixel >> 8;
+			}
 			break;
 		    case 24:			// 24 bit MSB
-			*dst++ = pixel >> 16;
-			*dst++ = pixel >> 8;
-			*dst++ = pixel;
+			for ( x=0; x<w; x++ ) {
+			    GET_PIXEL
+			    *dst++ = pixel >> 16;
+			    *dst++ = pixel >> 8;
+			    *dst++ = pixel;
+			}
 			break;
 		    case 25:			// 24 bit LSB
-			*dst++ = pixel;
-			*dst++ = pixel >> 8;
-			*dst++ = pixel >> 16;
+			for ( x=0; x<w; x++ ) {
+			    GET_PIXEL
+			    *dst++ = pixel;
+			    *dst++ = pixel >> 8;
+			    *dst++ = pixel >> 16;
+			}
 			break;
 		    case 32:			// 32 bit MSB
-			*dst++ = pixel >> 24;
-			*dst++ = pixel >> 16;
-			*dst++ = pixel >> 8;
-			*dst++ = pixel;
+			for ( x=0; x<w; x++ ) {
+			    GET_PIXEL
+			    *dst++ = pixel >> 24;
+			    *dst++ = pixel >> 16;
+			    *dst++ = pixel >> 8;
+			    *dst++ = pixel;
+			}
 			break;
 		    case 33:			// 32 bit LSB
-			*dst++ = pixel;
-			*dst++ = pixel >> 8;
-			*dst++ = pixel >> 16;
-			*dst++ = pixel >> 24;
+			for ( x=0; x<w; x++ ) {
+			    GET_PIXEL
+			    *dst++ = pixel;
+			    *dst++ = pixel >> 8;
+			    *dst++ = pixel >> 16;
+			    *dst++ = pixel >> 24;
+			}
 			break;
+		    default:
+			qFatal("Logic error 2");
 		}
 	    }
 	}
@@ -1297,8 +1364,10 @@ bool QPixmap::convertFromImage( const QImage &img, int conversion_flags )
 				    w, h, dd );
 
     XPutImage( dpy, hd, qt_xget_readonly_gc(), xi, 0, 0, 0, 0, w, h );
+
     if ( data->optim != BestOptim ) {		// throw away image
 	qSafeXDestroyImage( xi );
+	data->ximage = 0;
     } else {					// keep ximage that we created
 	data->ximage = xi;
     }
@@ -1706,6 +1775,7 @@ QPixmap QPixmap::xForm( const QWMatrix &matrix ) const
     }
     if ( data->optim == NoOptim ) {		// throw away ximage
 	qSafeXDestroyImage( xi );
+	data->ximage = 0;
     } else {					// keep ximage that we fetched
 	data->ximage = xi;
     }

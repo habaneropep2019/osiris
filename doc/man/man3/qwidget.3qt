@@ -1,5 +1,5 @@
-.TH QWidget 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QWidget 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QWidget \- The base class of all user interface objects
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -16,15 +14,15 @@ QWidget \- The base class of all user interface objects
 .PP
 Inherits QObject and QPaintDevice.
 .PP
-Inherited by QButton, QComboBox, QDialog, QFrame, QGLWidget, QHeader, QLineEdit, QMainWindow, QNPWidget, QScrollBar, QSemiModal, QSizeGrip, QSlider, QStatusBar, QTabBar, QTabWidget, QToolBar, QWorkspace and QXtWidget.
+Inherited by QButton, QComboBox, QDial, QDialog, QFrame, QGLWidget, QHeader, QLineEdit, QMainWindow, QNPWidget, QScrollBar, QSemiModal, QSizeGrip, QSlider, QStatusBar, QTabBar, QTabWidget, QToolBar, QWorkspace and QXtWidget.
 .PP
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQWidget\fR ( QWidget * " "parent" "=0, const char * " "name" "=0, WFlags " "f" "=0 )"
+.BI "\fBQWidget\fR ( QWidget * " "parent" "=0, const char * " "name" "=0, WFlags " "f" "=0 ) "
 .br
 .ti -1c
-.BI "\fB~QWidget\fR ()"
+.BI "\fB~QWidget\fR () "
 .br
 .ti -1c
 .BI "WId \fBwinId\fR () const"
@@ -33,7 +31,7 @@ Inherited by QButton, QComboBox, QDialog, QFrame, QGLWidget, QHeader, QLineEdit,
 .BI "QStyle& \fBstyle\fR () const"
 .br
 .ti -1c
-.BI "void \fBsetStyle\fR ( QStyle * )"
+.BI "void \fBsetStyle\fR ( QStyle * ) "
 .br
 .ti -1c
 .BI "bool \fBisTopLevel\fR () const"
@@ -111,58 +109,58 @@ Inherited by QButton, QComboBox, QDialog, QFrame, QGLWidget, QHeader, QLineEdit,
 .BI "int \fBmaximumHeight\fR () const"
 .br
 .ti -1c
-.BI "void \fBsetMinimumSize\fR ( const QSize & )"
+.BI "void \fBsetMinimumSize\fR ( const QSize & ) "
 .br
 .ti -1c
-.BI "virtual void \fBsetMinimumSize\fR ( int " "minw" ", int minh )"
+.BI "virtual void \fBsetMinimumSize\fR ( int " "minw" ", int minh ) "
 .br
 .ti -1c
-.BI "void \fBsetMaximumSize\fR ( const QSize & )"
+.BI "void \fBsetMaximumSize\fR ( const QSize & ) "
 .br
 .ti -1c
-.BI "virtual void \fBsetMaximumSize\fR ( int " "maxw" ", int maxh )"
+.BI "virtual void \fBsetMaximumSize\fR ( int " "maxw" ", int maxh ) "
 .br
 .ti -1c
-.BI "void \fBsetMinimumWidth\fR ( int minw )"
+.BI "void \fBsetMinimumWidth\fR ( int minw ) "
 .br
 .ti -1c
-.BI "void \fBsetMinimumHeight\fR ( int minh )"
+.BI "void \fBsetMinimumHeight\fR ( int minh ) "
 .br
 .ti -1c
-.BI "void \fBsetMaximumWidth\fR ( int maxw )"
+.BI "void \fBsetMaximumWidth\fR ( int maxw ) "
 .br
 .ti -1c
-.BI "void \fBsetMaximumHeight\fR ( int maxh )"
+.BI "void \fBsetMaximumHeight\fR ( int maxh ) "
 .br
 .ti -1c
 .BI "QSize \fBsizeIncrement\fR () const"
 .br
 .ti -1c
-.BI "void \fBsetSizeIncrement\fR ( const QSize & )"
+.BI "void \fBsetSizeIncrement\fR ( const QSize & ) "
 .br
 .ti -1c
-.BI "virtual void \fBsetSizeIncrement\fR ( int " "w" ", int h )"
+.BI "virtual void \fBsetSizeIncrement\fR ( int " "w" ", int h ) "
 .br
 .ti -1c
 .BI "QSize \fBbaseSize\fR () const"
 .br
 .ti -1c
-.BI "void \fBsetBaseSize\fR ( const QSize & )"
+.BI "void \fBsetBaseSize\fR ( const QSize & ) "
 .br
 .ti -1c
-.BI "void \fBsetBaseSize\fR ( int " "basew" ", int baseh )"
+.BI "void \fBsetBaseSize\fR ( int " "basew" ", int baseh ) "
 .br
 .ti -1c
-.BI "void \fBsetFixedSize\fR ( const QSize & )"
+.BI "void \fBsetFixedSize\fR ( const QSize & ) "
 .br
 .ti -1c
-.BI "void \fBsetFixedSize\fR ( int " "w" ", int h )"
+.BI "void \fBsetFixedSize\fR ( int " "w" ", int h ) "
 .br
 .ti -1c
-.BI "void \fBsetFixedWidth\fR ( int w )"
+.BI "void \fBsetFixedWidth\fR ( int w ) "
 .br
 .ti -1c
-.BI "void \fBsetFixedHeight\fR ( int h )"
+.BI "void \fBsetFixedHeight\fR ( int h ) "
 .br
 .ti -1c
 .BI "QPoint \fBmapToGlobal\fR ( const QPoint & ) const"
@@ -177,16 +175,22 @@ Inherited by QButton, QComboBox, QDialog, QFrame, QGLWidget, QHeader, QLineEdit,
 .BI "QPoint \fBmapFromParent\fR ( const QPoint & ) const"
 .br
 .ti -1c
+.BI "QPoint \fBmapTo\fR ( QWidget *, const QPoint & ) const"
+.br
+.ti -1c
+.BI "QPoint \fBmapFrom\fR ( QWidget *, const QPoint & ) const"
+.br
+.ti -1c
 .BI "QWidget* \fBtopLevelWidget\fR () const"
 .br
 .ti -1c
-.BI "enum \fBBackgroundMode\fR { FixedColor, FixedPixmap, NoBackground, PaletteForeground, PaletteButton, PaletteLight, PaletteMidlight, PaletteDark, PaletteMid, PaletteText, PaletteBrightText, PaletteBase, PaletteBackground, PaletteShadow, PaletteHighlight, PaletteHighlightedText }"
+.BI "enum \fBBackgroundMode\fR { FixedColor, FixedPixmap, NoBackground, PaletteForeground, PaletteButton, PaletteLight, PaletteMidlight, PaletteDark, PaletteMid, PaletteText, PaletteBrightText, PaletteBase, PaletteBackground, PaletteShadow, PaletteHighlight, PaletteHighlightedText, PaletteButtonText, X11ParentRelative }"
 .br
 .ti -1c
 .BI "BackgroundMode \fBbackgroundMode\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetBackgroundMode\fR ( BackgroundMode )"
+.BI "virtual void \fBsetBackgroundMode\fR ( BackgroundMode ) "
 .br
 .ti -1c
 .BI "const QColor& \fBbackgroundColor\fR () const"
@@ -195,13 +199,13 @@ Inherited by QButton, QComboBox, QDialog, QFrame, QGLWidget, QHeader, QLineEdit,
 .BI "const QColor& \fBforegroundColor\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetBackgroundColor\fR ( const QColor & )"
+.BI "virtual void \fBsetBackgroundColor\fR ( const QColor & ) "
 .br
 .ti -1c
 .BI "const QPixmap* \fBbackgroundPixmap\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetBackgroundPixmap\fR ( const QPixmap & )"
+.BI "virtual void \fBsetBackgroundPixmap\fR ( const QPixmap & ) "
 .br
 .ti -1c
 .BI "const QColorGroup& \fBcolorGroup\fR () const"
@@ -210,19 +214,25 @@ Inherited by QButton, QComboBox, QDialog, QFrame, QGLWidget, QHeader, QLineEdit,
 .BI "const QPalette& \fBpalette\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetPalette\fR ( const QPalette & )"
+.BI "bool \fBownPalette\fR () const"
 .br
 .ti -1c
-.BI "void \fBunsetPalette\fR ()"
+.BI "virtual void \fBsetPalette\fR ( const QPalette & ) "
+.br
+.ti -1c
+.BI "void \fBunsetPalette\fR () "
 .br
 .ti -1c
 .BI "QFont \fBfont\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetFont\fR ( const QFont & )"
+.BI "bool \fBownFont\fR () const"
 .br
 .ti -1c
-.BI "void \fBunsetFont\fR ()"
+.BI "virtual void \fBsetFont\fR ( const QFont & ) "
+.br
+.ti -1c
+.BI "void \fBunsetFont\fR () "
 .br
 .ti -1c
 .BI "QFontMetrics \fBfontMetrics\fR () const"
@@ -249,10 +259,13 @@ Inherited by QButton, QComboBox, QDialog, QFrame, QGLWidget, QHeader, QLineEdit,
 .BI "const QCursor& \fBcursor\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetCursor\fR ( const QCursor & )"
+.BI "bool \fBownCursor\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBunsetCursor\fR ()"
+.BI "virtual void \fBsetCursor\fR ( const QCursor & ) "
+.br
+.ti -1c
+.BI "virtual void \fBunsetCursor\fR () "
 .br
 .ti -1c
 .BI "QString \fBcaption\fR () const"
@@ -267,13 +280,13 @@ Inherited by QButton, QComboBox, QDialog, QFrame, QGLWidget, QHeader, QLineEdit,
 .BI "bool \fBhasMouseTracking\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetMask\fR ( const QBitmap & )"
+.BI "virtual void \fBsetMask\fR ( const QBitmap & ) "
 .br
 .ti -1c
-.BI "virtual void \fBsetMask\fR ( const QRegion & )"
+.BI "virtual void \fBsetMask\fR ( const QRegion & ) "
 .br
 .ti -1c
-.BI "void \fBclearMask\fR ()"
+.BI "void \fBclearMask\fR () "
 .br
 .ti -1c
 .BI "enum \fBFocusPolicy\fR { NoFocus = 0, TabFocus = 0x1, ClickFocus = 0x2, StrongFocus = 0x3, WheelFocus = 0x7 }"
@@ -282,7 +295,7 @@ Inherited by QButton, QComboBox, QDialog, QFrame, QGLWidget, QHeader, QLineEdit,
 .BI "bool \fBisActiveWindow\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetActiveWindow\fR ()"
+.BI "virtual void \fBsetActiveWindow\fR () "
 .br
 .ti -1c
 .BI "bool \fBisFocusEnabled\fR () const"
@@ -291,37 +304,37 @@ Inherited by QButton, QComboBox, QDialog, QFrame, QGLWidget, QHeader, QLineEdit,
 .BI "FocusPolicy \fBfocusPolicy\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetFocusPolicy\fR ( FocusPolicy )"
+.BI "virtual void \fBsetFocusPolicy\fR ( FocusPolicy ) "
 .br
 .ti -1c
 .BI "bool \fBhasFocus\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetFocusProxy\fR ( QWidget * )"
+.BI "virtual void \fBsetFocusProxy\fR ( QWidget * ) "
 .br
 .ti -1c
 .BI "QWidget* \fBfocusProxy\fR () const"
 .br
 .ti -1c
-.BI "void \fBgrabMouse\fR ()"
+.BI "void \fBgrabMouse\fR () "
 .br
 .ti -1c
-.BI "void \fBgrabMouse\fR ( const QCursor & )"
+.BI "void \fBgrabMouse\fR ( const QCursor & ) "
 .br
 .ti -1c
-.BI "void \fBreleaseMouse\fR ()"
+.BI "void \fBreleaseMouse\fR () "
 .br
 .ti -1c
-.BI "void \fBgrabKeyboard\fR ()"
+.BI "void \fBgrabKeyboard\fR () "
 .br
 .ti -1c
-.BI "void \fBreleaseKeyboard\fR ()"
+.BI "void \fBreleaseKeyboard\fR () "
 .br
 .ti -1c
 .BI "bool \fBisUpdatesEnabled\fR () const"
 .br
 .ti -1c
-.BI "virtual bool \fBclose\fR ( bool alsoDelete )"
+.BI "virtual bool \fBclose\fR ( bool alsoDelete ) "
 .br
 .ti -1c
 .BI "bool \fBisVisible\fR () const"
@@ -336,7 +349,13 @@ Inherited by QButton, QComboBox, QDialog, QFrame, QGLWidget, QHeader, QLineEdit,
 .BI "QRect \fBvisibleRect\fR () const"
 .br
 .ti -1c
+.BI "bool \fBisHidden\fR () const"
+.br
+.ti -1c
 .BI "bool \fBisMinimized\fR () const"
+.br
+.ti -1c
+.BI "bool \fBisMaximized\fR () const"
 .br
 .ti -1c
 .BI "virtual QSize \fBsizeHint\fR () const"
@@ -348,46 +367,49 @@ Inherited by QButton, QComboBox, QDialog, QFrame, QGLWidget, QHeader, QLineEdit,
 .BI "virtual QSizePolicy \fBsizePolicy\fR () const"
 .br
 .ti -1c
+.BI "void \fBsetSizePolicy\fR ( QSizePolicy ) "
+.br
+.ti -1c
 .BI "virtual int \fBheightForWidth\fR ( int ) const"
 .br
 .ti -1c
-.BI "virtual void \fBadjustSize\fR ()"
+.BI "virtual void \fBadjustSize\fR () "
 .br
 .ti -1c
 .BI "QLayout* \fBlayout\fR () const"
 .br
 .ti -1c
-.BI "void \fBupdateGeometry\fR ()"
+.BI "void \fBupdateGeometry\fR () "
 .br
 .ti -1c
-.BI "virtual void \fBreparent\fR ( QWidget * " "parent" ", WFlags, const QPoint &, bool " "showIt" "=FALSE )"
+.BI "virtual void \fBreparent\fR ( QWidget * " "parent" ", WFlags, const QPoint &, bool " "showIt" "=FALSE ) "
 .br
 .ti -1c
-.BI "void \fBreparent\fR ( QWidget * " "parent" ", const QPoint &, bool " "showIt" "=FALSE )"
+.BI "void \fBreparent\fR ( QWidget * " "parent" ", const QPoint &, bool " "showIt" "=FALSE ) "
 .br
 .ti -1c
-.BI "void \fBerase\fR ()"
+.BI "void \fBerase\fR () "
 .br
 .ti -1c
-.BI "void \fBerase\fR ( int " "x" ", int " "y" ", int " "w" ", int h )"
+.BI "void \fBerase\fR ( int " "x" ", int " "y" ", int " "w" ", int h ) "
 .br
 .ti -1c
-.BI "void \fBerase\fR ( const QRect & )"
+.BI "void \fBerase\fR ( const QRect & ) "
 .br
 .ti -1c
-.BI "void \fBerase\fR ( const QRegion & )"
+.BI "void \fBerase\fR ( const QRegion & ) "
 .br
 .ti -1c
-.BI "void \fBscroll\fR ( int " "dx" ", int dy )"
+.BI "void \fBscroll\fR ( int " "dx" ", int dy ) "
 .br
 .ti -1c
-.BI "void \fBscroll\fR ( int " "dx" ", int " "dy" ", const QRect & )"
+.BI "void \fBscroll\fR ( int " "dx" ", int " "dy" ", const QRect & ) "
 .br
 .ti -1c
-.BI "void \fBdrawText\fR ( int " "x" ", int " "y" ", const QString & )"
+.BI "void \fBdrawText\fR ( int " "x" ", int " "y" ", const QString & ) "
 .br
 .ti -1c
-.BI "void \fBdrawText\fR ( const QPoint &, const QString & )"
+.BI "void \fBdrawText\fR ( const QPoint &, const QString & ) "
 .br
 .ti -1c
 .BI "QWidget* \fBfocusWidget\fR () const"
@@ -399,10 +421,10 @@ Inherited by QButton, QComboBox, QDialog, QFrame, QGLWidget, QHeader, QLineEdit,
 .BI "bool \fBacceptDrops\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetAcceptDrops\fR ( bool on )"
+.BI "virtual void \fBsetAcceptDrops\fR ( bool on ) "
 .br
 .ti -1c
-.BI "virtual void \fBsetAutoMask\fR ( bool )"
+.BI "virtual void \fBsetAutoMask\fR ( bool ) "
 .br
 .ti -1c
 .BI "bool \fBautoMask\fR () const"
@@ -411,7 +433,7 @@ Inherited by QButton, QComboBox, QDialog, QFrame, QGLWidget, QHeader, QLineEdit,
 .BI "enum \fBBackgroundOrigin\fR { WidgetOrigin, ParentOrigin }"
 .br
 .ti -1c
-.BI "void \fBsetBackgroundOrigin\fR ( BackgroundOrigin )"
+.BI "void \fBsetBackgroundOrigin\fR ( BackgroundOrigin ) "
 .br
 .ti -1c
 .BI "BackgroundOrigin \fBbackgroundOrigin\fR () const"
@@ -438,118 +460,124 @@ Inherited by QButton, QComboBox, QDialog, QFrame, QGLWidget, QHeader, QLineEdit,
 .SS "Public Slots"
 .in +1c
 .ti -1c
-.BI "virtual void \fBsetEnabled\fR ( bool )"
+.BI "virtual void \fBsetEnabled\fR ( bool ) "
 .br
 .ti -1c
-.BI "virtual void \fBsetCaption\fR ( const QString & )"
+.BI "void \fBsetDisabled\fR ( bool ) "
 .br
 .ti -1c
-.BI "virtual void \fBsetIcon\fR ( const QPixmap & )"
+.BI "virtual void \fBsetCaption\fR ( const QString & ) "
 .br
 .ti -1c
-.BI "virtual void \fBsetIconText\fR ( const QString & )"
+.BI "virtual void \fBsetIcon\fR ( const QPixmap & ) "
 .br
 .ti -1c
-.BI "virtual void \fBsetMouseTracking\fR ( bool enable )"
+.BI "virtual void \fBsetIconText\fR ( const QString & ) "
 .br
 .ti -1c
-.BI "virtual void \fBsetFocus\fR ()"
+.BI "virtual void \fBsetMouseTracking\fR ( bool enable ) "
 .br
 .ti -1c
-.BI "void \fBclearFocus\fR ()"
+.BI "virtual void \fBsetFocus\fR () "
 .br
 .ti -1c
-.BI "virtual void \fBsetUpdatesEnabled\fR ( bool enable )"
+.BI "void \fBclearFocus\fR () "
 .br
 .ti -1c
-.BI "void \fBupdate\fR ()"
+.BI "virtual void \fBsetUpdatesEnabled\fR ( bool enable ) "
 .br
 .ti -1c
-.BI "void \fBupdate\fR ( int " "x" ", int " "y" ", int " "w" ", int h )"
+.BI "void \fBupdate\fR () "
 .br
 .ti -1c
-.BI "void \fBupdate\fR ( const QRect & )"
+.BI "void \fBupdate\fR ( int " "x" ", int " "y" ", int " "w" ", int h ) "
 .br
 .ti -1c
-.BI "void \fBrepaint\fR ()"
+.BI "void \fBupdate\fR ( const QRect & ) "
 .br
 .ti -1c
-.BI "void \fBrepaint\fR ( bool erase )"
+.BI "void \fBrepaint\fR () "
 .br
 .ti -1c
-.BI "void \fBrepaint\fR ( int " "x" ", int " "y" ", int " "w" ", int " "h" ", bool " "erase" "=TRUE )"
+.BI "void \fBrepaint\fR ( bool erase ) "
 .br
 .ti -1c
-.BI "void \fBrepaint\fR ( const QRect &, bool " "erase" "=TRUE )"
+.BI "void \fBrepaint\fR ( int " "x" ", int " "y" ", int " "w" ", int " "h" ", bool " "erase" "=TRUE ) "
 .br
 .ti -1c
-.BI "void \fBrepaint\fR ( const QRegion &, bool " "erase" "=TRUE )"
+.BI "void \fBrepaint\fR ( const QRect &, bool " "erase" "=TRUE ) "
 .br
 .ti -1c
-.BI "virtual void \fBshow\fR ()"
+.BI "void \fBrepaint\fR ( const QRegion &, bool " "erase" "=TRUE ) "
 .br
 .ti -1c
-.BI "virtual void \fBhide\fR ()"
+.BI "virtual void \fBshow\fR () "
 .br
 .ti -1c
-.BI "virtual void \fBshowMinimized\fR ()"
+.BI "virtual void \fBhide\fR () "
 .br
 .ti -1c
-.BI "virtual void \fBshowMaximized\fR ()"
+.BI "virtual void \fBshowMinimized\fR () "
 .br
 .ti -1c
-.BI "void \fBshowFullScreen\fR ()"
+.BI "virtual void \fBshowMaximized\fR () "
 .br
 .ti -1c
-.BI "virtual void \fBshowNormal\fR ()"
+.BI "void \fBshowFullScreen\fR () "
 .br
 .ti -1c
-.BI "virtual void \fBpolish\fR ()"
+.BI "virtual void \fBshowNormal\fR () "
+.br
+.ti -1c
+.BI "virtual void \fBpolish\fR () "
 .br
 .ti -1c
 .BI "void \fBconstPolish\fR () const"
 .br
 .ti -1c
-.BI "bool \fBclose\fR ()"
+.BI "bool \fBclose\fR () "
 .br
 .ti -1c
-.BI "void \fBraise\fR ()"
+.BI "void \fBraise\fR () "
 .br
 .ti -1c
-.BI "void \fBlower\fR ()"
+.BI "void \fBlower\fR () "
 .br
 .ti -1c
-.BI "virtual void \fBmove\fR ( int " "x" ", int y )"
+.BI "void \fBstackUnder\fR ( QWidget * ) "
 .br
 .ti -1c
-.BI "void \fBmove\fR ( const QPoint & )"
+.BI "virtual void \fBmove\fR ( int " "x" ", int y ) "
 .br
 .ti -1c
-.BI "virtual void \fBresize\fR ( int " "w" ", int h )"
+.BI "void \fBmove\fR ( const QPoint & ) "
 .br
 .ti -1c
-.BI "void \fBresize\fR ( const QSize & )"
+.BI "virtual void \fBresize\fR ( int " "w" ", int h ) "
 .br
 .ti -1c
-.BI "virtual void \fBsetGeometry\fR ( int " "x" ", int " "y" ", int " "w" ", int h )"
+.BI "void \fBresize\fR ( const QSize & ) "
 .br
 .ti -1c
-.BI "virtual void \fBsetGeometry\fR ( const QRect & )"
+.BI "virtual void \fBsetGeometry\fR ( int " "x" ", int " "y" ", int " "w" ", int h ) "
+.br
+.ti -1c
+.BI "virtual void \fBsetGeometry\fR ( const QRect & ) "
 .br
 .in -1c
 .SS "Static Public Members"
 .in +1c
 .ti -1c
-.BI "void \fBsetTabOrder\fR ( QWidget *, QWidget * )"
+.BI "void \fBsetTabOrder\fR ( QWidget *, QWidget * ) "
 .br
 .ti -1c
-.BI "QWidget* \fBmouseGrabber\fR ()"
+.BI "QWidget* \fBmouseGrabber\fR () "
 .br
 .ti -1c
-.BI "QWidget* \fBkeyboardGrabber\fR ()"
+.BI "QWidget* \fBkeyboardGrabber\fR () "
 .br
 .ti -1c
-.BI "QWidget* \fBfind\fR ( WId )"
+.BI "QWidget* \fBfind\fR ( WId ) "
 .br
 .ti -1c
 .BI "QWidgetMapper* \fBwmapper\fR () (internal)"
@@ -558,103 +586,103 @@ Inherited by QButton, QComboBox, QDialog, QFrame, QGLWidget, QHeader, QLineEdit,
 .SS "Protected Members"
 .in +1c
 .ti -1c
-.BI "virtual bool \fBevent\fR ( QEvent * )"
+.BI "virtual bool \fBevent\fR ( QEvent * ) "
 .br
 .ti -1c
-.BI "virtual void \fBmousePressEvent\fR ( QMouseEvent * )"
+.BI "virtual void \fBmousePressEvent\fR ( QMouseEvent * ) "
 .br
 .ti -1c
-.BI "virtual void \fBmouseReleaseEvent\fR ( QMouseEvent * )"
+.BI "virtual void \fBmouseReleaseEvent\fR ( QMouseEvent * ) "
 .br
 .ti -1c
-.BI "virtual void \fBmouseDoubleClickEvent\fR ( QMouseEvent * )"
+.BI "virtual void \fBmouseDoubleClickEvent\fR ( QMouseEvent * ) "
 .br
 .ti -1c
-.BI "virtual void \fBmouseMoveEvent\fR ( QMouseEvent * )"
+.BI "virtual void \fBmouseMoveEvent\fR ( QMouseEvent * ) "
 .br
 .ti -1c
-.BI "virtual void \fBwheelEvent\fR ( QWheelEvent * )"
+.BI "virtual void \fBwheelEvent\fR ( QWheelEvent * ) "
 .br
 .ti -1c
-.BI "virtual void \fBkeyPressEvent\fR ( QKeyEvent * )"
+.BI "virtual void \fBkeyPressEvent\fR ( QKeyEvent * ) "
 .br
 .ti -1c
-.BI "virtual void \fBkeyReleaseEvent\fR ( QKeyEvent * )"
+.BI "virtual void \fBkeyReleaseEvent\fR ( QKeyEvent * ) "
 .br
 .ti -1c
-.BI "virtual void \fBfocusInEvent\fR ( QFocusEvent * )"
+.BI "virtual void \fBfocusInEvent\fR ( QFocusEvent * ) "
 .br
 .ti -1c
-.BI "virtual void \fBfocusOutEvent\fR ( QFocusEvent * )"
+.BI "virtual void \fBfocusOutEvent\fR ( QFocusEvent * ) "
 .br
 .ti -1c
-.BI "virtual void \fBenterEvent\fR ( QEvent * )"
+.BI "virtual void \fBenterEvent\fR ( QEvent * ) "
 .br
 .ti -1c
-.BI "virtual void \fBleaveEvent\fR ( QEvent * )"
+.BI "virtual void \fBleaveEvent\fR ( QEvent * ) "
 .br
 .ti -1c
-.BI "virtual void \fBpaintEvent\fR ( QPaintEvent * )"
+.BI "virtual void \fBpaintEvent\fR ( QPaintEvent * ) "
 .br
 .ti -1c
-.BI "virtual void \fBmoveEvent\fR ( QMoveEvent * )"
+.BI "virtual void \fBmoveEvent\fR ( QMoveEvent * ) "
 .br
 .ti -1c
-.BI "virtual void \fBresizeEvent\fR ( QResizeEvent * )"
+.BI "virtual void \fBresizeEvent\fR ( QResizeEvent * ) "
 .br
 .ti -1c
-.BI "virtual void \fBcloseEvent\fR ( QCloseEvent * )"
+.BI "virtual void \fBcloseEvent\fR ( QCloseEvent * ) "
 .br
 .ti -1c
-.BI "virtual void \fBdragEnterEvent\fR ( QDragEnterEvent * )"
+.BI "virtual void \fBdragEnterEvent\fR ( QDragEnterEvent * ) "
 .br
 .ti -1c
-.BI "virtual void \fBdragMoveEvent\fR ( QDragMoveEvent * )"
+.BI "virtual void \fBdragMoveEvent\fR ( QDragMoveEvent * ) "
 .br
 .ti -1c
-.BI "virtual void \fBdragLeaveEvent\fR ( QDragLeaveEvent * )"
+.BI "virtual void \fBdragLeaveEvent\fR ( QDragLeaveEvent * ) "
 .br
 .ti -1c
-.BI "virtual void \fBdropEvent\fR ( QDropEvent * )"
+.BI "virtual void \fBdropEvent\fR ( QDropEvent * ) "
 .br
 .ti -1c
-.BI "virtual void \fBshowEvent\fR ( QShowEvent * )"
+.BI "virtual void \fBshowEvent\fR ( QShowEvent * ) "
 .br
 .ti -1c
-.BI "virtual void \fBhideEvent\fR ( QHideEvent * )"
+.BI "virtual void \fBhideEvent\fR ( QHideEvent * ) "
 .br
 .ti -1c
-.BI "virtual void \fBcustomEvent\fR ( QCustomEvent * )"
+.BI "virtual void \fBcustomEvent\fR ( QCustomEvent * ) "
 .br
 .ti -1c
-.BI "virtual void \fBupdateMask\fR ()"
+.BI "virtual void \fBupdateMask\fR () "
 .br
 .ti -1c
-.BI "virtual void \fBstyleChange\fR ( QStyle & )"
+.BI "virtual void \fBstyleChange\fR ( QStyle & ) "
 .br
 .ti -1c
-.BI "virtual void \fBenabledChange\fR ( bool )"
+.BI "virtual void \fBenabledChange\fR ( bool ) "
 .br
 .ti -1c
-.BI "virtual void \fBbackgroundColorChange\fR ( const QColor & )"
+.BI "virtual void \fBbackgroundColorChange\fR ( const QColor & ) "
 .br
 .ti -1c
-.BI "virtual void \fBbackgroundPixmapChange\fR ( const QPixmap & )"
+.BI "virtual void \fBbackgroundPixmapChange\fR ( const QPixmap & ) "
 .br
 .ti -1c
-.BI "virtual void \fBpaletteChange\fR ( const QPalette & )"
+.BI "virtual void \fBpaletteChange\fR ( const QPalette & ) "
 .br
 .ti -1c
-.BI "virtual void \fBfontChange\fR ( const QFont & )"
+.BI "virtual void \fBfontChange\fR ( const QFont & ) "
 .br
 .ti -1c
 .BI "virtual int \fBmetric\fR ( int ) const"
 .br
 .ti -1c
-.BI "virtual void \fBcreate\fR ( WId = 0, bool " "initializeWindow" " = TRUE, bool " "destroyOldWindow" " = TRUE )"
+.BI "virtual void \fBcreate\fR ( WId = 0, bool " "initializeWindow" " = TRUE, bool " "destroyOldWindow" " = TRUE ) "
 .br
 .ti -1c
-.BI "virtual void \fBdestroy\fR ( bool " "destroyWindow" " = TRUE, bool " "destroySubWindows" " = TRUE )"
+.BI "virtual void \fBdestroy\fR ( bool " "destroyWindow" " = TRUE, bool " "destroySubWindows" " = TRUE ) "
 .br
 .ti -1c
 .BI "uint \fBgetWState\fR () const (internal)"
@@ -669,10 +697,10 @@ Inherited by QButton, QComboBox, QDialog, QFrame, QGLWidget, QHeader, QLineEdit,
 .BI "WFlags \fBgetWFlags\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetWFlags\fR ( WFlags )"
+.BI "virtual void \fBsetWFlags\fR ( WFlags ) "
 .br
 .ti -1c
-.BI "void \fBclearWFlags\fR ( WFlags n )"
+.BI "void \fBclearWFlags\fR ( WFlags n ) "
 .br
 .ti -1c
 .BI "virtual void \fBsetFRect\fR ( const QRect & ) (internal)"
@@ -681,7 +709,7 @@ Inherited by QButton, QComboBox, QDialog, QFrame, QGLWidget, QHeader, QLineEdit,
 .BI "virtual void \fBsetCRect\fR ( const QRect & ) (internal)"
 .br
 .ti -1c
-.BI "virtual bool \fBfocusNextPrevChild\fR ( bool next )"
+.BI "virtual bool \fBfocusNextPrevChild\fR ( bool next ) "
 .br
 .ti -1c
 .BI "QWExtra* \fBextraData\fR () (internal)"
@@ -690,17 +718,17 @@ Inherited by QButton, QComboBox, QDialog, QFrame, QGLWidget, QHeader, QLineEdit,
 .BI "QTLWExtra* \fBtopData\fR () (internal)"
 .br
 .ti -1c
-.BI "QFocusData* \fBfocusData\fR ()"
+.BI "QFocusData* \fBfocusData\fR () "
 .br
 .ti -1c
-.BI "virtual void \fBsetKeyCompression\fR ( bool )"
+.BI "virtual void \fBsetKeyCompression\fR ( bool ) "
 .br
 .ti -1c
-.BI "virtual void \fBsetMicroFocusHint\fR ( int " "x" ", int " "y" ", int " "w" ", int " "h" ", bool " "text" "=TRUE )"
+.BI "virtual void \fBsetMicroFocusHint\fR ( int " "x" ", int " "y" ", int " "w" ", int " "h" ", bool " "text" "=TRUE ) "
 .br
 .in -1c
 .SS "Properties"
-<table border=1 cellpadding=3 cellspacing=0> <tr><th>Type<th>Name<th>READ<th>WRITE<th>Options <tr><td>bool<td>isTopLevel<td>isTopLevel<td>&nbsp;<td>&nbsp; <tr><td>bool<td>isModal<td>isModal<td>&nbsp;<td>&nbsp; <tr><td>bool<td>isPopup<td>isPopup<td>&nbsp;<td>&nbsp; <tr><td>bool<td>isDesktop<td>isDesktop<td>&nbsp;<td>&nbsp; <tr><td>bool<td>enabled<td>isEnabled<td>setEnabled<td>&nbsp; <tr><td>QRect<td>geometry<td>geometry<td>setGeometry<td>&nbsp; <tr><td>QRect<td>frameGeometry<td>frameGeometry<td>&nbsp;<td>&nbsp; <tr><td>int<td>x<td>x<td>&nbsp;<td>&nbsp; <tr><td>int<td>y<td>y<td>&nbsp;<td>&nbsp; <tr><td>QPoint<td>pos<td>pos<td>&nbsp;<td>&nbsp; <tr><td>QSize<td>frameSize<td>frameSize<td>&nbsp;<td>&nbsp; <tr><td>QSize<td>size<td>size<td>resize<td> DESIGNABLE false <tr><td>int<td>width<td>width<td>&nbsp;<td>&nbsp; <tr><td>int<td>height<td>height<td>&nbsp;<td>&nbsp; <tr><td>QRect<td>rect<td>rect<td>&nbsp;<td>&nbsp; <tr><td>QRect<td>childrenRect<td>childrenRect<td>&nbsp;<td>&nbsp; <tr><td>QRegion<td>childrenRegion<td>childrenRegion<td>&nbsp;<td>&nbsp; <tr><td>QSize<td>minimumSize<td>minimumSize<td>setMinimumSize<td>&nbsp; <tr><td>QSize<td>maximumSize<td>maximumSize<td>setMaximumSize<td>&nbsp; <tr><td>int<td>minimumWidth<td>minimumWidth<td>setMinimumWidth<td> STORED false <tr><td>int<td>minimumHeight<td>minimumHeight<td>setMinimumHeight<td> STORED false <tr><td>int<td>maximumWidth<td>maximumWidth<td>setMaximumWidth<td> STORED false <tr><td>int<td>maximumHeight<td>maximumHeight<td>setMaximumHeight<td> STORED false <tr><td>QSize<td>sizeIncrement<td>sizeIncrement<td>setSizeIncrement<td>&nbsp; <tr><td>QSize<td>baseSize<td>baseSize<td>setBaseSize<td>&nbsp; <tr><td>BackgroundMode<td>backgroundMode<td>backgroundMode<td>setBackgroundMode<td> DESIGNABLE false <tr><td>QColor<td>backgroundColor<td>backgroundColor<td>setBackgroundColor<td> DESIGNABLE false <tr><td>QColor<td>foregroundColor<td>foregroundColor<td>&nbsp;<td>&nbsp; <tr><td>QPixmap<td>backgroundPixmap<td>backgroundPixmap<td>setBackgroundPixmap<td> DESIGNABLE false <tr><td>QColorGroup<td>colorGroup<td>colorGroup<td>&nbsp;<td>&nbsp; <tr><td>QPalette<td>palette<td>palette<td>setPalette<td> RESET unsetPalette <tr><td>QFont<td>font<td>font<td>setFont<td> RESET unsetFont <tr><td>QCursor<td>cursor<td>cursor<td>setCursor<td> RESET unsetCursor <tr><td>QString<td>caption<td>caption<td>setCaption<td>&nbsp; <tr><td>QPixmap<td>icon<td>icon<td>setIcon<td>&nbsp; <tr><td>QString<td>iconText<td>iconText<td>setIconText<td>&nbsp; <tr><td>bool<td>mouseTracking<td>hasMouseTracking<td>setMouseTracking<td>&nbsp; <tr><td>bool<td>isActiveWindow<td>isActiveWindow<td>&nbsp;<td>&nbsp; <tr><td>bool<td>focusEnabled<td>isFocusEnabled<td>&nbsp;<td>&nbsp; <tr><td>FocusPolicy<td>focusPolicy<td>focusPolicy<td>setFocusPolicy<td>&nbsp; <tr><td>bool<td>focus<td>hasFocus<td>&nbsp;<td>&nbsp; <tr><td>bool<td>updatesEnabled<td>isUpdatesEnabled<td>setUpdatesEnabled<td> DESIGNABLE false <tr><td>bool<td>visible<td>isVisible<td>&nbsp;<td>&nbsp; <tr><td>bool<td>visibleToTLW<td>isVisibleToTLW<td>&nbsp;<td>&nbsp; <tr><td>QRect<td>visibleRect<td>visibleRect<td>&nbsp;<td>&nbsp; <tr><td>bool<td>minimized<td>isMinimized<td>&nbsp;<td>&nbsp; <tr><td>QSize<td>sizeHint<td>sizeHint<td>&nbsp;<td>&nbsp; <tr><td>QSize<td>minimumSizeHint<td>minimumSizeHint<td>&nbsp;<td>&nbsp; <tr><td>QRect<td>microFocusHint<td>microFocusHint<td>&nbsp;<td>&nbsp; <tr><td>bool<td>acceptDrops<td>acceptDrops<td>setAcceptDrops<td>&nbsp; <tr><td>bool<td>autoMask<td>autoMask<td>setAutoMask<td>&nbsp; <tr><td>BackgroundOrigin<td>backgroundOrigin<td>backgroundOrigin<td>setBackgroundOrigin<td>&nbsp; <tr><td>bool<td>customWhatsThis<td>customWhatsThis<td>&nbsp;<td>&nbsp; </table>
+<table border=1 cellpadding=3 cellspacing=0> <tr><th>Type<th>Name<th>READ<th>WRITE<th>Options <tr><td>bool<td>isTopLevel<td>isTopLevel<td>&nbsp;<td>&nbsp; <tr><td>bool<td>isModal<td>isModal<td>&nbsp;<td>&nbsp; <tr><td>bool<td>isPopup<td>isPopup<td>&nbsp;<td>&nbsp; <tr><td>bool<td>isDesktop<td>isDesktop<td>&nbsp;<td>&nbsp; <tr><td>bool<td>enabled<td>isEnabled<td>setEnabled<td>&nbsp; <tr><td>QRect<td>geometry<td>geometry<td>setGeometry<td>&nbsp; <tr><td>QRect<td>frameGeometry<td>frameGeometry<td>&nbsp;<td>&nbsp; <tr><td>int<td>x<td>x<td>&nbsp;<td>&nbsp; <tr><td>int<td>y<td>y<td>&nbsp;<td>&nbsp; <tr><td>QPoint<td>pos<td>pos<td>&nbsp;<td>&nbsp; <tr><td>QSize<td>frameSize<td>frameSize<td>&nbsp;<td>&nbsp; <tr><td>QSize<td>size<td>size<td>resize<td> DESIGNABLE false <tr><td>int<td>width<td>width<td>&nbsp;<td>&nbsp; <tr><td>int<td>height<td>height<td>&nbsp;<td>&nbsp; <tr><td>QRect<td>rect<td>rect<td>&nbsp;<td>&nbsp; <tr><td>QRect<td>childrenRect<td>childrenRect<td>&nbsp;<td>&nbsp; <tr><td>QRegion<td>childrenRegion<td>childrenRegion<td>&nbsp;<td>&nbsp; <tr><td>QSizePolicy<td>sizePolicy<td>sizePolicy<td>setSizePolicy<td>&nbsp; <tr><td>QSize<td>minimumSize<td>minimumSize<td>setMinimumSize<td>&nbsp; <tr><td>QSize<td>maximumSize<td>maximumSize<td>setMaximumSize<td>&nbsp; <tr><td>int<td>minimumWidth<td>minimumWidth<td>setMinimumWidth<td> STORED false <tr><td>int<td>minimumHeight<td>minimumHeight<td>setMinimumHeight<td> STORED false <tr><td>int<td>maximumWidth<td>maximumWidth<td>setMaximumWidth<td> STORED false <tr><td>int<td>maximumHeight<td>maximumHeight<td>setMaximumHeight<td> STORED false <tr><td>QSize<td>sizeIncrement<td>sizeIncrement<td>setSizeIncrement<td>&nbsp; <tr><td>QSize<td>baseSize<td>baseSize<td>setBaseSize<td>&nbsp; <tr><td>BackgroundMode<td>backgroundMode<td>backgroundMode<td>setBackgroundMode<td> DESIGNABLE false <tr><td>QColor<td>backgroundColor<td>backgroundColor<td>setBackgroundColor<td> DESIGNABLE false <tr><td>QColor<td>foregroundColor<td>foregroundColor<td>&nbsp;<td>&nbsp; <tr><td>QPixmap<td>backgroundPixmap<td>backgroundPixmap<td>setBackgroundPixmap<td> DESIGNABLE false <tr><td>QColorGroup<td>colorGroup<td>colorGroup<td>&nbsp;<td>&nbsp; <tr><td>QPalette<td>palette<td>palette<td>setPalette<td> RESET unsetPalette <tr><td>bool<td>ownPalette<td>ownPalette<td>&nbsp;<td>&nbsp; <tr><td>QFont<td>font<td>font<td>setFont<td> RESET unsetFont <tr><td>bool<td>ownFont<td>ownFont<td>&nbsp;<td>&nbsp; <tr><td>QCursor<td>cursor<td>cursor<td>setCursor<td> RESET unsetCursor <tr><td>bool<td>ownCursor<td>ownCursor<td>&nbsp;<td>&nbsp; <tr><td>QString<td>caption<td>caption<td>setCaption<td>&nbsp; <tr><td>QPixmap<td>icon<td>icon<td>setIcon<td>&nbsp; <tr><td>QString<td>iconText<td>iconText<td>setIconText<td>&nbsp; <tr><td>bool<td>mouseTracking<td>hasMouseTracking<td>setMouseTracking<td>&nbsp; <tr><td>bool<td>isActiveWindow<td>isActiveWindow<td>&nbsp;<td>&nbsp; <tr><td>bool<td>focusEnabled<td>isFocusEnabled<td>&nbsp;<td>&nbsp; <tr><td>FocusPolicy<td>focusPolicy<td>focusPolicy<td>setFocusPolicy<td>&nbsp; <tr><td>bool<td>focus<td>hasFocus<td>&nbsp;<td>&nbsp; <tr><td>bool<td>updatesEnabled<td>isUpdatesEnabled<td>setUpdatesEnabled<td> DESIGNABLE false <tr><td>bool<td>visible<td>isVisible<td>&nbsp;<td>&nbsp; <tr><td>QRect<td>visibleRect<td>visibleRect<td>&nbsp;<td>&nbsp; <tr><td>bool<td>hidden<td>isHidden<td>&nbsp;<td>&nbsp; <tr><td>bool<td>minimized<td>isMinimized<td>&nbsp;<td>&nbsp; <tr><td>QSize<td>sizeHint<td>sizeHint<td>&nbsp;<td>&nbsp; <tr><td>QSize<td>minimumSizeHint<td>minimumSizeHint<td>&nbsp;<td>&nbsp; <tr><td>QRect<td>microFocusHint<td>microFocusHint<td>&nbsp;<td>&nbsp; <tr><td>bool<td>acceptDrops<td>acceptDrops<td>setAcceptDrops<td>&nbsp; <tr><td>bool<td>autoMask<td>autoMask<td>setAutoMask<td>&nbsp; <tr><td>BackgroundOrigin<td>backgroundOrigin<td>backgroundOrigin<td>setBackgroundOrigin<td>&nbsp; <tr><td>bool<td>customWhatsThis<td>customWhatsThis<td>&nbsp;<td>&nbsp; </table>
 .SH DESCRIPTION
 The QWidget class is the base class of all user interface objects.
 .PP
@@ -722,7 +750,7 @@ Top level windows: caption(), setCaption(), icon(), setIcon(), iconText(), setIc
 .TP
 Window contents: update(), repaint(), erase(), scroll(), updateMask().
 .TP
-Geometry: pos(), size(), rect(), x(), y(), width(), height(), sizePolicy(), sizeHint(), updateGeometry(), layout(), move(), resize(), setGeometry(), frameGeometry(), geometry(), childrenRect(), adjustSize(), mapFromGlobal(), mapFromParent() mapToGlobal(), mapToParent(), maximumSize(), minimumSize(), sizeIncrement(), setMaximumSize(), setMinimumSize(), setSizeIncrement(), setBaseSize(), setFixedSize()
+Geometry: pos(), size(), rect(), x(), y(), width(), height(), sizePolicy(), setSizePolicy(), sizeHint(), updateGeometry(), layout(), move(), resize(), setGeometry(), frameGeometry(), geometry(), childrenRect(), adjustSize(), mapFromGlobal(), mapFromParent() mapToGlobal(), mapToParent(), maximumSize(), minimumSize(), sizeIncrement(), setMaximumSize(), setMinimumSize(), setSizeIncrement(), setBaseSize(), setFixedSize()
 .TP
 Mode: isVisible(), isVisibleTo(), visibleRect(), isMinimized(), isDesktop(), isEnabled(), isEnabledTo(), isModal(), isPopup(), isTopLevel(), setEnabled(), hasMouseTracking(), setMouseTracking(), isUpdatesEnabled(), setUpdatesEnabled(),
 .TP
@@ -796,16 +824,16 @@ When writing a widget, there are a few more things to look out for.
 .TP
 In the constructor, be sure to set up your member variables early on, before there's any chance that you might receive an event.
 .TP
-It is almost always useful to reimplement sizePolicy or at least sizeHint(), so users of your class can set up layout management more easily. sizePolicy() lets you supply good defaults for the layout management handling, so that other widgets can contain and manage yours easily. sizeHint() indicates a "good" size for the widget.
+It is almost always useful to reimplement sizeHint() and to set the correct size policy with setSizePolicy(), so users of your class can set up layout management more easily. A size policy lets you supply good defaults for the layout management handling, so that other widgets can contain and manage yours easily. sizeHint() indicates a "good" size for the widget.
 .TP
 If your widget is a top-level window, setCaption() and setIcon() set the title bar and icon respectively.
 .IP
 .PP
-See also: QEvent, QPainter, QGridLayout and QBoxLayout.
+See also QEvent, QPainter, QGridLayout and QBoxLayout.
 .PP
 Examples:
 .(l
-iconview/main.cpp drawlines/connect.cpp mainlyQt/editor.cpp xform/xform.cpp layout/layout.cpp popup/popup.cpp menu/menu.cpp progress/progress.cpp qmag/qmag.cpp splitter/splitter.cpp forever/forever.cpp desktop/desktop.cpp scrollview/scrollview.cpp customlayout/main.cpp
+iconview/main.cpp drawlines/connect.cpp mainlyQt/editor.cpp xform/xform.cpp layout/layout.cpp i18n/main.cpp popup/popup.cpp menu/menu.cpp progress/progress.cpp qmag/qmag.cpp splitter/splitter.cpp forever/forever.cpp desktop/desktop.cpp scrollview/scrollview.cpp customlayout/main.cpp
 .)l
 .SS "Member Type Documentation"
 .SH "QWidget::BackgroundMode"
@@ -850,7 +878,7 @@ The background is what the widget contains when paintEvent() is called. To minim
 .PP
 \fCFixedColor\fR and \fCFixedPixmap\fR sometimes are just the right thing, but if you use them, make sure that your application looks right when the desktop color scheme has been changed. (On X11, a quick way to test is e.g. "./yourapp -bg paleblue". On Windows, you have to use the control panel.)
 .PP
-See also: setBackgroundMode(), backgroundMode(), setBackgroundPixmap() and setBackgroundColor().
+See also setBackgroundMode(), backgroundMode(), setBackgroundPixmap() and setBackgroundColor().
 .SH "QWidget::BackgroundOrigin"
 This enum defines the origin used to draw a widget's background pixmap.
 .TP
@@ -883,7 +911,7 @@ If \fIparent\fR is 0, the new widget becomes a top-level window. If \fIparent\fR
 .PP
 The \fIname\fR is sent to the QObject constructor.
 .PP
-The widget flags argument \fIf\fR is normally 0, but it can be set to customize the window frame of a top-level widget (i.e. \fIparent\fR must be zero). To customize the frame, set the \fCWStyle_Customize\fR flag OR'ed with any of these flags:
+The widget flags argument \fIf\fR is normally 0, but it can be set to customize the window frame of a top-level widget (i.e. \fIparent\fR must be zero). To customize the frame, set the \fCWStyle_Customize\fR flag OR'ed with any of the Qt::WidgetFlags.
 .PP
 Note that the X11 version of Qt may not be able to deliver all combinations of style flags on all systems. This is because on X11, Qt can only ask the window manager, and the window manager can override the application's settings. On Windows, Qt can set whatever flags you want.
 .PP
@@ -906,13 +934,13 @@ All children of this widget are deleted first. The application exits if this wid
 .SH "bool QWidget::acceptDrops () const"
 Returns TRUE if drop events are enabled for this widget.
 .PP
-See also: setAcceptDrops().
+See also setAcceptDrops().
 .SH "void QWidget::adjustSize () \fC[virtual]\fR"
 Adjusts the size of the widget to fit the contents.
 .PP
 Uses sizeHint() if valid (i.e if the size hint's width and height are equal to or greater than 0), otherwise sets the size to the children rectangle (the union of all child widget geometries).
 .PP
-See also: sizeHint() and childrenRect().
+See also sizeHint() and childrenRect().
 .PP
 Examples:
 .(l
@@ -923,13 +951,13 @@ Reimplemented in QMessageBox.
 .SH "bool QWidget::autoMask () const"
 Returns whether or not the widget has the auto mask feature enabled.
 .PP
-See also: setAutoMask(), updateMask(), setMask() and clearMask().
+See also setAutoMask(), updateMask(), setMask() and clearMask().
 .SH "const QColor & QWidget::backgroundColor () const"
 Returns the background color of this widget, which is normally set implicitly by setBackgroundMode(), but can also be set explicitly by setBackgroundColor().
 .PP
 If there is a background pixmap (set using setBackgroundPixmap()), then the return value of this function is indeterminate.
 .PP
-See also: setBackgroundColor(), foregroundColor(), colorGroup() and palette().
+See also setBackgroundColor(), foregroundColor(), colorGroup() and palette().
 .PP
 Examples:
 .(l
@@ -940,57 +968,65 @@ This virtual function is called from setBackgroundColor(). \fIoldBackgroundColor
 .PP
 Reimplement this function if your widget needs to know when its background color changes. You will almost certainly need to call this implementation of the function.
 .PP
-See also: setBackgroundColor(), backgroundColor(), setPalette(), repaint() and update().
+See also setBackgroundColor(), backgroundColor(), setPalette(), repaint() and update().
 .SH "QWidget::BackgroundMode QWidget::backgroundMode() const"
 Returns the mode most recently set by setBackgroundMode(). The default is PaletteBackground.
 .PP
-See also: BackgroundMode and setBackgroundMode().
+See also BackgroundMode and setBackgroundMode().
 .SH "QWidget::BackgroundOrigin QWidget::backgroundOrigin() const"
 Returns the current background origin.
 .PP
-See also: setBackgroundOrigin().
+See also setBackgroundOrigin().
 .SH "const QPixmap * QWidget::backgroundPixmap () const"
 Returns the background pixmap if one has been set. If the widget has backgroundMode() NoBackground, the return value is a pixmap for which QPixmao:isNull() is true. If the widget has no pixmap is the background, the return value is a null pointer.
 .PP
-See also: setBackgroundPixmap() and setBackgroundMode().
+See also setBackgroundPixmap() and setBackgroundMode().
 .SH "void QWidget::backgroundPixmapChange ( const QPixmap & oldBackgroundPixmap ) \fC[virtual protected]\fR"
 This virtual function is called from setBackgroundPixmap(). \fIoldBackgroundPixmap\fR is the previous background pixmap; you can get the new background pixmap from backgroundPixmap().
 .PP
 Reimplement this function if your widget needs to know when its background pixmap changes. You will almost certainly need to call this implementation of the function.
 .PP
-See also: setBackgroundPixmap(), backgroundPixmap(), repaint() and update().
+See also setBackgroundPixmap(), backgroundPixmap(), repaint() and update().
 .SH "QSize QWidget::baseSize () const"
 Returns the widget base size
 .PP
 The base size is used to calculate a proper widget size in case the widget defines sizeIncrement().
 .PP
-See also: setBaseSize() and setSizeIncrement().
+See also setBaseSize() and setSizeIncrement().
 .SH "QString QWidget::caption () const"
 Returns the widget caption. If no caption has been set (common for child widgets), this functions returns a null string.
 .PP
-See also: setCaption(), icon(), iconText() and QString::isNull().
+See also setCaption(), icon(), iconText() and QString::isNull().
 .SH "QRect QWidget::childrenRect () const"
 Returns the bounding rectangle of the widget's children.
+.PP
+Explicitely hidden children are excluded.
+.PP
+See also childrenRegion().
 .SH "QRegion QWidget::childrenRegion () const"
 Returns the combined region of the widget's children geometry().
+.PP
+Explicitely hidden children are excluded.
+.PP
+See also childrenRect().
 .SH "void QWidget::clearFocus () \fC[slot]\fR"
 Takes keyboard input focus from the widget.
 .PP
-If the widget has active focus, a focus out event is sent to this widget to tell it that it is about to loose the focus.
+If the widget has active focus, a focus out event is sent to this widget to tell it that it is about to lose the focus.
 .PP
 This widget must enable focus setting in order to get the keyboard input focus, i.e. it must call setFocusPolicy().
 .PP
-See also: hasFocus(), setFocus(), focusInEvent(), focusOutEvent(), setFocusPolicy() and QApplication::focusWidget().
+See also hasFocus(), setFocus(), focusInEvent(), focusOutEvent(), setFocusPolicy() and QApplication::focusWidget().
 .SH "void QWidget::clearMask ()"
 Removes any mask set by setMask().
 .PP
-See also: setMask().
+See also setMask().
 .SH "void QWidget::clearWFlags ( WFlags f ) \fC[protected]\fR"
 Clears the widget flags \fIf.\fR
 .PP
 Widget flags are internal, not meant for public use.
 .PP
-See also: testWFlags(), getWFlags() and setWFlags().
+See also testWFlags(), getWFlags() and setWFlags().
 .SH "bool QWidget::close () \fC[slot]\fR"
 Closes this widget. Returns TRUE if the widget was closed, otherwise FALSE.
 .PP
@@ -998,7 +1034,7 @@ First it sends the widget a QCloseEvent. The widget is hidden if it accepts the 
 .PP
 The QApplication::lastWindowClosed() signal is emitted when the last visible top level widget is closed.
 .PP
-See also: close(bool).
+See also close(bool).
 .PP
 Examples:
 .(l
@@ -1013,13 +1049,13 @@ The QApplication::lastWindowClosed() signal is emitted when the last visible top
 .PP
 Note that closing the QApplication::mainWidget() terminates the application.
 .PP
-See also: closeEvent(), QCloseEvent, hide(), QApplication::quit(), QApplication::setMainWidget() and QApplication::lastWindowClosed().
+See also closeEvent(), QCloseEvent, hide(), QApplication::quit(), QApplication::setMainWidget() and QApplication::lastWindowClosed().
 .SH "void QWidget::closeEvent ( QCloseEvent * e ) \fC[virtual protected]\fR"
 This event handler can be reimplemented in a subclass to receive widget close events.
 .PP
 The default implementation calls e->accept(), which hides this widget. See the QCloseEvent documentation for more details.
 .PP
-See also: event(), hide(), close() and QCloseEvent.
+See also event(), hide(), close() and QCloseEvent.
 .PP
 Reimplemented in QPopupMenu, QDialog and QProgressDialog.
 .SH "const QColorGroup & QWidget::colorGroup () const"
@@ -1029,7 +1065,7 @@ The color group is determined by the state of the widget.
 .PP
 A disabled widget returns the QPalette::disabled() color group, a widget in the window with keyboard focus returns the QPalette::active() color group and all inactive widgets return the QPalette::inactive() color group.
 .PP
-See also: palette() and setPalette().
+See also palette() and setPalette().
 .SH "void QWidget::constPolish () const \fC[slot]\fR"
 Ensures that the widget is properly initialized by calling polish().
 .PP
@@ -1037,7 +1073,7 @@ Call constPolish() from functions like sizeHint() that depends on the widget bei
 .PP
 \fBWarning:\fR Do not call constPolish() on a widget from inside that widget's constructor.
 .PP
-See also: polish().
+See also polish().
 .SH "void QWidget::create ( WId window = 0, bool initializeWindow = TRUE, bool destroyOldWindow = TRUE ) \fC[virtual protected]\fR"
 Creates a new widget window if \fIwindow\fR is null, otherwise sets the widget's window to \fIwindow.\fR
 .PP
@@ -1049,11 +1085,11 @@ The QWidget constructor calls create(0,TRUE,TRUE) to create a window for this wi
 .SH "const QCursor & QWidget::cursor () const"
 Returns the widget cursor. If no cursor has been set the parent widget's cursor is returned.
 .PP
-See also: setCursor() and unsetCursor();.
+See also setCursor() and unsetCursor();.
 .SH "void QWidget::customEvent ( QCustomEvent * ) \fC[virtual protected]\fR"
 This event handler can be reimplemented in a subclass to receive custom events. Custom events are user-defined events with a type value at least as large as the "User" item of the QEvent::Type enum, and is typically a QCustomEvent or QCustomEvent subclass.
 .PP
-See also: event() and QCustomEvent.
+See also event() and QCustomEvent.
 .SH "bool QWidget::customWhatsThis () const \fC[virtual]\fR"
 Returns whether the widget wants to handle What's This help manually. The default implementation returns FALSE, which means the widget will not receive any events in Whats This mode.
 .PP
@@ -1061,9 +1097,9 @@ The widget may leave Whats This mode by calling QWhatsThis::leaveWhatsThisMode()
 .PP
 You may also reimplement customWhatsThis() if your widget is a so-called "passive interactor" that is supposed to work under all circumstances. Simply don't call QWhatsThis::leaveWhatsThisMode() in that case.
 .PP
-See also: QWhatsThis::inWhatsThisMode() and QWhatsThis::leaveWhatsThisMode().
+See also QWhatsThis::inWhatsThisMode() and QWhatsThis::leaveWhatsThisMode().
 .PP
-Reimplemented in QMenuBar and QPopupMenu.
+Reimplemented in QPopupMenu and QMenuBar.
 .SH "void QWidget::destroy ( bool destroyWindow = TRUE, bool destroySubWindows = TRUE ) \fC[virtual protected]\fR"
 Frees up window system resources. Destroys the widget window if \fIdestroyWindow\fR is TRUE.
 .PP
@@ -1075,7 +1111,7 @@ This event handler is called when a drag is in progress and the mouse enters thi
 .PP
 See the Drag-and-drop documentation for an overview of how to provide drag-and-drop in your application.
 .PP
-See also: QTextDrag, QImageDrag and QDragEnterEvent.
+See also QTextDrag, QImageDrag and QDragEnterEvent.
 .PP
 Reimplemented in QMultiLineEdit and QLineEdit.
 .SH "void QWidget::dragLeaveEvent ( QDragLeaveEvent * ) \fC[virtual protected]\fR"
@@ -1083,7 +1119,7 @@ This event handler is called when a drag is in progress and the mouse leaves thi
 .PP
 See the Drag-and-drop documentation for an overview of how to provide drag-and-drop in your application.
 .PP
-See also: QTextDrag, QImageDrag and QDragLeaveEvent.
+See also QTextDrag, QImageDrag and QDragLeaveEvent.
 .PP
 Reimplemented in QMultiLineEdit.
 .SH "void QWidget::dragMoveEvent ( QDragMoveEvent * ) \fC[virtual protected]\fR"
@@ -1091,7 +1127,7 @@ This event handler is called when a drag is in progress and the mouse enters thi
 .PP
 See the Drag-and-drop documentation for an overview of how to provide drag-and-drop in your application.
 .PP
-See also: QTextDrag, QImageDrag and QDragMoveEvent.
+See also QTextDrag, QImageDrag and QDragMoveEvent.
 .PP
 Reimplemented in QMultiLineEdit.
 .SH "void QWidget::drawText ( int x, int y, const QString & str )"
@@ -1101,7 +1137,7 @@ The \fIy\fR position is the base line position of the text. The text is drawn us
 .PP
 This function is provided for convenience. You will generally get more flexible results and often higher speed by using a a painter instead.
 .PP
-See also: setFont(), foregroundColor() and QPainter::drawText().
+See also setFont(), foregroundColor() and QPainter::drawText().
 .SH "void QWidget::drawText ( const QPoint & pos, const QString & str )"
 This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts.
 .SH "void QWidget::dropEvent ( QDropEvent * ) \fC[virtual protected]\fR"
@@ -1109,9 +1145,9 @@ This event handler is called when the drag is dropped on this widget.
 .PP
 See the Drag-and-drop documentation for an overview of how to provide drag-and-drop in your application.
 .PP
-See also: QTextDrag, QImageDrag and QDropEvent.
+See also QTextDrag, QImageDrag and QDropEvent.
 .PP
-Reimplemented in QMultiLineEdit and QLineEdit.
+Reimplemented in QLineEdit and QMultiLineEdit.
 .SH "void QWidget::enabledChange ( bool oldEnabled ) \fC[virtual protected]\fR"
 This virtual function is called from setEnabled(). \fIoldEnabled\fR is the previous setting; you can get the new setting from isEnabled().
 .PP
@@ -1119,7 +1155,7 @@ Reimplement this function if your widget needs to know when it becomes enabled o
 .PP
 The default implementation repaints the visible part of the widget.
 .PP
-See also: setEnabled(), isEnabled(), repaint(), update() and visibleRect().
+See also setEnabled(), isEnabled(), repaint(), update() and visibleRect().
 .PP
 Reimplemented in QListView and QButton.
 .SH "void QWidget::enterEvent ( QEvent * ) \fC[virtual protected]\fR"
@@ -1127,7 +1163,7 @@ This event handler can be reimplemented in a subclass to receive widget enter ev
 .PP
 An event is sent to the widget when the mouse cursor enters the widget.
 .PP
-See also: leaveEvent(), mouseMoveEvent() and event().
+See also leaveEvent(), mouseMoveEvent() and event().
 .PP
 Reimplemented in QToolButton.
 .SH "void QWidget::erase ( const QRegion & reg )"
@@ -1146,7 +1182,7 @@ If \fIw\fR is negative, it is replaced with \fCwidth() - x\fR. If \fIh\fR is neg
 .PP
 Child widgets are not affected.
 .PP
-See also: repaint().
+See also repaint().
 .SH "void QWidget::erase ()"
 This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts.
 .PP
@@ -1162,7 +1198,7 @@ Key press/release events are treated differently from other events. event() chec
 .PP
 This function returns TRUE if it is able to pass the event over to someone, or FALSE if nobody wanted the event.
 .PP
-See also: closeEvent(), focusInEvent(), focusOutEvent(), enterEvent(), keyPressEvent(), keyReleaseEvent(), leaveEvent(), mouseDoubleClickEvent(), mouseMoveEvent(), mousePressEvent(), mouseReleaseEvent(), moveEvent(), paintEvent(), resizeEvent(), QObject::event() and QObject::timerEvent().
+See also closeEvent(), focusInEvent(), focusOutEvent(), enterEvent(), keyPressEvent(), keyReleaseEvent(), leaveEvent(), mouseDoubleClickEvent(), mouseMoveEvent(), mousePressEvent(), mouseReleaseEvent(), moveEvent(), paintEvent(), resizeEvent(), QObject::event() and QObject::timerEvent().
 .PP
 Reimplemented from QObject.
 .SH "QWidget * QWidget::find ( WId id ) \fC[static]\fR"
@@ -1170,7 +1206,7 @@ Returns a pointer to the widget with window identifer/handle \fIid.\fR
 .PP
 The window identifier type depends by the underlying window system, see qwindowdefs.h for the actual definition. If there is no widget with this identifier, a null pointer is returned.
 .PP
-See also: wmapper() and id().
+See also wmapper() and id().
 .SH "QFocusData * QWidget::focusData () \fC[protected]\fR"
 Returns a pointer to the focus data for this widget's top-level widget.
 .PP
@@ -1184,9 +1220,9 @@ A widget normally must setFocusPolicy() to something other than NoFocus in order
 .PP
 The default implementation updates the widget if it accepts focus (see focusPolicy()). It also calls setMicroFocusHint(), hinting any system-specific input tools about the focus of the user's attention.
 .PP
-See also: focusOutEvent(), setFocusPolicy(), keyPressEvent(), keyReleaseEvent(), event() and QFocusEvent.
+See also focusOutEvent(), setFocusPolicy(), keyPressEvent(), keyReleaseEvent(), event() and QFocusEvent.
 .PP
-Reimplemented in QPushButton, QListBox, QTabBar, QButton, QMultiLineEdit, QLineEdit, QSlider, QGroupBox, QPopupMenu, QMenuBar, QComboBox, QListView, QTextView and QRadioButton.
+Reimplemented in QListBox, QTabBar, QLineEdit, QSlider, QGroupBox, QComboBox, QPushButton, QButton, QMultiLineEdit, QPopupMenu, QMenuBar, QTable, QDial, QListView, QTextView and QRadioButton.
 .SH "bool QWidget::focusNextPrevChild ( bool next ) \fC[virtual protected]\fR"
 Finds a new widget to give the keyboard focus to, as appropriate for Tab/shift-Tab, and returns TRUE if is can find a new widget and FALSE if it can't,
 .PP
@@ -1196,7 +1232,7 @@ Sometimes, you will want to reimplement this function. For example, a web browse
 .PP
 Child widgets call focusNextPrevChild() on their parent widgets, and only the top-level widget will thus make the choice of where to redirect focus. By overriding this method for an object, you thus gain control of focus traversal for all child widgets.
 .PP
-See also: focusData().
+See also focusData().
 .PP
 Reimplemented in QButton, QPopupMenu and QScrollView.
 .SH "void QWidget::focusOutEvent ( QFocusEvent * ) \fC[virtual protected]\fR"
@@ -1206,17 +1242,17 @@ A widget normally must setFocusPolicy() to something other than NoFocus in order
 .PP
 The default implementation calls repaint() since the widget's colorGroup() changes from active to normal, so the widget probably needs repainting. It also calls setMicroFocusHint(), hinting any system-specific input tools about the focus of the user's attention.
 .PP
-See also: focusInEvent(), setFocusPolicy(), keyPressEvent(), keyReleaseEvent(), event() and QFocusEvent.
+See also focusInEvent(), setFocusPolicy(), keyPressEvent(), keyReleaseEvent(), event() and QFocusEvent.
 .PP
-Reimplemented in QListBox, QButton, QMenuBar, QMultiLineEdit, QTextView, QPopupMenu, QTabBar, QLineEdit, QPushButton, QSlider and QListView.
+Reimplemented in QMenuBar, QMultiLineEdit, QTextView, QPopupMenu, QTabBar, QDial, QTable, QSlider, QListView, QListBox, QButton, QLineEdit and QPushButton.
 .SH "QWidget::FocusPolicy QWidget::focusPolicy() const"
 Returns \fCQWidget::TabFocus\fR if the widget accepts focus by tabbing, \fCQWidget::ClickFocus\fR if the widget accepts focus by clicking, \fCQWidget::StrongFocus\fR if it accepts both and \fCQWidget::NoFocus\fR if it does not accept focus at all.
 .PP
-See also: isFocusEnabled(), setFocusPolicy(), focusInEvent(), focusOutEvent(), keyPressEvent(), keyReleaseEvent() and isEnabled().
+See also isFocusEnabled(), setFocusPolicy(), focusInEvent(), focusOutEvent(), keyPressEvent(), keyReleaseEvent() and isEnabled().
 .SH "QWidget * QWidget::focusProxy () const"
 Returns a pointer to the focus proxy, or 0 if there is no focus proxy.
 .PP
-See also: setFocusProxy().
+See also setFocusProxy().
 .SH "QWidget * QWidget::focusWidget () const"
 Returns the focus widget in this widget's window. This is not the same as QApplication::focusWidget(), which returns the focus widget in the currently active window.
 .SH "QFont QWidget::font () const"
@@ -1226,7 +1262,7 @@ fontInfo() tells you what font is actually being used.
 .PP
 As long as no special font has been set, this is either a special font for the widget class, the parent's font or - if this widget is a toplevel widget - the default application font.
 .PP
-See also: setFont(), fontInfo(), fontMetrics() and QApplication::font().
+See also setFont(), fontInfo(), fontMetrics() and QApplication::font().
 .PP
 Examples:
 .(l
@@ -1239,17 +1275,17 @@ Reimplement this function if your widget needs to know when its font changes. Yo
 .PP
 The default implementation updates the widget including its geometry.
 .PP
-See also: setFont(), font(), update() and updateGeometry().
+See also setFont(), font(), update() and updateGeometry().
 .PP
-Reimplemented in QLabel, QMenuBar and QGroupBox.
+Reimplemented in QMenuBar, QLabel and QGroupBox.
 .SH "QFontInfo QWidget::fontInfo () const"
 Returns the font info for the widget's current font. Equivalent to QFontInto(widget->font()).
 .PP
-See also: font(), fontMetrics() and setFont().
+See also font(), fontMetrics() and setFont().
 .SH "QFontMetrics QWidget::fontMetrics () const"
 Returns the font metrics for the widget's current font. Equivalent to QFontMetrics(widget->font()).
 .PP
-See also: font(), fontInfo() and setFont().
+See also font(), fontInfo() and setFont().
 .PP
 Examples:
 .(l
@@ -1260,19 +1296,19 @@ xform/xform.cpp drawdemo/drawdemo.cpp qmag/qmag.cpp
 .PP
 The return value is meaningless
 .PP
-See also: setFontPropagation().
+See also setFontPropagation().
 .SH "const QColor & QWidget::foregroundColor () const"
 Returns the foreground color of this widget.
 .PP
 The foreground color is also accessible as colorGroup().foreground().
 .PP
-See also: backgroundColor() and colorGroup().
+See also backgroundColor() and colorGroup().
 .SH "QRect QWidget::frameGeometry () const"
 Returns the geometry of the widget, relative to its parent and including the window frame.
 .PP
 See the Window Geometry documentation for an overview of geometry issues with top-level widgets.
 .PP
-See also: geometry(), x(), y() and pos().
+See also geometry(), x(), y() and pos().
 .SH "QSize QWidget::frameSize () const"
 Returns the size of the window system frame (for top level widgets).
 .SH "const QRect & QWidget::geometry () const"
@@ -1280,7 +1316,7 @@ Returns the geometry of the widget, relative to its parent widget and excluding 
 .PP
 See the Window Geometry documentation for an overview of geometry issues with top-level widgets.
 .PP
-See also: frameGeometry(), size() and rect().
+See also frameGeometry(), size() and rect().
 .PP
 Examples:
 .(l
@@ -1291,7 +1327,7 @@ Returns the widget flags for this this widget.
 .PP
 Widget flags are internal, not meant for public use.
 .PP
-See also: testWFlags(), setWFlags() and clearWFlags().
+See also testWFlags(), setWFlags() and clearWFlags().
 .SH "void QWidget::grabKeyboard ()"
 Grabs all keyboard input.
 .PP
@@ -1299,7 +1335,7 @@ This widget will receive all keyboard events, independent of the active window.
 .PP
 \fBWarning:\fR Grabbing the keyboard might lock the terminal.
 .PP
-See also: releaseKeyboard(), grabMouse() and releaseMouse().
+See also releaseKeyboard(), grabMouse() and releaseMouse().
 .SH "void QWidget::grabMouse ()"
 Grabs the mouse input.
 .PP
@@ -1309,7 +1345,7 @@ This widget will be the only one to receive mouse events until releaseMouse() is
 .PP
 It is almost never necessary to grab the mouse when using Qt since Qt grabs and releases it sensibly. In particular, Qt grabs the mouse when a button is pressed and keeps it until the last button is released.
 .PP
-See also: releaseMouse(), grabKeyboard() and releaseKeyboard().
+See also releaseMouse(), grabKeyboard() and releaseKeyboard().
 .SH "void QWidget::grabMouse ( const QCursor & cursor )"
 Grabs the mouse input and changes the cursor shape.
 .PP
@@ -1317,7 +1353,7 @@ The cursor will assume shape \fIcursor\fR (for as long as the mouse focus is gra
 .PP
 \fBWarning:\fR Grabbing the mouse might lock the terminal.
 .PP
-See also: releaseMouse(), grabKeyboard(), releaseKeyboard() and setCursor().
+See also releaseMouse(), grabKeyboard(), releaseKeyboard() and setCursor().
 .PP
 Examples:
 .(l
@@ -1328,17 +1364,17 @@ Returns TRUE if this widget (or its focus proxy) has the keyboard input focus, o
 .PP
 Equivalent to \fCqApp->focusWidget() == this\fR.
 .PP
-See also: setFocus(), clearFocus(), setFocusPolicy() and QApplication::focusWidget().
+See also setFocus(), clearFocus(), setFocusPolicy() and QApplication::focusWidget().
 .SH "bool QWidget::hasMouseTracking () const"
 Returns TRUE if mouse tracking is enabled for this widget, or FALSE if mouse tracking is disabled.
 .PP
-See also: setMouseTracking().
+See also setMouseTracking().
 .SH "int QWidget::height () const"
 Returns the height of the widget, excluding the window frame.
 .PP
 See the Window Geometry documentation for an overview of geometry issues with top-level widgets.
 .PP
-See also: geometry(), width() and size().
+See also geometry(), width() and size().
 .PP
 Examples:
 .(l
@@ -1349,64 +1385,64 @@ Returns the preferred height for this widget, given the width \fIw.\fR The defau
 .PP
 \fBWarning:\fR Does not look at the widget's layout.
 .PP
-Reimplemented in QMenuBar, QLabel and QTextView.
+Reimplemented in QTextView, QMenuBar and QLabel.
 .SH "void QWidget::hide () \fC[virtual slot]\fR"
 Hides the widget.
 .PP
 You almost never have to reimplement this function. If you need to do something after a widget is hidden, use hideEvent() instead.
 .PP
-See also: hideEvent(), show(), showMinimized(), isVisible() and close().
+See also isHhideEvent(), isHidden(), show(), showMinimized(), isVisible() and close().
 .PP
 Examples:
 .(l
 xform/xform.cpp popup/popup.cpp progress/progress.cpp scrollview/scrollview.cpp
 .)l
 .PP
-Reimplemented in QToolBar, QPopupMenu, QDialog and QMenuBar.
+Reimplemented in QPopupMenu, QToolBar, QDialog and QMenuBar.
 .SH "void QWidget::hideEvent ( QHideEvent * ) \fC[virtual protected]\fR"
 This event handler can be reimplemented in a subclass to receive widget hide events.
 .PP
 Hide events are sent to widgets right after they have been hidden.
 .PP
-See also: event() and QHideEvent.
+See also event() and QHideEvent.
 .SH "const QPixmap * QWidget::icon () const"
 Returns the widget icon pixmap, or null if no icon has been set.
 .PP
-See also: setIcon(), iconText() and caption().
+See also setIcon(), iconText() and caption().
 .SH "QString QWidget::iconText () const"
 Returns the widget icon text. If no icon text has been set (common for child widgets), this functions returns a null string.
 .PP
-See also: setIconText(), icon(), caption() and QString::isNull().
+See also setIconText(), icon(), caption() and QString::isNull().
 .SH "bool QWidget::isActiveWindow () const"
 Returns TRUE if this widget is in the active window, i.e. the window that has keyboard focus.
 .PP
 When popup windows are visible, this function returns TRUE for both the active window and the popup.
 .PP
-See also: setActiveWindow() and QApplication::activeWindow().
+See also setActiveWindow() and QApplication::activeWindow().
 .SH "bool QWidget::isDesktop () const"
 Returns TRUE if the widget is a desktop widget, otherwise FALSE.
 .PP
 A desktop widget is also a top-level widget.
 .PP
-See also: isTopLevel() and QApplication::desktop().
+See also isTopLevel() and QApplication::desktop().
 .SH "bool QWidget::isEnabled () const"
 Returns TRUE if the widget is enabled, or FALSE if it is disabled.
 .PP
-See also: setEnabled().
+See also setEnabled().
 .SH "bool QWidget::isEnabledTo ( QWidget * ancestor ) const"
 Returns TRUE if this widget would become enabled if \fIancestor\fR is enabled.
 .PP
-This is the case if neither the widget itself nor every parent up to but excluding \fIancestor\fR has been explicitely disabled.
+This is the case if neither the widget itself nor every parent up to but excluding \fIancestor\fR has been explicitly disabled.
 .PP
 isEnabledTo(0) is equivalent to isEnabled().
 .PP
-See also: setEnabled() and isEnabled().
+See also setEnabled() and isEnabled().
 .SH "bool QWidget::isEnabledToTLW () const"
 \fBThis function is obsolete.\fR It is provided to keep old source working, and will probably be removed in a future version of Qt. We strongly advise against using it in new code.
 .PP
 This function is deprecated. It is equivalent to isEnabled()
 .PP
-See also: setEnabled() and isEnabled().
+See also setEnabled() and isEnabled().
 .SH "bool QWidget::isFocusEnabled () const"
 Returns TRUE if the widget accepts keyboard focus, or FALSE if it does not.
 .PP
@@ -1414,17 +1450,27 @@ Keyboard focus is initially disabled (i.e. focusPolicy() == \fCQWidget::NoFocus)
 .PP
 You must enable keyboard focus for a widget if it processes keyboard events. This is normally done from the widget's constructor. For instance, the QLineEdit constructor calls setFocusPolicy(\fCQWidget::StrongFocus).\fR
 .PP
-See also: setFocusPolicy(), focusInEvent(), focusOutEvent(), keyPressEvent(), keyReleaseEvent() and isEnabled().
+See also setFocusPolicy(), focusInEvent(), focusOutEvent(), keyPressEvent(), keyReleaseEvent() and isEnabled().
+.SH "bool QWidget::isHidden () const"
+Returns TRUE if the widget is explicitly hidden, or FALSE if it is visible or would become visible if all its ancestors became visible.
+.PP
+See also hide(), show(), isVisible() and isVisibleTo().
+.SH "bool QWidget::isMaximized () const"
+Returns TRUE if this widget is a top-level widget that is maximized, or else FALSE.
+.PP
+Note that due to limitations in some window-systems, this does not always report expected results (eg. if the user on X11 maximizes the window via the window manager, Qt has no way of telling this from any other resize). This will improve as window manager protocols advance.
+.PP
+See also showMaximized().
 .SH "bool QWidget::isMinimized () const"
 Returns TRUE if this widget is a top-level widget that is minimized (iconified), or else FALSE.
 .PP
-See also: showMinimized(), isVisible(), show(), hide() and showNormal().
+See also showMinimized(), isVisible(), show(), hide() and showNormal().
 .SH "bool QWidget::isModal () const"
 Returns TRUE if the widget is a modal widget, otherwise FALSE.
 .PP
 A modal widget is also a top-level widget.
 .PP
-See also: isTopLevel() and QDialog.
+See also isTopLevel() and QDialog.
 .SH "bool QWidget::isPopup () const"
 Returns TRUE if the widget is a popup widget, otherwise FALSE.
 .PP
@@ -1432,7 +1478,7 @@ A popup widget is created by specifying the widget flag \fCWType_Popup\fR to the
 .PP
 A popup widget is also a top-level widget.
 .PP
-See also: isTopLevel().
+See also isTopLevel().
 .SH "bool QWidget::isTopLevel () const"
 Returns TRUE if the widget is a top-level widget, otherwise FALSE.
 .PP
@@ -1444,11 +1490,11 @@ QDialog and QMainWindow widgets are by default top-level, even if a parent widge
 .PP
 Child widgets are the opposite of top-level widgets.
 .PP
-See also: topLevelWidget(), isModal(), isPopup(), isDesktop() and parentWidget().
+See also topLevelWidget(), isModal(), isPopup(), isDesktop() and parentWidget().
 .SH "bool QWidget::isUpdatesEnabled () const"
 Returns TRUE if updates are enabled, otherwise FALSE.
 .PP
-See also: setUpdatesEnabled().
+See also setUpdatesEnabled().
 .SH "bool QWidget::isVisible () const"
 Returns TRUE if the widget itself is visible, or else FALSE.
 .PP
@@ -1456,27 +1502,29 @@ Calling show() sets the widget to visible status if all its parent widgets up to
 .PP
 Calling hide() hides a widget explicitly. An explicitly hidden widget will never become visible, even if all its ancestors become visible.
 .PP
-Iconified top-level widgets also have hidden status, as well as having isMinimized() return TRUE.
+Iconified top-level widgets also have hidden status, as well as having isMinimized() return TRUE. Windows that live on another virtual desktop (on platforms that support this concept) also have hidden status.
 .PP
 This function returns TRUE if the widget currently is obscured by other windows on the screen, but would be visible if moved.
 .PP
-See also: show(), hide(), isVisibleTo() and isMinimized().
+A widget receives show- and hide events when its visibility status changes. Between a hide and a show event, there is no need in wasting any CPU on preparing or displaying information to the user. A video application, for example, might simply stop generating new frames.
+.PP
+See also show(), hide(), isHidden(), isVisibleTo(), isMinimized(), showEvent() and hideEvent().
 .SH "bool QWidget::isVisibleTo ( QWidget * ancestor ) const"
 Returns TRUE if this widget would become visible if \fIancestor\fR is shown.
 .PP
-This is the case if neither the widget itself nor every parent up to but excluding \fIancestor\fR has been explicitely hidden.
+This is the case if neither the widget itself nor every parent up to but excluding \fIancestor\fR has been explicitly hidden.
 .PP
 This function returns TRUE if the widget it is obscured by other windows on the screen, but would be visible if moved.
 .PP
-isVisibleTo(0) is equivalent to isVisible().
+isVisibleTo(0) is very similar to isVisible(), with the exception that it does not cover the iconfied-case or the situation where the window lives on another virtual desktop.
 .PP
-See also: show(), hide() and isVisible().
+See also show(), hide() and isVisible().
 .SH "bool QWidget::isVisibleToTLW () const"
 \fBThis function is obsolete.\fR It is provided to keep old source working, and will probably be removed in a future version of Qt. We strongly advise against using it in new code.
 .PP
 This function is deprecated. It is equivalent to isVisible()
 .PP
-See also: show(), hide() and isVisible().
+See also show(), hide() and isVisible().
 .SH "void QWidget::keyPressEvent ( QKeyEvent * e ) \fC[virtual protected]\fR"
 This event handler can be reimplemented in a subclass to receive key press events for the widget.
 .PP
@@ -1486,11 +1534,9 @@ If you reimplement this handler, it is very important that you ignore() the even
 .PP
 The default implementation closes popup widgets if you hit escape. Otherwise the event is ignored.
 .PP
-As a special case to support applications not utilizing focus, Top-level widgets that have NoFocus policy will receive keyboard events.
+See also keyReleaseEvent(), QKeyEvent::ignore(), setFocusPolicy(), focusInEvent(), focusOutEvent(), event() and QKeyEvent.
 .PP
-See also: keyReleaseEvent(), QKeyEvent::ignore(), setFocusPolicy(), focusInEvent(), focusOutEvent(), event() and QKeyEvent.
-.PP
-Reimplemented in QComboBox, QButton, QTextBrowser, QSlider, QDialog, QMultiLineEdit, QLineEdit, QTextView, QMessageBox, QMenuBar, QListBox, QListView, QPopupMenu, QScrollBar, QFileDialog and QTabBar.
+Reimplemented in QComboBox, QDial, QTextBrowser, QSlider, QMultiLineEdit, QLineEdit, QMessageBox, QScrollBar, QFileDialog, QTable, QButton, QDialog, QTextView, QMenuBar, QListBox, QListView, QPopupMenu and QTabBar.
 .SH "void QWidget::keyReleaseEvent ( QKeyEvent * e ) \fC[virtual protected]\fR"
 This event handler can be reimplemented in a subclass to receive key release events for the widget.
 .PP
@@ -1500,7 +1546,7 @@ If you reimplement this handler, it is very important that you ignore() the rele
 .PP
 The default implementation ignores the event.
 .PP
-See also: keyPressEvent(), QKeyEvent::ignore(), setFocusPolicy(), focusInEvent(), focusOutEvent(), event() and QKeyEvent.
+See also keyPressEvent(), QKeyEvent::ignore(), setFocusPolicy(), focusInEvent(), focusOutEvent(), event() and QKeyEvent.
 .PP
 Reimplemented in QButton.
 .SH "QWidget * QWidget::keyboardGrabber () \fC[static]\fR"
@@ -1508,37 +1554,45 @@ Returns a pointer to the widget that is currently grabbing the keyboard input.
 .PP
 If no widget in this application is currently grabbing the keyboard, 0 is returned.
 .PP
-See also: grabMouse() and mouseGrabber().
+See also grabMouse() and mouseGrabber().
 .SH "QLayout* QWidget::layout () const"
 Returns a pointer to the layout engine that manages the geometry of this widget's children.
 .PP
 If the widget does not have a layout, layout() returns a null pointer.
 .PP
-See also: sizePolicy().
+See also sizePolicy().
 .SH "void QWidget::leaveEvent ( QEvent * ) \fC[virtual protected]\fR"
 This event handler can be reimplemented in a subclass to receive widget leave events.
 .PP
 A leave event is sent to the widget when the mouse cursor leaves the widget.
 .PP
-See also: enterEvent(), mouseMoveEvent() and event().
+See also enterEvent(), mouseMoveEvent() and event().
 .PP
-Reimplemented in QToolButton, QMenuBar, QMultiLineEdit, QSpinBox and QLineEdit.
+Reimplemented in QMenuBar, QMultiLineEdit, QSpinBox, QToolButton and QLineEdit.
 .SH "void QWidget::lower () \fC[slot]\fR"
 Lowers the widget to the bottom of the parent widget's stack.
 .PP
 If there are siblings of this widget that overlap it on the screen, this widget will be obscured by its siblings afterwards.
 .PP
-See also: raise().
+See also raise() and stackUnder().
+.SH "QPoint QWidget::mapFrom ( QWidget * parent, const QPoint & pos ) const"
+Translates the widget coordinate \fIpos\fR from the coordinate system of \fIparent\fR to this widget's coordinate system, which must be non-null and be a parent widget of this.
+.PP
+See also mapTo(), mapFromParent() and mapFromGlobal().
 .SH "QPoint QWidget::mapFromGlobal ( const QPoint & pos ) const"
 Translates the global screen coordinate \fIpos\fR to widget coordinates.
 .PP
-See also: mapToGlobal().
+See also mapToGlobal(), mapFrom() and mapFromParent().
 .SH "QPoint QWidget::mapFromParent ( const QPoint & pos ) const"
 Translates the parent widget coordinate \fIpos\fR to widget coordinates.
 .PP
 Same as mapFromGlobal() if the widget has no parent.
 .PP
-See also: mapToParent().
+See also mapToParent(), mapFrom() and mapFromGlobal().
+.SH "QPoint QWidget::mapTo ( QWidget * parent, const QPoint & pos ) const"
+Translates the widget coordinate \fIpos\fR to the coordinate system of \fIparent,\fR which must be non-null and be a parent widget of this.
+.PP
+See also mapFrom(), mapToParent() and mapToGlobal().
 .SH "QPoint QWidget::mapToGlobal ( const QPoint & pos ) const"
 Translates the widget coordinate \fIpos\fR to global screen coordinates. For example,
 .PP
@@ -1548,7 +1602,7 @@ Translates the widget coordinate \fIpos\fR to global screen coordinates. For exa
 .fi
 would give the global coordinates of the top-left pixel of the widget.
 .PP
-See also: mapFromGlobal().
+See also mapFromGlobal(), mapTo() and mapToParent().
 .PP
 Examples:
 .(l
@@ -1559,21 +1613,21 @@ Translates the widget coordinate \fIpos\fR to a coordinate in the parent widget.
 .PP
 Same as mapToGlobal() if the widget has no parent.
 .PP
-See also: mapFromParent().
+See also mapFromParent(), mapTo() and mapToGlobal().
 .SH "int QWidget::maximumHeight () const"
 Returns the widget's maximum height.
 .PP
-See also: maximumSize() and maximumWidth().
+See also maximumSize() and maximumWidth().
 .SH "QSize QWidget::maximumSize () const"
 Returns the maximum widget size.
 .PP
 The widget cannot be resized to a larger size than the maximum widget size.
 .PP
-See also: maximumWidth(), maximumHeight(), setMaximumSize(), minimumSize() and sizeIncrement().
+See also maximumWidth(), maximumHeight(), setMaximumSize(), minimumSize() and sizeIncrement().
 .SH "int QWidget::maximumWidth () const"
 Returns the widget's maximum width.
 .PP
-See also: maximumSize() and maximumHeight().
+See also maximumSize() and maximumHeight().
 .SH "int QWidget::metric ( int m ) const \fC[virtual protected]\fR"
 Internal implementation of the virtual QPaintDevice::metric() function.
 .PP
@@ -1583,11 +1637,11 @@ Reimplemented from QPaintDevice.
 .SH "QRect QWidget::microFocusHint () const"
 Returns the currently set micro focus hint for this widget.
 .PP
-See also: setMicroFocusHint().
+See also setMicroFocusHint().
 .SH "int QWidget::minimumHeight () const"
 Returns the widget's minimum height.
 .PP
-See also: minimumSize() and minimumWidth().
+See also minimumSize() and minimumWidth().
 .SH "QSize QWidget::minimumSize () const"
 Returns the minimum widget size.
 .PP
@@ -1595,19 +1649,19 @@ The widget cannot be resized to a smaller size than the minimum widget size.
 .PP
 If the returned minimum size equals (0,0) then it means that there are no constraints on the minimum size. However, Qt does nevertheless not allow you to shrink widgets to less than 1 pixel width/height.
 .PP
-See also: maximumWidth(), maximumHeight(), setMinimumSize(), maximumSize() and sizeIncrement().
+See also maximumWidth(), maximumHeight(), setMinimumSize(), maximumSize() and sizeIncrement().
 .SH "QSize QWidget::minimumSizeHint () const \fC[virtual]\fR"
 Returns a recommended minimum size for the widget, or an invalid size if no minimum size is recommended.
 .PP
 The default implementation returns an invalid size if there is no layout for this widget, the layout's minimum size otherwise.
 .PP
-See also: QSize::isValid(), resize(), setMinimumSize() and sizePolicy().
+See also QSize::isValid(), resize(), setMinimumSize() and sizePolicy().
 .PP
-Reimplemented in QMenuBar, QIconView, QWidgetStack, QSplitter, QLineEdit, QToolBar, QMultiLineEdit, QSlider, QProgressBar, QLabel, QTabWidget, QListBox, QMainWindow, QListView and QScrollView.
+Reimplemented in QMenuBar, QWidgetStack, QSlider, QListBox, QDialog, QDial, QIconView, QSplitter, QLineEdit, QToolBar, QMultiLineEdit, QProgressBar, QLabel, QTabWidget, QMainWindow, QTabBar, QListView and QScrollView.
 .SH "int QWidget::minimumWidth () const"
 Returns the widget's minimum width.
 .PP
-See also: minimumSize() and minimumHeight().
+See also minimumSize() and minimumHeight().
 .SH "void QWidget::mouseDoubleClickEvent ( QMouseEvent * e ) \fC[virtual protected]\fR"
 This event handler can be reimplemented in a subclass to receive mouse double click events for the widget.
 .PP
@@ -1615,15 +1669,15 @@ The default implementation generates a normal mouse press event.
 .PP
 Note that the widgets gets a mousePressEvent() and a mouseReleaseEvent() before the mouseDoubleClickEvent().
 .PP
-See also: mousePressEvent(), mouseReleaseEvent(), mouseMoveEvent(), event() and QMouseEvent.
+See also mousePressEvent(), mouseReleaseEvent(), mouseMoveEvent(), event() and QMouseEvent.
 .PP
-Reimplemented in QComboBox, QMultiLineEdit, QLineEdit and QListBox.
+Reimplemented in QMultiLineEdit, QLineEdit, QListBox and QComboBox.
 .SH "QWidget * QWidget::mouseGrabber () \fC[static]\fR"
 Returns a pointer to the widget that is currently grabbing the mouse input.
 .PP
 If no widget in this application is currently grabbing the mouse, 0 is returned.
 .PP
-See also: grabMouse() and keyboardGrabber().
+See also grabMouse() and keyboardGrabber().
 .SH "void QWidget::mouseMoveEvent ( QMouseEvent * ) \fC[virtual protected]\fR"
 This event handler can be reimplemented in a subclass to receive mouse move events for the widget.
 .PP
@@ -1631,9 +1685,9 @@ If mouse tracking is switched off, mouse move events only occur if a mouse butto
 .PP
 QMouseEvent::pos() reports the position of the mouse cursor, relative to this widget. For press and release events, the position is usually the same as the position of the last mouse move event, but it might be different if the user moves and clicks the mouse fast. This is a feature of the underlying window system, not Qt.
 .PP
-See also: setMouseTracking(), mousePressEvent(), mouseReleaseEvent(), mouseDoubleClickEvent(), event() and QMouseEvent.
+See also setMouseTracking(), mousePressEvent(), mouseReleaseEvent(), mouseDoubleClickEvent(), event() and QMouseEvent.
 .PP
-Reimplemented in QMenuBar, QListBox, QSlider, QScrollBar, QButton, QPopupMenu, QMultiLineEdit, QSizeGrip, QHeader, QLineEdit and QComboBox.
+Reimplemented in QSlider, QPopupMenu, QSizeGrip, QMenuBar, QDial, QListBox, QScrollBar, QButton, QMultiLineEdit, QHeader, QLineEdit and QComboBox.
 .SH "void QWidget::mousePressEvent ( QMouseEvent * e ) \fC[virtual protected]\fR"
 This event handler can be reimplemented in a subclass to receive mouse press events for the widget.
 .PP
@@ -1641,15 +1695,15 @@ If you create new widgets in the mousePressEvent() the mouseReleaseEvent() may n
 .PP
 The default implementation implements the closing of popup widgets when you click outside the window. For other widget types it does nothing.
 .PP
-See also: mouseReleaseEvent(), mouseDoubleClickEvent(), mouseMoveEvent(), event() and QMouseEvent.
+See also mouseReleaseEvent(), mouseDoubleClickEvent(), mouseMoveEvent(), event() and QMouseEvent.
 .PP
-Reimplemented in QListBox, QScrollBar, QLineEdit, QButton, QSlider, QTabBar, QComboBox, QSizeGrip, QHeader, QPopupMenu, QMenuBar and QMultiLineEdit.
+Reimplemented in QScrollBar, QLineEdit, QButton, QSlider, QSizeGrip, QPopupMenu, QMenuBar, QMultiLineEdit, QListBox, QDial, QTabBar, QComboBox and QHeader.
 .SH "void QWidget::mouseReleaseEvent ( QMouseEvent * ) \fC[virtual protected]\fR"
 This event handler can be reimplemented in a subclass to receive mouse release events for the widget.
 .PP
-See also: mouseReleaseEvent(), mouseDoubleClickEvent(), mouseMoveEvent(), event() and QMouseEvent.
+See also mouseReleaseEvent(), mouseDoubleClickEvent(), mouseMoveEvent(), event() and QMouseEvent.
 .PP
-Reimplemented in QScrollBar, QButton, QPopupMenu, QTabBar, QHeader, QSlider, QListBox, QMenuBar, QLineEdit, QMultiLineEdit and QComboBox.
+Reimplemented in QScrollBar, QButton, QPopupMenu, QTabBar, QHeader, QListBox, QMenuBar, QDial, QSlider, QLineEdit, QMultiLineEdit and QComboBox.
 .SH "void QWidget::move ( int x, int y ) \fC[virtual slot]\fR"
 Moves the widget to the position \fI(x,y)\fR relative to the parent widget and including the window frame.
 .PP
@@ -1661,24 +1715,34 @@ This function is virtual, and all other overloaded move() implementations call i
 .PP
 See the Window Geometry documentation for an overview of geometry issues with top-level widgets.
 .PP
-See also: pos(), resize(), setGeometry() and moveEvent().
-.PP
-Reimplemented in QSemiModal and QDialog.
-.SH "void QWidget::move ( const QPoint & ) \fC[slot]\fR"
-This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts.
+See also pos(), resize(), setGeometry() and moveEvent().
 .PP
 Examples:
 .(l
 drawdemo/drawdemo.cpp popup/popup.cpp
 .)l
+.PP
+Reimplemented in QSemiModal, QPushButton and QDialog.
+.SH "void QWidget::move ( const QPoint & ) \fC[slot]\fR"
+This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts.
 .SH "void QWidget::moveEvent ( QMoveEvent * ) \fC[virtual protected]\fR"
 This event handler can be reimplemented in a subclass to receive widget move events. When the widget receives this event, it is already at the new position.
 .PP
 The old position is accessible through QMoveEvent::oldPos().
 .PP
-See also: resizeEvent(), event(), move() and QMoveEvent.
+See also resizeEvent(), event(), move() and QMoveEvent.
 .PP
 Reimplemented in QXtWidget and QToolButton.
+.SH "bool QWidget::ownCursor () const"
+Returns whether the widget uses its own cursor or its parent widget's cursor.
+.SH "bool QWidget::ownFont () const"
+Returns whether the widget uses its own font or its natural default font.
+.PP
+See also setFont() and unsetFont().
+.SH "bool QWidget::ownPalette () const"
+Returns whether the widget uses its own palette or its natural default palette.
+.PP
+See also setPalette() and unsetPalette().
 .SH "void QWidget::paintEvent ( QPaintEvent * ) \fC[virtual protected]\fR"
 This event handler can be reimplemented in a subclass to receive widget paint events.
 .PP
@@ -1690,21 +1754,21 @@ During paintEvent(), any QPainter you create on the widget will be clipped to at
 .PP
 update() and repaint() can be used to force a paint event.
 .PP
-See also: event(), repaint(), update(), QPainter, QPixmap and QPaintEvent.
+See also event(), repaint(), update(), QPainter, QPixmap and QPaintEvent.
 .PP
-Reimplemented in QTabDialog, QScrollBar, QSizeGrip, QButton, QToolBar, QLineEdit, QFrame, QGLWidget, QMainWindow, QStatusBar, QTabBar, QPopupMenu, QGroupBox, QSlider, QTableView, QHeader and QComboBox.
+Reimplemented in QTabDialog, QSizeGrip, QButton, QFrame, QGLWidget, QStatusBar, QGroupBox, QDial, QTableView, QHeader, QScrollBar, QToolBar, QLineEdit, QMainWindow, QTabBar, QPopupMenu, QSlider and QComboBox.
 .SH "const QPalette & QWidget::palette () const"
 Returns the widget palette.
 .PP
 As long as no special palette has been set, this is either a special palette for the widget class, the parent's palette or - if this widget is a toplevel widget - the default application palette.
 .PP
-See also: setPalette(), colorGroup() and QApplication::palette().
+See also setPalette(), colorGroup() and QApplication::palette().
 .SH "void QWidget::paletteChange ( const QPalette & oldPalette ) \fC[virtual protected]\fR"
 This virtual function is called from setPalette(). \fIoldPalette\fR is the previous palette; you can get the new palette from palette().
 .PP
 Reimplement this function if your widget needs to know when its palette changes. You will almost certainly need to call this implementation of the function.
 .PP
-See also: setPalette() and palette().
+See also setPalette() and palette().
 .PP
 Reimplemented in QTextView.
 .SH "QWidget::PropagationMode QWidget::palettePropagation() const"
@@ -1720,11 +1784,11 @@ This function will be called \fIafter\fR a widget has been fully created and \fI
 .PP
 Polishing is useful for final initialization depending on an instantiated widget. This is something a constructor cannot guarantee since the initialization of the subclasses might not be finished.
 .PP
-After this function, the wiget has a proper font and palette and QApplication::polish() has been called.
+After this function, the widget has a proper font and palette and QApplication::polish() has been called.
 .PP
 Remember to call QWidget's implementation when reimplementing this function.
 .PP
-See also: constPolish() and QApplication::polish().
+See also constPolish() and QApplication::polish().
 .PP
 Examples:
 .(l
@@ -1735,7 +1799,7 @@ Returns the position of the widget in its parent widget, including the window fr
 .PP
 See the Window Geometry documentation for an overview of geometry issues with top-level widgets.
 .PP
-See also: move(), frameGeometry(), x() and y().
+See also move(), frameGeometry(), x() and y().
 .PP
 Examples:
 .(l
@@ -1746,13 +1810,13 @@ Raises this widget to the top of the parent widget's stack.
 .PP
 If there are any siblings of this widget that overlap it on the screen, this widget will be visually in front of its siblings afterwards.
 .PP
-See also: lower().
+See also lower() and stackUnder().
 .SH "QRect QWidget::rect () const"
 Returns the the internal geometry of the widget, excluding the window frame. rect() equals QRect(0,0,width(),height()).
 .PP
 See the Window Geometry documentation for an overview of geometry issues with top-level widgets.
 .PP
-See also: size().
+See also size().
 .PP
 Examples:
 .(l
@@ -1761,11 +1825,11 @@ grapher/grapher.cpp menu/menu.cpp desktop/desktop.cpp picture/picture.cpp
 .SH "void QWidget::releaseKeyboard ()"
 Releases the keyboard grab.
 .PP
-See also: grabKeyboard(), grabMouse() and releaseMouse().
+See also grabKeyboard(), grabMouse() and releaseMouse().
 .SH "void QWidget::releaseMouse ()"
 Releases the mouse grab.
 .PP
-See also: grabMouse(), grabKeyboard() and releaseKeyboard().
+See also grabMouse(), grabKeyboard() and releaseKeyboard().
 .PP
 Examples:
 .(l
@@ -1780,7 +1844,7 @@ Use repaint if your widget needs to be repainted immediately, for example when d
 .PP
 \fBWarning:\fR If you call repaint() in a function which may itself be called from paintEvent(), you may see infinite recursion. The update() function never generates recursion.
 .PP
-See also: update(), paintEvent(), setUpdatesEnabled() and erase().
+See also update(), paintEvent(), setUpdatesEnabled() and erase().
 .SH "void QWidget::repaint ( int x, int y, int w, int h, bool erase=TRUE ) \fC[slot]\fR"
 Repaints the widget directly by calling paintEvent() directly, unless updates are disabled or the widget is hidden.
 .PP
@@ -1792,7 +1856,7 @@ Use repaint if your widget needs to be repainted immediately, for example when d
 .PP
 \fBWarning:\fR If you call repaint() in a function which may itself be called from paintEvent(), you may see infinite recursion. The update() function never generates recursion.
 .PP
-See also: update(), paintEvent(), setUpdatesEnabled() and erase().
+See also update(), paintEvent(), setUpdatesEnabled() and erase().
 .PP
 Examples:
 .(l
@@ -1819,7 +1883,7 @@ If the new parent widget is in the same top-level widget as the old parent, repa
 .PP
 \fBWarning:\fR Reparenting widgets should be a real exception. In normal applications, you will almost never need it. Dynamic masks can be achieved much easier and cleaner with classes like QWidgetStack or on a higher abstraction level, QWizard.
 .PP
-See also: getWFlags().
+See also getWFlags().
 .SH "void QWidget::reparent ( QWidget * parent, const QPoint & p, bool showIt=FALSE )"
 This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts.
 .PP
@@ -1837,7 +1901,7 @@ This function is virtual, and all other overloaded resize() implementations call
 .PP
 \fBWarning:\fR If you call resize() or setGeometry() from resizeEvent(), you may see infinite recursion.
 .PP
-See also: size(), move(), setGeometry(), resizeEvent(), minimumSize() and maximumSize().
+See also size(), move(), setGeometry(), resizeEvent(), minimumSize() and maximumSize().
 .PP
 Examples:
 .(l
@@ -1850,7 +1914,7 @@ This is an overloaded member function, provided for convenience. It differs from
 .PP
 Examples:
 .(l
-themes/main.cpp listviews/main.cpp dclock/main.cpp mainlyXt/editor.cpp i18n/main.cpp drawdemo/drawdemo.cpp popup/popup.cpp fileiconview/main.cpp scribble/main.cpp qmag/qmag.cpp mainlyMotif/editor.cpp richtext/main.cpp scrollview/scrollview.cpp qfd/qfd.cpp listboxcombo/main.cpp
+rangecontrols/main.cpp themes/main.cpp listviews/main.cpp dclock/main.cpp mainlyXt/editor.cpp drawdemo/drawdemo.cpp popup/popup.cpp fileiconview/main.cpp scribble/main.cpp qmag/qmag.cpp mainlyMotif/editor.cpp richtext/main.cpp scrollview/scrollview.cpp qfd/qfd.cpp listboxcombo/main.cpp
 .)l
 .SH "void QWidget::resizeEvent ( QResizeEvent * ) \fC[virtual protected]\fR"
 This event handler can be reimplemented in a subclass to receive widget resize events. When resizeEvent() is called, the widget already has its new geometry. The old size is accessible through QResizeEvent::oldSize(), though.
@@ -1861,35 +1925,31 @@ Widgets that have been created with the \fCWResizeNoErase\fR flag will not be er
 .PP
 The default implementation calls updateMask() if the widget has automatic masking enabled.
 .PP
-See also: moveEvent(), event(), resize(), QResizeEvent and paintEvent().
+See also moveEvent(), event(), resize(), QResizeEvent and paintEvent().
 .PP
-Reimplemented in QScrollView, QSplitter, QFileDialog, QTabWidget, QScrollBar, QMultiLineEdit, QPushButton, QListView, QCheckBox, QSlider, QMenuBar, QMainWindow, QStatusBar, QToolBar, QWidgetStack, QTabDialog, QRadioButton, QTabBar, QGLWidget, QComboBox, QWorkspace, QTableView, QListBox, QGroupBox, QLineEdit, QSpinBox, QFrame, QXtWidget, QProgressDialog, QMessageBox and QTextView.
-.SH "void QWidget::scroll ( int dx, int dy )"
-Scrolls the contents of the widget \fIdx\fR pixels rightwards and \fIdy\fR pixels downwards. If \fIdx/dy\fR is negative, the scroll direction is leftwards/upwards. Child widgets are moved accordingly.
-.PP
-\fBWarning:\fR You might find that QScrollView offers a higher-level of functionality than using this function.
-.PP
-The areas of the widget that are exposed will be erased and paint events may be generated immediately, or after some further event processing.
-.PP
-\fBWarning:\fR If you call scroll() in a function which may itself be called from the moveEvent() or paintEvent() of a direct child of the widget being scrolled, you may see infinite recursion.
-.PP
-See also: erase() and bitBlt().
+Reimplemented in QScrollBar, QMultiLineEdit, QCheckBox, QSlider, QWidgetStack, QTabDialog, QRadioButton, QTabBar, QDial, QComboBox, QWorkspace, QGroupBox, QLineEdit, QSpinBox, QDialog, QProgressDialog, QMessageBox, QScrollView, QSplitter, QFileDialog, QTabWidget, QPushButton, QListView, QMenuBar, QMainWindow, QStatusBar, QToolBar, QGLWidget, QTableView, QListBox, QFrame, QXtWidget, QTable, QTextView and QLabel.
 .SH "void QWidget::scroll ( int dx, int dy, const QRect & r )"
-Scrolls the area \fIr\fR of this widget \fIdx\fR pixels rightwards and \fIdy\fR pixels downwards. If \fIdx/dy\fR is negative, the scroll direction is leftwards/upwards. Child widgets are not moved.
+Scrolls \fIr dx\fR pixels to the right and \fIdy\fR downwards. Both \fIdx\fR and \fIdy\fR may be negative.
 .PP
-\fBWarning:\fR You might find that QScrollView offers a higher-level of functionality than using this function.
+If \fIr\fR is empty or invalid, the result is undefined.
 .PP
-The areas of the widget that are exposed will be erased and paint events may be generated immediately, or after some further event processing.
+After scrolling, scroll() sends a paint event for the the part of \fIr\fR that is read but not written. For example, when scrolling 10 pixels rightwards, the leftmost ten pixels of \fIr\fR need repainting. The paint event may be delivered immediately or later, depending on some heuristics.
 .PP
-\fBWarning:\fR If you call scroll() in a function which may itself be called from the moveEvent() or paintEvent() of a direct child of the widget being scrolled, you may see infinite recursion.
+This version of scroll() does not move the children of this widget.
 .PP
-See also: erase() and bitBlt().
+See also QScrollView, erase() and bitBlt().
+.SH "void QWidget::scroll ( int dx, int dy )"
+This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts.
+.PP
+This version of the function scrolls the entire widget and moves the widget's children along with the scroll.
+.PP
+See also bitBlt() and QScrollView.
 .SH "void QWidget::setAcceptDrops ( bool on ) \fC[virtual]\fR"
 Announces to the system that this widget \fImay\fR be able to accept drop events.
 .PP
 If the widgets is the desktop, this may fail if another application is using the desktop - you can call acceptDrops() to test if this occurs.
 .PP
-See also: acceptDrops().
+See also acceptDrops().
 .PP
 Examples:
 .(l
@@ -1902,7 +1962,7 @@ An active window is a visible top-level window that has the keyboard input focus
 .PP
 This function performs the same operation as clicking the mouse on the title bar of a top-level window, at least on Windows. On X11, the result depends on the Window Manager. If you want to ensure that the window is stacked on top as well, call raise() in addition. Note that the window has be to visible, otherwise setActiveWindow() has no effect.
 .PP
-See also: isActiveWindow(), topLevelWidget() and show().
+See also isActiveWindow(), topLevelWidget() and show().
 .PP
 Reimplemented in QXtWidget.
 .SH "void QWidget::setAutoMask ( bool enable ) \fC[virtual]\fR"
@@ -1921,7 +1981,7 @@ at the end of your event handlers. Same holds for all member functions that chan
 .PP
 While being a technically appealing concept, masks have one big drawback: when using complex masks that cannot be expressed easily with relatively simple regions, they tend to be very slow on some window systems. The classic example is a transparent label. The complex shape of its contents makes it necessary to represent its mask by a bitmap, which consumes both memory and time. If all you want is to blend the background of several neighboring widgets together seamlessly, you may probably want to use setBackgroundOrigin() rather than a mask.
 .PP
-See also: autoMask(), updateMask(), setMask(), clearMask() and setBackgroundOrigin().
+See also autoMask(), updateMask(), setMask(), clearMask() and setBackgroundOrigin().
 .PP
 Examples:
 .(l
@@ -1932,7 +1992,7 @@ Reimplemented in QLabel.
 .SH "void QWidget::setBackgroundColor ( const QColor & color ) \fC[virtual]\fR"
 Sets the widget to be cleared to the fixed color \fIcolor\fR before paintEvent() is called.
 .PP
-Note that using this function is very often a mistake.
+Note that using this function is very often a mistake. Here are the most common mistakes:
 .PP
 If you want to set the background color of a widget to one of the "usual" colors, setBackgroundMode() is usually the best function. For example, man widgets that usually use white backgrounds (and black text on it) can use this:
 .PP
@@ -1950,7 +2010,7 @@ If you want to change the color scheme of a widget, the setPalette() function is
 .PP
 A fixed background color sometimes is just the right thing, but if you use it, make sure that your application looks right when the desktop color scheme has been changed. (On X11, a quick way to test is e.g. "./yourapp -bg paleblue". On Windows, you have to use the control panel.)
 .PP
-See also: setPalette(), QApplication::setPalette(), backgroundColor(), setBackgroundPixmap() and setBackgroundMode().
+See also setPalette(), QApplication::setPalette(), backgroundColor(), setBackgroundPixmap() and setBackgroundMode().
 .PP
 Examples:
 .(l
@@ -1974,7 +2034,7 @@ Sets the widget's background to be drawn relative to \fIorigin,\fR which is eith
 .PP
 This makes a difference only if the widget has a background pixmap where the positioning matters. In such case, using \fCParentOrigin\fR for several neighboring widgets makes the background blend together seamlessly.
 .PP
-See also: backgroundOrigin(), backgroundPixmap() and setBackgroundMode().
+See also backgroundOrigin(), backgroundPixmap() and setBackgroundMode().
 .SH "void QWidget::setBackgroundPixmap ( const QPixmap & pixmap ) \fC[virtual]\fR"
 Sets the background pixmap of the widget to \fIpixmap.\fR
 .PP
@@ -1984,7 +2044,7 @@ If \fIpixmap\fR is part of the widget's palette(), we recommend calling setBackg
 .PP
 A fixed background pixmap sometimes is just the right thing, but if you use it, make sure that your application looks right when the desktop color scheme has been changed. (On X11, a quick way to test is e.g. "./yourapp -bg paleblue". On Windows, you have to use the control panel.)
 .PP
-See also: setBackgroundMode(), backgroundPixmap(), backgroundPixmapChange() and setBackgroundColor().
+See also setBackgroundMode(), backgroundPixmap(), backgroundPixmapChange() and setBackgroundColor().
 .PP
 Examples:
 .(l
@@ -1993,17 +2053,17 @@ desktop/desktop.cpp
 .SH "void QWidget::setBaseSize ( int basew, int baseh )"
 Sets the base size of the widget. The base size is important only in combination with size increments. See setSizeIncrement() for details.
 .PP
-See also: baseSize().
+See also baseSize().
 .SH "void QWidget::setBaseSize ( const QSize & )"
 This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts.
 .SH "void QWidget::setCaption ( const QString & caption ) \fC[virtual slot]\fR"
 Sets the window caption (title) to \fIcaption.\fR
 .PP
-See also: caption(), setIcon() and setIconText().
+See also caption(), setIcon() and setIconText().
 .PP
 Examples:
 .(l
-iconview/main.cpp validator/main.cpp themes/main.cpp listviews/main.cpp checklists/main.cpp wizard/main.cpp application/main.cpp buttongroups/main.cpp drawdemo/drawdemo.cpp lineedits/main.cpp popup/popup.cpp listbox/main.cpp menu/menu.cpp progress/progress.cpp tabdialog/main.cpp progressbar/main.cpp richtext/main.cpp tooltip/main.cpp forever/forever.cpp addressbook/main.cpp movies/main.cpp hello/main.cpp listboxcombo/main.cpp mdi/main.cpp dirview/main.cpp
+action/main.cpp rangecontrols/main.cpp iconview/main.cpp validator/main.cpp themes/main.cpp listviews/main.cpp checklists/main.cpp wizard/main.cpp application/main.cpp buttongroups/main.cpp drawdemo/drawdemo.cpp lineedits/main.cpp popup/popup.cpp listbox/main.cpp menu/menu.cpp progress/progress.cpp tabdialog/main.cpp progressbar/main.cpp tooltip/main.cpp richtext/main.cpp forever/forever.cpp addressbook/main.cpp movies/main.cpp hello/main.cpp listboxcombo/main.cpp mdi/main.cpp dirview/main.cpp
 .)l
 .SH "void QWidget::setCursor ( const QCursor & cursor ) \fC[virtual]\fR"
 Sets the widget cursor shape to \fIcursor.\fR
@@ -2017,12 +2077,22 @@ An editor widget would for example use an I-beam cursor:
     setCursor( ibeamCursor );
 .fi
 .PP
-See also: cursor(), unsetCursor() and QApplication::setOverrideCursor().
+See also cursor(), unsetCursor() and QApplication::setOverrideCursor().
 .PP
 Examples:
 .(l
 cursor/cursor.cpp
 .)l
+.SH "void QWidget::setDisabled ( bool disable ) \fC[slot]\fR"
+Disables widget input events if \fIdisable\fR is TRUE, otherwise enables input events.
+.PP
+An enabled widget receives keyboard and mouse events; a disabled widget does not. Note that an enabled widget receives keyboard events only when it is in focus.
+.PP
+Some widgets display themselves differently when they are disabled. For example a button might draw its label grayed out. If your widget needs to know when it becomes enabled or disabled, you can reimplement the enabledChange() function.
+.PP
+Disabling a widget implicitely disables all its children. Enabling respectively enables all child widgets unless they have been explicitly disabled.
+.PP
+See also setEnabled(), isEnabled(), isEnabledTo(), QKeyEvent, QMouseEvent and enabledChange().
 .SH "void QWidget::setEnabled ( bool enable ) \fC[virtual slot]\fR"
 Enables widget input events if \fIenable\fR is TRUE, otherwise disables input events.
 .PP
@@ -2030,15 +2100,15 @@ An enabled widget receives keyboard and mouse events; a disabled widget does not
 .PP
 Some widgets display themselves differently when they are disabled. For example a button might draw its label grayed out. If your widget needs to know when it becomes enabled or disabled, you can reimplement the enabledChange() function.
 .PP
-Disabling a widget implicitely disables all its children. Enabling respectively enables all child widgets unless they have been explicitely disabled.
+Disabling a widget implicitely disables all its children. Enabling respectively enables all child widgets unless they have been explicitly disabled.
 .PP
-See also: isEnabled(), isEnabledTo(), QKeyEvent, QMouseEvent and enabledChange().
+See also isEnabled(), isEnabledTo(), QKeyEvent, QMouseEvent and enabledChange().
 .PP
 Reimplemented in QScrollView.
 .SH "void QWidget::setFixedHeight ( int h )"
 Sets both the minimum and maximum heights of the widget to \fIh\fR without changing the widths. Provided for convenience.
 .PP
-See also: sizeHint(), minimumSize(), maximumSize(), setFixedSize() and more.
+See also sizeHint(), minimumSize(), maximumSize(), setFixedSize() and more.
 .PP
 Examples:
 .(l
@@ -2047,23 +2117,23 @@ layout/layout.cpp
 .SH "void QWidget::setFixedSize ( const QSize & s )"
 Sets both the minimum and maximum sizes of the widget to \fIs,\fR thereby preventing it from ever growing or shrinking.
 .PP
-See also: setMaximumSize() and setMinimumSize().
+See also setMaximumSize() and setMinimumSize().
 .SH "void QWidget::setFixedSize ( int w, int h )"
 This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts.
 .SH "void QWidget::setFixedWidth ( int w )"
 Sets both the minimum and maximum width of the widget to \fIw\fR without changing the heights. Provided for convenience.
 .PP
-See also: sizeHint(), minimumSize(), maximumSize(), setFixedSize() and more.
+See also sizeHint(), minimumSize(), maximumSize(), setFixedSize() and more.
 .SH "void QWidget::setFocus () \fC[virtual slot]\fR"
 Gives the keyboard input focus to the widget (or its focus proxy).
 .PP
-First, a focus out event is sent to the focus widget (if any) to tell it that it is about to loose the focus. Then a focus in event is sent to this widget to tell it that it just received the focus.
+First, a focus out event is sent to the focus widget (if any) to tell it that it is about to lose the focus. Then a focus in event is sent to this widget to tell it that it just received the focus.
 .PP
 setFocus() gives focus to a widget regardless of its focus policy.
 .PP
 \fBWarning:\fR If you call setFocus() in a function which may itself be called from focusOutEvent() or focusInEvent(), you may see infinite recursion.
 .PP
-See also: hasFocus(), clearFocus(), focusInEvent(), focusOutEvent(), setFocusPolicy() and QApplication::focusWidget().
+See also hasFocus(), clearFocus(), focusInEvent(), focusOutEvent(), setFocusPolicy() and QApplication::focusWidget().
 .PP
 Examples:
 .(l
@@ -2076,9 +2146,7 @@ The keyboard focus is initially disabled (i.e. \fIpolicy\fR == \fCQWidget::NoFoc
 .PP
 You must enable keyboard focus for a widget if it processes keyboard events. This is normally done from the widget's constructor. For instance, the QLineEdit constructor calls setFocusPolicy(\fCQWidget::StrongFocus).\fR
 .PP
-As a special case to support applications not utilizing focus, Top-level widgets that have NoFocus policy will receive focus events and gain keyboard events.
-.PP
-See also: isFocusEnabled(), focusInEvent(), focusOutEvent(), keyPressEvent(), keyReleaseEvent() and isEnabled().
+See also isFocusEnabled(), focusInEvent(), focusOutEvent(), keyPressEvent(), keyReleaseEvent() and isEnabled().
 .PP
 Examples:
 .(l
@@ -2091,7 +2159,7 @@ Some widgets, such as QComboBox, can "have focus," but create a child widget to 
 .PP
 setFocusProxy() sets the widget which will actually get focus when "this widget" gets it. If there is a focus proxy, focusPolicy(), setFocusPolicy(), setFocus() and hasFocus() all operate on the focus proxy.
 .PP
-See also: focusProxy().
+See also focusProxy().
 .SH "void QWidget::setFont ( const QFont & font ) \fC[virtual]\fR"
 Sets the font for the widget and informs all children about the change.
 .PP
@@ -2106,7 +2174,7 @@ This code fragment sets a 12 point helvetica bold font:
     setFont( f );
 .fi
 .PP
-See also: font(), fontChange(), fontInfo(), fontMetrics() and unsetFont().
+See also font(), fontChange(), fontInfo(), fontMetrics(), unsetFont() and ownFont().
 .PP
 Examples:
 .(l
@@ -2138,28 +2206,28 @@ This function is virtual, and all other overloaded setGeometry() implementations
 .PP
 \fBWarning:\fR If you call setGeometry() from resizeEvent() or moveEvent(), you may see infinite recursion.
 .PP
-See also: geometry(), move(), resize(), moveEvent(), resizeEvent(), minimumSize() and maximumSize().
-.PP
-Examples:
-.(l
-drawdemo/drawdemo.cpp popup/popup.cpp qmag/qmag.cpp
-.)l
+See also geometry(), move(), resize(), moveEvent(), resizeEvent(), minimumSize() and maximumSize().
 .PP
 Reimplemented in QDialog.
 .SH "void QWidget::setGeometry ( const QRect & ) \fC[virtual slot]\fR"
 This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts.
 .PP
+Examples:
+.(l
+i18n/main.cpp drawdemo/drawdemo.cpp popup/popup.cpp qmag/qmag.cpp
+.)l
+.PP
 Reimplemented in QDialog.
 .SH "void QWidget::setIcon ( const QPixmap & pixmap ) \fC[virtual slot]\fR"
 Sets the window icon to \fIpixmap.\fR
 .PP
-See also: icon(), setIconText(), setCaption() and Setting the Application Icon
+See also icon(), setIconText(), setCaption() and Setting the Application Icon
 .PP
 Reimplemented in QMessageBox.
 .SH "void QWidget::setIconText ( const QString & iconText ) \fC[virtual slot]\fR"
 Sets the text of the window's icon to \fIiconText.\fR
 .PP
-See also: iconText(), setIcon() and setCaption().
+See also iconText(), setIcon() and setCaption().
 .SH "void QWidget::setKeyCompression ( bool compress ) \fC[virtual protected]\fR"
 Enables key event compression, if \fIenable\fR is TRUE, and disables it if \fIenable\fR is FALSE.
 .PP
@@ -2169,23 +2237,23 @@ For example, a word processor widget might receive 2, 3 or more characters in ea
 .PP
 If a widget supports multiple character unicode input, it is always safe to turn the compression on.
 .PP
-See also: QKeyEvent::text();.
+See also QKeyEvent::text();.
 .SH "void QWidget::setMask ( const QBitmap & bitmap ) \fC[virtual]\fR"
 Causes only the pixels of the widget for which \fIbitmap\fR has a corresponding 1 bit to be visible. If the region includes pixels outside the rect() of the widget, window system controls in that area may or may not be visible, depending on the platform.
 .PP
 Note that this effect can be slow if the region is particularly complex.
 .PP
-See also: setMask(const, QRegion&) and clearMask().
+See also setMask(const, QRegion&) and clearMask().
 .SH "void QWidget::setMask ( const QRegion & region ) \fC[virtual]\fR"
 Causes only the parts of the widget which overlap \fIregion\fR to be visible. If the region includes pixels outside the rect() of the widget, window system controls in that area may or may not be visible, depending on the platform.
 .PP
 Note that this effect can be slow if the region is particularly complex.
 .PP
-See also: setMask(QBitmap) and clearMask().
+See also setMask(QBitmap) and clearMask().
 .SH "void QWidget::setMaximumHeight ( int h )"
 Sets the maximum height of the widget to \fIh\fR without changing the width. Provided for convenience.
 .PP
-See also: sizeHint(), minimumSize(), maximumSize(), setFixedSize() and more.
+See also sizeHint(), minimumSize(), maximumSize(), setFixedSize() and more.
 .PP
 Examples:
 .(l
@@ -2196,13 +2264,13 @@ Sets the maximum size of the widget to \fIw\fR by \fIh\fR pixels.
 .PP
 The widget cannot be resized to a larger size than the maximum widget size. The widget's size is forced to the maximum size if the current size is greater.
 .PP
-See also: maximumSize(), setMinimumSize(), setSizeIncrement(), resize() and size().
+See also maximumSize(), setMinimumSize(), setSizeIncrement(), resize() and size().
 .SH "void QWidget::setMaximumSize ( const QSize & size )"
 This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts.
 .SH "void QWidget::setMaximumWidth ( int w )"
 Sets the maximum width of the widget to \fIw\fR without changing the height. Provided for convenience.
 .PP
-See also: sizeHint(), minimumSize(), maximumSize(), setFixedSize() and more.
+See also sizeHint(), minimumSize(), maximumSize(), setFixedSize() and more.
 .SH "void QWidget::setMicroFocusHint ( int x, int y, int width, int height, bool text=TRUE ) \fC[virtual protected]\fR"
 When a widget gets focus, it should call setMicroFocusHint for some appropriate position and size - \fIx, y\fR and \fIw\fR by \fIh.\fR This has no \fIvisual\fR effect, it just provides hints to any system-specific input handling tools.
 .PP
@@ -2212,17 +2280,19 @@ In the Windows version of Qt, this method sets the system caret, which is used f
 .PP
 In the X11 version of Qt, if \fItext\fR is TRUE, this method sets the XIM "spot" point for complex language input handling.
 .PP
-See also: microFocusHint().
+See also microFocusHint().
 .SH "void QWidget::setMinimumHeight ( int h )"
 Sets the minimum height of the widget to \fIh\fR without changing the width. Provided for convenience.
 .PP
-See also: sizeHint(), minimumSize(), maximumSize(), setFixedSize() and more.
+See also sizeHint(), minimumSize(), maximumSize(), setFixedSize() and more.
 .SH "void QWidget::setMinimumSize ( int minw, int minh ) \fC[virtual]\fR"
 Sets the minimum size of the widget to \fIw\fR by \fIh\fR pixels.
 .PP
 The widget cannot be resized to a smaller size than the minimum widget size. The widget's size is forced to the minimum size if the current size is smaller.
 .PP
-See also: minimumSize(), setMaximumSize(), setSizeIncrement(), resize() and size().
+If you use a layout inside the widget, the minimum size will be set by the layout and not by setMinimumSize, unless you set the layouts resize mode to QLayout::FreeResize.
+.PP
+See also minimumSize(), setMaximumSize(), setSizeIncrement(), resize(), size() and QLayout::setResizeMode().
 .PP
 Examples:
 .(l
@@ -2233,7 +2303,7 @@ This is an overloaded member function, provided for convenience. It differs from
 .SH "void QWidget::setMinimumWidth ( int w )"
 Sets the minimum width of the widget to \fIw\fR without changing the height. Provided for convenience.
 .PP
-See also: sizeHint(), minimumSize(), maximumSize(), setFixedSize() and more.
+See also sizeHint(), minimumSize(), maximumSize(), setFixedSize() and more.
 .SH "void QWidget::setMouseTracking ( bool enable ) \fC[virtual slot]\fR"
 Enables mouse tracking if \fIenable\fR is TRUE, or disables it if \fIenable\fR is FALSE.
 .PP
@@ -2241,7 +2311,7 @@ If mouse tracking is disabled (default), this widget only receives mouse move ev
 .PP
 If mouse tracking is enabled, this widget receives mouse move events even if no buttons are pressed down.
 .PP
-See also: hasMouseTracking(), mouseMoveEvent() and QApplication::setGlobalMouseTracking().
+See also hasMouseTracking(), mouseMoveEvent() and QApplication::setGlobalMouseTracking().
 .PP
 Examples:
 .(l
@@ -2260,7 +2330,7 @@ Use setPalette( const QPalette& p ) instead.
 .SH "void QWidget::setPalette ( const QPalette & palette ) \fC[virtual]\fR"
 Sets the widget palette to \fIpalette\fR and informs all children about the change.
 .PP
-See also: QApplication::setPalette(), palette(), paletteChange(), unsetPalette() and colorGroup().
+See also QApplication::setPalette(), palette(), paletteChange(), unsetPalette(), ownPalette() and colorGroup().
 .SH "void QWidget::setPalettePropagation ( PropagationMode )"
 \fBThis function is obsolete.\fR It is provided to keep old source working, and will probably be removed in a future version of Qt. We strongly advise against using it in new code.
 .PP
@@ -2279,19 +2349,25 @@ Note that while you can set the size increment for all widgets, it has no effect
 .PP
 \fBWarning:\fR The size increment has no effect under Windows, and may be disregarded by the window manager on X.
 .PP
-See also: sizeIncrement(), setMinimumSize(), setMaximumSize(), resize() and size().
+See also sizeIncrement(), setMinimumSize(), setMaximumSize(), resize() and size().
 .SH "void QWidget::setSizeIncrement ( const QSize & )"
 This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts.
+.SH "void QWidget::setSizePolicy ( QSizePolicy policy )"
+Sets the size policy for this widget to \fIpolicy.\fR The size policy specifies the default layout behaviour.
+.PP
+The default policy is Preferred/Preferred, which means that the widget can be freely resized, but prefers to be the size sizeHint() returns. Button-like widgets set the size policy to specify that they may stretch horizontally, but are fixed vertically. The same applies to lineedit controls (such as QLineEdit, QSpinBox or an editable QComboBox) and other horizontally orientated widgets (such as QProgressBar). A QToolButton on the other hand wants to be squared, therefore it allows growth in both directions. Widgets that support different directions (such as QSlider, QScrollBar or QHeader) specify stretching in the respective direction only. Widgets that can provide scrollbars (usually subclasses of QScrollView) tend to specify that they can use additional space, and that they can survive on less than sizeHint().
+.PP
+See also sizeHint(), QLayout, QSizePolicy and updateGeometry().
 .SH "void QWidget::setStyle ( QStyle * style )"
-Sets the widget's GUI style to \fIstyle.\fR Ownership of the style object is not transfered.
+Sets the widget's GUI style to \fIstyle.\fR Ownership of the style object is not transferred.
 .PP
 If no style is set, the widget uses the application's style QApplication::style() instead.
 .PP
 Setting a widget's style has no effect on existing or future child widgets.
 .PP
-\fBWarning:\fR This function is particularly useful for demonstration purposes, where you want to show Qt's styling capabilities. Real appliations should stay away from it and use one consistent GUI style instead.
+\fBWarning:\fR This function is particularly useful for demonstration purposes, where you want to show Qt's styling capabilities. Real applications should stay away from it and use one consistent GUI style instead.
 .PP
-See also: style(), QStyle, QApplication::style() and QApplication::setStyle().
+See also style(), QStyle, QApplication::style() and QApplication::setStyle().
 .PP
 Examples:
 .(l
@@ -2324,7 +2400,7 @@ not like this:
 .PP
 If either \fIfirst\fR or \fIsecond\fR has a focus proxy, setTabOrder() substitutes its/their proxies.
 .PP
-See also: setFocusPolicy() and setFocusProxy().
+See also setFocusPolicy() and setFocusProxy().
 .PP
 Examples:
 .(l
@@ -2333,7 +2409,7 @@ customlayout/main.cpp
 .SH "void QWidget::setUpdatesEnabled ( bool enable ) \fC[virtual slot]\fR"
 Enables widget updates if \fIenable\fR is TRUE, or disables widget updates if \fIenable\fR is FALSE.
 .PP
-Calling update() and repaint() has no effect if updates are disabled. Paint events from the window system are processed as normally even if updates are disabled.
+Calling update() and repaint() has no effect if updates are disabled. Paint events from the window system are processed normally even if updates are disabled.
 .PP
 This function is normally used to disable updates for a short period of time, for instance to avoid screen flicker during large changes.
 .PP
@@ -2350,13 +2426,15 @@ Example:
     repaint();
 .fi
 .PP
-See also: isUpdatesEnabled(), update(), repaint() and paintEvent().
+See also isUpdatesEnabled(), update(), repaint() and paintEvent().
+.PP
+Reimplemented in QHeader.
 .SH "void QWidget::setWFlags ( WFlags f ) \fC[virtual protected]\fR"
 Sets the widget flags \fIf.\fR
 .PP
 Widget flags are internal, not meant for public use.
 .PP
-See also: testWFlags(), getWFlags() and clearWFlags().
+See also testWFlags(), getWFlags() and clearWFlags().
 .SH "void QWidget::show () \fC[virtual slot]\fR"
 Shows the widget and its child widgets.
 .PP
@@ -2364,22 +2442,22 @@ If its size or position has changed, Qt guarantees that a widget gets move and r
 .PP
 You almost never have to reimplement this function. If you need to change some settings before a widget is shown, use showEvent() instead. If you need to do some delayed initialization use polish().
 .PP
-See also: showEvent(), hide(), showMinimized(), showMaximized(), showNormal(), isVisible() and polish().
+See also showEvent(), hide(), showMinimized(), showMaximized(), showNormal(), isVisible() and polish().
 .PP
 Examples:
 .(l
-showimg/main.cpp validator/main.cpp listviews/main.cpp aclock/main.cpp checklists/main.cpp drawlines/connect.cpp dclock/main.cpp xform/xform.cpp cursor/cursor.cpp layout/layout.cpp tetrix/tetrix.cpp buttongroups/main.cpp life/main.cpp drawdemo/drawdemo.cpp lineedits/main.cpp popup/popup.cpp listbox/main.cpp menu/menu.cpp progress/progress.cpp qmag/qmag.cpp splitter/splitter.cpp progressbar/main.cpp richtext/main.cpp tooltip/main.cpp qwerty/main.cpp forever/forever.cpp rot13/rot13.cpp scrollview/scrollview.cpp movies/main.cpp picture/picture.cpp hello/main.cpp listboxcombo/main.cpp biff/main.cpp tictac/main.cpp customlayout/main.cpp
+showimg/main.cpp rangecontrols/main.cpp validator/main.cpp listviews/main.cpp aclock/main.cpp checklists/main.cpp drawlines/connect.cpp dclock/main.cpp xform/xform.cpp cursor/cursor.cpp layout/layout.cpp tetrix/tetrix.cpp buttongroups/main.cpp life/main.cpp i18n/main.cpp drawdemo/drawdemo.cpp lineedits/main.cpp popup/popup.cpp listbox/main.cpp menu/menu.cpp progress/progress.cpp qmag/qmag.cpp splitter/splitter.cpp progressbar/main.cpp tooltip/main.cpp richtext/main.cpp qwerty/main.cpp forever/forever.cpp rot13/rot13.cpp scrollview/scrollview.cpp movies/main.cpp picture/picture.cpp hello/main.cpp listboxcombo/main.cpp biff/main.cpp tictac/main.cpp customlayout/main.cpp
 .)l
 .PP
-Reimplemented in QTableView, QListView, QTabBar, QDialog, QScrollView, QMenuBar, QTabDialog, QWidgetStack, QPopupMenu, QToolBar, QWizard, QProgressBar, QSemiModal and QMainWindow.
+Reimplemented in QTableView, QTabBar, QMenuBar, QWidgetStack, QToolBar, QWizard, QSemiModal, QMainWindow, QListView, QDialog, QScrollView, QTabDialog, QPopupMenu and QProgressBar.
 .SH "void QWidget::showEvent ( QShowEvent * ) \fC[virtual protected]\fR"
 This event handler can be reimplemented in a subclass to receive widget show events.
 .PP
 Non-spontaneous show events are sent to widgets right before they are shown. Spontaneous show events of toplevel widgets are delivered afterwards, naturally.
 .PP
-See also: event() and QShowEvent.
+See also event() and QShowEvent.
 .PP
-Reimplemented in QTextView, QListView, QTextBrowser, QProgressDialog, QTabWidget, QListBox and QWorkspace.
+Reimplemented in QTextBrowser, QProgressDialog, QTable, QTabWidget, QListBox, QWorkspace, QTextView, QListView and QHeader.
 .SH "void QWidget::showFullScreen () \fC[slot]\fR"
 Shows the widget in full-screen mode.
 .PP
@@ -2393,7 +2471,7 @@ An alternative would be to bypass the window manager at all and to create a wind
 .PP
 Future window managers that follow modern post-ICCCM specifications may support full-screen mode properly.
 .PP
-See also: showNormal(), showMaximized(), show(), hide() and isVisible().
+See also showNormal(), showMaximized(), show(), hide() and isVisible().
 .SH "void QWidget::showMaximized () \fC[virtual slot]\fR"
 Shows the widget maximized.
 .PP
@@ -2401,49 +2479,58 @@ Calling this function has no effect for other than top-level widgets.
 .PP
 On X11, this function may not work properly with certain window managers. See the Window Geometry documentation for details on why.
 .PP
-See also: showNormal(), showMinimized(), show(), hide() and isVisible().
+See also showNormal(), showMinimized(), show(), hide() and isVisible().
+.PP
+Examples:
+.(l
+helpviewer/main.cpp scribble/main.cpp qwerty/main.cpp
+.)l
 .SH "void QWidget::showMinimized () \fC[virtual slot]\fR"
 Shows the widget minimized, as an icon.
 .PP
 Calling this function has no effect for other than top-level widgets.
 .PP
-See also: showNormal(), showMaximized(), show(), hide(), isVisible() and isMinimized().
+See also showNormal(), showMaximized(), show(), hide(), isVisible() and isMinimized().
 .SH "void QWidget::showNormal () \fC[virtual slot]\fR"
 Restores the widget after it has been maximized or minimized.
 .PP
 Calling this function has no effect for other than top-level widgets.
 .PP
-See also: showMinimized(), showMaximized(), show(), hide() and isVisible().
+See also showMinimized(), showMaximized(), show(), hide() and isVisible().
 .SH "QSize QWidget::size () const"
 Returns the size of the widget, excluding the window frame.
 .PP
-See also: geometry(), width() and height().
+See also geometry(), width() and height().
 .SH "QSize QWidget::sizeHint () const \fC[virtual]\fR"
 Returns a recommended size for the widget, or an invalid size if no size is recommended.
 .PP
 The default implementation returns an invalid size if there is no layout for this widget, the layout's preferred size otherwise.
 .PP
-See also: QSize::isValid(), minimumSizeHint(), sizePolicy(), setMinimumSize() and updateGeometry().
+See also QSize::isValid(), minimumSizeHint(), sizePolicy(), setMinimumSize() and updateGeometry().
 .PP
-Reimplemented in QHeader, QPopupMenu, QIconView, QToolButton, QSlider, QListView, QTabBar, QMainWindow, QLabel, QFrame, QCheckBox, QTabWidget, QProgressDialog, QLineEdit, QMenuBar, QWidgetStack, QLCDNumber, QPushButton, QMultiLineEdit, QScrollBar, QSplitter, QRadioButton, QListBox, QHBox, QScrollView, QSizeGrip, QComboBox, QGrid, QSpinBox, QWorkspace and QProgressBar.
+Reimplemented in QGroupBox, QToolButton, QSlider, QTable, QCheckBox, QProgressDialog, QLineEdit, QMenuBar, QLCDNumber, QPushButton, QScrollBar, QRadioButton, QListBox, QHBox, QComboBox, QGrid, QSpinBox, QProgressBar, QHeader, QPopupMenu, QIconView, QDial, QListView, QTabBar, QMainWindow, QDialog, QLabel, QFrame, QTabWidget, QWidgetStack, QMultiLineEdit, QSplitter, QCanvasView, QScrollView, QSizeGrip and QWorkspace.
 .SH "QSize QWidget::sizeIncrement () const"
 Returns the widget size increment.
 .PP
-See also: setSizeIncrement(), minimumSize() and maximumSize().
+See also setSizeIncrement(), minimumSize() and maximumSize().
 .SH "QSizePolicy QWidget::sizePolicy () const \fC[virtual]\fR"
-This function can be reimplemented in subclasses to specify the default layout behaviour of that subclass.
+Returns the default layout behaviour of this widget.
 .PP
 If there is a QLayout that manages this widget's children, the size policy specified by that layout is used. If there is no such QLayout, the result of this function is used.
 .PP
-The default implementation returns a value which means that the widget can be freely resized, but prefers to be the size sizeHint() returns. Button-like widgets reimplement sizeHint to specify that they may stretch horizontally, but are fixed vertically. The same applies to lineedit controls (such as QLineEdit, QSpinBox or an editable QComboBox) and other horizontally orientated widgets (such as QProgressBar). A QToolButton on the other hand wants to be squared, therefore it allows growth in both directions. Widgets that support different directions (such as QSlider, QScrollBar or QHeader) specify stretching in the respecitive direction only. Widgets that can provide scrollbars (usually subclasses of QScrollView) tend to specify that they can use additional space, and that they can survive on less than sizeHint().
+See also setSizePolicy(), sizeHint(), QLayout, QSizePolicy and updateGeometry().
 .PP
-See also: sizeHint(), QLayout, QSizePolicy and updateGeometry().
+Reimplemented in QSlider, QPushButton, QProgressBar, QRadioButton, QLabel, QScrollBar, QTabBar, QWorkspace, QToolButton, QLCDNumber, QTabWidget, QFrame, QLineEdit, QHeader, QCheckBox, QSpinBox, QMultiLineEdit, QScrollView, QIconView, QSplitter and QSizeGrip.
+.SH "void QWidget::stackUnder ( QWidget * w ) \fC[slot]\fR"
+Places the widget under \fIw\fR in the parent widget's stack.
 .PP
-Reimplemented in QLabel, QScrollBar, QSlider, QPushButton, QTabBar, QWorkspace, QToolButton, QLCDNumber, QTabWidget, QFrame, QLineEdit, QHeader, QCheckBox, QSpinBox, QMultiLineEdit, QProgressBar, QScrollView, QRadioButton, QIconView, QSplitter and QSizeGrip.
+To make this work, the widget itself and \fIw\fR have to be siblings.
+.PP
+See also raise() and lower().
 .SH "QStyle& QWidget::style () const"
 Returns the GUI style for this widget
 .PP
-See also: QWidget::setStyle(), QApplication::setStyle() and QApplication::style().
+See also QWidget::setStyle(), QApplication::setStyle() and QApplication::style().
 .SH "void QWidget::styleChange ( QStyle & oldStyle ) \fC[virtual protected]\fR"
 This virtual function is called when the style of the widgets. changes.\fIoldStyle\fR is the previous GUI style; you can get the new style from style().
 .PP
@@ -2451,9 +2538,9 @@ Reimplement this function if your widget needs to know when its GUI style change
 .PP
 The default implementation updates the widget including its geometry.
 .PP
-See also: QApplication::setStyle(), style(), update() and updateGeometry().
+See also QApplication::setStyle(), style(), update() and updateGeometry().
 .PP
-Reimplemented in QPopupMenu, QComboBox, QSplitter, QListView, QProgressDialog, QProgressBar, QSlider, QTabWidget, QIconView, QMenuBar, QScrollBar, QMainWindow, QSpinBox, QTabBar, QTabDialog and QScrollView.
+Reimplemented in QPopupMenu, QComboBox, QProgressBar, QSlider, QIconView, QMenuBar, QScrollBar, QMainWindow, QSpinBox, QSplitter, QListView, QProgressDialog, QTabWidget, QTabBar, QTabDialog and QScrollView.
 .SH "bool QWidget::testWFlags ( WFlags n ) const"
 Returns TRUE if any of the widget flags in \fIn\fR are set. The widget flags are listed in qnamespace.h, and are strictly for internal use.
 .SH "QWidget * QWidget::topLevelWidget () const"
@@ -2468,21 +2555,21 @@ Typical usage is changing the window caption:
     aWidget->topLevelWidget()->setCaption( "New Caption" );
 .fi
 .PP
-See also: isTopLevel().
+See also isTopLevel().
 .SH "void QWidget::unsetCursor () \fC[virtual]\fR"
 Unset the cursor for this widget. The widget will use the cursor of its parent from now on.
 .PP
 This functions does nothing for top-level windows.
 .PP
-See also: cursor(), setCursor() and QApplication::setOverrideCursor().
+See also cursor(), setCursor() and QApplication::setOverrideCursor().
 .SH "void QWidget::unsetFont ()"
 Unsets the font for this widget. The widget will use its natural default font from now on. This is either a special font for the widget class, the parent's font or - if this widget is a toplevel widget - the default application font.
 .PP
-See also: setFont().
+See also setFont() and ownFont().
 .SH "void QWidget::unsetPalette ()"
 Unsets the palette for this widget. The widget will use its natural default palette from now on.
 .PP
-See also: setPalette().
+See also setPalette() and ownPalette().
 .SH "void QWidget::update () \fC[slot]\fR"
 Updates the widget unless updates are disabled or the widget is hidden.
 .PP
@@ -2490,11 +2577,11 @@ Updating the widget will erase the widget contents and generate an appropriate p
 .PP
 If the widgets sets the WRepaintNoErase flag, update() will not erase its contents.
 .PP
-See also: repaint(), paintEvent(), setUpdatesEnabled(), erase() and setWFlags().
+See also repaint(), paintEvent(), setUpdatesEnabled(), erase() and setWFlags().
 .PP
 Examples:
 .(l
-drawlines/connect.cpp drawdemo/drawdemo.cpp desktop/desktop.cpp picture/picture.cpp
+grapher/grapher.cpp drawlines/connect.cpp drawdemo/drawdemo.cpp desktop/desktop.cpp scrollview/scrollview.cpp picture/picture.cpp
 .)l
 .SH "void QWidget::update ( int x, int y, int w, int h ) \fC[slot]\fR"
 Updates a rectangle (\fIx, y, w, h)\fR inside the widget unless updates are disabled or the widget is hidden.
@@ -2505,26 +2592,23 @@ If \fIw\fR is negative, it is replaced with \fCwidth() - x\fR. If \fIh\fR is neg
 .PP
 If the widgets sets the WRepaintNoErase flag, update() will not erase its contents.
 .PP
-See also: repaint(), paintEvent(), setUpdatesEnabled() and erase().
-.PP
-Examples:
-.(l
-grapher/grapher.cpp scrollview/scrollview.cpp
-.)l
+See also repaint(), paintEvent(), setUpdatesEnabled() and erase().
 .SH "void QWidget::update ( const QRect & r ) \fC[slot]\fR"
 This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts.
 .SH "void QWidget::updateGeometry ()"
 Notifies the layout system that this widget has changed and may need to change geometry.
 .PP
 Call this function if the sizeHint() or sizePolicy() have changed.
+.PP
+For explicitly hidden widgets, updateGeometry() is a no-op. The layout system will be notified as soon as the widget is shown.
 .SH "void QWidget::updateMask () \fC[virtual protected]\fR"
 This function can be reimplemented in a subclass to support transparent widgets. It is supposed to be called whenever a widget changes state in a way that the shape mask has to be recalculated.
 .PP
-See also: setAutoMask(), updateMask(), setMask() and clearMask().
+See also setAutoMask(), updateMask(), setMask() and clearMask().
 .PP
-Reimplemented in QTabWidget, QCheckBox, QGroupBox, QPushButton, QSlider, QFrame, QRadioButton, QTabBar and QComboBox.
+Reimplemented in QCheckBox, QGroupBox, QPushButton, QSlider, QRadioButton, QTabWidget, QFrame, QTabBar and QComboBox.
 .SH "QRect QWidget::visibleRect () const"
-Returns the currently visible rectangle of the widget. This function is in particular useful to optimize immediate repainting of a windget. Typical usage is
+Returns the currently visible rectangle of the widget. This function is in particular useful to optimize immediate repainting of a widget. Typical usage is
 .PP
 .nf
 .br
@@ -2546,15 +2630,15 @@ If you reimplement this handler, it is very important that you ignore() the even
 .PP
 The default implementation ignores the event.
 .PP
-See also: QWheelEvent::ignore(), QWheelEvent::accept(), event() and QWheelEvent.
+See also QWheelEvent::ignore(), QWheelEvent::accept(), event() and QWheelEvent.
 .PP
-Reimplemented in QScrollBar, QSpinBox, QMultiLineEdit, QSlider and QScrollView.
+Reimplemented in QSpinBox, QSlider, QScrollView, QScrollBar, QMultiLineEdit and QDial.
 .SH "int QWidget::width () const"
 Returns the width of the widget, excluding the window frame.
 .PP
 See the Window Geometry documentation for an overview of geometry issues with top-level widgets.
 .PP
-See also: geometry(), height() and size().
+See also geometry(), height() and size().
 .PP
 Examples:
 .(l
@@ -2565,19 +2649,19 @@ Returns the window system identifier of the widget.
 .PP
 Portable in principle, but if you use it you are probably about to do something non-portable. Be careful.
 .PP
-See also: find().
+See also find().
 .SH "int QWidget::x () const"
 Returns the x coordinate of the widget, relative to its parent widget and including the window frame.
 .PP
 See the Window Geometry documentation for an overview of geometry issues with top-level widgets.
 .PP
-See also: frameGeometry(), y() and pos().
+See also frameGeometry(), y() and pos().
 .SH "int QWidget::y () const"
 Returns the y coordinate of the widget, relative to its parent widget and including the window frame.
 .PP
 See the Window Geometry documentation for an overview of geometry issues with top-level widgets.
 .PP
-See also: frameGeometry(), x() and pos().
+See also frameGeometry(), x() and pos().
 .PP
 Examples:
 .(l
@@ -2604,7 +2688,7 @@ For internal use only.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qwidget.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

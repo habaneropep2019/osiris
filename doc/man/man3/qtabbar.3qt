@@ -1,5 +1,5 @@
-.TH QTabBar 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QTabBar 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QTabBar \- Tab bar, for use in e.g. tabbed dialogs
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -19,10 +17,10 @@ Inherits QWidget.
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQTabBar\fR ( QWidget * " "parent" " = 0, const char * " "name" " = 0 )"
+.BI "\fBQTabBar\fR ( QWidget * " "parent" " = 0, const char * " "name" " = 0 ) "
 .br
 .ti -1c
-.BI "\fB~QTabBar\fR ()"
+.BI "\fB~QTabBar\fR () "
 .br
 .ti -1c
 .BI "enum \fBShape\fR { RoundedAbove, RoundedBelow, TriangularAbove, TriangularBelow }"
@@ -31,19 +29,19 @@ Inherits QWidget.
 .BI "Shape \fBshape\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetShape\fR ( Shape )"
+.BI "virtual void \fBsetShape\fR ( Shape ) "
 .br
 .ti -1c
-.BI "virtual int \fBaddTab\fR ( QTab * )"
+.BI "virtual int \fBaddTab\fR ( QTab * ) "
 .br
 .ti -1c
-.BI "virtual int \fBinsertTab\fR ( QTab *, int " "index" " = -1 )"
+.BI "virtual int \fBinsertTab\fR ( QTab *, int " "index" " = -1 ) "
 .br
 .ti -1c
-.BI "virtual void \fBremoveTab\fR ( QTab * )"
+.BI "virtual void \fBremoveTab\fR ( QTab * ) "
 .br
 .ti -1c
-.BI "virtual void \fBsetTabEnabled\fR ( int, bool )"
+.BI "virtual void \fBsetTabEnabled\fR ( int, bool ) "
 .br
 .ti -1c
 .BI "bool \fBisTabEnabled\fR ( int ) const"
@@ -55,25 +53,28 @@ Inherits QWidget.
 .BI "int \fBkeyboardFocusTab\fR () const"
 .br
 .ti -1c
-.BI "QTab* \fBtab\fR ( int )"
+.BI "QTab* \fBtab\fR ( int ) "
 .br
 .ti -1c
-.BI "virtual void \fBlayoutTabs\fR ()"
+.BI "int \fBcount\fR () const"
+.br
+.ti -1c
+.BI "virtual void \fBlayoutTabs\fR () "
 .br
 .in -1c
 .SS "Public Slots"
 .in +1c
 .ti -1c
-.BI "virtual void \fBsetCurrentTab\fR ( int )"
+.BI "virtual void \fBsetCurrentTab\fR ( int ) "
 .br
 .ti -1c
-.BI "virtual void \fBsetCurrentTab\fR ( QTab * )"
+.BI "virtual void \fBsetCurrentTab\fR ( QTab * ) "
 .br
 .in -1c
 .SS "Signals"
 .in +1c
 .ti -1c
-.BI "void \fBselected\fR ( int )"
+.BI "void \fBselected\fR ( int ) "
 .br
 .in -1c
 .SS "Protected Members"
@@ -88,17 +89,17 @@ Inherits QWidget.
 .BI "virtual QTab* \fBselectTab\fR ( const QPoint & p ) const"
 .br
 .ti -1c
-.BI "virtual void \fBupdateMask\fR ()"
+.BI "virtual void \fBupdateMask\fR () "
 .br
 .ti -1c
-.BI "virtual void \fBpaintEvent\fR ( QPaintEvent * )"
+.BI "virtual void \fBpaintEvent\fR ( QPaintEvent * ) "
 .br
 .ti -1c
-.BI "QList<QTab>* \fBtabList\fR ()"
+.BI "QList<QTab>* \fBtabList\fR () "
 .br
 .in -1c
 .SS "Properties"
-<table border=1 cellpadding=3 cellspacing=0> <tr><th>Type<th>Name<th>READ<th>WRITE<th>Options <tr><td>Shape<td>shape<td>shape<td>setShape<td>&nbsp; <tr><td>int<td>currentTab<td>currentTab<td>setCurrentTab<td>&nbsp; <tr><td>int<td>keyboardFocusTab<td>keyboardFocusTab<td>&nbsp;<td>&nbsp; </table>
+<table border=1 cellpadding=3 cellspacing=0> <tr><th>Type<th>Name<th>READ<th>WRITE<th>Options <tr><td>Shape<td>shape<td>shape<td>setShape<td>&nbsp; <tr><td>int<td>currentTab<td>currentTab<td>setCurrentTab<td>&nbsp; <tr><td>int<td>count<td>count<td>&nbsp;<td>&nbsp; <tr><td>int<td>keyboardFocusTab<td>keyboardFocusTab<td>&nbsp;<td>&nbsp; </table>
 .SH DESCRIPTION
 The QTabBar class provides a tab bar, for use in e.g. tabbed dialogs.
 .PP
@@ -142,6 +143,10 @@ Destroys the tab control, freeing memory used.
 Adds \fInewTab\fR to the tab control.
 .PP
 Allocates a new id, sets \fInewTab's\fR id, locates it just to the right of the existing tabs, inserts an accelerator if the tab's label contains the string "&p" for some value of p, adds it to the bar, and returns the newly allocated id.
+.SH "int QTabBar::count () const"
+Returns the number of tabs in the tab bar.
+.PP
+See also tab().
 .SH "int QTabBar::currentTab () const"
 If a page is currently visible, returns its ID. If no page is currently visible, returns either -1 or the ID of one of the pages.
 .PP
@@ -149,7 +154,7 @@ Even if the return value is not -1, you cannot assume either that the user can s
 .PP
 When you need to display something, the return value from this function represents the best page to display. That's all.
 .PP
-See also: selected().
+See also selected().
 .SH "void QTabBar::focusInEvent ( QFocusEvent * ) \fC[virtual protected]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .PP
@@ -167,7 +172,7 @@ Allocates a new id, sets \fInewTab's\fR id, locates it respectively, inserts an 
 .SH "bool QTabBar::isTabEnabled ( int id ) const"
 Returns TRUE if the tab with id \fIid\fR is enabled, or FALSE if it is disabled or there is no such tab.
 .PP
-See also: setTabEnabled().
+See also setTabEnabled().
 .SH "void QTabBar::keyPressEvent ( QKeyEvent * e ) \fC[virtual protected]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .PP
@@ -176,6 +181,10 @@ Reimplemented from QWidget.
 If this tab control has keyboard focus, returns the ID of the tab Space will select. Otherwise, returns -1.
 .SH "void QTabBar::layoutTabs () \fC[virtual]\fR"
 Layout all existing tabs (i.e. setting their r attribute ) according to their label and their iconset.
+.SH "QSize QTabBar::minimumSizeHint () const \fC[virtual]\fR"
+Reimplemented for internal reasons; the API is not affected.
+.PP
+Reimplemented from QWidget.
 .SH "void QTabBar::mousePressEvent ( QMouseEvent * e ) \fC[virtual protected]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .PP
@@ -191,13 +200,13 @@ This virtual function may be reimplemented to change the look of QTabBar. If you
 .SH "void QTabBar::paintEvent ( QPaintEvent * e ) \fC[virtual protected]\fR"
 Repaints the tab row. All the painting is done by paint(); paintEvent() only decides which tabs need painting and in what order.
 .PP
-See also: paint().
+See also paint().
 .PP
 Reimplemented from QWidget.
 .SH "void QTabBar::paintLabel ( QPainter * p, const QRect & br, QTab * t, bool has_focus ) const \fC[virtual protected]\fR"
 Paints the label of tab \fIt\fR centered in rectangle \fIbr\fR using painter \fIp\fR and draws a focus indication if \fIhas_focus\fR is TRUE.
-.SH "void QTabBar::removeTab ( QTab * tab ) \fC[virtual]\fR"
-Removes \fItab\fR from the tab control.
+.SH "void QTabBar::removeTab ( QTab * t ) \fC[virtual]\fR"
+Removes tab \fIt\fR from the tab control.
 .SH "void QTabBar::resizeEvent ( QResizeEvent * ) \fC[virtual protected]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .PP
@@ -205,7 +214,7 @@ Reimplemented from QWidget.
 .SH "QTab * QTabBar::selectTab ( const QPoint & p ) const \fC[virtual protected]\fR"
 This virtual functions is called by the mouse event handlers to determine which tab is pressed. The default implementation returns a pointer to the tab whose bounding rectangle contains \fIp,\fR if exactly one tab's bounding rectangle contains \fIp.\fR It returns 0 else.
 .PP
-See also: mousePressEvent() and mouseReleaseEvent().
+See also mousePressEvent() and mouseReleaseEvent().
 .SH "void QTabBar::selected ( int id ) \fC[signal]\fR"
 QTabBar emits this signal whenever any tab is selected, whether by the program or the user. The argument \fIid\fR is the ID if the tab as returned by addTab().
 .PP
@@ -213,23 +222,23 @@ show() is guaranteed to emit this signal, so that you can display your page in a
 .SH "void QTabBar::setCurrentTab ( QTab * tab ) \fC[virtual slot]\fR"
 Raises \fItab\fR and emits the selected() signal unless the tab was already current.
 .PP
-See also: currentTab() and selected().
+See also currentTab() and selected().
 .SH "void QTabBar::setCurrentTab ( int id ) \fC[virtual slot]\fR"
 Raises the tab with ID \fIid\fR and emits the selected() signal.
 .PP
-See also: currentTab(), selected() and tab().
+See also currentTab(), selected() and tab().
 .SH "void QTabBar::setShape ( Shape s )"
 Sets the shape of this tab bar to \fIs\fR and refreshes the bar.
 .SH "void QTabBar::setTabEnabled ( int id, bool enabled ) \fC[virtual]\fR"
 Enable tab \fIid\fR if \fIenable\fR is TRUE, or disable it if \fIenable\fR is FALSE. If \fIid\fR is currently selected, setTabEnabled() makes another tab selected.
 .PP
-setTabEnabled() updates the display respectivly if this causes a change in \fIid's\fR status.
+setTabEnabled() updates the display respectively if this causes a change in \fIid's\fR status.
 .PP
-See also: update() and isTabEnabled().
+See also update() and isTabEnabled().
 .SH "QTabBar::Shape QTabBar::shape() const"
 Returns the shape of this tab bar.
 .PP
-See also: setShape().
+See also setShape().
 .SH "void QTabBar::show () \fC[virtual]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .PP
@@ -248,6 +257,8 @@ Reimplemented for internal reasons; the API is not affected.
 Reimplemented from QWidget.
 .SH "QTab * QTabBar::tab ( int id )"
 Returns a pointer to the tab with ID \fIid,\fR or 0 if there is no such tab.
+.PP
+See also count().
 .SH "QList<QTab> * QTabBar::tabList () \fC[protected]\fR"
 The list of QTab objects added.
 .SH "void QTabBar::updateMask () \fC[virtual protected]\fR"
@@ -257,7 +268,7 @@ Reimplemented from QWidget.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qtabbar.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

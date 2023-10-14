@@ -1,29 +1,44 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qurloperator.cpp   2.1.1   edited 2000-03-27 $
+** $Id: qt/src/kernel/qurloperator.cpp   2.2.0   edited 2000-08-25 $
 **
 ** Implementation of QUrlOperator class
 **
 ** Created : 950429
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the kernel module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #include "qurloperator.h"
+
+#ifndef QT_NO_NETWORKPROTOCOL
+
 #include "qurlinfo.h"
 #include "qnetworkprotocol.h"
 #include "qmap.h"
@@ -61,20 +76,20 @@ struct QUrlOperatorPrivate
 
   \ingroup misc
 
-  This class operates on hirachical structures (like filesystems)
+  This class operates on hierarchical structures (like filesystems)
   using URLs. Its API allows do all common operations on it
-  (listing childeren, removing children, renaimg, etc.). But
+  (listing children, removing children, renaming, etc.). But
   the class itself contains no functionality for that. It uses
   the functionality of registered network protocols. This means,
-  depending of the protocol of the URL, it uses an fitting
+  depending of the protocol of the URL, it uses a fitting
   network protocol class for the operations. In detail, each of
-  the operation methodes of QUrlOperator creates a
+  the operation methods of QUrlOperator create a
   QNetworkOperation object which describes the operation and
   puts it into the operation queue of the used network protocol.
   If no fitting protocol could be found (because no implementation
-  of the needed network protocol is registered),  the url operator
+  of the needed network protocol is registered), the url operator
   emits errors. Also not each protocol supports each operation -
-  but the error  handling deals with this problem.
+  but the error handling deals with this problem.
 
   A QUrlOperator can be used like this (for e.g. downloading a file)
   \code
@@ -85,9 +100,9 @@ struct QUrlOperatorPrivate
   Now, you also will connect to some signals of the QUrlOperator to get
   informed about success, errors, progress and more things.
 
-  Of course an implementation for the FTP protocol has to be registered for this example.
-  In the Qt Network Extension Library there is an implementation of the
-  FTP protocol.
+  Of course an implementation for the FTP protocol has to be registered for
+  this example.  In the Qt Network Extension Library there is an implementation
+  of the FTP protocol.
 
   For more information about the Qt Network Architecture take a look
   at the <a href="network.html">Qt Network Documentation</a>.
@@ -177,7 +192,7 @@ struct QUrlOperatorPrivate
   \fn void QUrlOperator::data( const QByteArray &data, QNetworkOperation *op )
 
   This signal is emitted when new \a data has been received
-  after e.g. calling get() or put(). \op holds the name of the file which data
+  after e.g. calling get() or put(). \a op holds the name of the file which data
   is retrieved in the first argument and the data in the second argument (raw).
   You get them with op->arg( 0 ) and op->rawArg( 1 ).
 
@@ -202,7 +217,7 @@ struct QUrlOperatorPrivate
 /*!
   \fn void QUrlOperator::startedNextCopy( const QList<QNetworkOperation> &lst )
 
-  This signal is emitted if copy() started a new copy opration. \a lst contains all
+  This signal is emitted if copy() started a new copy operation. \a lst contains all
   QNetworkOperations which describe this copy operation.
 
   \sa copy()
@@ -308,7 +323,7 @@ QUrlOperator::~QUrlOperator()
   and after the last one finished() is emitted.
   For each list of new entries, the newChildren()
   signals is emitted.
-  If an error occures, also the signal finished()
+  If an error occurs, also the signal finished()
   is emitted, so check the state of the network operation pointer!
 
   As the operation will not be executed immediately, a pointer to the
@@ -458,7 +473,7 @@ const QNetworkOperation *QUrlOperator::remove( const QString &filename )
   couldn't be created.
 
   This path of this QUrlOperator has to point to a directory, as \a oldname and
-  \a newname are handled relaitvie to this directory, and not to a file,
+  \a newname are handled relatively to this directory, and not to a file,
   else this operation might not work!
 */
 
@@ -604,7 +619,7 @@ QList<QNetworkOperation> QUrlOperator::copy( const QString &from, const QString 
   the files are moved and not copied. \a dest has to point to a directory.
 
   This method is just a convenience function of the copy method above. It
-  calles the copy above for each entry in \a files one after the other. You
+  calls the copy above for each entry in \a files one after the other. You
   don't get a result from this method, but each time a new copy is started,
   startedNextCopy() is emitted, with a list of QNetworkOperations which
   describe the new copy operation.
@@ -622,7 +637,7 @@ void QUrlOperator::copy( const QStringList &files, const QString &dest,
 
 /*!
   Returns TRUE if the url is a directory, else
-  returns FALSE. This may not always work correcrly,
+  returns FALSE. This may not always work correctly,
   if the protocol of the URL is something else than file
   (local filesystem)! If you pass a bool as \a ok argument,
   this is set to TRUE, if the result of this method is correct
@@ -672,7 +687,7 @@ bool QUrlOperator::isDir( bool *ok )
   when you use this operation. If \a location is not empty, it can be relative (a child of
   the path to which the QUrlOperator points) or an absolute URL.
 
-  E.g. for getting a webpage you might do something like
+  E.g. for getting a Web page you might do something like
 
   \code
   QUrlOperator op( "http://www.whatever.org/cgi-bin/search.pl?cmd=Hallo" );
@@ -741,7 +756,7 @@ const QNetworkOperation *QUrlOperator::get( const QString &location )
 /*!
   Tells the network protocol to put \a data to \a location, or if this is
   empty (QString::null) it puts the \a data to the location to which the
-  URL points. What exaclty happens is depending on the network
+  URL points. What exactly happens is depending on the network
   protocol. Also depending on the network protocol
   after putting data some data might come back. In this case the
   data() signal is emitted.
@@ -1130,3 +1145,5 @@ void QUrlOperator::deleteOperation( QNetworkOperation *op )
     if ( op )
 	d->oldOps.append( op );
 }
+
+#endif // QT_NO_NETWORKPROTOCOL

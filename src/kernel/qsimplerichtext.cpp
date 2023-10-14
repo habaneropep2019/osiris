@@ -1,29 +1,44 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qsimplerichtext.cpp   2.1.1   edited 2000-04-01 $
+** $Id: qt/src/kernel/qsimplerichtext.cpp   2.2.0   edited 2000-08-25 $
 **
 ** Implementation of the QSimpleRichText class
 **
 ** Created : 990101
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the kernel module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #include "qrichtext_p.h"
+
+#ifndef QT_NO_RICHTEXT
+
 #include "qsimplerichtext.h"
 #include "qpainter.h"
 
@@ -36,7 +51,7 @@
   \ingroup drawing
 
   This class encapsulates simple richt text usage where a string is
-  interpretted as richt text and can be drawn.  This is in particular
+  interpreted as richt text and can be drawn.  This is in particular
   useful if you want to display some rich text in a custom widget.
   A QStyleSheet is needed to actually understand and format rich text.
   Qt provides a default HTML-like style sheet but you may define custom
@@ -47,7 +62,7 @@
   importantly, it can be drawn on any given QPainter with draw().
   QSimpleRichText can also be used to implement hypertext or active
   text facilities by using anchorAt().  A hit test through inText()
-  makes it possible to use simple righ text for text objects in
+  makes it possible to use simple rich text for text objects in
   editable drawing canvases.
 
   Once constructed from a string, the contents cannot be changed, only
@@ -70,7 +85,7 @@ public:
   and the font \a fnt.
 
   The font is used as basis for the text rendering. When using rich
-  text rendering on a certain widget \e w, you would regularily
+  text rendering on a certain widget \e w, you would regularly
   specify the widget's font as shown in the following code example:
 
   \code
@@ -200,7 +215,7 @@ int QSimpleRichText::height() const
   needed, and if not 0, *\a paper is used as the background brush.
 
   Note that the display code is highly optimized to reduce flicker, so
-  passing a brush for \a paper is preferrable to simply clearing the area
+  passing a brush for \a paper is preferable to simply clearing the area
   to be painted and then calling this without a brush.
 */
 void QSimpleRichText::draw( QPainter* p,  int x, int y, const QRegion& clipRegion,
@@ -215,11 +230,11 @@ void QSimpleRichText::draw( QPainter* p,  int x, int y, const QRegion& clipRegio
   needed, and if not 0, *\a paper is used as the background brush.
 
   Note that the display code is highly optimized to reduce flicker, so
-  passing a brush for \a paper is preferrable to simply clearing the area
+  passing a brush for \a paper is preferable to simply clearing the area
   to be painted and then calling this without a brush.
 
   This is a convenience function if there's no palette but just a
-  cologroup available. If you have a palette, pass this instead of \a cg.
+  color group available. If you have a palette, pass this instead of \a cg.
 */
 void QSimpleRichText::draw( QPainter* p,  int x, int y, const QRegion& clipRegion,
 			      const QColorGroup& cg, const QBrush* paper) const
@@ -320,3 +335,5 @@ bool QSimpleRichText::inText( const QPoint& pos ) const
     QRichTextIterator it( *d->doc );
     return it.goTo( pos );
 }
+
+#endif // QT_NO_RICHTEXT

@@ -1,14 +1,12 @@
-.TH QSplitter 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QSplitter 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
 .ad l
 .nh
 .SH NAME
-QSplitter \- QSplitter implements a splitter widget
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
+QSplitter \- Implements a splitter widget
 .SH SYNOPSIS
 .br
 .PP
@@ -22,73 +20,73 @@ Inherits QFrame.
 .BI "enum \fBResizeMode\fR { Stretch, KeepSize, FollowSizeHint }"
 .br
 .ti -1c
-.BI "\fBQSplitter\fR ( QWidget * " "parent" "=0, const char * " "name" "=0 )"
+.BI "\fBQSplitter\fR ( QWidget * " "parent" "=0, const char * " "name" "=0 ) "
 .br
 .ti -1c
-.BI "\fBQSplitter\fR ( Orientation, QWidget * " "parent" "=0, const char * " "name" "=0 )"
+.BI "\fBQSplitter\fR ( Orientation, QWidget * " "parent" "=0, const char * " "name" "=0 ) "
 .br
 .ti -1c
-.BI "\fB~QSplitter\fR ()"
+.BI "\fB~QSplitter\fR () "
 .br
 .ti -1c
-.BI "virtual void \fBsetOrientation\fR ( Orientation )"
+.BI "virtual void \fBsetOrientation\fR ( Orientation ) "
 .br
 .ti -1c
 .BI "Orientation \fBorientation\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetResizeMode\fR ( QWidget * " "w" ", ResizeMode )"
+.BI "virtual void \fBsetResizeMode\fR ( QWidget * " "w" ", ResizeMode ) "
 .br
 .ti -1c
-.BI "virtual void \fBsetOpaqueResize\fR ( bool = TRUE )"
+.BI "virtual void \fBsetOpaqueResize\fR ( bool = TRUE ) "
 .br
 .ti -1c
 .BI "bool \fBopaqueResize\fR () const"
 .br
 .ti -1c
-.BI "void \fBmoveToFirst\fR ( QWidget * )"
+.BI "void \fBmoveToFirst\fR ( QWidget * ) "
 .br
 .ti -1c
-.BI "void \fBmoveToLast\fR ( QWidget * )"
+.BI "void \fBmoveToLast\fR ( QWidget * ) "
 .br
 .ti -1c
-.BI "void \fBrefresh\fR ()"
+.BI "void \fBrefresh\fR () "
 .br
 .ti -1c
 .BI "QValueList<int> \fBsizes\fR () const"
 .br
 .ti -1c
-.BI "void \fBsetSizes\fR ( QValueList<int> )"
+.BI "void \fBsetSizes\fR ( QValueList<int> ) "
 .br
 .in -1c
 .SS "Protected Members"
 .in +1c
 .ti -1c
-.BI "virtual void \fBchildEvent\fR ( QChildEvent * )"
+.BI "virtual void \fBchildEvent\fR ( QChildEvent * ) "
 .br
 .ti -1c
 .BI "int \fBidAfter\fR ( QWidget * ) const"
 .br
 .ti -1c
-.BI "void \fBmoveSplitter\fR ( QCOORD " "pos" ", int id )"
+.BI "void \fBmoveSplitter\fR ( QCOORD " "pos" ", int id ) "
 .br
 .ti -1c
-.BI "virtual void \fBdrawSplitter\fR ( QPainter *, QCOORD " "x" ", QCOORD " "y" ", QCOORD " "w" ", QCOORD h )"
+.BI "virtual void \fBdrawSplitter\fR ( QPainter *, QCOORD " "x" ", QCOORD " "y" ", QCOORD " "w" ", QCOORD h ) "
 .br
 .ti -1c
-.BI "int \fBadjustPos\fR ( int, int )"
+.BI "int \fBadjustPos\fR ( int, int ) "
 .br
 .ti -1c
-.BI "virtual void \fBsetRubberband\fR ( int )"
+.BI "virtual void \fBsetRubberband\fR ( int ) "
 .br
 .ti -1c
-.BI "void \fBgetRange\fR ( int " "id" ", int *, int * )"
+.BI "void \fBgetRange\fR ( int " "id" ", int *, int * ) "
 .br
 .in -1c
 .SS "Properties"
 <table border=1 cellpadding=3 cellspacing=0> <tr><th>Type<th>Name<th>READ<th>WRITE<th>Options <tr><td>Orientation<td>orientation<td>orientation<td>setOrientation<td>&nbsp; </table>
 .SH DESCRIPTION
-QSplitter implements a splitter widget.
+The QSplitter class implements a splitter widget.
 .PP
 A splitter lets the user control the size of child widgets by dragging the boundary between the children. Any number of widgets may be controlled.
 .PP
@@ -117,7 +115,7 @@ If you hide() a child, its space will be distributed among the other children. W
 .PP
 <img src=qsplitter-m.png> <img src=qsplitter-w.png>
 .PP
-See also: QTabBar.
+See also QTabBar.
 .PP
 Examples:
 .(l
@@ -143,7 +141,7 @@ Destructs the splitter.
 .SH "int QSplitter::adjustPos ( int p, int id ) \fC[protected]\fR"
 Returns the legal position closest to \fIp\fR of the splitter with id \fIid.\fR
 .PP
-See also: idAfter().
+See also idAfter().
 .SH "void QSplitter::childEvent ( QChildEvent * c ) \fC[virtual protected]\fR"
 Tells the splitter that a child widget has been inserted/removed.
 .PP
@@ -151,7 +149,7 @@ Reimplemented from QObject.
 .SH "void QSplitter::drawSplitter ( QPainter * p, QCOORD x, QCOORD y, QCOORD w, QCOORD h ) \fC[virtual protected]\fR"
 Draws the splitter handle in the rectangle described by \fIx, y, w, h\fR using painter \fIp.\fR
 .PP
-See also: QStyle::drawSplitter.
+See also QStyle::drawSplitter.
 .SH "bool QSplitter::event ( QEvent * e ) \fC[virtual protected]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .PP
@@ -159,7 +157,7 @@ Reimplemented from QObject.
 .SH "void QSplitter::getRange ( int id, int * min, int * max ) \fC[protected]\fR"
 Returns the valid range of the splitter with id \fIid\fR in \fImin\fR and \fImax.\fR
 .PP
-See also: idAfter().
+See also idAfter().
 .SH "int QSplitter::idAfter ( QWidget * w ) const \fC[protected]\fR"
 Returns the id of the splitter to the right of or below the widget \fIw,\fR or 0 if there is no such splitter. (ie. it is either not in this QSplitter, or it is at the end).
 .SH "QSize QSplitter::minimumSizeHint () const \fC[virtual]\fR"
@@ -169,7 +167,7 @@ Reimplemented from QWidget.
 .SH "void QSplitter::moveSplitter ( QCOORD p, int id ) \fC[protected]\fR"
 Moves the left/top edge of the splitter handle with id \fIid\fR as close as possible to \fIp\fR which is the distance from the left (or top) edge of the widget.
 .PP
-See also: idAfter().
+See also idAfter().
 .SH "void QSplitter::moveToFirst ( QWidget * w )"
 Moves \fIw\fR to the leftmost/top position.
 .PP
@@ -182,11 +180,11 @@ Moves \fIw\fR to the rightmost/bottom position.
 .SH "bool QSplitter::opaqueResize () const"
 Returns TRUE if opaque resize is on, FALSE otherwise.
 .PP
-See also: setOpaqueResize().
+See also setOpaqueResize().
 .SH "Orientation QSplitter::orientation () const"
 Returns the orientation (\fCHorizontal\fR or \fCVertical)\fR of the splitter.
 .PP
-See also: setOrientation().
+See also setOrientation().
 .SH "void QSplitter::refresh ()"
 Updates the splitter state. You should not need to call this function during normal use of the splitter.
 .SH "void QSplitter::resizeEvent ( QResizeEvent * ) \fC[virtual protected]\fR"
@@ -196,7 +194,7 @@ Reimplemented from QWidget.
 .SH "void QSplitter::setOpaqueResize ( bool on = TRUE ) \fC[virtual]\fR"
 Sets opaque resize to \fIon.\fR Opaque resize is initially turned off.
 .PP
-See also: opaqueResize().
+See also opaqueResize().
 .PP
 Examples:
 .(l
@@ -205,11 +203,11 @@ mainlyQt/editor.cpp splitter/splitter.cpp
 .SH "void QSplitter::setOrientation ( Orientation o ) \fC[virtual]\fR"
 Sets the orientation to \fIo.\fR By default the orientation is horizontal (the widgets are side by side).
 .PP
-See also: orientation().
+See also orientation().
 .SH "void QSplitter::setResizeMode ( QWidget * w, ResizeMode mode )"
 Sets resize mode of \fIw\fR to \fImode.\fR
 .PP
-See also: ResizeMode.
+See also ResizeMode.
 .PP
 Examples:
 .(l
@@ -218,9 +216,9 @@ splitter/splitter.cpp
 .SH "void QSplitter::setRubberband ( int p ) \fC[virtual protected]\fR"
 Shows a rubber band at position \fIp.\fR If \fIp\fR is negative, the rubber band is removed.
 .SH "void QSplitter::setSizes ( QValueList<int> list )"
-Sets the size parameters to the values given in \fIlist.\fR Extra values in \fIlist\fR are ignored.
+Sets the size parameters to the values given in \fIlist.\fR If the splitter is horizontal, the values set the sizes from left to right. If it is vertical, the sizes are applied from top to bottom. Extra values in \fIlist\fR are ignored.
 .PP
-If \fIlist\fR contains to few values, the result is undefined but the program will still be well-behaved.
+If \fIlist\fR contains too few values, the result is undefined but the program will still be well-behaved.
 .SH "QSize QSplitter::sizeHint () const \fC[virtual]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .PP
@@ -240,7 +238,7 @@ Reimplemented from QWidget.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qsplitter.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

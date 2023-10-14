@@ -1,29 +1,42 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qspinbox.cpp   2.1.1   edited 2000-05-03 $
+** $Id: qt/src/widgets/qspinbox.cpp   2.2.0   edited 2000-08-25 $
 **
 ** Implementation of QSpinBox widget class
 **
 ** Created : 1997
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the widgets module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #include "qspinbox.h"
+#ifndef QT_NO_COMPLEXWIDGETS
 
 #include "qspinbox.h"
 #include "qpushbutton.h"
@@ -32,7 +45,7 @@
 #include "qlineedit.h"
 #include "qvalidator.h"
 #include "qpixmapcache.h"
-
+#include "qapplication.h"
 
 struct QSpinBoxPrivate
 {
@@ -187,6 +200,7 @@ void QSpinBox::initSpinBox()
     setPalettePropagation( AllChildren );
     setFontPropagation( AllChildren );
 
+    setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Fixed ) );
     updateDisplay();
 
     connect( up, SIGNAL(pressed()), SLOT(stepUp()) );
@@ -425,7 +439,7 @@ QSize QSpinBox::sizeHint() const
 	     + 4 // top/bottom margins
 	     + h // font height
 	     );
-    return r;
+    return r.expandedTo( QApplication::globalStrut() );
 }
 
 
@@ -470,7 +484,8 @@ void QSpinBox::arrangeWidgets()
 */
 QSizePolicy QSpinBox::sizePolicy() const
 {
-    return QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Fixed );
+    //### removeme 3.0
+    return QWidget::sizePolicy();
 }
 
 
@@ -564,7 +579,7 @@ bool QSpinBox::eventFilter( QObject* obj, QEvent* ev )
     if ( obj != vi )
 	return FALSE;
 
-    if ( ev->type() == QEvent::FocusOut || ev->type() == QEvent::Leave ) {
+    if ( ev->type() == QEvent::FocusOut || ev->type() == QEvent::Leave || ev->type() == QEvent::Hide ) {
 	if ( edited )
 	    interpretText();
     } else if ( ev->type() == QEvent::KeyPress ) {
@@ -862,13 +877,14 @@ void QSpinBox::setEnabled( bool on )
 
 /*! \reimp */
 
-void QSpinBox::styleChange( QStyle& )
+void QSpinBox::styleChange( QStyle& old )
 {
     if ( style() == WindowsStyle )
 	setFrameStyle( WinPanel | Sunken );
     else
 	setFrameStyle( Panel | Sunken );
     arrangeWidgets();
+    QWidget::styleChange( old );
 }
 
 
@@ -979,9 +995,13 @@ void QSpinBox::updateButtonSymbols()
 	    p.setBrush( color1 );
 	    p.drawPolygon( a );
 	    p.end();
+#ifndef QT_NO_TRANSFORMATIONS
 	    QWMatrix wm;
 	    wm.scale( 1, -1 );
 	    upBm = dnBm.xForm( wm );
+#else
+	    upBm = dnBm;    // ### fix me!
+#endif
 	}
 	QPixmapCache::insert( dnKey, dnBm );
 	QPixmapCache::insert( upKey, upBm );
@@ -1056,3 +1076,4 @@ int QSpinBox::value() const
 {
     return QRangeControl::value();
 }
+#endif

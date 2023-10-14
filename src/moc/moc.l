@@ -1,25 +1,37 @@
 /****************************************************************************
-** $Id: qt/src/moc/moc.l   2.1.1   edited 2000-03-24 $
+** $Id: qt/src/moc/moc.l   2.2.0   edited 2000-08-31 $
 **
 ** Lexical analyzer for meta object compiler
 **
 ** Created : 930417
 **
-** Copyright (C) 1993-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the widgets module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
+**
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
 **
 *****************************************************************************/
 
@@ -31,8 +43,10 @@
 
 #define X if(lexDebug){fprintf(stderr,"LEX (%i) : %s\n",lineNo,yytext);};
 #define Y if(lexDebug){fprintf(stderr,"LEX (%i) : %s\n",lineNo,yytext);};
-// #define Y if(lexDebug){fprintf(stderr,"LEX (%i) : %s updates level to %i\n"\
-//                                 ,lineNo,yytext,templLevel);};
+/*
+#define Y if(lexDebug){fprintf(stderr,"LEX (%i) : %s updates level to %i\n"\
+                                 ,lineNo,yytext,templLevel);};
+*/
 #define Z if(lexDebug){fprintf(stderr,"LEX (%i) : skipped the string %s\"\n"\
                                ,lineNo,yytext);};
 #define BEGIN_INSIDE
@@ -62,7 +76,7 @@ extern void addExpressionString( const char * );
 extern void moc_warn( const char *msg );
 %}
 
-%start OUTSIDE QT_DEF IN_CLASS IN_NAMESPACE IN_ENUM IN_EXPR IN_FCT IN_TEMPL_ARGS GIMME_SEMICOLON SKIP IN_PROPERTY IN_PROPDEF
+%start OUTSIDE QT_DEF IN_CLASS IN_NAMESPACE IN_ENUM IN_EXPR IN_FCT IN_TEMPL_ARGS GIMME_SEMICOLON SKIP IN_PROPERTY IN_PROPDEF IN_CLASSINFO
 
 %%
 <OUTSIDE>"class"		{ X;
@@ -223,6 +237,20 @@ extern void moc_warn( const char *msg );
 			  return IDENTIFIER;
 			}
 
+<IN_CLASSINFO>"(" { X; return '('; }
+<IN_CLASSINFO>")" { X; return ')'; }
+<IN_CLASSINFO>"," { X; return ','; }
+
+<IN_CLASSINFO>\"[^"]*      { if (yytext[yyleng - 1] == '\\') {
+			      yymore();
+			  }
+			  else {
+			      X;
+			      yylval.string = qstrdup(yytext+1);
+			      input();		/* discard the '"' */
+			      return STRING;
+			 }
+			}
 
 <OUTSIDE>[_a-zA-Z][_a-zA-Z0-9]*  ;
 <IN_CLASS>[_a-zA-Z][_a-zA-Z0-9]* ;

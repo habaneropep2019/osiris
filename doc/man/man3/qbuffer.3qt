@@ -1,5 +1,5 @@
-.TH QBuffer 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QBuffer 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QBuffer \- I/O device that operates on a QByteArray
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -19,19 +17,19 @@ Inherits QIODevice.
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQBuffer\fR ()"
+.BI "\fBQBuffer\fR () "
 .br
 .ti -1c
-.BI "\fBQBuffer\fR ( QByteArray )"
+.BI "\fBQBuffer\fR ( QByteArray ) "
 .br
 .ti -1c
-.BI "\fB~QBuffer\fR ()"
+.BI "\fB~QBuffer\fR () "
 .br
 .ti -1c
 .BI "QByteArray \fBbuffer\fR () const"
 .br
 .ti -1c
-.BI "bool \fBsetBuffer\fR ( QByteArray )"
+.BI "bool \fBsetBuffer\fR ( QByteArray ) "
 .br
 .in -1c
 .SH DESCRIPTION
@@ -49,7 +47,7 @@ Note that QTextStream can also operate on a QString (a Unicode string); a QBuffe
 .PP
 You can also use QBuffer directly through the standard QIODevice functions readBlock(), writeBlock() readLine(), at(), getch(), putch() and ungetch().
 .PP
-See also: QFile, QDataStream, QTextStream, QByteArray and Shared Classes
+See also QFile, QDataStream, QTextStream, QByteArray and Shared Classes
 .PP
 Examples:
 .(l
@@ -80,7 +78,7 @@ Example:
       // Now, str == "abcdef"
 .fi
 .PP
-See also: setBuffer().
+See also setBuffer().
 .SH "QBuffer::~QBuffer ()"
 Destructs the buffer.
 .SH "bool QBuffer::at ( int pos ) \fC[virtual]\fR"
@@ -94,11 +92,11 @@ Reimplemented from QIODevice.
 .SH "QByteArray QBuffer::buffer () const"
 Returns this buffer's byte array.
 .PP
-See also: setBuffer().
+See also setBuffer().
 .SH "void QBuffer::close () \fC[virtual]\fR"
 Reimplemented for internal reasons; the API is not affected. Closes an open buffer.
 .PP
-See also: open().
+See also open().
 .PP
 Examples:
 .(l
@@ -129,7 +127,7 @@ The mode parameter \fIm\fR must be a combination of the following flags.
 .TP
 \fCIO_Truncate\fR truncates the buffer.
 .PP
-See also: close() and isOpen().
+See also close() and isOpen().
 .PP
 Examples:
 .(l
@@ -142,7 +140,7 @@ Reimplemented for internal reasons; the API is not affected. Writes the characte
 .PP
 Returns \fIch,\fR or -1 if some error occurred.
 .PP
-See also: getch() and ungetch().
+See also getch() and ungetch().
 .PP
 Examples:
 .(l
@@ -165,7 +163,7 @@ This may not be done when isOpen() is TRUE.
 .PP
 Note that if you open the buffer in write mode (\fCIO_WriteOnly\fR or IO_ReadWrite) and write something into the buffer, \fIbuf\fR is also modified because QByteArray is an explicitly shared class.
 .PP
-See also: buffer(), open() and close().
+See also buffer(), open() and close().
 .SH "uint QBuffer::size () const \fC[virtual]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .PP
@@ -181,13 +179,13 @@ Writes \fIlen\fR bytes from \fIp\fR into the buffer at the current index, overwr
 .PP
 Returns -1 if a serious error occurred.
 .PP
-See also: readBlock().
+See also readBlock().
 .PP
 Reimplemented from QIODevice.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qbuffer.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

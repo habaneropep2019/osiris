@@ -1,5 +1,5 @@
-.TH QValueListIterator 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QValueListIterator 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QValueListIterator \- Iterator for QValueList
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -17,13 +15,13 @@ QValueListIterator \- Iterator for QValueList
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQValueListIterator\fR ()"
+.BI "\fBQValueListIterator\fR () "
 .br
 .ti -1c
-.BI "\fBQValueListIterator\fR ( NodePtr p )"
+.BI "\fBQValueListIterator\fR ( NodePtr p ) "
 .br
 .ti -1c
-.BI "\fBQValueListIterator\fR ( const QValueListIterator<T> & it )"
+.BI "\fBQValueListIterator\fR ( const QValueListIterator<T> & it ) "
 .br
 .ti -1c
 .BI "bool \fBoperator==\fR ( const QValueListIterator<T> & it ) const"
@@ -35,19 +33,19 @@ QValueListIterator \- Iterator for QValueList
 .BI "const T& \fBoperator*\fR () const"
 .br
 .ti -1c
-.BI "T& \fBoperator*\fR ()"
+.BI "T& \fBoperator*\fR () "
 .br
 .ti -1c
-.BI "QValueListIterator<T>& \fBoperator++\fR ()"
+.BI "QValueListIterator<T>& \fBoperator++\fR () "
 .br
 .ti -1c
-.BI "QValueListIterator<T> \fBoperator++\fR ( int )"
+.BI "QValueListIterator<T> \fBoperator++\fR ( int ) "
 .br
 .ti -1c
-.BI "QValueListIterator<T>& \fBoperator--\fR ()"
+.BI "QValueListIterator<T>& \fBoperator--\fR () "
 .br
 .ti -1c
-.BI "QValueListIterator<T> \fBoperator--\fR ( int )"
+.BI "QValueListIterator<T> \fBoperator--\fR ( int ) "
 .br
 .in -1c
 .SH DESCRIPTION
@@ -141,11 +139,11 @@ Program output:
         Joe earns 50000
 .fi
 .PP
-In contrast to QList there are no built in functions in QValueList to traverse the list. The only way to do this is to use iterators. QValueList is highly optimized for performance and memory usage. On the other hand that means that you have to be a bit more careful by what you are doing. QValueList does not know about all its iterators and the iterators dont even know to which list they belong. That makes things fast and slim but a bit dangerous because it is up to you to make shure that iterators you are using are still valid. QListIterator will be able to give warnings while QValueListIterator may end up in an undefined state.
+In contrast to QList there are no built in functions in QValueList to traverse the list. The only way to do this is to use iterators. QValueList is highly optimized for performance and memory usage. On the other hand that means that you have to be a bit more careful by what you are doing. QValueList does not know about all its iterators and the iterators dont even know to which list they belong. That makes things fast and slim but a bit dangerous because it is up to you to make sure that iterators you are using are still valid. QListIterator will be able to give warnings while QValueListIterator may end up in an undefined state.
 .PP
 For every Iterator there is a ConstIterator. When accessing a QValueList in a const environment or if the reference or pointer to the list is itself const, then you have to use the ConstIterator. Its semantics are the same, but it returns only const references to the item it points to.
 .PP
-See also: QValueList and QValueListConstIterator.
+See also QValueList and QValueListConstIterator.
 .SH MEMBER FUNCTION DOCUMENTATION
 .SH "QValueListIterator::QValueListIterator ()"
 Creates un uninitialized iterator.
@@ -172,7 +170,7 @@ Compares both iterators and returns TRUE if they point to the same item.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qvaluelistiterator.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

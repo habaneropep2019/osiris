@@ -1,5 +1,5 @@
-.TH QScrollBar 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QScrollBar 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QScrollBar \- Vertical or horizontal scroll bar
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -19,22 +17,22 @@ Inherits QRangeControl and QWidget.
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQScrollBar\fR ( QWidget * " "parent" ", const char * " "name" "=0 )"
+.BI "\fBQScrollBar\fR ( QWidget * " "parent" ", const char * " "name" "=0 ) "
 .br
 .ti -1c
-.BI "\fBQScrollBar\fR ( Orientation, QWidget * " "parent" ", const char * " "name" "=0 )"
+.BI "\fBQScrollBar\fR ( Orientation, QWidget * " "parent" ", const char * " "name" "=0 ) "
 .br
 .ti -1c
-.BI "\fBQScrollBar\fR ( int " "minValue" ", int " "maxValue" ", int " "LineStep" ", int " "PageStep" ", int " "value" ", Orientation, QWidget * " "parent" ", const char * " "name" "=0 )"
+.BI "\fBQScrollBar\fR ( int " "minValue" ", int " "maxValue" ", int " "LineStep" ", int " "PageStep" ", int " "value" ", Orientation, QWidget * " "parent" ", const char * " "name" "=0 ) "
 .br
 .ti -1c
-.BI "virtual void \fBsetOrientation\fR ( Orientation )"
+.BI "virtual void \fBsetOrientation\fR ( Orientation ) "
 .br
 .ti -1c
 .BI "Orientation \fBorientation\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetTracking\fR ( bool enable )"
+.BI "virtual void \fBsetTracking\fR ( bool enable ) "
 .br
 .ti -1c
 .BI "bool \fBtracking\fR () const"
@@ -43,46 +41,46 @@ Inherits QRangeControl and QWidget.
 .BI "bool \fBdraggingSlider\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetPalette\fR ( const QPalette & )"
+.BI "virtual void \fBsetPalette\fR ( const QPalette & ) "
 .br
 .ti -1c
-.BI "void \fBsetMinValue\fR ( int )"
+.BI "void \fBsetMinValue\fR ( int ) "
 .br
 .ti -1c
-.BI "void \fBsetMaxValue\fR ( int )"
+.BI "void \fBsetMaxValue\fR ( int ) "
 .br
 .ti -1c
-.BI "void \fBsetLineStep\fR ( int )"
+.BI "void \fBsetLineStep\fR ( int ) "
 .br
 .ti -1c
-.BI "void \fBsetPageStep\fR ( int )"
+.BI "void \fBsetPageStep\fR ( int ) "
 .br
 .in -1c
 .SS "Signals"
 .in +1c
 .ti -1c
-.BI "void \fBvalueChanged\fR ( int value )"
+.BI "void \fBvalueChanged\fR ( int value ) "
 .br
 .ti -1c
-.BI "void \fBsliderPressed\fR ()"
+.BI "void \fBsliderPressed\fR () "
 .br
 .ti -1c
-.BI "void \fBsliderMoved\fR ( int value )"
+.BI "void \fBsliderMoved\fR ( int value ) "
 .br
 .ti -1c
-.BI "void \fBsliderReleased\fR ()"
+.BI "void \fBsliderReleased\fR () "
 .br
 .ti -1c
-.BI "void \fBnextLine\fR ()"
+.BI "void \fBnextLine\fR () "
 .br
 .ti -1c
-.BI "void \fBprevLine\fR ()"
+.BI "void \fBprevLine\fR () "
 .br
 .ti -1c
-.BI "void \fBnextPage\fR ()"
+.BI "void \fBnextPage\fR () "
 .br
 .ti -1c
-.BI "void \fBprevPage\fR ()"
+.BI "void \fBprevPage\fR () "
 .br
 .in -1c
 .SS "Protected Members"
@@ -148,7 +146,7 @@ If you need to add scrollbars to an interface, consider using the QScrollView cl
 .PP
 <img src=qscrbar-m.png> <img src=qscrbar-w.png>
 .PP
-See also: QSlider, QSpinBox, QScrollView and GUI Design Handbook: Scroll Bar
+See also QSlider, QSpinBox, QScrollView and GUI Design Handbook: Scroll Bar
 .SH MEMBER FUNCTION DOCUMENTATION
 .SH "QScrollBar::QScrollBar ( Orientation orientation, QWidget * parent, const char * name=0 )"
 Constructs a scroll bar.
@@ -207,7 +205,7 @@ This signal is emitted when the scroll bar scrolls one page down/right.
 .SH "Orientation QScrollBar::orientation () const"
 Returns the orientation of the scroll bar; QScrollBar::Vertical or QScrollBar::Horizontal.
 .PP
-See also: setOrientation().
+See also setOrientation().
 .SH "int QScrollBar::pageStep () const"
 Reimplemented for internal reasons; the API is not affected.
 .SH "void QScrollBar::paintEvent ( QPaintEvent * ) \fC[virtual protected]\fR"
@@ -227,25 +225,25 @@ Sets the line step to \fIi.\fR
 .PP
 Calls the virtual stepChange() function if the new line step is different from the previous setting.
 .PP
-See also: lineStep(), QRangeControl::setSteps(), setPageStep() and setRange().
+See also lineStep(), QRangeControl::setSteps(), setPageStep() and setRange().
 .SH "void QScrollBar::setMaxValue ( int i )"
 A convenience function which just calls setRange( minValue(), i )
 .PP
-See also: setRange().
+See also setRange().
 .SH "void QScrollBar::setMinValue ( int i )"
 A convenience function which just calls setRange( i, maxValue() )
 .PP
-See also: setRange().
+See also setRange().
 .SH "void QScrollBar::setOrientation ( Orientation orientation ) \fC[virtual]\fR"
 Sets the scroll bar orientation. The \fIorientation\fR must be QScrollBar::Vertical or QScrollBar::Horizontal.
 .PP
-See also: orientation().
+See also orientation().
 .SH "void QScrollBar::setPageStep ( int i )"
 Sets the page step to \fIi.\fR
 .PP
 Calls the virtual stepChange() function if the new page step is different from the previous setting.
 .PP
-See also: pageStep(), QRangeControl::setSteps(), setLineStep() and setRange().
+See also pageStep(), QRangeControl::setSteps(), setLineStep() and setRange().
 .SH "void QScrollBar::setPalette ( const QPalette & p ) \fC[virtual]\fR"
 Reimplements the virtual function QWidget::setPalette().
 .PP
@@ -255,7 +253,7 @@ Enables scroll bar tracking if \fIenable\fR is TRUE, or disables tracking if \fI
 .PP
 If tracking is enabled (the default), the scroll bar emits the valueChanged() signal while the slider is being dragged. If tracking is disabled, the scroll bar emits the valueChanged() signal only when the user releases the mouse button after moving the slider.
 .PP
-See also: tracking().
+See also tracking().
 .SH "void QScrollBar::setValue ( int i )"
 Reimplemented for internal reasons; the API is not affected.
 .SH "QSize QScrollBar::sizeHint () const \fC[virtual]\fR"
@@ -271,13 +269,13 @@ This signal is emitted when the slider is moved by the user, with the new scroll
 .PP
 This signal is emitted even when tracking is turned off.
 .PP
-See also: tracking(), valueChanged(), nextLine(), prevLine(), nextPage() and prevPage().
+See also tracking(), valueChanged(), nextLine(), prevLine(), nextPage() and prevPage().
 .SH "void QScrollBar::sliderPressed () \fC[signal]\fR"
 This signal is emitted when the user presses the slider with the mouse.
 .SH "QRect QScrollBar::sliderRect () const \fC[protected]\fR"
 Returns the scroll bar slider rectangle.
 .PP
-See also: sliderStart().
+See also sliderStart().
 .SH "void QScrollBar::sliderReleased () \fC[signal]\fR"
 This signal is emitted when the user releases the slider with the mouse.
 .SH "int QScrollBar::sliderStart () const \fC[protected]\fR"
@@ -293,7 +291,7 @@ Returns TRUE if tracking is enabled, or FALSE if tracking is disabled.
 .PP
 Tracking is initially enabled.
 .PP
-See also: setTracking().
+See also setTracking().
 .SH "int QScrollBar::value () const"
 Reimplemented for internal reasons; the API is not affected.
 .SH "void QScrollBar::valueChanged ( int value ) \fC[signal]\fR"
@@ -317,7 +315,7 @@ Reimplemented from QRangeControl.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qscrollbar.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

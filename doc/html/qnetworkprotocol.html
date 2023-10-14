@@ -1,15 +1,17 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head>
 <title>Qt Toolkit - QNetworkProtocol Class</title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
-a:link { text-decoration: none; }
-body { background: white; color: black; }
+a:link { color: #004faf; text-decoration: none }
+a:visited { color: #672967; text-decoration: none }body { background: white; color: black; }
 --></style>
 </head><body bgcolor="#ffffff">
 
-<a href="index.html">
-<img width="122" height="65" src="qtlogo.png" alt="Home"
-  align="left" border="0">
-</a><div align=right><img src="dochead.png" width="472" height="27"><br>
+<table width="100%">
+<tr><td><a href="index.html">
+<img width="100" height="100" src="qtlogo.png"
+alt="Home" border="0"><img width="100"
+height="100" src="face.png" alt="Home" border="0">
+</a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
 - <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
@@ -17,7 +19,7 @@ body { background: white; color: black; }
 - <a href="index.html">Home</a>
 - <a href="topicals.html"><b>Structure</b></a>
 </div>
-<br clear=all>
+</table>
 
 <h1 align=center>QNetworkProtocol Class Reference</h1><br clear="all">
 <p>
@@ -27,55 +29,55 @@ This is the base class for network protocols which provides a common API for net
 <code>#include &lt;<a href="qnetworkprotocol-h.html">qnetworkprotocol.h</a>&gt;</code>
 <p>
 Inherits <a href="qobject.html">QObject</a>.
-<p>Inherited by <a href="qlocalfs.html">QLocalFs</a>.
+<p>Inherited by <a href="qftp.html">QFtp</a> and <a href="qlocalfs.html">QLocalFs</a>.
 <p><a href="qnetworkprotocol-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><span class="fn">enum <a href="#State"><b>State</b></a> { StWaiting = 0, StInProgress, StDone, StFailed, StStopped }</span>
-<li><span class="fn">enum <a href="#Operation"><b>Operation</b></a> { OpListChildren = 1, OpMkdir = 2, OpRemove = 4, OpRename = 8, OpGet = 32, OpPut = 64 }</span>
-<li><span class="fn">enum <a href="#ConnectionState"><b>ConnectionState</b></a> { ConHostFound, ConConnected, ConClosed }</span>
-<li><span class="fn">enum <a href="#Error"><b>Error</b></a> { NoError = 0, ErrValid, ErrUnknownProtocol, ErrUnsupported, ErrParse, ErrLoginIncorrect, ErrHostNotFound, ErrListChlidren, ErrMkdir, ErrRemove, ErrRename, ErrGet, ErrPut, ErrFileNotExisting, ErrPermissionDenied }</span>
-<li><span class="fn"><a href="#402ce1"><b>QNetworkProtocol</b></a> () </span>
-<li><span class="fn">virtual <a href="#73afd1"><b>~QNetworkProtocol</b></a> () </span>
-<li><span class="fn">virtual void <a href="#27f07c"><b>setUrl</b></a> ( QUrlOperator * u ) </span>
-<li><span class="fn">virtual void <a href="#249462"><b>setAutoDelete</b></a> ( bool b, int i = 10000 ) </span>
-<li><span class="fn">bool <a href="#68d7b4"><b>autoDelete</b></a> () const</span>
-<li><span class="fn">virtual int <a href="#0d9449"><b>supportedOperations</b></a> () const</span>
-<li><span class="fn">virtual void <a href="#07cb61"><b>addOperation</b></a> ( QNetworkOperation * op ) </span>
-<li><span class="fn">QUrlOperator* <a href="#5b1477"><b>url</b></a> () const</span>
-<li><span class="fn">QNetworkOperation* <a href="#74fa26"><b>operationInProgress</b></a> () const</span>
-<li><span class="fn">virtual void <a href="#3e1607"><b>clearOperationQueue</b></a> () </span>
-<li><span class="fn">virtual void <a href="#36684a"><b>stop</b></a> () </span>
+<li><div class="fn">enum <a href="#State"><b>State</b></a> { StWaiting = 0, StInProgress, StDone, StFailed, StStopped }</div>
+<li><div class="fn">enum <a href="#Operation"><b>Operation</b></a> { OpListChildren = 1, OpMkdir = 2, OpRemove = 4, OpRename = 8, OpGet = 32, OpPut = 64 }</div>
+<li><div class="fn">enum <a href="#ConnectionState"><b>ConnectionState</b></a> { ConHostFound, ConConnected, ConClosed }</div>
+<li><div class="fn">enum <a href="#Error"><b>Error</b></a> { NoError = 0, ErrValid, ErrUnknownProtocol, ErrUnsupported, ErrParse, ErrLoginIncorrect, ErrHostNotFound, ErrListChlidren, ErrMkdir, ErrRemove, ErrRename, ErrGet, ErrPut, ErrFileNotExisting, ErrPermissionDenied }</div>
+<li><div class="fn"><a href="#402ce1"><b>QNetworkProtocol</b></a> () </div>
+<li><div class="fn">virtual <a href="#73afd1"><b>~QNetworkProtocol</b></a> () </div>
+<li><div class="fn">virtual void <a href="#27f07c"><b>setUrl</b></a> ( QUrlOperator * u ) </div>
+<li><div class="fn">virtual void <a href="#249462"><b>setAutoDelete</b></a> ( bool b, int i = 10000 ) </div>
+<li><div class="fn">bool <a href="#68d7b4"><b>autoDelete</b></a> () const</div>
+<li><div class="fn">virtual int <a href="#0d9449"><b>supportedOperations</b></a> () const</div>
+<li><div class="fn">virtual void <a href="#07cb61"><b>addOperation</b></a> ( QNetworkOperation * op ) </div>
+<li><div class="fn">QUrlOperator* <a href="#5b1477"><b>url</b></a> () const</div>
+<li><div class="fn">QNetworkOperation* <a href="#74fa26"><b>operationInProgress</b></a> () const</div>
+<li><div class="fn">virtual void <a href="#3e1607"><b>clearOperationQueue</b></a> () </div>
+<li><div class="fn">virtual void <a href="#36684a"><b>stop</b></a> () </div>
 </ul>
 <h2>Signals</h2>
 <ul>
-<li><span class="fn">void <a href="#8519a2"><b>data</b></a> ( const QByteArray &amp;, QNetworkOperation * res ) </span>
-<li><span class="fn">void <a href="#46ad87"><b>connectionStateChanged</b></a> ( int state, const QString &amp; data ) </span>
-<li><span class="fn">void <a href="#d76fad"><b>finished</b></a> ( QNetworkOperation * res ) </span>
-<li><span class="fn">void <a href="#69ac73"><b>start</b></a> ( QNetworkOperation * res ) </span>
-<li><span class="fn">void <a href="#ef4de7"><b>newChildren</b></a> ( const QValueList&lt;QUrlInfo&gt; &amp;, QNetworkOperation * res ) </span>
-<li><span class="fn">void <a href="#64527d"><b>newChild</b></a> ( const QUrlInfo &amp;, QNetworkOperation * res ) </span>
-<li><span class="fn">void <a href="#dff642"><b>createdDirectory</b></a> ( const QUrlInfo &amp;, QNetworkOperation * res ) </span>
-<li><span class="fn">void <a href="#c1fe06"><b>removed</b></a> ( QNetworkOperation * res ) </span>
-<li><span class="fn">void <a href="#480cf3"><b>itemChanged</b></a> ( QNetworkOperation * res ) </span>
-<li><span class="fn">void <a href="#603255"><b>dataTransferProgress</b></a> ( int bytesDone, int bytesTotal, QNetworkOperation * res ) </span>
+<li><div class="fn">void <a href="#8519a2"><b>data</b></a> ( const QByteArray &amp;, QNetworkOperation * res ) </div>
+<li><div class="fn">void <a href="#46ad87"><b>connectionStateChanged</b></a> ( int state, const QString &amp; data ) </div>
+<li><div class="fn">void <a href="#d76fad"><b>finished</b></a> ( QNetworkOperation * res ) </div>
+<li><div class="fn">void <a href="#69ac73"><b>start</b></a> ( QNetworkOperation * res ) </div>
+<li><div class="fn">void <a href="#ef4de7"><b>newChildren</b></a> ( const QValueList&lt;QUrlInfo&gt; &amp;, QNetworkOperation * res ) </div>
+<li><div class="fn">void <a href="#64527d"><b>newChild</b></a> ( const QUrlInfo &amp;, QNetworkOperation * res ) </div>
+<li><div class="fn">void <a href="#dff642"><b>createdDirectory</b></a> ( const QUrlInfo &amp;, QNetworkOperation * res ) </div>
+<li><div class="fn">void <a href="#c1fe06"><b>removed</b></a> ( QNetworkOperation * res ) </div>
+<li><div class="fn">void <a href="#480cf3"><b>itemChanged</b></a> ( QNetworkOperation * res ) </div>
+<li><div class="fn">void <a href="#603255"><b>dataTransferProgress</b></a> ( int bytesDone, int bytesTotal, QNetworkOperation * res ) </div>
 </ul>
 <h2>Static Public Members</h2>
 <ul>
-<li><span class="fn">void <a href="#165cea"><b>registerNetworkProtocol</b></a> ( const QString &amp; protocol, QNetworkProtocolFactoryBase * protocolFactory ) </span>
-<li><span class="fn">QNetworkProtocol* <a href="#a8fc99"><b>getNetworkProtocol</b></a> ( const QString &amp; protocol ) </span>
-<li><span class="fn">bool <a href="#c45202"><b>hasOnlyLocalFileSystem</b></a> () </span>
+<li><div class="fn">void <a href="#165cea"><b>registerNetworkProtocol</b></a> ( const QString &amp; protocol, QNetworkProtocolFactoryBase * protocolFactory ) </div>
+<li><div class="fn">QNetworkProtocol* <a href="#a8fc99"><b>getNetworkProtocol</b></a> ( const QString &amp; protocol ) </div>
+<li><div class="fn">bool <a href="#c45202"><b>hasOnlyLocalFileSystem</b></a> () </div>
 </ul>
 <h2>Protected Members</h2>
 <ul>
-<li><span class="fn">virtual void <b>processOperation</b> ( QNetworkOperation * op ) (internal)</span>
-<li><span class="fn">virtual void <a href="#161367"><b>operationListChildren</b></a> ( QNetworkOperation * op ) </span>
-<li><span class="fn">virtual void <a href="#03899c"><b>operationMkDir</b></a> ( QNetworkOperation * op ) </span>
-<li><span class="fn">virtual void <a href="#599ae4"><b>operationRemove</b></a> ( QNetworkOperation * op ) </span>
-<li><span class="fn">virtual void <a href="#710414"><b>operationRename</b></a> ( QNetworkOperation * op ) </span>
-<li><span class="fn">virtual void <a href="#6e7390"><b>operationGet</b></a> ( QNetworkOperation * op ) </span>
-<li><span class="fn">virtual void <a href="#b5026a"><b>operationPut</b></a> ( QNetworkOperation * op ) </span>
-<li><span class="fn">virtual bool <a href="#06d02e"><b>checkConnection</b></a> ( QNetworkOperation * op ) </span>
+<li><div class="fn">virtual void <b>processOperation</b> ( QNetworkOperation * op ) (internal)</div>
+<li><div class="fn">virtual void <a href="#161367"><b>operationListChildren</b></a> ( QNetworkOperation * op ) </div>
+<li><div class="fn">virtual void <a href="#03899c"><b>operationMkDir</b></a> ( QNetworkOperation * op ) </div>
+<li><div class="fn">virtual void <a href="#599ae4"><b>operationRemove</b></a> ( QNetworkOperation * op ) </div>
+<li><div class="fn">virtual void <a href="#710414"><b>operationRename</b></a> ( QNetworkOperation * op ) </div>
+<li><div class="fn">virtual void <a href="#6e7390"><b>operationGet</b></a> ( QNetworkOperation * op ) </div>
+<li><div class="fn">virtual void <a href="#b5026a"><b>operationPut</b></a> ( QNetworkOperation * op ) </div>
+<li><div class="fn">virtual bool <a href="#06d02e"><b>checkConnection</b></a> ( QNetworkOperation * op ) </div>
 </ul>
 <hr><h2><a name="details"></a>Detailed Description</h2>
 This is the base class for network protocols which provides a common API for network protocols.
@@ -113,19 +115,19 @@ of following values:
 When an operation failed (finished without success) the <a href="qnetworkoperation.html">QNetworkOperation</a>
 of the operation returns an error code, which is one of following values:
 <p><ul>
-<li><code>NoError</code> - No error occured
+<li><code>NoError</code> - No error occurred
 <li><code>ErrValid</code> - The URL you are operating on is not valid
 <li><code>ErrUnknownProtocol</code> - There is no protocol implementation available for the protocol of the URL you are operating on (e.g. if the protocol is http and no http implementation has been registered)
 <li><code>ErrUnsupported</code> - The operation is not supported by the protocol
 <li><code>ErrParse</code> - Parse error of the URL
 <li><code>ErrLoginIncorrect</code> - You needed to login but the username and or password are wrong
 <li><code>ErrHostNotFound</code> - The specified host (in the URL) couldn´t be found
-<li><code>ErrListChlidren</code> - An error occured while listing the children
-<li><code>ErrMkdir</code> - An error occured when creating a directory
-<li><code>ErrRemove</code> - An error occured while removing a child
-<li><code>ErrRename</code>  - An error occured while renaming a child
-<li><code>ErrGet</code> - An error occured while getting (retrieving) data
-<li><code>ErrPut</code> - An error occured while putting (uploading) data
+<li><code>ErrListChlidren</code> - An error occurred while listing the children
+<li><code>ErrMkdir</code> - An error occurred when creating a directory
+<li><code>ErrRemove</code> - An error occurred while removing a child
+<li><code>ErrRename</code>  - An error occurred while renaming a child
+<li><code>ErrGet</code> - An error occurred while getting (retrieving) data
+<li><code>ErrPut</code> - An error occurred while putting (uploading) data
 <li><code>ErrFileNotExisting</code> - A file which is needed by the operation doesn't exist
 <li><code>ErrPermissionDenied</code> - The permission for doing the operation has been denied
 </ul>
@@ -138,7 +140,7 @@ can support. <a href="#0d9449">supportedOperations</a>() returns an int which is
 together of these values, also the type() or a <a href="qnetworkoperation.html">QNetworkOperation</a>
 is always one of these values.
 <p><ul>
-<li> <code>OpListChildren</code> - Listing the childrens of a URL, e.g. of a directory
+<li> <code>OpListChildren</code> - Listing the children of a URL, e.g. of a directory
 <li> <code>OpMkdir</code> - Create a directory
 <li> <code>OpRemove</code> - remove a child (e.g. file)
 <li> <code>OpRename</code> - rename a child (e.g. file )
@@ -153,7 +155,7 @@ can have:
 and is waiting for being prcessed
 <li> <code>StInProgress</code> - The operation is just processed
 <li> <code>StDone</code> - The operation has been processed succesfully
-<li> <code>StFailed</code> - The operation has been processed but an error occured
+<li> <code>StFailed</code> - The operation has been processed but an error occurred
 <li> <code>StStopped</code> - The operation has been processed but has been stopped before it finished
 </ul>
 <hr><h2>Member Function Documentation</h2>
@@ -168,7 +170,7 @@ will be processed as soon as possible. This method returns
 immediately.
 <h3 class="fn">bool <a name="68d7b4"></a>QNetworkProtocol::autoDelete () const</h3>
 <p>Returns TRUE, of autodeleting is enabled, else FALSE.
-<p>See also:  <a href="#249462">QNetworkProtocol::setAutoDelete</a>().
+<p>See also  <a href="#249462">QNetworkProtocol::setAutoDelete</a>().
 <h3 class="fn">bool <a name="06d02e"></a>QNetworkProtocol::checkConnection ( <a href="qnetworkoperation.html">QNetworkOperation</a> * ) <code>[virtual protected]</code></h3>
 <p>For processing operations the newtork protocol baseclass calls this
 method quite often. This should be reimplemented by new
@@ -180,8 +182,9 @@ but the host couldn't be found or something like that), set the state
 of <em>op</em> to QNetworkProtocol::StFailed and emit the <a href="#d76fad">finished</a>() signal with
 this <a href="qnetworkoperation.html">QNetworkOperation</a> as argument.
 <p><em>op</em> is the operation which needs an open connection.
+<p>Reimplemented in <a href="qftp.html#72fdb6">QFtp</a>.
 <h3 class="fn">void <a name="3e1607"></a>QNetworkProtocol::clearOperationQueue () <code>[virtual]</code></h3>
-<p>Clears the opeartion queue.
+<p>Clears the operation queue.
 <h3 class="fn">void <a name="46ad87"></a>QNetworkProtocol::connectionStateChanged ( int state, const <a href="qstring.html">QString</a> &amp; data ) <code>[signal]</code></h3>
 <p>This signal is emitted whenever the state of the connection of
 the network protocol is changed. <em>state</em> describes the new state,
@@ -202,7 +205,7 @@ to let the <a href="qurloperator.html">QUrlOperator</a>, which is used by the ne
 its corresponding signal.
 <h3 class="fn">void <a name="8519a2"></a>QNetworkProtocol::data ( const <a href="qbytearray.html">QByteArray</a> &amp; data, <a href="qnetworkoperation.html">QNetworkOperation</a> * op ) <code>[signal]</code></h3>
 <p>This signal is emitted when new <em>data</em> has been received
-after e.g. calling get() or put(). \op holds the name of the file which data
+after e.g. calling get() or put(). <em>op</em> holds the name of the file which data
 is retrieved in the first argument and the data in the second argument (raw).
 You get them with op->arg( 0 ) and op->rawArg( 1 ).
 <p><em>op</em> is the pointer to the operation object, which contains all infos
@@ -232,7 +235,7 @@ its corresponding signal.
 <h3 class="fn">QNetworkProtocol * <a name="a8fc99"></a>QNetworkProtocol::getNetworkProtocol ( const <a href="qstring.html">QString</a> &amp; protocol ) <code>[static]</code></h3>
 <p>Static method to get a new instance of a network protocol. E.g. if
 you need to do some FTP operations, do
-<p>QFtp *ftp = QNetworkProtocol::getNetworkProtocol( "ftp" );
+<p><a href="qftp.html">QFtp</a> *ftp = QNetworkProtocol::getNetworkProtocol( "ftp" );
 <p>This returns now either NULL, if no protocol for ftp was registered,
 or a pointer to a new instance of an FTP implementation. The ownership
 of the pointer is transferred to you, so you have to delete it, if you
@@ -241,7 +244,7 @@ don´t need it anymore.
 you will not need to call this method yourself. Rather use the
 <a href="qurloperator.html">QUrlOperator</a>, which makes working with network protocols
 much more convenient.
-<p>See also:  <a href="qurloperator.html">QUrlOperator</a>.
+<p>See also  <a href="qurloperator.html">QUrlOperator</a>.
 <h3 class="fn">bool <a name="c45202"></a>QNetworkProtocol::hasOnlyLocalFileSystem () <code>[static]</code></h3>
 <p>Returns TRUE, if only a protocol for working on the local filesystem is
 registered, or FALSE if also other network protocols are registered.
@@ -362,7 +365,7 @@ to let the <a href="qurloperator.html">QUrlOperator</a>, which is used by the ne
 its corresponding signal.
 <h3 class="fn">void <a name="249462"></a>QNetworkProtocol::setAutoDelete ( bool b, int i = 10000 ) <code>[virtual]</code></h3>
 <p>Because it's sometimes hard to care about removing network protocol
-instances, QNetworkProtocol provides an autodelete meachnism. If
+instances, QNetworkProtocol provides an autodelete mechanism. If
 you set <em>b</em> to TRUE, this network protocol instance gets removed
 after it has been <em>i</em> milliseconds inactive (this means <em>i</em> ms after
 the last operation has been processed).
@@ -371,7 +374,7 @@ If you set <em>b</em> to FALSE, the autodelete mechanism is switched off.
 deletes its <a href="qurloperator.html">QUrlOperator</a>!.
 <h3 class="fn">void <a name="27f07c"></a>QNetworkProtocol::setUrl ( <a href="qurloperator.html">QUrlOperator</a> * u ) <code>[virtual]</code></h3>
 <p>Sets the <a href="qurloperator.html">QUrlOperator</a>, on which the protocol works.
-<p>See also:  <a href="qurloperator.html">QUrlOperator</a>.
+<p>See also  <a href="qurloperator.html">QUrlOperator</a>.
 <h3 class="fn">void <a name="69ac73"></a>QNetworkProtocol::start ( <a href="qnetworkoperation.html">QNetworkOperation</a> * op ) <code>[signal]</code></h3>
 <p>Some operations (like listChildren()) emit this signal
 when they start processing the operation.
@@ -396,13 +399,13 @@ network protocols.
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.1.1"><nobr>
+<input type=hidden name="version" value="2.2.0"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
 copyright &copy; 1995-2000
-<a href="http://www.trolltech.com">Troll Tech</a>, all rights reserved.<p><address><hr><div align="center">
+<a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.1</div>
+<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.2.0</div>
 </table></div></address></body></html>

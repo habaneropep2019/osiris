@@ -1,31 +1,43 @@
 /****************************************************************************
-** $Id: qt/src/tools/qjiscodec.cpp   2.1.1   edited 2000-03-24 $
+** $Id: qt/src/tools/qjiscodec.cpp   2.2.0   edited 2000-08-25 $
 **
 ** Implementation of QJisCodec class
 **
 ** Created : 990225
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the tools module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 // Most of the code here was originally written by Serika Kurusugawa
 // a.k.a. Junji Takagi, and is include in Qt with the author's permission,
-// and the grateful thanks of the Troll Tech team.
+// and the grateful thanks of the Trolltech team.
 
 /*! \class QJisCodec qjiscodec.h
 
@@ -40,7 +52,7 @@
 
   It was largely written by Serika Kurusugawa a.k.a. Junji Takagi, and
   is included in Qt with the author's permission, and the grateful
-  thanks of the Troll Tech team. Here is the copyright statement for
+  thanks of the Trolltech team. Here is the copyright statement for
   that code:
 
   \mustquote
@@ -71,6 +83,8 @@
 */
 
 #include "qjiscodec.h"
+
+#ifndef QT_NO_CODECS
 
 static const uchar Esc = 0x1b;
 static const uchar So = 0x0e;	// Shift Out
@@ -166,10 +180,10 @@ QCString QJisCodec::fromUnicode(const QString& uc, int& len_in_out) const
 	    j = '?';
 	}
 	if (state != prev) {
-	    if (state >= MinState && state <= MaxState) {
-		result += Esc_SEQ[state - MinState];
-	    } else {
+	    if (state == Unknown) {
 		result += Esc_Ascii;
+	    } else {
+		result += Esc_SEQ[state - MinState];
 	    }
 	    prev = state;
 	}
@@ -308,10 +322,10 @@ int QJisCodec::heuristicNameMatch(const char* hint) const
 {
     int score = 0;
     bool ja = FALSE;
-    if (strnicmp(hint, "ja_JP", 5) == 0 || strnicmp(hint, "japan", 5) == 0) {
+    if (qstrnicmp(hint, "ja_JP", 5) == 0 || qstrnicmp(hint, "japan", 5) == 0) {
 	score += 3;
 	ja = TRUE;
-    } else if (strnicmp(hint, "ja", 2) == 0) {
+    } else if (qstrnicmp(hint, "ja", 2) == 0) {
 	score += 2;
 	ja = TRUE;
     }
@@ -326,9 +340,9 @@ int QJisCodec::heuristicNameMatch(const char* hint) const
 	p = hint;
     }
     if (p) {
-	if ((stricmp(p, "JIS") == 0) ||
-	    (stricmp(p, "JIS7") == 0) ||
-	    (stricmp(p, "ISO-2022-JP") == 0)) {
+	if ((qstricmp(p, "JIS") == 0) ||
+	    (qstricmp(p, "JIS7") == 0) ||
+	    (qstricmp(p, "ISO-2022-JP") == 0)) {
 	    return score + 4;
 	}
     }
@@ -617,3 +631,4 @@ QTextDecoder* QJisCodec::makeDecoder() const
     return new QJisDecoder(conv);
 }
 
+#endif

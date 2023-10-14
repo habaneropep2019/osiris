@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: qt/examples/application/application.cpp   2.1.1   edited 2000-02-24 $
+** $Id: qt/examples/application/application.cpp   2.2.0   edited 2000-08-31 $
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -215,7 +215,9 @@ void ApplicationWindow::print()
     if ( printer->setup(this) ) {		// printer dialog
 	statusBar()->message( "Printing..." );
 	QPainter p;
-	p.begin( printer );			// paint on printer
+	if( !p.begin( printer ) )
+	    return;				// paint on printer
+
 	p.setFont( e->font() );
 	int yPos	= 0;			// y position for each line
 	QFontMetrics fm = p.fontMetrics();
@@ -241,7 +243,6 @@ void ApplicationWindow::print()
     } else {
 	statusBar()->message( "Printing aborted", 2000 );
     }
-
 }
 
 void ApplicationWindow::closeEvent( QCloseEvent* ce )

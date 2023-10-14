@@ -1,15 +1,17 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head>
 <title>Qt Toolkit - QNetworkOperation Class</title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
-a:link { text-decoration: none; }
-body { background: white; color: black; }
+a:link { color: #004faf; text-decoration: none }
+a:visited { color: #672967; text-decoration: none }body { background: white; color: black; }
 --></style>
 </head><body bgcolor="#ffffff">
 
-<a href="index.html">
-<img width="122" height="65" src="qtlogo.png" alt="Home"
-  align="left" border="0">
-</a><div align=right><img src="dochead.png" width="472" height="27"><br>
+<table width="100%">
+<tr><td><a href="index.html">
+<img width="100" height="100" src="qtlogo.png"
+alt="Home" border="0"><img width="100"
+height="100" src="face.png" alt="Home" border="0">
+</a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
 - <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
@@ -17,7 +19,7 @@ body { background: white; color: black; }
 - <a href="index.html">Home</a>
 - <a href="topicals.html"><b>Structure</b></a>
 </div>
-<br clear=all>
+</table>
 
 <h1 align=center>QNetworkOperation Class Reference</h1><br clear="all">
 <p>
@@ -30,21 +32,21 @@ Inherits <a href="qobject.html">QObject</a>.
 <p><a href="qnetworkoperation-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><span class="fn"><a href="#881998"><b>QNetworkOperation</b></a> ( QNetworkProtocol::Operation operation, const QString &amp; arg0, const QString &amp; arg1, const QString &amp; arg2 ) </span>
-<li><span class="fn"><a href="#c71a20"><b>QNetworkOperation</b></a> ( QNetworkProtocol::Operation operation, const QByteArray &amp; arg0, const QByteArray &amp; arg1, const QByteArray &amp; arg2 ) </span>
-<li><span class="fn"><a href="#783da7"><b>~QNetworkOperation</b></a> () </span>
-<li><span class="fn">void <a href="#7e63c4"><b>setState</b></a> ( QNetworkProtocol::State state ) </span>
-<li><span class="fn">void <a href="#dde2c3"><b>setProtocolDetail</b></a> ( const QString &amp; detail ) </span>
-<li><span class="fn">void <a href="#a3cde4"><b>setErrorCode</b></a> ( int ec ) </span>
-<li><span class="fn">void <a href="#940c60"><b>setArg</b></a> ( int num, const QString &amp; arg ) </span>
-<li><span class="fn">void <a href="#beb96b"><b>setRawArg</b></a> ( int num, const QByteArray &amp; arg ) </span>
-<li><span class="fn">QNetworkProtocol::Operation <a href="#71fd13"><b>operation</b></a> () const</span>
-<li><span class="fn">QNetworkProtocol::State <a href="#a9b623"><b>state</b></a> () const</span>
-<li><span class="fn">QString <a href="#71bf9f"><b>arg</b></a> ( int num ) const</span>
-<li><span class="fn">QByteArray <a href="#960077"><b>rawArg</b></a> ( int num ) const</span>
-<li><span class="fn">QString <a href="#ccae63"><b>protocolDetail</b></a> () const</span>
-<li><span class="fn">int <a href="#89cb3f"><b>errorCode</b></a> () const</span>
-<li><span class="fn">void <a href="#62ff9c"><b>free</b></a> () </span>
+<li><div class="fn"><a href="#881998"><b>QNetworkOperation</b></a> ( QNetworkProtocol::Operation operation, const QString &amp; arg0, const QString &amp; arg1, const QString &amp; arg2 ) </div>
+<li><div class="fn"><a href="#c71a20"><b>QNetworkOperation</b></a> ( QNetworkProtocol::Operation operation, const QByteArray &amp; arg0, const QByteArray &amp; arg1, const QByteArray &amp; arg2 ) </div>
+<li><div class="fn"><a href="#783da7"><b>~QNetworkOperation</b></a> () </div>
+<li><div class="fn">void <a href="#7e63c4"><b>setState</b></a> ( QNetworkProtocol::State state ) </div>
+<li><div class="fn">void <a href="#dde2c3"><b>setProtocolDetail</b></a> ( const QString &amp; detail ) </div>
+<li><div class="fn">void <a href="#a3cde4"><b>setErrorCode</b></a> ( int ec ) </div>
+<li><div class="fn">void <a href="#940c60"><b>setArg</b></a> ( int num, const QString &amp; arg ) </div>
+<li><div class="fn">void <a href="#beb96b"><b>setRawArg</b></a> ( int num, const QByteArray &amp; arg ) </div>
+<li><div class="fn">QNetworkProtocol::Operation <a href="#71fd13"><b>operation</b></a> () const</div>
+<li><div class="fn">QNetworkProtocol::State <a href="#a9b623"><b>state</b></a> () const</div>
+<li><div class="fn">QString <a href="#71bf9f"><b>arg</b></a> ( int num ) const</div>
+<li><div class="fn">QByteArray <a href="#960077"><b>rawArg</b></a> ( int num ) const</div>
+<li><div class="fn">QString <a href="#ccae63"><b>protocolDetail</b></a> () const</div>
+<li><div class="fn">int <a href="#89cb3f"><b>errorCode</b></a> () const</div>
+<li><div class="fn">void <a href="#62ff9c"><b>free</b></a> () </div>
 </ul>
 <hr><h2><a name="details"></a>Detailed Description</h2>
 This class is used to define operations for network protocols and return the state, arguments, etc.
@@ -55,7 +57,7 @@ state.
 <p>For a detailed description about the Qt Network Architecture, and
 also how to implement and use network protocols in Qt, look
 at the <a href="network.html">Qt Network Documentation</a>.
-<p>See also:  <a href="qnetworkprotocol.html">QNetworkProtocol</a>.
+<p>See also  <a href="qnetworkprotocol.html">QNetworkProtocol</a>.
 
 <hr><h2>Member Function Documentation</h2>
 <h3 class="fn"><a name="c71a20"></a>QNetworkOperation::QNetworkOperation ( <a href="qnetworkprotocol.html#Operation">QNetworkProtocol::Operation</a> operation, const <a href="qbytearray.html">QByteArray</a> &amp; arg0, const <a href="qbytearray.html">QByteArray</a> &amp; arg1, const <a href="qbytearray.html">QByteArray</a> &amp; arg2 )</h3>
@@ -77,12 +79,12 @@ not set already, an empty string is returned.
 <p>If an operation failed, you get the error code using
 this methode.
 <h3 class="fn">void <a name="62ff9c"></a>QNetworkOperation::free ()</h3>
-<p>If this method is called the QNetworkOperation deletes itself after it has been
-1 sec unused, which means for 1 second no method of the QNetworkOperation
-has been accessed.
+<p>If this method is called the QNetworkOperation deletes itself after it
+has been 1 second unused, which means for 1 second no method of the
+QNetworkOperation has been accessed.
 <p>Because QNetworkOperation pointers are passed around a lot the <a href="qnetworkprotocol.html">QNetworkProtocol</a>
 can't delete these at the correct time. So, if a QNetworkProtocol doesn't need an operation
-anymore and calles this method, so that it gets deleted correctly.
+anymore and calls this method, so that it gets deleted correctly.
 <p>You should never need to call the method yourself!.
 <h3 class="fn">QNetworkProtocol::Operation <a name="71fd13"></a>QNetworkOperation::operation() const</h3>
 <p>Returns the type of the operation.
@@ -115,13 +117,13 @@ if it is in process or if has been done successfully or if it failed.
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.1.1"><nobr>
+<input type=hidden name="version" value="2.2.0"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
 copyright &copy; 1995-2000
-<a href="http://www.trolltech.com">Troll Tech</a>, all rights reserved.<p><address><hr><div align="center">
+<a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.1</div>
+<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.2.0</div>
 </table></div></address></body></html>

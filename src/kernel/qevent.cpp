@@ -1,27 +1,39 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qevent.cpp   2.1.1   edited 2000-03-24 $
+** $Id: qt/src/kernel/qevent.cpp   2.2.0   edited 2000-08-25 $
 **
 ** Implementation of event classes
 **
 ** Created : 931029
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the kernel module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #include "qevent.h"
 #include "qcursor.h"
@@ -64,8 +76,8 @@
 
 
 /*! \enum Qt::ButtonState
-  This enum type describes the state of the mouse buttons, with
-  associated shift buttons.  The currently defined values are:<ul>
+  This enum type describes the state of the mouse buttons and the
+  modifier buttons.  The currently defined values are:<ul>
 
   <li> \c NoButton - used when the button state does not refer to any
   button (see QMouseEvent::button()).
@@ -83,6 +95,8 @@
   <li> \c ControlButton - a control key on the keyboard is also pressed.
 
   <li> \c AltButton - an alt (or meta) key on the keyboard is also pressed.
+
+  <li> \c Keypad - a keypad button is pressed.
 
   </ul>
 */
@@ -113,6 +127,7 @@
   <li> \c Accel - key press in child, for shortcut key handling, QKeyEvent
   <li> \c Wheel - mouse wheel rolled, QWheelEvent
   <li> \c AccelAvailable - an internal event used by Qt on some platforms.
+  <li> \c AccelOverride - key press in child, for overriding shortcut key handling, QKeyEvent
  <li> \c WindowActivate - the window was activated
  <li> \c WindowDeactivate - the window was deactivated
   <li> \c CaptionChange - widget's caption changed
@@ -224,18 +239,18 @@
 
   Constructs a mouse event object.
 
-  The \a type parameter must be \c QEvent::MouseButtonPress,
+  The \a type parameter must be one of \c QEvent::MouseButtonPress,
   \c QEvent::MouseButtonRelease,
   \c QEvent::MouseButtonDblClick or \c QEvent::MouseMove.
 
-  The \a pos parameter specifies the position relative to the receiving widget;
-  \a button specifies the ButtonState of the button that caused the event,
-  it should be 0 if \a type is \c MouseMove; and \a state is the ButtonState
-  at the time of the event.
+  The \a pos parameter specifies the position relative to the
+  receiving widget; \a button specifies the ButtonState of the button
+  that caused the event, which should be 0 if \a type is \c
+  MouseMove; \a state is the ButtonState at the time of the event.
 
   The globalPos() is initialized to QCursor::pos(), which may not be
   appropriate. Use the other constructor to specify the global position
-  explicitely.
+  explicitly.
 */
 
 QMouseEvent::QMouseEvent( Type type, const QPoint &pos, int button, int state )
@@ -253,11 +268,11 @@ QMouseEvent::QMouseEvent( Type type, const QPoint &pos, int button, int state )
   \c QEvent::MouseButtonRelease,
   \c QEvent::MouseButtonDblClick or \c QEvent::MouseMove.
 
-  The \a pos parameter specifies the position relative to the receiving widget;
-  \a globalPos gives the position in absolute coordinates;
-  \a button specifies the ButtonState of the button that caused the event,
-  it should be 0 if \a type is \c MouseMove; and \a state is the ButtonState
-  at the time of the event.
+  The \a pos parameter specifies the position relative to the
+  receiving widget; \a globalPos is the position in absolute
+  coordinates; \a button specifies the ButtonState of the button that
+  caused the event, which should be 0 if \a type is \c MouseMove; and
+  \a state is the ButtonState at the time of the event.
 */
 
 /*!
@@ -353,11 +368,7 @@ QMouseEvent::QMouseEvent( Type type, const QPoint &pos, int button, int state )
 */
 Qt::ButtonState QMouseEvent::stateAfter() const
 {
-    if ( type() == QEvent::MouseButtonDblClick ) {
-	return Qt::ButtonState(state()&~button());
-    } else {
-	return Qt::ButtonState(state()^button());
-    }
+    return Qt::ButtonState(state()^button());
 }
 
 
@@ -391,10 +402,9 @@ Qt::ButtonState QMouseEvent::stateAfter() const
 
   Constructs a wheel event object.
 
-  The globalPos() is initialized to QCursor::pos(), which may not be
-  appropriate. Use the other constructor to specify the global position
-  explicitely.
-
+  The globalPos() is initialized to QCursor::pos(), which usually is
+  right but not always. Use the other constructor if you need to
+  specify the global position explicitly.
 
   \sa pos(), delta(), state()
 */
@@ -573,7 +583,7 @@ QWheelEvent::QWheelEvent( const QPoint &pos, int delta, int state )
 /*!
   \fn int QKeyEvent::ascii() const
   Returns the ASCII code of the key that was pressed or released.
-  We recomment using text() instead.
+  We recommend using text() instead.
 
   \sa text()
 */
@@ -716,7 +726,7 @@ QFocusEvent::Reason QFocusEvent::prev_reason = QFocusEvent::Other;
   <li> \c Other - any other reason, usually application-specific
   </ul>
 
-   See focus.html for more about focus.
+   See the \link focus.html focus overview \endlink for more about focus.
 
 */
 
@@ -1082,7 +1092,7 @@ QCustomEvent::QCustomEvent( int type )
 /*!
   \fn QCustomEvent::QCustomEvent( Type type, void *data )
   Constructs a custom event object with the event type \a type and a
-  pointer to \a data. (Note that any int value may safely be casted to
+  pointer to \a data. (Note that any int value may safely be cast to
   QEvent::Type).
 */
 
@@ -1142,15 +1152,6 @@ QCustomEvent::QCustomEvent( int type )
 */
 
 
-
-/*!
-  \fn QDropEvent::QDropEvent( const QPoint& pos )
-
-  Creates a QDropEvent for which the mouse is at point \a pos.
-
-  Note that internal state is also involved with QDropEvent,
-  so it is not useful to create these yourself.
-*/
 
 /*!
   \fn const QPoint& QDropEvent::pos() const
@@ -1385,16 +1386,3 @@ QEvent::~QEvent()
 	QApplication::removePostedEvent( this );
 }
 
-/*!
-  \class QConfigureEvent qevent.h
-  \brief The event is sent when QObject::configure() is called
-
-  \sa QConfigureLayoutEvent
-*/
-
-/*!
-  \class QConfigureLayoutEvent qevent.h
-  \brief The event is sent when QLayout::configure() is called
-
-  \sa QConfigureLayoutEvent
-*/

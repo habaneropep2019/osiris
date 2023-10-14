@@ -1,27 +1,39 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qguardedptr.cpp   2.1.1   edited 2000-03-24 $
+** $Id: qt/src/kernel/qguardedptr.cpp   2.2.0   edited 2000-08-25 $
 **
 ** Implementation of QGuardedPtr class
 **
 ** Created : 990929
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the kernel module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #include "qguardedptr.h"
 
@@ -72,8 +84,7 @@
   For creating guarded pointers, you can construct or assign to them
   from an X* or from another guarded pointer of the same type. You can
   compare them with each other for equality (==) and inequality (!=),
-  or test for null with isNull() and for non-null with the bool() casting
-  operator.  Finally, you can dereference
+  or test for null with isNull().  Finally, you can dereference
   them using either the \c *x or the \c x->member notation.
 
   A guarded pointer will automatically cast to an X* so you can freely
@@ -138,14 +149,14 @@
   TRUE if both \a p and this are null, or if both \a p and this point
   to the same object.
 
-  \sa operator!=
+  \sa operator!=()
 */
 
 /*!
   \fn bool QGuardedPtr::operator!= ( const QGuardedPtr<T>& p ) const 
 
   Unequality operator, implements pointer semantics, the negation
-  of operator==.
+  of operator==().
 */
 
 /*!
@@ -175,22 +186,6 @@
   Cast operator, implements pointer semantics. Because of this function,
   you can pass a QGuardedPtr<X> to a function where an X* is
   required.
-*/
-
-/*!
-  \fn QGuardedPtr::operator bool() const
-
-  Cast operator to bool, implements pointer semantics. This function
-  allows code such as:
-  \code
-     QGuardedPtr<QWidget> w = new QLabel;
-     ...
-     if ( w ) {
-	...
-     }
-  \endcode
-
-  Equivalent to \c !isNull();
 */
 
 

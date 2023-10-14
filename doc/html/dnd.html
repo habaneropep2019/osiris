@@ -1,11 +1,15 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><title>
-Qt Toolkit - Drag and Drop
-</title></head><body bgcolor="#ffffff">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><title>Qt Toolkit -  Drag and Drop</title><style type="text/css"><!--
+h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
+a:link { color: #004faf; text-decoration: none }
+a:visited { color: #672967; text-decoration: none }body { background: white; color: black; }
+--></style></head><body bgcolor="#ffffff">
 <p>
-<a href="index.html">
-<img width="122" height="65" src="qtlogo.png" alt="Home"
-  align="left" border="0">
-</a><div align=right><img src="dochead.png" width="472" height="27"><br>
+<table width="100%">
+<tr><td><a href="index.html">
+<img width="100" height="100" src="qtlogo.png"
+alt="Home" border="0"><img width="100"
+height="100" src="face.png" alt="Home" border="0">
+</a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
 - <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
@@ -13,10 +17,8 @@ Qt Toolkit - Drag and Drop
 - <a href="index.html">Home</a>
 - <a href="topicals.html"><b>Structure</b></a>
 </div>
-<br clear=all>
-<p>
-<h1 align=center>Drag and Drop with Qt</h1><br clear="all">
-<p>
+</table>
+<h1 align=center> Drag and Drop</h1><br clear="all">
   Drag-and-drop is a direct-manipulation model for allowing the user to
   transfer information between and within applications. It is similar
   in function to the cut-and-paste clipboard model.
@@ -175,29 +177,26 @@ Qt Toolkit - Drag and Drop
   the two applications need a way to agree on the type of information
   they both understand.
   The way they do it is using
-  <i><a href=http://www.rfc-editor.org/rfc/rfc1341.txt>MIME types</a></i> - the
-  drag source provides a list of MIME types that it can produce (ordered
-  from most appropriate to least appropriate), and the drop target chooses
-  which of those it can handle.
-  For example,
-  QTextDrag provides support for
-   the "<tt>text/plain</tt>" MIME type (ordinary unformatted text), and
-   the Unicode formats "<tt>text/utf16</tt>" and "<tt>text/utf8</tt>";
-  QImageDrag provides for "<tt>image/</tt><tt>*</tt>",
-  where <tt>*</tt>
-  is any <a href="qimageio.html">image format that Qt supports</a>;
-  and the QUriDrag subclass provides "<tt>text/uri-list</tt>",
-  a standard format for transferring a list of filenames (or URLs).
+  <i><a href="http://www.rfc-editor.org/rfc/rfc1341.txt">MIME types</a></i>
+  - the drag source provides a list of MIME types that it can produce
+  (ordered from most appropriate to least appropriate), and the drop target
+  chooses which of those it can handle. For example, QTextDrag provides
+   support for the "<tt>text/plain</tt>" MIME type (ordinary unformatted
+   text), and the Unicode formats "<tt>text/utf16</tt>" and
+   "<tt>text/utf8</tt>"; QImageDrag provides for "<tt>image/</tt><tt>*</tt>",
+  where <tt>*</tt> is any image format that <a href="qimageio.html">QImageIO</a> supports; and the
+  QUriDrag subclass provides "<tt>text/uri-list</tt>", a standard format for
+  transferring a list of filenames (or URLs).
 <p>
   To implement drag-and-drop of some type of information for which there
   is no available QDragObject subclass, the
   first and most important step is to look for existing formats
   that are appropriate - the Internet Assigned Numbers Authority
-  (<a href=http://www.iana.org>IANA</a>) provides a
-  <a href=http://www.isi.edu/in-notes/iana/assignments/media-types/>
+  (<a href="http://www.iana.org">IANA</a>) provides a
+  <a href="http://www.isi.edu/in-notes/iana/assignments/media-types/">
   hierarchical list of MIME media types</a>
   at the Information Sciences Institute
-  (<a href=http://www.isi.edu>ISI</a>).
+  (<a href="http://www.isi.edu">ISI</a>).
   This maximizes inter-operability of your software with other
   software now and in the future.
 <p>
@@ -307,7 +306,7 @@ Qt Toolkit - Drag and Drop
 <p>
   <h3>Inter-operating with other applications</h3>
   On X11, the public
-  <a href=http://www.cco.caltech.edu/~jafl/xdnd/>XDND protocol</a>
+  <a class="r" href="http://www.cco.caltech.edu/~jafl/xdnd/">XDND protocol</a>
   is used, while on Windows Qt uses the OLE standard.  On X11,
   XDND uses MIME, so no translation is necessary.
   The Qt API is the same regardless of the platform.
@@ -324,7 +323,7 @@ Qt Toolkit - Drag and Drop
   On X11, Qt also supports drops via the Motif Drag&Drop Protocol. The
   implementation incorporates some code that was originally written by
   Daniel Dardailler, and adapted for Qt by Matt Koss &lt;koss@napri.sk&gt;
-  and Troll Tech. Here is the original copyright notice:
+  and Trolltech. Here is the original copyright notice:
 <p>
   Copyright 1996 Daniel Dardailler.
 <p>
@@ -343,6 +342,6 @@ Qt Toolkit - Drag and Drop
 
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.1</div>
+<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.2.0</div>
 </table></div></address></body></html>

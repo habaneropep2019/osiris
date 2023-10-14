@@ -1,0 +1,53 @@
+.TH QXmlLocator 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
+.\" license file included in the distribution for a complete license
+.\" statement.
+.\"
+.ad l
+.nh
+.SH NAME
+QXmlLocator \- The XML handler classes with information about the actual parsing position
+<h1 align=center>QXmlLocator Class Reference
+.br
+<small>[ XML module ]</small></h1>
+.br
+.PP
+\fC#include <qxml.h>\fR
+.PP
+.SS "Public Members"
+.in +1c
+.ti -1c
+.BI "\fBQXmlLocator\fR ( QXmlSimpleReader * parent ) "
+.br
+.ti -1c
+.BI "\fB~QXmlLocator\fR () "
+.br
+.ti -1c
+.BI "int \fBcolumnNumber\fR () "
+.br
+.ti -1c
+.BI "int \fBlineNumber\fR () "
+.br
+.in -1c
+.SH DESCRIPTION
+The QXmlLocator class provides the XML handler classes with information about the actual parsing position.
+.PP
+The reader reports a QXmlLocator to the content handler before he starts to parse the document. This is done with the QXmlContentHandler::setDocumentLocator() function. The handler classes can now use this locator to get the actual position the reader is at.
+.SH MEMBER FUNCTION DOCUMENTATION
+.SH "QXmlLocator::QXmlLocator ( QXmlSimpleReader * parent )"
+Constructor.
+.SH "QXmlLocator::~QXmlLocator ()"
+Destructor.
+.SH "int QXmlLocator::columnNumber ()"
+Gets the column number (starting with 1) or -1 if there is no column number available.
+.SH "int QXmlLocator::lineNumber ()"
+Gets the line number (starting with 1) or -1 if there is no line number
+available.
+.SH "SEE ALSO"
+.BR http://doc.trolltech.com/qxmllocator.html
+.SH COPYRIGHT
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
+license file included in the distribution for a complete license
+statement.
+.SH AUTHOR
+Generated automatically from the source code.

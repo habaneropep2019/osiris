@@ -1,29 +1,42 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qdrawutil.cpp   2.1.1   edited 2000-03-24 $
+** $Id: qt/src/kernel/qdrawutil.cpp   2.2.0   edited 2000-08-25 $
 **
 ** Implementation of draw utilities
 **
 ** Created : 950920
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the kernel module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #include "qdrawutil.h"
+#ifndef QT_NO_DRAWUTIL
 #include "qbitmap.h"
 #include "qpixmapcache.h"
 
@@ -793,7 +806,9 @@ static void qDrawMotifArrow( QPainter *p, Qt::ArrowType type, bool down,
     QPointArray bTop;				// top shadow.
     QPointArray bBot;				// bottom shadow.
     QPointArray bLeft;				// left shadow.
+#ifndef QT_NO_TRANSFORMATIONS
     QWMatrix	matrix;				// xform matrix
+#endif
     bool vertical = type == Qt::UpArrow || type == Qt::DownArrow;
     bool horizontal = !vertical;
     int	 dim = w < h ? w : h;
@@ -842,6 +857,7 @@ static void qDrawMotifArrow( QPainter *p, Qt::ArrowType type, bool down,
     }
 
     if ( type == Qt::UpArrow || type == Qt::LeftArrow ) {
+#ifndef QT_NO_TRANSFORMATIONS	// #### fix me!
 	matrix.translate( x, y );
 	if ( vertical ) {
 	    matrix.translate( 0, h - 1 );
@@ -850,17 +866,20 @@ static void qDrawMotifArrow( QPainter *p, Qt::ArrowType type, bool down,
 	    matrix.translate( w - 1, h - 1 );
 	    matrix.rotate( 180 );
 	}
+#endif
 	if ( down )
 	    colspec = horizontal ? 0x2334 : 0x2343;
 	else
 	    colspec = horizontal ? 0x1443 : 0x1434;
     }
     else if ( type == Qt::DownArrow || type == Qt::RightArrow ) {
+#ifndef QT_NO_TRANSFORMATIONS	// #### fix me!
 	matrix.translate( x, y );
 	if ( vertical ) {
 	    matrix.translate( w-1, 0 );
 	    matrix.rotate( 90 );
 	}
+#endif
 	if ( down )
 	    colspec = horizontal ? 0x2443 : 0x2434;
 	else
@@ -880,13 +899,17 @@ static void qDrawMotifArrow( QPainter *p, Qt::ArrowType type, bool down,
 
     QPen     savePen   = p->pen();		// save current pen
     QBrush   saveBrush = p->brush();		// save current brush
+#ifndef QT_NO_TRANSFORMATIONS
     QWMatrix wxm = p->worldMatrix();
+#endif
     QPen     pen( Qt::NoPen );
     QBrush brush = g.brush( QColorGroup::Button );
 
     p->setPen( pen );
     p->setBrush( brush );
+#ifndef QT_NO_TRANSFORMATIONS
     p->setWorldMatrix( matrix, TRUE );		// set transformation matrix
+#endif
     p->drawPolygon( bFill );			// fill arrow
     p->setBrush( Qt::NoBrush );			// don't fill
 
@@ -897,7 +920,9 @@ static void qDrawMotifArrow( QPainter *p, Qt::ArrowType type, bool down,
     p->setPen( CBOT );
     p->drawLineSegments( bBot );
 
+#ifndef QT_NO_TRANSFORMATIONS
     p->setWorldMatrix( wxm );
+#endif
     p->setBrush( saveBrush );			// restore brush
     p->setPen( savePen );			// restore pen
 
@@ -927,3 +952,4 @@ void qDrawArrow( QPainter *p, Qt::ArrowType type, Qt::GUIStyle style, bool down,
 #endif
     }
 }
+#endif //QT_NO_DRAWUTIL

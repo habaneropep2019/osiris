@@ -1,15 +1,17 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head>
 <title>Qt Toolkit - QMenuBar Class</title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
-a:link { text-decoration: none; }
-body { background: white; color: black; }
+a:link { color: #004faf; text-decoration: none }
+a:visited { color: #672967; text-decoration: none }body { background: white; color: black; }
 --></style>
 </head><body bgcolor="#ffffff">
 
-<a href="index.html">
-<img width="122" height="65" src="qtlogo.png" alt="Home"
-  align="left" border="0">
-</a><div align=right><img src="dochead.png" width="472" height="27"><br>
+<table width="100%">
+<tr><td><a href="index.html">
+<img width="100" height="100" src="qtlogo.png"
+alt="Home" border="0"><img width="100"
+height="100" src="face.png" alt="Home" border="0">
+</a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
 - <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
@@ -17,7 +19,7 @@ body { background: white; color: black; }
 - <a href="index.html">Home</a>
 - <a href="topicals.html"><b>Structure</b></a>
 </div>
-<br clear=all>
+</table>
 
 <h1 align=center>QMenuBar Class Reference</h1><br clear="all">
 <p>
@@ -30,53 +32,53 @@ Inherits <a href="qframe.html">QFrame</a> and <a href="qmenudata.html">QMenuData
 <p><a href="qmenubar-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><span class="fn"><a href="#31d9d4"><b>QMenuBar</b></a> ( QWidget * parent=0, const char * name=0 ) </span>
-<li><span class="fn"><a href="#0fea29"><b>~QMenuBar</b></a> () </span>
-<li><span class="fn">virtual void <b>updateItem</b> ( int id ) (internal)</span>
-<li><span class="fn">virtual void <a href="#768e1b"><b>show</b></a> () </span>
-<li><span class="fn">virtual void <a href="#6c5bca"><b>hide</b></a> () </span>
-<li><span class="fn">virtual bool <a href="#90adf4"><b>eventFilter</b></a> ( QObject *, QEvent * ) </span>
-<li><span class="fn">virtual int <a href="#5f9b14"><b>heightForWidth</b></a> ( int ) const</span>
-<li><span class="fn">enum <a href="#Separator"><b>Separator</b></a> { Never=0, InWindowsStyle=1 }</span>
-<li><span class="fn">Separator <a href="#0285fc"><b>separator</b></a> () const</span>
-<li><span class="fn">virtual void <a href="#077955"><b>setSeparator</b></a> ( Separator when ) </span>
-<li><span class="fn">void <a href="#62e75b"><b>setDefaultUp</b></a> ( bool ) </span>
-<li><span class="fn">bool <a href="#0ce71b"><b>isDefaultUp</b></a> () const</span>
+<li><div class="fn"><a href="#31d9d4"><b>QMenuBar</b></a> ( QWidget * parent=0, const char * name=0 ) </div>
+<li><div class="fn"><a href="#0fea29"><b>~QMenuBar</b></a> () </div>
+<li><div class="fn">virtual void <b>updateItem</b> ( int id ) (internal)</div>
+<li><div class="fn">virtual void <a href="#768e1b"><b>show</b></a> () </div>
+<li><div class="fn">virtual void <a href="#6c5bca"><b>hide</b></a> () </div>
+<li><div class="fn">virtual bool <a href="#90adf4"><b>eventFilter</b></a> ( QObject *, QEvent * ) </div>
+<li><div class="fn">virtual int <a href="#5f9b14"><b>heightForWidth</b></a> ( int ) const</div>
+<li><div class="fn">enum <a href="#Separator"><b>Separator</b></a> { Never=0, InWindowsStyle=1 }</div>
+<li><div class="fn">Separator <a href="#0285fc"><b>separator</b></a> () const</div>
+<li><div class="fn">virtual void <a href="#077955"><b>setSeparator</b></a> ( Separator when ) </div>
+<li><div class="fn">void <a href="#62e75b"><b>setDefaultUp</b></a> ( bool ) </div>
+<li><div class="fn">bool <a href="#0ce71b"><b>isDefaultUp</b></a> () const</div>
 </ul>
 <h2>Signals</h2>
 <ul>
-<li><span class="fn">void <a href="#e4ba80"><b>activated</b></a> ( int itemId ) </span>
-<li><span class="fn">void <a href="#0ab87a"><b>highlighted</b></a> ( int itemId ) </span>
+<li><div class="fn">void <a href="#e4ba80"><b>activated</b></a> ( int itemId ) </div>
+<li><div class="fn">void <a href="#0ab87a"><b>highlighted</b></a> ( int itemId ) </div>
 </ul>
 <h2>Important Inherited Members</h2>
 <ul>
-<li><span class="fn">int <a href="qmenudata.html#b89bda"><b>insertItem</b></a> ( QCustomMenuItem * custom, int id, int index ) </span>
-<li><span class="fn">int <a href="qmenudata.html#b3557b"><b>insertItem</b></a> ( QWidget * widget, int id, int index ) </span>
-<li><span class="fn">int <a href="qmenudata.html#14ea2f"><b>insertItem</b></a> ( const QIconSet &amp; icon, QCustomMenuItem * custom, int id, int index ) </span>
-<li><span class="fn">int <a href="qmenudata.html#fac7c5"><b>insertItem</b></a> ( const QIconSet &amp; icon, const QPixmap &amp; pixmap, QPopupMenu * popup, int id, int index ) </span>
-<li><span class="fn">int <a href="qmenudata.html#9271f5"><b>insertItem</b></a> ( const QIconSet &amp; icon, const QPixmap &amp; pixmap, const QObject * receiver, const char * member, int accel, int id, int index ) </span>
-<li><span class="fn">int <a href="qmenudata.html#0b9657"><b>insertItem</b></a> ( const QIconSet &amp; icon, const QPixmap &amp; pixmap, int id, int index ) </span>
-<li><span class="fn">int <a href="qmenudata.html#4beee8"><b>insertItem</b></a> ( const QIconSet &amp; icon, const QString &amp; text, QPopupMenu * popup, int id, int index ) </span>
-<li><span class="fn">int <a href="qmenudata.html#d07200"><b>insertItem</b></a> ( const QIconSet &amp; icon, const QString &amp; text, const QObject * receiver, const char * member, int accel, int id, int index ) </span>
-<li><span class="fn">int <a href="qmenudata.html#3a10ec"><b>insertItem</b></a> ( const QIconSet &amp; icon, const QString &amp; text, int id, int index ) </span>
-<li><span class="fn">int <a href="qmenudata.html#46373c"><b>insertItem</b></a> ( const QPixmap &amp; pixmap, QPopupMenu * popup, int id, int index ) </span>
-<li><span class="fn">int <a href="qmenudata.html#bf3d04"><b>insertItem</b></a> ( const QPixmap &amp; pixmap, const QObject * receiver, const char * member, int accel, int id, int index ) </span>
-<li><span class="fn">int <a href="qmenudata.html#f2fb70"><b>insertItem</b></a> ( const QPixmap &amp; pixmap, int id, int index ) </span>
-<li><span class="fn">int <a href="qmenudata.html#43c652"><b>insertItem</b></a> ( const QString &amp; text, QPopupMenu * popup, int id, int index ) </span>
-<li><span class="fn">int <a href="qmenudata.html#df7df9"><b>insertItem</b></a> ( const QString &amp; text, const QObject * receiver, const char * member, int accel, int id, int index ) </span>
-<li><span class="fn">int <a href="qmenudata.html#c0b90d"><b>insertItem</b></a> ( const QString &amp; text, int id, int index ) </span>
-<li><span class="fn">void <a href="qmenudata.html#7cf339"><b>removeItem</b></a> ( int id ) </span>
-<li><span class="fn">void <a href="qmenudata.html#785444"><b>clear</b></a> () </span>
-<li><span class="fn">int <a href="qmenudata.html#5f2cea"><b>insertSeparator</b></a> ( int index ) </span>
-<li><span class="fn">void <a href="qmenudata.html#b2cb33"><b>setItemEnabled</b></a> ( int id, bool enable ) </span>
-<li><span class="fn">bool <a href="qmenudata.html#ff519d"><b>isItemEnabled</b></a> ( int id ) const</span>
+<li><div class="fn">int <a href="qmenudata.html#b89bda"><b>insertItem</b></a> ( QCustomMenuItem * custom, int id, int index ) </div>
+<li><div class="fn">int <a href="qmenudata.html#b3557b"><b>insertItem</b></a> ( QWidget * widget, int id, int index ) </div>
+<li><div class="fn">int <a href="qmenudata.html#14ea2f"><b>insertItem</b></a> ( const QIconSet &amp; icon, QCustomMenuItem * custom, int id, int index ) </div>
+<li><div class="fn">int <a href="qmenudata.html#fac7c5"><b>insertItem</b></a> ( const QIconSet &amp; icon, const QPixmap &amp; pixmap, QPopupMenu * popup, int id, int index ) </div>
+<li><div class="fn">int <a href="qmenudata.html#9271f5"><b>insertItem</b></a> ( const QIconSet &amp; icon, const QPixmap &amp; pixmap, const QObject * receiver, const char * member, int accel, int id, int index ) </div>
+<li><div class="fn">int <a href="qmenudata.html#0b9657"><b>insertItem</b></a> ( const QIconSet &amp; icon, const QPixmap &amp; pixmap, int id, int index ) </div>
+<li><div class="fn">int <a href="qmenudata.html#4beee8"><b>insertItem</b></a> ( const QIconSet &amp; icon, const QString &amp; text, QPopupMenu * popup, int id, int index ) </div>
+<li><div class="fn">int <a href="qmenudata.html#d07200"><b>insertItem</b></a> ( const QIconSet &amp; icon, const QString &amp; text, const QObject * receiver, const char * member, int accel, int id, int index ) </div>
+<li><div class="fn">int <a href="qmenudata.html#3a10ec"><b>insertItem</b></a> ( const QIconSet &amp; icon, const QString &amp; text, int id, int index ) </div>
+<li><div class="fn">int <a href="qmenudata.html#46373c"><b>insertItem</b></a> ( const QPixmap &amp; pixmap, QPopupMenu * popup, int id, int index ) </div>
+<li><div class="fn">int <a href="qmenudata.html#bf3d04"><b>insertItem</b></a> ( const QPixmap &amp; pixmap, const QObject * receiver, const char * member, int accel, int id, int index ) </div>
+<li><div class="fn">int <a href="qmenudata.html#f2fb70"><b>insertItem</b></a> ( const QPixmap &amp; pixmap, int id, int index ) </div>
+<li><div class="fn">int <a href="qmenudata.html#43c652"><b>insertItem</b></a> ( const QString &amp; text, QPopupMenu * popup, int id, int index ) </div>
+<li><div class="fn">int <a href="qmenudata.html#df7df9"><b>insertItem</b></a> ( const QString &amp; text, const QObject * receiver, const char * member, int accel, int id, int index ) </div>
+<li><div class="fn">int <a href="qmenudata.html#c0b90d"><b>insertItem</b></a> ( const QString &amp; text, int id, int index ) </div>
+<li><div class="fn">void <a href="qmenudata.html#7cf339"><b>removeItem</b></a> ( int id ) </div>
+<li><div class="fn">void <a href="qmenudata.html#785444"><b>clear</b></a> () </div>
+<li><div class="fn">int <a href="qmenudata.html#5f2cea"><b>insertSeparator</b></a> ( int index ) </div>
+<li><div class="fn">void <a href="qmenudata.html#b2cb33"><b>setItemEnabled</b></a> ( int id, bool enable ) </div>
+<li><div class="fn">bool <a href="qmenudata.html#ff519d"><b>isItemEnabled</b></a> ( int id ) const</div>
 </ul>
 <h2>Protected Members</h2>
 <ul>
-<li><span class="fn">virtual void <a href="#6f6df1"><b>drawContents</b></a> ( QPainter * ) </span>
-<li><span class="fn">virtual void <b>fontChange</b> ( const QFont &amp; ) (internal)</span>
-<li><span class="fn">virtual void <a href="#52bee7"><b>menuContentsChanged</b></a> () </span>
-<li><span class="fn">virtual void <a href="#de6942"><b>menuStateChanged</b></a> () </span>
+<li><div class="fn">virtual void <a href="#6f6df1"><b>drawContents</b></a> ( QPainter * ) </div>
+<li><div class="fn">virtual void <b>fontChange</b> ( const QFont &amp; ) (internal)</div>
+<li><div class="fn">virtual void <a href="#52bee7"><b>menuContentsChanged</b></a> () </div>
+<li><div class="fn">virtual void <a href="#de6942"><b>menuStateChanged</b></a> () </div>
 </ul>
 <h2>Properties</h2>
 <table border=1 cellpadding=3 cellspacing=0>
@@ -91,8 +93,8 @@ A menu bar consists of a list of submenu items, so-called pulldown
 menus.  You add submenu items with <a href="qmenudata.html#43c652">insertItem</a>(). Assuming that <code>menubar</code> is a pointer to a QMenuBar and <code>filemenu</code> a pointer to a
 <a href="qpopupmenu.html">QPopupMenu</a>, <pre>  menubar-&gt;insertItem( "&amp;File", filemenu );
 </pre>
-<p>inserts the menu into the menu bar. The ampercent in the item text declares
-Alt-f as shortcut for this menu.
+<p>inserts the menu into the menu bar. The ampersand in the item text declares
+Alt-f as shortcut for this menu. Use "&&" to get a real ampsend in the menubar.
 <p>Items are either enabled or disabled. You toggle their state with
 <a href="qmenudata.html#b2cb33">setItemEnabled</a>().
 <p>Note that there is no need to layout a menu bar. It automatically
@@ -100,7 +102,7 @@ sets its own geometry to the top of the parent widget and changes it
 appropriately whenever the parent is resized.
 <p><a href="menu-menu-cpp.html#QMenuBar">menu/menu.cpp</a> is a typical example of QMenuBar and QPopupMenu use.
 <p><img src=qmenubar-m.png> <img src=qmenubar-w.png>
-<p>See also:  <a href="qpopupmenu.html">QPopupMenu</a> and <a href="guibooks.html#fowler">GUI Design Handbook: Menu Bar</a>
+<p>See also  <a href="qpopupmenu.html">QPopupMenu</a> and <a href="guibooks.html#fowler">GUI Design Handbook: Menu Bar</a>
 <p>Examples:
  <a href="grapher-grapher-cpp.html#QMenuBar">grapher/grapher.cpp</a>
  <a href="layout-layout-cpp.html#QMenuBar">layout/layout.cpp</a>
@@ -122,6 +124,8 @@ looks good in Windows style but not else.
 <p>Constructs a menu bar with a <em>parent</em> and a <em>name.</em>
 <h3 class="fn"><a name="0fea29"></a>QMenuBar::~QMenuBar ()</h3>
 <p>Destroys the menu bar.
+<h3 class="fn">void <a name="6a549e"></a>QMenuBar::activateItemAt ( int index )</h3>
+<p>Reimplemented for internal reasons; the API is not affected.
 <h3 class="fn">void <a name="e4ba80"></a>QMenuBar::activated ( int id ) <code>[signal]</code></h3>
 <p>This signal is emitted when a menu item is selected; <em>id</em> is the id
 of the selected item.
@@ -129,7 +133,7 @@ of the selected item.
 <a href="qmenudata.html#df7df9">QMenuData::insertItem</a>(), but sometimes you will want to connect
 several items to a single slot (most often if the user selects from
 an array).  This signal is handy in such cases.
-<p>See also:  <a href="#0ab87a">highlighted</a>() and <a href="qmenudata.html#df7df9">QMenuData::insertItem</a>().
+<p>See also  <a href="#0ab87a">highlighted</a>() and <a href="qmenudata.html#df7df9">QMenuData::insertItem</a>().
 <h3 class="fn">bool <a name="ec0046"></a>QMenuBar::customWhatsThis () const <code>[virtual]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
 <p>Reimplemented from <a href="qwidget.html#dd25bf">QWidget.</a>
@@ -168,11 +172,11 @@ id of the highlighted item.
 <a href="qmenudata.html#df7df9">QMenuData::insertItem</a>(), but sometimes you will want to connect
 several items to a single slot (most often if the user selects from
 an array).  This signal is handy in such cases.
-<p>See also:  <a href="#e4ba80">activated</a>() and <a href="qmenudata.html#df7df9">QMenuData::insertItem</a>().
+<p>See also  <a href="#e4ba80">activated</a>() and <a href="qmenudata.html#df7df9">QMenuData::insertItem</a>().
 <h3 class="fn">bool <a name="0ce71b"></a>QMenuBar::isDefaultUp () const</h3>
 <p>Returns whether the menus default to popping "down" the screen
 (the default), or "up".
-<p>See also:  <a href="#62e75b">setDefaultUp</a>();.
+<p>See also  <a href="#62e75b">setDefaultUp</a>();.
 <h3 class="fn">void <a name="0474b5"></a>QMenuBar::keyPressEvent ( <a href="qkeyevent.html">QKeyEvent</a> * e ) <code>[virtual protected]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
 <p>Reimplemented from <a href="qwidget.html#cdb1c7">QWidget.</a>
@@ -210,7 +214,7 @@ state.
 <p>Reimplemented from <a href="qwidget.html#28c156">QWidget.</a>
 <h3 class="fn">QMenuBar::Separator <a name="0285fc"></a>QMenuBar::separator() const</h3>
 <p>Returns the currently set <a href="#Separator">Separator</a> usage.
-<p>See also:  <a href="#Separator">Separator</a> and <a href="#077955">setSeparator</a>().
+<p>See also  <a href="#Separator">Separator</a> and <a href="#077955">setSeparator</a>().
 <h3 class="fn">void <a name="62e75b"></a>QMenuBar::setDefaultUp ( bool on )</h3>
 <p>Sets the default popup orientation. By default, menus pop "down" the
 screen.  By calling setDefaultUp(TRUE) the menu will pop "up".  You
@@ -218,14 +222,14 @@ might call this for menus that are <em>below</em> the document to which
 they refer.
 <p>If the menu would not fit on the screen, the other direction is used
 rather than the default.
-<p>See also:  defaultUp();.
+<p>See also  defaultUp();.
 <h3 class="fn">void <a name="077955"></a>QMenuBar::setSeparator ( <a href="qmenubar.html#Separator">Separator</a> when )</h3>
 <p>When a menubar is used above an unframed widget, it may look better
 with a separating line when displayed with <a href="qwidget.html#ea8b00">WindowsStyle</a>.
 <p>This function sets the usage of such a separator to appear either
 QMenuBar::Never, or QMenuBar::InWindowsStyle.
 <p>The default is QMenuBar::Never.
-<p>See also:  <a href="#Separator">Separator</a> and <a href="#0285fc">separator</a>().
+<p>See also  <a href="#Separator">Separator</a> and <a href="#0285fc">separator</a>().
 <p>Examples:
  <a href="layout-layout-cpp.html#setSeparator">layout/layout.cpp</a>
  <a href="scrollview-scrollview-cpp.html#setSeparator">scrollview/scrollview.cpp</a>
@@ -251,13 +255,13 @@ accelerators and raise itself to the top of the widget stack.
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.1.1"><nobr>
+<input type=hidden name="version" value="2.2.0"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
 copyright &copy; 1995-2000
-<a href="http://www.trolltech.com">Troll Tech</a>, all rights reserved.<p><address><hr><div align="center">
+<a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.1</div>
+<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.2.0</div>
 </table></div></address></body></html>

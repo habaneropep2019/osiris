@@ -1,35 +1,47 @@
 /****************************************************************************
-** $Id: qt/src/tools/qeucjpcodec.cpp   2.1.1   edited 2000-04-03 $
+** $Id: qt/src/tools/qeucjpcodec.cpp   2.2.0   edited 2000-08-25 $
 **
 ** Implementation of QEucJpCodec class
 **
 ** Created : 990225
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the tools module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 // Most of the code here was originally written by Serika Kurusugawa
 // a.k.a. Junji Takagi, and is include in Qt with the author's permission,
-// and the grateful thanks of the Troll Tech team.
+// and the grateful thanks of the Trolltech team.
 
 /*! \class QEucJpCodec qeucjpcodec.h
 
-  \brief Provides conversion to and from EUC-CP character sets
+  \brief Provides conversion to and from EUC-JP character sets
 
   The QEucJpCodec class subclasses QTextCodec to provide support for
   EUC-JP, the main legacy encoding for UNIX machines in Japan.
@@ -38,9 +50,9 @@
   QJpUnicodeConv, QEucJpCodec, QJisCodec and QSjisCodec do their work.
   The QJpUnicodeConv documentation describes how to use this variable.
 
-  It was largely written by Serika Kurusugawa a.k.a. Junji Takagi, and
+  It was largely written by Serika Kurusugawa, a.k.a. Junji Takagi, and
   is included in Qt with the author's permission, and the grateful
-  thanks of the Troll Tech team. Here is the copyright statement for
+  thanks of the Trolltech team. Here is the copyright statement for
   that code:
 
   \mustquote
@@ -99,6 +111,8 @@
 
 #include "qeucjpcodec.h"
 
+#ifndef QT_NO_CODECS
+
 static const uchar Esc = 0x1b;
 static const uchar Ss2 = 0x8e;	// Single Shift 2
 static const uchar Ss3 = 0x8f;	// Single Shift 3
@@ -109,10 +123,18 @@ static const uchar Ss3 = 0x8f;	// Single Shift 3
 #define	QValidChar(u)	((u) ? QChar((ushort)(u)) : QChar::replacement)
 
 /*!
-  Construct a QEucJpCodec.
+  Constructs a QEucJpCodec.
 */
 QEucJpCodec::QEucJpCodec() : conv(QJpUnicodeConv::newConverter(JU_Default))
 {
+}
+
+/*!
+  Destructs the codec.
+*/
+QEucJpCodec::~QEucJpCodec()
+{
+    // delete conv;
 }
 
 /*!
@@ -266,10 +288,10 @@ int QEucJpCodec::heuristicNameMatch(const char* hint) const
 {
     int score = 0;
     bool ja = FALSE;
-    if (strnicmp(hint, "ja_JP", 5) == 0 || strnicmp(hint, "japan", 5) == 0) {
+    if (qstrnicmp(hint, "ja_JP", 5) == 0 || qstrnicmp(hint, "japan", 5) == 0) {
 	score += 3;
 	ja = TRUE;
-    } else if (strnicmp(hint, "ja", 2) == 0) {
+    } else if (qstrnicmp(hint, "ja", 2) == 0) {
 	score += 2;
 	ja = TRUE;
     }
@@ -284,14 +306,14 @@ int QEucJpCodec::heuristicNameMatch(const char* hint) const
 	p = hint;
     }
     if (p) {
-	if ((stricmp(p, "AJEC") == 0) ||
-	    (stricmp(p, "eucJP") == 0) ||
-	    (stricmp(p, "ujis") == 0)) {
+	if ((qstricmp(p, "AJEC") == 0) ||
+	    (qstricmp(p, "eucJP") == 0) ||
+	    (qstricmp(p, "ujis") == 0)) {
 	    return score + 4;
 	}
 	// there exists ja_JP.EUC, ko_KR.EUC, zh_CN.EUC and zh_TW.EUC
 	// so "euc" may or may not be Japanese EUC.
-	if (stricmp(p, "euc") == 0) {
+	if (qstricmp(p, "euc") == 0) {
 	    return ja ? score + 4 : 1;
 	}
     }
@@ -444,3 +466,4 @@ QTextDecoder* QEucJpCodec::makeDecoder() const
     return new QEucJpDecoder(conv);
 }
 
+#endif

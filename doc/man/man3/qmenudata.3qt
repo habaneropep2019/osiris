@@ -1,5 +1,5 @@
-.TH QMenuData 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QMenuData 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QMenuData \- Base class for QMenuBar and QPopupMenu
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -19,76 +17,76 @@ Inherited by QMenuBar and QPopupMenu.
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQMenuData\fR ()"
+.BI "\fBQMenuData\fR () "
 .br
 .ti -1c
-.BI "virtual \fB~QMenuData\fR ()"
+.BI "virtual \fB~QMenuData\fR () "
 .br
 .ti -1c
 .BI "uint \fBcount\fR () const"
 .br
 .ti -1c
-.BI "int \fBinsertItem\fR ( const QString & " "text" ", const QObject * " "receiver" ", const char * " "member" ", int " "accel" " = 0, int " "id" " = -1, int " "index" " = -1 )"
+.BI "int \fBinsertItem\fR ( const QString & " "text" ", const QObject * " "receiver" ", const char * " "member" ", int " "accel" " = 0, int " "id" " = -1, int " "index" " = -1 ) "
 .br
 .ti -1c
-.BI "int \fBinsertItem\fR ( const QIconSet & " "icon" ", const QString & " "text" ", const QObject * " "receiver" ", const char * " "member" ", int " "accel" " = 0, int " "id" " = -1, int " "index" " = -1 )"
+.BI "int \fBinsertItem\fR ( const QIconSet & " "icon" ", const QString & " "text" ", const QObject * " "receiver" ", const char * " "member" ", int " "accel" " = 0, int " "id" " = -1, int " "index" " = -1 ) "
 .br
 .ti -1c
-.BI "int \fBinsertItem\fR ( const QPixmap & " "pixmap" ", const QObject * " "receiver" ", const char * " "member" ", int " "accel" " = 0, int " "id" " = -1, int " "index" " = -1 )"
+.BI "int \fBinsertItem\fR ( const QPixmap & " "pixmap" ", const QObject * " "receiver" ", const char * " "member" ", int " "accel" " = 0, int " "id" " = -1, int " "index" " = -1 ) "
 .br
 .ti -1c
-.BI "int \fBinsertItem\fR ( const QIconSet & " "icon" ", const QPixmap & " "pixmap" ", const QObject * " "receiver" ", const char * " "member" ", int " "accel" " = 0, int " "id" " = -1, int " "index" " = -1 )"
+.BI "int \fBinsertItem\fR ( const QIconSet & " "icon" ", const QPixmap & " "pixmap" ", const QObject * " "receiver" ", const char * " "member" ", int " "accel" " = 0, int " "id" " = -1, int " "index" " = -1 ) "
 .br
 .ti -1c
-.BI "int \fBinsertItem\fR ( const QString & " "text" ", int " "id" "=-1, int " "index" "=-1 )"
+.BI "int \fBinsertItem\fR ( const QString & " "text" ", int " "id" "=-1, int " "index" "=-1 ) "
 .br
 .ti -1c
-.BI "int \fBinsertItem\fR ( const QIconSet & " "icon" ", const QString & " "text" ", int " "id" "=-1, int " "index" "=-1 )"
+.BI "int \fBinsertItem\fR ( const QIconSet & " "icon" ", const QString & " "text" ", int " "id" "=-1, int " "index" "=-1 ) "
 .br
 .ti -1c
-.BI "int \fBinsertItem\fR ( const QString & " "text" ", QPopupMenu * " "popup" ", int " "id" "=-1, int " "index" "=-1 )"
+.BI "int \fBinsertItem\fR ( const QString & " "text" ", QPopupMenu * " "popup" ", int " "id" "=-1, int " "index" "=-1 ) "
 .br
 .ti -1c
-.BI "int \fBinsertItem\fR ( const QIconSet & " "icon" ", const QString & " "text" ", QPopupMenu * " "popup" ", int " "id" "=-1, int " "index" "=-1 )"
+.BI "int \fBinsertItem\fR ( const QIconSet & " "icon" ", const QString & " "text" ", QPopupMenu * " "popup" ", int " "id" "=-1, int " "index" "=-1 ) "
 .br
 .ti -1c
-.BI "int \fBinsertItem\fR ( const QPixmap & " "pixmap" ", int " "id" "=-1, int " "index" "=-1 )"
+.BI "int \fBinsertItem\fR ( const QPixmap & " "pixmap" ", int " "id" "=-1, int " "index" "=-1 ) "
 .br
 .ti -1c
-.BI "int \fBinsertItem\fR ( const QIconSet & " "icon" ", const QPixmap & " "pixmap" ", int " "id" "=-1, int " "index" "=-1 )"
+.BI "int \fBinsertItem\fR ( const QIconSet & " "icon" ", const QPixmap & " "pixmap" ", int " "id" "=-1, int " "index" "=-1 ) "
 .br
 .ti -1c
-.BI "int \fBinsertItem\fR ( const QPixmap & " "pixmap" ", QPopupMenu * " "popup" ", int " "id" "=-1, int " "index" "=-1 )"
+.BI "int \fBinsertItem\fR ( const QPixmap & " "pixmap" ", QPopupMenu * " "popup" ", int " "id" "=-1, int " "index" "=-1 ) "
 .br
 .ti -1c
-.BI "int \fBinsertItem\fR ( const QIconSet & " "icon" ", const QPixmap & " "pixmap" ", QPopupMenu * " "popup" ", int " "id" "=-1, int " "index" "=-1 )"
+.BI "int \fBinsertItem\fR ( const QIconSet & " "icon" ", const QPixmap & " "pixmap" ", QPopupMenu * " "popup" ", int " "id" "=-1, int " "index" "=-1 ) "
 .br
 .ti -1c
-.BI "int \fBinsertItem\fR ( QWidget * " "widget" ", int " "id" "=-1, int " "index" "=-1 )"
+.BI "int \fBinsertItem\fR ( QWidget * " "widget" ", int " "id" "=-1, int " "index" "=-1 ) "
 .br
 .ti -1c
-.BI "int \fBinsertItem\fR ( const QIconSet & " "icon" ", QCustomMenuItem * " "custom" ", int " "id" "=-1, int " "index" "=-1 )"
+.BI "int \fBinsertItem\fR ( const QIconSet & " "icon" ", QCustomMenuItem * " "custom" ", int " "id" "=-1, int " "index" "=-1 ) "
 .br
 .ti -1c
-.BI "int \fBinsertItem\fR ( QCustomMenuItem * " "custom" ", int " "id" "=-1, int " "index" "=-1 )"
+.BI "int \fBinsertItem\fR ( QCustomMenuItem * " "custom" ", int " "id" "=-1, int " "index" "=-1 ) "
 .br
 .ti -1c
-.BI "int \fBinsertSeparator\fR ( int " "index" "=-1 )"
+.BI "int \fBinsertSeparator\fR ( int " "index" "=-1 ) "
 .br
 .ti -1c
-.BI "void \fBremoveItem\fR ( int id )"
+.BI "void \fBremoveItem\fR ( int id ) "
 .br
 .ti -1c
-.BI "void \fBremoveItemAt\fR ( int index )"
+.BI "void \fBremoveItemAt\fR ( int index ) "
 .br
 .ti -1c
-.BI "void \fBclear\fR ()"
+.BI "void \fBclear\fR () "
 .br
 .ti -1c
 .BI "int \fBaccel\fR ( int id ) const"
 .br
 .ti -1c
-.BI "void \fBsetAccel\fR ( int " "key" ", int id )"
+.BI "void \fBsetAccel\fR ( int " "key" ", int id ) "
 .br
 .ti -1c
 .BI "QIconSet* \fBiconSet\fR ( int id ) const"
@@ -100,22 +98,22 @@ Inherited by QMenuBar and QPopupMenu.
 .BI "QPixmap* \fBpixmap\fR ( int id ) const"
 .br
 .ti -1c
-.BI "void \fBsetWhatsThis\fR ( int " "id" ", const QString & )"
+.BI "void \fBsetWhatsThis\fR ( int " "id" ", const QString & ) "
 .br
 .ti -1c
 .BI "QString \fBwhatsThis\fR ( int id ) const"
 .br
 .ti -1c
-.BI "void \fBchangeItem\fR ( int " "id" ", const QString & text )"
+.BI "void \fBchangeItem\fR ( int " "id" ", const QString & text ) "
 .br
 .ti -1c
-.BI "void \fBchangeItem\fR ( int " "id" ", const QPixmap & pixmap )"
+.BI "void \fBchangeItem\fR ( int " "id" ", const QPixmap & pixmap ) "
 .br
 .ti -1c
-.BI "void \fBchangeItem\fR ( int " "id" ", const QIconSet & " "icon" ", const QString & text )"
+.BI "void \fBchangeItem\fR ( int " "id" ", const QIconSet & " "icon" ", const QString & text ) "
 .br
 .ti -1c
-.BI "void \fBchangeItem\fR ( int " "id" ", const QIconSet & " "icon" ", const QPixmap & pixmap )"
+.BI "void \fBchangeItem\fR ( int " "id" ", const QIconSet & " "icon" ", const QPixmap & pixmap ) "
 .br
 .ti -1c
 .BI "void changeItem ( const QString & " "text" ", int id ) \fI(obsolete)\fR"
@@ -130,16 +128,16 @@ Inherited by QMenuBar and QPopupMenu.
 .BI "bool \fBisItemEnabled\fR ( int id ) const"
 .br
 .ti -1c
-.BI "void \fBsetItemEnabled\fR ( int " "id" ", bool enable )"
+.BI "void \fBsetItemEnabled\fR ( int " "id" ", bool enable ) "
 .br
 .ti -1c
 .BI "bool \fBisItemChecked\fR ( int id ) const"
 .br
 .ti -1c
-.BI "void \fBsetItemChecked\fR ( int " "id" ", bool check )"
+.BI "void \fBsetItemChecked\fR ( int " "id" ", bool check ) "
 .br
 .ti -1c
-.BI "virtual void \fBupdateItem\fR ( int id )"
+.BI "virtual void \fBupdateItem\fR ( int id ) "
 .br
 .ti -1c
 .BI "int \fBindexOf\fR ( int id ) const"
@@ -148,16 +146,16 @@ Inherited by QMenuBar and QPopupMenu.
 .BI "int \fBidAt\fR ( int index ) const"
 .br
 .ti -1c
-.BI "virtual void \fBsetId\fR ( int " "index" ", int id )"
+.BI "virtual void \fBsetId\fR ( int " "index" ", int id ) "
 .br
 .ti -1c
-.BI "bool \fBconnectItem\fR ( int " "id" ", const QObject * " "receiver" ", const char * member )"
+.BI "bool \fBconnectItem\fR ( int " "id" ", const QObject * " "receiver" ", const char * member ) "
 .br
 .ti -1c
-.BI "bool \fBdisconnectItem\fR ( int " "id" ", const QObject * " "receiver" ", const char * member )"
+.BI "bool \fBdisconnectItem\fR ( int " "id" ", const QObject * " "receiver" ", const char * member ) "
 .br
 .ti -1c
-.BI "bool \fBsetItemParameter\fR ( int " "id" ", int param )"
+.BI "bool \fBsetItemParameter\fR ( int " "id" ", int param ) "
 .br
 .ti -1c
 .BI "int \fBitemParameter\fR ( int id ) const"
@@ -168,23 +166,26 @@ Inherited by QMenuBar and QPopupMenu.
 .ti -1c
 .BI "QMenuItem* \fBfindItem\fR ( int " "id" ", QMenuData ** parent ) const"
 .br
+.ti -1c
+.BI "void \fBactivateItemAt\fR ( int index ) "
+.br
 .in -1c
 .SS "Protected Members"
 .in +1c
 .ti -1c
-.BI "virtual void \fBmenuContentsChanged\fR ()"
+.BI "virtual void \fBmenuContentsChanged\fR () "
 .br
 .ti -1c
-.BI "virtual void \fBmenuStateChanged\fR ()"
+.BI "virtual void \fBmenuStateChanged\fR () "
 .br
 .ti -1c
-.BI "virtual void \fBmenuInsPopup\fR ( QPopupMenu * )"
+.BI "virtual void \fBmenuInsPopup\fR ( QPopupMenu * ) "
 .br
 .ti -1c
-.BI "virtual void \fBmenuDelPopup\fR ( QPopupMenu * )"
+.BI "virtual void \fBmenuDelPopup\fR ( QPopupMenu * ) "
 .br
 .ti -1c
-.BI "QMenuItem* \fBfindPopup\fR ( QPopupMenu *, int * " "index" " = 0 )"
+.BI "QMenuItem* \fBfindPopup\fR ( QPopupMenu *, int * " "index" " = 0 ) "
 .br
 .in -1c
 .SH DESCRIPTION
@@ -196,7 +197,7 @@ The menu item sends out an activated() signal when it is selected, and a highlig
 .PP
 Menu items can be accessed through identifiers.
 .PP
-See also: QAccel.
+See also QAccel.
 .SH MEMBER FUNCTION DOCUMENTATION
 .SH "QMenuData::QMenuData ()"
 Constructs an empty list.
@@ -205,51 +206,55 @@ Removes all menu items and disconnects any signals that have been connected.
 .SH "int QMenuData::accel ( int id ) const"
 Returns the accelerator key that has been defined for the menu item \fIid,\fR or 0 if it has no accelerator key.
 .PP
-See also: setAccel(), QAccel and qnamespace.h.
+See also setAccel(), QAccel and qnamespace.h.
+.SH "void QMenuData::activateItemAt ( int index )"
+Activates the menu item at index \fIindex.\fR
+.PP
+If the index is invalid (for example -1), the object itself is deactivated.
 .SH "void QMenuData::changeItem ( const QIconSet & icon, const QString & text, int id )"
 \fBThis function is obsolete.\fR It is provided to keep old source working, and will probably be removed in a future version of Qt. We strongly advise against using it in new code.
 .PP
 Changes the icon and text of the menu item \fIid.\fR
 .PP
-See also: pixmap().
+See also pixmap().
 .SH "void QMenuData::changeItem ( const QPixmap & pixmap, int id )"
 \fBThis function is obsolete.\fR It is provided to keep old source working, and will probably be removed in a future version of Qt. We strongly advise against using it in new code.
 .PP
 Changes the pixmap of the menu item \fIid.\fR If the item has an icon, the icon remains unchanged.
 .PP
-See also: pixmap().
+See also pixmap().
 .SH "void QMenuData::changeItem ( const QString & text, int id )"
 \fBThis function is obsolete.\fR It is provided to keep old source working, and will probably be removed in a future version of Qt. We strongly advise against using it in new code.
 .PP
 Changes the text of the menu item \fIid.\fR If the item has an icon, the icon remains unchanged.
 .PP
-See also: text().
+See also text().
 .SH "void QMenuData::changeItem ( int id, const QIconSet & icon, const QPixmap & pixmap )"
 Changes the icon and pixmap of the menu item \fIid.\fR
 .PP
-See also: pixmap().
+See also pixmap().
 .SH "void QMenuData::changeItem ( int id, const QIconSet & icon, const QString & text )"
 Changes the icon and text of the menu item \fIid.\fR
 .PP
-See also: pixmap().
+See also pixmap().
 .SH "void QMenuData::changeItem ( int id, const QPixmap & pixmap )"
 Changes the pixmap of the menu item \fIid.\fR If the item has an icon, the icon remains unchanged.
 .PP
-See also: pixmap().
+See also pixmap().
 .SH "void QMenuData::changeItem ( int id, const QString & text )"
 Changes the text of the menu item \fIid.\fR If the item has an icon, the icon remains unchanged.
 .PP
-See also: text().
+See also text().
 .SH "void QMenuData::clear ()"
 Removes all menu items.
 .PP
-See also: removeItem() and removeItemAt().
+See also removeItem() and removeItemAt().
 .SH "bool QMenuData::connectItem ( int id, const QObject * receiver, const char * member )"
 Connects a menu item to a receiver and a slot or signal.
 .PP
 The receiver's slot/signal is activated when the menu item is activated.
 .PP
-See also: disconnectItem() and setItemParameter().
+See also disconnectItem() and setItemParameter().
 .PP
 Examples:
 .(l
@@ -262,29 +267,29 @@ Disconnects a receiver/member from a menu item.
 .PP
 All connections are removed when the menu data object is destroyed.
 .PP
-See also: connectItem() and setItemParameter().
+See also connectItem() and setItemParameter().
 .SH "QMenuItem * QMenuData::findItem ( int id ) const"
 Returns a pointer to the menu item with identifier \fIid,\fR or 0 if there is no item with such an identifier.
 .PP
-See also: indexOf().
+See also indexOf().
 .SH "QMenuItem * QMenuData::findItem ( int id, QMenuData ** parent ) const"
 Returns a pointer to the menu item with identifier \fIid,\fR or 0 if there is no item with such an identifier, and changes \fIparent\fR to point to the parent of the return value.
 .PP
-See also: indexOf().
+See also indexOf().
 .SH "QMenuItem * QMenuData::findPopup ( QPopupMenu * popup, int * index = 0 ) \fC[protected]\fR"
 Internal function that finds the menu item where \fIpopup\fR is located, storing its index at \fIindex\fR if \fIindex\fR is not NULL.
 .SH "QIconSet* QMenuData::iconSet ( int id ) const"
 Returns the icon set that has been set for menu item \fIid,\fR or 0 if no icon set has been set.
 .PP
-See also: changeItem(), text() and pixmap().
+See also changeItem(), text() and pixmap().
 .SH "int QMenuData::idAt ( int index ) const"
 Returns the identifier of the menu item at position \fIindex\fR in the internal list, or -1 if \fIindex\fR is out of range.
 .PP
-See also: setId() and indexOf().
+See also setId() and indexOf().
 .SH "int QMenuData::indexOf ( int id ) const"
 Returns the index of the menu item with identifier \fIid,\fR or -1 if there is no item with such an identifier.
 .PP
-See also: idAt() and findItem().
+See also idAt() and findItem().
 .PP
 Examples:
 .(l
@@ -339,7 +344,7 @@ Note that keyboard accelerators in Qt are not application global, but bound to a
 .PP
 \fBWarning:\fR Be careful when passing a literal 0 to insertItem(), as some C++ compilers choose the wrong overloaded function. Cast the 0 to what you mean, eg. \fC(QObject*)0\fR.
 .PP
-See also: removeItem(), changeItem(), setAccel(), connectItem(), QAccel and qnamespace.h.
+See also removeItem(), changeItem(), setAccel(), connectItem(), QAccel and qnamespace.h.
 .SH "int QMenuData::insertItem ( QCustomMenuItem * custom, int id=-1, int index=-1 )"
 This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts.
 .PP
@@ -349,7 +354,7 @@ This only works with popup menus. It is not supported for menu bars. Ownership o
 .PP
 If you want to connect a custom item to a certain slot, use connectItem().
 .PP
-See also: connectItem(), removeItem() and QCustomMenuItem.
+See also connectItem(), removeItem() and QCustomMenuItem.
 .SH "int QMenuData::insertItem ( QWidget * widget, int id=-1, int index=-1 )"
 This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts.
 .PP
@@ -357,7 +362,7 @@ Inserts a menu item that consists of the widget \fIwidget.\fR
 .PP
 Ownership of \fIwidget\fR is transferred to the popup menu or the menubar.
 .PP
-Theoretically, any widget can be inserted into a popup menu. In practise, this only makes sense with certain widgets.
+Theoretically, any widget can be inserted into a popup menu. In practice, this only makes sense with certain widgets.
 .PP
 If a widget is not focus enabled ( see QWidget::isFocusEnabled() ), the menu treats it as a separator. This means, the item is not selectable and will never get focus. This way you can for example simply insert a QLabel if you need a popup menu with a title.
 .PP
@@ -374,7 +379,7 @@ If the widget is focus enabled, it will get focus when the user traverses the po
         parentWidget()->close();
 .fi
 .PP
-See also: removeItem().
+See also removeItem().
 .SH "int QMenuData::insertItem ( const QIconSet & icon, QCustomMenuItem * custom, int id=-1, int index=-1 )"
 This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts.
 .PP
@@ -384,7 +389,7 @@ This only works with popup menus. It is not supported for menu bars. Ownership o
 .PP
 If you want to connect a custom item to a certain slot, use connectItem().
 .PP
-See also: connectItem(), removeItem() and QCustomMenuItem.
+See also connectItem(), removeItem() and QCustomMenuItem.
 .SH "int QMenuData::insertItem ( const QIconSet & icon, const QPixmap & pixmap, QPopupMenu * popup, int id=-1, int index=-1 )"
 This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts.
 .PP
@@ -394,7 +399,7 @@ The \fIpopup\fR must be deleted by the programmer or by its parent widget. It is
 .PP
 Returns the menu item identifier.
 .PP
-See also: removeItem(), changeItem(), setAccel() and connectItem().
+See also removeItem(), changeItem(), setAccel() and connectItem().
 .SH "int QMenuData::insertItem ( const QIconSet & icon, const QPixmap & pixmap, const QObject * receiver, const char * member, int accel = 0, int id = -1, int index = -1 )"
 This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts.
 .PP
@@ -404,13 +409,13 @@ To look best when being highlighted as menu item, the pixmap should provide a ma
 .PP
 Returns the menu item identifier.
 .PP
-See also: removeItem(), changeItem(), setAccel(), connectItem(), QAccel and qnamespace.h.
+See also removeItem(), changeItem(), setAccel(), connectItem(), QAccel and qnamespace.h.
 .SH "int QMenuData::insertItem ( const QIconSet & icon, const QPixmap & pixmap, int id=-1, int index=-1 )"
 This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts.
 .PP
 Inserts a menu item with an icon and a pixmap. The icon will be displayed to the left of the pixmap in the item. Returns the menu item identifier.
 .PP
-See also: removeItem(), changeItem(), setAccel() and connectItem().
+See also removeItem(), changeItem(), setAccel() and connectItem().
 .SH "int QMenuData::insertItem ( const QIconSet & icon, const QString & text, QPopupMenu * popup, int id=-1, int index=-1 )"
 This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts.
 .PP
@@ -420,19 +425,19 @@ The \fIpopup\fR must be deleted by the programmer or by its parent widget. It is
 .PP
 Returns the menu item identifier.
 .PP
-See also: removeItem(), changeItem(), setAccel() and connectItem().
+See also removeItem(), changeItem(), setAccel() and connectItem().
 .SH "int QMenuData::insertItem ( const QIconSet & icon, const QString & text, const QObject * receiver, const char * member, int accel = 0, int id = -1, int index = -1 )"
 This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts.
 .PP
 Inserts a menu item with an icon, a text, an accelerator key, an id and an optional index and connects it to an object/slot. The icon will be displayed to the left of the text in the item.
 .PP
-See also: removeItem(), changeItem(), setAccel(), connectItem(), QAccel and qnamespace.h.
+See also removeItem(), changeItem(), setAccel(), connectItem(), QAccel and qnamespace.h.
 .SH "int QMenuData::insertItem ( const QIconSet & icon, const QString & text, int id=-1, int index=-1 )"
 This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts.
 .PP
 Inserts a menu item with an icon and a text. The icon will be displayed to the left of the text in the item. Returns the menu item identifier.
 .PP
-See also: removeItem(), changeItem(), setAccel() and connectItem().
+See also removeItem(), changeItem(), setAccel() and connectItem().
 .SH "int QMenuData::insertItem ( const QPixmap & pixmap, QPopupMenu * popup, int id=-1, int index=-1 )"
 This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts.
 .PP
@@ -442,7 +447,7 @@ The \fIpopup\fR must be deleted by the programmer or by its parent widget. It is
 .PP
 Returns the menu item identifier.
 .PP
-See also: removeItem(), changeItem(), setAccel() and connectItem().
+See also removeItem(), changeItem(), setAccel() and connectItem().
 .SH "int QMenuData::insertItem ( const QPixmap & pixmap, const QObject * receiver, const char * member, int accel = 0, int id = -1, int index = -1 )"
 This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts.
 .PP
@@ -452,7 +457,7 @@ To look best when being highlighted as menu item, the pixmap should provide a ma
 .PP
 Returns the menu item identifier.
 .PP
-See also: removeItem(), changeItem(), setAccel() and connectItem().
+See also removeItem(), changeItem(), setAccel() and connectItem().
 .SH "int QMenuData::insertItem ( const QPixmap & pixmap, int id=-1, int index=-1 )"
 This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts.
 .PP
@@ -460,7 +465,7 @@ Inserts a menu item with a pixmap. Returns the menu item identifier.
 .PP
 To look best when being highlighted as menu item, the pixmap should provide a mask, see QPixmap::mask().
 .PP
-See also: removeItem(), changeItem(), setAccel() and connectItem().
+See also removeItem(), changeItem(), setAccel() and connectItem().
 .SH "int QMenuData::insertItem ( const QString & text, QPopupMenu * popup, int id=-1, int index=-1 )"
 This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts.
 .PP
@@ -470,7 +475,7 @@ The \fIpopup\fR must be deleted by the programmer or by its parent widget. It is
 .PP
 Returns the menu item identifier.
 .PP
-See also: removeItem(), changeItem(), setAccel() and connectItem().
+See also removeItem(), changeItem(), setAccel() and connectItem().
 .PP
 Examples:
 .(l
@@ -481,7 +486,7 @@ This is an overloaded member function, provided for convenience. It differs from
 .PP
 Inserts a menu item with a text. Returns the menu item identifier.
 .PP
-See also: removeItem(), changeItem(), setAccel() and connectItem().
+See also removeItem(), changeItem(), setAccel() and connectItem().
 .SH "int QMenuData::insertSeparator ( int index=-1 )"
 Inserts a separator at position \fIindex.\fR The separator becomes the last menu item if \fIindex\fR is negative.
 .PP
@@ -494,7 +499,7 @@ grapher/grapher.cpp menu/menu.cpp progress/progress.cpp scrollview/scrollview.cp
 .SH "bool QMenuData::isItemChecked ( int id ) const"
 Returns TRUE if the menu item has been checked, otherwise FALSE.
 .PP
-See also: setItemChecked().
+See also setItemChecked().
 .PP
 Examples:
 .(l
@@ -503,13 +508,13 @@ progress/progress.cpp
 .SH "bool QMenuData::isItemEnabled ( int id ) const"
 Returns TRUE if the item with identifier \fIid\fR is enabled or FALSE if it is disabled.
 .PP
-See also: setItemEnabled().
+See also setItemEnabled().
 .SH "int QMenuData::itemParameter ( int id ) const"
 Returns the parameter of the activation signal of item \fIid.\fR
 .PP
 If no parameter has been specified for this item with setItemParameter(), the value defaults to \fIid.\fR
 .PP
-See also: connectItem(), disconnectItem() and setItemParameter().
+See also connectItem(), disconnectItem() and setItemParameter().
 .SH "void QMenuData::menuContentsChanged () \fC[virtual protected]\fR"
 Virtual function; notifies subclasses that one or more items have been inserted or removed.
 .PP
@@ -525,15 +530,15 @@ Reimplemented in QMenuBar.
 .SH "QPixmap * QMenuData::pixmap ( int id ) const"
 Returns the pixmap that has been set for menu item \fIid,\fR or 0 if no pixmap has been set.
 .PP
-See also: changeItem(), text() and iconSet().
+See also changeItem(), text() and iconSet().
 .SH "void QMenuData::removeItem ( int id )"
 Removes the menu item which has the identifier \fIid.\fR
 .PP
-See also: removeItemAt() and clear().
+See also removeItemAt() and clear().
 .SH "void QMenuData::removeItemAt ( int index )"
 Removes the menu item at position \fIindex.\fR
 .PP
-See also: removeItem() and clear().
+See also removeItem() and clear().
 .SH "void QMenuData::setAccel ( int key, int id )"
 Defines an accelerator key for the menu item \fIid.\fR
 .PP
@@ -571,7 +576,7 @@ If you will need to translate accelerators, use QAccel::stringToKey():
 .PP
 You can also specify the accelerator in the insertItem() function.
 .PP
-See also: accel(), insertItem(), QAccel and qnamespace.h.
+See also accel(), insertItem(), QAccel and qnamespace.h.
 .PP
 Examples:
 .(l
@@ -582,11 +587,11 @@ Sets the menu identifier of the item at \fIindex\fR to \fIid.\fR
 .PP
 If index is out of range the operation is ignored.
 .PP
-See also: idAt().
+See also idAt().
 .SH "void QMenuData::setItemChecked ( int id, bool check )"
 Checks the menu item with id \fIid\fR if \fIcheck\fR is TRUE, or unchecks it if \fIcheck\fR is FALSE, and calls QPopupMenu::setCheckable( TRUE ) if necessary.
 .PP
-See also: isItemChecked().
+See also isItemChecked().
 .PP
 Examples:
 .(l
@@ -595,7 +600,7 @@ grapher/grapher.cpp progress/progress.cpp scrollview/scrollview.cpp
 .SH "void QMenuData::setItemEnabled ( int id, bool enable )"
 Enables the menu item with identifier \fIid\fR if \fIenable\fR is TRUE, or disables the item if \fIenable\fR is FALSE.
 .PP
-See also: isItemEnabled().
+See also isItemEnabled().
 .PP
 Examples:
 .(l
@@ -606,7 +611,7 @@ Sets the parameter of the activation signal of item \fIid\fR to \fIparam.\fR
 .PP
 If any receiver takes an integer parameter, this value is passed.
 .PP
-See also: connectItem(), disconnectItem() and itemParameter().
+See also connectItem(), disconnectItem() and itemParameter().
 .SH "void QMenuData::setWhatsThis ( int id, const QString & text )"
 Sets a Whats This help for a certain menu item.
 .PP
@@ -616,11 +621,11 @@ Arguments:
 .TP
 \fItext\fR is the Whats This help text in rich text format ( see QStyleSheet)
 .PP
-See also: whatsThis().
+See also whatsThis().
 .SH "QString QMenuData::text ( int id ) const"
 Returns the text that has been set for menu item \fIid,\fR or a null string if no text has been set.
 .PP
-See also: changeItem(), pixmap() and iconSet().
+See also changeItem(), pixmap() and iconSet().
 .SH "void QMenuData::updateItem ( int ) \fC[virtual]\fR"
 Virtual function; notifies subclasses about an item that has been changed.
 .PP
@@ -628,11 +633,11 @@ Reimplemented in QMenuBar and QPopupMenu.
 .SH "QString QMenuData::whatsThis ( int id ) const"
 Returns the Whats This help text for the specified item \fIid\fR or QString::null if no text has been defined yet.
 .PP
-See also:  setWhatsThis().
+See also  setWhatsThis().
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qmenudata.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

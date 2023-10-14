@@ -1,15 +1,17 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head>
 <title>Qt Toolkit - QUrl Class</title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
-a:link { text-decoration: none; }
-body { background: white; color: black; }
+a:link { color: #004faf; text-decoration: none }
+a:visited { color: #672967; text-decoration: none }body { background: white; color: black; }
 --></style>
 </head><body bgcolor="#ffffff">
 
-<a href="index.html">
-<img width="122" height="65" src="qtlogo.png" alt="Home"
-  align="left" border="0">
-</a><div align=right><img src="dochead.png" width="472" height="27"><br>
+<table width="100%">
+<tr><td><a href="index.html">
+<img width="100" height="100" src="qtlogo.png"
+alt="Home" border="0"><img width="100"
+height="100" src="face.png" alt="Home" border="0">
+</a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
 - <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
@@ -17,11 +19,11 @@ body { background: white; color: black; }
 - <a href="index.html">Home</a>
 - <a href="topicals.html"><b>Structure</b></a>
 </div>
-<br clear=all>
+</table>
 
 <h1 align=center>QUrl Class Reference</h1><br clear="all">
 <p>
-This class provides mainly an URL parser and simplifies working with URLs.
+The QUrl class provides mainly an URL parser and simplifies working with URLs.
 <a href="#details">More...</a>
 <p>
 <code>#include &lt;<a href="qurl-h.html">qurl.h</a>&gt;</code>
@@ -29,61 +31,61 @@ This class provides mainly an URL parser and simplifies working with URLs.
 <p><a href="qurl-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><span class="fn"><a href="#a84ed0"><b>QUrl</b></a> () </span>
-<li><span class="fn"><a href="#426a6c"><b>QUrl</b></a> ( const QString &amp; url ) </span>
-<li><span class="fn"><a href="#18fb05"><b>QUrl</b></a> ( const QUrl &amp; url ) </span>
-<li><span class="fn"><a href="#f12af2"><b>QUrl</b></a> ( const QUrl &amp; url, const QString &amp; relUrl, bool checkSlash = FALSE ) </span>
-<li><span class="fn">virtual <a href="#65dc1a"><b>~QUrl</b></a> () </span>
-<li><span class="fn">QString <a href="#6170b4"><b>protocol</b></a> () const</span>
-<li><span class="fn">virtual void <a href="#bc1769"><b>setProtocol</b></a> ( const QString &amp; protocol ) </span>
-<li><span class="fn">QString <a href="#2eb26d"><b>user</b></a> () const</span>
-<li><span class="fn">virtual void <a href="#0a32d5"><b>setUser</b></a> ( const QString &amp; user ) </span>
-<li><span class="fn">bool <a href="#4d5e47"><b>hasUser</b></a> () const</span>
-<li><span class="fn">QString <a href="#39bc85"><b>password</b></a> () const</span>
-<li><span class="fn">virtual void <a href="#29fde6"><b>setPassword</b></a> ( const QString &amp; pass ) </span>
-<li><span class="fn">bool <a href="#1605a9"><b>hasPassword</b></a> () const</span>
-<li><span class="fn">QString <a href="#1c07e5"><b>host</b></a> () const</span>
-<li><span class="fn">virtual void <a href="#46b05d"><b>setHost</b></a> ( const QString &amp; user ) </span>
-<li><span class="fn">bool <a href="#09e50e"><b>hasHost</b></a> () const</span>
-<li><span class="fn">int <a href="#a2bc45"><b>port</b></a> () const</span>
-<li><span class="fn">virtual void <a href="#784d38"><b>setPort</b></a> ( int port ) </span>
-<li><span class="fn">QString <a href="#b7b523"><b>path</b></a> ( bool correct = TRUE ) const</span>
-<li><span class="fn">virtual void <a href="#44bdb6"><b>setPath</b></a> ( const QString &amp; path ) </span>
-<li><span class="fn">bool <a href="#baf20d"><b>hasPath</b></a> () const</span>
-<li><span class="fn">virtual void <a href="#4bd159"><b>setEncodedPathAndQuery</b></a> ( const QString &amp; enc ) </span>
-<li><span class="fn">QString <a href="#e544c0"><b>encodedPathAndQuery</b></a> () </span>
-<li><span class="fn">virtual void <a href="#2d69d7"><b>setQuery</b></a> ( const QString &amp; txt ) </span>
-<li><span class="fn">QString <a href="#1e0538"><b>query</b></a> () const</span>
-<li><span class="fn">QString <a href="#7e6681"><b>ref</b></a> () const</span>
-<li><span class="fn">virtual void <a href="#8d42e2"><b>setRef</b></a> ( const QString &amp; txt ) </span>
-<li><span class="fn">bool <a href="#9211e4"><b>hasRef</b></a> () const</span>
-<li><span class="fn">bool <a href="#9ff3b5"><b>isValid</b></a> () const</span>
-<li><span class="fn">bool <a href="#ad41f0"><b>isLocalFile</b></a> () const</span>
-<li><span class="fn">virtual void <a href="#3a1216"><b>addPath</b></a> ( const QString &amp; path ) </span>
-<li><span class="fn">virtual void <a href="#cc862d"><b>setFileName</b></a> ( const QString &amp; txt ) </span>
-<li><span class="fn">QString <a href="#206a0a"><b>fileName</b></a> () const</span>
-<li><span class="fn">QString <a href="#571fe4"><b>dirPath</b></a> () const</span>
-<li><span class="fn">QUrl&amp; <a href="#80986e"><b>operator=</b></a> ( const QUrl &amp; url ) </span>
-<li><span class="fn">QUrl&amp; <a href="#97d55f"><b>operator=</b></a> ( const QString &amp; url ) </span>
-<li><span class="fn">bool <a href="#255283"><b>operator==</b></a> ( const QUrl &amp; url ) const</span>
-<li><span class="fn">bool <a href="#7c58ff"><b>operator==</b></a> ( const QString &amp; url ) const</span>
-<li><span class="fn">operator <a href=qurl.html#c00db3><b>QString</b></a> ()const</span>
-<li><span class="fn">virtual QString <a href="#bc27c8"><b>toString</b></a> ( bool encodedPath = FALSE, bool forcePrependProtocol = FALSE ) const</span>
-<li><span class="fn">virtual bool <a href="#c6dcc4"><b>cdUp</b></a> () </span>
+<li><div class="fn"><a href="#a84ed0"><b>QUrl</b></a> () </div>
+<li><div class="fn"><a href="#426a6c"><b>QUrl</b></a> ( const QString &amp; url ) </div>
+<li><div class="fn"><a href="#18fb05"><b>QUrl</b></a> ( const QUrl &amp; url ) </div>
+<li><div class="fn"><a href="#f12af2"><b>QUrl</b></a> ( const QUrl &amp; url, const QString &amp; relUrl, bool checkSlash = FALSE ) </div>
+<li><div class="fn">virtual <a href="#65dc1a"><b>~QUrl</b></a> () </div>
+<li><div class="fn">QString <a href="#6170b4"><b>protocol</b></a> () const</div>
+<li><div class="fn">virtual void <a href="#bc1769"><b>setProtocol</b></a> ( const QString &amp; protocol ) </div>
+<li><div class="fn">QString <a href="#2eb26d"><b>user</b></a> () const</div>
+<li><div class="fn">virtual void <a href="#0a32d5"><b>setUser</b></a> ( const QString &amp; user ) </div>
+<li><div class="fn">bool <a href="#4d5e47"><b>hasUser</b></a> () const</div>
+<li><div class="fn">QString <a href="#39bc85"><b>password</b></a> () const</div>
+<li><div class="fn">virtual void <a href="#29fde6"><b>setPassword</b></a> ( const QString &amp; pass ) </div>
+<li><div class="fn">bool <a href="#1605a9"><b>hasPassword</b></a> () const</div>
+<li><div class="fn">QString <a href="#1c07e5"><b>host</b></a> () const</div>
+<li><div class="fn">virtual void <a href="#46b05d"><b>setHost</b></a> ( const QString &amp; user ) </div>
+<li><div class="fn">bool <a href="#09e50e"><b>hasHost</b></a> () const</div>
+<li><div class="fn">int <a href="#a2bc45"><b>port</b></a> () const</div>
+<li><div class="fn">virtual void <a href="#784d38"><b>setPort</b></a> ( int port ) </div>
+<li><div class="fn">QString <a href="#b7b523"><b>path</b></a> ( bool correct = TRUE ) const</div>
+<li><div class="fn">virtual void <a href="#44bdb6"><b>setPath</b></a> ( const QString &amp; path ) </div>
+<li><div class="fn">bool <a href="#baf20d"><b>hasPath</b></a> () const</div>
+<li><div class="fn">virtual void <a href="#4bd159"><b>setEncodedPathAndQuery</b></a> ( const QString &amp; enc ) </div>
+<li><div class="fn">QString <a href="#e544c0"><b>encodedPathAndQuery</b></a> () </div>
+<li><div class="fn">virtual void <a href="#2d69d7"><b>setQuery</b></a> ( const QString &amp; txt ) </div>
+<li><div class="fn">QString <a href="#1e0538"><b>query</b></a> () const</div>
+<li><div class="fn">QString <a href="#7e6681"><b>ref</b></a> () const</div>
+<li><div class="fn">virtual void <a href="#8d42e2"><b>setRef</b></a> ( const QString &amp; txt ) </div>
+<li><div class="fn">bool <a href="#9211e4"><b>hasRef</b></a> () const</div>
+<li><div class="fn">bool <a href="#9ff3b5"><b>isValid</b></a> () const</div>
+<li><div class="fn">bool <a href="#ad41f0"><b>isLocalFile</b></a> () const</div>
+<li><div class="fn">virtual void <a href="#3a1216"><b>addPath</b></a> ( const QString &amp; path ) </div>
+<li><div class="fn">virtual void <a href="#cc862d"><b>setFileName</b></a> ( const QString &amp; txt ) </div>
+<li><div class="fn">QString <a href="#206a0a"><b>fileName</b></a> () const</div>
+<li><div class="fn">QString <a href="#571fe4"><b>dirPath</b></a> () const</div>
+<li><div class="fn">QUrl&amp; <a href="#80986e"><b>operator=</b></a> ( const QUrl &amp; url ) </div>
+<li><div class="fn">QUrl&amp; <a href="#97d55f"><b>operator=</b></a> ( const QString &amp; url ) </div>
+<li><div class="fn">bool <a href="#255283"><b>operator==</b></a> ( const QUrl &amp; url ) const</div>
+<li><div class="fn">bool <a href="#7c58ff"><b>operator==</b></a> ( const QString &amp; url ) const</div>
+<li><div class="fn">operator <a href=qurl.html#c00db3><b>QString</b></a> ()const</div>
+<li><div class="fn">virtual QString <a href="#bc27c8"><b>toString</b></a> ( bool encodedPath = FALSE, bool forcePrependProtocol = TRUE ) const</div>
+<li><div class="fn">virtual bool <a href="#c6dcc4"><b>cdUp</b></a> () </div>
 </ul>
 <h2>Static Public Members</h2>
 <ul>
-<li><span class="fn">void <a href="#db2875"><b>decode</b></a> ( QString &amp; url ) </span>
-<li><span class="fn">void <a href="#e2f55d"><b>encode</b></a> ( QString &amp; url ) </span>
-<li><span class="fn">bool <a href="#d509ca"><b>isRelativeUrl</b></a> ( const QString &amp; url ) </span>
+<li><div class="fn">void <a href="#db2875"><b>decode</b></a> ( QString &amp; url ) </div>
+<li><div class="fn">void <a href="#e2f55d"><b>encode</b></a> ( QString &amp; url ) </div>
+<li><div class="fn">bool <a href="#d509ca"><b>isRelativeUrl</b></a> ( const QString &amp; url ) </div>
 </ul>
 <h2>Protected Members</h2>
 <ul>
-<li><span class="fn">virtual void <a href="#e14834"><b>reset</b></a> () </span>
-<li><span class="fn">virtual bool <a href="#1c8c02"><b>parse</b></a> ( const QString &amp; url ) </span>
+<li><div class="fn">virtual void <a href="#e14834"><b>reset</b></a> () </div>
+<li><div class="fn">virtual bool <a href="#1c8c02"><b>parse</b></a> ( const QString &amp; url ) </div>
 </ul>
 <hr><h2><a name="details"></a>Detailed Description</h2>
-This class provides mainly an URL parser and simplifies working with URLs.
+The QUrl class provides mainly an URL parser and simplifies working with URLs.
 <p>
 The QUrl class is provided for a easy working with URLs.
 It does all parsing, decoding, encoding and so on.
@@ -110,10 +112,10 @@ the needed cast and assign operators. So you can do following:
   <a href="qstring.html">QString</a> s( "http://www.trolltech.com" );
   <a href="qurl.html">QUrl</a> u( s );
 </pre>
-<p>If you want to use an URL to work on a hirarchical structures
+<p>If you want to use an URL to work on a hierarchical structures
 (e.g. locally or remote filesystem) the class <a href="qurloperator.html">QUrlOperator</a>, which is derived
 fro QUrl, may be interesting for you.
-<p>See also:  <a href="qurloperator.html">QUrlOperator</a>.
+<p>See also  <a href="qurloperator.html">QUrlOperator</a>.
 
 <hr><h2>Member Function Documentation</h2>
 <h3 class="fn"><a name="a84ed0"></a>QUrl::QUrl ()</h3>
@@ -151,7 +153,7 @@ and let it replace by the filename of <em>relUrl</em>
 <p>Destructor.
 <h3 class="fn"><a name="c00db3"></a>QUrl::operator QString () const</h3>
 <p>Composes a string of the URL and returns it.
-<p>See also:  <a href="#bc27c8">QUrl::toString</a>().
+<p>See also  <a href="#bc27c8">QUrl::toString</a>().
 <h3 class="fn">void <a name="3a1216"></a>QUrl::addPath ( const <a href="qstring.html">QString</a> &amp; pa ) <code>[virtual]</code></h3>
 <p>Adds the path <em>pa</em> to the path of the URL.
 <h3 class="fn">bool <a name="c6dcc4"></a>QUrl::cdUp () <code>[virtual]</code></h3>
@@ -182,8 +184,7 @@ else FALSE;.
 <p>Returns TRUE, if the URL contains a path,
 else FALSE.
 <h3 class="fn">bool <a name="9211e4"></a>QUrl::hasRef () const</h3>
-<p>Returns TRUE, if the URL has a reference, else
-it returnd FALSE;.
+<p>Returns TRUE, if the URL has a reference, else it returns FALSE.
 <h3 class="fn">bool <a name="4d5e47"></a>QUrl::hasUser () const</h3>
 <p>Returns TRUE, if the URL contains an username,
 else FALSE;.
@@ -210,7 +211,7 @@ first. Returns TRUE if  <em>url</em> is equal to this url,
 else FALSE:.
 <h3 class="fn">bool <a name="255283"></a>QUrl::operator== ( const QUrl &amp; url ) const</h3>
 <p>Compares this URL with <em>url</em> and returns TRUE if
-they are equal, ese FALSE.
+they are equal, else FALSE.
 <h3 class="fn">bool <a name="1c8c02"></a>QUrl::parse ( const <a href="qstring.html">QString</a> &amp; url ) <code>[virtual protected]</code></h3>
 <p>Parses the <em>url.</em>
 <h3 class="fn"><a href="qstring.html">QString</a> <a name="39bc85"></a>QUrl::password () const</h3>
@@ -257,24 +258,24 @@ as file name and what as directory path.
 <p>Sets the reference of the URL. Must be encoded.
 <h3 class="fn">void <a name="0a32d5"></a>QUrl::setUser ( const <a href="qstring.html">QString</a> &amp; user ) <code>[virtual]</code></h3>
 <p>Sets the username of the URL.
-<h3 class="fn"><a href="qstring.html">QString</a> <a name="bc27c8"></a>QUrl::toString ( bool encodedPath = FALSE, bool forcePrependProtocol = FALSE ) const <code>[virtual]</code></h3>
-<p>Composes a string of the URL and returns it. If <em>encodedPath</em>
-is TRUE, the path in the returned string will be encoded. If
-<em>forcePrependProtocol</em> is TRUE the file:/ protocol is also
-prepended if no remote network protocols are registered.
+<h3 class="fn"><a href="qstring.html">QString</a> <a name="bc27c8"></a>QUrl::toString ( bool encodedPath = FALSE, bool forcePrependProtocol = TRUE ) const <code>[virtual]</code></h3>
+<p>Composes a string of the URL and returns it. If <em>encodedPath</em> is
+TRUE, the path in the returned string will be encoded. If <em>forcePrependProtocol</em> is TRUE, the protocol (file:/) is also
+prepended to local filenames, else no protocol is prepended for
+local filenames.
 <h3 class="fn"><a href="qstring.html">QString</a> <a name="2eb26d"></a>QUrl::user () const</h3>
 <p>Returns the username of the URL.
 <hr><p>
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.1.1"><nobr>
+<input type=hidden name="version" value="2.2.0"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
 copyright &copy; 1995-2000
-<a href="http://www.trolltech.com">Troll Tech</a>, all rights reserved.<p><address><hr><div align="center">
+<a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.1</div>
+<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.2.0</div>
 </table></div></address></body></html>

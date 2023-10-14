@@ -1,35 +1,41 @@
 /****************************************************************************
-** $Id: qt/doc/object.doc   2.1.1   edited 2000-05-18 $
+** $Id: qt/doc/object.doc   2.2.0   edited 2000-08-25 $
 **
 ** Explanation of the Qt object model
 **
-** Copyright (C) 2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 2000 Trolltech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 /*! \page object.html
 
-<title>
-Qt Toolkit - Qt Object Model
-</title></head><body bgcolor="#ffffff">
-
-\postheader
-
-<h1 align=center>Qt Object Model</h1><br clear="all">
+\title Qt Object Model
 
 The standard C++ Object Model provides very efficient runtime support
 of the object paradigm. On the negative side, its static nature shows
@@ -59,7 +65,7 @@ In addition to C++, Qt provides
 </ul>
 
 Many of these Qt features are implemented with standard C++
-techniquees, based on inheritance from \l QObject. Others, like the
+techniques, based on inheritance from \l QObject. Others, like the
 object communication mechanism and the dynamic property system,
 require the <a href="metaobjects.html">Meta Object System</a> provided
 by Qt's own <a href="moc.html">Meta Object Compiler (moc)</a>. Think
@@ -73,13 +79,7 @@ better suited for true component GUI programming.
 
 /*! \page timers.html
 
-<title>
-Qt Toolkit - Timers
-</title></head><body bgcolor="#ffffff">
-
-\postheader
-
-<h1 align=center>Timers</h1><br clear="all">
+\title Timers
 
 \l QObject, the base class of all Qt objects, provides the basic timer
 support in Qt. With \l QObject::startTimer(), you start a timer with
@@ -91,7 +91,7 @@ the timer id.
 For this mechanism to work, the application has to run in an event
 loop. You start an event loop with \l QApplication::exec(). When a
 timer fires, the application sends a QTimerEvent, and the flow of
-control leaves the event loop until the timer event is prosessed. This
+control leaves the event loop until the timer event is processed. This
 implies that a timer cannot fire while your application is busy doing
 something else. In other words: the accuracy of timers depends on the
 granularity of your application.
@@ -204,13 +204,7 @@ in a single-threaded application without blocking the user interface.
 
 /*! \page properties.html
 
-<title>
-Qt Toolkit - Properties
-</title></head><body bgcolor="#ffffff">
-
-\postheader
-
-<h1 align=center>Properties</h1><br clear="all">
+\title Properties
 
 Qt provides a sophisticated property system similar to those shipped
 by some compiler vendors. However, as a compiler- and
@@ -270,13 +264,13 @@ available properties for any QObject through its \link QMetaObject
 metaObject() \endlink setProperty() can give you control over classes
 that weren't available at compile time.
 
-As well las QObject::setProperty(), there is a \l
-QObject::property(). \l QMetaObject::propertyNames() returns the names
-of all available properties.  \l QMetaObject::property() returns the
-property data for a named property: a \l QMetaProperty object.
+As well as QObject::setProperty(), there is a \l QObject::property().
+\l QMetaObject::propertyNames() returns the names of all available
+properties.  \l QMetaObject::property() returns the property data for
+a named property: a \l QMetaProperty object.
 
 Here's a simple example that shows the most important property
-functions in use/.
+functions in use:
 
 \code
     class MyClass : public QObject
@@ -346,7 +340,7 @@ The remaining keywords in the \c Q_PROPERTY section are \c STORED, \c
 DESIGNABLE and \c RESET.
 
 \c STORED declares whether the property's value is stored in the
-object. Stored makes only sense for writeable properties. The default
+object. Stored makes only sense for writable properties. The default
 value is \c true.
 
 \c DESIGNABLE declares whether this property is suited for
@@ -367,7 +361,7 @@ that can be used to attach additional name/value-pairs to a classes'
 meta object, for example:
 
 \code
-Q_CLASSINFO( "Status", "Very nice class")
+Q_CLASSINFO( "Status", "Very nice class" )
 \endcode
 
 Like other meta data, class information is accessible at runtime
@@ -377,17 +371,11 @@ through the meta object, see \l QMetaObject::classInfo() for details.
 
 /*! \page eventsandfilters.html
 
-<title>
-Qt Toolkit - Events and Event Filters
-</title></head><body bgcolor="#ffffff">
-
-\postheader
-
-<h1 align=center>Events and Event Filters</h1><br clear="all">
+\title Events and Event Filters
 
 An event, in Qt, is an object that inherits \l QEvent.  Events are
 delivered to objects that inherit \l QObject through calling \l
-QObject::event().  Event delivery means that an event has occured, the
+QObject::event().  Event delivery means that an event has occurred, the
 QEvent indicates precisely what, and the QObject needs to react.  Most
 events are specific to \l QWidget and its subclasses, but there are
 important events that aren't related to graphics, such as socket
@@ -459,7 +447,7 @@ An event filter gets to process events before the target object does.
 The filter's \l QObject::eventFilter() implementation is called, and
 can accept or reject the filter, and allow or deny further processing
 of the event.  If all the event filters allow further processing of an
-event, the event is sent to the target object iself.  If one of them
+event, the event is sent to the target object itself.  If one of them
 stops processing, the target and any later event filters don't get to
 see the event at all.
 
@@ -476,17 +464,18 @@ filters.
 Finally, many applications want to create and send their own events.
 
 Creatint an event of a built-in type is very simple: Create an object
-of the relevant type, and then call \l QApplcation::sendEvent() or \l
+of the relevant type, and then call \l QApplication::sendEvent() or \l
 QApplication::postEvent().
 
 sendEvent() processes the event immediately - when sendEvent()
 returns, (the event filters and) the object have already processed the
-event.  \l QEvent::isAccepted() tells you whether the event was
-accepted or rejected by the last handler that was called.
+event.  For many event classes there is a function called isAccepted()
+tells you whether the event was accepted or rejected by the last
+handler that was called.
 
 postEvent() posts the event on a queue for later dispatch.  The next
 time Qt's main event loop runs, it dispatches all posted events, with
-somke optimization.  For example, if there are several resize events,
+some optimization.  For example, if there are several resize events,
 they are are compacted into one.  The same applies to paint events: \l
 QWidget::update() calls postEvent(), which minimizes flickering and
 increases speed by avoiding multiple repaints.
@@ -496,7 +485,7 @@ posted event will typically be dispatched very soon after the
 initialization of the object is complete.
 
 To create events of a custom type, you need to define an event number,
-which must be greater than \l QEvent::User, and probably you also need
+which must be greater than \c QEvent::User, and probably you also need
 to subclass \l QCustomEvent in order to pass characteristics about
 your custom event.  See the documentation to \l QCustomEvent for
 details.
@@ -505,13 +494,7 @@ details.
 
 /*! \page objecttrees.html
 
-<title>
-Qt Toolkit - Object Trees and Object Ownership
-</title></head><body bgcolor="#ffffff">
-
-\postheader
-
-<h1 align=center>Object Trees and Object Ownership</h1><br clear="all">
+\title Object Trees and Object Ownership
 
 \link QObject QObjects\endlink organize themselves in object trees.
 When you create a QObject with another object as parent, it's added to

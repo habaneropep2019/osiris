@@ -1,5 +1,5 @@
-.TH QGridLayout 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QGridLayout 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QGridLayout \- Lays out widgets in a grid
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -19,19 +17,19 @@ Inherits QLayout.
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQGridLayout\fR ( QWidget * " "parent" ", int " "nRows" " = 1, int " "nCols" " = 1, int " "border" "=0, int " "space" " = -1, const char * " "name" "=0 )"
+.BI "\fBQGridLayout\fR ( QWidget * " "parent" ", int " "nRows" " = 1, int " "nCols" " = 1, int " "border" "=0, int " "space" " = -1, const char * " "name" "=0 ) "
 .br
 .ti -1c
-.BI "\fBQGridLayout\fR ( int " "nRows" " = 1, int " "nCols" " = 1, int " "space" " = -1, const char * " "name" "=0 )"
+.BI "\fBQGridLayout\fR ( int " "nRows" " = 1, int " "nCols" " = 1, int " "space" " = -1, const char * " "name" "=0 ) "
 .br
 .ti -1c
-.BI "\fBQGridLayout\fR ( QLayout * " "parentLayout" ", int " "nRows" " = 1, int " "nCols" " = 1, int " "space" " = -1, const char * " "name" "=0 )"
+.BI "\fBQGridLayout\fR ( QLayout * " "parentLayout" ", int " "nRows" " = 1, int " "nCols" " = 1, int " "space" " = -1, const char * " "name" "=0 ) "
 .br
 .ti -1c
-.BI "\fB~QGridLayout\fR ()"
+.BI "\fB~QGridLayout\fR () "
 .br
 .ti -1c
-.BI "QSize \fBsizeHint\fR () const"
+.BI "virtual QSize \fBsizeHint\fR () const"
 .br
 .ti -1c
 .BI "virtual QSize \fBminimumSize\fR () const"
@@ -40,10 +38,10 @@ Inherits QLayout.
 .BI "virtual QSize \fBmaximumSize\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetRowStretch\fR ( int " "row" ", int stretch )"
+.BI "virtual void \fBsetRowStretch\fR ( int " "row" ", int stretch ) "
 .br
 .ti -1c
-.BI "virtual void \fBsetColStretch\fR ( int " "col" ", int stretch )"
+.BI "virtual void \fBsetColStretch\fR ( int " "col" ", int stretch ) "
 .br
 .ti -1c
 .BI "int \fBrowStretch\fR ( int row ) const"
@@ -70,52 +68,55 @@ Inherits QLayout.
 .BI "virtual QSizePolicy::ExpandData \fBexpanding\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBinvalidate\fR ()"
+.BI "virtual void \fBinvalidate\fR () "
 .br
 .ti -1c
-.BI "virtual void \fBaddItem\fR ( QLayoutItem * )"
+.BI "virtual void \fBaddItem\fR ( QLayoutItem * ) "
 .br
 .ti -1c
-.BI "void \fBaddItem\fR ( QLayoutItem * " "item" ", int " "row" ", int col )"
+.BI "void \fBaddItem\fR ( QLayoutItem * " "item" ", int " "row" ", int col ) "
 .br
 .ti -1c
-.BI "void \fBaddMultiCell\fR ( QLayoutItem *, int " "fromRow" ", int " "toRow" ", int " "fromCol" ", int " "toCol" ", int " "align" " = 0 )"
+.BI "void \fBaddMultiCell\fR ( QLayoutItem *, int " "fromRow" ", int " "toRow" ", int " "fromCol" ", int " "toCol" ", int " "align" " = 0 ) "
 .br
 .ti -1c
-.BI "void \fBaddWidget\fR ( QWidget *, int " "row" ", int " "col" ", int " "align" " = 0 )"
+.BI "void \fBaddWidget\fR ( QWidget *, int " "row" ", int " "col" ", int " "align" " = 0 ) "
 .br
 .ti -1c
-.BI "void \fBaddMultiCellWidget\fR ( QWidget *, int " "fromRow" ", int " "toRow" ", int " "fromCol" ", int " "toCol" ", int " "align" " = 0 )"
+.BI "void \fBaddMultiCellWidget\fR ( QWidget *, int " "fromRow" ", int " "toRow" ", int " "fromCol" ", int " "toCol" ", int " "align" " = 0 ) "
 .br
 .ti -1c
-.BI "void \fBaddLayout\fR ( QLayout * " "layout" ", int " "row" ", int col )"
+.BI "void \fBaddLayout\fR ( QLayout * " "layout" ", int " "row" ", int col ) "
 .br
 .ti -1c
-.BI "void \fBaddRowSpacing\fR ( int " "row" ", int minsize )"
+.BI "void \fBaddMultiCellLayout\fR ( QLayout * " "layout" ", int " "fromRow" ", int " "toRow" ", int " "fromCol" ", int " "toCol" ", int " "align" " = 0 ) "
 .br
 .ti -1c
-.BI "void \fBaddColSpacing\fR ( int " "col" ", int minsize )"
+.BI "void \fBaddRowSpacing\fR ( int " "row" ", int minsize ) "
 .br
 .ti -1c
-.BI "void \fBexpand\fR ( int " "rows" ", int cols )"
+.BI "void \fBaddColSpacing\fR ( int " "col" ", int minsize ) "
+.br
+.ti -1c
+.BI "void \fBexpand\fR ( int " "rows" ", int cols ) "
 .br
 .ti -1c
 .BI "enum \fBCorner\fR { TopLeft, TopRight, BottomLeft, BottomRight }"
 .br
 .ti -1c
-.BI "void \fBsetOrigin\fR ( Corner )"
+.BI "void \fBsetOrigin\fR ( Corner ) "
 .br
 .ti -1c
-.BI "virtual void \fBsetGeometry\fR ( const QRect & )"
+.BI "virtual void \fBsetGeometry\fR ( const QRect & ) "
 .br
 .in -1c
 .SS "Protected Members"
 .in +1c
 .ti -1c
-.BI "bool \fBfindWidget\fR ( QWidget * " "w" ", int * " "r" ", int * c )"
+.BI "bool \fBfindWidget\fR ( QWidget * " "w" ", int * " "r" ", int * c ) "
 .br
 .ti -1c
-.BI "void \fBadd\fR ( QLayoutItem *, int " "row" ", int col )"
+.BI "void \fBadd\fR ( QLayoutItem *, int " "row" ", int col ) "
 .br
 .in -1c
 .SH DESCRIPTION
@@ -133,7 +134,7 @@ This illustration shows a fragment of a dialog with a five-column, three-row gri
 .PP
 <img src="gridlayout.png" width="425" height="150">
 .PP
-Columns 0, 2 and 4 in this dialog fragment are made up of a QLabel, a QLineEdit and a QListBox. Columns 1 and 2 are placeholders, made with setColSpacing(). Row 0 consists of three QLabel objects, row 1 of three QLineEdit objects and row 2 of three QListBox objects.
+Columns 0, 2 and 4 in this dialog fragment are made up of a QLabel, a QLineEdit and a QListBox. Columns 1 and 2 are placeholders, made with addColSpacing(). Row 0 consists of three QLabel objects, row 1 of three QLineEdit objects and row 2 of three QListBox objects.
 .PP
 Since we did not want any space between the rows, we had to use placeholder columns to get the right amount of space between the columns.
 .PP
@@ -186,6 +187,12 @@ Places another layout at position (\fIrow, col)\fR in the grid. The top left pos
 Adds the \fIitem\fR to the cell grid, spanning multiple rows/columns.
 .PP
 Alignment is specified by \fIalignment\fR which is a bitwise OR of Qt::AlignmentFlags values. The default alignment is 0, which means that the widget fills the entire cell.
+.SH "void QGridLayout::addMultiCellLayout ( QLayout * layout, int fromRow, int toRow, int fromCol, int toCol, int alignment = 0 )"
+Adds the layout \fIw\fR to the cell grid, spanning multiple rows/columns.
+.PP
+Alignment is specified by \fIalignment\fR which is a bitwise OR of Qt::AlignmentFlags values. The default alignment is 0, which means that the widget fills the entire cell.
+.PP
+A non-zero alignment indicates that the layout should not grow to fill the available space, but should be sized according to sizeHint().
 .SH "void QGridLayout::addMultiCellWidget ( QWidget * w, int fromRow, int toRow, int fromCol, int toCol, int alignment = 0 )"
 Adds the widget \fIw\fR to the cell grid, spanning multiple rows/columns.
 .PP
@@ -219,7 +226,7 @@ Returns the geometry of the cell with row \fIrow,\fR and column \fIcol\fR in the
 .SH "int QGridLayout::colStretch ( int col ) const"
 Returns the stretch factor for column \fIcol.\fR
 .PP
-See also: setColStretch().
+See also setColStretch().
 .SH "void QGridLayout::expand ( int nRows, int nCols )"
 Expands this grid so that it will have \fInRows\fR rows and \fInCols\fR columns. Will not shrink the grid. You should not need to call this function, as QGridLayout expands automatically as new items are inserted.
 .SH "QSizePolicy::ExpandData QGridLayout::expanding() const \fC[virtual]\fR"
@@ -261,7 +268,7 @@ Returns the number of rows in this grid.
 .SH "int QGridLayout::rowStretch ( int row ) const"
 Returns the stretch factor for row \fIrow.\fR
 .PP
-See also: setRowStretch().
+See also setRowStretch().
 .SH "void QGridLayout::setColStretch ( int col, int stretch ) \fC[virtual]\fR"
 Sets the stretch factor of column \fIcol\fR to \fIstretch.\fR The first column is number 0.
 .PP
@@ -269,7 +276,7 @@ The stretch factor is relative to the other columns in this grid. Columns with h
 .PP
 The default stretch factor is 0. If the stretch factor is 0 and no other column in this table can grow at all, the column may still grow.
 .PP
-See also: colStretch(), addColSpacing() and setRowStretch().
+See also colStretch(), addColSpacing() and setRowStretch().
 .PP
 Examples:
 .(l
@@ -288,13 +295,15 @@ The stretch factor is relative to the other rows in this grid. Rows with higher 
 .PP
 The default stretch factor is 0. If the stretch factor is 0 and no other row in this table can grow at all, the row may still grow.
 .PP
-See also: rowStretch(), addRowSpacing() and setColStretch().
-.SH "QSize QGridLayout::sizeHint () const"
+See also rowStretch(), addRowSpacing() and setColStretch().
+.SH "QSize QGridLayout::sizeHint () const \fC[virtual]\fR"
 Returns the preferred size of this grid.
+.PP
+Reimplemented from QLayoutItem.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qgridlayout.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

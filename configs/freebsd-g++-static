@@ -7,8 +7,13 @@ SYSCONF_CXXFLAGS_X11	= -I/usr/X11R6/include
 SYSCONF_CXXFLAGS_QT	= -I$(QTDIR)/include
 SYSCONF_CXXFLAGS_OPENGL	= -I/usr/X11R6/include
 
-# Compiline YACC output
+# Compiling YACC output
 SYSCONF_CXXFLAGS_YACC     = -Wno-unused -Wno-parentheses
+
+# Linking with support libraries
+SYSCONF_RPATH_X11	= -Wl,-rpath,/usr/X11R6/lib
+SYSCONF_RPATH_QT	= -Wl,-rpath,$(QTDIR)/lib
+SYSCONF_RPATH_OPENGL	= -Wl,-rpath,/usr/X11R6/lib
 
 # Linking with support libraries
 # X11
@@ -16,8 +21,8 @@ SYSCONF_LFLAGS_X11	= -L/usr/X11R6/lib
 SYSCONF_LIBS_X11	= -lXext -lX11 -lm
 # Qt, Qt+OpenGL
 SYSCONF_LFLAGS_QT	= -L$(QTDIR)/lib
-SYSCONF_LIBS_QT		= -lqt
-SYSCONF_LIBS_QT_OPENGL	= -lqgl
+SYSCONF_LIBS_QT		= -lqt$(QT_THREAD_SUFFIX)
+SYSCONF_LIBS_QT_OPENGL	= 
 # OpenGL
 SYSCONF_LFLAGS_OPENGL	= -L/usr/X11R6/lib
 SYSCONF_LIBS_OPENGL	= -lGLU -lGL -lXmu
@@ -29,11 +34,20 @@ SYSCONF_LINK		= g++
 SYSCONF_LFLAGS		= 
 SYSCONF_LIBS		= 
 
-# Link flags shared objects
+# Link flags for shared objects
 SYSCONF_LFLAGS_SHOBJ	= -shared
+
+# Flags for threading
+SYSCONF_CFLAGS_THREAD	= -pthread -D_THREAD_SAFE
+SYSCONF_CXXFLAGS_THREAD	= -pthread -D_THREAD_SAFE
+SYSCONF_LFLAGS_THREAD	= -pthread
+SYSCONF_LIBS_THREAD	= 
 
 # Meta-object compiler
 SYSCONF_MOC		= $(QTDIR)/bin/moc
+
+# UI compiler
+SYSCONF_UIC		= $(QTDIR)/bin/uic
 
 # Linking shared libraries
 #   - Build the $(TARGET) library, eg. lib$(TARGET).so.2.0.1
@@ -63,11 +77,15 @@ SYSCONF_LINK_LIB_STATIC	= rm -f $(DESTDIR)$(SYSCONF_LINK_TARGET_STATIC) ; \
 # Compiling application source
 SYSCONF_CXXFLAGS	= -pipe -O2
 SYSCONF_CFLAGS		= -pipe -O2
+SYSCONF_LINK_LIB	= $(SYSCONF_LINK_LIB_STATIC)
+SYSCONF_LINK_TARGET	= $(SYSCONF_LINK_TARGET_STATIC)
 # Compiling library source
-SYSCONF_CXXFLAGS_LIB	= -fPIC
-SYSCONF_CFLAGS_LIB	= -fPIC
+SYSCONF_CXXFLAGS_LIB	= 
+SYSCONF_CFLAGS_LIB	= 
 # Compiling shared-object source
 SYSCONF_CXXFLAGS_SHOBJ	= -fPIC
 SYSCONF_CFLAGS_SHOBJ	= -fPIC
-SYSCONF_LINK_LIB	= $(SYSCONF_LINK_LIB_STATIC)
-SYSCONF_LINK_TARGET	= $(SYSCONF_LINK_TARGET_STATIC)
+# Linking Qt
+SYSCONF_LIBS_QTLIB	= $(SYSCONF_CXXFLAGS_X11) $(QT_LIBS_MT) $(QT_LIBS_OPT)
+# Linking Qt applications
+SYSCONF_LIBS_QTAPP	= $(SYSCONF_CXXFLAGS_X11) $(QT_LIBS_MT) $(QT_LIBS_OPT)

@@ -1,46 +1,59 @@
 /****************************************************************************
-** $Id: qt/doc/indices.doc   2.1.1   edited 2000-05-25 $
+** $Id: qt/doc/indices.doc   2.2.0   edited 2000-08-29 $
 **
 ** Miscellaneous index pages
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #if defined(DEBUG)
-static char ident[] = "$Id: qt/doc/indices.doc   2.1.1   edited 2000-05-25 $";
+static char ident[] = "$Id: qt/doc/indices.doc   2.2.0   edited 2000-08-29 $";
 #endif
 
 /*! \page index.html
 
 <title>Qt Reference Documentation</title>
+\style
 </head><body bgcolor="#ffffff">
 
 \postheader
 
-<table cellpadding=2 cellspacing=1 border=0  width=100% bgcolor=#EEEEFF>
+<table cellpadding=2 cellspacing=1 border=0  width=100% bgcolor=#E5E5E5>
 <tr>
-<th bgcolor=#D0D0FF width=33%>
+<th bgcolor=#A2C511 width=33%>
 General
 </th>
-<th bgcolor=#D0D0FF width=33%>
+<th bgcolor=#A2C511 width=33%>
 Getting Started
 </th>
-<th bgcolor=#D0D0FF width=33%>
+<th bgcolor=#A2C511 width=33%>
 What´s New
 </th>
 </tr>
@@ -49,11 +62,13 @@ What´s New
 <ul>
 <li> <a href="aboutqt.html" >About Qt</a>
 <li> <a href="commonproblems.html">Common Problems</a>
+<li> <a href="winsystem.html"> Windowsystem-specific notes</a>
 <li> <a href="buyhowto.html">How to buy Qt</a>
 </ul>
 </td>
 <td valign=top>
 <ul>
+<li> <a href="installation.html">Installation</a>
 <li> <a href="tutorial.html">Tutorial</a>
 <li> <a href="simple-application.html">Walkthrough</a>
 <li> <a href="examples.html">Examples</a>
@@ -61,18 +76,20 @@ What´s New
 </td>
 <td valign=top>
 <ul>
-<li> <a href="keyfeatures21.html">  Key Features in Qt 2.1</a>
-<li> <a href="changes21.html">  Detailed Change Notes for Qt 2.1</a>
-<li> <a href="changes211.html">  Detailed Change Notes for Qt 2.1.1</a>
-<li> <a href="porting.html">  Porting from Qt 1.x to Qt 2.0</a>
+<li> <a href="keyfeatures22.html">  Key Features in Qt 2.2</a>
+<li> <a href="changes22.html">  Detailed Change Notes for Qt 2.2</a>
+<li> <a href="http://www.trolltech.com/developer/changes/">Change History</a>
+<li> <a href="porting.html">  Porting from Qt 1.x to Qt 2.x</a>
 </ul>
 </td>
 </tr>
 <tr>
-<th  bgcolor=#D0D0FF>
+<th  bgcolor=#A2C511>
 API Reference
 </th>
-<th colspan=2 bgcolor=#D0D0FF>
+<th bgcolor=#A2C511>
+Modules
+<th bgcolor=#A2C511>
 Overviews
 </tr>
 <tr>
@@ -88,44 +105,53 @@ Overviews
 </td>
 <td valign=top>
 <ul>
-<li> <a href="object.html">  Introduction to the Qt Object Model</a>
+<li> <a href="modules.html">  About Modules</a>
+<li> <a href="canvas.html">  Canvas</a>
+<li> <a href="iconview.html">  Iconview</a>
+<li> <a href="network.html">  Network</a>
+<li> <a href="opengl.html">  OpenGL</a>
+<li> <a href="table.html">  Table</a>
+<li> <a href="workspace.html">  Workspace</a>
+<li> <a href="xml.html">  XML</a>
+</ul>
+</td>
+<td valign=top>
+<ul>
+<li> <a href="object.html">  Qt Object Model</a>
 <li> <a href="moc.html">  Using the Meta Object Compiler (moc)</a>
 <li> <a href="layout.html">  Geometry Management </a>
 <li> <a href="dnd.html">  Drag and Drop (D'n'D)</a>
-</ul>
-
-<td valign=top>
-<ul>
 <li> <a href="i18n.html">  Internationalization (i18n) </a>
 <li> <a href="debug.html">  Debugging Techniques</a>
-<li> <a href="network.html">  Network Programming</a>
 <li> <a href="pictures.html">  Widget Screenshots</a>
+<li> <a href="threads.html"> Thread support in Qt </a>
 </ul>
 
 </td>
 </tr>
 <tr>
-<th bgcolor=#D0D0FF>
-Troll Tech
+<th bgcolor=#A2C511>
+Trolltech
 </th>
-<th bgcolor=#D0D0FF>
-Products For Qt
+<th bgcolor=#A2C511>
+Tools
 </th>
-<th bgcolor=#D0D0FF>
+<th bgcolor=#A2C511>
 Appendix
 </th>
 </tr>
 <tr>
 <td valign=top>
 <ul>
-<li> <a href="troll.html"> About Troll Tech</a>
+<li> <a href="troll.html"> About Trolltech</a>
 <li> <a href="bughowto.html"> How to report a bug</a>
 <li> <a href="mailinglists.html"> Mailing List Information</a>
 </ul>
 </td>
 <td valign=top>
 <ul>
-  <li> <a href="opengl.html">  Qt OpenGL 3D Graphics</a>
+  <li> <a href="designer.html"> Qt Designer</a>
+  <li> <a href="qvfb-qws.html"> Virtual Framebuffer</a>
 </ul>
 </td>
 <td valign=top>
@@ -141,19 +167,13 @@ Appendix
 
 */
 
-
 /*! \page topicals.html
 
-<title>Qt API Structure Overview</title>
-</head><body bgcolor="#ffffff">
+\title API Structure Overview
 
-\postheader
-
-<h1 align="center">API Structure Overview</h1><br clear="all">
-
-<table bgcolor=#EEEEFF>
+<table bgcolor=#E5E5E5>
 <tr>
-<th cellpadding=2 cellspacing=1 border=0 colspan=2 bgcolor=#D0D0FF>
+<th cellpadding=2 cellspacing=1 border=0 colspan=2 bgcolor=#A2C511>
 Components
 </th>
 </tr><tr>
@@ -163,17 +183,17 @@ Components
 event handling, access to system settings, internationalization, etc.
 </td></tr><tr><td>
 <a href="application.html"> <nobr>Mainwindow And Friends</nobr></a>
-</td><td> Everything you need for a typical modern main application window 
+</td><td> Everything you need for a typical modern main application window
 (menus, toolbars, workspace, ...)
 </td></tr><tr><td>
 <a href="dialogs.html">  Standard Dialogs</a>
 </td><td> Ready-made dialogs for file-, font-, color-selection and more.
 </td></tr><tr><td>
 <a href="basic.html">  Basic Controls</a>
-</td><td> The GUI primitives like buttons, combo-boxes, scrollbars, etc. 
+</td><td> The GUI primitives like buttons, combo-boxes, scrollbars, etc.
 </td></tr><tr><td>
 <a href="advanced.html">  Advanced Controls</a>
-</td><td> Advanced user interface controls like listviews, progressbars etc.
+</td><td> Advanced user interface controls like listviews, progress bars etc.
 </td></tr><tr><td>
 <a href="organizers.html">  Organizers</a>
 </td><td> User interface organizers like splitters, tab books, button groups, etc.
@@ -182,7 +202,7 @@ event handling, access to system settings, internationalization, etc.
 </td><td> Classes providing for all forms of online-help in your application.
 </td></tr>
 <tr>
-<th colspan=2 bgcolor=#D0D0FF>
+<th colspan=2 bgcolor=#A2C511>
 Framework
 </th>
 </tr><tr>
@@ -208,7 +228,7 @@ encoding and decoding.
 of composing complex dialogs.
 </td></tr>
 <tr>
-<th colspan=2 bgcolor=#D0D0FF>
+<th colspan=2 bgcolor=#A2C511>
 Utilities
 </th>
 </tr><tr>
@@ -227,7 +247,7 @@ Utilities
 </td></tr><tr><td>
       <a href="misc.html">  Miscellaneous</a>
 </td><td> Various other useful classes
-</td>      
+</td>
 </tr>
 </table>
 
@@ -351,7 +371,7 @@ These classes are used to customize an application's appearance.
 
 /*! \defgroup shared.html
 
-<h1 align="center">Implicitly Shared Classes</h1><br clear="all">
+<h1 align="center">Implicitly and Explicitly Shared Classes</h1><br clear="all">
 
 These classes are normally-heavy classes which in Qt have been
 optimized by the use of reference counter and common data so they can

@@ -1,15 +1,17 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head>
 <title>Qt Toolkit - QPaintDevice Class</title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
-a:link { text-decoration: none; }
-body { background: white; color: black; }
+a:link { color: #004faf; text-decoration: none }
+a:visited { color: #672967; text-decoration: none }body { background: white; color: black; }
 --></style>
 </head><body bgcolor="#ffffff">
 
-<a href="index.html">
-<img width="122" height="65" src="qtlogo.png" alt="Home"
-  align="left" border="0">
-</a><div align=right><img src="dochead.png" width="472" height="27"><br>
+<table width="100%">
+<tr><td><a href="index.html">
+<img width="100" height="100" src="qtlogo.png"
+alt="Home" border="0"><img width="100"
+height="100" src="face.png" alt="Home" border="0">
+</a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
 - <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
@@ -17,7 +19,7 @@ body { background: white; color: black; }
 - <a href="index.html">Home</a>
 - <a href="topicals.html"><b>Structure</b></a>
 </div>
-<br clear=all>
+</table>
 
 <h1 align=center>QPaintDevice Class Reference</h1><br clear="all">
 <p>
@@ -29,19 +31,19 @@ The base class of objects that can be painted.
 <p><a href="qpaintdevice-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><span class="fn">virtual <a href="#05aee9"><b>~QPaintDevice</b></a> () </span>
-<li><span class="fn">int <a href="#d53dd9"><b>devType</b></a> () const</span>
-<li><span class="fn">bool <a href="#8eeb01"><b>isExtDev</b></a> () const</span>
-<li><span class="fn">bool <a href="#e39ac3"><b>paintingActive</b></a> () const</span>
-<li><span class="fn">enum <b>PDevCmd</b> { PdcNOP = 0, PdcDrawPoint = 1, PdcDrawFirst = PdcDrawPoint, PdcMoveTo = 2, PdcLineTo = 3, PdcDrawLine = 4, PdcDrawRect = 5, PdcDrawRoundRect = 6, PdcDrawEllipse = 7, PdcDrawArc = 8, PdcDrawPie = 9, PdcDrawChord = 10, PdcDrawLineSegments = 11, PdcDrawPolyline = 12, PdcDrawPolygon = 13, PdcDrawQuadBezier = 14, PdcDrawText = 15, PdcDrawTextFormatted = 16, PdcDrawPixmap = 17, PdcDrawImage = 18, PdcDrawText2 = 19, PdcDrawText2Formatted = 20, PdcDrawLast = PdcDrawText2Formatted, PdcBegin = 30, PdcEnd = 31, PdcSave = 32, PdcRestore = 33, PdcSetdev = 34, PdcSetBkColor = 40, PdcSetBkMode = 41, PdcSetROP = 42, PdcSetBrushOrigin = 43, PdcSetFont = 45, PdcSetPen = 46, PdcSetBrush = 47, PdcSetTabStops = 48, PdcSetTabArray = 49, PdcSetUnit = 50, PdcSetVXform = 51, PdcSetWindow = 52, PdcSetViewport = 53, PdcSetWXform = 54, PdcSetWMatrix = 55, PdcSaveWMatrix = 56, PdcRestoreWMatrix = 57, PdcSetClip = 60, PdcSetClipRegion = 61, PdcReservedStart = 0, PdcReservedStop = 199 }</span>
+<li><div class="fn">virtual <a href="#05aee9"><b>~QPaintDevice</b></a> () </div>
+<li><div class="fn">int <a href="#d53dd9"><b>devType</b></a> () const</div>
+<li><div class="fn">bool <a href="#8eeb01"><b>isExtDev</b></a> () const</div>
+<li><div class="fn">bool <a href="#e39ac3"><b>paintingActive</b></a> () const</div>
+<li><div class="fn">enum <b>PDevCmd</b> { PdcNOP = 0, PdcDrawPoint = 1, PdcDrawFirst = PdcDrawPoint, PdcMoveTo = 2, PdcLineTo = 3, PdcDrawLine = 4, PdcDrawRect = 5, PdcDrawRoundRect = 6, PdcDrawEllipse = 7, PdcDrawArc = 8, PdcDrawPie = 9, PdcDrawChord = 10, PdcDrawLineSegments = 11, PdcDrawPolyline = 12, PdcDrawPolygon = 13, PdcDrawQuadBezier = 14, PdcDrawText = 15, PdcDrawTextFormatted = 16, PdcDrawPixmap = 17, PdcDrawImage = 18, PdcDrawText2 = 19, PdcDrawText2Formatted = 20, PdcDrawLast = PdcDrawText2Formatted, PdcBegin = 30, PdcEnd = 31, PdcSave = 32, PdcRestore = 33, PdcSetdev = 34, PdcSetBkColor = 40, PdcSetBkMode = 41, PdcSetROP = 42, PdcSetBrushOrigin = 43, PdcSetFont = 45, PdcSetPen = 46, PdcSetBrush = 47, PdcSetTabStops = 48, PdcSetTabArray = 49, PdcSetUnit = 50, PdcSetVXform = 51, PdcSetWindow = 52, PdcSetViewport = 53, PdcSetWXform = 54, PdcSetWMatrix = 55, PdcSaveWMatrix = 56, PdcRestoreWMatrix = 57, PdcSetClip = 60, PdcSetClipRegion = 61, PdcReservedStart = 0, PdcReservedStop = 199 }</div>
 </ul>
 <h2>Protected Members</h2>
 <ul>
-<li><span class="fn"><a href="#28dfc6"><b>QPaintDevice</b></a> ( uint devflags ) </span>
-<li><span class="fn">virtual bool <a href="#2a5178"><b>cmd</b></a> ( int, QPainter *, QPDevCmdParam * ) </span>
-<li><span class="fn">virtual int <a href="#af35dc"><b>metric</b></a> ( int ) const</span>
-<li><span class="fn">virtual int <a href="#77ec87"><b>fontMet</b></a> ( QFont *, int, const char * = 0, int = 0 ) const</span>
-<li><span class="fn">virtual int <a href="#79a3f0"><b>fontInf</b></a> ( QFont *, int ) const</span>
+<li><div class="fn"><a href="#28dfc6"><b>QPaintDevice</b></a> ( uint devflags ) </div>
+<li><div class="fn">virtual bool <a href="#2a5178"><b>cmd</b></a> ( int, QPainter *, QPDevCmdParam * ) </div>
+<li><div class="fn">virtual int <a href="#af35dc"><b>metric</b></a> ( int ) const</div>
+<li><div class="fn">virtual int <a href="#77ec87"><b>fontMet</b></a> ( QFont *, int, const char * = 0, int = 0 ) const</div>
+<li><div class="fn">virtual int <a href="#79a3f0"><b>fontInf</b></a> ( QFont *, int ) const</div>
 </ul>
 <h2>Related Functions</h2>
 (Note that these are not member functions.)
@@ -112,7 +114,7 @@ graphics (external paint devices, for example <a href="qpicture.html">QPicture</
 <h3 class="fn">bool <a name="e39ac3"></a>QPaintDevice::paintingActive () const</h3>
 <p>Returns TRUE if the device is being painted, i.e. someone has called
 <a href="qpainter.html#59f1bb">QPainter::begin</a>() and not yet <a href="qpainter.html#c7f9ac">QPainter::end</a>() for this device.
-<p>See also:  <a href="qpainter.html#964105">QPainter::isActive</a>().
+<p>See also  <a href="qpainter.html#964105">QPainter::isActive</a>().
 <hr><h2>Related Functions</h2>
 <h3>void <a name="058006"></a>bitBlt (QPaintDevice * dst, const <a href="qpoint.html">QPoint</a> &amp; dp, const QPaintDevice * src, const <a href="qrect.html">QRect</a> &amp; sr, RasterOp rop)</h3>
 <p>Overloaded bitBlt() with the destination point <em>dp</em> and source rectangle
@@ -171,13 +173,13 @@ You cannot copy from an 8 bit pixmap to a 1 bit pixmap.
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.1.1"><nobr>
+<input type=hidden name="version" value="2.2.0"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
 copyright &copy; 1995-2000
-<a href="http://www.trolltech.com">Troll Tech</a>, all rights reserved.<p><address><hr><div align="center">
+<a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.1</div>
+<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.2.0</div>
 </table></div></address></body></html>

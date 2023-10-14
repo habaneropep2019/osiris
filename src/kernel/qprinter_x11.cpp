@@ -1,29 +1,44 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qprinter_x11.cpp   2.1.1   edited 2000-04-06 $
+** $Id: qt/src/kernel/qprinter_x11.cpp   2.2.0   edited 2000-08-25 $
 **
 ** Implementation of QPrinter class for X11
 **
 ** Created : 950810
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the kernel module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses for Unix/X11 may use this file in accordance with the Qt Commercial
+** License Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #include "qprinter.h"
+
+#ifndef QT_NO_PRINTER
+
 #include "qpaintdevicemetrics.h"
 #include "qfile.h"
 #include "qfileinfo.h"
@@ -419,3 +434,5 @@ QSize QPrinter::margins() const
 {
     return (orient == Portrait) ? QSize( 36, 22 ) : QSize( 22, 36 );
 }
+
+#endif

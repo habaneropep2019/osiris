@@ -1,10 +1,12 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><title>Qt tutorial - t14/cannon.cpp</title>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><title>Qt Tutorial - t14/cannon.cpp</title>
 </head><body bgcolor="#ffffff">
 <p>
-<a href="index.html">
-<img width="122" height="65" src="qtlogo.png" alt="Home"
-  align="left" border="0">
-</a><div align=right><img src="dochead.png" width="472" height="27"><br>
+<table width="100%">
+<tr><td><a href="index.html">
+<img width="100" height="100" src="qtlogo.png"
+alt="Home" border="0"><img width="100"
+height="100" src="face.png" alt="Home" border="0">
+</a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
 - <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
@@ -12,7 +14,7 @@
 - <a href="index.html">Home</a>
 - <a href="topicals.html"><b>Structure</b></a>
 </div>
-<br clear=all>
+</table>
 <p>
 <h1 align=center>Source code for <a href="t14.html">tutorial 14</a>: cannon.cpp</h1><br clear="all">
 <hr> <pre>/****************************************************************
@@ -38,17 +40,17 @@ CannonField::CannonField( <a href="qwidget.html">QWidget</a> *parent, const char
     timerCount = 0;
     autoShootTimer = new <a href="qtimer.html">QTimer</a>( this, "movement handler" );
     <a href="qobject.html#c2d209">connect</a>( autoShootTimer, SIGNAL(timeout()),
-             this, SLOT(<a href=#624>moveShot</a>()) );
+             this, SLOT(<a href=#607>moveShot</a>()) );
     shoot_ang = 0;
     shoot_f = 0;
     target = QPoint( 0, 0 );
     gameEnded = FALSE;
     barrelPressed = FALSE;
     <a href="qwidget.html#379ca0">setPalette</a>( <a href="qpalette.html">QPalette</a>( <a href="qcolor.html">QColor</a>( 250, 250, 200) ) );
-    <a href=#621>newTarget</a>();
+    <a href=#604>newTarget</a>();
 }
 
-void <a name="618"></a>CannonField::setAngle( int degrees )
+void <a name="601"></a>CannonField::setAngle( int degrees )
 {
     if ( degrees &lt; 5 )
         degrees = 5;
@@ -61,7 +63,7 @@ void <a name="618"></a>CannonField::setAngle( int degrees )
     emit angleChanged( ang );
 }
 
-void <a name="619"></a>CannonField::setForce( int newton )
+void <a name="602"></a>CannonField::setForce( int newton )
 {
     if ( newton &lt; 0 )
         newton = 0;
@@ -71,7 +73,7 @@ void <a name="619"></a>CannonField::setForce( int newton )
     emit forceChanged( f );
 }
 
-void <a name="620"></a>CannonField::shoot()
+void <a name="603"></a>CannonField::shoot()
 {
     if ( isShooting() )
         return;
@@ -82,7 +84,7 @@ void <a name="620"></a>CannonField::shoot()
     emit canShoot( FALSE );
 }
 
-void  <a name="621"></a>CannonField::newTarget()
+void  <a name="604"></a>CannonField::newTarget()
 {
     static bool first_time = TRUE;
     if ( first_time ) {
@@ -90,13 +92,13 @@ void  <a name="621"></a>CannonField::newTarget()
         <a href="qtime.html">QTime</a> midnight( 0, 0, 0 );
         srand( midnight.<a href="qtime.html#2fa5d7">secsTo</a>(<a href="qtime.html#03223b">QTime::currentTime</a>()) );
     }
-    <a href="qregion.html">QRegion</a> r( <a href=#635>targetRect</a>() );
+    <a href="qregion.html">QRegion</a> r( <a href=#618>targetRect</a>() );
     target = QPoint( 200 + rand() % 190,
                      10  + rand() % 255 );
-    <a href="qwidget.html#977d49">repaint</a>( r.<a href="qrect.html#dd997c">unite</a>( <a href=#635>targetRect</a>() ) );
+    <a href="qwidget.html#977d49">repaint</a>( r.<a href="qrect.html#dd997c">unite</a>( <a href=#618>targetRect</a>() ) );
 }
 
-void <a name="622"></a>CannonField::setGameOver()
+void <a name="605"></a>CannonField::setGameOver()
 {
     if ( gameEnded )
         return;
@@ -106,7 +108,7 @@ void <a name="622"></a>CannonField::setGameOver()
     <a href="qwidget.html#977d49">repaint</a>();
 }
 
-void <a name="623"></a>CannonField::restartGame()
+void <a name="606"></a>CannonField::restartGame()
 {
     if ( isShooting() )
         autoShootTimer-&gt;stop();
@@ -115,19 +117,19 @@ void <a name="623"></a>CannonField::restartGame()
     emit canShoot( TRUE );
 }
 
-void <a name="624"></a>CannonField::moveShot()
+void <a name="607"></a>CannonField::moveShot()
 {
-    <a href="qregion.html">QRegion</a> r( <a href=#634>shotRect</a>() );
+    <a href="qregion.html">QRegion</a> r( <a href=#617>shotRect</a>() );
     timerCount++;
 
     <a href="qrect.html">QRect</a> shotR = shotRect();
 
-    if ( shotR.<a href="qrect.html#6d4f45">intersects</a>( <a href=#635>targetRect</a>() ) ) {
+    if ( shotR.<a href="qrect.html#6d4f45">intersects</a>( <a href=#618>targetRect</a>() ) ) {
         autoShootTimer-&gt;stop();
         emit hit();
         emit canShoot( TRUE );
     } else if ( shotR.<a href="qrect.html#3a3d38">x</a>() &gt; width() || shotR.<a href="qrect.html#65e614">y</a>() &gt; height() ||
-                shotR.<a href="qrect.html#6d4f45">intersects</a>(<a href=#636>barrierRect</a>()) ) {
+                shotR.<a href="qrect.html#6d4f45">intersects</a>(<a href=#619>barrierRect</a>()) ) {
         autoShootTimer-&gt;stop();
         emit missed();
         emit canShoot( TRUE );
@@ -138,7 +140,7 @@ void <a name="624"></a>CannonField::moveShot()
     <a href="qwidget.html#977d49">repaint</a>( r );
 }
 
-void <a name="625"></a>CannonField::mousePressEvent( <a href="qmouseevent.html">QMouseEvent</a> *e )
+void <a name="608"></a>CannonField::mousePressEvent( <a href="qmouseevent.html">QMouseEvent</a> *e )
 {
     if ( e-&gt;button() != LeftButton )
         return;
@@ -146,7 +148,7 @@ void <a name="625"></a>CannonField::mousePressEvent( <a href="qmouseevent.html">
         barrelPressed = TRUE;
 }
 
-void <a name="626"></a>CannonField::mouseMoveEvent( <a href="qmouseevent.html">QMouseEvent</a> *e )
+void <a name="609"></a>CannonField::mouseMoveEvent( <a href="qmouseevent.html">QMouseEvent</a> *e )
 {
     if ( !barrelPressed )
         return;
@@ -156,16 +158,16 @@ void <a name="626"></a>CannonField::mouseMoveEvent( <a href="qmouseevent.html">Q
     if ( pnt.<a href="qpoint.html#90c362">y</a>() &gt;= height() )
         pnt.<a href="qpoint.html#10d53d">setY</a>( <a href="qwidget.html#180786">height</a>() - 1 );
     double rad = atan(((double)rect().bottom()-pnt.<a href="qpoint.html#90c362">y</a>())/pnt.<a href="qpoint.html#1ed201">x</a>());
-    <a href=#618>setAngle</a>( qRound ( rad*180/3.14159265 ) );
+    <a href=#601>setAngle</a>( qRound ( rad*180/3.14159265 ) );
 }
 
-void <a name="627"></a>CannonField::mouseReleaseEvent( <a href="qmouseevent.html">QMouseEvent</a> *e )
+void <a name="610"></a>CannonField::mouseReleaseEvent( <a href="qmouseevent.html">QMouseEvent</a> *e )
 {
     if ( e-&gt;button() == LeftButton )
         barrelPressed = FALSE;
 }
 
-void <a name="628"></a>CannonField::paintEvent( <a href="qpaintevent.html">QPaintEvent</a> *e )
+void <a name="611"></a>CannonField::paintEvent( <a href="qpaintevent.html">QPaintEvent</a> *e )
 {
     <a href="qrect.html">QRect</a> updateR = e-&gt;<a href="qpaintevent.html#6177d5">rect</a>();
     <a href="qpainter.html">QPainter</a> p( this );
@@ -175,40 +177,40 @@ void <a name="628"></a>CannonField::paintEvent( <a href="qpaintevent.html">QPain
         p.<a href="qpainter.html#e4d6b7">setFont</a>( <a href="qfont.html">QFont</a>( "Courier", 48, QFont::Bold ) );
         p.<a href="qpainter.html#8a59ed">drawText</a>( <a href="qwidget.html#e872e1">rect</a>(), AlignCenter, "Game Over" );
     }
-    if ( updateR.<a href="qrect.html#6d4f45">intersects</a>( <a href=#633>cannonRect</a>() ) )
-        <a href=#632>paintCannon</a>( &amp;p );
-    if ( updateR.<a href="qrect.html#6d4f45">intersects</a>( <a href=#636>barrierRect</a>() ) )
-        <a href=#631>paintBarrier</a>( &amp;p );
-    if ( isShooting() &amp;&amp; updateR.<a href="qrect.html#6d4f45">intersects</a>( <a href=#634>shotRect</a>() ) )
-        <a href=#629>paintShot</a>( &amp;p );
-    if ( !gameEnded &amp;&amp; updateR.<a href="qrect.html#6d4f45">intersects</a>( <a href=#635>targetRect</a>() ) )
-        <a href=#630>paintTarget</a>( &amp;p );
+    if ( updateR.<a href="qrect.html#6d4f45">intersects</a>( <a href=#616>cannonRect</a>() ) )
+        <a href=#615>paintCannon</a>( &amp;p );
+    if ( updateR.<a href="qrect.html#6d4f45">intersects</a>( <a href=#619>barrierRect</a>() ) )
+        <a href=#614>paintBarrier</a>( &amp;p );
+    if ( isShooting() &amp;&amp; updateR.<a href="qrect.html#6d4f45">intersects</a>( <a href=#617>shotRect</a>() ) )
+        <a href=#612>paintShot</a>( &amp;p );
+    if ( !gameEnded &amp;&amp; updateR.<a href="qrect.html#6d4f45">intersects</a>( <a href=#618>targetRect</a>() ) )
+        <a href=#613>paintTarget</a>( &amp;p );
 }
 
-void <a name="629"></a>CannonField::paintShot( <a href="qpainter.html">QPainter</a> *p )
+void <a name="612"></a>CannonField::paintShot( <a href="qpainter.html">QPainter</a> *p )
 {
     p-&gt;<a href="qpainter.html#38e68f">setBrush</a>( black );
     p-&gt;<a href="qpainter.html#0a6aff">setPen</a>( NoPen );
-    p-&gt;<a href="qpainter.html#b29a16">drawRect</a>( <a href=#634>shotRect</a>() );
+    p-&gt;<a href="qpainter.html#b29a16">drawRect</a>( <a href=#617>shotRect</a>() );
 }
 
-void <a name="630"></a>CannonField::paintTarget( <a href="qpainter.html">QPainter</a> *p )
+void <a name="613"></a>CannonField::paintTarget( <a href="qpainter.html">QPainter</a> *p )
 {
     p-&gt;<a href="qpainter.html#38e68f">setBrush</a>( red );
     p-&gt;<a href="qpainter.html#0a6aff">setPen</a>( black );
-    p-&gt;<a href="qpainter.html#b29a16">drawRect</a>( <a href=#635>targetRect</a>() );
+    p-&gt;<a href="qpainter.html#b29a16">drawRect</a>( <a href=#618>targetRect</a>() );
 }
 
-void <a name="631"></a>CannonField::paintBarrier( <a href="qpainter.html">QPainter</a> *p )
+void <a name="614"></a>CannonField::paintBarrier( <a href="qpainter.html">QPainter</a> *p )
 {
     p-&gt;<a href="qpainter.html#38e68f">setBrush</a>( yellow );
     p-&gt;<a href="qpainter.html#0a6aff">setPen</a>( black );
-    p-&gt;<a href="qpainter.html#b29a16">drawRect</a>( <a href=#636>barrierRect</a>() );
+    p-&gt;<a href="qpainter.html#b29a16">drawRect</a>( <a href=#619>barrierRect</a>() );
 }
 
 const QRect barrelRect(33, -4, 15, 8);
 
-void <a name="632"></a>CannonField::paintCannon( <a href="qpainter.html">QPainter</a> *p )
+void <a name="615"></a>CannonField::paintCannon( <a href="qpainter.html">QPainter</a> *p )
 {
     <a href="qrect.html">QRect</a> cr = cannonRect();
     <a href="qpixmap.html">QPixmap</a> pix( cr.<a href="qrect.html#517d48">size</a>() );
@@ -227,14 +229,14 @@ void <a name="632"></a>CannonField::paintCannon( <a href="qpainter.html">QPainte
     p-&gt;<a href="qpainter.html#f3fb4a">drawPixmap</a>( cr.<a href="qrect.html#4ff486">topLeft</a>(), pix );
 }
 
-<a href="qrect.html">QRect</a> <a name="633"></a>CannonField::cannonRect() const
+<a href="qrect.html">QRect</a> <a name="616"></a>CannonField::cannonRect() const
 {
     <a href="qrect.html">QRect</a> r( 0, 0, 50, 50 );
     r.<a href="qrect.html#eb5839">moveBottomLeft</a>( <a href="qwidget.html#e872e1">rect</a>().bottomLeft() );
     return r;
 }
 
-<a href="qrect.html">QRect</a> <a name="634"></a>CannonField::shotRect() const
+<a href="qrect.html">QRect</a> <a name="617"></a>CannonField::shotRect() const
 {
     const double gravity = 4;
 
@@ -254,19 +256,19 @@ void <a name="632"></a>CannonField::paintCannon( <a href="qpainter.html">QPainte
     return r;
 }
 
-<a href="qrect.html">QRect</a> <a name="635"></a>CannonField::targetRect() const
+<a href="qrect.html">QRect</a> <a name="618"></a>CannonField::targetRect() const
 {
     <a href="qrect.html">QRect</a> r( 0, 0, 20, 10 );
     r.<a href="qrect.html#b0408d">moveCenter</a>( <a href="qpoint.html">QPoint</a>(target.x(),<a href="qwidget.html#180786">height</a>() - 1 - target.y()) );
     return r;
 }
 
-<a href="qrect.html">QRect</a> <a name="636"></a>CannonField::barrierRect() const
+<a href="qrect.html">QRect</a> <a name="619"></a>CannonField::barrierRect() const
 {
     return QRect( 145, <a href="qwidget.html#180786">height</a>() - 100, 15, 100 );
 }
 
-bool <a name="637"></a>CannonField::barrelHit( const QPoint &amp;p ) const
+bool <a name="620"></a>CannonField::barrelHit( const QPoint &amp;p ) const
 {
     <a href="qwmatrix.html">QWMatrix</a> mtx;
     mtx.<a href="qwmatrix.html#226fc6">translate</a>( 0, <a href="qwidget.html#180786">height</a>() - 1 );
@@ -275,17 +277,17 @@ bool <a name="637"></a>CannonField::barrelHit( const QPoint &amp;p ) const
     return barrelRect.contains( mtx.<a href="qwmatrix.html#38577f">map</a>(p) );
 }
 
-bool <a name="638"></a>CannonField::isShooting() const
+bool <a name="621"></a>CannonField::isShooting() const
 {
     return autoShootTimer-&gt;isActive();
 }
 
-<a href="qsize.html">QSize</a> <a name="639"></a>CannonField::sizeHint() const
+<a href="qsize.html">QSize</a> <a name="622"></a>CannonField::sizeHint() const
 {
     return QSize( 400, 300 );
 }
 
-<a href="qsizepolicy.html">QSizePolicy</a> <a name="640"></a>CannonField::sizePolicy() const
+<a href="qsizepolicy.html">QSizePolicy</a> <a name="623"></a>CannonField::sizePolicy() const
 {
     return QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding );
 }
@@ -294,6 +296,6 @@ bool <a name="638"></a>CannonField::isShooting() const
 
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.1</div>
+<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.2.0</div>
 </table></div></address></body></html>

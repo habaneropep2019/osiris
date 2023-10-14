@@ -1,25 +1,37 @@
 /****************************************************************************
-** $Id: qt/doc/qmap.doc   2.1.1   edited 2000-05-22 $
+** $Id: qt/doc/qmap.doc   2.2.0   edited 2000-08-25 $
 **
 ** QMap and QMapIterator class documentation
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees with valid Qt Professional Edition licenses may distribute and
-** use this file in accordance with the Qt Professional Edition License
-** provided at sale or upon request.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 
 /*****************************************************************************
@@ -32,9 +44,10 @@
 
   \ingroup qtl
   \ingroup tools
+  \ingroup shared
 
   Define a template instance QMap\<Key,Data\> to create a dictionary
-  with keys of type X and values of type Y. QMap does not store
+  with keys of type Key and values of type Data. QMap does not store
   pointers to the members of the map. Instead, it holds a copy of
   every member. For that reason this kind of classes is called "value
   based" while QList and QDict are "reference based".
@@ -52,6 +65,9 @@
   Note that C++ defaults to field-by-field assignment operators and
   copy constructors if no explicit version is supplied. In many cases,
   this is sufficient.
+
+  The class used for the key requires that the \c operator< is implemented
+  and defines a total order on the keys.
 
   Example:
   \code
@@ -139,7 +155,7 @@
 
   Another method for traversing a map is to use the functions begin()
   and end().  With a simple for loop as shown in the example you can
-  iterate over the complete map.  It is save to have multiple
+  iterate over the complete map.  It is safe to have multiple
   iterators at the same time. If some member of the map is removed
   then only iterators pointing to the removed member become
   invalid. Inserting in the map does not invalidate any iterator.
@@ -497,7 +513,7 @@
 /*!
   \fn QMapIterator<K,T> QMapIterator::operator--(int)
 
-  Postfix -- makes the previoius item current and returns an iterator
+  Postfix -- makes the previous item current and returns an iterator
   pointing to the new current item.  The iterator can not check
   whether it reached the beginning of the map. Decrementing the
   iterator as returned by begin() causes undefined results.
@@ -624,7 +640,7 @@
 /*!
   \fn QMapConstIterator<K,T> QMapConstIterator::operator--(int)
 
-  Postfix -- makes the previoius item current and returns an iterator
+  Postfix -- makes the previous item current and returns an iterator
   pointing to the new current item.  The iterator can not check
   whether it reached the beginning of the map. Decrementing the
   iterator as returned by begin() causes undefined results.

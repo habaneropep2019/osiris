@@ -3,15 +3,17 @@
 Qt Toolkit - grapher/grapher.cpp example file
 </title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
-a:link { text-decoration: none; }
-body { background: white; color: black; }
+a:link { color: #004faf; text-decoration: none }
+a:visited { color: #672967; text-decoration: none }body { background: white; color: black; }
 --></style>
 </head><body bgcolor="#ffffff">
 
-<a href="index.html">
-<img width="122" height="65" src="qtlogo.png" alt="Home"
-  align="left" border="0">
-</a><div align=right><img src="dochead.png" width="472" height="27"><br>
+<table width="100%">
+<tr><td><a href="index.html">
+<img width="100" height="100" src="qtlogo.png"
+alt="Home" border="0"><img width="100"
+height="100" src="face.png" alt="Home" border="0">
+</a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
 - <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
@@ -19,7 +21,7 @@ body { background: white; color: black; }
 - <a href="index.html">Home</a>
 - <a href="topicals.html"><b>Structure</b></a>
 </div>
-<br clear=all>
+</table>
 
 <h1 align=center>Grapher Plugin</h1>
   <p>
@@ -37,7 +39,7 @@ body { background: white; color: black; }
     graphstyle=pie fontfamily=times fontsize=18>
   <p>
   The text file it accepts as input has a title line, then
-  a sequence of lines with an number then a string.  The
+  a sequence of lines with a number, then a string.  The
   plugin displays a pie chart of the numbers, each segment
   labelled by the associated string.  The user can select
   a bar chart view of the same data by selecting from the
@@ -55,7 +57,7 @@ body { background: white; color: black; }
 </pre>
 </small>
   Note that some HTML arguments (which we have capitalized here)
-  are interpretted by the browser, while others are used by the
+  are interpreted by the browser, while others are used by the
   plugin.
 
 <br clear>
@@ -109,7 +111,7 @@ public:
 //
 // Graph is a widget subclass that displays a GraphModel.
 // Since the widget is a QNPWidget, it can be used as a plugin window,
-// returned by <a name="80"></a>Grapher::newWindow() below.
+// returned by <a name="93"></a>Grapher::newWindow() below.
 //
 
 class Graph : public QNPWidget {
@@ -198,7 +200,7 @@ Graph::~Graph()
 {
 }
 
-void <a name="87"></a>Graph::setStyle(Style s)
+void <a name="100"></a>Graph::setStyle(Style s)
 {
     if (style != s) {
         if (pieRotationTimer)
@@ -210,46 +212,46 @@ void <a name="87"></a>Graph::setStyle(Style s)
         else
             pieRotationTimer = 0;
         stylemenu-&gt;<a href="qmenudata.html#4b7fd2">setItemChecked</a>(100+style, TRUE);
-        <a name="update"></a><a href="qwidget.html#52f9c5">update</a>();
+        <a name="update"></a><a href="qwidget.html#4a97ef">update</a>();
     }
 }
 
-void <a name="86"></a>Graph::timerEvent(<a href="qtimerevent.html">QTimerEvent</a>*)
+void <a name="99"></a>Graph::timerEvent(<a href="qtimerevent.html">QTimerEvent</a>*)
 {
     pieRotation = ( pieRotation + 6 ) % 360; repaint(FALSE);
 }
 
-void <a name="87"></a>Graph::setStyle(const char* stext)
+void <a name="100"></a>Graph::setStyle(const char* stext)
 {
     for ( Style s = Pie; styleName[s]; s = Style(s+1) ) {
-        if ( stricmp(stext,styleName[s])==0 ) {
-            <a name="setStyle"></a><a href="#87">setStyle</a>(s);
+        if ( qstricmp(stext,styleName[s])==0 ) {
+            <a name="setStyle"></a><a href="#100">setStyle</a>(s);
             return;
         }
     }
 }
 
-void <a name="88"></a>Graph::enterInstance()
+void <a name="101"></a>Graph::enterInstance()
 {
     menubar-&gt;<a name="show"></a><a href="qmenubar.html#768e1b">show</a>();
 }
 
-void <a name="89"></a>Graph::leaveInstance()
+void <a name="102"></a>Graph::leaveInstance()
 {
     menubar-&gt;<a name="hide"></a><a href="qmenubar.html#6c5bca">hide</a>();
 }
 
-void <a name="90"></a>Graph::paintError(const char* e)
+void <a name="103"></a>Graph::paintError(const char* e)
 {
     <a name="QPainter"></a><a href="qpainter.html">QPainter</a> p(this);
     int w = width();
     p.<a name="drawText"></a><a href="qpainter.html#8a59ed">drawText</a>(w/8, 0, w-w/4, <a name="height"></a><a href="qwidget.html#180786">height</a>(), AlignCenter|WordBreak, e);
 }
 
-void <a name="91"></a>Graph::paintBar(<a href="qpaintevent.html">QPaintEvent</a>* event)
+void <a name="104"></a>Graph::paintBar(<a href="qpaintevent.html">QPaintEvent</a>* event)
 {
     if ( model.colType(0) != GraphModel::Numeric ) {
-        <a name="paintError"></a><a href="#90">paintError</a>("First column not numeric, cannot draw bar graph\n");
+        <a name="paintError"></a><a href="#103">paintError</a>("First column not numeric, cannot draw bar graph\n");
         return;
     }
 
@@ -326,10 +328,10 @@ void <a name="91"></a>Graph::paintBar(<a href="qpaintevent.html">QPaintEvent</a>
     }
 }
 
-void <a name="92"></a>Graph::paintPie(<a href="qpaintevent.html">QPaintEvent</a>* event)
+void <a name="105"></a>Graph::paintPie(<a href="qpaintevent.html">QPaintEvent</a>* event)
 {
     if ( model.colType(0) != GraphModel::Numeric ) {
-        <a href=#90>paintError</a>("First column not numeric, cannot draw pie graph\n");
+        <a href=#103>paintError</a>("First column not numeric, cannot draw pie graph\n");
         return;
     }
 
@@ -400,38 +402,38 @@ void <a name="92"></a>Graph::paintPie(<a href="qpaintevent.html">QPaintEvent</a>
     p2.<a name="drawPixmap"></a><a href="qpainter.html#f3fb4a">drawPixmap</a>(0,0,pm);
 }
 
-void <a name="93"></a>Graph::paintWait(<a href="qpaintevent.html">QPaintEvent</a>*)
+void <a name="106"></a>Graph::paintWait(<a href="qpaintevent.html">QPaintEvent</a>*)
 {
     <a href="qpainter.html">QPainter</a> p(this);
     p.<a href="qpainter.html#8a59ed">drawText</a>(<a name="rect"></a><a href="qwidget.html#e872e1">rect</a>(), AlignCenter, "Loading...");
 }
 
-void <a name="94"></a>Graph::paintEvent(<a href="qpaintevent.html">QPaintEvent</a>* event)
+void <a name="107"></a>Graph::paintEvent(<a href="qpaintevent.html">QPaintEvent</a>* event)
 {
     if (!model.nCols()) {
-        <a name="paintWait"></a><a href="#93">paintWait</a>(event);
+        <a name="paintWait"></a><a href="#106">paintWait</a>(event);
     } else {
         switch (style) {
           case Pie:
-            <a name="paintPie"></a><a href="#92">paintPie</a>(event);
+            <a name="paintPie"></a><a href="#105">paintPie</a>(event);
             break;
           case Bar:
-            <a name="paintBar"></a><a href="#91">paintBar</a>(event);
+            <a name="paintBar"></a><a href="#104">paintBar</a>(event);
             break;
         }
     }
 }
 
-void <a name="95"></a>Graph::setStyleFromMenu(int id)
+void <a name="108"></a>Graph::setStyleFromMenu(int id)
 {
-    <a href=#87>setStyle</a>(Style(id-100));
+    <a href=#100>setStyle</a>(Style(id-100));
 }
 
-const char* <a name="96"></a>Graph::styleName[] = { "Pie", "Bar", 0 };
+const char* <a name="109"></a>Graph::styleName[] = { "Pie", "Bar", 0 };
 
 //
 // Grapher is a subclass of QNPInstance, and so it can be returned
-// by <a name="75"></a>GrapherPlugin::newInstance().  A QNPInstance represents the
+// by <a name="88"></a>GrapherPlugin::newInstance().  A QNPInstance represents the
 // plugin, distinctly from the plugin window.
 //
 // Grapher is also a GraphModel, because it loads graph data from
@@ -492,22 +494,22 @@ Grapher::~Grapher()
 {
 }
 
-<a href="qlist.html">QList</a>&lt;GraphModel::Datum&gt;&amp; <a name="<a name="77">"></a><a href="#77"><a name="77"></a>Grapher::graphData</a>()
+<a href="qlist.html">QList</a>&lt;GraphModel::Datum&gt;&amp; <a name="<a name="90">"></a><a href="#90"><a name="90"></a>Grapher::graphData</a>()
 {
     return data;
 }
 
-GraphModel::ColType <a name="78"></a>Grapher::colType(int col) const
+GraphModel::ColType <a name="91"></a>Grapher::colType(int col) const
 {
     return coltype[col];
 }
 
-int <a name="79"></a>Grapher::nCols() const
+int <a name="92"></a>Grapher::nCols() const
 {
     return ncols;
 }
 
-<a href="qnpwidget.html">QNPWidget</a>* <a name="80"></a>Grapher::newWindow()
+<a href="qnpwidget.html">QNPWidget</a>* <a name="93"></a>Grapher::newWindow()
 {
     // Create a Graph - our subclass of QNPWidget.
     Graph *graph = new Graph(*this);
@@ -524,13 +526,13 @@ int <a name="79"></a>Grapher::nCols() const
     int ptsize = fontsize ? atoi(fontsize) : graph-&gt;<a href="qwidget.html#3a7237">font</a>().pointSize();
     if (fontfamily) graph-&gt;<a name="setFont"></a><a href="qwidget.html#dde00b">setFont</a>(<a name="QFont"></a><a href="qfont.html">QFont</a>(fontfamily, ptsize));
 
-    <a name="connect"></a><a href="qobject.html#c2d209">connect</a>(graph, SIGNAL(<a name="aboutPlugin"></a><a href="#83">aboutPlugin</a>()), this, SLOT(<a href=#83>aboutPlugin</a>()));
-    <a href="qobject.html#c2d209">connect</a>(graph, SIGNAL(<a name="aboutData"></a><a href="#84">aboutData</a>()), this, SLOT(<a href=#84>aboutData</a>()));
+    <a name="connect"></a><a href="qobject.html#c2d209">connect</a>(graph, SIGNAL(<a name="aboutPlugin"></a><a href="#96">aboutPlugin</a>()), this, SLOT(<a href=#96>aboutPlugin</a>()));
+    <a href="qobject.html#c2d209">connect</a>(graph, SIGNAL(<a name="aboutData"></a><a href="#97">aboutData</a>()), this, SLOT(<a href=#97>aboutData</a>()));
 
     return graph;
 }
 
-void <a name="81"></a>Grapher::consumeLine()
+void <a name="94"></a>Grapher::consumeLine()
 {
     line.<a name="close"></a><a href="qbuffer.html#1384d7">close</a>();
     line.<a href="qbuffer.html#61e313">open</a>(IO_ReadOnly);
@@ -585,7 +587,7 @@ void <a name="81"></a>Grapher::consumeLine()
     line.<a href="qbuffer.html#61e313">open</a>(IO_WriteOnly|IO_Truncate);
 }
 
-int <a name="82"></a>Grapher::write(<a href="qnpstream.html">QNPStream</a>* /*str*/, int /*offset*/, int len, void* buffer)
+int <a name="95"></a>Grapher::write(<a href="qnpstream.html">QNPStream</a>* /*str*/, int /*offset*/, int len, void* buffer)
 {
     // The browser calls this function when data is available on one
     // of the streams the plugin has requested.  Since we are only
@@ -599,7 +601,7 @@ int <a name="82"></a>Grapher::write(<a href="qnpstream.html">QNPStream</a>* /*st
         char ch = txt[i];
         switch ( ch ) {
           case '\n':
-            <a name="consumeLine"></a><a href="#81">consumeLine</a>();
+            <a name="consumeLine"></a><a href="#94">consumeLine</a>();
             break;
           case '\r': // ignore;
             break;
@@ -615,12 +617,12 @@ int <a name="82"></a>Grapher::write(<a href="qnpstream.html">QNPStream</a>* /*st
     return len;
 }
 
-void <a name="83"></a>Grapher::aboutPlugin()
+void <a name="96"></a>Grapher::aboutPlugin()
 {
     <a name="getURL"></a><a href="qnpinstance.html#0caac4">getURL</a>( "http://www.trolltech.com/nsplugin/", "_blank" );
 }
 
-void <a name="84"></a>Grapher::aboutData()
+void <a name="97"></a>Grapher::aboutData()
 {
     const char* page = arg("DATAPAGE");
     if (page)
@@ -687,6 +689,6 @@ public:
 </pre>
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.1</div>
+<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.2.0</div>
 </table></div></address></body></html>

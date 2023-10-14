@@ -1,15 +1,17 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head>
 <title>Qt Toolkit - QSizePolicy Class</title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
-a:link { text-decoration: none; }
-body { background: white; color: black; }
+a:link { color: #004faf; text-decoration: none }
+a:visited { color: #672967; text-decoration: none }body { background: white; color: black; }
 --></style>
 </head><body bgcolor="#ffffff">
 
-<a href="index.html">
-<img width="122" height="65" src="qtlogo.png" alt="Home"
-  align="left" border="0">
-</a><div align=right><img src="dochead.png" width="472" height="27"><br>
+<table width="100%">
+<tr><td><a href="index.html">
+<img width="100" height="100" src="qtlogo.png"
+alt="Home" border="0"><img width="100"
+height="100" src="face.png" alt="Home" border="0">
+</a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
 - <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
@@ -17,7 +19,7 @@ body { background: white; color: black; }
 - <a href="index.html">Home</a>
 - <a href="topicals.html"><b>Structure</b></a>
 </div>
-<br clear=all>
+</table>
 
 <h1 align=center>QSizePolicy Class Reference</h1><br clear="all">
 <p>
@@ -28,21 +30,23 @@ A layout attribute describing horizontal and vertical resizing.
 <p><a href="qsizepolicy-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><span class="fn">enum <a href="#SizeType"><b>SizeType</b></a> { Fixed = 0, Minimum = MayGrow, Maximum = MayShrink, Preferred = MayGrow|MayShrink, MinimumExpanding = Minimum|ExpMask, Expanding = MinimumExpanding|MayShrink }</span>
-<li><span class="fn">enum <a href="#ExpandData"><b>ExpandData</b></a> { NoDirection = 0, Horizontal = 1, Vertical = 2, BothDirections = Horizontal | Vertical }</span>
-<li><span class="fn"><a href="#31bbb9"><b>QSizePolicy</b></a> () </span>
-<li><span class="fn"><a href="#040f42"><b>QSizePolicy</b></a> ( SizeType hor, SizeType ver, bool hfw = FALSE ) </span>
-<li><span class="fn">SizeType <a href="#18fc28"><b>horData</b></a> () const</span>
-<li><span class="fn">SizeType <a href="#dec840"><b>verData</b></a> () const</span>
-<li><span class="fn">bool <a href="#c7f6d4"><b>mayShrinkHorizontally</b></a> () const</span>
-<li><span class="fn">bool <a href="#299cb8"><b>mayShrinkVertically</b></a> () const</span>
-<li><span class="fn">bool <a href="#7f6971"><b>mayGrowHorizontally</b></a> () const</span>
-<li><span class="fn">bool <a href="#d833a4"><b>mayGrowVertically</b></a> () const</span>
-<li><span class="fn">ExpandData <a href="#32501a"><b>expanding</b></a> () const</span>
-<li><span class="fn">void <a href="#b5673f"><b>setHorData</b></a> ( SizeType d ) </span>
-<li><span class="fn">void <a href="#63a58d"><b>setVerData</b></a> ( SizeType d ) </span>
-<li><span class="fn">void <a href="#c48c18"><b>setHeightForWidth</b></a> ( bool b ) </span>
-<li><span class="fn">bool <a href="#a37b7f"><b>hasHeightForWidth</b></a> () const</span>
+<li><div class="fn">enum <a href="#SizeType"><b>SizeType</b></a> { Fixed = 0, Minimum = MayGrow, Maximum = MayShrink, Preferred = MayGrow|MayShrink, MinimumExpanding = Minimum|ExpMask, Expanding = MinimumExpanding|MayShrink }</div>
+<li><div class="fn">enum <a href="#ExpandData"><b>ExpandData</b></a> { NoDirection = 0, Horizontal = 1, Vertical = 2, BothDirections = Horizontal | Vertical }</div>
+<li><div class="fn"><a href="#31bbb9"><b>QSizePolicy</b></a> () </div>
+<li><div class="fn"><a href="#040f42"><b>QSizePolicy</b></a> ( SizeType hor, SizeType ver, bool hfw = FALSE ) </div>
+<li><div class="fn">SizeType <a href="#18fc28"><b>horData</b></a> () const</div>
+<li><div class="fn">SizeType <a href="#dec840"><b>verData</b></a> () const</div>
+<li><div class="fn">bool <a href="#c7f6d4"><b>mayShrinkHorizontally</b></a> () const</div>
+<li><div class="fn">bool <a href="#299cb8"><b>mayShrinkVertically</b></a> () const</div>
+<li><div class="fn">bool <a href="#7f6971"><b>mayGrowHorizontally</b></a> () const</div>
+<li><div class="fn">bool <a href="#d833a4"><b>mayGrowVertically</b></a> () const</div>
+<li><div class="fn">ExpandData <a href="#32501a"><b>expanding</b></a> () const</div>
+<li><div class="fn">void <a href="#b5673f"><b>setHorData</b></a> ( SizeType d ) </div>
+<li><div class="fn">void <a href="#63a58d"><b>setVerData</b></a> ( SizeType d ) </div>
+<li><div class="fn">void <a href="#c48c18"><b>setHeightForWidth</b></a> ( bool b ) </div>
+<li><div class="fn">bool <a href="#a37b7f"><b>hasHeightForWidth</b></a> () const</div>
+<li><div class="fn">bool <b>operator==</b> ( const QSizePolicy &amp; s ) const</div>
+<li><div class="fn">bool <b>operator!=</b> ( const QSizePolicy &amp; s ) const</div>
 </ul>
 <hr><h2><a name="details"></a>Detailed Description</h2>
 A layout attribute describing horizontal and vertical resizing.
@@ -62,7 +66,7 @@ and can be queried using a variety of functions, none of which are
 really interesting to application programmers.
 <p>The <a href="#a37b7f">hasHeightForWidth</a>() flag indicates whether the widget's sizeHint()
 is width-dependent (like a word-wrapping label).
-<p>See also:  <a href="#SizeType">QSizePolicy::SizeType</a>.
+<p>See also  <a href="#SizeType">QSizePolicy::SizeType</a>.
 <p>Examples:
  <a href="xform-xform-cpp.html#QSizePolicy">xform/xform.cpp</a>
 
@@ -112,7 +116,7 @@ This is the constructor normally used to return a value in the
 overridden <a href="qwidget.html#2d5d13">QWidget::sizePolicy()</a> function of a <a href="qwidget.html">QWidget</a> subclass.
 <p>It constructs a QSizePolicy with independent horizontal and vertical
 sizing types, <em>hor</em> and <em>ver</em> respectively.  These <a href="#SizeType">sizing types</a> affect how the widget is
-treated by the <em>link</em> <a href="qlayout.html">QLayout</a> layout engine\endlink.
+treated by the <a href="qlayout.html">layout engine</a>.
 <p>If <em>hfw</em> is TRUE, the preferred height of the widget is dependent on the
 width of the widget (for example, a <a href="qlabel.html">QLabel</a> with automatic word-breaking).
 <h3 class="fn">QSizePolicy::ExpandData <a name="32501a"></a>QSizePolicy::expanding() const</h3>
@@ -142,13 +146,13 @@ width of the widget (for example, a <a href="qlabel.html">QLabel</a> with automa
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.1.1"><nobr>
+<input type=hidden name="version" value="2.2.0"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
 copyright &copy; 1995-2000
-<a href="http://www.trolltech.com">Troll Tech</a>, all rights reserved.<p><address><hr><div align="center">
+<a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.1</div>
+<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.2.0</div>
 </table></div></address></body></html>

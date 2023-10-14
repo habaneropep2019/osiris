@@ -1,5 +1,5 @@
-.TH QKeyEvent 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QKeyEvent 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QKeyEvent \- Parameters that describe a key event
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -19,7 +17,7 @@ Inherits QEvent.
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQKeyEvent\fR ( Type " "type" ", int " "key" ", int " "ascii" ", int " "state" ", const QString & text=QString::null, bool " "autorep" "=FALSE, ushort " "count" "=1 )"
+.BI "\fBQKeyEvent\fR ( Type " "type" ", int " "key" ", int " "ascii" ", int " "state" ", const QString & text=QString::null, bool " "autorep" "=FALSE, ushort " "count" "=1 ) "
 .br
 .ti -1c
 .BI "int \fBkey\fR () const"
@@ -46,10 +44,10 @@ Inherits QEvent.
 .BI "int \fBcount\fR () const"
 .br
 .ti -1c
-.BI "void \fBaccept\fR ()"
+.BI "void \fBaccept\fR () "
 .br
 .ti -1c
-.BI "void \fBignore\fR ()"
+.BI "void \fBignore\fR () "
 .br
 .in -1c
 .SH DESCRIPTION
@@ -63,7 +61,7 @@ The QWidget::setEnable() function can be used to enable or disable mouse and key
 .PP
 The event handlers QWidget::keyPressEvent() and QWidget::keyReleaseEvent() receive key events.
 .PP
-See also: QFocusEvent and QWidget::grabKeyboard().
+See also QFocusEvent and QWidget::grabKeyboard().
 .PP
 Examples:
 .(l
@@ -91,11 +89,11 @@ Setting the accept parameter indicates that the receiver of the event wants the 
 .PP
 The accept flag is set by default.
 .PP
-See also: ignore().
+See also ignore().
 .SH "int QKeyEvent::ascii () const"
-Returns the ASCII code of the key that was pressed or released. We recomment using text() instead.
+Returns the ASCII code of the key that was pressed or released. We recommend using text() instead.
 .PP
-See also: text().
+See also text().
 .PP
 Examples:
 .(l
@@ -106,7 +104,7 @@ Returns the number of single keys for this event. If text() is not empty, this i
 .PP
 However, Qt also compresses invisible keycodes, such as BackSpace. For those, count() returns the number of key presses/repeats this event represents.
 .PP
-See also: QWidget::setKeyCompression().
+See also QWidget::setKeyCompression().
 .SH "void QKeyEvent::ignore ()"
 Clears the accept flag parameter of the key event object.
 .PP
@@ -114,7 +112,7 @@ Clearing the accept parameter indicates that the event receiver does not want th
 .PP
 The accept flag is set by default.
 .PP
-See also: accept().
+See also accept().
 .SH "bool QKeyEvent::isAccepted () const"
 Returns TRUE if the receiver of the event wants to keep the key.
 .SH "bool QKeyEvent::isAutoRepeat () const"
@@ -132,21 +130,21 @@ Returns the keyboard modifier flags that existed immediately before the event oc
 .PP
 The returned value is \fCShiftButton, ControlButton\fR and \fCAltButton\fR OR'ed together.
 .PP
-See also: stateAfter().
+See also stateAfter().
 .SH "ButtonState QKeyEvent::stateAfter () const"
 Returns the keyboard modifier flags that existed immediately after the event occurred.
 .PP
 \fBWarning:\fR This function cannot be trusted.
 .PP
-See also: state().
+See also state().
 .SH "QString QKeyEvent::text () const"
 Returns the Unicode text which this key generated.
 .PP
-See also:  QWidget::setKeyCompression().
+See also  QWidget::setKeyCompression().
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qkeyevent.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

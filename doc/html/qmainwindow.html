@@ -1,15 +1,17 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head>
 <title>Qt Toolkit - QMainWindow Class</title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
-a:link { text-decoration: none; }
-body { background: white; color: black; }
+a:link { color: #004faf; text-decoration: none }
+a:visited { color: #672967; text-decoration: none }body { background: white; color: black; }
 --></style>
 </head><body bgcolor="#ffffff">
 
-<a href="index.html">
-<img width="122" height="65" src="qtlogo.png" alt="Home"
-  align="left" border="0">
-</a><div align=right><img src="dochead.png" width="472" height="27"><br>
+<table width="100%">
+<tr><td><a href="index.html">
+<img width="100" height="100" src="qtlogo.png"
+alt="Home" border="0"><img width="100"
+height="100" src="face.png" alt="Home" border="0">
+</a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
 - <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
@@ -17,7 +19,7 @@ body { background: white; color: black; }
 - <a href="index.html">Home</a>
 - <a href="topicals.html"><b>Structure</b></a>
 </div>
-<br clear=all>
+</table>
 
 <h1 align=center>QMainWindow Class Reference</h1><br clear="all">
 <p>
@@ -30,59 +32,58 @@ Inherits <a href="qwidget.html">QWidget</a>.
 <p><a href="qmainwindow-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><span class="fn"><a href="#9a91e1"><b>QMainWindow</b></a> ( QWidget * parent = 0, const char * name = 0, WFlags f = WType_TopLevel ) </span>
-<li><span class="fn"><a href="#8832d5"><b>~QMainWindow</b></a> () </span>
-<li><span class="fn">QMenuBar* <a href="#2fcbc3"><b>menuBar</b></a> () const</span>
-<li><span class="fn">QStatusBar* <a href="#14153d"><b>statusBar</b></a> () const</span>
-<li><span class="fn">QToolTipGroup* <a href="#4f5d02"><b>toolTipGroup</b></a> () const</span>
-<li><span class="fn">virtual void <a href="#0983b6"><b>setCentralWidget</b></a> ( QWidget * ) </span>
-<li><span class="fn">QWidget* <a href="#874e7d"><b>centralWidget</b></a> () const</span>
-<li><span class="fn">enum <a href="#ToolBarDock"><b>ToolBarDock</b></a> { Unmanaged, TornOff, Top, Bottom, Right, Left, Minimized }</span>
-<li><span class="fn">virtual void <a href="#6c19ce"><b>setDockEnabled</b></a> ( ToolBarDock dock, bool enable ) </span>
-<li><span class="fn">bool <a href="#492e75"><b>isDockEnabled</b></a> ( ToolBarDock dock ) const</span>
-<li><span class="fn">void <a href="#dee7ae"><b>setDockEnabled</b></a> ( QToolBar * tb, ToolBarDock dock, bool enable ) </span>
-<li><span class="fn">bool <a href="#eed6b5"><b>isDockEnabled</b></a> ( QToolBar * tb, ToolBarDock dock ) const</span>
-<li><span class="fn">void <a href="#95dc7d"><b>addToolBar</b></a> ( QToolBar *, ToolBarDock = Top, bool newLine = FALSE ) </span>
-<li><span class="fn">void <a href="#63cf8b"><b>addToolBar</b></a> ( QToolBar *, const QString &amp; label, ToolBarDock = Top, bool newLine = FALSE ) </span>
-<li><span class="fn">void <a href="#3c1688"><b>moveToolBar</b></a> ( QToolBar *, ToolBarDock = Top ) </span>
-<li><span class="fn">void <a href="#5d7a7b"><b>moveToolBar</b></a> ( QToolBar *, ToolBarDock, bool nl, int index, int extraOffset = -1 ) </span>
-<li><span class="fn">void <a href="#9d9d21"><b>removeToolBar</b></a> ( QToolBar * ) </span>
-<li><span class="fn">bool <a href="#b667ba"><b>rightJustification</b></a> () const</span>
-<li><span class="fn">bool <a href="#725ddd"><b>usesBigPixmaps</b></a> () const</span>
-<li><span class="fn">bool <a href="#609172"><b>usesTextLabel</b></a> () const</span>
-<li><span class="fn">bool <a href="#308027"><b>toolBarsMovable</b></a> () const</span>
-<li><span class="fn">bool <a href="#22f243"><b>opaqueMoving</b></a> () const</span>
-<li><span class="fn">bool <a href="#a2d60b"><b>getLocation</b></a> ( QToolBar * tb, ToolBarDock &amp; dock, int &amp; index, bool &amp; nl, int &amp; extraOffset ) const</span>
-<li><span class="fn">QList&lt;QToolBar&gt; <a href="#f37573"><b>toolBars</b></a> ( ToolBarDock dock ) const</span>
-<li><span class="fn">void <a href="#eedf5e"><b>lineUpToolBars</b></a> ( bool keepNewLines = FALSE ) </span>
-<li><span class="fn">bool <a href="#026ae1"><b>isDockMenuEnabled</b></a> () const</span>
+<li><div class="fn"><a href="#9a91e1"><b>QMainWindow</b></a> ( QWidget * parent = 0, const char * name = 0, WFlags f = WType_TopLevel ) </div>
+<li><div class="fn"><a href="#8832d5"><b>~QMainWindow</b></a> () </div>
+<li><div class="fn">QMenuBar* <a href="#2fcbc3"><b>menuBar</b></a> () const</div>
+<li><div class="fn">QStatusBar* <a href="#14153d"><b>statusBar</b></a> () const</div>
+<li><div class="fn">QToolTipGroup* <a href="#4f5d02"><b>toolTipGroup</b></a> () const</div>
+<li><div class="fn">virtual void <a href="#0983b6"><b>setCentralWidget</b></a> ( QWidget * ) </div>
+<li><div class="fn">QWidget* <a href="#874e7d"><b>centralWidget</b></a> () const</div>
+<li><div class="fn">enum <a href="#ToolBarDock"><b>ToolBarDock</b></a> { Unmanaged, TornOff, Top, Bottom, Right, Left, Minimized }</div>
+<li><div class="fn">virtual void <a href="#6c19ce"><b>setDockEnabled</b></a> ( ToolBarDock dock, bool enable ) </div>
+<li><div class="fn">bool <a href="#492e75"><b>isDockEnabled</b></a> ( ToolBarDock dock ) const</div>
+<li><div class="fn">void <a href="#dee7ae"><b>setDockEnabled</b></a> ( QToolBar * tb, ToolBarDock dock, bool enable ) </div>
+<li><div class="fn">bool <a href="#eed6b5"><b>isDockEnabled</b></a> ( QToolBar * tb, ToolBarDock dock ) const</div>
+<li><div class="fn">void <a href="#95dc7d"><b>addToolBar</b></a> ( QToolBar *, ToolBarDock = Top, bool newLine = FALSE ) </div>
+<li><div class="fn">void <a href="#63cf8b"><b>addToolBar</b></a> ( QToolBar *, const QString &amp; label, ToolBarDock = Top, bool newLine = FALSE ) </div>
+<li><div class="fn">void <a href="#3c1688"><b>moveToolBar</b></a> ( QToolBar *, ToolBarDock = Top ) </div>
+<li><div class="fn">void <a href="#5d7a7b"><b>moveToolBar</b></a> ( QToolBar *, ToolBarDock, bool nl, int index, int extraOffset = -1 ) </div>
+<li><div class="fn">void <a href="#9d9d21"><b>removeToolBar</b></a> ( QToolBar * ) </div>
+<li><div class="fn">bool <a href="#b667ba"><b>rightJustification</b></a> () const</div>
+<li><div class="fn">bool <a href="#725ddd"><b>usesBigPixmaps</b></a> () const</div>
+<li><div class="fn">bool <a href="#609172"><b>usesTextLabel</b></a> () const</div>
+<li><div class="fn">bool <a href="#308027"><b>toolBarsMovable</b></a> () const</div>
+<li><div class="fn">bool <a href="#22f243"><b>opaqueMoving</b></a> () const</div>
+<li><div class="fn">bool <a href="#a2d60b"><b>getLocation</b></a> ( QToolBar * tb, ToolBarDock &amp; dock, int &amp; index, bool &amp; nl, int &amp; extraOffset ) const</div>
+<li><div class="fn">void <a href="#eedf5e"><b>lineUpToolBars</b></a> ( bool keepNewLines = FALSE ) </div>
+<li><div class="fn">bool <a href="#026ae1"><b>isDockMenuEnabled</b></a> () const</div>
 </ul>
 <h2>Public Slots</h2>
 <ul>
-<li><span class="fn">virtual void <a href="#deadb2"><b>setRightJustification</b></a> ( bool ) </span>
-<li><span class="fn">virtual void <a href="#44e8cb"><b>setUsesBigPixmaps</b></a> ( bool ) </span>
-<li><span class="fn">void <a href="#0e35cf"><b>setUsesTextLabel</b></a> ( bool ) </span>
-<li><span class="fn">void <a href="#aa099c"><b>setToolBarsMovable</b></a> ( bool ) </span>
-<li><span class="fn">void <a href="#3d6632"><b>setOpaqueMoving</b></a> ( bool ) </span>
-<li><span class="fn">void <a href="#382603"><b>setDockMenuEnabled</b></a> ( bool ) </span>
-<li><span class="fn">void <a href="#db02bc"><b>whatsThis</b></a> () </span>
+<li><div class="fn">virtual void <a href="#deadb2"><b>setRightJustification</b></a> ( bool ) </div>
+<li><div class="fn">virtual void <a href="#44e8cb"><b>setUsesBigPixmaps</b></a> ( bool ) </div>
+<li><div class="fn">void <a href="#0e35cf"><b>setUsesTextLabel</b></a> ( bool ) </div>
+<li><div class="fn">void <a href="#aa099c"><b>setToolBarsMovable</b></a> ( bool ) </div>
+<li><div class="fn">void <a href="#3d6632"><b>setOpaqueMoving</b></a> ( bool ) </div>
+<li><div class="fn">void <a href="#382603"><b>setDockMenuEnabled</b></a> ( bool ) </div>
+<li><div class="fn">void <a href="#db02bc"><b>whatsThis</b></a> () </div>
 </ul>
 <h2>Signals</h2>
 <ul>
-<li><span class="fn">void <a href="#f392de"><b>pixmapSizeChanged</b></a> ( bool ) </span>
-<li><span class="fn">void <a href="#ad6a70"><b>usesTextLabelChanged</b></a> ( bool ) </span>
-<li><span class="fn">void <a href="#ac17f3"><b>startMovingToolBar</b></a> ( QToolBar * ) </span>
-<li><span class="fn">void <a href="#6a1195"><b>endMovingToolBar</b></a> ( QToolBar * ) </span>
-<li><span class="fn">void <a href="#f678e3"><b>toolBarPositionChanged</b></a> ( QToolBar * ) </span>
+<li><div class="fn">void <a href="#f392de"><b>pixmapSizeChanged</b></a> ( bool ) </div>
+<li><div class="fn">void <a href="#ad6a70"><b>usesTextLabelChanged</b></a> ( bool ) </div>
+<li><div class="fn">void <a href="#ac17f3"><b>startMovingToolBar</b></a> ( QToolBar * ) </div>
+<li><div class="fn">void <a href="#6a1195"><b>endMovingToolBar</b></a> ( QToolBar * ) </div>
+<li><div class="fn">void <a href="#f678e3"><b>toolBarPositionChanged</b></a> ( QToolBar * ) </div>
 </ul>
 <h2>Protected Members</h2>
 <ul>
-<li><span class="fn">virtual void <a href="#c1fe7b"><b>resizeEvent</b></a> ( QResizeEvent * ) </span>
-<li><span class="fn">virtual void <a href="#366599"><b>childEvent</b></a> ( QChildEvent * ) </span>
+<li><div class="fn">virtual void <a href="#c1fe7b"><b>resizeEvent</b></a> ( QResizeEvent * ) </div>
+<li><div class="fn">virtual void <a href="#366599"><b>childEvent</b></a> ( QChildEvent * ) </div>
 </ul>
 <h2>Protected Slots</h2>
 <ul>
-<li><span class="fn">virtual void <a href="#bafbe0"><b>setUpLayout</b></a> () </span>
+<li><div class="fn">virtual void <a href="#bafbe0"><b>setUpLayout</b></a> () </div>
 </ul>
 <h2>Properties</h2>
 <table border=1 cellpadding=3 cellspacing=0>
@@ -138,7 +139,7 @@ is displayed in a tool tip (see <a href="qtoolbar.html#63c372">QToolBar::label</
 you should specify a meaningful label for each toolbar.
 <p>Normally toolbars are moved transparently (this means while the user
 drags one, a rectangle is drawn on the screen). With <a href="#3d6632">setOpaqueMoving</a>()
-it's possible to switch betrween opaque and transparent moving
+it's possible to switch between opaque and transparent moving
 of toolbars.
 <p>The main window's menubar is static (on the top) by default. If you want a movable
 menubar, create a <a href="qmenubar.html">QMenuBar</a> as stretchable widget inside its
@@ -158,10 +159,10 @@ use <a href="#a2d60b">getLocation</a>() on each toolbar, store the data and rest
 layout using <a href="#052329">moveToolBar</a>() on each toolbar again. When restoring,
 ensure to move the toolbars in exactly the same order in which you
 got the information.
-<p>For multidocument interfaces (MDI), use a <a href="qworkspace.html">QWorkspace</a> as central
+<p>For multi-document interfaces (MDI), use a <a href="qworkspace.html">QWorkspace</a> as central
 widget.
 <p><img src=qmainwindow-m.png> <img src=qmainwindow-w.png>
-<p>See also:  <a href="qtoolbar.html">QToolBar</a>, <a href="qstatusbar.html">QStatusBar</a>, <a href="qmenubar.html">QMenuBar</a>, <a href="qtooltipgroup.html">QToolTipGroup</a> and <a href="qdialog.html">QDialog</a>.
+<p>See also  <a href="qtoolbar.html">QToolBar</a>, <a href="qstatusbar.html">QStatusBar</a>, <a href="qmenubar.html">QMenuBar</a>, <a href="qtooltipgroup.html">QToolTipGroup</a> and <a href="qdialog.html">QDialog</a>.
 <p>Examples:
  <a href="mainlyQt-editor-cpp.html#QMainWindow">mainlyQt/editor.cpp</a>
 
@@ -196,7 +197,7 @@ removed from that window.
 <p>Returns a pointer to the main child of this main widget.  The
 main child is the big widget around which the tool bars are
 arranged.
-<p>See also:  <a href="#0983b6">setCentralWidget</a>().
+<p>See also  <a href="#0983b6">setCentralWidget</a>().
 <p>Examples:
  <a href="qfd-qfd-cpp.html#centralWidget">qfd/qfd.cpp</a>
 <h3 class="fn">void <a name="366599"></a>QMainWindow::childEvent ( <a href="qchildevent.html">QChildEvent</a> * e ) <code>[virtual protected]</code></h3>
@@ -221,15 +222,15 @@ else to FALSE.
 (e.g. because the toolbar <em>tb</em> was not found in this mainwindow).
 <h3 class="fn">bool <a name="492e75"></a>QMainWindow::isDockEnabled ( <a href="qmainwindow.html#ToolBarDock">ToolBarDock</a> dock ) const</h3>
 <p>Returns TRUE if <em>dock</em> is enabled, or FALSE if it is not.
-<p>See also:  <a href="#6c19ce">setDockEnabled</a>().
+<p>See also  <a href="#6c19ce">setDockEnabled</a>().
 <h3 class="fn">bool <a name="eed6b5"></a>QMainWindow::isDockEnabled ( <a href="qtoolbar.html">QToolBar</a> * tb, <a href="qmainwindow.html#ToolBarDock">ToolBarDock</a> dock ) const</h3>
 <p>Returns TRUE if <em>dock</em> is enabled for the toolbar <em>tb</em> , or FALSE if it is not.
-<p>See also:  <a href="#6c19ce">setDockEnabled</a>().
+<p>See also  <a href="#6c19ce">setDockEnabled</a>().
 <h3 class="fn">bool <a name="026ae1"></a>QMainWindow::isDockMenuEnabled () const</h3>
 <p>Returns TRUE, if rightclicking on an empty space on a toolbar dock
 or rightclicking on a toolbar handle opens a popup menu which allows
 lining up toolbars and hiding/showing toolbars.
-<p>See also:  <a href="#6c19ce">setDockEnabled</a>() and <a href="#eedf5e">lineUpToolBars</a>().
+<p>See also  <a href="#6c19ce">setDockEnabled</a>() and <a href="#eedf5e">lineUpToolBars</a>().
 <h3 class="fn">void <a name="eedf5e"></a>QMainWindow::lineUpToolBars ( bool keepNewLines = FALSE )</h3>
 <p>As toolbars can be freely moved inside docks, it's possible to line them
 up nicely with this method to get rid of all the unused space. If <em>keepNewLines</em>
@@ -239,7 +240,7 @@ together as compact as possible.
 <h3 class="fn"><a href="qmenubar.html">QMenuBar</a> * <a name="2fcbc3"></a>QMainWindow::menuBar () const</h3>
 <p>Returns the menu bar for this window.  If there isn't any,
 menuBar() creates an empty menu bar on the fly.
-<p>See also:  <a href="#14153d">statusBar</a>().
+<p>See also  <a href="#14153d">statusBar</a>().
 <h3 class="fn"><a href="qsize.html">QSize</a> <a name="090eac"></a>QMainWindow::minimumSizeHint () const <code>[virtual]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
 <p>Reimplemented from <a href="qwidget.html#3f0fc2">QWidget.</a>
@@ -254,7 +255,7 @@ that window to this.
 <h3 class="fn">bool <a name="22f243"></a>QMainWindow::opaqueMoving () const</h3>
 <p>Returns whether the toolbars of the mainwindow can
 be moved opaque or transparent.
-<p>See also:  <a href="#3d6632">setOpaqueMoving</a>().
+<p>See also  <a href="#3d6632">setOpaqueMoving</a>().
 <h3 class="fn">void <a name="2ead64"></a>QMainWindow::paintEvent ( <a href="qpaintevent.html">QPaintEvent</a> * ) <code>[virtual protected]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
 <p>Reimplemented from <a href="qwidget.html#ef2069">QWidget.</a>
@@ -263,7 +264,7 @@ be moved opaque or transparent.
 with a value which is different from the current setting.  All
 relevant widgets must connect to this signal.
 <h3 class="fn">void <a name="9d9d21"></a>QMainWindow::removeToolBar ( <a href="qtoolbar.html">QToolBar</a> * toolBar )</h3>
-<p>Removes <em>toolBar</em> from this main window, if <em>toolBar</em> is
+<p>Removes <em>toolBar</em> from this main window's docking area, if <em>toolBar</em> is
 non-null and known by this main window.
 <h3 class="fn">void <a name="c1fe7b"></a>QMainWindow::resizeEvent ( <a href="qresizeevent.html">QResizeEvent</a> * ) <code>[virtual protected]</code></h3>
 <p>Monitors events to ensure layout is updated.
@@ -273,7 +274,7 @@ non-null and known by this main window.
 FALSE if it uses a ragged right edge.
 <p>The default is to use a ragged right edge.
 <p>("Right edge" sometimes means "bottom edge".)
-<p>See also:  <a href="#deadb2">setRightJustification</a>().
+<p>See also  <a href="#deadb2">setRightJustification</a>().
 <h3 class="fn">void <a name="0983b6"></a>QMainWindow::setCentralWidget ( <a href="qwidget.html">QWidget</a> * w ) <code>[virtual]</code></h3>
 <p>Sets the central widget for this window to <em>w.</em>  The central
 widget is the one around which the toolbars etc. are arranged.
@@ -289,12 +290,12 @@ available if <em>enable</em> is FALSE.
 <p>When passing TRUE for <em>b</em> here, rightclicking on an empty space on a toolbar dock
 or rightclicking on a toolbar handle opens a popup menu which allows lining up toolbars
 and hiding/showing toolbars.
-<p>See also:  <a href="#eedf5e">lineUpToolBars</a>() and <a href="#026ae1">isDockMenuEnabled</a>().
+<p>See also  <a href="#eedf5e">lineUpToolBars</a>() and <a href="#026ae1">isDockMenuEnabled</a>().
 <h3 class="fn">void <a name="3d6632"></a>QMainWindow::setOpaqueMoving ( bool b ) <code>[slot]</code></h3>
 <p>If you set <em>b</em> to TRUE, the use can move the
 toolbars opaque, otherwise this is done transparent. This
 setting makes only sense, if <a href="#308027">toolBarsMovable</a>() is set to TRUE.
-<p>See also:  setToolbarsMovable().
+<p>See also  setToolbarsMovable().
 <h3 class="fn">void <a name="deadb2"></a>QMainWindow::setRightJustification ( bool enable ) <code>[virtual slot]</code></h3>
 <p>Sets this main window to right-justifies its toolbars if <em>enable</em>
 is TRUE. If enable is FALSE, only stretchable toolbars are expanded,
@@ -302,7 +303,7 @@ while non-stretchable toolbars get just the space they need. Given
 that most toolbars are not stretchable, this usually results in a
 ragged right edge.
 <p>The default is FALSE.
-<p>See also:  <a href="#b667ba">rightJustification</a>(), <a href="qtoolbar.html#6dbf4a">QToolBar::setVerticalStretchable</a>() and <a href="qtoolbar.html#511ffc">QToolBar::setHorizontalStretchable</a>().
+<p>See also  <a href="#b667ba">rightJustification</a>(), <a href="qtoolbar.html#6dbf4a">QToolBar::setVerticalStretchable</a>() and <a href="qtoolbar.html#511ffc">QToolBar::setHorizontalStretchable</a>().
 <h3 class="fn">void <a name="aa099c"></a>QMainWindow::setToolBarsMovable ( bool enable ) <code>[slot]</code></h3>
 <p>Sets the toolbars to be movable if <em>enable</em> is TRUE, or static
 otherwise.
@@ -310,7 +311,7 @@ otherwise.
 different toolbar docks by the user. By default toolbars are moved
 transparent, but this setting can be changed by <a href="#3d6632">setOpaqueMoving</a>().
 <p>The default is TRUE.
-<p>See also:  <a href="#6c19ce">setDockEnabled</a>(), <a href="#308027">toolBarsMovable</a>() and <a href="#3d6632">setOpaqueMoving</a>().
+<p>See also  <a href="#6c19ce">setDockEnabled</a>(), <a href="#308027">toolBarsMovable</a>() and <a href="#3d6632">setOpaqueMoving</a>().
 <h3 class="fn">void <a name="bafbe0"></a>QMainWindow::setUpLayout () <code>[virtual protected slot]</code></h3>
 <p>Sets up the geometry management of this window.  Called
 automatically when needed, so you should never need to call this.
@@ -320,20 +321,22 @@ automatically when needed, so you should never need to call this.
 <p>Tool buttons and other interested widgets are responsible for
 reading the correct state on startup, and for connecting to this
 widget's <a href="#f392de">pixmapSizeChanged</a>() signal.
-<p>See also:  <a href="qtoolbutton.html#3e8336">QToolButton::setUsesBigPixmap</a>().
+<p>See also  <a href="qtoolbutton.html#3e8336">QToolButton::setUsesBigPixmap</a>().
 <h3 class="fn">void <a name="0e35cf"></a>QMainWindow::setUsesTextLabel ( bool enable ) <code>[slot]</code></h3>
 <p>Sets tool buttons in this main windows to use text labels if <em>enable</em> is TRUE, and no text labels otherwise.
 <p>The default is FALSE.
 <p>Tool buttons and other interested widgets are responsible for
 reading the correct state on startup, and for connecting to this
 widget's <a href="#ad6a70">usesTextLabelChanged</a>() signal.
-<p>See also:  <a href="qtoolbutton.html#46ee3e">QToolButton::setUsesTextLabel</a>().
+<p>See also  <a href="qtoolbutton.html#46ee3e">QToolButton::setUsesTextLabel</a>().
 <h3 class="fn">void <a name="e71bb3"></a>QMainWindow::show () <code>[virtual]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
 <p>Examples:
+ <a href="action-main-cpp.html#show">action/main.cpp</a>
  <a href="themes-main-cpp.html#show">themes/main.cpp</a>
  <a href="mainlyQt-editor-cpp.html#show">mainlyQt/editor.cpp</a>
  <a href="application-main-cpp.html#show">application/main.cpp</a>
+ <a href="helpviewer-main-cpp.html#show">helpviewer/main.cpp</a>
  <a href="i18n-main-cpp.html#show">i18n/main.cpp</a>
  <a href="fileiconview-main-cpp.html#show">fileiconview/main.cpp</a>
  <a href="scribble-main-cpp.html#show">scribble/main.cpp</a>
@@ -351,7 +354,7 @@ the user started dragging it.
 <p>Returns the status bar for this window.  If there isn't any,
 statusBar() creates an empty status bar on the fly, and if necessary
 a tool tip group too.
-<p>See also:  <a href="#2fcbc3">menuBar</a>() and <a href="#4f5d02">toolTipGroup</a>().
+<p>See also  <a href="#2fcbc3">menuBar</a>() and <a href="#4f5d02">toolTipGroup</a>().
 <p>Examples:
  <a href="qfd-qfd-cpp.html#statusBar">qfd/qfd.cpp</a>
 <h3 class="fn">void <a name="be8549"></a>QMainWindow::styleChange ( <a href="qstyle.html">QStyle</a> &amp; old ) <code>[virtual protected]</code></h3>
@@ -360,24 +363,22 @@ a tool tip group too.
 <h3 class="fn">void <a name="f678e3"></a>QMainWindow::toolBarPositionChanged ( <a href="qtoolbar.html">QToolBar</a> * toolbar ) <code>[signal]</code></h3>
 <p>This signal is emitted when the <em>toolbar</em> has changed its position.
 This means it has been moved to another dock or inside the dock.
-<p>See also:  <a href="#a2d60b">getLocation</a>().
-<h3 class="fn"><a href="qlist.html">QList</a>&lt;<a href="qtoolbar.html">QToolBar</a>&gt; <a name="f37573"></a>QMainWindow::toolBars ( <a href="qmainwindow.html#ToolBarDock">ToolBarDock</a> dock ) const</h3>
-<p>Returns a list of all toolbars which are placed in <em>dock.</em>
+<p>See also  <a href="#a2d60b">getLocation</a>().
 <h3 class="fn">bool <a name="308027"></a>QMainWindow::toolBarsMovable () const</h3>
 <p>Returns whether or not the toolbars of this main window are movable.
-<p>See also:  <a href="#aa099c">setToolBarsMovable</a>().
+<p>See also  <a href="#aa099c">setToolBarsMovable</a>().
 <h3 class="fn"><a href="qtooltipgroup.html">QToolTipGroup</a> * <a name="4f5d02"></a>QMainWindow::toolTipGroup () const</h3>
 <p>Returns the tool tip group for this window.  If there isn't any,
 toolTipGroup() creates an empty tool tip group on the fly.
-<p>See also:  <a href="#2fcbc3">menuBar</a>() and <a href="#14153d">statusBar</a>().
+<p>See also  <a href="#2fcbc3">menuBar</a>() and <a href="#14153d">statusBar</a>().
 <h3 class="fn">bool <a name="725ddd"></a>QMainWindow::usesBigPixmaps () const</h3>
 <p>Returns the state last set by <a href="#44e8cb">setUsesBigPixmaps</a>().  The initial
 state is FALSE.
-<p>See also:  <a href="#44e8cb">setUsesBigPixmaps</a>();.
+<p>See also  <a href="#44e8cb">setUsesBigPixmaps</a>();.
 <h3 class="fn">bool <a name="609172"></a>QMainWindow::usesTextLabel () const</h3>
 <p>Returns the state last set by <a href="#0e35cf">setUsesTextLabel</a>().  The initial
 state is FALSE.
-<p>See also:  <a href="#0e35cf">setUsesTextLabel</a>();.
+<p>See also  <a href="#0e35cf">setUsesTextLabel</a>();.
 <h3 class="fn">void <a name="ad6a70"></a>QMainWindow::usesTextLabelChanged ( bool ) <code>[signal]</code></h3>
 <p>This signal is called whenever the <a href="#0e35cf">setUsesTextLabel</a>() is called
 with a value which is different from the current setting.  All
@@ -390,18 +391,18 @@ as in the code fragment:
 <p><pre>    <a href="qpopupmenu.html">QPopupMenu</a> * help = new <a href="qpopupmenu.html">QPopupMenu</a>( this );
     help-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "What's &amp;This", this , SLOT(whatsThis()), SHIFT+Key_F1);
 </pre>
-<p>See also:  <a href="qwhatsthis.html#8d84ad">QWhatsThis::enterWhatsThisMode</a>().
+<p>See also  <a href="qwhatsthis.html#8d84ad">QWhatsThis::enterWhatsThisMode</a>().
 <hr><p>
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.1.1"><nobr>
+<input type=hidden name="version" value="2.2.0"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
 copyright &copy; 1995-2000
-<a href="http://www.trolltech.com">Troll Tech</a>, all rights reserved.<p><address><hr><div align="center">
+<a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.1</div>
+<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.2.0</div>
 </table></div></address></body></html>

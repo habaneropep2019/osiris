@@ -1,29 +1,42 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qlcdnumber.cpp   2.1.1   edited 2000-05-05 $
+** $Id: qt/src/widgets/qlcdnumber.cpp   2.2.0   edited 2000-08-25 $
 **
 ** Implementation of QLCDNumber class
 **
 ** Created : 940518
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the widgets module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #include "qlcdnumber.h"
+#ifndef QT_NO_LCDNUMBER
 #include "qbitarray.h"
 #include "qpainter.h"
 
@@ -322,6 +335,7 @@ void QLCDNumber::init()
     setNumDigits( ndigits );
     setSegmentStyle( Outline );
     d = 0;
+    setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum ) );
 }
 
 /*!
@@ -366,8 +380,8 @@ void QLCDNumber::setNumDigits( int numDigits )
 	digitStr.fill( ' ', ndigits );
 	points.fill( 0, ndigits );
 	digitStr[ndigits - 1] = '0';		// "0" is the default number
-    }
-    else {
+    } else {
+	bool doDisplay = ndigits == 0;
 	if ( numDigits == ndigits )		// no change
 	    return;
 	register int i;
@@ -382,8 +396,7 @@ void QLCDNumber::setNumDigits( int numDigits )
 		points.setBit( i, points.testBit(i-dif) );
 	    for ( i=0; i<dif; i++ )
 		points.clearBit( i );
-	}
-	else {					// shrink
+	} else {					// shrink
 	    dif = ndigits - numDigits;
 	    digitStr = digitStr.right( numDigits );
 	    QBitArray tmpPoints = points.copy();
@@ -392,6 +405,8 @@ void QLCDNumber::setNumDigits( int numDigits )
 		points.setBit( i, tmpPoints.testBit(i+dif) );
 	}
 	ndigits = numDigits;
+	if ( doDisplay )
+	    display( value() );
 	update();
     }
 }
@@ -586,7 +601,7 @@ void QLCDNumber::setMode( Mode m )
 {
     base = m;
 
-    repaint( contentsRect() );
+    display( val );
 }
 
 
@@ -637,7 +652,7 @@ void QLCDNumber::drawContents( QPainter *p )
 
 void QLCDNumber::internalDisplay( const QString & )
 {
-    ; // Not used anymore
+    // Not used anymore
 }
 
 void QLCDNumber::internalSetString( const QString& s )
@@ -1116,6 +1131,7 @@ void QLCDNumber::setSegmentStyle( SegmentStyle s )
 {
     fill = ( s == Flat || s == Filled );
     shadow = ( s == Outline || s == Filled );
+    update();
 }
 
 
@@ -1147,5 +1163,7 @@ QSize QLCDNumber::sizeHint() const
 */
 QSizePolicy QLCDNumber::sizePolicy() const
 {
-    return QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum );
+    //### removeme 3.0
+    return QWidget::sizePolicy();
 }
+#endif // QT_NO_LCDNUMBER

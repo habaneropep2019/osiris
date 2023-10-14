@@ -1,5 +1,5 @@
-.TH QDataStream 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QDataStream 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QDataStream \- Serialization of binary data to a QIODevice
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -17,25 +15,25 @@ QDataStream \- Serialization of binary data to a QIODevice
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQDataStream\fR ()"
+.BI "\fBQDataStream\fR () "
 .br
 .ti -1c
-.BI "\fBQDataStream\fR ( QIODevice * )"
+.BI "\fBQDataStream\fR ( QIODevice * ) "
 .br
 .ti -1c
-.BI "\fBQDataStream\fR ( QByteArray, int mode )"
+.BI "\fBQDataStream\fR ( QByteArray, int mode ) "
 .br
 .ti -1c
-.BI "virtual \fB~QDataStream\fR ()"
+.BI "virtual \fB~QDataStream\fR () "
 .br
 .ti -1c
 .BI "QIODevice* \fBdevice\fR () const"
 .br
 .ti -1c
-.BI "void \fBsetDevice\fR ( QIODevice * )"
+.BI "void \fBsetDevice\fR ( QIODevice * ) "
 .br
 .ti -1c
-.BI "void \fBunsetDevice\fR ()"
+.BI "void \fBunsetDevice\fR () "
 .br
 .ti -1c
 .BI "bool \fBatEnd\fR () const"
@@ -50,85 +48,97 @@ QDataStream \- Serialization of binary data to a QIODevice
 .BI "int \fBbyteOrder\fR () const"
 .br
 .ti -1c
-.BI "void \fBsetByteOrder\fR ( int )"
+.BI "void \fBsetByteOrder\fR ( int ) "
 .br
 .ti -1c
 .BI "bool \fBisPrintableData\fR () const"
 .br
 .ti -1c
-.BI "void \fBsetPrintableData\fR ( bool )"
+.BI "void \fBsetPrintableData\fR ( bool ) "
 .br
 .ti -1c
 .BI "int \fBversion\fR () const"
 .br
 .ti -1c
-.BI "void \fBsetVersion\fR ( int )"
+.BI "void \fBsetVersion\fR ( int ) "
 .br
 .ti -1c
-.BI "QDataStream& \fBoperator>>\fR ( Q_INT8 & i )"
+.BI "QDataStream& \fBoperator>>\fR ( Q_INT8 & i ) "
 .br
 .ti -1c
-.BI "QDataStream& \fBoperator>>\fR ( Q_UINT8 & i )"
+.BI "QDataStream& \fBoperator>>\fR ( Q_UINT8 & i ) "
 .br
 .ti -1c
-.BI "QDataStream& \fBoperator>>\fR ( Q_INT16 & i )"
+.BI "QDataStream& \fBoperator>>\fR ( Q_INT16 & i ) "
 .br
 .ti -1c
-.BI "QDataStream& \fBoperator>>\fR ( Q_UINT16 & i )"
+.BI "QDataStream& \fBoperator>>\fR ( Q_UINT16 & i ) "
 .br
 .ti -1c
-.BI "QDataStream& \fBoperator>>\fR ( Q_INT32 & i )"
+.BI "QDataStream& \fBoperator>>\fR ( Q_INT32 & i ) "
 .br
 .ti -1c
-.BI "QDataStream& \fBoperator>>\fR ( Q_UINT32 & i )"
+.BI "QDataStream& \fBoperator>>\fR ( Q_UINT32 & i ) "
 .br
 .ti -1c
-.BI "QDataStream& \fBoperator>>\fR ( float & f )"
+.BI "QDataStream& \fBoperator>>\fR ( Q_INT64 & i ) "
 .br
 .ti -1c
-.BI "QDataStream& \fBoperator>>\fR ( double & f )"
+.BI "QDataStream& \fBoperator>>\fR ( Q_UINT64 & i ) "
 .br
 .ti -1c
-.BI "QDataStream& \fBoperator>>\fR ( char *& str )"
+.BI "QDataStream& \fBoperator>>\fR ( float & f ) "
 .br
 .ti -1c
-.BI "QDataStream& \fBoperator<<\fR ( Q_INT8 i )"
+.BI "QDataStream& \fBoperator>>\fR ( double & f ) "
 .br
 .ti -1c
-.BI "QDataStream& \fBoperator<<\fR ( Q_UINT8 i )"
+.BI "QDataStream& \fBoperator>>\fR ( char *& str ) "
 .br
 .ti -1c
-.BI "QDataStream& \fBoperator<<\fR ( Q_INT16 i )"
+.BI "QDataStream& \fBoperator<<\fR ( Q_INT8 i ) "
 .br
 .ti -1c
-.BI "QDataStream& \fBoperator<<\fR ( Q_UINT16 i )"
+.BI "QDataStream& \fBoperator<<\fR ( Q_UINT8 i ) "
 .br
 .ti -1c
-.BI "QDataStream& \fBoperator<<\fR ( Q_INT32 i )"
+.BI "QDataStream& \fBoperator<<\fR ( Q_INT16 i ) "
 .br
 .ti -1c
-.BI "QDataStream& \fBoperator<<\fR ( Q_UINT32 i )"
+.BI "QDataStream& \fBoperator<<\fR ( Q_UINT16 i ) "
 .br
 .ti -1c
-.BI "QDataStream& \fBoperator<<\fR ( float f )"
+.BI "QDataStream& \fBoperator<<\fR ( Q_INT32 i ) "
 .br
 .ti -1c
-.BI "QDataStream& \fBoperator<<\fR ( double f )"
+.BI "QDataStream& \fBoperator<<\fR ( Q_UINT32 i ) "
 .br
 .ti -1c
-.BI "QDataStream& \fBoperator<<\fR ( const char * str )"
+.BI "QDataStream& \fBoperator<<\fR ( Q_INT64 i ) "
 .br
 .ti -1c
-.BI "QDataStream& \fBreadBytes\fR ( char *&, uint & len )"
+.BI "QDataStream& \fBoperator<<\fR ( Q_UINT64 i ) "
 .br
 .ti -1c
-.BI "QDataStream& \fBreadRawBytes\fR ( char *, uint len )"
+.BI "QDataStream& \fBoperator<<\fR ( float f ) "
 .br
 .ti -1c
-.BI "QDataStream& \fBwriteBytes\fR ( const char *, uint len )"
+.BI "QDataStream& \fBoperator<<\fR ( double f ) "
 .br
 .ti -1c
-.BI "QDataStream& \fBwriteRawBytes\fR ( const char *, uint len )"
+.BI "QDataStream& \fBoperator<<\fR ( const char * str ) "
+.br
+.ti -1c
+.BI "QDataStream& \fBreadBytes\fR ( char *&, uint & len ) "
+.br
+.ti -1c
+.BI "QDataStream& \fBreadRawBytes\fR ( char *, uint len ) "
+.br
+.ti -1c
+.BI "QDataStream& \fBwriteBytes\fR ( const char *, uint len ) "
+.br
+.ti -1c
+.BI "QDataStream& \fBwriteRawBytes\fR ( const char *, uint len ) "
 .br
 .in -1c
 .SH DESCRIPTION
@@ -261,12 +271,12 @@ Then read it in with:
     s >> [other interesting data];
 .fi
 .PP
-See also: QTextStream and QVariant.
+See also QTextStream and QVariant.
 .SH MEMBER FUNCTION DOCUMENTATION
 .SH "QDataStream::QDataStream ()"
 Constructs a data stream that has no IO device.
 .PP
-See also: setDevice().
+See also setDevice().
 .SH "QDataStream::QDataStream ( QByteArray a, int mode )"
 Constructs a data stream that operates on a byte array through an internal QBuffer device.
 .PP
@@ -291,7 +301,7 @@ The QArray::setRawData() function is not for the inexperienced.
 .SH "QDataStream::QDataStream ( QIODevice * d )"
 Constructs a data stream that uses the IO device \fId.\fR
 .PP
-See also: setDevice() and device().
+See also setDevice() and device().
 .SH "QDataStream::~QDataStream () \fC[virtual]\fR"
 Destructs the data stream.
 .PP
@@ -301,15 +311,15 @@ Returns TRUE if the IO device has reached the end position (end of stream or fil
 .PP
 Returns FALSE if the current position of the read/write head of the IO device is somewhere before the end position.
 .PP
-See also: QIODevice::atEnd().
+See also QIODevice::atEnd().
 .SH "int QDataStream::byteOrder () const"
 Returns the current byte order setting - either \fCBigEndian\fR or \fCLittleEndian.\fR
 .PP
-See also: setByteOrder().
+See also setByteOrder().
 .SH "QIODevice * QDataStream::device () const"
 Returns the IO device currently set.
 .PP
-See also: setDevice() and unsetDevice().
+See also setDevice() and unsetDevice().
 .SH "bool QDataStream::eof () const"
 \fBThis function is obsolete.\fR It is provided to keep old source working, and will probably be removed in a future version of Qt. We strongly advise against using it in new code.
 .PP
@@ -317,21 +327,25 @@ Returns TRUE if the IO device has reached the end position (end of stream or fil
 .PP
 Returns FALSE if the current position of the read/write head of the IO device is somewhere before the end position.
 .PP
-See also: QIODevice::atEnd().
+See also QIODevice::atEnd().
 .SH "bool QDataStream::isPrintableData () const"
 Returns TRUE if the printable data flag has been set.
 .PP
-See also: setPrintableData().
+See also setPrintableData().
 .SH "QDataStream & QDataStream::operator<< ( Q_INT16 i )"
 Writes a signed 16-bit integer to the stream and returns a reference to the stream.
 .SH "QDataStream & QDataStream::operator<< ( Q_INT32 i )"
 Writes a signed 32-bit integer to the stream and returns a reference to the stream.
+.SH "QDataStream & QDataStream::operator<< ( Q_INT64 i )"
+Writes a signed 64-bit integer to the stream and returns a reference to the stream, or calls the Q_INT32-operator if 64 bit is not available.
 .SH "QDataStream & QDataStream::operator<< ( Q_INT8 i )"
 Writes a signed byte to the stream.
 .SH "QDataStream & QDataStream::operator<< ( Q_UINT16 i )"
 Writes an unsigned 16-bit integer to the stream and returns a reference to the stream.
 .SH "QDataStream & QDataStream::operator<< ( Q_UINT32 i )"
 Writes an unsigned 32-bit integer to the stream and returns a reference to the stream.
+.SH "QDataStream & QDataStream::operator<< ( Q_UINT64 i )"
+Writes an unsigned 64-bit integer to the stream and returns a reference to the stream, or uses the Q_UINT32-operator if 64 bit is not available.
 .SH "QDataStream & QDataStream::operator<< ( Q_UINT8 i )"
 Writes an unsigned byte to the stream and returns a reference to the stream.
 .SH "QDataStream & QDataStream::operator<< ( const char * s )"
@@ -346,12 +360,16 @@ Writes a 32-bit floating point number to the stream using the standard IEEE754 f
 Reads a signed 16-bit integer from the stream and returns a reference to the stream.
 .SH "QDataStream & QDataStream::operator>> ( Q_INT32 & i )"
 Reads a signed 32-bit integer from the stream and returns a reference to the stream.
+.SH "QDataStream & QDataStream::operator>> ( Q_INT64 & i )"
+Reads a signed 64-bit integer from the stream and returns a reference to the stream, or uses the Q_UINT32 operator if 64 bit is not available.
 .SH "QDataStream & QDataStream::operator>> ( Q_INT8 & i )"
 Reads a signed byte from the stream.
 .SH "QDataStream & QDataStream::operator>> ( Q_UINT16 & i )"
 Reads an unsigned 16-bit integer from the stream and returns a reference to the stream.
 .SH "QDataStream & QDataStream::operator>> ( Q_UINT32 & i )"
 Reads an unsigned 32-bit integer from the stream and returns a reference to the stream.
+.SH "QDataStream & QDataStream::operator>> ( Q_UINT64 & i )"
+Reads an unsigned 64-bit integer from the stream and returns a reference to the stream, or uses the Q_UINT32 operator if 64 bit is not available.
 .SH "QDataStream & QDataStream::operator>> ( Q_UINT8 & i )"
 Reads an unsigned byte from the stream and returns a reference to the stream.
 .SH "QDataStream & QDataStream::operator>> ( char *& s )"
@@ -371,13 +389,13 @@ The \fIl\fR parameter will be set to the length of the buffer.
 .PP
 The serialization format is an Q_UINT32 length specifier first, then the data (\fIl\fR bytes).
 .PP
-See also: readRawBytes() and writeBytes().
+See also readRawBytes() and writeBytes().
 .SH "QDataStream & QDataStream::readRawBytes ( char * s, uint len )"
 Reads \fIlen\fR bytes from the stream into \fIs\fR and returns a reference to the stream.
 .PP
 The buffer \fIs\fR must be preallocated.
 .PP
-See also: readBytes(), QIODevice::readBlock() and writeRawBytes().
+See also readBytes(), QIODevice::readBlock() and writeRawBytes().
 .SH "void QDataStream::setByteOrder ( int bo )"
 Sets the serialization byte order to \fIbo.\fR
 .PP
@@ -385,11 +403,11 @@ The \fIbo\fR parameter can be \fCQDataStream::BigEndian\fR or \fCQDataStream::Li
 .PP
 The default setting is big endian. We recommend leaving this setting unless you have special requirements.
 .PP
-See also: byteOrder().
+See also byteOrder().
 .SH "void QDataStream::setDevice ( QIODevice * d )"
 void QDataStream::setDevice(QIODevice *d ) Sets the IO device to \fId.\fR
 .PP
-See also: device() and unsetDevice().
+See also device() and unsetDevice().
 .SH "void QDataStream::setPrintableData ( bool enable )"
 Sets or clears the printable data flag.
 .PP
@@ -405,29 +423,29 @@ For Qt 1.x compatibility, use \fIv\fR == 1.
 .PP
 For Qt 2.0.x compatibility, use \fIv\fR == 2 (Not required for reading in Qt 2.1).
 .PP
-See also: version().
+See also version().
 .SH "void QDataStream::unsetDevice ()"
 Unsets the IO device. This is the same as calling setDevice( 0 ).
 .PP
-See also: device() and setDevice().
+See also device() and setDevice().
 .SH "int QDataStream::version () const"
 Returns the version number of the data serialization format. In Qt 2.1, this number is by default 3.
 .PP
-See also: setVersion().
+See also setVersion().
 .SH "QDataStream & QDataStream::writeBytes ( const char * s, uint len )"
 Writes the length specifier \fIlen\fR and the buffer \fIs\fR to the stream and returns a reference to the stream.
 .PP
 The \fIlen\fR is serialized as an Q_UINT32, followed by \fIlen\fR bytes from \fIs.\fR
 .PP
-See also: writeRawBytes() and readBytes().
+See also writeRawBytes() and readBytes().
 .SH "QDataStream & QDataStream::writeRawBytes ( const char * s, uint len )"
 Writes \fIlen\fR bytes from \fIs\fR to the stream and returns a reference to the stream.
 .PP
-See also:  writeBytes(), QIODevice::writeBlock() and readRawBytes().
+See also  writeBytes(), QIODevice::writeBlock() and readRawBytes().
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qdatastream.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

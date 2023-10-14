@@ -1,27 +1,39 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qregion_x11.cpp   2.1.1   edited 2000-03-24 $
+** $Id: qt/src/kernel/qregion_x11.cpp   2.2.0   edited 2000-08-25 $
 **
 ** Implementation of QRegion class for X11
 **
 ** Created : 940729
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the kernel module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses for Unix/X11 may use this file in accordance with the Qt Commercial
+** License Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #include "qregion.h"
 #include "qpointarray.h"
@@ -456,6 +468,27 @@ QArray<QRect> QRegion::rects() const
     return a;
 }
 
+/*!
+  Sets the region to be the given set of rectangles.  The rectangles
+  \e must be optimal Y-X sorted bands as follows:
+   <ul>
+    <li> The rectangles must not intersect
+    <li> All rectangles with a given top coordinate must have the same height.
+    <li> No two rectangles may abut horizontally (they should be combined
+		into a single wider rectangle in that case).
+    <li> The rectangles must be sorted ascendingly by Y as the major sort key
+		and X as the minor sort key.
+   </ul>
+  \internal
+  Only some platforms have that restriction (QWS).
+*/
+void QRegion::setRects( const QRect *rects, int num )
+{
+    // Could be optimized
+    *this = QRegion();
+    for (int i=0; i<num; i++)
+	*this |= rects[i];
+}
 
 /*!
   Returns TRUE if the region is equal to \a r, or FALSE if the regions are

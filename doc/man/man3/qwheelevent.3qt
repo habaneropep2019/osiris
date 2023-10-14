@@ -1,5 +1,5 @@
-.TH QWheelEvent 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QWheelEvent 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QWheelEvent \- Parameters that describe a wheel event
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -19,10 +17,10 @@ Inherits QEvent.
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQWheelEvent\fR ( const QPoint & " "pos" ", int " "delta" ", int state )"
+.BI "\fBQWheelEvent\fR ( const QPoint & " "pos" ", int " "delta" ", int state ) "
 .br
 .ti -1c
-.BI "\fBQWheelEvent\fR ( const QPoint & " "pos" ", const QPoint & " "globalPos" ", int " "delta" ", int state )"
+.BI "\fBQWheelEvent\fR ( const QPoint & " "pos" ", const QPoint & " "globalPos" ", int " "delta" ", int state ) "
 .br
 .ti -1c
 .BI "int \fBdelta\fR () const"
@@ -52,10 +50,10 @@ Inherits QEvent.
 .BI "bool \fBisAccepted\fR () const"
 .br
 .ti -1c
-.BI "void \fBaccept\fR ()"
+.BI "void \fBaccept\fR () "
 .br
 .ti -1c
-.BI "void \fBignore\fR ()"
+.BI "void \fBignore\fR () "
 .br
 .in -1c
 .SH DESCRIPTION
@@ -69,18 +67,18 @@ The QWidget::setEnable() function can be used to enable or disable mouse and key
 .PP
 The event handler QWidget::wheelEvent() receive wheel events.
 .PP
-See also: QMouseEvent and QWidget::grabMouse().
+See also QMouseEvent and QWidget::grabMouse().
 .SH MEMBER FUNCTION DOCUMENTATION
 .SH "QWheelEvent::QWheelEvent ( const QPoint & pos, const QPoint & globalPos, int delta, int state )"
 Constructs a wheel event object.
 .PP
-See also: pos(), globalPos(), delta() and state().
+See also pos(), globalPos(), delta() and state().
 .SH "QWheelEvent::QWheelEvent ( const QPoint & pos, int delta, int state )"
 Constructs a wheel event object.
 .PP
-The globalPos() is initialized to QCursor::pos(), which may not be appropriate. Use the other constructor to specify the global position explicitely.
+The globalPos() is initialized to QCursor::pos(), which usually is right but not always. Use the other constructor if you need to specify the global position explicitly.
 .PP
-See also: pos(), delta() and state().
+See also pos(), delta() and state().
 .SH "void QWheelEvent::accept ()"
 Sets the accept flag of the wheel event object.
 .PP
@@ -88,7 +86,7 @@ Setting the accept parameter indicates that the receiver of the event wants the 
 .PP
 The accept flag is set by default.
 .PP
-See also: ignore().
+See also ignore().
 .SH "int QWheelEvent::delta () const"
 Returns the distance that the wheel is rotated, expressed in multiples or divisions of WHEEL_DELTA, which is set at 120 currently.A positive value indicates that the wheel was rotated forward, away from the user; a negative value indicates that the wheel was rotated backward, toward the user.
 .PP
@@ -96,21 +94,21 @@ The WHEEL_DELTA constant was set to 120 by the wheel mouse vendors to allow buil
 .SH "const QPoint & QWheelEvent::globalPos () const"
 Returns the global position of the mouse pointer \fIat the time\fR of the event. This is important on asynchronous window systems like X11: Whenever you move your widgets around in response to mouse evens, globalPos() can differ a lot from the current pointer position QCursor::pos().
 .PP
-See also: globalX() and globalY().
+See also globalX() and globalY().
 .SH "int QWheelEvent::globalX () const"
 Returns the global X position of the mouse pointer at the time of the event
 .PP
-See also: globalY() and globalPos().
+See also globalY() and globalPos().
 .SH "int QWheelEvent::globalY () const"
 Returns the global Y position of the mouse pointer at the time of the event
 .PP
-See also: globalX() and globalPos().
+See also globalX() and globalPos().
 .SH "void QWheelEvent::ignore ()"
 Clears the accept flag parameter of the wheel event object.
 .PP
 Clearing the accept parameter indicates that the event receiver does not want the wheel event. Unwanted wheel events are sent to the parent widget. The accept flag is set by default.
 .PP
-See also: accept().
+See also accept().
 .SH "bool QWheelEvent::isAccepted () const"
 Returns TRUE if the receiver of the event handles the wheel event.
 .SH "const QPoint & QWheelEvent::pos () const"
@@ -118,7 +116,7 @@ Returns the position of the mouse pointer, relative to the widget that received 
 .PP
 If you move your widgets around in response to mouse evens, use globalPos() instead of this function.
 .PP
-See also: x(), y() and globalPos().
+See also x(), y() and globalPos().
 .SH "ButtonState QWheelEvent::state () const"
 Returns the keyboard modifier flags of the event.
 .PP
@@ -126,15 +124,15 @@ The returned value is \fCShiftButton, ControlButton\fR and \fCAltButton\fR OR'ed
 .SH "int QWheelEvent::x () const"
 Returns the X position of the mouse pointer, relative to the widget that received the event.
 .PP
-See also: y() and pos().
+See also y() and pos().
 .SH "int QWheelEvent::y () const"
 Returns the Y position of the mouse pointer, relative to the widget that received the event.
 .PP
-See also:  x() and pos().
+See also  x() and pos().
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qwheelevent.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

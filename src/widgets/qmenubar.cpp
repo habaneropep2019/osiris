@@ -1,32 +1,45 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qmenubar.cpp   2.1.1   edited 2000-05-03 $
+** $Id: qt/src/widgets/qmenubar.cpp   2.2.0   edited 2000-08-28 $
 **
 ** Implementation of QMenuBar class
 **
 ** Created : 941209
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the widgets module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 // qmainwindow.h before qmenubar.h because of GCC-2.7.* compatibility
 // ### could be reorganised by discarding INCLUDE_MENUITEM_DEF and put
 // the relevant declarations in a private header?
 #include "qmainwindow.h"
+#ifndef QT_NO_MENUBAR
 #define	 INCLUDE_MENUITEM_DEF
 #include "qmenubar.h"
 #include "qaccel.h"
@@ -59,8 +72,8 @@ public:
   QPopupMenu, \code
   menubar->insertItem( "&File", filemenu );
   \endcode
-  inserts the menu into the menu bar. The ampercent in the item text declares
-  Alt-f as shortcut for this menu.
+  inserts the menu into the menu bar. The ampersand in the item text declares
+  Alt-f as shortcut for this menu. Use "&&" to get a real ampsend in the menubar.
 
   Items are either enabled or disabled. You toggle their state with
   setItemEnabled().
@@ -125,7 +138,6 @@ public:
 
 // Motif style parameters
 
-static const int motifBarFrame		= 2;	// menu bar frame width
 static const int motifBarHMargin	= 2;	// menu bar hor margin to item
 static const int motifBarVMargin	= 1;	// menu bar ver margin to item
 static const int motifItemFrame		= 2;	// menu item frame width
@@ -187,10 +199,10 @@ QMenuBar::QMenuBar( QWidget *parent, const char *name )
     int gs = style();
     int h;
     if ( gs == WindowsStyle ) {
-	h = 2 + fm.height() + motifItemVMargin + 2*motifBarFrame;
+	h = 2 + fm.height() + motifItemVMargin + 2*style().defaultFrameWidth();
     } else {
-	h =  motifBarFrame + motifBarVMargin + fm.height()
-	    + motifItemVMargin + 2*motifBarFrame + 2*motifItemFrame;
+	h =  style().defaultFrameWidth() + motifBarVMargin + fm.height()
+	    + motifItemVMargin + 2*style().defaultFrameWidth() + 2*motifItemFrame;
     }
 
     move( 0, 0 );
@@ -203,7 +215,7 @@ QMenuBar::QMenuBar( QWidget *parent, const char *name )
 	    break;
 	case MotifStyle:
 	    setFrameStyle( QFrame::Panel | QFrame::Raised );
-	    setLineWidth( motifBarFrame );
+	    setLineWidth( style().defaultFrameWidth() );
 	    break;
 	default:
 	    break;
@@ -224,7 +236,7 @@ void QMenuBar::styleChange( QStyle& old )
 	    break;
 	case MotifStyle:
 	    setFrameStyle( QFrame::Panel | QFrame::Raised );
-	    setLineWidth( motifBarFrame );
+	    setLineWidth( style().defaultFrameWidth() );
 	    setMouseTracking( FALSE );
 	    break;
 	default:
@@ -279,7 +291,7 @@ void QMenuBar::menuContentsChanged()
 	    ( (QMainWindow*)parent() )->update();
 	}
 	if ( parentWidget() && parentWidget()->layout() )
-	    parentWidget()->layout()->invalidate();
+	    parentWidget()->layout()->activate();
     }
 }
 
@@ -293,6 +305,7 @@ void QMenuBar::menuContentsChanged()
 
 void QMenuBar::menuStateChanged()
 {
+    setupAccelerators(); // ### when we have a good solution for the accel vs. focus widget problem, remove that. That is only a workaround
     update();
 }
 
@@ -532,7 +545,9 @@ void QMenuBar::openActPopup()
 	menuInsPopup(popup);
     }
 
+    popup->snapToMouse = FALSE;
     popup->popup( pos );
+    popup->snapToMouse = TRUE;
 }
 
 /*!
@@ -637,8 +652,8 @@ int QMenuBar::calculateRects( int max_width )
     int max_item_height = 0;
     int nlitems = 0;				// number on items on cur line
     int gs = style();
-    int x = motifBarFrame + motifBarHMargin;
-    int y = motifBarFrame + motifBarVMargin;
+    int x = style().defaultFrameWidth() + motifBarHMargin;
+    int y = style().defaultFrameWidth() + motifBarVMargin;
     int i = 0;
     int separator = -1;
     if ( gs == WindowsStyle )	//###
@@ -650,20 +665,21 @@ int QMenuBar::calculateRects( int max_width )
 	    if ( mi->widget()->parentWidget() != this ) {
 		mi->widget()->reparent( this, QPoint(0,0), TRUE );
 	    }
-	    w = mi->widget()->sizeHint().width()+2;
-	    h = mi->widget()->sizeHint().height()+2;
-	    if ( separator < 0 )
+	    w = mi->widget()->sizeHint().expandedTo( QApplication::globalStrut() ).width()+2;
+	    h = mi->widget()->sizeHint().expandedTo( QApplication::globalStrut() ).height()+2;
+	    if ( i && separator < 0 )
 		separator = i;
 	} else if ( mi->pixmap() ) {			// pixmap item
-	    w = mi->pixmap()->width() + 4;
-	    h = mi->pixmap()->height() + 4;
+	    w = QMAX( mi->pixmap()->width() + 4, QApplication::globalStrut().width() );
+	    h = QMAX( mi->pixmap()->height() + 4, QApplication::globalStrut().height() );
 	} else if ( !mi->text().isNull() ) {	// text item
 	    QString s = mi->text();
 	    w = fm.boundingRect( s ).width()
 		+ 2*motifItemHMargin;
 	    w -= s.contains('&')*fm.width('&');
 	    w += s.contains("&&")*fm.width('&');
-	    h = fm.height() + motifItemVMargin;
+	    w = QMAX( w, QApplication::globalStrut().width() );
+	    h = QMAX( fm.height() + motifItemVMargin, QApplication::globalStrut().height() );
 	} else if ( mi->isSeparator() ) {	// separator item
 	    if ( style() == MotifStyle )
 		separator = i; //### only motif?
@@ -673,14 +689,14 @@ int QMenuBar::calculateRects( int max_width )
 		w += 2*motifItemFrame;
 		h += 2*motifItemFrame;
 	    }
-	    if ( x + w + motifBarFrame - max_width > 0 && nlitems > 0 ) {
+	    if ( x + w + style().defaultFrameWidth() - max_width > 0 && nlitems > 0 ) {
 		nlitems = 0;
-		x = motifBarFrame + motifBarHMargin;
+		x = style().defaultFrameWidth() + motifBarHMargin;
 		y += h + motifBarHMargin;
 		separator = -1;
 	    }
-	    if ( y + h + 2*motifBarFrame > max_height )
-		max_height = y + h + 2*motifBarFrame;
+	    if ( y + h + 2*style().defaultFrameWidth() > max_height )
+		max_height = y + h + 2*style().defaultFrameWidth();
 	    if ( h > max_item_height )
 		max_item_height = h;
 	}
@@ -841,11 +857,8 @@ void QMenuBar::drawContents( QPainter *p )
 		else // other item
 		    p->fillRect(r, palette().normal().brush( QColorGroup::Button ));
 	    }
-	    QColor btext = g.buttonText();
-	    style().drawItem( p, r.left(), r.top(), r.width(), r.height(),
-			      AlignCenter|ShowPrefix|DontClip|SingleLine,
-			      g, e, mi->pixmap(), mi->text(), -1, &btext );
-
+	    style().drawMenuBarItem( p, r.left(), r.top(), r.width(), r.height(),
+			    mi, g, e, (i == actItem && actItemDown) );
 	}
     }
     if ( mseparator == InWindowsStyle && gs == WindowsStyle ) {
@@ -876,6 +889,8 @@ void QMenuBar::mousePressEvent( QMouseEvent *e )
 void QMenuBar::mouseReleaseEvent( QMouseEvent *e )
 {
     if ( e->button() != LeftButton )
+	return;
+    if ( !mouseBtDn )
 	return;
     mouseBtDn = FALSE;				// mouse button up
     int item = itemAtPos( e->pos() );
@@ -1088,6 +1103,7 @@ void QMenuBar::setActiveItem( int i, bool show, bool activate_first_item )
 	if ( activate_first_item )
 	    popup->setFirstItemActive();
     } else {				// not a popup
+	goodbye( FALSE );
 	if ( mi->signal() )			// activate signal
 	    mi->signal()->activate();
 	emit activated( mi->id() );
@@ -1137,6 +1153,8 @@ void QMenuBar::setupAccelerators()
     register QMenuItem *mi;
     while ( (mi=it.current()) ) {
 	++it;
+	if ( !mi->isEnabled() ) // ### when we have a good solution for the accel vs. focus widget problem, remove that. That is only a workaround
+	    continue;
 	QString s = mi->text();
 	if ( !s.isEmpty() ) {
 	    int i = QAccel::shortcutKey( s );
@@ -1209,7 +1227,7 @@ QSize QMenuBar::sizeHint() const
 	    s.setWidth( s.width() + irects[ i ].width() + 2 );
     }
     s.setHeight( height() );
-    return s;
+    return s.expandedTo( QApplication::globalStrut() );
 }
 
 /*!
@@ -1259,3 +1277,15 @@ bool QMenuBar::isDefaultUp() const
     return defaultup;
 }
 
+
+/*!\reimp
+ */
+void QMenuBar::activateItemAt( int index )
+{
+    if ( index >= 0 && index < (int) mitems->count() )
+	setActiveItem( index );
+    else
+	goodbye( FALSE );
+}
+
+#endif // QT_NO_MENUBAR

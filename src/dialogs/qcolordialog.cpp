@@ -1,34 +1,47 @@
 /****************************************************************************
-** $Id: qt/src/dialogs/qcolordialog.cpp   2.1.1   edited 2000-03-24 $
+** $Id: qt/src/dialogs/qcolordialog.cpp   2.2.0   edited 2000-08-25 $
 **
 ** Implementation of QColorDialog class
 **
 ** Created : 990222
 **
-** Copyright (C) 1999-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1999-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the dialogs module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #include "qcolordialog.h"
+
+#ifndef QT_NO_COLORDIALOG
 
 #include "qpainter.h"
 #include "qlayout.h"
 #include "qlabel.h"
-#include "../widgets/qwellarray_p.h"
 #include "qpushbutton.h"
 #include "qlineedit.h"
 #include "qimage.h"
@@ -38,6 +51,456 @@
 #include "qdragobject.h"
 #include "qapplication.h"
 #include "qdragobject.h"
+
+//////////// QWellArray BEGIN
+
+#include "qobjectdict.h"
+
+//
+//  W A R N I N G
+//  -------------
+//
+// This file is not part of the Qt API.  It exists for the convenience
+// of qwellarray.cpp and qcolordialog.cpp.
+// This header file may change from version to version without notice,
+// or even be removed.
+//
+//
+
+
+#include "qtableview.h"
+
+
+struct QWellArrayData;
+
+class QWellArray : public QTableView
+{
+    Q_OBJECT
+    Q_PROPERTY( int numCols READ numCols )
+    Q_PROPERTY( int numRows READ numRows )
+    Q_PROPERTY( int selectedColumn READ selectedColumn )
+    Q_PROPERTY( int selectedRow READ selectedRow )
+
+public:
+    QWellArray( QWidget *parent=0, const char *name=0, bool popup = FALSE );
+
+    ~QWellArray() {}
+    QString cellContent( int row, int col ) const;
+    // ### Paul !!! virtual void setCellContent( int row, int col, const QString &);
+
+    // ##### Obsolete since not const
+    int numCols() { return nCols; }
+    int numRows() { return nRows; }
+
+    int numCols() const { return nCols; }
+    int numRows() const { return nRows; }
+
+    // ##### Obsolete since not const
+    int selectedColumn() { return selCol; }
+    int selectedRow() { return selRow; }
+
+    int selectedColumn() const { return selCol; }
+    int selectedRow() const { return selRow; }
+
+    virtual void setSelected( int row, int col );
+
+    void setCellSize( int w, int h ) { setCellWidth(w);setCellHeight( h ); }
+
+    QSize sizeHint() const;
+
+    virtual void setDimension( int rows, int cols );
+    virtual void setCellBrush( int row, int col, const QBrush & );
+    QBrush cellBrush( int row, int col );
+
+signals:
+    void selected( int row, int col );
+
+protected:
+    virtual void setCurrent( int row, int col );
+
+    virtual void drawContents( QPainter *, int row, int col, const QRect& );
+    void drawContents( QPainter * );
+
+    void paintCell( QPainter*, int row, int col );
+    void mousePressEvent( QMouseEvent* );
+    void mouseReleaseEvent( QMouseEvent* );
+    void mouseMoveEvent( QMouseEvent* );
+    void keyPressEvent( QKeyEvent* );
+    void focusInEvent( QFocusEvent* );
+    void focusOutEvent( QFocusEvent* );
+
+private:
+    int curRow;
+    int curCol;
+    int selRow;
+    int selCol;
+    int nCols;
+    int nRows;
+    bool smallStyle;
+    QWellArrayData *d;
+
+private:	// Disabled copy constructor and operator=
+#if defined(Q_DISABLE_COPY)
+    QWellArray( const QWellArray & );
+    QWellArray& operator=( const QWellArray & );
+#endif
+};
+
+
+
+// non-interface ...
+
+
+
+struct QWellArrayData {
+    QBrush *brush;
+};
+
+// NOT REVISED
+/* WARNING, NOT
+  \class QWellArray qwellarray_p.h
+  \brief ....
+
+  ....
+
+  \ingroup advanced
+*/
+
+QWellArray::QWellArray( QWidget *parent, const char * name, bool popup )
+    : QTableView( parent, name,
+		  popup ? (WStyle_Customize|WStyle_Tool|WStyle_NoBorder) : 0 )
+{
+    d = 0;
+    setFocusPolicy( StrongFocus );
+    setBackgroundMode( PaletteButton );
+    nCols = 7;
+    nRows = 7;
+    int w = 24;		// cell width
+    int h = 21;		// cell height
+    smallStyle = popup;
+
+    if ( popup ) {
+	w = h = 18;
+	if ( style() == WindowsStyle )
+	    setFrameStyle( QFrame::WinPanel | QFrame::Raised );
+	else
+	    setFrameStyle( QFrame::Panel | QFrame::Raised );
+	setMargin( 1 );
+	setLineWidth( 2 );
+    }
+    setNumCols( nCols );
+    setNumRows( nRows );
+    setCellWidth( w );
+    setCellHeight( h );
+    curCol = 0;
+    curRow = 0;
+    selCol = -1;
+    selRow = -1;
+
+    if ( smallStyle )
+	setMouseTracking( TRUE );
+    setOffset( 5 , 10 );
+
+    resize( sizeHint() );
+
+}
+
+
+QSize QWellArray::sizeHint() const
+{
+    constPolish();
+    int f = frameWidth() * 2;
+    int w = nCols * cellWidth() + f;
+    int h = nRows * cellHeight() + f;
+    return QSize( w, h );
+}
+
+
+void QWellArray::paintCell( QPainter* p, int row, int col )
+{
+    int w = cellWidth( col );			// width of cell in pixels
+    int h = cellHeight( row );			// height of cell in pixels
+    int b = 1;
+
+    if ( !smallStyle )
+	b = 3;
+
+    const QColorGroup & g = colorGroup();
+    p->setPen( QPen( black, 0, SolidLine ) );
+    if ( !smallStyle && row ==selRow && col == selCol &&
+	 style() != MotifStyle ) {
+	int n = 2;
+	p->drawRect( n, n, w-2*n, h-2*n );
+    }
+
+
+    if ( style() == WindowsStyle ) {
+	qDrawWinPanel( p, b, b ,  w - 2*b,  h - 2*b,
+		       g, TRUE );
+	b += 2;
+    } else {
+	if ( smallStyle ) {
+	    qDrawShadePanel( p, b, b ,  w - 2*b,  h - 2*b,
+			     g, TRUE, 2 );
+	    b += 2;
+	} else {
+	    int t = ( row == selRow && col == selCol ) ? 2 : 0;
+	    b -= t;
+	    qDrawShadePanel( p, b, b ,  w - 2*b,  h - 2*b,
+			     g, TRUE, 2 );
+	    b += 2 + t;
+	}
+    }
+
+
+    if ( (row == curRow) && (col == curCol) ) {
+	if ( smallStyle ) {
+	    p->setPen ( white );
+	    p->drawRect( 1, 1, w-2, h-2 );
+	    p->setPen ( black );
+	    p->drawRect( 0, 0, w, h );
+	    p->drawRect( 2, 2, w-4, h-4 );
+	    b = 3;
+	} else if ( hasFocus() ) {
+	    style().drawFocusRect(p, QRect(0,0,w,h), g );
+	}
+    }
+    drawContents( p, row, col, QRect(b, b, w - 2*b, h - 2*b) );
+}
+
+/*!
+  Pass-through to QTableView::drawContents() to avoid hiding.
+*/
+void QWellArray::drawContents( QPainter *p )
+{
+    QTableView::drawContents(p);
+}
+
+/*!
+  Reimplement this function to change the contents of the well array.
+ */
+void QWellArray::drawContents( QPainter *p, int row, int col, const QRect &r )
+{
+
+    if ( d ) {
+	p->fillRect( r, d->brush[row*nCols+col] );
+    } else {
+	p->fillRect( r, white );
+	p->setPen( black );
+	p->drawLine( r.topLeft(), r.bottomRight() );
+	p->drawLine( r.topRight(), r.bottomLeft() );
+    }
+}
+
+
+/*\reimp
+*/
+void QWellArray::mousePressEvent( QMouseEvent* e )
+{
+    // The current cell marker is set to the cell the mouse is pressed
+    // in.
+    QPoint pos = e->pos();
+    setCurrent( findRow( pos.y() ), findCol( pos.x() ) );
+}
+
+/*\reimp
+*/
+void QWellArray::mouseReleaseEvent( QMouseEvent* )
+{
+    // The current cell marker is set to the cell the mouse is clicked
+    // in.
+    setSelected( curRow, curCol );
+}
+
+
+/*\reimp
+*/
+void QWellArray::mouseMoveEvent( QMouseEvent* e )
+{
+    //   The current cell marker is set to the cell the mouse is
+    //   clicked in.
+    if ( smallStyle ) {
+	QPoint pos = e->pos();
+	setCurrent( findRow( pos.y() ), findCol( pos.x() ) );
+    }
+}
+
+/*
+  Sets the cell currently having the focus. This is not necessarily
+  the same as the currently selected cell.
+*/
+
+void QWellArray::setCurrent( int row, int col )
+{
+
+    if ( (curRow == row) && (curCol == col) )
+	return;
+
+    if ( row < 0 || col < 0 )
+	row = col = -1;
+
+    int oldRow = curRow;
+    int oldCol = curCol;
+
+    curRow = row;
+    curCol = col;
+
+    updateCell( oldRow, oldCol );
+    updateCell( curRow, curCol );
+}
+
+
+/*!
+  Sets the currently selected cell to \a row, \a col.  If \a row or \a
+  col are less than zero, the current cell is unselected.
+
+  Does not set the position of the focus indicator.
+*/
+
+void QWellArray::setSelected( int row, int col )
+{
+    if ( (selRow == row) && (selCol == col) )
+	return;
+
+    int oldRow = selRow;
+    int oldCol = selCol;
+
+    if ( row < 0 || col < 0 )
+	row = col = -1;
+
+    selCol = col;
+    selRow = row;
+
+    updateCell( oldRow, oldCol );
+    updateCell( selRow, selCol );
+    if ( row >= 0 )
+	emit selected( row, col );
+
+    if ( isVisible() && parentWidget() && parentWidget()->inherits("QPopupMenu") )
+	parentWidget()->close();
+
+}
+
+
+
+/*!\reimp
+*/
+void QWellArray::focusInEvent( QFocusEvent* )
+{
+    updateCell( curRow, curCol );
+}
+
+
+/*!
+  Sets the size of the well array to be \c rows cells by \c cols.
+  Resets any brush info set by setCellBrush().
+
+  Must be called by reimplementors.
+ */
+void QWellArray::setDimension( int rows, int cols )
+{
+    nRows = rows;
+    nCols = cols;
+    if ( d ) {
+	if ( d->brush )
+	    delete[] d->brush;
+	delete d;
+	d = 0;
+    }
+    setNumCols( nCols );
+    setNumRows( nRows );
+}
+
+void QWellArray::setCellBrush( int row, int col, const QBrush &b )
+{
+    if ( !d ) {
+	d = new QWellArrayData;
+	d->brush = new QBrush[nRows*nCols];
+    }
+    if ( row >= 0 && row < nRows && col >= 0 && col < nCols )
+	d->brush[row*nCols+col] = b;
+#ifdef CHECK_RANGE
+    else
+	qWarning( "QWellArray::setCellBrush( %d, %d ) out of range", row, col );
+#endif
+}
+
+
+
+/*!
+  Returns the brush set for the cell at \a row, \a col. If no brush is set,
+  \c NoBrush is returned.
+*/
+
+QBrush QWellArray::cellBrush( int row, int col )
+{
+    if ( d && row >= 0 && row < nRows && col >= 0 && col < nCols )
+	return d->brush[row*nCols+col];
+    return NoBrush;
+}
+
+
+
+/*!\reimp
+*/
+
+void QWellArray::focusOutEvent( QFocusEvent* )
+{
+    updateCell( curRow, curCol );
+}
+
+/*\reimp
+*/
+void QWellArray::keyPressEvent( QKeyEvent* e )
+{
+    switch( e->key() ) {			// Look at the key code
+    case Key_Left:				// If 'left arrow'-key,
+	if( curCol > 0 ) {			// and cr't not in leftmost col
+	    setCurrent( curRow, curCol - 1);	// set cr't to next left column
+	    int edge = leftCell();		// find left edge
+	    if ( curCol < edge )		// if we have moved off  edge,
+		setLeftCell( edge - 1 );	// scroll view to rectify
+	}
+	break;
+    case Key_Right:				// Correspondingly...
+	if( curCol < numCols()-1 ) {
+	    setCurrent( curRow, curCol + 1);
+	    int edge = lastColVisible();
+	    if ( curCol >= edge )
+		setLeftCell( leftCell() + 1 );
+	}
+	break;
+    case Key_Up:
+	if( curRow > 0 ) {
+	    setCurrent( curRow - 1, curCol);
+	    int edge = topCell();
+	    if ( curRow < edge )
+		setTopCell( edge - 1 );
+	} else if ( smallStyle )
+	    focusNextPrevChild( FALSE );
+	break;
+    case Key_Down:
+	if( curRow < numRows()-1 ) {
+	    setCurrent( curRow + 1, curCol);
+	    int edge = lastRowVisible();
+	    if ( curRow >= edge )
+		setTopCell( topCell() + 1 );
+	} else if ( smallStyle )
+	    focusNextPrevChild( TRUE );
+	break;
+    case Key_Space:
+    case Key_Return:
+    case Key_Enter:
+	setSelected( curRow, curCol );
+	break;
+    default:				// If not an interesting key,
+	e->ignore();			// we don't accept the event
+	return;
+    }
+
+}
+
+//////////// QWellArray END
 
 static bool initrgb = FALSE;
 static QRgb stdrgb[6*8];
@@ -119,10 +582,12 @@ protected:
     void mousePressEvent( QMouseEvent *e );
     void mouseMoveEvent( QMouseEvent *e );
     void mouseReleaseEvent( QMouseEvent *e );
+#ifndef QT_NO_DRAGANDDROP
     void dragEnterEvent( QDragEnterEvent *e );
     void dragLeaveEvent( QDragLeaveEvent *e );
     void dragMoveEvent( QDragMoveEvent *e );
     void dropEvent( QDropEvent *e );
+#endif
 
 private:
     QRgb *values;
@@ -154,6 +619,7 @@ void QColorWell::mousePressEvent( QMouseEvent *e )
 void QColorWell::mouseMoveEvent( QMouseEvent *e )
 {
     QWellArray::mouseMoveEvent( e );
+#ifndef QT_NO_DRAGANDDROP
     if ( !mousePressed )
 	return;
     if ( ( pressPos - e->pos() ).manhattanLength() > QApplication::startDragDistance() ) {
@@ -170,8 +636,10 @@ void QColorWell::mouseMoveEvent( QMouseEvent *e )
 	mousePressed = FALSE;
 	drg->dragCopy();
     }
+#endif
 }
 
+#ifndef QT_NO_DRAGANDDROP
 void QColorWell::dragEnterEvent( QDragEnterEvent *e )
 {
     setFocus();
@@ -209,6 +677,8 @@ void QColorWell::dropEvent( QDropEvent *e )
 	e->ignore();
     }
 }
+
+#endif // QT_NO_DRAGANDDROP
 
 void QColorWell::mouseReleaseEvent( QMouseEvent *e )
 {
@@ -250,8 +720,8 @@ private:
     QPixmap *pix;
 };
 
-static const int pWidth = 200;
-static const int pHeight = 200;
+static int pWidth = 200;
+static int pHeight = 200;
 
 class QColorLuminancePicker : public QWidget
 {
@@ -386,9 +856,9 @@ void QColorLuminancePicker::setCol( int h, int s , int v )
 QPoint QColorPicker::colPt()
 { return QPoint( (360-hue)*(pWidth-1)/360, (255-sat)*(pHeight-1)/255 ); }
 int QColorPicker::huePt( const QPoint &pt )
-{ return 360 - pt.x()*360/(pHeight-1); }
+{ return 360 - pt.x()*360/(pWidth-1); }
 int QColorPicker::satPt( const QPoint &pt )
-{ return 255 - pt.y()*255/(pWidth-1) ; }
+{ return 255 - pt.y()*255/(pHeight-1) ; }
 void QColorPicker::setCol( const QPoint &pt )
 { setCol( huePt(pt), satPt(pt) ); }
 
@@ -397,7 +867,7 @@ QColorPicker::QColorPicker(QWidget* parent, const char* name )
 {
     setCol( 150, 255 );
 
-    QImage img( pHeight, pWidth, 32 );
+    QImage img( pWidth, pHeight, 32 );
     int x,y;
     for ( y = 0; y < pHeight; y++ )
 	for ( x = 0; x < pWidth; x++ ) {
@@ -417,7 +887,7 @@ QColorPicker::~QColorPicker()
 
 QSize QColorPicker::sizeHint() const
 {
-    return QSize( pHeight + 2*frameWidth(), pWidth + 2*frameWidth() );
+    return QSize( pWidth + 2*frameWidth(), pHeight + 2*frameWidth() );
 }
 
 QSizePolicy QColorPicker::sizePolicy() const
@@ -580,9 +1050,11 @@ protected:
     void mousePressEvent( QMouseEvent *e );
     void mouseMoveEvent( QMouseEvent *e );
     void mouseReleaseEvent( QMouseEvent *e );
+#ifndef QT_NO_DRAGANDDROP
     void dragEnterEvent( QDragEnterEvent *e );
     void dragLeaveEvent( QDragLeaveEvent *e );
     void dropEvent( QDropEvent *e );
+#endif
 
 private:
     QColor col;
@@ -615,6 +1087,7 @@ void QColorShowLabel::mousePressEvent( QMouseEvent *e )
 
 void QColorShowLabel::mouseMoveEvent( QMouseEvent *e )
 {
+#ifndef QT_NO_DRAGANDDROP
     if ( !mousePressed )
 	return;
     if ( ( pressPos - e->pos() ).manhattanLength() > QApplication::startDragDistance() ) {
@@ -628,8 +1101,10 @@ void QColorShowLabel::mouseMoveEvent( QMouseEvent *e )
 	mousePressed = FALSE;
 	drg->dragCopy();
     }
+#endif
 }
 
+#ifndef QT_NO_DRAGANDDROP
 void QColorShowLabel::dragEnterEvent( QDragEnterEvent *e )
 {
     if ( QColorDrag::canDecode( e ) )
@@ -653,6 +1128,7 @@ void QColorShowLabel::dropEvent( QDropEvent *e )
 	e->ignore();
     }
 }
+#endif // QT_NO_DRAGANDDROP
 
 void QColorShowLabel::mouseReleaseEvent( QMouseEvent * )
 {
@@ -781,7 +1257,7 @@ void QColorShower::setRgb( QRgb rgb )
 	return;
     curCol = rgb;
 
-    rgb2hsv(currentColor(), hue, sat, val );
+    rgb2hsv( currentColor(), hue, sat, val );
 
     hEd->setNum( hue );
     sEd->setNum( sat );
@@ -794,7 +1270,7 @@ void QColorShower::setRgb( QRgb rgb )
     showCurrentColor();
 }
 
-void QColorShower::setHsv(  int h, int s, int v )
+void QColorShower::setHsv( int h, int s, int v )
 {
     rgbOriginal = FALSE;
     if ( h == hue && v == val && s == sat )
@@ -840,7 +1316,7 @@ private:
     QWellArray *standard;
     QColorShower *cs;
     int nextCust;
-
+    bool compact;
 };
 
 //sets all widgets to display h,s,v
@@ -884,51 +1360,56 @@ void QColorDialogPrivate::newStandard( int r, int c )
 QColorDialogPrivate::QColorDialogPrivate( QColorDialog *dialog ) :
     QObject(dialog)
 {
+    compact = FALSE;
+    // small displays (e.g. PDAs cannot fit the full color dialog,
+    // so just use the color picker.
+    if ( qApp->desktop()->width() < 480 || qApp->desktop()->height() < 350 )
+	compact = TRUE;
+
     nextCust = 0;
     const int lumSpace = 3;
-    QHBoxLayout *topLay = new QHBoxLayout( dialog, 12, 6 );
-    QVBoxLayout *leftLay = new QVBoxLayout( topLay );
+    int border = 12;
+    if ( compact )
+	border = 6;
+    QHBoxLayout *topLay = new QHBoxLayout( dialog, border, 6 );
+    QVBoxLayout *leftLay = 0;
+
+    if ( !compact )
+	leftLay = new QVBoxLayout( topLay );
 
     initRGB();
 
+    if ( !compact ) {
+	standard = new QColorWell( dialog, 6, 8, stdrgb );
+	standard->setCellSize( 28, 24 );
+	QLabel * lab = new QLabel( standard,
+				QColorDialog::tr( "&Basic colors"), dialog );
+	connect( standard, SIGNAL(selected(int,int)), SLOT(newStandard(int,int)));
+	leftLay->addWidget( lab );
+	leftLay->addWidget( standard );
 
-    standard = new QColorWell( dialog, 6, 8, stdrgb );
-    standard->setCellSize( 28, 24 );
-    QLabel * lab = new QLabel( standard,
-			    QColorDialog::tr( "&Basic colors"), dialog );
-    connect( standard, SIGNAL(selected(int,int)), SLOT(newStandard(int,int)));
-    leftLay->addWidget( lab );
-    leftLay->addWidget( standard );
 
+	leftLay->addStretch();
 
-    leftLay->addStretch();
+	custom = new QColorWell( dialog, 2, 8, cusrgb );
+	custom->setCellSize( 28, 24 );
+	custom->setAcceptDrops( TRUE );
 
-    custom = new QColorWell( dialog, 2, 8, cusrgb );
-    custom->setCellSize( 28, 24 );
-    custom->setAcceptDrops( TRUE );
+	connect( custom, SIGNAL(selected(int,int)), SLOT(newCustom(int,int)));
+	lab = new QLabel( custom, QColorDialog::tr( "&Custom colors") , dialog );
+	leftLay->addWidget( lab );
+	leftLay->addWidget( custom );
 
-    connect( custom, SIGNAL(selected(int,int)), SLOT(newCustom(int,int)));
-    lab = new QLabel( custom, QColorDialog::tr( "&Custom colors") , dialog );
-    leftLay->addWidget( lab );
-    leftLay->addWidget( custom );
-
-    QPushButton *custbut =
-	new QPushButton( QColorDialog::tr("&Define Custom Colors >>"),
-					    dialog );
-    custbut->setEnabled( FALSE );
-    leftLay->addWidget( custbut );
-
-    QHBoxLayout *buttons = new QHBoxLayout( leftLay );
-
-    QPushButton *ok, *cancel;
-    ok = new QPushButton( QColorDialog::tr("OK"), dialog );
-    connect( ok, SIGNAL(clicked()), dialog, SLOT(accept()) );
-    ok->setDefault(TRUE);
-    cancel = new QPushButton( QColorDialog::tr("Cancel"), dialog );
-    connect( cancel, SIGNAL(clicked()), dialog, SLOT(reject()) );
-    buttons->addWidget( ok );
-    buttons->addWidget( cancel );
-    buttons->addStretch();
+	QPushButton *custbut =
+	    new QPushButton( QColorDialog::tr("&Define Custom Colors >>"),
+						dialog );
+	custbut->setEnabled( FALSE );
+	leftLay->addWidget( custbut );
+    } else {
+	// better color picker size for small displays
+	pWidth = 150;
+	pHeight = 100;
+    }
 
     QVBoxLayout *rightLay = new QVBoxLayout( topLay );
 
@@ -955,17 +1436,34 @@ QColorDialogPrivate::QColorDialogPrivate( QColorDialog *dialog ) :
     connect( cs, SIGNAL(newCol(QRgb)), this, SLOT(newColorTypedIn(QRgb)));
     rightLay->addWidget( cs );
 
+    QHBoxLayout *buttons;
+    if ( compact )
+	buttons = new QHBoxLayout( rightLay );
+    else
+	buttons = new QHBoxLayout( leftLay );
 
-    QPushButton *addCusBt = new QPushButton(
-				    QColorDialog::tr("&Add To Custom Colors"),
-					     dialog );
-    rightLay->addWidget( addCusBt );
-    connect( addCusBt, SIGNAL(clicked()), this, SLOT(addCustom()) );
+    QPushButton *ok, *cancel;
+    ok = new QPushButton( QColorDialog::tr("OK"), dialog );
+    connect( ok, SIGNAL(clicked()), dialog, SLOT(accept()) );
+    ok->setDefault(TRUE);
+    cancel = new QPushButton( QColorDialog::tr("Cancel"), dialog );
+    connect( cancel, SIGNAL(clicked()), dialog, SLOT(reject()) );
+    buttons->addWidget( ok );
+    buttons->addWidget( cancel );
+    buttons->addStretch();
+
+    if ( !compact ) {
+	QPushButton *addCusBt = new QPushButton(
+					QColorDialog::tr("&Add To Custom Colors"),
+						 dialog );
+	rightLay->addWidget( addCusBt );
+	connect( addCusBt, SIGNAL(clicked()), this, SLOT(addCustom()) );
+    }
 }
 
 void QColorDialogPrivate::addCustom()
 {
-    cusrgb[nextCust] =  cs->currentColor();
+    cusrgb[nextCust] = cs->currentColor();
     custom->repaint( FALSE ); //###
     nextCust = (nextCust+1) % 16;
 }
@@ -974,12 +1472,12 @@ void QColorDialogPrivate::addCustom()
 // BEING REVISED: jo
 /*!
   \class QColorDialog qcolordialog.h
-  \brief The QColorDialog provides a dialog widget for specifying colors.
+  \brief The QColorDialog class provides a dialog widget for specifying colors.
   \ingroup dialogs
 
-  The color dialog's function is to allow users to choose colours -
+  The color dialog's function is to allow users to choose colors -
   for instance, you might use this in a drawing program to allow the
-  user to set the brush colour.
+  user to set the brush color.
 
   This version of Qt only provides modal color dialogs. The static
   getColor() function shows the dialog and allows the user to specify a color,
@@ -1003,9 +1501,9 @@ void QColorDialogPrivate::addCustom()
 QColorDialog::QColorDialog(QWidget* parent, const char* name, bool modal) :
     QDialog(parent, name, modal )
 {
+    setSizeGripEnabled( TRUE );
     d = new QColorDialogPrivate( this );
 }
-
 
 
 /*!
@@ -1031,8 +1529,6 @@ QColor QColorDialog::getColor( QColor initial, QWidget *parent,
     delete dlg;
     return result;
 }
-
-
 
 
 /*!
@@ -1131,3 +1627,5 @@ int QColorDialog::selectedAlpha() const
 
 
 #include "qcolordialog.moc"
+
+#endif

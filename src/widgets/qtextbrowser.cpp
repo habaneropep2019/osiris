@@ -1,29 +1,42 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qtextbrowser.cpp   2.1.1   edited 2000-03-29 $
+** $Id: qt/src/widgets/qtextbrowser.cpp   2.2.0   edited 2000-08-25 $
 **
 ** Implementation of the QTextView class
 **
 ** Created : 990101
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the widgets module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #include "qtextbrowser.h"
+#ifndef QT_NO_TEXTBROWSER
 #include "../kernel/qrichtext_p.h"
 
 #include "qapplication.h"
@@ -141,8 +154,10 @@ QTextBrowser::~QTextBrowser()
 */
 void QTextBrowser::setSource(const QString& name)
 {
+#ifndef QT_NO_CURSOR
     if ( isVisible() )
 	qApp->setOverrideCursor( waitCursor );
+#endif
     QString source = name;
     QString mark;
     int hash = name.find('#');
@@ -184,7 +199,9 @@ void QTextBrowser::setSource(const QString& name)
 	    delete formats; //#### fix inheritance structure in rich text
 	    if ( doReturn ) {
  		popupDetail( txt, d->lastClick );
+#ifndef QT_NO_CURSOR
  		qApp->restoreOverrideCursor();
+#endif
  		return;
  	    }
  	}
@@ -192,7 +209,7 @@ void QTextBrowser::setSource(const QString& name)
 	d->curmain = url;
 	dosettext = TRUE;
     }
-    
+
     d->curmark = mark;
 
     if ( !mark.isEmpty() ) {
@@ -217,14 +234,16 @@ void QTextBrowser::setSource(const QString& name)
 
     if ( dosettext )
 	setText( txt, url );
-    
+
     if ( isVisible() && !mark.isEmpty() )
 	scrollToAnchor( mark );
     else
 	setContentsPos( 0, 0 );
 
+#ifndef QT_NO_CURSOR
     if ( isVisible() )
 	qApp->restoreOverrideCursor();
+#endif
 }
 
 /*!
@@ -371,6 +390,7 @@ void QTextBrowser::viewportMouseReleaseEvent( QMouseEvent* e )
 */
 void QTextBrowser::viewportMouseMoveEvent( QMouseEvent* e)
 {
+#ifndef QT_NO_DRAGANDDROP
     if ( (e->state() & LeftButton) == LeftButton && !d->buttonDown.isEmpty()  ) {
 	if ( ( e->globalPos() - d->lastClick ).manhattanLength() > QApplication::startDragDistance() ) {
 	    QUrl url ( context(), d->buttonDown, TRUE );
@@ -380,6 +400,7 @@ void QTextBrowser::viewportMouseMoveEvent( QMouseEvent* e)
 	}
 	return;
     }
+#endif
 
     if ( e->state() == 0 ) {
 	QString act = anchorAt( e->pos() );
@@ -392,7 +413,9 @@ void QTextBrowser::viewportMouseMoveEvent( QMouseEvent* e)
 		emit highlighted( QString::null );
 		d->highlight = QString::null;
 	    }
+#ifndef QT_NO_CURSOR
 	    viewport()->setCursor( d->highlight.isEmpty()?arrowCursor:pointingHandCursor );
+#endif
 	}
     }
 
@@ -530,3 +553,4 @@ void QTextBrowser::showEvent( QShowEvent* e )
     QTextView::showEvent( e );
     scrollToAnchor( d->curmark );
 }
+#endif  // QT_NO_TEXTBROWSER

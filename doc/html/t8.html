@@ -1,11 +1,13 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><title>
-Qt Tutorial - Chapter 8
+Qt Tutorial - Chapter 8: Preparing for Battle
 </title></head><body bgcolor="#ffffff">
 <p>
-<a href="index.html">
-<img width="122" height="65" src="qtlogo.png" alt="Home"
-  align="left" border="0">
-</a><div align=right><img src="dochead.png" width="472" height="27"><br>
+<table width="100%">
+<tr><td><a href="index.html">
+<img width="100" height="100" src="qtlogo.png"
+alt="Home" border="0"><img width="100"
+height="100" src="face.png" alt="Home" border="0">
+</a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
 - <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
@@ -13,7 +15,7 @@ Qt Tutorial - Chapter 8
 - <a href="index.html">Home</a>
 - <a href="topicals.html"><b>Structure</b></a>
 </div>
-<br clear=all>
+</table>
 <p>
 <h1 align=center>Chapter 8: Preparing for Battle</h1><br clear="all">
 <p>
@@ -74,7 +76,7 @@ but chose not to.)  If the arguments are illegal, we use Qt's
 qWarning() function to issue a warning to the user and return
 immediately.  qWarning() is a printf-like function that by default
 sends its output to <code>stderr.</code>  You can install your own handler
-function using <a href="qapplication.html#972896">::qInstallMsgHandler()</a> if you want.
+function using <a href="qapplication.html#ef70dc">::qInstallMsgHandler()</a> if you want.
 <p>
 <h3><a href="t8-cannon-h.html">cannon.h</a></h3>
 <p>
@@ -124,7 +126,7 @@ custom palette for this widget.
 <p>
 This palette uses the indicated color as background, and picks other
 colors suitably.  (For this widget, only the background and text
-colors wil be used.)  <pre>
+colors will be used.)  <pre>
     void CannonField::setAngle( int degrees )
     {
         if ( degrees &lt; 5 )
@@ -315,6 +317,6 @@ You may now go on to <a href="t9.html">chapter nine.</a>
 
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.1</div>
+<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.2.0</div>
 </table></div></address></body></html>

@@ -1,29 +1,46 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qclipboard_x11.cpp   2.1.1   edited 2000-04-27 $
+** $Id: qt/src/kernel/qclipboard_x11.cpp   2.2.0   edited 2000-08-25 $
 **
 ** Implementation of QClipboard class for X11
 **
 ** Created : 960430
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the kernel module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses for Unix/X11 may use this file in accordance with the Qt Commercial
+** License Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #include "qclipboard.h"
+
+#ifndef QT_NO_CLIPBOARD
+
+// #define QT_CLIPBOARD_DEBUG
+
 #include "qapplication.h"
 #include "qbitmap.h"
 #include "qdatetime.h"
@@ -33,12 +50,13 @@
 
 // REVISED: arnt
 
-/*
-    ##### If we had two clipboards, one for automatic copy (ie. the normal
-    ##### X11 selection mechanism) and one for CTRL-C copying (ie. the
-    ##### Windows norm), then highlight-copy-highlight-paste could be
-    ##### implemented in QMultiLineEdit, etc., instead of having different
-    ##### behaviour on Windows and X11.
+/* #####
+
+  If we had two clipboards, one for automatic copy (ie. the normal
+  X11 selection mechanism) and one for CTRL-C copying (ie. the
+  Windows norm), then highlight-copy-highlight-paste could be
+  implemented in QMultiLineEdit, etc., instead of having different
+  behaviour on Windows and X11.
 */
 
 /*****************************************************************************
@@ -66,7 +84,7 @@ void setupOwner()
 {
     if ( owner )
 	return;
-    owner = new QWidget( 0, "internal clibpoard owner" );
+    owner = new QWidget( 0, "internal clipboard owner" );
     qAddPostRoutine( cleanup );
 }
 
@@ -85,26 +103,32 @@ class QClipboardData
 {
 public:
     QClipboardData();
-   ~QClipboardData();
+    ~QClipboardData();
 
     void setSource(QMimeSource* s)
-	{ delete src; src = s; }
+    {
+	QMimeSource *s2 = src;
+	src = s;
+
+	delete s2;
+    }
+
     QMimeSource* source()
-	{ return src; }
+    { return src; }
     void addTransferredPixmap(QPixmap pm)
-	{ /* TODO: queue them */
-	    transferred[tindex] = pm;
-	    tindex=(tindex+1)%2;
-	}
+    { /* TODO: queue them */
+	transferred[tindex] = pm;
+	tindex=(tindex+1)%2;
+    }
     void clearTransfers()
-	{
-	    transferred[0] = QPixmap();
-	    transferred[1] = QPixmap();
-	}
+    {
+	transferred[0] = QPixmap();
+	transferred[1] = QPixmap();
+    }
 
     void clear();
 
-private:
+    // private:
     QMimeSource* src;
 
     QPixmap transferred[2];
@@ -119,21 +143,25 @@ QClipboardData::QClipboardData()
 
 QClipboardData::~QClipboardData()
 {
-    delete src;
+    QMimeSource *s2 = src;
+    src = 0;
+    delete s2;
 }
 
 void QClipboardData::clear()
 {
-    delete src;
+    QMimeSource *s2 = src;
     src = 0;
+    delete s2;
 }
 
 
-static QClipboardData *internalCbData;
+static QClipboardData *internalCbData = 0;
 
 static void cleanupClipboardData()
 {
     delete internalCbData;
+    internalCbData = 0;
 }
 
 static QClipboardData *clipboardData()
@@ -158,6 +186,23 @@ static QClipboardData *clipboardData()
 void QClipboard::clear()
 {
     setText( QString::null );
+}
+
+
+void QClipboard::clobber()
+{
+    if ( !internalCbData ) return;
+
+    qRemovePostRoutine(cleanupClipboardData);
+
+    internalCbData->src = 0;
+    delete internalCbData;
+    internalCbData = 0;
+
+    Window win =  XGetSelectionOwner(owner->x11Display(), XA_PRIMARY);
+    
+    if (win == owner->winId())
+	XSetSelectionOwner(owner->x11Display(), XA_PRIMARY, None, qt_x_time);
 }
 
 
@@ -319,6 +364,7 @@ QByteArray qt_xclb_read_incremental_property( Display *dpy, Window win,
 
 void QClipboard::ownerDestroyed()
 {
+    owner = 0;
 }
 
 
@@ -346,18 +392,22 @@ bool QClipboard::event( QEvent *e )
 
     switch ( xevent->type ) {
 
-	case SelectionClear:			// new selection owner
-	    clipboardData()->clear();
-	    emit dataChanged();
-	    break;
+    case SelectionClear:			// new selection owner
+	clipboardData()->clear();
+	emit dataChanged();
+	break;
 
-	case SelectionNotify:
-	    clipboardData()->clear();
-	    break;
+    case SelectionNotify:
+	clipboardData()->clear();
+	break;
 
-	case SelectionRequest:
-	  {		// someone wants our data
+    case SelectionRequest:
+	{		// someone wants our data
 	    XSelectionRequestEvent *req = &xevent->xselectionrequest;
+
+	    if (req->requestor == owner->winId())
+		break;
+
 	    XEvent evt;
 	    evt.xselection.type = SelectionNotify;
 	    evt.xselection.display	= req->display;
@@ -367,6 +417,7 @@ bool QClipboard::event( QEvent *e )
 	    evt.xselection.property	= None;
 	    evt.xselection.time = req->time;
 	    // ### Should we check that we own the clipboard?
+	    // ### We do above
 
 	    if ( !d->source() )
 		d->setSource(new QClipboardWatcher());
@@ -380,13 +431,13 @@ bool QClipboard::event( QEvent *e )
 	    int imulti = -1;
 	    if ( req->target == xa_multiple ) {
 		if ( qt_xclb_read_property( dpy,
-			   req->requestor, req->property,
-			   FALSE, &data, 0, 0, 0, 0 ) )
-		{
-		    nmulti = data.size()/sizeof(*multi);
-		    multi = new AtomPair[nmulti];
-		    memcpy(multi,data.data(),data.size());
-		}
+					    req->requestor, req->property,
+					    FALSE, &data, 0, 0, 0, 0 ) )
+		    {
+			nmulti = data.size()/sizeof(*multi);
+			multi = new AtomPair[nmulti];
+			memcpy(multi,data.data(),data.size());
+		    }
 		imulti = 0;
 	    }
 
@@ -406,22 +457,39 @@ bool QClipboard::event( QEvent *e )
 		}
 
 		if ( target == xa_targets ) {
-		    int n = 3; // 3 standard ones
-		    while (d->source()->format(n))
-			n++;
-		    data = QByteArray(n*sizeof(Atom));
-		    Atom* target = (Atom*)data.data();
-		    n = 0;
-		    while ((fmt=d->source()->format(n))) {
-			target[n++] = *qt_xdnd_str_to_atom(fmt);
+		    int atoms = 0; // 3 standard ones
+		    while (d->source()->format(atoms))
+			atoms++;
+		    atoms += 3;
+
+		    data = QByteArray(atoms * sizeof(Atom));
+		    Atom* atarget = (Atom*)data.data();
+
+		    int n = 0;
+		    while ((fmt=d->source()->format(n)) && n < atoms) {
+			Atom *dnd = qt_xdnd_str_to_atom(fmt);
+
+#ifdef QT_CLIPBOARD_DEBUG
+			qDebug("qclipboard_x11.cpp:%d: atom* for '%s' = %p %d",
+			       __LINE__, fmt, dnd, n);
+#endif
+
+			atarget[n++] = *dnd;
 		    }
 
-		    if ( d->source()->provides("text/plain") )
-			target[n++] = XA_STRING;
-		    if ( d->source()->provides("image/ppm") )
-			target[n++] = XA_PIXMAP;
-		    if ( d->source()->provides("image/pbm") )
-			target[n++] = XA_BITMAP;
+		    if (n < atoms - 3) {
+#ifdef QT_CLIPBOARD_DEBUG
+			qDebug("qclipboard_x11.cpp:%d: n(%d) < n(%d) - 3",
+			       __LINE__, n, atoms);
+#endif
+
+			if ( d->source()->provides("image/ppm") )
+			    atarget[n++] = XA_PIXMAP;
+			if ( d->source()->provides("image/pbm") )
+			    atarget[n++] = XA_BITMAP;
+			if ( d->source()->provides("text/plain") )
+			    atarget[n++] = XA_STRING;
+		    }
 
 		    XChangeProperty ( dpy, req->requestor, property,
 				      xa_targets, 32,
@@ -477,8 +545,9 @@ bool QClipboard::event( QEvent *e )
 			already_done = TRUE;
 		    } else {
 			fmt = qt_xdnd_atom_to_str(target);
-			if ( fmt && !d->source()->provides(fmt) )
+			if ( fmt && !d->source()->provides(fmt) ) {
 			    fmt = 0; // Not a MIME type we can produce
+			}
 		    }
 		    if ( fmt ) {
 			if ( !already_done ) {
@@ -492,12 +561,13 @@ bool QClipboard::event( QEvent *e )
 			}
 		    }
 		}
+
 		XSendEvent( dpy, req->requestor, False, 0, &evt );
 		if ( !nmulti )
 		    break;
 	    }
-	  }
-	  break;
+	}
+	break;
     }
 
     return TRUE;
@@ -542,7 +612,8 @@ const char* QClipboardWatcher::format( int n ) const
 
 QByteArray QClipboardWatcher::encodedData( const char* fmt ) const
 {
-    if ( empty() ) return 0;
+    if ( !fmt || empty() )
+	return QByteArray( 0 );
 
     Atom fmtatom = 0;
 
@@ -636,7 +707,8 @@ QMimeSource* QClipboard::data() const
   the clipboard - the only ways to remove this data is to set
   something else, or to call clear().  The QDragObject subclasses are
   reasonable things to put on the clipboard (but do not try to call
-  QDragObject::drag() on the same object).  Do not put QDragMoveEvent
+  QDragObject::drag() on the same object).  Any QDragObject placed in
+  the clipboard should have a parent of 0.  Do not put QDragMoveEvent
   or QDropEvent subclasses on the clipboard, as they do not belong to
   the event handler which receives them.
 
@@ -652,14 +724,18 @@ void QClipboard::setData( QMimeSource* src )
     d->setSource( src );
     emit dataChanged();
 
+    // ### 3 round trips per selection change?  this should be optimized...
     Window prevOwner = XGetSelectionOwner( dpy, XA_PRIMARY );
     XSetSelectionOwner( dpy, XA_PRIMARY, win, qt_x_time );
+
+    // ### perhaps this should be CHECK_RANGE ?
+#if defined(DEBUG) 
     if ( XGetSelectionOwner(dpy,XA_PRIMARY) != win ) {
-#if defined(DEBUG)
 	qWarning( "QClipboard::setData: Cannot set X11 selection owner" );
-#endif
 	return;
     }
+#endif
+
     // Signal to other Qt processes that the selection has changed
     Window owners[2];
     owners[0] = win;
@@ -675,7 +751,6 @@ void QClipboard::setData( QMimeSource* src )
   _QT_SELECTION_SENTINEL property has been changed (i.e. when some Qt
   process has performed QClipboard::setData(). If it returns TRUE, the
   QClipBoard dataChanged() signal should be emitted.
-
 */
 
 bool qt_check_selection_sentinel( XEvent* )
@@ -687,14 +762,15 @@ bool qt_check_selection_sentinel( XEvent* )
 	  the selection has changed, we emulate it (for Qt processes) here.
 	  The notification should be ignored in case of either
 	  a) This is the process that did setData (because setData()
-	     then has already emitted dataChanged())
+	  then has already emitted dataChanged())
 	  b) This is the process that owned the selection when dataChanged()
-	     was called (because we have then received a SelectionClear event,
-	     and have already emitted dataChanged() as a result of that)
+	  was called (because we have then received a SelectionClear event,
+	  and have already emitted dataChanged() as a result of that)
 	*/
 
 	//# Could optimize away the X server roundtrip of XGetWindowProperty
 	// by checking if dataChanged() is connected to anything
+	// ### This is done in the main event loop in QApplication
 	Window* owners;
 	Atom actualType;
 	int actualFormat;
@@ -715,3 +791,5 @@ bool qt_check_selection_sentinel( XEvent* )
     return doIt;
 }
 
+
+#endif // QT_NO_CLIPBOARD

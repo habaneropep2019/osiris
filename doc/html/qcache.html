@@ -1,15 +1,17 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head>
 <title>Qt Toolkit - QCache Class</title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
-a:link { text-decoration: none; }
-body { background: white; color: black; }
+a:link { color: #004faf; text-decoration: none }
+a:visited { color: #672967; text-decoration: none }body { background: white; color: black; }
 --></style>
 </head><body bgcolor="#ffffff">
 
-<a href="index.html">
-<img width="122" height="65" src="qtlogo.png" alt="Home"
-  align="left" border="0">
-</a><div align=right><img src="dochead.png" width="472" height="27"><br>
+<table width="100%">
+<tr><td><a href="index.html">
+<img width="100" height="100" src="qtlogo.png"
+alt="Home" border="0"><img width="100"
+height="100" src="face.png" alt="Home" border="0">
+</a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
 - <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
@@ -17,7 +19,7 @@ body { background: white; color: black; }
 - <a href="index.html">Home</a>
 - <a href="topicals.html"><b>Structure</b></a>
 </div>
-<br clear=all>
+</table>
 
 <h1 align=center>QCache Class Reference</h1><br clear="all">
 <p>
@@ -30,23 +32,23 @@ Inherits <a href="qgcache.html">QGCache</a>.
 <p><a href="qcache-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><span class="fn"><b>QCache</b> ( const QCache&lt;type&gt; &amp; c ) (internal)</span>
-<li><span class="fn"><a href="#24e63a"><b>QCache</b></a> ( int maxCost=100, int size=17, bool caseSensitive=TRUE ) </span>
-<li><span class="fn"><a href="#dac96b"><b>~QCache</b></a> () </span>
-<li><span class="fn">QCache&lt;type&gt;&amp; <b>operator=</b> ( const QCache&lt;type&gt; &amp; c ) (internal)</span>
-<li><span class="fn">int <a href="#2fb81e"><b>maxCost</b></a> () const</span>
-<li><span class="fn">int <a href="#349626"><b>totalCost</b></a> () const</span>
-<li><span class="fn">void <a href="#086c03"><b>setMaxCost</b></a> ( int m ) </span>
-<li><span class="fn">virtual uint <a href="#d98fdc"><b>count</b></a> () const</span>
-<li><span class="fn">uint <a href="#1ac44f"><b>size</b></a> () const</span>
-<li><span class="fn">bool <a href="#5829ef"><b>isEmpty</b></a> () const</span>
-<li><span class="fn">virtual void <a href="#3058eb"><b>clear</b></a> () </span>
-<li><span class="fn">bool <a href="#514c0c"><b>insert</b></a> ( const QString &amp; k, const type * d, int c=1, int p=0 ) </span>
-<li><span class="fn">bool <a href="#1c6749"><b>remove</b></a> ( const QString &amp; k ) </span>
-<li><span class="fn">type* <a href="#6ad008"><b>take</b></a> ( const QString &amp; k ) </span>
-<li><span class="fn">type* <a href="#d2236a"><b>find</b></a> ( const QString &amp; k, bool ref=TRUE ) const</span>
-<li><span class="fn">type* <a href="#4ac2c9"><b>operator[]</b></a> ( const QString &amp; k ) const</span>
-<li><span class="fn">void <a href="#64e4cf"><b>statistics</b></a> () const</span>
+<li><div class="fn"><b>QCache</b> ( const QCache&lt;type&gt; &amp; c ) (internal)</div>
+<li><div class="fn"><a href="#24e63a"><b>QCache</b></a> ( int maxCost=100, int size=17, bool caseSensitive=TRUE ) </div>
+<li><div class="fn"><a href="#dac96b"><b>~QCache</b></a> () </div>
+<li><div class="fn">QCache&lt;type&gt;&amp; <b>operator=</b> ( const QCache&lt;type&gt; &amp; c ) (internal)</div>
+<li><div class="fn">int <a href="#2fb81e"><b>maxCost</b></a> () const</div>
+<li><div class="fn">int <a href="#349626"><b>totalCost</b></a> () const</div>
+<li><div class="fn">void <a href="#086c03"><b>setMaxCost</b></a> ( int m ) </div>
+<li><div class="fn">virtual uint <a href="#d98fdc"><b>count</b></a> () const</div>
+<li><div class="fn">uint <a href="#1ac44f"><b>size</b></a> () const</div>
+<li><div class="fn">bool <a href="#5829ef"><b>isEmpty</b></a> () const</div>
+<li><div class="fn">virtual void <a href="#3058eb"><b>clear</b></a> () </div>
+<li><div class="fn">bool <a href="#514c0c"><b>insert</b></a> ( const QString &amp; k, const type * d, int c=1, int p=0 ) </div>
+<li><div class="fn">bool <a href="#1c6749"><b>remove</b></a> ( const QString &amp; k ) </div>
+<li><div class="fn">type* <a href="#6ad008"><b>take</b></a> ( const QString &amp; k ) </div>
+<li><div class="fn">type* <a href="#d2236a"><b>find</b></a> ( const QString &amp; k, bool ref=TRUE ) const</div>
+<li><div class="fn">type* <a href="#4ac2c9"><b>operator[]</b></a> ( const QString &amp; k ) const</div>
+<li><div class="fn">void <a href="#64e4cf"><b>statistics</b></a> () const</div>
 </ul>
 <hr><h2><a name="details"></a>Detailed Description</h2>
 The QCache class is a template class that provides a cache based on <code><a href="qstring.html">QString</a></code> keys.
@@ -82,7 +84,7 @@ items in the cache in arbitrary order.
 <p>In QCache, the cache items are accessed via <a href="qstring.html">QString</a> keys, which
 are Unicode strings.  If you want to use non-Unicode, plain 8-bit <code>char*</code> keys, use the <a href="qasciicache.html">QAsciiCache</a> template.  A QCache has the same
 performace as a QAsciiCache.
-<p>See also:  <a href="qcacheiterator.html">QCacheIterator</a>, <a href="qasciicache.html">QAsciiCache</a>, <a href="qintcache.html">QIntCache</a> and <a href="collection.html">Collection Classes</a>
+<p>See also  <a href="qcacheiterator.html">QCacheIterator</a>, <a href="qasciicache.html">QAsciiCache</a>, <a href="qintcache.html">QIntCache</a> and <a href="collection.html">Collection Classes</a>
 
 <hr><h2>Member Function Documentation</h2>
 <h3 class="fn"><a name="24e63a"></a>QCache::QCache ( int maxCost=100, int size=17, bool caseSensitive=TRUE )</h3>
@@ -110,11 +112,11 @@ All iterators that access this cache will be reset.
 <p>Removes all items from the cache, and deletes them if auto-deletion
 has been enabled.
 <p>All cache iterators that operate this on cache are reset.
-<p>See also:  <a href="#1c6749">remove</a>() and <a href="#6ad008">take</a>().
+<p>See also  <a href="#1c6749">remove</a>() and <a href="#6ad008">take</a>().
 <p>Reimplemented from <a href="qcollection.html#10eb2d">QCollection.</a>
 <h3 class="fn">uint <a name="d98fdc"></a>QCache::count () const <code>[virtual]</code></h3>
 <p>Returns the number of items in the cache.
-<p>See also:  <a href="#349626">totalCost</a>().
+<p>See also  <a href="#349626">totalCost</a>().
 <p>Reimplemented from <a href="qcollection.html#649c42">QCollection.</a>
 <h3 class="fn">type * <a name="d2236a"></a>QCache::find ( const <a href="qstring.html">QString</a> &amp; k, bool ref=TRUE ) const</h3>
 <p>Returns the item associated with <em>k,</em> or null if the key does not
@@ -139,14 +141,14 @@ invalid.
 object in it.
 <h3 class="fn">int <a name="2fb81e"></a>QCache::maxCost () const</h3>
 <p>Returns the maximum allowed total cost of the cache.
-<p>See also:  <a href="#086c03">setMaxCost</a>() and <a href="#349626">totalCost</a>().
+<p>See also  <a href="#086c03">setMaxCost</a>() and <a href="#349626">totalCost</a>().
 <h3 class="fn">type * <a name="4ac2c9"></a>QCache::operator[] ( const <a href="qstring.html">QString</a> &amp; k ) const</h3>
 <p>Returns the item associated with <em>k,</em> or null if <em>k</em> does not
 exist in the cache, and moves the item to the front of the LRU list.
 <p>If there are two or more items with equal keys, then the one that
 was inserted last is returned.
 <p>This is the same as <a href="#d2236a">find</a>( k, TRUE ).
-<p>See also:  <a href="#d2236a">find</a>().
+<p>See also  <a href="#d2236a">find</a>().
 <h3 class="fn">bool <a name="1c6749"></a>QCache::remove ( const <a href="qstring.html">QString</a> &amp; k )</h3>
 <p>Removes the item associated with <em>k,</em> and returns TRUE if the item
 was present in the cache or FALSE if it was not.
@@ -156,12 +158,12 @@ called <a href="qcollection.html#a3fc3c">setAutoDelete</a>(TRUE).
 was inserted last is is removed.
 <p>All iterators that refer to the removed item are set to point to the
 next item in the cache's traversal order.
-<p>See also:  <a href="#6ad008">take</a>() and <a href="#3058eb">clear</a>().
+<p>See also  <a href="#6ad008">take</a>() and <a href="#3058eb">clear</a>().
 <h3 class="fn">void <a name="086c03"></a>QCache::setMaxCost ( int m )</h3>
 <p>Sets the maximum allowed total cost of the cache to <em>m.</em>  If the
 current total cost is above <em>m,</em> some items are deleted
 immediately.
-<p>See also:  <a href="#2fb81e">maxCost</a>() and <a href="#349626">totalCost</a>().
+<p>See also  <a href="#2fb81e">maxCost</a>() and <a href="#349626">totalCost</a>().
 <h3 class="fn">uint <a name="1ac44f"></a>QCache::size () const</h3>
 <p>Returns the size of the hash array used to implement the cache.
 This should be a bit bigger than <a href="#d98fdc">count</a>() is likely to be.
@@ -177,11 +179,11 @@ the key does not exist in the cache.
 was inserted last is taken.
 <p>All iterators that refer to the taken item are set to point to the
 next item in the cache's traversal order.
-<p>See also:  <a href="#1c6749">remove</a>() and <a href="#3058eb">clear</a>().
+<p>See also  <a href="#1c6749">remove</a>() and <a href="#3058eb">clear</a>().
 <h3 class="fn">int <a name="349626"></a>QCache::totalCost () const</h3>
 <p>Returns the total cost of the items in the cache.  This is an
 integer in the range 0 to <a href="#2fb81e">maxCost</a>().
-<p>See also:  <a href="#086c03">setMaxCost</a>().
+<p>See also  <a href="#086c03">setMaxCost</a>().
 <h3 class="fn"><a name="ceedc3"></a>QCache::QCache ( const QCache&lt;type&gt; &amp; c )</h3>
 <p>For internal use only.
 <h3 class="fn">QCache&lt;type&gt;&amp; <a name="6f1bee"></a>QCache::operator= ( const QCache&lt;type&gt; &amp; c )</h3>
@@ -190,13 +192,13 @@ integer in the range 0 to <a href="#2fb81e">maxCost</a>().
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.1.1"><nobr>
+<input type=hidden name="version" value="2.2.0"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
 copyright &copy; 1995-2000
-<a href="http://www.trolltech.com">Troll Tech</a>, all rights reserved.<p><address><hr><div align="center">
+<a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.1</div>
+<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.2.0</div>
 </table></div></address></body></html>

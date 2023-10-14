@@ -1,5 +1,5 @@
-.TH QFocusData 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QFocusData 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QFocusData \- Maintains the list of widgets which can take focus
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -20,13 +18,13 @@ QFocusData \- Maintains the list of widgets which can take focus
 .BI "QWidget* \fBfocusWidget\fR () const"
 .br
 .ti -1c
-.BI "QWidget* \fBhome\fR ()"
+.BI "QWidget* \fBhome\fR () "
 .br
 .ti -1c
-.BI "QWidget* \fBnext\fR ()"
+.BI "QWidget* \fBnext\fR () "
 .br
 .ti -1c
-.BI "QWidget* \fBprev\fR ()"
+.BI "QWidget* \fBprev\fR () "
 .br
 .ti -1c
 .BI "int \fBcount\fR () const"
@@ -43,7 +41,7 @@ When reimplementing QWidget::focusNextPrevChild() to provide special focus flow,
 .PP
 The cursor may change at any time; this class is not thread-safe.
 .PP
-See also: QWidget::focusNextPrevChild(), QWidget::setTabOrder() and QWidget::setFocusPolicy().
+See also QWidget::focusNextPrevChild(), QWidget::setTabOrder() and QWidget::setFocusPolicy().
 .SH MEMBER FUNCTION DOCUMENTATION
 .SH "int QFocusData::count () const"
 Returns a count of the number of widgets in the hierarchy which accept focus.
@@ -60,7 +58,7 @@ loop, without ever returning 0.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qfocusdata.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

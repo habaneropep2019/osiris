@@ -1,6 +1,6 @@
 TEMPLATE	= moc.t
 CONFIG		= console release qtinc yacc
-DEFINES		= QT_NO_CODECS
+DEFINES		= QT_NO_CODECS QT_LITE_UNICODE
 win32:DEFINES  += QT_NODLL
 LEXINPUT	= moc.l
 YACCINPUT	= moc.y
@@ -23,7 +23,6 @@ SOURCES		= $$MOCGEN		    \
 		  ../tools/qiodevice.cpp    \
 		  ../tools/qregexp.cpp	    \
 		  ../tools/qstring.cpp	    \
-		  ../tools/qstringlist.cpp  \
 		  ../tools/qtextcodec.cpp   \
 		  ../tools/qtextstream.cpp
 

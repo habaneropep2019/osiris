@@ -1,14 +1,12 @@
-.TH QSpacerItem 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QSpacerItem 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
 .ad l
 .nh
 .SH NAME
-QSpacerItem \- A QLayoutItem that represents blank space
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
+QSpacerItem \- The QLayoutItem class that represents blank space
 .SH SYNOPSIS
 .br
 .PP
@@ -19,10 +17,10 @@ Inherits QLayoutItem.
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQSpacerItem\fR ( int " "w" ", int " "h" ", QSizePolicy::SizeType hData=QSizePolicy::Minimum, QSizePolicy::SizeType vData= QSizePolicy::Minimum )"
+.BI "\fBQSpacerItem\fR ( int " "w" ", int " "h" ", QSizePolicy::SizeType hData=QSizePolicy::Minimum, QSizePolicy::SizeType vData= QSizePolicy::Minimum ) "
 .br
 .ti -1c
-.BI "void \fBchangeSize\fR ( int " "w" ", int " "h" ", QSizePolicy::SizeType hData=QSizePolicy::Minimum, QSizePolicy::SizeType vData=QSizePolicy::Minimum )"
+.BI "void \fBchangeSize\fR ( int " "w" ", int " "h" ", QSizePolicy::SizeType hData=QSizePolicy::Minimum, QSizePolicy::SizeType vData=QSizePolicy::Minimum ) "
 .br
 .ti -1c
 .BI "virtual QSize \fBsizeHint\fR () const"
@@ -40,15 +38,15 @@ Inherits QLayoutItem.
 .BI "virtual bool \fBisEmpty\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetGeometry\fR ( const QRect & )"
+.BI "virtual void \fBsetGeometry\fR ( const QRect & ) "
 .br
 .in -1c
 .SH DESCRIPTION
-A QLayoutItem that represents blank space.
+The QLayoutItem class that represents blank space.
 .PP
 For custom layouts.
 .PP
-See also: QLayout.
+See also QLayout.
 .SH MEMBER FUNCTION DOCUMENTATION
 .SH "QSpacerItem::QSpacerItem ( int w, int h, QSizePolicy::SizeType hData=QSizePolicy::Minimum=QSizePolicy::Minimum, QSizePolicy::SizeType vData= QSizePolicy::Minimum= QSizePolicy::Minimum )"
 Constructs a spacer item with preferred width \fIw,\fR preferred height \fIh,\fR horizontal size policy \fIhData\fR and vertical size policy \fIvData.\fR
@@ -93,7 +91,7 @@ Reimplemented from QLayoutItem.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qspaceritem.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

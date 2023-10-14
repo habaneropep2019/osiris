@@ -1,5 +1,5 @@
-.TH QDateTime 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QDateTime 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QDateTime \- Date and time functions
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -17,13 +15,13 @@ QDateTime \- Date and time functions
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQDateTime\fR ()"
+.BI "\fBQDateTime\fR () "
 .br
 .ti -1c
-.BI "\fBQDateTime\fR ( const QDate & )"
+.BI "\fBQDateTime\fR ( const QDate & ) "
 .br
 .ti -1c
-.BI "\fBQDateTime\fR ( const QDate &, const QTime & )"
+.BI "\fBQDateTime\fR ( const QDate &, const QTime & ) "
 .br
 .ti -1c
 .BI "bool \fBisNull\fR () const"
@@ -38,13 +36,13 @@ QDateTime \- Date and time functions
 .BI "QTime \fBtime\fR () const"
 .br
 .ti -1c
-.BI "void \fBsetDate\fR ( const QDate & date )"
+.BI "void \fBsetDate\fR ( const QDate & date ) "
 .br
 .ti -1c
-.BI "void \fBsetTime\fR ( const QTime & time )"
+.BI "void \fBsetTime\fR ( const QTime & time ) "
 .br
 .ti -1c
-.BI "void \fBsetTime_t\fR ( uint secsSince1Jan1970UTC )"
+.BI "void \fBsetTime_t\fR ( uint secsSince1Jan1970UTC ) "
 .br
 .ti -1c
 .BI "QString \fBtoString\fR () const"
@@ -83,7 +81,7 @@ QDateTime \- Date and time functions
 .SS "Static Public Members"
 .in +1c
 .ti -1c
-.BI "QDateTime \fBcurrentDateTime\fR ()"
+.BI "QDateTime \fBcurrentDateTime\fR () "
 .br
 .in -1c
 .SH RELATED FUNCTION DOCUMENTATION
@@ -113,12 +111,12 @@ A datetime can also be set using the setTime_t() function, which takes a POSIX-s
 .PP
 The limitations regarding range and resolution mentioned in the QDate and QTime documentation apply for QDateTime also.
 .PP
-See also: QDate and QTime.
+See also QDate and QTime.
 .SH MEMBER FUNCTION DOCUMENTATION
 .SH "QDateTime::QDateTime ()"
 Constructs a null datetime (i.e. null date and null time). A null datetime is invalid, since the date is invalid.
 .PP
-See also: isValid().
+See also isValid().
 .SH "QDateTime::QDateTime ( const QDate & date )"
 Constructs a datetime with date \fIdate\fR and null time (00:00:00.000).
 .SH "QDateTime::QDateTime ( const QDate & date, const QTime & time )"
@@ -126,35 +124,35 @@ Constructs a datetime with date \fIdate\fR and time \fItime.\fR
 .SH "QDateTime QDateTime::addDays ( int ndays ) const"
 Returns a QDateTime object containing a datetime \fIndays\fR days later than the datetime of this object (or earlier if \fIndays\fR is negative).
 .PP
-See also: daysTo() and addSecs().
+See also daysTo() and addSecs().
 .SH "QDateTime QDateTime::addSecs ( int nsecs ) const"
 Returns a QDateTime object containing a datetime \fInsecs\fR seconds later than the datetime of this object (or earlier if \fInsecs\fR is negative).
 .PP
-See also: secsTo() and addDays().
+See also secsTo() and addDays().
 .SH "QDateTime QDateTime::currentDateTime () \fC[static]\fR"
 Returns the current datetime, as reported by the system clock.
 .PP
-See also: QDate::currentDate() and QTime::currentTime().
+See also QDate::currentDate() and QTime::currentTime().
 .SH "QDate QDateTime::date () const"
 Returns the date part of this datetime.
 .PP
-See also: setDate() and time().
+See also setDate() and time().
 .SH "int QDateTime::daysTo ( const QDateTime & dt ) const"
 Returns the number of days from this datetime to \fIdt\fR (which is negative if \fIdt\fR is earlier than this datetime).
 .PP
-See also: addDays() and secsTo().
+See also addDays() and secsTo().
 .SH "bool QDateTime::isNull () const"
 Returns TRUE if both the date and the time are null. A null date is invalid.
 .PP
-See also: QDate::isNull() and QTime::isNull().
+See also QDate::isNull() and QTime::isNull().
 .SH "bool QDateTime::isValid () const"
 Returns TRUE if both the date and the time are valid.
 .PP
-See also: QDate::isValid() and QTime::isValid().
+See also QDate::isValid() and QTime::isValid().
 .SH "bool QDateTime::operator!= ( const QDateTime & dt ) const"
 Returns TRUE if this datetime is different from \fIdt,\fR or FALSE if they are equal.
 .PP
-See also: operator==().
+See also operator==().
 .SH "bool QDateTime::operator< ( const QDateTime & dt ) const"
 Returns TRUE if this datetime is earlier than \fIdt,\fR otherwise FALSE.
 .SH "bool QDateTime::operator<= ( const QDateTime & dt ) const"
@@ -162,7 +160,7 @@ Returns TRUE if this datetime is earlier than or equal to \fIdt,\fR otherwise FA
 .SH "bool QDateTime::operator== ( const QDateTime & dt ) const"
 Returns TRUE if this datetime is equal to \fIdt,\fR or FALSE if they are different.
 .PP
-See also: operator!=().
+See also operator!=().
 .SH "bool QDateTime::operator> ( const QDateTime & dt ) const"
 Returns TRUE if this datetime is later than \fIdt,\fR otherwise FALSE.
 .SH "bool QDateTime::operator>= ( const QDateTime & dt ) const"
@@ -181,15 +179,15 @@ Example:
     qDebug( "There are %d seconds to Christmas", dt.secsTo(x) );
 .fi
 .PP
-See also: addSecs(), daysTo() and QTime::secsTo().
+See also addSecs(), daysTo() and QTime::secsTo().
 .SH "void QDateTime::setDate ( const QDate & date )"
 Sets the date part of this datetime.
 .PP
-See also: date() and setTime().
+See also date() and setTime().
 .SH "void QDateTime::setTime ( const QTime & time )"
 Sets the time part of this datetime.
 .PP
-See also: time() and setDate().
+See also time() and setDate().
 .SH "void QDateTime::setTime_t ( uint secsSince1Jan1970UTC )"
 Sets the local date and time given the number of seconds that have passed since 00:00:00 on January 1, 1970, Coordinated Universal Time (UTC). On systems that do not support timezones this function will behave as if local time were UTC.
 .PP
@@ -197,7 +195,7 @@ Note that Microsoft Windows supports only a limited range of values for \fIsecsS
 .SH "QTime QDateTime::time () const"
 Returns the time part of this datetime.
 .PP
-See also: setTime() and date().
+See also setTime() and date().
 .SH "QString QDateTime::toString () const"
 Returns the datetime as a string.
 .PP
@@ -208,15 +206,15 @@ This function uses QDate::dayName(), QDate::monthName(), and QTime::toString() t
 .SH "QDataStream & operator<< (QDataStream & s, const QDateTime & dt)"
 Writes a datetime to the stream.
 .PP
-See also: Format of the QDataStream operators
+See also Format of the QDataStream operators
 .SH "QDataStream & operator>> (QDataStream & s, QDateTime & dt)"
 Reads a datetime from the stream.
 .PP
-See also:  Format of the QDataStream operators
+See also  Format of the QDataStream operators
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qdatetime.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

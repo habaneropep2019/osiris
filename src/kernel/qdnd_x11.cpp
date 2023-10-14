@@ -1,29 +1,44 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qdnd_x11.cpp   2.1.1   edited 2000-05-05 $
+** $Id: qt/src/kernel/qdnd_x11.cpp   2.2.0   edited 2000-08-25 $
 **
 ** XDND implementation for Qt.  See http://www.cco.caltech.edu/~jafl/xdnd/
 **
 ** Created : 980320
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the kernel module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses for Unix/X11 may use this file in accordance with the Qt Commercial
+** License Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #include "qapplication.h"
+
+#ifndef QT_NO_DRAGANDDROP
+
 #include "qwidget.h"
 #include "qintdict.h"
 #include "qdatetime.h"
@@ -415,7 +430,6 @@ void qt_xdnd_cleanup()
     qt_xdnd_atom_numbers = 0;
     delete qt_xdnd_target_data;
     qt_xdnd_target_data = 0;
-    delete noDropCursor;
     noDropCursor = 0;
     delete copyCursor;
     copyCursor = 0;
@@ -982,8 +996,10 @@ void QDragManager::updateCursor()
 	if ( qt_xdnd_deco )
 	    qt_xdnd_deco->hide();
     }
+#ifndef QT_NO_CURSOR
     if ( c )
 	qApp->setOverrideCursor( *c, TRUE );
+#endif
 }
 
 
@@ -998,10 +1014,12 @@ void QDragManager::cancel( bool deleteSource )
 	qt_xdnd_send_leave();
     }
 
+#ifndef QT_NO_CURSOR
     if ( restoreCursor ) {
 	QApplication::restoreOverrideCursor();
 	restoreCursor = FALSE;
     }
+#endif
 
     if ( deleteSource )
 	delete qt_xdnd_source_object;
@@ -1249,10 +1267,12 @@ void QDragManager::drop()
 	XSendEvent( qt_xdisplay(), qt_xdnd_current_proxy_target, FALSE, emask,
 		    (XEvent*)&drop );
 
+#ifndef QT_NO_CURSOR
     if ( restoreCursor ) {
 	QApplication::restoreOverrideCursor();
 	restoreCursor = FALSE;
     }
+#endif
 }
 
 
@@ -1530,7 +1550,7 @@ const char* QDropEvent::format( int n ) const
 
 bool QDragManager::drag( QDragObject * o, QDragObject::DragMode mode )
 {
-    if ( object == o )
+    if ( object == o || !o || !o->parent() )
 	return FALSE;
 
     if ( object ) {
@@ -1562,13 +1582,17 @@ bool QDragManager::drag( QDragObject * o, QDragObject::DragMode mode )
     move(QCursor::pos());
     heartbeat = startTimer(200);
 
+#ifndef QT_NO_CURSOR
     qApp->setOverrideCursor( arrowCursor );
     restoreCursor = TRUE;
     updateCursor();
+#endif
 
     qApp->enter_loop(); // Do the DND.
 
+#ifndef QT_NO_CURSOR
     qApp->restoreOverrideCursor();
+#endif
 
     delete qt_xdnd_deco;
     qt_xdnd_deco = 0;
@@ -1606,3 +1630,5 @@ void QDragManager::updatePixmap()
 	}
     }
 }
+
+#endif // QT_NO_DRAGANDDROP

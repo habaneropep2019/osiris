@@ -3,15 +3,17 @@
 Qt Toolkit - richtext/main.cpp example file
 </title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
-a:link { text-decoration: none; }
-body { background: white; color: black; }
+a:link { color: #004faf; text-decoration: none }
+a:visited { color: #672967; text-decoration: none }body { background: white; color: black; }
 --></style>
 </head><body bgcolor="#ffffff">
 
-<a href="index.html">
-<img width="122" height="65" src="qtlogo.png" alt="Home"
-  align="left" border="0">
-</a><div align=right><img src="dochead.png" width="472" height="27"><br>
+<table width="100%">
+<tr><td><a href="index.html">
+<img width="100" height="100" src="qtlogo.png"
+alt="Home" border="0"><img width="100"
+height="100" src="face.png" alt="Home" border="0">
+</a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
 - <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
@@ -19,7 +21,7 @@ body { background: white; color: black; }
 - <a href="index.html">Home</a>
 - <a href="topicals.html"><b>Structure</b></a>
 </div>
-<br clear=all>
+</table>
 
 <h1 align=center>Richtext</h1><br clear="all">
 
@@ -30,9 +32,9 @@ body { background: white; color: black; }
   <hr>
 
   Header file: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/richtext/richtext.h   2.1.1   edited 2000-01-31 $
+** &#36;Id&#58; qt/examples/richtext/richtext.h   2.2.0   edited 2000-08-31 $
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -72,9 +74,9 @@ protected slots:
   <hr>
 
   Implementation: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/richtext/richtext.cpp   2.1.1   edited 2000-01-31 $
+** &#36;Id&#58; qt/examples/richtext/richtext.cpp   2.2.0   edited 2000-08-31 $
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -155,7 +157,7 @@ MyRichText::MyRichText( <a href="qwidget.html">QWidget</a> *parent, const char *
     view = new <a href="qtextview.html">QTextView</a>( this );
     view-&gt;setText( "This is a &lt;b&gt;Test&lt;/b&gt; with &lt;i&gt;italic&lt;/i&gt; &lt;u&gt;stuff&lt;/u&gt;" );
     <a href="qbrush.html">QBrush</a> paper;
-    paper.<a href="qbrush.html#447de9">setPixmap</a>( <a href="qpixmap.html">QPixmap</a>( "../themes/marble.xpm" ) );
+    paper.<a href="qbrush.html#447de9">setPixmap</a>( <a href="qpixmap.html">QPixmap</a>( "../richtext/marble.png" ) );
     view-&gt;setPaper( paper );
 
     view-&gt;setText( sayings[0] );
@@ -171,13 +173,13 @@ MyRichText::MyRichText( <a href="qwidget.html">QWidget</a> *parent, const char *
     bPrev-&gt;setEnabled( FALSE );
 
     <a href="qobject.html#c2d209">connect</a>( bClose, SIGNAL( clicked() ), qApp, SLOT( quit() ) );
-    <a href="qobject.html#c2d209">connect</a>( bPrev, SIGNAL( clicked() ), this, SLOT( <a href=#322>prev</a>() ) );
-    <a href="qobject.html#c2d209">connect</a>( bNext, SIGNAL( clicked() ), this, SLOT( <a href=#323>next</a>() ) );
+    <a href="qobject.html#c2d209">connect</a>( bPrev, SIGNAL( clicked() ), this, SLOT( <a href=#310>prev</a>() ) );
+    <a href="qobject.html#c2d209">connect</a>( bNext, SIGNAL( clicked() ), this, SLOT( <a href=#311>next</a>() ) );
 
     num = 0;
 }
 
-void <a name="322"></a>MyRichText::prev()
+void <a name="310"></a>MyRichText::prev()
 {
     if ( num &lt;= 0 )
         return;
@@ -192,7 +194,7 @@ void <a name="322"></a>MyRichText::prev()
     bNext-&gt;setEnabled( TRUE );
 }
 
-void <a name="323"></a>MyRichText::next()
+void <a name="311"></a>MyRichText::next()
 {
     if ( !sayings[++num] )
         return;
@@ -211,9 +213,9 @@ void <a name="323"></a>MyRichText::next()
 
   Main:
 <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/richtext/main.cpp   2.1.1   edited 2000-01-31 $
+** &#36;Id&#58; qt/examples/richtext/main.cpp   2.2.0   edited 2000-08-31 $
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -238,6 +240,6 @@ int main( int argc, char **argv )
 </pre>
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.1</div>
+<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.2.0</div>
 </table></div></address></body></html>

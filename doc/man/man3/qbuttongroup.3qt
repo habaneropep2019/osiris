@@ -1,5 +1,5 @@
-.TH QButtonGroup 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QButtonGroup 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QButtonGroup \- Organizes QButton widgets in a group
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -21,16 +19,16 @@ Inherited by QHButtonGroup and QVButtonGroup.
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQButtonGroup\fR ( QWidget * " "parent" "=0, const char * " "name" "=0 )"
+.BI "\fBQButtonGroup\fR ( QWidget * " "parent" "=0, const char * " "name" "=0 ) "
 .br
 .ti -1c
-.BI "\fBQButtonGroup\fR ( const QString & " "title" ", QWidget * " "parent" "=0, const char * " "name" "=0 )"
+.BI "\fBQButtonGroup\fR ( const QString & " "title" ", QWidget * " "parent" "=0, const char * " "name" "=0 ) "
 .br
 .ti -1c
-.BI "\fBQButtonGroup\fR ( int " "columns" ", Orientation " "o" ", QWidget * " "parent" "=0, const char * " "name" "=0 )"
+.BI "\fBQButtonGroup\fR ( int " "columns" ", Orientation " "o" ", QWidget * " "parent" "=0, const char * " "name" "=0 ) "
 .br
 .ti -1c
-.BI "\fBQButtonGroup\fR ( int " "columns" ", Orientation " "o" ", const QString & " "title" ", QWidget * " "parent" "=0, const char * " "name" "=0 )"
+.BI "\fBQButtonGroup\fR ( int " "columns" ", Orientation " "o" ", const QString & " "title" ", QWidget * " "parent" "=0, const char * " "name" "=0 ) "
 .br
 .ti -1c
 .BI "bool \fBisExclusive\fR () const"
@@ -39,16 +37,16 @@ Inherited by QHButtonGroup and QVButtonGroup.
 .BI "bool \fBisRadioButtonExclusive\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetExclusive\fR ( bool )"
+.BI "virtual void \fBsetExclusive\fR ( bool ) "
 .br
 .ti -1c
-.BI "virtual void \fBsetRadioButtonExclusive\fR ( bool )"
+.BI "virtual void \fBsetRadioButtonExclusive\fR ( bool ) "
 .br
 .ti -1c
-.BI "int \fBinsert\fR ( QButton *, int " "id" "=-1 )"
+.BI "int \fBinsert\fR ( QButton *, int " "id" "=-1 ) "
 .br
 .ti -1c
-.BI "void \fBremove\fR ( QButton * )"
+.BI "void \fBremove\fR ( QButton * ) "
 .br
 .ti -1c
 .BI "QButton* \fBfind\fR ( int id ) const"
@@ -60,25 +58,25 @@ Inherited by QHButtonGroup and QVButtonGroup.
 .BI "int \fBcount\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetButton\fR ( int id )"
+.BI "virtual void \fBsetButton\fR ( int id ) "
 .br
 .ti -1c
-.BI "virtual void \fBmoveFocus\fR ( int )"
+.BI "virtual void \fBmoveFocus\fR ( int ) "
 .br
 .ti -1c
-.BI "QButton* \fBselected\fR ()"
+.BI "QButton* \fBselected\fR () "
 .br
 .in -1c
 .SS "Signals"
 .in +1c
 .ti -1c
-.BI "void \fBpressed\fR ( int id )"
+.BI "void \fBpressed\fR ( int id ) "
 .br
 .ti -1c
-.BI "void \fBreleased\fR ( int id )"
+.BI "void \fBreleased\fR ( int id ) "
 .br
 .ti -1c
-.BI "void \fBclicked\fR ( int id )"
+.BI "void \fBclicked\fR ( int id ) "
 .br
 .in -1c
 .SS "Protected Slots"
@@ -113,11 +111,11 @@ The button group is an invisible widget and the contained buttons have some othe
 .PP
 <img src=qbttngrp-m.png> <img src=qbttngrp-w.png>
 .PP
-See also: QButton, QPushButton, QCheckBox and QRadioButton.
+See also QButton, QPushButton, QCheckBox and QRadioButton.
 .PP
 Examples:
 .(l
-xform/xform.cpp drawdemo/drawdemo.cpp
+xform/xform.cpp i18n/main.cpp drawdemo/drawdemo.cpp
 .)l
 .SH MEMBER FUNCTION DOCUMENTATION
 .SH "QButtonGroup::QButtonGroup ( QWidget * parent=0, const char * name=0 )"
@@ -157,7 +155,7 @@ The button is assigned the identifier \fIid\fR or an automatically generated ide
 .PP
 Inserting several buttons with \fIid\fR = -1 assigns the identifiers 0, 1, 2, etc.
 .PP
-See also: find(), remove() and setExclusive().
+See also find(), remove() and setExclusive().
 .PP
 Examples:
 .(l
@@ -166,11 +164,11 @@ xform/xform.cpp
 .SH "bool QButtonGroup::isExclusive () const"
 Returns TRUE if the button group is exclusive, otherwise FALSE.
 .PP
-See also: setExclusive().
+See also setExclusive().
 .SH "bool QButtonGroup::isRadioButtonExclusive () const"
 Returns whether this button group will treat radio buttons as mutually exclusive. The default is TRUE.
 .PP
-See also: setRadioButtonExclusive().
+See also setRadioButtonExclusive().
 .SH "void QButtonGroup::moveFocus ( int key ) \fC[virtual]\fR"
 Moves the keyboard focus according to \fIkey,\fR and if appropriate checks the new focus item.
 .PP
@@ -182,7 +180,7 @@ This signal is emitted when a button in the group is released. The \fIid\fR argu
 .SH "void QButtonGroup::remove ( QButton * button )"
 Removes a button from the button group.
 .PP
-See also: insert().
+See also insert().
 .SH "QButton * QButtonGroup::selected ()"
 Returns a pointer to the selected radio button in this group, if one exists, or 0 if there is no selected radio button in this group.
 .PP
@@ -196,7 +194,7 @@ An exclusive button group switches off all other toggle buttons when one is swit
 .PP
 The default setting is FALSE.
 .PP
-See also: isExclusive().
+See also isExclusive().
 .SH "void QButtonGroup::setRadioButtonExclusive ( bool on ) \fC[virtual]\fR"
 If \fIon\fR is TRUE, this button group will treat radio buttons as mutually exclusive, and other buttons according to isExclusive().
 .SH "void QButtonGroup::buttonClicked () \fC[protected slot]\fR"
@@ -210,7 +208,7 @@ For internal use only.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qbuttongroup.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

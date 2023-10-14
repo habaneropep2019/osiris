@@ -1,14 +1,12 @@
-.TH QTextDrag 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QTextDrag 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
 .ad l
 .nh
 .SH NAME
-QTextDrag \- The QTextDrag provides a drag-and-drop object for transferring plain and Unicode text
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
+QTextDrag \- Drag-and-drop object for transferring plain and Unicode text
 .SH SYNOPSIS
 .br
 .PP
@@ -19,35 +17,35 @@ Inherits QDragObject.
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQTextDrag\fR ( const QString &, QWidget * " "dragSource" " = 0, const char * " "name" " = 0 )"
+.BI "\fBQTextDrag\fR ( const QString &, QWidget * " "dragSource" " = 0, const char * " "name" " = 0 ) "
 .br
 .ti -1c
-.BI "\fBQTextDrag\fR ( QWidget * " "dragSource" " = 0, const char * " "name" " = 0 )"
+.BI "\fBQTextDrag\fR ( QWidget * " "dragSource" " = 0, const char * " "name" " = 0 ) "
 .br
 .ti -1c
-.BI "\fB~QTextDrag\fR ()"
+.BI "\fB~QTextDrag\fR () "
 .br
 .ti -1c
-.BI "virtual void \fBsetText\fR ( const QString & )"
+.BI "virtual void \fBsetText\fR ( const QString & ) "
 .br
 .ti -1c
-.BI "virtual void \fBsetSubtype\fR ( const QCString & )"
+.BI "virtual void \fBsetSubtype\fR ( const QCString & ) "
 .br
 .in -1c
 .SS "Static Public Members"
 .in +1c
 .ti -1c
-.BI "bool \fBcanDecode\fR ( const QMimeSource * e )"
+.BI "bool \fBcanDecode\fR ( const QMimeSource * e ) "
 .br
 .ti -1c
-.BI "bool \fBdecode\fR ( const QMimeSource * " "e" ", QString & s )"
+.BI "bool \fBdecode\fR ( const QMimeSource * " "e" ", QString & s ) "
 .br
 .ti -1c
-.BI "bool \fBdecode\fR ( const QMimeSource * " "e" ", QString & " "s" ", QCString & subtype )"
+.BI "bool \fBdecode\fR ( const QMimeSource * " "e" ", QString & " "s" ", QCString & subtype ) "
 .br
 .in -1c
 .SH DESCRIPTION
-The QTextDrag provides a drag-and-drop object for transferring plain and Unicode text.
+The QTextDrag class is a drag-and-drop object for transferring plain and Unicode text.
 .PP
 Plain text is single- or multi-line 8-bit text in the local encoding.
 .PP
@@ -66,15 +64,15 @@ Destructs the text drag object and frees up all allocated resources.
 .SH "bool QTextDrag::canDecode ( const QMimeSource * e ) \fC[static]\fR"
 Returns TRUE if the information in \fIe\fR can be decoded into a QString.
 .PP
-See also: decode().
+See also decode().
 .SH "bool QTextDrag::decode ( const QMimeSource * e, QString & str ) \fC[static]\fR"
 Attempts to decode the dropped information in \fIe\fR into \fIstr,\fR returning TRUE if successful.
 .PP
-See also: canDecode().
+See also canDecode().
 .SH "bool QTextDrag::decode ( const QMimeSource * e, QString & str, QCString & subtype ) \fC[static]\fR"
 Attempts to decode the dropped information in \fIe\fR into \fIstr,\fR returning TRUE if successful. If \fIsubtype\fR is null, any text subtype is accepted, otherwise only that specified is accepted. \fIsubtype\fR is set to the accepted subtype.
 .PP
-See also: canDecode().
+See also canDecode().
 .SH "QByteArray QTextDrag::encodedData ( const char * mime ) const \fC[virtual]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .SH "const char * QTextDrag::format ( int i ) const \fC[virtual]\fR"
@@ -89,7 +87,7 @@ not pass the text during construction.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qtextdrag.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

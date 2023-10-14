@@ -1,5 +1,5 @@
-.TH QRegion 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QRegion 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QRegion \- Clip region for a painter
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -20,28 +18,28 @@ QRegion \- Clip region for a painter
 .BI "enum \fBRegionType\fR { Rectangle, Ellipse }"
 .br
 .ti -1c
-.BI "\fBQRegion\fR ()"
+.BI "\fBQRegion\fR () "
 .br
 .ti -1c
-.BI "\fBQRegion\fR ( int " "x" ", int " "y" ", int " "w" ", int " "h" ", RegionType = Rectangle )"
+.BI "\fBQRegion\fR ( int " "x" ", int " "y" ", int " "w" ", int " "h" ", RegionType = Rectangle ) "
 .br
 .ti -1c
-.BI "\fBQRegion\fR ( const QRect &, RegionType = Rectangle )"
+.BI "\fBQRegion\fR ( const QRect &, RegionType = Rectangle ) "
 .br
 .ti -1c
-.BI "\fBQRegion\fR ( const QPointArray &, bool " "winding" "=FALSE )"
+.BI "\fBQRegion\fR ( const QPointArray &, bool " "winding" "=FALSE ) "
 .br
 .ti -1c
-.BI "\fBQRegion\fR ( const QRegion & )"
+.BI "\fBQRegion\fR ( const QRegion & ) "
 .br
 .ti -1c
-.BI "\fBQRegion\fR ( const QBitmap & )"
+.BI "\fBQRegion\fR ( const QBitmap & ) "
 .br
 .ti -1c
-.BI "\fB~QRegion\fR ()"
+.BI "\fB~QRegion\fR () "
 .br
 .ti -1c
-.BI "QRegion& \fBoperator=\fR ( const QRegion & )"
+.BI "QRegion& \fBoperator=\fR ( const QRegion & ) "
 .br
 .ti -1c
 .BI "bool \fBisNull\fR () const"
@@ -56,7 +54,7 @@ QRegion \- Clip region for a painter
 .BI "bool \fBcontains\fR ( const QRect & r ) const"
 .br
 .ti -1c
-.BI "void \fBtranslate\fR ( int " "dx" ", int dy )"
+.BI "void \fBtranslate\fR ( int " "dx" ", int dy ) "
 .br
 .ti -1c
 .BI "QRegion \fBunite\fR ( const QRegion & ) const"
@@ -77,6 +75,9 @@ QRegion \- Clip region for a painter
 .BI "QArray<QRect> \fBrects\fR () const"
 .br
 .ti -1c
+.BI "void \fBsetRects\fR ( const QRect *, int ) "
+.br
+.ti -1c
 .BI "QRegion \fBoperator|\fR ( const QRegion & ) const"
 .br
 .ti -1c
@@ -92,19 +93,19 @@ QRegion \- Clip region for a painter
 .BI "QRegion \fBoperator^\fR ( const QRegion & ) const"
 .br
 .ti -1c
-.BI "QRegion& \fBoperator|=\fR ( const QRegion & )"
+.BI "QRegion& \fBoperator|=\fR ( const QRegion & ) "
 .br
 .ti -1c
-.BI "QRegion& \fBoperator+=\fR ( const QRegion & )"
+.BI "QRegion& \fBoperator+=\fR ( const QRegion & ) "
 .br
 .ti -1c
-.BI "QRegion& \fBoperator&=\fR ( const QRegion & )"
+.BI "QRegion& \fBoperator&=\fR ( const QRegion & ) "
 .br
 .ti -1c
-.BI "QRegion& \fBoperator-=\fR ( const QRegion & )"
+.BI "QRegion& \fBoperator-=\fR ( const QRegion & ) "
 .br
 .ti -1c
-.BI "QRegion& \fBoperator^=\fR ( const QRegion & )"
+.BI "QRegion& \fBoperator^=\fR ( const QRegion & ) "
 .br
 .ti -1c
 .BI "bool \fBoperator==\fR ( const QRegion & ) const"
@@ -165,7 +166,7 @@ Example of using complex regions:
 .PP
 QRegion is an implicitely shared class.
 .PP
-See also: QPainter::setClipRegion() and QPainter::setClipRect().
+See also QPainter::setClipRegion() and QPainter::setClipRect().
 .SS "Member Type Documentation"
 .SH "QRegion::RegionType"
 Determines the shape of the region to be created.
@@ -177,7 +178,7 @@ Determines the shape of the region to be created.
 .SH "QRegion::QRegion ()"
 Constructs a null region.
 .PP
-See also: isNull().
+See also isNull().
 .SH "QRegion::QRegion ( const QBitmap & bm )"
 Constructs a region from the bitmap \fIbm.\fR
 .PP
@@ -252,39 +253,39 @@ Example:
     r3.isEmpty();               // FALSE
 .fi
 .PP
-See also: isNull().
+See also isNull().
 .SH "bool QRegion::isNull () const"
 Returns TRUE if the region is a null region, otherwise FALSE.
 .PP
 A null region is a region that has not been initialized. A null region is always empty.
 .PP
-See also: isEmpty().
+See also isEmpty().
 .SH "bool QRegion::operator!= ( const QRegion & r ) const"
 Returns TRUE if the region is different from \fIr,\fR or FALSE if the regions are equal.
 .SH "QRegion QRegion::operator& ( const QRegion & r ) const"
 \fCr1&r2\fR is equivalent to \fCr1.intersect(r2)\fR
 .PP
-See also: intersect().
+See also intersect().
 .SH "QRegion& QRegion::operator&= ( const QRegion & r )"
 \fCr1&=r2\fR is equivalent to \fCr1=r1.intersect(r2)\fR
 .PP
-See also: intersect().
+See also intersect().
 .SH "QRegion QRegion::operator+ ( const QRegion & r ) const"
 \fCr1+r2\fR is equivalent to \fCr1.unite(r2)\fR
 .PP
-See also: unite() and operator|().
+See also unite() and operator|().
 .SH "QRegion& QRegion::operator+= ( const QRegion & r )"
 \fCr1+=r2\fR is equivalent to \fCr1=r1.unite(r2)\fR
 .PP
-See also: intersect().
+See also intersect().
 .SH "QRegion QRegion::operator- ( const QRegion & r ) const"
 \fCr1-r2\fR is equivalent to \fCr1.subtract(r2)\fR
 .PP
-See also: subtract().
+See also subtract().
 .SH "QRegion& QRegion::operator-= ( const QRegion & r )"
 \fCr1-=r2\fR is equivalent to \fCr1=r1.subtract(r2)\fR
 .PP
-See also: subtract().
+See also subtract().
 .SH "QRegion & QRegion::operator= ( const QRegion & r )"
 Assigns \fIr\fR to this region and returns a reference to the region.
 .SH "bool QRegion::operator== ( const QRegion & r ) const"
@@ -292,23 +293,33 @@ Returns TRUE if the region is equal to \fIr,\fR or FALSE if the regions are diff
 .SH "QRegion QRegion::operator^ ( const QRegion & r ) const"
 \fCr1^r2\fR is equivalent to \fCr1.eor(r2)\fR
 .PP
-See also: eor().
+See also eor().
 .SH "QRegion& QRegion::operator^= ( const QRegion & r )"
 \fCr1^=r2\fR is equivalent to \fCr1=r1.eor(r2)\fR
 .PP
-See also: eor().
+See also eor().
 .SH "QRegion QRegion::operator| ( const QRegion & r ) const"
 \fCr1|r2\fR is equivalent to \fCr1.unite(r2)\fR
 .PP
-See also: unite() and operator+().
+See also unite() and operator+().
 .SH "QRegion& QRegion::operator|= ( const QRegion & r )"
 \fCr1|=r2\fR is equivalent to \fCr1=r1.unite(r2)\fR
 .PP
-See also: unite().
+See also unite().
 .SH "QArray<QRect> QRegion::rects () const"
 Returns an array of non-overlapping rectangles that make up the region.
 .PP
 The union of all the rectangles is equal to the original region.
+.SH "void QRegion::setRects ( const QRect * rects, int num )"
+Sets the region to be the given set of rectangles. The rectangles \fImust\fR be optimal Y-X sorted bands as follows:
+.TP
+The rectangles must not intersect
+.TP
+All rectangles with a given top coordinate must have the same height.
+.TP
+No two rectangles may abut horizontally (they should be combined into a single wider rectangle in that case).
+.TP
+The rectangles must be sorted ascendingly by Y as the major sort key and X as the minor sort key.
 .SH "QRegion QRegion::subtract ( const QRegion & r ) const"
 Returns a region which is \fIr\fR subtracted from this region.
 .PP
@@ -327,15 +338,15 @@ The figure shows the union of two elliptical regions.
 .SH "QDataStream & operator>> (QDataStream & s, QRegion & r)"
 Reads a region from the stream \fIs\fR into \fIr\fR and returns a reference to the stream.
 .PP
-See also: Format of the QDataStream operators
+See also Format of the QDataStream operators
 .SH "QDataStream & operator<< (QDataStream & s, const QRegion & r)"
 Writes the region \fIr\fR to the stream \fIs\fR and returns a reference to the stream.
 .PP
-See also:  Format of the QDataStream operators
+See also  Format of the QDataStream operators
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qregion.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

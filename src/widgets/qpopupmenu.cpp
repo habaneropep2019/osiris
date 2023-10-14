@@ -1,30 +1,43 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qpopupmenu.cpp   2.1.1   edited 2000-04-19 $
+** $Id: qt/src/widgets/qpopupmenu.cpp   2.2.0   edited 2000-08-25 $
 **
 ** Implementation of QPopupMenu class
 **
 ** Created : 941128
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the widgets module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #define	 INCLUDE_MENUITEM_DEF
 #include "qpopupmenu.h"
+#ifndef QT_NO_COMPLEXWIDGETS
 #include "qmenubar.h"
 #include "qaccel.h"
 #include "qpainter.h"
@@ -36,7 +49,11 @@
 #include "qwhatsthis.h"
 #include "qobjectlist.h"
 #include "qguardedptr.h"
+#include "qeffects_p.h"
 #include <ctype.h>
+
+//#define ANIMATED_POPUP
+//#define BLEND_POPUP
 
 // Motif style parameters
 
@@ -84,6 +101,7 @@ static void popupSubMenuLater( int msec, QPopupMenu * receiver ) {
     singleSingleShot->start( msec, TRUE );
 }
 
+static bool preventAnimation = FALSE;
 
 // NOT REVISED
 /*!
@@ -95,7 +113,7 @@ static void popupSubMenuLater( int msec, QPopupMenu * receiver ) {
 
   A popup menu widget is a selection menu. It can be both, a pull-down
   menu in a menu bar or a standalone context menu.  Pull-down menus
-  are shown by the menu bar when the user clicks on the respecitive
+  are shown by the menu bar when the user clicks on the respective
   item or hits the specified shortcut key. Use QMenuBar::insertItem()
   to insert a popup menu into a menu bar. Show a context menu either
   asynchronously with popup() or synchronously with exec().
@@ -106,14 +124,14 @@ static void popupSubMenuLater( int msec, QPopupMenu * receiver ) {
   QCustomMenuItem). In addition, items can have an optional icon drawn
   on the very left side and an accelerator key, like "Ctrl-X".
 
-  There are three kind of menu items: seperators, those that perform
+  There are three kind of menu items: separators, those that perform
   an action and those that show a submenu.  Separators are inserted
   with insertSeparator(). For submenus, you pass a pointer to a
   QPopupMenu in your call to insertItem().  All other items are
   considered action items.
 
   When inserting actions items, you usually specify a receiver and a
-  slot. The receiver will be notifed whenever the item was
+  slot. The receiver will be notified whenever the item was
   selected. In addition, QPopupMenu provides two signals activated()
   and highlighted() that signal the identifier of the respective menu
   item. Sometimes it is practical to connect several items to one
@@ -132,7 +150,8 @@ static void popupSubMenuLater( int msec, QPopupMenu * receiver ) {
   setItemEnabled().  Just before a popup menu becomes visible, it
   emits the aboutToShow() signal. You can use this signal to set the
   correct enabled/disabled states of all menu items before the user
-  sees it.
+  sees it. The corresponding aboutToHide() signal is emitted when the
+  menu hides again.
 
   You can provide What's This? help for single menu items with
   setWhatsThis(). See QWhatsThis for general information about this
@@ -170,9 +189,16 @@ static void popupSubMenuLater( int msec, QPopupMenu * receiver ) {
   can connect it to any slot that sets up the menu contents (e.g. to
   ensure that the right items are enabled).
 
-  \sa setItemEnabled() setItemChecked() insertItem() removeItem()
+  \sa aboutToHide(), setItemEnabled(), setItemChecked(), insertItem(), removeItem()
 */
 
+/*! \fn void QPopupMenu::aboutToHide()
+
+  This signal is emitted just before the popup menu is hidden after it
+  has been displayed.
+
+  \sa aboutToShow(), setItemEnabled(), setItemChecked(), insertItem(), removeItem()
+*/
 
 
 
@@ -208,6 +234,7 @@ QPopupMenu::QPopupMenu( QWidget *parent, const char *name )
     autoaccel	  = 0;
     accelDisabled = FALSE;
     popupActive	  = -1;
+    snapToMouse	  = TRUE;
     tab = 0;
     checkable = 0;
     tornOff = 0;
@@ -238,13 +265,13 @@ QPopupMenu::~QPopupMenu()
 
     if ( parentMenu )
 	parentMenu->removePopup( this );	// remove from parent menu
+
+    preventAnimation = FALSE;
 }
 
 
 /*!
   Updates the item with identity \a id.
-
-  \sa updateRow()
 */
 void QPopupMenu::updateItem( int id )		// update popup menu item
 {
@@ -305,6 +332,7 @@ void QPopupMenu::menuContentsChanged()
 
 void QPopupMenu::menuStateChanged()
 {
+    updateAccel( 0 ); // ### when we have a good solution for the accel vs. focus widget problem, remove that. That is only a workaround
     updateSize();
     update();
     if ( QMenuData::d->aWidget )
@@ -334,7 +362,6 @@ void QPopupMenu::frameChanged()
 {
     menuContentsChanged();
 }
-
 
 /*!
   Opens the popup menu so that the item number \a indexAtPoint will be
@@ -372,6 +399,15 @@ void QPopupMenu::popup( const QPoint &pos, int indexAtPoint )
 	insertSeparator();			// Save Our Souls
     if ( badSize )
 	updateSize();
+
+    QPoint mouse = QCursor::pos();
+    snapToMouse = snapToMouse && pos == mouse;
+
+    // have to emit here as a menu might be setup in a slot connected
+    // to aboutToShow which will change the size of the menu
+    supressAboutToShow = TRUE;
+    emit aboutToShow();
+
     QWidget *desktop = QApplication::desktop();
     int sw = desktop->width();			// screen width
     int sh = desktop->height();			// screen height
@@ -381,18 +417,55 @@ void QPopupMenu::popup( const QPoint &pos, int indexAtPoint )
 	y -= itemGeometry( indexAtPoint ).y();		// (would subtract 2 pixels!)
     int w  = width();
     int h  = height();
-    if ( x+w > sw )				// the complete widget must
-	x = sw - w;				//   be visible
-    if ( y+h > sh )
-	y = sh - h;
-    if ( x < 0 )
-	x = 0;
-    if ( y < 0 )
-	y = 0;
+
+    if ( snapToMouse ) {
+	if ( x+w > sw )
+	    x = mouse.x()-w;
+	if ( y+h > sh )
+	    y = mouse.y()-h;
+	if ( x < 0 )
+	    x = mouse.x();
+	if ( y < 0 )
+	    y = mouse.y();
+    } else {
+	if ( x+w > sw )				// the complete widget must
+	    x = sw - w;				//   be visible
+	if ( y+h > sh )
+	    y = sh - h;
+	if ( x < 0 )
+	    x = 0;
+	if ( y < 0 )
+	    y = 0;
+    }
     move( x, y );
     motion=0;
     actItem = -1;
-    show();
+
+#ifndef QT_NO_EFFECTS
+    int hGuess = QEffects::RightScroll;
+    int vGuess = QEffects::DownScroll;
+    if ( snapToMouse && ( x + w/2 < mouse.x() ) ||
+	( parentMenu && parentMenu->isPopupMenu &&
+	( x + w/2 < ((QPopupMenu*)parentMenu)->mapToGlobal( ((QPopupMenu*)parentMenu)->pos() ).x() ) ) )
+	hGuess = QEffects::LeftScroll;
+    if ( snapToMouse && ( y + h/2 < mouse.y() ) ||
+	( parentMenu && parentMenu->isMenuBar &&
+	( y + h/2 < ((QMenuBar*)parentMenu)->mapToGlobal( ((QMenuBar*)parentMenu)->pos() ).y() ) ) )
+	vGuess = QEffects::UpScroll;
+
+    if ( QApplication::isEffectEnabled( UI_AnimateMenu ) &&
+	 preventAnimation == FALSE ) {
+	if ( QApplication::isEffectEnabled( UI_FadeMenu ) )
+	    qFadeEffect( this );
+	else if ( parentMenu )
+	    qScrollEffect( this, parentMenu->isPopupMenu ? hGuess : vGuess );
+	else
+	    qScrollEffect( this, hGuess | vGuess );
+    } else
+#endif
+    {
+	show();
+    }
 }
 
 /*!
@@ -517,6 +590,10 @@ void QPopupMenu::setFirstItemActive()
 void QPopupMenu::hideAllPopups()
 {
     register QMenuData *top = this;		// find top level popup
+    if ( !preventAnimation )
+	QTimer::singleShot( 10, this, SLOT(allowAnimation()) );
+    preventAnimation = TRUE;
+
     if ( !isPopup() )
 	return; // nothing to do
 
@@ -533,6 +610,10 @@ void QPopupMenu::hideAllPopups()
 
 void QPopupMenu::hidePopups()
 {
+    if ( preventAnimation )
+	QTimer::singleShot( 10, this, SLOT(allowAnimation()) );
+    preventAnimation = TRUE;	
+
     QMenuItemListIt it(*mitems);
     register QMenuItem *mi;
     while ( (mi=it.current()) ) {
@@ -554,9 +635,13 @@ bool QPopupMenu::tryMenuBar( QMouseEvent *e )
     register QMenuData *top = this;		// find top level
     while ( top->parentMenu )
 	top = top->parentMenu;
+#ifndef QT_NO_MENUBAR
     return top->isMenuBar ?
 	((QMenuBar *)top)->tryMouseEvent( this, e ) :
 			      ((QPopupMenu*)top)->tryMouseEvent(this, e );
+#else
+    return ((QPopupMenu*)top)->tryMouseEvent(this, e );
+#endif
 }
 
 
@@ -583,11 +668,13 @@ bool QPopupMenu::tryMouseEvent( QPopupMenu *p, QMouseEvent * e)
 void QPopupMenu::byeMenuBar()
 {
     hideAllPopups();
+#ifndef QT_NO_MENUBAR
     register QMenuData *top = this;		// find top level
     while ( top->parentMenu )
 	top = top->parentMenu;
     if ( top->isMenuBar )
 	((QMenuBar *)top)->goodbye();
+#endif
 }
 
 
@@ -844,6 +931,8 @@ void QPopupMenu::updateAccel( QWidget *parent )
     }
     while ( (mi=it.current()) ) {
 	++it;
+	if ( !mi->isEnabled() ) // ### when we have a good solution for the accel vs. focus widget problem, remove that. That is only a workaround
+	    continue;
 	int k = mi->key();
 	if ( k ) {
 	    int id = autoaccel->insertItem( k, mi->id() );
@@ -949,6 +1038,7 @@ void QPopupMenu::hide()
 	QWidget::hide();
   	return;
     }
+    emit aboutToHide();
 
     actItem = popupActive = -1;
     mouseBtDn = FALSE;				// mouse button up
@@ -976,10 +1066,13 @@ int QPopupMenu::itemHeight( int row ) const
 int QPopupMenu::itemHeight( QMenuItem *mi ) const
 {
     if  ( mi->widget() )
-	return mi->widget()->height();
+	return QMAX( mi->widget()->height(), QApplication::globalStrut().height() );
     if ( mi->custom() && mi->custom()->fullSpan() )
-	return mi->custom()->sizeHint().height();
-    return style().popupMenuItemHeight( checkable, mi, fontMetrics() );
+	return QMAX( mi->custom()->sizeHint().height(), QApplication::globalStrut().height() );
+    if ( mi->isSeparator() )
+	return style().popupMenuItemHeight( checkable, mi, fontMetrics() );
+
+    return QMAX( style().popupMenuItemHeight( checkable, mi, fontMetrics() ), QApplication::globalStrut().height() );
 }
 
 
@@ -1154,6 +1247,15 @@ void QPopupMenu::mouseMoveEvent( QMouseEvent *e )
 {
     motion++;
 
+    if ( parentMenu && parentMenu->isPopupMenu ) {
+	QPopupMenu* p = (QPopupMenu*)parentMenu;
+	int myIndex;
+
+	p->findPopup( this, &myIndex );
+	if ( p->actItem != myIndex )
+	    p->setActiveItem( myIndex );
+    }
+
     if ( (e->state() & Qt::MouseButtonMask) == 0 &&
 	 !hasMouseTracking() )
 	return;
@@ -1233,8 +1335,10 @@ void QPopupMenu::keyPressEvent( QKeyEvent *e )
 	}
 	// just hide one
 	hide();
+#ifndef QT_NO_MENUBAR
   	if ( parentMenu && parentMenu->isMenuBar )
 	    ((QMenuBar*) parentMenu)->goodbye( TRUE );
+#endif
 	break;
 
     case Key_Left:
@@ -1263,6 +1367,9 @@ void QPopupMenu::keyPressEvent( QKeyEvent *e )
 		singleSingleShot->stop();
 	    popup->setFirstItemActive();
 	    subMenuTimer();
+	    break;
+	} else if ( actItem == -1 && ( parentMenu && !parentMenu->isMenuBar )) {
+	    dy = 1;
 	    break;
 	}
 	if ( ncols > 1 && actItem >= 0 ) {
@@ -1361,6 +1468,7 @@ void QPopupMenu::keyPressEvent( QKeyEvent *e )
 	    }
 	}
     }
+#ifndef QT_NO_MENUBAR
     if ( !ok_key ) {				// send to menu bar
 	register QMenuData *top = this;		// find top level
 	while ( top->parentMenu )
@@ -1368,7 +1476,7 @@ void QPopupMenu::keyPressEvent( QKeyEvent *e )
 	if ( top->isMenuBar )
 	    ((QMenuBar*)top)->tryKeyEvent( this, e );
     }
-
+#endif
     if ( dy && actItem < 0 ) {
 	setFirstItemActive();
     } else if ( dy ) {				// highlight next/prev
@@ -1484,6 +1592,10 @@ void QPopupMenu::subMenuTimer() {
     popup->popup( p );
 }
 
+void QPopupMenu::allowAnimation()
+{
+    preventAnimation = FALSE;
+}
 
 void QPopupMenu::updateRow( int row )
 {
@@ -1646,7 +1758,7 @@ void QPopupMenu::setActiveItem( int i )
 	mi->widget()->setFocus();
     else
 	setFocus();
-    if ( mi->id() != 0 )
+    if ( mi->id() != -1 )
 	hilitSig( mi->id() );
 }
 
@@ -1660,7 +1772,7 @@ QSize QPopupMenu::sizeHint() const
 	QPopupMenu* that = (QPopupMenu*) this;
 	that->updateSize();
     }
-    return size();
+    return size().expandedTo( QApplication::globalStrut() );
 }
 
 
@@ -1820,4 +1932,65 @@ void QPopupMenu::toggleTearOff()
 	QMenuData::d->aWidget = p;
     }
 }
+
+/*! \reimp
+ */
+void QPopupMenu::activateItemAt( int index )
+{
+    if ( index >= 0 && index < (int) mitems->count() ) {
+	QMenuItem *mi = mitems->at( index );
+	if ( index != actItem )			// new item activated
+	    setActiveItem( index );
+	QPopupMenu *popup = mi->popup();
+	if ( popup ) {
+	    if ( popup->isVisible() ) {		// sub menu already open
+		int pactItem = popup->actItem;
+		popup->actItem = -1;
+		popup->hidePopups();
+		popup->updateRow( pactItem );
+	    } else {				// open sub menu
+		hidePopups();
+		actItem = index;
+		subMenuTimer();
+		popup->setFirstItemActive();
+	    }
+	} else {
+	    byeMenuBar();			// deactivate menu bar
+	    bool b = QWhatsThis::inWhatsThisMode();
+	    if ( !mi->isEnabled() ) {
+		if ( b ) {
+		    actItem = -1;
+		    updateItem( mi->id() );
+		    byeMenuBar();
+		    actSig( mi->id(), b);
+		}
+	    } else {
+		byeMenuBar();			// deactivate menu bar
+		if ( mi->isEnabled() ) {
+		    actItem = -1;
+		    updateItem( mi->id() );
+		    active_popup_menu = this;
+		    actSig( mi->id(), b );
+		    if ( mi->signal() && !b )
+			mi->signal()->activate();
+		    active_popup_menu = 0;
+		}
+	    }
+	}
+    } else {
+	if ( tornOff ) {
+	    close();
+	} else {
+	    hide();
+#ifndef QT_NO_MENUBAR
+	    if ( parentMenu && parentMenu->isMenuBar )
+		((QMenuBar*) parentMenu)->goodbye( TRUE );
+#endif
+	}
+    }
+
+}
+
+
+#endif // QT_NO_COMPLEXWIDGETS
 

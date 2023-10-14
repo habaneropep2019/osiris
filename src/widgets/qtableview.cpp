@@ -1,29 +1,42 @@
 /**********************************************************************
-** $Id: qt/src/widgets/qtableview.cpp   2.1.1   edited 2000-05-04 $
+** $Id: qt/src/widgets/qtableview.cpp   2.2.0   edited 2000-08-25 $
 **
 ** Implementation of QTableView class
 **
 ** Created : 941115
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the widgets module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #include "qtableview.h"
+#ifndef QT_NO_COMPLEXWIDGETS
 #include "qscrollbar.h"
 #include "qpainter.h"
 #include "qdrawutil.h"
@@ -1324,7 +1337,9 @@ void QTableView::paintEvent( QPaintEvent *e )
     QRect winR = viewRect();
     QRect cellR;
     QRect cellUR;
+#ifndef QT_NO_TRANSFORMATIONS
     QWMatrix matrix;
+#endif
 
     while ( yPos <= maxY && row < nRows ) {
 	nextY = yPos + (cellH ? cellH : cellHeight( row ));
@@ -1346,6 +1361,7 @@ void QTableView::paintEvent( QPaintEvent *e )
 		if ( eraseInPaint )
 		    paint.eraseRect( cellUR );
 
+#ifndef QT_NO_TRANSFORMATIONS
 		matrix.translate( xPos, yPos );
 		paint.setWorldMatrix( matrix );
 		if ( testTableFlags(Tbl_clipCellPainting) ||
@@ -1358,6 +1374,18 @@ void QTableView::paintEvent( QPaintEvent *e )
 		}
 		matrix.reset();
 		paint.setWorldMatrix( matrix );
+#else
+		paint.translate( xPos, yPos );
+		if ( testTableFlags(Tbl_clipCellPainting) ||
+		     frameWidth() > 0 && !winR.contains( cellR ) ) { //##arnt
+		    paint.setClipRect( cellUR );
+		    paintCell( &paint, row, col );
+		    paint.setClipping( FALSE );
+		} else {
+		    paintCell( &paint, row, col );
+		}
+		paint.translate( -xPos, -yPos );
+#endif
 	    }
 	    col++;
 	    xPos = nextX;
@@ -1379,17 +1407,24 @@ void QTableView::paintEvent( QPaintEvent *e )
     // reponsible for all pixels outside the cells.
 
     QRect viewR = viewRect();
-
+    const QColorGroup g = colorGroup();
+    
     if ( xPos <= maxX ) {
 	QRect r = viewR;
 	r.setLeft( xPos );
 	r.setBottom( yPos<maxY?yPos:maxY );
-	paint.eraseRect( r.intersect( updateR ) );
+	if ( inherits( "QMultiLineEdit" ) )
+	    paint.fillRect( r.intersect( updateR ), g.base() );
+	else
+	    paint.eraseRect( r.intersect( updateR ) );
     }
     if ( yPos <= maxY ) {
 	QRect r = viewR;
 	r.setTop( yPos );
-	paint.eraseRect( r.intersect( updateR ) );
+	if ( inherits( "QMultiLineEdit" ) )
+	    paint.fillRect( r.intersect( updateR ), g.base() );
+	else
+	    paint.eraseRect( r.intersect( updateR ) );
     }
 }
 
@@ -1427,7 +1462,9 @@ QScrollBar *QTableView::verticalScrollBar() const
     QTableView *that = (QTableView*)this; // semantic const
     if ( !vScrollBar ) {
 	QScrollBar *sb = new QScrollBar( QScrollBar::Vertical, that );
+#ifndef QT_NO_CURSOR
 	sb->setCursor( arrowCursor );
+#endif
         sb->resize( sb->sizeHint() ); // height is irrelevant
 	CHECK_PTR(sb);
 	sb->setTracking( FALSE );
@@ -1456,7 +1493,9 @@ QScrollBar *QTableView::horizontalScrollBar() const
     QTableView *that = (QTableView*)this; // semantic const
     if ( !hScrollBar ) {
 	QScrollBar *sb = new QScrollBar( QScrollBar::Horizontal, that );
+#ifndef QT_NO_CURSOR
 	sb->setCursor( arrowCursor );
+#endif
 	sb->resize( sb->sizeHint() ); // width is irrelevant
 	sb->setFocusPolicy( NoFocus );
 	CHECK_PTR(sb);
@@ -2254,3 +2293,4 @@ void QTableView::updateTableSize()
 }
 
 
+#endif

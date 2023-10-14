@@ -1,15 +1,17 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head>
 <title>Qt Toolkit - QMessageBox Class</title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
-a:link { text-decoration: none; }
-body { background: white; color: black; }
+a:link { color: #004faf; text-decoration: none }
+a:visited { color: #672967; text-decoration: none }body { background: white; color: black; }
 --></style>
 </head><body bgcolor="#ffffff">
 
-<a href="index.html">
-<img width="122" height="65" src="qtlogo.png" alt="Home"
-  align="left" border="0">
-</a><div align=right><img src="dochead.png" width="472" height="27"><br>
+<table width="100%">
+<tr><td><a href="index.html">
+<img width="100" height="100" src="qtlogo.png"
+alt="Home" border="0"><img width="100"
+height="100" src="face.png" alt="Home" border="0">
+</a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
 - <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
@@ -17,7 +19,7 @@ body { background: white; color: black; }
 - <a href="index.html">Home</a>
 - <a href="topicals.html"><b>Structure</b></a>
 </div>
-<br clear=all>
+</table>
 
 <h1 align=center>QMessageBox Class Reference</h1><br clear="all">
 <p>
@@ -30,34 +32,34 @@ Inherits <a href="qdialog.html">QDialog</a>.
 <p><a href="qmessagebox-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><span class="fn">enum <a href="#Icon"><b>Icon</b></a> { NoIcon = 0, Information = 1, Warning = 2, Critical = 3 }</span>
-<li><span class="fn"><a href="#e1715a"><b>QMessageBox</b></a> ( QWidget * parent=0, const char * name=0 ) </span>
-<li><span class="fn"><a href="#4d160f"><b>QMessageBox</b></a> ( const QString &amp; caption, const QString &amp; text, Icon icon, int button0, int button1, int button2, QWidget * parent=0, const char * name=0, bool modal=TRUE, WFlags f=WStyle_DialogBorder ) </span>
-<li><span class="fn"><a href="#31c068"><b>~QMessageBox</b></a> () </span>
-<li><span class="fn">enum { NoButton = 0, Ok = 1, Cancel = 2, Yes = 3, No = 4, Abort = 5, Retry = 6, Ignore = 7, ButtonMask = 0x07, Default = 0x100, Escape = 0x200, FlagMask = 0x300 }</span>
-<li><span class="fn">QString <a href="#f2f037"><b>text</b></a> () const</span>
-<li><span class="fn">void <a href="#f9357c"><b>setText</b></a> ( const QString &amp; ) </span>
-<li><span class="fn">Icon <a href="#b9b20f"><b>icon</b></a> () const</span>
-<li><span class="fn">void <a href="#14290b"><b>setIcon</b></a> ( Icon ) </span>
-<li><span class="fn">const QPixmap* <a href="#a29b0f"><b>iconPixmap</b></a> () const</span>
-<li><span class="fn">void <a href="#4828ca"><b>setIconPixmap</b></a> ( const QPixmap &amp; ) </span>
-<li><span class="fn">QString <a href="#ea4df0"><b>buttonText</b></a> ( int button ) const</span>
-<li><span class="fn">void <a href="#7489e7"><b>setButtonText</b></a> ( int button, const QString &amp; ) </span>
-<li><span class="fn">virtual void <a href="#5adde6"><b>adjustSize</b></a> () </span>
-<li><span class="fn">TextFormat <a href="#3ba851"><b>textFormat</b></a> () const</span>
-<li><span class="fn">void <a href="#fab85c"><b>setTextFormat</b></a> ( TextFormat ) </span>
+<li><div class="fn">enum <a href="#Icon"><b>Icon</b></a> { NoIcon = 0, Information = 1, Warning = 2, Critical = 3 }</div>
+<li><div class="fn"><a href="#e1715a"><b>QMessageBox</b></a> ( QWidget * parent=0, const char * name=0 ) </div>
+<li><div class="fn"><a href="#4d160f"><b>QMessageBox</b></a> ( const QString &amp; caption, const QString &amp; text, Icon icon, int button0, int button1, int button2, QWidget * parent=0, const char * name=0, bool modal=TRUE, WFlags f=WStyle_DialogBorder ) </div>
+<li><div class="fn"><a href="#31c068"><b>~QMessageBox</b></a> () </div>
+<li><div class="fn">enum { NoButton = 0, Ok = 1, Cancel = 2, Yes = 3, No = 4, Abort = 5, Retry = 6, Ignore = 7, ButtonMask = 0x07, Default = 0x100, Escape = 0x200, FlagMask = 0x300 }</div>
+<li><div class="fn">QString <a href="#f2f037"><b>text</b></a> () const</div>
+<li><div class="fn">void <a href="#f9357c"><b>setText</b></a> ( const QString &amp; ) </div>
+<li><div class="fn">Icon <a href="#b9b20f"><b>icon</b></a> () const</div>
+<li><div class="fn">void <a href="#14290b"><b>setIcon</b></a> ( Icon ) </div>
+<li><div class="fn">const QPixmap* <a href="#a29b0f"><b>iconPixmap</b></a> () const</div>
+<li><div class="fn">void <a href="#4828ca"><b>setIconPixmap</b></a> ( const QPixmap &amp; ) </div>
+<li><div class="fn">QString <a href="#ea4df0"><b>buttonText</b></a> ( int button ) const</div>
+<li><div class="fn">void <a href="#7489e7"><b>setButtonText</b></a> ( int button, const QString &amp; ) </div>
+<li><div class="fn">virtual void <a href="#5adde6"><b>adjustSize</b></a> () </div>
+<li><div class="fn">TextFormat <a href="#3ba851"><b>textFormat</b></a> () const</div>
+<li><div class="fn">void <a href="#fab85c"><b>setTextFormat</b></a> ( TextFormat ) </div>
 </ul>
 <h2>Static Public Members</h2>
 <ul>
-<li><span class="fn">int <a href="#720b98"><b>information</b></a> ( QWidget * parent, const QString &amp; caption, const QString &amp; text, int button0, int button1=0, int button2=0 ) </span>
-<li><span class="fn">int <a href="#2e454b"><b>information</b></a> ( QWidget * parent, const QString &amp; caption, const QString &amp; text, const QString &amp; button0Text = QString::null, const QString &amp; button1Text = QString::null, const QString &amp; button2Text = QString::null, int defaultButtonNumber = 0, int escapeButtonNumber = -1 ) </span>
-<li><span class="fn">int <a href="#e39165"><b>warning</b></a> ( QWidget * parent, const QString &amp; caption, const QString &amp; text, int button0, int button1, int button2=0 ) </span>
-<li><span class="fn">int <a href="#b7fab2"><b>warning</b></a> ( QWidget * parent, const QString &amp; caption, const QString &amp; text, const QString &amp; button0Text = QString::null, const QString &amp; button1Text = QString::null, const QString &amp; button2Text = QString::null, int defaultButtonNumber = 0, int escapeButtonNumber = -1 ) </span>
-<li><span class="fn">int <a href="#f87a7e"><b>critical</b></a> ( QWidget * parent, const QString &amp; caption, const QString &amp; text, int button0, int button1, int button2=0 ) </span>
-<li><span class="fn">int <a href="#4ca74e"><b>critical</b></a> ( QWidget * parent, const QString &amp; caption, const QString &amp; text, const QString &amp; button0Text = QString::null, const QString &amp; button1Text = QString::null, const QString &amp; button2Text = QString::null, int defaultButtonNumber = 0, int escapeButtonNumber = -1 ) </span>
-<li><span class="fn">void <a href="#e67950"><b>about</b></a> ( QWidget * parent, const QString &amp; caption, const QString &amp; text ) </span>
-<li><span class="fn">void <a href="#976755"><b>aboutQt</b></a> ( QWidget * parent, const QString &amp; caption=QString::null ) </span>
-<li><span class="fn">QPixmap <a href="#ec9ecb"><b>standardIcon</b></a> ( Icon icon, GUIStyle style ) </span>
+<li><div class="fn">int <a href="#720b98"><b>information</b></a> ( QWidget * parent, const QString &amp; caption, const QString &amp; text, int button0, int button1=0, int button2=0 ) </div>
+<li><div class="fn">int <a href="#2e454b"><b>information</b></a> ( QWidget * parent, const QString &amp; caption, const QString &amp; text, const QString &amp; button0Text = QString::null, const QString &amp; button1Text = QString::null, const QString &amp; button2Text = QString::null, int defaultButtonNumber = 0, int escapeButtonNumber = -1 ) </div>
+<li><div class="fn">int <a href="#e39165"><b>warning</b></a> ( QWidget * parent, const QString &amp; caption, const QString &amp; text, int button0, int button1, int button2=0 ) </div>
+<li><div class="fn">int <a href="#b7fab2"><b>warning</b></a> ( QWidget * parent, const QString &amp; caption, const QString &amp; text, const QString &amp; button0Text = QString::null, const QString &amp; button1Text = QString::null, const QString &amp; button2Text = QString::null, int defaultButtonNumber = 0, int escapeButtonNumber = -1 ) </div>
+<li><div class="fn">int <a href="#f87a7e"><b>critical</b></a> ( QWidget * parent, const QString &amp; caption, const QString &amp; text, int button0, int button1, int button2=0 ) </div>
+<li><div class="fn">int <a href="#4ca74e"><b>critical</b></a> ( QWidget * parent, const QString &amp; caption, const QString &amp; text, const QString &amp; button0Text = QString::null, const QString &amp; button1Text = QString::null, const QString &amp; button2Text = QString::null, int defaultButtonNumber = 0, int escapeButtonNumber = -1 ) </div>
+<li><div class="fn">void <a href="#e67950"><b>about</b></a> ( QWidget * parent, const QString &amp; caption, const QString &amp; text ) </div>
+<li><div class="fn">void <a href="#976755"><b>aboutQt</b></a> ( QWidget * parent, const QString &amp; caption=QString::null ) </div>
+<li><div class="fn">QPixmap <a href="#ec9ecb"><b>standardIcon</b></a> ( Icon icon, GUIStyle style ) </div>
 </ul>
 <h2>Properties</h2>
 <table border=1 cellpadding=3 cellspacing=0>
@@ -76,20 +78,43 @@ three push buttons.  It's used for simple messages and questions.
 along two axes: Severity and complexity.
 <p>Severity is
 <ul>
-<li> <code>Information</code> - for message boxes that are part of normal operation,
-<li> <code>Warning</code> - for message boxes that tell the user about errors
-or ask the user how to fix an error, or
-<li> <code>Critical</code> - as Warning, but for critical errors.
+<li> <code>Information</code> - for message boxes that are part of normal operation
+<li> <code>Warning</code> - for message boxes that tell the user about unusual errors
+<li> <code>Critical</code> - as Warning, but for critical errors
 </ul>
-The message box has a different icon for each of the severity levels.
-<p>Complexity is one button (Ok, sometimes Dismiss for Motif
-applications) for a simple messages, or two or even three buttons
-for questions.
+<p>The message box has a different icon for each of the severity levels.
+<p>Complexity is one button (Ok) for a simple messages, or two or even
+three buttons for questions.
+<p>There are static functions that let you do most of the common jobs,
+for example:
+<p>If a program is unable to find a supporting file, but can do perfectly
+well without:
+<p><pre>  <a href="#2e454b">QMessageBox::information</a>( this, "Application name",
+                            "Unable to find the user preferences file.\n"
+                            "The factory default will be used instead." );
+</pre>
+<p><a href="#b7fab2">warning</a>() can be used to tell the user about unusual errors, or
+errors which can't be easily fixed:
+<p><pre>  switch( <a href="#b7fab2">QMessageBox::warning</a>( this, "Application name",
+                                "Could not connect to the &lt;mumble&gt; server.\n"
+                          "This program can't function correctly "
+                          "without the server.\n\n",
+                          "Try again", "Quit", 0,
+                          0, 1 );
+  case 0: // Try again or Enter
+      // try again
+      break;
+  case 1: // Quit or Escape
+      // exit
+      break;
+  }
+</pre>
+<p>Finally,
 <p>The text part of all message box messages can be either rich text or
 plain text. If you specify a rich text formatted string, it will be
 rendered using the default stylesheet. See
 <a href="qstylesheet.html#9d69e9">QStyleSheet::defaultSheet</a>() for details. With certain strings that
-contain XML meta characters , the auto-rich text detection may fail,
+contain XML meta characters, the auto-rich text detection may fail,
 interpreting plain text falsely as rich text. In these rare cases,
 use <a href="qstylesheet.html#8b6a91">QStyleSheet::convertFromPlainText</a>() to convert your plain text
 string to a visually equivalent rich text string or set the text
@@ -131,22 +156,6 @@ example like this:
 <p>Again, the application name is used as window caption, as Microsoft
 recommends.  The Escape button cancels the entire Exit operation,
 and Enter/Return saves the document and exits.
-<p><a href="#b7fab2">warning</a>() can be used to tell the user about unusual errors, or
-errors which can't be easily fixed:
-<p><pre>    switch( <a href="#b7fab2">QMessageBox::warning</a>( this, "Application name here",
-                                  "Could not connect to the &lt;mumble&gt; server.\n"
-                                  "This program can't function correctly "
-                                  "without the server.\n\n",
-                                  "Try again", "Quit", 0,
-                                  0, 1 );
-    case 0: // Try again or Enter
-        // try again
-        break;
-    case 1: // Quit or Escape
-        // exit
-        break;
-    }
-</pre>
 <p>Disk full errors are unusual (in a perfect world, they are) and they
 certainly can be hard to correct.  This example uses predefined buttons
 instead of hardcoded button texts:
@@ -169,9 +178,9 @@ instead of hardcoded button texts:
 this example, errorDetails is a <a href="qstring.html">QString</a> or const char*, and QString
 is used to concatenate several strings:
 <p><pre>    <a href="#4ca74e">QMessageBox::critical</a>( 0, "Application name here",
-                           <a href="qstring.html">QString</a>("An internal error occured. Please call ") +
-                           "technical support at 123456789 and report these\n"+
-                           "numbers:\n\n" + errorDetails +
+                           <a href="qstring.html">QString</a>("An internal error occurred. Please ") +
+                           "call technical support at 123456789 and report\n"+
+                           "these numbers:\n\n" + errorDetails +
                            "\n\n&lt;Application&gt; will now exit." );
 </pre>
 <p>QMessageBox provides a very simple About box, which displays an
@@ -239,7 +248,7 @@ latter accepts a <a href="qpixmap.html">QPixmap</a> and can be used to set custo
 <p><a href="#7489e7">setButtonText</a>() and <a href="#ea4df0">buttonText</a>() provide access to the buttons.
 <p>QMessageBox has no signals or slots.
 <p><img src=qmsgbox-m.png> <img src=qmsgbox-w.png>
-<p>See also:  <a href="qdialog.html">QDialog</a>, <a href="http://www.iarchitect.com/errormsg.htm">Isys on error messages,</a> and <a href="guibooks.html#fowler">GUI Design Handbook: Message Box.</a>
+<p>See also  <a href="qdialog.html">QDialog</a>, <a href="http://www.iarchitect.com/errormsg.htm">Isys on error messages,</a> and <a href="guibooks.html#fowler">GUI Design Handbook: Message Box.</a>
 
 <hr><h2>Member Type Documentation</h2>
 <h3 class="fn"><a name="Icon">QMessageBox::Icon</a></h3>
@@ -279,7 +288,7 @@ to three buttons.
 <li><code>QMessageBox::Ignore</code>
 </ul>
 <p>Use QMessageBox::NoButton for the later parameters to have less than
-three buttons in your messagebox.
+three buttons in your message box.
 <p>One of the buttons can be combined with the <code>QMessageBox::Default</code> flag
 to make a default button.
 <p>One of the buttons can be combined with the <code>QMessageBox::Escape</code> flag
@@ -301,7 +310,7 @@ modal relative to <em>parent.</em>
 modeless.
 <p>The <em>parent, name, modal</em> and <em>f</em> arguments are passed to the
 <a href="qdialog.html">QDialog</a> constructor.
-<p>See also:  <a href="qwidget.html#d4f007">setCaption</a>(), <a href="#f9357c">setText</a>() and <a href="#14290b">setIcon</a>().
+<p>See also  <a href="qwidget.html#d4f007">setCaption</a>(), <a href="#f9357c">setText</a>() and <a href="#14290b">setIcon</a>().
 <h3 class="fn"><a name="31c068"></a>QMessageBox::~QMessageBox ()</h3>
 <p>Destructs the message box.
 <h3 class="fn">void <a name="e67950"></a>QMessageBox::about ( <a href="qwidget.html">QWidget</a> * parent, const <a href="qstring.html">QString</a> &amp; caption, const <a href="qstring.html">QString</a> &amp; text ) <code>[static]</code></h3>
@@ -313,7 +322,7 @@ if that exists.  <li>If not, it tries the top level widget
 containing <em>parent</em> <li>If that too fails, it tries the <a href="qapplication.html#7d0bf0">main widget.</a> <li>As a last
 resort it uses the Information icon. </ol>
 <p>The about box has a single button labelled OK.
-<p>See also:  <a href="qwidget.html#586389">QWidget::icon</a>() and <a href="qapplication.html#7d0bf0">QApplication::mainWidget</a>().
+<p>See also  <a href="qwidget.html#586389">QWidget::icon</a>() and <a href="qapplication.html#7d0bf0">QApplication::mainWidget</a>().
 <p>Examples:
  <a href="menu-menu-cpp.html#QMessageBox::about">menu/menu.cpp</a>
 <h3 class="fn">void <a name="976755"></a>QMessageBox::aboutQt ( <a href="qwidget.html">QWidget</a> * parent, const <a href="qstring.html">QString</a> &amp; caption=QString::null ) <code>[static]</code></h3>
@@ -333,7 +342,7 @@ resized before showing it.
 <h3 class="fn"><a href="qstring.html">QString</a> <a name="ea4df0"></a>QMessageBox::buttonText ( int button ) const</h3>
 <p>Returns the text of the message box button <em>button,</em> or null if the
 message box does not contain the button.
-<p>See also:  <a href="#7489e7">setButtonText</a>().
+<p>See also  <a href="#7489e7">setButtonText</a>().
 <h3 class="fn">int <a name="4ca74e"></a>QMessageBox::critical ( <a href="qwidget.html">QWidget</a> * parent, const <a href="qstring.html">QString</a> &amp; caption, const <a href="qstring.html">QString</a> &amp; text, const <a href="qstring.html">QString</a> &amp; button0Text = QString::null, const <a href="qstring.html">QString</a> &amp; button1Text = QString::null, const <a href="qstring.html">QString</a> &amp; button2Text = QString::null, int defaultButtonNumber = 0, int escapeButtonNumber = -1 ) <code>[static]</code></h3>
 <p>Displays a critical error message box with a caption, a text and
 1-3 buttons.  Returns the number of the button that was clicked
@@ -351,17 +360,17 @@ the relevant button.
 <p>If <em>parent</em> is 0, then the message box becomes an application-global
 modal dialog box.  If <em>parent</em> is a widget, the message box becomes
 modal relative to <em>parent.</em>
-<p>See also:  <a href="#2e454b">information</a>() and <a href="#b7fab2">warning</a>().
+<p>See also  <a href="#2e454b">information</a>() and <a href="#b7fab2">warning</a>().
 <h3 class="fn">int <a name="f87a7e"></a>QMessageBox::critical ( <a href="qwidget.html">QWidget</a> * parent, const <a href="qstring.html">QString</a> &amp; caption, const <a href="qstring.html">QString</a> &amp; text, int button0, int button1, int button2=0 ) <code>[static]</code></h3>
 <p>Opens a critical message box with a caption, a text and up to three
 buttons.  Returns the identifier of the button that was clicked.
 <p>If <em>parent</em> is 0, then the message box becomes an application-global
 modal dialog box.  If <em>parent</em> is a widget, the message box becomes
 modal relative to <em>parent.</em>
-<p>See also:  <a href="#2e454b">information</a>() and <a href="#b7fab2">warning</a>().
+<p>See also  <a href="#2e454b">information</a>() and <a href="#b7fab2">warning</a>().
 <h3 class="fn">QMessageBox::Icon <a name="b9b20f"></a>QMessageBox::icon() const</h3>
 <p>Returns the icon of the message box.
-<p>See also:  <a href="#14290b">setIcon</a>() and <a href="#a29b0f">iconPixmap</a>().
+<p>See also  <a href="#14290b">setIcon</a>() and <a href="#a29b0f">iconPixmap</a>().
 <h3 class="fn">const <a href="qpixmap.html">QPixmap</a> * <a name="a29b0f"></a>QMessageBox::iconPixmap () const</h3>
 <p>Returns the icon pixmap of the message box.
 <p>Example:
@@ -369,7 +378,7 @@ modal relative to <em>parent.</em>
     mb.<a href="#14290b">setIcon</a>( QMessageBox::Warning );
     mb.<a href="#a29b0f">iconPixmap</a>();    // returns the warning icon pixmap
 </pre>
-<p>See also:  <a href="#4828ca">setIconPixmap</a>() and <a href="#b9b20f">icon</a>().
+<p>See also  <a href="#4828ca">setIconPixmap</a>() and <a href="#b9b20f">icon</a>().
 <h3 class="fn">int <a name="2e454b"></a>QMessageBox::information ( <a href="qwidget.html">QWidget</a> * parent, const <a href="qstring.html">QString</a> &amp; caption, const <a href="qstring.html">QString</a> &amp; text, const <a href="qstring.html">QString</a> &amp; button0Text = QString::null, const <a href="qstring.html">QString</a> &amp; button1Text = QString::null, const <a href="qstring.html">QString</a> &amp; button2Text = QString::null, int defaultButtonNumber = 0, int escapeButtonNumber = -1 ) <code>[static]</code></h3>
 <p>Displays an information message box with a caption, a text and
 1-3 buttons.  Returns the number of the button that was clicked
@@ -387,7 +396,7 @@ the relevant button.
 <p>If <em>parent</em> is 0, then the message box becomes an application-global
 modal dialog box.  If <em>parent</em> is a widget, the message box becomes
 modal relative to <em>parent.</em>
-<p>See also:  <a href="#b7fab2">warning</a>() and <a href="#4ca74e">critical</a>().
+<p>See also  <a href="#b7fab2">warning</a>() and <a href="#4ca74e">critical</a>().
 <p>Examples:
  <a href="picture-picture-cpp.html#QMessageBox::information">picture/picture.cpp</a>
 <h3 class="fn">int <a name="720b98"></a>QMessageBox::information ( <a href="qwidget.html">QWidget</a> * parent, const <a href="qstring.html">QString</a> &amp; caption, const <a href="qstring.html">QString</a> &amp; text, int button0, int button1=0, int button2=0 ) <code>[static]</code></h3>
@@ -396,7 +405,7 @@ buttons.  Returns the identifier of the button that was clicked.
 <p>If <em>parent</em> is 0, then the message box becomes an application-global
 modal dialog box.  If <em>parent</em> is a widget, the message box becomes
 modal relative to <em>parent.</em>
-<p>See also:  <a href="#b7fab2">warning</a>() and <a href="#4ca74e">critical</a>().
+<p>See also  <a href="#b7fab2">warning</a>() and <a href="#4ca74e">critical</a>().
 <h3 class="fn">void <a name="e90531"></a>QMessageBox::keyPressEvent ( <a href="qkeyevent.html">QKeyEvent</a> * e ) <code>[virtual protected]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
 <p>Reimplemented from <a href="qwidget.html#cdb1c7">QWidget.</a>
@@ -407,7 +416,7 @@ modal relative to <em>parent.</em>
 <p>Sets the text of the message box button <em>button</em> to <em>text.</em>
 Setting the text of a button that is not in the message box is quietly
 ignored.
-<p>See also:  <a href="#ea4df0">buttonText</a>().
+<p>See also  <a href="#ea4df0">buttonText</a>().
 <h3 class="fn">void <a name="14290b"></a>QMessageBox::setIcon ( <a href="qmessagebox.html#Icon">Icon</a> icon )</h3>
 <p>Sets the icon of the message box to <em>icon,</em> which is a predefined icon:
 <p><ul>
@@ -419,7 +428,7 @@ ignored.
 <p>The actual pixmap used for displaying the icon depends on the current
 <a href="qwidget.html#ea8b00">GUI style</a>.  You can also set a custom pixmap icon
 using the <a href="#4828ca">setIconPixmap</a>() function.
-<p>See also:  <a href="#b9b20f">icon</a>(), <a href="#4828ca">setIconPixmap</a>() and <a href="#a29b0f">iconPixmap</a>().
+<p>See also  <a href="#b9b20f">icon</a>(), <a href="#4828ca">setIconPixmap</a>() and <a href="#a29b0f">iconPixmap</a>().
 <h3 class="fn">void <a name="23ac47"></a>QMessageBox::setIcon ( const <a href="qpixmap.html">QPixmap</a> &amp; pix ) <code>[virtual]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
 <p>Reimplemented from <a href="qwidget.html#38db6e">QWidget.</a>
@@ -427,19 +436,19 @@ using the <a href="#4828ca">setIconPixmap</a>() function.
 <p>Sets the icon of the message box to a custom <em>pixmap.</em>  Note that
 it's often hard to draw one pixmap which looks appropriate in both
 Motif and Windoes GUI styles.  You may want to draw two.
-<p>See also:  <a href="#a29b0f">iconPixmap</a>() and <a href="#14290b">setIcon</a>().
+<p>See also  <a href="#a29b0f">iconPixmap</a>() and <a href="#14290b">setIcon</a>().
 <h3 class="fn">void <a name="f9357c"></a>QMessageBox::setText ( const <a href="qstring.html">QString</a> &amp; text )</h3>
 <p>Sets the message box text to be displayed.
 <p><em>text</em> will be interpreted either as a plain text or as a rich
 text, depending on the text format setting; see <a href="#fab85c">setTextFormat</a>(). The
 default setting is <code>AutoText,</code> i.e. the message box will try to
 auto-detect the format of <em>text.</em>
-<p>See also:  <a href="#f2f037">text</a>() and <a href="#fab85c">setTextFormat</a>().
+<p>See also  <a href="#f2f037">text</a>() and <a href="#fab85c">setTextFormat</a>().
 <h3 class="fn">void <a name="fab85c"></a>QMessageBox::setTextFormat ( <a href="qt.html#TextFormat">Qt::TextFormat</a> format )</h3>
 <p>Sets the text format to <em>format.</em> See the <a href="qt.html#TextFormat">Qt::TextFormat</a> enum for
 an explanation of the possible options.
 <p>The default format is <code>AutoText.</code>
-<p>See also:  <a href="#3ba851">textFormat</a>() and <a href="#f9357c">setText</a>().
+<p>See also  <a href="#3ba851">textFormat</a>() and <a href="#f9357c">setText</a>().
 <h3 class="fn"><a href="qpixmap.html">QPixmap</a> <a name="ec9ecb"></a>QMessageBox::standardIcon ( <a href="qmessagebox.html#Icon">Icon</a> icon, GUIStyle style ) <code>[static]</code></h3>
 <p>Returns the pixmap used for a standard icon.  This
 allows the pixmaps to be used in more complex message boxes.
@@ -449,10 +458,10 @@ allows the pixmaps to be used in more complex message boxes.
 <p>Returns the message box text currently set, or a
 <a href="qstring.html#367622">null string</a>
 if no text has been set.
-<p>See also:  <a href="#f9357c">setText</a>() and <a href="#3ba851">textFormat</a>().
+<p>See also  <a href="#f9357c">setText</a>() and <a href="#3ba851">textFormat</a>().
 <h3 class="fn">Qt::TextFormat <a name="3ba851"></a>QMessageBox::textFormat() const</h3>
 <p>Returns the current text format.
-<p>See also:  <a href="#fab85c">setTextFormat</a>().
+<p>See also  <a href="#fab85c">setTextFormat</a>().
 <h3 class="fn">int <a name="b7fab2"></a>QMessageBox::warning ( <a href="qwidget.html">QWidget</a> * parent, const <a href="qstring.html">QString</a> &amp; caption, const <a href="qstring.html">QString</a> &amp; text, const <a href="qstring.html">QString</a> &amp; button0Text = QString::null, const <a href="qstring.html">QString</a> &amp; button1Text = QString::null, const <a href="qstring.html">QString</a> &amp; button2Text = QString::null, int defaultButtonNumber = 0, int escapeButtonNumber = -1 ) <code>[static]</code></h3>
 <p>Displays a warning message box with a caption, a text and
 1-3 buttons.  Returns the number of the button that was clicked
@@ -470,7 +479,7 @@ the relevant button.
 <p>If <em>parent</em> is 0, then the message box becomes an application-global
 modal dialog box.  If <em>parent</em> is a widget, the message box becomes
 modal relative to <em>parent.</em>
-<p>See also:  <a href="#2e454b">information</a>() and <a href="#4ca74e">critical</a>().
+<p>See also  <a href="#2e454b">information</a>() and <a href="#4ca74e">critical</a>().
 <p>Examples:
  <a href="i18n-main-cpp.html#QMessageBox::warning">i18n/main.cpp</a>
 <h3 class="fn">int <a name="e39165"></a>QMessageBox::warning ( <a href="qwidget.html">QWidget</a> * parent, const <a href="qstring.html">QString</a> &amp; caption, const <a href="qstring.html">QString</a> &amp; text, int button0, int button1, int button2=0 ) <code>[static]</code></h3>
@@ -479,18 +488,18 @@ buttons.  Returns the identifier of the button that was clicked.
 <p>If <em>parent</em> is 0, then the message box becomes an application-global
 modal dialog box.  If <em>parent</em> is a widget, the message box becomes
 modal relative to <em>parent.</em>
-<p>See also:  <a href="#2e454b">information</a>() and <a href="#4ca74e">critical</a>().
+<p>See also  <a href="#2e454b">information</a>() and <a href="#4ca74e">critical</a>().
 <hr><p>
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.1.1"><nobr>
+<input type=hidden name="version" value="2.2.0"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
 copyright &copy; 1995-2000
-<a href="http://www.trolltech.com">Troll Tech</a>, all rights reserved.<p><address><hr><div align="center">
+<a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.1</div>
+<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.2.0</div>
 </table></div></address></body></html>

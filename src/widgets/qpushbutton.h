@@ -1,27 +1,39 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qpushbutton.h   2.1.1   edited 2000-03-24 $
+** $Id: qt/src/widgets/qpushbutton.h   2.2.0   edited 2000-08-25 $
 **
 ** Definition of QPushButton class
 **
 ** Created : 940221
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the widgets module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #ifndef QPUSHBUTTON_H
 #define QPUSHBUTTON_H
@@ -31,17 +43,20 @@
 #include "qiconset.h"
 #endif // QT_H
 
+#ifndef QT_NO_COMPLEXWIDGETS
+
 class Q_EXPORT QPushButton : public QButton
 {
     Q_OBJECT
-    
+
     Q_PROPERTY( bool autoDefault READ autoDefault WRITE setAutoDefault )
     Q_PROPERTY( bool default READ isDefault WRITE setDefault )
-    Q_PROPERTY( bool menuButton READ isMenuButton WRITE setIsMenuButton )
+    Q_PROPERTY( bool menuButton READ isMenuButton )
     Q_PROPERTY( QIconSet iconSet READ iconSet WRITE setIconSet )
-    
+
     Q_OVERRIDE( bool toggleButton WRITE setToggleButton )
     Q_OVERRIDE( bool on WRITE setOn )
+    Q_PROPERTY( bool flat READ isFlat WRITE setFlat )
 
 public:
     QPushButton( QWidget *parent, const char *name=0 );
@@ -76,6 +91,9 @@ public:
     void setIconSet( const QIconSet& );
     QIconSet* iconSet() const;
 
+    void setFlat( bool );
+    bool isFlat() const;
+
 public slots:
     virtual void setOn( bool );
 
@@ -97,9 +115,9 @@ private:
 
     uint	autoDefButton	: 1;
     uint	defButton	: 1;
-    uint	lastDown		: 1;
-    uint	reserved		: 1;
-    uint	lastEnabled	: 1;
+    uint	flt		: 1;
+    uint	reserved		: 1; // UNUSED
+    uint	lastEnabled	: 1; // UNUSED
     uint	hasMenuArrow	: 1;
 
     friend class QDialog;
@@ -111,5 +129,7 @@ private:	// Disabled copy constructor and operator=
 #endif
 };
 
+
+#endif // QT_NO_COMPLEXWIDGETS
 
 #endif // QPUSHBUTTON_H

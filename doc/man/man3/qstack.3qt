@@ -1,5 +1,5 @@
-.TH QStack 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QStack 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,34 +7,30 @@
 .nh
 .SH NAME
 QStack \- Template class that provides a stack
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
 \fC#include <qstack.h>\fR
 .PP
-Inherits QGList.
-.PP
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQStack\fR ()"
+.BI "\fBQStack\fR () "
 .br
 .ti -1c
-.BI "\fBQStack\fR ( const QStack<type> & s )"
+.BI "\fBQStack\fR ( const QStack<type> & s ) "
 .br
 .ti -1c
-.BI "\fB~QStack\fR ()"
+.BI "\fB~QStack\fR () "
 .br
 .ti -1c
-.BI "QStack<type>& \fBoperator=\fR ( const QStack<type> & s )"
+.BI "QStack<type>& \fBoperator=\fR ( const QStack<type> & s ) "
 .br
 .ti -1c
 .BI "bool \fBautoDelete\fR () const"
 .br
 .ti -1c
-.BI "void \fBsetAutoDelete\fR ( bool enable )"
+.BI "void \fBsetAutoDelete\fR ( bool enable ) "
 .br
 .ti -1c
 .BI "virtual uint \fBcount\fR () const"
@@ -43,16 +39,16 @@ Inherits QGList.
 .BI "bool \fBisEmpty\fR () const"
 .br
 .ti -1c
-.BI "void \fBpush\fR ( const type * d )"
+.BI "void \fBpush\fR ( const type * d ) "
 .br
 .ti -1c
-.BI "type* \fBpop\fR ()"
+.BI "type* \fBpop\fR () "
 .br
 .ti -1c
-.BI "bool \fBremove\fR ()"
+.BI "bool \fBremove\fR () "
 .br
 .ti -1c
-.BI "virtual void \fBclear\fR ()"
+.BI "virtual void \fBclear\fR () "
 .br
 .ti -1c
 .BI "type* \fBtop\fR () const"
@@ -71,7 +67,7 @@ QStack is implemented as a template class. Define a template instance QStack<X> 
 .PP
 A stack is a Last In, First Out (LIFO) structure. Items are added to the top of the stack with push() and retrieved from the top with pop().
 .PP
-See also: Collection Classes
+See also Collection Classes
 .SH MEMBER FUNCTION DOCUMENTATION
 .SH "QStack::QStack ()"
 Creates and empty stack.
@@ -84,17 +80,17 @@ Returns a reference to the top item on the stack (most recently pushed). The sta
 .SH "bool QStack::autoDelete () const"
 The same as QCollection::autoDelete().
 .PP
-See also: setAutoDelete().
+See also setAutoDelete().
 .SH "void QStack::clear () \fC[virtual]\fR"
 Removes all items from the stack, deleting them if autoDelete() is TRUE.
 .PP
-See also: remove().
+See also remove().
 .PP
 Reimplemented from QCollection.
 .SH "uint QStack::count () const \fC[virtual]\fR"
 Returns the number of items in the stack.
 .PP
-See also: isEmpty().
+See also isEmpty().
 .PP
 Reimplemented from QCollection.
 .SH "type* QStack::current () const"
@@ -110,18 +106,18 @@ Adds an element to the top of the stack. Last in, first out.
 .SH "bool QStack::remove ()"
 Removes the top item from the stack and deletes it if autoDelete() is TRUE. Returns TRUE if there was an item to pop.
 .PP
-See also: clear().
+See also clear().
 .SH "void QStack::setAutoDelete ( bool enable )"
 The same as QCollection::setAutoDelete().
 .PP
-See also: autoDelete().
+See also autoDelete().
 .SH "type* QStack::top () const"
 Returns a reference to the top item on the stack (most recently pushed).
 The stack is not changed.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qstack.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

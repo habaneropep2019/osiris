@@ -3,15 +3,17 @@
 Qt Toolkit - drawdemo/drawdemo.cpp example file
 </title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
-a:link { text-decoration: none; }
-body { background: white; color: black; }
+a:link { color: #004faf; text-decoration: none }
+a:visited { color: #672967; text-decoration: none }body { background: white; color: black; }
 --></style>
 </head><body bgcolor="#ffffff">
 
-<a href="index.html">
-<img width="122" height="65" src="qtlogo.png" alt="Home"
-  align="left" border="0">
-</a><div align=right><img src="dochead.png" width="472" height="27"><br>
+<table width="100%">
+<tr><td><a href="index.html">
+<img width="100" height="100" src="qtlogo.png"
+alt="Home" border="0"><img width="100"
+height="100" src="face.png" alt="Home" border="0">
+</a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
 - <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
@@ -19,7 +21,7 @@ body { background: white; color: black; }
 - <a href="index.html">Home</a>
 - <a href="topicals.html"><b>Structure</b></a>
 </div>
-<br clear=all>
+</table>
 
 <h1 align=center>Draw Demo</h1><br clear="all">
 
@@ -30,9 +32,9 @@ body { background: white; color: black; }
 
   Implementation:
 <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/drawdemo/drawdemo.cpp   2.1.1   edited 2000-03-02 $
+** &#36;Id&#58; qt/examples/drawdemo/drawdemo.cpp   2.2.0   edited 2000-08-31 $
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -179,12 +181,10 @@ DrawView::DrawView()
     <a name="setCaption"></a><a href="qwidget.html#d4f007">setCaption</a>( "Qt Draw Demo Application" );
     <a name="setBackgroundColor"></a><a href="qwidget.html#721b7d">setBackgroundColor</a>( white );
 
-    printer = new <a href="qprinter.html">QPrinter</a>;
-
     // Create a button group to contain all buttons
     bgroup = new <a href="qbuttongroup.html">QButtonGroup</a>( this );
     bgroup-&gt;<a name="resize"></a><a href="qwidget.html#9ff9d8">resize</a>( 200, 200 );
-    <a name="connect"></a><a href="qobject.html#c2d209">connect</a>( bgroup, SIGNAL(clicked(int)), SLOT(<a name="updateIt"></a><a href="#171">updateIt</a>(int)) );
+    <a name="connect"></a><a href="qobject.html#c2d209">connect</a>( bgroup, SIGNAL(clicked(int)), SLOT(<a name="updateIt"></a><a href="#185">updateIt</a>(int)) );
 
     // Calculate the size for the radio buttons
     int maxwidth = 80;
@@ -199,7 +199,7 @@ DrawView::DrawView()
 
     for ( i=0; (n=ourDrawFunctions[i].name) != 0; i++ ) {
         <a name="QRadioButton"></a><a href="qradiobutton.html">QRadioButton</a> *rb = new <a href="qradiobutton.html">QRadioButton</a>( n, bgroup );
-        rb-&gt;<a name="setGeometry"></a><a href="qwidget.html#8e0197">setGeometry</a>( 10, i*30+10, maxwidth, 30 );
+        rb-&gt;<a name="setGeometry"></a><a href="qwidget.html#0fac5c">setGeometry</a>( 10, i*30+10, maxwidth, 30 );
         if ( i == 0 )
             rb-&gt;<a name="setChecked"></a><a href="qradiobutton.html#11e2e3">setChecked</a>( TRUE );
     }
@@ -209,11 +209,13 @@ DrawView::DrawView()
 
     maxwidth += 40;                             // now size of bgroup
 
+    printer = new <a href="qprinter.html">QPrinter</a>;
+
     // Create and setup the print button
     print = new <a href="qpushbutton.html">QPushButton</a>( "Print...", bgroup );
     print-&gt;<a name="resize"></a><a href="qpushbutton.html#5f0add">resize</a>( 80, 30 );
     print-&gt;<a name="move"></a><a href="qpushbutton.html#0d7ae4">move</a>( maxwidth/2 - print-&gt;<a name="width"></a><a href="qwidget.html#576663">width</a>()/2, maxindex*30+20 );
-    <a href="qobject.html#c2d209">connect</a>( print, SIGNAL(clicked()), SLOT(<a name="printIt"></a><a href="#173">printIt</a>()) );
+    <a href="qobject.html#c2d209">connect</a>( print, SIGNAL(clicked()), SLOT(<a name="printIt"></a><a href="#187">printIt</a>()) );
 
     bgroup-&gt;<a href="qwidget.html#9ff9d8">resize</a>( maxwidth, print-&gt;<a name="y"></a><a href="qwidget.html#043386">y</a>()+print-&gt;<a name="height"></a><a href="qwidget.html#180786">height</a>()+10 );
 
@@ -225,14 +227,16 @@ DrawView::DrawView()
 //
 DrawView::~DrawView()
 {
+#ifndef QT_NO_PRINTER
     delete printer;
+#endif
 }
 
 //
 // Called when a radio button is clicked.
 //
 
-void <a name="171"></a>DrawView::updateIt( int index )
+void <a name="185"></a>DrawView::updateIt( int index )
 {
     if ( index &lt; maxindex ) {
         drawindex = index;
@@ -244,7 +248,7 @@ void <a name="171"></a>DrawView::updateIt( int index )
 // Calls the drawing function as specified by the radio buttons.
 //
 
-void <a name="172"></a>DrawView::drawIt( <a href="qpainter.html">QPainter</a> *p )
+void <a name="186"></a>DrawView::drawIt( <a href="qpainter.html">QPainter</a> *p )
 {
     (*ourDrawFunctions[drawindex].f)(p);
 }
@@ -253,22 +257,24 @@ void <a name="172"></a>DrawView::drawIt( <a href="qpainter.html">QPainter</a> *p
 // Called when the print button is clicked.
 //
 
-void <a name="173"></a>DrawView::printIt()
+void <a name="187"></a>DrawView::printIt()
 {
+#ifndef QT_NO_PRINTER
     if ( printer-&gt;<a name="setup"></a><a href="qprinter.html#a36243">setup</a>( this ) ) {
         <a href="qpainter.html">QPainter</a> paint( printer );
-        <a name="drawIt"></a><a href="#172">drawIt</a>( &amp;paint );
+        <a name="drawIt"></a><a href="#186">drawIt</a>( &amp;paint );
     }
+#endif
 }
 
 //
 // Called when the widget needs to be updated.
 //
 
-void <a name="174"></a>DrawView::paintEvent( <a href="qpaintevent.html">QPaintEvent</a> * )
+void <a name="188"></a>DrawView::paintEvent( <a href="qpaintevent.html">QPaintEvent</a> * )
 {
     <a href="qpainter.html">QPainter</a> paint( this );
-    <a href=#172>drawIt</a>( &amp;paint );
+    <a href=#186>drawIt</a>( &amp;paint );
 }
 
 //
@@ -276,9 +282,9 @@ void <a name="174"></a>DrawView::paintEvent( <a href="qpaintevent.html">QPaintEv
 // Moves the button group to the upper right corner
 // of the widget.
 
-void <a name="175"></a>DrawView::resizeEvent( <a href="qresizeevent.html">QResizeEvent</a> * )
+void <a name="189"></a>DrawView::resizeEvent( <a href="qresizeevent.html">QResizeEvent</a> * )
 {
-    bgroup-&gt;<a name="move"></a><a href="qwidget.html#8b0010">move</a>( <a href="qwidget.html#576663">width</a>()-bgroup-&gt;<a href="qwidget.html#576663">width</a>(), 0 );
+    bgroup-&gt;<a name="move"></a><a href="qwidget.html#958bbe">move</a>( <a href="qwidget.html#576663">width</a>()-bgroup-&gt;<a href="qwidget.html#576663">width</a>(), 0 );
 }
 
 //
@@ -298,6 +304,6 @@ int main( int argc, char **argv )
 </pre>
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.1</div>
+<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.2.0</div>
 </table></div></address></body></html>

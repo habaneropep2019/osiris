@@ -55,7 +55,7 @@ typedef union {
     int		int_val;
     double	double_val;
     char       *string;
-    AccessPerm	access;
+    Access	access;
     Function   *function;
     ArgList    *arg_list;
     Argument   *arg;

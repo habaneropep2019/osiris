@@ -3,15 +3,17 @@
 Qt Toolkit - picture/picture.cpp example file
 </title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
-a:link { text-decoration: none; }
-body { background: white; color: black; }
+a:link { color: #004faf; text-decoration: none }
+a:visited { color: #672967; text-decoration: none }body { background: white; color: black; }
 --></style>
 </head><body bgcolor="#ffffff">
 
-<a href="index.html">
-<img width="122" height="65" src="qtlogo.png" alt="Home"
-  align="left" border="0">
-</a><div align=right><img src="dochead.png" width="472" height="27"><br>
+<table width="100%">
+<tr><td><a href="index.html">
+<img width="100" height="100" src="qtlogo.png"
+alt="Home" border="0"><img width="100"
+height="100" src="face.png" alt="Home" border="0">
+</a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
 - <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
@@ -19,7 +21,7 @@ body { background: white; color: black; }
 - <a href="index.html">Home</a>
 - <a href="topicals.html"><b>Structure</b></a>
 </div>
-<br clear=all>
+</table>
 
 <h1 align=center>Picture</h1><br clear="all">
 
@@ -30,9 +32,9 @@ body { background: white; color: black; }
 
   Implementation:
 <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/picture/picture.cpp   2.1.1   edited 2000-02-21 $
+** &#36;Id&#58; qt/examples/picture/picture.cpp   2.2.0   edited 2000-08-31 $
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -64,7 +66,7 @@ void paintCar( <a name="QPainter"></a><a href="qpainter.html">QPainter</a> *p ) 
     brush.<a name="setColor"></a><a href="qbrush.html#67a3ce">setColor</a>( windowColor );              // set this brush color
     p-&gt;<a href="qpainter.html#38e68f">setBrush</a>( brush );                       // set brush
     p-&gt;<a name="drawRect"></a><a href="qpainter.html#b29a16">drawRect</a>( 80, 80, 250, 70 );             // car window
-    p-&gt;<a name="drawText"></a><a href="qpainter.html#8a59ed">drawText</a>( 180, 80, 150, 70, Qt::AlignCenter, "--  Qt  --\nTroll Tech AS" );
+    p-&gt;<a name="drawText"></a><a href="qpainter.html#8a59ed">drawText</a>( 180, 80, 150, 70, Qt::AlignCenter, "--  Qt  --\nTrolltech AS" );
 
     <a name="QPixmap"></a><a href="qpixmap.html">QPixmap</a> pixmap;
     if ( pixmap.<a name="load"></a><a href="qpixmap.html#775e08">load</a>("flag.bmp") )              // load and draw image
@@ -106,7 +108,7 @@ PictureDisplay::~PictureDisplay()
     delete pict;
 }
 
-void <a name="378"></a>PictureDisplay::paintEvent( <a href="qpaintevent.html">QPaintEvent</a> * )
+void <a name="361"></a>PictureDisplay::paintEvent( <a href="qpaintevent.html">QPaintEvent</a> * )
 {
     <a href="qpainter.html">QPainter</a> paint( this );                     // paint widget
     if ( pict )
@@ -115,7 +117,7 @@ void <a name="378"></a>PictureDisplay::paintEvent( <a href="qpaintevent.html">QP
         paint.<a href="qpainter.html#8a59ed">drawText</a>( <a name="rect"></a><a href="qwidget.html#e872e1">rect</a>(), AlignCenter, name );
 }
 
-void <a name="379"></a>PictureDisplay::keyPressEvent( <a href="qkeyevent.html">QKeyEvent</a> *k )
+void <a name="362"></a>PictureDisplay::keyPressEvent( <a href="qkeyevent.html">QKeyEvent</a> *k )
 {
     switch ( tolower(k-&gt;<a name="ascii"></a><a href="qkeyevent.html#c3c00e">ascii</a>()) ) {
         case 'r':                               // reload
@@ -159,6 +161,6 @@ int main( int argc, char **argv )
 </pre>
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.1</div>
+<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.2.0</div>
 </table></div></address></body></html>

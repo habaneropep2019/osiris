@@ -1,27 +1,39 @@
 /****************************************************************************
-** $Id: qt/src/tools/qfileinfo_unix.cpp   2.1.1   edited 2000-03-24 $
+** $Id: qt/src/tools/qfileinfo_unix.cpp   2.2.0   edited 2000-08-25 $
 **
 ** Implementation of QFileInfo class
 **
 ** Created : 950628
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the tools module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses for Unix/X11 or for Qt/Embedded may use this file in accordance
+** with the Qt Commercial License Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #include "qglobal.h"
 
@@ -42,10 +54,12 @@
 extern "C" int readlink( const char *, void *, uint );
 #endif
 
+
 void QFileInfo::slashify( QString& )
 {
     return;
 }
+
 
 void QFileInfo::makeAbs( QString & )
 {
@@ -106,7 +120,7 @@ QString QFileInfo::readLink() const
 {
     QString r;
 
-#if defined(UNIX) && !defined(_OS_OS2EMX_)
+#if defined(_OS_UNIX_) && !defined(_OS_OS2EMX_)
     char s[PATH_MAX+1];
     if ( !isSymLink() )
 	return QString();
@@ -315,7 +329,7 @@ void QFileInfo::doStat() const
     STATBUF *b = &that->fic->st;
     that->fic->isSymLink = FALSE;
 
-#if defined( UNIX ) && defined(S_IFLNK)
+#if defined(_OS_UNIX_) && defined(S_IFLNK)
     if ( ::lstat(QFile::encodeName(fn),b) == 0 ) {
 	if ( S_ISLNK( b->st_mode ) )
 	    that->fic->isSymLink = TRUE;
@@ -340,7 +354,7 @@ void QFileInfo::doStat() const
 
   \sa dir(), filePath(), fileName(), isRelative()
 */
-
+#ifndef QT_NO_DIR
 QString QFileInfo::dirPath( bool absPath ) const
 {
     QString s;
@@ -357,7 +371,7 @@ QString QFileInfo::dirPath( bool absPath ) const
 	return s.left( pos );
     }
 }
-
+#endif
 /*!
   Returns the name of the file, the file path is not included.
 
@@ -392,7 +406,7 @@ QString QFileInfo::fileName() const
 
   \sa isRelative(), filePath()
 */
-
+#ifndef QT_NO_DIR
 QString QFileInfo::absFilePath() const
 {
     if ( QDir::isRelativePath(fn) ) {
@@ -408,3 +422,4 @@ QString QFileInfo::absFilePath() const
     }
 
 }
+#endif

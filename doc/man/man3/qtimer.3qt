@@ -1,5 +1,5 @@
-.TH QTimer 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QTimer 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QTimer \- Timer signals and single-shot timers
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -19,34 +17,34 @@ Inherits QObject.
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQTimer\fR ( QObject * " "parent" "=0, const char * " "name" "=0 )"
+.BI "\fBQTimer\fR ( QObject * " "parent" "=0, const char * " "name" "=0 ) "
 .br
 .ti -1c
-.BI "\fB~QTimer\fR ()"
+.BI "\fB~QTimer\fR () "
 .br
 .ti -1c
 .BI "bool \fBisActive\fR () const"
 .br
 .ti -1c
-.BI "int \fBstart\fR ( int " "msec" ", bool " "sshot" " = FALSE )"
+.BI "int \fBstart\fR ( int " "msec" ", bool " "sshot" " = FALSE ) "
 .br
 .ti -1c
-.BI "void \fBchangeInterval\fR ( int msec )"
+.BI "void \fBchangeInterval\fR ( int msec ) "
 .br
 .ti -1c
-.BI "void \fBstop\fR ()"
+.BI "void \fBstop\fR () "
 .br
 .in -1c
 .SS "Signals"
 .in +1c
 .ti -1c
-.BI "void \fBtimeout\fR ()"
+.BI "void \fBtimeout\fR () "
 .br
 .in -1c
 .SS "Static Public Members"
 .in +1c
 .ti -1c
-.BI "void \fBsingleShot\fR ( int " "msec" ", QObject * " "receiver" ", const char * member )"
+.BI "void \fBsingleShot\fR ( int " "msec" ", QObject * " "receiver" ", const char * member ) "
 .br
 .in -1c
 .SH DESCRIPTION
@@ -104,7 +102,7 @@ Changes the timeout interval to \fImsec\fR milliseconds.
 .PP
 If the timer signal is pending, it will be stopped and restarted, otherwise it will be started.
 .PP
-See also: start() and isActive().
+See also start() and isActive().
 .SH "bool QTimer::event ( QEvent * e ) \fC[virtual protected]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .PP
@@ -148,7 +146,7 @@ If \fIsshot\fR is TRUE, the timer will be activated only once, otherwise it will
 .PP
 Any pending timer will be stopped.
 .PP
-See also: stop(), changeInterval() and isActive().
+See also stop(), changeInterval() and isActive().
 .PP
 Examples:
 .(l
@@ -157,13 +155,13 @@ forever/forever.cpp
 .SH "void QTimer::stop ()"
 Stops the timer.
 .PP
-See also: start().
+See also start().
 .SH "void QTimer::timeout () \fC[signal]\fR"
 This signal is emitted when the timer is activated.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qtimer.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

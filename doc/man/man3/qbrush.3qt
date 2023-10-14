@@ -1,5 +1,5 @@
-.TH QBrush 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QBrush 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QBrush \- Defines the fill pattern of shapes drawn by a QPainter
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -19,43 +17,43 @@ Inherits Qt.
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQBrush\fR ()"
+.BI "\fBQBrush\fR () "
 .br
 .ti -1c
-.BI "\fBQBrush\fR ( BrushStyle )"
+.BI "\fBQBrush\fR ( BrushStyle ) "
 .br
 .ti -1c
-.BI "\fBQBrush\fR ( const QColor &, BrushStyle=SolidPattern )"
+.BI "\fBQBrush\fR ( const QColor &, BrushStyle=SolidPattern ) "
 .br
 .ti -1c
-.BI "\fBQBrush\fR ( const QColor &, const QPixmap & )"
+.BI "\fBQBrush\fR ( const QColor &, const QPixmap & ) "
 .br
 .ti -1c
-.BI "\fBQBrush\fR ( const QBrush & )"
+.BI "\fBQBrush\fR ( const QBrush & ) "
 .br
 .ti -1c
-.BI "\fB~QBrush\fR ()"
+.BI "\fB~QBrush\fR () "
 .br
 .ti -1c
-.BI "QBrush& \fBoperator=\fR ( const QBrush & )"
+.BI "QBrush& \fBoperator=\fR ( const QBrush & ) "
 .br
 .ti -1c
 .BI "BrushStyle \fBstyle\fR () const"
 .br
 .ti -1c
-.BI "void \fBsetStyle\fR ( BrushStyle )"
+.BI "void \fBsetStyle\fR ( BrushStyle ) "
 .br
 .ti -1c
 .BI "const QColor& \fBcolor\fR () const"
 .br
 .ti -1c
-.BI "void \fBsetColor\fR ( const QColor & )"
+.BI "void \fBsetColor\fR ( const QColor & ) "
 .br
 .ti -1c
 .BI "QPixmap* \fBpixmap\fR () const"
 .br
 .ti -1c
-.BI "void \fBsetPixmap\fR ( const QPixmap & )"
+.BI "void \fBsetPixmap\fR ( const QPixmap & ) "
 .br
 .ti -1c
 .BI "bool \fBoperator==\fR ( const QBrush & p ) const"
@@ -112,7 +110,7 @@ Example:
 .PP
 See the setStyle() function for a complete list of brush styles.
 .PP
-See also: QPainter, QPainter::setBrush() and QPainter::setBrushOrigin().
+See also QPainter, QPainter::setBrush() and QPainter::setBrushOrigin().
 .PP
 Examples:
 .(l
@@ -124,17 +122,17 @@ Constructs a default black brush with the style \fCNoBrush\fR (will not fill sha
 .SH "QBrush::QBrush ( BrushStyle style )"
 Constructs a black brush with the specified style.
 .PP
-See also: setStyle().
+See also setStyle().
 .SH "QBrush::QBrush ( const QColor & color, BrushStyle style=SolidPattern )"
 Constructs a brush with a specified color and style.
 .PP
-See also: setColor() and setStyle().
+See also setColor() and setStyle().
 .SH "QBrush::QBrush ( const QColor & color, const QPixmap & pixmap )"
 Constructs a brush with a specified color and a custom pattern.
 .PP
 The color will only have an effect for monochrome pixmaps, i.e. QPixmap::depth() == 1.
 .PP
-See also: setColor() and setPixmap().
+See also setColor() and setPixmap().
 .SH "QBrush::QBrush ( const QBrush & b )"
 Constructs a brush which is a shallow copy of \fIb.\fR
 .SH "QBrush::~QBrush ()"
@@ -142,13 +140,13 @@ Destructs the brush.
 .SH "const QColor & QBrush::color () const"
 Returns the brush color.
 .PP
-See also: setColor().
+See also setColor().
 .SH "bool QBrush::operator!= ( const QBrush & b ) const"
 Returns TRUE if the brush is different from \fIb,\fR or FALSE if the brushes are equal.
 .PP
 Two brushes are different if they have different styles, colors or pixmaps.
 .PP
-See also: operator==().
+See also operator==().
 .SH "QBrush & QBrush::operator= ( const QBrush & b )"
 Assigns \fIb\fR to this brush and returns a reference to this brush.
 .SH "bool QBrush::operator== ( const QBrush & b ) const"
@@ -156,17 +154,17 @@ Returns TRUE if the brush is equal to \fIb,\fR or FALSE if the brushes are diffe
 .PP
 Two brushes are equal if they have equal styles, colors and pixmaps.
 .PP
-See also: operator!=().
+See also operator!=().
 .SH "QPixmap * QBrush::pixmap () const"
 Returns a pointer to the custom brush pattern.
 .PP
 A null pointer is returned if no custom brush pattern has been set.
 .PP
-See also: setPixmap().
+See also setPixmap().
 .SH "void QBrush::setColor ( const QColor & c )"
 Sets the brush color to \fIc.\fR
 .PP
-See also: color() and setStyle().
+See also color() and setStyle().
 .PP
 Examples:
 .(l
@@ -177,7 +175,7 @@ Sets the brush pixmap. The style is set to \fCCustomPattern.\fR
 .PP
 The current brush color will only have an effect for monochrome pixmaps, i.e. QPixmap::depth() == 1.
 .PP
-See also: pixmap() and color().
+See also pixmap() and color().
 .SH "void QBrush::setStyle ( BrushStyle s )"
 Sets the brush style to \fIs.\fR
 .PP
@@ -215,24 +213,24 @@ The brush styles are:
 .TP
 \fCCustomPattern\fR set when a pixmap pattern is being used.
 .PP
-See also: style().
+See also style().
 .SH "BrushStyle QBrush::style () const"
 Returns the brush style.
 .PP
-See also: setStyle().
+See also setStyle().
 .SH RELATED FUNCTION DOCUMENTATION
 .SH "QDataStream & operator>> (QDataStream & s, QBrush & b)"
 Reads a brush from the stream and returns a reference to the stream.
 .PP
-See also: Format of the QDataStream operators
+See also Format of the QDataStream operators
 .SH "QDataStream & operator<< (QDataStream & s, const QBrush & b)"
 Writes a brush to the stream and returns a reference to the stream.
 .PP
-See also:  Format of the QDataStream operators
+See also  Format of the QDataStream operators
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qbrush.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

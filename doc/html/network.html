@@ -1,10 +1,15 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><title>Qt Documentation</title>
-</head><body bgcolor="#ffffff">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><title>Qt Toolkit -  Qt Network Module</title><style type="text/css"><!--
+h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
+a:link { color: #004faf; text-decoration: none }
+a:visited { color: #672967; text-decoration: none }body { background: white; color: black; }
+--></style></head><body bgcolor="#ffffff">
 <p>
-<a href="index.html">
-<img width="122" height="65" src="qtlogo.png" alt="Home"
-  align="left" border="0">
-</a><div align=right><img src="dochead.png" width="472" height="27"><br>
+<table width="100%">
+<tr><td><a href="index.html">
+<img width="100" height="100" src="qtlogo.png"
+alt="Home" border="0"><img width="100"
+height="100" src="face.png" alt="Home" border="0">
+</a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
 - <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
@@ -12,36 +17,36 @@
 - <a href="index.html">Home</a>
 - <a href="topicals.html"><b>Structure</b></a>
 </div>
-<br clear=all>
+</table>
+<h1 align=center> Qt Network Module</h1><br clear="all">
+The network module offers classes to make network programming easier
+and portable. Basically there are three sets of classes, first very
+basic classes like <a href="qsocket.html">QSocket</a>, <a href="qserversocket.html">QServerSocket</a>, <a href="qdns.html">QDns</a>, etc. which
+allow to work in a portable way with TCP/IP sockets. In addition,
+there are classes like <a href="qnetworkprotocol.html">QNetworkProtocol</a>, <a href="qnetworkoperation.html">QNetworkOperation</a> in
+the Qt base library, which provide an abstract layer for implementing
+network protocols and <code>QUrlOperator</code> which operates on such network
+protocols. Finally the third set of network classes are the passive
+ones, namely <code>QUrl</code> and <code>QUrlInfo</code> which do URL parsing and similar
+stuff.
 <p>
-<h1 align=center>Network Programming with Qt</h1><br clear="all">
+The first set of classes (<a href="qsocket.html">QSocket</a>, <a href="qserversocket.html">QServerSocket</a>, <a href="qdns.html">QDns</a>, <a href="qftp.html">QFtp</a>, etc.)
+are included in the "network" module of Qt.
 <p>
-Since version 2.1 Qt offers classes to make network programming
-easier and portable. Basically there are three sets of classes, first very
-basic classes like <code>QSocket,</code> <code>QServerSocket,</code> <code>QDns,</code> etc. which allow to work
-in a portable way with TCP/IP sockets. Then there are classes like
-<code>QNetworkProtocol,</code> <code>QNetworkOperation</code> which provide an abstract
-layer for implementing network protocols which can be used in Qt, and
-<code>QUrlOperator</code> which operates on such network protocols. Finally the third
-set of network classes are the passive ones, namely <code>QUrl</code> and <code>QUrlInfo</code>
-which do URL parsing and similar stuff.
-<p>
-The first set of classes (<code>QSocket,</code> <code>QServerSocket,</code> <code>QDns,</code> <code>QFtp,</code> etc.) is not
-included in Qt but will be released as a seperate extension after the
-Qt 2.1 release.
-<p>
-Also, the QSocket classes are not directly related to the QNetwork
-classes, but QSocket should and will be used for implementing
-network protocols, which are directly related to the QNetwork
+The QSocket classes are not directly related to the QNetwork classes,
+but QSocket should and will be used for implementing network
+protocols, which are directly related to the QNetwork
 classes. E.g. the QFtp class (implementation of the FTP protocol) uses
-QSockets. But QSockets don't need to be used for protocol implementations,
-e.g. QLocalFs (which is an implementation of the local filesystem as
-network protocol) uses QDir and no QSocket. Using QNetworkProtocols
-you can implement everything which fits into a hierarchical structure and
-can be accessed using URLs. This could be e.g. a protocol which can read
-pictures from a digital camera using a serial connection.
+QSockets. But QSockets don't need to be used for protocol
+implementations, e.g. QLocalFs (which is an implementation of the
+local filesystem as network protocol) uses QDir and no QSocket. Using
+QNetworkProtocols you can implement everything which fits into a
+hierarchical structure and can be accessed using URLs. This could be
+e.g. a protocol which can read pictures from a digital camera using a
+serial connection.
 <p>
-<h2>Working Network Protocol independent with QUrlOperator and QNetworkOperation</h2>
+<h2>Working Network Protocol independent with QUrlOperator and
+QNetworkOperation</h2>
 <p>
 To just use existing network protocol implementations and operate on
 URLs using them is quite easy. E.g. downloading a file from an FTP
@@ -325,7 +330,7 @@ Here you have to return TRUE, if the connection is up and ok (this means
 operations on the protocol can be done). If the connection is not ok,
 return FALSE and start to try opening it. If you will not be able to open the
 connection at all (e.g. because the host is not found), emit a <code>finished()</code>
-signal and set an errorcode and the <code>QNetworkProtocol::StFailed</code> state to
+signal and set an error code and the <code>QNetworkProtocol::StFailed</code> state to
 the <code>QNetworkOperation</code> pointer you get here.
 <p>
 Now, you never need to check before doing an operation yourself,
@@ -336,7 +341,7 @@ method if the connection is ok.
 <p>
 Using this knowledge it should be possible to implement network protocols. Finally
 to be able to use it with a QUrlOperator (and so e.g. in the QFileDialog), you have to
-register the enwtork protocol implementation. This can be done like this:
+register the network protocol implementation. This can be done like this:
 <p>
 <pre>    <a href="qnetworkprotocol.html#165cea">QNetworkProtocol::registerNetworkProtocol</a>( "myprot", new QNetworkProtocolFactory&lt;MyProtocol&gt; );
 </pre>
@@ -389,7 +394,7 @@ if you use an own network protocol implementation which defines additional error
 <code>QNetworkOperation::protocolDetails()</code> may also return a string which contains an error
 message then which could e.g. be displayed for the user.
 <p>
-According tho this information it should be possible to react on errors.
+According to this information it should be possible to react on errors.
 <p>
 Now, if you implement your own network protocol, you will need to tell about errors
 which occurred. First you always need to be able to access the <code>QNetworkOperation</code>
@@ -422,6 +427,6 @@ in the seperate network extension.
 
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.1</div>
+<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.2.0</div>
 </table></div></address></body></html>

@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: qt/examples/drawdemo/drawdemo.cpp   2.1.1   edited 2000-03-02 $
+** $Id: qt/examples/drawdemo/drawdemo.cpp   2.2.0   edited 2000-08-31 $
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -154,8 +154,6 @@ DrawView::DrawView()
     setCaption( "Qt Draw Demo Application" );
     setBackgroundColor( white );
 
-    printer = new QPrinter;
-
     // Create a button group to contain all buttons
     bgroup = new QButtonGroup( this );
     bgroup->resize( 200, 200 );
@@ -184,6 +182,8 @@ DrawView::DrawView()
 
     maxwidth += 40;				// now size of bgroup
 
+    printer = new QPrinter;
+
     // Create and setup the print button
     print = new QPushButton( "Print...", bgroup );
     print->resize( 80, 30 );
@@ -200,7 +200,9 @@ DrawView::DrawView()
 //
 DrawView::~DrawView()
 {
+#ifndef QT_NO_PRINTER
     delete printer;
+#endif
 }
 
 //
@@ -230,10 +232,12 @@ void DrawView::drawIt( QPainter *p )
 
 void DrawView::printIt()
 {
+#ifndef QT_NO_PRINTER
     if ( printer->setup( this ) ) {
         QPainter paint( printer );
         drawIt( &paint );
     }
+#endif
 }
 
 //

@@ -1,27 +1,39 @@
 /****************************************************************************
-** $Id: qt/src/tools/qglobal.cpp   2.1.1   edited 2000-03-24 $
+** $Id: qt/src/tools/qglobal.cpp   2.2.0   edited 2000-08-28 $
 **
 ** Global functions
 **
 ** Created : 920604
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the tools module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #include "qglobal.h"
 #include "qasciidict.h"
@@ -38,7 +50,6 @@
   or "2.1.0".
 */
 
-Q_EXPORT
 const char *qVersion()
 {
     return QT_VERSION_STR;
@@ -65,7 +76,6 @@ static bool si_bigEndian;
   (i.e. different endianness for 16 bit and 32 bit integers).
 */
 
-Q_EXPORT
 bool qSysInfo( int *wordSize, bool *bigEndian )
 {
 #if defined(CHECK_NULL)
@@ -154,7 +164,7 @@ bool qSysInfo( int *wordSize, bool *bigEndian )
   Under X11, the text is printed to stderr.  Under Windows, the text is
   sent to the debugger.
 
-  \warning The internal buffer is limited to 512 bytes (including the
+  \warning The internal buffer is limited to 8196 bytes (including the
   0-terminator).
 
   \sa qWarning(), qFatal(), qInstallMsgHandler(),
@@ -183,7 +193,7 @@ bool qSysInfo( int *wordSize, bool *bigEndian )
   Under X11, the text is printed to stderr.  Under Windows, the text is
   sent to the debugger.
 
-  \warning The internal buffer is limited to 512 bytes (including the
+  \warning The internal buffer is limited to 8196 bytes (including the
   0-terminator).
 
   \sa qDebug(), qFatal(), qInstallMsgHandler(),
@@ -213,7 +223,7 @@ bool qSysInfo( int *wordSize, bool *bigEndian )
   Under X11, the text is printed to stderr.  Under Windows, the text is
   sent to the debugger.
 
-  \warning The internal buffer is limited to 512 bytes (including the
+  \warning The internal buffer is limited to 8196 bytes (including the
   0-terminator).
 
   \sa qDebug(), qWarning(), qInstallMsgHandler(),
@@ -232,7 +242,7 @@ void qDebug( const char *msg, ... )
 {
     mac_debug=fopen( "debug.txt", "a+" );
     if(mac_debug) {
-	char buf[512];
+	char buf[8196];
 	va_list ap;
 	va_start( ap, msg );			// use variable arg list
 	if ( handler ) {
@@ -252,12 +262,11 @@ void qDebug( const char *msg, ... )
 }
 
 // copied... this looks really bad.
-Q_EXPORT
 void debug( const char *msg, ... )
 {
     mac_debug=fopen( "debug.txt", "a+" );
     if(mac_debug) {
-	char buf[512];
+	char buf[8196];
 	va_list ap;
 	va_start( ap, msg );			// use variable arg list
 	if ( handler ) {
@@ -278,7 +287,7 @@ void qWarning( const char *msg, ... )
 {
     mac_debug=fopen( "debug.txt", "a+" );
     if(mac_debug) {
-	char buf[512];
+	char buf[8196];
 	va_list ap;
 	va_start( ap, msg );			// use variable arg list
 	if ( handler ) {
@@ -296,12 +305,11 @@ void qWarning( const char *msg, ... )
 }
 
 // copied... this looks really bad.
-Q_EXPORT
 void warning( const char *msg, ... )
 {
     mac_debug=fopen( "debug.txt", "a+" );
     if(mac_debug) {
-	char buf[512];
+	char buf[8196];
 	va_list ap;
 	va_start( ap, msg );			// use variable arg list
 	if ( handler ) {
@@ -322,7 +330,7 @@ void qFatal( const char *msg, ... )
 {
     mac_debug=fopen( "debug.txt", "a+");
     if(mac_debug) {
-	char buf[512];
+	char buf[8196];
 	va_list ap;
 	va_start( ap, msg );			// use variable arg list
 	if ( handler ) {
@@ -341,12 +349,11 @@ void qFatal( const char *msg, ... )
 }
 
 // copied... this looks really bad.
-Q_EXPORT
 void fatal( const char *msg, ... )
 {
     mac_debug=fopen( "debug.txt", "a+" );
     if(mac_debug) {
-	char buf[512];
+	char buf[8196];
 	va_list ap;
 	va_start( ap, msg );			// use variable arg list
 	if ( handler ) {
@@ -366,14 +373,13 @@ void fatal( const char *msg, ... )
 
 #else
 
-Q_EXPORT
 void qDebug( const char *msg, ... )
 {
-    char buf[512];
+    char buf[8196];
     va_list ap;
     va_start( ap, msg );			// use variable arg list
     if ( handler ) {
-	vsprintf( buf, msg, ap );
+	vsprintf( buf, msg, ap );		// ### vsnprintf would be great here
 	va_end( ap );
 	(*handler)( QtDebugMsg, buf );
     } else {
@@ -384,10 +390,9 @@ void qDebug( const char *msg, ... )
 }
 
 // copied... this looks really bad.
-Q_EXPORT
 void debug( const char *msg, ... )
 {
-    char buf[512];
+    char buf[8196];
     va_list ap;
     va_start( ap, msg );			// use variable arg list
     if ( handler ) {
@@ -401,10 +406,9 @@ void debug( const char *msg, ... )
     }
 }
 
-Q_EXPORT
 void qWarning( const char *msg, ... )
 {
-    char buf[512];
+    char buf[8196];
     va_list ap;
     va_start( ap, msg );			// use variable arg list
     if ( handler ) {
@@ -420,10 +424,9 @@ void qWarning( const char *msg, ... )
 
 
 // again, copied
-Q_EXPORT
 void warning( const char *msg, ... )
 {
-    char buf[512];
+    char buf[8196];
     va_list ap;
     va_start( ap, msg );			// use variable arg list
     if ( handler ) {
@@ -437,10 +440,9 @@ void warning( const char *msg, ... )
     }
 }
 
-Q_EXPORT
 void qFatal( const char *msg, ... )
 {
-    char buf[512];
+    char buf[8196];
     va_list ap;
     va_start( ap, msg );			// use variable arg list
     if ( handler ) {
@@ -451,7 +453,7 @@ void qFatal( const char *msg, ... )
 	vfprintf( stderr, msg, ap );
 	va_end( ap );
 	fprintf( stderr, "\n" );		// add newline
-#if defined(UNIX) && defined(DEBUG)
+#if defined(_OS_UNIX_) && defined(DEBUG)
 	abort();				// trap; generates core dump
 #else
 	exit( 1 );				// goodbye cruel world
@@ -460,10 +462,9 @@ void qFatal( const char *msg, ... )
 }
 
 // yet again, copied
-Q_EXPORT
 void fatal( const char *msg, ... )
 {
-    char buf[512];
+    char buf[8196];
     va_list ap;
     va_start( ap, msg );			// use variable arg list
     if ( handler ) {
@@ -474,7 +475,7 @@ void fatal( const char *msg, ... )
 	vfprintf( stderr, msg, ap );
 	va_end( ap );
 	fprintf( stderr, "\n" );		// add newline
-#if defined(UNIX) && defined(DEBUG)
+#if defined(_OS_UNIX_) && defined(DEBUG)
 	abort();				// trap; generates core dump
 #else
 	exit( 1 );				// goodbye cruel world
@@ -545,7 +546,6 @@ void fatal( const char *msg, ... )
 // The CHECK_PTR macro calls this function to check if an allocation went ok.
 //
 
-Q_EXPORT
 bool qt_check_pointer( bool c, const char *n, int l )
 {
     if ( c )
@@ -578,13 +578,11 @@ static bool firstObsoleteWarning(const char *obj, const char *oldfunc )
 
 static bool suppressObsolete = FALSE;
 
-Q_EXPORT
 void qSuppressObsoleteWarnings( bool suppress )
 {
     suppressObsolete = suppress;
 }
 
-Q_EXPORT
 void qObsolete(	 const char *obj, const char *oldfunc, const char *newfunc )
 {
     if ( suppressObsolete )
@@ -595,7 +593,6 @@ void qObsolete(	 const char *obj, const char *oldfunc, const char *newfunc )
 	   obj, oldfunc, newfunc );
 }
 
-Q_EXPORT
 void qObsolete(	 const char *obj, const char *oldfunc )
 {
     if ( suppressObsolete )
@@ -605,7 +602,6 @@ void qObsolete(	 const char *obj, const char *oldfunc )
     qDebug( "%s::%s: This function is obsolete.", obj, oldfunc );
 }
 
-Q_EXPORT
 void qObsolete(	 const char *message )
 {
     if ( suppressObsolete )
@@ -669,7 +665,6 @@ void qObsolete(	 const char *message )
   \sa qDebug(), qWarning(), qFatal(), \link debug.html Debugging\endlink
 */
 
-Q_EXPORT
 msg_handler qInstallMsgHandler( msg_handler h )
 {
     msg_handler old = handler;

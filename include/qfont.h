@@ -1,27 +1,39 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qfont.h   2.1.1   edited 2000-03-24 $
+** $Id: qt/src/kernel/qfont.h   2.2.0   edited 2000-08-25 $
 **
 ** Definition of QFont class
 **
 ** Created : 940514
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the kernel module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #ifndef QFONT_H
 #define QFONT_H
@@ -35,7 +47,8 @@
 class QStringList;
 struct QFontDef;
 struct QFontData;
-class  QFontInternal;
+class QFontInternal;
+class QRenderedFont;
 
 
 class Q_EXPORT QFont					// font class
@@ -51,7 +64,7 @@ public:
 		     ISO_8859_8,
 		     ISO_8859_9,  Latin5 = ISO_8859_9,
 		     ISO_8859_10, Latin6 = ISO_8859_10,
-		     ISO_8859_11,
+		     ISO_8859_11, TIS620 = ISO_8859_11,
 		     ISO_8859_12,
 		     ISO_8859_13, Latin7 = ISO_8859_13,
 		     ISO_8859_14, Latin8 = ISO_8859_14,
@@ -65,19 +78,38 @@ public:
 		     Set_N = Set_Zh_TW,
 		     Unicode,
 		     /* The following will need to be re-ordered later,
-			since we accidientally left no room below "Unicode".
+			since we accidentally left no room below "Unicode".
 		        (For binary-compatibility that cannot change yet).
 			The above will be obsoleted and a same-named list
 			added below.
 		     */
 		     Set_GBK,
-		     Set_Big5
-		    };
+		     Set_Big5,
+
+		     /* The following are font-specific encodings that
+			we shouldn't need in a perfect world.
+		     */
+		     // 8-bit fonts
+		     JIS_X_0201 = 0xa0,
+		     // 16-bit fonts
+		     JIS_X_0208 = 0xc0, Enc16 = JIS_X_0208,
+		     KSC_5601,
+		     GB_2312,
+		     Big5,
+		     TSCII
+    };
     enum StyleHint { Helvetica, Times, Courier, OldEnglish,  System, AnyStyle,
 		     SansSerif	= Helvetica,
 		     Serif	= Times,
 		     TypeWriter = Courier,
 		     Decorative = OldEnglish};
+    enum StyleStrategy { PreferDefault = 0x0001,
+			  PreferBitmap = 0x0002,
+			  PreferDevice = 0x0004,
+			  PreferOutline = 0x0008,
+			  ForceOutline = 0x0010,
+			  PreferMatch = 0x0020,
+			  PreferQuality = 0x0040 };
     enum Weight	   { Light = 25, Normal = 50, DemiBold = 63,
 		     Bold  = 75, Black	= 87 };
     QFont();					// default font
@@ -112,6 +144,8 @@ public:
     void	setFixedPitch( bool );
     StyleHint	styleHint()	const;
     void	setStyleHint( StyleHint );
+    StyleStrategy styleStrategy() const;
+    void	setStyleHint( StyleHint, StyleStrategy );
     CharSet	charSet()	const;
     void	setCharSet( CharSet );
 
@@ -131,6 +165,8 @@ public:
 #elif defined(_WS_MAC_)
     HANDLE      handle() const;
 #elif defined(_WS_X11_)
+    HANDLE	handle() const;
+#elif defined(_WS_QWS_)
     HANDLE	handle() const;
 #endif
 
@@ -154,6 +190,10 @@ public:
     static void cleanup();
     static void cacheStatistics();
 
+#if defined(_WS_QWS_)
+    void qwsRenderToDisk(bool all=TRUE);
+#endif
+
 protected:
     bool	dirty()			const;
 
@@ -176,12 +216,14 @@ private:
     void       *textMetric() const;
 #endif
 
+    friend class QFontInternal;
     friend class QFontMetrics;
     friend class QFontInfo;
     friend class QPainter;
+#ifndef QT_NO_DATASTREAM
     friend Q_EXPORT QDataStream &operator<<( QDataStream &, const QFont & );
     friend Q_EXPORT QDataStream &operator>>( QDataStream &, QFont & );
-
+#endif
     QFontData	 *d;				// internal font data
     static CharSet defaultCharSet;
 };
@@ -197,8 +239,9 @@ inline void QFont::setBold( bool enable )
   QFont stream functions
  *****************************************************************************/
 
+#ifndef QT_NO_DATASTREAM
 Q_EXPORT QDataStream &operator<<( QDataStream &, const QFont & );
 Q_EXPORT QDataStream &operator>>( QDataStream &, QFont & );
-
+#endif
 
 #endif // QFONT_H

@@ -1,34 +1,50 @@
 /****************************************************************************
-** $Id: qt/src/dialogs/qprogressdialog.cpp   2.1.1   edited 2000-04-19 $
+** $Id: qt/src/dialogs/qprogressdialog.cpp   2.2.0   edited 2000-08-25 $
 **
 ** Implementation of QProgressDialog class
 **
 ** Created : 970521
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the dialogs module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #include "qprogressdialog.h"
+
+#ifndef QT_NO_PROGRESSDIALOG
+
 #include "qaccel.h"
 #include "qpainter.h"
 #include "qdrawutil.h"
 #include "qdatetime.h"
 #include "qapplication.h"
+#include "qtimer.h"
 #include <limits.h>
 
 // If the operation is expected to take this long (as predicted by
@@ -68,7 +84,9 @@ struct QProgressData
     bool	  shown_once;
     bool	  cancellation_flag;
     QTime	  starttime;
+#ifndef QT_NO_CURSOR
     QCursor	  parentCursor;
+#endif
     int		  showTime;
     bool autoClose;
     bool autoReset;
@@ -227,7 +245,7 @@ QProgressBar *QProgressDialog::bar() const
 
 QProgressDialog::QProgressDialog( QWidget *creator, const char *name,
 				  bool modal, WFlags f )
-    : QSemiModal( 0, name, modal, f)
+    : QSemiModal( creator?creator->topLevelWidget():0, name, modal, f)
 {
     init( creator, QString::fromLatin1(""), tr("Cancel"), 100 );
 }
@@ -261,7 +279,7 @@ QProgressDialog::QProgressDialog( const QString &labelText,
 				  int totalSteps,
 				  QWidget *creator, const char *name,
 				  bool modal, WFlags f )
-    : QSemiModal( 0, name, modal, f)
+    : QSemiModal( creator?creator->topLevelWidget():0, name, modal, f)
 {
     init( creator, labelText, cancelButtonText, totalSteps );
 }
@@ -273,8 +291,10 @@ QProgressDialog::QProgressDialog( const QString &labelText,
 
 QProgressDialog::~QProgressDialog()
 {
+#ifndef QT_NO_CURSOR
     if ( d->creator )
 	d->creator->setCursor( d->parentCursor );
+#endif
     delete d;
 }
 
@@ -288,6 +308,8 @@ void QProgressDialog::init( QWidget *creator,
     d->forceHide = FALSE;
     setCancelButtonText( canc );
     connect( this, SIGNAL(cancelled()), this, SLOT(cancel()) );
+    forceTimer = new QTimer( this );
+    connect( forceTimer, SIGNAL(timeout()), this, SLOT(forceShow()) );
     layout();
 }
 
@@ -474,15 +496,18 @@ void QProgressDialog::setTotalSteps( int totalSteps )
 
 void QProgressDialog::reset()
 {
+#ifndef QT_NO_CURSOR
     if ( progress() >= 0 ) {
 	if ( d->creator )
 	    d->creator->setCursor( d->parentCursor );
     }
+#endif
     if ( d->autoClose || d->forceHide )
 	hide();
     bar()->reset();
     d->cancellation_flag = FALSE;
     d->shown_once = FALSE;
+    forceTimer->stop();
 }
 
 /*!
@@ -541,11 +566,14 @@ void QProgressDialog::setProgress( int progress )
 	    qApp->processEvents();
     } else {
 	if ( progress == 0 ) {
+#ifndef QT_NO_CURSOR
 	    if ( d->creator ) {
 		d->parentCursor = d->creator->cursor();
 		d->creator->setCursor( waitCursor );
 	    }
+#endif
 	    d->starttime.start();
+	    forceTimer->start( d->showTime );
 	    return;
 	} else {
 	    bool need_show;
@@ -681,6 +709,10 @@ void QProgressDialog::layout()
 void QProgressDialog::setMinimumDuration( int ms )
 {
     d->showTime = ms;
+    if ( bar()->progress() == 0 ) {
+	forceTimer->stop();
+	forceTimer->start( ms );
+    }
 }
 
 /*!
@@ -762,4 +794,24 @@ void QProgressDialog::showEvent( QShowEvent *e )
     int w = QMAX( isVisible() ? width() : 0, sizeHint().width() );
     int h = QMAX( isVisible() ? height() : 0, sizeHint().height() );
     resize( w, h );
+    forceTimer->stop();
 }
+
+/*!
+  Shows the dialog if it is still hidden after the algorithm has been started
+  and the minimumDuration is over.
+
+  \sa setMinimumDuration()
+*/
+
+void QProgressDialog::forceShow()
+{
+    if ( d->shown_once || d->cancellation_flag )
+	return;
+
+    show();
+    d->shown_once = TRUE;
+}
+
+
+#endif

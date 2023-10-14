@@ -1,5 +1,5 @@
-.TH QValueStack 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QValueStack 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QValueStack \- Value based template class that provides a stack
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -19,19 +17,19 @@ Inherits QValueList.
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQValueStack\fR ()"
+.BI "\fBQValueStack\fR () "
 .br
 .ti -1c
-.BI "\fB~QValueStack\fR ()"
+.BI "\fB~QValueStack\fR () "
 .br
 .ti -1c
-.BI "void \fBpush\fR ( const T & d )"
+.BI "void \fBpush\fR ( const T & d ) "
 .br
 .ti -1c
-.BI "T \fBpop\fR ()"
+.BI "T \fBpop\fR () "
 .br
 .ti -1c
-.BI "T& \fBtop\fR ()"
+.BI "T& \fBtop\fR () "
 .br
 .ti -1c
 .BI "const T& \fBtop\fR () const"
@@ -102,29 +100,29 @@ Destroys the stack. References to the values in the stack and all iterators of t
 .SH "T QValueStack::pop ()"
 Removes the top item from the stack and returns it.
 .PP
-See also: top() and push().
+See also top() and push().
 .SH "void QValueStack::push ( const T & d )"
 Adds an element to the top of the stack. Last in, first out.
 .PP
 This function is equivalent to append()
 .PP
-See also: pop() and top().
+See also pop() and top().
 .SH "T& QValueStack::top ()"
 Returns a reference to the top item of the stack or the item referenced by end() if no such item exists. Please note that you may not change the value the end() Iterator is pointing to.
 .PP
 This function is equivalent to last().
 .PP
-See also: pop(), push() and QValueList::fromLast().
+See also pop(), push() and QValueList::fromLast().
 .SH "const T& QValueStack::top () const"
 Returns a reference to the top item of the stack or the item referenced by end() if no such item exists.
 .PP
 This function is equivalent to last().
 .PP
-See also:  pop(), push() and QValueList::fromLast().
+See also  pop(), push() and QValueList::fromLast().
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qvaluestack.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

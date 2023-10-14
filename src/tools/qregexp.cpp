@@ -1,27 +1,39 @@
 /****************************************************************************
-** $Id: qt/src/tools/qregexp.cpp   2.1.1   edited 2000-03-24 $
+** $Id: qt/src/tools/qregexp.cpp   2.2.0   edited 2000-08-25 $
 **
 ** Implementation of QRegExp class
 **
 ** Created : 950126
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the tools module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #include "qregexp.h"
 #include <ctype.h>
@@ -45,15 +57,14 @@
   <li><dfn>a*</dfn> matches a sequence of zero or more a's
   <li><dfn>a+</dfn> matches a sequence of one or more a's
   <li><dfn>a?</dfn> matches an optional a
-  <li><dfn>\c</dfn> escape code for matching special characters like
-  \, [, *, +, . etc.
-  <li><dfn>\b</dfn> matches the BELL character (7)
+  <li><dfn>\c</dfn> escape code for matching special characters such
+  as \, [, *, +, . etc.
   <li><dfn>\t</dfn> matches the TAB character (9)
   <li><dfn>\n</dfn> matches newline (10)
   <li><dfn>\r</dfn> matches return (13)
   <li><dfn>\s</dfn> matches a white space (defined as any character
   for which QChar::isSpace() returns TRUE. This includes at least
-  ASCII characters 9 (TAB), 10 (LF), 11 (VT), 12(FF), 13 (CR), and 32
+  ASCII characters 9 (TAB), 10 (LF), 11 (VT), 12(FF), 13 (CR) and 32
   (Space)).
   <li><dfn>\d</dfn> matches a digit (defined as any character for
   which QChar::isDigit() returns TRUE. This includes at least ASCII
@@ -63,8 +74,6 @@
   0x12 (18 decimal, 12 hexadecimal).
   <li><dfn>\022</dfn> matches the ASCII/Latin1 character 022 (18
   decimal, 22 octal).
-  <li><dfn>\\<</dfn> Reserved; do not use.
-  <li><dfn>\\></dfn> Reserved; do not use.
   </ul>
 
   In wildcard mode, it only knows four primitives:
@@ -78,13 +87,13 @@
   QRegExp supports Unicode both in the pattern strings and in the
   strings to be matched.
 
-  When writing regular expressions in C++ code, remember that the C++
-  preprocessor processes \ characters.  So in order to match e.g. a "."
-  character, you must write "\\." in C++ source, not "\.".
+  When writing regular expressions in C++ code, remember that C++
+  processes \ characters.  So in order to match e.g. a "." character,
+  you must write "\\." in C++ source, not "\.".
 
   A character set matches a defined set of characters. For example,
-  [TSG] matches any of 'G', 'S', and 'T'. Within a character set, the
-  special characters '.', '*', '?', '^', '$', '+', and '[' lose their
+  [BSD] matches any of 'B', 'D' and 'S'. Within a character set, the
+  special characters '.', '*', '?', '^', '$', '+' and '[' lose their
   special meanings. The following special characters apply:
   <ul plain>
   <li><dfn>^</dfn> When placed first in the list, changes the
@@ -98,12 +107,17 @@
   after the negation operator '^', if present)
   </ul>
   Thus, [a-zA-Z0-9.] matches upper and lower case ASCII letters,
-  digits, and dot, and [^\s] matches everything except white space.
+  digits and dot; and [^\s] matches everything except white space.
 
   \bug Case insensitive matching is not supported for non-ASCII/Latin1
-  (non-8bit) characters. Any charcter with a non-zero QChar.row() is
+  (non-8bit) characters. Any character with a non-zero QChar.row() is
   matched case sensitively even if the QRegExp is in case insensitive
   mode.
+
+  \note In Qt 3.0, the language of regular expressions will contain
+  five more special characters, namely '(', ')', '{', '|' and '}'. To
+  ease porting, it's a good idea to escape these characters with a
+  backslash in all the regular expressions you'll write from now on.
 */
 
 
@@ -115,7 +129,7 @@
 // uint no:	1		2		3		...
 // value:	CCL | n		from | to	from | to
 //
-// where n is the (16-bit) number of following range definitions, and
+// where n is the (16-bit) number of following range definitions and
 // from and to define the ranges inclusive. from <= to is always true,
 // otherwise it is a built-in charclass (Pxx, eg \s - PWS). Single
 // characters in the class are coded as from==to.  Negated classes
@@ -226,6 +240,9 @@ QRegExp &QRegExp::operator=( const QRegExp &r )
 }
 
 /*!
+  \obsolete
+  Consider using setPattern() instead of this method.
+
   Sets the pattern string to \e pattern and returns a reference to this regexp.
   The case sensitivity or wildcard options do not change.
 */
@@ -329,6 +346,12 @@ void QRegExp::setCaseSensitive( bool enable )
   Returns the pattern string of the regexp.
 */
 
+
+/*!
+  \fn void QRegExp::setPattern(const QString & pattern)
+  Sets the pattern string to \a pattern and returns a reference to this regexp.
+  The case sensitivity or wildcard options do not change.
+*/
 
 static inline bool iswordchar( int x )
 {
@@ -618,6 +641,8 @@ const QChar *QRegExp::matchstr( uint *rxd, const QChar *str, uint strlength,
     int len;
     r.match("pi = 3.1416", 0, &len);		// returns 5, len == 6
   \endcode
+
+  \note In Qt 3.0, this function will be replaced by find().
 */
 
 int QRegExp::match( const QString &str, int index, int *len,
@@ -665,6 +690,13 @@ int QRegExp::match( const QString &str, int index, int *len,
     return ep >= 0 ? (int)(p - start) : -1;		// return index;
 }
 
+/*! \fn int QRegExp::find( const QString& str, int index )
+
+  Attempts to match in \e str, starting from position \e index.
+  Returns the position of the match, or -1 if there was no match.
+
+  \sa match()
+*/
 
 //
 // Translate wildcard pattern to standard regexp pattern.
@@ -766,7 +798,7 @@ static uint char_val( const QChar **str, uint *strlength )   // get char value
 		if ( ch >= '0' && ch <= '7' ) {	//octal code
 		    len--;
 		    for ( i = 0; (i < 3) && pl; i++ ) {	// up to 3 oct digits
-			c = tolower((char)*p);
+			c = (char)*p;
 			if ( c >= '0' && c <= '7' ) {
 			    v <<= 3;
 			    v += c - '0';

@@ -1,5 +1,5 @@
-.TH QSocketNotifier 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QSocketNotifier 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QSocketNotifier \- Support for socket callbacks
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -22,10 +20,10 @@ Inherits QObject.
 .BI "enum \fBType\fR { Read, Write, Exception }"
 .br
 .ti -1c
-.BI "\fBQSocketNotifier\fR ( int " "socket" ", Type, QObject * " "parent" "=0, const char * " "name" "=0 )"
+.BI "\fBQSocketNotifier\fR ( int " "socket" ", Type, QObject * " "parent" "=0, const char * " "name" "=0 ) "
 .br
 .ti -1c
-.BI "\fB~QSocketNotifier\fR ()"
+.BI "\fB~QSocketNotifier\fR () "
 .br
 .ti -1c
 .BI "int \fBsocket\fR () const"
@@ -37,13 +35,13 @@ Inherits QObject.
 .BI "bool \fBisEnabled\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetEnabled\fR ( bool )"
+.BI "virtual void \fBsetEnabled\fR ( bool ) "
 .br
 .in -1c
 .SS "Signals"
 .in +1c
 .ti -1c
-.BI "void \fBactivated\fR ( int socket )"
+.BI "void \fBactivated\fR ( int socket ) "
 .br
 .in -1c
 .SH DESCRIPTION
@@ -61,7 +59,7 @@ The type specifies when the activated() signal is to be emitted:
 .IP 2
 \fCQSocketNotifier::Write:\fR Data can be written (socket write event).
 .IP 3
-\fCQSocketNofifier::Exception:\fR An exception has occured (socket exception event). We recommend against using this.
+\fCQSocketNofifier::Exception:\fR An exception has occurred (socket exception event). We recommend against using this.
 .PP
 For example, if you need to monitor both reads and writes for the same socket, you must create two socket notifiers.
 .PP
@@ -100,7 +98,7 @@ If you disable the read notifier, your program may deadlock. Avoid it if you do 
 .PP
 For write notifiers, after the activated() signal has been received and you have sent the data to be written on the socket, immediately disable the notifier. When you have more data to be written, enable it again to get a new activated() signal. The exception is if the socket data writing operation (send() or equivalent) fails with a "Would block" error, meaning that some buffer is full and you must wait before sending more data. In this case, you do not need to disable and re-enable the write notifier, it will fire again as soon as the system allows more data may be sent.
 .PP
-The behaviour of a write notifier that is left in enabled state after having emitting the first activated() signal (and no "would block" error has occured) is undefined. Depending on the operating system, it may fire on every pass of the event loop, or not at all.
+The behaviour of a write notifier that is left in enabled state after having emitting the first activated() signal (and no "would block" error has occurred) is undefined. Depending on the operating system, it may fire on every pass of the event loop, or not at all.
 .PP
 If you need a time-out for your sockets, you can use either timer events or the QTimer class.
 .PP
@@ -108,7 +106,7 @@ Socket action is detected in the main event loop of Qt. The X11 version of Qt ha
 .PP
 Note that on XFree86 for OS/2, select() only works in the thread in which main() is running, therefore you should use that thread for GUI operations.
 .PP
-See also: QSocket, QServerSocket and QSocketDevice.
+See also QSocket, QServerSocket and QSocketDevice.
 .SH MEMBER FUNCTION DOCUMENTATION
 .SH "QSocketNotifier::QSocketNotifier ( int socket, Type type, QObject * parent=0, const char * name=0 )"
 Constructs a socket notifier with a \fIparent\fR and a \fIname.\fR
@@ -121,7 +119,7 @@ Arguments:
 .PP
 The socket notifier is initially enabled. It is generally advisable to explicitly enable or disable it, especially for write notifiers.
 .PP
-See also: setEnabled() and isEnabled().
+See also setEnabled() and isEnabled().
 .SH "QSocketNotifier::~QSocketNotifier ()"
 Destructs the socket notifier.
 .SH "void QSocketNotifier::activated ( int socket ) \fC[signal]\fR"
@@ -131,11 +129,11 @@ This signal is emitted under certain conditions, specified by the notifier type:
 .IP 2
 \fCQSocketNotifier::Write:\fR Data can be written (socket write event).
 .IP 3
-\fCQSocketNofifier::Exception:\fR An exception has occured (socket exception event).
+\fCQSocketNofifier::Exception:\fR An exception has occurred (socket exception event).
 .PP
 The \fIsocket\fR argument is the socket identifier.
 .PP
-See also: type() and socket().
+See also type() and socket().
 .SH "bool QSocketNotifier::event ( QEvent * e ) \fC[virtual protected]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .PP
@@ -143,7 +141,7 @@ Reimplemented from QObject.
 .SH "bool QSocketNotifier::isEnabled () const"
 Returns TRUE if the notifier is enabled, or FALSE if it is disabled.
 .PP
-See also: setEnabled().
+See also setEnabled().
 .SH "void QSocketNotifier::setEnabled ( bool enable ) \fC[virtual]\fR"
 Enables the notifier if \fIenable\fR is TRUE, or disables it if \fIenable\fR is FALSE.
 .PP
@@ -153,19 +151,19 @@ If the notifier is enabled, it emits the activated() signal whenever a socket ev
 .PP
 Write notifiers should normally be disabled immediately after the activated() signal has been emitted; see discussion of write notifiers in the class description above.
 .PP
-See also: isEnabled() and activated().
+See also isEnabled() and activated().
 .SH "int QSocketNotifier::socket () const"
 Returns the socket identifier specified to the constructor.
 .PP
-See also: type().
+See also type().
 .SH "Type QSocketNotifier::type () const"
 Returns the socket event type specified to the constructor; \fCQSocketNotifier::Read, QSocketNotifier::Write\fR or \fCQSocketNotifier::Exception.\fR
 .PP
-See also:  socket().
+See also  socket().
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qsocketnotifier.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

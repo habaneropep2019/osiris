@@ -1,5 +1,5 @@
-.TH QEvent 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QEvent 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QEvent \- Base class of all event classes. Event objects contain event parameters
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -21,13 +19,13 @@ Inherited by QChildEvent, QCloseEvent, QCustomEvent, QDragLeaveEvent, QDragRespo
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "enum \fBType\fR { None = 0, Timer = 1, MouseButtonPress = 2, MouseButtonRelease = 3, MouseButtonDblClick= 4, MouseMove = 5, KeyPress = 6, KeyRelease = 7, FocusIn = 8, FocusOut = 9, Enter = 10, Leave = 11, Paint = 12, Move = 13, Resize = 14, Create = 15, Destroy = 16, Show = 17, Hide = 18, Close = 19, Quit = 20, Reparent = 21, ShowMaximized = 21, ShowMinimized = 22, ShowNormal = 23, WindowActivate = 24, WindowDeactivate = 25, ShowToParent = 26, HideToParent = 27, Accel = 30, Wheel = 31, AccelAvailable = 32, CaptionChange = 33, IconChange = 34, ParentFontChange = 35, ApplicationFontChange = 36, ParentPaletteChange = 37, ApplicationPaletteChange = 38, Clipboard = 40, SockAct = 50, DragEnter = 60, DragMove = 61, DragLeave = 62, Drop = 63, DragResponse = 64, ChildInserted = 70, ChildRemoved = 71, LayoutHint = 72, ActivateControl = 80, DeactivateControl = 81, Configure = 82, ConfigureLayout = 83, User = 1000 }"
+.BI "enum \fBType\fR { None = 0, Timer = 1, MouseButtonPress = 2, MouseButtonRelease = 3, MouseButtonDblClick= 4, MouseMove = 5, KeyPress = 6, KeyRelease = 7, FocusIn = 8, FocusOut = 9, Enter = 10, Leave = 11, Paint = 12, Move = 13, Resize = 14, Create = 15, Destroy = 16, Show = 17, Hide = 18, Close = 19, Quit = 20, Reparent = 21, ShowMinimized = 22, ShowNormal = 23, WindowActivate = 24, WindowDeactivate = 25, ShowToParent = 26, HideToParent = 27, ShowMaximized = 28, Accel = 30, Wheel = 31, AccelAvailable = 32, CaptionChange = 33, IconChange = 34, ParentFontChange = 35, ApplicationFontChange = 36, ParentPaletteChange = 37, ApplicationPaletteChange = 38, Clipboard = 40, Speech = 42, SockAct = 50, AccelOverride = 51, DragEnter = 60, DragMove = 61, DragLeave = 62, Drop = 63, DragResponse = 64, ChildInserted = 70, ChildRemoved = 71, LayoutHint = 72, ShowWindowRequest = 73, ActivateControl = 80, DeactivateControl = 81, User = 1000 }"
 .br
 .ti -1c
-.BI "\fBQEvent\fR ( Type type )"
+.BI "\fBQEvent\fR ( Type type ) "
 .br
 .ti -1c
-.BI "virtual \fB~QEvent\fR ()"
+.BI "virtual \fB~QEvent\fR () "
 .br
 .ti -1c
 .BI "Type \fBtype\fR () const"
@@ -44,7 +42,7 @@ QObject received events by having its QObject::event() function called. The func
 .PP
 The basic QEvent only contains an event type parameter. Subclasses of QEvent contain additional parameters that describe the particular event.
 .PP
-See also: QObject::event(), QObject::installEventFilter(), QWidget::event(), QApplication::sendEvent(), QAppilcation::postEvent() and QApplication::processEvents().
+See also QObject::event(), QObject::installEventFilter(), QWidget::event(), QApplication::sendEvent(), QAppilcation::postEvent() and QApplication::processEvents().
 .SS "Member Type Documentation"
 .SH "QEvent::Type"
 This enum type defines the valid event types in Qt. The currently defined event types, and the specialized classes for each type, are: 
@@ -90,6 +88,8 @@ This enum type defines the valid event types in Qt. The currently defined event 
 \fCWheel\fR - mouse wheel rolled, QWheelEvent
 .TP
 \fCAccelAvailable\fR - an internal event used by Qt on some platforms.
+.TP
+\fCAccelOverride\fR - key press in child, for overriding shortcut key handling, QKeyEvent
 .TP
 \fCWindowActivate\fR - the window was activated
 .TP
@@ -154,7 +154,7 @@ Returns the event type.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qevent.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

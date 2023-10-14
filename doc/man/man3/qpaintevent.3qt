@@ -1,5 +1,5 @@
-.TH QPaintEvent 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QPaintEvent 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QPaintEvent \- Event parameters for paint events
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -19,10 +17,10 @@ Inherits QEvent.
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQPaintEvent\fR ( const QRegion & " "paintRegion" ", bool " "erased" " = TRUE )"
+.BI "\fBQPaintEvent\fR ( const QRegion & " "paintRegion" ", bool " "erased" " = TRUE ) "
 .br
 .ti -1c
-.BI "\fBQPaintEvent\fR ( const QRect & " "paintRect" ", bool " "erased" " = TRUE )"
+.BI "\fBQPaintEvent\fR ( const QRect & " "paintRect" ", bool " "erased" " = TRUE ) "
 .br
 .ti -1c
 .BI "const QRect& \fBrect\fR () const"
@@ -41,7 +39,7 @@ Paint events are sent to widgets that need to update themselves, for instance wh
 .PP
 The event handler QWidget::paintEvent() receives paint events.
 .PP
-See also: QPainter, QWidget::update() and QWidget::repaint().
+See also QPainter, QWidget::update() and QWidget::repaint().
 .PP
 Examples:
 .(l
@@ -57,7 +55,7 @@ Returns whether the paint event region (or rectangle) has been erased with the w
 .SH "const QRect & QPaintEvent::rect () const"
 Returns the rectangle that should be updated.
 .PP
-See also: region() and QPainter::setClipRect().
+See also region() and QPainter::setClipRect().
 .PP
 Examples:
 .(l
@@ -66,11 +64,11 @@ qtimage/qtimage.cpp grapher/grapher.cpp progress/progress.cpp splitter/splitter.
 .SH "const QRegion & QPaintEvent::region () const"
 Returns the region that should be updated.
 .PP
-See also:  rect() and QPainter::setClipRegion().
+See also  rect() and QPainter::setClipRegion().
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qpaintevent.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

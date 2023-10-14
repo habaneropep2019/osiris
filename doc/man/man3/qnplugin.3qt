@@ -1,5 +1,5 @@
-.TH QNPlugin 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QNPlugin 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QNPlugin \- The plugin central factory [Qt NSPlugin Extension]
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -17,13 +15,13 @@ QNPlugin \- The plugin central factory [Qt NSPlugin Extension]
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "virtual \fB~QNPlugin\fR ()"
+.BI "virtual \fB~QNPlugin\fR () "
 .br
 .ti -1c
-.BI "void \fBgetVersionInfo\fR ( int & " "plugin_major" ", int & " "plugin_minor" ", int & " "browser_major" ", int & browser_minor )"
+.BI "void \fBgetVersionInfo\fR ( int & " "plugin_major" ", int & " "plugin_minor" ", int & " "browser_major" ", int & browser_minor ) "
 .br
 .ti -1c
-.BI "virtual QNPInstance* \fBnewInstance\fR ()"
+.BI "virtual QNPInstance* \fBnewInstance\fR () "
 .br
 .ti -1c
 .BI "virtual const char* \fBgetMIMEDescription\fR () const"
@@ -35,10 +33,10 @@ QNPlugin \- The plugin central factory [Qt NSPlugin Extension]
 .BI "virtual const char* \fBgetPluginDescriptionString\fR () const"
 .br
 .ti -1c
-.BI "virtual void* \fBgetJavaClass\fR ()"
+.BI "virtual void* \fBgetJavaClass\fR () "
 .br
 .ti -1c
-.BI "virtual void \fBunuseJavaClass\fR ()"
+.BI "virtual void \fBunuseJavaClass\fR () "
 .br
 .ti -1c
 .BI "void* \fBgetJavaEnv\fR () const"
@@ -47,16 +45,16 @@ QNPlugin \- The plugin central factory [Qt NSPlugin Extension]
 .SS "Static Public Members"
 .in +1c
 .ti -1c
-.BI "QNPlugin* \fBcreate\fR ()"
+.BI "QNPlugin* \fBcreate\fR () "
 .br
 .ti -1c
-.BI "QNPlugin* \fBactual\fR ()"
+.BI "QNPlugin* \fBactual\fR () "
 .br
 .in -1c
 .SS "Protected Members"
 .in +1c
 .ti -1c
-.BI "\fBQNPlugin\fR ()"
+.BI "\fBQNPlugin\fR () "
 .br
 .in -1c
 .SH DESCRIPTION
@@ -88,13 +86,13 @@ If you override this class, you must also override QNPlugin::unuseJavaClass().
 .PP
 The return value is actually a \fCjref\fR we use \fCvoid*\fR so as to avoid burdening plugins which do not require Java.
 .PP
-See also: getJavaEnv() and QNPInstance::getJavaPeer().
+See also getJavaEnv() and QNPInstance::getJavaPeer().
 .SH "void* QNPlugin::getJavaEnv () const"
 Returns a pointer to the Java execution environment, or 0 if Java is disabled or an error occurred.
 .PP
 The return value is actually a \fCJRIEnv*\fR we use \fCvoid*\fR so as to avoid burdening plugins which do not require Java.
 .PP
-See also: getJavaClass() and QNPInstance::getJavaPeer().
+See also getJavaClass() and QNPInstance::getJavaPeer().
 .SH "const char* QNPlugin::getMIMEDescription () const \fC[virtual]\fR"
 Override this to return the MIME description of the data formats supported by your plugin. The format of this string is described by the following example:
 .PP
@@ -139,7 +137,7 @@ The function should \fIunuse\fR the Java class and return 0.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qnplugin.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

@@ -1,5 +1,5 @@
-.TH QGroupBox 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QGroupBox 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QGroupBox \- Group box frame with a title
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -21,50 +19,50 @@ Inherited by QButtonGroup, QHGroupBox and QVGroupBox.
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQGroupBox\fR ( QWidget * " "parent" "=0, const char * " "name" "=0 )"
+.BI "\fBQGroupBox\fR ( QWidget * " "parent" "=0, const char * " "name" "=0 ) "
 .br
 .ti -1c
-.BI "\fBQGroupBox\fR ( const QString & " "title" ", QWidget * " "parent" "=0, const char * " "name" "=0 )"
+.BI "\fBQGroupBox\fR ( const QString & " "title" ", QWidget * " "parent" "=0, const char * " "name" "=0 ) "
 .br
 .ti -1c
-.BI "\fBQGroupBox\fR ( int " "columns" ", Orientation " "o" ", QWidget * " "parent" "=0, const char * " "name" "=0 )"
+.BI "\fBQGroupBox\fR ( int " "columns" ", Orientation " "o" ", QWidget * " "parent" "=0, const char * " "name" "=0 ) "
 .br
 .ti -1c
-.BI "\fBQGroupBox\fR ( int " "columns" ", Orientation " "o" ", const QString & " "title" ", QWidget * " "parent" "=0, const char * " "name" "=0 )"
+.BI "\fBQGroupBox\fR ( int " "columns" ", Orientation " "o" ", const QString & " "title" ", QWidget * " "parent" "=0, const char * " "name" "=0 ) "
 .br
 .ti -1c
-.BI "virtual void \fBsetColumnLayout\fR ( int " "columns" ", Orientation o )"
+.BI "virtual void \fBsetColumnLayout\fR ( int " "columns" ", Orientation o ) "
 .br
 .ti -1c
 .BI "QString \fBtitle\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetTitle\fR ( const QString & )"
+.BI "virtual void \fBsetTitle\fR ( const QString & ) "
 .br
 .ti -1c
 .BI "int \fBalignment\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetAlignment\fR ( int )"
+.BI "virtual void \fBsetAlignment\fR ( int ) "
 .br
 .ti -1c
 .BI "int \fBcolumns\fR () const"
 .br
 .ti -1c
-.BI "void \fBsetColumns\fR ( int )"
+.BI "void \fBsetColumns\fR ( int ) "
 .br
 .ti -1c
 .BI "Orientation \fBorientation\fR () const"
 .br
 .ti -1c
-.BI "void \fBsetOrientation\fR ( Orientation )"
+.BI "void \fBsetOrientation\fR ( Orientation ) "
 .br
 .ti -1c
-.BI "void \fBaddSpace\fR ( int )"
+.BI "void \fBaddSpace\fR ( int ) "
 .br
 .in -1c
 .SS "Properties"
-<table border=1 cellpadding=3 cellspacing=0> <tr><th>Type<th>Name<th>READ<th>WRITE<th>Options <tr><td>QString<td>title<td>title<td>setTitle<td>&nbsp; <tr><td>Alignment<td>alignment<td>alignment<td>setAlignment<td>&nbsp; <tr><td>Orientation<td>orientation<td>orientation<td>setOrientation<td>&nbsp; <tr><td>int<td>columns<td>columns<td>setColumns<td>&nbsp; </table>
+<table border=1 cellpadding=3 cellspacing=0> <tr><th>Type<th>Name<th>READ<th>WRITE<th>Options <tr><td>QString<td>title<td>title<td>setTitle<td>&nbsp; <tr><td>Alignment<td>alignment<td>alignment<td>setAlignment<td>&nbsp; <tr><td>Orientation<td>orientation<td>orientation<td>setOrientation<td> DESIGNABLE false <tr><td>int<td>columns<td>columns<td>setColumns<td> DESIGNABLE false </table>
 .SH DESCRIPTION
 The QGroupBox widget provides a group box frame with a title.
 .PP
@@ -78,7 +76,7 @@ QGroupBox also lets you set the title() (normally set in the constructor) and if
 .PP
 <img src=qgrpbox-w.png>
 .PP
-See also: QButtonGroup.
+See also QButtonGroup.
 .SH MEMBER FUNCTION DOCUMENTATION
 .SH "QGroupBox::QGroupBox ( QWidget * parent=0, const char * name=0 )"
 Constructs a group box widget with no title.
@@ -109,13 +107,17 @@ Returns the alignment of the group box title.
 .PP
 The default alignment is \fCAlignLeft.\fR
 .PP
-See also: setAlignment() and Qt::AlignmentFlags.
+See also setAlignment() and Qt::AlignmentFlags.
 .SH "void QGroupBox::childEvent ( QChildEvent * c ) \fC[virtual protected]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .PP
 Reimplemented from QObject.
 .SH "int QGroupBox::columns () const"
 Returns the numbers of columns in the groupbox as passed to the constructor, setColumns() or setColumnLayout().
+.SH "bool QGroupBox::event ( QEvent * e ) \fC[virtual protected]\fR"
+Reimplemented for internal reasons; the API is not affected.
+.PP
+Reimplemented from QObject.
 .SH "void QGroupBox::focusInEvent ( QFocusEvent * ) \fC[virtual protected]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .PP
@@ -127,7 +129,7 @@ Reimplemented from QWidget.
 .SH "Orientation QGroupBox::orientation () const"
 Returns the current orientation of the groupbox.
 .PP
-See also: setOrientation().
+See also setOrientation().
 .SH "void QGroupBox::paintEvent ( QPaintEvent * event ) \fC[virtual protected]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .PP
@@ -149,19 +151,19 @@ The \fIalignment\fR is the bitwise OR of the following flags:
 .TP
 \fCAlignHCenter\fR aligns the title text centered.
 .PP
-See also: alignment() and Qt::AlignmentFlags.
+See also alignment() and Qt::AlignmentFlags.
 .SH "void QGroupBox::setColumnLayout ( int columns, Orientation direction ) \fC[virtual]\fR"
 Changes the layout of the group box. This function is only useful in combination with the default constructor that does not take any layout information. This function will put all existing children in the new layout. Nevertheless is is not good programming style to call this function after children have been inserted.
 .PP
-See also: setOrientation() and setColumns().
+See also setOrientation() and setColumns().
 .SH "void QGroupBox::setColumns ( int c )"
 Changes the numbers of columns to \fIc.\fR Usually it is no good idea to use the method since it is slow (it does a complete layout). Better set the numbers of columns directly in the constructor.
 .PP
-See also: column() and setColumnLayout().
+See also column() and setColumnLayout().
 .SH "void QGroupBox::setOrientation ( Qt::Orientation o )"
 Changes the orientation of the groupbox. Usually it is no good idea to use the method since it is slow (it does a complete layout). Better set the orientation directly in the constructor.
 .PP
-See also: orientation().
+See also orientation().
 .SH "void QGroupBox::setTitle ( const QString & title ) \fC[virtual]\fR"
 Sets the group box title text to \fItitle,\fR and add a focus-change accelerator if the \fItitle\fR contains & followed by an appropriate letter. This produces "User information" with the U underscored and Alt-U moves the keyboard focus into the group:
 .PP
@@ -169,6 +171,10 @@ Sets the group box title text to \fItitle,\fR and add a focus-change accelerator
 .br
     g->setTitle( "&User information" );
 .fi
+.SH "QSize QGroupBox::sizeHint () const \fC[virtual]\fR"
+Reimplemented for internal reasons; the API is not affected.
+.PP
+Reimplemented from QWidget.
 .SH "QString QGroupBox::title () const"
 Returns the group box title text.
 .SH "void QGroupBox::updateMask () \fC[virtual protected]\fR"
@@ -178,7 +184,7 @@ Reimplemented from QWidget.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qgroupbox.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

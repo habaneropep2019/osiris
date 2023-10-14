@@ -1,29 +1,43 @@
 /****************************************************************************
-** $Id: qt/src/tools/qdatastream.cpp   2.1.1   edited 2000-05-22 $
+** $Id: qt/src/tools/qdatastream.cpp   2.2.0   edited 2000-08-25 $
 **
 ** Implementation of QDataStream class
 **
 ** Created : 930831
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the tools module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #include "qdatastream.h"
+
+#ifndef QT_NO_DATASTREAM
 #include "qbuffer.h"
 #include <stdio.h>
 #include <ctype.h>
@@ -488,6 +502,41 @@ QDataStream &QDataStream::operator>>( Q_INT32 &i )
     return *this;
 }
 
+/*!
+  \fn QDataStream &QDataStream::operator>>( Q_UINT64 &i )
+  Reads an unsigned 64-bit integer from the stream and returns a reference to
+  the stream, or uses the Q_UINT32 operator if 64 bit is not available.
+*/
+
+/*!
+  Reads a signed 64-bit integer from the stream and returns a reference to
+  the stream, or uses the Q_UINT32 operator if 64 bit is not available.
+*/
+
+QDataStream &QDataStream::operator>>( Q_INT64 &i )
+{
+    CHECK_STREAM_PRECOND
+    if ( printable ) {				// printable data
+	i = read_int_ascii( this );
+    } else if ( noswap ) {			// no conversion needed
+	dev->readBlock( (char *)&i, sizeof(Q_INT64) );
+    } else {					// swap bytes
+	register uchar *p = (uchar *)(&i);
+	char b[sizeof(Q_INT64)];
+	dev->readBlock( b, sizeof(Q_INT64) );
+	if ( sizeof(Q_INT64) == 8 ) {
+	    *p++ = b[7];
+	    *p++ = b[6];
+	    *p++ = b[5];
+	    *p++ = b[4];
+	}
+	*p++ = b[3];
+	*p++ = b[2];
+	*p++ = b[1];
+	*p   = b[0];
+    }
+    return *this;
+}
 
 static double read_double_ascii( QDataStream *s )
 {
@@ -727,6 +776,43 @@ QDataStream &QDataStream::operator<<( Q_INT32 i )
     return *this;
 }
 
+/*!
+  \fn QDataStream &QDataStream::operator<<( Q_UINT64 i )
+  Writes an unsigned 64-bit integer to the stream and returns a reference to
+  the stream, or uses the Q_UINT32-operator if 64 bit is not available.
+*/
+
+/*!
+  Writes a signed 64-bit integer to the stream and returns a reference to
+  the stream, or calls the Q_INT32-operator if 64 bit is not available.
+*/
+
+QDataStream &QDataStream::operator<<( Q_INT64 i )
+{
+    CHECK_STREAM_PRECOND
+    if ( printable ) {				// printable data
+	char buf[20];
+	sprintf( buf, "%ld\n", i );
+	dev->writeBlock( buf, strlen(buf) );
+    } else if ( noswap ) {			// no conversion needed
+	dev->writeBlock( (char *)&i, sizeof(Q_INT64) );
+    } else {					// swap bytes
+	register uchar *p = (uchar *)(&i);
+	char b[sizeof(Q_INT64)];
+	if ( sizeof(Q_INT64) == 8 ) {
+	    b[7] = *p++;
+	    b[6] = *p++;
+	    b[5] = *p++;
+	    b[4] = *p++;
+	}
+	b[3] = *p++;
+	b[2] = *p++;
+	b[1] = *p++;
+	b[0] = *p;
+	dev->writeBlock( b, sizeof(Q_INT64) );
+    }
+    return *this;
+}
 
 /*!
   \fn QDataStream &QDataStream::operator<<( uint i )
@@ -752,7 +838,7 @@ QDataStream &QDataStream::operator<<( float f )
     CHECK_STREAM_PRECOND
     if ( printable ) {				// printable data
 	char buf[32];
-	sprintf( buf, "%g\n", f );
+	sprintf( buf, "%g\n", (double)f );
 	dev->writeBlock( buf, strlen(buf) );
     } else {
 	float g = f;				// fixes float-on-stack problem
@@ -816,7 +902,7 @@ QDataStream &QDataStream::operator<<( const char *s )
 	*this << (Q_UINT32)0;
 	return *this;
     }
-    uint len = strlen( s ) + 1;			// also write null terminator
+    uint len = qstrlen( s ) + 1;			// also write null terminator
     *this << (Q_UINT32)len;			// write length specifier
     return writeRawBytes( s, len );
 }
@@ -861,3 +947,5 @@ QDataStream &QDataStream::writeRawBytes( const char *s, uint len )
     }
     return *this;
 }
+
+#endif // QT_NO_DATASTREAM

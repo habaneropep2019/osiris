@@ -1,15 +1,17 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head>
 <title>Qt Toolkit - QCacheIterator Class</title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
-a:link { text-decoration: none; }
-body { background: white; color: black; }
+a:link { color: #004faf; text-decoration: none }
+a:visited { color: #672967; text-decoration: none }body { background: white; color: black; }
 --></style>
 </head><body bgcolor="#ffffff">
 
-<a href="index.html">
-<img width="122" height="65" src="qtlogo.png" alt="Home"
-  align="left" border="0">
-</a><div align=right><img src="dochead.png" width="472" height="27"><br>
+<table width="100%">
+<tr><td><a href="index.html">
+<img width="100" height="100" src="qtlogo.png"
+alt="Home" border="0"><img width="100"
+height="100" src="face.png" alt="Home" border="0">
+</a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
 - <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
@@ -17,7 +19,7 @@ body { background: white; color: black; }
 - <a href="index.html">Home</a>
 - <a href="topicals.html"><b>Structure</b></a>
 </div>
-<br clear=all>
+</table>
 
 <h1 align=center>QCacheIterator Class Reference</h1><br clear="all">
 <p>
@@ -30,23 +32,23 @@ Inherits <a href="qgcacheiterator.html">QGCacheIterator</a>.
 <p><a href="qcacheiterator-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><span class="fn"><a href="#9233b7"><b>QCacheIterator</b></a> ( const QCache&lt;type&gt; &amp; cache ) </span>
-<li><span class="fn"><a href="#c34c0a"><b>QCacheIterator</b></a> ( const QCacheIterator&lt;type&gt; &amp; ci ) </span>
-<li><span class="fn">QCacheIterator&lt;type&gt;&amp; <a href="#91a302"><b>operator=</b></a> ( const QCacheIterator&lt;type&gt; &amp; ci ) </span>
-<li><span class="fn">uint <a href="#23eea6"><b>count</b></a> () const</span>
-<li><span class="fn">bool <a href="#8a27fb"><b>isEmpty</b></a> () const</span>
-<li><span class="fn">bool <a href="#97059e"><b>atFirst</b></a> () const</span>
-<li><span class="fn">bool <a href="#e02f14"><b>atLast</b></a> () const</span>
-<li><span class="fn">type* <a href="#523a45"><b>toFirst</b></a> () </span>
-<li><span class="fn">type* <a href="#bf5d61"><b>toLast</b></a> () </span>
-<li><span class="fn">operator <a href=qcacheiterator.html#ffd949><b>type*</b></a> ()const</span>
-<li><span class="fn">type* <a href="#a77fdf"><b>current</b></a> () const</span>
-<li><span class="fn">QString <a href="#d6c727"><b>currentKey</b></a> () const</span>
-<li><span class="fn">type* <a href="#a77b59"><b>operator</b></a> () </span>
-<li><span class="fn">type* <a href="#53055f"><b>operator++</b></a> () </span>
-<li><span class="fn">type* <a href="#9f4ded"><b>operator+=</b></a> ( uint jump ) </span>
-<li><span class="fn">type* <a href="#b3b515"><b>operator--</b></a> () </span>
-<li><span class="fn">type* <a href="#e14872"><b>operator-=</b></a> ( uint jump ) </span>
+<li><div class="fn"><a href="#9233b7"><b>QCacheIterator</b></a> ( const QCache&lt;type&gt; &amp; cache ) </div>
+<li><div class="fn"><a href="#c34c0a"><b>QCacheIterator</b></a> ( const QCacheIterator&lt;type&gt; &amp; ci ) </div>
+<li><div class="fn">QCacheIterator&lt;type&gt;&amp; <a href="#91a302"><b>operator=</b></a> ( const QCacheIterator&lt;type&gt; &amp; ci ) </div>
+<li><div class="fn">uint <a href="#23eea6"><b>count</b></a> () const</div>
+<li><div class="fn">bool <a href="#8a27fb"><b>isEmpty</b></a> () const</div>
+<li><div class="fn">bool <a href="#97059e"><b>atFirst</b></a> () const</div>
+<li><div class="fn">bool <a href="#e02f14"><b>atLast</b></a> () const</div>
+<li><div class="fn">type* <a href="#523a45"><b>toFirst</b></a> () </div>
+<li><div class="fn">type* <a href="#bf5d61"><b>toLast</b></a> () </div>
+<li><div class="fn">operator <a href=qcacheiterator.html#ffd949><b>type*</b></a> ()const</div>
+<li><div class="fn">type* <a href="#a77fdf"><b>current</b></a> () const</div>
+<li><div class="fn">QString <a href="#d6c727"><b>currentKey</b></a> () const</div>
+<li><div class="fn">type* <a href="#a77b59"><b>operator</b></a> () </div>
+<li><div class="fn">type* <a href="#53055f"><b>operator++</b></a> () </div>
+<li><div class="fn">type* <a href="#9f4ded"><b>operator+=</b></a> ( uint jump ) </div>
+<li><div class="fn">type* <a href="#b3b515"><b>operator--</b></a> () </div>
+<li><div class="fn">type* <a href="#e14872"><b>operator-=</b></a> ( uint jump ) </div>
 </ul>
 <hr><h2><a name="details"></a>Detailed Description</h2>
 The QCacheIterator class provides an iterator for <a href="qcache.html">QCache</a> collections.
@@ -65,7 +67,7 @@ which returns TRUE if the cache is empty and finally <a href="#23eea6">count</a>
 returns the number of items in the cache.
 <p>Note that atFirst() and atLast() refer to the iterator's arbitrary
 ordering, not to the cache's internal LRU list.
-<p>See also:  <a href="qcache.html">QCache</a>.
+<p>See also  <a href="qcache.html">QCache</a>.
 
 <hr><h2>Member Function Documentation</h2>
 <h3 class="fn"><a name="9233b7"></a>QCacheIterator::QCacheIterator ( const <a href="qcache.html">QCache</a>&lt;type&gt; &amp; cache )</h3>
@@ -84,15 +86,15 @@ Same as <a href="#a77fdf">current</a>().
 <p>Returns TRUE if the iterator points to the first item in the
 cache. Note that this refers to the iterator's arbitrary ordering,
 not to the cache's internal LRU list.
-<p>See also:  <a href="#523a45">toFirst</a>() and <a href="#e02f14">atLast</a>().
+<p>See also  <a href="#523a45">toFirst</a>() and <a href="#e02f14">atLast</a>().
 <h3 class="fn">bool <a name="e02f14"></a>QCacheIterator::atLast () const</h3>
 <p>Returns TRUE if the iterator points to the last item in the
 cache. Note that this refers to the iterator's arbitrary ordering,
 not to the cache's internal LRU list.
-<p>See also:  <a href="#bf5d61">toLast</a>() and <a href="#97059e">atFirst</a>().
+<p>See also  <a href="#bf5d61">toLast</a>() and <a href="#97059e">atFirst</a>().
 <h3 class="fn">uint <a name="23eea6"></a>QCacheIterator::count () const</h3>
 <p>Returns the number of items in the cache on which this iterator operates.
-<p>See also:  <a href="#8a27fb">isEmpty</a>().
+<p>See also  <a href="#8a27fb">isEmpty</a>().
 <h3 class="fn">type * <a name="a77fdf"></a>QCacheIterator::current () const</h3>
 <p>Returns a pointer to the current iterator item.
 <h3 class="fn"><a href="qstring.html">QString</a> <a name="d6c727"></a>QCacheIterator::currentKey () const</h3>
@@ -100,7 +102,7 @@ not to the cache's internal LRU list.
 <h3 class="fn">bool <a name="8a27fb"></a>QCacheIterator::isEmpty () const</h3>
 <p>Returns TRUE if the cache is empty, i.e. <a href="#23eea6">count</a>() == 0, otherwise
 FALSE.
-<p>See also:  <a href="#23eea6">count</a>().
+<p>See also  <a href="#23eea6">count</a>().
 <h3 class="fn">type * <a name="a77b59"></a>QCacheIterator::operator() ()</h3>
 <p>Makes the succeeding item current and returns the original current
 item.
@@ -126,23 +128,23 @@ independently thereafter.
 <p>Sets the iterator to point to the first item in the cache and
 returns a pointer to the item.
 <p>Sets the iterator to null and returns null if if the cache is empty.
-<p>See also:  <a href="#bf5d61">toLast</a>() and <a href="#8a27fb">isEmpty</a>().
+<p>See also  <a href="#bf5d61">toLast</a>() and <a href="#8a27fb">isEmpty</a>().
 <h3 class="fn">type * <a name="bf5d61"></a>QCacheIterator::toLast ()</h3>
 <p>Sets the iterator to point to the last item in the cache and
 returns a pointer to the item.
 <p>Sets the iterator to null and returns null if if the cache is empty.
-<p>See also:  <a href="#523a45">toFirst</a>() and <a href="#8a27fb">isEmpty</a>().
+<p>See also  <a href="#523a45">toFirst</a>() and <a href="#8a27fb">isEmpty</a>().
 <hr><p>
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.1.1"><nobr>
+<input type=hidden name="version" value="2.2.0"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
 copyright &copy; 1995-2000
-<a href="http://www.trolltech.com">Troll Tech</a>, all rights reserved.<p><address><hr><div align="center">
+<a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.1</div>
+<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.2.0</div>
 </table></div></address></body></html>

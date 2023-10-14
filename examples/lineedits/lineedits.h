@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: qt/examples/lineedits/lineedits.h   2.1.1   edited 2000-04-03 $
+** $Id: qt/examples/lineedits/lineedits.h   2.2.0   edited 2000-08-31 $
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -24,13 +24,14 @@ public:
     LineEdits( QWidget *parent = 0, const char *name = 0 );
 
 protected:
-    QLineEdit *lined1, *lined2, *lined3;
-    QComboBox *combo1, *combo2, *combo3;
+    QLineEdit *lined1, *lined2, *lined3, *lined4;
+    QComboBox *combo1, *combo2, *combo3, *combo4;
 
 protected slots:
     void slotEchoChanged( int );
     void slotValidatorChanged( int );
     void slotAlignmentChanged( int );
+    void slotReadOnlyChanged( int );
 };
 
 #endif

@@ -1,29 +1,42 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qtabwidget.cpp   2.1.1   edited 2000-04-26 $
+** $Id: qt/src/widgets/qtabwidget.cpp   2.2.0   edited 2000-08-25 $
 **
 ** Implementation of QTabWidget class
 **
 ** Created : 990318
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the widgets module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #include "qtabwidget.h"
+#ifndef QT_NO_COMPLEXWIDGETS
 #include "qobjectlist.h"
 #include "qobjectdict.h"
 #include "qtabbar.h"
@@ -60,7 +73,8 @@
   meaningful and descriptive to the user, while the widget name is
   used primarily for debugging.
 
-  A signal selected() is emitted when the user selects some page.
+  A signal currentChanged() is emitted when the user selects some
+  page.
 
   Each tab is either enabled or disabled at any given time.  If a tab
   is enabled, the tab text is drawn in black and the user can select
@@ -91,8 +105,18 @@
   </ul>
 */
 
+/*! \enum QTabWidget::TabShape
 
-/*! \fn void QTabWidget::selected( const QString &tabLabel );
+  This enum type defines the shape of the tabs: <ul>
+  <li> \c Rounded - rounded look (normal)
+  <li> \c Triangular - triangular look (very unusual, included for completeness)
+  </ul>
+*/
+
+/* undocumented now
+  \obsolete
+
+  \fn void QTabWidget::selected( const QString &tabLabel );
 
   This signal is emitted whenever a tab is selected (raised),
   including during the first show().
@@ -100,17 +124,26 @@
   \sa raise()
 */
 
+
+/*! \fn void QTabWidget::currentChanged( QWidget* );
+
+  This signal is emitted whenever the current page changes.
+
+  \sa currentPage(), showPage(), tabLabel()
+*/
+
 class QTabWidgetData
 {
 public:
     QTabWidgetData()
-	: tabs(0), stack(0), dirty( TRUE ), pos( QTabWidget::Top )
+	: tabs(0), stack(0), dirty( TRUE ), pos( QTabWidget::Top ), shape( QTabWidget::Rounded )
 	{};
     ~QTabWidgetData(){};
     QTabBar* tabs;
     QWidgetStack* stack;
     bool dirty;
     QTabWidget::TabPosition pos;
+    QTabWidget::TabShape shape;
 };
 
 
@@ -123,7 +156,7 @@ public:
 */
 
 
-QTabWidget::QTabWidget( QWidget *parent, const char *name, WFlags f)
+QTabWidget::QTabWidget( QWidget *parent, const char *name, WFlags f )
     : QWidget( parent, name, f )
 {
     init();
@@ -132,7 +165,7 @@ QTabWidget::QTabWidget( QWidget *parent, const char *name, WFlags f)
 /*!
   \overload
 */
-QTabWidget::QTabWidget( QWidget *parent, const char *name)
+QTabWidget::QTabWidget( QWidget *parent, const char *name )
     : QWidget( parent, name )
 {
     init();
@@ -148,6 +181,10 @@ void QTabWidget::init()
 
     d->stack->setFrameStyle( QFrame::StyledPanel | QFrame::Raised );
     d->stack->setLineWidth( style().defaultFrameWidth() );
+
+    setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) );
+    setFocusPolicy( TabFocus );
+    setFocusProxy( d->tabs );
 }
 
 /*!
@@ -305,6 +342,14 @@ void QTabWidget::changeTab( QWidget *w, const QString &label)
 	return;
     t->label = label;
     d->tabs->layoutTabs();
+
+    int ct = d->tabs->currentTab();
+    d->tabs->blockSignals( TRUE );
+    d->tabs->setCurrentTab( 0 );
+    d->tabs->setCurrentTab( ct );
+    d->tabs->blockSignals( FALSE );
+
+    d->tabs->update();
     setUpLayout();
 }
 
@@ -325,6 +370,14 @@ void QTabWidget::changeTab( QWidget *w, const QIconSet& iconset, const QString &
     t->label = label;
     t->iconset = new QIconSet( iconset );
     d->tabs->layoutTabs();
+
+    int ct = d->tabs->currentTab();
+    d->tabs->blockSignals( TRUE );
+    d->tabs->setCurrentTab( 0 );
+    d->tabs->setCurrentTab( ct );
+    d->tabs->blockSignals( FALSE );
+
+    d->tabs->update();
     setUpLayout();
 }
 
@@ -400,7 +453,6 @@ void QTabWidget::removePage( QWidget * w )
 	setUpLayout();
 	if ( !currentPage() && d->stack->frameStyle() != QFrame::NoFrame )
 	    d->stack->setFrameStyle( QFrame::NoFrame );
-
     }
 }
 
@@ -421,6 +473,23 @@ is never 0, but if you try hard enough it can be.
 QWidget * QTabWidget::currentPage() const
 {
     return d->stack->visibleWidget();
+}
+
+/*! Returns the ID of the current page.
+*/
+
+int QTabWidget::currentPageIndex() const
+{
+    return d->tabs->currentTab();
+}
+
+/*! Sets the page with index \a id as current page.
+*/
+
+void QTabWidget::setCurrentPage( int id )
+{
+    d->tabs->setCurrentTab( id );
+    showTab( id );
 }
 
 /*!
@@ -467,6 +536,7 @@ void QTabWidget::showTab( int i )
     if ( d->stack->widget( i ) ) {
 	d->stack->raiseWidget( i );
 	emit selected( d->tabs->tab( i )->label );
+	emit currentChanged( d->stack->widget( i ) );
     }
 }
 
@@ -487,12 +557,12 @@ void QTabWidget::setUpLayout( bool onlyCheck )
 	t.setWidth( width() );
     int lw = d->stack->lineWidth();
     if ( d->pos == Bottom ) {
-	d->tabs->setGeometry( QMAX(0, lw-2), height() - t.height(), t.width(), t.height() );
-	d->stack->setGeometry( 0, 0, width(), height()-t.height()+lw );
+	d->tabs->setGeometry( QMAX(0, lw-2), height() - t.height() - lw, t.width(), t.height() );
+	d->stack->setGeometry( 0, 0, width(), height()-t.height()+QMAX(0, lw-2) );
     }
     else { // Top
 	d->tabs->setGeometry( QMAX(0, lw-2), 0, t.width(), t.height() );
-	d->stack->setGeometry( 0, t.height()-lw, width(), height()-t.height()+lw );
+	d->stack->setGeometry( 0, t.height()-lw, width(), height()-t.height()+QMAX(0, lw-2));
     }
 
     d->dirty = FALSE;
@@ -519,7 +589,7 @@ QSize QTabWidget::sizeHint() const
 QSize QTabWidget::minimumSizeHint() const
 {
     QSize s( d->stack->minimumSizeHint() );
-    QSize t( d->tabs->sizeHint() );
+    QSize t( d->tabs->minimumSizeHint() );
     return QSize( QMAX( s.width(), t.width()),
 		  s.height() + t.height() );
 }
@@ -566,9 +636,44 @@ void QTabWidget::setTabPosition( TabPosition pos)
 	else
 	    d->tabs->setShape( QTabBar::RoundedAbove );
     }
+    d->tabs->layoutTabs();
     setUpLayout();
 }
 
+/*!
+  Returns the shape of the tabs.
+  
+  \sa setTabShape()
+*/
+
+QTabWidget::TabShape QTabWidget::tabShape() const
+{
+    return d->shape;
+}
+
+/*!
+  Sets the shape of the tabs to \a s.
+*/
+
+void QTabWidget::setTabShape( TabShape s )
+{
+    if ( d->shape == s )
+	return;
+    d->shape = s;
+    if ( d->pos == Top ) {
+	if ( s == Rounded )
+	    d->tabs->setShape( QTabBar::RoundedAbove );
+	else
+	    d->tabs->setShape( QTabBar::TriangularAbove );
+    } else {
+	if ( s == Rounded )
+	    d->tabs->setShape( QTabBar::RoundedBelow );
+	else
+	    d->tabs->setShape( QTabBar::TriangularBelow );
+    }
+    d->tabs->layoutTabs();
+    setUpLayout();
+}
 
 
 /*!
@@ -637,5 +742,8 @@ bool QTabWidget::eventFilter( QObject *o, QEvent * e)
 
 QSizePolicy QTabWidget::sizePolicy() const
 {
-    return QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding );
+    //### removeme 3.0
+    return QWidget::sizePolicy();
 }
+
+#endif

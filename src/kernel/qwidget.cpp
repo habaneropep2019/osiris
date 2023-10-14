@@ -1,27 +1,39 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qwidget.cpp   2.1.1   edited 2000-05-21 $
+** $Id: qt/src/kernel/qwidget.cpp   2.2.0   edited 2000-08-28 $
 **
 ** Implementation of QWidget class
 **
 ** Created : 931031
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the kernel module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 
 #include "qobjectlist.h"
@@ -37,6 +49,9 @@
 #include "qlayout.h"
 #if defined(_WS_WIN_)
 #include "qt_windows.h"
+#endif
+#if defined(_WS_QWS_)
+#include "qwsmanager_qws.h"
 #endif
 
 // NOT REVISED
@@ -113,6 +128,7 @@
 	width(),
 	height(),
 	sizePolicy(),
+	setSizePolicy(),
 	sizeHint(),
 	updateGeometry(),
 	layout(),
@@ -260,7 +276,7 @@
   ready (you can name a a widget in the builder, and connect() to it by
   name in your code).
   <li><code>WFlags f = 0</code> (where available) sets the <a
-  href="qt#WidgetFlags">widget flags;</a> the default is good for almost
+  href="qt.html#WidgetFlags">widget flags</a>; the default is good for almost
   all widgets, but to get e.g. top-level widgets without a window
   system frame you must use special flags.
   </ul>
@@ -377,11 +393,12 @@
   <li> In the constructor, be sure to set up your member variables
   early on, before there's any chance that you might receive an event.
 
-  <li>It is almost always useful to reimplement sizePolicy or at least
-  sizeHint(), so users of your class can set up layout management more
-  easily.  sizePolicy() lets you supply good defaults for the layout
-  management handling, so that other widgets can contain and manage
-  yours easily.  sizeHint() indicates a "good" size for the widget.
+  <li>It is almost always useful to reimplement sizeHint() and to set
+  the correct size policy with setSizePolicy(), so users of your class
+  can set up layout management more easily.  A size policy lets you
+  supply good defaults for the layout management handling, so that
+  other widgets can contain and manage yours easily.  sizeHint()
+  indicates a "good" size for the widget.
 
   <li>If your widget is a top-level window, setCaption() and setIcon() set
   the title bar and icon respectively.
@@ -405,7 +422,11 @@
   in the file qapp_xxx.cpp.
  *****************************************************************************/
 
-static const int WDictSize = 3733; // plenty for 15 big complex windows
+#ifdef _WS_QWS_
+static const int WDictSize = 163; // plenty for small devices
+#else
+static const int WDictSize = 1123; // plenty for 5 big complex windows
+#endif
 
 class QWidgetMapper : public QWidgetIntDict
 {						// maps ids -> widgets
@@ -477,11 +498,11 @@ inline bool QWidgetMapper::remove( WId id )
   <dt>WState_Created<dd> The widget has a valid winId().
   <dt>WState_Disabled<dd> The widget does not receive any mouse
        or keyboard events.
-  <dt>WState_ForceDisabled<dd> The widget is explicitely disabled, i.e. it will remain
+  <dt>WState_ForceDisabled<dd> The widget is explicitly disabled, i.e. it will remain
 	disabled even when all its ancestors are set to enabled
 	state. This implies WState_Disabled.
   <dt>WState_Visible<dd> The widget is currently visible.
-  <dt>WState_ForceHide<dd> The widget is explicitely hidden, i.e. it won't become
+  <dt>WState_ForceHide<dd> The widget is explicitly hidden, i.e. it won't become
   	visible unless you call show() on it.  ForceHide implies !WState_Visible
   <dt>WState_OwnCursor<dd> A cursor has been set for this widget.
   <dt>WState_MouseTracking<dd> Mouse tracking is enabled.
@@ -510,7 +531,7 @@ inline bool QWidgetMapper::remove( WId id )
 <a name="widgetflags"></a>
 
 This enum type is used to specify various window-system properties
-of the widget.  Mostly they are fairly unusal, but necessary in a
+of the widget.  Mostly they are fairly unusual, but necessary in a
 few cases.
 
 The main types are <ul>
@@ -546,7 +567,7 @@ Cannot be combined with \c WStyle_NormalBorder or \c WStyle_NoBorder.
 user cannot move or resize a borderless window via the window system.
 Cannot be combined with \c WStyle_NormalBorder or \c
 WStyle_DialogBorder. On Windows, the flag works fine. On X11, it
-bypasses the window manager comletely. This results in a borderless
+bypasses the window manager completely. This results in a borderless
 window, but also in a window that is not managed at all (i.e. for
 example no keyboard focus unless you call setActiveWindow()
 manually. ) For compatibility, the flag was not changed for Qt-2.1. We
@@ -558,7 +579,7 @@ Cannot be combined with \c WStyle_NormalBorder or \c
 WStyle_DialogBorder. On X11, the result of the flag is depending on
 the window manager and its ability to understand MOTIF hints to some
 degree.  Most existing modern window managers do this. With \c
-WX11BypassWM, you can bypass the window manager comletely. This
+WX11BypassWM, you can bypass the window manager completely. This
 results in a borderless window for sure, but also in a window that is
 not managed at all (i.e. for example no keyboard input unless you call
 setActiveWindow() manually )
@@ -591,7 +612,7 @@ should stay on top of all other windows.
 subwindow of its parent, in other words: a dialog.  The window will
 not get its own taskbar entry and be kept on top of its parent by
 the window system.  Usually, it will also be minimized when the
-parent is minized.  If not customized, the window is decorated
+parent is minimized.  If not customized, the window is decorated
 with a slightly simpler title bar.  This is the flag QDialog uses.
 
 </ul> Finally, there are some modifier flags: <ul>
@@ -621,9 +642,13 @@ it wants mouse events for its entire rectangle.
 north-west aligned and static. On resize, such a widget will receive
 paint events only for the newly visible part of itself.
 
-<li> \c WRepaintNoErase - indacates that the widget paints all its
+<li> \c WRepaintNoErase - indicates that the widget paints all its
 pixels.  Updating, scrolling and focus changes should therefore not
 erase the widget.  This allows smart-repainting to avoid flicker.
+
+<li> \c WGroupLeader - makes this widget or window a group
+leader. Modality of secondary windows only affects windows within the
+same group.
 
 </ul>
 
@@ -643,7 +668,7 @@ erase the widget.  This allows smart-repainting to avoid flicker.
   The widget flags argument \a f is normally 0, but it can be set to
   customize the window frame of a top-level widget (i.e. \a parent must be
   zero). To customize the frame, set the \c WStyle_Customize flag OR'ed with
-  any of these flags:
+  any of the Qt::WidgetFlags.
 
   Note that the X11 version of Qt may not be able to deliver all
   combinations of style flags on all systems.  This is because on X11,
@@ -672,12 +697,20 @@ QWidget::QWidget( QWidget *parent, const char *name, WFlags f )
     focus_policy = 0;
     own_font = 0;
     own_palette = 0;
+    sizehint_forced = 0;
+    is_closing = 0;
+    in_show = 0;
+#ifndef QT_NO_LAYOUT
     lay_out = 0;
+#endif
     extra = 0;					// no extra widget info
+#ifndef QT_NO_PALETTE
     bg_col = pal.normal().background();		// default background color
+#endif
     create();					// platform-dependent init
-
+#ifndef QT_NO_PALETTE
     pal = isTopLevel() ? QApplication::palette() : parentWidget()->palette();
+#endif
     fnt = isTopLevel() ? QApplication::font() : parentWidget()->font();
 
     if ( !isDesktop() )
@@ -701,6 +734,7 @@ QWidget::QWidget( QWidget *parent, const char *name, WFlags f )
     }
 }
 
+static bool noMoreToplevels();
 
 /*!
   Destructs the widget.
@@ -735,6 +769,11 @@ QWidget::~QWidget()
 	QApplication::main_widget = 0;
 	if (qApp)
 	    qApp->quit();
+    } else if ( isTopLevel() && !isPopup() ) {
+	    hide();
+	    if ( qApp->receivers(SIGNAL(lastWindowClosed()))
+		 && noMoreToplevels() )
+		emit qApp->lastWindowClosed();
     }
     if ( focusWidget() == this )
 	clearFocus();
@@ -761,6 +800,7 @@ QWidget::~QWidget()
 	childObjects = 0;
     }
 
+    QApplication::removePostedEvents( this );
     if ( extra )
 	deleteExtra();
     destroy();					// platform-dependent cleanup
@@ -881,6 +921,7 @@ QTLWExtra *QWidget::topData()
     return extra->topextra;
 }
 
+
 void QWidget::createTLExtra()
 {
     if ( !extra )
@@ -903,6 +944,10 @@ void QWidget::createTLExtra()
 	x->uspos = 0;
 	x->ussize = 0;
 #endif
+#if defined(_WS_QWS_) && !defined(QT_NO_QWS_MANAGER)
+	x->decor_allocated_region = QRegion();
+	x->qwsManager = 0;
+#endif
 	createTLSysExtra();
     }
 }
@@ -921,10 +966,17 @@ void QWidget::createExtra()
 	extra->maxw = extra->maxh = QWIDGETSIZE_MAX;
 	extra->bg_pix = 0;
 	extra->focus_proxy = 0;
+#ifndef QT_NO_CURSOR
 	extra->curs = 0;
+#endif
 	extra->topextra = 0;
 	extra->bg_mode = PaletteBackground;
+#ifndef QT_NO_STYLE
 	extra->style = 0;
+#endif
+	extra->size_policy = QSizePolicy( QSizePolicy::Preferred,
+					  QSizePolicy::Preferred );
+	extra->posted_events = 0;
 	createSysExtra();
     }
 }
@@ -939,14 +991,25 @@ void QWidget::deleteExtra()
 {
     if ( extra ) {				// if exists
 	delete extra->bg_pix;
+#ifndef QT_NO_CURSOR
 	delete extra->curs;
+#endif
 	deleteSysExtra();
 	if ( extra->topextra ) {
 	    deleteTLSysExtra();
 	    delete extra->topextra->icon;
 	    delete extra->topextra->focusData;
+#if defined(_WS_QWS_) && !defined(QT_NO_QWS_MANAGER)
+	    delete extra->topextra->qwsManager;
+#endif
 	    delete extra->topextra;
 	}
+#if defined(DEUBG)
+	if ( extra->posted_events )
+	    qWarning( "QWidget::deleteExtra: Memory leak for "
+		      "extra->posted_events (%p)", extra->posted_events );
+	// removePostedEvents( this ) must be called before deleteExtra()
+#endif
 	delete extra;
 	// extra->xic destroyed in QWidget::destroy()
 	extra = 0;
@@ -1040,7 +1103,7 @@ QWidget *QWidget::find( WId id )
   \sa find()
 */
 
-
+#ifndef QT_NO_STYLE
 /*!
   Returns the GUI style for this widget
 
@@ -1078,7 +1141,7 @@ void QWidget::styleChange( QStyle& )
     update();
     updateGeometry();
 }
-
+#endif
 
 /*!
   \fn bool QWidget::isTopLevel() const
@@ -1148,7 +1211,7 @@ void QWidget::styleChange( QStyle& )
   enabled.
 
   This is the case if neither the widget itself nor every parent up to
-  but excluding \a ancestor has been explicitely disabled.
+  but excluding \a ancestor has been explicitly disabled.
 
   isEnabledTo(0) is equivalent to isEnabled().
 
@@ -1177,7 +1240,7 @@ bool QWidget::isEnabledTo(QWidget* ancestor) const
 
 bool QWidget::isEnabledToTLW() const
 {
-    return isEnabledTo(0);
+    return isEnabled();
 }
 
 
@@ -1196,7 +1259,7 @@ bool QWidget::isEnabledToTLW() const
 
   Disabling a widget implicitely disables all its children.  Enabling
   respectively enables all child widgets unless they have been
-  explicitely disabled.
+  explicitly disabled.
 
   \sa isEnabled(), isEnabledTo(), QKeyEvent, QMouseEvent, enabledChange()
 */
@@ -1246,6 +1309,30 @@ void QWidget::setEnabled( bool enable )
 	    }
 	}
     }
+}
+
+/*!
+  Disables widget input events if \a disable is TRUE, otherwise enables
+  input events.
+
+  An enabled widget receives keyboard and mouse events; a disabled
+  widget does not.  Note that an enabled widget receives keyboard
+  events only when it is in focus.
+
+  Some widgets display themselves differently when they are disabled.
+  For example a button might draw its label grayed out. If your widget
+  needs to know when it becomes enabled or disabled, you can
+  reimplement the enabledChange() function.
+
+  Disabling a widget implicitely disables all its children.  Enabling
+  respectively enables all child widgets unless they have been
+  explicitly disabled.
+
+  \sa setEnabled(), isEnabled(), isEnabledTo(), QKeyEvent, QMouseEvent, enabledChange()
+*/
+void QWidget::setDisabled( bool disable )
+{
+    setEnabled( !disable );
 }
 
 /*!
@@ -1371,6 +1458,10 @@ QRect QWidget::frameGeometry() const
 
 /*!
   Returns the bounding rectangle of the widget's children.
+
+  Explicitely hidden children are excluded.
+
+  \sa childrenRegion()
 */
 
 QRect QWidget::childrenRect() const
@@ -1382,7 +1473,7 @@ QRect QWidget::childrenRect() const
     QObject *obj;
     while ( (obj=it.current()) ) {
 	++it;
-	if ( obj->isWidgetType() )
+	if ( obj->isWidgetType() && !((QWidget*)obj)->isHidden() )
 	    r = r.unite( ((QWidget*)obj)->geometry() );
     }
     return r;
@@ -1390,6 +1481,10 @@ QRect QWidget::childrenRect() const
 
 /*!
   Returns the combined region of the widget's children geometry().
+
+  Explicitely hidden children are excluded.
+
+  \sa childrenRect()
 */
 
 QRegion QWidget::childrenRegion() const
@@ -1401,7 +1496,7 @@ QRegion QWidget::childrenRegion() const
     QObject *obj;
     while ( (obj=it.current()) ) {
 	++it;
-	if ( obj->isWidgetType() )
+	if ( obj->isWidgetType() && !((QWidget*)obj)->isHidden() )
 	    r = r.unite( ((QWidget*)obj)->geometry() );
     }
     return r;
@@ -1615,11 +1710,53 @@ void QWidget::setFixedHeight( int h )
 }
 
 
+/*! Translates the widget coordinate \a pos to the coordinate system
+  of \a parent, which must be non-null and be a parent widget of this.
+
+  \sa mapFrom() mapToParent() mapToGlobal()
+*/
+
+QPoint QWidget::mapTo( QWidget * parent, const QPoint & pos ) const
+{
+    QPoint p = pos;
+    if ( parent ) {
+	const QWidget * w = this;
+	while ( w != parent ) {
+	    p = w->mapToParent( p );
+	    w = w->parentWidget();
+	}
+    }
+    return p;
+}
+
+
+/*! Translates the widget coordinate \a pos from the coordinate system
+  of \a parent to this widget's coordinate system, which must be non-null
+  and be a parent widget of this.
+
+  \sa mapTo() mapFromParent() mapFromGlobal()
+*/
+
+QPoint QWidget::mapFrom( QWidget * parent, const QPoint & pos ) const
+{
+    QPoint p( pos );
+    if ( parent ) {
+	const QWidget * w = this;
+	while ( w != parent ) {
+	    p = w->mapFromParent( p );
+	    w = w->parentWidget();
+	}
+    }
+    return p;
+}
+
+
 /*!
   Translates the widget coordinate \a pos to a coordinate in the parent widget.
 
   Same as mapToGlobal() if the widget has no parent.
-  \sa mapFromParent()
+
+  \sa mapFromParent() mapTo() mapToGlobal()
 */
 
 QPoint QWidget::mapToParent( const QPoint &pos ) const
@@ -1632,7 +1769,7 @@ QPoint QWidget::mapToParent( const QPoint &pos ) const
 
   Same as mapFromGlobal() if the widget has no parent.
 
-  \sa mapToParent()
+  \sa mapToParent() mapFrom() mapFromGlobal()
 */
 
 QPoint QWidget::mapFromParent( const QPoint &pos ) const
@@ -1677,7 +1814,8 @@ QWidget *QWidget::topLevelWidget() const
   Sets the widget to be cleared to the fixed color \a color before
   paintEvent() is called.
 
-  Note that using this function is very often a mistake.
+  Note that using this function is very often a mistake.  Here are the
+  most common mistakes:
 
   If you want to set the background color of a widget to one of the
   "usual" colors, setBackgroundMode() is usually the best function.
@@ -1743,6 +1881,7 @@ void QWidget::setBackgroundPixmap( const QPixmap &pixmap )
 
 void QWidget::setBackgroundFromMode()
 {
+#ifndef QT_NO_PALETTE
     QColorGroup::ColorRole r = QColorGroup::Background;
     if ( extra ) {
 	int i = (BackgroundMode)extra->bg_mode;
@@ -1791,6 +1930,14 @@ void QWidget::setBackgroundFromMode()
 	case PaletteHighlightedText:
 	    r = QColorGroup::HighlightedText;
 	    break;
+	case PaletteButtonText:
+	    r = QColorGroup::ButtonText;
+	    break;
+	case X11ParentRelative:
+#if defined(_WS_X11_)
+	    setBackgroundX11Relative();
+#endif
+	    return;
 	}
     }
     QPixmap * p = palette().active().brush( r ).pixmap();
@@ -1798,6 +1945,7 @@ void QWidget::setBackgroundFromMode()
 	setBackgroundPixmapDirect( *p );
     else
 	setBackgroundColorDirect( palette().active().color( r ) );
+#endif
 }
 
 /*!
@@ -1930,7 +2078,11 @@ void QWidget::setBackgroundModeDirect( BackgroundMode m )
 
 const QColor &QWidget::foregroundColor() const
 {
+#ifndef QT_NO_PALETTE
     return colorGroup().foreground();
+#else
+    return black; //###
+#endif
 }
 
 
@@ -2002,7 +2154,7 @@ void QWidget::backgroundPixmapChange( const QPixmap & )
 
   \sa palette(), setPalette()
 */
-
+#ifndef QT_NO_PALETTE
 const QColorGroup &QWidget::colorGroup() const
 {
     if ( !isEnabled() )
@@ -2012,7 +2164,7 @@ const QColorGroup &QWidget::colorGroup() const
     else
 	return palette().inactive();
 }
-
+#endif
 /*!
   \fn const QPalette &QWidget::palette() const
   Returns the widget palette.
@@ -2037,10 +2189,10 @@ const QColorGroup &QWidget::colorGroup() const
 /*!
   Sets the widget palette to \e palette and informs all children about the change.
 
-  \sa QApplication::setPalette(), palette(), paletteChange(), unsetPalette()
+  \sa QApplication::setPalette(), palette(), paletteChange(), unsetPalette(), ownPalette()
   colorGroup()
 */
-
+#ifndef QT_NO_PALETTE
 void QWidget::setPalette( const QPalette &palette )
 {
     own_palette = TRUE;
@@ -2051,7 +2203,7 @@ void QWidget::setPalette( const QPalette &palette )
     setBackgroundFromMode();
     paletteChange( old );
     if ( children() ) {
-	QCustomEvent e( QEvent::ParentPaletteChange, 0 );
+	QEvent e( QEvent::ParentPaletteChange );
 	QObjectListIt it( *children() );
 	QWidget *w;
 	while( (w=(QWidget *)it.current()) != 0 ) {
@@ -2068,7 +2220,7 @@ void QWidget::setPalette( const QPalette &palette )
   Unsets the palette for this widget. The widget will use its natural
   default palette from now on.
 
-\sa setPalette()
+\sa setPalette(), ownPalette()
  */
 void QWidget::unsetPalette()
 {
@@ -2107,7 +2259,7 @@ void QWidget::setPalette( const QPalette &p, bool )
 void QWidget::paletteChange( const QPalette & )
 {
 }
-
+#endif // QT_NO_PALETTE
 
 /*!
   \fn QFont QWidget::font() const
@@ -2137,7 +2289,7 @@ void QWidget::paletteChange( const QPalette & )
     setFont( f );
   \endcode
 
-  \sa font(), fontChange(), fontInfo(), fontMetrics(), unsetFont()
+  \sa font(), fontChange(), fontInfo(), fontMetrics(), unsetFont(), ownFont()
 */
 
 void QWidget::setFont( const QFont &font )
@@ -2150,7 +2302,7 @@ void QWidget::setFont( const QFont &font )
     fnt.handle();				// force load font
     fontChange( old );
     if ( children() ) {
-	QCustomEvent e( QEvent::ParentFontChange, 0 );
+	QEvent e( QEvent::ParentFontChange );
 	QObjectListIt it( *children() );
 	QWidget *w;
 	while( (w=(QWidget *)it.current()) != 0 ) {
@@ -2169,7 +2321,7 @@ void QWidget::setFont( const QFont &font )
   widget class, the parent's font or - if this widget is a toplevel
   widget - the default application font.
 
-\sa setFont()
+\sa setFont(), ownFont()
  */
 void QWidget::unsetFont()
 {
@@ -2239,7 +2391,7 @@ void QWidget::fontChange( const QFont & )
   widget's cursor is returned.
   \sa setCursor(), unsetCursor();
 */
-
+#ifndef QT_NO_CURSOR
 const QCursor &QWidget::cursor() const
 {
     if ( testWState(WState_OwnCursor) )
@@ -2249,7 +2401,7 @@ const QCursor &QWidget::cursor() const
     else
 	return isTopLevel() ? arrowCursor : parentWidget()->cursor();
 }
-
+#endif
 
 /*!
   Returns the widget caption.  If no caption has been set (common for
@@ -2413,7 +2565,7 @@ bool QWidget::hasFocus() const
   Gives the keyboard input focus to the widget (or its focus proxy).
 
   First, a \link focusOutEvent() focus out event\endlink is sent to the
-  focus widget (if any) to tell it that it is about to loose the
+  focus widget (if any) to tell it that it is about to lose the
   focus. Then a \link focusInEvent() focus in event\endlink is sent to
   this widget to tell it that it just received the focus.
 
@@ -2441,7 +2593,7 @@ void QWidget::setFocus()
     if ( f->it.current() == this && qApp->focusWidget() == this )
 	return;
 
-    // ### why do we do this twice?
+    // ### why do we do this twice? - bad merge?
 
     f->it.toFirst();
     while ( f->it.current() != this && !f->it.atLast() )
@@ -2485,7 +2637,7 @@ void QWidget::setFocus()
 
   If the widget has active focus, a \link focusOutEvent() focus out
   event\endlink is sent to this widget to tell it that it is about to
-  loose the focus.
+  lose the focus.
 
   This widget must enable focus setting in order to get the keyboard input
   focus, i.e. it must call setFocusPolicy().
@@ -2727,12 +2879,12 @@ void QWidget::reparentFocusWidgets( QWidget * oldtlw )
     if ( oldtlw == topLevelWidget() )
 	return; // nothing to do
 
-    QFocusData * from = oldtlw->topData()->focusData;
-    from->focusWidgets.first();
+    QFocusData * from = oldtlw ? oldtlw->topData()->focusData : 0;
     QFocusData * to;
     to = focusData();
 
     if ( from ) {
+	from->focusWidgets.first();
 	do {
 	    QWidget * pw = from->focusWidgets.current();
 	    while( pw && pw != this )
@@ -2995,11 +3147,6 @@ void QWidget::setGeometry( int x, int y, int w, int h )
   instance, the QLineEdit constructor calls
   setFocusPolicy(\c QWidget::StrongFocus).
 
-  As a special case to support applications not utilizing focus,
-  \link isTopLevel() Top-level widgets \endlink that have
-  NoFocus policy will receive focus events and
-  gain keyboard events.
-
   \sa isFocusEnabled(), focusInEvent(), focusOutEvent(), keyPressEvent(),
   keyReleaseEvent(), isEnabled()
 */
@@ -3028,7 +3175,7 @@ void QWidget::setFocusPolicy( FocusPolicy policy )
   if \e enable is FALSE.
 
   Calling update() and repaint() has no effect if updates are disabled.
-  Paint events from the window system are processed as normally even if
+  Paint events from the window system are processed normally even if
   updates are disabled.
 
   This function is normally used to disable updates for a short period of
@@ -3066,7 +3213,7 @@ static bool noMoreToplevels()
     QWidgetList *list   = qApp->topLevelWidgets();
     QWidget     *widget = list->first();
     while ( widget ) {
-	if ( !widget->testWState( Qt::WState_ForceHide )
+	if ( !widget->isHidden()
 	     && !widget->isDesktop()
 	     && !widget->isPopup()
 	     && !widget->testWFlags( Qt::WStyle_Dialog) )
@@ -3099,23 +3246,24 @@ bool qt_modal_state();				// --- "" ---
 
 void QWidget::show()
 {
-    bool sendLayoutHint = !isTopLevel() && testWState( WState_ForceHide );
+    bool sendLayoutHint = !isTopLevel() && isHidden();
     clearWState( WState_ForceHide );
 
     if ( testWState(WState_Visible) )
 	return; // nothing to do
     if ( !isTopLevel() && !parentWidget()->isVisibleTo( 0 ) ){
-	// we should become visible, but our parents are explicitely
+	// we should become visible, but our parents are explicitly
 	// hidden. Don' worry, since we cleared the ForceHide flag,
 	// our immediate parent will call show() on us again during
 	// his own processing of show().
 	if ( sendLayoutHint ) {
-	    QCustomEvent e( QEvent::ShowToParent, 0 );
+	    QEvent e( QEvent::ShowToParent );
 	    QApplication::sendEvent( this, &e );
 	}
 	return;
     }
 
+    in_show = TRUE;
 
     QApplication::sendPostedEvents( this, QEvent::ChildInserted );
 
@@ -3125,11 +3273,14 @@ void QWidget::show()
 	// minimum size.
 	QSize s = sizeHint();
 	QSizePolicy::ExpandData exp;
+#ifndef QT_NO_LAYOUT
 	if ( layout() ) {
 	    if ( layout()->hasHeightForWidth() )
 		s.setHeight( layout()->totalHeightForWidth( s.width() ) );
 	    exp =  layout()->expanding();
-	} else {
+	} else
+#endif
+	{
 	    if ( sizePolicy().hasHeightForWidth() )
 		s.setHeight( heightForWidth( s.width() ) );
 	    exp = sizePolicy().expanding();
@@ -3167,9 +3318,7 @@ void QWidget::show()
 
     if ( testWFlags(WStyle_Tool) || isPopup() ) {
 	raise();
-    }
-
-    if ( testWFlags(WType_TopLevel) && !isPopup() && qstrcmp(name(),"toolTipTip")!=0 ) {
+    } else if ( testWFlags(WType_TopLevel) ) {
 	while ( QApplication::activePopupWidget() )
 	    QApplication::activePopupWidget()->hide();
     }
@@ -3186,16 +3335,18 @@ void QWidget::show()
 	    ++it;
 	    if ( object->isWidgetType() ) {
 		widget = (QWidget*)object;
-		if ( !widget->testWState(WState_ForceHide) && !widget->isTopLevel() )
+		if ( !widget->isHidden() && !widget->isTopLevel() )
 		    widget->show();
 	    }
 	}
     }
 
 
+     bool sendShowWindowRequest = FALSE;
+
      if ( !isTopLevel() && !parentWidget()->isVisible() ) {
 	// we should become visible, but somehow our parent is not
-	// visible, so we can't do that. Since it is not explicitely
+	// visible, so we can't do that. Since it is not explicitly
 	// hidden (that we checked above with isVisibleTo(0) ), our
 	// window is not withdrawn, but may for example be iconfied or
 	// on another virtual desktop. Therefore we have to prepare
@@ -3205,7 +3356,7 @@ void QWidget::show()
 	 showWindow();
 	 clearWState( WState_Visible );
 	 if ( sendLayoutHint ) {
-	     QCustomEvent e( QEvent::ShowToParent, 0 );
+	     QEvent e( QEvent::ShowToParent );
 	     QApplication::sendEvent( this, &e );
 	 }
      } else {
@@ -3218,7 +3369,14 @@ void QWidget::show()
 	     // stacking might be wrong
 	     qt_enter_modal( this );
 	 }
-	 showWindow();
+
+	 // do not show the window directly, but post a showWindow
+	 // request to reduce flicker with laid out widgets
+	 if ( !isTopLevel() && !parentWidget()->in_show )
+	     sendShowWindowRequest = TRUE;
+	 else
+	     showWindow();
+
 	 if ( testWFlags(WType_Popup) )
 	     qApp->openPopup( this );
      }
@@ -3226,6 +3384,10 @@ void QWidget::show()
     if ( sendLayoutHint )
 	QApplication::postEvent( parentWidget(),
 				 new QEvent( QEvent::LayoutHint) );
+    if ( sendShowWindowRequest )
+	QApplication::postEvent( this, new QEvent( QEvent::ShowWindowRequest ) );
+
+    in_show = FALSE;
 }
 
 
@@ -3236,7 +3398,7 @@ void QWidget::show()
   You almost never have to reimplement this function. If you need to
   do something after a widget is hidden, use hideEvent() instead.
 
-  \sa hideEvent(), show(), showMinimized(), isVisible(), close()
+  \sa isHhideEvent(), isHidden(), show(), showMinimized(), isVisible(), close()
 */
 
 void QWidget::hide()
@@ -3254,8 +3416,13 @@ void QWidget::hide()
     hideWindow();
 
     if ( !testWState(WState_Visible) ) {
-	QCustomEvent e( QEvent::HideToParent, 0 );
+	QEvent e( QEvent::HideToParent );
 	QApplication::sendEvent( this, &e );
+	// post layout hint for non toplevels. The parent widget check is
+	// necessary since the function is called in the destructor
+	if ( !isTopLevel() && parentWidget() )
+	    QApplication::postEvent( parentWidget(),
+				     new QEvent( QEvent::LayoutHint) );
 	return;
     }
     clearWState( WState_Visible );
@@ -3292,7 +3459,7 @@ void QWidget::sendShowEventsToChildren( bool spontaneous )
 	    ++it;
 	    if ( object->isWidgetType() ) {
 		widget = (QWidget*)object;
-		if ( !widget->isTopLevel() && !widget->isVisible() && !widget->testWState(WState_ForceHide) ) {
+		if ( !widget->isTopLevel() && !widget->isVisible() && !widget->isHidden() ) {
 		    widget->setWState( WState_Visible );
 		    widget->sendShowEventsToChildren( spontaneous );
 		    QShowEvent e( spontaneous );
@@ -3337,7 +3504,7 @@ void QWidget::sendHideEventsToChildren( bool spontaneous )
   guarantee since the initialization of the subclasses might not be
   finished.
 
-  After this function, the wiget has a proper font and palette and
+  After this function, the widget has a proper font and palette and
   QApplication::polish() has been called.
 
   Remember to call QWidget's implementation when reimplementing this
@@ -3353,10 +3520,12 @@ void QWidget::polish()
 	    setFont( QApplication::font( this ) );
 	    own_font = FALSE;
 	}
+#ifndef QT_NO_PALETTE
 	if ( !own_palette && !QApplication::palette( this ).isCopyOf( QApplication::palette() ) ) {
 	    setPalette( QApplication::palette( this ) );
 	    own_palette = FALSE;
 	}
+#endif
 	setWState(WState_Polished);
 	qApp->polish( this );
 	QApplication::sendPostedEvents( this, QEvent::ChildInserted );
@@ -3399,10 +3568,13 @@ void QWidget::polish()
 
 bool QWidget::close( bool alsoDelete )
 {
+    if ( is_closing )
+	return TRUE;
+    is_closing = 1;
+
     WId	 id	= winId();
     bool isMain = qApp->mainWidget() == this;
-    bool checkLastWindowClosed = isTopLevel() && !isPopup() &&
-				 !testWFlags(WStyle_Dialog);
+    bool checkLastWindowClosed = isTopLevel() && !isPopup();
     QCloseEvent e;
     QApplication::sendEvent( this, &e );
     bool accept = e.isAccepted();
@@ -3411,11 +3583,19 @@ bool QWidget::close( bool alsoDelete )
     } else {
 	if ( accept ) {
 	    hide();
-	    if ( alsoDelete || testWFlags(WDestructiveClose) )
+	    if ( alsoDelete || testWFlags(WDestructiveClose) ) {
+		if ( checkLastWindowClosed
+		     && qApp->receivers(SIGNAL(lastWindowClosed()))
+		     && noMoreToplevels() )
+		    emit qApp->lastWindowClosed();
+		if ( isMain )
+		    qApp->quit();
 		delete this;
+		return TRUE;
+	    }
 	}
     }
-    if ( accept  ) {	// last window closed?
+    if ( accept ) {	// last window closed?
 	if ( checkLastWindowClosed
 	     && qApp->receivers(SIGNAL(lastWindowClosed()))
 	     && noMoreToplevels() )
@@ -3423,6 +3603,7 @@ bool QWidget::close( bool alsoDelete )
 	if ( isMain )
 	    qApp->quit();
     }
+    is_closing = 0;
     return accept;
 }
 
@@ -3458,12 +3639,21 @@ bool QWidget::close( bool alsoDelete )
   visible.
 
   Iconified top-level widgets also have hidden status, as well as
-  having isMinimized() return TRUE.
+  having isMinimized() return TRUE. Windows that live on another
+  virtual desktop (on platforms that support this concept) also have
+  hidden status.
 
   This function returns TRUE if the widget currently is obscured by
   other windows on the screen, but would be visible if moved.
 
-  \sa show(), hide(), isVisibleTo(), isMinimized()
+  A widget receives show- and hide events when its visibility status
+  changes. Between a hide and a show event, there is no need in
+  wasting any CPU on preparing or displaying information to the
+  user. A video application, for example, might simply stop generating
+  new frames.
+
+  \sa show(), hide(), isHidden(), isVisibleTo(), isMinimized(),
+  showEvent(), hideEvent()
 */
 
 
@@ -3472,12 +3662,14 @@ bool QWidget::close( bool alsoDelete )
   shown.
 
   This is the case if neither the widget itself nor every parent up to
-  but excluding \a ancestor has been explicitely hidden.
+  but excluding \a ancestor has been explicitly hidden.
 
   This function returns TRUE if the widget it is obscured by other
   windows on the screen, but would be visible if moved.
 
-  isVisibleTo(0) is equivalent to isVisible().
+  isVisibleTo(0) is very similar to isVisible(), with the exception
+  that it does not cover the iconfied-case or the situation where the
+  window lives on another virtual desktop.
 
   \sa show() hide() isVisible()
 */
@@ -3486,12 +3678,12 @@ bool QWidget::isVisibleTo(QWidget* ancestor) const
 {
     const QWidget * w = this;
     while ( w
-	    && !w->testWState( WState_ForceHide )
+	    && !w->isHidden()
 	    && !w->isTopLevel()
 	    && w->parentWidget()
 	    && w->parentWidget()!=ancestor )
 	w = w->parentWidget();
-    return !w->testWState( WState_ForceHide );
+    return !w->isHidden();
 }
 
 
@@ -3509,9 +3701,20 @@ bool QWidget::isVisibleToTLW() const
 
 
 /*!
+  \fn bool QWidget::isHidden() const
+
+  Returns TRUE if the widget is explicitly hidden, or FALSE if it
+  is visible or would become visible if all its ancestors became visible.
+
+  \sa hide(), show(), isVisible(), isVisibleTo()
+*/
+
+
+
+/*!
   Returns the currently visible rectangle of the widget. This function
   is in particular useful to optimize immediate repainting of a
-  windget. Typical usage is
+  widget. Typical usage is
   \code
   repaint( w->visibleRect() );
   \endcode
@@ -3582,8 +3785,10 @@ void QWidget::adjustSize()
 
 QSize QWidget::sizeHint() const
 {
+#ifndef QT_NO_LAYOUT
     if ( layout() )
 	return layout()->totalSizeHint();
+#endif
     constPolish();
     return QSize( -1, -1 );
 }
@@ -3603,8 +3808,10 @@ QSize QWidget::sizeHint() const
 
 QSize QWidget::minimumSizeHint() const
 {
+#ifndef QT_NO_LAYOUT
     if ( layout() )
 	return layout()->totalMinimumSize();
+#endif
     constPolish();
     return QSize( -1, -1 );
 }
@@ -3791,6 +3998,7 @@ bool QWidget::event( QEvent *e )
 		return FALSE;
 	    }
 	    break;
+#ifndef QT_NO_DRAGANDDROP
 	case QEvent::Drop:
 	    dropEvent( (QDropEvent*) e);
 	    break;
@@ -3803,11 +4011,16 @@ bool QWidget::event( QEvent *e )
 	case QEvent::DragLeave:
 	    dragLeaveEvent( (QDragLeaveEvent*) e);
 	    break;
+#endif
 	case QEvent::Show:
 	    showEvent( (QShowEvent*) e);
 	    break;
 	case QEvent::Hide:
 	    hideEvent( (QHideEvent*) e);
+	    break;
+	case QEvent::ShowWindowRequest:
+	    if ( !isHidden() )
+		showWindow();
 	    break;
 	case QEvent::ChildInserted:
 	case QEvent::ChildRemoved:
@@ -3825,6 +4038,8 @@ bool QWidget::event( QEvent *e )
 		    setFont( QApplication::font( this ) );
 		own_font = FALSE;
 	    }
+	    break;
+#ifndef QT_NO_PALETTE
 	case QEvent::ParentPaletteChange:
  	    if ( isTopLevel() )
  		break;
@@ -3838,6 +4053,7 @@ bool QWidget::event( QEvent *e )
 		own_palette = FALSE;
 	    }
 	    break;
+#endif
         default:
 	    if ( e->type() >= QEvent::User ) {
 		customEvent( (QCustomEvent*) e );
@@ -3968,10 +4184,6 @@ void QWidget::wheelEvent( QWheelEvent *e )
 
   The default implementation closes popup widgets if you hit
   escape.  Otherwise the event is ignored.
-
-  As a special case to support applications not utilizing focus,
-  \link isTopLevel() Top-level widgets \endlink that have
-  NoFocus policy will receive keyboard events.
 
   \sa keyReleaseEvent(), QKeyEvent::ignore(), setFocusPolicy(),
   focusInEvent(), focusOutEvent(), event(), QKeyEvent
@@ -4196,6 +4408,8 @@ void QWidget::closeEvent( QCloseEvent *e )
 }
 
 
+#ifndef QT_NO_DRAGANDDROP
+
 /*!
   This event handler is called when a drag is in progress and the
   mouse enters this widget.
@@ -4249,6 +4463,7 @@ void QWidget::dropEvent( QDropEvent * )
 {
 }
 
+#endif // QT_NO_DRAGANDDROP
 
 /*!
   This event handler can be reimplemented in a subclass to receive
@@ -4351,6 +4566,26 @@ bool QWidget::winEvent( MSG * )
 */
 
 bool QWidget::x11Event( XEvent * )
+{
+    return FALSE;
+}
+
+#elif defined(_WS_QWS_)
+
+/*!
+  This special event handler can be reimplemented in a subclass to receive
+  native Qt/Embedded events.
+
+  If the event handler returns FALSE, this native event is passed back to
+  Qt, which translates the event into a Qt event and sends it to the
+  widget.  If the event handler returns TRUE, the event is stopped.
+
+  \warning This function is not portable.
+
+  QApplication::qwsEventFilter()
+*/
+
+bool QWidget::qwsEvent( QWSEvent * )
 {
     return FALSE;
 }
@@ -4540,30 +4775,43 @@ void QWidget::updateMask()
 
   \sa layout() QLayout sizePolicy()
 */
-
+#ifndef QT_NO_LAYOUT
 void QWidget::setLayout( QLayout *l )
 {
     lay_out = l;
 }
+#endif
 
-
-/*!  This function can be reimplemented in subclasses to specify the
-  default layout behaviour of that subclass.
+/*!
+  Returns the default layout behaviour of this widget.
 
   If there is a QLayout that manages this widget's children, the size
   policy specified by that layout is used. If there is no such
   QLayout, the result of this function is used.
 
-  The default implementation returns a value which means that the
+  \sa setSizePolicy(), sizeHint() QLayout QSizePolicy, updateGeometry()
+*/
+
+QSizePolicy QWidget::sizePolicy() const
+{
+    return extra ? extra->size_policy : QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Preferred );
+}
+
+/*!
+
+  Sets the size policy for this widget to \a policy. The size policy
+  specifies the default layout behaviour.
+
+  The default policy is Preferred/Preferred, which means that the
   widget can be freely resized, but prefers to be the size sizeHint()
-  returns. Button-like widgets reimplement sizeHint to specify that
+  returns. Button-like widgets set the size policy to specify that
   they may stretch horizontally, but are fixed vertically. The same
   applies to lineedit controls (such as QLineEdit, QSpinBox or an
   editable QComboBox) and other horizontally orientated widgets (such
   as QProgressBar).  A QToolButton on the other hand wants to be
   squared, therefore it allows growth in both directions. Widgets that
   support different directions (such as QSlider, QScrollBar or
-  QHeader) specify stretching in the respecitive direction
+  QHeader) specify stretching in the respective direction
   only. Widgets that can provide scrollbars (usually subclasses of
   QScrollView) tend to specify that they can use additional space, and
   that they can survive on less than sizeHint().
@@ -4571,10 +4819,15 @@ void QWidget::setLayout( QLayout *l )
   \sa sizeHint() QLayout QSizePolicy, updateGeometry()
 */
 
-QSizePolicy QWidget::sizePolicy() const
+void QWidget::setSizePolicy( QSizePolicy policy )
 {
-    return QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Preferred );
+    if ( policy == sizePolicy() )
+	return;
+    createExtra();
+    extra->size_policy = policy;
+    updateGeometry();
 }
+
 
 /*!
   Returns the preferred height for this widget, given the width \a w.
@@ -4618,11 +4871,14 @@ bool QWidget::customWhatsThis() const
   to change geometry.
 
   Call this function if the sizeHint() or sizePolicy() have changed.
+
+  For explicitly hidden widgets, updateGeometry() is a no-op. The
+  layout system will be notified as soon as the widget is shown.
 */
 
 void QWidget::updateGeometry()
 {
-    if ( !isTopLevel() )
+    if ( !isTopLevel() && !isHidden() )
 	QApplication::postEvent( parentWidget(),
 				 new QEvent( QEvent::LayoutHint ) );
 }
@@ -4631,7 +4887,7 @@ void QWidget::updateGeometry()
 
 /*!
   Sets the widget's GUI style to \a style. Ownership of the style
-  object is not transfered.
+  object is not transferred.
 
   If no style is set, the widget uses the application's style
   QApplication::style() instead.
@@ -4641,11 +4897,12 @@ void QWidget::updateGeometry()
 
   \warning This function is particularly useful for demonstration
   purposes, where you want to show Qt's styling capabilities.  Real
-  appliations should stay away from it and use one consistent GUI
+  applications should stay away from it and use one consistent GUI
   style instead.
 
   \sa style(), QStyle, QApplication::style(), QApplication::setStyle()
 */
+#ifndef QT_NO_STYLE
 
 void QWidget::setStyle( QStyle *style )
 {
@@ -4656,9 +4913,10 @@ void QWidget::setStyle( QStyle *style )
 	 && testWState(WState_Polished)) { // (and have been polished)
 	old.unPolish( this );
 	QWidget::style().polish( this );
-	styleChange( old );
     }
+    styleChange( old );
 }
+#endif
 
 /*!\overload
 
@@ -4723,10 +4981,47 @@ void QWidget::showFullScreen()
     raise();
     show();
 #if defined(_WS_X11_)
-    extern void qt_wait_for_window_manager( WId win ); // defined in qwidget_x11.cpp
-    qt_wait_for_window_manager( winId() );
+    extern void qt_wait_for_window_manager( QWidget* w ); // defined in qwidget_x11.cpp
+    qt_wait_for_window_manager( this );
 #endif
 
     setActiveWindow();
 }
 
+/*!
+  \fn bool QWidget::isMaximized() const
+
+  Returns TRUE if this widget is a top-level widget that is maximized,
+  or else FALSE.
+
+  Note that due to limitations in some window-systems,
+  this does not always report expected results (eg. if the user on X11
+  maximizes the window via the window manager, Qt has no way of telling
+  this from any other resize). This will improve as window manager
+  protocols advance.
+
+  \sa showMaximized()
+ */
+
+
+/*!
+  \fn bool QWidget::ownCursor() const
+  Returns whether the widget uses its own cursor or its parent
+  widget's cursor
+ */
+
+/*!
+  \fn bool QWidget::ownFont() const
+  Returns whether the widget uses its own font or its natural
+  default font.
+
+  \sa setFont(), unsetFont()
+ */
+
+/*!
+  \fn bool QWidget::ownPalette() const
+  Returns whether the widget uses its own palette or its natural
+  default palette.
+
+  \sa setPalette(), unsetPalette()
+ */

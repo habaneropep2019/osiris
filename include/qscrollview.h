@@ -1,27 +1,39 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qscrollview.h   2.1.1   edited 2000-04-28 $
+** $Id: qt/src/widgets/qscrollview.h   2.2.0   edited 2000-08-25 $
 **
 ** Definition of QScrollView class
 **
 ** Created : 970523
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the widgets module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 #ifndef QSCROLLVIEW_H
 #define QSCROLLVIEW_H
 
@@ -29,6 +41,8 @@
 #include "qframe.h"
 #include "qscrollbar.h"
 #endif // QT_H
+
+#ifndef QT_NO_COMPLEXWIDGETS
 
 struct QScrollViewData;
 
@@ -45,7 +59,9 @@ class Q_EXPORT QScrollView : public QFrame
     Q_PROPERTY( int contentsHeight READ contentsHeight )
     Q_PROPERTY( int contentsX READ contentsX )
     Q_PROPERTY( int contentsY READ contentsY )
+#ifndef QT_NO_DRAGANDDROP
     Q_PROPERTY( bool dragAutoScroll READ dragAutoScroll WRITE setDragAutoScroll )
+#endif
 
 public:
     QScrollView(QWidget *parent=0, const char *name=0, WFlags f=0);
@@ -104,6 +120,9 @@ public:
     QPoint	viewportToContents(const QPoint&);
     void	enableClipper(bool y);
 
+    void     setStaticBackground(bool y);
+    bool     hasStaticBackground() const;
+
     QSize	viewportSize( int, int ) const;
     QSizePolicy sizePolicy() const;
     QSize	sizeHint() const;
@@ -111,8 +130,10 @@ public:
 
     void	removeChild(QObject* child);
 
+#ifndef QT_NO_DRAGANDDROP
     void	setDragAutoScroll( bool b ); // #### virtual in 3.0
     bool	dragAutoScroll() const;
+#endif
 
 signals:
     void	contentsMoving(int x, int y);
@@ -138,10 +159,12 @@ protected:
     virtual void contentsMouseReleaseEvent( QMouseEvent* );
     virtual void contentsMouseDoubleClickEvent( QMouseEvent* );
     virtual void contentsMouseMoveEvent( QMouseEvent* );
+#ifndef QT_NO_DRAGANDDROP
     virtual void contentsDragEnterEvent( QDragEnterEvent * );
     virtual void contentsDragMoveEvent( QDragMoveEvent * );
     virtual void contentsDragLeaveEvent( QDragLeaveEvent * );
     virtual void contentsDropEvent( QDropEvent * );
+#endif
     virtual void contentsWheelEvent( QWheelEvent * );
 
     virtual void viewportPaintEvent( QPaintEvent* );
@@ -150,10 +173,12 @@ protected:
     virtual void viewportMouseReleaseEvent( QMouseEvent* );
     virtual void viewportMouseDoubleClickEvent( QMouseEvent* );
     virtual void viewportMouseMoveEvent( QMouseEvent* );
+#ifndef QT_NO_DRAGANDDROP
     virtual void viewportDragEnterEvent( QDragEnterEvent * );
     virtual void viewportDragMoveEvent( QDragMoveEvent * );
     virtual void viewportDragLeaveEvent( QDragLeaveEvent * );
     virtual void viewportDropEvent( QDropEvent * );
+#endif
     virtual void viewportWheelEvent( QWheelEvent * );
 
     virtual void drawContentsOffset(QPainter*, int ox, int oy,
@@ -181,9 +206,11 @@ private:
 private slots:
     void hslide(int);
     void vslide(int);
+#ifndef QT_NO_DRAGANDDROP
     void doDragAutoScroll();
     void startDragAutoScroll();
     void stopDragAutoScroll();
+#endif
 
 private:	// Disabled copy constructor and operator=
 #if defined(Q_DISABLE_COPY)
@@ -193,4 +220,6 @@ private:	// Disabled copy constructor and operator=
     void changeFrameRect(const QRect&);
 };
 
-#endif
+#endif // QT_NO_COMPLEXWIDGETS
+
+#endif // QSCROLLVIEW_H

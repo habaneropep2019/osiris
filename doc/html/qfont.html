@@ -1,15 +1,17 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head>
 <title>Qt Toolkit - QFont Class</title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
-a:link { text-decoration: none; }
-body { background: white; color: black; }
+a:link { color: #004faf; text-decoration: none }
+a:visited { color: #672967; text-decoration: none }body { background: white; color: black; }
 --></style>
 </head><body bgcolor="#ffffff">
 
-<a href="index.html">
-<img width="122" height="65" src="qtlogo.png" alt="Home"
-  align="left" border="0">
-</a><div align=right><img src="dochead.png" width="472" height="27"><br>
+<table width="100%">
+<tr><td><a href="index.html">
+<img width="100" height="100" src="qtlogo.png"
+alt="Home" border="0"><img width="100"
+height="100" src="face.png" alt="Home" border="0">
+</a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
 - <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
@@ -17,7 +19,7 @@ body { background: white; color: black; }
 - <a href="index.html">Home</a>
 - <a href="topicals.html"><b>Structure</b></a>
 </div>
-<br clear=all>
+</table>
 
 <h1 align=center>QFont Class Reference</h1><br clear="all">
 <p>
@@ -28,72 +30,75 @@ The QFont class specifies a font used for drawing text.
 <p><a href="qfont-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><span class="fn">enum <a href="#CharSet"><b>CharSet</b></a> { ISO_8859_1, Latin1 = ISO_8859_1, AnyCharSet, ISO_8859_2, Latin2 = ISO_8859_2, ISO_8859_3, Latin3 = ISO_8859_3, ISO_8859_4, Latin4 = ISO_8859_4, ISO_8859_5, ISO_8859_6, ISO_8859_7, ISO_8859_8, ISO_8859_9, Latin5 = ISO_8859_9, ISO_8859_10, Latin6 = ISO_8859_10, ISO_8859_11, ISO_8859_12, ISO_8859_13, Latin7 = ISO_8859_13, ISO_8859_14, Latin8 = ISO_8859_14, ISO_8859_15, Latin9 = ISO_8859_15, KOI8R, Set_Ja, Set_1 = Set_Ja, Set_Ko, Set_Th_TH, Set_Zh, Set_Zh_TW, Set_N = Set_Zh_TW, Unicode, Set_GBK, Set_Big5 }</span>
-<li><span class="fn">enum <a href="#StyleHint"><b>StyleHint</b></a> { Helvetica, Times, Courier, OldEnglish, System, AnyStyle, SansSerif = Helvetica, Serif = Times, TypeWriter = Courier, Decorative = OldEnglish}</span>
-<li><span class="fn">enum <a href="#Weight"><b>Weight</b></a> { Light = 25, Normal = 50, DemiBold = 63, Bold = 75, Black = 87 }</span>
-<li><span class="fn"><a href="#5c67d5"><b>QFont</b></a> () </span>
-<li><span class="fn"><a href="#61fecf"><b>QFont</b></a> ( const QString &amp; family, int pointSize = 12, int weight = Normal, bool italic = FALSE ) </span>
-<li><span class="fn"><a href="#7033cc"><b>QFont</b></a> ( const QString &amp; family, int pointSize, int weight, bool italic, CharSet charSet ) </span>
-<li><span class="fn"><a href="#d83930"><b>QFont</b></a> ( const QFont &amp; ) </span>
-<li><span class="fn"><a href="#2a29ed"><b>~QFont</b></a> () </span>
-<li><span class="fn">QFont&amp; <a href="#ac8291"><b>operator=</b></a> ( const QFont &amp; ) </span>
-<li><span class="fn">QString <a href="#a9017e"><b>family</b></a> () const</span>
-<li><span class="fn">void <a href="#0f8456"><b>setFamily</b></a> ( const QString &amp; ) </span>
-<li><span class="fn">int <a href="#9bb6f8"><b>pointSize</b></a> () const</span>
-<li><span class="fn">float <a href="#151894"><b>pointSizeFloat</b></a> () const</span>
-<li><span class="fn">void <a href="#598c89"><b>setPointSize</b></a> ( int ) </span>
-<li><span class="fn">void <a href="#a22ae1"><b>setPointSizeFloat</b></a> ( float ) </span>
-<li><span class="fn">int <a href="#11c974"><b>pixelSize</b></a> () const</span>
-<li><span class="fn">void <a href="#353e4e"><b>setPixelSize</b></a> ( int ) </span>
-<li><span class="fn">void <a href="#92232e"><b>setPixelSizeFloat</b></a> ( float ) </span>
-<li><span class="fn">int <a href="#f73128"><b>weight</b></a> () const</span>
-<li><span class="fn">void <a href="#196425"><b>setWeight</b></a> ( int ) </span>
-<li><span class="fn">bool <a href="#f2c973"><b>bold</b></a> () const</span>
-<li><span class="fn">void <a href="#3ec9de"><b>setBold</b></a> ( bool ) </span>
-<li><span class="fn">bool <a href="#3eb9a0"><b>italic</b></a> () const</span>
-<li><span class="fn">void <a href="#c36bb5"><b>setItalic</b></a> ( bool ) </span>
-<li><span class="fn">bool <a href="#e4b2a7"><b>underline</b></a> () const</span>
-<li><span class="fn">void <a href="#be81f1"><b>setUnderline</b></a> ( bool ) </span>
-<li><span class="fn">bool <a href="#ae6b96"><b>strikeOut</b></a> () const</span>
-<li><span class="fn">void <a href="#650053"><b>setStrikeOut</b></a> ( bool ) </span>
-<li><span class="fn">bool <a href="#7f2a40"><b>fixedPitch</b></a> () const</span>
-<li><span class="fn">void <a href="#370b59"><b>setFixedPitch</b></a> ( bool ) </span>
-<li><span class="fn">StyleHint <a href="#e5bc49"><b>styleHint</b></a> () const</span>
-<li><span class="fn">void <a href="#ddd5ac"><b>setStyleHint</b></a> ( StyleHint ) </span>
-<li><span class="fn">CharSet <a href="#d94bbd"><b>charSet</b></a> () const</span>
-<li><span class="fn">void <a href="#766078"><b>setCharSet</b></a> ( CharSet ) </span>
-<li><span class="fn">bool <a href="#0f89b1"><b>rawMode</b></a> () const</span>
-<li><span class="fn">void <a href="#7c41f5"><b>setRawMode</b></a> ( bool ) </span>
-<li><span class="fn">bool <a href="#0ce732"><b>exactMatch</b></a> () const</span>
-<li><span class="fn">bool <a href="#68d836"><b>operator==</b></a> ( const QFont &amp; ) const</span>
-<li><span class="fn">bool <a href="#da054f"><b>operator!=</b></a> ( const QFont &amp; ) const</span>
-<li><span class="fn">bool <a href="#770cb2"><b>isCopyOf</b></a> ( const QFont &amp; ) const</span>
-<li><span class="fn">void <a href="#a54e29"><b>setRawName</b></a> ( const QString &amp; ) </span>
-<li><span class="fn">QString <a href="#787069"><b>rawName</b></a> () const</span>
-<li><span class="fn">QString <a href="#5eb49e"><b>key</b></a> () const</span>
+<li><div class="fn">enum <a href="#CharSet"><b>CharSet</b></a> { ISO_8859_1, Latin1 = ISO_8859_1, AnyCharSet, ISO_8859_2, Latin2 = ISO_8859_2, ISO_8859_3, Latin3 = ISO_8859_3, ISO_8859_4, Latin4 = ISO_8859_4, ISO_8859_5, ISO_8859_6, ISO_8859_7, ISO_8859_8, ISO_8859_9, Latin5 = ISO_8859_9, ISO_8859_10, Latin6 = ISO_8859_10, ISO_8859_11, TIS620 = ISO_8859_11, ISO_8859_12, ISO_8859_13, Latin7 = ISO_8859_13, ISO_8859_14, Latin8 = ISO_8859_14, ISO_8859_15, Latin9 = ISO_8859_15, KOI8R, Set_Ja, Set_1 = Set_Ja, Set_Ko, Set_Th_TH, Set_Zh, Set_Zh_TW, Set_N = Set_Zh_TW, Unicode, Set_GBK, Set_Big5, JIS_X_0201 = 0xa0, JIS_X_0208 = 0xc0, Enc16 = JIS_X_0208, KSC_5601, GB_2312, Big5, TSCII }</div>
+<li><div class="fn">enum <a href="#StyleHint"><b>StyleHint</b></a> { Helvetica, Times, Courier, OldEnglish, System, AnyStyle, SansSerif = Helvetica, Serif = Times, TypeWriter = Courier, Decorative = OldEnglish}</div>
+<li><div class="fn">enum <a href="#StyleStrategy"><b>StyleStrategy</b></a> { PreferDefault = 0x0001, PreferBitmap = 0x0002, PreferDevice = 0x0004, PreferOutline = 0x0008, ForceOutline = 0x0010, PreferMatch = 0x0020, PreferQuality = 0x0040 }</div>
+<li><div class="fn">enum <a href="#Weight"><b>Weight</b></a> { Light = 25, Normal = 50, DemiBold = 63, Bold = 75, Black = 87 }</div>
+<li><div class="fn"><a href="#5c67d5"><b>QFont</b></a> () </div>
+<li><div class="fn"><a href="#61fecf"><b>QFont</b></a> ( const QString &amp; family, int pointSize = 12, int weight = Normal, bool italic = FALSE ) </div>
+<li><div class="fn"><a href="#7033cc"><b>QFont</b></a> ( const QString &amp; family, int pointSize, int weight, bool italic, CharSet charSet ) </div>
+<li><div class="fn"><a href="#d83930"><b>QFont</b></a> ( const QFont &amp; ) </div>
+<li><div class="fn"><a href="#2a29ed"><b>~QFont</b></a> () </div>
+<li><div class="fn">QFont&amp; <a href="#ac8291"><b>operator=</b></a> ( const QFont &amp; ) </div>
+<li><div class="fn">QString <a href="#a9017e"><b>family</b></a> () const</div>
+<li><div class="fn">void <a href="#0f8456"><b>setFamily</b></a> ( const QString &amp; ) </div>
+<li><div class="fn">int <a href="#9bb6f8"><b>pointSize</b></a> () const</div>
+<li><div class="fn">float <a href="#151894"><b>pointSizeFloat</b></a> () const</div>
+<li><div class="fn">void <a href="#598c89"><b>setPointSize</b></a> ( int ) </div>
+<li><div class="fn">void <a href="#a22ae1"><b>setPointSizeFloat</b></a> ( float ) </div>
+<li><div class="fn">int <a href="#11c974"><b>pixelSize</b></a> () const</div>
+<li><div class="fn">void <a href="#353e4e"><b>setPixelSize</b></a> ( int ) </div>
+<li><div class="fn">void <a href="#92232e"><b>setPixelSizeFloat</b></a> ( float ) </div>
+<li><div class="fn">int <a href="#f73128"><b>weight</b></a> () const</div>
+<li><div class="fn">void <a href="#196425"><b>setWeight</b></a> ( int ) </div>
+<li><div class="fn">bool <a href="#f2c973"><b>bold</b></a> () const</div>
+<li><div class="fn">void <a href="#3ec9de"><b>setBold</b></a> ( bool ) </div>
+<li><div class="fn">bool <a href="#3eb9a0"><b>italic</b></a> () const</div>
+<li><div class="fn">void <a href="#c36bb5"><b>setItalic</b></a> ( bool ) </div>
+<li><div class="fn">bool <a href="#e4b2a7"><b>underline</b></a> () const</div>
+<li><div class="fn">void <a href="#be81f1"><b>setUnderline</b></a> ( bool ) </div>
+<li><div class="fn">bool <a href="#ae6b96"><b>strikeOut</b></a> () const</div>
+<li><div class="fn">void <a href="#650053"><b>setStrikeOut</b></a> ( bool ) </div>
+<li><div class="fn">bool <a href="#7f2a40"><b>fixedPitch</b></a> () const</div>
+<li><div class="fn">void <a href="#370b59"><b>setFixedPitch</b></a> ( bool ) </div>
+<li><div class="fn">StyleHint <a href="#e5bc49"><b>styleHint</b></a> () const</div>
+<li><div class="fn">void <a href="#ddd5ac"><b>setStyleHint</b></a> ( StyleHint ) </div>
+<li><div class="fn">StyleStrategy <a href="#54a51d"><b>styleStrategy</b></a> () const</div>
+<li><div class="fn">void <a href="#e7b773"><b>setStyleHint</b></a> ( StyleHint, StyleStrategy ) </div>
+<li><div class="fn">CharSet <a href="#d94bbd"><b>charSet</b></a> () const</div>
+<li><div class="fn">void <a href="#766078"><b>setCharSet</b></a> ( CharSet ) </div>
+<li><div class="fn">bool <a href="#0f89b1"><b>rawMode</b></a> () const</div>
+<li><div class="fn">void <a href="#7c41f5"><b>setRawMode</b></a> ( bool ) </div>
+<li><div class="fn">bool <a href="#0ce732"><b>exactMatch</b></a> () const</div>
+<li><div class="fn">bool <a href="#68d836"><b>operator==</b></a> ( const QFont &amp; ) const</div>
+<li><div class="fn">bool <a href="#da054f"><b>operator!=</b></a> ( const QFont &amp; ) const</div>
+<li><div class="fn">bool <a href="#770cb2"><b>isCopyOf</b></a> ( const QFont &amp; ) const</div>
+<li><div class="fn">void <a href="#a54e29"><b>setRawName</b></a> ( const QString &amp; ) </div>
+<li><div class="fn">QString <a href="#787069"><b>rawName</b></a> () const</div>
+<li><div class="fn">QString <a href="#5eb49e"><b>key</b></a> () const</div>
 </ul>
 <h2>Static Public Members</h2>
 <ul>
-<li><span class="fn">CharSet <a href="#e8a836"><b>charSetForLocale</b></a> () </span>
-<li><span class="fn">QString <a href="#ecff95"><b>encodingName</b></a> ( CharSet ) </span>
-<li><span class="fn">QFont <a href="#cf7e3b"><b>defaultFont</b></a> () </span>
-<li><span class="fn">void setDefaultFont ( const QFont &amp; ) <em>(obsolete)</em></span>
-<li><span class="fn">QString <a href="#270565"><b>substitute</b></a> ( const QString &amp; familyName ) </span>
-<li><span class="fn">void <a href="#4c66c0"><b>insertSubstitution</b></a> ( const QString &amp;, const QString &amp; ) </span>
-<li><span class="fn">void <a href="#78bc56"><b>removeSubstitution</b></a> ( const QString &amp; ) </span>
-<li><span class="fn">QStringList <a href="#ba4ea7"><b>substitutions</b></a> () </span>
-<li><span class="fn">void <a href="#afa8f5"><b>initialize</b></a> () </span>
-<li><span class="fn">void <a href="#38ede2"><b>locale_init</b></a> () </span>
-<li><span class="fn">void <a href="#8464d5"><b>cleanup</b></a> () </span>
-<li><span class="fn">void <a href="#54fb52"><b>cacheStatistics</b></a> () </span>
+<li><div class="fn">CharSet <a href="#e8a836"><b>charSetForLocale</b></a> () </div>
+<li><div class="fn">QString <a href="#ecff95"><b>encodingName</b></a> ( CharSet ) </div>
+<li><div class="fn">QFont <a href="#cf7e3b"><b>defaultFont</b></a> () </div>
+<li><div class="fn">void setDefaultFont ( const QFont &amp; ) <em>(obsolete)</em></div>
+<li><div class="fn">QString <a href="#270565"><b>substitute</b></a> ( const QString &amp; familyName ) </div>
+<li><div class="fn">void <a href="#4c66c0"><b>insertSubstitution</b></a> ( const QString &amp;, const QString &amp; ) </div>
+<li><div class="fn">void <a href="#78bc56"><b>removeSubstitution</b></a> ( const QString &amp; ) </div>
+<li><div class="fn">QStringList <a href="#ba4ea7"><b>substitutions</b></a> () </div>
+<li><div class="fn">void <a href="#afa8f5"><b>initialize</b></a> () </div>
+<li><div class="fn">void <a href="#38ede2"><b>locale_init</b></a> () </div>
+<li><div class="fn">void <a href="#8464d5"><b>cleanup</b></a> () </div>
+<li><div class="fn">void <a href="#54fb52"><b>cacheStatistics</b></a> () </div>
 </ul>
 <h2>Protected Members</h2>
 <ul>
-<li><span class="fn">bool <a href="#bac1f5"><b>dirty</b></a> () const</span>
-<li><span class="fn">QString <a href="#634c22"><b>defaultFamily</b></a> () const</span>
-<li><span class="fn">QString <a href="#77a4bc"><b>lastResortFamily</b></a> () const</span>
-<li><span class="fn">QString <a href="#0be87c"><b>lastResortFont</b></a> () const</span>
-<li><span class="fn">int <a href="#0278d6"><b>deciPointSize</b></a> () const</span>
+<li><div class="fn">bool <a href="#bac1f5"><b>dirty</b></a> () const</div>
+<li><div class="fn">QString <a href="#634c22"><b>defaultFamily</b></a> () const</div>
+<li><div class="fn">QString <a href="#77a4bc"><b>lastResortFamily</b></a> () const</div>
+<li><div class="fn">QString <a href="#0be87c"><b>lastResortFont</b></a> () const</div>
+<li><div class="fn">int <a href="#0278d6"><b>deciPointSize</b></a> () const</div>
 </ul>
 <h2>Related Functions</h2>
 (Note that these are not member functions.)
@@ -157,32 +162,63 @@ fonts are installed.
 especially on X11.  The QFont class contains extensive optimizations
 to make copying of QFont objects fast, and to cache the results of
 the slow window system functions it uses.
-<p>QFont also offers a few static functions, mostly to tune the <a href="fontmatch.html">font matching algorithm:</a> You can control
-what happens if a font's family isn't installed using
-<a href="#4c66c0">insertSubstitution</a>() and <a href="#78bc56">removeSubstitution</a>(), ask what happens for
-a single family using <a href="#270565">substitute</a>() and you can get a complete list of
-the fallback families using <a href="#ba4ea7">substitutions</a>().
+<p>QFont also offers a few static functions, mostly to tune the font
+matching algorithm: You can control what happens if a font's family
+isn't installed using <a href="#4c66c0">insertSubstitution</a>() and <a href="#78bc56">removeSubstitution</a>(),
+ask what happens for a single family using <a href="#270565">substitute</a>() and you can
+get a complete list of the fallback families using <a href="#ba4ea7">substitutions</a>().
 <p><a href="#54fb52">cacheStatistics</a>() offers cache effectiveness information; this is
 useful mostly for debugging.
 <p>Finally, <a href="qapplication.html#01d457">QApplication::setFont</a>() allows you to set the default font.
-The default default font is chosen at application startup from a set of
-common installed fonts that support the correct character set for the
-current locale. Of course, the initialization algorithm has a
+The default default font is chosen at application startup from a set
+of common installed fonts that support the correct character set for
+the current locale. Of course, the initialization algorithm has a
 default, too: The default default default font!
+<p>The font matching algorithm works as follows:
+<p>First an available font family is found. If the requested is not
+available the <a href="#e5bc49">styleHint</a>() is used to select a replacement family. If
+the style hint has not been set, "helvetica" will be used.
+<p>If even the replacement family is not found, "helvetica" is searched
+for, if that too is not found Qt will search for a last resort font,
+i.e.  a specific font to match to, ignoring the attribute
+settings. Qt searches through a built-in list of very common
+fonts. If none of these are available, Qt gives you an error message
+and aborts (of course this only happens if you are using fonts and
+Qt <em>has</em> to load a font). We have not been able to find a case
+where this happens. Please <a href="bughowto.html">report it as a
+bug</a> if it does, preferably with a list of the fonts you have
+installed.
+<p>The following attributes are then matched, in order of priority: <ol>
+<li> <a href="#d94bbd">charSet</a>()
+<li> <a href="#7f2a40">fixedPitch</a>()
+<li> pointSize() (see below)
+<li> weight()
+<li> italic()
+</ol>
+<p>If, for example, a font with the correct character set is found, but
+with all other attributes in the list unmatched, it will be chosen
+before a font with the wrong character set but with all other
+attributes correct.
+<p>The point size is defined to match if it is within 20% of the
+requested point size. Of course, when several fonts match and only
+point size differs the closest point size to the one requested will
+be chosen.
 <p>For more general information on fonts, see the
 <a href="http://www.nwalsh.com/comp.fonts/FAQ/">comp.fonts FAQ</a>
 and for more general information on encodings, see
 <a href="http://czyborra.com/charsets/">Roman Czyborra's page</a>
 about that.
-<p>See also:  <a href="qfontmetrics.html">QFontMetrics</a>, <a href="qfontinfo.html">QFontInfo</a>, <a href="qapplication.html#01d457">QApplication::setFont</a>(), <a href="qwidget.html#26de4b">QWidget::setFont</a>(), <a href="qpainter.html#e4d6b7">QPainter::setFont</a>(), <a href="#StyleHint">QFont::StyleHint</a>, <a href="#CharSet">QFont::CharSet</a> and <a href="#Weight">QFont::Weight</a>.
+<p>See also  <a href="qfontmetrics.html">QFontMetrics</a>, <a href="qfontinfo.html">QFontInfo</a>, <a href="qapplication.html#01d457">QApplication::setFont</a>(), <a href="qwidget.html#26de4b">QWidget::setFont</a>(), <a href="qpainter.html#e4d6b7">QPainter::setFont</a>(), <a href="#StyleHint">QFont::StyleHint</a>, <a href="#CharSet">QFont::CharSet</a> and <a href="#Weight">QFont::Weight</a>.
 <p>Examples:
  <a href="showimg-main-cpp.html#QFont">showimg/main.cpp</a>
  <a href="grapher-grapher-cpp.html#QFont">grapher/grapher.cpp</a>
  <a href="xform-xform-cpp.html#QFont">xform/xform.cpp</a>
+ <a href="i18n-main-cpp.html#QFont">i18n/main.cpp</a>
  <a href="drawdemo-drawdemo-cpp.html#QFont">drawdemo/drawdemo.cpp</a>
  <a href="menu-menu-cpp.html#QFont">menu/menu.cpp</a>
  <a href="desktop-desktop-cpp.html#QFont">desktop/desktop.cpp</a>
  <a href="scrollview-scrollview-cpp.html#QFont">scrollview/scrollview.cpp</a>
+ <a href="qfd-qfd-cpp.html#QFont">qfd/qfd.cpp</a>
  <a href="movies-main-cpp.html#QFont">movies/main.cpp</a>
  <a href="picture-picture-cpp.html#QFont">picture/picture.cpp</a>
  <a href="hello-main-cpp.html#QFont">hello/main.cpp</a>
@@ -203,15 +239,31 @@ The following character set encodings are available: <ul>
 <li> <code>QFont::KOI8R</code> - KOI8-R, Cyrillic, defined in
 <a href="ftp://ftp.nordu.net/rfc/rfc1489.txt">RFC 1489.</a>
 <li> <code>QFont::AnyCharSet</code> - whatever is handiest.
+<li> <code>QFont::Set_Ja,</code> Japanese
+<li> <code>QFont::Set_Ko,</code> Korean
+<li> <code>QFont::Set_Th_TH</code>
+<li> <code>QFont::Set_Zh</code>
+<li> <code>QFont::Set_Zh_TW</code>
+<li> <code>QFont::Unicode,</code> Unicode character set
+<li> <code>QFont::Set_GBK</code>
+<li> <code>QFont::Set_Big5</code>
 </ul>
 <h3 class="fn"><a name="StyleHint">QFont::StyleHint</a></h3>
-Style hints are used by the <a href="fontmatch.html">font
-matching algorithm</a> when a selected font family cannot be
-found and is used to find an appropriate default family.
-<p>The style hint value of <code>AnyStyle</code> leaves the
-task of finding a good default family to the font matching
-algorithm.
+Style hints are used by the font matching algorithm when a selected
+font family cannot be found and is used to find an appropriate
+default family.
+<p>The style hint value of <code>AnyStyle</code> leaves the task of finding a
+good default family to the font matching algorithm.
 <p>The other available style hints are <code>QFont::SansSerif, QFont::TypeWriter, QFont::OldEnglish, QFont::System</code>
+<h3 class="fn"><a name="StyleStrategy">QFont::StyleStrategy</a></h3>
+The style strategy tells the font matching algorithm what type
+of fonts should be used to find an appropriate default family.
+<p>The algorithm won't prefer any type of font if <code>NoStratgie</code> is
+provided.
+<p>The other available strategys are <code>QFont::PreferBitmap, QFont::PreferDevice, QFont::PreferOutline, QFont::ForceOutline</code>
+<p>Any of these may be ORed with a indicator whether exact matching or
+good quality should be preferred.
+<p><code>QFont::PreferMatch, QFont::PreferQuality</code>
 <h3 class="fn"><a name="Weight">QFont::Weight</a></h3>
 Contains the predefined font weights:<ul>
 <li> <code>QFont::Light</code> (25)
@@ -223,15 +275,17 @@ Contains the predefined font weights:<ul>
 <hr><h2>Member Function Documentation</h2>
 <h3 class="fn"><a name="5c67d5"></a>QFont::QFont ()</h3>
 <p>Constructs a font object that refers to the default font.
-<p>See also:  <a href="qapplication.html#01d457">QApplication::setFont</a>() and <a href="qapplication.html#43060b">QApplication::font</a>().
+<p>See also  <a href="qapplication.html#01d457">QApplication::setFont</a>() and <a href="qapplication.html#43060b">QApplication::font</a>().
 <h3 class="fn"><a name="61fecf"></a>QFont::QFont ( const <a href="qstring.html">QString</a> &amp; family, int pointSize = 12, int weight = Normal, bool italic = FALSE )</h3>
-<p>Constructs a font object with the specified <em>family, pointSize, weight</em> and <em>italic</em> settings.  The <a href="#d94bbd">character set</a> is copied from the <a href="qapplication.html#43060b">default font</a> and the rest of the settings are set reasonably.
+<p>Constructs a font object with the specified <em>family, pointSize, weight</em> and <em>italic</em> settings.  The <a href="#d94bbd">charSet</a>() is copied from the
+<a href="qapplication.html#43060b">default font</a> and the rest of the
+settings are set reasonably.
 <p>If <em>pointSize</em> is less than or equal to 0 it is set to 1.
-<p>See also:  <a href="#0f8456">setFamily</a>(), <a href="#598c89">setPointSize</a>(), <a href="#196425">setWeight</a>() and <a href="#c36bb5">setItalic</a>().
+<p>See also  <a href="#0f8456">setFamily</a>(), <a href="#598c89">setPointSize</a>(), <a href="#196425">setWeight</a>() and <a href="#c36bb5">setItalic</a>().
 <h3 class="fn"><a name="7033cc"></a>QFont::QFont ( const <a href="qstring.html">QString</a> &amp; family, int pointSize, int weight, bool italic, <a href="qfont.html#CharSet">CharSet</a> charSet )</h3>
 <p>Constructs a font object with the specified <em>family, pointSize, weight, italic</em> and <em>charSet</em> settings.  If <em>pointSize</em> is
 less than or equal to 0 it is set to 1.
-<p>See also:  <a href="#0f8456">setFamily</a>(), <a href="#598c89">setPointSize</a>(), <a href="#196425">setWeight</a>() and <a href="#c36bb5">setItalic</a>().
+<p>See also  <a href="#0f8456">setFamily</a>(), <a href="#598c89">setPointSize</a>(), <a href="#196425">setWeight</a>() and <a href="#c36bb5">setItalic</a>().
 <h3 class="fn"><a name="d83930"></a>QFont::QFont ( const QFont &amp; font )</h3>
 <p>Constructs a font that is a copy of <em>font.</em>
 <h3 class="fn"><a name="2a29ed"></a>QFont::~QFont ()</h3>
@@ -239,13 +293,13 @@ less than or equal to 0 it is set to 1.
 <h3 class="fn">bool <a name="f2c973"></a>QFont::bold () const</h3>
 <p>Returns TRUE if <a href="#f73128">weight</a>() is a value greater than <code>QFont::Normal,</code>
 otherwise FALSE.
-<p>See also:  <a href="#f73128">weight</a>(), <a href="#3ec9de">setBold</a>() and <a href="qfontinfo.html#d5de2f">QFontInfo::bold</a>().
+<p>See also  <a href="#f73128">weight</a>(), <a href="#3ec9de">setBold</a>() and <a href="qfontinfo.html#d5de2f">QFontInfo::bold</a>().
 <h3 class="fn">void <a name="54fb52"></a>QFont::cacheStatistics () <code>[static]</code></h3>
 <p>Internal function that dumps font cache statistics.
 <h3 class="fn">QFont::CharSet <a name="d94bbd"></a>QFont::charSet() const</h3>
 <p>Returns the character set by <a href="#766078">setCharSet</a>().
 <p>Use <a href="qfontinfo.html">QFontInfo</a> to find the <a href="#CharSet">CharSet</a> of the window system font actually used.
-<p>See also:  <a href="#766078">setCharSet</a>().
+<p>See also  <a href="#766078">setCharSet</a>().
 <h3 class="fn">QFont::CharSet <a name="e8a836"></a>QFont::charSetForLocale() <code>[static]</code></h3>
 <p>Returns a guess at the character set most likely to be
 appropriate for the locale the application is running in.  This is
@@ -254,7 +308,7 @@ the character sets fonts will use by default.
 <p>Internal function that cleans up the font system.
 <h3 class="fn">int <a name="0278d6"></a>QFont::deciPointSize () const <code>[protected]</code></h3>
 <p>Returns the point size in 1/10ths of a point.
-<p>See also:  <a href="#9bb6f8">pointSize</a>().
+<p>See also  <a href="#9bb6f8">pointSize</a>().
 <h3 class="fn"><a href="qstring.html">QString</a> <a name="634c22"></a>QFont::defaultFamily () const <code>[protected]</code></h3>
 <p>Returns the family name that corresponds to the current style hint.
 <h3 class="fn">QFont <a name="cf7e3b"></a>QFont::defaultFont () <code>[static]</code></h3>
@@ -270,7 +324,7 @@ returns "iso8859-1" and QFont::Unicode returns "iso10646".
 <h3 class="fn">bool <a name="0ce732"></a>QFont::exactMatch () const</h3>
 <p>Returns TRUE if a window system font exactly matching the settings
 of this font is available.
-<p>See also:  <a href="qfontinfo.html">QFontInfo</a> and <a href="fontmatch.html">font matching</a>
+<p>See also  <a href="qfontinfo.html">QFontInfo</a>.
 <h3 class="fn"><a href="qstring.html">QString</a> <a name="a9017e"></a>QFont::family () const</h3>
 <p>Returns the family name set by <a href="#0f8456">setFamily</a>().
 <p>Use <a href="qfontinfo.html">QFontInfo</a> to find the family name of the window system font that
@@ -281,12 +335,12 @@ is actually used for drawing.
     <a href="qapplication.html#3db6b2">qDebug</a>( "Font family requested is    : \"%s\"", font.<a href="#a9017e">family</a>() );
     <a href="qapplication.html#3db6b2">qDebug</a>( "Font family actually used is: \"%s\"", info.<a href="qfontinfo.html#682b83">family</a>() );
 </pre>
-<p>See also:  <a href="#0f8456">setFamily</a>() and <a href="#270565">substitute</a>().
+<p>See also  <a href="#0f8456">setFamily</a>() and <a href="#270565">substitute</a>().
 <h3 class="fn">bool <a name="7f2a40"></a>QFont::fixedPitch () const</h3>
 <p>Returns the value set by <a href="#370b59">setFixedPitch</a>().
 <p>Use <a href="qfontinfo.html">QFontInfo</a> to find the fixed pitch value of the window system font
 actually used.
-<p>See also:  <a href="#370b59">setFixedPitch</a>() and <a href="qfontinfo.html#fb43e1">QFontInfo::fixedPitch</a>().
+<p>See also  <a href="#370b59">setFixedPitch</a>() and <a href="qfontinfo.html#fb43e1">QFontInfo::fixedPitch</a>().
 <h3 class="fn">void <a name="afa8f5"></a>QFont::initialize () <code>[static]</code></h3>
 <p>Internal function that initializes the font system.
 <h3 class="fn">void <a name="4c66c0"></a>QFont::insertSubstitution ( const <a href="qstring.html">QString</a> &amp; familyName, const <a href="qstring.html">QString</a> &amp; replacementName ) <code>[static]</code></h3>
@@ -294,31 +348,33 @@ actually used.
 table.
 <p>If <em>familyName</em> already exists in the substitution table, it will
 be replaced with this new substitution.
-<p>See also:  <a href="#78bc56">removeSubstitution</a>(), <a href="#ba4ea7">substitutions</a>() and <a href="#270565">substitute</a>().
+<p>See also  <a href="#78bc56">removeSubstitution</a>(), <a href="#ba4ea7">substitutions</a>() and <a href="#270565">substitute</a>().
 <h3 class="fn">bool <a name="770cb2"></a>QFont::isCopyOf ( const QFont &amp; f ) const</h3>
 <p>Returns TRUE if this font and <em>f</em> are copies of each other,
 i.e. one of them was created as a copy of the other and neither was
 subsequently modified.  This is much stricter than equality.
-<p>See also:  operator= and operator==.
+<p>See also  operator= and operator==.
 <h3 class="fn">bool <a name="3eb9a0"></a>QFont::italic () const</h3>
 <p>Returns the value set by <a href="#c36bb5">setItalic</a>().
 <p>Use <a href="qfontinfo.html">QFontInfo</a> to find the italic value of the window system font actually
 used.
-<p>See also:  <a href="#c36bb5">setItalic</a>().
+<p>See also  <a href="#c36bb5">setItalic</a>().
 <h3 class="fn"><a href="qstring.html">QString</a> <a name="5eb49e"></a>QFont::key () const</h3>
 <p>Returns the font's key, which is a textual representation of the font
 settings. It is typically used to insert and find fonts in a
 dictionary or a cache.
-<p>See also:  <a href="qmap.html">QMap</a>.
+<p>See also  <a href="qmap.html">QMap</a>.
 <h3 class="fn"><a href="qstring.html">QString</a> <a name="77a4bc"></a>QFont::lastResortFamily () const <code>[protected]</code></h3>
-<p>Returns a last resort family name for the <a href="fontmatch.html">font
-matching algorithm.</a>
-<p>See also:  <a href="#0be87c">lastResortFont</a>().
+<p>Returns a last resort family name for the font matching algorithm.
+<p>See also  <a href="#0be87c">lastResortFont</a>().
 <h3 class="fn"><a href="qstring.html">QString</a> <a name="0be87c"></a>QFont::lastResortFont () const <code>[protected]</code></h3>
-<p>Returns a last resort raw font name for the <a href="fontmatch.html">font
-matching algorithm.</a>
-<p>This is used if not even the last resort family is available.
-<p>See also:  <a href="#77a4bc">lastResortFamily</a>().
+<p>Returns a last resort raw font name for the font matching algorithm.
+This is used if even the last resort family is not available.  It
+returns <em>something,</em> almost no matter what.
+<p>The current implementation tries a wide variety of common fonts,
+returning the first one it finds.  The implementation may change at
+any time.
+<p>See also  <a href="#77a4bc">lastResortFamily</a>().
 <h3 class="fn">void <a name="38ede2"></a>QFont::locale_init () <code>[static]</code></h3>
 <p>Internal function that uses locale information to find the preferred
 character set of loaded fonts.
@@ -328,7 +384,7 @@ equal.
 <p>Two QFonts are different if their font attributes are different.  If
 <a href="#0f89b1">rawMode</a>() is enabled for both fonts, then only the family fields are
 compared.
-<p>See also:  <a href="#68d836">operator==</a>().
+<p>See also  <a href="#68d836">operator==</a>().
 <h3 class="fn">QFont &amp; <a name="ac8291"></a>QFont::operator= ( const QFont &amp; font )</h3>
 <p>Assigns <em>font</em> to this font and returns a reference to this font.
 <h3 class="fn">bool <a name="68d836"></a>QFont::operator== ( const QFont &amp; f ) const</h3>
@@ -337,7 +393,7 @@ different.
 <p>Two QFonts are equal if their font attributes are equal.  If
 <a href="#0f89b1">rawMode</a>() is enabled for both fonts, then only the family fields are
 compared.
-<p>See also:  <a href="#da054f">operator!=</a>().
+<p>See also  <a href="#da054f">operator!=</a>().
 <h3 class="fn">int <a name="11c974"></a>QFont::pixelSize () const</h3>
 <p>Returns the logical pixel height of characters in the font if shown on
 the screen.
@@ -352,29 +408,28 @@ actually used.
     <a href="qapplication.html#3db6b2">qDebug</a>( "Font size requested is    : %d", font.<a href="#9bb6f8">pointSize</a>() );
     <a href="qapplication.html#3db6b2">qDebug</a>( "Font size actually used is: %d", info.<a href="qfontinfo.html#b4f86c">pointSize</a>() );
 </pre>
-<p>See also:  <a href="#598c89">setPointSize</a>() and <a href="#0278d6">deciPointSize</a>().
+<p>See also  <a href="#598c89">setPointSize</a>() and <a href="#0278d6">deciPointSize</a>().
 <h3 class="fn">float <a name="151894"></a>QFont::pointSizeFloat () const</h3>
 <p>Returns the height of characters in the font in points (1/72 inch).
-<p>See also:  <a href="#9bb6f8">pointSize</a>().
+<p>See also  <a href="#9bb6f8">pointSize</a>().
 <h3 class="fn">bool <a name="0f89b1"></a>QFont::rawMode () const</h3>
 <p>Returns the value set by <a href="#7c41f5">setRawMode</a>().
-<p>See also:  <a href="#7c41f5">setRawMode</a>().
+<p>See also  <a href="#7c41f5">setRawMode</a>().
 <h3 class="fn"><a href="qstring.html">QString</a> <a name="787069"></a>QFont::rawName () const</h3>
 <p>Returns the name of the font within the underlying window system.
 On Windows, this is usually just the family name of a true type
-font. Under X, it is  a rather complex  XLFD (X Logical Font Description).
-<em>Using the return value of this function is usually not
-portable.</em>
-<p>See also:  <a href="#a54e29">setRawName</a>().
+font. Under X, it is a rather complex XLFD (X Logical Font
+Description). Using the return value of this function is usually <em>not portable.</em>
+<p>See also  <a href="#a54e29">setRawName</a>().
 <h3 class="fn">void <a name="78bc56"></a>QFont::removeSubstitution ( const <a href="qstring.html">QString</a> &amp; familyName ) <code>[static]</code></h3>
 <p>Removes a font family name substitution from the family substitution
 table.
-<p>See also:  <a href="#4c66c0">insertSubstitution</a>(), <a href="#ba4ea7">substitutions</a>() and <a href="#270565">substitute</a>().
+<p>See also  <a href="#4c66c0">insertSubstitution</a>(), <a href="#ba4ea7">substitutions</a>() and <a href="#270565">substitute</a>().
 <h3 class="fn">void <a name="3ec9de"></a>QFont::setBold ( bool enable )</h3>
 <p>Sets the weight to <code>QFont::Bold</code> if <em>enable</em> is TRUE, or to
 <code>QFont::Normal</code> if <em>enable</em> is FALSE.
 <p>Use <a href="#196425">setWeight</a>() to set the weight to other values.
-<p>See also:  <a href="#f2c973">bold</a>() and <a href="#196425">setWeight</a>().
+<p>See also  <a href="#f2c973">bold</a>() and <a href="#196425">setWeight</a>().
 <p>Examples:
  <a href="menu-menu-cpp.html#setBold">menu/menu.cpp</a>
 <h3 class="fn">void <a name="766078"></a>QFont::setCharSet ( <a href="qfont.html#CharSet">CharSet</a> charset )</h3>
@@ -382,29 +437,26 @@ table.
 <p>If the character set encoding is not available another will be used
 for drawing.  For most non-trivial applications you will probably
 not want this to happen since it can totally obscure the text shown
-to the user.  This is why the <a href="fontmatch.html">font
-matching algorithm</a> gives high priority to finding the
-correct character set.
+to the user.  This is why the font matching algorithm gives high
+priority to finding the correct character set.
 <p>You can test that the character set is correct using the <a href="qfontinfo.html">QFontInfo</a>
 class.
-<p>See also:  <a href="#d94bbd">charSet</a>(), <a href="qfontinfo.html">QFontInfo</a> and <a href="fontmatch.html">font matching</a>
+<p>See also  <a href="#d94bbd">charSet</a>() and <a href="qfontinfo.html">QFontInfo</a>.
 <h3 class="fn">void <a name="468560"></a>QFont::setDefaultFont ( const QFont &amp; f ) <code>[static]</code></h3>
 <p><b>This function is obsolete.</b> It is provided to keep old source working, and will probably be removed in a future version of Qt.  We strongly advise against using it in new code.<p>
-Sets the <a href="qapplication.html">QApplication</a> default font.
-<p>This function will be removed in a future version of Qt. Please use
-<a href="qapplication.html#01d457">QApplication::setFont</a>() instead.
+<p>Please use <a href="qapplication.html#01d457">QApplication::setFont</a>() instead.
 <h3 class="fn">void <a name="0f8456"></a>QFont::setFamily ( const <a href="qstring.html">QString</a> &amp; family )</h3>
 <p>Sets the family name of the font (e.g. "Helvetica" or "times").
 <p>The family name is case insensitive.
 <p>If the family is not available a default family is used.
-<p>See also:  <a href="#a9017e">family</a>(), <a href="#ddd5ac">setStyleHint</a>(), <a href="qfontinfo.html">QFontInfo</a> and <a href="fontmatch.html">font matching</a>
+<p>See also  <a href="#a9017e">family</a>(), <a href="#ddd5ac">setStyleHint</a>() and <a href="qfontinfo.html">QFontInfo</a>.
 <h3 class="fn">void <a name="370b59"></a>QFont::setFixedPitch ( bool enable )</h3>
 <p>Sets fixed pitch on or off.
 <p>A fixed pitch font is a font where all characters have the same width.
-<p>See also:  <a href="#7f2a40">fixedPitch</a>(), <a href="qfontinfo.html">QFontInfo</a> and <a href="fontmatch.html">font matching</a>
+<p>See also  <a href="#7f2a40">fixedPitch</a>() and <a href="qfontinfo.html">QFontInfo</a>.
 <h3 class="fn">void <a name="c36bb5"></a>QFont::setItalic ( bool enable )</h3>
 <p>Sets italic on or off.
-<p>See also:  <a href="#3eb9a0">italic</a>(), <a href="qfontinfo.html">QFontInfo</a> and <a href="fontmatch.html">font matching</a>
+<p>See also  <a href="#3eb9a0">italic</a>() and <a href="qfontinfo.html">QFontInfo</a>.
 <h3 class="fn">void <a name="353e4e"></a>QFont::setPixelSize ( int pixelSize )</h3>
 <p>Sets the logical height of characters in the font if shown on
 the screen.
@@ -418,7 +470,7 @@ than zero.
 <pre>    <a href="qfont.html">QFont</a> font( "courier" );
     font.<a href="#598c89">setPointSize</a>( 18 );
 </pre>
-<p>See also:  <a href="#9bb6f8">pointSize</a>(), <a href="qfontinfo.html">QFontInfo</a> and <a href="fontmatch.html">font matching</a>
+<p>See also  <a href="#9bb6f8">pointSize</a>() and <a href="qfontinfo.html">QFontInfo</a>.
 <h3 class="fn">void <a name="a22ae1"></a>QFont::setPointSizeFloat ( float pointSize )</h3>
 <p>Sets the point size to <em>pointSize.</em> The point size must be greater
 than zero. The requested precision may not be achieved on all platforms.
@@ -432,34 +484,38 @@ first font returned by X.  <a href="qfontinfo.html">QFontInfo</a> <em>cannot</em
 information about a QFont using raw mode (it will return the values
 set in the QFont for all parameters, including the family name).<p><b>Warning:</b> Do not use raw mode unless you really, really need it! In
 most (if not all) cases, <a href="#a54e29">setRawName</a>() is a much better choise.
-<p>See also:  <a href="#0f89b1">rawMode</a>() and <a href="#a54e29">setRawName</a>().
+<p>See also  <a href="#0f89b1">rawMode</a>() and <a href="#a54e29">setRawName</a>().
 <h3 class="fn">void <a name="a54e29"></a>QFont::setRawName ( const <a href="qstring.html">QString</a> &amp; name )</h3>
 <p>Sets a font by its system specific name. The function is in
 particular useful under X, where system font settings ( for example
 X resources) are usually available as XLFD (X Logical Font
 Description) only. You can pass an XLFD as <em>name</em> to this function.
-<p>The big advantage over Qt-1.x' concept of raw fonts is, that a font
-after setRawName() is still a full-featured QFont. It can be queried
-(for example with <a href="#3eb9a0">italic</a>()) or modified (for example with
-<a href="#c36bb5">setItalic</a>() ) and is therefore also suitable as a basis font for
-rendering rich text.
+<p>In Qt 2.0 and later, a font set with setRawName() is still a
+full-featured QFont. It can be queried (for example with <a href="#3eb9a0">italic</a>())
+or modified (for example with <a href="#c36bb5">setItalic</a>() ) and is therefore also
+suitable as a basis font for rendering rich text.
 <p>If Qt's internal font database cannot resolve the raw name, the font
 becomes a raw font with <em>name</em> as family.
-<p>See also:  <a href="#787069">rawName</a>(), <a href="#7c41f5">setRawMode</a>() and <a href="#0f8456">setFamily</a>().
-<p>Bugs and limitations:
-<ul>
-<li>Doesn't handle wildcards in XLFDs well, only complete
-descriptions.  Aliases (file <code>fonts.alias</code> in the font directory on
-X11) are not supported.
-</ul>
+<p>Note that the present implementation does not handle handle
+wildcards in XLFDs well, and that font aliases (file <code>fonts.alias</code>
+in the font directory on X11) are not supported.
+<p>See also  <a href="#787069">rawName</a>(), <a href="#7c41f5">setRawMode</a>() and <a href="#0f8456">setFamily</a>().
 <h3 class="fn">void <a name="650053"></a>QFont::setStrikeOut ( bool enable )</h3>
 <p>Sets strike out on or off.
-<p>See also:  <a href="#ae6b96">strikeOut</a>(), <a href="qfontinfo.html">QFontInfo</a> and <a href="fontmatch.html">font matching</a>
+<p>See also  <a href="#ae6b96">strikeOut</a>() and <a href="qfontinfo.html">QFontInfo</a>.
 <h3 class="fn">void <a name="ddd5ac"></a>QFont::setStyleHint ( <a href="qfont.html#StyleHint">StyleHint</a> hint )</h3>
 <p>Sets the style hint.
+<p>See also  setStyleHint().
+<p>Examples:
+ <a href="desktop-desktop-cpp.html#setStyleHint">desktop/desktop.cpp</a>
+<h3 class="fn">void <a name="e7b773"></a>QFont::setStyleHint ( <a href="qfont.html#StyleHint">StyleHint</a> hint, <a href="qfont.html#StyleStrategy">StyleStrategy</a> strategy )</h3>
+<p>Sets the style hint and strategy.
 <p>The style hint has a default value of <code>AnyStyle</code> which leaves the
 task of finding a good default family to the font matching
 algorithm.
+<p>The style strategy has a default value of <code>PreferDefault</code> which tells
+the algorithm not to prefer any type of font.
+Right now, the X version only supports bitmap fonts.
 <p>In the example below the push button will
 display its text label with the Bavaria font family if this family
 is available, if not it will display its text label with another
@@ -474,18 +530,16 @@ serif font:
         <a href="qpushbutton.html">QPushButton</a>  push("Push me");
 
         <a href="qfont.html">QFont</a> font( "Bavaria", 18 );        // preferred family is Bavaria
-        font.<a href="#ddd5ac">setStyleHint</a>( QFont::Serif );  // can also use any serif font
+        font.<a href="#ddd5ac">setStyleHint</a>( QFont::Serif )    // can also use any serif font
 
         push.<a href="qwidget.html#dde00b">setFont</a>( font );
         return app.<a href="qapplication.html#7076af">exec</a>( &amp;push );
     }
 </pre>
-<p>See also:  <a href="#StyleHint">QFont::StyleHint</a>, <a href="#e5bc49">styleHint</a>(), <a href="qfontinfo.html">QFontInfo</a> and <a href="fontmatch.html">font matching</a>
-<p>Examples:
- <a href="desktop-desktop-cpp.html#setStyleHint">desktop/desktop.cpp</a>
+<p>See also  <a href="#StyleHint">QFont::StyleHint</a>, <a href="#e5bc49">styleHint</a>(), <a href="#StyleStrategy">QFont::StyleStrategy</a>, <a href="#54a51d">styleStrategy</a>() and <a href="qfontinfo.html">QFontInfo</a>.
 <h3 class="fn">void <a name="be81f1"></a>QFont::setUnderline ( bool enable )</h3>
 <p>Sets underline on or off.
-<p>See also:  <a href="#e4b2a7">underline</a>(), <a href="qfontinfo.html">QFontInfo</a> and <a href="fontmatch.html">font matching.</a>
+<p>See also  <a href="#e4b2a7">underline</a>() and <a href="qfontinfo.html">QFontInfo</a>.
 <p>Examples:
  <a href="menu-menu-cpp.html#setUnderline">menu/menu.cpp</a>
 <h3 class="fn">void <a name="196425"></a>QFont::setWeight ( int weight )</h3>
@@ -500,15 +554,18 @@ from the <a href="#Weight">QFont::Weight</a> enumeration.
 asking too much of the underlying window system.
 <p>If the specified weight is not available the closest available will
 be used. Use <a href="qfontinfo.html">QFontInfo</a> to check the actual weight.
-<p>See also:  <a href="#f73128">weight</a>(), <a href="qfontinfo.html">QFontInfo</a> and <a href="fontmatch.html">font matching</a>
+<p>See also  <a href="#f73128">weight</a>() and <a href="qfontinfo.html">QFontInfo</a>.
 <h3 class="fn">bool <a name="ae6b96"></a>QFont::strikeOut () const</h3>
 <p>Returns the value set by <a href="#650053">setStrikeOut</a>().
 <p>Use <a href="qfontinfo.html">QFontInfo</a> to find the strike out value of the window system font
 actually used.
-<p>See also:  <a href="#650053">setStrikeOut</a>() and <a href="qfontinfo.html#824934">QFontInfo::strikeOut</a>().
+<p>See also  <a href="#650053">setStrikeOut</a>() and <a href="qfontinfo.html#824934">QFontInfo::strikeOut</a>().
 <h3 class="fn">QFont::StyleHint <a name="e5bc49"></a>QFont::styleHint() const</h3>
 <p>Returns the <a href="#StyleHint">StyleHint</a> set by <a href="#ddd5ac">setStyleHint</a>().
-<p>See also:  <a href="#ddd5ac">setStyleHint</a>() and <a href="qfontinfo.html#87cfb0">QFontInfo::styleHint</a>().
+<p>See also  <a href="#ddd5ac">setStyleHint</a>() and <a href="qfontinfo.html#87cfb0">QFontInfo::styleHint</a>().
+<h3 class="fn">QFont::StyleStrategy <a name="54a51d"></a>QFont::styleStrategy() const</h3>
+<p>Returns the StyleStratgie set by <a href="#ddd5ac">setStyleHint</a>()
+<p>See also  <a href="#ddd5ac">setStyleHint</a>().
 <h3 class="fn"><a href="qstring.html">QString</a> <a name="270565"></a>QFont::substitute ( const <a href="qstring.html">QString</a> &amp; familyName ) <code>[static]</code></h3>
 <p>Returns the font family name to be used whenever <em>familyName</em> is
 specified. The lookup is case insensitive.
@@ -525,39 +582,39 @@ returned.
     <a href="#78bc56">QFont::removeSubstitution</a>( "newyork" );
     <a href="#270565">QFont::substitute</a>( "NewYork" );     // returns "NewYork"
 </pre>
-<p>See also:  <a href="#0f8456">setFamily</a>(), <a href="#4c66c0">insertSubstitution</a>() and <a href="#78bc56">removeSubstitution</a>().
+<p>See also  <a href="#0f8456">setFamily</a>(), <a href="#4c66c0">insertSubstitution</a>() and <a href="#78bc56">removeSubstitution</a>().
 <h3 class="fn"><a href="qstringlist.html">QStringList</a> <a name="ba4ea7"></a>QFont::substitutions () <code>[static]</code></h3>
 <p>Returns a sorted list of substituted family names.
-<p>See also:  <a href="#4c66c0">insertSubstitution</a>(), <a href="#78bc56">removeSubstitution</a>() and <a href="#270565">substitute</a>().
+<p>See also  <a href="#4c66c0">insertSubstitution</a>(), <a href="#78bc56">removeSubstitution</a>() and <a href="#270565">substitute</a>().
 <h3 class="fn">bool <a name="e4b2a7"></a>QFont::underline () const</h3>
 <p>Returns the value set by <a href="#be81f1">setUnderline</a>().
 <p>Use <a href="qfontinfo.html">QFontInfo</a> to find the underline value of the window system font
 actually used for drawing.
-<p>See also:  <a href="#be81f1">setUnderline</a>() and <a href="qfontinfo.html#aefbe6">QFontInfo::underline</a>().
+<p>See also  <a href="#be81f1">setUnderline</a>() and <a href="qfontinfo.html#aefbe6">QFontInfo::underline</a>().
 <h3 class="fn">int <a name="f73128"></a>QFont::weight () const</h3>
 <p>Returns the weight set by <a href="#196425">setWeight</a>().
 <p>Use <a href="qfontinfo.html">QFontInfo</a> to find the weight of the window system font actually used.
-<p>See also:  <a href="#196425">setWeight</a>() and <a href="qfontinfo.html">QFontInfo</a>.
+<p>See also  <a href="#196425">setWeight</a>() and <a href="qfontinfo.html">QFontInfo</a>.
 <hr><h2>Related Functions</h2>
 <h3><a href="qdatastream.html">QDataStream</a> &amp; <a name="befaea"></a>operator&lt;&lt; (<a href="qdatastream.html">QDataStream</a> &amp; s, const QFont &amp; f)</h3>
 <p>Writes a font to the stream.
-<p>See also:  <a href="datastreamformat.html">Format of the QDataStream operators</a>
+<p>See also  <a href="datastreamformat.html">Format of the QDataStream operators</a>
 
 <h3><a href="qdatastream.html">QDataStream</a> &amp; <a name="d9809d"></a>operator&gt;&gt; (<a href="qdatastream.html">QDataStream</a> &amp; s, QFont &amp; f)</h3>
 <p>Reads a font from the stream.
-<p>See also:  <a href="datastreamformat.html">Format of the QDataStream operators</a>
+<p>See also  <a href="datastreamformat.html">Format of the QDataStream operators</a>
 
 <hr><p>
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.1.1"><nobr>
+<input type=hidden name="version" value="2.2.0"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
 copyright &copy; 1995-2000
-<a href="http://www.trolltech.com">Troll Tech</a>, all rights reserved.<p><address><hr><div align="center">
+<a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.1</div>
+<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.2.0</div>
 </table></div></address></body></html>

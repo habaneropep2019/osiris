@@ -1,15 +1,17 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head>
 <title>Qt Toolkit - QSlider Class</title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
-a:link { text-decoration: none; }
-body { background: white; color: black; }
+a:link { color: #004faf; text-decoration: none }
+a:visited { color: #672967; text-decoration: none }body { background: white; color: black; }
 --></style>
 </head><body bgcolor="#ffffff">
 
-<a href="index.html">
-<img width="122" height="65" src="qtlogo.png" alt="Home"
-  align="left" border="0">
-</a><div align=right><img src="dochead.png" width="472" height="27"><br>
+<table width="100%">
+<tr><td><a href="index.html">
+<img width="100" height="100" src="qtlogo.png"
+alt="Home" border="0"><img width="100"
+height="100" src="face.png" alt="Home" border="0">
+</a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
 - <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
@@ -17,7 +19,7 @@ body { background: white; color: black; }
 - <a href="index.html">Home</a>
 - <a href="topicals.html"><b>Structure</b></a>
 </div>
-<br clear=all>
+</table>
 
 <h1 align=center>QSlider Class Reference</h1><br clear="all">
 <p>
@@ -30,48 +32,48 @@ Inherits <a href="qrangecontrol.html">QRangeControl</a> and <a href="qwidget.htm
 <p><a href="qslider-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><span class="fn">enum <a href="#TickSetting"><b>TickSetting</b></a> { NoMarks = 0, Above = 1, Left = Above, Below = 2, Right = Below, Both = 3 }</span>
-<li><span class="fn"><a href="#6c0163"><b>QSlider</b></a> ( QWidget * parent, const char * name=0 ) </span>
-<li><span class="fn"><a href="#786a10"><b>QSlider</b></a> ( Orientation, QWidget * parent, const char * name=0 ) </span>
-<li><span class="fn"><a href="#d9c48b"><b>QSlider</b></a> ( int minValue, int maxValue, int pageStep, int value, Orientation, QWidget * parent, const char * name=0 ) </span>
-<li><span class="fn">virtual void <a href="#fe0428"><b>setOrientation</b></a> ( Orientation ) </span>
-<li><span class="fn">Orientation <a href="#a8339f"><b>orientation</b></a> () const</span>
-<li><span class="fn">virtual void <a href="#6a92b8"><b>setTracking</b></a> ( bool enable ) </span>
-<li><span class="fn">bool <a href="#a86f62"><b>tracking</b></a> () const</span>
-<li><span class="fn">virtual void <a href="#3ef390"><b>setPalette</b></a> ( const QPalette &amp; ) </span>
-<li><span class="fn">QRect <a href="#9b00e1"><b>sliderRect</b></a> () const</span>
-<li><span class="fn">virtual void <a href="#2618af"><b>setTickmarks</b></a> ( TickSetting ) </span>
-<li><span class="fn">TickSetting <a href="#a55103"><b>tickmarks</b></a> () const</span>
-<li><span class="fn">virtual void <a href="#74d1ff"><b>setTickInterval</b></a> ( int ) </span>
-<li><span class="fn">int <a href="#e99ec2"><b>tickInterval</b></a> () const</span>
-<li><span class="fn">void <a href="#3250bd"><b>setMinValue</b></a> ( int ) </span>
-<li><span class="fn">void <a href="#2ef6db"><b>setMaxValue</b></a> ( int ) </span>
-<li><span class="fn">void <a href="#1137b6"><b>setLineStep</b></a> ( int ) </span>
-<li><span class="fn">void <a href="#c6c44b"><b>setPageStep</b></a> ( int ) </span>
+<li><div class="fn">enum <a href="#TickSetting"><b>TickSetting</b></a> { NoMarks = 0, Above = 1, Left = Above, Below = 2, Right = Below, Both = 3 }</div>
+<li><div class="fn"><a href="#6c0163"><b>QSlider</b></a> ( QWidget * parent, const char * name=0 ) </div>
+<li><div class="fn"><a href="#786a10"><b>QSlider</b></a> ( Orientation, QWidget * parent, const char * name=0 ) </div>
+<li><div class="fn"><a href="#d9c48b"><b>QSlider</b></a> ( int minValue, int maxValue, int pageStep, int value, Orientation, QWidget * parent, const char * name=0 ) </div>
+<li><div class="fn">virtual void <a href="#fe0428"><b>setOrientation</b></a> ( Orientation ) </div>
+<li><div class="fn">Orientation <a href="#a8339f"><b>orientation</b></a> () const</div>
+<li><div class="fn">virtual void <a href="#6a92b8"><b>setTracking</b></a> ( bool enable ) </div>
+<li><div class="fn">bool <a href="#a86f62"><b>tracking</b></a> () const</div>
+<li><div class="fn">virtual void <a href="#3ef390"><b>setPalette</b></a> ( const QPalette &amp; ) </div>
+<li><div class="fn">QRect <a href="#9b00e1"><b>sliderRect</b></a> () const</div>
+<li><div class="fn">virtual void <a href="#2618af"><b>setTickmarks</b></a> ( TickSetting ) </div>
+<li><div class="fn">TickSetting <a href="#a55103"><b>tickmarks</b></a> () const</div>
+<li><div class="fn">virtual void <a href="#74d1ff"><b>setTickInterval</b></a> ( int ) </div>
+<li><div class="fn">int <a href="#e99ec2"><b>tickInterval</b></a> () const</div>
+<li><div class="fn">void <a href="#3250bd"><b>setMinValue</b></a> ( int ) </div>
+<li><div class="fn">void <a href="#2ef6db"><b>setMaxValue</b></a> ( int ) </div>
+<li><div class="fn">void <a href="#1137b6"><b>setLineStep</b></a> ( int ) </div>
+<li><div class="fn">void <a href="#c6c44b"><b>setPageStep</b></a> ( int ) </div>
 </ul>
 <h2>Public Slots</h2>
 <ul>
-<li><span class="fn">virtual void <a href="#c5cce4"><b>setValue</b></a> ( int ) </span>
-<li><span class="fn">void <a href="#a83993"><b>addStep</b></a> () </span>
-<li><span class="fn">void <a href="#4de4a2"><b>subtractStep</b></a> () </span>
+<li><div class="fn">virtual void <a href="#c5cce4"><b>setValue</b></a> ( int ) </div>
+<li><div class="fn">void <a href="#a83993"><b>addStep</b></a> () </div>
+<li><div class="fn">void <a href="#4de4a2"><b>subtractStep</b></a> () </div>
 </ul>
 <h2>Signals</h2>
 <ul>
-<li><span class="fn">void <a href="#cc08f4"><b>valueChanged</b></a> ( int value ) </span>
-<li><span class="fn">void <a href="#c85dde"><b>sliderPressed</b></a> () </span>
-<li><span class="fn">void <a href="#a2aa4e"><b>sliderMoved</b></a> ( int value ) </span>
-<li><span class="fn">void <a href="#6e0e50"><b>sliderReleased</b></a> () </span>
+<li><div class="fn">void <a href="#cc08f4"><b>valueChanged</b></a> ( int value ) </div>
+<li><div class="fn">void <a href="#c85dde"><b>sliderPressed</b></a> () </div>
+<li><div class="fn">void <a href="#a2aa4e"><b>sliderMoved</b></a> ( int value ) </div>
+<li><div class="fn">void <a href="#6e0e50"><b>sliderReleased</b></a> () </div>
 </ul>
 <h2>Protected Members</h2>
 <ul>
-<li><span class="fn">virtual void <a href="#d19f7d"><b>updateMask</b></a> () </span>
-<li><span class="fn">virtual void <a href="#860415"><b>valueChange</b></a> () </span>
-<li><span class="fn">virtual void <a href="#07197a"><b>rangeChange</b></a> () </span>
-<li><span class="fn">virtual void <a href="#3bab19"><b>paintSlider</b></a> ( QPainter *, const QColorGroup &amp;, const QRect &amp; ) </span>
-<li><span class="fn">void <a href="#908a5e"><b>drawTicks</b></a> ( QPainter *, const QColorGroup &amp;, int, int, int=1 ) const</span>
-<li><span class="fn">void drawWinGroove ( QPainter *, QCOORD ) <em>(obsolete)</em></span>
-<li><span class="fn">void <a href="#31a744"><b>drawTicks</b></a> ( QPainter *, int, int, int=1 ) const</span>
-<li><span class="fn">virtual int <a href="#533df4"><b>thickness</b></a> () const</span>
+<li><div class="fn">virtual void <a href="#d19f7d"><b>updateMask</b></a> () </div>
+<li><div class="fn">virtual void <a href="#860415"><b>valueChange</b></a> () </div>
+<li><div class="fn">virtual void <a href="#07197a"><b>rangeChange</b></a> () </div>
+<li><div class="fn">virtual void <a href="#3bab19"><b>paintSlider</b></a> ( QPainter *, const QColorGroup &amp;, const QRect &amp; ) </div>
+<li><div class="fn">void <a href="#908a5e"><b>drawTicks</b></a> ( QPainter *, const QColorGroup &amp;, int, int, int=1 ) const</div>
+<li><div class="fn">void drawWinGroove ( QPainter *, QCOORD ) <em>(obsolete)</em></div>
+<li><div class="fn">void drawTicks ( QPainter *, int, int, int=1 ) const <em>(obsolete)</em></div>
+<li><div class="fn">virtual int <a href="#533df4"><b>thickness</b></a> () const</div>
 </ul>
 <h2>Properties</h2>
 <table border=1 cellpadding=3 cellspacing=0>
@@ -106,7 +108,7 @@ slider is to e horizontal or vertical.
 accepts focus on Tab and by using the mouse wheel, and a
 suitable keyboard interface.
 <p><img src=qslider-m.png> <img src=qslider-w.png>
-<p>See also:  <a href="qscrollbar.html">QScrollBar</a>, <a href="qspinbox.html">QSpinBox</a> and <a href="guibooks.html#fowler">GUI Design Handbook: Slider</a>
+<p>See also  <a href="qscrollbar.html">QScrollBar</a>, <a href="qspinbox.html">QSpinBox</a> and <a href="guibooks.html#fowler">GUI Design Handbook: Slider</a>
 <p>Examples:
  <a href="xform-xform-cpp.html#QSlider">xform/xform.cpp</a>
 
@@ -146,15 +148,13 @@ The <em>parent</em> and <em>name</em> arguments are sent to the <a href="qwidget
 of the widget, using <em>w</em> pixels and with an interval of <em>i.</em>
 <p>Setting the colorgroup is useful to reuse the code to draw a mask if
 the slider supports transparceny.
-<p>See also:  <a href="qwidget.html#c7a335">setAutoMask</a>() and <a href="#d19f7d">updateMask</a>().
+<p>See also  <a href="qwidget.html#c7a335">setAutoMask</a>() and <a href="#d19f7d">updateMask</a>().
 <h3 class="fn">void <a name="31a744"></a>QSlider::drawTicks ( <a href="qpainter.html">QPainter</a> * p, int dist, int w, int i=1 ) const <code>[protected]</code></h3>
-<p>Using <em>p,</em> draws tickmarks at a distance of <em>dist</em> from the edge
-of the widget, using <em>w</em> pixels and with an interval of <em>i.</em>
-<p>Do not reimplement this function, it's mainly there for
-compatibility reasons. It simply calls
-<p>drawTicks( <a href="qpainter.html">QPainter</a> *p, const <a href="qcolorgroup.html">QColorGroup</a>& g, int dist, int w, int i ) const
-<p>which is the right function to overload.
-<p>See also:  <a href="qwidget.html#5bc085">colorGroup</a>(), drawTicks(, <a href="qpainter.html">QPainter</a>, *p, const, <a href="qcolorgroup.html">QColorGroup</a>&, g, int, dist, int, w, int, i, ), const and paintSlider.
+<p><b>This function is obsolete.</b> It is provided to keep old source working, and will probably be removed in a future version of Qt.  We strongly advise against using it in new code.<p>
+\overload
+<p>Do not reimplement this function, it's only there for compatibility
+reasons. It simply calls the other version with <a href="qwidget.html#5bc085">colorGroup</a>() as the
+second argument.
 <h3 class="fn">void <a name="e759a7"></a>QSlider::drawWinGroove ( <a href="qpainter.html">QPainter</a> * p, QCOORD c ) <code>[protected]</code></h3>
 <p><b>This function is obsolete.</b> It is provided to keep old source working, and will probably be removed in a future version of Qt.  We strongly advise against using it in new code.<p>
 <p>Draws the "groove" on which the slider moves, using the painter <em>p. c</em> gives the distance from the top (or left) edge of the widget to
@@ -189,7 +189,7 @@ the center of the groove.
 <h3 class="fn"><a href="qt.html#Orientation">Orientation</a> <a name="a8339f"></a>QSlider::orientation () const</h3>
 <p>Returns the slider orientation; QSlider::Vertical or
 QSlider::Horizontal.
-<p>See also:  <a href="#fe0428">setOrientation</a>().
+<p>See also  <a href="#fe0428">setOrientation</a>().
 <h3 class="fn">int <a name="54d2ec"></a>QSlider::pageStep () const</h3>
 <p>Reimplemented for internal reasons; the API is not affected.
 <h3 class="fn">void <a name="da5fc3"></a>QSlider::paintEvent ( <a href="qpaintevent.html">QPaintEvent</a> * ) <code>[virtual protected]</code></h3>
@@ -201,7 +201,7 @@ and position given by <em>r.</em> Reimplement this function to change the
 look of the slider button.
 <p>Setting the colorgroup is useful to reuse the code to draw a mask if
 the slider supports transparceny.
-<p>See also:  <a href="qwidget.html#c7a335">setAutoMask</a>() and <a href="#d19f7d">updateMask</a>().
+<p>See also  <a href="qwidget.html#c7a335">setAutoMask</a>() and <a href="#d19f7d">updateMask</a>().
 <h3 class="fn">void <a name="07197a"></a>QSlider::rangeChange () <code>[virtual protected]</code></h3>
 <p>Implements the virtual <a href="qrangecontrol.html">QRangeControl</a> function.
 <p>Reimplemented from <a href="qrangecontrol.html#759b5a">QRangeControl.</a>
@@ -212,24 +212,24 @@ the slider supports transparceny.
 <p>Sets the line step to <em>i.</em>
 <p>Calls the virtual <a href="qrangecontrol.html#33b3a2">stepChange</a>() function if the new line step is
 different from the previous setting.
-<p>See also:  <a href="#433bfa">lineStep</a>(), <a href="qrangecontrol.html#60ce91">QRangeControl::setSteps</a>(), <a href="#c6c44b">setPageStep</a>() and <a href="qrangecontrol.html#0337f8">setRange</a>().
+<p>See also  <a href="#433bfa">lineStep</a>(), <a href="qrangecontrol.html#60ce91">QRangeControl::setSteps</a>(), <a href="#c6c44b">setPageStep</a>() and <a href="qrangecontrol.html#0337f8">setRange</a>().
 <h3 class="fn">void <a name="2ef6db"></a>QSlider::setMaxValue ( int i )</h3>
 <p>A convenience function which just calls
 <a href="qrangecontrol.html#0337f8">setRange</a>( <a href="#054afb">minValue</a>(), i )
-<p>See also:  <a href="qrangecontrol.html#0337f8">setRange</a>().
+<p>See also  <a href="qrangecontrol.html#0337f8">setRange</a>().
 <h3 class="fn">void <a name="3250bd"></a>QSlider::setMinValue ( int i )</h3>
 <p>A convenience function which just calls
 <a href="qrangecontrol.html#0337f8">setRange</a>( i, <a href="#a3735f">maxValue</a>() )
-<p>See also:  <a href="qrangecontrol.html#0337f8">setRange</a>().
+<p>See also  <a href="qrangecontrol.html#0337f8">setRange</a>().
 <h3 class="fn">void <a name="fe0428"></a>QSlider::setOrientation ( <a href="qt.html#Orientation">Orientation</a> orientation ) <code>[virtual]</code></h3>
 <p>Sets the slider orientation.  The <em>orientation</em> must be
 QSlider::Vertical or QSlider::Horizontal.
-<p>See also:  <a href="#a8339f">orientation</a>().
+<p>See also  <a href="#a8339f">orientation</a>().
 <h3 class="fn">void <a name="c6c44b"></a>QSlider::setPageStep ( int i )</h3>
 <p>Sets the page step to <em>i.</em>
 <p>Calls the virtual <a href="qrangecontrol.html#33b3a2">stepChange</a>() function if the new page step is
 different from the previous setting.
-<p>See also:  <a href="#54d2ec">pageStep</a>(), <a href="qrangecontrol.html#60ce91">QRangeControl::setSteps</a>(), <a href="#1137b6">setLineStep</a>() and <a href="qrangecontrol.html#0337f8">setRange</a>().
+<p>See also  <a href="#54d2ec">pageStep</a>(), <a href="qrangecontrol.html#60ce91">QRangeControl::setSteps</a>(), <a href="#1137b6">setLineStep</a>() and <a href="qrangecontrol.html#0337f8">setRange</a>().
 <h3 class="fn">void <a name="3ef390"></a>QSlider::setPalette ( const <a href="qpalette.html">QPalette</a> &amp; p ) <code>[virtual]</code></h3>
 <p>Reimplements the virtual function <a href="qwidget.html#379ca0">QWidget::setPalette</a>().
 <p>Sets the background color to the mid color for Motif style sliders.
@@ -238,7 +238,7 @@ different from the previous setting.
 not a pixel interval. If <em>i</em> is 0, the slider
 will choose between <a href="#433bfa">lineStep</a>() and <a href="#54d2ec">pageStep</a>(). The initial value of
 <a href="#e99ec2">tickInterval</a>() is 0.
-<p>See also:  <a href="#e99ec2">tickInterval</a>(), <a href="qrangecontrol.html#618fd8">QRangeControl::lineStep</a>() and <a href="qrangecontrol.html#92f5c3">QRangeControl::pageStep</a>().
+<p>See also  <a href="#e99ec2">tickInterval</a>(), <a href="qrangecontrol.html#618fd8">QRangeControl::lineStep</a>() and <a href="qrangecontrol.html#92f5c3">QRangeControl::pageStep</a>().
 <h3 class="fn">void <a name="2618af"></a>QSlider::setTickmarks ( <a href="qslider.html#TickSetting">TickSetting</a> s )</h3>
 <p>Sets the way tickmarks are displayed by the slider. <em>s</em> can take
 the following values:
@@ -251,7 +251,7 @@ the following values:
 <li> <code>Both</code>
 </ul>
 The initial value is <code>NoMarks.</code>
-<p>See also:  <a href="#a55103">tickmarks</a>() and <a href="#74d1ff">setTickInterval</a>().
+<p>See also  <a href="#a55103">tickmarks</a>() and <a href="#74d1ff">setTickInterval</a>().
 <h3 class="fn">void <a name="6a92b8"></a>QSlider::setTracking ( bool enable ) <code>[virtual]</code></h3>
 <p>Enables slider tracking if <em>enable</em> is TRUE, or disables tracking
 if <em>enable</em> is FALSE.
@@ -260,7 +260,7 @@ if <em>enable</em> is FALSE.
 tracking is disabled, the slider emits the valueChanged() signal
 when the user releases the mouse button (unless the value happens to
 be the same as before).
-<p>See also:  <a href="#a86f62">tracking</a>().
+<p>See also  <a href="#a86f62">tracking</a>().
 <h3 class="fn">void <a name="c5cce4"></a>QSlider::setValue ( int value ) <code>[virtual slot]</code></h3>
 <p>Makes <a href="qrangecontrol.html#29bfef">QRangeControl::setValue</a>() available as a slot.
 <p>Examples:
@@ -294,18 +294,18 @@ have to change the other.
 <h3 class="fn">int <a name="e99ec2"></a>QSlider::tickInterval () const</h3>
 <p>Returns the interval between tickmarks. Returns 0 if the slider
 chooses between <a href="#54d2ec">pageStep</a>() and <a href="#433bfa">lineStep</a>().
-<p>See also:  <a href="#74d1ff">setTickInterval</a>().
+<p>See also  <a href="#74d1ff">setTickInterval</a>().
 <h3 class="fn">QSlider::TickSetting <a name="a55103"></a>QSlider::tickmarks() const</h3>
 <p>Returns the tickmark settings for this slider.
-<p>See also:  <a href="#2618af">setTickmarks</a>().
+<p>See also  <a href="#2618af">setTickmarks</a>().
 <h3 class="fn">bool <a name="a86f62"></a>QSlider::tracking () const</h3>
 <p>Returns TRUE if tracking is enabled, or FALSE if tracking is disabled.
 <p>Tracking is initially enabled.
-<p>See also:  <a href="#6a92b8">setTracking</a>().
+<p>See also  <a href="#6a92b8">setTracking</a>().
 <h3 class="fn">void <a name="d19f7d"></a>QSlider::updateMask () <code>[virtual protected]</code></h3>
 <p>Reimplementation of <a href="qwidget.html#395595">QWidget::updateMask</a>(). Draws the mask of the
 slider when transparency is required.
-<p>See also:  <a href="qwidget.html#c7a335">QWidget::setAutoMask</a>().
+<p>See also  <a href="qwidget.html#c7a335">QWidget::setAutoMask</a>().
 <p>Reimplemented from <a href="qwidget.html#395595">QWidget.</a>
 <h3 class="fn">int <a name="8f52b8"></a>QSlider::value () const</h3>
 <p>Reimplemented for internal reasons; the API is not affected.
@@ -324,13 +324,13 @@ new slider value as an argument.
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.1.1"><nobr>
+<input type=hidden name="version" value="2.2.0"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
 copyright &copy; 1995-2000
-<a href="http://www.trolltech.com">Troll Tech</a>, all rights reserved.<p><address><hr><div align="center">
+<a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.1</div>
+<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.2.0</div>
 </table></div></address></body></html>

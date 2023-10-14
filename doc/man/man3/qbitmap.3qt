@@ -1,5 +1,5 @@
-.TH QBitmap 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QBitmap 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QBitmap \- Monochrome (1 bit depth) pixmaps
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -19,34 +17,34 @@ Inherits QPixmap.
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQBitmap\fR ()"
+.BI "\fBQBitmap\fR () "
 .br
 .ti -1c
-.BI "\fBQBitmap\fR ( int " "w" ", int " "h" ", bool " "clear" " = FALSE, QPixmap::Optimization = QPixmap::DefaultOptim )"
+.BI "\fBQBitmap\fR ( int " "w" ", int " "h" ", bool " "clear" " = FALSE, QPixmap::Optimization = QPixmap::DefaultOptim ) "
 .br
 .ti -1c
-.BI "\fBQBitmap\fR ( const QSize &, bool " "clear" " = FALSE, QPixmap::Optimization = QPixmap::DefaultOptim )"
+.BI "\fBQBitmap\fR ( const QSize &, bool " "clear" " = FALSE, QPixmap::Optimization = QPixmap::DefaultOptim ) "
 .br
 .ti -1c
-.BI "\fBQBitmap\fR ( int " "w" ", int " "h" ", const uchar * " "bits" ", bool " "isXbitmap" "=FALSE )"
+.BI "\fBQBitmap\fR ( int " "w" ", int " "h" ", const uchar * " "bits" ", bool " "isXbitmap" "=FALSE ) "
 .br
 .ti -1c
-.BI "\fBQBitmap\fR ( const QSize &, const uchar * " "bits" ", bool " "isXbitmap" "=FALSE )"
+.BI "\fBQBitmap\fR ( const QSize &, const uchar * " "bits" ", bool " "isXbitmap" "=FALSE ) "
 .br
 .ti -1c
-.BI "\fBQBitmap\fR ( const QBitmap & )"
+.BI "\fBQBitmap\fR ( const QBitmap & ) "
 .br
 .ti -1c
-.BI "\fBQBitmap\fR ( const QString & " "fileName" ", const char * " "format" "=0 )"
+.BI "\fBQBitmap\fR ( const QString & " "fileName" ", const char * " "format" "=0 ) "
 .br
 .ti -1c
-.BI "QBitmap& \fBoperator=\fR ( const QBitmap & )"
+.BI "QBitmap& \fBoperator=\fR ( const QBitmap & ) "
 .br
 .ti -1c
-.BI "QBitmap& \fBoperator=\fR ( const QPixmap & )"
+.BI "QBitmap& \fBoperator=\fR ( const QPixmap & ) "
 .br
 .ti -1c
-.BI "QBitmap& \fBoperator=\fR ( const QImage & )"
+.BI "QBitmap& \fBoperator=\fR ( const QImage & ) "
 .br
 .ti -1c
 .BI "QBitmap \fBxForm\fR ( const QWMatrix & ) const"
@@ -63,7 +61,7 @@ When drawing in a QBitmap (or QPixmap with depth 1), we recommend using the QCol
 .PP
 Just like the QPixmap class, QBitmap is optimized by the use of implicit sharing, so it is very efficient to pass QBitmap objects as arguments.
 .PP
-See also: QPixmap, QPainter::drawPixmap(), bitBlt() and Shared Classes
+See also QPixmap, QPainter::drawPixmap(), bitBlt() and Shared Classes
 .PP
 Examples:
 .(l
@@ -73,13 +71,13 @@ cursor/cursor.cpp
 .SH "QBitmap::QBitmap ()"
 Constructs a null bitmap.
 .PP
-See also: QPixmap::isNull().
+See also QPixmap::isNull().
 .SH "QBitmap::QBitmap ( const QString & fileName, const char * format=0 )"
 Constructs a pixmap from the file \fIfileName.\fR If the file does not exist, or is of an unknown format, the pixmap becomes a null pixmap.
 .PP
 The parameters are passed on to QPixmap::load(). Dithering will be performed if the file format uses more than 1 bit per pixel.
 .PP
-See also: QPixmap::isNull(), QPixmap::load(), QPixmap::loadFromData(), QPixmap::save() and QPixmap::imageFormat().
+See also QPixmap::isNull(), QPixmap::load(), QPixmap::loadFromData(), QPixmap::save() and QPixmap::imageFormat().
 .SH "QBitmap::QBitmap ( const QBitmap & bitmap )"
 Constructs a bitmap which is a copy of \fIbitmap.\fR
 .SH "QBitmap::QBitmap ( int w, int h, bool clear = FALSE, QPixmap::Optimization optimization = QPixmap::DefaultOptim )"
@@ -89,7 +87,7 @@ The contents of the bitmap is uninitialized if \fIclear\fR is FALSE, otherwise i
 .PP
 The optional \fIoptimization\fR argument specifies the optimization setting for the bitmap. The default optimization should be used in most cases. Games and other pixmap-intensive applications may benefit from setting this argument.
 .PP
-See also: QPixmap::setOptimization() and QPixmap::setDefaultOptimization().
+See also QPixmap::setOptimization() and QPixmap::setDefaultOptimization().
 .SH "QBitmap::QBitmap ( int w, int h, const uchar * bits, bool isXbitmap=FALSE )"
 Constructs a bitmap with \fIw\fR width and \fIh\fR height and sets the contents to \fIbits.\fR
 .PP
@@ -122,11 +120,11 @@ Returns a transformed copy of this bitmap, using \fImatrix.\fR
 .PP
 This function does exactly the same as QPixmap::xForm(), except that it returns a QBitmap instead of a QPixmap.
 .PP
-See also:  QPixmap::xForm().
+See also  QPixmap::xForm().
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qbitmap.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

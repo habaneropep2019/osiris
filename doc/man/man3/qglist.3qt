@@ -1,5 +1,5 @@
-.TH QGList 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QGList 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QGList \- Internal class for implementing Qt collection classes
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -93,7 +91,7 @@ Inherited by QList, QQueue and QStack.
 .BI "QCollection::Item \fBtakeLast\fR () (internal)"
 .br
 .ti -1c
-.BI "void \fBsort\fR ()"
+.BI "void \fBsort\fR () "
 .br
 .ti -1c
 .BI "virtual void \fBclear\fR () (internal)"
@@ -144,10 +142,10 @@ Inherited by QList, QQueue and QStack.
 .BI "void \fBtoVector\fR ( QGVector * ) const (internal)"
 .br
 .ti -1c
-.BI "virtual int \fBcompareItems\fR ( QCollection::Item, QCollection::Item )"
+.BI "virtual int \fBcompareItems\fR ( QCollection::Item, QCollection::Item ) "
 .br
 .ti -1c
-.BI "virtual QDataStream& \fBread\fR ( QDataStream &, QCollection::Item & )"
+.BI "virtual QDataStream& \fBread\fR ( QDataStream &, QCollection::Item & ) "
 .br
 .ti -1c
 .BI "virtual QDataStream& \fBwrite\fR ( QDataStream &, QCollection::Item ) const"
@@ -199,7 +197,7 @@ Reads a collection/list item from the stream \fIs\fR and returns a reference to 
 .PP
 The default implementation sets \fIitem\fR to 0.
 .PP
-See also: write().
+See also write().
 .SH "void QGList::sort () \fC[protected]\fR"
 Sorts the list by the result of the virtual compareItems() function.
 .PP
@@ -209,7 +207,7 @@ Writes a collection/list item to the stream \fIs\fR and returns a reference to t
 .PP
 The default implementation does nothing.
 .PP
-See also: read().
+See also read().
 .SH "QGList::QGList () \fC[protected]\fR"
 For internal use only.
 .SH "QGList::QGList ( const QGList & list ) \fC[protected]\fR"
@@ -293,7 +291,7 @@ For internal use only.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qglist.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

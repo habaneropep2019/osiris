@@ -1,5 +1,5 @@
-.TH QDoubleValidator 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QDoubleValidator 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QDoubleValidator \- Range checking of floating-point numbers
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -19,28 +17,28 @@ Inherits QValidator.
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQDoubleValidator\fR ( QWidget * " "parent" ", const char * " "name" " = 0 )"
+.BI "\fBQDoubleValidator\fR ( QWidget * " "parent" ", const char * " "name" " = 0 ) "
 .br
 .ti -1c
-.BI "\fBQDoubleValidator\fR ( double " "bottom" ", double " "top" ", int " "decimals" ", QWidget * " "parent" ", const char * " "name" " = 0 )"
+.BI "\fBQDoubleValidator\fR ( double " "bottom" ", double " "top" ", int " "decimals" ", QWidget * " "parent" ", const char * " "name" " = 0 ) "
 .br
 .ti -1c
-.BI "\fB~QDoubleValidator\fR ()"
+.BI "\fB~QDoubleValidator\fR () "
 .br
 .ti -1c
 .BI "QValidator::State \fBvalidate\fR ( QString &, int & ) const"
 .br
 .ti -1c
-.BI "virtual void \fBsetRange\fR ( double " "bottom" ", double " "top" ", int " "decimals" " = 0 )"
+.BI "virtual void \fBsetRange\fR ( double " "bottom" ", double " "top" ", int " "decimals" " = 0 ) "
 .br
 .ti -1c
-.BI "void \fBsetBottom\fR ( double )"
+.BI "void \fBsetBottom\fR ( double ) "
 .br
 .ti -1c
-.BI "void \fBsetTop\fR ( double )"
+.BI "void \fBsetTop\fR ( double ) "
 .br
 .ti -1c
-.BI "void \fBsetDecimals\fR ( int )"
+.BI "void \fBsetDecimals\fR ( int ) "
 .br
 .ti -1c
 .BI "double \fBbottom\fR () const"
@@ -59,7 +57,7 @@ The QDoubleValidator class provides range checking of floating-point numbers.
 .PP
 QDoubleValidator provides an upper bound, a lower bound, and a limit on the number of digits after the decimal point. It does not provide a fixup() function.
 .PP
-See also: QIntValidator.
+See also QIntValidator.
 .SH MEMBER FUNCTION DOCUMENTATION
 .SH "QDoubleValidator::QDoubleValidator ( QWidget * parent, const char * name = 0 )"
 Constructs a validator object which accepts all doubles.
@@ -70,15 +68,15 @@ Destroys the validator, freeing any storage and other resources used.
 .SH "double QDoubleValidator::bottom () const"
 Returns the lowest valid number according to this validator.
 .PP
-See also: top(), decimals() and setRange().
+See also top(), decimals() and setRange().
 .SH "int QDoubleValidator::decimals () const"
 Returns the largest number of digits a valid number can have after its decimal point.
 .PP
-See also: bottom(), top() and setRange().
+See also bottom(), top() and setRange().
 .SH "void QDoubleValidator::setBottom ( double bottom )"
 Sets the validator to accept no numbers smaller than \fIbottom.\fR
 .PP
-See also: setRange().
+See also setRange().
 .SH "void QDoubleValidator::setDecimals ( int decimals )"
 Sets the maximum number of digits after the decimal point.
 .SH "void QDoubleValidator::setRange ( double bottom, double top, int decimals = 0 ) \fC[virtual]\fR"
@@ -86,11 +84,11 @@ Sets the validator to accept numbers from \fIbottom\fR up to and including \fIto
 .SH "void QDoubleValidator::setTop ( double top )"
 Sets the validator to accept no numbers bigger than \fItop.\fR
 .PP
-See also: setRange().
+See also setRange().
 .SH "double QDoubleValidator::top () const"
 Returns the highest valid number according to this validator.
 .PP
-See also: bottom(), decimals() and setRange().
+See also bottom(), decimals() and setRange().
 .SH "QValidator::State QDoubleValidator::validate( QString & input, int & ) const"
 Returns \fIAcceptable\fR if \fIinput\fR contains a number in the legal
 range and format, \fIIntermediate\fR if it contains another number, a
@@ -99,7 +97,7 @@ number with too many digits after the decimal point or is empty, and
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qdoublevalidator.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

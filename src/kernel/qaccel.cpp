@@ -1,29 +1,44 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qaccel.cpp   2.1.1   edited 2000-04-13 $
+** $Id: qt/src/kernel/qaccel.cpp   2.2.0   edited 2000-08-25 $
 **
 ** Implementation of QAccel class
 **
 ** Created : 950419
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the kernel module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #include "qaccel.h"
+
+#ifndef QT_NO_ACCEL
+
 #include "qapplication.h"
 #include "qwidget.h"
 #include "qlist.h"
@@ -65,7 +80,7 @@
   shortcut for printing a document. The key codes are listed in
   qnamespace.h. As an alternative, use \c UNICODE_ACCEL with the
   unicode code point of the character. For example,
-  <code>UNICODE_ACCEL + 'A'</code> gies the same accelerator as \c
+  <code>UNICODE_ACCEL + 'A'</code> gives the same accelerator as \c
   Key_A.
 
   When an accelerator key is pressed, the accelerator sends out the
@@ -153,6 +168,9 @@ static QAccelItem *find_key( QAccelList &list, int key, QChar ch )
 		    c = ch;
 		if ( kc.lower() == c.lower()
 		  && (key & Qt::MODIFIER_MASK) == km )
+		    break;
+		else if ( kc.lower() == c.lower()
+		    && (key & (Qt::MODIFIER_MASK^Qt::SHIFT)) == km )
 		    break;
 	    } else {
 		// No modifiers requested, ignore Shift but require others...
@@ -417,8 +435,8 @@ bool QAccel::disconnectItem( int id, const QObject *receiver,
 
 
 /*!
-  Make sure that the accelerator is watching the correct event
-  filter. This function is called automatically, you should not need
+  Makes sure that the accelerator is watching the correct event
+  filter. This function is called automatically; you should not need
   to call it in application code.
 */
 
@@ -463,11 +481,17 @@ bool QAccel::eventFilter( QObject *o, QEvent *e )
 	QAccelItem *item = find_key( d->aitems, key, k->text()[0] );
 	if ( key == Key_unknown )
 	    item = 0;
+#ifndef QT_NO_COMPLEXWIDGETS
 	bool b = QWhatsThis::inWhatsThisMode();
+#else
+	bool b = FALSE;
+#endif
 	if ( item && ( item->enabled || b )) {
 	    if (e->type() == QEvent::Accel) {
 		if ( b && !d->ignorewhatsthis ) {
+#ifndef QT_NO_COMPLEXWIDGETS
 		    QWhatsThis::leaveWhatsThisMode( item->whatsthis );
+#endif
 		}
 		else if ( item->enabled ){
 		    if ( item->signal )
@@ -495,9 +519,9 @@ bool QAccel::eventFilter( QObject *o, QEvent *e )
   you need to write e.g. Qt::ALT+Qt::Key_X.)
 
   We provide a \link accelerators.html list of common accelerators
-  \endlink in English.  (At the time of writing the Microsoft and The
+  \endlink in English.  At the time of writing the Microsoft and The
   Open Group appear to not have issued such recommendations for other
-  languages.)
+  languages.
 */
 
 int QAccel::shortcutKey( const QString &str )
@@ -505,15 +529,16 @@ int QAccel::shortcutKey( const QString &str )
     int p = 0;
     while ( p >= 0 ) {
 	p = str.find( '&', p ) + 1;
-	if ( p <= 0 || p == (int)str.length() )
+	if ( p <= 0 || p >= (int)str.length() )
 	    return 0;
 	if ( str[p] != '&' ) {
 	    QChar c = str[p];
-	    if ( c < QChar(' ') || ( c > QChar('\176') && c < QChar('\240') ) )
-		return 0;
-	    c = c.upper();
-	    return c.unicode() + ALT + UNICODE_ACCEL;
+	    if ( c.isPrint() ) {
+		c = c.upper();
+		return c.unicode() + ALT + UNICODE_ACCEL;
+	    }
 	}
+	p++;
     }
     return 0;
 }
@@ -643,14 +668,15 @@ int QAccel::stringToKey( const QString & s )
 		}
 	    }
 	}
-	done:;
     }
+done:
     if ( p > 0 ) {
-	if ( s.contains("Ctrl+") || s.contains(tr("Ctrl")+"+") )
+	QString sl = s.lower();
+	if ( sl.contains("ctrl+") || sl.contains(tr("ctrl")+"+") )
 	    k |= CTRL;
-	if ( s.contains("Shift+") || s.contains(tr("Shift")+"+") )
+	if ( sl.contains("shift+") || sl.contains(tr("shift")+"+") )
 	    k |= SHIFT;
-	if ( s.contains("Alt+") || s.contains(tr("Alt")+"+") )
+	if ( sl.contains("alt+") || sl.contains(tr("alt")+"+") )
 	    k |= ALT;
     }
     return k;
@@ -723,7 +749,7 @@ agrees with Microsoft.
 The boldfaced letter plus Alt is Microsoft's recommended choice, and
 we recommend supporting it.  For an Apply button, for example, we
 recommend \link QButton::setText() setText( \endlink \link
-QWidget::tr() tr( \endlink "&About" ) );
+QWidget::tr() tr( \endlink "&Apply" ) );
 
 If you have conflicting commands (e.g. About and Apply buttons in the
 same dialog), you're on your own.
@@ -806,3 +832,4 @@ to help. Ask then for ISBN 1859121047. (This ISBN is correct, but is
 not listed in any database we have seen.)
 
 */
+#endif // QT_NO_ACCEL

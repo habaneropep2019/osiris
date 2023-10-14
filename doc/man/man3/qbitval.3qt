@@ -1,5 +1,5 @@
-.TH QBitVal 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QBitVal 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QBitVal \- Internal class, used with QBitArray
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -17,16 +15,16 @@ QBitVal \- Internal class, used with QBitArray
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQBitVal\fR ( QBitArray * " "a" ", uint i )"
+.BI "\fBQBitVal\fR ( QBitArray * " "a" ", uint i ) "
 .br
 .ti -1c
 .BI "operator \fBint\fR ()"
 .br
 .ti -1c
-.BI "QBitVal& \fBoperator=\fR ( const QBitVal & v )"
+.BI "QBitVal& \fBoperator=\fR ( const QBitVal & v ) "
 .br
 .ti -1c
-.BI "QBitVal& \fBoperator=\fR ( bool v )"
+.BI "QBitVal& \fBoperator=\fR ( bool v ) "
 .br
 .in -1c
 .SH DESCRIPTION
@@ -35,7 +33,7 @@ The QBitVal class is an internal class, used with QBitArray.
 The QBitVal is required by the indexing [] operator on bit arrays. It is probably a bad idea to use it in any other context.
 .SH MEMBER FUNCTION DOCUMENTATION
 .SH "QBitVal::QBitVal ( QBitArray * a, uint i )"
-Constructs a reference to an element in a QBitArray. This is what QBitArray::operator[] contructs its return value with.
+Constructs a reference to an element in a QBitArray. This is what QBitArray::operator[] constructs its return value with.
 .SH "QBitVal::operator int ()"
 Returns the value referenced by the QBitVal.
 .SH "QBitVal& QBitVal::operator= ( bool v )"
@@ -46,7 +44,7 @@ QBitVal.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qbitval.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

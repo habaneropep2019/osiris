@@ -1,5 +1,5 @@
-.TH QTabDialog 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QTabDialog 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QTabDialog \- Stack of tabbed widgets
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -19,43 +17,43 @@ Inherits QDialog.
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQTabDialog\fR ( QWidget * " "parent" "=0, const char * " "name" "=0, bool " "modal" "=FALSE, WFlags " "f" "=0 )"
+.BI "\fBQTabDialog\fR ( QWidget * " "parent" "=0, const char * " "name" "=0, bool " "modal" "=FALSE, WFlags " "f" "=0 ) "
 .br
 .ti -1c
-.BI "\fB~QTabDialog\fR ()"
+.BI "\fB~QTabDialog\fR () "
 .br
 .ti -1c
-.BI "virtual void \fBsetFont\fR ( const QFont & font )"
+.BI "virtual void \fBsetFont\fR ( const QFont & font ) "
 .br
 .ti -1c
-.BI "void \fBaddTab\fR ( QWidget *, const QString & )"
+.BI "void \fBaddTab\fR ( QWidget *, const QString & ) "
 .br
 .ti -1c
-.BI "void \fBaddTab\fR ( QWidget * " "child" ", const QIconSet & " "iconset" ", const QString & label )"
+.BI "void \fBaddTab\fR ( QWidget * " "child" ", const QIconSet & " "iconset" ", const QString & label ) "
 .br
 .ti -1c
-.BI "void \fBaddTab\fR ( QWidget *, QTab * )"
+.BI "void \fBaddTab\fR ( QWidget *, QTab * ) "
 .br
 .ti -1c
-.BI "void \fBinsertTab\fR ( QWidget *, const QString &, int " "index" " = -1 )"
+.BI "void \fBinsertTab\fR ( QWidget *, const QString &, int " "index" " = -1 ) "
 .br
 .ti -1c
-.BI "void \fBinsertTab\fR ( QWidget * " "child" ", const QIconSet & " "iconset" ", const QString & " "label" ", int " "index" " = -1 )"
+.BI "void \fBinsertTab\fR ( QWidget * " "child" ", const QIconSet & " "iconset" ", const QString & " "label" ", int " "index" " = -1 ) "
 .br
 .ti -1c
-.BI "void \fBinsertTab\fR ( QWidget *, QTab *, int " "index" " = -1 )"
+.BI "void \fBinsertTab\fR ( QWidget *, QTab *, int " "index" " = -1 ) "
 .br
 .ti -1c
-.BI "void \fBchangeTab\fR ( QWidget *, const QString & )"
+.BI "void \fBchangeTab\fR ( QWidget *, const QString & ) "
 .br
 .ti -1c
-.BI "void \fBchangeTab\fR ( QWidget * " "child" ", const QIconSet & " "iconset" ", const QString & label )"
+.BI "void \fBchangeTab\fR ( QWidget * " "child" ", const QIconSet & " "iconset" ", const QString & label ) "
 .br
 .ti -1c
 .BI "bool \fBisTabEnabled\fR ( QWidget * ) const"
 .br
 .ti -1c
-.BI "void \fBsetTabEnabled\fR ( QWidget *, bool )"
+.BI "void \fBsetTabEnabled\fR ( QWidget *, bool ) "
 .br
 .ti -1c
 .BI "bool isTabEnabled ( const char * ) const \fI(obsolete)\fR"
@@ -64,58 +62,58 @@ Inherits QDialog.
 .BI "void setTabEnabled ( const char *, bool ) \fI(obsolete)\fR"
 .br
 .ti -1c
-.BI "void \fBshowPage\fR ( QWidget * )"
+.BI "void \fBshowPage\fR ( QWidget * ) "
 .br
 .ti -1c
-.BI "void \fBremovePage\fR ( QWidget * )"
+.BI "void \fBremovePage\fR ( QWidget * ) "
 .br
 .ti -1c
-.BI "QString \fBtabLabel\fR ( QWidget * )"
+.BI "QString \fBtabLabel\fR ( QWidget * ) "
 .br
 .ti -1c
 .BI "QWidget* \fBcurrentPage\fR () const"
 .br
 .ti -1c
-.BI "void \fBsetDefaultButton\fR ( const QString & text )"
+.BI "void \fBsetDefaultButton\fR ( const QString & text ) "
 .br
 .ti -1c
-.BI "void \fBsetDefaultButton\fR ()"
+.BI "void \fBsetDefaultButton\fR () "
 .br
 .ti -1c
 .BI "bool \fBhasDefaultButton\fR () const"
 .br
 .ti -1c
-.BI "void \fBsetHelpButton\fR ( const QString & text )"
+.BI "void \fBsetHelpButton\fR ( const QString & text ) "
 .br
 .ti -1c
-.BI "void \fBsetHelpButton\fR ()"
+.BI "void \fBsetHelpButton\fR () "
 .br
 .ti -1c
 .BI "bool \fBhasHelpButton\fR () const"
 .br
 .ti -1c
-.BI "void \fBsetCancelButton\fR ( const QString & text )"
+.BI "void \fBsetCancelButton\fR ( const QString & text ) "
 .br
 .ti -1c
-.BI "void \fBsetCancelButton\fR ()"
+.BI "void \fBsetCancelButton\fR () "
 .br
 .ti -1c
 .BI "bool \fBhasCancelButton\fR () const"
 .br
 .ti -1c
-.BI "void \fBsetApplyButton\fR ( const QString & text )"
+.BI "void \fBsetApplyButton\fR ( const QString & text ) "
 .br
 .ti -1c
-.BI "void \fBsetApplyButton\fR ()"
+.BI "void \fBsetApplyButton\fR () "
 .br
 .ti -1c
 .BI "bool \fBhasApplyButton\fR () const"
 .br
 .ti -1c
-.BI "void \fBsetOkButton\fR ( const QString & text )"
+.BI "void \fBsetOkButton\fR ( const QString & text ) "
 .br
 .ti -1c
-.BI "void \fBsetOkButton\fR ()"
+.BI "void \fBsetOkButton\fR () "
 .br
 .ti -1c
 .BI "bool \fBhasOkButton\fR () const"
@@ -124,28 +122,31 @@ Inherits QDialog.
 .SS "Signals"
 .in +1c
 .ti -1c
-.BI "void \fBaboutToShow\fR ()"
+.BI "void \fBaboutToShow\fR () "
 .br
 .ti -1c
-.BI "void \fBapplyButtonPressed\fR ()"
+.BI "void \fBapplyButtonPressed\fR () "
 .br
 .ti -1c
-.BI "void \fBcancelButtonPressed\fR ()"
+.BI "void \fBcancelButtonPressed\fR () "
 .br
 .ti -1c
-.BI "void \fBdefaultButtonPressed\fR ()"
+.BI "void \fBdefaultButtonPressed\fR () "
 .br
 .ti -1c
-.BI "void \fBhelpButtonPressed\fR ()"
+.BI "void \fBhelpButtonPressed\fR () "
 .br
 .ti -1c
-.BI "void \fBselected\fR ( const QString & )"
+.BI "void \fBcurrentChanged\fR ( QWidget * ) "
+.br
+.ti -1c
+.BI "void selected ( const QString & ) \fI(obsolete)\fR"
 .br
 .in -1c
 .SS "Protected Members"
 .in +1c
 .ti -1c
-.BI "void \fBsetTabBar\fR ( QTabBar * )"
+.BI "void \fBsetTabBar\fR ( QTabBar * ) "
 .br
 .ti -1c
 .BI "QTabBar* \fBtabBar\fR () const"
@@ -184,7 +185,7 @@ helpButtonPressed() is emitted when the user clicks Help; the slot it is connect
 .TP
 aboutToShow() is emitted at the start of show(); if there is any chance that the state of the application may change between the creation of the tab dialog and the time it show() is called, you must connect this signal to a slot which resets the state of the dialog. 
 .TP
-selected() is emitted when the user selects some page. 
+currentChanged() is emitted when the user selects some page. 
 .PP
 Each tab is either enabled or disabled at any given time. If a tab is enabled, the tab text is drawn in black and the user can select that tab. If it is disabled, the tab is drawn in a different way and the user can not select that tab. Note that even though a tab is disabled, the page can still be visible, for example if all of the tabs happen to be disabled.
 .PP
@@ -217,7 +218,7 @@ Most of the functionality in QTabDialog is provided by a QTabWidget.
 .PP
 <img src=qtabdlg-m.png> <img src=qtabdlg-w.png>
 .PP
-See also: QDialog.
+See also QDialog.
 .SH MEMBER FUNCTION DOCUMENTATION
 .SH "QTabDialog::QTabDialog ( QWidget * parent=0, const char * name=0, bool modal=FALSE, WFlags f=0 )"
 Constructs a QTabDialog with only an Ok button.
@@ -228,7 +229,7 @@ This signal is emitted by show() when it's time to set the state of the dialog's
 .PP
 This applies mainly to QTabDialog objects that are kept around hidden rather than being created, show()n and deleted afterwards.
 .PP
-See also: applyButtonPressed(), show() and cancelButtonPressed().
+See also applyButtonPressed(), show() and cancelButtonPressed().
 .SH "void QTabDialog::addTab ( QWidget * child, QTab * tab )"
 This is a lower-level method for adding tabs, similar to the other addTab() method. It is useful if you are using setTabBar() to set a QTabBar subclass with an overridden QTabBar::paint() routine for a subclass of QTab.
 .SH "void QTabDialog::addTab ( QWidget * child, const QIconSet & iconset, const QString & label )"
@@ -257,17 +258,21 @@ This signal is emitted when the Apply or OK buttons are clicked.
 .PP
 It should be connected to a slot (or several slots) which change the application's state according to the state of the dialog.
 .PP
-See also: cancelButtonPressed(), defaultButtonPressed() and setApplyButton().
+See also cancelButtonPressed(), defaultButtonPressed() and setApplyButton().
 .SH "void QTabDialog::cancelButtonPressed () \fC[signal]\fR"
 This signal is emitted when the Cancel button is clicked. It is automatically connected to QDialog::reject(), which will hide the dialog.
 .PP
 The Cancel button should not change the application's state in any way, so generally you should not need to connect it to any slot.
 .PP
-See also: applyButtonPressed(), defaultButtonPressed() and setCancelButton().
+See also applyButtonPressed(), defaultButtonPressed() and setCancelButton().
 .SH "void QTabDialog::changeTab ( QWidget * w, const QIconSet & iconset, const QString & label )"
 Defines a new \fIiconset\fR and a new \fIlabel\fR for the tab of page \\w.
 .SH "void QTabDialog::changeTab ( QWidget * w, const QString & label )"
 Defines a new label for the tab of page \\w.
+.SH "void QTabDialog::currentChanged ( QWidget * ) \fC[signal]\fR"
+This signal is emitted whenever the current page changes.
+.PP
+See also currentPage(), showPage() and tabLabel().
 .SH "QWidget * QTabDialog::currentPage () const"
 Returns a pointer to the page currently being displayed by the tab dialog. The tab dialog does its best to make sure that this value is never 0, but if you try hard enough it can be.
 .SH "void QTabDialog::defaultButtonPressed () \fC[signal]\fR"
@@ -275,31 +280,31 @@ This signal is emitted when the Defaults button is pressed. It should reset the 
 .PP
 The application's state should not be changed until the user clicks Apply or OK.
 .PP
-See also: applyButtonPressed(), cancelButtonPressed() and setDefaultButton().
+See also applyButtonPressed(), cancelButtonPressed() and setDefaultButton().
 .SH "bool QTabDialog::hasApplyButton () const"
 Returns TRUE if the tab dialog has an Apply button, FALSE if not.
 .PP
-See also: setApplyButton(), applyButtonPressed(), hasCancelButton() and hasDefaultButton().
+See also setApplyButton(), applyButtonPressed(), hasCancelButton() and hasDefaultButton().
 .SH "bool QTabDialog::hasCancelButton () const"
 Returns TRUE if the tab dialog has a Cancel button, FALSE if not.
 .PP
-See also: setCancelButton(), cancelButtonPressed(), hasApplyButton() and hasDefaultButton().
+See also setCancelButton(), cancelButtonPressed(), hasApplyButton() and hasDefaultButton().
 .SH "bool QTabDialog::hasDefaultButton () const"
 Returns TRUE if the tab dialog has a Defaults button, FALSE if not.
 .PP
-See also: setDefaultButton(), defaultButtonPressed(), hasApplyButton() and hasCancelButton().
+See also setDefaultButton(), defaultButtonPressed(), hasApplyButton() and hasCancelButton().
 .SH "bool QTabDialog::hasHelpButton () const"
 Returns TRUE if the tab dialog has a Help button, FALSE if not.
 .PP
-See also: setHelpButton(), helpButtonPressed(), hasApplyButton() and hasCancelButton().
+See also setHelpButton(), helpButtonPressed(), hasApplyButton() and hasCancelButton().
 .SH "bool QTabDialog::hasOkButton () const"
 Returns TRUE if the tab dialog has an OK button, FALSE if not.
 .PP
-See also: setOkButton(), hasApplyButton(), hasCancelButton() and hasDefaultButton().
+See also setOkButton(), hasApplyButton(), hasCancelButton() and hasDefaultButton().
 .SH "void QTabDialog::helpButtonPressed () \fC[signal]\fR"
 This signal is emitted when the Help button is pressed. It should give instructions about how to use the dialog.
 .PP
-See also: applyButtonPressed(), cancelButtonPressed() and setHelpButton().
+See also applyButtonPressed(), cancelButtonPressed() and setHelpButton().
 .SH "void QTabDialog::insertTab ( QWidget * child, QTab * tab, int index = -1 )"
 This is a lower-level method for inserting tabs, similar to the other insertTab() method. It is useful if you are using setTabBar() to set a QTabBar subclass with an overridden QTabBar::paint() routine for a subclass of QTab.
 .SH "void QTabDialog::insertTab ( QWidget * child, const QIconSet & iconset, const QString & label, int index = -1 )"
@@ -328,7 +333,7 @@ If you call insertTab() after show(), the screen will flicker and the user will 
 .SH "bool QTabDialog::isTabEnabled ( QWidget * w ) const"
 Returns TRUE if the page \fIw\fR is enabled, and false if it is disabled.
 .PP
-See also: setTabEnabled() and QWidget::isEnabled().
+See also setTabEnabled() and QWidget::isEnabled().
 .SH "bool QTabDialog::isTabEnabled ( const char * name ) const"
 \fBThis function is obsolete.\fR It is provided to keep old source working, and will probably be removed in a future version of Qt. We strongly advise against using it in new code.
 .PP
@@ -336,7 +341,7 @@ Returns TRUE if the page with object name \fIname\fR is enabled, and false if it
 .PP
 If \fIname\fR is 0 or not the name of any of the pages, isTabEnabled() returns FALSE.
 .PP
-See also: setTabEnabled() and QWidget::isEnabled().
+See also setTabEnabled() and QWidget::isEnabled().
 .SH "void QTabDialog::paintEvent ( QPaintEvent * ) \fC[virtual protected]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .PP
@@ -344,15 +349,17 @@ Reimplemented from QWidget.
 .SH "void QTabDialog::removePage ( QWidget * w )"
 Removes page \fIw\fR from this stack of widgets. Does not delete \fIw.\fR
 .PP
-See also: showPage(), QTabWidget::removePage() and QWidgetStack::removeWidget().
+See also showPage(), QTabWidget::removePage() and QWidgetStack::removeWidget().
 .SH "void QTabDialog::resizeEvent ( QResizeEvent * e ) \fC[virtual protected]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .PP
 Reimplemented from QWidget.
 .SH "void QTabDialog::selected ( const QString & tabLabel ) \fC[signal]\fR"
+\fBThis function is obsolete.\fR It is provided to keep old source working, and will probably be removed in a future version of Qt. We strongly advise against using it in new code.
+.PP
 This signal is emitted whenever a tab is selected (raised), including during the first show().
 .PP
-See also: raise().
+See also raise().
 .SH "void QTabDialog::setApplyButton ()"
 Adds an Apply button to the dialog. The button's text is set to a localizable "Apply".
 .SH "void QTabDialog::setApplyButton ( const QString & text )"
@@ -362,7 +369,7 @@ The Apply button should apply the current settings in the dialog box to the appl
 .PP
 When Apply is clicked, the applyButtonPressed() signal is emitted.
 .PP
-See also: setCancelButton(), setDefaultButton() and applyButtonPressed().
+See also setCancelButton(), setDefaultButton() and applyButtonPressed().
 .SH "void QTabDialog::setCancelButton ()"
 Adds a Cancel button to the dialog. The button's text is set to a localizable "Cancel".
 .SH "void QTabDialog::setCancelButton ( const QString & text )"
@@ -374,7 +381,7 @@ When Cancel is clicked, the cancelButtonPressed() signal is emitted. The dialog 
 .PP
 If \fItext\fR is a null string, no button is shown.
 .PP
-See also: setApplyButton(), setDefaultButton() and cancelButtonPressed().
+See also setApplyButton(), setDefaultButton() and cancelButtonPressed().
 .SH "void QTabDialog::setDefaultButton ()"
 Adds a Defaults button to the dialog. The button's text is set to a localizable "Defaults".
 .SH "void QTabDialog::setDefaultButton ( const QString & text )"
@@ -386,7 +393,7 @@ When Defaults is clicked, the defaultButtonPressed() signal is emitted.
 .PP
 If \fItext\fR is a null string, no button is shown.
 .PP
-See also: setApplyButton(), setCancelButton() and defaultButtonPressed().
+See also setApplyButton(), setCancelButton() and defaultButtonPressed().
 .SH "void QTabDialog::setFont ( const QFont & font ) \fC[virtual]\fR"
 Sets the font for the tabs to \fIfont.\fR
 .PP
@@ -402,7 +409,7 @@ When Help is clicked, the helpButtonPressed() signal is emitted.
 .PP
 If \fItext\fR is a null string, no button is shown.
 .PP
-See also: setApplyButton(), setCancelButton() and helpButtonPressed().
+See also setApplyButton(), setCancelButton() and helpButtonPressed().
 .SH "void QTabDialog::setOkButton ()"
 Adds an OK to the dialog. The button's text is set to a localizable "OK".
 .SH "void QTabDialog::setOkButton ( const QString & text )"
@@ -412,11 +419,11 @@ When the OK button is clicked, the applyButtonPressed() signal is emitted, and t
 .PP
 If \fItext\fR is a null string, no button is shown.
 .PP
-See also: setCancelButton(), setDefaultButton() and applyButtonPressed().
+See also setCancelButton(), setDefaultButton() and applyButtonPressed().
 .SH "void QTabDialog::setTabBar ( QTabBar * tb ) \fC[protected]\fR"
 Replaces the QTabBar heading the dialog by the given tab bar. Note that this must be called \fIbefore\fR any tabs have been added, or the behavior is undefined.
 .PP
-See also: tabBar().
+See also tabBar().
 .SH "void QTabDialog::setTabEnabled ( QWidget * w, bool enable )"
 Enables/disables page \fIw\fR according to the value of \fIenable,\fR and redraws the page's tab appropriately.
 .PP
@@ -424,7 +431,7 @@ QTabWidget uses QWidget::setEnabled() internally, rather than keep a separate fl
 .PP
 Note that even a disabled tab/page may be visible. If the page is visible already, QTabWidget will not hide it, and if all the pages are disabled, QTabWidget will show one of them.
 .PP
-See also: isTabEnabled() and QWidget::setEnabled().
+See also isTabEnabled() and QWidget::setEnabled().
 .SH "void QTabDialog::setTabEnabled ( const char * name, bool enable )"
 \fBThis function is obsolete.\fR It is provided to keep old source working, and will probably be removed in a future version of Qt. We strongly advise against using it in new code.
 .PP
@@ -436,7 +443,7 @@ Note that even a disabled tab/page may be visible. If the page is visible alread
 .PP
 The object name is used (rather than the tab label) because the tab text may not be invariant in multi-language applications.
 .PP
-See also: isTabEnabled() and QWidget::setEnabled().
+See also isTabEnabled() and QWidget::setEnabled().
 .SH "void QTabDialog::show () \fC[virtual]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .PP
@@ -451,7 +458,7 @@ Ensures that \fIw\fR is shown. This is useful mainly for accelerators.
 .PP
 \fBWarning:\fR Used carelessly, this function can easily surprise or confuse the user.
 .PP
-See also: QTabBar::setCurrentTab().
+See also QTabBar::setCurrentTab().
 .SH "void QTabDialog::styleChange ( QStyle & s ) \fC[virtual protected]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .PP
@@ -459,13 +466,13 @@ Reimplemented from QWidget.
 .SH "QTabBar* QTabDialog::tabBar () const \fC[protected]\fR"
 Returns the currently set QTabBar.
 .PP
-See also: setTabBar().
+See also setTabBar().
 .SH "QString QTabDialog::tabLabel ( QWidget * w )"
 Returns the text in the tab for page \fIw.\fR
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qtabdialog.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

@@ -1,10 +1,15 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><title>Qt Template library</title>
-</head><body bgcolor="#ffffff">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><title>Qt Toolkit -  Qt Template library</title><style type="text/css"><!--
+h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
+a:link { color: #004faf; text-decoration: none }
+a:visited { color: #672967; text-decoration: none }body { background: white; color: black; }
+--></style></head><body bgcolor="#ffffff">
 <p>
-<a href="index.html">
-<img width="122" height="65" src="qtlogo.png" alt="Home"
-  align="left" border="0">
-</a><div align=right><img src="dochead.png" width="472" height="27"><br>
+<table width="100%">
+<tr><td><a href="index.html">
+<img width="100" height="100" src="qtlogo.png"
+alt="Home" border="0"><img width="100"
+height="100" src="face.png" alt="Home" border="0">
+</a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
 - <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
@@ -12,10 +17,8 @@
 - <a href="index.html">Home</a>
 - <a href="topicals.html"><b>Structure</b></a>
 </div>
-<br clear=all>
-<p>
-<h1 align=center>Qt Template Library</h1><br clear="all">
-<p>
+</table>
+<h1 align=center> Qt Template library</h1><br clear="all">
 Thq Qt Template Library is a set of templates within Qt dealing with
 containers of objects.  It provides a list of objects, a stack of
 objects, a map (or dictionary) from one type to another, and
@@ -29,7 +32,7 @@ code, can often be a bit faster, require that the objects stored can
 be copied, and finally, have a worse record of compiler problems.
 <p>
 Compared to the STL, the QTL contains only the most important features
-of the STL, has more regular funcion naming, has no platform
+of the STL, has more regular function naming, has no platform
 differences, is often a little slower and often expands to less object
 code.
 <p>
@@ -63,7 +66,7 @@ The Qt template library is designed for speed. Especially iterators
 are extremely fast. On the drawback side, less error checking is done
 than in the QCollection based containers. A template library container
 for example does not track associated iterators. This makes certain
-validy checks, like on removing items, impossible to perform
+validity checks, like on removing items, impossible to perform
 automatically.
 <p>
 <h2> Iterators </h2>
@@ -171,7 +174,7 @@ illustrates this:
 <p>
 At the end of this code fragment, the List l1 contains "Torben",
 "Matthias", "Arnt" and "Sue", with the prior contents being
-overwritten. Another flavour of qCopy() takes three arguments to make
+overwritten. Another flavor of qCopy() takes three arguments to make
 it possible to copy a slice of a container:
 <p>
 <pre>        typedef QValueList&lt;int&gt; List;
@@ -232,6 +235,6 @@ The same applies to QStringList, QValueStack and QMap.
 </ul>
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.1</div>
+<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.2.0</div>
 </table></div></address></body></html>

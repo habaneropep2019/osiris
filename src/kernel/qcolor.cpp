@@ -1,27 +1,39 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qcolor.cpp   2.1.1   edited 2000-05-22 $
+** $Id: qt/src/kernel/qcolor.cpp   2.2.0   edited 2000-08-25 $
 **
 ** Implementation of QColor class
 **
 ** Created : 940112
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the kernel module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #include "qcolor.h"
 #include "qnamespace.h"
@@ -172,8 +184,13 @@ void QColor::initGlobalColors()
     globals_init = TRUE;
     stdcol[ 0].pix = COLOR0_PIX;
     stdcol[ 1].pix = COLOR1_PIX;
+#ifdef _WS_QWS_
+    stdcol[ 0].rgbVal = 0;
+    stdcol[ 1].rgbVal = 0x00ffffff; //######### QWS color allocation is a mess
+#else
     stdcol[ 0].rgbVal = 0x00ffffff;
     stdcol[ 1].rgbVal = 0;
+#endif
     stdcol[ 2].setRgb(   0,   0,   0 );
     stdcol[ 3].setRgb( 255, 255, 255 );
     stdcol[ 4].setRgb( 128, 128, 128 );
@@ -335,7 +352,7 @@ QString QColor::name() const
 }
 
 
-inline static int hex2int( QChar hexchar )
+static int hex2int( QChar hexchar )
 {
     int v;
     if ( hexchar.isDigit() )
@@ -491,7 +508,7 @@ void QColor::setHsv( int h, int s, int v )
 #endif
     int r=v, g=v, b=v;
     if ( s == 0 || h == -1 ) {			// achromatic case
-	;
+	// Ignore
     } else {					// chromatic case
 	if ( (uint)h >= 360 )
 	    h %= 360;
@@ -722,7 +739,7 @@ void QColor::setLazyAlloc( bool enable )
 /*****************************************************************************
   QColor stream functions
  *****************************************************************************/
-
+#ifndef QT_NO_DATASTREAM
 /*!
   \relates QColor
   Writes a color object to the stream.
@@ -754,7 +771,7 @@ QDataStream &operator>>( QDataStream &s, QColor &c )
     c.setRgb( p );
     return s;
 }
-
+#endif
 
 /*****************************************************************************
   QColor global functions (documentation only)

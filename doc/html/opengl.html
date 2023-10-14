@@ -1,9 +1,24 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><title>Qt OpenGL 3D Graphics</title>
-</head><body bgcolor="#ffffff">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><title>Qt Toolkit -  Qt OpenGL 3D Graphics</title><style type="text/css"><!--
+h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
+a:link { color: #004faf; text-decoration: none }
+a:visited { color: #672967; text-decoration: none }body { background: white; color: black; }
+--></style></head><body bgcolor="#ffffff">
 <p>
-<h1 align=center>Qt OpenGL 3D Graphics</h1>
-<hr>
-<p>
+<table width="100%">
+<tr><td><a href="index.html">
+<img width="100" height="100" src="qtlogo.png"
+alt="Home" border="0"><img width="100"
+height="100" src="face.png" alt="Home" border="0">
+</a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
+<a href="classes.html"><b>Classes</b></a>
+- <a href="annotated.html">Annotated</a>
+- <a href="hierarchy.html">Tree</a>
+- <a href="functions.html">Functions</a>
+- <a href="index.html">Home</a>
+- <a href="topicals.html"><b>Structure</b></a>
+</div>
+</table>
+<h1 align=center> Qt OpenGL 3D Graphics</h1><br clear="all">
 <h2>Introduction</h2>
 <p>
 OpenGL is a standard API for rendering 3D graphics.
@@ -11,11 +26,50 @@ OpenGL is a standard API for rendering 3D graphics.
 OpenGL only deals with 3D rendering and provides little or no support
 for GUI programming issues. The user interface for an OpenGL
 application must be created with another toolkit, such as Motif on the
-X platform, Microsoft Foundation Classes (MFC) under Windows -- or Qt
-on both platforms.
+X platform, Microsoft Foundation Classes (MFC) under Windows - or Qt
+on <i>both</i> platforms.
 <p>
-The Qt OpenGL Extension provides integration of OpenGL with Qt, making
-it very easy to use OpenGL rendering in a Qt application.
+The Qt OpenGL Extension makes it easy to use OpenGL in Qt
+applications.  It provides an OpenGL widget class that can be used
+just like any other Qt widget, only that it opens an OpenGL display
+buffer where you can use the OpenGL API to render the contents.
+<p>
+The Qt OpenGL Extension is implemented as a platform-independent
+Qt/C++ wrapper around the platform-dependent GLX and WGL C APIs. The
+provided functionality is very similar to Mark Kilgard's GLUT library,
+but with much more non-OpenGL-specific GUI functionality: the whole Qt
+API.
+<p>
+<h2>Installation</h2>
+<p>
+When you install Qt for X11, you must pass the <tt>-opengl</tt> option
+to the <tt>configure</tt> script, and you must have OpenGL installed
+on your system.
+<p>
+When you install Qt for Windows, Qt OpenGL support is included.
+<p>
+The Qt OpenGL modules is not licensed for use with the
+Qt Professional Edition. Consider upgrading to the Qt Enterprise Edition
+if you require OpenGL support.
+<p>
+Note about using Mesa on X11: Mesa versions earlier than 3.1 would use the
+name "MesaGL" and "MesaGLU" for the libraries, instead of "GL" and
+"GLU". If you want to use a pre-3.1 version of Mesa, you must change
+the Makefiles to use these library names instead. The easiest way to
+do this edit the SYSCONF_LIBS_OPENGL line in the config file you are
+using (qt/configs/*), changing "-lGL -lGLU" to "-lMesaGL -lMesaGLU";
+then run "configure" again.
+<p>
+<h2>Building programs</h2>
+<p>
+Building your own programs that use the Qt OpenGL Extension is done
+just like building other Qt programs, the only extra step needed is:
+<ul>
+  <li> If you use tmake: Just add the 'qgl' keyword to the 'CONFIG' line.
+  <li> Otherwise: Link with the libqgl.a (Unix) or qgl.lib (Windows) library,
+        and add the location of the GL headers to the include path.
+</ul>
+See the example programs for details.
 <p>
 <h2>The QGL Classes</h2>
 <p>
@@ -33,6 +87,6 @@ classes provide advanced features.
 
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.1</div>
+<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.2.0</div>
 </table></div></address></body></html>

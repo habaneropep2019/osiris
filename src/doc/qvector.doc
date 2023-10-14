@@ -1,25 +1,37 @@
 /****************************************************************************
-** $Id: qt/doc/qvector.doc   2.1.1   edited 2000-05-18 $
+** $Id: qt/doc/qvector.doc   2.2.0   edited 2000-08-25 $
 **
 ** QVector class documentation
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 
 /*****************************************************************************
@@ -209,7 +221,7 @@
 */
 
 /*!
-  \fn bool QVector::fill( const type *d, int size=-1 )
+  \fn bool QVector::fill( const type *d, int size )
 
   Inserts item \a d in all positions in the vector. Any existing items
   are removed. If \a d is 0, the vector becomes empty.
@@ -251,9 +263,9 @@
 
 
 /*!
-  \fn int QVector::findRef( const type *d, uint i=0 ) const
+  \fn int QVector::findRef( const type *d, uint i ) const
 
-  Finds the first occurence of the item pointer \a d in the vector,
+  Finds the first occurrence of the item pointer \a d in the vector,
   using linear search. The search starts at position \a i, which must
   be less than size(). \a i is by default 0; i.e. the search starts at
   the start of the vector.
@@ -266,9 +278,9 @@
 */
 
 /*!
-  \fn int QVector::find( const type *d, uint i=0 ) const
+  \fn int QVector::find( const type *d, uint i ) const
 
-  Finds the first occurence of item \a d in the vector, using linear
+  Finds the first occurrence of item \a d in the vector, using linear
   search. The search starts at position \a i, which must be less than
   size(). \a i is by default 0; i.e. the search starts at the start of
   the vector.
@@ -284,7 +296,7 @@
 /*!
   \fn uint QVector::containsRef( const type *d ) const
 
-  Returns the number of occurences of the item pointer \a d in the
+  Returns the number of occurrences of the item pointer \a d in the
   vector.
 
   This function does \e not use compareItems() to compare items.
@@ -295,7 +307,7 @@
 /*!
   \fn uint QVector::contains( const type *d ) const
 
-  Returns the number of occurences of item \a d in the vector.
+  Returns the number of occurrences of item \a d in the vector.
 
   Compares items using the virtual function compareItems().
 

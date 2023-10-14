@@ -1,27 +1,39 @@
 /**********************************************************************
-** $Id: qt/src/widgets/qmultilineedit.h   2.1.1   edited 2000-03-24 $
+** $Id: qt/src/widgets/qmultilineedit.h   2.2.0   edited 2000-08-25 $
 **
 ** Definition of QMultiLineEdit widget class
 **
 ** Created : 961005
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the widgets module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #ifndef QMULTILINEEDIT_H
 #define QMULTILINEEDIT_H
@@ -31,6 +43,8 @@
 #include "qstring.h"
 #include "qlist.h"
 #endif // QT_H
+
+#ifndef QT_NO_COMPLEXWIDGETS
 
 struct QMultiLineData;
 class QMultiLineEditCommand;
@@ -45,16 +59,15 @@ class Q_EXPORT QMultiLineEdit : public QTableView
     Q_PROPERTY( bool atEnd READ atEnd )
     Q_PROPERTY( int maxLineWidth READ maxLineWidth )
     Q_PROPERTY( Alignment alignment READ alignment WRITE setAlignment )
-    Q_PROPERTY( bool edited READ edited WRITE setEdited )
+    Q_PROPERTY( bool edited READ edited WRITE setEdited DESIGNABLE false )
     Q_PROPERTY( EchoMode echoMode READ echoMode WRITE setEchoMode )
     Q_PROPERTY( int maxLength READ maxLength WRITE setMaxLength )
-    Q_PROPERTY( int maxLineLength READ maxLineLength WRITE setMaxLineLength )
     Q_PROPERTY( int maxLines READ maxLines WRITE setMaxLines )
     Q_PROPERTY( int hMargin READ hMargin WRITE setHMargin )
     Q_PROPERTY( WordWrap wordWrap READ wordWrap WRITE setWordWrap )
     Q_PROPERTY( int wrapColumnOrWidth READ wrapColumnOrWidth WRITE setWrapColumnOrWidth )
     Q_PROPERTY( WrapPolicy wrapPolicy READ wrapPolicy WRITE setWrapPolicy )
-    Q_PROPERTY( bool autoUpdate READ autoUpdate WRITE setAutoUpdate )
+    Q_PROPERTY( bool autoUpdate READ autoUpdate WRITE setAutoUpdate DESIGNABLE false )
     Q_PROPERTY( bool undoEnabled READ isUndoEnabled WRITE setUndoEnabled )
     Q_PROPERTY( int undoDepth READ undoDepth WRITE setUndoDepth )
     Q_PROPERTY( bool readOnly READ isReadOnly WRITE setReadOnly )
@@ -160,10 +173,13 @@ public slots:
     void       append( const QString &);
     void       deselect();
     void       selectAll();
+#ifndef QT_NO_CLIPBOARD
     void       paste();
+    void       pasteSubType(const QCString& subtype);
     void       copyText() const;
     void       copy() const;
     void       cut();
+#endif
     void       insert( const QString& );
     void       undo();
     void       redo();
@@ -173,9 +189,11 @@ signals:
     void	returnPressed();
     void	undoAvailable( bool );
     void	redoAvailable( bool );
+    void	copyAvailable( bool );
 
 protected:
     void	paintCell( QPainter *, int row, int col );
+    bool	event( QEvent * );
 
     void	mousePressEvent( QMouseEvent * );
     void	mouseMoveEvent( QMouseEvent * );
@@ -189,10 +207,12 @@ protected:
     void	leaveEvent( QEvent * );
     void	resizeEvent( QResizeEvent * );
 
+#ifndef QT_NO_DRAGANDDROP
     void	dragMoveEvent( QDragMoveEvent* );
     void	dragEnterEvent( QDragEnterEvent * );
     void	dropEvent( QDropEvent* );
     void	dragLeaveEvent( QDragLeaveEvent* );
+#endif
 
     bool	hasMarkedText() const;
     QString	markedText() const;
@@ -234,6 +254,12 @@ private slots:
     void	dndTimeout();
 
 private:
+#ifndef QT_NO_MIME
+    QCString pickSpecial(QMimeSource* ms, bool always_ask, const QPoint&);
+#endif
+#ifndef QT_NO_MIMECLIPBOARD
+    void       pasteSpecial(const QPoint&);
+#endif
     struct QMultiLineEditRow {
 	QMultiLineEditRow( QString string, int width, bool nl = TRUE )
 	    :s(string), w(width), newline( nl )
@@ -281,12 +307,15 @@ private:
     void 	markWord( int posx, int posy );
     void	extendSelectionWord( int &newX, int&newY);
     int 	charClass( QChar );
-    void	turnMarkOff();
+    void	turnMark( bool on );
     bool	inMark( int posx, int posy ) const;
     bool	beforeMark( int posx, int posy ) const;
     bool	afterMark( int posx, int posy ) const;
+    int		setNumRowsAndTruncate();
 
+#ifndef QT_NO_DRAGANDDROP
     void	doDrag();
+#endif
     void	startAutoScroll();
     void	stopAutoScroll();
 
@@ -350,4 +379,7 @@ inline int QMultiLineEdit::numLines() const
 {
     return contents->count();
 }
+
+#endif // QT_NO_COMPLEXWIDGETS
+
 #endif // QMULTILINED_H

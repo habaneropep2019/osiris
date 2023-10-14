@@ -3,15 +3,17 @@
 Qt Toolkit - customlayout/main.cpp example file
 </title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
-a:link { text-decoration: none; }
-body { background: white; color: black; }
+a:link { color: #004faf; text-decoration: none }
+a:visited { color: #672967; text-decoration: none }body { background: white; color: black; }
 --></style>
 </head><body bgcolor="#ffffff">
 
-<a href="index.html">
-<img width="122" height="65" src="qtlogo.png" alt="Home"
-  align="left" border="0">
-</a><div align=right><img src="dochead.png" width="472" height="27"><br>
+<table width="100%">
+<tr><td><a href="index.html">
+<img width="100" height="100" src="qtlogo.png"
+alt="Home" border="0"><img width="100"
+height="100" src="face.png" alt="Home" border="0">
+</a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
 - <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
@@ -19,11 +21,11 @@ body { background: white; color: black; }
 - <a href="index.html">Home</a>
 - <a href="topicals.html"><b>Structure</b></a>
 </div>
-<br clear=all>
+</table>
 
 <h1 align=center>Customized Layoutmanager</h1><br clear="all">
 
-  This examples desmonstrates how to write a customized layout (geometry) manager,
+  This examples demonstrates how to write a customized layout (geometry) manager,
   like a Card-Layout, Border-Layout and Flow-Layout.
 
   See also: <a href="layout.html">Documentation of Geometry Management</a>.
@@ -31,15 +33,18 @@ body { background: white; color: black; }
   <hr>
 
   Header file of the Flow-Layout: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/customlayout/flow.h   2.1.1   edited 2000-01-31 $
+** &#36;Id&#58; qt/examples/customlayout/flow.h   2.2.0   edited 2000-08-31 $
 **
 ** Definition of simple flow layout for custom layout example
 **
 ** Created : 979899
 **
-** Copyright (C) 1997 by Troll Tech AS.  All rights reserved.
+** Copyright (C) 1997 by Trolltech AS.  All rights reserved.
 **
-****************************************************************************/
+** This file is part of an example program for Qt.  This example
+** program may be used, distributed and modified without limitation.
+**
+*****************************************************************************/
 
 #ifndef FLOW_H
 #define FLOW_H
@@ -89,11 +94,14 @@ private:
   <hr>
 
   Implementation of the Flow-Layout: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/customlayout/flow.cpp   2.1.1   edited 2000-01-31 $
+** &#36;Id&#58; qt/examples/customlayout/flow.cpp   2.2.0   edited 2000-08-31 $
 **
 ** Implementing your own layout: flow example
 **
-** Copyright (C) 1996 by Troll Tech AS.  All rights reserved.
+** Copyright (C) 1996 by Trolltech AS.  All rights reserved.
+**
+** This file is part of an example program for Qt.  This example
+** program may be used, distributed and modified without limitation.
 **
 *****************************************************************************/
 
@@ -114,24 +122,24 @@ private:
 
 };
 
-uint <a name="417"></a>SimpleFlowIterator::count() const
+uint <a name="400"></a>SimpleFlowIterator::count() const
 {
     return list-&gt;<a href="qlist.html#816005">count</a>();
 }
 
-<a href="qlayoutitem.html">QLayoutItem</a> *<a name="418"></a>SimpleFlowIterator::current()
+<a href="qlayoutitem.html">QLayoutItem</a> *<a name="401"></a>SimpleFlowIterator::current()
 {
-    return idx &lt; int(<a href=#417>count</a>()) ? list-&gt;<a href="qlist.html#0812c4">at</a>(idx) : 0;
+    return idx &lt; int(<a href=#400>count</a>()) ? list-&gt;<a href="qlist.html#0812c4">at</a>(idx) : 0;
 }
 
-<a href="qlayoutitem.html">QLayoutItem</a> *<a name="419"></a>SimpleFlowIterator::next()
+<a href="qlayoutitem.html">QLayoutItem</a> *<a name="402"></a>SimpleFlowIterator::next()
 {
     idx++; return current();
 }
 
-<a href="qlayoutitem.html">QLayoutItem</a> *<a name="420"></a>SimpleFlowIterator::takeCurrent()
+<a href="qlayoutitem.html">QLayoutItem</a> *<a name="403"></a>SimpleFlowIterator::takeCurrent()
 {
-    return idx &lt; int(<a href=#417>count</a>()) ? list-&gt;<a href="qlist.html#0f1003">take</a>( idx ) : 0;
+    return idx &lt; int(<a href=#400>count</a>()) ? list-&gt;<a href="qlist.html#0f1003">take</a>( idx ) : 0;
 }
 
 SimpleFlow::~SimpleFlow()
@@ -139,7 +147,7 @@ SimpleFlow::~SimpleFlow()
     deleteAllItems();
 }
 
-int <a name="408"></a>SimpleFlow::heightForWidth( int w ) const
+int <a name="391"></a>SimpleFlow::heightForWidth( int w ) const
 {
     if ( cached_width != w ) {
         //Not all C++ compilers support "mutable" yet:
@@ -151,38 +159,38 @@ int <a name="408"></a>SimpleFlow::heightForWidth( int w ) const
     return cached_hfw;
 }
 
-void <a name="409"></a>SimpleFlow::addItem( <a href="qlayoutitem.html">QLayoutItem</a> *item)
+void <a name="392"></a>SimpleFlow::addItem( <a href="qlayoutitem.html">QLayoutItem</a> *item)
 {
     list.<a href="qlist.html#687e74">append</a>( item );
 }
 
-bool <a name="410"></a>SimpleFlow::hasHeightForWidth() const
+bool <a name="393"></a>SimpleFlow::hasHeightForWidth() const
 {
     return TRUE;
 }
 
-<a href="qsize.html">QSize</a> <a name="411"></a>SimpleFlow::sizeHint() const
+<a href="qsize.html">QSize</a> <a name="394"></a>SimpleFlow::sizeHint() const
 {
     return minimumSize();
 }
 
-<a href="qsizepolicy.html#ExpandData">QSizePolicy::ExpandData</a> <a name="412"></a>SimpleFlow::expanding() const
+<a href="qsizepolicy.html#ExpandData">QSizePolicy::ExpandData</a> <a name="395"></a>SimpleFlow::expanding() const
 {
     return QSizePolicy::NoDirection;
 }
 
-<a href="qlayoutiterator.html">QLayoutIterator</a> <a name="413"></a>SimpleFlow::iterator()
+<a href="qlayoutiterator.html">QLayoutIterator</a> <a name="396"></a>SimpleFlow::iterator()
 {
     return QLayoutIterator( new SimpleFlowIterator( &amp;list ) );
 }
 
-void <a name="414"></a>SimpleFlow::setGeometry( const QRect &amp;r )
+void <a name="397"></a>SimpleFlow::setGeometry( const QRect &amp;r )
 {
     <a href="qlayout.html#0d8bbc">QLayout::setGeometry</a>( r );
-    <a href=#415>doLayout</a>( r );
+    <a href=#398>doLayout</a>( r );
 }
 
-int <a name="415"></a>SimpleFlow::doLayout( const QRect &amp;r, bool testonly )
+int <a name="398"></a>SimpleFlow::doLayout( const QRect &amp;r, bool testonly )
 {
     int x = r.x();
     int y = r.y();
@@ -206,7 +214,7 @@ int <a name="415"></a>SimpleFlow::doLayout( const QRect &amp;r, bool testonly )
     return y + h - r.y();
 }
 
-<a href="qsize.html">QSize</a> <a name="416"></a>SimpleFlow::minimumSize() const
+<a href="qsize.html">QSize</a> <a name="399"></a>SimpleFlow::minimumSize() const
 {
     <a href="qsize.html">QSize</a> s(0,0);
     <a href="qlistiterator.html">QListIterator</a>&lt;<a href="qlayoutitem.html">QLayoutItem</a>&gt; it(list);
@@ -223,15 +231,18 @@ int <a name="415"></a>SimpleFlow::doLayout( const QRect &amp;r, bool testonly )
   <hr>
 
   Header file of the Border-Layout: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/customlayout/border.h   2.1.1   edited 2000-01-31 $
+** &#36;Id&#58; qt/examples/customlayout/border.h   2.2.0   edited 2000-08-31 $
 **
 ** Definition of simple flow layout for custom layout example
 **
 ** Created : 979899
 **
-** Copyright (C) 1997 by Troll Tech AS.  All rights reserved.
+** Copyright (C) 1997 by Trolltech AS.  All rights reserved.
 **
-****************************************************************************/
+** This file is part of an example program for Qt.  This example
+** program may be used, distributed and modified without limitation.
+**
+*****************************************************************************/
 
 #ifndef BORDER_H
 #define BORDER_H
@@ -330,11 +341,14 @@ private:
   <hr>
 
   Implementation of the Border-Layout: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/customlayout/border.cpp   2.1.1   edited 2000-02-21 $
+** &#36;Id&#58; qt/examples/customlayout/border.cpp   2.2.0   edited 2000-08-31 $
 **
 ** Implementing your own layout: flow example
 **
-** Copyright (C) 1996 by Troll Tech AS.  All rights reserved.
+** Copyright (C) 1996 by Trolltech AS.  All rights reserved.
+**
+** This file is part of an example program for Qt.  This example
+** program may be used, distributed and modified without limitation.
 **
 *****************************************************************************/
 
@@ -361,33 +375,33 @@ private:
 
 };
 
-uint <a name="432"></a>BorderLayoutIterator::count() const
+uint <a name="415"></a>BorderLayoutIterator::count() const
 {
     return list-&gt;<a href="qlist.html#816005">count</a>();
 }
 
-<a href="qlayoutitem.html">QLayoutItem</a> *<a name="433"></a>BorderLayoutIterator::current()
+<a href="qlayoutitem.html">QLayoutItem</a> *<a name="416"></a>BorderLayoutIterator::current()
 {
     return idx &lt; (int)count() ? list-&gt;<a href="qlist.html#0812c4">at</a>( idx )-&gt;item : 0;
 }
 
-BorderLayout::BorderLayoutStruct *<a name="434"></a>BorderLayoutIterator::currentStruct()
+BorderLayout::BorderLayoutStruct *<a name="417"></a>BorderLayoutIterator::currentStruct()
 {
     return idx &lt; (int)count() ? list-&gt;<a href="qlist.html#0812c4">at</a>( idx ) : 0;
 }
 
-void <a name="435"></a>BorderLayoutIterator::toFirst()
+void <a name="418"></a>BorderLayoutIterator::toFirst()
 {
     idx = 0;
 }
 
-<a href="qlayoutitem.html">QLayoutItem</a> *<a name="436"></a>BorderLayoutIterator::next()
+<a href="qlayoutitem.html">QLayoutItem</a> *<a name="419"></a>BorderLayoutIterator::next()
 {
     idx++;
     return current();
 }
 
-<a href="qlayoutitem.html">QLayoutItem</a> *<a name="437"></a>BorderLayoutIterator::takeCurrent()
+<a href="qlayoutitem.html">QLayoutItem</a> *<a name="420"></a>BorderLayoutIterator::takeCurrent()
 {
     BorderLayout::BorderLayoutStruct *b
         = idx &lt; int( list-&gt;<a href="qlist.html#816005">count</a>() ) ? list-&gt;<a href="qlist.html#0f1003">take</a>(  idx  ) : 0;
@@ -396,9 +410,9 @@ void <a name="435"></a>BorderLayoutIterator::toFirst()
     return item;
 }
 
-BorderLayoutIterator &amp;<a href=#438><a name="438"></a>BorderLayoutIterator::operator</a>++()
+BorderLayoutIterator &amp;<a href=#421><a name="421"></a>BorderLayoutIterator::operator</a>++()
 {
-    <a href=#436>next</a>();
+    <a href=#419>next</a>();
     return *this;
 }
 
@@ -407,56 +421,56 @@ BorderLayout::~BorderLayout()
     deleteAllItems();
 }
 
-void <a name="421"></a>BorderLayout::addItem( <a href="qlayoutitem.html">QLayoutItem</a> *item )
+void <a name="404"></a>BorderLayout::addItem( <a href="qlayoutitem.html">QLayoutItem</a> *item )
 {
-    <a href=#423>add</a>( item, West );
+    <a href=#406>add</a>( item, West );
 }
 
-void <a name="422"></a>BorderLayout::addWidget( <a href="qwidget.html">QWidget</a> *widget, Position pos )
+void <a name="405"></a>BorderLayout::addWidget( <a href="qwidget.html">QWidget</a> *widget, Position pos )
 {
-    <a href=#423>add</a>( new BorderWidgetItem( widget ), pos );
+    <a href=#406>add</a>( new BorderWidgetItem( widget ), pos );
 }
 
-void <a name="423"></a>BorderLayout::add( <a href="qlayoutitem.html">QLayoutItem</a> *item, Position pos )
+void <a name="406"></a>BorderLayout::add( <a href="qlayoutitem.html">QLayoutItem</a> *item, Position pos )
 {
     list.<a href="qlist.html#687e74">append</a>( new BorderLayoutStruct( item, pos ) );
     sizeDirty = TRUE; msizeDirty = TRUE;
-    <a href=#431>calcSize</a>( SizeHint ); calcSize( Minimum );
+    <a href=#414>calcSize</a>( SizeHint ); calcSize( Minimum );
 }
 
-bool <a name="424"></a>BorderLayout::hasHeightForWidth() const
+bool <a name="407"></a>BorderLayout::hasHeightForWidth() const
 {
     return FALSE;
 }
 
-<a href="qsize.html">QSize</a> <a name="425"></a>BorderLayout::sizeHint() const
+<a href="qsize.html">QSize</a> <a name="408"></a>BorderLayout::sizeHint() const
 {
     return cached;
 }
 
-<a href="qsize.html">QSize</a> <a name="426"></a>BorderLayout::minimumSize() const
+<a href="qsize.html">QSize</a> <a name="409"></a>BorderLayout::minimumSize() const
 {
     return cached;
 }
 
-<a href="qsizepolicy.html#ExpandData">QSizePolicy::ExpandData</a> <a name="427"></a>BorderLayout::expanding() const
+<a href="qsizepolicy.html#ExpandData">QSizePolicy::ExpandData</a> <a name="410"></a>BorderLayout::expanding() const
 
 {
     return QSizePolicy::BothDirections;
 }
 
-<a href="qlayoutiterator.html">QLayoutIterator</a> <a name="428"></a>BorderLayout::iterator()
+<a href="qlayoutiterator.html">QLayoutIterator</a> <a name="411"></a>BorderLayout::iterator()
 {
     return QLayoutIterator( new BorderLayoutIterator( &amp;list ) );
 }
 
-void <a name="429"></a>BorderLayout::setGeometry( const QRect &amp;rct )
+void <a name="412"></a>BorderLayout::setGeometry( const QRect &amp;rct )
 {
     <a href="qlayout.html#0d8bbc">QLayout::setGeometry</a>( rct );
-    <a href=#430>doLayout</a>( rct );
+    <a href=#413>doLayout</a>( rct );
 }
 
-void <a name="430"></a>BorderLayout::doLayout( const QRect &amp;rct, bool /*testonly*/ )
+void <a name="413"></a>BorderLayout::doLayout( const QRect &amp;rct, bool /*testonly*/ )
 {
     int ew = 0, ww = 0, nh = 0, sh = 0;
     int h = 0;
@@ -505,7 +519,7 @@ void <a name="430"></a>BorderLayout::doLayout( const QRect &amp;rct, bool /*test
         center-&gt;item-&gt;setGeometry( <a href="qrect.html">QRect</a>( ww, nh, rct.width() - ew - ww, h ) );
 }
 
-void <a name="431"></a>BorderLayout::calcSize( SizeType st )
+void <a name="414"></a>BorderLayout::calcSize( SizeType st )
 {
     if ( ( st == Minimum &amp;&amp; !msizeDirty ) ||
          ( st == SizeHint &amp;&amp; !sizeDirty ) )
@@ -558,15 +572,18 @@ void <a name="431"></a>BorderLayout::calcSize( SizeType st )
   <hr>
 
   Header file of the Card-Layout: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/customlayout/card.h   2.1.1   edited 2000-01-31 $
+** &#36;Id&#58; qt/examples/customlayout/card.h   2.2.0   edited 2000-08-31 $
 **
 ** Definition of simple flow layout for custom layout example
 **
 ** Created : 979899
 **
-** Copyright (C) 1997 by Troll Tech AS.  All rights reserved.
+** Copyright (C) 1997 by Trolltech AS.  All rights reserved.
 **
-****************************************************************************/
+** This file is part of an example program for Qt.  This example
+** program may be used, distributed and modified without limitation.
+**
+*****************************************************************************/
 
 #ifndef CARD_H
 #define CARD_H
@@ -603,11 +620,14 @@ private:
   <hr>
 
   Implementation of the Card-Layout: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/customlayout/card.cpp   2.1.1   edited 2000-02-21 $
+** &#36;Id&#58; qt/examples/customlayout/card.cpp   2.2.0   edited 2000-08-31 $
 **
 ** Implementing your own layout: flow example
 **
-** Copyright (C) 1996 by Troll Tech AS.  All rights reserved.
+** Copyright (C) 1996 by Trolltech AS.  All rights reserved.
+**
+** This file is part of an example program for Qt.  This example
+** program may be used, distributed and modified without limitation.
 **
 *****************************************************************************/
 
@@ -628,22 +648,22 @@ private:
     <a href="qlist.html">QList</a>&lt;<a href="qlayoutitem.html">QLayoutItem</a>&gt; *list;
 };
 
-<a href="qlayoutitem.html">QLayoutItem</a> *<a name="444"></a>CardLayoutIterator::current()
+<a href="qlayoutitem.html">QLayoutItem</a> *<a name="427"></a>CardLayoutIterator::current()
 {
     return idx &lt; int( list-&gt;<a href="qlist.html#816005">count</a>() ) ? list-&gt;<a href="qlist.html#0812c4">at</a>( idx ) : 0;
 }
 
-<a href="qlayoutitem.html">QLayoutItem</a> *<a name="445"></a>CardLayoutIterator::next()
+<a href="qlayoutitem.html">QLayoutItem</a> *<a name="428"></a>CardLayoutIterator::next()
 {
     idx++; return current();
 }
 
-<a href="qlayoutitem.html">QLayoutItem</a> *<a name="446"></a>CardLayoutIterator::takeCurrent()
+<a href="qlayoutitem.html">QLayoutItem</a> *<a name="429"></a>CardLayoutIterator::takeCurrent()
 {
     return idx &lt; int( list-&gt;<a href="qlist.html#816005">count</a>() ) ?list-&gt;<a href="qlist.html#0f1003">take</a>( idx ) : 0;
 }
 
-<a href="qlayoutiterator.html">QLayoutIterator</a> <a name="439"></a>CardLayout::iterator()
+<a href="qlayoutiterator.html">QLayoutIterator</a> <a name="422"></a>CardLayout::iterator()
 {
     return QLayoutIterator(  new CardLayoutIterator( &amp;list )  );
 }
@@ -653,12 +673,12 @@ CardLayout::~CardLayout()
     deleteAllItems();
 }
 
-void <a name="440"></a>CardLayout::addItem(  <a href="qlayoutitem.html">QLayoutItem</a> *item  )
+void <a name="423"></a>CardLayout::addItem(  <a href="qlayoutitem.html">QLayoutItem</a> *item  )
 {
     list.<a href="qlist.html#687e74">append</a>( item );
 }
 
-void <a name="441"></a>CardLayout::setGeometry( const QRect &amp;rct )
+void <a name="424"></a>CardLayout::setGeometry( const QRect &amp;rct )
 {
     <a href="qlayout.html#0d8bbc">QLayout::setGeometry</a>( rct );
 
@@ -682,7 +702,7 @@ void <a name="441"></a>CardLayout::setGeometry( const QRect &amp;rct )
     }
 }
 
-<a href="qsize.html">QSize</a> <a name="442"></a>CardLayout::sizeHint() const
+<a href="qsize.html">QSize</a> <a name="425"></a>CardLayout::sizeHint() const
 {
     <a href="qsize.html">QSize</a> s(0,0);
     int n = list.<a href="qlist.html#816005">count</a>();
@@ -697,7 +717,7 @@ void <a name="441"></a>CardLayout::setGeometry( const QRect &amp;rct )
     return s + n*QSize(<a href="qlayout.html#47a259">spacing</a>(),<a href="qlayout.html#47a259">spacing</a>());
 }
 
-<a href="qsize.html">QSize</a> <a name="443"></a>CardLayout::minimumSize() const
+<a href="qsize.html">QSize</a> <a name="426"></a>CardLayout::minimumSize() const
 {
     <a href="qsize.html">QSize</a> s(0,0);
     int n = list.<a href="qlist.html#816005">count</a>();
@@ -716,11 +736,14 @@ void <a name="441"></a>CardLayout::setGeometry( const QRect &amp;rct )
 
   Main:
 <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/customlayout/main.cpp   2.1.1   edited 2000-03-14 $
+** &#36;Id&#58; qt/examples/customlayout/main.cpp   2.2.0   edited 2000-08-31 $
 **
 ** Main for custom layout example
 **
-** Copyright (C) 1996 by Troll Tech AS.  All rights reserved.
+** Copyright (C) 1996 by Trolltech AS.  All rights reserved.
+**
+** This file is part of an example program for Qt.  This example
+** program may be used, distributed and modified without limitation.
 **
 *****************************************************************************/
 
@@ -811,6 +834,6 @@ int main( int argc, char **argv )
 </pre>
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.1</div>
+<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.2.0</div>
 </table></div></address></body></html>

@@ -1,29 +1,43 @@
 /****************************************************************************
-** $Id: qt/src/dialogs/qprintdialog.cpp   2.1.1   edited 2000-03-29 $
+** $Id: qt/src/dialogs/qprintdialog.cpp   2.2.0   edited 2000-08-25 $
 **
 ** Implementation of internal print dialog (X11) used by QPrinter::select().
 **
 ** Created : 950829
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the dialogs module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #include "qprintdialog.h"
+
+#ifndef QT_NO_PRINTDIALOG
 
 #include "qfiledialog.h"
 
@@ -50,6 +64,10 @@
 
 #include <ctype.h>
 #include <stdlib.h>
+
+#if defined(QT_CUPS_SUPPORT)
+#include <cups/cups.h>
+#endif
 
 // REVISED: warwick
 
@@ -86,6 +104,8 @@ struct QPrintDialogPrivate
     int numCopies;
 
     QBoxLayout *customLayout;
+
+    QPrinter::PageSize indexToPageSize[QPrinter::NPageSize];
 };
 
 
@@ -307,7 +327,8 @@ static char * parsePrintersConf( QListView * printers )
 			   printerDesc[j] != ',' )
 			j++;
 		    // that's our default printer
-		    defaultPrinter = qstrdup( printerDesc.mid( i, j-i ).ascii() );
+		    defaultPrinter =
+			qstrdup( printerDesc.mid( i, j-i ).ascii() );
 		    printerName = "";
 		    printerDesc = "";
 		} else if ( printerName == QString::fromLatin1("_all") ) {
@@ -352,12 +373,15 @@ static char * parsePrintersConf( QListView * printers )
 			       printerDesc[j] != ',' )
 			    j++;
 			if ( printerName != printerDesc.mid( i, j-i ) ) {
-			    printerComment = QString::fromLatin1("Remote name: ");
+			    printerComment =
+				QString::fromLatin1("Remote name: ");
 			    printerComment += printerDesc.mid( i, j-i );
 			}
 		    }
 		}
 	    }
+	    if ( printerComment == ":" )
+		printerComment = ""; // for cups
 	    if ( printerName.length() )
 		perhapsAddPrinter( printers, printerName, printerHost,
 				   printerComment );
@@ -483,6 +507,8 @@ static void parseQconfig( QListView * printers )
     QString remoteHost; // null if local
     QString deviceName; // null if remote
 
+    QRegExp newStanza( QString::fromLatin1("^[0-z][0-z]*:$") );
+
     // our basic strategy here is to process each line, detecting new
     // stanzas.  each time we see a new stanza, we check if the
     // previous stanza was a valid queue for a) a remote printer or b)
@@ -497,7 +523,7 @@ static void parseQconfig( QListView * printers )
 	line = line.simplifyWhiteSpace();
 
 	if ( indented && line.contains( '=' ) ) { // line in stanza
-	
+
 	    int i = line.find( '=' );
 	    QString variable = line.left( i ).simplifyWhiteSpace();
 	    QString value=line.mid( i+1, line.length() ).simplifyWhiteSpace();
@@ -511,8 +537,7 @@ static void parseQconfig( QListView * printers )
 	    // nothing to do
 	} else if ( ts.atEnd() || // end of file, or beginning of new stanza
 		    ( !indented &&
-		      line.contains(
-			QRegExp( QString::fromLatin1("^[0-z][0-z]*:$") ) ) ) ) {
+		      line.contains( newStanza ) ) ) {
 	    if ( up && stanzaName.length() > 0 && stanzaName.length() < 21 ) {
 		if ( remoteHost.length() ) // remote printer
 		    perhapsAddPrinter( printers, stanzaName, remoteHost,
@@ -534,6 +559,32 @@ static void parseQconfig( QListView * printers )
 }
 
 
+static char * parseCupsOutput( QListView * printers )
+{
+    char * defaultPrinter = 0;
+#if defined(QT_CUPS_SUPPORT)
+    int nd;
+    cups_dest_t * d;
+    nd = cupsGetDests( &d );
+    if ( nd < 1 )
+	return 0;
+
+    int n = 0;
+    while( n < nd ) {
+	perhapsAddPrinter( printers, d[n].name,
+			   qApp->translate( "QPrintDialog",
+					    "Unknown Location" ), 0 );
+	if ( d[n].is_default && !defaultPrinter )
+	    defaultPrinter = qstrdup( d[n].instance );
+	n++;
+    }
+#else
+    Q_UNUSED( printers );
+#endif
+    return defaultPrinter;
+}
+
+
 static QPrintDialog * globalPrintDialog = 0;
 
 static void deleteGlobalPrintDialog()
@@ -548,12 +599,14 @@ static void deleteGlobalPrintDialog()
   \brief The QPrintDialog class provides a dialog for specifying
   print-out details.
 
-  \ingroup dialogs
 
   \warning This class is not present on all platforms; use
   QPrinter::setup() instead for portability.
 
   \internal
+
+  (ingroup dialogs)
+
   THIS DOCUMENTATION IS Not Revised. It must be revised before
   becoming public API.
 
@@ -736,39 +789,45 @@ QGroupBox * QPrintDialog::setupDestination()
     d->printers->addColumn( tr("Comment"), 150 );
     d->printers->setFrameStyle( QFrame::WinPanel + QFrame::Sunken );
 
-#if defined(UNIX)
+#if defined(_OS_UNIX_)
     char * etcLpDefault = 0;
 
-    parsePrintcap( d->printers );
-    parseEtcLpMember( d->printers );
-    parseSpoolInterface( d->printers );
-    parseQconfig( d->printers );
+    etcLpDefault = parseCupsOutput( d->printers );
+    if ( d->printers->childCount() == 0 ) {
+	// we only use other schemes when cups fails.
+	parsePrintcap( d->printers );
+	parseEtcLpMember( d->printers );
+	parseSpoolInterface( d->printers );
+	parseQconfig( d->printers );
 
-    QFileInfo f;
-    f.setFile( QString::fromLatin1("/etc/lp/printers") );
-    if ( f.isDir() ) {
-	parseEtcLpPrinters( d->printers );
-	QFile def( QString::fromLatin1("/etc/lp/default") );
-	if ( def.open( IO_ReadOnly ) ) {
-	    etcLpDefault = new char[1025];
-	    def.readLine( etcLpDefault, 1024 );
-	    char * p = etcLpDefault;
-	    while( p && *p ) {
-		if ( !isprint(*p) || isspace(*p) )
-		    *p = 0;
-		else
-		    p++;
+	QFileInfo f;
+	f.setFile( QString::fromLatin1("/etc/lp/printers") );
+	if ( f.isDir() ) {
+	    parseEtcLpPrinters( d->printers );
+	    QFile def( QString::fromLatin1("/etc/lp/default") );
+	    if ( def.open( IO_ReadOnly ) ) {
+		if ( etcLpDefault )
+		    delete[] etcLpDefault;
+		etcLpDefault = new char[1025];
+		def.readLine( etcLpDefault, 1024 );
+		char * p = etcLpDefault;
+		while( p && *p ) {
+		    if ( !isprint(*p) || isspace(*p) )
+			*p = 0;
+		    else
+			p++;
+		}
 	    }
 	}
-    }
 
-    f.setFile( QString::fromLatin1("/etc/printers.conf") );
-    if ( f.isFile() ) {
-	char * def = parsePrintersConf( d->printers );
-	if ( def ) {
-	    if ( etcLpDefault )
-		delete[] etcLpDefault;
-	    etcLpDefault = def;
+	f.setFile( QString::fromLatin1("/etc/printers.conf") );
+	if ( f.isFile() ) {
+	    char * def = parsePrintersConf( d->printers );
+	    if ( def ) {
+		if ( etcLpDefault )
+		    delete[] etcLpDefault;
+		etcLpDefault = def;
+	    }
 	}
     }
 
@@ -826,7 +885,7 @@ QGroupBox * QPrintDialog::setupDestination()
 	h = d->printers->firstChild()->height();
     d->printers->setMinimumSize( d->printers->sizeHint().width(),
 				 d->printers->header()->height() +
-				  3 * h );
+				 3 * h );
     horiz->addWidget( d->printers, 3 );
 
     tll->addSpacing( 6 );
@@ -962,6 +1021,17 @@ QGroupBox * QPrintDialog::setupOptions()
 }
 
 
+static void isc( QPrintDialogPrivate * d, const QString & text,
+		 QPrinter::PageSize ps )
+{
+    if ( d && text && ps < QPrinter::NPageSize ) {
+	d->sizeCombo->insertItem( text, -1 );
+	int index = d->sizeCombo->count()-1;
+	if ( index >= 0 && index < QPrinter::NPageSize )
+	    d->indexToPageSize[index] = ps;
+    }
+}
+
 QGroupBox * QPrintDialog::setupPaper()
 {
     QGroupBox * g = new QGroupBox( tr( "Paper format"),
@@ -969,6 +1039,8 @@ QGroupBox * QPrintDialog::setupPaper()
 
     QBoxLayout * tll = new QBoxLayout( g, QBoxLayout::Down, 12, 0 );
     tll->addSpacing( 12 );
+
+    d->pageSize = QPrinter::A4;
 
     // page orientation
     d->orientationCombo = new QComboBox( FALSE, g );
@@ -987,36 +1059,41 @@ QGroupBox * QPrintDialog::setupPaper()
     d->sizeCombo = new QComboBox( FALSE, g );
     tll->addWidget( d->sizeCombo );
 
-    d->sizeCombo->insertItem( tr( "A4 (210x297 mm, 8.26x11.7 inches)" ), -1 );
-    d->sizeCombo->insertItem( tr( "B5 (182x257 mm, 7.17x10.13 inches)" ), -1 );
-    d->sizeCombo->insertItem( tr( "Letter (8.5x11 inches, 216x279 mm)" ), -1 );
-    d->sizeCombo->insertItem( tr( "Legal (8.5x14 inches, 216x356 mm)" ), -1 );
-    d->sizeCombo->insertItem( tr( "Executive (7.5x10 inches, 191x254 mm)" ), -1 );
-    d->sizeCombo->insertItem( tr( "A0 (841 x 1189 mm)" ), -1 );
-    d->sizeCombo->insertItem( tr( "A1 (594 x 841 mm)" ), -1 );
-    d->sizeCombo->insertItem( tr( "A2 (420 x 594 mm)" ), -1 );
-    d->sizeCombo->insertItem( tr( "A3 (297 x 420 mm)" ), -1 );
-    d->sizeCombo->insertItem( tr( "A5 (148 x 210 mm)" ), -1 );
-    d->sizeCombo->insertItem( tr( "A6 (105 x 148 mm)" ), -1 );
-    d->sizeCombo->insertItem( tr( "A7 (74 x 105 mm)" ), -1 );
-    d->sizeCombo->insertItem( tr( "A8 (52 x 74 mm)" ), -1 );
-    d->sizeCombo->insertItem( tr( "A9 (37 x 52 mm)" ), -1 );
-    d->sizeCombo->insertItem( tr( "B0 (1030 x 1456 mm)" ), -1 );
-    d->sizeCombo->insertItem( tr( "B1 (728 x 1030 mm)" ), -1 );
-    d->sizeCombo->insertItem( tr( "B10 (32 x 45 mm)" ), -1 );
-    d->sizeCombo->insertItem( tr( "B2 (515 x 728 mm)" ), -1 );
-    d->sizeCombo->insertItem( tr( "B3 (364 x 515 mm)" ), -1 );
-    d->sizeCombo->insertItem( tr( "B4 (257 x 364 mm)" ), -1 );
-    d->sizeCombo->insertItem( tr( "B6 (128 x 182 mm)" ), -1 );
-    d->sizeCombo->insertItem( tr( "B7 (91 x 128 mm)" ), -1 );
-    d->sizeCombo->insertItem( tr( "B8 (64 x 91 mm)" ), -1 );
-    d->sizeCombo->insertItem( tr( "B9 (45 x 64 mm)" ), -1 );
-    d->sizeCombo->insertItem( tr( "C5E (163 x 229 mm)" ), -1 );
-    d->sizeCombo->insertItem( tr( "US Common #10 Envelope (105 x 241 mm)" ), -1 );
-    d->sizeCombo->insertItem( tr( "DLE (110 x 220 mm)" ), -1 );
-    d->sizeCombo->insertItem( tr( "Folio (210 x 330 mm)" ), -1 );
-    d->sizeCombo->insertItem( tr( "Ledger (432 x 279 mm)" ), -1 );
-    d->sizeCombo->insertItem( tr( "Tabloid (279 x 432 mm)" ), -1 );
+    int n;
+    for( n=0; n<QPrinter::NPageSize; n++ )
+	d->indexToPageSize[n] = QPrinter::A4;
+
+    isc( d, tr( "A0 (841 x 1189 mm)" ), QPrinter::A0 );
+    isc( d, tr( "A1 (594 x 841 mm)" ), QPrinter::A1 );
+    isc( d, tr( "A2 (420 x 594 mm)" ), QPrinter::A2 );
+    isc( d, tr( "A3 (297 x 420 mm)" ), QPrinter::A3 );
+    isc( d, tr( "A4 (210x297 mm, 8.26x11.7 inches)" ), QPrinter::A4 );
+    isc( d, tr( "A5 (148 x 210 mm)" ), QPrinter::A5 );
+    isc( d, tr( "A6 (105 x 148 mm)" ), QPrinter::A6 );
+    isc( d, tr( "A7 (74 x 105 mm)" ), QPrinter::A7 );
+    isc( d, tr( "A8 (52 x 74 mm)" ), QPrinter::A8 );
+    isc( d, tr( "A9 (37 x 52 mm)" ), QPrinter::A9 );
+    isc( d, tr( "B0 (1030 x 1456 mm)" ), QPrinter::B0 );
+    isc( d, tr( "B1 (728 x 1030 mm)" ), QPrinter::B1 );
+    isc( d, tr( "B10 (32 x 45 mm)" ), QPrinter::B10 );
+    isc( d, tr( "B2 (515 x 728 mm)" ), QPrinter::B2 );
+    isc( d, tr( "B3 (364 x 515 mm)" ), QPrinter::B3 );
+    isc( d, tr( "B4 (257 x 364 mm)" ), QPrinter::B4 );
+    isc( d, tr( "B5 (182x257 mm, 7.17x10.13 inches)" ), QPrinter::B5 );
+    isc( d, tr( "B6 (128 x 182 mm)" ), QPrinter::B5 );
+    isc( d, tr( "B7 (91 x 128 mm)" ), QPrinter::B7 );
+    isc( d, tr( "B8 (64 x 91 mm)" ), QPrinter::B8 );
+    isc( d, tr( "B9 (45 x 64 mm)" ), QPrinter::B9 );
+    isc( d, tr( "C5E (163 x 229 mm)" ), QPrinter::C5E );
+    isc( d, tr( "DLE (110 x 220 mm)" ), QPrinter::DLE );
+    isc( d, tr( "Executive (7.5x10 inches, 191x254 mm)" ),
+	 QPrinter::Executive );
+    isc( d, tr( "Folio (210 x 330 mm)" ), QPrinter::Folio );
+    isc( d, tr( "Ledger (432 x 279 mm)" ), QPrinter::Ledger );
+    isc( d, tr( "Legal (8.5x14 inches, 216x356 mm)" ), QPrinter::Legal );
+    isc( d, tr( "Letter (8.5x11 inches, 216x279 mm)" ), QPrinter::Letter );
+    isc( d, tr( "Tabloid (279 x 432 mm)" ), QPrinter::Tabloid );
+    isc( d, tr( "US Common #10 Envelope (105 x 241 mm)" ), QPrinter::Comm10E );
 
     connect( d->sizeCombo, SIGNAL( activated( int ) ),
 	     this, SLOT( paperSizeSelected( int ) ) );
@@ -1056,6 +1133,19 @@ void QPrintDialog::printerOrFileSelected( int id )
     d->outputToFile = id ? TRUE : FALSE;
     if ( d->outputToFile ) {
 	fileNameEditChanged( d->fileName->text() );
+	if ( !d->fileName->edited() && d->fileName->text().isEmpty() ) {
+	    QString home = QString::fromLatin1( ::getenv( "HOME" ) );
+	    QString cur = QDir::currentDirPath();
+	    if ( home.at(home.length()-1) != '/' )
+		home += '/';
+	    if ( cur.at(cur.length()-1) != '/' )
+		cur += '/';
+	    if ( cur.left( home.length() ) != home )
+		cur = home;
+	    d->fileName->setText( cur );
+	    d->fileName->setCursorPosition( 32767 );
+	    d->fileName->selectAll();
+	}
 	d->browse->setEnabled( TRUE );
 	d->fileName->setEnabled( TRUE );
 	d->fileName->setFocus();
@@ -1079,7 +1169,8 @@ void QPrintDialog::landscapeSelected( int id )
 
 void QPrintDialog::paperSizeSelected( int id )
 {
-    d->pageSize = QPrinter::PageSize(id);
+    if ( id < QPrinter::NPageSize )
+	d->pageSize = QPrinter::PageSize( d->indexToPageSize[id] );
 }
 
 
@@ -1189,10 +1280,14 @@ void QPrintDialog::setPrinter( QPrinter * p, bool pickUpSettings )
 	// orientation
 	d->orientationCombo->setCurrentItem( (int)p->orientation() );
 	orientSelected( p->orientation() );
-	
+
 	// page size
-	d->sizeCombo->setCurrentItem( (int)p->pageSize() );
-	paperSizeSelected( p->pageSize() );
+	int n = 0;
+	while( n < QPrinter::NPageSize &&
+	       d->indexToPageSize[n] != p->pageSize() )
+	    n++;
+	d->sizeCombo->setCurrentItem( n );
+	paperSizeSelected( n );
 
 	// New stuff (Options)
 
@@ -1227,7 +1322,7 @@ void QPrintDialog::setPrinter( QPrinter * p, bool pickUpSettings )
 	d->printRange->setButton( some );
 	printRangeSelected( some );
     } else {
-	d->printRange->setButton( 0 );	
+	d->printRange->setButton( 0 );
 	d->printRangeButton->setEnabled( FALSE );
 	d->firstPage->setEnabled( FALSE );
 	d->lastPage->setEnabled( FALSE );
@@ -1268,3 +1363,5 @@ void QPrintDialog::fileNameEditChanged( const QString &text )
 {
     d->ok->setEnabled( !text.isEmpty() );
 }
+
+#endif

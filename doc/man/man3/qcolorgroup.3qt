@@ -1,5 +1,5 @@
-.TH QColorGroup 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QColorGroup 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QColorGroup \- Group of widget colors
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -17,19 +15,19 @@ QColorGroup \- Group of widget colors
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQColorGroup\fR ()"
+.BI "\fBQColorGroup\fR () "
 .br
 .ti -1c
 .BI "QColorGroup ( const QColor & " "foreground" ", const QColor & " "button" ", const QColor & " "light" ", const QColor & " "dark" ", const QColor & " "mid" ", const QColor & " "text" ", const QColor & base ) \fI(obsolete)\fR"
 .br
 .ti -1c
-.BI "\fBQColorGroup\fR ( const QBrush & " "foreground" ", const QBrush & " "button" ", const QBrush & " "light" ", const QBrush & " "dark" ", const QBrush & " "mid" ", const QBrush & " "text" ", const QBrush & " "bright_text" ", const QBrush & " "base" ", const QBrush & background )"
+.BI "\fBQColorGroup\fR ( const QBrush & " "foreground" ", const QBrush & " "button" ", const QBrush & " "light" ", const QBrush & " "dark" ", const QBrush & " "mid" ", const QBrush & " "text" ", const QBrush & " "bright_text" ", const QBrush & " "base" ", const QBrush & background ) "
 .br
 .ti -1c
-.BI "\fBQColorGroup\fR ( const QColorGroup & )"
+.BI "\fBQColorGroup\fR ( const QColorGroup & ) "
 .br
 .ti -1c
-.BI "\fB~QColorGroup\fR ()"
+.BI "\fB~QColorGroup\fR () "
 .br
 .ti -1c
 .BI "enum \fBColorRole\fR { Foreground, Button, Light, Midlight, Dark, Mid, Text, BrightText, ButtonText, Base, Background, Shadow, Highlight, HighlightedText, NColorRoles }"
@@ -41,10 +39,10 @@ QColorGroup \- Group of widget colors
 .BI "const QBrush& \fBbrush\fR ( ColorRole ) const"
 .br
 .ti -1c
-.BI "void \fBsetColor\fR ( ColorRole, const QColor & )"
+.BI "void \fBsetColor\fR ( ColorRole, const QColor & ) "
 .br
 .ti -1c
-.BI "void \fBsetBrush\fR ( ColorRole, const QBrush & )"
+.BI "void \fBsetBrush\fR ( ColorRole, const QBrush & ) "
 .br
 .ti -1c
 .BI "const QColor& \fBforeground\fR () const"
@@ -135,7 +133,7 @@ You modify a color group by calling the access functions setColor() and setBrush
 .PP
 There are also corresponding color() and brush() getters, and a commonly used convenience function to get each ColorRole: background(), foreground(), base() and so on.
 .PP
-See also: QColor, QPalette and QWidget::colorGroup().
+See also QColor, QPalette and QWidget::colorGroup().
 .SS "Member Type Documentation"
 .SH "QColorGroup::ColorRole"
 The ColorRole enum defines the different symbolic color roles used in current GUIs. The central roles are:
@@ -146,7 +144,7 @@ The ColorRole enum defines the different symbolic color roles used in current GU
 .TP
 \fCBase\fR - used as background color for e.g. text entry widgets, usually white or another light color.
 .TP
-\fCText\fR - the forground color used with \fCBase.\fR Usually this is the same as the \fCForeground,\fR in what case it must provide good contrast both with \fCBackground\fR and \fCBase.\fR
+\fCText\fR - the foreground color used with \fCBase.\fR Usually this is the same as the \fCForeground,\fR in what case it must provide good contrast both with \fCBackground\fR and \fCBase.\fR
 .TP
 \fCButton\fR - general button background color, where buttons need a background different from \fCBackground,\fR as in the Macintosh style.
 .TP
@@ -188,7 +186,7 @@ Constructs a color group. You can pass either brushes, pixmaps or plain colors f
 .PP
 This constructor can be very handy sometimes, but don't overuse it: Such long lists of arguments are rather error-prone.
 .PP
-See also: QBrush.
+See also QBrush.
 .SH "QColorGroup::QColorGroup ( const QColor & foreground, const QColor & background, const QColor & light, const QColor & dark, const QColor & mid, const QColor & text, const QColor & base )"
 \fBThis function is obsolete.\fR It is provided to keep old source working, and will probably be removed in a future version of Qt. We strongly advise against using it in new code.
 .PP
@@ -200,96 +198,96 @@ Destructs the color group.
 .SH "const QColor & QColorGroup::background () const"
 Returns the background color of the color group.
 .PP
-See also: ColorRole.
+See also ColorRole.
 .SH "const QColor & QColorGroup::base () const"
 Returns the base color of the color group.
 .PP
-See also: ColorRole.
+See also ColorRole.
 .SH "const QColor & QColorGroup::brightText () const"
 Returns the bright text foreground color of the color group.
 .PP
-See also: ColorRole.
+See also ColorRole.
 .SH "const QBrush & QColorGroup::brush ( ColorRole r ) const"
 Returns the brush that has been set for color role \fIr.\fR
 .PP
-See also: color(), setBrush() and ColorRole.
+See also color(), setBrush() and ColorRole.
 .SH "const QColor & QColorGroup::button () const"
 Returns the button color of the color group.
 .PP
-See also: ColorRole.
+See also ColorRole.
 .SH "const QColor & QColorGroup::buttonText () const"
 Returns the button text foreground color of the color group.
 .PP
-See also: ColorRole.
+See also ColorRole.
 .SH "const QColor & QColorGroup::color ( ColorRole r ) const"
 Returns the color that has been set for color role \fIr.\fR
 .PP
-See also: brush() and ColorRole.
+See also brush() and ColorRole.
 .SH "const QColor & QColorGroup::dark () const"
 Returns the dark color of the color group.
 .PP
-See also: ColorRole.
+See also ColorRole.
 .SH "const QColor & QColorGroup::foreground () const"
 Returns the foreground color of the color group.
 .PP
-See also: ColorRole.
+See also ColorRole.
 .SH "const QColor & QColorGroup::highlight () const"
 Returns the highlight color of the color group.
 .PP
-See also: ColorRole.
+See also ColorRole.
 .SH "const QColor & QColorGroup::highlightedText () const"
 Returns the highlighted text color of the color group.
 .PP
-See also: ColorRole.
+See also ColorRole.
 .SH "const QColor & QColorGroup::light () const"
 Returns the light color of the color group.
 .PP
-See also: ColorRole.
+See also ColorRole.
 .SH "const QColor & QColorGroup::mid () const"
 Returns the medium color of the color group.
 .PP
-See also: ColorRole.
+See also ColorRole.
 .SH "const QColor& QColorGroup::midlight () const"
 Returns the midlight color of the color group.
 .PP
-See also: ColorRole.
+See also ColorRole.
 .SH "bool QColorGroup::operator!= ( const QColorGroup & g ) const"
 Returns TRUE if this color group is different from \fIg,\fR or FALSE if it is equal to \fIg.\fR
 .PP
-See also: operator!=().
+See also operator!=().
 .SH "bool QColorGroup::operator== ( const QColorGroup & g ) const"
 Returns TRUE if this color group is equal to \fIg,\fR or FALSE if it is different from \fIg.\fR
 .PP
-See also: operator==().
+See also operator==().
 .SH "void QColorGroup::setBrush ( ColorRole r, const QBrush & b )"
 Sets the brush used for color role \fIr\fR to \fIb.\fR
 .PP
-See also: brush(), setColor() and ColorRole.
+See also brush(), setColor() and ColorRole.
 .SH "void QColorGroup::setColor ( ColorRole r, const QColor & c )"
 Sets the brush used for color role \fIr\fR to a solid color \fIc.\fR
 .PP
-See also: brush(), setColor() and ColorRole.
+See also brush(), setColor() and ColorRole.
 .SH "const QColor & QColorGroup::shadow () const"
 Returns the shadow color of the color group.
 .PP
-See also: ColorRole.
+See also ColorRole.
 .SH "const QColor & QColorGroup::text () const"
 Returns the text foreground color of the color group.
 .PP
-See also: ColorRole.
+See also ColorRole.
 .SH RELATED FUNCTION DOCUMENTATION
 .SH "QDataStream & operator>> (QDataStream & s, QColorGroup & g)"
 Reads a color group from the stream.
 .PP
-See also: Format of the QDataStream operators
+See also Format of the QDataStream operators
 .SH "QDataStream & operator<< (QDataStream & s, const QColorGroup & g)"
 Writes a color group to the stream.
 .PP
-See also:  Format of the QDataStream operators
+See also  Format of the QDataStream operators
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qcolorgroup.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

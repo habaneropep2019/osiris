@@ -1,5 +1,5 @@
-.TH QToolTipGroup 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QToolTipGroup 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QToolTipGroup \- Collects tool tips into natural groups
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -19,10 +17,10 @@ Inherits QObject.
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQToolTipGroup\fR ( QObject * " "parent" ", const char * " "name" " = 0 )"
+.BI "\fBQToolTipGroup\fR ( QObject * " "parent" ", const char * " "name" " = 0 ) "
 .br
 .ti -1c
-.BI "\fB~QToolTipGroup\fR ()"
+.BI "\fB~QToolTipGroup\fR () "
 .br
 .ti -1c
 .BI "bool \fBdelay\fR () const"
@@ -34,19 +32,19 @@ Inherits QObject.
 .SS "Public Slots"
 .in +1c
 .ti -1c
-.BI "void \fBsetDelay\fR ( bool )"
+.BI "void \fBsetDelay\fR ( bool ) "
 .br
 .ti -1c
-.BI "void \fBsetEnabled\fR ( bool )"
+.BI "void \fBsetEnabled\fR ( bool ) "
 .br
 .in -1c
 .SS "Signals"
 .in +1c
 .ti -1c
-.BI "void \fBshowTip\fR ( const QString & )"
+.BI "void \fBshowTip\fR ( const QString & ) "
 .br
 .ti -1c
-.BI "void \fBremoveTip\fR ()"
+.BI "void \fBremoveTip\fR () "
 .br
 .in -1c
 .SS "Properties"
@@ -90,31 +88,31 @@ Destroy this tool tip groups and all tool tips in it.
 .SH "bool QToolTipGroup::delay () const"
 Returns TRUE if the group text is shown delayed (at the same time as the tip) and FALSE if it is shown immediately.
 .PP
-See also: setDelay().
+See also setDelay().
 .SH "bool QToolTipGroup::enabled () const"
 Returns whether tooltips in the group are enabled.
 .PP
-See also: setEnabled().
+See also setEnabled().
 .SH "void QToolTipGroup::removeTip () \fC[signal]\fR"
 This signal is emitted when a tool tip in this group is hidden. See the QToolTipGroup documentation for an example of use.
 .PP
-See also: showTip().
+See also showTip().
 .SH "void QToolTipGroup::setDelay ( bool enable ) \fC[slot]\fR"
 Sets the group to show its text immediately if \fIenable\fR is FALSE, and delayed (at the same time as the tip text) if \fIenable\fR is TRUE. The default is TRUE.
 .PP
-See also: delay().
+See also delay().
 .SH "void QToolTipGroup::setEnabled ( bool enable ) \fC[slot]\fR"
 Sets the group to be enabled (all tool tips in the group show when activated), or disabled (tool tips in the group are never shown).
 .PP
-See also: QToolTip::setEnabled() and enabled().
+See also QToolTip::setEnabled() and enabled().
 .SH "void QToolTipGroup::showTip ( const QString & longText ) \fC[signal]\fR"
 This signal is emitted when one of the tool tips in the group is displayed. \fIlongText\fR is the supplementary text for the displayed tool tip.
 .PP
-See also:  removeTip().
+See also  removeTip().
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qtooltipgroup.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

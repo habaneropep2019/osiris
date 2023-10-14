@@ -1,29 +1,42 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qframe.cpp   2.1.1   edited 2000-05-02 $
+** $Id: qt/src/widgets/qframe.cpp   2.2.0   edited 2000-08-25 $
 **
 ** Implementation of QFrame widget class
 **
 ** Created : 950201
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the widgets module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #include "qframe.h"
+#ifndef QT_NO_FRAME
 #include "qpainter.h"
 #include "qdrawutil.h"
 #include "qframe.h"
@@ -253,13 +266,21 @@ static const int wpwidth = 2; // WinPanel lwidth
 
 void QFrame::setFrameStyle( int style )
 {
-#if defined(CHECK_RANGE)
-    bool shape	= (style & MShape)  != 0;
-    bool shadow = (style & MShadow) != 0;
-    if ( shape != shadow )
-	qWarning( "QFrame::setFrameStyle: (%s) Incomplete frame style",
-		 name( "unnamed" ) );
-#endif
+    //   If this is a line, it may stretch in the direction of the
+    //   line, but it is fixed in the other direction. If this is a
+    //   normal frame, use QWidget's default behavior.
+    switch (style & MShape) {
+    case HLine:
+	setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Fixed ) );
+	break;
+    case VLine:
+	setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Minimum ) );
+	break;
+    default:
+	// only reset if it was hline or vline
+	if ( (fstyle & MShape) == HLine || (fstyle & MShape) == VLine ) 
+	    setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Preferred ) );
+    }
     fstyle = (short)style;
     updateFrameWidth();
 }
@@ -497,18 +518,8 @@ QSize QFrame::sizeHint() const
 */
 QSizePolicy QFrame::sizePolicy() const
 {
-    //   If this is a line, it may stretch in the direction of the
-    //   line, but it is fixed in the other direction. If this is a
-    //   normal frame, use QWidget's default behavior.
-    switch (fstyle & MShape) {
-    case HLine:
-	return QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Fixed );
-    case VLine:
-	return QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Minimum );
-    default:
-	return QWidget::sizePolicy();
-    }
-
+    //### removeme 3.0
+    return QWidget::sizePolicy();
 
 }
 
@@ -584,6 +595,11 @@ void QFrame::drawFrame( QPainter *p )
     QRect	r     = frameRect();
     int		type  = fstyle & MShape;
     int		cstyle = fstyle & MShadow;
+#ifdef QT_NO_DRAWUTIL
+    p->setPen( black ); // ####
+    p->drawRect( r ); //### a bit too simple
+#else
+
     const QColorGroup & g = colorGroup();
 
     switch ( type ) {
@@ -596,18 +612,19 @@ void QFrame::drawFrame( QPainter *p )
 			    midLineWidth() );
 	break;
 
+    case StyledPanel:
+#ifndef QT_NO_STYLE
+	if ( cstyle == Plain )
+	    qDrawPlainRect( p, r, g.foreground(), lwidth );
+	else
+	    style().drawPanel( p, r.x(), r.y(), r.width(), r.height(), g, cstyle == Sunken, lwidth );
+	break;
+#endif // fall through to Panel if QT_NO_STYLE
     case Panel:
 	if ( cstyle == Plain )
 	    qDrawPlainRect( p, r, g.foreground(), lwidth );
 	else
 	    qDrawShadePanel( p, r, g, cstyle == Sunken, lwidth );
-	break;
-
-    case StyledPanel:
-	if ( cstyle == Plain )
-	    qDrawPlainRect( p, r, g.foreground(), lwidth );
-	else
-	    style().drawPanel( p, r.x(), r.y(), r.width(), r.height(), g, cstyle == Sunken, lwidth );
 	break;
 
     case PopupPanel:
@@ -645,6 +662,7 @@ void QFrame::drawFrame( QPainter *p )
 			    lwidth, midLineWidth() );
 	break;
     }
+#endif // QT_NO_DRAWUTIL
 }
 
 
@@ -716,8 +734,6 @@ void QFrame::updateMask()
   If you reimplemented drawFrame(QPainter*) and your widget should
   support transparency you probably have to re-implement this function as well.
 
-  The default implementation is empty.
-
   \sa drawFrame(), updateMask(), QWidget::setAutoMask(), QPainter::setClipRect()
 */
 void QFrame::drawFrameMask( QPainter* p )
@@ -726,7 +742,10 @@ void QFrame::drawFrameMask( QPainter* p )
     QRect	r     = frameRect();
     int		type  = fstyle & MShape;
     int		style = fstyle & MShadow;
-
+#ifdef QT_NO_DRAWUTIL
+    p->setPen( color1 );
+    p->drawRect( r ); //### a bit too simple
+#else
     QColorGroup g(color1, color1, color1, color1, color1, color1, color1, color1, color0);
 
     switch ( type ) {
@@ -774,6 +793,7 @@ void QFrame::drawFrameMask( QPainter* p )
 			    lwidth, midLineWidth() );
 	break;
     }
+#endif // QT_NO_DRAWUTIL
 }
 
 /*!
@@ -788,9 +808,13 @@ void QFrame::drawFrameMask( QPainter* p )
 */
 void QFrame::drawContentsMask( QPainter* p)
 {
+    int type  = fstyle & MShape;
+    if ( type == HLine || type == VLine )
+	return;
     QBrush oldBrush = p->brush();
 
     p->fillRect( contentsRect(), QBrush( color1 ) );
 
     p->setBrush( oldBrush );
 }
+#endif //QT_NO_FRAME

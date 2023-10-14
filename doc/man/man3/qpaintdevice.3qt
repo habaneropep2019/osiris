@@ -1,5 +1,5 @@
-.TH QPaintDevice 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QPaintDevice 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QPaintDevice \- Of objects that can be painted
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -19,7 +17,7 @@ Inherited by QPicture, QPixmap, QPrinter and QWidget.
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "virtual \fB~QPaintDevice\fR ()"
+.BI "virtual \fB~QPaintDevice\fR () "
 .br
 .ti -1c
 .BI "int \fBdevType\fR () const"
@@ -37,10 +35,10 @@ Inherited by QPicture, QPixmap, QPrinter and QWidget.
 .SS "Protected Members"
 .in +1c
 .ti -1c
-.BI "\fBQPaintDevice\fR ( uint devflags )"
+.BI "\fBQPaintDevice\fR ( uint devflags ) "
 .br
 .ti -1c
-.BI "virtual bool \fBcmd\fR ( int, QPainter *, QPDevCmdParam * )"
+.BI "virtual bool \fBcmd\fR ( int, QPainter *, QPDevCmdParam * ) "
 .br
 .ti -1c
 .BI "virtual int \fBmetric\fR ( int ) const"
@@ -132,7 +130,7 @@ Reimplemented in QWidget, QPrinter, QPicture and QPixmap.
 .SH "bool QPaintDevice::paintingActive () const"
 Returns TRUE if the device is being painted, i.e. someone has called QPainter::begin() and not yet QPainter::end() for this device.
 .PP
-See also: QPainter::isActive().
+See also QPainter::isActive().
 .SH RELATED FUNCTION DOCUMENTATION
 .SH "void bitBlt (QPaintDevice * dst, const QPoint & dp, const QPaintDevice * src, const QRect & sr, RasterOp rop)"
 Overloaded bitBlt() with the destination point \fIdp\fR and source rectangle \fIsr.\fR
@@ -205,7 +203,7 @@ You cannot copy from an 8 bit pixmap to a 1 bit pixmap.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qpaintdevice.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

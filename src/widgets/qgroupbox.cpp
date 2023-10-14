@@ -1,29 +1,42 @@
 /**********************************************************************
-** $Id: qt/src/widgets/qgroupbox.cpp   2.1.1   edited 2000-04-21 $
+** $Id: qt/src/widgets/qgroupbox.cpp   2.2.0   edited 2000-08-25 $
 **
 ** Implementation of QGroupBox widget class
 **
 ** Created : 950203
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the widgets module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #include "qgroupbox.h"
+#ifndef QT_NO_COMPLEXWIDGETS
 #include "qlayout.h"
 #include "qpainter.h"
 #include "qbitmap.h"
@@ -146,13 +159,25 @@ void QGroupBox::setTextSpacer()
     QSpacerItem *sp = (QSpacerItem*)d;
     if ( ! sp )
 	return;
-    QFontMetrics fm = fontMetrics();
     int h = 0;
     int w = 0;
     if ( lenvisible ) {
 	QFontMetrics fm = fontMetrics();
 	h = fm.height();
 	w = fm.width( str, lenvisible ) + 2*fm.width(QChar(' '));
+	if ( layout() ) {
+	    int m = layout()->margin();
+	    // do we have a child layout?
+	    for ( QLayoutIterator it = layout()->iterator(); it.current(); ++it ) {
+		if ( it.current()->layout() ) {
+		    m += it.current()->layout()->margin();
+		    break;
+		}
+	    }
+	    if ( m > 4 )
+		h -= m - 4;
+	    h = QMAX( 0, h );
+	}
     }
     sp->changeSize( w, h, QSizePolicy::Minimum, QSizePolicy::Fixed );
 }
@@ -184,17 +209,16 @@ void QGroupBox::setTitle( const QString &title )
     }
     calculateFrame();
     setTextSpacer();
-    if ( vbox ) {
-	vbox->activate();
+    if ( layout() ) {
+	layout()->activate();
 	QSize s( size() );
 	QSize ms( minimumSizeHint() );
 	resize( QMAX( s.width(), ms.width() ),
 		QMAX( s.height(), ms.height() ) );
     }
-    if ( isVisible() ) {
-	update();
-	updateGeometry();
-    }
+    
+    update();
+    updateGeometry();
 }
 
 /*!
@@ -396,7 +420,7 @@ void QGroupBox::setColumnLayout(int columns, Orientation direction)
     if ( columns < 0 ) // if 0, we create the vbox but not the grid. See below.
 	return;
 
-    vbox = new QVBoxLayout( this, 8, 0 );
+    vbox = new QVBoxLayout( this, 11, 0 );
 
     QSpacerItem *spacer = new QSpacerItem( 0, 0, QSizePolicy::Minimum,
 					   QSizePolicy::Fixed );
@@ -414,7 +438,7 @@ void QGroupBox::setColumnLayout(int columns, Orientation direction)
     QApplication::sendPostedEvents( this, QEvent::ChildInserted );
 
     // if 0 or smaller , create a vbox-layout but no grid. This allows
-    // the designer to handle it's own grid layout in a group box.
+    // the designer to handle its own grid layout in a group box.
     if ( columns <= 0 )
 	return;
 
@@ -443,8 +467,16 @@ void QGroupBox::setColumnLayout(int columns, Orientation direction)
     }
 }
 
-/*!\reimp
-*/
+
+/*! \reimp  */
+bool QGroupBox::event( QEvent * e )
+{
+    if ( e->type() == QEvent::LayoutHint && layout() )
+	setTextSpacer();
+    return QFrame::event( e );
+}
+
+/*!\reimp */
 void QGroupBox::childEvent( QChildEvent *c )
 {
     // Similar to QGrid::childEvent()
@@ -567,3 +599,28 @@ void QGroupBox::fontChange( const QFont & oldFont )
     setTextSpacer();
     QWidget::fontChange( oldFont );
 }
+
+/*!
+  \reimp
+*/
+
+QSize QGroupBox::sizeHint() const
+{
+    int tw = QFontMetrics( font() ).width( title() );
+
+    QSize s;
+    if ( layout() ) {
+	s = QFrame::sizeHint();
+	return s.expandedTo( QSize( tw, 0 ) );
+    } else {
+	QRect r = childrenRect();
+	QSize s( 100, 50 );
+	s = s.expandedTo( QSize( tw, 0 ) );
+	if ( r.isNull() )
+	    return s;
+
+	return s.expandedTo( QSize( r.width() + 2 * r.x(), r.height()+ 2 * r.y() ) );
+    }
+}
+
+#endif

@@ -1,5 +1,5 @@
-.TH QToolButton 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QToolButton 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QToolButton \- Quick-access button to specific commands or options, usually used inside a QToolBar
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -19,25 +17,25 @@ Inherits QButton.
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQToolButton\fR ( QWidget * " "parent" ", const char * " "name" " = 0 )"
+.BI "\fBQToolButton\fR ( QWidget * " "parent" ", const char * " "name" " = 0 ) "
 .br
 .ti -1c
-.BI "\fBQToolButton\fR ( const QPixmap & " "pm" ", const QString & " "textLabel" ", const QString & " "grouptext" ", QObject * " "receiver" ", const char * " "slot" ", QToolBar * " "parent" ", const char * " "name" " = 0 )"
+.BI "\fBQToolButton\fR ( const QPixmap & " "pm" ", const QString & " "textLabel" ", const QString & " "grouptext" ", QObject * " "receiver" ", const char * " "slot" ", QToolBar * " "parent" ", const char * " "name" " = 0 ) "
 .br
 .ti -1c
-.BI "\fBQToolButton\fR ( const QIconSet & " "s" ", const QString & " "textLabel" ", const QString & " "grouptext" ", QObject * " "receiver" ", const char * " "slot" ", QToolBar * " "parent" ", const char * " "name" " = 0 )"
+.BI "\fBQToolButton\fR ( const QIconSet & " "s" ", const QString & " "textLabel" ", const QString & " "grouptext" ", QObject * " "receiver" ", const char * " "slot" ", QToolBar * " "parent" ", const char * " "name" " = 0 ) "
 .br
 .ti -1c
-.BI "\fBQToolButton\fR ( ArrowType " "type" ", QWidget * " "parent" ", const char * " "name" " = 0 )"
+.BI "\fBQToolButton\fR ( ArrowType " "type" ", QWidget * " "parent" ", const char * " "name" " = 0 ) "
 .br
 .ti -1c
-.BI "\fB~QToolButton\fR ()"
+.BI "\fB~QToolButton\fR () "
 .br
 .ti -1c
-.BI "void \fBsetOnIconSet\fR ( const QIconSet & )"
+.BI "void \fBsetOnIconSet\fR ( const QIconSet & ) "
 .br
 .ti -1c
-.BI "void \fBsetOffIconSet\fR ( const QIconSet & )"
+.BI "void \fBsetOffIconSet\fR ( const QIconSet & ) "
 .br
 .ti -1c
 .BI "QIconSet \fBonIconSet\fR () const"
@@ -46,7 +44,7 @@ Inherits QButton.
 .BI "QIconSet \fBoffIconSet\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetIconSet\fR ( const QIconSet &, bool " "on" " = FALSE )"
+.BI "virtual void \fBsetIconSet\fR ( const QIconSet &, bool " "on" " = FALSE ) "
 .br
 .ti -1c
 .BI "QIconSet \fBiconSet\fR ( bool " "on" " = FALSE ) const"
@@ -61,19 +59,19 @@ Inherits QButton.
 .BI "QString \fBtextLabel\fR () const"
 .br
 .ti -1c
-.BI "void \fBsetPopup\fR ( QPopupMenu * popup )"
+.BI "void \fBsetPopup\fR ( QPopupMenu * popup ) "
 .br
 .ti -1c
 .BI "QPopupMenu* \fBpopup\fR () const"
 .br
 .ti -1c
-.BI "void \fBsetPopupDelay\fR ( int delay )"
+.BI "void \fBsetPopupDelay\fR ( int delay ) "
 .br
 .ti -1c
 .BI "int \fBpopupDelay\fR () const"
 .br
 .ti -1c
-.BI "void \fBsetAutoRaise\fR ( bool enable )"
+.BI "void \fBsetAutoRaise\fR ( bool enable ) "
 .br
 .ti -1c
 .BI "bool \fBautoRaise\fR () const"
@@ -82,25 +80,25 @@ Inherits QButton.
 .SS "Public Slots"
 .in +1c
 .ti -1c
-.BI "virtual void \fBsetUsesBigPixmap\fR ( bool enable )"
+.BI "virtual void \fBsetUsesBigPixmap\fR ( bool enable ) "
 .br
 .ti -1c
-.BI "virtual void \fBsetUsesTextLabel\fR ( bool enable )"
+.BI "virtual void \fBsetUsesTextLabel\fR ( bool enable ) "
 .br
 .ti -1c
-.BI "virtual void \fBsetTextLabel\fR ( const QString &, bool )"
+.BI "virtual void \fBsetTextLabel\fR ( const QString &, bool ) "
 .br
 .ti -1c
-.BI "virtual void \fBsetToggleButton\fR ( bool enable )"
+.BI "virtual void \fBsetToggleButton\fR ( bool enable ) "
 .br
 .ti -1c
-.BI "virtual void \fBsetOn\fR ( bool enable )"
+.BI "virtual void \fBsetOn\fR ( bool enable ) "
 .br
 .ti -1c
-.BI "void \fBtoggle\fR ()"
+.BI "void \fBtoggle\fR () "
 .br
 .ti -1c
-.BI "void \fBsetTextLabel\fR ( const QString & )"
+.BI "void \fBsetTextLabel\fR ( const QString & ) "
 .br
 .in -1c
 .SS "Protected Members"
@@ -124,7 +122,7 @@ The button's look and dimension is adjustable with setUsesBigPixmap() and setUse
 .PP
 A tool button can offer additional choices in a popup menu. The feature is sometimes used with the "Back" button in a web browsers: After pressing the button down for a while, a menu pops up showing all possible pages to browse back. With QToolButton, you can set a popup menu using setPopup(). The default delay is 600ms, you may adjust it with setPopupDelay().
 .PP
-See also: QPushButton, QToolBar, QMainWindow and GUI Design Handbook: Push Button
+See also QPushButton, QToolBar, QMainWindow and GUI Design Handbook: Push Button
 .SH MEMBER FUNCTION DOCUMENTATION
 .SH "QToolButton::QToolButton ( QWidget * parent, const char * name = 0 )"
 Constructs an empty tool button.
@@ -147,7 +145,7 @@ Destroys the object and frees any allocated resources.
 .SH "bool QToolButton::autoRaise () const"
 Returns whether auto-raising is enabled or not.
 .PP
-See also: setAutoRaise.
+See also setAutoRaise.
 .SH "void QToolButton::drawButton ( QPainter * p ) \fC[virtual protected]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .PP
@@ -167,7 +165,7 @@ If the button doesn't have a pixmap either, iconSet()'s return value is meaningl
 .PP
 If \fIon\fR equals TRUE, the special icon set for the on-state of the button is returned.
 .PP
-See also: setIconSet() and QIconSet.
+See also setIconSet() and QIconSet.
 .SH "void QToolButton::leaveEvent ( QEvent * e ) \fC[virtual protected]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .PP
@@ -179,23 +177,23 @@ Reimplemented from QWidget.
 .SH "QIconSet QToolButton::offIconSet () const"
 Returns the icon set which is used if the toolbutton is in off-state.
 .PP
-See also: iconSet().
+See also iconSet().
 .SH "QIconSet QToolButton::onIconSet () const"
 Returns the icon set which is used if the toolbutton is in on-state.
 .PP
-See also: iconSet().
+See also iconSet().
 .SH "QPopupMenu* QToolButton::popup () const"
 Returns the associated popup menu or 0 if no popup menu has been defined.
 .PP
-See also: setPopup().
+See also setPopup().
 .SH "int QToolButton::popupDelay () const"
 Returns the delay between pressing the button and the appearance of the associated popupmenu in milliseconds.
 .PP
-See also: setPopupDelay() and setPopup().
+See also setPopupDelay() and setPopup().
 .SH "void QToolButton::setAutoRaise ( bool enable )"
 Enables or disables auto-raising according to \fIenable.\fR
 .PP
-See also: autoRaise.
+See also autoRaise.
 .SH "void QToolButton::setIconSet ( const QIconSet & set, bool on = FALSE ) \fC[virtual]\fR"
 Sets this tool button to display the icons in \fIset.\fR (setPixmap() is effectively a wrapper for this function.)
 .PP
@@ -203,21 +201,21 @@ For toggle buttons it is possible to set an extra icon set with \fIon\fR equals 
 .PP
 QToolButton makes a copy of \fIset,\fR so you must delete \fIset\fR yourself.
 .PP
-See also: iconSet(), QIconSet, setToggleButton() and isOn().
+See also iconSet(), QIconSet, setToggleButton() and isOn().
 .SH "void QToolButton::setOffIconSet ( const QIconSet & set )"
 Sets the icon that is used when the button is in off-state.
 .PP
-See also: setIconSet().
+See also setIconSet().
 .SH "void QToolButton::setOn ( bool enable ) \fC[virtual slot]\fR"
 Sets this tool button to be on if \fIenable\fR is TRUE, and off it \fIenable\fR is FALSE.
 .PP
 This function has no effect on non-toggling buttons.
 .PP
-See also: isToggleButton() and toggle().
+See also isToggleButton() and toggle().
 .SH "void QToolButton::setOnIconSet ( const QIconSet & set )"
 Sets the icon that is used when the button is in on-state.
 .PP
-See also: setIconSet().
+See also setIconSet().
 .SH "void QToolButton::setPopup ( QPopupMenu * popup )"
 Associates the popup menu \fIpopup\fR with this toolbutton.
 .PP
@@ -225,11 +223,11 @@ The popup will be shown each time the toolbutton has been pressed down for a cer
 .PP
 Ownership of the popup menu is not transferred.
 .PP
-See also: popup().
+See also popup().
 .SH "void QToolButton::setPopupDelay ( int delay )"
 Sets the time delay between pressing the button and the appearance of the associated popupmenu in milliseconds. Usually this is around 1/2 of a second.
 .PP
-See also: popupDelay() and setPopup().
+See also popupDelay() and setPopup().
 .SH "void QToolButton::setTextLabel ( const QString & newLabel ) \fC[slot]\fR"
 Sets the label of this button to \fInewLabel,\fR and automatically sets it as tool tip too.
 .SH "void QToolButton::setTextLabel ( const QString & newLabel, bool tipToo ) \fC[virtual slot]\fR"
@@ -239,7 +237,7 @@ Makes the tool button a toggle button if \fIenable\fR is TRUE, or a normal tool 
 .PP
 Toggle buttons have an on/off state similar to check boxes. A tool button is initially not a toggle button.
 .PP
-See also: setOn(), toggle(), isToggleButton() and toggled().
+See also setOn(), toggle(), isToggleButton() and toggled().
 .SH "void QToolButton::setUsesBigPixmap ( bool enable ) \fC[virtual slot]\fR"
 Sets this button to use the big pixmaps provided by its QIconSet if \fIenable\fR is TRUE, and to use the small ones else.
 .PP
@@ -261,29 +259,29 @@ Reimplemented from QWidget.
 .SH "QString QToolButton::textLabel () const"
 Returns the text label in use by this tool button, or 0.
 .PP
-See also: setTextLabel(), usesTextLabel(), setUsesTextLabel() and setText().
+See also setTextLabel(), usesTextLabel(), setUsesTextLabel() and setText().
 .SH "void QToolButton::toggle () \fC[slot]\fR"
 Toggles the state of this tool button.
 .PP
 This function has no effect on non-toggling buttons.
 .PP
-See also: isToggleButton() and toggled().
+See also isToggleButton() and toggled().
 .SH "bool QToolButton::uses3D () const \fC[protected]\fR"
 Returns TRUE if this button should be drawn using raised edges.
 .PP
-See also: drawButton().
+See also drawButton().
 .SH "bool QToolButton::usesBigPixmap () const"
 Returns TRUE if this tool button uses the big (32-pixel) pixmaps, and FALSE if it does not.
 .PP
-See also: setUsesBigPixmap(), setPixmap() and usesTextLabel.
+See also setUsesBigPixmap(), setPixmap() and usesTextLabel.
 .SH "bool QToolButton::usesTextLabel () const"
 Returns TRUE if this tool button puts a text label below the button pixmap, and FALSE if it does not.
 .PP
-See also:  setUsesTextLabel(), setTextLabel() and usesBigPixmap().
+See also  setUsesTextLabel(), setTextLabel() and usesBigPixmap().
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qtoolbutton.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

@@ -1,15 +1,17 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head>
 <title>Qt Toolkit - QGridLayout Class</title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
-a:link { text-decoration: none; }
-body { background: white; color: black; }
+a:link { color: #004faf; text-decoration: none }
+a:visited { color: #672967; text-decoration: none }body { background: white; color: black; }
 --></style>
 </head><body bgcolor="#ffffff">
 
-<a href="index.html">
-<img width="122" height="65" src="qtlogo.png" alt="Home"
-  align="left" border="0">
-</a><div align=right><img src="dochead.png" width="472" height="27"><br>
+<table width="100%">
+<tr><td><a href="index.html">
+<img width="100" height="100" src="qtlogo.png"
+alt="Home" border="0"><img width="100"
+height="100" src="face.png" alt="Home" border="0">
+</a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
 - <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
@@ -17,7 +19,7 @@ body { background: white; color: black; }
 - <a href="index.html">Home</a>
 - <a href="topicals.html"><b>Structure</b></a>
 </div>
-<br clear=all>
+</table>
 
 <h1 align=center>QGridLayout Class Reference</h1><br clear="all">
 <p>
@@ -30,41 +32,42 @@ Inherits <a href="qlayout.html">QLayout</a>.
 <p><a href="qgridlayout-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><span class="fn"><a href="#7fff24"><b>QGridLayout</b></a> ( QWidget * parent, int nRows = 1, int nCols = 1, int border=0, int space = -1, const char * name=0 ) </span>
-<li><span class="fn"><a href="#7cb457"><b>QGridLayout</b></a> ( int nRows = 1, int nCols = 1, int space = -1, const char * name=0 ) </span>
-<li><span class="fn"><a href="#bd1f15"><b>QGridLayout</b></a> ( QLayout * parentLayout, int nRows = 1, int nCols = 1, int space = -1, const char * name=0 ) </span>
-<li><span class="fn"><a href="#ccb289"><b>~QGridLayout</b></a> () </span>
-<li><span class="fn">QSize <a href="#1bdd08"><b>sizeHint</b></a> () const</span>
-<li><span class="fn">virtual QSize <a href="#d53c78"><b>minimumSize</b></a> () const</span>
-<li><span class="fn">virtual QSize <a href="#850c66"><b>maximumSize</b></a> () const</span>
-<li><span class="fn">virtual void <a href="#3c47e8"><b>setRowStretch</b></a> ( int row, int stretch ) </span>
-<li><span class="fn">virtual void <a href="#4ffa51"><b>setColStretch</b></a> ( int col, int stretch ) </span>
-<li><span class="fn">int <a href="#e25b39"><b>rowStretch</b></a> ( int row ) const</span>
-<li><span class="fn">int <a href="#9adc06"><b>colStretch</b></a> ( int col ) const</span>
-<li><span class="fn">int <a href="#add8f9"><b>numRows</b></a> () const</span>
-<li><span class="fn">int <a href="#db226b"><b>numCols</b></a> () const</span>
-<li><span class="fn">QRect <a href="#d450ce"><b>cellGeometry</b></a> ( int row, int col ) const</span>
-<li><span class="fn">virtual bool <a href="#e42304"><b>hasHeightForWidth</b></a> () const</span>
-<li><span class="fn">virtual int <a href="#41be71"><b>heightForWidth</b></a> ( int ) const</span>
-<li><span class="fn">virtual QSizePolicy::ExpandData <a href="#cbe78d"><b>expanding</b></a> () const</span>
-<li><span class="fn">virtual void <a href="#59d52a"><b>invalidate</b></a> () </span>
-<li><span class="fn">virtual void <a href="#927a27"><b>addItem</b></a> ( QLayoutItem * ) </span>
-<li><span class="fn">void <a href="#4c36ed"><b>addItem</b></a> ( QLayoutItem * item, int row, int col ) </span>
-<li><span class="fn">void <a href="#c5d458"><b>addMultiCell</b></a> ( QLayoutItem *, int fromRow, int toRow, int fromCol, int toCol, int align = 0 ) </span>
-<li><span class="fn">void <a href="#70abf2"><b>addWidget</b></a> ( QWidget *, int row, int col, int align = 0 ) </span>
-<li><span class="fn">void <a href="#a3775f"><b>addMultiCellWidget</b></a> ( QWidget *, int fromRow, int toRow, int fromCol, int toCol, int align = 0 ) </span>
-<li><span class="fn">void <a href="#7fc9ea"><b>addLayout</b></a> ( QLayout * layout, int row, int col ) </span>
-<li><span class="fn">void <a href="#ff9ceb"><b>addRowSpacing</b></a> ( int row, int minsize ) </span>
-<li><span class="fn">void <a href="#cae32e"><b>addColSpacing</b></a> ( int col, int minsize ) </span>
-<li><span class="fn">void <a href="#02708d"><b>expand</b></a> ( int rows, int cols ) </span>
-<li><span class="fn">enum <b>Corner</b> { TopLeft, TopRight, BottomLeft, BottomRight }</span>
-<li><span class="fn">void <a href="#d317c9"><b>setOrigin</b></a> ( Corner ) </span>
-<li><span class="fn">virtual void <a href="#6cde24"><b>setGeometry</b></a> ( const QRect &amp; ) </span>
+<li><div class="fn"><a href="#7fff24"><b>QGridLayout</b></a> ( QWidget * parent, int nRows = 1, int nCols = 1, int border=0, int space = -1, const char * name=0 ) </div>
+<li><div class="fn"><a href="#7cb457"><b>QGridLayout</b></a> ( int nRows = 1, int nCols = 1, int space = -1, const char * name=0 ) </div>
+<li><div class="fn"><a href="#bd1f15"><b>QGridLayout</b></a> ( QLayout * parentLayout, int nRows = 1, int nCols = 1, int space = -1, const char * name=0 ) </div>
+<li><div class="fn"><a href="#ccb289"><b>~QGridLayout</b></a> () </div>
+<li><div class="fn">virtual QSize <a href="#1bdd08"><b>sizeHint</b></a> () const</div>
+<li><div class="fn">virtual QSize <a href="#d53c78"><b>minimumSize</b></a> () const</div>
+<li><div class="fn">virtual QSize <a href="#850c66"><b>maximumSize</b></a> () const</div>
+<li><div class="fn">virtual void <a href="#3c47e8"><b>setRowStretch</b></a> ( int row, int stretch ) </div>
+<li><div class="fn">virtual void <a href="#4ffa51"><b>setColStretch</b></a> ( int col, int stretch ) </div>
+<li><div class="fn">int <a href="#e25b39"><b>rowStretch</b></a> ( int row ) const</div>
+<li><div class="fn">int <a href="#9adc06"><b>colStretch</b></a> ( int col ) const</div>
+<li><div class="fn">int <a href="#add8f9"><b>numRows</b></a> () const</div>
+<li><div class="fn">int <a href="#db226b"><b>numCols</b></a> () const</div>
+<li><div class="fn">QRect <a href="#d450ce"><b>cellGeometry</b></a> ( int row, int col ) const</div>
+<li><div class="fn">virtual bool <a href="#e42304"><b>hasHeightForWidth</b></a> () const</div>
+<li><div class="fn">virtual int <a href="#41be71"><b>heightForWidth</b></a> ( int ) const</div>
+<li><div class="fn">virtual QSizePolicy::ExpandData <a href="#cbe78d"><b>expanding</b></a> () const</div>
+<li><div class="fn">virtual void <a href="#59d52a"><b>invalidate</b></a> () </div>
+<li><div class="fn">virtual void <a href="#927a27"><b>addItem</b></a> ( QLayoutItem * ) </div>
+<li><div class="fn">void <a href="#4c36ed"><b>addItem</b></a> ( QLayoutItem * item, int row, int col ) </div>
+<li><div class="fn">void <a href="#c5d458"><b>addMultiCell</b></a> ( QLayoutItem *, int fromRow, int toRow, int fromCol, int toCol, int align = 0 ) </div>
+<li><div class="fn">void <a href="#70abf2"><b>addWidget</b></a> ( QWidget *, int row, int col, int align = 0 ) </div>
+<li><div class="fn">void <a href="#a3775f"><b>addMultiCellWidget</b></a> ( QWidget *, int fromRow, int toRow, int fromCol, int toCol, int align = 0 ) </div>
+<li><div class="fn">void <a href="#7fc9ea"><b>addLayout</b></a> ( QLayout * layout, int row, int col ) </div>
+<li><div class="fn">void <a href="#e4724b"><b>addMultiCellLayout</b></a> ( QLayout * layout, int fromRow, int toRow, int fromCol, int toCol, int align = 0 ) </div>
+<li><div class="fn">void <a href="#ff9ceb"><b>addRowSpacing</b></a> ( int row, int minsize ) </div>
+<li><div class="fn">void <a href="#cae32e"><b>addColSpacing</b></a> ( int col, int minsize ) </div>
+<li><div class="fn">void <a href="#02708d"><b>expand</b></a> ( int rows, int cols ) </div>
+<li><div class="fn">enum <b>Corner</b> { TopLeft, TopRight, BottomLeft, BottomRight }</div>
+<li><div class="fn">void <a href="#d317c9"><b>setOrigin</b></a> ( Corner ) </div>
+<li><div class="fn">virtual void <a href="#6cde24"><b>setGeometry</b></a> ( const QRect &amp; ) </div>
 </ul>
 <h2>Protected Members</h2>
 <ul>
-<li><span class="fn">bool <a href="#d18b57"><b>findWidget</b></a> ( QWidget * w, int * r, int * c ) </span>
-<li><span class="fn">void <a href="#d1b860"><b>add</b></a> ( QLayoutItem *, int row, int col ) </span>
+<li><div class="fn">bool <a href="#d18b57"><b>findWidget</b></a> ( QWidget * w, int * r, int * c ) </div>
+<li><div class="fn">void <a href="#d1b860"><b>add</b></a> ( QLayoutItem *, int row, int col ) </div>
 </ul>
 <hr><h2><a name="details"></a>Detailed Description</h2>
 The QGridLayout class lays out widgets in a grid.
@@ -90,7 +93,7 @@ three-row grid (the grid is shown overlaid in magenta):
 <p><img src="gridlayout.png" width="425" height="150">
 <p>Columns 0, 2 and 4 in this dialog fragment are made up of a <a href="qlabel.html">QLabel</a>,
 a <a href="qlineedit.html">QLineEdit</a> and a <a href="qlistbox.html">QListBox</a>.  Columns 1 and 2 are placeholders, made
-with setColSpacing().  Row 0 consists of three QLabel objects, row 1
+with addColSpacing().  Row 0 consists of three QLabel objects, row 1
 of three QLineEdit objects and row 2 of three QListBox objects.
 <p>Since we did not want any space between the rows, we had to use
 placeholder columns to get the right amount of space between the
@@ -167,6 +170,15 @@ The top left position is (0,0).
 <a href="qt.html#AlignmentFlags">Qt::AlignmentFlags</a> values.
 The default alignment is 0, which means
 that the widget fills the entire cell.
+<h3 class="fn">void <a name="e4724b"></a>QGridLayout::addMultiCellLayout ( <a href="qlayout.html">QLayout</a> * layout, int fromRow, int toRow, int fromCol, int toCol, int alignment = 0 )</h3>
+<p>Adds the layout <em>w</em> to the cell grid, spanning multiple rows/columns.
+<p>Alignment is specified by <em>alignment</em> which is a bitwise OR of
+<a href="qt.html#AlignmentFlags">Qt::AlignmentFlags</a> values.
+The default alignment is 0, which means
+that the widget fills the entire cell.
+<p>A non-zero alignment indicates that the layout should not grow to
+fill the available space, but should be sized according to
+<a href="#1bdd08">sizeHint</a>().
 <h3 class="fn">void <a name="a3775f"></a>QGridLayout::addMultiCellWidget ( <a href="qwidget.html">QWidget</a> * w, int fromRow, int toRow, int fromCol, int toCol, int alignment = 0 )</h3>
 <p>Adds the widget <em>w</em> to the cell grid, spanning multiple rows/columns.
 <p>Alignment is specified by <em>alignment</em> which is a bitwise OR of
@@ -206,7 +218,7 @@ valid results until <a href="#6cde24">setGeometry</a>() has been called, ie. aft
 <a href="qlayout.html#db9cb9">mainWidget</a>() is visible.
 <h3 class="fn">int <a name="9adc06"></a>QGridLayout::colStretch ( int col ) const</h3>
 <p>Returns the stretch factor for column <em>col.</em>
-<p>See also:  <a href="#4ffa51">setColStretch</a>().
+<p>See also  <a href="#4ffa51">setColStretch</a>().
 <h3 class="fn">void <a name="02708d"></a>QGridLayout::expand ( int nRows, int nCols )</h3>
 <p>Expands this grid so that it will have <em>nRows</em> rows and <em>nCols</em> columns.
 Will not shrink the grid. You should not need to call this function, as
@@ -242,7 +254,7 @@ returns TRUE. If <em>w</em> is not found, FALSE is returned.<p><b>Warning:</b> I
 <p>Returns the number of rows in this grid.
 <h3 class="fn">int <a name="e25b39"></a>QGridLayout::rowStretch ( int row ) const</h3>
 <p>Returns the stretch factor for row <em>row.</em>
-<p>See also:  <a href="#3c47e8">setRowStretch</a>().
+<p>See also  <a href="#3c47e8">setRowStretch</a>().
 <h3 class="fn">void <a name="4ffa51"></a>QGridLayout::setColStretch ( int col, int stretch ) <code>[virtual]</code></h3>
 <p>Sets the stretch factor of column <em>col</em> to <em>stretch.</em>
 The first column is number 0.
@@ -251,7 +263,7 @@ Columns with higher stretch factor take more of the available space.
 <p>The default stretch factor is 0.
 If the stretch factor is 0 and no other column in this table can
 grow at all, the column may still grow.
-<p>See also:  <a href="#9adc06">colStretch</a>(), <a href="#cae32e">addColSpacing</a>() and <a href="#3c47e8">setRowStretch</a>().
+<p>See also  <a href="#9adc06">colStretch</a>(), <a href="#cae32e">addColSpacing</a>() and <a href="#3c47e8">setRowStretch</a>().
 <p>Examples:
  <a href="layout-layout-cpp.html#setColStretch">layout/layout.cpp</a>
 <h3 class="fn">void <a name="6cde24"></a>QGridLayout::setGeometry ( const <a href="qrect.html">QRect</a> &amp; r ) <code>[virtual]</code></h3>
@@ -267,20 +279,21 @@ Rows with higher stretch factor take more of the available space.
 <p>The default stretch factor is 0.
 If the stretch factor is 0 and no other row in this table can
 grow at all, the row may still grow.
-<p>See also:  <a href="#e25b39">rowStretch</a>(), <a href="#ff9ceb">addRowSpacing</a>() and <a href="#4ffa51">setColStretch</a>().
-<h3 class="fn"><a href="qsize.html">QSize</a> <a name="1bdd08"></a>QGridLayout::sizeHint () const</h3>
+<p>See also  <a href="#e25b39">rowStretch</a>(), <a href="#ff9ceb">addRowSpacing</a>() and <a href="#4ffa51">setColStretch</a>().
+<h3 class="fn"><a href="qsize.html">QSize</a> <a name="1bdd08"></a>QGridLayout::sizeHint () const <code>[virtual]</code></h3>
 <p>Returns the preferred size of this grid.
+<p>Reimplemented from <a href="qlayoutitem.html#e2e8a5">QLayoutItem.</a>
 <hr><p>
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.1.1"><nobr>
+<input type=hidden name="version" value="2.2.0"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
 copyright &copy; 1995-2000
-<a href="http://www.trolltech.com">Troll Tech</a>, all rights reserved.<p><address><hr><div align="center">
+<a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.1</div>
+<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.2.0</div>
 </table></div></address></body></html>

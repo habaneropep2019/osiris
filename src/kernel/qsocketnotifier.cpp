@@ -1,27 +1,39 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qsocketnotifier.cpp   2.1.1   edited 2000-03-24 $
+** $Id: qt/src/kernel/qsocketnotifier.cpp   2.2.0   edited 2000-08-25 $
 **
 ** Implementation of QSocketNotifier class
 **
 ** Created : 951114
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the kernel module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #include "qsocketnotifier.h"
 #include "qevent.h"
@@ -55,7 +67,7 @@ extern bool qt_set_socket_handler( int, int, QObject *, bool );
   <ol>
   <li> \c QSocketNotifier::Read: There is data to be read (socket read event).
   <li> \c QSocketNotifier::Write: Data can be written (socket write event).
-  <li> \c QSocketNofifier::Exception: An exception has occured (socket
+  <li> \c QSocketNofifier::Exception: An exception has occurred (socket
   exception event).  We recommend against using this.
   </ol>
 
@@ -104,7 +116,7 @@ extern bool qt_set_socket_handler( int, int, QObject *, bool );
 
   The behaviour of a write notifier that is left in enabled state
   after having emitting the first activated() signal (and no "would
-  block" error has occured) is undefined. Depending on the operating
+  block" error has occurred) is undefined. Depending on the operating
   system, it may fire on every pass of the event loop, or not at all.
 
   If you need a time-out for your sockets, you can use either
@@ -170,7 +182,7 @@ QSocketNotifier::~QSocketNotifier()
   <ol>
   <li> \c QSocketNotifier::Read: There is data to be read (socket read event).
   <li> \c QSocketNotifier::Write: Data can be written (socket write event).
-  <li> \c QSocketNofifier::Exception: An exception has occured (socket
+  <li> \c QSocketNofifier::Exception: An exception has occurred (socket
   exception event).
   </ol>
 

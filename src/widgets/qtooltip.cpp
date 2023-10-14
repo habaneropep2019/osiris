@@ -1,31 +1,46 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qtooltip.cpp   2.1.1   edited 2000-05-24 $
+** $Id: qt/src/widgets/qtooltip.cpp   2.2.0   edited 2000-08-28 $
 **
 ** Tool Tips (or Balloon Help) for any widget or rectangle
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the widgets module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #include "qtooltip.h"
+#ifndef QT_NO_COMPLEXWIDGETS
 #include "qlabel.h"
 #include "qptrdict.h"
 #include "qapplication.h"
 #include "qguardedptr.h"
+#include "qtimer.h"
+#include "qeffects_p.h"
 
 static bool globally_enabled = TRUE;
 
@@ -92,6 +107,8 @@ public:
 
     void    removeFromGroup( QToolTipGroup * );
 
+    void    hideTipAndSleep();
+
 public slots:
     void    hideTip();
 
@@ -99,6 +116,7 @@ private slots:
     void    labelDestroyed();
     void    clientWidgetDestroyed();
     void    showTip();
+    void    allowAnimation();
 
 private:
     QTimer  wakeUp;
@@ -110,7 +128,9 @@ private:
     QGuardedPtr<QWidget> widget;
     Tip *currentTip;
     Tip *previousTip;
+    bool preventAnimation;
     bool isApplicationFilter;
+    QTimer *removeTimer;
 };
 
 
@@ -146,9 +166,11 @@ QTipManager::QTipManager()
     currentTip = 0;
     previousTip = 0;
     label = 0;
+    preventAnimation = FALSE;
     isApplicationFilter = FALSE;
     connect( &wakeUp, SIGNAL(timeout()), SLOT(showTip()) );
     connect( &fallAsleep, SIGNAL(timeout()), SLOT(hideTip()) );
+    removeTimer = new QTimer( this );
 }
 
 
@@ -179,7 +201,8 @@ QTipManager::~QTipManager()
     delete label;
 }
 
-void QTipManager::add( const QRect &gm, QWidget *w, const QRect &r, const QString &s,
+void QTipManager::add( const QRect &gm, QWidget *w,
+		       const QRect &r, const QString &s,
 		       QToolTipGroup *g, const QString& gs,
 		       QToolTip *tt, bool a )
 {
@@ -201,22 +224,27 @@ void QTipManager::add( const QRect &gm, QWidget *w, const QRect &r, const QStrin
 
     tips->insert( w, t );
 
-    if ( a && t->rect.contains( pos ) && (!g || g->enabled()) )
+    if ( a && t->rect.contains( pos ) && (!g || g->enabled()) ) {
+	removeTimer->stop();
 	showTip();
+    }
 
     if ( !isApplicationFilter && qApp ) {
 	isApplicationFilter = TRUE;
 	qApp->installEventFilter( tipManager );
 	qApp->setGlobalMouseTracking( TRUE );
     }
+
+    if ( t->group )
+	connect( removeTimer, SIGNAL( timeout() ),
+		 t->group, SIGNAL( removeTip() ) );
 }
 
 void QTipManager::add( QWidget *w, const QRect &r, const QString &s,
 		       QToolTipGroup *g, const QString& gs,
 		       QToolTip *tt, bool a )
 {
-    add( QRect( -1, -1, -1, -1 ),
-	 w, r, s, g, gs, tt, a );
+    add( QRect( -1, -1, -1, -1 ), w, r, s, g, gs, tt, a );
 }
 
 
@@ -246,12 +274,13 @@ void QTipManager::remove( QWidget *w, const QRect & r )
 	    delete d;
 	}
     }
-
+#if 0 // not needed, leads sometimes to crashes
     if ( tips->isEmpty() ) {
 	// the manager will be recreated if needed
 	delete tipManager;
 	tipManager = 0;
     }
+#endif
 }
 
 
@@ -293,10 +322,12 @@ void QTipManager::remove( QWidget *w )
 	t = d;
     }
 
+#if 0
     if ( tips->isEmpty() ) {
 	delete tipManager;
 	tipManager = 0;
     }
+#endif
 }
 
 
@@ -307,8 +338,12 @@ void QTipManager::removeFromGroup( QToolTipGroup *g )
     while( (t = i.current()) != 0 ) {
 	++i;
 	while ( t ) {
-	    if ( t->group == g )
+	    if ( t->group == g ) {
+		if ( t->group )
+		    disconnect( removeTimer, SIGNAL( timeout() ),
+				t->group, SIGNAL( removeTip() ) );
 		t->group = 0;
+	    }
 	    t = t->next;
 	}
     }
@@ -331,9 +366,8 @@ bool QTipManager::eventFilter( QObject *obj, QEvent *e )
     QWidget *w = (QWidget *)obj;
 
     if ( e->type() == QEvent::FocusOut || e->type() == QEvent::FocusIn ) {
-	// user moved focus somewhere - hide the tip
-	hideTip();
-	fallAsleep.stop();
+	// user moved focus somewhere - hide the tip and sleep
+	hideTipAndSleep();
 	return FALSE;
     }
 
@@ -345,10 +379,9 @@ bool QTipManager::eventFilter( QObject *obj, QEvent *e )
     }
 
     if ( !t ) {
-	if ( e->type() >= QEvent::MouseButtonPress &&
-	     e->type() <= QEvent::Leave ) {
+	if ( ( e->type() >= QEvent::MouseButtonPress &&
+	       e->type() <= QEvent::FocusOut) || e->type() == QEvent::Leave )
 	    hideTip();
-	}
 	return FALSE;
     }
 
@@ -361,16 +394,12 @@ bool QTipManager::eventFilter( QObject *obj, QEvent *e )
     case QEvent::KeyPress:
     case QEvent::KeyRelease:
 	// input - turn off tool tip mode
-	hideTip();
-	fallAsleep.stop();
+	hideTipAndSleep();
 	break;
     case QEvent::MouseMove:
 	{ // a whole scope just for one variable
 	    QMouseEvent * m = (QMouseEvent *)e;
-
-	    QPoint mousePos( m->pos() );
-	    mousePos = ((QWidget*)obj)->mapToGlobal( mousePos );
-	    mousePos = w->mapFromGlobal( mousePos );
+	    QPoint mousePos = w->mapFromGlobal( m->globalPos() );
 
 	    if ( currentTip && !currentTip->rect.contains( mousePos ) ) {
 		hideTip();
@@ -379,7 +408,9 @@ bool QTipManager::eventFilter( QObject *obj, QEvent *e )
 	    }
 
 	    wakeUp.stop();
-	    if ( m->state() == 0 ) {
+	    if ( m->state() == 0 &&
+		    mousePos.x() >= 0 && mousePos.x() < w->width() &&
+		    mousePos.y() >= 0 && mousePos.y() < w->height() ) {
 		if ( label && label->isVisible() ) {
 		    return FALSE;
 		} else {
@@ -390,8 +421,10 @@ bool QTipManager::eventFilter( QObject *obj, QEvent *e )
 			wakeUp.start( 700, TRUE );
 		    }
 		    if ( t->group && t->group->ena &&
-			    !t->group->del && !t->groupText.isEmpty() )
+			 !t->group->del && !t->groupText.isEmpty() ) {
+			removeTimer->stop();
 			emit t->group->showTip( t->groupText );
+		    }
 		}
 		widget = w;
 		pos = mousePos;
@@ -425,6 +458,9 @@ void QTipManager::showTip()
 	t = t->next;
     if ( t == 0 )
 	return;
+
+    if (  t == currentTip )
+	return; // nothing to do
 
     if ( t->tip ) {
 	t->tip->maybeTip( pos );
@@ -461,13 +497,27 @@ void QTipManager::showTip()
 	p.setY( p.y() - 20 - label->height() );
     if ( label->text().length() ) {
 	label->move( p );
-	label->show();
+
+	
+	if ( QApplication::isEffectEnabled( UI_AnimateTooltip ) == FALSE ||
+	     previousTip || preventAnimation )
+	    label->show();
+#ifndef QT_NO_EFFECTS
+	else if ( QApplication::isEffectEnabled( UI_FadeTooltip ) )
+	    qFadeEffect( label );
+	else
+	    qScrollEffect( label );
+#endif
+
 	label->raise();
 	fallAsleep.start( 10000, TRUE );
     }
 
-    if ( t->group && t->group->del && !t->groupText.isEmpty() )
+    if ( t->group && t->group->del && !t->groupText.isEmpty() ) {
+	removeTimer->stop();
 	emit t->group->showTip( t->groupText );
+    }
+
     currentTip = t;
     previousTip = 0;
 }
@@ -475,17 +525,20 @@ void QTipManager::showTip()
 
 void QTipManager::hideTip()
 {
+    QTimer::singleShot( 250, this, SLOT(allowAnimation()) );
+    preventAnimation = TRUE;
+
     if ( label && label->isVisible() ) {
 	label->hide();
 	fallAsleep.start( 2000, TRUE );
 	wakeUp.stop();
 	if ( currentTip && currentTip->group )
-	    emit currentTip->group->removeTip();
+	    removeTimer->start( 100, TRUE );
     } else if ( wakeUp.isActive() ) {
 	wakeUp.stop();
 	if ( currentTip && currentTip->group &&
 	     !currentTip->group->del && !currentTip->groupText.isEmpty() )
-	    emit currentTip->group->removeTip();
+	    removeTimer->start( 100, TRUE );
     }
 
     previousTip = currentTip;
@@ -493,6 +546,18 @@ void QTipManager::hideTip()
     if ( previousTip && previousTip->autoDelete )
 	remove( widget, previousTip->rect );
     widget = 0;
+}
+
+void  QTipManager::hideTipAndSleep()
+{
+    hideTip();
+    fallAsleep.stop();
+}
+
+
+void QTipManager::allowAnimation()
+{
+    preventAnimation = FALSE;
 }
 
 
@@ -771,7 +836,7 @@ void QToolTip::remove( QWidget * widget, const QRect & rect )
 void QToolTip::hide()
 {
     if ( tipManager )
-	tipManager->hideTip();
+	tipManager->hideTipAndSleep();
 }
 
 /*!
@@ -788,8 +853,8 @@ void QToolTip::hide()
   implementation will be of the form:
 
   \code
-    if ( \\<something\\> ) {
-	tip( \\<something\\>, \\<something\\> );
+    if ( <something> ) {
+	tip( <something>, <something> );
     }
   \endcode
 
@@ -1025,3 +1090,4 @@ bool QToolTip::enabled()
 }
 
 #include "qtooltip.moc"
+#endif

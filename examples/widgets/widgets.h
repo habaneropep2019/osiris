@@ -1,13 +1,16 @@
 /****************************************************************************
-** $Id: qt/examples/widgets/widgets.h   2.1.1   edited 2000-03-03 $
+** $Id: qt/examples/widgets/widgets.h   2.2.0   edited 2000-08-31 $
 **
 ** Definition of something or other
 **
 ** Created : 979899
 **
-** Copyright (C) 1997 by Troll Tech AS.  All rights reserved.
+** Copyright (C) 1997 by Trolltech AS.  All rights reserved.
 **
-****************************************************************************/
+** This file is part of an example program for Qt.  This example
+** program may be used, distributed and modified without limitation.
+**
+*****************************************************************************/
 
 #ifndef WIDGETS_H
 #define WIDGETS_H
@@ -87,7 +90,7 @@ private slots:
     void	movieUpdate( const QRect& );
     void	spinBoxValueChanged( const QString& );
     void	popupSelected( int );
-    
+
     void	open();
     void	dummy();
     void	showProperties();
@@ -106,6 +109,7 @@ private:
     QMultiLineEdit* edit;
     QPopupMenu *textStylePopup;
     int plainStyleID;
+    QWidget* bla;
 };
 
 #endif

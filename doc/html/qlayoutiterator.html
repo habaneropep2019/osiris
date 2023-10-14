@@ -1,15 +1,17 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head>
 <title>Qt Toolkit - QLayoutIterator Class</title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
-a:link { text-decoration: none; }
-body { background: white; color: black; }
+a:link { color: #004faf; text-decoration: none }
+a:visited { color: #672967; text-decoration: none }body { background: white; color: black; }
 --></style>
 </head><body bgcolor="#ffffff">
 
-<a href="index.html">
-<img width="122" height="65" src="qtlogo.png" alt="Home"
-  align="left" border="0">
-</a><div align=right><img src="dochead.png" width="472" height="27"><br>
+<table width="100%">
+<tr><td><a href="index.html">
+<img width="100" height="100" src="qtlogo.png"
+alt="Home" border="0"><img width="100"
+height="100" src="face.png" alt="Home" border="0">
+</a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
 - <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
@@ -17,7 +19,7 @@ body { background: white; color: black; }
 - <a href="index.html">Home</a>
 - <a href="topicals.html"><b>Structure</b></a>
 </div>
-<br clear=all>
+</table>
 
 <h1 align=center>QLayoutIterator Class Reference</h1><br clear="all">
 <p>
@@ -28,14 +30,14 @@ The QLayoutIterator class provides iterators over <a href="qlayoutitem.html">QLa
 <p><a href="qlayoutiterator-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><span class="fn"><a href="#1ef0c5"><b>QLayoutIterator</b></a> ( QGLayoutIterator * i ) </span>
-<li><span class="fn"><a href="#a2fe2d"><b>QLayoutIterator</b></a> ( const QLayoutIterator &amp; i ) </span>
-<li><span class="fn"><a href="#40cd28"><b>~QLayoutIterator</b></a> () </span>
-<li><span class="fn">QLayoutIterator&amp; <a href="#d4c81f"><b>operator=</b></a> ( const QLayoutIterator &amp; i ) </span>
-<li><span class="fn">QLayoutItem* <a href="#295ab7"><b>operator++</b></a> () </span>
-<li><span class="fn">QLayoutItem* <a href="#0d663a"><b>current</b></a> () </span>
-<li><span class="fn">QLayoutItem* <a href="#e6ccab"><b>takeCurrent</b></a> () </span>
-<li><span class="fn">void <a href="#3def41"><b>deleteCurrent</b></a> () </span>
+<li><div class="fn"><a href="#1ef0c5"><b>QLayoutIterator</b></a> ( QGLayoutIterator * i ) </div>
+<li><div class="fn"><a href="#a2fe2d"><b>QLayoutIterator</b></a> ( const QLayoutIterator &amp; i ) </div>
+<li><div class="fn"><a href="#40cd28"><b>~QLayoutIterator</b></a> () </div>
+<li><div class="fn">QLayoutIterator&amp; <a href="#d4c81f"><b>operator=</b></a> ( const QLayoutIterator &amp; i ) </div>
+<li><div class="fn">QLayoutItem* <a href="#295ab7"><b>operator++</b></a> () </div>
+<li><div class="fn">QLayoutItem* <a href="#0d663a"><b>current</b></a> () </div>
+<li><div class="fn">QLayoutItem* <a href="#e6ccab"><b>takeCurrent</b></a> () </div>
+<li><div class="fn">void <a href="#3def41"><b>deleteCurrent</b></a> () </div>
 </ul>
 <hr><h2><a name="details"></a>Detailed Description</h2>
 The QLayoutIterator class provides iterators over <a href="qlayoutitem.html">QLayoutItem</a>
@@ -46,7 +48,7 @@ an iterator is copied, and one of the copies is modified,
 both iterators will be modified.
 <p>A QLayoutIterator is not protected against changes in its layout. If
 the layout is modified or deleted, the iterator will become invalid.
-It is not posible to test for validity. It is safe to delete an
+It is not possible to test for validity. It is safe to delete an
 invalid layout. Any other access may lead to an illegal memory
 reference, and the abnormal termination of the program.
 <p>Calling <a href="#e6ccab">takeCurrent</a>() or <a href="#3def41">deleteCurrent</a>() leaves the iterator in a
@@ -109,13 +111,13 @@ invalid.
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.1.1"><nobr>
+<input type=hidden name="version" value="2.2.0"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
 copyright &copy; 1995-2000
-<a href="http://www.trolltech.com">Troll Tech</a>, all rights reserved.<p><address><hr><div align="center">
+<a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.1</div>
+<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.2.0</div>
 </table></div></address></body></html>

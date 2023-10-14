@@ -1,29 +1,42 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qpainter.cpp   2.1.1   edited 2000-05-22 $
+** $Id: qt/src/kernel/qpainter.cpp   2.2.0   edited 2000-08-25 $
 **
 ** Implementation of QPainter, QPen and QBrush classes
 **
 ** Created : 940112
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the kernel module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #include "qpainter.h"
+#include "qpainter_p.h"
 #include "qbitmap.h"
 #include "qstack.h"
 #include "qdatastream.h"
@@ -31,9 +44,14 @@
 #include "qimage.h"
 #include "q1xcompatibility.h"
 #include "qpaintdevicemetrics.h"
+#ifdef _WS_QWS_
+#include "qgfx_qws.h"
+#endif
 #include <stdlib.h>
 
+#ifndef QT_NO_TRANSFORMATIONS
 typedef QStack<QWMatrix> QWMatrixStack;
+#endif
 
 // REVISED: arnt
 /*!
@@ -77,10 +95,10 @@ typedef QStack<QWMatrix> QWMatrixStack;
   you set using setFont() and fontInfo() returns the font actually
   being used.
 
-  <li> brush() is the currently set brush; the colour or pattern
+  <li> brush() is the currently set brush; the color or pattern
   that's used for filling e.g. circles.
 
-  <li> pen() is the currently set pen; the colour or stipple that's
+  <li> pen() is the currently set pen; the color or stipple that's
   used for drawing lines or boundaries.
 
   <li> backgroundMode() is \c Opaque or \c Transparent, ie. whether
@@ -100,7 +118,7 @@ typedef QStack<QWMatrix> QWMatrixStack;
   painter's coordinate transformation system.  See \link coordsys.html
   The Coordinate System \endlink for an explanation of this, or a
   paragraph below for a quick overview of the functions.
-  
+
   <li> clipping() is whether the painter clips at all. (The paint
   device clips, too.)  If the painter clips, it clips to clipRegion().
 
@@ -108,7 +126,7 @@ typedef QStack<QWMatrix> QWMatrixStack;
   lineTo().
 
   </ul>
-  
+
   Note that some of these settings mirror settings in some paint
   devices, e.g. QWidget::font(). QPainter::begin() (or the QPainter
   constructor) copies these attributes from the paint device, changing
@@ -117,20 +135,20 @@ typedef QStack<QWMatrix> QWMatrixStack;
 
   save() saves all of these settings on an internal stack, restore()
   pops them back.
-  
+
   The core functionality of QPainter is drawing, and there are
   functions to draw most primitives: drawPoint(), drawPoints(),
   drawLine(), drawRect(), drawWinFocusRect(), drawRoundRect(),
   drawEllipse(), drawArc(), drawPie(), drawChord(),
   drawLineSegments(), drawPolyline(), drawPolygon(), and
   drawQuadBezier().
-  
+
   There are functions to draw pixmaps/images, namely drawPixmap(),
   drawImage() and drawTiledPixmap().  drawPixmap() and drawImage()
   produce the same result, except that drawPixmap() is faster
   on-screen and drawImage() faster and sometimes better on QPrinter
   and QPicture.
-  
+
   Text drawing is done using drawText(), and when you need
   fine-grained positioning, boundingRect() tells you where a given
   drawText() command would draw.
@@ -145,7 +163,7 @@ typedef QStack<QWMatrix> QWMatrixStack;
   coordinate transformation.  See \link coordsys.html The Coordinate
   System \endlink for a more general overview and a walkthrough of a
   simple example.
-  
+
   The most common functions used are scale(), rotate(), translate()
   and shear(), all of which operate on the worldMatrix().
   setWorldMatrix() can replace or add to the currently set matrix().
@@ -171,10 +189,10 @@ typedef QStack<QWMatrix> QWMatrixStack;
   widgets, and most printers clip away an area near the edges of the
   paper.  This additional clipping is \e not reflected by the return
   value of clipRegion() or hasClipping().
-  
+
   Finally, QPainter includes some little-used functions that are very
   handy the few times you need them.
-  
+
   isActive() indicates whether the painter is active.  begin() (and
   the most usual constructor) makes it active.  end() (and the
   destructor) deactivates it.  If the painter is active, device()
@@ -365,18 +383,18 @@ QPainter::QPainter()
   used only once. The constructor calls begin() for you and the QPainter
   destructor automatically calls end().
 
-  Example using begin() and end():
+  Here's an example using begin() and end():
   \code
     void MyWidget::paintEvent( QPaintEvent * )
     {
-	QPainter p();
-	p.begin();
+	QPainter p;
+	p.begin( this );
 	p.drawLine( ... );	// drawing code
 	p.end();
     }
   \endcode
 
-  Example using this constructor:
+  The same example using this constructor:
   \code
     void MyWidget::paintEvent( QPaintEvent * )
     {
@@ -422,8 +440,10 @@ QPainter::~QPainter()
 	end();
     if ( tabarray )				// delete tab array
 	delete [] tabarray;
-    if (wm_stack )
+#ifndef QT_NO_TRANSFORMATIONS
+    if ( wm_stack )
 	delete (QWMatrixStack *)wm_stack;
+#endif
 }
 
 
@@ -524,7 +544,12 @@ struct QPState {				// painter state
     uchar	rop;
     QPoint	bro;
     QRect	wr, vr;
+#ifndef QT_NO_TRANSFORMATIONS
     QWMatrix	wm;
+#else
+    int		xlatex;
+    int		xlatey;
+#endif
     bool	vxf;
     bool	wxf;
     QRegion	rgn;
@@ -583,11 +608,16 @@ void QPainter::save()
 #if 0
     ps->pu    = pu;				// !!!not used
 #endif
+#ifndef QT_NO_TRANSFORMATIONS
     ps->wr    = QRect( wx, wy, ww, wh );
     ps->vr    = QRect( vx, vy, vw, vh );
     ps->wm    = wxmat;
     ps->vxf   = testf(VxF);
     ps->wxf   = testf(WxF);
+#else
+    ps->xlatex = xlatex;
+    ps->xlatey = xlatey;
+#endif
     ps->rgn   = crgn;
     ps->clip  = testf(ClipOn);
     ps->ts    = tabstops;
@@ -633,6 +663,7 @@ void QPainter::restore()
     if ( ps->pu != pu )				// !!!not used
 	pu = ps->pu;
 #endif
+#ifndef QT_NO_TRANSFORMATIONS
     QRect wr( wx, wy, ww, wh );
     QRect vr( vx, vy, vw, vh );
     if ( ps->wr != wr || hardRestore )
@@ -645,6 +676,10 @@ void QPainter::restore()
 	setViewXForm( ps->vxf );
     if ( ps->wxf != testf(WxF) || hardRestore )
 	setWorldXForm( ps->wxf );
+#else
+    xlatex = ps->xlatex;
+    xlatey = ps->xlatey;
+#endif
     if ( ps->rgn != crgn || hardRestore )
 	setClipRegion( ps->rgn );
     if ( ps->clip != testf(ClipOn) || hardRestore )
@@ -652,9 +687,11 @@ void QPainter::restore()
     tabstops = ps->ts;
     tabarray = ps->ta;
 
+#ifndef QT_NO_TRANSFORMATIONS
     if (wm_stack )
 	delete (QWMatrixStack *)wm_stack;
     wm_stack = ps->wm_stack;
+#endif
     delete ps;
 }
 
@@ -677,7 +714,7 @@ QFontMetrics QPainter::fontMetrics() const
 
 /*!
   Returns the font info for the painter, if the painter is active.  It
-  is not possibel to obtain font information for an inactive painter,
+  is not possible to obtain font information for an inactive painter,
   so the return value is undefined if the painter is not active.
 
   \sa fontMetrics(), isActive()
@@ -953,6 +990,8 @@ void QPainter::setTabArray( int *ta )
   QPainter xform settings
  *****************************************************************************/
 
+#ifndef QT_NO_TRANSFORMATIONS
+
 /*! Enables view transformations if \a enable is TRUE, or disables
 view transformations if \a enable is FALSE.
 
@@ -1046,8 +1085,8 @@ QRect QPainter::viewport() const		// get viewport
   enables view transformation.
 
   The viewport rectangle is part of the view transformation.  The
-  window specifies the device coordinate system.  Its sister, the
-  viewport(), specifies the logical coordinate system.
+  viewport specifies the device coordinate system.  Its sister, the
+  window(), specifies the logical coordinate system.
 
   The default viewport rectangle is the same as the device's rectangle.
   See the \link coordsys.html Coordinate System Overview \endlink for
@@ -1078,6 +1117,7 @@ void QPainter::setViewport( int x, int y, int w, int h )
     else
 	setViewXForm( TRUE );
 }
+
 
 /*!
   Enables world transformations if \a enable is TRUE, or disables
@@ -1132,7 +1172,6 @@ const QWMatrix &QPainter::worldMatrix() const
   setWorldXForm(FALSE).  (The identity matrix is the matrix where
   QWMatrix::m11() and QWMatrix::m22() are 1.0 and the rest are 0.0.)
 
-  
   World transformations are applied after the view transformations
   (i.e. \link setWindow window\endlink and \link setViewport viewport\endlink).
 
@@ -1161,7 +1200,7 @@ const QWMatrix &QPainter::worldMatrix() const
   with additional transformations.  Using translate(), scale(),
   etc. is safe.
 
-  For a brief verview of coordinate transformation, see the \link
+  For a brief overview of coordinate transformation, see the \link
   coordsys.html Coordinate System Overview. \endlink
 
   \sa worldMatrix() setWorldXForm() setWindow() setViewport()
@@ -1232,6 +1271,7 @@ void QPainter::restoreWorldMatrix()
     delete m;
 }
 
+#endif // QT_NO_TRANSFORMATIONS
 
 /*!
   Translates the coordinate system by \a (dx,dy).
@@ -1252,11 +1292,19 @@ void QPainter::restoreWorldMatrix()
 
 void QPainter::translate( double dx, double dy )
 {
+#ifndef QT_NO_TRANSFORMATIONS
     QWMatrix m;
     m.translate( dx, dy );
     setWorldMatrix( m, TRUE );
+#else
+    xlatex += (int)dx;
+    xlatey += (int)dy;
+    setf( VxF );
+#endif
 }
 
+
+#ifndef QT_NO_TRANSFORMATIONS
 /*!
   Scales the coordinate system by \a (sx,sy).
   \sa translate(), shear(), rotate(), resetXForm(), setWorldMatrix(),
@@ -1296,6 +1344,7 @@ void QPainter::rotate( double a )
     setWorldMatrix( m, TRUE );
 }
 
+
 /*!
   Resets any transformations that were made using translate(), scale(),
   shear(), rotate(), setWorldMatrix(), setViewport() and setWindow()
@@ -1313,12 +1362,10 @@ void QPainter::resetXForm()
     setWorldXForm( FALSE );
 }
 
-
 const int TxNone      = 0;			// transformation codes
 const int TxTranslate = 1;			// copy in qptr_xyz.cpp
 const int TxScale     = 2;
 const int TxRotShear  = 3;
-
 
 /*!
   \internal
@@ -1344,10 +1391,10 @@ void QPainter::updateXForm()
     txinv = FALSE;				// no inverted matrix
     txop  = TxNone;
     const double eps = 0.0; // ##### can we get away with this?
-    //#define FZ(x) ((x)<eps&&(x)>-eps) ###nonsense if eps==0.0!!!
-    #define FZ(x) ((x) == eps)
+//#define FZ(x) ((x)<eps&&(x)>-eps) ###nonsense if eps==0.0!!!
+#define FZ(x) ((x) == eps)
     //#define FEQ(x,y) (((x)-(y))<eps&&((x)-(y))>-eps) ###nonsense if eps==0.0!
-    #define FEQ(x,y) ((x)==(y))
+#define FEQ(x,y) ((x)==(y))
     if ( FZ(m12()) && FZ(m21()) && m11() >= -eps && m22() >= -eps ) {
 	if ( FEQ(m11(),1.0) && FEQ(m22(),1.0) ) {
 	    if ( !FZ(dx()) || !FZ(dy()) )
@@ -1364,8 +1411,8 @@ void QPainter::updateXForm()
 	setf(DirtyFont);
 #endif
     }
-    #undef FZ
-    #undef FEQ
+#undef FZ
+#undef FEQ
 }
 
 
@@ -1396,6 +1443,13 @@ void QPainter::updateInvXForm()
     ixmat = m.invert( &invertible );		// invert matrix
 }
 
+#else
+void QPainter::resetXForm()
+{
+    xlatex = 0;
+    xlatey = 0;
+}
+#endif // QT_NO_TRANSFORMATIONS
 
 /*!
   \internal
@@ -1404,6 +1458,7 @@ void QPainter::updateInvXForm()
 
 void QPainter::map( int x, int y, int *rx, int *ry ) const
 {
+#ifndef QT_NO_TRANSFORMATIONS
      switch ( txop ) {
 	case TxNone:
 	    *rx = x;  *ry = y;
@@ -1426,6 +1481,10 @@ void QPainter::map( int x, int y, int *rx, int *ry ) const
 	    *ry = ty >= 0 ? int(ty + 0.5) : int(ty - 0.5);
 	    } break;
     }
+#else
+    *rx = x + xlatex;
+    *ry = y + xlatey;
+#endif
 }
 
 /*!
@@ -1437,6 +1496,7 @@ void QPainter::map( int x, int y, int *rx, int *ry ) const
 void QPainter::map( int x, int y, int w, int h,
 		    int *rx, int *ry, int *rw, int *rh ) const
 {
+#ifndef QT_NO_TRANSFORMATIONS
      switch ( txop ) {
 	case TxNone:
 	    *rx = x;  *ry = y;
@@ -1464,6 +1524,12 @@ void QPainter::map( int x, int y, int w, int h,
 #endif
 	    break;
     }
+
+#else
+    *rx = x + xlatex;
+    *ry = y + xlatey;
+    *rw = w;  *rh = h;
+#endif
 }
 
 /*!
@@ -1473,6 +1539,7 @@ void QPainter::map( int x, int y, int w, int h,
 
 void QPainter::mapInv( int x, int y, int *rx, int *ry ) const
 {
+#ifndef QT_NO_TRANSFORMATIONS
 #if defined(CHECK_STATE)
     if ( !txinv )
 	qWarning( "QPainter::mapInv: Internal error" );
@@ -1481,6 +1548,11 @@ void QPainter::mapInv( int x, int y, int *rx, int *ry ) const
     double ty = im12()*x + im22()*y+idy();
     *rx = tx >= 0 ? int(tx + 0.5) : int(tx - 0.5);
     *ry = ty >= 0 ? int(ty + 0.5) : int(ty - 0.5);
+
+#else
+    *rx = x - xlatex;
+    *ry = y - xlatey;
+#endif
 }
 
 /*!
@@ -1492,6 +1564,7 @@ void QPainter::mapInv( int x, int y, int *rx, int *ry ) const
 void QPainter::mapInv( int x, int y, int w, int h,
 		       int *rx, int *ry, int *rw, int *rh ) const
 {
+#ifndef QT_NO_TRANSFORMATIONS
 #if defined(CHECK_STATE)
     if ( !txinv || txop == TxRotShear )
 	qWarning( "QPainter::mapInv: Internal error" );
@@ -1504,6 +1577,13 @@ void QPainter::mapInv( int x, int y, int w, int h,
     *ry = ty >= 0 ? int(ty + 0.5) : int(ty - 0.5);
     *rw = tw >= 0 ? int(tw + 0.5) : int(tw - 0.5);
     *rh = th >= 0 ? int(th + 0.5) : int(th - 0.5);
+
+#else
+    *rx = x - xlatex;
+    *ry = y - xlatey;
+    *rw = w;
+    *rh = h;
+#endif
 }
 
 
@@ -1516,8 +1596,10 @@ void QPainter::mapInv( int x, int y, int w, int h,
 
 QPoint QPainter::xForm( const QPoint &pv ) const
 {
+#ifndef QT_NO_TRANSFORMATIONS
     if ( txop == TxNone )
 	return pv;
+#endif
     int x=pv.x(), y=pv.y();
     map( x, y, &x, &y );
     return QPoint( x, y );
@@ -1535,6 +1617,7 @@ QPoint QPainter::xForm( const QPoint &pv ) const
 
 QRect QPainter::xForm( const QRect &rv ) const
 {
+#ifndef QT_NO_TRANSFORMATIONS
     if ( txop == TxNone )
 	return rv;
 
@@ -1543,6 +1626,7 @@ QRect QPainter::xForm( const QRect &rv ) const
 	a = xForm( a );
 	return a.boundingRect();
     }
+#endif
 
     // Just translation/scale
     int x, y, w, h;
@@ -1561,7 +1645,12 @@ QRect QPainter::xForm( const QRect &rv ) const
 QPointArray QPainter::xForm( const QPointArray &av ) const
 {
     QPointArray a = av;
-    if ( txop != TxNone ) {
+#ifndef QT_NO_TRANSFORMATIONS
+    if ( txop != TxNone )
+#else
+    if ( xlatex || xlatey )
+#endif
+    {
 	a = a.copy();
 	int x, y, i;
 	for ( i=0; i<(int)a.size(); i++ ) {
@@ -1617,12 +1706,14 @@ QPointArray QPainter::xForm( const QPointArray &av, int index,
 
 QPoint QPainter::xFormDev( const QPoint &pd ) const
 {
+#ifndef QT_NO_TRANSFORMATIONS
     if ( txop == TxNone )
 	return pd;
     if ( !txinv ) {
 	QPainter *that = (QPainter*)this;	// mutable
 	that->updateInvXForm();
     }
+#endif
     int x=pd.x(), y=pd.y();
     mapInv( x, y, &x, &y );
     return QPoint( x, y );
@@ -1640,6 +1731,7 @@ QPoint QPainter::xFormDev( const QPoint &pd ) const
 
 QRect QPainter::xFormDev( const QRect &rd ) const
 {
+#ifndef QT_NO_TRANSFORMATIONS
     if ( txop == TxNone )
 	return rd;
     if ( !txinv ) {
@@ -1651,6 +1743,7 @@ QRect QPainter::xFormDev( const QRect &rd ) const
 	a = xFormDev( a );
 	return a.boundingRect();
     }
+#endif
 
     // Just translation/scale
     int x, y, w, h;
@@ -1668,7 +1761,12 @@ QRect QPainter::xFormDev( const QRect &rd ) const
 QPointArray QPainter::xFormDev( const QPointArray &ad ) const
 {
     QPointArray a = ad;
-    if ( txop != TxNone ) {
+#ifndef QT_NO_TRANSFORMATIONS
+    if ( txop != TxNone )
+#else
+    if ( xlatex || xlatey )
+#endif
+    {
 	a = a.copy();
 	int x, y, i;
 	for ( i=0; i<(int)a.size(); i++ ) {
@@ -1810,7 +1908,7 @@ void QPainter::fillRect( int x, int y, int w, int h, const QBrush &brush )
 */
 
 
-#if !defined(_WS_X11_)
+#if !defined(_WS_X11_) && !defined(_WS_QWS_)
 // The doc and X implementation of this functions is in qpainter_x11.cpp
 void QPainter::drawWinFocusRect( int, int, int, int,
 				 bool, const QColor & )
@@ -1855,10 +1953,14 @@ void QPainter::drawPixmap( const QPoint &p, const QPixmap &pm )
     drawPixmap( p.x(), p.y(), pm, 0, 0, pm.width(), pm.height() );
 }
 
+#if QT_VERSION >= 300
+#error "Merge QPainter::drawImage()'s by default conversion_flags=0"
+#endif
 
 /*!
   Draws at (\a x, \a y) the \a sw by \a sh area of pixels
-  from (\a sx, \a sy) in \a image.
+  from (\a sx, \a sy) in \a image, using \a conversion_flags if
+  the image needs to be converted to a pixmap.
 
   This function may convert \a image to a pixmap and then draw it, if
   device() is a QPixmap or a QWidget, or else draw it directly, if
@@ -1867,8 +1969,45 @@ void QPainter::drawPixmap( const QPoint &p, const QPixmap &pm )
   \sa drawPixmap() QPixmap::convertFromImage()
 */
 void QPainter::drawImage( int x, int y, const QImage & image,
-			  int sx, int sy, int sw, int sh )
+			  int sx, int sy, int sw, int sh,
+			  int conversion_flags )
 {
+#ifdef _WS_QWS_
+    //### Hackish
+# ifndef QT_NO_TRANSFORMATIONS
+    if ( !image.isNull() && gfx &&
+	(txop==TxNone||txop==TxTranslate) && !testf(ExtDev) )
+# else
+    if ( !image.isNull() && gfx && !testf(ExtDev) )
+# endif
+    {
+        if(sw<0)
+	    sw=image.width();
+        if(sh<0)
+	    sh=image.height();
+
+	QImage image2=image;
+
+	// This is a bit dubious
+	if(image2.depth()==1) {
+	    image2.setNumColors( 2 );
+	    image2.setColor( 0, qRgb(255,255,255) );
+	    image2.setColor( 1, qRgb(0,0,0) );
+	}
+	if ( image2.hasAlphaBuffer() )
+	    gfx->setAlphaType(QGfx::InlineAlpha);
+	else
+	    gfx->setAlphaType(QGfx::IgnoreAlpha);
+	gfx->setSource(&image2);
+	gfx->setSourceOffset(sx,sy);
+	if ( testf(VxF|WxF) ) {
+	    map( x, y, &x, &y );
+	}
+	gfx->blt(x,y,sw,sh);
+    }
+    return;
+#endif
+
     if ( !isActive() || image.isNull() )
 	return;
 
@@ -1907,20 +2046,41 @@ void QPainter::drawImage( int x, int y, const QImage & image,
 	param[1].image = &subimage;
 #if defined(_WS_WIN_)
 	if ( !pdev->cmd( QPaintDevice::PdcDrawImage, this, param ) || !hdc )
+	    return;
+#elif defined(_WS_QWS_)
+	pdev->cmd( QPaintDevice::PdcDrawImage, this, param );
+	return;
 #else
 	if ( !pdev->cmd( QPaintDevice::PdcDrawImage, this, param ) || !hd )
-#endif
 	    return;
+#endif
     }
 
     QPixmap pm;
-    pm.convertFromImage( subimage );
+    pm.convertFromImage( subimage, conversion_flags );
     drawPixmap( x, y, pm );
+}
+
+/*!
+  \overload void QPainter::drawImage( int x, int y, const QImage & image,
+			  int sx, int sy, int sw, int sh )
+*/
+void QPainter::drawImage( int x, int y, const QImage & image,
+			  int sx, int sy, int sw, int sh )
+{
+    drawImage(x,y,image,sx,sy,sw,sh,0);
 }
 
 /*!
   \overload void QPainter::drawImage( const QPoint &, const QImage &, const QRect &sr )
 */
+/*!
+  \overload void QPainter::drawImage( const QPoint &, const QImage &, const QRect &sr, int conversion_flags )
+*/
+void QPainter::drawImage( const QPoint &p, const QImage &i, const QRect &sr, int conversion_flags )
+{
+    drawImage(p.x(),p.y(),i,sr.x(),sr.y(),sr.width(),sr.height(),conversion_flags);
+}
 
 /*!
   \overload void QPainter::drawImage( const QPoint &, const QImage & )
@@ -1928,6 +2088,14 @@ void QPainter::drawImage( int x, int y, const QImage & image,
 void QPainter::drawImage( const QPoint & p, const QImage & i )
 {
     drawImage(p, i, i.rect());
+}
+
+/*!
+  \overload void QPainter::drawImage( const QPoint &, const QImage &, int conversion_flags )
+*/
+void QPainter::drawImage( const QPoint & p, const QImage & i, int conversion_flags )
+{
+    drawImage(p, i, i.rect(), conversion_flags);
 }
 
 
@@ -2063,12 +2231,16 @@ void QPainter::drawText( int x, int y, int w, int h, int tf,
 		if ( !pdev->cmd( QPaintDevice::PdcDrawText2Formatted,
 				 this, param) ||
 		     !hdc )
+		    return;			// QPrinter wants PdcDrawText2
+#elif defined(_WS_QWS_)
+		pdev->cmd( QPaintDevice::PdcDrawText2Formatted, this, param);
+		return;
 #else
 		if ( !pdev->cmd( QPaintDevice::PdcDrawText2Formatted,
 				 this, param) ||
 		     !hd )
-#endif
 		    return;			// QPrinter wants PdcDrawText2
+#endif
 	    }
 	}
     }
@@ -2195,7 +2367,14 @@ void qt_format_text( const QFontMetrics& fm, int x, int y, int w, int h,
  	    }
 	    word += *p;
 	} else {				// not printable (except ' ')
-	    cw = fm.width(word);
+	    // somehow the assertion fm.width(word) == breakwidth seems not to hold in 100%
+	    // of the cases (maybe an X11 bug). This led to an endless loop in a very special case.
+	    if ( !breakwithinwords || fakeBreak )
+		cw = fm.width(word);
+	    else {
+		cw = breakwidth - CWIDTH(cc);
+		//qDebug( "cw gets set to %d - would have been %d", cw, fm.width(word) );
+	    }
 	    if ( !fakeBreak && wordbreak ) {
 		if ( tw+cw > w ) {
 		    if ( breakindex > 0 ) {
@@ -2236,9 +2415,9 @@ void qt_format_text( const QFontMetrics& fm, int x, int y, int w, int h,
 	    } else if ( *p == ' ' ) {			// the space character
 		cc = ' ';
 		cw += spacewidth;
-	    } else if ( *p == '\n' ) {		// newline
+	    } else if ( *p == '\n' || *p == '\r' ) {	// newline and carriage return
 		if ( singleline ) {
-		    cc = ' ';			// convert newline to space
+		    cc = ' ';			// convert newline and carriage return to space
 		    cw += spacewidth;
 		} else {
 		    cc = BEGLINE;
@@ -2331,7 +2510,7 @@ void qt_format_text( const QFontMetrics& fm, int x, int y, int w, int h,
     if ( decode ) {				// decode from internal data
 	char	  *data = *internal;
 	text_info *ti	= (text_info*)data;
-	if ( strncmp(ti->tag,"qptr",4)!=0 || ti->w != w || ti->h != h ||
+	if ( qstrncmp(ti->tag,"qptr",4)!=0 || ti->w != w || ti->h != h ||
 	     ti->tf != tf || ti->len != len ) {
 #if defined(CHECK_STATE)
 	    qWarning( "QPainter::drawText: Internal text info is invalid" );
@@ -2431,14 +2610,18 @@ void qt_format_text( const QFontMetrics& fm, int x, int y, int w, int h,
     if ( (tf & Qt::DontClip) == 0 ) {		// clip text
 	QRegion new_rgn;
 	QRect r( x, y, w, h );
+#ifndef QT_NO_TRANSFORMATIONS
 	if ( painter->txop == TxRotShear ) {		// world xform active
 	    QPointArray a( r );			// complex region
 	    a = painter->xForm( a );
 	    new_rgn = QRegion( a );
 	} else {
+#endif
 	    r = painter->xForm( r );
 	    new_rgn = QRegion( r );
+#ifndef QT_NO_TRANSFORMATIONS
 	}
+#endif
 	if ( clip_on )				// combine with existing region
 	    new_rgn = new_rgn.intersect( painter->crgn );
 	painter->setClipRegion( new_rgn );
@@ -2527,10 +2710,9 @@ void qt_format_text( const QFontMetrics& fm, int x, int y, int w, int h,
     }
 
     if ( (tf & Qt::DontClip) == 0 ) {		// restore clipping
-	if ( clip_on ) {			// set original region
+	if ( clip_on ) {
 	    painter->setClipRegion( save_rgn );
-	} else {				// clipping was off
-	    painter->crgn = save_rgn;
+	} else {
 	    painter->setClipping( FALSE );
 	}
     }
@@ -2615,7 +2797,7 @@ QRect QPainter::boundingRect( int x, int y, int w, int h, int tf,
 
   The cap style defines how the end points of lines are drawn. The
   join style defines how the joins between two lines drawn when
-  multiple, conncted lines are drawn (QPainter::drawPolyLine() etc.).
+  multiple, connected lines are drawn (QPainter::drawPolyLine() etc.).
   The cap and join styles apply only to wide lines, i.e. when the
   width is 1 or greater.
 
@@ -2916,7 +3098,7 @@ bool QPen::operator==( const QPen &p ) const
 /*****************************************************************************
   QPen stream functions
  *****************************************************************************/
-
+#ifndef QT_NO_DATASTREAM
 /*!
   \relates QPen
   Writes a pen to the stream and returns a reference to the stream.
@@ -2950,7 +3132,7 @@ QDataStream &operator>>( QDataStream &s, QPen &p )
     p = QPen( color, (uint)width, (Qt::PenStyle)style );	// owl
     return s;
 }
-
+#endif //QT_NO_DATASTREAM
 
 /*****************************************************************************
   QBrush member functions
@@ -3257,7 +3439,7 @@ bool QBrush::operator==( const QBrush &b ) const
 /*****************************************************************************
   QBrush stream functions
  *****************************************************************************/
-
+#ifndef QT_NO_DATASTREAM
 /*!
   \relates QBrush
   Writes a brush to the stream and returns a reference to the stream.
@@ -3295,4 +3477,4 @@ QDataStream &operator>>( QDataStream &s, QBrush &b )
 	b = QBrush( color, (Qt::BrushStyle)style );
     return s;
 }
-
+#endif // QT_NO_DATASTREAM

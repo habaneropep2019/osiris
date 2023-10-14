@@ -1,5 +1,5 @@
-.TH QScrollView 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QScrollView 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QScrollView \- Scrolling area with on-demand scrollbars
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -16,39 +14,39 @@ QScrollView \- Scrolling area with on-demand scrollbars
 .PP
 Inherits QFrame.
 .PP
-Inherited by QIconView, QListBox, QListView and QTextView.
+Inherited by QCanvasView, QIconView, QListBox, QListView, QTable and QTextView.
 .PP
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQScrollView\fR ( QWidget * " "parent" "=0, const char * " "name" "=0, WFlags " "f" "=0 )"
+.BI "\fBQScrollView\fR ( QWidget * " "parent" "=0, const char * " "name" "=0, WFlags " "f" "=0 ) "
 .br
 .ti -1c
-.BI "\fB~QScrollView\fR ()"
+.BI "\fB~QScrollView\fR () "
 .br
 .ti -1c
 .BI "enum \fBResizePolicy\fR { Default, Manual, AutoOne }"
 .br
 .ti -1c
-.BI "virtual void \fBsetResizePolicy\fR ( ResizePolicy )"
+.BI "virtual void \fBsetResizePolicy\fR ( ResizePolicy ) "
 .br
 .ti -1c
 .BI "ResizePolicy \fBresizePolicy\fR () const"
 .br
 .ti -1c
-.BI "void \fBremoveChild\fR ( QWidget * child )"
+.BI "void \fBremoveChild\fR ( QWidget * child ) "
 .br
 .ti -1c
-.BI "virtual void \fBaddChild\fR ( QWidget * " "child" ", int " "x" "=0, int " "y" "=0 )"
+.BI "virtual void \fBaddChild\fR ( QWidget * " "child" ", int " "x" "=0, int " "y" "=0 ) "
 .br
 .ti -1c
-.BI "virtual void \fBmoveChild\fR ( QWidget * " "child" ", int " "x" ", int y )"
+.BI "virtual void \fBmoveChild\fR ( QWidget * " "child" ", int " "x" ", int y ) "
 .br
 .ti -1c
-.BI "int \fBchildX\fR ( QWidget * child )"
+.BI "int \fBchildX\fR ( QWidget * child ) "
 .br
 .ti -1c
-.BI "int \fBchildY\fR ( QWidget * child )"
+.BI "int \fBchildY\fR ( QWidget * child ) "
 .br
 .ti -1c
 .BI "bool childIsVisible ( QWidget * child ) \fI(obsolete)\fR"
@@ -63,19 +61,19 @@ Inherited by QIconView, QListBox, QListView and QTextView.
 .BI "ScrollBarMode \fBvScrollBarMode\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetVScrollBarMode\fR ( ScrollBarMode )"
+.BI "virtual void \fBsetVScrollBarMode\fR ( ScrollBarMode ) "
 .br
 .ti -1c
 .BI "ScrollBarMode \fBhScrollBarMode\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetHScrollBarMode\fR ( ScrollBarMode )"
+.BI "virtual void \fBsetHScrollBarMode\fR ( ScrollBarMode ) "
 .br
 .ti -1c
 .BI "QWidget* \fBcornerWidget\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetCornerWidget\fR ( QWidget * )"
+.BI "virtual void \fBsetCornerWidget\fR ( QWidget * ) "
 .br
 .ti -1c
 .BI "QScrollBar* \fBhorizontalScrollBar\fR () const"
@@ -108,37 +106,43 @@ Inherited by QIconView, QListBox, QListView and QTextView.
 .BI "int \fBcontentsY\fR () const"
 .br
 .ti -1c
-.BI "void \fBupdateContents\fR ( int " "x" ", int " "y" ", int " "w" ", int h )"
+.BI "void \fBupdateContents\fR ( int " "x" ", int " "y" ", int " "w" ", int h ) "
 .br
 .ti -1c
-.BI "void \fBupdateContents\fR ( const QRect & r )"
+.BI "void \fBupdateContents\fR ( const QRect & r ) "
 .br
 .ti -1c
-.BI "void \fBrepaintContents\fR ( int " "x" ", int " "y" ", int " "w" ", int " "h" ", bool " "erase" "=TRUE )"
+.BI "void \fBrepaintContents\fR ( int " "x" ", int " "y" ", int " "w" ", int " "h" ", bool " "erase" "=TRUE ) "
 .br
 .ti -1c
-.BI "void \fBrepaintContents\fR ( const QRect & " "r" ", bool " "erase" "=TRUE )"
+.BI "void \fBrepaintContents\fR ( const QRect & " "r" ", bool " "erase" "=TRUE ) "
 .br
 .ti -1c
-.BI "void \fBcontentsToViewport\fR ( int " "x" ", int " "y" ", int & " "vx" ", int & vy )"
+.BI "void \fBcontentsToViewport\fR ( int " "x" ", int " "y" ", int & " "vx" ", int & vy ) "
 .br
 .ti -1c
-.BI "void \fBviewportToContents\fR ( int " "vx" ", int " "vy" ", int & " "x" ", int & y )"
+.BI "void \fBviewportToContents\fR ( int " "vx" ", int " "vy" ", int & " "x" ", int & y ) "
 .br
 .ti -1c
-.BI "QPoint \fBcontentsToViewport\fR ( const QPoint & )"
+.BI "QPoint \fBcontentsToViewport\fR ( const QPoint & ) "
 .br
 .ti -1c
-.BI "QPoint \fBviewportToContents\fR ( const QPoint & )"
+.BI "QPoint \fBviewportToContents\fR ( const QPoint & ) "
 .br
 .ti -1c
-.BI "void \fBenableClipper\fR ( bool y )"
+.BI "void \fBenableClipper\fR ( bool y ) "
+.br
+.ti -1c
+.BI "void \fBsetStaticBackground\fR ( bool y ) "
+.br
+.ti -1c
+.BI "bool \fBhasStaticBackground\fR () const"
 .br
 .ti -1c
 .BI "QSize \fBviewportSize\fR ( int, int ) const"
 .br
 .ti -1c
-.BI "void \fBsetDragAutoScroll\fR ( bool b )"
+.BI "void \fBsetDragAutoScroll\fR ( bool b ) "
 .br
 .ti -1c
 .BI "bool \fBdragAutoScroll\fR () const"
@@ -147,109 +151,109 @@ Inherited by QIconView, QListBox, QListView and QTextView.
 .SS "Public Slots"
 .in +1c
 .ti -1c
-.BI "virtual void \fBresizeContents\fR ( int " "w" ", int h )"
+.BI "virtual void \fBresizeContents\fR ( int " "w" ", int h ) "
 .br
 .ti -1c
-.BI "void \fBscrollBy\fR ( int " "dx" ", int dy )"
+.BI "void \fBscrollBy\fR ( int " "dx" ", int dy ) "
 .br
 .ti -1c
-.BI "virtual void \fBsetContentsPos\fR ( int " "x" ", int y )"
+.BI "virtual void \fBsetContentsPos\fR ( int " "x" ", int y ) "
 .br
 .ti -1c
-.BI "void \fBensureVisible\fR ( int " "x" ", int y )"
+.BI "void \fBensureVisible\fR ( int " "x" ", int y ) "
 .br
 .ti -1c
-.BI "void \fBensureVisible\fR ( int " "x" ", int " "y" ", int " "xmargin" ", int ymargin )"
+.BI "void \fBensureVisible\fR ( int " "x" ", int " "y" ", int " "xmargin" ", int ymargin ) "
 .br
 .ti -1c
-.BI "void \fBcenter\fR ( int " "x" ", int y )"
+.BI "void \fBcenter\fR ( int " "x" ", int y ) "
 .br
 .ti -1c
-.BI "void \fBcenter\fR ( int " "x" ", int " "y" ", float " "xmargin" ", float ymargin )"
+.BI "void \fBcenter\fR ( int " "x" ", int " "y" ", float " "xmargin" ", float ymargin ) "
 .br
 .ti -1c
-.BI "void \fBupdateScrollBars\fR ()"
+.BI "void \fBupdateScrollBars\fR () "
 .br
 .in -1c
 .SS "Signals"
 .in +1c
 .ti -1c
-.BI "void \fBcontentsMoving\fR ( int " "x" ", int y )"
+.BI "void \fBcontentsMoving\fR ( int " "x" ", int y ) "
 .br
 .in -1c
 .SS "Protected Members"
 .in +1c
 .ti -1c
-.BI "virtual bool \fBeventFilter\fR ( QObject *, QEvent * e )"
+.BI "virtual bool \fBeventFilter\fR ( QObject *, QEvent * e ) "
 .br
 .ti -1c
-.BI "virtual void \fBcontentsMousePressEvent\fR ( QMouseEvent * )"
+.BI "virtual void \fBcontentsMousePressEvent\fR ( QMouseEvent * ) "
 .br
 .ti -1c
-.BI "virtual void \fBcontentsMouseReleaseEvent\fR ( QMouseEvent * )"
+.BI "virtual void \fBcontentsMouseReleaseEvent\fR ( QMouseEvent * ) "
 .br
 .ti -1c
-.BI "virtual void \fBcontentsMouseDoubleClickEvent\fR ( QMouseEvent * )"
+.BI "virtual void \fBcontentsMouseDoubleClickEvent\fR ( QMouseEvent * ) "
 .br
 .ti -1c
-.BI "virtual void \fBcontentsMouseMoveEvent\fR ( QMouseEvent * )"
+.BI "virtual void \fBcontentsMouseMoveEvent\fR ( QMouseEvent * ) "
 .br
 .ti -1c
-.BI "virtual void \fBcontentsDragEnterEvent\fR ( QDragEnterEvent * )"
+.BI "virtual void \fBcontentsDragEnterEvent\fR ( QDragEnterEvent * ) "
 .br
 .ti -1c
-.BI "virtual void \fBcontentsDragMoveEvent\fR ( QDragMoveEvent * )"
+.BI "virtual void \fBcontentsDragMoveEvent\fR ( QDragMoveEvent * ) "
 .br
 .ti -1c
-.BI "virtual void \fBcontentsDragLeaveEvent\fR ( QDragLeaveEvent * )"
+.BI "virtual void \fBcontentsDragLeaveEvent\fR ( QDragLeaveEvent * ) "
 .br
 .ti -1c
-.BI "virtual void \fBcontentsDropEvent\fR ( QDropEvent * )"
+.BI "virtual void \fBcontentsDropEvent\fR ( QDropEvent * ) "
 .br
 .ti -1c
-.BI "virtual void \fBcontentsWheelEvent\fR ( QWheelEvent * )"
+.BI "virtual void \fBcontentsWheelEvent\fR ( QWheelEvent * ) "
 .br
 .ti -1c
-.BI "virtual void \fBviewportPaintEvent\fR ( QPaintEvent * )"
+.BI "virtual void \fBviewportPaintEvent\fR ( QPaintEvent * ) "
 .br
 .ti -1c
-.BI "virtual void \fBviewportResizeEvent\fR ( QResizeEvent * )"
+.BI "virtual void \fBviewportResizeEvent\fR ( QResizeEvent * ) "
 .br
 .ti -1c
-.BI "virtual void \fBviewportMousePressEvent\fR ( QMouseEvent * )"
+.BI "virtual void \fBviewportMousePressEvent\fR ( QMouseEvent * ) "
 .br
 .ti -1c
-.BI "virtual void \fBviewportMouseReleaseEvent\fR ( QMouseEvent * )"
+.BI "virtual void \fBviewportMouseReleaseEvent\fR ( QMouseEvent * ) "
 .br
 .ti -1c
-.BI "virtual void \fBviewportMouseDoubleClickEvent\fR ( QMouseEvent * )"
+.BI "virtual void \fBviewportMouseDoubleClickEvent\fR ( QMouseEvent * ) "
 .br
 .ti -1c
-.BI "virtual void \fBviewportMouseMoveEvent\fR ( QMouseEvent * )"
+.BI "virtual void \fBviewportMouseMoveEvent\fR ( QMouseEvent * ) "
 .br
 .ti -1c
-.BI "virtual void \fBviewportDragEnterEvent\fR ( QDragEnterEvent * )"
+.BI "virtual void \fBviewportDragEnterEvent\fR ( QDragEnterEvent * ) "
 .br
 .ti -1c
-.BI "virtual void \fBviewportDragMoveEvent\fR ( QDragMoveEvent * )"
+.BI "virtual void \fBviewportDragMoveEvent\fR ( QDragMoveEvent * ) "
 .br
 .ti -1c
-.BI "virtual void \fBviewportDragLeaveEvent\fR ( QDragLeaveEvent * )"
+.BI "virtual void \fBviewportDragLeaveEvent\fR ( QDragLeaveEvent * ) "
 .br
 .ti -1c
-.BI "virtual void \fBviewportDropEvent\fR ( QDropEvent * )"
+.BI "virtual void \fBviewportDropEvent\fR ( QDropEvent * ) "
 .br
 .ti -1c
-.BI "virtual void \fBviewportWheelEvent\fR ( QWheelEvent * )"
+.BI "virtual void \fBviewportWheelEvent\fR ( QWheelEvent * ) "
 .br
 .ti -1c
-.BI "virtual void \fBdrawContentsOffset\fR ( QPainter *, int " "ox" ", int " "oy" ", int " "cx" ", int " "cy" ", int " "cw" ", int ch )"
+.BI "virtual void \fBdrawContentsOffset\fR ( QPainter *, int " "ox" ", int " "oy" ", int " "cx" ", int " "cy" ", int " "cw" ", int ch ) "
 .br
 .ti -1c
-.BI "virtual void \fBdrawContents\fR ( QPainter *, int " "cx" ", int " "cy" ", int " "cw" ", int ch )"
+.BI "virtual void \fBdrawContents\fR ( QPainter *, int " "cx" ", int " "cy" ", int " "cw" ", int ch ) "
 .br
 .ti -1c
-.BI "virtual void \fBsetMargins\fR ( int " "left" ", int " "top" ", int " "right" ", int bottom )"
+.BI "virtual void \fBsetMargins\fR ( int " "left" ", int " "top" ", int " "right" ", int bottom ) "
 .br
 .ti -1c
 .BI "int \fBleftMargin\fR () const"
@@ -264,10 +268,10 @@ Inherited by QIconView, QListBox, QListView and QTextView.
 .BI "int \fBbottomMargin\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetHBarGeometry\fR ( QScrollBar & " "hbar" ", int " "x" ", int " "y" ", int " "w" ", int h )"
+.BI "virtual void \fBsetHBarGeometry\fR ( QScrollBar & " "hbar" ", int " "x" ", int " "y" ", int " "w" ", int h ) "
 .br
 .ti -1c
-.BI "virtual void \fBsetVBarGeometry\fR ( QScrollBar & " "vbar" ", int " "x" ", int " "y" ", int " "w" ", int h )"
+.BI "virtual void \fBsetVBarGeometry\fR ( QScrollBar & " "vbar" ", int " "x" ", int " "y" ", int " "w" ", int h ) "
 .br
 .in -1c
 .SS "Properties"
@@ -368,7 +372,7 @@ To enable drag-and-drop, you would setAcceptDrops(TRUE) on the QScrollView (sinc
 .PP
 To handle mouse events on the scrolling area, subclass scrollview as you would subclass other widgets, but rather than overriding mousePressEvent(), reimplement viewportMousePressEvent() instead (if you reimplement mousePressEvent() you'll only get called when part of the QScrollView is clicked - and the only such part is the "corner" (if you don't set a cornerWidget()) and the frame, everything else being covered up by the viewport, clipper, or scrollbars.
 .PP
-When you contruct a QScrollView, some of the widget flags apply to the viewport(), instead of being sent to the QWidget constructor for the QScrollView. This applies to \fCWResizeNoErase, WNorthWestGravity, WRepaintNoErase\fR and \fCWPaintClever.\fR See Qt::WidgetFlags for documentation about these flags. Here are some examples: 
+When you construct a QScrollView, some of the widget flags apply to the viewport(), instead of being sent to the QWidget constructor for the QScrollView. This applies to \fCWResizeNoErase, WNorthWestGravity, WRepaintNoErase\fR and \fCWPaintClever.\fR See Qt::WidgetFlags for documentation about these flags. Here are some examples: 
 .TP
 An image manipulation widget would use \fCWResizeNoErase|WNorthWestGravity,\fR because the widget draws all pixels itself and when the size increases, it only needs a paint event for the new part, since the old part remains unchanged.
 .TP
@@ -388,11 +392,11 @@ scrollview/scrollview.cpp
 .SH "QScrollView::ResizePolicy"
 This enum type is used to control QScrollView's reaction to resize events. There are three possible settings:
 .TP
-\fCDefault\fR - QScrollView selects one of the other settings automatically when it has to. At the time of writing, QScrollView changs to \fCManual\fR if you resize the contents with resizeContents(), and to \fCAutoOne\fR if a child is added.
+\fCDefault\fR - QScrollView selects one of the other settings automatically when it has to. At the time of writing, QScrollView changes to \fCManual\fR if you resize the contents with resizeContents(), and to \fCAutoOne\fR if a child is added.
 .TP
 \fCManual\fR - the view stays the size set by resizeContents().
 .TP
-\fCAutoOne\fR - if there is only only child widget, the view stays the size of that widget. Otherwise, the behaviour is undefined.
+\fCAutoOne\fR - if there is only child widget, the view stays the size of that widget. Otherwise, the behaviour is undefined.
 .IP
 .SH "QScrollView::ScrollBarMode"
 This enum type describes the various modes of QScrollView's scroll bars. The defined modes are: 
@@ -429,7 +433,7 @@ scrollview/scrollview.cpp
 .SH "int QScrollView::bottomMargin () const \fC[protected]\fR"
 Returns the current bottom margin.
 .PP
-See also: setMargins().
+See also setMargins().
 .SH "void QScrollView::center ( int x, int y ) \fC[slot]\fR"
 Scrolls the content so that the point (x,y) is in the center of visible area.
 .SH "void QScrollView::center ( int x, int y, float xmargin, float ymargin ) \fC[slot]\fR"
@@ -455,7 +459,7 @@ Returns the clipper widget. Contents in the scrollview is ultimately clipped to 
 .PP
 You should not need to access this.
 .PP
-See also: visibleWidth() and visibleHeight().
+See also visibleWidth() and visibleHeight().
 .SH "void QScrollView::contentsDragEnterEvent ( QDragEnterEvent * ) \fC[virtual protected]\fR"
 This event handler is called whenever the QScrollView receives a dragEnterEvent() - the drag position is translated to be a point on the contents.
 .SH "void QScrollView::contentsDragLeaveEvent ( QDragLeaveEvent * ) \fC[virtual protected]\fR"
@@ -469,23 +473,23 @@ Returns the height of the contents area.
 .SH "void QScrollView::contentsMouseDoubleClickEvent ( QMouseEvent * ) \fC[virtual protected]\fR"
 This event handler is called whenever the QScrollView receives a mouseDoubleClickEvent() - the click position is translated to be a point on the contents.
 .PP
-Reimplemented in QListView.
+Reimplemented in QTable and QListView.
 .SH "void QScrollView::contentsMouseMoveEvent ( QMouseEvent * ) \fC[virtual protected]\fR"
 This event handler is called whenever the QScrollView receives a mouseMoveEvent() - the mouse position is translated to be a point on the contents.
 .PP
-Reimplemented in QListView.
+Reimplemented in QListView and QTable.
 .SH "void QScrollView::contentsMousePressEvent ( QMouseEvent * ) \fC[virtual protected]\fR"
 This event handler is called whenever the QScrollView receives a mousePressEvent() - the press position is translated to be a point on the contents.
 .PP
-Reimplemented in QListView.
+Reimplemented in QListView and QTable.
 .SH "void QScrollView::contentsMouseReleaseEvent ( QMouseEvent * ) \fC[virtual protected]\fR"
 This event handler is called whenever the QScrollView receives a mouseReleaseEvent() - the release position is translated to be a point on the contents.
 .PP
-Reimplemented in QListView.
+Reimplemented in QListView and QTable.
 .SH "void QScrollView::contentsMoving ( int x, int y ) \fC[signal]\fR"
 This signal is emitted just before the contents is moved to the given position.
 .PP
-See also: contentsX() and contentsY().
+See also contentsX() and contentsY().
 .SH "QPoint QScrollView::contentsToViewport ( const QPoint & p )"
 Returns the point \fIp\fR translated to a point on the viewport() widget.
 .SH "void QScrollView::contentsToViewport ( int x, int y, int & vx, int & vy )"
@@ -510,7 +514,7 @@ scrollview/scrollview.cpp
 .SH "bool QScrollView::dragAutoScroll () const"
 Returns TRUE if autoscrolling in drag move events is enabled, else FALSE.
 .PP
-See also: setDragAutoScroll().
+See also setDragAutoScroll().
 .SH "void QScrollView::drawContents ( QPainter * p, int clipx, int clipy, int clipw, int cliph ) \fC[virtual protected]\fR"
 Reimplement this method if you are viewing a drawing area rather than a widget.
 .PP
@@ -553,6 +557,8 @@ For example:
 .fi
 .PP
 The clip rectangle and translation of the painter \fIp\fR is already set appropriately.
+.PP
+Reimplemented in QCanvasView and QTable.
 .SH "void QScrollView::drawContentsOffset ( QPainter * p, int offsetx, int offsety, int clipx, int clipy, int clipw, int cliph ) \fC[virtual protected]\fR"
 For backward compatibility only. It is easier to use drawContents(QPainter*,int,int,int,int).
 .PP
@@ -589,12 +595,16 @@ Reimplemented from QFrame.
 .SH "QScrollView::ScrollBarMode QScrollView::hScrollBarMode() const"
 Returns the currently set mode for the horizontal scrollbar.
 .PP
-See also: setHScrollBarMode().
+See also setHScrollBarMode().
 .PP
 Examples:
 .(l
 scrollview/scrollview.cpp
 .)l
+.SH "bool QScrollView::hasStaticBackground () const"
+Returns wether QScrollView uses a static background.
+.PP
+See also setStaticBackground().
 .SH "QScrollBar* QScrollView::horizontalScrollBar () const"
 Returns the component horizontal scrollbar. It is made available to allow accelerators, autoscrolling, etc., and to allow changing of arrow scroll rates: bar->setSteps( rate, bar->pageStep() ).
 .PP
@@ -604,7 +614,7 @@ This function never returns 0.
 .SH "int QScrollView::leftMargin () const \fC[protected]\fR"
 Returns the current left margin.
 .PP
-See also: setMargins().
+See also setMargins().
 .SH "QSize QScrollView::minimumSizeHint () const \fC[virtual]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .PP
@@ -620,7 +630,7 @@ Removes a child from the scrolled area. Note that this happens automatically if 
 .SH "void QScrollView::repaintContents ( int x, int y, int w, int h, bool erase=TRUE )"
 Calls repaint() on rectangle defined by \fIx, y, w, h,\fR translated appropriately. If the rectangle in not visible, nothing is repainted.
 .PP
-See also: updateContents().
+See also updateContents().
 .SH "void QScrollView::repaintContents ( const QRect & r, bool erase=TRUE )"
 This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts.
 .SH "void QScrollView::resize ( const QSize & s )"
@@ -641,11 +651,11 @@ Reimplemented from QWidget.
 .SH "QScrollView::ResizePolicy QScrollView::resizePolicy() const"
 Returns the currently set ResizePolicy.
 .PP
-See also: setResizePolicy() and ResizePolicy.
+See also setResizePolicy() and ResizePolicy.
 .SH "int QScrollView::rightMargin () const \fC[protected]\fR"
 Returns the current right margin.
 .PP
-See also: setMargins().
+See also setMargins().
 .SH "void QScrollView::scrollBy ( int dx, int dy ) \fC[slot]\fR"
 Scrolls the content by \fIx\fR to the left and \fIy\fR upwards.
 .SH "void QScrollView::setContentsPos ( int x, int y ) \fC[virtual slot]\fR"
@@ -669,14 +679,14 @@ Any \fInewly\fR set widget should have no current parent.
 .PP
 By default, no corner widget is present.
 .PP
-See also: setVScrollBarMode() and setHScrollBarMode().
+See also setVScrollBarMode() and setHScrollBarMode().
 .PP
 Examples:
 .(l
 scrollview/scrollview.cpp
 .)l
 .SH "void QScrollView::setDragAutoScroll ( bool b )"
-If \fIb\fR is set to TRUE, the QScrollView automatically scrolles the contents in drag move events if the user moves the cursor close to a border of the view. This of course only works id the viewport accepts drops!. Specifying FALSE here disables this autscroll feature.
+If \fIb\fR is set to TRUE, the QScrollView automatically scrolls the contents in drag move events if the user moves the cursor close to a border of the view. This of course only works id the viewport accepts drops! Specifying FALSE here disables this autoscroll feature.
 .SH "void QScrollView::setEnabled ( bool enable ) \fC[virtual slot]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .PP
@@ -686,7 +696,7 @@ Called when the horizontal scrollbar geometry changes. This is provided as a pro
 .PP
 The default implementation simply gives all the space to \fIhbar.\fR
 .PP
-See also: setVBarGeometry().
+See also setVBarGeometry().
 .SH "void QScrollView::setHScrollBarMode ( ScrollBarMode mode )"
 Sets the mode for the horizontal scrollbar.
 .TP
@@ -696,7 +706,7 @@ Sets the mode for the horizontal scrollbar.
 .TP
 \fCAlwaysOn\fR always shows a scrollbar.
 .PP
-See also: hScrollBarMode() and setVScrollBarMode().
+See also hScrollBarMode() and setVScrollBarMode().
 .PP
 Examples:
 .(l
@@ -707,21 +717,27 @@ Sets the margins around the scrolling area. This is useful for applications such
 .PP
 By default all margins are zero.
 .PP
-See also: frameChanged().
+See also frameChanged().
 .SH "void QScrollView::setResizePolicy ( ResizePolicy r )"
 Sets the resize policy to \fIr.\fR
 .PP
-See also: resizePolicy() and ResizePolicy.
+See also resizePolicy() and ResizePolicy.
+.SH "void QScrollView::setStaticBackground ( bool y )"
+Sets the scrollview to have a static background if \fIy\fR is TRUE, or a scrolling background otherwise. By default, the background is scrolling.
+.PP
+Beware that this mode is quite slow, as a full repaint of the visible area has to be triggered on every contents move.
+.PP
+See also hasStaticBackground().
 .SH "void QScrollView::setVBarGeometry ( QScrollBar & vbar, int x, int y, int w, int h ) \fC[virtual protected]\fR"
 Called when the vertical scrollbar geometry changes. This is provided as a protected function so that subclasses can do interesting things like providing extra buttons in some of the space normally used by the scrollbars.
 .PP
 The default implementation simply gives all the space to \fIvbar.\fR
 .PP
-See also: setHBarGeometry().
+See also setHBarGeometry().
 .SH "void QScrollView::setVScrollBarMode ( ScrollBarMode mode )"
 Sets the mode for the vertical scrollbar.
 .PP
-See also: vScrollBarMode() and setHScrollBarMode().
+See also vScrollBarMode() and setHScrollBarMode().
 .PP
 Examples:
 .(l
@@ -732,7 +748,7 @@ Reimplemented for internal reasons; the API is not affected.
 .PP
 Examples:
 .(l
-iconview/main.cpp table/main.cpp
+iconview/main.cpp
 .)l
 .PP
 Reimplemented from QWidget.
@@ -755,11 +771,11 @@ Reimplemented from QWidget.
 .SH "int QScrollView::topMargin () const \fC[protected]\fR"
 Returns the current top margin.
 .PP
-See also: setMargins().
+See also setMargins().
 .SH "void QScrollView::updateContents ( int x, int y, int w, int h )"
 Calls update() on rectangle defined by \fIx, y, w, h,\fR translated appropriately. If the rectangle in not visible, nothing is repainted.
 .PP
-See also: repaintContents().
+See also repaintContents().
 .SH "void QScrollView::updateContents ( const QRect & r )"
 This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts.
 .SH "void QScrollView::updateScrollBars () \fC[slot]\fR"
@@ -767,7 +783,7 @@ Updates scrollbars - all possibilities considered. You should never need to call
 .SH "QScrollView::ScrollBarMode QScrollView::vScrollBarMode() const"
 Returns the currently set mode for the vertical scrollbar.
 .PP
-See also: setVScrollBarMode().
+See also setVScrollBarMode().
 .PP
 Examples:
 .(l
@@ -791,31 +807,31 @@ To provide simple processing of events on the contents, this method receives all
 .PP
 The default implementation translates the event and calls contentsDragEnterEvent().
 .PP
-See also: QWidget::dragEnterEvent().
+See also QWidget::dragEnterEvent().
 .SH "void QScrollView::viewportDragLeaveEvent ( QDragLeaveEvent * e ) \fC[virtual protected]\fR"
 To provide simple processing of events on the contents, this method receives all drag leave events sent to the viewport.
 .PP
 The default implementation calls contentsDragLeaveEvent().
 .PP
-See also: QWidget::dragLeaveEvent().
+See also QWidget::dragLeaveEvent().
 .SH "void QScrollView::viewportDragMoveEvent ( QDragMoveEvent * e ) \fC[virtual protected]\fR"
 To provide simple processing of events on the contents, this method receives all drag move events sent to the viewport.
 .PP
 The default implementation translates the event and calls contentsDragMoveEvent().
 .PP
-See also: QWidget::dragMoveEvent().
+See also QWidget::dragMoveEvent().
 .SH "void QScrollView::viewportDropEvent ( QDropEvent * e ) \fC[virtual protected]\fR"
 To provide simple processing of events on the contents, this method receives all drop events sent to the viewport.
 .PP
 The default implementation translates the event and calls contentsDropEvent().
 .PP
-See also: QWidget::dropEvent().
+See also QWidget::dropEvent().
 .SH "void QScrollView::viewportMouseDoubleClickEvent ( QMouseEvent * e ) \fC[virtual protected]\fR"
 To provide simple processing of events on the contents, this method receives all mouse double click events sent to the viewport.
 .PP
 The default implementation translates the event and calls contentsMouseDoubleClickEvent().
 .PP
-See also: QWidget::mouseDoubleClickEvent().
+See also QWidget::mouseDoubleClickEvent().
 .PP
 Reimplemented in QListBox.
 .SH "void QScrollView::viewportMouseMoveEvent ( QMouseEvent * e ) \fC[virtual protected]\fR"
@@ -823,15 +839,15 @@ To provide simple processing of events on the contents, this method receives all
 .PP
 The default implementation translates the event and calls contentsMouseMoveEvent().
 .PP
-See also: QWidget::mouseMoveEvent().
+See also QWidget::mouseMoveEvent().
 .PP
-Reimplemented in QTextBrowser, QListBox and QTextView.
+Reimplemented in QTextView, QTextBrowser and QListBox.
 .SH "void QScrollView::viewportMousePressEvent ( QMouseEvent * e ) \fC[virtual protected]\fR"
 To provide simple processing of events on the contents, this method receives all mouse press events sent to the viewport.
 .PP
 The default implementation translates the event and calls contentsMousePressEvent().
 .PP
-See also: contentsMousePressEvent() and QWidget::mousePressEvent().
+See also contentsMousePressEvent() and QWidget::mousePressEvent().
 .PP
 Reimplemented in QTextView, QListBox and QTextBrowser.
 .SH "void QScrollView::viewportMouseReleaseEvent ( QMouseEvent * e ) \fC[virtual protected]\fR"
@@ -839,9 +855,9 @@ To provide simple processing of events on the contents, this method receives all
 .PP
 The default implementation translates the event and calls contentsMouseReleaseEvent().
 .PP
-See also: QWidget::mouseReleaseEvent().
+See also QWidget::mouseReleaseEvent().
 .PP
-Reimplemented in QTextView, QListBox and QTextBrowser.
+Reimplemented in QListBox, QTextView and QTextBrowser.
 .SH "void QScrollView::viewportPaintEvent ( QPaintEvent * pe ) \fC[virtual protected]\fR"
 This is a low-level painting routine that draws the viewport contents. Reimplement this if drawContents() is too high-level. (for example, if you don't want to open a QPainter on the viewport).
 .PP
@@ -849,7 +865,7 @@ Reimplemented in QListBox.
 .SH "void QScrollView::viewportResizeEvent ( QResizeEvent * ) \fC[virtual protected]\fR"
 To provide simple processing of events on the contents, this method receives all resize events sent to the viewport.
 .PP
-See also: QWidget::resizeEvent().
+See also QWidget::resizeEvent().
 .PP
 Reimplemented in QTextView.
 .SH "QSize QScrollView::viewportSize ( int x, int y ) const"
@@ -867,7 +883,7 @@ To provide simple processing of events on the contents, this method receives all
 .PP
 The default implementation translates the event and calls contentsWheelEvent().
 .PP
-See also: QWidget::wheelEvent().
+See also QWidget::wheelEvent().
 .SH "int QScrollView::visibleHeight () const"
 Returns the vertical amount of the content that is visible.
 .SH "int QScrollView::visibleWidth () const"
@@ -879,7 +895,7 @@ Reimplemented from QWidget.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qscrollview.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

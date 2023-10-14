@@ -1,28 +1,40 @@
 /****************************************************************************
-** $Id: qt/doc/examples.doc   2.1.1   edited 2000-05-18 $
+** $Id: qt/doc/examples.doc   2.2.0   edited 2000-08-25 $
 **
 ** Documentation for the examples
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #if defined(DEBUG)
-static char ident[] = "$Id: qt/doc/examples.doc   2.1.1   edited 2000-05-18 $";
+static char ident[] = "$Id: qt/doc/examples.doc   2.2.0   edited 2000-08-25 $";
 #endif
 
 
@@ -55,11 +67,36 @@ static char ident[] = "$Id: qt/doc/examples.doc   2.1.1   edited 2000-05-18 $";
 
 */
 
+/*! \example action/main.cpp
+
+  <h1 align=center>A Complete Application Window with Actions</h1><br clear="all">
+
+  This example program is just like the application example, 
+  QAction to build the menu and the toolbar.
+
+  <hr>
+
+  Header file:
+
+  \include application/application.h
+
+  <hr>
+
+  Implementation:
+
+  \include application/application.cpp
+
+  <hr>
+
+  Main:
+
+*/
+
 /*! \example mdi/main.cpp
 
   <h1 align=center>A MDI Application</h1><br clear="all">
 
-  This example program is just like the application example, but designed as 
+  This example program is just like the application example, but designed as
   Multiple Document Interface (MDI).
 
   <hr>
@@ -146,7 +183,7 @@ static char ident[] = "$Id: qt/doc/examples.doc   2.1.1   edited 2000-05-18 $";
 
   <h1 align=center>Customized Layoutmanager</h1><br clear="all">
 
-  This examples desmonstrates how to write a customized layout (geometry) manager,
+  This examples demonstrates how to write a customized layout (geometry) manager,
   like a Card-Layout, Border-Layout and Flow-Layout.
 
   See also: <a href="layout.html">Documentation of Geometry Management</a>.
@@ -382,7 +419,7 @@ static char ident[] = "$Id: qt/doc/examples.doc   2.1.1   edited 2000-05-18 $";
 
   <h1 align=center>Listboxes and Comboboxes</h1><br clear="all">
 
-  This example program desmonstrates how to use Listboxes (with single selection
+  This example program demonstrates how to use Listboxes (with single selection
   and multi selection) and Comboboxes (editable and non-editable).
 
   <hr>
@@ -432,8 +469,8 @@ static char ident[] = "$Id: qt/doc/examples.doc   2.1.1   edited 2000-05-18 $";
 
   <h1 align=center>Listviews</h1><br clear="all">
 
-  This examples shows how to work with Listviews (hirarchical and multi-columns).
-  It also shows how to subclass Listview Items for sepcial reasons. It looks
+  This examples shows how to work with Listviews (hierarchical and multi-column).
+  It also shows how to subclass Listview Items for special reasons. It looks
   and works like the mainwindow of a mail client.
 
   <hr>
@@ -568,6 +605,31 @@ static char ident[] = "$Id: qt/doc/examples.doc   2.1.1   edited 2000-05-18 $";
 
 */
 
+/*! \example rangecontrols/main.cpp
+
+  <h1 align=center>Rangecontrols</h1><br clear="all">
+
+  This examples shows the different types of Rangecontrols which
+  are supported by Qt. These are Dials, Spinboxes and Sliders.
+
+  <hr>
+
+  Header file:
+
+  \include rangecontrols/rangecontrols.h
+
+  <hr>
+
+  Implementation:
+
+  \include rangecontrols/rangecontrols.cpp
+
+  <hr>
+
+  Main:
+
+*/
+
 /*! \example richtext/main.cpp
 
   <h1 align=center>Richtext</h1><br clear="all">
@@ -662,35 +724,6 @@ static char ident[] = "$Id: qt/doc/examples.doc   2.1.1   edited 2000-05-18 $";
   Implementation:
 
   \include tabdialog/tabdialog.cpp
-
-  <hr>
-
-  Main:
-
-*/
-
-/*! \example table/main.cpp
-
-  <h1 align=center>Table</h1><br clear="all">
-
-  The table program displays a spreadsheet-like table. It is an example of
-  how to inherit the QScrollView widget for presentations of 2D data arrays.
-
-  Left-click the mouse to set a current cell. Press the arrow buttons to
-  move the current mark around. Type something to edit a cell's
-  contents.
-
-  <hr>
-
-  Header file:
-
-  \include table/table.h
-
-  <hr>
-
-  Implementation:
-
-  \include table/table.cpp
 
   <hr>
 
@@ -1006,7 +1039,7 @@ static char ident[] = "$Id: qt/doc/examples.doc   2.1.1   edited 2000-05-18 $";
 
   <h1 align=center>Simple HTML Help Browser</h1><br clear="all">
 
-  The HelpViewer example implements a simple HTML help browser using 
+  The HelpViewer example implements a simple HTML help browser using
   Qt's richtext capabilities.
 
   <hr>
@@ -1031,7 +1064,7 @@ static char ident[] = "$Id: qt/doc/examples.doc   2.1.1   edited 2000-05-18 $";
 
   <h1 align=center>Simple HTML Browser</h1><br clear="all">
 
-  The QBrowser exampple implements a simple HTML browser using Qt's Richtext widget.
+  The QBrowser example implements a simple HTML browser using Qt's Richtext widget.
 
   <hr>
 
@@ -1063,7 +1096,7 @@ static char ident[] = "$Id: qt/doc/examples.doc   2.1.1   edited 2000-05-18 $";
 
   <h1 align=center>Font Displayer</h1><br clear="all">
 
-  This example program displayes all characters of a font.
+  This example program displays all characters of a font.
 
   <hr>
 
@@ -1087,7 +1120,7 @@ static char ident[] = "$Id: qt/doc/examples.doc   2.1.1   edited 2000-05-18 $";
 
   <h1 align=center>Simple Filemanager</h1><br clear="all">
 
-  This example implements a simple and not full functional filemanager using
+  This example implements a simple and not full functional file manager using
   a widget derived from QIconView to display the current directory and the
   widget of the DirectoryView example to display the directory tree.
 

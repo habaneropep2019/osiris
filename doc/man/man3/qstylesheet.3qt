@@ -1,5 +1,5 @@
-.TH QStyleSheet 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QStyleSheet 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QStyleSheet \- A collection of styles for rich text rendering and a generator of tags
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -19,13 +17,13 @@ Inherits QObject.
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQStyleSheet\fR ( QObject * " "parent" "=0, const char * " "name" "=0 )"
+.BI "\fBQStyleSheet\fR ( QObject * " "parent" "=0, const char * " "name" "=0 ) "
 .br
 .ti -1c
-.BI "virtual \fB~QStyleSheet\fR ()"
+.BI "virtual \fB~QStyleSheet\fR () "
 .br
 .ti -1c
-.BI "QStyleSheetItem* \fBitem\fR ( const QString & name )"
+.BI "QStyleSheetItem* \fBitem\fR ( const QString & name ) "
 .br
 .ti -1c
 .BI "const QStyleSheetItem* \fBitem\fR ( const QString & name ) const"
@@ -46,16 +44,16 @@ Inherits QObject.
 .SS "Static Public Members"
 .in +1c
 .ti -1c
-.BI "QStyleSheet* \fBdefaultSheet\fR ()"
+.BI "QStyleSheet* \fBdefaultSheet\fR () "
 .br
 .ti -1c
-.BI "void \fBsetDefaultSheet\fR ( QStyleSheet * )"
+.BI "void \fBsetDefaultSheet\fR ( QStyleSheet * ) "
 .br
 .ti -1c
-.BI "QString \fBconvertFromPlainText\fR ( const QString & )"
+.BI "QString \fBconvertFromPlainText\fR ( const QString & ) "
 .br
 .ti -1c
-.BI "bool \fBmightBeRichText\fR ( const QString & )"
+.BI "bool \fBmightBeRichText\fR ( const QString & ) "
 .br
 .in -1c
 .SH DESCRIPTION
@@ -139,11 +137,11 @@ Special elements are:
 .IP
 The \fCalign\fR attribute determines where the image is placed. Per default, an image is placed inline, just like a normal character. Specify \fCleft\fR or \fCright\fR to place the image at the respective side.
 .TP
-\fC<hr/>\fR - A horizonal line
+\fC<hr/>\fR - A horizontal line
 .TP
 \fC<br/>\fR - A line break
 .PP
-Other tags not in any of the above cathegories are:
+Other tags not in any of the above categories are:
 .TP
 \fC<nobr>...</nobr>\fR - No break. Prevents word wrap.
 .PP
@@ -190,9 +188,9 @@ Auxiliary function. Converts the plain text string \fIplain\fR to a rich text fo
 .SH "QStyleSheet* QStyleSheet::defaultSheet () \fC[static]\fR"
 Returns the application-wide default style sheet.This style sheet is used by rich text rendering classes such as QSimpleRichText, QWhatsThis and also QMessageBox to define the rendering style and available tags within rich text documents. It serves also as initial style sheet for the more complex render widgets QTextView and QTextBrowser.
 .PP
-See also: setDefaultSheet().
+See also setDefaultSheet().
 .SH "void QStyleSheet::error ( const QString & msg ) const \fC[virtual]\fR"
-This virtual function is called when an error occurs when processsing rich text. Reimplement if if you need to catch error messages.
+This virtual function is called when an error occurs when processing rich text. Reimplement if if you need to catch error messages.
 .PP
 Errors might occur if some rich text strings contain tags that are not understood by the stylesheet, if some tags are nested wrongly or if tags are not closed properly.
 .PP
@@ -212,11 +210,11 @@ When calling this function, \fIfont\fR has a point size corresponding to the log
 .PP
 Typical logical font sizes range from 1 to 7, with 1 being the smallest.
 .PP
-See also: QStyleSheetItem::logicalFontSize(), QStyleSheetItem::logicalFontSizeStep() and QFont::setPointSize().
+See also QStyleSheetItem::logicalFontSize(), QStyleSheetItem::logicalFontSizeStep() and QFont::setPointSize().
 .SH "void QStyleSheet::setDefaultSheet ( QStyleSheet * sheet ) \fC[static]\fR"
 Sets the application-wide default style sheet, deleting any style sheet previously set. The ownership is transferred.
 .PP
-See also: defaultSheet().
+See also defaultSheet().
 .SH "QTextCustomItem* QStyleSheet::tag ( const QString & name, const QMap<QString, QString> & attr, const QString & context, const QMimeSourceFactory & factory, bool = FALSE ) const \fC[virtual]\fR"
 Generates an internal object for tag named \fIname,\fR given the attributes \fIattr,\fR and using additional information provided by the mime source factory \fIfactory\fR .
 .PP
@@ -226,7 +224,7 @@ For internal use only.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qstylesheet.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

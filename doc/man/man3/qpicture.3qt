@@ -1,5 +1,5 @@
-.TH QPicture 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QPicture 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QPicture \- Paint device that records and replays QPainter commands
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -19,10 +17,10 @@ Inherits QPaintDevice.
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQPicture\fR ( int " "formatVersion" " = 0 )"
+.BI "\fBQPicture\fR ( int " "formatVersion" " = 0 ) "
 .br
 .ti -1c
-.BI "\fB~QPicture\fR ()"
+.BI "\fB~QPicture\fR () "
 .br
 .ti -1c
 .BI "bool \fBisNull\fR () const"
@@ -34,19 +32,19 @@ Inherits QPaintDevice.
 .BI "const char* \fBdata\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetData\fR ( const char * " "data" ", uint size )"
+.BI "virtual void \fBsetData\fR ( const char * " "data" ", uint size ) "
 .br
 .ti -1c
-.BI "bool \fBplay\fR ( QPainter * )"
+.BI "bool \fBplay\fR ( QPainter * ) "
 .br
 .ti -1c
-.BI "bool \fBload\fR ( const QString & fileName )"
+.BI "bool \fBload\fR ( const QString & fileName ) "
 .br
 .ti -1c
-.BI "bool \fBsave\fR ( const QString & fileName )"
+.BI "bool \fBsave\fR ( const QString & fileName ) "
 .br
 .ti -1c
-.BI "QPicture& \fBoperator=\fR ( const QPicture & )"
+.BI "QPicture& \fBoperator=\fR ( const QPicture & ) "
 .br
 .in -1c
 .SS "Protected Members"
@@ -56,6 +54,16 @@ Inherits QPaintDevice.
 .br
 .ti -1c
 .BI "virtual int \fBmetric\fR ( int ) const"
+.br
+.in -1c
+.SH RELATED FUNCTION DOCUMENTATION
+(Note that these are not member functions.)
+.in +1c
+.ti -1c
+.BI "QDataStream & \fBoperator>>\fR (QDataStream & " "s" ", QPicture & " "r" ")"
+.br
+.ti -1c
+.BI "QDataStream & \fBoperator<<\fR (QDataStream & " "s" ", const QPicture & " "r" ")"
 .br
 .in -1c
 .SH DESCRIPTION
@@ -117,13 +125,13 @@ Destructs the picture.
 .SH "const char* QPicture::data () const"
 Returns a pointer to the picture data. The returned pointer is null if the picture contains no data.
 .PP
-See also: size() and isNull().
+See also size() and isNull().
 .SH "bool QPicture::isNull () const"
 Returns TRUE if the picture contains no data, otherwise FALSE.
 .SH "bool QPicture::load ( const QString & fileName )"
 Loads a picture from the file specified by \fIfileName\fR and returns TRUE if successful, otherwise FALSE.
 .PP
-See also: save().
+See also save().
 .PP
 Examples:
 .(l
@@ -146,7 +154,7 @@ This function does exactly the same as QPainter::drawPicture().
 .SH "bool QPicture::save ( const QString & fileName )"
 Saves a picture to the file specified by \fIfileName\fR and returns TRUE if successful, otherwise FALSE.
 .PP
-See also: load().
+See also load().
 .PP
 Examples:
 .(l
@@ -155,19 +163,24 @@ picture/picture.cpp
 .SH "void QPicture::setData ( const char * data, uint size ) \fC[virtual]\fR"
 Sets the picture data directly from \fIdata\fR and \fIsize.\fR This function copies the input data.
 .PP
-See also: data() and size().
+See also data() and size().
 .SH "uint QPicture::size () const"
 Returns the size of the picture data.
 .PP
-See also: data().
+See also data().
 .SH "bool QPicture::cmd ( int c, QPainter *, QPDevCmdParam * p ) \fC[virtual protected]\fR"
 For internal use only.
 .PP
 Reimplemented from QPaintDevice.
+.SH RELATED FUNCTION DOCUMENTATION
+.SH "QDataStream & operator>> (QDataStream & s, QPicture & r)"
+Reads a QPicture from the stream and returns a reference to the stream.
+.SH "QDataStream & operator<< (QDataStream & s, const QPicture & r)"
+Writes a QPicture to the stream and returns a reference to the stream.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qpicture.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

@@ -1,14 +1,12 @@
-.TH QSizeGrip 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QSizeGrip 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
 .ad l
 .nh
 .SH NAME
-QSizeGrip \- Corner-grip for resizeing a top level window
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
+QSizeGrip \- Corner-grip for resizing a top level window
 .SH SYNOPSIS
 .br
 .PP
@@ -19,32 +17,29 @@ Inherits QWidget.
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQSizeGrip\fR ( QWidget * " "parent" ", const char * " "name" "=0 )"
+.BI "\fBQSizeGrip\fR ( QWidget * " "parent" ", const char * " "name" "=0 ) "
 .br
 .ti -1c
-.BI "\fB~QSizeGrip\fR ()"
+.BI "\fB~QSizeGrip\fR () "
 .br
 .ti -1c
 .BI "virtual QSize \fBsizeHint\fR () const"
-.br
-.ti -1c
-.BI "virtual QSizePolicy \fBsizePolicy\fR () const"
 .br
 .in -1c
 .SS "Protected Members"
 .in +1c
 .ti -1c
-.BI "virtual void \fBpaintEvent\fR ( QPaintEvent * )"
+.BI "virtual void \fBpaintEvent\fR ( QPaintEvent * ) "
 .br
 .ti -1c
-.BI "virtual void \fBmousePressEvent\fR ( QMouseEvent * )"
+.BI "virtual void \fBmousePressEvent\fR ( QMouseEvent * ) "
 .br
 .ti -1c
-.BI "virtual void \fBmouseMoveEvent\fR ( QMouseEvent * )"
+.BI "virtual void \fBmouseMoveEvent\fR ( QMouseEvent * ) "
 .br
 .in -1c
 .SH DESCRIPTION
-The QSizeGrip class provides corner-grip for resizeing a top level window.
+The QSizeGrip class provides corner-grip for resizing a top level window.
 .PP
 This widget works like the standard Windows resize handle. In the X11 version this resize handle generally works differently than the one provided by the system; we hope to reduce this difference in the future.
 .PP
@@ -52,7 +47,7 @@ Put this widget anywhere in a tree and the user can use it to resize the top-lev
 .PP
 <img src=qsizegrip-m.png> <img src=qsizegrip-w.png>
 .PP
-See also: QStatusBar.
+See also QStatusBar.
 .PP
 Examples:
 .(l
@@ -72,7 +67,7 @@ Primes the resize operation.
 .PP
 Reimplemented from QWidget.
 .SH "void QSizeGrip::paintEvent ( QPaintEvent * e ) \fC[virtual protected]\fR"
-Paints the resize grip - small diagonal textured lines in the lower righthand corner.
+Paints the resize grip - small diagonal textured lines in the lower right-hand corner.
 .PP
 Reimplemented from QWidget.
 .SH "QSize QSizeGrip::sizeHint () const \fC[virtual]\fR"
@@ -80,13 +75,13 @@ Returns a small size.
 .PP
 Reimplemented from QWidget.
 .SH "QSizePolicy QSizeGrip::sizePolicy () const \fC[virtual]\fR"
-The size grip has a fixed height, but can grow horizontally.
+Reimplemented for internal reasons; the API is not affected.
 .PP
 Reimplemented from QWidget.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qsizegrip.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

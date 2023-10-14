@@ -1,5 +1,5 @@
-.TH QListViewItem 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QListViewItem 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QListViewItem \- Implements a list view item
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -21,37 +19,37 @@ Inherited by QCheckListItem.
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQListViewItem\fR ( QListView * parent )"
+.BI "\fBQListViewItem\fR ( QListView * parent ) "
 .br
 .ti -1c
-.BI "\fBQListViewItem\fR ( QListViewItem * parent )"
+.BI "\fBQListViewItem\fR ( QListViewItem * parent ) "
 .br
 .ti -1c
-.BI "\fBQListViewItem\fR ( QListView * " "parent" ", QListViewItem * after )"
+.BI "\fBQListViewItem\fR ( QListView * " "parent" ", QListViewItem * after ) "
 .br
 .ti -1c
-.BI "\fBQListViewItem\fR ( QListViewItem * " "parent" ", QListViewItem * after )"
+.BI "\fBQListViewItem\fR ( QListViewItem * " "parent" ", QListViewItem * after ) "
 .br
 .ti -1c
-.BI "\fBQListViewItem\fR ( QListView * " "parent" ", QString, QString = QString::null, QString = QString::null, QString = QString::null, QString = QString::null, QString = QString::null, QString = QString::null, QString = QString::null )"
+.BI "\fBQListViewItem\fR ( QListView * " "parent" ", QString, QString = QString::null, QString = QString::null, QString = QString::null, QString = QString::null, QString = QString::null, QString = QString::null, QString = QString::null ) "
 .br
 .ti -1c
-.BI "\fBQListViewItem\fR ( QListViewItem * " "parent" ", QString, QString = QString::null, QString = QString::null, QString = QString::null, QString = QString::null, QString = QString::null, QString = QString::null, QString = QString::null )"
+.BI "\fBQListViewItem\fR ( QListViewItem * " "parent" ", QString, QString = QString::null, QString = QString::null, QString = QString::null, QString = QString::null, QString = QString::null, QString = QString::null, QString = QString::null ) "
 .br
 .ti -1c
-.BI "\fBQListViewItem\fR ( QListView * " "parent" ", QListViewItem * " "after" ", QString, QString = QString::null, QString = QString::null, QString = QString::null, QString = QString::null, QString = QString::null, QString = QString::null, QString = QString::null )"
+.BI "\fBQListViewItem\fR ( QListView * " "parent" ", QListViewItem * " "after" ", QString, QString = QString::null, QString = QString::null, QString = QString::null, QString = QString::null, QString = QString::null, QString = QString::null, QString = QString::null ) "
 .br
 .ti -1c
-.BI "\fBQListViewItem\fR ( QListViewItem * " "parent" ", QListViewItem * " "after" ", QString, QString = QString::null, QString = QString::null, QString = QString::null, QString = QString::null, QString = QString::null, QString = QString::null, QString = QString::null )"
+.BI "\fBQListViewItem\fR ( QListViewItem * " "parent" ", QListViewItem * " "after" ", QString, QString = QString::null, QString = QString::null, QString = QString::null, QString = QString::null, QString = QString::null, QString = QString::null, QString = QString::null ) "
 .br
 .ti -1c
-.BI "virtual \fB~QListViewItem\fR ()"
+.BI "virtual \fB~QListViewItem\fR () "
 .br
 .ti -1c
-.BI "virtual void \fBinsertItem\fR ( QListViewItem * )"
+.BI "virtual void \fBinsertItem\fR ( QListViewItem * ) "
 .br
 .ti -1c
-.BI "virtual void \fBtakeItem\fR ( QListViewItem * )"
+.BI "virtual void \fBtakeItem\fR ( QListViewItem * ) "
 .br
 .ti -1c
 .BI "virtual void removeItem ( QListViewItem * ) \fI(obsolete)\fR"
@@ -60,7 +58,7 @@ Inherited by QCheckListItem.
 .BI "int \fBheight\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBinvalidateHeight\fR ()"
+.BI "virtual void \fBinvalidateHeight\fR () "
 .br
 .ti -1c
 .BI "int \fBtotalHeight\fR () const"
@@ -75,13 +73,13 @@ Inherited by QCheckListItem.
 .BI "int \fBdepth\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetText\fR ( int, const QString & )"
+.BI "virtual void \fBsetText\fR ( int, const QString & ) "
 .br
 .ti -1c
 .BI "virtual QString \fBtext\fR ( int ) const"
 .br
 .ti -1c
-.BI "virtual void \fBsetPixmap\fR ( int, const QPixmap & )"
+.BI "virtual void \fBsetPixmap\fR ( int, const QPixmap & ) "
 .br
 .ti -1c
 .BI "virtual const QPixmap* \fBpixmap\fR ( int ) const"
@@ -90,7 +88,7 @@ Inherited by QCheckListItem.
 .BI "virtual QString \fBkey\fR ( int, bool ) const"
 .br
 .ti -1c
-.BI "virtual void \fBsortChildItems\fR ( int, bool )"
+.BI "virtual void \fBsortChildItems\fR ( int, bool ) "
 .br
 .ti -1c
 .BI "int \fBchildCount\fR () const"
@@ -99,25 +97,25 @@ Inherited by QCheckListItem.
 .BI "bool \fBisOpen\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetOpen\fR ( bool )"
+.BI "virtual void \fBsetOpen\fR ( bool ) "
 .br
 .ti -1c
-.BI "virtual void \fBsetup\fR ()"
+.BI "virtual void \fBsetup\fR () "
 .br
 .ti -1c
-.BI "virtual void \fBsetSelected\fR ( bool )"
+.BI "virtual void \fBsetSelected\fR ( bool ) "
 .br
 .ti -1c
 .BI "bool \fBisSelected\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBpaintCell\fR ( QPainter *, const QColorGroup & " "cg" ", int " "column" ", int " "width" ", int alignment )"
+.BI "virtual void \fBpaintCell\fR ( QPainter *, const QColorGroup & " "cg" ", int " "column" ", int " "width" ", int alignment ) "
 .br
 .ti -1c
-.BI "virtual void \fBpaintBranches\fR ( QPainter * " "p" ", const QColorGroup & " "cg" ", int " "w" ", int " "y" ", int " "h" ", GUIStyle s )"
+.BI "virtual void \fBpaintBranches\fR ( QPainter * " "p" ", const QColorGroup & " "cg" ", int " "w" ", int " "y" ", int " "h" ", GUIStyle s ) "
 .br
 .ti -1c
-.BI "virtual void \fBpaintFocus\fR ( QPainter *, const QColorGroup & " "cg" ", const QRect & r )"
+.BI "virtual void \fBpaintFocus\fR ( QPainter *, const QColorGroup & " "cg" ", const QRect & r ) "
 .br
 .ti -1c
 .BI "QListViewItem* \fBfirstChild\fR () const"
@@ -129,10 +127,10 @@ Inherited by QCheckListItem.
 .BI "QListViewItem* \fBparent\fR () const"
 .br
 .ti -1c
-.BI "QListViewItem* \fBitemAbove\fR ()"
+.BI "QListViewItem* \fBitemAbove\fR () "
 .br
 .ti -1c
-.BI "QListViewItem* \fBitemBelow\fR ()"
+.BI "QListViewItem* \fBitemBelow\fR () "
 .br
 .ti -1c
 .BI "int \fBitemPos\fR () const"
@@ -141,13 +139,13 @@ Inherited by QCheckListItem.
 .BI "QListView* \fBlistView\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetSelectable\fR ( bool enable )"
+.BI "virtual void \fBsetSelectable\fR ( bool enable ) "
 .br
 .ti -1c
 .BI "bool \fBisSelectable\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetExpandable\fR ( bool )"
+.BI "virtual void \fBsetExpandable\fR ( bool ) "
 .br
 .ti -1c
 .BI "bool \fBisExpandable\fR () const"
@@ -156,7 +154,10 @@ Inherited by QCheckListItem.
 .BI "void \fBrepaint\fR () const"
 .br
 .ti -1c
-.BI "void \fBsort\fR ()"
+.BI "void \fBsort\fR () "
+.br
+.ti -1c
+.BI "void \fBmoveItem\fR ( QListViewItem * after ) "
 .br
 .in -1c
 .SS "Protected Members"
@@ -165,13 +166,13 @@ Inherited by QCheckListItem.
 .BI "virtual void \fBenforceSortOrder\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetHeight\fR ( int )"
+.BI "virtual void \fBsetHeight\fR ( int ) "
 .br
 .ti -1c
-.BI "virtual void \fBactivate\fR ()"
+.BI "virtual void \fBactivate\fR () "
 .br
 .ti -1c
-.BI "bool \fBactivatedPos\fR ( QPoint & )"
+.BI "bool \fBactivatedPos\fR ( QPoint & ) "
 .br
 .in -1c
 .SH DESCRIPTION
@@ -213,7 +214,7 @@ You can also traverse it as a tree, using parent(), firstChild() and nextSibling
     }
 .fi
 .PP
-Also there is now an interator class to traverse a tree of list view items. To iterate over all items of a list view, do:
+Also there is now an iterator class to traverse a tree of list view items. To iterate over all items of a list view, do:
 .PP
 .nf
 .br
@@ -248,7 +249,7 @@ Constructs a new list view item in the QListView \fIparent, parent,\fR with at m
      (void)new QListViewItem( lv, "/", "Root directory" );
 .fi
 .PP
-See also: setText().
+See also setText().
 .SH "QListViewItem::QListViewItem ( QListView * parent, QListViewItem * after )"
 Constructs an empty list view item which is a child of \fIparent\fR and is after \fIafter\fR in the parent's list of children.
 .SH "QListViewItem::QListViewItem ( QListView * parent, QListViewItem * after, QString label1, QString label2 = QString::null, QString label3 = QString::null, QString label4 = QString::null, QString label5 = QString::null, QString label6 = QString::null, QString label7 = QString::null, QString label8 = QString::null )"
@@ -256,7 +257,7 @@ Constructs a new list view item in the QListView \fIparent,\fR after item \fIaft
 .PP
 Note that the order is changed according to QListViewItem::key() unless the list view's sorting is disabled using QListView::setSorting( -1 ).
 .PP
-See also: setText().
+See also setText().
 .SH "QListViewItem::QListViewItem ( QListViewItem * parent )"
 Constructs a new list view item which is a child of \fIparent\fR and first in the parent's list of children.
 .SH "QListViewItem::QListViewItem ( QListViewItem * parent, QString label1, QString label2 = QString::null, QString label3 = QString::null, QString label4 = QString::null, QString label5 = QString::null, QString label6 = QString::null, QString label7 = QString::null, QString label8 = QString::null )"
@@ -267,7 +268,7 @@ Constructs a new list view item that's a child of the QListViewItem \fIparent,\f
      (void)new QListViewItem( parentMessage, author, subject );
 .fi
 .PP
-See also: setText().
+See also setText().
 .SH "QListViewItem::QListViewItem ( QListViewItem * parent, QListViewItem * after )"
 Constructs an empty list view item which is a child of \fIparent\fR and is after \fIafter\fR in the parent's list of children.
 .SH "QListViewItem::QListViewItem ( QListViewItem * parent, QListViewItem * after, QString label1, QString label2 = QString::null, QString label3 = QString::null, QString label4 = QString::null, QString label5 = QString::null, QString label6 = QString::null, QString label7 = QString::null, QString label8 = QString::null )"
@@ -275,13 +276,13 @@ Constructs a new list view item that's a child of the QListViewItem \fIparent,\f
 .PP
 Note that the order is changed according to QListViewItem::key() unless the list view's sorting is disabled using QListView::setSorting( -1 ).
 .PP
-See also: setText().
+See also setText().
 .SH "QListViewItem::~QListViewItem () \fC[virtual]\fR"
 Destroys the item, deleting all its children, freeing up all allocated resources.
 .SH "void QListViewItem::activate () \fC[virtual protected]\fR"
 This virtual function is called whenever the user clicks on this item or presses Space on it.
 .PP
-See also: activatedPos().
+See also activatedPos().
 .PP
 Reimplemented in QCheckListItem.
 .SH "bool QListViewItem::activatedPos ( QPoint & pos ) \fC[protected]\fR"
@@ -293,7 +294,7 @@ Pos is relative to the top-left corner of this item.
 .PP
 We recommend not using this function; it will most likely be obsoleted at the first opportunity.
 .PP
-See also: activate().
+See also activate().
 .SH "int QListViewItem::childCount () const"
 Returns the current number of children of this item.
 .SH "int QListViewItem::depth () const"
@@ -303,13 +304,13 @@ Makes sure that this object's children are sorted appropriately.
 .PP
 This only works if every item in the chain from the root item to this item is sorted appropriately.
 .PP
-See also: sortChildItems().
+See also sortChildItems().
 .SH "QListViewItem* QListViewItem::firstChild () const"
 Returns a pointer to the first (top) child of this item, or a null pointer if this item has no children.
 .PP
 Note that the children are not guaranteed to be sorted properly. QListView and QListViewItem try to postpone or avoid sorting to the greatest degree possible, in order to keep the user interface snappy.
 .PP
-See also: nextSibling().
+See also nextSibling().
 .SH "int QListViewItem::height () const"
 Returns the height of this item in pixels. This does not include the height of any children; totalHeight() returns that.
 .SH "void QListViewItem::insertItem ( QListViewItem * newChild ) \fC[virtual]\fR"
@@ -321,37 +322,37 @@ Invalidates the cached total height of this item including all open children.
 .PP
 This function works even if this item is not contained in a list view.
 .PP
-See also: setHeight(), height() and totalHeight().
+See also setHeight(), height() and totalHeight().
 .SH "bool QListViewItem::isExpandable () const"
 Returns TRUE if this item is expandable even when it has no children.
 .SH "bool QListViewItem::isOpen () const"
 Returns TRUE if this list view item has children \fIand\fR they are potentially visible, or FALSE if the item has no children or they are hidden.
 .PP
-See also: setOpen().
+See also setOpen().
 .SH "bool QListViewItem::isSelectable () const"
 Returns TRUE if the item is selectable (as it is by default) and FALSE if it isn't.
 .PP
-See also: setSelectable().
+See also setSelectable().
 .SH "bool QListViewItem::isSelected () const"
 Returns TRUE if this item is selected, or FALSE if it is not.
 .PP
-See also: setSelected(), QListView::setSelected() and QListView::selectionChanged().
+See also setSelected(), QListView::setSelected() and QListView::selectionChanged().
 .SH "QListViewItem * QListViewItem::itemAbove ()"
 Returns a pointer to the item immediately above this item on the screen. This is usually the item's closest older sibling, but may also be its parent or its next older sibling's youngest child, or something else if anyoftheabove->height() returns 0. Returns a null pointer if there is no item immediately above this item.
 .PP
 This function assumes that all parents of this item are open (ie. that this item is visible, or can be made visible by scrolling).
 .PP
-See also: itemBelow() and QListView::itemRect().
+See also itemBelow() and QListView::itemRect().
 .SH "QListViewItem * QListViewItem::itemBelow ()"
 Returns a pointer to the item immediately below this item on the screen. This is usually the item's eldest child, but may also be its next younger sibling, its parent's next younger sibling, grandparent's etc., or something else if anyoftheabove->height() returns 0. Returns a null pointer if there is no item immediately above this item.
 .PP
 This function assumes that all parents of this item are open (ie. that this item is visible, or can be made visible by scrolling).
 .PP
-See also: itemAbove() and QListView::itemRect().
+See also itemAbove() and QListView::itemRect().
 .SH "int QListViewItem::itemPos () const"
 Returns the y coordinate of \fIitem\fR in the list view's coordinate system. This functions is normally much slower than QListView::itemAt(), but it works for all items, while QListView::itemAt() normally works only for items on the screen.
 .PP
-See also: QListView::itemAt(), QListView::itemRect() and QListView::itemPos().
+See also QListView::itemAt(), QListView::itemRect() and QListView::itemPos().
 .SH "QString QListViewItem::key ( int column, bool ascending ) const \fC[virtual]\fR"
 Returns a key that can be used for sorting by column \fIcolumn.\fR The default implementation returns text(). Derived classes may also incorporate the order indicated by \fIascending\fR into this key, although this is not recommended.
 .PP
@@ -374,15 +375,17 @@ You can use this function to sort by non-alphabetic data. This code excerpt sort
     return tmpString;
 .fi
 .PP
-See also: sortChildItems().
+See also sortChildItems().
 .SH "QListView * QListViewItem::listView () const"
 Returns a pointer to the listview containing this item.
+.SH "void QListViewItem::moveItem ( QListViewItem * after )"
+Moves this item after the item \fIafter.\fR This means it will get the sibling exactly after the item \fIafter.\fR To move an item in the hierarchy, use takeItem() and insertItem().
 .SH "QListViewItem* QListViewItem::nextSibling () const"
 Returns a pointer to the sibling item below this item, or a null pointer if there is no sibling item after this item.
 .PP
 Note that the siblings are not guaranteed to be sorted properly. QListView and QListViewItem try to postpone or avoid sorting to the greatest degree possible, in order to keep the user interface snappy.
 .PP
-See also: firstChild().
+See also firstChild().
 .SH "void QListViewItem::paintBranches ( QPainter * p, const QColorGroup & cg, int w, int y, int h, GUIStyle s ) \fC[virtual]\fR"
 Paints a set of branches from this item to (some of) its children.
 .PP
@@ -390,7 +393,7 @@ Paints a set of branches from this item to (some of) its children.
 .PP
 The update rectangle is in an undefined state when this function is called; this function must draw on \fIall\fR of the pixels.
 .PP
-See also: paintCell() and QListView::drawContentsOffset().
+See also paintCell() and QListView::drawContentsOffset().
 .PP
 Reimplemented in QCheckListItem.
 .SH "void QListViewItem::paintCell ( QPainter * p, const QColorGroup & cg, int column, int width, int align ) \fC[virtual]\fR"
@@ -404,7 +407,7 @@ If you reimplement this function, you should also reimplement width().
 .PP
 The rectangle to be painted is in an undefined state when this function is called, so you \fImust\fR draw on all the pixels. The painter \fIp\fR has the right font on entry.
 .PP
-See also: paintBranches() and QListView::drawContentsOffset().
+See also paintBranches() and QListView::drawContentsOffset().
 .PP
 Reimplemented in QCheckListItem.
 .SH "void QListViewItem::paintFocus ( QPainter * p, const QColorGroup & cg, const QRect & r ) \fC[virtual]\fR"
@@ -412,17 +415,17 @@ Paints a focus indication on the rectangle \fIr\fR using painter \fIp\fR and col
 .PP
 \fIp\fR is already clipped.
 .PP
-See also: paintCell(), paintBranches() and QListView::setAllColumnsShowFocus().
+See also paintCell(), paintBranches() and QListView::setAllColumnsShowFocus().
 .SH "QListViewItem* QListViewItem::parent () const"
 Returns a pointer to the parent of this item, or a null pointer if this item has no parent.
 .PP
-See also: firstChild() and nextSibling().
+See also firstChild() and nextSibling().
 .SH "const QPixmap * QListViewItem::pixmap ( int column ) const \fC[virtual]\fR"
 Returns a pointer to the pixmap for \fIcolumn,\fR or a null pointer if there is no pixmap for \fIcolumn.\fR
 .PP
 This function works even if this item is not contained in a list view, but reimplementations of it are not required to work properly in that case.
 .PP
-See also: setText() and setPixmap().
+See also setText() and setPixmap().
 .SH "void QListViewItem::removeItem ( QListViewItem * item ) \fC[virtual]\fR"
 \fBThis function is obsolete.\fR It is provided to keep old source working, and will probably be removed in a future version of Qt. We strongly advise against using it in new code.
 .PP
@@ -436,7 +439,7 @@ The dirview example uses this in the canonical fashion: It checks whether the di
 .PP
 Note that root items are not expandable by the user unless QListView::setRootIsDecorated() is set to TRUE.
 .PP
-See also: setSelectable().
+See also setSelectable().
 .SH "void QListViewItem::setHeight ( int height ) \fC[virtual protected]\fR"
 Sets this item's own height to \fIheight\fR pixels. This implicitly changes totalHeight() too.
 .PP
@@ -444,13 +447,13 @@ Note that e.g. a font change causes this height to be overwritten unless you rei
 .PP
 For best results in Windows style, we suggest using an even number of pixels.
 .PP
-See also: height(), totalHeight() and isOpen();.
+See also height(), totalHeight() and isOpen();.
 .SH "void QListViewItem::setOpen ( bool o ) \fC[virtual]\fR"
 Sets this item to be open (its children are visible) if \fIo\fR is TRUE, and to be closed (its children are not visible) if \fIo\fR is FALSE.
 .PP
 Also does some bookkeeping.
 .PP
-See also: height() and totalHeight().
+See also height() and totalHeight().
 .PP
 Examples:
 .(l
@@ -459,25 +462,25 @@ dirview/main.cpp
 .SH "void QListViewItem::setPixmap ( int column, const QPixmap & pm ) \fC[virtual]\fR"
 Sets the pixmap in column \fIcolumn\fR to \fIpm,\fR if \fIpm\fR is non-null and \fIcolumn\fR is non-negative.
 .PP
-See also: pixmap() and setText().
+See also pixmap() and setText().
 .SH "void QListViewItem::setSelectable ( bool enable ) \fC[virtual]\fR"
 Sets this items to be selectable if \fIenable\fR is TRUE (the default) or not to be selectable if \fIenable\fR is FALSE.
 .PP
 The user is not able to select a non-selectable item using either the keyboard or mouse. The application programmer still can, of course.
 .PP
-See also: isSelectable().
+See also isSelectable().
 .SH "void QListViewItem::setSelected ( bool s ) \fC[virtual]\fR"
 Sets this item to be selected \fIs\fR is TRUE, and to not be selected if \fIo\fR is FALSE.
 .PP
 This function does not maintain any invariants or repaint anything - QListView::setSelected() does that.
 .PP
-See also: height() and totalHeight().
+See also height() and totalHeight().
 .SH "void QListViewItem::setText ( int column, const QString & text ) \fC[virtual]\fR"
 Sets the text in column \fIcolumn\fR to \fItext,\fR if \fIcolumn\fR is a valid column number and \fItext\fR is non-null.
 .PP
 If \fItext()\fR has been reimplemented, this function may be a no-op.
 .PP
-See also: text(), key() and invalidate().
+See also text(), key() and invalidate().
 .SH "void QListViewItem::setup () \fC[virtual]\fR"
 This virtual function is called before the first time QListView needs to know the height or any other graphical attribute of this object, and whenever the font, GUI style or colors of the list view change.
 .PP
@@ -487,25 +490,25 @@ Reimplemented in QCheckListItem.
 .SH "void QListViewItem::sort ()"
 (Re)sorts all child items of this item using the last sorting configuration (sort column and direction).
 .PP
-See also: enforceSortOrder().
+See also enforceSortOrder().
 .SH "void QListViewItem::sortChildItems ( int column, bool ascending ) \fC[virtual]\fR"
 Sorts the children of this item by the return values of key(\fIcolumn, ascending),\fR in ascending order if \fIascending\fR is TRUE and in descending order of \fIdescending\fR is FALSE.
 .PP
 Asks some of the children to sort their children. (QListView and QListViewItem ensure that all on-screen objects are properly sorted, but may avoid or defer sorting other objects in order to be more responsive.)
 .PP
-See also: key().
+See also key().
 .SH "void QListViewItem::takeItem ( QListViewItem * item ) \fC[virtual]\fR"
 Removes \fIitem\fR from this object's list of children and causes an update of the screen display. The item is not deleted. You should normally not need to call this function, as QListViewItem::~QListViewItem() calls it. The normal way to delete an item is \fCdelete.
 .PP
 \fBWarning:\fR\fR This function leaves \fIitem\fR and its children in a state where most member functions are unsafe. Only the few functions that are explicitly documented to work in this state may be used then.
 .PP
-See also: QListViewItem::insertItem().
+See also QListViewItem::insertItem().
 .SH "QString QListViewItem::text ( int column ) const \fC[virtual]\fR"
 Returns the text in column \fIcolumn,\fR or a null string if there is no text in that column.
 .PP
 This function works even if this item is not contained in a list view, but reimplementations of it are not required to work properly in that case.
 .PP
-See also: key() and paintCell().
+See also key() and paintCell().
 .PP
 Reimplemented in QCheckListItem.
 .SH "int QListViewItem::totalHeight () const"
@@ -513,23 +516,23 @@ Returns the total height of this object, including any visible children. This he
 .PP
 setHeight() can be used to set the item's own height, setOpen() to show or hide its children, and invalidateHeight() to invalidate the cached height.
 .PP
-See also: height().
+See also height().
 .SH "int QListViewItem::width ( const QFontMetrics & fm, const QListView * lv, int c ) const \fC[virtual]\fR"
 Returns the number of pixels of width required to draw column \fIc\fR of listview \fIlv,\fR using the metrics \fIfm\fR without cropping. The list view containing this item may use this information, depending on the QListView::WidthMode settings for the column.
 .PP
 The default implementation returns the width of the bounding rectangle of the text of column \fIc.\fR
 .PP
-See also: listView(), widthChanged(), QListView::setColumnWidthMode() and QListView::itemMargin().
+See also listView(), widthChanged(), QListView::setColumnWidthMode() and QListView::itemMargin().
 .PP
 Reimplemented in QCheckListItem.
 .SH "void QListViewItem::widthChanged ( int c=-1 ) const"
 Call this function when the value of width() may have changed for column \fIc.\fR Normally, you should call this if text(c) changes. Passing -1 for \fIc\fR indicates all columns may have changed. For efficiency, you should do this if more than one call to widthChanged() is required.
 .PP
-See also:  width().
+See also  width().
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qlistviewitem.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: qt/examples/life/life.cpp   2.1.1   edited 2000-04-24 $
+** $Id: qt/examples/life/life.cpp   2.2.0   edited 2000-08-31 $
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -18,9 +18,11 @@
 
 // The main game of life widget
 
-LifeWidget::LifeWidget( QWidget *parent, const char *name )
+LifeWidget::LifeWidget( int s, QWidget *parent, const char *name )
     : QFrame( parent, name )
 {
+    SCALE = s;
+
     maxi = maxj = 50;
     setMinimumSize( MINSIZE * SCALE + 2 * BORDER,
 		   MINSIZE * SCALE + 2 * BORDER );

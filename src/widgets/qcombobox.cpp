@@ -1,29 +1,42 @@
 /**********************************************************************
-** $Id: qt/src/widgets/qcombobox.cpp   2.1.1   edited 2000-05-18 $
+** $Id: qt/src/widgets/qcombobox.cpp   2.2.0   edited 2000-08-25 $
 **
 ** Implementation of QComboBox widget class
 **
 ** Created : 940426
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the widgets module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #include "qcombobox.h"
+#ifndef QT_NO_COMBOBOX
 #include "qpopupmenu.h"
 #include "qlistbox.h"
 #include "qpainter.h"
@@ -34,9 +47,8 @@
 #include "qapplication.h"
 #include "qlineedit.h"
 #include "qbitmap.h"
+#include "qeffects_p.h"
 #include <limits.h>
-
-//#define ANIMATED_COMBO
 
 // NOT REVISED
 /*!
@@ -200,7 +212,10 @@ public:
 struct QComboData
 {
     QComboData( QComboBox *cb ): usingLBox( FALSE ), pop( 0 ), lBox( 0 ), combo( cb )
-    { duplicatesEnabled = TRUE; }
+    {
+	duplicatesEnabled = TRUE;
+	cb->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Fixed ) );
+    }
     ~QComboData()
     {
 	delete pop;
@@ -235,7 +250,8 @@ struct QComboData
     int fullHeight, currHeight;
 
     QLineEdit * ed;  // /bin/ed rules!
-    QTimer *showTimer;
+
+    QSize sizeHint;
 
 private:
     bool	usingLBox;
@@ -382,10 +398,6 @@ QComboBox::QComboBox( bool rw, QWidget *parent, const char *name )
     d->shortClick = FALSE;
     d->useCompletion = FALSE;
 
-    d->showTimer = new QTimer( this );
-    connect( d->showTimer, SIGNAL( timeout() ),
-	     this, SLOT( showMore() ) );
-
     setFocusPolicy( StrongFocus );
 
     d->ed = 0;
@@ -410,7 +422,7 @@ QComboBox::~QComboBox()
 
 /*!
   If the combobox is editable and the user enters some text in
-  the lineedit of the combox and presses return (and the insertionPolicy()
+  the lineedit of the combobox and presses return (and the insertionPolicy()
   is different from \c NoInsertion), the entered text is inserted into the
   list of this combobox. Now, if you set \a enable to TRUE here,
   this new text is always inserted, else it's only inserted if it
@@ -420,7 +432,7 @@ QComboBox::~QComboBox()
   gets the new current item.
 
   This setting only applies when the user want's to insert a text
-  with pressing the return key. It does \em not affect methods like
+  with pressing the return key. It does \e not affect methods like
   insertItem() and similar.
 */
 
@@ -700,10 +712,12 @@ void QComboBox::removeItem( int index )
 
 void QComboBox::clear()
 {
-    if ( d->usingListBox() )
+    if ( d->usingListBox() ) {
+	d->listBox()->resize( 0, 0 );
 	d->listBox()->clear();
-    else
+    } else {
 	d->popup()->clear();
+    }
 
     d->current = 0;
     if ( d->ed ) {
@@ -774,9 +788,12 @@ void QComboBox::changeItem( const QString &t, int index )
 	d->listBox()->changeItem( t, index );
     else
 	d->popup()->changeItem( t, index );
-    if ( index == d->current && d->ed ) {
-	d->ed->setText( text( d->current ) );
-	d->updateLinedGeometry();
+    if ( index == d->current ) {
+	if ( d->ed ) {
+	    d->ed->setText( text( d->current ) );
+	    d->updateLinedGeometry();
+	} else
+	    update();
     }
 }
 
@@ -795,6 +812,8 @@ void QComboBox::changeItem( const QPixmap &im, int index )
 	d->listBox()->changeItem( im, index );
     else
 	d->popup()->changeItem( im, index );
+    if ( index == d->current )
+	update();
 }
 
 /*!
@@ -816,6 +835,8 @@ void QComboBox::changeItem( const QPixmap &im, const QString &t, int index )
 	d->listBox()->changeItem( im, t, index );
     else
 	d->popup()->changeItem( im, t, index );
+    if ( index == d->current )
+	update();
 }
 
 
@@ -848,14 +869,11 @@ void QComboBox::setCurrentItem( int index )
 	d->ed->setText( text( index ) );
 	d->updateLinedGeometry();
     }
-    if ( d->poppedUp ) {
-	if ( d->usingListBox() && d->listBox() )
-	    d->listBox()->setCurrentItem( index );
-	else if ( d->popup() )
-	    // the popup will soon send an override, but for the
-	    // moment this is correct
-	    internalHighlight( index );
-    }
+    if ( d->poppedUp && d->usingListBox() && d->listBox() )
+	d->listBox()->setCurrentItem( index );
+    else
+	internalHighlight( index );
+
     currentChanged();
 }
 
@@ -898,9 +916,11 @@ void QComboBox::setAutoResize( bool enable )
 */
 QSize QComboBox::sizeHint() const
 {
+    if ( isVisibleTo(0) && d->sizeHint.isValid() )
+	return d->sizeHint;
+
     constPolish();
     int i, w, h;
-    QString tmp;
     QFontMetrics fm = fontMetrics();
 
     int maxW = count() ? 18 : 7 * fm.width(QChar('x')) + 18;
@@ -938,7 +958,8 @@ QSize QComboBox::sizeHint() const
 	sh = 5 + 5 + maxH;
     }
 
-    return QSize( sw, sh );
+    d->sizeHint = QSize( sw, sh ).expandedTo( QApplication::globalStrut() );
+    return d->sizeHint;
 }
 
 
@@ -946,7 +967,8 @@ QSize QComboBox::sizeHint() const
 */
 QSizePolicy QComboBox::sizePolicy() const
 {
-    return QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Fixed );
+    //### removeme 3.0
+    return QWidget::sizePolicy();
 }
 
 
@@ -1060,7 +1082,6 @@ void QComboBox::resizeEvent( QResizeEvent * e )
 {
     if ( d->ed ) {
 	d->updateLinedGeometry();
-	//d->ed->setGeometry(style().comboButtonRect( 0, 0, width(), height() ));
     }
     QWidget::resizeEvent( e );
 }
@@ -1113,7 +1134,6 @@ void QComboBox::paintEvent( QPaintEvent * )
 	}
 	if ( !d->ed ) {
 	    QRect clip = style().comboButtonRect( 0, 0, width(), height() );
-	    QString str = d->listBox()->text( d->current );
 	    p.setPen( g.foreground() );
 	    p.setClipRect( clip );
 	    p.setPen( g.foreground() );
@@ -1134,7 +1154,7 @@ void QComboBox::paintEvent( QPaintEvent * )
 	}
 	p.setClipping( FALSE );
     } else {					// windows 95 style
-	style().drawComboButton(&p, 0, 0, width(), height(), g, d->arrowDown, d->ed != 0);
+	style().drawComboButton(&p, 0, 0, width(), height(), g, d->arrowDown, d->ed != 0, isEnabled() );
 
 	QRect tmpR = style().comboButtonRect(0,0,width(),height());
 	QRect textR(tmpR.x()+1, tmpR.y()+1, tmpR.width()-2, tmpR.height()-2);
@@ -1351,16 +1371,13 @@ void QComboBox::popup()
 	d->listBox()->setCurrentItem( d->listBox()->item( d->current ) );
 	d->listBox()->blockSignals( FALSE );
 	d->listBox()->setAutoScrollBar( TRUE );
-#ifdef ANIMATED_COMBO
-	d->fullHeight = d->listBox()->height();
-	d->currHeight = 0;
-	d->listBox()->resize( d->listBox()->width(), 0 );
-	d->listBox()->show();
-	d->listBox()->setVScrollBarMode( QScrollView::AlwaysOff );
-	d->showTimer->start( 2 );
-#else
-	d->listBox()->show();
+
+#ifndef QT_NO_EFFECTS
+	if ( QApplication::isEffectEnabled( UI_AnimateCombo ) )
+	    qScrollEffect( d->listBox() );
+	else
 #endif
+	    d->listBox()->show();
     } else {
 	d->popup()->installEventFilter( this );
 	d->popup()->popup( mapToGlobal( QPoint(0,0) ), this->d->current );
@@ -1480,9 +1497,11 @@ bool QComboBox::eventFilter( QObject *object, QEvent *event )
 		    if ( it.length() >= ct.length() ) {
 			it.truncate( ct.length() );
 			int itlen = text( i ).length();
-			if ( it == ct && itlen < foundLength ) {
+			if ( (it == ct || it.lower() == ct )
+			    && itlen < foundLength ) {
 			    foundAt = i;
 			    foundLength = text( i ).length();
+			    break;
 			}
 		    }
 		    i++;
@@ -1834,7 +1853,6 @@ void QComboBox::setListBox( QListBox * newListBox )
 
     newListBox->reparent( 0, WType_Popup, QPoint(0,0), FALSE );
     d->setListBox( newListBox );
-
     d->listBox()->setFont( font() );
     d->listBox()->setAutoScrollBar( FALSE );
     d->listBox()->setBottomScrollBar( FALSE );
@@ -1944,26 +1962,41 @@ void QComboBox::styleChange( QStyle& s )
 {
     if ( d->ed )
 	d->updateLinedGeometry();
-    //d->ed->setGeometry(style().comboButtonRect( 0, 0, width(), height() ));
     QWidget::styleChange( s );
 }
 
 /*!
-  \internal
-*/
+  Returns whether the combobox is editable or not.
 
-void QComboBox::showMore()
+  \sa setEditable()
+ */
+bool QComboBox::editable() const
 {
-    if ( !d->listBox() )
+    return d->ed != 0;
+}
+
+
+/*!
+  Make the input field editable, if \a y is TRUE. Otherwise the user
+  may only choose one of the items in the combo box.
+
+  \sa editable()
+ */
+void QComboBox::setEditable( bool y )
+{
+    if ( y == editable() )
 	return;
-    d->currHeight += 10;
-    if ( d->currHeight > d->fullHeight )
-	d->currHeight = d->fullHeight;
-    d->listBox()->resize( d->listBox()->width(), d->currHeight );
-    if ( d->currHeight == d->fullHeight ) {
-	d->listBox()->setVScrollBarMode( QScrollView::Auto );
-	d->showTimer->stop();
+    if ( y ) {
+	if ( !d->usingListBox() )
+	    setUpListBox();
+	setUpLineEdit();
+	d->ed->show();
+    } else {
+	delete d->ed;
+	d->ed = 0;
     }
+    updateGeometry();
+    update();
 }
 
 
@@ -1982,9 +2015,6 @@ void QComboBox::setUpListBox()
 	     SLOT(internalActivate(int)) );
     connect( d->listBox(), SIGNAL(highlighted(int)),
 	     SLOT(internalHighlight(int)));
-    d->showTimer = new QTimer( this );
-    connect( d->showTimer, SIGNAL( timeout() ),
-	     this, SLOT( showMore() ) );
 }
 
 
@@ -2000,3 +2030,6 @@ void QComboBox::setUpLineEdit()
 
     connect( d->ed, SIGNAL(returnPressed()), SLOT(returnPressed()) );
 }
+
+
+#endif // QT_NO_COMBOBOX

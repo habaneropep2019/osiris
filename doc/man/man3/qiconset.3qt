@@ -1,5 +1,5 @@
-.TH QIconSet 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QIconSet 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QIconSet \- Set of differently styled and sized icons
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -23,25 +21,28 @@ QIconSet \- Set of differently styled and sized icons
 .BI "enum \fBMode\fR { Normal, Disabled, Active }"
 .br
 .ti -1c
-.BI "\fBQIconSet\fR ()"
+.BI "\fBQIconSet\fR () "
 .br
 .ti -1c
-.BI "\fBQIconSet\fR ( const QPixmap &, Size = Automatic )"
+.BI "\fBQIconSet\fR ( const QPixmap &, Size = Automatic ) "
 .br
 .ti -1c
-.BI "\fBQIconSet\fR ( const QIconSet & )"
+.BI "\fBQIconSet\fR ( const QPixmap & " "smallPix" ", const QPixmap & largePix ) "
 .br
 .ti -1c
-.BI "virtual \fB~QIconSet\fR ()"
+.BI "\fBQIconSet\fR ( const QIconSet & ) "
 .br
 .ti -1c
-.BI "void \fBreset\fR ( const QPixmap &, Size )"
+.BI "virtual \fB~QIconSet\fR () "
 .br
 .ti -1c
-.BI "virtual void \fBsetPixmap\fR ( const QPixmap &, Size, Mode = Normal )"
+.BI "void \fBreset\fR ( const QPixmap &, Size ) "
 .br
 .ti -1c
-.BI "virtual void \fBsetPixmap\fR ( const QString &, Size, Mode = Normal )"
+.BI "virtual void \fBsetPixmap\fR ( const QPixmap &, Size, Mode = Normal ) "
+.br
+.ti -1c
+.BI "virtual void \fBsetPixmap\fR ( const QString &, Size, Mode = Normal ) "
 .br
 .ti -1c
 .BI "QPixmap \fBpixmap\fR ( Size, Mode ) const"
@@ -59,10 +60,10 @@ QIconSet \- Set of differently styled and sized icons
 .BI "bool \fBisNull\fR () const"
 .br
 .ti -1c
-.BI "void \fBdetach\fR ()"
+.BI "void \fBdetach\fR () "
 .br
 .ti -1c
-.BI "QIconSet& \fBoperator=\fR ( const QIconSet & )"
+.BI "QIconSet& \fBoperator=\fR ( const QIconSet & ) "
 .br
 .in -1c
 .SH DESCRIPTION
@@ -118,7 +119,7 @@ Provide a method to set a QIconSet, and when you draw the icon, choose whichever
 .PP
 You might also make use of the Active mode, perhaps making your widget Active when the mouse in inside the widget (see QWidget::enterEvent), while the mouse is pressed pending the release that will activate the function, or when it is the currently selected item.
 .PP
-See also: QPixmap, QLabel, QToolButton, QPopupMenu, QIconViewItem::setViewMode(), QMainWindow::setUsesBigPixmaps(), GUI Design Handbook: Iconic Label and Microsoft Icon Gallery.
+See also QPixmap, QLabel, QToolButton, QPopupMenu, QIconViewItem::setViewMode(), QMainWindow::setUsesBigPixmaps(), GUI Design Handbook: Iconic Label and Microsoft Icon Gallery.
 .SS "Member Type Documentation"
 .SH "QIconSet::Mode"
 This enum type describes the mode for which a pixmap is intended to be provided. The currently defined modes are:
@@ -139,18 +140,20 @@ This enum type describes the size for which a pixmap is intended to be provided.
 .PP
 If a Small pixmap is not set by QIconSet::setPixmap(), then the Large pixmap may be automatically scaled to two-thirds of its size to generate the Small pixmap. Conversely, a Small pixmap will be automatically scaled up by 50% to create a Large pixmap if needed.
 .PP
-See also: setPixmap(), pixmap(), QIconViewItem::setViewMode() and QMainWindow::setUsesBigPixmaps().
+See also setPixmap(), pixmap(), QIconViewItem::setViewMode() and QMainWindow::setUsesBigPixmaps().
 .SH MEMBER FUNCTION DOCUMENTATION
 .SH "QIconSet::QIconSet ()"
 Constructs an icon set of null pixmaps. Use setPixmap(), reset(), or operator=() to set some pixmaps.
 .PP
-See also: reset().
+See also reset().
 .SH "QIconSet::QIconSet ( const QPixmap & pixmap, Size size = Automatic )"
 Constructs an icon set for which the Normal pixmap is \fIpixmap,\fR which is assumed to be the given \fIsize.\fR
 .PP
 The default for \fIsize\fR is \fCAutomatic,\fR which means that QIconSet will determine if the pixmap is Small or Large from its pixel size. Pixmaps less than 23 pixels wide are considered to be Small.
 .PP
-See also: reset().
+See also reset().
+.SH "QIconSet::QIconSet ( const QPixmap & smallPix, const QPixmap & largePix )"
+Creates an iconset which uses the pixmap \fIsmallPix\fR for for displaying small a small icon, and \fIlargePix\fR for displaying a large one.
 .SH "QIconSet::QIconSet ( const QIconSet & other )"
 Constructs a copy of \fIother.\fR This is very fast.
 .SH "QIconSet::~QIconSet () \fC[virtual]\fR"
@@ -168,11 +171,11 @@ Assigns \fIother\fR to this icon set and returns a reference to this icon set.
 .PP
 This is very fast.
 .PP
-See also: detach().
+See also detach().
 .SH "QPixmap QIconSet::pixmap () const"
 Returns the pixmap originally provided to the constructor or to reset(). This is the Normal pixmap of unspecified Size.
 .PP
-See also: reset().
+See also reset().
 .SH "QPixmap QIconSet::pixmap ( Size s, Mode m ) const"
 Returns a pixmap with size \fIs\fR and mode \fIm,\fR generating one if needed. Generated pixmaps are cached.
 .SH "QPixmap QIconSet::pixmap ( Size s, bool enabled ) const"
@@ -184,17 +187,19 @@ This is equivalent to assigning QIconSet(pm,s) to this icon set.
 .SH "void QIconSet::setPixmap ( const QPixmap & pm, Size size, Mode mode = Normal )"
 Sets this icon set to provide \fIpm\fR for a \fIsize\fR and \fImode.\fR It may also use \fIpm\fR for deriving some other varieties if those are not set.
 .PP
-The \fIsize\fR must be Large or Small; it cannot be Automatic.
+The \fIsize\fR can be one of Automatic, Large or Small. If Automatic is used, QIconSet will determine if the pixmap is Small or Large from its pixel size. Pixmaps less than 23 pixels wide are considered to be Small.
 .PP
-See also: reset().
+See also reset().
 .SH "void QIconSet::setPixmap ( const QString & fileName, Size s, Mode m = Normal )"
 Sets this icon set to load \fIfileName\fR as a pixmap and provide it for size \fIs\fR and mode \fIm.\fR It may also use the pixmap for deriving some other varieties if those are not set.
 .PP
-The \fIsize\fR must be Large or Small; it cannot be Automatic.
+The \fIsize\fR can be one of Automatic, Large or Small.  If Automatic is used,
+QIconSet will determine if the pixmap is Small or Large from its pixel size.
+Pixmaps less than 23 pixels wide are considered to be Small.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qiconset.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

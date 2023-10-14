@@ -1,5 +1,5 @@
-.TH QAccel 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QAccel 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QAccel \- Handles keyboard accelerator and shortcut keys
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -19,34 +17,34 @@ Inherits QObject.
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQAccel\fR ( QWidget * " "parent" ", const char * " "name" "=0 )"
+.BI "\fBQAccel\fR ( QWidget * " "parent" ", const char * " "name" "=0 ) "
 .br
 .ti -1c
-.BI "\fBQAccel\fR ( QWidget * " "watch" ", QObject * " "parent" ", const char * " "name" "=0 )"
+.BI "\fBQAccel\fR ( QWidget * " "watch" ", QObject * " "parent" ", const char * " "name" "=0 ) "
 .br
 .ti -1c
-.BI "\fB~QAccel\fR ()"
+.BI "\fB~QAccel\fR () "
 .br
 .ti -1c
 .BI "bool \fBisEnabled\fR () const"
 .br
 .ti -1c
-.BI "void \fBsetEnabled\fR ( bool )"
+.BI "void \fBsetEnabled\fR ( bool ) "
 .br
 .ti -1c
 .BI "uint \fBcount\fR () const"
 .br
 .ti -1c
-.BI "int \fBinsertItem\fR ( int " "key" ", int " "id" "=-1 )"
+.BI "int \fBinsertItem\fR ( int " "key" ", int " "id" "=-1 ) "
 .br
 .ti -1c
-.BI "void \fBremoveItem\fR ( int id )"
+.BI "void \fBremoveItem\fR ( int id ) "
 .br
 .ti -1c
-.BI "void \fBclear\fR ()"
+.BI "void \fBclear\fR () "
 .br
 .ti -1c
-.BI "int \fBkey\fR ( int id )"
+.BI "int \fBkey\fR ( int id ) "
 .br
 .ti -1c
 .BI "int \fBfindKey\fR ( int key ) const"
@@ -55,19 +53,19 @@ Inherits QObject.
 .BI "bool \fBisItemEnabled\fR ( int id ) const"
 .br
 .ti -1c
-.BI "void \fBsetItemEnabled\fR ( int " "id" ", bool enable )"
+.BI "void \fBsetItemEnabled\fR ( int " "id" ", bool enable ) "
 .br
 .ti -1c
-.BI "bool \fBconnectItem\fR ( int " "id" ", const QObject * " "receiver" ", const char * member )"
+.BI "bool \fBconnectItem\fR ( int " "id" ", const QObject * " "receiver" ", const char * member ) "
 .br
 .ti -1c
-.BI "bool \fBdisconnectItem\fR ( int " "id" ", const QObject * " "receiver" ", const char * member )"
+.BI "bool \fBdisconnectItem\fR ( int " "id" ", const QObject * " "receiver" ", const char * member ) "
 .br
 .ti -1c
-.BI "void \fBrepairEventFilter\fR ()"
+.BI "void \fBrepairEventFilter\fR () "
 .br
 .ti -1c
-.BI "void \fBsetWhatsThis\fR ( int " "id" ", const QString & )"
+.BI "void \fBsetWhatsThis\fR ( int " "id" ", const QString & ) "
 .br
 .ti -1c
 .BI "QString \fBwhatsThis\fR ( int id ) const"
@@ -82,25 +80,25 @@ Inherits QObject.
 .SS "Signals"
 .in +1c
 .ti -1c
-.BI "void \fBactivated\fR ( int id )"
+.BI "void \fBactivated\fR ( int id ) "
 .br
 .in -1c
 .SS "Static Public Members"
 .in +1c
 .ti -1c
-.BI "int \fBshortcutKey\fR ( const QString & )"
+.BI "int \fBshortcutKey\fR ( const QString & ) "
 .br
 .ti -1c
-.BI "QString \fBkeyToString\fR ( int k )"
+.BI "QString \fBkeyToString\fR ( int k ) "
 .br
 .ti -1c
-.BI "int \fBstringToKey\fR ( const QString & )"
+.BI "int \fBstringToKey\fR ( const QString & ) "
 .br
 .in -1c
 .SS "Protected Members"
 .in +1c
 .ti -1c
-.BI "virtual bool \fBeventFilter\fR ( QObject *, QEvent * )"
+.BI "virtual bool \fBeventFilter\fR ( QObject *, QEvent * ) "
 .br
 .in -1c
 .SH DESCRIPTION
@@ -121,7 +119,7 @@ In most cases, you will not need to use this class directly. Use QMenuData::inse
 .PP
 A QAccel contains a list of accelerator items. The following functions manipulate the list: insertItem(), removeItem(), clear(), key(), findKey().
 .PP
-Each accelerator item consists of an identifier and a keyboard code combined with modifiers (\fCSHIFT, CTRL, ALT\fR or \fCUNICODE_ACCEL).\fR For example, \fCCTRL + Key_P\fR could be a shortcut for printing a document. The key codes are listed in qnamespace.h. As an alternative, use \fCUNICODE_ACCEL\fR with the unicode code point of the character. For example, \fCUNICODE_ACCEL + 'A'\fR gies the same accelerator as \fCKey_A.\fR
+Each accelerator item consists of an identifier and a keyboard code combined with modifiers (\fCSHIFT, CTRL, ALT\fR or \fCUNICODE_ACCEL).\fR For example, \fCCTRL + Key_P\fR could be a shortcut for printing a document. The key codes are listed in qnamespace.h. As an alternative, use \fCUNICODE_ACCEL\fR with the unicode code point of the character. For example, \fCUNICODE_ACCEL + 'A'\fR gives the same accelerator as \fCKey_A.\fR
 .PP
 When an accelerator key is pressed, the accelerator sends out the signal activated() with a number that identifies this particular accelerator item. Accelerator items can also be individually connected, so that two different keys will activate two different slots (see connectItem() and disconnectItem()).
 .PP
@@ -144,7 +142,7 @@ Example:
                      SLOT(printDoc()) );        // printDoc() slot
 .fi
 .PP
-See also: QKeyEvent, QWidget::keyPressEvent(), QMenuData::setAccel(), QButton::setAccel(), QLabel::setBuddy() and GUI Design Handbook: Keyboard Shortcuts
+See also QKeyEvent, QWidget::keyPressEvent(), QMenuData::setAccel(), QButton::setAccel(), QLabel::setBuddy() and GUI Design Handbook: Keyboard Shortcuts
 .SH MEMBER FUNCTION DOCUMENTATION
 .SH "QAccel::QAccel ( QWidget * parent, const char * name=0 )"
 Constructs a QAccel object with parent \fIparent\fR and name \fIname.\fR The accelerator operates on \fIparent.\fR
@@ -168,13 +166,13 @@ Connects the accelerator item \fIid\fR to the slot \\member of \fIreceiver.\fR
 .PP
 Of course, you can also send a signal as \fImember.\fR
 .PP
-See also: disconnectItem().
+See also disconnectItem().
 .SH "uint QAccel::count () const"
 Returns the number of accelerator items in this accelerator.
 .SH "bool QAccel::disconnectItem ( int id, const QObject * receiver, const char * member )"
 Disconnects an accelerator item from a function in another object.
 .PP
-See also: connectItem().
+See also connectItem().
 .SH "bool QAccel::eventFilter ( QObject * o, QEvent * e ) \fC[virtual protected]\fR"
 Processes accelerator events intended for the top level widget.
 .PP
@@ -205,33 +203,33 @@ If \fIid\fR is negative, then the item will be assigned a unique negative identi
 .SH "bool QAccel::isEnabled () const"
 Returns TRUE if the accelerator is enabled, or FALSE if it is disabled.
 .PP
-See also: setEnabled() and isItemEnabled().
+See also setEnabled() and isItemEnabled().
 .SH "bool QAccel::isItemEnabled ( int id ) const"
 Returns TRUE if the accelerator item with the identifier \fIid\fR is enabled. Returns FALSE if the item is disabled or cannot be found.
 .PP
-See also: setItemEnabled() and isEnabled().
+See also setItemEnabled() and isEnabled().
 .SH "int QAccel::key ( int id )"
 Returns the key code of the accelerator item with the identifier \fIid,\fR or zero if the id cannot be found.
 .SH "QString QAccel::keyToString ( int k ) \fC[static]\fR"
 Creates an accelerator string for the key \fIk.\fR For instance CTRL+Key_O gives "Ctrl+O". The "Ctrl" etc. are translated (using QObject::tr()) in the "QAccel" scope.
 .PP
-See also: stringToKey().
+See also stringToKey().
 .SH "void QAccel::removeItem ( int id )"
 Removes the accelerator item with the identifier \fIid.\fR
 .SH "void QAccel::repairEventFilter ()"
-Make sure that the accelerator is watching the correct event filter. This function is called automatically, you should not need to call it in application code.
+Makes sure that the accelerator is watching the correct event filter. This function is called automatically; you should not need to call it in application code.
 .SH "void QAccel::setEnabled ( bool enable )"
 Enables the accelerator if \fIenable\fR is TRUE, or disables it if \fIenable\fR is FALSE.
 .PP
 Individual keys can also be enabled or disabled using setItemEnabled(). To work, a key must be an enabled item in an enabled QAccel.
 .PP
-See also: isEnabled() and setItemEnabled().
+See also isEnabled() and setItemEnabled().
 .SH "void QAccel::setItemEnabled ( int id, bool enable )"
 Enables the accelerator key \fIitem\fR if \fIenable\fR is TRUE, and disables \fIitem\fR if \fIenable\fR is FALSE.
 .PP
 To work, a key must be an enabled item in an enabled QAccel.
 .PP
-See also: isItemEnabled() and isEnabled().
+See also isItemEnabled() and isEnabled().
 .SH "void QAccel::setWhatsThis ( int id, const QString & text )"
 Sets a Whats This help for the accelerator item \fIid\fR to \fItext.\fR
 .PP
@@ -239,13 +237,13 @@ The text will be shown when the application is in What's This mode and the user 
 .PP
 To set Whats This help on a menu item (with or without an accelerator key) use QMenuData::setWhatsThis().
 .PP
-See also: whatsThis(), QWhatsThis::inWhatsThisMode() and QMenuData::setWhatsThis().
+See also whatsThis(), QWhatsThis::inWhatsThisMode() and QMenuData::setWhatsThis().
 .SH "int QAccel::shortcutKey ( const QString & str ) \fC[static]\fR"
 Returns the shortcut key for \fIstring,\fR or 0 if \fIstring\fR has no shortcut sequence.
 .PP
 For example, shortcutKey("E&xit") returns ALT+Key_X, shortcutKey("&Exit") returns ALT+Key_E and shortcutKey("Exit") returns 0. (In code that does not inherit the Qt namespace class, you need to write e.g. Qt::ALT+Qt::Key_X.)
 .PP
-We provide a list of common accelerators in English. (At the time of writing the Microsoft and The Open Group appear to not have issued such recommendations for other languages.).
+We provide a list of common accelerators in English. At the time of writing the Microsoft and The Open Group appear to not have issued such recommendations for other languages.
 .SH "int QAccel::stringToKey ( const QString & s ) \fC[static]\fR"
 Returns an accelerator code for the string \fIs.\fR For example "Ctrl+O" gives CTRL+UNICODE_ACCEL+'O'. The strings "Ctrl", "Shift", "Alt" are recognized, as well as their translated equivalents in the "QAccel" scope (using QObject::tr()). Returns 0 if \fIs\fR is not recognized.
 .PP
@@ -262,7 +260,7 @@ A common usage of this function is to provide translatable accelerator values fo
 .SH "QString QAccel::whatsThis ( int id ) const"
 Returns the Whats This help text for the specified item \fIid\fR or QString::null if no text has been defined yet.
 .PP
-See also: setWhatsThis().
+See also setWhatsThis().
 .SH "bool QAccel::ignoreWhatsThis () const"
 For internal use only.
 .SH "void QAccel::setIgnoreWhatsThis ( bool b )"
@@ -270,7 +268,7 @@ For internal use only.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qaccel.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

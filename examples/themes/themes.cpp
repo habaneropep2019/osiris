@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: qt/examples/themes/themes.cpp   2.1.1   edited 2000-03-20 $
+** $Id: qt/examples/themes/themes.cpp   2.2.0   edited 2000-08-31 $
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -30,6 +30,7 @@
 #include <qwindowsstyle.h>
 #include <qplatinumstyle.h>
 #include <qmotifstyle.h>
+#include <qmotifplusstyle.h>
 #include <qcdestyle.h>
 
 Themes::Themes( QWidget *parent, const char *name, WFlags f )
@@ -61,6 +62,7 @@ Themes::Themes( QWidget *parent, const char *name, WFlags f )
     sWindows = style->insertItem( "&Windows", this, SLOT( styleWindows() ) );
     sCDE = style->insertItem( "&CDE", this, SLOT( styleCDE() ) );
     sMotif = style->insertItem( "M&otif", this, SLOT( styleMotif() ) );
+    sMotifPlus = style->insertItem( "Motif P&lus", this, SLOT( styleMotifPlus() ) );
     style->insertSeparator();
     style->insertItem("&Quit", qApp, SLOT( quit() ), CTRL | Key_Q );
 
@@ -141,6 +143,15 @@ void Themes::styleMotif()
     selectStyleMenu( sMotif );
 }
 
+void Themes::styleMotifPlus()
+{
+    qApp->setStyle( new QMotifPlusStyle );
+    QPalette p( QColor( 192, 192, 192 ) );
+    qApp->setPalette( p, TRUE );
+    qApp->setFont( appFont, TRUE );
+    selectStyleMenu( sMotifPlus );
+}
+
 
 void Themes::about()
 {
@@ -165,5 +176,6 @@ void Themes::selectStyleMenu( int s )
     menuBar()->setItemChecked( sWindows, FALSE );
     menuBar()->setItemChecked( sCDE, FALSE );
     menuBar()->setItemChecked( sMotif, FALSE );
+    menuBar()->setItemChecked( sMotifPlus, FALSE );
     menuBar()->setItemChecked( s, TRUE );
 }

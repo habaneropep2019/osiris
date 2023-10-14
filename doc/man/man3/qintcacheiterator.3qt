@@ -1,5 +1,5 @@
-.TH QIntCacheIterator 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QIntCacheIterator 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QIntCacheIterator \- Iterator for QIntCache collections
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -19,13 +17,13 @@ Inherits QGCacheIterator.
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQIntCacheIterator\fR ( const QIntCache<type> & cache )"
+.BI "\fBQIntCacheIterator\fR ( const QIntCache<type> & cache ) "
 .br
 .ti -1c
-.BI "\fBQIntCacheIterator\fR ( const QIntCacheIterator<type> & ci )"
+.BI "\fBQIntCacheIterator\fR ( const QIntCacheIterator<type> & ci ) "
 .br
 .ti -1c
-.BI "QIntCacheIterator<type>& \fBoperator=\fR ( const QIntCacheIterator<type> & ci )"
+.BI "QIntCacheIterator<type>& \fBoperator=\fR ( const QIntCacheIterator<type> & ci ) "
 .br
 .ti -1c
 .BI "uint \fBcount\fR () const"
@@ -40,10 +38,10 @@ Inherits QGCacheIterator.
 .BI "bool \fBatLast\fR () const"
 .br
 .ti -1c
-.BI "type* \fBtoFirst\fR ()"
+.BI "type* \fBtoFirst\fR () "
 .br
 .ti -1c
-.BI "type* \fBtoLast\fR ()"
+.BI "type* \fBtoLast\fR () "
 .br
 .ti -1c
 .BI "operator \fBtype*\fR ()const"
@@ -55,19 +53,19 @@ Inherits QGCacheIterator.
 .BI "long \fBcurrentKey\fR () const"
 .br
 .ti -1c
-.BI "type* \fBoperator\fR ()"
+.BI "type* \fBoperator\fR () "
 .br
 .ti -1c
-.BI "type* \fBoperator++\fR ()"
+.BI "type* \fBoperator++\fR () "
 .br
 .ti -1c
-.BI "type* \fBoperator+=\fR ( uint jump )"
+.BI "type* \fBoperator+=\fR ( uint jump ) "
 .br
 .ti -1c
-.BI "type* \fBoperator--\fR ()"
+.BI "type* \fBoperator--\fR () "
 .br
 .ti -1c
-.BI "type* \fBoperator-=\fR ( uint jump )"
+.BI "type* \fBoperator-=\fR ( uint jump ) "
 .br
 .in -1c
 .SH DESCRIPTION
@@ -81,7 +79,7 @@ QIntCacheIterator provides an operator++(), and an operator+=() to traverse the 
 .PP
 Note that atFirst() and atLast() refer to the iterator's arbitrary ordering, not to the cache's internal LRU list.
 .PP
-See also: QIntCache.
+See also QIntCache.
 .SH MEMBER FUNCTION DOCUMENTATION
 .SH "QIntCacheIterator::QIntCacheIterator ( const QIntCache<type> & cache )"
 Constructs an iterator for \fIcache.\fR The current iterator item is set to point on the first item in the \fIcache\fR (or rather, the first item is defined to be the item at which this constructor sets the iterator to point).
@@ -92,15 +90,15 @@ Cast operator. Returns a pointer to the current iterator item. Same as current()
 .SH "bool QIntCacheIterator::atFirst () const"
 Returns TRUE if the iterator points to the first item in the cache. Note that this refers to the iterator's arbitrary ordering, not to the cache's internal LRU list.
 .PP
-See also: toFirst() and atLast().
+See also toFirst() and atLast().
 .SH "bool QIntCacheIterator::atLast () const"
 Returns TRUE if the iterator points to the last item in the cache. Note that this refers to the iterator's arbitrary ordering, not to the cache's internal LRU list.
 .PP
-See also: toLast() and atFirst().
+See also toLast() and atFirst().
 .SH "uint QIntCacheIterator::count () const"
 Returns the number of items in the cache on which this iterator operates.
 .PP
-See also: isEmpty().
+See also isEmpty().
 .SH "type * QIntCacheIterator::current () const"
 Returns a pointer to the current iterator item.
 .SH "long QIntCacheIterator::currentKey () const"
@@ -108,7 +106,7 @@ Returns the key for the current iterator item.
 .SH "bool QIntCacheIterator::isEmpty () const"
 Returns TRUE if the cache is empty, i.e. count() == 0, otherwise FALSE.
 .PP
-See also: count().
+See also count().
 .SH "type * QIntCacheIterator::operator() ()"
 Makes the succeeding item current and returns the original current item.
 .PP
@@ -128,17 +126,17 @@ Sets the iterator to point to the first item in the cache and returns a pointer 
 .PP
 Sets the iterator to null and returns null if if the cache is empty.
 .PP
-See also: toLast() and isEmpty().
+See also toLast() and isEmpty().
 .SH "type * QIntCacheIterator::toLast ()"
 Sets the iterator to point to the last item in the cache and returns a pointer to the item.
 .PP
 Sets the iterator to null and returns null if if the cache is empty.
 .PP
-See also:  toFirst() and isEmpty().
+See also  toFirst() and isEmpty().
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qintcacheiterator.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

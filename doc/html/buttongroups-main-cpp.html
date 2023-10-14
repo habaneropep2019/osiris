@@ -3,15 +3,17 @@
 Qt Toolkit - buttongroups/main.cpp example file
 </title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
-a:link { text-decoration: none; }
-body { background: white; color: black; }
+a:link { color: #004faf; text-decoration: none }
+a:visited { color: #672967; text-decoration: none }body { background: white; color: black; }
 --></style>
 </head><body bgcolor="#ffffff">
 
-<a href="index.html">
-<img width="122" height="65" src="qtlogo.png" alt="Home"
-  align="left" border="0">
-</a><div align=right><img src="dochead.png" width="472" height="27"><br>
+<table width="100%">
+<tr><td><a href="index.html">
+<img width="100" height="100" src="qtlogo.png"
+alt="Home" border="0"><img width="100"
+height="100" src="face.png" alt="Home" border="0">
+</a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
 - <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
@@ -19,7 +21,7 @@ body { background: white; color: black; }
 - <a href="index.html">Home</a>
 - <a href="topicals.html"><b>Structure</b></a>
 </div>
-<br clear=all>
+</table>
 
 <h1 align=center>Buttons and Groupboxes</h1><br clear="all">
 
@@ -29,9 +31,9 @@ body { background: white; color: black; }
   <hr>
 
   Header file: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/buttongroups/buttongroups.h   2.1.1   edited 2000-04-04 $
+** &#36;Id&#58; qt/examples/buttongroups/buttongroups.h   2.2.0   edited 2000-08-31 $
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -69,9 +71,9 @@ protected slots:
   <hr>
 
   Implementation: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/buttongroups/buttongroups.cpp   2.1.1   edited 2000-04-04 $
+** &#36;Id&#58; qt/examples/buttongroups/buttongroups.cpp   2.2.0   edited 2000-08-31 $
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -146,7 +148,7 @@ ButtonsGroups::ButtonsGroups( <a href="qwidget.html">QWidget</a> *parent, const 
     state = new <a href="qcheckbox.html">QCheckBox</a>( "E&amp;nable Radiobuttons", grp3 );
     state-&gt;setChecked( TRUE );
     // ...and connect its SIGNAL clicked() with the SLOT slotChangeGrp3State()
-    <a href="qobject.html#c2d209">connect</a>( state, SIGNAL( clicked() ), this, SLOT( <a href=#161>slotChangeGrp3State</a>() ) );
+    <a href="qobject.html#c2d209">connect</a>( state, SIGNAL( clicked() ), this, SLOT( <a href=#174>slotChangeGrp3State</a>() ) );
 
     // ------------ fourth group
 
@@ -169,7 +171,7 @@ ButtonsGroups::ButtonsGroups( <a href="qwidget.html">QWidget</a> *parent, const 
  * enables/disables the radiobuttons of the third buttongroup
  */
 
-void <a name="161"></a>ButtonsGroups::slotChangeGrp3State()
+void <a name="174"></a>ButtonsGroups::slotChangeGrp3State()
 {
     rb21-&gt;setEnabled( state-&gt;isChecked() );
     rb22-&gt;setEnabled( state-&gt;isChecked() );
@@ -182,9 +184,9 @@ void <a name="161"></a>ButtonsGroups::slotChangeGrp3State()
 
   Main:
 <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/buttongroups/main.cpp   2.1.1   edited 2000-02-14 $
+** &#36;Id&#58; qt/examples/buttongroups/main.cpp   2.2.0   edited 2000-08-31 $
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -209,6 +211,6 @@ int main( int argc, char **argv )
 </pre>
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.1</div>
+<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.2.0</div>
 </table></div></address></body></html>

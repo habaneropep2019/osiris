@@ -1,5 +1,5 @@
-.TH QQueue 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QQueue 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,34 +7,30 @@
 .nh
 .SH NAME
 QQueue \- Template class that provides a queue
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
 \fC#include <qqueue.h>\fR
 .PP
-Inherits QGList.
-.PP
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQQueue\fR ()"
+.BI "\fBQQueue\fR () "
 .br
 .ti -1c
-.BI "\fBQQueue\fR ( const QQueue<type> & queue )"
+.BI "\fBQQueue\fR ( const QQueue<type> & queue ) "
 .br
 .ti -1c
-.BI "\fB~QQueue\fR ()"
+.BI "\fB~QQueue\fR () "
 .br
 .ti -1c
-.BI "QQueue<type>& \fBoperator=\fR ( const QQueue<type> & queue )"
+.BI "QQueue<type>& \fBoperator=\fR ( const QQueue<type> & queue ) "
 .br
 .ti -1c
 .BI "bool \fBautoDelete\fR () const"
 .br
 .ti -1c
-.BI "void \fBsetAutoDelete\fR ( bool enable )"
+.BI "void \fBsetAutoDelete\fR ( bool enable ) "
 .br
 .ti -1c
 .BI "virtual uint \fBcount\fR () const"
@@ -43,16 +39,16 @@ Inherits QGList.
 .BI "bool \fBisEmpty\fR () const"
 .br
 .ti -1c
-.BI "void \fBenqueue\fR ( const type * d )"
+.BI "void \fBenqueue\fR ( const type * d ) "
 .br
 .ti -1c
-.BI "type* \fBdequeue\fR ()"
+.BI "type* \fBdequeue\fR () "
 .br
 .ti -1c
-.BI "bool \fBremove\fR ()"
+.BI "bool \fBremove\fR () "
 .br
 .ti -1c
-.BI "virtual void \fBclear\fR ()"
+.BI "virtual void \fBclear\fR () "
 .br
 .ti -1c
 .BI "type* \fBhead\fR () const"
@@ -71,7 +67,7 @@ QQueue is implemented as a template class. Define a template instance QQueue<X> 
 .PP
 A queue is a First In, First Out (FIFO) structure. Items are added to the back of the queue with enqueue() and retrieved from the front with dequeue().
 .PP
-See also: Collection Classes
+See also Collection Classes
 .SH MEMBER FUNCTION DOCUMENTATION
 .SH "QQueue::QQueue ()"
 Creates an empty queue.
@@ -86,17 +82,17 @@ Returns a reference to the front item in the queue. The queue is not changed.
 .SH "bool QQueue::autoDelete () const"
 The same as QCollection::autoDelete().
 .PP
-See also: setAutoDelete().
+See also setAutoDelete().
 .SH "void QQueue::clear () \fC[virtual]\fR"
 Removes all items from the queue, deleting them if if autoDelete() is TRUE.
 .PP
-See also: remove().
+See also remove().
 .PP
 Reimplemented from QCollection.
 .SH "uint QQueue::count () const \fC[virtual]\fR"
 Returns the number of items in the queue.
 .PP
-See also: isEmpty().
+See also isEmpty().
 .PP
 Reimplemented from QCollection.
 .SH "type* QQueue::current () const"
@@ -118,11 +114,11 @@ Removes the front item from the queue. First in, first out. The item is deleted 
 .SH "void QQueue::setAutoDelete ( bool enable )"
 The same as QCollection::setAutoDelete().
 .PP
-See also:  autoDelete().
+See also  autoDelete().
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qqueue.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

@@ -3,15 +3,17 @@
 Qt Toolkit - lineedits/main.cpp example file
 </title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
-a:link { text-decoration: none; }
-body { background: white; color: black; }
+a:link { color: #004faf; text-decoration: none }
+a:visited { color: #672967; text-decoration: none }body { background: white; color: black; }
 --></style>
 </head><body bgcolor="#ffffff">
 
-<a href="index.html">
-<img width="122" height="65" src="qtlogo.png" alt="Home"
-  align="left" border="0">
-</a><div align=right><img src="dochead.png" width="472" height="27"><br>
+<table width="100%">
+<tr><td><a href="index.html">
+<img width="100" height="100" src="qtlogo.png"
+alt="Home" border="0"><img width="100"
+height="100" src="face.png" alt="Home" border="0">
+</a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
 - <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
@@ -19,7 +21,7 @@ body { background: white; color: black; }
 - <a href="index.html">Home</a>
 - <a href="topicals.html"><b>Structure</b></a>
 </div>
-<br clear=all>
+</table>
 
 <h1 align=center>Line Edits</h1><br clear="all">
 
@@ -29,9 +31,9 @@ body { background: white; color: black; }
   <hr>
 
   Header file: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/lineedits/lineedits.h   2.1.1   edited 2000-04-03 $
+** &#36;Id&#58; qt/examples/lineedits/lineedits.h   2.2.0   edited 2000-08-31 $
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -54,13 +56,14 @@ public:
     LineEdits( <a href="qwidget.html">QWidget</a> *parent = 0, const char *name = 0 );
 
 protected:
-    <a href="qlineedit.html">QLineEdit</a> *lined1, *lined2, *lined3;
-    <a href="qcombobox.html">QComboBox</a> *combo1, *combo2, *combo3;
+    <a href="qlineedit.html">QLineEdit</a> *lined1, *lined2, *lined3, *lined4;
+    <a href="qcombobox.html">QComboBox</a> *combo1, *combo2, *combo3, *combo4;
 
 protected slots:
     void slotEchoChanged( int );
     void slotValidatorChanged( int );
     void slotAlignmentChanged( int );
+    void slotReadOnlyChanged( int );
 };
 
 #endif
@@ -70,9 +73,9 @@ protected slots:
   <hr>
 
   Implementation: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/lineedits/lineedits.cpp   2.1.1   edited 2000-04-03 $
+** &#36;Id&#58; qt/examples/lineedits/lineedits.cpp   2.2.0   edited 2000-08-31 $
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -100,9 +103,9 @@ LineEdits::LineEdits( <a href="qwidget.html">QWidget</a> *parent, const char *na
 {
     <a href="qframe.html#ab991e">setMargin</a>( 10 );
 
-    <a href="qvboxlayout.html">QVBoxLayout</a>* vbox = new <a href="qvboxlayout.html">QVBoxLayout</a>( <a href="qwidget.html#286df8">layout</a>() );
+    <a href="qvboxlayout.html">QVBoxLayout</a>* box = new <a href="qvboxlayout.html">QVBoxLayout</a>( <a href="qwidget.html#286df8">layout</a>() );
 
-    <a href="qhboxlayout.html">QHBoxLayout</a> *row1 = new <a href="qhboxlayout.html">QHBoxLayout</a>( vbox );
+    <a href="qhboxlayout.html">QHBoxLayout</a> *row1 = new <a href="qhboxlayout.html">QHBoxLayout</a>( box );
     row1-&gt;<a href="qlayout.html#cd2c99">setMargin</a>( 5 );
 
     // Create a Label
@@ -117,14 +120,14 @@ LineEdits::LineEdits( <a href="qwidget.html">QWidget</a> *parent, const char *na
     combo1-&gt;insertItem( "No Echo", -1 );
     // ...and connect the activated() SIGNAL with the slotEchoChanged() SLOT to be able
     // to react when an item is selected
-    <a href="qobject.html#c2d209">connect</a>( combo1, SIGNAL( activated( int ) ), this, SLOT( <a href=#176>slotEchoChanged</a>( int ) ) );
+    <a href="qobject.html#c2d209">connect</a>( combo1, SIGNAL( activated( int ) ), this, SLOT( <a href=#190>slotEchoChanged</a>( int ) ) );
 
     // insert the first LineEdit
     lined1 = new <a href="qlineedit.html">QLineEdit</a>( this );
-    vbox-&gt;<a href="qboxlayout.html#219265">addWidget</a>( lined1 );
+    box-&gt;<a href="qboxlayout.html#219265">addWidget</a>( lined1 );
 
     // another widget which is used for layouting
-    <a href="qhboxlayout.html">QHBoxLayout</a> *row2 = new <a href="qhboxlayout.html">QHBoxLayout</a>( vbox );
+    <a href="qhboxlayout.html">QHBoxLayout</a> *row2 = new <a href="qhboxlayout.html">QHBoxLayout</a>( box );
     row2-&gt;<a href="qlayout.html#cd2c99">setMargin</a>( 5 );
 
     // and the second label
@@ -138,14 +141,14 @@ LineEdits::LineEdits( <a href="qwidget.html">QWidget</a> *parent, const char *na
     combo2-&gt;insertItem( "Integer Validator", -1 );
     combo2-&gt;insertItem( "Double Validator", -1 );
     // ...and again the activated() SIGNAL gets connected with a SLOT
-    <a href="qobject.html#c2d209">connect</a>( combo2, SIGNAL( activated( int ) ), this, SLOT( <a href=#177>slotValidatorChanged</a>( int ) ) );
+    <a href="qobject.html#c2d209">connect</a>( combo2, SIGNAL( activated( int ) ), this, SLOT( <a href=#191>slotValidatorChanged</a>( int ) ) );
 
     // and the second LineEdit
     lined2 = new <a href="qlineedit.html">QLineEdit</a>( this );
-    vbox-&gt;<a href="qboxlayout.html#219265">addWidget</a>( lined2 );
+    box-&gt;<a href="qboxlayout.html#219265">addWidget</a>( lined2 );
 
     // yet another widget which is used for layouting
-    <a href="qhboxlayout.html">QHBoxLayout</a> *row3 = new <a href="qhboxlayout.html">QHBoxLayout</a>( vbox );
+    <a href="qhboxlayout.html">QHBoxLayout</a> *row3 = new <a href="qhboxlayout.html">QHBoxLayout</a>( box );
     row3-&gt;<a href="qlayout.html#cd2c99">setMargin</a>( 5 );
 
     // we need a label for this too
@@ -159,11 +162,30 @@ LineEdits::LineEdits( <a href="qwidget.html">QWidget</a> *parent, const char *na
     combo3-&gt;insertItem( "Centered", -1 );
     combo3-&gt;insertItem( "Right", -1 );
     // ...and again the activated() SIGNAL gets connected with a SLOT
-    <a href="qobject.html#c2d209">connect</a>( combo3, SIGNAL( activated( int ) ), this, SLOT( <a href=#178>slotAlignmentChanged</a>( int ) ) );
+    <a href="qobject.html#c2d209">connect</a>( combo3, SIGNAL( activated( int ) ), this, SLOT( <a href=#192>slotAlignmentChanged</a>( int ) ) );
 
-    // and the lineedit
+    // and the third lineedit
     lined3 = new <a href="qlineedit.html">QLineEdit</a>( this );
-    vbox-&gt;<a href="qboxlayout.html#219265">addWidget</a>( lined3 );
+    box-&gt;<a href="qboxlayout.html#219265">addWidget</a>( lined3 );
+
+    // last widget used for layouting
+    <a href="qhbox.html">QHBox</a> *row4 = new <a href="qhbox.html">QHBox</a>( this );
+    box-&gt;<a href="qboxlayout.html#219265">addWidget</a>( row4 );
+    row4-&gt;<a href="qframe.html#ab991e">setMargin</a>( 5 );
+
+    // last label
+    (void)new <a href="qlabel.html">QLabel</a>( "Read-Only: ", row4 );
+
+    // A combo box for setting alignment
+    combo4 = new <a href="qcombobox.html">QComboBox</a>( FALSE, row4 );
+    combo4-&gt;insertItem( "False", -1 );
+    combo4-&gt;insertItem( "True", -1 );
+    // ...and again the activated() SIGNAL gets connected with a SLOT
+    <a href="qobject.html#c2d209">connect</a>( combo4, SIGNAL( activated( int ) ), this, SLOT( <a href=#193>slotReadOnlyChanged</a>( int ) ) );
+
+    // and the last lineedit
+    lined4 = new <a href="qlineedit.html">QLineEdit</a>( this );
+    box-&gt;<a href="qboxlayout.html#219265">addWidget</a>( lined4 );
 
     // give the first LineEdit the focus at the beginning
     lined1-&gt;setFocus();
@@ -177,7 +199,7 @@ LineEdits::LineEdits( <a href="qwidget.html">QWidget</a> *parent, const char *na
  * first LineEdit.
  */
 
-void <a name="176"></a>LineEdits::slotEchoChanged( int i )
+void <a name="190"></a>LineEdits::slotEchoChanged( int i )
 {
     switch ( i ) {
     case 0:
@@ -204,7 +226,7 @@ void <a name="176"></a>LineEdits::slotEchoChanged( int i )
  * ignored and not inserted into the lineedit.
  */
 
-void <a name="177"></a>LineEdits::slotValidatorChanged( int i )
+void <a name="191"></a>LineEdits::slotValidatorChanged( int i )
 {
     switch ( i ) {
     case 0:
@@ -227,11 +249,11 @@ void <a name="177"></a>LineEdits::slotValidatorChanged( int i )
  * SLOT slotAlignmentChanged( int i )
  *
  * i contains the number of the item which the user has been chosen in
- * the second Combobox.  According to this value, we set an alignment
+ * the third Combobox.  According to this value, we set an alignment
  * third LineEdit.
  */
 
-void <a name="178"></a>LineEdits::slotAlignmentChanged( int i )
+void <a name="192"></a>LineEdits::slotAlignmentChanged( int i )
 {
     switch ( i ) {
     case 0:
@@ -247,6 +269,27 @@ void <a name="178"></a>LineEdits::slotAlignmentChanged( int i )
 
     lined3-&gt;setFocus();
 }
+
+/*
+ * SLOT slotReadOnlyChanged( int i )
+ *
+ * i contains the number of the item which the user has been chosen in
+ * the fourth Combobox.  According to this value, we toggle read-only.
+ */
+
+void <a name="193"></a>LineEdits::slotReadOnlyChanged( int i )
+{
+    switch ( i ) {
+    case 0:
+        lined4-&gt;setReadOnly( FALSE );
+        break;
+    case 1:
+        lined4-&gt;setReadOnly( TRUE );
+        break;
+    }
+
+    lined4-&gt;setFocus();
+}
 </pre>
 
 
@@ -254,9 +297,9 @@ void <a name="178"></a>LineEdits::slotAlignmentChanged( int i )
 
   Main:
 <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/lineedits/main.cpp   2.1.1   edited 2000-04-03 $
+** &#36;Id&#58; qt/examples/lineedits/main.cpp   2.2.0   edited 2000-08-31 $
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -280,6 +323,6 @@ int main( int argc, char **argv )
 </pre>
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.1</div>
+<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.2.0</div>
 </table></div></address></body></html>

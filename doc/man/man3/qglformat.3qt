@@ -1,15 +1,15 @@
-.TH QGLFormat 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QGLFormat 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
 .ad l
 .nh
 .SH NAME
-QGLFormat \- The display format of an OpenGL rendering context [Qt OpenGL Extension]
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
+QGLFormat \- The display format of an OpenGL rendering context
+<h1 align=center>QGLFormat Class Reference
 .br
-.SH SYNOPSIS
+<small>[ OpenGL module ]</small></h1>
 .br
 .PP
 \fC#include <qgl.h>\fR
@@ -19,73 +19,73 @@ Inherits QGL.
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQGLFormat\fR ()"
+.BI "\fBQGLFormat\fR () "
 .br
 .ti -1c
-.BI "\fBQGLFormat\fR ( int " "options" ", int " "plane" " = 0 )"
+.BI "\fBQGLFormat\fR ( int " "options" ", int " "plane" " = 0 ) "
 .br
 .ti -1c
 .BI "bool \fBdoubleBuffer\fR () const"
 .br
 .ti -1c
-.BI "void \fBsetDoubleBuffer\fR ( bool enable )"
+.BI "void \fBsetDoubleBuffer\fR ( bool enable ) "
 .br
 .ti -1c
 .BI "bool \fBdepth\fR () const"
 .br
 .ti -1c
-.BI "void \fBsetDepth\fR ( bool enable )"
+.BI "void \fBsetDepth\fR ( bool enable ) "
 .br
 .ti -1c
 .BI "bool \fBrgba\fR () const"
 .br
 .ti -1c
-.BI "void \fBsetRgba\fR ( bool enable )"
+.BI "void \fBsetRgba\fR ( bool enable ) "
 .br
 .ti -1c
 .BI "bool \fBalpha\fR () const"
 .br
 .ti -1c
-.BI "void \fBsetAlpha\fR ( bool enable )"
+.BI "void \fBsetAlpha\fR ( bool enable ) "
 .br
 .ti -1c
 .BI "bool \fBaccum\fR () const"
 .br
 .ti -1c
-.BI "void \fBsetAccum\fR ( bool enable )"
+.BI "void \fBsetAccum\fR ( bool enable ) "
 .br
 .ti -1c
 .BI "bool \fBstencil\fR () const"
 .br
 .ti -1c
-.BI "void \fBsetStencil\fR ( bool enable )"
+.BI "void \fBsetStencil\fR ( bool enable ) "
 .br
 .ti -1c
 .BI "bool \fBstereo\fR () const"
 .br
 .ti -1c
-.BI "void \fBsetStereo\fR ( bool enable )"
+.BI "void \fBsetStereo\fR ( bool enable ) "
 .br
 .ti -1c
 .BI "bool \fBdirectRendering\fR () const"
 .br
 .ti -1c
-.BI "void \fBsetDirectRendering\fR ( bool enable )"
+.BI "void \fBsetDirectRendering\fR ( bool enable ) "
 .br
 .ti -1c
 .BI "bool \fBhasOverlay\fR () const"
 .br
 .ti -1c
-.BI "void \fBsetOverlay\fR ( bool enable )"
+.BI "void \fBsetOverlay\fR ( bool enable ) "
 .br
 .ti -1c
 .BI "int \fBplane\fR () const"
 .br
 .ti -1c
-.BI "void \fBsetPlane\fR ( int plane )"
+.BI "void \fBsetPlane\fR ( int plane ) "
 .br
 .ti -1c
-.BI "void \fBsetOption\fR ( FormatOption opt )"
+.BI "void \fBsetOption\fR ( FormatOption opt ) "
 .br
 .ti -1c
 .BI "bool \fBtestOption\fR ( FormatOption opt ) const"
@@ -94,22 +94,22 @@ Inherits QGL.
 .SS "Static Public Members"
 .in +1c
 .ti -1c
-.BI "QGLFormat \fBdefaultFormat\fR ()"
+.BI "QGLFormat \fBdefaultFormat\fR () "
 .br
 .ti -1c
-.BI "void \fBsetDefaultFormat\fR ( const QGLFormat & f )"
+.BI "void \fBsetDefaultFormat\fR ( const QGLFormat & f ) "
 .br
 .ti -1c
-.BI "QGLFormat \fBdefaultOverlayFormat\fR ()"
+.BI "QGLFormat \fBdefaultOverlayFormat\fR () "
 .br
 .ti -1c
-.BI "void \fBsetDefaultOverlayFormat\fR ( const QGLFormat & f )"
+.BI "void \fBsetDefaultOverlayFormat\fR ( const QGLFormat & f ) "
 .br
 .ti -1c
-.BI "bool \fBhasOpenGL\fR ()"
+.BI "bool \fBhasOpenGL\fR () "
 .br
 .ti -1c
-.BI "bool \fBhasOpenGLOverlays\fR ()"
+.BI "bool \fBhasOpenGLOverlays\fR () "
 .br
 .in -1c
 .SH RELATED FUNCTION DOCUMENTATION
@@ -120,8 +120,6 @@ Inherits QGL.
 .br
 .in -1c
 .SH DESCRIPTION
-This class is defined in the \fBQt OpenGL Extension\fR, which can be found in the \fCqt/extensions\fR directory. It is not included in the main Qt API.
-.PP
 The QGLFormat class specifies the display format of an OpenGL rendering context.
 .PP
 A display format has several characteristics:
@@ -201,7 +199,7 @@ After the widget has been created, you can test which of the requested features 
     }
 .fi
 .PP
-See also: QGLContext and QGLWidget.
+See also QGLContext and QGLWidget.
 .SH MEMBER FUNCTION DOCUMENTATION
 .SH "QGLFormat::QGLFormat ()"
 Constructs a QGLFormat object with the factory default settings:
@@ -259,21 +257,21 @@ This constructor makes it easy to specify a certain desired format in classes de
 .PP
 Note that there exists FormatOption values for both turning on and off all format settings, e.g. DepthBuffer and NoDepthBuffer, DirectRendering and IndirectRendering, etc.
 .PP
-See also: defaultFormat() and setOption().
+See also defaultFormat() and setOption().
 .SH "bool QGLFormat::accum () const"
 Returns TRUE if the accumulation buffer is enabled, otherwise FALSE. The accumulation buffer is disabled by default.
 .PP
-See also: setAccum().
+See also setAccum().
 .SH "bool QGLFormat::alpha () const"
 Returns TRUE if the alpha channel of the framebuffer is enabled, otherwise FALSE. The alpha channel is disabled by default.
 .PP
-See also: setAlpha().
+See also setAlpha().
 .SH "QGLFormat QGLFormat::defaultFormat () \fC[static]\fR"
 Returns the default QGLFormat for the application. All QGLWidgets that are created use this format unless anything else is specified.
 .PP
 If no special default format has been set using setDefaultFormat(), the default format is the same as that created with QGLFormat().
 .PP
-See also: setDefaultFormat().
+See also setDefaultFormat().
 .SH "QGLFormat QGLFormat::defaultOverlayFormat () \fC[static]\fR"
 Returns the default QGLFormat for overlay contexts.
 .PP
@@ -299,21 +297,21 @@ Overlay: Disabled.
 .TP
 Plane: 1 (i.e. first overlay plane).
 .PP
-See also: setDefaultFormat().
+See also setDefaultFormat().
 .SH "bool QGLFormat::depth () const"
 Returns TRUE if the depth buffer is enabled, otherwise FALSE. The depth buffer is enabled by default.
 .PP
-See also: setDepth().
+See also setDepth().
 .SH "bool QGLFormat::directRendering () const"
 Returns TRUE if direct rendering is enabled, otherwise FALSE.
 .PP
 Direct rendering is enabled by default.
 .PP
-See also: setDirectRendering().
+See also setDirectRendering().
 .SH "bool QGLFormat::doubleBuffer () const"
 Returns TRUE if double buffering is enabled, otherwise FALSE. Double buffering is enabled by default.
 .PP
-See also: setDoubleBuffer().
+See also setDoubleBuffer().
 .SH "bool QGLFormat::hasOpenGL () \fC[static]\fR"
 Returns TRUE if the window system has any OpenGL support, otherwise FALSE.
 .PP
@@ -327,15 +325,15 @@ Returns TRUE if overlay plane is enabled, otherwise FALSE.
 .PP
 Overlay is disabled by default.
 .PP
-See also: setOverlay().
+See also setOverlay().
 .SH "int QGLFormat::plane () const"
 Returns the plane of this format. Default for normal formats is 0, which means the normal plane; default for overlay formats is 1, which is the first overlay plane.
 .PP
-See also: setPlane().
+See also setPlane().
 .SH "bool QGLFormat::rgba () const"
 Returns TRUE if RGBA color mode is set, or FALSE if color index mode is set. The default color mode is RGBA.
 .PP
-See also: setRgba().
+See also setRgba().
 .SH "void QGLFormat::setAccum ( bool enable )"
 Enables the accumulation buffer if \fIenable\fR is TRUE, or disables it if \fIenable\fR is FALSE.
 .PP
@@ -343,7 +341,7 @@ The accumulation buffer is disabled by default.
 .PP
 The accumulation buffer is used for create blur effects and multiple exposures.
 .PP
-See also: accum().
+See also accum().
 .SH "void QGLFormat::setAlpha ( bool enable )"
 Enables the alpha channel of the framebuffer if \fIenable\fR is TRUE, or disables it if \fIenable\fR is FALSE.
 .PP
@@ -351,7 +349,7 @@ The alpha buffer is disabled by default.
 .PP
 The alpha channel is typically used for implementing transparency or translucency. The A in RGBA specifies the transparency of a pixel.
 .PP
-See also: alpha().
+See also alpha().
 .SH "void QGLFormat::setDefaultFormat ( const QGLFormat & f ) \fC[static]\fR"
 Sets a new default QGLFormat for the application. For example, to set single buffering as default instead of double buffering, your main() can contain:
 .PP
@@ -366,7 +364,7 @@ Sets a new default QGLFormat for the application. For example, to set single buf
     QGLFormat::setDefaultFormat( f );
 .fi
 .PP
-See also: defaultFormat().
+See also defaultFormat().
 .SH "void QGLFormat::setDefaultOverlayFormat ( const QGLFormat & f ) \fC[static]\fR"
 Sets a new default QGLFormat for overlay contexts. This format is used whenever a QGLWidget is created with a format with hasOverlay() enabled.
 .PP
@@ -381,7 +379,7 @@ For example, to get a double buffered overlay contexts (if available), the code 
     QGLFormat::setDefaultOverlayFormat( f );
 .fi
 .PP
-As ususal, you can test after the widget creation whether the underlying OpenGL system was able to provide the requested specification:
+As usual, you can test after the widget creation whether the underlying OpenGL system was able to provide the requested specification:
 .PP
 .nf
 .br
@@ -406,7 +404,7 @@ As ususal, you can test after the widget creation whether the underlying OpenGL 
     }
 .fi
 .PP
-See also: defaultOverlayFormat().
+See also defaultOverlayFormat().
 .SH "void QGLFormat::setDepth ( bool enable )"
 Enables the depth buffer if \fIenable\fR is TRUE, or disables it if \fIenable\fR is FALSE.
 .PP
@@ -414,7 +412,7 @@ The depth buffer is enabled by default.
 .PP
 The purpose of a depth buffer (or z-buffering) is to remove hidden surfaces. Pixels are assigned z values based on the distance to the viewer. A pixel with a high z value is closer to the viewer than a pixel with a low z value. This information is used to decide whether to draw a pixel or not.
 .PP
-See also: depth().
+See also depth().
 .SH "void QGLFormat::setDirectRendering ( bool enable )"
 Enables direct rendering if \fIenable\fR is TRUE, or disables it if \fIenable\fR is FALSE.
 .PP
@@ -422,31 +420,31 @@ Direct rendering is enabled by default.
 .PP
 Enabling this option will make OpenGL bypass the underlying window system and render directly from hardware to the screen, if this is supported by the system.
 .PP
-See also: directRendering().
+See also directRendering().
 .SH "void QGLFormat::setDoubleBuffer ( bool enable )"
-Sets double buffering if \fIenable\fR is TRUE og single buffering if \fIenable\fR is FALSE.
+Sets double buffering if \fIenable\fR is TRUE or single buffering if \fIenable\fR is FALSE.
 .PP
 Double buffering is enabled by default.
 .PP
 Double buffering is a technique where graphics is rendered to an off-screen buffer and not directly to the screen. When the drawing has been completed, the program calls a swapBuffers function to exchange the screen contents with the buffer. The result is flicker-free drawing and often better performance.
 .PP
-See also: doubleBuffer(), QGLContext::swapBuffers() and QGLWidget::swapBuffers().
+See also doubleBuffer(), QGLContext::swapBuffers() and QGLWidget::swapBuffers().
 .SH "void QGLFormat::setOption ( FormatOption opt )"
 Sets the option \fIopt.\fR
 .PP
-See also: testOption().
+See also testOption().
 .SH "void QGLFormat::setOverlay ( bool enable )"
 Enables an overlay plane if \fIenable\fR is TRUE; otherwise disables it.
 .PP
 Enabling the overlay plane will cause QGLWidget to create an additional context in an overlay plane. See the QGLWidget documentation for further information.
 .PP
-See also: hasOverlay().
+See also hasOverlay().
 .SH "void QGLFormat::setPlane ( int plane )"
 Sets the requested plane. 0 is the normal plane, 1 is the first overlay plane, 2 is the second overlay plane, etc., and -1, -2, etc. are underlay planes.
 .PP
 Note that, in contrast to the other format specifications, the plane specifications will be matched exactly. Thus, if you specify a plane that the underlying OpenGL system cannot provide, an invalid QGLWidget will be created.
 .PP
-See also: plane().
+See also plane().
 .SH "void QGLFormat::setRgba ( bool enable )"
 Sets RGBA mode if \fIenable\fR is TRUE, or color index mode if \fIenable\fR is FALSE.
 .PP
@@ -456,7 +454,7 @@ RGBA is the preferred mode for most OpenGL applications. In RGBA color mode you 
 .PP
 In color index mode you specify an index into a color lookup table.
 .PP
-See also: rgba().
+See also rgba().
 .SH "void QGLFormat::setStencil ( bool enable )"
 Enables the stencil buffer if \fIenable\fR is TRUE, or disables it if \fIenable\fR is FALSE.
 .PP
@@ -464,7 +462,7 @@ The stencil buffer is disabled by default.
 .PP
 The stencil buffer masks away drawing from certain parts of the screen.
 .PP
-See also: stencil().
+See also stencil().
 .SH "void QGLFormat::setStereo ( bool enable )"
 Enables stereo buffering if \fIenable\fR is TRUE, or disables it if \fIenable\fR is FALSE.
 .PP
@@ -472,19 +470,19 @@ Stereo buffering is disabled by default.
 .PP
 Stereo buffering provides extra color buffers to generate left-eye and right-eye images.
 .PP
-See also: stereo().
+See also stereo().
 .SH "bool QGLFormat::stencil () const"
 Returns TRUE if the stencil buffer is enabled, otherwise FALSE. The stencil buffer is disabled by default.
 .PP
-See also: setStencil().
+See also setStencil().
 .SH "bool QGLFormat::stereo () const"
 Returns TRUE if stereo buffering is enabled, otherwise FALSE. Stereo buffering is disabled by default.
 .PP
-See also: setStereo().
+See also setStereo().
 .SH "bool QGLFormat::testOption ( FormatOption opt ) const"
 Returns TRUE if format option \fIopt\fR is set, otherwise FALSE.
 .PP
-See also: setOption().
+See also setOption().
 .SH RELATED FUNCTION DOCUMENTATION
 .SH "const char * qGLVersion ()"
 Returns the version number string for the Qt OpenGL extension,
@@ -492,7 +490,7 @@ e.g. "1.0".
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qglformat.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

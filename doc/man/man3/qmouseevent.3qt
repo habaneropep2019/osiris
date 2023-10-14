@@ -1,5 +1,5 @@
-.TH QMouseEvent 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QMouseEvent 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QMouseEvent \- Parameters that describe a mouse event
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -19,10 +17,10 @@ Inherits QEvent.
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQMouseEvent\fR ( Type " "type" ", const QPoint & " "pos" ", int " "button" ", int state )"
+.BI "\fBQMouseEvent\fR ( Type " "type" ", const QPoint & " "pos" ", int " "button" ", int state ) "
 .br
 .ti -1c
-.BI "\fBQMouseEvent\fR ( Type " "type" ", const QPoint & " "pos" ", const QPoint & " "globalPos" ", int " "button" ", int state )"
+.BI "\fBQMouseEvent\fR ( Type " "type" ", const QPoint & " "pos" ", const QPoint & " "globalPos" ", int " "button" ", int state ) "
 .br
 .ti -1c
 .BI "const QPoint& \fBpos\fR () const"
@@ -67,7 +65,7 @@ The QWidget::setEnable() function can be used to enable or disable mouse and key
 .PP
 The event handlers QWidget::mousePressEvent(), QWidget::mouseReleaseEvent(), QWidget::mouseDoubleClickEvent() and QWidget::mouseMoveEvent() receive mouse events.
 .PP
-See also: QWidget::setMouseTracking(), QWidget::grabMouse() and QCursor::pos().
+See also QWidget::setMouseTracking(), QWidget::grabMouse() and QCursor::pos().
 .PP
 Examples:
 .(l
@@ -79,15 +77,15 @@ Constructs a mouse event object.
 .PP
 The \fItype\fR parameter must be \fCQEvent::MouseButtonPress, QEvent::MouseButtonRelease, QEvent::MouseButtonDblClick\fR or \fCQEvent::MouseMove.\fR
 .PP
-The \fIpos\fR parameter specifies the position relative to the receiving widget; \fIglobalPos\fR gives the position in absolute coordinates; \fIbutton\fR specifies the ButtonState of the button that caused the event, it should be 0 if \fItype\fR is \fCMouseMove;\fR and \fIstate\fR is the ButtonState at the time of the event.
+The \fIpos\fR parameter specifies the position relative to the receiving widget; \fIglobalPos\fR is the position in absolute coordinates; \fIbutton\fR specifies the ButtonState of the button that caused the event, which should be 0 if \fItype\fR is \fCMouseMove;\fR and \fIstate\fR is the ButtonState at the time of the event.
 .SH "QMouseEvent::QMouseEvent ( Type type, const QPoint & pos, int button, int state )"
 Constructs a mouse event object.
 .PP
-The \fItype\fR parameter must be \fCQEvent::MouseButtonPress, QEvent::MouseButtonRelease, QEvent::MouseButtonDblClick\fR or \fCQEvent::MouseMove.\fR
+The \fItype\fR parameter must be one of \fCQEvent::MouseButtonPress, QEvent::MouseButtonRelease, QEvent::MouseButtonDblClick\fR or \fCQEvent::MouseMove.\fR
 .PP
-The \fIpos\fR parameter specifies the position relative to the receiving widget; \fIbutton\fR specifies the ButtonState of the button that caused the event, it should be 0 if \fItype\fR is \fCMouseMove;\fR and \fIstate\fR is the ButtonState at the time of the event.
+The \fIpos\fR parameter specifies the position relative to the receiving widget; \fIbutton\fR specifies the ButtonState of the button that caused the event, which should be 0 if \fItype\fR is \fCMouseMove;\fR \fIstate\fR is the ButtonState at the time of the event.
 .PP
-The globalPos() is initialized to QCursor::pos(), which may not be appropriate. Use the other constructor to specify the global position explicitely.
+The globalPos() is initialized to QCursor::pos(), which may not be appropriate. Use the other constructor to specify the global position explicitly.
 .SH "ButtonState QMouseEvent::button () const"
 Returns the button that caused the event.
 .PP
@@ -95,7 +93,7 @@ Possible return values are \fCLeftButton, RightButton, MidButton\fR and \fCNoBut
 .PP
 Note that the returned value is always \fCNoButton\fR (0) for mouse move events.
 .PP
-See also: state().
+See also state().
 .PP
 Examples:
 .(l
@@ -104,21 +102,21 @@ movies/main.cpp
 .SH "const QPoint & QMouseEvent::globalPos () const"
 Returns the global position of the mouse pointer \fIat the time\fR of the event. This is important on asynchronous window systems like X11: Whenever you move your widgets around in response to mouse evens, globalPos() can differ a lot from the current pointer position QCursor::pos(), and from \fC QWidget::mapToGlobal( pos() ) \fR.
 .PP
-See also: globalX() and globalY().
+See also globalX() and globalY().
 .SH "int QMouseEvent::globalX () const"
 Returns the global X position of the mouse pointer at the time of the event
 .PP
-See also: globalY() and globalPos().
+See also globalY() and globalPos().
 .SH "int QMouseEvent::globalY () const"
 Returns the global Y position of the mouse pointer at the time of the event
 .PP
-See also: globalX() and globalPos().
+See also globalX() and globalPos().
 .SH "const QPoint & QMouseEvent::pos () const"
 Returns the position of the mouse pointer, relative to the widget that received the event.
 .PP
 If you move the widget as a result of the mouse event, use the global position returned by globalPos() to avoid a shaking motion.
 .PP
-See also: x(), y() and globalPos().
+See also x(), y() and globalPos().
 .PP
 Examples:
 .(l
@@ -133,7 +131,7 @@ This value is mainly interesting for \fCQEvent::MouseMove,\fR for the other case
 .PP
 The returned value is \fCLeftButton, RightButton, MidButton, ShiftButton, ControlButton\fR and \fCAltButton\fR OR'ed together.
 .PP
-See also: button() and stateAfter().
+See also button() and stateAfter().
 .PP
 Examples:
 .(l
@@ -142,11 +140,11 @@ movies/main.cpp
 .SH "ButtonState QMouseEvent::stateAfter () const"
 Returns the state of buttons after the event.
 .PP
-See also: state().
+See also state().
 .SH "int QMouseEvent::x () const"
 Returns the X position of the mouse pointer, relative to the widget that received the event.
 .PP
-See also: y() and pos().
+See also y() and pos().
 .PP
 Examples:
 .(l
@@ -155,7 +153,7 @@ scrollview/scrollview.cpp
 .SH "int QMouseEvent::y () const"
 Returns the Y position of the mouse pointer, relative to the widget that received the event.
 .PP
-See also: x() and pos().
+See also x() and pos().
 .PP
 Examples:
 .(l
@@ -164,7 +162,7 @@ scrollview/scrollview.cpp
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qmouseevent.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

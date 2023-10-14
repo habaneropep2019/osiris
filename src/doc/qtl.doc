@@ -1,35 +1,42 @@
 /****************************************************************************
-** $Id: qt/doc/qtl.doc   2.1.1   edited 2000-05-18 $
+** $Id: qt/doc/qtl.doc   2.2.0   edited 2000-08-25 $
 **
 ** Qt template library classes documentation
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 /*!
 \page qtl.html
 
-<title>Qt Template library</title>
-</head><body bgcolor="#ffffff">
-
-\postheader
-
-<h1 align=center>Qt Template Library</h1><br clear="all">
+\title Qt Template library
 
 Thq Qt Template Library is a set of templates within Qt dealing with
 containers of objects.  It provides a list of objects, a stack of
@@ -44,7 +51,7 @@ code, can often be a bit faster, require that the objects stored can
 be copied, and finally, have a worse record of compiler problems.
 
 Compared to the STL, the QTL contains only the most important features
-of the STL, has more regular funcion naming, has no platform
+of the STL, has more regular function naming, has no platform
 differences, is often a little slower and often expands to less object
 code.
 
@@ -79,7 +86,7 @@ The Qt template library is designed for speed. Especially iterators
 are extremely fast. On the drawback side, less error checking is done
 than in the QCollection based containers. A template library container
 for example does not track associated iterators. This makes certain
-validy checks, like on removing items, impossible to perform
+validity checks, like on removing items, impossible to perform
 automatically.
 
 <h2> Iterators </h2>
@@ -193,7 +200,7 @@ illustrates this:
 
 At the end of this code fragment, the List l1 contains "Torben",
 "Matthias", "Arnt" and "Sue", with the prior contents being
-overwritten. Another flavour of qCopy() takes three arguments to make
+overwritten. Another flavor of qCopy() takes three arguments to make
 it possible to copy a slice of a container:
 
 \code

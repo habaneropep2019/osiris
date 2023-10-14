@@ -1,5 +1,5 @@
-.TH QWhatsThis 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QWhatsThis 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QWhatsThis \- Simple description of any widget, e.g. answering the question "what's this?"
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -19,37 +17,37 @@ Inherits Qt.
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQWhatsThis\fR ( QWidget * )"
+.BI "\fBQWhatsThis\fR ( QWidget * ) "
 .br
 .ti -1c
-.BI "virtual \fB~QWhatsThis\fR ()"
+.BI "virtual \fB~QWhatsThis\fR () "
 .br
 .ti -1c
-.BI "virtual QString \fBtext\fR ( const QPoint & )"
+.BI "virtual QString \fBtext\fR ( const QPoint & ) "
 .br
 .in -1c
 .SS "Static Public Members"
 .in +1c
 .ti -1c
-.BI "void \fBadd\fR ( QWidget *, const QString & )"
+.BI "void \fBadd\fR ( QWidget *, const QString & ) "
 .br
 .ti -1c
-.BI "void \fBremove\fR ( QWidget * )"
+.BI "void \fBremove\fR ( QWidget * ) "
 .br
 .ti -1c
-.BI "QString \fBtextFor\fR ( QWidget *, const QPoint & pos = QPoint ())"
+.BI "QString \fBtextFor\fR ( QWidget *, const QPoint & pos = QPoint ()) "
 .br
 .ti -1c
-.BI "QToolButton* \fBwhatsThisButton\fR ( QWidget * parent )"
+.BI "QToolButton* \fBwhatsThisButton\fR ( QWidget * parent ) "
 .br
 .ti -1c
-.BI "void \fBenterWhatsThisMode\fR ()"
+.BI "void \fBenterWhatsThisMode\fR () "
 .br
 .ti -1c
-.BI "bool \fBinWhatsThisMode\fR ()"
+.BI "bool \fBinWhatsThisMode\fR () "
 .br
 .ti -1c
-.BI "void \fBleaveWhatsThisMode\fR ( const QString & = QString::null, const QPoint & pos = QCursor::pos ())"
+.BI "void \fBleaveWhatsThisMode\fR ( const QString & = QString::null, const QPoint & pos = QCursor::pos ()) "
 .br
 .in -1c
 .SH DESCRIPTION
@@ -75,7 +73,7 @@ If your widget needs even more control, see QWidget::customWhatsThis().
 .PP
 To remove added text, you can use QWhatsThis::remove(), but since the text is automatically removed when the widget is destroyed, this is rarely needed.
 .PP
-See also: QToolTip.
+See also QToolTip.
 .SH MEMBER FUNCTION DOCUMENTATION
 .SH "QWhatsThis::QWhatsThis ( QWidget * widget )"
 Constructs a dynamic \fIWhat's This\fR object for \fIwidget.\fR
@@ -88,7 +86,7 @@ Adds \fItext\fR as \fIWhat's This\fR help for \fIwidget.\fR If the text is rich 
 .PP
 The text is destroyed if the widget is later destroyed and so need not be explicitly removed.
 .PP
-See also: remove().
+See also remove().
 .SH "void QWhatsThis::enterWhatsThisMode () \fC[static]\fR"
 Enters \fIWhat's This\fR? mode and returns immediately.
 .PP
@@ -96,11 +94,11 @@ Qt will install a special cursor and take over mouse input until the user clicks
 .PP
 The user can also use the Escape key to leave \fIWhat's This\fR? mode.
 .PP
-See also: inWhatsThisMode() and leaveWhatsThisMode().
+See also inWhatsThisMode() and leaveWhatsThisMode().
 .SH "bool QWhatsThis::inWhatsThisMode () \fC[static]\fR"
 Returns whether the application is in \fIWhat's This\fR mode.
 .PP
-See also: enterWhatsThisMode() and leaveWhatsThisMode().
+See also enterWhatsThisMode() and leaveWhatsThisMode().
 .SH "void QWhatsThis::leaveWhatsThisMode ( const QString & text = QString::null, const QPoint & pos = QCursor::pos ()) \fC[static]\fR"
 Leaves \fIWhat's This\fR? question mode
 .PP
@@ -108,11 +106,11 @@ This function is used internally by widgets that support QWidget::customWhatsThi
 .PP
 If \fItext\fR is not a null string, then a \fIWhat's This\fR help window is displayed at the global screen position \fIpos.\fR
 .PP
-See also: inWhatsThisMode() and enterWhatsThisMode().
+See also inWhatsThisMode() and enterWhatsThisMode().
 .SH "void QWhatsThis::remove ( QWidget * widget ) \fC[static]\fR"
 Removes the \fIWhat's This\fR help for \fIwidget.\fR This happens automatically if the widget is destroyed.
 .PP
-See also: add().
+See also add().
 .SH "QString QWhatsThis::text ( const QPoint & ) \fC[virtual]\fR"
 This virtual functions returns the text for position \fIp\fR in the widget that this \fIWhat's This\fR object documents. If there is no \fIWhat's This\fR text for a position, QString::null is returned.
 .PP
@@ -120,7 +118,7 @@ The default implementation returns QString::null.
 .SH "QString QWhatsThis::textFor ( QWidget * widget, const QPoint & pos = QPoint ()) \fC[static]\fR"
 Returns the text for \fIwidget,\fR or a null string if there is no \fIWhat's This\fR help for \fIwidget.\fR
 .PP
-See also: add().
+See also add().
 .SH "QToolButton * QWhatsThis::whatsThisButton ( QWidget * parent ) \fC[static]\fR"
 Creates a QToolButton pre-configured to enter \fIWhat's This\fR mode when clicked. You will often use this with a toolbar:
 .PP
@@ -131,7 +129,7 @@ Creates a QToolButton pre-configured to enter \fIWhat's This\fR mode when clicke
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qwhatsthis.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

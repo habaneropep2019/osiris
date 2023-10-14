@@ -1,5 +1,5 @@
-.TH QNPInstance 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QNPInstance 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QNPInstance \- A QObject that is a Web-browser plugin [Qt NSPlugin Extension]
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -19,7 +17,7 @@ Inherits QObject.
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fB~QNPInstance\fR ()"
+.BI "\fB~QNPInstance\fR () "
 .br
 .ti -1c
 .BI "int \fBargc\fR () const"
@@ -46,61 +44,61 @@ Inherits QObject.
 .BI "const char* \fBuserAgent\fR () const"
 .br
 .ti -1c
-.BI "virtual QNPWidget* \fBnewWindow\fR ()"
+.BI "virtual QNPWidget* \fBnewWindow\fR () "
 .br
 .ti -1c
-.BI "QNPWidget* \fBwidget\fR ()"
+.BI "QNPWidget* \fBwidget\fR () "
 .br
 .ti -1c
 .BI "enum \fBStreamMode\fR { Normal=1, Seek=2, AsFile=3, AsFileOnly=4 }"
 .br
 .ti -1c
-.BI "virtual bool \fBnewStreamCreated\fR ( QNPStream *, StreamMode & smode )"
+.BI "virtual bool \fBnewStreamCreated\fR ( QNPStream *, StreamMode & smode ) "
 .br
 .ti -1c
-.BI "virtual int \fBwriteReady\fR ( QNPStream * )"
+.BI "virtual int \fBwriteReady\fR ( QNPStream * ) "
 .br
 .ti -1c
-.BI "virtual int \fBwrite\fR ( QNPStream *, int " "offset" ", int " "len" ", void * buffer )"
+.BI "virtual int \fBwrite\fR ( QNPStream *, int " "offset" ", int " "len" ", void * buffer ) "
 .br
 .ti -1c
-.BI "virtual void \fBstreamDestroyed\fR ( QNPStream * )"
+.BI "virtual void \fBstreamDestroyed\fR ( QNPStream * ) "
 .br
 .ti -1c
-.BI "void \fBstatus\fR ( const char * msg )"
+.BI "void \fBstatus\fR ( const char * msg ) "
 .br
 .ti -1c
-.BI "void \fBgetURLNotify\fR ( const char * " "url" ", const char * " "window" "=0, void * " "data" "=0 )"
+.BI "void \fBgetURLNotify\fR ( const char * " "url" ", const char * " "window" "=0, void * " "data" "=0 ) "
 .br
 .ti -1c
-.BI "void \fBgetURL\fR ( const char * " "url" ", const char * " "window" "=0 )"
+.BI "void \fBgetURL\fR ( const char * " "url" ", const char * " "window" "=0 ) "
 .br
 .ti -1c
-.BI "void \fBpostURL\fR ( const char * " "url" ", const char * " "window" ", uint " "len" ", const char * " "buf" ", bool file )"
+.BI "void \fBpostURL\fR ( const char * " "url" ", const char * " "window" ", uint " "len" ", const char * " "buf" ", bool file ) "
 .br
 .ti -1c
-.BI "QNPStream* \fBnewStream\fR ( const char * " "mimetype" ", const char * " "window" ", bool " "as_file" "=FALSE )"
+.BI "QNPStream* \fBnewStream\fR ( const char * " "mimetype" ", const char * " "window" ", bool " "as_file" "=FALSE ) "
 .br
 .ti -1c
-.BI "virtual void \fBstreamAsFile\fR ( QNPStream *, const char * fname )"
+.BI "virtual void \fBstreamAsFile\fR ( QNPStream *, const char * fname ) "
 .br
 .ti -1c
 .BI "void* \fBgetJavaPeer\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBnotifyURL\fR ( const char * " "url" ", Reason " "r" ", void * notifyData )"
+.BI "virtual void \fBnotifyURL\fR ( const char * " "url" ", Reason " "r" ", void * notifyData ) "
 .br
 .ti -1c
-.BI "virtual bool \fBprintFullPage\fR ()"
+.BI "virtual bool \fBprintFullPage\fR () "
 .br
 .ti -1c
-.BI "virtual void \fBprint\fR ( QPainter * )"
+.BI "virtual void \fBprint\fR ( QPainter * ) "
 .br
 .in -1c
 .SS "Protected Members"
 .in +1c
 .ti -1c
-.BI "\fBQNPInstance\fR ()"
+.BI "\fBQNPInstance\fR () "
 .br
 .in -1c
 .SH DESCRIPTION
@@ -138,7 +136,7 @@ Returns the value of the named arguments, or 0 if no argument with that name app
 .SH "int QNPInstance::argc () const"
 Returns the number of arguments to the instance. Note that you should not normally rely on the ordering of arguments, and also note that the SGML specification does not permit multiple arguments with the same name.
 .PP
-See also: arg().
+See also arg().
 .SH "const char* QNPInstance::argn ( int i ) const"
 Returns the name of the \fIi\fRth argument. See notes of argc().
 .SH "const char* QNPInstance::argv ( int i ) const"
@@ -148,7 +146,7 @@ Returns the Java object associated with the plug-in instance, an object of the p
 .PP
 The return value is actually a \fCjref\fR we use \fCvoid*\fR so as to avoid burdening plugins which do not require Java.
 .PP
-See also: QNPlugin::getJavaClass(), QNPlugin::getJavaEnv() and getJavaPeer().
+See also QNPlugin::getJavaClass(), QNPlugin::getJavaEnv() and getJavaPeer().
 .SH "void QNPInstance::getURL ( const char * url, const char * window=0 )"
 Requests that the given URL be retrieved and sent to the named window. See Netscape's JavaScript documentation for an explanation of window names.
 .PP
@@ -187,7 +185,7 @@ Sets the status message in the browser containing this instance.
 .SH "void QNPInstance::streamAsFile ( QNPStream *, const char * ) \fC[virtual]\fR"
 Called when a stream is delivered as a single file rather than as chunks. This may be simpler for a plugin to deal with, but precludes any incremental behavior.
 .PP
-See also: newStreamCreated(), newStream(), Note, that, the, AsFileOnly, method, is, not, supported, by, Netscape, 2.0, MS-Explorer and 3.0.
+See also newStreamCreated(), newStream(), Note, that, the, AsFileOnly, method, is, not, supported, by, Netscape, 2.0, MS-Explorer and 3.0.
 .SH "void QNPInstance::streamDestroyed ( QNPStream * ) \fC[virtual]\fR"
 Called when a stream is destroyed. At this this, the stream may be complete() and okay(). If it is not okay(), then an error has occurred. If it is okay(), but not complete(), then the user has cancelled the transmission - do not give an error message in this case.
 .SH "const char* QNPInstance::userAgent () const"
@@ -210,7 +208,7 @@ The default returns a very large value.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qnpinstance.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

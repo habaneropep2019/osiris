@@ -1,5 +1,5 @@
-.TH QLCDNumber 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QLCDNumber 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QLCDNumber \- Displays a number with LCD-like digits
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -19,13 +17,13 @@ Inherits QFrame.
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQLCDNumber\fR ( QWidget * " "parent" "=0, const char * " "name" "=0 )"
+.BI "\fBQLCDNumber\fR ( QWidget * " "parent" "=0, const char * " "name" "=0 ) "
 .br
 .ti -1c
-.BI "\fBQLCDNumber\fR ( uint " "numDigits" ", QWidget * " "parent" "=0, const char * " "name" "=0 )"
+.BI "\fBQLCDNumber\fR ( uint " "numDigits" ", QWidget * " "parent" "=0, const char * " "name" "=0 ) "
 .br
 .ti -1c
-.BI "\fB~QLCDNumber\fR ()"
+.BI "\fB~QLCDNumber\fR () "
 .br
 .ti -1c
 .BI "enum \fBMode\fR { Hex, HEX=Hex, Dec, DEC=Dec, Oct, OCT=Oct, Bin, BIN=Bin }"
@@ -40,7 +38,7 @@ Inherits QFrame.
 .BI "int \fBnumDigits\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetNumDigits\fR ( int nDigits )"
+.BI "virtual void \fBsetNumDigits\fR ( int nDigits ) "
 .br
 .ti -1c
 .BI "bool \fBcheckOverflow\fR ( double num ) const"
@@ -52,13 +50,13 @@ Inherits QFrame.
 .BI "Mode \fBmode\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetMode\fR ( Mode )"
+.BI "virtual void \fBsetMode\fR ( Mode ) "
 .br
 .ti -1c
 .BI "SegmentStyle \fBsegmentStyle\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetSegmentStyle\fR ( SegmentStyle )"
+.BI "virtual void \fBsetSegmentStyle\fR ( SegmentStyle ) "
 .br
 .ti -1c
 .BI "double \fBvalue\fR () const"
@@ -70,40 +68,40 @@ Inherits QFrame.
 .SS "Public Slots"
 .in +1c
 .ti -1c
-.BI "void \fBdisplay\fR ( int num )"
+.BI "void \fBdisplay\fR ( int num ) "
 .br
 .ti -1c
-.BI "void \fBdisplay\fR ( double num )"
+.BI "void \fBdisplay\fR ( double num ) "
 .br
 .ti -1c
-.BI "void \fBdisplay\fR ( const QString & str )"
+.BI "void \fBdisplay\fR ( const QString & str ) "
 .br
 .ti -1c
-.BI "virtual void \fBsetHexMode\fR ()"
+.BI "virtual void \fBsetHexMode\fR () "
 .br
 .ti -1c
-.BI "virtual void \fBsetDecMode\fR ()"
+.BI "virtual void \fBsetDecMode\fR () "
 .br
 .ti -1c
-.BI "virtual void \fBsetOctMode\fR ()"
+.BI "virtual void \fBsetOctMode\fR () "
 .br
 .ti -1c
-.BI "virtual void \fBsetBinMode\fR ()"
+.BI "virtual void \fBsetBinMode\fR () "
 .br
 .ti -1c
-.BI "virtual void \fBsetSmallDecimalPoint\fR ( bool )"
+.BI "virtual void \fBsetSmallDecimalPoint\fR ( bool ) "
 .br
 .in -1c
 .SS "Signals"
 .in +1c
 .ti -1c
-.BI "void \fBoverflow\fR ()"
+.BI "void \fBoverflow\fR () "
 .br
 .in -1c
 .SS "Protected Members"
 .in +1c
 .ti -1c
-.BI "virtual void \fBdrawContents\fR ( QPainter * )"
+.BI "virtual void \fBdrawContents\fR ( QPainter * ) "
 .br
 .in -1c
 .SS "Properties"
@@ -125,7 +123,7 @@ Incidentally, QLCDNumber is the very oldest part of Qt, tracing back to a BASIC 
 .PP
 <img src=qlcdnum-m.png> <img src=qlcdnum-w.png>
 .PP
-See also: QLabel and QFrame.
+See also QLabel and QFrame.
 .PP
 Examples:
 .(l
@@ -156,27 +154,27 @@ Constructs an LCD number, sets the number of digits to 5, the base to decimal, t
 .PP
 The \fIparent\fR and \fIname\fR arguments are passed to the QFrame constructor.
 .PP
-See also: setNumDigits() and setSmallDecimalPoint().
+See also setNumDigits() and setSmallDecimalPoint().
 .SH "QLCDNumber::QLCDNumber ( uint numDigits, QWidget * parent=0, const char * name=0 )"
 Constructs an LCD number, sets the number of digits to \fInumDigits,\fR the base to decimal, the decimal point mode to 'small' and the frame style to a raised box. The segmentStyle() is set to \fCOutline.\fR
 .PP
 The \fIparent\fR and \fIname\fR arguments are passed to the QFrame constructor.
 .PP
-See also: setNumDigits() and setSmallDecimalPoint().
+See also setNumDigits() and setSmallDecimalPoint().
 .SH "QLCDNumber::~QLCDNumber ()"
 Destructs the LCD number.
 .SH "bool QLCDNumber::checkOverflow ( double num ) const"
 Returns TRUE if \fInum\fR is too big to be displayed in its entirety, FALSE otherwise.
 .PP
-See also: display(), numDigits() and smallDecimalPoint().
+See also display(), numDigits() and smallDecimalPoint().
 .SH "bool QLCDNumber::checkOverflow ( int num ) const"
 Returns TRUE if \fInum\fR is too big to be displayed in its entirety, FALSE otherwise.
 .PP
-See also: display(), numDigits() and smallDecimalPoint().
+See also display(), numDigits() and smallDecimalPoint().
 .SH "void QLCDNumber::display ( int num ) \fC[slot]\fR"
 Sets the contents of the display to \fInum.\fR
 .PP
-See also: setMode() and smallDecimalPoint().
+See also setMode() and smallDecimalPoint().
 .PP
 Examples:
 .(l
@@ -199,15 +197,15 @@ Returns the last value set by one of the display() slots rounded to the nearest 
 .PP
 If display(QString ) was the last called, 0 is returned.
 .PP
-See also: value() and display().
+See also value() and display().
 .SH "QLCDNumber::Mode QLCDNumber::mode() const"
 Returns the current display mode, which is one of \fCBIN, OCT, DEC\fR and \fCHEX.\fR
 .PP
-See also: setMode() and smallDecimalPoint().
+See also setMode() and smallDecimalPoint().
 .SH "int QLCDNumber::numDigits () const"
 Returns the current number of digits. If smallDecimalPoint() is FALSE, the decimal point occupies one digit position.
 .PP
-See also: setNumDigits() and smallDecimalPoint().
+See also setNumDigits() and smallDecimalPoint().
 .SH "void QLCDNumber::overflow () \fC[signal]\fR"
 This signal is emitted whenever the QLCDNumber is asked to display a too large number or a too long string.
 .PP
@@ -215,19 +213,19 @@ It is never emitted by setNumDigits().
 .SH "QLCDNumber::SegmentStyle QLCDNumber::segmentStyle() const"
 Returns the style of the QLCDNumber.
 .PP
-See also: setSegmentStyle().
+See also setSegmentStyle().
 .SH "void QLCDNumber::setBinMode () \fC[virtual slot]\fR"
 Calls setMode( BIN ). Provided for convenience (e.g. for connecting buttons to this).
 .PP
-See also: setMode(), setHexMode(), setDecMode(), setOctMode() and mode().
+See also setMode(), setHexMode(), setDecMode(), setOctMode() and mode().
 .SH "void QLCDNumber::setDecMode () \fC[virtual slot]\fR"
 Calls setMode( DEC ). Provided for convenience (e.g. for connecting buttons to this).
 .PP
-See also: setMode(), setHexMode(), setOctMode(), setBinMode() and mode().
+See also setMode(), setHexMode(), setOctMode(), setBinMode() and mode().
 .SH "void QLCDNumber::setHexMode () \fC[virtual slot]\fR"
 Calls setMode( HEX ). Provided for convenience (e.g. for connecting buttons to this).
 .PP
-See also: setMode(), setDecMode(), setOctMode(), setBinMode() and mode().
+See also setMode(), setDecMode(), setOctMode(), setBinMode() and mode().
 .SH "void QLCDNumber::setMode ( Mode m )"
 Sets the display mode to \fIm,\fR which must be one of \fCBIN, OCT, DEC\fR and \fCHEX.\fR All four modes can display both integers, floating-point numbers and strings (subject to character set limitations).
 .PP
@@ -238,17 +236,17 @@ Example:
     myLcd.setMode( QLCDNumber::HEX );
 .fi
 .PP
-See also: mode(), setHexMode(), setDecMode(), setOctMode(), setBinMode(), setSmallDecimalPoint() and display().
+See also mode(), setHexMode(), setDecMode(), setOctMode(), setBinMode(), setSmallDecimalPoint() and display().
 .SH "void QLCDNumber::setNumDigits ( int numDigits ) \fC[virtual]\fR"
 Sets the number of digits shown to \fInumDigits,\fR which is forced into the [0-99] range.
 .PP
 If smallDecimalPoint() is TRUE, \fInumDigits\fR can be shown. If it is FALSE, only \fInumDigits-1\fR digits can be shown.
 .PP
-See also: numDigits(), setMode(), setSmallDecimalPoint() and overflow().
+See also numDigits(), setMode(), setSmallDecimalPoint() and overflow().
 .SH "void QLCDNumber::setOctMode () \fC[virtual slot]\fR"
 Calls setMode( OCT ). Provided for convenience (e.g. for connecting buttons to this).
 .PP
-See also: setMode(), setHexMode(), setDecMode(), setBinMode() and mode().
+See also setMode(), setHexMode(), setDecMode(), setBinMode() and mode().
 .SH "void QLCDNumber::setSegmentStyle ( SegmentStyle s )"
 Sets the style of the QLCDNumber to \fIs.\fR
 .TP
@@ -260,13 +258,13 @@ Sets the style of the QLCDNumber to \fIs.\fR
 .PP
 \fCOutline\fR and \fCFilled\fR will additionally use QColorGroup::light() and QColorGroup::dark() for shadow effects.
 .PP
-See also: segmentStyle().
+See also segmentStyle().
 .SH "void QLCDNumber::setSmallDecimalPoint ( bool b ) \fC[virtual slot]\fR"
 If \fIb\fR is TRUE, the decimal point is drawn between two digits. If \fIb\fR is FALSE, the decimal point is drawn in a digit position.
 .PP
 The inter-digit space is made slightly wider when the decimal point is drawn between the digits.
 .PP
-See also: smallDecimalPoint() and setMode().
+See also smallDecimalPoint() and setMode().
 .SH "QSize QLCDNumber::sizeHint () const \fC[virtual]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .PP
@@ -278,17 +276,17 @@ Reimplemented from QWidget.
 .SH "bool QLCDNumber::smallDecimalPoint () const"
 Returns TRUE if the decimal point is currently drawn between two digit positions, and FALSE if it is drawn in a digit position.
 .PP
-See also: setSmallDecimalPoint() and mode().
+See also setSmallDecimalPoint() and mode().
 .SH "double QLCDNumber::value () const"
 Returns the last value set by one of the display() slots.
 .PP
 If display(QString ) was the last called, 0 is returned.
 .PP
-See also:  intValue() and display().
+See also  intValue() and display().
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qlcdnumber.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

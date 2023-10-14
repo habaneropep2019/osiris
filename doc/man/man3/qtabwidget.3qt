@@ -1,5 +1,5 @@
-.TH QTabWidget 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QTabWidget 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QTabWidget \- Stack of tabbed widgets
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -19,55 +17,61 @@ Inherits QWidget.
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQTabWidget\fR ( QWidget * " "parent" ", const char * " "name" ", WFlags f )"
+.BI "\fBQTabWidget\fR ( QWidget * " "parent" ", const char * " "name" ", WFlags f ) "
 .br
 .ti -1c
-.BI "\fBQTabWidget\fR ( QWidget * " "parent" "=0, const char * " "name" "=0 )"
+.BI "\fBQTabWidget\fR ( QWidget * " "parent" "=0, const char * " "name" "=0 ) "
 .br
 .ti -1c
-.BI "\fB~QTabWidget\fR ()"
+.BI "\fB~QTabWidget\fR () "
 .br
 .ti -1c
-.BI "void \fBaddTab\fR ( QWidget *, const QString & )"
+.BI "void \fBaddTab\fR ( QWidget *, const QString & ) "
 .br
 .ti -1c
-.BI "void \fBaddTab\fR ( QWidget * " "child" ", const QIconSet & " "iconset" ", const QString & label )"
+.BI "void \fBaddTab\fR ( QWidget * " "child" ", const QIconSet & " "iconset" ", const QString & label ) "
 .br
 .ti -1c
-.BI "void \fBaddTab\fR ( QWidget *, QTab * )"
+.BI "void \fBaddTab\fR ( QWidget *, QTab * ) "
 .br
 .ti -1c
-.BI "void \fBinsertTab\fR ( QWidget *, const QString &, int " "index" " = -1 )"
+.BI "void \fBinsertTab\fR ( QWidget *, const QString &, int " "index" " = -1 ) "
 .br
 .ti -1c
-.BI "void \fBinsertTab\fR ( QWidget * " "child" ", const QIconSet & " "iconset" ", const QString & " "label" ", int " "index" " = -1 )"
+.BI "void \fBinsertTab\fR ( QWidget * " "child" ", const QIconSet & " "iconset" ", const QString & " "label" ", int " "index" " = -1 ) "
 .br
 .ti -1c
-.BI "void \fBinsertTab\fR ( QWidget *, QTab *, int " "index" " = -1 )"
+.BI "void \fBinsertTab\fR ( QWidget *, QTab *, int " "index" " = -1 ) "
 .br
 .ti -1c
-.BI "void \fBchangeTab\fR ( QWidget *, const QString & )"
+.BI "void \fBchangeTab\fR ( QWidget *, const QString & ) "
 .br
 .ti -1c
-.BI "void \fBchangeTab\fR ( QWidget * " "child" ", const QIconSet & " "iconset" ", const QString & label )"
+.BI "void \fBchangeTab\fR ( QWidget * " "child" ", const QIconSet & " "iconset" ", const QString & label ) "
 .br
 .ti -1c
 .BI "bool \fBisTabEnabled\fR ( QWidget * ) const"
 .br
 .ti -1c
-.BI "void \fBsetTabEnabled\fR ( QWidget *, bool )"
+.BI "void \fBsetTabEnabled\fR ( QWidget *, bool ) "
 .br
 .ti -1c
-.BI "void \fBshowPage\fR ( QWidget * )"
+.BI "void \fBshowPage\fR ( QWidget * ) "
 .br
 .ti -1c
-.BI "void \fBremovePage\fR ( QWidget * )"
+.BI "void \fBremovePage\fR ( QWidget * ) "
 .br
 .ti -1c
-.BI "QString \fBtabLabel\fR ( QWidget * )"
+.BI "QString \fBtabLabel\fR ( QWidget * ) "
 .br
 .ti -1c
 .BI "QWidget* \fBcurrentPage\fR () const"
+.br
+.ti -1c
+.BI "int \fBcurrentPageIndex\fR () const"
+.br
+.ti -1c
+.BI "void \fBsetCurrentPage\fR ( int ) "
 .br
 .ti -1c
 .BI "virtual QSize \fBminimumSizeHint\fR () const"
@@ -79,32 +83,44 @@ Inherits QWidget.
 .BI "TabPosition \fBtabPosition\fR () const"
 .br
 .ti -1c
-.BI "void \fBsetTabPosition\fR ( TabPosition )"
+.BI "void \fBsetTabPosition\fR ( TabPosition ) "
+.br
+.ti -1c
+.BI "enum \fBTabShape\fR { Rounded, Triangular }"
+.br
+.ti -1c
+.BI "TabShape \fBtabShape\fR () const"
+.br
+.ti -1c
+.BI "void \fBsetTabShape\fR ( TabShape s ) "
 .br
 .ti -1c
 .BI "int \fBmargin\fR () const"
 .br
 .ti -1c
-.BI "void \fBsetMargin\fR ( int )"
+.BI "void \fBsetMargin\fR ( int ) "
 .br
 .in -1c
 .SS "Signals"
 .in +1c
 .ti -1c
-.BI "void \fBselected\fR ( const QString & )"
+.BI "void \fBcurrentChanged\fR ( QWidget * ) "
+.br
+.ti -1c
+.BI "void \fBselected\fR ( const QString & ) "
 .br
 .in -1c
 .SS "Protected Members"
 .in +1c
 .ti -1c
-.BI "void \fBsetTabBar\fR ( QTabBar * )"
+.BI "void \fBsetTabBar\fR ( QTabBar * ) "
 .br
 .ti -1c
 .BI "QTabBar* \fBtabBar\fR () const"
 .br
 .in -1c
 .SS "Properties"
-<table border=1 cellpadding=3 cellspacing=0> <tr><th>Type<th>Name<th>READ<th>WRITE<th>Options <tr><td>TabPosition<td>tabPosition<td>tabPosition<td>setTabPosition<td>&nbsp; <tr><td>int<td>margin<td>margin<td>setMargin<td>&nbsp; </table>
+<table border=1 cellpadding=3 cellspacing=0> <tr><th>Type<th>Name<th>READ<th>WRITE<th>Options <tr><td>TabPosition<td>tabPosition<td>tabPosition<td>setTabPosition<td>&nbsp; <tr><td>TabShape<td>tabShape<td>tabShape<td>setTabShape<td>&nbsp; <tr><td>int<td>margin<td>margin<td>setMargin<td>&nbsp; <tr><td>int<td>currentPage<td>currentPageIndex<td>setCurrentPage<td>&nbsp; </table>
 .SH DESCRIPTION
 The QTabWidget class provides a stack of tabbed widgets.
 .PP
@@ -122,7 +138,7 @@ Connect to the signals and slots.
 .PP
 If you don't call addTab(), the page you have created will not be visible. Please don't confuse the object name you supply to the QWidget constructor and the tab label you supply to addTab(): addTab() takes a name which indicates an accelerator and is meaningful and descriptive to the user, while the widget name is used primarily for debugging.
 .PP
-A signal selected() is emitted when the user selects some page.
+A signal currentChanged() is emitted when the user selects some page.
 .PP
 Each tab is either enabled or disabled at any given time. If a tab is enabled, the tab text is drawn in black and the user can select that tab. If it is disabled, the tab is drawn in a different way and the user can not select that tab. Note that even though a tab is disabled, the page can still be visible, for example if all of the tabs happen to be disabled.
 .PP
@@ -132,7 +148,7 @@ Most of the functionality in QTabWidget is provided by a QTabBar (at the top, pr
 .PP
 <img src=qtabwidget-m.png> <img src=qtabwidget-w.png>
 .PP
-See also: QTabDialog.
+See also QTabDialog.
 .SS "Member Type Documentation"
 .SH "QTabWidget::TabPosition"
 This enum type defines where QTabWidget can draw the tab row: 
@@ -140,6 +156,12 @@ This enum type defines where QTabWidget can draw the tab row:
 \fCTop\fR - above the pages
 .TP
 \fCBottom\fR - below the pages
+.SH "QTabWidget::TabShape"
+This enum type defines the shape of the tabs: 
+.TP
+\fCRounded\fR - rounded look (normal)
+.TP
+\fCTriangular\fR - triangular look (very unusual, included for completeness)
 .SH MEMBER FUNCTION DOCUMENTATION
 .SH "QTabWidget::QTabWidget ( QWidget * parent, const char * name, WFlags f )"
 Constructs a tabbed widget with parent \fIparent,\fR name \fIname\fR and widget flags \fIf.\fR
@@ -174,8 +196,14 @@ If you call addTab() after show(), the screen will flicker and the user will be 
 Defines a new \fIiconset\fR and a new \fIlabel\fR for the tab of page \fIw\fR
 .SH "void QTabWidget::changeTab ( QWidget * w, const QString & label )"
 Defines a new label for the tab of page \fIw\fR
+.SH "void QTabWidget::currentChanged ( QWidget * ) \fC[signal]\fR"
+This signal is emitted whenever the current page changes.
+.PP
+See also currentPage(), showPage() and tabLabel().
 .SH "QWidget * QTabWidget::currentPage () const"
 Returns a pointer to the page currently being displayed by the tab dialog. The tab dialog does its best to make sure that this value is never 0, but if you try hard enough it can be.
+.SH "int QTabWidget::currentPageIndex () const"
+Returns the ID of the current page.
 .SH "bool QTabWidget::eventFilter ( QObject * o, QEvent * e ) \fC[virtual protected]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .PP
@@ -208,11 +236,11 @@ If you call insertTab() after show(), the screen will flicker and the user will 
 .SH "bool QTabWidget::isTabEnabled ( QWidget * w ) const"
 Returns TRUE if the page \fIw\fR is enabled, and false if it is disabled.
 .PP
-See also: setTabEnabled() and QWidget::isEnabled().
+See also setTabEnabled() and QWidget::isEnabled().
 .SH "int QTabWidget::margin () const"
 Returns the width of the margin. The margin is the distance between the innermost pixel of the frame and the outermost pixel of the pages.
 .PP
-See also: setMargin().
+See also setMargin().
 .SH "QSize QTabWidget::minimumSizeHint () const \fC[virtual]\fR"
 Returns a suitable minimum size for the tab widget.
 .PP
@@ -220,23 +248,21 @@ Reimplemented from QWidget.
 .SH "void QTabWidget::removePage ( QWidget * w )"
 Removes page \fIw\fR from this stack of widgets. Does not delete \fIw.\fR
 .PP
-See also: showPage() and QWidgetStack::removeWidget().
+See also showPage() and QWidgetStack::removeWidget().
 .SH "void QTabWidget::resizeEvent ( QResizeEvent * ) \fC[virtual protected]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .PP
 Reimplemented from QWidget.
-.SH "void QTabWidget::selected ( const QString & tabLabel ) \fC[signal]\fR"
-This signal is emitted whenever a tab is selected (raised), including during the first show().
-.PP
-See also: raise().
+.SH "void QTabWidget::setCurrentPage ( int id )"
+Sets the page with index \fIid\fR as current page.
 .SH "void QTabWidget::setMargin ( int w )"
 Sets the width of the margin to \fIw.\fR
 .PP
-See also: margin().
+See also margin().
 .SH "void QTabWidget::setTabBar ( QTabBar * tb ) \fC[protected]\fR"
 Replaces the QTabBar heading the dialog by the given tab bar. Note that this must be called \fIbefore\fR any tabs have been added, or the behavior is undefined.
 .PP
-See also: tabBar().
+See also tabBar().
 .SH "void QTabWidget::setTabEnabled ( QWidget * w, bool enable )"
 Enables/disables page \fIw\fR according to the value of \fIenable,\fR and redraws the page's tab appropriately.
 .PP
@@ -244,13 +270,15 @@ QTabWidget uses QWidget::setEnabled() internally, rather than keep a separate fl
 .PP
 Note that even a disabled tab/page may be visible. If the page is visible already, QTabWidget will not hide it, and if all the pages are disabled, QTabWidget will show one of them.
 .PP
-See also: isTabEnabled() and QWidget::setEnabled().
+See also isTabEnabled() and QWidget::setEnabled().
 .SH "void QTabWidget::setTabPosition ( TabPosition pos )"
 Sets the position of the tabs to \fIpos\fR
 .PP
 Possible values are QTabWidget::Top and QTabWidget::Bottom.
 .PP
-See also: tabPosition().
+See also tabPosition().
+.SH "void QTabWidget::setTabShape ( TabShape s )"
+Sets the shape of the tabs to \fIs.\fR
 .SH "void QTabWidget::showEvent ( QShowEvent * ) \fC[virtual protected]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .PP
@@ -260,7 +288,7 @@ Ensures that \fIw\fR is shown. This is useful mainly for accelerators.
 .PP
 \fBWarning:\fR Used carelessly, this function can easily surprise or confuse the user.
 .PP
-See also: QTabBar::setCurrentTab().
+See also QTabBar::setCurrentTab().
 .SH "QSize QTabWidget::sizeHint () const \fC[virtual]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .PP
@@ -276,7 +304,7 @@ Reimplemented from QWidget.
 .SH "QTabBar* QTabWidget::tabBar () const \fC[protected]\fR"
 Returns the currently set QTabBar.
 .PP
-See also: setTabBar().
+See also setTabBar().
 .SH "QString QTabWidget::tabLabel ( QWidget * w )"
 Returns the text in the tab for page \fIw.\fR
 .SH "QTabWidget::TabPosition QTabWidget::tabPosition() const"
@@ -284,7 +312,11 @@ Returns the position of the tabs.
 .PP
 Possible values are QTabWidget::Top and QTabWidget::Bottom.
 .PP
-See also: setTabPosition().
+See also setTabPosition().
+.SH "QTabWidget::TabShape QTabWidget::tabShape() const"
+Returns the shape of the tabs.
+.PP
+See also setTabShape().
 .SH "void QTabWidget::updateMask () \fC[virtual protected]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .PP
@@ -292,7 +324,7 @@ Reimplemented from QWidget.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qtabwidget.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

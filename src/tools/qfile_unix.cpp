@@ -1,27 +1,39 @@
 /****************************************************************************
-** $Id: qt/src/tools/qfile_unix.cpp   2.1.1   edited 2000-03-24 $
+** $Id: qt/src/tools/qfile_unix.cpp   2.2.0   edited 2000-08-25 $
 **
 ** Implementation of QFileInfo class
 **
 ** Created : 950628
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the tools module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses for Unix/X11 or for Qt/Embedded may use this file in accordance
+** with the Qt Commercial License Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #include "qglobal.h"
 
@@ -131,6 +143,7 @@ bool QFile::open( int m )
 	return FALSE;
     }
     bool ok = TRUE;
+    STATBUF st;
     if ( isRaw() ) {				// raw file I/O
 	int oflags = OPEN_RDONLY;
 	if ( isReadable() && isWritable() )
@@ -162,14 +175,7 @@ bool QFile::open( int m )
 	fd = OPEN( QFile::encodeName(fn), oflags, 0666 );
 
 	if ( fd != -1 ) {			// open successful
-	    STATBUF st;
-	    FSTAT( fd, &st );
-	    if ( (st.st_mode&STAT_MASK) == STAT_DIR ) {
-		ok = FALSE;
-	    } else {
-		length = (int)st.st_size;
-		ioIndex  = (flags() & IO_Append) == 0 ? 0 : length;
-	    }
+	    FSTAT( fd, &st ); // get the stat for later usage
 	} else {
 	    ok = FALSE;
 	}
@@ -194,7 +200,7 @@ bool QFile::open( int m )
 		perm = "w";
 	    }
 	}
-	strcpy( perm2, perm );
+	qstrcpy( perm2, perm );
 #if defined(HAS_TEXT_FILEMODE)
 	if ( isTranslated() )
 	    strcat( perm2, "t" );
@@ -213,20 +219,34 @@ bool QFile::open( int m )
 	    }
 	}
 	if ( fh ) {
-	    STATBUF st;
-	    FSTAT( FILENO(fh), &st );
-	    if ( (st.st_mode&STAT_MASK) == STAT_DIR ) {
-		ok = FALSE;
-	    } else {
-		length = (int)st.st_size;
-		ioIndex  = (flags() & IO_Append) == 0 ? 0 : length;
-	    }
+	    FSTAT( FILENO(fh), &st ); // get the stat for later usage
 	} else {
 	    ok = FALSE;
 	}
     }
     if ( ok ) {
 	setState( IO_Open );
+	// on successful open the file stat was got; now test what type
+	// of file we have
+	if ( (st.st_mode & STAT_MASK) != STAT_REG ) {
+	    // non-seekable
+	    setType( IO_Sequential );
+	    length = INT_MAX;
+	    ioIndex  = (flags() & IO_Append) == 0 ? 0 : length;
+	} else {
+	    length = (int)st.st_size;
+	    ioIndex  = (flags() & IO_Append) == 0 ? 0 : length;
+	    if ( (flags() & !IO_Truncate) && length == 0 && isReadable() ) {
+		// try if you can read from it (if you can, it's a sequential
+		// device; e.g. a file in the /proc filesystem)
+		int c = getch();
+		if ( c != -1 ) {
+		    ungetch(c);
+		    setType( IO_Sequential );
+		    length = INT_MAX;
+		}
+	    }
+	}
     } else {
 	init();
 	if ( errno == EMFILE )			// no more file handles/descrs
@@ -249,7 +269,7 @@ bool QFile::open( int m )
     {
 	QFile f;
 	f.open( IO_WriteOnly, stderr );
-	f.writeBlock( msg, strlen(msg) );	// write to stderr
+	f.writeBlock( msg, qstrlen(msg) );	// write to stderr
 	f.close();
     }
   \endcode
@@ -286,6 +306,16 @@ bool QFile::open( int m, FILE *f )
 	length = INT_MAX;
     } else {
 	length = (int)st.st_size;
+	if ( (flags() & !IO_Truncate) && length == 0 && isReadable() ) {
+	    // try if you can read from it (if you can, it's a sequential
+	    // device; e.g. a file in the /proc filesystem)
+	    int c = getch();
+	    if ( c != -1 ) {
+		ungetch(c);
+		setType( IO_Sequential );
+		length = INT_MAX;
+	    }
+	}
     }
     return TRUE;
 }
@@ -326,6 +356,16 @@ bool QFile::open( int m, int f )
 	length = INT_MAX;
     } else {
 	length = (int)st.st_size;
+	if ( length == 0 && isReadable() ) {
+	    // try if you can read from it (if you can, it's a sequential
+	    // device; e.g. a file in the /proc filesystem)
+	    int c = getch();
+	    if ( c != -1 ) {
+		ungetch(c);
+		setType( IO_Sequential );
+		length = INT_MAX;
+	    }
+	}
     }
     return TRUE;
 }
@@ -529,7 +569,7 @@ int QFile::handle() const
   is done to the file.
 
   Some "write-behind" filesystems may report an unspecified error on
-  closing the file. These errors only indiciate that something may
+  closing the file. These errors only indicate that something may
   have gone wrong since the previous open(). In such a case status()
   reports IO_UnspecifiedError after close(), otherwise IO_Ok.
 

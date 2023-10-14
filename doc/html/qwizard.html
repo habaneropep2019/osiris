@@ -1,15 +1,17 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head>
 <title>Qt Toolkit - QWizard Class</title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
-a:link { text-decoration: none; }
-body { background: white; color: black; }
+a:link { color: #004faf; text-decoration: none }
+a:visited { color: #672967; text-decoration: none }body { background: white; color: black; }
 --></style>
 </head><body bgcolor="#ffffff">
 
-<a href="index.html">
-<img width="122" height="65" src="qtlogo.png" alt="Home"
-  align="left" border="0">
-</a><div align=right><img src="dochead.png" width="472" height="27"><br>
+<table width="100%">
+<tr><td><a href="index.html">
+<img width="100" height="100" src="qtlogo.png"
+alt="Home" border="0"><img width="100"
+height="100" src="face.png" alt="Home" border="0">
+</a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
 - <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
@@ -17,7 +19,7 @@ body { background: white; color: black; }
 - <a href="index.html">Home</a>
 - <a href="topicals.html"><b>Structure</b></a>
 </div>
-<br clear=all>
+</table>
 
 <h1 align=center>QWizard Class Reference</h1><br clear="all">
 <p>
@@ -30,45 +32,47 @@ Inherits <a href="qdialog.html">QDialog</a>.
 <p><a href="qwizard-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><span class="fn"><a href="#342959"><b>QWizard</b></a> ( QWidget * parent=0, const char * name=0, bool modal=FALSE, WFlags f=0 ) </span>
-<li><span class="fn"><a href="#a7e809"><b>~QWizard</b></a> () </span>
-<li><span class="fn">virtual void <a href="#73ff8b"><b>addPage</b></a> ( QWidget *, const QString &amp; ) </span>
-<li><span class="fn">virtual void <a href="#260857"><b>removePage</b></a> ( QWidget * ) </span>
-<li><span class="fn">QString <a href="#5941a6"><b>title</b></a> ( QWidget * ) const</span>
-<li><span class="fn">virtual void <a href="#59c39e"><b>showPage</b></a> ( QWidget * ) </span>
-<li><span class="fn">QWidget* <a href="#71640e"><b>currentPage</b></a> () const</span>
-<li><span class="fn">QWidget* <a href="#040925"><b>page</b></a> ( int pos ) const</span>
-<li><span class="fn">int <a href="#b7a61d"><b>pageCount</b></a> () const</span>
-<li><span class="fn">virtual bool <a href="#863577"><b>appropriate</b></a> ( QWidget * ) const</span>
-<li><span class="fn">virtual void <a href="#a7948e"><b>setAppropriate</b></a> ( QWidget *, bool ) </span>
-<li><span class="fn">QPushButton* <a href="#2e813d"><b>backButton</b></a> () const</span>
-<li><span class="fn">QPushButton* <a href="#ed4fe0"><b>nextButton</b></a> () const</span>
-<li><span class="fn">QPushButton* <a href="#0ead5e"><b>finishButton</b></a> () const</span>
-<li><span class="fn">QPushButton* <a href="#a3dbbd"><b>cancelButton</b></a> () const</span>
-<li><span class="fn">QPushButton* <a href="#035293"><b>helpButton</b></a> () const</span>
+<li><div class="fn"><a href="#342959"><b>QWizard</b></a> ( QWidget * parent=0, const char * name=0, bool modal=FALSE, WFlags f=0 ) </div>
+<li><div class="fn"><a href="#a7e809"><b>~QWizard</b></a> () </div>
+<li><div class="fn">virtual void <a href="#73ff8b"><b>addPage</b></a> ( QWidget *, const QString &amp; ) </div>
+<li><div class="fn">virtual void <a href="#260857"><b>removePage</b></a> ( QWidget * ) </div>
+<li><div class="fn">QString <a href="#5941a6"><b>title</b></a> ( QWidget * ) const</div>
+<li><div class="fn">void <a href="#8e5ac5"><b>setTitle</b></a> ( QWidget *, const QString &amp; ) </div>
+<li><div class="fn">virtual void <a href="#59c39e"><b>showPage</b></a> ( QWidget * ) </div>
+<li><div class="fn">QWidget* <a href="#71640e"><b>currentPage</b></a> () const</div>
+<li><div class="fn">QWidget* <a href="#040925"><b>page</b></a> ( int pos ) const</div>
+<li><div class="fn">int <a href="#b7a61d"><b>pageCount</b></a> () const</div>
+<li><div class="fn">virtual bool <a href="#863577"><b>appropriate</b></a> ( QWidget * ) const</div>
+<li><div class="fn">virtual void <a href="#a7948e"><b>setAppropriate</b></a> ( QWidget *, bool ) </div>
+<li><div class="fn">QPushButton* <a href="#2e813d"><b>backButton</b></a> () const</div>
+<li><div class="fn">QPushButton* <a href="#ed4fe0"><b>nextButton</b></a> () const</div>
+<li><div class="fn">QPushButton* <a href="#0ead5e"><b>finishButton</b></a> () const</div>
+<li><div class="fn">QPushButton* <a href="#a3dbbd"><b>cancelButton</b></a> () const</div>
+<li><div class="fn">QPushButton* <a href="#035293"><b>helpButton</b></a> () const</div>
 </ul>
 <h2>Public Slots</h2>
 <ul>
-<li><span class="fn">virtual void <a href="#f4c269"><b>setBackEnabled</b></a> ( QWidget *, bool ) </span>
-<li><span class="fn">virtual void <a href="#567f89"><b>setNextEnabled</b></a> ( QWidget *, bool ) </span>
-<li><span class="fn">virtual void <a href="#d974dc"><b>setFinishEnabled</b></a> ( QWidget *, bool ) </span>
-<li><span class="fn">virtual void <a href="#90375c"><b>setHelpEnabled</b></a> ( QWidget *, bool ) </span>
-<li><span class="fn">virtual void setFinish ( QWidget *, bool ) <em>(obsolete)</em></span>
+<li><div class="fn">virtual void <a href="#f4c269"><b>setBackEnabled</b></a> ( QWidget *, bool ) </div>
+<li><div class="fn">virtual void <a href="#567f89"><b>setNextEnabled</b></a> ( QWidget *, bool ) </div>
+<li><div class="fn">virtual void <a href="#d974dc"><b>setFinishEnabled</b></a> ( QWidget *, bool ) </div>
+<li><div class="fn">virtual void <a href="#90375c"><b>setHelpEnabled</b></a> ( QWidget *, bool ) </div>
+<li><div class="fn">virtual void setFinish ( QWidget *, bool ) <em>(obsolete)</em></div>
 </ul>
 <h2>Signals</h2>
 <ul>
-<li><span class="fn">void <a href="#f3b73d"><b>helpClicked</b></a> () </span>
+<li><div class="fn">void <a href="#f3b73d"><b>helpClicked</b></a> () </div>
+<li><div class="fn">void <a href="#47b6e7"><b>selected</b></a> ( const QString &amp; ) </div>
 </ul>
 <h2>Protected Members</h2>
 <ul>
-<li><span class="fn">virtual void <a href="#e63548"><b>layOutButtonRow</b></a> ( QHBoxLayout * ) </span>
-<li><span class="fn">virtual void <a href="#906d9b"><b>layOutTitleRow</b></a> ( QHBoxLayout *, const QString &amp; ) </span>
+<li><div class="fn">virtual void <a href="#e63548"><b>layOutButtonRow</b></a> ( QHBoxLayout * ) </div>
+<li><div class="fn">virtual void <a href="#906d9b"><b>layOutTitleRow</b></a> ( QHBoxLayout *, const QString &amp; ) </div>
 </ul>
 <h2>Protected Slots</h2>
 <ul>
-<li><span class="fn">virtual void <a href="#2bd7c4"><b>back</b></a> () </span>
-<li><span class="fn">virtual void <a href="#2909df"><b>next</b></a> () </span>
-<li><span class="fn">virtual void <a href="#1c0fa2"><b>help</b></a> () </span>
+<li><div class="fn">virtual void <a href="#2bd7c4"><b>back</b></a> () </div>
+<li><div class="fn">virtual void <a href="#2909df"><b>next</b></a> () </div>
+<li><div class="fn">virtual void <a href="#1c0fa2"><b>help</b></a> () </div>
 </ul>
 <hr><h2><a name="details"></a>Detailed Description</h2>
 The QWizard class provides a framework for easily writing wizards.
@@ -150,10 +154,13 @@ The first page has position 0.
 <p>Removes <em>page</em> from this wizard.  Does not delete
 <em>page.</em> If <em>page</em> is currently being displayed, QWizard will
 display something else.
+<h3 class="fn">void <a name="47b6e7"></a>QWizard::selected ( const <a href="qstring.html">QString</a> &amp; ) <code>[signal]</code></h3>
+<p>This signal is emitted when the page changes, signalling
+the title of the page.
 <h3 class="fn">void <a name="a7948e"></a>QWizard::setAppropriate ( <a href="qwidget.html">QWidget</a> * w, bool enable ) <code>[virtual]</code></h3>
 <p>Sets whether it is appropriate for <em>w</em> to be displayed in the
 current context of the wizard.
-<p>See also:  <a href="#863577">appropriate</a>().
+<p>See also  <a href="#863577">appropriate</a>().
 <h3 class="fn">void <a name="f4c269"></a>QWizard::setBackEnabled ( <a href="qwidget.html">QWidget</a> * w, bool enable ) <code>[virtual slot]</code></h3>
 <p>Enables or disables the "Back" button for pages <em>w</em> in the wizard.
 By default, all pages have this button.
@@ -171,24 +178,26 @@ By default, all pages have this button.
 <h3 class="fn">void <a name="567f89"></a>QWizard::setNextEnabled ( <a href="qwidget.html">QWidget</a> * w, bool enable ) <code>[virtual slot]</code></h3>
 <p>Enables or disables the "Next" button for pages <em>w</em> in the wizard.
 By default, all pages have this button.
+<h3 class="fn">void <a name="8e5ac5"></a>QWizard::setTitle ( <a href="qwidget.html">QWidget</a> * page, const <a href="qstring.html">QString</a> &amp; t )</h3>
+<p>Sets the title for the <em>page</em> to <em>title.</em>
 <h3 class="fn">void <a name="66d420"></a>QWizard::show () <code>[virtual]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
 <p>Reimplemented from <a href="qwidget.html#ccc8f7">QWidget.</a>
 <h3 class="fn">void <a name="59c39e"></a>QWizard::showPage ( <a href="qwidget.html">QWidget</a> * page ) <code>[virtual]</code></h3>
-<p>Makes <em>page</em> be the displayed page.
+<p>Makes <em>page</em> be the displayed page and emits the <a href="#47b6e7">selected</a>() signal.
 <h3 class="fn"><a href="qstring.html">QString</a> <a name="5941a6"></a>QWizard::title ( <a href="qwidget.html">QWidget</a> * page ) const</h3>
 <p>Returns the title of <em>page.</em>
 <hr><p>
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.1.1"><nobr>
+<input type=hidden name="version" value="2.2.0"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
 copyright &copy; 1995-2000
-<a href="http://www.trolltech.com">Troll Tech</a>, all rights reserved.<p><address><hr><div align="center">
+<a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.1</div>
+<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.2.0</div>
 </table></div></address></body></html>

@@ -1,27 +1,39 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qapplication_x11.cpp   2.1.1   edited 2000-05-09 $
+** $Id: qt/src/kernel/qapplication_x11.cpp   2.2.0   edited 2000-08-28 $
 **
 ** Implementation of X11 startup routines and event handling
 **
 ** Created : 931029
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the kernel module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses for Unix/X11 may use this file in accordance with the Qt Commercial
+** License Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 // NOT REVISED
 
@@ -54,14 +66,20 @@
 #include "qguardedptr.h"
 #include "qclipboard.h"
 #include "qwhatsthis.h" // ######## dependency
+#include "qwindowsstyle.h" // ######## dependency
+#include "qmotifplusstyle.h" // ######## dependency
 #include <stdlib.h>
-#ifdef QT_SM_SUPPORT
+#ifndef QT_NO_SM_SUPPORT
 #include <pwd.h>
 #endif
 #include <ctype.h>
 #include <locale.h>
 #include <errno.h>
 #define	 GC GC_QQQ
+
+#if defined(QT_THREAD_SUPPORT)
+#include "qthread.h"
+#endif
 
 #if defined(_OS_LINUX_) && defined(DEBUG)
 #include "qfile.h"
@@ -72,8 +90,18 @@
 #undef gettimeofday
 #endif
 
-#if defined(UNIX) && defined(QT_THREAD_SUPPORT)
+#if defined(_OS_UNIX_)
+
+#if defined(_OS_SOLARIS_)
+#  define BSD_COMP // needed for FIONREAD
+#endif
+
 #include <sys/ioctl.h>
+
+#if defined(_OS_SOLARIS_)
+#  undef BSD_COMP
+#endif
+
 static int qt_thread_pipe[2];
 #endif
 
@@ -207,13 +235,13 @@ static char    *appBTNCol	= 0;		// application btn color
 static char    *mwGeometry	= 0;		// main widget geometry
 static char    *mwTitle		= 0;		// main widget title
 //Ming-Che 10/10
-static char    *ximServer   = 0;		//XIM Server will connect to
+static char    *ximServer	= 0;		// XIM Server will connect to
 static bool	mwIconic	= FALSE;	// main widget iconified
 //Ming-Che 10/10
-static bool noxim			= False;	//connect to xim or not
+static bool	noxim		= False;	// connect to xim or not
 static Display *appDpy		= 0;		// X11 application display
 static char    *appDpyName	= 0;		// X11 display name
-static bool     appForeignDpy	= FALSE;        // we didn't create display
+static bool	appForeignDpy	= FALSE;        // we didn't create display
 static bool	appSync		= FALSE;	// X11 synchronization
 #if defined(DEBUG)
 static bool	appNoGrab	= FALSE;	// X11 grabbing enabled
@@ -251,6 +279,9 @@ Atom 		qt_wm_client_leader	= 0;
 Atom 		qt_window_role		= 0;
 Atom 		qt_sm_client_id		= 0;
 Atom 		qt_xa_motif_wm_hints	= 0;
+Atom 		qt_kwin_running	= 0;
+Atom 		qt_kwm_running	= 0;
+Atom 		qt_gbackground_properties	= 0;
 Atom 		qt_x_incr		= 0;
 
 static Window	mouseActWindow	     = 0;	// window where mouse is
@@ -292,29 +323,43 @@ static bool qt_x11EventFilter( XEvent* ev )
     return qApp->x11EventFilter( ev );
 }
 
-VFPTR qt_set_preselect_handler (VFPTR);
-static VFPTR qt_preselect_handler = 0;
-VFPTR qt_set_postselect_handler (VFPTR);
-static VFPTR qt_postselect_handler = 0;
-VFPTR qt_set_preselect_handler (VFPTR handler)
+void qt_install_preselect_handler (VFPTR);
+void qt_remove_preselect_handler (VFPTR);
+static QVFuncList *qt_preselect_handler = 0;
+void qt_install_postselect_handler (VFPTR);
+void qt_remove_postselect_handler (VFPTR);
+static QVFuncList *qt_postselect_handler = 0;
+void qt_install_preselect_handler (VFPTR handler)
 {
-    VFPTR old_handler = qt_preselect_handler;
-    qt_preselect_handler = handler;
-    return old_handler;
+    if ( !qt_preselect_handler )
+	qt_preselect_handler = new QVFuncList;
+    qt_preselect_handler->append( (void*) handler );
 }
-VFPTR qt_set_postselect_handler (VFPTR handler)
+void qt_remove_preselect_handler (VFPTR handler)
 {
-    VFPTR old_handler = qt_postselect_handler;
-    qt_postselect_handler = handler;
-    return old_handler;
+    if ( qt_preselect_handler )
+	qt_preselect_handler->removeRef( (void*)handler );
 }
+void qt_install_postselect_handler (VFPTR handler)
+{
+    if ( !qt_postselect_handler )
+	qt_postselect_handler = new QVFuncList;
+    qt_postselect_handler->prepend( (void*)handler );
+}
+void qt_remove_postselect_handler (VFPTR handler)
+{
+    if ( qt_postselect_handler )
+	qt_postselect_handler->removeRef( (void*)handler );
+}
+
 
 
 static void	initTimers();
 static void	cleanupTimers();
 static timeval	watchtime;			// watch if time is turned back
-timeval        *qt_wait_timer();
-int	        qt_activate_timers();
+timeval		*qt_wait_timer();
+timeval 	*qt_wait_timer_max = 0;
+int 		qt_activate_timers();
 
 #if !defined(NO_XIM)
 XIM	qt_xim = 0;
@@ -338,6 +383,8 @@ bool		qt_cmap_option	 = FALSE;
 QWidget	       *qt_button_down	 = 0;		// widget got last button-down
 
 extern bool qt_is_gui_used; // qapplication.cpp
+
+extern void qt_dispatchEnterLeave( QWidget*, QWidget* ); // qapplication.cpp
 
 struct QScrollInProgress {
     static long serial;
@@ -501,7 +548,7 @@ static int qt_x_errhandler( Display *dpy, XErrorEvent *err )
     char errstr[256];
     XGetErrorText( dpy, err->error_code, errstr, 256 );
     qWarning( "X Error: %s %d\n  Major opcode:  %d", errstr, err->error_code, err->request_code );
-    //### we really should distinguish between severe, non-servere and
+    //### we really should distinguish between severe, non-severe and
     //### application specific errors
     return 0;
 }
@@ -511,8 +558,8 @@ static int qt_xio_errhandler( Display * )
 {
     qWarning( "%s: Fatal IO error: client killed", appName );
     exit( 1 );
-    //### give the application a chance for a proper shutdown instead, exit(1)
-    //### doesn't help.
+    //### give the application a chance for a proper shutdown instead,
+    //### exit(1) doesn't help.
     return 0;
 }
 
@@ -598,6 +645,7 @@ static void qt_x11_process_intern_atoms()
     }
 }
 
+static bool seems_like_KDE_is_running = FALSE;
 
 // read the _QT_DESKTOP_PROPERTIES property and apply the settings to
 // the application
@@ -614,8 +662,8 @@ static bool qt_set_desktop_properties()
     const char *data;
 
     int e = XGetWindowProperty( appDpy, appRootWin, qt_desktop_properties, 0, 1,
-			     FALSE, AnyPropertyType, &type, &format, &nitems,
-			     &after,  (unsigned char**)&data );
+				FALSE, AnyPropertyType, &type, &format, &nitems,
+				&after,  (unsigned char**)&data );
     if ( data )
 	XFree(  (unsigned char*)data );
     if ( e != Success || !nitems )
@@ -627,9 +675,12 @@ static bool qt_set_desktop_properties()
 	XGetWindowProperty( appDpy, appRootWin, qt_desktop_properties,
 			    offset, 1024, FALSE, AnyPropertyType,
 			    &type, &format, &nitems, &after, (unsigned char**) &data );
-	properties.writeBlock(data, nitems);
-	offset += 1024;
-	XFree(  (unsigned char*)data );
+	if (format == 8) {
+	    properties.writeBlock(data, nitems);
+	    offset += nitems / 4;
+	}
+
+	XFree( (unsigned char *) data );
     }
 
     QDataStream d( properties.buffer(), IO_ReadOnly );
@@ -644,6 +695,9 @@ static bool qt_set_desktop_properties()
     if ( font != QApplication::font() ) {
 	QApplication::setFont( font, TRUE );
     }
+
+    seems_like_KDE_is_running = TRUE;
+
     return TRUE;
 }
 
@@ -656,7 +710,7 @@ static void qt_set_x11_resources( const char* font = 0, const char* fg = 0,
     if ( !qt_std_pal )
 	qt_create_std_palette();
 
-    QCString resFont, resFG, resBG;
+    QCString resFont, resFG, resBG, resEF;
 
     if ( QApplication::desktopSettingsAware() && !qt_set_desktop_properties() ) {
 	int format;
@@ -672,13 +726,15 @@ static void qt_set_x11_resources( const char* font = 0, const char* fg = 0,
 				&type, &format, &nitems, &after,
 				(unsigned char**) &data );
 	    res += data;
-	    offset += 8192;
+	    offset += 2048; // offset is in 32bit quantities... 8192/4 == 2048
 	    if ( data )
 		XFree(data);
 	}
 
-	QCString item, key, value;
-	int l = 0, r, i;
+	QCString key, value;
+	int l = 0, r;
+	QCString apn = appName;
+	int apnl = apn.length();
 
 	while( (unsigned) l < res.length()) {
 	    r = res.find( "\n", l );
@@ -686,23 +742,41 @@ static void qt_set_x11_resources( const char* font = 0, const char* fg = 0,
 		r = res.length();
 	    while ( isspace(res[l]) )
 		l++;
+	    bool mine = FALSE;
 	    if ( res[l] == '*'
-	      && (res[l+1] == 'f' || res[l+1] == 'b') )
+	      && (res[l+1] == 'f' || res[l+1] == 'b' || res[l+1] == 'g') )
 	    {
-		// OPTIMIZED, since we only want "*[fb].."
+		// OPTIMIZED, since we only want "*[fbg].."
 
-		item = res.mid( l, r - l ).simplifyWhiteSpace();
-		i = item.find( ":" );
-		key = item.left( i ).stripWhiteSpace();
+		QCString item = res.mid( l, r - l ).simplifyWhiteSpace();
+		int i = item.find( ":" );
+		key = item.left( i ).stripWhiteSpace().mid(1);
 		value = item.right( item.length() - i - 1 ).stripWhiteSpace();
-		if ( !font && key == "*font")
-		    resFont = value.copy();
-		else if  ( !fg &&  key == "*foreground" )
-		    resFG = value.copy();
-		else if ( !bg && key == "*background")
-		    resBG = value.copy();
-		// NOTE: if you add more, change the [fb] stuff above
+		mine = TRUE;
+	    } else if ( res[l] == appName[0] ) {
+		if ( res.mid(l,apnl) == apn &&
+			(res[l+apnl] == '.' || res[l+apnl] == '*' ) )
+		{
+		    QCString item = res.mid( l, r - l ).simplifyWhiteSpace();
+		    int i = item.find( ":" );
+		    key = item.left( i ).stripWhiteSpace().mid(apnl+1);
+		    value = item.right( item.length() - i - 1 ).stripWhiteSpace();
+		    mine = TRUE;
+		}
 	    }
+
+	    if ( mine ) {
+		if ( !font && key == "font")
+		    resFont = value.copy();
+		else if  ( !fg &&  key == "foreground" )
+		    resFG = value.copy();
+		else if ( !bg && key == "background")
+		    resBG = value.copy();
+		else if ( key == "guieffects")
+		    resEF = value.copy();
+		// NOTE: if you add more, change the [fbg] stuff above
+	    }
+
 	    l = r + 1;
 	}
     }
@@ -778,6 +852,22 @@ static void qt_set_x11_resources( const char* font = 0, const char* fg = 0,
 	if ( pal != *qt_std_pal && pal != QApplication::palette() )
 	    QApplication::setPalette( pal, TRUE );
 	*qt_std_pal = pal;
+    }
+
+    if ( !resEF.isEmpty() ) {
+	QStringList effects = QStringList::split(" ",resEF);
+	if ( effects.contains("general") )
+	    QApplication::setEffectEnabled( Qt::UI_General, TRUE );
+	if ( effects.contains("animatemenu") )
+	    QApplication::setEffectEnabled( Qt::UI_AnimateMenu, TRUE );
+	if ( effects.contains("fademenu") )
+	    QApplication::setEffectEnabled( Qt::UI_FadeMenu, TRUE );
+	if ( effects.contains("animatecombo") )
+	    QApplication::setEffectEnabled( Qt::UI_AnimateCombo, TRUE );
+	if ( effects.contains("animatetooltip") )
+	    QApplication::setEffectEnabled( Qt::UI_AnimateTooltip, TRUE );
+	if ( effects.contains("fadetooltip") )
+	    QApplication::setEffectEnabled( Qt::UI_FadeTooltip, TRUE );
     }
 }
 
@@ -862,12 +952,12 @@ void QApplication::create_xim()
 #ifdef USE_X11R6_XIM
 	XIMCallback destroy;
 	destroy.callback = (XIMProc)xim_destroy_callback;
-	destroy.client_data = NULL;
-	if ( XSetIMValues( qt_xim, XNDestroyCallback, &destroy, NULL) != 0 )
+	destroy.client_data = 0;
+	if ( XSetIMValues( qt_xim, XNDestroyCallback, &destroy, 0 ) != 0 )
 	    qWarning( "Xlib dosn't support destroy callback");
 #endif
 	XIMStyles *styles=0;
-	XGetIMValues(qt_xim, XNQueryInputStyle, &styles, NULL, NULL);
+	XGetIMValues(qt_xim, XNQueryInputStyle, &styles, 0, 0);
 	if ( styles ) {
 	    int i;
 	    for ( i = 0; !qt_xim_style && i < styles->count_styles; i++ )
@@ -1121,6 +1211,9 @@ void qt_init_internal( int *argcptr, char **argv, Display *display )
 	qt_x11_intern_atom( "WINDOW_ROLE", &qt_window_role);
 	qt_x11_intern_atom( "SM_CLIENT_ID", &qt_sm_client_id);
 	qt_x11_intern_atom( "_MOTIF_WM_HINTS", &qt_xa_motif_wm_hints );
+	qt_x11_intern_atom( "KWIN_RUNNING", &qt_kwin_running );
+	qt_x11_intern_atom( "KWM_RUNNING", &qt_kwm_running );
+	qt_x11_intern_atom( "GNOME_BACKGROUND_PROPERTIES", &qt_gbackground_properties );
 	qt_x11_intern_atom( "INCR", &qt_x_incr );
 
 	qt_xdnd_setup();
@@ -1151,12 +1244,14 @@ void qt_init_internal( int *argcptr, char **argv, Display *display )
 // XIM segfaults on Solaris with "C" locale!
 // The idea was that the "en_US" locale is maybe installed on all systems
 // with a "C" locale and could be used as a fallback instead of "C". This
-// is not the case. We'll have to find something better...
+// is not the case.
+// We'll have to take a XIM / no XIM decision at run-time.
+// Taking a decision at compile-time using NO_XIM is not enough.
 #if defined (_OS_SOLARIS_) && !defined(NO_XIM)
     const char* locale = ::setlocale( LC_ALL, "" );
-    if ( !locale || ::strcmp( locale, "C" ) == 0 ) {
+    if ( !locale || qstrcmp( locale, "C" ) == 0 ) {
 	locale = ::setlocale( LC_ALL, "en_US" );
-	ASSERT( ::strcmp( locale, "en_US" ) == 0 );
+	ASSERT( qstrcmp( locale, "en_US" ) == 0 );
     }
 #else
     setlocale( LC_ALL, "" );		// use correct char set mapping
@@ -1202,13 +1297,63 @@ void qt_init_internal( int *argcptr, char **argv, Display *display )
 	qt_set_x11_resources( appFont, appFGCol, appBGCol, appBTNCol);
     }
 
-#if defined(UNIX) && defined(QT_THREAD_SUPPORT)
+#if defined(_OS_UNIX_)
     pipe( qt_thread_pipe );
 #endif
 
 }
 
-void qt_init( int *argcptr, char **argv )
+
+#ifndef QT_NO_STYLE
+ // run-time search for default style
+void QApplication::x11_initialize_style()
+{
+    Atom type;
+    int format;
+    unsigned long length, after;
+    unsigned char *data;
+    if ( app_style )
+	return;
+    if ( !seems_like_KDE_is_running ) {
+	if ( XGetWindowProperty( appDpy, appRootWin, qt_kwin_running, 0, 1,
+				 FALSE, AnyPropertyType, &type, &format,
+				 &length, &after, &data ) == Success
+	     && length ) {
+	    seems_like_KDE_is_running = TRUE;
+	    if ( data )
+		XFree( data );
+	}
+    }
+    if ( !seems_like_KDE_is_running ) {
+	if ( XGetWindowProperty( appDpy, appRootWin, qt_kwm_running, 0, 1,
+				 FALSE, AnyPropertyType, &type, &format,
+				 &length, &after, &data ) == Success
+	     && length ) {
+	    seems_like_KDE_is_running = TRUE; // KDE1, to be precise
+	    if ( data )
+		XFree( data );
+	}
+    }
+    if ( seems_like_KDE_is_running ) {
+#if !defined(QT_NO_STYLE_WINDOWS)
+	app_style = new QWindowsStyle; // default to windowsstyle on KDE
+#endif
+    } else { // maybe another desktop?
+	if ( XGetWindowProperty( appDpy, appRootWin, qt_gbackground_properties, 0, 1,
+				 FALSE, AnyPropertyType, &type, &format,
+				 &length, &after, &data ) == Success
+	     && length ) {
+#ifndef QT_NO_STYLE_CDE
+	    app_style = new QMotifPlusStyle( TRUE ); // default to MotifPlus with hovering
+#endif
+	    if ( data )
+		XFree( data );
+	}
+    }
+}
+#endif
+
+void qt_init( int *argcptr, char **argv, QApplication::Type )
 {
     qt_init_internal( argcptr, argv, 0 );
 }
@@ -1241,7 +1386,6 @@ void qt_cleanup()
     cleanupTimers();
     QPixmapCache::clear();
     QPainter::cleanup();
-    QCursor::cleanup();
     QFont::cleanup();
     QColor::cleanup();
 
@@ -1269,7 +1413,7 @@ void qt_cleanup()
     appDpy = 0;
 
     if ( appForeignDpy ) {
-	delete appName;
+	delete [] appName;
 	appName = 0;
     }
 
@@ -1322,7 +1466,8 @@ bool qt_wstate_iconified( WId winid )
 				 &length, &after, &data );
     bool iconic = FALSE;
     if ( r == Success && data && format == 32 ) {
-	Q_UINT32 *wstate = (Q_UINT32*)data;
+	// Q_UINT32 *wstate = (Q_UINT32*)data;
+	unsigned long *wstate = (unsigned long *) data;
 	iconic = (*wstate == IconicState );
 	XFree( (char *)data );
     }
@@ -1333,7 +1478,8 @@ bool qt_wstate_iconified( WId winid )
   \relates QApplication
 
   Adds a global routine that will be called from the QApplication
-  destructor.  This function is normally used to add cleanup routines.
+  destructor.  This function is normally used to add cleanup routines
+  for program-wide functionality.
 
   The function given by \a p should take no arguments and return
   nothing, like this:
@@ -1352,6 +1498,40 @@ bool qt_wstate_iconified( WId winid )
 	qAddPostRoutine( cleanup_ptr );	// delete later
     }
   \endcode
+
+  Note that for an application- or module-wide cleanup,
+  qAddPostRoutine() is often not suitable.  People have a tendency to
+  make such modules dynamically loaded, and then unload those modules
+  long before the QApplication destructor is called, for example.
+
+  For modules and libraries, using a reference-counted initialization
+  manager or Qt' parent-child delete mechanism may be better.  Here is
+  an example of a private class which uses the parent-child mechanism
+  to call a cleanup function at the right time:
+
+  \code
+    class MyPrivateInitStuff: public QObject {
+    private:
+        MyPrivateInitStuff( QObject * parent ): QObject( parent) {
+	    // initialization goes here
+	}
+	MyPrivateInitStuff * p;
+
+    public:
+        static MyPrivateInitStuff * initStuff( QObject * parent ) {
+	    if ( !p )
+	        p = new MyPrivateInitStuff( parent );
+	    return p;
+	}
+
+        ~MyPrivateInitStuff() {
+	    // cleanup (the "post routine") goes here
+	}
+    }
+  \endcode
+
+  By selecting the right parent widget/object, this can often be made
+  to clean up the module's data at the exact right moment.
 */
 
 void qAddPostRoutine( Q_CleanUpFunction p )
@@ -1362,6 +1542,48 @@ void qAddPostRoutine( Q_CleanUpFunction p )
     }
     postRList->insert( 0, (void *)p );		// store at list head
 }
+
+
+void qRemovePostRoutine( Q_CleanUpFunction p )
+{
+    if (! postRList) return;
+
+    void *postr = postRList->first();
+
+    while ( postr ) {
+	if (postr == (void *) p) {
+	    postRList->remove();
+	}
+
+	postr = postRList->next();
+    }
+}
+
+
+// HACK HACK
+/*
+void clean_post_routines(void *obj, unsigned long len, const char *name) {
+    QListIterator<void> post_it(*postRList);
+    void *post;
+
+    unsigned long objl = (unsigned long) obj, ptrl;
+
+    while ((post = post_it.current()) != 0) {
+    	++post_it;
+
+ 	ptrl = (unsigned long) post;
+
+	if (ptrl >= objl && ptrl <= (objl + len)) {
+	    qDebug("clean_post_routines: cleaning post routine for '%s'", name);
+
+	    postRList->remove(post);
+
+	    //	    break;
+	}
+    }
+}
+*/
+// </HACK>
 
 
 char *qAppName()				// get application name
@@ -1471,7 +1693,7 @@ GC qt_xget_temp_gc( bool monochrome )		// get temporary GC
   The main widget is like any other, in most respects except that if
   it is deleted, the application exits.
 
-  You need not have a main widget; conecting lastWindowClosed() to quit() is
+  You need not have a main widget; connecting lastWindowClosed() to quit() is
   another alternative.
 
   For X11, this function also resizes and moves the main widget
@@ -1484,13 +1706,16 @@ GC qt_xget_temp_gc( bool monochrome )		// get temporary GC
 
 void QApplication::setMainWidget( QWidget *mainWidget )
 {
+#if QT_VERSION >= 300
+    ASSERT(!mainWidget->parentWidget()); // catch silly error
+#endif
     extern int qwidget_tlw_gravity;		// in qwidget_x11.cpp
     main_widget = mainWidget;
     if ( main_widget ) {			// give WM command line
 	XSetWMProperties( main_widget->x11Display(), main_widget->winId(),
 			  0, 0, app_argv, app_argc, 0, 0, 0 );
 	if ( mwTitle )
-	    XStoreName( appDpy, main_widget->winId(), mwTitle );
+	    XStoreName( main_widget->x11Display(), main_widget->winId(), mwTitle );
 	if ( mwGeometry ) {			// parse geometry
 	    int x, y;
 	    int w, h;
@@ -1522,6 +1747,7 @@ void QApplication::setMainWidget( QWidget *mainWidget )
     }
 }
 
+#ifndef QT_NO_CURSOR
 
 /*****************************************************************************
   QApplication cursor stack
@@ -1632,6 +1858,7 @@ void QApplication::restoreOverrideCursor()
     }
 }
 
+#endif
 
 /*!
   \fn bool QApplication::hasGlobalMouseTracking()
@@ -2121,7 +2348,13 @@ int QApplication::exec()
 {
     quit_now = FALSE;
     quit_code = 0;
+
+#if defined(QT_THREAD_SUPPORT)
+    qApp->unlock(FALSE);
+#endif
+
     enter_loop();
+
     return quit_code;
 }
 
@@ -2141,27 +2374,49 @@ bool QApplication::processNextEvent( bool canWait )
     XEvent event;
     int	   nevents = 0;
 
+#if defined(QT_THREAD_SUPPORT)
+    qApp->lock();
+#endif
+
     emit guiThreadAwake();
 
     if (qt_is_gui_used ) {
 	sendPostedEvents();
 
-	// Two loops so that posted events accumulate
+       	// Two loops so that posted events accumulate
 	while ( XPending(appDpy) ) {
 	    while ( XPending(appDpy) ) {	// also flushes output buffer
-		if ( app_exit_loop )		// quit between events
+		if ( app_exit_loop ) {          // quit between events
+#if defined(QT_THREAD_SUPPORT)
+		    qApp->unlock(FALSE);
+#endif
+
 		    return FALSE;
+		}
+
 		XNextEvent( appDpy, &event );	// get next event
 		nevents++;
 
-		if ( x11ProcessEvent( &event ) == 1 )
+		if ( x11ProcessEvent( &event ) == 1 ) {
+#if defined(QT_THREAD_SUPPORT)
+		    qApp->unlock(FALSE);
+#endif
+
 		    return TRUE;
+		}
 	    }
+
 	    sendPostedEvents();
 	}
     }
-    if ( app_exit_loop )			// break immediately
+
+    if ( app_exit_loop ) {			// break immediately
+#if defined(QT_THREAD_SUPPORT)
+	qApp->unlock(FALSE);
+#endif
+
 	return FALSE;
+    }
 
     sendPostedEvents();
 
@@ -2194,13 +2449,15 @@ bool QApplication::processNextEvent( bool canWait )
     }
     int nsel;
 
-#if defined(UNIX) && defined(QT_THREAD_SUPPORT)
+#if defined(_OS_UNIX_)
     FD_SET( qt_thread_pipe[0], &app_readfds );
     highest = QMAX( highest, qt_thread_pipe[0] );
 #endif
 
-    if ( qt_preselect_handler )
-	qt_preselect_handler();
+    if ( qt_preselect_handler ) {
+	for ( VFPTR handler = (VFPTR) qt_preselect_handler->first(); handler; handler = (VFPTR) qt_preselect_handler->next() )
+	    handler();
+    }
 
 #if defined(_OS_WIN32_)
 #define FDCAST (fd_set*)
@@ -2208,19 +2465,42 @@ bool QApplication::processNextEvent( bool canWait )
 #define FDCAST (void*)
 #endif
 
+#if defined(QT_THREAD_SUPPORT)
+    qApp->unlock(FALSE);
+#endif
+
     nsel = select( highest + 1,
 		   FDCAST (&app_readfds),
 		   FDCAST (sn_write  ? &app_writefds  : 0),
 		   FDCAST (sn_except ? &app_exceptfds : 0),
 		   tm );
+
 #undef FDCAST
 
-    if ( qt_postselect_handler )
-	qt_postselect_handler();
+#if defined(QT_THREAD_SUPPORT)
+    qApp->lock();
+#endif
+
+#if defined(_OS_UNIX_)
+    if ( nsel > 0 && FD_ISSET( qt_thread_pipe[0], &app_readfds ) ) {
+	char c;
+	::read(qt_thread_pipe[0], &c, 1);
+    }
+#endif
+
+    if ( qt_postselect_handler ) {
+	for ( VFPTR handler = (VFPTR) qt_postselect_handler->first(); handler; handler = (VFPTR) qt_postselect_handler->next() )
+	    handler();
+    }
 
     if ( nsel == -1 ) {
 	if ( errno == EINTR || errno == EAGAIN ) {
 	    errno = 0;
+
+#if defined(QT_THREAD_SUPPORT)
+	    qApp->unlock(FALSE);
+#endif
+
 	    return (nevents > 0);
 	} else {
 	    ; // select error
@@ -2229,35 +2509,26 @@ bool QApplication::processNextEvent( bool canWait )
 	nevents += sn_activate();
     }
 
-#if defined(UNIX) && defined(QT_THREAD_SUPPORT)
-    if ( FD_ISSET( qt_thread_pipe[0], &app_readfds ) ) {
-	char c;
-	::read(qt_thread_pipe[0],&c,1);
-    }
-#endif
-
     nevents += qt_activate_timers();		// activate timers
     qt_reset_color_avail();			// color approx. optimization
+
+#if defined(QT_THREAD_SUPPORT)
+    qApp->unlock(FALSE);
+#endif
 
     return (nevents > 0);
 }
 
 
-
-/*!
-  Wakes up the GUI thread.
-
-  \sa guiThreadAwake()
-*/
 void QApplication::wakeUpGuiThread()
 {
-#if defined(UNIX) && defined(QT_THREAD_SUPPORT)
-    char c = '*';
+#  if defined(_OS_UNIX_)
+    char c = 0;
     int nbytes;
     if ( ::ioctl(qt_thread_pipe[1], FIONREAD, (char*)&nbytes) >= 0 && nbytes == 0 ) {
 	::write(  qt_thread_pipe[1], &c, 1  );
     }
-#endif
+#  endif
 }
 
 int QApplication::x11ClientMessage(QWidget* w, XEvent* event, bool passive_only)
@@ -2275,9 +2546,14 @@ int QApplication::x11ClientMessage(QWidget* w, XEvent* event, bool passive_only)
 		if ( (ulong) event->xclient.data.l[1] > qt_x_time )
 		    qt_x_time = event->xclient.data.l[1];
 		if ( amw && amw != widget ) {
-		    amw->raise(); //  help broken window managers
-		    XSetInputFocus( appDpy, amw->winId(),
-				    RevertToParent, qt_x_time );
+		    QWidget* groupLeader = widget;
+		    while ( groupLeader && !groupLeader->testWFlags( Qt::WGroupLeader ) )
+			groupLeader = groupLeader->parentWidget();
+		    if ( !groupLeader ) {
+			amw->raise(); //  help broken window managers
+			XSetInputFocus( appDpy, amw->winId(),
+					RevertToParent, qt_x_time );
+		    }
 		}
 	    } else if ( a == qt_net_wm_context_help ) {
 		QWhatsThis::enterWhatsThisMode();
@@ -2306,6 +2582,9 @@ int QApplication::x11ClientMessage(QWidget* w, XEvent* event, bool passive_only)
 
     return 0;
 }
+
+
+
 
 
 /*! This virtual does the core processing of individual X events,
@@ -2373,10 +2652,10 @@ int QApplication::x11ProcessEvent( XEvent* event )
 	qt_x_time = event->xproperty.time;
 	if ( event->xproperty.window == appRootWin ) { // root properties
 	    if ( event->xproperty.atom == qt_selection_sentinel ) {
-		if ( qt_check_selection_sentinel( event ) )
-		     emit clipboard()->dataChanged();
-	    }
-	    else if ( obey_desktop_settings ) {
+		if (clipboard()->receivers(SIGNAL(dataChanged())) &&
+		    qt_check_selection_sentinel( event ) )
+		    emit clipboard()->dataChanged();
+	    } else if ( obey_desktop_settings ) {
 		if ( event->xproperty.atom == qt_resource_manager )
 		    qt_set_x11_resources();
 		else if ( event->xproperty.atom == qt_desktop_properties )
@@ -2388,7 +2667,7 @@ int QApplication::x11ProcessEvent( XEvent* event )
 	return 0;
     }
 
-    if ( !widget ) {				// don't know this window
+    if ( !widget ) {				// don't know this windows
 	QWidget* popup = QApplication::activePopupWidget();
 	if ( popup ) {
 
@@ -2399,7 +2678,7 @@ int QApplication::x11ProcessEvent( XEvent* event )
 	      Unfortunately this translation is currently only
 	      possible with a known widget. I'll change that soon
 	      (Matthias).
-	     */
+	    */
 
 	    // Danger - make sure we don't lock the server
 	    switch ( event->type ) {
@@ -2432,6 +2711,7 @@ int QApplication::x11ProcessEvent( XEvent* event )
 	    return 1;
 	}
 
+
     if ( widget->x11Event(event) )		// send through widget filter
 	return 1;
 
@@ -2441,7 +2721,7 @@ int QApplication::x11ProcessEvent( XEvent* event )
     case ButtonRelease:
     case MotionNotify:
 	qt_x_time = (event->type == MotionNotify) ?
-			     event->xmotion.time : event->xbutton.time;
+		    event->xmotion.time : event->xbutton.time;
 	widget->translateMouseEvent( event );
 	break;
 
@@ -2505,9 +2785,8 @@ int QApplication::x11ProcessEvent( XEvent* event )
 	     event->xcrossing.detail == NotifyVirtual  ||
 	     event->xcrossing.detail == NotifyNonlinearVirtual )
 	    break;
+	qt_dispatchEnterLeave( widget, QWidget::find( curWin ) );
 	curWin = widget->winId();
-	QEvent e( QEvent::Enter );
-	QApplication::sendEvent( widget, &e );
 	widget->translateMouseEvent( event ); //we don't get MotionNotify, emulate it
     }
     break;
@@ -2522,8 +2801,25 @@ int QApplication::x11ProcessEvent( XEvent* event )
 	    break;
 	if ( !widget->isDesktop() )
 	    widget->translateMouseEvent( event ); //we don't get MotionNotify, emulate it
-	QEvent e( QEvent::Leave );
-	QApplication::sendEvent( widget, &e );
+
+	QWidget* enter = 0;
+	XEvent ev;
+	while ( XCheckMaskEvent( widget->x11Display(), EnterWindowMask | LeaveWindowMask , &ev )
+		&& !qt_x11EventFilter( &ev ) ) {
+	    if ( ev.type == LeaveNotify ) {
+		XPutBackEvent( widget->x11Display(), &ev );
+		break;
+	    }
+	    if (  ev.xcrossing.mode != NotifyNormal ||
+		 ev.xcrossing.detail == NotifyVirtual  ||
+		 ev.xcrossing.detail == NotifyNonlinearVirtual )
+		continue;
+	    enter = QWidget::find( ev.xcrossing.window );
+	    break;
+	}
+
+	qt_dispatchEnterLeave( enter, widget );
+	curWin = enter ? enter->winId() : 0;
     }
     break;
 
@@ -2538,7 +2834,7 @@ int QApplication::x11ProcessEvent( XEvent* event )
 
     case MapNotify:				// window shown
 	if ( widget->isTopLevel() && !widget->isVisible()
-	     && !widget->testWState( WState_ForceHide ) ) {
+	     && !widget->isHidden() ) {
 	    widget->setWState( WState_Visible );
 	    widget->sendShowEventsToChildren( TRUE );
 	    QShowEvent e( TRUE );
@@ -2747,11 +3043,8 @@ void qt_leave_modal( QWidget *widget )
 	    qt_modal_stack = 0;
 	    QPoint p( QCursor::pos() );
 	    QWidget* w = QApplication::widgetAt( p.x(), p.y(), TRUE );
-	    if ( w ) { // send synthetic enter event
-		curWin = w->winId();
-		QEvent e ( QEvent::Enter );
- 		QApplication::sendEvent( w, &e );
-	    }
+	    qt_dispatchEnterLeave( w, QWidget::find( curWin ) ); // send synthetic enter event
+	    curWin = w? w->winId() : 0;
 	}
     }
     app_do_modal = qt_modal_stack != 0;
@@ -2767,29 +3060,33 @@ static bool qt_try_modal( QWidget *widget, XEvent *event )
 
     QWidget *modal=0, *top=QApplication::activeModalWidget();
 
+    QWidget* groupLeader = widget;
     widget = widget->topLevelWidget();
+
     if ( widget->testWFlags(Qt::WType_Modal) )	// widget is modal
 	modal = widget;
-    if ( !top || modal == top )				// don't block event
+    if ( !top || modal == top )			// don't block event
 	return TRUE;
-
-#ifdef ALLOW_NON_APPLICATION_MODAL
-    if ( top && top->parentWidget() ) {
-	// Not application-modal
-	// Does widget have a child in qt_modal_stack?
+    
+    while ( groupLeader && !groupLeader->testWFlags( Qt::WGroupLeader ) )
+	groupLeader = groupLeader->parentWidget();
+    
+    if ( groupLeader ) {
+	// Does groupLeader have a child in qt_modal_stack?
 	bool unrelated = TRUE;
 	modal = qt_modal_stack->first();
 	while (modal && unrelated) {
 	    QWidget* p = modal->parentWidget();
-	    while ( p && p != widget ) {
+	    while ( p && p != groupLeader && !p->testWFlags( Qt::WGroupLeader) ) {
 		p = p->parentWidget();
 	    }
 	    modal = qt_modal_stack->next();
-	    if ( p ) unrelated = FALSE;
+	    if ( p == groupLeader ) unrelated = FALSE;
 	}
-	if ( unrelated ) return TRUE;		// don't block event
+	
+	if ( unrelated ) 
+	    return TRUE;		// don't block event
     }
-#endif
 
     bool block_event  = FALSE;
     bool expose_event = FALSE;
@@ -3098,6 +3395,8 @@ static void repairTimer( const timeval &time )	// repair broken timer
 /*
   Returns the time to wait for the next timer, or null if no timers are
   waiting.
+
+  The result is bounded to qt_wait_timer_max if this exists.
 */
 
 timeval *qt_wait_timer()
@@ -3120,6 +3419,12 @@ timeval *qt_wait_timer()
 	    tm.tv_sec  = 0;			// no time to wait
 	    tm.tv_usec = 0;
 	}
+	if ( qt_wait_timer_max && *qt_wait_timer_max < tm )
+	    tm = *qt_wait_timer_max;
+	return &tm;
+    }
+    if ( qt_wait_timer_max ) {
+	tm = *qt_wait_timer_max;
 	return &tm;
     }
     return 0;					// no timers
@@ -3214,6 +3519,8 @@ int qStartTimer( int interval, QObject *obj )
     t->timeout = currentTime + t->interval;
     t->obj = obj;
     insertTimer( t );				// put timer in list
+    void qt_np_enable_timers();			// in qnpsupport.cpp
+    qt_np_enable_timers();
     return id;
 }
 
@@ -3453,8 +3760,11 @@ bool QETWidget::translateMouseEvent( const XEvent *event )
 	    popupOfPopupButtonFocus = 0;
 	}
 
-	if ( !popupTarget->isEnabled() )
+	if ( !popupTarget->isEnabled() ) {
+	    if ( popupGrabOk )
+		XAllowEvents( x11Display(), SyncPointer, CurrentTime );
 	    return FALSE;
+	}
 
 	switch ( type ) {
 	    case QEvent::MouseButtonPress:
@@ -3469,6 +3779,8 @@ bool QETWidget::translateMouseEvent( const XEvent *event )
 		break;				// nothing for mouse move
 	}
 
+	Display* dpy = x11Display(); // store display, send() may destroy us
+
 	if ( popupButtonFocus ) {
 	    QMouseEvent e( type, popupButtonFocus->mapFromGlobal(globalPos),
 			   globalPos, button, state );
@@ -3477,22 +3789,26 @@ bool QETWidget::translateMouseEvent( const XEvent *event )
 		popupButtonFocus = 0;
 		popupOfPopupButtonFocus = 0;
 	    }
+	} else if ( popupChild ) {
+	    QMouseEvent e( type, popupChild->mapFromGlobal(globalPos),
+			   globalPos, button, state );
+	    QApplication::sendEvent( popupChild, &e );
 	} else {
 	    QMouseEvent e( type, pos, globalPos, button, state );
-	    QApplication::sendEvent( popup, &e );
+	    QApplication::sendEvent( popupChild ? popupChild : popup, &e );
 	}
 
 	if ( releaseAfter )
 	    qt_button_down = 0;
 
-	if ( qApp->inPopupMode() ) {			// still in popup mode
+	if ( qApp->inPopupMode() ) { // still in popup mode
 	    if ( popupGrabOk )
-		XAllowEvents( x11Display(), SyncPointer, CurrentTime );
+		XAllowEvents( dpy, SyncPointer, CurrentTime );
 	} else {
 	    if ( type != QEvent::MouseButtonRelease && state != 0 &&
 		 QWidget::find((WId)mouseActWindow) ) {
 		manualGrab = TRUE;		// need to manually grab
-		XGrabPointer( x11Display(), mouseActWindow, FALSE,
+		XGrabPointer( dpy, mouseActWindow, FALSE,
 			      (uint)(ButtonPressMask | ButtonReleaseMask |
 			      ButtonMotionMask |
 			      EnterWindowMask | LeaveWindowMask),
@@ -3548,6 +3864,9 @@ bool QETWidget::translateWheelEvent( int global_x, int global_y, int delta, int 
 
     // send the event to the widget or its ancestors
     if (w){
+	QWidget* popup = qApp->activePopupWidget();
+	if ( popup && w != popup )
+	    popup->hide();
 	do {
 	    QWheelEvent e( w->mapFromGlobal(QPoint( global_x, global_y)),
 			   QPoint(global_x, global_y), delta, state );
@@ -3594,9 +3913,9 @@ static const KeySym KeyTbl[] = {		// keyboard mapping table
     XK_BackSpace,	Qt::Key_Backspace,
     XK_Return,		Qt::Key_Return,
     XK_Insert,		Qt::Key_Insert,
-    XK_KP_Insert,		Qt::Key_Insert,
+    XK_KP_Insert,	Qt::Key_Insert,
     XK_Delete,		Qt::Key_Delete,
-    XK_KP_Delete,		Qt::Key_Delete,
+    XK_KP_Delete,	Qt::Key_Delete,
     XK_Clear,		Qt::Key_Delete,
     XK_Pause,		Qt::Key_Pause,
     XK_Print,		Qt::Key_Print,
@@ -3614,9 +3933,9 @@ static const KeySym KeyTbl[] = {		// keyboard mapping table
     XK_KP_End,		Qt::Key_End,
     XK_KP_Left,		Qt::Key_Left,
     XK_KP_Up,		Qt::Key_Up,
-    XK_KP_Right,		Qt::Key_Right,
+    XK_KP_Right,	Qt::Key_Right,
     XK_KP_Down,		Qt::Key_Down,
-    XK_KP_Prior,		Qt::Key_Prior,
+    XK_KP_Prior,	Qt::Key_Prior,
     XK_KP_Next,		Qt::Key_Next,
     XK_Shift_L,		Qt::Key_Shift,		// modifiers
     XK_Shift_R,		Qt::Key_Shift,
@@ -3645,6 +3964,7 @@ static const KeySym KeyTbl[] = {		// keyboard mapping table
     XK_Menu,		Qt::Key_Menu,
     XK_Hyper_L,		Qt::Key_Hyper_L,
     XK_Hyper_R,		Qt::Key_Hyper_R,
+    XK_Help,		Qt::Key_Help,
     0,			0
 };
 
@@ -3666,8 +3986,9 @@ static void deleteKeyDicts()
 
 
 bool QETWidget::translateKeyEventInternal( const XEvent *event, int& count,
-					   QString& text, int& state,
-					   char& ascii, int &code )
+					   QString& text,
+					   int& state,
+					   char& ascii, int& code )
 {
     QCString chars(64);
     KeySym key = 0;
@@ -3757,8 +4078,9 @@ bool QETWidget::translateKeyEventInternal( const XEvent *event, int& count,
 	code = isprint((int)key) ? toupper((int)key) : 0; // upper-case key, if known
     } else if ( key >= XK_F1 && key <= XK_F35 ) {
 	code = Key_F1 + ((int)key - XK_F1);	// function keys
-    } else if ( key >= XK_KP_0 && key <= XK_KP_9){
+    } else if ( key >= XK_KP_0 && key <= XK_KP_9) {
 	code = Key_0 + ((int)key - XK_KP_0);	// numeric keypad keys
+	state |= Keypad;
     } else {
 	int i = 0;				// any other keys
 	while ( KeyTbl[i] ) {
@@ -3768,8 +4090,34 @@ bool QETWidget::translateKeyEventInternal( const XEvent *event, int& count,
 	    }
 	    i += 2;
 	}
+	switch ( key ) {
+	case XK_KP_Insert:
+	case XK_KP_Delete:
+	case XK_KP_Home:
+	case XK_KP_End:
+	case XK_KP_Left:
+	case XK_KP_Up:
+	case XK_KP_Right:
+	case XK_KP_Down:
+	case XK_KP_Prior:
+	case XK_KP_Next:
+	case XK_KP_Space:
+	case XK_KP_Tab:
+	case XK_KP_Enter:
+	case XK_KP_Equal:
+	case XK_KP_Multiply:
+	case XK_KP_Add:
+	case XK_KP_Separator:
+	case XK_KP_Subtract:
+	case XK_KP_Decimal:
+	case XK_KP_Divide:
+	    state |= Keypad;
+	    break;
+	default:
+	    break;
+	}
 	if ( code == Key_Tab &&
-	     (state & ShiftButton) == Qt::ShiftButton ) {
+	     (state & ShiftButton) == ShiftButton ) {
 	    code = Key_Backtab;
 	    chars[0] = 0;
 	}
@@ -3796,7 +4144,6 @@ bool QETWidget::translateKeyEventInternal( const XEvent *event, int& count,
 #undef Q_EE
 #endif
 #endif
-
 
     // convert chars (8bit) to text (unicode).
     if ( input_mapper )
@@ -3829,7 +4176,7 @@ bool QETWidget::translateKeyEvent( const XEvent *event, bool grab )
 
     translateKeyEventInternal( event, count, text, state, ascii, code );
     bool isAccel = FALSE;
-    if (!grab) { // test for accel if the keyboard is not grabbed
+    if ( !grab ) { // test for accel if the keyboard is not grabbed
 	QKeyEvent a( QEvent::AccelAvailable, code, ascii, state, text, FALSE,
 		     QMAX(count, int(text.length())) );
 	a.ignore();
@@ -3935,13 +4282,19 @@ bool QETWidget::translateKeyEvent( const XEvent *event, bool grab )
     QKeyEvent e( type, code, ascii, state, text, autor,
 		 QMAX(count, int(text.length())) );
     if ( type == QEvent::KeyPress && !grab ) {
-	// send accel event to tlw if the keyboard is not grabbed
-	QKeyEvent a( QEvent::Accel, code, ascii, state, text, autor,
-		     QMAX(count, int(text.length())) );
-	a.ignore();
-	QApplication::sendEvent( topLevelWidget(), &a );
-	if ( a.isAccepted() )
-	    return TRUE;
+	// send accel events if the keyboard is not grabbed
+	QKeyEvent aa( QEvent::AccelOverride, code, ascii, state, text, autor,
+		      QMAX(count, int(text.length())) );
+	aa.ignore();
+	QApplication::sendEvent( this, &aa );
+	if ( !aa.isAccepted() ) {
+	    QKeyEvent a( QEvent::Accel, code, ascii, state, text, autor,
+			 QMAX(count, int(text.length())) );
+	    a.ignore();
+	    QApplication::sendEvent( topLevelWidget(), &a );
+	    if ( a.isAccepted() )
+		return TRUE;
+	}
     }
     return QApplication::sendEvent( this, &e );
 }
@@ -4133,7 +4486,7 @@ bool QETWidget::translateConfigEvent( const XEvent *event )
 
 	bool trust =  topData()->parentWinId == None ||  topData()->parentWinId == appRootWin;
 	if (event->xconfigure.send_event || trust ) {
-	    /* if a ConfigureNotify comes from a true sendevent request, we can
+	    /* if a ConfigureNotify comes from a real sendevent request, we can
 	       trust its values. */
 	    newCPos.rx() = event->xconfigure.x + event->xconfigure.border_width;
 	    newCPos.ry() = event->xconfigure.y + event->xconfigure.border_width;
@@ -4142,11 +4495,11 @@ bool QETWidget::translateConfigEvent( const XEvent *event )
 	XEvent otherEvent;
 	while ( XCheckTypedWindowEvent( x11Display(),winId(),ConfigureNotify,&otherEvent ) ) {
 	    if ( qt_x11EventFilter( &otherEvent ) )
-		break;
+		continue;
 	    if (x11Event( &otherEvent ) )
-		break;
+		continue;
 	    if ( otherEvent.xconfigure.event != otherEvent.xconfigure.window )
-		break;
+		continue;
 	    newSize.setWidth( otherEvent.xconfigure.width );
 	    newSize.setHeight( otherEvent.xconfigure.height );
 	    if ( otherEvent.xconfigure.send_event || trust ) {
@@ -4216,9 +4569,9 @@ bool QETWidget::translateCloseEvent( const XEvent * )
 
 /*!
   Sets the text cursor's flash time to \a msecs milliseconds.  The
-  flash time is the time requried to display, invert and restore the
+  flash time is the time required to display, invert and restore the
   caret display: A full flash cycle.  Usually, the text cursor is
-  displayed for \a msecs/2 millisecnds, then hidden for \a msecs/2
+  displayed for \a msecs/2 milliseconds, then hidden for \a msecs/2
   milliseconds, but this may vary.
 
   Note that on Microsoft Windows, calling this function sets the
@@ -4234,7 +4587,7 @@ void  QApplication::setCursorFlashTime( int msecs )
 
 /*!
   Returns the text cursor's flash time in milliseconds. The flash time
-  is the time requried to display, invert and restore the caret
+  is the time required to display, invert and restore the caret
   display.
 
   The default value on X11 is 1000 milliseconds. On Windows, the
@@ -4306,12 +4659,74 @@ int QApplication::wheelScrollLines()
     return wheel_scroll_lines;
 }
 
+/*!
+  Enables the UI effect \a effect if \a enable is TRUE, otherwise
+  the effect will not be used.
+
+  \sa isEffectEnabled(), Qt::UIEffect, setDesktopSettingsAware()
+*/
+void QApplication::setEffectEnabled( Qt::UIEffect effect, bool enable )
+{
+    switch (effect) {
+    case UI_AnimateMenu:
+	animate_menu = enable;
+	break;
+    case UI_FadeMenu:
+	if ( enable )
+	    animate_menu = TRUE;
+	fade_menu = enable;
+	break;
+    case UI_AnimateCombo:
+	animate_combo = enable;
+	break;
+    case UI_AnimateTooltip:
+	animate_tooltip = enable;
+	break;
+    case UI_FadeTooltip:
+	if ( enable )
+	    animate_tooltip = TRUE;
+	fade_tooltip = enable;
+	break;
+    default:
+	animate_ui = enable;
+	break;
+    }
+}
+
+/*!
+  Returns TRUE if \a effect is enabled, otherwise FALSE.
+
+  By default, Qt will try to use the desktop settings, and
+  setDesktopSettingsAware() must be called to prevent this.
+
+  sa\ setEffectEnabled(), Qt::UIEffect
+*/
+bool QApplication::isEffectEnabled( Qt::UIEffect effect )
+{
+    if ( !animate_ui )
+	return FALSE;
+
+    switch( effect ) {
+    case UI_AnimateMenu:
+	return animate_menu;
+    case UI_FadeMenu:
+	return fade_menu;
+    case UI_AnimateCombo:
+	return animate_combo;
+    case UI_AnimateTooltip:
+	return animate_tooltip;
+    case UI_FadeTooltip:
+	return fade_tooltip;
+    default:
+	return animate_ui;
+    }
+}
 
 /*****************************************************************************
-  Session management support (-D QT_SM_SUPPORT to enable it)
+  Session management support
  *****************************************************************************/
 
-#ifndef QT_SM_SUPPORT
+#ifdef QT_NO_SM_SUPPORT
 
 class QSessionManagerData
 {
@@ -4323,7 +4738,7 @@ public:
 };
 
 QSessionManager::QSessionManager( QApplication * app, QString &session )
-    : QObject( app, "session manager" )
+    : QObject( app, "qt_sessionmanager" )
 {
     d = new QSessionManagerData;
     d->sessionId = session;
@@ -4410,7 +4825,7 @@ void QSessionManager::requestPhase2()
 {
 }
 
-#else // QT_SM_SUPPORT
+#else // QT_NO_SM_SUPPORT
 
 
 #include <X11/SM/SMlib.h>
@@ -4696,8 +5111,10 @@ QSessionManager::QSessionManager( QApplication * app, QString &session )
     cb.shutdown_cancelled.callback = sm_shutdownCancelledCallback;
     cb.shutdown_cancelled.client_data = (SmPointer) this;
 
+    char* session_manager = getenv("SESSION_MANAGER");
+
     // avoid showing a warning message below
-    if (!::getenv("SESSION_MANAGER") )
+    if ( !session_manager || !session_manager[0] )
 	return;
 
     smcConnection = SmcOpenConnection( 0, 0, 1, 0,
@@ -4869,4 +5286,4 @@ void QSessionManager::requestPhase2()
 }
 
 
-#endif // QT_SM_SUPPORT
+#endif // QT_NO_SM_SUPPORT

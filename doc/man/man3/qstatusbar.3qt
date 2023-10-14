@@ -1,5 +1,5 @@
-.TH QStatusBar 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QStatusBar 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QStatusBar \- Horizontal bar suitable for presenting status information
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -19,19 +17,19 @@ Inherits QWidget.
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQStatusBar\fR ( QWidget * " "parent" " = 0, const char * " "name" " = 0 )"
+.BI "\fBQStatusBar\fR ( QWidget * " "parent" " = 0, const char * " "name" " = 0 ) "
 .br
 .ti -1c
-.BI "\fB~QStatusBar\fR ()"
+.BI "\fB~QStatusBar\fR () "
 .br
 .ti -1c
-.BI "void \fBaddWidget\fR ( QWidget *, int " "stretch" " = 0, bool = FALSE )"
+.BI "void \fBaddWidget\fR ( QWidget *, int " "stretch" " = 0, bool = FALSE ) "
 .br
 .ti -1c
-.BI "void \fBremoveWidget\fR ( QWidget * )"
+.BI "void \fBremoveWidget\fR ( QWidget * ) "
 .br
 .ti -1c
-.BI "void \fBsetSizeGripEnabled\fR ( bool )"
+.BI "void \fBsetSizeGripEnabled\fR ( bool ) "
 .br
 .ti -1c
 .BI "bool \fBisSizeGripEnabled\fR () const"
@@ -40,27 +38,29 @@ Inherits QWidget.
 .SS "Public Slots"
 .in +1c
 .ti -1c
-.BI "void \fBmessage\fR ( const QString & )"
+.BI "void \fBmessage\fR ( const QString & ) "
 .br
 .ti -1c
-.BI "void \fBmessage\fR ( const QString &, int )"
+.BI "void \fBmessage\fR ( const QString &, int ) "
 .br
 .ti -1c
-.BI "void \fBclear\fR ()"
+.BI "void \fBclear\fR () "
 .br
 .in -1c
 .SS "Protected Members"
 .in +1c
 .ti -1c
-.BI "virtual void \fBpaintEvent\fR ( QPaintEvent * )"
+.BI "virtual void \fBpaintEvent\fR ( QPaintEvent * ) "
 .br
 .ti -1c
-.BI "void \fBreformat\fR ()"
+.BI "void \fBreformat\fR () "
 .br
 .ti -1c
-.BI "void \fBhideOrShow\fR ()"
+.BI "void \fBhideOrShow\fR () "
 .br
 .in -1c
+.SS "Properties"
+<table border=1 cellpadding=3 cellspacing=0> <tr><th>Type<th>Name<th>READ<th>WRITE<th>Options <tr><td>bool<td>sizeGripEnabled<td>isSizeGripEnabled<td>setSizeGripEnabled<td>&nbsp; </table>
 .SH DESCRIPTION
 The QStatusBar class provides a horizontal bar suitable for presenting status information.
 .PP
@@ -101,12 +101,12 @@ By default, QStatusBar provides a QSizeGrip in the lower-right corner. You can d
 .PP
 <img src=qstatusbar-m.png> <img src=qstatusbar-w.png>
 .PP
-See also: QToolBar, QMainWindow, QLabel and GUI Design Handbook: Status Bar.
+See also QToolBar, QMainWindow, QLabel and GUI Design Handbook: Status Bar.
 .SH MEMBER FUNCTION DOCUMENTATION
 .SH "QStatusBar::QStatusBar ( QWidget * parent = 0, const char * name = 0 )"
 Constructs a status bar with just a size grip.
 .PP
-See also: setSizeGripEnabled().
+See also setSizeGripEnabled().
 .SH "QStatusBar::~QStatusBar ()"
 Destructs the status bar and frees any allocated resources.
 .SH "void QStatusBar::addWidget ( QWidget * widget, int stretch = 0, bool permanent = FALSE )"
@@ -120,11 +120,11 @@ If \fIpermanent\fR is TRUE, \fIwidget\fR is located at the far right of the stat
 .PP
 This function may cause some flicker.
 .PP
-See also: removeWidget().
+See also removeWidget().
 .SH "void QStatusBar::clear () \fC[slot]\fR"
 Removes any temporary message being shown.
 .PP
-See also: message().
+See also message().
 .SH "bool QStatusBar::event ( QEvent * e ) \fC[virtual protected]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .PP
@@ -134,11 +134,11 @@ Ensures that the right widgets are visible. Used by message() and clear().
 .SH "bool QStatusBar::isSizeGripEnabled () const"
 Returns whether the QSizeGrip in the bottom right of the status bar is enabled.
 .PP
-See also: setSizeGripEnabled().
+See also setSizeGripEnabled().
 .SH "void QStatusBar::message ( const QString & message ) \fC[slot]\fR"
 Hide the normal status indicators and display \fImessage,\fR until clear() or another message() is called.
 .PP
-See also: clear().
+See also clear().
 .SH "void QStatusBar::message ( const QString & message, int ms ) \fC[slot]\fR"
 Hide the normal status indications and display \fImessage\fR for \fIms\fR milli-seconds, or until clear() or another message() is called, whichever is first.
 .SH "void QStatusBar::paintEvent ( QPaintEvent * ) \fC[virtual protected]\fR"
@@ -154,19 +154,19 @@ This function may cause some flicker.
 .PP
 Note that \fIwidget\fR is not deleted.
 .PP
-See also: addWidget().
-.SH "void QStatusBar::resizeEvent ( QResizeEvent * ) \fC[virtual protected]\fR"
+See also addWidget().
+.SH "void QStatusBar::resizeEvent ( QResizeEvent * e ) \fC[virtual protected]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .PP
 Reimplemented from QWidget.
 .SH "void QStatusBar::setSizeGripEnabled ( bool enabled )"
 Enables or disables the QSizeGrip in the bottom right of the status bar. By default, the size grip is enabled.
 .PP
-See also:  isSizeGripEnabled().
+See also  isSizeGripEnabled().
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qstatusbar.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

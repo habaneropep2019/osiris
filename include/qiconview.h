@@ -1,27 +1,39 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qiconview.h   2.1.1   edited 2000-04-24 $
+** $Id: qt/src/iconview/qiconview.h   2.2.0   edited 2000-08-25 $
 **
 ** Definition of QIconView widget class
 **
 ** Created : 990707
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the iconview module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #ifndef QICONVIEW_H
 #define QICONVIEW_H
@@ -39,6 +51,16 @@
 #include <qstringlist.h>
 #include <qbitmap.h>
 #endif // QT_H
+
+#include <qmodules.h>
+
+#if !defined(QT_MODULE_ICONVIEW)
+#define QM_EXPORT
+#else
+#define QM_EXPORT Q_EXPORT
+#endif
+
+#ifndef QT_NO_ICONVIEW
 
 class QIconView;
 class QFontMetrics;
@@ -66,7 +88,7 @@ class QStringList;
  *
  *****************************************************************************/
 
-class Q_EXPORT QIconDragItem
+class QM_EXPORT QIconDragItem
 {
 public:
     QIconDragItem();
@@ -89,7 +111,7 @@ private:
 
 struct QIconDragPrivate;
 
-class Q_EXPORT QIconDrag : public QDragObject
+class QM_EXPORT QIconDrag : public QDragObject
 {
     Q_OBJECT
 public:
@@ -118,7 +140,7 @@ private:
 
 class QIconViewToolTip;
 
-class Q_EXPORT QIconViewItem : public Qt
+class QM_EXPORT QIconViewItem : public Qt
 {
     friend class QIconView;
     friend class QIconViewToolTip;
@@ -194,7 +216,9 @@ protected:
     virtual void calcRect( const QString &text_ = QString::null );
     virtual void paintItem( QPainter *p, const QColorGroup &cg );
     virtual void paintFocus( QPainter *p, const QColorGroup &cg );
+#ifndef QT_NO_DRAGANDDROP
     virtual void dropped( QDropEvent *e, const QValueList<QIconDragItem> &lst );
+#endif
     virtual void dragEntered();
     virtual void dragLeft();
     void setItemRect( const QRect &r );
@@ -235,7 +259,7 @@ private:
  *
  *****************************************************************************/
 
-class Q_EXPORT QIconView : public QScrollView
+class QM_EXPORT QIconView : public QScrollView
 {
     friend class QIconViewItem;
     friend class QIconViewPrivate;
@@ -383,7 +407,9 @@ signals:
     void mouseButtonPressed( int button, QIconViewItem* item, const QPoint& pos );
     void mouseButtonClicked( int button, QIconViewItem* item, const QPoint& pos );
 
+#ifndef QT_NO_DRAGANDDROP
     void dropped( QDropEvent *e, const QValueList<QIconDragItem> &lst );
+#endif
     void moved();
     void onItem( QIconViewItem *item );
     void onViewport();
@@ -405,10 +431,14 @@ protected:
     virtual void contentsMouseReleaseEvent( QMouseEvent *e );
     virtual void contentsMouseMoveEvent( QMouseEvent *e );
     virtual void contentsMouseDoubleClickEvent( QMouseEvent *e );
+
+#ifndef QT_NO_DRAGANDDROP
     virtual void contentsDragEnterEvent( QDragEnterEvent *e );
     virtual void contentsDragMoveEvent( QDragMoveEvent *e );
     virtual void contentsDragLeaveEvent( QDragLeaveEvent *e );
     virtual void contentsDropEvent( QDropEvent *e );
+#endif
+
     virtual void resizeEvent( QResizeEvent* e );
     virtual void keyPressEvent( QKeyEvent *e );
     virtual void focusInEvent( QFocusEvent *e );
@@ -416,8 +446,10 @@ protected:
     virtual void enterEvent( QEvent *e );
 
     virtual void drawRubber( QPainter *p );
+#ifndef QT_NO_DRAGANDDROP
     virtual QDragObject *dragObject();
     virtual void startDrag();
+#endif
     virtual void insertInGrid( QIconViewItem *item );
     virtual void drawBackground( QPainter *p, const QRect &r );
 
@@ -430,7 +462,9 @@ protected:
 
 private:
     virtual void drawDragShapes( const QPoint &pnt );
+#ifndef QT_NO_DRAGANDDROP
     virtual void initDragEnter( QDropEvent *e );
+#endif
     void drawContents( QPainter* );
     void findItemByName( const QString &text );
     void handleItemChange( QIconViewItem *old, bool shift, bool control );
@@ -451,4 +485,6 @@ private:	// Disabled copy constructor and operator=
 #endif
 };
 
-#endif
+#endif // QT_NO_ICONVIEW
+
+#endif // QICONVIEW_H

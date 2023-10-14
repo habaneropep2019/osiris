@@ -1,27 +1,39 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qpaintdevice_x11.cpp   2.1.1   edited 2000-03-24 $
+** $Id: qt/src/kernel/qpaintdevice_x11.cpp   2.2.0   edited 2000-08-25 $
 **
 ** Implementation of QPaintDevice class for X11
 **
 ** Created : 940721
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the kernel module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses for Unix/X11 may use this file in accordance with the Qt Commercial
+** License Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #include "qpaintdevice.h"
 #include "qpaintdevicemetrics.h"
@@ -217,12 +229,162 @@ QPaintDeviceX11Data* QPaintDevice::getX11Data( bool def ) const
 */
 
 /*!
-  \fn Display *QPaintDevice::x11Display() const
+  \fn HDC QPaintDevice::handle() const
 
-  Returns a pointer to the X display (X11 only).
+  Returns the window system handle of the paint device, for low-level
+  access.  <em>Using this function is not portable.</em>
+
+  The HDC type varies with platform; see qpaintdevice.h and qwindowdefs.h
+  for details.
+*/
+
+/*!
+  \fn Display *QPaintDevice::x11AppDisplay()
+
+  Returns a pointer to the X display
+  global to the application (X11 only).
   <em>Using this function is not portable.</em>
 
   \sa handle()
+*/
+
+/*!
+  \fn int QPaintDevice::x11AppScreen ()
+
+  Returns the screen number on the X display
+  global to the application (X11 only).
+  <em>Using this function is not portable.</em>
+*/
+
+/*!
+  \fn int QPaintDevice::x11AppDepth ()
+
+  Returns the depth of the X display
+  global to the application (X11 only).
+  <em>Using this function is not portable.</em>
+
+  \sa QPixmap::defaultDepth()
+*/
+
+/*!
+  \fn int QPaintDevice::x11AppCells ()
+
+  Returns the number of entries in the colormap of the X display
+  global to the application (X11 only).
+  <em>Using this function is not portable.</em>
+
+  \sa x11Colormap()
+*/
+
+/*!
+  \fn HANDLE QPaintDevice::x11AppColormap ()
+
+  Returns the colormap of the X display
+  global to the application (X11 only).
+  <em>Using this function is not portable.</em>
+
+  \sa x11Cells()
+*/
+
+/*!
+  \fn bool QPaintDevice::x11AppDefaultColormap ()
+
+  Returns the default colormap of the X display
+  global to the application (X11 only).
+  <em>Using this function is not portable.</em>
+
+  \sa x11Cells()
+*/
+
+/*!
+  \fn void* QPaintDevice::x11AppVisual ()
+
+  Returns the Visual of the X display
+  global to the application (X11 only).
+  <em>Using this function is not portable.</em>
+*/
+
+/*!
+  \fn bool QPaintDevice::x11AppDefaultVisual ()
+
+  Returns the default Visual of the X display
+  global to the application (X11 only).
+  <em>Using this function is not portable.</em>
+*/
+
+
+/*!
+  \fn Display *QPaintDevice::x11Display() const
+
+  Returns a pointer to the X display
+  for the paint device (X11 only).
+  <em>Using this function is not portable.</em>
+
+  \sa handle()
+*/
+
+/*!
+  \fn int QPaintDevice::x11Screen () const
+
+  Returns the screen number on the X display
+  for the paint device (X11 only).
+  <em>Using this function is not portable.</em>
+*/
+
+/*!
+  \fn int QPaintDevice::x11Depth () const
+
+  Returns the depth of the X display
+  for the paint device (X11 only).
+  <em>Using this function is not portable.</em>
+
+  \sa QPixmap::defaultDepth()
+*/
+
+/*!
+  \fn int QPaintDevice::x11Cells () const
+
+  Returns the number of entries in the colormap of the X display
+  for the paint device (X11 only).
+  <em>Using this function is not portable.</em>
+
+  \sa x11Colormap()
+*/
+
+/*!
+  \fn HANDLE QPaintDevice::x11Colormap () const
+
+  Returns the colormap of the X display
+  for the paint device (X11 only).
+  <em>Using this function is not portable.</em>
+
+  \sa x11Cells()
+*/
+
+/*!
+  \fn bool QPaintDevice::x11DefaultColormap () const
+
+  Returns the default colormap of the X display
+  for the paint device (X11 only).
+  <em>Using this function is not portable.</em>
+
+  \sa x11Cells()
+*/
+
+/*!
+  \fn void* QPaintDevice::x11Visual () const
+
+  Returns the Visual of the X display
+  for the paint device (X11 only).
+  <em>Using this function is not portable.</em>
+*/
+
+/*!
+  \fn bool QPaintDevice::x11DefaultVisual () const
+
+  Returns the default Visual of the X display
+  for the paint device (X11 only).
+  <em>Using this function is not portable.</em>
 */
 
 static int dpiX=0,dpiY=0;

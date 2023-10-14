@@ -1,15 +1,17 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head>
 <title>Qt Toolkit - QValueStack Class</title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
-a:link { text-decoration: none; }
-body { background: white; color: black; }
+a:link { color: #004faf; text-decoration: none }
+a:visited { color: #672967; text-decoration: none }body { background: white; color: black; }
 --></style>
 </head><body bgcolor="#ffffff">
 
-<a href="index.html">
-<img width="122" height="65" src="qtlogo.png" alt="Home"
-  align="left" border="0">
-</a><div align=right><img src="dochead.png" width="472" height="27"><br>
+<table width="100%">
+<tr><td><a href="index.html">
+<img width="100" height="100" src="qtlogo.png"
+alt="Home" border="0"><img width="100"
+height="100" src="face.png" alt="Home" border="0">
+</a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
 - <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
@@ -17,7 +19,7 @@ body { background: white; color: black; }
 - <a href="index.html">Home</a>
 - <a href="topicals.html"><b>Structure</b></a>
 </div>
-<br clear=all>
+</table>
 
 <h1 align=center>QValueStack Class Reference</h1><br clear="all">
 <p>
@@ -30,12 +32,12 @@ Inherits <a href="qvaluelist.html">QValueList</a>.
 <p><a href="qvaluestack-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><span class="fn"><a href="#da9a46"><b>QValueStack</b></a> () </span>
-<li><span class="fn"><a href="#97caf6"><b>~QValueStack</b></a> () </span>
-<li><span class="fn">void <a href="#d87884"><b>push</b></a> ( const T &amp; d ) </span>
-<li><span class="fn">T <a href="#bc1ba4"><b>pop</b></a> () </span>
-<li><span class="fn">T&amp; <a href="#7618e8"><b>top</b></a> () </span>
-<li><span class="fn">const T&amp; <a href="#0d2eb4"><b>top</b></a> () const</span>
+<li><div class="fn"><a href="#da9a46"><b>QValueStack</b></a> () </div>
+<li><div class="fn"><a href="#97caf6"><b>~QValueStack</b></a> () </div>
+<li><div class="fn">void <a href="#d87884"><b>push</b></a> ( const T &amp; d ) </div>
+<li><div class="fn">T <a href="#bc1ba4"><b>pop</b></a> () </div>
+<li><div class="fn">T&amp; <a href="#7618e8"><b>top</b></a> () </div>
+<li><div class="fn">const T&amp; <a href="#0d2eb4"><b>top</b></a> () const</div>
 </ul>
 <hr><h2><a name="details"></a>Detailed Description</h2>
 The QValueStack class is a value based template class that provides a stack.
@@ -94,34 +96,34 @@ you wont see warnings if you use invalid iterators,
 because it is impossible for an iterator to check wether it is valid or not.
 <h3 class="fn">T <a name="bc1ba4"></a>QValueStack::pop ()</h3>
 <p>Removes the top item from the stack and returns it.
-<p>See also:  <a href="#0d2eb4">top</a>() and <a href="#d87884">push</a>().
+<p>See also  <a href="#0d2eb4">top</a>() and <a href="#d87884">push</a>().
 <h3 class="fn">void <a name="d87884"></a>QValueStack::push ( const T &amp; d )</h3>
 <p>Adds an element to the top of the stack.  Last in, first out.
 <p>This function is equivalent to append()
-<p>See also:  <a href="#bc1ba4">pop</a>() and <a href="#0d2eb4">top</a>().
+<p>See also  <a href="#bc1ba4">pop</a>() and <a href="#0d2eb4">top</a>().
 <h3 class="fn">T&amp; <a name="7618e8"></a>QValueStack::top ()</h3>
 <p>Returns a reference to the top item of the stack or the item
 referenced by end() if no
 such item exists. Please note that you may not change
 the value the end() Iterator is pointing to.
 <p>This function is equivalent to last().
-<p>See also:  <a href="#bc1ba4">pop</a>(), <a href="#d87884">push</a>() and <a href="qvaluelist.html#77bdf7">QValueList::fromLast</a>().
+<p>See also  <a href="#bc1ba4">pop</a>(), <a href="#d87884">push</a>() and <a href="qvaluelist.html#77bdf7">QValueList::fromLast</a>().
 <h3 class="fn">const T&amp; <a name="0d2eb4"></a>QValueStack::top () const</h3>
 <p>Returns a reference to the top item of the stack or the item
 referenced by end() if no such item exists.
 <p>This function is equivalent to last().
-<p>See also:  <a href="#bc1ba4">pop</a>(), <a href="#d87884">push</a>() and <a href="qvaluelist.html#77bdf7">QValueList::fromLast</a>().
+<p>See also  <a href="#bc1ba4">pop</a>(), <a href="#d87884">push</a>() and <a href="qvaluelist.html#77bdf7">QValueList::fromLast</a>().
 <hr><p>
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.1.1"><nobr>
+<input type=hidden name="version" value="2.2.0"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
 copyright &copy; 1995-2000
-<a href="http://www.trolltech.com">Troll Tech</a>, all rights reserved.<p><address><hr><div align="center">
+<a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.1</div>
+<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.2.0</div>
 </table></div></address></body></html>

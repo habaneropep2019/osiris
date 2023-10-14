@@ -1,32 +1,46 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qasyncio.cpp   2.1.1   edited 2000-05-06 $
+** $Id: qt/src/kernel/qasyncio.cpp   2.2.0   edited 2000-08-25 $
 **
 ** Implementation of asynchronous I/O classes
 **
 ** Created : 970617
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the kernel module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #include "qasyncio.h"
 #include "qiodevice.h"
 #include "qtimer.h"
 #include <stdlib.h>
+
+#ifndef QT_NO_ASYNC_IO
 
 // NOT REVISED
 /*!
@@ -70,7 +84,7 @@ void QAsyncIO::ready()
 
 /*!
   \class QDataSink qasyncio.h
-  \brief A QDataSink is an asynchronous consumer of data.
+  \brief The QDataSink class is an asynchronous consumer of data.
 
   A data sink is an object which receives data from some source in an
   asynchronous manner.  This means that at some time not determined by
@@ -115,7 +129,7 @@ void QDataSink::maybeReady()
 
 /*!
   \class QDataSource qasyncio.h
-  \brief A QDataSource is an asynchronous producer of data.
+  \brief The QDataSource class is an asynchronous producer of data.
 
   A data source is an object which provides data from some source in an
   asynchronous manner.  This means that at some time not determined by
@@ -191,7 +205,7 @@ void QDataSource::rewind()
 
 /*!
   \class QIODeviceSource qasyncio.h
-  \brief A QIODeviceSource is a QDataSource that draws data from a QIODevice
+  \brief The QIODeviceSource class is a QDataSource that draws data from a QIODevice
 
   This class encapsulates retrieving data from a QIODevice (such as a QFile).
 */
@@ -331,3 +345,6 @@ void QDataPump::tryToPump()
 
     timer.start(0, TRUE);
 }
+
+#endif // QT_NO_ASYNC_IO
+

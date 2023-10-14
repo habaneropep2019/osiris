@@ -1,27 +1,39 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qmetaobject.cpp   2.1.1   edited 2000-03-31 $
+** $Id: qt/src/kernel/qmetaobject.cpp   2.2.0   edited 2000-08-25 $
 **
 ** Implementation of QMetaObject class
 **
 ** Created : 930419
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the kernel module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #include "qmetaobject.h"
 #include "qobjectlist.h"
@@ -76,7 +88,7 @@
   The Meta Object System in Qt is responsible for the signal/slot
   mechanism for communication between objects, runtime type
   information and the property system. All meta information in Qt is
-  kept in a singla instance of QMetaObject per class.
+  kept in a single instance of QMetaObject per class.
 
   In general, you will not have to use this class directly in any
   application program. Most of the class members and functions are
@@ -111,12 +123,15 @@ QObjectDictionary *objectDict = 0;		// global object dictionary
 class QMetaObjectPrivate
 {
 public:
+#ifndef QT_NO_PROPERTIES
     QMetaEnum     *enumData;			// enumeration types
     int		   numEnumData;
     QMetaProperty *propData;                    // property meta data
     int            numPropData;
+#endif
     QClassInfo    *classInfo;			// class information
     int            numClassInfo;
+    QMetaData::Access* slotAccess; // ### remove 3.0
 };
 
 
@@ -192,12 +207,15 @@ QMetaObject::QMetaObject( const char *class_name, const char *superclass_name,
     d = new QMetaObjectPrivate;
     reserved = 0;
 
+#ifndef QT_NO_PROPERTIES
     d->enumData = 0;
     d->numEnumData = 0;
     d->propData = 0;
     d->numPropData = 0;
+#endif
     d->classInfo = 0;
     d->numClassInfo = 0;
+    d->slotAccess = 0;
 }
 
 /*!\internal
@@ -205,8 +223,10 @@ QMetaObject::QMetaObject( const char *class_name, const char *superclass_name,
 QMetaObject::QMetaObject( const char *class_name, const char *superclass_name,
 			  QMetaData *slot_data,	  int n_slots,
 			  QMetaData *signal_data, int n_signals,
+#ifndef QT_NO_PROPERTIES
 			  QMetaProperty *prop_data, int n_props,
 			  QMetaEnum *enum_data, int n_enums,
+#endif
 			  QClassInfo *class_info, int n_info )
 {
     if ( !objectDict ) {			// first meta object created
@@ -226,10 +246,12 @@ QMetaObject::QMetaObject( const char *class_name, const char *superclass_name,
     d = new QMetaObjectPrivate;
     reserved = 0;
 
+#ifndef QT_NO_PROPERTIES
     d->propData = prop_data;
     d->numPropData = n_props;
     d->enumData = enum_data;
     d->numEnumData = n_enums;
+#endif
     d->classInfo = class_info;
     d->numClassInfo = n_info;
 
@@ -247,12 +269,16 @@ QMetaObject::~QMetaObject()
 	delete [] slotData;			// delete arrays created in
     if ( signalData )
 	delete [] signalData;			//   initMetaObject()
+#ifndef QT_NO_PROPERTIES
     if ( d->enumData )
 	delete [] d->enumData;
     if ( d->propData )
 	delete [] d->propData;
+#endif
     if ( d->classInfo )
 	delete [] d->classInfo;
+    if ( d->slotAccess )
+	delete [] d->slotAccess;
     delete slotDict;				// delete dicts
     delete signalDict;
     delete d;
@@ -270,7 +296,7 @@ QMetaObject::~QMetaObject()
 /*! \fn const char *QMetaObject::superClassName() const
 
   Returns the class name of the super class, or 0 if there is no super
-  class in the QObject hierachy.
+  class in the QObject hierarchy.
 
   \sa className()
 */
@@ -376,13 +402,19 @@ QMetaObject *QMetaObject::new_metaobject( const char *classname,
 					  const char *superclassname,
 					  QMetaData *slot_data,	int n_slots,
 					  QMetaData *signal_data,int n_signals,
+#ifndef QT_NO_PROPERTIES
 					  QMetaProperty *prop_data, int n_props,
 					  QMetaEnum *enum_data, int n_enums,
+#endif
 					  QClassInfo * class_info, int n_info )
 {
     return new QMetaObject( classname, superclassname, slot_data, n_slots,
-			    signal_data, n_signals, prop_data, n_props,
-			    enum_data, n_enums, class_info, n_info );
+			    signal_data, n_signals,
+#ifndef QT_NO_PROPERTIES
+			    prop_data, n_props,
+			    enum_data, n_enums,
+#endif
+			    class_info, n_info );
 }
 
 /*!\internal
@@ -403,7 +435,61 @@ QMetaData *QMetaObject::new_metadata( int numEntries )
     return numEntries > 0 ? new QMetaData[numEntries] : 0;
 }
 
+/*!\internal
+  
+  Binary compatibility workaround, removed in 3.0 ###
+ */
+QMetaData::Access *QMetaObject::new_metaaccess( int numEntries )
+{
+    return numEntries > 0 ? new QMetaData::Access[numEntries] : 0;
+}
 
+/*!\internal
+  
+  Binary compatibility workaround, removed in 3.0 ###
+ */
+void QMetaObject::set_slot_access( QMetaData::Access* access )
+{
+    d->slotAccess = access;
+}
+
+/*!\internal
+  
+  Binary compatibility workaround, removed in 3.0 ###
+ */
+QMetaData::Access QMetaObject::slot_access(int index, bool super )
+{
+    register QMetaObject *meta = (QMetaObject *)this;
+    QMetaData::Access *md;
+    QMemberDict *dict;
+    while ( TRUE ) {
+	dict = meta->slotDict;
+	int n = dict ? dict->count() : 0;
+	if ( super ) {
+	    if ( index >= n ) {			// try the superclass
+		index -= n;
+		meta = meta->superclass;
+		if ( !meta )			// there is no superclass
+		    return QMetaData::Private;
+		continue;
+	    }
+	}
+	if ( index >= 0 && index < n ) {
+	    md = meta->d->slotAccess;
+	    if ( md )
+		return md[n-index-1];
+	    else
+		return QMetaData::Private;
+	} else {				// bad index
+	    return QMetaData::Private;
+	}
+    }
+#if !defined(Q_NO_DEAD_CODE)
+    return QMetaData::Private;
+#endif
+}
+
+#ifndef QT_NO_PROPERTIES
 /*!\internal
  */
 QMetaEnum *QMetaObject::new_metaenum( int numEntries )
@@ -424,6 +510,7 @@ QMetaProperty *QMetaObject::new_metaproperty( int numEntries )
 {
     return numEntries > 0 ? new QMetaProperty[numEntries] : 0;
 }
+#endif
 
 /*!\internal
  */
@@ -554,7 +641,7 @@ QClassInfo* QMetaObject::classInfo( int index, bool super ) const
 const char* QMetaObject::classInfo( const char* name, bool super ) const
 {
     for( int i = 0; i < d->numClassInfo; ++i ) {
-	if ( strcmp( d->classInfo[i].name, name ) == 0 )
+	if ( qstrcmp( d->classInfo[i].name, name ) == 0 )
 	    return d->classInfo[i].value;
     }
     if ( !super || !superclass )
@@ -562,6 +649,7 @@ const char* QMetaObject::classInfo( const char* name, bool super ) const
     return superclass->classInfo( name, super );
 }
 
+#ifndef QT_NO_PROPERTIES
 /*!\internal
  */
 void QMetaObject::resolveProperty( QMetaProperty* prop )
@@ -570,19 +658,19 @@ void QMetaObject::resolveProperty( QMetaProperty* prop )
     while ( super ) {
 	const QMetaProperty* p = super->property( prop->n );
 	if( p ) {
-	    if ( strcmp( prop->type(), p->type() ) != 0 ) {
+	    if ( qstrcmp( prop->type(), p->type() ) != 0 ) {
 #if defined(CHECK_STATE)
 		qWarning( "QMetaObject::resolveProperty: Attempt to override property type: %s %s::%s clashes with %s %s::%s", p->type(), super->className(), p->name(), prop->type(), className(), prop->name() );
 #endif
 	    }
 	    if ( prop->get == 0 ) {
-		if ( p->get ) {
+		if ( p->get != 0 ) {
 		    prop->get = p->get;
 		    prop->gspec = p->gspec;
 		}
 	    }
 	    if ( prop->set == 0 ) {
-		if ( p->set ) {
+		if ( p->set != 0 ) {
 		    prop->set = p->set;
 		    prop->sspec = p->sspec;
 		}
@@ -651,7 +739,7 @@ void QMetaObject::resolveProperty( QMetaProperty* prop )
 const QMetaProperty* QMetaObject::property( const char* name, bool super ) const
 {
     for( int i = 0; i < d->numPropData; ++i ) {
-	if ( d->propData[i].isValid() && strcmp( d->propData[i].name(), name ) == 0 )
+	if ( d->propData[i].isValid() && qstrcmp( d->propData[i].name(), name ) == 0 )
 	    return &(d->propData[i]);
     }
     if ( !super || !superclass )
@@ -683,6 +771,8 @@ QStrList QMetaObject::propertyNames( bool super ) const
 
     return l;
 }
+
+#endif // QT_NO_PROPERTIES
 
 /*!
   Returns a list with the names of all signals for this class.
@@ -718,18 +808,19 @@ QStrList QMetaObject::slotNames( bool super ) const
     return l;
 }
 
-
+#ifndef QT_NO_PROPERTIES
 /*!\internal
  */
 QMetaEnum* QMetaObject::enumerator( const char* name, bool super ) const
 {
     for( int i = 0; i < d->numEnumData; ++i )
-	if ( strcmp( d->enumData[i].name, name ) == 0 )
+	if ( qstrcmp( d->enumData[i].name, name ) == 0 )
 	    return &(d->enumData[i]);
     if ( !super || !superclass )
 	return 0;
     return superclass->enumerator( name, super );
 }
+#endif
 
 /*!
   Returns TRUE if this class inherits \e clname within the meta
@@ -741,13 +832,14 @@ bool QMetaObject::inherits( const char* clname ) const
 {
     const QMetaObject *meta = this;
     while ( meta ) {
-	if ( strcmp(clname, meta->className()) == 0 )
+	if ( qstrcmp(clname, meta->className()) == 0 )
 	    return TRUE;
 	meta = meta->superclass;
     }
     return FALSE;
 }
 
+#ifndef QT_NO_PROPERTIES
 /*!
   \class QMetaProperty qmetaobject.h
 
@@ -755,7 +847,7 @@ bool QMetaObject::inherits( const char* clname ) const
   \ingroup objectmodel
 
   Property meta data mainly consists of a type(), a name() and the
-  fact, whether a property is writeable(), designable() or stored().
+  fact, whether a property is writable(), designable() or stored().
 
   The functions isSetType(), isEnumType() and enumKeys() provide
   further information about a property's type. The conversion
@@ -787,19 +879,19 @@ QStrList QMetaProperty::enumKeys() const
      return l;
 }
 
-/*!  
+/*!
   Converts the enumeration key \a key to its integer
   value.
-  
+
   For set types, use keysToValue().
-  
+
 \sa valueToKey(), isSetType(), keysToValue()
  */
 int QMetaProperty::keyToValue( const char* key ) const
 {
     if ( !isEnumType() )
 	return -1;
-    
+
     for( uint i = enumData->count; i > 0; --i ) {
 	if ( !qstrcmp( key, enumData->items[i-1].key) )
 	    return enumData->items[i-1].value;
@@ -807,18 +899,18 @@ int QMetaProperty::keyToValue( const char* key ) const
     return -1;
 }
 
-/*!  
+/*!
   Converts the enumeration value \a value to its literal key.
 
   For set types, use valueToKeys().
-  
+
 \sa valueToKey(), isSetType(), valueToKeys()
  */
 const char* QMetaProperty::valueToKey( int value ) const
 {
     if ( !isEnumType() )
 	return 0;
-    
+
     for( uint i = enumData->count; i > 0; --i ) {
 	if ( value == enumData->items[i-1].value )
 	    return enumData->items[i-1].key ;
@@ -826,7 +918,7 @@ const char* QMetaProperty::valueToKey( int value ) const
     return 0;
 }
 
-/*!  
+/*!
   Converts the list of keys \a keys to their combined integer
   value.
 
@@ -836,7 +928,7 @@ int QMetaProperty::keysToValue( const QStrList& keys ) const
 {
     if ( !isEnumType() )
 	return -1;
-    
+
     int value = 0;
     for ( QStrListIterator it( keys ); it.current(); ++it ) {
 	value |= keyToValue( it.current() );
@@ -844,18 +936,18 @@ int QMetaProperty::keysToValue( const QStrList& keys ) const
     return value;
 }
 
-/*!  
+/*!
   Converts the set value \a value to a list of keys.
-  
+
 \sa isSetType(), valueToKey(), valueToKeys()
  */
 QStrList QMetaProperty::valueToKeys( int value ) const
 {
     QStrList keys;
-    
+
     if ( !isEnumType() )
 	return keys;
-    
+
     for( uint i = enumData->count; i > 0; --i ) {
 	int k = enumData->items[i-1].value;
 	if ( (value & k) == k ) {
@@ -898,7 +990,7 @@ QMetaProperty::~QMetaProperty()
   Returns the name of the property.
  */
 
-/*! \fn bool QMetaProperty::writeable() const
+/*! \fn bool QMetaProperty::writable() const
 
   Returns whether the property is writable or not.
 
@@ -974,6 +1066,8 @@ bool QMetaProperty::stored( QObject* o ) const
 
   \internal
 */
+
+#endif // QT_NO_PROPERTIES
 
 QMetaObjectInit::QMetaObjectInit(void(*)()) // ### remove 3.0
 {

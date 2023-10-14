@@ -1,5 +1,5 @@
-.TH QMimeSource 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QMimeSource 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QMimeSource \- An abstract piece of formatted data
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -19,7 +17,7 @@ Inherited by QDragObject and QDropEvent.
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "virtual \fB~QMimeSource\fR ()"
+.BI "virtual \fB~QMimeSource\fR () "
 .br
 .ti -1c
 .BI "virtual const char* \fBformat\fR ( int " "n" " = 0 ) const"
@@ -36,7 +34,7 @@ An abstract piece of formatted data.
 .PP
 Drag-and-drop and clipboard use this abstraction.
 .PP
-See also: IANA list of MIME media types
+See also IANA list of MIME media types
 .SH MEMBER FUNCTION DOCUMENTATION
 .SH "QMimeSource::~QMimeSource () \fC[virtual]\fR"
 Provided to ensure subclasses destruct correctly.
@@ -49,7 +47,7 @@ Reimplemented in QDropEvent.
 .SH "const char * QMimeSource::format ( int i = 0 ) const \fC[virtual]\fR"
 Returns the \fIith\fR format, or NULL.
 .PP
-Reimplemented in QTextDrag, QDropEvent, QImageDrag and QStoredDrag.
+Reimplemented in QTextDrag, QImageDrag, QDropEvent and QStoredDrag.
 .SH "bool QMimeSource::provides ( const char * mimeType ) const \fC[virtual]\fR"
 Returns TRUE if the object can provide the data in format \fImimeType.\fR The default implementation iterates over format().
 .PP
@@ -59,7 +57,7 @@ Reimplemented in QDropEvent.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qmimesource.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: qt/examples/listviews/listviews.cpp   2.1.1   edited 2000-03-24 $
+** $Id: qt/examples/listviews/listviews.cpp   2.2.0   edited 2000-08-31 $
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -188,7 +188,7 @@ void ListViews::initFolder( Folder *folder, unsigned int &count )
 	str = QString( "Message %1  " ).arg( count );
 	QDateTime dt = QDateTime::currentDateTime();
 	dt = dt.addSecs( 60 * count );
-	MessageHeader mh( "Troll Tech <info@trolltech.com>  ", str, dt );
+	MessageHeader mh( "Trolltech <info@trolltech.com>  ", str, dt );
 
 	QString body;
 	body = QString( "This is the message number %1 of this application, \n"

@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: qt/examples/qwerty/main.cpp   2.1.1   edited 2000-01-31 $
+** $Id: qt/examples/qwerty/main.cpp   2.2.0   edited 2000-08-31 $
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -16,13 +16,21 @@ int main( int argc, char **argv )
 {
     QApplication a( argc, argv );
 
+    
+    bool small =  qApp->desktop()->size().width() < 450 
+		  || qApp->desktop()->size().height() < 450;
+    
     int i;
     for ( i= argc <= 1 ? 0 : 1; i<argc; i++ ) {
 	Editor *e = new Editor;
-	e->resize( 400, 400 );
 	if ( i > 0 )
 	    e->load( argv[i] );
-	e->show();
+	if ( small ) {
+	    e->showMaximized();
+	} else {
+	    e->resize( 400, 400 );
+	    e->show();
+	}
     }
     a.connect( &a, SIGNAL(lastWindowClosed()), &a, SLOT(quit()) );
     return a.exec();

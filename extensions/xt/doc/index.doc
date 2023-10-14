@@ -1,19 +1,19 @@
 /****************************************************************************
-** $Id: qt/extensions/xt/doc/index.doc   2.1.1   edited 2000-01-31 $
+** $Id: qt/extensions/xt/doc/index.doc   2.2.0   edited 2000-08-31 $
 **
 ** Index page
 **
-** Copyright (C) 1995-1997 by Troll Tech AS.  All rights reserved.
+** Copyright (C) 1995-1997 by Trolltech AS.  All rights reserved.
 **
 *****************************************************************************/
 
 #if defined(DEBUG)
-static char ident[] = "$Id: qt/extensions/xt/doc/index.doc   2.1.1   edited 2000-01-31 $";
+static char ident[] = "$Id: qt/extensions/xt/doc/index.doc   2.2.0   edited 2000-08-31 $";
 #endif
 
 /*! \page xt.html
 
-<title>Qt Documentation</title>
+<title>Qt Xt/Motif Support Extension</title>
 </head>
 
 <body bgcolor=#ffffff>
@@ -38,7 +38,7 @@ The Qt Xt/Motif Extension consists of the following classes:
 <ol>
  <li>Ensure you are using X11R6.
  <li>Ensure the programs you wish to port are compilable by a C++
-	compiler, or at least that this is the case for the parts 
+	compiler, or at least that this is the case for the parts
 	which need migration.
  <li>Decide whether you are writing a new Qt application reusing
 	old Xt widgets, or introducing new Qt widgets into an existing

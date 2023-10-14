@@ -1,29 +1,43 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qrichtext.cpp   2.1.1   edited 2000-05-04 $
+** $Id: qt/src/kernel/qrichtext.cpp   2.2.0   edited 2000-08-28 $
 **
 ** Implementation of the internal Qt classes dealing with rich text
 **
 ** Created : 990101
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the kernel module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #include "qrichtext_p.h"
+
+#ifndef QT_NO_RICHTEXT
 
 #include "qpainter.h"
 #include "qfile.h"
@@ -197,6 +211,7 @@ void QTextImage::draw(QPainter* p, int x, int y,
     }
 
     if ( p->device()->devType() == QInternal::Printer ) {
+#ifndef QT_NO_TRANSFORMATIONS
 	p->saveWorldMatrix();
 	QPaintDeviceMetrics metrics(p->device());
 	p->translate( x-ox, y-oy );
@@ -204,6 +219,9 @@ void QTextImage::draw(QPainter* p, int x, int y,
 		  scale_factor( metrics.logicalDpiY() ) );
 	p->drawPixmap( 0, 0, pm );
 	p->restoreWorldMatrix();
+#else
+	p->drawPixmap( x-ox, y-oy, pm );
+#endif
 	return;
     }
 
@@ -314,11 +332,11 @@ QRichText::QRichText( const QString &doc, const QFont& font,
 
 // constructor for nested text in text (tables, etc.)
 QRichText::QRichText( const QMap<QString, QString> &attr, const QString &doc, int& pos,
-			const QStyleSheetItem* style, const QTextCharFormat& fmt,
+			const QStyleSheetItem* basestyle, const QTextCharFormat& fmt,
 			const QString& context,
 			int margin,  const QMimeSourceFactory* factory, const QStyleSheet* sheet  )
     :QTextParagraph( 0, new QTextFormatCollection(),
-	    QTextCharFormat( fmt ), ( base = new QStyleSheetItem(*style) ), attr )
+	    QTextCharFormat( fmt ), ( base = new QStyleSheetItem(*basestyle) ), attr )
 {
     contxt = context;
 
@@ -748,6 +766,14 @@ QMap<QCString, QChar> *htmlMap()
   	html_map->insert("plusmn", '\xb1');
   	html_map->insert("middot", '*');
   	html_map->insert("quot", '\"');
+  	html_map->insert("commat", '@');
+  	html_map->insert("num", '#');
+  	html_map->insert("dollar", '$');
+  	html_map->insert("ldquo", '`');
+  	html_map->insert("rdquo", '\'');
+  	html_map->insert("sol", '/' );
+  	html_map->insert("bsol", '\\');
+  	html_map->insert("lowbar", '_');
     }
     return html_map;
 }
@@ -1186,8 +1212,7 @@ void QRichTextIterator::goTo( const QtTriple& pos )
     QtTriple rawpos = pos; rawpos.c = 0;
     stack.clear();
     fc.gotoParagraph( 0, &doc );
-    while ( position() < rawpos && right( FALSE ) )
-	;
+    while ( position() < rawpos && right( FALSE ) ) { }
     QRichTextFormatter& f = stack.getLast()?stack.getLast()->fc: fc;
     f.currentoffset = pos.c;
 }
@@ -1241,6 +1266,9 @@ int QTextParagraph::numberOfSubParagraph( QTextParagraph* subparagraph, bool onl
 {
     QTextParagraph* it = child;
     int i = 1;
+    if ( attributes_.contains( "start" ) )
+	i = attributes_["start"].toInt();
+
     while ( it && it != subparagraph ) {
 	if ( !onlyListItems || it->style->displayMode() == QStyleSheetItem::DisplayListItem )
 	    ++i;
@@ -1612,8 +1640,7 @@ void QRichTextFormatter::update( QPainter* p )
     gotoParagraph( p, paragraph );
     makeLineLayout( p );
     gotoLineStart( p );
-    while ( current < i  && rightOneItem( p ) )
-	;
+    while ( current < i  && rightOneItem( p ) ) { }
     while ( currentoffset < io )
 	right( p );
 }
@@ -1782,8 +1809,12 @@ void QRichTextFormatter::drawLine( QPainter* p, int ox, int oy,
     QRect r(gx-ox+lmargin, gy-oy, realWidth-lmargin-rmargin, height);
     bool clipMode = format()->customItem() && format()->customItem()->noErase();
 
+    bool isPrint = p->device()->devType() == QInternal::Printer;
+
     if (!clipMode )
 	to.erase( p, r );
+
+
 
     if ( first == 0 ) {
 	//#### TODO cache existence of label
@@ -1804,6 +1835,9 @@ void QRichTextFormatter::drawLine( QPainter* p, int ox, int oy,
     }
 
     QString c;
+    QString printString;
+    int printX = 0;
+    int printY = 0;
     while ( !atEndOfLine() ) {
 	QTextCharFormat *fmt  = format();
 	if ( !fmt->anchorHref().isEmpty() ) {
@@ -1866,8 +1900,19 @@ void QRichTextFormatter::drawLine( QPainter* p, int ox, int oy,
  		    c[i] = ' ';
  	    }
 #endif
-	    if ( l )
-		p->drawText(gx+currentx-ox, gy-oy+base, c, l );
+	    if ( l ) {
+		if ( isPrint ) {
+		    if ( printString.isEmpty() ) {
+			printString = c;
+			printX = gx + currentx - ox;
+			printY = gy-oy+base;
+		    }  else {
+			printString += c.left(l);
+		    }
+		} else {
+		    p->drawText(gx+currentx-ox, gy-oy+base, c, l );
+		}
+	    }
 	    if ( only_partially_highlighted ) {
 		p->setClipRect( highlight );
 		p->setPen( cg.highlightedText() );
@@ -1875,14 +1920,24 @@ void QRichTextFormatter::drawLine( QPainter* p, int ox, int oy,
 		    p->drawText(gx+currentx-ox, gy-oy+base, c, l );
 		p->setClipping( FALSE );
 	    }
+	
 	}
 	if ( selected )
 	    p->setPen( ( QPaintDeviceMetrics(p->device()).depth() > 1) ? fmt->color() : cg.text() );
+	
+	if ( isPrint && !printString.isEmpty() && !paragraph->text.haveSameFormat( current, current + 1) ) {
+	    p->drawText( printX, printY, printString );
+	    printString = QString::null;
+	}
 	gotoNextItem( p );
 	gy = y();
     }
+    if ( isPrint && !printString.isEmpty() ) {
+	p->drawText( printX, printY, printString );
+	printString = QString::null;
+    }
 
-    if (clipMode && p->device()->devType() != QInternal::Printer ) {
+    if (clipMode && !isPrint ) {
 	p->setClipRegion( backgroundRegion );
 	to.erase( p, r);
 	p->setClipping( FALSE );
@@ -2898,3 +2953,5 @@ void QTextFormatCollection::unregisterFormat( const QTextCharFormat &format )
 	}
     }
 }
+
+#endif // QT_NO_RICHTEXT

@@ -1,29 +1,42 @@
 /**********************************************************************
-** $Id: qt/src/widgets/qlabel.cpp   2.1.1   edited 2000-03-24 $
+** $Id: qt/src/widgets/qlabel.cpp   2.2.0   edited 2000-08-25 $
 **
 ** Implementation of QLabel widget class
 **
 ** Created : 941215
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the widgets module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #include "qlabel.h"
+#ifndef QT_NO_LABEL
 #include "qbitmap.h"
 #include "qpainter.h"
 #include "qdrawutil.h"
@@ -42,9 +55,11 @@ class QLabelPrivate
 {
 public:
     QLabelPrivate()
-	:minimumWidth(0)
+	:minimumWidth(0), img(0), pix(0)
     {}
     int minimumWidth; // for richtext
+    QImage* img; // for scaled contents
+    QPixmap* pix; // for scaled contents
 };
 
 
@@ -58,7 +73,7 @@ public:
   QLabel is used for displaying information in the form of text or
   image to the user. No user interaction functionality is
   provided. The visual appearance of the label can be configured in
-  various ways, and it can be used for specifying a focus accellerator
+  various ways, and it can be used for specifying a focus accelerator
   key for another widget.
 
   A QLabel can contain any of the following content types:
@@ -90,7 +105,7 @@ public:
 
   A QLabel is often used as a label for another, interactive
   widget. For this use, QLabel provides a handy mechanism for adding
-  an accellerator key (see QAccel) that will set the keyboard focus to
+  an accelerator key (see QAccel) that will set the keyboard focus to
   the other widget (called the QLabel's "buddy"). Example:
 
   \code
@@ -119,7 +134,7 @@ public:
 */
 
 QLabel::QLabel( QWidget *parent, const char *name, WFlags f )
-    : QFrame( parent, name, f | WMouseNoMask )
+    : QFrame( parent, name, f | WMouseNoMask  )
 {
     init();
 }
@@ -136,7 +151,7 @@ QLabel::QLabel( QWidget *parent, const char *name, WFlags f )
 
 QLabel::QLabel( const QString &text, QWidget *parent, const char *name,
 		WFlags f )
-	: QFrame( parent, name, f | WMouseNoMask )
+	: QFrame( parent, name, f | WMouseNoMask  )
 {
     init();
     setText( text );
@@ -154,7 +169,7 @@ QLabel::QLabel( const QString &text, QWidget *parent, const char *name,
   \sa setText(), setBuddy(), setAlignment(), setFrameStyle(),
   setIndent()
 */
-
+#ifndef QT_NO_ACCEL
 QLabel::QLabel( QWidget *buddy,  const QString &text,
 		QWidget *parent, const char *name, WFlags f )
     : QFrame( parent, name, f | WMouseNoMask )
@@ -163,7 +178,7 @@ QLabel::QLabel( QWidget *buddy,  const QString &text,
     setBuddy( buddy );
     setText( text );
 }
-
+#endif
 
 /*!
   Destructs the label.
@@ -179,15 +194,24 @@ QLabel::~QLabel()
 void QLabel::init()
 {
     lpixmap = 0;
+#ifndef QT_NO_MOVIE
     lmovie = 0;
+#endif
+#ifndef QT_NO_ACCEL
     lbuddy = 0;
-    lpixmap = 0;
     accel = 0;
+#endif
+    lpixmap = 0;
     align = AlignLeft | AlignVCenter | ExpandTabs;
     extraMargin= -1;
     autoresize = FALSE;
+    scaledcontents = FALSE;
     textformat = Qt::AutoText;
+#ifndef QT_NO_RICHTEXT
     doc = 0;
+#endif
+
+    setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum ) );
     d = new QLabelPrivate;
 }
 
@@ -232,7 +256,7 @@ void QLabel::setText( const QString &text )
     QSize osh = sizeHint();
     clearContents();
     ltext = text;
-
+#ifndef QT_NO_ACCEL
     int p = QAccel::shortcutKey( ltext );
     if ( p ) {
 	if ( !accel )
@@ -240,13 +264,22 @@ void QLabel::setText( const QString &text )
 	accel->connectItem( accel->insertItem( p ),
 			    this, SLOT(acceleratorSlot()) );
     }
-
+#endif
+#ifndef QT_NO_RICHTEXT
     if ( textformat == RichText ||
 	 ( textformat == AutoText && QStyleSheet::mightBeRichText(ltext) ) ) {
 	doc = new QSimpleRichText( ltext, font() );
 	doc->setWidth( 10 );
 	d->minimumWidth = doc->widthUsed();
     }
+#endif
+
+#ifndef QT_NO_RICHTEXT
+    if ( doc || align & WordBreak )
+	setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Preferred, TRUE ) );
+    else
+#endif	
+	setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum,  FALSE ) );
 
     updateLabel( osh );
 }
@@ -364,9 +397,11 @@ void QLabel::setAlignment( int alignment )
     if ( alignment == align )
 	return;
     QSize osh = sizeHint();
+#ifndef QT_NO_ACCEL
     if ( lbuddy )
 	align = alignment | ShowPrefix;
     else
+#endif	
 	align = alignment;
     updateLabel( osh );
 }
@@ -403,7 +438,7 @@ void QLabel::setAlignment( int alignment )
 void QLabel::setIndent( int indent )
 {
     extraMargin = indent;
-    //### update? auto-resize?
+    updateLabel( QSize( -1, -1 ) );
 }
 
 
@@ -455,7 +490,9 @@ QSize QLabel::sizeForWidth( int w ) const
     QFontMetrics fm = fontMetrics();
     QRect br;
     QPixmap *pix = pixmap();
+#ifndef QT_NO_MOVIE
     QMovie *mov = movie();
+#endif
     int fw = frameWidth();
     int m  = 2*indent();
     if ( m < 0 ) {
@@ -467,9 +504,12 @@ QSize QLabel::sizeForWidth( int w ) const
     if ( pix ) {
 	br = pix->rect();
     }
+#ifndef QT_NO_MOVIE
     else if ( mov ) {
 	br = mov->framePixmap().rect();
     }
+#endif
+#ifndef QT_NO_RICHTEXT
     else if ( doc ) {
 	if ( w < 0 )
 	    doc->adjustSize();
@@ -479,7 +519,9 @@ QSize QLabel::sizeForWidth( int w ) const
 	}
 	br = QRect( 0, 0, doc->widthUsed(), doc->height() );
     }
-    else {
+    else
+#endif
+    {
 	bool tryWidth = (w < 0) && (align & WordBreak);
 	if ( tryWidth )
 	    w = fm.width( 'x' ) * 80;
@@ -513,8 +555,10 @@ QSize QLabel::sizeForWidth( int w ) const
 
 int QLabel::heightForWidth( int w ) const
 {
+#ifndef QT_NO_RICHTEXT
     if ( doc || align & WordBreak )
 	return sizeForWidth( w ).height();
+#endif
     return QWidget::heightForWidth( w );
 }
 
@@ -535,10 +579,11 @@ QSize QLabel::sizeHint() const
 
 QSize QLabel::minimumSizeHint() const
 {
+#ifndef QT_NO_RICHTEXT
     if ( doc )
 	return QSize( d->minimumWidth, -1 );
-    else
-	return QSize( -1, -1 );
+#endif
+    return QSize( -1, -1 );
 }
 
 
@@ -546,12 +591,66 @@ QSize QLabel::minimumSizeHint() const
 */
 QSizePolicy QLabel::sizePolicy() const
 {
-    if ( doc || align & WordBreak )
-	return QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Preferred,
-			    TRUE );
-    else
-	return QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum,
-			    FALSE );
+    //### removeme 3.0
+    return QWidget::sizePolicy();
+}
+
+/*!
+  \reimp
+*/
+void QLabel::resizeEvent( QResizeEvent* e )
+{
+    QFrame::resizeEvent( e );
+
+#ifdef QT_NO_RICHTEXT
+    static const bool doc = FALSE;
+#endif
+
+    // optimize for standard labels
+    if ( frameShape() == NoFrame && (align & WordBreak) == 0 && !doc &&
+	 ( e->oldSize().width() >= e->size().width() && (align & AlignLeft ) == AlignLeft )
+	 && ( e->oldSize().height() >= e->size().height() && (align & AlignTop ) == AlignTop ) ) {
+	setWFlags( WResizeNoErase );
+	return;
+    }
+
+    clearWFlags( WResizeNoErase );
+    QRect cr = contentsRect();
+    if ( !lpixmap ||  !cr.isValid() ||
+	 // masked pixmaps can only reduce flicker when being top/left
+	 // aligned and when we do not perform scaled contents
+	 ( lpixmap->mask() && ( scaledcontents || ( ( align & (AlignLeft|AlignTop) ) != (AlignLeft|AlignTop) ) ) ) )
+	return;
+
+    // don't we all love QFrame? Reduce pixmap flicker
+    setWFlags( WResizeNoErase );
+    QRegion reg = QRect( QPoint(0, 0), e->size() );
+    reg = reg.subtract( cr );
+    if ( !scaledcontents ) {
+	int x = cr.x();
+	int y = cr.y();
+	int w = lpixmap->width();
+	int h = lpixmap->height();
+	if ( (align & Qt::AlignVCenter) == Qt::AlignVCenter )
+	    y += cr.height()/2 - h/2;
+	else if ( (align & Qt::AlignBottom) == Qt::AlignBottom)
+	    y += cr.height() - h;
+	if ( (align & Qt::AlignRight) == Qt::AlignRight )
+	    x += cr.width() - w;
+	else if ( (align & Qt::AlignHCenter) == Qt::AlignHCenter )
+	    x += cr.width()/2 - w/2;
+	if ( x > cr.x() )
+	    reg = reg.unite( QRect( cr.x(), cr.y(), x - cr.x(), cr.height() ) );
+	if ( y > cr.y() )
+	    reg = reg.unite( QRect( cr.x(), cr.y(), cr.width(), y - cr.y() ) );
+
+	if ( x + w < cr.right() )
+	    reg = reg.unite( QRect( x + w, cr.y(),  cr.right() - x - w, cr.height() ) );
+	if ( y + h < cr.bottom() )
+	    reg = reg.unite( QRect( cr.x(), y +  h, cr.width(), cr.bottom() - y - h ) );
+				
+	erase( reg );
+    }
 }
 
 
@@ -562,8 +661,16 @@ QSizePolicy QLabel::sizePolicy() const
 void QLabel::drawContents( QPainter *p )
 {
     QRect cr = contentsRect();
+
+#ifndef QT_NO_MOVIE
+    QMovie *mov = movie();
+#else
+    const int mov = 0;
+#endif
+
     int m = indent();
-    if ( m < 0 ) {
+    if ( m < 0 && !mov ) {
+	// This is ugly.
 	if ( frameWidth() > 0 )
 	    m = p->fontMetrics().width('x')/2;
 	else
@@ -580,7 +687,7 @@ void QLabel::drawContents( QPainter *p )
 	    cr.setBottom( cr.bottom() - m );
     }
 
-    QMovie *mov = movie();
+#ifndef QT_NO_MOVIE
     if ( mov ) {
 	// ### should add movie to qDrawItem
  	QRect r = style().itemRect( p,
@@ -590,7 +697,10 @@ void QLabel::drawContents( QPainter *p )
 	// ### could resize movie frame at this point
 	p->drawPixmap(r.x(), r.y(), mov->framePixmap() );
     }
-    else if ( doc ) {
+    else
+#endif
+#ifndef QT_NO_RICHTEXT
+    if ( doc ) {
 	doc->setWidth(p, cr.width() );
 	int rw = doc->widthUsed();
 	int rh = doc->height();
@@ -610,13 +720,28 @@ void QLabel::drawContents( QPainter *p )
 	    doc->draw(p, cr.x()+xo+1, cr.y()+yo+1, cr, cg, 0);
 	}
 	doc->draw(p, cr.x()+xo, cr.y()+yo, cr, colorGroup(), 0);
-    } else {
-	// ordinary text label
+    } else
+#endif
+    {
+	QPixmap* pix = lpixmap;
+#ifndef QT_NO_IMAGE_SMOOTHSCALE
+	if ( scaledcontents && lpixmap ) {
+	    if ( !d->img )
+		d->img = new QImage( lpixmap->convertToImage() );
+	    if ( !d->pix )
+		d->pix = new QPixmap;
+	    if ( d->pix->size() != cr.size() )
+		d->pix->convertFromImage( d->img->smoothScale( cr.width(), cr.height() ) );
+	    pix = d->pix;
+	}
+#endif	
+	// ordinary text or pixmap label
 	style().drawItem( p, cr.x(), cr.y(), cr.width(), cr.height(),
 			  align, colorGroup(), isEnabled(),
-			  lpixmap, ltext );
+			  pix, ltext );
     }
 }
+
 
 /*!
   \reimp
@@ -659,6 +784,7 @@ void QLabel::drawContentsMask( QPainter *p )
 	    cr.setBottom( cr.bottom() - m );
     }
 
+#ifndef QT_NO_MOVIE
     QMovie *mov = movie();
     if ( mov ) {
 	// ### could add movie to qDrawItem
@@ -676,21 +802,34 @@ void QLabel::drawContentsMask( QPainter *p )
 	    p->fillRect( r, color1 );
 	return;
     }
-
+#endif
     QColorGroup g( color1, color1, color1, color1, color1, color1, color1,
 		   color1, color0);
 
     QBitmap bm;
-    if (lpixmap) {
-	if (lpixmap->mask()) {
-	    bm = *lpixmap->mask();
+    QPixmap* pix = lpixmap;
+#ifndef QT_NO_IMAGE_SMOOTHSCALE
+    if ( scaledcontents && lpixmap ) {
+	if ( !d->img )
+	    d->img = new QImage( lpixmap->convertToImage() );
+	if ( !d->pix )
+	    d->pix = new QPixmap;
+	if ( d->pix->size() != cr.size() )
+	    d->pix->convertFromImage( d->img->smoothScale( cr.width(), cr.height() ) );
+	pix = d->pix;
+    }
+#endif
+    if (pix ) {
+	if (pix->mask()) {
+	    bm = *pix->mask();
 	}
 	else {
-	    bm.resize( lpixmap->size() );
+	    bm.resize( pix->size() );
 	    bm.fill(color1);
 	}
     }
 
+#ifndef QT_NO_RICHTEXT
     if ( doc ) {
 	doc->setWidth(p, cr.width() );
 	int rw = doc->widthUsed();
@@ -709,7 +848,9 @@ void QLabel::drawContentsMask( QPainter *p )
 	    doc->draw(p, cr.x()+xo+1, cr.y()+yo+1, cr, g, 0);
 	}
 	doc->draw(p, cr.x()+xo, cr.y()+yo, cr, g, 0);
-    } else {
+    } else
+#endif
+    {
 	style().drawItem( p, cr.x(), cr.y(), cr.width(), cr.height(),
 			  align, g, isEnabled(), bm.isNull()?0:&bm, ltext );
     }
@@ -726,12 +867,10 @@ void QLabel::updateLabel( QSize oldSizeHint )
 	updateGeometry();
     if ( autoresize ) {
 	adjustSize();
-    }
-    else {
-	if ( isVisible() ) {
-	    update();
-	    updateGeometry();
-	}
+        update();
+    } else {
+        update();
+	updateGeometry();
 	if ( autoMask() )
 	    updateMask();
     }
@@ -743,7 +882,7 @@ void QLabel::updateLabel( QSize oldSizeHint )
 
   Internal slot, used to set focus for accelerator labels.
 */
-
+#ifndef QT_NO_ACCEL
 void QLabel::acceleratorSlot()
 {
     if ( !lbuddy )
@@ -760,19 +899,18 @@ void QLabel::acceleratorSlot()
 	    ( (QLineEdit*)w )->selectAll();
     }
 }
-
+#endif
 
 /*!
   \internal
 
   Internal slot, used to clean up if the buddy widget dies.
 */
-
+#ifndef QT_NO_ACCEL
 void QLabel::buddyDied() // I can't remember if I cried.
 {
     lbuddy = 0;
 }
-
 
 /*!
   Sets the buddy of this label to \a buddy.
@@ -846,8 +984,10 @@ QWidget * QLabel::buddy() const
 {
     return lbuddy;
 }
+#endif //QT_NO_ACCEL
 
 
+#ifndef QT_NO_MOVIE
 void QLabel::movieUpdated(const QRect& rect)
 {
     QMovie *mov = movie();
@@ -896,6 +1036,8 @@ void QLabel::setMovie( const QMovie& movie )
 	updateLabel( osh );	// resize/update signals will come soon enough
 }
 
+#endif // QT_NO_MOVIE
+
 /*!
   \internal
 
@@ -904,25 +1046,35 @@ void QLabel::setMovie( const QMovie& movie )
 
 void QLabel::clearContents()
 {
+#ifndef QT_NO_RICHTEXT
     delete doc;
     doc = 0;
+#endif
 
     delete lpixmap;
     lpixmap = 0;
+    delete d->img;
+    d->img = 0;
+    delete d->pix;
+    d->pix = 0;
 
     ltext = QString::null;
-
+#ifndef QT_NO_ACCEL
     if ( accel )
 	accel->clear();
-
+#endif
+#ifndef QT_NO_MOVIE
     if ( lmovie ) {
 	lmovie->disconnectResize(this, SLOT(movieResized(const QSize&)));
 	lmovie->disconnectUpdate(this, SLOT(movieUpdated(const QRect&)));
 	delete lmovie;
 	lmovie = 0;
     }
+#endif
 }
 
+
+#ifndef QT_NO_MOVIE
 
 /*!
   If the label contains a movie, returns a pointer to it. Otherwise,
@@ -936,6 +1088,7 @@ QMovie* QLabel::movie() const
     return lmovie;
 }
 
+#endif  // QT_NO_MOVIE
 
 /*!
   Returns the current text format.
@@ -961,8 +1114,8 @@ void QLabel::setTextFormat( Qt::TextFormat format )
 {
     if ( format != textformat ) {
     textformat = format;
-	if ( !ltext.isEmpty() )
-	    updateLabel( QSize( -1, -1 ) );
+    if ( !ltext.isEmpty() )
+	updateLabel( QSize( -1, -1 ) );
     }
 }
 
@@ -975,3 +1128,39 @@ void QLabel::fontChange( const QFont & )
     if ( !ltext.isEmpty() )
 	updateLabel( QSize( -1, -1 ) );
 }
+
+#ifndef QT_NO_IMAGE_SMOOTHSCALE
+/*!
+  Returns whether the label will scale its contents to fill all
+  available space.
+
+  \sa setScaledContents()
+ */
+bool QLabel::hasScaledContents() const
+{
+    return scaledcontents;
+}
+
+/*!
+  When called with \a enable == TRUE, and the label shows a pixmap,
+  it will scale the pixmap to fill available space.
+
+  \sa hasScaledContents()
+ */
+void QLabel::setScaledContents( bool enable )
+{
+    if ( (bool)scaledcontents == enable )	
+	return;
+    scaledcontents = enable;
+    if ( !enable ) {
+	delete d->img;
+	d->img = 0;
+	delete d->pix;
+	d->pix = 0;
+    }
+    if ( autoMask() )
+	updateMask();
+    update();
+}
+#endif // QT_NO_IMAGE_SMOOTHSCALE
+#endif // QT_NO_LABEL

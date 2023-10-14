@@ -3,15 +3,17 @@
 Qt Toolkit - menu/menu.cpp example file
 </title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
-a:link { text-decoration: none; }
-body { background: white; color: black; }
+a:link { color: #004faf; text-decoration: none }
+a:visited { color: #672967; text-decoration: none }body { background: white; color: black; }
 --></style>
 </head><body bgcolor="#ffffff">
 
-<a href="index.html">
-<img width="122" height="65" src="qtlogo.png" alt="Home"
-  align="left" border="0">
-</a><div align=right><img src="dochead.png" width="472" height="27"><br>
+<table width="100%">
+<tr><td><a href="index.html">
+<img width="100" height="100" src="qtlogo.png"
+alt="Home" border="0"><img width="100"
+height="100" src="face.png" alt="Home" border="0">
+</a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
 - <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
@@ -19,7 +21,7 @@ body { background: white; color: black; }
 - <a href="index.html">Home</a>
 - <a href="topicals.html"><b>Structure</b></a>
 </div>
-<br clear=all>
+</table>
 
 <h1 align=center>Using menus</h1><br clear="all">
 
@@ -44,9 +46,9 @@ body { background: white; color: black; }
   <hr>
 
   Header file: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/menu/menu.h   2.1.1   edited 2000-01-31 $
+** &#36;Id&#58; qt/examples/menu/menu.h   2.2.0   edited 2000-08-31 $
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -105,9 +107,9 @@ private:
 
   Implementation:
 <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/menu/menu.cpp   2.1.1   edited 2000-02-21 $
+** &#36;Id&#58; qt/examples/menu/menu.cpp   2.2.0   edited 2000-08-31 $
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -228,18 +230,18 @@ MenuExample::MenuExample( <a name="QWidget"></a><a href="qwidget.html">QWidget</
     <a name="QPopupMenu"></a><a href="qpopupmenu.html">QPopupMenu</a> *print = new <a href="qpopupmenu.html">QPopupMenu</a>( this );
     CHECK_PTR( print );
     print-&gt;<a name="insertTearOffHandle"></a><a href="qpopupmenu.html#bd9693">insertTearOffHandle</a>();
-    print-&gt;<a name="insertItem"></a><a href="qmenudata.html#43c652">insertItem</a>( "&amp;Print to printer", this, SLOT(<a name="printer"></a><a href="#253">printer</a>()) );
-    print-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "Print to &amp;file", this, SLOT(<a name="file"></a><a href="#254">file</a>()) );
-    print-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "Print to fa&amp;x", this, SLOT(<a name="fax"></a><a href="#255">fax</a>()) );
+    print-&gt;<a name="insertItem"></a><a href="qmenudata.html#43c652">insertItem</a>( "&amp;Print to printer", this, SLOT(<a name="printer"></a><a href="#268">printer</a>()) );
+    print-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "Print to &amp;file", this, SLOT(<a name="file"></a><a href="#269">file</a>()) );
+    print-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "Print to fa&amp;x", this, SLOT(<a name="fax"></a><a href="#270">fax</a>()) );
     print-&gt;<a name="insertSeparator"></a><a href="qmenudata.html#5f2cea">insertSeparator</a>();
-    print-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "Printer &amp;Setup", this, SLOT(<a name="printerSetup"></a><a href="#256">printerSetup</a>()) );
+    print-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "Printer &amp;Setup", this, SLOT(<a name="printerSetup"></a><a href="#271">printerSetup</a>()) );
 
     <a href="qpopupmenu.html">QPopupMenu</a> *file = new <a href="qpopupmenu.html">QPopupMenu</a>( this );
     CHECK_PTR( file );
-    file-&gt;<a href="qmenudata.html#43c652">insertItem</a>( p1, "&amp;Open",  this, SLOT(<a name="open"></a><a href="#242">open</a>()), CTRL+Key_O );
-    file-&gt;<a href="qmenudata.html#43c652">insertItem</a>( p2, "&amp;New", this, SLOT(<a name="news"></a><a href="#243">news</a>()), CTRL+Key_N );
-    file-&gt;<a href="qmenudata.html#43c652">insertItem</a>( p3, "&amp;Save", this, SLOT(<a name="save"></a><a href="#244">save</a>()), CTRL+Key_S );
-    file-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "&amp;Close", this, SLOT(<a name="closeDoc"></a><a href="#245">closeDoc</a>()), CTRL+Key_W );
+    file-&gt;<a href="qmenudata.html#43c652">insertItem</a>( p1, "&amp;Open",  this, SLOT(<a name="open"></a><a href="#257">open</a>()), CTRL+Key_O );
+    file-&gt;<a href="qmenudata.html#43c652">insertItem</a>( p2, "&amp;New", this, SLOT(<a name="news"></a><a href="#258">news</a>()), CTRL+Key_N );
+    file-&gt;<a href="qmenudata.html#43c652">insertItem</a>( p3, "&amp;Save", this, SLOT(<a name="save"></a><a href="#259">save</a>()), CTRL+Key_S );
+    file-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "&amp;Close", this, SLOT(<a name="closeDoc"></a><a href="#260">closeDoc</a>()), CTRL+Key_W );
     file-&gt;<a href="qmenudata.html#5f2cea">insertSeparator</a>();
     file-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "&amp;Print", print, CTRL+Key_P );
     file-&gt;<a href="qmenudata.html#5f2cea">insertSeparator</a>();
@@ -247,8 +249,8 @@ MenuExample::MenuExample( <a name="QWidget"></a><a href="qwidget.html">QWidget</
 
     <a href="qpopupmenu.html">QPopupMenu</a> *edit = new <a href="qpopupmenu.html">QPopupMenu</a>( this );
     CHECK_PTR( edit );
-    int undoID = edit-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "&amp;Undo", this, SLOT(<a name="undo"></a><a href="#246">undo</a>()) );
-    int redoID = edit-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "&amp;Redo", this, SLOT(<a name="redo"></a><a href="#247">redo</a>()) );
+    int undoID = edit-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "&amp;Undo", this, SLOT(<a name="undo"></a><a href="#261">undo</a>()) );
+    int redoID = edit-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "&amp;Redo", this, SLOT(<a name="redo"></a><a href="#262">redo</a>()) );
     edit-&gt;<a name="setItemEnabled"></a><a href="qmenudata.html#b2cb33">setItemEnabled</a>( undoID, FALSE );
     edit-&gt;<a href="qmenudata.html#b2cb33">setItemEnabled</a>( redoID, FALSE );
 
@@ -256,7 +258,7 @@ MenuExample::MenuExample( <a name="QWidget"></a><a href="qwidget.html">QWidget</
     CHECK_PTR( options );
     options-&gt;<a href="qpopupmenu.html#bd9693">insertTearOffHandle</a>();
     options-&gt;<a name="setCaption"></a><a href="qwidget.html#d4f007">setCaption</a>("Options");
-    options-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "&amp;Normal Font", this, SLOT(<a name="normal"></a><a href="#248">normal</a>()) );
+    options-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "&amp;Normal Font", this, SLOT(<a name="normal"></a><a href="#263">normal</a>()) );
     options-&gt;<a href="qmenudata.html#5f2cea">insertSeparator</a>();
 
     options-&gt;<a name="polish"></a><a href="qwidget.html#74292a">polish</a>(); // adjust system settings 
@@ -264,12 +266,12 @@ MenuExample::MenuExample( <a name="QWidget"></a><a href="qwidget.html">QWidget</
     f.<a name="setBold"></a><a href="qfont.html#3ec9de">setBold</a>( TRUE );
     boldID = options-&gt;<a href="qmenudata.html#43c652">insertItem</a>( new MyMenuItem( "&amp;Bold", f ) );
     options-&gt;<a name="setAccel"></a><a href="qmenudata.html#a510aa">setAccel</a>( CTRL+Key_B, boldID );
-    options-&gt;<a name="connectItem"></a><a href="qmenudata.html#eaf991">connectItem</a>( boldID, this, SLOT(<a name="bold"></a><a href="#249">bold</a>()) );
+    options-&gt;<a name="connectItem"></a><a href="qmenudata.html#eaf991">connectItem</a>( boldID, this, SLOT(<a name="bold"></a><a href="#264">bold</a>()) );
     f = font();
     f.<a name="setUnderline"></a><a href="qfont.html#be81f1">setUnderline</a>( TRUE );
     underlineID = options-&gt;<a href="qmenudata.html#43c652">insertItem</a>( new MyMenuItem( "&amp;Underline", f ) );
     options-&gt;<a href="qmenudata.html#a510aa">setAccel</a>( CTRL+Key_U, underlineID );
-    options-&gt;<a href="qmenudata.html#eaf991">connectItem</a>( underlineID, this, SLOT(<a name="underline"></a><a href="#250">underline</a>()) );
+    options-&gt;<a href="qmenudata.html#eaf991">connectItem</a>( underlineID, this, SLOT(<a name="underline"></a><a href="#265">underline</a>()) );
 
     isBold = FALSE;
     isUnderline = FALSE;
@@ -277,8 +279,8 @@ MenuExample::MenuExample( <a name="QWidget"></a><a href="qwidget.html">QWidget</
 
     <a href="qpopupmenu.html">QPopupMenu</a> *help = new <a href="qpopupmenu.html">QPopupMenu</a>( this );
     CHECK_PTR( help );
-    help-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "&amp;About", this, SLOT(<a name="about"></a><a href="#251">about</a>()), CTRL+Key_H );
-    help-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "About &amp;<a name="Qt"></a><a href="qt.html">Qt</a>", this, SLOT(<a name="aboutQt"></a><a href="#252">aboutQt</a>()) );
+    help-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "&amp;About", this, SLOT(<a name="about"></a><a href="#266">about</a>()), CTRL+Key_H );
+    help-&gt;<a href="qmenudata.html#43c652">insertItem</a>( "About &amp;<a name="Qt"></a><a href="qt.html">Qt</a>", this, SLOT(<a name="aboutQt"></a><a href="#267">aboutQt</a>()) );
 
     menu = new <a name="QMenuBar"></a><a href="qmenubar.html">QMenuBar</a>( this );
     CHECK_PTR( menu );
@@ -302,37 +304,37 @@ MenuExample::MenuExample( <a name="QWidget"></a><a href="qwidget.html">QWidget</
     <a name="setMinimumSize"></a><a href="qwidget.html#378ed6">setMinimumSize</a>( 100, 80 );
 }
 
-void <a name="242"></a>MenuExample::open()
+void <a name="257"></a>MenuExample::open()
 {
     emit explain( "File/Open selected" );
 }
 
-void <a name="243"></a>MenuExample::news()
+void <a name="258"></a>MenuExample::news()
 {
     emit explain( "File/New selected" );
 }
 
-void <a name="244"></a>MenuExample::save()
+void <a name="259"></a>MenuExample::save()
 {
     emit explain( "File/Save selected" );
 }
 
-void <a name="245"></a>MenuExample::closeDoc()
+void <a name="260"></a>MenuExample::closeDoc()
 {
     emit explain( "File/Close selected" );
 }
 
-void <a name="246"></a>MenuExample::undo()
+void <a name="261"></a>MenuExample::undo()
 {
     emit explain( "Edit/Undo selected" );
 }
 
-void <a name="247"></a>MenuExample::redo()
+void <a name="262"></a>MenuExample::redo()
 {
     emit explain( "Edit/Redo selected" );
 }
 
-void <a name="248"></a>MenuExample::normal()
+void <a name="263"></a>MenuExample::normal()
 {
     isBold = FALSE;
     isUnderline = FALSE;
@@ -341,21 +343,21 @@ void <a name="248"></a>MenuExample::normal()
     emit explain( "Options/Normal selected" );
 }
 
-void <a name="249"></a>MenuExample::bold()
+void <a name="264"></a>MenuExample::bold()
 {
     isBold = !isBold;
     menu-&gt;setItemChecked( boldID, isBold );
     emit explain( "Options/Bold selected" );
 }
 
-void <a name="250"></a>MenuExample::underline()
+void <a name="265"></a>MenuExample::underline()
 {
     isUnderline = !isUnderline;
     menu-&gt;setItemChecked( underlineID, isUnderline );
     emit explain( "Options/Underline selected" );
 }
 
-void <a name="251"></a>MenuExample::about()
+void <a name="266"></a>MenuExample::about()
 {
     <a name="QMessageBox::about"></a><a href="qmessagebox.html#e67950">QMessageBox::about</a>( this, "Qt Menu Example",
                         "This example demonstrates simple use of Qt menus.\n"
@@ -363,32 +365,32 @@ void <a name="251"></a>MenuExample::about()
                         "programs." );
 }
 
-void <a name="252"></a>MenuExample::aboutQt()
+void <a name="267"></a>MenuExample::aboutQt()
 {
     <a name="QMessageBox::aboutQt"></a><a href="qmessagebox.html#976755">QMessageBox::aboutQt</a>( this, "Qt Menu Example" );
 }
 
-void <a name="253"></a>MenuExample::printer()
+void <a name="268"></a>MenuExample::printer()
 {
     emit explain( "File/Printer/Print selected" );
 }
 
-void <a name="254"></a>MenuExample::file()
+void <a name="269"></a>MenuExample::file()
 {
     emit explain( "File/Printer/Print To File selected" );
 }
 
-void <a name="255"></a>MenuExample::fax()
+void <a name="270"></a>MenuExample::fax()
 {
     emit explain( "File/Printer/Print To Fax selected" );
 }
 
-void <a name="256"></a>MenuExample::printerSetup()
+void <a name="271"></a>MenuExample::printerSetup()
 {
     emit explain( "File/Printer/Printer Setup selected" );
 }
 
-void <a name="257"></a>MenuExample::resizeEvent( <a name="QResizeEvent"></a><a href="qresizeevent.html">QResizeEvent</a> * )
+void <a name="272"></a>MenuExample::resizeEvent( <a name="QResizeEvent"></a><a href="qresizeevent.html">QResizeEvent</a> * )
 {
     label-&gt;setGeometry( 20, <a href="qwidget.html#e872e1">rect</a>().center().y()-20, <a href="qwidget.html#576663">width</a>()-40, 40 );
 }
@@ -405,6 +407,6 @@ int main( int argc, char ** argv )
 </pre>
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.1</div>
+<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.2.0</div>
 </table></div></address></body></html>

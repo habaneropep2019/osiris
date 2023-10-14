@@ -1,5 +1,5 @@
-.TH QIconViewItem 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QIconViewItem 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,9 +7,9 @@
 .nh
 .SH NAME
 QIconViewItem \- Implements an iconview item
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
+<h1 align=center>QIconViewItem Class Reference
 .br
-.SH SYNOPSIS
+<small>[ iconview module ]</small></h1>
 .br
 .PP
 \fC#include <qiconview.h>\fR
@@ -19,34 +19,34 @@ Inherits Qt.
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQIconViewItem\fR ( QIconView * parent )"
+.BI "\fBQIconViewItem\fR ( QIconView * parent ) "
 .br
 .ti -1c
-.BI "\fBQIconViewItem\fR ( QIconView * " "parent" ", QIconViewItem * after )"
+.BI "\fBQIconViewItem\fR ( QIconView * " "parent" ", QIconViewItem * after ) "
 .br
 .ti -1c
-.BI "\fBQIconViewItem\fR ( QIconView * " "parent" ", const QString & text )"
+.BI "\fBQIconViewItem\fR ( QIconView * " "parent" ", const QString & text ) "
 .br
 .ti -1c
-.BI "\fBQIconViewItem\fR ( QIconView * " "parent" ", QIconViewItem * " "after" ", const QString & text )"
+.BI "\fBQIconViewItem\fR ( QIconView * " "parent" ", QIconViewItem * " "after" ", const QString & text ) "
 .br
 .ti -1c
-.BI "\fBQIconViewItem\fR ( QIconView * " "parent" ", const QString & " "text" ", const QPixmap & icon )"
+.BI "\fBQIconViewItem\fR ( QIconView * " "parent" ", const QString & " "text" ", const QPixmap & icon ) "
 .br
 .ti -1c
-.BI "\fBQIconViewItem\fR ( QIconView * " "parent" ", QIconViewItem * " "after" ", const QString & " "text" ", const QPixmap & icon )"
+.BI "\fBQIconViewItem\fR ( QIconView * " "parent" ", QIconViewItem * " "after" ", const QString & " "text" ", const QPixmap & icon ) "
 .br
 .ti -1c
-.BI "virtual \fB~QIconViewItem\fR ()"
+.BI "virtual \fB~QIconViewItem\fR () "
 .br
 .ti -1c
-.BI "virtual void \fBsetRenameEnabled\fR ( bool allow )"
+.BI "virtual void \fBsetRenameEnabled\fR ( bool allow ) "
 .br
 .ti -1c
-.BI "virtual void \fBsetDragEnabled\fR ( bool allow )"
+.BI "virtual void \fBsetDragEnabled\fR ( bool allow ) "
 .br
 .ti -1c
-.BI "virtual void \fBsetDropEnabled\fR ( bool allow )"
+.BI "virtual void \fBsetDropEnabled\fR ( bool allow ) "
 .br
 .ti -1c
 .BI "virtual QString \fBtext\fR () const"
@@ -79,13 +79,13 @@ Inherits Qt.
 .BI "int \fBindex\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetSelected\fR ( bool " "s" ", bool cb )"
+.BI "virtual void \fBsetSelected\fR ( bool " "s" ", bool cb ) "
 .br
 .ti -1c
-.BI "virtual void \fBsetSelected\fR ( bool s )"
+.BI "virtual void \fBsetSelected\fR ( bool s ) "
 .br
 .ti -1c
-.BI "virtual void \fBsetSelectable\fR ( bool s )"
+.BI "virtual void \fBsetSelectable\fR ( bool s ) "
 .br
 .ti -1c
 .BI "bool \fBisSelected\fR () const"
@@ -94,19 +94,19 @@ Inherits Qt.
 .BI "bool \fBisSelectable\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBrepaint\fR ()"
+.BI "virtual void \fBrepaint\fR () "
 .br
 .ti -1c
-.BI "virtual void \fBmove\fR ( int " "x" ", int y )"
+.BI "virtual void \fBmove\fR ( int " "x" ", int y ) "
 .br
 .ti -1c
-.BI "virtual void \fBmoveBy\fR ( int " "dx" ", int dy )"
+.BI "virtual void \fBmoveBy\fR ( int " "dx" ", int dy ) "
 .br
 .ti -1c
-.BI "virtual void \fBmove\fR ( const QPoint & pnt )"
+.BI "virtual void \fBmove\fR ( const QPoint & pnt ) "
 .br
 .ti -1c
-.BI "virtual void \fBmoveBy\fR ( const QPoint & pnt )"
+.BI "virtual void \fBmoveBy\fR ( const QPoint & pnt ) "
 .br
 .ti -1c
 .BI "QRect \fBrect\fR () const"
@@ -145,58 +145,58 @@ Inherits Qt.
 .BI "virtual bool \fBacceptDrop\fR ( const QMimeSource * mime ) const"
 .br
 .ti -1c
-.BI "void \fBrename\fR ()"
+.BI "void \fBrename\fR () "
 .br
 .ti -1c
 .BI "virtual int \fBcompare\fR ( QIconViewItem * i ) const"
 .br
 .ti -1c
-.BI "virtual void \fBsetText\fR ( const QString & text )"
+.BI "virtual void \fBsetText\fR ( const QString & text ) "
 .br
 .ti -1c
-.BI "virtual void \fBsetPixmap\fR ( const QPixmap & icon )"
+.BI "virtual void \fBsetPixmap\fR ( const QPixmap & icon ) "
 .br
 .ti -1c
-.BI "virtual void \fBsetText\fR ( const QString & " "text" ", bool " "recalc" ", bool " "redraw" " = TRUE )"
+.BI "virtual void \fBsetText\fR ( const QString & " "text" ", bool " "recalc" ", bool " "redraw" " = TRUE ) "
 .br
 .ti -1c
-.BI "virtual void \fBsetPixmap\fR ( const QPixmap & " "icon" ", bool " "recalc" ", bool " "redraw" " = TRUE )"
+.BI "virtual void \fBsetPixmap\fR ( const QPixmap & " "icon" ", bool " "recalc" ", bool " "redraw" " = TRUE ) "
 .br
 .ti -1c
-.BI "virtual void \fBsetKey\fR ( const QString & k )"
+.BI "virtual void \fBsetKey\fR ( const QString & k ) "
 .br
 .in -1c
 .SS "Protected Members"
 .in +1c
 .ti -1c
-.BI "virtual void \fBremoveRenameBox\fR ()"
+.BI "virtual void \fBremoveRenameBox\fR () "
 .br
 .ti -1c
-.BI "virtual void \fBcalcRect\fR ( const QString & text_ = QString::null )"
+.BI "virtual void \fBcalcRect\fR ( const QString & text_ = QString::null ) "
 .br
 .ti -1c
-.BI "virtual void \fBpaintItem\fR ( QPainter * " "p" ", const QColorGroup & cg )"
+.BI "virtual void \fBpaintItem\fR ( QPainter * " "p" ", const QColorGroup & cg ) "
 .br
 .ti -1c
-.BI "virtual void \fBpaintFocus\fR ( QPainter * " "p" ", const QColorGroup & cg )"
+.BI "virtual void \fBpaintFocus\fR ( QPainter * " "p" ", const QColorGroup & cg ) "
 .br
 .ti -1c
-.BI "virtual void \fBdropped\fR ( QDropEvent * " "e" ", const QValueList<QIconDragItem> & lst )"
+.BI "virtual void \fBdropped\fR ( QDropEvent * " "e" ", const QValueList<QIconDragItem> & lst ) "
 .br
 .ti -1c
-.BI "virtual void \fBdragEntered\fR ()"
+.BI "virtual void \fBdragEntered\fR () "
 .br
 .ti -1c
-.BI "virtual void \fBdragLeft\fR ()"
+.BI "virtual void \fBdragLeft\fR () "
 .br
 .ti -1c
-.BI "void \fBsetItemRect\fR ( const QRect & r )"
+.BI "void \fBsetItemRect\fR ( const QRect & r ) "
 .br
 .ti -1c
-.BI "void \fBsetTextRect\fR ( const QRect & r )"
+.BI "void \fBsetTextRect\fR ( const QRect & r ) "
 .br
 .ti -1c
-.BI "void \fBsetPixmapRect\fR ( const QRect & r )"
+.BI "void \fBsetPixmapRect\fR ( const QRect & r ) "
 .br
 .ti -1c
 .BI "void \fBcalcTmpText\fR () (internal)"
@@ -253,11 +253,11 @@ Constructs an iconview item with no text and a default icon, and inserts it into
 .SH "QIconViewItem::QIconViewItem ( QIconView * parent, QIconViewItem * after, const QString & text )"
 Constructs an iconview item using \fItext\fR as text and a default icon, and inserts it into the iconview \fIparent\fR after the iconview item \fIafter.\fR
 .SH "QIconViewItem::QIconViewItem ( QIconView * parent, QIconViewItem * after, const QString & text, const QPixmap & icon )"
-Constructs an iconview item using \fItext\fR as text and a \\icon as icon, and inserts it into the iconview \fIparent\fR after the iconview item \fIafter.\fR
+Constructs an iconview item using \fItext\fR as text and \fIicon\fR as icon, and inserts it into the iconview \fIparent\fR after the iconview item \fIafter.\fR
 .SH "QIconViewItem::QIconViewItem ( QIconView * parent, const QString & text )"
 Constructs an iconview item using \fItext\fR as text and a default icon, and inserts it into the iconview \fIparent.\fR
 .SH "QIconViewItem::QIconViewItem ( QIconView * parent, const QString & text, const QPixmap & icon )"
-Constructs an iconview item using \fItext\fR as text and a \\icon as icon, and inserts it into the iconview \fIparent.\fR
+Constructs an iconview item using \fItext\fR as text and \fIicon\fR as icon, and inserts it into the iconview \fIparent.\fR
 .SH "QIconViewItem::~QIconViewItem () \fC[virtual]\fR"
 Destructs the iconview item and tells the iconview about it.
 .SH "bool QIconViewItem::acceptDrop ( const QMimeSource * mime ) const \fC[virtual]\fR"
@@ -271,25 +271,25 @@ Compares this iconview item to \fIi.\fR Returns -1 if this item is less than \fI
 .PP
 The default implementation uses QIconViewItem::key() to compare the items. A reimplementation may use different values.
 .PP
-See also: key().
+See also key().
 .SH "bool QIconViewItem::contains ( QPoint pnt ) const"
 Returns TRUE if the item contains the point \fIpnt\fR (in contents coordinates), and FALSE if it does not.
 .SH "bool QIconViewItem::dragEnabled () const"
 Returns TRUE if the user is allowed to drag the iconview item, or else FALSE.
 .PP
-See also: setDragEnabled().
+See also setDragEnabled().
 .SH "void QIconViewItem::dragEntered () \fC[virtual protected]\fR"
 This method is called, when a drag entered the item's bounding rect.
 .PP
-The default implementation does nothing, subcasses should reimplement this method.
+The default implementation does nothing, subclasses should reimplement this method.
 .SH "void QIconViewItem::dragLeft () \fC[virtual protected]\fR"
 This method is called, when a drag left the item's bounding rect.
 .PP
-The default implementation does nothing, subcasses should reimplement this method.
+The default implementation does nothing, subclasses should reimplement this method.
 .SH "bool QIconViewItem::dropEnabled () const"
 Returns TRUE if the user is allowed to drop something onto the item, otherwise FALSE.
 .PP
-See also: setDropEnabled().
+See also setDropEnabled().
 .SH "void QIconViewItem::dropped ( QDropEvent * e, const QValueList<QIconDragItem> & lst ) \fC[virtual protected]\fR"
 This method is called when something was dropped on the item. \fIe\fR contains all the information about the drop. If the drag object of the drop was a QIconDrag, \fIlst\fR contains the list of the dropped items. You can get the data using QIconDragItem::data() of each item then.
 .PP
@@ -301,21 +301,21 @@ Returns the height of the item.
 .SH "QIconView * QIconViewItem::iconView () const"
 Returns a pointer to this items' iconview parent.
 .SH "int QIconViewItem::index () const"
-Returns the index of this item in the iconview, or -1 if an error occured.
+Returns the index of this item in the iconview, or -1 if an error occurred.
 .SH "bool QIconViewItem::intersects ( QRect r ) const"
 Returns TRUE, if the item intersects the rectangle \fIr\fR (in contents coordinates), and FALSE if it does not.
 .SH "bool QIconViewItem::isSelectable () const"
 Returns TRUE if the item is selectable, or else FALSE.
 .PP
-See also: setSelectable().
+See also setSelectable().
 .SH "bool QIconViewItem::isSelected () const"
 Returns TRUE if the item is selected, or else FALSE.
 .PP
-See also: setSelected().
+See also setSelected().
 .SH "QString QIconViewItem::key () const \fC[virtual]\fR"
 Returns the key of the iconview item.
 .PP
-See also: setKey() and compareItems().
+See also setKey() and compareItems().
 .SH "void QIconViewItem::move ( int x, int y ) \fC[virtual]\fR"
 Moves the item to \fIx\fR and \fIy\fR in the iconview (these are contents coordinates).
 .SH "void QIconViewItem::move ( const QPoint & pnt ) \fC[virtual]\fR"
@@ -333,7 +333,7 @@ Paints the item using the painter \fIp\fR and the color group \fIcg.\fR If you w
 .SH "QPixmap * QIconViewItem::pixmap () const \fC[virtual]\fR"
 Returns the icon of the iconview item. Normally you will set the pixmap if the item with setPixmap(), but sometimes it's inconvenient to call setText() for each item, so you can subclass QIconViewItem, reimplement this method and return a pointer to the item's pixmap. If you do this you have to call calcRect() manually each time the size of this pixmap changes!
 .PP
-See also: setPixmap().
+See also setPixmap().
 .SH "QRect QIconViewItem::pixmapRect ( bool relative = TRUE ) const"
 Returns the bounding rectangle of the item's icon.
 .PP
@@ -353,7 +353,7 @@ This function sets the icon view up so that the user can edit the item text, and
 .SH "bool QIconViewItem::renameEnabled () const"
 Returns TRUE if the item can be renamed by the user with in-place renaming, or else FALSE.
 .PP
-See also: setRenameEnabled().
+See also setRenameEnabled().
 .SH "void QIconViewItem::repaint () \fC[virtual]\fR"
 Repaints the item.
 .SH "void QIconViewItem::setDragEnabled ( bool allow ) \fC[virtual]\fR"
@@ -365,19 +365,19 @@ Sets the bounding rectangle of the whole item. This should be only used in subcl
 .SH "void QIconViewItem::setKey ( const QString & k ) \fC[virtual]\fR"
 Sets \fIk\fR as key of the iconview item. This is used for sorting.
 .PP
-See also: compareItems().
+See also compareItems().
 .SH "void QIconViewItem::setPixmap ( const QPixmap & icon ) \fC[virtual]\fR"
 Sets \fIicon\fR as item icon of the iconview item. This method might be a no-op if you reimplement pixmap().
 .PP
-See also: pixmap().
+See also pixmap().
 .SH "void QIconViewItem::setPixmap ( const QPixmap & icon, bool recalc, bool redraw = TRUE ) \fC[virtual]\fR"
 Sets \fIicon\fR as item icon of the iconview item. If \fIrecalc\fR is TRUE, the iconview's layout is recalculated. If \fIredraw\fR is TRUE (the default), the icon view is repainted.
 .PP
-See also: pixmap().
+See also pixmap().
 .SH "void QIconViewItem::setPixmapRect ( const QRect & r ) \fC[protected]\fR"
 Sets the bounding rectangle of the item icon. This should be only used in subclasses, which reimplement calcRect() to be able to set the calculated rectangle.
 .SH "void QIconViewItem::setRenameEnabled ( bool allow ) \fC[virtual]\fR"
-If \\allow is TRUE, the user can rename the iconview item by clicking on the text while the item is selected (in-place renaming). If \fIallow\fR is FALSE, in-place renaming is not possible.
+If \fIallow\fR is TRUE, the user can rename the iconview item by clicking on the text while the item is selected (in-place renaming). If \fIallow\fR is FALSE, in-place renaming is not possible.
 .PP
 Examples:
 .(l
@@ -388,7 +388,7 @@ Sets this items to be selectable if \fIenable\fR is TRUE (the default) or not to
 .PP
 The user is not able to select a non-selectable item using either the keyboard or mouse. The application programmer still can, of course.
 .PP
-See also: isSelectable().
+See also isSelectable().
 .SH "void QIconViewItem::setSelected ( bool s, bool cb ) \fC[virtual]\fR"
 Selects or unselects the item depending on \fIs,\fR and may also unselect other items, depending on QIconView::selectionMode() and \fIcb.\fR
 .PP
@@ -410,11 +410,11 @@ This variant is equivalent to calling the other variant with \fIcb\fR set to FAL
 .SH "void QIconViewItem::setText ( const QString & text ) \fC[virtual]\fR"
 Sets \fItext\fR as text of the iconview item. This method might be a no-op if you reimplement text().
 .PP
-See also: text().
+See also text().
 .SH "void QIconViewItem::setText ( const QString & text, bool recalc, bool redraw = TRUE ) \fC[virtual]\fR"
 Sets \fItext\fR as text of the iconview item. If \fIrecalc\fR is TRUE, the iconview's layout is recalculated. If \fIredraw\fR is TRUE (the default), the icon view is repainted.
 .PP
-See also: text().
+See also text().
 .SH "void QIconViewItem::setTextRect ( const QRect & r ) \fC[protected]\fR"
 Sets the bounding rectangle of the item text. This should be only used in subclasses, which reimplement calcRect() to be able to set the calculated rectangle.
 .SH "QSize QIconViewItem::size () const"
@@ -422,7 +422,7 @@ Returns the size of the item.
 .SH "QString QIconViewItem::text () const \fC[virtual]\fR"
 Returns the text of the iconview item. Normally you will set the text if the item with setText(), but sometimes it's inconvenient to call setText() for each item, so you can subclass QIconViewItem, reimplement this method and return the text of the item. If you do this you have to call calcRect() manually each time the text (and so the size of it) changes.
 .PP
-See also: setText().
+See also setText().
 .SH "QRect QIconViewItem::textRect ( bool relative = TRUE ) const"
 Returns the bounding rectangle of the item's text.
 .PP
@@ -438,7 +438,7 @@ For internal use only.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qiconviewitem.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

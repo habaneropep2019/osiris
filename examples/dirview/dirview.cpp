@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: qt/examples/dirview/dirview.cpp   2.1.1   edited 2000-03-14 $
+** $Id: qt/examples/dirview/dirview.cpp   2.2.0   edited 2000-08-31 $
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -317,6 +317,7 @@ void DirectoryView::openFolder()
 
 static const int autoopenTime = 750;
 
+
 void DirectoryView::contentsDragEnterEvent( QDragEnterEvent *e )
 {
     if ( !QUriDrag::canDecode(e) ) {
@@ -430,6 +431,7 @@ void DirectoryView::contentsDropEvent( QDropEvent *e )
 
 }
 
+
 QString DirectoryView::fullPath(QListViewItem* item)
 {
     QString fullpath = item->text(0);
@@ -450,7 +452,7 @@ void DirectoryView::contentsMousePressEvent( QMouseEvent* e )
     if ( i ) {
 	// if the user clicked into the root decoration of the item, don't try to start a drag!
 	if ( p.x() > header()->cellPos( header()->mapToActual( 0 ) ) +
-	     treeStepSize() * ( i->depth() + ( rootIsDecorated() ? 1 : 0) ) + itemMargin() || 
+	     treeStepSize() * ( i->depth() + ( rootIsDecorated() ? 1 : 0) ) + itemMargin() ||
 	     p.x() < header()->cellPos( header()->mapToActual( 0 ) ) ) {
 	    presspos = e->pos();
 	    mousePressed = TRUE;

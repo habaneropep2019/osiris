@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: qt/examples/picture/picture.cpp   2.1.1   edited 2000-02-21 $
+** $Id: qt/examples/picture/picture.cpp   2.2.0   edited 2000-08-31 $
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -34,7 +34,7 @@ void paintCar( QPainter *p )			// paint a car
     brush.setColor( windowColor );		// set this brush color
     p->setBrush( brush );			// set brush
     p->drawRect( 80, 80, 250, 70 );		// car window
-    p->drawText( 180, 80, 150, 70, Qt::AlignCenter, "--  Qt  --\nTroll Tech AS" );
+    p->drawText( 180, 80, 150, 70, Qt::AlignCenter, "--  Qt  --\nTrolltech AS" );
 
     QPixmap pixmap;
     if ( pixmap.load("flag.bmp") )		// load and draw image

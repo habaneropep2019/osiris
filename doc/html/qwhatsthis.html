@@ -1,15 +1,17 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head>
 <title>Qt Toolkit - QWhatsThis Class</title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
-a:link { text-decoration: none; }
-body { background: white; color: black; }
+a:link { color: #004faf; text-decoration: none }
+a:visited { color: #672967; text-decoration: none }body { background: white; color: black; }
 --></style>
 </head><body bgcolor="#ffffff">
 
-<a href="index.html">
-<img width="122" height="65" src="qtlogo.png" alt="Home"
-  align="left" border="0">
-</a><div align=right><img src="dochead.png" width="472" height="27"><br>
+<table width="100%">
+<tr><td><a href="index.html">
+<img width="100" height="100" src="qtlogo.png"
+alt="Home" border="0"><img width="100"
+height="100" src="face.png" alt="Home" border="0">
+</a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
 - <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
@@ -17,7 +19,7 @@ body { background: white; color: black; }
 - <a href="index.html">Home</a>
 - <a href="topicals.html"><b>Structure</b></a>
 </div>
-<br clear=all>
+</table>
 
 <h1 align=center>QWhatsThis Class Reference</h1><br clear="all">
 <p>
@@ -30,19 +32,19 @@ Inherits <a href="qt.html">Qt</a>.
 <p><a href="qwhatsthis-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><span class="fn"><a href="#f55fd2"><b>QWhatsThis</b></a> ( QWidget * ) </span>
-<li><span class="fn">virtual <a href="#be24ee"><b>~QWhatsThis</b></a> () </span>
-<li><span class="fn">virtual QString <a href="#6690d8"><b>text</b></a> ( const QPoint &amp; ) </span>
+<li><div class="fn"><a href="#f55fd2"><b>QWhatsThis</b></a> ( QWidget * ) </div>
+<li><div class="fn">virtual <a href="#be24ee"><b>~QWhatsThis</b></a> () </div>
+<li><div class="fn">virtual QString <a href="#6690d8"><b>text</b></a> ( const QPoint &amp; ) </div>
 </ul>
 <h2>Static Public Members</h2>
 <ul>
-<li><span class="fn">void <a href="#5265e7"><b>add</b></a> ( QWidget *, const QString &amp; ) </span>
-<li><span class="fn">void <a href="#bf0c69"><b>remove</b></a> ( QWidget * ) </span>
-<li><span class="fn">QString <a href="#219fbd"><b>textFor</b></a> ( QWidget *, const QPoint &amp; pos = QPoint ()) </span>
-<li><span class="fn">QToolButton* <a href="#36466d"><b>whatsThisButton</b></a> ( QWidget * parent ) </span>
-<li><span class="fn">void <a href="#8d84ad"><b>enterWhatsThisMode</b></a> () </span>
-<li><span class="fn">bool <a href="#b5fe5f"><b>inWhatsThisMode</b></a> () </span>
-<li><span class="fn">void <a href="#8b7684"><b>leaveWhatsThisMode</b></a> ( const QString &amp; = QString::null, const QPoint &amp; pos = QCursor::pos ()) </span>
+<li><div class="fn">void <a href="#5265e7"><b>add</b></a> ( QWidget *, const QString &amp; ) </div>
+<li><div class="fn">void <a href="#bf0c69"><b>remove</b></a> ( QWidget * ) </div>
+<li><div class="fn">QString <a href="#219fbd"><b>textFor</b></a> ( QWidget *, const QPoint &amp; pos = QPoint ()) </div>
+<li><div class="fn">QToolButton* <a href="#36466d"><b>whatsThisButton</b></a> ( QWidget * parent ) </div>
+<li><div class="fn">void <a href="#8d84ad"><b>enterWhatsThisMode</b></a> () </div>
+<li><div class="fn">bool <a href="#b5fe5f"><b>inWhatsThisMode</b></a> () </div>
+<li><div class="fn">void <a href="#8b7684"><b>leaveWhatsThisMode</b></a> ( const QString &amp; = QString::null, const QPoint &amp; pos = QCursor::pos ()) </div>
 </ul>
 <hr><h2><a name="details"></a>Detailed Description</h2>
 The QWhatsThis class provides a simple description of any widget, e.g. answering the question "what's this?"
@@ -84,7 +86,7 @@ position of the mouse click.
 <p>To remove added text, you can use <a href="#bf0c69">QWhatsThis::remove</a>(), but since
 the text is automatically removed when the widget is destroyed,
 this is rarely needed.
-<p>See also:  <a href="qtooltip.html">QToolTip</a>.
+<p>See also  <a href="qtooltip.html">QToolTip</a>.
 
 <hr><h2>Member Function Documentation</h2>
 <h3 class="fn"><a name="f55fd2"></a>QWhatsThis::QWhatsThis ( <a href="qwidget.html">QWidget</a> * widget )</h3>
@@ -100,7 +102,7 @@ text formatted (ie. it contains markup), it will be rendered with
 the default stylesheet <a href="qstylesheet.html#9d69e9">QStyleSheet::defaultSheet</a>().
 <p>The text is destroyed if the widget is later destroyed and so need
 not be explicitly removed.
-<p>See also:  <a href="#bf0c69">remove</a>().
+<p>See also  <a href="#bf0c69">remove</a>().
 <h3 class="fn">void <a name="8d84ad"></a>QWhatsThis::enterWhatsThisMode () <code>[static]</code></h3>
 <p>Enters <i>What's This</i>? mode and returns immediately.
 <p>Qt will install a special cursor and take over mouse input
@@ -109,10 +111,10 @@ switch out of <i>What's This</i> mode.  Finally, Qt
 removes the special cursor and help window then restores ordinary event
 processing, at which point the left mouse button is not pressed.
 <p>The user can also use the Escape key to leave <i>What's This</i>? mode.
-<p>See also:  <a href="#b5fe5f">inWhatsThisMode</a>() and <a href="#8b7684">leaveWhatsThisMode</a>().
+<p>See also  <a href="#b5fe5f">inWhatsThisMode</a>() and <a href="#8b7684">leaveWhatsThisMode</a>().
 <h3 class="fn">bool <a name="b5fe5f"></a>QWhatsThis::inWhatsThisMode () <code>[static]</code></h3>
 <p>Returns whether the application is in <i>What's This</i> mode.
-<p>See also:  <a href="#8d84ad">enterWhatsThisMode</a>() and <a href="#8b7684">leaveWhatsThisMode</a>().
+<p>See also  <a href="#8d84ad">enterWhatsThisMode</a>() and <a href="#8b7684">leaveWhatsThisMode</a>().
 <h3 class="fn">void <a name="8b7684"></a>QWhatsThis::leaveWhatsThisMode ( const <a href="qstring.html">QString</a> &amp; text = QString::null, const <a href="qpoint.html">QPoint</a> &amp; pos = QCursor::pos ()) <code>[static]</code></h3>
 <p>Leaves <i>What's This</i>? question mode
 <p>This function is used internally by widgets that support
@@ -122,11 +124,11 @@ work normally in <i>What's This</i> mode, but provide help texts for single
 menu items instead.
 <p>If <em>text</em> is not a null string, then a <i>What's This</i> help window is
 displayed at the global screen position <em>pos.</em>
-<p>See also:  <a href="#b5fe5f">inWhatsThisMode</a>() and <a href="#8d84ad">enterWhatsThisMode</a>().
+<p>See also  <a href="#b5fe5f">inWhatsThisMode</a>() and <a href="#8d84ad">enterWhatsThisMode</a>().
 <h3 class="fn">void <a name="bf0c69"></a>QWhatsThis::remove ( <a href="qwidget.html">QWidget</a> * widget ) <code>[static]</code></h3>
 <p>Removes the <i>What's This</i> help for <em>widget.</em> This happens
 automatically if the widget is destroyed.
-<p>See also:  <a href="#5265e7">add</a>().
+<p>See also  <a href="#5265e7">add</a>().
 <h3 class="fn"><a href="qstring.html">QString</a> <a name="6690d8"></a>QWhatsThis::text ( const <a href="qpoint.html">QPoint</a> &amp; ) <code>[virtual]</code></h3>
 <p>This virtual functions returns the text for position <em>p</em> in the
 widget that this <i>What's This</i> object documents.  If there is no
@@ -135,7 +137,7 @@ widget that this <i>What's This</i> object documents.  If there is no
 <h3 class="fn"><a href="qstring.html">QString</a> <a name="219fbd"></a>QWhatsThis::textFor ( <a href="qwidget.html">QWidget</a> * widget, const <a href="qpoint.html">QPoint</a> &amp; pos = QPoint ()) <code>[static]</code></h3>
 <p>Returns the text for <em>widget,</em> or a null string if there
 is no <i>What's This</i> help for <em>widget.</em>
-<p>See also:  <a href="#5265e7">add</a>().
+<p>See also  <a href="#5265e7">add</a>().
 <h3 class="fn"><a href="qtoolbutton.html">QToolButton</a> * <a name="36466d"></a>QWhatsThis::whatsThisButton ( <a href="qwidget.html">QWidget</a> * parent ) <code>[static]</code></h3>
 <p>Creates a <a href="qtoolbutton.html">QToolButton</a> pre-configured
 to enter <i>What's This</i> mode when clicked. You
@@ -146,13 +148,13 @@ will often use this with a toolbar:
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.1.1"><nobr>
+<input type=hidden name="version" value="2.2.0"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
 copyright &copy; 1995-2000
-<a href="http://www.trolltech.com">Troll Tech</a>, all rights reserved.<p><address><hr><div align="center">
+<a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.1</div>
+<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.2.0</div>
 </table></div></address></body></html>

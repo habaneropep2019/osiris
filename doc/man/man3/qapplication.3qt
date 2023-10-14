@@ -1,5 +1,5 @@
-.TH QApplication 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QApplication 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QApplication \- Manages the GUI application's control flow and main settings
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -21,13 +19,19 @@ Inherited by QXtApplication.
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQApplication\fR ( int & " "argc" ", char ** argv )"
+.BI "\fBQApplication\fR ( int & " "argc" ", char ** argv ) "
 .br
 .ti -1c
-.BI "\fBQApplication\fR ( int & " "argc" ", char ** " "argv" ", bool GUIenabled )"
+.BI "\fBQApplication\fR ( int & " "argc" ", char ** " "argv" ", bool GUIenabled ) "
 .br
 .ti -1c
-.BI "virtual \fB~QApplication\fR ()"
+.BI "enum \fBType\fR { Tty, GuiClient, GuiServer }"
+.br
+.ti -1c
+.BI "\fBQApplication\fR ( int & " "argc" ", char ** " "argv" ", Type ) "
+.br
+.ti -1c
+.BI "virtual \fB~QApplication\fR () "
 .br
 .ti -1c
 .BI "int \fBargc\fR () const"
@@ -42,10 +46,10 @@ Inherited by QXtApplication.
 .BI "QWidget* \fBmainWidget\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetMainWidget\fR ( QWidget * )"
+.BI "virtual void \fBsetMainWidget\fR ( QWidget * ) "
 .br
 .ti -1c
-.BI "virtual void \fBpolish\fR ( QWidget * )"
+.BI "virtual void \fBpolish\fR ( QWidget * ) "
 .br
 .ti -1c
 .BI "QWidget* \fBfocusWidget\fR () const"
@@ -54,43 +58,46 @@ Inherited by QXtApplication.
 .BI "QWidget* \fBactiveWindow\fR () const"
 .br
 .ti -1c
-.BI "int \fBexec\fR ()"
+.BI "int \fBexec\fR () "
 .br
 .ti -1c
-.BI "void \fBprocessEvents\fR ()"
+.BI "void \fBprocessEvents\fR () "
 .br
 .ti -1c
-.BI "void \fBprocessEvents\fR ( int maxtime )"
+.BI "void \fBprocessEvents\fR ( int maxtime ) "
 .br
 .ti -1c
-.BI "void \fBprocessOneEvent\fR ()"
+.BI "void \fBprocessOneEvent\fR () "
 .br
 .ti -1c
-.BI "int \fBenter_loop\fR ()"
+.BI "int \fBenter_loop\fR () "
 .br
 .ti -1c
-.BI "void \fBexit_loop\fR ()"
+.BI "void \fBexit_loop\fR () "
 .br
 .ti -1c
 .BI "int \fBloopLevel\fR () const"
 .br
 .ti -1c
-.BI "virtual bool \fBnotify\fR ( QObject *, QEvent * )"
+.BI "virtual bool \fBnotify\fR ( QObject *, QEvent * ) "
 .br
 .ti -1c
-.BI "void \fBsetDefaultCodec\fR ( QTextCodec * )"
+.BI "void \fBsetDefaultCodec\fR ( QTextCodec * ) "
 .br
 .ti -1c
 .BI "QTextCodec* \fBdefaultCodec\fR () const"
 .br
 .ti -1c
-.BI "void \fBinstallTranslator\fR ( QTranslator * )"
+.BI "void \fBinstallTranslator\fR ( QTranslator * ) "
 .br
 .ti -1c
-.BI "void \fBremoveTranslator\fR ( QTranslator * )"
+.BI "void \fBremoveTranslator\fR ( QTranslator * ) "
 .br
 .ti -1c
-.BI "QString \fBtranslate\fR ( const char * " "scope" ", const char * key ) const"
+.BI "QString translate ( const char *, const char * ) const \fI(obsolete)\fR"
+.br
+.ti -1c
+.BI "QString \fBtranslate\fR ( const char *, const char *, const char * ) const"
 .br
 .ti -1c
 .BI "bool \fBisSessionRestored\fR () const"
@@ -99,136 +106,145 @@ Inherited by QXtApplication.
 .BI "QString \fBsessionId\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBcommitData\fR ( QSessionManager & sm )"
+.BI "virtual void \fBcommitData\fR ( QSessionManager & sm ) "
 .br
 .ti -1c
-.BI "virtual void \fBsaveState\fR ( QSessionManager & sm )"
+.BI "virtual void \fBsaveState\fR ( QSessionManager & sm ) "
 .br
 .ti -1c
-.BI "void \fBwakeUpGuiThread\fR ()"
+.BI "void \fBwakeUpGuiThread\fR () "
+.br
+.ti -1c
+.BI "void \fBlock\fR () "
+.br
+.ti -1c
+.BI "void \fBunlock\fR ( bool " "wakeUpGui" " = TRUE ) "
+.br
+.ti -1c
+.BI "bool \fBlocked\fR () "
 .br
 .in -1c
 .SS "Public Slots"
 .in +1c
 .ti -1c
-.BI "void \fBquit\fR ()"
+.BI "void \fBquit\fR () "
 .br
 .ti -1c
-.BI "void \fBcloseAllWindows\fR ()"
+.BI "void \fBcloseAllWindows\fR () "
 .br
 .in -1c
 .SS "Signals"
 .in +1c
 .ti -1c
-.BI "void \fBlastWindowClosed\fR ()"
+.BI "void \fBlastWindowClosed\fR () "
 .br
 .ti -1c
-.BI "void \fBaboutToQuit\fR ()"
+.BI "void \fBaboutToQuit\fR () "
 .br
 .ti -1c
-.BI "void \fBguiThreadAwake\fR ()"
+.BI "void \fBguiThreadAwake\fR () "
 .br
 .in -1c
 .SS "Static Public Members"
 .in +1c
 .ti -1c
-.BI "QStyle& \fBstyle\fR ()"
+.BI "QStyle& \fBstyle\fR () "
 .br
 .ti -1c
-.BI "void \fBsetStyle\fR ( QStyle * )"
+.BI "void \fBsetStyle\fR ( QStyle * ) "
 .br
 .ti -1c
-.BI "int \fBcolorSpec\fR ()"
+.BI "int \fBcolorSpec\fR () "
 .br
 .ti -1c
-.BI "void \fBsetColorSpec\fR ( int )"
+.BI "void \fBsetColorSpec\fR ( int ) "
 .br
 .ti -1c
-.BI "QCursor* \fBoverrideCursor\fR ()"
+.BI "QCursor* \fBoverrideCursor\fR () "
 .br
 .ti -1c
-.BI "void \fBsetOverrideCursor\fR ( const QCursor &, bool " "replace" "=FALSE )"
+.BI "void \fBsetOverrideCursor\fR ( const QCursor &, bool " "replace" "=FALSE ) "
 .br
 .ti -1c
-.BI "void \fBrestoreOverrideCursor\fR ()"
+.BI "void \fBrestoreOverrideCursor\fR () "
 .br
 .ti -1c
-.BI "bool \fBhasGlobalMouseTracking\fR ()"
+.BI "bool \fBhasGlobalMouseTracking\fR () "
 .br
 .ti -1c
-.BI "void \fBsetGlobalMouseTracking\fR ( bool enable )"
+.BI "void \fBsetGlobalMouseTracking\fR ( bool enable ) "
 .br
 .ti -1c
-.BI "QPalette \fBpalette\fR ( const QWidget * = 0 )"
+.BI "QPalette \fBpalette\fR ( const QWidget * = 0 ) "
 .br
 .ti -1c
-.BI "void \fBsetPalette\fR ( const QPalette &, bool " "informWidgets" "=FALSE, const char * " "className" " = 0 )"
+.BI "void \fBsetPalette\fR ( const QPalette &, bool " "informWidgets" "=FALSE, const char * " "className" " = 0 ) "
 .br
 .ti -1c
-.BI "QFont \fBfont\fR ( const QWidget * = 0 )"
+.BI "QFont \fBfont\fR ( const QWidget * = 0 ) "
 .br
 .ti -1c
-.BI "void \fBsetFont\fR ( const QFont &, bool " "informWidgets" "=FALSE, const char * " "className" " = 0 )"
+.BI "void \fBsetFont\fR ( const QFont &, bool " "informWidgets" "=FALSE, const char * " "className" " = 0 ) "
 .br
 .ti -1c
-.BI "QFontMetrics \fBfontMetrics\fR ()"
+.BI "QFontMetrics \fBfontMetrics\fR () "
 .br
 .ti -1c
-.BI "QWidgetList* \fBallWidgets\fR ()"
+.BI "QWidgetList* \fBallWidgets\fR () "
 .br
 .ti -1c
-.BI "QWidgetList* \fBtopLevelWidgets\fR ()"
+.BI "QWidgetList* \fBtopLevelWidgets\fR () "
 .br
 .ti -1c
-.BI "QWidget* \fBdesktop\fR ()"
+.BI "QWidget* \fBdesktop\fR () "
 .br
 .ti -1c
-.BI "QWidget* \fBactivePopupWidget\fR ()"
+.BI "QWidget* \fBactivePopupWidget\fR () "
 .br
 .ti -1c
-.BI "QWidget* \fBactiveModalWidget\fR ()"
+.BI "QWidget* \fBactiveModalWidget\fR () "
 .br
 .ti -1c
-.BI "QClipboard* \fBclipboard\fR ()"
+.BI "QClipboard* \fBclipboard\fR () "
 .br
 .ti -1c
-.BI "QWidget* \fBwidgetAt\fR ( int " "x" ", int " "y" ", bool " "child" "=FALSE )"
+.BI "QWidget* \fBwidgetAt\fR ( int " "x" ", int " "y" ", bool " "child" "=FALSE ) "
 .br
 .ti -1c
-.BI "QWidget* \fBwidgetAt\fR ( const QPoint &, bool " "child" "=FALSE )"
+.BI "QWidget* \fBwidgetAt\fR ( const QPoint &, bool " "child" "=FALSE ) "
 .br
 .ti -1c
-.BI "void \fBexit\fR ( int " "retcode" "=0 )"
+.BI "void \fBexit\fR ( int " "retcode" "=0 ) "
 .br
 .ti -1c
-.BI "bool \fBsendEvent\fR ( QObject * " "receiver" ", QEvent * event )"
+.BI "bool \fBsendEvent\fR ( QObject * " "receiver" ", QEvent * event ) "
 .br
 .ti -1c
-.BI "void \fBpostEvent\fR ( QObject * " "receiver" ", QEvent * event )"
+.BI "void \fBpostEvent\fR ( QObject * " "receiver" ", QEvent * event ) "
 .br
 .ti -1c
-.BI "void \fBsendPostedEvents\fR ( QObject * " "receiver" ", int event_type )"
+.BI "void \fBsendPostedEvents\fR ( QObject * " "receiver" ", int event_type ) "
 .br
 .ti -1c
-.BI "void \fBsendPostedEvents\fR ()"
+.BI "void \fBsendPostedEvents\fR () "
 .br
 .ti -1c
-.BI "void \fBremovePostedEvents\fR ( QObject * receiver )"
+.BI "void \fBremovePostedEvents\fR ( QObject * receiver ) "
 .br
 .ti -1c
-.BI "bool \fBstartingUp\fR ()"
+.BI "bool \fBstartingUp\fR () "
 .br
 .ti -1c
-.BI "bool \fBclosingDown\fR ()"
+.BI "bool \fBclosingDown\fR () "
 .br
 .ti -1c
-.BI "void \fBflushX\fR ()"
+.BI "void \fBflushX\fR () "
 .br
 .ti -1c
-.BI "void \fBsyncX\fR ()"
+.BI "void \fBsyncX\fR () "
 .br
 .ti -1c
-.BI "void \fBbeep\fR ()"
+.BI "void \fBbeep\fR () "
 .br
 .ti -1c
 .BI "void setWinStyleHighlightColor ( const QColor & ) \fI(obsolete)\fR"
@@ -237,40 +253,52 @@ Inherited by QXtApplication.
 .BI "const QColor& winStyleHighlightColor () \fI(obsolete)\fR"
 .br
 .ti -1c
-.BI "void \fBsetDesktopSettingsAware\fR ( bool )"
+.BI "void \fBsetDesktopSettingsAware\fR ( bool ) "
 .br
 .ti -1c
-.BI "bool \fBdesktopSettingsAware\fR ()"
+.BI "bool \fBdesktopSettingsAware\fR () "
 .br
 .ti -1c
-.BI "void \fBsetCursorFlashTime\fR ( int )"
+.BI "void \fBsetCursorFlashTime\fR ( int ) "
 .br
 .ti -1c
-.BI "int \fBcursorFlashTime\fR ()"
+.BI "int \fBcursorFlashTime\fR () "
 .br
 .ti -1c
-.BI "void \fBsetDoubleClickInterval\fR ( int )"
+.BI "void \fBsetDoubleClickInterval\fR ( int ) "
 .br
 .ti -1c
-.BI "int \fBdoubleClickInterval\fR ()"
+.BI "int \fBdoubleClickInterval\fR () "
 .br
 .ti -1c
-.BI "void \fBsetWheelScrollLines\fR ( int )"
+.BI "void \fBsetWheelScrollLines\fR ( int ) "
 .br
 .ti -1c
-.BI "int \fBwheelScrollLines\fR ()"
+.BI "int \fBwheelScrollLines\fR () "
 .br
 .ti -1c
-.BI "void \fBsetStartDragTime\fR ( int ms )"
+.BI "void \fBsetGlobalStrut\fR ( const QSize & ) "
 .br
 .ti -1c
-.BI "int \fBstartDragTime\fR ()"
+.BI "QSize \fBglobalStrut\fR () "
 .br
 .ti -1c
-.BI "void \fBsetStartDragDistance\fR ( int l )"
+.BI "void \fBsetStartDragTime\fR ( int ms ) "
 .br
 .ti -1c
-.BI "int \fBstartDragDistance\fR ()"
+.BI "int \fBstartDragTime\fR () "
+.br
+.ti -1c
+.BI "void \fBsetStartDragDistance\fR ( int l ) "
+.br
+.ti -1c
+.BI "int \fBstartDragDistance\fR () "
+.br
+.ti -1c
+.BI "bool \fBisEffectEnabled\fR ( Qt::UIEffect ) "
+.br
+.ti -1c
+.BI "void \fBsetEffectEnabled\fR ( Qt::UIEffect, bool " "enable" " = TRUE ) "
 .br
 .in -1c
 .SH RELATED FUNCTION DOCUMENTATION
@@ -289,19 +317,19 @@ Inherited by QXtApplication.
 .BI "void \fBqWarning\fR (const char * " "msg" ", ...)"
 .br
 .ti -1c
-.BI "Q_EXPORT bool \fBqSysInfo\fR (int * " "wordSize" ", bool * " "bigEndian" ")"
-.br
-.ti -1c
 .BI "void \fBqFatal\fR (const char * " "msg" ", ...)"
 .br
 .ti -1c
-.BI "Q_EXPORT msg_handler \fBqInstallMsgHandler\fR (msg_handler " "h" ")"
-.br
-.ti -1c
-.BI "Q_EXPORT const char * \fBqVersion\fR ()"
+.BI "const char * \fBqVersion\fR ()"
 .br
 .ti -1c
 .BI "void \fBqAddPostRoutine\fR (Q_CleanUpFunction " "p" ")"
+.br
+.ti -1c
+.BI "msg_handler \fBqInstallMsgHandler\fR (msg_handler " "h" ")"
+.br
+.ti -1c
+.BI "bool \fBqSysInfo\fR (int * " "wordSize" ", bool * " "bigEndian" ")"
 .br
 .in -1c
 .SH DESCRIPTION
@@ -317,7 +345,7 @@ It initializes the application to the user's desktop settings like palette(), fo
 .TP
 It performs event handling, meaning that it receives events from the underlying window system and sends them to the destination widgets. By using sendEvent() and postEvent() you can send your own events to widgets.
 .TP
-It parses common command line arguments and sets its internal state accordintly. See the constructor documentation below for more details about this.
+It parses common command line arguments and sets its internal state accordingly. See the constructor documentation below for more details about this.
 .TP
 It defines the application's look and feel, which is encapsulated in a QStyle object. This can be changed during runtime with setStyle().
 .TP
@@ -336,7 +364,7 @@ On the X window system, it provides functions to flush and sync the communicatio
 It provides support to implement sophisticated session management. This makes it possible for applications to terminate gracefully when the user logs out, to cancel a shutdown process if termination isn't possible and even to preserve the entire application state for a future session. See isSessionRestored(), sessionId() and commitData() and saveState() for details.
 .IP
 .PP
-The Application walktrough example contains a typical complete main() that does the usual things with QApplication.
+The Application walk-trough example contains a typical complete main() that does the usual things with QApplication.
 .PP
 Since the QApplication object does so much initialization, it is absolutely necessary to create it before any other objects related to the user interface are created.
 .PP
@@ -370,7 +398,7 @@ While Qt is not optimized or designed for writing non-GUI programs, it's possibl
 .PP
 Examples:
 .(l
-showimg/main.cpp iconview/main.cpp validator/main.cpp themes/main.cpp listviews/main.cpp aclock/main.cpp checklists/main.cpp drawlines/connect.cpp dclock/main.cpp wizard/main.cpp xform/xform.cpp application/main.cpp cursor/cursor.cpp layout/layout.cpp helpviewer/main.cpp buttongroups/main.cpp life/main.cpp i18n/main.cpp drawdemo/drawdemo.cpp lineedits/main.cpp popup/popup.cpp fileiconview/main.cpp listbox/main.cpp menu/menu.cpp progress/progress.cpp scribble/main.cpp qmag/qmag.cpp tabdialog/main.cpp table/main.cpp splitter/splitter.cpp progressbar/main.cpp richtext/main.cpp tooltip/main.cpp qwerty/main.cpp forever/forever.cpp rot13/rot13.cpp desktop/desktop.cpp scrollview/scrollview.cpp qfd/qfd.cpp addressbook/main.cpp movies/main.cpp picture/picture.cpp hello/main.cpp listboxcombo/main.cpp biff/main.cpp tictac/main.cpp customlayout/main.cpp mdi/main.cpp dirview/main.cpp
+showimg/main.cpp action/main.cpp rangecontrols/main.cpp iconview/main.cpp validator/main.cpp themes/main.cpp listviews/main.cpp aclock/main.cpp checklists/main.cpp drawlines/connect.cpp dclock/main.cpp wizard/main.cpp xform/xform.cpp application/main.cpp cursor/cursor.cpp layout/layout.cpp helpviewer/main.cpp buttongroups/main.cpp life/main.cpp i18n/main.cpp drawdemo/drawdemo.cpp lineedits/main.cpp popup/popup.cpp fileiconview/main.cpp listbox/main.cpp menu/menu.cpp progress/progress.cpp scribble/main.cpp qmag/qmag.cpp tabdialog/main.cpp splitter/splitter.cpp progressbar/main.cpp tooltip/main.cpp richtext/main.cpp qwerty/main.cpp forever/forever.cpp rot13/rot13.cpp desktop/desktop.cpp scrollview/scrollview.cpp qfd/qfd.cpp addressbook/main.cpp movies/main.cpp picture/picture.cpp hello/main.cpp listboxcombo/main.cpp biff/main.cpp tictac/main.cpp customlayout/main.cpp mdi/main.cpp dirview/main.cpp
 .)l
 .SH MEMBER FUNCTION DOCUMENTATION
 .SH "QApplication::QApplication ( int & argc, char ** argv )"
@@ -422,7 +450,9 @@ The X11 version of Qt also supports some traditional X11 command line options:
 .TP
 \fC-cmap,\fR causes the application to install a private color map on an 8-bit display.
 .PP
-See also: argc() and argv().
+See also argc() and argv().
+.SH "QApplication::QApplication ( int & argc, char ** argv, Type type )"
+For Qt/Embedded, passing \fIQApplication::GuiServer\fR for \fItype\fR make this application the server (equivalent to running with the -qws option).
 .SH "QApplication::QApplication ( int & argc, char ** argv, bool GUIenabled )"
 Constructs an application object with the command line arguments \fIargc\fR and \fIargv.\fR If \fIGUIenabled\fR is TRUE, a normal application is constructed, otherwise a non-GUI application is created.
 .PP
@@ -464,11 +494,11 @@ The following example shows how to create an application that uses a graphical i
 .SH "QApplication::~QApplication () \fC[virtual]\fR"
 Cleans up any window system resources that were allocated by this application. Sets the global variable \fCqApp\fR to null.
 .SH "void QApplication::aboutToQuit () \fC[signal]\fR"
-This signal is emitted when the application is about to quit the main event loop. This may happen either after a call to quit() from inside the applicaton or when the users shuts down the entire desktop session.
+This signal is emitted when the application is about to quit the main event loop. This may happen either after a call to quit() from inside the application or when the users shuts down the entire desktop session.
 .PP
 The signal is particularly useful if your application has to do some last-second cleanups. Note that no user interaction is possible at this state.
 .PP
-See also: quit().
+See also quit().
 .SH "QWidget * QApplication::activeModalWidget () \fC[static]\fR"
 Returns the active modal widget.
 .PP
@@ -476,7 +506,7 @@ A modal widget is a special top level widget which is a subclass of QDialog that
 .PP
 The modal widgets are organized in a stack. This function returns the active modal widget on top of the stack.
 .PP
-See also: activePopupWidget() and topLevelWidgets().
+See also activePopupWidget() and topLevelWidgets().
 .SH "QWidget * QApplication::activePopupWidget () \fC[static]\fR"
 Returns the active popup widget.
 .PP
@@ -484,11 +514,11 @@ A popup widget is a special top level widget that sets the \fCWType_Popup\fR wid
 .PP
 Only other popup widgets may be opened when a popup widget is shown. The popup widgets are organized in a stack. This function returns the active popup widget on top of the stack.
 .PP
-See also: activeModalWidget() and topLevelWidgets().
+See also activeModalWidget() and topLevelWidgets().
 .SH "QWidget * QApplication::activeWindow () const"
 Returns the application top-level window that has the keyboard input focus, or null if no application window has the focus. Note that there might be an activeWindow even if there is no focusWidget(), for example if no widget in that window accepts key events.
 .PP
-See also: QWidget::setFocus(), QWidget::hasFocus() and focusWidget().
+See also QWidget::setFocus(), QWidget::hasFocus() and focusWidget().
 .SH "QWidgetList * QApplication::allWidgets () \fC[static]\fR"
 Returns a list of all the widgets in the application.
 .PP
@@ -529,13 +559,13 @@ The QWidgetList class is defined in the qwidcoll.h header file.
 .PP
 \fBWarning:\fR Delete the list away as soon you have finished using it. The widgets in the list may be deleted by someone else at any time.
 .PP
-See also: topLevelWidgets(), QWidget::isVisible() and QList::isEmpty(),.
+See also topLevelWidgets(), QWidget::isVisible() and QList::isEmpty(),.
 .SH "int QApplication::argc () const"
 Returns the number of command line arguments.
 .PP
 The documentation for argv() contains a detailed description of how to process command line arguments.
 .PP
-See also: argv() and QApplication::QApplication().
+See also argv() and QApplication::QApplication().
 .SH "char ** QApplication::argv () const"
 Returns the command line argument vector.
 .PP
@@ -578,7 +608,7 @@ Example:
 .PP
 If you run \fCshowargs -display unix:0 -font 9x15bold hello world\fR under X11, the list box contains the three strings "showargs", "hello" and "world".
 .PP
-See also: argc() and QApplication::QApplication().
+See also argc() and QApplication::QApplication().
 .SH "void QApplication::beep () \fC[static]\fR"
 Sounds the bell, using the default volume and sound.
 .SH "QClipboard * QApplication::clipboard () \fC[static]\fR"
@@ -604,15 +634,15 @@ The function is particularly useful for applications with many toplevel windows.
 .PP
 The windows are closed in random order, until one window does not accept the close event.
 .PP
-See also: QWidget::close(), QWidget::closeEvent(), lastWindowClosed(), quit(), topLevelWidgets() and QWidget::isTopLevel().
+See also QWidget::close(), QWidget::closeEvent(), lastWindowClosed(), quit(), topLevelWidgets() and QWidget::isTopLevel().
 .SH "bool QApplication::closingDown () \fC[static]\fR"
 Returns TRUE if the application objects are being destroyed.
 .PP
-See also: startingUp().
+See also startingUp().
 .SH "int QApplication::colorSpec () \fC[static]\fR"
 Returns the color specification.
 .PP
-See also: QApplication::setColorSpec().
+See also QApplication::setColorSpec().
 .SH "void QApplication::commitData ( QSessionManager & sm ) \fC[virtual]\fR"
 This function deals with session management. It is invoked when the QSessionManager wants the application to commit all its data.
 .PP
@@ -626,21 +656,21 @@ Within this function, no user interaction is possible, \fIunless\fR you ask the 
 .PP
 The default implementation requests interaction and sends a close event to all visible toplevel widgets. If at least one event was rejected, the shutdown is cancelled.
 .PP
-See also: isSessionRestored(), sessionId() and saveState().
+See also isSessionRestored(), sessionId() and saveState().
 .SH "int QApplication::cursorFlashTime () \fC[static]\fR"
-Returns the text cursor's flash time in milliseconds. The flash time is the time requried to display, invert and restore the caret display.
+Returns the text cursor's flash time in milliseconds. The flash time is the time required to display, invert and restore the caret display.
 .PP
 The default value on X11 is 1000 milliseconds. On Windows, the control panel value is used.
 .PP
 Widgets should not cache this value since it may vary any time the user changes the global desktop settings.
 .PP
-See also: setCursorFlashTime().
+See also setCursorFlashTime().
 .SH "QTextCodec* QApplication::defaultCodec () const"
 Returns the default codec (see setDefaultCodec()). Returns 0 by default (no codec).
 .SH "QWidget * QApplication::desktop () \fC[static]\fR"
 Returns the desktop widget (also called the root window).
 .PP
-The desktop widget is useful for obtaining the size of the screen. It may also be possible to draw on the desktop. We recommend against assuming that it's possible to draw on the deskop, as it works on some machines and not on others.
+The desktop widget is useful for obtaining the size of the screen. It may also be possible to draw on the desktop. We recommend against assuming that it's possible to draw on the desktop, as it works on some machines and not on others.
 .PP
 .nf
 .br
@@ -653,22 +683,22 @@ The desktop widget is useful for obtaining the size of the screen. It may also b
 .PP
 Examples:
 .(l
-qmag/qmag.cpp
+helpviewer/main.cpp scribble/main.cpp qmag/qmag.cpp
 .)l
 .SH "bool QApplication::desktopSettingsAware () \fC[static]\fR"
 Returns the value set by setDesktopSettingsAware(), by default TRUE.
 .PP
-See also: setDesktopSettingsAware().
+See also setDesktopSettingsAware().
 .SH "int QApplication::doubleClickInterval () \fC[static]\fR"
 Returns the maximum duration for a double click.
 .PP
 The default value on X11 is 400 milliseconds. On Windows, the control panel value is used.
 .PP
-See also: setDoubleClickInterval().
+See also setDoubleClickInterval().
 .SH "int QApplication::enter_loop ()"
 This function enters the main event loop (recursively). Do not call it unless you really know what you are doing.
 .PP
-See also: exit_loop() and loopLevel().
+See also exit_loop() and loopLevel().
 .SH "int QApplication::exec ()"
 Enters the main event loop and waits until exit() is called or the main widget is destroyed, and Returns the value that was set via to exit() (which is 0 if exit() is called via quit()).
 .PP
@@ -678,11 +708,11 @@ Generally speaking, no user interaction can take place before calling exec(). As
 .PP
 To make your application perform idle processing, i.e. executing a special function whenever there are no pending events, use a QTimer with 0 timeout. More advanced idle processing schemes can be achieved by using processEvents() and processOneEvent().
 .PP
-See also: quit(), exit(), processEvents() and setMainWidget().
+See also quit(), exit(), processEvents() and setMainWidget().
 .PP
 Examples:
 .(l
-showimg/main.cpp iconview/main.cpp validator/main.cpp themes/main.cpp listviews/main.cpp aclock/main.cpp checklists/main.cpp drawlines/connect.cpp dclock/main.cpp mainlyQt/editor.cpp xform/xform.cpp application/main.cpp cursor/cursor.cpp layout/layout.cpp helpviewer/main.cpp buttongroups/main.cpp life/main.cpp i18n/main.cpp drawdemo/drawdemo.cpp lineedits/main.cpp popup/popup.cpp fileiconview/main.cpp listbox/main.cpp menu/menu.cpp progress/progress.cpp scribble/main.cpp qmag/qmag.cpp tabdialog/main.cpp table/main.cpp splitter/splitter.cpp progressbar/main.cpp richtext/main.cpp tooltip/main.cpp qwerty/main.cpp forever/forever.cpp rot13/rot13.cpp scrollview/scrollview.cpp qfd/qfd.cpp addressbook/main.cpp movies/main.cpp picture/picture.cpp hello/main.cpp listboxcombo/main.cpp biff/main.cpp tictac/main.cpp customlayout/main.cpp mdi/main.cpp dirview/main.cpp
+showimg/main.cpp action/main.cpp rangecontrols/main.cpp iconview/main.cpp validator/main.cpp themes/main.cpp listviews/main.cpp aclock/main.cpp checklists/main.cpp drawlines/connect.cpp dclock/main.cpp mainlyQt/editor.cpp xform/xform.cpp application/main.cpp cursor/cursor.cpp layout/layout.cpp helpviewer/main.cpp buttongroups/main.cpp life/main.cpp i18n/main.cpp drawdemo/drawdemo.cpp lineedits/main.cpp popup/popup.cpp fileiconview/main.cpp listbox/main.cpp menu/menu.cpp progress/progress.cpp scribble/main.cpp qmag/qmag.cpp tabdialog/main.cpp splitter/splitter.cpp progressbar/main.cpp tooltip/main.cpp richtext/main.cpp qwerty/main.cpp forever/forever.cpp rot13/rot13.cpp scrollview/scrollview.cpp qfd/qfd.cpp addressbook/main.cpp movies/main.cpp picture/picture.cpp hello/main.cpp listboxcombo/main.cpp biff/main.cpp tictac/main.cpp customlayout/main.cpp mdi/main.cpp dirview/main.cpp
 .)l
 .SH "void QApplication::exit ( int retcode=0 ) \fC[static]\fR"
 Tells the application to exit with a return code.
@@ -693,7 +723,7 @@ By convention, \fIretcode\fR 0 means success, any non-zero value indicates an er
 .PP
 Note that unlike the C library function of the same name, this function \fIdoes\fR returns to the caller - it is event processing that stops.
 .PP
-See also: quit() and exec().
+See also quit() and exec().
 .PP
 Examples:
 .(l
@@ -702,46 +732,51 @@ picture/picture.cpp
 .SH "void QApplication::exit_loop ()"
 This function leaves from a recursive call to the main event loop. Do not call it unless you are an expert.
 .PP
-See also: enter_loop() and loopLevel().
+See also enter_loop() and loopLevel().
 .SH "void QApplication::flushX () \fC[static]\fR"
 Flushes the X event queue in the X11 implementation. This normally returns almost immediately. Does nothing on other platforms.
 .PP
-See also: syncX().
+See also syncX().
 .SH "QWidget * QApplication::focusWidget () const"
 Returns the application widget that has the keyboard input focus, or null if no widget in this application has the focus.
 .PP
-See also: QWidget::setFocus(), QWidget::hasFocus() and activeWindow().
+See also QWidget::setFocus(), QWidget::hasFocus() and activeWindow().
 .SH "QFont QApplication::font ( const QWidget * w = 0 ) \fC[static]\fR"
 Returns the default font for a widget. Basically this function uses w->className() to get a font for it.
 .PP
 If \fIw\fR is 0 the default application font is returned.
 .PP
-See also: setFont(), fontMetrics() and QWidget::font().
+See also setFont(), fontMetrics() and QWidget::font().
 .SH "QFontMetrics QApplication::fontMetrics () \fC[static]\fR"
 Returns display (screen) font metrics for the application font.
 .PP
-See also: font(), setFont(), QWidget::fontMetrics() and QPainter::fontMetrics().
+See also font(), setFont(), QWidget::fontMetrics() and QPainter::fontMetrics().
+.SH "QSize QApplication::globalStrut () \fC[static]\fR"
+Returns the global strut of the application.
+.PP
+See also setGlobalStrut().
 .SH "void QApplication::guiThreadAwake () \fC[signal]\fR"
 This signal is emitted when the GUI threads is about to process a cycle of the event loop.
 .PP
-See also: wakeUpGuiThread().
+See also wakeUpGuiThread().
 .SH "bool QApplication::hasGlobalMouseTracking () \fC[static]\fR"
 Returns TRUE if global mouse tracking is enabled, otherwise FALSE.
 .PP
-See also: setGlobalMouseTracking().
+See also setGlobalMouseTracking().
 .SH "void QApplication::installTranslator ( QTranslator * mf )"
 Adds \fImf\fR to the list of message files to be used for localization. Message files are searched starting with the most recently added file.
 .PP
-See also: removeTranslator(), translate() and QObject::tr().
+See also removeTranslator(), translate() and QObject::tr().
+.SH "bool QApplication::isEffectEnabled ( Qt::UIEffect effect ) \fC[static]\fR"
+Returns TRUE if \fIeffect\fR is enabled, otherwise FALSE.
 .PP
-Examples:
-.(l
-i18n/main.cpp
-.)l
+By default, Qt will try to use the desktop settings, and setDesktopSettingsAware() must be called to prevent this.
+.PP
+sa\\ setEffectEnabled(), Qt::UIEffect.
 .SH "bool QApplication::isSessionRestored () const"
 Returns whether the application has been restored from an earlier session.
 .PP
-See also: sessionId(), commitData() and saveState().
+See also sessionId(), commitData() and saveState().
 .SH "void QApplication::lastWindowClosed () \fC[signal]\fR"
 This signal is emitted when the user has closed the last remaining top level window.
 .PP
@@ -749,15 +784,23 @@ The signal is very useful when your application has many top level widgets but n
 .PP
 For convenience, transient toplevel widgets such as popup menus and dialogs are omitted.
 .PP
-See also: mainWidget(), topLevelWidgets(), QWidget::isTopLevel() and QWidget::close().
+See also mainWidget(), topLevelWidgets(), QWidget::isTopLevel() and QWidget::close().
+.SH "void QApplication::lock ()"
+Lock the Qt library mutex. If another thread has already locked the mutex, the calling thread will block until the other thread has unlocked the mutex.
+.PP
+See also unlock() and locked().
+.SH "bool QApplication::locked ()"
+Returns TRUE if the Qt library mutex is locked by a different thread, otherwise returns FALSE.
+.PP
+See also lock() and unlock().
 .SH "int QApplication::loopLevel () const"
 Returns the current loop level
 .PP
-See also: enter_loop() and exit_loop().
+See also enter_loop() and exit_loop().
 .SH "QWidget * QApplication::mainWidget () const"
 Returns the main application widget, or a null pointer if there is not a defined main widget.
 .PP
-See also: setMainWidget().
+See also setMainWidget().
 .SH "bool QApplication::notify ( QObject * receiver, QEvent * event ) \fC[virtual]\fR"
 Sends \fIevent\fR to \fIreceiver:\fR \fCreceiver->event( event )\fR Returns the value that is returned from the receiver's event handler.
 .PP
@@ -773,19 +816,19 @@ Installing an event filter on the object. Such an even filter gets all the event
 .IP 5
 Finally, reimplementing paintEvent(), mousePressEvent() and so on. This is the normal, easiest and least powerful way. 
 .PP
-See also: QObject::event() and installEventFilter().
+See also QObject::event() and installEventFilter().
 .SH "QCursor * QApplication::overrideCursor () \fC[static]\fR"
 Returns the active application override cursor.
 .PP
 This function returns 0 if no application cursor has been defined (i.e. the internal cursor stack is empty).
 .PP
-See also: setOverrideCursor() and restoreOverrideCursor().
+See also setOverrideCursor() and restoreOverrideCursor().
 .SH "QPalette QApplication::palette ( const QWidget * w = 0 ) \fC[static]\fR"
 Returns a pointer to the default application palette. There is always an application palette, i.e. the returned pointer is guaranteed to be non-null.
 .PP
 If a widget is passed as argument, the default palette for the widget's class is returned. This may or may not be the application palett. In most cases there isn't be a special palette for certain types of widgets, but one notable exception is the popup menu under Windows, if the user has defined a special background color for menus in the display settings.
 .PP
-See also: setPalette() and QWidget::palette().
+See also setPalette() and QWidget::palette().
 .SH "void QApplication::polish ( QWidget * w ) \fC[virtual]\fR"
 Polishing of widgets.
 .PP
@@ -793,7 +836,7 @@ Usually widgets call this automatically when they are polished. It may be used t
 .PP
 Note that you are not limited to public functions of QWidget. Instead, based on meta information like QObject::className() you are able to customize any kind of widgets.
 .PP
-See also: QStyle::polish(), QWidget::polish(), setPalette() and setFont().
+See also QStyle::polish(), QWidget::polish(), setPalette() and setFont().
 .SH "void QApplication::postEvent ( QObject * receiver, QEvent * event ) \fC[static]\fR"
 Stores the event in a queue and returns immediately.
 .PP
@@ -801,25 +844,25 @@ The event must be allocated on the heap, as it is deleted when the event has bee
 .PP
 When control returns to the main event loop, all events that are stored in the queue will be sent using the notify() function.
 .PP
-See also: sendEvent().
+See also sendEvent().
 .SH "void QApplication::processEvents ()"
 Processes pending events, for 3 seconds or until there are no more events to process, whichever is shorter.
 .PP
 You can call this function occasionally when your program is busy doing a long operation (e.g. copying a file).
 .PP
-See also: processOneEvent(), exec() and QTimer.
+See also processOneEvent(), exec() and QTimer.
 .SH "void QApplication::processEvents ( int maxtime )"
 Processes pending events for \fImaxtime\fR milliseconds or until there are no more events to process, whichever is shorter.
 .PP
 You can call this function occasionally when you program is busy doing a long operation (e.g. copying a file).
 .PP
-See also: processOneEvent(), exec() and QTimer.
+See also processOneEvent(), exec() and QTimer.
 .SH "void QApplication::processOneEvent ()"
 Waits for an event to occur, processes it, then returns.
 .PP
 This function is useful for adapting Qt to situations where the event processing must be grafted into existing program loops. Using this function in new applications may be an indication of design problems.
 .PP
-See also: processEvents(), exec() and QTimer.
+See also processEvents(), exec() and QTimer.
 .SH "void QApplication::quit () \fC[slot]\fR"
 Tells the application to exit with return code 0 (success). Equivalent to calling QApplication::exit( 0 ).
 .PP
@@ -834,7 +877,7 @@ Example:
     connect( quitButton, SIGNAL(clicked()), qApp, SLOT(quit()) );
 .fi
 .PP
-See also: exit() and aboutToQuit().
+See also exit() and aboutToQuit().
 .SH "void QApplication::removePostedEvents ( QObject * receiver ) \fC[static]\fR"
 Removes all events posted using postEvent() for \fIreceiver.\fR
 .PP
@@ -842,13 +885,13 @@ The events are \fInot\fR dispatched, simply removed from the queue. You should n
 .SH "void QApplication::removeTranslator ( QTranslator * mf )"
 Removes \fImf\fR from the list of message files used by this application. Does not, of course, delete mf.
 .PP
-See also: installTranslator(), translate() and QObject::tr().
+See also installTranslator(), translate() and QObject::tr().
 .SH "void QApplication::restoreOverrideCursor () \fC[static]\fR"
 Undoes the last setOverrideCursor().
 .PP
 If setOverrideCursor() has been called twice, calling restoreOverrideCursor() will activate the first cursor set. Calling this function a second time restores the original widgets cursors.
 .PP
-See also: setOverrideCursor() and overrideCursor().
+See also setOverrideCursor() and overrideCursor().
 .SH "void QApplication::saveState ( QSessionManager & sm ) \fC[virtual]\fR"
 This function deals with session management. It is invoked when the session manager wants the application to preserve its state for a future session.
 .PP
@@ -860,11 +903,11 @@ Note that you should never exit the application within this function. Instead, t
 .br
 Within this function, no user interaction is possible, \fIunless\fR you ask the session manager \fIsm\fR for explicit permission. See QSessionManager::allowsInteraction() and QSessionManager::allowsErrorInteraction() for details.
 .PP
-See also: isSessionRestored(), sessionId() and commitData().
+See also isSessionRestored(), sessionId() and commitData().
 .SH "bool QApplication::sendEvent ( QObject * receiver, QEvent * event ) \fC[static]\fR"
 Sends an event directly to a receiver, using the notify() function. Returns the value that was returned from the event handler.
 .PP
-See also: postEvent() and notify().
+See also postEvent() and notify().
 .PP
 Examples:
 .(l
@@ -883,17 +926,17 @@ If the application has been restored from an earlier session, this identifier is
 .PP
 The session identifier is guaranteed to be unique for both different applications and different instances of the same application.
 .PP
-See also: isSessionRestored(), commitData() and saveState().
+See also isSessionRestored(), commitData() and saveState().
 .SH "void QApplication::setColorSpec ( int spec ) \fC[static]\fR"
 Sets the color specification for the application to \fIspec.\fR
 .PP
-The color specification controls how your application allocates colors whn run on a display with a limited amount of colors, i.e. 8 bit / 256 color displays.
+The color specification controls how your application allocates colors when run on a display with a limited amount of colors, i.e. 8 bit / 256 color displays.
 .PP
 The color specification must be set before you create the QApplication object.
 .PP
 The choices are:
 .TP
-\fCQApplication::NormalColor.\fR This is the default color allocation strategy. Use this choice if your application uses buttons, menus, texts and pixmaps with few colors. With this choice, the application uses system global colors. This works fine for most applications under X11, but on Windows machines it may cause dithering of non-standard colours.
+\fCQApplication::NormalColor.\fR This is the default color allocation strategy. Use this choice if your application uses buttons, menus, texts and pixmaps with few colors. With this choice, the application uses system global colors. This works fine for most applications under X11, but on Windows machines it may cause dithering of non-standard colors.
 .TP
 \fCQApplication::CustomColor.\fR Use this choice if your application needs a small number of custom colors. On X11, this choice is the same as NormalColor. On Windows, Qt creates a Windows palette, and allocates colors in it on demand.
 .TP
@@ -928,18 +971,18 @@ To see what mode you end up with, you can call QColor::numBitPlanes() once the Q
 .PP
 The color cube used by Qt are all those colors with red, green, and blue components of either 0x00, 0x33, 0x66, 0x99, 0xCC, or 0xFF.
 .PP
-See also: colorSpec(), QColor::numBitPlanes() and QColor::enterAllocContext().
+See also colorSpec(), QColor::numBitPlanes() and QColor::enterAllocContext().
 .PP
 Examples:
 .(l
 showimg/main.cpp themes/main.cpp tetrix/tetrix.cpp helpviewer/main.cpp
 .)l
 .SH "void QApplication::setCursorFlashTime ( int msecs ) \fC[static]\fR"
-Sets the text cursor's flash time to \fImsecs\fR milliseconds. The flash time is the time requried to display, invert and restore the caret display: A full flash cycle. Usually, the text cursor is displayed for \fImsecs/2\fR millisecnds, then hidden for \fImsecs/2\fR milliseconds, but this may vary.
+Sets the text cursor's flash time to \fImsecs\fR milliseconds. The flash time is the time required to display, invert and restore the caret display: A full flash cycle. Usually, the text cursor is displayed for \fImsecs/2\fR milliseconds, then hidden for \fImsecs/2\fR milliseconds, but this may vary.
 .PP
 Note that on Microsoft Windows, calling this function sets the cursor flash time for all windows.
 .PP
-See also: cursorFlashTime().
+See also cursorFlashTime().
 .SH "void QApplication::setDefaultCodec ( QTextCodec * codec )"
 If the literal quoted text in the program is not in the Latin1 encoding, this function can be used to set the appropriate encoding. For example, software developed by Korean programmers might use eucKR for all the text in the program, in which case main() would be:
 .PP
@@ -981,23 +1024,27 @@ This static function must be called before creating the QApplication object, lik
   }
 .fi
 .PP
-See also: desktopSettingsAware().
+See also desktopSettingsAware().
 .SH "void QApplication::setDoubleClickInterval ( int ms ) \fC[static]\fR"
 Sets the time limit that distinguishes a double click from two consecutive mouse clicks to \fIms\fR milliseconds.
 .PP
 Note that on Microsoft Windows, calling this function sets the double click interval for all windows.
 .PP
-See also: doubleClickInterval().
+See also doubleClickInterval().
+.SH "void QApplication::setEffectEnabled ( Qt::UIEffect effect, bool enable = TRUE ) \fC[static]\fR"
+Enables the UI effect \fIeffect\fR if \fIenable\fR is TRUE, otherwise the effect will not be used.
+.PP
+See also isEffectEnabled(), Qt::UIEffect and setDesktopSettingsAware().
 .SH "void QApplication::setFont ( const QFont & font, bool informWidgets=FALSE, const char * className = 0 ) \fC[static]\fR"
 Changes the default application font to \fIfont.\fR If \fIinformWidgets\fR is TRUE, then existing widgets are informed about the change and thus may adjust themselves to the new application setting. Otherwise the change only affects newly created widgets. If \fIclassName\fR is passed, the change applies only to classes that inherit \fIclassName\fR (as reported by QObject::inherits()).
 .PP
 On application start-up, the default font depends on the window system. It can vary both with window system version and with locale. This function lets you override it. Note that overriding it may be a bad idea, for example some locales need extra-big fonts to support their special characters.
 .PP
-See also: font(), fontMetrics() and QWidget::setFont().
+See also font(), fontMetrics() and QWidget::setFont().
 .PP
 Examples:
 .(l
-showimg/main.cpp desktop/desktop.cpp
+showimg/main.cpp desktop/desktop.cpp qfd/qfd.cpp
 .)l
 .SH "void QApplication::setGlobalMouseTracking ( bool enable ) \fC[static]\fR"
 Enables global mouse tracking if \fIenable\fR is TRUE or disables it if \fIenable\fR is FALSE.
@@ -1025,21 +1072,38 @@ This function uses an internal counter. Each setGlobalMouseTracking(TRUE) must h
     // but now it's off
 .fi
 .PP
-See also: hasGlobalMouseTracking() and QWidget::hasMouseTracking().
+See also hasGlobalMouseTracking() and QWidget::hasMouseTracking().
+.SH "void QApplication::setGlobalStrut ( const QSize & strut ) \fC[static]\fR"
+Sets the application strut to \fIstrut.\fR No GUI-element that can be interacted with should be smaller than the provided size. This should be considered when reimplementing items that may be used on touch-screens or with similar IO-devices.
+.PP
+Example:
+.PP
+.nf
+.br
+  QSize& WidgetClass::sizeHint() const
+.br
+  {
+.br
+      return QSize( 80, 25 ).expandedTo( QApplication::globalStrut() );
+.br
+  }
+.fi
+.PP
+See also golbalStrut().
 .SH "void QApplication::setMainWidget ( QWidget * mainWidget ) \fC[virtual]\fR"
 Sets the main widget of the application.
 .PP
 The main widget is like any other, in most respects except that if it is deleted, the application exits.
 .PP
-You need not have a main widget; conecting lastWindowClosed() to quit() is another alternative.
+You need not have a main widget; connecting lastWindowClosed() to quit() is another alternative.
 .PP
 For X11, this function also resizes and moves the main widget according to the \fI-geometry\fR command-line option, so you should set the default geometry (using QWidget::setGeometry()) before calling setMainWidget().
 .PP
-See also: mainWidget(), exec() and quit().
+See also mainWidget(), exec() and quit().
 .PP
 Examples:
 .(l
-iconview/main.cpp validator/main.cpp themes/main.cpp listviews/main.cpp aclock/main.cpp checklists/main.cpp drawlines/connect.cpp dclock/main.cpp mainlyQt/editor.cpp xform/xform.cpp cursor/cursor.cpp layout/layout.cpp buttongroups/main.cpp life/main.cpp i18n/main.cpp drawdemo/drawdemo.cpp lineedits/main.cpp popup/popup.cpp fileiconview/main.cpp listbox/main.cpp menu/menu.cpp progress/progress.cpp scribble/main.cpp qmag/qmag.cpp tabdialog/main.cpp table/main.cpp splitter/splitter.cpp progressbar/main.cpp richtext/main.cpp tooltip/main.cpp forever/forever.cpp rot13/rot13.cpp qfd/qfd.cpp addressbook/main.cpp picture/picture.cpp hello/main.cpp listboxcombo/main.cpp biff/main.cpp tictac/main.cpp customlayout/main.cpp dirview/main.cpp
+rangecontrols/main.cpp iconview/main.cpp validator/main.cpp themes/main.cpp listviews/main.cpp aclock/main.cpp checklists/main.cpp drawlines/connect.cpp dclock/main.cpp mainlyQt/editor.cpp xform/xform.cpp cursor/cursor.cpp layout/layout.cpp buttongroups/main.cpp life/main.cpp i18n/main.cpp drawdemo/drawdemo.cpp lineedits/main.cpp popup/popup.cpp fileiconview/main.cpp listbox/main.cpp menu/menu.cpp progress/progress.cpp scribble/main.cpp qmag/qmag.cpp tabdialog/main.cpp splitter/splitter.cpp progressbar/main.cpp tooltip/main.cpp richtext/main.cpp forever/forever.cpp rot13/rot13.cpp qfd/qfd.cpp addressbook/main.cpp picture/picture.cpp hello/main.cpp listboxcombo/main.cpp biff/main.cpp tictac/main.cpp customlayout/main.cpp dirview/main.cpp
 .)l
 .SH "void QApplication::setOverrideCursor ( const QCursor & cursor, bool replace=FALSE ) \fC[static]\fR"
 Sets the application override cursor to \fIcursor.\fR
@@ -1063,21 +1127,21 @@ Example:
     QApplication::restoreOverrideCursor();
 .fi
 .PP
-See also: overrideCursor(), restoreOverrideCursor() and QWidget::setCursor().
+See also overrideCursor(), restoreOverrideCursor() and QWidget::setCursor().
 .SH "void QApplication::setPalette ( const QPalette & palette, bool informWidgets=FALSE, const char * className = 0 ) \fC[static]\fR"
 Changes the default application palette to \fIpalette.\fR If \fIinformWidgets\fR is TRUE, then existing widgets are informed about the change and thus may adjust themselves to the new application setting. Otherwise the change only affects newly created widgets. If \fIclassName\fR is passed, the change applies only to classes that inherit \fIclassName\fR (as reported by QObject::inherits()).
 .PP
 The palette may be changed according to the current GUI style in QStyle::polish().
 .PP
-See also: QWidget::setPalette(), palette() and QStyle::polish().
+See also QWidget::setPalette(), palette() and QStyle::polish().
 .SH "void QApplication::setStartDragDistance ( int l ) \fC[static]\fR"
 Sets the distance after which a drag should start.
 .PP
-See also: startDragDistance().
+See also startDragDistance().
 .SH "void QApplication::setStartDragTime ( int ms ) \fC[static]\fR"
 Sets the time after which a drag should start.
 .PP
-See also: startDragTime().
+See also startDragTime().
 .SH "void QApplication::setStyle ( QStyle * style ) \fC[static]\fR"
 Sets the application GUI style to \fIstyle.\fR Ownership of the style object is transferred to QApplication, so QApplication will delete the style object on application exit or when a new style is set.
 .PP
@@ -1088,15 +1152,15 @@ Example usage:
     QApplication::setStyle( new QWindowStyle );
 .fi
 .PP
-When switching application styles, the color palette is set back to the initital colors or the system defaults. This is necessary since certain styles have to adapt the color palette to be fully style-guide compliant.
+When switching application styles, the color palette is set back to the initial colors or the system defaults. This is necessary since certain styles have to adapt the color palette to be fully style-guide compliant.
 .PP
-See also: style(), QStyle, setPalette() and desktopSettingsAware().
+See also style(), QStyle, setPalette() and desktopSettingsAware().
 .SH "void QApplication::setWheelScrollLines ( int n ) \fC[static]\fR"
 Sets the number of lines to scroll when the mouse wheel is rotated.
 .PP
 If this number exceeds the number of visible lines in a certain widget, the widget should interpret the scroll operation as a single page up / page down operation instead.
 .PP
-See also: wheelScrollLines().
+See also wheelScrollLines().
 .SH "void QApplication::setWinStyleHighlightColor ( const QColor & c ) \fC[static]\fR"
 \fBThis function is obsolete.\fR It is provided to keep old source working, and will probably be removed in a future version of Qt. We strongly advise against using it in new code.
 .PP
@@ -1104,7 +1168,7 @@ Sets the color used to mark selections in windows style for all widgets in the a
 .PP
 The default color is \fCdarkBlue.\fR
 .PP
-See also: winStyleHighlightColor().
+See also winStyleHighlightColor().
 .SH "int QApplication::startDragDistance () \fC[static]\fR"
 If you support drag'n'drop in you application and a drag should start after a mouse click and after moving the mouse a certain distance, you should use the value which this method returns as the distance. So if the mouse position of the click is stored in \fCstartPos\fR and the current position (e.g. in the mouse move event) is \fCcurrPos,\fR you can find out if a drag should be started with a code like this:
 .PP
@@ -1119,27 +1183,27 @@ Qt internally uses this value too, e.g. in the QFileDialog.
 .PP
 The default value is set to 4 pixels.
 .PP
-See also: setStartDragDistance(), startDragTime() and QPoint::manhattanLength().
+See also setStartDragDistance(), startDragTime() and QPoint::manhattanLength().
 .SH "int QApplication::startDragTime () \fC[static]\fR"
 If you support drag'n'drop in you application and a drag should start after a mouse click and after a certain time elapsed, you should use the value which this method returns as delay (in ms).
 .PP
 Qt internally uses also this delay e.g. in QMultiLineEdit for starting a drag.
 .PP
-The defaul value is set to 250 ms.
+The default value is set to 250 ms.
 .PP
-See also: setStartDragTime() and startDragDistance().
+See also setStartDragTime() and startDragDistance().
 .SH "bool QApplication::startingUp () \fC[static]\fR"
 Returns TRUE if an application object has not been created yet.
 .PP
-See also: closingDown().
+See also closingDown().
 .SH "QStyle& QApplication::style () \fC[static]\fR"
 Returns the style object of the application.
 .PP
-See also: setStyle() and QStyle.
+See also setStyle() and QStyle.
 .SH "void QApplication::syncX () \fC[static]\fR"
 Synchronizes with the X server in the X11 implementation. This normally takes some time. Does nothing on other platforms.
 .PP
-See also: flushX().
+See also flushX().
 .SH "QWidgetList * QApplication::topLevelWidgets () \fC[static]\fR"
 Returns a list of the top level widgets in the application.
 .PP
@@ -1180,27 +1244,41 @@ Example:
 .PP
 \fBWarning:\fR Delete the list away as soon you have finished using it. The widgets in the list may be deleted by someone else at any time.
 .PP
-See also: allWidgets(), QWidget::isTopLevel(), QWidget::isVisible() and QList::isEmpty().
-.SH "QString QApplication::translate ( const char * scope, const char * key ) const"
-Returns the best available translation for \fIkey\fR in \fIscope,\fR by querying the installed messages files. The message file that was installed last is asked first.
+See also allWidgets(), QWidget::isTopLevel(), QWidget::isVisible() and QList::isEmpty().
+.SH "QString QApplication::translate ( const char * scope, const char * key, const char * comment ) const"
+Returns the translation text for \fIkey,\fR by querying the installed messages files. The message file that was installed last is asked first.
 .PP
 QObject::tr() offers a more convenient way to use this functionality.
 .PP
-\fIscope\fR is typically a class name (e.g. \fCMyDialog)\fR and \fIis\fR either English text or a short marker text, if the output text will be very long (as for help texts).
+\fIcontext\fR is typically a class name (e.g. \fCMyDialog)\fR and \fIkey\fR is either English text or a short marker text, if the output text will be very long (as for help texts).
+.PP
+\fIcomment\fR is a disambiguating comment, for when the same text is used in different roles within one context.
+.PP
+See the QTranslator documentation for more information about keys, contexts and comments.
 .PP
 If none of the message files contain a translation for \fIkey\fR in \fIscope,\fR this function returns \fIkey.\fR
 .PP
 This function is not virtual, but you can add alternative translation techniques by installing subclasses of QTranslator.
 .PP
-See also: QObject::tr(), installTranslator(), removeTranslator() and QTranslator.
+See also QObject::tr(), installTranslator(), removeTranslator() and QTranslator.
+.SH "QString QApplication::translate ( const char * context, const char * key ) const"
+\fBThis function is obsolete.\fR It is provided to keep old source working, and will probably be removed in a future version of Qt. We strongly advise against using it in new code.
+.PP
+This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts.
+.PP
+This version of the function uses "" as comment.
+.SH "void QApplication::unlock ( bool wakeUpGui = TRUE )"
+Unlock the Qt library mutex. if \fIwakeUpGui\fR is TRUE (default argument), then the GUI thread will be woken with QApplication::wakeUpGuiThread().
+.PP
+See also lock() and locked().
 .SH "void QApplication::wakeUpGuiThread ()"
 Wakes up the GUI thread.
 .PP
-See also: guiThreadAwake().
+See also guiThreadAwake().
 .SH "int QApplication::wheelScrollLines () \fC[static]\fR"
 Returns the number of lines to scroll when the mouse wheel is rotated.
 .PP
-See also: setWheelScrollLines().
+See also setWheelScrollLines().
 .SH "QWidget * QApplication::widgetAt ( int x, int y, bool child=FALSE ) \fC[static]\fR"
 Returns a pointer to the widget at global screen position \fI(x,y),\fR or a null pointer if there is no Qt widget there.
 .PP
@@ -1208,7 +1286,7 @@ If \fIchild\fR is FALSE and there is a child widget at position \fI(x,y),\fR the
 .PP
 This function is normally rather slow.
 .PP
-See also: QCursor::pos(), QWidget::grabMouse() and QWidget::grabKeyboard().
+See also QCursor::pos(), QWidget::grabMouse() and QWidget::grabKeyboard().
 .SH "QWidget * QApplication::widgetAt ( const QPoint & pos, bool child=FALSE ) \fC[static]\fR"
 This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts.
 .SH "const QColor& QApplication::winStyleHighlightColor () \fC[static]\fR"
@@ -1216,7 +1294,7 @@ This is an overloaded member function, provided for convenience. It differs from
 .PP
 Returns the color used to mark selections in windows style.
 .PP
-See also: setWinStyleHighlightColor().
+See also setWinStyleHighlightColor().
 .SH RELATED FUNCTION DOCUMENTATION
 .SH "void qDebug (const char * msg, ...)"
 Prints a debug message, or calls the message handler (if it has been installed).
@@ -1232,9 +1310,9 @@ Example:
 .PP
 Under X11, the text is printed to stderr. Under Windows, the text is sent to the debugger.
 .PP
-\fBWarning:\fR The internal buffer is limited to 512 bytes (including the 0-terminator).
+\fBWarning:\fR The internal buffer is limited to 8196 bytes (including the 0-terminator).
 .PP
-See also: qWarning(), qFatal(), qInstallMsgHandler() and Debugging
+See also qWarning(), qFatal(), qInstallMsgHandler() and Debugging
 .SH "void CHECK_PTR (void * p)"
 If \fIp\fR is null, a fatal messages says that the program ran out of memory and exits. If \fIp\fR is not null, nothing happens.
 .PP
@@ -1255,7 +1333,7 @@ Example:
     CHECK_PTR( a );                     // this is fine
 .fi
 .PP
-See also: qFatal() and Debugging
+See also qFatal() and Debugging
 .SH "void ASSERT (bool test)"
 Prints a warning message containing the source code file name and line number if \fItest\fR is FALSE.
 .PP
@@ -1295,7 +1373,7 @@ If \fCb\fR is zero, the ASSERT statement will output the following message using
     ASSERT: "b == 0" in div.cpp (9)
 .fi
 .PP
-See also: qWarning() and Debugging
+See also qWarning() and Debugging
 .SH "void qWarning (const char * msg, ...)"
 Prints a warning message, or calls the message handler (if it has been installed).
 .PP
@@ -1318,20 +1396,14 @@ Example:
 .PP
 Under X11, the text is printed to stderr. Under Windows, the text is sent to the debugger.
 .PP
-\fBWarning:\fR The internal buffer is limited to 512 bytes (including the 0-terminator).
+\fBWarning:\fR The internal buffer is limited to 8196 bytes (including the 0-terminator).
 .PP
-See also: qDebug(), qFatal(), qInstallMsgHandler() and Debugging
+See also qDebug(), qFatal(), qInstallMsgHandler() and Debugging
 .PP
 Examples:
 .(l
-progress/progress.cpp tictac/main.cpp
+life/main.cpp progress/progress.cpp tictac/main.cpp
 .)l
-.SH "Q_EXPORT bool qSysInfo (int * wordSize, bool * bigEndian)"
-Obtains information about the system.
-.PP
-The system's word size in bits (typically 32) is returned in \fI*wordSize.\fR The \fI*bigEndian\fR is set to TRUE if this is a big-endian machine, or to FALSE if this is a little-endian machine.
-.PP
-This function calls qFatal() with a message if the computer is truly weird (i.e. different endianness for 16 bit and 32 bit integers).
 .SH "void qFatal (const char * msg, ...)"
 Prints a fatal error message and exits, or calls the message handler (if it has been installed).
 .PP
@@ -1356,10 +1428,86 @@ Example:
 .PP
 Under X11, the text is printed to stderr. Under Windows, the text is sent to the debugger.
 .PP
-\fBWarning:\fR The internal buffer is limited to 512 bytes (including the 0-terminator).
+\fBWarning:\fR The internal buffer is limited to 8196 bytes (including the 0-terminator).
 .PP
-See also: qDebug(), qWarning(), qInstallMsgHandler() and Debugging
-.SH "Q_EXPORT msg_handler qInstallMsgHandler (msg_handler h)"
+See also qDebug(), qWarning(), qInstallMsgHandler() and Debugging
+.SH "const char * qVersion ()"
+Returns the Qt version number for the library, typically "1.30" or "2.1.0".
+.SH "void qAddPostRoutine (Q_CleanUpFunction p)"
+Adds a global routine that will be called from the QApplication destructor. This function is normally used to add cleanup routines for program-wide functionality.
+.PP
+The function given by \fIp\fR should take no arguments and return nothing, like this:
+.PP
+.nf
+.br
+    static int *global_ptr = 0;
+.br
+.br
+    static void cleanup_ptr()
+.br
+    {
+.br
+        delete [] global_ptr;
+.br
+        global_ptr = 0;
+.br
+    }
+.br
+.br
+    void init_ptr()
+.br
+    {
+.br
+        global_ptr = new int[100];      // allocate data
+.br
+        qAddPostRoutine( cleanup_ptr ); // delete later
+.br
+    }
+.fi
+.PP
+Note that for an application- or module-wide cleanup, qAddPostRoutine() is often not suitable. People have a tendency to make such modules dynamically loaded, and then unload those modules long before the QApplication destructor is called, for example.
+.PP
+For modules and libraries, using a reference-counted initialization manager or Qt' parent-child delete mechanism may be better. Here is an example of a private class which uses the parent-child mechanism to call a cleanup function at the right time:
+.PP
+.nf
+.br
+    class MyPrivateInitStuff: public QObject {
+.br
+    private:
+.br
+        MyPrivateInitStuff( QObject * parent ): QObject( parent) {
+.br
+            // initialization goes here
+.br
+        }
+.br
+        MyPrivateInitStuff * p;
+.br
+.br
+    public:
+.br
+        static MyPrivateInitStuff * initStuff( QObject * parent ) {
+.br
+            if ( !p )
+.br
+                p = new MyPrivateInitStuff( parent );
+.br
+            return p;
+.br
+        }
+.br
+.br
+        ~MyPrivateInitStuff() {
+.br
+            // cleanup (the "post routine") goes here
+.br
+        }
+.br
+    }
+.fi
+.PP
+By selecting the right parent widget/object, this can often be made to clean up the module's data at the exact right moment.
+.SH "msg_handler qInstallMsgHandler (msg_handler h)"
 Installs a Qt message handler. Returns a pointer to the message handler previously defined.
 .PP
 The message handler is a function that prints out debug messages, warnings and fatal error messages. The Qt library (debug version) contains hundreds of warning messages that are printed when internal errors (usually invalid function arguments) occur. If you implement your own message handler, you get total control of these messages.
@@ -1425,44 +1573,18 @@ Example:
     }
 .fi
 .PP
-See also: qDebug(), qWarning(), qFatal() and Debugging
-.SH "Q_EXPORT const char * qVersion ()"
-Returns the Qt version number for the library, typically "1.30" or "2.1.0".
-.SH "void qAddPostRoutine (Q_CleanUpFunction p)"
-Adds a global routine that will be called from the QApplication destructor. This function is normally used to add cleanup routines.
+See also qDebug(), qWarning(), qFatal() and Debugging
+.SH "bool qSysInfo (int * wordSize, bool * bigEndian)"
+Obtains information about the system.
 .PP
-The function given by \fIp\fR should take no arguments and return nothing, like this:
+The system's word size in bits (typically 32) is returned in \fI*wordSize.\fR The \fI*bigEndian\fR is set to TRUE if this is a big-endian machine, or to FALSE if this is a little-endian machine.
 .PP
-.nf
-.br
-    static int *global_ptr = 0;
-.br
-.br
-    static void cleanup_ptr()
-.br
-    {
-.br
-        delete [] global_ptr;
-.br
-        global_ptr = 0;
-.br
-    }
-.br
-.br
-    void init_ptr()
-.br
-    {
-.br
-        global_ptr = new int[100];      // allocate data
-.br
-        qAddPostRoutine( cleanup_ptr ); // delete later
-.br
-    }
-.fi
+This function calls qFatal() with a message if the computer is truly weird
+(i.e. different endianness for 16 bit and 32 bit integers).
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qapplication.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

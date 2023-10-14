@@ -1,29 +1,44 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qnetworkprotocol.cpp   2.1.1   edited 2000-03-24 $
+** $Id: qt/src/kernel/qnetworkprotocol.cpp   2.2.0   edited 2000-08-25 $
 **
 ** Implementation of QNetworkProtocol class
 **
 ** Created : 950429
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the kernel module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #include "qnetworkprotocol.h"
+
+#ifndef QT_NO_NETWORKPROTOCOL
+
 #include "qlocalfs.h"
 #include "qurloperator.h"
 #include "qtimer.h"
@@ -189,7 +204,7 @@ struct QNetworkProtocolPrivate
   \fn void QNetworkProtocol::data( const QByteArray &data, QNetworkOperation *op )
 
   This signal is emitted when new \a data has been received
-  after e.g. calling get() or put(). \op holds the name of the file which data
+  after e.g. calling get() or put(). \a op holds the name of the file which data
   is retrieved in the first argument and the data in the second argument (raw).
   You get them with op->arg( 0 ) and op->rawArg( 1 ).
 
@@ -238,7 +253,7 @@ struct QNetworkProtocolPrivate
   and is waiting for being prcessed
   <li> \c StInProgress - The operation is just processed
   <li> \c StDone - The operation has been processed succesfully
-  <li> \c StFailed - The operation has been processed but an error occured
+  <li> \c StFailed - The operation has been processed but an error occurred
   <li> \c StStopped - The operation has been processed but has been stopped before it finished
   </ul>
 */
@@ -252,7 +267,7 @@ struct QNetworkProtocolPrivate
   is always one of these values.
 
   <ul>
-  <li> \c OpListChildren - Listing the childrens of a URL, e.g. of a directory
+  <li> \c OpListChildren - Listing the children of a URL, e.g. of a directory
   <li> \c OpMkdir - Create a directory
   <li> \c OpRemove - remove a child (e.g. file)
   <li> \c OpRename - rename a child (e.g. file )
@@ -282,19 +297,19 @@ struct QNetworkProtocolPrivate
   of the operation returns an error code, which is one of following values:
 
   <ul>
-  <li>\c NoError - No error occured
+  <li>\c NoError - No error occurred
   <li>\c ErrValid - The URL you are operating on is not valid
   <li>\c ErrUnknownProtocol - There is no protocol implementation available for the protocol of the URL you are operating on (e.g. if the protocol is http and no http implementation has been registered)
   <li>\c ErrUnsupported - The operation is not supported by the protocol
   <li>\c ErrParse - Parse error of the URL
   <li>\c ErrLoginIncorrect - You needed to login but the username and or password are wrong
   <li>\c ErrHostNotFound - The specified host (in the URL) couldn´t be found
-  <li>\c ErrListChlidren - An error occured while listing the children
-  <li>\c ErrMkdir - An error occured when creating a directory
-  <li>\c ErrRemove - An error occured while removing a child
-  <li>\c ErrRename  - An error occured while renaming a child
-  <li>\c ErrGet - An error occured while getting (retrieving) data
-  <li>\c ErrPut - An error occured while putting (uploading) data
+  <li>\c ErrListChlidren - An error occurred while listing the children
+  <li>\c ErrMkdir - An error occurred when creating a directory
+  <li>\c ErrRemove - An error occurred while removing a child
+  <li>\c ErrRename  - An error occurred while renaming a child
+  <li>\c ErrGet - An error occurred while getting (retrieving) data
+  <li>\c ErrPut - An error occurred while putting (uploading) data
   <li>\c ErrFileNotExisting - A file which is needed by the operation doesn't exist
   <li>\c ErrPermissionDenied - The permission for doing the operation has been denied
   </ul>
@@ -790,13 +805,12 @@ QNetworkOperation *QNetworkProtocol::operationInProgress() const
 }
 
 /*!
-  Clears the opeartion queue.
+  Clears the operation queue.
 */
 
 void QNetworkProtocol::clearOperationQueue()
 {
     d->operationQueue.dequeue();
-    d->opInProgress = 0;
     d->operationQueue.setAutoDelete( TRUE );
     d->operationQueue.clear();
 }
@@ -821,7 +835,7 @@ void QNetworkProtocol::stop()
 
 /*!
   Because it's sometimes hard to care about removing network protocol
-  instances, QNetworkProtocol provides an autodelete meachnism. If
+  instances, QNetworkProtocol provides an autodelete mechanism. If
   you set \a b to TRUE, this network protocol instance gets removed
   after it has been \a i milliseconds inactive (this means \a i ms after
   the last operation has been processed).
@@ -1131,13 +1145,13 @@ QByteArray& QNetworkOperation::raw( int num ) const
 }
 
 /*!
-  If this method is called the QNetworkOperation deletes itself after it has been
-  1 sec unused, which means for 1 second no method of the QNetworkOperation
-  has been accessed.
+  If this method is called the QNetworkOperation deletes itself after it
+  has been 1 second unused, which means for 1 second no method of the
+  QNetworkOperation has been accessed.
 
   Because QNetworkOperation pointers are passed around a lot the QNetworkProtocol
   can't delete these at the correct time. So, if a QNetworkProtocol doesn't need an operation
-  anymore and calles this method, so that it gets deleted correctly.
+  anymore and calls this method, so that it gets deleted correctly.
 
   You should never need to call the method yourself!
 */
@@ -1156,3 +1170,5 @@ void QNetworkOperation::deleteMe()
 {
     delete this;
 }
+
+#endif

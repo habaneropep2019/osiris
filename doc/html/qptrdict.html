@@ -1,15 +1,17 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head>
 <title>Qt Toolkit - QPtrDict Class</title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
-a:link { text-decoration: none; }
-body { background: white; color: black; }
+a:link { color: #004faf; text-decoration: none }
+a:visited { color: #672967; text-decoration: none }body { background: white; color: black; }
 --></style>
 </head><body bgcolor="#ffffff">
 
-<a href="index.html">
-<img width="122" height="65" src="qtlogo.png" alt="Home"
-  align="left" border="0">
-</a><div align=right><img src="dochead.png" width="472" height="27"><br>
+<table width="100%">
+<tr><td><a href="index.html">
+<img width="100" height="100" src="qtlogo.png"
+alt="Home" border="0"><img width="100"
+height="100" src="face.png" alt="Home" border="0">
+</a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
 - <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
@@ -17,7 +19,7 @@ body { background: white; color: black; }
 - <a href="index.html">Home</a>
 - <a href="topicals.html"><b>Structure</b></a>
 </div>
-<br clear=all>
+</table>
 
 <h1 align=center>QPtrDict Class Reference</h1><br clear="all">
 <p>
@@ -30,22 +32,22 @@ Inherits <a href="qgdict.html">QGDict</a>.
 <p><a href="qptrdict-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><span class="fn"><a href="#a1ec02"><b>QPtrDict</b></a> ( int size=17 ) </span>
-<li><span class="fn"><a href="#bad37c"><b>QPtrDict</b></a> ( const QPtrDict&lt;type&gt; &amp; dict ) </span>
-<li><span class="fn"><a href="#7cf671"><b>~QPtrDict</b></a> () </span>
-<li><span class="fn">QPtrDict&lt;type&gt;&amp; <a href="#51fb32"><b>operator=</b></a> ( const QPtrDict&lt;type&gt; &amp; dict ) </span>
-<li><span class="fn">virtual uint <a href="#ece3ad"><b>count</b></a> () const</span>
-<li><span class="fn">uint <a href="#0ba86e"><b>size</b></a> () const</span>
-<li><span class="fn">bool <a href="#9e3c79"><b>isEmpty</b></a> () const</span>
-<li><span class="fn">void <a href="#2b2cec"><b>insert</b></a> ( void * key, const type * item ) </span>
-<li><span class="fn">void <a href="#65db7a"><b>replace</b></a> ( void * key, const type * item ) </span>
-<li><span class="fn">bool <a href="#eceabd"><b>remove</b></a> ( void * key ) </span>
-<li><span class="fn">type* <a href="#904b0a"><b>take</b></a> ( void * key ) </span>
-<li><span class="fn">type* <a href="#adaff9"><b>find</b></a> ( void * key ) const</span>
-<li><span class="fn">type* <a href="#c3600a"><b>operator[]</b></a> ( void * key ) const</span>
-<li><span class="fn">virtual void <a href="#d9a36e"><b>clear</b></a> () </span>
-<li><span class="fn">void <a href="#6ba812"><b>resize</b></a> ( uint newsize ) </span>
-<li><span class="fn">void <a href="#d0c912"><b>statistics</b></a> () const</span>
+<li><div class="fn"><a href="#a1ec02"><b>QPtrDict</b></a> ( int size=17 ) </div>
+<li><div class="fn"><a href="#bad37c"><b>QPtrDict</b></a> ( const QPtrDict&lt;type&gt; &amp; dict ) </div>
+<li><div class="fn"><a href="#7cf671"><b>~QPtrDict</b></a> () </div>
+<li><div class="fn">QPtrDict&lt;type&gt;&amp; <a href="#51fb32"><b>operator=</b></a> ( const QPtrDict&lt;type&gt; &amp; dict ) </div>
+<li><div class="fn">virtual uint <a href="#ece3ad"><b>count</b></a> () const</div>
+<li><div class="fn">uint <a href="#0ba86e"><b>size</b></a> () const</div>
+<li><div class="fn">bool <a href="#9e3c79"><b>isEmpty</b></a> () const</div>
+<li><div class="fn">void <a href="#2b2cec"><b>insert</b></a> ( void * key, const type * item ) </div>
+<li><div class="fn">void <a href="#65db7a"><b>replace</b></a> ( void * key, const type * item ) </div>
+<li><div class="fn">bool <a href="#eceabd"><b>remove</b></a> ( void * key ) </div>
+<li><div class="fn">type* <a href="#904b0a"><b>take</b></a> ( void * key ) </div>
+<li><div class="fn">type* <a href="#adaff9"><b>find</b></a> ( void * key ) const</div>
+<li><div class="fn">type* <a href="#c3600a"><b>operator[]</b></a> ( void * key ) const</div>
+<li><div class="fn">virtual void <a href="#d9a36e"><b>clear</b></a> () </div>
+<li><div class="fn">void <a href="#6ba812"><b>resize</b></a> ( uint newsize ) </div>
+<li><div class="fn">void <a href="#d0c912"><b>statistics</b></a> () const</div>
 </ul>
 <hr><h2><a name="details"></a>Detailed Description</h2>
 The QPtrDict class is a template class that provides a dictionary based on <code>void*</code> keys.
@@ -144,7 +146,7 @@ Inherit a dictionary and reimplement it if you want deep copies.
 <p>When removing a dictionary item, the virtual function
 <a href="qcollection.html#24fd44">QCollection::deleteItem</a>() is called.  QPtrDict's default implementation
 is to delete the item if auto-deletion is enabled.
-<p>See also:  <a href="qptrdictiterator.html">QPtrDictIterator</a>, <a href="qdict.html">QDict</a>, <a href="qasciidict.html">QAsciiDict</a>, <a href="qintdict.html">QIntDict</a> and <a href="collection.html">Collection Classes</a>
+<p>See also  <a href="qptrdictiterator.html">QPtrDictIterator</a>, <a href="qdict.html">QDict</a>, <a href="qasciidict.html">QAsciiDict</a>, <a href="qintdict.html">QIntDict</a> and <a href="collection.html">Collection Classes</a>
 
 <hr><h2>Member Function Documentation</h2>
 <h3 class="fn"><a name="bad37c"></a>QPtrDict::QPtrDict ( const QPtrDict&lt;type&gt; &amp; dict )</h3>
@@ -160,16 +162,16 @@ distribution better and hence the loopup faster.
 <h3 class="fn"><a name="7cf671"></a>QPtrDict::~QPtrDict ()</h3>
 <p>Removes all items from the dictionary and destroys it.
 <p>All iterators that access this dictionary will be reset.
-<p>See also:  <a href="qcollection.html#a3fc3c">setAutoDelete</a>().
+<p>See also  <a href="qcollection.html#a3fc3c">setAutoDelete</a>().
 <h3 class="fn">void <a name="d9a36e"></a>QPtrDict::clear () <code>[virtual]</code></h3>
 <p>Removes all items from the dictionary.
 <p>The removed items are deleted if <a href="qcollection.html#a3fc3c">auto-deletion</a> is enabled.
 <p>All dictionary iterators that access this dictionary will be reset.
-<p>See also:  <a href="#eceabd">remove</a>(), <a href="#904b0a">take</a>() and <a href="qcollection.html#a3fc3c">setAutoDelete</a>().
+<p>See also  <a href="#eceabd">remove</a>(), <a href="#904b0a">take</a>() and <a href="qcollection.html#a3fc3c">setAutoDelete</a>().
 <p>Reimplemented from <a href="qcollection.html#10eb2d">QCollection.</a>
 <h3 class="fn">uint <a name="ece3ad"></a>QPtrDict::count () const <code>[virtual]</code></h3>
 <p>Returns the number of items in the dictionary.
-<p>See also:  <a href="#9e3c79">isEmpty</a>().
+<p>See also  <a href="#9e3c79">isEmpty</a>().
 <p>Reimplemented from <a href="qcollection.html#649c42">QCollection.</a>
 <h3 class="fn">type * <a name="adaff9"></a>QPtrDict::find ( void * key ) const</h3>
 <p>Returns the item associated with <em>key,</em> or null if the key does not
@@ -178,17 +180,17 @@ exist in the dictionary.
 <p>If there are two or more items with equal keys, then the last inserted
 of these will be found.
 <p>Equivalent to the [] operator.
-<p>See also:  <a href="#c3600a">operator[]</a>().
+<p>See also  <a href="#c3600a">operator[]</a>().
 <h3 class="fn">void <a name="2b2cec"></a>QPtrDict::insert ( void * key, const type * item )</h3>
 <p>Inserts the <em>key</em> with the <em>item</em> into the dictionary.
 <p>The key does not have to be a unique dictionary key.  If multiple items
 are inserted with the same key, only the last item will be visible.
 <p>Null items are not allowed.
-<p>See also:  <a href="#65db7a">replace</a>().
+<p>See also  <a href="#65db7a">replace</a>().
 <h3 class="fn">bool <a name="9e3c79"></a>QPtrDict::isEmpty () const</h3>
 <p>Returns TRUE if the dictionary is empty, i.e. <a href="#ece3ad">count</a>() == 0. Returns FALSE
 otherwise.
-<p>See also:  <a href="#ece3ad">count</a>().
+<p>See also  <a href="#ece3ad">count</a>().
 <h3 class="fn">QPtrDict&lt;type&gt; &amp; <a name="51fb32"></a>QPtrDict::operator= ( const QPtrDict&lt;type&gt; &amp; dict )</h3>
 <p>Assigns <em>dict</em> to this dictionary and returns a reference to this
 dictionary.
@@ -203,7 +205,7 @@ exist in the dictionary.
 <p>If there are two or more items with equal keys, then the last inserted
 of these will be found.
 <p>Equivalent to the <a href="#adaff9">find</a>() function.
-<p>See also:  <a href="#adaff9">find</a>().
+<p>See also  <a href="#adaff9">find</a>().
 <h3 class="fn">bool <a name="eceabd"></a>QPtrDict::remove ( void * key )</h3>
 <p>Removes the item associated with <em>key</em> from the dictionary.
 Returns TRUE if successful, or FALSE if the key does not exist in the
@@ -213,7 +215,7 @@ of these will be removed.
 <p>The removed item is deleted if <a href="qcollection.html#a3fc3c">auto-deletion</a> is enabled.
 <p>All dictionary iterators that refer to the removed item will be set to
 point to the next item in the dictionary traversing order.
-<p>See also:  <a href="#904b0a">take</a>(), <a href="#d9a36e">clear</a>() and <a href="qcollection.html#a3fc3c">setAutoDelete</a>().
+<p>See also  <a href="#904b0a">take</a>(), <a href="#d9a36e">clear</a>() and <a href="qcollection.html#a3fc3c">setAutoDelete</a>().
 <h3 class="fn">void <a name="65db7a"></a>QPtrDict::replace ( void * key, const type * item )</h3>
 <p>Replaces an item which has a key equal to <em>key</em> with <em>item.</em>
 <p>If the item does not already exist, it will be inserted.
@@ -227,7 +229,7 @@ point to the next item in the dictionary traversing order.
 </pre>
 <p>If there are two or more items with equal keys, then the last inserted
 of these will be replaced.
-<p>See also:  <a href="#2b2cec">insert</a>().
+<p>See also  <a href="#2b2cec">insert</a>().
 <h3 class="fn">void <a name="6ba812"></a>QPtrDict::resize ( uint newsize )</h3>
 <p>Changes the size of the hashtable the <em>newsize.</em>
 The contents of the dictionary are preserved,
@@ -235,10 +237,10 @@ but all iterators on the dictionary become invalid.
 <h3 class="fn">uint <a name="0ba86e"></a>QPtrDict::size () const</h3>
 <p>Returns the size of the internal hash array (as specified in the
 constructor).
-<p>See also:  <a href="#ece3ad">count</a>().
+<p>See also  <a href="#ece3ad">count</a>().
 <h3 class="fn">void <a name="d0c912"></a>QPtrDict::statistics () const</h3>
 <p>Debugging-only function that prints out the dictionary distribution
-using debug().
+using <a href="qapplication.html#3db6b2">qDebug</a>().
 <h3 class="fn">type * <a name="904b0a"></a>QPtrDict::take ( void * key )</h3>
 <p>Takes the item associated with <em>key</em> out of the dictionary without
 deleting it (even if <a href="qcollection.html#a3fc3c">auto-deletion</a> is enabled).
@@ -248,18 +250,18 @@ of these will be taken.
 exist in the dictionary.
 <p>All dictionary iterators that refer to the taken item will be set to
 point to the next item in the dictionary traversing order.
-<p>See also:  <a href="#eceabd">remove</a>(), <a href="#d9a36e">clear</a>() and <a href="qcollection.html#a3fc3c">setAutoDelete</a>().
+<p>See also  <a href="#eceabd">remove</a>(), <a href="#d9a36e">clear</a>() and <a href="qcollection.html#a3fc3c">setAutoDelete</a>().
 <hr><p>
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.1.1"><nobr>
+<input type=hidden name="version" value="2.2.0"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
 copyright &copy; 1995-2000
-<a href="http://www.trolltech.com">Troll Tech</a>, all rights reserved.<p><address><hr><div align="center">
+<a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.1</div>
+<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.2.0</div>
 </table></div></address></body></html>

@@ -1,29 +1,44 @@
 /****************************************************************************
-** $Id: qt/src/dialogs/qmessagebox.cpp   2.1.1   edited 2000-04-19 $
+** $Id: qt/src/dialogs/qmessagebox.cpp   2.2.0   edited 2000-08-25 $
 **
 ** Implementation of QMessageBox class
 **
 ** Created : 950503
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the dialogs module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #include "qmessagebox.h"
+
+#ifndef QT_NO_MESSAGEBOX
+
 #include "qlabel.h"
 #include "qpushbutton.h"
 #include "qimage.h"
@@ -153,63 +168,82 @@ static const char* const critical_xpm[]={
 ".........aa********aaaaa........",
 "...........aaaaaaaaaaa..........",
 ".............aaaaaaa............"};
-#define QT_END_TEXT qt_dialog_default_key
 
 
 // the Qt logo, for aboutQt
 /* XPM */
 static const char * const qtlogo_xpm[] = {
 /* width height ncolors chars_per_pixel */
-"54 34 13 1",
+"50 50 17 1",
 /* colors */
 "  c #000000",
-". c #999999",
-"X c #333366",
-"o c #6666CC",
-"O c #333333",
-"@ c #666699",
-"# c #000066",
-"$ c #666666",
-"% c #3333CC",
-"& c #000033",
-"* c #9999CC",
-"= c #333399",
-"+ c None",
+". c #495808",
+"X c #2A3304",
+"o c #242B04",
+"O c #030401",
+"+ c #9EC011",
+"@ c #93B310",
+"# c #748E0C",
+"$ c #A2C511",
+"% c #8BA90E",
+"& c #99BA10",
+"* c #060701",
+"= c #181D02",
+"- c #212804",
+"; c #61770A",
+": c #0B0D01",
+"/ c None",
 /* pixels */
-"+++++++++++++++++++.$OOO$.++++++++++++++++++++++++++++",
-"+++++++++++++++++$         O.+++++++++++++++++++++++++",
-"+++++++++++++++.O            $++++++++++++++++++++++++",
-"++++++++++++++.    $.++.$     O+++++++++++++++++++++++",
-"+++++++++++++.   O.+++++++$    O++++++++++++++++++++++",
-"+++++++++++++O   ++++++++++$    $+++++++++++++++++++++",
-"++++++++++++$   .+++++++++++O    .++++++++++++++++++++",
-"+++++++++++.   O+++++++++++++    O++++++.+++++++++++++",
-"+++++++++++$   .+++++++++++++$    .+++.O +++++++++++++",
-"+++++++++++    +++++++++++++++    O+++.  +++++++++++++",
-"++++++++++.  &Xoooo*++++++++++$    +++.  +++++++++++++",
-"++++++++++@=%%%%%%%%%%*+++++++.    .++.  +++++++++++++",
-"+++++++**oooooo**++*o%%%%o+++++    $++O  +++++++++++++",
-"+++++*****$OOX@oooo*++*%%%%%*++O   $+.   OOO$++++++++*",
-"++..+.++....$O$+*ooooo*+*o%%%%%O   O+$   $$O.++++++**+",
-"***+*+++++$$....+++*oooo**+*o%%#   O++O  ++++++***o*++",
-"*+++++++++O  $.....++**oooo**+*X   &o*O  ++++*ooo*++++",
-"++++++++++$   O++.....++**oooo*X   &%%&  ..*o%%*++++++",
-"++++++++++$    ++++.....+++**ooO   $*o&  @oo*+++++++++",
-"++++++++++.    .++++++.....+++*O   Xo*O  .++++++++++++",
-"+++++++++++    O+++++++++......    .++O  +++++++++++++",
-"+++++++++++O    +++.$$$.++++++.   O+++O  +++++++++++++",
-"+++++++++++.    $$OO    O.++++O   .+++O  +++++++++++++",
-"++++++++++++O    .+++.O   $++.   O++++O  +++++++++++++",
-"++++++++++++.    O+++++O   $+O   +++++O  +++++++++++++",
-"+++++++++++++.    O+++++O   O   .+++++O  .++++++++++++",
-"++++++++++++++$     .++++O     .++++.+$  O+.$.++++++++",
-"+++++++++++++++.      O$$O    .+++++...      +++++++++",
-"+++++++++++++++++$            O+++++$$+.O O$.+++++++++",
-"+++++++++++++++++++$OO  O$.O   O.++. .++++++++++++++++",
-"+++++++++++++++++++++++++++.     OO  .++++++++++++++++",
-"++++++++++++++++++++++++++++.       O+++++++++++++++++",
-"+++++++++++++++++++++++++++++.      .+++++++++++++++++",
-"++++++++++++++++++++++++++++++.O  O.++++++++++++++++++"
+"/$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$/",
+"$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$",
+"$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$",
+"$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$",
+"$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$",
+"$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$",
+"$$$$$$$$$$$$$$$$$$$$$$$+++$$$$$$$$$$$$$$$$$$$$$$$$",
+"$$$$$$$$$$$$$$$$$$$@;.o=::=o.;@$$$$$$$$$$$$$$$$$$$",
+"$$$$$$$$$$$$$$$$+#X*         **X#+$$$$$$$$$$$$$$$$",
+"$$$$$$$$$$$$$$$#oO*         O  **o#+$$$$$$$$$$$$$$",
+"$$$$$$$$$$$$$&.* OO              O*.&$$$$$$$$$$$$$",
+"$$$$$$$$$$$$@XOO            * OO    X&$$$$$$$$$$$$",
+"$$$$$$$$$$$@XO OO  O  **:::OOO OOO   X@$$$$$$$$$$$",
+"$$$$$$$$$$&XO      O-;#@++@%.oOO      X&$$$$$$$$$$",
+"$$$$$$$$$$.O  :  *-#+$$$$$$$$+#- : O O*.$$$$$$$$$$",
+"$$$$$$$$$#*OO  O*.&$$$$$$$$$$$$+.OOOO **#$$$$$$$$$",
+"$$$$$$$$+-OO O *;$$$$$$$$$$$&$$$$;*     o+$$$$$$$$",
+"$$$$$$$$#O*  O .+$$$$$$$$$$@X;$$$+.O    *#$$$$$$$$",
+"$$$$$$$$X*    -&$$$$$$$$$$@- :;$$$&-    OX$$$$$$$$",
+"$$$$$$$@*O  *O#$$$$$$$$$$@oOO**;$$$#    O*%$$$$$$$",
+"$$$$$$$;     -+$$$$$$$$$@o O OO ;+$$-O   *;$$$$$$$",
+"$$$$$$$.     ;$$$$$$$$$@-OO OO  X&$$;O    .$$$$$$$",
+"$$$$$$$o    *#$$$$$$$$@o  O O O-@$$$#O   *o$$$$$$$",
+"$$$$$$+=    *@$$$$$$$@o* OO   -@$$$$&:    =$$$$$$$",
+"$$$$$$+:    :+$$$$$$@-      *-@$$$$$$:    :+$$$$$$",
+"$$$$$$+:    :+$$$$$@o* O    *-@$$$$$$:    :+$$$$$$",
+"$$$$$$$=    :@$$$$@o*OOO      -@$$$$@:    =+$$$$$$",
+"$$$$$$$-    O%$$$@o* O O    O O-@$$$#*   OX$$$$$$$",
+"$$$$$$$. O *O;$$&o O*O* *O      -@$$;    O.$$$$$$$",
+"$$$$$$$;*   Oo+$$;O*O:OO--      Oo@+=    *;$$$$$$$",
+"$$$$$$$@*  O O#$$$;*OOOo@@-O     Oo;O*  **@$$$$$$$",
+"$$$$$$$$X* OOO-+$$$;O o@$$@-    O O     OX$$$$$$$$",
+"$$$$$$$$#*  * O.$$$$;X@$$$$@-O O        O#$$$$$$$$",
+"$$$$$$$$+oO O OO.+$$+&$$$$$$@-O         o+$$$$$$$$",
+"$$$$$$$$$#*    **.&$$$$$$$$$$@o      OO:#$$$$$$$$$",
+"$$$$$$$$$+.   O* O-#+$$$$$$$$+;O    OOO:@$$$$$$$$$",
+"$$$$$$$$$$&X  *O    -;#@++@#;=O    O    -@$$$$$$$$",
+"$$$$$$$$$$$&X O     O*O::::O      OO    Oo@$$$$$$$",
+"$$$$$$$$$$$$@XOO                  OO    O*X+$$$$$$",
+"$$$$$$$$$$$$$&.*       **  O      ::    *:#$$$$$$$",
+"$$$$$$$$$$$$$$$#o*OO       O    Oo#@-OOO=#$$$$$$$$",
+"$$$$$$$$$$$$$$$$+#X:* *     O**X#+$$@-*:#$$$$$$$$$",
+"$$$$$$$$$$$$$$$$$$$%;.o=::=o.#@$$$$$$@X#$$$$$$$$$$",
+"$$$$$$$$$$$$$$$$$$$$$$$$+++$$$$$$$$$$$+$$$$$$$$$$$",
+"$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$",
+"$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$",
+"$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$",
+"$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$",
+"$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$",
+"/$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$/",
 };
 
 
@@ -217,34 +251,67 @@ static const char * const qtlogo_xpm[] = {
 
 // BEING REVISED: paul
 /*!
-  \class QMessageBox qmessagebox.h
-  \brief Displays a brief message, an icon, and some buttons.
-  \ingroup dialogs
+\class QMessageBox qmessagebox.h
+\brief Displays a brief message, an icon, and some buttons.
+\ingroup dialogs
 
-  A message box is a modal dialog that displays an icon, a text and up to
-  three push buttons.  It's used for simple messages and questions.
+A message box is a modal dialog that displays an icon, a text and up to
+three push buttons.  It's used for simple messages and questions.
 
-  QMessageBox provides a range of different messages, arranged roughly
-  along two axes: Severity and complexity.
+QMessageBox provides a range of different messages, arranged roughly
+along two axes: Severity and complexity.
 
-  Severity is
-  <ul>
-  <li> \c Information - for message boxes that are part of normal operation,
-  <li> \c Warning - for message boxes that tell the user about errors
-  or ask the user how to fix an error, or
-  <li> \c Critical - as Warning, but for critical errors.
-  </ul>
-  The message box has a different icon for each of the severity levels.
+Severity is
+<ul>
+<li> \c Information - for message boxes that are part of normal operation
+<li> \c Warning - for message boxes that tell the user about unusual errors
+<li> \c Critical - as Warning, but for critical errors
+</ul>
 
-  Complexity is one button (Ok, sometimes Dismiss for Motif
-  applications) for a simple messages, or two or even three buttons
-  for questions.
+The message box has a different icon for each of the severity levels.
 
+
+Complexity is one button (Ok) for a simple messages, or two or even
+three buttons for questions.
+
+There are static functions that let you do most of the common jobs,
+for example:
+
+If a program is unable to find a supporting file, but can do perfectly
+well without:
+
+\code
+  QMessageBox::information( this, "Application name",
+                            "Unable to find the user preferences file.\n"
+			    "The factory default will be used instead." );
+\endcode
+
+warning() can be used to tell the user about unusual errors, or
+errors which can't be easily fixed:
+
+\code
+  switch( QMessageBox::warning( this, "Application name",
+                                "Could not connect to the <mumble> server.\n"
+      			  "This program can't function correctly "
+      			  "without the server.\n\n",
+      			  "Try again", "Quit", 0,
+      			  0, 1 );
+  case 0: // Try again or Enter
+      // try again
+      break;
+  case 1: // Quit or Escape
+      // exit
+      break;
+  }
+\endcode
+
+    Finally, 
+  
   The text part of all message box messages can be either rich text or
   plain text. If you specify a rich text formatted string, it will be
   rendered using the default stylesheet. See
   QStyleSheet::defaultSheet() for details. With certain strings that
-  contain XML meta characters , the auto-rich text detection may fail,
+  contain XML meta characters, the auto-rich text detection may fail,
   interpreting plain text falsely as rich text. In these rare cases,
   use QStyleSheet::convertFromPlainText() to convert your plain text
   string to a visually equivalent rich text string or set the text
@@ -296,25 +363,6 @@ static const char * const qtlogo_xpm[] = {
   recommends.  The Escape button cancels the entire Exit operation,
   and Enter/Return saves the document and exits.
 
-  warning() can be used to tell the user about unusual errors, or
-  errors which can't be easily fixed:
-
-  \code
-    switch( QMessageBox::warning( this, "Application name here",
-                                  "Could not connect to the <mumble> server.\n"
-				  "This program can't function correctly "
-				  "without the server.\n\n",
-				  "Try again", "Quit", 0,
-				  0, 1 );
-    case 0: // Try again or Enter
-        // try again
-	break;
-    case 1: // Quit or Escape
-        // exit
-	break;
-    }
-  \endcode
-
   Disk full errors are unusual (in a perfect world, they are) and they
   certainly can be hard to correct.  This example uses predefined buttons
   instead of hardcoded button texts:
@@ -342,9 +390,9 @@ static const char * const qtlogo_xpm[] = {
 
   \code
     QMessageBox::critical( 0, "Application name here",
-                           QString("An internal error occured. Please call ") +
-			   "technical support at 123456789 and report these\n"+
-			   "numbers:\n\n" + errorDetails +
+                           QString("An internal error occurred. Please ") +
+			   "call technical support at 123456789 and report\n"+
+			   "these numbers:\n\n" + errorDetails +
 			   "\n\n<Application> will now exit." );
   \endcode
 
@@ -524,7 +572,7 @@ QMessageBox::QMessageBox( QWidget *parent, const char *name )
   </ul>
 
   Use QMessageBox::NoButton for the later parameters to have less than
-  three buttons in your messagebox.
+  three buttons in your message box.
 
   One of the buttons can be combined with the \c QMessageBox::Default flag
   to make a default button.
@@ -581,8 +629,21 @@ QMessageBox::~QMessageBox()
 }
 
 
+static QString * translatedTextAboutQt = 0;
+
 void QMessageBox::init( int button0, int button1, int button2 )
 {
+    if ( !translatedTextAboutQt ) {
+	translatedTextAboutQt = new QString;
+	*translatedTextAboutQt
+	    = tr( "<h3>About Qt</h3>"
+		  "<p>This program uses Qt version %1, a multiplatform C++ "
+		  "GUI toolkit from Trolltech. Qt provides single-source "
+		  "portability across Windows 95/98/NT/2000, Linux, Solaris, "
+		  "HP-UX and many other versions of Unix with X11.</p>"
+		  "<p>See <tt>http://www.trolltech.com/qt/</tt> for more "
+		  "information.</p>" ).arg( QT_VERSION_STR );
+    }
     label = new QLabel( this, "text" );
     CHECK_PTR( label );
     label->setAlignment( AlignLeft );
@@ -756,7 +817,7 @@ QMessageBox::Icon QMessageBox::icon() const
 
   \sa icon(), setIconPixmap(), iconPixmap()
 */
-
+//#### Bad API (see QWidget::setIcon). Should be setMessageIcon in 3.0 (same for setIconPixmap and friends)
 void QMessageBox::setIcon( Icon icon )
 {
     setIconPixmap( standardIcon(icon, style()) );
@@ -788,7 +849,7 @@ QPixmap QMessageBox::standardIcon( Icon icon, GUIStyle style )
     if ( xpm_data ) {
 	QImage image( (const char **) xpm_data);
 	if ( style == MotifStyle ) {
-	    // All that colour looks ugly in Motif
+	    // All that color looks ugly in Motif
 	    QColorGroup g = QApplication::palette().normal();
 	    switch ( icon ) {
 	    case Information:
@@ -807,7 +868,7 @@ QPixmap QMessageBox::standardIcon( Icon icon, GUIStyle style )
 		image.setColor( 3, 0xff000000 | g.base().rgb() );
 	        break;
 	    default:
-		; // Can't happen
+		break; // Can't happen
 	    }
 	}
 	pm.convertFromImage(image);
@@ -1191,14 +1252,17 @@ static int textBox( QWidget *parent, QMessageBox::Icon severity,
 				       parent, "information" );
     CHECK_PTR( mb );
     if ( button0Text.isEmpty() )
-	mb->setButtonText( 1, mb_texts[ QMessageBox::Ok ] );
+	mb->setButtonText( 1, QMessageBox::tr(mb_texts[QMessageBox::Ok]) );
     else
 	mb->setButtonText( 1, button0Text );
     if ( b[1] )
 	mb->setButtonText( 2, button1Text );
     if ( b[2] )
 	mb->setButtonText( 3, button2Text );
+
+    mb->setCursor( Qt::arrowCursor );
     int reply = mb->exec();
+
     delete mb;
     return reply-1;
 }
@@ -1318,15 +1382,6 @@ int QMessageBox::critical( QWidget *parent, const QString &caption,
 }
 
 
-static const char *textAboutQt =
-"<h3>About Qt</h3><p>This program uses Qt version " QT_VERSION_STR ", a "
-"multiplatform C++ GUI toolkit from Troll Tech. "
-"Qt provides single-source portability across Windows 95/98/NT/2000, "
-"Linux, Solaris, HP-UX and many other versions of Unix with X11.</p>"
-"<p>See <tt>http://www.trolltech.com/qt/</tt> for more information.</p>";
-void QT_END_TEXT() { QMessageBox::aboutQt(0,"E" "g" "g"); }
-
-
 /*!
   Displays a simple message box about Qt, with window caption \a
   caption and optionally centered over \a parent.  The message includes
@@ -1343,7 +1398,7 @@ void QMessageBox::aboutQt( QWidget *parent, const QString &caption )
 	c = "About Qt";
     QMessageBox *mb = new QMessageBox( parent, "about qt" );
     mb->setCaption( caption.isNull()?QString::fromLatin1("About Qt"):caption );
-    mb->setText( qApp->translate( "QMessageBox", textAboutQt ) );
+    mb->setText( *translatedTextAboutQt );
     QPixmap pm;
     QImage logo( (const char **)qtlogo_xpm);
     if ( qGray(mb->palette().active().text().rgb()) >
@@ -1415,3 +1470,5 @@ void QMessageBox::setTextFormat( Qt::TextFormat format )
 // Apparently, I...
 //
 // http://www.people.cornell.edu/pages/mlj8/cant.gif
+
+#endif

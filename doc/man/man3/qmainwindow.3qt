@@ -1,5 +1,5 @@
-.TH QMainWindow 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QMainWindow 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QMainWindow \- Typical application window, with a menu bar, some tool bars and a status bar
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -19,10 +17,10 @@ Inherits QWidget.
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQMainWindow\fR ( QWidget * " "parent" " = 0, const char * " "name" " = 0, WFlags " "f" " = WType_TopLevel )"
+.BI "\fBQMainWindow\fR ( QWidget * " "parent" " = 0, const char * " "name" " = 0, WFlags " "f" " = WType_TopLevel ) "
 .br
 .ti -1c
-.BI "\fB~QMainWindow\fR ()"
+.BI "\fB~QMainWindow\fR () "
 .br
 .ti -1c
 .BI "QMenuBar* \fBmenuBar\fR () const"
@@ -34,7 +32,7 @@ Inherits QWidget.
 .BI "QToolTipGroup* \fBtoolTipGroup\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetCentralWidget\fR ( QWidget * )"
+.BI "virtual void \fBsetCentralWidget\fR ( QWidget * ) "
 .br
 .ti -1c
 .BI "QWidget* \fBcentralWidget\fR () const"
@@ -43,31 +41,31 @@ Inherits QWidget.
 .BI "enum \fBToolBarDock\fR { Unmanaged, TornOff, Top, Bottom, Right, Left, Minimized }"
 .br
 .ti -1c
-.BI "virtual void \fBsetDockEnabled\fR ( ToolBarDock " "dock" ", bool enable )"
+.BI "virtual void \fBsetDockEnabled\fR ( ToolBarDock " "dock" ", bool enable ) "
 .br
 .ti -1c
 .BI "bool \fBisDockEnabled\fR ( ToolBarDock dock ) const"
 .br
 .ti -1c
-.BI "void \fBsetDockEnabled\fR ( QToolBar * " "tb" ", ToolBarDock " "dock" ", bool enable )"
+.BI "void \fBsetDockEnabled\fR ( QToolBar * " "tb" ", ToolBarDock " "dock" ", bool enable ) "
 .br
 .ti -1c
 .BI "bool \fBisDockEnabled\fR ( QToolBar * " "tb" ", ToolBarDock dock ) const"
 .br
 .ti -1c
-.BI "void \fBaddToolBar\fR ( QToolBar *, ToolBarDock = Top, bool " "newLine" " = FALSE )"
+.BI "void \fBaddToolBar\fR ( QToolBar *, ToolBarDock = Top, bool " "newLine" " = FALSE ) "
 .br
 .ti -1c
-.BI "void \fBaddToolBar\fR ( QToolBar *, const QString & " "label" ", ToolBarDock = Top, bool " "newLine" " = FALSE )"
+.BI "void \fBaddToolBar\fR ( QToolBar *, const QString & " "label" ", ToolBarDock = Top, bool " "newLine" " = FALSE ) "
 .br
 .ti -1c
-.BI "void \fBmoveToolBar\fR ( QToolBar *, ToolBarDock = Top )"
+.BI "void \fBmoveToolBar\fR ( QToolBar *, ToolBarDock = Top ) "
 .br
 .ti -1c
-.BI "void \fBmoveToolBar\fR ( QToolBar *, ToolBarDock, bool " "nl" ", int " "index" ", int " "extraOffset" " = -1 )"
+.BI "void \fBmoveToolBar\fR ( QToolBar *, ToolBarDock, bool " "nl" ", int " "index" ", int " "extraOffset" " = -1 ) "
 .br
 .ti -1c
-.BI "void \fBremoveToolBar\fR ( QToolBar * )"
+.BI "void \fBremoveToolBar\fR ( QToolBar * ) "
 .br
 .ti -1c
 .BI "bool \fBrightJustification\fR () const"
@@ -88,10 +86,7 @@ Inherits QWidget.
 .BI "bool \fBgetLocation\fR ( QToolBar * " "tb" ", ToolBarDock & " "dock" ", int & " "index" ", bool & " "nl" ", int & extraOffset ) const"
 .br
 .ti -1c
-.BI "QList<QToolBar> \fBtoolBars\fR ( ToolBarDock dock ) const"
-.br
-.ti -1c
-.BI "void \fBlineUpToolBars\fR ( bool " "keepNewLines" " = FALSE )"
+.BI "void \fBlineUpToolBars\fR ( bool " "keepNewLines" " = FALSE ) "
 .br
 .ti -1c
 .BI "bool \fBisDockMenuEnabled\fR () const"
@@ -100,58 +95,58 @@ Inherits QWidget.
 .SS "Public Slots"
 .in +1c
 .ti -1c
-.BI "virtual void \fBsetRightJustification\fR ( bool )"
+.BI "virtual void \fBsetRightJustification\fR ( bool ) "
 .br
 .ti -1c
-.BI "virtual void \fBsetUsesBigPixmaps\fR ( bool )"
+.BI "virtual void \fBsetUsesBigPixmaps\fR ( bool ) "
 .br
 .ti -1c
-.BI "void \fBsetUsesTextLabel\fR ( bool )"
+.BI "void \fBsetUsesTextLabel\fR ( bool ) "
 .br
 .ti -1c
-.BI "void \fBsetToolBarsMovable\fR ( bool )"
+.BI "void \fBsetToolBarsMovable\fR ( bool ) "
 .br
 .ti -1c
-.BI "void \fBsetOpaqueMoving\fR ( bool )"
+.BI "void \fBsetOpaqueMoving\fR ( bool ) "
 .br
 .ti -1c
-.BI "void \fBsetDockMenuEnabled\fR ( bool )"
+.BI "void \fBsetDockMenuEnabled\fR ( bool ) "
 .br
 .ti -1c
-.BI "void \fBwhatsThis\fR ()"
+.BI "void \fBwhatsThis\fR () "
 .br
 .in -1c
 .SS "Signals"
 .in +1c
 .ti -1c
-.BI "void \fBpixmapSizeChanged\fR ( bool )"
+.BI "void \fBpixmapSizeChanged\fR ( bool ) "
 .br
 .ti -1c
-.BI "void \fBusesTextLabelChanged\fR ( bool )"
+.BI "void \fBusesTextLabelChanged\fR ( bool ) "
 .br
 .ti -1c
-.BI "void \fBstartMovingToolBar\fR ( QToolBar * )"
+.BI "void \fBstartMovingToolBar\fR ( QToolBar * ) "
 .br
 .ti -1c
-.BI "void \fBendMovingToolBar\fR ( QToolBar * )"
+.BI "void \fBendMovingToolBar\fR ( QToolBar * ) "
 .br
 .ti -1c
-.BI "void \fBtoolBarPositionChanged\fR ( QToolBar * )"
+.BI "void \fBtoolBarPositionChanged\fR ( QToolBar * ) "
 .br
 .in -1c
 .SS "Protected Members"
 .in +1c
 .ti -1c
-.BI "virtual void \fBresizeEvent\fR ( QResizeEvent * )"
+.BI "virtual void \fBresizeEvent\fR ( QResizeEvent * ) "
 .br
 .ti -1c
-.BI "virtual void \fBchildEvent\fR ( QChildEvent * )"
+.BI "virtual void \fBchildEvent\fR ( QChildEvent * ) "
 .br
 .in -1c
 .SS "Protected Slots"
 .in +1c
 .ti -1c
-.BI "virtual void \fBsetUpLayout\fR ()"
+.BI "virtual void \fBsetUpLayout\fR () "
 .br
 .in -1c
 .SS "Properties"
@@ -179,7 +174,7 @@ setUsesTextLabel() determines whether the toolbar buttons (and other classes), s
 .PP
 Toolbars can be dragged by the user into each enabled docking area and inside each docking area to change the order of the toolbars there. This feature can be enabled and disabled using setToolBarsMovable(). By default this feature is enabled. If the \fCMinimized\fR dock is enabled the user can hide(minimize)/show(restore) a toolbar with a click on the toolbar handle. The handles of all minimized toolbars are drawn below the menu bar in one row, and if the user moves the mouse cursor onto such a handle, the label of the toolbar is displayed in a tool tip (see QToolBar::label()). So if you enable the Minimized dock, you should specify a meaningful label for each toolbar.
 .PP
-Normally toolbars are moved transparently (this means while the user drags one, a rectangle is drawn on the screen). With setOpaqueMoving() it's possible to switch betrween opaque and transparent moving of toolbars.
+Normally toolbars are moved transparently (this means while the user drags one, a rectangle is drawn on the screen). With setOpaqueMoving() it's possible to switch between opaque and transparent moving of toolbars.
 .PP
 The main window's menubar is static (on the top) by default. If you want a movable menubar, create a QMenuBar as stretchable widget inside its own movable toolbar and restrict this toolbar to only live within the Top or Bottom dock:
 .PP
@@ -202,11 +197,11 @@ The main window's menubar is static (on the top) by default. If you want a movab
 .PP
 An application with multiple toolbars can choose to save the current toolbar layout in order to restore it in the next session. To do so, use getLocation() on each toolbar, store the data and restore the layout using moveToolBar() on each toolbar again. When restoring, ensure to move the toolbars in exactly the same order in which you got the information.
 .PP
-For multidocument interfaces (MDI), use a QWorkspace as central widget.
+For multi-document interfaces (MDI), use a QWorkspace as central widget.
 .PP
 <img src=qmainwindow-m.png> <img src=qmainwindow-w.png>
 .PP
-See also: QToolBar, QStatusBar, QMenuBar, QToolTipGroup and QDialog.
+See also QToolBar, QStatusBar, QMenuBar, QToolTipGroup and QDialog.
 .PP
 Examples:
 .(l
@@ -243,7 +238,7 @@ If \fItoolBar\fR is already managed by some main window, it is first removed fro
 .SH "QWidget * QMainWindow::centralWidget () const"
 Returns a pointer to the main child of this main widget. The main child is the big widget around which the tool bars are arranged.
 .PP
-See also: setCentralWidget().
+See also setCentralWidget().
 .PP
 Examples:
 .(l
@@ -270,15 +265,15 @@ This method returns TRUE if the information could be found out, otherwise FALSE 
 .SH "bool QMainWindow::isDockEnabled ( ToolBarDock dock ) const"
 Returns TRUE if \fIdock\fR is enabled, or FALSE if it is not.
 .PP
-See also: setDockEnabled().
+See also setDockEnabled().
 .SH "bool QMainWindow::isDockEnabled ( QToolBar * tb, ToolBarDock dock ) const"
 Returns TRUE if \fIdock\fR is enabled for the toolbar \fItb\fR , or FALSE if it is not.
 .PP
-See also: setDockEnabled().
+See also setDockEnabled().
 .SH "bool QMainWindow::isDockMenuEnabled () const"
 Returns TRUE, if rightclicking on an empty space on a toolbar dock or rightclicking on a toolbar handle opens a popup menu which allows lining up toolbars and hiding/showing toolbars.
 .PP
-See also: setDockEnabled() and lineUpToolBars().
+See also setDockEnabled() and lineUpToolBars().
 .SH "void QMainWindow::lineUpToolBars ( bool keepNewLines = FALSE )"
 As toolbars can be freely moved inside docks, it's possible to line them up nicely with this method to get rid of all the unused space. If \fIkeepNewLines\fR is TRUE, all toolbars stay in the line in which they are, else they are packed together as compact as possible.
 .PP
@@ -286,7 +281,7 @@ The method only works if movable() returns TRUE.
 .SH "QMenuBar * QMainWindow::menuBar () const"
 Returns the menu bar for this window. If there isn't any, menuBar() creates an empty menu bar on the fly.
 .PP
-See also: statusBar().
+See also statusBar().
 .SH "QSize QMainWindow::minimumSizeHint () const \fC[virtual]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .PP
@@ -302,7 +297,7 @@ If \fItoolBar\fR is already managed by some main window, it is moved from that w
 .SH "bool QMainWindow::opaqueMoving () const"
 Returns whether the toolbars of the mainwindow can be moved opaque or transparent.
 .PP
-See also: setOpaqueMoving().
+See also setOpaqueMoving().
 .SH "void QMainWindow::paintEvent ( QPaintEvent * ) \fC[virtual protected]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .PP
@@ -310,7 +305,7 @@ Reimplemented from QWidget.
 .SH "void QMainWindow::pixmapSizeChanged ( bool ) \fC[signal]\fR"
 This signal is called whenever the setUsesBigPixmaps() is called with a value which is different from the current setting. All relevant widgets must connect to this signal.
 .SH "void QMainWindow::removeToolBar ( QToolBar * toolBar )"
-Removes \fItoolBar\fR from this main window, if \fItoolBar\fR is non-null and known by this main window.
+Removes \fItoolBar\fR from this main window's docking area, if \fItoolBar\fR is non-null and known by this main window.
 .SH "void QMainWindow::resizeEvent ( QResizeEvent * ) \fC[virtual protected]\fR"
 Monitors events to ensure layout is updated.
 .PP
@@ -322,7 +317,7 @@ The default is to use a ragged right edge.
 .PP
 ("Right edge" sometimes means "bottom edge".)
 .PP
-See also: setRightJustification().
+See also setRightJustification().
 .SH "void QMainWindow::setCentralWidget ( QWidget * w ) \fC[virtual]\fR"
 Sets the central widget for this window to \fIw.\fR The central widget is the one around which the toolbars etc. are arranged.
 .SH "void QMainWindow::setDockEnabled ( ToolBarDock dock, bool enable )"
@@ -336,17 +331,17 @@ The user can drag the toolbar to any enabled dock.
 .SH "void QMainWindow::setDockMenuEnabled ( bool b ) \fC[slot]\fR"
 When passing TRUE for \fIb\fR here, rightclicking on an empty space on a toolbar dock or rightclicking on a toolbar handle opens a popup menu which allows lining up toolbars and hiding/showing toolbars.
 .PP
-See also: lineUpToolBars() and isDockMenuEnabled().
+See also lineUpToolBars() and isDockMenuEnabled().
 .SH "void QMainWindow::setOpaqueMoving ( bool b ) \fC[slot]\fR"
 If you set \fIb\fR to TRUE, the use can move the toolbars opaque, otherwise this is done transparent. This setting makes only sense, if toolBarsMovable() is set to TRUE.
 .PP
-See also: setToolbarsMovable().
+See also setToolbarsMovable().
 .SH "void QMainWindow::setRightJustification ( bool enable ) \fC[virtual slot]\fR"
 Sets this main window to right-justifies its toolbars if \fIenable\fR is TRUE. If enable is FALSE, only stretchable toolbars are expanded, while non-stretchable toolbars get just the space they need. Given that most toolbars are not stretchable, this usually results in a ragged right edge.
 .PP
 The default is FALSE.
 .PP
-See also: rightJustification(), QToolBar::setVerticalStretchable() and QToolBar::setHorizontalStretchable().
+See also rightJustification(), QToolBar::setVerticalStretchable() and QToolBar::setHorizontalStretchable().
 .SH "void QMainWindow::setToolBarsMovable ( bool enable ) \fC[slot]\fR"
 Sets the toolbars to be movable if \fIenable\fR is TRUE, or static otherwise.
 .PP
@@ -354,7 +349,7 @@ Movable toolbars can be dragged around between and within the different toolbar 
 .PP
 The default is TRUE.
 .PP
-See also: setDockEnabled(), toolBarsMovable() and setOpaqueMoving().
+See also setDockEnabled(), toolBarsMovable() and setOpaqueMoving().
 .SH "void QMainWindow::setUpLayout () \fC[virtual protected slot]\fR"
 Sets up the geometry management of this window. Called automatically when needed, so you should never need to call this.
 .SH "void QMainWindow::setUsesBigPixmaps ( bool enable ) \fC[virtual slot]\fR"
@@ -364,7 +359,7 @@ The default is FALSE.
 .PP
 Tool buttons and other interested widgets are responsible for reading the correct state on startup, and for connecting to this widget's pixmapSizeChanged() signal.
 .PP
-See also: QToolButton::setUsesBigPixmap().
+See also QToolButton::setUsesBigPixmap().
 .SH "void QMainWindow::setUsesTextLabel ( bool enable ) \fC[slot]\fR"
 Sets tool buttons in this main windows to use text labels if \fIenable\fR is TRUE, and no text labels otherwise.
 .PP
@@ -372,13 +367,13 @@ The default is FALSE.
 .PP
 Tool buttons and other interested widgets are responsible for reading the correct state on startup, and for connecting to this widget's usesTextLabelChanged() signal.
 .PP
-See also: QToolButton::setUsesTextLabel().
+See also QToolButton::setUsesTextLabel().
 .SH "void QMainWindow::show () \fC[virtual]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .PP
 Examples:
 .(l
-themes/main.cpp mainlyQt/editor.cpp application/main.cpp i18n/main.cpp fileiconview/main.cpp scribble/main.cpp qfd/qfd.cpp addressbook/main.cpp mdi/main.cpp
+action/main.cpp themes/main.cpp mainlyQt/editor.cpp application/main.cpp helpviewer/main.cpp i18n/main.cpp fileiconview/main.cpp scribble/main.cpp qfd/qfd.cpp addressbook/main.cpp mdi/main.cpp
 .)l
 .PP
 Reimplemented from QWidget.
@@ -391,7 +386,7 @@ This signal is emitted when the \fItoolbar\fR starts moving because the user sta
 .SH "QStatusBar * QMainWindow::statusBar () const"
 Returns the status bar for this window. If there isn't any, statusBar() creates an empty status bar on the fly, and if necessary a tool tip group too.
 .PP
-See also: menuBar() and toolTipGroup().
+See also menuBar() and toolTipGroup().
 .PP
 Examples:
 .(l
@@ -404,25 +399,23 @@ Reimplemented from QWidget.
 .SH "void QMainWindow::toolBarPositionChanged ( QToolBar * toolbar ) \fC[signal]\fR"
 This signal is emitted when the \fItoolbar\fR has changed its position. This means it has been moved to another dock or inside the dock.
 .PP
-See also: getLocation().
-.SH "QList<QToolBar> QMainWindow::toolBars ( ToolBarDock dock ) const"
-Returns a list of all toolbars which are placed in \fIdock.\fR
+See also getLocation().
 .SH "bool QMainWindow::toolBarsMovable () const"
 Returns whether or not the toolbars of this main window are movable.
 .PP
-See also: setToolBarsMovable().
+See also setToolBarsMovable().
 .SH "QToolTipGroup * QMainWindow::toolTipGroup () const"
 Returns the tool tip group for this window. If there isn't any, toolTipGroup() creates an empty tool tip group on the fly.
 .PP
-See also: menuBar() and statusBar().
+See also menuBar() and statusBar().
 .SH "bool QMainWindow::usesBigPixmaps () const"
 Returns the state last set by setUsesBigPixmaps(). The initial state is FALSE.
 .PP
-See also: setUsesBigPixmaps();.
+See also setUsesBigPixmaps();.
 .SH "bool QMainWindow::usesTextLabel () const"
 Returns the state last set by setUsesTextLabel(). The initial state is FALSE.
 .PP
-See also: setUsesTextLabel();.
+See also setUsesTextLabel();.
 .SH "void QMainWindow::usesTextLabelChanged ( bool ) \fC[signal]\fR"
 This signal is called whenever the setUsesTextLabel() is called with a value which is different from the current setting. All relevant widgets must connect to this signal.
 .SH "void QMainWindow::whatsThis () \fC[slot]\fR"
@@ -437,11 +430,11 @@ This is the same as QWhatsThis::enterWhatsThisMode(), but as a slot of of a main
     help->insertItem( "What's &This", this , SLOT(whatsThis()), SHIFT+Key_F1);
 .fi
 .PP
-See also:  QWhatsThis::enterWhatsThisMode().
+See also  QWhatsThis::enterWhatsThisMode().
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qmainwindow.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

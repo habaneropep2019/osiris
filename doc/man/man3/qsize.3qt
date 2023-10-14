@@ -1,5 +1,5 @@
-.TH QSize 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QSize 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QSize \- Defines the size of a two-dimensional object
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -17,10 +15,10 @@ QSize \- Defines the size of a two-dimensional object
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQSize\fR ()"
+.BI "\fBQSize\fR () "
 .br
 .ti -1c
-.BI "\fBQSize\fR ( int " "w" ", int h )"
+.BI "\fBQSize\fR ( int " "w" ", int h ) "
 .br
 .ti -1c
 .BI "bool \fBisNull\fR () const"
@@ -38,13 +36,13 @@ QSize \- Defines the size of a two-dimensional object
 .BI "int \fBheight\fR () const"
 .br
 .ti -1c
-.BI "void \fBsetWidth\fR ( int w )"
+.BI "void \fBsetWidth\fR ( int w ) "
 .br
 .ti -1c
-.BI "void \fBsetHeight\fR ( int h )"
+.BI "void \fBsetHeight\fR ( int h ) "
 .br
 .ti -1c
-.BI "void \fBtranspose\fR ()"
+.BI "void \fBtranspose\fR () "
 .br
 .ti -1c
 .BI "QSize \fBexpandedTo\fR ( const QSize & ) const"
@@ -53,28 +51,28 @@ QSize \- Defines the size of a two-dimensional object
 .BI "QSize \fBboundedTo\fR ( const QSize & ) const"
 .br
 .ti -1c
-.BI "QCOORD& \fBrwidth\fR ()"
+.BI "QCOORD& \fBrwidth\fR () "
 .br
 .ti -1c
-.BI "QCOORD& \fBrheight\fR ()"
+.BI "QCOORD& \fBrheight\fR () "
 .br
 .ti -1c
-.BI "QSize& \fBoperator+=\fR ( const QSize & )"
+.BI "QSize& \fBoperator+=\fR ( const QSize & ) "
 .br
 .ti -1c
-.BI "QSize& \fBoperator-=\fR ( const QSize & )"
+.BI "QSize& \fBoperator-=\fR ( const QSize & ) "
 .br
 .ti -1c
-.BI "QSize& \fBoperator*=\fR ( int c )"
+.BI "QSize& \fBoperator*=\fR ( int c ) "
 .br
 .ti -1c
-.BI "QSize& \fBoperator*=\fR ( double c )"
+.BI "QSize& \fBoperator*=\fR ( double c ) "
 .br
 .ti -1c
-.BI "QSize& \fBoperator/=\fR ( int c )"
+.BI "QSize& \fBoperator/=\fR ( int c ) "
 .br
 .ti -1c
-.BI "QSize& \fBoperator/=\fR ( double c )"
+.BI "QSize& \fBoperator/=\fR ( double c ) "
 .br
 .in -1c
 .SH RELATED FUNCTION DOCUMENTATION
@@ -124,7 +122,7 @@ A size is specified by a width and a height.
 .PP
 The coordinate type is QCOORD (defined in qwindowdefs.h as \fCint).\fR The minimum value of QCOORD is QCOORD_MIN (-2147483648) and the maximum value is QCOORD_MAX (2147483647).
 .PP
-See also: QPoint and QRect.
+See also QPoint and QRect.
 .PP
 Examples:
 .(l
@@ -142,7 +140,7 @@ Returns a size with the maximum width and height of this size and \fIotherSize.\
 .SH "int QSize::height () const"
 Returns the height.
 .PP
-See also: width().
+See also width().
 .PP
 Examples:
 .(l
@@ -206,7 +204,7 @@ Example:
     s.rheight() += 5;           // s becomes (100,15)
 .fi
 .PP
-See also: rwidth().
+See also rwidth().
 .SH "QCOORD & QSize::rwidth ()"
 Returns a reference to the width.
 .PP
@@ -221,21 +219,21 @@ Example:
     s.rwidth() += 20;           // s becomes (120,10)
 .fi
 .PP
-See also: rheight().
+See also rheight().
 .SH "void QSize::setHeight ( int h )"
 Sets the height to \fIh.\fR
 .PP
-See also: height() and setWidth().
+See also height() and setWidth().
 .SH "void QSize::setWidth ( int w )"
 Sets the width to \fIw.\fR
 .PP
-See also: width() and setHeight().
+See also width() and setHeight().
 .SH "void QSize::transpose ()"
 Swaps the values of width and height.
 .SH "int QSize::width () const"
 Returns the width.
 .PP
-See also: height().
+See also height().
 .PP
 Examples:
 .(l
@@ -261,11 +259,11 @@ Note that the result is truncated.
 .SH "QDataStream & operator<< (QDataStream & s, const QSize & sz)"
 Writes the size to the stream and returns a reference to the stream.
 .PP
-See also: Format of the QDataStream operators
+See also Format of the QDataStream operators
 .SH "QDataStream & operator>> (QDataStream & s, QSize & sz)"
 Reads the size from the stream and returns a reference to the stream.
 .PP
-See also: Format of the QDataStream operators
+See also Format of the QDataStream operators
 .SH "QSize operator- (const QSize & s1, const QSize & s2)"
 Returns \fIs2\fR subtracted from \fIs1;\fR each component is subtracted separately.
 .SH "QSize operator* (double c, const QSize & s)"
@@ -275,7 +273,7 @@ Returns the sum of \fIs1\fR and \fIs2;\fR each component is added separately.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qsize.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

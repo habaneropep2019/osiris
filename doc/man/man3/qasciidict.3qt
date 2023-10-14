@@ -1,5 +1,5 @@
-.TH QAsciiDict 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QAsciiDict 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QAsciiDict \- Template class that provides a dictionary based on \fCchar*\fR keys
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -19,16 +17,16 @@ Inherits QGDict.
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQAsciiDict\fR ( int " "size" "=17, bool " "caseSensitive" "=TRUE, bool " "copyKeys" "=TRUE )"
+.BI "\fBQAsciiDict\fR ( int " "size" "=17, bool " "caseSensitive" "=TRUE, bool " "copyKeys" "=TRUE ) "
 .br
 .ti -1c
-.BI "\fBQAsciiDict\fR ( const QAsciiDict<type> & dict )"
+.BI "\fBQAsciiDict\fR ( const QAsciiDict<type> & dict ) "
 .br
 .ti -1c
-.BI "\fB~QAsciiDict\fR ()"
+.BI "\fB~QAsciiDict\fR () "
 .br
 .ti -1c
-.BI "QAsciiDict<type>& \fBoperator=\fR ( const QAsciiDict<type> & dict )"
+.BI "QAsciiDict<type>& \fBoperator=\fR ( const QAsciiDict<type> & dict ) "
 .br
 .ti -1c
 .BI "virtual uint \fBcount\fR () const"
@@ -40,16 +38,16 @@ Inherits QGDict.
 .BI "bool \fBisEmpty\fR () const"
 .br
 .ti -1c
-.BI "void \fBinsert\fR ( const char * " "key" ", const type * item )"
+.BI "void \fBinsert\fR ( const char * " "key" ", const type * item ) "
 .br
 .ti -1c
-.BI "void \fBreplace\fR ( const char * " "key" ", const type * item )"
+.BI "void \fBreplace\fR ( const char * " "key" ", const type * item ) "
 .br
 .ti -1c
-.BI "bool \fBremove\fR ( const char * key )"
+.BI "bool \fBremove\fR ( const char * key ) "
 .br
 .ti -1c
-.BI "type* \fBtake\fR ( const char * key )"
+.BI "type* \fBtake\fR ( const char * key ) "
 .br
 .ti -1c
 .BI "type* \fBfind\fR ( const char * key ) const"
@@ -58,10 +56,10 @@ Inherits QGDict.
 .BI "type* \fBoperator[]\fR ( const char * key ) const"
 .br
 .ti -1c
-.BI "virtual void \fBclear\fR ()"
+.BI "virtual void \fBclear\fR () "
 .br
 .ti -1c
-.BI "void \fBresize\fR ( uint newsize )"
+.BI "void \fBresize\fR ( uint newsize ) "
 .br
 .ti -1c
 .BI "void \fBstatistics\fR () const"
@@ -189,7 +187,7 @@ When inserting an item into a dictionary, only the pointer is copied, not the it
 .PP
 When removing a dictionary item, the virtual function QCollection::deleteItem() is called. QAsciiDict's default implementation is to delete the item if auto-deletion is enabled.
 .PP
-See also: QAsciiDictIterator, QDict, QIntDict, QPtrDict and Collection Classes
+See also QAsciiDictIterator, QDict, QIntDict, QPtrDict and Collection Classes
 .SH MEMBER FUNCTION DOCUMENTATION
 .SH "QAsciiDict::QAsciiDict ( const QAsciiDict<type> & dict )"
 Constructs a copy of \fIdict.\fR
@@ -214,7 +212,7 @@ Removes all items from the dictionary and destroys it.
 .PP
 All iterators that access this dictionary will be reset.
 .PP
-See also: setAutoDelete().
+See also setAutoDelete().
 .SH "void QAsciiDict::clear () \fC[virtual]\fR"
 Removes all items from the dictionary.
 .PP
@@ -222,13 +220,13 @@ The removed items are deleted if auto-deletion is enabled.
 .PP
 All dictionary iterators that operate on dictionary are reset.
 .PP
-See also: remove(), take() and setAutoDelete().
+See also remove(), take() and setAutoDelete().
 .PP
 Reimplemented from QCollection.
 .SH "uint QAsciiDict::count () const \fC[virtual]\fR"
 Returns the number of items in the dictionary.
 .PP
-See also: isEmpty().
+See also isEmpty().
 .PP
 Reimplemented from QCollection.
 .SH "type * QAsciiDict::find ( const char * key ) const"
@@ -240,7 +238,7 @@ If there are two or more items with equal keys, then the last inserted of these 
 .PP
 Equivalent to the [] operator.
 .PP
-See also: operator[]().
+See also operator[]().
 .SH "void QAsciiDict::insert ( const char * key, const type * item )"
 Inserts the \fIkey\fR with the \fIitem\fR into the dictionary.
 .PP
@@ -248,11 +246,11 @@ The key does not have to be a unique dictionary key. If multiple items are inser
 .PP
 Null items are not allowed.
 .PP
-See also: replace().
+See also replace().
 .SH "bool QAsciiDict::isEmpty () const"
 Returns TRUE if the dictionary is empty, i.e. count() == 0. Returns FALSE otherwise.
 .PP
-See also: count().
+See also count().
 .SH "QAsciiDict<type> & QAsciiDict::operator= ( const QAsciiDict<type> & dict )"
 Assigns \fIdict\fR to this dictionary and returns a reference to this dictionary.
 .PP
@@ -266,7 +264,7 @@ If there are two or more items with equal keys, then the last inserted of these 
 .PP
 Equivalent to the find() function.
 .PP
-See also: find().
+See also find().
 .SH "bool QAsciiDict::remove ( const char * key )"
 Removes the item associated with \fIkey\fR from the dictionary. Returns TRUE if successful, or FALSE if the key does not exist in the dictionary.
 .PP
@@ -276,7 +274,7 @@ The removed item is deleted if auto-deletion is enabled.
 .PP
 All dictionary iterators that refer to the removed item will be set to point to the next item in the dictionary traversing order.
 .PP
-See also: take(), clear() and setAutoDelete().
+See also take(), clear() and setAutoDelete().
 .SH "void QAsciiDict::replace ( const char * key, const type * item )"
 Replaces an item which has a key equal to \fIkey\fR with \fIitem.\fR
 .PP
@@ -301,13 +299,13 @@ Equivalent to:
 .PP
 If there are two or more items with equal keys, then the last inserted of these will be replaced.
 .PP
-See also: insert().
+See also insert().
 .SH "void QAsciiDict::resize ( uint newsize )"
 Changes the size of the hashtable the \fInewsize.\fR The contents of the dictionary are preserved, but all iterators on the dictionary become invalid.
 .SH "uint QAsciiDict::size () const"
 Returns the size of the internal hash array (as specified in the constructor).
 .PP
-See also: count().
+See also count().
 .SH "void QAsciiDict::statistics () const"
 Debugging-only function that prints out the dictionary distribution using qDebug().
 .SH "type * QAsciiDict::take ( const char * key )"
@@ -319,11 +317,11 @@ Returns a pointer to the item taken out, or null if the key does not exist in th
 .PP
 All dictionary iterators that refer to the taken item will be set to point to the next item in the dictionary traversal order.
 .PP
-See also:  remove(), clear() and setAutoDelete().
+See also  remove(), clear() and setAutoDelete().
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qasciidict.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

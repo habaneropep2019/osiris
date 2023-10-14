@@ -1,27 +1,39 @@
 /****************************************************************************
-** $Id: qt/src/tools/qgdict.cpp   2.1.1   edited 2000-03-24 $
+** $Id: qt/src/tools/qgdict.cpp   2.2.0   edited 2000-08-25 $
 **
 ** Implementation of QGDict and QGDictIterator classes
 **
 ** Created : 920529
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the tools module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #include "qgdict.h"
 #include "qlist.h"
@@ -139,6 +151,7 @@ int QGDict::hashKeyAscii( const char *key )
     return index;
 }
 
+#ifndef QT_NO_DATASTREAM
 
 /*!
   Reads a collection/dictionary item from the stream \e s and returns a
@@ -166,7 +179,7 @@ QDataStream& QGDict::write( QDataStream &s, QCollection::Item ) const
 {
     return s;
 }
-
+#endif //QT_NO_DATASTREAM
 
 /*****************************************************************************
   QGDict member functions
@@ -385,13 +398,13 @@ QCollection::Item QGDict::look_ascii( const char *key, QCollection::Item d, int 
 	if ( cases ) {
 	    for ( n=(QAsciiBucket*)vec[index]; n;
 		  n=(QAsciiBucket*)n->getNext() ) {
-		if ( strcmp(n->getKey(),key) == 0 )
+		if ( qstrcmp(n->getKey(),key) == 0 )
 		    return n->getData();	// item found
 	    }
 	} else {
 	    for ( n=(QAsciiBucket*)vec[index]; n;
 		  n=(QAsciiBucket*)n->getNext() ) {
-		if ( stricmp(n->getKey(),key) == 0 )
+		if ( qstricmp(n->getKey(),key) == 0 )
 		    return n->getData();	// item found
 	    }
 	}
@@ -561,7 +574,7 @@ void QGDict::resize( uint newsize )
 
 /*!
   \internal
-  Unlinks the bucket with the specified key (and specifed data pointer,
+  Unlinks the bucket with the specified key (and specified data pointer,
   if it is set).
 */
 
@@ -626,8 +639,8 @@ QAsciiBucket *QGDict::unlink_ascii( const char *key, QCollection::Item d )
     QAsciiBucket *prev = 0;
     int index = hashKeyAscii(key) % vlen;	
     for ( n=(QAsciiBucket *)vec[index]; n; n=(QAsciiBucket *)n->getNext() ) {
-	bool found = (cases ? strcmp(n->getKey(),key)
-		       : stricmp(n->getKey(),key)) == 0;
+	bool found = (cases ? qstrcmp(n->getKey(),key)
+		       : qstricmp(n->getKey(),key)) == 0;
 	if ( found && d )
 	    found = (n->getData() == d);
 	if ( found ) {
@@ -693,8 +706,10 @@ bool QGDict::remove_string( const QString &key, QCollection::Item item )
     if ( n ) {
 	deleteItem( n->getData() );
 	delete n;
+	return TRUE;
+    } else {
+	return FALSE;
     }
-    return n != 0;
 }
 
 
@@ -930,7 +945,7 @@ void QGDict::statistics() const
 /*****************************************************************************
   QGDict stream functions
  *****************************************************************************/
-
+#ifndef QT_NO_DATASTREAM
 QDataStream &operator>>( QDataStream &s, QGDict &dict )
 {
     return dict.read( s );
@@ -1035,7 +1050,7 @@ QDataStream& QGDict::write( QDataStream &s ) const
     }
     return s;
 }
-
+#endif //QT_NO_DATASTREAM
 
 /*****************************************************************************
   QGDictIterator member functions

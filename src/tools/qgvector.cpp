@@ -1,27 +1,39 @@
 /****************************************************************************
-** $Id: qt/src/tools/qgvector.cpp   2.1.1   edited 2000-03-24 $
+** $Id: qt/src/tools/qgvector.cpp   2.2.0   edited 2000-08-25 $
 **
 ** Implementation of QGVector class
 **
 ** Created : 930907
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the tools module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #define	 QGVECTOR_CPP
 #include "qgvector.h"
@@ -56,7 +68,7 @@
   the QVector collection class.
 
   QGVector has some virtual functions that may be reimplemented in
-  subclasses to to customize behavor.
+  subclasses to to customize behavior.
 
   <ul>
   <li> compareItems() compares two collection/vector items.
@@ -100,6 +112,7 @@ int QGVector::compareItems( Item d1, Item d2 )
     return d1 != d2;				// compare pointers
 }
 
+#ifndef QT_NO_DATASTREAM
 /*!
   Reads a collection/vector item from the stream \a s and returns a reference
   to the stream.
@@ -128,7 +141,7 @@ QDataStream &QGVector::write( QDataStream &s, Item ) const
 {						// write item to stream
     return s;
 }
-
+#endif // QT_NO_DATASTREAM
 
 /*****************************************************************************
   QGVector member functions
@@ -218,11 +231,6 @@ QGVector& QGVector::operator=( const QGVector &v )
 
 /*!
   \fn uint QGVector::count() const
-  \internal
-*/
-
-/*!
-  \fn Item QGVector::take( uint index )
   \internal
 */
 
@@ -440,7 +448,7 @@ int QGVector::bsearch( Item d ) const		// binary search; when sorted
     }
     int n1 = 0;
     int n2 = len - 1;
-    int mid;
+    int mid = 0;
     bool found = FALSE;
     while ( n1 <= n2 ) {
 	int  res;
@@ -580,7 +588,7 @@ void QGVector::warningIndexRange( uint i )
 /*****************************************************************************
   QGVector stream functions
  *****************************************************************************/
-
+#ifndef QT_NO_DATASTREAM
 QDataStream &operator>>( QDataStream &s, QGVector &vec )
 {						// read vector
     return vec.read( s );
@@ -627,3 +635,4 @@ QDataStream &QGVector::write( QDataStream &s ) const
     }
     return s;
 }
+#endif // QT_NO_DATASTREAM

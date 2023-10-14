@@ -1,31 +1,45 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qmenudata.cpp   2.1.1   edited 2000-04-12 $
+** $Id: qt/src/widgets/qmenudata.cpp   2.2.0   edited 2000-08-25 $
 **
 ** Implementation of QMenuData class
 **
 ** Created : 941128
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the widgets module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #define	 INCLUDE_MENUITEM_DEF
 #include "qmenudata.h"
+#ifndef QT_NO_COMPLEXWIDGETS
 #include "qpopupmenu.h"
+#include "qmenubar.h"
 #include "qapplication.h"
 #include "qguardedptr.h"
 
@@ -585,9 +599,9 @@ int QMenuData::insertItem( const QIconSet& icon,
 
   Ownership of \a widget is transferred to the popup menu or the
   menubar.
-  
+
   Theoretically, any widget can be inserted into a popup menu. In
-  practise, this only makes sense with certain widgets.
+  practice, this only makes sense with certain widgets.
 
   If a widget is not focus enabled ( see QWidget::isFocusEnabled() ),
   the menu treats it as a separator. This means, the item is not
@@ -1230,12 +1244,12 @@ QString QMenuData::whatsThis( int id ) const
 
   A custom menu item is a menu item that is defined by two purely
   virtual functions, paint() and sizeHint(). The size hint tells the
-  menu how much space it needs to reserve for this item, wheras paint
+  menu how much space it needs to reserve for this item, whereas paint
   is called whenever the item needs painting.
 
   This simply mechanism gives applications the possibility to create
   all kinds of application specific menu items. Examples are items
-  showing different fonts in a wordprocessor, or menus that allow the
+  showing different fonts in a word processor, or menus that allow the
   selection of drawing utilities in a vector drawing program.
 
   A custom item is inserted into a popup menu with
@@ -1251,7 +1265,7 @@ QString QMenuData::whatsThis( int id ) const
 
   Note that you can also insert pixmaps or bitmaps as items into a
   popup menu. A custom menu item, however, offers even more
-  flexibility and - which is especially implortant under windows style
+  flexibility and - which is especially important under windows style
   - the possibility to draw the item with a different color when it is
   highlighted.
 
@@ -1297,7 +1311,7 @@ void QCustomMenuItem::setFont( const QFont&  )
 /*!
   Returns whether this item wants to span the entire popup menu width.
   The default is FALSE, meaning that the menu may show an icon and/or
-  an accelerator key for this itemas well.
+  an accelerator key for this item as well.
  */
 bool QCustomMenuItem::fullSpan() const
 {
@@ -1333,3 +1347,19 @@ bool QCustomMenuItem::isSeparator() const
  */
 
 
+
+/*!
+  Activates the menu item at index \a index. 
+  
+  If the index is invalid (for example -1), the object itself is
+  deactivated.
+ */
+void QMenuData::activateItemAt( int index )
+{
+    if ( isMenuBar )
+	( (QMenuBar*)this )->activateItemAt( index );
+    else if ( isPopupMenu ) 
+	( (QPopupMenu*)this )->activateItemAt( index );
+}
+
+#endif

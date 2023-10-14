@@ -1,5 +1,5 @@
-.TH QMotifStyle 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QMotifStyle 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QMotifStyle \- Motif Look and Feel
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -16,33 +14,36 @@ QMotifStyle \- Motif Look and Feel
 .PP
 Inherits QCommonStyle.
 .PP
-Inherited by QCDEStyle.
+Inherited by QCDEStyle, QMotifPlusStyle and QSGIStyle.
 .PP
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQMotifStyle\fR ( bool " "useHighlightCols" " = FALSE )"
+.BI "\fBQMotifStyle\fR ( bool " "useHighlightCols" " = FALSE ) "
 .br
 .ti -1c
-.BI "virtual \fB~QMotifStyle\fR ()"
+.BI "virtual \fB~QMotifStyle\fR () "
 .br
 .ti -1c
-.BI "void \fBsetUseHighlightColors\fR ( bool )"
+.BI "void \fBsetUseHighlightColors\fR ( bool ) "
 .br
 .ti -1c
 .BI "bool \fBuseHighlightColors\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBdrawButton\fR ( QPainter * " "p" ", int " "x" ", int " "y" ", int " "w" ", int " "h" ", const QColorGroup & " "g" ", bool " "sunken" " = FALSE, const QBrush * " "fill" " = 0 )"
+.BI "virtual void \fBdrawButton\fR ( QPainter * " "p" ", int " "x" ", int " "y" ", int " "w" ", int " "h" ", const QColorGroup & " "g" ", bool " "sunken" " = FALSE, const QBrush * " "fill" " = 0 ) "
 .br
 .ti -1c
-.BI "virtual void \fBdrawExclusiveIndicatorMask\fR ( QPainter * " "p" ", int " "x" ", int " "y" ", int, int, bool )"
+.BI "virtual void \fBdrawExclusiveIndicatorMask\fR ( QPainter * " "p" ", int " "x" ", int " "y" ", int, int, bool ) "
+.br
+.ti -1c
+.BI "void \fBpolishPopupMenu\fR ( QPopupMenu * ) "
 .br
 .in -1c
 .SH DESCRIPTION
 Motif Look and Feel
 .PP
-This class implements the Motif look and feel. It almost completely resembles the original Motif look as defined by the Open Group, but also contains minor improvements. The Motif style is Qt's default GUI style on UNIX plattforms.
+This class implements the Motif look and feel. It almost completely resembles the original Motif look as defined by the Open Group, but also contains minor improvements. The Motif style is Qt's default GUI style on UNIX platforms.
 .SH MEMBER FUNCTION DOCUMENTATION
 .SH "QMotifStyle::QMotifStyle ( bool useHighlightCols = FALSE )"
 Constructs a QMotifStyle.
@@ -116,14 +117,10 @@ Reimplemented from QStyle.
 Reimplemented for internal reasons; the API is not affected.
 .PP
 Reimplemented from QStyle.
-.SH "void QMotifStyle::drawTab ( QPainter * p, const QTabBar * tb, QTab * t, bool selected ) \fC[virtual]\fR"
+.SH "void QMotifStyle::drawTab ( QPainter * p, const QTabBar * tb, QTab * t, bool selected )"
 Reimplemented for internal reasons; the API is not affected.
-.PP
-Reimplemented from QStyle.
-.SH "void QMotifStyle::drawTabMask ( QPainter * p, const QTabBar * tb, QTab * t, bool selected ) \fC[virtual]\fR"
+.SH "void QMotifStyle::drawTabMask ( QPainter * p, const QTabBar * tb, QTab * t, bool selected )"
 Reimplemented for internal reasons; the API is not affected.
-.PP
-Reimplemented from QStyle.
 .SH "QSize QMotifStyle::exclusiveIndicatorSize () const \fC[virtual]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .PP
@@ -136,15 +133,11 @@ Reimplemented from QStyle.
 Reimplemented for internal reasons; the API is not affected.
 .PP
 Reimplemented from QStyle.
-.SH "void QMotifStyle::polish ( QApplication * a ) \fC[virtual]\fR"
+.SH "void QMotifStyle::polish ( QApplication * a )"
 Reimplemented for internal reasons; the API is not affected.
-.PP
-Reimplemented from QStyle.
 .SH "void QMotifStyle::polish ( QPalette & pal )"
 Reimplemented for internal reasons; the API is not affected.
-.SH "void QMotifStyle::polish ( QWidget * w )"
-Reimplemented for internal reasons; the API is not affected.
-.SH "void QMotifStyle::polishPopupMenu ( QPopupMenu * p ) \fC[virtual]\fR"
+.SH "void QMotifStyle::polish ( QWidget * w ) \fC[virtual]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .PP
 Reimplemented from QStyle.
@@ -161,7 +154,7 @@ If the argument is FALSE, then the style will polish the application's color pal
 .PP
 The effect will show up the next time a application palette is set via QApplication::setPalette(). The current color palette of the application remains unchanged.
 .PP
-See also: QStyle::polish(, QPalette& and ).
+See also QStyle::polish(, QPalette& and ).
 .SH "int QMotifStyle::sliderLength () const \fC[virtual]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .PP
@@ -170,10 +163,8 @@ Reimplemented from QStyle.
 Reimplemented for internal reasons; the API is not affected.
 .PP
 Reimplemented from QStyle.
-.SH "void QMotifStyle::tabbarMetrics ( const QTabBar * t, int & hframe, int & vframe, int & overlap ) \fC[virtual]\fR"
+.SH "void QMotifStyle::tabbarMetrics ( const QTabBar * t, int & hframe, int & vframe, int & overlap )"
 Reimplemented for internal reasons; the API is not affected.
-.PP
-Reimplemented from QStyle.
 .SH "bool QMotifStyle::useHighlightColors () const"
 Returns whether the style treats the highlight colors of the palette
 Motif-like, which is a simple inversion between the base and the
@@ -181,7 +172,7 @@ text color. The default is FALSE.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qmotifstyle.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

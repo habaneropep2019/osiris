@@ -1,34 +1,46 @@
 /****************************************************************************
-** $Id: qt/extensions/opengl/src/qgl.h   2.1.1   edited 2000-05-19 $
+** $Id: qt/src/opengl/qgl.h   2.2.0   edited 2000-08-25 $
 **
 ** Definition of OpenGL classes for Qt
 **
 ** Created : 970112
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the opengl module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition licenses may use this
+** file in accordance with the Qt Commercial License Agreement provided
+** with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #ifndef QGL_H
 #define QGL_H
 
 
-#define QGL_VERSION	440
-#define QGL_VERSION_STR	"4.4"
+#define QGL_VERSION	450
+#define QGL_VERSION_STR	"4.5"
 
 const char *qGLVersion();
 
@@ -52,14 +64,14 @@ const char *qGLVersion();
 #include <GL/gl.h>
 #include <GL/glu.h>
 
-class QColorMap;
+class QGLColorMap;
 class QPixmap;
 #if defined(Q_GLX)
 class QGLOverlayWidget;
 #endif
 
 // Namespace class:
-class QGL
+class Q_EXPORT QGL
 {
 public:
     enum FormatOption {
@@ -86,7 +98,7 @@ public:
 
 
 
-class QGLFormat : public QGL
+class Q_EXPORT QGLFormat : public QGL
 {
 public:
     QGLFormat();
@@ -136,7 +148,7 @@ private:
 
 
 
-class QGLContext : public QGL
+class Q_EXPORT QGLContext : public QGL
 {
 public:
     QGLContext( const QGLFormat& format, QPaintDevice* device );
@@ -151,7 +163,7 @@ public:
     virtual void	setFormat( const QGLFormat& format );
 
     virtual void	makeCurrent();
-    virtual void	swapBuffers();
+    virtual void	swapBuffers() const;
 
     QPaintDevice*	device() const;
 
@@ -184,7 +196,7 @@ protected:
     HDC			dc;
     WId			win;
     int			pixelFormatId;
-    QColorMap*		cmap;
+    QGLColorMap*		cmap;
 #elif defined(Q_GLX)
     void*		vi;
     void*		cx;
@@ -213,7 +225,7 @@ private:	// Disabled copy constructor and operator=
 
 
 
-class QGLWidget : public QWidget, public QGL
+class Q_EXPORT QGLWidget : public QWidget, public QGL
 {
     Q_OBJECT
 public:
@@ -234,12 +246,12 @@ public:
     virtual void	swapBuffers();
 
     QGLFormat		format() const;
-#ifndef QT_NO_COMPAT
+#if 1
     virtual void	setFormat( const QGLFormat& format ); // OBSOLETE
 #endif
 
     const QGLContext*	context() const;
-#ifndef QT_NO_COMPAT
+#if 1
     virtual void	setContext( QGLContext* context,
 				    const QGLContext* shareContext = 0,
 				    bool deleteOldContext = TRUE ); // OBSOLETE
@@ -252,6 +264,8 @@ public:
     const QGLContext*	overlayContext() const;
 
     void		setMouseTracking( bool enable );
+
+    static QImage	convertToGLFormat( const QImage& img );
 
 public slots:
     virtual void	updateGL();

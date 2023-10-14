@@ -1,27 +1,39 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qmetaobject.h   2.1.1   edited 2000-05-09 $
+** $Id: qt/src/kernel/qmetaobject.h   2.2.0   edited 2000-08-25 $
 **
 ** Definition of QMetaObject class
 **
 ** Created : 930419
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the kernel module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #ifndef QMETAOBJECT_H
 #define QMETAOBJECT_H
@@ -33,10 +45,14 @@
 
 class QObject;
 
-struct QMetaData				// member function meta data
+struct QMetaData				// - member function meta data
 {						//   for signal and slots
     const char *name;				// - member name
     QMember ptr;				// - member pointer
+    enum Access { Private, Protected, Public };
+    /* ### add this in 3.0
+       Access access;				// - access permission
+    */
 };
 
 
@@ -52,26 +68,28 @@ struct QMetaEnum 				// enumerator meta data
 	int value;
     };
     Item *items;				// - the name/value pairs
-    bool set;					// Wether enum has to be treated as a set
+    bool set;					// whether enum has to be treated as a set
 };
 
+#ifndef QT_NO_PROPERTIES
 class Q_EXPORT QMetaProperty 			// property meta data
 {
 public:
     QMetaProperty();
     ~QMetaProperty();
 
-    const char 	*type() const { return t; }		// type of the property
-    const char*	name() const { return n; }		// name of the property
+    const char 	*type() const { return t; }	// type of the property
+    const char*	name() const { return n; }	// name of the property
 
-    bool writeable() const;
+    bool writable() const;
+    bool writeable() const;			// ### remove in 3.0
     bool isValid() const;
 
     bool isSetType() const;
     bool isEnumType() const;
     QStrList enumKeys() const;			// enumeration names
 
-    int keyToValue( const char* key ) const; 		// enum and set conversion functions
+    int keyToValue( const char* key ) const; 	// enum and set conversion functions
     const char* valueToKey( int value ) const;
     int keysToValue( const QStrList& keys ) const;
     QStrList valueToKeys( int value ) const;
@@ -98,7 +116,8 @@ public:
 	UnresolvedStored     = 0x00000008,
 	UnresolvedDesignable = 0x00000010,
 	NotDesignable        = 0x00000020,
-	NotStored            = 0x00000040
+	NotStored            = 0x00000040,
+	StdSet 	             = 0x00000080 
     };
 
     bool testFlags( uint f ) const;
@@ -108,6 +127,7 @@ public:
 private:
     uint flags;
 };
+#endif // QT_NO_PROPERTIES
 
 struct QClassInfo 				// class info meta data
 {
@@ -126,8 +146,10 @@ public:
     QMetaObject( const char *class_name, const char *superclass_name,
 		 QMetaData *slot_data,	int n_slots,
 		 QMetaData *signal_data, int n_signals,
+#ifndef QT_NO_PROPERTIES
 		 QMetaProperty *prop_data, int n_props,
 		 QMetaEnum *enum_data, int n_enums,
+#endif
 		 QClassInfo *class_info, int n_info );
 
 
@@ -156,9 +178,11 @@ public:
     QClassInfo 	*classInfo( int index, bool super = FALSE ) const;
     const char 	*classInfo( const char* name, bool super = FALSE ) const;
 
+#ifndef QT_NO_PROPERTIES
     const QMetaProperty	*property( const char* name, bool super = FALSE ) const;
     QStrList		propertyNames( bool super = FALSE ) const;
     void		resolveProperty( QMetaProperty* prop );
+#endif
 
     // static wrappers around constructors, necessary to work around a
     // Windows-DLL limitation: objects can only be deleted within a
@@ -166,16 +190,23 @@ public:
     static QMetaObject	*new_metaobject( const char *, const char *,
 					QMetaData *, int,
 					QMetaData *, int,
+#ifndef QT_NO_PROPERTIES
 					QMetaProperty *prop_data, int n_props,
 					QMetaEnum *enum_data, int n_enums,
+#endif
 					QClassInfo * class_info, int n_info );
     static QMetaObject	*new_metaobject( const char *, const char *,
 					QMetaData *, int,
 					QMetaData *, int );
     static QMetaData		*new_metadata( int );
+    static QMetaData::Access		*new_metaaccess( int ); // ### remove in 3.0
+    void set_slot_access( QMetaData::Access* ); 		// ### remove in 3.0
+    QMetaData::Access slot_access(int index, bool super = FALSE ); // ### remove in 3.0
     static QMetaEnum 		*new_metaenum( int );
     static QMetaEnum::Item 	*new_metaenum_item( int );
+#ifndef QT_NO_PROPERTIES
     static QMetaProperty 	*new_metaproperty( int );
+#endif
     static QClassInfo 		*new_classinfo( int );
 
 private:
@@ -201,6 +232,9 @@ private:	// Disabled copy constructor and operator=
 #endif
 };
 
+#ifndef QT_NO_PROPERTIES
+inline bool QMetaProperty::writable() const
+{ return set != 0; }
 inline bool QMetaProperty::writeable() const
 { return set != 0; }
 inline bool QMetaProperty::testFlags( uint f ) const
@@ -217,6 +251,7 @@ inline void QMetaProperty::setFlags( uint f )
 { flags |= (uint)f; }
 inline void QMetaProperty::clearFlags( uint f )
 { flags &= ~(uint)f; }
+#endif
 
 // ### remove 3.0 (binary compatibility with Qt-2.0.2)
 class Q_EXPORT QMetaObjectInit {

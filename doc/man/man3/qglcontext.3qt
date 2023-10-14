@@ -1,15 +1,15 @@
-.TH QGLContext 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QGLContext 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
 .ad l
 .nh
 .SH NAME
-QGLContext \- Encapsulates an OpenGL rendering context [Qt OpenGL Extension]
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
+QGLContext \- Encapsulates an OpenGL rendering context
+<h1 align=center>QGLContext Class Reference
 .br
-.SH SYNOPSIS
+<small>[ OpenGL module ]</small></h1>
 .br
 .PP
 \fC#include <qgl.h>\fR
@@ -19,13 +19,13 @@ Inherits QGL.
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQGLContext\fR ( const QGLFormat & " "format" ", QPaintDevice * device )"
+.BI "\fBQGLContext\fR ( const QGLFormat & " "format" ", QPaintDevice * device ) "
 .br
 .ti -1c
-.BI "virtual \fB~QGLContext\fR ()"
+.BI "virtual \fB~QGLContext\fR () "
 .br
 .ti -1c
-.BI "virtual bool \fBcreate\fR ( const QGLContext * " "shareContext" " = 0 )"
+.BI "virtual bool \fBcreate\fR ( const QGLContext * " "shareContext" " = 0 ) "
 .br
 .ti -1c
 .BI "bool \fBisValid\fR () const"
@@ -34,19 +34,19 @@ Inherits QGL.
 .BI "bool \fBisSharing\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBreset\fR ()"
+.BI "virtual void \fBreset\fR () "
 .br
 .ti -1c
 .BI "QGLFormat \fBformat\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetFormat\fR ( const QGLFormat & format )"
+.BI "virtual void \fBsetFormat\fR ( const QGLFormat & format ) "
 .br
 .ti -1c
-.BI "virtual void \fBmakeCurrent\fR ()"
+.BI "virtual void \fBmakeCurrent\fR () "
 .br
 .ti -1c
-.BI "virtual void \fBswapBuffers\fR ()"
+.BI "virtual void \fBswapBuffers\fR () const"
 .br
 .ti -1c
 .BI "QPaintDevice* \fBdevice\fR () const"
@@ -58,16 +58,16 @@ Inherits QGL.
 .SS "Static Public Members"
 .in +1c
 .ti -1c
-.BI "const QGLContext* \fBcurrentContext\fR ()"
+.BI "const QGLContext* \fBcurrentContext\fR () "
 .br
 .in -1c
 .SS "Protected Members"
 .in +1c
 .ti -1c
-.BI "virtual bool \fBchooseContext\fR ( const QGLContext * " "shareContext" " = 0 )"
+.BI "virtual bool \fBchooseContext\fR ( const QGLContext * " "shareContext" " = 0 ) "
 .br
 .ti -1c
-.BI "virtual void \fBdoneCurrent\fR ()"
+.BI "virtual void \fBdoneCurrent\fR () "
 .br
 .ti -1c
 .BI "bool \fBdeviceIsPixmap\fR () const"
@@ -76,21 +76,19 @@ Inherits QGL.
 .BI "bool \fBwindowCreated\fR () const"
 .br
 .ti -1c
-.BI "void \fBsetWindowCreated\fR ( bool on )"
+.BI "void \fBsetWindowCreated\fR ( bool on ) "
 .br
 .ti -1c
 .BI "bool \fBinitialized\fR () const"
 .br
 .ti -1c
-.BI "void \fBsetInitialized\fR ( bool on )"
+.BI "void \fBsetInitialized\fR ( bool on ) "
 .br
 .ti -1c
 .BI "uint \fBcolorIndex\fR ( const QColor & c ) const (internal)"
 .br
 .in -1c
 .SH DESCRIPTION
-This class is defined in the \fBQt OpenGL Extension\fR, which can be found in the \fCqt/extensions\fR directory. It is not included in the main Qt API.
-.PP
 The QGLContext class encapsulates an OpenGL rendering context.
 .PP
 An OpenGL rendering context is a complete set of OpenGL state variables.
@@ -102,7 +100,7 @@ If the underlying OpenGL/Window system cannot satisfy all the features requested
 .PP
 The context will be invalid if it was not possible to obtain a GL context at all.
 .PP
-See also: format() and isValid().
+See also format() and isValid().
 .SH "QGLContext::~QGLContext () \fC[virtual]\fR"
 Destroys the OpenGL context.
 .SH "bool QGLContext::chooseContext ( const QGLContext * shareContext = 0 = 0 ) \fC[virtual protected]\fR"
@@ -122,15 +120,15 @@ If \fIshareContext\fR points to a valid QGLContext, this method will try to esta
 .PP
 \fBImplementation note:\fR Initialization of C++ class members usually takes place in the class constructor. QGLContext is an exception because it must be simple to customize. The virtual functions chooseContext() (and chooseVisual() for X11) can be reimplemented in a subclass to select a particular context. The trouble is that virtual functions are not properly called during construction (which is indeed correct C++), hence we need a create() function.
 .PP
-See also: chooseContext(), format() and isValid().
+See also chooseContext(), format() and isValid().
 .SH "const QGLContext* QGLContext::currentContext () \fC[static]\fR"
 Returns the current context, i.e. the context to which any OpenGL commands will currently be directed to. Returns 0 if no context is current.
 .PP
-See also: makeCurrent().
+See also makeCurrent().
 .SH "QPaintDevice* QGLContext::device () const"
 Returns the paint device set for this context.
 .PP
-See also: QGLContext::QGLContext().
+See also QGLContext::QGLContext().
 .SH "bool QGLContext::deviceIsPixmap () const \fC[protected]\fR"
 Returns TRUE if the paint device of this context is a pixmap, otherwise FALSE.
 .SH "void QGLContext::doneCurrent () \fC[virtual protected]\fR"
@@ -140,7 +138,7 @@ Returns the format.
 .SH "bool QGLContext::initialized () const \fC[protected]\fR"
 Returns TRUE if this context has been initialized, i.e. if QGLWidget::initializeGL() has been performed on it.
 .PP
-See also: setInitialized().
+See also setInitialized().
 .SH "bool QGLContext::isSharing () const"
 Returns TRUE if display list sharing with another context was requested in the create() call, and the GL system was able to fulfill this request. Note that display list sharing may possibly not be supported between contexts with different formats.
 .SH "bool QGLContext::isValid () const"
@@ -156,7 +154,7 @@ The returned QColor object will generally only work as expected when passed as t
 .SH "void QGLContext::reset () \fC[virtual]\fR"
 Resets the context and makes it invalid.
 .PP
-See also: create() and isValid().
+See also create() and isValid().
 .SH "void QGLContext::setFormat ( const QGLFormat & format ) \fC[virtual]\fR"
 Sets a \fIformat\fR for this context. The context is reset.
 .PP
@@ -183,29 +181,29 @@ Call create() to create a new GL context that tries to match the new format.
         exit(); // could not create stereo context
 .fi
 .PP
-See also: format(), reset() and create().
+See also format(), reset() and create().
 .SH "void QGLContext::setInitialized ( bool on ) \fC[protected]\fR"
 Tells the context whether it has been initialized, i.e. whether QGLWidget::initializeGL() has been performed on it.
 .PP
-See also: initialized().
+See also initialized().
 .SH "void QGLContext::setWindowCreated ( bool on ) \fC[protected]\fR"
 Tells the context whether a window has already been created for it.
 .PP
-See also: windowCreated().
-.SH "void QGLContext::swapBuffers () \fC[virtual]\fR"
+See also windowCreated().
+.SH "void QGLContext::swapBuffers () const \fC[virtual]\fR"
 Swaps the screen contents with an off-screen buffer. Works only if the context is in double buffer mode.
 .PP
-See also: QGLFormat::setDoubleBuffer().
+See also QGLFormat::setDoubleBuffer().
 .SH "bool QGLContext::windowCreated () const \fC[protected]\fR"
 Returns TRUE if a window has been created for this context, otherwise FALSE.
 .PP
-See also: setWindowCreated().
+See also setWindowCreated().
 .SH "uint QGLContext::colorIndex ( const QColor & c ) const \fC[protected]\fR"
 For internal use only.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qglcontext.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

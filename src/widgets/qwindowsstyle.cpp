@@ -1,29 +1,42 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qwindowsstyle.cpp   2.1.1   edited 2000-05-22 $
+** $Id: qt/src/widgets/qwindowsstyle.cpp   2.2.0   edited 2000-08-25 $
 **
 ** Implementation of Windows-like style class
 **
 ** Created : 981231
 **
-** Copyright (C) 1998-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1998-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the widgets module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #include "qwindowsstyle.h"
+#ifndef QT_NO_STYLE_WINDOWS
 #include "qapplication.h"
 #include "qpainter.h"
 #include "qdrawutil.h" // for now
@@ -41,6 +54,7 @@
 #include "qpopupmenu.h"
 #include <limits.h>
 
+
 // NOT REVISED
 /*!
   \class QWindowsStyle qwindowsstyle.h
@@ -48,9 +62,12 @@
   \ingroup appearance
 
   This class implements the look and feel known from the Windows
-  plattform. Naturally it is also Qt's default GUI style on Windows.
+  platform. Naturally it is also Qt's default GUI style on Windows.
 */
 
+#if defined(_WS_WIN32_)
+extern Qt::WindowsVersion qt_winver;
+#endif
 
 /*!
     Constructs a QWindowsStyle
@@ -71,8 +88,9 @@ QWindowsStyle::~QWindowsStyle()
 
 void QWindowsStyle::drawIndicator( QPainter* p,
 				   int x, int y, int w, int h, const QColorGroup &g,
-				   int s, bool down, bool /*enabled*/ )
+				   int s, bool down, bool enabled )
 {
+#ifndef QT_NO_COMPLEXWIDGETS
     QBrush fill;
     if ( s == QButton::NoChange ) {
 	QBrush b = p->brush();
@@ -85,7 +103,7 @@ void QWindowsStyle::drawIndicator( QPainter* p,
     } else if ( down )
 	fill = g.brush( QColorGroup::Button );
     else
-	fill = g.brush( QColorGroup::Base );
+	fill = g.brush( enabled ? QColorGroup::Base : QColorGroup::Background );
     qDrawWinPanel( p, x, y, w, h, g, TRUE, &fill );
     if ( s != QButton::Off ) {
 	QPointArray a( 7*2 );
@@ -110,6 +128,7 @@ void QWindowsStyle::drawIndicator( QPainter* p,
 	}
 	p->drawLineSegments( a );
     }
+#endif
 }
 
 
@@ -288,16 +307,16 @@ void QWindowsStyle::drawExclusiveIndicator( QPainter* p,
 				   bool on, bool down, bool /* enabled */ )
 {
 
-    static QCOORD pts1[] = {		// dark lines
+    static const QCOORD pts1[] = {		// dark lines
 	1,9, 1,8, 0,7, 0,4, 1,3, 1,2, 2,1, 3,1, 4,0, 7,0, 8,1, 9,1 };
-    static QCOORD pts2[] = {		// black lines
+    static const QCOORD pts2[] = {		// black lines
 	2,8, 1,7, 1,4, 2,3, 2,2, 3,2, 4,1, 7,1, 8,2, 9,2 };
-    static QCOORD pts3[] = {		// background lines
+    static const QCOORD pts3[] = {		// background lines
 	2,9, 3,9, 4,10, 7,10, 8,9, 9,9, 9,8, 10,7, 10,4, 9,3 };
-    static QCOORD pts4[] = {		// white lines
+    static const QCOORD pts4[] = {		// white lines
 	2,10, 3,10, 4,11, 7,11, 8,10, 9,10, 10,9, 10,8, 11,7,
 	11,4, 10,3, 10,2 };
-    static QCOORD pts5[] = {		// inner fill
+    static const QCOORD pts5[] = {		// inner fill
 	4,2, 7,2, 9,4, 9,7, 7,9, 4,9, 2,7, 2,4 };
     p->eraseRect( x, y, w, h );
     QPointArray a( QCOORDARRLEN(pts1), pts1 );
@@ -387,6 +406,7 @@ void QWindowsStyle::drawBevelButton( QPainter *p, int x, int y, int w, int h,
 void
 QWindowsStyle::drawPushButton( QPushButton* btn, QPainter *p)
 {
+#ifndef QT_NO_COMPLEXWIDGETS
     QColorGroup g = btn->colorGroup();
     int x1, y1, x2, y2;
 
@@ -422,7 +442,8 @@ QWindowsStyle::drawPushButton( QPushButton* btn, QPainter *p)
 	    drawButton( p, x1, y1, x2-x1+1, y2-y1+1, g, TRUE, &fill );
 	    clearButton = FALSE;
 	} else {
-	    drawButton( p, x1, y1, x2-x1+1, y2-y1+1, g, btn->isOn(),
+	    if ( !btn->isFlat() )
+		drawButton( p, x1, y1, x2-x1+1, y2-y1+1, g, btn->isOn(),
 			&g.brush( QColorGroup::Button ) );
 	}
     }
@@ -438,6 +459,7 @@ QWindowsStyle::drawPushButton( QPushButton* btn, QPainter *p)
     if ( p->brush().style() != NoBrush )
 	p->setBrush( NoBrush );
 
+#endif
 }
 
 
@@ -503,6 +525,7 @@ void QWindowsStyle::tabbarMetrics( const QTabBar* t, int& hframe, int& vframe, i
 /*! \reimp */
 void QWindowsStyle::drawTab( QPainter* p,  const QTabBar* tb, QTab* t , bool selected )
 {
+#ifndef QT_NO_COMPLEXWIDGETS
     QRect r( t->r );
     if ( tb->shape()  == QTabBar::RoundedAbove ) {
 	p->setPen( tb->colorGroup().midlight() );
@@ -585,7 +608,7 @@ void QWindowsStyle::drawTab( QPainter* p,  const QTabBar* tb, QTab* t , bool sel
     } else {
 	QCommonStyle::drawTab( p, tb, t, selected );
     }
-
+#endif
 }
 
 /*! \reimp */
@@ -603,6 +626,7 @@ void QWindowsStyle::drawTabMask( QPainter* p,  const QTabBar* tb, QTab* t, bool 
  */
 void QWindowsStyle::scrollBarMetrics( const QScrollBar* sb, int &sliderMin, int &sliderMax, int &sliderLength, int&buttonDim )
 {
+#ifndef QT_NO_COMPLEXWIDGETS
     int maxLength;
     int b = 0;
     int length = HORIZONTAL ? sb->width()  : sb->height();
@@ -628,7 +652,7 @@ void QWindowsStyle::scrollBarMetrics( const QScrollBar* sb, int &sliderMin, int 
 	    sliderLength = maxLength;
     }
     sliderMax = sliderMin + maxLength - sliderLength;
-
+#endif
 }
 
 
@@ -636,6 +660,7 @@ void QWindowsStyle::scrollBarMetrics( const QScrollBar* sb, int &sliderMin, int 
  */
 void QWindowsStyle::drawScrollBarControls( QPainter* p, const QScrollBar* sb, int sliderStart, uint controls, uint activeControl )
 {
+#ifndef QT_NO_COMPLEXWIDGETS
 #define ADD_LINE_ACTIVE ( activeControl == AddLine )
 #define SUB_LINE_ACTIVE ( activeControl == SubLine )
     QColorGroup g  = sb->colorGroup();
@@ -743,7 +768,7 @@ void QWindowsStyle::drawScrollBarControls( QPainter* p, const QScrollBar* sb, in
 	drawFocusRect(p, QRect(sliderR.x()+2, sliderR.y()+2,
 			       sliderR.width()-5, sliderR.height()-5), g,
 		      &sb->backgroundColor());
-
+#endif
 }
 
 /*!\reimp
@@ -760,6 +785,7 @@ void QWindowsStyle::drawSlider( QPainter *p,
 			     const QColorGroup &g,
 			     Orientation orient, bool tickAbove, bool tickBelow )
 {
+#ifndef QT_NO_COMPLEXWIDGETS    
     // 4444440
     // 4333310
     // 4322210
@@ -917,6 +943,7 @@ void QWindowsStyle::drawSlider( QPainter *p,
 	    p->drawLine( x2, y2-1, x2+d, y2-1-d);
 	    break;
     }
+#endif
 }
 
 /*!
@@ -1023,7 +1050,7 @@ int QWindowsStyle::maximumSliderDragDistance() const
 
 int QWindowsStyle::splitterWidth() const
 {
-    return 6;
+    return QMAX( 6, QApplication::globalStrut().width() );
 }
 
 
@@ -1052,10 +1079,12 @@ static const int windowsCheckMarkWidth = 12;       // checkmarks width on window
 */
 void QWindowsStyle::polishPopupMenu( QPopupMenu* p)
 {
+#ifndef QT_NO_COMPLEXWIDGETS
     p->setMouseTracking( TRUE );
     if ( !p->testWState( WState_Polished ) )
 	p->setCheckable( TRUE );
     p->setLineWidth( 2 );
+#endif
 }
 
 
@@ -1066,23 +1095,23 @@ void QWindowsStyle::drawCheckMark( QPainter *p, int x, int y, int w, int h,
 				   const QColorGroup &g,
 				   bool act, bool dis )
 {
-    const int markW = 7;
-    const int markH = 7;
+    const int markW = w > 7 ? 7 : w;
+    const int markH = markW;
     int posX = x + ( w - markW )/2 - 1;
     int posY = y + ( h - markH )/2;
 
     // Could do with some optimizing/caching...
-    QPointArray a( 7*2 );
+    QPointArray a( markH*2 );
     int i, xx, yy;
     xx = posX;
     yy = 3 + posY;
-    for ( i=0; i<3; i++ ) {
+    for ( i=0; i<markW/2; i++ ) {
 	a.setPoint( 2*i,   xx, yy );
 	a.setPoint( 2*i+1, xx, yy+2 );
 	xx++; yy++;
     }
     yy -= 2;
-    for ( i=3; i<7; i++ ) {
+    for ( ; i<markH; i++ ) {
 	a.setPoint( 2*i,   xx, yy );
 	a.setPoint( 2*i+1, xx, yy+2 );
 	xx++; yy--;
@@ -1106,6 +1135,7 @@ void QWindowsStyle::drawCheckMark( QPainter *p, int x, int y, int w, int h,
 */
 int QWindowsStyle::extraPopupMenuItemWidth( bool checkable, int maxpmw, QMenuItem* mi, const QFontMetrics& /*fm*/ )
 {
+#ifndef QT_NO_COMPLEXWIDGETS
     int w = 2*motifItemHMargin + 2*motifItemFrame; // a little bit of border can never harm
 
     if ( mi->isSeparator() )
@@ -1133,12 +1163,14 @@ int QWindowsStyle::extraPopupMenuItemWidth( bool checkable, int maxpmw, QMenuIte
     w += windowsRightBorder; // windows has a strange wide border on the right side
 
     return w;
+#endif
 }
 
 /*! \reimp
 */
 int QWindowsStyle::popupMenuItemHeight( bool /*checkable*/, QMenuItem* mi, const QFontMetrics& fm )
 {
+#ifndef QT_NO_COMPLEXWIDGETS    
     int h = 0;
     if ( mi->isSeparator() )			// separator height
 	h = motifSepHeight;
@@ -1153,6 +1185,7 @@ int QWindowsStyle::popupMenuItemHeight( bool /*checkable*/, QMenuItem* mi, const
     if ( mi->custom() )
 	h = QMAX( h, mi->custom()->sizeHint().height() + 2*motifItemVMargin + 2*motifItemFrame );
     return h;
+#endif
 }
 
 /*! \reimp
@@ -1161,14 +1194,21 @@ void QWindowsStyle::drawPopupMenuItem( QPainter* p, bool checkable, int maxpmw, 
 				       const QPalette& pal,
 				       bool act, bool enabled, int x, int y, int w, int h)
 {
+#ifndef QT_NO_COMPLEXWIDGETS    
     const QColorGroup & g = pal.active();
     bool dis	  = !enabled;
     QColorGroup itemg = dis ? pal.disabled() : pal.active();
 
-    if ( checkable )
-	maxpmw = QMAX( maxpmw, 12 ); // space for the checkmarks
-    int checkcol	  =     maxpmw;
+    if ( checkable ) {
+#if defined(_WS_WIN32_)
+	if ( qt_winver == Qt::WV_2000 || qt_winver == Qt::WV_98 )
+	    maxpmw = QMAX( maxpmw, 16);
+	else
+#endif
+	    maxpmw = QMAX( maxpmw, 12 ); // space for the checkmarks
+    }
 
+    int checkcol	  =     maxpmw;
 
     if ( mi && mi->isSeparator() ) {			// draw separator
 	p->setPen( g.dark() );
@@ -1298,4 +1338,7 @@ void QWindowsStyle::drawPopupMenuItem( QPainter* p, bool checkable, int maxpmw, 
 			       dim, dim, g, mi->isEnabled() );
 	}
     }
+#endif
 }
+
+#endif

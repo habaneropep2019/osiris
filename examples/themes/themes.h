@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: qt/examples/themes/themes.h   2.1.1   edited 2000-03-20 $
+** $Id: qt/examples/themes/themes.h   2.2.0   edited 2000-08-31 $
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -26,7 +26,7 @@ public:
 protected:
     QTabWidget *tabwidget;
 
-    int sWood, sMetal, sPlatinum, sWindows, sCDE, sMotif;
+    int sWood, sMetal, sPlatinum, sWindows, sCDE, sMotif, sMotifPlus;
 
 protected slots:
     void styleWood();
@@ -35,6 +35,7 @@ protected slots:
     void styleWindows();
     void styleCDE();
     void styleMotif();
+    void styleMotifPlus();
 
     void about();
     void aboutQt();

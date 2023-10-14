@@ -1,29 +1,43 @@
 /****************************************************************************
-** $Id: qt/src/dialogs/qinputdialog.cpp   2.1.1   edited 2000-03-24 $
+** $Id: qt/src/dialogs/qinputdialog.cpp   2.2.0   edited 2000-08-25 $
 **
 ** Implementation of QInputDialog class
 **
 ** Created : 991212
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the dialogs module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #include "qinputdialog.h"
+
+#ifndef QT_NO_INPUTDIALOG
 
 #include <qlayout.h>
 #include <qlabel.h>
@@ -57,7 +71,7 @@ public:
   what he/she should input.
 
   In this Qt version only the 4 static convenience functions
-  getText(), getInteger(), getDouble() and getInteger() of QInputDialog
+  getText(), getInteger(), getDouble() and getItem() of QInputDialog
   are available.
 
   Use it like this:
@@ -88,7 +102,7 @@ public:
   the QLineEdit can be accessed.
   <li>\c SpinBox - A QSpinBox is used for taking the input, so a decimal
   input can be done. Using spinBox() the QSpinBox can be accessed.
-  <li>\c ComboBox - A readonly QComboBox is used for taking the input,
+  <li>\c ComboBox - A read-only QComboBox is used for taking the input,
   so one item of a list can be chosen. Using comboBox() the QComboBox
   can be accessed.
   <li>\c EditableComboBox - An editable QComboBox is used for taking the input,
@@ -268,9 +282,22 @@ QInputDialog::~QInputDialog()
 QString QInputDialog::getText( const QString &caption, const QString &label, const QString &text,
 			      bool *ok, QWidget *parent, const char *name )
 {
+    return getText( caption, label, QLineEdit::Normal, text, ok, parent, name );
+}
+
+/*!
+  Like above, but accepts an a \a mode which the line edit will use to display text.
+
+  \sa getText()
+*/
+
+QString QInputDialog::getText( const QString &caption, const QString &label, QLineEdit::EchoMode mode,
+			      const QString &text, bool *ok, QWidget *parent, const char *name )
+{
     QInputDialog *dlg = new QInputDialog( label, parent, name, TRUE, LineEdit );
     dlg->setCaption( caption );
     dlg->lineEdit()->setText( text );
+    dlg->lineEdit()->setEchoMode( mode );
     if ( !text.isEmpty() )
 	dlg->lineEdit()->selectAll();
 
@@ -381,9 +408,9 @@ double QInputDialog::getDouble( const QString &caption, const QString &label, do
   Static convenience function to let the user select an item from a string list. \a caption is the text
   which is displayed in the title bar of the dialog. \a label is the text which
   is shown to the user (it should mention to the user what he/she should input), \a list the
-  string list which is inserted into the combobox, \a current the nimber of the item which should
+  string list which is inserted into the combobox, \a current the number of the item which should
   be initially the current item, \a editable specifies if the combobox should be editable (if it is TRUE)
-  or readonly (if \a editable is FALSE), \a ok a pointer to
+  or read-only (if \a editable is FALSE), \a ok a pointer to
   a bool which will be (if not 0!) set to TRUE if the user pressed ok or to FALSE if the
   user pressed cancel, \a parent the parent widget of the dialog and \a name
   the name of it. The dialogs pops up modally!
@@ -451,3 +478,5 @@ void QInputDialog::tryAccept()
     if ( !d->lineEdit->text().isEmpty() )
 	accept();
 }
+
+#endif

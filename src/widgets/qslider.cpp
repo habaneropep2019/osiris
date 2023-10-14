@@ -1,34 +1,47 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qslider.cpp   2.1.1   edited 2000-03-24 $
+** $Id: qt/src/widgets/qslider.cpp   2.2.0   edited 2000-08-25 $
 **
 ** Implementation of QSlider class
 **
 ** Created : 961019
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the widgets module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #include "qslider.h"
+#ifndef QT_NO_COMPLEXWIDGETS
 #include "qpainter.h"
 #include "qdrawutil.h"
 #include "qtimer.h"
 #include "qbitmap.h"
-
+#include "qapplication.h"
 
 static const int motifBorder = 2;
 static const int thresholdTime = 500;
@@ -150,10 +163,6 @@ void QSlider::init()
     track = TRUE;
     ticks = NoMarks;
     tickInt = 0;
-    if ( style() == MotifStyle )
-	setBackgroundMode( PaletteMid );
-    else
-	setBackgroundMode( PaletteBackground );
     setFocusPolicy( TabFocus  );
     initTicks();
 }
@@ -315,10 +324,6 @@ void QSlider::resizeEvent( QResizeEvent * )
 
 void QSlider::setPalette( const QPalette &p )
 {
-    if ( style() == MotifStyle )
-	setBackgroundMode( PaletteMid );
-    else
-	setBackgroundMode( PaletteBackground );
     QWidget::setPalette( p );
 }
 
@@ -389,8 +394,6 @@ QRect QSlider::sliderRect() const
 
 void QSlider::paintSlider( QPainter *p, const QColorGroup &g, const QRect &r )
 { //####### should this one be removed? private? non-virtual?
-    QBrush fill = g.brush( QColorGroup::Button );
-
     QPoint bo = p->brushOrigin();
     p->setBrushOrigin(r.topLeft());
 
@@ -456,27 +459,30 @@ void QSlider::paintEvent( QPaintEvent * )
     QPainter p( this );
     const QRect & sliderR = sliderRect();
     const QColorGroup & g = colorGroup();
-    {
-	int mid = thickness()/2;
-	if ( ticks & Above )
-	    mid += style().sliderLength() / 8;
-	if ( ticks & Below )
-	    mid -= style().sliderLength() / 8;
-	if ( orient == Horizontal ) {
-	    style().drawSliderGroove(&p, 0, tickOffset, width(), thickness(),
+    int mid = thickness()/2;
+    if ( ticks & Above )
+	mid += style().sliderLength() / 8;
+    if ( ticks & Below )
+	mid -= style().sliderLength() / 8;
+    if ( orient == Horizontal ) {
+	style().drawSliderGroove(&p, 0, tickOffset, width(), thickness(),
 				     g, mid, Horizontal );
-	    p.fillRect( 0, 0, width(), tickOffset, g.background() );
-	    p.fillRect( 0, tickOffset + thickness(),
-			width(), height()/*###*/, g.background() );
-	}
-	else {
-	    style().drawSliderGroove( &p, tickOffset, 0, thickness(), height(),
-				      g, mid, Vertical );
-	    p.fillRect( 0, 0,  tickOffset, height(), g.background() );
-	    p.fillRect( tickOffset + thickness(), 0,
-			width()/*###*/, height(), g.background() );
-	}
+// 	    p.fillRect( 0, 0, width(), tickOffset, g.background() );
+// 	    p.fillRect( 0, tickOffset + thickness(),
+// 			width(), height()/*###*/, g.background() );
+	erase( 0, 0, width(), tickOffset );
+	erase( 0, tickOffset + thickness(), width(), height() );
     }
+    else {
+	style().drawSliderGroove( &p, tickOffset, 0, thickness(), height(),
+				      g, mid, Vertical );
+// 	    p.fillRect( 0, 0,  tickOffset, height(), g.background() );
+// 	    p.fillRect( tickOffset + thickness(), 0,
+// 			width()/*###*/, height(), g.background() );
+	erase( 0, 0,  tickOffset, height() );
+	erase( tickOffset + thickness(), 0, width()/*###*/, height() );
+    }
+
     int interval = tickInt;
     if ( interval <= 0 ) {
 	interval = lineStep();
@@ -524,7 +530,6 @@ void QSlider::updateMask()
 	QPainter p( &bm, this );
 	QRect sliderR = sliderRect();
 	QColorGroup g(color1, color1, color1, color1, color1, color1, color1, color1, color0);
-	QBrush fill (color1);
 	int mid = tickOffset + thickness()/2;
 	if ( ticks & Above )
 	    mid += style().sliderLength() / 8;
@@ -845,7 +850,8 @@ QSize QSlider::sizeHint() const
 {
     constPolish();
     const int length = 84;
-    int thick = style() == MotifStyle ? 24 : 16;
+    //    int thick = style() == MotifStyle ? 24 : 16;
+    int thick = style().sliderThickness();
     const int tickSpace = 5;
 
     if ( ticks & Above )
@@ -855,9 +861,9 @@ QSize QSlider::sizeHint() const
     if ( style() == WindowsStyle && ticks != Both && ticks != NoMarks )
 	thick += style().sliderLength() / 4;	    // pointed slider
     if ( orient == Horizontal )
-	return QSize( length, thick );
+	return QSize( length, thick ).expandedTo( QApplication::globalStrut() );
     else
-	return QSize( thick, length );
+	return QSize( thick, length ).expandedTo( QApplication::globalStrut() );
 }
 
 
@@ -921,19 +927,12 @@ int QSlider::thickness() const
     return thick;
 }
 
-/*!
-  Using \a p, draws tickmarks at a distance of \a dist from the edge
-  of the widget, using \a w pixels and with an interval of \a i.
+/*! \obsolete
+  \overload
 
-  Do not reimplement this function, it's mainly there for
-  compatibility reasons. It simply calls
-
-  drawTicks( QPainter *p, const QColorGroup& g, int dist, int w, int i ) const
-
-  which is the right function to overload.
-
-  \sa colorGroup(), drawTicks( QPainter *p, const QColorGroup& g, int dist, int w, int i ) const,
-  paintSlider
+  Do not reimplement this function, it's only there for compatibility
+  reasons. It simply calls the other version with colorGroup() as the
+  second argument.
 */
 
 void QSlider::drawTicks( QPainter *p, int dist, int w, int i ) const
@@ -1037,10 +1036,6 @@ void QSlider::setTickInterval( int i )
  */
 void QSlider::styleChange( QStyle& old )
 {
-    if ( style() == MotifStyle )
-	setBackgroundMode( PaletteMid );
-    else
-	setBackgroundMode( PaletteBackground );
     QWidget::styleChange( old );
 }
 
@@ -1131,3 +1126,4 @@ int QSlider::value() const
 {
     return QRangeControl::value();
 }
+#endif

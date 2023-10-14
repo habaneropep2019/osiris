@@ -1,5 +1,5 @@
-.TH QCustomMenuItem 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QCustomMenuItem 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QCustomMenuItem \- Abstract base class for custom menu items in popup menus
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -19,10 +17,10 @@ Inherits Qt.
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQCustomMenuItem\fR ()"
+.BI "\fBQCustomMenuItem\fR () "
 .br
 .ti -1c
-.BI "virtual \fB~QCustomMenuItem\fR ()"
+.BI "virtual \fB~QCustomMenuItem\fR () "
 .br
 .ti -1c
 .BI "virtual bool \fBfullSpan\fR () const"
@@ -31,21 +29,21 @@ Inherits Qt.
 .BI "virtual bool \fBisSeparator\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetFont\fR ( const QFont & font )"
+.BI "virtual void \fBsetFont\fR ( const QFont & font ) "
 .br
 .ti -1c
-.BI "virtual void \fBpaint\fR ( QPainter * " "p" ", const QColorGroup & " "cg" ", bool " "act" ", bool " "enabled" ", int " "x" ", int " "y" ", int " "w" ", int h )"
+.BI "virtual void \fBpaint\fR ( QPainter * " "p" ", const QColorGroup & " "cg" ", bool " "act" ", bool " "enabled" ", int " "x" ", int " "y" ", int " "w" ", int h ) "
 .br
 .ti -1c
-.BI "virtual QSize \fBsizeHint\fR ()"
+.BI "virtual QSize \fBsizeHint\fR () "
 .br
 .in -1c
 .SH DESCRIPTION
 The QCustomMenuItem class is an abstract base class for custom menu items in popup menus.
 .PP
-A custom menu item is a menu item that is defined by two purely virtual functions, paint() and sizeHint(). The size hint tells the menu how much space it needs to reserve for this item, wheras paint is called whenever the item needs painting.
+A custom menu item is a menu item that is defined by two purely virtual functions, paint() and sizeHint(). The size hint tells the menu how much space it needs to reserve for this item, whereas paint is called whenever the item needs painting.
 .PP
-This simply mechanism gives applications the possibility to create all kinds of application specific menu items. Examples are items showing different fonts in a wordprocessor, or menus that allow the selection of drawing utilities in a vector drawing program.
+This simply mechanism gives applications the possibility to create all kinds of application specific menu items. Examples are items showing different fonts in a word processor, or menus that allow the selection of drawing utilities in a vector drawing program.
 .PP
 A custom item is inserted into a popup menu with QPopupMenu::insertItem().
 .PP
@@ -53,20 +51,20 @@ Per default, a custom item can also have an icon set and/or an accelerator key. 
 .PP
 If you want the custom item to be treated as a separator only, reimplement isSeparator() to return TRUE.
 .PP
-Note that you can also insert pixmaps or bitmaps as items into a popup menu. A custom menu item, however, offers even more flexibility and - which is especially implortant under windows style - the possibility to draw the item with a different color when it is highlighted.
+Note that you can also insert pixmaps or bitmaps as items into a popup menu. A custom menu item, however, offers even more flexibility and - which is especially important under windows style - the possibility to draw the item with a different color when it is highlighted.
 .PP
 menu/menu.cpp shows a simply example how custom menu items can be used.
 .PP
 <img src=qpopmenu-fancy.png>
 .PP
-See also: QMenuData and QPopupMenu.
+See also QMenuData and QPopupMenu.
 .SH MEMBER FUNCTION DOCUMENTATION
 .SH "QCustomMenuItem::QCustomMenuItem ()"
 Constructs a QCustomMenuItem.
 .SH "QCustomMenuItem::~QCustomMenuItem () \fC[virtual]\fR"
 Destructs a QCustomMenuItem.
 .SH "bool QCustomMenuItem::fullSpan () const \fC[virtual]\fR"
-Returns whether this item wants to span the entire popup menu width. The default is FALSE, meaning that the menu may show an icon and/or an accelerator key for this itemas well.
+Returns whether this item wants to span the entire popup menu width. The default is FALSE, meaning that the menu may show an icon and/or an accelerator key for this item as well.
 .SH "bool QCustomMenuItem::isSeparator () const \fC[virtual]\fR"
 Returns whether this item is just a separator.
 .SH "void QCustomMenuItem::paint ( QPainter * p, const QColorGroup & cg, bool act, bool enabled, int x, int y, int w, int h ) \fC[virtual]\fR"
@@ -82,7 +80,7 @@ Returns the size hint of this item.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qcustommenuitem.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

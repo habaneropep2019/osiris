@@ -1,29 +1,44 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qsizegrip.cpp   2.1.1   edited 2000-03-24 $
+** $Id: qt/src/kernel/qsizegrip.cpp   2.2.0   edited 2000-08-25 $
 **
 ** Implementation of QSizeGrip class
 **
 ** Created : 980119
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the kernel module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #include "qsizegrip.h"
+
+#ifndef QT_NO_SIZEGRIP
+
 #include "qpainter.h"
 #include "qapplication.h"
 
@@ -60,7 +75,7 @@ static QWidget* qt_sizegrip_workspace( QWidget* w )
 // NOT REVISED
 /*! \class QSizeGrip qsizegrip.h
 
-  \brief The QSizeGrip class provides corner-grip for resizeing a top level
+  \brief The QSizeGrip class provides corner-grip for resizing a top level
 	    window.
 
   \ingroup application
@@ -89,8 +104,10 @@ static QWidget* qt_sizegrip_workspace( QWidget* w )
 QSizeGrip::QSizeGrip( QWidget * parent, const char* name )
     : QWidget( parent, name )
 {
+#ifndef QT_NO_CURSOR
     setCursor( sizeFDiagCursor );
-
+#endif
+    setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Fixed ) );
 #if defined(_WS_X11_)
     if ( !qt_sizegrip_workspace( this ) ) {
 	WId id = winId();
@@ -122,12 +139,12 @@ QSizeGrip::~QSizeGrip()
 */
 QSize QSizeGrip::sizeHint() const
 {
-    return QSize( 13, 13 );
+    return QSize( 13, 13 ).expandedTo( QApplication::globalStrut() );
 }
 
 /*!
   Paints the resize grip - small diagonal textured lines in the
-  lower righthand corner.
+  lower right-hand corner.
 */
 void QSizeGrip::paintEvent( QPaintEvent *e )
 {
@@ -190,6 +207,12 @@ void QSizeGrip::mouseMoveEvent( QMouseEvent * e )
 	w = 1;
     if ( h < 1 )
 	h = 1;
+    QSize ms( tlw->minimumSizeHint() );
+    ms = ms.expandedTo( minimumSize() );
+    if ( w < ms.width() )
+	w = ms.width();
+    if ( h < ms.height() )
+	h = ms.height();
     tlw->resize( w, h );
 #ifdef _WS_WIN_
     MSG msg;
@@ -201,11 +224,12 @@ void QSizeGrip::mouseMoveEvent( QMouseEvent * e )
 
 
 
-/*!
-  The size grip has a fixed height, but can grow horizontally.
+/*!\reimp
 */
-
 QSizePolicy QSizeGrip::sizePolicy() const
 {
-    return QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Fixed );
+    //### removeme 3.0
+    return QWidget::sizePolicy();
 }
+
+#endif //QT_NO_SIZEGRIP

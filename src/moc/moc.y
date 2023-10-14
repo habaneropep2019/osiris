@@ -1,25 +1,37 @@
 /****************************************************************************
-** $Id: qt/src/moc/moc.y   2.1.1   edited 2000-03-24 $
+** $Id: qt/src/moc/moc.y   2.2.0   edited 2000-08-31 $
 **
 ** Parser and code generator for meta object compiler
 **
 ** Created : 930417
 **
-** Copyright (C) 1993-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the widgets module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
+**
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
 **
 ** --------------------------------------------------------------------------
 **
@@ -56,7 +68,7 @@ void yyerror( const char *msg );
 
 static QCString rmWS( const char * );
 
-enum AccessPerm { _PRIVATE, _PROTECTED, _PUBLIC };
+enum Access { Private, Protected, Public };
 
 
 struct Argument					// single arg meta data
@@ -80,7 +92,7 @@ public:
 
 struct Function					// member function meta data
 {						//   used for signals and slots
-    AccessPerm accessPerm;
+    Access access;
     QCString    qualifier;			// const or volatile
     QCString    name;
     QCString    type;
@@ -88,6 +100,13 @@ struct Function					// member function meta data
     ArgList   *args;
     Function() { args=0; }
    ~Function() { delete args; }
+    const char* accessAsString() {
+	switch ( access ) {
+	case Private: return "Private";
+	case Protected: return "Protected";
+	default: return "Public";
+	}
+    }
 };
 
 class FuncList : public QList<Function> {	// list of member functions
@@ -147,6 +166,13 @@ struct Property
     Specification sspec;
     Specification gspec;
 
+    bool stdSet () {
+	QCString s = "set";
+	s += toupper( name[0] );
+	s +=name.mid(1);
+	return s ==set;
+    }
+
     static const char* specToString( Specification s )
     {
 	switch ( s ) {
@@ -190,7 +216,7 @@ public:
   This table is copied from qvariant.cpp. If you change
   one, change both.
 */
-static const int ntypes = 25;
+static const int ntypes = 26;
 static const char* const type_map[ntypes] =
 {
     0,
@@ -217,7 +243,8 @@ static const char* const type_map[ntypes] =
     "QPointArray",
     "QRegion",
     "QBitmap",
-    "QCursor"
+    "QCursor",
+    "QSizePolicy"
 };
 
 int qvariant_nameToType( const char* name )
@@ -263,8 +290,8 @@ bool	   templateClassOld;			// previous class is a template
 ArgList	  *tmpArgList;				// current argument list
 Function  *tmpFunc;				// current member function
 Enum      *tmpEnum;				// current enum
-AccessPerm tmpAccessPerm;			// current access permission
-AccessPerm subClassPerm;			// current access permission
+Access tmpAccess;			// current access permission
+Access subClassPerm;			// current access permission
 
 bool	   Q_OBJECTdetected;			// TRUE if current class
 						// contains the Q_OBJECT macro
@@ -280,7 +307,7 @@ int	   tmpYYStart;				// Used to store the lexers current mode
 int	   tmpYYStart2;				// Used to store the lexers current mode
 						// (if tmpYYStart is already used)
 
-const int  formatRevision = 7;			// moc output format revision
+const int  formatRevision = 9;			// moc output format revision
 
 %}
 
@@ -290,7 +317,7 @@ const int  formatRevision = 7;			// moc output format revision
     int		int_val;
     double	double_val;
     char       *string;
-    AccessPerm	access;
+    Access	access;
     Function   *function;
     ArgList    *arg_list;
     Argument   *arg;
@@ -790,7 +817,7 @@ obj_member_list:	  obj_member_list obj_member_area
 			;
 
 
-qt_access_specifier:	  access_specifier	{ tmpAccessPerm = $1; }
+qt_access_specifier:	  access_specifier	{ tmpAccess = $1; }
 			| SLOTS	      { moc_err( "Missing access specifier"
 						   " before \"slots:\"." ); }
 			;
@@ -800,7 +827,7 @@ obj_member_area:	  qt_access_specifier	{ BEGIN QT_DEF; }
 			| SIGNALS		{ BEGIN QT_DEF; }
 			  ':'  opt_signal_declarations
 			| Q_OBJECT		{
-			      if ( tmpAccessPerm )
+			      if ( tmpAccess )
 				  moc_warn("Q_OBJECT is not in the private"
 					   " section of the class.\n"
 					   "Q_OBJECT is a macro that resets"
@@ -821,7 +848,7 @@ obj_member_area:	  qt_access_specifier	{ BEGIN QT_DEF; }
 						BEGIN tmpYYStart;
 				   	   }
 			  opt_property_candidates
-			| Q_CLASSINFO { tmpYYStart = YY_START; BEGIN IN_PROPERTY; }
+			| Q_CLASSINFO { tmpYYStart = YY_START; BEGIN IN_CLASSINFO; }
 			  '(' STRING ',' STRING ')'
 				  {
 				      infos.append( new ClassInfo( $4, $6 ) );
@@ -845,7 +872,7 @@ obj_member_area:	  qt_access_specifier	{ BEGIN QT_DEF; }
 slot_area:		  SIGNALS ':'	{ moc_err( "Signals cannot "
 						 "have access specifiers" ); }
 			| SLOTS	  ':' opt_slot_declarations
-			| ':'		{ if ( tmpAccessPerm == _PUBLIC && Q_PROPERTYdetected )
+			| ':'		{ if ( tmpAccess == Public && Q_PROPERTYdetected )
                                                   BEGIN QT_DEF;
                                               else
                                                   BEGIN IN_CLASS;
@@ -925,9 +952,9 @@ base_specifier:		  complete_class_name			       {$$=$1;}
 			| access_specifier qt_macro_name	       {$$=$2;}
 			;
 
-access_specifier:	  PRIVATE		{ $$=_PRIVATE; }
-			| PROTECTED		{ $$=_PROTECTED; }
-			| PUBLIC		{ $$=_PUBLIC; }
+access_specifier:	  PRIVATE		{ $$=Private; }
+			| PROTECTED		{ $$=Protected; }
+			| PUBLIC		{ $$=Public; }
 			;
 
 operator_name:		  decl_specs_opt IDENTIFIER ptr_operators_opt
@@ -1087,7 +1114,7 @@ opt_komma:		  /*empty*/
 
 enum_tail:		  IDENTIFIER '{'   enum_list opt_komma
 			  '}'   { BEGIN QT_DEF;
-				  if ( tmpAccessPerm == _PUBLIC) {
+				  if ( tmpAccess == Public) {
 				      tmpEnum->name = $1;
 				      addEnum();
 				  }
@@ -1105,9 +1132,9 @@ enum_list:		  /* empty */
 			| enum_list ',' enumerator
 			;
 
-enumerator:		  IDENTIFIER { if ( tmpAccessPerm == _PUBLIC) tmpEnum->append( $1 ); }
+enumerator:		  IDENTIFIER { if ( tmpAccess == Public) tmpEnum->append( $1 ); }
 			| IDENTIFIER '=' { expLevel=0; }
-			  enumerator_expression {  if ( tmpAccessPerm == _PUBLIC) tmpEnum->append( $1 );  }
+			  enumerator_expression {  if ( tmpAccess == Public) tmpEnum->append( $1 );  }
 			;
 
 property:		IDENTIFIER IDENTIFIER
@@ -1152,9 +1179,9 @@ prop_statements:	  /* empty */
 			| STORED IDENTIFIER prop_statements { propStored = $2; }
 			| DESIGNABLE IDENTIFIER
 				{
-					if ( strcmp( $2, "true" ) == 0 )
+					if ( qstrcmp( $2, "true" ) == 0 )
 						propDesignable = 1;
-					else if ( strcmp( $2, "false" ) == 0 )
+					else if ( qstrcmp( $2, "false" ) == 0 )
 						propDesignable = 0;
 					else
 						moc_err( "DESIGNABLE may only be followed by 'true' or 'false'" );
@@ -1441,8 +1468,8 @@ void init()					// initialize
 
 void initClass()				 // prepare for new class
 {
-    tmpAccessPerm      = _PRIVATE;
-    subClassPerm       = _PRIVATE;
+    tmpAccess      = Private;
+    subClassPerm       = Private;
     Q_OBJECTdetected   = FALSE;
     Q_PROPERTYdetected = FALSE;
     skipClass	       = FALSE;
@@ -1584,7 +1611,7 @@ inline bool isSpace( char x )
 
 static QCString rmWS( const char *src )
 {
-    QCString result( strlen(src)+1 );
+    QCString result( qstrlen(src)+1 );
     char *d = result.data();
     char *s = (char *)src;
     char last = 0;
@@ -1680,16 +1707,16 @@ int yywrap()					// more files?
 
 char *stradd( const char *s1, const char *s2 )	// adds two strings
 {
-    char *n = new char[strlen(s1)+strlen(s2)+1];
-    strcpy( n, s1 );
+    char *n = new char[qstrlen(s1)+qstrlen(s2)+1];
+    qstrcpy( n, s1 );
     strcat( n, s2 );
     return n;
 }
 
 char *stradd( const char *s1, const char *s2, const char *s3 )// adds 3 strings
 {
-    char *n = new char[strlen(s1)+strlen(s2)+strlen(s3)+1];
-    strcpy( n, s1 );
+    char *n = new char[qstrlen(s1)+qstrlen(s2)+qstrlen(s3)+1];
+    qstrcpy( n, s1 );
     strcat( n, s2 );
     strcat( n, s3 );
     return n;
@@ -1698,8 +1725,8 @@ char *stradd( const char *s1, const char *s2, const char *s3 )// adds 3 strings
 char *stradd( const char *s1, const char *s2,
 	      const char *s3, const char *s4 )// adds 4 strings
 {
-    char *n = new char[strlen(s1)+strlen(s2)+strlen(s3)+strlen(s4)+1];
-    strcpy( n, s1 );
+    char *n = new char[qstrlen(s1)+qstrlen(s2)+qstrlen(s3)+qstrlen(s4)+1];
+    qstrcpy( n, s1 );
     strcat( n, s2 );
     strcat( n, s3 );
     strcat( n, s4 );
@@ -1709,8 +1736,8 @@ char *stradd( const char *s1, const char *s2,
 
 char *straddSpc( const char *s1, const char *s2 )
 {
-    char *n = new char[strlen(s1)+strlen(s2)+2];
-    strcpy( n, s1 );
+    char *n = new char[qstrlen(s1)+qstrlen(s2)+2];
+    qstrcpy( n, s1 );
     strcat( n, " " );
     strcat( n, s2 );
     return n;
@@ -1718,8 +1745,8 @@ char *straddSpc( const char *s1, const char *s2 )
 
 char *straddSpc( const char *s1, const char *s2, const char *s3 )
 {
-    char *n = new char[strlen(s1)+strlen(s2)+strlen(s3)+3];
-    strcpy( n, s1 );
+    char *n = new char[qstrlen(s1)+qstrlen(s2)+qstrlen(s3)+3];
+    qstrcpy( n, s1 );
     strcat( n, " " );
     strcat( n, s2 );
     strcat( n, " " );
@@ -1730,8 +1757,8 @@ char *straddSpc( const char *s1, const char *s2, const char *s3 )
 char *straddSpc( const char *s1, const char *s2,
 	      const char *s3, const char *s4 )
 {
-    char *n = new char[strlen(s1)+strlen(s2)+strlen(s3)+strlen(s4)+4];
-    strcpy( n, s1 );
+    char *n = new char[qstrlen(s1)+qstrlen(s2)+qstrlen(s3)+qstrlen(s4)+4];
+    qstrcpy( n, s1 );
     strcat( n, " " );
     strcat( n, s2 );
     strcat( n, " " );
@@ -1807,15 +1834,39 @@ void generateFuncs( FuncList *list, char *functype, int num )
 	fprintf( out, "    m%d_t%d v%d_%d = Q_AMPERSAND %s::%s;\n",
 		 num, list->at(), num, list->at(),
 		 (const char*)qualifiedClassName(), (const char*)f->name);
-    if ( list->count() )
+    if ( list->count() ) {
 	fprintf(out,"    QMetaData *%s_tbl = QMetaObject::new_metadata(%d);\n",
 		functype, list->count() );
-    for ( f=list->first(); f; f=list->next() )
+
+    }
+
+    //### remove 3.0
+    if ( qstrcmp( functype, "slot" )  == 0 ) {
+	if ( list->count() )
+	    fprintf(out,"    QMetaData::Access *%s_tbl_access = QMetaObject::new_metaaccess(%d);\n",
+		    functype, list->count() );
+	else
+	    fprintf(out,"    QMetaData::Access *%s_tbl_access = 0;\n",
+		    functype );
+    }
+
+
+    for ( f=list->first(); f; f=list->next() ) {
 	fprintf( out, "    %s_tbl[%d].name = \"%s\";\n",
 		 functype, list->at(), (const char*)f->type );
-    for ( f=list->first(); f; f=list->next() )
-	fprintf( out, "    %s_tbl[%d].ptr = *((QMember*)&v%d_%d);\n",
+	fprintf( out, "    %s_tbl[%d].ptr = (QMember)v%d_%d;\n",
 		 functype, list->at(), num, list->at() );
+
+/* ### do this in 3.0:
+	fprintf( out, "    %s_tbl[%d].access = QMetaData::%s;\n",
+		 functype, list->at(), f->accessAsString() );
+
+### for now:
+*/
+	if ( qstrcmp( functype, "slot" ) == 0 )
+	    fprintf( out, "    %s_tbl_access[%d] = QMetaData::%s;\n",
+		     functype, list->at(), f->accessAsString() );
+    }
 }
 
 
@@ -1868,12 +1919,14 @@ bool isEnumType( const char* type )
 void finishProps()
 {
     int entry = 0;
+    fprintf( out, "#ifndef QT_NO_PROPERTIES\n" );
     for( QListIterator<Property> it( props ); it.current(); ++it ) {
 	if ( !isPropertyType( it.current()->type ) ||
 	     it.current()->override )
 	    fprintf( out, "    metaObj->resolveProperty( &props_tbl[%d] );\n", entry );
 	++entry;
     }
+    fprintf( out, "#endif // QT_NO_PROPERTIES\n" );
 }
 
 int generateEnums()
@@ -1881,6 +1934,7 @@ int generateEnums()
     if ( enums.count() == 0 )
 	return 0;
 
+    fprintf( out, "#ifndef QT_NO_PROPERTIES\n" );
     fprintf( out, "    QMetaEnum* enum_tbl = QMetaObject::new_metaenum( %i );\n", enums.count() );
 
     int i = 0;
@@ -1902,6 +1956,7 @@ int generateEnums()
 		     i, k, (const char*)className, eit.current() );
 	}
     }
+    fprintf( out, "#endif // QT_NO_PROPERTIES\n" );
 
     return enums.count();
 }
@@ -1912,6 +1967,8 @@ int generateProps()
     if ( displayWarnings && !Q_OBJECTdetected )
 	moc_err("The declaration of the class \"%s\" contains properties"
 		" but no Q_OBJECT macro!", className.data());
+
+    fprintf( out, "#ifndef QT_NO_PROPERTIES\n" );
     //
     // Resolve and verify property access functions
     //
@@ -1959,7 +2016,7 @@ int generateProps()
 		}
 		else if ( isEnumType( p->type ) ) {
 		    if ( tmp == "int" || tmp == "uint" || tmp == "unsigned int" ) {
-			// Test wether the enum is really a set (unfortunately we dont know enums of super classes)
+			// Test wether the enum is really a set (unfortunately we don't know enums of super classes)
 			bool ok = TRUE;
 			for( QListIterator<Enum> lit( enums ); lit.current(); ++lit )
 			    if ( lit.current()->name == p->type && !lit.current()->set )
@@ -1999,7 +2056,6 @@ int generateProps()
 			     "      int %s() const\n"
 			     "      uint %s() const\n"
 			     "      unsigned int %s() const\n",
-			     (const char*) p->get,
 			     (const char*) p->get,
 			     (const char*) p->get,
 			     (const char*) p->get );
@@ -2076,7 +2132,7 @@ int generateProps()
 		    if ( tmp == "int" || tmp == "uint" || tmp == "unsigned int" ) {
 		        if ( p->oredEnum == 0 )
 			    continue;
-			// Test wether the enum is really a set (unfortunately we dont know enums of super classes)
+			// Test wether the enum is really a set (unfortunately we don't know enums of super classes)
 			bool ok = TRUE;
 			for( QListIterator<Enum> lit( enums ); lit.current(); ++lit )
 			    if ( lit.current()->name == p->type && !lit.current()->set )
@@ -2282,8 +2338,8 @@ int generateProps()
     // Create meta data
     //
     if ( props.count() )
-	fprintf( out, "    QMetaProperty *props_tbl = QMetaObject::new_metaproperty( %d );\n", props.count() );
     {
+	fprintf( out, "    QMetaProperty *props_tbl = QMetaObject::new_metaproperty( %d );\n", props.count() );
 	int count = 0;
 	int entry = 0;
 	for( QListIterator<Property> it( props ); it.current(); ++it ){
@@ -2294,19 +2350,19 @@ int generateProps()
 		     entry, (const char*) it.current()->name );
 
 	    if ( it.current()->getfunc )
-		fprintf( out, "    props_tbl[%d].get = *((QMember*)&v%d_%d);\n",
+		fprintf( out, "    props_tbl[%d].get = (QMember)v%d_%d;\n",
 			 entry, Prop_Num, count );
 	    else
 		fprintf( out, "    props_tbl[%d].get = 0;\n", entry );
 
 	    if ( it.current()->setfunc )
-		fprintf( out, "    props_tbl[%d].set = *((QMember*)&v%d_%d);\n",
+		fprintf( out, "    props_tbl[%d].set = (QMember)v%d_%d;\n",
 			 entry, Prop_Num, count + 1 );
 	    else
 		fprintf( out, "    props_tbl[%d].set = 0;\n", entry );
 
 	    if ( it.current()->resetfunc )
-		fprintf( out, "    props_tbl[%d].reset = *((QMember*)&v%d_%d);\n",
+		fprintf( out, "    props_tbl[%d].reset = (QMember)v%d_%d;\n",
 			 entry, Prop_Num, count + 2 );
 	    else
 		fprintf( out, "    props_tbl[%d].reset = 0;\n", entry );
@@ -2324,22 +2380,24 @@ int generateProps()
 		    enumpos = k;
 	    }
 
+	    QCString flags;
+	
 	    // Is it an enum of this class ?
 	    if ( enumpos != -1 )
 		fprintf( out, "    props_tbl[%d].enumData = &enum_tbl[%i];\n", entry, enumpos );
 	    // Is it an unknown enum that needs to be resolved ?
 	    else if (!isPropertyType( it.current()->type ) ) {
 		if ( it.current()->oredEnum == 1 )
-		    fprintf( out, "    props_tbl[%d].setFlags(QMetaProperty::UnresolvedSet);\n", entry );
+		    flags += "QMetaProperty::UnresolvedSet|";
 		else if ( it.current()->oredEnum == 0 )
-		    fprintf( out, "    props_tbl[%d].setFlags(QMetaProperty::UnresolvedEnum);\n", entry );
+		    flags += "QMetaProperty::UnresolvedEnum|";
 		else
-		    fprintf( out, "    props_tbl[%d].setFlags(QMetaProperty::UnresolvedEnumOrSet);\n", entry );
+		    flags +="QMetaProperty::UnresolvedEnumOrSet|";
 	    }
 
 	    // Handle STORED
 	    if ( it.current()->stored == "false" )
-		fprintf( out, "    props_tbl[%d].setFlags(QMetaProperty::NotStored);\n", entry );
+		flags +="QMetaProperty::NotStored|";
 	    else if ( !it.current()->stored.isEmpty() && it.current()->stored != "true" )
 	    {
 		fprintf( out, "    typedef bool(%s::*s3_t%d)()const;\n", (const char*)className, count );
@@ -2351,21 +2409,31 @@ int generateProps()
 
 	    // OVERRIDE but no STORED ?
 	    if ( it.current()->override && it.current()->stored.isEmpty() )
-		fprintf( out, "    props_tbl[%d].setFlags(QMetaProperty::UnresolvedStored);\n", entry );
+		flags += "QMetaProperty::UnresolvedStored|";
 
 	    // Handle DESIGNABLE
 	    if ( it.current()->designable == 0 )
-		fprintf( out, "    props_tbl[%d].setFlags(QMetaProperty::NotDesignable);\n", entry );
+		flags += "QMetaProperty::NotDesignable|";
 	    // else { Default is TRUE -> do nothing }
 
 	    // OVERRIDE but no DESIGNABLE ?
 	    if ( it.current()->override && it.current()->designable == -1 )
-		fprintf( out, "    props_tbl[%d].setFlags(QMetaProperty::UnresolvedDesignable);\n", entry );
-
+		flags += "QMetaProperty::UnresolvedDesignable|";
+	
+	    if ( it.current()->stdSet() )
+		flags += "QMetaProperty::StdSet|";
+	
+	    if (!flags.isEmpty() ) {
+		if ( flags[ (int) flags.length() - 1] == '|' )
+		    flags.remove( flags.length()-1, 1);
+		fprintf( out, "    props_tbl[%d].setFlags(%s);\n", entry, flags.data() );
+	    }
+	
 	    ++entry;
 	    count += 3;
 	}
     }
+    fprintf( out, "#endif // QT_NO_PROPERTIES\n" );
 
     return props.count();
 }
@@ -2397,7 +2465,7 @@ void generateClass()		      // generate C++ source code for a class
     char *hdr1 = "/****************************************************************************\n"
 		 "** %s meta object code from reading C++ file '%s'\n**\n";
     char *hdr2 = "** Created: %s\n"
-		 "**      by: The Qt MOC ($Id: qt/src/moc/moc.y   2.1.1   edited 2000-03-24 $)\n**\n";
+		 "**      by: The Qt MOC ($Id: qt/src/moc/moc.y   2.2.0   edited 2000-08-31 $)\n**\n";
     char *hdr3 = "** WARNING! All changes made in this file will be lost!\n";
     char *hdr4 = "*****************************************************************************/\n\n";
     int   i;
@@ -2477,7 +2545,7 @@ void generateClass()		      // generate C++ source code for a class
 //
     fprintf( out, "void %s::initMetaObject()\n{\n", (const char*)qualifiedClassName() );
     fprintf( out, "    if ( metaObj )\n\treturn;\n" );
-    fprintf( out, "    if ( strcmp(%s::className(), \"%s\") != 0 )\n"
+    fprintf( out, "    if ( qstrcmp(%s::className(), \"%s\") != 0 )\n"
 	          "\tbadSuperclassWarning(\"%s\",\"%s\");\n",
              (const char*)qualifiedSuperclassName(), (const char*)qualifiedSuperclassName(),
              (const char*)qualifiedClassName(), (const char*)qualifiedSuperclassName() );
@@ -2485,10 +2553,18 @@ void generateClass()		      // generate C++ source code for a class
     fprintf( out, "}\n\n");
 
 //
-// Generate tr member function
+// Generate tr member function ### 3.0 one function
 //
-    fprintf( out, "QString %s::tr(const char* s)\n{\n", (const char*)qualifiedClassName() );
-    fprintf( out, "    return ((QNonBaseApplication*)qApp)->translate(\"%s\",s);\n}\n\n", (const char*)qualifiedClassName() );
+    fprintf( out, "#ifndef QT_NO_TRANSLATION\n\n" );
+    fprintf( out, "QString %s::tr(const char* s)\n{\n",
+	     (const char*)qualifiedClassName() );
+    fprintf( out, "    return qApp->translate"
+	     "( \"%s\", s, 0 );\n}\n\n", (const char*)qualifiedClassName() );
+    fprintf( out, "QString %s::tr(const char* s, const char * c)\n{\n",
+	     (const char*)qualifiedClassName() );
+    fprintf( out, "    return qApp->translate"
+	     "( \"%s\", s, c );\n}\n\n", (const char*)qualifiedClassName() );
+    fprintf( out, "#endif // QT_NO_TRANSLATION\n\n" );
 
 //
 // Generate staticMetaObject member function
@@ -2540,6 +2616,7 @@ void generateClass()		      // generate C++ source code for a class
     else
 	fprintf( out, "\t0, 0,\n" );
 
+    fprintf( out, "#ifndef QT_NO_PROPERTIES\n" );
     if ( n_props )
 	fprintf( out, "\tprops_tbl, %d,\n", n_props );
     else
@@ -2549,11 +2626,17 @@ void generateClass()		      // generate C++ source code for a class
 	fprintf( out, "\tenum_tbl, %d,\n", n_enums );
     else
 	fprintf( out, "\t0, 0,\n" );
+    fprintf( out, "#endif // QT_NO_PROPERTIES\n" );
 
     if ( n_infos )
 	fprintf( out, "\tclassinfo_tbl, %d );\n", n_infos );
     else
 	fprintf( out, "\t0, 0 );\n" );
+
+
+    //### remove 3.0
+    fprintf( out, "    metaObj->set_slot_access( slot_tbl_access );\n" );
+
 //
 // Finish property array in staticMetaObject()
 //
@@ -2657,12 +2740,10 @@ void generateClass()		      // generate C++ source code for a class
 	    for ( i=0; i<=nargs; i++ ) {
 		fprintf( out, "    typedef void (QObject::*RT%d)(%s);\n",
 			 i, (const char*)typvec[i] );
-		fprintf( out, "    typedef RT%d *PRT%d;\n", i, i );
 	    }
 	} else {
 	    fprintf( out, "    typedef void (QObject::*RT)(%s);\n",
 		     (const char*)typstr);
-	    fprintf( out, "    typedef RT *PRT;\n" );
 	}
 	if ( nargs ) {
 	    for ( i=0; i<=nargs; i++ )
@@ -2681,15 +2762,23 @@ void generateClass()		      // generate C++ source code for a class
 	    fprintf( out, "\tswitch ( c->numArgs() ) {\n" );
 	    for ( i=0; i<=nargs; i++ ) {
 		fprintf( out, "\t    case %d:\n", i );
-		fprintf( out, "\t\tr%d = *((PRT%d)(c->member()));\n", i, i );
+		fprintf( out, "#ifdef Q_FP_CCAST_BROKEN\n" );
+		fprintf( out, "\t\tr%d = reinterpret_cast<RT%d>(*(c->member()));\n", i, i );
+		fprintf( out, "#else\n" );
+		fprintf( out, "\t\tr%d = (RT%d)*(c->member());\n", i, i );
+		fprintf( out, "#endif\n" );
 		fprintf( out, "\t\t(object->*r%d)(%s);\n",
 			 i, (const char*)valvec[i] );
 		fprintf( out, "\t\tbreak;\n" );
 	    }
 	    fprintf( out, "\t}\n" );
 	} else {
-	    fprintf( out, "\tr = *((PRT)(c->member()));\n" );
+	    fprintf( out, "#ifdef Q_FP_CCAST_BROKEN\n" );
+	    fprintf( out, "\tr = reinterpret_cast<RT>(*(c->member()));\n" );
+	    fprintf( out, "#else\n" );
+	    fprintf( out, "\tr = (RT)*(c->member());\n" );
 	    fprintf( out, "\t(object->*r)(%s);\n", (const char*)valstr );
+	    fprintf( out, "#endif\n" );
 	}
 	fprintf( out, "    }\n}\n" );
 	f = signals.next();
@@ -2738,7 +2827,7 @@ void addMember( Member m )
 	return;
     }
 
-    tmpFunc->accessPerm = tmpAccessPerm;
+    tmpFunc->access = tmpAccess;
     tmpFunc->args	= tmpArgList;
     tmpFunc->lineNo	= lineNo;
 
@@ -2752,7 +2841,7 @@ void addMember( Member m )
 	slots.append( tmpFunc );
 	// fall trough
     case PropertyCandidateMember:
-	if ( !tmpFunc->name.isEmpty() && tmpFunc->accessPerm == _PUBLIC )
+	if ( !tmpFunc->name.isEmpty() && tmpFunc->access == Public )
 	    propfuncs.append( tmpFunc );
     }
 
@@ -2762,11 +2851,8 @@ void addMember( Member m )
     tmpArgList = new ArgList;
 }
 
-/**
- * Used to check property names. They must match
- * the pattern [A-Za-z][A-Za-z0-9_]*
- *
- * @author Torben Weis <weis@trolltech.com>
+/* Used to check property names. They must match the pattern
+ * [A-Za-z][A-Za-z0-9_]*
  */
 void checkIdentifier( const char* ident )
 {

@@ -1,10 +1,15 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><title>Qt Shared Classes</title>
-</head><body bgcolor="#ffffff">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><title>Qt Toolkit -  Shared Classes</title><style type="text/css"><!--
+h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
+a:link { color: #004faf; text-decoration: none }
+a:visited { color: #672967; text-decoration: none }body { background: white; color: black; }
+--></style></head><body bgcolor="#ffffff">
 <p>
-<a href="index.html">
-<img width="122" height="65" src="qtlogo.png" alt="Home"
-  align="left" border="0">
-</a><div align=right><img src="dochead.png" width="472" height="27"><br>
+<table width="100%">
+<tr><td><a href="index.html">
+<img width="100" height="100" src="qtlogo.png"
+alt="Home" border="0"><img width="100"
+height="100" src="face.png" alt="Home" border="0">
+</a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
 - <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
@@ -12,17 +17,15 @@
 - <a href="index.html">Home</a>
 - <a href="topicals.html"><b>Structure</b></a>
 </div>
-<br clear=all>
-<p>
-<h1 align=center>Shared Classes</h1><br clear="all">
-<p>
-Many C++ classes in Qt utilize a data sharing mechanism to maximize
-resource usage and minimize copying of data. We use two techniques:
+</table>
+<h1 align=center> Shared Classes</h1><br clear="all">
+Many C++ classes in Qt use data sharing mechanisms to maximize
+resource usage and minimize copying of data. We use two mechanisms:
 explicit and implicit sharing.
 <p>
 <h2>Overview</h2>
 <p>
-A shared class consists of a pointer to a shared data block that contains:
+A shared class consists of a pointer to a shared data block that contains
 <ul>
 <li> A reference count.
 <li> The data.
@@ -50,7 +53,7 @@ arguments and returned from functions.
 <p>
 Qt implements two types of sharing: <em>explicit</em> and <em>implicit</em> sharing.
 Explicit sharing means that the programmer must be aware of the fact that
-objects share common data.  Implicite sharing means that the sharing
+objects share common data.  Implicit sharing means that the sharing
 mechanism takes place behind the scenes and the programmer does not need
 to worry about it.
 <p>
@@ -106,7 +109,7 @@ An implicitly shared class has total control of its internal data.  In any
 member function that modify its data, it automatically detaches before
 modifying the data.
 <p>
-The QPen class, which has implicit sharing, detaches from the shared data
+The QPen class, which uses implicit sharing, detaches from the shared data
 in all member functions that change the internal data.
 <p>
 Code fragment:
@@ -126,10 +129,10 @@ Code fragment:
 This is clearly not possible for QByteArray, because the programmer can
 do the following:
 <p>
-<pre>  <a href="qbytearray.html">QByteArray</a> array(10);
-  array.<a href="qbytearray.html#5d40c0">fill</a>('a');
+<pre>  <a href="qbytearray.html">QByteArray</a> array( 10 );
+  array.<a href="qbytearray.html#5d40c0">fill</a>( 'a' );
   array[0] = 'f';                       // will modify array
-  *(array.<a href="qbytearray.html#895709">data</a>()+1) = 'i';              // will modify array
+  *( array.<a href="qbytearray.html#895709">data</a>() + 1 ) = 'i';          // will modify array
 </pre>
 <p>
 If we should have monitored changes in a QByteArray, the QByteArray class
@@ -141,7 +144,6 @@ All classes that are instances of the QArray template class are explicitly
 shared:
 <ul>
 <li><a href="qbitarray.html">QBitArray</a>
-<li><a href="qimage.html">QImage</a> (does not inherit QArray)
 <li><a href="qpointarray.html">QPointArray</a>
 <li><a href="qbytearray.html">QByteArray</a>
 <li>Any other instantiation of <a href="qarray.html">QArray&lt;type&gt;</a>
@@ -150,6 +152,9 @@ shared:
 These classes have a detach() function that can be called if you want your
 object to get a private copy of the shared data.  They also have a copy()
 function that returns a deep copy with reference count 1 of an object.
+<p>
+The same is true for <a href="qimage.html">QImage</a>, which does not inherit QArray.  <a href="qmovie.html">QMovie</a>
+is also explicitly shared, but it does not support detach() and copy().
 <p>
 <h2>Implicitly Shared Classes</h2>
 <p>
@@ -161,11 +166,16 @@ The Qt classes that are implicitly shared are:
 <li><a href="qfont.html">QFont</a>
 <li><a href="qfontinfo.html">QFontInfo</a>
 <li><a href="qfontmetrics.html">QFontMetrics</a>
-<li><a href="qpen.html">QPen</a>
+<li><a href="qiconset.html">QIconSet</a>
+<li><a href="qmap.html">QMap</a>
 <li><a href="qpalette.html">QPalette</a>
+<li><a href="qpen.html">QPen</a>
 <li><a href="qpixmap.html">QPixmap</a>
-<li><a href="qstring.html">QString</a>
 <li><a href="qregion.html">QRegion</a>
+<li><a href="qstring.html">QString</a>
+<li><a href="qstringlist.html">QStringList</a>
+<li><a href="qvaluelist.html">QValueList</a>
+<li><a href="qvaluestack.html">QValueStack</a>
 </ul>
 <p>
 These classes automatically detach from common data if an object is about
@@ -192,15 +202,14 @@ happens also if anything is <a href="qpaintdevice.html#058006">bitBlt()</a>'ed i
 <p>
 <h2>QCString - implicit or explicit?</h2>
 <p>
-<a href="qcstring.html">QCString</a> is a mixture of implicit
-and explicit sharing - functions inherited from QByteArray, such as data(),
-employ explicit sharing, while those in QCString detach automatically.  Thus,
-QCString is somewhat an "expert only" class, provided mainly to ease porting
-from Qt 1.x to Qt 2.0. We recommend you use QString, which is purely
-implicitly shared.
+<a href="qcstring.html">QCString</a> is a mixture of implicit and explicit sharing - functions
+inherited from QByteArray, such as data(), employ explicit sharing, while
+those only in QCString detach automatically. Thus, QCString is somewhat an
+"expert only" class, provided mainly to ease porting from Qt 1.x to Qt 2.0.
+We recommend that you use <a href="qstring.html">QString</a>, a purely implicitly shared class.
 
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.1</div>
+<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.2.0</div>
 </table></div></address></body></html>

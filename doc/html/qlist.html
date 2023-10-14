@@ -1,15 +1,17 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head>
 <title>Qt Toolkit - QList Class</title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
-a:link { text-decoration: none; }
-body { background: white; color: black; }
+a:link { color: #004faf; text-decoration: none }
+a:visited { color: #672967; text-decoration: none }body { background: white; color: black; }
 --></style>
 </head><body bgcolor="#ffffff">
 
-<a href="index.html">
-<img width="122" height="65" src="qtlogo.png" alt="Home"
-  align="left" border="0">
-</a><div align=right><img src="dochead.png" width="472" height="27"><br>
+<table width="100%">
+<tr><td><a href="index.html">
+<img width="100" height="100" src="qtlogo.png"
+alt="Home" border="0"><img width="100"
+height="100" src="face.png" alt="Home" border="0">
+</a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
 - <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
@@ -17,7 +19,7 @@ body { background: white; color: black; }
 - <a href="index.html">Home</a>
 - <a href="topicals.html"><b>Structure</b></a>
 </div>
-<br clear=all>
+</table>
 
 <h1 align=center>QList Class Reference</h1><br clear="all">
 <p>
@@ -31,46 +33,46 @@ Inherits <a href="qglist.html">QGList</a>.
 <p><a href="qlist-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><span class="fn"><a href="#eea4e7"><b>QList</b></a> () </span>
-<li><span class="fn"><a href="#971a67"><b>QList</b></a> ( const QList&lt;type&gt; &amp; list ) </span>
-<li><span class="fn"><a href="#2312d5"><b>~QList</b></a> () </span>
-<li><span class="fn">QList&lt;type&gt;&amp; <a href="#e2966c"><b>operator=</b></a> ( const QList&lt;type&gt; &amp; list ) </span>
-<li><span class="fn">bool <a href="#819588"><b>operator==</b></a> ( const QList&lt;type&gt; &amp; list ) const</span>
-<li><span class="fn">virtual uint <a href="#816005"><b>count</b></a> () const</span>
-<li><span class="fn">bool <a href="#59efd0"><b>isEmpty</b></a> () const</span>
-<li><span class="fn">bool <a href="#5a9966"><b>insert</b></a> ( uint index, const type * item ) </span>
-<li><span class="fn">void <a href="#33a5ef"><b>inSort</b></a> ( const type * item ) </span>
-<li><span class="fn">void <a href="#c177d3"><b>prepend</b></a> ( const type * item ) </span>
-<li><span class="fn">void <a href="#687e74"><b>append</b></a> ( const type * item ) </span>
-<li><span class="fn">bool <a href="#2eb9eb"><b>remove</b></a> ( uint index ) </span>
-<li><span class="fn">bool <a href="#82661c"><b>remove</b></a> () </span>
-<li><span class="fn">bool <a href="#5f56fc"><b>remove</b></a> ( const type * item ) </span>
-<li><span class="fn">bool <a href="#23e7ff"><b>removeRef</b></a> ( const type * item ) </span>
-<li><span class="fn">void <a href="#f6be52"><b>removeNode</b></a> ( QLNode * node ) </span>
-<li><span class="fn">bool <a href="#9c2408"><b>removeFirst</b></a> () </span>
-<li><span class="fn">bool <a href="#1db46f"><b>removeLast</b></a> () </span>
-<li><span class="fn">type* <a href="#14fafc"><b>take</b></a> ( uint index ) </span>
-<li><span class="fn">type* <a href="#0f1003"><b>take</b></a> () </span>
-<li><span class="fn">type* <a href="#0a35c5"><b>takeNode</b></a> ( QLNode * node ) </span>
-<li><span class="fn">virtual void <a href="#42ff86"><b>clear</b></a> () </span>
-<li><span class="fn">void <a href="#38f92e"><b>sort</b></a> () </span>
-<li><span class="fn">int <a href="#ce5a70"><b>find</b></a> ( const type * item ) </span>
-<li><span class="fn">int <a href="#c99bba"><b>findNext</b></a> ( const type * item ) </span>
-<li><span class="fn">int <a href="#cf8452"><b>findRef</b></a> ( const type * item ) </span>
-<li><span class="fn">int <a href="#8dc14d"><b>findNextRef</b></a> ( const type * item ) </span>
-<li><span class="fn">uint <a href="#5f0e4a"><b>contains</b></a> ( const type * item ) const</span>
-<li><span class="fn">uint <a href="#5dad2a"><b>containsRef</b></a> ( const type * item ) const</span>
-<li><span class="fn">type* <a href="#0812c4"><b>at</b></a> ( uint index ) </span>
-<li><span class="fn">int <a href="#ab65c6"><b>at</b></a> () const</span>
-<li><span class="fn">type* <a href="#fd9ebf"><b>current</b></a> () const</span>
-<li><span class="fn">QLNode* <a href="#905b1c"><b>currentNode</b></a> () const</span>
-<li><span class="fn">type* <a href="#1a3afc"><b>getFirst</b></a> () const</span>
-<li><span class="fn">type* <a href="#f07d20"><b>getLast</b></a> () const</span>
-<li><span class="fn">type* <a href="#df743c"><b>first</b></a> () </span>
-<li><span class="fn">type* <a href="#74dca3"><b>last</b></a> () </span>
-<li><span class="fn">type* <a href="#b39e6b"><b>next</b></a> () </span>
-<li><span class="fn">type* <a href="#51d7a3"><b>prev</b></a> () </span>
-<li><span class="fn">void <a href="#6a9a58"><b>toVector</b></a> ( QGVector * vec ) const</span>
+<li><div class="fn"><a href="#eea4e7"><b>QList</b></a> () </div>
+<li><div class="fn"><a href="#971a67"><b>QList</b></a> ( const QList&lt;type&gt; &amp; list ) </div>
+<li><div class="fn"><a href="#2312d5"><b>~QList</b></a> () </div>
+<li><div class="fn">QList&lt;type&gt;&amp; <a href="#e2966c"><b>operator=</b></a> ( const QList&lt;type&gt; &amp; list ) </div>
+<li><div class="fn">bool <a href="#819588"><b>operator==</b></a> ( const QList&lt;type&gt; &amp; list ) const</div>
+<li><div class="fn">virtual uint <a href="#816005"><b>count</b></a> () const</div>
+<li><div class="fn">bool <a href="#59efd0"><b>isEmpty</b></a> () const</div>
+<li><div class="fn">bool <a href="#5a9966"><b>insert</b></a> ( uint index, const type * item ) </div>
+<li><div class="fn">void <a href="#33a5ef"><b>inSort</b></a> ( const type * item ) </div>
+<li><div class="fn">void <a href="#c177d3"><b>prepend</b></a> ( const type * item ) </div>
+<li><div class="fn">void <a href="#687e74"><b>append</b></a> ( const type * item ) </div>
+<li><div class="fn">bool <a href="#2eb9eb"><b>remove</b></a> ( uint index ) </div>
+<li><div class="fn">bool <a href="#82661c"><b>remove</b></a> () </div>
+<li><div class="fn">bool <a href="#5f56fc"><b>remove</b></a> ( const type * item ) </div>
+<li><div class="fn">bool <a href="#23e7ff"><b>removeRef</b></a> ( const type * item ) </div>
+<li><div class="fn">void <a href="#f6be52"><b>removeNode</b></a> ( QLNode * node ) </div>
+<li><div class="fn">bool <a href="#9c2408"><b>removeFirst</b></a> () </div>
+<li><div class="fn">bool <a href="#1db46f"><b>removeLast</b></a> () </div>
+<li><div class="fn">type* <a href="#14fafc"><b>take</b></a> ( uint index ) </div>
+<li><div class="fn">type* <a href="#0f1003"><b>take</b></a> () </div>
+<li><div class="fn">type* <a href="#0a35c5"><b>takeNode</b></a> ( QLNode * node ) </div>
+<li><div class="fn">virtual void <a href="#42ff86"><b>clear</b></a> () </div>
+<li><div class="fn">void <a href="#38f92e"><b>sort</b></a> () </div>
+<li><div class="fn">int <a href="#ce5a70"><b>find</b></a> ( const type * item ) </div>
+<li><div class="fn">int <a href="#c99bba"><b>findNext</b></a> ( const type * item ) </div>
+<li><div class="fn">int <a href="#cf8452"><b>findRef</b></a> ( const type * item ) </div>
+<li><div class="fn">int <a href="#8dc14d"><b>findNextRef</b></a> ( const type * item ) </div>
+<li><div class="fn">uint <a href="#5f0e4a"><b>contains</b></a> ( const type * item ) const</div>
+<li><div class="fn">uint <a href="#5dad2a"><b>containsRef</b></a> ( const type * item ) const</div>
+<li><div class="fn">type* <a href="#0812c4"><b>at</b></a> ( uint index ) </div>
+<li><div class="fn">int <a href="#ab65c6"><b>at</b></a> () const</div>
+<li><div class="fn">type* <a href="#fd9ebf"><b>current</b></a> () const</div>
+<li><div class="fn">QLNode* <a href="#905b1c"><b>currentNode</b></a> () const</div>
+<li><div class="fn">type* <a href="#1a3afc"><b>getFirst</b></a> () const</div>
+<li><div class="fn">type* <a href="#f07d20"><b>getLast</b></a> () const</div>
+<li><div class="fn">type* <a href="#df743c"><b>first</b></a> () </div>
+<li><div class="fn">type* <a href="#74dca3"><b>last</b></a> () </div>
+<li><div class="fn">type* <a href="#b39e6b"><b>next</b></a> () </div>
+<li><div class="fn">type* <a href="#51d7a3"><b>prev</b></a> () </div>
+<li><div class="fn">void <a href="#6a9a58"><b>toVector</b></a> ( QGVector * vec ) const</div>
 </ul>
 <hr><h2><a name="details"></a>Detailed Description</h2>
 The QList class is a template class that provides doubly linked lists.
@@ -147,7 +149,7 @@ These functions are somewhat faster than those that call <a href="qglist.html#fe
 <p>The <a href="qstrlist.html">QStrList</a> class in <a href="qstrlist-h.html">qstrlist.h</a> is a list of <code>char*.</code>  QStrList is
 a good example of a list that reimplements <a href="qcollection.html#c9b4cf">newItem</a>(), <a href="qcollection.html#24fd44">deleteItem</a>() and
 compareItems()
-<p>See also:  <a href="qlistiterator.html">QListIterator</a> and <a href="collection.html">Collection Classes</a>
+<p>See also  <a href="qlistiterator.html">QListIterator</a> and <a href="collection.html">Collection Classes</a>
 <p>Examples:
  <a href="grapher-grapher-cpp.html#QList">grapher/grapher.cpp</a>
 
@@ -161,19 +163,19 @@ Only the pointers are copied (shallow copy).
 <h3 class="fn"><a name="2312d5"></a>QList::~QList ()</h3>
 <p>Removes all items from the list and destroys the list.
 <p>All list iterators that access this list will be reset.
-<p>See also:  <a href="qcollection.html#a3fc3c">setAutoDelete</a>().
+<p>See also  <a href="qcollection.html#a3fc3c">setAutoDelete</a>().
 <h3 class="fn">void <a name="687e74"></a>QList::append ( const type * item )</h3>
 <p>Inserts the <em>item</em> at the end of the list.
 <p>The inserted item becomes the current list item.
 This is equivalent to <code><a href="#5a9966">insert</a>(<a href="#816005">count</a>(),item).</code>
 <p>The <em>item</em> must not be a null pointer.
-<p>See also:  <a href="#5a9966">insert</a>(), <a href="#fd9ebf">current</a>() and <a href="#c177d3">prepend</a>().
+<p>See also  <a href="#5a9966">insert</a>(), <a href="#fd9ebf">current</a>() and <a href="#c177d3">prepend</a>().
 <p>Examples:
  <a href="grapher-grapher-cpp.html#append">grapher/grapher.cpp</a>
 <h3 class="fn">int <a name="ab65c6"></a>QList::at () const</h3>
 <p>Returns the index of the current list item.  The returned value is -1
 if the current item is null.
-<p>See also:  <a href="#fd9ebf">current</a>().
+<p>See also  <a href="#fd9ebf">current</a>().
 <h3 class="fn">type * <a name="0812c4"></a>QList::at ( uint index )</h3>
 <p>Returns a pointer to the item at position <em>index</em> in the list, or
 null if the index is out of range.
@@ -181,12 +183,12 @@ null if the index is out of range.
 The valid range is <code>0 .. (<a href="#816005">count</a>() - 1)</code> inclusive.
 <p>This function is very efficient.  It starts scanning from the first
 item, last item or current item, whichever is closest to <em>index.</em>
-<p>See also:  <a href="#fd9ebf">current</a>().
+<p>See also  <a href="#fd9ebf">current</a>().
 <h3 class="fn">void <a name="42ff86"></a>QList::clear () <code>[virtual]</code></h3>
 <p>Removes all items from the list.
 <p>The removed items are deleted if <a href="qcollection.html#a3fc3c">auto-deletion</a> is enabled.
 <p>All list iterators that access this list will be reset.
-<p>See also:  <a href="#2eb9eb">remove</a>(), <a href="#0f1003">take</a>() and <a href="qcollection.html#a3fc3c">setAutoDelete</a>().
+<p>See also  <a href="#2eb9eb">remove</a>(), <a href="#0f1003">take</a>() and <a href="qcollection.html#a3fc3c">setAutoDelete</a>().
 <p>Reimplemented from <a href="qcollection.html#10eb2d">QCollection.</a>
 <h3 class="fn">uint <a name="5f0e4a"></a>QList::contains ( const type * item ) const</h3>
 <p>Counts and returns the number of occurrences of <em>item</em> in the list.
@@ -194,30 +196,30 @@ item, last item or current item, whichever is closest to <em>index.</em>
 in the list. If compareItems() is not reimplemented, it is more
 efficient to call <a href="#5dad2a">containsRef</a>().
 <p>Does not affect the current list item.
-<p>See also:  <a href="#5dad2a">containsRef</a>() and <a href="qglist.html#fe1336">compareItems</a>().
+<p>See also  <a href="#5dad2a">containsRef</a>() and <a href="qglist.html#fe1336">compareItems</a>().
 <h3 class="fn">uint <a name="5dad2a"></a>QList::containsRef ( const type * item ) const</h3>
 <p>Counts and returns the number of occurrences of <em>item</em> in the list.
 <p>Calling this function is must faster than <a href="#5f0e4a">contains</a>(), because contains()
 compares <em>item</em> with each list item using <a href="qglist.html#fe1336">compareItems</a>().
 This function only compares the pointers.
 <p>Does not affect the current list item.
-<p>See also:  <a href="#5f0e4a">contains</a>().
+<p>See also  <a href="#5f0e4a">contains</a>().
 <h3 class="fn">uint <a name="816005"></a>QList::count () const <code>[virtual]</code></h3>
 <p>Returns the number of items in the list.
-<p>See also:  <a href="#59efd0">isEmpty</a>().
+<p>See also  <a href="#59efd0">isEmpty</a>().
 <p>Examples:
  <a href="grapher-grapher-cpp.html#count">grapher/grapher.cpp</a>
 <p>Reimplemented from <a href="qcollection.html#649c42">QCollection.</a>
 <h3 class="fn">type * <a name="fd9ebf"></a>QList::current () const</h3>
 <p>Returns a pointer to the current list item.  The current item may be
 null (implies that the current index is -1).
-<p>See also:  <a href="#0812c4">at</a>().
+<p>See also  <a href="#0812c4">at</a>().
 <h3 class="fn"><a href="qlnode.html">QLNode</a> * <a name="905b1c"></a>QList::currentNode () const</h3>
 <p>Returns a pointer to the current list node.
 <p>The node can be kept and removed later using <a href="#f6be52">removeNode</a>().
 The advantage is that the item can be removed directly without
 searching the list.<p><b>Warning:</b> Do not call this function unless you are an expert.
-<p>See also:  <a href="#f6be52">removeNode</a>(), <a href="#0a35c5">takeNode</a>() and <a href="#fd9ebf">current</a>().
+<p>See also  <a href="#f6be52">removeNode</a>(), <a href="#0a35c5">takeNode</a>() and <a href="#fd9ebf">current</a>().
 <h3 class="fn">int <a name="ce5a70"></a>QList::find ( const type * item )</h3>
 <p>Finds the first occurrence of <em>item</em> in the list.
 <p>If the item is found, the list sets the current item to point to
@@ -227,7 +229,7 @@ the current index to -1 and returns -1.
 <p>The <a href="qglist.html#fe1336">compareItems</a>() function is called when searching for the item
 in the list. If compareItems() is not reimplemented, it is more
 efficient to call <a href="#cf8452">findRef</a>().
-<p>See also:  <a href="#c99bba">findNext</a>(), <a href="#cf8452">findRef</a>(), <a href="qglist.html#fe1336">compareItems</a>() and <a href="#fd9ebf">current</a>().
+<p>See also  <a href="#c99bba">findNext</a>(), <a href="#cf8452">findRef</a>(), <a href="qglist.html#fe1336">compareItems</a>() and <a href="#fd9ebf">current</a>().
 <h3 class="fn">int <a name="c99bba"></a>QList::findNext ( const type * item )</h3>
 <p>Finds the next occurrence of <em>item</em> in the list, starting from
 the current list item.
@@ -238,7 +240,7 @@ the current index to -1 and returns -1.
 <p>The <a href="qglist.html#fe1336">compareItems</a>() function is called when searching for the item
 in the list. If compareItems() is not reimplemented, it is more
 efficient to call <a href="#8dc14d">findNextRef</a>().
-<p>See also:  <a href="#ce5a70">find</a>(), <a href="#8dc14d">findNextRef</a>(), <a href="qglist.html#fe1336">compareItems</a>() and <a href="#fd9ebf">current</a>().
+<p>See also  <a href="#ce5a70">find</a>(), <a href="#8dc14d">findNextRef</a>(), <a href="qglist.html#fe1336">compareItems</a>() and <a href="#fd9ebf">current</a>().
 <h3 class="fn">int <a name="8dc14d"></a>QList::findNextRef ( const type * item )</h3>
 <p>Finds the next occurrence of <em>item</em> in the list, starting from the
 current list item.
@@ -249,7 +251,7 @@ the current index to -1 and returns -1.
 <p>Calling this function is must faster than <a href="#c99bba">findNext</a>(), because findNext()
 compares <em>item</em> with each list item using <a href="qglist.html#fe1336">compareItems</a>().
 This function only compares the pointers.
-<p>See also:  <a href="#cf8452">findRef</a>(), <a href="#c99bba">findNext</a>() and <a href="#fd9ebf">current</a>().
+<p>See also  <a href="#cf8452">findRef</a>(), <a href="#c99bba">findNext</a>() and <a href="#fd9ebf">current</a>().
 <h3 class="fn">int <a name="cf8452"></a>QList::findRef ( const type * item )</h3>
 <p>Finds the first occurrence of <em>item</em> in the list.
 <p>If the item is found, the list sets the current item to point to
@@ -259,23 +261,23 @@ the current index to -1 and returns -1.
 <p>Calling this function is must faster than <a href="#ce5a70">find</a>(), because find()
 compares <em>item</em> with each list item using <a href="qglist.html#fe1336">compareItems</a>().
 This function only compares the pointers.
-<p>See also:  <a href="#8dc14d">findNextRef</a>(), <a href="#ce5a70">find</a>() and <a href="#fd9ebf">current</a>().
+<p>See also  <a href="#8dc14d">findNextRef</a>(), <a href="#ce5a70">find</a>() and <a href="#fd9ebf">current</a>().
 <h3 class="fn">type * <a name="df743c"></a>QList::first ()</h3>
 <p>Returns a pointer to the first item in the list and makes this the
 current list item, or null if the list is empty.
-<p>See also:  <a href="#1a3afc">getFirst</a>(), <a href="#74dca3">last</a>(), <a href="#b39e6b">next</a>(), <a href="#51d7a3">prev</a>() and <a href="#fd9ebf">current</a>().
+<p>See also  <a href="#1a3afc">getFirst</a>(), <a href="#74dca3">last</a>(), <a href="#b39e6b">next</a>(), <a href="#51d7a3">prev</a>() and <a href="#fd9ebf">current</a>().
 <p>Examples:
  <a href="grapher-grapher-cpp.html#first">grapher/grapher.cpp</a>
 <h3 class="fn">type * <a name="1a3afc"></a>QList::getFirst () const</h3>
 <p>Returns a pointer to the first item in the list, or null if the
 list is empty.
 <p>Does not affect the current list item.
-<p>See also:  <a href="#df743c">first</a>() and <a href="#f07d20">getLast</a>().
+<p>See also  <a href="#df743c">first</a>() and <a href="#f07d20">getLast</a>().
 <h3 class="fn">type * <a name="f07d20"></a>QList::getLast () const</h3>
 <p>Returns a pointer to the last item in the list, or null if the
 list is empty.
 <p>Does not affect the current list item.
-<p>See also:  <a href="#74dca3">last</a>() and <a href="#1a3afc">getFirst</a>().
+<p>See also  <a href="#74dca3">last</a>() and <a href="#1a3afc">getFirst</a>().
 <h3 class="fn">void <a name="33a5ef"></a>QList::inSort ( const type * item )</h3>
 <p>Inserts the <em>item</em> at its sorted position in the list.
 <p>The sort order depends on the virtual <a href="qglist.html#fe1336">QGList::compareItems</a>() function.
@@ -286,9 +288,9 @@ All items must be inserted with inSort() to maintain the sorting order.
 in a list and sort after inserting then you should use <a href="#38f92e">sort</a>().
 inSort() takes up to O(n) compares. That means inserting n items in
 your list will need O(n^2) compares while sort() only needs O(n*logn)
-for the same task. So you inSort() only if you already have a presorted
+for the same task. So you inSort() only if you already have a pre-sorted
 list and want to insert only few additional items.
-<p>See also:  <a href="#5a9966">insert</a>(), <a href="qglist.html#fe1336">QGList::compareItems</a>(), <a href="#fd9ebf">current</a>() and <a href="#38f92e">sort</a>().
+<p>See also  <a href="#5a9966">insert</a>(), <a href="qglist.html#fe1336">QGList::compareItems</a>(), <a href="#fd9ebf">current</a>() and <a href="#38f92e">sort</a>().
 <h3 class="fn">bool <a name="5a9966"></a>QList::insert ( uint index, const type * item )</h3>
 <p>Inserts the <em>item</em> at the position <em>index</em> in the list.
 <p>Returns TRUE if successful, or FALSE if <em>index</em> is out of range.
@@ -296,22 +298,22 @@ The valid range is <code>0 .. <a href="#816005">count</a>()</code> inclusive.
 The item is appended if <em>index</em> == count().
 <p>The inserted item becomes the current list item.
 <p>The <em>item</em> must not be a null pointer.
-<p>See also:  <a href="#687e74">append</a>() and <a href="#fd9ebf">current</a>().
+<p>See also  <a href="#687e74">append</a>() and <a href="#fd9ebf">current</a>().
 <h3 class="fn">bool <a name="59efd0"></a>QList::isEmpty () const</h3>
 <p>Returns TRUE if the list is empty, i.e. <a href="#816005">count</a>() == 0. Returns FALSE
 otherwise.
-<p>See also:  <a href="#816005">count</a>().
+<p>See also  <a href="#816005">count</a>().
 <h3 class="fn">type * <a name="74dca3"></a>QList::last ()</h3>
 <p>Returns a pointer to the last item in the list and makes this the
 current list item, or null if the list is empty.
-<p>See also:  <a href="#f07d20">getLast</a>(), <a href="#df743c">first</a>(), <a href="#b39e6b">next</a>(), <a href="#51d7a3">prev</a>() and <a href="#fd9ebf">current</a>().
+<p>See also  <a href="#f07d20">getLast</a>(), <a href="#df743c">first</a>(), <a href="#b39e6b">next</a>(), <a href="#51d7a3">prev</a>() and <a href="#fd9ebf">current</a>().
 <h3 class="fn">type * <a name="b39e6b"></a>QList::next ()</h3>
 <p>Returns a pointer to the item succeeding the current item.
 Returns null if the current item is null or equal to the last item.
 <p>Makes the succeeding item current. If the current item before this
 function call was the last item, the current item will be set to null.
 If the current item was null, this function does nothing.
-<p>See also:  <a href="#df743c">first</a>(), <a href="#74dca3">last</a>(), <a href="#51d7a3">prev</a>() and <a href="#fd9ebf">current</a>().
+<p>See also  <a href="#df743c">first</a>(), <a href="#74dca3">last</a>(), <a href="#51d7a3">prev</a>() and <a href="#fd9ebf">current</a>().
 <p>Examples:
  <a href="grapher-grapher-cpp.html#next">grapher/grapher.cpp</a>
 <h3 class="fn">QList&lt;type&gt; &amp; <a name="e2966c"></a>QList::operator= ( const QList&lt;type&gt; &amp; list )</h3>
@@ -327,14 +329,14 @@ contain the same data, else FALSE.
 <p>The inserted item becomes the current list item.
 This is equivalent to <code><a href="#5a9966">insert</a>(0,item).</code>
 <p>The <em>item</em> must not be a null pointer.
-<p>See also:  <a href="#687e74">append</a>(), <a href="#5a9966">insert</a>() and <a href="#fd9ebf">current</a>().
+<p>See also  <a href="#687e74">append</a>(), <a href="#5a9966">insert</a>() and <a href="#fd9ebf">current</a>().
 <h3 class="fn">type * <a name="51d7a3"></a>QList::prev ()</h3>
 <p>Returns a pointer to the item preceding the current item.
 Returns null if the current item is null or equal to the first item.
 <p>Makes the preceding item current. If the current item before this
 function call was the first item, the current item will be set to null.
 If the current item was null, this function does nothing.
-<p>See also:  <a href="#df743c">first</a>(), <a href="#74dca3">last</a>(), <a href="#b39e6b">next</a>() and <a href="#fd9ebf">current</a>().
+<p>See also  <a href="#df743c">first</a>(), <a href="#74dca3">last</a>(), <a href="#b39e6b">next</a>() and <a href="#fd9ebf">current</a>().
 <h3 class="fn">bool <a name="82661c"></a>QList::remove ()</h3>
 <p>Removes the current list item.
 <p>Returns TRUE if successful, or FALSE if the current item is null.
@@ -346,7 +348,7 @@ In 3.0, the current item will be set to null.  The current item is
 set to null if the list becomes empty.
 <p>All list iterators that refer to the removed item will be set to point
 to the new current item.
-<p>See also:  <a href="#0f1003">take</a>(), <a href="#42ff86">clear</a>(), <a href="qcollection.html#a3fc3c">setAutoDelete</a>(), <a href="#fd9ebf">current</a>() and <a href="#23e7ff">removeRef</a>().
+<p>See also  <a href="#0f1003">take</a>(), <a href="#42ff86">clear</a>(), <a href="qcollection.html#a3fc3c">setAutoDelete</a>(), <a href="#fd9ebf">current</a>() and <a href="#23e7ff">removeRef</a>().
 <h3 class="fn">bool <a name="5f56fc"></a>QList::remove ( const type * item )</h3>
 <p>Removes the first occurrence of <em>item</em> from the list.
 <p>Returns TRUE if successful, or FALSE if the item could not be found in the
@@ -362,7 +364,7 @@ In 3.0, the current item will be set to null.  The current item is
 set to null if the list becomes empty.
 <p>All list iterators that refer to the removed item will be set to point
 to the new current item.
-<p>See also:  <a href="#23e7ff">removeRef</a>(), <a href="#0f1003">take</a>(), <a href="#42ff86">clear</a>(), <a href="qcollection.html#a3fc3c">setAutoDelete</a>(), <a href="qglist.html#fe1336">compareItems</a>() and <a href="#fd9ebf">current</a>().
+<p>See also  <a href="#23e7ff">removeRef</a>(), <a href="#0f1003">take</a>(), <a href="#42ff86">clear</a>(), <a href="qcollection.html#a3fc3c">setAutoDelete</a>(), <a href="qglist.html#fe1336">compareItems</a>() and <a href="#fd9ebf">current</a>().
 <h3 class="fn">bool <a name="2eb9eb"></a>QList::remove ( uint index )</h3>
 <p>Removes the item at position <em>index</em> in the list.
 <p>Returns TRUE if successful, or FALSE if <em>index</em> is out of range.
@@ -375,7 +377,7 @@ In 3.0, the current item will be set to null.  The current item is
 set to null if the list becomes empty.
 <p>All list iterators that refer to the removed item will be set to point
 to the new current item.
-<p>See also:  <a href="#0f1003">take</a>(), <a href="#42ff86">clear</a>(), <a href="qcollection.html#a3fc3c">setAutoDelete</a>(), <a href="#fd9ebf">current</a>() and <a href="#23e7ff">removeRef</a>().
+<p>See also  <a href="#0f1003">take</a>(), <a href="#42ff86">clear</a>(), <a href="qcollection.html#a3fc3c">setAutoDelete</a>(), <a href="#fd9ebf">current</a>() and <a href="#23e7ff">removeRef</a>().
 <h3 class="fn">bool <a name="9c2408"></a>QList::removeFirst ()</h3>
 <p>Removes the first item from the list.
 Returns TRUE if successful, or FALSE if the list is empty.
@@ -384,7 +386,7 @@ Returns TRUE if successful, or FALSE if the list is empty.
 The current item is set to null if the list becomes empty.
 <p>All list iterators that refer to the removed item will be set to point
 to the new current item.
-<p>See also:  <a href="#1db46f">removeLast</a>(), <a href="qcollection.html#a3fc3c">setAutoDelete</a>(), <a href="#fd9ebf">current</a>() and <a href="#2eb9eb">remove</a>().
+<p>See also  <a href="#1db46f">removeLast</a>(), <a href="qcollection.html#a3fc3c">setAutoDelete</a>(), <a href="#fd9ebf">current</a>() and <a href="#2eb9eb">remove</a>().
 <h3 class="fn">bool <a name="1db46f"></a>QList::removeLast ()</h3>
 <p>Removes the last item from the list.
 Returns TRUE if successful, or FALSE if the list is empty.
@@ -393,7 +395,7 @@ Returns TRUE if successful, or FALSE if the list is empty.
 The current item is set to null if the list becomes empty.
 <p>All list iterators that refer to the removed item will be set to point
 to the new current item.
-<p>See also:  <a href="#9c2408">removeFirst</a>(), <a href="qcollection.html#a3fc3c">setAutoDelete</a>() and <a href="#fd9ebf">current</a>().
+<p>See also  <a href="#9c2408">removeFirst</a>(), <a href="qcollection.html#a3fc3c">setAutoDelete</a>() and <a href="#fd9ebf">current</a>().
 <h3 class="fn">void <a name="f6be52"></a>QList::removeNode ( <a href="qlnode.html">QLNode</a> * node )</h3>
 <p>Removes the <em>node</em> from the list.
 <p>This node must exist in the list, otherwise the program may crash.
@@ -403,7 +405,7 @@ The current item is set to null if the list becomes empty.
 <p>All list iterators that refer to the removed item will be set to point to
 the item succeeding this item, or the preceding item if the removed item
 was the last item.<p><b>Warning:</b> Do not call this function unless you are an expert.
-<p>See also:  <a href="#0a35c5">takeNode</a>(), <a href="#905b1c">currentNode</a>(), <a href="#2eb9eb">remove</a>() and <a href="#23e7ff">removeRef</a>().
+<p>See also  <a href="#0a35c5">takeNode</a>(), <a href="#905b1c">currentNode</a>(), <a href="#2eb9eb">remove</a>() and <a href="#23e7ff">removeRef</a>().
 <h3 class="fn">bool <a name="23e7ff"></a>QList::removeRef ( const type * item )</h3>
 <p>Removes the first occurrence of <em>item</em> from the list.
 <p>Returns TRUE if successful, or FALSE if the item cannot be found in the
@@ -422,7 +424,7 @@ In 3.0, the current item will be set to null.  The current item is
 set to null if the list becomes empty.
 <p>All list iterators that refer to the removed item will be set to point
 to the new current item.
-<p>See also:  <a href="#2eb9eb">remove</a>(), <a href="#42ff86">clear</a>(), <a href="qcollection.html#a3fc3c">setAutoDelete</a>() and <a href="#fd9ebf">current</a>().
+<p>See also  <a href="#2eb9eb">remove</a>(), <a href="#42ff86">clear</a>(), <a href="qcollection.html#a3fc3c">setAutoDelete</a>() and <a href="#fd9ebf">current</a>().
 <h3 class="fn">void <a name="38f92e"></a>QList::sort ()</h3>
 <p>Sorts the list by the result of the virtual <a href="qglist.html#fe1336">compareItems</a>() function.
 <p>The Heap-Sort algorithm is used for sorting.  It sorts n items with
@@ -431,7 +433,7 @@ sorting problem.
 <p>If the items in your list support operator< and operator== then you
 might be better off with <a href="qsortedlist.html">QSortedList</a> since it implements the
 compareItems() function for you using these two operators.
-<p>See also:  <a href="#33a5ef">inSort</a>().
+<p>See also  <a href="#33a5ef">inSort</a>().
 <h3 class="fn">type * <a name="0f1003"></a>QList::take ()</h3>
 <p>Takes the current item out of the list without deleting it (even if
 <a href="qcollection.html#a3fc3c">auto-deletion</a> is enabled).
@@ -444,7 +446,7 @@ is taken, the new last item becomes the current item in Qt 2.x.  In
 to null if the list becomes empty.
 <p>All list iterators that refer to the taken item will be set to point to
 the new current item.
-<p>See also:  <a href="#2eb9eb">remove</a>(), <a href="#42ff86">clear</a>() and <a href="#fd9ebf">current</a>().
+<p>See also  <a href="#2eb9eb">remove</a>(), <a href="#42ff86">clear</a>() and <a href="#fd9ebf">current</a>().
 <h3 class="fn">type * <a name="14fafc"></a>QList::take ( uint index )</h3>
 <p>Takes the item at position <em>index</em> out of the list without
 deleting it (even if <a href="qcollection.html#a3fc3c">auto-deletion</a> is enabled).
@@ -458,7 +460,7 @@ is taken, the new last item becomes the current item in Qt 2.x.  In
 to null if the list becomes empty.
 <p>All list iterators that refer to the taken item will be set to point to
 the new current item.
-<p>See also:  <a href="#2eb9eb">remove</a>(), <a href="#42ff86">clear</a>() and <a href="#fd9ebf">current</a>().
+<p>See also  <a href="#2eb9eb">remove</a>(), <a href="#42ff86">clear</a>() and <a href="#fd9ebf">current</a>().
 <h3 class="fn">type * <a name="0a35c5"></a>QList::takeNode ( <a href="qlnode.html">QLNode</a> * node )</h3>
 <p>Takes the <em>node</em> out of the list without deleting its item (even if
 <a href="qcollection.html#a3fc3c">auto-deletion</a> is enabled).
@@ -468,7 +470,7 @@ Returns a pointer to the item taken out of the list.
 <p>All list iterators that refer to the taken item will be set to point to
 the item succeeding this item, or the preceding item if the taken item
 was the last item.<p><b>Warning:</b> Do not call this function unless you are an expert.
-<p>See also:  <a href="#f6be52">removeNode</a>() and <a href="#905b1c">currentNode</a>().
+<p>See also  <a href="#f6be52">removeNode</a>() and <a href="#905b1c">currentNode</a>().
 <h3 class="fn">void <a name="6a9a58"></a>QList::toVector ( <a href="qgvector.html">QGVector</a> * vec ) const</h3>
 <p>Stores all list items in the vector <em>vec.</em>
 <p>The vector must be have the same item type, otherwise the result
@@ -477,13 +479,13 @@ will be undefined.
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.1.1"><nobr>
+<input type=hidden name="version" value="2.2.0"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
 copyright &copy; 1995-2000
-<a href="http://www.trolltech.com">Troll Tech</a>, all rights reserved.<p><address><hr><div align="center">
+<a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.1</div>
+<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.2.0</div>
 </table></div></address></body></html>

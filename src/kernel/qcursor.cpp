@@ -1,29 +1,44 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qcursor.cpp   2.1.1   edited 2000-05-22 $
+** $Id: qt/src/kernel/qcursor.cpp   2.2.0   edited 2000-08-25 $
 **
 ** Implementation of QCursor class
 **
 ** Created : 940220
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the kernel module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #include "qcursor.h"
+
+#ifndef QT_NO_CURSOR
+
 #include "qbitmap.h"
 #include "qimage.h"
 #include "qdatastream.h"
@@ -85,7 +100,7 @@
 /*****************************************************************************
   QCursor stream functions
  *****************************************************************************/
-
+#ifndef QT_NO_DATASTREAM
 /*!
   \relates QCursor
   Writes the cursor \a c to the stream \a s.
@@ -124,7 +139,7 @@ QDataStream &operator>>( QDataStream &s, QCursor &c )
     }
     return s;
 }
-
+#endif // QT_NO_DATASTREAM
 
 /*!
   Constructs a custom pixmap cursor.
@@ -150,14 +165,25 @@ QDataStream &operator>>( QDataStream &s, QCursor &c )
 QCursor::QCursor( const QPixmap &pixmap, int hotX, int hotY )
 {
     QImage img = pixmap.convertToImage().
-		    convertDepth(8,Qt::ThresholdDither|Qt::AvoidDither);
+		    convertDepth( 8, Qt::ThresholdDither|Qt::AvoidDither );
     QBitmap bm;
-    bm.convertFromImage(img);
+    bm.convertFromImage( img, Qt::ThresholdDither|Qt::AvoidDither );
     QBitmap bmm;
-    if ( pixmap.mask() ) {
-	QImage mimg = pixmap.mask()->convertToImage();
-	bmm.convertFromImage(mimg);
+    if ( bm.mask() ) {
+	bmm = *bm.mask();
+	QBitmap nullBm;
+	bm.setMask( nullBm );
     }
+    else if ( pixmap.mask() ) {
+	QImage mimg = pixmap.mask()->convertToImage().
+	              convertDepth( 8, Qt::ThresholdDither|Qt::AvoidDither );
+	bmm.convertFromImage( mimg, Qt::ThresholdDither|Qt::AvoidDither );
+    }
+    else {
+	bmm.resize( bm.size() );
+	bmm.fill( Qt::color1 );
+    }
+
     setBitmap(bm,bmm,hotX,hotY);
 }
 
@@ -198,3 +224,5 @@ QCursor::QCursor( const QBitmap &bitmap, const QBitmap &mask,
 {
     setBitmap(bitmap,mask,hotX,hotY);
 }
+
+#endif // QT_NO_CURSOR

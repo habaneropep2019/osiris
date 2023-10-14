@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: qt/examples/i18n/mywidget.cpp   2.1.1   edited 2000-02-09 $
+** $Id: qt/examples/i18n/mywidget.cpp   2.2.0   edited 2000-08-31 $
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -65,4 +65,10 @@ void MyWidget::initChoices(QWidget* parent)
     QListBox* lb = new QListBox( parent ); 
     for ( int i = 0; choices[i]; i++ )
 	lb->insertItem( tr( choices[i] ) ); 
+}
+
+void MyWidget::closeEvent(QCloseEvent* e)
+{
+    QWidget::closeEvent(e);
+    emit closed();
 }

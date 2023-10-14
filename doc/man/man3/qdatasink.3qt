@@ -1,14 +1,12 @@
-.TH QDataSink 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QDataSink 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
 .ad l
 .nh
 .SH NAME
-QDataSink \- A QDataSink is an asynchronous consumer of data
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
+QDataSink \- Asynchronous consumer of data
 .SH SYNOPSIS
 .br
 .PP
@@ -19,24 +17,24 @@ Inherits QAsyncIO.
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "virtual int \fBreadyToReceive\fR ()"
+.BI "virtual int \fBreadyToReceive\fR () "
 .br
 .ti -1c
-.BI "virtual void \fBreceive\fR ( const uchar *, int count )"
+.BI "virtual void \fBreceive\fR ( const uchar *, int count ) "
 .br
 .ti -1c
-.BI "virtual void \fBeof\fR ()"
+.BI "virtual void \fBeof\fR () "
 .br
 .ti -1c
-.BI "void \fBmaybeReady\fR ()"
+.BI "void \fBmaybeReady\fR () "
 .br
 .in -1c
 .SH DESCRIPTION
-A QDataSink is an asynchronous consumer of data.
+The QDataSink class is an asynchronous consumer of data.
 .PP
 A data sink is an object which receives data from some source in an asynchronous manner. This means that at some time not determined by the data sink, blocks of data are given to it from processing. The data sink is able to limit the maximum size of such blocks which it is currently able to process.
 .PP
-See also: QAsyncIO, QDataSource and QDataPump.
+See also QAsyncIO, QDataSource and QDataPump.
 .SH MEMBER FUNCTION DOCUMENTATION
 .SH "void QDataSink::eof () \fC[virtual]\fR"
 This function will be called when no more data is available for processing.
@@ -51,7 +49,7 @@ readyToReceive().  The sink must use all the provided data.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qdatasink.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

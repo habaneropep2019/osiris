@@ -1,29 +1,44 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qstylesheet.cpp   2.1.1   edited 2000-04-04 $
+** $Id: qt/src/kernel/qstylesheet.cpp   2.2.0   edited 2000-08-27 $
 **
 ** Implementation of the QStyleSheet class
 **
 ** Created : 990101
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the kernel module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #include "qstylesheet.h"
+
+#ifndef QT_NO_RICHTEXT
+
 #include "qrichtext_p.h"
 #include "qapplication.h"
 #include "qlayout.h"
@@ -87,8 +102,8 @@ public:
   <li> \c WhiteSpacePre - white space must be output exactly as given
   in the input.
 
-  <li> \c WhiteSpaceNoWrap - multiple spaces are collapsed as with 
-  WhiteSpaceNormal, but no  automatical line breaks occur. To break lines manually, 
+  <li> \c WhiteSpaceNoWrap - multiple spaces are collapsed as with
+  WhiteSpaceNormal, but no  automatic line breaks occur. To break lines manually,
   use the  \c&lt;br&gt; tag.
 
 </ul>
@@ -525,14 +540,14 @@ QStyleSheetItem::WhiteSpaceMode QStyleSheetItem::whiteSpaceMode() const
   Sets the white space mode to \a m. Possible values are
   <ul>
    <li> \c WhiteSpaceNormal
-	- white spaces in the document only serve as seperators.
+	- white spaces in the document only serve as separators.
 	Multiple spaces or indentation therefore is ignored.
    <li> \c WhiteSpacePre
-	  - white spaces are preserved. This is particulary useful to
+	  - white spaces are preserved. This is particularly useful to
 	  display programming code.
    <li> \c WhiteSpaceNoWrap
-	  - multiple spaces are collapsed as with WhiteSpaceNormal, but no 
-	  automatical line breaks occur. To break lines manually, use the 
+	  - multiple spaces are collapsed as with WhiteSpaceNormal, but no
+	  automatic line breaks occur. To break lines manually, use the
 	  \c&lt;br&gt; tag.
   </ul>
  */
@@ -699,7 +714,7 @@ void QStyleSheetItem::setSelfNesting( bool nesting )
 /*!
   \class QStyleSheet qstylesheet.h
   \brief A collection of styles for rich text rendering and a generator of tags.
-  
+
   \ingroup drawing
   \ingroup helpsystem
 
@@ -836,12 +851,12 @@ void QStyleSheetItem::setSelfNesting( bool nesting )
 	normal character. Specify \c left or \c right to place the
 	image at the respective side.
     <li>\c &lt;hr/&gt;
-	- A horizonal line
+	- A horizontal line
     <li>\c &lt;br/&gt;
 	- A line break
   </ul>
 
-  Other tags not in any of the above cathegories are:
+  Other tags not in any of the above categories are:
   <ul>
   <li>\c &lt;nobr&gt;...&lt;/nobr&gt;
 	- No break. Prevents word wrap.
@@ -1071,6 +1086,7 @@ static QStyleSheet* defaultsheet = 0;
 void qt_cleanup_defaultsheet()
 {
     delete defaultsheet;
+    defaultsheet = 0;
 }
 
 /*!
@@ -1187,7 +1203,8 @@ QString QStyleSheet::convertFromPlainText( const QString& plain)
 	}
 	else if ( plain[i] == '\t' ){
 	    rich += 0x00a0U;
-	    while ( col / 4.0 != int( col/4 ) ) {
+	    // while ( col / 4.0 != int( col/4 ) ) { // weird
+	    while ( col % 4 ) {
 		rich += 0x00a0U;
 		++col;
 	    }
@@ -1270,7 +1287,7 @@ bool QStyleSheet::mightBeRichText( const QString& text)
 /*! \fn void QStyleSheet::error( const QString& msg) const
 
   This virtual function is called when an error occurs when
-  processsing rich text. Reimplement if if you need to catch
+  processing rich text. Reimplement if if you need to catch
   error messages.
 
   Errors might occur if some rich text strings contain tags that are
@@ -1306,25 +1323,27 @@ void QStyleSheet::scaleFont( QFont& font, int logicalSize ) const
     int s;
     switch ( logicalSize ) {
     case 1:
-	s =  int(0.5 * basePointSize);
+	s =  basePointSize/2;
 	break;
     case 2:
-	s = int(0.8 * basePointSize);
+	s = (8 * basePointSize) / 10;
 	break;
     case 4:
-	s =  int(1.2 * basePointSize);
+	s =  (12 * basePointSize) / 10;
 	break;
     case 5:
-	s = int(1.5 * basePointSize);
+	s = (15 * basePointSize) / 10;
 	break;
     case 6:
-	s = int(2 * basePointSize);
+	s = 2 * basePointSize;
 	break;
     case 7:
-	s = int(2.4 * basePointSize);
+	s = (24 * basePointSize) / 10;
 	break;
     default:
 	s = basePointSize;
     }
     font.setPointSize( s );
 }
+
+#endif // QT_NO_RICHTEXT

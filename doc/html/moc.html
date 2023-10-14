@@ -1,11 +1,15 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><title>
-Qt Toolkit - Using the Meta Object Compiler
-</title></head><body bgcolor="#ffffff">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><title>Qt Toolkit -  Using the Meta Object Compiler</title><style type="text/css"><!--
+h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
+a:link { color: #004faf; text-decoration: none }
+a:visited { color: #672967; text-decoration: none }body { background: white; color: black; }
+--></style></head><body bgcolor="#ffffff">
 <p>
-<a href="index.html">
-<img width="122" height="65" src="qtlogo.png" alt="Home"
-  align="left" border="0">
-</a><div align=right><img src="dochead.png" width="472" height="27"><br>
+<table width="100%">
+<tr><td><a href="index.html">
+<img width="100" height="100" src="qtlogo.png"
+alt="Home" border="0"><img width="100"
+height="100" src="face.png" alt="Home" border="0">
+</a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
 - <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
@@ -13,10 +17,8 @@ Qt Toolkit - Using the Meta Object Compiler
 - <a href="index.html">Home</a>
 - <a href="topicals.html"><b>Structure</b></a>
 </div>
-<br clear=all>
-<p>
-<h1 align=center>Using the Meta Object Compiler</h1><br clear="all">
-<p>
+</table>
+<h1 align=center> Using the Meta Object Compiler</h1><br clear="all">
 The Meta Object Compiler, moc among friends, is the program which
 handles the <a href="metaobjects.html">C++ extensions in Qt.</a>
 <p>
@@ -136,7 +138,7 @@ file.
 automate the running of the moc. By adding some rules to the Makefile
 of your program, <var>make</var> can take care of running moc when
 necessary and handling the moc output.
-<p>We recommend using Troll Tech's free makefile generation tool
+<p>We recommend using Trolltech's free makefile generation tool
 <var>tmake</var> for building your Makefiles. This tool recognizes
 both Method A and B style source files, and generates a Makefile that
 does all necessary moc handling. tmake is available from <a
@@ -263,7 +265,6 @@ the first inherited class is a QObject.
 </pre>
 <p>
 (This limitation is almost impossible to remove; since the moc does not expand
-#include or #define, it cannot find out which one of the base classes
 is a QObject.)
 <p>
 <h4>Virtual functions cannot be slots when using multiple inheritance</h4>
@@ -505,6 +506,6 @@ beginning of the class declaration, right after Q_OBJECT:
 
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.1</div>
+<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.2.0</div>
 </table></div></address></body></html>

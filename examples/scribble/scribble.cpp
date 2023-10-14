@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: qt/examples/scribble/scribble.cpp   2.1.1   edited 2000-03-14 $
+** $Id: qt/examples/scribble/scribble.cpp   2.2.0   edited 2000-08-31 $
 **
-** Copyright ( C ) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright ( C ) 1992-2000 Trolltech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -10,6 +10,7 @@
 
 #include "scribble.h"
 
+#include <qapplication.h>
 #include <qevent.h>
 #include <qpainter.h>
 #include <qtoolbar.h>
@@ -26,18 +27,23 @@
 #include <qpopupmenu.h>
 #include <qintdict.h>
 
+const bool no_writing = FALSE;
+
 Canvas::Canvas( QWidget *parent, const char *name )
     : QWidget( parent, name, WNorthWestGravity ), pen( Qt::red, 3 ), polyline(3),
       mousePressed( FALSE ), buffer( width(), height() )
 {
-    buffer.fill( colorGroup().base() );
+
+    if ((qApp->argc() > 0) && !buffer.load(qApp->argv()[1]))
+    	buffer.fill( colorGroup().base() );
     setBackgroundMode( QWidget::PaletteBase );
     setCursor( Qt::crossCursor );
 }
 
 void Canvas::save( const QString &filename, const QString &format )
 {
-    buffer.save( filename, format.upper() );
+    if ( !no_writing )
+	buffer.save( filename, format.upper() );
 }
 
 void Canvas::clearScreen()

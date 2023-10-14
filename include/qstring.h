@@ -1,28 +1,40 @@
 /****************************************************************************
-** $Id: qt/src/tools/qstring.h   2.1.1   edited 2000-05-20 $
+** $Id: qt/src/tools/qstring.h   2.2.0   edited 2000-08-25 $
 **
 ** Definition of the QString class, and related Unicode
 ** functions.
 **
 ** Created : 920609
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the tools module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #ifndef QSTRING_H
 #define QSTRING_H
@@ -40,22 +52,23 @@ class QRegExp;
 class QString;
 class QCharRef;
 
-class Q_EXPORT QChar {
+class Q_EXPORT Q_PACKED QChar {
 public:
-    QChar() { rw = 0; cl = 0; }
-    QChar( char c ) { rw = 0; cl = (uchar)c; }
-    QChar( uchar c ) { rw = 0; cl = c; }
-    QChar( uchar c, uchar r ) { rw = r; cl = c; }
-    QChar( const QChar& c ) { rw = c.rw; cl = c.cl; }
-    QChar( ushort rc ) { rw = (uchar)((rc>>8)&0xff); cl = (uchar)(rc&0xff); }
-    QChar( short rc ) { rw = (uchar)((rc>>8)&0xff); cl = (uchar)(rc&0xff); }
-    QChar( uint rc ) { rw = (uchar)((rc>>8)&0xff); cl = (uchar)(rc&0xff); }
-    QChar( int rc ) { rw = (uchar)((rc>>8)&0xff); cl = (uchar)(rc&0xff); }
+    QChar();
+    QChar( char c );
+    QChar( uchar c );
+    QChar( uchar c, uchar r );
+    QChar( const QChar& c );
+    QChar( ushort rc );
+    QChar( short rc );
+    QChar( uint rc );
+    QChar( int rc );
 
     QT_STATIC_CONST QChar null;            // 0000
     QT_STATIC_CONST QChar replacement;     // FFFD
     QT_STATIC_CONST QChar byteOrderMark;     // FEFF
     QT_STATIC_CONST QChar byteOrderSwapped;     // FFFE
+    QT_STATIC_CONST QChar nbsp;            // 00A0
 
     // Unicode information
 
@@ -168,18 +181,89 @@ public:
     friend inline int operator<=( QChar c1, QChar c2 );
 
 private:
-#if defined(_WS_X11_) || defined(_OS_WIN32_BYTESWAP_)
+#if defined(_WS_X11_) || defined(_OS_WIN32_BYTESWAP_) || defined( _WS_QWS_ )
     // XChar2b on X11, ushort on _OS_WIN32_BYTESWAP_
+    //### QWS must be defined on a platform by platform basis
     uchar rw;
     uchar cl;
+#if defined(QT_QSTRING_UCS_4)
+    ushort grp;
+#endif
     enum { net_ordered = 1 };
 #else
     // ushort on _OS_WIN32_
     uchar cl;
     uchar rw;
+#if defined(QT_QSTRING_UCS_4)
+    ushort grp;
+#endif
     enum { net_ordered = 0 };
 #endif
 };
+
+inline QChar::QChar()
+{
+    rw = 0; cl = 0;
+#ifdef QT_QSTRING_UCS_4
+    grp = 0;
+#endif
+}
+inline QChar::QChar( char c )
+{
+    rw = 0; cl = (uchar)c;
+#ifdef QT_QSTRING_UCS_4
+    grp = 0;
+#endif
+}
+inline QChar::QChar( uchar c )
+{
+    rw = 0; cl = c;
+#ifdef QT_QSTRING_UCS_4
+    grp = 0;
+#endif
+}
+inline QChar::QChar( uchar c, uchar r )
+{
+    rw = r; cl = c;
+#ifdef QT_QSTRING_UCS_4
+    grp = 0;
+#endif
+}
+inline QChar::QChar( const QChar& c )
+{
+    rw = c.rw; cl = c.cl;
+#ifdef QT_QSTRING_UCS_4
+    grp = 0;
+#endif
+}
+inline QChar::QChar( ushort rc )
+{
+    rw = (uchar)((rc>>8)&0xff); cl = (uchar)(rc&0xff);
+#ifdef QT_QSTRING_UCS_4
+    grp = 0;
+#endif
+}
+inline QChar::QChar( short rc )
+{
+    rw = (uchar)((rc>>8)&0xff); cl = (uchar)(rc&0xff);
+#ifdef QT_QSTRING_UCS_4
+    grp = 0;
+#endif
+}
+inline QChar::QChar( uint rc )
+{
+    rw = (uchar)((rc>>8)&0xff); cl = (uchar)(rc&0xff);
+#ifdef QT_QSTRING_UCS_4
+    grp = 0;
+#endif
+}
+inline QChar::QChar( int rc )
+{
+    rw = (uchar)((rc>>8)&0xff); cl = (uchar)(rc&0xff);
+#ifdef QT_QSTRING_UCS_4
+    grp = 0;
+#endif
+}
 
 
 inline int operator==( char ch, QChar c )
@@ -249,8 +333,10 @@ struct Q_EXPORT QStringData : public QShared {
 	unicode(0), ascii(0), len(0), maxl(0), dirtyascii(0) { ref(); }
     QStringData(QChar *u, uint l, uint m) :
 	unicode(u), ascii(0), len(l), maxl(m), dirtyascii(0) { }
+
     ~QStringData() { if ( unicode ) delete[] ((char*)unicode);
                      if ( ascii ) delete[] ascii; }
+
     void deleteSelf();
     QChar *unicode;
     char *ascii;
@@ -287,6 +373,10 @@ public:
     bool	isEmpty()	const;
     uint	length()	const;
     void	truncate( uint pos );
+
+#if QT_VERSION >= 300
+#error "fill() Should return *this, or QChar constructor should take count=1"
+#endif
     void	fill( QChar c, int len = -1 );
 
     QString	copy()	const;
@@ -303,7 +393,7 @@ public:
     QString arg(double a, int fieldwidth=0, char fmt='g', int prec=-1) const;
 
     QString    &sprintf( const char* format, ... )
-#if defined(_CC_GNU_)
+#if defined(_CC_GNU_) && !defined(__INSURE__)
 	__attribute__ ((format (printf, 2, 3)))
 #endif
 	;
@@ -349,8 +439,10 @@ public:
     QString    &insert( uint index, QChar );
     QString    &insert( uint index, char c ) { return insert(index,QChar(c)); }
     QString    &append( char );
+    QString    &append( QChar );
     QString    &append( const QString & );
     QString    &prepend( char );
+    QString    &prepend( QChar );
     QString    &prepend( const QString & );
     QString    &remove( uint index, uint len );
     QString    &replace( uint index, uint len, const QString & );
@@ -408,8 +500,10 @@ public:
     const char* ascii() const;
     const char* latin1() const;
     static QString fromLatin1(const char*, int len=-1);
+#ifndef QT_NO_TEXTCODEC
     QCString utf8() const;
     static QString fromUtf8(const char*, int len=-1);
+#endif
     QCString local8Bit() const;
     static QString fromLocal8Bit(const char*, int len=-1);
     bool operator!() const;
@@ -425,8 +519,9 @@ public:
     static int compare( const QString& s1, const QString& s2 )
 	{ return s1.compare(s2); }
 
+#ifndef QT_NO_DATASTREAM
     friend Q_EXPORT QDataStream &operator>>( QDataStream &, QString & );
-
+#endif
     // new functions for BiDi
     void compose();
     QChar::Direction basicDirection();
@@ -435,6 +530,8 @@ public:
 #ifndef QT_NO_COMPAT
     const char* data() const { return latin1(); }
 #endif
+
+    bool startsWith( const QString& ) const;
 
 private:
     QString( int size, bool dummy );		// allocate size incl. \0
@@ -527,10 +624,10 @@ public:
 /*****************************************************************************
   QString stream functions
  *****************************************************************************/
-
+#ifndef QT_NO_DATASTREAM
 Q_EXPORT QDataStream &operator<<( QDataStream &, const QString & );
 Q_EXPORT QDataStream &operator>>( QDataStream &, QString & );
-
+#endif
 
 /*****************************************************************************
   QString inline functions
@@ -577,11 +674,17 @@ inline QString QString::copy() const
 inline QString &QString::prepend( const QString & s )
 { return insert(0,s); }
 
+inline QString &QString::prepend( QChar c )
+{ return insert(0,c); }
+
 inline QString &QString::prepend( char c )
 { return insert(0,c); }
 
 inline QString &QString::append( const QString & s )
 { return operator+=(s); }
+
+inline QString &QString::append( QChar c )
+{ return operator+=(c); }
 
 inline QString &QString::append( char c )
 { return operator+=(c); }

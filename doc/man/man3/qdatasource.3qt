@@ -1,14 +1,12 @@
-.TH QDataSource 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QDataSource 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
 .ad l
 .nh
 .SH NAME
-QDataSource \- A QDataSource is an asynchronous producer of data
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
+QDataSource \- Asynchronous producer of data
 .SH SYNOPSIS
 .br
 .PP
@@ -21,30 +19,30 @@ Inherited by QIODeviceSource.
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "virtual int \fBreadyToSend\fR ()"
+.BI "virtual int \fBreadyToSend\fR () "
 .br
 .ti -1c
-.BI "virtual void \fBsendTo\fR ( QDataSink *, int count )"
+.BI "virtual void \fBsendTo\fR ( QDataSink *, int count ) "
 .br
 .ti -1c
-.BI "void \fBmaybeReady\fR ()"
+.BI "void \fBmaybeReady\fR () "
 .br
 .ti -1c
 .BI "virtual bool \fBrewindable\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBenableRewind\fR ( bool )"
+.BI "virtual void \fBenableRewind\fR ( bool ) "
 .br
 .ti -1c
-.BI "virtual void \fBrewind\fR ()"
+.BI "virtual void \fBrewind\fR () "
 .br
 .in -1c
 .SH DESCRIPTION
-A QDataSource is an asynchronous producer of data.
+The QDataSource class is an asynchronous producer of data.
 .PP
 A data source is an object which provides data from some source in an asynchronous manner. This means that at some time not determined by the data source, blocks of data will be taken from it for processing. The data source is able to limit the maximum size of such blocks which it is currently able to provide.
 .PP
-See also: QAsyncIO, QDataSink and QDataPump.
+See also QAsyncIO, QDataSink and QDataPump.
 .SH MEMBER FUNCTION DOCUMENTATION
 .SH "void QDataSource::enableRewind ( bool ) \fC[virtual]\fR"
 If this function is called with \fIon\fR set to TRUE, and rewindable() is TRUE, then the data source must take measures to allow the rewind() function to subsequently operate as described. If rewindable() is FALSE, the function should call QDataSource::enableRewind(), which aborts with a qFatal() error.
@@ -75,7 +73,7 @@ Reimplemented in QIODeviceSource.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qdatasource.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

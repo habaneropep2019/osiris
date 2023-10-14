@@ -1,29 +1,42 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qtoolbar.cpp   2.1.1   edited 2000-04-30 $
+** $Id: qt/src/widgets/qtoolbar.cpp   2.2.0   edited 2000-08-25 $
 **
 ** Implementation of QToolBar class
 **
 ** Created : 980315
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the widgets module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #include "qtoolbar.h"
+#ifndef QT_NO_COMPLEXWIDGETS
 
 #include "qmainwindow.h"
 #include "qpushbutton.h"
@@ -115,6 +128,7 @@ QToolBarSeparator::QToolBarSeparator(Orientation o , QToolBar *parent,
     setOrientation( o );
     setBackgroundMode( parent->backgroundMode() );
     setBackgroundOrigin( ParentOrigin );
+    setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum ) );
 }
 
 
@@ -144,7 +158,8 @@ QSize QToolBarSeparator::sizeHint() const
 
 QSizePolicy QToolBarSeparator::sizePolicy() const
 {
-    return QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum );
+    //### removeme 3.0
+    return QWidget::sizePolicy();
 }
 
 #include "qtoolbar.moc"
@@ -158,7 +173,7 @@ QSizePolicy QToolBarSeparator::sizePolicy() const
   \ingroup application
 
   A toolbar is a panel that contains a set of controls, usually
-  represented by small icons.  It's purpose is to provide quick access
+  represented by small icons.  Its purpose is to provide quick access
   to frequently used commands or options. Within a main window, the
   user can drag toolbars freely around and hide them with a click on
   the toolbar handle.
@@ -180,7 +195,7 @@ QSizePolicy QToolBarSeparator::sizePolicy() const
   tool bar and word-wrapped as necessary. The main window can
   be resized to a smaller size than a toolbar would need to show all
   items. If this happens QToolbar shows a little arrow button at the
-  roght or bottom end. When clicking on that button, a popup menu is
+  right or bottom end. When clicking on that button, a popup menu is
   opened which shows all items of the toolbar which are
   outside the visible area of the mainwindow.
 
@@ -275,8 +290,9 @@ void QToolBar::init()
     bl = new QBoxLayout( this, orientation() == Vertical
 			? QBoxLayout::Down : QBoxLayout::LeftToRight,
 			style() == WindowsStyle ? 2 : 1, 0 );
-    bl->setAutoAdd( TRUE );
-    bl->addSpacing( 9 );
+    boxLayout()->setAutoAdd( TRUE );
+    if ( !mw || mw->toolBarsMovable() )
+	boxLayout()->addSpacing( 9 );
 
     if ( mw ) {
 	connect( mw, SIGNAL( startMovingToolBar( QToolBar * ) ),
@@ -292,13 +308,29 @@ void QToolBar::init()
     setFocusPolicy( NoFocus );
 }
 
+QBoxLayout *QToolBar::boxLayout()
+{
+    if ( !layout() ) {
+	bl = new QBoxLayout( this, orientation() == Vertical
+			     ? QBoxLayout::Down : QBoxLayout::LeftToRight,
+			     style() == WindowsStyle ? 2 : 1, 0 );
+	if ( !mw || mw->toolBarsMovable() )
+	    boxLayout()->addSpacing( 9 );
+	return bl;
+    }
+
+    if ( bl == layout() || layout()->inherits( "QBoxLayout" ) ) {
+	bl = (QBoxLayout*)layout();
+	return (QBoxLayout*)layout();
+    }
+
+    return 0;
+}
 
 /*! Destructs the object and frees any allocated resources. */
 
 QToolBar::~QToolBar()
 {
-    delete bl;
-    bl = 0;
     d->menu = 0;
     delete d;
     d = 0;
@@ -335,9 +367,8 @@ void QToolBar::setOrientation( Orientation newOrientation )
 	    delete d->back;
 	    d->back = 0;
 	}
-	if ( bl )
-	    bl->setDirection( o==Horizontal ? QBoxLayout::LeftToRight :
-			      QBoxLayout::TopToBottom );
+	boxLayout()->setDirection( o==Horizontal ? QBoxLayout::LeftToRight :
+				   QBoxLayout::TopToBottom );
 	emit orientationChanged( newOrientation );
     }
 }
@@ -410,7 +441,7 @@ QMainWindow * QToolBar::mainWindow()
 void QToolBar::setStretchableWidget( QWidget * w )
 {
     sw = w;
-    bl->setStretchFactor( w, 1 );
+    boxLayout()->setStretchFactor( w, 1 );
 
     if ( !isHorizontalStretchable() && !isVerticalStretchable() ) {
 	if ( orientation() == Horizontal )
@@ -429,11 +460,11 @@ bool QToolBar::event( QEvent * e )
     //after the event filters have dealt with it:
     if ( e->type() == QEvent::ChildInserted ) {
 	QObject * child = ((QChildEvent*)e)->child();
-	if ( child && child->isWidgetType() && ((QWidget*)child) == sw )
-	    bl->setStretchFactor( (QWidget*)child, 1 );
 	if ( isVisible() && child && child->isWidgetType() &&
 	     child->parent() == this && !child->inherits( "QPopupMenu" ) )
 	    ( (QWidget*)child )->show();
+	if ( child && child->isWidgetType() && ((QWidget*)child) == sw )
+	    boxLayout()->setStretchFactor( (QWidget*)child, 1 );
     } else if ( e->type() == QEvent::ChildRemoved ) {
 	QObject * child = ((QChildEvent*)e)->child();
 	if ( child == d->arrow )
@@ -487,10 +518,12 @@ void QToolBar::clear()
 {
     if ( !children() )
 	return;
-    QObjectList list = *children();
-    for (QObjectListIt it(list); it.current(); ++it) {
-	if ( it.current()->isWidgetType() )
-	    delete it.current();
+    QObjectListIt it( *children() );
+    QObject * obj;
+    while( (obj=it.current()) != 0 ) {
+	++it;
+	if ( obj->isWidgetType() )
+	    delete obj;
     }
     d->menu = 0;
     d->arrow = 0;
@@ -675,7 +708,7 @@ void QToolBar::updateArrowStuff()
 		d->back->hide();
 		d->arrow->hide();
 	    }
-	
+
 	    if ( d->back->geometry() != QRect( width() - 20, 1, 20, height() - 2 ) )
 		d->back->setGeometry( width() - 20, 1, 20, height() - 2 );
 	    if ( d->arrow->geometry() != QRect( width() - 14, 3, 13, height() - 6 ) )
@@ -724,7 +757,7 @@ void QToolBar::updateArrowStuff()
 		d->back->hide();
 		d->arrow->hide();
 	    }
-	
+
 	    if ( d->back->geometry() != QRect( 1, height() - 20, width() - 2, 20 ) )
 		d->back->setGeometry( 1, height() - 20, width() - 2, 20 );
 	    if ( d->arrow->geometry() != QRect( 3, height() - 14, width() - 6, 13 ) )
@@ -775,7 +808,7 @@ void QToolBar::setupArrowMenu()
 		QWidget *w = (QWidget*)ob;
 		bool mv = FALSE;
 		if ( orientation() == Horizontal )
-		    mv = ( w->x() + w->width() > width() - 20 ||	
+		    mv = ( w->x() + w->width() > width() - 20 ||
 			   w->x() == -w->width() && w->y() == -w->height() );
 		else
 		    mv = ( w->y() + w->height() > height() - 20 ||
@@ -897,7 +930,7 @@ prints immediately to the default printer).
 
 4.  Avoid turning toolbars into graphical menu bars.  To me, a toolbar should
 be efficient. Once you make almost all the items in a toolbar into graphical
-pull-down menus, you start to loose efficiency.
+pull-down menus, you start to lose efficiency.
 
 5.  Make sure that adjacent icons are distinctive. There are some toolbars
 where you see a group of 4-5 icons that represent related functions, but they
@@ -927,3 +960,4 @@ more predictable.
 11.  Keep a single toolbar to fewer than 20 items divided into 4-7 groups of
 items.
 */
+#endif

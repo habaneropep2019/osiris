@@ -1,27 +1,39 @@
 /****************************************************************************
-** $Id: qt/src/dialogs/qfiledialog.h   2.1.1   edited 2000-03-28 $
+** $Id: qt/src/dialogs/qfiledialog.h   2.2.0   edited 2000-08-25 $
 **
 ** Definition of QFileDialog class
 **
 ** Created : 950428
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the dialogs module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #ifndef QFILEDIALOG_H
 #define QFILEDIALOG_H
@@ -33,6 +45,7 @@ class QWidget;
 class QFileDialog;
 class QTimer;
 class QNetworkOperation;
+class QFileListView;
 
 #ifndef QT_H
 #include "qdir.h"
@@ -44,6 +57,7 @@ class QNetworkOperation;
 #include "qurlinfo.h"
 #endif // QT_H
 
+#ifndef QT_NO_FILEDIALOG
 
 class Q_EXPORT QFileIconProvider : public QObject
 {
@@ -74,7 +88,7 @@ class Q_EXPORT QFileDialog : public QDialog
 
     Q_OBJECT
     Q_ENUMS( Mode ViewMode PreviewMode )
-    // ##### Why are this readonly properties ?
+    // ##### Why are this read-only properties ?
     Q_PROPERTY( QString selectedFile READ selectedFile )
     Q_PROPERTY( QString selectedFilter READ selectedFilter )
     Q_PROPERTY( QStringList selectedFiles READ selectedFiles )
@@ -106,7 +120,7 @@ public:
 				    QWidget *parent = 0, const char* name = 0);// ## merge 3.0
     static QString getSaveFileName( const QString &initially,
 				    const QString &filter,
-				    QWidget *parent, const char* name, 
+				    QWidget *parent, const char* name,
 				    const QString& caption);
     static QString getExistingDirectory( const QString &dir = QString::null,
 					 QWidget *parent = 0,
@@ -114,7 +128,12 @@ public:
     static QString getExistingDirectory( const QString &dir,
 					 QWidget *parent,
 					 const char* name,
-					 const QString& caption);
+					 const QString& caption );
+    static QString getExistingDirectory( const QString &dir,
+					 QWidget *parent,
+					 const char* name,
+					 const QString& caption,
+					 bool dirOnly );
     static QStringList getOpenFileNames( const QString &filter= QString::null,
 					 const QString &dir = QString::null,
 					 QWidget *parent = 0,
@@ -152,7 +171,7 @@ public:
     void rereadDir();
     void resortDir();
 
-    enum Mode { AnyFile, ExistingFile, Directory, ExistingFiles };
+    enum Mode { AnyFile, ExistingFile, Directory, ExistingFiles, DirectoryOnly };
     void setMode( Mode );
     Mode mode() const;
 
@@ -176,6 +195,7 @@ public:
     QUrl url() const;
 
 public slots:
+    void done( int );
     void setDir( const QString& );
     void setUrl( const QUrlOperator &url );
     void setFilter( const QString& );
@@ -277,7 +297,7 @@ private:
 				       const QString &filter,
 				       QString* workingDirectory,
 				       QWidget *parent = 0,
-				       const char* name = 0, 
+				       const char* name = 0,
 				       const QString& caption = QString::null);
     static QString winGetSaveFileName( const QString &initialSelection,
 				       const QString &filter,
@@ -298,5 +318,7 @@ private:	// Disabled copy constructor and operator=
     QFileDialog &operator=( const QFileDialog & );
 #endif
 };
+
+#endif
 
 #endif // QFILEDIALOG_H

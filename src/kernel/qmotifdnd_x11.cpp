@@ -1,30 +1,42 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qmotifdnd_x11.cpp   2.1.1   edited 2000-04-27 $
+** $Id: qt/src/kernel/qmotifdnd_x11.cpp   2.2.0   edited 2000-08-25 $
 **
 ** Implementation of Motif Dynamic Drag and Drop class
 **
 ** Created : 950419
 **
-** Copyright (C) 2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the kernel module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses for Unix/X11 may use this file in accordance with the Qt Commercial
+** License Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 /* The following copyright notice pertains to the code as contributed
-to Troll Tech, not to Troll Tech's modifications. It is replicated
+to Trolltech, not to Trolltech's modifications. It is replicated
 in doc/dnd.doc, where the documentation system can see it. */
 
 /* Copyright 1996 Daniel Dardailler.
@@ -48,13 +60,16 @@ in doc/dnd.doc, where the documentation system can see it. */
 /* Only requires Xlib layer - not MT safe */
 /* Author: Daniel Dardailler, daniel@x.org */
 /* Adapted by : Matt Koss, koss@napri.sk */
-/* Further adaptions by : Troll Tech AS */
+/* Further adaptions by : Trolltech AS */
 /***********************************************************/
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 
 #include "qapplication.h"
+
+#ifndef QT_NO_DRAGANDDROP
+
 #include "qwidget.h"
 
 #include <X11/Xlib.h>
@@ -334,7 +349,7 @@ static void DndReadSourceProperty(Display * dpy,
 				  Window window, Atom dnd_selection,
 				  Atom ** targets, unsigned short * num_targets)
 {
-    DndSrcProp * src_prop = NULL;
+    DndSrcProp * src_prop = 0;
     Atom type ;
     int format ;
     unsigned long bytesafter, lengthRtn;
@@ -514,7 +529,7 @@ static Window MotifWindow(Display *display )
     int             format;
     unsigned long   size;
     unsigned long   bytes_after;
-    Window         *property = NULL;
+    Window         *property = 0;
     Window	    motif_window ;
 
     /* this version does no caching, so it's slow: round trip each time */
@@ -576,7 +591,7 @@ static DndTargetsTable TargetsTable(Display *display)
 			     (unsigned char **) &target_prop) != Success) ||
 	type == None) {
 	qWarning("QMotifDND: cannot get property on motif window");
-	return NULL ;
+	return 0;
     }
 
     if (target_prop->protocol_version != DND_PROTOCOL_VERSION) {
@@ -892,3 +907,5 @@ void qt_motifdnd_handle_msg( QWidget * /* w */ , const XEvent * xe, bool /* pass
 	break;
     }   //  end of switch ( dnd_data.reason )
 }
+
+#endif // QT_NO_DRAGANDDROP

@@ -3,15 +3,17 @@
 Qt Toolkit - checklists/main.cpp example file
 </title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
-a:link { text-decoration: none; }
-body { background: white; color: black; }
+a:link { color: #004faf; text-decoration: none }
+a:visited { color: #672967; text-decoration: none }body { background: white; color: black; }
 --></style>
 </head><body bgcolor="#ffffff">
 
-<a href="index.html">
-<img width="122" height="65" src="qtlogo.png" alt="Home"
-  align="left" border="0">
-</a><div align=right><img src="dochead.png" width="472" height="27"><br>
+<table width="100%">
+<tr><td><a href="index.html">
+<img width="100" height="100" src="qtlogo.png"
+alt="Home" border="0"><img width="100"
+height="100" src="face.png" alt="Home" border="0">
+</a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
 - <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
@@ -19,7 +21,7 @@ body { background: white; color: black; }
 - <a href="index.html">Home</a>
 - <a href="topicals.html"><b>Structure</b></a>
 </div>
-<br clear=all>
+</table>
 
 <h1 align=center>Listviews with Checkable Items</h1><br clear="all">
 
@@ -29,9 +31,9 @@ body { background: white; color: black; }
   <hr>
 
   Header file: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/checklists/checklists.h   2.1.1   edited 2000-03-20 $
+** &#36;Id&#58; qt/examples/checklists/checklists.h   2.2.0   edited 2000-08-31 $
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -70,9 +72,9 @@ protected slots:
   <hr>
 
   Implementation: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/checklists/checklists.cpp   2.1.1   edited 2000-03-20 $
+** &#36;Id&#58; qt/examples/checklists/checklists.cpp   2.2.0   edited 2000-08-31 $
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -142,7 +144,7 @@ CheckLists::CheckLists( <a href="qwidget.html">QWidget</a> *parent, const char *
     tmp-&gt;<a href="qboxlayout.html#219265">addWidget</a>( copy1 );
     copy1-&gt;<a href="qwidget.html#4aaf24">setMaximumWidth</a>( copy1-&gt;<a href="qpushbutton.html#d91732">sizeHint</a>().width() );
     // connect the SIGNAL clicked() of the pushbutton with the SLOT copy1to2()
-    <a href="qobject.html#c2d209">connect</a>( copy1, SIGNAL( clicked() ), this, SLOT( <a href=#102>copy1to2</a>() ) );
+    <a href="qobject.html#c2d209">connect</a>( copy1, SIGNAL( clicked() ), this, SLOT( <a href=#115>copy1to2</a>() ) );
 
     // another widget for layouting
     <a href="qvboxlayout.html">QVBoxLayout</a> *vbox2 = new <a href="qvboxlayout.html">QVBoxLayout</a>( lay );
@@ -166,7 +168,7 @@ CheckLists::CheckLists( <a href="qwidget.html">QWidget</a> *parent, const char *
     lay-&gt;<a href="qboxlayout.html#219265">addWidget</a>( copy2 );
     copy2-&gt;<a href="qwidget.html#4aaf24">setMaximumWidth</a>( copy2-&gt;<a href="qpushbutton.html#d91732">sizeHint</a>().width() );
     // ...and connect its clicked() SIGNAL to the copy2to3() SLOT
-    <a href="qobject.html#c2d209">connect</a>( copy2, SIGNAL( clicked() ), this, SLOT( <a href=#103>copy2to3</a>() ) );
+    <a href="qobject.html#c2d209">connect</a>( copy2, SIGNAL( clicked() ), this, SLOT( <a href=#116>copy2to3</a>() ) );
 
     tmp = new <a href="qvboxlayout.html">QVBoxLayout</a>( lay );
     tmp-&gt;<a href="qlayout.html#cd2c99">setMargin</a>( 5 );
@@ -183,7 +185,7 @@ CheckLists::CheckLists( <a href="qwidget.html">QWidget</a> *parent, const char *
  * the second one, and inserts them as Radio-ListViewItem.
  */
 
-void <a name="102"></a>CheckLists::copy1to2()
+void <a name="115"></a>CheckLists::copy1to2()
 {
     // create an iterator which operates on the first ListView
     <a href="qlistviewitemiterator.html">QListViewItemIterator</a> it( lv1 );
@@ -215,7 +217,7 @@ void <a name="102"></a>CheckLists::copy1to2()
  * Label at the right.
  */
 
-void <a name="103"></a>CheckLists::copy2to3()
+void <a name="116"></a>CheckLists::copy2to3()
 {
     // create an iterator which operates on the second ListView
     <a href="qlistviewitemiterator.html">QListViewItemIterator</a> it( lv2 );
@@ -238,9 +240,9 @@ void <a name="103"></a>CheckLists::copy2to3()
 
   Main:
 <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/checklists/main.cpp   2.1.1   edited 2000-01-31 $
+** &#36;Id&#58; qt/examples/checklists/main.cpp   2.2.0   edited 2000-08-31 $
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -265,6 +267,6 @@ int main( int argc, char **argv )
 </pre>
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.1</div>
+<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.2.0</div>
 </table></div></address></body></html>

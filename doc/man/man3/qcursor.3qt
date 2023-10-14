@@ -1,5 +1,5 @@
-.TH QCursor 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QCursor 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QCursor \- Mouse cursor with an arbitrary shape
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -17,31 +15,31 @@ QCursor \- Mouse cursor with an arbitrary shape
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQCursor\fR ()"
+.BI "\fBQCursor\fR () "
 .br
 .ti -1c
-.BI "\fBQCursor\fR ( int shape )"
+.BI "\fBQCursor\fR ( int shape ) "
 .br
 .ti -1c
-.BI "\fBQCursor\fR ( const QBitmap & " "bitmap" ", const QBitmap & " "mask" ", int " "hotX" "=-1, int " "hotY" "=-1 )"
+.BI "\fBQCursor\fR ( const QBitmap & " "bitmap" ", const QBitmap & " "mask" ", int " "hotX" "=-1, int " "hotY" "=-1 ) "
 .br
 .ti -1c
-.BI "\fBQCursor\fR ( const QPixmap & " "pixmap" ", int " "hotX" "=-1, int " "hotY" "=-1 )"
+.BI "\fBQCursor\fR ( const QPixmap & " "pixmap" ", int " "hotX" "=-1, int " "hotY" "=-1 ) "
 .br
 .ti -1c
-.BI "\fBQCursor\fR ( const QCursor & )"
+.BI "\fBQCursor\fR ( const QCursor & ) "
 .br
 .ti -1c
-.BI "\fB~QCursor\fR ()"
+.BI "\fB~QCursor\fR () "
 .br
 .ti -1c
-.BI "QCursor& \fBoperator=\fR ( const QCursor & )"
+.BI "QCursor& \fBoperator=\fR ( const QCursor & ) "
 .br
 .ti -1c
 .BI "int \fBshape\fR () const"
 .br
 .ti -1c
-.BI "void \fBsetShape\fR ( int )"
+.BI "void \fBsetShape\fR ( int ) "
 .br
 .ti -1c
 .BI "const QBitmap* \fBbitmap\fR () const"
@@ -56,19 +54,19 @@ QCursor \- Mouse cursor with an arbitrary shape
 .SS "Static Public Members"
 .in +1c
 .ti -1c
-.BI "QPoint \fBpos\fR ()"
+.BI "QPoint \fBpos\fR () "
 .br
 .ti -1c
-.BI "void \fBsetPos\fR ( int " "x" ", int y )"
+.BI "void \fBsetPos\fR ( int " "x" ", int y ) "
 .br
 .ti -1c
-.BI "void \fBsetPos\fR ( const QPoint & )"
+.BI "void \fBsetPos\fR ( const QPoint & ) "
 .br
 .ti -1c
-.BI "void \fBinitialize\fR ()"
+.BI "void \fBinitialize\fR () "
 .br
 .ti -1c
-.BI "void \fBcleanup\fR ()"
+.BI "void \fBcleanup\fR () "
 .br
 .in -1c
 .SH RELATED FUNCTION DOCUMENTATION
@@ -126,7 +124,7 @@ If you want to create a cursor with an own bitmap, use either the QCursor constr
 .PP
 To set or get the position of the mouse cursor use the static methods QCursor::pos() and QCursor::setPos().
 .PP
-See also: QWidget and GUI Design Handbook: Cursors.
+See also QWidget and GUI Design Handbook: Cursors.
 .PP
 Examples:
 .(l
@@ -156,7 +154,7 @@ Use the global color \fCcolor0\fR to draw 0-pixels and \fCcolor1\fR to draw 1-pi
 .PP
 Allowed cursor sizes depend on the display hardware (or the underlying window system). We recommend using 32x32 cursors, because this size is supported on all platforms. Some platforms also support 16x16, 48x48 and 64x64 cursors.
 .PP
-See also: QBitmap::QBitmap() and QBitmap::setMask().
+See also QBitmap::QBitmap() and QBitmap::setMask().
 .SH "QCursor::QCursor ( const QPixmap & pixmap, int hotX=-1, int hotY=-1 )"
 Constructs a custom pixmap cursor.
 .PP
@@ -168,7 +166,7 @@ Allowed cursor sizes depend on the display hardware (or the underlying window sy
 .PP
 Currently, only black-and-white pixmaps can be used.
 .PP
-See also: QPixmap::QPixmap() and QPixmap::setMask().
+See also QPixmap::QPixmap() and QPixmap::setMask().
 .SH "QCursor::QCursor ( const QCursor & c )"
 Constructs a copy of the cursor \fIc.\fR
 .SH "QCursor::QCursor ( int shape )"
@@ -208,7 +206,7 @@ Constructs a cursor with the specified \fIshape.\fR
 .PP
 These correspond to the predefined global QCursor objects.
 .PP
-See also: setShape().
+See also setShape().
 .SH "QCursor::~QCursor ()"
 Destructs the cursor.
 .SH "const QBitmap * QCursor::bitmap () const"
@@ -216,13 +214,13 @@ Returns the cursor bitmap, or 0 if it is one of the standard cursors.
 .SH "void QCursor::cleanup () \fC[static]\fR"
 Internal function that deinitializes the predefined cursors. This function is called from the QApplication destructor.
 .PP
-See also: initialize().
+See also initialize().
 .SH "QPoint QCursor::hotSpot () const"
 Returns the cursor hot spot, or (0,0) if it is one of the standard cursors.
 .SH "void QCursor::initialize () \fC[static]\fR"
 Internal function that initializes the predefined cursors. This function is called from the QApplication constructor.
 .PP
-See also: cleanup().
+See also cleanup().
 .SH "const QBitmap * QCursor::mask () const"
 Returns the cursor bitmap mask, or 0 if it is one of the standard cursors.
 .SH "QCursor & QCursor::operator= ( const QCursor & c )"
@@ -232,13 +230,13 @@ Returns the position of the cursor (hot spot) in global screen coordinates.
 .PP
 You can call QWidget::mapFromGlobal() to translate it to widget coordinates.
 .PP
-See also: setPos(), QWidget::mapFromGlobal() and QWidget::mapToGlobal().
+See also setPos(), QWidget::mapFromGlobal() and QWidget::mapToGlobal().
 .SH "void QCursor::setPos ( int x, int y ) \fC[static]\fR"
 Moves the cursor (hot spot) to the global screen position \fIx\fR and \fIy.\fR
 .PP
 You can call QWidget::mapToGlobal() to translate widget coordinates to global screen coordinates.
 .PP
-See also: pos(), QWidget::mapFromGlobal() and QWidget::mapToGlobal().
+See also pos(), QWidget::mapFromGlobal() and QWidget::mapToGlobal().
 .SH "void QCursor::setPos ( const QPoint & ) \fC[static]\fR"
 This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts.
 .SH "void QCursor::setShape ( int shape )"
@@ -278,9 +276,9 @@ CrossCursor - crosshair
 .PP
 These correspond to the predefined global QCursor objects.
 .PP
-See also: shape().
+See also shape().
 .SH "int QCursor::shape () const"
-Returns the cursor shape identifer. The return value is one of following values (casted to an int)
+Returns the cursor shape identifer. The return value is one of following values (cast to an int)
 .TP
 \fCArrowCursor\fR - standard arrow cursor
 .TP
@@ -316,20 +314,20 @@ Returns the cursor shape identifer. The return value is one of following values 
 .PP
 These correspond to the predefined global QCursor objects.
 .PP
-See also: setShape().
+See also setShape().
 .SH RELATED FUNCTION DOCUMENTATION
 .SH "QDataStream & operator<< (QDataStream & s, const QCursor & c)"
 Writes the cursor \fIc\fR to the stream \fIs.\fR
 .PP
-See also: Format of the QDataStream operators
+See also Format of the QDataStream operators
 .SH "QDataStream & operator>> (QDataStream & s, QCursor & c)"
 Reads a cursor from the stream \fIs\fR and sets \fIc\fR to the read data.
 .PP
-See also:  Format of the QDataStream operators
+See also  Format of the QDataStream operators
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qcursor.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

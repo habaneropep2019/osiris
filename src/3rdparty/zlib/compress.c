@@ -3,7 +3,7 @@
  * For conditions of distribution and use, see copyright notice in zlib.h 
  */
 
-/* @(#) $Id: qt/src/3rdparty/zlib/compress.c   2.1.1   edited 2000-01-31 $ */
+/* @(#) $Id: qt/src/3rdparty/zlib/compress.c   2.2.0   edited 2000-06-07 $ */
 
 #include "zlib.h"
 
@@ -58,7 +58,7 @@ int ZEXPORT compress2 (dest, destLen, source, sourceLen, level)
 
 /* ===========================================================================
  */
-int ZEXPORT compress (dest, destLen, source, sourceLen)
+int Q_ZEXPORT compress (dest, destLen, source, sourceLen)
     Bytef *dest;
     uLongf *destLen;
     const Bytef *source;

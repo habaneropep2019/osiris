@@ -3,15 +3,17 @@
 Qt Toolkit - qpixmap.h include file
 </title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
-a:link { text-decoration: none; }
-body { background: white; color: black; }
+a:link { color: #004faf; text-decoration: none }
+a:visited { color: #672967; text-decoration: none }body { background: white; color: black; }
 --></style>
 </head><body bgcolor="#ffffff">
 
-<a href="index.html">
-<img width="122" height="65" src="qtlogo.png" alt="Home"
-  align="left" border="0">
-</a><div align=right><img src="dochead.png" width="472" height="27"><br>
+<table width="100%">
+<tr><td><a href="index.html">
+<img width="100" height="100" src="qtlogo.png"
+alt="Home" border="0"><img width="100"
+height="100" src="face.png" alt="Home" border="0">
+</a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
 - <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
@@ -19,38 +21,50 @@ body { background: white; color: black; }
 - <a href="index.html">Home</a>
 - <a href="topicals.html"><b>Structure</b></a>
 </div>
-<br clear=all>
+</table>
 
 <h1 align=center>qpixmap.h</h1><br clear="all">
 This is the verbatim text of the qpixmap.h include file.  It is
 provided only for illustration; the copyright
-remains with Troll Tech.
+remains with Trolltech.
 <hr>
 <pre>
 /****************************************************************************
-** &#36;Id&#58; qt/src/kernel/qpixmap.h   2.1.1   edited 2000-04-05 $
+** &#36;Id&#58; qt/src/kernel/qpixmap.h   2.2.0   edited 2000-08-25 $
 **
 ** Definition of QPixmap class
 **
 ** Created : 940501
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the kernel module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #ifndef QPIXMAP_H
 #define QPIXMAP_H
@@ -62,6 +76,7 @@ remains with Troll Tech.
 #include "qnamespace.h"
 #endif // QT_H
 
+class QGfx;
 
 #if defined(_WS_WIN_)
 // Internal pixmap memory optimization class for Windows 9x
@@ -115,8 +130,10 @@ public:
     static  QPixmap grabWidget( QWidget * widget,
                                 int x=0, int y=0, int w=-1, int h=-1 );
 
+#ifndef QT_NO_TRANSFORMATIONS
     QPixmap         xForm( const QWMatrix &amp; ) const;
     static QWMatrix trueMatrix( const QWMatrix &amp;, int w, int h );
+#endif
 
     QImage      convertToImage() const;
     bool        convertFromImage( const QImage &amp;, ColorMode mode=Auto );
@@ -136,7 +153,9 @@ public:
     bool        loadFromData( const QByteArray &amp;data,
                               const char* format=0,
                               int conversion_flags=0 );
-    bool        save( const QString&amp; fileName, const char* format ) const;
+    bool        save( const QString&amp; fileName, const char* format ) const; // ### remove 3.0
+    bool        save( const QString&amp; fileName, const char* format,
+                      int quality ) const; // ### change to quality=-1 in 3.0
 
 #if defined(_WS_WIN_)
     HBITMAP     hbm()           const;
@@ -161,6 +180,14 @@ public:
     int         multiCellOffset() const;
     int         allocCell();
     void        freeCell( bool = FALSE );
+#endif
+
+#if defined(_WS_QWS_)
+    virtual QGfx * graphicsContext() const;
+    virtual unsigned char * scanLine(int) const;
+    virtual int bytesPerLine() const;
+    QRgb * clut() const;
+    int numCols() const;
 #endif
 
 protected:
@@ -195,6 +222,10 @@ protected:
 #elif defined(_WS_X11_)
         void   *ximage;
         void   *maskgc;
+#elif defined(_WS_QWS_)
+        int id; // ### should use QPaintDevice::hd, since it is there
+        QRgb * clut;
+        int numcols;
 #endif
         Optimization optim;
     } *data;
@@ -276,15 +307,16 @@ inline bool QPixmap::isMultiCellPixmap() const
   QPixmap stream functions
  *****************************************************************************/
 
+#ifndef QT_NO_DATASTREAM
 Q_EXPORT QDataStream &amp;operator&lt;&lt;( QDataStream &amp;, const QPixmap &amp; );
 Q_EXPORT QDataStream &amp;operator&gt;&gt;( QDataStream &amp;, QPixmap &amp; );
-
+#endif
 
 #endif // QPIXMAP_H
 
 </pre>
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.1</div>
+<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.2.0</div>
 </table></div></address></body></html>

@@ -3,15 +3,17 @@
 Qt Toolkit - life/main.cpp example file
 </title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
-a:link { text-decoration: none; }
-body { background: white; color: black; }
+a:link { color: #004faf; text-decoration: none }
+a:visited { color: #672967; text-decoration: none }body { background: white; color: black; }
 --></style>
 </head><body bgcolor="#ffffff">
 
-<a href="index.html">
-<img width="122" height="65" src="qtlogo.png" alt="Home"
-  align="left" border="0">
-</a><div align=right><img src="dochead.png" width="472" height="27"><br>
+<table width="100%">
+<tr><td><a href="index.html">
+<img width="100" height="100" src="qtlogo.png"
+alt="Home" border="0"><img width="100"
+height="100" src="face.png" alt="Home" border="0">
+</a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
 - <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
@@ -19,7 +21,7 @@ body { background: white; color: black; }
 - <a href="index.html">Home</a>
 - <a href="topicals.html"><b>Structure</b></a>
 </div>
-<br clear=all>
+</table>
 
 <h1 align=center>Conway's Game of Life</h1><br clear="all">
 
@@ -28,9 +30,9 @@ body { background: white; color: black; }
   <hr>
 
   Header file: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/life/life.h   2.1.1   edited 2000-01-31 $
+** &#36;Id&#58; qt/examples/life/life.h   2.2.0   edited 2000-08-31 $
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -46,7 +48,7 @@ class LifeWidget : public QFrame
 {
     Q_OBJECT
 public:
-    LifeWidget( <a href="qwidget.html">QWidget</a> *parent = 0, const char *name = 0 );
+    LifeWidget( int s = 10, QWidget *parent = 0, const char *name = 0 );
 
     void        setPoint( int i, int j );
 
@@ -65,21 +67,22 @@ protected:
     void         mouseHandle( const QPoint &amp;pos );
 
 private:
-    enum { SCALE = 10, MAXSIZE = 50, MINSIZE = 10, BORDER = 5 };
+    enum { MAXSIZE = 50, MINSIZE = 10, BORDER = 5 };
 
     bool        cells[2][MAXSIZE + 2][MAXSIZE + 2];
     int         current;
     int         maxi, maxj;
 
-    static int pos2index( int x )
+    int pos2index( int x )
     {
         return ( x - BORDER ) / SCALE + 1;
     }
-    static int index2pos( int i )
+    int index2pos( int i )
     {
         return  ( i - 1 ) * SCALE + BORDER;
     }
 
+    int SCALE;
 };
 
 #endif // LIFE_H
@@ -89,9 +92,9 @@ private:
   <hr>
 
   Implementation: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/life/life.cpp   2.1.1   edited 2000-04-24 $
+** &#36;Id&#58; qt/examples/life/life.cpp   2.2.0   edited 2000-08-31 $
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -108,9 +111,11 @@ private:
 
 // The main game of life widget
 
-LifeWidget::LifeWidget( <a href="qwidget.html">QWidget</a> *parent, const char *name )
+LifeWidget::LifeWidget( int s, QWidget *parent, const char *name )
     : <a href="qframe.html">QFrame</a>( parent, name )
 {
+    SCALE = s;
+
     maxi = maxj = 50;
     <a href="qwidget.html#378ed6">setMinimumSize</a>( MINSIZE * SCALE + 2 * BORDER,
                    MINSIZE * SCALE + 2 * BORDER );
@@ -118,12 +123,12 @@ LifeWidget::LifeWidget( <a href="qwidget.html">QWidget</a> *parent, const char *
                    MAXSIZE * SCALE + 2 * BORDER );
     <a href="qwidget.html#832223">setSizeIncrement</a>( SCALE, SCALE);
 
-    <a href=#162>clear</a>();
+    <a href=#175>clear</a>();
     <a href="qwidget.html#9ff9d8">resize</a>( maxi * SCALE + 2 * BORDER , maxj * SCALE + 2 * BORDER );
 
 }
 
-void <a name="162"></a>LifeWidget::clear()
+void <a name="175"></a>LifeWidget::clear()
 {
     current = 0;
     for ( int t = 0; t &lt; 2; t++ )
@@ -131,46 +136,46 @@ void <a name="162"></a>LifeWidget::clear()
             for ( int j = 0; j &lt; MAXSIZE + 2; j++ )
                 cells[t][i][j] = FALSE;
 
-    <a href="qwidget.html#413466">repaint</a>();
+    <a href="qwidget.html#f084e3">repaint</a>();
 }
 
 // We assume that the size will never be beyond the maximum size set
 // this is not in general TRUE, but in practice it's good enough for
 // this program
 
-void <a name="163"></a>LifeWidget::resizeEvent( <a href="qresizeevent.html">QResizeEvent</a> * e )
+void <a name="176"></a>LifeWidget::resizeEvent( <a href="qresizeevent.html">QResizeEvent</a> * e )
 {
     maxi = (e-&gt;size().width()  - 2 * BORDER) / SCALE;
     maxj = (e-&gt;size().height() - 2 * BORDER) / SCALE;
 }
 
-void <a name="164"></a>LifeWidget::setPoint( int i, int j )
+void <a name="177"></a>LifeWidget::setPoint( int i, int j )
 {
     if ( i &lt; 1 || i &gt; maxi || j &lt; 1 || j &gt; maxi )
         return;
     cells[current][i][j] = TRUE;
-    <a href="qwidget.html#413466">repaint</a>( index2pos(i), index2pos(j), SCALE, SCALE, FALSE );
+    <a href="qwidget.html#f084e3">repaint</a>( index2pos(i), index2pos(j), SCALE, SCALE, FALSE );
 }
 
-void <a name="165"></a>LifeWidget::mouseHandle( const QPoint &amp;pos )
+void <a name="178"></a>LifeWidget::mouseHandle( const QPoint &amp;pos )
 {
     int i = pos2index( pos.x() );
     int j = pos2index( pos.y() );
-    <a href=#164>setPoint</a>( i, j );
+    <a href=#177>setPoint</a>( i, j );
 }
 
-void <a name="166"></a>LifeWidget::mouseMoveEvent( <a href="qmouseevent.html">QMouseEvent</a> *e )
+void <a name="179"></a>LifeWidget::mouseMoveEvent( <a href="qmouseevent.html">QMouseEvent</a> *e )
 {
-    <a href=#165>mouseHandle</a>( e-&gt;pos() );
+    <a href=#178>mouseHandle</a>( e-&gt;pos() );
 }
 
-void <a name="167"></a>LifeWidget::mousePressEvent( <a href="qmouseevent.html">QMouseEvent</a> *e )
+void <a name="180"></a>LifeWidget::mousePressEvent( <a href="qmouseevent.html">QMouseEvent</a> *e )
 {
     if ( e-&gt;button() == QMouseEvent::LeftButton )
-        <a href=#165>mouseHandle</a>( e-&gt;pos() );
+        <a href=#178>mouseHandle</a>( e-&gt;pos() );
 }
 
-void <a name="168"></a>LifeWidget::nextGeneration()
+void <a name="181"></a>LifeWidget::nextGeneration()
 {
     for ( int i = 1; i &lt;= MAXSIZE; i++ ) {
         for ( int j = 1; j &lt;= MAXSIZE; j++ ) {
@@ -188,10 +193,10 @@ void <a name="168"></a>LifeWidget::nextGeneration()
         }
     }
     current = !current;
-    <a href="qwidget.html#413466">repaint</a>( FALSE );           // repaint without erase
+    <a href="qwidget.html#f084e3">repaint</a>( FALSE );           // repaint without erase
 }
 
-void <a name="169"></a>LifeWidget::paintEvent( <a href="qpaintevent.html">QPaintEvent</a> * e )
+void <a name="182"></a>LifeWidget::paintEvent( <a href="qpaintevent.html">QPaintEvent</a> * e )
 {
     int starti = pos2index( e-&gt;<a href="qpaintevent.html#6177d5">rect</a>().left() );
     int stopi  = pos2index( e-&gt;<a href="qpaintevent.html#6177d5">rect</a>().right() );
@@ -223,23 +228,44 @@ void <a name="169"></a>LifeWidget::paintEvent( <a href="qpaintevent.html">QPaint
 
   Main:
 <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/life/main.cpp   2.1.1   edited 2000-01-31 $
+** &#36;Id&#58; qt/examples/life/main.cpp   2.2.0   edited 2000-08-31 $
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
 **
 *****************************************************************************/
 
+#include &lt;stdlib.h&gt;
 #include "lifedlg.h"
 #include &lt;<a name="qapplication.h"></a><a href="qapplication-h.html">qapplication.h</a>&gt;
+
+void usage()
+{
+    <a name="qWarning"></a><a href="qapplication.html#7a943f">qWarning</a>( "Usage: life [-scale scale]" );
+}
 
 int main( int argc, char **argv )
 {
     <a name="QApplication"></a><a href="qapplication.html">QApplication</a> a( argc, argv );
 
-    LifeDialog *life = new LifeDialog;
+    int scale = 10;
+
+    for ( int i = 1; i &lt; argc; i++ ){
+        <a name="QString"></a><a href="qstring.html">QString</a> arg = argv[i];
+        if ( arg == "-scale" )
+            scale = atoi( argv[++i] );
+        else {
+            usage();
+            exit(1);
+        }
+    }
+
+    if ( scale &lt; 2 )
+        scale = 2;
+
+    LifeDialog *life = new LifeDialog( scale );
     a.<a name="setMainWidget"></a><a href="qapplication.html#11c921">setMainWidget</a>( life );
     life-&gt;<a name="show"></a><a href="qwidget.html#ccc8f7">show</a>();
 
@@ -248,6 +274,6 @@ int main( int argc, char **argv )
 </pre>
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.1</div>
+<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.2.0</div>
 </table></div></address></body></html>

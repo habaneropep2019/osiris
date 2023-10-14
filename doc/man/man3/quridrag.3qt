@@ -1,5 +1,5 @@
-.TH QUriDrag 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QUriDrag 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QUriDrag \- Provides for drag-and-drop of a list of URI references
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -19,49 +17,49 @@ Inherits QStoredDrag.
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQUriDrag\fR ( QStrList " "uris" ", QWidget * " "dragSource" " = 0, const char * " "name" " = 0 )"
+.BI "\fBQUriDrag\fR ( QStrList " "uris" ", QWidget * " "dragSource" " = 0, const char * " "name" " = 0 ) "
 .br
 .ti -1c
-.BI "\fBQUriDrag\fR ( QWidget * " "dragSource" " = 0, const char * " "name" " = 0 )"
+.BI "\fBQUriDrag\fR ( QWidget * " "dragSource" " = 0, const char * " "name" " = 0 ) "
 .br
 .ti -1c
-.BI "\fB~QUriDrag\fR ()"
+.BI "\fB~QUriDrag\fR () "
 .br
 .ti -1c
-.BI "void \fBsetFilenames\fR ( QStringList fnames )"
+.BI "void \fBsetFilenames\fR ( QStringList fnames ) "
 .br
 .ti -1c
-.BI "void \fBsetUnicodeUris\fR ( QStringList uuris )"
+.BI "void \fBsetUnicodeUris\fR ( QStringList uuris ) "
 .br
 .ti -1c
-.BI "virtual void \fBsetUris\fR ( QStrList uris )"
+.BI "virtual void \fBsetUris\fR ( QStrList uris ) "
 .br
 .in -1c
 .SS "Static Public Members"
 .in +1c
 .ti -1c
-.BI "QString \fBuriToLocalFile\fR ( const char * )"
+.BI "QString \fBuriToLocalFile\fR ( const char * ) "
 .br
 .ti -1c
-.BI "QCString \fBlocalFileToUri\fR ( const QString & )"
+.BI "QCString \fBlocalFileToUri\fR ( const QString & ) "
 .br
 .ti -1c
-.BI "QString \fBuriToUnicodeUri\fR ( const char * )"
+.BI "QString \fBuriToUnicodeUri\fR ( const char * ) "
 .br
 .ti -1c
-.BI "QCString \fBunicodeUriToUri\fR ( const QString & )"
+.BI "QCString \fBunicodeUriToUri\fR ( const QString & ) "
 .br
 .ti -1c
-.BI "bool \fBcanDecode\fR ( const QMimeSource * e )"
+.BI "bool \fBcanDecode\fR ( const QMimeSource * e ) "
 .br
 .ti -1c
-.BI "bool \fBdecode\fR ( const QMimeSource * " "e" ", QStrList & i )"
+.BI "bool \fBdecode\fR ( const QMimeSource * " "e" ", QStrList & i ) "
 .br
 .ti -1c
-.BI "bool \fBdecodeToUnicodeUris\fR ( const QMimeSource * " "e" ", QStringList & i )"
+.BI "bool \fBdecodeToUnicodeUris\fR ( const QMimeSource * " "e" ", QStringList & i ) "
 .br
 .ti -1c
-.BI "bool \fBdecodeLocalFiles\fR ( const QMimeSource * " "e" ", QStringList & i )"
+.BI "bool \fBdecodeLocalFiles\fR ( const QMimeSource * " "e" ", QStringList & i ) "
 .br
 .in -1c
 .SH DESCRIPTION
@@ -69,7 +67,7 @@ Provides for drag-and-drop of a list of URI references.
 .PP
 URIs are a useful way to refer to files that may be distributed across multiple machines. Much of the time a URI will refer to a file on a machine local to both the drag source and the drop target, and so the URI will be equivalent to passing a filename, but more extensible.
 .PP
-While presenting URIs to the user, use them in Unicode form so that the user can confortably edit and view them. For use in HTTP or other protocols, use the correctly escaped ASCII form (see.
+While presenting URIs to the user, use them in Unicode form so that the user can comfortably edit and view them. For use in HTTP or other protocols, use the correctly escaped ASCII form (see.
 .SH MEMBER FUNCTION DOCUMENTATION
 .SH "QUriDrag::QUriDrag ( QStrList uris, QWidget * dragSource = 0, const char * name = 0 )"
 Constructs an object to drag the list of URIs in \fIuris.\fR The \fIdragSource\fR and \fIname\fR arguments are passed on to QStoredDrag. Note that URIs are always in escaped UTF8 encoding, as defined by the W3C.
@@ -94,33 +92,33 @@ Returns TRUE if the event contained a valid list of URIs.
 .SH "QCString QUriDrag::localFileToUri ( const QString & filename ) \fC[static]\fR"
 Returns the URI equivalent to the absolute local file \fIfilename.\fR
 .PP
-See also: uriToLocalFile().
+See also uriToLocalFile().
 .SH "void QUriDrag::setFilenames ( QStringList fnames )"
 Sets the URIs to be the local-file URIs equivalent to \fIfnames.\fR
 .PP
-See also: localFileToUri() and setUris().
+See also localFileToUri() and setUris().
 .SH "void QUriDrag::setUnicodeUris ( QStringList uuris )"
 Sets the URIs to be the Unicode URIs (only useful for displaying to humans) \fIuuris.\fR
 .PP
-See also: localFileToUri() and setUris().
+See also localFileToUri() and setUris().
 .SH "void QUriDrag::setUris ( QStrList uris ) \fC[virtual]\fR"
 Changes the list of \fIuris\fR to be dragged.
 .SH "QCString QUriDrag::unicodeUriToUri ( const QString & uuri ) \fC[static]\fR"
 Returns the URI equivalent to the Unicode URI (only useful for displaying to humans). \fIuuri.\fR
 .PP
-See also: uriToLocalFile().
+See also uriToLocalFile().
 .SH "QString QUriDrag::uriToLocalFile ( const char * uri ) \fC[static]\fR"
 Returns the name of a local file equivalent to \fIuri,\fR or a null string if \fIuri\fR is not a local file.
 .PP
-See also: localFileToUri().
+See also localFileToUri().
 .SH "QString QUriDrag::uriToUnicodeUri ( const char * uri ) \fC[static]\fR"
 Returns the Unicode URI (only useful for displaying to humans) equivalent to \fIuri.\fR
 .PP
-See also:  localFileToUri().
+See also  localFileToUri().
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/quridrag.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

@@ -1,5 +1,5 @@
-.TH QListIterator 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QListIterator 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QListIterator \- Iterator for QList collections
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -21,10 +19,10 @@ Inherited by QStrListIterator.
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQListIterator\fR ( const QList<type> & list )"
+.BI "\fBQListIterator\fR ( const QList<type> & list ) "
 .br
 .ti -1c
-.BI "\fB~QListIterator\fR ()"
+.BI "\fB~QListIterator\fR () "
 .br
 .ti -1c
 .BI "uint \fBcount\fR () const"
@@ -39,37 +37,37 @@ Inherited by QStrListIterator.
 .BI "bool \fBatLast\fR () const"
 .br
 .ti -1c
-.BI "type* \fBtoFirst\fR ()"
+.BI "type* \fBtoFirst\fR () "
 .br
 .ti -1c
-.BI "type* \fBtoLast\fR ()"
+.BI "type* \fBtoLast\fR () "
 .br
 .ti -1c
 .BI "operator \fBtype*\fR ()const"
 .br
 .ti -1c
-.BI "type* \fBoperator*\fR ()"
+.BI "type* \fBoperator*\fR () "
 .br
 .ti -1c
 .BI "type* \fBcurrent\fR () const"
 .br
 .ti -1c
-.BI "type* \fBoperator\fR ()"
+.BI "type* \fBoperator\fR () "
 .br
 .ti -1c
-.BI "type* \fBoperator++\fR ()"
+.BI "type* \fBoperator++\fR () "
 .br
 .ti -1c
-.BI "type* \fBoperator+=\fR ( uint jump )"
+.BI "type* \fBoperator+=\fR ( uint jump ) "
 .br
 .ti -1c
-.BI "type* \fBoperator--\fR ()"
+.BI "type* \fBoperator--\fR () "
 .br
 .ti -1c
-.BI "type* \fBoperator-=\fR ( uint jump )"
+.BI "type* \fBoperator-=\fR ( uint jump ) "
 .br
 .ti -1c
-.BI "QListIterator<type>& \fBoperator=\fR ( const QListIterator<type> & it )"
+.BI "QListIterator<type>& \fBoperator=\fR ( const QListIterator<type> & it ) "
 .br
 .in -1c
 .SH DESCRIPTION
@@ -216,7 +214,7 @@ Program output:
         Ron
 .fi
 .PP
-See also: QList and collection classes
+See also QList and collection classes
 .PP
 Examples:
 .(l
@@ -232,21 +230,21 @@ Cast operator. Returns a pointer to the current iterator item. Same as current()
 .SH "bool QListIterator::atFirst () const"
 Returns TRUE if the current iterator item is the first list item, otherwise FALSE.
 .PP
-See also: toFirst() and atLast().
+See also toFirst() and atLast().
 .SH "bool QListIterator::atLast () const"
 Returns TRUE if the current iterator item is the last list item, otherwise FALSE.
 .PP
-See also: toLast() and atFirst().
+See also toLast() and atFirst().
 .SH "uint QListIterator::count () const"
 Returns the number of items in the list this iterator operates on.
 .PP
-See also: isEmpty().
+See also isEmpty().
 .SH "type * QListIterator::current () const"
 Returns a pointer to the current iterator item.
 .SH "bool QListIterator::isEmpty () const"
 Returns TRUE if the list is empty, i.e. count() == 0, otherwise FALSE.
 .PP
-See also: count().
+See also count().
 .SH "type * QListIterator::operator() ()"
 Makes the succeeding item current and returns the original current item.
 .PP
@@ -272,15 +270,15 @@ Assignment. Makes a copy of the iterator \fIit\fR and returns a reference to thi
 .SH "type * QListIterator::toFirst ()"
 Sets the current iterator item to point to the first list item and returns a pointer to the item. Sets the current item to null and returns null if the list is empty.
 .PP
-See also: toLast() and atFirst().
+See also toLast() and atFirst().
 .SH "type * QListIterator::toLast ()"
 Sets the current iterator item to point to the last list item and returns a pointer to the item. Sets the current item to null and returns null if the list is empty.
 .PP
-See also:  toFirst() and atLast().
+See also  toFirst() and atLast().
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qlistiterator.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

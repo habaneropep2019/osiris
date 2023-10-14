@@ -1,5 +1,5 @@
-.TH QPtrDictIterator 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QPtrDictIterator 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QPtrDictIterator \- Iterator for QPtrDict collections
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -19,10 +17,10 @@ Inherits QGDictIterator.
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQPtrDictIterator\fR ( const QPtrDict<type> & dict )"
+.BI "\fBQPtrDictIterator\fR ( const QPtrDict<type> & dict ) "
 .br
 .ti -1c
-.BI "\fB~QPtrDictIterator\fR ()"
+.BI "\fB~QPtrDictIterator\fR () "
 .br
 .ti -1c
 .BI "uint \fBcount\fR () const"
@@ -31,7 +29,7 @@ Inherits QGDictIterator.
 .BI "bool \fBisEmpty\fR () const"
 .br
 .ti -1c
-.BI "type* \fBtoFirst\fR ()"
+.BI "type* \fBtoFirst\fR () "
 .br
 .ti -1c
 .BI "operator \fBtype*\fR ()const"
@@ -43,13 +41,13 @@ Inherits QGDictIterator.
 .BI "void* \fBcurrentKey\fR () const"
 .br
 .ti -1c
-.BI "type* \fBoperator\fR ()"
+.BI "type* \fBoperator\fR () "
 .br
 .ti -1c
-.BI "type* \fBoperator++\fR ()"
+.BI "type* \fBoperator++\fR () "
 .br
 .ti -1c
-.BI "type* \fBoperator+=\fR ( uint jump )"
+.BI "type* \fBoperator+=\fR ( uint jump ) "
 .br
 .in -1c
 .SH DESCRIPTION
@@ -118,7 +116,7 @@ Note that the traversal order is arbitrary, you are not guaranteed the order abo
 .PP
 Multiple iterators may independently traverse the same dictionary. A QPtrDict knows about all iterators that are operating on the dictionary. When an item is removed from the dictionary, QPtrDict update all iterators that are referring the removed item to point to the next item in the traversing order.
 .PP
-See also: QPtrDict and Collection Classes
+See also QPtrDict and Collection Classes
 .SH MEMBER FUNCTION DOCUMENTATION
 .SH "QPtrDictIterator::QPtrDictIterator ( const QPtrDict<type> & dict )"
 Constructs an iterator for \fIdict.\fR The current iterator item is set to point on the first item in the \fIdict.\fR
@@ -129,7 +127,7 @@ Cast operator. Returns a pointer to the current iterator item. Same as current()
 .SH "uint QPtrDictIterator::count () const"
 Returns the number of items in the dictionary this iterator operates on.
 .PP
-See also: isEmpty().
+See also isEmpty().
 .SH "type * QPtrDictIterator::current () const"
 Returns a pointer to the current iterator item.
 .SH "void * QPtrDictIterator::currentKey () const"
@@ -137,7 +135,7 @@ Returns the key for the current iterator item.
 .SH "bool QPtrDictIterator::isEmpty () const"
 Returns TRUE if the dictionary is empty, i.e. count() == 0. Returns FALSE otherwise.
 .PP
-See also: count().
+See also count().
 .SH "type * QPtrDictIterator::operator() ()"
 Makes the succeeding item current and returns the original current item.
 .PP
@@ -158,7 +156,7 @@ returns null.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qptrdictiterator.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

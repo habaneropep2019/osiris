@@ -1,5 +1,5 @@
-.TH QDropEvent 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QDropEvent 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QDropEvent \- Event sent when a drag-and-drop is completed
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -21,7 +19,7 @@ Inherited by QDragMoveEvent.
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQDropEvent\fR ( const QPoint & " "pos" ", Type " "typ" "=Drop )"
+.BI "\fBQDropEvent\fR ( const QPoint & " "pos" ", Type " "typ" "=Drop ) "
 .br
 .ti -1c
 .BI "const QPoint& \fBpos\fR () const"
@@ -30,19 +28,19 @@ Inherited by QDragMoveEvent.
 .BI "bool \fBisAccepted\fR () const"
 .br
 .ti -1c
-.BI "void \fBignore\fR ()"
+.BI "void \fBignore\fR () "
 .br
 .ti -1c
 .BI "bool \fBisActionAccepted\fR () const"
 .br
 .ti -1c
-.BI "void \fBacceptAction\fR ( bool " "y" "=TRUE )"
+.BI "void \fBacceptAction\fR ( bool " "y" "=TRUE ) "
 .br
 .ti -1c
 .BI "enum \fBAction\fR { Copy, Link, Move, Private, UserAction=100 }"
 .br
 .ti -1c
-.BI "void \fBsetAction\fR ( Action a )"
+.BI "void \fBsetAction\fR ( Action a ) "
 .br
 .ti -1c
 .BI "Action \fBaction\fR () const"
@@ -63,7 +61,7 @@ Inherited by QDragMoveEvent.
 .BI "QByteArray data ( const char * f ) const \fI(obsolete)\fR"
 .br
 .ti -1c
-.BI "void \fBsetPoint\fR ( const QPoint & np )"
+.BI "void \fBsetPoint\fR ( const QPoint & np ) "
 .br
 .in -1c
 .SH DESCRIPTION
@@ -102,7 +100,7 @@ Call this to indicate whether the event provided data which your widget processe
 .PP
 \fBWarning:\fR To accept or reject the drop, call acceptAction(), not this function. This function indicates whether you processed the event at all.
 .PP
-See also: acceptAction().
+See also acceptAction().
 .PP
 Examples:
 .(l
@@ -123,7 +121,7 @@ data() normally needs to get the data from the drag source, which is potentially
 .PP
 The resulting data will have a size of 0 if the format was not available.
 .PP
-See also: format() and QByteArray::size().
+See also format() and QByteArray::size().
 .PP
 Reimplemented from QMimeSource.
 .SH "const char* QDropEvent::format ( int n = 0 ) const \fC[virtual]\fR"
@@ -131,7 +129,7 @@ Returns a string describing one of the available data types for this drag. Commo
 .PP
 This function is provided mainly for debugging. Most drop targets will use provides().
 .PP
-See also: data() and provides().
+See also data() and provides().
 .PP
 Examples:
 .(l
@@ -150,7 +148,7 @@ Returns the position where the drop was made.
 .SH "bool QDropEvent::provides ( const char * mimeType ) const \fC[virtual]\fR"
 Returns TRUE if this event provides format \fImimeType\fR or FALSE if it does not.
 .PP
-See also: data().
+See also data().
 .PP
 Reimplemented from QMimeSource.
 .SH "void QDropEvent::setAction ( Action a )"
@@ -160,13 +158,13 @@ Sets the drop to happen at \fInp.\fR You do normally not need to use this as it 
 .SH "QWidget* QDropEvent::source () const"
 If the source of the drag operation is a widget in this application, this function returns that source, otherwise 0. The source of the operation is the first parameter to to drag object subclass.
 .PP
-This is useful if your widget needs special behavior when dragging to itelf, etc.
+This is useful if your widget needs special behavior when dragging to itself, etc.
 .PP
 See QDragObject::QDragObject() and subclasses.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qdropevent.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

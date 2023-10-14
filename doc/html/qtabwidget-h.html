@@ -3,15 +3,17 @@
 Qt Toolkit - qtabwidget.h include file
 </title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
-a:link { text-decoration: none; }
-body { background: white; color: black; }
+a:link { color: #004faf; text-decoration: none }
+a:visited { color: #672967; text-decoration: none }body { background: white; color: black; }
 --></style>
 </head><body bgcolor="#ffffff">
 
-<a href="index.html">
-<img width="122" height="65" src="qtlogo.png" alt="Home"
-  align="left" border="0">
-</a><div align=right><img src="dochead.png" width="472" height="27"><br>
+<table width="100%">
+<tr><td><a href="index.html">
+<img width="100" height="100" src="qtlogo.png"
+alt="Home" border="0"><img width="100"
+height="100" src="face.png" alt="Home" border="0">
+</a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
 - <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
@@ -19,38 +21,50 @@ body { background: white; color: black; }
 - <a href="index.html">Home</a>
 - <a href="topicals.html"><b>Structure</b></a>
 </div>
-<br clear=all>
+</table>
 
 <h1 align=center>qtabwidget.h</h1><br clear="all">
 This is the verbatim text of the qtabwidget.h include file.  It is
 provided only for illustration; the copyright
-remains with Troll Tech.
+remains with Trolltech.
 <hr>
 <pre>
 /****************************************************************************
-** &#36;Id&#58; qt/src/widgets/qtabwidget.h   2.1.1   edited 2000-04-26 $
+** &#36;Id&#58; qt/src/widgets/qtabwidget.h   2.2.0   edited 2000-08-25 $
 **
 ** Definition of QTabWidget class
 **
 ** Created : 990318
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the widgets module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #ifndef QTABWIDGET_H
 #define QTABWIDGET_H
@@ -59,6 +73,8 @@ remains with Troll Tech.
 #include "qwidget.h"
 #include "qiconset.h"
 #endif // QT_H
+
+#ifndef QT_NO_COMPLEXWIDGETS
 
 class <a href="qtabbar.html">QTabBar</a>;
 class QTabWidgetData;
@@ -70,10 +86,14 @@ class Q_EXPORT <a href="qtabwidget.html">QTabWidget</a> : public <a href="qwidge
 {
     Q_OBJECT
     Q_ENUMS( TabPosition )
+    Q_ENUMS( TabShape )
     Q_PROPERTY( TabPosition tabPosition READ tabPosition WRITE setTabPosition )
+    Q_PROPERTY( TabShape tabShape READ tabShape WRITE setTabShape )
     Q_PROPERTY( int margin READ margin WRITE setMargin )
-
+    Q_PROPERTY( int currentPage READ currentPageIndex WRITE setCurrentPage )
+    
 public:
+    
     QTabWidget( QWidget *parent, const char *name, WFlags f);
     QTabWidget( QWidget *parent=0, const char *name=0);
    ~QTabWidget();
@@ -97,6 +117,8 @@ public:
     QString tabLabel( QWidget * ); //### const in 3.0
 
     QWidget * currentPage() const;
+    int currentPageIndex() const;
+    void setCurrentPage( int );
 
     QSize sizeHint() const;
     QSize minimumSizeHint() const;
@@ -105,11 +127,15 @@ public:
     TabPosition tabPosition() const;
     void setTabPosition( TabPosition );
 
+    enum TabShape { Rounded, Triangular };
+    TabShape tabShape() const;
+    void setTabShape( TabShape s );
+    
     int margin() const;
     void setMargin( int );
 
     QSizePolicy sizePolicy() const;
-    
+
 protected:
     void showEvent( QShowEvent * );
     void resizeEvent( QResizeEvent * );
@@ -120,7 +146,8 @@ protected:
     bool eventFilter( QObject *, QEvent * );
 
 signals:
-    void selected( const QString&amp; );
+    void currentChanged( QWidget * );
+    void selected( const QString&amp; ); // obsolete
 
 private slots:
     void showTab( int i );
@@ -144,12 +171,13 @@ private:        // Disabled copy constructor and operator=
 #endif
 };
 
+#endif // QT_NO_COMPLEXWIDGETS
 
-#endif
+#endif // QTABWIDGET_H
 
 </pre>
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.1</div>
+<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.2.0</div>
 </table></div></address></body></html>

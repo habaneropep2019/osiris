@@ -1,0 +1,62 @@
+.TH QXmlInputSource 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
+.\" license file included in the distribution for a complete license
+.\" statement.
+.\"
+.ad l
+.nh
+.SH NAME
+QXmlInputSource \- The source where XML data is read from
+<h1 align=center>QXmlInputSource Class Reference
+.br
+<small>[ XML module ]</small></h1>
+.br
+.PP
+\fC#include <qxml.h>\fR
+.PP
+.SS "Public Members"
+.in +1c
+.ti -1c
+.BI "\fBQXmlInputSource\fR () "
+.br
+.ti -1c
+.BI "\fBQXmlInputSource\fR ( QTextStream & stream ) "
+.br
+.ti -1c
+.BI "\fBQXmlInputSource\fR ( QFile & file ) "
+.br
+.ti -1c
+.BI "virtual \fB~QXmlInputSource\fR () "
+.br
+.ti -1c
+.BI "virtual const QString& \fBdata\fR () const"
+.br
+.ti -1c
+.BI "virtual void \fBsetData\fR ( const QString & d ) "
+.br
+.in -1c
+.SH DESCRIPTION
+The QXmlInputSource class is the source where XML data is read from.
+.PP
+All subclasses of QXmlReader read the input from this class.
+.SH MEMBER FUNCTION DOCUMENTATION
+.SH "QXmlInputSource::QXmlInputSource ()"
+Constructs a input source which contains no data.
+.SH "QXmlInputSource::QXmlInputSource ( QFile & file )"
+Constructs a input source and get the data from a file. If the file cannot be read the input source is empty.
+.SH "QXmlInputSource::QXmlInputSource ( QTextStream & stream )"
+Constructs a input source and get the data from the text stream.
+.SH "QXmlInputSource::~QXmlInputSource () \fC[virtual]\fR"
+Destructor.
+.SH "const QString& QXmlInputSource::data () const \fC[virtual]\fR"
+Returns all the data this input source contains.
+.SH "void QXmlInputSource::setData ( const QString & dat ) \fC[virtual]\fR"
+Sets the data of the input source to \fIdat.\fR
+.SH "SEE ALSO"
+.BR http://doc.trolltech.com/qxmlinputsource.html
+.SH COPYRIGHT
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
+license file included in the distribution for a complete license
+statement.
+.SH AUTHOR
+Generated automatically from the source code.

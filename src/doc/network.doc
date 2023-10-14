@@ -1,67 +1,76 @@
 /****************************************************************************
-** $Id: qt/doc/network.doc   2.1.1   edited 2000-05-18 $
+** $Id: qt/doc/network.doc   2.2.0   edited 2000-08-25 $
 **
 ** Documentation for network programming
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #if defined(DEBUG)
-static char ident[] = "$Id: qt/doc/network.doc   2.1.1   edited 2000-05-18 $";
+static char ident[] = "$Id: qt/doc/network.doc   2.2.0   edited 2000-08-25 $";
 #endif
 
 
 /*!
 \page network.html
 
-<title>Qt Documentation</title>
-</head><body bgcolor="#ffffff">
+\title Qt Network Module
 
-\postheader
+The network module offers classes to make network programming easier
+and portable. Basically there are three sets of classes, first very
+basic classes like \l QSocket, \l QServerSocket, \l QDns, etc. which
+allow to work in a portable way with TCP/IP sockets. In addition,
+there are classes like \l QNetworkProtocol, \l QNetworkOperation in
+the Qt base library, which provide an abstract layer for implementing
+network protocols and \c QUrlOperator which operates on such network
+protocols. Finally the third set of network classes are the passive
+ones, namely \c QUrl and \c QUrlInfo which do URL parsing and similar
+stuff.
 
-<h1 align=center>Network Programming with Qt</h1><br clear="all">
+The first set of classes (\l QSocket, \l QServerSocket, \l QDns, \l QFtp, etc.)
+are included in the "network" module of Qt.
 
-Since version 2.1 Qt offers classes to make network programming
-easier and portable. Basically there are three sets of classes, first very
-basic classes like \c QSocket, \c QServerSocket, \c QDns, etc. which allow to work
-in a portable way with TCP/IP sockets. Then there are classes like
-\c QNetworkProtocol, \c QNetworkOperation which provide an abstract
-layer for implementing network protocols which can be used in Qt, and
-\c QUrlOperator which operates on such network protocols. Finally the third
-set of network classes are the passive ones, namely \c QUrl and \c QUrlInfo
-which do URL parsing and similar stuff.
-
-The first set of classes (\c QSocket, \c QServerSocket, \c QDns, \c QFtp, etc.) is not
-included in Qt but will be released as a seperate extension after the
-Qt 2.1 release.
-
-Also, the QSocket classes are not directly related to the QNetwork
-classes, but QSocket should and will be used for implementing
-network protocols, which are directly related to the QNetwork
+The QSocket classes are not directly related to the QNetwork classes,
+but QSocket should and will be used for implementing network
+protocols, which are directly related to the QNetwork
 classes. E.g. the QFtp class (implementation of the FTP protocol) uses
-QSockets. But QSockets don't need to be used for protocol implementations,
-e.g. QLocalFs (which is an implementation of the local filesystem as
-network protocol) uses QDir and no QSocket. Using QNetworkProtocols
-you can implement everything which fits into a hierarchical structure and
-can be accessed using URLs. This could be e.g. a protocol which can read
-pictures from a digital camera using a serial connection.
+QSockets. But QSockets don't need to be used for protocol
+implementations, e.g. QLocalFs (which is an implementation of the
+local filesystem as network protocol) uses QDir and no QSocket. Using
+QNetworkProtocols you can implement everything which fits into a
+hierarchical structure and can be accessed using URLs. This could be
+e.g. a protocol which can read pictures from a digital camera using a
+serial connection.
 
-<h2>Working Network Protocol independent with QUrlOperator and QNetworkOperation</h2>
+<h2>Working Network Protocol independent with QUrlOperator and
+QNetworkOperation</h2>
 
 To just use existing network protocol implementations and operate on
 URLs using them is quite easy. E.g. downloading a file from an FTP
@@ -358,7 +367,7 @@ Here you have to return TRUE, if the connection is up and ok (this means
 operations on the protocol can be done). If the connection is not ok,
 return FALSE and start to try opening it. If you will not be able to open the
 connection at all (e.g. because the host is not found), emit a \c finished()
-signal and set an errorcode and the \c QNetworkProtocol::StFailed state to
+signal and set an error code and the \c QNetworkProtocol::StFailed state to
 the \c QNetworkOperation pointer you get here.
 
 Now, you never need to check before doing an operation yourself,
@@ -369,7 +378,7 @@ method if the connection is ok.
 
 Using this knowledge it should be possible to implement network protocols. Finally
 to be able to use it with a QUrlOperator (and so e.g. in the QFileDialog), you have to
-register the enwtork protocol implementation. This can be done like this:
+register the network protocol implementation. This can be done like this:
 
 \code
     QNetworkProtocol::registerNetworkProtocol( "myprot", new QNetworkProtocolFactory<MyProtocol> );
@@ -424,7 +433,7 @@ if you use an own network protocol implementation which defines additional error
 \c QNetworkOperation::protocolDetails() may also return a string which contains an error
 message then which could e.g. be displayed for the user.
 
-According tho this information it should be possible to react on errors.
+According to this information it should be possible to react on errors.
 
 Now, if you implement your own network protocol, you will need to tell about errors
 which occurred. First you always need to be able to access the \c QNetworkOperation

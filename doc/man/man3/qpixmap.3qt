@@ -1,5 +1,5 @@
-.TH QPixmap 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QPixmap 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QPixmap \- Off-screen pixel-based paint device
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -16,7 +14,7 @@ QPixmap \- Off-screen pixel-based paint device
 .PP
 Inherits QPaintDevice and Qt.
 .PP
-Inherited by QBitmap.
+Inherited by QBitmap and QCanvasPixmap.
 .PP
 .SS "Public Members"
 .in +1c
@@ -27,37 +25,37 @@ Inherited by QBitmap.
 .BI "enum \fBOptimization\fR { DefaultOptim, NoOptim, MemoryOptim=NoOptim, NormalOptim, BestOptim }"
 .br
 .ti -1c
-.BI "\fBQPixmap\fR ()"
+.BI "\fBQPixmap\fR () "
 .br
 .ti -1c
-.BI "\fBQPixmap\fR ( int " "w" ", int " "h" ", int " "depth" " = -1, Optimization = DefaultOptim )"
+.BI "\fBQPixmap\fR ( int " "w" ", int " "h" ", int " "depth" " = -1, Optimization = DefaultOptim ) "
 .br
 .ti -1c
-.BI "\fBQPixmap\fR ( const QSize &, int " "depth" " = -1, Optimization = DefaultOptim )"
+.BI "\fBQPixmap\fR ( const QSize &, int " "depth" " = -1, Optimization = DefaultOptim ) "
 .br
 .ti -1c
-.BI "\fBQPixmap\fR ( const QString & " "fileName" ", const char * " "format" "=0, ColorMode " "mode" "=Auto )"
+.BI "\fBQPixmap\fR ( const QString & " "fileName" ", const char * " "format" "=0, ColorMode " "mode" "=Auto ) "
 .br
 .ti -1c
-.BI "\fBQPixmap\fR ( const QString & " "fileName" ", const char * " "format" ", int conversion_flags )"
+.BI "\fBQPixmap\fR ( const QString & " "fileName" ", const char * " "format" ", int conversion_flags ) "
 .br
 .ti -1c
-.BI "\fBQPixmap\fR ( const char * xpm[] )"
+.BI "\fBQPixmap\fR ( const char * xpm[] ) "
 .br
 .ti -1c
-.BI "\fBQPixmap\fR ( const QByteArray & data )"
+.BI "\fBQPixmap\fR ( const QByteArray & data ) "
 .br
 .ti -1c
-.BI "\fBQPixmap\fR ( const QPixmap & )"
+.BI "\fBQPixmap\fR ( const QPixmap & ) "
 .br
 .ti -1c
-.BI "\fB~QPixmap\fR ()"
+.BI "\fB~QPixmap\fR () "
 .br
 .ti -1c
-.BI "QPixmap& \fBoperator=\fR ( const QPixmap & )"
+.BI "QPixmap& \fBoperator=\fR ( const QPixmap & ) "
 .br
 .ti -1c
-.BI "QPixmap& \fBoperator=\fR ( const QImage & )"
+.BI "QPixmap& \fBoperator=\fR ( const QImage & ) "
 .br
 .ti -1c
 .BI "bool \fBisNull\fR () const"
@@ -78,25 +76,25 @@ Inherited by QBitmap.
 .BI "int \fBdepth\fR () const"
 .br
 .ti -1c
-.BI "void \fBfill\fR ( const QColor & fillColor = Qt::white )"
+.BI "void \fBfill\fR ( const QColor & fillColor = Qt::white ) "
 .br
 .ti -1c
-.BI "void \fBfill\fR ( const QWidget *, int " "xofs" ", int yofs )"
+.BI "void \fBfill\fR ( const QWidget *, int " "xofs" ", int yofs ) "
 .br
 .ti -1c
-.BI "void \fBfill\fR ( const QWidget *, const QPoint & ofs )"
+.BI "void \fBfill\fR ( const QWidget *, const QPoint & ofs ) "
 .br
 .ti -1c
-.BI "void \fBresize\fR ( int " "width" ", int height )"
+.BI "void \fBresize\fR ( int " "width" ", int height ) "
 .br
 .ti -1c
-.BI "void \fBresize\fR ( const QSize & )"
+.BI "void \fBresize\fR ( const QSize & ) "
 .br
 .ti -1c
 .BI "const QBitmap* \fBmask\fR () const"
 .br
 .ti -1c
-.BI "void \fBsetMask\fR ( const QBitmap & )"
+.BI "void \fBsetMask\fR ( const QBitmap & ) "
 .br
 .ti -1c
 .BI "bool \fBselfMask\fR () const"
@@ -111,28 +109,31 @@ Inherited by QBitmap.
 .BI "QImage \fBconvertToImage\fR () const"
 .br
 .ti -1c
-.BI "bool \fBconvertFromImage\fR ( const QImage &, ColorMode " "mode" "=Auto )"
+.BI "bool \fBconvertFromImage\fR ( const QImage &, ColorMode " "mode" "=Auto ) "
 .br
 .ti -1c
-.BI "bool \fBconvertFromImage\fR ( const QImage &, int conversion_flags )"
+.BI "bool \fBconvertFromImage\fR ( const QImage &, int conversion_flags ) "
 .br
 .ti -1c
-.BI "bool \fBload\fR ( const QString & " "fileName" ", const char * " "format" "=0, ColorMode " "mode" "=Auto )"
+.BI "bool \fBload\fR ( const QString & " "fileName" ", const char * " "format" "=0, ColorMode " "mode" "=Auto ) "
 .br
 .ti -1c
-.BI "bool \fBload\fR ( const QString & " "fileName" ", const char * " "format" ", int conversion_flags )"
+.BI "bool \fBload\fR ( const QString & " "fileName" ", const char * " "format" ", int conversion_flags ) "
 .br
 .ti -1c
-.BI "bool \fBloadFromData\fR ( const uchar * " "buf" ", uint " "len" ", const char * " "format" "=0, ColorMode " "mode" "=Auto )"
+.BI "bool \fBloadFromData\fR ( const uchar * " "buf" ", uint " "len" ", const char * " "format" "=0, ColorMode " "mode" "=Auto ) "
 .br
 .ti -1c
-.BI "bool \fBloadFromData\fR ( const uchar * " "buf" ", uint " "len" ", const char * " "format" ", int conversion_flags )"
+.BI "bool \fBloadFromData\fR ( const uchar * " "buf" ", uint " "len" ", const char * " "format" ", int conversion_flags ) "
 .br
 .ti -1c
-.BI "bool \fBloadFromData\fR ( const QByteArray & " "data" ", const char * " "format" "=0, int " "conversion_flags" "=0 )"
+.BI "bool \fBloadFromData\fR ( const QByteArray & " "data" ", const char * " "format" "=0, int " "conversion_flags" "=0 ) "
 .br
 .ti -1c
 .BI "bool \fBsave\fR ( const QString & " "fileName" ", const char * format ) const"
+.br
+.ti -1c
+.BI "bool \fBsave\fR ( const QString & " "fileName" ", const char * " "format" ", int quality ) const"
 .br
 .ti -1c
 .BI "int \fBserialNumber\fR () const"
@@ -141,10 +142,10 @@ Inherited by QBitmap.
 .BI "Optimization \fBoptimization\fR () const"
 .br
 .ti -1c
-.BI "void \fBsetOptimization\fR ( Optimization )"
+.BI "void \fBsetOptimization\fR ( Optimization ) "
 .br
 .ti -1c
-.BI "virtual void \fBdetach\fR ()"
+.BI "virtual void \fBdetach\fR () "
 .br
 .ti -1c
 .BI "bool \fBisQBitmap\fR () const"
@@ -153,31 +154,31 @@ Inherited by QBitmap.
 .SS "Static Public Members"
 .in +1c
 .ti -1c
-.BI "int \fBdefaultDepth\fR ()"
+.BI "int \fBdefaultDepth\fR () "
 .br
 .ti -1c
-.BI "QPixmap \fBgrabWindow\fR ( WId, int " "x" "=0, int " "y" "=0, int " "w" "=-1, int " "h" "=-1 )"
+.BI "QPixmap \fBgrabWindow\fR ( WId, int " "x" "=0, int " "y" "=0, int " "w" "=-1, int " "h" "=-1 ) "
 .br
 .ti -1c
-.BI "QPixmap \fBgrabWidget\fR ( QWidget * " "widget" ", int " "x" "=0, int " "y" "=0, int " "w" "=-1, int " "h" "=-1 )"
+.BI "QPixmap \fBgrabWidget\fR ( QWidget * " "widget" ", int " "x" "=0, int " "y" "=0, int " "w" "=-1, int " "h" "=-1 ) "
 .br
 .ti -1c
-.BI "QWMatrix \fBtrueMatrix\fR ( const QWMatrix &, int " "w" ", int h )"
+.BI "QWMatrix \fBtrueMatrix\fR ( const QWMatrix &, int " "w" ", int h ) "
 .br
 .ti -1c
-.BI "const char* \fBimageFormat\fR ( const QString & fileName )"
+.BI "const char* \fBimageFormat\fR ( const QString & fileName ) "
 .br
 .ti -1c
-.BI "Optimization \fBdefaultOptimization\fR ()"
+.BI "Optimization \fBdefaultOptimization\fR () "
 .br
 .ti -1c
-.BI "void \fBsetDefaultOptimization\fR ( Optimization )"
+.BI "void \fBsetDefaultOptimization\fR ( Optimization ) "
 .br
 .in -1c
 .SS "Protected Members"
 .in +1c
 .ti -1c
-.BI "\fBQPixmap\fR ( int " "w" ", int " "h" ", const uchar * " "data" ", bool isXbitmap )"
+.BI "\fBQPixmap\fR ( int " "w" ", int " "h" ", const uchar * " "data" ", bool isXbitmap ) "
 .br
 .ti -1c
 .BI "virtual int \fBmetric\fR ( int ) const"
@@ -235,7 +236,7 @@ If your application uses dozens or hundreds of pixmaps, e.g. on tool bar buttons
     QPixmap::setDefaultOptimization( QPixmap::NormalOptim );
 .fi
 .PP
-See also: QBitmap, QImage, QImageIO and Shared Classes
+See also QBitmap, QImage, QImageIO and Shared Classes
 .PP
 Examples:
 .(l
@@ -269,23 +270,23 @@ We recommend sticking with \fCDefaultOptim\fR
 .SH "QPixmap::QPixmap ()"
 Constructs a null pixmap.
 .PP
-See also: isNull().
+See also isNull().
 .SH "QPixmap::QPixmap ( const QByteArray & img_data )"
 Constructs a pixmaps by loading from \fIimg_data.\fR The data can be in any image format supported by Qt.
 .PP
-See also: loadFromData().
+See also loadFromData().
 .SH "QPixmap::QPixmap ( const QString & fileName, const char * format, int conversion_flags )"
 Constructs a pixmap from the file \fIfileName.\fR If the file does not exist, or is of an unknown format, the pixmap becomes a null pixmap.
 .PP
 The parameters are passed on to load().
 .PP
-See also: isNull(), load(), loadFromData(), save() and imageFormat().
+See also isNull(), load(), loadFromData(), save() and imageFormat().
 .SH "QPixmap::QPixmap ( const QString & fileName, const char * format=0, ColorMode mode=Auto )"
 Constructs a pixmap from the file \fIfileName.\fR If the file does not exist, or is of an unknown format, the pixmap becomes a null pixmap.
 .PP
 The parameters are passed on to load().
 .PP
-See also: isNull(), load(), loadFromData(), save() and imageFormat().
+See also isNull(), load(), loadFromData(), save() and imageFormat().
 .SH "QPixmap::QPixmap ( const QPixmap & pixmap )"
 Constructs a pixmap which is a copy of \fIpixmap.\fR
 .SH "QPixmap::QPixmap ( const char * xpm[] )"
@@ -295,9 +296,16 @@ Error are silently ignored.
 .PP
 Note that it's possible to squeeze the XPM variable a little bit by using an unusual declaration:
 .PP
-\\example static const char * const start_xpm[]={ "16 15 8 1", "a c #cec6bd",
-....
-\\endcode
+.nf
+.br
+    static const char * const start_xpm[]={
+.br
+        "16 15 8 1",
+.br
+        "a c #cec6bd",
+.br
+    ....
+.fi
 .PP
 The extra \fCconst\fR makes the entire definition read-only, which is slightly more efficient e.g. when the code is in a shared library, and ROMable when the application is to be stored in ROM.
 .PP
@@ -313,7 +321,7 @@ The \fIdepth\fR can be either 1 (monochrome) or the depth of the current video m
 .PP
 If either \fIwidth\fR or \fIheight\fR is zero, a null pixmap is constructed.
 .PP
-See also: isNull().
+See also isNull().
 .SH "QPixmap::QPixmap ( const QSize & size, int depth = -1, Optimization optimization = DefaultOptim )"
 This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts.
 .SH "QPixmap::~QPixmap ()"
@@ -355,7 +363,7 @@ Note that even though a QPixmap with depth 1 behaves much like a QBitmap, isQBit
 .PP
 If a pixmap with depth 1 is painted with color0 and color1 and converted to an image, the pixels painted with color0 will produce pixel index 0 in the image and those painted with color1 will produce pixel index 1.
 .PP
-See also: convertToImage(), isQBitmap(), QImage::convertDepth(), defaultDepth() and QImage::hasAlphaBuffer().
+See also convertToImage(), isQBitmap(), QImage::convertDepth(), defaultDepth() and QImage::hasAlphaBuffer().
 .PP
 Bugs and limitations:
 .TP
@@ -372,7 +380,7 @@ Converts the pixmap to an image. Returns a null image if the operation failed.
 .PP
 If the pixmap has 1 bit depth, the returned image will also be 1 bits deep. If the pixmap has 2-8 bit depth, the returned image has 8 bit depth. If the pixmap has greater than 8 bit depth, the returned image has 32 bit depth.
 .PP
-See also: convertFromImage().
+See also convertFromImage().
 .PP
 Bugs and limitations:
 .TP
@@ -396,21 +404,21 @@ The mask may not be perfect but should be reasonable, so you can do things like:
 .PP
 This function is slow because it involves transformation to a QImage, non-trivial computations and a transformation back to QBitmap.
 .PP
-See also: QImage::createHeuristicMask().
+See also QImage::createHeuristicMask().
 .SH "int QPixmap::defaultDepth () \fC[static]\fR"
 Returns the default pixmap depth, i.e. the depth a pixmap gets if -1 is specified.
 .PP
-See also: depth().
+See also depth().
 .SH "QPixmap::Optimization QPixmap::defaultOptimization() \fC[static]\fR"
 Returns the default pixmap optimization setting.
 .PP
-See also: setDefaultOptimization(), setOptimization() and optimization().
+See also setDefaultOptimization(), setOptimization() and optimization().
 .SH "int QPixmap::depth () const"
 Returns the depth of the image.
 .PP
 The pixmap depth is also called bits per pixel (bpp) or bit planes of a pixmap. A null pixmap has depth 0.
 .PP
-See also: defaultDepth(), isNull() and QImage::convertDepth().
+See also defaultDepth(), isNull() and QImage::convertDepth().
 .SH "void QPixmap::detach () \fC[virtual]\fR"
 Special-purpose function that detaches the pixmap from shared pixmap data.
 .PP
@@ -483,7 +491,7 @@ This function actually asks \fIwidget\fR to paint itself (and its children to pa
 .PP
 If there is overlap, it returns a pixmap of the size you want, containing a rendering of \fIwidget.\fR If the rectangle you ask for is a superset of \fIwidget,\fR the area outside \fIwidget\fR are covered with the widget's background.
 .PP
-See also: grabWindow(), QPainter::redirect() and QWidget::paintEvent().
+See also grabWindow(), QPainter::redirect() and QWidget::paintEvent().
 .SH "QPixmap QPixmap::grabWindow ( WId window, int x=0, int y=0, int w=-1, int h=-1 ) \fC[static]\fR"
 Grabs the contents of a window and makes a pixmap out of it. Returns the pixmap.
 .PP
@@ -499,11 +507,11 @@ The reason we use a window identifier and not a QWidget is to enable grabbing of
 .PP
 \fBWarning:\fR Grabbing an area outside the screen is not safe in general. This depends on the underlying window system.
 .PP
-See also: grabWidget().
+See also grabWidget().
 .SH "int QPixmap::height () const"
 Returns the height of the pixmap.
 .PP
-See also: width(), size() and rect().
+See also width(), size() and rect().
 .PP
 Examples:
 .(l
@@ -514,7 +522,7 @@ Returns a string that specifies the image format of the file \fIfileName,\fR or 
 .PP
 The QImageIO documentation lists the supported image formats.
 .PP
-See also: load() and save().
+See also load() and save().
 .SH "bool QPixmap::isNull () const"
 Returns TRUE if it is a null pixmap.
 .PP
@@ -522,7 +530,7 @@ A null pixmap has zero width, zero height and no contents. You cannot draw in a 
 .PP
 Resizing an existing pixmap to (0,0) makes a pixmap into a null pixmap.
 .PP
-See also: resize().
+See also resize().
 .PP
 Examples:
 .(l
@@ -539,7 +547,7 @@ See the convertFromImage() documentation for a description of the \fIconversion_
 .PP
 The QImageIO documentation lists the supported image formats and explains how to add extra formats.
 .PP
-See also: loadFromData(), save(), imageFormat(), QImage::load() and QImageIO.
+See also loadFromData(), save(), imageFormat(), QImage::load() and QImageIO.
 .PP
 Examples:
 .(l
@@ -556,7 +564,7 @@ See the convertFromImage() documentation for a description of the \fIconversion_
 .PP
 The QImageIO documentation lists the supported image formats and explains how to add extra formats.
 .PP
-See also: load(), save(), imageFormat(), QImage::loadFromData() and QImageIO.
+See also load(), save(), imageFormat(), QImage::loadFromData() and QImageIO.
 .SH "bool QPixmap::loadFromData ( const QByteArray & buf, const char * format=0, int conversion_flags=0 )"
 This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts.
 .SH "bool QPixmap::loadFromData ( const uchar * buf, uint len, const char * format=0, ColorMode mode=Auto )"
@@ -564,7 +572,7 @@ This is an overloaded member function, provided for convenience. It differs from
 .SH "const QBitmap * QPixmap::mask () const"
 Returns the mask bitmap, or null if no mask has been set.
 .PP
-See also: setMask() and QBitmap.
+See also setMask() and QBitmap.
 .SH "int QPixmap::metric ( int m ) const \fC[virtual protected]\fR"
 Internal implementation of the virtual QPaintDevice::metric() function.
 .PP
@@ -574,7 +582,7 @@ Reimplemented from QPaintDevice.
 .SH "QPixmap & QPixmap::operator= ( const QImage & image )"
 Converts the image \fIimage\fR to a pixmap that is assigned to this pixmap. Returns a reference to the pixmap.
 .PP
-See also: convertFromImage().
+See also convertFromImage().
 .SH "QPixmap & QPixmap::operator= ( const QPixmap & pixmap )"
 Assigns the pixmap \fIpixmap\fR to this pixmap and returns a reference to this pixmap.
 .SH "QPixmap::Optimization QPixmap::optimization() const"
@@ -586,11 +594,11 @@ Call setDefaultOptimization() to set the default optimization for all new pixmap
 .TP
 Call setOptimization() to set a the optimization for individual pixmaps.
 .PP
-See also: setOptimization(), setDefaultOptimization() and defaultOptimization().
+See also setOptimization(), setDefaultOptimization() and defaultOptimization().
 .SH "QRect QPixmap::rect () const"
 Returns the enclosing rectangle (0,0,width(),height()) of the pixmap.
 .PP
-See also: width(), height() and size().
+See also width(), height() and size().
 .PP
 Examples:
 .(l
@@ -610,20 +618,24 @@ This is an overloaded member function, provided for convenience. It differs from
 .SH "bool QPixmap::save ( const QString & fileName, const char * format ) const"
 Saves the pixmap to the file \fIfileName,\fR using the image file format \fIformat.\fR Returns TRUE if successful, or FALSE if the pixmap could not be saved.
 .PP
-See also: load(), loadFromData(), imageFormat(), QImage::save() and QImageIO.
+See also load(), loadFromData(), imageFormat(), QImage::save() and QImageIO.
 .PP
 Examples:
 .(l
 qmag/qmag.cpp
 .)l
+.SH "bool QPixmap::save ( const QString & fileName, const char * format, int quality ) const"
+Saves the pixmap to the file \fIfileName,\fR using the image file format \fIformat\fR and a quality factor \fIquality. quality\fR must be in the range [0,100] or -1. Specify 0 to obtain small compressed files, 100 for large uncompressed files and -1 to use the default settings. Returns TRUE if successful, or FALSE if the pixmap could not be saved.
+.PP
+See also load(), loadFromData(), imageFormat(), QImage::save() and QImageIO.
 .SH "bool QPixmap::selfMask () const"
 Returns TRUE if the pixmap's mask is identical to the pixmap itself.
 .PP
-See also: mask().
+See also mask().
 .SH "int QPixmap::serialNumber () const"
-Returns a number that uniquely identifies the contents of this QPixmap object. This means that multiple QPixmaps objects can have the same serial number as long as they refere to the same contents. The serial number is for example very useful for caching.
+Returns a number that uniquely identifies the contents of this QPixmap object. This means that multiple QPixmaps objects can have the same serial number as long as they refer to the same contents. The serial number is for example very useful for caching.
 .PP
-See also: QPixmapCache.
+See also QPixmapCache.
 .SH "void QPixmap::setDefaultOptimization ( Optimization optimization ) \fC[static]\fR"
 Sets the default pixmap optimization.
 .PP
@@ -631,7 +643,7 @@ All \fInew\fR pixmaps that are created will use this default optimization. You m
 .PP
 The initial default optimization setting is \fCQPixmap::Normal.\fR
 .PP
-See also: defaultOptimization(), setOptimization() and optimization().
+See also defaultOptimization(), setOptimization() and optimization().
 .SH "void QPixmap::setMask ( const QBitmap & newmask )"
 Sets a mask bitmap.
 .PP
@@ -639,7 +651,7 @@ The \fImask\fR bitmap defines the clip mask for this pixmap. Every pixel in \fIm
 .PP
 Setting a null mask resets the mask,
 .PP
-See also: mask(), createHeuristicMask() and QBitmap.
+See also mask(), createHeuristicMask() and QBitmap.
 .SH "void QPixmap::setOptimization ( Optimization optimization )"
 Sets pixmap drawing optimization for this pixmap.
 .PP
@@ -649,7 +661,7 @@ Pixmap optimization involves keeping intermediate results in a cache buffer and 
 .PP
 Use the setDefaultOptimization() to change the default optimization for all new pixmaps.
 .PP
-See also: optimization(), setDefaultOptimization() and defaultOptimization().
+See also optimization(), setDefaultOptimization() and defaultOptimization().
 .PP
 Examples:
 .(l
@@ -658,7 +670,7 @@ desktop/desktop.cpp
 .SH "QSize QPixmap::size () const"
 Returns the size of the pixmap.
 .PP
-See also: width(), height() and rect().
+See also width(), height() and rect().
 .PP
 Examples:
 .(l
@@ -671,11 +683,11 @@ When transforming a pixmap with xForm(), the transformation matrix is internally
 .PP
 This function returns the modified matrix, which maps points correctly from the original pixmap into the new pixmap.
 .PP
-See also: xForm() and QWMatrix.
+See also xForm() and QWMatrix.
 .SH "int QPixmap::width () const"
 Returns the width of the pixmap.
 .PP
-See also: height(), size() and rect().
+See also height(), size() and rect().
 .PP
 Examples:
 .(l
@@ -774,7 +786,7 @@ If you want to draw rotated text, you do not have to implement all the code abov
     p.end();
 .fi
 .PP
-See also: trueMatrix(), QWMatrix and QPainter::setWorldMatrix().
+See also trueMatrix(), QWMatrix and QPainter::setWorldMatrix().
 .PP
 Bugs and limitations:
 .TP
@@ -788,15 +800,15 @@ qtimage/qtimage.cpp xform/xform.cpp qmag/qmag.cpp desktop/desktop.cpp movies/mai
 .SH "QDataStream & operator>> (QDataStream & s, QPixmap & pixmap)"
 Reads a pixmap from the stream.
 .PP
-See also: QPixmap::load() and Format of the QDataStream operators
+See also QPixmap::load() and Format of the QDataStream operators
 .SH "QDataStream & operator<< (QDataStream & s, const QPixmap & pixmap)"
 Writes a pixmap to the stream as a PNG image.
 .PP
-See also:  QPixmap::save() and Format of the QDataStream operators
+See also  QPixmap::save() and Format of the QDataStream operators
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qpixmap.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

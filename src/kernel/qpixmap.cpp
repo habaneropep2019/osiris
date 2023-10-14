@@ -1,27 +1,39 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qpixmap.cpp   2.1.1   edited 2000-05-22 $
+** $Id: qt/src/kernel/qpixmap.cpp   2.2.0   edited 2000-08-29 $
 **
 ** Implementation of QPixmap class
 **
 ** Created : 950301
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the kernel module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #include "qpixmap.h"
 
@@ -240,7 +252,7 @@ QPixmap::QPixmap( const QString& fileName, const char *format, ColorMode mode )
   Note that it's possible to squeeze the XPM variable a little bit by
   using an unusual declaration:
 
-  \example
+  \code
     static const char * const start_xpm[]={
         "16 15 8 1",
         "a c #cec6bd",
@@ -356,7 +368,7 @@ QPixmap &QPixmap::operator=( const QPixmap &pixmap )
 	      pixmap.data->bitmap, pixmap.data->optim );
 	data->uninit = FALSE;
 	if ( !isNull() ) {
-	    bitBlt( this, 0, 0, &pixmap, pixmap.width(), pixmap.height(),
+	    bitBlt( this, 0, 0, &pixmap, 0, 0, pixmap.width(), pixmap.height(),
 		    CopyROP, TRUE );
 	    if ( pixmap.mask() )
 		setMask( pixmap.data->selfmask ? *((QBitmap*)(this))
@@ -691,7 +703,7 @@ bool QPixmap::load( const QString &fileName, const char *format,
 	conversion_flags |= MonoOnly;
 	break;
       default:
-	;// Nothing.
+	break;// Nothing.
     }
     return load( fileName, format, conversion_flags );
 }
@@ -712,7 +724,7 @@ bool QPixmap::convertFromImage( const QImage &image, ColorMode mode )
 	conversion_flags |= MonoOnly;
 	break;
       default:
-	;// Nothing.
+	break;// Nothing.
     }
     return convertFromImage( image, conversion_flags );
 }
@@ -769,7 +781,7 @@ bool QPixmap::loadFromData( const uchar *buf, uint len, const char *format,
 	conversion_flags |= MonoOnly;
 	break;
       default:
-	;// Nothing.
+	break;// Nothing.
     }
     return loadFromData( buf, len, format, conversion_flags );
 }
@@ -790,15 +802,44 @@ bool QPixmap::loadFromData( const QByteArray &buf, const char *format,
   Saves the pixmap to the file \e fileName, using the image file format
   \e format.  Returns TRUE if successful, or FALSE if the pixmap could not
   be saved.
+
   \sa load(), loadFromData(), imageFormat(), QImage::save(), QImageIO
 */
 
 bool QPixmap::save( const QString &fileName, const char *format ) const
 {
+    return save( fileName, format, -1 );
+}
+
+
+/*!
+  Saves the pixmap to the file \e fileName, using the image file format
+  \e format and a quality factor \e quality.  \e quality must be in the
+  range [0,100] or -1.  Specify 0 to obtain small compressed files, 100
+  for large uncompressed files and -1 to use the default settings.
+  Returns TRUE if successful, or FALSE if the pixmap could not be saved.
+
+  \sa load(), loadFromData(), imageFormat(), QImage::save(), QImageIO
+*/
+
+bool QPixmap::save( const QString &fileName, const char *format, int quality ) const
+{
     if ( isNull() )
 	return FALSE;				// nothing to save
     QImageIO io( fileName, format );
     io.setImage( convertToImage() );
+    if ( quality > 100  || quality < -1 ) {
+#if defined(CHECK_RANGE)
+	qWarning( "QPixmap::save: quality out of range [-1,100]" );
+#endif
+        if ( quality > 100 )
+	    quality = 100;
+    }
+    if ( quality >= 0 ) {
+	QString s;
+	s.setNum( quality );
+	io.setParameters( s.latin1() );
+    }
     return io.write();
 }
 
@@ -808,7 +849,7 @@ bool QPixmap::save( const QString &fileName, const char *format ) const
 
   Returns a number that uniquely identifies the contents of this QPixmap object.
   This means that multiple QPixmaps objects can have the same serial number
-  as long as they refere to the same contents.
+  as long as they refer to the same contents.
   The serial number is for example very useful for caching.
 
   \sa QPixmapCache
@@ -862,7 +903,7 @@ static QPixmap grabChildWidgets( QWidget * w )
 	while( (child=it.current()) != 0 ) {
 	    ++it;
 	    if ( child->isWidgetType() &&
-		 !((QWidget *)child)->testWState( Qt::WState_ForceHide ) &&
+		 !((QWidget *)child)->isHidden() &&
 		 ((QWidget *)child)->geometry().intersects( w->rect() ) ) {
 		// those conditions aren't quite right, it's possible
 		// to have a grandchild completely outside its
@@ -942,7 +983,7 @@ QPixmap QPixmap::grabWidget( QWidget * widget, int x, int y, int w, int h )
 /*****************************************************************************
   QPixmap stream functions
  *****************************************************************************/
-
+#ifndef QT_NO_DATASTREAM
 /*!
   \relates QPixmap
   Writes a pixmap to the stream as a PNG image.
@@ -980,3 +1021,4 @@ QDataStream &operator>>( QDataStream &s, QPixmap &pixmap )
     return s;
 }
 
+#endif //QT_NO_DATASTREAM

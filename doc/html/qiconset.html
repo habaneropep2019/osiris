@@ -1,15 +1,17 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head>
 <title>Qt Toolkit - QIconSet Class</title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
-a:link { text-decoration: none; }
-body { background: white; color: black; }
+a:link { color: #004faf; text-decoration: none }
+a:visited { color: #672967; text-decoration: none }body { background: white; color: black; }
 --></style>
 </head><body bgcolor="#ffffff">
 
-<a href="index.html">
-<img width="122" height="65" src="qtlogo.png" alt="Home"
-  align="left" border="0">
-</a><div align=right><img src="dochead.png" width="472" height="27"><br>
+<table width="100%">
+<tr><td><a href="index.html">
+<img width="100" height="100" src="qtlogo.png"
+alt="Home" border="0"><img width="100"
+height="100" src="face.png" alt="Home" border="0">
+</a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
 - <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
@@ -17,7 +19,7 @@ body { background: white; color: black; }
 - <a href="index.html">Home</a>
 - <a href="topicals.html"><b>Structure</b></a>
 </div>
-<br clear=all>
+</table>
 
 <h1 align=center>QIconSet Class Reference</h1><br clear="all">
 <p>
@@ -28,22 +30,23 @@ The QIconSet class provides a set of differently styled and sized icons.
 <p><a href="qiconset-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><span class="fn">enum <a href="#Size"><b>Size</b></a> { Automatic, Small, Large }</span>
-<li><span class="fn">enum <a href="#Mode"><b>Mode</b></a> { Normal, Disabled, Active }</span>
-<li><span class="fn"><a href="#57a0f3"><b>QIconSet</b></a> () </span>
-<li><span class="fn"><a href="#bbe8b6"><b>QIconSet</b></a> ( const QPixmap &amp;, Size = Automatic ) </span>
-<li><span class="fn"><a href="#c6c540"><b>QIconSet</b></a> ( const QIconSet &amp; ) </span>
-<li><span class="fn">virtual <a href="#a39728"><b>~QIconSet</b></a> () </span>
-<li><span class="fn">void <a href="#a5444c"><b>reset</b></a> ( const QPixmap &amp;, Size ) </span>
-<li><span class="fn">virtual void <a href="#d52d93"><b>setPixmap</b></a> ( const QPixmap &amp;, Size, Mode = Normal ) </span>
-<li><span class="fn">virtual void <a href="#642129"><b>setPixmap</b></a> ( const QString &amp;, Size, Mode = Normal ) </span>
-<li><span class="fn">QPixmap <a href="#79f3fd"><b>pixmap</b></a> ( Size, Mode ) const</span>
-<li><span class="fn">QPixmap <a href="#cab5bd"><b>pixmap</b></a> ( Size s, bool enabled ) const</span>
-<li><span class="fn">QPixmap <a href="#095840"><b>pixmap</b></a> () const</span>
-<li><span class="fn">bool <a href="#5a1af1"><b>isGenerated</b></a> ( Size, Mode ) const</span>
-<li><span class="fn">bool <a href="#ecba8e"><b>isNull</b></a> () const</span>
-<li><span class="fn">void <a href="#ae49e5"><b>detach</b></a> () </span>
-<li><span class="fn">QIconSet&amp; <a href="#762570"><b>operator=</b></a> ( const QIconSet &amp; ) </span>
+<li><div class="fn">enum <a href="#Size"><b>Size</b></a> { Automatic, Small, Large }</div>
+<li><div class="fn">enum <a href="#Mode"><b>Mode</b></a> { Normal, Disabled, Active }</div>
+<li><div class="fn"><a href="#57a0f3"><b>QIconSet</b></a> () </div>
+<li><div class="fn"><a href="#bbe8b6"><b>QIconSet</b></a> ( const QPixmap &amp;, Size = Automatic ) </div>
+<li><div class="fn"><a href="#7d1efd"><b>QIconSet</b></a> ( const QPixmap &amp; smallPix, const QPixmap &amp; largePix ) </div>
+<li><div class="fn"><a href="#c6c540"><b>QIconSet</b></a> ( const QIconSet &amp; ) </div>
+<li><div class="fn">virtual <a href="#a39728"><b>~QIconSet</b></a> () </div>
+<li><div class="fn">void <a href="#a5444c"><b>reset</b></a> ( const QPixmap &amp;, Size ) </div>
+<li><div class="fn">virtual void <a href="#d52d93"><b>setPixmap</b></a> ( const QPixmap &amp;, Size, Mode = Normal ) </div>
+<li><div class="fn">virtual void <a href="#642129"><b>setPixmap</b></a> ( const QString &amp;, Size, Mode = Normal ) </div>
+<li><div class="fn">QPixmap <a href="#79f3fd"><b>pixmap</b></a> ( Size, Mode ) const</div>
+<li><div class="fn">QPixmap <a href="#cab5bd"><b>pixmap</b></a> ( Size s, bool enabled ) const</div>
+<li><div class="fn">QPixmap <a href="#095840"><b>pixmap</b></a> () const</div>
+<li><div class="fn">bool <a href="#5a1af1"><b>isGenerated</b></a> ( Size, Mode ) const</div>
+<li><div class="fn">bool <a href="#ecba8e"><b>isNull</b></a> () const</div>
+<li><div class="fn">void <a href="#ae49e5"><b>detach</b></a> () </div>
+<li><div class="fn">QIconSet&amp; <a href="#762570"><b>operator=</b></a> ( const QIconSet &amp; ) </div>
 </ul>
 <hr><h2><a name="details"></a>Detailed Description</h2>
 The QIconSet class provides a set of differently styled and sized icons.
@@ -100,7 +103,7 @@ For example:
 Active when the mouse in inside the widget (see <a href="qwidget.html#4d173d">QWidget::enterEvent</a>),
 while the mouse is pressed pending the release that will activate
 the function, or when it is the currently selected item.
-<p>See also:  <a href="qpixmap.html">QPixmap</a>, <a href="qlabel.html">QLabel</a>, <a href="qtoolbutton.html">QToolButton</a>, <a href="qpopupmenu.html">QPopupMenu</a>, QIconViewItem::setViewMode(), <a href="qmainwindow.html#44e8cb">QMainWindow::setUsesBigPixmaps</a>(), <a href="guibooks.html#fowler">GUI Design Handbook: Iconic Label</a> and <a href="http://www.microsoft.com/clipgallerylive/icons.asp">Microsoft Icon Gallery.</a>
+<p>See also  <a href="qpixmap.html">QPixmap</a>, <a href="qlabel.html">QLabel</a>, <a href="qtoolbutton.html">QToolButton</a>, <a href="qpopupmenu.html">QPopupMenu</a>, QIconViewItem::setViewMode(), <a href="qmainwindow.html#44e8cb">QMainWindow::setUsesBigPixmaps</a>(), <a href="guibooks.html#fowler">GUI Design Handbook: Iconic Label</a> and <a href="http://www.microsoft.com/clipgallerylive/icons.asp">Microsoft Icon Gallery.</a>
 
 <hr><h2>Member Type Documentation</h2>
 <h3 class="fn"><a name="Mode">QIconSet::Mode</a></h3>
@@ -135,12 +138,12 @@ pixel size. This is a useful default.
 Large pixmap may be automatically scaled to two-thirds of its size to
 generate the Small pixmap.  Conversely, a Small pixmap will be
 automatically scaled up by 50% to create a Large pixmap if needed.
-<p>See also:  <a href="#642129">setPixmap</a>(), <a href="#095840">pixmap</a>(), QIconViewItem::setViewMode() and <a href="qmainwindow.html#44e8cb">QMainWindow::setUsesBigPixmaps</a>().
+<p>See also  <a href="#642129">setPixmap</a>(), <a href="#095840">pixmap</a>(), QIconViewItem::setViewMode() and <a href="qmainwindow.html#44e8cb">QMainWindow::setUsesBigPixmaps</a>().
 <hr><h2>Member Function Documentation</h2>
 <h3 class="fn"><a name="57a0f3"></a>QIconSet::QIconSet ()</h3>
 <p>Constructs an icon set of <a href="qpixmap.html#29cbd3">null</a> pixmaps.
 Use <a href="#642129">setPixmap</a>(), <a href="#a5444c">reset</a>(), or <a href="#762570">operator=</a>() to set some pixmaps.
-<p>See also:  <a href="#a5444c">reset</a>().
+<p>See also  <a href="#a5444c">reset</a>().
 <h3 class="fn"><a name="bbe8b6"></a>QIconSet::QIconSet ( const <a href="qpixmap.html">QPixmap</a> &amp; pixmap, <a href="qiconset.html#Size">Size</a> size = Automatic )</h3>
 <p>Constructs an icon set for which the Normal pixmap is
 <em>pixmap,</em> which is assumed to be the given <em>size.</em>
@@ -148,7 +151,11 @@ Use <a href="#642129">setPixmap</a>(), <a href="#a5444c">reset</a>(), or <a href
 QIconSet will determine if the pixmap is Small or Large
 from its pixel size.
 Pixmaps less than 23 pixels wide are considered to be Small.
-<p>See also:  <a href="#a5444c">reset</a>().
+<p>See also  <a href="#a5444c">reset</a>().
+<h3 class="fn"><a name="7d1efd"></a>QIconSet::QIconSet ( const <a href="qpixmap.html">QPixmap</a> &amp; smallPix, const <a href="qpixmap.html">QPixmap</a> &amp; largePix )</h3>
+<p>Creates an iconset which uses the pixmap <em>smallPix</em> for for
+displaying small a small icon, and <em>largePix</em> for displaying a large
+one.
 <h3 class="fn"><a name="c6c540"></a>QIconSet::QIconSet ( const QIconSet &amp; other )</h3>
 <p>Constructs a copy of <em>other.</em>  This is very fast.
 <h3 class="fn"><a name="a39728"></a>QIconSet::~QIconSet () <code>[virtual]</code></h3>
@@ -168,11 +175,11 @@ is never empty (although it may contain null pixmaps).
 <p>Assigns <em>other</em> to this icon set and returns a reference to this
 icon set.
 <p>This is very fast.
-<p>See also:  <a href="#ae49e5">detach</a>().
+<p>See also  <a href="#ae49e5">detach</a>().
 <h3 class="fn"><a href="qpixmap.html">QPixmap</a> <a name="095840"></a>QIconSet::pixmap () const</h3>
 <p>Returns the pixmap originally provided to the constructor or
 to <a href="#a5444c">reset</a>().  This is the Normal pixmap of unspecified <a href="#Size">Size</a>.
-<p>See also:  <a href="#a5444c">reset</a>().
+<p>See also  <a href="#a5444c">reset</a>().
 <h3 class="fn"><a href="qpixmap.html">QPixmap</a> <a name="79f3fd"></a>QIconSet::pixmap ( <a href="qiconset.html#Size">Size</a> s, <a href="qiconset.html#Mode">Mode</a> m ) const</h3>
 <p>Returns a pixmap with size <em>s</em> and mode <em>m,</em> generating one if
 needed. Generated pixmaps are cached.
@@ -187,25 +194,29 @@ assuming it to be of size <em>s.</em>
 <p>Sets this icon set to provide <em>pm</em> for a <em>size</em> and <em>mode.</em>
 It may also use <em>pm</em> for deriving some other varieties if those
 are not set.
-<p>The <em>size</em> must be Large or Small; it cannot be Automatic.
-<p>See also:  <a href="#a5444c">reset</a>().
+<p>The <em>size</em> can be one of Automatic, Large or Small.  If Automatic is used,
+QIconSet will determine if the pixmap is Small or Large from its pixel size.
+Pixmaps less than 23 pixels wide are considered to be Small.
+<p>See also  <a href="#a5444c">reset</a>().
 <h3 class="fn">void <a name="642129"></a>QIconSet::setPixmap ( const <a href="qstring.html">QString</a> &amp; fileName, <a href="qiconset.html#Size">Size</a> s, <a href="qiconset.html#Mode">Mode</a> m = Normal )</h3>
 <p>Sets this icon set to load <em>fileName</em> as a pixmap and provide it
 for size <em>s</em> and mode <em>m.</em>
 It may also use the pixmap for deriving some other varieties if those
 are not set.
-<p>The <em>size</em> must be Large or Small; it cannot be Automatic.
+<p>The <em>size</em> can be one of Automatic, Large or Small.  If Automatic is used,
+QIconSet will determine if the pixmap is Small or Large from its pixel size.
+Pixmaps less than 23 pixels wide are considered to be Small.
 <hr><p>
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.1.1"><nobr>
+<input type=hidden name="version" value="2.2.0"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
 copyright &copy; 1995-2000
-<a href="http://www.trolltech.com">Troll Tech</a>, all rights reserved.<p><address><hr><div align="center">
+<a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.1</div>
+<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.2.0</div>
 </table></div></address></body></html>

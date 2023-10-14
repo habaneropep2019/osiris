@@ -1,27 +1,39 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qevent.h   2.1.1   edited 2000-03-30 $
+** $Id: qt/src/kernel/qevent.h   2.2.0   edited 2000-08-25 $
 **
 ** Definition of event classes
 **
 ** Created : 931029
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the kernel module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #ifndef QEVENT_H
 #define QEVENT_H
@@ -43,7 +55,7 @@ public:
 	//       it's probably because you're trying to include X11, which
 	//	 has a mess of #defines in it.  Put the messy X11 includes
 	//	 *AFTER* the nice clean Qt includes.
-	//
+
 	None = 0,				// invalid event
 
 
@@ -68,13 +80,13 @@ public:
 	Close = 19,				// request to close widget
 	Quit = 20,				// request to quit application
 	Reparent = 21,				// widget has been reparented
-	ShowMaximized = 21,		       	// widget is shown maximized
 	ShowMinimized = 22,		       	// widget is shown minimized
 	ShowNormal = 23,	       		// widget is shown normal
 	WindowActivate = 24,	       		// window was activated
 	WindowDeactivate = 25,	       		// window was deactivated
 	ShowToParent = 26,	       		// widget is shown to parent
 	HideToParent = 27,	       		// widget is hidden to parent
+	ShowMaximized = 28,		       	// widget is shown maximized
 	Accel = 30,				// accelerator event
 	Wheel = 31,				// wheel event
 	AccelAvailable = 32,			// accelerator available event
@@ -85,7 +97,9 @@ public:
 	ParentPaletteChange = 37,		// parent font changed
 	ApplicationPaletteChange = 38,		// application palette changed
 	Clipboard = 40,				// internal clipboard event
+	Speech = 42,				// reserved for speech input
 	SockAct = 50,				// socket activation
+	AccelOverride = 51,			// accelerator override event
 	DragEnter = 60,				// drag moves into widget
 	DragMove = 61,				// drag moves in widget
 	DragLeave = 62,				// drag leaves or is cancelled
@@ -94,10 +108,9 @@ public:
 	ChildInserted = 70,			// new child widget
 	ChildRemoved = 71,			// deleted child widget
 	LayoutHint = 72,			// child min/max size changed
+	ShowWindowRequest = 73,			// widget's window should be mapped
 	ActivateControl = 80,			// ActiveX activation
 	DeactivateControl = 81,			// ActiveX deactivation
-	Configure = 82,				// configure an object
-	ConfigureLayout = 83,			// configure a layout
 	User = 1000				// first user event id
     };
 
@@ -108,6 +121,10 @@ protected:
     Type  t;
 private:
     bool  posted;
+#if defined(_CC_MSVC_)
+    friend class QEvent;
+#endif
+
     friend class QApplication;
     friend class QBaseApplication;
 };
@@ -145,8 +162,8 @@ public:
 protected:
     QPoint p;
     QPoint g;
-    int	   b;
-    ushort s;
+    int	   b; // ### Make ushort in 3.0? Here it's an int...
+    ushort s; // ### ...and here an ushort. But both are ButtonState!
 };
 
 
@@ -244,6 +261,8 @@ public:
     const QRegion &region() const { return reg; }
     bool erased() const { return erase; }
 protected:
+    friend class QApplication;
+    friend class QBaseApplication;
     QRect rec;
     QRegion reg;
     bool erase;
@@ -259,6 +278,8 @@ public:
     const QPoint &oldPos()const { return oldp;}
 protected:
     QPoint p, oldp;
+    friend class QApplication;
+    friend class QBaseApplication;
 };
 
 
@@ -271,6 +292,8 @@ public:
     const QSize &oldSize()const { return olds;}
 protected:
     QSize s, olds;
+    friend class QApplication;
+    friend class QBaseApplication;
 };
 
 
@@ -308,6 +331,7 @@ protected:
     bool spont;
 };
 
+#ifndef QT_NO_DRAGANDDROP
 
 // This class is rather closed at the moment.  If you need to create your
 // own DND event objects, write to qt-bugs@trolltech.com and we'll try to
@@ -349,6 +373,7 @@ protected:
     uint resv:5;
     void * d;
 };
+
 
 
 class Q_EXPORT QDragMoveEvent : public QDropEvent
@@ -395,6 +420,7 @@ public:
 	: QEvent(DragLeave) {}
 };
 
+#endif // QT_NO_DRAGANDDROP
 
 class Q_EXPORT QChildEvent : public QEvent
 {

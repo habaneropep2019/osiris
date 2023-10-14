@@ -1,34 +1,45 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qurl.cpp   2.1.1   edited 2000-05-02 $
+** $Id: qt/src/kernel/qurl.cpp   2.2.0   edited 2000-08-28 $
 **
 ** Implementation of QUrl class
 **
 ** Created : 950429
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the kernel module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #include "qurl.h"
-#include "qnetworkprotocol.h"
+
+#ifndef QT_NO_NETWORKPROTOCOL
 
 #include <stdlib.h>
-
-extern Q_EXPORT QNetworkProtocolDict *qNetworkProtocolRegister;
 
 struct QUrlPrivate
 {
@@ -45,7 +56,7 @@ struct QUrlPrivate
 };
 
 /*!
-  Replaces backslashes with slashes and removes multiple occurences
+  Replaces backslashes with slashes and removes multiple occurrences
   of slashes or backslashes if \c allowMultiple is FALSE.
 */
 
@@ -72,7 +83,7 @@ static void slashify( QString& s, bool allowMultiple = TRUE )
 /*!
   \class QUrl qurl.h
 
-  \brief This class provides mainly an URL parser and
+  \brief The QUrl class provides mainly an URL parser and
   simplifies working with URLs.
 
   \ingroup misc
@@ -113,7 +124,7 @@ static void slashify( QString& s, bool allowMultiple = TRUE )
   QUrl u( s );
   \endcode
 
-  If you want to use an URL to work on a hirarchical structures
+  If you want to use an URL to work on a hierarchical structures
   (e.g. locally or remote filesystem) the class QUrlOperator, which is derived
   fro QUrl, may be interesting for you.
 
@@ -440,8 +451,7 @@ void QUrl::setRef( const QString& txt )
 }
 
 /*!
-  Returns TRUE, if the URL has a reference, else
-  it returnd FALSE;
+  Returns TRUE, if the URL has a reference, else it returns FALSE.
 */
 
 bool QUrl::hasRef() const
@@ -523,9 +533,9 @@ bool QUrl::parse( const QString& url )
      /* None       InputAlpha  InputDigit  InputSlash  InputColon  InputAt     InputHash   InputQuery */
 	{ 0,       Protocol,   0,          Path,       0,          0,          0,          0,         }, // Init
 	{ 0,       Protocol,   0,          0,          Separator1, 0,          0,          0,         }, // Protocol
-	{ 0,       Path,          Path,          Separator2, 0,          0,          0,          0,         }, // Separator1
+	{ 0,       Path,       Path,       Separator2, 0,          0,          0,          0,         }, // Separator1
 	{ 0,       Path,       0,          Separator3, 0,          0,          0,          0,         }, // Separator2
-	{ 0,       User,       User,          Separator3, Pass,       Host,       0,          0,         }, // Separator3
+	{ 0,       User,       User,       Separator3, Pass,       Host,       0,          0,         }, // Separator3
 	{ 0,       User,       User,       User,       Pass,       Host,       User,       User,      }, // User
 	{ 0,       Pass,       Pass,       Pass,       Pass,       Host,       Pass,       Pass,      }, // Pass
 	{ 0,       Host,       Host,       Path,       Port,       Host,       Ref,        Query,     }, // Host
@@ -542,15 +552,20 @@ bool QUrl::parse( const QString& url )
 
     // if :/ is at pos 1, we have only one letter
     // before that separator => that's a drive letter!
-    if ( url_.find( ":/" ) == 1 )
+    int cs = url_.find( ":/" );
+    if ( cs == 1 )
 	relPath = forceRel = TRUE;
 
-    int cs = url_.find( ":/" );
+    int hasNoHost = -1;
+    if ( cs != -1 ) // if a protocol is there, find out if there is a host or directly the path after it
+	hasNoHost = url_.find( "///", cs );
     table[ 4 ][ 1 ] = User;
     table[ 4 ][ 2 ] = User;
-    if ( ( cs == -1 && url.left( 6 ) != "mailto" )
-	 || forceRel ) { // we have a relative file (no path, host, protocol, etc.)
-	table[ 0 ][ 1 ] = Path;
+    if ( cs == -1 || forceRel ) { // we have a relative file
+	if ( url.find( ':' ) == -1 || forceRel )
+	    table[ 0 ][ 1 ] = Path;
+	else
+	    table[ 0 ][ 1 ] = Protocol;
 	relPath = TRUE;
     } else { // some checking
 	table[ 0 ][ 1 ] = Protocol;
@@ -571,11 +586,12 @@ bool QUrl::parse( const QString& url )
 	    int at = tmp.find( "@" );
 	    if ( at != -1 )
 		at += cs;
-	    // we have no @, which means
-	    // host[:port], so directly after the protocol the host starts,
-	    // or if the protocol is file, it´s the path
+	    // we have no @, which means host[:port], so directly
+	    // after the protocol the host starts, or if the protocol
+	    // is file or there were more than 2 slashes, it´s the
+	    // path
 	    if ( at == -1 ) {
-		if ( url_.left( 4 ) == "file" )
+		if ( url_.left( 4 ) == "file" || hasNoHost != -1 )
 		    table[ 4 ][ 1 ] = Path;
 		else
 		    table[ 4 ][ 1 ] = Host;
@@ -592,7 +608,6 @@ bool QUrl::parse( const QString& url )
     QString port;
 
     while ( TRUE ) {
-
 	switch ( c ) {
 	case '?':
 	    input = InputQuery;
@@ -683,7 +698,7 @@ bool QUrl::parse( const QString& url )
     if ( !d->path.isEmpty() ) {
 	if ( d->path[ 0 ] == '@' || d->path[ 0 ] == ':' )
 	    d->path.remove( 0, 1 );
-	if ( d->path[ 0 ] != '/' && !relPath && d->path[ 1 ] != ':' && d->protocol != "mailto" )
+	if ( d->path[ 0 ] != '/' && !relPath && d->path[ 1 ] != ':' )
 	    d->path.prepend( "/" );
     }
     if ( !d->refEncoded.isEmpty() && d->refEncoded[ 0 ] == '#' )
@@ -749,7 +764,7 @@ QUrl& QUrl::operator=( const QUrl& url )
 
 /*!
   Compares this URL with \a url and returns TRUE if
-  they are equal, ese FALSE.
+  they are equal, else FALSE.
 */
 
 bool QUrl::operator==( const QUrl& url ) const
@@ -1055,11 +1070,11 @@ void QUrl::decode( QString& url )
     url = newUrl;
 }
 
-/*!
-  Composes a string of the URL and returns it. If \a encodedPath
-  is TRUE, the path in the returned string will be encoded. If
-  \a forcePrependProtocol is TRUE the file:/ protocol is also
-  prepended if no remote network protocols are registered.
+/*!  Composes a string of the URL and returns it. If \a encodedPath is
+  TRUE, the path in the returned string will be encoded. If \a
+  forcePrependProtocol is TRUE, the protocol (file:/) is also
+  prepended to local filenames, else no protocol is prepended for
+  local filenames.
 */
 
 QString QUrl::toString( bool encodedPath, bool forcePrependProtocol ) const
@@ -1069,12 +1084,12 @@ QString QUrl::toString( bool encodedPath, bool forcePrependProtocol ) const
 	encode( p );
 
     if ( isLocalFile() ) {
-	if ( !forcePrependProtocol && ( !qNetworkProtocolRegister ||
-					qNetworkProtocolRegister->count() == 0 ||
-					QNetworkProtocol::hasOnlyLocalFileSystem() ) )
-	    res = p;
-	else
+	if ( forcePrependProtocol )
 	    res = d->protocol + ":" + p;
+	else
+	    res = p;
+    } else if ( d->protocol == "mailto" ) {
+	res = d->protocol + ":" + p;
     } else {
 	res = d->protocol + "://";
 	if ( !d->user.isEmpty() || !d->pass.isEmpty() ) {
@@ -1120,3 +1135,4 @@ bool QUrl::cdUp()
     return TRUE;
 }
 
+#endif // QT_NO_NETWORKPROTOCOL

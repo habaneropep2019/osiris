@@ -1,5 +1,5 @@
-.TH QImageConsumer 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QImageConsumer 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QImageConsumer \- An abstraction used by QImageDecoder
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -17,25 +15,25 @@ QImageConsumer \- An abstraction used by QImageDecoder
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "virtual void \fBend\fR ()"
+.BI "virtual void \fBend\fR () "
 .br
 .ti -1c
-.BI "virtual void \fBchanged\fR ( const QRect & )"
+.BI "virtual void \fBchanged\fR ( const QRect & ) "
 .br
 .ti -1c
-.BI "virtual void \fBframeDone\fR ()"
+.BI "virtual void \fBframeDone\fR () "
 .br
 .ti -1c
-.BI "virtual void \fBframeDone\fR ( const QPoint &, const QRect & )"
+.BI "virtual void \fBframeDone\fR ( const QPoint &, const QRect & ) "
 .br
 .ti -1c
-.BI "virtual void \fBsetLooping\fR ( int )"
+.BI "virtual void \fBsetLooping\fR ( int ) "
 .br
 .ti -1c
-.BI "virtual void \fBsetFramePeriod\fR ( int )"
+.BI "virtual void \fBsetFramePeriod\fR ( int ) "
 .br
 .ti -1c
-.BI "virtual void \fBsetSize\fR ( int, int )"
+.BI "virtual void \fBsetSize\fR ( int, int ) "
 .br
 .in -1c
 .SH DESCRIPTION
@@ -43,7 +41,7 @@ An abstraction used by QImageDecoder.
 .PP
 A QImageConsumer consumes information about changes to the QImage maintained by a QImageDecoder. It represents the a view of the image which the decoder produces.
 .PP
-See also: QImageDecoder.
+See also QImageDecoder.
 .SH MEMBER FUNCTION DOCUMENTATION
 .SH "void QImageConsumer::changed ( const QRect & ) \fC[virtual]\fR"
 Called when the given area of the image has changed.
@@ -52,13 +50,13 @@ Called when all data of all frames has been decoded and revealed as changed().
 .SH "void QImageConsumer::frameDone () \fC[virtual]\fR"
 One of the two frameDone() functions will be called when a frame of an animated image has ended and been revealed as changed().
 .PP
-When this funciton is called, the current image should be displayed.
+When this function is called, the current image should be displayed.
 .PP
 The decoder will not make any further changes to the image until the next call to QImageFormat::decode().
 .SH "void QImageConsumer::frameDone ( const QPoint & offset, const QRect & rect ) \fC[virtual]\fR"
 One of the two frameDone() functions will be called when a frame of an animated image has ended and been revealed as changed().
 .PP
-When this funciton is called, the area \fIrect\fR in the current image should be moved by \fIoffset\fR and displayed.
+When this function is called, the area \fIrect\fR in the current image should be moved by \fIoffset\fR and displayed.
 .PP
 The decoder will not make any further changes to the image until the next call to QImageFormat::decode().
 .SH "void QImageConsumer::setFramePeriod ( int milliseconds ) \fC[virtual]\fR"
@@ -81,7 +79,7 @@ been determined.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qimageconsumer.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

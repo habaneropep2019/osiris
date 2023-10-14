@@ -1,15 +1,17 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head>
 <title>Qt Toolkit - QDropEvent Class</title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
-a:link { text-decoration: none; }
-body { background: white; color: black; }
+a:link { color: #004faf; text-decoration: none }
+a:visited { color: #672967; text-decoration: none }body { background: white; color: black; }
 --></style>
 </head><body bgcolor="#ffffff">
 
-<a href="index.html">
-<img width="122" height="65" src="qtlogo.png" alt="Home"
-  align="left" border="0">
-</a><div align=right><img src="dochead.png" width="472" height="27"><br>
+<table width="100%">
+<tr><td><a href="index.html">
+<img width="100" height="100" src="qtlogo.png"
+alt="Home" border="0"><img width="100"
+height="100" src="face.png" alt="Home" border="0">
+</a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
 - <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
@@ -17,7 +19,7 @@ body { background: white; color: black; }
 - <a href="index.html">Home</a>
 - <a href="topicals.html"><b>Structure</b></a>
 </div>
-<br clear=all>
+</table>
 
 <h1 align=center>QDropEvent Class Reference</h1><br clear="all">
 <p>
@@ -31,21 +33,21 @@ Inherits <a href="qevent.html">QEvent</a> and <a href="qmimesource.html">QMimeSo
 <p><a href="qdropevent-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><span class="fn"><a href="#58b390"><b>QDropEvent</b></a> ( const QPoint &amp; pos, Type typ=Drop ) </span>
-<li><span class="fn">const QPoint&amp; <a href="#4b9a80"><b>pos</b></a> () const</span>
-<li><span class="fn">bool <a href="#cf63da"><b>isAccepted</b></a> () const</span>
-<li><span class="fn">void <a href="#6c4844"><b>ignore</b></a> () </span>
-<li><span class="fn">bool <a href="#508d13"><b>isActionAccepted</b></a> () const</span>
-<li><span class="fn">void <a href="#2a39a0"><b>acceptAction</b></a> ( bool y=TRUE ) </span>
-<li><span class="fn">enum <a href="#Action"><b>Action</b></a> { Copy, Link, Move, Private, UserAction=100 }</span>
-<li><span class="fn">void <a href="#9a6d8c"><b>setAction</b></a> ( Action a ) </span>
-<li><span class="fn">Action <a href="#bfcdf4"><b>action</b></a> () const</span>
-<li><span class="fn">QWidget* <a href="#f7ef81"><b>source</b></a> () const</span>
-<li><span class="fn">virtual const char* <a href="#141ff9"><b>format</b></a> ( int n = 0 ) const</span>
-<li><span class="fn">virtual QByteArray <a href="#11772b"><b>encodedData</b></a> ( const char * ) const</span>
-<li><span class="fn">virtual bool <a href="#cd7d5a"><b>provides</b></a> ( const char * ) const</span>
-<li><span class="fn">QByteArray data ( const char * f ) const <em>(obsolete)</em></span>
-<li><span class="fn">void <a href="#3cc40d"><b>setPoint</b></a> ( const QPoint &amp; np ) </span>
+<li><div class="fn"><a href="#58b390"><b>QDropEvent</b></a> ( const QPoint &amp; pos, Type typ=Drop ) </div>
+<li><div class="fn">const QPoint&amp; <a href="#4b9a80"><b>pos</b></a> () const</div>
+<li><div class="fn">bool <a href="#cf63da"><b>isAccepted</b></a> () const</div>
+<li><div class="fn">void <a href="#6c4844"><b>ignore</b></a> () </div>
+<li><div class="fn">bool <a href="#508d13"><b>isActionAccepted</b></a> () const</div>
+<li><div class="fn">void <a href="#2a39a0"><b>acceptAction</b></a> ( bool y=TRUE ) </div>
+<li><div class="fn">enum <a href="#Action"><b>Action</b></a> { Copy, Link, Move, Private, UserAction=100 }</div>
+<li><div class="fn">void <a href="#9a6d8c"><b>setAction</b></a> ( Action a ) </div>
+<li><div class="fn">Action <a href="#bfcdf4"><b>action</b></a> () const</div>
+<li><div class="fn">QWidget* <a href="#f7ef81"><b>source</b></a> () const</div>
+<li><div class="fn">virtual const char* <a href="#141ff9"><b>format</b></a> ( int n = 0 ) const</div>
+<li><div class="fn">virtual QByteArray <a href="#11772b"><b>encodedData</b></a> ( const char * ) const</div>
+<li><div class="fn">virtual bool <a href="#cd7d5a"><b>provides</b></a> ( const char * ) const</div>
+<li><div class="fn">QByteArray data ( const char * f ) const <em>(obsolete)</em></div>
+<li><div class="fn">void <a href="#3cc40d"><b>setPoint</b></a> ( const QPoint &amp; np ) </div>
 </ul>
 <hr><h2><a name="details"></a>Detailed Description</h2>
 Event sent when a drag-and-drop is completed.
@@ -88,7 +90,7 @@ preferably, the decode() methods of existing <a href="qdragobject.html">QDragObj
 such as <a href="qtextdrag.html#5da6e5">QTextDrag::decode</a>(), or your own subclasses.<p><b>Warning:</b> To accept or reject the drop, call <a href="#2a39a0">acceptAction</a>(), not this
 function.  This function indicates whether you processed the event
 at all.
-<p>See also:  <a href="#2a39a0">acceptAction</a>().
+<p>See also  <a href="#2a39a0">acceptAction</a>().
 <p>Examples:
  <a href="desktop-desktop-cpp.html#accept">desktop/desktop.cpp</a>
 <h3 class="fn">void <a name="2a39a0"></a>QDropEvent::acceptAction ( bool y=TRUE=TRUE )</h3>
@@ -112,7 +114,7 @@ potentially very slow, so it's advisable to call this function only
 if you're sure that you will need the data in <em>format.</em>
 <p>The resulting data will have a size of 0 if the format was not
 available.
-<p>See also:  <a href="#141ff9">format</a>() and <a href="qbytearray.html#86ae87">QByteArray::size</a>().
+<p>See also  <a href="#141ff9">format</a>() and <a href="qbytearray.html#86ae87">QByteArray::size</a>().
 <p>Reimplemented from <a href="qmimesource.html#a6c4b8">QMimeSource.</a>
 <h3 class="fn">const char* <a name="141ff9"></a>QDropEvent::format ( int n = 0 ) const <code>[virtual]</code></h3>
 <p>Returns a string describing one of the available data types for
@@ -120,7 +122,7 @@ this drag.  Common examples are "text/plain" and "image/gif".  If <em>n</em> is 
 types, format() returns 0.
 <p>This function is provided mainly for debugging.  Most drop targets
 will use <a href="#cd7d5a">provides</a>().
-<p>See also:  <a href="#af357c">data</a>() and <a href="#cd7d5a">provides</a>().
+<p>See also  <a href="#af357c">data</a>() and <a href="#cd7d5a">provides</a>().
 <p>Examples:
  <a href="iconview-main-cpp.html#format">iconview/main.cpp</a>
 <p>Reimplemented from <a href="qmimesource.html#dbf817">QMimeSource.</a>
@@ -136,7 +138,7 @@ FALSE if not.
 <h3 class="fn">bool <a name="cd7d5a"></a>QDropEvent::provides ( const char * mimeType ) const <code>[virtual]</code></h3>
 <p>Returns TRUE if this event provides format <em>mimeType</em> or
 FALSE if it does not.
-<p>See also:  <a href="#af357c">data</a>().
+<p>See also  <a href="#af357c">data</a>().
 <p>Reimplemented from <a href="qmimesource.html#223b80">QMimeSource.</a>
 <h3 class="fn">void <a name="9a6d8c"></a>QDropEvent::setAction ( <a href="qdropevent.html#Action">Action</a> a )</h3>
 <p>Sets the action.  This is used internally, you should not need to
@@ -151,19 +153,19 @@ drop event.
 this function returns that source, otherwise 0.  The source of the
 operation is the first parameter to to drag object subclass.
 <p>This is useful if your widget needs special behavior when dragging
-to itelf, etc.
+to itself, etc.
 <p>See <a href="qdragobject.html#9b7caf">QDragObject::QDragObject</a>() and subclasses.
 <hr><p>
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.1.1"><nobr>
+<input type=hidden name="version" value="2.2.0"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
 copyright &copy; 1995-2000
-<a href="http://www.trolltech.com">Troll Tech</a>, all rights reserved.<p><address><hr><div align="center">
+<a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.1</div>
+<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.2.0</div>
 </table></div></address></body></html>

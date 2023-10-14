@@ -1,15 +1,17 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head>
 <title>Qt Toolkit - QComboBox Class</title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
-a:link { text-decoration: none; }
-body { background: white; color: black; }
+a:link { color: #004faf; text-decoration: none }
+a:visited { color: #672967; text-decoration: none }body { background: white; color: black; }
 --></style>
 </head><body bgcolor="#ffffff">
 
-<a href="index.html">
-<img width="122" height="65" src="qtlogo.png" alt="Home"
-  align="left" border="0">
-</a><div align=right><img src="dochead.png" width="472" height="27"><br>
+<table width="100%">
+<tr><td><a href="index.html">
+<img width="100" height="100" src="qtlogo.png"
+alt="Home" border="0"><img width="100"
+height="100" src="face.png" alt="Home" border="0">
+</a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
 - <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
@@ -17,7 +19,7 @@ body { background: white; color: black; }
 - <a href="index.html">Home</a>
 - <a href="topicals.html"><b>Structure</b></a>
 </div>
-<br clear=all>
+</table>
 
 <h1 align=center>QComboBox Class Reference</h1><br clear="all">
 <p>
@@ -30,70 +32,73 @@ Inherits <a href="qwidget.html">QWidget</a>.
 <p><a href="qcombobox-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><span class="fn"><a href="#05e894"><b>QComboBox</b></a> ( QWidget * parent=0, const char * name=0 ) </span>
-<li><span class="fn"><a href="#9c534e"><b>QComboBox</b></a> ( bool rw, QWidget * parent=0, const char * name=0 ) </span>
-<li><span class="fn"><a href="#0bde71"><b>~QComboBox</b></a> () </span>
-<li><span class="fn">int <a href="#6eface"><b>count</b></a> () const</span>
-<li><span class="fn">void <a href="#7a74b9"><b>insertStringList</b></a> ( const QStringList &amp;, int index=-1 ) </span>
-<li><span class="fn">void <a href="#f1a2f1"><b>insertStrList</b></a> ( const QStrList &amp;, int index=-1 ) </span>
-<li><span class="fn">void <a href="#1b09b7"><b>insertStrList</b></a> ( const QStrList *, int index=-1 ) </span>
-<li><span class="fn">void <a href="#239584"><b>insertStrList</b></a> ( const char **, int numStrings=-1, int index=-1 ) </span>
-<li><span class="fn">void <a href="#f09145"><b>insertItem</b></a> ( const QString &amp; text, int index=-1 ) </span>
-<li><span class="fn">void <a href="#be91ca"><b>insertItem</b></a> ( const QPixmap &amp; pixmap, int index=-1 ) </span>
-<li><span class="fn">void <a href="#bd8981"><b>insertItem</b></a> ( const QPixmap &amp; pixmap, const QString &amp; text, int index=-1 ) </span>
-<li><span class="fn">void <a href="#c12065"><b>removeItem</b></a> ( int index ) </span>
-<li><span class="fn">void <a href="#d4313c"><b>clear</b></a> () </span>
-<li><span class="fn">QString <a href="#d5a68d"><b>currentText</b></a> () const</span>
-<li><span class="fn">QString <a href="#2dd3f6"><b>text</b></a> ( int index ) const</span>
-<li><span class="fn">const QPixmap* <a href="#aa8213"><b>pixmap</b></a> ( int index ) const</span>
-<li><span class="fn">void <a href="#62488f"><b>changeItem</b></a> ( const QString &amp; text, int index ) </span>
-<li><span class="fn">void <a href="#789bf4"><b>changeItem</b></a> ( const QPixmap &amp; pixmap, int index ) </span>
-<li><span class="fn">void <a href="#c07ec0"><b>changeItem</b></a> ( const QPixmap &amp; pixmap, const QString &amp; text, int index ) </span>
-<li><span class="fn">int <a href="#e99bcc"><b>currentItem</b></a> () const</span>
-<li><span class="fn">virtual void <a href="#cd8c4a"><b>setCurrentItem</b></a> ( int index ) </span>
-<li><span class="fn">bool autoResize () const <em>(obsolete)</em></span>
-<li><span class="fn">virtual void setAutoResize ( bool ) <em>(obsolete)</em></span>
-<li><span class="fn">virtual void <a href="#23782f"><b>setBackgroundColor</b></a> ( const QColor &amp; ) </span>
-<li><span class="fn">virtual void <a href="#11ba97"><b>setPalette</b></a> ( const QPalette &amp; ) </span>
-<li><span class="fn">virtual void <a href="#83c8a0"><b>setFont</b></a> ( const QFont &amp; ) </span>
-<li><span class="fn">virtual void <a href="#00bb6f"><b>setSizeLimit</b></a> ( int ) </span>
-<li><span class="fn">int <a href="#807b9d"><b>sizeLimit</b></a> () const</span>
-<li><span class="fn">virtual void <a href="#523689"><b>setMaxCount</b></a> ( int ) </span>
-<li><span class="fn">int <a href="#708ed8"><b>maxCount</b></a> () const</span>
-<li><span class="fn">enum <a href="#Policy"><b>Policy</b></a> { NoInsertion, AtTop, AtCurrent, AtBottom, AfterCurrent, BeforeCurrent }</span>
-<li><span class="fn">virtual void <a href="#f1bfd2"><b>setInsertionPolicy</b></a> ( Policy policy ) </span>
-<li><span class="fn">Policy <a href="#ec4f9c"><b>insertionPolicy</b></a> () const</span>
-<li><span class="fn">virtual void <a href="#32a346"><b>setValidator</b></a> ( const QValidator * ) </span>
-<li><span class="fn">const QValidator* <a href="#eecd1b"><b>validator</b></a> () const</span>
-<li><span class="fn">virtual void <a href="#cf750c"><b>setListBox</b></a> ( QListBox * ) </span>
-<li><span class="fn">QListBox* <a href="#0c879c"><b>listBox</b></a> () const</span>
-<li><span class="fn">QLineEdit* <a href="#67b62a"><b>lineEdit</b></a> () const</span>
-<li><span class="fn">virtual void <a href="#6e84ed"><b>setAutoCompletion</b></a> ( bool ) </span>
-<li><span class="fn">bool <a href="#cc98e9"><b>autoCompletion</b></a> () const</span>
-<li><span class="fn">void <a href="#c6d107"><b>setDuplicatesEnabled</b></a> ( bool enable ) </span>
-<li><span class="fn">bool <a href="#957679"><b>duplicatesEnabled</b></a> () const</span>
+<li><div class="fn"><a href="#05e894"><b>QComboBox</b></a> ( QWidget * parent=0, const char * name=0 ) </div>
+<li><div class="fn"><a href="#9c534e"><b>QComboBox</b></a> ( bool rw, QWidget * parent=0, const char * name=0 ) </div>
+<li><div class="fn"><a href="#0bde71"><b>~QComboBox</b></a> () </div>
+<li><div class="fn">int <a href="#6eface"><b>count</b></a> () const</div>
+<li><div class="fn">void <a href="#7a74b9"><b>insertStringList</b></a> ( const QStringList &amp;, int index=-1 ) </div>
+<li><div class="fn">void <a href="#f1a2f1"><b>insertStrList</b></a> ( const QStrList &amp;, int index=-1 ) </div>
+<li><div class="fn">void <a href="#1b09b7"><b>insertStrList</b></a> ( const QStrList *, int index=-1 ) </div>
+<li><div class="fn">void <a href="#239584"><b>insertStrList</b></a> ( const char **, int numStrings=-1, int index=-1 ) </div>
+<li><div class="fn">void <a href="#f09145"><b>insertItem</b></a> ( const QString &amp; text, int index=-1 ) </div>
+<li><div class="fn">void <a href="#be91ca"><b>insertItem</b></a> ( const QPixmap &amp; pixmap, int index=-1 ) </div>
+<li><div class="fn">void <a href="#bd8981"><b>insertItem</b></a> ( const QPixmap &amp; pixmap, const QString &amp; text, int index=-1 ) </div>
+<li><div class="fn">void <a href="#c12065"><b>removeItem</b></a> ( int index ) </div>
+<li><div class="fn">void <a href="#d4313c"><b>clear</b></a> () </div>
+<li><div class="fn">QString <a href="#d5a68d"><b>currentText</b></a> () const</div>
+<li><div class="fn">QString <a href="#2dd3f6"><b>text</b></a> ( int index ) const</div>
+<li><div class="fn">const QPixmap* <a href="#aa8213"><b>pixmap</b></a> ( int index ) const</div>
+<li><div class="fn">void <a href="#62488f"><b>changeItem</b></a> ( const QString &amp; text, int index ) </div>
+<li><div class="fn">void <a href="#789bf4"><b>changeItem</b></a> ( const QPixmap &amp; pixmap, int index ) </div>
+<li><div class="fn">void <a href="#c07ec0"><b>changeItem</b></a> ( const QPixmap &amp; pixmap, const QString &amp; text, int index ) </div>
+<li><div class="fn">int <a href="#e99bcc"><b>currentItem</b></a> () const</div>
+<li><div class="fn">virtual void <a href="#cd8c4a"><b>setCurrentItem</b></a> ( int index ) </div>
+<li><div class="fn">bool autoResize () const <em>(obsolete)</em></div>
+<li><div class="fn">virtual void setAutoResize ( bool ) <em>(obsolete)</em></div>
+<li><div class="fn">virtual void <a href="#23782f"><b>setBackgroundColor</b></a> ( const QColor &amp; ) </div>
+<li><div class="fn">virtual void <a href="#11ba97"><b>setPalette</b></a> ( const QPalette &amp; ) </div>
+<li><div class="fn">virtual void <a href="#83c8a0"><b>setFont</b></a> ( const QFont &amp; ) </div>
+<li><div class="fn">virtual void <a href="#00bb6f"><b>setSizeLimit</b></a> ( int ) </div>
+<li><div class="fn">int <a href="#807b9d"><b>sizeLimit</b></a> () const</div>
+<li><div class="fn">virtual void <a href="#523689"><b>setMaxCount</b></a> ( int ) </div>
+<li><div class="fn">int <a href="#708ed8"><b>maxCount</b></a> () const</div>
+<li><div class="fn">enum <a href="#Policy"><b>Policy</b></a> { NoInsertion, AtTop, AtCurrent, AtBottom, AfterCurrent, BeforeCurrent }</div>
+<li><div class="fn">virtual void <a href="#f1bfd2"><b>setInsertionPolicy</b></a> ( Policy policy ) </div>
+<li><div class="fn">Policy <a href="#ec4f9c"><b>insertionPolicy</b></a> () const</div>
+<li><div class="fn">virtual void <a href="#32a346"><b>setValidator</b></a> ( const QValidator * ) </div>
+<li><div class="fn">const QValidator* <a href="#eecd1b"><b>validator</b></a> () const</div>
+<li><div class="fn">virtual void <a href="#cf750c"><b>setListBox</b></a> ( QListBox * ) </div>
+<li><div class="fn">QListBox* <a href="#0c879c"><b>listBox</b></a> () const</div>
+<li><div class="fn">QLineEdit* <a href="#67b62a"><b>lineEdit</b></a> () const</div>
+<li><div class="fn">virtual void <a href="#6e84ed"><b>setAutoCompletion</b></a> ( bool ) </div>
+<li><div class="fn">bool <a href="#cc98e9"><b>autoCompletion</b></a> () const</div>
+<li><div class="fn">void <a href="#c6d107"><b>setDuplicatesEnabled</b></a> ( bool enable ) </div>
+<li><div class="fn">bool <a href="#957679"><b>duplicatesEnabled</b></a> () const</div>
+<li><div class="fn">bool <a href="#0ad031"><b>editable</b></a> () const</div>
+<li><div class="fn">void <a href="#32fdd9"><b>setEditable</b></a> ( bool ) </div>
 </ul>
 <h2>Public Slots</h2>
 <ul>
-<li><span class="fn">void <a href="#253f1b"><b>clearValidator</b></a> () </span>
-<li><span class="fn">void <a href="#d9cda5"><b>clearEdit</b></a> () </span>
-<li><span class="fn">virtual void <a href="#251213"><b>setEditText</b></a> ( const QString &amp; ) </span>
+<li><div class="fn">void <a href="#253f1b"><b>clearValidator</b></a> () </div>
+<li><div class="fn">void <a href="#d9cda5"><b>clearEdit</b></a> () </div>
+<li><div class="fn">virtual void <a href="#251213"><b>setEditText</b></a> ( const QString &amp; ) </div>
 </ul>
 <h2>Signals</h2>
 <ul>
-<li><span class="fn">void <a href="#e5819b"><b>activated</b></a> ( int index ) </span>
-<li><span class="fn">void <a href="#64c14d"><b>highlighted</b></a> ( int index ) </span>
-<li><span class="fn">void <a href="#b2b3e6"><b>activated</b></a> ( const QString &amp; ) </span>
-<li><span class="fn">void <a href="#c08206"><b>highlighted</b></a> ( const QString &amp; ) </span>
-<li><span class="fn">void <a href="#5252bf"><b>textChanged</b></a> ( const QString &amp; ) </span>
+<li><div class="fn">void <a href="#e5819b"><b>activated</b></a> ( int index ) </div>
+<li><div class="fn">void <a href="#64c14d"><b>highlighted</b></a> ( int index ) </div>
+<li><div class="fn">void <a href="#b2b3e6"><b>activated</b></a> ( const QString &amp; ) </div>
+<li><div class="fn">void <a href="#c08206"><b>highlighted</b></a> ( const QString &amp; ) </div>
+<li><div class="fn">void <a href="#5252bf"><b>textChanged</b></a> ( const QString &amp; ) </div>
 </ul>
 <h2>Protected Members</h2>
 <ul>
-<li><span class="fn">void <a href="#cee353"><b>popup</b></a> () </span>
+<li><div class="fn">void <a href="#cee353"><b>popup</b></a> () </div>
 </ul>
 <h2>Properties</h2>
 <table border=1 cellpadding=3 cellspacing=0>
 <tr><th>Type<th>Name<th>READ<th>WRITE<th>Options
+<tr><td>bool<td>editable<td>editable<td>setEditable<td>&nbsp;
 <tr><td>int<td>count<td>count<td>&nbsp;<td>&nbsp;
 <tr><td>QString<td>currentText<td>currentText<td>&nbsp;<td>&nbsp;
 <tr><td>int<td>currentItem<td>currentItem<td>setCurrentItem<td>&nbsp;
@@ -159,7 +164,7 @@ not grab focus if clicked.  This differs from both Windows and Motif.
 <img src="qcombo2-m.png">(Motif 2, read-write)<br clear=all>
 <img src="qcombo3-m.png">(Motif 2, read-only)<br clear=all>
 <img src="qcombo1-w.png">(Windows style)
-<p>See also:  <a href="qlineedit.html">QLineEdit</a>, <a href="qlistbox.html">QListBox</a>, <a href="qspinbox.html">QSpinBox</a>, <a href="qradiobutton.html">QRadioButton</a>, <a href="qbuttongroup.html">QButtonGroup</a>, <a href="guibooks.html#fowler">GUI Design Handbook: Combo Box,</a> and <a href="guibooks.html#fowler">GUI Design Handbook: Drop-Down List Box.</a>
+<p>See also  <a href="qlineedit.html">QLineEdit</a>, <a href="qlistbox.html">QListBox</a>, <a href="qspinbox.html">QSpinBox</a>, <a href="qradiobutton.html">QRadioButton</a>, <a href="qbuttongroup.html">QButtonGroup</a>, <a href="guibooks.html#fowler">GUI Design Handbook: Combo Box,</a> and <a href="guibooks.html#fowler">GUI Design Handbook: Drop-Down List Box.</a>
 <p>Examples:
  <a href="qmag-qmag-cpp.html#QComboBox">qmag/qmag.cpp</a>
 
@@ -205,21 +210,21 @@ strings.
 The <em>index</em> is the position of the item in the popup list.
 <h3 class="fn">bool <a name="cc98e9"></a>QComboBox::autoCompletion () const</h3>
 <p>Returns TRUE if this combo box is in auto-completion mode.
-<p>See also:  <a href="#6e84ed">setAutoCompletion</a>().
+<p>See also  <a href="#6e84ed">setAutoCompletion</a>().
 <h3 class="fn">bool <a name="1f54fe"></a>QComboBox::autoResize () const</h3>
 <p><b>This function is obsolete.</b> It is provided to keep old source working, and will probably be removed in a future version of Qt.  We strongly advise against using it in new code.<p>
 Returns TRUE if auto-resizing is enabled, or FALSE if auto-resizing is
 disabled.
 <p>Auto-resizing is disabled by default.
-<p>See also:  <a href="#163732">setAutoResize</a>().
+<p>See also  <a href="#163732">setAutoResize</a>().
 <h3 class="fn">void <a name="c07ec0"></a>QComboBox::changeItem ( const <a href="qpixmap.html">QPixmap</a> &amp; im, const <a href="qstring.html">QString</a> &amp; t, int index )</h3>
 <p>Replaces the item at position <em>index</em> with a pixmap plus text.
 If the combo box is writable, the pixmap is ignored.
-<p>See also:  <a href="#bd8981">insertItem</a>().
+<p>See also  <a href="#bd8981">insertItem</a>().
 <h3 class="fn">void <a name="789bf4"></a>QComboBox::changeItem ( const <a href="qpixmap.html">QPixmap</a> &amp; im, int index )</h3>
 <p>Replaces the item at position <em>index</em> with a pixmap, unless the
 combo box is writable.
-<p>See also:  <a href="#bd8981">insertItem</a>().
+<p>See also  <a href="#bd8981">insertItem</a>().
 <h3 class="fn">void <a name="62488f"></a>QComboBox::changeItem ( const <a href="qstring.html">QString</a> &amp; t, int index )</h3>
 <p>Replaces the item at position <em>index</em> with a text.
 <h3 class="fn">void <a name="d4313c"></a>QComboBox::clear ()</h3>
@@ -231,22 +236,25 @@ nothing if the combo isn't editable.
 with history.  For example you can connect the combo's <a href="#b2b3e6">activated</a>()
 signal to clearEdit() in order to present the user with a new, empty
 line as soon as return is pressed.
-<p>See also:  <a href="#251213">setEditText</a>().
+<p>See also  <a href="#251213">setEditText</a>().
 <h3 class="fn">void <a name="253f1b"></a>QComboBox::clearValidator () <code>[slot]</code></h3>
 <p>This slot is equivalent to <a href="#32a346">setValidator</a>( 0 ).
 <h3 class="fn">int <a name="6eface"></a>QComboBox::count () const</h3>
 <p>Returns the number of items in the combo box.
 <h3 class="fn">int <a name="e99bcc"></a>QComboBox::currentItem () const</h3>
 <p>Returns the index of the current combo box item.
-<p>See also:  <a href="#cd8c4a">setCurrentItem</a>().
+<p>See also  <a href="#cd8c4a">setCurrentItem</a>().
 <h3 class="fn"><a href="qstring.html">QString</a> <a name="d5a68d"></a>QComboBox::currentText () const</h3>
 <p>Returns the text item being edited, or the current text item if the combo
 box is not editable.
-<p>See also:  <a href="#2dd3f6">text</a>().
+<p>See also  <a href="#2dd3f6">text</a>().
 <h3 class="fn">bool <a name="957679"></a>QComboBox::duplicatesEnabled () const</h3>
 <p>Returns TRUE if the same text can be inserted multiple times
 into the list of the combobox, else FALSE.
-<p>See also:  <a href="#c6d107">setDuplicatesEnabled</a>();.
+<p>See also  <a href="#c6d107">setDuplicatesEnabled</a>();.
+<h3 class="fn">bool <a name="0ad031"></a>QComboBox::editable () const</h3>
+<p>Returns whether the combobox is editable or not.
+<p>See also  <a href="#32fdd9">setEditable</a>().
 <h3 class="fn">bool <a name="f75507"></a>QComboBox::eventFilter ( <a href="qobject.html">QObject</a> * object, <a href="qevent.html">QEvent</a> * event ) <code>[virtual]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
 <p>Reimplemented from <a href="qobject.html#bb8547">QObject.</a>
@@ -288,7 +296,7 @@ terminated with 0.
 <p>Inserts the list of strings at the index <em>index</em> in the combo box.
 <h3 class="fn">QComboBox::Policy <a name="ec4f9c"></a>QComboBox::insertionPolicy() const</h3>
 <p>Returns the current insertion policy of the combo box.
-<p>See also:  <a href="#f1bfd2">setInsertionPolicy</a>().
+<p>See also  <a href="#f1bfd2">setInsertionPolicy</a>().
 <h3 class="fn">void <a name="8a8d58"></a>QComboBox::keyPressEvent ( <a href="qkeyevent.html">QKeyEvent</a> * e ) <code>[virtual protected]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
 <p>Reimplemented from <a href="qwidget.html#cdb1c7">QWidget.</a>
@@ -299,11 +307,11 @@ terminated with 0.
 <p>Returns the current list box, or 0 if there is no list box
 currently.  (QComboBox can use <a href="qpopupmenu.html">QPopupMenu</a> instead of <a href="qlistbox.html">QListBox</a>.)
 Provided to match <a href="#cf750c">setListBox</a>().
-<p>See also:  <a href="#cf750c">setListBox</a>().
+<p>See also  <a href="#cf750c">setListBox</a>().
 <h3 class="fn">int <a name="708ed8"></a>QComboBox::maxCount () const</h3>
 <p>Returns the current maximum size of the combo box.  By default,
 there is no limit, so this function returns INT_MAX.
-<p>See also:  <a href="#523689">setMaxCount</a>() and <a href="#6eface">count</a>().
+<p>See also  <a href="#523689">setMaxCount</a>() and <a href="#6eface">count</a>().
 <h3 class="fn">void <a name="db2faa"></a>QComboBox::mouseDoubleClickEvent ( <a href="qmouseevent.html">QMouseEvent</a> * e ) <code>[virtual protected]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
 <p>Reimplemented from <a href="qwidget.html#3311d2">QWidget.</a>
@@ -333,14 +341,14 @@ there is no limit, so this function returns INT_MAX.
 <p>Sets this combo box to offer auto-completion while the user is
 editing if <em>enable</em> is TRUE, or not to offer auto-completion of <em>enable</em> is FALSE (the default).
 <p>The combo box uses the list of items as candidates for completion.
-<p>See also:  <a href="#cc98e9">autoCompletion</a>() and <a href="#251213">setEditText</a>().
+<p>See also  <a href="#cc98e9">autoCompletion</a>() and <a href="#251213">setEditText</a>().
 <h3 class="fn">void <a name="163732"></a>QComboBox::setAutoResize ( bool enable ) <code>[virtual]</code></h3>
 <p><b>This function is obsolete.</b> It is provided to keep old source working, and will probably be removed in a future version of Qt.  We strongly advise against using it in new code.<p>
 Enables auto-resizing if <em>enable</em> is TRUE, or disables it if <em>enable</em> is
 FALSE.
 <p>When auto-resizing is enabled, the combo box button will resize itself
 whenever the current combo box item change.
-<p>See also:  <a href="#1f54fe">autoResize</a>() and <a href="qwidget.html#ab3108">adjustSize</a>().
+<p>See also  <a href="#1f54fe">autoResize</a>() and <a href="qwidget.html#ab3108">adjustSize</a>().
 <h3 class="fn">void <a name="23782f"></a>QComboBox::setBackgroundColor ( const <a href="qcolor.html">QColor</a> &amp; color ) <code>[virtual]</code></h3>
 <p>Reimplements <a href="qwidget.html#721b7d">QWidget::setBackgroundColor</a>().
 <p>Sets the background color for both the combo box button and the
@@ -348,12 +356,12 @@ combo box popup list.
 <h3 class="fn">void <a name="cd8c4a"></a>QComboBox::setCurrentItem ( int index ) <code>[virtual]</code></h3>
 <p>Sets the current combo box item.
 This is the item to be displayed on the combo box button.
-<p>See also:  <a href="#e99bcc">currentItem</a>().
+<p>See also  <a href="#e99bcc">currentItem</a>().
 <p>Examples:
  <a href="qmag-qmag-cpp.html#setCurrentItem">qmag/qmag.cpp</a>
 <h3 class="fn">void <a name="c6d107"></a>QComboBox::setDuplicatesEnabled ( bool enable )</h3>
 <p>If the combobox is editable and the user enters some text in
-the lineedit of the combox and presses return (and the <a href="#ec4f9c">insertionPolicy</a>()
+the lineedit of the combobox and presses return (and the <a href="#ec4f9c">insertionPolicy</a>()
 is different from <code>NoInsertion),</code> the entered text is inserted into the
 list of this combobox. Now, if you set <em>enable</em> to TRUE here,
 this new text is always inserted, else it's only inserted if it
@@ -362,7 +370,7 @@ and the text exists already in the list, the item which contains
 the same text like which should be inserted, this item
 gets the new current item.
 <p>This setting only applies when the user want's to insert a text
-with pressing the return key. It does \em not affect methods like
+with pressing the return key. It does <em>not</em> affect methods like
 <a href="#bd8981">insertItem</a>() and similar.
 <h3 class="fn">void <a name="251213"></a>QComboBox::setEditText ( const <a href="qstring.html">QString</a> &amp; newText ) <code>[virtual slot]</code></h3>
 <p>Sets the text in the embedded line edit to <em>newText</em> without
@@ -371,7 +379,11 @@ editable.
 <p>This is useful e.g. for providing a good starting point for the
 user's editing and entering the change in the combo only when the
 user presses enter.
-<p>See also:  <a href="#d9cda5">clearEdit</a>() and <a href="#bd8981">insertItem</a>().
+<p>See also  <a href="#d9cda5">clearEdit</a>() and <a href="#bd8981">insertItem</a>().
+<h3 class="fn">void <a name="32fdd9"></a>QComboBox::setEditable ( bool y )</h3>
+<p>Make the input field editable, if <em>y</em> is TRUE. Otherwise the user
+may only choose one of the items in the combo box.
+<p>See also  <a href="#0ad031">editable</a>().
 <h3 class="fn">void <a name="983a4b"></a>QComboBox::setEnabled ( bool enable ) <code>[virtual]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
 <h3 class="fn">void <a name="83c8a0"></a>QComboBox::setFont ( const <a href="qfont.html">QFont</a> &amp; font ) <code>[virtual]</code></h3>
@@ -387,7 +399,7 @@ in the list <li> AtCurrent: Strings typed by the user replace the
 last selected item <li> AtBottom: Strings typed by the user are
 inserted at the bottom of the list. </ul>
 <p>The default insertion policy is <code>AtBottom.</code>
-<p>See also:  <a href="#ec4f9c">insertionPolicy</a>().
+<p>See also  <a href="#ec4f9c">insertionPolicy</a>().
 <h3 class="fn">void <a name="cf750c"></a>QComboBox::setListBox ( <a href="qlistbox.html">QListBox</a> * newListBox ) <code>[virtual]</code></h3>
 <p>Sets the combo box to use <em>newListBox</em> instead of the current
 list box or popup.  As a site effect, clears the combo box of its
@@ -398,7 +410,7 @@ necessary because of the line edit in QComboBox.
 <p>Sets the maximum number of items the combo box can hold to <em>count.</em>
 <p>If <em>count</em> is smaller than the current number of items, the list is
 truncated at the end.  There is no limit by default.
-<p>See also:  <a href="#708ed8">maxCount</a>() and <a href="#6eface">count</a>().
+<p>See also  <a href="#708ed8">maxCount</a>() and <a href="#6eface">count</a>().
 <h3 class="fn">void <a name="11ba97"></a>QComboBox::setPalette ( const <a href="qpalette.html">QPalette</a> &amp; palette ) <code>[virtual]</code></h3>
 <p>Reimplements <a href="qwidget.html#379ca0">QWidget::setPalette</a>().
 <p>Sets the palette for both the combo box button and the
@@ -408,18 +420,18 @@ combo box popup list.
 is disregarded in Motif 1.x style.  The default limit is ten lines.
 <p>If the number of items in the combo box is/grows larger than
 <code>lines,</code> a list box is added.
-<p>See also:  <a href="#807b9d">sizeLimit</a>(), <a href="#6eface">count</a>() and <a href="#523689">setMaxCount</a>().
+<p>See also  <a href="#807b9d">sizeLimit</a>(), <a href="#6eface">count</a>() and <a href="#523689">setMaxCount</a>().
 <h3 class="fn">void <a name="32a346"></a>QComboBox::setValidator ( const <a href="qvalidator.html">QValidator</a> * v ) <code>[virtual]</code></h3>
 <p>Sets this combo box to be editable only as allowed by <em>v.</em>
 <p>This function does nothing if the combo is not editable.
-<p>See also:  <a href="#eecd1b">validator</a>(), <a href="#253f1b">clearValidator</a>() and <a href="qvalidator.html">QValidator</a>.
+<p>See also  <a href="#eecd1b">validator</a>(), <a href="#253f1b">clearValidator</a>() and <a href="qvalidator.html">QValidator</a>.
 <h3 class="fn"><a href="qsize.html">QSize</a> <a name="9a180c"></a>QComboBox::sizeHint () const <code>[virtual]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
 <p>Reimplemented from <a href="qwidget.html#290bcd">QWidget.</a>
 <h3 class="fn">int <a name="807b9d"></a>QComboBox::sizeLimit () const</h3>
 <p>Returns the current maximum on-screen size of the combo box.  The
 default is ten lines.
-<p>See also:  <a href="#00bb6f">setSizeLimit</a>(), <a href="#6eface">count</a>() and <a href="#708ed8">maxCount</a>().
+<p>See also  <a href="#00bb6f">setSizeLimit</a>(), <a href="#6eface">count</a>() and <a href="#708ed8">maxCount</a>().
 <h3 class="fn"><a href="qsizepolicy.html">QSizePolicy</a> <a name="dbdb6d"></a>QComboBox::sizePolicy () const <code>[virtual]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
 <h3 class="fn">void <a name="6da1a5"></a>QComboBox::styleChange ( <a href="qstyle.html">QStyle</a> &amp; s ) <code>[virtual protected]</code></h3>
@@ -429,7 +441,7 @@ default is ten lines.
 <p>Returns the text item at a given index, or
 <a href="qstring.html#367622">null string</a>
 if the item is not a string.
-<p>See also:  <a href="#d5a68d">currentText</a>().
+<p>See also  <a href="#d5a68d">currentText</a>().
 <h3 class="fn">void <a name="5252bf"></a>QComboBox::textChanged ( const <a href="qstring.html">QString</a> &amp; string ) <code>[signal]</code></h3>
 <p>This signal is useful for editable comboboxes. It is emitted whenever
 the contents of the text entry field changes.
@@ -439,18 +451,18 @@ the contents of the text entry field changes.
 <h3 class="fn">const <a href="qvalidator.html">QValidator</a> * <a name="eecd1b"></a>QComboBox::validator () const</h3>
 <p>Returns the validator which constrains editing for this combo
 box if there is any, or else 0.
-<p>See also:  <a href="#32a346">setValidator</a>(), <a href="#253f1b">clearValidator</a>() and <a href="qvalidator.html">QValidator</a>.
+<p>See also  <a href="#32a346">setValidator</a>(), <a href="#253f1b">clearValidator</a>() and <a href="qvalidator.html">QValidator</a>.
 <hr><p>
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.1.1"><nobr>
+<input type=hidden name="version" value="2.2.0"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
 copyright &copy; 1995-2000
-<a href="http://www.trolltech.com">Troll Tech</a>, all rights reserved.<p><address><hr><div align="center">
+<a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.1</div>
+<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.2.0</div>
 </table></div></address></body></html>

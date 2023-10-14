@@ -1,27 +1,39 @@
 /****************************************************************************
-** $Id: qt/src/tools/qglist.cpp   2.1.1   edited 2000-04-06 $
+** $Id: qt/src/tools/qglist.cpp   2.2.0   edited 2000-08-25 $
 **
 ** Implementation of QGList and QGListIterator classes
 **
 ** Created : 920624
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the tools module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #include "qglist.h"
 #include "qgvector.h"
@@ -115,6 +127,7 @@ int QGList::compareItems( QCollection::Item item1, QCollection::Item item2 )
     return item1 != item2;			// compare pointers
 }
 
+#ifndef QT_NO_DATASTREAM
 /*!
   Reads a collection/list item from the stream \a s and returns a reference
   to the stream.
@@ -143,7 +156,7 @@ QDataStream &QGList::write( QDataStream &s, QCollection::Item ) const
 {
     return s;
 }
-
+#endif // QT_NO_DATASTREAM
 
 /*****************************************************************************
   QGList member functions
@@ -960,6 +973,7 @@ void QGList::sort()
   QGList stream functions
  *****************************************************************************/
 
+#ifndef QT_NO_DATASTREAM
 QDataStream &operator>>( QDataStream &s, QGList &list )
 {						// read list
     return list.read( s );
@@ -1019,7 +1033,7 @@ QDataStream &QGList::write( QDataStream &s ) const
     return s;
 }
 
-
+#endif // QT_NO_DATASTREAM
 
 /*****************************************************************************
   QGListIterator member functions
@@ -1027,7 +1041,7 @@ QDataStream &QGList::write( QDataStream &s ) const
 
 /*!
   \class QGListIterator qglist.h
-  \brief The QGListIterator is an internal class for implementing QListIterator.
+  \brief The QGListIterator class is an internal class for implementing QListIterator.
 
   QGListIterator is a strictly internal class that does the heavy work for
   QListIterator.

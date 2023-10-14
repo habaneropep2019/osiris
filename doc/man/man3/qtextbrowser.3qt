@@ -1,5 +1,5 @@
-.TH QTextBrowser 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QTextBrowser 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QTextBrowser \- A rich text  browser with simple navigation
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -19,64 +17,64 @@ Inherits QTextView.
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQTextBrowser\fR ( QWidget * " "parent" "=0, const char * " "name" "=0 )"
+.BI "\fBQTextBrowser\fR ( QWidget * " "parent" "=0, const char * " "name" "=0 ) "
 .br
 .ti -1c
-.BI "\fB~QTextBrowser\fR ()"
+.BI "\fB~QTextBrowser\fR () "
 .br
 .ti -1c
-.BI "virtual void \fBsetSource\fR ( const QString & name )"
+.BI "virtual void \fBsetSource\fR ( const QString & name ) "
 .br
 .ti -1c
 .BI "QString \fBsource\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetText\fR ( const QString & " "contents" ", const QString & context=QString::null )"
+.BI "virtual void \fBsetText\fR ( const QString & " "contents" ", const QString & context=QString::null ) "
 .br
 .ti -1c
-.BI "void \fBscrollToAnchor\fR ( const QString & name )"
+.BI "void \fBscrollToAnchor\fR ( const QString & name ) "
 .br
 .in -1c
 .SS "Public Slots"
 .in +1c
 .ti -1c
-.BI "virtual void \fBbackward\fR ()"
+.BI "virtual void \fBbackward\fR () "
 .br
 .ti -1c
-.BI "virtual void \fBforward\fR ()"
+.BI "virtual void \fBforward\fR () "
 .br
 .ti -1c
-.BI "virtual void \fBhome\fR ()"
+.BI "virtual void \fBhome\fR () "
 .br
 .in -1c
 .SS "Signals"
 .in +1c
 .ti -1c
-.BI "void \fBbackwardAvailable\fR ( bool )"
+.BI "void \fBbackwardAvailable\fR ( bool ) "
 .br
 .ti -1c
-.BI "void \fBforwardAvailable\fR ( bool )"
+.BI "void \fBforwardAvailable\fR ( bool ) "
 .br
 .ti -1c
-.BI "void \fBhighlighted\fR ( const QString & )"
+.BI "void \fBhighlighted\fR ( const QString & ) "
 .br
 .ti -1c
-.BI "void \fBtextChanged\fR ()"
+.BI "void \fBtextChanged\fR () "
 .br
 .in -1c
 .SS "Protected Members"
 .in +1c
 .ti -1c
-.BI "virtual void \fBviewportMousePressEvent\fR ( QMouseEvent * )"
+.BI "virtual void \fBviewportMousePressEvent\fR ( QMouseEvent * ) "
 .br
 .ti -1c
-.BI "virtual void \fBviewportMouseReleaseEvent\fR ( QMouseEvent * )"
+.BI "virtual void \fBviewportMouseReleaseEvent\fR ( QMouseEvent * ) "
 .br
 .ti -1c
-.BI "virtual void \fBviewportMouseMoveEvent\fR ( QMouseEvent * )"
+.BI "virtual void \fBviewportMouseMoveEvent\fR ( QMouseEvent * ) "
 .br
 .ti -1c
-.BI "virtual void \fBkeyPressEvent\fR ( QKeyEvent * e )"
+.BI "virtual void \fBkeyPressEvent\fR ( QKeyEvent * e ) "
 .br
 .in -1c
 .SS "Properties"
@@ -110,13 +108,13 @@ Destructs the browser.
 .SH "void QTextBrowser::backward () \fC[virtual slot]\fR"
 Changes the document displayed to be the previous document in the list of documents build by navigating links.
 .PP
-See also: forward() and backwardAvailable().
+See also forward() and backwardAvailable().
 .SH "void QTextBrowser::backwardAvailable ( bool available ) \fC[signal]\fR"
 This signal is emitted when the availability of the backward() changes. It becomes available when the user navigates forward, and unavailable when the user is at the home().
 .SH "void QTextBrowser::forward () \fC[virtual slot]\fR"
 Changes the document displayed to be the next document in the list of documents build by navigating links.
 .PP
-See also: backward() and forwardAvailable().
+See also backward() and forwardAvailable().
 .SH "void QTextBrowser::forwardAvailable ( bool available ) \fC[signal]\fR"
 This signal is emitted when the availability of the forward() changes. It becomes available after backward() is activated, and unavailable when the user navigates or goes forward() to the last navigated document.
 .SH "void QTextBrowser::highlighted ( const QString & href ) \fC[signal]\fR"
@@ -148,7 +146,7 @@ Reimplemented from QWidget.
 .SH "QString QTextBrowser::source () const"
 Returns the source of the currently display document. If no document is displayed or the source is unknown, a null string is returned.
 .PP
-See also: setSource().
+See also setSource().
 .SH "void QTextBrowser::textChanged () \fC[signal]\fR"
 This signal is emitted whenever the setText() changes the contents (eg. because the user clicked on a link).
 .SH "void QTextBrowser::viewportMouseMoveEvent ( QMouseEvent * e ) \fC[virtual protected]\fR"
@@ -166,7 +164,7 @@ Reimplemented from QScrollView.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qtextbrowser.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

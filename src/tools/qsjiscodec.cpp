@@ -1,33 +1,45 @@
 /****************************************************************************
-** $Id: qt/src/tools/qsjiscodec.cpp   2.1.1   edited 2000-03-24 $
+** $Id: qt/src/tools/qsjiscodec.cpp   2.2.0   edited 2000-08-25 $
 **
 ** Implementation of QSjisCodec class
 **
 ** Created : 990225
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the tools module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 // Most of the code here was originally written by Serika Kurusugawa
 // a.k.a. Junji Takagi, and is include in Qt with the author's permission,
-// and the grateful thanks of the Troll Tech team.
+// and the grateful thanks of the Trolltech team.
 
-/*! \class QEucJpCodec qeucjpcodec.h
+/*! \class QSjisCodec qsjiscodec.h
 
   \brief Provides conversion to and from Shift-JIS.
 
@@ -41,7 +53,7 @@
 
   It was largely written by Serika Kurusugawa a.k.a. Junji Takagi, and
   is included in Qt with the author's permission, and the grateful
-  thanks of the Troll Tech team. Here is the copyright statement for
+  thanks of the Trolltech team. Here is the copyright statement for
   that code:
 
   \mustquote
@@ -73,6 +85,8 @@
 
 #include "qsjiscodec.h"
 
+#ifndef QT_NO_CODECS
+
 static const uchar Esc = 0x1b;
 
 #define	IsKana(c)	(((c) >= 0xa1) && ((c) <= 0xdf))
@@ -83,10 +97,17 @@ static const uchar Esc = 0x1b;
 
 #define	QValidChar(u)	((u) ? QChar((ushort)(u)) : QChar::replacement)
 
+/*!
+  Creates a Shift-JIS codec.  Note that this is done automatically by
+  the QApplication, you do not need construct your own.
+*/
 QSjisCodec::QSjisCodec() : conv(QJpUnicodeConv::newConverter(JU_Default))
 {
 }
 
+/*!
+  \reimp
+*/
 int QSjisCodec::mibEnum() const
 {
     /*
@@ -101,6 +122,9 @@ int QSjisCodec::mibEnum() const
     return 17;
 }
 
+/*!
+  \reimp
+*/
 QCString QSjisCodec::fromUnicode(const QString& uc, int& len_in_out) const
 {
     int l = QMIN((int)uc.length(),len_in_out);
@@ -134,6 +158,9 @@ QCString QSjisCodec::fromUnicode(const QString& uc, int& len_in_out) const
     return rstr;
 }
 
+/*!
+  \reimp
+*/
 QString QSjisCodec::toUnicode(const char* chars, int len) const
 {
     QString result;
@@ -168,19 +195,25 @@ QString QSjisCodec::toUnicode(const char* chars, int len) const
     return result;
 }
 
+/*!
+  \reimp
+*/
 const char* QSjisCodec::name() const
 {
     return "SJIS";
 }
 
+/*!
+  \reimp
+*/
 int QSjisCodec::heuristicNameMatch(const char* hint) const
 {
     int score = 0;
     bool ja = FALSE;
-    if (strnicmp(hint, "ja_JP", 5) == 0 || strnicmp(hint, "japan", 5) == 0) {
+    if (qstrnicmp(hint, "ja_JP", 5) == 0 || qstrnicmp(hint, "japan", 5) == 0) {
 	score += 3;
 	ja = TRUE;
-    } else if (strnicmp(hint, "ja", 2) == 0) {
+    } else if (qstrnicmp(hint, "ja", 2) == 0) {
 	score += 2;
 	ja = TRUE;
     }
@@ -195,16 +228,19 @@ int QSjisCodec::heuristicNameMatch(const char* hint) const
 	p = hint;
     }
     if (p) {
-	if ((stricmp(p, "mscode") == 0) ||
-	    (stricmp(p, "PCK") == 0) ||
-	    (stricmp(p, "SJIS") == 0) ||
-	    (stricmp(p, "ShiftJIS") == 0)) {
+	if ((qstricmp(p, "mscode") == 0) ||
+	    (qstricmp(p, "PCK") == 0) ||
+	    (qstricmp(p, "SJIS") == 0) ||
+	    (qstricmp(p, "ShiftJIS") == 0)) {
 	    return score + 4;
 	}
     }
     return QTextCodec::heuristicNameMatch(hint);
 }
 
+/*!
+  \reimp
+*/
 int QSjisCodec::heuristicContentMatch(const char* chars, int len) const
 {
     int score = 0;
@@ -290,8 +326,12 @@ public:
     }
 };
 
+/*!
+  \reimp
+*/
 QTextDecoder* QSjisCodec::makeDecoder() const
 {
     return new QSjisDecoder(conv);
 }
 
+#endif

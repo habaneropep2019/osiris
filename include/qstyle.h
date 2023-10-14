@@ -1,28 +1,39 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qstyle.h   2.1.1   edited 2000-05-18 $
+** $Id: qt/src/kernel/qstyle.h   2.2.0   edited 2000-08-25 $
 **
 ** Definition of QStyle class
 **
 ** Created : 980616
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the kernel module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
-
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 #ifndef QSTYLE_H
 #define QSTYLE_H
 
@@ -31,6 +42,7 @@
 #include "qobject.h"
 #endif // QT_H
 
+#ifndef QT_NO_STYLE
 class QButton;
 class QPushButton;
 class QScrollBar;
@@ -164,6 +176,7 @@ public:
 
     // push buttons
     virtual void drawPushButton( QPushButton* btn, QPainter *p) = 0;
+    // virtual void drawPushButtonMask(QPushButton *btn, QPainter *p) = 0; // missing, add 3.0
     virtual void drawPushButtonLabel( QPushButton* btn, QPainter *p) = 0;
     QRect pushButtonContentsRect( QPushButton* btn ); // ### virtual/const 3.0
     int menuButtonIndicatorWidth( int h ); // ### virtual/const 3.0
@@ -235,11 +248,17 @@ public:
 				    const QPalette& pal,
 				    bool act, bool enabled,
 				    int x, int y, int w, int h) = 0;
+    void drawMenuBarItem( QPainter* p, int x, int y, int w, int h, //### virtual in 3.0
+				    QMenuItem* mi, QColorGroup& g,
+				    bool enabled, bool active );
 
     // Binary compatibility contortions, to become virtual in 3.0
     QSize scrollBarExtent(); // ### const 3.0
     int buttonDefaultIndicatorWidth() const;
-    int toolBarHandleExtend() const; // we know it's a spelling error, fixed in 2.2
+    int buttonMargin() const; // ### virtual 3.0
+    int toolBarHandleExtent() const; // ### virtual 3.0
+    int toolBarHandleExtend() const; // obsolete
+    int sliderThickness() const ; // ### virtual 3.0
     void drawToolBarHandle( QPainter *p, const QRect &r,
 			    Qt::Orientation orientation,
 			    bool highlight, const QColorGroup &cg,
@@ -248,6 +267,9 @@ public:
 protected:
     void setScrollBarExtent( int w, int h=-1 ); // ### remove 3.0
     void setButtonDefaultIndicatorWidth( int w ); // ### remove 3.0
+    void setButtonMargin( int w ); // ### remove 3.0
+    void setSliderThickness(int t); // ### remove 3.0
+
 
 private:	// Disabled copy constructor and operator=
 #if defined(Q_DISABLE_COPY)
@@ -256,5 +278,5 @@ private:	// Disabled copy constructor and operator=
 #endif
 };
 
-
+#endif // QT_NO_STYLE
 #endif // QSTYLE_H

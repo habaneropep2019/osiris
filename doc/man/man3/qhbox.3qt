@@ -1,5 +1,5 @@
-.TH QHBox 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QHBox 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QHBox \- Performs geometry management on its children
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -21,19 +19,19 @@ Inherited by QVBox.
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQHBox\fR ( QWidget * " "parent" "=0, const char * " "name" "=0, WFlags " "f" "=0, bool " "allowLines" "=TRUE )"
+.BI "\fBQHBox\fR ( QWidget * " "parent" "=0, const char * " "name" "=0, WFlags " "f" "=0, bool " "allowLines" "=TRUE ) "
 .br
 .ti -1c
-.BI "void \fBsetSpacing\fR ( int )"
+.BI "void \fBsetSpacing\fR ( int ) "
 .br
 .ti -1c
-.BI "bool \fBsetStretchFactor\fR ( QWidget *, int stretch )"
+.BI "bool \fBsetStretchFactor\fR ( QWidget *, int stretch ) "
 .br
 .in -1c
 .SS "Protected Members"
 .in +1c
 .ti -1c
-.BI "\fBQHBox\fR ( bool " "horizontal" ", QWidget * " "parent" "=0, const char * " "name" "=0, WFlags " "f" "=0, bool " "allowLines" "=TRUE )"
+.BI "\fBQHBox\fR ( bool " "horizontal" ", QWidget * " "parent" "=0, const char * " "name" "=0, WFlags " "f" "=0, bool " "allowLines" "=TRUE ) "
 .br
 .in -1c
 .SH DESCRIPTION
@@ -45,11 +43,11 @@ Use setMargin() to add space around the edge, and use setSpacing() to add space 
 .PP
 <img src=qhbox-m.png>
 .PP
-See also: QVBox and QGrid.
+See also QVBox and QGrid.
 .PP
 Examples:
 .(l
-xform/xform.cpp
+xform/xform.cpp i18n/main.cpp
 .)l
 .SH MEMBER FUNCTION DOCUMENTATION
 .SH "QHBox::QHBox ( QWidget * parent=0, const char * name=0, WFlags f=0, bool allowLines=TRUE )"
@@ -72,7 +70,7 @@ xform/xform.cpp
 .SH "bool QHBox::setStretchFactor ( QWidget * w, int stretch )"
 Sets the stretch factor of \fIw\fR to \fIstretch.\fR
 .PP
-See also: QBoxLayout::setStretchFactor().
+See also QBoxLayout::setStretchFactor().
 .PP
 Examples:
 .(l
@@ -85,7 +83,7 @@ Reimplemented from QWidget.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qhbox.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

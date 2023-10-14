@@ -1,15 +1,17 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head>
 <title>Qt Toolkit - QCursor Class</title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
-a:link { text-decoration: none; }
-body { background: white; color: black; }
+a:link { color: #004faf; text-decoration: none }
+a:visited { color: #672967; text-decoration: none }body { background: white; color: black; }
 --></style>
 </head><body bgcolor="#ffffff">
 
-<a href="index.html">
-<img width="122" height="65" src="qtlogo.png" alt="Home"
-  align="left" border="0">
-</a><div align=right><img src="dochead.png" width="472" height="27"><br>
+<table width="100%">
+<tr><td><a href="index.html">
+<img width="100" height="100" src="qtlogo.png"
+alt="Home" border="0"><img width="100"
+height="100" src="face.png" alt="Home" border="0">
+</a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
 - <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
@@ -17,7 +19,7 @@ body { background: white; color: black; }
 - <a href="index.html">Home</a>
 - <a href="topicals.html"><b>Structure</b></a>
 </div>
-<br clear=all>
+</table>
 
 <h1 align=center>QCursor Class Reference</h1><br clear="all">
 <p>
@@ -28,26 +30,26 @@ The QCursor class provides a mouse cursor with an arbitrary shape.
 <p><a href="qcursor-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><span class="fn"><a href="#b89a11"><b>QCursor</b></a> () </span>
-<li><span class="fn"><a href="#498ce6"><b>QCursor</b></a> ( int shape ) </span>
-<li><span class="fn"><a href="#a156ee"><b>QCursor</b></a> ( const QBitmap &amp; bitmap, const QBitmap &amp; mask, int hotX=-1, int hotY=-1 ) </span>
-<li><span class="fn"><a href="#ffbd2b"><b>QCursor</b></a> ( const QPixmap &amp; pixmap, int hotX=-1, int hotY=-1 ) </span>
-<li><span class="fn"><a href="#6f3c99"><b>QCursor</b></a> ( const QCursor &amp; ) </span>
-<li><span class="fn"><a href="#0d8bff"><b>~QCursor</b></a> () </span>
-<li><span class="fn">QCursor&amp; <a href="#1cf381"><b>operator=</b></a> ( const QCursor &amp; ) </span>
-<li><span class="fn">int <a href="#14a5a2"><b>shape</b></a> () const</span>
-<li><span class="fn">void <a href="#6ef136"><b>setShape</b></a> ( int ) </span>
-<li><span class="fn">const QBitmap* <a href="#1b6dce"><b>bitmap</b></a> () const</span>
-<li><span class="fn">const QBitmap* <a href="#7df57d"><b>mask</b></a> () const</span>
-<li><span class="fn">QPoint <a href="#f6805f"><b>hotSpot</b></a> () const</span>
+<li><div class="fn"><a href="#b89a11"><b>QCursor</b></a> () </div>
+<li><div class="fn"><a href="#498ce6"><b>QCursor</b></a> ( int shape ) </div>
+<li><div class="fn"><a href="#a156ee"><b>QCursor</b></a> ( const QBitmap &amp; bitmap, const QBitmap &amp; mask, int hotX=-1, int hotY=-1 ) </div>
+<li><div class="fn"><a href="#ffbd2b"><b>QCursor</b></a> ( const QPixmap &amp; pixmap, int hotX=-1, int hotY=-1 ) </div>
+<li><div class="fn"><a href="#6f3c99"><b>QCursor</b></a> ( const QCursor &amp; ) </div>
+<li><div class="fn"><a href="#0d8bff"><b>~QCursor</b></a> () </div>
+<li><div class="fn">QCursor&amp; <a href="#1cf381"><b>operator=</b></a> ( const QCursor &amp; ) </div>
+<li><div class="fn">int <a href="#14a5a2"><b>shape</b></a> () const</div>
+<li><div class="fn">void <a href="#6ef136"><b>setShape</b></a> ( int ) </div>
+<li><div class="fn">const QBitmap* <a href="#1b6dce"><b>bitmap</b></a> () const</div>
+<li><div class="fn">const QBitmap* <a href="#7df57d"><b>mask</b></a> () const</div>
+<li><div class="fn">QPoint <a href="#f6805f"><b>hotSpot</b></a> () const</div>
 </ul>
 <h2>Static Public Members</h2>
 <ul>
-<li><span class="fn">QPoint <a href="#854b1d"><b>pos</b></a> () </span>
-<li><span class="fn">void <a href="#502465"><b>setPos</b></a> ( int x, int y ) </span>
-<li><span class="fn">void <a href="#a62fb2"><b>setPos</b></a> ( const QPoint &amp; ) </span>
-<li><span class="fn">void <a href="#dddea6"><b>initialize</b></a> () </span>
-<li><span class="fn">void <a href="#16dc37"><b>cleanup</b></a> () </span>
+<li><div class="fn">QPoint <a href="#854b1d"><b>pos</b></a> () </div>
+<li><div class="fn">void <a href="#502465"><b>setPos</b></a> ( int x, int y ) </div>
+<li><div class="fn">void <a href="#a62fb2"><b>setPos</b></a> ( const QPoint &amp; ) </div>
+<li><div class="fn">void <a href="#dddea6"><b>initialize</b></a> () </div>
+<li><div class="fn">void <a href="#16dc37"><b>cleanup</b></a> () </div>
 </ul>
 <h2>Related Functions</h2>
 (Note that these are not member functions.)
@@ -90,7 +92,7 @@ constructor which takes a a bitmap and a mask or the constructor which
 takes a pixmap as arguments.
 <p>To set or get the position of the mouse cursor use the static methods
 <a href="#854b1d">QCursor::pos</a>() and <a href="#502465">QCursor::setPos</a>().
-<p>See also:  <a href="qwidget.html">QWidget</a> and <a href="guibooks.html#fowler">GUI Design Handbook: Cursors.</a>
+<p>See also  <a href="qwidget.html">QWidget</a> and <a href="guibooks.html#fowler">GUI Design Handbook: Cursors.</a>
 <p>Examples:
  <a href="cursor-cursor-cpp.html#QCursor">cursor/cursor.cpp</a>
 
@@ -118,7 +120,7 @@ If <em>hotY</em> is negative, it is set to the bitmap().height()/2.
 window system). We recommend using 32x32 cursors, because this size
 is supported on all platforms. Some platforms also support 16x16, 48x48
 and 64x64 cursors.
-<p>See also:  <a href="qbitmap.html#1b481a">QBitmap::QBitmap</a>() and <a href="qpixmap.html#ffddf9">QBitmap::setMask</a>().
+<p>See also  <a href="qbitmap.html#1b481a">QBitmap::QBitmap</a>() and <a href="qpixmap.html#ffddf9">QBitmap::setMask</a>().
 <h3 class="fn"><a name="ffbd2b"></a>QCursor::QCursor ( const <a href="qpixmap.html">QPixmap</a> &amp; pixmap, int hotX=-1, int hotY=-1 )</h3>
 <p>Constructs a custom pixmap cursor.
 <p><em>pixmap</em> is the image
@@ -132,7 +134,7 @@ window system). We recommend using 32x32 cursors, because this size
 is supported on all platforms. Some platforms also support 16x16, 48x48
 and 64x64 cursors.
 <p>Currently, only black-and-white pixmaps can be used.
-<p>See also:  <a href="qpixmap.html#0aa453">QPixmap::QPixmap</a>() and <a href="qpixmap.html#ffddf9">QPixmap::setMask</a>().
+<p>See also  <a href="qpixmap.html#0aa453">QPixmap::QPixmap</a>() and <a href="qpixmap.html#ffddf9">QPixmap::setMask</a>().
 <h3 class="fn"><a name="6f3c99"></a>QCursor::QCursor ( const QCursor &amp; c )</h3>
 <p>Constructs a copy of the cursor <em>c.</em>
 <h3 class="fn"><a name="498ce6"></a>QCursor::QCursor ( int shape )</h3>
@@ -157,7 +159,7 @@ and 64x64 cursors.
 </ul>
 <p>These correspond to the <a href="#cursors">predefined</a>
 global QCursor objects.
-<p>See also:  <a href="#6ef136">setShape</a>().
+<p>See also  <a href="#6ef136">setShape</a>().
 <h3 class="fn"><a name="0d8bff"></a>QCursor::~QCursor ()</h3>
 <p>Destructs the cursor.
 <h3 class="fn">const <a href="qbitmap.html">QBitmap</a> * <a name="1b6dce"></a>QCursor::bitmap () const</h3>
@@ -165,13 +167,13 @@ global QCursor objects.
 <h3 class="fn">void <a name="16dc37"></a>QCursor::cleanup () <code>[static]</code></h3>
 <p>Internal function that deinitializes the predefined cursors.
 This function is called from the <a href="qapplication.html">QApplication</a> destructor.
-<p>See also:  <a href="#dddea6">initialize</a>().
+<p>See also  <a href="#dddea6">initialize</a>().
 <h3 class="fn"><a href="qpoint.html">QPoint</a> <a name="f6805f"></a>QCursor::hotSpot () const</h3>
 <p>Returns the cursor hot spot, or (0,0) if it is one of the standard cursors.
 <h3 class="fn">void <a name="dddea6"></a>QCursor::initialize () <code>[static]</code></h3>
 <p>Internal function that initializes the predefined cursors.
 This function is called from the <a href="qapplication.html">QApplication</a> constructor.
-<p>See also:  <a href="#16dc37">cleanup</a>().
+<p>See also  <a href="#16dc37">cleanup</a>().
 <h3 class="fn">const <a href="qbitmap.html">QBitmap</a> * <a name="7df57d"></a>QCursor::mask () const</h3>
 <p>Returns the cursor bitmap mask, or 0 if it is one of the standard cursors.
 <h3 class="fn">QCursor &amp; <a name="1cf381"></a>QCursor::operator= ( const QCursor &amp; c )</h3>
@@ -181,12 +183,12 @@ This function is called from the <a href="qapplication.html">QApplication</a> co
 coordinates.
 <p>You can call <a href="qwidget.html#1ca1dd">QWidget::mapFromGlobal</a>() to translate it to widget
 coordinates.
-<p>See also:  <a href="#502465">setPos</a>(), <a href="qwidget.html#1ca1dd">QWidget::mapFromGlobal</a>() and <a href="qwidget.html#e40f36">QWidget::mapToGlobal</a>().
+<p>See also  <a href="#502465">setPos</a>(), <a href="qwidget.html#1ca1dd">QWidget::mapFromGlobal</a>() and <a href="qwidget.html#e40f36">QWidget::mapToGlobal</a>().
 <h3 class="fn">void <a name="502465"></a>QCursor::setPos ( int x, int y ) <code>[static]</code></h3>
 <p>Moves the cursor (hot spot) to the global screen position <em>x</em> and <em>y.</em>
 <p>You can call <a href="qwidget.html#e40f36">QWidget::mapToGlobal</a>() to translate widget coordinates
 to global screen coordinates.
-<p>See also:  <a href="#854b1d">pos</a>(), <a href="qwidget.html#1ca1dd">QWidget::mapFromGlobal</a>() and <a href="qwidget.html#e40f36">QWidget::mapToGlobal</a>().
+<p>See also  <a href="#854b1d">pos</a>(), <a href="qwidget.html#1ca1dd">QWidget::mapFromGlobal</a>() and <a href="qwidget.html#e40f36">QWidget::mapToGlobal</a>().
 <h3 class="fn">void <a name="a62fb2"></a>QCursor::setPos ( const <a href="qpoint.html">QPoint</a> &amp; ) <code>[static]</code></h3>
 <p>This is an overloaded member function, provided for convenience.  It differs from the above function only in what argument(s) it accepts.
 <h3 class="fn">void <a name="6ef136"></a>QCursor::setShape ( int shape )</h3>
@@ -211,10 +213,10 @@ to global screen coordinates.
 </ul>
 <p>These correspond to the <a href="#cursors">predefined</a>
 global QCursor objects.
-<p>See also:  <a href="#14a5a2">shape</a>().
+<p>See also  <a href="#14a5a2">shape</a>().
 <h3 class="fn">int <a name="14a5a2"></a>QCursor::shape () const</h3>
 <p>Returns the cursor shape identifer. The return value is one of
-following values (casted to an int)
+following values (cast to an int)
 <p><ul>
 <li> <code>ArrowCursor</code> - standard arrow cursor
 <li> <code>UpArrowCursor</code> - upwards arrow
@@ -235,27 +237,27 @@ following values (casted to an int)
 </ul>
 <p>These correspond to the <a href="#cursors">predefined</a>
 global QCursor objects.
-<p>See also:  <a href="#6ef136">setShape</a>().
+<p>See also  <a href="#6ef136">setShape</a>().
 <hr><h2>Related Functions</h2>
 <h3><a href="qdatastream.html">QDataStream</a> &amp; <a name="3c638e"></a>operator&lt;&lt; (<a href="qdatastream.html">QDataStream</a> &amp; s, const QCursor &amp; c)</h3>
 <p>Writes the cursor <em>c</em> to the stream <em>s.</em>
-<p>See also:  <a href="datastreamformat.html">Format of the QDataStream operators</a>
+<p>See also  <a href="datastreamformat.html">Format of the QDataStream operators</a>
 
 <h3><a href="qdatastream.html">QDataStream</a> &amp; <a name="d4df1b"></a>operator&gt;&gt; (<a href="qdatastream.html">QDataStream</a> &amp; s, QCursor &amp; c)</h3>
 <p>Reads a cursor from the stream <em>s</em> and sets <em>c</em> to the read data.
-<p>See also:  <a href="datastreamformat.html">Format of the QDataStream operators</a>
+<p>See also  <a href="datastreamformat.html">Format of the QDataStream operators</a>
 
 <hr><p>
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.1.1"><nobr>
+<input type=hidden name="version" value="2.2.0"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
 copyright &copy; 1995-2000
-<a href="http://www.trolltech.com">Troll Tech</a>, all rights reserved.<p><address><hr><div align="center">
+<a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.1</div>
+<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.2.0</div>
 </table></div></address></body></html>

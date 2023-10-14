@@ -1,36 +1,47 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qclipboard.cpp   2.1.1   edited 2000-04-12 $
+** $Id: qt/src/kernel/qclipboard.cpp   2.2.0   edited 2000-08-25 $
 **
 ** Implementation of QClipboard class
 **
 ** Created : 960430
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the kernel module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #include "qclipboard.h"
+
+#ifndef QT_NO_CLIPBOARD
+
 #include "qapplication.h"
 #include "qdragobject.h"
 #include "qpixmap.h"
-
-#if defined(QT_MAKEDLL)
-#define QApplication QBaseApplication
-#endif
 
 // REVISED: arnt
 
@@ -46,9 +57,9 @@
   QClipboard supports the same data types that QDragObject does, and uses
   similar mechanisms.
 
-  Only there is a single QClipboard object in an application, and you
+  There is only one QClipboard object in an application, and you
   can gain access to it using QApplication::clipboard().
-  
+
   Example:
   \code
     QClipboard *cb = QApplication::clipboard();
@@ -67,10 +78,10 @@
   types: The methods setText() allows exchanging unicode text easily
   over the clipboard, while setPixmap() setImage() allows to exchange
   QPixmap and QImage between applications.  setData() is the ultimate
-  in flexibility: It allows you to add any QMimeSource onto the
+  in flexibility:  It allows you to add any QMimeSource onto the
   clipboard.  (There are corresponding getters for each of these,
   e.g. text().)
-  
+
   You can clear the clipboard by calling the method clear().
 */
 
@@ -83,7 +94,7 @@
   clipboard object.
 
   There is only one clipboard in the window system, and creating more
-  than one object to represent it is almost certainly a bug.  
+  than one object to represent it is almost certainly a bug.
 */
 
 QClipboard::QClipboard( QObject *parent, const char *name )
@@ -137,9 +148,29 @@ QClipboard *QApplication::clipboard()
     return (QClipboard *)qt_clipboard;
 }
 
+#ifndef QT_NO_MIMECLIPBOARD
+// text handling is done directly in qclipboard_qws, for now
 
 /*!
-  Returns the clipboard text, or a null string
+  Returns the clipboard text in subtype \a subtype,
+  or a null string if the clipboard does not contain any text.
+  If \a subtype is null, any subtype is acceptable, and \a subtype
+  is set to the chosen subtype.
+
+  Common values for \a subtype are "plain" and "html".
+
+  \sa setText() data(), QString::operator!()
+*/
+
+QString QClipboard::text(QCString& subtype) const
+{
+    QString r;
+    QTextDrag::decode( data() ,r, subtype );
+    return r;
+}
+
+/*!
+  Returns the clipboard as plain text, or a null string
   if the clipboard does not contain any text.
 
   \sa setText() data(), QString::operator!()
@@ -147,10 +178,10 @@ QClipboard *QApplication::clipboard()
 
 QString QClipboard::text() const
 {
-    QString r;
-    QTextDrag::decode(data(),r);
-    return r;
+    QCString subtype = "plain";
+    return text(subtype);
 }
+
 
 /*!
   Copies \a text into the clipboard.
@@ -159,7 +190,7 @@ QString QClipboard::text() const
 
 void QClipboard::setText( const QString &text )
 {
-    setData(new QTextDrag(text));
+    setData( new QTextDrag(text) );
 }
 
 
@@ -174,7 +205,7 @@ void QClipboard::setText( const QString &text )
 QImage QClipboard::image() const
 {
     QImage r;
-    QImageDrag::decode(data(),r);
+    QImageDrag::decode( data(), r );
     return r;
 }
 
@@ -191,7 +222,7 @@ QImage QClipboard::image() const
 
 void QClipboard::setImage( const QImage &image )
 {
-    setData(new QImageDrag(image));
+    setData( new QImageDrag( image ) );
 }
 
 
@@ -201,14 +232,14 @@ void QClipboard::setImage( const QImage &image )
   example, if the image is 24-bit and the display 8-bit the result is
   converted to 8 bits, and if the image has an alpha channel the
   result just has a mask.
-  
+
   \sa setPixmap() image() data() QPixmap::convertFromImage().
 */
 
 QPixmap QClipboard::pixmap() const
 {
     QPixmap r;
-    QImageDrag::decode(data(),r);
+    QImageDrag::decode( data(), r );
     return r;
 }
 
@@ -222,7 +253,7 @@ QPixmap QClipboard::pixmap() const
 void QClipboard::setPixmap( const QPixmap &pixmap )
 {
     // *could* just use the handle, but that is X hackery, MIME is better.
-    setData(new QImageDrag(pixmap.convertToImage()));
+    setData( new QImageDrag( pixmap.convertToImage() ) );
 }
-
-
+#endif // QT_NO_MIMECLIPBOARD
+#endif // QT_NO_CLIPBOARD

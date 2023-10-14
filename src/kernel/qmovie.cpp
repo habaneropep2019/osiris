@@ -1,27 +1,39 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qmovie.cpp   2.1.1   edited 2000-04-07 $
+** $Id: qt/src/kernel/qmovie.cpp   2.2.0   edited 2000-08-25 $
 **
 ** Implementation of movie classes
 **
 ** Created : 970617
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the kernel module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 // #define QT_SAVE_MOVIE_HACK
 
@@ -33,6 +45,12 @@
 #include "qfile.h"
 #include "qbuffer.h"
 #include "qshared.h"
+
+#ifndef QT_NO_MOVIE
+
+#ifdef _WS_QWS_
+#include "qgfx_qws.h"
+#endif
 
 #include "qasyncio.h"
 #include "qasyncimageio.h"
@@ -67,11 +85,10 @@
   factories which have been installed, and the format of the input is
   determined as the input is decoded.
 
-  In Qt 1.30, the decoder factory interface is not available for adding
-  support for new formats. Only GIF support is installed.  The GIF decoder
-  supports interlaced images, transparency, looping, image-restore
-  disposal, local color maps, and background colors.  The Netscape looping
-  extension is obeyed.
+  The supported formats are MNG (if Qt is built with MNG support enabled)
+  and GIF (if Qt is built with GIF support enabled).  For MNG support, you
+  need to have installed libmng from
+  \link http://www.libmng.com http://www.libmng.com\endlink.
 
   Archives of animated GIFs and tools for building them can be found
   at <a href="http://dir.yahoo.com/Arts/Visual_Arts/Animation/Computer_Animation/Animated_GIFs/">Yahoo</a>.
@@ -87,7 +104,7 @@
   USA, France, Germany, Italy and the UK.
 
   GIF support may be removed completely in a future version of Qt.  We
-  recommend using the PNG format.
+  recommend using the MNG or PNG format.
 
   <img src="qmovie.png">
 
@@ -115,6 +132,7 @@ public: // for QMovie
     void init(bool fully);
     void flushBuffer();
     void updatePixmapFromImage();
+    void updatePixmapFromImage(const QPoint& off, const QRect& area);
     void showChanges();
 
     // This as QImageConsumer
@@ -144,6 +162,7 @@ public slots:
 
 public:
     QMovie *that;
+    QWidget * display_widget;
 
     QImageDecoder *decoder;
 
@@ -158,6 +177,7 @@ public:
     QTimer *frametimer;
     int lasttimerinterval;
     int loop;
+    bool movie_ended;
 
     bool waitingForFrameTick;
     int stepping;
@@ -185,6 +205,8 @@ QMovieFilePrivate::QMovieFilePrivate()
     pump = 0;
     source = 0;
     decoder = 0;
+    display_widget=0;
+    buf_size = 0;
     init(FALSE);
 }
 
@@ -194,12 +216,13 @@ QMovieFilePrivate::QMovieFilePrivate(QDataSource* src, QMovie* movie, int bufsiz
     buf_size(bufsize)
 {
     frametimer = new QTimer(this);
-    pump = new QDataPump(src, this);
+    pump = src ? new QDataPump(src, this) : 0;
     QObject::connect(frametimer, SIGNAL(timeout()), this, SLOT(refresh()));
     source = src;
     buffer = 0;
     decoder = 0;
     speed = 100;
+    display_widget=0;
     init(TRUE);
 }
 
@@ -214,7 +237,7 @@ QMovieFilePrivate::~QMovieFilePrivate()
 
 bool QMovieFilePrivate::isNull() const
 {
-    return !pump;
+    return !buf_size;
 }
 
 // Initialize.  Only actually allocate any space if \a fully is TRUE,
@@ -230,6 +253,8 @@ void QMovieFilePrivate::init(bool fully)
     if ( buffer )				// Avoid purify complaint
 	delete [] buffer;
     buffer = fully ? new uchar[buf_size] : 0;
+    if ( buffer )
+	memset( buffer, 0, buf_size );
 
     delete decoder;
     decoder = fully ? new QImageDecoder(this) : 0;
@@ -248,6 +273,7 @@ void QMovieFilePrivate::init(bool fully)
     changed_area.setRect(0,0,-1,-1);
     valid_area = changed_area;
     loop = -1;
+    movie_ended = FALSE;
     error = 0;
     empty = TRUE;
 }
@@ -258,13 +284,25 @@ void QMovieFilePrivate::flushBuffer()
 	int used = decoder->decode(buffer + buf_r,
 			QMIN(buf_usage, buf_size - buf_r));
 	if (used<=0) {
-	    error = 1;
-	    emit dataStatus(QMovie::UnrecognizedFormat);
+	    if ( used < 0 ) {
+		error = 1;
+		emit dataStatus(QMovie::UnrecognizedFormat);
+	    }
 	    break;
 	}
 	buf_r = (buf_r + used)%buf_size;
 	buf_usage -= used;
     }
+
+    // Some formats, like MNG can make stuff happen without any extra data.
+    int used = decoder->decode(buffer + buf_r,0);
+    if (used<=0) {
+	if ( used < 0 ) {
+	    error = 1;
+	    emit dataStatus(QMovie::UnrecognizedFormat);
+	}
+    }
+
     if(error) frametimer->stop();
     maybeReady();
 }
@@ -272,10 +310,15 @@ void QMovieFilePrivate::flushBuffer()
 void QMovieFilePrivate::updatePixmapFromImage()
 {
     if (changed_area.isEmpty()) return;
+    updatePixmapFromImage(QPoint(0,0),changed_area);
+}
 
+void QMovieFilePrivate::updatePixmapFromImage(const QPoint& off,
+						const QRect& area)
+{
     // Create temporary QImage to hold the part we want
     const QImage& gimg = decoder->image();
-    QImage img = gimg.copy(changed_area);
+    QImage img = gimg.copy(area);
 
 #ifdef QT_SAVE_MOVIE_HACK
     if ( save_image ) {
@@ -292,7 +335,7 @@ void QMovieFilePrivate::updatePixmapFromImage()
     if (bg.isValid()) {
 	QPainter p;
 	p.begin(&mypixmap);
-	p.fillRect(changed_area, bg);
+	p.fillRect(area, bg);
 	p.end();
     } else {
 	if (gimg.hasAlphaBuffer()) {
@@ -308,16 +351,40 @@ void QMovieFilePrivate::updatePixmapFromImage()
     // Convert to pixmap and paste that onto myself
     QPixmap lines;
     lines.convertFromImage(img);
-    bitBlt(&mypixmap, changed_area.left(), changed_area.top(),
-	&lines, 0, 0, changed_area.width(), changed_area.height(),
-	CopyROP, !bg.isValid());
+    bitBlt(&mypixmap, area.left(), area.top(),
+	   &lines, off.x(), off.x(), area.width(), area.height(),
+	   CopyROP, !bg.isValid());
 
     if (!bg.isValid() && gimg.hasAlphaBuffer()) {
-	bitBlt(&mymask, changed_area.left(), changed_area.top(),
-	    lines.mask(), 0, 0, changed_area.width(), changed_area.height(),
-	    CopyROP, TRUE);
+	bitBlt(&mymask, area.left(), area.top(),
+	       lines.mask(), 0, 0, area.width(),
+	       area.height(),
+	       CopyROP, TRUE);
 	mypixmap.setMask(mymask);
     }
+
+#ifdef _WS_QWS_
+    if(display_widget) {
+	QGfx * mygfx=display_widget->graphicsContext();
+	if(mygfx) {
+	    double xscale,yscale;
+	    xscale=display_widget->width();
+	    yscale=display_widget->height();
+	    xscale=xscale/((double)mypixmap.width());
+	    yscale=yscale/((double)mypixmap.height());
+	    double xh,yh;
+	    xh=xscale*((double)area.left());
+	    yh=yscale*((double)area.top());
+	    mygfx->setSource(&mypixmap);
+	    mygfx->setSourceOffset(0,0);
+	    mygfx->setAlphaType(QGfx::IgnoreAlpha);
+	    mygfx->stretchBlt(0,0,display_widget->width(),
+			      display_widget->height(),mypixmap.width(),
+			      mypixmap.height());
+	    delete mygfx;
+	}
+    }
+#endif
 }
 
 void QMovieFilePrivate::showChanges()
@@ -342,6 +409,7 @@ void QMovieFilePrivate::changed(const QRect& rect)
 
 void QMovieFilePrivate::end()
 {
+    movie_ended = TRUE;
 }
 
 void QMovieFilePrivate::preFrameDone()
@@ -369,13 +437,9 @@ void QMovieFilePrivate::frameDone(const QPoint& p,
 {
     preFrameDone();
     const QImage& gimg = decoder->image();
-    if (framenumber==0) {
-	mypixmap.resize(gimg.width(), gimg.height());
+    if (framenumber==0)
 	emit sizeChanged(gimg.size());
-    }
-    bitBlt(&mypixmap, p.x(), p.y(), &gimg, rect.x(), rect.y(),
-		    rect.width(), rect.height());
-    // TODO: transparency
+    updatePixmapFromImage(p,rect);
     emit areaChanged(QRect(p,rect.size()));
     emit dataStatus(QMovie::EndOfFrame);
     framenumber++;
@@ -440,8 +504,10 @@ void QMovieFilePrivate::receive(const uchar* b, int bytecount)
     while (bytecount && !waitingForFrameTick && stepping != 0) {
 	int used = decoder->decode(b, bytecount);
 	if (used<=0) {
-	    error = 1;
-	    emit dataStatus(QMovie::UnrecognizedFormat);
+	    if ( used < 0 ) {
+		error = 1;
+		emit dataStatus(QMovie::UnrecognizedFormat);
+	    }
 	    break;
 	}
 	b+=used;
@@ -458,6 +524,9 @@ void QMovieFilePrivate::receive(const uchar* b, int bytecount)
 
 void QMovieFilePrivate::eof()
 {
+    if ( !movie_ended )
+	return;
+
     if ( empty )
 	emit dataStatus(QMovie::SourceEmpty);
 
@@ -535,6 +604,45 @@ QMovie::QMovie()
 {
     d = new QMovieFilePrivate();
 }
+
+/*!
+  Constructs a QMovie with an external data source.
+  You should later call pushData() to send incoming animation data to
+  the movie.
+
+  \sa pushData()
+*/
+QMovie::QMovie(int bufsize)
+{
+    d = new QMovieFilePrivate(0, this, bufsize);
+}
+
+/*!
+  Returns the maximum amount of data that can currently be pushed
+  into the movie by a call to pushData().  This is affected by the
+  initial buffer size, but varies as the movie plays and data is consumed.
+*/
+int QMovie::pushSpace() const
+{
+    return d->readyToReceive();
+}
+
+/*!
+  Pushes \a length bytes from \a data into the movie.  \a length must
+  be no more than the amount returned by pushSpace() since the previous
+  call to pushData().
+*/
+void QMovie::pushData(const uchar* data, int length)
+{
+    d->receive(data,length);
+}
+
+#ifdef _WS_QWS_ // ##### Temporary performance experiment
+void QMovie::setDisplayWidget(QWidget * w)
+{
+    d->display_widget=w;
+}
+#endif
 
 /*!
   Constructs a QMovie which reads an image sequence from the given
@@ -643,13 +751,28 @@ const QRect& QMovie::getValidRect() const
 }
 
 /*!
-  Returns the current frame of the movie.  It is not generally useful to
+  Returns the current frame of the movie, as a QPixmap.
+  It is not generally useful to
   keep a copy of this pixmap.  Better to keep a copy of the QMovie and
   get the framePixmap() only when needed for drawing.
+
+  \sa frameImage()
 */
 const QPixmap& QMovie::framePixmap() const
 {
     return d->mypixmap;
+}
+
+/*!
+  Returns the current frame of the movie, as a QImage.
+  It is not generally useful to
+  keep a copy of this pixmap.
+
+  \sa framePixmap()
+*/
+const QImage& QMovie::frameImage() const
+{
+    return d->decoder->image();
 }
 
 /*!
@@ -880,3 +1003,5 @@ void QMovie::disconnectStatus(QObject* receiver, const char *member)
 
 
 #include "qmovie.moc"
+
+#endif	// QT_NO_MOVIE

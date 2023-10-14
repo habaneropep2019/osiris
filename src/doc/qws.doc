@@ -1,0 +1,524 @@
+/****************************************************************************
+** $Id: qt/doc/qws.doc   2.2.0   edited 2000-08-25 $
+**
+** Qt/Embedded (Qt on QWS) documentation
+**
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+**
+** This file is part of the Qt GUI Toolkit.
+**
+** This file may be distributed under the terms of the Q Public License
+** as defined by Trolltech AS of Norway and appearing in the file
+** LICENSE.QPL included in the packaging of this file.
+**
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+**
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
+**
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
+/*! \page install-qws.html
+
+\title Installing Qt/Embedded
+
+<p>
+This installation procedure is written for Linux. It may need
+to be modified for other platforms.
+
+<h3>  Unpack the archive if you have not done so already:</h3>
+<pre>
+	cd &lt;anywhere&gt;
+	gunzip qt-embedded-<i>version</i>-commercial.tar.gz    # uncompress the archive
+	tar xf qt-embedded-<i>version</i>-commercial.tar       # unpack it
+</pre>
+
+  This document assumes that the archive is installed as <tt>~/qt-<i>version</i></tt>.
+</p>
+
+
+<h3> Compile the Qt/Embedded library and examples</h3>
+
+<pre>
+	cd ~/qt-<i>version</i>
+	export QTDIR=~/qt-<i>version</i>
+	./configure
+	make
+</pre>
+
+<p>
+The configuration system is designed to allow platform-specific options
+to be added, but in general all Linux system which have framebuffer
+support can use the "linux-generic-g++" platform.
+The configuration system also supports cross-compilers:
+to build <i>on</i> Linux/x86 <i>for</i> the Linux/MIPSEL target, you would use:
+<pre>
+	./configure -platform linux-x86-g++ -xplatform linux-mips-g++
+</pre>
+<p>
+Only a small number of configurations are predefined, all much the same.
+Configurations files are found in <tt>configs/</tt>.
+
+<h3> Enable framebuffer support</h3>
+
+<p>
+   You may need to recompile your kernel to enable the framebuffer.
+   This document does not describe how to do this; the
+   <a href=HOWTO-framebuffer.html>HOWTO-Framebuffer page</a>
+   contains a short description. (You should see
+   a penguin logo at boot time when the frame buffer is enabled.)
+
+<p>
+   For Matrox G100/G200/G400 use the matrox frame buffer driver.
+
+<p>
+   For NVidia TNT cards use the nvidia frame buffer driver.
+
+<p>
+   For Mach64 and most other cards, use the vesafb driver.
+
+
+<p>
+   Note that some cards are only supported in VGA16 mode, this will
+   not work with the current version of Qt/Embedded, since VGA/16 is
+   not yet supported. You may need to upgrade your kernel, or even
+   switch to an experimental kernel.
+
+<p>
+   The frame buffer must also be enabled with a boot parameter. See
+   <tt>/usr/src/linux/Documentation/fb</tt> for details.
+
+<p>
+   The fbset program, which should be included in Linux distributions,
+   may be used to switch video modes without rebooting the system. The
+   video mode active when the server is started will be used. (8-bit
+   modes are still experimental.) NOTE: fbset does not work with the vesafb
+   driver.
+</p>
+
+
+<h3> Change permissions</h3>
+
+<p>
+   To run Qt/Embedded, you need write access to the framebuffer device
+   <tt>/dev/fb0</tt>. 
+
+<p>
+   You also need read access to the mouse device. (Note that
+   <tt>/dev/mouse</tt> is normally a symbolic link; the actual mouse device
+   must be readable.)
+</p>
+
+
+
+<h3> How to run the demonstration program</h3>
+
+<p>
+   Log into a virtual console and do:
+
+<pre>
+	cd ~/qt-<i>version</i>/
+   	./start-demo
+</pre>
+  
+
+<h3> Miscellaneous troubleshooting and known bugs</h3>
+
+<p>
+  To kill gpm, run the following command as root:
+  
+<pre>
+	gpm -k
+</pre>
+
+<p>
+  In some cases, if the server does not work, it will work when run as root.
+
+<p>
+  Some example programs may not compile with GCC 2.95.
+
+
+<p>
+  Show processes using the framebuffer:
+
+<pre>
+    fuser -v /dev/fb0
+</pre>
+
+<p>
+  Kill such processes:
+<pre>
+    fuser -vk /dev/fb0
+</pre>
+  or harsher:
+<pre>
+    fuser -k -KILL /dev/fb0
+</pre>
+
+
+<p>
+  Show existing semaphores:
+
+<pre>
+    ipcs            
+</pre>
+ 
+<p>
+  Remove semaphores:
+
+<pre>
+    ipcrm
+</pre>
+
+<p>
+  The communication between client and server is done through the
+  named pipe <tt>/tmp/.QtEmbedded</tt>; sometimes it may need to be deleted
+  (eg. if you run Qt/Embedded as root then later as an unprivileged user).
+</p>
+
+
+<h3> Customization  </h3>
+
+<p>
+   The Qt/Embedded library can be reduced in size by
+    <a href=features.html>removing unneeded features</a>.
+
+*/
+
+/*! \page fonts-qws.html
+
+\title Fonts in Qt/Embedded
+
+<h2>Supported formats</h2>
+
+<p>
+Qt/Embedded supports four font formats:
+
+<ul>
+ <li><b>TrueType (TTF)</b> - the scalable font technology now standard
+	    on MS-Windows and Apple Macintosh, and becoming popular on X11.
+ <li><b>Postscript Type1 (PFA/PFB)</b> - scalable fonts often used by printers,
+	    also popular on X11. These are similar in functionality to TTF
+	    fonts and are not discussed further in this document.
+ <li><b>Bitmap Distribution Format fonts (BDF)</b> - a standard format
+	    for non-scalable fonts. A large number of BDF fonts are
+	    supplied as part of standard X11 distributions - most of
+	    these can be used with Qt/Embedded.
+ <li><b>Qt Prerendered Font (QPF)</b> - a light-weight non-scalable font
+	    format specific to Qt/Embedded.
+</ul>
+
+<p>
+Support for each of these font formats,
+except QPF which is always enabled,
+can be enabled or disabled independently by using the
+<a href=features.html>Qt/Embedded Features Definition</a>
+There is support in
+Qt/Embedded for writing a QPF font file from any font, thus you can
+initially enable TTF and BDF formats, save QPF files for the fonts and
+sizes you need, then remove TTF and BDF support.
+
+<h2>Memory requirements</h2>
+
+<p>
+With TTF fonts, each character in the font at a given point size is
+only rendered when first used in a drawing or metrics operation. With
+BDF fonts all characters are rendered when the font is used.
+With QPF fonts, the characters are stored in the same format as Qt uses
+when drawing.
+
+<p>
+As an example, a 10-point Times font containing the ASCII characters uses
+around 1300 bytes when stored in QPF format.
+
+<p>
+The QPF format is designed to allow memory-mapped usage of the font,
+therefore its RAM consumption can be reduced even further.
+In Qt/Embedded 2.2.0, this memory-mapping is not done.
+
+<p>
+The scalable fonts use a much larger amount of memory per-font, but
+these fonts can give a memory saving if many different sizes of each
+font are needed.
+
+<h2>Smooth fonts</h2>
+
+<p>
+TTF, PFA, and QPF fonts can be rendered as <i>smooth</i> anti-aliased
+fonts to give superior readability, especially on low-resolution devices.
+The difference between smooth and non-smooth fonts is illustrated below
+(you may need to change your display to low resolution to see the difference).
+
+<center>
+<table>
+<tr align=center>
+<td><img src=smooth.png>
+<td width=10%>
+<td><img src=unsmooth.png>
+</table>
+</center>
+
+<p>
+In Qt/Embedded 2.2.0, smooth fonts use 8 times as much memory as non-smooth
+fonts. This multiplier will be reduced to a configurable
+2 or 4 (ie. 4-level and 16-level shading rather than the current excessive
+256-level shading).
+
+<h2>Unicode</h2>
+
+All fonts used by Qt/Embedded use the Unicode character encoding. Most fonts
+available today do not actually contain all the Unicode characters, but they
+do use the Unicode characters ordering. A single <i>complete</i> 16-point
+Unicode font uses over 1Mb of memory.
+
+<h2>The font definition file</h2>
+
+When Qt/Embedded applications run, they look for a file called
+<tt>$QTDIR/etc/fonts/fontdir</tt> or
+<tt>/usr/local/qt-embedded/etc/fonts/fontdir</tt>. This file defines the
+fonts available to the application. It has the following format:
+
+<p>
+<blockquote>
+   <i>name</i> <i>file</i> <i>renderer</i> <i>italic</i> <i>weight</i> <i>size</i> <i>flags</i>
+</blockquote>
+
+<p>
+where:
+
+<blockquote>
+<p>
+<table>
+<tr><td valign=top>      <i>name</i> <td> <b>Helvetica</b>, <b>Times</b>, etc.
+<tr><td valign=top>      <i>file</i> <td> <b>helvR0810.bdf</b>, <b>verdana.ttf</b>, etc.
+<tr><td valign=top>  <i>renderer</i> <td> <b>BDF</b> or <b>TTF</b>
+<tr><td valign=top>    <i>italic</i> <td> <b>y</b> or <b>n</b>
+<tr><td valign=top>    <i>weight</i> <td> <b>50</b> is Normal, <b>75</b> is Bold, etc.
+<tr><td valign=top>      <i>size</i> <td> <b>0</b> for scalable or 10 times pointsize (eg. <b>120</b> for 12pt)
+<tr><td valign=top>     <i>flags</i> <td> Flag characters:<br>
+			<b>s</b> = smooth (anti-aliased)<br>
+			<b>u</b> = unicode range when saving (default is Latin 1)<br>
+			<b>a</b> = ascii range when saving (default is Latin 1)<br>
+</table>
+</blockquote>
+
+<p>
+The font definition file does not specify QPF fonts - these are loaded 
+directly from the directory containing the <tt>fontdir</tt> file, and must
+be named <i>name</i>_<i>size</i>_<i>weight</i><i>italicflag</i>.qpf, where:
+
+<blockquote>
+<p>
+<table>
+<tr><td valign=top>      <i>name</i> <td> <b>helvetica</b>, <b>times</b>, etc. (lowercase)
+<tr><td valign=top>      <i>size</i> <td> 10 times pointsize (eg. <b>120</b> for 12pt)
+<tr><td valign=top>    <i>italicflag</i> <td> <b>i</b> for italic or nothing.
+<tr><td valign=top>    <i>weight</i> <td> <b>50</b> is Normal, <b>75</b> is Bold, etc.
+</table>
+</blockquote>
+
+<p>
+If an application is run with the <tt>-savefonts</tt> command-line option,
+then whenever a font other than a QPF font is used, a corresponding QPF file
+is saved. This allows you to easily find the font usage of your applications
+and to generate QPF files so that you can eventually reduce the memory
+usage of your applications by disabling TTF and BDF support from Qt/Embedded.
+option, or by modifying the initialization of <tt>qws_savefonts</tt> in
+<tt>kernel/qapplication_qws.cpp</tt> of the Qt/Embedded library source code.
+In extreme cases of memory-saving, it is possible to save partially-rendered
+fonts (eg. only the characters in "Product Name<sup>TM</sup>") if you are
+certain that these are the only characters you will need from the font.
+See QMemoryManager::savePrerenderedFont() for this functionality.
+
+<h2>Notes</h2>
+
+<p>
+The font definition file, naming conventions for font files, and the format
+of QPF files may change in versions of Qt/Embedded after 2.2.0.
+
+<p>
+When enabled, Qt/Embedded uses the powerful FreeType2 library to implement
+TrueType and Type1 support.
+
+*/
+
+/*! \page running-qws.html
+
+\title Running Qt/Embedded applications
+
+A Qt/Embedded application requires a master application to be running
+or to be a master application itself.  The
+master application is primarily responsible for managing top-level window
+regions, pointer and keyboard input.
+<p>
+Any Qt/Embedded application can be a
+master application by constructing the QApplication object with the
+<i>QApplication::GuiServer</i> type, or running the application with the
+<i>-qws</i> command line option.
+<p>
+This document assumes you have the Linux framebuffer configured correctly
+and no master process is running.  If you do not have a working Linux
+framebuffer you can use the
+<a href="qvfb-qws.html">Qt/Embedded virtual framebuffer</a>.
+<p>
+Change to a Linux console and select an example to run, e.g. examples/widgets.
+Make sure $QTDIR is set to the directory where you installed Qt/Embedded
+and add the $QTDIR/lib directory to $LD_LIBRARY_PATH, e.g.:
+<pre>
+export QTDIR=$HOME/qt-<i>version</i>
+export LD_LIBRARY_PATH=$QTDIR/lib:$LD_LIBRARY_PATH
+</pre>
+<p>
+Run the application with the <i>-qws</i> option:
+<p>
+<pre>
+cd $QTDIR/examples/widgets
+./widgets -qws
+</pre>
+<p>
+You should see the widgets example appear.  If your mouse doesn't work
+correctly you need to specify the type of mouse to use.
+You can exit the master application at any time using ctrl+alt+backspace.
+<p>
+If you wish to run additional applications you should run them as clients
+i.e. without the <i>-qws</i> option.
+
+<h2>Displays</h2>
+Qt/Embedded allows multiple displays to be used simultaneously by running
+multiple Qt/Embedded master processes.  This is achieved using the -display
+command line parameter or the $QWS_DISPLAY environment variable.
+<p>
+The -display parameter's syntax is:
+<p>
+<tt>[gfx driver][:driver specific options][:display number]</tt>
+<p>
+for example if you want to use the mach64 driver on fb1 as display 2:
+<p>
+<tt>$ ./launcher -display Mach64:/dev/fb1:2</tt>
+<p>
+To try this functionality you can do the following:
+<ol>
+<li>Change to VC 1 and run the launcher:<br>
+<tt>$ cd examples/launcher</tt><br>
+<tt>$ ./launcher</tt>
+
+<li>Switch to VC 2 and run another one:<br>
+<tt>$ cd examples/launcher</tt><br>
+<tt>$ ./launcher -display :1</tt><p>
+Another launcher will be started.  Start an application in this launcher.
+
+<li>Press ctrl+alt+F1 - back to display 0.  You can also start additional
+applications on a particular display by specifying the display id. Change
+to VC 3:<br>
+<tt>$ cd examples/widgets</tt><br>
+<tt>$ ./widgets -display :1</tt><br>
+will display the widgets example on dislpay :1 (VC 2).
+</ol>
+<p>
+Only the master process needs to specify the driver/device part explicitly.
+The clients get the information they need from the master when they connect.
+So once you have a master server running using a particular driver, you can
+just use "client -display :n" to use display n.
+
+<h2>Mouse Input</h2>
+At the time of writing Qt/Embedded supports MouseMan (default), Microsoft,
+IntelliMouse and some other devices specific to certain hardware (e.g. Vr
+touch panel).  To specify the mouse to use set the $QWS_MOUSE_PROTO environment
+variable, e.g.:<p>
+<pre>
+export QWS_MOUSE_PROTO=IntelliMouse
+</pre>
+<p>
+See <a href="pointer-qws.html">Qt/Embedded Pointer Handling</a> for more
+information.
+
+*/
+
+/*! \page porting-qws.html
+
+\title Porting your applications to Qt/Embedded
+
+Existing Qt applications should require no porting provided there is no
+platform dependent code.  Platform dependent code includes system calls,
+calls to the underlying window system (Windows or X11), and Qt platform
+specific methods such as QApplication::x11EventFilter().
+<p>
+For cases where it is necessary to use platform dependent code there are
+macros defined that can be used to enable/disable code for each platform
+using #ifdef directives:
+
+<table>
+<tr><th>Platform</th><th>Macro</th></tr>
+<tr><td>Qt/X11</td><td>_WS_X11_</td></tr>
+<tr><td>Qt/Windows</td><td>_WS_WIN_</td></tr>
+<tr><td>Qt/Embedded</td><td>_WS_QWS_</td></tr>
+</table>
+
+*/
+
+
+/*! \page pointer-qws.html
+\title Qt/Embedded Pointer Handling
+
+Pointer handling in Qt/Embedded works for any mouse-like device such as
+a touchpanel, a trackball, or real mouse.
+
+<h2>Mouse Protocols</h2>
+
+Qt/Embedded uses the environment variable QWS_MOUSE_PROTO to determine
+which mouse to use. This environment variable should be set to:
+<blockquote>
+    <i>&lt;protocol&gt;</i><tt>:</tt><i>&lt;device&gt;</i>
+</blockquote>
+where <i>&lt;protocol&gt;</i> is one of:
+<ul>
+ <li>MouseMan
+ <li>IntelliMouse
+ <li>Microsoft
+</ul>
+and <i>&lt;device&gt;</i> is the mouse device, often <tt>/dev/mouse</tt>.
+If no such variable is specified, the built-in default
+is <tt>MouseMan:/dev/mouse</tt>.
+<p>
+If you require support for a mouse other than these, you can use GPM
+to translate the mouse protocol as an interim solution. To do this, run:
+<pre>
+    gpm -t help
+</pre>
+choose a protocol from the list and run:
+<pre>
+    gpm -R ps2 -t <i>&lt;protocol&gt;</i>
+</pre>
+
+<p>
+In Qt/Embedded 2.2.0 no attempt is made to auto-detect the mouse type,
+on the assumption that an embedded device will support a single mouse
+protocol. Such auto-detection may be available in a future release.
+
+<p>
+To add another protocol, new subclasses of QMouseHandler can be written
+in <tt>kernel/qwsmouse_qws.cpp</tt>.
+
+<h2>Vr Touch Panel</h2>
+
+Qt/Embedded ships with support for the NEC Vr41XX touchpanel.
+Like an additional mouse protocol, this is implemented by subclassing
+QMouseHandler in <tt>kernel/qwsmouse_qws.cpp</tt>.
+
+*/
+
+

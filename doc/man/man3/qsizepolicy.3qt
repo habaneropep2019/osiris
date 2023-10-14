@@ -1,5 +1,5 @@
-.TH QSizePolicy 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QSizePolicy 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QSizePolicy \- A layout attribute describing horizontal and vertical resizing
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -23,10 +21,10 @@ QSizePolicy \- A layout attribute describing horizontal and vertical resizing
 .BI "enum \fBExpandData\fR { NoDirection = 0, Horizontal = 1, Vertical = 2, BothDirections = Horizontal | Vertical }"
 .br
 .ti -1c
-.BI "\fBQSizePolicy\fR ()"
+.BI "\fBQSizePolicy\fR () "
 .br
 .ti -1c
-.BI "\fBQSizePolicy\fR ( SizeType " "hor" ", SizeType " "ver" ", bool " "hfw" " = FALSE )"
+.BI "\fBQSizePolicy\fR ( SizeType " "hor" ", SizeType " "ver" ", bool " "hfw" " = FALSE ) "
 .br
 .ti -1c
 .BI "SizeType \fBhorData\fR () const"
@@ -50,16 +48,22 @@ QSizePolicy \- A layout attribute describing horizontal and vertical resizing
 .BI "ExpandData \fBexpanding\fR () const"
 .br
 .ti -1c
-.BI "void \fBsetHorData\fR ( SizeType d )"
+.BI "void \fBsetHorData\fR ( SizeType d ) "
 .br
 .ti -1c
-.BI "void \fBsetVerData\fR ( SizeType d )"
+.BI "void \fBsetVerData\fR ( SizeType d ) "
 .br
 .ti -1c
-.BI "void \fBsetHeightForWidth\fR ( bool b )"
+.BI "void \fBsetHeightForWidth\fR ( bool b ) "
 .br
 .ti -1c
 .BI "bool \fBhasHeightForWidth\fR () const"
+.br
+.ti -1c
+.BI "bool \fBoperator==\fR ( const QSizePolicy & s ) const"
+.br
+.ti -1c
+.BI "bool \fBoperator!=\fR ( const QSizePolicy & s ) const"
 .br
 .in -1c
 .SH DESCRIPTION
@@ -75,7 +79,7 @@ The per-dimension SizeType objects are set in the usual constructor, and can be 
 .PP
 The hasHeightForWidth() flag indicates whether the widget's sizeHint() is width-dependent (like a word-wrapping label).
 .PP
-See also: QSizePolicy::SizeType.
+See also QSizePolicy::SizeType.
 .PP
 Examples:
 .(l
@@ -114,7 +118,7 @@ Default constructor, produces a minimally initialized QSizePolicy.
 .SH "QSizePolicy::QSizePolicy ( SizeType hor, SizeType ver, bool hfw = FALSE )"
 This is the constructor normally used to return a value in the overridden QWidget::sizePolicy() function of a QWidget subclass.
 .PP
-It constructs a QSizePolicy with independent horizontal and vertical sizing types, \fIhor\fR and \fIver\fR respectively. These sizing types affect how the widget is treated by the \fIlink\fR QLayout layout engine\\endlink.
+It constructs a QSizePolicy with independent horizontal and vertical sizing types, \fIhor\fR and \fIver\fR respectively. These sizing types affect how the widget is treated by the layout engine.
 .PP
 If \fIhfw\fR is TRUE, the preferred height of the widget is dependent on the width of the widget (for example, a QLabel with automatic word-breaking).
 .SH "QSizePolicy::ExpandData QSizePolicy::expanding() const"
@@ -142,7 +146,7 @@ Returns the vertical component of the size policy.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qsizepolicy.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

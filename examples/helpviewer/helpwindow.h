@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: qt/examples/helpviewer/helpwindow.h   2.1.1   edited 2000-03-21 $
+** $Id: qt/examples/helpviewer/helpwindow.h   2.2.0   edited 2000-08-31 $
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -51,8 +51,7 @@ private:
     QComboBox *pathCombo;
     int backwardId, forwardId;
     QString selectedURL;
-    QDir path;
-    QStringList fileList, history, bookmarks;
+    QStringList history, bookmarks;
     QMap<int, QString> mHistory, mBookmarks;
     QPopupMenu *hist, *bookm;
     

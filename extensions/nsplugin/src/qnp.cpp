@@ -1,27 +1,39 @@
 /****************************************************************************
-** $Id: qt/extensions/nsplugin/src/qnp.cpp   2.1.1   edited 2000-04-26 $
+** $Id: qt/extensions/nsplugin/src/qnp.cpp   2.2.0   edited 2000-08-31 $
 **
 ** Implementation of Qt extension classes for Netscape Plugin support.
 **
 ** Created : 970601
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 
 // Remaining _WS_X11_ considerations:
@@ -64,6 +76,7 @@
 
 #include "qnp.h"
 
+#include <stdlib.h>		// Must be here for Borland C++
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
@@ -401,6 +414,10 @@ static void np_set_timer( int interval )
     }
     qt_np_timerid = XtAppAddTimeOut(appcon, interval,
 	(XtTimerCallbackProc)qt_np_timeout, 0);
+    /*
+    qt_np_timerid = XtAddTimeOut(interval,
+	(XtTimerCallbackProc)qt_np_timeout, 0);
+    */
 }
 
 static void np_do_timers( void*, void* )
@@ -518,8 +535,10 @@ NPP_Shutdown(void)
 	    // We are the last Qt-based plugin to leave
 	    removeXtEventFilters(Safe);
 	    removeXtEventFilters(Dangerous);
-	    if (qt_np_timerid) XtRemoveTimeOut( qt_np_timerid );
-	    qt_np_timerid = 0;
+	    if (qt_np_timerid) {
+		XtRemoveTimeOut( qt_np_timerid );
+		qt_np_timerid = 0;
+	    }
 	    qt_np_leave_cb = 0;
 	}
 	delete piApp;
@@ -926,7 +945,6 @@ NPP_URLNotify(NPP instance,
               NPReason reason,
               void* notifyData)
 {
-    debug("NPP_URLNotify(%s,%d)",url,reason);
     if (instance != NULL) {
         QNPInstance::Reason r;
         switch (reason) {
@@ -1504,7 +1522,9 @@ void QNPInstance::postURL(const char* url, const char* window,
 */
 void QNPInstance::getURLNotify(const char* url, const char* window, void*data)
 {
+#ifdef _WS_WIN_ // Only on Windows?
     NPN_GetURLNotify( pi->npp, url, window, data );
+#endif
 }
 
 /*!
@@ -1598,7 +1618,7 @@ const char* QNPInstance::arg(const char* name) const
 {
     for (int i=0; i<pi->argc; i++) {
 	// SGML: names are case insensitive
-	if ( stricmp( name, pi->argn[i] ) == 0 ) {
+	if ( qstricmp( name, pi->argn[i] ) == 0 ) {
 	    if (pi->argv[i].isEmpty())
 		return "";
 	    else

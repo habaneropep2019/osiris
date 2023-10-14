@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: qt/examples/addressbook/centralwidget.cpp   2.1.1   edited 2000-02-14 $
+** $Id: qt/examples/addressbook/centralwidget.cpp   2.2.0   edited 2000-08-31 $
 **
-** Copyright ( C ) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright ( C ) 1992-2000 Trolltech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -193,12 +193,12 @@ void ABCentralWidget::setupListView()
     listView->addColumn( "Address" );
     listView->addColumn( "E-Mail" );
 
-    listView->setMultiSelection( TRUE );
+    listView->setSelectionMode( QListView::Extended );
 
-    connect( listView, SIGNAL( selectionChanged() ), this, SLOT( selectionChanged() ) );
-    connect( listView, SIGNAL( doubleClicked( QListViewItem* ) ), this, SLOT( itemSelected( QListViewItem* ) ) );
+    connect( listView, SIGNAL( clicked( QListViewItem* ) ), this, SLOT( itemSelected( QListViewItem* ) ) );
 
     mainGrid->addWidget( listView, 1, 0 );
+    listView->setAllColumnsShowFocus( TRUE );
 }
 
 void ABCentralWidget::addEntry()
@@ -242,7 +242,6 @@ void ABCentralWidget::selectionChanged()
 
 void ABCentralWidget::itemSelected( QListViewItem *item )
 {
-    listView->clearSelection();
     item->setSelected( TRUE );
     item->repaint();
 

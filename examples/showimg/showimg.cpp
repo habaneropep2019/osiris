@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: qt/examples/showimg/showimg.cpp   2.1.1   edited 2000-03-14 $
+** $Id: qt/examples/showimg/showimg.cpp   2.2.0   edited 2000-08-31 $
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -95,7 +95,7 @@ ImageViewer::ImageViewer( QWidget *parent, const char *name, int wFlags )
     dd = options->insertItem( "AvoidDither" );
     options->insertSeparator();
     ss = options->insertItem( "Smooth scaling" );
-    cc = options->insertItem( "Use colour context" );
+    cc = options->insertItem( "Use color context" );
     if ( QApplication::colorSpec() == QApplication::ManyColor )
 	options->setItemEnabled( cc, FALSE );
     options->setCheckable( TRUE );
@@ -598,7 +598,6 @@ void ImageViewer::rot180()
 
 void ImageViewer::copy()
 {
-    //QApplication::clipboard()->setPixmap(pm);
     QApplication::clipboard()->setImage(image); // Less information loss
 }
 

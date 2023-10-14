@@ -1,5 +1,5 @@
-.TH QRangeControl 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QRangeControl 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,40 +7,38 @@
 .nh
 .SH NAME
 QRangeControl \- Integer value within a range
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
 \fC#include <qrangecontrol.h>\fR
 .PP
-Inherited by QScrollBar, QSlider and QSpinBox.
+Inherited by QDial, QScrollBar, QSlider and QSpinBox.
 .PP
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQRangeControl\fR ()"
+.BI "\fBQRangeControl\fR () "
 .br
 .ti -1c
-.BI "\fBQRangeControl\fR ( int " "minValue" ", int " "maxValue" ", int " "lineStep" ", int " "pageStep" ", int value )"
+.BI "\fBQRangeControl\fR ( int " "minValue" ", int " "maxValue" ", int " "lineStep" ", int " "pageStep" ", int value ) "
 .br
 .ti -1c
 .BI "int \fBvalue\fR () const"
 .br
 .ti -1c
-.BI "void \fBsetValue\fR ( int )"
+.BI "void \fBsetValue\fR ( int ) "
 .br
 .ti -1c
-.BI "void \fBaddPage\fR ()"
+.BI "void \fBaddPage\fR () "
 .br
 .ti -1c
-.BI "void \fBsubtractPage\fR ()"
+.BI "void \fBsubtractPage\fR () "
 .br
 .ti -1c
-.BI "void \fBaddLine\fR ()"
+.BI "void \fBaddLine\fR () "
 .br
 .ti -1c
-.BI "void \fBsubtractLine\fR ()"
+.BI "void \fBsubtractLine\fR () "
 .br
 .ti -1c
 .BI "int \fBminValue\fR () const"
@@ -49,7 +47,7 @@ Inherited by QScrollBar, QSlider and QSpinBox.
 .BI "int \fBmaxValue\fR () const"
 .br
 .ti -1c
-.BI "void \fBsetRange\fR ( int " "minValue" ", int maxValue )"
+.BI "void \fBsetRange\fR ( int " "minValue" ", int maxValue ) "
 .br
 .ti -1c
 .BI "int \fBlineStep\fR () const"
@@ -58,7 +56,7 @@ Inherited by QScrollBar, QSlider and QSpinBox.
 .BI "int \fBpageStep\fR () const"
 .br
 .ti -1c
-.BI "void \fBsetSteps\fR ( int " "line" ", int page )"
+.BI "void \fBsetSteps\fR ( int " "line" ", int page ) "
 .br
 .ti -1c
 .BI "int \fBbound\fR ( int ) const"
@@ -73,19 +71,19 @@ Inherited by QScrollBar, QSlider and QSpinBox.
 .BI "int \fBvalueFromPosition\fR ( int " "pos" ", int space ) const"
 .br
 .ti -1c
-.BI "void \fBdirectSetValue\fR ( int val )"
+.BI "void \fBdirectSetValue\fR ( int val ) "
 .br
 .ti -1c
 .BI "int \fBprevValue\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBvalueChange\fR ()"
+.BI "virtual void \fBvalueChange\fR () "
 .br
 .ti -1c
-.BI "virtual void \fBrangeChange\fR ()"
+.BI "virtual void \fBrangeChange\fR () "
 .br
 .ti -1c
-.BI "virtual void \fBstepChange\fR ()"
+.BI "virtual void \fBstepChange\fR () "
 .br
 .in -1c
 .SH DESCRIPTION
@@ -131,7 +129,7 @@ plus a test for numerical overflow
 .PP
 If the value is changed, then valueChange() is called.
 .PP
-See also: subtractLine(), addPage() and setValue().
+See also subtractLine(), addPage() and setValue().
 .SH "void QRangeControl::addPage ()"
 Equivalent to
 .PP
@@ -143,13 +141,13 @@ plus a test for numerical overflow.
 .PP
 If the value is changed, then valueChange() is called.
 .PP
-See also: subtractPage(), addLine() and setValue().
+See also subtractPage(), addLine() and setValue().
 .SH "int QRangeControl::bound ( int v ) const"
 Forces \fIv\fR to be within the range from minValue() to maxValue() inclusive, and returns the result.
 .PP
 This function is provided so that you can easily force other numbers than value() into the allowed range. You do not need to call it in order to use QRangeControl itself.
 .PP
-See also: setValue(), value(), minValue() and maxValue().
+See also setValue(), value(), minValue() and maxValue().
 .SH "void QRangeControl::directSetValue ( int value ) \fC[protected]\fR"
 Sets the range control value directly without calling valueChange().
 .PP
@@ -157,23 +155,23 @@ Forces the new value to be within the legal range.
 .PP
 You will find few cases only where you have to call this function. However, if you want to change the range controls value inside the overloaded method valueChange() then setValue() would call the function valueChange() again. To avoid this recursion you must use directSetValue() instead.
 .PP
-See also: setValue().
+See also setValue().
 .SH "int QRangeControl::lineStep () const"
 Returns the current line step.
 .PP
-See also: setSteps() and pageStep().
+See also setSteps() and pageStep().
 .SH "int QRangeControl::maxValue () const"
 Returns the current maximum value of the range.
 .PP
-See also: setRange() and minValue().
+See also setRange() and minValue().
 .SH "int QRangeControl::minValue () const"
 Returns the current minimum value of the range.
 .PP
-See also: setRange() and maxValue().
+See also setRange() and maxValue().
 .SH "int QRangeControl::pageStep () const"
 Returns the current page step.
 .PP
-See also: setSteps() and lineStep().
+See also setSteps() and lineStep().
 .SH "int QRangeControl::positionFromValue ( int logical_val, int span ) const \fC[protected]\fR"
 Converts \fIlogical_val\fR to a pixel position. minValue() maps to 0, maxValue() maps to \fIspan,\fR and other values are distributed evenly in between.
 .PP
@@ -181,21 +179,21 @@ This function can handle the entire integer range without overflow.
 .PP
 Callings this method is useful when actually drawing a range control like a QScrollBar on the screen.
 .PP
-See also: valueFromPosition().
+See also valueFromPosition().
 .SH "int QRangeControl::prevValue () const \fC[protected]\fR"
-Returns the previous value of the range control. "Previous value" means the value before the last change occured. Setting a new range may affect the value, too, since the value is forced to be inside the specified range. When the range control is initially created, this is the same as value().
+Returns the previous value of the range control. "Previous value" means the value before the last change occurred. Setting a new range may affect the value, too, since the value is forced to be inside the specified range. When the range control is initially created, this is the same as value().
 .PP
 Note that prevValue() can be outside the current legal range if a call to setRange() causes the current value to change. (For example if the range was 0-1000 and the current value 500, setRange( 0, 400 ) makes value() return 400 and prevValue() 500)
 .PP
-See also: value() and setRange().
+See also value() and setRange().
 .SH "void QRangeControl::rangeChange () \fC[virtual protected]\fR"
 This virtual function is called whenever the range controls range changes. You can reimplement it if you want to be notified when the range changes. The default implementation does nothing.
 .PP
 Note that this method is called after the range changed.
 .PP
-See also: setRange(), valueChange() and stepChange().
+See also setRange(), valueChange() and stepChange().
 .PP
-Reimplemented in QSlider and QScrollBar.
+Reimplemented in QSlider, QDial and QScrollBar.
 .SH "void QRangeControl::setRange ( int minValue, int maxValue )"
 Sets the range min value to \fIminValue\fR and the max value to \fImaxValue.\fR
 .PP
@@ -203,7 +201,7 @@ Calls the virtual rangeChange() function if one or both of the new min and max v
 .PP
 If \fImaxValue\fR is smaller than \fIminValue, minValue\fR becomes the only legal value.
 .PP
-See also: minValue() and maxValue().
+See also minValue() and maxValue().
 .PP
 Examples:
 .(l
@@ -214,19 +212,19 @@ Sets the range line step to \fIlineStep\fR and page step to \fIpageStep.\fR
 .PP
 Calls the virtual stepChange() function if the new line step and/or page step are different from the previous settings.
 .PP
-See also: lineStep(), pageStep() and setRange().
+See also lineStep(), pageStep() and setRange().
 .SH "void QRangeControl::setValue ( int value )"
 Sets the range controls value to \fIvalue\fR and forces it to be within the legal range.
 .PP
 Calls the virtual valueChange() function if the new value is different from the previous value. The old value can still be retrieved using prevValue().
 .PP
-See also: value().
+See also value().
 .SH "void QRangeControl::stepChange () \fC[virtual protected]\fR"
 This virtual function is called whenever the range controls line/page step settings changes. You can reimplement it if you want to be notified when the step changes. The default implementation does nothing.
 .PP
 Note that this method is called after the step settings changed.
 .PP
-See also: setSteps(), rangeChange() and valueChange().
+See also setSteps(), rangeChange() and valueChange().
 .PP
 Reimplemented in QScrollBar.
 .SH "void QRangeControl::subtractLine ()"
@@ -240,7 +238,7 @@ plus a test for numerical underflow
 .PP
 If the value is changed, then valueChange() is called.
 .PP
-See also: addLine(), subtractPage() and setValue().
+See also addLine(), subtractPage() and setValue().
 .SH "void QRangeControl::subtractPage ()"
 Equivalent to
 .PP
@@ -252,19 +250,19 @@ plus a test for numerical underflow
 .PP
 If the value is changed, then valueChange() is called.
 .PP
-See also: addPage(), subtractLine() and setValue().
+See also addPage(), subtractLine() and setValue().
 .SH "int QRangeControl::value () const"
 Returns the current range control value. This is guaranteed to be within the range [ minValue() ... maxValue() ].
 .PP
-See also: setValue() and prevValue().
+See also setValue() and prevValue().
 .SH "void QRangeControl::valueChange () \fC[virtual protected]\fR"
 This virtual function is called whenever the range control value changes. You can reimplement it if you want to be notified when the value changes. The default implementation does nothing.
 .PP
 Note that this method is called after the value changed. The previous value can be retrieved using prevValue().
 .PP
-See also: setValue(), addPage(), subtractPage(), addLine(), subtractLine(), rangeChange() and stepChange().
+See also setValue(), addPage(), subtractPage(), addLine(), subtractLine(), rangeChange() and stepChange().
 .PP
-Reimplemented in QSlider and QScrollBar.
+Reimplemented in QDial, QScrollBar and QSlider.
 .SH "int QRangeControl::valueFromPosition ( int pos, int span ) const \fC[protected]\fR"
 Converts the pixel position \fIpos\fR to a value. 0 maps to minValue(), \fIspan\fR maps to maxValue(), and other values are distributed evenly in between.
 .PP
@@ -272,11 +270,11 @@ This function can handle the entire integer range without overflow.
 .PP
 Calling this method is useful if you actually implemented a range control widget like QScrollBar and want to handle mouse press events. This function maps then screen coordinates to the logical values.
 .PP
-See also:  positionFromValue().
+See also  positionFromValue().
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qrangecontrol.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

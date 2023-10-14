@@ -1,15 +1,17 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head>
 <title>Qt Toolkit - QJpUnicodeConv Class</title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
-a:link { text-decoration: none; }
-body { background: white; color: black; }
+a:link { color: #004faf; text-decoration: none }
+a:visited { color: #672967; text-decoration: none }body { background: white; color: black; }
 --></style>
 </head><body bgcolor="#ffffff">
 
-<a href="index.html">
-<img width="122" height="65" src="qtlogo.png" alt="Home"
-  align="left" border="0">
-</a><div align=right><img src="dochead.png" width="472" height="27"><br>
+<table width="100%">
+<tr><td><a href="index.html">
+<img width="100" height="100" src="qtlogo.png"
+alt="Home" border="0"><img width="100"
+height="100" src="face.png" alt="Home" border="0">
+</a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
 - <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
@@ -17,56 +19,56 @@ body { background: white; color: black; }
 - <a href="index.html">Home</a>
 - <a href="topicals.html"><b>Structure</b></a>
 </div>
-<br clear=all>
+</table>
 
 <h1 align=center>QJpUnicodeConv Class Reference</h1><br clear="all">
 <p>
-The QJpUnicodeConv class provides implementation support for <a href="qjiscodec.html">QJisCodec</a>, QSjisCodec, and <a href="qeucjpcodec.html">QEucJpCodec</a>.
+The QJpUnicodeConv class provides implementation support for <a href="qjiscodec.html">QJisCodec</a>, <a href="qsjiscodec.html">QSjisCodec</a>, and <a href="qeucjpcodec.html">QEucJpCodec</a>.
 <a href="#details">More...</a>
 <p>
 <code>#include &lt;<a href="qjpunicode-h.html">qjpunicode.h</a>&gt;</code>
 <p><a href="qjpunicodeconv-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><span class="fn">virtual uint <b>AsciiToUnicode</b> ( uint h, uint l ) const (internal)</span>
-<li><span class="fn">uint <b>Jisx0201ToUnicode</b> ( uint h, uint l ) const (internal)</span>
-<li><span class="fn">virtual uint <b>Jisx0201LatinToUnicode</b> ( uint h, uint l ) const (internal)</span>
-<li><span class="fn">uint <b>Jisx0201KanaToUnicode</b> ( uint h, uint l ) const (internal)</span>
-<li><span class="fn">virtual uint <b>Jisx0208ToUnicode</b> ( uint h, uint l ) const (internal)</span>
-<li><span class="fn">virtual uint <b>Jisx0212ToUnicode</b> ( uint h, uint l ) const (internal)</span>
-<li><span class="fn">uint <a href="#0e39a7"><b>AsciiToUnicode</b></a> ( uint ascii ) const</span>
-<li><span class="fn">uint <a href="#c1a1b5"><b>Jisx0201ToUnicode</b></a> ( uint jis ) const</span>
-<li><span class="fn">uint <a href="#f50a23"><b>Jisx0201LatinToUnicode</b></a> ( uint jis ) const</span>
-<li><span class="fn">uint <a href="#74ce02"><b>Jisx0201KanaToUnicode</b></a> ( uint jis ) const</span>
-<li><span class="fn">uint <a href="#8f8439"><b>Jisx0208ToUnicode</b></a> ( uint jis ) const</span>
-<li><span class="fn">uint <a href="#de1212"><b>Jisx0212ToUnicode</b></a> ( uint jis ) const</span>
-<li><span class="fn">virtual uint <b>UnicodeToAscii</b> ( uint h, uint l ) const (internal)</span>
-<li><span class="fn">uint <b>UnicodeToJisx0201</b> ( uint h, uint l ) const (internal)</span>
-<li><span class="fn">virtual uint <b>UnicodeToJisx0201Latin</b> ( uint h, uint l ) const (internal)</span>
-<li><span class="fn">uint <b>UnicodeToJisx0201Kana</b> ( uint h, uint l ) const (internal)</span>
-<li><span class="fn">virtual uint <b>UnicodeToJisx0208</b> ( uint h, uint l ) const (internal)</span>
-<li><span class="fn">virtual uint <b>UnicodeToJisx0212</b> ( uint h, uint l ) const (internal)</span>
-<li><span class="fn">uint <a href="#a21fab"><b>UnicodeToAscii</b></a> ( uint unicode ) const</span>
-<li><span class="fn">uint <a href="#c51732"><b>UnicodeToJisx0201</b></a> ( uint unicode ) const</span>
-<li><span class="fn">uint <a href="#d7042d"><b>UnicodeToJisx0201Latin</b></a> ( uint unicode ) const</span>
-<li><span class="fn">uint <a href="#b5a7e6"><b>UnicodeToJisx0201Kana</b></a> ( uint unicode ) const</span>
-<li><span class="fn">uint <a href="#d3c2d1"><b>UnicodeToJisx0208</b></a> ( uint unicode ) const</span>
-<li><span class="fn">uint <a href="#f5b28e"><b>UnicodeToJisx0212</b></a> ( uint unicode ) const</span>
-<li><span class="fn">uint <b>SjisToUnicode</b> ( uint h, uint l ) const (internal)</span>
-<li><span class="fn">uint <b>UnicodeToSjis</b> ( uint h, uint l ) const (internal)</span>
-<li><span class="fn">uint <a href="#855cc0"><b>SjisToUnicode</b></a> ( uint sjis ) const</span>
-<li><span class="fn">uint <a href="#3306e6"><b>UnicodeToSjis</b></a> ( uint unicode ) const</span>
+<li><div class="fn">virtual uint <b>AsciiToUnicode</b> ( uint h, uint l ) const (internal)</div>
+<li><div class="fn">uint <b>Jisx0201ToUnicode</b> ( uint h, uint l ) const (internal)</div>
+<li><div class="fn">virtual uint <b>Jisx0201LatinToUnicode</b> ( uint h, uint l ) const (internal)</div>
+<li><div class="fn">uint <b>Jisx0201KanaToUnicode</b> ( uint h, uint l ) const (internal)</div>
+<li><div class="fn">virtual uint <b>Jisx0208ToUnicode</b> ( uint h, uint l ) const (internal)</div>
+<li><div class="fn">virtual uint <b>Jisx0212ToUnicode</b> ( uint h, uint l ) const (internal)</div>
+<li><div class="fn">uint <a href="#0e39a7"><b>AsciiToUnicode</b></a> ( uint ascii ) const</div>
+<li><div class="fn">uint <a href="#c1a1b5"><b>Jisx0201ToUnicode</b></a> ( uint jis ) const</div>
+<li><div class="fn">uint <a href="#f50a23"><b>Jisx0201LatinToUnicode</b></a> ( uint jis ) const</div>
+<li><div class="fn">uint <a href="#74ce02"><b>Jisx0201KanaToUnicode</b></a> ( uint jis ) const</div>
+<li><div class="fn">uint <a href="#8f8439"><b>Jisx0208ToUnicode</b></a> ( uint jis ) const</div>
+<li><div class="fn">uint <a href="#de1212"><b>Jisx0212ToUnicode</b></a> ( uint jis ) const</div>
+<li><div class="fn">virtual uint <b>UnicodeToAscii</b> ( uint h, uint l ) const (internal)</div>
+<li><div class="fn">uint <b>UnicodeToJisx0201</b> ( uint h, uint l ) const (internal)</div>
+<li><div class="fn">virtual uint <b>UnicodeToJisx0201Latin</b> ( uint h, uint l ) const (internal)</div>
+<li><div class="fn">uint <b>UnicodeToJisx0201Kana</b> ( uint h, uint l ) const (internal)</div>
+<li><div class="fn">virtual uint <b>UnicodeToJisx0208</b> ( uint h, uint l ) const (internal)</div>
+<li><div class="fn">virtual uint <b>UnicodeToJisx0212</b> ( uint h, uint l ) const (internal)</div>
+<li><div class="fn">uint <a href="#a21fab"><b>UnicodeToAscii</b></a> ( uint unicode ) const</div>
+<li><div class="fn">uint <a href="#c51732"><b>UnicodeToJisx0201</b></a> ( uint unicode ) const</div>
+<li><div class="fn">uint <a href="#d7042d"><b>UnicodeToJisx0201Latin</b></a> ( uint unicode ) const</div>
+<li><div class="fn">uint <a href="#b5a7e6"><b>UnicodeToJisx0201Kana</b></a> ( uint unicode ) const</div>
+<li><div class="fn">uint <a href="#d3c2d1"><b>UnicodeToJisx0208</b></a> ( uint unicode ) const</div>
+<li><div class="fn">uint <a href="#f5b28e"><b>UnicodeToJisx0212</b></a> ( uint unicode ) const</div>
+<li><div class="fn">uint <b>SjisToUnicode</b> ( uint h, uint l ) const (internal)</div>
+<li><div class="fn">uint <b>UnicodeToSjis</b> ( uint h, uint l ) const (internal)</div>
+<li><div class="fn">uint <a href="#855cc0"><b>SjisToUnicode</b></a> ( uint sjis ) const</div>
+<li><div class="fn">uint <a href="#3306e6"><b>UnicodeToSjis</b></a> ( uint unicode ) const</div>
 </ul>
 <h2>Static Public Members</h2>
 <ul>
-<li><span class="fn">const QJpUnicodeConv* <b>newConverter</b> ( int rule ) (internal)</span>
+<li><div class="fn">const QJpUnicodeConv* <b>newConverter</b> ( int rule ) (internal)</div>
 </ul>
 <h2>Protected Members</h2>
 <ul>
-<li><span class="fn"><a href="#a8ba6d"><b>QJpUnicodeConv</b></a> ( int r ) </span>
+<li><div class="fn"><a href="#a8ba6d"><b>QJpUnicodeConv</b></a> ( int r ) </div>
 </ul>
 <hr><h2><a name="details"></a>Detailed Description</h2>
-The QJpUnicodeConv class provides implementation support for <a href="qjiscodec.html">QJisCodec</a>, QSjisCodec, and <a href="qeucjpcodec.html">QEucJpCodec</a>.
+The QJpUnicodeConv class provides implementation support for <a href="qjiscodec.html">QJisCodec</a>, <a href="qsjiscodec.html">QSjisCodec</a>, and <a href="qeucjpcodec.html">QEucJpCodec</a>.
 <p>
 You should not need to use this class directly.  If you do, keep in
 mind that the function names will change in Qt 3.0: Every function
@@ -100,14 +102,15 @@ Microsoft Windows style. Windows Code Page 932. Some chars (0x2140,
 <li> "jdk1.1.7" for Sun's JDK style Same as Unicode 1.1, except that
 JIS 0x2140 is mapped to UFF3C. Either ASCII or JISX0201 can be used
 for 0x00-0x7f.
-<p></ul> In addition, QJpUnicodeConv supports some  extensions:  "nec-vdc", "ibm-vdc" or "udc".
+<p></ul> In addition, QJpUnicodeConv supports some extensions:
+"nec-vdc", "ibm-vdc" or "udc".
 <p>For example, if you want to use Unicode style conversion, but with
 NEC's extension, set <code>UNICODEMAP_JP</code> to
-<code>unicode-0.9, nec-vdc</code>. (You will probably need to quote
-that in the shell command.)
+<nobr><code>unicode-0.9, nec-vdc</code>.</nobr> (You will probably
+need to quote that in the shell command.)
 <p>Most of the code here was originally written by Serika Kurusugawa
 a.k.a. Junji Takagi, and is includes in Qt with the author's
-permission, and the grateful thanks of the Troll Tech team. Here is
+permission, and the grateful thanks of the Trolltech team. Here is
 the copyright statement for that code:
 <p>Copyright (c) 1999 Serika Kurusugawa, All rights reserved.
 <p>Redistribution and use in source and binary forms, with or without
@@ -196,13 +199,13 @@ SUCH DAMAGE.
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.1.1"><nobr>
+<input type=hidden name="version" value="2.2.0"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
 copyright &copy; 1995-2000
-<a href="http://www.trolltech.com">Troll Tech</a>, all rights reserved.<p><address><hr><div align="center">
+<a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.1</div>
+<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.2.0</div>
 </table></div></address></body></html>

@@ -1,14 +1,12 @@
-.TH QDragObject 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QDragObject 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
 .ad l
 .nh
 .SH NAME
-QDragObject \- The QDragObject encapsulates MIME-based information transfer
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
+QDragObject \- Encapsulates MIME-based information transfer
 .SH SYNOPSIS
 .br
 .PP
@@ -21,25 +19,25 @@ Inherited by QIconDrag, QImageDrag, QStoredDrag and QTextDrag.
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQDragObject\fR ( QWidget * " "dragSource" " = 0, const char * " "name" " = 0 )"
+.BI "\fBQDragObject\fR ( QWidget * " "dragSource" " = 0, const char * " "name" " = 0 ) "
 .br
 .ti -1c
-.BI "virtual \fB~QDragObject\fR ()"
+.BI "virtual \fB~QDragObject\fR () "
 .br
 .ti -1c
-.BI "bool \fBdrag\fR ()"
+.BI "bool \fBdrag\fR () "
 .br
 .ti -1c
-.BI "bool \fBdragMove\fR ()"
+.BI "bool \fBdragMove\fR () "
 .br
 .ti -1c
-.BI "void \fBdragCopy\fR ()"
+.BI "void \fBdragCopy\fR () "
 .br
 .ti -1c
-.BI "virtual void \fBsetPixmap\fR ( QPixmap )"
+.BI "virtual void \fBsetPixmap\fR ( QPixmap ) "
 .br
 .ti -1c
-.BI "virtual void \fBsetPixmap\fR ( QPixmap, QPoint hotspot )"
+.BI "virtual void \fBsetPixmap\fR ( QPixmap, QPoint hotspot ) "
 .br
 .ti -1c
 .BI "QPixmap \fBpixmap\fR () const"
@@ -48,7 +46,7 @@ Inherited by QIconDrag, QImageDrag, QStoredDrag and QTextDrag.
 .BI "QPoint \fBpixmapHotSpot\fR () const"
 .br
 .ti -1c
-.BI "QWidget* \fBsource\fR ()"
+.BI "QWidget* \fBsource\fR () "
 .br
 .ti -1c
 .BI "enum \fBDragMode\fR { DragDefault, DragCopy, DragMove, DragCopyOrMove }"
@@ -57,7 +55,7 @@ Inherited by QIconDrag, QImageDrag, QStoredDrag and QTextDrag.
 .SS "Static Public Members"
 .in +1c
 .ti -1c
-.BI "QWidget* \fBtarget\fR ()"
+.BI "QWidget* \fBtarget\fR () "
 .br
 .ti -1c
 .BI "void \fBsetTarget\fR ( QWidget * ) (internal)"
@@ -66,11 +64,11 @@ Inherited by QIconDrag, QImageDrag, QStoredDrag and QTextDrag.
 .SS "Protected Members"
 .in +1c
 .ti -1c
-.BI "virtual bool \fBdrag\fR ( DragMode )"
+.BI "virtual bool \fBdrag\fR ( DragMode ) "
 .br
 .in -1c
 .SH DESCRIPTION
-The QDragObject encapsulates MIME-based information transfer.
+The QDragObject class encapsulates MIME-based information transfer.
 .PP
 QDragObject is the base class for all data that needs to be transferred between and within applications, both for drag-and-drop and for the clipboard.
 .PP
@@ -94,7 +92,7 @@ Constructs a drag object which is a child of \fIdragSource\fR and named \fIname.
 .PP
 Note that the drag object will be deleted when \fIdragSource\fR is.
 .SH "QDragObject::~QDragObject () \fC[virtual]\fR"
-Destructs the drag object, cancelling any drag-and-drop operation in which it is involved, and frees up the storage used.
+Destructs the drag object, canceling any drag-and-drop operation in which it is involved, and frees up the storage used.
 .SH "bool QDragObject::drag ()"
 Starts a drag operation using the contents of this object, using DragDefault mode.
 .PP
@@ -140,7 +138,7 @@ For internal use only.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qdragobject.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

@@ -1,14 +1,14 @@
 /****************************************************************************
-** $Id: qt/src/compat/qmultilinedit.h   2.1.1   edited 2000-03-24 $
+** $Id: qt/src/compat/qmultilinedit.h   2.2.0   edited 2000-08-25 $
 **
 ** Compatibility file - should only be included by legacy code.
 ** It #includes the file which obsoletes this one.
 **
-** Copyright (C) 1998-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1998-2000 Trolltech AS.  All rights reserved.
 **  This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
 ** Licensees holding valid Qt Professional Edition licenses may use this

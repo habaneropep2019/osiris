@@ -1,35 +1,42 @@
 /****************************************************************************
-** $Id: qt/doc/coordsys.doc   2.1.1   edited 2000-05-18 $
+** $Id: qt/doc/coordsys.doc   2.2.0   edited 2000-08-25 $
 **
 ** Qt Coordinate System Documentation
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
 ** This file is part of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 /*!
 \page coordsys.html
 
-<title>The Coordinate System</title>
-</head><body bgcolor="#ffffff">
-
-\postheader
-
-<h1 align=center>The Coordinate System</h1><br clear="all">
+\title The Coordinate System
 
 A \link QPaintDevice paint device\endlink in Qt is a drawable 2D
 surface. \l QWidget, \l QPixmap, \l QPicture and \l QPrinter are all
@@ -126,7 +133,7 @@ matrix. You can also use \l QWMatrix objects, \l
 QPainter::worldMatrix() and \l QPainter::setWorldMatrix() to store and
 use named matrices.
 
-The second step uses the window.  The window decribes the view
+The second step uses the window.  The window describes the view
 boundaries in model coordinates.  The matrix positions the \e objects
 and \l QPainter::setWindow() positions the \e window, deciding what
 coordinates will be visible.  (If you have 3D experience, the window
@@ -153,7 +160,7 @@ fixed-size coordinate system, just \l QPainter::setWindow() is
 perfect. And so on.
 
 Here is a short example that uses all three mechanisms: the function
-that draws the clock face in the \l aclock/aclock.cpp example.  We
+that draws the clock face in the aclock/aclock.cpp example.  We
 recommend compiling and running the example before you read any
 further.  In particular, try resizing the window to different shapes.
 

@@ -3,15 +3,17 @@
 Qt Toolkit - tooltip/main.cpp example file
 </title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
-a:link { text-decoration: none; }
-body { background: white; color: black; }
+a:link { color: #004faf; text-decoration: none }
+a:visited { color: #672967; text-decoration: none }body { background: white; color: black; }
 --></style>
 </head><body bgcolor="#ffffff">
 
-<a href="index.html">
-<img width="122" height="65" src="qtlogo.png" alt="Home"
-  align="left" border="0">
-</a><div align=right><img src="dochead.png" width="472" height="27"><br>
+<table width="100%">
+<tr><td><a href="index.html">
+<img width="100" height="100" src="qtlogo.png"
+alt="Home" border="0"><img width="100"
+height="100" src="face.png" alt="Home" border="0">
+</a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
 - <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
@@ -19,7 +21,7 @@ body { background: white; color: black; }
 - <a href="index.html">Home</a>
 - <a href="topicals.html"><b>Structure</b></a>
 </div>
-<br clear=all>
+</table>
 
 <h1 align=center>Advanced use of tool tips</h1><br clear="all">
 
@@ -33,9 +35,9 @@ body { background: white; color: black; }
   <hr>
 
   Header file: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/tooltip/tooltip.h   2.1.1   edited 2000-01-31 $
+** &#36;Id&#58; qt/examples/tooltip/tooltip.h   2.2.0   edited 2000-08-31 $
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -80,9 +82,9 @@ private:
   <hr>
 
   Implementation: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/tooltip/tooltip.cpp   2.1.1   edited 2000-01-31 $
+** &#36;Id&#58; qt/examples/tooltip/tooltip.cpp   2.2.0   edited 2000-08-31 $
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -100,7 +102,7 @@ DynamicTip::DynamicTip( <a href="qwidget.html">QWidget</a> * parent )
     // no explicit initialization needed
 }
 
-void <a name="324"></a>DynamicTip::maybeTip( const QPoint &amp;pos )
+void <a name="304"></a>DynamicTip::maybeTip( const QPoint &amp;pos )
 {
     if ( !parentWidget()-&gt;inherits( "TellMe" ) )
         return;
@@ -133,7 +135,7 @@ TellMe::~TellMe()
     t = 0;
 }
 
-void <a name="325"></a>TellMe::paintEvent( <a href="qpaintevent.html">QPaintEvent</a> * e )
+void <a name="305"></a>TellMe::paintEvent( <a href="qpaintevent.html">QPaintEvent</a> * e )
 {
     <a href="qpainter.html">QPainter</a> p( this );
 
@@ -155,7 +157,7 @@ void <a name="325"></a>TellMe::paintEvent( <a href="qpaintevent.html">QPaintEven
     }
 }
 
-void <a name="326"></a>TellMe::mousePressEvent( <a href="qmouseevent.html">QMouseEvent</a> * e )
+void <a name="306"></a>TellMe::mousePressEvent( <a href="qmouseevent.html">QMouseEvent</a> * e )
 {
     if ( r1.contains( e-&gt;<a href="qmouseevent.html#ac025d">pos</a>() ) )
         r1 = randomRect();
@@ -164,7 +166,7 @@ void <a name="326"></a>TellMe::mousePressEvent( <a href="qmouseevent.html">QMous
     <a href="qwidget.html#977d49">repaint</a>();
 }
 
-void <a name="327"></a>TellMe::resizeEvent( <a href="qresizeevent.html">QResizeEvent</a> * )
+void <a name="307"></a>TellMe::resizeEvent( <a href="qresizeevent.html">QResizeEvent</a> * )
 {
     if ( !rect().contains( r1 ) )
          r1 = randomRect();
@@ -172,13 +174,13 @@ void <a name="327"></a>TellMe::resizeEvent( <a href="qresizeevent.html">QResizeE
          r2 = randomRect();
 }
 
-<a href="qrect.html">QRect</a> <a name="328"></a>TellMe::randomRect()
+<a href="qrect.html">QRect</a> <a name="308"></a>TellMe::randomRect()
 {
     return QRect( ::rand() % (<a href="qwidget.html#576663">width</a>() - 20), ::rand() % (<a href="qwidget.html#180786">height</a>() - 20),
                   20, 20 );
 }
 
-<a href="qrect.html">QRect</a> <a name="329"></a>TellMe::tip( const QPoint &amp; p )
+<a href="qrect.html">QRect</a> <a name="309"></a>TellMe::tip( const QPoint &amp; p )
 {
     if ( r1.contains( p ) )
         return r1;
@@ -194,9 +196,9 @@ void <a name="327"></a>TellMe::resizeEvent( <a href="qresizeevent.html">QResizeE
 
   Main:
 <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/tooltip/main.cpp   2.1.1   edited 2000-01-31 $
+** &#36;Id&#58; qt/examples/tooltip/main.cpp   2.2.0   edited 2000-08-31 $
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -220,6 +222,6 @@ int main( int argc, char ** argv )
 </pre>
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.1</div>
+<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.2.0</div>
 </table></div></address></body></html>

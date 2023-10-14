@@ -1,5 +1,5 @@
-.TH QNetworkOperation 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QNetworkOperation 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QNetworkOperation \- This class is used to define operations for network protocols and return the state, arguments, etc
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -19,28 +17,28 @@ Inherits QObject.
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQNetworkOperation\fR ( QNetworkProtocol::Operation " "operation" ", const QString & " "arg0" ", const QString & " "arg1" ", const QString & arg2 )"
+.BI "\fBQNetworkOperation\fR ( QNetworkProtocol::Operation " "operation" ", const QString & " "arg0" ", const QString & " "arg1" ", const QString & arg2 ) "
 .br
 .ti -1c
-.BI "\fBQNetworkOperation\fR ( QNetworkProtocol::Operation " "operation" ", const QByteArray & " "arg0" ", const QByteArray & " "arg1" ", const QByteArray & arg2 )"
+.BI "\fBQNetworkOperation\fR ( QNetworkProtocol::Operation " "operation" ", const QByteArray & " "arg0" ", const QByteArray & " "arg1" ", const QByteArray & arg2 ) "
 .br
 .ti -1c
-.BI "\fB~QNetworkOperation\fR ()"
+.BI "\fB~QNetworkOperation\fR () "
 .br
 .ti -1c
-.BI "void \fBsetState\fR ( QNetworkProtocol::State state )"
+.BI "void \fBsetState\fR ( QNetworkProtocol::State state ) "
 .br
 .ti -1c
-.BI "void \fBsetProtocolDetail\fR ( const QString & detail )"
+.BI "void \fBsetProtocolDetail\fR ( const QString & detail ) "
 .br
 .ti -1c
-.BI "void \fBsetErrorCode\fR ( int ec )"
+.BI "void \fBsetErrorCode\fR ( int ec ) "
 .br
 .ti -1c
-.BI "void \fBsetArg\fR ( int " "num" ", const QString & arg )"
+.BI "void \fBsetArg\fR ( int " "num" ", const QString & arg ) "
 .br
 .ti -1c
-.BI "void \fBsetRawArg\fR ( int " "num" ", const QByteArray & arg )"
+.BI "void \fBsetRawArg\fR ( int " "num" ", const QByteArray & arg ) "
 .br
 .ti -1c
 .BI "QNetworkProtocol::Operation \fBoperation\fR () const"
@@ -61,7 +59,7 @@ Inherits QObject.
 .BI "int \fBerrorCode\fR () const"
 .br
 .ti -1c
-.BI "void \fBfree\fR ()"
+.BI "void \fBfree\fR () "
 .br
 .in -1c
 .SH DESCRIPTION
@@ -71,7 +69,7 @@ For each operation, which a network protocol should process such an object is cr
 .PP
 For a detailed description about the Qt Network Architecture, and also how to implement and use network protocols in Qt, look at the Qt Network Documentation.
 .PP
-See also: QNetworkProtocol.
+See also QNetworkProtocol.
 .SH MEMBER FUNCTION DOCUMENTATION
 .SH "QNetworkOperation::QNetworkOperation ( QNetworkProtocol::Operation operation, const QByteArray & arg0, const QByteArray & arg1, const QByteArray & arg2 )"
 Constructs a network operation object. \fIoperation\fR is the type of the operation, \fIarg0, arg1\fR and \fIarg2\fR are the first three raw data arguments of the operation. The state is initialized to QNetworkProtocol::StWaiting.
@@ -84,9 +82,9 @@ Returns the argument \fInum\fR of the operation. If this argument was not set al
 .SH "int QNetworkOperation::errorCode () const"
 If an operation failed, you get the error code using this methode.
 .SH "void QNetworkOperation::free ()"
-If this method is called the QNetworkOperation deletes itself after it has been 1 sec unused, which means for 1 second no method of the QNetworkOperation has been accessed.
+If this method is called the QNetworkOperation deletes itself after it has been 1 second unused, which means for 1 second no method of the QNetworkOperation has been accessed.
 .PP
-Because QNetworkOperation pointers are passed around a lot the QNetworkProtocol can't delete these at the correct time. So, if a QNetworkProtocol doesn't need an operation anymore and calles this method, so that it gets deleted correctly.
+Because QNetworkOperation pointers are passed around a lot the QNetworkProtocol can't delete these at the correct time. So, if a QNetworkProtocol doesn't need an operation anymore and calls this method, so that it gets deleted correctly.
 .PP
 You should never need to call the method yourself!.
 .SH "QNetworkProtocol::Operation QNetworkOperation::operation() const"
@@ -112,7 +110,7 @@ if it is in process or if has been done successfully or if it failed.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qnetworkoperation.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

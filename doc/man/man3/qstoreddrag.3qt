@@ -1,5 +1,5 @@
-.TH QStoredDrag 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QStoredDrag 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QStoredDrag \- Simple stored-value drag object for arbitrary MIME data
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -21,13 +19,13 @@ Inherited by QColorDrag and QUriDrag.
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQStoredDrag\fR ( const char * " "mimeType" ", QWidget * " "dragSource" " = 0, const char * " "name" " = 0 )"
+.BI "\fBQStoredDrag\fR ( const char * " "mimeType" ", QWidget * " "dragSource" " = 0, const char * " "name" " = 0 ) "
 .br
 .ti -1c
-.BI "\fB~QStoredDrag\fR ()"
+.BI "\fB~QStoredDrag\fR () "
 .br
 .ti -1c
-.BI "virtual void \fBsetEncodedData\fR ( const QByteArray & )"
+.BI "virtual void \fBsetEncodedData\fR ( const QByteArray & ) "
 .br
 .ti -1c
 .BI "virtual QByteArray \fBencodedData\fR ( const char * ) const"
@@ -49,7 +47,7 @@ Destructs the drag object and frees up all allocated resources.
 .SH "QByteArray QStoredDrag::encodedData ( const char * m ) const \fC[virtual]\fR"
 Returns the stored data.
 .PP
-See also: setEncodedData().
+See also setEncodedData().
 .SH "const char * QStoredDrag::format ( int i ) const \fC[virtual]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .PP
@@ -62,7 +60,7 @@ has been called.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qstoreddrag.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

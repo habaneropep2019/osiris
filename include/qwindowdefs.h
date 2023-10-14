@@ -1,28 +1,40 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qwindowdefs.h   2.1.1   edited 2000-03-24 $
+** $Id: qt/src/kernel/qwindowdefs.h   2.2.0   edited 2000-08-25 $
 **
 ** Definition of general window system dependent functions, types and
 ** constants
 **
 ** Created : 931029
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the kernel module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #ifndef QWINDOWDEFS_H
 #define QWINDOWDEFS_H
@@ -33,6 +45,7 @@
 #include "qnamespace.h"
 #endif // QT_H
 
+#include <limits.h>
 
 // Class forward definitions
 
@@ -66,6 +79,7 @@ class QPicture;
 class QPrinter;
 class QAccel;
 class QTimer;
+class QTime;
 class QClipboard;
 
 
@@ -87,63 +101,24 @@ typedef void * MSG;
 
 
 #if defined(_WS_WIN_)
-
-#if defined(_CC_BOR_) || defined(_CC_WAT_)
-#define NEEDS_QMAIN
-#endif
-
-#if !defined(Q_NOWINSTRICT)
-#define Q_WINSTRICT
-#endif
-
-typedef void *HANDLE;
-
-#if defined(Q_WINSTRICT)
-
-#if !defined(STRICT)
-#define STRICT
-#endif
-#undef NO_STRICT
-#define Q_DECLARE_HANDLE(name) struct name##__; typedef struct name##__ *name
-
-#else
-
-#if !defined(NO_STRICT)
-#define NO_STRICT
-#endif
-#undef  STRICT
-#define Q_DECLARE_HANDLE(name) typedef HANDLE name
-
-#endif
-
-Q_DECLARE_HANDLE(HINSTANCE);
-Q_DECLARE_HANDLE(HDC);
-Q_DECLARE_HANDLE(HWND);
-Q_DECLARE_HANDLE(HFONT);
-Q_DECLARE_HANDLE(HPEN);
-Q_DECLARE_HANDLE(HBRUSH);
-Q_DECLARE_HANDLE(HBITMAP);
-Q_DECLARE_HANDLE(HICON);
-typedef HICON HCURSOR;
-Q_DECLARE_HANDLE(HPALETTE);
-Q_DECLARE_HANDLE(HRGN);
-
-typedef struct tagMSG MSG;
-typedef HWND  WId;
-
-
-Q_EXPORT HINSTANCE qWinAppInst();
-Q_EXPORT HINSTANCE qWinAppPrevInst();
-Q_EXPORT int	   qWinAppCmdShow();
-Q_EXPORT HDC	   qt_display_dc();
-
+#include "qwindowdefs_win.h"
 #endif // _WS_WIN_
 
 
 #if defined(_WS_X11_)
 
+#if QT_VERSION > 290
+#error "define WId and friends to ulong always"
+#endif
+
+#if defined(_OS_OSF_) && defined(UINT_MAX) && defined(ULONG_MAX) && (ULONG_MAX > UINT_MAX)
+typedef unsigned long  WId;
+typedef unsigned long  HANDLE;
+#else
 typedef unsigned int  WId;
 typedef unsigned int  HANDLE;
+#endif
+
 typedef struct _XDisplay Display;
 typedef union  _XEvent XEvent;
 typedef struct _XGC *GC;
@@ -157,12 +132,20 @@ Q_EXPORT GC	 qt_xget_temp_gc( bool monochrome=FALSE );
 
 #endif // _WS_X11_
 
+#if defined(_WS_QWS_)
+
+struct QWSEvent;
+typedef unsigned int WId;
+typedef void* HANDLE;
+class QGfx;
+
+#endif // _WS_QWS_
+
 class QApplication;
 
 #if defined(NEEDS_QMAIN)
 #define main qMain
 #endif
-
 
 // Global platform-independent types and functions
 
@@ -180,8 +163,9 @@ Q_EXPORT char *qAppName();			// get application name
 
 typedef void (*Q_CleanUpFunction)();
 Q_EXPORT void qAddPostRoutine( Q_CleanUpFunction );
+Q_EXPORT void qRemovePostRoutine( Q_CleanUpFunction );
 
-
+// ### remove 3.0
 Q_EXPORT void *qt_find_obj_child( QObject *, const char *, const char * );
 #define Q_CHILD(parent,type,name) \
 	((type*)qt_find_obj_child(parent,#type,name))

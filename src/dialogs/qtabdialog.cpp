@@ -1,29 +1,43 @@
 /****************************************************************************
-** $Id: qt/src/dialogs/qtabdialog.cpp   2.1.1   edited 2000-03-29 $
+** $Id: qt/src/dialogs/qtabdialog.cpp   2.2.0   edited 2000-08-25 $
 **
 ** Implementation of QTabDialog class
 **
 ** Created : 960825
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the dialogs module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #include "qtabdialog.h"
+
+#ifndef QT_NO_TABDIALOG
 
 #include "qobjectlist.h"
 #include "qobjectdict.h"
@@ -88,7 +102,7 @@
   show(); if there is any chance that the state of the application may
   change between the creation of the tab dialog and the time it show()
   is called, you must connect this signal to a slot which resets the
-  state of the dialog. <li> selected() is emitted when the user
+  state of the dialog. <li> currentChanged() is emitted when the user
   selects some page. </ul>
 
   Each tab is either enabled or disabled at any given time.  If a tab
@@ -163,12 +177,21 @@
   \sa QDialog
 */
 
-/*! \fn void QTabDialog::selected( const QString &tabLabel );
+/*!
+  \fn void QTabDialog::selected( const QString &tabLabel );
+  \obsolete
 
   This signal is emitted whenever a tab is selected (raised),
   including during the first show().
 
   \sa raise()
+*/
+
+/*! \fn void QTabDialog::currentChanged( QWidget* );
+
+  This signal is emitted whenever the current page changes.
+
+  \sa currentPage(), showPage(), tabLabel()
 */
 
 
@@ -208,6 +231,7 @@ QTabDialog::QTabDialog( QWidget *parent, const char *name, bool modal,
 
     d->tw = new QTabWidget( this, "tab widget" );
     connect ( d->tw, SIGNAL ( selected( const QString& ) ), this, SIGNAL( selected( const QString& ) ) );
+    connect ( d->tw, SIGNAL ( currentChanged( QWidget* ) ), this, SIGNAL( currentChanged( QWidget* ) ) );
 
     d->ok = new QPushButton( this, "ok" );
     CHECK_PTR( d->ok );
@@ -1123,3 +1147,5 @@ void QTabDialog::removePage( QWidget * w )
 {
     d->tw->removePage( w );
 }
+
+#endif

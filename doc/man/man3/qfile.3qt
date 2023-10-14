@@ -1,5 +1,5 @@
-.TH QFile 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QFile 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QFile \- I/O device that operates on files
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -19,46 +17,46 @@ Inherits QIODevice.
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQFile\fR ()"
+.BI "\fBQFile\fR () "
 .br
 .ti -1c
-.BI "\fBQFile\fR ( const QString & name )"
+.BI "\fBQFile\fR ( const QString & name ) "
 .br
 .ti -1c
-.BI "\fB~QFile\fR ()"
+.BI "\fB~QFile\fR () "
 .br
 .ti -1c
 .BI "QString \fBname\fR () const"
 .br
 .ti -1c
-.BI "void \fBsetName\fR ( const QString & name )"
+.BI "void \fBsetName\fR ( const QString & name ) "
 .br
 .ti -1c
-.BI "typedef \fBQCString\fR ( * EncoderFn )( const QString & " "fileName" ")"
+.BI "typedef \fBQCString\fR ( * EncoderFn )( const QString & " "fileName" ") "
 .br
 .ti -1c
-.BI "typedef \fBQString\fR ( * DecoderFn )( const QCString & " "localfileName" ")"
+.BI "typedef \fBQString\fR ( * DecoderFn )( const QCString & " "localfileName" ") "
 .br
 .ti -1c
 .BI "bool \fBexists\fR () const"
 .br
 .ti -1c
-.BI "bool \fBremove\fR ()"
+.BI "bool \fBremove\fR () "
 .br
 .ti -1c
-.BI "virtual bool \fBopen\fR ( int )"
+.BI "virtual bool \fBopen\fR ( int ) "
 .br
 .ti -1c
-.BI "bool \fBopen\fR ( int, FILE * )"
+.BI "bool \fBopen\fR ( int, FILE * ) "
 .br
 .ti -1c
-.BI "bool \fBopen\fR ( int, int )"
+.BI "bool \fBopen\fR ( int, int ) "
 .br
 .ti -1c
-.BI "virtual void \fBclose\fR ()"
+.BI "virtual void \fBclose\fR () "
 .br
 .ti -1c
-.BI "virtual void \fBflush\fR ()"
+.BI "virtual void \fBflush\fR () "
 .br
 .ti -1c
 .BI "virtual uint \fBsize\fR () const"
@@ -67,28 +65,28 @@ Inherits QIODevice.
 .BI "virtual int \fBat\fR () const"
 .br
 .ti -1c
-.BI "virtual bool \fBat\fR ( int )"
+.BI "virtual bool \fBat\fR ( int ) "
 .br
 .ti -1c
 .BI "virtual bool \fBatEnd\fR () const"
 .br
 .ti -1c
-.BI "virtual int \fBreadBlock\fR ( char * " "data" ", uint len )"
+.BI "virtual int \fBreadBlock\fR ( char * " "data" ", uint len ) "
 .br
 .ti -1c
-.BI "virtual int \fBreadLine\fR ( char * " "data" ", uint maxlen )"
+.BI "virtual int \fBreadLine\fR ( char * " "data" ", uint maxlen ) "
 .br
 .ti -1c
-.BI "int \fBreadLine\fR ( QString &, uint maxlen )"
+.BI "int \fBreadLine\fR ( QString &, uint maxlen ) "
 .br
 .ti -1c
-.BI "virtual int \fBgetch\fR ()"
+.BI "virtual int \fBgetch\fR () "
 .br
 .ti -1c
-.BI "virtual int \fBputch\fR ( int )"
+.BI "virtual int \fBputch\fR ( int ) "
 .br
 .ti -1c
-.BI "virtual int \fBungetch\fR ( int )"
+.BI "virtual int \fBungetch\fR ( int ) "
 .br
 .ti -1c
 .BI "int \fBhandle\fR () const"
@@ -97,22 +95,22 @@ Inherits QIODevice.
 .SS "Static Public Members"
 .in +1c
 .ti -1c
-.BI "QCString \fBencodeName\fR ( const QString & fileName )"
+.BI "QCString \fBencodeName\fR ( const QString & fileName ) "
 .br
 .ti -1c
-.BI "QString \fBdecodeName\fR ( const QCString & localFileName )"
+.BI "QString \fBdecodeName\fR ( const QCString & localFileName ) "
 .br
 .ti -1c
-.BI "void \fBsetEncodingFunction\fR ( EncoderFn )"
+.BI "void \fBsetEncodingFunction\fR ( EncoderFn ) "
 .br
 .ti -1c
-.BI "void \fBsetDecodingFunction\fR ( DecoderFn )"
+.BI "void \fBsetDecodingFunction\fR ( DecoderFn ) "
 .br
 .ti -1c
-.BI "bool \fBexists\fR ( const QString & fileName )"
+.BI "bool \fBexists\fR ( const QString & fileName ) "
 .br
 .ti -1c
-.BI "bool \fBremove\fR ( const QString & fileName )"
+.BI "bool \fBremove\fR ( const QString & fileName ) "
 .br
 .in -1c
 .SH DESCRIPTION
@@ -151,14 +149,14 @@ The QFileInfo class holds detailed information about a file, such as access perm
 .PP
 The QDir class manages directories and lists of file names.
 .PP
-See also: QDataStream and QTextStream.
+See also QDataStream and QTextStream.
 .SH MEMBER FUNCTION DOCUMENTATION
 .SH "QFile::QFile ()"
 Constructs a QFile with no name.
 .SH "QFile::QFile ( const QString & name )"
 Constructs a QFile with a file name \fIname.\fR
 .PP
-See also: setName().
+See also setName().
 .SH "QFile::~QFile ()"
 Destructs a QFile. Calls close().
 .SH "bool QFile::at ( int pos ) \fC[virtual]\fR"
@@ -183,19 +181,19 @@ Example:
 .PP
 \fBWarning:\fR The result is undefined if the file was opened using the \fCIO_Append\fR specifier.
 .PP
-See also: size() and open().
+See also size() and open().
 .PP
 Reimplemented from QIODevice.
 .SH "int QFile::at () const \fC[virtual]\fR"
 Returns the file index.
 .PP
-See also: size().
+See also size().
 .PP
 Reimplemented from QIODevice.
 .SH "bool QFile::atEnd () const \fC[virtual]\fR"
 Returns TRUE if the end of file has been reached, otherwise FALSE.
 .PP
-See also: size().
+See also size().
 .PP
 Reimplemented from QIODevice.
 .SH "void QFile::close () \fC[virtual]\fR"
@@ -203,15 +201,15 @@ Closes an open file.
 .PP
 The file is not closed if it was opened with an existing file handle. If the existing file handle is a \fCFILE*,\fR the file is flushed. If the existing file handle is an \fCint\fR file descriptor, nothing is done to the file.
 .PP
-Some "write-behind" filesystems may report an unspecified error on closing the file. These errors only indiciate that something may have gone wrong since the previous open(). In such a case status() reports IO_UnspecifiedError after close(), otherwise IO_Ok.
+Some "write-behind" filesystems may report an unspecified error on closing the file. These errors only indicate that something may have gone wrong since the previous open(). In such a case status() reports IO_UnspecifiedError after close(), otherwise IO_Ok.
 .PP
-See also: open() and flush().
+See also open() and flush().
 .PP
 Reimplemented from QIODevice.
 .SH "QString QFile::decodeName ( const QCString & localFileName ) \fC[static]\fR"
 This does the reverse of QFile::encodeName().
 .PP
-See also: setDecodingFunction().
+See also setDecodingFunction().
 .SH "QCString QFile::encodeName ( const QString & fileName ) \fC[static]\fR"
 When you use QFile, QFileInfo, and QDir to access the filesystem with Qt, you can use Unicode filenames. On Unix, these filenames are converted to an 8-bit encoding. If you want to do your own file I/O on Unix, you should convert the filename using this function. On Windows NT, Unicode filenames are supported directly in the filesystem and this function should be avoided. On Windows 95, non-Latin1 locales are not supported at this time.
 .PP
@@ -219,11 +217,11 @@ By default, this function converts to the local 8-bit encoding determined by the
 .PP
 The conversion scheme can be changed using setEncodingFunction(). This might be useful if you wish to give the user an option to store in filenames in UTF-8, etc., but beware that such filenames would probably then be unrecognizable when seen by other programs.
 .PP
-See also: decodeName().
+See also decodeName().
 .SH "bool QFile::exists () const"
 Returns TRUE if this file exists, otherwise FALSE.
 .PP
-See also: name().
+See also name().
 .SH "bool QFile::exists ( const QString & fileName ) \fC[static]\fR"
 Returns TRUE if the file given by \fIfileName\fR exists, otherwise FALSE.
 .SH "void QFile::flush () \fC[virtual]\fR"
@@ -237,7 +235,7 @@ Reads a single byte/character from the file.
 .PP
 Returns the byte/character read, or -1 if the end of the file has been reached.
 .PP
-See also: putch() and ungetch().
+See also putch() and ungetch().
 .PP
 Reimplemented from QIODevice.
 .SH "int QFile::handle () const"
@@ -247,11 +245,11 @@ This is a small positive integer, suitable for use with C library functions such
 .PP
 If the file is not open or there is an error, handle() returns -1.
 .PP
-See also: QSocketNotifier.
+See also QSocketNotifier.
 .SH "QString QFile::name () const"
 Returns the name set by setName().
 .PP
-See also: setName() and QFileInfo::fileName().
+See also setName() and QFileInfo::fileName().
 .SH "bool QFile::open ( int m ) \fC[virtual]\fR"
 Opens the file specified by the file name currently set, using the mode \fIm.\fR Returns TRUE if successful, otherwise FALSE.
 .PP
@@ -292,7 +290,7 @@ Example:
     f2.open( IO_ReadOnly | IO_Translate );
 .fi
 .PP
-See also: name(), close(), isOpen() and flush().
+See also name(), close(), isOpen() and flush().
 .PP
 Reimplemented from QIODevice.
 .SH "bool QFile::open ( int m, FILE * f )"
@@ -313,7 +311,7 @@ Example:
 .br
         f.open( IO_WriteOnly, stderr );
 .br
-        f.writeBlock( msg, strlen(msg) );       // write to stderr
+        f.writeBlock( msg, qstrlen(msg) );      // write to stderr
 .br
         f.close();
 .br
@@ -324,7 +322,7 @@ When a QFile is opened using this function, close() does not actually close the 
 .PP
 \fBWarning:\fR If \fIf\fR is \fCstdin, stdout, stderr,\fR you may not be able to seek. See QIODevice::isSequentialAccess() for more information.
 .PP
-See also: close().
+See also close().
 .SH "bool QFile::open ( int m, int f )"
 Opens a file in the mode \fIm\fR using an existing file descriptor \fIf.\fR Returns TRUE if successful, otherwise FALSE.
 .PP
@@ -332,13 +330,13 @@ When a QFile is opened using this function, close() does not actually close the 
 .PP
 \fBWarning:\fR If \fIf\fR is one of 0 (stdin), 1 (stdout) or 2 (stderr), you may not be able to seek. size() is set to \fCINT_MAX\fR (in limits.h).
 .PP
-See also: close().
+See also close().
 .SH "int QFile::putch ( int ch ) \fC[virtual]\fR"
 Writes the character \fIch\fR to the file.
 .PP
 Returns \fIch,\fR or -1 if some error occurred.
 .PP
-See also: getch() and ungetch().
+See also getch() and ungetch().
 .PP
 Reimplemented from QIODevice.
 .SH "int QFile::readBlock ( char * p, uint len ) \fC[virtual]\fR"
@@ -348,7 +346,7 @@ Returns -1 if a serious error occurred.
 .PP
 \fBWarning:\fR We have experienced problems with some C libraries when a buffered file is opened for both reading and writing. If a read operation takes place immediately after a write operation, the read buffer contains garbage data. Worse, the same garbage is written to the file. Calling flush() before readBlock() solved this problem.
 .PP
-See also: writeBlock().
+See also writeBlock().
 .PP
 Reimplemented from QIODevice.
 .SH "int QFile::readLine ( QString & s, uint maxlen )"
@@ -360,7 +358,7 @@ This function is efficient only for buffered files. Avoid readLine() for files t
 .PP
 Note that the string is read as plain Latin1 bytes, not Unicode.
 .PP
-See also: readBlock() and QTextStream::readLine().
+See also readBlock() and QTextStream::readLine().
 .SH "int QFile::readLine ( char * p, uint maxlen ) \fC[virtual]\fR"
 Reads a line of text.
 .PP
@@ -368,7 +366,7 @@ Reads bytes from the file until end-of-line is reached, or up to \fImaxlen\fR by
 .PP
 This function is efficient only for buffered files. Avoid readLine() for files that have been opened with the \fCIO_Raw\fR flag.
 .PP
-See also: readBlock() and QTextStream::readLine().
+See also readBlock() and QTextStream::readLine().
 .PP
 Reimplemented from QIODevice.
 .SH "bool QFile::remove ()"
@@ -380,11 +378,11 @@ Removes the file \fIfileName.\fR Returns TRUE if successful, otherwise FALSE.
 .SH "void QFile::setDecodingFunction ( DecoderFn f ) \fC[static]\fR"
 Sets the function for decoding 8-bit filenames. The default uses the locale-specific 8-bit encoding.
 .PP
-See also: encodeName() and decodeName().
+See also encodeName() and decodeName().
 .SH "void QFile::setEncodingFunction ( EncoderFn f ) \fC[static]\fR"
 Sets the function for encoding Unicode filenames. The default encodes in the locale-specific 8-bit encoding.
 .PP
-See also: encodeName().
+See also encodeName().
 .SH "void QFile::setName ( const QString & name )"
 Sets the name of the file. The name can include an absolute directory path or it can be a name or a path relative to the current directory.
 .PP
@@ -409,11 +407,11 @@ Example:
 .PP
 Also note that the directory separator '/' works for all operating systems supported by Qt.
 .PP
-See also: name(), QFileInfo and QDir.
+See also name(), QFileInfo and QDir.
 .SH "uint QFile::size () const \fC[virtual]\fR"
 Returns the file size.
 .PP
-See also: at().
+See also at().
 .PP
 Reimplemented from QIODevice.
 .SH "int QFile::ungetch ( int ch ) \fC[virtual]\fR"
@@ -423,7 +421,7 @@ This function is normally called to "undo" a getch() operation.
 .PP
 Returns \fIch,\fR or -1 if some error occurred.
 .PP
-See also: getch() and putch().
+See also getch() and putch().
 .PP
 Reimplemented from QIODevice.
 .SH "int QFile::writeBlock ( const QByteArray & data )"
@@ -437,13 +435,13 @@ Returns -1 if a serious error occurred.
 .PP
 \fBWarning:\fR When working with buffered files, data may not be written to the file at once. Call flush() to make sure the data is really written.
 .PP
-See also: readBlock().
+See also readBlock().
 .PP
 Reimplemented from QIODevice.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qfile.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

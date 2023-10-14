@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: qt/examples/helpviewer/main.cpp   2.1.1   edited 2000-02-10 $
+** $Id: qt/examples/helpviewer/main.cpp   2.2.0   edited 2000-08-31 $
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -26,7 +26,14 @@ int main( int argc, char ** argv )
     else
         home = QString(getenv("QTDIR")) + "/doc/html/index.html";
 
-    ( new HelpWindow(home, ".", 0, "help viewer") )->show();
+    
+    HelpWindow *help = new HelpWindow(home, ".", 0, "help viewer");
+
+    if ( QApplication::desktop()->width() > 400
+	 && QApplication::desktop()->height() > 500 )
+	help->show();
+    else
+	help->showMaximized();
 
     QObject::connect( &a, SIGNAL(lastWindowClosed()),
                       &a, SLOT(quit()) );

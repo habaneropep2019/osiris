@@ -1,5 +1,5 @@
-.TH QPixmapCache 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QPixmapCache 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QPixmapCache \- Application-global cache for pixmaps
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -49,7 +47,7 @@ Returns the cache limit (in kilobytes).
 .PP
 The default setting is 1024 kilobytes.
 .PP
-See also: setCacheLimit().
+See also setCacheLimit().
 .SH "void QPixmapCache::clear () \fC[static]\fR"
 Removes all pixmaps from the cache.
 .SH "QPixmap * QPixmapCache::find ( const QString & key ) \fC[static]\fR"
@@ -119,17 +117,17 @@ When a pixmap is inserted and the cache is about to exceed its limit, it removes
 .PP
 The oldest pixmaps (least recently accessed in the cache) are deleted when more space is needed.
 .PP
-See also: setCacheLimit().
+See also setCacheLimit().
 .SH "void QPixmapCache::setCacheLimit ( int n ) \fC[static]\fR"
 Sets the cache limit to \fIn\fR kilobytes.
 .PP
 The default setting is 1024 kilobytes.
 .PP
-See also:  cacheLimit().
+See also  cacheLimit().
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qpixmapcache.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

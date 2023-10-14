@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: qt/examples/i18n/mywidget.h   2.1.1   edited 2000-01-31 $
+** $Id: qt/examples/i18n/mywidget.h   2.2.0   edited 2000-08-31 $
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -20,6 +20,12 @@ class MyWidget : public QMainWindow
 
 public:
     MyWidget( QWidget* parent=0, const char* name = 0 );
+
+signals:
+    void closed();
+
+protected:
+    void closeEvent(QCloseEvent*);
 
 private:
     static void initChoices(QWidget* parent);

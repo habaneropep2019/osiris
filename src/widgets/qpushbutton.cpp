@@ -1,29 +1,42 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qpushbutton.cpp   2.1.1   edited 2000-04-28 $
+** $Id: qt/src/widgets/qpushbutton.cpp   2.2.0   edited 2000-08-25 $
 **
 ** Implementation of QPushButton class
 **
 ** Created : 940221
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the widgets module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #include "qpushbutton.h"
+#ifndef QT_NO_COMPLEXWIDGETS
 #include "qdialog.h"
 #include "qfontmetrics.h"
 #include "qpainter.h"
@@ -150,6 +163,7 @@ static QPtrDict<QPushButtonPrivate> *d_ptr = 0;
 static void cleanup_d_ptr()
 {
     delete d_ptr;
+    d_ptr = 0;
 }
 static QPushButtonPrivate* d( const QPushButton* foo )
 {
@@ -236,11 +250,12 @@ QPushButton::~QPushButton()
 void QPushButton::init()
 {
     defButton = FALSE;
-    lastDown = FALSE;
     lastEnabled = FALSE;
     hasMenuArrow = FALSE;
+    flt = FALSE;
     autoDefButton = topLevelWidget()->inherits("QDialog");
     setBackgroundMode( PaletteButton );
+    setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Fixed ) );
 }
 
 
@@ -314,10 +329,8 @@ void QPushButton::setAutoDefault( bool enable )
     if ( (bool)autoDefButton == enable )
 	return;
     autoDefButton = enable;
-    if ( isVisible() ) {
-	update();
-	updateGeometry();
-    }
+    update();
+    updateGeometry();
 }
 
 
@@ -367,16 +380,16 @@ QSize QPushButton::sizeHint() const
 
     if ( pixmap() ) {
 	QPixmap *pm = (QPixmap *)pixmap();
-	w = pm->width() + 6;
-	h = pm->height() + 6;
+	w = pm->width() + style().buttonMargin();
+	h = pm->height() + style().buttonMargin();
     } else {
 	QString s( text() );
 	if ( s.isEmpty() )
 	    s = QString::fromLatin1("XXXX");
 	QFontMetrics fm = fontMetrics();
 	QSize sz = fm.size( ShowPrefix, s );
-	w = sz.width() + 6;
-	h = sz.height() + sz.height()/8 + 10;
+	w = sz.width() + style().buttonMargin();
+	h = sz.height() + sz.height()/8 + 4 + style().buttonMargin();
 	w += h;
     }
 
@@ -384,8 +397,8 @@ QSize QPushButton::sizeHint() const
     if ( iconSet() && !iconSet()->isNull() ) {
 	int iw = iconSet()->pixmap( QIconSet::Small, QIconSet::Normal ).width() + 4;
 	int ih = iconSet()->pixmap( QIconSet::Small, QIconSet::Normal ).height();
-	w += iw + 4;
-	h = QMAX( h, ih + 6 );
+	w += iw + style().buttonMargin() - 2;
+	h = QMAX( h, ih + style().buttonMargin() );
     }
 
 
@@ -397,17 +410,23 @@ QSize QPushButton::sizeHint() const
     if ( isMenuButton() )
 	w += style().menuButtonIndicatorWidth( h );
 
-
-    if ( style() == WindowsStyle ) {
+#ifndef _WS_QWS_
+     if ( style() == WindowsStyle ) {
 	// in windows style, try a little harder to conform to
 	// microsoft's size specifications
 	if ( h <= 25 )
 	    h = 22;
 	if ( w < 85 && !pixmap() && ( isDefault() || autoDefault() ) )
 	    w = 80;
-    }
+     } else if ( !pixmap() && (isDefault() || autoDefault() ) ) {
+	 // un-unglify motifstyles until we fix boxlayout to treat
+	 // pushbuttons differently
+	 if ( w < 80 )
+	     w = 80;
+     }
+#endif
 
-    return QSize( w, h );
+     return QSize( w, h ).expandedTo( QApplication::globalStrut() );
 }
 
 
@@ -415,7 +434,8 @@ QSize QPushButton::sizeHint() const
 */
 QSizePolicy QPushButton::sizePolicy() const
 {
-    return QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Fixed );
+    //### removeme 3.0
+    return QWidget::sizePolicy();
 }
 
 /*!\reimp
@@ -476,26 +496,36 @@ void QPushButton::drawButton( QPainter *paint )
     if ( isDefault() || autoDefault() ) {
 	diw = style().buttonDefaultIndicatorWidth();
 	if ( diw > 0 ) {
-	    if ( parentWidget() && parentWidget()->backgroundPixmap() ){
+	    if (backgroundMode() == X11ParentRelative) {
+		erase( 0, 0, width(), diw );
+		erase( 0, 0, diw, height() );
+		erase( 0, height() - diw, width(), diw );
+		erase( width() - diw, 0, diw, height() );
+	    } else if ( parentWidget() && parentWidget()->backgroundPixmap() ){
 		// pseudo tranparency
 		paint->drawTiledPixmap( 0, 0, width(), diw,
-				    *parentWidget()->backgroundPixmap(),
-				    x(), y() );
+					*parentWidget()->backgroundPixmap(),
+					x(), y() );
 		paint->drawTiledPixmap( 0, 0, diw, height(),
-				    *parentWidget()->backgroundPixmap(),
-				    x(), y() );
+					*parentWidget()->backgroundPixmap(),
+					x(), y() );
 		paint->drawTiledPixmap( 0, height()-diw, width(), diw,
-				    *parentWidget()->backgroundPixmap(),
-				    x(), y() );
+					*parentWidget()->backgroundPixmap(),
+					x(), y() );
 		paint->drawTiledPixmap( width()-diw, 0, diw, height(),
-				    *parentWidget()->backgroundPixmap(),
-				    x(), y() );
+					*parentWidget()->backgroundPixmap(),
+					x(), y() );
 	    } else {
-		paint->fillRect( 0, 0, width(), diw, colorGroup().brush(QColorGroup::Background) );
-		paint->fillRect( 0, 0, diw, height(), colorGroup().brush(QColorGroup::Background) );
-		paint->fillRect( 0, height()-diw, width(), diw, colorGroup().brush(QColorGroup::Background) );
-		paint->fillRect( width()-diw, 0, diw, height(), colorGroup().brush(QColorGroup::Background) );
+		paint->fillRect( 0, 0, width(), diw,
+				 colorGroup().brush(QColorGroup::Background) );
+		paint->fillRect( 0, 0, diw, height(),
+				 colorGroup().brush(QColorGroup::Background) );
+		paint->fillRect( 0, height()-diw, width(), diw,
+				 colorGroup().brush(QColorGroup::Background) );
+		paint->fillRect( width()-diw, 0, diw, height(),
+				 colorGroup().brush(QColorGroup::Background) );
 	    }
+
 	}
     }
 
@@ -507,7 +537,6 @@ void QPushButton::drawButton( QPainter *paint )
  	QRect r(x1+2, y1+2, x2-x1-3, y2-y1-3);
  	style().drawFocusRect( paint, r , colorGroup(), &colorGroup().button() );
     }
-    lastDown = isDown();
     lastEnabled = isEnabled();
 }
 
@@ -579,10 +608,8 @@ void QPushButton::setIsMenuButton( bool enable )
     if ( (bool)hasMenuArrow == enable )
 	return;
     hasMenuArrow = enable ? 1 : 0;
-    if ( isVisible() ) {
-	update();
-	updateGeometry();
-    }
+    update();
+    updateGeometry();
 }
 
 
@@ -627,15 +654,18 @@ void QPushButton::setPopup( QPopupMenu* popup )
  */
 void QPushButton::setIconSet( const QIconSet& icon )
 {
-    if ( ::d( this )->iconset )
-	*::d( this )->iconset = icon;
-    else
-	::d( this )->iconset = new QIconSet( icon );
-
-    if ( isVisible() ) {
-	update();
-	updateGeometry();
+    if (! icon.isNull()) {
+	if ( ::d( this )->iconset )
+	    *::d( this )->iconset = icon;
+	else
+	    ::d( this )->iconset = new QIconSet( icon );
+    } else if (::d(this)->iconset) {
+	delete (::d(this)->iconset);
+	::d(this)->iconset = 0;
     }
+	
+    update();
+    updateGeometry();
 }
 
 
@@ -672,3 +702,24 @@ void QPushButton::popupPressed()
 	setDown( FALSE );
     }
 }
+
+/*!
+  Disable the border.
+
+  \sa flat()
+*/
+void QPushButton::setFlat( bool f )
+{
+    flt = f;
+}
+
+/*!
+  Returns whether the border is disabled.
+  \sa setFlat()
+*/
+bool QPushButton::isFlat() const
+{
+    return flt;
+}
+
+#endif

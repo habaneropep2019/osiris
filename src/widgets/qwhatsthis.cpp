@@ -1,28 +1,40 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qwhatsthis.cpp   2.1.1   edited 2000-05-18 $
+** $Id: qt/src/widgets/qwhatsthis.cpp   2.2.0   edited 2000-08-25 $
 **
 ** Implementation of QWhatsThis class
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the widgets module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #include "qwhatsthis.h"
-
+#ifndef QT_NO_COMPLEXWIDGETS
 #include "qapplication.h"
 #include "qpaintdevicemetrics.h"
 #include "qpixmap.h"
@@ -100,7 +112,7 @@
 class QWhatsThisButton: public QToolButton
 {
     Q_OBJECT
-    
+
 public:
     QWhatsThisButton( QWidget * parent, const char * name );
     ~QWhatsThisButton();
@@ -138,6 +150,7 @@ public:
 
     // say it.
     void say( QWidget *, const QString&, const QPoint&  );
+    void say_helper(QWidget*,const QPoint& ppos,bool);
 
     // setup and teardown
     static void tearDownWhatsThis();
@@ -152,7 +165,11 @@ public:
     QPtrDict<QWhatsThisButton> * buttons;
     State state;
 
+#ifndef QT_NO_CURSOR
     QCursor * cursor;
+#endif
+
+    QString currentText;
 
 private slots:
     void cleanupWidget()
@@ -198,6 +215,8 @@ static const char * button_image[] = {
 "     ooo        ",
 "     ooo        "};
 
+#ifndef QT_NO_CURSOR
+
 #define cursor_bits_width 32
 #define cursor_bits_height 32
 static unsigned char cursor_bits_bits[] = {
@@ -228,6 +247,7 @@ static unsigned char cursor_mask_bits[] = {
   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, };
 
+#endif
 
 
 // the button class
@@ -257,7 +277,9 @@ void QWhatsThisButton::mouseReleased()
 {
     if ( wt->state == QWhatsThisPrivate::Inactive && isOn() ) {
 	QWhatsThisPrivate::setUpWhatsThis();
+#ifndef QT_NO_CURSOR
 	QApplication::setOverrideCursor( *wt->cursor, FALSE );
+#endif
 	wt->state = QWhatsThisPrivate::Waiting;
 	qApp->installEventFilter( wt );
     }
@@ -275,17 +297,21 @@ QWhatsThisPrivate::QWhatsThisPrivate()
     wt = this;
     buttons = new QPtrDict<QWhatsThisButton>;
     state = Inactive;
+#ifndef QT_NO_CURSOR
     cursor = new QCursor( QBitmap( cursor_bits_width, cursor_bits_height,
 				   cursor_bits_bits, TRUE ),
 			  QBitmap( cursor_mask_width, cursor_mask_height,
 				   cursor_mask_bits, TRUE ),
 			  1, 1 );
+#endif
 }
 
 QWhatsThisPrivate::~QWhatsThisPrivate()
 {
+#ifndef QT_NO_CURSOR
     if ( state == Waiting )
 	QApplication::restoreOverrideCursor();
+#endif
 
     // the two straight-and-simple dicts
     delete tlw;
@@ -304,7 +330,9 @@ QWhatsThisPrivate::~QWhatsThisPrivate()
 	    delete i;
     }
     delete dict;
+#ifndef QT_NO_CURSOR
     delete cursor;
+#endif
     delete whatsThat;
 
     // and finally lose wt
@@ -322,6 +350,11 @@ bool QWhatsThisPrivate::eventFilter( QObject * o, QEvent * e )
 	    whatsThat->hide();
 	    return TRUE;
 	}
+#ifdef _WS_QWS_
+       else if ( e->type() == QEvent::Paint ) {
+	   wt->say_helper(0,QPoint(0,0),FALSE);
+       }
+#endif
 	return FALSE;
     }
 
@@ -376,7 +409,6 @@ bool QWhatsThisPrivate::eventFilter( QObject * o, QEvent * e )
     case Inactive:
  	if ( e->type() == QEvent::Accel &&
  	     ((QKeyEvent *)e)->key() == Key_F1 &&
- 	     !o->parent() &&
  	     o->isWidgetType() &&
  	     ((QKeyEvent *)e)->state() == ShiftButton ) {
  	    QWidget * w = ((QWidget *)o)->focusWidget();
@@ -422,40 +454,37 @@ void QWhatsThisPrivate::leaveWhatsThisMode()
 	    ++it;
 	    b->setOn( FALSE );
 	}
+#ifndef QT_NO_CURSOR
 	QApplication::restoreOverrideCursor();
+#endif
 	state = Inactive;
 	qApp->removeEventFilter( this );
     }
 }
 
-void QWhatsThisPrivate::say( QWidget * widget, const QString &text, const QPoint& ppos)
+
+
+void QWhatsThisPrivate::say_helper(QWidget* widget,const QPoint& ppos,bool init)
 {
     const int shadowWidth = 6;   // also used as '5' and '6' and even '8' below
     const int vMargin = 8;
     const int hMargin = 12;
 
-    if ( text.isEmpty() )
+    if ( currentText.isEmpty() )
 	return;
 
-    // make the widget, and set it up
-    if ( !whatsThat ) {
-	whatsThat = new QWidget( 0, "automatic what's this? widget",
-				 WType_Popup );
-	whatsThat->setBackgroundMode( QWidget::NoBackground );
-	whatsThat->setPalette( QToolTip::palette(), TRUE );
-	whatsThat->installEventFilter( this );
-    }
-
-
     QRect r;
+#ifndef QT_NO_RICHTEXT
     QSimpleRichText* doc = 0;
 
-    if ( QStyleSheet::mightBeRichText( text ) ) {
-	doc = new QSimpleRichText( text, whatsThat->font() );
+    if ( QStyleSheet::mightBeRichText( currentText ) ) {
+	doc = new QSimpleRichText( currentText, whatsThat->font() );
 	doc->adjustSize();
 	r.setRect( 0, 0, doc->width(), doc->height() );
     }
-    else {
+    else
+#endif
+    {
 	int sw = QApplication::desktop()->width() / 3;
 	if ( sw < 200 )
 	    sw = 200;
@@ -464,60 +493,61 @@ void QWhatsThisPrivate::say( QWidget * widget, const QString &text, const QPoint
 
 	r = whatsThat->fontMetrics().boundingRect( 0, 0, sw, 1000,
 			    AlignLeft + AlignTop + WordBreak + ExpandTabs,
-			    text );
+			    currentText );
     }
 
     int w = r.width() + 2*hMargin;
     int h = r.height() + 2*vMargin;
 
-    // okay, now to find a suitable location
+    if ( init ) {
+	// okay, now to find a suitable location
 
-    int x;
+	int x;
 
-    // first try locating the widget immediately above/below,
-    // with nice alignment if possible.
-    QPoint pos;
-    if ( widget )
-	pos = widget->mapToGlobal( QPoint( 0,0 ) );
+	// first try locating the widget immediately above/below,
+	// with nice alignment if possible.
+	QPoint pos;
+	if ( widget )
+	    pos = widget->mapToGlobal( QPoint( 0,0 ) );
 
-    if ( widget && w > widget->width() + 16 )
-	    x = pos.x() + widget->width()/2 - w/2;
-    else
-	x = ppos.x() - w/2;
+	if ( widget && w > widget->width() + 16 )
+		x = pos.x() + widget->width()/2 - w/2;
+	else
+	    x = ppos.x() - w/2;
 
-    // squeeze it in if that would result in part of what's this
-    // being only partially visible
-    if ( x + w > QApplication::desktop()->width() )
-	x = (widget? (QMIN(QApplication::desktop()->width(),
-			  pos.x() + widget->width())
-		     ) : QApplication::desktop()->width() )
-	    - w;
+	// squeeze it in if that would result in part of what's this
+	// being only partially visible
+	if ( x + w > QApplication::desktop()->width() )
+	    x = (widget? (QMIN(QApplication::desktop()->width(),
+			      pos.x() + widget->width())
+			 ) : QApplication::desktop()->width() )
+		- w;
 
-    if ( x < 0 )
-	x = 0;
+	if ( x < 0 )
+	    x = 0;
 
-    int y;
-    if ( widget && h > widget->height() + 16 ) {
-	y = pos.y() + widget->height() + 2; // below, two pixels spacing
-	// what's this is above or below, wherever there's most space
-	if ( y + h + 10 > QApplication::desktop()->height() )
-	    y = pos.y() + 2 - shadowWidth - h; // above, overlap
+	int y;
+	if ( widget && h > widget->height() + 16 ) {
+	    y = pos.y() + widget->height() + 2; // below, two pixels spacing
+	    // what's this is above or below, wherever there's most space
+	    if ( y + h + 10 > QApplication::desktop()->height() )
+		y = pos.y() + 2 - shadowWidth - h; // above, overlap
+	}
+	y = ppos.y() + 2;
+
+	// squeeze it in if that would result in part of what's this
+	// being only partially visible
+	if ( y + h > QApplication::desktop()->height() )
+	    y = ( widget ? (QMIN(QApplication::desktop()->height(),
+				 pos.y() + widget->height())
+			    ) : QApplication:: desktop()->height() )
+		- h;
+	if ( y < 0 )
+	    y = 0;
+	
+	whatsThat->setGeometry( x, y, w + shadowWidth, h + shadowWidth );
+	whatsThat->show();
     }
-    y = ppos.y() + 2;
-
-    // squeeze it in if that would result in part of what's this
-    // being only partially visible
-    if ( y + h > QApplication::desktop()->height() )
-	y = ( widget ? (QMIN(QApplication::desktop()->height(),
-			     pos.y() + widget->height())
-			) : QApplication:: desktop()->height() )
-	    - h;
-    if ( y < 0 )
-	y = 0;
-
-
-    whatsThat->setGeometry( x, y, w + shadowWidth, h + shadowWidth );
-    whatsThat->show();
 
     // now for super-clever shadow stuff.  super-clever mostly in
     // how many window system problems it skirts around.
@@ -530,14 +560,17 @@ void QWhatsThisPrivate::say( QWidget * widget, const QString &text, const QPoint
     p.drawRect( 1, 1, w-2, h-2 );
     p.setPen( whatsThat->colorGroup().foreground() );
 
+#ifndef QT_NO_RICHTEXT
     if ( doc ) {
 	doc->draw( &p, hMargin, vMargin, r, whatsThat->colorGroup(), 0 );
 	delete doc;
     }
-    else {
+    else
+#endif
+    {
 	p.drawText( hMargin, vMargin, r.width(), r.height(),
 		    AlignLeft + AlignTop + WordBreak + ExpandTabs,
-		    text );
+		    currentText );
     }
     p.setPen( whatsThat->colorGroup().shadow() );
 
@@ -556,6 +589,22 @@ void QWhatsThisPrivate::say( QWidget * widget, const QString &text, const QPoint
     for( ; i > 0 ; i -= 2 )
 	p.drawLine( 6, h + 6 - i,
 		    i + 5, h + 5 );
+}
+
+
+void QWhatsThisPrivate::say( QWidget * widget, const QString &text, const QPoint& ppos)
+{
+    currentText = text;
+
+    // make the widget, and set it up
+    if ( !whatsThat ) {
+	whatsThat = new QWidget( 0, "automatic what's this? widget",
+				 WType_Popup );
+	whatsThat->setBackgroundMode( QWidget::NoBackground );
+	whatsThat->setPalette( QToolTip::palette(), TRUE );
+	whatsThat->installEventFilter( this );
+    }
+    say_helper(widget,ppos,TRUE);
 }
 
 QWhatsThisPrivate::WhatsThisItem* QWhatsThisPrivate::newItem( QWidget * widget )
@@ -780,7 +829,9 @@ void QWhatsThis::enterWhatsThisMode()
 {
     QWhatsThisPrivate::setUpWhatsThis();
     if ( wt->state == QWhatsThisPrivate::Inactive ) {
+#ifndef QT_NO_CURSOR
 	QApplication::setOverrideCursor( *wt->cursor, FALSE );
+#endif
 	wt->state = QWhatsThisPrivate::Waiting;
 	qApp->installEventFilter( wt );
     }
@@ -825,3 +876,4 @@ void QWhatsThis::leaveWhatsThisMode( const QString& text, const QPoint& pos )
 }
 
 #include "qwhatsthis.moc"
+#endif

@@ -1,27 +1,39 @@
 /****************************************************************************
-** $Id: qt/src/dialogs/qmessagebox.h   2.1.1   edited 2000-04-19 $
+** $Id: qt/src/dialogs/qmessagebox.h   2.2.0   edited 2000-08-25 $
 **
 ** Definition of QMessageBox class
 **
 ** Created : 950503
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the dialogs module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #ifndef QMESSAGEBOX_H
 #define QMESSAGEBOX_H
@@ -29,6 +41,8 @@
 #ifndef QT_H
 #include "qdialog.h"
 #endif // QT_H
+
+#ifndef QT_NO_MESSAGEBOX
 
 class  QLabel;
 class  QPushButton;
@@ -93,15 +107,18 @@ public:
     static void about( QWidget *parent, const QString &caption,
 		       const QString& text );
 
-    static void aboutQt( QWidget *parent, const QString& caption=QString::null );
+    static void aboutQt( QWidget *parent,
+			 const QString& caption=QString::null );
 
 #if 1 /* OBSOLETE */
     static int message( const QString &caption,
-			const QString& text,  const QString& buttonText=QString::null,
+			const QString& text, 
+			const QString& buttonText=QString::null,
 			QWidget *parent=0, const char *name=0 );
 
     static bool query( const QString &caption,
-		       const QString& text,  const QString& yesButtonText=QString::null,
+		       const QString& text, 
+		       const QString& yesButtonText=QString::null,
 		       const QString& noButtonText=QString::null,
 		       QWidget *parent=0, const char *name=0 );
 #endif
@@ -110,6 +127,8 @@ public:
     void	setText( const QString &);
 
     Icon	icon() const;
+
+    // ### the next four functions will probably be renamed in 3.0.
     void	setIcon( Icon );
     void	setIcon( const QPixmap & );
 
@@ -150,5 +169,6 @@ private:	// Disabled copy constructor and operator=
 #endif
 };
 
+#endif // QT_NO_MESSAGEBOX
 
 #endif // QMESSAGEBOX_H

@@ -1,9 +1,12 @@
 /****************************************************************************
-** $Id: qt/examples/customlayout/card.cpp   2.1.1   edited 2000-02-21 $
+** $Id: qt/examples/customlayout/card.cpp   2.2.0   edited 2000-08-31 $
 **
 ** Implementing your own layout: flow example
 **
-** Copyright (C) 1996 by Troll Tech AS.  All rights reserved.
+** Copyright (C) 1996 by Trolltech AS.  All rights reserved.
+**
+** This file is part of an example program for Qt.  This example
+** program may be used, distributed and modified without limitation.
 **
 *****************************************************************************/
 

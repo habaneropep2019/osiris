@@ -1,28 +1,41 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qsplitter.cpp   2.1.1   edited 2000-05-13 $
+** $Id: qt/src/widgets/qsplitter.cpp   2.2.0   edited 2000-08-27 $
 **
 **  Splitter widget
 **
 **  Created:  980105
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the widgets module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 #include "qsplitter.h"
+#ifndef QT_NO_COMPLEXWIDGETS
 
 #include "qpainter.h"
 #include "qdrawutil.h"
@@ -77,26 +90,25 @@ QSplitterHandle::QSplitterHandle( Qt::Orientation o,
 
 QSizePolicy QSplitterHandle::sizePolicy() const
 {
-    if ( orient == Horizontal )
-	return QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Minimum );
-    else
-    	return QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Fixed );
-
+    //### removeme 3.0
+    return QWidget::sizePolicy();
 }
 
 QSize QSplitterHandle::sizeHint() const
 {
     int sw = style().splitterWidth();
-    return QSize(sw,sw);
+    return QSize(sw,sw).expandedTo( QApplication::globalStrut() );
 }
 
 void QSplitterHandle::setOrientation( Qt::Orientation o )
 {
     orient = o;
+#ifndef QT_NO_CURSOR
     if ( o == QSplitter::Horizontal )
 	setCursor( splitHCursor );
     else
 	setCursor( splitVCursor );
+#endif
 }
 
 
@@ -160,7 +172,7 @@ public:
 // NOT REVISED
 /*!
   \class QSplitter qsplitter.h
-  \brief QSplitter implements a splitter widget.
+  \brief The QSplitter class implements a splitter widget.
 
   \ingroup organizers
 
@@ -257,6 +269,10 @@ QSplitter::~QSplitter()
 void QSplitter::init()
 {
     data = new QSplitterData;
+    if ( orient == Horizontal )
+	setSizePolicy( QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Minimum) );
+    else
+    	setSizePolicy( QSizePolicy(QSizePolicy::Minimum,QSizePolicy::Fixed) );
 }
 
 
@@ -280,6 +296,10 @@ void QSplitter::setOrientation( Orientation o )
 	return;
     orient = o;
 
+    if ( orient == Horizontal )
+	setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Minimum ) );
+    else
+    	setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Fixed ) );
 
     QSplitterLayoutStruct *s = data->list.first();
     while ( s ) {
@@ -360,8 +380,10 @@ void QSplitter::childEvent( QChildEvent *c )
     if ( c->type() == QEvent::ChildInserted ) {
 	if ( !c->child()->isWidgetType() )
 	    return;
-	//debug( "%p QSplitter::child %s %p inserted", this,
-	//       c->child()->className(), c->child() );
+
+	if ( ((QWidget*)c->child())->testWFlags( WType_TopLevel ) )
+	    return;
+
 	QSplitterLayoutStruct *s = data->list.first();
 	while ( s ) {
 	    if ( s->wid == c->child() )
@@ -372,7 +394,6 @@ void QSplitter::childEvent( QChildEvent *c )
 	recalc( isVisible() );
 
     } else if ( c->type() == QEvent::ChildRemoved ) {
-	//debug( "%p QSplitter::child %p removed", this, c->child() );
 	QSplitterLayoutStruct *p = 0;
 	if ( data->list.count() > 1 )
 	    p = data->list.at(1); //remove handle _after_ first widget.
@@ -518,7 +539,7 @@ void QSplitter::moveBefore( int pos, int id, bool upLeft )
     if ( !s )
 	return;
     QWidget *w = s->wid;
-    if ( w->testWState(WState_ForceHide) ) {
+    if ( w->isHidden() ) {
 	moveBefore( pos, id-1, upLeft );
     } else if ( s->isSplitter ) {
 	int dd = s->sizer;
@@ -554,7 +575,7 @@ void QSplitter::moveAfter( int pos, int id, bool upLeft )
     if ( !s )
 	return;
     QWidget *w = s->wid;
-    if ( w->testWState(WState_ForceHide) ) {
+    if ( w->isHidden() ) {
 	moveAfter( pos, id+1, upLeft );
     } else if ( pick( w->pos() ) == pos ) {
 	//No need to do anything if it's already there.
@@ -651,7 +672,7 @@ void QSplitter::doResize()
     for ( i = 0; i< n; i++ ) {
 	a[i].init();
 	QSplitterLayoutStruct *s = data->list.at(i);
-	if ( s->wid->testWState(WState_ForceHide) ) {
+	if ( s->wid->isHidden() ) {
 	    a[i].stretch = 0;
 	    a[i].sizeHint = a[i].minimumSize = 0;
 	    a[i].maximumSize = 0;
@@ -709,11 +730,11 @@ void QSplitter::recalc( bool update )
 	if ( !s->isSplitter ) {
 	    QSplitterLayoutStruct *p = (i > 0) ? p = data->list.at( i-1 ) : 0;
 	    if ( p && p->isSplitter )
-		if ( first || s->wid->testWState(WState_ForceHide) )
+		if ( first || s->wid->isHidden() )
 		    p->wid->hide(); //may trigger new recalc
 		else
 		    p->wid->show(); //may trigger new recalc
-	    if ( !s->wid->testWState(WState_ForceHide) )
+	    if ( !s->wid->isHidden() )
 		first = FALSE;
 	}
     }
@@ -721,7 +742,7 @@ void QSplitter::recalc( bool update )
     bool empty=TRUE;
     for ( int j = 0; j< n; j++ ) {
 	QSplitterLayoutStruct *s = data->list.at(j);
-	if ( !s->wid->testWState(WState_ForceHide) ) {
+	if ( !s->wid->isHidden() ) {
 	    empty = FALSE;
 	    if ( s->isSplitter ) {
 		minl += s->sizer;
@@ -902,7 +923,7 @@ QSize QSplitter::sizeHint() const
 	while( (o=it.current()) != 0 ) {
 	    ++it;
 	    if ( o->isWidgetType() &&
-		 !((QWidget*)o)->testWState(WState_ForceHide) ) {
+		 !((QWidget*)o)->isHidden() ) {
 		QSize s = ((QWidget*)o)->sizeHint();
 		if ( s.isValid() ) {
 		    l += pick( s );
@@ -932,7 +953,7 @@ QSize QSplitter::minimumSizeHint() const
 	while( (o=it.current()) != 0 ) {
 	    ++it;
 	    if ( o->isWidgetType() &&
-		 !((QWidget*)o)->testWState(WState_ForceHide) ) {
+		 !((QWidget*)o)->isHidden() ) {
 		QSize s = minSize((QWidget*)o);
 		if ( s.isValid() ) {
 		    l += pick( s );
@@ -1045,9 +1066,12 @@ QValueList<int> QSplitter::sizes() const
 
 /*!
   Sets the size parameters to the values given in \a list.
+  If the splitter is horizontal, the values set the sizes from
+  left to right. If it is vertical, the sizes are applied from
+  top to bottom.
   Extra values in \a list are ignored.
 
-  If \a list contains to few values, the result is undefined
+  If \a list contains too few values, the result is undefined
   but the program will still be well-behaved.
 */
 
@@ -1095,3 +1119,4 @@ void QSplitter::styleChange( QStyle& old )
     QFrame::styleChange( old );
 }
 
+#endif

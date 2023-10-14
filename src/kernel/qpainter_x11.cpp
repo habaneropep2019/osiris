@@ -1,27 +1,39 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qpainter_x11.cpp   2.1.1   edited 2000-04-25 $
+** $Id: qt/src/kernel/qpainter_x11.cpp   2.2.0   edited 2000-08-25 $
 **
 ** Implementation of QPainter class for X11
 **
 ** Created : 940112
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the kernel module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses for Unix/X11 may use this file in accordance with the Qt Commercial
+** License Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #include "qpainter.h"
 #include "qwidget.h"
@@ -592,11 +604,6 @@ void QPainter::updateFont()
 
 void QPainter::updatePen()
 {
-    static char dash_line[]	    = { 7, 3 };
-    static char dot_line[]	    = { 1, 3 };
-    static char dash_dot_line[]	    = { 7, 3, 2, 3 };
-    static char dash_dot_dot_line[] = { 7, 3, 2, 3, 2, 3 };
-
     if ( testf(ExtDev) ) {
 	QPDevCmdParam param[1];
 	param[0].pen = &cpen;
@@ -604,7 +611,7 @@ void QPainter::updatePen()
 	    return;
     }
 
-    int	 ps = cpen.style();
+    int	ps = cpen.style();
     bool cacheIt = !testf(ClipOn|MonoDev|NoCache) &&
 		   (ps == NoPen || ps == SolidLine) &&
 		   cpen.width() == 0 && rop == CopyROP;
@@ -652,11 +659,23 @@ void QPainter::updatePen()
     if ( obtained )
 	return;
 
-    char *dashes = 0;				// custom pen dashes
+    char dashes[10];				// custom pen dashes
     int dash_len = 0;				// length of dash list
     int s = LineSolid;
     int cp = CapButt;
     int jn = JoinMiter;
+
+    /*
+      We are emulating Windows here.  Windows treats cpen.width() == 1
+      as a very special case.  The fudge variable unifies this case
+      with the general case.
+    */
+    int dot = cpen.width();			// width of a dot
+    int fudge = 1;
+    if ( dot <= 1 ) {
+	dot = 3;
+	fudge = 2;
+    }
 
     switch( ps ) {
 	case NoPen:
@@ -664,22 +683,32 @@ void QPainter::updatePen()
 	    s = LineSolid;
 	    break;
 	case DashLine:
-	    dashes = dash_line;
-	    dash_len = sizeof(dash_line);
+	    dashes[0] = fudge * 3 * dot;
+	    dashes[1] = fudge * dot;
+	    dash_len = 2;
 	    break;
 	case DotLine:
-	    dashes = dot_line;
-	    dash_len = sizeof(dot_line);
+	    dashes[0] = dot;
+	    dashes[1] = dot;
+	    dash_len = 2;
 	    break;
 	case DashDotLine:
-	    dashes = dash_dot_line;
-	    dash_len = sizeof(dash_dot_line);
+	    dashes[0] = 3 * dot;
+	    dashes[1] = fudge * dot;
+	    dashes[2] = dot;
+	    dashes[3] = fudge * dot;
+	    dash_len = 4;
 	    break;
 	case DashDotDotLine:
-	    dashes = dash_dot_dot_line;
-	    dash_len = sizeof(dash_dot_dot_line);
-	    break;
+	    dashes[0] = 3 * dot;
+	    dashes[1] = dot;
+	    dashes[2] = dot;
+	    dashes[3] = dot;
+	    dashes[4] = dot;
+	    dashes[5] = dot;
+	    dash_len = 6;
     }
+    ASSERT( dash_len <= (int) sizeof(dashes) );
 
     switch ( cpen.capStyle() ) {
     case SquareCap:
@@ -705,7 +734,6 @@ void QPainter::updatePen()
 	jn = JoinMiter;
 	break;
     }
-
 
     XSetForeground( dpy, gc, cpen.color().pixel() );
     XSetBackground( dpy, gc, bg_col.pixel() );
@@ -897,7 +925,7 @@ bool QPainter::begin( const QPaintDevice *pd )
     if ( isActive() ) {				// already active painting
 #if defined(CHECK_STATE)
 	qWarning( "QPainter::begin: Painter is already active."
-		 "\n\tYou must end() the painter before a second begin()" );
+		  "\n\tYou must end() the painter before a second begin()" );
 #endif
 	return FALSE;
     }
@@ -922,11 +950,11 @@ bool QPainter::begin( const QPaintDevice *pd )
     }
 
     if ( pdev->isExtDev() && pdev->paintingActive() ) {
-		// somebody else is already painting
+	// somebody else is already painting
 #if defined(CHECK_STATE)
 	qWarning( "QPainter::begin: Another QPainter is already painting "
-		 "this device;\n\tAn extended paint device can only be painted "
-	         "by one QPainter at a time." );
+		  "this device;\n\tAn extended paint device can only be "
+		  "painted by one QPainter at a time." );
 #endif
 	return FALSE;
     }
@@ -935,7 +963,7 @@ bool QPainter::begin( const QPaintDevice *pd )
     flags = IsActive | DirtyFont;		// init flags
     int dt = pdev->devType();			// get the device type
 
-    if ( (pdev->devFlags & QInternal::ExternalDevice) != 0 )	// this is an extended device
+    if ( (pdev->devFlags & QInternal::ExternalDevice) != 0 )
 	setf(ExtDev);
     else if ( dt == QInternal::Pixmap )		// device is a pixmap
 	((QPixmap*)pdev)->detach();		// will modify it
@@ -946,6 +974,10 @@ bool QPainter::begin( const QPaintDevice *pd )
     if ( testf(ExtDev) ) {			// external device
 	if ( !pdev->cmd( QPaintDevice::PdcBegin, this, 0 ) ) {
 	    // could not begin painting
+	    if ( reinit )
+		clearf( IsActive | DirtyFont );
+	    else
+		flags = IsStartingUp;
 	    pdev = 0;
 	    return FALSE;
 	}
@@ -1725,40 +1757,35 @@ void QPainter::drawRoundRect( int x, int y, int w, int h, int xRnd, int yRnd )
 		return;
 	}
 	if ( txop == TxRotShear ) {		// rotate/shear polygon
-	    QPointArray a;
 	    if ( w <= 0 || h <= 0 )
 		fix_neg_rect( &x, &y, &w, &h );
 	    w--;
 	    h--;
 	    int rxx = w*xRnd/200;
 	    int ryy = h*yRnd/200;
+	    // were there overflows?
+	    if ( rxx < 0 )
+		rxx = w/200*xRnd;
+	    if ( ryy < 0 )
+		ryy = h/200*yRnd;
 	    int rxx2 = 2*rxx;
 	    int ryy2 = 2*ryy;
-	    int xx, yy;
-
-	    // ###### WWA: this should use the new makeArc (with xmat)
-
-	    a.makeEllipse( x, y, rxx2, ryy2 );
-	    int s = a.size()/4;
-	    int i = 0;
-	    while ( i < s ) {
-		a.point( i, &xx, &yy );
-		xx += w - rxx2;
-		a.setPoint( i++, xx, yy );
+	    QPointArray a[4];
+	    a[0].makeArc( x, y, rxx2, ryy2, 1*16*90, 16*90, wxmat );
+	    a[1].makeArc( x, y+h-ryy2, rxx2, ryy2, 2*16*90, 16*90, wxmat );
+	    a[2].makeArc( x+w-rxx2, y+h-ryy2, rxx2, ryy2, 3*16*90, 16*90, wxmat );
+	    a[3].makeArc( x+w-rxx2, y, rxx2, ryy2, 0*16*90, 16*90, wxmat );
+	    // ### is there a better way to join QPointArrays?
+	    QPointArray aa;
+	    aa.resize( a[0].size() + a[1].size() + a[2].size() + a[3].size() );
+	    uint j = 0;
+	    for ( int k=0; k<4; k++ ) {
+		for ( uint i=0; i<a[k].size(); i++ ) {
+		    aa.setPoint( j, a[k].point(i) );
+		    j++;
+		}
 	    }
-	    i = 2*s;
-	    while ( i < 3*s ) {
-		a.point( i, &xx, &yy );
-		yy += h - ryy2;
-		a.setPoint( i++, xx, yy );
-	    }
-	    while ( i < 4*s ) {
-		a.point( i, &xx, &yy );
-		xx += w - rxx2;
-		yy += h - ryy2;
-		a.setPoint( i++, xx, yy );
-	    }
-	    drawPolyInternal( xForm(a) );
+	    drawPolyInternal( aa );
 	    return;
 	}
 	map( x, y, w, h, &x, &y, &w, &h );
@@ -2088,7 +2115,7 @@ void QPainter::drawChord( int x, int y, int w, int h, int a, int alen )
 
 /*!
   Draws \a nlines separate lines from points defined in \a a, starting
-  at a[\a index] (\a index detaults to 0). If \a nlines is -1 (the
+  at a[\a index] (\a index defaults to 0). If \a nlines is -1 (the
   defauls) all points until the end of the array are used
   (i.e. (a.size()-index)/2 lines are drawn).
 
@@ -2174,9 +2201,16 @@ void QPainter::drawPolyline( const QPointArray &a, int index, int npoints )
 	    }
 	}
     }
-    if ( cpen.style() != NoPen )
+    if ( cpen.style() != NoPen ) {
+	while(npoints>65535) {
+	    XDrawLines( dpy, hd, gc, (XPoint*)(pa.shortPoints( index, 65535 )),
+			65535, CoordModeOrigin );
+	    npoints-=65535;
+	    index+=65535;
+	}
 	XDrawLines( dpy, hd, gc, (XPoint*)(pa.shortPoints( index, npoints )),
 		    npoints, CoordModeOrigin );
+    }
 }
 
 
@@ -2724,19 +2758,17 @@ void QPainter::drawText( int x, int y, const QString &str, int len )
 		}
 	    }
 	    if ( bg_mode == OpaqueMode ) {	// opaque fill
-		// ### WWA: not sure on this, but the previous
-		// ###      was totally non-Unicode.
 		int fx = x;
 		int fy = y - fm.ascent();
 		int fw = fm.width(str,len);
 		int fh = fm.ascent() + fm.descent();
 		int m, n;
 		QPointArray a(5);
-		mat2.map( fx,	 fy,	&m, &n );  a.setPoint( 0, m, n );
+		mat1.map( fx,	 fy,	&m, &n );  a.setPoint( 0, m, n );
 						   a.setPoint( 4, m, n );
-		mat2.map( fx+fw, fy,	&m, &n );  a.setPoint( 1, m, n );
-		mat2.map( fx+fw, fy+fh, &m, &n );  a.setPoint( 2, m, n );
-		mat2.map( fx,	 fy+fh, &m, &n );  a.setPoint( 3, m, n );
+		mat1.map( fx+fw, fy,	&m, &n );  a.setPoint( 1, m, n );
+		mat1.map( fx+fw, fy+fh, &m, &n );  a.setPoint( 2, m, n );
+		mat1.map( fx,	 fy+fh, &m, &n );  a.setPoint( 3, m, n );
 		QBrush oldBrush = cbrush;
 		setBrush( backgroundColor() );
 		updateBrush();
@@ -2775,7 +2807,7 @@ void QPainter::drawText( int x, int y, const QString &str, int len )
 	// translate from Unicode to font charset encoding here
 	mapped = mapper->fromUnicode(str,len);
     }
-
+// ### not pretty -- using codec to produce 16-bit encoding
     if ( !cfont.handle() ) {
 	if ( mapped.isNull() )
 	    qWarning("Fontsets only apply to mapped encodings");
@@ -2788,10 +2820,16 @@ void QPainter::drawText( int x, int y, const QString &str, int len )
 	}
     } else {
 	if ( !mapped.isNull() ) {
-	    if ( bg_mode == TransparentMode )
-		XDrawString( dpy, hd, gc, x, y, mapped, len );
+	    if ( cfont.charSet() < QFont::Enc16 )
+		if ( bg_mode == TransparentMode )
+		    XDrawString( dpy, hd, gc, x, y, mapped, len );
+		else
+		    XDrawImageString( dpy, hd, gc, x, y, mapped, len );
 	    else
-		XDrawImageString( dpy, hd, gc, x, y, mapped, len );
+		if ( bg_mode == TransparentMode )
+		    XDrawString16( dpy, hd, gc, x, y, (XChar2b*)mapped.data(), len/2 );
+		else
+		    XDrawImageString16( dpy, hd, gc, x, y, (XChar2b*)mapped.data(), len/2 );
 	} else {
 	    // Unicode font
 

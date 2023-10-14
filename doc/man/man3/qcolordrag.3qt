@@ -1,14 +1,12 @@
-.TH QColorDrag 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QColorDrag 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
 .ad l
 .nh
 .SH NAME
-QColorDrag \- The QColorDrag provides a drag-and-drop object for transferring colors
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
+QColorDrag \- Drag-and-drop object for transferring colors
 .SH SYNOPSIS
 .br
 .PP
@@ -19,28 +17,28 @@ Inherits QStoredDrag.
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQColorDrag\fR ( const QColor & " "col" ", QWidget * " "dragsource" " = 0, const char * " "name" " = 0 )"
+.BI "\fBQColorDrag\fR ( const QColor & " "col" ", QWidget * " "dragsource" " = 0, const char * " "name" " = 0 ) "
 .br
 .ti -1c
-.BI "\fBQColorDrag\fR ( QWidget * " "dragSource" " = 0, const char * " "name" " = 0 )"
+.BI "\fBQColorDrag\fR ( QWidget * " "dragSource" " = 0, const char * " "name" " = 0 ) "
 .br
 .ti -1c
-.BI "void \fBsetColor\fR ( const QColor & col )"
+.BI "void \fBsetColor\fR ( const QColor & col ) "
 .br
 .in -1c
 .SS "Static Public Members"
 .in +1c
 .ti -1c
-.BI "bool \fBcanDecode\fR ( QMimeSource * )"
+.BI "bool \fBcanDecode\fR ( QMimeSource * ) "
 .br
 .ti -1c
-.BI "bool \fBdecode\fR ( QMimeSource *, QColor & col )"
+.BI "bool \fBdecode\fR ( QMimeSource *, QColor & col ) "
 .br
 .in -1c
 .SH DESCRIPTION
-The QColorDrag provides a drag-and-drop object for transferring colors.
+The QColorDrag class provides a drag-and-drop object for transferring colors.
 .PP
-This class provides a drag object which can be used to transfere data about colors for drag-and-drop and over the clipboard. It's e.g. used in the QColorDialog.
+This class provides a drag object which can be used to transfer data about colors for drag-and-drop and over the clipboard. It's e.g. used in the QColorDialog.
 .PP
 For detailed information about drag-and-drop, see the QDragObject class.
 .SH MEMBER FUNCTION DOCUMENTATION
@@ -57,7 +55,7 @@ Sets the color of the color drag to \fIcol\fR
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qcolordrag.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

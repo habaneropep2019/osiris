@@ -3,15 +3,17 @@
 Qt Toolkit - cursor/cursor.cpp example file
 </title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
-a:link { text-decoration: none; }
-body { background: white; color: black; }
+a:link { color: #004faf; text-decoration: none }
+a:visited { color: #672967; text-decoration: none }body { background: white; color: black; }
 --></style>
 </head><body bgcolor="#ffffff">
 
-<a href="index.html">
-<img width="122" height="65" src="qtlogo.png" alt="Home"
-  align="left" border="0">
-</a><div align=right><img src="dochead.png" width="472" height="27"><br>
+<table width="100%">
+<tr><td><a href="index.html">
+<img width="100" height="100" src="qtlogo.png"
+alt="Home" border="0"><img width="100"
+height="100" src="face.png" alt="Home" border="0">
+</a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
 - <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
@@ -19,7 +21,7 @@ body { background: white; color: black; }
 - <a href="index.html">Home</a>
 - <a href="topicals.html"><b>Structure</b></a>
 </div>
-<br clear=all>
+</table>
 
 <h1 align=center>Cursors</h1><br clear="all">
 
@@ -29,9 +31,9 @@ body { background: white; color: black; }
 
   Implementation:
 <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/cursor/cursor.cpp   2.1.1   edited 2000-03-11 $
+** &#36;Id&#58; qt/examples/cursor/cursor.cpp   2.2.0   edited 2000-08-31 $
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -111,7 +113,8 @@ CursorView::CursorView()                        // construct view
         { SplitVCursor,         "splitVCursor" },
         { SplitHCursor,         "splitHCursor" },
         { PointingHandCursor,   "pointingHandCursor" },
-        { ForbiddenCursor,              "forbiddenCursor" }
+        { ForbiddenCursor,      "forbiddenCursor" },
+        { BitmapCursor,         "" }            // sentinel
     };
 
     setCaption( "CursorView" );                 // set window caption
@@ -122,15 +125,16 @@ CursorView::CursorView()                        // construct view
     int i=0;
     for ( int y=0; y&lt;4; y++ ) {                 // create the small labels
         for ( int x=0; x&lt;4; x++ ) {
-            if ( list[i].shape &lt;= LastCursor ) {
-                label = new <a href="qlabel.html">QLabel</a>( this );
-                label-&gt;<a name="setCursor"></a><a href="qwidget.html#afbf1a">setCursor</a>( <a name="QCursor"></a><a href="qcursor.html">QCursor</a>( list[i].shape ) );
-                label-&gt;<a name="setText"></a><a href="qlabel.html#dffb43">setText</a>( list[i].name );
-                label-&gt;<a name="setAlignment"></a><a href="qlabel.html#1f406e">setAlignment</a>( AlignCenter );
-                label-&gt;<a name="setFrameStyle"></a><a href="qframe.html#c0d758">setFrameStyle</a>( QFrame::Box | QFrame::Raised );
-                grid-&gt;<a name="addWidget"></a><a href="qgridlayout.html#70abf2">addWidget</a>( label, x, y );
-                i++;
-            }
+            if ( list[i].shape == BitmapCursor )
+                break;
+
+            label = new <a href="qlabel.html">QLabel</a>( this );
+            label-&gt;<a name="setCursor"></a><a href="qwidget.html#afbf1a">setCursor</a>( <a name="QCursor"></a><a href="qcursor.html">QCursor</a>( list[i].shape ) );
+            label-&gt;<a name="setText"></a><a href="qlabel.html#dffb43">setText</a>( list[i].name );
+            label-&gt;<a name="setAlignment"></a><a href="qlabel.html#1f406e">setAlignment</a>( AlignCenter );
+            label-&gt;<a name="setFrameStyle"></a><a href="qframe.html#c0d758">setFrameStyle</a>( QFrame::Box | QFrame::Raised );
+            grid-&gt;<a name="addWidget"></a><a href="qgridlayout.html#70abf2">addWidget</a>( label, x, y );
+            i++;
         }
     }
 
@@ -162,6 +166,6 @@ int main( int argc, char **argv )
 </pre>
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.1</div>
+<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.2.0</div>
 </table></div></address></body></html>

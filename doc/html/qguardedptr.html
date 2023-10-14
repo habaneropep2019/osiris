@@ -1,15 +1,17 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head>
 <title>Qt Toolkit - QGuardedPtr Class</title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
-a:link { text-decoration: none; }
-body { background: white; color: black; }
+a:link { color: #004faf; text-decoration: none }
+a:visited { color: #672967; text-decoration: none }body { background: white; color: black; }
 --></style>
 </head><body bgcolor="#ffffff">
 
-<a href="index.html">
-<img width="122" height="65" src="qtlogo.png" alt="Home"
-  align="left" border="0">
-</a><div align=right><img src="dochead.png" width="472" height="27"><br>
+<table width="100%">
+<tr><td><a href="index.html">
+<img width="100" height="100" src="qtlogo.png"
+alt="Home" border="0"><img width="100"
+height="100" src="face.png" alt="Home" border="0">
+</a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
 - <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
@@ -17,7 +19,7 @@ body { background: white; color: black; }
 - <a href="index.html">Home</a>
 - <a href="topicals.html"><b>Structure</b></a>
 </div>
-<br clear=all>
+</table>
 
 <h1 align=center>QGuardedPtr Class Reference</h1><br clear="all">
 <p>
@@ -28,18 +30,18 @@ The QGuardedPtr class is a template class that provides guarded pointers to QObj
 <p><a href="qguardedptr-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><span class="fn"><a href="#4fa314"><b>QGuardedPtr</b></a> () </span>
-<li><span class="fn"><a href="#117573"><b>QGuardedPtr</b></a> ( T * p ) </span>
-<li><span class="fn"><a href="#d6eb30"><b>QGuardedPtr</b></a> ( const QGuardedPtr&lt;T&gt; &amp; p ) </span>
-<li><span class="fn"><a href="#0e981a"><b>~QGuardedPtr</b></a> () </span>
-<li><span class="fn">QGuardedPtr&lt;T&gt;&amp; <a href="#23bf31"><b>operator=</b></a> ( const QGuardedPtr&lt;T&gt; &amp; p ) </span>
-<li><span class="fn">QGuardedPtr&lt;T&gt;&amp; <a href="#005be9"><b>operator=</b></a> ( T * p ) </span>
-<li><span class="fn">bool <a href="#32b3b5"><b>operator==</b></a> ( const QGuardedPtr&lt;T&gt; &amp; p ) const</span>
-<li><span class="fn">bool <a href="#adabb4"><b>operator!=</b></a> ( const QGuardedPtr&lt;T&gt; &amp; p ) const</span>
-<li><span class="fn">bool <a href="#cb3ab4"><b>isNull</b></a> () const</span>
-<li><span class="fn">T* <a href="#fbf80f"><b>operator-&gt;</b></a> () const</span>
-<li><span class="fn">T&amp; <a href="#02d12e"><b>operator*</b></a> () const</span>
-<li><span class="fn">operator <a href=qguardedptr.html#242a32><b>T*</b></a> ()const</span>
+<li><div class="fn"><a href="#4fa314"><b>QGuardedPtr</b></a> () </div>
+<li><div class="fn"><a href="#117573"><b>QGuardedPtr</b></a> ( T * p ) </div>
+<li><div class="fn"><a href="#d6eb30"><b>QGuardedPtr</b></a> ( const QGuardedPtr&lt;T&gt; &amp; p ) </div>
+<li><div class="fn"><a href="#0e981a"><b>~QGuardedPtr</b></a> () </div>
+<li><div class="fn">QGuardedPtr&lt;T&gt;&amp; <a href="#23bf31"><b>operator=</b></a> ( const QGuardedPtr&lt;T&gt; &amp; p ) </div>
+<li><div class="fn">QGuardedPtr&lt;T&gt;&amp; <a href="#005be9"><b>operator=</b></a> ( T * p ) </div>
+<li><div class="fn">bool <a href="#32b3b5"><b>operator==</b></a> ( const QGuardedPtr&lt;T&gt; &amp; p ) const</div>
+<li><div class="fn">bool <a href="#adabb4"><b>operator!=</b></a> ( const QGuardedPtr&lt;T&gt; &amp; p ) const</div>
+<li><div class="fn">bool <a href="#cb3ab4"><b>isNull</b></a> () const</div>
+<li><div class="fn">T* <a href="#fbf80f"><b>operator-&gt;</b></a> () const</div>
+<li><div class="fn">T&amp; <a href="#02d12e"><b>operator*</b></a> () const</div>
+<li><div class="fn">operator <a href=qguardedptr.html#242a32><b>T*</b></a> ()const</div>
 </ul>
 <hr><h2><a name="details"></a>Detailed Description</h2>
 The QGuardedPtr class is a template class that provides guarded pointers to QObjects
@@ -76,8 +78,7 @@ to read this class documentation.
 <p>For creating guarded pointers, you can construct or assign to them
 from an X* or from another guarded pointer of the same type. You can
 compare them with each other for equality (==) and inequality (!=),
-or test for null with <a href="#cb3ab4">isNull</a>() and for non-null with the bool() casting
-operator.  Finally, you can dereference
+or test for null with <a href="#cb3ab4">isNull</a>().  Finally, you can dereference
 them using either the <code>*x</code> or the <code>x->member</code> notation.
 <p>A guarded pointer will automatically cast to an X* so you can freely
 mix guarded and unguarded pointers. This means that if you have a
@@ -91,7 +92,7 @@ error will result.
 <hr><h2>Member Function Documentation</h2>
 <h3 class="fn"><a name="4fa314"></a>QGuardedPtr::QGuardedPtr ()</h3>
 <p>Constructs a null guarded pointer.
-<p>See also:  <a href="#cb3ab4">isNull</a>().
+<p>See also  <a href="#cb3ab4">isNull</a>().
 <h3 class="fn"><a name="117573"></a>QGuardedPtr::QGuardedPtr ( T * p )</h3>
 <p>Constructs a guarded pointer that points to same object as is
 pointed to by <em>p.</em>
@@ -111,7 +112,7 @@ required.
 no referenced object.
 <h3 class="fn">bool <a name="adabb4"></a>QGuardedPtr::operator!= ( const QGuardedPtr&lt;T&gt; &amp; p ) const</h3>
 <p>Unequality operator, implements pointer semantics, the negation
-of operator==.
+of <a href="#32b3b5">operator==</a>().
 <h3 class="fn">T&amp; <a name="02d12e"></a>QGuardedPtr::operator* () const</h3>
 <p>Dereference operator, implements pointer semantics. Just use this
 operator as you would with a normal C++ pointer.
@@ -128,18 +129,18 @@ object as does <em>p.</em>
 <p>Equality operator, implements traditional pointer semantics: returns
 TRUE if both <em>p</em> and this are null, or if both <em>p</em> and this point
 to the same object.
-<p>See also:  operator!=.
+<p>See also  <a href="#adabb4">operator!=</a>().
 <hr><p>
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.1.1"><nobr>
+<input type=hidden name="version" value="2.2.0"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
 copyright &copy; 1995-2000
-<a href="http://www.trolltech.com">Troll Tech</a>, all rights reserved.<p><address><hr><div align="center">
+<a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.1</div>
+<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.2.0</div>
 </table></div></address></body></html>

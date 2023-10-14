@@ -1,5 +1,5 @@
-.TH QCheckListItem 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QCheckListItem 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QCheckListItem \- Implements checkable list view items
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -22,31 +20,31 @@ Inherits QListViewItem.
 .BI "enum \fBType\fR { RadioButton, CheckBox, Controller }"
 .br
 .ti -1c
-.BI "\fBQCheckListItem\fR ( QCheckListItem * " "parent" ", const QString & " "text" ", Type = Controller )"
+.BI "\fBQCheckListItem\fR ( QCheckListItem * " "parent" ", const QString & " "text" ", Type = Controller ) "
 .br
 .ti -1c
-.BI "\fBQCheckListItem\fR ( QListViewItem * " "parent" ", const QString & " "text" ", Type = Controller )"
+.BI "\fBQCheckListItem\fR ( QListViewItem * " "parent" ", const QString & " "text" ", Type = Controller ) "
 .br
 .ti -1c
-.BI "\fBQCheckListItem\fR ( QListView * " "parent" ", const QString & " "text" ", Type = Controller )"
+.BI "\fBQCheckListItem\fR ( QListView * " "parent" ", const QString & " "text" ", Type = Controller ) "
 .br
 .ti -1c
-.BI "\fBQCheckListItem\fR ( QListViewItem * " "parent" ", const QString & " "text" ", const QPixmap & )"
+.BI "\fBQCheckListItem\fR ( QListViewItem * " "parent" ", const QString & " "text" ", const QPixmap & ) "
 .br
 .ti -1c
-.BI "\fBQCheckListItem\fR ( QListView * " "parent" ", const QString & " "text" ", const QPixmap & )"
+.BI "\fBQCheckListItem\fR ( QListView * " "parent" ", const QString & " "text" ", const QPixmap & ) "
 .br
 .ti -1c
-.BI "virtual void \fBpaintCell\fR ( QPainter *, const QColorGroup & " "cg" ", int " "column" ", int " "width" ", int alignment )"
+.BI "virtual void \fBpaintCell\fR ( QPainter *, const QColorGroup & " "cg" ", int " "column" ", int " "width" ", int alignment ) "
 .br
 .ti -1c
-.BI "virtual void \fBpaintFocus\fR ( QPainter *, const QColorGroup & " "cg" ", const QRect & r )"
+.BI "virtual void \fBpaintFocus\fR ( QPainter *, const QColorGroup & " "cg" ", const QRect & r ) "
 .br
 .ti -1c
-.BI "virtual void \fBsetup\fR ()"
+.BI "virtual void \fBsetup\fR () "
 .br
 .ti -1c
-.BI "virtual void \fBsetOn\fR ( bool )"
+.BI "virtual void \fBsetOn\fR ( bool ) "
 .br
 .ti -1c
 .BI "bool \fBisOn\fR () const"
@@ -57,20 +55,26 @@ Inherits QListViewItem.
 .ti -1c
 .BI "QString \fBtext\fR () const"
 .br
+.ti -1c
+.BI "void \fBsetEnabled\fR ( bool b ) "
+.br
+.ti -1c
+.BI "bool \fBisEnabled\fR () const"
+.br
 .in -1c
 .SS "Protected Members"
 .in +1c
 .ti -1c
-.BI "virtual void \fBpaintBranches\fR ( QPainter * " "p" ", const QColorGroup & " "cg" ", int " "w" ", int " "y" ", int " "h" ", GUIStyle s )"
+.BI "virtual void \fBpaintBranches\fR ( QPainter * " "p" ", const QColorGroup & " "cg" ", int " "w" ", int " "y" ", int " "h" ", GUIStyle s ) "
 .br
 .ti -1c
-.BI "virtual void \fBactivate\fR ()"
+.BI "virtual void \fBactivate\fR () "
 .br
 .ti -1c
-.BI "void \fBturnOffChild\fR ()"
+.BI "void \fBturnOffChild\fR () "
 .br
 .ti -1c
-.BI "virtual void \fBstateChange\fR ( bool )"
+.BI "virtual void \fBstateChange\fR ( bool ) "
 .br
 .in -1c
 .SH DESCRIPTION
@@ -103,9 +107,13 @@ Constructs a checkable item with parent \fIparent,\fR text \fItext\fR and type \
 Toggle checkbox, or set radio button on.
 .PP
 Reimplemented from QListViewItem.
+.SH "bool QCheckListItem::isEnabled () const"
+Retuns whether the item is enabled or disabled.
+.PP
+See also setEnabled().
 .SH "bool QCheckListItem::isOn () const"
 Returns TRUE if this item is toggled on, FALSE otherwise.
-.SH "void QCheckListItem::paintBranches ( QPainter * p, const QColorGroup & cg, int w, int, int h, GUIStyle ) \fC[virtual protected]\fR"
+.SH "void QCheckListItem::paintBranches ( QPainter * p, const QColorGroup &, int w, int, int h, GUIStyle ) \fC[virtual protected]\fR"
 Fills the rectangle. No decoration is drawn.
 .PP
 Reimplemented from QListViewItem.
@@ -115,6 +123,8 @@ Paints this item.
 Reimplemented from QListViewItem.
 .SH "void QCheckListItem::paintFocus ( QPainter * p, const QColorGroup & cg, const QRect & r ) \fC[virtual]\fR"
 Draws the focus rectangle.
+.SH "void QCheckListItem::setEnabled ( bool b )"
+Enables/Disables the item depending on what you pass as \fIb\fR parameter. If the item is disabled, the user can't change the state (see setOn()/isOn()) of the item.
 .SH "void QCheckListItem::setOn ( bool b ) \fC[virtual]\fR"
 Sets this button on if \fIb\fR is TRUE, off otherwise. Maintains radio button exclusivity.
 .SH "void QCheckListItem::setup () \fC[virtual]\fR"
@@ -140,7 +150,7 @@ Reimplemented from QListViewItem.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qchecklistitem.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

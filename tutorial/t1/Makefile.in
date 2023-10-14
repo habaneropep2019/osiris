@@ -2,14 +2,15 @@
 
 ####### Compiler, tools and options
 
-CXX	=	$(SYSCONF_CXX)
+CXX	=	$(SYSCONF_CXX) $(QT_CXX_MT)
 CXXFLAGS=	$(SYSCONF_CXXFLAGS_QT) $(SYSCONF_CXXFLAGS)
-CC	=	$(SYSCONF_CC)
+CC	=	$(SYSCONF_CC) $(QT_C_MT)
 CFLAGS	=	$(SYSCONF_CFLAGS)
 INCPATH =	
-LFLAGS	=	$(SYSCONF_LFLAGS_QT) $(SYSCONF_LFLAGS_X11) $(SYSCONF_LFLAGS)
-LIBS	=	$(SYSCONF_LIBS_QT) $(SYSCONF_LIBS_X11) $(SYSCONF_LIBS)
+LFLAGS	=	$(SYSCONF_LFLAGS_QT) $(SYSCONF_RPATH_QT) $(SYSCONF_LFLAGS) $(QT_LFLAGS_MT)
+LIBS	=	$(SUBLIBS)  $(SYSCONF_LIBS_QTAPP) $(SYSCONF_LIBS_QT) $(SYSCONF_LIBS)
 MOC	=	$(SYSCONF_MOC)
+UIC	=	$(SYSCONF_UIC)
 
 ####### Target
 
@@ -25,8 +26,12 @@ TARGET1 = lib$(TARGET).so.$(VER_MAJ)
 HEADERS =	
 SOURCES =	main.cpp
 OBJECTS =	main.o
+INTERFACES =    
+UICDECLS =      
+UICIMPLS =      
 SRCMOC	=	
 OBJMOC	=	
+
 
 ####### Implicit rules
 
@@ -49,10 +54,11 @@ OBJMOC	=
 
 ####### Build rules
 
+
 all: $(DESTDIR)$(TARGET)
 
-$(DESTDIR)$(TARGET): $(OBJECTS) $(OBJMOC) 
-	$(SYSCONF_LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(OBJMOC) $(LIBS)
+$(DESTDIR)$(TARGET): $(UICDECLS) $(OBJECTS) $(OBJMOC) $(SUBLIBS)
+	$(SYSCONF_LINK) $(LFLAGS) -o $(DESTDIR)$(TARGET) $(OBJECTS) $(OBJMOC) $(LIBS)
 
 moc: $(SRCMOC)
 
@@ -60,10 +66,36 @@ tmake:
 	tmake t1.pro
 
 clean:
-	-rm -f $(OBJECTS) $(OBJMOC) $(SRCMOC)
+	-rm -f $(OBJECTS) $(OBJMOC) $(SRCMOC) $(UICIMPLS) $(UICDECLS)
 	-rm -f *~ core
+	-rm -f tmp/qt.cpp
+
+####### Extension Modules
+
+listpromodules:
+	@echo 
+
+listallmodules:
+	@echo 
+
+listaddonpromodules:
+	@echo 
+
+listaddonentmodules:
+	@echo 
+
+
+REQUIRES=
+
+####### Sub-libraries
+
+
+###### Combined headers
+
+
 
 ####### Compile
 
 main.o: main.cpp
+
 

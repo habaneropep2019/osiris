@@ -1,29 +1,43 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qlayout.cpp   2.1.1   edited 2000-05-06 $
+** $Id: qt/src/kernel/qlayout.cpp   2.2.0   edited 2000-08-30 $
 **
 ** Implementation of layout classes
 **
 ** Created : 960416
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the kernel module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #include "qlayout.h"
+
+#ifndef QT_NO_LAYOUT
 
 #include "qapplication.h" //for postEvent() in QBoxLayout::setDirection
 #include "qwidget.h"
@@ -470,7 +484,7 @@ static void distributeMultiBox( QArray<QLayoutStruct> &chain, int spacing,
 
     if ( max < minSize ) { //implies w<minSize
 	//we must increase the maximum size of at least one of the
-	//items. qGeomCalc() will put the extra space in between 
+	//items. qGeomCalc() will put the extra space in between
 	//the items. We must recover that extra space and put it somewhere.
 	//It does not really matter where, since the user can always
 	//specify stretch factors and avoid this code.
@@ -489,7 +503,7 @@ static void distributeMultiBox( QArray<QLayoutStruct> &chain, int spacing,
 		chain[i].maximumSize = chain[i].minimumSize;
 	    pos = nextPos;
  	}
-	
+
     } else if ( w < minSize ) {
 	//debug( "Big multicell" );
 	qGeomCalc( chain, start, end-start+1, 0, minSize, spacing );
@@ -808,7 +822,7 @@ private:
 
   Columns 0, 2 and 4 in this dialog fragment are made up of a QLabel,
   a QLineEdit and a QListBox.  Columns 1 and 2 are placeholders, made
-  with setColSpacing().	 Row 0 consists of three QLabel objects, row 1
+  with addColSpacing().	 Row 0 consists of three QLabel objects, row 1
   of three QLineEdit objects and row 2 of three QListBox objects.
 
   Since we did not want any space between the rows, we had to use
@@ -840,7 +854,7 @@ private:
   to the same as the border width.  Both are set using arguments to
   the constructor.
 
-  See also the <a href="layout.html">Layout Overview</a> documentation.
+  See also the \link layout.html Layout Overview \endlink documentation.
 */
 
 
@@ -1251,6 +1265,30 @@ void QGridLayout::addLayout( QLayout *layout, int row, int col)
 
 
 /*!
+  Adds the layout \a w to the cell grid, spanning multiple rows/columns.
+
+  Alignment is specified by \a alignment which is a bitwise OR of
+  Qt::AlignmentFlags values.
+  The default alignment is 0, which means
+  that the widget fills the entire cell.
+
+  A non-zero alignment indicates that the layout should not grow to
+  fill the available space, but should be sized according to
+  sizeHint().
+
+*/
+
+void QGridLayout::addMultiCellLayout( QLayout *layout, int fromRow, int toRow,
+				      int fromCol, int toCol, int alignment )
+{
+    QLayoutBox *b = new QLayoutBox( layout );
+    b->setAlignment( alignment );
+    array->add( b, fromRow, toRow, fromCol, toCol );
+}
+
+
+
+/*!
   Sets the stretch factor of row \a row to \a stretch.
   The first row is number 0.
 
@@ -1523,7 +1561,7 @@ private:
   QBoxLayout: QVBoxLayout and QHBoxLayout, because of their simpler
   constructors.
 
-  See also the <a href="layout.html">Layout Overview</a> documentation.
+  See also the \link layout.html Layout overview documentation \endlink.
 */
 
 
@@ -2433,3 +2471,4 @@ QVBoxLayout::~QVBoxLayout()
 
 
 
+#endif //QT_NO_LAYOUT

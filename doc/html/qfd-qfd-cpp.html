@@ -3,15 +3,17 @@
 Qt Toolkit - qfd/qfd.cpp example file
 </title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
-a:link { text-decoration: none; }
-body { background: white; color: black; }
+a:link { color: #004faf; text-decoration: none }
+a:visited { color: #672967; text-decoration: none }body { background: white; color: black; }
 --></style>
 </head><body bgcolor="#ffffff">
 
-<a href="index.html">
-<img width="122" height="65" src="qtlogo.png" alt="Home"
-  align="left" border="0">
-</a><div align=right><img src="dochead.png" width="472" height="27"><br>
+<table width="100%">
+<tr><td><a href="index.html">
+<img width="100" height="100" src="qtlogo.png"
+alt="Home" border="0"><img width="100"
+height="100" src="face.png" alt="Home" border="0">
+</a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
 - <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
@@ -19,18 +21,18 @@ body { background: white; color: black; }
 - <a href="index.html">Home</a>
 - <a href="topicals.html"><b>Structure</b></a>
 </div>
-<br clear=all>
+</table>
 
 <h1 align=center>Font Displayer</h1><br clear="all">
 
-  This example program displayes all characters of a font.
+  This example program displays all characters of a font.
 
   <hr>
 
   Header file: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/qfd/fontdisplayer.h   2.1.1   edited 2000-01-31 $
+** &#36;Id&#58; qt/examples/qfd/fontdisplayer.h   2.2.0   edited 2000-08-31 $
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -78,9 +80,9 @@ public:
   <hr>
 
   Implementation: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/qfd/fontdisplayer.cpp   2.1.1   edited 2000-01-31 $
+** &#36;Id&#58; qt/examples/qfd/fontdisplayer.cpp   2.2.0   edited 2000-08-31 $
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -101,21 +103,21 @@ FontRowTable::FontRowTable( <a href="qwidget.html">QWidget</a>* parent, const ch
     <a href="qwidget.html#182f0e">setBackgroundMode</a>(PaletteBase);
     <a href="qframe.html#c0d758">setFrameStyle</a>(Panel|Sunken);
     <a href="qframe.html#ab991e">setMargin</a>(8);
-    <a href=#354>setRow</a>(0);
+    <a href=#337>setRow</a>(0);
 }
 
-<a href="qsize.html">QSize</a> <a name="351"></a>FontRowTable::sizeHint() const
+<a href="qsize.html">QSize</a> <a name="334"></a>FontRowTable::sizeHint() const
 {
     return 16*cellSize()+QSize(2,2)*(<a href="qframe.html#f69ee0">margin</a>()+frameWidth());
 }
 
-<a href="qsize.html">QSize</a> <a name="352"></a>FontRowTable::cellSize() const
+<a href="qsize.html">QSize</a> <a name="335"></a>FontRowTable::cellSize() const
 {
     <a href="qfontmetrics.html">QFontMetrics</a> fm = fontMetrics();
     return QSize( fm.<a href="qfontmetrics.html#d638e2">maxWidth</a>(), fm.<a href="qfontmetrics.html#ebe056">lineSpacing</a>()+1 );
 }
 
-void <a name="353"></a>FontRowTable::paintEvent( <a href="qpaintevent.html">QPaintEvent</a>* e )
+void <a name="336"></a>FontRowTable::paintEvent( <a href="qpaintevent.html">QPaintEvent</a>* e )
 {
     <a href="qframe.html#2e9073">QFrame::paintEvent</a>(e);
     <a href="qpainter.html">QPainter</a> p(this);
@@ -139,6 +141,8 @@ void <a name="353"></a>FontRowTable::paintEvent( <a href="qpaintevent.html">QPai
     <a href="qcolor.html">QColor</a> body(255,255,192);
     <a href="qcolor.html">QColor</a> negative(255,192,192);
     <a href="qcolor.html">QColor</a> positive(192,192,255);
+    <a href="qcolor.html">QColor</a> rnegative(255,128,128);
+    <a href="qcolor.html">QColor</a> rpositive(128,128,255);
 
     for (int j = minj; j&lt;=maxj; j++) {
         for (int i = mini; i&lt;=maxi; i++) {
@@ -159,11 +163,12 @@ void <a name="353"></a>FontRowTable::paintEvent( <a href="qpaintevent.html">QPai
                     p.<a href="qpainter.html#0f4c23">fillRect</a>(x,y,w,-h,body);
                     if ( w ) {
                         if ( l ) {
-                            p.<a href="qpainter.html#0f4c23">fillRect</a>(x+(l&gt;0?0:l),
-                                y,abs(l),-h/2,l &lt; 0 ? negative : positive);
+                            p.<a href="qpainter.html#0f4c23">fillRect</a>(x+(l&gt;0?0:l), y-h/2, abs(l),-h/2,
+                                       l &lt; 0 ? negative : positive);
                         }
                         if ( r ) {
-                            p.<a href="qpainter.html#0f4c23">fillRect</a>(x+w+(r&gt;0?-1:0),y,-r,-h/2,r &lt; 0 ? negative : positive);
+                            p.<a href="qpainter.html#0f4c23">fillRect</a>(x+w-(r&gt;0?r:0),y+2, abs(r),-h/2,
+                                       r &lt; 0 ? rnegative : rpositive);
                         }
                     }
                     <a href="qstring.html">QString</a> s;
@@ -176,7 +181,7 @@ void <a name="353"></a>FontRowTable::paintEvent( <a href="qpaintevent.html">QPai
     }
 }
 
-void <a name="354"></a>FontRowTable::setRow(int r)
+void <a name="337"></a>FontRowTable::setRow(int r)
 {
     row = r;
 
@@ -189,7 +194,7 @@ void <a name="354"></a>FontRowTable::setRow(int r)
         );
 
     emit fontInformation(str);
-    <a href="qwidget.html#52f9c5">update</a>();
+    <a href="qwidget.html#4a97ef">update</a>();
 }
 
 FontDisplayer::FontDisplayer( <a href="qwidget.html">QWidget</a>* parent, const char* name ) :
@@ -211,9 +216,9 @@ FontDisplayer::FontDisplayer( <a href="qwidget.html">QWidget</a>* parent, const 
 
   Main:
 <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/qfd/qfd.cpp   2.1.1   edited 2000-03-07 $
+** &#36;Id&#58; qt/examples/qfd/qfd.cpp   2.2.0   edited 2000-08-31 $
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -229,6 +234,9 @@ FontDisplayer::FontDisplayer( <a href="qwidget.html">QWidget</a>* parent, const 
 
 int main(int argc, char** argv)
 {
+    // Use an interesting font
+    <a name="QApplication::setFont"></a><a href="qapplication.html#01d457">QApplication::setFont</a>(<a name="QFont"></a><a href="qfont.html">QFont</a>("unifont",16));
+
     <a name="QApplication"></a><a href="qapplication.html">QApplication</a> app(argc,argv);
 
     FontDisplayer m;
@@ -243,6 +251,6 @@ int main(int argc, char** argv)
 </pre>
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.1</div>
+<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.2.0</div>
 </table></div></address></body></html>

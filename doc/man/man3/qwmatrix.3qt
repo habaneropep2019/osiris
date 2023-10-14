@@ -1,5 +1,5 @@
-.TH QWMatrix 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QWMatrix 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QWMatrix \- 2D transformations of a coordinate system
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -17,13 +15,13 @@ QWMatrix \- 2D transformations of a coordinate system
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQWMatrix\fR ()"
+.BI "\fBQWMatrix\fR () "
 .br
 .ti -1c
-.BI "\fBQWMatrix\fR ( double " "m11" ", double " "m12" ", double " "m21" ", double " "m22" ", double " "dx" ", double dy )"
+.BI "\fBQWMatrix\fR ( double " "m11" ", double " "m12" ", double " "m21" ", double " "m22" ", double " "dx" ", double dy ) "
 .br
 .ti -1c
-.BI "void \fBsetMatrix\fR ( double " "m11" ", double " "m12" ", double " "m21" ", double " "m22" ", double " "dx" ", double dy )"
+.BI "void \fBsetMatrix\fR ( double " "m11" ", double " "m12" ", double " "m21" ", double " "m22" ", double " "dx" ", double dy ) "
 .br
 .ti -1c
 .BI "double \fBm11\fR () const"
@@ -59,19 +57,19 @@ QWMatrix \- 2D transformations of a coordinate system
 .BI "QPointArray \fBmap\fR ( const QPointArray & ) const"
 .br
 .ti -1c
-.BI "void \fBreset\fR ()"
+.BI "void \fBreset\fR () "
 .br
 .ti -1c
-.BI "QWMatrix& \fBtranslate\fR ( double " "dx" ", double dy )"
+.BI "QWMatrix& \fBtranslate\fR ( double " "dx" ", double dy ) "
 .br
 .ti -1c
-.BI "QWMatrix& \fBscale\fR ( double " "sx" ", double sy )"
+.BI "QWMatrix& \fBscale\fR ( double " "sx" ", double sy ) "
 .br
 .ti -1c
-.BI "QWMatrix& \fBshear\fR ( double " "sh" ", double sv )"
+.BI "QWMatrix& \fBshear\fR ( double " "sh" ", double sv ) "
 .br
 .ti -1c
-.BI "QWMatrix& \fBrotate\fR ( double a )"
+.BI "QWMatrix& \fBrotate\fR ( double a ) "
 .br
 .ti -1c
 .BI "QWMatrix \fBinvert\fR ( bool * = 0 ) const"
@@ -83,7 +81,7 @@ QWMatrix \- 2D transformations of a coordinate system
 .BI "bool \fBoperator!=\fR ( const QWMatrix & ) const"
 .br
 .ti -1c
-.BI "QWMatrix& \fBoperator*=\fR ( const QWMatrix & )"
+.BI "QWMatrix& \fBoperator*=\fR ( const QWMatrix & ) "
 .br
 .in -1c
 .SH RELATED FUNCTION DOCUMENTATION
@@ -206,7 +204,7 @@ The same example, but using basic matrix operations:
 .PP
 QPainter has functions that translate, scale, shear and rotate the coordinate system without using a QWMatrix. These functions are very convenient, however, if you want to perform more than a single transform operation, it is more efficient to build a QWMatrix and call QPainter::setWorldMatrix().
 .PP
-See also: QPainter::setWorldMatrix() and QPixmap::xForm().
+See also QPainter::setWorldMatrix() and QPixmap::xForm().
 .PP
 Examples:
 .(l
@@ -281,7 +279,7 @@ Rotates the coordinate system \fIa\fR degrees counterclockwise.
 .PP
 Returns a reference to the matrix.
 .PP
-See also: translate(), scale() and shear().
+See also translate(), scale() and shear().
 .PP
 Examples:
 .(l
@@ -292,7 +290,7 @@ Scales the coordinate system unit by \fIsx\fR horizontally and \fIsy\fR vertical
 .PP
 Returns a reference to the matrix.
 .PP
-See also: translate(), shear() and rotate().
+See also translate(), shear() and rotate().
 .PP
 Examples:
 .(l
@@ -305,7 +303,7 @@ Shears the coordinate system by \fIsh\fR horizontally and \fIsv\fR vertically.
 .PP
 Returns a reference to the matrix.
 .PP
-See also: translate(), scale() and rotate().
+See also translate(), scale() and rotate().
 .PP
 Examples:
 .(l
@@ -316,7 +314,7 @@ Moves the coordinate system \fIdx\fR along the X-axis and \fIdy\fR along the Y-a
 .PP
 Returns a reference to the matrix.
 .PP
-See also: scale(), shear() and rotate().
+See also scale(), shear() and rotate().
 .PP
 Examples:
 .(l
@@ -330,15 +328,15 @@ Remember that matrix multiplication is not commutative, thus a*b != b*a.
 .SH "QDataStream & operator<< (QDataStream & s, const QWMatrix & m)"
 Writes a matrix to the stream and returns a reference to the stream.
 .PP
-See also: Format of the QDataStream operators
+See also Format of the QDataStream operators
 .SH "QDataStream & operator>> (QDataStream & s, QWMatrix & m)"
 Reads a matrix from the stream and returns a reference to the stream.
 .PP
-See also:  Format of the QDataStream operators
+See also  Format of the QDataStream operators
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qwmatrix.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

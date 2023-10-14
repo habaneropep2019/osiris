@@ -1,5 +1,5 @@
-.TH QList 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QList 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QList \- Template class that provides doubly linked lists
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -21,16 +19,16 @@ Inherited by QStrList.
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQList\fR ()"
+.BI "\fBQList\fR () "
 .br
 .ti -1c
-.BI "\fBQList\fR ( const QList<type> & list )"
+.BI "\fBQList\fR ( const QList<type> & list ) "
 .br
 .ti -1c
-.BI "\fB~QList\fR ()"
+.BI "\fB~QList\fR () "
 .br
 .ti -1c
-.BI "QList<type>& \fBoperator=\fR ( const QList<type> & list )"
+.BI "QList<type>& \fBoperator=\fR ( const QList<type> & list ) "
 .br
 .ti -1c
 .BI "bool \fBoperator==\fR ( const QList<type> & list ) const"
@@ -42,64 +40,64 @@ Inherited by QStrList.
 .BI "bool \fBisEmpty\fR () const"
 .br
 .ti -1c
-.BI "bool \fBinsert\fR ( uint " "index" ", const type * item )"
+.BI "bool \fBinsert\fR ( uint " "index" ", const type * item ) "
 .br
 .ti -1c
-.BI "void \fBinSort\fR ( const type * item )"
+.BI "void \fBinSort\fR ( const type * item ) "
 .br
 .ti -1c
-.BI "void \fBprepend\fR ( const type * item )"
+.BI "void \fBprepend\fR ( const type * item ) "
 .br
 .ti -1c
-.BI "void \fBappend\fR ( const type * item )"
+.BI "void \fBappend\fR ( const type * item ) "
 .br
 .ti -1c
-.BI "bool \fBremove\fR ( uint index )"
+.BI "bool \fBremove\fR ( uint index ) "
 .br
 .ti -1c
-.BI "bool \fBremove\fR ()"
+.BI "bool \fBremove\fR () "
 .br
 .ti -1c
-.BI "bool \fBremove\fR ( const type * item )"
+.BI "bool \fBremove\fR ( const type * item ) "
 .br
 .ti -1c
-.BI "bool \fBremoveRef\fR ( const type * item )"
+.BI "bool \fBremoveRef\fR ( const type * item ) "
 .br
 .ti -1c
-.BI "void \fBremoveNode\fR ( QLNode * node )"
+.BI "void \fBremoveNode\fR ( QLNode * node ) "
 .br
 .ti -1c
-.BI "bool \fBremoveFirst\fR ()"
+.BI "bool \fBremoveFirst\fR () "
 .br
 .ti -1c
-.BI "bool \fBremoveLast\fR ()"
+.BI "bool \fBremoveLast\fR () "
 .br
 .ti -1c
-.BI "type* \fBtake\fR ( uint index )"
+.BI "type* \fBtake\fR ( uint index ) "
 .br
 .ti -1c
-.BI "type* \fBtake\fR ()"
+.BI "type* \fBtake\fR () "
 .br
 .ti -1c
-.BI "type* \fBtakeNode\fR ( QLNode * node )"
+.BI "type* \fBtakeNode\fR ( QLNode * node ) "
 .br
 .ti -1c
-.BI "virtual void \fBclear\fR ()"
+.BI "virtual void \fBclear\fR () "
 .br
 .ti -1c
-.BI "void \fBsort\fR ()"
+.BI "void \fBsort\fR () "
 .br
 .ti -1c
-.BI "int \fBfind\fR ( const type * item )"
+.BI "int \fBfind\fR ( const type * item ) "
 .br
 .ti -1c
-.BI "int \fBfindNext\fR ( const type * item )"
+.BI "int \fBfindNext\fR ( const type * item ) "
 .br
 .ti -1c
-.BI "int \fBfindRef\fR ( const type * item )"
+.BI "int \fBfindRef\fR ( const type * item ) "
 .br
 .ti -1c
-.BI "int \fBfindNextRef\fR ( const type * item )"
+.BI "int \fBfindNextRef\fR ( const type * item ) "
 .br
 .ti -1c
 .BI "uint \fBcontains\fR ( const type * item ) const"
@@ -108,7 +106,7 @@ Inherited by QStrList.
 .BI "uint \fBcontainsRef\fR ( const type * item ) const"
 .br
 .ti -1c
-.BI "type* \fBat\fR ( uint index )"
+.BI "type* \fBat\fR ( uint index ) "
 .br
 .ti -1c
 .BI "int \fBat\fR () const"
@@ -126,16 +124,16 @@ Inherited by QStrList.
 .BI "type* \fBgetLast\fR () const"
 .br
 .ti -1c
-.BI "type* \fBfirst\fR ()"
+.BI "type* \fBfirst\fR () "
 .br
 .ti -1c
-.BI "type* \fBlast\fR ()"
+.BI "type* \fBlast\fR () "
 .br
 .ti -1c
-.BI "type* \fBnext\fR ()"
+.BI "type* \fBnext\fR () "
 .br
 .ti -1c
-.BI "type* \fBprev\fR ()"
+.BI "type* \fBprev\fR () "
 .br
 .ti -1c
 .BI "void \fBtoVector\fR ( QGVector * vec ) const"
@@ -230,7 +228,7 @@ The virtual function QGList::compareItems() can be reimplemented to compare two 
 .PP
 The QStrList class in qstrlist.h is a list of \fCchar*.\fR QStrList is a good example of a list that reimplements newItem(), deleteItem() and compareItems()
 .PP
-See also: QListIterator and Collection Classes
+See also QListIterator and Collection Classes
 .PP
 Examples:
 .(l
@@ -248,7 +246,7 @@ Removes all items from the list and destroys the list.
 .PP
 All list iterators that access this list will be reset.
 .PP
-See also: setAutoDelete().
+See also setAutoDelete().
 .SH "void QList::append ( const type * item )"
 Inserts the \fIitem\fR at the end of the list.
 .PP
@@ -256,7 +254,7 @@ The inserted item becomes the current list item. This is equivalent to \fCinsert
 .PP
 The \fIitem\fR must not be a null pointer.
 .PP
-See also: insert(), current() and prepend().
+See also insert(), current() and prepend().
 .PP
 Examples:
 .(l
@@ -265,7 +263,7 @@ grapher/grapher.cpp
 .SH "int QList::at () const"
 Returns the index of the current list item. The returned value is -1 if the current item is null.
 .PP
-See also: current().
+See also current().
 .SH "type * QList::at ( uint index )"
 Returns a pointer to the item at position \fIindex\fR in the list, or null if the index is out of range.
 .PP
@@ -273,7 +271,7 @@ Sets the current list item to this item if \fIindex\fR is valid. The valid range
 .PP
 This function is very efficient. It starts scanning from the first item, last item or current item, whichever is closest to \fIindex.\fR
 .PP
-See also: current().
+See also current().
 .SH "void QList::clear () \fC[virtual]\fR"
 Removes all items from the list.
 .PP
@@ -281,7 +279,7 @@ The removed items are deleted if auto-deletion is enabled.
 .PP
 All list iterators that access this list will be reset.
 .PP
-See also: remove(), take() and setAutoDelete().
+See also remove(), take() and setAutoDelete().
 .PP
 Reimplemented from QCollection.
 .SH "uint QList::contains ( const type * item ) const"
@@ -291,7 +289,7 @@ The compareItems() function is called when looking for the \fIitem\fR in the lis
 .PP
 Does not affect the current list item.
 .PP
-See also: containsRef() and compareItems().
+See also containsRef() and compareItems().
 .SH "uint QList::containsRef ( const type * item ) const"
 Counts and returns the number of occurrences of \fIitem\fR in the list.
 .PP
@@ -299,11 +297,11 @@ Calling this function is must faster than contains(), because contains() compare
 .PP
 Does not affect the current list item.
 .PP
-See also: contains().
+See also contains().
 .SH "uint QList::count () const \fC[virtual]\fR"
 Returns the number of items in the list.
 .PP
-See also: isEmpty().
+See also isEmpty().
 .PP
 Examples:
 .(l
@@ -314,7 +312,7 @@ Reimplemented from QCollection.
 .SH "type * QList::current () const"
 Returns a pointer to the current list item. The current item may be null (implies that the current index is -1).
 .PP
-See also: at().
+See also at().
 .SH "QLNode * QList::currentNode () const"
 Returns a pointer to the current list node.
 .PP
@@ -322,7 +320,7 @@ The node can be kept and removed later using removeNode(). The advantage is that
 .PP
 \fBWarning:\fR Do not call this function unless you are an expert.
 .PP
-See also: removeNode(), takeNode() and current().
+See also removeNode(), takeNode() and current().
 .SH "int QList::find ( const type * item )"
 Finds the first occurrence of \fIitem\fR in the list.
 .PP
@@ -330,7 +328,7 @@ If the item is found, the list sets the current item to point to the found item 
 .PP
 The compareItems() function is called when searching for the item in the list. If compareItems() is not reimplemented, it is more efficient to call findRef().
 .PP
-See also: findNext(), findRef(), compareItems() and current().
+See also findNext(), findRef(), compareItems() and current().
 .SH "int QList::findNext ( const type * item )"
 Finds the next occurrence of \fIitem\fR in the list, starting from the current list item.
 .PP
@@ -338,7 +336,7 @@ If the item is found, the list sets the current item to point to the found item 
 .PP
 The compareItems() function is called when searching for the item in the list. If compareItems() is not reimplemented, it is more efficient to call findNextRef().
 .PP
-See also: find(), findNextRef(), compareItems() and current().
+See also find(), findNextRef(), compareItems() and current().
 .SH "int QList::findNextRef ( const type * item )"
 Finds the next occurrence of \fIitem\fR in the list, starting from the current list item.
 .PP
@@ -346,7 +344,7 @@ If the item is found, the list sets the current item to point to the found item 
 .PP
 Calling this function is must faster than findNext(), because findNext() compares \fIitem\fR with each list item using compareItems(). This function only compares the pointers.
 .PP
-See also: findRef(), findNext() and current().
+See also findRef(), findNext() and current().
 .SH "int QList::findRef ( const type * item )"
 Finds the first occurrence of \fIitem\fR in the list.
 .PP
@@ -354,11 +352,11 @@ If the item is found, the list sets the current item to point to the found item 
 .PP
 Calling this function is must faster than find(), because find() compares \fIitem\fR with each list item using compareItems(). This function only compares the pointers.
 .PP
-See also: findNextRef(), find() and current().
+See also findNextRef(), find() and current().
 .SH "type * QList::first ()"
 Returns a pointer to the first item in the list and makes this the current list item, or null if the list is empty.
 .PP
-See also: getFirst(), last(), next(), prev() and current().
+See also getFirst(), last(), next(), prev() and current().
 .PP
 Examples:
 .(l
@@ -369,13 +367,13 @@ Returns a pointer to the first item in the list, or null if the list is empty.
 .PP
 Does not affect the current list item.
 .PP
-See also: first() and getLast().
+See also first() and getLast().
 .SH "type * QList::getLast () const"
 Returns a pointer to the last item in the list, or null if the list is empty.
 .PP
 Does not affect the current list item.
 .PP
-See also: last() and getFirst().
+See also last() and getFirst().
 .SH "void QList::inSort ( const type * item )"
 Inserts the \fIitem\fR at its sorted position in the list.
 .PP
@@ -385,9 +383,9 @@ The inserted item becomes the current list item.
 .PP
 The \fIitem\fR must not be a null pointer.
 .PP
-Please note that inSort is slow. If you want to insert lots of items in a list and sort after inserting then you should use sort(). inSort() takes up to O(n) compares. That means inserting n items in your list will need O(n^2) compares while sort() only needs O(n*logn) for the same task. So you inSort() only if you already have a presorted list and want to insert only few additional items.
+Please note that inSort is slow. If you want to insert lots of items in a list and sort after inserting then you should use sort(). inSort() takes up to O(n) compares. That means inserting n items in your list will need O(n^2) compares while sort() only needs O(n*logn) for the same task. So you inSort() only if you already have a pre-sorted list and want to insert only few additional items.
 .PP
-See also: insert(), QGList::compareItems(), current() and sort().
+See also insert(), QGList::compareItems(), current() and sort().
 .SH "bool QList::insert ( uint index, const type * item )"
 Inserts the \fIitem\fR at the position \fIindex\fR in the list.
 .PP
@@ -397,21 +395,21 @@ The inserted item becomes the current list item.
 .PP
 The \fIitem\fR must not be a null pointer.
 .PP
-See also: append() and current().
+See also append() and current().
 .SH "bool QList::isEmpty () const"
 Returns TRUE if the list is empty, i.e. count() == 0. Returns FALSE otherwise.
 .PP
-See also: count().
+See also count().
 .SH "type * QList::last ()"
 Returns a pointer to the last item in the list and makes this the current list item, or null if the list is empty.
 .PP
-See also: getLast(), first(), next(), prev() and current().
+See also getLast(), first(), next(), prev() and current().
 .SH "type * QList::next ()"
 Returns a pointer to the item succeeding the current item. Returns null if the current item is null or equal to the last item.
 .PP
 Makes the succeeding item current. If the current item before this function call was the last item, the current item will be set to null. If the current item was null, this function does nothing.
 .PP
-See also: first(), last(), prev() and current().
+See also first(), last(), prev() and current().
 .PP
 Examples:
 .(l
@@ -430,13 +428,13 @@ The inserted item becomes the current list item. This is equivalent to \fCinsert
 .PP
 The \fIitem\fR must not be a null pointer.
 .PP
-See also: append(), insert() and current().
+See also append(), insert() and current().
 .SH "type * QList::prev ()"
 Returns a pointer to the item preceding the current item. Returns null if the current item is null or equal to the first item.
 .PP
 Makes the preceding item current. If the current item before this function call was the first item, the current item will be set to null. If the current item was null, this function does nothing.
 .PP
-See also: first(), last(), next() and current().
+See also first(), last(), next() and current().
 .SH "bool QList::remove ()"
 Removes the current list item.
 .PP
@@ -448,7 +446,7 @@ The item after the removed item becomes the new current list item if the removed
 .PP
 All list iterators that refer to the removed item will be set to point to the new current item.
 .PP
-See also: take(), clear(), setAutoDelete(), current() and removeRef().
+See also take(), clear(), setAutoDelete(), current() and removeRef().
 .SH "bool QList::remove ( const type * item )"
 Removes the first occurrence of \fIitem\fR from the list.
 .PP
@@ -462,7 +460,7 @@ The item after the removed item becomes the new current list item if the removed
 .PP
 All list iterators that refer to the removed item will be set to point to the new current item.
 .PP
-See also: removeRef(), take(), clear(), setAutoDelete(), compareItems() and current().
+See also removeRef(), take(), clear(), setAutoDelete(), compareItems() and current().
 .SH "bool QList::remove ( uint index )"
 Removes the item at position \fIindex\fR in the list.
 .PP
@@ -474,7 +472,7 @@ The item after the removed item becomes the new current list item if the removed
 .PP
 All list iterators that refer to the removed item will be set to point to the new current item.
 .PP
-See also: take(), clear(), setAutoDelete(), current() and removeRef().
+See also take(), clear(), setAutoDelete(), current() and removeRef().
 .SH "bool QList::removeFirst ()"
 Removes the first item from the list. Returns TRUE if successful, or FALSE if the list is empty.
 .PP
@@ -484,7 +482,7 @@ The first item in the list becomes the new current list item. The current item i
 .PP
 All list iterators that refer to the removed item will be set to point to the new current item.
 .PP
-See also: removeLast(), setAutoDelete(), current() and remove().
+See also removeLast(), setAutoDelete(), current() and remove().
 .SH "bool QList::removeLast ()"
 Removes the last item from the list. Returns TRUE if successful, or FALSE if the list is empty.
 .PP
@@ -494,7 +492,7 @@ The last item in the list becomes the new current list item. The current item is
 .PP
 All list iterators that refer to the removed item will be set to point to the new current item.
 .PP
-See also: removeFirst(), setAutoDelete() and current().
+See also removeFirst(), setAutoDelete() and current().
 .SH "void QList::removeNode ( QLNode * node )"
 Removes the \fInode\fR from the list.
 .PP
@@ -508,7 +506,7 @@ All list iterators that refer to the removed item will be set to point to the it
 .PP
 \fBWarning:\fR Do not call this function unless you are an expert.
 .PP
-See also: takeNode(), currentNode(), remove() and removeRef().
+See also takeNode(), currentNode(), remove() and removeRef().
 .SH "bool QList::removeRef ( const type * item )"
 Removes the first occurrence of \fIitem\fR from the list.
 .PP
@@ -531,7 +529,7 @@ The item after the removed item becomes the new current list item if the removed
 .PP
 All list iterators that refer to the removed item will be set to point to the new current item.
 .PP
-See also: remove(), clear(), setAutoDelete() and current().
+See also remove(), clear(), setAutoDelete() and current().
 .SH "void QList::sort ()"
 Sorts the list by the result of the virtual compareItems() function.
 .PP
@@ -539,7 +537,7 @@ The Heap-Sort algorithm is used for sorting. It sorts n items with O(n*log n) co
 .PP
 If the items in your list support operator< and operator== then you might be better off with QSortedList since it implements the compareItems() function for you using these two operators.
 .PP
-See also: inSort().
+See also inSort().
 .SH "type * QList::take ()"
 Takes the current item out of the list without deleting it (even if auto-deletion is enabled). Returns a pointer to the item taken out of the list, or null if the current item is null.
 .PP
@@ -547,7 +545,7 @@ The item after the taken item becomes the new current list item if the taken ite
 .PP
 All list iterators that refer to the taken item will be set to point to the new current item.
 .PP
-See also: remove(), clear() and current().
+See also remove(), clear() and current().
 .SH "type * QList::take ( uint index )"
 Takes the item at position \fIindex\fR out of the list without deleting it (even if auto-deletion is enabled).
 .PP
@@ -557,7 +555,7 @@ The item after the taken item becomes the new current list item if the taken ite
 .PP
 All list iterators that refer to the taken item will be set to point to the new current item.
 .PP
-See also: remove(), clear() and current().
+See also remove(), clear() and current().
 .SH "type * QList::takeNode ( QLNode * node )"
 Takes the \fInode\fR out of the list without deleting its item (even if auto-deletion is enabled). Returns a pointer to the item taken out of the list.
 .PP
@@ -569,7 +567,7 @@ All list iterators that refer to the taken item will be set to point to the item
 .PP
 \fBWarning:\fR Do not call this function unless you are an expert.
 .PP
-See also: removeNode() and currentNode().
+See also removeNode() and currentNode().
 .SH "void QList::toVector ( QGVector * vec ) const"
 Stores all list items in the vector \fIvec.\fR
 .PP
@@ -578,7 +576,7 @@ will be undefined.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qlist.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

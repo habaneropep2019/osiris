@@ -1,29 +1,42 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qtextview.cpp   2.1.1   edited 2000-04-24 $
+** $Id: qt/src/widgets/qtextview.cpp   2.2.0   edited 2000-08-25 $
 **
 ** Implementation of the QTextView class
 **
 ** Created : 990101
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the widgets module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #include "qtextview.h"
+#ifndef QT_NO_TEXTVIEW
 #include "../kernel/qrichtext_p.h"
 
 #include "qapplication.h"
@@ -64,7 +77,7 @@
 
   Using QTextView is quite similar to QLabel. It's mainly a call to
   setText() to set the contents. Setting the background color is
-  slighty different from other widgets, since a text view is a
+  slightly different from other widgets, since a text view is a
   scrollable widget that naturally provides a scrolling background. You
   can specify the colorgroup of the displayed text with
   setPaperColorGroup() or directly define the paper background with
@@ -96,7 +109,9 @@ public:
     QColor paplinkcol;
     bool linkunderline;
     QTimer* resizeTimer;
+#ifndef QT_NO_DRAGANDDROP
     QTimer* dragTimer;
+#endif
     QTimer* scrollTimer;
     Qt::TextFormat textformat;
     QRichTextFormatter* fcresize;
@@ -166,8 +181,10 @@ void QTextView::init()
 
     d->resizeTimer = new QTimer( this, "qt_resizetimer" );
     connect( d->resizeTimer, SIGNAL( timeout() ), this, SLOT( doResize() ));
+#ifndef QT_NO_DRAGANDDROP
     d->dragTimer = new QTimer( this );
     connect( d->dragTimer, SIGNAL( timeout() ), this, SLOT( doStartDrag() ));
+#endif
     d->scrollTimer = new QTimer( this );
     connect( d->scrollTimer, SIGNAL( timeout() ), this, SLOT( doAutoScroll() ));
 }
@@ -264,6 +281,7 @@ void QTextView::append( const QString& text )
     } else
 	updateLayout();
     updateContents( contentsX(), y-h, visibleWidth(), h );
+    d->original_txt += text;
 }
 
 /*!
@@ -393,7 +411,7 @@ void QTextView::setMimeSourceFactory( QMimeSourceFactory* factory )
 /*!
   Sets the brush to use as the background to \a pap.
 
-  This may be a nice pergament or marble pixmap or simply another
+  This may be a nice parchment or marble pixmap or simply another
   plain color.
 
   Technically, setPaper() is just a convenience function to set the
@@ -498,7 +516,7 @@ int QTextView::heightForWidth( int w ) const
 }
 
 /*!
-  Returns the document defining the view as drawable and querable rich
+  Returns the document defining the view as drawable and queryable rich
   text object.  This is not currently useful for applications.
 */
 QRichText& QTextView::richText() const
@@ -553,7 +571,7 @@ void QTextView::drawContentsOffset(QPainter* p, int ox, int oy,
     QFontMetrics fm( p->fontMetrics() );
     while ( b && tc.y() <= cy + ch ) {
 
-	if ( b && b->dirty ) //ensure the paragraph is layouted
+	if ( b && b->dirty ) //ensure the paragraph is laid out
 	    tc.updateLayout( p, cy + ch );
 
 	tc.gotoParagraph( p, b );
@@ -568,7 +586,7 @@ void QTextView::drawContentsOffset(QPainter* p, int ox, int oy,
 	    while ( tc.gotoNextLine( p ) );
 	}
 	b = b->nextInDocument();
-    };
+    }
 
     to.selstart = QtTriple();
     to.selstart = to.selend;
@@ -642,8 +660,10 @@ void QTextView::viewportMousePressEvent( QMouseEvent* e )
 	d->selstart = d->selorigin;
 	d->selend = d->selstart;
 	d->dragselection = TRUE;
+#ifndef QT_NO_DRAGANDDROP
     } else {
 	d->dragTimer->start( QApplication::startDragTime(), TRUE );
+#endif
     }
 }
 
@@ -654,15 +674,16 @@ void QTextView::viewportMouseReleaseEvent( QMouseEvent* e )
 {
     if ( e->button() == LeftButton ) {
 	d->scrollTimer->stop();
+#ifndef QT_NO_CLIPBOARD
 	if ( d->dragselection ) {
-#if defined(_WS_X11_)
-	    copy();
-#else
-	if ( style() == MotifStyle )
-	    copy();
+#if !defined(_WS_X11_)
+	    if ( style() == MotifStyle )
+		copy();
 #endif
-	d->dragselection = FALSE;
-	} else {
+	    d->dragselection = FALSE;
+	} else
+#endif
+	{
 	    clearSelection();
 	}
     }
@@ -682,7 +703,7 @@ bool QTextView::hasSelectedText() const
 /*!  Returns a copy of the selected text in plain text format.
 
   \sa hasSelectedText()
- */
+*/
 QString QTextView::selectedText() const
 {
     if ( !d->selection )
@@ -690,6 +711,10 @@ QString QTextView::selectedText() const
 
     QRichTextIterator it( richText() );
     it.goTo( d->selstart );
+
+    if ( d->selstart.a == d->selend.a && d->selstart.b == d->selend.b )
+	return it.text().mid( d->selstart.c, d->selend.c - d->selstart.c );
+    
     int column = 0;
     QString txt;
     QString s = it.text().mid( d->selstart.c );
@@ -718,7 +743,98 @@ QString QTextView::selectedText() const
     return txt;
 }
 
+static int logicalFontSize( QStyleSheet* style, QFont base, int pt )
+{
+    for (int i=0; i<10; i++) {
+	QFont b = base;
+	style->scaleFont(b,i);
+	if ( b.pointSize() >= pt )
+	    return i;
+    }
+    return 1; // else what?
+}
 
+static QString formatDiff(const QTextView* view, QTextCharFormat* pfmt, QTextCharFormat* nfmt)
+{
+    QString txt;
+    QFont basefont = view->font();
+    if ( pfmt != nfmt ) {
+	QString t,pre,post;
+	if ( pfmt->color() != nfmt->color() ) {
+	    QString c;
+	    t += c.sprintf("color=#%06x ", nfmt->color().rgb());
+	}
+	if ( pfmt->font() != nfmt->font() ) {
+	    int plsz = logicalFontSize( view->styleSheet(), basefont, pfmt->font().pointSize() );
+	    int nlsz = logicalFontSize( view->styleSheet(), basefont, nfmt->font().pointSize() );
+	    if ( nlsz != plsz ) {
+		QString f;
+		t += f.sprintf("size=%d ",nlsz-plsz);
+	    }
+	    if ( pfmt->font().family() != nfmt->font().family() ) {
+		t += "face=";
+		t += nfmt->font().family();
+		t += " ";
+	    }
+	    if ( pfmt->font().italic() != nfmt->font().italic() ) {
+		bool on = nfmt->font().italic();
+		if ( on )
+		    post = post + "<i>";
+		else
+		    pre = "</i>" + pre;
+	    }
+	    if ( pfmt->font().weight() != nfmt->font().weight() ) {
+		bool on = nfmt->font().weight() > 50;
+		if ( on )
+		    post = post + "<b>";
+		else
+		    pre = "</b>" + pre;
+	    }
+	}
+	txt += pre;
+	if ( !t.isEmpty() ) {
+	    t.truncate(t.length()-1); // chop space
+	    txt += "<font " + t + ">";
+	}
+	txt += post;
+    }
+    return txt;
+}
+
+/*!  Returns a copy of the selected text in rich text format (XML).
+
+  \sa hasSelectedText()
+*/
+QString QTextView::selectedRichTextInternal() const
+{
+    if ( !d->selection )
+	return QString::null;
+
+    QRichTextIterator it( richText() );
+    it.goTo( d->selstart );
+    QString txt;
+    QString s = it.text().mid( d->selstart.c );
+    QTextCharFormat ifmt;
+    QTextCharFormat* pfmt = &ifmt;
+    while ( it.position() < d->selend ) {
+	QTextCharFormat* nfmt = it.format();
+	txt += formatDiff(this,pfmt,nfmt);
+	pfmt = nfmt;
+	txt += s;
+	int oldpar = it.position().a;
+	if ( !it.right( FALSE ) )
+	    break;
+	if ( it.position().a != oldpar )
+	    txt += "</p><p>";
+	s = it.text();
+	if ( it.position().a == d->selend.a && it.position().b == d->selend.b )
+	    s = s.left( d->selend.c );
+    }
+    txt += formatDiff(this,pfmt,&ifmt);
+    return txt;
+}
+
+#ifndef QT_NO_CLIPBOARD
 /*!
   Copies the marked text to the clipboard.
 */
@@ -741,6 +857,7 @@ void QTextView::copy()
 	     this, SLOT(clipboardChanged()) );
 #endif
 }
+#endif
 
 /*!
   Selects all text.
@@ -749,8 +866,7 @@ void QTextView::selectAll()
 {
     QRichTextIterator it( richText() );
     d->selstart = it.position();
-    while ( it.right( FALSE ) )
-	;
+    while ( it.right( FALSE ) ) { }
     d->selend = it.position();
     viewport()->update();
     d->selection = TRUE;
@@ -768,9 +884,11 @@ void QTextView::viewportMouseMoveEvent( QMouseEvent* e)
 	if (d->dragselection ) {
 	    doSelection( e->pos() );
 	    ensureVisible( d->cursor.x(), d->cursor.y() );
+#ifndef QT_NO_DRAGANDDROP
 	} else if ( d->dragTimer->isActive() ) {
 	    d->dragTimer->stop();
 	    doStartDrag();
+#endif
 	}
     }
 }
@@ -806,15 +924,18 @@ void QTextView::keyPressEvent( QKeyEvent * e)
     case Key_PageDown:
 	scrollBy( 0, visibleHeight() );
 	break;
+#ifndef QT_NO_DRAGANDDROP
+    case Key_F16: // Copy key on Sun keyboards
+	copy();
+	break;
+#if defined (_WS_WIN_)
+    case Key_Insert:
+#endif
     case Key_C:
 	if ( e->state() & ControlButton )
 	    copy();
-#if defined (_WS_WIN_)
-    case Key_Insert:
-	if ( e->state() & ControlButton )
-	    copy();
-#endif
 	break;
+#endif
     default:
 	unknown++;
     }
@@ -848,7 +969,7 @@ Qt::TextFormat QTextView::textFormat() const
 /*!
   Sets the text format to \a format. Possible choices are
   <ul>
-  <li> \c PlainText - all characters are displayed verbatimely,
+  <li> \c PlainText - all characters are displayed verbatim,
   including all blanks and linebreaks.
   <li> \c RichText - rich text rendering. The available
   styles are defined in the default stylesheet
@@ -909,7 +1030,9 @@ void QTextView::showEvent( QShowEvent* )
 
 void QTextView::clearSelection()
 {
+#ifndef QT_NO_DRAGANDDROP
     d->dragTimer->stop();
+#endif
     if ( !d->selection )
 	return; // nothing to do
     d->selection = FALSE;
@@ -928,11 +1051,13 @@ void QTextView::clearSelection()
     }
 }
 
+#ifndef QT_NO_DRAGANDDROP
 void QTextView::doStartDrag()
 {
     QTextDrag* drag = new QTextDrag( selectedText(), this ) ;
     drag->drag();
 }
+#endif
 
 void QTextView::doAutoScroll()
 {
@@ -999,3 +1124,4 @@ void QTextView::focusInEvent( QFocusEvent * )
 void QTextView::focusOutEvent( QFocusEvent * )
 {
 }
+#endif  // QT_NO_TEXTVIEW

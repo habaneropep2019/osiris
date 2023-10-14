@@ -1,5 +1,5 @@
-.TH QNetworkProtocol 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QNetworkProtocol 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QNetworkProtocol \- This is the base class for network protocols which provides a common API for network protocols
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -16,7 +14,7 @@ QNetworkProtocol \- This is the base class for network protocols which provides 
 .PP
 Inherits QObject.
 .PP
-Inherited by QLocalFs.
+Inherited by QFtp and QLocalFs.
 .PP
 .SS "Public Members"
 .in +1c
@@ -33,16 +31,16 @@ Inherited by QLocalFs.
 .BI "enum \fBError\fR { NoError = 0, ErrValid, ErrUnknownProtocol, ErrUnsupported, ErrParse, ErrLoginIncorrect, ErrHostNotFound, ErrListChlidren, ErrMkdir, ErrRemove, ErrRename, ErrGet, ErrPut, ErrFileNotExisting, ErrPermissionDenied }"
 .br
 .ti -1c
-.BI "\fBQNetworkProtocol\fR ()"
+.BI "\fBQNetworkProtocol\fR () "
 .br
 .ti -1c
-.BI "virtual \fB~QNetworkProtocol\fR ()"
+.BI "virtual \fB~QNetworkProtocol\fR () "
 .br
 .ti -1c
-.BI "virtual void \fBsetUrl\fR ( QUrlOperator * u )"
+.BI "virtual void \fBsetUrl\fR ( QUrlOperator * u ) "
 .br
 .ti -1c
-.BI "virtual void \fBsetAutoDelete\fR ( bool " "b" ", int " "i" " = 10000 )"
+.BI "virtual void \fBsetAutoDelete\fR ( bool " "b" ", int " "i" " = 10000 ) "
 .br
 .ti -1c
 .BI "bool \fBautoDelete\fR () const"
@@ -51,7 +49,7 @@ Inherited by QLocalFs.
 .BI "virtual int \fBsupportedOperations\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBaddOperation\fR ( QNetworkOperation * op )"
+.BI "virtual void \fBaddOperation\fR ( QNetworkOperation * op ) "
 .br
 .ti -1c
 .BI "QUrlOperator* \fBurl\fR () const"
@@ -60,55 +58,55 @@ Inherited by QLocalFs.
 .BI "QNetworkOperation* \fBoperationInProgress\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBclearOperationQueue\fR ()"
+.BI "virtual void \fBclearOperationQueue\fR () "
 .br
 .ti -1c
-.BI "virtual void \fBstop\fR ()"
+.BI "virtual void \fBstop\fR () "
 .br
 .in -1c
 .SS "Signals"
 .in +1c
 .ti -1c
-.BI "void \fBdata\fR ( const QByteArray &, QNetworkOperation * res )"
+.BI "void \fBdata\fR ( const QByteArray &, QNetworkOperation * res ) "
 .br
 .ti -1c
-.BI "void \fBconnectionStateChanged\fR ( int " "state" ", const QString & data )"
+.BI "void \fBconnectionStateChanged\fR ( int " "state" ", const QString & data ) "
 .br
 .ti -1c
-.BI "void \fBfinished\fR ( QNetworkOperation * res )"
+.BI "void \fBfinished\fR ( QNetworkOperation * res ) "
 .br
 .ti -1c
-.BI "void \fBstart\fR ( QNetworkOperation * res )"
+.BI "void \fBstart\fR ( QNetworkOperation * res ) "
 .br
 .ti -1c
-.BI "void \fBnewChildren\fR ( const QValueList<QUrlInfo> &, QNetworkOperation * res )"
+.BI "void \fBnewChildren\fR ( const QValueList<QUrlInfo> &, QNetworkOperation * res ) "
 .br
 .ti -1c
-.BI "void \fBnewChild\fR ( const QUrlInfo &, QNetworkOperation * res )"
+.BI "void \fBnewChild\fR ( const QUrlInfo &, QNetworkOperation * res ) "
 .br
 .ti -1c
-.BI "void \fBcreatedDirectory\fR ( const QUrlInfo &, QNetworkOperation * res )"
+.BI "void \fBcreatedDirectory\fR ( const QUrlInfo &, QNetworkOperation * res ) "
 .br
 .ti -1c
-.BI "void \fBremoved\fR ( QNetworkOperation * res )"
+.BI "void \fBremoved\fR ( QNetworkOperation * res ) "
 .br
 .ti -1c
-.BI "void \fBitemChanged\fR ( QNetworkOperation * res )"
+.BI "void \fBitemChanged\fR ( QNetworkOperation * res ) "
 .br
 .ti -1c
-.BI "void \fBdataTransferProgress\fR ( int " "bytesDone" ", int " "bytesTotal" ", QNetworkOperation * res )"
+.BI "void \fBdataTransferProgress\fR ( int " "bytesDone" ", int " "bytesTotal" ", QNetworkOperation * res ) "
 .br
 .in -1c
 .SS "Static Public Members"
 .in +1c
 .ti -1c
-.BI "void \fBregisterNetworkProtocol\fR ( const QString & " "protocol" ", QNetworkProtocolFactoryBase * protocolFactory )"
+.BI "void \fBregisterNetworkProtocol\fR ( const QString & " "protocol" ", QNetworkProtocolFactoryBase * protocolFactory ) "
 .br
 .ti -1c
-.BI "QNetworkProtocol* \fBgetNetworkProtocol\fR ( const QString & protocol )"
+.BI "QNetworkProtocol* \fBgetNetworkProtocol\fR ( const QString & protocol ) "
 .br
 .ti -1c
-.BI "bool \fBhasOnlyLocalFileSystem\fR ()"
+.BI "bool \fBhasOnlyLocalFileSystem\fR () "
 .br
 .in -1c
 .SS "Protected Members"
@@ -117,25 +115,25 @@ Inherited by QLocalFs.
 .BI "virtual void \fBprocessOperation\fR ( QNetworkOperation * op ) (internal)"
 .br
 .ti -1c
-.BI "virtual void \fBoperationListChildren\fR ( QNetworkOperation * op )"
+.BI "virtual void \fBoperationListChildren\fR ( QNetworkOperation * op ) "
 .br
 .ti -1c
-.BI "virtual void \fBoperationMkDir\fR ( QNetworkOperation * op )"
+.BI "virtual void \fBoperationMkDir\fR ( QNetworkOperation * op ) "
 .br
 .ti -1c
-.BI "virtual void \fBoperationRemove\fR ( QNetworkOperation * op )"
+.BI "virtual void \fBoperationRemove\fR ( QNetworkOperation * op ) "
 .br
 .ti -1c
-.BI "virtual void \fBoperationRename\fR ( QNetworkOperation * op )"
+.BI "virtual void \fBoperationRename\fR ( QNetworkOperation * op ) "
 .br
 .ti -1c
-.BI "virtual void \fBoperationGet\fR ( QNetworkOperation * op )"
+.BI "virtual void \fBoperationGet\fR ( QNetworkOperation * op ) "
 .br
 .ti -1c
-.BI "virtual void \fBoperationPut\fR ( QNetworkOperation * op )"
+.BI "virtual void \fBoperationPut\fR ( QNetworkOperation * op ) "
 .br
 .ti -1c
-.BI "virtual bool \fBcheckConnection\fR ( QNetworkOperation * op )"
+.BI "virtual bool \fBcheckConnection\fR ( QNetworkOperation * op ) "
 .br
 .in -1c
 .SH DESCRIPTION
@@ -160,7 +158,7 @@ When the connection state of a network protocol changes, it emits the signal con
 .SH "QNetworkProtocol::Error"
 When an operation failed (finished without success) the QNetworkOperation of the operation returns an error code, which is one of following values:
 .TP
-\fCNoError\fR - No error occured
+\fCNoError\fR - No error occurred
 .TP
 \fCErrValid\fR - The URL you are operating on is not valid
 .TP
@@ -174,17 +172,17 @@ When an operation failed (finished without success) the QNetworkOperation of the
 .TP
 \fCErrHostNotFound\fR - The specified host (in the URL) couldn´t be found
 .TP
-\fCErrListChlidren\fR - An error occured while listing the children
+\fCErrListChlidren\fR - An error occurred while listing the children
 .TP
-\fCErrMkdir\fR - An error occured when creating a directory
+\fCErrMkdir\fR - An error occurred when creating a directory
 .TP
-\fCErrRemove\fR - An error occured while removing a child
+\fCErrRemove\fR - An error occurred while removing a child
 .TP
-\fCErrRename\fR - An error occured while renaming a child
+\fCErrRename\fR - An error occurred while renaming a child
 .TP
-\fCErrGet\fR - An error occured while getting (retrieving) data
+\fCErrGet\fR - An error occurred while getting (retrieving) data
 .TP
-\fCErrPut\fR - An error occured while putting (uploading) data
+\fCErrPut\fR - An error occurred while putting (uploading) data
 .TP
 \fCErrFileNotExisting\fR - A file which is needed by the operation doesn't exist
 .TP
@@ -194,7 +192,7 @@ When implementing custom network protocols, you should also use these values of 
 .SH "QNetworkProtocol::Operation"
 This enum lists all possible operations which a network protocol can support. supportedOperations() returns an int which is or'd together of these values, also the type() or a QNetworkOperation is always one of these values.
 .TP
-\fCOpListChildren\fR - Listing the childrens of a URL, e.g. of a directory
+\fCOpListChildren\fR - Listing the children of a URL, e.g. of a directory
 .TP
 \fCOpMkdir\fR - Create a directory
 .TP
@@ -214,7 +212,7 @@ This enum contains the state which a QNetworkOperation can have:
 .TP
 \fCStDone\fR - The operation has been processed succesfully
 .TP
-\fCStFailed\fR - The operation has been processed but an error occured
+\fCStFailed\fR - The operation has been processed but an error occurred
 .TP
 \fCStStopped\fR - The operation has been processed but has been stopped before it finished
 .SH MEMBER FUNCTION DOCUMENTATION
@@ -227,15 +225,17 @@ Adds the operation \fIop\fR the operation queue. The operation will be processed
 .SH "bool QNetworkProtocol::autoDelete () const"
 Returns TRUE, of autodeleting is enabled, else FALSE.
 .PP
-See also: QNetworkProtocol::setAutoDelete().
+See also QNetworkProtocol::setAutoDelete().
 .SH "bool QNetworkProtocol::checkConnection ( QNetworkOperation * ) \fC[virtual protected]\fR"
 For processing operations the newtork protocol baseclass calls this method quite often. This should be reimplemented by new network protocols. It should return TRUE, if the connection is ok (open), else FALSE. If the connection is not open, the protocol should open it.
 .PP
 If the connection can't be opened (e.g. because you already tried it, but the host couldn't be found or something like that), set the state of \fIop\fR to QNetworkProtocol::StFailed and emit the finished() signal with this QNetworkOperation as argument.
 .PP
 \fIop\fR is the operation which needs an open connection.
+.PP
+Reimplemented in QFtp.
 .SH "void QNetworkProtocol::clearOperationQueue () \fC[virtual]\fR"
-Clears the opeartion queue.
+Clears the operation queue.
 .SH "void QNetworkProtocol::connectionStateChanged ( int state, const QString & data ) \fC[signal]\fR"
 This signal is emitted whenever the state of the connection of the network protocol is changed. \fIstate\fR describes the new state, which is one of ConHostFound, ConConnected, ConClosed \fIdata\fR is a message text.
 .SH "void QNetworkProtocol::createdDirectory ( const QUrlInfo & i, QNetworkOperation * op ) \fC[signal]\fR"
@@ -243,7 +243,7 @@ This signal is emitted when mkdir() has been succesful and the directory has bee
 .PP
 When a protocol emits this signal, QNetworkProtocol is smart enough to let the QUrlOperator, which is used by the network protocol, emit its corresponding signal.
 .SH "void QNetworkProtocol::data ( const QByteArray & data, QNetworkOperation * op ) \fC[signal]\fR"
-This signal is emitted when new \fIdata\fR has been received after e.g. calling get() or put(). \\op holds the name of the file which data is retrieved in the first argument and the data in the second argument (raw). You get them with op->arg( 0 ) and op->rawArg( 1 ).
+This signal is emitted when new \fIdata\fR has been received after e.g. calling get() or put(). \fIop\fR holds the name of the file which data is retrieved in the first argument and the data in the second argument (raw). You get them with op->arg( 0 ) and op->rawArg( 1 ).
 .PP
 \fIop\fR is the pointer to the operation object, which contains all infos of the operation, including the state and so on.
 .PP
@@ -265,7 +265,7 @@ This returns now either NULL, if no protocol for ftp was registered, or a pointe
 .PP
 Normally you should not work directly with network protocols, so you will not need to call this method yourself. Rather use the QUrlOperator, which makes working with network protocols much more convenient.
 .PP
-See also: QUrlOperator.
+See also QUrlOperator.
 .SH "bool QNetworkProtocol::hasOnlyLocalFileSystem () \fC[static]\fR"
 Returns TRUE, if only a protocol for working on the local filesystem is registered, or FALSE if also other network protocols are registered.
 .SH "void QNetworkProtocol::itemChanged ( QNetworkOperation * op ) \fC[signal]\fR"
@@ -323,13 +323,13 @@ This signal is emitted when remove() has been succesful and the file has been re
 .PP
 When a protocol emits this signal, QNetworkProtocol is smart enough to let the QUrlOperator, which is used by the network protocol, emit its corresponding signal.
 .SH "void QNetworkProtocol::setAutoDelete ( bool b, int i = 10000 ) \fC[virtual]\fR"
-Because it's sometimes hard to care about removing network protocol instances, QNetworkProtocol provides an autodelete meachnism. If you set \fIb\fR to TRUE, this network protocol instance gets removed after it has been \fIi\fR milliseconds inactive (this means \fIi\fR ms after the last operation has been processed). If you set \fIb\fR to FALSE, the autodelete mechanism is switched off.
+Because it's sometimes hard to care about removing network protocol instances, QNetworkProtocol provides an autodelete mechanism. If you set \fIb\fR to TRUE, this network protocol instance gets removed after it has been \fIi\fR milliseconds inactive (this means \fIi\fR ms after the last operation has been processed). If you set \fIb\fR to FALSE, the autodelete mechanism is switched off.
 .PP
 NOTE: If you switch on autodeleting, the QNetworkProtocol also deletes its QUrlOperator!.
 .SH "void QNetworkProtocol::setUrl ( QUrlOperator * u ) \fC[virtual]\fR"
 Sets the QUrlOperator, on which the protocol works.
 .PP
-See also: QUrlOperator.
+See also QUrlOperator.
 .SH "void QNetworkProtocol::start ( QNetworkOperation * op ) \fC[signal]\fR"
 Some operations (like listChildren()) emit this signal when they start processing the operation. \fIop\fR is the pointer to the operation object, which contains all infos of the operation, including the state and so on.
 .PP
@@ -345,7 +345,7 @@ For internal use only.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qnetworkprotocol.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

@@ -1,5 +1,5 @@
-.TH QDir 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QDir 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QDir \- Traverses directory structures and contents in a platform-independent way
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -23,25 +21,25 @@ QDir \- Traverses directory structures and contents in a platform-independent wa
 .BI "enum \fBSortSpec\fR { Name = 0x00, Time = 0x01, Size = 0x02, Unsorted = 0x03, SortByMask = 0x03, DirsFirst = 0x04, Reversed = 0x08, IgnoreCase = 0x10, DefaultSort = -1 }"
 .br
 .ti -1c
-.BI "\fBQDir\fR ()"
+.BI "\fBQDir\fR () "
 .br
 .ti -1c
-.BI "\fBQDir\fR ( const QString & " "path" ", const QString & nameFilter = QString::null, int sortSpec = Name | IgnoreCase, int " "filterSpec" " = All )"
+.BI "\fBQDir\fR ( const QString & " "path" ", const QString & nameFilter = QString::null, int sortSpec = Name | IgnoreCase, int " "filterSpec" " = All ) "
 .br
 .ti -1c
-.BI "\fBQDir\fR ( const QDir & )"
+.BI "\fBQDir\fR ( const QDir & ) "
 .br
 .ti -1c
-.BI "virtual \fB~QDir\fR ()"
+.BI "virtual \fB~QDir\fR () "
 .br
 .ti -1c
-.BI "QDir& \fBoperator=\fR ( const QDir & )"
+.BI "QDir& \fBoperator=\fR ( const QDir & ) "
 .br
 .ti -1c
-.BI "QDir& \fBoperator=\fR ( const QString & path )"
+.BI "QDir& \fBoperator=\fR ( const QString & path ) "
 .br
 .ti -1c
-.BI "virtual void \fBsetPath\fR ( const QString & path )"
+.BI "virtual void \fBsetPath\fR ( const QString & path ) "
 .br
 .ti -1c
 .BI "virtual QString \fBpath\fR () const"
@@ -62,34 +60,34 @@ QDir \- Traverses directory structures and contents in a platform-independent wa
 .BI "virtual QString \fBabsFilePath\fR ( const QString & " "fileName" ", bool " "acceptAbsPath" " = TRUE ) const"
 .br
 .ti -1c
-.BI "virtual bool \fBcd\fR ( const QString & " "dirName" ", bool " "acceptAbsPath" " = TRUE )"
+.BI "virtual bool \fBcd\fR ( const QString & " "dirName" ", bool " "acceptAbsPath" " = TRUE ) "
 .br
 .ti -1c
-.BI "virtual bool \fBcdUp\fR ()"
+.BI "virtual bool \fBcdUp\fR () "
 .br
 .ti -1c
 .BI "QString \fBnameFilter\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetNameFilter\fR ( const QString & nameFilter )"
+.BI "virtual void \fBsetNameFilter\fR ( const QString & nameFilter ) "
 .br
 .ti -1c
 .BI "FilterSpec \fBfilter\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetFilter\fR ( int filterSpec )"
+.BI "virtual void \fBsetFilter\fR ( int filterSpec ) "
 .br
 .ti -1c
 .BI "SortSpec \fBsorting\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetSorting\fR ( int sortSpec )"
+.BI "virtual void \fBsetSorting\fR ( int sortSpec ) "
 .br
 .ti -1c
 .BI "bool \fBmatchAllDirs\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetMatchAllDirs\fR ( bool )"
+.BI "virtual void \fBsetMatchAllDirs\fR ( bool ) "
 .br
 .ti -1c
 .BI "uint \fBcount\fR () const"
@@ -134,7 +132,7 @@ QDir \- Traverses directory structures and contents in a platform-independent wa
 .BI "virtual bool \fBisRelative\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBconvertToAbs\fR ()"
+.BI "virtual void \fBconvertToAbs\fR () "
 .br
 .ti -1c
 .BI "virtual bool \fBoperator==\fR ( const QDir & ) const"
@@ -143,58 +141,58 @@ QDir \- Traverses directory structures and contents in a platform-independent wa
 .BI "virtual bool \fBoperator!=\fR ( const QDir & ) const"
 .br
 .ti -1c
-.BI "virtual bool \fBremove\fR ( const QString & " "fileName" ", bool " "acceptAbsPath" " = TRUE )"
+.BI "virtual bool \fBremove\fR ( const QString & " "fileName" ", bool " "acceptAbsPath" " = TRUE ) "
 .br
 .ti -1c
-.BI "virtual bool \fBrename\fR ( const QString & " "name" ", const QString & " "newName" ", bool " "acceptAbsPaths" " = TRUE )"
+.BI "virtual bool \fBrename\fR ( const QString & " "name" ", const QString & " "newName" ", bool " "acceptAbsPaths" " = TRUE ) "
 .br
 .ti -1c
-.BI "virtual bool \fBexists\fR ( const QString & " "name" ", bool " "acceptAbsPath" " = TRUE )"
+.BI "virtual bool \fBexists\fR ( const QString & " "name" ", bool " "acceptAbsPath" " = TRUE ) "
 .br
 .in -1c
 .SS "Static Public Members"
 .in +1c
 .ti -1c
-.BI "QString \fBconvertSeparators\fR ( const QString & pathName )"
+.BI "QString \fBconvertSeparators\fR ( const QString & pathName ) "
 .br
 .ti -1c
-.BI "const QFileInfoList* \fBdrives\fR ()"
+.BI "const QFileInfoList* \fBdrives\fR () "
 .br
 .ti -1c
-.BI "char \fBseparator\fR ()"
+.BI "char \fBseparator\fR () "
 .br
 .ti -1c
-.BI "bool \fBsetCurrent\fR ( const QString & path )"
+.BI "bool \fBsetCurrent\fR ( const QString & path ) "
 .br
 .ti -1c
-.BI "QDir \fBcurrent\fR ()"
+.BI "QDir \fBcurrent\fR () "
 .br
 .ti -1c
-.BI "QDir \fBhome\fR ()"
+.BI "QDir \fBhome\fR () "
 .br
 .ti -1c
-.BI "QDir \fBroot\fR ()"
+.BI "QDir \fBroot\fR () "
 .br
 .ti -1c
-.BI "QString \fBcurrentDirPath\fR ()"
+.BI "QString \fBcurrentDirPath\fR () "
 .br
 .ti -1c
-.BI "QString \fBhomeDirPath\fR ()"
+.BI "QString \fBhomeDirPath\fR () "
 .br
 .ti -1c
-.BI "QString \fBrootDirPath\fR ()"
+.BI "QString \fBrootDirPath\fR () "
 .br
 .ti -1c
-.BI "bool \fBmatch\fR ( const QStringList & " "filters" ", const QString & fileName )"
+.BI "bool \fBmatch\fR ( const QStringList & " "filters" ", const QString & fileName ) "
 .br
 .ti -1c
-.BI "bool \fBmatch\fR ( const QString & " "filter" ", const QString & fileName )"
+.BI "bool \fBmatch\fR ( const QString & " "filter" ", const QString & fileName ) "
 .br
 .ti -1c
-.BI "QString \fBcleanDirPath\fR ( const QString & dirPath )"
+.BI "QString \fBcleanDirPath\fR ( const QString & dirPath ) "
 .br
 .ti -1c
-.BI "bool \fBisRelativePath\fR ( const QString & path )"
+.BI "bool \fBisRelativePath\fR ( const QString & path ) "
 .br
 .in -1c
 .SH DESCRIPTION
@@ -344,7 +342,7 @@ You can only specify one of the first four. If you specify both \fCDirsFirst\fR 
 .SH "QDir::QDir ()"
 Constructs a QDir pointing to the current directory.
 .PP
-See also: currentDirPath().
+See also currentDirPath().
 .SH "QDir::QDir ( const QString & path, const QString & nameFilter = QString::null, int sortSpec = Name | IgnoreCase, int filterSpec = All )"
 Constructs a QDir.
 .PP
@@ -376,11 +374,11 @@ If \fIpath\fR is "" or null, the directory is set to "." (the current directory)
 .PP
 No check is made to ensure that the directory exists.
 .PP
-See also: exists(), setPath(), setNameFilter(), setFilter() and setSorting().
+See also exists(), setPath(), setNameFilter(), setFilter() and setSorting().
 .SH "QDir::QDir ( const QDir & d )"
 Constructs a QDir that is a copy of the given directory.
 .PP
-See also: operator=().
+See also operator=().
 .SH "QDir::~QDir () \fC[virtual]\fR"
 Destructs the QDir and cleans up.
 .SH "QString QDir::absFilePath ( const QString & fileName, bool acceptAbsPath = TRUE ) const \fC[virtual]\fR"
@@ -388,17 +386,17 @@ Returns the absolute path name of a file in the directory. Does NOT check if the
 .PP
 If \fIacceptAbsPath\fR is TRUE a \fIfileName\fR starting with a separator ('/') will be returned without change. if \fIacceptAbsPath\fR is FALSE an absolute path will be appended to the directory path.
 .PP
-See also: filePath().
+See also filePath().
 .SH "QString QDir::absPath () const \fC[virtual]\fR"
 Returns the absolute (a path that starts with '/') path, which may contain symbolic links, but never contains redundant ".", ".." or multiple separators.
 .PP
-See also: setPath(), canonicalPath(), exists(), cleanDirPath(), dirName() and absFilePath().
+See also setPath(), canonicalPath(), exists(), cleanDirPath(), dirName() and absFilePath().
 .SH "QString QDir::canonicalPath () const \fC[virtual]\fR"
 Returns the canonical path, i.e. a path without symbolic links or redundant "." or ".." elements.
 .PP
 On systems that do not have symbolic links this function will always return the same string that absPath returns. If the canonical path does not exist (normally due to dangling symbolic links) canonicalPath() returns a null string.
 .PP
-See also: path(), absPath(), exists(), cleanDirPath(), dirName(), absFilePath() and QString::isNull().
+See also path(), absPath(), exists(), cleanDirPath(), dirName(), absFilePath() and QString::isNull().
 .SH "bool QDir::cd ( const QString & dirName, bool acceptAbsPath = TRUE ) \fC[virtual]\fR"
 Changes directory by descending into the given directory. Returns TRUE if the new directory exists and is readable. Note that the logical cd operation is NOT performed if the new directory does not exist.
 .PP
@@ -455,19 +453,19 @@ Example:
 .PP
 Calling cd( ".." ) is equivalent to calling cdUp().
 .PP
-See also: cdUp(), isReadable(), exists() and path().
+See also cdUp(), isReadable(), exists() and path().
 .SH "bool QDir::cdUp () \fC[virtual]\fR"
 Changes directory by moving one directory up the path followed to arrive at the current directory.
 .PP
 Returns TRUE if the new directory exists and is readable. Note that the logical cdUp() operation is not performed if the new directory does not exist.
 .PP
-See also: cd(), isReadable(), exists() and path().
+See also cd(), isReadable(), exists() and path().
 .SH "QString QDir::cleanDirPath ( const QString & filePath ) \fC[static]\fR"
 Removes all multiple directory separators ('/') and resolves any "." or ".." found in the path.
 .PP
 Symbolic links are kept. This function does not return the canonical path, but rather the most simplified version of the input. "../stuff" becomes "stuff", "stuff/../nonsense" becomes "nonsense" and "\\\\stuff\\\\more\\\\..\\\\nonsense" becomes "\\\\stuff\\\\nonsense".
 .PP
-See also: absPath() and canonicalPath().
+See also absPath() and canonicalPath().
 .SH "QString QDir::convertSeparators ( const QString & pathName ) \fC[static]\fR"
 Converts the '/' separators in \fIpathName\fR to system native separators. Returns the translated string.
 .PP
@@ -477,25 +475,25 @@ No conversion is done on UNIX.
 .SH "void QDir::convertToAbs () \fC[virtual]\fR"
 Converts the directory path to an absolute path. If it is already absolute nothing is done.
 .PP
-See also: isRelative().
+See also isRelative().
 .SH "uint QDir::count () const"
 Returns the number of files that was found. Equivalent to entryList().count().
 .PP
-See also: operator[]() and entryList().
+See also operator[]() and entryList().
 .SH "QDir QDir::current () \fC[static]\fR"
 Returns the current directory.
 .PP
-See also: currentDirPath() and QDir::QDir().
+See also currentDirPath() and QDir::QDir().
 .SH "QString QDir::currentDirPath () \fC[static]\fR"
 Returns the absolute path of the current directory.
 .PP
-See also: current().
+See also current().
 .SH "QString QDir::dirName () const \fC[virtual]\fR"
 Returns the name of the directory, this is NOT the same as the path, e.g. a directory with the name "mail", might have the path "/var/spool/mail". If the directory has no name (e.g. the root directory) a null string is returned.
 .PP
 No check is made to ensure that a directory with this name actually exists.
 .PP
-See also: path(), absPath(), absFilePath(), exists() and QString::isNull().
+See also path(), absPath(), absFilePath(), exists() and QString::isNull().
 .SH "const QFileInfoList * QDir::drives () \fC[static]\fR"
 Returns a list of the root directories on this system. On win32, this returns a number of QFileInfo objects containing "C:/", "D:/" etc. On other operating systems, it returns a list containing just one root directory (e.g. "/").
 .PP
@@ -517,7 +515,7 @@ Returns 0 if the directory is unreadable or does not exist.
 .PP
 The returned pointer is a const pointer to a QFileInfoList. The list is owned by the QDir object and will be reused on the next call to entryInfoList() for the same QDir instance. If you want to keep the entries of the list after a subsequent call to this function you will need to copy them.
 .PP
-See also: entryList(), setNameFilter(), setSorting() and setFilter().
+See also entryList(), setNameFilter(), setSorting() and setFilter().
 .SH "const QFileInfoList * QDir::entryInfoList ( int filterSpec = DefaultFilter, int sortSpec = DefaultSort ) const \fC[virtual]\fR"
 Returns a list of QFileInfo objects for all files and directories in the directory pointed to using the setSorting(), setFilter() and setNameFilter() specifications.
 .PP
@@ -527,7 +525,7 @@ Returns 0 if the directory is unreadable or does not exist.
 .PP
 The returned pointer is a const pointer to a QFileInfoList. The list is owned by the QDir object and will be reused on the next call to entryInfoList() for the same QDir instance. If you want to keep the entries of the list after a subsequent call to this function you will need to copy them.
 .PP
-See also: entryList(), setNameFilter(), setSorting() and setFilter().
+See also entryList(), setNameFilter(), setSorting() and setFilter().
 .SH "QStringList QDir::entryList ( const QString & nameFilter, int filterSpec = DefaultFilter, int sortSpec = DefaultSort ) const \fC[virtual]\fR"
 Returns a list of the names of all files and directories in the directory indicated by the setSorting(), setFilter() and setNameFilter() specifications.
 .PP
@@ -535,7 +533,7 @@ The the filter and sorting specifications can be overridden using the \fInameFil
 .PP
 Returns and empty list if the directory is unreadable or does not exist.
 .PP
-See also: entryInfoList(), setNameFilter(), setSorting(), setFilter() and encodedEntryList().
+See also entryInfoList(), setNameFilter(), setSorting(), setFilter() and encodedEntryList().
 .SH "QStringList QDir::entryList ( int filterSpec = DefaultFilter, int sortSpec = DefaultSort ) const \fC[virtual]\fR"
 Returns a list of the names of all files and directories in the directory indicated by the setSorting(), setFilter() and setNameFilter() specifications.
 .PP
@@ -543,11 +541,11 @@ The the filter and sorting specifications can be overridden using the \fIfilterS
 .PP
 Returns an empty list if the directory is unreadable or does not exist.
 .PP
-See also: entryInfoList(), setNameFilter(), setSorting(), setFilter() and encodedEntryList().
+See also entryInfoList(), setNameFilter(), setSorting(), setFilter() and encodedEntryList().
 .SH "bool QDir::exists () const \fC[virtual]\fR"
 Returns TRUE if the directory exists. (If a file with the same name is found this function will of course return FALSE).
 .PP
-See also: QFileInfo::exists() and QFile::exists().
+See also QFileInfo::exists() and QFile::exists().
 .SH "bool QDir::exists ( const QString & name, bool acceptAbsPath = TRUE ) \fC[virtual]\fR"
 Checks for existence of a file.
 .PP
@@ -555,41 +553,41 @@ If \fIacceptAbsPaths\fR is TRUE a path starting with a separator ('/') will chec
 .PP
 Returns TRUE if the file exists, otherwise FALSE.
 .PP
-See also: QFileInfo::exists() and QFile::exists().
+See also QFileInfo::exists() and QFile::exists().
 .SH "QString QDir::filePath ( const QString & fileName, bool acceptAbsPath = TRUE ) const \fC[virtual]\fR"
 Returns the path name of a file in the directory. Does NOT check if the file actually exists in the directory. If the QDir is relative the returned path name will also be relative. Redundant multiple separators or "." and ".." directories in \fIfileName\fR will not be removed (see cleanDirPath()).
 .PP
 If \fIacceptAbsPath\fR is TRUE a \fIfileName\fR starting with a separator ('/') will be returned without change. If \fIacceptAbsPath\fR is FALSE an absolute path will be appended to the directory path.
 .PP
-See also: absFilePath(), isRelative() and canonicalPath().
+See also absFilePath(), isRelative() and canonicalPath().
 .SH "QDir::FilterSpec QDir::filter() const"
 Returns the value set by setFilter()
 .PP
-See also: setFilter().
+See also setFilter().
 .SH "QDir QDir::home () \fC[static]\fR"
 Returns the home directory.
 .PP
-See also: homeDirPath().
+See also homeDirPath().
 .SH "QString QDir::homeDirPath () \fC[static]\fR"
 Returns the absolute path for the user's home directory,
 .PP
-See also: home().
+See also home().
 .SH "bool QDir::isReadable () const \fC[virtual]\fR"
 Returns TRUE if the directory is readable AND we can open files by name. This function will return FALSE if only one of these is present.
 .PP
 \fBWarning:\fR A FALSE value from this function is not a guarantee that files in the directory are not accessible.
 .PP
-See also: QFileInfo::isReadable().
+See also QFileInfo::isReadable().
 .SH "bool QDir::isRelative () const \fC[virtual]\fR"
 Returns TRUE if the directory path is relative to the current directory, FALSE if the path is absolute (e.g. under UNIX a path is relative if it does not start with a '/').
 .PP
 According to Einstein this function should always return TRUE.
 .PP
-See also: convertToAbs().
+See also convertToAbs().
 .SH "bool QDir::isRelativePath ( const QString & path ) \fC[static]\fR"
 Returns TRUE if the path is relative, FALSE if it is absolute.
 .PP
-See also: isRelative().
+See also isRelative().
 .SH "bool QDir::isRoot () const \fC[virtual]\fR"
 Returns TRUE if the directory is the root directory, otherwise FALSE.
 .PP
@@ -608,19 +606,19 @@ Example:
         qWarning( "It IS a root link!" );
 .fi
 .PP
-See also: root() and rootDirPath().
+See also root() and rootDirPath().
 .SH "bool QDir::match ( const QString & filter, const QString & fileName ) \fC[static]\fR"
-Returns TRUE if the \fIfileName\fR matches the wildcard \fIfilter. Filter\fR may also contain multiple wildcards speprated by spaces or semiclolons.
+Returns TRUE if the \fIfileName\fR matches the wildcard \fIfilter. Filter\fR may also contain multiple wildcards separated by spaces or semicolons.
 .PP
-See also: QRegExp.
+See also QRegExp.
 .SH "bool QDir::match ( const QStringList & filters, const QString & fileName ) \fC[static]\fR"
 Returns TRUE if the \fIfileName\fR matches one of the wildcards in the list \fIfilters.\fR
 .PP
-See also: QRegExp.
+See also QRegExp.
 .SH "bool QDir::matchAllDirs () const"
 Returns the value set by setMatchAllDirs()
 .PP
-See also: setMatchAllDirs().
+See also setMatchAllDirs().
 .SH "bool QDir::mkdir ( const QString & dirName, bool acceptAbsPath = TRUE ) const \fC[virtual]\fR"
 Creates a directory.
 .PP
@@ -628,11 +626,11 @@ If \fIacceptAbsPath\fR is TRUE a path starting with a separator ('/') will creat
 .PP
 Returns TRUE if successful, otherwise FALSE.
 .PP
-See also: rmdir().
+See also rmdir().
 .SH "QString QDir::nameFilter () const"
 Returns the string set by setNameFilter()
 .PP
-See also: setNameFilter().
+See also setNameFilter().
 .SH "bool QDir::operator!= ( const QDir & d ) const \fC[virtual]\fR"
 Returns TRUE if the \fId\fR and this dir have different path or different sort/filter settings, otherwise FALSE.
 .SH "QDir & QDir::operator= ( const QString & path )"
@@ -646,13 +644,13 @@ Returns the file name at position \fIindex\fR in the list of found file names. E
 .PP
 Returns null if the \fIindex\fR is out of range or if the entryList() function failed.
 .PP
-See also: count() and entryList().
+See also count() and entryList().
 .SH "QString QDir::path () const \fC[virtual]\fR"
 Returns the path, this may contain symbolic links, but never contains redundant ".", ".." or multiple separators.
 .PP
 The returned path can be either absolute or relative (see setPath()).
 .PP
-See also: setPath(), absPath(), exists(), cleanDirPath(), dirName(), absFilePath() and convertSeparators().
+See also setPath(), absPath(), exists(), cleanDirPath(), dirName(), absFilePath() and convertSeparators().
 .SH "bool QDir::remove ( const QString & fileName, bool acceptAbsPath = TRUE ) \fC[virtual]\fR"
 Removes a file.
 .PP
@@ -676,15 +674,15 @@ The directory must be empty for rmdir() to succeed.
 .PP
 Returns TRUE if successful, otherwise FALSE.
 .PP
-See also: mkdir().
+See also mkdir().
 .SH "QDir QDir::root () \fC[static]\fR"
 Returns the root directory.
 .PP
-See also: rootDirPath() and drives().
+See also rootDirPath() and drives().
 .SH "QString QDir::rootDirPath () \fC[static]\fR"
 Returns the absolute path for the root directory ("/" under UNIX).
 .PP
-See also: root() and drives().
+See also root() and drives().
 .SH "char QDir::separator () \fC[static]\fR"
 Returns the native directory separator; '/' under UNIX and '\\' under MS-DOS, Windows NT and OS/2.
 .PP
@@ -694,11 +692,11 @@ Sets the the current directory. Returns TRUE if successful.
 .SH "void QDir::setFilter ( int filterSpec ) \fC[virtual]\fR"
 Sets the filter used by entryList() and entryInfoList(). The filter is used to specify the kind of files that should be returned by entryList() and entryInfoList().
 .PP
-See also: nameFilter().
+See also nameFilter().
 .SH "void QDir::setMatchAllDirs ( bool enable ) \fC[virtual]\fR"
 If \fIenable\fR is TRUE, all directories will be listed (even if they do not match the filter or the name filter), otherwise only matched directories will be listed.
 .PP
-See also: matchAllDirs().
+See also matchAllDirs().
 .PP
 Bugs and limitations:
 .TP
@@ -708,13 +706,13 @@ Sets the name filter used by entryList() and entryInfoList().
 .PP
 The name filter is a wildcarding filter that understands "*" and "?" wildcards, You may specify several filter entries separated by a " " or a ";". If you want entryList() and entryInfoList() to list all files ending with ".cpp" and all files ending with ".h", you simply call dir.setNameFilter("*.cpp *.h") or dir.setNameFilter("*.cpp;*.h")
 .PP
-See also: nameFilter().
+See also nameFilter().
 .SH "void QDir::setPath ( const QString & path ) \fC[virtual]\fR"
 Sets the path of the directory. The path is cleaned of redundant ".", ".." and multiple separators. No check is made to ensure that a directory with this path exists.
 .PP
 The path can be either absolute or relative. Absolute paths begin with the directory separator ('/') or a drive specification (not applicable to UNIX). Relative file names begin with a directory name or a file name and specify a path relative to the current directory. An example of an absolute path is the string "/tmp/quartz", a relative path might look like "src/fatlib". You can use the function isRelative() to check if a QDir is using a relative or an absolute file path. You can call the function convertToAbs() to convert a relative QDir to an absolute one.
 .PP
-See also: path(), absPath(), exists, cleanDirPath(), dirName(), absFilePath(), isRelative() and convertToAbs().
+See also path(), absPath(), exists, cleanDirPath(), dirName(), absFilePath(), isRelative() and convertToAbs().
 .SH "void QDir::setSorting ( int sortSpec ) \fC[virtual]\fR"
 Sets the sorting order used by entryList() and entryInfoList().
 .PP
@@ -741,11 +739,11 @@ Ignore case when sorting by name.
 .SH "QDir::SortSpec QDir::sorting() const"
 Returns the value set by setSorting()
 .PP
-See also:  setSorting().
+See also  setSorting().
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qdir.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

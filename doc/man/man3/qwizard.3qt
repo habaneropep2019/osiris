@@ -1,5 +1,5 @@
-.TH QWizard 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QWizard 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QWizard \- Framework for easily writing wizards
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -19,22 +17,25 @@ Inherits QDialog.
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQWizard\fR ( QWidget * " "parent" "=0, const char * " "name" "=0, bool " "modal" "=FALSE, WFlags " "f" "=0 )"
+.BI "\fBQWizard\fR ( QWidget * " "parent" "=0, const char * " "name" "=0, bool " "modal" "=FALSE, WFlags " "f" "=0 ) "
 .br
 .ti -1c
-.BI "\fB~QWizard\fR ()"
+.BI "\fB~QWizard\fR () "
 .br
 .ti -1c
-.BI "virtual void \fBaddPage\fR ( QWidget *, const QString & )"
+.BI "virtual void \fBaddPage\fR ( QWidget *, const QString & ) "
 .br
 .ti -1c
-.BI "virtual void \fBremovePage\fR ( QWidget * )"
+.BI "virtual void \fBremovePage\fR ( QWidget * ) "
 .br
 .ti -1c
 .BI "QString \fBtitle\fR ( QWidget * ) const"
 .br
 .ti -1c
-.BI "virtual void \fBshowPage\fR ( QWidget * )"
+.BI "void \fBsetTitle\fR ( QWidget *, const QString & ) "
+.br
+.ti -1c
+.BI "virtual void \fBshowPage\fR ( QWidget * ) "
 .br
 .ti -1c
 .BI "QWidget* \fBcurrentPage\fR () const"
@@ -49,7 +50,7 @@ Inherits QDialog.
 .BI "virtual bool \fBappropriate\fR ( QWidget * ) const"
 .br
 .ti -1c
-.BI "virtual void \fBsetAppropriate\fR ( QWidget *, bool )"
+.BI "virtual void \fBsetAppropriate\fR ( QWidget *, bool ) "
 .br
 .ti -1c
 .BI "QPushButton* \fBbackButton\fR () const"
@@ -70,16 +71,16 @@ Inherits QDialog.
 .SS "Public Slots"
 .in +1c
 .ti -1c
-.BI "virtual void \fBsetBackEnabled\fR ( QWidget *, bool )"
+.BI "virtual void \fBsetBackEnabled\fR ( QWidget *, bool ) "
 .br
 .ti -1c
-.BI "virtual void \fBsetNextEnabled\fR ( QWidget *, bool )"
+.BI "virtual void \fBsetNextEnabled\fR ( QWidget *, bool ) "
 .br
 .ti -1c
-.BI "virtual void \fBsetFinishEnabled\fR ( QWidget *, bool )"
+.BI "virtual void \fBsetFinishEnabled\fR ( QWidget *, bool ) "
 .br
 .ti -1c
-.BI "virtual void \fBsetHelpEnabled\fR ( QWidget *, bool )"
+.BI "virtual void \fBsetHelpEnabled\fR ( QWidget *, bool ) "
 .br
 .ti -1c
 .BI "virtual void setFinish ( QWidget *, bool ) \fI(obsolete)\fR"
@@ -88,28 +89,31 @@ Inherits QDialog.
 .SS "Signals"
 .in +1c
 .ti -1c
-.BI "void \fBhelpClicked\fR ()"
+.BI "void \fBhelpClicked\fR () "
+.br
+.ti -1c
+.BI "void \fBselected\fR ( const QString & ) "
 .br
 .in -1c
 .SS "Protected Members"
 .in +1c
 .ti -1c
-.BI "virtual void \fBlayOutButtonRow\fR ( QHBoxLayout * )"
+.BI "virtual void \fBlayOutButtonRow\fR ( QHBoxLayout * ) "
 .br
 .ti -1c
-.BI "virtual void \fBlayOutTitleRow\fR ( QHBoxLayout *, const QString & )"
+.BI "virtual void \fBlayOutTitleRow\fR ( QHBoxLayout *, const QString & ) "
 .br
 .in -1c
 .SS "Protected Slots"
 .in +1c
 .ti -1c
-.BI "virtual void \fBback\fR ()"
+.BI "virtual void \fBback\fR () "
 .br
 .ti -1c
-.BI "virtual void \fBnext\fR ()"
+.BI "virtual void \fBnext\fR () "
 .br
 .ti -1c
-.BI "virtual void \fBhelp\fR ()"
+.BI "virtual void \fBhelp\fR () "
 .br
 .in -1c
 .SH DESCRIPTION
@@ -177,10 +181,12 @@ Returns a pointer to page a position \fIpos,\fR or 0 if \fIpos\fR is out of rang
 Returns the number of pages in the wizard.
 .SH "void QWizard::removePage ( QWidget * page ) \fC[virtual]\fR"
 Removes \fIpage\fR from this wizard. Does not delete \fIpage.\fR If \fIpage\fR is currently being displayed, QWizard will display something else.
+.SH "void QWizard::selected ( const QString & ) \fC[signal]\fR"
+This signal is emitted when the page changes, signalling the title of the page.
 .SH "void QWizard::setAppropriate ( QWidget * w, bool enable ) \fC[virtual]\fR"
 Sets whether it is appropriate for \fIw\fR to be displayed in the current context of the wizard.
 .PP
-See also: appropriate().
+See also appropriate().
 .SH "void QWizard::setBackEnabled ( QWidget * w, bool enable ) \fC[virtual slot]\fR"
 Enables or disables the "Back" button for pages \fIw\fR in the wizard. By default, all pages have this button.
 .SH "void QWizard::setFinish ( QWidget *, bool ) \fC[virtual slot]\fR"
@@ -195,18 +201,20 @@ Reimplemented from QWidget.
 Enables or disables the "Help" button for pages \fIw\fR in the wizard. By default, all pages have this button.
 .SH "void QWizard::setNextEnabled ( QWidget * w, bool enable ) \fC[virtual slot]\fR"
 Enables or disables the "Next" button for pages \fIw\fR in the wizard. By default, all pages have this button.
+.SH "void QWizard::setTitle ( QWidget * page, const QString & t )"
+Sets the title for the \fIpage\fR to \fItitle.\fR
 .SH "void QWizard::show () \fC[virtual]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .PP
 Reimplemented from QWidget.
 .SH "void QWizard::showPage ( QWidget * page ) \fC[virtual]\fR"
-Makes \fIpage\fR be the displayed page.
+Makes \fIpage\fR be the displayed page and emits the selected() signal.
 .SH "QString QWizard::title ( QWidget * page ) const"
 Returns the title of \fIpage.\fR
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qwizard.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

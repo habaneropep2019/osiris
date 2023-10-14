@@ -1,5 +1,5 @@
-.TH QImageDecoder 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QImageDecoder 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QImageDecoder \- Incremental image decoder for all supported image formats
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -17,34 +15,34 @@ QImageDecoder \- Incremental image decoder for all supported image formats
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQImageDecoder\fR ( QImageConsumer * c )"
+.BI "\fBQImageDecoder\fR ( QImageConsumer * c ) "
 .br
 .ti -1c
-.BI "\fB~QImageDecoder\fR ()"
+.BI "\fB~QImageDecoder\fR () "
 .br
 .ti -1c
-.BI "const QImage& \fBimage\fR ()"
+.BI "const QImage& \fBimage\fR () "
 .br
 .ti -1c
-.BI "int \fBdecode\fR ( const uchar * " "buffer" ", int length )"
+.BI "int \fBdecode\fR ( const uchar * " "buffer" ", int length ) "
 .br
 .in -1c
 .SS "Static Public Members"
 .in +1c
 .ti -1c
-.BI "const char* \fBformatName\fR ( const uchar * " "buffer" ", int length )"
+.BI "const char* \fBformatName\fR ( const uchar * " "buffer" ", int length ) "
 .br
 .ti -1c
-.BI "QImageFormatType* \fBformat\fR ( const char * name )"
+.BI "QImageFormatType* \fBformat\fR ( const char * name ) "
 .br
 .ti -1c
-.BI "QStrList \fBinputFormats\fR ()"
+.BI "QStrList \fBinputFormats\fR () "
 .br
 .ti -1c
-.BI "void \fBregisterDecoderFactory\fR ( QImageFormatType * )"
+.BI "void \fBregisterDecoderFactory\fR ( QImageFormatType * ) "
 .br
 .ti -1c
-.BI "void \fBunregisterDecoderFactory\fR ( QImageFormatType * )"
+.BI "void \fBunregisterDecoderFactory\fR ( QImageFormatType * ) "
 .br
 .in -1c
 .SH DESCRIPTION
@@ -63,7 +61,7 @@ Call this function to decode some data into image changes. The data will be deco
 .PP
 Returns the number of bytes consumed, 0 if consumption is complete, and -1 if decoding fails due to invalid data.
 .SH "QImageFormatType* QImageDecoder::format ( const char * name ) \fC[static]\fR"
-Returns a QImageFormatType by name. This might be used in cases where the user needs to force data to be interpretted as being in a certain format. \fIname\fR is one of the formats listed by QImageDecoder::inputFormats(). Note that you will still need to supply decodable data to result->decoderFor() before you can begin decoding the data.
+Returns a QImageFormatType by name. This might be used in cases where the user needs to force data to be interpreted as being in a certain format. \fIname\fR is one of the formats listed by QImageDecoder::inputFormats(). Note that you will still need to supply decodable data to result->decoderFor() before you can begin decoding the data.
 .SH "const char* QImageDecoder::formatName ( const uchar * buffer, int length ) \fC[static]\fR"
 Call this function to find the name of the format of the given header. The returned string is statically allocated.
 .PP
@@ -80,7 +78,7 @@ application code as factories call this themselves.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qimagedecoder.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

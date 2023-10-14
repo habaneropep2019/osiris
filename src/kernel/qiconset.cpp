@@ -1,29 +1,44 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qiconset.cpp   2.1.1   edited 2000-03-24 $
+** $Id: qt/src/kernel/qiconset.cpp   2.2.0   edited 2000-08-25 $
 **
 ** Implementation of QIconSet class
 **
 ** Created : 980318
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the kernel module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #include "qiconset.h"
+
+#ifndef QT_NO_ICONSET
+
 #include "qimage.h"
 #include "qbitmap.h"
 #include "qapplication.h"
@@ -231,6 +246,17 @@ QIconSet::QIconSet( const QIconSet& other )
 	d->ref();
 }
 
+/*!  Creates an iconset which uses the pixmap \a smallPix for for
+  displaying small a small icon, and \a largePix for displaying a large
+  one.
+*/
+
+QIconSet::QIconSet( const QPixmap &smallPix, const QPixmap &largePix )
+{
+    d = 0;
+    reset( smallPix, Small );
+    reset( largePix, Large );
+}
 
 /*!
   Destructs the icon set and frees any allocated resources.
@@ -297,7 +323,9 @@ void QIconSet::reset( const QPixmap & pm, Size s )
   It may also use \a pm for deriving some other varieties if those
   are not set.
 
-  The \a size must be Large or Small; it cannot be Automatic.
+  The \a size can be one of Automatic, Large or Small.  If Automatic is used,
+  QIconSet will determine if the pixmap is Small or Large from its pixel size.
+  Pixmaps less than 23 pixels wide are considered to be Small.
 
   \sa reset()
 */
@@ -314,30 +342,42 @@ void QIconSet::setPixmap( const QPixmap & pm, Size size, Mode mode )
     } else {
 	d = new QIconSetPrivate;
     }
-    if ( size == Large ) {
+    if ( size == Large || (size == Automatic && pm.width() > 22)) {
 	switch( mode ) {
 	case Active:
-	    d->largeActive.pm = new QPixmap( pm );
+	    if ( !d->largeActive.pm )
+		d->largeActive.pm = new QPixmap();
+	    *d->largeActive.pm = pm;
 	    break;
 	case Disabled:
-	    d->largeDisabled.pm = new QPixmap( pm );
+	    if ( !d->largeDisabled.pm )
+		d->largeDisabled.pm = new QPixmap();
+	    *d->largeDisabled.pm = pm;
 	    break;
 	case Normal:
 	default:
-	    d->large.pm = new QPixmap( pm );
+	    if ( !d->large.pm )
+		d->large.pm = new QPixmap();
+	    *d->large.pm = pm;
 	    break;
 	}
-    } else if ( size == Small ) {
+    } else if ( size == Small  || (size == Automatic && pm.width() <= 22)) {
 	switch( mode ) {
 	case Active:
-	    d->smallActive.pm = new QPixmap( pm );
+	    if ( !d->smallActive.pm )
+		d->smallActive.pm = new QPixmap();
+	    *d->smallActive.pm = pm;
 	    break;
 	case Disabled:
-	    d->smallDisabled.pm = new QPixmap( pm );
+	    if ( !d->smallDisabled.pm )
+		d->smallDisabled.pm = new QPixmap();
+	    *d->smallDisabled.pm = pm;
 	    break;
 	case Normal:
 	default:
-	    d->small.pm = new QPixmap( pm );
+	    if ( !d->small.pm )
+		d->small.pm = new QPixmap();
+	    *d->small.pm = pm;
 	    break;
 	}
 #if defined(CHECK_RANGE)
@@ -354,7 +394,9 @@ void QIconSet::setPixmap( const QPixmap & pm, Size size, Mode mode )
   It may also use the pixmap for deriving some other varieties if those
   are not set.
 
-  The \a size must be Large or Small; it cannot be Automatic.
+  The \a size can be one of Automatic, Large or Small.  If Automatic is used,
+  QIconSet will determine if the pixmap is Small or Large from its pixel size.
+  Pixmaps less than 23 pixels wide are considered to be Small.
 */
 void QIconSet::setPixmap( const QString &fileName, Size s, Mode m )
 {
@@ -629,3 +671,5 @@ void QIconSet::detach()
     d->deref();
     d = p;
 }
+
+#endif // QT_NO_ICONSET

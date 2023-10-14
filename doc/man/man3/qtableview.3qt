@@ -1,5 +1,5 @@
-.TH QTableView 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QTableView 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QTableView \- This is an abstract base class for implementing tables
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -24,70 +22,70 @@ Inherited by QMultiLineEdit.
 .BI "virtual void \fBsetBackgroundColor\fR ( const QColor & ) (internal)"
 .br
 .ti -1c
-.BI "void \fBrepaint\fR ( bool " "erase" "=TRUE )"
+.BI "void \fBrepaint\fR ( bool " "erase" "=TRUE ) "
 .br
 .ti -1c
-.BI "void \fBrepaint\fR ( int " "x" ", int " "y" ", int " "w" ", int " "h" ", bool " "erase" "=TRUE )"
+.BI "void \fBrepaint\fR ( int " "x" ", int " "y" ", int " "w" ", int " "h" ", bool " "erase" "=TRUE ) "
 .br
 .ti -1c
-.BI "void \fBrepaint\fR ( const QRect &, bool " "erase" "=TRUE )"
+.BI "void \fBrepaint\fR ( const QRect &, bool " "erase" "=TRUE ) "
 .br
 .in -1c
 .SS "Protected Members"
 .in +1c
 .ti -1c
-.BI "\fBQTableView\fR ( QWidget * " "parent" "=0, const char * " "name" "=0, WFlags " "f" "=0 )"
+.BI "\fBQTableView\fR ( QWidget * " "parent" "=0, const char * " "name" "=0, WFlags " "f" "=0 ) "
 .br
 .ti -1c
-.BI "\fB~QTableView\fR ()"
+.BI "\fB~QTableView\fR () "
 .br
 .ti -1c
 .BI "int \fBnumRows\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetNumRows\fR ( int )"
+.BI "virtual void \fBsetNumRows\fR ( int ) "
 .br
 .ti -1c
 .BI "int \fBnumCols\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetNumCols\fR ( int )"
+.BI "virtual void \fBsetNumCols\fR ( int ) "
 .br
 .ti -1c
 .BI "int \fBtopCell\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetTopCell\fR ( int row )"
+.BI "virtual void \fBsetTopCell\fR ( int row ) "
 .br
 .ti -1c
 .BI "int \fBleftCell\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetLeftCell\fR ( int col )"
+.BI "virtual void \fBsetLeftCell\fR ( int col ) "
 .br
 .ti -1c
-.BI "virtual void \fBsetTopLeftCell\fR ( int " "row" ", int col )"
+.BI "virtual void \fBsetTopLeftCell\fR ( int " "row" ", int col ) "
 .br
 .ti -1c
 .BI "int \fBxOffset\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetXOffset\fR ( int )"
+.BI "virtual void \fBsetXOffset\fR ( int ) "
 .br
 .ti -1c
 .BI "int \fByOffset\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetYOffset\fR ( int )"
+.BI "virtual void \fBsetYOffset\fR ( int ) "
 .br
 .ti -1c
-.BI "virtual void \fBsetOffset\fR ( int " "x" ", int " "y" ", bool " "updateScrBars" " = TRUE )"
+.BI "virtual void \fBsetOffset\fR ( int " "x" ", int " "y" ", bool " "updateScrBars" " = TRUE ) "
 .br
 .ti -1c
-.BI "virtual int \fBcellWidth\fR ( int col )"
+.BI "virtual int \fBcellWidth\fR ( int col ) "
 .br
 .ti -1c
-.BI "virtual int \fBcellHeight\fR ( int row )"
+.BI "virtual int \fBcellHeight\fR ( int row ) "
 .br
 .ti -1c
 .BI "int \fBcellWidth\fR () const"
@@ -96,16 +94,16 @@ Inherited by QMultiLineEdit.
 .BI "int \fBcellHeight\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetCellWidth\fR ( int )"
+.BI "virtual void \fBsetCellWidth\fR ( int ) "
 .br
 .ti -1c
-.BI "virtual void \fBsetCellHeight\fR ( int )"
+.BI "virtual void \fBsetCellHeight\fR ( int ) "
 .br
 .ti -1c
-.BI "virtual int \fBtotalWidth\fR ()"
+.BI "virtual int \fBtotalWidth\fR () "
 .br
 .ti -1c
-.BI "virtual int \fBtotalHeight\fR ()"
+.BI "virtual int \fBtotalHeight\fR () "
 .br
 .ti -1c
 .BI "uint \fBtableFlags\fR () const"
@@ -114,19 +112,19 @@ Inherited by QMultiLineEdit.
 .BI "bool \fBtestTableFlags\fR ( uint f ) const"
 .br
 .ti -1c
-.BI "virtual void \fBsetTableFlags\fR ( uint f )"
+.BI "virtual void \fBsetTableFlags\fR ( uint f ) "
 .br
 .ti -1c
-.BI "void \fBclearTableFlags\fR ( uint f = ~0 )"
+.BI "void \fBclearTableFlags\fR ( uint f = ~0 ) "
 .br
 .ti -1c
 .BI "bool \fBautoUpdate\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetAutoUpdate\fR ( bool )"
+.BI "virtual void \fBsetAutoUpdate\fR ( bool ) "
 .br
 .ti -1c
-.BI "void \fBupdateCell\fR ( int " "row" ", int " "column" ", bool " "erase" "=TRUE )"
+.BI "void \fBupdateCell\fR ( int " "row" ", int " "column" ", bool " "erase" "=TRUE ) "
 .br
 .ti -1c
 .BI "QRect \fBcellUpdateRect\fR () const"
@@ -153,13 +151,13 @@ Inherited by QMultiLineEdit.
 .BI "QScrollBar* \fBhorizontalScrollBar\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBpaintCell\fR ( QPainter *, int " "row" ", int col )"
+.BI "virtual void \fBpaintCell\fR ( QPainter *, int " "row" ", int col ) "
 .br
 .ti -1c
-.BI "virtual void \fBsetupPainter\fR ( QPainter * )"
+.BI "virtual void \fBsetupPainter\fR ( QPainter * ) "
 .br
 .ti -1c
-.BI "virtual void \fBpaintEvent\fR ( QPaintEvent * )"
+.BI "virtual void \fBpaintEvent\fR ( QPaintEvent * ) "
 .br
 .ti -1c
 .BI "int \fBfindRow\fR ( int yPos ) const"
@@ -174,16 +172,16 @@ Inherited by QMultiLineEdit.
 .BI "bool \fBcolXPos\fR ( int " "col" ", int * xPos ) const"
 .br
 .ti -1c
-.BI "int \fBmaxXOffset\fR ()"
+.BI "int \fBmaxXOffset\fR () "
 .br
 .ti -1c
-.BI "int \fBmaxYOffset\fR ()"
+.BI "int \fBmaxYOffset\fR () "
 .br
 .ti -1c
-.BI "int \fBmaxColOffset\fR ()"
+.BI "int \fBmaxColOffset\fR () "
 .br
 .ti -1c
-.BI "int \fBmaxRowOffset\fR ()"
+.BI "int \fBmaxRowOffset\fR () "
 .br
 .ti -1c
 .BI "int \fBminViewX\fR () const"
@@ -204,13 +202,13 @@ Inherited by QMultiLineEdit.
 .BI "int \fBviewHeight\fR () const"
 .br
 .ti -1c
-.BI "void \fBscroll\fR ( int " "xPixels" ", int yPixels )"
+.BI "void \fBscroll\fR ( int " "xPixels" ", int yPixels ) "
 .br
 .ti -1c
-.BI "void \fBupdateScrollBars\fR ()"
+.BI "void \fBupdateScrollBars\fR () "
 .br
 .ti -1c
-.BI "void \fBupdateTableSize\fR ()"
+.BI "void \fBupdateTableSize\fR () "
 .br
 .in -1c
 .SH DESCRIPTION
@@ -240,7 +238,7 @@ Note: The row,column indices are always given in that order, i.e. first the vert
 .PP
 \fBWarning:\fR Experience has shown that use of this widget tends to bring more bugs than expected, and our analysis indicates that widget's very flexibility is the problem. If QScrollView or QListBox can easily be made to do the job you need, we recommend subclassing those widgets rather than QTableView. In addition, QScrollView makes it easy to have child widgets inside tables, something QTableView doesn't support at all.
 .PP
-See also: QScrollView and GUI Design Handbook: Table
+See also QScrollView and GUI Design Handbook: Table
 .SH MEMBER FUNCTION DOCUMENTATION
 .SH "QTableView::QTableView ( QWidget * parent=0, const char * name=0, WFlags f=0 ) \fC[protected]\fR"
 Constructs a table view. All the arguments are passed to the QFrame constructor.
@@ -257,29 +255,29 @@ Destructs the table view.
 .SH "bool QTableView::autoUpdate () const \fC[protected]\fR"
 Returns TRUE if the view updates itself automatically whenever it is changed in some way.
 .PP
-See also: setAutoUpdate().
+See also setAutoUpdate().
 .SH "int QTableView::cellHeight () const \fC[protected]\fR"
 Returns the row height, in pixels. Returns 0 if the rows have variable heights.
 .PP
-See also: setCellHeight() and cellWidth().
+See also setCellHeight() and cellWidth().
 .SH "int QTableView::cellHeight ( int ) \fC[virtual protected]\fR"
 Returns the height of row \fIrow,\fR in pixels.
 .PP
 This function is virtual and must be reimplemented by subclasses that have variable cell heights. Note that if the total table height changes, updateTableSize() must be called.
 .PP
-See also: setCellHeight(), cellWidth() and totalHeight().
+See also setCellHeight(), cellWidth() and totalHeight().
 .SH "QRect QTableView::cellUpdateRect () const \fC[protected]\fR"
 This function should only be called from the paintCell() function in subclasses. It returns the portion of a cell that actually needs to be updated, in \fIcell\fR coordinates. This is only useful for non-trivial paintCell().
 .SH "int QTableView::cellWidth () const \fC[protected]\fR"
 Returns the column width, in pixels. Returns 0 if the columns have variable widths.
 .PP
-See also: setCellWidth() and cellHeight().
+See also setCellWidth() and cellHeight().
 .SH "int QTableView::cellWidth ( int ) \fC[virtual protected]\fR"
 Returns the width of column \fIcol,\fR in pixels.
 .PP
 This function is virtual and must be reimplemented by subclasses that have variable cell widths. Note that if the total table width changes, updateTableSize() must be called.
 .PP
-See also: setCellWidth(), cellHeight(), totalWidth() and updateTableSize().
+See also setCellWidth(), cellHeight(), totalWidth() and updateTableSize().
 .SH "void QTableView::clearTableFlags ( uint f = ~0 ) \fC[protected]\fR"
 Clears the table flags that are set in \fIf.\fR
 .PP
@@ -292,25 +290,25 @@ Example (clears a single flag):
 .PP
 The default argument clears all flags.
 .PP
-See also: setTableFlags(), testTableFlags() and tableFlags().
+See also setTableFlags(), testTableFlags() and tableFlags().
 .SH "bool QTableView::colIsVisible ( int col ) const \fC[protected]\fR"
 Returns TRUE if \fIcol\fR is at least partially visible.
 .PP
-See also: rowIsVisible().
+See also rowIsVisible().
 .SH "bool QTableView::colXPos ( int col, int * xPos ) const \fC[protected]\fR"
 Computes the position in the widget of column \fIcolumn.\fR
 .PP
 Returns TRUE and stores the result in \fI*xPos\fR (in \fIwidget\fR coordinates) if the column is visible. Returns FALSE and does not modify \fI*xPos\fR if \fIcol\fR is invisible or invalid.
 .PP
-See also: rowYPos() and findCol().
+See also rowYPos() and findCol().
 .SH "int QTableView::findCol ( int xPos ) const \fC[protected]\fR"
 Returns the index of the column at position \fIxPos,\fR where \fIxPos\fR is in \fIwidget\fR coordinates. Returns -1 if \fIxPos\fR is outside the valid range.
 .PP
-See also: findRow() and colXPos().
+See also findRow() and colXPos().
 .SH "int QTableView::findRow ( int yPos ) const \fC[protected]\fR"
 Returns the index of the row at position \fIyPos,\fR where \fIyPos\fR is in \fIwidget\fR coordinates. Returns -1 if \fIyPos\fR is outside the valid range.
 .PP
-See also: findCol() and rowYPos().
+See also findCol() and rowYPos().
 .SH "QScrollBar * QTableView::horizontalScrollBar () const \fC[protected]\fR"
 Returns a pointer to the horizontal scroll bar, mainly so you can connect() to its signals. Note that the scroll bar works in pixel values, use findCol() to translate to cell numbers.
 .SH "int QTableView::lastColVisible () const \fC[protected]\fR"
@@ -318,65 +316,65 @@ Returns the index of the last (right) column in the view. The index of the first
 .PP
 If no columns are visible it returns -1. This can happen if the view is too narrow for the first column and Tbl_cutCellsH is set.
 .PP
-See also: lastRowVisible().
+See also lastRowVisible().
 .SH "int QTableView::lastRowVisible () const \fC[protected]\fR"
 Returns the index of the last (bottom) row in the view. The index of the first row is 0.
 .PP
 If no rows are visible it returns -1. This can happen if the view is too small for the first row and Tbl_cutCellsV is set.
 .PP
-See also: lastColVisible().
+See also lastColVisible().
 .SH "int QTableView::leftCell () const \fC[protected]\fR"
 Returns the index of the first column in the table that is visible in the view. The index of the very leftmost column is 0.
 .PP
-See also: topCell() and setLeftCell().
+See also topCell() and setLeftCell().
 .SH "int QTableView::maxColOffset () \fC[protected]\fR"
 Returns the index of the last column which may be at the left edge of the view.
 .PP
 Depending on the Tbl_scrollLastHCell flag, this may or may not be the last column.
 .PP
-See also: maxXOffset() and maxRowOffset().
+See also maxXOffset() and maxRowOffset().
 .SH "int QTableView::maxRowOffset () \fC[protected]\fR"
 Returns the index of the last row which may be at the top edge of the view.
 .PP
 Depending on the Tbl_scrollLastVCell flag, this may or may not be the last row.
 .PP
-See also: maxYOffset() and maxColOffset().
+See also maxYOffset() and maxColOffset().
 .SH "int QTableView::maxViewX () const \fC[protected]\fR"
 Returns the rightmost pixel of the table view in \fIview\fR coordinates. This excludes the frame and any scroll bar, but includes blank pixels to the right of the visible table data.
 .PP
-See also: maxViewY(), viewWidth() and contentsRect().
+See also maxViewY(), viewWidth() and contentsRect().
 .SH "int QTableView::maxViewY () const \fC[protected]\fR"
 Returns the bottom pixel of the table view in \fIview\fR coordinates. This excludes the frame and any scroll bar, but includes blank pixels below the visible table data.
 .PP
-See also: maxViewX(), viewHeight() and contentsRect().
+See also maxViewX(), viewHeight() and contentsRect().
 .SH "int QTableView::maxXOffset () \fC[protected]\fR"
 Returns the maximum horizontal offset within the table of the view's left edge, in \fItable\fR coordinates.
 .PP
 This is used mainly to set the horizontal scroll bar's range.
 .PP
-See also: maxColOffset(), maxYOffset() and totalWidth().
+See also maxColOffset(), maxYOffset() and totalWidth().
 .SH "int QTableView::maxYOffset () \fC[protected]\fR"
 Returns the maximum vertical offset within the table of the view's top edge, in \fItable\fR coordinates.
 .PP
 This is used mainly to set the vertical scroll bar's range.
 .PP
-See also: maxRowOffset(), maxXOffset() and totalHeight().
+See also maxRowOffset(), maxXOffset() and totalHeight().
 .SH "int QTableView::minViewX () const \fC[protected]\fR"
 Returns the leftmost pixel of the table view in \fIview\fR coordinates. This excludes the frame and any header.
 .PP
-See also: maxViewY(), viewWidth() and contentsRect().
+See also maxViewY(), viewWidth() and contentsRect().
 .SH "int QTableView::minViewY () const \fC[protected]\fR"
 Returns the top pixel of the table view in \fIview\fR coordinates. This excludes the frame and any header.
 .PP
-See also: maxViewX(), viewHeight() and contentsRect().
+See also maxViewX(), viewHeight() and contentsRect().
 .SH "int QTableView::numCols () const \fC[protected]\fR"
 Returns the number of columns in the table
 .PP
-See also: numRows() and setNumCols().
+See also numRows() and setNumCols().
 .SH "int QTableView::numRows () const \fC[protected]\fR"
 Returns the number of rows in the table.
 .PP
-See also: numCols() and setNumRows().
+See also numCols() and setNumRows().
 .SH "void QTableView::paintCell ( QPainter * p, int row, int col ) \fC[virtual protected]\fR"
 This pure virtual function is called to paint the single cell at \fI(row,col)\fR using \fIp,\fR which is open when paintCell() is called and must remain open.
 .PP
@@ -384,7 +382,7 @@ The coordinate system is translated such that the origin is at the top left corn
 .PP
 By default, the painter is not clipped, for maximum efficiency. For safety, call setTableFlags(Tbl_clipCellPainting) to enable clipping.
 .PP
-See also: paintEvent(), QPainter() and setTableFlags().
+See also paintEvent(), QPainter() and setTableFlags().
 .PP
 Reimplemented in QMultiLineEdit.
 .SH "void QTableView::paintEvent ( QPaintEvent * e ) \fC[virtual protected]\fR"
@@ -416,13 +414,13 @@ Reimplemented from QWidget.
 .SH "bool QTableView::rowIsVisible ( int row ) const \fC[protected]\fR"
 Returns TRUE if \fIrow\fR is at least partially visible.
 .PP
-See also: colIsVisible().
+See also colIsVisible().
 .SH "bool QTableView::rowYPos ( int row, int * yPos ) const \fC[protected]\fR"
 Computes the position in the widget of row \fIrow.\fR
 .PP
 Returns TRUE and stores the result in \fI*yPos\fR (in \fIwidget\fR coordinates) if the row is visible. Returns FALSE and does not modify \fI*yPos\fR if \fIrow\fR is invisible or invalid.
 .PP
-See also: colXPos() and findRow().
+See also colXPos() and findRow().
 .SH "void QTableView::scroll ( int xPixels, int yPixels ) \fC[protected]\fR"
 Moves the visible area of the table rightwards by \fIxPixels\fR and downwards by \fIyPixels\fR pixels. Both may be negative.
 .PP
@@ -430,7 +428,7 @@ Moves the visible area of the table rightwards by \fIxPixels\fR and downwards by
 .PP
 This function is \fInot\fR the same as QWidget::scroll(), in particular, the signs of \fIxPixels\fR and \fIyPixels\fR have the reverse semantics.
 .PP
-See also: setXOffset(), setYOffset(), setOffset(), setTopCell(), setLeftCell() and setTopLeftOffset().
+See also setXOffset(), setYOffset(), setOffset(), setTopCell(), setLeftCell() and setTopLeftOffset().
 .SH "void QTableView::setAutoUpdate ( bool enable ) \fC[virtual protected]\fR"
 Sets the auto-update option of the table view to \fIenable.\fR
 .PP
@@ -442,41 +440,41 @@ If \fIenable\fR is FALSE, the view does NOT repaint itself, or update its intern
 .PP
 Setting auto-update to TRUE does not repaint the view, you must call repaint() to do this.
 .PP
-See also: autoUpdate() and repaint().
+See also autoUpdate() and repaint().
 .SH "void QTableView::setCellHeight ( int cellHeight ) \fC[virtual protected]\fR"
 Sets the height in pixels of the table cells to \fIcellHeight.\fR
 .PP
 Setting it to zero means that the row height is variable. When set to 0 (this is the default) QTableView calls the virtual function cellHeight() to get the height.
 .PP
-See also: cellHeight(), setCellWidth(), totalHeight() and numRows().
+See also cellHeight(), setCellWidth(), totalHeight() and numRows().
 .SH "void QTableView::setCellWidth ( int cellWidth ) \fC[virtual protected]\fR"
 Sets the width in pixels of the table cells to \fIcellWidth.\fR
 .PP
 Setting it to zero means that the column width is variable. When set to 0 (this is the default) QTableView calls the virtual function cellWidth() to get the width.
 .PP
-See also: cellWidth(), setCellHeight(), totalWidth() and numCols().
+See also cellWidth(), setCellHeight(), totalWidth() and numCols().
 .SH "void QTableView::setLeftCell ( int col ) \fC[virtual protected]\fR"
 Scrolls the table such that \fIcol\fR becomes the leftmost column. The index of the very leftmost column is 0.
 .PP
-See also: setXOffset(), setTopLeftCell() and setTopCell().
+See also setXOffset(), setTopLeftCell() and setTopCell().
 .SH "void QTableView::setNumCols ( int cols ) \fC[virtual protected]\fR"
 Sets the number of columns of the table to \fIcols\fR (must be non-negative). Does not change leftCell().
 .PP
 The table repaints itself automatically if autoUpdate() is set.
 .PP
-See also: numCols(), numRows() and setNumRows().
+See also numCols(), numRows() and setNumRows().
 .SH "void QTableView::setNumRows ( int rows ) \fC[virtual protected]\fR"
 Sets the number of rows of the table to \fIrows\fR (must be non-negative). Does not change topCell().
 .PP
 The table repaints itself automatically if autoUpdate() is set.
 .PP
-See also: numCols(), setNumCols() and numRows().
+See also numCols(), setNumCols() and numRows().
 .SH "void QTableView::setOffset ( int x, int y, bool updateScrBars = TRUE ) \fC[virtual protected]\fR"
 Scrolls the table such that \fI(x,y)\fR becomes the top left pixel in the view. Parameters \fI(x,y)\fR are in \fItable\fR coordinates.
 .PP
 The interaction with Tbl_snapTo*Grid is tricky. If \fIupdateScrBars\fR is TRUE, the scroll bars are updated.
 .PP
-See also: xOffset(), yOffset(), setXOffset(), setYOffset() and setTopLeftCell().
+See also xOffset(), yOffset(), setXOffset(), setYOffset() and setTopLeftCell().
 .SH "void QTableView::setPalette ( const QPalette & p ) \fC[virtual]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .SH "void QTableView::setTableFlags ( uint f ) \fC[virtual protected]\fR"
@@ -533,27 +531,27 @@ Example:
 .PP
 \fBWarning:\fR The cutCells options (\fCTbl_cutCells, Tbl_cutCellsH\fR and Tbl_cutCellsV) may cause painting problems when scrollbars are enabled. Do not combine cutCells and scrollbars.
 .PP
-See also: clearTableFlags(), testTableFlags() and tableFlags().
+See also clearTableFlags(), testTableFlags() and tableFlags().
 .SH "void QTableView::setTopCell ( int row ) \fC[virtual protected]\fR"
 Scrolls the table such that \fIrow\fR becomes the top row. The index of the very first row is 0.
 .PP
-See also: setYOffset(), setTopLeftCell() and setLeftCell().
+See also setYOffset(), setTopLeftCell() and setLeftCell().
 .SH "void QTableView::setTopLeftCell ( int row, int col ) \fC[virtual protected]\fR"
 Scrolls the table such that the cell at row \fIrow\fR and colum \fIcol\fR becomes the top left cell in the view. The cell at the extreme top left of the table is at position (0,0).
 .PP
-See also: setLeftCell(), setTopCell() and setOffset().
+See also setLeftCell(), setTopCell() and setOffset().
 .SH "void QTableView::setXOffset ( int x ) \fC[virtual protected]\fR"
 Scrolls the table such that \fIx\fR becomes the leftmost pixel in the view. The \fIx\fR parameter is in \fItable\fR coordinates.
 .PP
 The interaction with Tbl_snapToHGrid is tricky.
 .PP
-See also: xOffset(), setYOffset(), setOffset() and setLeftCell().
+See also xOffset(), setYOffset(), setOffset() and setLeftCell().
 .SH "void QTableView::setYOffset ( int y ) \fC[virtual protected]\fR"
 Scrolls the table such that \fIy\fR becomes the top pixel in the view. The \fIy\fR parameter is in \fItable\fR coordinates.
 .PP
 The interaction with Tbl_snapToVGrid is tricky.
 .PP
-See also: yOffset(), setXOffset(), setOffset() and setTopCell().
+See also yOffset(), setXOffset(), setOffset() and setTopCell().
 .SH "void QTableView::setupPainter ( QPainter * ) \fC[virtual protected]\fR"
 This virtual function is called before painting of table cells is started. It can be reimplemented by subclasses that want to to set up the painter in a special way and that do not want to do so for each cell.
 .SH "void QTableView::show () \fC[virtual]\fR"
@@ -563,15 +561,15 @@ Reimplemented from QWidget.
 .SH "uint QTableView::tableFlags () const \fC[protected]\fR"
 Returns the union of the table flags that are currently set.
 .PP
-See also: setTableFlags(), clearTableFlags() and testTableFlags().
+See also setTableFlags(), clearTableFlags() and testTableFlags().
 .SH "bool QTableView::testTableFlags ( uint f ) const \fC[protected]\fR"
 Returns TRUE if any of the table flags in \fIf\fR are currently set, otherwise FALSE.
 .PP
-See also: setTableFlags(), clearTableFlags() and tableFlags().
+See also setTableFlags(), clearTableFlags() and tableFlags().
 .SH "int QTableView::topCell () const \fC[protected]\fR"
 Returns the index of the first row in the table that is visible in the view. The index of the very first row is 0.
 .PP
-See also: leftCell() and setTopCell().
+See also leftCell() and setTopCell().
 .SH "int QTableView::totalHeight () \fC[virtual protected]\fR"
 Returns the total height of the table in pixels.
 .PP
@@ -579,7 +577,7 @@ This function is virtual and should be reimplemented by subclasses that have var
 .PP
 The default implementation may be slow for very tall tables.
 .PP
-See also: cellHeight() and totalWidth().
+See also cellHeight() and totalWidth().
 .SH "int QTableView::totalWidth () \fC[virtual protected]\fR"
 Returns the total width of the table in pixels.
 .PP
@@ -587,17 +585,17 @@ This function is virtual and should be reimplemented by subclasses that have var
 .PP
 The default implementation may be slow for very wide tables.
 .PP
-See also: cellWidth() and totalHeight().
+See also cellWidth() and totalHeight().
 .SH "void QTableView::updateCell ( int row, int col, bool erase=TRUE ) \fC[protected]\fR"
 Repaints the cell at row \fIrow,\fR column \fIcol\fR if it is inside the view.
 .PP
 If \fIerase\fR is TRUE, the relevant part of the view is cleared to the background color/pixmap before the contents are repainted.
 .PP
-See also: isVisible().
+See also isVisible().
 .SH "void QTableView::updateScrollBars () \fC[protected]\fR"
 Updates the scroll bars' contents and presence to match the table's state. Generally you should not need to call this.
 .PP
-See also: setTableFlags().
+See also setTableFlags().
 .SH "void QTableView::updateTableSize () \fC[protected]\fR"
 Updates the scroll bars and internal state.
 .PP
@@ -609,27 +607,27 @@ Returns a pointer to the vertical scroll bar, mainly so you can connect() to its
 .SH "int QTableView::viewHeight () const \fC[protected]\fR"
 Returns the height of the table view, as such, in \fIview\fR coordinates. This does not include any header, scroll bar or frame, but does include background pixels below the table data.
 .PP
-See also: minViewY(), maxViewY(), viewWidth(), contentsRect() and viewRect().
+See also minViewY(), maxViewY(), viewWidth(), contentsRect() and viewRect().
 .SH "QRect QTableView::viewRect () const \fC[protected]\fR"
 Returns the rectangle which is the actual table, excluding any frame, in \fIwidget\fR coordinates.
 .SH "int QTableView::viewWidth () const \fC[protected]\fR"
 Returns the width of the table view, as such, in \fIview\fR coordinates. This does not include any header, scroll bar or frame, but does include background pixels to the right of the table data.
 .PP
-See also: minViewX(), maxViewX(), viewHeight(), contentsRect() and viewRect().
+See also minViewX(), maxViewX(), viewHeight(), contentsRect() and viewRect().
 .SH "int QTableView::xOffset () const \fC[protected]\fR"
 Returns the x coordinate in \fItable\fR coordinates of the pixel which is currently on the left edge of the view.
 .PP
-See also: setXOffset(), yOffset() and leftCell().
+See also setXOffset(), yOffset() and leftCell().
 .SH "int QTableView::yOffset () const \fC[protected]\fR"
 Returns the y coordinate in \fItable\fR coordinates of the pixel which is currently on the top edge of the view.
 .PP
-See also: setYOffset(), xOffset() and topCell().
+See also setYOffset(), xOffset() and topCell().
 .SH "void QTableView::setBackgroundColor ( const QColor & c ) \fC[virtual]\fR"
 For internal use only.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qtableview.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

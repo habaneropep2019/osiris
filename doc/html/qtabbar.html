@@ -1,15 +1,17 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head>
 <title>Qt Toolkit - QTabBar Class</title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
-a:link { text-decoration: none; }
-body { background: white; color: black; }
+a:link { color: #004faf; text-decoration: none }
+a:visited { color: #672967; text-decoration: none }body { background: white; color: black; }
 --></style>
 </head><body bgcolor="#ffffff">
 
-<a href="index.html">
-<img width="122" height="65" src="qtlogo.png" alt="Home"
-  align="left" border="0">
-</a><div align=right><img src="dochead.png" width="472" height="27"><br>
+<table width="100%">
+<tr><td><a href="index.html">
+<img width="100" height="100" src="qtlogo.png"
+alt="Home" border="0"><img width="100"
+height="100" src="face.png" alt="Home" border="0">
+</a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
 - <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
@@ -17,7 +19,7 @@ body { background: white; color: black; }
 - <a href="index.html">Home</a>
 - <a href="topicals.html"><b>Structure</b></a>
 </div>
-<br clear=all>
+</table>
 
 <h1 align=center>QTabBar Class Reference</h1><br clear="all">
 <p>
@@ -30,44 +32,46 @@ Inherits <a href="qwidget.html">QWidget</a>.
 <p><a href="qtabbar-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><span class="fn"><a href="#3339fd"><b>QTabBar</b></a> ( QWidget * parent = 0, const char * name = 0 ) </span>
-<li><span class="fn"><a href="#a7b0f8"><b>~QTabBar</b></a> () </span>
-<li><span class="fn">enum <a href="#Shape"><b>Shape</b></a> { RoundedAbove, RoundedBelow, TriangularAbove, TriangularBelow }</span>
-<li><span class="fn">Shape <a href="#7b977f"><b>shape</b></a> () const</span>
-<li><span class="fn">virtual void <a href="#a5dc66"><b>setShape</b></a> ( Shape ) </span>
-<li><span class="fn">virtual int <a href="#16c1d2"><b>addTab</b></a> ( QTab * ) </span>
-<li><span class="fn">virtual int <a href="#bf17d7"><b>insertTab</b></a> ( QTab *, int index = -1 ) </span>
-<li><span class="fn">virtual void <a href="#eb312d"><b>removeTab</b></a> ( QTab * ) </span>
-<li><span class="fn">virtual void <a href="#eadbd2"><b>setTabEnabled</b></a> ( int, bool ) </span>
-<li><span class="fn">bool <a href="#d02ba9"><b>isTabEnabled</b></a> ( int ) const</span>
-<li><span class="fn">int <a href="#669e23"><b>currentTab</b></a> () const</span>
-<li><span class="fn">int <a href="#370563"><b>keyboardFocusTab</b></a> () const</span>
-<li><span class="fn">QTab* <a href="#181518"><b>tab</b></a> ( int ) </span>
-<li><span class="fn">virtual void <a href="#1c540f"><b>layoutTabs</b></a> () </span>
+<li><div class="fn"><a href="#3339fd"><b>QTabBar</b></a> ( QWidget * parent = 0, const char * name = 0 ) </div>
+<li><div class="fn"><a href="#a7b0f8"><b>~QTabBar</b></a> () </div>
+<li><div class="fn">enum <a href="#Shape"><b>Shape</b></a> { RoundedAbove, RoundedBelow, TriangularAbove, TriangularBelow }</div>
+<li><div class="fn">Shape <a href="#7b977f"><b>shape</b></a> () const</div>
+<li><div class="fn">virtual void <a href="#a5dc66"><b>setShape</b></a> ( Shape ) </div>
+<li><div class="fn">virtual int <a href="#16c1d2"><b>addTab</b></a> ( QTab * ) </div>
+<li><div class="fn">virtual int <a href="#bf17d7"><b>insertTab</b></a> ( QTab *, int index = -1 ) </div>
+<li><div class="fn">virtual void <a href="#eb312d"><b>removeTab</b></a> ( QTab * ) </div>
+<li><div class="fn">virtual void <a href="#eadbd2"><b>setTabEnabled</b></a> ( int, bool ) </div>
+<li><div class="fn">bool <a href="#d02ba9"><b>isTabEnabled</b></a> ( int ) const</div>
+<li><div class="fn">int <a href="#669e23"><b>currentTab</b></a> () const</div>
+<li><div class="fn">int <a href="#370563"><b>keyboardFocusTab</b></a> () const</div>
+<li><div class="fn">QTab* <a href="#181518"><b>tab</b></a> ( int ) </div>
+<li><div class="fn">int <a href="#cab0cd"><b>count</b></a> () const</div>
+<li><div class="fn">virtual void <a href="#1c540f"><b>layoutTabs</b></a> () </div>
 </ul>
 <h2>Public Slots</h2>
 <ul>
-<li><span class="fn">virtual void <a href="#6001bd"><b>setCurrentTab</b></a> ( int ) </span>
-<li><span class="fn">virtual void <a href="#b22952"><b>setCurrentTab</b></a> ( QTab * ) </span>
+<li><div class="fn">virtual void <a href="#6001bd"><b>setCurrentTab</b></a> ( int ) </div>
+<li><div class="fn">virtual void <a href="#b22952"><b>setCurrentTab</b></a> ( QTab * ) </div>
 </ul>
 <h2>Signals</h2>
 <ul>
-<li><span class="fn">void <a href="#f859d2"><b>selected</b></a> ( int ) </span>
+<li><div class="fn">void <a href="#f859d2"><b>selected</b></a> ( int ) </div>
 </ul>
 <h2>Protected Members</h2>
 <ul>
-<li><span class="fn">virtual void <a href="#1c944e"><b>paint</b></a> ( QPainter *, QTab *, bool ) const</span>
-<li><span class="fn">virtual void <a href="#d79bda"><b>paintLabel</b></a> ( QPainter *, const QRect &amp;, QTab *, bool ) const</span>
-<li><span class="fn">virtual QTab* <a href="#b2e7a4"><b>selectTab</b></a> ( const QPoint &amp; p ) const</span>
-<li><span class="fn">virtual void <a href="#939a9c"><b>updateMask</b></a> () </span>
-<li><span class="fn">virtual void <a href="#e41cbe"><b>paintEvent</b></a> ( QPaintEvent * ) </span>
-<li><span class="fn">QList&lt;QTab&gt;* <a href="#e03e62"><b>tabList</b></a> () </span>
+<li><div class="fn">virtual void <a href="#1c944e"><b>paint</b></a> ( QPainter *, QTab *, bool ) const</div>
+<li><div class="fn">virtual void <a href="#d79bda"><b>paintLabel</b></a> ( QPainter *, const QRect &amp;, QTab *, bool ) const</div>
+<li><div class="fn">virtual QTab* <a href="#b2e7a4"><b>selectTab</b></a> ( const QPoint &amp; p ) const</div>
+<li><div class="fn">virtual void <a href="#939a9c"><b>updateMask</b></a> () </div>
+<li><div class="fn">virtual void <a href="#e41cbe"><b>paintEvent</b></a> ( QPaintEvent * ) </div>
+<li><div class="fn">QList&lt;QTab&gt;* <a href="#e03e62"><b>tabList</b></a> () </div>
 </ul>
 <h2>Properties</h2>
 <table border=1 cellpadding=3 cellspacing=0>
 <tr><th>Type<th>Name<th>READ<th>WRITE<th>Options
 <tr><td>Shape<td>shape<td>shape<td>setShape<td>&nbsp;
 <tr><td>int<td>currentTab<td>currentTab<td>setCurrentTab<td>&nbsp;
+<tr><td>int<td>count<td>count<td>&nbsp;<td>&nbsp;
 <tr><td>int<td>keyboardFocusTab<td>keyboardFocusTab<td>&nbsp;<td>&nbsp;
 </table>
 <hr><h2><a name="details"></a>Detailed Description</h2>
@@ -122,6 +126,9 @@ e.g. the spreadsheet Excel
 existing tabs, inserts an accelerator if the tab's label contains the
 string "&p" for some value of p, adds it to the bar, and returns the
 newly allocated id.
+<h3 class="fn">int <a name="cab0cd"></a>QTabBar::count () const</h3>
+<p>Returns the number of tabs in the tab bar.
+<p>See also  <a href="#181518">tab</a>().
 <h3 class="fn">int <a name="669e23"></a>QTabBar::currentTab () const</h3>
 <p>If a page is currently visible, returns its ID.  If no page is
 currently visible, returns either -1 or the ID of one of the pages.
@@ -129,7 +136,7 @@ currently visible, returns either -1 or the ID of one of the pages.
 the user can see the relevant page, or that the tab <a href="#d02ba9">is enabled.</a>
 <p>When you need to display something, the return value from this
 function represents the best page to display.  That's all.
-<p>See also:  <a href="#f859d2">selected</a>().
+<p>See also  <a href="#f859d2">selected</a>().
 <h3 class="fn">void <a name="783ed2"></a>QTabBar::focusInEvent ( <a href="qfocusevent.html">QFocusEvent</a> * ) <code>[virtual protected]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
 <p>Reimplemented from <a href="qwidget.html#303f18">QWidget.</a>
@@ -147,7 +154,7 @@ allocated id.
 <h3 class="fn">bool <a name="d02ba9"></a>QTabBar::isTabEnabled ( int id ) const</h3>
 <p>Returns TRUE if the tab with id <em>id</em> is enabled, or FALSE if it
 is disabled or there is no such tab.
-<p>See also:  <a href="#eadbd2">setTabEnabled</a>().
+<p>See also  <a href="#eadbd2">setTabEnabled</a>().
 <h3 class="fn">void <a name="d1a3e7"></a>QTabBar::keyPressEvent ( <a href="qkeyevent.html">QKeyEvent</a> * e ) <code>[virtual protected]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
 <p>Reimplemented from <a href="qwidget.html#cdb1c7">QWidget.</a>
@@ -157,6 +164,9 @@ tab Space will select.  Otherwise, returns -1.
 <h3 class="fn">void <a name="1c540f"></a>QTabBar::layoutTabs () <code>[virtual]</code></h3>
 <p>Layout all existing tabs (i.e. setting their r attribute ) according
 to their label and their iconset.
+<h3 class="fn"><a href="qsize.html">QSize</a> <a name="7f7fef"></a>QTabBar::minimumSizeHint () const <code>[virtual]</code></h3>
+<p>Reimplemented for internal reasons; the API is not affected.
+<p>Reimplemented from <a href="qwidget.html#3f0fc2">QWidget.</a>
 <h3 class="fn">void <a name="3721f4"></a>QTabBar::mousePressEvent ( <a href="qmouseevent.html">QMouseEvent</a> * e ) <code>[virtual protected]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
 <p>Reimplemented from <a href="qwidget.html#fb611b">QWidget.</a>
@@ -173,13 +183,13 @@ reimplement <a href="#34db5a">sizeHint</a>().
 <p>Repaints the tab row.  All the painting is done by <a href="#1c944e">paint</a>();
 paintEvent() only decides which tabs need painting and in what
 order.
-<p>See also:  <a href="#1c944e">paint</a>().
+<p>See also  <a href="#1c944e">paint</a>().
 <p>Reimplemented from <a href="qwidget.html#ef2069">QWidget.</a>
 <h3 class="fn">void <a name="d79bda"></a>QTabBar::paintLabel ( <a href="qpainter.html">QPainter</a> * p, const <a href="qrect.html">QRect</a> &amp; br, <a href="qtab.html">QTab</a> * t, bool has_focus ) const <code>[virtual protected]</code></h3>
 <p>Paints the label of tab <em>t</em> centered in rectangle <em>br</em> using
 painter <em>p</em> and draws a focus indication if <em>has_focus</em> is TRUE.
-<h3 class="fn">void <a name="eb312d"></a>QTabBar::removeTab ( <a href="qtab.html">QTab</a> * tab ) <code>[virtual]</code></h3>
-<p>Removes <em>tab</em> from the tab control.
+<h3 class="fn">void <a name="eb312d"></a>QTabBar::removeTab ( <a href="qtab.html">QTab</a> * t ) <code>[virtual]</code></h3>
+<p>Removes tab <em>t</em> from the tab control.
 <h3 class="fn">void <a name="800c84"></a>QTabBar::resizeEvent ( <a href="qresizeevent.html">QResizeEvent</a> * ) <code>[virtual protected]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
 <p>Reimplemented from <a href="qwidget.html#28c156">QWidget.</a>
@@ -189,7 +199,7 @@ determine which tab is pressed.  The default implementation returns
 a pointer to the tab whose bounding rectangle contains <em>p,</em> if
 exactly one tab's bounding rectangle contains <em>p.</em>  It returns 0
 else.
-<p>See also:  <a href="#3721f4">mousePressEvent</a>() and <a href="#022f08">mouseReleaseEvent</a>().
+<p>See also  <a href="#3721f4">mousePressEvent</a>() and <a href="#022f08">mouseReleaseEvent</a>().
 <h3 class="fn">void <a name="f859d2"></a>QTabBar::selected ( int id ) <code>[signal]</code></h3>
 <p>QTabBar emits this signal whenever any tab is selected, whether by
 the program or the user.  The argument <em>id</em> is the ID if the tab
@@ -199,22 +209,22 @@ your page in a slot connected to this signal.
 <h3 class="fn">void <a name="b22952"></a>QTabBar::setCurrentTab ( <a href="qtab.html">QTab</a> * tab ) <code>[virtual slot]</code></h3>
 <p>Raises <em>tab</em> and emits the <a href="#f859d2">selected</a>() signal unless the tab was
 already current.
-<p>See also:  <a href="#669e23">currentTab</a>() and <a href="#f859d2">selected</a>().
+<p>See also  <a href="#669e23">currentTab</a>() and <a href="#f859d2">selected</a>().
 <h3 class="fn">void <a name="6001bd"></a>QTabBar::setCurrentTab ( int id ) <code>[virtual slot]</code></h3>
 <p>Raises the tab with ID <em>id</em> and emits the <a href="#f859d2">selected</a>() signal.
-<p>See also:  <a href="#669e23">currentTab</a>(), <a href="#f859d2">selected</a>() and <a href="#181518">tab</a>().
+<p>See also  <a href="#669e23">currentTab</a>(), <a href="#f859d2">selected</a>() and <a href="#181518">tab</a>().
 <h3 class="fn">void <a name="a5dc66"></a>QTabBar::setShape ( <a href="qtabbar.html#Shape">Shape</a> s )</h3>
 <p>Sets the shape of this tab bar to <em>s</em> and refreshes the bar.
 <h3 class="fn">void <a name="eadbd2"></a>QTabBar::setTabEnabled ( int id, bool enabled ) <code>[virtual]</code></h3>
 <p>Enable tab <em>id</em> if <em>enable</em> is TRUE, or disable it if <em>enable</em> is
 FALSE.  If <em>id</em> is currently selected, setTabEnabled() makes
 another tab selected.
-<p>setTabEnabled() updates the display respectivly if this causes a
+<p>setTabEnabled() updates the display respectively if this causes a
 change in <em>id's</em> status.
-<p>See also:  <a href="qwidget.html#52f9c5">update</a>() and <a href="#d02ba9">isTabEnabled</a>().
+<p>See also  <a href="qwidget.html#4a97ef">update</a>() and <a href="#d02ba9">isTabEnabled</a>().
 <h3 class="fn">QTabBar::Shape <a name="7b977f"></a>QTabBar::shape() const</h3>
 <p>Returns the shape of this tab bar.
-<p>See also:  <a href="#a5dc66">setShape</a>().
+<p>See also  <a href="#a5dc66">setShape</a>().
 <h3 class="fn">void <a name="ceb97c"></a>QTabBar::show () <code>[virtual]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
 <p>Reimplemented from <a href="qwidget.html#ccc8f7">QWidget.</a>
@@ -230,6 +240,7 @@ change in <em>id's</em> status.
 <h3 class="fn"><a href="qtab.html">QTab</a> * <a name="181518"></a>QTabBar::tab ( int id )</h3>
 <p>Returns a pointer to the tab with ID <em>id,</em> or 0 if there is no
 such tab.
+<p>See also  <a href="#cab0cd">count</a>().
 <h3 class="fn"><a href="qlist.html">QList</a>&lt;<a href="qtab.html">QTab</a>&gt; * <a name="e03e62"></a>QTabBar::tabList () <code>[protected]</code></h3>
 <p>The list of <a href="qtab.html">QTab</a> objects added.
 <h3 class="fn">void <a name="939a9c"></a>QTabBar::updateMask () <code>[virtual protected]</code></h3>
@@ -239,13 +250,13 @@ such tab.
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.1.1"><nobr>
+<input type=hidden name="version" value="2.2.0"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
 copyright &copy; 1995-2000
-<a href="http://www.trolltech.com">Troll Tech</a>, all rights reserved.<p><address><hr><div align="center">
+<a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.1</div>
+<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.2.0</div>
 </table></div></address></body></html>

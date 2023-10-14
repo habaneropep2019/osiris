@@ -1,5 +1,5 @@
-.TH QPushButton 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QPushButton 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QPushButton \- Command button
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -19,31 +17,31 @@ Inherits QButton.
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQPushButton\fR ( QWidget * " "parent" ", const char * " "name" "=0 )"
+.BI "\fBQPushButton\fR ( QWidget * " "parent" ", const char * " "name" "=0 ) "
 .br
 .ti -1c
-.BI "\fBQPushButton\fR ( const QString & " "text" ", QWidget * " "parent" ", const char * " "name" "=0 )"
+.BI "\fBQPushButton\fR ( const QString & " "text" ", QWidget * " "parent" ", const char * " "name" "=0 ) "
 .br
 .ti -1c
-.BI "\fBQPushButton\fR ( const QIconSet & " "icon" ", const QString & " "text" ", QWidget * " "parent" ", const char * " "name" "=0 )"
+.BI "\fBQPushButton\fR ( const QIconSet & " "icon" ", const QString & " "text" ", QWidget * " "parent" ", const char * " "name" "=0 ) "
 .br
 .ti -1c
-.BI "\fB~QPushButton\fR ()"
+.BI "\fB~QPushButton\fR () "
 .br
 .ti -1c
-.BI "virtual void \fBsetToggleButton\fR ( bool )"
+.BI "virtual void \fBsetToggleButton\fR ( bool ) "
 .br
 .ti -1c
 .BI "bool \fBautoDefault\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetAutoDefault\fR ( bool autoDef )"
+.BI "virtual void \fBsetAutoDefault\fR ( bool autoDef ) "
 .br
 .ti -1c
 .BI "bool \fBisDefault\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetDefault\fR ( bool def )"
+.BI "virtual void \fBsetDefault\fR ( bool def ) "
 .br
 .ti -1c
 .BI "virtual void setIsMenuButton ( bool ) \fI(obsolete)\fR"
@@ -52,25 +50,31 @@ Inherits QButton.
 .BI "bool isMenuButton () const \fI(obsolete)\fR"
 .br
 .ti -1c
-.BI "void \fBsetPopup\fR ( QPopupMenu * popup )"
+.BI "void \fBsetPopup\fR ( QPopupMenu * popup ) "
 .br
 .ti -1c
 .BI "QPopupMenu* \fBpopup\fR () const"
 .br
 .ti -1c
-.BI "void \fBsetIconSet\fR ( const QIconSet & )"
+.BI "void \fBsetIconSet\fR ( const QIconSet & ) "
 .br
 .ti -1c
 .BI "QIconSet* \fBiconSet\fR () const"
+.br
+.ti -1c
+.BI "void \fBsetFlat\fR ( bool ) "
+.br
+.ti -1c
+.BI "bool \fBisFlat\fR () const"
 .br
 .in -1c
 .SS "Public Slots"
 .in +1c
 .ti -1c
-.BI "virtual void \fBsetOn\fR ( bool )"
+.BI "virtual void \fBsetOn\fR ( bool ) "
 .br
 .ti -1c
-.BI "void \fBtoggle\fR ()"
+.BI "void \fBtoggle\fR () "
 .br
 .in -1c
 .SS "Important Inherited Members"
@@ -79,7 +83,7 @@ Inherits QButton.
 .BI "QString \fBtext\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetText\fR ( const QString & text )"
+.BI "virtual void \fBsetText\fR ( const QString & text ) "
 .br
 .ti -1c
 .BI "QString \fBtext\fR () const"
@@ -88,19 +92,19 @@ Inherits QButton.
 .BI "const QPixmap* \fBpixmap\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetPixmap\fR ( const QPixmap & pixmap )"
+.BI "virtual void \fBsetPixmap\fR ( const QPixmap & pixmap ) "
 .br
 .ti -1c
 .BI "int \fBaccel\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetAccel\fR ( int key )"
+.BI "virtual void \fBsetAccel\fR ( int key ) "
 .br
 .ti -1c
 .BI "bool \fBisToggleButton\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetDown\fR ( bool enable )"
+.BI "virtual void \fBsetDown\fR ( bool enable ) "
 .br
 .ti -1c
 .BI "bool \fBisDown\fR () const"
@@ -118,29 +122,29 @@ Inherits QButton.
 .BI "QButtonGroup* \fBgroup\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetAutoRepeat\fR ( bool enable )"
+.BI "virtual void \fBsetAutoRepeat\fR ( bool enable ) "
 .br
 .ti -1c
-.BI "void \fBtoggle\fR ()"
+.BI "void \fBtoggle\fR () "
 .br
 .ti -1c
-.BI "void \fBpressed\fR ()"
+.BI "void \fBpressed\fR () "
 .br
 .ti -1c
-.BI "void \fBreleased\fR ()"
+.BI "void \fBreleased\fR () "
 .br
 .ti -1c
-.BI "void \fBclicked\fR ()"
+.BI "void \fBclicked\fR () "
 .br
 .ti -1c
-.BI "void \fBtoggled\fR ( bool on )"
+.BI "void \fBtoggled\fR ( bool on ) "
 .br
 .ti -1c
-.BI "void \fBstateChanged\fR ( int state )"
+.BI "void \fBstateChanged\fR ( int state ) "
 .br
 .in -1c
 .SS "Properties"
-<table border=1 cellpadding=3 cellspacing=0> <tr><th>Type<th>Name<th>READ<th>WRITE<th>Options <tr><td>bool<td>autoDefault<td>autoDefault<td>setAutoDefault<td>&nbsp; <tr><td>bool<td>default<td>isDefault<td>setDefault<td>&nbsp; <tr><td>bool<td>menuButton<td>isMenuButton<td>setIsMenuButton<td>&nbsp; <tr><td>QIconSet<td>iconSet<td>iconSet<td>setIconSet<td>&nbsp; </table>
+<table border=1 cellpadding=3 cellspacing=0> <tr><th>Type<th>Name<th>READ<th>WRITE<th>Options <tr><td>bool<td>autoDefault<td>autoDefault<td>setAutoDefault<td>&nbsp; <tr><td>bool<td>default<td>isDefault<td>setDefault<td>&nbsp; <tr><td>bool<td>menuButton<td>isMenuButton<td>&nbsp;<td>&nbsp; <tr><td>QIconSet<td>iconSet<td>iconSet<td>setIconSet<td>&nbsp; <tr><td>bool<td>flat<td>isFlat<td>setFlat<td>&nbsp; </table>
 .SH DESCRIPTION
 The QPushButton widget provides a command button.
 .PP
@@ -189,11 +193,11 @@ Other classes of buttons are option buttons (see QRadioButton) and check boxes (
 .PP
 In Qt, the QButton class provides most of the modes and other API, and QPushButton provides GUI logic. See QButton for more information about the API.
 .PP
-See also: QToolButton, QRadioButton, QCheckBox and GUI Design Handbook: Push Button
+See also QToolButton, QRadioButton, QCheckBox and GUI Design Handbook: Push Button
 .PP
 Examples:
 .(l
-xform/xform.cpp layout/layout.cpp drawdemo/drawdemo.cpp popup/popup.cpp qmag/qmag.cpp rot13/rot13.cpp scrollview/scrollview.cpp customlayout/main.cpp
+xform/xform.cpp layout/layout.cpp i18n/main.cpp drawdemo/drawdemo.cpp popup/popup.cpp qmag/qmag.cpp rot13/rot13.cpp scrollview/scrollview.cpp customlayout/main.cpp
 .)l
 .SH MEMBER FUNCTION DOCUMENTATION
 .SH "QPushButton::QPushButton ( QWidget * parent, const char * name=0 )"
@@ -215,7 +219,7 @@ Destructs the push button.
 .SH "bool QPushButton::autoDefault () const"
 Returns TRUE if the button is an auto-default button.
 .PP
-See also: setAutoDefault().
+See also setAutoDefault().
 .SH "void QPushButton::drawButton ( QPainter * paint ) \fC[virtual protected]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .PP
@@ -235,30 +239,36 @@ Reimplemented from QWidget.
 .SH "QIconSet* QPushButton::iconSet () const"
 Returns the button's icon or 0 if no icon has been defined.
 .PP
-See also: setIconSet().
+See also setIconSet().
 .SH "bool QPushButton::isDefault () const"
 Returns TRUE if the button is currently default.
 .PP
-See also: setDefault().
+See also setDefault().
+.SH "bool QPushButton::isFlat () const"
+Returns whether the border is disabled.
+.PP
+See also setFlat().
 .SH "bool QPushButton::isMenuButton () const"
 \fBThis function is obsolete.\fR It is provided to keep old source working, and will probably be removed in a future version of Qt. We strongly advise against using it in new code.
 .PP
 Returns TRUE if this button indicates to the user that pressing it will pop up a menu, and FALSE otherwise. The default is FALSE.
 .PP
-See also: setIsMenuButton().
+See also setIsMenuButton().
 .SH "void QPushButton::move ( const QPoint & p )"
 Reimplemented for internal reasons; the API is not affected.
-.SH "void QPushButton::move ( int x, int y )"
+.SH "void QPushButton::move ( int x, int y ) \fC[virtual]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .PP
 Examples:
 .(l
 drawdemo/drawdemo.cpp
 .)l
+.PP
+Reimplemented from QWidget.
 .SH "QPopupMenu* QPushButton::popup () const"
 Returns the associated popup menu or 0 if no popup menu has been defined.
 .PP
-See also: setPopup().
+See also setPopup().
 .SH "void QPushButton::resize ( const QSize & s )"
 Reimplemented for internal reasons; the API is not affected.
 .SH "void QPushButton::resize ( int w, int h )"
@@ -279,7 +289,7 @@ An auto-default button becomes automatically the default push button in a dialog
 .PP
 In some GUI styles, a default button is drawn with an extra frame around it, up to 3 pixels or more. Qt automatically keeps this space free around auto-default buttons, i.e. auto-default buttons may have a slightly larger size hint.
 .PP
-See also: autoDefault() and setDefault().
+See also autoDefault() and setDefault().
 .SH "void QPushButton::setDefault ( bool enable ) \fC[virtual]\fR"
 Sets this button to be the current default button of a dialog if \fIenable\fR is TRUE, or to be a normal button if \fIenable\fR is FALSE.
 .PP
@@ -287,7 +297,11 @@ The current default button gets clicked when the user presses the "Enter" key, i
 .PP
 The default button behaviour is only provided in dialogs. Buttons can always be clicked from the keyboard by pressing return or the spacebar when the button has focus.
 .PP
-See also: isDefault(), setAutoDefault() and QDialog.
+See also isDefault(), setAutoDefault() and QDialog.
+.SH "void QPushButton::setFlat ( bool f )"
+Disable the border.
+.PP
+See also flat().
 .SH "void QPushButton::setGeometry ( const QRect & r ) \fC[virtual]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .PP
@@ -300,7 +314,7 @@ Reimplemented for internal reasons; the API is not affected.
 .SH "void QPushButton::setIconSet ( const QIconSet & icon )"
 Sets the button to display the icon \fIicon\fR in addition to its text or pixmap
 .PP
-See also: iconSet().
+See also iconSet().
 .SH "void QPushButton::setIsMenuButton ( bool enable ) \fC[virtual]\fR"
 \fBThis function is obsolete.\fR It is provided to keep old source working, and will probably be removed in a future version of Qt. We strongly advise against using it in new code.
 .PP
@@ -308,11 +322,11 @@ Tells this button to draw a menu indication triangle if \fIenable\fR is TRUE, an
 .PP
 setIsMenuButton() does not cause the button to do anything other than draw the menu indication.
 .PP
-See also: isMenuButton().
+See also isMenuButton().
 .SH "void QPushButton::setOn ( bool enable ) \fC[virtual slot]\fR"
 Switches a toggle button on if \fIenable\fR is TRUE or off if \fIenable\fR is FALSE.
 .PP
-See also: isOn(), toggle(), toggled() and isToggleButton().
+See also isOn(), toggle(), toggled() and isToggleButton().
 .PP
 Examples:
 .(l
@@ -323,13 +337,13 @@ Associates the popup menu \fIpopup\fR with this push button and thus turns it in
 .PP
 Ownership of the popup menu is not transferred.
 .PP
-See also: popup().
+See also popup().
 .SH "void QPushButton::setToggleButton ( bool enable ) \fC[virtual]\fR"
 Makes the push button a toggle button if \fIenable\fR is TRUE, or a normal push button if \fIenable\fR is FALSE.
 .PP
 Toggle buttons have an on/off state similar to check boxes. A push button is initially not a toggle button.
 .PP
-See also: setOn(), toggle(), isToggleButton() and toggled().
+See also setOn(), toggle(), isToggleButton() and toggled().
 .PP
 Examples:
 .(l
@@ -346,7 +360,7 @@ Reimplemented from QWidget.
 .SH "void QPushButton::toggle () \fC[important inherited]\fR"
 Toggles the state of a toggle button.
 .PP
-See also: isOn(), setOn(), toggled() and isToggleButton().
+See also isOn(), setOn(), toggled() and isToggleButton().
 .SH "void QPushButton::updateMask () \fC[virtual protected]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .PP
@@ -354,7 +368,7 @@ Reimplemented from QWidget.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qpushbutton.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

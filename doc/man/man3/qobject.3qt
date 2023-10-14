@@ -1,5 +1,5 @@
-.TH QObject 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QObject 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QObject \- The base class of all Qt objects
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -16,21 +14,21 @@ QObject \- The base class of all Qt objects
 .PP
 Inherits Qt.
 .PP
-Inherited by QAccel, QApplication, QClipboard, QDataPump, QDragManager, QDragObject, QFileIconProvider, QGuardedPtrPrivate, QLayout, QNPInstance, QNetworkOperation, QNetworkProtocol, QSenderObject, QSessionManager, QSignal, QSignalMapper, QSocketNotifier, QStyle, QStyleSheet, QTimer, QToolTipGroup, QTranslator, QUrlOperator, QValidator and QWidget.
+Inherited by QAccel, QAction, QApplication, QAuServer, QCanvas, QClipboard, QDataPump, QDns, QDnsSocket, QDragManager, QDragObject, QFileIconProvider, QGuardedPtrPrivate, QLayout, QNPInstance, QNetworkOperation, QNetworkProtocol, QSenderObject, QServerSocket, QSessionManager, QSignal, QSignalMapper, QSocket, QSocketNotifier, QSound, QStyle, QStyleSheet, QTimer, QToolTipGroup, QTranslator, QUrlOperator, QValidator, QWSManager and QWidget.
 .PP
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQObject\fR ( QObject * " "parent" "=0, const char * " "name" "=0 )"
+.BI "\fBQObject\fR ( QObject * " "parent" "=0, const char * " "name" "=0 ) "
 .br
 .ti -1c
-.BI "virtual \fB~QObject\fR ()"
+.BI "virtual \fB~QObject\fR () "
 .br
 .ti -1c
-.BI "virtual bool \fBevent\fR ( QEvent * )"
+.BI "virtual bool \fBevent\fR ( QEvent * ) "
 .br
 .ti -1c
-.BI "virtual bool \fBeventFilter\fR ( QObject *, QEvent * )"
+.BI "virtual bool \fBeventFilter\fR ( QObject *, QEvent * ) "
 .br
 .ti -1c
 .BI "virtual QMetaObject* \fBmetaObject\fR () const"
@@ -51,7 +49,7 @@ Inherited by QAccel, QApplication, QClipboard, QDataPump, QDragManager, QDragObj
 .BI "const char* \fBname\fR ( const char * defaultName ) const"
 .br
 .ti -1c
-.BI "virtual void \fBsetName\fR ( const char * name )"
+.BI "virtual void \fBsetName\fR ( const char * name ) "
 .br
 .ti -1c
 .BI "bool \fBisWidgetType\fR () const"
@@ -63,55 +61,55 @@ Inherited by QAccel, QApplication, QClipboard, QDataPump, QDragManager, QDragObj
 .BI "bool \fBsignalsBlocked\fR () const"
 .br
 .ti -1c
-.BI "void \fBblockSignals\fR ( bool b )"
+.BI "void \fBblockSignals\fR ( bool b ) "
 .br
 .ti -1c
-.BI "int \fBstartTimer\fR ( int interval )"
+.BI "int \fBstartTimer\fR ( int interval ) "
 .br
 .ti -1c
-.BI "void \fBkillTimer\fR ( int id )"
+.BI "void \fBkillTimer\fR ( int id ) "
 .br
 .ti -1c
-.BI "void \fBkillTimers\fR ()"
+.BI "void \fBkillTimers\fR () "
 .br
 .ti -1c
-.BI "QObject* \fBchild\fR ( const char * " "name" ", const char * " "type" " = 0 )"
+.BI "QObject* \fBchild\fR ( const char * " "name" ", const char * " "type" " = 0 ) "
 .br
 .ti -1c
 .BI "const QObjectList* \fBchildren\fR () const"
 .br
 .ti -1c
-.BI "QObjectList* \fBqueryList\fR ( const char * " "inheritsClass" " = 0, const char * " "objName" " = 0, bool " "regexpMatch" " = TRUE, bool " "recursiveSearch" " = TRUE )"
+.BI "QObjectList* \fBqueryList\fR ( const char * " "inheritsClass" " = 0, const char * " "objName" " = 0, bool " "regexpMatch" " = TRUE, bool " "recursiveSearch" " = TRUE ) "
 .br
 .ti -1c
-.BI "virtual void \fBinsertChild\fR ( QObject * )"
+.BI "virtual void \fBinsertChild\fR ( QObject * ) "
 .br
 .ti -1c
-.BI "virtual void \fBremoveChild\fR ( QObject * )"
+.BI "virtual void \fBremoveChild\fR ( QObject * ) "
 .br
 .ti -1c
-.BI "void \fBinstallEventFilter\fR ( const QObject * )"
+.BI "void \fBinstallEventFilter\fR ( const QObject * ) "
 .br
 .ti -1c
-.BI "void \fBremoveEventFilter\fR ( const QObject * )"
+.BI "void \fBremoveEventFilter\fR ( const QObject * ) "
 .br
 .ti -1c
 .BI "bool \fBconnect\fR ( const QObject * " "sender" ", const char * " "signal" ", const char * member ) const"
 .br
 .ti -1c
-.BI "bool \fBdisconnect\fR ( const char * " "signal" "=0, const QObject * " "receiver" "=0, const char * " "member" "=0 )"
+.BI "bool \fBdisconnect\fR ( const char * " "signal" "=0, const QObject * " "receiver" "=0, const char * " "member" "=0 ) "
 .br
 .ti -1c
-.BI "bool \fBdisconnect\fR ( const QObject * " "receiver" ", const char * " "member" "=0 )"
+.BI "bool \fBdisconnect\fR ( const QObject * " "receiver" ", const char * " "member" "=0 ) "
 .br
 .ti -1c
-.BI "void \fBdumpObjectTree\fR ()"
+.BI "void \fBdumpObjectTree\fR () "
 .br
 .ti -1c
-.BI "void \fBdumpObjectInfo\fR ()"
+.BI "void \fBdumpObjectInfo\fR () "
 .br
 .ti -1c
-.BI "bool \fBsetProperty\fR ( const char * " "name" ", const QVariant & value )"
+.BI "bool \fBsetProperty\fR ( const char * " "name" ", const QVariant & value ) "
 .br
 .ti -1c
 .BI "QVariant \fBproperty\fR ( const char * name ) const"
@@ -126,22 +124,25 @@ Inherited by QAccel, QApplication, QClipboard, QDataPump, QDragManager, QDragObj
 .SS "Signals"
 .in +1c
 .ti -1c
-.BI "void \fBdestroyed\fR ()"
+.BI "void \fBdestroyed\fR () "
 .br
 .in -1c
 .SS "Static Public Members"
 .in +1c
 .ti -1c
-.BI "QString \fBtr\fR ( const char * )"
+.BI "QString \fBtr\fR ( const char * ) "
 .br
 .ti -1c
-.BI "const QObjectList* \fBobjectTrees\fR ()"
+.BI "QString \fBtr\fR ( const char *, const char * ) "
 .br
 .ti -1c
-.BI "bool \fBconnect\fR ( const QObject * " "sender" ", const char * " "signal" ", const QObject * " "receiver" ", const char * member )"
+.BI "const QObjectList* \fBobjectTrees\fR () "
 .br
 .ti -1c
-.BI "bool \fBdisconnect\fR ( const QObject * " "sender" ", const char * " "signal" ", const QObject * " "receiver" ", const char * member )"
+.BI "bool \fBconnect\fR ( const QObject * " "sender" ", const char * " "signal" ", const QObject * " "receiver" ", const char * member ) "
+.br
+.ti -1c
+.BI "bool \fBdisconnect\fR ( const QObject * " "sender" ", const char * " "signal" ", const QObject * " "receiver" ", const char * member ) "
 .br
 .in -1c
 .SS "Protected Members"
@@ -156,55 +157,58 @@ Inherited by QAccel, QApplication, QClipboard, QDataPump, QDragManager, QDragObj
 .BI "void \fBactivate_signal\fR ( const char * signal ) (internal)"
 .br
 .ti -1c
-.BI "void \fBactivate_signal\fR ( const char * " "signal" ", short )"
+.BI "void \fBactivate_signal\fR ( const char * " "signal" ", short ) "
 .br
 .ti -1c
-.BI "void \fBactivate_signal\fR ( const char * " "signal" ", int )"
+.BI "void \fBactivate_signal\fR ( const char * " "signal" ", int ) "
 .br
 .ti -1c
-.BI "void \fBactivate_signal\fR ( const char * " "signal" ", long )"
+.BI "void \fBactivate_signal\fR ( const char * " "signal" ", long ) "
 .br
 .ti -1c
-.BI "void \fBactivate_signal\fR ( const char * " "signal" ", const char * )"
+.BI "void \fBactivate_signal\fR ( const char * " "signal" ", const char * ) "
 .br
 .ti -1c
-.BI "void \fBactivate_signal_bool\fR ( const char * " "signal" ", bool )"
+.BI "void \fBactivate_signal_bool\fR ( const char * " "signal" ", bool ) "
 .br
 .ti -1c
-.BI "void \fBactivate_signal_string\fR ( const char * " "signal" ", QString )"
+.BI "void \fBactivate_signal_string\fR ( const char * " "signal" ", QString ) "
 .br
 .ti -1c
-.BI "void \fBactivate_signal_strref\fR ( const char * " "signal" ", const QString & )"
+.BI "void \fBactivate_signal_strref\fR ( const char * " "signal" ", const QString & ) "
 .br
 .ti -1c
-.BI "const QObject* \fBsender\fR ()"
+.BI "const QObject* \fBsender\fR () "
 .br
 .ti -1c
-.BI "virtual void \fBinitMetaObject\fR ()"
+.BI "virtual void \fBinitMetaObject\fR () "
 .br
 .ti -1c
-.BI "virtual void \fBtimerEvent\fR ( QTimerEvent * )"
+.BI "virtual void \fBtimerEvent\fR ( QTimerEvent * ) "
 .br
 .ti -1c
-.BI "virtual void \fBchildEvent\fR ( QChildEvent * )"
+.BI "virtual void \fBchildEvent\fR ( QChildEvent * ) "
 .br
 .ti -1c
-.BI "virtual void \fBconnectNotify\fR ( const char * signal )"
+.BI "virtual void \fBconnectNotify\fR ( const char * signal ) "
 .br
 .ti -1c
-.BI "virtual void \fBdisconnectNotify\fR ( const char * signal )"
+.BI "virtual void \fBdisconnectNotify\fR ( const char * signal ) "
 .br
 .ti -1c
-.BI "virtual bool \fBcheckConnectArgs\fR ( const char * " "signal" ", const QObject * " "receiver" ", const char * member )"
+.BI "virtual bool \fBcheckConnectArgs\fR ( const char * " "signal" ", const QObject * " "receiver" ", const char * member ) "
 .br
 .in -1c
 .SS "Static Protected Members"
 .in +1c
 .ti -1c
-.BI "QMetaObject* \fBstaticMetaObject\fR ()"
+.BI "QMetaObject* \fBstaticMetaObject\fR () "
 .br
 .ti -1c
-.BI "void \fBbadSuperclassWarning\fR ( const char * " "className" ", const char * superclassName )"
+.BI "QCString \fBnormalizeSignalSlot\fR ( const char * signalSlot ) "
+.br
+.ti -1c
+.BI "void \fBbadSuperclassWarning\fR ( const char * " "className" ", const char * superclassName ) "
 .br
 .in -1c
 .SH RELATED FUNCTION DOCUMENTATION
@@ -219,21 +223,21 @@ Inherited by QAccel, QApplication, QClipboard, QDataPump, QDragManager, QDragObj
 .SH DESCRIPTION
 The QObject class is the base class of all Qt objects.
 .PP
-QObject is the heart of the Qt Object Model. The central feature in this model is a very powerful mechnism for seamless object commuinication dubbed signals and slots. With connect(), you can connect a signal to a slot and destroy the connection again with disconnect(). To avoid neverending notification loops, you can temporarily block signals with blockSignals(). The protected functions connectNotify() and disconnectNotify() make it possible to track connections.
+QObject is the heart of the Qt object model. The central feature in this model is a very powerful mechanism for seamless object commuinication dubbed signals and slots. With connect(), you can connect a signal to a slot and destroy the connection again with disconnect(). To avoid never-ending notification loops, you can temporarily block signals with blockSignals(). The protected functions connectNotify() and disconnectNotify() make it possible to track connections.
 .PP
-QObjects organize themselves in object trees. When you create a QObject with another object as parent, it will automatically do an insertChild() on the parent and thus show up in the parent's children() list. The parent receives object ownership, i.e. it will automatically delete its children in its destructor. With objectTrees(), you get direct access to all root objects currently existing. With queryList(), you can query all children and children's children of an object for certain criteria, such as their class or object name.
+QObjects organize themselves in object trees. When you create a QObject with another object as parent, it will automatically do an insertChild() on the parent and thus show up in the parent's children() list. The parent receives object ownership, i.e. it will automatically delete its children in its destructor. You can look for an object by name and optionally type using child() or queryList(), and get the list of tree roots using objectTrees().
 .PP
 Every object has an object name() and can report its className() and whether it inherits() another class in the QObject inheritance hierarchy.
 .PP
-When an object is deleted, it emits a destroyed() signal. You can catch this signal to avoid dangling references to QObjects. The QGuardedPtr class provides an elegant way to utilize this feature.
+When an object is deleted, it emits a destroyed() signal. You can catch this signal to avoid dangling references to QObjects. The QGuardedPtr class provides an elegant way to use this feature.
 .PP
 QObjects can receive events through event() and filter events of other objects. See installEventFilter() and eventFilter() for details. A convenience handler childEvent() can be reimplemented to catch child events.
 .PP
-Last but not least, QObject provides the basic timer support in Qt, see startTimer() and timerEvent() for details.
+Last but not least, QObject provides the basic timer support in Qt, see QTimer for high-level support for timers.
 .PP
-Notice that the \fCQ_OBJECT\fR macro is mandatory for any object that implement signals, slots or properties. You also need to run the moc program (Meta Object Compiler) on the source file. We strongly recommenend to use the macro in \fIall\fR subclasses of QObject regardless whether they actually use signals, slots and properties or not. Otherwise certain functions can show undefined behaviour.
+Notice that the \fCQ_OBJECT\fR macro is mandatory for any object that implement signals, slots or properties. You also need to run the moc program (Meta Object Compiler) on the source file. We strongly recommend to use the macro in \fIall\fR subclasses of QObject regardless whether they actually use signals, slots and properties or not. Otherwise certain functions can show undefined behaviour.
 .PP
-All Qt widgets inherit QObject. The convenience function isWidgetType() returns whether an object is actually a widget.
+All Qt widgets inherit QObject. The convenience function isWidgetType() returns whether an object is actually a widget. It is much faster than inherits( "QWidget" ).
 .SH MEMBER FUNCTION DOCUMENTATION
 .SH "QObject::QObject ( QObject * parent=0, const char * name=0 )"
 Constructs an object with the parent object \fIparent\fR and a \fIname.\fR
@@ -244,11 +248,9 @@ The destructor of a parent object destroys all child objects.
 .PP
 Setting \fIparent\fR to 0 constructs an object with no parent. If the object is a widget, it will become a top-level window.
 .PP
-The object name is a text that can be used to identify this QObject. It is not very useful in the current version of Qt, but it will become increasingly important in the future.
+The object name is a text that can be used to identify this QObject. It's particularly useful in conjunction with the Qt Designer. You can find an object by name (and type) using child(), and more than one using queryList().
 .PP
-The queryList() function searches the object tree for objects that matches a particular object name.
-.PP
-See also: parent(), name() and queryList().
+See also parent(), name(), child() and queryList().
 .SH "QObject::~QObject () \fC[virtual]\fR"
 Destructs the object, deleting all its child objects.
 .PP
@@ -280,13 +282,11 @@ Returns TRUE if the \fIsignal\fR and the \fImember\fR arguments are compatible, 
 .PP
 \fBWarning:\fR We recommend that you do not reimplement this function but use the default implementation.
 .SH "QObject* QObject::child ( const char * name, const char * type = 0 )"
-Returns the pointer to a child widget with the required name and type or 0 if no child matches. This function works recursive. That means it traverses the entire object tree to find the child. That in turn means that names have to be unique with regard to their toplevel window.
+Searches through the children and grandchildren of this object for an object named \fIname\fR and with type \fItype\fR (or a subclass of that type), and returns a pointer to that object if it exists. If \fItype\fR is 0, any type matches.
 .PP
-If multiple widgets with the same name and type are found then it is undefined which one of them is returned.
+If there isn't any such object, this function returns null.
 .PP
-If \fItype\fR is set to 0 then the only criterion is the object's name.
-.PP
-This function is useful if you need a widget of a dialog that was created from a ressource file.
+If there is more than one, one of them is retured; use queryList() if you need all of them.
 .SH "void QObject::childEvent ( QChildEvent * ) \fC[virtual protected]\fR"
 This event handler can be reimplemented in a subclass to receive child events.
 .PP
@@ -296,9 +296,9 @@ Note that events with QEvent::type() \fCQEvent::ChildInserted\fR are \fIposted\f
 .PP
 If you change state based on \fCChildInserted\fR events, call QWidget::constPolish(), or do \fCQApplication::sendPostedEvents( this, QEvent::ChildInserted );\fR in functions that depend on the state. One notable example is QWidget::sizeHint().
 .PP
-See also: event() and QChildEvent.
+See also event() and QChildEvent.
 .PP
-Reimplemented in QMainWindow, QWidgetStack, QGroupBox, QWorkspace and QSplitter.
+Reimplemented in QWidgetStack, QGroupBox, QMainWindow, QWorkspace and QSplitter.
 .SH "const QObjectList * QObject::children () const"
 Returns a list of child objects, or 0 if this object has no children.
 .PP
@@ -306,9 +306,9 @@ The QObjectList class is defined in the qobjcoll.h header file.
 .PP
 The latest child added is the first object in the list and the first child added is the last object in the list.
 .PP
-Note that the list order might change when widget children are raised or lowered. A widget that is raised becomes the last object in the list. A widget that is lowered becomes the first object in the list.
+Note that the list order changes when QWidget children are raised or lowered. A widget that is raised becomes the last object in the list, and a widget that is lowered becomes the first object in the list.
 .PP
-See also: queryList(), parent(), insertChild() and removeChild().
+See also child(), queryList(), parent(), insertChild() and removeChild().
 .SH "const char * QObject::className () const \fC[virtual]\fR"
 Returns the class name of this object.
 .PP
@@ -316,7 +316,7 @@ This function is generated by the Meta Object Compiler.
 .PP
 \fBWarning:\fR This function will return an invalid name if the class definition lacks the \fCQ_OBJECT\fR macro.
 .PP
-See also: name(), inherits(), isA() and isWidgetType().
+See also name(), inherits(), isA() and isWidgetType().
 .SH "bool QObject::connect ( const QObject * sender, const char * signal, const QObject * receiver, const char * member ) \fC[static]\fR"
 Connects \fIsignal\fR from the \fIsender\fR object to \fImember\fR in object \fIreceiver.\fR
 .PP
@@ -383,11 +383,11 @@ A signal can be connected to many slots/signals. Many signals can be connected t
 .PP
 If a signal is connected to several slots, the slots are activated in arbitrary order when the signal is emitted.
 .PP
-See also: disconnect().
+See also disconnect().
 .PP
 Examples:
 .(l
-showimg/main.cpp iconview/main.cpp grapher/grapher.cpp xform/xform.cpp application/main.cpp helpviewer/main.cpp drawdemo/drawdemo.cpp popup/popup.cpp menu/menu.cpp qmag/qmag.cpp qwerty/main.cpp forever/forever.cpp rot13/rot13.cpp scrollview/scrollview.cpp addressbook/main.cpp movies/main.cpp hello/main.cpp customlayout/main.cpp mdi/main.cpp
+showimg/main.cpp action/main.cpp iconview/main.cpp grapher/grapher.cpp xform/xform.cpp application/main.cpp helpviewer/main.cpp i18n/main.cpp drawdemo/drawdemo.cpp popup/popup.cpp menu/menu.cpp qmag/qmag.cpp qwerty/main.cpp forever/forever.cpp rot13/rot13.cpp scrollview/scrollview.cpp addressbook/main.cpp movies/main.cpp hello/main.cpp customlayout/main.cpp mdi/main.cpp
 .)l
 .SH "bool QObject::connect ( const QObject * sender, const char * signal, const char * member ) const"
 This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts.
@@ -396,13 +396,13 @@ Connects \fIsignal\fR from the \fIsender\fR object to \fImember\fR in this objec
 .PP
 Equivalent to: \fCQObject::connect(sender, signal, this, member)\fR.
 .PP
-See also: disconnect().
+See also disconnect().
 .SH "void QObject::connectNotify ( const char * signal ) \fC[virtual protected]\fR"
 This virtual function is called when something has been connected to \fIsignal\fR in this object.
 .PP
 \fBWarning:\fR This function violates the object-oriented principle of modularity. However, it might be useful when you need to perform expensive initialization only if something is connected to a signal.
 .PP
-See also: connect() and disconnectNotify().
+See also connect() and disconnectNotify().
 .PP
 Reimplemented in QClipboard.
 .SH "void QObject::destroyed () \fC[signal]\fR"
@@ -469,7 +469,7 @@ If \fIreceiver\fR is 0, it disconnects anything connected to \fIsignal.\fR If no
 .PP
 If \fImember\fR is 0, it disconnects anything that is connected to \fIreceiver.\fR If not, only slots named \fImember\fR will be disconnected, and all other slots are left alone. The \fImember\fR must be 0 if \fIreceiver\fR is left out, so you cannot disconnect a specifically-named slot on all objects.
 .PP
-See also: connect().
+See also connect().
 .SH "bool QObject::disconnect ( const QObject * receiver, const char * member=0 )"
 This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts.
 .PP
@@ -487,7 +487,7 @@ This virtual function is called when something has been disconnected from \fIsig
 .PP
 \fBWarning:\fR This function violates the object-oriented principle of modularity. However, it might be useful for optimizing access to expensive resources.
 .PP
-See also: disconnect() and connectNotify().
+See also disconnect() and connectNotify().
 .SH "void QObject::dumpObjectInfo ()"
 Dumps information about signal connections etc. for this object to the debug output.
 .PP
@@ -501,17 +501,19 @@ This virtual function receives events to an object and should return TRUE if the
 .PP
 The event() function can be reimplemented to customize the behavior of an object.
 .PP
-See also: installEventFilter(), timerEvent(), QApplication::sendEvent(), QApplication::postEvent() and QWidget::event().
+See also installEventFilter(), timerEvent(), QApplication::sendEvent(), QApplication::postEvent() and QWidget::event().
 .PP
-Reimplemented in QSplitter, QToolBar, QClipboard, QSocketNotifier, QTimer, QStatusBar, QMainWindow and QWidget.
+Reimplemented in QSplitter, QToolBar, QClipboard, QSocketNotifier, QStatusBar, QMainWindow, QLineEdit, QGroupBox, QTimer, QMultiLineEdit and QWidget.
 .SH "bool QObject::eventFilter ( QObject *, QEvent * ) \fC[virtual]\fR"
 Filters events if this object has been installed as an event filter for another object.
 .PP
 The reimplementation of this virtual function must return TRUE if the event should be stopped, or FALSE if the event should be dispatched normally.
 .PP
-See also: installEventFilter().
+\fBWarning:\fR If you delete the receiver object in this function, be sure to return TRUE. If you return FALSE, Qt sends the event to the deleted object and the program will crash.
 .PP
-Reimplemented in QScrollView, QAccel, QToolBar, QMainWindow, QTabWidget, QFontDialog, QListView, QComboBox, QFileDialog, QSpinBox, QWorkspace, QIconView, QLayout, QMenuBar and QWizard.
+See also installEventFilter().
+.PP
+Reimplemented in QScrollView, QToolBar, QMainWindow, QTabWidget, QFontDialog, QFileDialog, QSpinBox, QLayout, QSGIStyle, QAccel, QListView, QComboBox, QTable, QWorkspace, QMotifPlusStyle, QIconView, QMenuBar and QWizard.
 .SH "bool QObject::highPriority () const"
 Returns TRUE if the object is a high priority object, or FALSE if it is a standard priority object.
 .PP
@@ -541,21 +543,21 @@ Example:
     s->inherits( "QRangeControl" );     // returns FALSE
 .fi
 .PP
-See also: isA() and metaObject().
+See also isA() and metaObject().
 .SH "void QObject::initMetaObject () \fC[virtual protected]\fR"
 Initializes the meta object of this object. This method is automatically executed on demand.
 .PP
-See also: metaObject().
+See also metaObject().
 .SH "void QObject::insertChild ( QObject * obj ) \fC[virtual]\fR"
 Inserts an object \fIobj\fR into the list of child objects.
 .PP
 \fBWarning:\fR This function cannot be used to make a widget a child widget of another. Child widgets can be created only by setting the parent widget in the constructor or by calling QWidget::reparent().
 .PP
-See also: removeChild() and QWidget::reparent().
+See also removeChild() and QWidget::reparent().
 .SH "void QObject::installEventFilter ( const QObject * obj )"
-Installs an event filter object for this object.
+Installs an event filter \fIobj\fR for this object.
 .PP
-An event filter is an object that receives all events that are sent to this object. The filter can either stop the event or forward it to this object. The event filter object receives events via the eventFilter() function. The eventFilter() function must return TRUE if the event should be stopped, or FALSE if the event should be dispatched normally.
+An event filter is an object that receives all events that are sent to this object. The filter can either stop the event or forward it to this object. The event filter \fIobj\fR receives events via its eventFilter() function. The eventFilter() function must return TRUE if the event should be stopped, or FALSE if the event should be dispatched normally.
 .PP
 If multiple event filters are installed for a single object, the filter that was installed last is activated first.
 .PP
@@ -617,7 +619,7 @@ The QAccel class, for example, uses this technique.
 .PP
 \fBWarning:\fR If you delete the receiver object in your eventFilter() function, be sure to return TRUE. If you return FALSE, Qt sends the event to the deleted object and the program will crash.
 .PP
-See also: removeEventFilter(), eventFilter() and event().
+See also removeEventFilter(), eventFilter() and event().
 .SH "bool QObject::isA ( const char * clname ) const"
 Returns TRUE if this object is an instance of a specified class, otherwise FALSE.
 .PP
@@ -632,7 +634,7 @@ Example:
     t->isA("QObject");                  // returns FALSE
 .fi
 .PP
-See also: inherits() and metaObject().
+See also inherits() and metaObject().
 .SH "bool QObject::isWidgetType () const"
 Returns TRUE if the object is a widget, or FALSE if not.
 .PP
@@ -642,7 +644,7 @@ Kills the timer with the identifier \fIid.\fR
 .PP
 The timer identifier is returned by startTimer() when a timer event is started.
 .PP
-See also: timerEvent(), startTimer() and killTimers().
+See also timerEvent(), startTimer() and killTimers().
 .PP
 Examples:
 .(l
@@ -653,7 +655,7 @@ Kills all timers that this object has started.
 .PP
 Note that using this function can cause hard-to-find bugs: It kills timers started by sub- and superclasses as well as those started by you, which is often not what you want. Therefore, we recommend using a QTimer, or perhaps killTimer().
 .PP
-See also: timerEvent(), startTimer() and killTimer().
+See also timerEvent(), startTimer() and killTimer().
 .PP
 Examples:
 .(l
@@ -677,11 +679,13 @@ Returns the name of this object. If the object does not have a name, it will ret
 .PP
 The object name is set by the constructor or by the setName() function. The object name is not very useful in the current version of Qt, but will become increasingly important in the future.
 .PP
-The queryList() function searches the object tree for objects that matches a particular object name.
+You can find an object by name (and type) using child(), and more than one using queryList().
 .PP
-See also: setName(), className() and queryList().
+See also setName(), className(), child() and queryList().
 .SH "const char * QObject::name ( const char * defaultName ) const"
 Returns the name of this object, or \fIdefaultName\fR if the object does not have a name.
+.SH "QCString QObject::normalizeSignalSlot ( const char * signalSlot ) \fC[static protected]\fR"
+Normlizes the signal or slot definition \fIsignalSlot\fR by removing unnecessary whitespaces.
 .SH "const QObjectList * QObject::objectTrees () \fC[static]\fR"
 Returns a pointer to the list of all object trees (respectively their root objects), or 0 if there are no objects.
 .PP
@@ -689,11 +693,11 @@ The QObjectList class is defined in the qobjcoll.h header file.
 .PP
 The latest root object created is the first object in the list and the first root object added is the last object in the list.
 .PP
-See also: children(), parent(), insertChild() and removeChild().
+See also children(), parent(), insertChild() and removeChild().
 .SH "QObject * QObject::parent () const"
 Returns a pointer to the parent object.
 .PP
-See also: children().
+See also children().
 .SH "QVariant QObject::property ( const char * name ) const"
 Returns the value of the object's \fIname\fR property.
 .PP
@@ -701,37 +705,25 @@ If no such property exists, the returned variant is invalid.
 .PP
 Information about all available properties are provided through the metaObject().
 .PP
-See also: setProperty(), QVariant::isValid(), metaObject(), QMetaObject::propertyNames() and QMetaObject::property().
+See also setProperty(), QVariant::isValid(), metaObject(), QMetaObject::propertyNames() and QMetaObject::property().
 .SH "QObjectList * QObject::queryList ( const char * inheritsClass = 0, const char * objName = 0, bool regexpMatch = TRUE, bool recursiveSearch = TRUE )"
-Returns a list of child objects found by a query.
+Searches the children and optinally grandchildren of this object, and returns a list of those objects that are named or matches \fIobjName\fR and inherit \fIineritsClass.\fR If \fIinheritsClass\fR is 0 (the default), all classes match. IF \fIobjName\fR is 0 (the default), all object names match.
 .PP
-The query is specified by:
+If \fIregexpMatch\fR is TRUE (the default), \fIobjName\fR is a regexp that the objects's names must match. If \fIregexpMatch\fR is FALSE, \fIobjName\fR is a string and object names must match it exactly.
 .PP
-Arguments:
-.TP
-\fIinheritsClass\fR is the name of the base class that an object should inherit. Any class will be matched if \fIinheritsClass\fR is 0.
-.TP
-\fIobjName\fR is the object name to search for. Any object name will be matched if \fIobjName\fR is 0.
-.TP
-\fIregexpMatch\fR specifies whether \fIobjName\fR is a regular expression (default) or not.
-.TP
-\fIrecursiveSearch\fR must be \fCTRUE\fR (default) if you want to search the entire object tree, or \fCFALSE\fR if you want the search to traverse just the 1st level child objects of this object. Example:
+Note that \fIineritsClass\fR uses single inheritance from QObject, the way inherits() does. According to inherits(), QMenuBar inherits QWidget but not QMenuData. This does not quite match reality, but is the best that can be done on the wide variety of compilers Qt supports.
+.PP
+Finally, if \fIrecursiveSearch\fR is TRUE (the default), queryList() searches nth-generation as well as first-generation children.
+.PP
+If all this seems a bit complex for your needs, the simpler function child() may be what you want.
+.PP
+This somewhat contrived example disables all the buttons in this window:
 .PP
 .nf
 .br
-    //
+    QObjectList * l = topLevelWidget()->queryList( "QButton" );
 .br
-    // Sets a Courier 24 point fonts for all children in myWidget that
-.br
-    // inherit QButton (i.e. QPushButton, QCheckBox, QRadioButton).
-.br
-    //
-.br
-    QObjectList *list = myWidget->queryList( "QButton" );
-.br
-    QObjectListIt it( *list );          // iterate over the buttons
-.br
-    QFont newFont( "Courier", 24 );
+    QObjectListIt it( *l );             // iterate over the buttons
 .br
     QObject * obj;
 .br
@@ -739,18 +731,16 @@ Arguments:
 .br
         ++it;
 .br
-        ((QButton*)obj)->setFont( newFont );
+        ((QButton*)obj)->setEnabled( FALSE );
 .br
     }
 .br
     delete list;                        // delete the list, not the objects
 .fi
 .PP
-The QObjectList class is defined in the qobjcoll.h header file.
+\fBWarning:\fR Delete the list away as soon you have finished using it. The list contains pointers that may become invalid at almost any time without notice - as soon as the user closes a window you may have dangling pointers, for example.
 .PP
-\fBWarning:\fR Delete the list away as soon you have finished using it. You can get in serious trouble if you for instance try to access an object that has been deleted.
-.PP
-See also: children(), parent(), inherits(), name() and QRegExp.
+See also child(), children(), parent(), inherits(), name() and QRegExp.
 .SH "QConnectionList * QObject::receivers ( const char * signal ) const \fC[protected]\fR"
 Returns a list of objects/slot pairs that are connected to the signal, or 0 if nothing is connected to it.
 .PP
@@ -760,7 +750,7 @@ Removes the child object \fIobj\fR from the list of children.
 .PP
 \fBWarning:\fR This function will not remove a child widget from the screen. It will only remove it from the parent widget's list of children.
 .PP
-See also: insertChild() and QWidget::reparent().
+See also insertChild() and QWidget::reparent().
 .PP
 Reimplemented in QScrollView.
 .SH "void QObject::removeEventFilter ( const QObject * obj )"
@@ -770,19 +760,19 @@ All event filters for this object are automatically removed when this object is 
 .PP
 It is always safe to remove an event filter, even during event filter activation (i.e. from the eventFilter() function).
 .PP
-See also: installEventFilter(), eventFilter() and event().
+See also installEventFilter(), eventFilter() and event().
 .SH "const QObject * QObject::sender () \fC[protected]\fR"
-Returns a pointer to the object that sent the last signal received by this object.
+Returns a pointer to the object that sent the signal, if called in a slot before any function call or signal emission. Returns an undefined value in all other cases.
+.PP
+\fBWarning:\fR This function will return something apparently correct in other cases as well. However, its value may change during any function call, depending on what signal-slot connections are activated during that call. In Qt 3.0 the value will change more often than in 2.x.
 .PP
 \fBWarning:\fR This function violates the object-oriented principle of modularity, However, getting access to the sender might be practical when many signals are connected to a single slot. The sender is undefined if the slot is called as a normal C++ function.
 .SH "void QObject::setName ( const char * name ) \fC[virtual]\fR"
 Sets the name of this object to \fIname.\fR The default name is the one assigned by the constructor.
 .PP
-The object name is not very useful in the current version of Qt, but it will become increasingly important in the future.
+You can find an object by name (and type) using child(), and more than one using queryList().
 .PP
-The queryList() function searches the object tree for objects that matches a particular object name.
-.PP
-See also: name(), className() and queryList().
+See also name(), className(), queryList() and child().
 .PP
 Reimplemented in QWidget and QSignal.
 .SH "bool QObject::setProperty ( const char * name, const QVariant & value )"
@@ -792,13 +782,13 @@ Returne TRUE is the operation was successful, FALSE otherwise.
 .PP
 Information about all available properties are provided through the metaObject().
 .PP
-See also: property(), metaObject(), QMetaObject::propertyNames() and QMetaObject::property().
+See also property(), metaObject(), QMetaObject::propertyNames() and QMetaObject::property().
 .SH "bool QObject::signalsBlocked () const"
 Returns TRUE if signals are blocked, or FALSE if signals are not blocked.
 .PP
 Signals are not blocked by default.
 .PP
-See also: blockSignals().
+See also blockSignals().
 .SH "int QObject::startTimer ( int interval )"
 Starts a timer and returns a timer identifier, or returns zero if it could not start a timer.
 .PP
@@ -855,7 +845,7 @@ There is practically no upper limit for the interval value (more than one year).
 .PP
 The QTimer class provides a high-level programming interface with one-shot timers and timer signals instead of events.
 .PP
-See also: timerEvent(), killTimer() and killTimers().
+See also timerEvent(), killTimer() and killTimers().
 .PP
 Examples:
 .(l
@@ -866,7 +856,7 @@ The functionality of initMetaObject(), provided as a static function.
 .SH "QStringList QObject::superClasses ( bool includeThis = FALSE ) const"
 \fBThis function is obsolete.\fR It is provided to keep old source working, and will probably be removed in a future version of Qt. We strongly advise against using it in new code.
 .PP
-This function is misleadingly named, and cannot be implemented in a way that fulfils its name. someQWidget->superClasses() should have returned QPaintDevice and QObject, obviously. And it never can, so let us kill the function. \fBIt will be removed in Qt-3.0\fR
+This function is misleadingly named, and cannot be implemented in a way that fulfills its name. someQWidget->superClasses() should have returned QPaintDevice and QObject, obviously. And it never can, so let us kill the function. \fBIt will be removed in Qt-3.0\fR
 .PP
 Oh, and the return type was wrong, too. QStringList not QStrList.
 .SH "void QObject::timerEvent ( QTimerEvent * ) \fC[virtual protected]\fR"
@@ -874,13 +864,19 @@ This event handler can be reimplemented in a subclass to receive timer events fo
 .PP
 QTimer provides a higher-level interface to the timer functionality, and also more general information about timers.
 .PP
-See also: startTimer(), killTimer(), killTimers() and event().
+See also startTimer(), killTimer(), killTimers() and event().
 .PP
 Reimplemented in QPopupMenu and QMultiLineEdit.
-.SH "QString QObject::tr ( const char * text ) \fC[static]\fR"
-Returns a translated version of \fItext,\fR or \fItext\fR if there is no appropriate translated version. All QObject subclasses which use the Q_OBJECT macro have an overridden version of this.
+.SH "QString QObject::tr ( const char * text, const char * comment ) \fC[static]\fR"
+Returns a translated version of \fItext\fR in context QObject and and with \fIcomment,\fR or \fItext\fR if there is no appropriate translated version. All QObject subclasses which use the Q_OBJECT macro have a reimplementation of this function which uses the relevant class name as context.
 .PP
-See also: QApplication::translate().
+See also QApplication::translate().
+.SH "QString QObject::tr ( const char * text ) \fC[static]\fR"
+This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts.
+.PP
+Returns a translated version of \fItext\fR in context QObject and with no comment, or \fItext\fR if there is no appropriate translated version. All QObject subclasses which use the Q_OBJECT macro have a reimplementation of this function which uses the relevant class name as context.
+.PP
+See also QApplication::translate().
 .SH "bool QObject::activate_filters ( QEvent * e ) \fC[protected]\fR"
 For internal use only.
 .SH "void QObject::activate_signal ( const char * signal ) \fC[protected]\fR"
@@ -904,7 +900,7 @@ Returns 0 if there is no such child.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qobject.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

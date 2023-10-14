@@ -1,5 +1,5 @@
-.TH QPrinter 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QPrinter 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QPrinter \- Paint device that paint on a printer
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -19,10 +17,10 @@ Inherits QPaintDevice.
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQPrinter\fR ()"
+.BI "\fBQPrinter\fR () "
 .br
 .ti -1c
-.BI "\fB~QPrinter\fR ()"
+.BI "\fB~QPrinter\fR () "
 .br
 .ti -1c
 .BI "enum \fBOrientation\fR { Portrait, Landscape }"
@@ -40,70 +38,70 @@ Inherits QPaintDevice.
 .BI "QString \fBprinterName\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetPrinterName\fR ( const QString & )"
+.BI "virtual void \fBsetPrinterName\fR ( const QString & ) "
 .br
 .ti -1c
 .BI "bool \fBoutputToFile\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetOutputToFile\fR ( bool )"
+.BI "virtual void \fBsetOutputToFile\fR ( bool ) "
 .br
 .ti -1c
 .BI "QString \fBoutputFileName\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetOutputFileName\fR ( const QString & )"
+.BI "virtual void \fBsetOutputFileName\fR ( const QString & ) "
 .br
 .ti -1c
 .BI "QString \fBprintProgram\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetPrintProgram\fR ( const QString & )"
+.BI "virtual void \fBsetPrintProgram\fR ( const QString & ) "
 .br
 .ti -1c
 .BI "QString \fBprinterSelectionOption\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetPrinterSelectionOption\fR ( const QString & )"
+.BI "virtual void \fBsetPrinterSelectionOption\fR ( const QString & ) "
 .br
 .ti -1c
 .BI "QString \fBdocName\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetDocName\fR ( const QString & )"
+.BI "virtual void \fBsetDocName\fR ( const QString & ) "
 .br
 .ti -1c
 .BI "QString \fBcreator\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetCreator\fR ( const QString & )"
+.BI "virtual void \fBsetCreator\fR ( const QString & ) "
 .br
 .ti -1c
 .BI "Orientation \fBorientation\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetOrientation\fR ( Orientation )"
+.BI "virtual void \fBsetOrientation\fR ( Orientation ) "
 .br
 .ti -1c
 .BI "PageSize \fBpageSize\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetPageSize\fR ( PageSize )"
+.BI "virtual void \fBsetPageSize\fR ( PageSize ) "
 .br
 .ti -1c
-.BI "virtual void \fBsetPageOrder\fR ( PageOrder )"
+.BI "virtual void \fBsetPageOrder\fR ( PageOrder ) "
 .br
 .ti -1c
 .BI "PageOrder \fBpageOrder\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetColorMode\fR ( ColorMode )"
+.BI "virtual void \fBsetColorMode\fR ( ColorMode ) "
 .br
 .ti -1c
 .BI "ColorMode \fBcolorMode\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetFullPage\fR ( bool )"
+.BI "virtual void \fBsetFullPage\fR ( bool ) "
 .br
 .ti -1c
 .BI "bool \fBfullPage\fR () const"
@@ -118,7 +116,7 @@ Inherits QPaintDevice.
 .BI "int \fBtoPage\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetFromTo\fR ( int " "fromPage" ", int toPage )"
+.BI "virtual void \fBsetFromTo\fR ( int " "fromPage" ", int toPage ) "
 .br
 .ti -1c
 .BI "int \fBminPage\fR () const"
@@ -127,25 +125,25 @@ Inherits QPaintDevice.
 .BI "int \fBmaxPage\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetMinMax\fR ( int " "minPage" ", int maxPage )"
+.BI "virtual void \fBsetMinMax\fR ( int " "minPage" ", int maxPage ) "
 .br
 .ti -1c
 .BI "int \fBnumCopies\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetNumCopies\fR ( int )"
+.BI "virtual void \fBsetNumCopies\fR ( int ) "
 .br
 .ti -1c
-.BI "bool \fBnewPage\fR ()"
+.BI "bool \fBnewPage\fR () "
 .br
 .ti -1c
-.BI "bool \fBabort\fR ()"
+.BI "bool \fBabort\fR () "
 .br
 .ti -1c
 .BI "bool \fBaborted\fR () const"
 .br
 .ti -1c
-.BI "bool \fBsetup\fR ( QWidget * " "parent" " = 0 )"
+.BI "bool \fBsetup\fR ( QWidget * " "parent" " = 0 ) "
 .br
 .in -1c
 .SS "Protected Members"
@@ -295,35 +293,35 @@ Destructs the printer paint device and cleans up.
 .SH "bool QPrinter::abort ()"
 Aborts the print job. Returns TRUE if successful, otherwise FALSE.
 .PP
-See also: aborted().
+See also aborted().
 .SH "bool QPrinter::aborted () const"
 Returns TRUE is the printer job was aborted, otherwise FALSE.
 .PP
-See also: abort().
+See also abort().
 .SH "QPrinter::ColorMode QPrinter::colorMode() const"
 Returns the current color mode. The default color mode is \fCColor.\fR
 .PP
-See also: setColorMode().
+See also setColorMode().
 .SH "QString QPrinter::creator () const"
 Returns the creator name.
 .PP
-See also: setCreator().
+See also setCreator().
 .SH "QString QPrinter::docName () const"
 Returns the document name.
 .PP
-See also: setDocName().
+See also setDocName().
 .SH "int QPrinter::fromPage () const"
 Returns the from-page setting. The default value is 0.
 .PP
 The programmer is responsible for reading this setting and print accordingly.
 .PP
-See also: setFromTo() and toPage().
+See also setFromTo() and toPage().
 .SH "bool QPrinter::fullPage () const"
 Returns TRUE if the origin of the printer's coordinate system is at the corner of the sheet, and FALSE if it is at the edge of the printable area.
 .PP
 See setFullPage() for more detail and some warnings.
 .PP
-See also: setFullPage(), PageSize and QPaintDeviceMetrics.
+See also setFullPage(), PageSize and QPaintDeviceMetrics.
 .SH "QSize QPrinter::margins () const"
 Returns the width of the left/right and top/bottom margins of the printer. This is a best-effort guess, not based on perfect knowledge.
 .PP
@@ -331,11 +329,11 @@ If you have called setFullPage( TRUE ) (this is recommended for high-quality pri
 .PP
 If you have called setFullPage( FALSE ) (this is the default), margins() is automatically subtracted from the pageSize() by QPrinter.
 .PP
-See also: setFullPage(), QPaintDeviceMetrics and PageSize.
+See also setFullPage(), QPaintDeviceMetrics and PageSize.
 .SH "int QPrinter::maxPage () const"
 Returns the max-page setting. The default value is 0.
 .PP
-See also: minPage() and setMinMax().
+See also minPage() and setMinMax().
 .SH "int QPrinter::metric ( int m ) const \fC[virtual protected]\fR"
 Internal implementation of the virtual QPaintDevice::metric() function.
 .PP
@@ -345,27 +343,27 @@ Reimplemented from QPaintDevice.
 .SH "int QPrinter::minPage () const"
 Returns the min-page setting. The default value is 0.
 .PP
-See also: maxPage() and setMinMax().
+See also maxPage() and setMinMax().
 .SH "bool QPrinter::newPage ()"
 Advances to a new page on the printer. Returns TRUE if successful, otherwise FALSE.
 .SH "int QPrinter::numCopies () const"
 Returns the number of copies to be printed. The default value is 1.
 .PP
-See also: setNumCopies().
+See also setNumCopies().
 .SH "Orientation QPrinter::orientation () const"
 Returns the orientation setting. The default value is \fCQPrinter::Portrait.\fR
 .PP
-See also: setOrientation().
+See also setOrientation().
 .SH "QString QPrinter::outputFileName () const"
 Returns the name of the output file. There is no default file name.
 .PP
-See also: setOutputFileName() and setOutputToFile().
+See also setOutputFileName() and setOutputToFile().
 .SH "bool QPrinter::outputToFile () const"
 Returns TRUE if the output should be written to a file, or FALSE if the output should be sent directly to the printer. The default setting is FALSE.
 .PP
 This function is currently only supported under X11.
 .PP
-See also: setOutputToFile() and setOutputFileName().
+See also setOutputToFile() and setOutputFileName().
 .SH "QPrinter::PageOrder QPrinter::pageOrder() const"
 Returns the current page order.
 .PP
@@ -373,7 +371,7 @@ The default page order is \fIFirstPageFirst.\fR
 .SH "PageSize QPrinter::pageSize () const"
 Returns the printer page size. The default value is system-dependent.
 .PP
-See also: setPageSize().
+See also setPageSize().
 .SH "QString QPrinter::printProgram () const"
 Returns the name of the program that sends the print output to the printer.
 .PP
@@ -381,11 +379,11 @@ The default is to return a null string; meaning that QPrinter will try to be sma
 .PP
 On Windows, this function returns the name of the printer device driver.
 .PP
-See also: setPrintProgram() and setPrinterSelectionOption().
+See also setPrintProgram() and setPrinterSelectionOption().
 .SH "QString QPrinter::printerName () const"
 Returns the printer name. This value is initially set to the name of the default printer.
 .PP
-See also: setPrinterName().
+See also setPrinterName().
 .SH "QString QPrinter::printerSelectionOption () const"
 Returns the printer options selection string. This is only useful if the print command has been explicitly set.
 .PP
@@ -393,19 +391,19 @@ The default value (a null string) implies to select printer in a system-dependen
 .PP
 Any other value implies to use that value.
 .PP
-See also: setPrinterSelectionOption().
+See also setPrinterSelectionOption().
 .SH "void QPrinter::setColorMode ( ColorMode newColorMode )"
 Sets the printer's color mode to \fInewColorMode,\fR which can be one of \fCColor\fR (the default) and \fCGrayScale.\fR
 .PP
 A future version of Qt will modify its printing accordingly. At present, QPrinter behaves as if \fCColor\fR is selected.
 .PP
-See also: colorMode().
+See also colorMode().
 .SH "void QPrinter::setCreator ( const QString & creator ) \fC[virtual]\fR"
 Sets the creator name.
 .PP
 Calling this function only has effect for the X11 version of Qt. The creator name is the name of the application that created the document. If no creator name is specified, then the creator will be set to "Qt" with some version number.
 .PP
-See also: creator().
+See also creator().
 .SH "void QPrinter::setDocName ( const QString & name ) \fC[virtual]\fR"
 Sets the document name.
 .SH "void QPrinter::setFromTo ( int fromPage, int toPage ) \fC[virtual]\fR"
@@ -415,29 +413,29 @@ The from-page and to-page settings specify what pages to print.
 .PP
 This function is useful mostly for setting a default value that the user can override in the print dialog when you call setup().
 .PP
-See also: fromPage(), toPage(), setMinMax() and setup().
+See also fromPage(), toPage(), setMinMax() and setup().
 .SH "void QPrinter::setFullPage ( bool fp ) \fC[virtual]\fR"
 Sets QPrinter to have the origin of the coordinate system at the top left corner of the paper if \fIfp\fR is TRUE, or where it thinks the top left corner of the printable area is if \fIfp\fR is FALSE.
 .PP
 The default is FALSE: You can (probably) print on (0,0), and QPaintDeviceMetrics will report something smaller than the size indicated by PageSize. (Note that QPrinter may be wrong - it does not have perfect knowledge of the physical printer.)
 .PP
-If you set it to TRUE, QPaintDeviceMetrics will report the exact same size as indicated by PageSize, but you cannot print on all of that - you have to take care of the ourput margins yourself.
+If you set it to TRUE, QPaintDeviceMetrics will report the exact same size as indicated by PageSize, but you cannot print on all of that - you have to take care of the output margins yourself.
 .PP
 If the page-size mode is changed while the printer is active, the current print job may or may not be affected.
 .PP
-See also: PageSize, setPageSize(), QPaintDeviceMetrics and fullPage().
+See also PageSize, setPageSize(), QPaintDeviceMetrics and fullPage().
 .SH "void QPrinter::setMinMax ( int minPage, int maxPage ) \fC[virtual]\fR"
 Sets the min page and max page.
 .PP
 The min-page and max-page restrict the from-page and to-page settings. When the printer setup dialog comes up, the user cannot select from and to that are outside the range specified by min and max pages.
 .PP
-See also: minPage(), maxPage(), setFromTo() and setup().
+See also minPage(), maxPage(), setFromTo() and setup().
 .SH "void QPrinter::setNumCopies ( int numCopies ) \fC[virtual]\fR"
 Sets the number of pages to be printed.
 .PP
 The printer driver reads this setting and prints the specified number of copies.
 .PP
-See also: numCopies() and setup().
+See also numCopies() and setup().
 .SH "void QPrinter::setOrientation ( Orientation orientation )"
 Sets the print orientation.
 .PP
@@ -445,7 +443,7 @@ The orientation can be either \fCQPrinter::Portrait\fR or \fCQPrinter::Landscape
 .PP
 The printer driver reads this setting and prints using the specified orientation.
 .PP
-See also: orientation().
+See also orientation().
 .SH "void QPrinter::setOutputFileName ( const QString & fileName ) \fC[virtual]\fR"
 Sets the name of the output file.
 .PP
@@ -453,7 +451,7 @@ Setting a null name (0 or "") disables output to a file, i.e. calls setOutputToF
 .PP
 This function is currently only supported under X11.
 .PP
-See also: outputFileName() and setOutputToFile().
+See also outputFileName() and setOutputToFile().
 .SH "void QPrinter::setOutputToFile ( bool enable ) \fC[virtual]\fR"
 Specifies whether the output should be written to a file or sent directly to the printer.
 .PP
@@ -461,7 +459,7 @@ Will output to a file if \fIenable\fR is TRUE, or will output directly to the pr
 .PP
 This function is currently only supported under X11.
 .PP
-See also: outputToFile() and setOutputFileName().
+See also outputToFile() and setOutputFileName().
 .SH "void QPrinter::setPageOrder ( PageOrder newPageOrder )"
 Sets the page order to \fInewPageOrder.\fR
 .PP
@@ -475,13 +473,13 @@ The default page size is system-dependent.
 .PP
 This function is useful mostly for setting a default value that the user can override in the print dialog when you call setup().
 .PP
-See also: pageSize(), PageSize and setFullPage().
+See also pageSize(), PageSize and setFullPage().
 .SH "void QPrinter::setPrintProgram ( const QString & printProg ) \fC[virtual]\fR"
 Sets the name of the program that should do the print job.
 .PP
 On X11, this function sets the program to call with the PostScript output. On other platforms, it has no effect.
 .PP
-See also: printProgram().
+See also printProgram().
 .SH "void QPrinter::setPrinterName ( const QString & name ) \fC[virtual]\fR"
 Sets the printer name.
 .PP
@@ -489,7 +487,7 @@ The default printer will be used if no printer name is set.
 .PP
 Under X11, the PRINTER environment variable defines the default printer. Under any other window system, the window system defines the default printer.
 .PP
-See also: printerName().
+See also printerName().
 .SH "void QPrinter::setPrinterSelectionOption ( const QString & option ) \fC[virtual]\fR"
 Sets the printer to use \fIoption\fR to select printer. \fIoption\fR is null by default, meaning to be a little smart, but can be set to other values to use a specific printer selection option.
 .PP
@@ -508,7 +506,7 @@ Returns the to-page setting. The default value is 0.
 .PP
 The programmer is responsible for reading this setting and print accordingly.
 .PP
-See also: setFromTo() and fromPage().
+See also setFromTo() and fromPage().
 .SH "bool QPrinter::cmd ( int c, QPainter * paint, QPDevCmdParam * p ) \fC[virtual protected]\fR"
 For internal use only.
 .PP
@@ -516,7 +514,7 @@ Reimplemented from QPaintDevice.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qprinter.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

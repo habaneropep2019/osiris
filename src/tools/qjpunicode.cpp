@@ -1,27 +1,39 @@
 /****************************************************************************
-** $Id: qt/src/tools/qjpunicode.cpp   2.1.1   edited 2000-03-24 $
+** $Id: qt/src/tools/qjpunicode.cpp   2.2.0   edited 2000-08-28 $
 **
 ** Implementation of QJpUnicodeConv class
 **
 ** Created : 990225
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the tools module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 /*! \class QJpUnicodeConv qjpunicode.h
 
@@ -68,16 +80,17 @@
   JIS 0x2140 is mapped to UFF3C. Either ASCII or JISX0201 can be used
   for 0x00-0x7f.
 
-  </ul> In addition, QJpUnicodeConv supports some  extensions:  "nec-vdc", "ibm-vdc" or "udc".
+  </ul> In addition, QJpUnicodeConv supports some extensions:
+  "nec-vdc", "ibm-vdc" or "udc".
 
   For example, if you want to use Unicode style conversion, but with
   NEC's extension, set \c UNICODEMAP_JP to
-  <code>unicode-0.9, nec-vdc</code>. (You will probably need to quote
-  that in the shell command.)
+  <nobr><code>unicode-0.9, nec-vdc</code>.</nobr> (You will probably
+  need to quote that in the shell command.)
 
   Most of the code here was originally written by Serika Kurusugawa
   a.k.a. Junji Takagi, and is includes in Qt with the author's
-  permission, and the grateful thanks of the Troll Tech team. Here is
+  permission, and the grateful thanks of the Trolltech team. Here is
   the copyright statement for that code:
 
   \mustquote
@@ -109,6 +122,9 @@
 */
 
 #include "qcstring.h"
+
+#ifndef QT_NO_CODECS
+
 #include <stdlib.h>
 #include <ctype.h>
 
@@ -809,32 +825,32 @@ const QJpUnicodeConv *QJpUnicodeConv::newConverter(int rule)
 		s = env.mid(i, j - i).stripWhiteSpace();
 		i = j + 1;
 	    }
-	    if (stricmp(s, "unicode-0.9") == 0) {
+	    if (qstricmp(s, "unicode-0.9") == 0) {
 		rule = (rule & 0xff00) | JU_Unicode;
-	    } else if (stricmp(s, "unicode-0201") == 0) {
+	    } else if (qstricmp(s, "unicode-0201") == 0) {
 		rule = (rule & 0xff00) | JU_Unicode_JISX0201;
-	    } else if (stricmp(s, "unicode-ascii") == 0) {
+	    } else if (qstricmp(s, "unicode-ascii") == 0) {
 		rule = (rule & 0xff00) | JU_Unicode_ASCII;
-	    } else if (stricmp(s, "jisx0221-1995") == 0) {
+	    } else if (qstricmp(s, "jisx0221-1995") == 0) {
 		rule = (rule & 0xff00) | JU_JISX0221_JISX0201;
-	    } else if ((stricmp(s, "open-0201") == 0) ||
-		       (stricmp(s, "open-19970715-0201") == 0)) {
+	    } else if ((qstricmp(s, "open-0201") == 0) ||
+		       (qstricmp(s, "open-19970715-0201") == 0)) {
 		rule = (rule & 0xff00) | JU_JISX0221_JISX0201;
-	    } else if ((stricmp(s, "open-ascii") == 0) ||
-		       (stricmp(s, "open-19970715-ascii") == 0)) {
+	    } else if ((qstricmp(s, "open-ascii") == 0) ||
+		       (qstricmp(s, "open-19970715-ascii") == 0)) {
 		rule = (rule & 0xff00) | JU_JISX0221_ASCII;
-	    } else if ((stricmp(s, "open-ms") == 0) ||
-		       (stricmp(s, "open-19970715-ms") == 0)) {
+	    } else if ((qstricmp(s, "open-ms") == 0) ||
+		       (qstricmp(s, "open-19970715-ms") == 0)) {
 		rule = (rule & 0xff00) | JU_Microsoft_CP932;
-	    } else if (stricmp(s, "cp932") == 0) {
+	    } else if (qstricmp(s, "cp932") == 0) {
 		rule = (rule & 0xff00) | JU_Microsoft_CP932;
-	    } else if (stricmp(s, "jdk1.1.7") == 0) {
+	    } else if (qstricmp(s, "jdk1.1.7") == 0) {
 		rule = (rule & 0xff00) | JU_Sun_JDK117;
-	    } else if (stricmp(s, "nec-vdc") == 0) {
+	    } else if (qstricmp(s, "nec-vdc") == 0) {
 		rule = rule | JU_NEC_VDC;
-	    } else if (stricmp(s, "ibm-vdc") == 0) {
+	    } else if (qstricmp(s, "ibm-vdc") == 0) {
 		rule = rule | JU_IBM_VDC;
-	    } else if (stricmp(s, "udc") == 0) {
+	    } else if (qstricmp(s, "udc") == 0) {
 		rule = rule | JU_UDC;
 	    }
 	}
@@ -10561,3 +10577,5 @@ static uint Unicode11ToJisx0212(uint h, uint l)
 
 \internal
 */
+
+#endif

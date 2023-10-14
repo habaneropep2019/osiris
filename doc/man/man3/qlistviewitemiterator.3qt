@@ -1,5 +1,5 @@
-.TH QListViewItemIterator 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QListViewItemIterator 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QListViewItemIterator \- Iterator for collections of QListViewItems
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -17,40 +15,40 @@ QListViewItemIterator \- Iterator for collections of QListViewItems
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQListViewItemIterator\fR ()"
+.BI "\fBQListViewItemIterator\fR () "
 .br
 .ti -1c
-.BI "\fBQListViewItemIterator\fR ( QListViewItem * item )"
+.BI "\fBQListViewItemIterator\fR ( QListViewItem * item ) "
 .br
 .ti -1c
-.BI "\fBQListViewItemIterator\fR ( const QListViewItemIterator & it )"
+.BI "\fBQListViewItemIterator\fR ( const QListViewItemIterator & it ) "
 .br
 .ti -1c
-.BI "\fBQListViewItemIterator\fR ( QListView * lv )"
+.BI "\fBQListViewItemIterator\fR ( QListView * lv ) "
 .br
 .ti -1c
-.BI "QListViewItemIterator& \fBoperator=\fR ( const QListViewItemIterator & it )"
+.BI "QListViewItemIterator& \fBoperator=\fR ( const QListViewItemIterator & it ) "
 .br
 .ti -1c
-.BI "\fB~QListViewItemIterator\fR ()"
+.BI "\fB~QListViewItemIterator\fR () "
 .br
 .ti -1c
-.BI "QListViewItemIterator& \fBoperator++\fR ()"
+.BI "QListViewItemIterator& \fBoperator++\fR () "
 .br
 .ti -1c
-.BI "const QListViewItemIterator \fBoperator++\fR ( int )"
+.BI "const QListViewItemIterator \fBoperator++\fR ( int ) "
 .br
 .ti -1c
-.BI "QListViewItemIterator& \fBoperator+=\fR ( int j )"
+.BI "QListViewItemIterator& \fBoperator+=\fR ( int j ) "
 .br
 .ti -1c
-.BI "QListViewItemIterator& \fBoperator--\fR ()"
+.BI "QListViewItemIterator& \fBoperator--\fR () "
 .br
 .ti -1c
-.BI "const QListViewItemIterator \fBoperator--\fR ( int )"
+.BI "const QListViewItemIterator \fBoperator--\fR ( int ) "
 .br
 .ti -1c
-.BI "QListViewItemIterator& \fBoperator-=\fR ( int j )"
+.BI "QListViewItemIterator& \fBoperator-=\fR ( int j ) "
 .br
 .ti -1c
 .BI "QListViewItem* \fBcurrent\fR () const"
@@ -120,11 +118,11 @@ Often you want to get all items, which were selected by a user. Here is an examp
   }
 .fi
 .PP
-Using a QListViewItemIterator is a convinient way to traverse the tree of QListViewItems of a QListView. It makes especially operating on a hirarchical QListView easy.
+Using a QListViewItemIterator is a convenient way to traverse the tree of QListViewItems of a QListView. It makes especially operating on a hierarchical QListView easy.
 .PP
 Also, multiple QListViewItemIterators can operate on the tree of QListViewItems. A QListView knows about all iterators which are operating on its QListViewItems. So when a QListViewItem gets removed, all iterators that point to this item get updated and point to the new current item after that.
 .PP
-See also: QListView and QListViewItem.
+See also QListView and QListViewItem.
 .SH MEMBER FUNCTION DOCUMENTATION
 .SH "QListViewItemIterator::QListViewItemIterator ()"
 Constructs an empty iterator.
@@ -143,7 +141,7 @@ Prefix ++ makes the next item in the QListViewItem tree of the QListView of the 
 .SH "const QListViewItemIterator QListViewItemIterator::operator++ ( int )"
 Postfix ++ makes the next item in the QListViewItem tree of the QListView of the iterator the current item and returns the item, which was the current one before.
 .SH "QListViewItemIterator & QListViewItemIterator::operator+= ( int j )"
-Sets the current item to the item \fIj\fR positions after the current item in the QListViewItem hirarchie. If this item is beyond the last item, the current item is set to null.
+Sets the current item to the item \fIj\fR positions after the current item in the QListViewItem hierarchy. If this item is beyond the last item, the current item is set to null.
 .PP
 The new current item (or null, if the new current item is null) is returned.
 .SH "QListViewItemIterator & QListViewItemIterator::operator-- ()"
@@ -151,14 +149,14 @@ Prefix -- makes the previous item in the QListViewItem tree of the QListView of 
 .SH "const QListViewItemIterator QListViewItemIterator::operator-- ( int )"
 Postfix -- makes the previous item in the QListViewItem tree of the QListView of the iterator the current item and returns the item, which was the current one before.
 .SH "QListViewItemIterator & QListViewItemIterator::operator-= ( int j )"
-Sets the current item to the item \fIj\fR positions before the current item in the QListViewItem hirarchie. If this item is above the first item, the current item is set to null. The new current item (or null, if the new current item is null) is returned.
+Sets the current item to the item \fIj\fR positions before the current item in the QListViewItem hierarchy. If this item is above the first item, the current item is set to null. The new current item (or null, if the new current item is null) is returned.
 .SH "QListViewItemIterator & QListViewItemIterator::operator= ( const QListViewItemIterator & it )"
 Assignment. Makes a copy of \fIit\fR and returns a reference to its
 iterator.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qlistviewitemiterator.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

@@ -1,5 +1,5 @@
-.TH QLayoutItem 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QLayoutItem 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QLayoutItem \- The abstract items which a QLayout manipulates
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -19,10 +17,10 @@ Inherited by QLayout, QSpacerItem and QWidgetItem.
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQLayoutItem\fR ( int " "alignment" " = 0 )"
+.BI "\fBQLayoutItem\fR ( int " "alignment" " = 0 ) "
 .br
 .ti -1c
-.BI "virtual \fB~QLayoutItem\fR ()"
+.BI "virtual \fB~QLayoutItem\fR () "
 .br
 .ti -1c
 .BI "virtual QSize \fBsizeHint\fR () const"
@@ -37,7 +35,7 @@ Inherited by QLayout, QSpacerItem and QWidgetItem.
 .BI "virtual QSizePolicy::ExpandData \fBexpanding\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetGeometry\fR ( const QRect & )"
+.BI "virtual void \fBsetGeometry\fR ( const QRect & ) "
 .br
 .ti -1c
 .BI "virtual QRect \fBgeometry\fR () const"
@@ -52,25 +50,25 @@ Inherited by QLayout, QSpacerItem and QWidgetItem.
 .BI "virtual int \fBheightForWidth\fR ( int ) const"
 .br
 .ti -1c
-.BI "virtual void \fBinvalidate\fR ()"
+.BI "virtual void \fBinvalidate\fR () "
 .br
 .ti -1c
-.BI "virtual QWidget* \fBwidget\fR ()"
+.BI "virtual QWidget* \fBwidget\fR () "
 .br
 .ti -1c
-.BI "virtual QLayoutIterator \fBiterator\fR ()"
+.BI "virtual QLayoutIterator \fBiterator\fR () "
 .br
 .ti -1c
-.BI "virtual QLayout* \fBlayout\fR ()"
+.BI "virtual QLayout* \fBlayout\fR () "
 .br
 .ti -1c
-.BI "virtual QSpacerItem* \fBspacerItem\fR ()"
+.BI "virtual QSpacerItem* \fBspacerItem\fR () "
 .br
 .ti -1c
 .BI "int \fBalignment\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBsetAlignment\fR ( int a )"
+.BI "virtual void \fBsetAlignment\fR ( int a ) "
 .br
 .in -1c
 .SH DESCRIPTION
@@ -78,7 +76,7 @@ The abstract items which a QLayout manipulates.
 .PP
 For custom layouts.
 .PP
-See also: QLayout.
+See also QLayout.
 .SH MEMBER FUNCTION DOCUMENTATION
 .SH "QLayoutItem::QLayoutItem ( int alignment = 0 )"
 Constructs a layout item with an \fIalignment\fR that is a bitwise OR of Qt::AlignmentFlags. Alignment may not be supported by all subclasses.
@@ -89,7 +87,7 @@ Returns the alignment of this item.
 .SH "QSizePolicy::ExpandData QLayoutItem::expanding() const \fC[virtual]\fR"
 Implemented in subclasses to return whether this item "wants" to expand.
 .PP
-Reimplemented in QWidgetItem, QBoxLayout, QGridLayout, QSpacerItem and QLayout.
+Reimplemented in QSpacerItem, QWidgetItem, QBoxLayout, QGridLayout and QLayout.
 .SH "QRect QLayoutItem::geometry () const \fC[virtual]\fR"
 Returns the rectangle covered by this layout item.
 .PP
@@ -99,7 +97,7 @@ Returns TRUE if this layout's preferred height depends on its width. The default
 .PP
 Reimplement this function in layout managers that support height for width.
 .PP
-See also: heightForWidth() and QWidget::heightForWidth().
+See also heightForWidth() and QWidget::heightForWidth().
 .PP
 Reimplemented in QBoxLayout, QGridLayout and QWidgetItem.
 .SH "int QLayoutItem::heightForWidth ( int ) const \fC[virtual]\fR"
@@ -136,9 +134,9 @@ Reimplement this function in layout managers that support height for width. A ty
 .PP
 Caching is strongly recommended, without it layout will take exponential time.
 .PP
-See also: hasHeightForWidth().
+See also hasHeightForWidth().
 .PP
-Reimplemented in QWidgetItem, QBoxLayout and QGridLayout.
+Reimplemented in QGridLayout, QWidgetItem and QBoxLayout.
 .SH "void QLayoutItem::invalidate () \fC[virtual]\fR"
 Invalidates any cached information in this layout item.
 .PP
@@ -146,7 +144,7 @@ Reimplemented in QBoxLayout, QLayout and QGridLayout.
 .SH "virtual bool QLayoutItem::isEmpty () const \fC[virtual]\fR"
 Implemented in subclasses to return whether this item is empty, i.e. whether it contains any widgets.
 .PP
-Reimplemented in QWidgetItem, QSpacerItem and QLayout.
+Reimplemented in QLayout, QWidgetItem and QSpacerItem.
 .SH "QLayoutIterator QLayoutItem::iterator () \fC[virtual]\fR"
 Returns an iterator over this item's QLayoutItem children. The default implementation returns an empty iterator.
 .PP
@@ -160,21 +158,21 @@ Reimplemented in QLayout.
 .SH "QSize QLayoutItem::maximumSize () const \fC[virtual]\fR"
 Implemented in subclasses to return the maximum size of this item.
 .PP
-Reimplemented in QBoxLayout, QLayout, QSpacerItem, QGridLayout and QWidgetItem.
+Reimplemented in QLayout, QSpacerItem, QGridLayout, QWidgetItem and QBoxLayout.
 .SH "QSize QLayoutItem::minimumSize () const \fC[virtual]\fR"
 Implemented in subclasses to return the minimum size of this item.
 .PP
-Reimplemented in QSpacerItem, QLayout, QWidgetItem, QGridLayout and QBoxLayout.
+Reimplemented in QSpacerItem, QGridLayout, QBoxLayout, QLayout and QWidgetItem.
 .SH "void QLayoutItem::setAlignment ( int a ) \fC[virtual]\fR"
 Sets the alignment of this item to \fIa,\fR which is a bitwise OR of Qt::AlignmentFlags.
 .SH "void QLayoutItem::setGeometry ( const QRect & r ) \fC[virtual]\fR"
 Implemented in subclasses to set this item's geometry to \fIr.\fR
 .PP
-Reimplemented in QLayout, QSpacerItem, QWidgetItem, QBoxLayout and QGridLayout.
+Reimplemented in QWidgetItem, QBoxLayout, QGridLayout, QLayout and QSpacerItem.
 .SH "QSize QLayoutItem::sizeHint () const \fC[virtual]\fR"
 Implemented in subclasses to return the preferred size of this item.
 .PP
-Reimplemented in QSpacerItem and QWidgetItem.
+Reimplemented in QWidgetItem, QBoxLayout, QSpacerItem and QGridLayout.
 .SH "QSpacerItem * QLayoutItem::spacerItem () \fC[virtual]\fR"
 If this item is a QSpacerItem, return it as a QSpacerItem, otherwise return 0. This function provides type-safe casting.
 .PP
@@ -185,7 +183,7 @@ The default implementation returns 0;.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qlayoutitem.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

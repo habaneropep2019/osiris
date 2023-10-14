@@ -1,32 +1,49 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qmime.cpp   2.1.1   edited 2000-04-06 $
+** $Id: qt/src/kernel/qmime.cpp   2.2.0   edited 2000-08-25 $
 **
 ** Implementation of MIME support
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the kernel module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #include "qmime.h"
+
+#ifndef QT_NO_MIME
+
 #include "qmap.h"
 #include "qstringlist.h"
 #include "qfileinfo.h"
 #include "qdir.h"
 #include "qdragobject.h"
+#include "qapplication.h" // ### for now
+#include "qclipboard.h" // ### for now
 
 // NOT REVISED
 /*!
@@ -47,6 +64,18 @@
 */
 QMimeSource::~QMimeSource()
 {
+    if (QApplication::closingDown()) return;
+    
+#ifndef QT_NO_MIMECLIPBOARD
+    if (QApplication::clipboard()->data() == this) {
+#ifdef CHECK_RANGE
+	qWarning("QMimeSource::~QMimeSource: clipboard data deleted!");
+#endif
+#if defined(_WS_X11_)	
+	QApplication::clipboard()->clobber();
+#endif
+    }
+#endif // QT_NO_CLIPBOARD
 }
 
 /*!
@@ -140,7 +169,7 @@ public:
   As mentioned earlier, a factory can also be used as container to
   store data associated with a name. This technique is useful whenever
   rich text contains images that are stored in the program itself, not
-  loaded from the harddisk. Your program may for example define some
+  loaded from the hard disk. Your program may for example define some
   image data as
 
   \code
@@ -169,7 +198,7 @@ public:
 
 
 /*!
-  Constructs a QMimeSourceFactory which has no filepath and no stored
+  Constructs a QMimeSourceFactory which has no file path and no stored
   content.
 */
 QMimeSourceFactory::QMimeSourceFactory() :
@@ -180,7 +209,7 @@ QMimeSourceFactory::QMimeSourceFactory() :
     setExtensionType("html", "text/html;charset=iso8859-1");
     setExtensionType("txt", "text/plain");
     setExtensionType("xml", "text/xml;charset=UTF-8");
-    setExtensionType("jpg", "image/jpeg"); // support missspelled jpeg files
+    setExtensionType("jpg", "image/jpeg"); // support misspelled jpeg files
 }
 
 /*!
@@ -250,7 +279,7 @@ static QMimeSource* data_internal(const QString& abs_name,
   encode any Unicode characters without resorting to encoding definitions
   inside the file.
 
-  Any file data that is not recognized will be retreived as a QMimeSource
+  Any file data that is not recognized will be retrieved as a QMimeSource
   providing the "application/octet-stream" MIME type, which is just
   uninterpreted binary data.
   You can add further extensions or change existing ones with
@@ -331,7 +360,7 @@ void QMimeSourceFactory::setExtensionType( const QString& ext, const char* mimet
 
 /*!
   Converts the absolute or relative data item name \a abs_or_rel_name
-  to an absolute name, interpretted within the context of the data
+  to an absolute name, interpreted within the context of the data
   item named \a context (this must be an absolute name).
 */
 QString QMimeSourceFactory::makeAbsolute(const QString& abs_or_rel_name, const QString& context) const
@@ -442,3 +471,5 @@ void QMimeSourceFactory::setDefaultFactory( QMimeSourceFactory* factory)
 	delete defaultfactory;
     defaultfactory = factory;
 }
+
+#endif // QT_NO_MIME

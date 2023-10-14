@@ -1,7 +1,7 @@
 /****************************************************************************
-** $Id: qt/examples/mdi/application.h   2.1.1   edited 2000-02-21 $
+** $Id: qt/examples/mdi/application.h   2.2.0   edited 2000-08-31 $
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -19,6 +19,7 @@ class QToolBar;
 class QPopupMenu;
 class QWorkspace;
 class QPopupMenu;
+class QMovie;
 
 class MDIWindow: public QMainWindow
 {
@@ -37,6 +38,7 @@ signals:
 
 private:
     QMultiLineEdit* medit;
+    QMovie * mmovie;
     QString filename;
 };
 

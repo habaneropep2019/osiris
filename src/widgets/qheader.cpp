@@ -1,29 +1,42 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qheader.cpp   2.1.1   edited 2000-05-24 $
+** $Id: qt/src/widgets/qheader.cpp   2.2.0   edited 2000-08-28 $
 **
 ** Implementation of QHeader widget class (table header)
 **
 ** Created : 961105
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the widgets module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #include "qheader.h"
+#ifndef QT_NO_HEADER
 #include "qpainter.h"
 #include "qdrawutil.h"
 #include "qbitmap.h"
@@ -63,13 +76,15 @@ struct QHeaderData
 	}
 	clicks_default = TRUE;
 	resize_default = TRUE;
+	was_reordered = FALSE;
 	clicks.fill( clicks_default );
 	resize.fill( resize_default );
 	move = TRUE;
 	sortColumn = -1;
 	sortDirection = TRUE;
+	positionsDirty = TRUE;
     }
-    
+
 
     QArray<QCOORD>	sizes;
     QArray<QCOORD>	heights;
@@ -84,13 +99,15 @@ struct QHeaderData
     uint move : 1;
     uint clicks_default : 1; // default value for new clicks bits
     uint resize_default : 1; // default value for new resize bits
+    uint was_reordered : 1;
     bool sortDirection;
     int sortColumn;
     int count;
-    
+    bool positionsDirty;
     
     void calculatePositions(){
 	// positions is sorted by index, not by section
+	positionsDirty = FALSE;
 	int p = 0;
 	for ( int i = 0; i < count; i++ ) {
 	    positions[i] = p;
@@ -99,7 +116,7 @@ struct QHeaderData
     }
     int sectionAt( int pos ) {
 	// positions is sorted by index, not by section
-	if ( !count ) 
+	if ( !count )
 	    return -1;
 	int l = 0;
 	int r = count - 1;
@@ -188,6 +205,15 @@ QHeader::~QHeader()
     d = 0;
 }
 
+/*! \reimp
+ */
+
+void QHeader::showEvent( QShowEvent *e )
+{
+    d->calculatePositions();
+    QWidget::showEvent( e );
+}
+
 /*!
   \fn void QHeader::sizeChange( int section, int oldSize, int newSize )
 
@@ -201,7 +227,7 @@ QHeader::~QHeader()
 
   This signal is emitted when the user clicked onto the section
   \a section.
-  
+
   \sa pressed(), released()
 */
 
@@ -209,7 +235,7 @@ QHeader::~QHeader()
   \fn void QHeader::pressed( int section )
 
   This signal is emitted when the user presses section \a section down.
-  
+
   \sa released()
 */
 
@@ -217,7 +243,7 @@ QHeader::~QHeader()
   \fn void QHeader::released( int section )
 
   This signal is emitted when section \a section is released.
-  
+
   \sa pressed()
 */
 
@@ -339,6 +365,7 @@ void QHeader::init( int n )
     setMouseTracking( TRUE );
     trackingIsOn = FALSE;
     setBackgroundMode( PaletteButton );
+    setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed ) );
 }
 
 /*!
@@ -354,6 +381,10 @@ void QHeader::setOrientation( Orientation orientation )
 {
     if (orient==orientation) return;
     orient = orientation;
+    if ( orient == Horizontal )
+	setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed ) );
+    else
+	setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Preferred ) );
     update();
     updateGeometry();
 }
@@ -469,7 +500,7 @@ int QHeader::findLine( int c )
 
   Use moveSection() instead!
 
-  Moves the section which is currently dispalyed at the index \a fromIndex
+  Moves the section which is currently displayed at the index \a fromIndex
   to the index \a toIdx.
 */
 
@@ -483,7 +514,7 @@ void QHeader::moveCell( int fromIdx, int toIdx )
 */
 void QHeader::mousePressEvent( QMouseEvent *e )
 {
-    if ( e->button() != LeftButton )
+    if ( e->button() != LeftButton || state != Idle )
 	return;
     handleIdx = 0;
     int c = orient == Horizontal ? e->pos().x() : e->pos().y();
@@ -537,7 +568,9 @@ void QHeader::mouseReleaseEvent( QMouseEvent *e )
 	handleColumnResize( handleIdx, c, TRUE );
 	} break;
     case Moving: {
+#ifndef QT_NO_CURSOR
 	unsetCursor();
+#endif
 	int section = d->i2s[handleIdx];
 	if ( handleIdx != moveToIdx && moveToIdx != -1 ) {
 	    moveSection( section, moveToIdx );
@@ -574,7 +607,7 @@ void QHeader::mouseMoveEvent( QMouseEvent *e )
 
     int c = orient == Horizontal ? e->pos().x() : e->pos().y();
     c += offset();
-    
+
     switch( state ) {
     case Idle:
 	hit = FALSE;
@@ -586,15 +619,19 @@ void QHeader::mouseMoveEvent( QMouseEvent *e )
 		    section = d->i2s[--index];
 		if ( d->resize.testBit(section) ) {
 		    hit = TRUE;
+#ifndef QT_NO_CURSOR
 		    if ( orient == Horizontal )
 			setCursor( splitHCursor );
 		    else
 			setCursor( splitVCursor );
+#endif
 		}
 	    }
 	}
+#ifndef QT_NO_CURSOR
 	if ( !hit )
 	    unsetCursor();
+#endif
 	break;
     case Blocked:
 	break;
@@ -602,10 +639,12 @@ void QHeader::mouseMoveEvent( QMouseEvent *e )
 	if ( QABS( c - clickPos ) > 4 && d->move ) {
 	    state = Moving;
 	    moveToIdx = -1;
+#ifndef QT_NO_CURSOR
 	    if ( orient == Horizontal )
 		setCursor( sizeHorCursor );
 	    else
 		setCursor( sizeVerCursor );
+#endif
 	}
 	break;
     case Sliding:
@@ -648,7 +687,7 @@ void QHeader::handleColumnResize( int index, int c, bool final )
     d->sizes[section] = newSize;
 
     d->calculatePositions();
-    
+
     int pos = d->positions[index]-offset();
     if ( orient == Horizontal )
 	repaint( pos, 0, width() - pos, height() );
@@ -667,11 +706,11 @@ void QHeader::handleColumnResize( int index, int c, bool final )
 
 QRect QHeader::sRect( int index )
 {
-    
+
     int section = mapToSection( index );
     if ( section < 0 )
 	return rect(); // ### eeeeevil
-    
+
     if ( orient == Horizontal )
 	return QRect(  d->positions[index]-offset(), 0, d->sizes[section], height() );
     else
@@ -712,7 +751,8 @@ void QHeader::setLabel( int section, const QString &s, int size )
     d->labels.insert( section, new QString( s ) );
     if ( size >= 0 )
 	d->sizes[section] = size;
-    d->calculatePositions();
+    if ( isUpdatesEnabled() )
+	d->calculatePositions();
     update();
 }
 
@@ -774,6 +814,7 @@ void QHeader::removeLabel( int section )
 	d->labels.insert( i, d->labels.take( i + 1 ) );
 	d->iconsets.insert( i, d->iconsets.take( i + 1 ) );
     }
+
     d->sizes.resize( n );
     d->positions.resize( n );
     d->heights.resize( n );
@@ -783,18 +824,25 @@ void QHeader::removeLabel( int section )
     for ( i = section; i < n; ++i )
 	d->s2i[i] = d->s2i[i+1];
     d->s2i.resize( n  );
-    for ( i = 0; i < n; ++i )
-	if ( d->s2i[i] > index )
-	    --d->s2i[i];
 
+    if ( d->was_reordered ) {
+	for ( i = 0; i < n; ++i )
+	    if ( d->s2i[i] > index )
+		--d->s2i[i];
+    }
+    
     for ( i = index; i < n; ++i )
 	d->i2s[i] = d->i2s[i+1];
     d->i2s.resize( n );
-    for ( i = 0; i < n ; ++i )
-	if ( d->i2s[i] > section )
-	    --d->i2s[i];
 
-    d->calculatePositions();
+    if ( d->was_reordered ) {
+	for ( i = 0; i < n ; ++i )
+	    if ( d->i2s[i] > section )
+		--d->i2s[i];
+    }
+    
+    if ( isUpdatesEnabled() )
+	d->calculatePositions();
     update();
 }
 
@@ -854,7 +902,7 @@ int QHeader::addLabel( const QString &s, int size )
     d->resize.setBit( section, d->resize_default );
 
     update();
-    return index; 
+    return index;
 }
 
 
@@ -888,10 +936,8 @@ QSize QHeader::sizeHint() const
 */
 QSizePolicy QHeader::sizePolicy() const
 {
-    if ( orient == Horizontal )
-	return QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed );
-    else
-	return QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Preferred );
+    //### removeme 3.0
+    return QWidget::sizePolicy();
 }
 
 
@@ -913,7 +959,7 @@ void QHeader::setOffset( int x )
 
 
 /*!
-  
+
   Returns the position of actual division line \a i in widget
   coordinates. May return a position outside the widget.
 
@@ -1020,7 +1066,8 @@ void QHeader::setCellSize( int section, int s )
     if ( section < 0 || section >= count() )
 	return;
     d->sizes[ section ] = s;
-    d->calculatePositions();
+    if ( isUpdatesEnabled() )
+	d->calculatePositions();
 }
 
 
@@ -1088,7 +1135,7 @@ void QHeader::setClickEnabled( bool enable, int section )
 /*!
   Paints actual section \a index of the header, inside rectangle \a fr in
   widget coordinates.
-  
+
   Calls paintSectionLabel().
 */
 
@@ -1097,7 +1144,7 @@ void QHeader::paintSection( QPainter *p, int index, QRect fr )
     int section = mapToSection( index );
     if ( section < 0 )
 	return;
-    
+
     bool down = (index==handleIdx) && ( state == Pressed || state == Moving );
     p->setBrushOrigin( fr.topLeft() );
     if ( d->clicks[section] ) {
@@ -1149,12 +1196,12 @@ void QHeader::paintSection( QPainter *p, int index, QRect fr )
     }
 
     paintSectionLabel( p, index, fr );
-}   
+}
 
 /*!
   Paints the label of actual section \a index of the header, inside rectangle \a fr in
   widget coordinates.
-  
+
   Called by paintSection()
 */
 void QHeader::paintSectionLabel( QPainter *p, int index, const QRect& fr )
@@ -1275,7 +1322,8 @@ void QHeader::resizeSection( int section, int s )
     if ( section < 0 || section >= count() )
 	return;
     d->sizes[ section ] = s;
-    d->calculatePositions();
+    if ( isUpdatesEnabled() )
+	d->calculatePositions();
     update();
 }
 
@@ -1292,12 +1340,14 @@ int QHeader::sectionSize( int section ) const
 
 /*!
   Returns the position (in pixels) at which the \a section starts.
-  
+
   \sa offset()
 */
 
 int QHeader::sectionPos( int section ) const
 {
+    if ( d->positionsDirty )
+	d->calculatePositions();
     if ( section < 0 || section >= count()  )
 	return 0;
     return d->positions[ d->s2i[section] ];
@@ -1305,18 +1355,13 @@ int QHeader::sectionPos( int section ) const
 
 /*!
   Returns the \a section which contains the position \a pos given in pixels.
-  
+
   \sa offset()
 */
 
 int QHeader::sectionAt( int pos ) const
 {
     return d->sectionAt( pos );
-    for ( int i = 0; i < d->count; i++ ) {
-	if ( pos >= d->positions[i] && pos <= d->positions[i] + d->sizes[d->i2s[i]] )
-	    return d->i2s[i];
-    }
-    return -1;
 }
 
 /*!
@@ -1345,6 +1390,7 @@ int QHeader::mapToIndex( int section ) const
 
 void QHeader::moveSection( int section, int toIndex )
 {
+    d->was_reordered = TRUE;
     int fromIndex = mapToIndex( section );
     if ( fromIndex == toIndex ||
 	 fromIndex < 0 || fromIndex > count() ||
@@ -1426,4 +1472,14 @@ bool QHeader::isMovingEnabled() const
     return d->move;
 }
 
+/*! reimp */
+
+void QHeader::setUpdatesEnabled( bool enable )
+{
+    if ( enable )
+	d->calculatePositions();
+    QWidget::setUpdatesEnabled( enable );
+}
+
 //#### what about lastSectionCoversAll?
+#endif // QT_NO_HEADER

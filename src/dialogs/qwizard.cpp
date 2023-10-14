@@ -1,29 +1,43 @@
 /****************************************************************************
-** $Id: qt/src/dialogs/qwizard.cpp   2.1.1   edited 2000-03-24 $
+** $Id: qt/src/dialogs/qwizard.cpp   2.2.0   edited 2000-08-25 $
 **
 ** Implementation of QWizard class.
 **
 ** Created : 990124
 **
-** Copyright (C) 1999-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1999-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the dialogs module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #include "qwizard.h"
+
+#ifndef QT_NO_WIZARD
 
 #include "qlayout.h"
 #include "qpushbutton.h"
@@ -92,8 +106,7 @@ public:
 	if ( !w )
 	    return 0;
 	int i = pages.size();
-	while( --i >= 0 && pages[i] && pages[i]->w != w )
-	    ;
+	while( --i >= 0 && pages[i] && pages[i]->w != w ) { }
 	return i >= 0 ? pages[i] : 0;
     }
 
@@ -209,8 +222,14 @@ void QWizard::addPage( QWidget * page, const QString & title )
     d->pages.insert( i, p );
 }
 
+/*!
+  \fn void QWizard::selected(const QString&)
+  This signal is emitted when the page changes, signalling
+  the title of the page.
+*/
 
-/*!  Makes \a page be the displayed page. */
+
+/*!  Makes \a page be the displayed page and emits the selected() signal. */
 
 void QWizard::showPage( QWidget * page )
 {
@@ -224,6 +243,7 @@ void QWizard::showPage( QWidget * page )
 
     layOut();
     updateButtons();
+    emit selected( p ? p->t : QString::null );
 }
 
 
@@ -454,6 +474,18 @@ QString QWizard::title( QWidget * page ) const
     return p ? p->t : QString::null;
 }
 
+/*!  Sets the title for the \a page to \a title.
+*/
+
+void QWizard::setTitle( QWidget *page, const QString &t )
+{
+    QWizardPrivate::Page * p = d->page( page );
+    if ( p )
+	p->t = t;
+    if ( page == currentPage() )
+	d->title->setText( t );	
+}
+
 
 /*!
   Returns the Back button of the dialog.
@@ -655,16 +687,20 @@ void QWizard::removePage( QWidget * page )
 	return;
 
     int i = d->pages.size();
-    while( --i >= 0 && d->pages[i] && d->pages[i]->w != page )
-	;
+    while( --i >= 0 && d->pages[i] && d->pages[i]->w != page ) { }
     if ( i < 0 )
 	return;
     QWizardPrivate::Page * p = d->pages[i];
-    d->pages.remove( i );
     delete p;
-    if ( i+1 == (int) d->pages.size() )
-	d->pages.resize( i );
+    d->pages.remove( i );
+    for ( uint j = i; j < d->pages.size() - 1; ++j ) {
+	d->pages.insert( j, d->pages[ j + 1 ] );
+	d->pages.remove( j + 1 );
+    }
+    d->pages.resize( d->pages.size() - 1 );
     d->ws->removeWidget( page );
+    if ( pageCount() > 0 )
+	showPage( QWizard::page( 0 ) );
 }
 
 
@@ -672,7 +708,7 @@ void QWizard::removePage( QWidget * page )
   Returns a pointer to page a position \a pos, or 0 if \a pos is out of range.
   The first page has position 0.
 */
-  
+
 QWidget* QWizard::page( int pos ) const
 {
     if ( pos >= pageCount() || pos < 0 )
@@ -681,3 +717,4 @@ QWidget* QWizard::page( int pos ) const
     return d->pages[ pos ]->w;
 }
 
+#endif // QT_NO_WIZARD

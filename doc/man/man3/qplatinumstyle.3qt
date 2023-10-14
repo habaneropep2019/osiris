@@ -1,5 +1,5 @@
-.TH QPlatinumStyle 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QPlatinumStyle 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QPlatinumStyle \- Platinum Look and Feel
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -19,16 +17,16 @@ Inherits QWindowsStyle.
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQPlatinumStyle\fR ()"
+.BI "\fBQPlatinumStyle\fR () "
 .br
 .ti -1c
-.BI "virtual \fB~QPlatinumStyle\fR ()"
+.BI "virtual \fB~QPlatinumStyle\fR () "
 .br
 .ti -1c
-.BI "virtual void \fBdrawButton\fR ( QPainter * " "p" ", int " "x" ", int " "y" ", int " "w" ", int " "h" ", const QColorGroup & " "g" ", bool " "sunken" " = FALSE, const QBrush * " "fill" " = 0 )"
+.BI "virtual void \fBdrawButton\fR ( QPainter * " "p" ", int " "x" ", int " "y" ", int " "w" ", int " "h" ", const QColorGroup & " "g" ", bool " "sunken" " = FALSE, const QBrush * " "fill" " = 0 ) "
 .br
 .ti -1c
-.BI "ScrollControl \fBscrollBarPointOver\fR ( const QScrollBar * " "sb" ", int " "sliderStart" ", const QPoint & p )"
+.BI "ScrollControl \fBscrollBarPointOver\fR ( const QScrollBar * " "sb" ", int " "sliderStart" ", const QPoint & p ) "
 .br
 .ti -1c
 .BI "virtual int \fBmaximumSliderDragDistance\fR () const"
@@ -37,10 +35,10 @@ Inherits QWindowsStyle.
 .SS "Protected Members"
 .in +1c
 .ti -1c
-.BI "QColor \fBmixedColor\fR ( const QColor &, const QColor & )"
+.BI "QColor \fBmixedColor\fR ( const QColor &, const QColor & ) "
 .br
 .ti -1c
-.BI "void \fBdrawRiffles\fR ( QPainter * " "p" ", int " "x" ", int " "y" ", int " "w" ", int " "h" ", const QColorGroup & " "g" ", bool horizontal )"
+.BI "void \fBdrawRiffles\fR ( QPainter * " "p" ", int " "x" ", int " "y" ", int " "w" ", int " "h" ", const QColorGroup & " "g" ", bool horizontal ) "
 .br
 .in -1c
 .SH DESCRIPTION
@@ -147,7 +145,7 @@ Reimplemented from QStyle.
 .SH "int QPlatinumStyle::maximumSliderDragDistance () const \fC[virtual]\fR"
 Reimplementation from QWindowsStyle to disable the Windows typical jump back when dragging controls.
 .PP
-See also: QStyle.
+See also QStyle.
 .PP
 Reimplemented from QStyle.
 .SH "QColor QPlatinumStyle::mixedColor ( const QColor & c1, const QColor & c2 ) \fC[protected]\fR"
@@ -171,7 +169,7 @@ Reimplemented from QStyle.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qplatinumstyle.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

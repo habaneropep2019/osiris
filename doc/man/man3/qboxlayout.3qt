@@ -1,5 +1,5 @@
-.TH QBoxLayout 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QBoxLayout 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QBoxLayout \- Lines up child widgets horizontally or vertically
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -24,61 +22,61 @@ Inherited by QHBoxLayout and QVBoxLayout.
 .BI "enum \fBDirection\fR { LeftToRight, RightToLeft, TopToBottom, BottomToTop, Down = TopToBottom, Up = BottomToTop }"
 .br
 .ti -1c
-.BI "\fBQBoxLayout\fR ( QWidget * " "parent" ", Direction, int " "border" "=0, int " "space" " = -1, const char * " "name" "=0 )"
+.BI "\fBQBoxLayout\fR ( QWidget * " "parent" ", Direction, int " "border" "=0, int " "space" " = -1, const char * " "name" "=0 ) "
 .br
 .ti -1c
-.BI "\fBQBoxLayout\fR ( QLayout * " "parentLayout" ", Direction, int " "space" " = -1, const char * " "name" "=0 )"
+.BI "\fBQBoxLayout\fR ( QLayout * " "parentLayout" ", Direction, int " "space" " = -1, const char * " "name" "=0 ) "
 .br
 .ti -1c
-.BI "\fBQBoxLayout\fR ( Direction, int " "space" " = -1, const char * " "name" "=0 )"
+.BI "\fBQBoxLayout\fR ( Direction, int " "space" " = -1, const char * " "name" "=0 ) "
 .br
 .ti -1c
-.BI "\fB~QBoxLayout\fR ()"
+.BI "\fB~QBoxLayout\fR () "
 .br
 .ti -1c
-.BI "virtual void \fBaddItem\fR ( QLayoutItem * )"
+.BI "virtual void \fBaddItem\fR ( QLayoutItem * ) "
 .br
 .ti -1c
 .BI "Direction \fBdirection\fR () const"
 .br
 .ti -1c
-.BI "void \fBsetDirection\fR ( Direction )"
+.BI "void \fBsetDirection\fR ( Direction ) "
 .br
 .ti -1c
-.BI "void \fBaddSpacing\fR ( int size )"
+.BI "void \fBaddSpacing\fR ( int size ) "
 .br
 .ti -1c
-.BI "void \fBaddStretch\fR ( int " "stretch" " = 0 )"
+.BI "void \fBaddStretch\fR ( int " "stretch" " = 0 ) "
 .br
 .ti -1c
-.BI "void \fBaddWidget\fR ( QWidget *, int " "stretch" " = 0, int " "alignment" " = 0 )"
+.BI "void \fBaddWidget\fR ( QWidget *, int " "stretch" " = 0, int " "alignment" " = 0 ) "
 .br
 .ti -1c
-.BI "void \fBaddLayout\fR ( QLayout * " "layout" ", int " "stretch" " = 0 )"
+.BI "void \fBaddLayout\fR ( QLayout * " "layout" ", int " "stretch" " = 0 ) "
 .br
 .ti -1c
-.BI "void \fBaddStrut\fR ( int )"
+.BI "void \fBaddStrut\fR ( int ) "
 .br
 .ti -1c
-.BI "void \fBinsertSpacing\fR ( int " "index" ", int size )"
+.BI "void \fBinsertSpacing\fR ( int " "index" ", int size ) "
 .br
 .ti -1c
-.BI "void \fBinsertStretch\fR ( int " "index" ", int " "stretch" " = 0 )"
+.BI "void \fBinsertStretch\fR ( int " "index" ", int " "stretch" " = 0 ) "
 .br
 .ti -1c
-.BI "void \fBinsertWidget\fR ( int " "index" ", QWidget * " "widget" ", int " "stretch" " = 0, int " "alignment" " = 0 )"
+.BI "void \fBinsertWidget\fR ( int " "index" ", QWidget * " "widget" ", int " "stretch" " = 0, int " "alignment" " = 0 ) "
 .br
 .ti -1c
-.BI "void \fBinsertLayout\fR ( int " "index" ", QLayout * " "layout" ", int " "stretch" " = 0 )"
+.BI "void \fBinsertLayout\fR ( int " "index" ", QLayout * " "layout" ", int " "stretch" " = 0 ) "
 .br
 .ti -1c
-.BI "bool \fBsetStretchFactor\fR ( QWidget *, int stretch )"
+.BI "bool \fBsetStretchFactor\fR ( QWidget *, int stretch ) "
 .br
 .ti -1c
-.BI "bool \fBsetStretchFactor\fR ( QLayout * " "l" ", int stretch )"
+.BI "bool \fBsetStretchFactor\fR ( QLayout * " "l" ", int stretch ) "
 .br
 .ti -1c
-.BI "QSize \fBsizeHint\fR () const"
+.BI "virtual QSize \fBsizeHint\fR () const"
 .br
 .ti -1c
 .BI "virtual QSize \fBminimumSize\fR () const"
@@ -96,19 +94,19 @@ Inherited by QHBoxLayout and QVBoxLayout.
 .BI "virtual QSizePolicy::ExpandData \fBexpanding\fR () const"
 .br
 .ti -1c
-.BI "virtual void \fBinvalidate\fR ()"
+.BI "virtual void \fBinvalidate\fR () "
 .br
 .ti -1c
-.BI "virtual void \fBsetGeometry\fR ( const QRect & )"
+.BI "virtual void \fBsetGeometry\fR ( const QRect & ) "
 .br
 .ti -1c
-.BI "int \fBfindWidget\fR ( QWidget * w )"
+.BI "int \fBfindWidget\fR ( QWidget * w ) "
 .br
 .in -1c
 .SS "Protected Members"
 .in +1c
 .ti -1c
-.BI "void \fBinsertItem\fR ( int " "index" ", QLayoutItem * )"
+.BI "void \fBinsertItem\fR ( int " "index" ", QLayoutItem * ) "
 .br
 .in -1c
 .SH DESCRIPTION
@@ -148,7 +146,7 @@ The outer border width defaults to 0, and the intra-widget width defaults to the
 .PP
 You will almost always want to use the convenience classes for QBoxLayout: QVBoxLayout and QHBoxLayout, because of their simpler constructors.
 .PP
-See also the Layout Overview documentation.
+See also the Layout overview documentation
 .PP
 Examples:
 .(l
@@ -188,7 +186,7 @@ Constructs a new QBoxLayout with direction \fId\fR and main widget \fIparent. pa
 .PP
 \fIname\fR is the internal object name
 .PP
-See also: direction().
+See also direction().
 .SH "QBoxLayout::~QBoxLayout ()"
 Destructs this box.
 .SH "void QBoxLayout::addItem ( QLayoutItem * item ) \fC[virtual]\fR"
@@ -198,15 +196,15 @@ Reimplemented from QLayout.
 .SH "void QBoxLayout::addLayout ( QLayout * layout, int stretch = 0 )"
 Adds \fIlayout\fR to the end of the box, with serial stretch factor \fIstretch.\fR
 .PP
-See also: insertLayout(), setAutoAdd(), addWidget() and addSpacing().
+See also insertLayout(), setAutoAdd(), addWidget() and addSpacing().
 .SH "void QBoxLayout::addSpacing ( int size )"
 Adds a non-stretchable space with size \fIsize\fR to the end of this box layout. QBoxLayout gives default border and spacing. This function adds additional space.
 .PP
-See also: insertSpacing() and addStretch().
+See also insertSpacing() and addStretch().
 .SH "void QBoxLayout::addStretch ( int stretch = 0 )"
 Adds a stretchable space with zero minimum size and stretch factor \fIstretch\fR to the end of this box layout.
 .PP
-See also: addSpacing().
+See also addSpacing().
 .SH "void QBoxLayout::addStrut ( int size )"
 Limits the perpendicular dimension of the box (e.g. height if the box is LeftToRight) to a minimum of \fIsize.\fR Other constraints may increase the limit.
 .SH "void QBoxLayout::addWidget ( QWidget * widget, int stretch = 0, int alignment = 0 )"
@@ -220,7 +218,7 @@ Alignment is specified by \fIalignment\fR which is a bitwise OR of Qt::Alignment
 .PP
 Note: The alignment parameter is interpreted more aggressively than in previous versions of Qt. A non-default alignment now indicates that the widget should not grow to fill the available space, but should be sized according to sizeHint().
 .PP
-See also: insertWidget(), setAutoAdd(), addLayout() and addSpacing().
+See also insertWidget(), setAutoAdd(), addLayout() and addSpacing().
 .PP
 Examples:
 .(l
@@ -231,7 +229,7 @@ Returns the (serial) direction of the box. addWidget() and addSpacing() work in 
 .PP
 The directions are \fCLeftToRight, RightToLeft, TopToBottom\fR and \fCBottomToTop.\fR For the last two, the shorter aliases \fCDown\fR and \fCUp\fR are also available.
 .PP
-See also: addWidget() and addSpacing().
+See also addWidget() and addSpacing().
 .SH "QSizePolicy::ExpandData QBoxLayout::expanding() const \fC[virtual]\fR"
 Returns the expansiveness of this layout.
 .PP
@@ -253,21 +251,21 @@ Inserts \fIitem\fR in this box layout at index \fIindex.\fR If \fIindex\fR is ne
 .PP
 \fBWarning:\fR does not call QLayout::insertChildLayout() if \fIitem\fR is a QLayout.
 .PP
-See also: addItem() and findWidget().
+See also addItem() and findWidget().
 .SH "void QBoxLayout::insertLayout ( int index, QLayout * layout, int stretch = 0 )"
 Inserts \fIlayout\fR at index \fIindex,\fR with serial stretch factor \fIstretch.\fR If \fIindex\fR is negative, the layout is added at the end.
 .PP
-See also: setAutoAdd(), insertWidget() and insertSpacing().
+See also setAutoAdd(), insertWidget() and insertSpacing().
 .SH "void QBoxLayout::insertSpacing ( int index, int size )"
 Inserts a non-stretchable space at index \fIindex\fR with size \fIsize.\fR If \fIindex\fR is negative, the space is added at the end.
 .PP
 QBoxLayout gives default border and spacing. This function adds additional space.
 .PP
-See also: insertStretch().
+See also insertStretch().
 .SH "void QBoxLayout::insertStretch ( int index, int stretch = 0 )"
 Inserts a stretchable space at index \fIindex\fR with zero minimum size and stretch factor \fIstretch.\fR If \fIindex\fR is negative, the space is added at the end.
 .PP
-See also: insertSpacing().
+See also insertSpacing().
 .SH "void QBoxLayout::insertWidget ( int index, QWidget * widget, int stretch = 0, int alignment = 0 )"
 Inserts \fIwidget\fR at index \fIindex,\fR with a \fIstretch\fR factor and \fIalignment.\fR If \fIindex\fR is negative, the widget is added at the end.
 .PP
@@ -279,7 +277,7 @@ Alignment is specified by \fIalignment\fR which is a bitwise OR of Qt::Alignment
 .PP
 Note: The alignment parameter is interpreted more aggressively than in previous versions of Qt. A non-default alignment now indicates that the widget should not grow to fill the available space, but should be sized according to sizeHint().
 .PP
-See also: setAutoAdd(), insertLayout() and insertSpacing().
+See also setAutoAdd(), insertLayout() and insertSpacing().
 .SH "void QBoxLayout::invalidate () \fC[virtual]\fR"
 Resets cached information.
 .PP
@@ -310,12 +308,14 @@ Returns FALSE if \fIl\fR is not found.
 Sets the stretch factor for widget \fIw\fR to \fIstretch\fR and returns TRUE, if \fIw\fR is found in this layout (not including child layouts).
 .PP
 Returns FALSE if \fIw\fR is not found.
-.SH "QSize QBoxLayout::sizeHint () const"
+.SH "QSize QBoxLayout::sizeHint () const \fC[virtual]\fR"
 Returns the preferred size of this grid.
+.PP
+Reimplemented from QLayoutItem.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qboxlayout.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

@@ -1,35 +1,49 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qcheckbox.cpp   2.1.1   edited 2000-05-07 $
+** $Id: qt/src/widgets/qcheckbox.cpp   2.2.0   edited 2000-08-25 $
 **
 ** Implementation of QCheckBox class
 **
 ** Created : 940222
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the widgets module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #include "qcheckbox.h"
+#ifndef QT_NO_COMPLEXWIDGETS
 #include "qpainter.h"
 #include "qdrawutil.h"
 #include "qpixmap.h"
 #include "qpixmapcache.h"
 #include "qbitmap.h"
 #include "qtextstream.h"
+#include "qapplication.h"
 
 // NOT REVISED
 /*!
@@ -44,7 +58,7 @@
   a "one of many" choice, while check-boxes provide "many of many"
   choices.
 
-  While it is technically possible to imlement radio-behaviour with
+  While it is technically possible to implement radio-behaviour with
   check boxes and vice versa, it's strongly recommended to stick with
   the well-known semantics. Otherwise your users would be pretty
   confused.
@@ -87,6 +101,7 @@ QCheckBox::QCheckBox( QWidget *parent, const char *name )
 	: QButton( parent, name, WRepaintNoErase | WResizeNoErase | WMouseNoMask )
 {
     setToggleButton( TRUE );
+    setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Fixed ) );
 }
 
 /*!
@@ -100,6 +115,7 @@ QCheckBox::QCheckBox( const QString &text, QWidget *parent, const char *name )
 {
     setText( text );
     setToggleButton( TRUE );
+    setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Fixed ) );
 }
 
 
@@ -136,11 +152,22 @@ void QCheckBox::setNoChange()
   is the "Italic" check box in the font dialog of a word processor
   when the marked text is partially Italic and partially not.
 
-  \sa setNoChange() stateChanged(), state()
+  \sa isTristate(), setNoChange() stateChanged(), state()
 */
 void QCheckBox::setTristate(bool y)
 {
     setToggleType( y ? Tristate : Toggle );
+}
+
+/*!
+  Returns TRUE if the checkbox is a tristate checkbox. Otherwise returns
+  FALSE.
+
+  \sa setTristate()
+*/
+bool QCheckBox::isTristate() const
+{
+    return toggleType() == Tristate;
 }
 
 static int extraWidth( int gs )
@@ -172,7 +199,7 @@ QSize QCheckBox::sizeHint() const
 
     return sz + QSize( bmsz.width() + (style()==MotifStyle ? 1 : 0)
 			+ (text().isEmpty() ? 0 : 4 + extraWidth(gs)),
-			4 );
+			4 ).expandedTo( QApplication::globalStrut() );
 }
 
 
@@ -192,7 +219,10 @@ void QCheckBox::drawButton( QPainter *paint )
     x = gs == MotifStyle ? 1 : 0;
     y = (height() - lsz.height() + fm.height() - sz.height())/2;
 
+#ifndef QT_NO_TEXTSTREAM
 #define SAVE_CHECKBOX_PIXMAPS
+#endif
+
 #if defined(SAVE_CHECKBOX_PIXMAPS)
     QString pmkey;				// pixmap key
     int kf = 0;
@@ -203,7 +233,8 @@ void QCheckBox::drawButton( QPainter *paint )
     if ( hasFocus() )
 	kf |= 4;				// active vs. normal colorgroup
     kf |= state() << 3;
-    QTextOStream(&pmkey) << "$qt_check_" << style().className() << "_"
+    QTextOStream os(&pmkey);
+    os << "$qt_check_" << style().className() << "_"
 			 << palette().serialNumber() << "_" << kf;
     QPixmap *pm = QPixmapCache::find( pmkey );
     if ( pm ) {					// pixmap exists
@@ -230,7 +261,7 @@ void QCheckBox::drawButton( QPainter *paint )
 #if defined(SAVE_CHECKBOX_PIXMAPS)
     if ( use_pm ) {
 	pmpaint.end();
-	if ( backgroundPixmap() ) {
+	if ( backgroundPixmap() || backgroundMode() == X11ParentRelative ) {
 	    QBitmap bm( pm->size() );
 	    bm.fill( color0 );
 	    pmpaint.begin( &bm );
@@ -355,5 +386,7 @@ void QCheckBox::updateMask()
 */
 QSizePolicy QCheckBox::sizePolicy() const
 {
-    return QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Fixed );
+    //### removeme 3.0
+    return QWidget::sizePolicy();
 }
+#endif

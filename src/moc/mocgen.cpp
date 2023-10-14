@@ -1,4 +1,4 @@
-/* Automatically generated at Troll Tech by mkdists, Qt 2.1.1 */
+/* Automatically generated at Trolltech by mkdists, Qt 2.2.0 */
 #ifndef lint
 static char yysccsid[] = "@(#)yaccpar	1.9 (Berkeley) 02/21/93";
 #endif
@@ -9,7 +9,7 @@ static char yysccsid[] = "@(#)yaccpar	1.9 (Berkeley) 02/21/93";
 #define yyerrok (yyerrflag=0)
 #define YYRECOVERING (yyerrflag!=0)
 #define YYPREFIX "yy"
-#line 43 "moc.y"
+#line 55 "moc.y"
 void yyerror( const char *msg );
 
 #include "qlist.h"
@@ -26,7 +26,7 @@ void yyerror( const char *msg );
 
 static QCString rmWS( const char * );
 
-enum AccessPerm { _PRIVATE, _PROTECTED, _PUBLIC };
+enum Access { Private, Protected, Public };
 
 
 struct Argument					/* single arg meta data*/
@@ -50,7 +50,7 @@ public:
 
 struct Function					/* member function meta data*/
 {						/*   used for signals and slots*/
-    AccessPerm accessPerm;
+    Access access;
     QCString    qualifier;			/* const or volatile*/
     QCString    name;
     QCString    type;
@@ -58,6 +58,13 @@ struct Function					/* member function meta data*/
     ArgList   *args;
     Function() { args=0; }
    ~Function() { delete args; }
+    const char* accessAsString() {
+	switch ( access ) {
+	case Private: return "Private";
+	case Protected: return "Protected";
+	default: return "Public";
+	}
+    }
 };
 
 class FuncList : public QList<Function> {	/* list of member functions*/
@@ -117,6 +124,13 @@ struct Property
     Specification sspec;
     Specification gspec;
 
+    bool stdSet () {
+	QCString s = "set";
+	s += toupper( name[0] );
+	s +=name.mid(1);
+	return s ==set;
+    }
+
     static const char* specToString( Specification s )
     {
 	switch ( s ) {
@@ -160,7 +174,7 @@ public:
   This table is copied from qvariant.cpp. If you change
   one, change both.
 */
-static const int ntypes = 25;
+static const int ntypes = 26;
 static const char* const type_map[ntypes] =
 {
     0,
@@ -187,7 +201,8 @@ static const char* const type_map[ntypes] =
     "QPointArray",
     "QRegion",
     "QBitmap",
-    "QCursor"
+    "QCursor",
+    "QSizePolicy"
 };
 
 int qvariant_nameToType( const char* name )
@@ -233,8 +248,8 @@ bool	   templateClassOld;			/* previous class is a template*/
 ArgList	  *tmpArgList;				/* current argument list*/
 Function  *tmpFunc;				/* current member function*/
 Enum      *tmpEnum;				/* current enum*/
-AccessPerm tmpAccessPerm;			/* current access permission*/
-AccessPerm subClassPerm;			/* current access permission*/
+Access tmpAccess;			/* current access permission*/
+Access subClassPerm;			/* current access permission*/
 
 bool	   Q_OBJECTdetected;			/* TRUE if current class*/
 						/* contains the Q_OBJECT macro*/
@@ -250,20 +265,20 @@ int	   tmpYYStart;				/* Used to store the lexers current mode*/
 int	   tmpYYStart2;				/* Used to store the lexers current mode*/
 						/* (if tmpYYStart is already used)*/
 
-const int  formatRevision = 7;			/* moc output format revision*/
+const int  formatRevision = 9;			/* moc output format revision*/
 
-#line 288 "moc.y"
+#line 315 "moc.y"
 typedef union {
     char	char_val;
     int		int_val;
     double	double_val;
     char       *string;
-    AccessPerm	access;
+    Access	access;
     Function   *function;
     ArgList    *arg_list;
     Argument   *arg;
 } YYSTYPE;
-#line 266 "y.tab.c"
+#line 281 "y.tab.c"
 #define CHAR_VAL 257
 #define INT_VAL 258
 #define DOUBLE_VAL 259
@@ -1237,7 +1252,7 @@ YYSTYPE yylval;
 short yyss[YYSTACKSIZE];
 YYSTYPE yyvs[YYSTACKSIZE];
 #define yystacksize YYSTACKSIZE
-#line 1174 "moc.y"
+#line 1201 "moc.y"
 
 #if defined(_OS_WIN32_)
 #include <io.h>
@@ -1508,8 +1523,8 @@ void init()					// initialize
 
 void initClass()				 // prepare for new class
 {
-    tmpAccessPerm      = _PRIVATE;
-    subClassPerm       = _PRIVATE;
+    tmpAccess      = Private;
+    subClassPerm       = Private;
     Q_OBJECTdetected   = FALSE;
     Q_PROPERTYdetected = FALSE;
     skipClass	       = FALSE;
@@ -1651,7 +1666,7 @@ inline bool isSpace( char x )
 
 static QCString rmWS( const char *src )
 {
-    QCString result( strlen(src)+1 );
+    QCString result( qstrlen(src)+1 );
     char *d = result.data();
     char *s = (char *)src;
     char last = 0;
@@ -1747,16 +1762,16 @@ int yywrap()					// more files?
 
 char *stradd( const char *s1, const char *s2 )	// adds two strings
 {
-    char *n = new char[strlen(s1)+strlen(s2)+1];
-    strcpy( n, s1 );
+    char *n = new char[qstrlen(s1)+qstrlen(s2)+1];
+    qstrcpy( n, s1 );
     strcat( n, s2 );
     return n;
 }
 
 char *stradd( const char *s1, const char *s2, const char *s3 )// adds 3 strings
 {
-    char *n = new char[strlen(s1)+strlen(s2)+strlen(s3)+1];
-    strcpy( n, s1 );
+    char *n = new char[qstrlen(s1)+qstrlen(s2)+qstrlen(s3)+1];
+    qstrcpy( n, s1 );
     strcat( n, s2 );
     strcat( n, s3 );
     return n;
@@ -1765,8 +1780,8 @@ char *stradd( const char *s1, const char *s2, const char *s3 )// adds 3 strings
 char *stradd( const char *s1, const char *s2,
 	      const char *s3, const char *s4 )// adds 4 strings
 {
-    char *n = new char[strlen(s1)+strlen(s2)+strlen(s3)+strlen(s4)+1];
-    strcpy( n, s1 );
+    char *n = new char[qstrlen(s1)+qstrlen(s2)+qstrlen(s3)+qstrlen(s4)+1];
+    qstrcpy( n, s1 );
     strcat( n, s2 );
     strcat( n, s3 );
     strcat( n, s4 );
@@ -1776,8 +1791,8 @@ char *stradd( const char *s1, const char *s2,
 
 char *straddSpc( const char *s1, const char *s2 )
 {
-    char *n = new char[strlen(s1)+strlen(s2)+2];
-    strcpy( n, s1 );
+    char *n = new char[qstrlen(s1)+qstrlen(s2)+2];
+    qstrcpy( n, s1 );
     strcat( n, " " );
     strcat( n, s2 );
     return n;
@@ -1785,8 +1800,8 @@ char *straddSpc( const char *s1, const char *s2 )
 
 char *straddSpc( const char *s1, const char *s2, const char *s3 )
 {
-    char *n = new char[strlen(s1)+strlen(s2)+strlen(s3)+3];
-    strcpy( n, s1 );
+    char *n = new char[qstrlen(s1)+qstrlen(s2)+qstrlen(s3)+3];
+    qstrcpy( n, s1 );
     strcat( n, " " );
     strcat( n, s2 );
     strcat( n, " " );
@@ -1797,8 +1812,8 @@ char *straddSpc( const char *s1, const char *s2, const char *s3 )
 char *straddSpc( const char *s1, const char *s2,
 	      const char *s3, const char *s4 )
 {
-    char *n = new char[strlen(s1)+strlen(s2)+strlen(s3)+strlen(s4)+4];
-    strcpy( n, s1 );
+    char *n = new char[qstrlen(s1)+qstrlen(s2)+qstrlen(s3)+qstrlen(s4)+4];
+    qstrcpy( n, s1 );
     strcat( n, " " );
     strcat( n, s2 );
     strcat( n, " " );
@@ -1874,15 +1889,39 @@ void generateFuncs( FuncList *list, char *functype, int num )
 	fprintf( out, "    m%d_t%d v%d_%d = Q_AMPERSAND %s::%s;\n",
 		 num, list->at(), num, list->at(),
 		 (const char*)qualifiedClassName(), (const char*)f->name);
-    if ( list->count() )
+    if ( list->count() ) {
 	fprintf(out,"    QMetaData *%s_tbl = QMetaObject::new_metadata(%d);\n",
 		functype, list->count() );
-    for ( f=list->first(); f; f=list->next() )
+
+    }
+
+    //### remove 3.0
+    if ( qstrcmp( functype, "slot" )  == 0 ) {
+	if ( list->count() )
+	    fprintf(out,"    QMetaData::Access *%s_tbl_access = QMetaObject::new_metaaccess(%d);\n",
+		    functype, list->count() );
+	else
+	    fprintf(out,"    QMetaData::Access *%s_tbl_access = 0;\n",
+		    functype );
+    }
+
+
+    for ( f=list->first(); f; f=list->next() ) {
 	fprintf( out, "    %s_tbl[%d].name = \"%s\";\n",
 		 functype, list->at(), (const char*)f->type );
-    for ( f=list->first(); f; f=list->next() )
-	fprintf( out, "    %s_tbl[%d].ptr = *((QMember*)&v%d_%d);\n",
+	fprintf( out, "    %s_tbl[%d].ptr = (QMember)v%d_%d;\n",
 		 functype, list->at(), num, list->at() );
+
+/* ### do this in 3.0:
+	fprintf( out, "    %s_tbl[%d].access = QMetaData::%s;\n",
+		 functype, list->at(), f->accessAsString() );
+
+### for now:
+*/
+	if ( qstrcmp( functype, "slot" ) == 0 )
+	    fprintf( out, "    %s_tbl_access[%d] = QMetaData::%s;\n",
+		     functype, list->at(), f->accessAsString() );
+    }
 }
 
 
@@ -1935,12 +1974,14 @@ bool isEnumType( const char* type )
 void finishProps()
 {
     int entry = 0;
+    fprintf( out, "#ifndef QT_NO_PROPERTIES\n" );
     for( QListIterator<Property> it( props ); it.current(); ++it ) {
 	if ( !isPropertyType( it.current()->type ) ||
 	     it.current()->override )
 	    fprintf( out, "    metaObj->resolveProperty( &props_tbl[%d] );\n", entry );
 	++entry;
     }
+    fprintf( out, "#endif // QT_NO_PROPERTIES\n" );
 }
 
 int generateEnums()
@@ -1948,6 +1989,7 @@ int generateEnums()
     if ( enums.count() == 0 )
 	return 0;
 
+    fprintf( out, "#ifndef QT_NO_PROPERTIES\n" );
     fprintf( out, "    QMetaEnum* enum_tbl = QMetaObject::new_metaenum( %i );\n", enums.count() );
 
     int i = 0;
@@ -1969,6 +2011,7 @@ int generateEnums()
 		     i, k, (const char*)className, eit.current() );
 	}
     }
+    fprintf( out, "#endif // QT_NO_PROPERTIES\n" );
 
     return enums.count();
 }
@@ -1979,6 +2022,8 @@ int generateProps()
     if ( displayWarnings && !Q_OBJECTdetected )
 	moc_err("The declaration of the class \"%s\" contains properties"
 		" but no Q_OBJECT macro!", className.data());
+
+    fprintf( out, "#ifndef QT_NO_PROPERTIES\n" );
     //
     // Resolve and verify property access functions
     //
@@ -2026,7 +2071,7 @@ int generateProps()
 		}
 		else if ( isEnumType( p->type ) ) {
 		    if ( tmp == "int" || tmp == "uint" || tmp == "unsigned int" ) {
-			// Test wether the enum is really a set (unfortunately we dont know enums of super classes)
+			// Test wether the enum is really a set (unfortunately we don't know enums of super classes)
 			bool ok = TRUE;
 			for( QListIterator<Enum> lit( enums ); lit.current(); ++lit )
 			    if ( lit.current()->name == p->type && !lit.current()->set )
@@ -2066,7 +2111,6 @@ int generateProps()
 			     "      int %s() const\n"
 			     "      uint %s() const\n"
 			     "      unsigned int %s() const\n",
-			     (const char*) p->get,
 			     (const char*) p->get,
 			     (const char*) p->get,
 			     (const char*) p->get );
@@ -2143,7 +2187,7 @@ int generateProps()
 		    if ( tmp == "int" || tmp == "uint" || tmp == "unsigned int" ) {
 		        if ( p->oredEnum == 0 )
 			    continue;
-			// Test wether the enum is really a set (unfortunately we dont know enums of super classes)
+			// Test wether the enum is really a set (unfortunately we don't know enums of super classes)
 			bool ok = TRUE;
 			for( QListIterator<Enum> lit( enums ); lit.current(); ++lit )
 			    if ( lit.current()->name == p->type && !lit.current()->set )
@@ -2349,8 +2393,8 @@ int generateProps()
     // Create meta data
     //
     if ( props.count() )
-	fprintf( out, "    QMetaProperty *props_tbl = QMetaObject::new_metaproperty( %d );\n", props.count() );
     {
+	fprintf( out, "    QMetaProperty *props_tbl = QMetaObject::new_metaproperty( %d );\n", props.count() );
 	int count = 0;
 	int entry = 0;
 	for( QListIterator<Property> it( props ); it.current(); ++it ){
@@ -2361,19 +2405,19 @@ int generateProps()
 		     entry, (const char*) it.current()->name );
 
 	    if ( it.current()->getfunc )
-		fprintf( out, "    props_tbl[%d].get = *((QMember*)&v%d_%d);\n",
+		fprintf( out, "    props_tbl[%d].get = (QMember)v%d_%d;\n",
 			 entry, Prop_Num, count );
 	    else
 		fprintf( out, "    props_tbl[%d].get = 0;\n", entry );
 
 	    if ( it.current()->setfunc )
-		fprintf( out, "    props_tbl[%d].set = *((QMember*)&v%d_%d);\n",
+		fprintf( out, "    props_tbl[%d].set = (QMember)v%d_%d;\n",
 			 entry, Prop_Num, count + 1 );
 	    else
 		fprintf( out, "    props_tbl[%d].set = 0;\n", entry );
 
 	    if ( it.current()->resetfunc )
-		fprintf( out, "    props_tbl[%d].reset = *((QMember*)&v%d_%d);\n",
+		fprintf( out, "    props_tbl[%d].reset = (QMember)v%d_%d;\n",
 			 entry, Prop_Num, count + 2 );
 	    else
 		fprintf( out, "    props_tbl[%d].reset = 0;\n", entry );
@@ -2391,22 +2435,24 @@ int generateProps()
 		    enumpos = k;
 	    }
 
+	    QCString flags;
+	
 	    // Is it an enum of this class ?
 	    if ( enumpos != -1 )
 		fprintf( out, "    props_tbl[%d].enumData = &enum_tbl[%i];\n", entry, enumpos );
 	    // Is it an unknown enum that needs to be resolved ?
 	    else if (!isPropertyType( it.current()->type ) ) {
 		if ( it.current()->oredEnum == 1 )
-		    fprintf( out, "    props_tbl[%d].setFlags(QMetaProperty::UnresolvedSet);\n", entry );
+		    flags += "QMetaProperty::UnresolvedSet|";
 		else if ( it.current()->oredEnum == 0 )
-		    fprintf( out, "    props_tbl[%d].setFlags(QMetaProperty::UnresolvedEnum);\n", entry );
+		    flags += "QMetaProperty::UnresolvedEnum|";
 		else
-		    fprintf( out, "    props_tbl[%d].setFlags(QMetaProperty::UnresolvedEnumOrSet);\n", entry );
+		    flags +="QMetaProperty::UnresolvedEnumOrSet|";
 	    }
 
 	    // Handle STORED
 	    if ( it.current()->stored == "false" )
-		fprintf( out, "    props_tbl[%d].setFlags(QMetaProperty::NotStored);\n", entry );
+		flags +="QMetaProperty::NotStored|";
 	    else if ( !it.current()->stored.isEmpty() && it.current()->stored != "true" )
 	    {
 		fprintf( out, "    typedef bool(%s::*s3_t%d)()const;\n", (const char*)className, count );
@@ -2418,21 +2464,31 @@ int generateProps()
 
 	    // OVERRIDE but no STORED ?
 	    if ( it.current()->override && it.current()->stored.isEmpty() )
-		fprintf( out, "    props_tbl[%d].setFlags(QMetaProperty::UnresolvedStored);\n", entry );
+		flags += "QMetaProperty::UnresolvedStored|";
 
 	    // Handle DESIGNABLE
 	    if ( it.current()->designable == 0 )
-		fprintf( out, "    props_tbl[%d].setFlags(QMetaProperty::NotDesignable);\n", entry );
+		flags += "QMetaProperty::NotDesignable|";
 	    // else { Default is TRUE -> do nothing }
 
 	    // OVERRIDE but no DESIGNABLE ?
 	    if ( it.current()->override && it.current()->designable == -1 )
-		fprintf( out, "    props_tbl[%d].setFlags(QMetaProperty::UnresolvedDesignable);\n", entry );
-
+		flags += "QMetaProperty::UnresolvedDesignable|";
+	
+	    if ( it.current()->stdSet() )
+		flags += "QMetaProperty::StdSet|";
+	
+	    if (!flags.isEmpty() ) {
+		if ( flags[ (int) flags.length() - 1] == '|' )
+		    flags.remove( flags.length()-1, 1);
+		fprintf( out, "    props_tbl[%d].setFlags(%s);\n", entry, flags.data() );
+	    }
+	
 	    ++entry;
 	    count += 3;
 	}
     }
+    fprintf( out, "#endif // QT_NO_PROPERTIES\n" );
 
     return props.count();
 }
@@ -2464,7 +2520,7 @@ void generateClass()		      // generate C++ source code for a class
     char *hdr1 = "/****************************************************************************\n"
 		 "** %s meta object code from reading C++ file '%s'\n**\n";
     char *hdr2 = "** Created: %s\n"
-		 "**      by: The Qt MOC ($Id: qt/src/moc/moc.y   2.1.1   edited 2000-03-24 $)\n**\n";
+		 "**      by: The Qt MOC ($Id: qt/src/moc/moc.y   2.2.0   edited 2000-08-31 $)\n**\n";
     char *hdr3 = "** WARNING! All changes made in this file will be lost!\n";
     char *hdr4 = "*****************************************************************************/\n\n";
     int   i;
@@ -2544,7 +2600,7 @@ void generateClass()		      // generate C++ source code for a class
 //
     fprintf( out, "void %s::initMetaObject()\n{\n", (const char*)qualifiedClassName() );
     fprintf( out, "    if ( metaObj )\n\treturn;\n" );
-    fprintf( out, "    if ( strcmp(%s::className(), \"%s\") != 0 )\n"
+    fprintf( out, "    if ( qstrcmp(%s::className(), \"%s\") != 0 )\n"
 	          "\tbadSuperclassWarning(\"%s\",\"%s\");\n",
              (const char*)qualifiedSuperclassName(), (const char*)qualifiedSuperclassName(),
              (const char*)qualifiedClassName(), (const char*)qualifiedSuperclassName() );
@@ -2552,10 +2608,18 @@ void generateClass()		      // generate C++ source code for a class
     fprintf( out, "}\n\n");
 
 //
-// Generate tr member function
+// Generate tr member function ### 3.0 one function
 //
-    fprintf( out, "QString %s::tr(const char* s)\n{\n", (const char*)qualifiedClassName() );
-    fprintf( out, "    return ((QNonBaseApplication*)qApp)->translate(\"%s\",s);\n}\n\n", (const char*)qualifiedClassName() );
+    fprintf( out, "#ifndef QT_NO_TRANSLATION\n\n" );
+    fprintf( out, "QString %s::tr(const char* s)\n{\n",
+	     (const char*)qualifiedClassName() );
+    fprintf( out, "    return qApp->translate"
+	     "( \"%s\", s, 0 );\n}\n\n", (const char*)qualifiedClassName() );
+    fprintf( out, "QString %s::tr(const char* s, const char * c)\n{\n",
+	     (const char*)qualifiedClassName() );
+    fprintf( out, "    return qApp->translate"
+	     "( \"%s\", s, c );\n}\n\n", (const char*)qualifiedClassName() );
+    fprintf( out, "#endif // QT_NO_TRANSLATION\n\n" );
 
 //
 // Generate staticMetaObject member function
@@ -2607,6 +2671,7 @@ void generateClass()		      // generate C++ source code for a class
     else
 	fprintf( out, "\t0, 0,\n" );
 
+    fprintf( out, "#ifndef QT_NO_PROPERTIES\n" );
     if ( n_props )
 	fprintf( out, "\tprops_tbl, %d,\n", n_props );
     else
@@ -2616,11 +2681,17 @@ void generateClass()		      // generate C++ source code for a class
 	fprintf( out, "\tenum_tbl, %d,\n", n_enums );
     else
 	fprintf( out, "\t0, 0,\n" );
+    fprintf( out, "#endif // QT_NO_PROPERTIES\n" );
 
     if ( n_infos )
 	fprintf( out, "\tclassinfo_tbl, %d );\n", n_infos );
     else
 	fprintf( out, "\t0, 0 );\n" );
+
+
+    //### remove 3.0
+    fprintf( out, "    metaObj->set_slot_access( slot_tbl_access );\n" );
+
 //
 // Finish property array in staticMetaObject()
 //
@@ -2724,12 +2795,10 @@ void generateClass()		      // generate C++ source code for a class
 	    for ( i=0; i<=nargs; i++ ) {
 		fprintf( out, "    typedef void (QObject::*RT%d)(%s);\n",
 			 i, (const char*)typvec[i] );
-		fprintf( out, "    typedef RT%d *PRT%d;\n", i, i );
 	    }
 	} else {
 	    fprintf( out, "    typedef void (QObject::*RT)(%s);\n",
 		     (const char*)typstr);
-	    fprintf( out, "    typedef RT *PRT;\n" );
 	}
 	if ( nargs ) {
 	    for ( i=0; i<=nargs; i++ )
@@ -2748,15 +2817,23 @@ void generateClass()		      // generate C++ source code for a class
 	    fprintf( out, "\tswitch ( c->numArgs() ) {\n" );
 	    for ( i=0; i<=nargs; i++ ) {
 		fprintf( out, "\t    case %d:\n", i );
-		fprintf( out, "\t\tr%d = *((PRT%d)(c->member()));\n", i, i );
+		fprintf( out, "#ifdef Q_FP_CCAST_BROKEN\n" );
+		fprintf( out, "\t\tr%d = reinterpret_cast<RT%d>(*(c->member()));\n", i, i );
+		fprintf( out, "#else\n" );
+		fprintf( out, "\t\tr%d = (RT%d)*(c->member());\n", i, i );
+		fprintf( out, "#endif\n" );
 		fprintf( out, "\t\t(object->*r%d)(%s);\n",
 			 i, (const char*)valvec[i] );
 		fprintf( out, "\t\tbreak;\n" );
 	    }
 	    fprintf( out, "\t}\n" );
 	} else {
-	    fprintf( out, "\tr = *((PRT)(c->member()));\n" );
+	    fprintf( out, "#ifdef Q_FP_CCAST_BROKEN\n" );
+	    fprintf( out, "\tr = reinterpret_cast<RT>(*(c->member()));\n" );
+	    fprintf( out, "#else\n" );
+	    fprintf( out, "\tr = (RT)*(c->member());\n" );
 	    fprintf( out, "\t(object->*r)(%s);\n", (const char*)valstr );
+	    fprintf( out, "#endif\n" );
 	}
 	fprintf( out, "    }\n}\n" );
 	f = signals.next();
@@ -2805,7 +2882,7 @@ void addMember( Member m )
 	return;
     }
 
-    tmpFunc->accessPerm = tmpAccessPerm;
+    tmpFunc->access = tmpAccess;
     tmpFunc->args	= tmpArgList;
     tmpFunc->lineNo	= lineNo;
 
@@ -2819,7 +2896,7 @@ void addMember( Member m )
 	slots.append( tmpFunc );
 	// fall trough
     case PropertyCandidateMember:
-	if ( !tmpFunc->name.isEmpty() && tmpFunc->accessPerm == _PUBLIC )
+	if ( !tmpFunc->name.isEmpty() && tmpFunc->access == Public )
 	    propfuncs.append( tmpFunc );
     }
 
@@ -2829,11 +2906,8 @@ void addMember( Member m )
     tmpArgList = new ArgList;
 }
 
-/**
- * Used to check property names. They must match
- * the pattern [A-Za-z][A-Za-z0-9_]*
- *
- * @author Torben Weis <weis@trolltech.com>
+/* Used to check property names. They must match the pattern
+ * [A-Za-z][A-Za-z0-9_]*
  */
 void checkIdentifier( const char* ident )
 {
@@ -2862,7 +2936,7 @@ void checkIdentifier( const char* ident )
 
 
 
-#line 2865 "y.tab.c"
+#line 2939 "y.tab.c"
 #define YYABORT goto yyabort
 #define YYREJECT goto yyabort
 #define YYACCEPT goto yyaccept
@@ -3004,527 +3078,527 @@ yyreduce:
     switch (yyn)
     {
 case 10:
-#line 413 "moc.y"
+#line 440 "moc.y"
 { enterNameSpace(yyvsp[0].string); }
 break;
 case 11:
-#line 414 "moc.y"
+#line 441 "moc.y"
 { BEGIN IN_NAMESPACE; }
 break;
 case 12:
-#line 416 "moc.y"
+#line 443 "moc.y"
 { leaveNameSpace();
 			                       selectOutsideClassState();
                                              }
 break;
 case 13:
-#line 421 "moc.y"
+#line 448 "moc.y"
 { enterNameSpace(); }
 break;
 case 14:
-#line 422 "moc.y"
+#line 449 "moc.y"
 { BEGIN IN_NAMESPACE; }
 break;
 case 15:
-#line 424 "moc.y"
+#line 451 "moc.y"
 { leaveNameSpace();
   			                       selectOutsideClassState();
 			                     }
 break;
 case 17:
-#line 433 "moc.y"
+#line 460 "moc.y"
 { selectOutsideClassState(); }
 break;
 case 18:
-#line 437 "moc.y"
+#line 464 "moc.y"
 { selectOutsideClassState(); }
 break;
 case 19:
-#line 440 "moc.y"
+#line 467 "moc.y"
 { selectOutsideClassState(); }
 break;
 case 20:
-#line 441 "moc.y"
+#line 468 "moc.y"
 { selectOutsideClassState(); }
 break;
 case 21:
-#line 444 "moc.y"
+#line 471 "moc.y"
 { initClass(); }
 break;
 case 22:
-#line 445 "moc.y"
+#line 472 "moc.y"
 { generateClass();
 			                        registerClassInNamespace();
 						selectOutsideClassState(); }
 break;
 case 23:
-#line 453 "moc.y"
+#line 480 "moc.y"
 { yyval.string = yyvsp[0].string; }
 break;
 case 24:
-#line 454 "moc.y"
+#line 481 "moc.y"
 { yyval.string = yyvsp[0].string; }
 break;
 case 25:
-#line 458 "moc.y"
+#line 485 "moc.y"
 { yyval.string = stradd( yyvsp[-3].string, "<",
 				     tmpExpression =
 				     tmpExpression.stripWhiteSpace(), ">" ); }
 break;
 case 26:
-#line 469 "moc.y"
+#line 496 "moc.y"
 { initExpression();
 						    templLevel = 1;
 						    BEGIN IN_TEMPL_ARGS; }
 break;
 case 27:
-#line 482 "moc.y"
+#line 509 "moc.y"
 { initExpression();
 						    BEGIN IN_EXPR; }
 break;
 case 28:
-#line 486 "moc.y"
+#line 513 "moc.y"
 { initExpression();
 						    BEGIN IN_ENUM; }
 break;
 case 29:
-#line 492 "moc.y"
+#line 519 "moc.y"
 { yyval.string = ""; }
 break;
 case 30:
-#line 493 "moc.y"
+#line 520 "moc.y"
 { yyval.string = yyvsp[0].string; }
 break;
 case 31:
-#line 494 "moc.y"
+#line 521 "moc.y"
 { yyval.string = ""; }
 break;
 case 32:
-#line 495 "moc.y"
+#line 522 "moc.y"
 { skipFunc = TRUE; yyval.string = ""; }
 break;
 case 33:
-#line 496 "moc.y"
+#line 523 "moc.y"
 { skipFunc = TRUE; yyval.string = ""; }
 break;
 case 34:
-#line 500 "moc.y"
+#line 527 "moc.y"
 { yyval.string = straddSpc(yyvsp[-2].string,yyvsp[-1].string,yyvsp[0].string); }
 break;
 case 35:
-#line 503 "moc.y"
+#line 530 "moc.y"
 { yyval.string = ""; }
 break;
 case 36:
-#line 504 "moc.y"
+#line 531 "moc.y"
 { yyval.string = yyvsp[0].string; }
 break;
 case 37:
-#line 507 "moc.y"
+#line 534 "moc.y"
 { yyval.string = yyvsp[0].string; }
 break;
 case 38:
-#line 508 "moc.y"
+#line 535 "moc.y"
 { yyval.string = straddSpc(yyvsp[-1].string,yyvsp[0].string); }
 break;
 case 41:
-#line 513 "moc.y"
+#line 540 "moc.y"
 { skipFunc = TRUE; }
 break;
 case 45:
-#line 521 "moc.y"
+#line 548 "moc.y"
 { yyval.string = "const"; }
 break;
 case 46:
-#line 522 "moc.y"
+#line 549 "moc.y"
 { yyval.string = "volatile"; }
 break;
 case 47:
-#line 525 "moc.y"
+#line 552 "moc.y"
 { yyval.string = yyvsp[0].string; }
 break;
 case 48:
-#line 526 "moc.y"
+#line 553 "moc.y"
 { yyval.string = yyvsp[0].string; }
 break;
 case 49:
-#line 527 "moc.y"
+#line 554 "moc.y"
 { yyval.string = yyvsp[0].string; }
 break;
 case 50:
-#line 531 "moc.y"
+#line 558 "moc.y"
 { yyval.string = straddSpc(yyvsp[-1].string,yyvsp[0].string); }
 break;
 case 51:
-#line 532 "moc.y"
+#line 559 "moc.y"
 { yyval.string = yyvsp[0].string; }
 break;
 case 52:
-#line 534 "moc.y"
+#line 561 "moc.y"
 { yyval.string = "char"; }
 break;
 case 53:
-#line 535 "moc.y"
+#line 562 "moc.y"
 { yyval.string = "short"; }
 break;
 case 54:
-#line 536 "moc.y"
+#line 563 "moc.y"
 { yyval.string = "int"; }
 break;
 case 55:
-#line 537 "moc.y"
+#line 564 "moc.y"
 { yyval.string = "long"; }
 break;
 case 56:
-#line 538 "moc.y"
+#line 565 "moc.y"
 { yyval.string = "signed"; }
 break;
 case 57:
-#line 539 "moc.y"
+#line 566 "moc.y"
 { yyval.string = "unsigned"; }
 break;
 case 58:
-#line 540 "moc.y"
+#line 567 "moc.y"
 { yyval.string = "float"; }
 break;
 case 59:
-#line 541 "moc.y"
+#line 568 "moc.y"
 { yyval.string = "double"; }
 break;
 case 60:
-#line 542 "moc.y"
+#line 569 "moc.y"
 { yyval.string = "void"; }
 break;
 case 61:
-#line 546 "moc.y"
+#line 573 "moc.y"
 { yyval.string = stradd( "template<",
 				     tmpExpression =
 				     tmpExpression.stripWhiteSpace(), ">" ); }
 break;
 case 63:
-#line 552 "moc.y"
+#line 579 "moc.y"
 { templateClassOld = templateClass;
 						  templateClass = TRUE;
 						}
 break;
 case 64:
-#line 558 "moc.y"
+#line 585 "moc.y"
 { yyval.string = "class"; }
 break;
 case 65:
-#line 559 "moc.y"
+#line 586 "moc.y"
 { yyval.string = "struct"; }
 break;
 case 66:
-#line 562 "moc.y"
+#line 589 "moc.y"
 { yyval.string = yyvsp[0].string; }
 break;
 case 67:
-#line 564 "moc.y"
+#line 591 "moc.y"
 { yyval.string = stradd( "::", yyvsp[0].string ); }
 break;
 case 68:
-#line 568 "moc.y"
+#line 595 "moc.y"
 { yyval.string = stradd( yyvsp[-2].string, "::", yyvsp[0].string );}
 break;
 case 69:
-#line 569 "moc.y"
+#line 596 "moc.y"
 { yyval.string = yyvsp[0].string; }
 break;
 case 70:
-#line 573 "moc.y"
+#line 600 "moc.y"
 { yyval.string = straddSpc(yyvsp[-1].string,yyvsp[0].string); }
 break;
 case 71:
-#line 574 "moc.y"
+#line 601 "moc.y"
 { yyval.string = stradd("enum ",yyvsp[0].string); }
 break;
 case 72:
-#line 575 "moc.y"
+#line 602 "moc.y"
 { yyval.string = stradd("union ",yyvsp[0].string); }
 break;
 case 73:
-#line 580 "moc.y"
+#line 607 "moc.y"
 { yyval.arg_list = yyvsp[-1].arg_list;}
 break;
 case 74:
-#line 581 "moc.y"
+#line 608 "moc.y"
 { yyval.arg_list = yyvsp[-2].arg_list;
 				       func_warn("Ellipsis not supported"
 						 " in signals and slots.\n"
 						 "Ellipsis argument ignored."); }
 break;
 case 75:
-#line 587 "moc.y"
+#line 614 "moc.y"
 { yyval.arg_list = tmpArgList; }
 break;
 case 76:
-#line 588 "moc.y"
+#line 615 "moc.y"
 { yyval.arg_list = yyvsp[0].arg_list; }
 break;
 case 78:
-#line 592 "moc.y"
+#line 619 "moc.y"
 { func_warn("Ellipsis not supported"
 						 " in signals and slots.\n"
 						 "Ellipsis argument ignored."); }
 break;
 case 79:
-#line 600 "moc.y"
+#line 627 "moc.y"
 { yyval.arg_list = addArg(yyvsp[0].arg); }
 break;
 case 80:
-#line 601 "moc.y"
+#line 628 "moc.y"
 { yyval.arg_list = addArg(yyvsp[0].arg); }
 break;
 case 81:
-#line 604 "moc.y"
+#line 631 "moc.y"
 { yyval.arg = new Argument(straddSpc(yyvsp[-1].string,yyvsp[0].string),""); }
 break;
 case 82:
-#line 606 "moc.y"
+#line 633 "moc.y"
 { expLevel = 1; }
 break;
 case 83:
-#line 608 "moc.y"
+#line 635 "moc.y"
 { yyval.arg = new Argument(straddSpc(yyvsp[-4].string,yyvsp[-3].string),""); }
 break;
 case 84:
-#line 611 "moc.y"
+#line 638 "moc.y"
 { yyval.arg = new Argument(straddSpc(yyvsp[-3].string,yyvsp[-2].string),yyvsp[0].string); }
 break;
 case 85:
-#line 614 "moc.y"
+#line 641 "moc.y"
 { expLevel = 1; }
 break;
 case 86:
-#line 616 "moc.y"
+#line 643 "moc.y"
 { yyval.arg = new Argument(straddSpc(yyvsp[-6].string,yyvsp[-5].string),yyvsp[-3].string); }
 break;
 case 87:
-#line 620 "moc.y"
+#line 647 "moc.y"
 { yyval.string = ""; }
 break;
 case 88:
-#line 621 "moc.y"
+#line 648 "moc.y"
 { yyval.string = yyvsp[0].string; }
 break;
 case 89:
-#line 625 "moc.y"
+#line 652 "moc.y"
 { yyval.string = straddSpc(yyvsp[-1].string,yyvsp[0].string); }
 break;
 case 90:
-#line 626 "moc.y"
+#line 653 "moc.y"
 { expLevel = 1; }
 break;
 case 91:
-#line 628 "moc.y"
+#line 655 "moc.y"
 { yyval.string = stradd( "[",
 				     tmpExpression =
 				     tmpExpression.stripWhiteSpace(), "]" ); }
 break;
 case 92:
-#line 631 "moc.y"
+#line 658 "moc.y"
 { expLevel = 1; }
 break;
 case 93:
-#line 633 "moc.y"
+#line 660 "moc.y"
 { yyval.string = stradd( yyvsp[-4].string,"[",
 				     tmpExpression =
 				     tmpExpression.stripWhiteSpace(),"]" ); }
 break;
 case 94:
-#line 636 "moc.y"
+#line 663 "moc.y"
 { yyval.string = yyvsp[0].string; }
 break;
 case 95:
-#line 637 "moc.y"
+#line 664 "moc.y"
 { yyval.string = yyvsp[-1].string; }
 break;
 case 96:
-#line 640 "moc.y"
+#line 667 "moc.y"
 { yyval.string = ""; }
 break;
 case 97:
-#line 642 "moc.y"
+#line 669 "moc.y"
 { yyval.string = straddSpc(yyvsp[-1].string,yyvsp[0].string);}
 break;
 case 98:
-#line 643 "moc.y"
+#line 670 "moc.y"
 { expLevel = 1; }
 break;
 case 99:
-#line 645 "moc.y"
+#line 672 "moc.y"
 { yyval.string = stradd( yyvsp[-4].string,"[",
 				     tmpExpression =
 				     tmpExpression.stripWhiteSpace(),"]" ); }
 break;
 case 100:
-#line 648 "moc.y"
+#line 675 "moc.y"
 { yyval.string = yyvsp[-1].string; }
 break;
 case 102:
-#line 660 "moc.y"
+#line 687 "moc.y"
 { tmpFunc->args	     = yyvsp[-4].arg_list;
 						  tmpFunc->qualifier = yyvsp[-2].string; }
 break;
 case 104:
-#line 666 "moc.y"
+#line 693 "moc.y"
 { func_warn("Variable as signal or slot."); }
 break;
 case 105:
-#line 667 "moc.y"
+#line 694 "moc.y"
 { expLevel=0; }
 break;
 case 106:
-#line 669 "moc.y"
+#line 696 "moc.y"
 { skipFunc = TRUE; }
 break;
 case 107:
-#line 670 "moc.y"
+#line 697 "moc.y"
 { expLevel=0; }
 break;
 case 108:
-#line 672 "moc.y"
+#line 699 "moc.y"
 { skipFunc = TRUE; }
 break;
 case 109:
-#line 676 "moc.y"
+#line 703 "moc.y"
 { expLevel = 1; }
 break;
 case 111:
-#line 678 "moc.y"
+#line 705 "moc.y"
 { expLevel = 1; }
 break;
 case 113:
-#line 683 "moc.y"
+#line 710 "moc.y"
 { yyval.string = ""; }
 break;
 case 114:
-#line 684 "moc.y"
+#line 711 "moc.y"
 { yyval.string = yyvsp[0].string; }
 break;
 case 115:
-#line 687 "moc.y"
+#line 714 "moc.y"
 { yyval.string = yyvsp[0].string; }
 break;
 case 116:
-#line 688 "moc.y"
+#line 715 "moc.y"
 { yyval.string = straddSpc(yyvsp[-1].string,yyvsp[0].string);}
 break;
 case 117:
-#line 691 "moc.y"
+#line 718 "moc.y"
 { yyval.string = straddSpc("*",yyvsp[0].string);}
 break;
 case 118:
-#line 692 "moc.y"
+#line 719 "moc.y"
 { yyval.string = stradd("&",yyvsp[0].string);}
 break;
 case 119:
-#line 699 "moc.y"
+#line 726 "moc.y"
 { yyval.string = ""; }
 break;
 case 120:
-#line 700 "moc.y"
+#line 727 "moc.y"
 { yyval.string = yyvsp[0].string; }
 break;
 case 121:
-#line 703 "moc.y"
+#line 730 "moc.y"
 { yyval.string = yyvsp[0].string; }
 break;
 case 122:
-#line 705 "moc.y"
+#line 732 "moc.y"
 { yyval.string = straddSpc(yyvsp[-1].string,yyvsp[0].string); }
 break;
 case 123:
-#line 708 "moc.y"
+#line 735 "moc.y"
 { yyval.string = "const"; }
 break;
 case 124:
-#line 709 "moc.y"
+#line 736 "moc.y"
 { yyval.string = "volatile"; }
 break;
 case 128:
-#line 717 "moc.y"
+#line 744 "moc.y"
 { BEGIN IN_FCT; fctLevel = 1;}
 break;
 case 129:
-#line 718 "moc.y"
+#line 745 "moc.y"
 { BEGIN QT_DEF; }
 break;
 case 130:
-#line 725 "moc.y"
+#line 752 "moc.y"
 { BEGIN IN_CLASS;
                                                   classPLevel = 1;
 						}
 break;
 case 131:
-#line 729 "moc.y"
+#line 756 "moc.y"
 { BEGIN QT_DEF; }
 break;
 case 132:
-#line 730 "moc.y"
+#line 757 "moc.y"
 { BEGIN QT_DEF;	  /* -- " -- */
 						  skipClass = TRUE; }
 break;
 case 133:
-#line 734 "moc.y"
+#line 761 "moc.y"
 { BEGIN QT_DEF; /* catch ';' */
 						  skipClass = TRUE; }
 break;
 case 134:
-#line 736 "moc.y"
+#line 763 "moc.y"
 { skipClass = TRUE;
 						  BEGIN GIMME_SEMICOLON; }
 break;
 case 140:
-#line 749 "moc.y"
+#line 776 "moc.y"
 { className = yyvsp[0].string; }
 break;
 case 141:
-#line 752 "moc.y"
+#line 779 "moc.y"
 { className = yyvsp[0].string; }
 break;
 case 142:
-#line 756 "moc.y"
+#line 783 "moc.y"
 { superclassName = yyvsp[0].string; }
 break;
 case 143:
-#line 761 "moc.y"
+#line 788 "moc.y"
 { templateClass = templateClassOld; }
 break;
 case 149:
-#line 775 "moc.y"
+#line 802 "moc.y"
 { expLevel = 1; }
 break;
 case 151:
-#line 780 "moc.y"
+#line 807 "moc.y"
 { yyval.string = 0; }
 break;
 case 152:
-#line 781 "moc.y"
+#line 808 "moc.y"
 { yyval.string = yyvsp[0].string; }
 break;
 case 157:
-#line 793 "moc.y"
-{ tmpAccessPerm = yyvsp[0].access; }
+#line 820 "moc.y"
+{ tmpAccess = yyvsp[0].access; }
 break;
 case 158:
-#line 794 "moc.y"
+#line 821 "moc.y"
 { moc_err( "Missing access specifier"
 						   " before \"slots:\"." ); }
 break;
 case 159:
-#line 798 "moc.y"
+#line 825 "moc.y"
 { BEGIN QT_DEF; }
 break;
 case 161:
-#line 800 "moc.y"
+#line 827 "moc.y"
 { BEGIN QT_DEF; }
 break;
 case 163:
-#line 802 "moc.y"
+#line 829 "moc.y"
 {
-			      if ( tmpAccessPerm )
+			      if ( tmpAccess )
 				  moc_warn("Q_OBJECT is not in the private"
 					   " section of the class.\n"
 					   "Q_OBJECT is a macro that resets"
@@ -3533,70 +3607,70 @@ case 163:
 			  }
 break;
 case 164:
-#line 810 "moc.y"
+#line 837 "moc.y"
 { tmpYYStart = YY_START;
 				       tmpPropOverride = FALSE;
 				       BEGIN IN_PROPERTY; }
 break;
 case 165:
-#line 813 "moc.y"
+#line 840 "moc.y"
 {
 						BEGIN tmpYYStart;
 				   	   }
 break;
 case 167:
-#line 817 "moc.y"
+#line 844 "moc.y"
 { tmpYYStart = YY_START;
 				       tmpPropOverride = TRUE;
 				       BEGIN IN_PROPERTY; }
 break;
 case 168:
-#line 820 "moc.y"
+#line 847 "moc.y"
 {
 						BEGIN tmpYYStart;
 				   	   }
 break;
 case 170:
-#line 824 "moc.y"
-{ tmpYYStart = YY_START; BEGIN IN_PROPERTY; }
+#line 851 "moc.y"
+{ tmpYYStart = YY_START; BEGIN IN_CLASSINFO; }
 break;
 case 171:
-#line 826 "moc.y"
+#line 853 "moc.y"
 {
 				      infos.append( new ClassInfo( yyvsp[-3].string, yyvsp[-1].string ) );
 				      BEGIN tmpYYStart;
 				  }
 break;
 case 173:
-#line 831 "moc.y"
+#line 858 "moc.y"
 { tmpYYStart = YY_START; BEGIN IN_PROPERTY; }
 break;
 case 174:
-#line 832 "moc.y"
+#line 859 "moc.y"
 {
 			  			Q_PROPERTYdetected = TRUE;
 						BEGIN tmpYYStart;
 				   	   }
 break;
 case 176:
-#line 837 "moc.y"
+#line 864 "moc.y"
 { tmpYYStart = YY_START; BEGIN IN_PROPERTY; }
 break;
 case 177:
-#line 838 "moc.y"
+#line 865 "moc.y"
 {
 			  			Q_PROPERTYdetected = TRUE;
 						BEGIN tmpYYStart;
 				   	   }
 break;
 case 179:
-#line 845 "moc.y"
+#line 872 "moc.y"
 { moc_err( "Signals cannot "
 						 "have access specifiers" ); }
 break;
 case 181:
-#line 848 "moc.y"
-{ if ( tmpAccessPerm == _PUBLIC && Q_PROPERTYdetected )
+#line 875 "moc.y"
+{ if ( tmpAccess == Public && Q_PROPERTYdetected )
                                                   BEGIN QT_DEF;
                                               else
                                                   BEGIN IN_CLASS;
@@ -3604,13 +3678,13 @@ case 181:
                                         }
 break;
 case 182:
-#line 855 "moc.y"
+#line 882 "moc.y"
 {
 					  suppress_func_warn = FALSE;
 					}
 break;
 case 183:
-#line 858 "moc.y"
+#line 885 "moc.y"
 { BEGIN IN_CLASS;
 					   if ( classPLevel != 1 )
 					       moc_warn( "unexpected access"
@@ -3618,88 +3692,88 @@ case 183:
 					}
 break;
 case 188:
-#line 873 "moc.y"
+#line 900 "moc.y"
 { addMember( PropertyCandidateMember ); }
 break;
 case 193:
-#line 885 "moc.y"
+#line 912 "moc.y"
 { addMember( SignalMember ); }
 break;
 case 198:
-#line 896 "moc.y"
+#line 923 "moc.y"
 { addMember( SlotMember ); }
 break;
 case 201:
-#line 903 "moc.y"
+#line 930 "moc.y"
 { yyval.string=yyvsp[0].string; }
 break;
 case 204:
-#line 911 "moc.y"
+#line 938 "moc.y"
 { yyval.string = stradd( yyvsp[-3].string, "(", yyvsp[-1].string, ")" ); }
 break;
 case 205:
-#line 913 "moc.y"
+#line 940 "moc.y"
 { yyval.string = stradd( yyvsp[-3].string, "(", yyvsp[-1].string, ")" ); }
 break;
 case 206:
-#line 916 "moc.y"
+#line 943 "moc.y"
 {yyval.string=yyvsp[0].string;}
 break;
 case 207:
-#line 917 "moc.y"
+#line 944 "moc.y"
 {yyval.string=yyvsp[0].string;}
 break;
 case 208:
-#line 918 "moc.y"
+#line 945 "moc.y"
 {yyval.string=yyvsp[0].string;}
 break;
 case 209:
-#line 919 "moc.y"
+#line 946 "moc.y"
 {yyval.string=yyvsp[0].string;}
 break;
 case 210:
-#line 920 "moc.y"
+#line 947 "moc.y"
 {yyval.string=yyvsp[0].string;}
 break;
 case 211:
-#line 921 "moc.y"
+#line 948 "moc.y"
 {yyval.string=yyvsp[0].string;}
 break;
 case 212:
-#line 922 "moc.y"
+#line 949 "moc.y"
 {yyval.string=yyvsp[0].string;}
 break;
 case 213:
-#line 923 "moc.y"
+#line 950 "moc.y"
 {yyval.string=yyvsp[0].string;}
 break;
 case 214:
-#line 924 "moc.y"
+#line 951 "moc.y"
 {yyval.string=yyvsp[0].string;}
 break;
 case 215:
-#line 925 "moc.y"
+#line 952 "moc.y"
 {yyval.string=yyvsp[0].string;}
 break;
 case 216:
-#line 928 "moc.y"
-{ yyval.access=_PRIVATE; }
+#line 955 "moc.y"
+{ yyval.access=Private; }
 break;
 case 217:
-#line 929 "moc.y"
-{ yyval.access=_PROTECTED; }
+#line 956 "moc.y"
+{ yyval.access=Protected; }
 break;
 case 218:
-#line 930 "moc.y"
-{ yyval.access=_PUBLIC; }
+#line 957 "moc.y"
+{ yyval.access=Public; }
 break;
 case 262:
-#line 982 "moc.y"
+#line 1009 "moc.y"
 { tmpFunc->type = yyvsp[-1].string;
 						  tmpFunc->name = yyvsp[0].string; }
 break;
 case 263:
-#line 985 "moc.y"
+#line 1012 "moc.y"
 { tmpFunc->type = "int";
 						  tmpFunc->name = yyvsp[0].string;
 				  if ( tmpFunc->name == className )
@@ -3708,7 +3782,7 @@ case 263:
 						}
 break;
 case 264:
-#line 992 "moc.y"
+#line 1019 "moc.y"
 { tmpFunc->type = "void";
 						  tmpFunc->name = "~";
 						  tmpFunc->name += yyvsp[0].string;
@@ -3717,7 +3791,7 @@ case 264:
 						}
 break;
 case 265:
-#line 1000 "moc.y"
+#line 1027 "moc.y"
 {
 						    char *tmp =
 							straddSpc(yyvsp[-4].string,yyvsp[-3].string,yyvsp[-2].string,yyvsp[-1].string);
@@ -3726,123 +3800,123 @@ case 265:
 						    tmpFunc->name = yyvsp[0].string; }
 break;
 case 266:
-#line 1007 "moc.y"
+#line 1034 "moc.y"
 { skipFunc = TRUE; }
 break;
 case 267:
-#line 1009 "moc.y"
+#line 1036 "moc.y"
 { tmpFunc->type =
 						      straddSpc(yyvsp[-2].string,yyvsp[-1].string);
 						  tmpFunc->name = yyvsp[0].string; }
 break;
 case 268:
-#line 1014 "moc.y"
+#line 1041 "moc.y"
 { tmpFunc->type =
 						      straddSpc(yyvsp[-3].string,yyvsp[-2].string,yyvsp[-1].string);
 						  tmpFunc->name = yyvsp[0].string; }
 break;
 case 269:
-#line 1018 "moc.y"
+#line 1045 "moc.y"
 { operatorError();    }
 break;
 case 270:
-#line 1020 "moc.y"
+#line 1047 "moc.y"
 { operatorError();    }
 break;
 case 271:
-#line 1023 "moc.y"
+#line 1050 "moc.y"
 { operatorError();    }
 break;
 case 272:
-#line 1025 "moc.y"
+#line 1052 "moc.y"
 { operatorError();    }
 break;
 case 273:
-#line 1028 "moc.y"
+#line 1055 "moc.y"
 { operatorError();    }
 break;
 case 275:
-#line 1034 "moc.y"
+#line 1061 "moc.y"
 { func_warn("Variable as signal or slot."); }
 break;
 case 276:
-#line 1037 "moc.y"
+#line 1064 "moc.y"
 { func_warn("Variable as signal or slot."); }
 break;
 case 277:
-#line 1039 "moc.y"
+#line 1066 "moc.y"
 { func_warn("Enum declaration as signal or"
 					    " slot."); }
 break;
 case 278:
-#line 1042 "moc.y"
+#line 1069 "moc.y"
 { func_warn("Using declaration as signal or"
 					    " slot."); }
 break;
 case 279:
-#line 1045 "moc.y"
+#line 1072 "moc.y"
 { func_warn("Using declaration as signal or"
 					    " slot."); }
 break;
 case 280:
-#line 1048 "moc.y"
+#line 1075 "moc.y"
 { classPLevel++;
 				  moc_err("Namespace declaration as signal or"
 					  " slot."); }
 break;
 case 281:
-#line 1052 "moc.y"
+#line 1079 "moc.y"
 { func_warn("Class declaration as signal or slot.");}
 break;
 case 282:
-#line 1054 "moc.y"
+#line 1081 "moc.y"
 { func_warn("Class declaration as signal or slot.");
 				  BEGIN IN_FCT; fctLevel=1;
 				}
 break;
 case 283:
-#line 1057 "moc.y"
+#line 1084 "moc.y"
 { BEGIN QT_DEF; }
 break;
 case 288:
-#line 1067 "moc.y"
+#line 1094 "moc.y"
 { expLevel = 0; }
 break;
 case 290:
-#line 1069 "moc.y"
+#line 1096 "moc.y"
 { expLevel = 0; }
 break;
 case 293:
-#line 1074 "moc.y"
+#line 1101 "moc.y"
 { expLevel = 0; }
 break;
 case 298:
-#line 1089 "moc.y"
+#line 1116 "moc.y"
 { BEGIN QT_DEF;
-				  if ( tmpAccessPerm == _PUBLIC) {
+				  if ( tmpAccess == Public) {
 				      tmpEnum->name = yyvsp[-4].string;
 				      addEnum();
 				  }
 				}
 break;
 case 299:
-#line 1096 "moc.y"
+#line 1123 "moc.y"
 { tmpEnum->clear();}
 break;
 case 305:
-#line 1108 "moc.y"
-{ if ( tmpAccessPerm == _PUBLIC) tmpEnum->append( yyvsp[0].string ); }
+#line 1135 "moc.y"
+{ if ( tmpAccess == Public) tmpEnum->append( yyvsp[0].string ); }
 break;
 case 306:
-#line 1109 "moc.y"
+#line 1136 "moc.y"
 { expLevel=0; }
 break;
 case 307:
-#line 1110 "moc.y"
-{  if ( tmpAccessPerm == _PUBLIC) tmpEnum->append( yyvsp[-3].string );  }
+#line 1137 "moc.y"
+{  if ( tmpAccess == Public) tmpEnum->append( yyvsp[-3].string );  }
 break;
 case 308:
-#line 1114 "moc.y"
+#line 1141 "moc.y"
 {
 				     propWrite = "";
 				     propRead = "";
@@ -3859,7 +3933,7 @@ case 308:
 				}
 break;
 case 309:
-#line 1129 "moc.y"
+#line 1156 "moc.y"
 {
 				    if ( propRead.isEmpty() && !propOverride)
 					moc_err( "A property must at least feature a read method." );
@@ -3879,49 +3953,49 @@ case 309:
 				}
 break;
 case 311:
-#line 1149 "moc.y"
+#line 1176 "moc.y"
 { propRead = yyvsp[-1].string; }
 break;
 case 312:
-#line 1150 "moc.y"
+#line 1177 "moc.y"
 { propWrite = yyvsp[-1].string; }
 break;
 case 313:
-#line 1151 "moc.y"
+#line 1178 "moc.y"
 { propReset = yyvsp[-1].string; }
 break;
 case 314:
-#line 1152 "moc.y"
+#line 1179 "moc.y"
 { propStored = yyvsp[-1].string; }
 break;
 case 315:
-#line 1154 "moc.y"
+#line 1181 "moc.y"
 {
-					if ( strcmp( yyvsp[0].string, "true" ) == 0 )
+					if ( qstrcmp( yyvsp[0].string, "true" ) == 0 )
 						propDesignable = 1;
-					else if ( strcmp( yyvsp[0].string, "false" ) == 0 )
+					else if ( qstrcmp( yyvsp[0].string, "false" ) == 0 )
 						propDesignable = 0;
 					else
 						moc_err( "DESIGNABLE may only be followed by 'true' or 'false'" );
 				}
 break;
 case 317:
-#line 1165 "moc.y"
+#line 1192 "moc.y"
 { }
 break;
 case 318:
-#line 1166 "moc.y"
+#line 1193 "moc.y"
 { qtEnums.append( yyvsp[-1].string ); }
 break;
 case 319:
-#line 1169 "moc.y"
+#line 1196 "moc.y"
 { }
 break;
 case 320:
-#line 1170 "moc.y"
+#line 1197 "moc.y"
 { qtSets.append( yyvsp[-1].string ); }
 break;
-#line 3924 "y.tab.c"
+#line 3998 "y.tab.c"
     }
     yyssp -= yym;
     yystate = *yyssp;

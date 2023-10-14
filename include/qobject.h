@@ -1,27 +1,39 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qobject.h   2.1.1   edited 2000-04-06 $
+** $Id: qt/src/kernel/qobject.h   2.2.0   edited 2000-08-25 $
 **
 ** Definition of QObject class
 **
 ** Created : 930418
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the kernel module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #ifndef QOBJECT_H
 #define QOBJECT_H
@@ -41,6 +53,8 @@
 class QMetaObject;
 class QVariant;
 
+#ifndef QT_MOC_CPP
+
 class Q_EXPORT QObject: public Qt
 {
     Q_PROPERTY( QCString name READ name WRITE setName )
@@ -49,7 +63,8 @@ public:
     QObject( QObject *parent=0, const char *name=0 );
     virtual ~QObject();
 
-    static QString tr(const char*);
+    static QString tr( const char * );
+    static QString tr( const char *, const char * );
 
     virtual bool event( QEvent * );
     virtual bool eventFilter( QObject *, QEvent * );
@@ -78,11 +93,12 @@ public:
     const QObjectList *children() const { return childObjects; }
 
     static const QObjectList *objectTrees();
-    
+
+    //### make queryList const in 3.0
     QObjectList	      *queryList( const char *inheritsClass = 0,
 				  const char *objName = 0,
 				  bool regexpMatch = TRUE,
-				  bool recursiveSearch = TRUE ); //### const in 3.0
+				  bool recursiveSearch = TRUE );
 
     virtual void insertChild( QObject * );
     virtual void removeChild( QObject * );
@@ -103,8 +119,10 @@ public:
     void	 dumpObjectTree();
     void	 dumpObjectInfo();
 
+#ifndef QT_NO_PROPERTIES
     bool setProperty( const char *name, const QVariant& value ); // virtual in Qt 3.0
     QVariant property( const char *name ) const;    // virtual in Qt 3.0
+#endif // QT_NO_PROPERTIES
 
 signals:
     void	 destroyed();
@@ -140,6 +158,7 @@ protected:
     virtual void disconnectNotify( const char *signal );
     virtual bool checkConnectArgs( const char *signal, const QObject *receiver,
 				   const char *member );
+    static QCString normalizeSignalSlot( const char *signalSlot );
 
     static  void badSuperclassWarning( const char *className,
 				       const char *superclassName );
@@ -161,6 +180,8 @@ private:
     QSignalDict *connections;
     QObjectList *senderObjects;
     QObjectList *eventFilters;
+    // ### 3.0 todo: add d pointer
+
     QObject	*sigSender;
 
     friend class QApplication;
@@ -174,12 +195,15 @@ private:	// Disabled copy constructor and operator=
     QObject( const QObject & );
     QObject &operator=( const QObject & );
 #endif
-    
-public: 
+
+public:
     // obsolete
+#ifndef QT_NO_STRINGLIST
     QStringList  superClasses( bool includeThis = FALSE ) const; // obsolete, remove 3.0
+#endif
 };
 
+#endif
 
 inline bool QObject::connect( const QObject *sender, const char *signal,
 			      const char *member ) const
@@ -209,6 +233,10 @@ class Q_EXPORT QSenderObject : public QObject		// object for sending signals
 public:
     void setSender( QObject *s ) { sigSender=s; }
 };
+
+#ifdef QT_NO_TRANSLATION
+inline QString QObject::tr(const char* s) { return QString(s); }
+#endif
 
 
 #endif // QOBJECT_H

@@ -1,29 +1,43 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qpalette.cpp   2.1.1   edited 2000-05-22 $
+** $Id: qt/src/kernel/qpalette.cpp   2.2.0   edited 2000-08-25 $
 **
 ** Implementation of QColorGroup and QPalette classes
 **
 ** Created : 950323
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the kernel module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #include "qpalette.h"
+
+#ifndef QT_NO_PALETTE
 #include "qdatastream.h"
 #include "qpixmap.h"
 
@@ -91,7 +105,7 @@
   <li> \c Base - used as background color for e.g. text entry widgets,
   usually white or another light color.
 
-  <li> \c Text - the forground color used with \c Base. Usually this
+  <li> \c Text - the foreground color used with \c Base. Usually this
   is the same as the \c Foreground, in what case it must provide good
   contrast both with \c Background and \c Base.
 
@@ -172,7 +186,7 @@ QColorGroup::QColorGroup( const QColorGroup& other )
 }
 
 /*!
-  Copies the colours of \a other to this color group.
+  Copies the colors of \a other to this color group.
 */
 QColorGroup& QColorGroup::operator =(const QColorGroup& other)
 {
@@ -180,6 +194,12 @@ QColorGroup& QColorGroup::operator =(const QColorGroup& other)
 	br[i] = other.br[i];
     return *this;
 }
+
+static QColor qt_mix_colors( QColor a, QColor b)
+{
+    return QColor( (a.red() + b.red()) / 2, (a.green() + b.green()) / 2, (a.blue() + b.blue()) / 2 );
+}
+
 
 /*!
 Constructs a color group. You can pass either brushes, pixmaps or
@@ -207,7 +227,7 @@ Such long lists of arguments are rather error-prone.
     br[ButtonText] 	= text;
     br[Base] 		= base;
     br[Background] 	= background;
-    br[Midlight] 	= QBrush( br[Button].color().light(115));
+    br[Midlight] 	= qt_mix_colors( br[Button].color(), br[Light].color() );
     br[Shadow]          = Qt::black;
     br[Highlight]       = Qt::darkBlue;
     br[HighlightedText] = Qt::white;
@@ -236,7 +256,7 @@ QColorGroup::QColorGroup( const QColor &foreground, const QColor &background,
     br[ButtonText]      = br[Text];
     br[Base]            = QBrush(base);
     br[Background]      = QBrush(background);
-    br[Midlight]        = QBrush(br[Button].color().light(115));
+    br[Midlight] 	= qt_mix_colors( br[Button].color(), br[Light].color() );
     br[Shadow]          = Qt::black;
     br[Highlight]       = Qt::darkBlue;
     br[HighlightedText] = Qt::white;
@@ -504,7 +524,7 @@ QPalette::QPalette( const QColor &button )
 
 /*!
   Constructs a palette from a \e button color and a background. The other colors are
-  automatically calculated, based on this color.
+  automatically calculated, based on these colors.
 */
 
 QPalette::QPalette( const QColor &button, const QColor &background )
@@ -808,6 +828,7 @@ bool QPalette::operator==( const QPalette &p ) const
   QColorGroup/QPalette stream functions
  *****************************************************************************/
 
+#ifndef QT_NO_DATASTREAM
 /*!
   \relates QColorGroup
   Writes a color group to the stream.
@@ -928,7 +949,7 @@ QDataStream &operator>>( QDataStream &s, QPalette &p )
     p = newpal;
     return s;
 }
-
+#endif //QT_NO_DATASTREAM
 
 /*!  Returns TRUE if this palette and \a p are copies of each other,
   ie. one of them was created as a copy of the other and neither was
@@ -969,7 +990,7 @@ QBrush &QPalette::directBrush( ColorGroup gr, QColorGroup::ColorRole r ) const
 	//break;
     default:
 	break;
-    };
+    }
 #if defined(CHECK_RANGE)
     qWarning( "QPalette::directBrush: colorGroup(%i) internal error", gr );
 #endif
@@ -1202,3 +1223,4 @@ nsyLoJIhCFLTyGQMBxi9CCoZgiC1C8pYdYBKhiBIjaIqYzhP5kVQyRAEqUW0ZAznybwIKhmC
 IDWHjozhAKMXQSVDEKS2QBmrPlDJEASpIYrKGM6TeZH/D0A5AKNKJaiaAAAAAElFTkSuQmCC
 
 */
+#endif // QT_NO_PALETTE

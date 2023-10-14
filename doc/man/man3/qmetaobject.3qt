@@ -1,5 +1,5 @@
-.TH QMetaObject 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QMetaObject 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QMetaObject \- Meta information about Qt objects
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -79,6 +77,12 @@ QMetaObject \- Meta information about Qt objects
 .ti -1c
 .BI "void \fBresolveProperty\fR ( QMetaProperty * prop ) (internal)"
 .br
+.ti -1c
+.BI "void \fBset_slot_access\fR ( QMetaData::Access * ) (internal)"
+.br
+.ti -1c
+.BI "QMetaData::Access \fBslot_access\fR ( int " "index" ", bool " "super" " = FALSE ) (internal)"
+.br
 .in -1c
 .SS "Static Public Members"
 .in +1c
@@ -90,6 +94,9 @@ QMetaObject \- Meta information about Qt objects
 .br
 .ti -1c
 .BI "QMetaData* \fBnew_metadata\fR ( int ) (internal)"
+.br
+.ti -1c
+.BI "QMetaData::Access* \fBnew_metaaccess\fR ( int ) (internal)"
 .br
 .ti -1c
 .BI "QMetaEnum* \fBnew_metaenum\fR ( int ) (internal)"
@@ -107,7 +114,7 @@ QMetaObject \- Meta information about Qt objects
 .SH DESCRIPTION
 The QMetaObject class contains meta information about Qt objects.
 .PP
-The Meta Object System in Qt is responsible for the signal/slot mechanism for communication between objects, runtime type information and the property system. All meta information in Qt is kept in a singla instance of QMetaObject per class.
+The Meta Object System in Qt is responsible for the signal/slot mechanism for communication between objects, runtime type information and the property system. All meta information in Qt is kept in a single instance of QMetaObject per class.
 .PP
 In general, you will not have to use this class directly in any application program. Most of the class members and functions are internal, \fB do not use them \fR.
 .PP
@@ -138,7 +145,7 @@ If \fIsuper\fR is TRUE, inherited class information is included.
 .SH "const char * QMetaObject::className () const"
 Returns the class name.
 .PP
-See also: QObject::className() and superClassName().
+See also QObject::className() and superClassName().
 .SH "bool QMetaObject::inherits ( const char * clname ) const"
 Returns TRUE if this class inherits \fIclname\fR within the meta object inheritance chain.
 .PP
@@ -152,43 +159,43 @@ Returns the number of signals for this class.
 .PP
 If \fIsuper\fR is TRUE, inherited signals are included.
 .PP
-See also: signalNames().
+See also signalNames().
 .SH "int QMetaObject::numSlots ( bool super = FALSE ) const"
 Returns the number of slots for this class.
 .PP
 If \fIsuper\fR is TRUE, inherited slots are included.
 .PP
-See also: slotNames().
+See also slotNames().
 .SH "const QMetaProperty* QMetaObject::property ( const char * name, bool super = FALSE ) const"
 Returns the property meta data for the property with name \fIname\fR or 0 if no such property exists.
 .PP
 If \fIsuper\fR is TRUE, inherited properties are included.
 .PP
-See also: propertyNames().
+See also propertyNames().
 .SH "QStrList QMetaObject::propertyNames ( bool super = FALSE ) const"
 Returns a list with the names of all properties for this class.
 .PP
 If \fIsuper\fR is TRUE, inherited properties are included.
 .PP
-See also: property().
+See also property().
 .SH "QStrList QMetaObject::signalNames ( bool super = FALSE ) const"
 Returns a list with the names of all signals for this class.
 .PP
 If \fIsuper\fR is TRUE, inherited signals are included.
 .PP
-See also: signal().
+See also signal().
 .SH "QStrList QMetaObject::slotNames ( bool super = FALSE ) const"
 Returns a list with the names of all slots for this class.
 .PP
 If \fIsuper\fR is TRUE, inherited slots are included.
 .PP
-See also: numSlots().
+See also numSlots().
 .SH "QMetaObject * QMetaObject::superClass () const"
 Returns the meta object of the super class or 0, if there is no such object.
 .SH "const char * QMetaObject::superClassName () const"
-Returns the class name of the super class, or 0 if there is no super class in the QObject hierachy.
+Returns the class name of the super class, or 0 if there is no super class in the QObject hierarchy.
 .PP
-See also: className().
+See also className().
 .SH "QMetaObject::QMetaObject ( const char * class_name, const char * superclass_name, QMetaData * slot_data, int n_slots, QMetaData * signal_data, int n_signals )"
 For internal use only.
 .SH "QMetaObject::QMetaObject ( const char * class_name, const char * superclass_name, QMetaData * slot_data, int n_slots, QMetaData * signal_data, int n_signals, QMetaProperty * prop_data, int n_props, QMetaEnum * enum_data, int n_enums, QClassInfo * class_info, int n_info )"
@@ -196,6 +203,8 @@ For internal use only.
 .SH "QMetaObject::~QMetaObject () \fC[virtual]\fR"
 For internal use only.
 .SH "QClassInfo * QMetaObject::new_classinfo ( int numEntries ) \fC[static]\fR"
+For internal use only.
+.SH "QMetaData::Access * QMetaObject::new_metaaccess( int numEntries ) \fC[static]\fR"
 For internal use only.
 .SH "QMetaData * QMetaObject::new_metadata ( int numEntries ) \fC[static]\fR"
 For internal use only.
@@ -211,6 +220,8 @@ For internal use only.
 For internal use only.
 .SH "void QMetaObject::resolveProperty ( QMetaProperty * prop )"
 For internal use only.
+.SH "void QMetaObject::set_slot_access ( QMetaData::Access * access )"
+For internal use only.
 .SH "QMetaData * QMetaObject::signal ( const char * n, bool super = FALSE ) const"
 For internal use only.
 .SH "QMetaData * QMetaObject::signal ( int index, bool super = FALSE ) const"
@@ -219,10 +230,12 @@ For internal use only.
 For internal use only.
 .SH "QMetaData * QMetaObject::slot ( int index, bool super = FALSE ) const"
 For internal use only.
+.SH "QMetaData::Access QMetaObject::slot_access( int index, bool super = FALSE )"
+For internal use only.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qmetaobject.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

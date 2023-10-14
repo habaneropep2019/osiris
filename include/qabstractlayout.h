@@ -1,27 +1,39 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qabstractlayout.h   2.1.1   edited 2000-03-24 $
+** $Id: qt/src/kernel/qabstractlayout.h   2.2.0   edited 2000-08-25 $
 **
 ** Definition of the abstract layout base class
 **
 ** Created : 960416
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the kernel module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #ifndef QABSTRACTLAYOUT_H
 #define QABSTRACTLAYOUT_H
@@ -31,6 +43,8 @@
 #include "qsizepolicy.h"
 #include "qwidget.h"
 #endif // QT_H
+
+#ifndef QT_NO_LAYOUT
 
 class QMenuBar;
 class QWidget;
@@ -157,7 +171,7 @@ class Q_EXPORT QLayout : public QObject, public QLayoutItem
     Q_PROPERTY( int margin READ margin WRITE setMargin )
     Q_PROPERTY( int spacing READ spacing WRITE setSpacing )
     Q_PROPERTY( ResizeMode resizeMode READ resizeMode WRITE setResizeMode )
-    
+
 public:
     QLayout( QWidget *parent, int margin=0, int space=-1,
 	     const char *name=0 );
@@ -165,7 +179,7 @@ public:
     QLayout( int space=-1, const char *name=0 );
 
     ~QLayout();
-    
+
     int margin() const { return outsideBorder; }
     int spacing() const { return insideSpacing; }
 
@@ -183,10 +197,12 @@ public:
     void setResizeMode( ResizeMode );
     ResizeMode resizeMode() const;
 
+#ifndef QT_NO_MENUBAR
     virtual void  setMenuBar( QMenuBar *w );
+    QMenuBar *menuBar() const { return menubar; }
+#endif
 
     QWidget *mainWidget();
-    QMenuBar *menuBar() const { return menubar; }
     bool isTopLevel() const { return topLevel; }
 
     virtual void setAutoAdd( bool );
@@ -213,6 +229,9 @@ public:
     QLayout *layout();
 
     bool supportsMargin() const { return marginImpl; }
+    
+    void setEnabled( bool );
+    bool isEnabled() const;
 
 protected:
     bool  eventFilter( QObject *, QEvent * );
@@ -232,9 +251,12 @@ private:
     uint frozen : 1;
     uint activated : 1;
     uint marginImpl : 1;
+    uint enabled : 1;
     QRect rect;
     QLayoutData *extraData;
+#ifndef QT_NO_MENUBAR
     QMenuBar *menubar;
+#endif
 private:	// Disabled copy constructor and operator=
 #if defined(Q_DISABLE_COPY)
     QLayout( const QLayout & );
@@ -247,5 +269,5 @@ inline void QLayoutIterator::deleteCurrent()
 {
     delete takeCurrent();
 }
-
+#endif //QT_NO_LAYOUT
 #endif

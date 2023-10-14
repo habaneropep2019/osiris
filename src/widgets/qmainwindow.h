@@ -1,27 +1,39 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qmainwindow.h   2.1.1   edited 2000-04-18 $
+** $Id: qt/src/widgets/qmainwindow.h   2.2.0   edited 2000-08-25 $
 **
 ** Definition of QMainWindow class
 **
 ** Created : 980316
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the widgets module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #ifndef QMAINWINDOW_H
 #define QMAINWINDOW_H
@@ -30,10 +42,12 @@
 #include "qwidget.h"
 #endif // QT_H
 
+#ifndef QT_NO_COMPLEXWIDGETS
+
 class QMenuBar;
-class QToolBar;
 class QStatusBar;
 class QToolTipGroup;
+class QToolBar;
 template <class type> class QList;
 
 class QMainWindowPrivate;
@@ -51,14 +65,21 @@ public:
     QMainWindow( QWidget * parent = 0, const char * name = 0, WFlags f = WType_TopLevel );
     ~QMainWindow();
 
+#ifndef QT_NO_MENUBAR
     QMenuBar * menuBar() const;
+#endif
     QStatusBar * statusBar() const;
     QToolTipGroup * toolTipGroup() const;
 
     virtual void setCentralWidget( QWidget * );
     QWidget * centralWidget() const;
 
-    enum ToolBarDock { Unmanaged, TornOff, Top, Bottom, Right, Left, Minimized };
+    // ##### In moved to Qt:: in 3.0 and qtoolbar doesn't #include qmainwindow,
+    // ##### then qmainwindow can include qtoolbar, so toolBars() below can
+    // ##### work in bad compilers.
+    enum ToolBarDock {
+	Unmanaged, TornOff, Top, Bottom, Right, Left, Minimized
+    };
 
     virtual void setDockEnabled( ToolBarDock dock, bool enable );
     bool isDockEnabled( ToolBarDock dock ) const;
@@ -88,7 +109,11 @@ public:
 
     bool getLocation( QToolBar *tb, ToolBarDock &dock, int &index, bool &nl, int &extraOffset ) const;
 
+// WARNING: compilers requiring Q_TEMPLATE_NEEDS_CLASS_DECLARATION
+//	    may not be supported in future Qt versions.
+#ifndef Q_TEMPLATE_NEEDS_CLASS_DECLARATION
     QList<QToolBar> toolBars( ToolBarDock dock ) const;
+#endif
     void lineUpToolBars( bool keepNewLines = FALSE );
 
     bool isDockMenuEnabled() const;
@@ -126,7 +151,9 @@ private:
     void moveToolBar( QToolBar *, QMouseEvent * );
     void rightMouseButtonMenu( const QPoint &p );
 
+#ifndef QT_NO_MENUBAR
     virtual void setMenuBar( QMenuBar * );
+#endif
     virtual void setStatusBar( QStatusBar * );
     virtual void setToolTipGroup( QToolTipGroup * );
     ToolBarDock findDockArea( const QPoint &pos, QRect &rect, QToolBar *tb, QRect *dockRect = 0 );
@@ -142,5 +169,6 @@ private:	// Disabled copy constructor and operator=
 #endif
 };
 
+#endif // QT_NO_COMPLEXWIDGETS
 
-#endif
+#endif // QMAINWINDOW_H

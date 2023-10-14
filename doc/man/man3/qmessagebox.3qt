@@ -1,5 +1,5 @@
-.TH QMessageBox 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QMessageBox 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QMessageBox \- Displays a brief message, an icon, and some buttons
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -22,13 +20,13 @@ Inherits QDialog.
 .BI "enum \fBIcon\fR { NoIcon = 0, Information = 1, Warning = 2, Critical = 3 }"
 .br
 .ti -1c
-.BI "\fBQMessageBox\fR ( QWidget * " "parent" "=0, const char * " "name" "=0 )"
+.BI "\fBQMessageBox\fR ( QWidget * " "parent" "=0, const char * " "name" "=0 ) "
 .br
 .ti -1c
-.BI "\fBQMessageBox\fR ( const QString & " "caption" ", const QString & " "text" ", Icon " "icon" ", int " "button0" ", int " "button1" ", int " "button2" ", QWidget * " "parent" "=0, const char * " "name" "=0, bool " "modal" "=TRUE, WFlags " "f" "=WStyle_DialogBorder )"
+.BI "\fBQMessageBox\fR ( const QString & " "caption" ", const QString & " "text" ", Icon " "icon" ", int " "button0" ", int " "button1" ", int " "button2" ", QWidget * " "parent" "=0, const char * " "name" "=0, bool " "modal" "=TRUE, WFlags " "f" "=WStyle_DialogBorder ) "
 .br
 .ti -1c
-.BI "\fB~QMessageBox\fR ()"
+.BI "\fB~QMessageBox\fR () "
 .br
 .ti -1c
 .BI "enum { NoButton = 0, Ok = 1, Cancel = 2, Yes = 3, No = 4, Abort = 5, Retry = 6, Ignore = 7, ButtonMask = 0x07, Default = 0x100, Escape = 0x200, FlagMask = 0x300 }"
@@ -37,64 +35,64 @@ Inherits QDialog.
 .BI "QString \fBtext\fR () const"
 .br
 .ti -1c
-.BI "void \fBsetText\fR ( const QString & )"
+.BI "void \fBsetText\fR ( const QString & ) "
 .br
 .ti -1c
 .BI "Icon \fBicon\fR () const"
 .br
 .ti -1c
-.BI "void \fBsetIcon\fR ( Icon )"
+.BI "void \fBsetIcon\fR ( Icon ) "
 .br
 .ti -1c
 .BI "const QPixmap* \fBiconPixmap\fR () const"
 .br
 .ti -1c
-.BI "void \fBsetIconPixmap\fR ( const QPixmap & )"
+.BI "void \fBsetIconPixmap\fR ( const QPixmap & ) "
 .br
 .ti -1c
 .BI "QString \fBbuttonText\fR ( int button ) const"
 .br
 .ti -1c
-.BI "void \fBsetButtonText\fR ( int " "button" ", const QString & )"
+.BI "void \fBsetButtonText\fR ( int " "button" ", const QString & ) "
 .br
 .ti -1c
-.BI "virtual void \fBadjustSize\fR ()"
+.BI "virtual void \fBadjustSize\fR () "
 .br
 .ti -1c
 .BI "TextFormat \fBtextFormat\fR () const"
 .br
 .ti -1c
-.BI "void \fBsetTextFormat\fR ( TextFormat )"
+.BI "void \fBsetTextFormat\fR ( TextFormat ) "
 .br
 .in -1c
 .SS "Static Public Members"
 .in +1c
 .ti -1c
-.BI "int \fBinformation\fR ( QWidget * " "parent" ", const QString & " "caption" ", const QString & " "text" ", int " "button0" ", int " "button1" "=0, int " "button2" "=0 )"
+.BI "int \fBinformation\fR ( QWidget * " "parent" ", const QString & " "caption" ", const QString & " "text" ", int " "button0" ", int " "button1" "=0, int " "button2" "=0 ) "
 .br
 .ti -1c
-.BI "int \fBinformation\fR ( QWidget * " "parent" ", const QString & " "caption" ", const QString & " "text" ", const QString & button0Text = QString::null, const QString & button1Text = QString::null, const QString & button2Text = QString::null, int " "defaultButtonNumber" " = 0, int " "escapeButtonNumber" " = -1 )"
+.BI "int \fBinformation\fR ( QWidget * " "parent" ", const QString & " "caption" ", const QString & " "text" ", const QString & button0Text = QString::null, const QString & button1Text = QString::null, const QString & button2Text = QString::null, int " "defaultButtonNumber" " = 0, int " "escapeButtonNumber" " = -1 ) "
 .br
 .ti -1c
-.BI "int \fBwarning\fR ( QWidget * " "parent" ", const QString & " "caption" ", const QString & " "text" ", int " "button0" ", int " "button1" ", int " "button2" "=0 )"
+.BI "int \fBwarning\fR ( QWidget * " "parent" ", const QString & " "caption" ", const QString & " "text" ", int " "button0" ", int " "button1" ", int " "button2" "=0 ) "
 .br
 .ti -1c
-.BI "int \fBwarning\fR ( QWidget * " "parent" ", const QString & " "caption" ", const QString & " "text" ", const QString & button0Text = QString::null, const QString & button1Text = QString::null, const QString & button2Text = QString::null, int " "defaultButtonNumber" " = 0, int " "escapeButtonNumber" " = -1 )"
+.BI "int \fBwarning\fR ( QWidget * " "parent" ", const QString & " "caption" ", const QString & " "text" ", const QString & button0Text = QString::null, const QString & button1Text = QString::null, const QString & button2Text = QString::null, int " "defaultButtonNumber" " = 0, int " "escapeButtonNumber" " = -1 ) "
 .br
 .ti -1c
-.BI "int \fBcritical\fR ( QWidget * " "parent" ", const QString & " "caption" ", const QString & " "text" ", int " "button0" ", int " "button1" ", int " "button2" "=0 )"
+.BI "int \fBcritical\fR ( QWidget * " "parent" ", const QString & " "caption" ", const QString & " "text" ", int " "button0" ", int " "button1" ", int " "button2" "=0 ) "
 .br
 .ti -1c
-.BI "int \fBcritical\fR ( QWidget * " "parent" ", const QString & " "caption" ", const QString & " "text" ", const QString & button0Text = QString::null, const QString & button1Text = QString::null, const QString & button2Text = QString::null, int " "defaultButtonNumber" " = 0, int " "escapeButtonNumber" " = -1 )"
+.BI "int \fBcritical\fR ( QWidget * " "parent" ", const QString & " "caption" ", const QString & " "text" ", const QString & button0Text = QString::null, const QString & button1Text = QString::null, const QString & button2Text = QString::null, int " "defaultButtonNumber" " = 0, int " "escapeButtonNumber" " = -1 ) "
 .br
 .ti -1c
-.BI "void \fBabout\fR ( QWidget * " "parent" ", const QString & " "caption" ", const QString & text )"
+.BI "void \fBabout\fR ( QWidget * " "parent" ", const QString & " "caption" ", const QString & text ) "
 .br
 .ti -1c
-.BI "void \fBaboutQt\fR ( QWidget * " "parent" ", const QString & caption=QString::null )"
+.BI "void \fBaboutQt\fR ( QWidget * " "parent" ", const QString & caption=QString::null ) "
 .br
 .ti -1c
-.BI "QPixmap \fBstandardIcon\fR ( Icon " "icon" ", GUIStyle style )"
+.BI "QPixmap \fBstandardIcon\fR ( Icon " "icon" ", GUIStyle style ) "
 .br
 .in -1c
 .SS "Properties"
@@ -108,15 +106,63 @@ QMessageBox provides a range of different messages, arranged roughly along two a
 .PP
 Severity is
 .TP
-\fCInformation\fR - for message boxes that are part of normal operation,
+\fCInformation\fR - for message boxes that are part of normal operation
 .TP
-\fCWarning\fR - for message boxes that tell the user about errors or ask the user how to fix an error, or
+\fCWarning\fR - for message boxes that tell the user about unusual errors
 .TP
-\fCCritical\fR - as Warning, but for critical errors. The message box has a different icon for each of the severity levels.
+\fCCritical\fR - as Warning, but for critical errors
 .PP
-Complexity is one button (Ok, sometimes Dismiss for Motif applications) for a simple messages, or two or even three buttons for questions.
+The message box has a different icon for each of the severity levels.
 .PP
-The text part of all message box messages can be either rich text or plain text. If you specify a rich text formatted string, it will be rendered using the default stylesheet. See QStyleSheet::defaultSheet() for details. With certain strings that contain XML meta characters , the auto-rich text detection may fail, interpreting plain text falsely as rich text. In these rare cases, use QStyleSheet::convertFromPlainText() to convert your plain text string to a visually equivalent rich text string or set the text format explicitly with setTextFormat().
+Complexity is one button (Ok) for a simple messages, or two or even three buttons for questions.
+.PP
+There are static functions that let you do most of the common jobs, for example:
+.PP
+If a program is unable to find a supporting file, but can do perfectly well without:
+.PP
+.nf
+.br
+  QMessageBox::information( this, "Application name",
+.br
+                            "Unable to find the user preferences file.\\n"
+.br
+                            "The factory default will be used instead." );
+.fi
+.PP
+warning() can be used to tell the user about unusual errors, or errors which can't be easily fixed:
+.PP
+.nf
+.br
+  switch( QMessageBox::warning( this, "Application name",
+.br
+                                "Could not connect to the <mumble> server.\\n"
+.br
+                          "This program can't function correctly "
+.br
+                          "without the server.\\n\\n",
+.br
+                          "Try again", "Quit", 0,
+.br
+                          0, 1 );
+.br
+  case 0: // Try again or Enter
+.br
+      // try again
+.br
+      break;
+.br
+  case 1: // Quit or Escape
+.br
+      // exit
+.br
+      break;
+.br
+  }
+.fi
+.PP
+Finally,
+.PP
+The text part of all message box messages can be either rich text or plain text. If you specify a rich text formatted string, it will be rendered using the default stylesheet. See QStyleSheet::defaultSheet() for details. With certain strings that contain XML meta characters, the auto-rich text detection may fail, interpreting plain text falsely as rich text. In these rare cases, use QStyleSheet::convertFromPlainText() to convert your plain text string to a visually equivalent rich text string or set the text format explicitly with setTextFormat().
 .PP
 Here are some examples of how to use the static member functions. After these examples you will find an overview of the non-static member functions.
 .PP
@@ -172,37 +218,6 @@ Exiting a program is part of its normal operation, and if there are unsaved data
 .PP
 Again, the application name is used as window caption, as Microsoft recommends. The Escape button cancels the entire Exit operation, and Enter/Return saves the document and exits.
 .PP
-warning() can be used to tell the user about unusual errors, or errors which can't be easily fixed:
-.PP
-.nf
-.br
-    switch( QMessageBox::warning( this, "Application name here",
-.br
-                                  "Could not connect to the <mumble> server.\\n"
-.br
-                                  "This program can't function correctly "
-.br
-                                  "without the server.\\n\\n",
-.br
-                                  "Try again", "Quit", 0,
-.br
-                                  0, 1 );
-.br
-    case 0: // Try again or Enter
-.br
-        // try again
-.br
-        break;
-.br
-    case 1: // Quit or Escape
-.br
-        // exit
-.br
-        break;
-.br
-    }
-.fi
-.PP
 Disk full errors are unusual (in a perfect world, they are) and they certainly can be hard to correct. This example uses predefined buttons instead of hardcoded button texts:
 .PP
 .nf
@@ -242,11 +257,11 @@ The critical() function should be reserved for critical errors. In this example,
 .br
     QMessageBox::critical( 0, "Application name here",
 .br
-                           QString("An internal error occured. Please call ") +
+                           QString("An internal error occurred. Please ") +
 .br
-                           "technical support at 123456789 and report these\\n"+
+                           "call technical support at 123456789 and report\\n"+
 .br
-                           "numbers:\\n\\n" + errorDetails +
+                           "these numbers:\\n\\n" + errorDetails +
 .br
                            "\\n\\n<Application> will now exit." );
 .fi
@@ -347,7 +362,7 @@ QMessageBox has no signals or slots.
 .PP
 <img src=qmsgbox-m.png> <img src=qmsgbox-w.png>
 .PP
-See also: QDialog, Isys on error messages, and GUI Design Handbook: Message Box.
+See also QDialog, Isys on error messages, and GUI Design Handbook: Message Box.
 .SS "Member Type Documentation"
 .SH "QMessageBox::Icon"
 This type includes the following values:
@@ -397,7 +412,7 @@ Each button can have one of the following values:
 .TP
 \fCQMessageBox::Ignore\fR
 .PP
-Use QMessageBox::NoButton for the later parameters to have less than three buttons in your messagebox.
+Use QMessageBox::NoButton for the later parameters to have less than three buttons in your message box.
 .PP
 One of the buttons can be combined with the \fCQMessageBox::Default\fR flag to make a default button.
 .PP
@@ -428,7 +443,7 @@ If \fImodal\fR is TRUE the message becomes modal, otherwise it becomes modeless.
 .PP
 The \fIparent, name, modal\fR and \fIf\fR arguments are passed to the QDialog constructor.
 .PP
-See also: setCaption(), setText() and setIcon().
+See also setCaption(), setText() and setIcon().
 .SH "QMessageBox::~QMessageBox ()"
 Destructs the message box.
 .SH "void QMessageBox::about ( QWidget * parent, const QString & caption, const QString & text ) \fC[static]\fR"
@@ -446,7 +461,7 @@ As a last resort it uses the Information icon.
 .PP
 The about box has a single button labelled OK.
 .PP
-See also: QWidget::icon() and QApplication::mainWidget().
+See also QWidget::icon() and QApplication::mainWidget().
 .PP
 Examples:
 .(l
@@ -470,7 +485,7 @@ Reimplemented from QWidget.
 .SH "QString QMessageBox::buttonText ( int button ) const"
 Returns the text of the message box button \fIbutton,\fR or null if the message box does not contain the button.
 .PP
-See also: setButtonText().
+See also setButtonText().
 .SH "int QMessageBox::critical ( QWidget * parent, const QString & caption, const QString & text, const QString & button0Text = QString::null, const QString & button1Text = QString::null, const QString & button2Text = QString::null, int defaultButtonNumber = 0, int escapeButtonNumber = -1 ) \fC[static]\fR"
 Displays a critical error message box with a caption, a text and 1-3 buttons. Returns the number of the button that was clicked (0, 1 or 2).
 .PP
@@ -478,17 +493,17 @@ Displays a critical error message box with a caption, a text and 1-3 buttons. Re
 .PP
 If \fIparent\fR is 0, then the message box becomes an application-global modal dialog box. If \fIparent\fR is a widget, the message box becomes modal relative to \fIparent.\fR
 .PP
-See also: information() and warning().
+See also information() and warning().
 .SH "int QMessageBox::critical ( QWidget * parent, const QString & caption, const QString & text, int button0, int button1, int button2=0 ) \fC[static]\fR"
 Opens a critical message box with a caption, a text and up to three buttons. Returns the identifier of the button that was clicked.
 .PP
 If \fIparent\fR is 0, then the message box becomes an application-global modal dialog box. If \fIparent\fR is a widget, the message box becomes modal relative to \fIparent.\fR
 .PP
-See also: information() and warning().
+See also information() and warning().
 .SH "QMessageBox::Icon QMessageBox::icon() const"
 Returns the icon of the message box.
 .PP
-See also: setIcon() and iconPixmap().
+See also setIcon() and iconPixmap().
 .SH "const QPixmap * QMessageBox::iconPixmap () const"
 Returns the icon pixmap of the message box.
 .PP
@@ -503,7 +518,7 @@ Example:
     mb.iconPixmap();    // returns the warning icon pixmap
 .fi
 .PP
-See also: setIconPixmap() and icon().
+See also setIconPixmap() and icon().
 .SH "int QMessageBox::information ( QWidget * parent, const QString & caption, const QString & text, const QString & button0Text = QString::null, const QString & button1Text = QString::null, const QString & button2Text = QString::null, int defaultButtonNumber = 0, int escapeButtonNumber = -1 ) \fC[static]\fR"
 Displays an information message box with a caption, a text and 1-3 buttons. Returns the number of the button that was clicked (0, 1 or 2).
 .PP
@@ -511,7 +526,7 @@ Displays an information message box with a caption, a text and 1-3 buttons. Retu
 .PP
 If \fIparent\fR is 0, then the message box becomes an application-global modal dialog box. If \fIparent\fR is a widget, the message box becomes modal relative to \fIparent.\fR
 .PP
-See also: warning() and critical().
+See also warning() and critical().
 .PP
 Examples:
 .(l
@@ -522,7 +537,7 @@ Opens an information message box with a caption, a text and up to three buttons.
 .PP
 If \fIparent\fR is 0, then the message box becomes an application-global modal dialog box. If \fIparent\fR is a widget, the message box becomes modal relative to \fIparent.\fR
 .PP
-See also: warning() and critical().
+See also warning() and critical().
 .SH "void QMessageBox::keyPressEvent ( QKeyEvent * e ) \fC[virtual protected]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .PP
@@ -534,7 +549,7 @@ Reimplemented from QWidget.
 .SH "void QMessageBox::setButtonText ( int button, const QString & text )"
 Sets the text of the message box button \fIbutton\fR to \fItext.\fR Setting the text of a button that is not in the message box is quietly ignored.
 .PP
-See also: buttonText().
+See also buttonText().
 .SH "void QMessageBox::setIcon ( Icon icon )"
 Sets the icon of the message box to \fIicon,\fR which is a predefined icon:
 .TP
@@ -548,7 +563,7 @@ Sets the icon of the message box to \fIicon,\fR which is a predefined icon:
 .PP
 The actual pixmap used for displaying the icon depends on the current GUI style. You can also set a custom pixmap icon using the setIconPixmap() function.
 .PP
-See also: icon(), setIconPixmap() and iconPixmap().
+See also icon(), setIconPixmap() and iconPixmap().
 .SH "void QMessageBox::setIcon ( const QPixmap & pix ) \fC[virtual]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .PP
@@ -556,19 +571,19 @@ Reimplemented from QWidget.
 .SH "void QMessageBox::setIconPixmap ( const QPixmap & pixmap )"
 Sets the icon of the message box to a custom \fIpixmap.\fR Note that it's often hard to draw one pixmap which looks appropriate in both Motif and Windoes GUI styles. You may want to draw two.
 .PP
-See also: iconPixmap() and setIcon().
+See also iconPixmap() and setIcon().
 .SH "void QMessageBox::setText ( const QString & text )"
 Sets the message box text to be displayed.
 .PP
 \fItext\fR will be interpreted either as a plain text or as a rich text, depending on the text format setting; see setTextFormat(). The default setting is \fCAutoText,\fR i.e. the message box will try to auto-detect the format of \fItext.\fR
 .PP
-See also: text() and setTextFormat().
+See also text() and setTextFormat().
 .SH "void QMessageBox::setTextFormat ( Qt::TextFormat format )"
 Sets the text format to \fIformat.\fR See the Qt::TextFormat enum for an explanation of the possible options.
 .PP
 The default format is \fCAutoText.\fR
 .PP
-See also: textFormat() and setText().
+See also textFormat() and setText().
 .SH "QPixmap QMessageBox::standardIcon ( Icon icon, GUIStyle style ) \fC[static]\fR"
 Returns the pixmap used for a standard icon. This allows the pixmaps to be used in more complex message boxes.
 .SH "void QMessageBox::styleChanged ( QStyle & ) \fC[protected]\fR"
@@ -576,11 +591,11 @@ Reimplemented for internal reasons; the API is not affected.
 .SH "QString QMessageBox::text () const"
 Returns the message box text currently set, or a null string if no text has been set.
 .PP
-See also: setText() and textFormat().
+See also setText() and textFormat().
 .SH "Qt::TextFormat QMessageBox::textFormat() const"
 Returns the current text format.
 .PP
-See also: setTextFormat().
+See also setTextFormat().
 .SH "int QMessageBox::warning ( QWidget * parent, const QString & caption, const QString & text, const QString & button0Text = QString::null, const QString & button1Text = QString::null, const QString & button2Text = QString::null, int defaultButtonNumber = 0, int escapeButtonNumber = -1 ) \fC[static]\fR"
 Displays a warning message box with a caption, a text and 1-3 buttons. Returns the number of the button that was clicked (0, 1 or 2).
 .PP
@@ -588,7 +603,7 @@ Displays a warning message box with a caption, a text and 1-3 buttons. Returns t
 .PP
 If \fIparent\fR is 0, then the message box becomes an application-global modal dialog box. If \fIparent\fR is a widget, the message box becomes modal relative to \fIparent.\fR
 .PP
-See also: information() and critical().
+See also information() and critical().
 .PP
 Examples:
 .(l
@@ -599,11 +614,11 @@ Opens a warning message box with a caption, a text and up to three buttons. Retu
 .PP
 If \fIparent\fR is 0, then the message box becomes an application-global modal dialog box. If \fIparent\fR is a widget, the message box becomes modal relative to \fIparent.\fR
 .PP
-See also:  information() and critical().
+See also  information() and critical().
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qmessagebox.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

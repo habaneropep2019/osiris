@@ -1,27 +1,39 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qrect.cpp   2.1.1   edited 2000-05-22 $
+** $Id: qt/src/kernel/qrect.cpp   2.2.0   edited 2000-08-25 $
 **
 ** Implementation of QRect class
 **
 ** Created : 931028
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the kernel module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #define	 QRECT_C
 #include "qrect.h"
@@ -561,6 +573,7 @@ void QRect::setSize( const QSize &s )
 }
 
 /*!
+  \fn bool QRect::contains( const QPoint &p, bool proper ) const
   Returns TRUE if the point \e p is inside or on the edge of the
   rectangle.
 
@@ -568,15 +581,12 @@ void QRect::setSize( const QSize &s )
   inside (not on the edge).
 */
 
-bool QRect::contains( const QPoint &p, bool proper ) const
-{
-    if ( proper )
-	return p.x() > x1 && p.x() < x2 &&
-	       p.y() > y1 && p.y() < y2;
-    else
-	return p.x() >= x1 && p.x() <= x2 &&
-	       p.y() >= y1 && p.y() <= y2;
-}
+
+/*!
+  \fn bool QRect::contains( int x, int y, bool proper ) const
+  \overload bool QRect::contains( const QPoint &p, bool proper ) const
+*/
+
 
 /*!
   Returns TRUE if the rectangle \e r is inside this rectangle.
@@ -714,7 +724,7 @@ bool operator!=( const QRect &r1, const QRect &r2 )
 /*****************************************************************************
   QRect stream functions
  *****************************************************************************/
-
+#ifndef QT_NO_DATASTREAM
 /*!
   \relates QRect
 
@@ -756,3 +766,4 @@ QDataStream &operator>>( QDataStream &s, QRect &r )
     }
     return s;
 }
+#endif // QT_NO_DATASTREAM

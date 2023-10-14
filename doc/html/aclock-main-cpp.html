@@ -3,15 +3,17 @@
 Qt Toolkit - aclock/main.cpp example file
 </title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
-a:link { text-decoration: none; }
-body { background: white; color: black; }
+a:link { color: #004faf; text-decoration: none }
+a:visited { color: #672967; text-decoration: none }body { background: white; color: black; }
 --></style>
 </head><body bgcolor="#ffffff">
 
-<a href="index.html">
-<img width="122" height="65" src="qtlogo.png" alt="Home"
-  align="left" border="0">
-</a><div align=right><img src="dochead.png" width="472" height="27"><br>
+<table width="100%">
+<tr><td><a href="index.html">
+<img width="100" height="100" src="qtlogo.png"
+alt="Home" border="0"><img width="100"
+height="100" src="face.png" alt="Home" border="0">
+</a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
 - <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
@@ -19,7 +21,7 @@ body { background: white; color: black; }
 - <a href="index.html">Home</a>
 - <a href="topicals.html"><b>Structure</b></a>
 </div>
-<br clear=all>
+</table>
 
 <h1 align=center>Analog Clock</h1><br clear="all">
 
@@ -28,9 +30,9 @@ body { background: white; color: black; }
   <hr>
 
   Header file: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/aclock/aclock.h   2.1.1   edited 2000-01-31 $
+** &#36;Id&#58; qt/examples/aclock/aclock.h   2.2.0   edited 2000-08-31 $
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -69,9 +71,9 @@ private:
   <hr>
 
   Implementation: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/aclock/aclock.cpp   2.1.1   edited 2000-04-19 $
+** &#36;Id&#58; qt/examples/aclock/aclock.cpp   2.2.0   edited 2000-08-31 $
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -92,7 +94,7 @@ AnalogClock::AnalogClock( <a href="qwidget.html">QWidget</a> *parent, const char
 {
     time = QTime::currentTime();                // get current time
     <a href="qtimer.html">QTimer</a> *internalTimer = new <a href="qtimer.html">QTimer</a>( this ); // create internal timer
-    <a href="qobject.html#c2d209">connect</a>( internalTimer, SIGNAL(<a href=#97>timeout</a>()), SLOT(<a href=#97>timeout</a>()) );
+    <a href="qobject.html#c2d209">connect</a>( internalTimer, SIGNAL(<a href=#110>timeout</a>()), SLOT(<a href=#110>timeout</a>()) );
     internalTimer-&gt;<a href="qtimer.html#3aafb5">start</a>( 5000 );               // emit signal every 5 seconds
 }
 
@@ -100,26 +102,30 @@ AnalogClock::AnalogClock( <a href="qwidget.html">QWidget</a> *parent, const char
 // The QTimer::timeout() signal is received by this slot.
 //
 
-void <a name="97"></a>AnalogClock::timeout()
+void <a name="110"></a>AnalogClock::timeout()
 {
     <a href="qtime.html">QTime</a> new_time = QTime::currentTime();      // get the current time
-    if ( new_time.<a href="qtime.html#42c45b">minute</a>() != time.minute() )   // minute has changed
-        <a href=#99>updateMask</a>();
+    if ( new_time.<a href="qtime.html#42c45b">minute</a>() != time.minute() ) { // minute has changed
+        if (autoMask())
+            <a href=#112>updateMask</a>();
+        else
+            <a href="qwidget.html#4a97ef">update</a>();
+    }
 }
 
-void <a name="98"></a>AnalogClock::paintEvent( <a href="qpaintevent.html">QPaintEvent</a> * )
+void <a name="111"></a>AnalogClock::paintEvent( <a href="qpaintevent.html">QPaintEvent</a> * )
 {
     if ( autoMask() )
         return;
     <a href="qpainter.html">QPainter</a> paint( this );
     paint.<a href="qpainter.html#38e68f">setBrush</a>( <a href="qwidget.html#5bc085">colorGroup</a>().foreground() );
-    <a href=#100>drawClock</a>( &amp;paint );
+    <a href=#113>drawClock</a>( &amp;paint );
 }
 
 // If the clock is transparent, we use updateMask()
 // instead of paintEvent()
 
-void <a name="99"></a>AnalogClock::updateMask()  // paint clock mask
+void <a name="112"></a>AnalogClock::updateMask()  // paint clock mask
 {
     <a href="qbitmap.html">QBitmap</a> bm( <a href="qwidget.html#da2102">size</a>() );
     bm.<a href="qpixmap.html#e584bd">fill</a>( color0 );                  //transparent
@@ -129,7 +135,7 @@ void <a name="99"></a>AnalogClock::updateMask()  // paint clock mask
     paint.<a href="qpainter.html#38e68f">setBrush</a>( color1 );           // use non-transparent color
     paint.<a href="qpainter.html#0a6aff">setPen</a>( color1 );
 
-    <a href=#100>drawClock</a>( &amp;paint );
+    <a href=#113>drawClock</a>( &amp;paint );
 
     paint.<a href="qpainter.html#c7f9ac">end</a>();
     <a href="qwidget.html#3af9ed">setMask</a>( bm );
@@ -140,7 +146,7 @@ void <a name="99"></a>AnalogClock::updateMask()  // paint clock mask
 // the a centered square, as big as possible.  The painter's pen and
 // brush colors are used.
 //
-void <a name="100"></a>AnalogClock::drawClock( <a href="qpainter.html">QPainter</a> *paint )
+void <a name="113"></a>AnalogClock::drawClock( <a href="qpainter.html">QPainter</a> *paint )
 {
     paint-&gt;<a href="qpainter.html#629789">save</a>();
 
@@ -174,7 +180,7 @@ void <a name="100"></a>AnalogClock::drawClock( <a href="qpainter.html">QPainter<
     paint-&gt;<a href="qpainter.html#24cf68">restore</a>();
 }
 
-void <a name="101"></a>AnalogClock::setAutoMask(bool b)
+void <a name="114"></a>AnalogClock::setAutoMask(bool b)
 {
     if (b)
         <a href="qwidget.html#182f0e">setBackgroundMode</a>( PaletteForeground );
@@ -189,9 +195,9 @@ void <a name="101"></a>AnalogClock::setAutoMask(bool b)
 
   Main:
 <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/aclock/main.cpp   2.1.1   edited 2000-03-28 $
+** &#36;Id&#58; qt/examples/aclock/main.cpp   2.2.0   edited 2000-08-31 $
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -217,6 +223,6 @@ int main( int argc, char **argv )
 </pre>
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.1</div>
+<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.2.0</div>
 </table></div></address></body></html>

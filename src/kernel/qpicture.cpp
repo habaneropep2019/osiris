@@ -1,29 +1,44 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qpicture.cpp   2.1.1   edited 2000-03-24 $
+** $Id: qt/src/kernel/qpicture.cpp   2.2.0   edited 2000-08-25 $
 **
 ** Implementation of QPicture class
 **
 ** Created : 940802
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the kernel module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #include "qpicture.h"
+
+#ifndef QT_NO_PICTURE
+
 #include "qpainter.h"
 #include "qpixmap.h"
 #include "qimage.h"
@@ -296,7 +311,9 @@ bool QPicture::exec( QPainter *painter, QDataStream &s, int nrecords )
     QPen	pen;
     QBrush	brush;
     QRegion	rgn;
+#ifndef QT_NO_TRANSFORMATIONS
     QWMatrix	matrix;
+#endif
 
     while ( nrecords-- && !s.eof() ) {
 	s >> c;					// read cmd
@@ -459,30 +476,42 @@ bool QPicture::exec( QPainter *painter, QDataStream &s, int nrecords )
 		break;
 	    case PdcSetVXform:
 		s >> i_8;
+#ifndef QT_NO_TRANSFORMATIONS
 		painter->setViewXForm( i_8 );
+#endif
 		break;
 	    case PdcSetWindow:
 		s >> r;
+#ifndef QT_NO_TRANSFORMATIONS
 		painter->setWindow( r );
+#endif
 		break;
 	    case PdcSetViewport:
 		s >> r;
+#ifndef QT_NO_TRANSFORMATIONS
 		painter->setViewport( r );
+#endif
 		break;
 	    case PdcSetWXform:
 		s >> i_8;
+#ifndef QT_NO_TRANSFORMATIONS
 		painter->setWorldXForm( i_8 );
+#endif
 		break;
 	    case PdcSetWMatrix:
+#ifndef QT_NO_TRANSFORMATIONS	// #### fix me!
 		s >> matrix >> i_8;
 		painter->setWorldMatrix( matrix, i_8 );
+#endif
 		break;
+#ifndef QT_NO_TRANSFORMATIONS
 	    case PdcSaveWMatrix:
 		painter->saveWorldMatrix();
 		break;
 	    case PdcRestoreWMatrix:
 		painter->restoreWorldMatrix();
 		break;
+#endif
 	    case PdcSetClip:
 		s >> i_8;
 		painter->setClipping( i_8 );
@@ -642,6 +671,7 @@ bool QPicture::cmd( int c, QPainter *, QPDevCmdParam *p )
 	case PdcSetClip:
 	    s << (Q_INT8)p[0].ival;
 	    break;
+#ifndef QT_NO_TRANSFORMATIONS
 	case PdcSetWindow:
 	case PdcSetViewport:
 	    s << *p[0].rect;
@@ -649,6 +679,7 @@ bool QPicture::cmd( int c, QPainter *, QPDevCmdParam *p )
 	case PdcSetWMatrix:
 	    s << *p[0].matrix << (Q_INT8)p[1].ival;
 	    break;
+#endif
 	case PdcSetClipRegion:
 	    s << *p[0].rgn;
 	    break;
@@ -761,3 +792,55 @@ void QPicture::resetFormat()
     formatMajor = mfhdr_maj;
     formatMinor = mfhdr_min;
 }
+
+
+/*****************************************************************************
+  QPicture stream functions
+ *****************************************************************************/
+
+/*!
+  \relates QPicture
+
+  Writes a QPicture to the stream and returns a reference to the stream.
+*/
+
+QDataStream &operator<<( QDataStream &s, const QPicture &r )
+{
+    // just write the whole buffer to the stream
+    return s.writeRawBytes ( r.pictb.buffer().data(), r.pictb.buffer().size() );
+}
+
+/*!
+  \relates QPicture
+
+  Reads a QPicture from the stream and returns a reference to the stream.
+*/
+
+QDataStream &operator>>( QDataStream &s, QPicture &r )
+{
+    Q_INT8 c;
+    QDataStream sr;
+
+    // "init"; this code is similar to the beginning of QPicture::cmd()
+    sr.setDevice( &r.pictb );
+    sr.setVersion( r.formatMajor );
+    QByteArray empty( 0 );
+    r.pictb.setBuffer( empty );
+    r.pictb.open( IO_WriteOnly );
+
+    // read all input and put it in the buffer (since it is a stream, I
+    // don't know the size; so I have to loop until the end)
+    while ( !s.atEnd() ) {
+	s >> c;
+	sr << c;
+    }
+
+    // "cleanup"
+    r.pictb.close();
+    r.resetFormat();
+
+    return s;
+}
+
+#endif // QT_NO_PICTURE
+

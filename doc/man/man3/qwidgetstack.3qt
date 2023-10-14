@@ -1,5 +1,5 @@
-.TH QWidgetStack 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QWidgetStack 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QWidgetStack \- Stack of widgets, where the user can see only the top widget
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -19,16 +17,16 @@ Inherits QFrame.
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fBQWidgetStack\fR ( QWidget * " "parent" " = 0, const char * " "name" " = 0 )"
+.BI "\fBQWidgetStack\fR ( QWidget * " "parent" " = 0, const char * " "name" " = 0 ) "
 .br
 .ti -1c
-.BI "\fB~QWidgetStack\fR ()"
+.BI "\fB~QWidgetStack\fR () "
 .br
 .ti -1c
-.BI "void \fBaddWidget\fR ( QWidget *, int )"
+.BI "void \fBaddWidget\fR ( QWidget *, int ) "
 .br
 .ti -1c
-.BI "void \fBremoveWidget\fR ( QWidget * )"
+.BI "void \fBremoveWidget\fR ( QWidget * ) "
 .br
 .ti -1c
 .BI "QWidget* \fBwidget\fR ( int ) const"
@@ -43,25 +41,25 @@ Inherits QFrame.
 .SS "Public Slots"
 .in +1c
 .ti -1c
-.BI "void \fBraiseWidget\fR ( int )"
+.BI "void \fBraiseWidget\fR ( int ) "
 .br
 .ti -1c
-.BI "void \fBraiseWidget\fR ( QWidget * )"
+.BI "void \fBraiseWidget\fR ( QWidget * ) "
 .br
 .in -1c
 .SS "Signals"
 .in +1c
 .ti -1c
-.BI "void \fBaboutToShow\fR ( int )"
+.BI "void \fBaboutToShow\fR ( int ) "
 .br
 .ti -1c
-.BI "void \fBaboutToShow\fR ( QWidget * )"
+.BI "void \fBaboutToShow\fR ( QWidget * ) "
 .br
 .in -1c
 .SS "Protected Members"
 .in +1c
 .ti -1c
-.BI "virtual void \fBsetChildGeometries\fR ()"
+.BI "virtual void \fBsetChildGeometries\fR () "
 .br
 .in -1c
 .SH DESCRIPTION
@@ -77,7 +75,7 @@ The default widget stack is frame-less and propagates its font and palette to al
 .PP
 Finally, QWidgetStack provides a signal, aboutToShow(), which is emitted just before a managed widget is shown.
 .PP
-See also: QTabDialog, QTabBar and QFrame.
+See also QTabDialog, QTabBar and QFrame.
 .PP
 Examples:
 .(l
@@ -112,7 +110,7 @@ Reimplemented from QFrame.
 .SH "int QWidgetStack::id ( QWidget * widget ) const"
 Returns the ID of the \fIwidget.\fR If \fIwidget\fR is 0 or is not being managed by this widget stack, this function returns -1.
 .PP
-See also: widget() and addWidget().
+See also widget() and addWidget().
 .SH "QSize QWidgetStack::minimumSizeHint () const \fC[virtual]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .PP
@@ -122,7 +120,7 @@ Raises \fIw\fR to the top of the widget stack.
 .SH "void QWidgetStack::raiseWidget ( int id ) \fC[slot]\fR"
 Raises \fIid\fR to the top of the widget stack.
 .PP
-See also: visibleWidget().
+See also visibleWidget().
 .PP
 Examples:
 .(l
@@ -131,7 +129,7 @@ xform/xform.cpp
 .SH "void QWidgetStack::removeWidget ( QWidget * w )"
 Removes \fIw\fR from this stack of widgets. Does not delete \fIw.\fR If \fIw\fR is the currently visible widget, no other widget is substituted.
 .PP
-See also: visibleWidget() and raiseWidget().
+See also visibleWidget() and raiseWidget().
 .SH "void QWidgetStack::resizeEvent ( QResizeEvent * e ) \fC[virtual protected]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .PP
@@ -153,15 +151,15 @@ Reimplemented from QWidget.
 .SH "QWidget * QWidgetStack::visibleWidget () const"
 Returns a pointer to the currently visible widget (the one on the top of the stack), or 0 if nothing is currently being shown.
 .PP
-See also: aboutToShow(), id() and raiseWidget().
+See also aboutToShow(), id() and raiseWidget().
 .SH "QWidget * QWidgetStack::widget ( int id ) const"
 Returns a pointer to the widget with ID \fIid.\fR If this widget stack does not manage a widget with ID \fIid,\fR this function returns 0.
 .PP
-See also:  id() and addWidget().
+See also  id() and addWidget().
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qwidgetstack.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

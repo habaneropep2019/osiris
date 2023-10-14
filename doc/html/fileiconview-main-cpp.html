@@ -3,15 +3,17 @@
 Qt Toolkit - fileiconview/main.cpp example file
 </title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
-a:link { text-decoration: none; }
-body { background: white; color: black; }
+a:link { color: #004faf; text-decoration: none }
+a:visited { color: #672967; text-decoration: none }body { background: white; color: black; }
 --></style>
 </head><body bgcolor="#ffffff">
 
-<a href="index.html">
-<img width="122" height="65" src="qtlogo.png" alt="Home"
-  align="left" border="0">
-</a><div align=right><img src="dochead.png" width="472" height="27"><br>
+<table width="100%">
+<tr><td><a href="index.html">
+<img width="100" height="100" src="qtlogo.png"
+alt="Home" border="0"><img width="100"
+height="100" src="face.png" alt="Home" border="0">
+</a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
 - <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
@@ -19,20 +21,20 @@ body { background: white; color: black; }
 - <a href="index.html">Home</a>
 - <a href="topicals.html"><b>Structure</b></a>
 </div>
-<br clear=all>
+</table>
 
 <h1 align=center>Simple Filemanager</h1><br clear="all">
 
-  This example implements a simple and not full functional filemanager using
+  This example implements a simple and not full functional file manager using
   a widget derived from QIconView to display the current directory and the
   widget of the DirectoryView example to display the directory tree.
 
   <hr>
 
   Header file of the fileiconview: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/fileiconview/qfileiconview.h   2.1.1   edited 2000-03-02 $
+** &#36;Id&#58; qt/examples/fileiconview/qfileiconview.h   2.2.0   edited 2000-08-31 $
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -204,9 +206,9 @@ protected:
   <hr>
 
   Implementation of the fileiconview: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/fileiconview/qfileiconview.cpp   2.1.1   edited 2000-04-15 $
+** &#36;Id&#58; qt/examples/fileiconview/qfileiconview.cpp   2.2.0   edited 2000-08-31 $
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -461,7 +463,7 @@ QtFileIconDrag::QtFileIconDrag( <a href="qwidget.html">QWidget</a> * dragSource,
 {
 }
 
-const char* <a name="215"></a>QtFileIconDrag::format( int i ) const
+const char* <a name="230"></a>QtFileIconDrag::format( int i ) const
 {
     if ( i == 0 )
         return "application/x-qiconlist";
@@ -471,7 +473,7 @@ const char* <a name="215"></a>QtFileIconDrag::format( int i ) const
         return 0;
 }
 
-<a href="qbytearray.html">QByteArray</a> <a name="216"></a>QtFileIconDrag::encodedData( const char* mime ) const
+<a href="qbytearray.html">QByteArray</a> <a name="231"></a>QtFileIconDrag::encodedData( const char* mime ) const
 {
     <a href="qbytearray.html">QByteArray</a> a;
     if ( <a href="qstring.html">QString</a>( mime ) == "application/x-qiconlist" ) {
@@ -484,13 +486,13 @@ const char* <a name="215"></a>QtFileIconDrag::format( int i ) const
     return a;
 }
 
-bool <a name="217"></a>QtFileIconDrag::canDecode( <a href="qmimesource.html">QMimeSource</a>* e )
+bool <a name="232"></a>QtFileIconDrag::canDecode( <a href="qmimesource.html">QMimeSource</a>* e )
 {
     return e-&gt;<a href="qdropevent.html#cd7d5a">provides</a>( "application/x-qiconlist" ) ||
         e-&gt;<a href="qdropevent.html#cd7d5a">provides</a>( "text/uri-list" );
 }
 
-void <a name="218"></a>QtFileIconDrag::append( const QIconDragItem &amp;item, const QRect &amp;pr,
+void <a name="233"></a>QtFileIconDrag::append( const QIconDragItem &amp;item, const QRect &amp;pr,
                              const QRect &amp;tr, const QString &amp;url )
 {
     <a href="qicondrag.html#fb28c9">QIconDrag::append</a>( item, pr, tr );
@@ -516,7 +518,7 @@ QtFileIconViewItem::QtFileIconViewItem( QtFileIconView *parent, QFileInfo *fi )
     if ( itemFileInfo-&gt;isSymLink() )
         itemType = Link;
 
-    <a href=#186>viewModeChanged</a>( ( (QtFileIconView*)iconView() )-&gt;viewMode() );
+    <a href=#201>viewModeChanged</a>( ( (QtFileIconView*)iconView() )-&gt;viewMode() );
 
     if ( itemFileInfo-&gt;fileName() == "." ||
          itemFileInfo-&gt;fileName() == ".." )
@@ -528,7 +530,7 @@ QtFileIconViewItem::QtFileIconViewItem( QtFileIconView *parent, QFileInfo *fi )
                       <a href="qiconviewitem.html#d4ef81">iconView</a>(), SLOT( openFolder() ) );
 }
 
-void <a name="185"></a>QtFileIconViewItem::paintItem( <a href="qpainter.html">QPainter</a> *p, const QColorGroup &amp;cg )
+void <a name="200"></a>QtFileIconViewItem::paintItem( <a href="qpainter.html">QPainter</a> *p, const QColorGroup &amp;cg )
 {
     if ( itemFileInfo-&gt;isSymLink() ) {
         <a href="qfont.html">QFont</a> f( p-&gt;font() );
@@ -539,14 +541,14 @@ void <a name="185"></a>QtFileIconViewItem::paintItem( <a href="qpainter.html">QP
     <a href="qiconviewitem.html#b942db">QIconViewItem::paintItem</a>( p, cg );
 }
 
-void <a name="186"></a>QtFileIconViewItem::viewModeChanged( QtFileIconView::ViewMode m )
+void <a name="201"></a>QtFileIconViewItem::viewModeChanged( QtFileIconView::ViewMode m )
 {
     vm = m;
     <a href="qiconviewitem.html#b9410b">setDropEnabled</a>( itemType == Dir &amp;&amp; <a href="qdir.html">QDir</a>( itemFileName ).isReadable() );
     <a href="qiconviewitem.html#6e31c6">calcRect</a>();
 }
 
-<a href="qpixmap.html">QPixmap</a> *<a name="187"></a>QtFileIconViewItem::pixmap() const
+<a href="qpixmap.html">QPixmap</a> *<a name="202"></a>QtFileIconViewItem::pixmap() const
 {
     switch ( itemType ) {
     case Dir: {
@@ -582,7 +584,7 @@ QtFileIconViewItem::~QtFileIconViewItem()
     delete itemFileInfo;
 }
 
-void <a name="188"></a>QtFileIconViewItem::setText( const QString &amp;text )
+void <a name="203"></a>QtFileIconViewItem::setText( const QString &amp;text )
 {
     if ( checkSetText ) {
         if ( text == "." || text == "." || text.isEmpty() )
@@ -599,7 +601,7 @@ void <a name="188"></a>QtFileIconViewItem::setText( const QString &amp;text )
     }
 }
 
-bool <a name="189"></a>QtFileIconViewItem::acceptDrop( const QMimeSource *e ) const
+bool <a name="204"></a>QtFileIconViewItem::acceptDrop( const QMimeSource *e ) const
 {
     if ( type() == Dir &amp;&amp; e-&gt;<a href="qdropevent.html#cd7d5a">provides</a>( "text/uri-list" ) &amp;&amp;
          <a href="qiconviewitem.html#869702">dropEnabled</a>() )
@@ -608,7 +610,7 @@ bool <a name="189"></a>QtFileIconViewItem::acceptDrop( const QMimeSource *e ) co
     return FALSE;
 }
 
-void <a name="190"></a>QtFileIconViewItem::dropped( <a href="qdropevent.html">QDropEvent</a> *e, const QValueList&lt;<a href="qicondragitem.html">QIconDragItem</a>&gt; &amp; )
+void <a name="205"></a>QtFileIconViewItem::dropped( <a href="qdropevent.html">QDropEvent</a> *e, const QValueList&lt;<a href="qicondragitem.html">QIconDragItem</a>&gt; &amp; )
 {
     timer.stop();
 
@@ -637,7 +639,7 @@ void <a name="190"></a>QtFileIconViewItem::dropped( <a href="qdropevent.html">QD
     e-&gt;<a href="qdropevent.html#2a39a0">acceptAction</a>();
 }
 
-void <a name="191"></a>QtFileIconViewItem::dragEntered()
+void <a name="206"></a>QtFileIconViewItem::dragEntered()
 {
     if ( type() != Dir ||
          type() == Dir &amp;&amp; !QDir( itemFileName ).isReadable() )
@@ -647,7 +649,7 @@ void <a name="191"></a>QtFileIconViewItem::dragEntered()
     timer.start( 1500 );
 }
 
-void <a name="192"></a>QtFileIconViewItem::dragLeft()
+void <a name="207"></a>QtFileIconViewItem::dragLeft()
 {
     if ( type() != Dir ||
          type() == Dir &amp;&amp; !QDir( itemFileName ).isReadable() )
@@ -697,7 +699,7 @@ QtFileIconView::QtFileIconView( const QString &amp;dir, QWidget *parent, const c
              this, SLOT( itemDoubleClicked( <a href="qiconviewitem.html">QIconViewItem</a> * ) ) );
     connect( this, SIGNAL( returnPressed( <a href="qiconviewitem.html">QIconViewItem</a> * ) ),
              this, SLOT( itemDoubleClicked( <a href="qiconviewitem.html">QIconViewItem</a> * ) ) );
-    connect( this, SIGNAL( <a href=#190>dropped</a>( <a href="qdropevent.html">QDropEvent</a> *, const QValueList&lt;<a href="qicondragitem.html">QIconDragItem</a>&gt; &amp; ) ),
+    connect( this, SIGNAL( <a href=#205>dropped</a>( <a href="qdropevent.html">QDropEvent</a> *, const QValueList&lt;<a href="qicondragitem.html">QIconDragItem</a>&gt; &amp; ) ),
              this, SLOT( slotDropped( <a href="qdropevent.html">QDropEvent</a> *, const QValueList&lt;<a href="qicondragitem.html">QIconDragItem</a>&gt; &amp; ) ) );
     connect( this, SIGNAL( rightButtonPressed( <a href="qiconviewitem.html">QIconViewItem</a> *, const QPoint &amp; ) ),
              this, SLOT( slotRightPressed( <a href="qiconviewitem.html">QIconViewItem</a> * ) ) );
@@ -710,7 +712,7 @@ QtFileIconView::QtFileIconView( const QString &amp;dir, QWidget *parent, const c
     openItem = 0;
 }
 
-void <a name="193"></a>QtFileIconView::openFolder()
+void <a name="208"></a>QtFileIconView::openFolder()
 {
     if ( !openItem )
         return;
@@ -720,22 +722,22 @@ void <a name="193"></a>QtFileIconView::openFolder()
         return;
 
     openItem-&gt;timer.stop();
-    <a href=#195>setDirectory</a>( openItem-&gt;itemFileName );
+    <a href=#210>setDirectory</a>( openItem-&gt;itemFileName );
 }
 
-void <a name="195"></a>QtFileIconView::setDirectory( const QString &amp;dir )
+void <a name="210"></a>QtFileIconView::setDirectory( const QString &amp;dir )
 {
     viewDir = QDir( dir );
-    <a href=#198>readDir</a>( viewDir );
+    <a href=#213>readDir</a>( viewDir );
 }
 
-void <a name="195"></a>QtFileIconView::setDirectory( const QDir &amp;dir )
+void <a name="210"></a>QtFileIconView::setDirectory( const QDir &amp;dir )
 {
     viewDir = dir;
-    <a href=#198>readDir</a>( viewDir );
+    <a href=#213>readDir</a>( viewDir );
 }
 
-void <a name="196"></a>QtFileIconView::newDirectory()
+void <a name="211"></a>QtFileIconView::newDirectory()
 {
     <a href="qiconview.html#456d21">setAutoArrange</a>( FALSE );
     <a href="qiconview.html#dde4aa">selectAll</a>( FALSE );
@@ -755,14 +757,14 @@ void <a name="196"></a>QtFileIconView::newDirectory()
     <a href="qiconview.html#456d21">setAutoArrange</a>( TRUE );
 }
 
-<a href="qdir.html">QDir</a> <a name="197"></a>QtFileIconView::currentDir()
+<a href="qdir.html">QDir</a> <a name="212"></a>QtFileIconView::currentDir()
 {
     return viewDir;
 }
 
 static bool isRoot( const QString &amp;s )
 {
-#if defined(UNIX)
+#if defined(_OS_UNIX_)
     if ( s == "/" )
         return TRUE;
 #elif defined(_OS_WIN32_)
@@ -782,7 +784,7 @@ static bool isRoot( const QString &amp;s )
     return FALSE;
 }
 
-void <a name="198"></a>QtFileIconView::readDir( const QDir &amp;dir )
+void <a name="213"></a>QtFileIconView::readDir( const QDir &amp;dir )
 {
     if ( !dir.<a href="qdir.html#8bd872">isReadable</a>() )
         return;
@@ -835,28 +837,28 @@ void <a name="198"></a>QtFileIconView::readDir( const QDir &amp;dir )
     emit readDirDone();
 }
 
-void <a name="199"></a>QtFileIconView::itemDoubleClicked( <a href="qiconviewitem.html">QIconViewItem</a> *i )
+void <a name="214"></a>QtFileIconView::itemDoubleClicked( <a href="qiconviewitem.html">QIconViewItem</a> *i )
 {
     QtFileIconViewItem *item = ( QtFileIconViewItem* )i;
 
     if ( item-&gt;type() == QtFileIconViewItem::Dir ) {
         viewDir = QDir( item-&gt;filename() );
-        <a href=#198>readDir</a>( viewDir );
+        <a href=#213>readDir</a>( viewDir );
     } else if ( item-&gt;type() == QtFileIconViewItem::Link &amp;&amp;
                 <a href="qfileinfo.html">QFileInfo</a>( <a href="qfileinfo.html">QFileInfo</a>( item-&gt;filename() ).readLink() ).isDir() ) {
         viewDir = QDir( <a href="qfileinfo.html">QFileInfo</a>( item-&gt;filename() ).readLink() );
-        <a href=#198>readDir</a>( viewDir );
+        <a href=#213>readDir</a>( viewDir );
     }
 }
 
-<a href="qdragobject.html">QDragObject</a> *<a name="200"></a>QtFileIconView::dragObject()
+<a href="qdragobject.html">QDragObject</a> *<a name="215"></a>QtFileIconView::dragObject()
 {
     if ( !currentItem() )
         return 0;
 
     <a href="qpoint.html">QPoint</a> orig = viewportToContents( <a href="qscrollview.html#040cb5">viewport</a>()-&gt;mapFromGlobal( <a href="qcursor.html#854b1d">QCursor::pos</a>() ) );
     QtFileIconDrag *drag = new QtFileIconDrag( <a href="qscrollview.html#040cb5">viewport</a>() );
-    drag-&gt;<a href="qdragobject.html#f21169">setPixmap</a>( *currentItem()-&gt;pixmap(),
+    drag-&gt;<a href="qdragobject.html#3f0ef8">setPixmap</a>( *currentItem()-&gt;pixmap(),
                      <a href="qpoint.html">QPoint</a>( <a href="qiconview.html#4b5a9c">currentItem</a>()-&gt;pixmapRect().width() / 2, <a href="qiconview.html#4b5a9c">currentItem</a>()-&gt;pixmapRect().height() / 2 ) );
     for ( QtFileIconViewItem *item = (QtFileIconViewItem*)firstItem(); item;
           item = (QtFileIconViewItem*)item-&gt;<a href="qiconviewitem.html#a582f3">nextItem</a>() ) {
@@ -877,16 +879,16 @@ void <a name="199"></a>QtFileIconView::itemDoubleClicked( <a href="qiconviewitem
     return drag;
 }
 
-void <a name="201"></a>QtFileIconView::keyPressEvent( <a href="qkeyevent.html">QKeyEvent</a> *e )
+void <a name="216"></a>QtFileIconView::keyPressEvent( <a href="qkeyevent.html">QKeyEvent</a> *e )
 {
     if ( e-&gt;key() == Key_N &amp;&amp;
          ( e-&gt;state() &amp; ControlButton ) )
-        <a href=#196>newDirectory</a>();
+        <a href=#211>newDirectory</a>();
     else
         <a href="qiconview.html#ecd8d8">QIconView::keyPressEvent</a>( e );
 }
 
-void <a name="202"></a>QtFileIconView::slotDropped( <a href="qdropevent.html">QDropEvent</a> *e, const QValueList&lt;<a href="qicondragitem.html">QIconDragItem</a>&gt; &amp; )
+void <a name="217"></a>QtFileIconView::slotDropped( <a href="qdropevent.html">QDropEvent</a> *e, const QValueList&lt;<a href="qicondragitem.html">QIconDragItem</a>&gt; &amp; )
 {
     if ( openItem )
         openItem-&gt;timer.stop();
@@ -916,81 +918,81 @@ void <a name="202"></a>QtFileIconView::slotDropped( <a href="qdropevent.html">QD
     openItem = 0;
 }
 
-void <a name="203"></a>QtFileIconView::viewLarge()
+void <a name="218"></a>QtFileIconView::viewLarge()
 {
-    <a href=#214>setViewMode</a>( Large );
+    <a href=#229>setViewMode</a>( Large );
 }
 
-void <a name="204"></a>QtFileIconView::viewSmall()
+void <a name="219"></a>QtFileIconView::viewSmall()
 {
-    <a href=#214>setViewMode</a>( Small );
+    <a href=#229>setViewMode</a>( Small );
 }
 
-void <a name="205"></a>QtFileIconView::viewBottom()
+void <a name="220"></a>QtFileIconView::viewBottom()
 {
     <a href="qiconview.html#39d892">setItemTextPos</a>( Bottom );
 }
 
-void <a name="206"></a>QtFileIconView::viewRight()
+void <a name="221"></a>QtFileIconView::viewRight()
 {
     <a href="qiconview.html#39d892">setItemTextPos</a>( Right );
 }
 
-void <a name="207"></a>QtFileIconView::flowEast()
+void <a name="222"></a>QtFileIconView::flowEast()
 {
     <a href="qscrollview.html#d1b7ae">setHScrollBarMode</a>( AlwaysOff );
     <a href="qscrollview.html#cdec7e">setVScrollBarMode</a>( Auto );
     <a href="qiconview.html#6d0e1b">setArrangement</a>( LeftToRight );
 }
 
-void <a name="208"></a>QtFileIconView::flowSouth()
+void <a name="223"></a>QtFileIconView::flowSouth()
 {
     <a href="qscrollview.html#cdec7e">setVScrollBarMode</a>( AlwaysOff );
     <a href="qscrollview.html#d1b7ae">setHScrollBarMode</a>( Auto );
     <a href="qiconview.html#6d0e1b">setArrangement</a>( TopToBottom );
 }
 
-void <a name="209"></a>QtFileIconView::sortAscending()
+void <a name="224"></a>QtFileIconView::sortAscending()
 {
     <a href="qiconview.html#e9e83a">sort</a>( TRUE );
 }
 
-void <a name="210"></a>QtFileIconView::sortDescending()
+void <a name="225"></a>QtFileIconView::sortDescending()
 {
     <a href="qiconview.html#e9e83a">sort</a>( FALSE );
 }
 
-void <a name="211"></a>QtFileIconView::itemTextTruncate()
+void <a name="226"></a>QtFileIconView::itemTextTruncate()
 {
     <a href="qiconview.html#588a44">setWordWrapIconText</a>( FALSE );
 }
 
-void <a name="212"></a>QtFileIconView::itemTextWordWrap()
+void <a name="227"></a>QtFileIconView::itemTextWordWrap()
 {
     <a href="qiconview.html#588a44">setWordWrapIconText</a>( TRUE );
 }
 
-void <a name="213"></a>QtFileIconView::slotRightPressed( <a href="qiconviewitem.html">QIconViewItem</a> *item )
+void <a name="228"></a>QtFileIconView::slotRightPressed( <a href="qiconviewitem.html">QIconViewItem</a> *item )
 {
     if ( !item ) { // right pressed on viewport
         <a href="qpopupmenu.html">QPopupMenu</a> menu( this );
 
-        menu.<a href="qmenudata.html#43c652">insertItem</a>( "&amp;Large view", this, SLOT( <a href=#203>viewLarge</a>() ) );
-        menu.<a href="qmenudata.html#43c652">insertItem</a>( "&amp;Small view", this, SLOT( <a href=#204>viewSmall</a>() ) );
+        menu.<a href="qmenudata.html#43c652">insertItem</a>( "&amp;Large view", this, SLOT( <a href=#218>viewLarge</a>() ) );
+        menu.<a href="qmenudata.html#43c652">insertItem</a>( "&amp;Small view", this, SLOT( <a href=#219>viewSmall</a>() ) );
         menu.<a href="qmenudata.html#5f2cea">insertSeparator</a>();
-        menu.<a href="qmenudata.html#43c652">insertItem</a>( "Text at the &amp;bottom", this, SLOT( <a href=#205>viewBottom</a>() ) );
-        menu.<a href="qmenudata.html#43c652">insertItem</a>( "Text at the &amp;right", this, SLOT( <a href=#206>viewRight</a>() ) );
+        menu.<a href="qmenudata.html#43c652">insertItem</a>( "Text at the &amp;bottom", this, SLOT( <a href=#220>viewBottom</a>() ) );
+        menu.<a href="qmenudata.html#43c652">insertItem</a>( "Text at the &amp;right", this, SLOT( <a href=#221>viewRight</a>() ) );
         menu.<a href="qmenudata.html#5f2cea">insertSeparator</a>();
-        menu.<a href="qmenudata.html#43c652">insertItem</a>( "Arrange l&amp;eft to right", this, SLOT( <a href=#207>flowEast</a>() ) );
-        menu.<a href="qmenudata.html#43c652">insertItem</a>( "Arrange t&amp;op to bottom", this, SLOT( <a href=#208>flowSouth</a>() ) );
+        menu.<a href="qmenudata.html#43c652">insertItem</a>( "Arrange l&amp;eft to right", this, SLOT( <a href=#222>flowEast</a>() ) );
+        menu.<a href="qmenudata.html#43c652">insertItem</a>( "Arrange t&amp;op to bottom", this, SLOT( <a href=#223>flowSouth</a>() ) );
         menu.<a href="qmenudata.html#5f2cea">insertSeparator</a>();
-        menu.<a href="qmenudata.html#43c652">insertItem</a>( "&amp;Truncate item text", this, SLOT( <a href=#211>itemTextTruncate</a>() ) );
-        menu.<a href="qmenudata.html#43c652">insertItem</a>( "&amp;Wordwrap item text", this, SLOT( <a href=#212>itemTextWordWrap</a>() ) );
+        menu.<a href="qmenudata.html#43c652">insertItem</a>( "&amp;Truncate item text", this, SLOT( <a href=#226>itemTextTruncate</a>() ) );
+        menu.<a href="qmenudata.html#43c652">insertItem</a>( "&amp;Wordwrap item text", this, SLOT( <a href=#227>itemTextWordWrap</a>() ) );
         menu.<a href="qmenudata.html#5f2cea">insertSeparator</a>();
         menu.<a href="qmenudata.html#43c652">insertItem</a>( "Arrange items in &amp;grid", this, SLOT( <a href="qiconview.html#0afe2f">arrangeItemsInGrid</a>() ) );
         menu.<a href="qmenudata.html#5f2cea">insertSeparator</a>();
-        menu.<a href="qmenudata.html#43c652">insertItem</a>( "Sort &amp;ascending", this, SLOT( <a href=#209>sortAscending</a>() ) );
-        menu.<a href="qmenudata.html#43c652">insertItem</a>( "Sort &amp;descending", this, SLOT( <a href=#210>sortDescending</a>() ) );
+        menu.<a href="qmenudata.html#43c652">insertItem</a>( "Sort &amp;ascending", this, SLOT( <a href=#224>sortAscending</a>() ) );
+        menu.<a href="qmenudata.html#43c652">insertItem</a>( "Sort &amp;descending", this, SLOT( <a href=#225>sortDescending</a>() ) );
 
         menu.<a href="qwidget.html#eeb59b">setMouseTracking</a>( TRUE );
         menu.<a href="qpopupmenu.html#5b40c9">exec</a>( <a href="qcursor.html#854b1d">QCursor::pos</a>() );
@@ -1016,7 +1018,7 @@ void <a name="213"></a>QtFileIconView::slotRightPressed( <a href="qiconviewitem.
     }
 }
 
-void <a name="214"></a>QtFileIconView::setViewMode( ViewMode m )
+void <a name="229"></a>QtFileIconView::setViewMode( ViewMode m )
 {
     if ( m == vm )
         return;
@@ -1034,9 +1036,9 @@ void <a name="214"></a>QtFileIconView::setViewMode( ViewMode m )
   <hr>
 
   Header file of the mainwindow: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/fileiconview/mainwindow.h   2.1.1   edited 2000-03-02 $
+** &#36;Id&#58; qt/examples/fileiconview/mainwindow.h   2.2.0   edited 2000-08-31 $
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -1100,9 +1102,9 @@ protected slots:
   <hr>
 
   Implementation of the mainwindow: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/fileiconview/mainwindow.cpp   2.1.1   edited 2000-03-02 $
+** &#36;Id&#58; qt/examples/fileiconview/mainwindow.cpp   2.2.0   edited 2000-08-31 $
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -1167,15 +1169,15 @@ static const char* newfolder_xpm[] = {
 FileMainWindow::FileMainWindow()
     : <a href="qmainwindow.html">QMainWindow</a>()
 {
-    <a href=#220>setup</a>();
+    <a href=#235>setup</a>();
 }
 
-void <a name="219"></a>FileMainWindow::show()
+void <a name="234"></a>FileMainWindow::show()
 {
     <a href="qmainwindow.html#e71bb3">QMainWindow::show</a>();
 }
 
-void <a name="220"></a>FileMainWindow::setup()
+void <a name="235"></a>FileMainWindow::setup()
 {
     <a href="qsplitter.html">QSplitter</a> *splitter = new <a href="qsplitter.html">QSplitter</a>( this );
 
@@ -1194,13 +1196,13 @@ void <a name="220"></a>FileMainWindow::setup()
     <a href="qtoolbar.html">QToolBar</a> *toolbar = new <a href="qtoolbar.html">QToolBar</a>( this, "toolbar" );
     <a href="qmainwindow.html#deadb2">setRightJustification</a>( TRUE );
 
-    (void)new <a href="qlabel.html">QLabel</a>( <a href="qobject.html#44b4c1">tr</a>( " Path: " ), toolbar );
+    (void)new <a href="qlabel.html">QLabel</a>( <a href="qobject.html#ba30fb">tr</a>( " Path: " ), toolbar );
 
     pathCombo = new <a href="qcombobox.html">QComboBox</a>( TRUE, toolbar );
     pathCombo-&gt;setAutoCompletion( TRUE );
     toolbar-&gt;<a href="qtoolbar.html#cf1b0e">setStretchableWidget</a>( pathCombo );
     <a href="qobject.html#c2d209">connect</a>( pathCombo, SIGNAL( activated( const QString &amp; ) ),
-             this, SLOT ( <a href=#228>changePath</a>( const QString &amp; ) ) );
+             this, SLOT ( <a href=#243>changePath</a>( const QString &amp; ) ) );
 
     toolbar-&gt;<a href="qtoolbar.html#0c2bac">addSeparator</a>();
 
@@ -1208,22 +1210,22 @@ void <a name="220"></a>FileMainWindow::setup()
 
     pix = QPixmap( cdtoparent_xpm );
     upButton = new <a href="qtoolbutton.html">QToolButton</a>( pix, "One directory up", QString::null,
-                                this, SLOT( <a href=#226>cdUp</a>() ), toolbar, "cd up" );
+                                this, SLOT( <a href=#241>cdUp</a>() ), toolbar, "cd up" );
 
     pix = QPixmap( newfolder_xpm );
     mkdirButton = new <a href="qtoolbutton.html">QToolButton</a>( pix, "New Folder", QString::null,
-                                   this, SLOT( <a href=#227>newFolder</a>() ), toolbar, "new folder" );
+                                   this, SLOT( <a href=#242>newFolder</a>() ), toolbar, "new folder" );
 
     <a href="qobject.html#c2d209">connect</a>( dirlist, SIGNAL( folderSelected( const QString &amp; ) ),
              fileview, SLOT ( setDirectory( const QString &amp; ) ) );
-    <a href="qobject.html#c2d209">connect</a>( fileview, SIGNAL( <a href=#222>directoryChanged</a>( const QString &amp; ) ),
-             this, SLOT( <a href=#222>directoryChanged</a>( const QString &amp; ) ) );
+    <a href="qobject.html#c2d209">connect</a>( fileview, SIGNAL( <a href=#237>directoryChanged</a>( const QString &amp; ) ),
+             this, SLOT( <a href=#237>directoryChanged</a>( const QString &amp; ) ) );
     <a href="qobject.html#c2d209">connect</a>( fileview, SIGNAL( startReadDir( int ) ),
-             this, SLOT( <a href=#223>slotStartReadDir</a>( int ) ) );
+             this, SLOT( <a href=#238>slotStartReadDir</a>( int ) ) );
     <a href="qobject.html#c2d209">connect</a>( fileview, SIGNAL( readNextDir() ),
-             this, SLOT( <a href=#224>slotReadNextDir</a>() ) );
+             this, SLOT( <a href=#239>slotReadNextDir</a>() ) );
     <a href="qobject.html#c2d209">connect</a>( fileview, SIGNAL( readDirDone() ),
-             this, SLOT( <a href=#225>slotReadDirDone</a>() ) );
+             this, SLOT( <a href=#240>slotReadDirDone</a>() ) );
 
     <a href="qmainwindow.html#6c19ce">setDockEnabled</a>( Left, FALSE );
     <a href="qmainwindow.html#6c19ce">setDockEnabled</a>( Right, FALSE );
@@ -1233,17 +1235,17 @@ void <a name="220"></a>FileMainWindow::setup()
     progress = new <a href="qprogressbar.html">QProgressBar</a>( <a href="qmainwindow.html#14153d">statusBar</a>() );
     <a href="qmainwindow.html#14153d">statusBar</a>()-&gt;addWidget( progress, 1, TRUE );
 
-    <a href="qobject.html#c2d209">connect</a>( fileview, SIGNAL( <a href=#229>enableUp</a>() ),
-             this, SLOT( <a href=#229>enableUp</a>() ) );
-    <a href="qobject.html#c2d209">connect</a>( fileview, SIGNAL( <a href=#230>disableUp</a>() ),
-             this, SLOT( <a href=#230>disableUp</a>() ) );
-    <a href="qobject.html#c2d209">connect</a>( fileview, SIGNAL( <a href=#231>enableMkdir</a>() ),
-             this, SLOT( <a href=#231>enableMkdir</a>() ) );
-    <a href="qobject.html#c2d209">connect</a>( fileview, SIGNAL( <a href=#232>disableMkdir</a>() ),
-             this, SLOT( <a href=#232>disableMkdir</a>() ) );
+    <a href="qobject.html#c2d209">connect</a>( fileview, SIGNAL( <a href=#244>enableUp</a>() ),
+             this, SLOT( <a href=#244>enableUp</a>() ) );
+    <a href="qobject.html#c2d209">connect</a>( fileview, SIGNAL( <a href=#245>disableUp</a>() ),
+             this, SLOT( <a href=#245>disableUp</a>() ) );
+    <a href="qobject.html#c2d209">connect</a>( fileview, SIGNAL( <a href=#246>enableMkdir</a>() ),
+             this, SLOT( <a href=#246>enableMkdir</a>() ) );
+    <a href="qobject.html#c2d209">connect</a>( fileview, SIGNAL( <a href=#247>disableMkdir</a>() ),
+             this, SLOT( <a href=#247>disableMkdir</a>() ) );
 }
 
-void <a name="221"></a>FileMainWindow::setPathCombo()
+void <a name="236"></a>FileMainWindow::setPathCombo()
 {
     <a href="qstring.html">QString</a> dir = caption();
     int i = 0;
@@ -1264,67 +1266,67 @@ void <a name="221"></a>FileMainWindow::setPathCombo()
 
 }
 
-void <a name="222"></a>FileMainWindow::directoryChanged( const QString &amp;dir )
+void <a name="237"></a>FileMainWindow::directoryChanged( const QString &amp;dir )
 {
     <a href="qwidget.html#d4f007">setCaption</a>( dir );
-    <a href=#221>setPathCombo</a>();
+    <a href=#236>setPathCombo</a>();
 }
 
-void <a name="223"></a>FileMainWindow::slotStartReadDir( int dirs )
+void <a name="238"></a>FileMainWindow::slotStartReadDir( int dirs )
 {
-    label-&gt;setText( <a href="qobject.html#44b4c1">tr</a>( " Reading Directory..." ) );
+    label-&gt;setText( <a href="qobject.html#ba30fb">tr</a>( " Reading Directory..." ) );
     progress-&gt;reset();
     progress-&gt;setTotalSteps( dirs );
 }
 
-void <a name="224"></a>FileMainWindow::slotReadNextDir()
+void <a name="239"></a>FileMainWindow::slotReadNextDir()
 {
     int p = progress-&gt;progress();
     progress-&gt;setProgress( ++p );
 }
 
-void <a name="225"></a>FileMainWindow::slotReadDirDone()
+void <a name="240"></a>FileMainWindow::slotReadDirDone()
 {
-    label-&gt;setText( <a href="qobject.html#44b4c1">tr</a>( " Reading Directory Done." ) );
+    label-&gt;setText( <a href="qobject.html#ba30fb">tr</a>( " Reading Directory Done." ) );
     progress-&gt;setProgress( progress-&gt;totalSteps() );
 }
 
-void <a name="226"></a>FileMainWindow::cdUp()
+void <a name="241"></a>FileMainWindow::cdUp()
 {
     <a href="qdir.html">QDir</a> dir = fileview-&gt;currentDir();
     dir.<a href="qdir.html#c8e735">cd</a>( ".." );
     fileview-&gt;setDirectory( dir );
 }
 
-void <a name="227"></a>FileMainWindow::newFolder()
+void <a name="242"></a>FileMainWindow::newFolder()
 {
     fileview-&gt;newDirectory();
 }
 
-void <a name="228"></a>FileMainWindow::changePath( const QString &amp;path )
+void <a name="243"></a>FileMainWindow::changePath( const QString &amp;path )
 {
     if ( <a href="qfileinfo.html">QFileInfo</a>( path ).exists() )
         fileview-&gt;setDirectory( path );
     else
-        <a href=#221>setPathCombo</a>();
+        <a href=#236>setPathCombo</a>();
 }
 
-void <a name="229"></a>FileMainWindow::enableUp()
+void <a name="244"></a>FileMainWindow::enableUp()
 {
     upButton-&gt;setEnabled( TRUE );
 }
 
-void <a name="230"></a>FileMainWindow::disableUp()
+void <a name="245"></a>FileMainWindow::disableUp()
 {
     upButton-&gt;setEnabled( FALSE );
 }
 
-void <a name="231"></a>FileMainWindow::enableMkdir()
+void <a name="246"></a>FileMainWindow::enableMkdir()
 {
     mkdirButton-&gt;setEnabled( TRUE );
 }
 
-void <a name="232"></a>FileMainWindow::disableMkdir()
+void <a name="247"></a>FileMainWindow::disableMkdir()
 {
     mkdirButton-&gt;setEnabled( FALSE );
 }
@@ -1335,9 +1337,9 @@ void <a name="232"></a>FileMainWindow::disableMkdir()
 
   Main:
 <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/fileiconview/main.cpp   2.1.1   edited 2000-02-03 $
+** &#36;Id&#58; qt/examples/fileiconview/main.cpp   2.2.0   edited 2000-08-31 $
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -1363,6 +1365,6 @@ int main( int argc, char **argv )
 </pre>
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.1</div>
+<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.2.0</div>
 </table></div></address></body></html>

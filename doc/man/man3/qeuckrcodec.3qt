@@ -1,5 +1,5 @@
-.TH QEucKrCodec 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QEucKrCodec 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QEucKrCodec \- Provides conversion to and from EUC-KR character sets
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -21,9 +19,9 @@ Provides conversion to and from EUC-KR character sets
 .PP
 The QEucKrCodec class subclasses QTextCodec to provide support for EUC-JP, the main legacy encoding for UNIX machines in Korea
 .PP
-It was margely written by Mizi Research Inc.; here is the copyright statement for the code as it was at the point of contribution. (Troll Tech's subsequent modifications are covered by the usual copyright for Qt.)
+It was largely written by Mizi Research Inc.; here is the copyright statement for the code as it was at the point of contribution. (Trolltech's subsequent modifications are covered by the usual copyright for Qt.)
 .PP
-Copyright (c) 1999 Mizi Research Inc., All rights reserved.
+Copyright (c) 1999-2000 Mizi Research Inc., All rights reserved.
 .PP
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met: 
 .IP 1
@@ -36,25 +34,25 @@ THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND ANY EXPRE
 .SH "QCString QEucKrCodec::fromUnicode ( const QString & uc, int & len_in_out ) const \fC[virtual]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .PP
-Reimplemented from QTextCodec.
+Reimplemented from QSjisCodec.
 .SH "int QEucKrCodec::heuristicContentMatch ( const char * chars, int len ) const \fC[virtual]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .PP
-Reimplemented from QTextCodec.
+Reimplemented from QSjisCodec.
 .SH "int QEucKrCodec::heuristicNameMatch ( const char * hint ) const \fC[virtual]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .PP
-Reimplemented from QTextCodec.
+Reimplemented from QSjisCodec.
 .SH "QTextDecoder* QEucKrCodec::makeDecoder () const \fC[virtual]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .PP
-Reimplemented from QTextCodec.
+Reimplemented from QSjisCodec.
 .SH "int QEucKrCodec::mibEnum () const \fC[virtual]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .SH "const char* QEucKrCodec::name () const \fC[virtual]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .PP
-Reimplemented from QTextCodec.
+Reimplemented from QSjisCodec.
 .SH "QString QEucKrCodec::toUnicode ( const char * chars, int len ) const \fC[virtual]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .PP
@@ -62,7 +60,7 @@ Reimplemented from QTextCodec.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qeuckrcodec.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

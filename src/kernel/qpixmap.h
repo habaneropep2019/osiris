@@ -1,27 +1,39 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qpixmap.h   2.1.1   edited 2000-04-05 $
+** $Id: qt/src/kernel/qpixmap.h   2.2.0   edited 2000-08-25 $
 **
 ** Definition of QPixmap class
 **
 ** Created : 940501
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file is part of the Qt GUI Toolkit.
+** This file is part of the kernel module of the Qt GUI Toolkit.
 **
 ** This file may be distributed under the terms of the Q Public License
-** as defined by Troll Tech AS of Norway and appearing in the file
+** as defined by Trolltech AS of Norway and appearing in the file
 ** LICENSE.QPL included in the packaging of this file.
 **
-** Licensees holding valid Qt Professional Edition licenses may use this
-** file in accordance with the Qt Professional Edition License Agreement
-** provided with the Qt Professional Edition.
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-** information about the Professional Edition licensing, or see
-** http://www.trolltech.com/qpl/ for QPL licensing information.
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
 **
-*****************************************************************************/
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
 
 #ifndef QPIXMAP_H
 #define QPIXMAP_H
@@ -33,6 +45,7 @@
 #include "qnamespace.h"
 #endif // QT_H
 
+class QGfx;
 
 #if defined(_WS_WIN_)
 // Internal pixmap memory optimization class for Windows 9x
@@ -86,8 +99,10 @@ public:
     static  QPixmap grabWidget( QWidget * widget,
 				int x=0, int y=0, int w=-1, int h=-1 );
 
+#ifndef QT_NO_TRANSFORMATIONS
     QPixmap	    xForm( const QWMatrix & ) const;
     static QWMatrix trueMatrix( const QWMatrix &, int w, int h );
+#endif
 
     QImage	convertToImage() const;
     bool	convertFromImage( const QImage &, ColorMode mode=Auto );
@@ -107,7 +122,9 @@ public:
     bool	loadFromData( const QByteArray &data,
 			      const char* format=0,
 			      int conversion_flags=0 );
-    bool	save( const QString& fileName, const char* format ) const;
+    bool	save( const QString& fileName, const char* format ) const; // ### remove 3.0
+    bool	save( const QString& fileName, const char* format,
+		      int quality ) const; // ### change to quality=-1 in 3.0
 
 #if defined(_WS_WIN_)
     HBITMAP	hbm()		const;
@@ -132,6 +149,14 @@ public:
     int		multiCellOffset() const;
     int		allocCell();
     void	freeCell( bool = FALSE );
+#endif
+
+#if defined(_WS_QWS_)
+    virtual QGfx * graphicsContext() const;
+    virtual unsigned char * scanLine(int) const;
+    virtual int bytesPerLine() const;
+    QRgb * clut() const;
+    int numCols() const;
 #endif
 
 protected:
@@ -166,6 +191,10 @@ protected:
 #elif defined(_WS_X11_)
 	void   *ximage;
 	void   *maskgc;
+#elif defined(_WS_QWS_)
+	int id; // ### should use QPaintDevice::hd, since it is there
+	QRgb * clut;
+	int numcols;
 #endif
 	Optimization optim;
     } *data;
@@ -247,8 +276,9 @@ inline bool QPixmap::isMultiCellPixmap() const
   QPixmap stream functions
  *****************************************************************************/
 
+#ifndef QT_NO_DATASTREAM
 Q_EXPORT QDataStream &operator<<( QDataStream &, const QPixmap & );
 Q_EXPORT QDataStream &operator>>( QDataStream &, QPixmap & );
-
+#endif
 
 #endif // QPIXMAP_H

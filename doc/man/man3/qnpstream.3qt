@@ -1,5 +1,5 @@
-.TH QNPStream 3qt "25 May 2000" "Troll Tech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Troll Tech AS.  All rights reserved.  See the
+.TH QNPStream 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,8 +7,6 @@
 .nh
 .SH NAME
 QNPStream \- A stream of data provided to a QNPInstance by the browser [Qt NSPlugin Extension]
-\fBClasses\fR - Annotated - Tree - Functions - Home - \fBStructure\fR </div>
-.br
 .SH SYNOPSIS
 .br
 .PP
@@ -17,7 +15,7 @@ QNPStream \- A stream of data provided to a QNPInstance by the browser [Qt NSPlu
 .SS "Public Members"
 .in +1c
 .ti -1c
-.BI "\fB~QNPStream\fR ()"
+.BI "\fB~QNPStream\fR () "
 .br
 .ti -1c
 .BI "const char* \fBurl\fR () const"
@@ -41,16 +39,16 @@ QNPStream \- A stream of data provided to a QNPInstance by the browser [Qt NSPlu
 .BI "bool \fBcomplete\fR () const"
 .br
 .ti -1c
-.BI "void \fBrequestRead\fR ( int " "offset" ", uint length )"
+.BI "void \fBrequestRead\fR ( int " "offset" ", uint length ) "
 .br
 .ti -1c
-.BI "int \fBwrite\fR ( int " "len" ", void * buffer )"
+.BI "int \fBwrite\fR ( int " "len" ", void * buffer ) "
 .br
 .ti -1c
-.BI "QNPInstance* \fBinstance\fR ()"
+.BI "QNPInstance* \fBinstance\fR () "
 .br
 .ti -1c
-.BI "\fBQNPStream\fR ( QNPInstance *, const char *, _NPStream *, bool )"
+.BI "\fBQNPStream\fR ( QNPInstance *, const char *, _NPStream *, bool ) "
 .br
 .ti -1c
 .BI "void \fBsetOkay\fR ( bool ) (internal)"
@@ -66,7 +64,7 @@ A stream of data provided to a QNPInstance by the browser.
 .PP
 Note that this is neither a QTextStream or a QDataStream.
 .PP
-See also: QNPInstance::write() and QNPInstance::newStreamCreated().
+See also QNPInstance::write() and QNPInstance::newStreamCreated().
 .PP
 Examples:
 .(l
@@ -104,7 +102,7 @@ For internal use only.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qnpstream.html
 .SH COPYRIGHT
-Copyright 1992-2000 Troll Tech AS, http://www.trolltech.com.  See the
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR

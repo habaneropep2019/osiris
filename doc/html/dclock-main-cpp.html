@@ -3,15 +3,17 @@
 Qt Toolkit - dclock/main.cpp example file
 </title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
-a:link { text-decoration: none; }
-body { background: white; color: black; }
+a:link { color: #004faf; text-decoration: none }
+a:visited { color: #672967; text-decoration: none }body { background: white; color: black; }
 --></style>
 </head><body bgcolor="#ffffff">
 
-<a href="index.html">
-<img width="122" height="65" src="qtlogo.png" alt="Home"
-  align="left" border="0">
-</a><div align=right><img src="dochead.png" width="472" height="27"><br>
+<table width="100%">
+<tr><td><a href="index.html">
+<img width="100" height="100" src="qtlogo.png"
+alt="Home" border="0"><img width="100"
+height="100" src="face.png" alt="Home" border="0">
+</a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
 - <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
@@ -19,7 +21,7 @@ body { background: white; color: black; }
 - <a href="index.html">Home</a>
 - <a href="topicals.html"><b>Structure</b></a>
 </div>
-<br clear=all>
+</table>
 
 <h1 align=center>Digital Clock</h1><br clear="all">
 
@@ -29,9 +31,9 @@ body { background: white; color: black; }
   <hr>
 
   Header file: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/dclock/dclock.h   2.1.1   edited 2000-01-31 $
+** &#36;Id&#58; qt/examples/dclock/dclock.h   2.2.0   edited 2000-08-31 $
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -72,9 +74,9 @@ private:                                        // internal data
   <hr>
 
   Implementation: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/dclock/dclock.cpp   2.1.1   edited 2000-02-21 $
+** &#36;Id&#58; qt/examples/dclock/dclock.cpp   2.2.0   edited 2000-08-31 $
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -94,7 +96,7 @@ DigitalClock::DigitalClock( <a href="qwidget.html">QWidget</a> *parent, const ch
     showingColon = FALSE;
     <a href="qframe.html#c0d758">setFrameStyle</a>( QFrame::Panel | QFrame::Raised );
     <a href="qframe.html#bffeeb">setLineWidth</a>( 2 );                          // set frame line width
-    <a href=#112>showTime</a>();                                 // display the current time
+    <a href=#125>showTime</a>();                                 // display the current time
     normalTimer = startTimer( 500 );            // 1/2 second timer events
     showDateTimer = -1;                         // not showing date
 }
@@ -105,13 +107,13 @@ DigitalClock::DigitalClock( <a href="qwidget.html">QWidget</a> *parent, const ch
 // and another one for switching back from date mode to time mode.
 //
 
-void <a name="108"></a>DigitalClock::timerEvent( <a href="qtimerevent.html">QTimerEvent</a> *e )
+void <a name="121"></a>DigitalClock::timerEvent( <a href="qtimerevent.html">QTimerEvent</a> *e )
 {
     if ( e-&gt;timerId() == showDateTimer )        // stop showing date
-        <a href=#111>stopDate</a>();
+        <a href=#124>stopDate</a>();
     else {                                      // normal timer
         if ( showDateTimer == -1 )              // not showing date
-            <a href=#112>showTime</a>();
+            <a href=#125>showTime</a>();
     }
 }
 
@@ -119,10 +121,10 @@ void <a name="108"></a>DigitalClock::timerEvent( <a href="qtimerevent.html">QTim
 // Enters date mode when the left mouse button is pressed.
 //
 
-void <a name="109"></a>DigitalClock::mousePressEvent( <a href="qmouseevent.html">QMouseEvent</a> *e )
+void <a name="122"></a>DigitalClock::mousePressEvent( <a href="qmouseevent.html">QMouseEvent</a> *e )
 {
     if ( e-&gt;<a href="qmouseevent.html#de3f35">button</a>() == QMouseEvent::LeftButton )               // left button pressed
-        <a href=#110>showDate</a>();
+        <a href=#123>showDate</a>();
 }
 
 //
@@ -130,7 +132,7 @@ void <a name="109"></a>DigitalClock::mousePressEvent( <a href="qmouseevent.html"
 // Fires a timer to stop showing the date.
 //
 
-void <a name="110"></a>DigitalClock::showDate()
+void <a name="123"></a>DigitalClock::showDate()
 {
     if ( showDateTimer != -1 )                  // already showing date
         return;
@@ -145,18 +147,18 @@ void <a name="110"></a>DigitalClock::showDate()
 // Stops showing the date.
 //
 
-void <a name="111"></a>DigitalClock::stopDate()
+void <a name="124"></a>DigitalClock::stopDate()
 {
     <a href="qobject.html#f5e328">killTimer</a>( showDateTimer );
     showDateTimer = -1;
-    <a href=#112>showTime</a>();
+    <a href=#125>showTime</a>();
 }
 
 //
 // Shows the current time in the internal lcd widget.
 //
 
-void <a name="112"></a>DigitalClock::showTime()
+void <a name="125"></a>DigitalClock::showTime()
 {
     showingColon = !showingColon;               // toggle/blink colon
     <a href="qstring.html">QString</a> s = QTime::currentTime().toString().left(5);
@@ -173,9 +175,9 @@ void <a name="112"></a>DigitalClock::showTime()
 
   Main:
 <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/dclock/main.cpp   2.1.1   edited 2000-01-31 $
+** &#36;Id&#58; qt/examples/dclock/main.cpp   2.2.0   edited 2000-08-31 $
 **
-** Copyright (C) 1992-2000 Troll Tech AS.  All rights reserved.
+** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example
 ** program may be used, distributed and modified without limitation.
@@ -197,6 +199,6 @@ int main( int argc, char **argv )
 </pre>
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2000 Troll Tech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.1.1</div>
+<td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td align="right"><div align="right">Qt version 2.2.0</div>
 </table></div></address></body></html>
