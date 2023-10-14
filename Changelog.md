@@ -11,7 +11,7 @@ Osiris 2.4.1 is a maintenance release. As a reminder, Osiris is a fork of Qt ver
 - Removed the need for the environment variable OSIRISDIR in the configure script, making it easier to use
 - Removed configs for long obsolete platforms and platforms that have no planned support in Osiris.
 - Bumped OSIRIS_VER and OSIRIS_VER_STR to reflect new Osiris release 2.4.1
-- Fixed a bug in qtextbrowser that would cause a segfault when forwardStack was empty
+- Fixed a bug in qtextbrowser that would cause a segfault when forwardStack was empty. This bug was introduced in Qt 2.1.0, with a release date of April 2000. That's a bugfix almost 23 years later!
 
 #### Osiris 2.4.0
 
