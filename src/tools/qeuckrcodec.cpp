@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qeuckrcodec.cpp   2.2.0   edited 2000-08-28 $
+** $Id: qt/src/tools/qeuckrcodec.cpp   2.2.1   edited 2000-08-28 $
 **
 ** Implementation of QEucKrCodec class
 **

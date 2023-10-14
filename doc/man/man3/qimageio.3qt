@@ -1,4 +1,4 @@
-.TH QImageIO 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.TH QImageIO 3qt "4 October 2000" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -104,7 +104,7 @@ You will normally not need to use this class, QPixmap::load(), QPixmap::save() a
 .PP
 For image files which contain sequences of images, only the first is read. See the QMovie for loading multiple images.
 .PP
-PBM, PGM, and PPM format \fIoutput\fR is always in the more condensed raw format.
+PBM, PGM, and PPM format \fIoutput\fR is always in the more condensed raw format. PPM and PGM files with more than 256 levels of intensity are scaled down when reading.
 .PP
 \fBWarning:\fR Unisys has changed its position regarding GIF. If you are in a country where Unisys holds a patent on LZW compression and/or decompression and you want to use GIF, Unisys may require you to license that technology. These countries include Canada, Japan, the USA, France, Germany, Italy and the UK.
 .PP

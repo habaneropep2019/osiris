@@ -5,7 +5,7 @@ unix:CONFIG += x11
 embedded:CONFIG -= x11
 
 TARGET		= qt
-VERSION		= 2.2.0
+VERSION		= 2.2.1
 DESTDIR		= ../lib
 DLLDESTDIR	= ../bin
 
@@ -25,7 +25,8 @@ internal:CONFIG	+= png zlib  # Done differently in external system
 embedded:CONFIG	+= png zlib
 win32:CONFIG	+= png zlib
 internal:CONFIG -= opengl
-#internal:CONFIG += thread
+# internal:LIBS += -lpng -lz
+
 thread:DEFINES += QT_THREAD_SUPPORT
 
 embedded:CONFIG -= opengl
@@ -46,6 +47,7 @@ internal:X11LIBS += -lICE -lSM
 #
 internal:CONFIG += jpeg
 embedded:CONFIG -= jpeg
+win32:CONFIG -= jpeg
 jpeg:INTJPEGIU += -ljpeg
 jpeg:INTJPEGIW += libjpeg.lib
 DEFINESI += QT_NO_IMAGEIO_JPEG
@@ -55,6 +57,7 @@ win32:INTJPEGI += $$INTJPEGIW
 internal:LIBS += $$INTJPEGI
 internal:DEFINES += $$DEFINESI
 win32:DEFINES += QT_NO_IMAGEIO_JPEG
+
 
 win32:LIBS += $$WINLIBS
 unix:LIBS += $$X11LIBS
@@ -202,6 +205,7 @@ kernel:HEADERS += $$KERNEL_H/qabstractlayout.h \
 		  $$KERNEL_H/qstyle.h \
 		  $$KERNEL_H/qstylesheet.h \
 		  $$KERNEL_H/qthread.h \
+		  $$KERNEL_H/qthread_p.h \
 		  $$KERNEL_H/qtimer.h \
 		  $$KERNEL_H/qurl.h \
 		  $$KERNEL_H/qlocalfs.h \

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/moc/moc.y   2.2.0   edited 2000-08-31 $
+** $Id: qt/src/moc/moc.y   2.2.1   edited 2000-09-29 $
 **
 ** Parser and code generator for meta object compiler
 **
@@ -2465,7 +2465,7 @@ void generateClass()		      // generate C++ source code for a class
     char *hdr1 = "/****************************************************************************\n"
 		 "** %s meta object code from reading C++ file '%s'\n**\n";
     char *hdr2 = "** Created: %s\n"
-		 "**      by: The Qt MOC ($Id: qt/src/moc/moc.y   2.2.0   edited 2000-08-31 $)\n**\n";
+		 "**      by: The Qt MOC ($Id: qt/src/moc/moc.y   2.2.1   edited 2000-09-29 $)\n**\n";
     char *hdr3 = "** WARNING! All changes made in this file will be lost!\n";
     char *hdr4 = "*****************************************************************************/\n\n";
     int   i;
@@ -2547,7 +2547,7 @@ void generateClass()		      // generate C++ source code for a class
     fprintf( out, "    if ( metaObj )\n\treturn;\n" );
     fprintf( out, "    if ( qstrcmp(%s::className(), \"%s\") != 0 )\n"
 	          "\tbadSuperclassWarning(\"%s\",\"%s\");\n",
-             (const char*)qualifiedSuperclassName(), (const char*)qualifiedSuperclassName(),
+             (const char*)superclassName, (const char*)qualifiedSuperclassName(),
              (const char*)qualifiedClassName(), (const char*)qualifiedSuperclassName() );
     fprintf( out, "    (void) staticMetaObject();\n");
     fprintf( out, "}\n\n");
@@ -2571,7 +2571,7 @@ void generateClass()		      // generate C++ source code for a class
 //
     fprintf( out, "QMetaObject* %s::staticMetaObject()\n{\n", (const char*)qualifiedClassName() );
     fprintf( out, "    if ( metaObj )\n\treturn metaObj;\n" );
-    fprintf( out, "    (void) %s::staticMetaObject();\n", (const char*)qualifiedSuperclassName() );
+    fprintf( out, "    (void) %s::staticMetaObject();\n", (const char*)superclassName );
 
 //
 // Build the enums array in staticMetaObject()

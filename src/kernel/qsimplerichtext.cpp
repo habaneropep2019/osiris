@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qsimplerichtext.cpp   2.2.0   edited 2000-08-25 $
+** $Id: qt/src/kernel/qsimplerichtext.cpp   2.2.1   edited 2000-10-03 $
 **
 ** Implementation of the QSimpleRichText class
 **
@@ -47,7 +47,7 @@
 /*!
   \class QSimpleRichText qsimplerichtext.h
   \brief A small displayable piece of rich text.
-  
+
   \ingroup drawing
 
   This class encapsulates simple richt text usage where a string is
@@ -78,6 +78,7 @@ public:
     QRichText* doc;
     QColor linkColor;
     bool linkUnderline;
+    QFont font;
 };
 
 /*!
@@ -110,6 +111,7 @@ QSimpleRichText::QSimpleRichText( const QString& text, const QFont& fnt,
     d  = new QSimpleRichTextData;
     d->linkColor = Qt::blue;
     d->linkUnderline = TRUE;
+    d->font = fnt;
     d->doc = new QRichText( text, fnt, context, 0, 0, sheet );
 }
 
@@ -129,10 +131,11 @@ QSimpleRichText::QSimpleRichText( const QString& text, const QFont& fnt,
 				  const QColor& linkColor, bool linkUnderline )
 {
     d  = new QSimpleRichTextData;
-    d->doc = new QRichText( text, fnt, context, 0, factory, sheet );
-    d->doc->flow()->pagesize = verticalBreak;
     d->linkColor = linkColor;
     d->linkUnderline = linkUnderline;
+    d->doc = new QRichText( text, fnt, context, 0, factory, sheet );
+    d->doc->flow()->pagesize = verticalBreak;
+    d->font = fnt;
 }
 
 
@@ -210,7 +213,7 @@ int QSimpleRichText::height() const
 
 
 /*!
-  Draws the formatted text with \a p, at position (\a x,\a y), clipped
+  Draws the formatted text with \a p, at position (\a x, \a y), clipped
   to \a clipRegion.  Colors from the palette \a pal are used as
   needed, and if not 0, *\a paper is used as the background brush.
 
@@ -225,7 +228,7 @@ void QSimpleRichText::draw( QPainter* p,  int x, int y, const QRegion& clipRegio
 }
 
 /*!\overload
-  Draws the formatted text with \a p, at position (\a x,\a y), clipped
+  Draws the formatted text with \a p, at position (\a x, \a y), clipped
   to \a clipRegion.  Colors from the \a cg are used as
   needed, and if not 0, *\a paper is used as the background brush.
 
@@ -314,7 +317,8 @@ static uint int_sqrt(uint n)
 */
 void QSimpleRichText::adjustSize()
 {
-    int mw = QApplication::desktop()->width();
+    QFontMetrics fm( d->font );
+    int mw =  fm.width( 'x' ) * 80;
     int w = mw;
     d->doc->doLayout( 0,w );
     w = int_sqrt( (5*d->doc->height) / (3*d->doc->flow()->widthUsed ) );

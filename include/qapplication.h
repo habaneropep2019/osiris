@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qapplication.h   2.2.0   edited 2000-08-27 $
+** $Id: qt/src/kernel/qapplication.h   2.2.1   edited 2000-10-03 $
 **
 ** Definition of QApplication class
 **
@@ -202,6 +202,7 @@ public:
 #elif defined(_WS_QWS_)
     virtual bool     qwsEventFilter( QWSEvent * );
     int              qwsProcessEvent( QWSEvent* );
+    void             qwsSetCustomColors( QRgb *colortable, int start, int numColors );
 #ifndef QT_NO_QWS_MANAGER
     static QWSDecoration &qwsDecoration();
     static void      qwsSetDecoration( QWSDecoration *);
@@ -247,7 +248,11 @@ private:
     void	     initialize( int, char ** );
     void	     init_precmdline();
     void	     process_cmdline( int* argcptr, char ** argv );
-
+#if defined(_WS_QWS_)
+    static QWidget *findChildWidget( const QWidget *p, const QPoint &pos );
+    static QWidget *findWidget( const QObjectList&, const QPoint &, bool rec );
+#endif
+    
 #if defined(QT_THREAD_SUPPORT)
     static QMutex * qt_mutex;
 #endif

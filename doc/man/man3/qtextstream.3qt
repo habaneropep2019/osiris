@@ -1,4 +1,4 @@
-.TH QTextStream 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.TH QTextStream 3qt "4 October 2000" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -99,6 +99,9 @@ Inherited by QTextIStream and QTextOStream.
 .br
 .ti -1c
 .BI "QTextStream& \fBoperator>>\fR ( QCString & ) "
+.br
+.ti -1c
+.BI "QTextStream& \fBoperator<<\fR ( QChar ) "
 .br
 .ti -1c
 .BI "QTextStream& \fBoperator<<\fR ( char ) "
@@ -380,6 +383,8 @@ See also setf() and unsetf().
 Sets the stream flags to \fIf.\fR Returns the previous stream flags.
 .PP
 See also setf(), unsetf() and flags().
+.SH "QTextStream & QTextStream::operator<< ( QChar c )"
+Writes a \fCchar\fR to the stream and returns a reference to the stream.
 .SH "QTextStream & QTextStream::operator<< ( char c )"
 Writes a \fCchar\fR to the stream and returns a reference to the stream.
 .SH "QTextStream & QTextStream::operator<< ( const QCString & s )"
@@ -455,7 +460,7 @@ Reads \fIlen\fR bytes from the stream into \fIe\fR s and returns a reference to 
 .PP
 The buffer \fIs\fR must be preallocated.
 .PP
-\\note No Encoding is done by this function.
+Note that no encoding is done by this function.
 .PP
 \fBWarning:\fR The behaviour of this function is undefined unless the stream's encoding is set to Unicode or Latin1.
 .PP
@@ -475,7 +480,7 @@ See also setf(), width(), fill() and precision().
 .SH "void QTextStream::setCodec ( QTextCodec * codec )"
 Sets the codec for this stream to \fIcodec.\fR Will not try to autodetect Unicode.
 .PP
-\\note This function should be called before any data is read to/written from the stream.
+Note that this function should be called before any data is read to/written from the stream.
 .PP
 See also setEncoding().
 .SH "void QTextStream::setDevice ( QIODevice * iod )"
@@ -501,7 +506,7 @@ Sets the encoding of this stream to \fIe,\fR where \fIe\fR is one of:
 .PP
 \fCLocale\fR and all Unicode encodings, except \fCRawUnicode,\fR will look at the first two bytes in a input stream to determine the byte order. The initial byte order marker will be stripped off before data is read.
 .PP
-\\note This function should be called before any data is read to/written from the stream.
+Note that this function should be called before any data is read to/written from the stream.
 .PP
 See also setCodec().
 .SH "int QTextStream::setf ( int bits )"
@@ -535,7 +540,7 @@ Sets the field width to \fIw.\fR Returns the previous field width.
 .SH "QTextStream & QTextStream::writeRawBytes ( const char * s, uint len )"
 Writes the \fIlen\fR bytes from \fIs\fR to the stream and returns a reference to the stream.
 .PP
-\\note No Encoding is done by this function.
+Note that no encoding is done by this function.
 .PP
 See also  QIODevice::writeBlock().
 .SH "SEE ALSO"

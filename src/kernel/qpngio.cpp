@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qpngio.cpp   2.2.0   edited 2000-08-25 $
+** $Id: qt/src/kernel/qpngio.cpp   2.2.1   edited 2000-09-03 $
 **
 ** Implementation of PNG QImage IOHandler
 **
@@ -389,7 +389,7 @@ bool QPNGImageWriter::writeImage(const QImage& image, int quality, int off_x, in
 	return FALSE;
     }
 
-    if (quality > 0) {
+    if (quality >= 0) {
 	if (quality > 9) {
 #if defined(CHECK_RANGE)
 	    qWarning( "PNG: Quality %d out of range", quality );

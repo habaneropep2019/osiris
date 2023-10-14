@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qlistview.cpp   2.2.0   edited 2000-08-30 $
+** $Id: qt/src/widgets/qlistview.cpp   2.2.1   edited 2000-10-01 $
 **
 ** Implementation of QListView widget class
 **
@@ -1030,6 +1030,9 @@ void QListViewItem::setExpandable( bool enable )
 
 void QListViewItem::enforceSortOrder() const
 {
+    QListView *lv = listView();
+    if ( lv && lv->d->clearing )
+	return;
     if( parentItem &&
 	(parentItem->lsc != lsc || parentItem->lso != lso) &&
 	(int)parentItem->lsc != Unsorted )
@@ -4573,6 +4576,9 @@ void QCheckListItem::turnOffChild()
  */
 void QCheckListItem::activate()
 {
+    if ( listView() && !listView()->isEnabled() || !isEnabled() )
+	return;
+
     QPoint pos;
     if ( activatedPos( pos ) ) {
 	//ignore clicks outside the box
@@ -4612,9 +4618,6 @@ bool QCheckListItem::isEnabled() const
  */
 void QCheckListItem::setOn( bool b  )
 {
-    if ( listView() && !listView()->isEnabled() || !isEnabled() )
-	return;
-
     if ( b == on )
 	return;
     if ( myType == CheckBox ) {
@@ -4847,12 +4850,12 @@ void QCheckListItem::paintFocus( QPainter *p, const QColorGroup & cg,
 }
 
 /*!
-  Fills the rectangle. No decoration is drawn.
+  \reimp
  */
-void QCheckListItem::paintBranches( QPainter * p, const QColorGroup &,
-			    int w, int, int h, GUIStyle)
+void QCheckListItem::paintBranches( QPainter * p, const QColorGroup &g,
+			    int w, int y, int h, GUIStyle s)
 {
-    listView()->paintEmptyArea( p, QRect( 0, 0, w, h ) );
+    QListViewItem::paintBranches( p, g, w, y, h, s );
 }
 
 

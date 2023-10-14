@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/widgets/main.cpp   2.2.0   edited 2000-08-31 $
+** $Id: qt/examples/widgets/main.cpp   2.2.1   edited 2000-09-06 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -57,7 +57,6 @@ int main( int argc, char **argv )
 {
     QApplication::setColorSpec( QApplication::CustomColor );
     QApplication a( argc, argv );
-    QApplication::setStyle( new QWindowsStyle() );
 
     MyWidgetView* w = new MyWidgetView;
     a.setMainWidget( w );

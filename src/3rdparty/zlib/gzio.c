@@ -5,7 +5,7 @@
  * Compile this file with -DNO_DEFLATE to avoid the compression code.
  */
 
-/* @(#) $Id: qt/src/3rdparty/zlib/gzio.c   2.2.0   edited 2000-06-05 $ */
+/* @(#) $Id: qt/src/3rdparty/zlib/gzio.c   2.2.1   edited 2000-06-05 $ */
 
 #include <stdio.h>
 

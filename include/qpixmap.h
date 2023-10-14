@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qpixmap.h   2.2.0   edited 2000-08-25 $
+** $Id: qt/src/kernel/qpixmap.h   2.2.1   edited 2000-09-15 $
 **
 ** Definition of QPixmap class
 **
@@ -159,6 +159,10 @@ public:
     int numCols() const;
 #endif
 
+#if defined(Q_FULL_TEMPLATE_INSTANTIATION)
+    bool operator==( const QPixmap& ) const { return FALSE; }
+#endif
+
 protected:
     QPixmap( int w, int h, const uchar *data, bool isXbitmap );
     int metric( int ) const;
@@ -195,6 +199,8 @@ protected:
 	int id; // ### should use QPaintDevice::hd, since it is there
 	QRgb * clut;
 	int numcols;
+	int rw;
+	int rh;
 #endif
 	Optimization optim;
     } *data;

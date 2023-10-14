@@ -1,4 +1,4 @@
-.TH QPixmapCache 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.TH QPixmapCache 3qt "4 October 2000" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -109,7 +109,7 @@ If this function returns TRUE, do not use \fIpm\fR afterwards or keep references
 .PP
 Due to these dangers, we strongly recommend that you use insert(const QString&, const QPixmap&) instead. \fR
 .SH "void QPixmapCache::insert ( const QString & key, const QPixmap & pm ) \fC[static]\fR"
-Inserts a copy of the pixmap \fIpm\fR associated with \fIkey\fR into the cache. Returns TRUE if successful, or FALSE if the pixmap is too big for the cache.
+Inserts a copy of the pixmap \fIpm\fR associated with \fIkey\fR into the cache.
 .PP
 All pixmaps inserted by the Qt library have a key starting with "$qt..". Use something else for your own pixmaps.
 .PP

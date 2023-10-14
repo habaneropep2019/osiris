@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qaccel.cpp   2.2.0   edited 2000-08-25 $
+** $Id: qt/src/kernel/qaccel.cpp   2.2.1   edited 2000-09-13 $
 **
 ** Implementation of QAccel class
 **
@@ -394,7 +394,7 @@ void QAccel::setItemEnabled( int id, bool enable )
 
 
 /*!
-  Connects the accelerator item \a id to the slot \member of \a receiver.
+  Connects the accelerator item \a id to the slot \a member of \a receiver.
 
   \code
     a->connectItem( 201, mainView, SLOT(quit()) );

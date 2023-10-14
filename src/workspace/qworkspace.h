@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/workspace/qworkspace.h   2.2.0   edited 2000-08-26 $
+** $Id: qt/src/workspace/qworkspace.h   2.2.1   edited 2000-08-26 $
 **
 ** Definition of the QWorkspace class
 **

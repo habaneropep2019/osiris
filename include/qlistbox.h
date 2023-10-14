@@ -1,5 +1,5 @@
 /**********************************************************************
-** $Id: qt/src/widgets/qlistbox.h   2.2.0   edited 2000-08-25 $
+** $Id: qt/src/widgets/qlistbox.h   2.2.1   edited 2000-09-22 $
 **
 ** Definition of QListBox widget class
 **
@@ -309,8 +309,8 @@ private:	// Disabled copy constructor and operator=
 class Q_EXPORT QListBoxItem
 {
 public:
-    QListBoxItem( QListBox* listbox = 0);
-    QListBoxItem( QListBox* listbox, QListBoxItem *after);
+    QListBoxItem( QListBox* listbox = 0 );
+    QListBoxItem( QListBox* listbox, QListBoxItem *after );
     virtual ~QListBoxItem();
 
     virtual QString text() const;

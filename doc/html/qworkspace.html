@@ -114,7 +114,9 @@ problems with MDI applications.  Use this class cautiously.
 <p>Arranges all child windows in a tile pattern
 <p>See also  <a href="#0e59d0">cascade</a>().
 <h3 class="fn">void <a name="e6df04"></a>QWorkspace::windowActivated ( <a href="qwidget.html">QWidget</a> * w ) <code>[signal]</code></h3>
-<p>This signal is emitted when the window widget <em>w</em> becomes active.
+<p>This signal is emitted when the window widget <em>w</em> becomes active. Note that
+<em>w</em> can be null, and that more than one signal may be fired for one activation
+event.
 <p>See also  <a href="#66fb10">activeWindow</a>() and <a href="#1abb6e">windowList</a>().
 <h3 class="fn">QWidgetList <a name="1abb6e"></a>QWorkspace::windowList () const</h3>
 <p>Returns a list of all windows.
@@ -122,7 +124,7 @@ problems with MDI applications.  Use this class cautiously.
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.2.0"><nobr>
+<input type=hidden name="version" value="2.2.1"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -130,5 +132,5 @@ copyright &copy; 1995-2000
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.0</div>
+<td align="right"><div align="right">Qt version 2.2.1</div>
 </table></div></address></body></html>

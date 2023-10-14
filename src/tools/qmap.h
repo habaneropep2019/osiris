@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qmap.h   2.2.0   edited 2000-08-30 $
+** $Id: qt/src/tools/qmap.h   2.2.1   edited 2000-09-30 $
 **
 ** Definition of QMap class
 **
@@ -528,8 +528,8 @@ public:
     ConstIterator find ( const Key& k ) const
 	{ return sh->find( k ); }
     T& operator[] ( const Key& k ) {
-	detach(); Iterator it( sh->find( k ).node );
-	if ( it != sh->end() ) return it.data();
+	detach(); QMapNode<Key,T>* p = sh->find( k ).node;
+	if ( p != sh->end().node ) return p->data;
 	return insert( k, T() ).data(); }
     const T& operator[] ( const Key& k ) const
 	{ return sh->find( k ).data(); }
@@ -564,7 +564,7 @@ public:
     void clear() { if ( sh->count == 1 ) sh->clear(); else { sh->deref(); sh = new QMapPrivate<Key,T>; } }
 
 #if defined(Q_FULL_TEMPLATE_INSTANTIATION)
-    bool operator==( const QMap& ) const { return FALSE; }
+    bool operator==( const QMap<Key,T>& ) const { return FALSE; }
 #endif
 
 protected:

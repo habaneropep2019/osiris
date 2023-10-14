@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/networkprotocol/http.h   2.2.0   edited 2000-08-31 $
+** $Id: qt/examples/networkprotocol/http.h   2.2.1   edited 2000-08-31 $
 **
 ** Implementation of Network Extension Library
 **

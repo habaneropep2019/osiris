@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/doc/credits.doc   2.2.0   edited 2000-08-25 $
+** $Id: qt/doc/credits.doc   2.2.1   edited 2000-08-25 $
 **
 ** Credits file - all the qt-bugs stuff
 **
@@ -34,7 +34,7 @@
 **********************************************************************/
 
 #if defined(DEBUG)
-static char ident[] = "$Id: qt/doc/credits.doc   2.2.0   edited 2000-08-25 $";
+static char ident[] = "$Id: qt/doc/credits.doc   2.2.1   edited 2000-08-25 $";
 #endif
 
 // the list is up to an including /local/qt/mail/qt-bugs/1715

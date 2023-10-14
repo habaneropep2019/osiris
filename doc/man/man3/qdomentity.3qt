@@ -1,4 +1,4 @@
-.TH QDomEntity 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.TH QDomEntity 3qt "4 October 2000" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -61,6 +61,8 @@ For further information about the Document Objct Model see http://www.w3.org/TR/
 Constructs an empty entity.
 .SH "QDomEntity::QDomEntity ( const QDomEntity & x )"
 Copy constructor.
+.PP
+The data of the copy is shared: modifying one will also change the other. If you want to make a real copy, use cloneNode() instead.
 .SH "QDomEntity::~QDomEntity ()"
 Destructor.
 .SH "bool QDomEntity::isEntity () const \fC[virtual]\fR"
@@ -75,6 +77,8 @@ Reimplemented from QDomNode.
 For unparsed entities this function returns the name of the notation for the entity. For parsed entities this function returns QString::null.
 .SH "QDomEntity& QDomEntity::operator= ( const QDomEntity & x )"
 Assignment operator.
+.PP
+The data of the copy is shared: modifying one will also change the other. If you want to make a real copy, use cloneNode() instead.
 .SH "QString QDomEntity::publicId () const \fC[virtual]\fR"
 Returns the public identifier associated with this entity. If the public identifier was not specified QString::null is returned.
 .SH "QString QDomEntity::systemId () const \fC[virtual]\fR"

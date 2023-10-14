@@ -75,13 +75,10 @@ functions numAreaPoints() and getAreaPoints() are valid.
 <hr><h2>Member Function Documentation</h2>
 <h3 class="fn"><a name="c57394"></a>QCanvasPolygonalItem::QCanvasPolygonalItem ( <a href="qcanvas.html">QCanvas</a> * canvas )</h3>
 <p>Constructs a QCanvasPolygonalItem on <em>canvas.</em>
-Derived classes should call <a href="qcanvasitem.html#e034f2">addToChunks</a>()
-in their constructor once numAreaPoints() and getAreaPoints() are valid.
 <h3 class="fn"><a name="1ba1e8"></a>QCanvasPolygonalItem::~QCanvasPolygonalItem () <code>[virtual]</code></h3>
-<p>Destruct the QCanvasPolygonalItem.  Derived classes <em>must</em> remove the area
-from any chunks, as this destructor cannot call the virtual methods
-required to do so.  That is, they must call <a href="qcanvasitem.html#c2e7f6">hide</a>() in their
-destructor.
+<p>Destruct the QCanvasPolygonalItem.  Derived classes <em>must</em> 
+call <a href="qcanvasitem.html#c2e7f6">hide</a>() in their
+destructor, as this destructor cannot call the virtual methods.
 <h3 class="fn"><a href="qpointarray.html">QPointArray</a> <a name="3a4360"></a>QCanvasPolygonalItem::areaPoints () const <code>[virtual]</code></h3>
 <p>Must return the points bounding the shape.  Note that the returned
 points are <em>outside</em> the object, not touching it.
@@ -137,7 +134,7 @@ it uses the odd-even algorithm.
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.2.0"><nobr>
+<input type=hidden name="version" value="2.2.1"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -145,5 +142,5 @@ copyright &copy; 1995-2000
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.0</div>
+<td align="right"><div align="right">Qt version 2.2.1</div>
 </table></div></address></body></html>

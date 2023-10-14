@@ -30,7 +30,7 @@ remains with Trolltech.
 <hr>
 <pre>
 /****************************************************************************
-** &#36;Id&#58; qt/src/kernel/qrect.h   2.2.0   edited 2000-08-25 $
+** &#36;Id&#58; qt/src/kernel/qrect.h   2.2.1   edited 2000-09-12 $
 **
 ** Definition of QRect class
 **
@@ -270,18 +270,6 @@ inline int QRect::height() const
 inline QSize QRect::size() const
 { return QSize(x2-x1+1, y2-y1+1); }
 
-// worth inlining since proper is usually a constant (and usually FALSE)
-inline bool QRect::contains( const QPoint &amp;p, bool proper ) const
-{
-    if ( proper )
-        return p.x() &gt; x1 &amp;&amp; p.x() &lt; x2 &amp;&amp;
-               p.y() &gt; y1 &amp;&amp; p.y() &lt; y2;
-    else
-        return p.x() &gt;= x1 &amp;&amp; p.x() &lt;= x2 &amp;&amp;
-               p.y() &gt;= y1 &amp;&amp; p.y() &lt;= y2;
-}
-
-
 inline bool QRect::contains( int x, int y, bool proper ) const
 {
     if ( proper )
@@ -298,5 +286,5 @@ inline bool QRect::contains( int x, int y, bool proper ) const
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.0</div>
+<td align="right"><div align="right">Qt version 2.2.1</div>
 </table></div></address></body></html>

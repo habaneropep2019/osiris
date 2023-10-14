@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qstring.cpp   2.2.0   edited 2000-08-25 $
+** $Id: qt/src/tools/qstring.cpp   2.2.1   edited 2000-10-01 $
 **
 ** Implementation of the QString class and related Unicode functions
 **
@@ -12241,6 +12241,7 @@ QString::QString( const QChar* unicode, uint length )
 {
     if ( !unicode && !length ) {
 	d = shared_null ? shared_null : makeSharedNull();
+	d->ref();
     } else {
 	QChar* uc = QT_ALLOC_QCHAR_VEC( length );
 	if ( unicode )
@@ -12295,6 +12296,8 @@ void QString::real_detach()
 void QString::deref()
 {
     if ( d->deref() ) {
+	if ( d == shared_null )
+	    shared_null = 0;
 	delete d;
 	d = 0; // helps debugging
     }
@@ -13896,6 +13899,13 @@ ushort QString::toUShort( bool *ok, int base ) const
 /*!
   Returns the string converted to a <code>int</code> value.
 
+  \code
+  QString str("FF");
+  bool ok;
+  int hex = str.toInt( &ok, "16" ); // will return 255, and ok set to TRUE
+  int dec = str.toInt( &ok, "10" ); // will return 0, and ok set to FALSE
+  \endcode
+
   If \a ok is non-null, \a *ok is set to TRUE if there are no
   conceivable errors, and FALSE if the string is not a number at all,
   or if it has trailing garbage.
@@ -14146,8 +14156,8 @@ QString QString::number( uint n, int base )
 }
 
 /*!
-  This static function returns the printed value of \a n, formatted in the \f
-  format with \a prec precision.
+  This static function returns the printed value of \a n, formatted in the
+  \a f format with \a prec precision.
 
   \a f can be 'f', 'F', 'e', 'E', 'g' or 'G', all of which have the
   same meaning as for sprintf().
@@ -14574,6 +14584,7 @@ QString& QString::setUnicode( const QChar *unicode, uint len )
 	if ( d != shared_null ) {		// beware of nullstring being set to nullstring
 	    deref();
 	    d = shared_null ? shared_null : makeSharedNull();
+	    d->ref();
 	}
     } else if ( d->count != 1 || len > d->maxl ||
 	 ( len*4 < d->maxl && d->maxl > 4 ) ) {	// detach, grown or shrink
@@ -14947,7 +14958,9 @@ QDataStream &operator<<( QDataStream &s, const QString &str )
 QDataStream &operator>>( QDataStream &s, QString &str )
 {
 #ifdef QT_QSTRING_UCS_4
+#if defined(_CC_GNU_)
 #warning "operator>> not working properly"
+#endif
 #endif
     if ( s.version() == 1 ) {
 	QCString l;

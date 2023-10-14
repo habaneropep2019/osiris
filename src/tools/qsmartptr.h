@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qsmartptr.h   2.2.0   edited 2000-08-25 $
+** $Id: qt/src/tools/qsmartptr.h   2.2.1   edited 2000-09-23 $
 **
 ** Definition of QSmartPtr class
 **
@@ -50,12 +50,20 @@
 #endif
 
 
+//
+//  W A R N I N G
+//  -------------
+//
 // This template was added to the public releases by mistake. It has
 // never been mentioned in any Qt documentation, has never been
 // announced, and will go away again in Qt 3.0.
-
+//
+// We mean it.
+//
 // If you need QSmartPtr, write to qt-bugs@troll.no and we'll give you
 // a BSD-licensed copy of it.
+//
+//
 
 template< class T >
 class QSmartPtrPrivate : public QShared

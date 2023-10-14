@@ -1,4 +1,4 @@
-.TH QDomCDATASection 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.TH QDomCDATASection 3qt "4 October 2000" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -50,6 +50,8 @@ For further information about the Document Objct Model see http://www.w3.org/TR/
 Constructs an empty CDATA section. To create a CDATA section with content, use the QDomDocument::createCDATASection() function.
 .SH "QDomCDATASection::QDomCDATASection ( const QDomCDATASection & x )"
 Copy constructor.
+.PP
+The data of the copy is shared: modifying one will also change the other. If you want to make a real copy, use cloneNode() instead.
 .SH "QDomCDATASection::~QDomCDATASection ()"
 Destructor.
 .SH "bool QDomCDATASection::isCDATASection () const \fC[virtual]\fR"
@@ -62,6 +64,9 @@ Returns \fCCDATASection.\fR
 Reimplemented from QDomNode.
 .SH "QDomCDATASection& QDomCDATASection::operator= ( const QDomCDATASection & x )"
 Assigment operator.
+.PP
+The data of the copy is shared: modifying one will also change the other. If
+you want to make a real copy, use cloneNode() instead.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qdomcdatasection.html
 .SH COPYRIGHT

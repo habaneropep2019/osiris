@@ -1,4 +1,4 @@
-.TH QDomDocumentType 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.TH QDomDocumentType 3qt "4 October 2000" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -59,6 +59,8 @@ See also QDomDocument.
 Creates an empty QDomDocumentType object.
 .SH "QDomDocumentType::QDomDocumentType ( const QDomDocumentType & n )"
 Copy constructor.
+.PP
+The data of the copy is shared: modifying one will also change the other. If you want to make a real copy, use cloneNode() instead.
 .SH "QDomDocumentType::~QDomDocumentType ()"
 Destructor.
 .SH "QDomNamedNodeMap QDomDocumentType::entities () const \fC[virtual]\fR"
@@ -83,6 +85,9 @@ Reimplemented from QDomNode.
 Returns a map of all notations described in the DTD.
 .SH "QDomDocumentType& QDomDocumentType::operator= ( const QDomDocumentType & n )"
 Assignement operator.
+.PP
+The data of the copy is shared: modifying one will also change the other. If
+you want to make a real copy, use cloneNode() instead.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qdomdocumenttype.html
 .SH COPYRIGHT

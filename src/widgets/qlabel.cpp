@@ -1,5 +1,5 @@
 /**********************************************************************
-** $Id: qt/src/widgets/qlabel.cpp   2.2.0   edited 2000-08-25 $
+** $Id: qt/src/widgets/qlabel.cpp   2.2.1   edited 2000-10-04 $
 **
 ** Implementation of QLabel widget class
 **
@@ -274,13 +274,6 @@ void QLabel::setText( const QString &text )
     }
 #endif
 
-#ifndef QT_NO_RICHTEXT
-    if ( doc || align & WordBreak )
-	setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Preferred, TRUE ) );
-    else
-#endif	
-	setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum,  FALSE ) );
-
     updateLabel( osh );
 }
 
@@ -401,8 +394,9 @@ void QLabel::setAlignment( int alignment )
     if ( lbuddy )
 	align = alignment | ShowPrefix;
     else
-#endif	
+#endif
 	align = alignment;
+
     updateLabel( osh );
 }
 
@@ -648,7 +642,7 @@ void QLabel::resizeEvent( QResizeEvent* e )
 	    reg = reg.unite( QRect( x + w, cr.y(),  cr.right() - x - w, cr.height() ) );
 	if ( y + h < cr.bottom() )
 	    reg = reg.unite( QRect( cr.x(), y +  h, cr.width(), cr.bottom() - y - h ) );
-				
+
 	erase( reg );
     }
 }
@@ -734,7 +728,7 @@ void QLabel::drawContents( QPainter *p )
 		d->pix->convertFromImage( d->img->smoothScale( cr.width(), cr.height() ) );
 	    pix = d->pix;
 	}
-#endif	
+#endif
 	// ordinary text or pixmap label
 	style().drawItem( p, cr.x(), cr.y(), cr.width(), cr.height(),
 			  align, colorGroup(), isEnabled(),
@@ -863,13 +857,30 @@ void QLabel::drawContentsMask( QPainter *p )
 
 void QLabel::updateLabel( QSize oldSizeHint )
 {
+    QSizePolicy policy = sizePolicy();
+    if (
+#ifndef QT_NO_RICHTEXT
+	doc ||
+#endif
+	(align & WordBreak) ) {
+	if ( policy == QSizePolicy( QSizePolicy::Minimum,
+				    QSizePolicy::Minimum ) )
+	    policy = QSizePolicy( QSizePolicy::Preferred,
+				  QSizePolicy::Preferred, TRUE );
+	else
+	    policy.setHeightForWidth( TRUE );
+    } else {
+	policy.setHeightForWidth( FALSE );
+    }
+    setSizePolicy( policy );
+    QRect cr = contentsRect();
     if ( sizeHint() != oldSizeHint )
 	updateGeometry();
     if ( autoresize ) {
 	adjustSize();
-        update();
+        update(cr.x(), cr.y(), cr.width(), cr.height());
     } else {
-        update();
+        update(cr.x(), cr.y(), cr.width(), cr.height());
 	updateGeometry();
 	if ( autoMask() )
 	    updateMask();
@@ -1149,7 +1160,7 @@ bool QLabel::hasScaledContents() const
  */
 void QLabel::setScaledContents( bool enable )
 {
-    if ( (bool)scaledcontents == enable )	
+    if ( (bool)scaledcontents == enable )
 	return;
     scaledcontents = enable;
     if ( !enable ) {

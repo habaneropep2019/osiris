@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qthread.h   2.2.0   edited 2000-08-29 $
+** $Id: qt/src/kernel/qthread.h   2.2.1   edited 2000-09-13 $
 **
 ** Definition of QThread class
 **
@@ -51,6 +51,7 @@ const int Q_MUTEX_RECURSIVE = 1;
 class Q_EXPORT QMutex : public Qt
 {
     friend class QWaitCondition;
+    friend class QWaitConditionPrivate;
 
 public:
     QMutex(bool recursive = FALSE);

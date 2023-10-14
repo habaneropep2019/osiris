@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qwidget.h   2.2.0   edited 2000-08-29 $
+** $Id: qt/src/kernel/qwidget.h   2.2.1   edited 2000-08-29 $
 **
 ** Definition of QWidget class
 **

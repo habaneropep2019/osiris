@@ -49,7 +49,11 @@ extern void qt_wait_for_window_manager( QWidget* );
 extern "C" {
 #endif
 
+#if defined(_OS_IRIX_) && defined(_CC_GNU_)
+static void signalHandler()
+#else
 static void signalHandler( int )
+#endif
 {
     QFile f( QDir::homeDirPath() + "/.designerargs" );
     f.open( IO_ReadOnly );
@@ -100,7 +104,10 @@ public:
     QDesignerApplication( int argc, char** argv )
 	: QApplication( argc, argv )
     {
-	DESIGNER_OPENFILE = RegisterWindowMessage("QT_DESIGNER_OPEN_FILE");
+		if ( winVersion() & Qt::WV_NT_based )
+			DESIGNER_OPENFILE = RegisterWindowMessage((TCHAR*)"QT_DESIGNER_OPEN_FILE");
+		else
+			DESIGNER_OPENFILE = RegisterWindowMessageA("QT_DESIGNER_OPEN_FILE");
     }
 
 protected:
@@ -128,7 +135,7 @@ bool QDesignerApplication::winEventFilter( MSG *msg )
 	    if ( arg[0] != '-' ) {
 		QObjectList* l = MainWindow::self->queryList( "FormWindow" );
 		FormWindow* fw = (FormWindow*) l->first();
-		FormWindow* totop;
+		FormWindow* totop = 0;
 		bool haveit = FALSE;
 		while ( fw ) {
 		    haveit = haveit || fw->fileName() == arg;
@@ -141,7 +148,7 @@ bool QDesignerApplication::winEventFilter( MSG *msg )
 		if ( !haveit ) {
 		    FlashWindow( MainWindow::self->winId(), TRUE );
 		    MainWindow::self->openFile( arg );
-		} else {
+		} else if ( totop ) {
 		    totop->setFocus();
 		}
 		delete l;
@@ -158,17 +165,25 @@ bool QDesignerApplication::winEventFilter( MSG *msg )
 extern "C" {
 #endif
 
+#if defined(_OS_IRIX_) && defined(_CC_GNU_)
+static void exitHandler()
+#else
 static void exitHandler( int )
+#endif
 {
     QDir d( QDir::homeDirPath() );
     d.remove( ".designerpid" );
     exit( -1 );
 }
 
+#if defined(_OS_IRIX_) && defined(_CC_GNU_)
+static void crashHandler()
+#else
 static void crashHandler( int )
+#endif
 {
     MainWindow::self->saveAllTemp();
-    ::exit( -1 ); 
+    ::exit( -1 );
 }
 
 #if defined(Q_C_CALLBACKS)
@@ -179,7 +194,9 @@ static void crashHandler( int )
 
 int main( int argc, char *argv[] )
 {
+#ifdef NO_DEBUG
     signal( SIGSEGV, crashHandler );
+#endif
 
     QApplication::setColorSpec( QApplication::ManyColor );
 	
@@ -216,7 +233,10 @@ int main( int argc, char *argv[] )
 		if ( !GetProcessVersion( pidStr.toUInt() ) ) {		
 		    creatPid = TRUE;
 		} else {
-		    SendMessage( HWND_BROADCAST, RegisterWindowMessage("QT_DESIGNER_OPEN_FILE"), 0, 0 );
+			if ( a.winVersion() & Qt::WV_NT_based )
+				SendMessage( HWND_BROADCAST, RegisterWindowMessage((TCHAR*)"QT_DESIGNER_OPEN_FILE"), 0, 0 );
+			else
+				SendMessage( HWND_BROADCAST, RegisterWindowMessageA("QT_DESIGNER_OPEN_FILE"), 0, 0 );
 		    return 0;
 		}
 #endif
@@ -257,6 +277,7 @@ int main( int argc, char *argv[] )
 	splash->setFrameStyle( QFrame::WinPanel | QFrame::Raised );
 	splash->setPixmap( splashScreen() );
 	splash->adjustSize();
+	splash->setCaption( "Qt Designer by Trolltech" );
 	QRect r = QApplication::desktop()->geometry();
 	splash->move( r.center() - splash->rect().center() );
 	splash->show();

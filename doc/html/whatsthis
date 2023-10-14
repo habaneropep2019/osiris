@@ -254,6 +254,7 @@ The structures in a QTabBar. | QTab
 The t widget is a namespace for miscellaneous identifiers that need to be global-like. | Qt
 The ueue class is a template widget that provides a queue. | QQueue
 This class is used to define operations for network protocols and return the state, arguments, etc. | QNetworkOperation
+This class provides communication capabilities between several clients. | PCOPChannel
 This class provides conversion to and from the Chinese GBK encoding. | QGbkCodec
 This is an abstract base class for implementing tables | QTableView
 This is the base class for network protocols which provides a common API for network protocols. | QNetworkProtocol

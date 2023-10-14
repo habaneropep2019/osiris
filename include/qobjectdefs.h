@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qobjectdefs.h   2.2.0   edited 2000-08-25 $
+** $Id: qt/src/kernel/qobjectdefs.h   2.2.1   edited 2000-09-17 $
 **
 ** Macros and definitions related to QObject
 **
@@ -45,6 +45,7 @@
 
 // The following macros are our "extensions" to C++
 // They are used, strictly speaking, only by the moc.
+// Only Q_OBJECT is used by the compiler.
 
 #ifndef QT_NO_TRANSLATION
 #define QT_TR_FUNCTION static QString tr(const char*); \

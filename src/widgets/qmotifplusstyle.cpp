@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qmotifplusstyle.cpp   2.2.0   edited 2000-08-25 $
+** $Id: qt/src/widgets/qmotifplusstyle.cpp   2.2.1   edited 2000-09-23 $
 **
 ** Implementation of QMotifPlusStyle class
 **
@@ -254,7 +254,8 @@ void QMotifPlusStyle::polish(QWidget *widget)
 	((QFrame *) widget)->frameStyle() == QFrame::Panel)
 	((QFrame *) widget)->setFrameStyle(QFrame::WinPanel);
 
-    if (widget->inherits("QMenuBar"))
+    if (widget->inherits("QMenuBar") &&
+	((QMenuBar *) widget)->frameStyle() != QFrame::NoFrame)
 	((QMenuBar *) widget)->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
 
     if (widget->inherits("QToolBar"))
@@ -1124,9 +1125,8 @@ void QMotifPlusStyle::drawTab(QPainter *p, const QTabBar *tabbar, QTab *tab, boo
     p->fillRect(fr.left() + 1, fr.top() + 1, fr.width() - 2, fr.height() - 2,
 		(selected) ? g.brush(QColorGroup::Button) : g.brush(QColorGroup::Mid));
 
-    if (tabbar->shape() == QTabBar::RoundedAbove ||
-	tabbar->shape() == QTabBar::TriangularAbove) {
-	// tabs on top
+    if (tabbar->shape() == QTabBar::RoundedAbove) {
+	// "rounded" tabs on top
 
 	fr.setBottom(fr.bottom() - 1);
 
@@ -1144,8 +1144,8 @@ void QMotifPlusStyle::drawTab(QPainter *p, const QTabBar *tabbar, QTab *tab, boo
 
 	p->setPen(black);
 	p->drawLine(fr.right(), fr.top() + 1, fr.right(), fr.bottom() - 1);
-    } else {
-	// tabs on bottom
+    } else if (tabbar->shape() == QTabBar::RoundedBelow) {
+	// "rounded" tabs on bottom
 
 	fr.setTop(fr.top() + 1);
 
@@ -1179,10 +1179,14 @@ void QMotifPlusStyle::drawTab(QPainter *p, const QTabBar *tabbar, QTab *tab, boo
 		    fr.left(), fr.bottom() - 2);
 	if (! selected && fr.left() == 0)
 	    p->drawPoint(fr.left(), fr.top() - 1);
+    } else {
+	// triangular drawing code
+	QCommonStyle::drawTab(p, tabbar, tab, selected);
     }
 
     p->setPen(oldpen);
 }
+
 
 /*!
   \reimp
@@ -1252,13 +1256,14 @@ bool QMotifPlusStyle::eventFilter(QObject *object, QEvent *event)
 			d->hoverWidget->repaint(FALSE);
 		    } else if (object->inherits("QPushButton")) {
 			QPalette pal = d->hoverWidget->palette();
-			
+
 			if (d->hoverWidget->ownPalette())
 			    d->hoverPalette = new QPalette(pal);
-			
+
 			pal.setColor(QPalette::Active, QColorGroup::Button,
 				     d->prelight_palette.color(QPalette::Active,
 							       QColorGroup::Button));
+
 			d->hoverWidget->setPalette(pal);
 		    } else
 			d->hoverWidget->setPalette(d->prelight_palette);
@@ -1278,8 +1283,8 @@ bool QMotifPlusStyle::eventFilter(QObject *object, QEvent *event)
 		    d->hoverPalette = 0;
 		} else {
 		    d->hoverWidget->unsetPalette();
-		}	
-		
+		}
+
 		d->hoverWidget = 0;
 	    }
 

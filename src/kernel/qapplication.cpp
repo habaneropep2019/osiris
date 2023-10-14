@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qapplication.cpp   2.2.0   edited 2000-08-29 $
+** $Id: qt/src/kernel/qapplication.cpp   2.2.1   edited 2000-09-30 $
 **
 ** Implementation of QApplication class
 **
@@ -580,11 +580,6 @@ QApplication::QApplication( int &argc, char **argv, Type type )
 
 void QApplication::construct( int &argc, char **argv, Type type )
 {
-
-#if defined(QT_THREAD_SUPPORT)
-    qt_mutex = new QMutex(TRUE);
-#endif
-
     qt_is_gui_used = (type != Tty);
     init_precmdline();
     static char *empty = (char*)"";
@@ -594,6 +589,11 @@ void QApplication::construct( int &argc, char **argv, Type type )
     }
     qt_init( &argc, argv, type );   // Must be called before initialize()
     process_cmdline( &argc, argv );
+
+#if defined(QT_THREAD_SUPPORT)
+    qt_mutex = new QMutex(TRUE);
+#endif
+
     initialize( argc, argv );
 
 }
@@ -704,7 +704,8 @@ void QApplication::initialize( int argc, char **argv )
 #endif
 
 #if defined(QT_THREAD_SUPPORT)
-    qApp->lock();
+    if (qt_is_gui_used)
+	qApp->lock();
 #endif
 }
 
@@ -2329,21 +2330,31 @@ void QApplication::setActiveWindow( QWidget* act )
     }
 
 #ifndef QT_NO_PALETTE
+    //### in 3.0, propagate activated event to all children
     QWidgetIntDictIt it( *((QWidgetIntDict*)QWidget::mapper) );
     register QWidget *w;
     while ( (w=it.current()) ) {		// for all widgets...
 	++it;
-	if ( (w->topLevelWidget() == old_active || w->topLevelWidget()==active_window )
-	    && w->palette().active() != w->palette().inactive() ) {
-	    if ( w->palette().active() != w->palette().inactive() &&
-		( w->inherits( "QPopupMenu" ) || w->inherits( "QMenuBar" ) ||
-		  w->parentWidget() &&
-		( qstrcmp( w->name(), "qt_clipped_viewport" ) == 0 ||
-		  qstrcmp( w->name(), "qt_viewport" ) == 0 ) &&
-		( w->parentWidget()->inherits( "QListView" ) ||
-		  w->parentWidget()->inherits( "QIconView" ) ||
-		  w->parentWidget()->inherits( "QListBox" ) ) ) )
-		    w->update();
+	if ( w->topLevelWidget() == old_active || w->topLevelWidget()==active_window ) {
+	    QColorGroup acg = w->palette().active();
+	    QColorGroup icg = w->palette().inactive();
+	    if ( acg != icg && 
+		 ( acg.background() != icg.background() ||
+		   acg.base() != icg.base() ||
+		   acg.button() != icg.button() ||
+		   acg.text() != icg.text() ||
+		   acg.foreground() != icg.foreground() ||
+		   acg.brightText() != icg.brightText() ||
+		   acg.buttonText() != icg.buttonText() ||
+		   acg.dark() != icg.dark() ||
+		   acg.light() != icg.light() ||
+		   acg.mid() != icg.mid() ||
+		   acg.midlight() != icg.midlight() ||
+		   acg.shadow() != icg.shadow() ||
+		   (  w->parentWidget() && w->parentWidget()->inherits( "QScrollView" ) &&
+		      ( qstrcmp( w->name(), "qt_clipped_viewport" ) == 0 ||
+			qstrcmp( w->name(), "qt_viewport" ) == 0 ) ) ) )
+		w->update();
 	}
     }
 #endif

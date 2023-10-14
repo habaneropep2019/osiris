@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qscrollview.cpp   2.2.0   edited 2000-08-30 $
+** $Id: qt/src/widgets/qscrollview.cpp   2.2.1   edited 2000-09-28 $
 **
 ** Implementation of QScrollView class
 **
@@ -53,6 +53,9 @@ const int coord_limit = 4000;
 static const int autoscroll_margin = 16;
 static const int initialScrollTime = 30;
 static const int initialScrollAccel = 5;
+
+static const QScrollView::ResizePolicy StretchOne=(QScrollView::ResizePolicy)4;
+					//Becomes member in 3.0
 
 struct QSVChildRec {
     QSVChildRec(QWidget* c, int xx, int yy) :
@@ -240,13 +243,13 @@ struct QScrollViewData {
     }
     void autoResize(QScrollView* sv)
     {
-	if ( policy > QScrollView::Manual ) {
+	if ( policy == QScrollView::AutoOne ) {
 	    QSVChildRec* r = children.first();
 	    if (r)
-	        sv->resizeContents(r->child->width(),r->child->height());
+		sv->resizeContents(r->child->width(),r->child->height());
 	}
     }
-    void autoResizeHint()
+    void autoResizeHint(QScrollView* sv)
     {
 	if ( policy == QScrollView::AutoOne ) {
 	    QSVChildRec* r = children.first();
@@ -255,9 +258,26 @@ struct QScrollViewData {
 	        if ( s.isValid() )
 		    r->child->resize(s);
 	    }
+	} else if ( policy == StretchOne ) {
+	    QSVChildRec* r = children.first();
+	    if (r) {
+		QSize sh = r->child->sizeHint();
+	        sv->resizeContents( sh.width(), sh.height() );
+	    }
 	}
     }
 
+    void viewportResized( int w, int h ) {
+	if ( policy == StretchOne ) {
+	    QSVChildRec* r = children.first();
+	    if (r) {
+		QSize sh = r->child->sizeHint();
+		r->child->resize( QMAX(w,sh.width()), QMAX(h,sh.height()) );
+	    }
+	    
+	}
+    }
+    
     QScrollBar	hbar;
     QScrollBar	vbar;
     QWidget	viewport;
@@ -475,8 +495,11 @@ flag explicitly.
   <li> \c AutoOne - if there is only child widget, the view stays
   the size of that widget.  Otherwise, the behaviour is undefined.
 
+
   </ul>
 */
+//####  The widget will be resized to its sizeHint() when a LayoutHint event
+//#### is received
 
 /*!
 
@@ -487,6 +510,8 @@ flag explicitly.
   WPaintClever are propagated to the viewport() widget. The other
   widget flags are propagated to the parent constructor as usual.
 */
+
+
 
 QScrollView::QScrollView( QWidget *parent, const char *name, WFlags f ) :
     QFrame( parent, name, f & (~WNorthWestGravity) & (~WRepaintNoErase), FALSE )
@@ -778,6 +803,7 @@ void QScrollView::updateScrollBars()
 	clipper()->setGeometry( lmarg, tmarg,
                                 w-vsbExt-lmarg-rmarg,
                                 bottom-tmarg-bmarg );
+	d->viewportResized( w-vsbExt-lmarg-rmarg, bottom-tmarg-bmarg );
 	if ( style() == WindowsStyle )
 	    changeFrameRect(QRect(0, 0, w, h) );
 	else
@@ -808,6 +834,7 @@ void QScrollView::updateScrollBars()
 	    changeFrameRect(QRect(0, 0, w, bottom));
 	clipper()->setGeometry( lmarg, tmarg,
 				 w-lmarg-rmarg, bottom-tmarg-bmarg );
+	d->viewportResized( w-lmarg-rmarg, bottom-tmarg-bmarg );
     }
     if ( d->corner ) {
 	if ( style() == WindowsStyle )
@@ -1094,18 +1121,19 @@ void QScrollView::addChild(QWidget* child, int x, int y)
 	if (r) {
 	    r->moveTo(this,x,y,d->clipped_viewport);
 	    if ( d->policy > Manual ) {
-		d->autoResizeHint();
+		d->autoResizeHint(this);
 		d->autoResize(this); // #### better to just deal with this one widget!
 	    }
 	    return;
 	}
     }
 
-    if ( d->children.isEmpty() && d->policy == Default ) {
-	setResizePolicy( AutoOne );
+    if ( d->children.isEmpty() && d->policy != Manual ) {
+	if ( d->policy == Default )
+	    setResizePolicy( AutoOne );
 	child->installEventFilter( this );
-    } else if ( d->policy > Manual ) {
-	child->removeEventFilter( this );
+    } else if ( d->policy == AutoOne ) {
+	child->removeEventFilter( this ); //#### ?????
         setResizePolicy( Manual );
     }
     if ( child->parentWidget() != viewport() ) {
@@ -1114,7 +1142,7 @@ void QScrollView::addChild(QWidget* child, int x, int y)
     d->addChildRec(child,x,y)->hideOrShow(this, d->clipped_viewport);
 
     if ( d->policy > Manual ) {
-	d->autoResizeHint();
+	d->autoResizeHint(this);
 	d->autoResize(this); // #### better to just deal with this one widget!
     }
 }
@@ -1236,7 +1264,7 @@ bool QScrollView::eventFilter( QObject *obj, QEvent *e )
 	    removeChild((QWidget*)((QChildEvent*)e)->child());
 	    break;
 	case QEvent::LayoutHint:
-	    d->autoResizeHint();
+	    d->autoResizeHint(this);
 	    break;
 	default:
 	    break;

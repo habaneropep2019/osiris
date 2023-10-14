@@ -1,4 +1,4 @@
-.TH QDomElement 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.TH QDomElement 3qt "4 October 2000" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -98,6 +98,8 @@ For further information about the Document Objct Model see http://www.w3.org/TR/
 Constructs an empty element. Use the QDomDocument::createElement() function to construct elements with content.
 .SH "QDomElement::QDomElement ( const QDomElement & x )"
 Copy constructor.
+.PP
+The data of the copy is shared: modifying one will also change the other. If you want to make a real copy, use cloneNode() instead.
 .SH "QDomElement::~QDomElement ()"
 Destructor.
 .SH "QString QDomElement::attribute ( const QString & name, const QString & defValue = QString::null ) const"
@@ -130,6 +132,8 @@ Reimplemented from QDomNode.
 Calling normalize() on an element brings all its children into a standard form. This means, that adjacent QDomText objects will be merged to one text object (QDomCDATASection nodes are not merged).
 .SH "QDomElement& QDomElement::operator= ( const QDomElement & x )"
 Assignment operator.
+.PP
+The data of the copy is shared: modifying one will also change the other. If you want to make a real copy, use cloneNode() instead.
 .SH "void QDomElement::removeAttribute ( const QString & name )"
 Removes the attribute with the name \fIname\fR from this element.
 .PP

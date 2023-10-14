@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qaction.cpp   2.2.0   edited 2000-08-25 $
+** $Id: qt/src/widgets/qaction.cpp   2.2.1   edited 2000-09-11 $
 **
 ** Implementation of QAction class
 **
@@ -650,7 +650,9 @@ bool QAction::addTo( QWidget* w )
  */
 void QAction::showStatusText( const QString& text )
 {
-    QObject* par = parent();
+    QObject* par;
+    if ( ( par = parent() ) && par->inherits( "QActionGroup" ) )
+	par = par->parent();
     if ( !par || !par->isWidgetType() )
 	return;
     QObjectList* l = ( (QWidget*)par )->topLevelWidget()->queryList("QStatusBar");

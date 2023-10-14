@@ -1,5 +1,5 @@
 /**********************************************************************
-** $Id: qt/src/canvas/qcanvas.cpp   2.2.0   edited 2000-08-28 $
+** $Id: qt/src/canvas/qcanvas.cpp   2.2.1   edited 2000-09-28 $
 **
 ** Implementation of QCanvas and associated classes
 **
@@ -527,6 +527,9 @@ void qt_unview(QCanvas* c)
 QCanvas::~QCanvas()
 {
     qt_unview(this);
+    delete [] chunks;
+    delete [] grid;
+    delete d;
 }
 
 /*!
@@ -1021,7 +1024,7 @@ void QCanvas::drawArea(const QRect& inarea, QPainter* p, bool double_buffer)
 	if ( p ) {
 	    painter.setClipRect(QRect(0,0,area.width(),area.height()));
 	} else {
-	    //painter.setClipRegion(rgn);
+	    painter.setClipRegion(rgn);
 	}
 	drawBackground(painter,area);
 	allvisible.drawUnique(painter);
@@ -1304,7 +1307,7 @@ void QCanvas::setTiles( QPixmap p,
 {
     htiles = h;
     vtiles = v;
-    delete grid;
+    delete[] grid;
     if ( h && v ) {
 	grid = new ushort[h*v];
 	memset( grid, 0, h*v*sizeof(ushort) );
@@ -1325,7 +1328,7 @@ void QCanvas::setTiles( QPixmap p,
 /*!
   \fn int QCanvas::tile( int x, int y ) const
 
-  Returns the tile at (\a x,\a y). Initially, all tiles are 0.
+  Returns the tile at (\a x, \a y). Initially, all tiles are 0.
 
   \warning The parameters must be within range.
 
@@ -1839,7 +1842,7 @@ static bool collision_double_dispatch( const QCanvasSprite* s1,
     if ( s1 && s2 ) {
 	// a
 	return qt_testCollision(s1,s2);
-    } else if ( (r1 || t2 || s1) && (r2 || t2 || s2) ) {
+    } else if ( (r1 || t1 || s1) && (r2 || t2 || s2) ) {
 	// b
 	QRect rc1 = i1->boundingRectAdvanced();
 	QRect rc2 = i2->boundingRectAdvanced();
@@ -2288,7 +2291,7 @@ QCanvasPixmapArray::QCanvasPixmapArray(QList<QPixmap> list, QList<QPoint> hotspo
 {
     if (list.count() != hotspots.count()) {
 	qWarning("QCanvasPixmapArray: lists have different lengths");
-	delete [] img;
+	reset();
 	img = 0;
     } else {
 	list.first();
@@ -2397,7 +2400,7 @@ Returns the length of the array.
 
 
 /*!
-  Moves the item to (\a x,\a y) by calling the moveBy()
+  Moves the item to (\a x, \a y) by calling the moveBy()
   virtual function.
 */
 void QCanvasItem::move(double x, double y)
@@ -2758,8 +2761,6 @@ QSize QCanvasView::sizeHint() const
 
 /*!
   Constructs a QCanvasPolygonalItem on \a canvas.
-  Derived classes should call addToChunks()
-  in their constructor once numAreaPoints() and getAreaPoints() are valid.
 */
 QCanvasPolygonalItem::QCanvasPolygonalItem(QCanvas* canvas) :
     QCanvasItem(canvas)
@@ -2768,10 +2769,9 @@ QCanvasPolygonalItem::QCanvasPolygonalItem(QCanvas* canvas) :
 }
 
 /*!
-  Destruct the QCanvasPolygonalItem.  Derived classes \e must remove the area
-  from any chunks, as this destructor cannot call the virtual methods
-  required to do so.  That is, they must call hide() in their
-  destructor.
+  Destruct the QCanvasPolygonalItem.  Derived classes \e must 
+  call hide() in their
+  destructor, as this destructor cannot call the virtual methods.
 */
 QCanvasPolygonalItem::~QCanvasPolygonalItem()
 {
@@ -3188,7 +3188,7 @@ void QCanvasLine::setPen(QPen p)
 */
 
 /*!
-  Sets the ends of the line to (\a xa,\a ya) and (\a xb,\a yb).
+  Sets the ends of the line to (\a xa, \a ya) and (\a xb, \a yb).
 */
 void QCanvasLine::setPoints(int xa, int ya, int xb, int yb)
 {

@@ -1,4 +1,4 @@
-.TH QDomProcessingInstruction 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.TH QDomProcessingInstruction 3qt "4 October 2000" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -57,6 +57,8 @@ For further information about the Document Objct Model see http://www.w3.org/TR/
 Constructs an empty processing instruction. Use QDomDocument::createProcessingInstruction() to create a processing instruction with content.
 .SH "QDomProcessingInstruction::QDomProcessingInstruction ( const QDomProcessingInstruction & x )"
 Copy constructor.
+.PP
+The data of the copy is shared: modifying one will also change the other. If you want to make a real copy, use cloneNode() instead.
 .SH "QDomProcessingInstruction::~QDomProcessingInstruction ()"
 Destructor.
 .SH "QString QDomProcessingInstruction::data () const \fC[virtual]\fR"
@@ -73,6 +75,8 @@ Returns \fCProcessingInstructionNode.\fR
 Reimplemented from QDomNode.
 .SH "QDomProcessingInstruction& QDomProcessingInstruction::operator= ( const QDomProcessingInstruction & x )"
 Assignment operator.
+.PP
+The data of the copy is shared: modifying one will also change the other. If you want to make a real copy, use cloneNode() instead.
 .SH "void QDomProcessingInstruction::setData ( const QString & d ) \fC[virtual]\fR"
 Sets the data contained in the processing instruction.
 .PP

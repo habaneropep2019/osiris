@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/networkprotocol/nntp.cpp   2.2.0   edited 2000-08-31 $
+** $Id: qt/examples/networkprotocol/nntp.cpp   2.2.1   edited 2000-08-31 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -87,6 +87,10 @@ bool Nntp::checkConnection( QNetworkOperation * )
 
     // seems that there is no chance to connect
     if ( commandSocket->isOpen() )
+	return FALSE;
+
+    // don't call connectToHost() if we are already trying to connect
+    if ( commandSocket->state() == QSocket::Connecting )
 	return FALSE;
 
     // start connecting

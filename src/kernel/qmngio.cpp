@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qmngio.cpp   2.2.0   edited 2000-08-25 $
+** $Id: qt/src/kernel/qmngio.cpp   2.2.1   edited 2000-09-16 $
 **
 ** Implementation of MNG QImage IOHandler
 **
@@ -341,11 +341,11 @@ static mng_bool settimer( mng_handle handle, mng_uint32  iMsecs )
     return ((QMNGFormat*)mng_get_userdata(handle))->settimer(iMsecs);
 }
 
-static mng_ptr memalloc(mng_uint32 iLen)
+static mng_ptr memalloc(mng_size_t iLen)
 {
     return calloc(1,iLen);
 }
-static void memfree(mng_ptr iPtr, mng_uint32 /*iLen*/)
+static void memfree(mng_ptr iPtr, mng_size_t /*iLen*/)
 {
     free(iPtr);
 }

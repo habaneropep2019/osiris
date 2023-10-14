@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qmovie.cpp   2.2.0   edited 2000-08-25 $
+** $Id: qt/src/kernel/qmovie.cpp   2.2.1   edited 2000-09-27 $
 **
 ** Implementation of movie classes
 **
@@ -376,7 +376,6 @@ void QMovieFilePrivate::updatePixmapFromImage(const QPoint& off,
 	    xh=xscale*((double)area.left());
 	    yh=yscale*((double)area.top());
 	    mygfx->setSource(&mypixmap);
-	    mygfx->setSourceOffset(0,0);
 	    mygfx->setAlphaType(QGfx::IgnoreAlpha);
 	    mygfx->stretchBlt(0,0,display_widget->width(),
 			      display_widget->height(),mypixmap.width(),
@@ -439,6 +438,7 @@ void QMovieFilePrivate::frameDone(const QPoint& p,
     const QImage& gimg = decoder->image();
     if (framenumber==0)
 	emit sizeChanged(gimg.size());
+    valid_area = valid_area.unite(QRect(p,rect.size()));
     updatePixmapFromImage(p,rect);
     emit areaChanged(QRect(p,rect.size()));
     emit dataStatus(QMovie::EndOfFrame);
@@ -765,8 +765,9 @@ const QPixmap& QMovie::framePixmap() const
 
 /*!
   Returns the current frame of the movie, as a QImage.
-  It is not generally useful to
-  keep a copy of this pixmap.
+  It is not generally useful to keep a copy of this image.
+  Also note that you must not call this function if the
+  movie is finished(), as the image is not them available.
 
   \sa framePixmap()
 */

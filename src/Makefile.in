@@ -3,12 +3,12 @@
 ####### Compiler, tools and options
 
 CXX	=	$(SYSCONF_CXX) $(QT_CXX_MT)
-CXXFLAGS=	$(SYSCONF_CXXFLAGS_QT) $(SYSCONF_CXXFLAGS_X11) $(SYSCONF_CXXFLAGS) $(SYSCONF_CXXFLAGS_LIB) $(QT_CXXFLAGS_OPT)
+CXXFLAGS=	$(SYSCONF_CXXFLAGS_OPENGL) $(SYSCONF_CXXFLAGS_QT) $(SYSCONF_CXXFLAGS_X11) $(SYSCONF_CXXFLAGS) $(SYSCONF_CXXFLAGS_LIB) $(QT_CXXFLAGS_OPT)
 CC	=	$(SYSCONF_CC) $(QT_C_MT)
 CFLAGS	=	$(SYSCONF_CFLAGS) $(SYSCONF_CFLAGS_LIB) $(QT_CFLAGS_OPT)
 INCPATH =	
-LFLAGS	=	$(SYSCONF_LFLAGS_X11) $(SYSCONF_RPATH_X11) $(SYSCONF_LFLAGS) $(QT_LFLAGS_MT)
-LIBS	=	$(SUBLIBS)  $(SYSCONF_LIBS_QTLIB) $(SYSCONF_LIBS_X11)
+LFLAGS	=	$(SYSCONF_LFLAGS_OPENGL) $(SYSCONF_LFLAGS_X11) $(SYSCONF_RPATH_X11) $(SYSCONF_LFLAGS) $(QT_LFLAGS_MT)
+LIBS	=	$(SUBLIBS) $(SYSCONF_LIBS_OPENGL) $(SYSCONF_LIBS_X11) $(SYSCONF_LIBS_QTLIB)
 MOC	=	$(SYSCONF_MOC)
 UIC	=	$(SYSCONF_UIC)
 
@@ -17,7 +17,7 @@ UIC	=	$(SYSCONF_UIC)
 DESTDIR = ../lib/
 VER_MAJ = 2
 VER_MIN = 2
-VER_PATCH = 0
+VER_PATCH = 1
 TARGET	= qt$(QT_THREAD_SUFFIX)
 TARGET1 = lib$(TARGET).so.$(VER_MAJ)
 
@@ -2043,9 +2043,6 @@ kernel/qthread_unix.o: kernel/qthread_unix.cpp \
 		tools/qgarray.h \
 		tools/qshared.h \
 		kernel/qnamespace.h \
-		tools/qlist.h \
-		tools/qglist.h \
-		tools/qcollection.h \
 		kernel/qapplication.h \
 		kernel/qwidget.h \
 		kernel/qobject.h \
@@ -2055,6 +2052,9 @@ kernel/qthread_unix.o: kernel/qthread_unix.cpp \
 		kernel/qsize.h \
 		kernel/qpoint.h \
 		kernel/qmime.h \
+		tools/qlist.h \
+		tools/qglist.h \
+		tools/qcollection.h \
 		tools/qstringlist.h \
 		tools/qvaluelist.h \
 		tools/qdatastream.h \
@@ -2074,8 +2074,7 @@ kernel/qthread_unix.o: kernel/qthread_unix.cpp \
 		tools/qgdict.h \
 		kernel/qtranslator.h \
 		tools/qintdict.h \
-		kernel/qsocketnotifier.h \
-		tools/qptrdict.h
+		kernel/qthread_p.h
 
 kernel/qapplication_x11.o: kernel/qapplication_x11.cpp \
 		kernel/qapplication_x11.moc \
@@ -11839,7 +11838,10 @@ dialogs/qinputdialog.o: dialogs/qinputdialog.cpp \
 		tools/qintdict.h \
 		tools/qgdict.h \
 		tools/qptrdict.h \
-		widgets/qvalidator.h
+		widgets/qvalidator.h \
+		kernel/qapplication.h \
+		tools/qasciidict.h \
+		kernel/qtranslator.h
 
 # Module iconview...
 iconview/moc_qiconview.o: iconview/moc_qiconview.cpp \

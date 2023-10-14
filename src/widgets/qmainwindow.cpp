@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qmainwindow.cpp   2.2.0   edited 2000-08-30 $
+** $Id: qt/src/widgets/qmainwindow.cpp   2.2.1   edited 2000-10-03 $
 **
 ** Implementation of QMainWindow class
 **
@@ -713,8 +713,10 @@ QSize QMainWindowLayout::minimumSize() const
 	h = QMAX( h, right->minimumSize().height() );
     }
     if ( central ) {
-	w += central->minimumSize().width();
-	h = QMAX( h, QMAX( central->minimumSize().height(), central->minimumSizeHint().height() ) );
+	QSize min = central->minimumSize().isNull() ?
+		    central->minimumSizeHint() : central->minimumSize();
+	w += min.width();
+	h = QMAX( h, min.height() );
     }
 
     return QSize( w, h );
@@ -2249,6 +2251,8 @@ QWidget * QMainWindow::centralWidget() const
 
 void QMainWindow::paintEvent( QPaintEvent * )
 {
+    if ( d->rectPainter )
+	return;
     if ( style() == WindowsStyle && d->mb &&
 	 ( ( d->top && !d->top->isEmpty() ) || ( d->hidden && !d->hidden->isEmpty() ) ) ) {
 	QPainter p( this );
@@ -2923,6 +2927,9 @@ void QMainWindow::moveToolBar( QToolBar* t , QMouseEvent * e )
     } else if ( e->type() == QMouseEvent::MouseMove ) {
 	if ( ( e->state() & LeftButton ) != LeftButton || !d->inMovement )
 	    return;
+    } else if ( ( e->type() ==QMouseEvent::MouseMove || 
+		  e->type() == QMouseEvent::MouseButtonRelease ) && !d->inMovement ) {
+	return;
     }
 
     // find out if the mouse had been moved yet...

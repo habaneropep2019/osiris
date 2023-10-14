@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qpopupmenu.cpp   2.2.0   edited 2000-08-25 $
+** $Id: qt/src/widgets/qpopupmenu.cpp   2.2.1   edited 2000-09-03 $
 **
 ** Implementation of QPopupMenu class
 **
@@ -1427,7 +1427,7 @@ void QPopupMenu::keyPressEvent( QKeyEvent *e )
 	ok_key = FALSE;
 
     }
-    if ( !ok_key && !e->state() && e->text().length()==1 ) {
+    if ( !ok_key && ( !e->state() || e->state() == AltButton ) && e->text().length()==1 ) {
 	QChar c = e->text()[0].upper();
 
 	QMenuItemListIt it(*mitems);

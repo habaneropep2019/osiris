@@ -816,6 +816,7 @@ void QTable::init( int rows, int cols )
 QTable::~QTable()
 {
     delete d;
+    contents.setAutoDelete( TRUE );
     contents.clear();
     widgets.clear();
 }
@@ -1195,7 +1196,7 @@ void QTable::drawContents( QPainter *p, int cx, int cy, int cw, int ch )
     p->translate( focusRect.x(), focusRect.y() );
     paintFocus( p, focusRect );
     p->restoreWorldMatrix();
-    
+
     // Paint empty rects
     paintEmptyArea( p, cx, cy, cw, ch );
 }
@@ -1251,7 +1252,7 @@ void QTable::paintCell( QPainter* p, int row, int col,
   currentColumn()). The painter \a p is already translated to the
   cell's origin, while \a cr specifies the cell's geometry in contents
   coordinates.
-*/  
+*/
 
 void QTable::paintFocus( QPainter *p, const QRect &cr )
 {
@@ -1335,7 +1336,7 @@ void QTable::setItem( int row, int col, QTableItem *item )
     item->updateEditor( orow, ocol );
 }
 
-/*!  Removes the QTableItem in position \p row, \a col.
+/*!  Removes the QTableItem in position \a row, \a col.
 */
 
 void QTable::clearCell( int row, int col )
@@ -1592,7 +1593,7 @@ QTableSelection QTable::selection( int num ) const
  number or -1 if the selection is invalid. Don't forget
  to call QTableSelection::init() and
  QTableSelection::expandTo() to make it valid (see also
- QTableSelection::isValid()).
+ QTableSelection::isActive()).
 */
 
 int QTable::addSelection( const QTableSelection &s )
@@ -1750,7 +1751,7 @@ void QTable::doAutoScroll()
     int tmpCol = curCol;
     if ( pos.y() < 0 )
 	tmpRow--;
-    else if ( pos.y() > visibleWidth() )
+    else if ( pos.y() > visibleHeight() )
 	tmpRow++;
     if ( pos.x() < 0 )
 	tmpCol--;
@@ -3169,7 +3170,8 @@ void QTable::insertWidget( int row, int col, QWidget *w )
     widgets.insert( indexOf( row, col ), w );
 }
 
-/*!  Returns the widget which has been set to the cell \a row, \a col
+/*!
+  Returns the widget which has been set to the cell \a row, \a col
   of 0 if there is no widget.
 */
 
@@ -3184,8 +3186,8 @@ QWidget *QTable::cellWidget( int row, int col ) const
     return widgets[ indexOf( row, col ) ];
 }
 
-/*!  Removes the widget (if there is any) which is set for the cell \a
-  row, \a col.
+/*!
+  Removes the widget (if there is any) which is set for the cell \a row, \a col.
 */
 
 void QTable::clearCellWidget( int row, int col )

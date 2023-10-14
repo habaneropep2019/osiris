@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qurl.cpp   2.2.0   edited 2000-08-28 $
+** $Id: qt/src/kernel/qurl.cpp   2.2.1   edited 2000-09-13 $
 **
 ** Implementation of QUrl class
 **
@@ -37,7 +37,7 @@
 
 #include "qurl.h"
 
-#ifndef QT_NO_NETWORKPROTOCOL
+#ifndef QT_NO_DIR
 
 #include <stdlib.h>
 

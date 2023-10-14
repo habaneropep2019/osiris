@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qiodevice.cpp   2.2.0   edited 2000-08-25 $
+** $Id: qt/src/tools/qiodevice.cpp   2.2.1   edited 2000-09-05 $
 **
 ** Implementation of QIODevice class
 **
@@ -425,8 +425,10 @@ void QIODevice::setStatus( int s )
   <li>\c IO_Append sets the file index to the end of the file.
   <li>\c IO_Truncate truncates the file.
   <li>\c IO_Translate enables carriage returns and linefeed translation
-  for text files under MS-DOS, Window, OS/2 and Macintosh.  Cannot be
-  combined with \c IO_Raw.
+  for text files under MS-DOS, Window, OS/2 and Macintosh.  On Unix systems 
+  this flag has no effect. Use with caution as it will also transform every linefeed
+  written to the file into a CRLF pair. This is likely to corrupt your file when
+  writing binary data to it. Cannot be combined with \c IO_Raw.
   </ul>
 
   This virtual function must be reimplemented by all subclasses.

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qsgistyle.cpp   2.2.0   edited 2000-08-25 $
+** $Id: qt/src/widgets/qsgistyle.cpp   2.2.1   edited 2000-09-23 $
 **
 ** Implementation of Motif-like style class
 **
@@ -71,9 +71,17 @@ static bool sliderHandleActive		= FALSE;
 static bool repaintByMouseMove		= FALSE;
 static QPalette* lastWidgetPalette	= 0;
 static int activeScrollBarElement	= 0;
-static QRect sliderStartOldPos(1,-1,1,-1);
 static void* deviceUnderMouse		= 0;
 static QPoint mousePos(-1,-1);
+
+struct SliderLastPosition
+{
+    SliderLastPosition() : pos(0,-1,0,-1), slider(0) {}
+    QRect pos;
+    QWidget* slider;
+};
+
+static SliderLastPosition sliderLastPosition;
 
 /*!
   \class QSGIStyle qsgistyle.h
@@ -928,17 +936,18 @@ void
 QSGIStyle::drawSlider( QPainter* p, int x, int y, int w, int h, const QColorGroup& g,
                  Orientation orient, bool /*tickAbove*/, bool /*tickBelow*/ )
 {
-
     QRect sliderR( x, y, w-1, h-1 );
     if ( sliderMoving ) {
-        if (!sliderStartOldPos.isValid()) {
-            sliderStartOldPos = sliderR;
-        } else {
-            p->setClipRegion( QRegion(sliderStartOldPos) - QRegion(sliderR) );
-            qDrawShadePanel( p, sliderStartOldPos, g, TRUE, 2, &g.brush( QColorGroup::Dark) );
-        }
+        if ( sliderLastPosition.slider == (QWidget*)p->device() ) {
+	    if ( !sliderLastPosition.pos.isValid() ) {
+		sliderLastPosition.pos= sliderR;
+	    } else {
+		p->setClipRegion( QRegion(sliderLastPosition.pos ) - QRegion(sliderR) );
+		qDrawShadePanel( p, sliderLastPosition.pos, g, TRUE, 2, &g.brush( QColorGroup::Dark) );
+	    }
+	}
     } else
-        sliderStartOldPos = QRect( 1, -1, 1, -1 );
+        sliderLastPosition.pos = QRect( 1, -1, 1, -1 );
 
     if ( repaintByMouseMove) {
 	bool aboutToBeActive = sliderR.contains( mousePos );
@@ -983,9 +992,11 @@ QSGIStyle::drawSliderGroove( QPainter* p, int x, int y, int w, int h,
     if ( repaintByMouseMove)
 	return;
 
-    if ( sliderMoving && sliderStartOldPos.isValid() )
-        p->setClipRegion( QRegion( x,y,w,h )
-	    - QRegion(sliderStartOldPos) );
+    if ( sliderLastPosition.slider == p->device() ) {
+	if ( sliderMoving && sliderLastPosition.pos.isValid() )
+	    p->setClipRegion( QRegion( x,y,w,h )
+		- QRegion( sliderLastPosition.pos ) );
+    }
 
     qDrawShadePanel( p, x, y, w, h, g, TRUE, 1 );
     drawButton( p, x+1, y+1, w-2, h-2, g );
@@ -1102,24 +1113,23 @@ static void drawSGIPrefix( QPainter *p, int x, int y, QString* miText )
     if ( miText && (!!(*miText)) ) {
 	int amp = 0;
 	bool nextAmp = FALSE;
-	do {
-	    amp = miText->find( '&', amp );	 // remove ampersand from text
-	    if ( amp != -1 ) {
-		miText->remove( amp,1 );
-		nextAmp = (*miText)[amp] == '&';	// next time if &&
+	while ( ( amp = miText->find( '&', amp ) ) != -1 ) {
+	    if ( (uint)amp == miText->length()-1 )
+		return;
+	    miText->remove( amp,1 );
+	    nextAmp = (*miText)[amp] == '&';	// next time if &&
 
-		if ((*miText)[amp] != '&') {     // draw special underlining
-		    uint ulx = p->fontMetrics().width(*miText, amp);
+	    if ( !nextAmp ) {     // draw special underlining
+		uint ulx = p->fontMetrics().width(*miText, amp);
 
-		    uint ulw = p->fontMetrics().width(*miText, amp+1) - ulx;
+		uint ulw = p->fontMetrics().width(*miText, amp+1) - ulx;
 
-		    p->drawLine( x+ulx, y, x+ulx+ulw, y );
-		    p->drawLine( x+ulx, y+1, x+ulx+ulw/2, y+1 );
-		    p->drawLine( x+ulx, y+2, x+ulx+ulw/4, y+2 );
-		}
+		p->drawLine( x+ulx, y, x+ulx+ulw, y );
+		p->drawLine( x+ulx, y+1, x+ulx+ulw/2, y+1 );
+		p->drawLine( x+ulx, y+2, x+ulx+ulw/4, y+2 );
 	    }
 	    amp++;
-	} while ( nextAmp );
+	}
     }
 }
 
@@ -1288,14 +1298,19 @@ QSGIStyle::eventFilter( QObject* o, QEvent* e )
     switch ( e->type() ) {
     case QEvent::MouseButtonPress:
         {
-            if ( o->inherits("QSlider") )
+            if ( o->inherits("QSlider") ) {
+		sliderLastPosition.pos = QRect( 0, -1, 0, -1 );
+		sliderLastPosition.slider = (QWidget*)o;
                 sliderMoving = TRUE;
+	    }
         }
         break;
     case QEvent::MouseButtonRelease:
         {
             if ( o->inherits("QSlider") )
             {
+		sliderLastPosition.pos = QRect( 0, -1, 0, -1 );
+		sliderLastPosition.slider = 0;
                 sliderMoving = FALSE;
                 ((QWidget*) o)->repaint( FALSE );
             }

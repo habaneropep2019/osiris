@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/dialogs/qwizard.cpp   2.2.0   edited 2000-08-25 $
+** $Id: qt/src/dialogs/qwizard.cpp   2.2.1   edited 2000-08-25 $
 **
 ** Implementation of QWizard class.
 **

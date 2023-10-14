@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qstylesheet.cpp   2.2.0   edited 2000-08-27 $
+** $Id: qt/src/kernel/qstylesheet.cpp   2.2.1   edited 2000-09-13 $
 **
 ** Implementation of the QStyleSheet class
 **
@@ -103,8 +103,8 @@ public:
   in the input.
 
   <li> \c WhiteSpaceNoWrap - multiple spaces are collapsed as with
-  WhiteSpaceNormal, but no  automatic line breaks occur. To break lines manually,
-  use the  \c&lt;br&gt; tag.
+  WhiteSpaceNormal, but no  automatic line breaks occur. To break lines
+  manually, use the \c &lt;br&gt; tag.
 
 </ul>
 
@@ -548,7 +548,7 @@ QStyleSheetItem::WhiteSpaceMode QStyleSheetItem::whiteSpaceMode() const
    <li> \c WhiteSpaceNoWrap
 	  - multiple spaces are collapsed as with WhiteSpaceNormal, but no
 	  automatic line breaks occur. To break lines manually, use the
-	  \c&lt;br&gt; tag.
+	  \c &lt;br&gt; tag.
   </ul>
  */
 void QStyleSheetItem::setWhiteSpaceMode(WhiteSpaceMode m)

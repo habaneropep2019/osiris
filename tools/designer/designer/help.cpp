@@ -18,6 +18,8 @@
 **
 **********************************************************************/
 
+#include <qvariant.h>  // HP-UX compiler needs this here
+
 #include "help.h"
 #include "helpdialogimpl.h"
 #include "qaction.h"

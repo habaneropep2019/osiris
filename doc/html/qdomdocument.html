@@ -81,17 +81,23 @@ inserted into the Document.
 <p>The QDom classes are typically used as follows:
 <pre>  <a href="qdomdocument.html">QDomDocument</a> doc( "mydocument" );
   <a href="qfile.html">QFile</a> f( "mydocument.xml" );
-  doc.<a href="#4885cb">setContent</a>( f );
+  if ( !f.<a href="qfile.html#44ae9b">open</a>( IO_ReadOnly ) )
+      return;
+  if ( !doc.<a href="#4885cb">setContent</a>( &amp;f ) ) {
+      f.<a href="qfile.html#e37a87">close</a>();
+      return;
+  }
+  f.<a href="qfile.html#e37a87">close</a>();
 
   // print out the element names of all elements that are a direct child
   // of the outermost element.
-  <a href="qdomelement.html">QDomElement</a> *docElem = doc.<a href="#6c83d1">documentElement</a>();
+  <a href="qdomelement.html">QDomElement</a> docElem = doc.<a href="#6c83d1">documentElement</a>();
 
   <a href="qdomnode.html">QDomNode</a> n = docElem.<a href="qdomnode.html#7d7903">firstChild</a>();
   while( !n.<a href="qdomnode.html#aa255a">isNull</a>() ) {
       <a href="qdomelement.html">QDomElement</a> e = n.<a href="qdomnode.html#7be3a4">toElement</a>(); // try to convert the node to an element.
       if( !e.<a href="qdomnode.html#aa255a">isNull</a>() ) { // the node was really an element.
-          cout &lt;&lt; n.name() &lt;&lt; endl;
+          cout &lt;&lt; e.<a href="qdomelement.html#a75b61">tagName</a>() &lt;&lt; endl;
       }
       n = n.<a href="qdomnode.html#c400a2">nextSibling</a>();
   }
@@ -99,8 +105,7 @@ inserted into the Document.
   // lets append a new element to the end of the document
   <a href="qdomelement.html">QDomElement</a> elem = doc.<a href="#019a5f">createElement</a>( "img" );
   elem.<a href="qdomelement.html#137828">setAttribute</a>( "src", "myimage.png" );
-
-  doc.append( elem );
+  docElem.<a href="qdomnode.html#50474f">appendChild</a>( elem );
 </pre>
 <p>Once <code>doc</code> and <code>elem</code> go out of scode, the whole internal tree representing
 the XML document will get deleted.
@@ -114,6 +119,8 @@ the XML document will get deleted.
 <p>Creates a document with the name <em>name.</em>
 <h3 class="fn"><a name="4aa4ff"></a>QDomDocument::QDomDocument ( const QDomDocument &amp; x )</h3>
 <p>Copy constructor.
+<p>The data of the copy is shared: modifying one will also change the other. If
+you want to make a real copy, use <a href="qdomnode.html#7b27fa">cloneNode</a>() instead.
 <h3 class="fn"><a name="147159"></a>QDomDocument::~QDomDocument ()</h3>
 <p>Destructor.
 <h3 class="fn"><a href="qdomattr.html">QDomAttr</a> <a name="8115dd"></a>QDomDocument::createAttribute ( const <a href="qstring.html">QString</a> &amp; name )</h3>
@@ -151,6 +158,8 @@ with the tag name <em>tagname.</em>
 <p>Reimplemented from <a href="qdomnode.html#4aab85">QDomNode.</a>
 <h3 class="fn">QDomDocument&amp; <a name="2b3cf3"></a>QDomDocument::operator= ( const QDomDocument &amp; x )</h3>
 <p>Assignment operator.
+<p>The data of the copy is shared: modifying one will also change the other. If
+you want to make a real copy, use <a href="qdomnode.html#7b27fa">cloneNode</a>() instead.
 <h3 class="fn">bool <a name="4885cb"></a>QDomDocument::setContent ( const <a href="qstring.html">QString</a> &amp; text )</h3>
 <p>This function parses the string <em>text</em> and sets it as the content of the
 document.
@@ -168,7 +177,7 @@ document.
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.2.0"><nobr>
+<input type=hidden name="version" value="2.2.1"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -176,5 +185,5 @@ copyright &copy; 1995-2000
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.0</div>
+<td align="right"><div align="right">Qt version 2.2.1</div>
 </table></div></address></body></html>

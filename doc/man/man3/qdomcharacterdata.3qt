@@ -1,4 +1,4 @@
-.TH QDomCharacterData 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.TH QDomCharacterData 3qt "4 October 2000" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -74,6 +74,8 @@ See also QDomText, QDomComment and QDomCDATASection.
 Constructs an empty character data object.
 .SH "QDomCharacterData::QDomCharacterData ( const QDomCharacterData & x )"
 Copy constructor.
+.PP
+The data of the copy is shared: modifying one will also change the other. If you want to make a real copy, use cloneNode() instead.
 .SH "QDomCharacterData::~QDomCharacterData ()"
 Destructor.
 .SH "void QDomCharacterData::appendData ( const QString & arg ) \fC[virtual]\fR"
@@ -98,6 +100,8 @@ Returns the type of node this object refers to (i.e. \fCTextNode, CDATASectionNo
 Reimplemented from QDomNode.
 .SH "QDomCharacterData& QDomCharacterData::operator= ( const QDomCharacterData & x )"
 Assignment operator.
+.PP
+The data of the copy is shared: modifying one will also change the other. If you want to make a real copy, use cloneNode() instead.
 .SH "void QDomCharacterData::replaceData ( unsigned long offset, unsigned long count, const QString & arg ) \fC[virtual]\fR"
 Replaces the substring starting at \fIoffset\fR with length \fIcount\fR with the string \fIarg.\fR
 .SH "void QDomCharacterData::setData ( const QString & v ) \fC[virtual]\fR"

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/tools/mergetr/mergetr.cpp   2.2.0   edited 2000-08-25 $
+** $Id: qt/tools/mergetr/mergetr.cpp   2.2.1   edited 2000-08-25 $
 **
 ** This is a utility program for merging findtr msgfiles
 **

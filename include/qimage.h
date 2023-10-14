@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qimage.h   2.2.0   edited 2000-08-25 $
+** $Id: qt/src/kernel/qimage.h   2.2.1   edited 2000-09-12 $
 **
 ** Definition of QImage and QImageIO classes
 **
@@ -78,6 +78,11 @@ public:
     QImage( uchar* data, int w, int h, int depth,
 		QRgb* colortable, int numColors,
 		Endian bitOrder );
+#ifdef _WS_QWS_
+    QImage( uchar* data, int w, int h, int depth, int pbl,
+		QRgb* colortable, int numColors,
+		Endian bitOrder );
+#endif
     QImage( const QImage & );
    ~QImage();
 

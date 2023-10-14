@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qfontdatabase.cpp   2.2.0   edited 2000-08-25 $
+** $Id: qt/src/kernel/qfontdatabase.cpp   2.2.1   edited 2000-10-01 $
 **
 ** Implementation of font database class.
 **
@@ -1018,6 +1018,7 @@ void QFontDatabase::createDatabase()
             //qWarning( "createDatabase: Not XLFD[%s]", xFontList[i] );
         }
     }
+    XFreeFontNames( xFontList );
 }
 
 #endif
@@ -1279,9 +1280,15 @@ static QFont::CharSet getCharSet( const char * registry, const char *encoding )
 		(qstrcmp( encoding, "r" ) == 0 ||
 		 qstrcmp( encoding, "1" ) == 0) ) {
 	return QFont::KOI8R;
+    } else if ( strcmp( registry, "koi8" ) == 0 &&
+		qstrcmp( encoding, "u" ) == 0) {
+	return QFont::KOI8U;
     } else if ( qstrcmp( registry, "tscii" ) == 0 &&
 		qstrcmp( encoding, "0" ) == 0 ) {
 	return QFont::TSCII;
+    } else if ( qstrcmp( registry, "tis620" ) == 0 &&
+		qstrcmp( encoding, "0" ) == 0 ) {
+	return QFont::TIS620;
     } else if ( qstrcmp( registry, "iso10646" ) == 0 ) {
 	return QFont::Unicode;
     }
@@ -1325,6 +1332,10 @@ static QFont::CharSet getCharSet( const QString &name )
         return QFont::KOI8R;
     if ( name == "koi8-1" )
         return QFont::KOI8R;
+    if ( name == "koi8-u" )
+        return QFont::KOI8U;
+    if ( name == "tis620-0" )
+        return QFont::TIS620;
     if ( name == "tscii-0" )
 	return QFont::TSCII;
     if ( name == "iso10646-1" )
@@ -1367,6 +1378,8 @@ static const QString getCharSet( QFont::CharSet set)
         return "iso8859-15";
     case QFont::KOI8R:
         return "koi8-r";
+    case QFont::KOI8U:
+        return "koi8-u";
     case QFont::Unicode:
         return "iso10646-1";
     default:
@@ -1436,6 +1449,9 @@ static QString getCharSetName( QFont::CharSet cs )
         break;
     case QFont::KOI8R:
         name = "Cyrillic (KOI8-R)";
+        break;
+    case QFont::KOI8U:
+        name = "Ukrainian (KOI8-U)";
         break;
     case QFont::TSCII:
 	name = "Tamil (TSCII)";
@@ -1546,6 +1562,12 @@ static QString getCharSetSample( QFont::CharSet cs )
     case QFont::KOI8R:
         sample += QChar(0x0414);
         sample += QChar(0x0434);
+        sample += QChar(0x0436);
+        sample += QChar(0x2560);
+        break;
+    case QFont::KOI8U:
+        sample += QChar(0x0404);
+        sample += QChar(0x0454);
         sample += QChar(0x0436);
         sample += QChar(0x2560);
         break;

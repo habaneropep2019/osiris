@@ -30,7 +30,7 @@ remains with Trolltech.
 <hr>
 <pre>
 /****************************************************************************
-** &#36;Id&#58; qt/src/kernel/qclipboard.h   2.2.0   edited 2000-08-25 $
+** &#36;Id&#58; qt/src/kernel/qclipboard.h   2.2.1   edited 2000-09-20 $
 **
 ** Definition of QClipboard class
 **
@@ -83,11 +83,15 @@ class Q_EXPORT <a href="qclipboard.html">QClipboard</a> : public <a href="qobjec
     Q_OBJECT
 private:
     QClipboard( QObject *parent=0, const char *name=0 );
-   ~QClipboard();
+    ~QClipboard();
 
 public:
     void        clear();
 
+#if defined(_WS_X11_)
+    bool ownsSelection() const;
+#endif
+    
 #ifndef QT_NO_MIMECLIPBOARD
     QMimeSource* data() const;
     void  setData( QMimeSource* );
@@ -115,12 +119,12 @@ protected:
     friend class QBaseApplication;
     friend class QDragManager;
     friend class QMimeSource;
-    
+
 private:        // Disabled copy constructor and operator=
-#if defined(_WS_X11_)    
+#if defined(_WS_X11_)
     void clobber();
 #endif
-    
+
 #if defined(Q_DISABLE_COPY)
     QClipboard( const QClipboard &amp; );
     QClipboard &amp;operator=( const QClipboard &amp; );
@@ -135,5 +139,5 @@ private:        // Disabled copy constructor and operator=
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.0</div>
+<td align="right"><div align="right">Qt version 2.2.1</div>
 </table></div></address></body></html>

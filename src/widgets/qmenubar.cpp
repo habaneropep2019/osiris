@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qmenubar.cpp   2.2.0   edited 2000-08-28 $
+** $Id: qt/src/widgets/qmenubar.cpp   2.2.1   edited 2000-09-23 $
 **
 ** Implementation of QMenuBar class
 **
@@ -652,12 +652,14 @@ int QMenuBar::calculateRects( int max_width )
     int max_item_height = 0;
     int nlitems = 0;				// number on items on cur line
     int gs = style();
-    int x = style().defaultFrameWidth() + motifBarHMargin;
-    int y = style().defaultFrameWidth() + motifBarVMargin;
+    int x = style().defaultFrameWidth();
+    int y = style().defaultFrameWidth();
+    if( gs == MotifStyle ) {
+	x += motifBarHMargin;
+	y += motifBarVMargin;
+    }
     int i = 0;
     int separator = -1;
-    if ( gs == WindowsStyle )	//###
-	x = y = 2;
     while ( i < (int)mitems->count() ) {	// for each menu item...
 	QMenuItem *mi = mitems->at(i);
 	int w=0, h=0;
@@ -691,8 +693,12 @@ int QMenuBar::calculateRects( int max_width )
 	    }
 	    if ( x + w + style().defaultFrameWidth() - max_width > 0 && nlitems > 0 ) {
 		nlitems = 0;
-		x = style().defaultFrameWidth() + motifBarHMargin;
-		y += h + motifBarHMargin;
+		x = style().defaultFrameWidth();
+		y += h;
+		if( gs == MotifStyle ) {
+		    x += motifBarHMargin;
+		    y += motifBarVMargin;
+		}
 		separator = -1;
 	    }
 	    if ( y + h + 2*style().defaultFrameWidth() > max_height )
@@ -1221,7 +1227,7 @@ QSize QMenuBar::sizeHint() const
 {
     if ( badSize )
 	( (QMenuBar*)this )->calculateRects();
-    QSize s( 0, 0 );
+    QSize s( style().defaultFrameWidth(), 0 );
     if ( irects ) {
 	for ( int i = 0; i < (int)mitems->count(); ++i )
 	    s.setWidth( s.width() + irects[ i ].width() + 2 );

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/dialogs/qfiledialog.cpp   2.2.0   edited 2000-08-27 $
+** $Id: qt/src/dialogs/qfiledialog.cpp   2.2.1   edited 2000-10-01 $
 **
 ** Implementation of QFileDialog class
 **
@@ -484,6 +484,8 @@ static void cleanup() {
     endCopyIcon = 0;
     delete goBackIcon;
     goBackIcon = 0;
+    delete lastSize;
+    lastSize = 0;
 #if defined (_WS_WIN_)
     delete fileIconProvider;
     fileIconProvider = 0;
@@ -831,7 +833,7 @@ void QFDProgressDialog::setWriteLabel( const QString &s )
  *
  ************************************************************************/
 
-#if !defined(_CC_SUN_) // Work around bug 4328291/4325168 (SunPro 5.0/6.0 EA)
+#if !defined(_CC_SUN_) // Work around bug 4328291/4325168 (Sun WorkShop 5.0)
 inline
 #endif
 int sun4325168Workaround( QCollection::Item n1, QCollection::Item n2 ) {
@@ -2742,7 +2744,7 @@ void QFileDialog::setUrl( const QUrlOperator &url )
 {
     d->oldUrl = d->url;
     QString nf = d->url.nameFilter();
-    d->url = url;
+    d->url = QUrl( d->url, url.toString( FALSE, FALSE ) );
     d->url.setNameFilter( nf );
 
     d->checkForFilter = TRUE;
@@ -3218,12 +3220,6 @@ bool QFileDialog::trySetSelection( bool isDir, const QUrlOperator &u, bool updat
 
     if ( !d->currentFileName.isNull() || isDir ) {
 	okB->setEnabled( TRUE );
-	if ( d->currentFileName.isNull() && isDir )
-	    okB->setText( tr("Open") );
-	else {
-	    QString okt = mode() == AnyFile ? tr("Save") : tr("OK");
-	    okB->setText( okt );
-	}
     } else if ( !isDirectoryMode( d->mode ) ) {
 	okB->setEnabled( FALSE );
     }
@@ -3369,8 +3365,14 @@ void QFileDialog::detailViewSelectionChanged()
     d->moreFiles->blockSignals( FALSE );
     nameEdit->setText( str );
     nameEdit->setCursorPosition( str.length() );
-    okB->setText( tr( "Open" ) );
     okB->setEnabled( TRUE );
+    if ( d->preview && d->preview->isVisible() && files->currentItem() ) {
+	QUrl u = QUrl( d->url, ((QFileDialogPrivate::File*)files->currentItem())->info.name() );
+	if ( d->infoPreviewer )
+	    d->infoPreviewer->previewUrl( u );
+	if ( d->contentsPreviewer )
+	    d->contentsPreviewer->previewUrl( u );
+    }
 }
 
 void QFileDialog::listBoxSelectionChanged()
@@ -3396,8 +3398,16 @@ void QFileDialog::listBoxSelectionChanged()
     files->blockSignals( FALSE );
     nameEdit->setText( str );
     nameEdit->setCursorPosition( str.length() );
-    okB->setText( tr( "Open" ) );
     okB->setEnabled( TRUE );
+    if ( d->preview && d->preview->isVisible() && d->moreFiles->item( d->moreFiles->currentItem() ) ) {
+	QUrl u = QUrl( d->url, 
+		       ( (QFileDialogPrivate::File*)( (QFileDialogPrivate::MCItem*)d->
+						      moreFiles->item( d->moreFiles->currentItem() ) )->i )->info.name() );
+	if ( d->infoPreviewer )
+	    d->infoPreviewer->previewUrl( u );
+	if ( d->contentsPreviewer )
+	    d->contentsPreviewer->previewUrl( u );
+    }
 }
 
 /*! \overload */
@@ -3876,6 +3886,8 @@ void QFileDialog::setMode( Mode newMode )
 	QUrlInfo f( d->url, "." );
 	trySetSelection( f.isDir(), d->url, TRUE );
     }
+    QString okt = mode() == AnyFile ? tr("Save") : tr("Open");
+    okB->setText( okt );
 }
 
 
@@ -4821,15 +4833,19 @@ void QFileDialog::urlStart( QNetworkOperation *op )
 	files->clear();
 	files->setSorting( -1 );
 
-	QString cp( d->url );
-	int i = d->paths->count() - 1;
-	while( i >= 0 && d->paths->text( i ) <= cp )
-	    i--;
-	if ( i < d->paths->count() )
-	    i++;
-	if ( i == d->paths->count() || d->paths->text( i ) != cp )
-	    d->paths->insertItem( *openFolderIcon, d->url.toString( FALSE, FALSE ), i );
-	d->paths->setCurrentItem( i );
+	QString s = d->url.toString( FALSE, FALSE );
+	bool found = FALSE;
+	for ( int i = 0; i < d->paths->count(); ++i ) {
+	    if ( d->paths->text( i ) == s ) {
+		found = TRUE;
+		d->paths->setCurrentItem( i );
+		break;
+	    }
+	}
+	if ( !found ) {
+	    d->paths->insertItem( *openFolderIcon, s, -1 );
+	    d->paths->setCurrentItem( d->paths->count() - 1 );
+	}
 	d->last = 0;
 	d->hadDotDot = FALSE;
 
@@ -5022,8 +5038,28 @@ void QFileDialog::itemChanged( QNetworkOperation *op )
 	return;
 
     QUrlInfo *i = 0;
-    QListViewItemIterator it( files );
+    QListViewItemIterator it1( files );
     bool ok1 = FALSE, ok2 = FALSE;
+    // first check whether the new file replaces an existing file.
+    for ( i = d->sortedList.first(); it1.current(); ++it1, i = d->sortedList.next() ) {
+	if ( ( (QFileDialogPrivate::File*)it1.current() )->info.name() == op->arg( 1 ) ) {
+	    delete ( (QFileDialogPrivate::File*)it1.current() )->i;
+	    delete it1.current();
+	    ok1 = TRUE;
+	}
+	if ( i && i->name() == op->arg( 1 ) ) {
+	    d->sortedList.removeRef( i );
+	    i = d->sortedList.prev();
+	    ok2 = TRUE;
+	}
+	if ( ok1 && ok2 )
+	    break;
+    }
+
+    i = 0;
+    QListViewItemIterator it( files );
+    ok1 = FALSE;
+    ok2 = FALSE;
     for ( i = d->sortedList.first(); it.current(); ++it, i = d->sortedList.next() ) {
 	if ( ( (QFileDialogPrivate::File*)it.current() )->info.name() == op->arg( 0 ) ) {
 	    ( (QFileDialogPrivate::File*)it.current() )->info.setName( op->arg( 1 ) );
@@ -5215,6 +5251,7 @@ void QFileDialog::resortDir()
 
     if ( files->childCount() > 0 || d->moreFiles->count() > 0 ) {
 	files->clear();
+	d->last = 0;
 	d->moreFiles->clear();
 	files->setSorting( -1 );
     }

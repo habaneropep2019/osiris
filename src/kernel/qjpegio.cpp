@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qjpegio.cpp   2.2.0   edited 2000-08-25 $
+** $Id: qt/src/kernel/qjpegio.cpp   2.2.1   edited 2000-10-02 $
 **
 ** Implementation of JPEG QImage IOHandler
 **
@@ -47,13 +47,20 @@
 #include <stdio.h> // jpeglib needs this to be pre-included
 #include <setjmp.h>
 
+
+// including jpeglib.h seems to be a little messy
 extern "C" {
 #define XMD_H // Shut JPEGlib up.
+#if defined(_OS_UNIXWARE7_)
+#  define HAVE_BOOLEAN // libjpeg under Unixware seems to need this
+#  define HAVE_PROTOTYPES
+#endif
 #include <jpeglib.h>
 #ifdef const
-#undef const // Remove crazy C hackery in jconfig.h
+#  undef const // Remove crazy C hackery in jconfig.h
 #endif
 }
+
 
 struct my_error_mgr : public jpeg_error_mgr {
     jmp_buf setjmp_buffer;
@@ -114,7 +121,11 @@ boolean qt_fill_input_buffer(j_decompress_ptr cinfo)
     } else {
 	src->bytes_in_buffer = num_read;
     }
+#if defined(_OS_UNIXWARE7_)
+    return B_TRUE;
+#else
     return TRUE;
+#endif
 }
 
 static
@@ -182,7 +193,11 @@ void read_jpeg_image(QImageIO* iio)
     jerr.error_exit = my_error_exit;
 
     if (!setjmp(jerr.setjmp_buffer)) {
+#if defined(_OS_UNIXWARE7_)
+	(void) jpeg_read_header(&cinfo, B_TRUE);
+#else
 	(void) jpeg_read_header(&cinfo, TRUE);
+#endif
 
 	(void) jpeg_start_decompress(&cinfo);
 
@@ -268,7 +283,11 @@ boolean qt_empty_output_buffer(j_compress_ptr cinfo)
     dest->next_output_byte = dest->buffer;
     dest->free_in_buffer = max_buf;
 
+#if defined(_OS_UNIXWARE7_)
+    return B_TRUE;
+#else
     return TRUE;
+#endif
 }
 
 static
@@ -364,9 +383,13 @@ void write_jpeg_image(QImageIO* iio)
 		quality = iq;
 	    }
 	}
+#if defined(_OS_UNIXWARE7_)
+	jpeg_set_quality(&cinfo, quality, B_TRUE /* limit to baseline-JPEG values */);
+	jpeg_start_compress(&cinfo, B_TRUE);
+#else
 	jpeg_set_quality(&cinfo, quality, TRUE /* limit to baseline-JPEG values */);
-
 	jpeg_start_compress(&cinfo, TRUE);
+#endif
 
 	row_pointer[0] = new uchar[cinfo.image_width*cinfo.input_components];
 	int w = cinfo.image_width;

@@ -1,4 +1,4 @@
-.TH QThread 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.TH QThread 3qt "4 October 2000" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -125,7 +125,7 @@ Constructs a new thread. The thread does not actually begin executing until star
 .SH "QThread::~QThread () \fC[virtual]\fR"
 QThread destructor. Note that deleting a QThread object will not stop the execution of the thread it represents.
 .SH "HANDLE QThread::currentThread () \fC[static]\fR"
-This returns the thread ID of the currently executing thread. The handle returned by this function is used for internal reasons and should not be used in any application code.
+This returns the thread handle of the currently executing thread. The handle returned by this function is used for internal reasons and should not be used in any application code. On Windows, the returned value is a pseudo handle for the current thread, and it can not be used for numerical comparison.
 .SH "void QThread::exit () \fC[static]\fR"
 Ends execution of the calling thread and wakes up any threads waiting for its termination.
 .SH "bool QThread::finished () const"

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qtsciicodec.cpp   2.2.0   edited 2000-08-24 $
+** $Id: qt/src/tools/qtsciicodec.cpp   2.2.1   edited 2000-08-24 $
 **
 ** Implementation of QTsciiCodec class
 **

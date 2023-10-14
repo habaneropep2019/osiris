@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/dragdrop/main.cpp   2.2.0   edited 2000-08-31 $
+** $Id: qt/examples/dragdrop/main.cpp   2.2.1   edited 2000-08-31 $
 **
 ** Ritual main() for Qt applications
 **

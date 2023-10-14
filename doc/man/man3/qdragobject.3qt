@@ -1,4 +1,4 @@
-.TH QDragObject 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.TH QDragObject 3qt "4 October 2000" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -118,7 +118,7 @@ Starts a drag operation using the contents of this object, using DragMove mode.
 .SH "QPixmap QDragObject::pixmap () const"
 Returns the currently set pixmap (which isNull() if none is set).
 .SH "QPoint QDragObject::pixmapHotSpot () const"
-Returns the currently set pixmap hitspot.
+Returns the currently set pixmap hotspot.
 .SH "void QDragObject::setPixmap ( QPixmap pm, QPoint hotspot ) \fC[virtual]\fR"
 Set the pixmap \fIpm\fR to display while dragging the object. The platform-specific implementation will use this in a loose fashion - so provide a small masked pixmap, but do not require that the user ever sees it in all its splendor. In particular, cursors on Windows 95 are of limited size.
 .PP

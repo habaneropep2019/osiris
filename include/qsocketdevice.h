@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/network/qsocketdevice.h   2.2.0   edited 2000-08-25 $
+** $Id: qt/src/network/qsocketdevice.h   2.2.1   edited 2000-09-12 $
 **
 ** Definition of QSocketDevice class.
 **
@@ -44,7 +44,7 @@
 #include "qhostaddress.h"
 #endif // QT_H
 
-
+#ifndef QT_NO_NETWORK
 class QSocketDevicePrivate;
 
 
@@ -139,5 +139,5 @@ private:	// Disabled copy constructor and operator=
 #endif
 };
 
-
+#endif // QT_NO_NETWORK
 #endif // QSOCKETDEVICE_H

@@ -167,7 +167,9 @@ MainWindow::MainWindow( bool asClient )
     setupHierarchyView();
     setupFormList();
 
-    resize( QSize( 1000, 800 ).boundedTo( qApp->desktop()->size() ) );
+    QSize as( qApp->desktop()->size() );
+    as -= QSize( 30, 30 );
+    resize( QSize( 1000, 800 ).boundedTo( as ) );
 
     connect( qApp->clipboard(), SIGNAL( dataChanged() ),
 	     this, SLOT( clipboardChanged() ) );
@@ -532,8 +534,8 @@ void MainWindow::setupToolActions()
 
     connect( actionToolsCustomWidget, SIGNAL( activated() ), this, SLOT( toolsCustomWidget() ) );
 
-    for ( int i = 0; i < WidgetDatabase::numWidgetGroups(); ++i ) {
-	QString grp = WidgetDatabase::widgetGroup( i );
+    for ( int j = 0; j < WidgetDatabase::numWidgetGroups(); ++j ) {
+	QString grp = WidgetDatabase::widgetGroup( j );
 	if ( !WidgetDatabase::isGroupVisible( grp ) )
 	    continue;
 #if defined(HAVE_KDE)
@@ -586,7 +588,8 @@ void MainWindow::setupToolActions()
 	    whats += QString("<p>%1</p>").arg(WidgetDatabase::whatsThis( i ));
 	    a->setWhatsThis( whats + tr("<p>Double click on this tool to keep it selected.</p>") );
 	
-	    a->addTo( tb );
+	    if ( grp != "KDE" )
+		a->addTo( tb );
 	    a->addTo( menu );
 	}
     }
@@ -1086,7 +1089,7 @@ static void unifyFormName( FormWindow *fw, QWorkspace *workspace )
 void MainWindow::fileNew()
 {
     statusBar()->message( tr( "Select a template for the new form...") );
-    NewForm dlg( this );
+    NewForm dlg( this, templatePath() );
     if ( dlg.exec() == QDialog::Accepted ) {
 	NewForm::Form f = dlg.formType();
 	if ( f != NewForm::Custom ) {
@@ -1536,12 +1539,13 @@ QWidget* MainWindow::previewFormInternal( QStyle* style, QPalette* palet )
     buffer.open( IO_WriteOnly );
     Resource resource( this );
     resource.setWidget( fw );
-    resource.save( &buffer );
+    QValueList<Resource::Image> images;
+    resource.save( &buffer, FALSE, &images );
 
     buffer.close();
     buffer.open( IO_ReadOnly );
     Resource preview( style, palet );
-    if ( preview.load( &buffer ) && preview.widget() ) {
+    if ( preview.load( &buffer, &images ) && preview.widget() ) {
 	preview.widget()->move( fw->mapToGlobal( QPoint(0,0) ) );
 	((MainWindow*)preview.widget() )->setWFlags( WDestructiveClose );
 	QApplication::restoreOverrideCursor();
@@ -2698,11 +2702,16 @@ static QString fixArgs2( const QString &s2 )
 void MainWindow::readConfig()
 {
     QString fn = QDir::homeDirPath() + "/.designerrc";
-    if ( !QFile::exists( fn ) )
-	return;
+    if ( !QFile::exists( fn ) ) {
+	fn = "/etc/designerrc";
+	if ( !QFile::exists( fn ) )
+	    return;
+    }
     Config config( fn );
+    config.setGroup( "General" );
     restoreConfig = config.readBoolEntry( "RestoreWorkspace", TRUE );
     docPath = config.readEntry( "DocPath", docPath );
+    templPath = config.readEntry( "TemplatePath", QString::null );
     config.setGroup( "Import" );
     int num = config.readNumEntry( "numFilters" );
     int i;
@@ -2778,13 +2787,13 @@ void MainWindow::readConfig()
 	if ( l.count() > c ) {
 	    int numSignals = l[ c ].toInt();
 	    c++;
-	    for ( int i = 0; i < numSignals; ++i, c++ )
+	    for ( int j = 0; j < numSignals; ++j, c++ )
 		w->lstSignals.append( fixArgs2( l[ c ] ).latin1() );
 	}
 	if ( l.count() > c ) {
 	    int numSlots = l[ c ].toInt();
 	    c++;
-	    for ( int i = 0; i < numSlots; ++i ) {
+	    for ( int j = 0; j < numSlots; ++j ) {
 		MetaDataBase::Slot slot;
 		slot.slot = fixArgs2( l[ c ] );
 		c++;
@@ -2796,7 +2805,7 @@ void MainWindow::readConfig()
 	if ( l.count() > c ) {
 	    int numProperties = l[ c ].toInt();
 	    c++;
-	    for ( int i = 0; i < numProperties; ++i ) {
+	    for ( int j = 0; j < numProperties; ++j ) {
 		MetaDataBase::Property prop;
 		prop.property = l[ c ];
 		c++;

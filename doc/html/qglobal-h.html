@@ -30,7 +30,7 @@ remains with Trolltech.
 <hr>
 <pre>
 /****************************************************************************
-** &#36;Id&#58; qt/src/tools/qglobal.h   2.2.0   edited 2000-09-03 $
+** &#36;Id&#58; qt/src/tools/qglobal.h   2.2.1   edited 2000-10-04 $
 **
 ** Global type declarations and definitions
 **
@@ -70,8 +70,8 @@ remains with Trolltech.
 #define QGLOBAL_H
 
 
-#define QT_VERSION      220
-#define QT_VERSION_STR  "2.2.0"
+#define QT_VERSION      221
+#define QT_VERSION_STR  "2.2.1"
 
 
 //
@@ -129,9 +129,6 @@ remains with Trolltech.
 #define _OS_RELIANTUNIX_
 #elif defined(linux) || defined(__linux) || defined(__linux__)
 #define _OS_LINUX_
-#if defined(__alpha__) || defined(__alpha)
-#define _OS_ALPHA_LINUX_
-#endif
 #elif defined(__FreeBSD__)
 #define _OS_FREEBSD_
 #elif defined(__NetBSD__)
@@ -227,6 +224,9 @@ remains with Trolltech.
 #define Q_TEMPLATE_NEEDS_EXPLICIT_CONVERSION
 #define Q_SPURIOUS_NON_VOID_WARNING
 #endif
+#if __GNUC__ == 2 &amp;&amp; __GNUC_MINOR__ &gt;= 95
+#define Q_DELETING_VOID_UNDEFINED
+#endif
 #if __GNUC__ == 2 &amp;&amp; __GNUC_MINOR__ &gt;= 96
 #define Q_DELETING_VOID_UNDEFINED
 #define Q_FP_CCAST_BROKEN
@@ -237,6 +237,9 @@ remains with Trolltech.
 #elif defined(__xlC__)
 #define _CC_XLC_
 #define Q_FULL_TEMPLATE_INSTANTIATION
+#if __xlC__ &lt;= 0x0306
+#define Q_TEMPLATE_NEEDS_EXPLICIT_CONVERSION
+#endif
 #elif defined(como40)
 #define _CC_EDG_
 #define _CC_COMEAU_
@@ -255,6 +258,7 @@ remains with Trolltech.
 #define _CC_SUN_
 #if __SUNPRO_CC &gt;= 0x500
 #define Q_HAS_BOOL_TYPE
+#define Q_FP_CCAST_BROKEN
 #define Q_SPARCWORKS_FUNCP_BUG
 #define Q_C_CALLBACKS
 #endif
@@ -335,11 +339,11 @@ remains with Trolltech.
 #define Q_HAS_BOOL_TYPE
 #elif defined(_CC_COMEAU_)
 #define Q_HAS_BOOL_TYPE
-#elif defined(sgi) &amp;&amp; ( (_COMPILER_VERSION &gt;= 710) || defined(_BOOL) )
+#elif defined(sgi) &amp;&amp; defined(_BOOL)
 #define Q_HAS_BOOL_TYPE
 #elif defined(__DECCXX) &amp;&amp; (__DECCXX_VER &gt;= 60060005)
 #define Q_HAS_BOOL_TYPE
-#elif defined(_AIX) &amp;&amp; (__xlC__ &gt;= 0x500)
+#elif defined(_AIX) &amp;&amp; (__xlC__ &gt;= 0x400)
 #define Q_HAS_BOOL_TYPE
 #endif
 
@@ -509,6 +513,8 @@ Q_EXPORT bool qSysInfo( int *wordSize, bool *bigEndian );
 #pragma warning(disable: 4275)
 #pragma warning(disable: 4514)
 #pragma warning(disable: 4800)
+#pragma warning(disable: 4097)
+#pragma warning(disable: 4706)
 #elif defined(_CC_BOR_)
 #pragma option -w-inl
 #pragma option -w-aus
@@ -626,5 +632,5 @@ Q_EXPORT void qObsolete( const char *message );
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.0</div>
+<td align="right"><div align="right">Qt version 2.2.1</div>
 </table></div></address></body></html>

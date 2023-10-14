@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qcollection.h   2.2.0   edited 2000-08-25 $
+** $Id: qt/src/tools/qcollection.h   2.2.1   edited 2000-09-17 $
 **
 ** Definition of base class for all collection classes
 **
@@ -66,8 +66,8 @@ protected:
 
     bool del_item;				// default FALSE
 
-    virtual Item	     newItem( Item );		// create object
-    virtual void     deleteItem( Item );		// delete object
+    virtual Item     newItem( Item );		// create object
+    virtual void     deleteItem( Item );	// delete object
 };
 
 

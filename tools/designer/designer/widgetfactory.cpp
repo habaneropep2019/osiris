@@ -18,6 +18,8 @@
 **
 **********************************************************************/
 
+#include <qvariant.h> // HP-UX compiler need this here
+
 #include "widgetfactory.h"
 #include <widgetdatabase.h>
 #include "metadatabase.h"
@@ -35,11 +37,7 @@
 #include <qmodules.h>
 
 #include <qpixmap.h>
-#include <qpushbutton.h>
-#include <qcheckbox.h>
-#include <qradiobutton.h>
 #include <qgroupbox.h>
-#include <qbuttongroup.h>
 #include <qiconview.h>
 #if defined(QT_MODULE_TABLE)
 #include <qtable.h>
@@ -55,7 +53,6 @@
 #include <qlistbox.h>
 #include <qlistview.h>
 #include <qobjectlist.h>
-#include <qtoolbutton.h>
 #include <qlcdnumber.h>
 #include <qslider.h>
 #include <qdial.h>
@@ -67,6 +64,7 @@
 #include <qwidgetstack.h>
 #include <qwizard.h>
 #include <qvaluelist.h>
+#include <qtimer.h>
 
 #include <globaldefs.h>
 
@@ -97,6 +95,19 @@ QString QDesignerTabWidget::pageTitle() const
 void QDesignerTabWidget::setPageTitle( const QString& title )
 {
     changeTab( QTabWidget::currentPage(), title  );
+}
+
+void QDesignerTabWidget::setPageName( const QCString& name )
+{
+    if ( QTabWidget::currentPage() )
+	QTabWidget::currentPage()->setName( name );
+}
+
+QCString QDesignerTabWidget::pageName() const
+{
+    if ( !QTabWidget::currentPage() )
+	return 0;
+    return QTabWidget::currentPage()->name();
 }
 
 int QDesignerTabWidget::count() const
@@ -140,6 +151,19 @@ QString QDesignerWizard::pageTitle() const
 void QDesignerWizard::setPageTitle( const QString& title )
 {
     setTitle( currentPage(), title );
+}
+
+void QDesignerWizard::setPageName( const QCString& name )
+{
+    if ( QWizard::currentPage() )
+	QWizard::currentPage()->setName( name );
+}
+
+QCString QDesignerWizard::pageName() const
+{
+    if ( !QWizard::currentPage() )
+	return 0;
+    return QWizard::currentPage()->name();
 }
 
 int QDesignerWizard::pageNum( QWidget *p )
@@ -416,27 +440,35 @@ QWidget *WidgetFactory::createWidget( const QString &className, QWidget *parent,
 {
     if ( className == "QPushButton" ) {
 	QPushButton *b = 0;
-	if ( init )
-	    b = new QPushButton( QString::fromLatin1( name ), parent, name );
-	else
-	    b = new QPushButton( parent, name );
+	if ( init ) {
+	    b = new QDesignerPushButton( parent, name );
+	    b->setText( QString::fromLatin1( name ) );
+	} else {
+	    b = new QDesignerPushButton( parent, name );
+	}
 	b->setAutoDefault( TRUE );
 	return b;
     } else if ( className == "QToolButton" ) {
 	if ( init ) {
-	    QToolButton *tb = new QToolButton( parent, name );
+	    QDesignerToolButton *tb = new QDesignerToolButton( parent, name );
 	    tb->setText( "..." );
 	    return tb;
 	}
-	return new QToolButton( parent, name );
+	return new QDesignerToolButton( parent, name );
     } else if ( className == "QCheckBox" ) {
-	if ( init )
-	    return new QCheckBox( QString::fromLatin1( name ), parent, name );
-	return new QCheckBox( parent, name );
+	if ( init ) {
+	    QDesignerCheckBox *cb = new QDesignerCheckBox( parent, name );
+	    cb->setText( QString::fromLatin1( name ) );
+	    return cb;
+	}
+	return new QDesignerCheckBox( parent, name );
     } else if ( className == "QRadioButton" ) {
-	if ( init )
-	    return new QRadioButton( QString::fromLatin1( name ), parent, name );
-	return new QRadioButton( parent, name );
+	if ( init ) {
+	    QDesignerRadioButton *rb = new QDesignerRadioButton( parent, name );
+	    rb->setText( QString::fromLatin1( name ) );
+	    return rb;
+	}
+	return new QDesignerRadioButton( parent, name );
     } else if ( className == "QGroupBox" ) {
 	if ( init )
 	    return new QGroupBox( QString::fromLatin1( name ), parent, name );
@@ -505,9 +537,9 @@ QWidget *WidgetFactory::createWidget( const QString &className, QWidget *parent,
 	QTabWidget *tw = new QDesignerTabWidget( parent, name );
 	if ( init ) {
 	    FormWindow *fw = find_formwindow( parent );
-	    QWidget *w = fw ? new QDesignerWidget( fw, tw, 0 ) : new QWidget( tw );
+	    QWidget *w = fw ? new QDesignerWidget( fw, tw, "tab" ) : new QWidget( tw, "tab" );
 	    tw->addTab( w, MainWindow::tr("Tab 1") );
-	    w = fw ? new QDesignerWidget( fw, tw, 0 ) : new QWidget( tw );
+	    w = fw ? new QDesignerWidget( fw, tw, "tab" ) : new QWidget( tw, "tab" );
 	    MetaDataBase::addEntry( tw );
 	    tw->addTab( w, MainWindow::tr("Tab 2") );
 	    MetaDataBase::addEntry( tw );
@@ -541,7 +573,7 @@ QWidget *WidgetFactory::createWidget( const QString &className, QWidget *parent,
 	if ( parent )
 	    wiz->reparent( parent, QPoint( 0, 0 ), TRUE );
 	if ( init && parent && parent->inherits( "FormWindow" ) ) {
-	    QDesignerWidget *dw = new QDesignerWidget( (FormWindow*)parent, wiz, "Page" );
+	    QDesignerWidget *dw = new QDesignerWidget( (FormWindow*)parent, wiz, "page" );
 	    MetaDataBase::addEntry( dw );
 	    wiz->addPage( dw, FormWindow::tr( "Page" ) );
 	    QTimer::singleShot( 0, wiz, SLOT( next() ) );
@@ -760,6 +792,14 @@ const char* WidgetFactory::classNameOf( QObject* o )
 	return "QLabel";
     else if ( o->inherits( "QDesignerWizard" ) )
 	return "QWizard";
+    else if ( o->inherits( "QDesignerPushButton" ) )
+	return "QPushButton";
+    else if ( o->inherits( "QDesignerToolButton" ) )
+	return "QToolButton";
+    else if ( o->inherits( "QDesignerRadioButton" ) )
+	return "QRadioButton";
+    else if ( o->inherits( "QDesignerCheckBox" ) )
+	return "QCheckBox";
     return o->className();
 }
 
@@ -780,8 +820,10 @@ void WidgetFactory::initChangedProperties( QObject *o )
     else if ( o->isA( "QFrame" ) ) {
 	MetaDataBase::setPropertyChanged( o, "frameShadow", TRUE );
 	MetaDataBase::setPropertyChanged( o, "frameShape", TRUE );
-    } else if ( o->inherits( "QTabWidget" ) )
+    } else if ( o->inherits( "QTabWidget" ) || o->inherits( "QWizard" ) ) {
 	MetaDataBase::setPropertyChanged( o, "pageTitle", TRUE );
+	MetaDataBase::setPropertyChanged( o, "pageName", TRUE );
+    }
 }
 
 bool WidgetFactory::hasSpecialEditor( int id )
@@ -979,18 +1021,6 @@ bool QLayoutWidget::event( QEvent *e )
     return QWidget::event( e );
 }
 
-static int sp_to_int( QSizePolicy::SizeType t )
-{
-    if ( t == QSizePolicy::MinimumExpanding )
-	return 6;
-    return (int)t;
-}
-
-static bool isGreater( QSizePolicy::SizeType t1, QSizePolicy::SizeType t2 )
-{
-    return sp_to_int( t1 ) > sp_to_int( t2 );
-}
-
 void QLayoutWidget::updateSizePolicy()
 {
     if ( !children() || children()->count() == 0 ) {
@@ -1000,16 +1030,23 @@ void QLayoutWidget::updateSizePolicy()
 
     QObjectListIt it( *children() );
     QObject *o;
-    QSizePolicy::SizeType vt = QSizePolicy::Fixed;
-    QSizePolicy::SizeType ht = QSizePolicy::Fixed;
+    QSizePolicy::SizeType vt = QSizePolicy::Preferred;
+    QSizePolicy::SizeType ht = QSizePolicy::Preferred;
     while ( ( o = it.current() ) ) {
 	++it;
 	if ( !o->inherits( "QWidget" ) || ( (QWidget*)o )->testWState( WState_ForceHide ) )
 	    continue;
-	if ( isGreater( ( (QWidget*)o )->sizePolicy().horData(), ht ) )
-	    ht = ( (QWidget*)o )->sizePolicy().horData();
-	if ( isGreater( ( (QWidget*)o )->sizePolicy().verData(), vt ) )
-	    vt = ( (QWidget*)o )->sizePolicy().verData();
+	QWidget *w = (QWidget*)o;
+	if ( w->sizePolicy().horData() == QSizePolicy::Expanding ||
+	     w->sizePolicy().horData() == QSizePolicy::MinimumExpanding )
+	    ht = QSizePolicy::Expanding;
+	else if ( w->sizePolicy().horData() == QSizePolicy::Fixed && ht != QSizePolicy::Expanding )
+	    ht = QSizePolicy::Fixed;
+	if ( w->sizePolicy().verData() == QSizePolicy::Expanding ||
+	     w->sizePolicy().verData() == QSizePolicy::MinimumExpanding )
+	    vt = QSizePolicy::Expanding;
+	else if ( w->sizePolicy().verData() == QSizePolicy::Fixed && vt != QSizePolicy::Expanding )
+	    vt = QSizePolicy::Fixed;
     }
 
     sp = QSizePolicy( ht, vt );
@@ -1030,3 +1067,4 @@ void CustomWidget::paintEvent( QPaintEvent *e )
 		      *cusw->pixmap );
     }
 }
+

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/network/qhostaddress.h   2.2.0   edited 2000-08-25 $
+** $Id: qt/src/network/qhostaddress.h   2.2.1   edited 2000-09-12 $
 **
 ** Definition of QHostAddress class.
 **
@@ -42,6 +42,7 @@
 #include "qstring.h"
 #endif // QT_H
 
+#ifndef QT_NO_NETWORK
 class QHostAddressPrivate;
 
 class Q_EXPORT QHostAddress
@@ -70,5 +71,5 @@ private:
     QHostAddressPrivate* d;
 };
 
-
+#endif //QT_NO_NETWORK
 #endif

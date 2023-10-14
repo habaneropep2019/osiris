@@ -57,11 +57,11 @@ when drawing.
 As an example, a 10-point Times font containing the ASCII characters uses
 around 1300 bytes when stored in QPF format.
 <p>
-The QPF format is designed to allow memory-mapped usage of the font,
-therefore its RAM consumption can be reduced even further.
-In Qt/Embedded 2.2.0, this memory-mapping is not done.
+Taking advantage of the way the QPF format is structured, Qt/Embedded
+memory-maps the data rather than reading and parsing it.
+This reduces the RAM consumption even further.
 <p>
-The scalable fonts use a much larger amount of memory per-font, but
+The scalable fonts use a larger amount of memory per font, but
 these fonts can give a memory saving if many different sizes of each
 font are needed.
 <p>
@@ -81,7 +81,7 @@ The difference between smooth and non-smooth fonts is illustrated below
 </table>
 </center>
 <p>
-In Qt/Embedded 2.2.0, smooth fonts use 8 times as much memory as non-smooth
+In Qt/Embedded 2.2.1, smooth fonts use 8 times as much memory as non-smooth
 fonts. This multiplier will be reduced to a configurable
 2 or 4 (ie. 4-level and 16-level shading rather than the current excessive
 256-level shading).
@@ -151,7 +151,7 @@ See QMemoryManager::savePrerenderedFont() for this functionality.
 <h2>Notes</h2>
 <p>
 The font definition file, naming conventions for font files, and the format
-of QPF files may change in versions of Qt/Embedded after 2.2.0.
+of QPF files may change in versions of Qt/Embedded after 2.2.1.
 <p>
 When enabled, Qt/Embedded uses the powerful FreeType2 library to implement
 TrueType and Type1 support.
@@ -159,5 +159,5 @@ TrueType and Type1 support.
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.0</div>
+<td align="right"><div align="right">Qt version 2.2.1</div>
 </table></div></address></body></html>

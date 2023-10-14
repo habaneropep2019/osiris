@@ -1,5 +1,5 @@
 /**********************************************************************
-** $Id: qt/src/widgets/qgroupbox.cpp   2.2.0   edited 2000-08-25 $
+** $Id: qt/src/widgets/qgroupbox.cpp   2.2.1   edited 2000-09-06 $
 **
 ** Implementation of QGroupBox widget class
 **
@@ -241,7 +241,7 @@ void QGroupBox::setTitle( const QString &title )
   The title is always placed on the upper frame line, however,
   the horizontal alignment can be specified by the \e alignment parameter.
 
-  The \e alignment is the bitwise OR of the following flags:
+  The \e alignment is one of the following flags:
   <ul>
   <li> \c AlignLeft aligns the title text to the left.
   <li> \c AlignRight aligns the title text to the right.

@@ -1,5 +1,5 @@
 /**********************************************************************
-** $Id: qt/src/widgets/qlineedit.cpp   2.2.0   edited 2000-08-25 $
+** $Id: qt/src/widgets/qlineedit.cpp   2.2.1   edited 2000-09-25 $
 **
 ** Implementation of QLineEdit widget class
 **
@@ -58,7 +58,7 @@ struct QLineEditUndoItem
     QLineEditUndoItem( const QString& s, int p )
 	: str(s),pos(p){}
 #if defined(Q_FULL_TEMPLATE_INSTANTIATION)
-    bool operator==( const QLineEditUndoItem& ) const;
+    bool operator==( const QLineEditUndoItem& ) const { return FALSE; }
 #endif
     QString str;
     int pos;
@@ -474,6 +474,8 @@ void QLineEdit::keyPressEvent( QKeyEvent *e )
 	    v->fixup( tbuf );
 	    if ( old != tbuf ) {
 		d->pmDirty = TRUE;
+		if ( cursorPos > (int)tbuf.length() )
+		    cursorPos = tbuf.length();
 		update();
 	    }
 	    if ( v->validate( tbuf, cursorPos ) == QValidator::Acceptable )
@@ -1805,9 +1807,9 @@ void QLineEdit::setEdited( bool on )
 
 /*!  Returns the edited flag of the line edit.  If this returns FALSE,
 the line edit's contents have not been changed since the construction
-of the QLineEdit (or the last call to setEdited( FALSE ), if any).  If
-it returns true, the contents have been edited, or setEdited( TRUE )
-has been called.
+of the QLineEdit (or the last call to either setText() or setEdited( FALSE ), 
+if any).  If it returns true, the contents have been edited, or 
+setEdited( TRUE ) has been called.
 
 \sa setEdited()
 */

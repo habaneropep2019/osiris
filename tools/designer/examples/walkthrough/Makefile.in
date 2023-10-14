@@ -8,7 +8,7 @@ CC	=	$(SYSCONF_CC) $(QT_C_MT)
 CFLAGS	=	$(SYSCONF_CFLAGS)
 INCPATH =	
 LFLAGS	=	$(SYSCONF_LFLAGS_QT) $(SYSCONF_RPATH_QT) $(SYSCONF_LFLAGS) $(QT_LFLAGS_MT)
-LIBS	=	$(SUBLIBS)  $(SYSCONF_LIBS_QTAPP) $(SYSCONF_LIBS_QT) $(SYSCONF_LIBS)
+LIBS	=	$(SUBLIBS) $(SYSCONF_LIBS_QT) $(SYSCONF_LIBS) $(SYSCONF_LIBS_QTAPP)
 MOC	=	$(SYSCONF_MOC)
 UIC	=	$(SYSCONF_UIC)
 
@@ -108,7 +108,7 @@ mydialogimpl.o: mydialogimpl.cpp \
 		mydialog.h
 
 mydialog.h: mydialog.ui
-	$(UIC) mydialog.ui -o mydialog.h
+	$(UIC) mydialog.ui -o $(INTERFACE_DECL_PATH)/mydialog.h
 
 mydialog.cpp: mydialog.ui
 	$(UIC) mydialog.ui -i mydialog.h -o mydialog.cpp

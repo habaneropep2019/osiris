@@ -645,7 +645,7 @@ void LayoutGridCommand::unexecute()
 
 BreakLayoutCommand::BreakLayoutCommand( const QString &n, FormWindow *fw,
 					QWidget *layoutBase, const QWidgetList &wl )
-    : Command( n, fw ), lb( layoutBase )
+    : Command( n, fw ), lb( layoutBase ), widgets( wl )
 {
     WidgetFactory::LayoutType lay = WidgetFactory::layoutType( layoutBase );
     spacing = MetaDataBase::spacing( layoutBase );
@@ -666,6 +666,8 @@ void BreakLayoutCommand::execute()
     formWindow()->clearSelection( FALSE );
     layout->breakLayout();
     formWindow()->mainWindow()->objectHierarchy()->rebuild();
+    for ( QWidget *w = widgets.first(); w; w = widgets.next() )
+	w->resize( QMAX( 16, w->width() ), QMAX( 16, w->height() ) );
 }
 
 void BreakLayoutCommand::unexecute()
@@ -705,7 +707,7 @@ AddTabPageCommand::AddTabPageCommand( const QString &n, FormWindow *fw,
 				      QTabWidget *tw, const QString &label )
     : Command( n, fw ), tabWidget( tw ), tabLabel( label )
 {
-    tabPage = new QDesignerWidget( formWindow(), tabWidget, 0 );
+    tabPage = new QDesignerWidget( formWindow(), tabWidget, "tab" );
     tabPage->hide();
     index = -1;
     MetaDataBase::addEntry( tabPage );
@@ -761,7 +763,7 @@ AddWizardPageCommand::AddWizardPageCommand( const QString &n, FormWindow *fw,
 					    QWizard *w, const QString &label )
     : Command( n, fw ), wizard( w ), pageLabel( label )
 {
-    page = new QDesignerWidget( formWindow(), wizard, 0 );
+    page = new QDesignerWidget( formWindow(), wizard, "page" );
     page->hide();
     index = -1;
     MetaDataBase::addEntry( page );
@@ -988,6 +990,13 @@ void TabOrderCommand::unexecute()
 
 // ------------------------------------------------------------
 
+#if defined(Q_FULL_TEMPLATE_INSTANTIATION)
+bool PopulateListBoxCommand::Item::operator==( const PopulateListBoxCommand::Item& ) const
+{
+    return FALSE;
+}
+#endif
+
 PopulateListBoxCommand::PopulateListBoxCommand( const QString &n, FormWindow *fw,
 						QListBox *lb, const QValueList<Item> &items )
     : Command( n, fw ), newItems( items ), listbox( lb )
@@ -1028,6 +1037,12 @@ void PopulateListBoxCommand::unexecute()
 
 // ------------------------------------------------------------
 
+#if defined(Q_FULL_TEMPLATE_INSTANTIATION)
+bool PopulateIconViewCommand::Item::operator==( const PopulateIconViewCommand::Item& ) const
+{
+    return FALSE;
+}
+#endif
 
 PopulateIconViewCommand::PopulateIconViewCommand( const QString &n, FormWindow *fw,
 						  QIconView *iv, const QValueList<Item> &items )

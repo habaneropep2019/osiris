@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qnamespace.h   2.2.0   edited 2000-08-28 $
+** $Id: qt/src/kernel/qnamespace.h   2.2.1   edited 2000-08-28 $
 **
 ** Definition of Qt namespace (as class for compiler compatibility)
 **

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qsizepolicy.h   2.2.0   edited 2000-08-25 $
+** $Id: qt/src/kernel/qsizepolicy.h   2.2.1   edited 2000-09-18 $
 **
 ** Definition of the QSizePolicy class
 **
@@ -82,13 +82,13 @@ public:
     void setVerData( SizeType d ) { data = (data & ~(HMask<<HSize)) |
 					   (d<<HSize); }
 		
-    void setHeightForWidth( bool b ) { data = b ? data & ~( 1 << 2*HSize )
-					      :  data | ( 1 << 2*HSize ); }
+    void setHeightForWidth( bool b ) { data = b ? ( data | ( 1 << 2*HSize ) )
+					      : ( data & ~( 1 << 2*HSize ) );  }
     bool hasHeightForWidth() const { return data & ( 1 << 2*HSize ); }
 
     bool operator==( const QSizePolicy& s ) const { return data == s.data; }
     bool operator!=( const QSizePolicy& s ) const { return data != s.data; }
-    
+
 private:
     QSizePolicy( int i ): data( i ) {}
 

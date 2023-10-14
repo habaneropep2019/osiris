@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qrichtext.cpp   2.2.0   edited 2000-08-28 $
+** $Id: qt/src/kernel/qrichtext.cpp   2.2.1   edited 2000-10-02 $
 **
 ** Implementation of the internal Qt classes dealing with rich text
 **
@@ -298,10 +298,12 @@ bool QRichText::space_ = FALSE;
 
 QRichText::QRichText( const QString &doc, const QFont& font,
 		      const QString& context,
-		      int margin,  const QMimeSourceFactory* factory, const QStyleSheet* sheet  )
-    :QTextParagraph( 0, new QTextFormatCollection(),
-		     QTextCharFormat( font, QColor() ), (base = new QStyleSheetItem(0,"") ) )
+		      int margin, const QMimeSourceFactory* factory,
+		      const QStyleSheet* sheet )
+    : QTextParagraph( 0, new QTextFormatCollection(),
+		      QTextCharFormat( font, QColor() ), new QStyleSheetItem(0,"") )
 {
+    base = (QStyleSheetItem*)style;
     contxt = context;
 
     // for access during parsing only
@@ -336,8 +338,9 @@ QRichText::QRichText( const QMap<QString, QString> &attr, const QString &doc, in
 			const QString& context,
 			int margin,  const QMimeSourceFactory* factory, const QStyleSheet* sheet  )
     :QTextParagraph( 0, new QTextFormatCollection(),
-	    QTextCharFormat( fmt ), ( base = new QStyleSheetItem(*basestyle) ), attr )
+		     QTextCharFormat( fmt ), new QStyleSheetItem(*basestyle), attr )
 {
+    base = (QStyleSheetItem*)style;
     contxt = context;
 
     // for access during parsing only

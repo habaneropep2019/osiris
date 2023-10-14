@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/overlay_x11/gearwidget.cpp   2.2.0   edited 2000-08-31 $
+** $Id: qt/examples/overlay_x11/gearwidget.cpp   2.2.1   edited 2000-08-31 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **

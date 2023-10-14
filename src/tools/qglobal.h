@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qglobal.h   2.2.0   edited 2000-09-03 $
+** $Id: qt/src/tools/qglobal.h   2.2.1   edited 2000-10-04 $
 **
 ** Global type declarations and definitions
 **
@@ -39,8 +39,8 @@
 #define QGLOBAL_H
 
 
-#define QT_VERSION	220
-#define QT_VERSION_STR	"2.2.0"
+#define QT_VERSION	221
+#define QT_VERSION_STR	"2.2.1"
 
 
 //
@@ -98,9 +98,6 @@
 #define _OS_RELIANTUNIX_
 #elif defined(linux) || defined(__linux) || defined(__linux__)
 #define _OS_LINUX_
-#if defined(__alpha__) || defined(__alpha)
-#define _OS_ALPHA_LINUX_
-#endif
 #elif defined(__FreeBSD__)
 #define _OS_FREEBSD_
 #elif defined(__NetBSD__)
@@ -196,6 +193,9 @@
 #define Q_TEMPLATE_NEEDS_EXPLICIT_CONVERSION
 #define Q_SPURIOUS_NON_VOID_WARNING
 #endif
+#if __GNUC__ == 2 && __GNUC_MINOR__ >= 95
+#define Q_DELETING_VOID_UNDEFINED
+#endif
 #if __GNUC__ == 2 && __GNUC_MINOR__ >= 96
 #define Q_DELETING_VOID_UNDEFINED
 #define Q_FP_CCAST_BROKEN
@@ -206,6 +206,9 @@
 #elif defined(__xlC__)
 #define _CC_XLC_
 #define Q_FULL_TEMPLATE_INSTANTIATION
+#if __xlC__ <= 0x0306
+#define Q_TEMPLATE_NEEDS_EXPLICIT_CONVERSION
+#endif
 #elif defined(como40)
 #define _CC_EDG_
 #define _CC_COMEAU_
@@ -224,6 +227,7 @@
 #define _CC_SUN_
 #if __SUNPRO_CC >= 0x500
 #define Q_HAS_BOOL_TYPE
+#define Q_FP_CCAST_BROKEN
 #define Q_SPARCWORKS_FUNCP_BUG
 #define Q_C_CALLBACKS
 #endif
@@ -304,11 +308,11 @@
 #define Q_HAS_BOOL_TYPE
 #elif defined(_CC_COMEAU_)
 #define Q_HAS_BOOL_TYPE
-#elif defined(sgi) && ( (_COMPILER_VERSION >= 710) || defined(_BOOL) )
+#elif defined(sgi) && defined(_BOOL)
 #define Q_HAS_BOOL_TYPE
 #elif defined(__DECCXX) && (__DECCXX_VER >= 60060005)
 #define Q_HAS_BOOL_TYPE
-#elif defined(_AIX) && (__xlC__ >= 0x500)
+#elif defined(_AIX) && (__xlC__ >= 0x400)
 #define Q_HAS_BOOL_TYPE
 #endif
 
@@ -478,6 +482,8 @@ Q_EXPORT bool qSysInfo( int *wordSize, bool *bigEndian );
 #pragma warning(disable: 4275)
 #pragma warning(disable: 4514)
 #pragma warning(disable: 4800)
+#pragma warning(disable: 4097)
+#pragma warning(disable: 4706)
 #elif defined(_CC_BOR_)
 #pragma option -w-inl
 #pragma option -w-aus

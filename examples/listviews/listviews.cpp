@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/listviews/listviews.cpp   2.2.0   edited 2000-08-31 $
+** $Id: qt/examples/listviews/listviews.cpp   2.2.1   edited 2000-09-30 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -16,6 +16,7 @@
 #include <qobjectlist.h>
 #include <qpopupmenu.h>
 #include <qheader.h>
+#include <qregexp.h>
 
 // -----------------------------------------------------------------
 

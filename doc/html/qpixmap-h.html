@@ -30,7 +30,7 @@ remains with Trolltech.
 <hr>
 <pre>
 /****************************************************************************
-** &#36;Id&#58; qt/src/kernel/qpixmap.h   2.2.0   edited 2000-08-25 $
+** &#36;Id&#58; qt/src/kernel/qpixmap.h   2.2.1   edited 2000-09-15 $
 **
 ** Definition of QPixmap class
 **
@@ -190,6 +190,10 @@ public:
     int numCols() const;
 #endif
 
+#if defined(Q_FULL_TEMPLATE_INSTANTIATION)
+    bool operator==( const QPixmap&amp; ) const { return FALSE; }
+#endif
+
 protected:
     QPixmap( int w, int h, const uchar *data, bool isXbitmap );
     int metric( int ) const;
@@ -226,6 +230,8 @@ protected:
         int id; // ### should use QPaintDevice::hd, since it is there
         QRgb * clut;
         int numcols;
+        int rw;
+        int rh;
 #endif
         Optimization optim;
     } *data;
@@ -318,5 +324,5 @@ Q_EXPORT QDataStream &amp;operator&gt;&gt;( QDataStream &amp;, QPixmap &amp; );
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.0</div>
+<td align="right"><div align="right">Qt version 2.2.1</div>
 </table></div></address></body></html>

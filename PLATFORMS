@@ -15,11 +15,11 @@ Supported platforms and compilers:
 
 Limitations:
 
-  aix-g++ and ultrix-g++ do not support shared libraries, use static.
+  ultrix-g++ does not support shared libraries, use static.
 
 Compilation problems:
 
-  Qt 2.0 has problems compiling on some combinations of operating
+  Qt 2.x has problems compiling on some combinations of operating
   system versions and compiler versions.  Information about such
   problems will be posted on http://www.trolltech.com/platforms/ as we
   become aware of them.

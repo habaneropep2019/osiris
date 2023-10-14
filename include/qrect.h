@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qrect.h   2.2.0   edited 2000-08-25 $
+** $Id: qt/src/kernel/qrect.h   2.2.1   edited 2000-09-12 $
 **
 ** Definition of QRect class
 **
@@ -238,18 +238,6 @@ inline int QRect::height() const
 
 inline QSize QRect::size() const
 { return QSize(x2-x1+1, y2-y1+1); }
-
-// worth inlining since proper is usually a constant (and usually FALSE)
-inline bool QRect::contains( const QPoint &p, bool proper ) const
-{
-    if ( proper )
-	return p.x() > x1 && p.x() < x2 &&
-	       p.y() > y1 && p.y() < y2;
-    else
-	return p.x() >= x1 && p.x() <= x2 &&
-	       p.y() >= y1 && p.y() <= y2;
-}
-
 
 inline bool QRect::contains( int x, int y, bool proper ) const
 {

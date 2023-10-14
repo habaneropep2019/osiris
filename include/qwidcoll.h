@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/compat/qwidcoll.h   2.2.0   edited 2000-08-25 $
+** $Id: qt/src/compat/qwidcoll.h   2.2.1   edited 2000-08-25 $
 **
 ** Compatibility file - should only be included by legacy code.
 ** It #includes the file which obsoletes this one.
@@ -21,7 +21,7 @@
 **
 *****************************************************************************/
 /****************************************************************************
-** $Id: qt/src/compat/qwidcoll.h   2.2.0   edited 2000-08-25 $
+** $Id: qt/src/compat/qwidcoll.h   2.2.1   edited 2000-08-25 $
 **
 ** Definition of QWidget collections
 **

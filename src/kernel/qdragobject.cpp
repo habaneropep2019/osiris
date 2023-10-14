@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qdragobject.cpp   2.2.0   edited 2000-08-25 $
+** $Id: qt/src/kernel/qdragobject.cpp   2.2.1   edited 2000-10-03 $
 **
 ** Implementation of Drag and Drop support
 **
@@ -351,7 +351,7 @@ QPixmap QDragObject::pixmap() const
 }
 
 /*!
-  Returns the currently set pixmap hitspot.
+  Returns the currently set pixmap hotspot.
 */
 QPoint QDragObject::pixmapHotSpot() const
 {

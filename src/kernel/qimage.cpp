@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qimage.cpp   2.2.0   edited 2000-08-28 $
+** $Id: qt/src/kernel/qimage.cpp   2.2.1   edited 2000-09-16 $
 **
 ** Implementation of QImage and QImageIO classes
 **
@@ -406,6 +406,45 @@ QImage::QImage( uchar* yourdata, int w, int h, int depth,
     data->bits = jt;
     data->bitordr = bitOrder;
 }
+
+#ifdef _WS_QWS_
+
+/*!
+  Constructs an image that uses an existing memory buffer.
+  The buffer must remain valid for the life of the QImage.  The image
+  will not delete the buffer at destruction.
+
+  \a bpl specifies the number of bytes per line.
+
+  If colortable is 0, a color table sufficient for \a numColors will be
+  allocated (and destructed later).
+*/
+QImage::QImage( uchar* yourdata, int w, int h, int depth,
+		int bpl, QRgb* colortable, int numColors,
+		Endian bitOrder )
+{
+    init();
+    data->w = w;
+    data->h = h;
+    data->d = depth;
+    data->ncols = numColors;
+    data->nbytes = bpl * h;
+    if ( colortable || !numColors ) {
+	data->ctbl = colortable;
+	data->ctbl_mine = FALSE;
+    } else {
+	// calloc since we realloc, etc. later (ick)
+        data->ctbl = (QRgb*)calloc( numColors*sizeof(QRgb), numColors );
+	data->ctbl_mine = TRUE;
+    }
+    uchar** jt = (uchar**)malloc(h*sizeof(uchar*));
+    for (int j=0; j<h; j++) {
+	jt[j] = yourdata+j*bpl;
+    }
+    data->bits = jt;
+    data->bitordr = bitOrder;
+}
+#endif
 
 /*!
   Destructs the image and cleans up.
@@ -3030,7 +3069,8 @@ static void swapPixel01( QImage *image )	// 1-bpp: swap 0 and 1 pixels
   read.  See the QMovie for loading multiple images.
 
   PBM, PGM, and PPM format \e output is always in the more condensed
-  raw format.
+  raw format. PPM and PGM files with more than 256 levels of intensity
+  are scaled down when reading.
 
   \warning Unisys has changed its position regarding GIF.  If you are
   in a country where Unisys holds a patent on LZW compression and/or
@@ -3425,7 +3465,7 @@ const char *QImageIO::imageFormat( QIODevice *d )
     if ( rdlen != buflen )
 	return 0;
 
-    const char* format;
+    const char* format = 0;
 #ifndef QT_NO_ASYNC_IMAGE_IO
     // Try asynchronous loaders first (before we 0->1 the header),
     // but overwrite if found in IOHandlers.
@@ -4208,8 +4248,9 @@ static void read_pbm_image( QImageIO *iio )	// read PBM image data
     if ( w <= 0 || w > 32767 || h <= 0 || h > 32767 || mcc < 0 || mcc > 32767 )
 	return;					// weird P.M image
 
-    if ( mcc > 255 )
-	mcc = 255;
+    int maxc = mcc;
+    if ( maxc > 255 )
+	maxc = 255;
     image.create( w, h, nbits, 0,
 		  nbits == 1 ? QImage::BigEndian :  QImage::IgnoreEndian );
     if ( image.isNull() )
@@ -4259,18 +4300,34 @@ static void read_pbm_image( QImageIO *iio )	// read PBM image data
 		    *p++ = b;
 		}
 	    } else if ( nbits == 8 ) {
-		while ( n-- ) {
-		    *p++ = read_pbm_int( d );
+		if ( mcc == maxc ) {
+		    while ( n-- ) {
+			*p++ = read_pbm_int( d );
+		    }
+		} else {
+		    while ( n-- ) {
+			*p++ = read_pbm_int( d ) * maxc / mcc;
+		    }
 		}
 	    } else {				// 32 bits
 		n /= 4;
 		int r, g, b;
-		while ( n-- ) {
-		    r = read_pbm_int( d );
-		    g = read_pbm_int( d );
-		    b = read_pbm_int( d );
-		    *((QRgb*)p) = qRgb( r, g, b );
-		    p += 4;
+		if ( mcc == maxc ) {
+		    while ( n-- ) {
+			r = read_pbm_int( d );
+			g = read_pbm_int( d );
+			b = read_pbm_int( d );
+			*((QRgb*)p) = qRgb( r, g, b );
+			p += 4;
+		    }
+		} else {
+		    while ( n-- ) {
+			r = read_pbm_int( d ) * maxc / mcc;
+			g = read_pbm_int( d ) * maxc / mcc;
+			b = read_pbm_int( d ) * maxc / mcc;
+			*((QRgb*)p) = qRgb( r, g, b );
+			p += 4;
+		    }
 		}
 	    }
 	}
@@ -4281,9 +4338,9 @@ static void read_pbm_image( QImageIO *iio )	// read PBM image data
 	image.setColor( 0, qRgb(255,255,255) ); // white
 	image.setColor( 1, qRgb(0,0,0) );	// black
     } else if ( nbits == 8 ) {			// graymap
-	image.setNumColors( mcc+1 );
-	for ( int i=0; i<=mcc; i++ )
-	    image.setColor( i, qRgb(i*255/mcc,i*255/mcc,i*255/mcc) );
+	image.setNumColors( maxc+1 );
+	for ( int i=0; i<=maxc; i++ )
+	    image.setColor( i, qRgb(i*255/maxc,i*255/maxc,i*255/maxc) );
     }
 
     iio->setImage( image );
@@ -5318,7 +5375,9 @@ QGfx * QImage::graphicsContext()
 {
     QGfx * ret=0;
     if(depth()) {
-	ret=QGfx::createGfx(depth(),bits(),width(),height(),bytesPerLine());
+	int w = qt_screen->mapToDevice( QSize(width(),height()) ).width();
+	int h = qt_screen->mapToDevice( QSize(width(),height()) ).height();
+	ret=QGfx::createGfx(depth(),bits(),w,h,bytesPerLine());
     } else {
 	qDebug("Trying to create image for null depth");
 	return 0;

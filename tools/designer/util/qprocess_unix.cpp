@@ -22,11 +22,6 @@
 #include "qlist.h"
 #include "qprocess.h"
 
-//### 3.0: remove -D_BSD from tmake and remove this AIX preprocessor stuff
-#if defined(_OS_AIX_) && defined(_BSD)
-#undef _BSD
-#endif
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>
@@ -38,7 +33,7 @@
 extern "C" {
 #endif
 
-#if defined(_OS_OSF_)
+#if defined(_OS_OSF_) || ( defined(_OS_IRIX_) && defined(_CC_GNU_) )
 static void qt_C_sigchldHnd();
 #else
 static void qt_C_sigchldHnd( int );
@@ -48,7 +43,7 @@ static void qt_C_sigchldHnd( int );
 }
 #endif
 
-#if defined(_OS_OSF_)
+#if defined(_OS_OSF_) || ( defined(_OS_IRIX_) && defined(_CC_GNU_) )
 void qt_C_sigchldHnd()
 #else
 void qt_C_sigchldHnd( int )
@@ -91,7 +86,7 @@ QProcessPrivate::QProcessPrivate( QProcess *proc ) : d( proc )
 	sigemptyset( &(act.sa_mask) );
 	sigaddset( &(act.sa_mask), SIGCHLD );
 	act.sa_flags = SA_NOCLDSTOP;
-#ifdef SA_RESTART
+#if defined(SA_RESTART)
 	act.sa_flags |= SA_RESTART;
 #endif
 	if ( sigaction( SIGCHLD, &act, oldact ) != 0 )
@@ -106,12 +101,14 @@ QProcessPrivate::~QProcessPrivate()
     qDebug( "QProcessPrivate: Destructor" );
 #endif
     // restore SIGCHLD handler
-    proclist->remove( d );
-    if ( proclist->count() == 0 ) {
-	delete proclist;
-	proclist = 0;
-	if ( sigaction( SIGCHLD, oldact, 0 ) != 0 )
-	    qWarning( "Error restoring SIGCHLD handler" );
+    if ( proclist != 0 ) {
+	proclist->remove( d );
+	if ( proclist->count() == 0 ) {
+	    delete proclist;
+	    proclist = 0;
+	    if ( sigaction( SIGCHLD, oldact, 0 ) != 0 )
+		qWarning( "Error restoring SIGCHLD handler" );
+	}
     }
 
     while ( !stdinBuf.isEmpty() ) {
@@ -147,7 +144,14 @@ void QProcessPrivate::sigchldHnd()
 #if defined(QPROCESS_DEBUG)
 	    qDebug( "QProcessPrivate::sigchldHnd(): process exited" );
 #endif
+	    // read pending data
+	    proc->socketRead( proc->d->socketStdout[0] );
+	    proc->socketRead( proc->d->socketStderr[0] );
+
 	    emit proc->processExited();
+	    // the slot might have deleted the last process...
+	    if ( !proclist )
+		return;
 	}
     }
 }
@@ -329,6 +333,8 @@ void QProcess::socketRead( int fd )
 #if defined(QPROCESS_DEBUG)
     qDebug( "QProcess::socketRead(): %d", fd );
 #endif
+    if ( fd == 0 )
+	return;
     const size_t bufsize = 4096;
     char *buffer = new char[bufsize];
     int n = ::read( fd, buffer, bufsize-1 );

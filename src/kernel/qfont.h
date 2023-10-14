@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qfont.h   2.2.0   edited 2000-08-25 $
+** $Id: qt/src/kernel/qfont.h   2.2.1   edited 2000-09-02 $
 **
 ** Definition of QFont class
 **
@@ -96,7 +96,8 @@ public:
 		     KSC_5601,
 		     GB_2312,
 		     Big5,
-		     TSCII
+		     TSCII,
+		     KOI8U
     };
     enum StyleHint { Helvetica, Times, Courier, OldEnglish,  System, AnyStyle,
 		     SansSerif	= Helvetica,

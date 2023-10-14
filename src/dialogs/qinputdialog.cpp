@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/dialogs/qinputdialog.cpp   2.2.0   edited 2000-08-25 $
+** $Id: qt/src/dialogs/qinputdialog.cpp   2.2.1   edited 2000-09-24 $
 **
 ** Implementation of QInputDialog class
 **
@@ -47,6 +47,7 @@
 #include <qcombobox.h>
 #include <qwidgetstack.h>
 #include <qvalidator.h>
+#include <qapplication.h>
 
 class QInputDialogPrivate
 {
@@ -124,6 +125,11 @@ QInputDialog::QInputDialog( const QString &label, QWidget* parent, const char* n
 			  bool modal, Type type)
     : QDialog( parent, name, modal )
 {
+    if ( parent && parent->icon() &&!parent->icon()->isNull() )
+	setIcon( *parent->icon() );
+    else if ( qApp->mainWidget() && qApp->mainWidget()->icon() && !qApp->mainWidget()->icon()->isNull() )
+	QDialog::setIcon( *qApp->mainWidget()->icon() );
+
     d = new QInputDialogPrivate;
     d->lineEdit = 0;
     d->spinBox = 0;

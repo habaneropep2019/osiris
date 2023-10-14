@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/network/qserversocket.h   2.2.0   edited 2000-08-25 $
+** $Id: qt/src/network/qserversocket.h   2.2.1   edited 2000-09-12 $
 **
 ** Definition of QServerSocketClass.
 **
@@ -42,7 +42,7 @@
 #include "qobject.h"
 #include "qsocket.h"
 #endif // QT_H
-
+#ifndef QT_NO_NETWORK
 
 class QServerSocketPrivate;
 
@@ -80,5 +80,5 @@ private:
     void init( const QHostAddress & address, Q_UINT16 port, int backlog );
 };
 
-
+#endif // QT_NO_NETWORK
 #endif // QSERVERSOCKET_H

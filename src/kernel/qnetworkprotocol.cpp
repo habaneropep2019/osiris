@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qnetworkprotocol.cpp   2.2.0   edited 2000-08-25 $
+** $Id: qt/src/kernel/qnetworkprotocol.cpp   2.2.1   edited 2000-09-14 $
 **
 ** Implementation of QNetworkProtocol class
 **
@@ -872,7 +872,8 @@ void QNetworkProtocol::removeMe()
 #ifdef QNETWORKPROTOCOL_DEBUG
 	qDebug( "QNetworkOperation:  autodelete of QNetworkProtocol %p", this );
 #endif
-	delete url();
+	delete d->url;
+	d->url = 0;
     }
 }
 

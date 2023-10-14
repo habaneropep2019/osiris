@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/doc/indices.doc   2.2.0   edited 2000-08-29 $
+** $Id: qt/doc/indices.doc   2.2.1   edited 2000-08-29 $
 **
 ** Miscellaneous index pages
 **
@@ -34,7 +34,7 @@
 **********************************************************************/
 
 #if defined(DEBUG)
-static char ident[] = "$Id: qt/doc/indices.doc   2.2.0   edited 2000-08-29 $";
+static char ident[] = "$Id: qt/doc/indices.doc   2.2.1   edited 2000-08-29 $";
 #endif
 
 /*! \page index.html

@@ -157,7 +157,6 @@ void QAlphaWidget::run( int time )
 	widget->clearWState( WState_ForceHide );
 	pm = mixed;
 	show();
-	raise();
 
 	connect( &anim, SIGNAL(timeout()), this, SLOT(render()));
 	anim.start( 0 );
@@ -327,8 +326,7 @@ static QRollEffect* roll = 0;
   Construct a QRollEffect widget.
 */
 QRollEffect::QRollEffect( QWidget* w, WFlags f, DirFlags orient )
-    : QWidget( 0, 0, f )
-, orientation(orient)
+    : QWidget( 0, 0, f ), orientation(orient)
 {
     widget = (QAccessWidget*) w;
     ASSERT( widget );
@@ -452,15 +450,21 @@ void QRollEffect::scroll()
             elapsed = tempel;
 
 	if ( currentWidth != totalWidth ) {
-	    currentWidth = double( totalWidth * elapsed ) / (double)duration;
+	    currentWidth = totalWidth * (elapsed/duration)
+		+ ( 2 * totalWidth * (elapsed%duration) + duration )
+		/ ( 2 * duration );
+	    // equiv. to int( (totalWidth*elapsed) / duration + 0.5 )
 	    done = (currentWidth >= totalWidth);
 	}
 	if ( currentHeight != totalHeight ) {
-	    currentHeight = double( totalHeight * elapsed ) / (double)duration;
+	    currentHeight = totalHeight * (elapsed/duration)
+		+ ( 2 * totalHeight * (elapsed%duration) + duration )
+		/ ( 2 * duration );
+	    // equiv. to int( (totalHeight*elapsed) / duration + 0.5 )
 	    done = (currentHeight >= totalHeight);
 	}
-	done = ( ( currentHeight >= totalHeight ) && 
-		 ( currentWidth >= totalWidth ) );
+	done = ( currentHeight >= totalHeight ) && 
+	       ( currentWidth >= totalWidth );
 
         int w = totalWidth;
 	int h = totalHeight;
@@ -533,9 +537,11 @@ void qScrollEffect( QWidget* w, QEffects::DirFlags orient, int time )
     qApp->sendPostedEvents( w, QEvent::Resize );
 
     if ( qstrcmp( w->name(), "qt_internal_mdi_popup" ) )
-	roll = new QRollEffect( w, Qt::WStyle_Customize | Qt::WStyle_Tool | Qt::WResizeNoErase | Qt::WRepaintNoErase, orient );
+	roll = new QRollEffect( w, Qt::WStyle_Customize | Qt::WStyle_Tool | 
+	    Qt::WResizeNoErase | Qt::WRepaintNoErase | Qt::WStyle_StaysOnTop, orient );
     else
-	roll = new QRollEffect( w, Qt::WStyle_Customize | Qt::WType_Popup | Qt::WResizeNoErase | Qt::WRepaintNoErase, orient );
+	roll = new QRollEffect( w, Qt::WStyle_Customize | Qt::WType_Popup | 
+	    Qt::WResizeNoErase | Qt::WRepaintNoErase | Qt::WStyle_StaysOnTop, orient );
 
     roll->run( time );
 }
@@ -554,9 +560,11 @@ void qFadeEffect( QWidget* w, int time )
     qApp->sendPostedEvents( w, QEvent::Resize );
 
     if ( qstrcmp( w->name(), "qt_internal_mdi_popup" ) )
-	blend = new QAlphaWidget( w, Qt::WStyle_Customize | Qt::WStyle_Tool | Qt::WResizeNoErase | Qt::WRepaintNoErase );
+	blend = new QAlphaWidget( w, Qt::WStyle_Customize | Qt::WStyle_Tool | 
+	    Qt::WResizeNoErase | Qt::WRepaintNoErase | Qt::WStyle_StaysOnTop );
     else
-	blend = new QAlphaWidget( w, Qt::WStyle_Customize | Qt::WType_Popup | Qt::WResizeNoErase | Qt::WRepaintNoErase );
+	blend = new QAlphaWidget( w, Qt::WStyle_Customize | Qt::WType_Popup | 
+	    Qt::WResizeNoErase | Qt::WRepaintNoErase | Qt::WStyle_StaysOnTop);
 
     blend->run( time );
 }

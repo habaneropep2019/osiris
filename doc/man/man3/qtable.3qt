@@ -1,4 +1,4 @@
-.TH QTable 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.TH QTable 3qt "4 October 2000" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -363,7 +363,7 @@ This is called to activate the next cell if in-place editing was finished by pre
 .PP
 If you want a different behaviour then going from top to bottom, reimplement this function.
 .SH "int QTable::addSelection ( const QTableSelection & s ) \fC[virtual]\fR"
-Adds a selection described by \fIs\fR to the table and returns its number or -1 if the selection is invalid. Don't forget to call QTableSelection::init() and QTableSelection::expandTo() to make it valid (see also QTableSelection::isValid()).
+Adds a selection described by \fIs\fR to the table and returns its number or -1 if the selection is invalid. Don't forget to call QTableSelection::init() and QTableSelection::expandTo() to make it valid (see also QTableSelection::isActive()).
 .SH "void QTable::adjustColumn ( int col ) \fC[virtual slot]\fR"
 Resizes the column \fIcol\fR to be exactly wide enough so that the whole contents is visible.
 .SH "void QTable::adjustRow ( int row ) \fC[virtual slot]\fR"
@@ -379,7 +379,7 @@ Returns the bounding rect of the cell \fIrow, col\fR in contents coordinates.
 .SH "QWidget * QTable::cellWidget ( int row, int col ) const \fC[virtual]\fR"
 Returns the widget which has been set to the cell \fIrow, col\fR of 0 if there is no widget.
 .SH "void QTable::clearCell ( int row, int col ) \fC[virtual]\fR"
-Removes the QTableItem in position \\p row, \fIcol.\fR
+Removes the QTableItem in position \fIrow, col.\fR
 .SH "void QTable::clearCellWidget ( int row, int col ) \fC[virtual]\fR"
 Removes the widget (if there is any) which is set for the cell \fIrow, col.\fR
 .SH "void QTable::clearSelection ( bool repaint = TRUE ) \fC[slot]\fR"

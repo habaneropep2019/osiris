@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qstring.h   2.2.0   edited 2000-08-25 $
+** $Id: qt/src/tools/qstring.h   2.2.1   edited 2000-09-20 $
 **
 ** Definition of the QString class, and related Unicode
 ** functions.
@@ -646,8 +646,11 @@ inline QString::QString() :
 //
 inline QString::~QString()
 {
-    if ( d->deref() )
+    if ( d->deref() ) {
+	if ( d == shared_null )
+	    shared_null = 0;
 	d->deleteSelf();
+    }
 }
 
 inline QString &QString::operator=( QChar c )

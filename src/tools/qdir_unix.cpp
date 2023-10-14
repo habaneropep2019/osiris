@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qdir_unix.cpp   2.2.0   edited 2000-08-25 $
+** $Id: qt/src/tools/qdir_unix.cpp   2.2.1   edited 2000-09-20 $
 **
 ** Implementation of QDirclass
 **
@@ -243,23 +243,25 @@ bool QDir::readDirEntries( const QString &nameFilter,
     }
 
     // Sort...
-    QDirSortItem* si= new QDirSortItem[fiList->count()];
-    QFileInfo* itm;
-    i=0;
-    for (itm = fiList->first(); itm; itm = fiList->next())
-	si[i++].item = itm;
-    qt_cmp_si_sortSpec = sortSpec;
-    qsort( si, i, sizeof(si[0]), qt_cmp_si );
-    // put them back in the list
-    fiList->setAutoDelete( FALSE );
-    fiList->clear();
-    int j;
-    for ( j=0; j<i; j++ ) {
-	fiList->append( si[j].item );
-	fList->append( si[j].item->fileName() );
+    if(fiList->count()) {
+	QDirSortItem* si= new QDirSortItem[fiList->count()];
+	QFileInfo* itm;
+	i=0;
+	for (itm = fiList->first(); itm; itm = fiList->next())
+	    si[i++].item = itm;
+	qt_cmp_si_sortSpec = sortSpec;
+	qsort( si, i, sizeof(si[0]), qt_cmp_si );
+	// put them back in the list
+	fiList->setAutoDelete( FALSE );
+	fiList->clear();
+	int j;
+	for ( j=0; j<i; j++ ) {
+	    fiList->append( si[j].item );
+	    fList->append( si[j].item->fileName() );
+	}
+	delete [] si;
+	fiList->setAutoDelete( TRUE );
     }
-    delete [] si;
-    fiList->setAutoDelete( TRUE );
 
     if ( filterSpec == (FilterSpec)filtS && sortSpec == (SortSpec)sortS &&
 	 nameFilter == nameFilt )

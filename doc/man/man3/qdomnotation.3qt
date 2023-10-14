@@ -1,4 +1,4 @@
-.TH QDomNotation 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.TH QDomNotation 3qt "4 October 2000" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -58,6 +58,8 @@ For further information about the Document Objct Model see http://www.w3.org/TR/
 Constructor.
 .SH "QDomNotation::QDomNotation ( const QDomNotation & x )"
 Copy constructor.
+.PP
+The data of the copy is shared: modifying one will also change the other. If you want to make a real copy, use cloneNode() instead.
 .SH "QDomNotation::~QDomNotation ()"
 Destructor.
 .SH "bool QDomNotation::isNotation () const \fC[virtual]\fR"
@@ -70,6 +72,8 @@ Returns \fCNotationNode.\fR
 Reimplemented from QDomNode.
 .SH "QDomNotation& QDomNotation::operator= ( const QDomNotation & x )"
 Assignment operator.
+.PP
+The data of the copy is shared: modifying one will also change the other. If you want to make a real copy, use cloneNode() instead.
 .SH "QString QDomNotation::publicId () const"
 Returns the public identifier of this notation.
 .SH "QString QDomNotation::systemId () const"

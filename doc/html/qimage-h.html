@@ -30,7 +30,7 @@ remains with Trolltech.
 <hr>
 <pre>
 /****************************************************************************
-** &#36;Id&#58; qt/src/kernel/qimage.h   2.2.0   edited 2000-08-25 $
+** &#36;Id&#58; qt/src/kernel/qimage.h   2.2.1   edited 2000-09-12 $
 **
 ** Definition of QImage and QImageIO classes
 **
@@ -109,6 +109,11 @@ public:
     QImage( uchar* data, int w, int h, int depth,
                 QRgb* colortable, int numColors,
                 Endian bitOrder );
+#ifdef _WS_QWS_
+    QImage( uchar* data, int w, int h, int depth, int pbl,
+                QRgb* colortable, int numColors,
+                Endian bitOrder );
+#endif
     QImage( const QImage &amp; );
    ~QImage();
 
@@ -420,5 +425,5 @@ inline QPoint QImage::offset() const
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.0</div>
+<td align="right"><div align="right">Qt version 2.2.1</div>
 </table></div></address></body></html>

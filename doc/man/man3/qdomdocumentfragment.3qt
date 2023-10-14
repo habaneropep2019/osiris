@@ -1,4 +1,4 @@
-.TH QDomDocumentFragment 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.TH QDomDocumentFragment 3qt "4 October 2000" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -50,6 +50,8 @@ The most important feature of QDomDocumentFragment is, that it is treated in a s
 Constructs an empty DocumentFragment.
 .SH "QDomDocumentFragment::QDomDocumentFragment ( const QDomDocumentFragment & x )"
 Copy constructor.
+.PP
+The data of the copy is shared: modifying one will also change the other. If you want to make a real copy, use cloneNode() instead.
 .SH "QDomDocumentFragment::~QDomDocumentFragment ()"
 Destructor.
 .SH "bool QDomDocumentFragment::isDocumentFragment () const \fC[virtual]\fR"
@@ -66,6 +68,9 @@ See also isDocumentFragment() and QDomNode::toDocumentFragment().
 Reimplemented from QDomNode.
 .SH "QDomDocumentFragment& QDomDocumentFragment::operator= ( const QDomDocumentFragment & x )"
 Assignment operator.
+.PP
+The data of the copy is shared: modifying one will also change the other. If
+you want to make a real copy, use cloneNode() instead.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qdomdocumentfragment.html
 .SH COPYRIGHT

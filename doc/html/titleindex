@@ -80,6 +80,8 @@ Qt Toolkit -  Windowsystem-specific Notes | winsystem.html
 Qt Toolkit -  Writing your own layout manager | customlayout.html
 Qt Toolkit -  Year 2000 Compliance Statement | y2k.html
 Qt Toolkit - Example Programs | examples.html
+Qt Toolkit - PCOPChannel Class | pcopchannel.html
+Qt Toolkit - PCOPChannel member list | pcopchannel-members.html
 Qt Toolkit - QAccel Class | qaccel.html
 Qt Toolkit - QAccel member list | qaccel-members.html
 Qt Toolkit - QAction Class | qaction.html
@@ -996,6 +998,7 @@ Qt Toolkit - qwindowsstyle.h include file | qwindowsstyle-h.html
 Qt Toolkit - qwizard.h include file | qwizard-h.html
 Qt Toolkit - qwmatrix.h include file | qwmatrix-h.html
 Qt Toolkit - qworkspace.h include file | qworkspace-h.html
+Qt Toolkit - qwsdisplay_qws.h include file | qwsdisplay_qws-h.html
 Qt Toolkit - qwsmanager_qws.h include file | qwsmanager_qws-h.html
 Qt Toolkit - qxml.h include file | qxml-h.html
 Qt Toolkit - qxt.h include file | qxt-h.html

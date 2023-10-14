@@ -1,4 +1,4 @@
-.TH QDomAttr 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.TH QDomAttr 3qt "4 October 2000" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -84,6 +84,8 @@ For further information about the Document Objct Model see http://www.w3.org/TR/
 Constructs an empty attribute.
 .SH "QDomAttr::QDomAttr ( const QDomAttr & x )"
 Copy constructor.
+.PP
+The data of the copy is shared: modifying one will also change the other. If you want to make a real copy, use cloneNode() instead.
 .SH "QDomAttr::~QDomAttr ()"
 Destructor.
 .SH "bool QDomAttr::isAttr () const \fC[virtual]\fR"
@@ -98,6 +100,8 @@ Returns \fCAttributeNode.\fR
 Reimplemented from QDomNode.
 .SH "QDomAttr& QDomAttr::operator= ( const QDomAttr & x )"
 Assignment operator.
+.PP
+The data of the copy is shared: modifying one will also change the other. If you want to make a real copy, use cloneNode() instead.
 .SH "void QDomAttr::setValue ( const QString & v ) \fC[virtual]\fR"
 Sets the value of the attribute to \fIv.\fR
 .PP

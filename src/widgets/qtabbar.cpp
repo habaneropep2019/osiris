@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qtabbar.cpp   2.2.0   edited 2000-08-25 $
+** $Id: qt/src/widgets/qtabbar.cpp   2.2.1   edited 2000-10-01 $
 **
 ** Implementation of QTab and QTabBar classes
 **
@@ -602,7 +602,6 @@ void QTabBar::show()
     //  ensures that one tab is selected.
     QTab * t = l->last();
     QWidget::show();
-    d->scrolls = 0;
     updateArrowButtons();
 
     if ( t )
@@ -787,7 +786,7 @@ void QTabBar::setShape( Shape s )
 
 
 /*!
-  Layout all existing tabs (i.e. setting their r attribute ) according
+  Layout all existing tabs (i.e. setting their \c r attribute) according
   to their label and their iconset.
  */
 void QTabBar::layoutTabs()
@@ -955,10 +954,7 @@ void QTabBar::makeVisible( QTab* tab  )
 
 void QTabBar::updateArrowButtons()
 {
-    bool b = lstatic->last() ?
-	lstatic->last()->r.right() > width() : FALSE;
-    if ( d->scrolls == b )
-	return;
+    bool b = lstatic->last() &&	( lstatic->last()->r.right() > width() );
     d->scrolls = b;
     if ( d->scrolls ) {
 	d->leftB->setEnabled( FALSE );

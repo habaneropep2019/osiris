@@ -1,4 +1,4 @@
-.TH QWorkspace 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.TH QWorkspace 3qt "4 October 2000" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -104,7 +104,7 @@ Arranges all child windows in a tile pattern
 .PP
 See also cascade().
 .SH "void QWorkspace::windowActivated ( QWidget * w ) \fC[signal]\fR"
-This signal is emitted when the window widget \fIw\fR becomes active.
+This signal is emitted when the window widget \fIw\fR becomes active. Note that \fIw\fR can be null, and that more than one signal may be fired for one activation event.
 .PP
 See also activeWindow() and windowList().
 .SH "QWidgetList QWorkspace::windowList () const"

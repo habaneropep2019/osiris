@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qtextstream.h   2.2.0   edited 2000-08-25 $
+** $Id: qt/src/tools/qtextstream.h   2.2.1   edited 2000-09-19 $
 **
 ** Definition of QTextStream class
 **
@@ -89,6 +89,7 @@ public:
     QTextStream &operator>>( QString & );
     QTextStream &operator>>( QCString & );
 
+    QTextStream &operator<<( QChar );
     QTextStream &operator<<( char );
     QTextStream &operator<<( signed short );
     QTextStream &operator<<( unsigned short );

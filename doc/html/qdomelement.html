@@ -73,6 +73,8 @@ For a more general introduction of the DOM implementation see the
 to construct elements with content.
 <h3 class="fn"><a name="ef0d2f"></a>QDomElement::QDomElement ( const QDomElement &amp; x )</h3>
 <p>Copy constructor.
+<p>The data of the copy is shared: modifying one will also change the other. If
+you want to make a real copy, use <a href="qdomnode.html#7b27fa">cloneNode</a>() instead.
 <h3 class="fn"><a name="0cd7d9"></a>QDomElement::~QDomElement ()</h3>
 <p>Destructor.
 <h3 class="fn"><a href="qstring.html">QString</a> <a name="bbd00e"></a>QDomElement::attribute ( const <a href="qstring.html">QString</a> &amp; name, const <a href="qstring.html">QString</a> &amp; defValue = QString::null ) const</h3>
@@ -105,6 +107,8 @@ form. This means, that adjacent <a href="qdomtext.html">QDomText</a> objects wil
 one text object (<a href="qdomcdatasection.html">QDomCDATASection</a> nodes are not merged).
 <h3 class="fn">QDomElement&amp; <a name="4a3983"></a>QDomElement::operator= ( const QDomElement &amp; x )</h3>
 <p>Assignment operator.
+<p>The data of the copy is shared: modifying one will also change the other. If
+you want to make a real copy, use <a href="qdomnode.html#7b27fa">cloneNode</a>() instead.
 <h3 class="fn">void <a name="dfe9bd"></a>QDomElement::removeAttribute ( const <a href="qstring.html">QString</a> &amp; name )</h3>
 <p>Removes the attribute with the name <em>name</em> from this element.
 <p>See also  <a href="#137828">setAttribute</a>() and <a href="#bbd00e">attribute</a>().
@@ -147,7 +151,7 @@ will return "Hello Qt &lt;xml is cool&gt;".
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.2.0"><nobr>
+<input type=hidden name="version" value="2.2.1"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -155,5 +159,5 @@ copyright &copy; 1995-2000
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.0</div>
+<td align="right"><div align="right">Qt version 2.2.1</div>
 </table></div></address></body></html>

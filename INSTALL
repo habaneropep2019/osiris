@@ -8,15 +8,15 @@ where you choose to install Qt.
 1.  Unpack the archive if you have not done so already:
 
 	cd /usr/local
-	gunzip qt-x11-2.2.0.tar.gz	# uncompress the archive
-	tar xf qt-x11-2.2.0.tar	# unpack it
+	gunzip qt-x11-2.2.1.tar.gz	# uncompress the archive
+	tar xf qt-x11-2.2.1.tar	# unpack it
 
-    This creates the directory /usr/local/qt-2.2.0 containing the
+    This creates the directory /usr/local/qt-2.2.1 containing the
     files from the main archive.
 
-    Rename qt-2.2.0 to qt (or make a symlink):
+    Rename qt-2.2.1 to qt (or make a symlink):
 
-	mv qt-2.2.0 qt
+	mv qt-2.2.1 qt
 
     The rest of this file assumes that Qt is installed in /usr/local/qt.
 
@@ -55,9 +55,10 @@ where you choose to install Qt.
     proceed otherwise.
 
 
-3.  Install your license file.  For the free edition, you do not need
-    a license file.  For Professional and Enterprise editions, install
-    your license file as described in your distribution.
+3.  Install your license file as $HOME/.qt-license.
+    For the free edition, you do not need a license file.  For Professional
+    and Enterprise editions, install your license file as described in your
+    distribution.
 
 
 4.  Building.

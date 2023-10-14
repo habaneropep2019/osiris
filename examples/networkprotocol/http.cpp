@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/networkprotocol/http.cpp   2.2.0   edited 2000-08-31 $
+** $Id: qt/examples/networkprotocol/http.cpp   2.2.1   edited 2000-08-31 $
 **
 ** Implementation of Network Extension Library
 **
@@ -67,19 +67,12 @@ bool Http::checkConnection( QNetworkOperation * )
     if ( !commandSocket->peerName().isEmpty() )
 	return FALSE;
 
+    if ( commandSocket->state() == QSocket::Connecting )
+	return FALSE;
+
     connectionReady = FALSE;
     commandSocket->connectToHost( url()->host(),
 				  url()->port() != -1 ? url()->port() : 80 );
-#if 0
-    // connectToHost just starts something - there's no point in
-    // making any tests until something has responded.
-    if ( !commandSocket->connectToHost( url()->host(), url()->port() != -1 ? url()->port() : 80 ) ) {
-	QString msg = tr( "Host not found: \n" + url()->host() );
-	op->setState( (int)StFailed );
-	op->setProtocolDetail( msg );
-	op->setErrorCode( ErrHostNotFound );
-    }
-#endif
 
     return FALSE;
 }

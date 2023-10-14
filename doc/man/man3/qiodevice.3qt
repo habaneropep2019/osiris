@@ -1,4 +1,4 @@
-.TH QIODevice 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.TH QIODevice 3qt "4 October 2000" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -375,7 +375,7 @@ The mode parameter \fIm\fR must be a combination of the following flags.
 .TP
 \fCIO_Truncate\fR truncates the file.
 .TP
-\fCIO_Translate\fR enables carriage returns and linefeed translation for text files under MS-DOS, Window, OS/2 and Macintosh. Cannot be combined with \fCIO_Raw.\fR
+\fCIO_Translate\fR enables carriage returns and linefeed translation for text files under MS-DOS, Window, OS/2 and Macintosh. On Unix systems this flag has no effect. Use with caution as it will also transform every linefeed written to the file into a CRLF pair. This is likely to corrupt your file when writing binary data to it. Cannot be combined with \fCIO_Raw.\fR
 .PP
 This virtual function must be reimplemented by all subclasses.
 .PP

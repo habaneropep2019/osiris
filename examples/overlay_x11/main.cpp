@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/overlay_x11/main.cpp   2.2.0   edited 2000-08-31 $
+** $Id: qt/examples/overlay_x11/main.cpp   2.2.1   edited 2000-08-31 $
 **
 ** Example application showing how to use Qt and Qt OpenGL Extension on an 
 ** X11 overlay visual 

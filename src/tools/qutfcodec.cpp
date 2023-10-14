@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qutfcodec.cpp   2.2.0   edited 2000-08-25 $
+** $Id: qt/src/tools/qutfcodec.cpp   2.2.1   edited 2000-09-26 $
 **
 ** Implementation of QEucCodec class
 **
@@ -127,7 +127,7 @@ public:
 
     QString toUnicode(const char* chars, int len)
     {
-	QString result;
+	QString result = "";
 	for (int i=0; i<len; i++) {
 	    uchar ch = chars[i];
 	    if (need) {

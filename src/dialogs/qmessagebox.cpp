@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/dialogs/qmessagebox.cpp   2.2.0   edited 2000-08-25 $
+** $Id: qt/src/dialogs/qmessagebox.cpp   2.2.1   edited 2000-09-24 $
 **
 ** Implementation of QMessageBox class
 **
@@ -543,6 +543,11 @@ static const char *mb_texts[] = {
 QMessageBox::QMessageBox( QWidget *parent, const char *name )
     : QDialog( parent, name, TRUE, WStyle_Customize | WStyle_NormalBorder | WStyle_Title | WStyle_SysMenu )
 {
+    if ( parent && parent->icon() && !parent->icon()->isNull() )
+	QDialog::setIcon( *parent->icon() );
+    else if ( qApp->mainWidget() && qApp->mainWidget()->icon() && !qApp->mainWidget()->icon()->isNull() )
+	QDialog::setIcon( *qApp->mainWidget()->icon() );
+
     init( Ok, 0, 0 );
 }
 
@@ -612,6 +617,11 @@ QMessageBox::QMessageBox( const QString& caption,
 			  bool modal, WFlags f )
     : QDialog( parent, name, modal, f | WStyle_Customize | WStyle_NormalBorder | WStyle_Title | WStyle_SysMenu )
 {
+    if ( parent && parent->icon() && !parent->icon()->isNull() )
+	QDialog::setIcon( *parent->icon() );
+    else if ( qApp->mainWidget() && qApp->mainWidget()->icon() && !qApp->mainWidget()->icon()->isNull() )
+	QDialog::setIcon( *qApp->mainWidget()->icon() );
+
     init( button0, button1, button2 );
     setCaption( caption );
     setText( text );

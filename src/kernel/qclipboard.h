@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qclipboard.h   2.2.0   edited 2000-08-25 $
+** $Id: qt/src/kernel/qclipboard.h   2.2.1   edited 2000-09-20 $
 **
 ** Definition of QClipboard class
 **
@@ -52,11 +52,15 @@ class Q_EXPORT QClipboard : public QObject
     Q_OBJECT
 private:
     QClipboard( QObject *parent=0, const char *name=0 );
-   ~QClipboard();
+    ~QClipboard();
 
 public:
     void	clear();
 
+#if defined(_WS_X11_)
+    bool ownsSelection() const;
+#endif
+    
 #ifndef QT_NO_MIMECLIPBOARD
     QMimeSource* data() const;
     void  setData( QMimeSource* );
@@ -84,12 +88,12 @@ protected:
     friend class QBaseApplication;
     friend class QDragManager;
     friend class QMimeSource;
-    
+
 private:	// Disabled copy constructor and operator=
-#if defined(_WS_X11_)    
+#if defined(_WS_X11_)
     void clobber();
 #endif
-    
+
 #if defined(Q_DISABLE_COPY)
     QClipboard( const QClipboard & );
     QClipboard &operator=( const QClipboard & );

@@ -36,7 +36,7 @@ height="100" src="face.png" alt="Home" border="0">
   <hr>
 
   Header file: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/i18n/mywidget.h   2.2.0   edited 2000-08-31 $
+** &#36;Id&#58; qt/examples/i18n/mywidget.h   2.2.1   edited 2000-08-31 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -75,7 +75,7 @@ private:
   <hr>
 
   Implementation: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/i18n/mywidget.cpp   2.2.0   edited 2000-08-31 $
+** &#36;Id&#58; qt/examples/i18n/mywidget.cpp   2.2.1   edited 2000-08-31 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -155,7 +155,7 @@ void <a name="184"></a>MyWidget::closeEvent(<a href="qcloseevent.html">QCloseEve
 
   Main:
 <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/i18n/main.cpp   2.2.0   edited 2000-08-31 $
+** &#36;Id&#58; qt/examples/i18n/main.cpp   2.2.1   edited 2000-10-03 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -288,6 +288,8 @@ int main( int argc, char** argv )
             for ( int i=0; qm[i]; i++ ) {
                 if ( r == 2 || qmb[i]-&gt;isChecked() ) {
                     MyWidget* w = showLang((const char*)qm[i]);
+
+                    if( w == 0 ) exit( 0 );
                     <a name="QObject::connect"></a><a href="qobject.html#c2d209">QObject::connect</a>(w, SIGNAL(closed()), qApp, SLOT(quit()));
                     w-&gt;<a name="setGeometry"></a><a href="qwidget.html#0fac5c">setGeometry</a>(x,y,197,356);
                     w-&gt;<a name="show"></a><a href="qmainwindow.html#e71bb3">show</a>();
@@ -303,6 +305,8 @@ int main( int argc, char** argv )
                     }
                 }
             }
+        } else {
+            exit( 0 );
         }
     } else {
         <a href="qstring.html">QString</a> lang = argv[1];
@@ -321,5 +325,5 @@ int main( int argc, char** argv )
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.0</div>
+<td align="right"><div align="right">Qt version 2.2.1</div>
 </table></div></address></body></html>

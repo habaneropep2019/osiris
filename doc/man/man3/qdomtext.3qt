@@ -1,4 +1,4 @@
-.TH QDomText 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.TH QDomText 3qt "4 October 2000" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -53,6 +53,8 @@ Constructs an empty QDomText object.
 To construct a QDomText with content, use QDomDocument::createTextNode().
 .SH "QDomText::QDomText ( const QDomText & x )"
 Copy constructor.
+.PP
+The data of the copy is shared: modifying one will also change the other. If you want to make a real copy, use cloneNode() instead.
 .SH "QDomText::~QDomText ()"
 Destructor.
 .SH "bool QDomText::isText () const \fC[virtual]\fR"
@@ -65,6 +67,8 @@ Returns \fCTextNode.\fR
 Reimplemented from QDomNode.
 .SH "QDomText& QDomText::operator= ( const QDomText & x )"
 Assignment operator.
+.PP
+The data of the copy is shared: modifying one will also change the other. If you want to make a real copy, use cloneNode() instead.
 .SH "QDomText QDomText::splitText ( int offset )"
 Splits this object at position \fIoffset\fR into two QDomText objects. The newly created object is inserted into the document tree after this object.
 .PP

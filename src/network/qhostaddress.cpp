@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/network/qhostaddress.cpp   2.2.0   edited 2000-08-25 $
+** $Id: qt/src/network/qhostaddress.cpp   2.2.1   edited 2000-09-12 $
 **
 ** Implementation of QHostAddress class.
 **
@@ -39,6 +39,7 @@
 #include "qglobal.h"
 #include "qstringlist.h"
 
+#ifndef QT_NO_NETWORK
 class QHostAddressPrivate
 {
 public:
@@ -326,3 +327,4 @@ bool QHostAddress::operator==( const QHostAddress & other ) const
 {
     return  d->a == other.d->a;
 }
+#endif //QT_NO_NETWORK

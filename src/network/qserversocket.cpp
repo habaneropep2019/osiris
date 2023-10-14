@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/network/qserversocket.cpp   2.2.0   edited 2000-08-25 $
+** $Id: qt/src/network/qserversocket.cpp   2.2.1   edited 2000-09-12 $
 **
 ** Implementation of QServerSocket class.
 **
@@ -37,7 +37,7 @@
 
 #include "qserversocket.h"
 
-
+#ifndef QT_NO_NETWORK
 class QServerSocketPrivate {
 public:
     QServerSocketPrivate(): s(0), n(0) {}
@@ -266,3 +266,5 @@ void QServerSocket::setSocket( int socket )
     connect( d->n, SIGNAL(activated(int)),
 	     this, SLOT(incomingConnection(int)) );
 }
+
+#endif //QT_NO_NETWORK

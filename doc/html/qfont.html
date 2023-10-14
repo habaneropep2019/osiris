@@ -30,7 +30,7 @@ The QFont class specifies a font used for drawing text.
 <p><a href="qfont-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><div class="fn">enum <a href="#CharSet"><b>CharSet</b></a> { ISO_8859_1, Latin1 = ISO_8859_1, AnyCharSet, ISO_8859_2, Latin2 = ISO_8859_2, ISO_8859_3, Latin3 = ISO_8859_3, ISO_8859_4, Latin4 = ISO_8859_4, ISO_8859_5, ISO_8859_6, ISO_8859_7, ISO_8859_8, ISO_8859_9, Latin5 = ISO_8859_9, ISO_8859_10, Latin6 = ISO_8859_10, ISO_8859_11, TIS620 = ISO_8859_11, ISO_8859_12, ISO_8859_13, Latin7 = ISO_8859_13, ISO_8859_14, Latin8 = ISO_8859_14, ISO_8859_15, Latin9 = ISO_8859_15, KOI8R, Set_Ja, Set_1 = Set_Ja, Set_Ko, Set_Th_TH, Set_Zh, Set_Zh_TW, Set_N = Set_Zh_TW, Unicode, Set_GBK, Set_Big5, JIS_X_0201 = 0xa0, JIS_X_0208 = 0xc0, Enc16 = JIS_X_0208, KSC_5601, GB_2312, Big5, TSCII }</div>
+<li><div class="fn">enum <a href="#CharSet"><b>CharSet</b></a> { ISO_8859_1, Latin1 = ISO_8859_1, AnyCharSet, ISO_8859_2, Latin2 = ISO_8859_2, ISO_8859_3, Latin3 = ISO_8859_3, ISO_8859_4, Latin4 = ISO_8859_4, ISO_8859_5, ISO_8859_6, ISO_8859_7, ISO_8859_8, ISO_8859_9, Latin5 = ISO_8859_9, ISO_8859_10, Latin6 = ISO_8859_10, ISO_8859_11, TIS620 = ISO_8859_11, ISO_8859_12, ISO_8859_13, Latin7 = ISO_8859_13, ISO_8859_14, Latin8 = ISO_8859_14, ISO_8859_15, Latin9 = ISO_8859_15, KOI8R, Set_Ja, Set_1 = Set_Ja, Set_Ko, Set_Th_TH, Set_Zh, Set_Zh_TW, Set_N = Set_Zh_TW, Unicode, Set_GBK, Set_Big5, JIS_X_0201 = 0xa0, JIS_X_0208 = 0xc0, Enc16 = JIS_X_0208, KSC_5601, GB_2312, Big5, TSCII, KOI8U }</div>
 <li><div class="fn">enum <a href="#StyleHint"><b>StyleHint</b></a> { Helvetica, Times, Courier, OldEnglish, System, AnyStyle, SansSerif = Helvetica, Serif = Times, TypeWriter = Courier, Decorative = OldEnglish}</div>
 <li><div class="fn">enum <a href="#StyleStrategy"><b>StyleStrategy</b></a> { PreferDefault = 0x0001, PreferBitmap = 0x0002, PreferDevice = 0x0004, PreferOutline = 0x0008, ForceOutline = 0x0010, PreferMatch = 0x0020, PreferQuality = 0x0040 }</div>
 <li><div class="fn">enum <a href="#Weight"><b>Weight</b></a> { Light = 25, Normal = 50, DemiBold = 63, Bold = 75, Black = 87 }</div>
@@ -238,6 +238,8 @@ The following character set encodings are available: <ul>
 <li> <code>QFont::ISO_8859_10..15,</code> other ISO 8859 characters sets
 <li> <code>QFont::KOI8R</code> - KOI8-R, Cyrillic, defined in
 <a href="ftp://ftp.nordu.net/rfc/rfc1489.txt">RFC 1489.</a>
+<li> <code>QFont::KOI8U</code> - KOI8-U, Cyrillic/Ukrainian, defined in
+<a href="ftp://ftp.nordu.net/rfc/rfc2319.txt">RFC 2319.</a>
 <li> <code>QFont::AnyCharSet</code> - whatever is handiest.
 <li> <code>QFont::Set_Ja,</code> Japanese
 <li> <code>QFont::Set_Ko,</code> Korean
@@ -608,7 +610,7 @@ actually used for drawing.
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.2.0"><nobr>
+<input type=hidden name="version" value="2.2.1"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -616,5 +618,5 @@ copyright &copy; 1995-2000
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.0</div>
+<td align="right"><div align="right">Qt version 2.2.1</div>
 </table></div></address></body></html>

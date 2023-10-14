@@ -1,4 +1,4 @@
-.TH QMovie 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.TH QMovie 3qt "4 October 2000" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -228,7 +228,7 @@ Disconnects the given member, or all members if member is zero, previously conne
 .SH "bool QMovie::finished () const"
 Returns TRUE if the image is no longer playing - this happens when all loops of all frames is complete.
 .SH "const QImage& QMovie::frameImage () const"
-Returns the current frame of the movie, as a QImage. It is not generally useful to keep a copy of this pixmap.
+Returns the current frame of the movie, as a QImage. It is not generally useful to keep a copy of this image. Also note that you must not call this function if the movie is finished(), as the image is not them available.
 .PP
 See also framePixmap().
 .SH "int QMovie::frameNumber () const"

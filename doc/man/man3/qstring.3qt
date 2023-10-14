@@ -1,4 +1,4 @@
-.TH QString 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.TH QString 3qt "4 October 2000" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -821,7 +821,7 @@ Examples:
 qmag/qmag.cpp
 .)l
 .SH "QString QString::number ( double n, char f='g', int prec=6 ) \fC[static]\fR"
-This static function returns the printed value of \fIn,\fR formatted in the \\f format with \fIprec\fR precision.
+This static function returns the printed value of \fIn,\fR formatted in the \fIf\fR format with \fIprec\fR precision.
 .PP
 \fIf\fR can be 'f', 'F', 'e', 'E', 'g' or 'G', all of which have the same meaning as for sprintf().
 .PP
@@ -1118,6 +1118,17 @@ Returns the string converted to a \fCfloat\fR value.
 If \fIok\fR is non-null, \fI*ok\fR is set to TRUE if there are no conceivable errors, and FALSE if the string is not a number at all, or if it has trailing garbage.
 .SH "int QString::toInt ( bool * ok=0, int base=10 ) const"
 Returns the string converted to a \fCint\fR value.
+.PP
+.nf
+.br
+  QString str("FF");
+.br
+  bool ok;
+.br
+  int hex = str.toInt( &ok, "16" ); // will return 255, and ok set to TRUE
+.br
+  int dec = str.toInt( &ok, "10" ); // will return 0, and ok set to FALSE
+.fi
 .PP
 If \fIok\fR is non-null, \fI*ok\fR is set to TRUE if there are no conceivable errors, and FALSE if the string is not a number at all, or if it has trailing garbage.
 .SH "long QString::toLong ( bool * ok=0, int base=10 ) const"

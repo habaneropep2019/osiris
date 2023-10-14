@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qlist.h   2.2.0   edited 2000-08-25 $
+** $Id: qt/src/tools/qlist.h   2.2.1   edited 2000-10-01 $
 **
 ** Definition of QList template/macro class
 **
@@ -103,7 +103,6 @@ template<class type> inline void QList<type>::deleteItem( QCollection::Item d )
 {
     if ( del_item ) delete (type *)d;
 }
-
 
 
 template<class type> class Q_EXPORT QListIterator : public QGListIterator

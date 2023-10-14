@@ -1,4 +1,4 @@
-.TH QDomDocument 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.TH QDomDocument 3qt "4 October 2000" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -113,14 +113,26 @@ The QDom classes are typically used as follows:
 .br
   QFile f( "mydocument.xml" );
 .br
-  doc.setContent( f );
+  if ( !f.open( IO_ReadOnly ) )
+.br
+      return;
+.br
+  if ( !doc.setContent( &f ) ) {
+.br
+      f.close();
+.br
+      return;
+.br
+  }
+.br
+  f.close();
 .br
 .br
   // print out the element names of all elements that are a direct child
 .br
   // of the outermost element.
 .br
-  QDomElement *docElem = doc.documentElement();
+  QDomElement docElem = doc.documentElement();
 .br
 .br
   QDomNode n = docElem.firstChild();
@@ -131,7 +143,7 @@ The QDom classes are typically used as follows:
 .br
       if( !e.isNull() ) { // the node was really an element.
 .br
-          cout << n.name() << endl;
+          cout << e.tagName() << endl;
 .br
       }
 .br
@@ -146,8 +158,7 @@ The QDom classes are typically used as follows:
 .br
   elem.setAttribute( "src", "myimage.png" );
 .br
-.br
-  doc.append( elem );
+  docElem.appendChild( elem );
 .fi
 .PP
 Once \fCdoc\fR and \fCelem\fR go out of scode, the whole internal tree representing the XML document will get deleted.
@@ -160,6 +171,8 @@ Constructs an empty document.
 Creates a document with the name \fIname.\fR
 .SH "QDomDocument::QDomDocument ( const QDomDocument & x )"
 Copy constructor.
+.PP
+The data of the copy is shared: modifying one will also change the other. If you want to make a real copy, use cloneNode() instead.
 .SH "QDomDocument::~QDomDocument ()"
 Destructor.
 .SH "QDomAttr QDomDocument::createAttribute ( const QString & name )"
@@ -196,6 +209,8 @@ Returns \fCDocumentNode.\fR
 Reimplemented from QDomNode.
 .SH "QDomDocument& QDomDocument::operator= ( const QDomDocument & x )"
 Assignment operator.
+.PP
+The data of the copy is shared: modifying one will also change the other. If you want to make a real copy, use cloneNode() instead.
 .SH "bool QDomDocument::setContent ( const QString & text )"
 This function parses the string \fItext\fR and sets it as the content of the document.
 .SH "bool QDomDocument::setContent ( QIODevice * dev )"

@@ -1,9 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qcolor_p.cpp   2.2.0   edited 2000-08-25 $
-**
-**		      ***   INTERNAL HEADER FILE   ***
-**
-**		This file is NOT a part of the Qt interface!
+** $Id: qt/src/kernel/qcolor_p.cpp   2.2.1   edited 2000-09-03 $
 **
 ** Named color support for non-X platforms.
 ** The color names have been borrowed from X.
@@ -39,9 +35,6 @@
 ** not clear to you.
 **
 **********************************************************************/
-
-#ifndef QCOLOR_P_H
-#define QCOLOR_P_H
 
 #include "qcolor.h"
 
@@ -746,5 +739,3 @@ uint qt_get_rgb_val( const char * )
 }
 
 #endif // QT_NO_COLORNAMES
-
-#endif

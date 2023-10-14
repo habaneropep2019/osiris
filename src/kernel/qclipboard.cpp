@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qclipboard.cpp   2.2.0   edited 2000-08-25 $
+** $Id: qt/src/kernel/qclipboard.cpp   2.2.1   edited 2000-09-25 $
 **
 ** Implementation of QClipboard class
 **
@@ -55,7 +55,8 @@
   applications.
 
   QClipboard supports the same data types that QDragObject does, and uses
-  similar mechanisms.
+  similar mechanisms. For advanced clipboard usage, you should read
+  \link dnd.html the drag-and-drop documentation\endlink.
 
   There is only one QClipboard object in an application, and you
   can gain access to it using QApplication::clipboard().

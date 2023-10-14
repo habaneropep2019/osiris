@@ -30,7 +30,7 @@ remains with Trolltech.
 <hr>
 <pre>
 /****************************************************************************
-** &#36;Id&#58; qt/src/kernel/qsizepolicy.h   2.2.0   edited 2000-08-25 $
+** &#36;Id&#58; qt/src/kernel/qsizepolicy.h   2.2.1   edited 2000-09-18 $
 **
 ** Definition of the QSizePolicy class
 **
@@ -113,13 +113,13 @@ public:
     void setVerData( SizeType d ) { data = (data &amp; ~(HMask&lt;&lt;HSize)) |
                                            (d&lt;&lt;HSize); }
                 
-    void setHeightForWidth( bool b ) { data = b ? data &amp; ~( 1 &lt;&lt; 2*HSize )
-                                              :  data | ( 1 &lt;&lt; 2*HSize ); }
+    void setHeightForWidth( bool b ) { data = b ? ( data | ( 1 &lt;&lt; 2*HSize ) )
+                                              : ( data &amp; ~( 1 &lt;&lt; 2*HSize ) );  }
     bool hasHeightForWidth() const { return data &amp; ( 1 &lt;&lt; 2*HSize ); }
 
     bool operator==( const QSizePolicy&amp; s ) const { return data == s.data; }
     bool operator!=( const QSizePolicy&amp; s ) const { return data != s.data; }
-    
+
 private:
     QSizePolicy( int i ): data( i ) {}
 
@@ -136,5 +136,5 @@ inline QSizePolicy::QSizePolicy( SizeType hor, SizeType ver, bool hfw )
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.0</div>
+<td align="right"><div align="right">Qt version 2.2.1</div>
 </table></div></address></body></html>

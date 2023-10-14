@@ -8,7 +8,7 @@ CC	=	$(SYSCONF_CC) $(QT_C_MT)
 CFLAGS	=	$(SYSCONF_CFLAGS) -DDESIGNER -DHAVE_KDE
 INCPATH =	-I../shared -I../util -I../../../src/3rdparty/zlib -I$(KDEDIR)/include
 LFLAGS	=	$(SYSCONF_LFLAGS_QT) $(SYSCONF_RPATH_QT) $(SYSCONF_LFLAGS) $(QT_LFLAGS_MT)
-LIBS	=	$(SUBLIBS)  $(SYSCONF_LIBS_QTAPP) -lqutil -L$(QTDIR)/lib -L$(KDEDIR)/lib -lkdecore -lkdeui -lDCOP $(SYSCONF_LIBS_QT) $(SYSCONF_LIBS)
+LIBS	=	$(SUBLIBS) -lqutil -L$(QTDIR)/lib -L$(KDEDIR)/lib -lkdecore -lkdeui -lDCOP -lqutil -L$(QTDIR)/lib -L$(KDEDIR)/lib -lkdecore -lkdeui -lDCOP $(SYSCONF_LIBS_QT) $(SYSCONF_LIBS) $(SYSCONF_LIBS_QTAPP)
 MOC	=	$(SYSCONF_MOC)
 UIC	=	$(SYSCONF_UIC)
 
@@ -863,133 +863,133 @@ splashloader.o: splashloader.cpp \
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o splashloader.o splashloader.cpp
 
 listboxeditor.h: listboxeditor.ui
-	$(UIC) listboxeditor.ui -o listboxeditor.h
+	$(UIC) listboxeditor.ui -o $(INTERFACE_DECL_PATH)/listboxeditor.h
 
 listboxeditor.cpp: listboxeditor.ui
 	$(UIC) listboxeditor.ui -i listboxeditor.h -o listboxeditor.cpp
 
 connectioneditor.h: connectioneditor.ui
-	$(UIC) connectioneditor.ui -o connectioneditor.h
+	$(UIC) connectioneditor.ui -o $(INTERFACE_DECL_PATH)/connectioneditor.h
 
 connectioneditor.cpp: connectioneditor.ui
 	$(UIC) connectioneditor.ui -i connectioneditor.h -o connectioneditor.cpp
 
 editslots.h: editslots.ui
-	$(UIC) editslots.ui -o editslots.h
+	$(UIC) editslots.ui -o $(INTERFACE_DECL_PATH)/editslots.h
 
 editslots.cpp: editslots.ui
 	$(UIC) editslots.ui -i editslots.h -o editslots.cpp
 
 newform.h: newform.ui
-	$(UIC) newform.ui -o newform.h
+	$(UIC) newform.ui -o $(INTERFACE_DECL_PATH)/newform.h
 
 newform.cpp: newform.ui
 	$(UIC) newform.ui -i newform.h -o newform.cpp
 
 listvieweditor.h: listvieweditor.ui
-	$(UIC) listvieweditor.ui -o listvieweditor.h
+	$(UIC) listvieweditor.ui -o $(INTERFACE_DECL_PATH)/listvieweditor.h
 
 listvieweditor.cpp: listvieweditor.ui
 	$(UIC) listvieweditor.ui -i listvieweditor.h -o listvieweditor.cpp
 
 connectionviewer.h: connectionviewer.ui
-	$(UIC) connectionviewer.ui -o connectionviewer.h
+	$(UIC) connectionviewer.ui -o $(INTERFACE_DECL_PATH)/connectionviewer.h
 
 connectionviewer.cpp: connectionviewer.ui
 	$(UIC) connectionviewer.ui -i connectionviewer.h -o connectionviewer.cpp
 
 customwidgeteditor.h: customwidgeteditor.ui
-	$(UIC) customwidgeteditor.ui -o customwidgeteditor.h
+	$(UIC) customwidgeteditor.ui -o $(INTERFACE_DECL_PATH)/customwidgeteditor.h
 
 customwidgeteditor.cpp: customwidgeteditor.ui
 	$(UIC) customwidgeteditor.ui -i customwidgeteditor.h -o customwidgeteditor.cpp
 
 texteditpreview.h: texteditpreview.ui
-	$(UIC) texteditpreview.ui -o texteditpreview.h
+	$(UIC) texteditpreview.ui -o $(INTERFACE_DECL_PATH)/texteditpreview.h
 
 texteditpreview.cpp: texteditpreview.ui
 	$(UIC) texteditpreview.ui -i texteditpreview.h -o texteditpreview.cpp
 
 listviewpreview.h: listviewpreview.ui
-	$(UIC) listviewpreview.ui -o listviewpreview.h
+	$(UIC) listviewpreview.ui -o $(INTERFACE_DECL_PATH)/listviewpreview.h
 
 listviewpreview.cpp: listviewpreview.ui
 	$(UIC) listviewpreview.ui -i listviewpreview.h -o listviewpreview.cpp
 
 paletteeditor.h: paletteeditor.ui
-	$(UIC) paletteeditor.ui -o paletteeditor.h
+	$(UIC) paletteeditor.ui -o $(INTERFACE_DECL_PATH)/paletteeditor.h
 
 paletteeditor.cpp: paletteeditor.ui
 	$(UIC) paletteeditor.ui -i paletteeditor.h -o paletteeditor.cpp
 
 radiopreview.h: radiopreview.ui
-	$(UIC) radiopreview.ui -o radiopreview.h
+	$(UIC) radiopreview.ui -o $(INTERFACE_DECL_PATH)/radiopreview.h
 
 radiopreview.cpp: radiopreview.ui
 	$(UIC) radiopreview.ui -i radiopreview.h -o radiopreview.cpp
 
 checkboxpreview.h: checkboxpreview.ui
-	$(UIC) checkboxpreview.ui -o checkboxpreview.h
+	$(UIC) checkboxpreview.ui -o $(INTERFACE_DECL_PATH)/checkboxpreview.h
 
 checkboxpreview.cpp: checkboxpreview.ui
 	$(UIC) checkboxpreview.ui -i checkboxpreview.h -o checkboxpreview.cpp
 
 widgetpreview.h: widgetpreview.ui
-	$(UIC) widgetpreview.ui -o widgetpreview.h
+	$(UIC) widgetpreview.ui -o $(INTERFACE_DECL_PATH)/widgetpreview.h
 
 widgetpreview.cpp: widgetpreview.ui
 	$(UIC) widgetpreview.ui -i widgetpreview.h -o widgetpreview.cpp
 
 iconvieweditor.h: iconvieweditor.ui
-	$(UIC) iconvieweditor.ui -o iconvieweditor.h
+	$(UIC) iconvieweditor.ui -o $(INTERFACE_DECL_PATH)/iconvieweditor.h
 
 iconvieweditor.cpp: iconvieweditor.ui
 	$(UIC) iconvieweditor.ui -i iconvieweditor.h -o iconvieweditor.cpp
 
 preferences.h: preferences.ui
-	$(UIC) preferences.ui -o preferences.h
+	$(UIC) preferences.ui -o $(INTERFACE_DECL_PATH)/preferences.h
 
 preferences.cpp: preferences.ui
 	$(UIC) preferences.ui -i preferences.h -o preferences.cpp
 
 helpdialog.h: helpdialog.ui
-	$(UIC) helpdialog.ui -o helpdialog.h
+	$(UIC) helpdialog.ui -o $(INTERFACE_DECL_PATH)/helpdialog.h
 
 helpdialog.cpp: helpdialog.ui
 	$(UIC) helpdialog.ui -i helpdialog.h -o helpdialog.cpp
 
 topicchooser.h: topicchooser.ui
-	$(UIC) topicchooser.ui -o topicchooser.h
+	$(UIC) topicchooser.ui -o $(INTERFACE_DECL_PATH)/topicchooser.h
 
 topicchooser.cpp: topicchooser.ui
 	$(UIC) topicchooser.ui -i topicchooser.h -o topicchooser.cpp
 
 multilineeditor.h: multilineeditor.ui
-	$(UIC) multilineeditor.ui -o multilineeditor.h
+	$(UIC) multilineeditor.ui -o $(INTERFACE_DECL_PATH)/multilineeditor.h
 
 multilineeditor.cpp: multilineeditor.ui
 	$(UIC) multilineeditor.ui -i multilineeditor.h -o multilineeditor.cpp
 
 formsettings.h: formsettings.ui
-	$(UIC) formsettings.ui -o formsettings.h
+	$(UIC) formsettings.ui -o $(INTERFACE_DECL_PATH)/formsettings.h
 
 formsettings.cpp: formsettings.ui
 	$(UIC) formsettings.ui -i formsettings.h -o formsettings.cpp
 
 about.h: about.ui
-	$(UIC) about.ui -o about.h
+	$(UIC) about.ui -o $(INTERFACE_DECL_PATH)/about.h
 
 about.cpp: about.ui
 	$(UIC) about.ui -i about.h -o about.cpp
 
 pixmapfunction.h: pixmapfunction.ui
-	$(UIC) pixmapfunction.ui -o pixmapfunction.h
+	$(UIC) pixmapfunction.ui -o $(INTERFACE_DECL_PATH)/pixmapfunction.h
 
 pixmapfunction.cpp: pixmapfunction.ui
 	$(UIC) pixmapfunction.ui -i pixmapfunction.h -o pixmapfunction.cpp
 
 createtemplate.h: createtemplate.ui
-	$(UIC) createtemplate.ui -o createtemplate.h
+	$(UIC) createtemplate.ui -o $(INTERFACE_DECL_PATH)/createtemplate.h
 
 createtemplate.cpp: createtemplate.ui
 	$(UIC) createtemplate.ui -i createtemplate.h -o createtemplate.cpp

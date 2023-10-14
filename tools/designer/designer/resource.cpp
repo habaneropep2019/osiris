@@ -142,7 +142,7 @@ bool Resource::load( const QString& filename )
     return b;
 }
 
-bool Resource::load( QIODevice* dev )
+bool Resource::load( QIODevice* dev, QValueList<Image> *imgs )
 {
     QDomDocument doc;
     if ( !doc.setContent( dev ) ) {
@@ -201,6 +201,8 @@ bool Resource::load( QIODevice* dev )
 
     if ( !imageCollection.isNull() )
 	loadImageCollection( imageCollection );
+    if ( images.isEmpty() && imgs )
+	images = *imgs;
     if ( !customWidgets.isNull() )
 	loadCustomWidgets( customWidgets, this );
     if ( !createObject( firstWidget, !previewMode ? formwindow : 0, 0) )
@@ -240,7 +242,7 @@ bool Resource::save( const QString& filename )
     return b;
 }
 
-bool Resource::save( QIODevice* dev )
+bool Resource::save( QIODevice* dev, bool saveImages, QValueList<Image> *imgs )
 {
     if ( !formwindow )
 	return FALSE;
@@ -253,12 +255,15 @@ bool Resource::save( QIODevice* dev )
     saveObject( formwindow->mainContainer(), 0, ts, 0 );
     if ( !MetaDataBase::customWidgets()->isEmpty() && !usedCustomWidgets.isEmpty() )
 	saveCustomWidgets( ts, 0 );
-    if ( !images.isEmpty() )
+    if ( !images.isEmpty() && saveImages )
 	saveImageCollection( ts, 0 );
     if ( !MetaDataBase::connections( formwindow ).isEmpty() || !MetaDataBase::slotList( formwindow ).isEmpty() )
 	saveConnections( ts, 0 );
     saveTabOrder( ts, 0 );
     ts << "</UI>" << endl;
+
+    if ( imgs )
+	*imgs = images;
     images.clear();
 
     return TRUE;
@@ -427,6 +432,13 @@ void Resource::saveObject( QObject *obj, QDesignerGridLayout* grid, QTextStream 
 	    ++indent;
 	    ts << makeIndent( indent ) << "<class>" << "QWidget" << "</class>" << endl;
 
+	    ts << makeIndent( indent ) << "<property stdset=\"1\">" << endl;
+	    indent++;
+	    ts << makeIndent( indent ) << "<name>name</name>" << endl;
+	    ts << makeIndent( indent ) << "<cstring>" << entitize( it.current()->name() ) << "</cstring>" << endl;
+	    indent--;
+	    ts << makeIndent( indent ) << "</property>" << endl;
+
 	    ts << makeIndent( indent ) << "<attribute>" << endl;
 	    indent++;
 	    ts << makeIndent( indent ) << "<name>" << "title" << "</name>" << endl;
@@ -452,7 +464,14 @@ void Resource::saveObject( QObject *obj, QDesignerGridLayout* grid, QTextStream 
 	    ts << makeIndent( indent ) << "<widget>" << endl;
 	    ++indent;
 	    ts << makeIndent( indent ) << "<class>" << "QWidget" << "</class>" << endl;
-
+	
+	    ts << makeIndent( indent ) << "<property stdset=\"1\">" << endl;
+	    indent++;
+	    ts << makeIndent( indent ) << "<name>name</name>" << endl;
+	    ts << makeIndent( indent ) << "<cstring>" << entitize( it.current()->name() ) << "</cstring>" << endl;
+	    indent--;
+	    ts << makeIndent( indent ) << "</property>" << endl;
+	
 	    ts << makeIndent( indent ) << "<attribute>" << endl;
 	    indent++;
 	    ts << makeIndent( indent ) << "<name>" << "title" << "</name>" << endl;
@@ -671,10 +690,13 @@ void Resource::saveChildrenOf( QObject* obj, QTextStream &ts, int indent )
 void Resource::saveObjectProperties( QObject *w, QTextStream &ts, int indent )
 {
     QStringList changed;
-    if ( w->isWidgetType() )
+    if ( w->isWidgetType() ) {
 	changed = MetaDataBase::changedProperties( w );
-    else if ( w->inherits( "QLayout" ) ) // #### should be cleaner (RS)
+	if ( w->inherits( "Spacer" ) )
+	    changed << "sizeHint";
+    } else if ( w->inherits( "QLayout" ) ) { // #### should be cleaner (RS)
 	changed << "margin" << "spacing";
+    }
 
     if ( w == formwindow->mainContainer() ) {
 	if ( changed.findIndex( "geometry" ) == -1 )
@@ -688,8 +710,6 @@ void Resource::saveObjectProperties( QObject *w, QTextStream &ts, int indent )
 
     bool inLayout = w != formwindow->mainContainer() && !copying && w->isWidgetType() && ( (QWidget*)w )->parentWidget() &&
 		    WidgetFactory::layoutType( ( (QWidget*)w )->parentWidget() ) != WidgetFactory::NoLayout;
-    if ( inLayout && w->inherits( "Spacer" ) )
-	inLayout = FALSE;
 	
     QStringList::Iterator it = changed.begin();
     for ( ; it != changed.end(); ++it ) {
@@ -1241,7 +1261,8 @@ QWidget *Resource::createSpacer( const QDomElement &e, QWidget *parent, QLayout 
 	    if ( layout->inherits( "QBoxLayout" ) )
 		( (QBoxLayout*)layout )->addWidget( spacer, 0, spacer->alignment() );
 	    else
-		( (QDesignerGridLayout*)layout )->addMultiCellWidget( spacer, row, row + rowspan - 1, col, col + colspan - 1 );
+		( (QDesignerGridLayout*)layout )->addMultiCellWidget( spacer, row, row + rowspan - 1, col, col + colspan - 1,
+								      spacer->alignment() );
 	}
     } else {
 	QSpacerItem *item = new QSpacerItem( spacer->width(), spacer->height(),
@@ -1251,7 +1272,8 @@ QWidget *Resource::createSpacer( const QDomElement &e, QWidget *parent, QLayout 
 	    if ( layout->inherits( "QBoxLayout" ) )
 		( (QBoxLayout*)layout )->addItem( item );
 	    else
-		( (QDesignerGridLayout*)layout )->addMultiCell( item, row, row + rowspan - 1, col, col + colspan - 1 );
+		( (QDesignerGridLayout*)layout )->addMultiCell( item, row, row + rowspan - 1, col, col + colspan - 1,
+								spacer->alignment() );
 	}
 	delete spacer;
 	return 0;
@@ -1388,6 +1410,11 @@ void Resource::setObjectProperty( QObject* obj, const QString &prop, const QDomE
 	} else if ( !previewMode && formwindow && obj == formwindow->mainContainer() ) {
 	    formwindow->setName( v.toCString() );
 	}
+    }
+
+    if ( prop == "sizePolicy" ) {
+	QSizePolicy sp = v.toSizePolicy();
+	sp.setHeightForWidth( ( (QWidget*)obj )->sizePolicy().hasHeightForWidth() );
     }
 
     obj->setProperty( prop, v );

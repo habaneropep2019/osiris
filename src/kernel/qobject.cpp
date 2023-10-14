@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qobject.cpp   2.2.0   edited 2000-08-25 $
+** $Id: qt/src/kernel/qobject.cpp   2.2.1   edited 2000-10-01 $
 **
 ** Implementation of QObject class
 **
@@ -2316,7 +2316,7 @@ bool QObject::setProperty( const char *name, const QVariant& value )
     if ( !value.canCast( type ) )
 	return FALSE;
 
-    // Some stupid casts in this switch... for #@$!&@ SunPro C++ 5.0 compiler
+    // Some stupid casts in this switch... for #@$!&@ Sun WorkShop C++ 5.0
     switch ( type ) {
 
     case QVariant::Invalid:

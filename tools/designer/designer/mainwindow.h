@@ -99,6 +99,8 @@ public:
     static MainWindow *self;
     void saveAllTemp();
 
+    QString templatePath() const { return templPath; }
+    
 public slots:
     void showProperties( QWidget *w );
     void updateProperties( QWidget *w );
@@ -267,7 +269,8 @@ private:
     QMap<QString,QString> propertyDocumentation;
     QRect propGeom, flGeom, hvGeom;
     bool client;
-
+    QString templPath;
+    
 };
 
 #endif

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/network/qsocket.h   2.2.0   edited 2000-08-25 $
+** $Id: qt/src/network/qsocket.h   2.2.1   edited 2000-09-12 $
 **
 ** Definition of QSocket class.
 **
@@ -43,7 +43,7 @@
 #include "qsocketnotifier.h"
 #endif // QT_H
 
-
+#ifndef QT_NO_NETWORK
 class QSocketPrivate;
 
 
@@ -135,5 +135,5 @@ private:	// Disabled copy constructor and operator=
 #endif
 };
 
-
+#endif //QT_NO_NETWORK
 #endif // QSOCKET_H

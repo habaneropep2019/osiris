@@ -100,7 +100,9 @@ public:
     {
 	QString header;
 	QString location;
-	bool operator==( const Include & ) const;
+	bool operator==( const Include &i ) const {
+	    return header == i.header && location == i.location;
+	}
     };
 
     struct MetaInfo

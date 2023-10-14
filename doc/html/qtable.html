@@ -235,7 +235,7 @@ reimplement this function.
 number or -1 if the selection is invalid. Don't forget
 to call <a href="qtableselection.html#55f61c">QTableSelection::init</a>() and
 <a href="qtableselection.html#7ecad3">QTableSelection::expandTo</a>() to make it valid (see also
-QTableSelection::isValid()).
+<a href="qtableselection.html#8c6745">QTableSelection::isActive</a>()).
 <h3 class="fn">void <a name="a0c09a"></a>QTable::adjustColumn ( int col ) <code>[virtual slot]</code></h3>
 <p>Resizes the column <em>col</em> to be exactly wide enough so that the
 whole contents is visible.
@@ -257,7 +257,7 @@ coordinates.
 <p>Returns the widget which has been set to the cell <em>row, col</em>
 of 0 if there is no widget.
 <h3 class="fn">void <a name="1f2af2"></a>QTable::clearCell ( int row, int col ) <code>[virtual]</code></h3>
-<p>Removes the <a href="qtableitem.html">QTableItem</a> in position \p row, <em>col.</em>
+<p>Removes the <a href="qtableitem.html">QTableItem</a> in position <em>row, col.</em>
 <h3 class="fn">void <a name="e3aaa3"></a>QTable::clearCellWidget ( int row, int col ) <code>[virtual]</code></h3>
 <p>Removes the widget (if there is any) which is set for the cell <em>row, col.</em>
 <h3 class="fn">void <a name="0d91fb"></a>QTable::clearSelection ( bool repaint = TRUE ) <code>[slot]</code></h3>
@@ -611,7 +611,7 @@ the relevant item does not exist or includes no text.
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.2.0"><nobr>
+<input type=hidden name="version" value="2.2.1"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -619,5 +619,5 @@ copyright &copy; 1995-2000
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.0</div>
+<td align="right"><div align="right">Qt version 2.2.1</div>
 </table></div></address></body></html>

@@ -289,10 +289,12 @@ void CCommands::addSharedSettings( CComPtr<IConfiguration> pConfig )
     const CComBSTR compiler("cl.exe");
     const CComBSTR linker("link.exe");
     const CComBSTR dllDefine("/D QT_DLL");
+    const CComBSTR qtInclude("/I \"$(QTDIR)\\include\"");
     const CComBSTR staticLib("$(QTDIR)\\lib\\qt.lib");
     const CComBSTR sharedLib("$(QTDIR)\\lib\\qt220.lib $(QTDIR)\\lib\\qtmain.lib");
 
     VERIFY_OK(pConfig->AddToolSettings( compiler, dllDefine, CComVariant(VARIANT_FALSE) ));
+    VERIFY_OK(pConfig->AddToolSettings( compiler, qtInclude, CComVariant(VARIANT_FALSE) ));
     VERIFY_OK(pConfig->RemoveToolSettings( linker, staticLib, CComVariant(VARIANT_FALSE) ));
     VERIFY_OK(pConfig->AddToolSettings( linker, sharedLib, CComVariant(VARIANT_FALSE) ));
     m_pApplication->PrintToOutputWindow( CComBSTR("\t\tadded Qt shared library") );
@@ -303,10 +305,12 @@ void CCommands::addStaticSettings( CComPtr<IConfiguration> pConfig )
     const CComBSTR compiler("cl.exe");
     const CComBSTR linker("link.exe");
     const CComBSTR dllDefine("/D QT_DLL");
+    const CComBSTR qtInclude("/I \"$(QTDIR)\\include\"");
     const CComBSTR staticLib("$(QTDIR)\\lib\\qt.lib");
     const CComBSTR sharedLib("$(QTDIR)\\lib\\qt220.lib $(QTDIR)\\lib\\qtmain.lib");
 
     VERIFY_OK(pConfig->RemoveToolSettings( compiler, dllDefine, CComVariant(VARIANT_FALSE) ));
+    VERIFY_OK(pConfig->AddToolSettings( compiler, qtInclude, CComVariant(VARIANT_FALSE) ));
     VERIFY_OK(pConfig->RemoveToolSettings( linker, sharedLib, CComVariant(VARIANT_FALSE) ));
     VERIFY_OK(pConfig->AddToolSettings( linker, staticLib, CComVariant(VARIANT_FALSE) ));
     m_pApplication->PrintToOutputWindow( CComBSTR("\t\tadded Qt static library") );
@@ -362,8 +366,8 @@ void CCommands::addMOC( CComQIPtr<IBuildProject, &IID_IBuildProject> pProject, C
 	CComVariant Varc = c+1;
 	CComPtr<IConfiguration> pConfig;
 	VERIFY_OK(pConfigs->Item(Varc, &pConfig));
-	VERIFY_OK(pConfig->AddCustomBuildStepToFile(CComBSTR(fileToMoc), CComBSTR(moccommand+"$(InputDir)\\$(InputName).h -o "+mocfile), 
-					  CComBSTR(mocfile), CComBSTR("MOCing "+file+"..."), 
+	VERIFY_OK(pConfig->AddCustomBuildStepToFile(CComBSTR(fileToMoc), CComBSTR(moccommand+"$(InputDir)\\$(InputName)."+fileext+" -o "+mocfile), 
+					  CComBSTR(mocfile), CComBSTR("Moc'ing $(InputName)."+fileext+" ..."), 
 					  CComVariant(VARIANT_FALSE)));
 	m_pApplication->PrintToOutputWindow( CComBSTR("\t\tadded MOC preprocessor") );
     }
@@ -404,7 +408,7 @@ void CCommands::addUIC( CComQIPtr<IBuildProject, &IID_IBuildProject> pProject, C
     if ( getConfigurations( pProject, pConfigs ) != S_OK ) {
 	m_pApplication->PrintToOutputWindow( CComBSTR("FAILED TO ADD UIC!") );
     }
-    // Add the moc step to the file
+    // Add the uic step to the file
     long cCount;
     VERIFY_OK( pConfigs->get_Count(&cCount));
     for (long c = 0; c < cCount; c++ ) {
@@ -415,7 +419,8 @@ void CCommands::addUIC( CComQIPtr<IBuildProject, &IID_IBuildProject> pProject, C
 			   uiccommand+"$(InputPath) -i $(InputDir)\\$(InputName).h -o $(InputDir)\\$(InputName).cpp\n" + 
 			   moccommand+"$(InputDir)\\$(InputName).h -o $(InputDir)\\moc_$(InputName).cpp";
 	CComBSTR output = "$(InputDir)\\$(InputName).h\n$(InputDir)\\$(InputName).cpp\n$(InputDir)\\moc_$(InputName).cpp";
-	VERIFY_OK(pConfig->AddCustomBuildStepToFile(CComBSTR(uiFile), command, output, CComBSTR("UICing "+file+"..."), CComVariant(VARIANT_FALSE)));
+	VERIFY_OK(pConfig->AddCustomBuildStepToFile(CComBSTR(uiFile), command, output, CComBSTR("Uic'ing $(InputName).ui ..."), 
+	    CComVariant(VARIANT_FALSE)));
 	m_pApplication->PrintToOutputWindow( CComBSTR("\t\tadded UIC preprocessor step") );
     }
 }
@@ -527,16 +532,12 @@ STDMETHODIMP CCommands::QMsDevUseQt()
 
     // Add the specific settings to compiler and linker
     
-    const CComBSTR compiler("cl.exe");
-    const CComBSTR ipath("/I_$(QTDIR)\\include");
-
     long cCount;
     VERIFY_OK( pConfigs->get_Count(&cCount));
     for (long c = 0; c < cCount; c++ ) {
 	CComVariant Varc = c+1;
 	CComPtr<IConfiguration> pConfig;
 	VERIFY_OK(pConfigs->Item(Varc, &pConfig));
-	VERIFY_OK(pConfig->AddToolSettings( compiler, ipath, CComVariant(VARIANT_FALSE) ));
 	if ( result == IDYES )
 	    addSharedSettings( pConfig );
 	else
@@ -554,8 +555,12 @@ STDMETHODIMP CCommands::QMsDevAddMOCStep()
 
     // Check for active Project
     CComQIPtr<IBuildProject, &IID_IBuildProject> pProject;
-    if ( getActiveProject( pProject ) != S_OK )
+    if ( getActiveProject( pProject ) != S_OK ) {
+	VERIFY_OK(m_pApplication->EnableModeless(VARIANT_FALSE));
+	::MessageBox(NULL, "Can't find an active project!", "QMsDev", MB_OK | MB_ICONINFORMATION );
+	VERIFY_OK(m_pApplication->EnableModeless(VARIANT_TRUE));
 	return S_FALSE;
+    }
 
     CString file;
     CString fileext;
@@ -605,7 +610,7 @@ STDMETHODIMP CCommands::QMsDevAddUICStep()
     CComQIPtr<IBuildProject, &IID_IBuildProject> pProject;
     if ( getActiveProject( pProject ) != S_OK ) {
 	VERIFY_OK(m_pApplication->EnableModeless(VARIANT_FALSE));
-	::MessageBox(NULL, "Can't find active project!", "QMsDev", MB_OK | MB_ICONINFORMATION );
+	::MessageBox(NULL, "Can't find an active project!", "QMsDev", MB_OK | MB_ICONINFORMATION );
 	VERIFY_OK(m_pApplication->EnableModeless(VARIANT_TRUE));
 	return S_FALSE;
     }
@@ -628,7 +633,6 @@ STDMETHODIMP CCommands::QMsDevAddUICStep()
     }
 
     m_pApplication->PrintToOutputWindow( CComBSTR("Add UIC buildstep for "+file+"...") );
-    m_pApplication->PrintToOutputWindow( CComBSTR("Add buildstep for "+file+"...") );
     addUIC( pProject, filepath + file );
     m_pApplication->PrintToOutputWindow( CComBSTR("Finished!\n") );
     
@@ -760,7 +764,7 @@ STDMETHODIMP CCommands::QMsDevNewQtProject()
 	    addSharedSettings( pConfig );
 	} else {
 	    m_pApplication->PrintToOutputWindow( CComBSTR("\tadding Qt static library to "+ CString(bstr) + "...") );
-	    addSharedSettings( pConfig );
+	    addStaticSettings( pConfig );
 	}
     }
 

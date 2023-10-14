@@ -68,6 +68,8 @@ For a more general introduction of the DOM implementation see the
 content.
 <h3 class="fn"><a name="8c8146"></a>QDomEntityReference::QDomEntityReference ( const QDomEntityReference &amp; x )</h3>
 <p>Copy constructor.
+<p>The data of the copy is shared: modifying one will also change the other. If
+you want to make a real copy, use <a href="qdomnode.html#7b27fa">cloneNode</a>() instead.
 <h3 class="fn"><a name="71fa6a"></a>QDomEntityReference::~QDomEntityReference ()</h3>
 <p>Destructor.
 <h3 class="fn">bool <a name="baa0d1"></a>QDomEntityReference::isEntityReference () const <code>[virtual]</code></h3>
@@ -78,11 +80,13 @@ content.
 <p>Reimplemented from <a href="qdomnode.html#4aab85">QDomNode.</a>
 <h3 class="fn">QDomEntityReference&amp; <a name="cf3391"></a>QDomEntityReference::operator= ( const QDomEntityReference &amp; x )</h3>
 <p>Assignment operator.
+<p>The data of the copy is shared: modifying one will also change the other. If
+you want to make a real copy, use <a href="qdomnode.html#7b27fa">cloneNode</a>() instead.
 <hr><p>
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.2.0"><nobr>
+<input type=hidden name="version" value="2.2.1"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -90,5 +94,5 @@ copyright &copy; 1995-2000
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.0</div>
+<td align="right"><div align="right">Qt version 2.2.1</div>
 </table></div></address></body></html>

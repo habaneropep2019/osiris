@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/network/qnetwork.h   2.2.0   edited 2000-08-25 $
+** $Id: qt/src/network/qnetwork.h   2.2.1   edited 2000-09-12 $
 **
 ** Definition of qInitNetworkProtocols function.
 **
@@ -42,7 +42,7 @@
 #include <qglobal.h>
 #include <qfeatures.h>
 #endif // QT_H
-
+#ifndef QT_NO_NETWORK
 Q_EXPORT void qInitNetworkProtocols();
-
+#endif
 #endif

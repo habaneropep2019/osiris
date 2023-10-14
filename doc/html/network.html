@@ -189,15 +189,15 @@ to operate on it. So you should reimplement following protected members
     void QNetworkProtocol::operationPut( <a href="qnetworkoperation.html">QNetworkOperation</a> *op );
 </pre>
 <p>
-Some words about how to reimplement these methods: You always
-get a pointer to a <code>QNetworkOperation</code> as argument. This pointer holds
-all information about the operation in the current state. If you start
-processing such an operation, set the state to <code>QNetworkProtocol::StInProgress.</code>
-If you finished processing the operation, set the state to \cQNetworkProtocol::StDone if it
-was successful or <code>QNetworkProtocol::StFailed</code> if an error occurred. If an error occurred
-you have to set an error code (see <code>QNetworkOperation::setErrorCode()</code> )
-and if you know some details (e.g. an error message) you can also set this message
-to the operation pointer (see <code>QNetworkOperation::setProtocolDetail()</code> ).
+Some words about how to reimplement these methods: You always get a pointer to
+a <code>QNetworkOperation</code> as argument.  This pointer holds all information about
+the operation in the current state.  If you start processing such an operation,
+set the state to <code>QNetworkProtocol::StInProgress.</code>  If you finished processing
+the operation, set the state to <code>QNetworkProtocol::StDone</code> if it was
+successful or <code>QNetworkProtocol::StFailed</code> if an error occurred. If an
+error occurred you have to set an error code (see <code>QNetworkOperation::setErrorCode()</code> )
+and if you know some details (e.g. an error message) you can also set this
+message to the operation pointer (see <code>QNetworkOperation::setProtocolDetail()</code> ).
 Also you get all information (type, arguments, etc.) of the operation
 from this <code>QNetworkOperation</code> pointer. For details about which arguments
 you can get and set look at the class documentation of <code>QNetworkOperation.</code>
@@ -428,5 +428,5 @@ in the seperate network extension.
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.0</div>
+<td align="right"><div align="right">Qt version 2.2.1</div>
 </table></div></address></body></html>

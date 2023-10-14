@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/xml/qxml.h   2.2.0   edited 2000-08-25 $
+** $Id: qt/src/xml/qxml.h   2.2.1   edited 2000-08-25 $
 **
 ** Definition of QXmlSimpleReader and related classes.
 **

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qwidgetstack.cpp   2.2.0   edited 2000-08-25 $
+** $Id: qt/src/widgets/qwidgetstack.cpp   2.2.1   edited 2000-09-29 $
 **
 ** Implementation of QWidgetStack class
 **
@@ -200,6 +200,7 @@ void QWidgetStack::raiseWidget( QWidget * w )
 	invisible->setGeometry( contentsRect() );
 	invisible->lower();
 	invisible->show();
+	QApplication::sendPostedEvents( invisible, QEvent::ShowWindowRequest );
     }
 
     // try to move focus onto the incoming widget if focus
@@ -285,6 +286,7 @@ void QWidgetStack::raiseWidget( QWidget * w )
 
     w->setGeometry( invisible->geometry() );
     w->show();
+    QApplication::sendPostedEvents( w, QEvent::ShowWindowRequest );
 }
 
 

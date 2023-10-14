@@ -1,4 +1,4 @@
-.TH QCheckListItem 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.TH QCheckListItem 3qt "4 October 2000" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -65,9 +65,6 @@ Inherits QListViewItem.
 .SS "Protected Members"
 .in +1c
 .ti -1c
-.BI "virtual void \fBpaintBranches\fR ( QPainter * " "p" ", const QColorGroup & " "cg" ", int " "w" ", int " "y" ", int " "h" ", GUIStyle s ) "
-.br
-.ti -1c
 .BI "virtual void \fBactivate\fR () "
 .br
 .ti -1c
@@ -113,8 +110,8 @@ Retuns whether the item is enabled or disabled.
 See also setEnabled().
 .SH "bool QCheckListItem::isOn () const"
 Returns TRUE if this item is toggled on, FALSE otherwise.
-.SH "void QCheckListItem::paintBranches ( QPainter * p, const QColorGroup &, int w, int, int h, GUIStyle ) \fC[virtual protected]\fR"
-Fills the rectangle. No decoration is drawn.
+.SH "void QCheckListItem::paintBranches ( QPainter * p, const QColorGroup & g, int w, int y, int h, GUIStyle s ) \fC[virtual protected]\fR"
+Reimplemented for internal reasons; the API is not affected.
 .PP
 Reimplemented from QListViewItem.
 .SH "void QCheckListItem::paintCell ( QPainter * p, const QColorGroup & cg, int column, int width, int align ) \fC[virtual]\fR"

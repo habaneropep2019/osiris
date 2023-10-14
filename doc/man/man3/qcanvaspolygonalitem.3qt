@@ -1,4 +1,4 @@
-.TH QCanvasPolygonalItem 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.TH QCanvasPolygonalItem 3qt "4 October 2000" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -76,9 +76,9 @@ Derived classes should try to define as small as possible an area to maximize ef
 All subclasses must call hide() in their destructor while the functions numAreaPoints() and getAreaPoints() are valid.
 .SH MEMBER FUNCTION DOCUMENTATION
 .SH "QCanvasPolygonalItem::QCanvasPolygonalItem ( QCanvas * canvas )"
-Constructs a QCanvasPolygonalItem on \fIcanvas.\fR Derived classes should call addToChunks() in their constructor once numAreaPoints() and getAreaPoints() are valid.
+Constructs a QCanvasPolygonalItem on \fIcanvas.\fR
 .SH "QCanvasPolygonalItem::~QCanvasPolygonalItem () \fC[virtual]\fR"
-Destruct the QCanvasPolygonalItem. Derived classes \fImust\fR remove the area from any chunks, as this destructor cannot call the virtual methods required to do so. That is, they must call hide() in their destructor.
+Destruct the QCanvasPolygonalItem. Derived classes \fImust\fR call hide() in their destructor, as this destructor cannot call the virtual methods.
 .SH "QPointArray QCanvasPolygonalItem::areaPoints () const \fC[virtual]\fR"
 Must return the points bounding the shape. Note that the returned points are \fIoutside\fR the object, not touching it.
 .PP

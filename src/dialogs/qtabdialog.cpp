@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/dialogs/qtabdialog.cpp   2.2.0   edited 2000-08-25 $
+** $Id: qt/src/dialogs/qtabdialog.cpp   2.2.1   edited 2000-09-13 $
 **
 ** Implementation of QTabDialog class
 **
@@ -1124,7 +1124,7 @@ QWidget * QTabDialog::currentPage() const
 }
 
 /*!
-  Defines a new label for the tab of page \w
+  Defines a new \a label for the tab of page \a w
  */
 void QTabDialog::changeTab( QWidget *w, const QString &label)
 {
@@ -1132,7 +1132,7 @@ void QTabDialog::changeTab( QWidget *w, const QString &label)
 }
 
 /*!
-  Defines a new \a iconset and a new \a label for the tab of page \w
+  Defines a new \a iconset and a new \a label for the tab of page \a w
  */
 void QTabDialog::changeTab( QWidget *w, const QIconSet& iconset, const QString &label)
 {

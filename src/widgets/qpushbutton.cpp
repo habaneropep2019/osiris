@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qpushbutton.cpp   2.2.0   edited 2000-08-25 $
+** $Id: qt/src/widgets/qpushbutton.cpp   2.2.1   edited 2000-09-28 $
 **
 ** Implementation of QPushButton class
 **
@@ -155,6 +155,10 @@ public:
     QPushButtonPrivate()
 	:iconset( 0 )
     {}
+    ~QPushButtonPrivate()
+    {
+	delete iconset;
+    }
     QGuardedPtr<QPopupMenu> popup;
     QIconSet* iconset;
 };
@@ -169,6 +173,7 @@ static QPushButtonPrivate* d( const QPushButton* foo )
 {
     if ( !d_ptr ) {
 	d_ptr = new QPtrDict<QPushButtonPrivate>;
+	d_ptr->setAutoDelete( TRUE );
 	qAddPostRoutine( cleanup_d_ptr );
     }
     QPushButtonPrivate* ret = d_ptr->find( (void*)foo );

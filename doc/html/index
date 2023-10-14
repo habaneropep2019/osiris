@@ -210,6 +210,12 @@
 "OpenGL module" opengl.html
 "Orientation" qt.html#Orientation
 "Overlay:" qglformat.html#c4ce7c
+"PCOPChannel" pcopchannel.html
+"PCOPChannel" pcopchannel.html#233c5d
+"PCOPChannel" pcopchannel.html#3d11b9
+"PCOPChannel" pcopchannel.html#3e44f6
+"PCOPChannel" pcopchannel.html#83f92c
+"PCOPChannel" pcopchannel.html#b9f5d7
 "PenCapStyle" qt.html#PenCapStyle
 "PenJoinStyle" qt.html#PenJoinStyle
 "PenStyle" qt.html#PenStyle
@@ -7144,6 +7150,7 @@
 "RFC 1489." ftp://ftp.nordu.net/rfc/rfc1489.txt
 "RFC 1766" ftp://ftp.isi.edu/in-notes/1766
 "RFC 1925" http://info.internet.isi.edu/1/in-notes/rfc
+"RFC 2319." ftp://ftp.nordu.net/rfc/rfc2319.txt
 "RFC-2535" http://www.dns.net/dnsrd/rfc/rfc2535.html
 "RGBA or color index mode." qglformat.html#b91309
 "RGBA:" qglformat.html#b91309
@@ -7176,6 +7183,7 @@
 "Technical FAQ" http://www.trolltech.com/faq/tech.html
 "The Coordinate System" coordsys.html
 "The plane of an overlay format." qglformat.html#575987
+"Threads documentation" threads.html
 "Trademarks" http://www.trolltech.com/trademarks.html
 "Tree" hierarchy.html
 "Trolltech" http://www.trolltech.com
@@ -7703,6 +7711,7 @@
 "changeTab" qtabdialog.html#37b919
 "changeTab" qtabwidget.html#8bade8
 "changed" qimageconsumer.html#96d0a9
+"channel" pcopchannel.html#83f92c
 "chapter 7" t7.html
 "chapter eight." t8.html
 "chapter eleven." t11.html
@@ -9799,6 +9808,7 @@
 "isReadable" qfileinfo.html#b1136b
 "isReadable" qiodevice.html#a52f4d
 "isReadable" qurlinfo.html#eff978
+"isRegistered" pcopchannel.html#b9f5d7
 "isRelative" qdir.html#bf7a9f
 "isRelative" qfileinfo.html#c9001f
 "isRelativePath" qdir.html#43f37d
@@ -10627,7 +10637,6 @@
 "onViewport" qlistbox.html#254162
 "onViewport" qlistview.html#bb80c7
 "one of the constructors" qsizepolicy.html#interesting
-"online Threads documentation" threads.html
 "opaqueMoving" qmainwindow.html#22f243
 "opaqueResize" qsplitter.html#c978e1
 "open" menu-menu-cpp.html#257
@@ -11578,6 +11587,7 @@
 "qwizard.h" qwizard-h.html
 "qwmatrix.h" qwmatrix-h.html
 "qworkspace.h" qworkspace-h.html
+"qwsdisplay_qws.h" qwsdisplay_qws-h.html
 "qwsmanager_qws.h" qwsmanager_qws-h.html
 "qxml.h" qxml-h.html
 "qxt.h" qxt-h.html
@@ -11634,6 +11644,7 @@
 "readyToSend" qdatasource.html#27a6b8
 "readyToSend" qiodevicesource.html#be3f43
 "reason" qfocusevent.html#63797b
+"receive" pcopchannel.html#3e44f6
 "receive" qdatasink.html#430880
 "receiveBufferSize" qsocketdevice.html#44851e
 "receivers" qobject.html#d485d7
@@ -12064,6 +12075,7 @@
 "selectionMode" qtable.html#5b0379
 "selfMask" qpixmap.html#3a2cb4
 "selfNesting" qstylesheetitem.html#a5c31a
+"send" pcopchannel.html#3d11b9
 "sendBufferSize" qsocketdevice.html#bd4cae
 "sendEvent" qapplication.html#5a43f0
 "sendPostedEvents" qapplication.html#72245c
@@ -14086,6 +14098,7 @@
 "yVelocity" qcanvasitem.html#df5072
 "year" qdate.html#d53d66
 "z" qcanvasitem.html#304ea2
+"~PCOPChannel" pcopchannel.html#92c3a2
 "~QAccel" qaccel.html#f19e88
 "~QAction" qaction.html#209573
 "~QActionGroup" qactiongroup.html#e2d429

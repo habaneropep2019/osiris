@@ -1,0 +1,78 @@
+.TH PCOPChannel 3qt "4 October 2000" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
+.\" license file included in the distribution for a complete license
+.\" statement.
+.\"
+.ad l
+.nh
+.SH NAME
+PCOPChannel \- This class provides communication capabilities between several clients
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <qwsdisplay_qws.h>\fR
+.PP
+.SS "Public Members"
+.in +1c
+.ti -1c
+.BI "\fBPCOPChannel\fR ( const QCString & channel ) "
+.br
+.ti -1c
+.BI "virtual \fB~PCOPChannel\fR () "
+.br
+.ti -1c
+.BI "QCString \fBchannel\fR () const"
+.br
+.ti -1c
+.BI "virtual void \fBreceive\fR ( const QCString & " "msg" ", const QByteArray & data ) "
+.br
+.in -1c
+.SS "Static Public Members"
+.in +1c
+.ti -1c
+.BI "bool \fBisRegistered\fR ( const QCString & channel ) "
+.br
+.ti -1c
+.BI "bool \fBsend\fR ( const QCString & " "channel" ", const QCString & msg ) "
+.br
+.ti -1c
+.BI "bool \fBsend\fR ( const QCString & " "channel" ", const QCString & " "msg" ", const QByteArray & data ) "
+.br
+.in -1c
+.SH DESCRIPTION
+This class provides communication capabilities between several clients.
+.PP
+PCOP, the Palmtop COmmunication Protocol, allows clients to communicate inside of the same address space or between different processes.
+.PP
+PCOPChannel is an abstract base class. Important functions like send() and isRegistered() are static and therefore usable as is. In order to \fIlisten\fR to the traffic on channel you have to subclass from PCOPChannel and provide an implementation for receive().
+.SH MEMBER FUNCTION DOCUMENTATION
+.SH "PCOPChannel::PCOPChannel ( const QCString & channel )"
+Constructs a PCOP channel and registers it with the server under the name \fIchannel.\fR
+.SH "PCOPChannel::~PCOPChannel () \fC[virtual]\fR"
+Destructs the client's side end of the channel and notifies the server about the closing. The server itself keeps the channel open until the last registered client detaches.
+.SH "QCString PCOPChannel::channel () const"
+Returns the name of the channel.
+.SH "bool PCOPChannel::isRegistered ( const QCString & channel ) \fC[static]\fR"
+Queries the server for the existance of \fIchannel.\fR
+.PP
+Returns TRUE if \fIchannel\fR is registered.
+.SH "void PCOPChannel::receive ( const QCString & msg, const QByteArray & data ) \fC[virtual]\fR"
+This abstract virtual function allows subclasses of PCOPChannel to process data received from their channel. Note that the format of \fIdata\fR has to be well defined in order to demarshall the contained information.
+.PP
+See also send().
+.SH "bool PCOPChannel::send ( const QCString & channel, const QCString & msg ) \fC[static]\fR"
+Send the message \fImsg\fR on \fIchannel.\fR The message will be distributed to all clients subscribed to the channel.
+.PP
+See also receive().
+.SH "bool PCOPChannel::send ( const QCString & channel, const QCString & msg, const QByteArray & data ) \fC[static]\fR"
+Same as above function except the additional \fIdata\fR parameter.
+QDataStream provides a convenient way to fill the byte array with
+auxiliary data.
+.SH "SEE ALSO"
+.BR http://doc.trolltech.com/pcopchannel.html
+.SH COPYRIGHT
+Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
+license file included in the distribution for a complete license
+statement.
+.SH AUTHOR
+Generated automatically from the source code.

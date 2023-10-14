@@ -228,6 +228,7 @@ void Uic::createFormDecl( const QDomElement &e )
     out << "#ifndef " << protector << endl;
     out << "#define " << protector << endl;
     out << endl;
+    out << "#include <qvariant.h>" << endl; // for broken HPUX compilers
 
     QStringList globalIncludes, localIncludes;
     int wid = WidgetDatabase::idFromClassName( objClass );
@@ -268,8 +269,8 @@ void Uic::createFormDecl( const QDomElement &e )
 	    if ( s == "Line" )
 		s = "QFrame";
 	    forwardDecl += s;
-	    if ( s == "QListBox" || s == "QListView" || s == "QIconView" )
-		forwardDecl += s + "Item";
+	    if ( s.mid( 1 ) == "ListBox" || s.mid( 1 ) == "ListView" || s.mid( 1 ) == "IconView" )
+		forwardDecl += "Q" + s.mid( 1 ) + "Item";
 	}
     }
 
@@ -442,7 +443,7 @@ void Uic::createFormImpl( const QDomElement &e )
 	    QString name = getClassName( nl.item(i).toElement() );
 	    if ( name != objClass )
 		globalIncludes += getInclude( name );
-	    if ( name == "QListView" )
+	    if ( name.mid( 1 ) == "ListView" )
 		globalIncludes += "qheader.h";
 	}
     }
@@ -922,6 +923,12 @@ QString Uic::createObjectImpl( const QDomElement &e, const QString& parentClass,
 		    else
 			value = "QFrame::VLine | QFrame::Sunken";
 		}
+		if ( prop == "buttonGroupId" ) {
+		    if ( parentClass == "QButtonGroup" )
+			out << indent << parent << "->insert( " << objName << ", " << value << " );" << endl;
+		    continue;
+		}
+
 		if ( prop == "geometry") {
 			out << indent << objName << "->setGeometry( " << value << " ); " << endl;
 		} else {
@@ -930,28 +937,27 @@ QString Uic::createObjectImpl( const QDomElement &e, const QString& parentClass,
 		    else
 			out << indent << objName << "->setProperty( \"" << prop << "\", " << value << " );" << endl;
 		}
-
 	    }
 	} else if ( n.tagName() == "item" ) {
-	    if ( objClass == "QListBox" ) {
+	    if ( objClass.mid( 1 ) == "ListBox" ) {
 		QString s = createListBoxItemImpl( n, objName );
 		if ( !s.isEmpty() )
 		    out << indent << s << endl;
-	    } else if ( objClass == "QComboBox" ) {
+	    } else if ( objClass.mid( 1 ) == "ComboBox" ) {
 		QString s = createListBoxItemImpl( n, objName );
 		if ( !s.isEmpty() )
 		    out << indent << s << endl;
-	    } else if ( objClass == "QIconView" ) {
+	    } else if ( objClass.mid( 1 ) == "IconView" ) {
 		QString s = createIconViewItemImpl( n, objName );
 		if ( !s.isEmpty() )
 		    out << indent << s << endl;
-	    } else if ( objClass == "QListView" ) {
+	    } else if ( objClass.mid( 1 ) == "ListView" ) {
 		QString s = createListViewItemImpl( n, objName, QString::null );
 		if ( !s.isEmpty() )
 		    out << s << endl;
 	    }
 	} else if ( n.tagName() == "column" ) {
-	    if ( objClass == "QListView" ) {
+	    if ( objClass.mid( 1 ) == "ListView" ) {
 		QString s = createListViewColumnImpl( n, objName );
 		if ( !s.isEmpty() )
 		    out << s;
@@ -1262,18 +1268,24 @@ QString Uic::createSpacerImpl( const QDomElement &e, const QString& /*parentClas
     objClass = e.tagName();
     objName = registerObject( "spacer" );
 
-    QRect geom = DomTool::readProperty( e, "geometry", QRect(0,0,0,0) ).toRect();
+    QSize size = DomTool::readProperty( e, "sizeHint", QSize( 0, 0 ) ).toSize();
     QString sizeType = DomTool::readProperty( e, "sizeType", "Expanding" ).toString();
     bool isVspacer = DomTool::readProperty( e, "orientation", "Horizontal" ) == "Vertical";
 
+    if ( sizeType != "Expanding" && sizeType != "MinimumExpanding" &&
+	 DomTool::hasProperty( e, "geometry" ) ) { // compatibility Qt 2.2
+	QRect geom = DomTool::readProperty( e, "geometry", QRect(0,0,0,0) ).toRect();
+	size = geom.size();
+    }
+
     if ( isVspacer )
 	out << "    QSpacerItem* " << objName << " = new QSpacerItem( "
-	    << geom.width() << ", " << geom.height()
-	    << ", QSizePolicy::Fixed, QSizePolicy::" << sizeType << " );" << endl;
+	    << size.width() << ", " << size.height()
+	    << ", QSizePolicy::Minimum, QSizePolicy::" << sizeType << " );" << endl;
     else
 	out << "    QSpacerItem* " << objName << " = new QSpacerItem( "
-	    << geom.width() << ", " << geom.height()
-	    << ", QSizePolicy::" << sizeType << ", QSizePolicy::Fixed );" << endl;
+	    << size.width() << ", " << size.height()
+	    << ", QSizePolicy::" << sizeType << ", QSizePolicy::Minimum );" << endl;
 
     return objName;
 }
@@ -1481,7 +1493,10 @@ QString Uic::setObjectProperty( const QString& objClass, const QString& obj, con
 		sp.setVerData( (QSizePolicy::SizeType)n3.firstChild().toText().data().toInt() );
 	    n3 = n3.nextSibling().toElement();
 	}
-	v = "QSizePolicy( (QSizePolicy::SizeType)%1, (QSizePolicy::SizeType)%2 )";
+	QString tmp;
+	if ( !obj.isEmpty() )
+	    tmp = obj + "->";
+	v = "QSizePolicy( (QSizePolicy::SizeType)%1, (QSizePolicy::SizeType)%2, " +tmp + "sizePolicy().hasHeightForWidth() )";
 	v = v.arg( (int)sp.horData() ).arg( (int)sp.verData() );
     } else if ( e.tagName() == "palette" ) {
 	QPalette pal;
@@ -1688,7 +1703,7 @@ QStringList Uic::unique( const QStringList& list )
 QString Uic::createObjectInstance( const QString& objClass, const QString& parent, const QString& objName )
 {
 
-    if ( objClass == "QComboBox" ) {
+    if ( objClass.mid( 1 ) == "ComboBox" ) {
 	return objClass + "( FALSE, " + parent + ", \"" + objName + "\" )";
     }
     return objClass + "( " + parent + ", \"" + objName + "\" )";

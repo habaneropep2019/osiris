@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/dialogs/qprintdialog.h   2.2.0   edited 2000-08-25 $
+** $Id: qt/src/dialogs/qprintdialog.h   2.2.1   edited 2000-08-25 $
 **
 ** Definition of print dialog.
 **

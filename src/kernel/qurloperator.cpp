@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qurloperator.cpp   2.2.0   edited 2000-08-25 $
+** $Id: qt/src/kernel/qurloperator.cpp   2.2.1   edited 2000-09-14 $
 **
 ** Implementation of QUrlOperator class
 **
@@ -352,7 +352,7 @@ const QNetworkOperation *QUrlOperator::listChildren()
 	return res;
     } else {
 	QString msg = tr( "The protocol `%1' is not supported\n"
-			  "or `%2' doesn't support listing directores" ).
+			  "or `%2' doesn't support listing directories" ).
 		      arg( protocol() ).arg( protocol() );
 	res->setState( QNetworkProtocol::StFailed );
 	res->setProtocolDetail( msg );

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/iconview/qiconview.cpp   2.2.0   edited 2000-08-25 $
+** $Id: qt/src/iconview/qiconview.cpp   2.2.1   edited 2000-09-27 $
 **
 ** Implementation of QIconView widget class
 **
@@ -2289,9 +2289,7 @@ QIconView::QIconView( QWidget *parent, const char *name, WFlags f )
     d->fullRedrawTimer = new QTimer( this );
     d->itemTextBrush = NoBrush;
     d->drawAllBack = TRUE;
-    QFont fo( font() );
-    fo.setItalic( TRUE );
-    d->fm = new QFontMetrics( fo );
+    d->fm = new QFontMetrics( font() );
     d->minLeftBearing = d->fm->minLeftBearing();
     d->minRightBearing = d->fm->minRightBearing();
     d->firstContainer = d->lastContainer = 0;
@@ -2331,11 +2329,16 @@ QIconView::QIconView( QWidget *parent, const char *name, WFlags f )
 void QIconView::styleChange( QStyle& old )
 {
     QScrollView::styleChange( old );
-    QFont fo( font() );
-    fo.setItalic( TRUE );
-    *d->fm = QFontMetrics( fo );
+    *d->fm = QFontMetrics( font() );
     d->minLeftBearing = d->fm->minLeftBearing();
     d->minRightBearing = d->fm->minRightBearing();
+
+    QIconViewItem *item = d->firstItem;
+    for ( ; item; item = item->next ) {
+	item->wordWrapDirty = TRUE;
+	item->calcRect();
+    }
+    
     delete qiv_selection;
     qiv_selection = 0;
 }
@@ -2347,11 +2350,15 @@ void QIconView::styleChange( QStyle& old )
 void QIconView::setFont( const QFont & f )
 {
     QScrollView::setFont( f );
-    QFont fo( font() );
-    fo.setItalic( TRUE );
-    *d->fm = QFontMetrics( fo );
+    *d->fm = QFontMetrics( font() );
     d->minLeftBearing = d->fm->minLeftBearing();
     d->minRightBearing = d->fm->minRightBearing();
+
+    QIconViewItem *item = d->firstItem;
+    for ( ; item; item = item->next ) {
+	item->wordWrapDirty = TRUE;
+	item->calcRect();
+    }
 }
 
 /*!
@@ -2361,11 +2368,15 @@ void QIconView::setFont( const QFont & f )
 void QIconView::setPalette( const QPalette & p )
 {
     QScrollView::setPalette( p );
-    QFont fo( font() );
-    fo.setItalic( TRUE );
-    *d->fm = QFontMetrics( fo );
+    *d->fm = QFontMetrics( font() );
     d->minLeftBearing = d->fm->minLeftBearing();
     d->minRightBearing = d->fm->minRightBearing();
+
+    QIconViewItem *item = d->firstItem;
+    for ( ; item; item = item->next ) {
+	item->wordWrapDirty = TRUE;
+	item->calcRect();
+    }
 }
 
 /*!
@@ -4190,10 +4201,8 @@ void QIconView::resizeEvent( QResizeEvent* e )
 void QIconView::adjustItems()
 {
     d->adjustTimer->stop();
-    if ( d->resizeMode == Adjust ) {
-	if ( size() != d->oldSize )
+    if ( d->resizeMode == Adjust )
 	    arrangeItemsInGrid( TRUE );
-    }
 }
 
 /*!

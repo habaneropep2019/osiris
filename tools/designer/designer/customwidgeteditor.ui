@@ -42,13 +42,6 @@
                 <name>name</name>
                 <cstring>boxWidgets</cstring>
             </property>
-            <property stdset="1">
-                <name>sizePolicy</name>
-                <sizepolicy>
-                    <hsizetype>5</hsizetype>
-                    <vsizetype>7</vsizetype>
-                </sizepolicy>
-            </property>
             <property>
                 <name>whatsThis</name>
                 <string>The list of all custom widgets known to the designer.</string>
@@ -128,21 +121,19 @@
                         <cstring>Horizontal Spacing2</cstring>
                     </property>
                     <property stdset="1">
-                        <name>geometry</name>
-                        <rect>
-                            <x>87</x>
-                            <y>5</y>
-                            <width>520</width>
-                            <height>20</height>
-                        </rect>
-                    </property>
-                    <property stdset="1">
                         <name>orientation</name>
                         <enum>Horizontal</enum>
                     </property>
                     <property stdset="1">
                         <name>sizeType</name>
                         <enum>Expanding</enum>
+                    </property>
+                    <property>
+                        <name>sizeHint</name>
+                        <size>
+                            <width>20</width>
+                            <height>20</height>
+                        </size>
                     </property>
                 </spacer>
                 <widget>
@@ -172,21 +163,19 @@
                 <cstring>Vertical Spacing1</cstring>
             </property>
             <property stdset="1">
-                <name>geometry</name>
-                <rect>
-                    <x>175</x>
-                    <y>79</y>
-                    <width>20</width>
-                    <height>190</height>
-                </rect>
-            </property>
-            <property stdset="1">
                 <name>orientation</name>
                 <enum>Vertical</enum>
             </property>
             <property stdset="1">
                 <name>sizeType</name>
                 <enum>Expanding</enum>
+            </property>
+            <property>
+                <name>sizeHint</name>
+                <size>
+                    <width>20</width>
+                    <height>20</height>
+                </size>
             </property>
         </spacer>
         <widget row="3"  column="1" >
@@ -240,6 +229,10 @@
             </property>
             <widget>
                 <class>QWidget</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>Widget2</cstring>
+                </property>
                 <attribute>
                     <name>title</name>
                     <string>D&amp;efinition</string>
@@ -640,21 +633,19 @@
                             <cstring>Spacer1</cstring>
                         </property>
                         <property stdset="1">
-                            <name>geometry</name>
-                            <rect>
-                                <x>345</x>
-                                <y>181</y>
-                                <width>20</width>
-                                <height>105</height>
-                            </rect>
-                        </property>
-                        <property stdset="1">
                             <name>orientation</name>
                             <enum>Vertical</enum>
                         </property>
                         <property stdset="1">
                             <name>sizeType</name>
                             <enum>Expanding</enum>
+                        </property>
+                        <property>
+                            <name>sizeHint</name>
+                            <size>
+                                <width>20</width>
+                                <height>20</height>
+                            </size>
                         </property>
                     </spacer>
                     <widget row="5"  column="1" >
@@ -681,6 +672,10 @@
             </widget>
             <widget>
                 <class>QWidget</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>Widget3</cstring>
+                </property>
                 <attribute>
                     <name>title</name>
                     <string>&amp;Signals</string>
@@ -726,21 +721,19 @@
                                     <cstring>Spacer1_2</cstring>
                                 </property>
                                 <property stdset="1">
-                                    <name>geometry</name>
-                                    <rect>
-                                        <x>1</x>
-                                        <y>5</y>
-                                        <width>1</width>
-                                        <height>20</height>
-                                    </rect>
-                                </property>
-                                <property stdset="1">
                                     <name>orientation</name>
                                     <enum>Horizontal</enum>
                                 </property>
                                 <property stdset="1">
                                     <name>sizeType</name>
                                     <enum>Expanding</enum>
+                                </property>
+                                <property>
+                                    <name>sizeHint</name>
+                                    <size>
+                                        <width>20</width>
+                                        <height>20</height>
+                                    </size>
                                 </property>
                             </spacer>
                             <widget>
@@ -842,6 +835,10 @@
             </widget>
             <widget>
                 <class>QWidget</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>Widget4</cstring>
+                </property>
                 <attribute>
                     <name>title</name>
                     <string>S&amp;lots</string>
@@ -995,21 +992,19 @@
                                     <cstring>Spacer2</cstring>
                                 </property>
                                 <property stdset="1">
-                                    <name>geometry</name>
-                                    <rect>
-                                        <x>1</x>
-                                        <y>5</y>
-                                        <width>22</width>
-                                        <height>20</height>
-                                    </rect>
-                                </property>
-                                <property stdset="1">
                                     <name>orientation</name>
                                     <enum>Horizontal</enum>
                                 </property>
                                 <property stdset="1">
                                     <name>sizeType</name>
                                     <enum>Expanding</enum>
+                                </property>
+                                <property>
+                                    <name>sizeHint</name>
+                                    <size>
+                                        <width>20</width>
+                                        <height>20</height>
+                                    </size>
                                 </property>
                             </spacer>
                             <widget>
@@ -1064,6 +1059,10 @@
             </widget>
             <widget>
                 <class>QWidget</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>Widget5</cstring>
+                </property>
                 <attribute>
                     <name>title</name>
                     <string>&amp;Properties</string>
@@ -1098,21 +1097,19 @@
                                     <cstring>Spacer2_2</cstring>
                                 </property>
                                 <property stdset="1">
-                                    <name>geometry</name>
-                                    <rect>
-                                        <x>1</x>
-                                        <y>5</y>
-                                        <width>3</width>
-                                        <height>20</height>
-                                    </rect>
-                                </property>
-                                <property stdset="1">
                                     <name>orientation</name>
                                     <enum>Horizontal</enum>
                                 </property>
                                 <property stdset="1">
                                     <name>sizeType</name>
                                     <enum>Expanding</enum>
+                                </property>
+                                <property>
+                                    <name>sizeHint</name>
+                                    <size>
+                                        <width>20</width>
+                                        <height>20</height>
+                                    </size>
                                 </property>
                             </spacer>
                             <widget>

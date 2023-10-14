@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/themes/main.cpp   2.2.0   edited 2000-08-31 $
+** $Id: qt/examples/themes/main.cpp   2.2.1   edited 2000-10-03 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -16,7 +16,7 @@
 
 int main( int argc, char ** argv )
 {
-    QApplication::setColorSpec( QApplication::CustomColor );
+    QApplication::setColorSpec( QApplication::ManyColor );
     QApplication a( argc, argv );
 
     Themes themes;

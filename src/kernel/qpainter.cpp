@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qpainter.cpp   2.2.0   edited 2000-08-25 $
+** $Id: qt/src/kernel/qpainter.cpp   2.2.1   edited 2000-09-27 $
 **
 ** Implementation of QPainter, QPen and QBrush classes
 **
@@ -256,7 +256,7 @@ typedef QStack<QWMatrix> QWMatrixStack;
   flags are: <ul>
 
   <li> \c AlignLeft - Align with the left edge.
-  <li> \c AlignRight - Align with the left edge.
+  <li> \c AlignRight - Align with the right edge.
   <li> \c AlignHCenter - Center horizontally in the available space.
 
   </ul> The vertical flags are: <ul>
@@ -1986,7 +1986,7 @@ void QPainter::drawImage( int x, int y, const QImage & image,
         if(sh<0)
 	    sh=image.height();
 
-	QImage image2=image;
+	QImage image2 = qt_screen->mapToDevice( image );
 
 	// This is a bit dubious
 	if(image2.depth()==1) {
@@ -1999,11 +1999,10 @@ void QPainter::drawImage( int x, int y, const QImage & image,
 	else
 	    gfx->setAlphaType(QGfx::IgnoreAlpha);
 	gfx->setSource(&image2);
-	gfx->setSourceOffset(sx,sy);
 	if ( testf(VxF|WxF) ) {
 	    map( x, y, &x, &y );
 	}
-	gfx->blt(x,y,sw,sh);
+	gfx->blt(x,y,sw,sh,sx,sy);
     }
     return;
 #endif
@@ -2343,7 +2342,9 @@ void qt_format_text( const QFontMetrics& fm, int x, int y, int w, int h,
 
     bool fakeBreak = FALSE;
     bool breakwithinwords = FALSE;
+    //qDebug("painting string %s pointSize=%d width=%d", str.latin1(), fm.height(), w);
     while ( k <= len ) {				// convert string to codes
+	//qDebug("at position %d fakeBreak=%d", k, fakeBreak);
 	if ( !fakeBreak && k < len && ISPRINT(*p) ) {			// printable character
 	    if ( *p == '&' && showprefix ) {
 		cc = '&';			// assume ampersand
@@ -2369,9 +2370,10 @@ void qt_format_text( const QFontMetrics& fm, int x, int y, int w, int h,
 	} else {				// not printable (except ' ')
 	    // somehow the assertion fm.width(word) == breakwidth seems not to hold in 100%
 	    // of the cases (maybe an X11 bug). This led to an endless loop in a very special case.
-	    if ( !breakwithinwords || fakeBreak )
+	    if ( !breakwithinwords || fakeBreak ) {
 		cw = fm.width(word);
-	    else {
+		//qDebug("%s: word = %s, width=%d", str.latin1(), word.latin1(), cw);
+	    } else {
 		cw = breakwidth - CWIDTH(cc);
 		//qDebug( "cw gets set to %d - would have been %d", cw, fm.width(word) );
 	    }
@@ -2589,6 +2591,7 @@ void qt_format_text( const QFontMetrics& fm, int x, int y, int w, int h,
 		 "\t\t    and AlignVCenter set in the tf parameter.");
 #endif // CHECK_RANGE
 
+    //qDebug("%s: nlines = %d height=%d width needed=%d", str.latin1(), nlines, fheight, maxwidth);
     QRect br( x+xp, y+yp, maxwidth, nlines*fheight );
     if ( brect )				// set bounding rect
 	*brect = br;
@@ -2627,18 +2630,20 @@ void qt_format_text( const QFontMetrics& fm, int x, int y, int w, int h,
 	painter->setClipRegion( new_rgn );
     }
 
-    QBitmap  *mask;
-    QPainter *pp;
-    QPixmap *pm;
-
-    mask = 0;
-    pp = 0;
-    pm = 0;
-
     yp += fascent;
 
     uint *cp = codes;
 
+#if 0
+    int i = 0;
+    while ( *cp ) {
+	qDebug("code[%d] = %x", i, *cp);
+	cp++;
+	i++;
+    }
+    cp = codes;
+#endif
+    
     while ( *cp ) {				// finally, draw the text
 	tw = *cp++ & WIDTHBITS;			// text width
 
@@ -2648,7 +2653,7 @@ void qt_format_text( const QFontMetrics& fm, int x, int y, int w, int h,
 	    yp += fheight;
 	    continue;
 	}
-
+	
 	if ( (tf & Qt::AlignRight) == Qt::AlignRight ) {
 	    xc = w - tw + minrightbearing;
 	} else if ( (tf & Qt::AlignHCenter) == Qt::AlignHCenter ) {
@@ -2657,31 +2662,20 @@ void qt_format_text( const QFontMetrics& fm, int x, int y, int w, int h,
 	    xc = -minleftbearing;
 	}
 
-	if ( pp )				// erase pixmap if gray text
-	    pp->fillRect( 0, 0, w, fheight, Qt::color0 );
-
 	int bxc = xc;				// base x position (chars)
 	while ( TRUE ) {
 	    QString chunk;
 	    while ( *cp && (*cp & (BEGLINE|TABSTOP)) == 0 ) {
 		if ( (*cp & PREFIX) == PREFIX ) {
 		    int xcpos = fm.width( chunk );
-		    if ( pp )			// gray text
-			pp->fillRect( xc+xcpos, fascent+fm.underlinePos(),
-				      CWIDTH(*cp), fm.lineWidth(),
-				      Qt::color1 );
-		    else
-			painter->fillRect( x+xc+xcpos, y+yp+fm.underlinePos(),
-					   CWIDTH(*cp), fm.lineWidth(),
-					   painter->cpen.color() );
+		    painter->fillRect( x+xc+xcpos, y+yp+fm.underlinePos(),
+				       CWIDTH(*cp), fm.lineWidth(),
+				       painter->cpen.color() );
 		}
 		chunk += DECCHAR(*cp);
 		++cp;
 	    }
-	    if ( pp )				// gray text
-		pp->drawText( xc, fascent, chunk );
-	    else
-		painter->drawText( x+xc, y+yp, chunk );// draw the text
+	    painter->drawText( x+xc, y+yp, chunk );// draw the text
 	    if ( (*cp & TABSTOP) == TABSTOP ) {
 		int w = (*cp++ & WIDTHBITS);
 		xc = bxc + w;
@@ -2689,24 +2683,7 @@ void qt_format_text( const QFontMetrics& fm, int x, int y, int w, int h,
 		break;
 	    }
 	}
-	if ( pp ) {				// gray text
-	    pp->setPen(Qt::color0);
-	    pp->drawRect( mask->rect() );
-	    pp->setPen(Qt::color1);
-	    pm->fill( painter->cpen.color() );
-	    pp->end();
-	    pm->setMask( *mask );
-	    painter->drawPixmap( x, y+yp-fascent, *pm );
-	    pp->begin( mask );
-	}
-
 	yp += fheight;
-    }
-
-    if ( pp ) {					// gray text
-	pp->end();
-	delete pp;
-	delete pm;
     }
 
     if ( (tf & Qt::DontClip) == 0 ) {		// restore clipping

@@ -198,6 +198,7 @@ VERBOSE=
 DEBUG=no
 SHARED=yes
 GIF=no
+OPENGL=auto
 THREAD=auto
 SM=auto
 ZLIB=yes
@@ -294,6 +295,11 @@ while [ -n "$1" ]; do
        MODULE=`echo $1 | sed -e "s/-no-//"`;
        if [ -d "src/$MODULE" ]
        then
+	    if [ $MODULE = "opengl" ]
+	    then
+		OPENGL=no
+	    fi
+		
 	   MODULES=`echo $MODULES | sed -e "s/$MODULE//"`
        else
 	   FEATURE=`echo $1 | sed -e "s/-/_/g" | tr '[a-z]' '[A-Z]'`;
@@ -353,7 +359,7 @@ then
     then
 	# This is a Qt/Embedded distribution
 	SM=no
-	MODULES=`echo $MODULES | sed -e 's/\<opengl\>//'`
+	MODULES=`echo $MODULES | sed -e 's/opengl//'`
 	PLATFORMS="linux-generic-g++ linux-mips-g++ linux-x86-g++ linux-arm-g++"
 	case "$UNAME_MACHINE" in
 	 *86) ARCH=x86-
@@ -561,8 +567,9 @@ then
     exit 2
 fi
 
-if [ ! -f configs/linux-generic-g++-shared ]
+if [ ! -f configs/linux-generic-g++-shared -a $OPENGL = "auto" ]
 then
+    OPENGL=yes
     # Auto-detect opengl support
     LIBS=`sed -n -e '/^SYSCONF_LIBS_OPENGL[	]*=/ { s/[^=]*=[	 ]*//; s/-l/ /g; p; }' $XCONFIG`
     for L in $LIBS
@@ -576,10 +583,31 @@ then
 		break
 	    fi
 	done
-	if [ -z "$F" ]
+	if [ "$F" = "yes" ]
 	then
-	    MODULES=`echo $MODULES | sed -e 's/\<opengl\>//'`
-	    break
+	    for I in GL/glu.h GL/gl.h
+	    do
+		G=
+		for INC in `sed -n -e '/^SYSCONF_CXXFLAGS_OPENGL[	]*=/ { s/[^=]*=[	 ]*//; s/-I/ /g; p; }' $XCONFIG` /usr/include
+		do
+		    if [ -f $INC/$I ]
+		    then
+			G=yes
+			break
+		    fi
+		done
+	    done
+
+	    if [ -z "$G" ]
+            then
+                MODULES=`echo $MODULES | sed -e 's/opengl//'`
+		OPENGL=no
+	        break
+            fi
+	else
+            MODULES=`echo $MODULES | sed -e 's/opengl//'`
+	    OPENGL=no
+            break
 	fi
     done
 fi
@@ -663,10 +691,10 @@ if [ "$HELP" = "yes" ]; then
     fi
 
     cat <<EOF
-Usage: $0 [-debug] [-release] [-gif] [-no-gif] [-sm] [-no-sm] \\
-        [-qt-zlib] [-system-zlib] [-qt-libpng] [-system-libpng] \\
-        [-no-jpeg] [-system-jpeg] [-no-thread] [-thread] [-kde] \\
-        [-Istring] [-lstring] [-Lstring] [-Rstring] [-no-<module>] \\
+Usage: $0 [-debug] [-release] [-shared] [-static] [-gif] [-no-gif] \\
+	[-sm] [-no-sm] [-thread] [-no-thread] [-qt-zlib] [-system-zlib] \\
+	[-qt-libpng] [-system-libpng] [-no-jpeg] [-system-jpeg] \\
+	[-no-<module>] [-kde] [-Istring] [-Lstring] [-Rstring] [-lstring]
 
 The defaults (*) are usually acceptable.  Here is a short explanation of
 each option:
@@ -706,6 +734,9 @@ each option:
     -system-nas-sound .. Use NAS libaudio from the operating system.
                          See http://radscan.com/nas.html
 
+    -no-<module> ....... Disables a module, where module can
+                         can be one of: $MODULES_HELP
+
     -kde ............... Builds the Qt Designer with KDE2 support, so that
 			 KDE2 widgets can be used directly in
 			 the Qt Designer. \$KDEDIR must be
@@ -723,9 +754,6 @@ each option:
     -Lstring ........... Add an explicit library path.
     -Rstring ........... Add an explicit dynamic library runtime search path.
     -lstring ........... Add an explicit library.
-
-    -no-<module> ....... Disables a module, where module can
-                         can be one of: $MODULES_HELP
 EOF
 
    [ "x$ERROR" = "xyes" ] && exit 1
@@ -938,13 +966,41 @@ for a in `find $relpath/. -name Makefile.in -print | sort` ; do
 
 EOF
 
+	if [ $N = ././src/moc/Makefile ] ; then
+	# we don't want to link moc to SM and ICE
+	    OPT="sed -e s/^QT_LIBS_OPT.*$//g .buildopts"
+	else
+	    OPT="cat .buildopts"
+	fi
+
 	if [ $relpath != `pwd` ] ; then
 	    echo VPATH=$relpath/$buildpath >> $N
-	    cat .buildopts $CONF >> $N
+	    $OPT >> $N
+	    if [ $N = ././src/moc/Makefile ] ; then
+		cat $CONF | sed -e "s/^SYSCONF_LIBS_QTAPP.*$/SYSCONF_LIBS_QTAPP =/" >> $N
+	    else
+		if [ $OPENGL = "no" ]
+		then
+	  	    cat $CONF | sed -e "s/^SYSCONF_LIBS_OPENGL.*$/SYSCONF_LIBS_OPENGL =/" >> $N
+		else
+		    cat $CONF >> $N
+		fi
+	    fi
+
 	    sed -e's/	\$(MOC) [^ ]* -o .*/	$(MOC) $< -o $@/g' \
 		-e's/\(	\$(CXX) -c \$(CXXFLAGS) \$(INCPATH) -o\) [^ ]* [^ ]*/\1 $@ $</g' $M >> $N
 	else
-	    cat .buildopts $CONF $M >> $N
+	    $OPT >> $N
+	    if [ $N = ././src/moc/Makefile ] ; then
+		cat $CONF $M | sed -e "s/^SYSCONF_LIBS_QTAPP.*$/SYSCONF_LIBS_QTAPP =/" >> $N
+	    else
+                if [ $OPENGL = "no" ] 
+                then
+                    cat $CONF $M | sed -e "s/^SYSCONF_LIBS_OPENGL.*$/SYSCONF_LIBS_OPENGL =/" >> $N
+                else
+                    cat $CONF $M >> $N
+                fi
+	    fi
 	fi
 	if [ "$VERBOSE" = "yes" ]; then
 	   echo '  Created' $N

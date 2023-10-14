@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/network/qftp.cpp   2.2.0   edited 2000-08-30 $
+** $Id: qt/src/network/qftp.cpp   2.2.1   edited 2000-09-29 $
 **
 ** Implementation of QFtp class.
 **
@@ -211,11 +211,16 @@ bool QFtp::checkConnection( QNetworkOperation * )
 #endif
 	return TRUE;
     }
-
     if ( commandSocket->isOpen() ) {
 // #if defined(QFTP_DEBUG)
 // 	qDebug( "QFtp: command socket open but connection not ok!" );
 // #endif
+	return FALSE;
+    }
+    if ( commandSocket->state() == QSocket::Connecting ) {
+#if defined(QFTP_DEBUG)
+	qDebug( "QFtp::checkConnection(): already trying to connect" );
+#endif
 	return FALSE;
     }
 
@@ -425,8 +430,9 @@ void QFtp::closed()
 void QFtp::readyRead()
 {
     QCString s;
-    s.resize( commandSocket->bytesAvailable() );
+    s.resize( commandSocket->bytesAvailable() + 1 );
     commandSocket->readBlock( s.data(), commandSocket->bytesAvailable() );
+    s[ (int)(s.size() - 1) ] = '\0';
 
     if ( !url() )
 	return;
@@ -595,7 +601,7 @@ void QFtp::okGoOn( int code, const QCString &data )
 void QFtp::okButNeedMoreInfo( int code, const QCString & )
 {
     switch ( code ) {
-    case 331: // expect PASSWORD
+    case 331: {		// expect PASSWORD
 #if defined(QFTP_DEBUG)
 	qDebug( "QFtp: write password" );
 #endif
@@ -606,7 +612,7 @@ void QFtp::okButNeedMoreInfo( int code, const QCString & )
 #endif
 	commandSocket->writeBlock( cmd, cmd.length() );
 	connectionReady = FALSE;
-	break;
+    } break;
     }
 }
 

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/xml/qxml.cpp   2.2.0   edited 2000-08-29 $
+** $Id: qt/src/xml/qxml.cpp   2.2.1   edited 2000-09-30 $
 **
 ** Implementation of QXmlSimpleReader and related classes.
 **
@@ -194,6 +194,12 @@ class QXmlDefaultHandlerPrivate
 {
 };
 
+#if defined(Q_FULL_TEMPLATE_INSTANTIATION)
+bool operator==( const QMap<QString, QString>, const QMap<QString, QString> )
+{
+    return FALSE;
+}
+#endif
 
 /*!
   \class QXmlParseException qxml.h
@@ -3287,12 +3293,6 @@ bool QXmlSimpleReader::parseDoctype()
 		parseOk = parseExternalID();
 		break;
 	    case MP:
-		if ( lexicalHnd ) {
-		    if ( !lexicalHnd->startDTD( d->doctype, d->publicId, d->systemId ) ) {
-			d->error = lexicalHnd->errorString();
-			goto parseError;
-		    }
-		}
 		next_eat_ws();
 		break;
 	    case PER:
@@ -3328,6 +3328,12 @@ bool QXmlSimpleReader::parseDoctype()
 		break;
 	    case Doctype2:
 		d->doctype = name();
+		if ( lexicalHnd ) {
+		    if ( !lexicalHnd->startDTD( d->doctype, d->publicId, d->systemId ) ) {
+			d->error = lexicalHnd->errorString();
+			goto parseError;
+		    }
+		}
 		break;
 	    case Sys:
 		if ( !parseOk ) {

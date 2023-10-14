@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qcommonstyle.cpp   2.2.0   edited 2000-08-28 $
+** $Id: qt/src/widgets/qcommonstyle.cpp   2.2.1   edited 2000-10-03 $
 **
 ** Implementation of the QCommonStyle class
 **
@@ -365,7 +365,7 @@ void QStyle::drawToolBarHandle( QPainter *p, const QRect &r, Qt::Orientation ori
 	    unsigned int i;
 	
 	    if (orientation == Qt::Vertical) {
-		mp->drawButton(p, r.x(), r.y(), r.width(), toolBarHandleExtent(),
+		mp->drawButton(p, 0, 0, r.width(), toolBarHandleExtent(),
 			       cg, FALSE, &cg.brush(((highlight) ?
 						     QColorGroup::Highlight :
 						     QColorGroup::Button)));
@@ -388,7 +388,7 @@ void QStyle::drawToolBarHandle( QPainter *p, const QRect &r, Qt::Orientation ori
 		    p->drawPoints( a );
 		}
 	    } else {
-		mp->drawButton(p, r.x(), r.y(), toolBarHandleExtent(), r.height(),
+		mp->drawButton(p, 0, 0, toolBarHandleExtent(), r.height(),
 			       cg, FALSE, &cg.brush(((highlight) ?
 						     QColorGroup::Highlight :
 						     QColorGroup::Button)));

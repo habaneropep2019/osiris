@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qapplication_x11.cpp   2.2.0   edited 2000-08-28 $
+** $Id: qt/src/kernel/qapplication_x11.cpp   2.2.1   edited 2000-09-27 $
 **
 ** Implementation of X11 startup routines and event handling
 **
@@ -92,14 +92,18 @@
 
 #if defined(_OS_UNIX_)
 
-#if defined(_OS_SOLARIS_)
+#if defined(_OS_SOLARIS_) || defined(_OS_UNIXWARE7_)
 #  define BSD_COMP // needed for FIONREAD
 #endif
 
 #include <sys/ioctl.h>
 
-#if defined(_OS_SOLARIS_)
+#if defined(_OS_SOLARIS_) || defined(_OS_UNIXWARE7_)
 #  undef BSD_COMP
+#endif
+
+#if defined(_OS_SCO_)
+#  include <sys/socket.h> // for FIONREAD on SCO OpenServer 5.0.x
 #endif
 
 static int qt_thread_pipe[2];
@@ -302,8 +306,8 @@ static bool sm_blockUserInput = FALSE;		// session management
 // one day in the future we will be able to have static objects in libraries....
 static QGuardedPtr<QWidget>* activeBeforePopup = 0; // focus handling with popups
 
-typedef void  (*VFPTR)();
-typedef QList<void> QVFuncList;
+typedef void (*VFPTR)();
+typedef QValueList<VFPTR> QVFuncList;
 static QVFuncList *postRList = 0;		// list of post routines
 
 typedef int (*QX11EventFilter) (XEvent*);
@@ -323,33 +327,39 @@ static bool qt_x11EventFilter( XEvent* ev )
     return qApp->x11EventFilter( ev );
 }
 
-void qt_install_preselect_handler (VFPTR);
-void qt_remove_preselect_handler (VFPTR);
+void qt_install_preselect_handler( VFPTR );
+void qt_remove_preselect_handler( VFPTR );
 static QVFuncList *qt_preselect_handler = 0;
-void qt_install_postselect_handler (VFPTR);
-void qt_remove_postselect_handler (VFPTR);
+void qt_install_postselect_handler( VFPTR );
+void qt_remove_postselect_handler( VFPTR );
 static QVFuncList *qt_postselect_handler = 0;
-void qt_install_preselect_handler (VFPTR handler)
+void qt_install_preselect_handler( VFPTR handler )
 {
     if ( !qt_preselect_handler )
 	qt_preselect_handler = new QVFuncList;
-    qt_preselect_handler->append( (void*) handler );
+    qt_preselect_handler->append( handler );
 }
-void qt_remove_preselect_handler (VFPTR handler)
+void qt_remove_preselect_handler( VFPTR handler )
 {
-    if ( qt_preselect_handler )
-	qt_preselect_handler->removeRef( (void*)handler );
+    if ( qt_preselect_handler ) {
+	QVFuncList::Iterator it = qt_preselect_handler->find( handler );
+	if ( it != qt_preselect_handler->end() )
+		qt_preselect_handler->remove( it );
+    }
 }
-void qt_install_postselect_handler (VFPTR handler)
+void qt_install_postselect_handler( VFPTR handler )
 {
     if ( !qt_postselect_handler )
 	qt_postselect_handler = new QVFuncList;
-    qt_postselect_handler->prepend( (void*)handler );
+    qt_postselect_handler->prepend( handler );
 }
-void qt_remove_postselect_handler (VFPTR handler)
+void qt_remove_postselect_handler( VFPTR handler )
 {
-    if ( qt_postselect_handler )
-	qt_postselect_handler->removeRef( (void*)handler );
+    if ( qt_postselect_handler ) {
+	QVFuncList::Iterator it = qt_postselect_handler->find( handler );
+	if ( it != qt_postselect_handler->end() )
+		qt_postselect_handler->remove( it );
+    }
 }
 
 
@@ -1371,11 +1381,11 @@ void qt_init( Display *display )
 void qt_cleanup()
 {
     if ( postRList ) {
-	VFPTR f = (VFPTR)postRList->first();
-	while ( f ) {				// call post routines
-	    (*f)();
-	    postRList->remove();
-	    f = (VFPTR)postRList->first();
+	QVFuncList::Iterator it = postRList->begin();
+	while ( it != postRList->end() ) {	// call post routines
+	    (**it)();
+	    postRList->remove( it );
+	    it = postRList->begin();
 	}
 	delete postRList;
 	postRList = 0;
@@ -1540,22 +1550,21 @@ void qAddPostRoutine( Q_CleanUpFunction p )
 	postRList = new QVFuncList;
 	CHECK_PTR( postRList );
     }
-    postRList->insert( 0, (void *)p );		// store at list head
+    postRList->prepend( p );
 }
 
 
 void qRemovePostRoutine( Q_CleanUpFunction p )
 {
-    if (! postRList) return;
+    if ( !postRList ) return;
 
-    void *postr = postRList->first();
+    QVFuncList::Iterator it = postRList->begin();
 
-    while ( postr ) {
-	if (postr == (void *) p) {
-	    postRList->remove();
+    while ( it != postRList->end() ) {
+	if ( *it == p ) {
+	    postRList->remove( it );
+	    it = postRList->begin();
 	}
-
-	postr = postRList->next();
     }
 }
 
@@ -2455,8 +2464,9 @@ bool QApplication::processNextEvent( bool canWait )
 #endif
 
     if ( qt_preselect_handler ) {
-	for ( VFPTR handler = (VFPTR) qt_preselect_handler->first(); handler; handler = (VFPTR) qt_preselect_handler->next() )
-	    handler();
+	QVFuncList::Iterator end = qt_preselect_handler->end();
+	for ( QVFuncList::Iterator it = qt_preselect_handler->begin(); it != end; ++it )
+	    (**it)();
     }
 
 #if defined(_OS_WIN32_)
@@ -2489,8 +2499,9 @@ bool QApplication::processNextEvent( bool canWait )
 #endif
 
     if ( qt_postselect_handler ) {
-	for ( VFPTR handler = (VFPTR) qt_postselect_handler->first(); handler; handler = (VFPTR) qt_postselect_handler->next() )
-	    handler();
+	QVFuncList::Iterator end = qt_postselect_handler->end();
+	for ( QVFuncList::Iterator it = qt_postselect_handler->begin(); it != end; ++it )
+	    (**it)();
     }
 
     if ( nsel == -1 ) {
@@ -2525,7 +2536,7 @@ void QApplication::wakeUpGuiThread()
 #  if defined(_OS_UNIX_)
     char c = 0;
     int nbytes;
-    if ( ::ioctl(qt_thread_pipe[1], FIONREAD, (char*)&nbytes) >= 0 && nbytes == 0 ) {
+    if ( ::ioctl(qt_thread_pipe[0], FIONREAD, (char*)&nbytes) >= 0 && nbytes == 0 ) {
 	::write(  qt_thread_pipe[1], &c, 1  );
     }
 #  endif
@@ -3067,10 +3078,10 @@ static bool qt_try_modal( QWidget *widget, XEvent *event )
 	modal = widget;
     if ( !top || modal == top )			// don't block event
 	return TRUE;
-    
+
     while ( groupLeader && !groupLeader->testWFlags( Qt::WGroupLeader ) )
 	groupLeader = groupLeader->parentWidget();
-    
+
     if ( groupLeader ) {
 	// Does groupLeader have a child in qt_modal_stack?
 	bool unrelated = TRUE;
@@ -3083,8 +3094,8 @@ static bool qt_try_modal( QWidget *widget, XEvent *event )
 	    modal = qt_modal_stack->next();
 	    if ( p == groupLeader ) unrelated = FALSE;
 	}
-	
-	if ( unrelated ) 
+
+	if ( unrelated )
 	    return TRUE;		// don't block event
     }
 
@@ -3154,6 +3165,8 @@ void QApplication::openPopup( QWidget *popup )
 		XUngrabKeyboard( popup->x11Display(), CurrentTime );
 	    }
 	}
+    } else if ( popupGrabOk ) {
+	 XAllowEvents(  popup->x11Display(), SyncPointer, CurrentTime );
     }
 
     // popups are not focus-handled by the window system (the first
@@ -4492,6 +4505,9 @@ bool QETWidget::translateConfigEvent( const XEvent *event )
 	    newCPos.ry() = event->xconfigure.y + event->xconfigure.border_width;
 	}
 
+	if ( isVisible() )
+	    QApplication::syncX();
+	
 	XEvent otherEvent;
 	while ( XCheckTypedWindowEvent( x11Display(),winId(),ConfigureNotify,&otherEvent ) ) {
 	    if ( qt_x11EventFilter( &otherEvent ) )

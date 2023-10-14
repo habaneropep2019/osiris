@@ -569,8 +569,8 @@ the length of the string.
 <p>Examples:
  <a href="qmag-qmag-cpp.html#mid">qmag/qmag.cpp</a>
 <h3 class="fn">QString <a name="3f7178"></a>QString::number ( double n, char f='g', int prec=6 ) <code>[static]</code></h3>
-<p>This static function returns the printed value of <em>n,</em> formatted in the \f
-format with <em>prec</em> precision.
+<p>This static function returns the printed value of <em>n,</em> formatted in the
+<em>f</em> format with <em>prec</em> precision.
 <p><em>f</em> can be 'f', 'F', 'e', 'E', 'g' or 'G', all of which have the
 same meaning as for <a href="#2eb9bc">sprintf</a>().
 <p>See also  <a href="#01d80b">setNum</a>().
@@ -843,6 +843,11 @@ conceivable errors, and FALSE if the string is not a number at all,
 or if it has trailing garbage.
 <h3 class="fn">int <a name="d12ba3"></a>QString::toInt ( bool * ok=0, int base=10 ) const</h3>
 <p>Returns the string converted to a <code>int</code> value.
+<p><pre>  <a href="qstring.html">QString</a> str("FF");
+  bool ok;
+  int hex = str.<a href="#d12ba3">toInt</a>( &amp;ok, "16" ); // will return 255, and ok set to TRUE
+  int dec = str.<a href="#d12ba3">toInt</a>( &amp;ok, "10" ); // will return 0, and ok set to FALSE
+</pre>
 <p>If <em>ok</em> is non-null, <em>*ok</em> is set to TRUE if there are no
 conceivable errors, and FALSE if the string is not a number at all,
 or if it has trailing garbage.
@@ -988,7 +993,7 @@ otherwise FALSE.
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.2.0"><nobr>
+<input type=hidden name="version" value="2.2.1"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -996,5 +1001,5 @@ copyright &copy; 1995-2000
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.0</div>
+<td align="right"><div align="right">Qt version 2.2.1</div>
 </table></div></address></body></html>

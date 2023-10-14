@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qwidget_x11.cpp   2.2.0   edited 2000-08-25 $
+** $Id: qt/src/kernel/qwidget_x11.cpp   2.2.1   edited 2000-10-01 $
 **
 ** Implementation of QWidget and QWindow classes for X11
 **
@@ -856,7 +856,12 @@ void QWidget::unsetCursor()
 static XTextProperty*
 qstring_to_xtp( const QString& s )
 {
-    static XTextProperty tp;
+    static XTextProperty tp = { 0, 0, 0, 0 };
+    if ( tp.value ) {
+	XFree( tp.value );
+	tp.value = 0;
+    }
+
     static const QTextCodec* mapper = QTextCodec::codecForLocale();
     int errCode = 0;
     if ( mapper ) {
@@ -1148,8 +1153,12 @@ QWidget *QWidget::keyboardGrabber()
 void QWidget::setActiveWindow()
 {
     QWidget *tlw = topLevelWidget();
-    if ( tlw->isVisible() && !tlw->topData()->embedded )
+    if ( tlw->isVisible() && !tlw->topData()->embedded ) {
 	XSetInputFocus( x11Display(), tlw->winId(), RevertToNone, qt_x_time);
+	
+	if ( tlw->topData()->xic)
+	    XSetICFocus((XIC) tlw->topData()->xic);
+    }
 }
 
 
@@ -1354,11 +1363,11 @@ void QWidget::hideWindow()
     if ( isTopLevel() ) {
 	qt_deferred_map_take( this );
 	XWithdrawWindow( x11Display(), winId(), x11Screen() );
-	fpos = crect.topLeft();
+	crect.moveTopLeft( fpos );
 	topData()->fsize = crect.size();
-    }
-    else
+    } else {
 	XUnmapWindow( x11Display(), winId() );
+    }
 }
 
 
@@ -1380,6 +1389,7 @@ void QWidget::showMinimized()
 	    topData()->showMode = 1;
 	    show();
 	    clearWState( WState_Visible );
+	    sendHideEventsToChildren(TRUE);
 	}
     }
     QCustomEvent e( QEvent::ShowMinimized, 0 );

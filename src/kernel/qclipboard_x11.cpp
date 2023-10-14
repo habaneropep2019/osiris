@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qclipboard_x11.cpp   2.2.0   edited 2000-08-25 $
+** $Id: qt/src/kernel/qclipboard_x11.cpp   2.2.1   edited 2000-09-27 $
 **
 ** Implementation of QClipboard class for X11
 **
@@ -47,6 +47,10 @@
 #include "qdragobject.h"
 #include "qbuffer.h"
 #include "qt_x11.h"
+
+#include <sys/time.h>
+#include <sys/types.h>
+#include <unistd.h>
 
 // REVISED: arnt
 
@@ -189,6 +193,18 @@ void QClipboard::clear()
 }
 
 
+#if defined(_WS_X11_)
+bool QClipboard::ownsSelection() const
+{
+    if (owner &&
+	XGetSelectionOwner(owner->x11Display(), XA_PRIMARY) == owner->winId())
+	return TRUE;
+
+    return FALSE;
+}
+#endif
+
+
 void QClipboard::clobber()
 {
     if ( !internalCbData ) return;
@@ -200,7 +216,7 @@ void QClipboard::clobber()
     internalCbData = 0;
 
     Window win =  XGetSelectionOwner(owner->x11Display(), XA_PRIMARY);
-    
+
     if (win == owner->winId())
 	XSetSelectionOwner(owner->x11Display(), XA_PRIMARY, None, qt_x_time);
 }
@@ -211,13 +227,25 @@ bool qt_xclb_wait_for_event( Display *dpy, Window win, int type, XEvent *event,
 {
     QTime started = QTime::currentTime();
     QTime now = started;
+    bool flushed = FALSE;
     do {
 	if ( XCheckTypedWindowEvent(dpy,win,type,event) )
 	    return TRUE;
 	now = QTime::currentTime();
 	if ( started > now )			// crossed midnight
 	    started = now;
-	XSync( dpy, FALSE );			// toss a ball while we wait
+	// XSync is evil, and causes a *very* high load on the server and client if called
+	// like this very often. Things also
+	//XSync( dpy, FALSE );			// toss a ball while we wait
+	if(!flushed) {
+	    XFlush( dpy );
+	    flushed = TRUE;
+	}
+	// sleep a bit, so we don't use up CPU cycles all the time.
+	struct timeval _usleep_tv;
+	_usleep_tv.tv_sec = 0;
+	_usleep_tv.tv_usec = 50000;
+	select(0,0,0,0,&_usleep_tv);
     } while ( started.msecsTo(now) < timeout );
     return FALSE;
 }
@@ -282,7 +310,7 @@ bool qt_xclb_read_property( Display *dpy, Window win, Atom property,
 	    offset += (unsigned int)length;
 	    XFree( (char*)data );
 	}
-	if (nullterm)
+       	if (nullterm)
 	    buffer->at(offset) = '\0';		// zero-terminate (for text)
     }
     if ( size )
@@ -324,7 +352,7 @@ QByteArray qt_xclb_read_incremental_property( Display *dpy, Window win,
 
     while ( TRUE ) {
 	if ( !qt_xclb_wait_for_event(dpy,win,PropertyNotify,
-				     (XEvent*)&event,5000) )
+				     (XEvent*)&event,1000) )
 	    break;
 	XFlush( dpy );
 	if ( event.xproperty.atom != property ||
@@ -393,6 +421,11 @@ bool QClipboard::event( QEvent *e )
     switch ( xevent->type ) {
 
     case SelectionClear:			// new selection owner
+#if defined(QT_CLIPBOARD_DEBUG)
+	qDebug("qclipboard_x11.cpp: new selection owner 0x%lx",
+	       XGetSelectionOwner(dpy, XA_PRIMARY));
+#endif
+	
 	clipboardData()->clear();
 	emit dataChanged();
 	break;
@@ -418,6 +451,17 @@ bool QClipboard::event( QEvent *e )
 	    evt.xselection.time = req->time;
 	    // ### Should we check that we own the clipboard?
 	    // ### We do above
+
+#if defined(QT_CLIPBOARD_DEBUG)
+	    qDebug("qclipboard_x11.cpp: selection requested\n"
+		   "                    from 0x%lx\n"
+		   "                    to 0x%lx (%s) 0x%lx (%s)",
+		   req->requestor,
+		   req->selection,
+		   XGetAtomName(req->display, req->selection),
+		   req->target,
+		   XGetAtomName(req->display, req->target));
+#endif
 
 	    if ( !d->source() )
 		d->setSource(new QClipboardWatcher());
@@ -457,49 +501,60 @@ bool QClipboard::event( QEvent *e )
 		}
 
 		if ( target == xa_targets ) {
-		    int atoms = 0; // 3 standard ones
-		    while (d->source()->format(atoms))
-			atoms++;
-		    atoms += 3;
+		    int atoms = 0;
+		    while (d->source()->format(atoms)) atoms++;
+		    if (d->source()->provides("image/ppm")) atoms++;
+		    if (d->source()->provides("image/pbm")) atoms++;
+		    if (d->source()->provides("text/plain")) atoms++;
 
-		    data = QByteArray(atoms * sizeof(Atom));
-		    Atom* atarget = (Atom*)data.data();
+#ifdef QT_CLIPBOARD_DEBUG
+		    qDebug("qclipboard_x11.cpp:%d: %d provided types", __LINE__, atoms);
+#endif
+
+		    // for 64 bit cleanness... XChangeProperty expects long* for data
+		    // with format == 32
+		    data = QByteArray(atoms * sizeof(long));
+		    long *atarget = (long *) data.data();
 
 		    int n = 0;
 		    while ((fmt=d->source()->format(n)) && n < atoms) {
 			Atom *dnd = qt_xdnd_str_to_atom(fmt);
 
-#ifdef QT_CLIPBOARD_DEBUG
-			qDebug("qclipboard_x11.cpp:%d: atom* for '%s' = %p %d",
-			       __LINE__, fmt, dnd, n);
-#endif
-
+			// compiler should handle the Atom to long conversion implicitly
 			atarget[n++] = *dnd;
 		    }
 
-		    if (n < atoms - 3) {
 #ifdef QT_CLIPBOARD_DEBUG
-			qDebug("qclipboard_x11.cpp:%d: n(%d) < n(%d) - 3",
-			       __LINE__, n, atoms);
+		    qDebug("qclipboard_x11.cpp:%d: before standard, n(%d) atoms(%d)",
+			   __LINE__, n, atoms);
 #endif
 
-			if ( d->source()->provides("image/ppm") )
-			    atarget[n++] = XA_PIXMAP;
-			if ( d->source()->provides("image/pbm") )
-			    atarget[n++] = XA_BITMAP;
-			if ( d->source()->provides("text/plain") )
-			    atarget[n++] = XA_STRING;
+		    if ( d->source()->provides("image/ppm") )
+			atarget[n++] = XA_PIXMAP;
+		    if ( d->source()->provides("image/pbm") )
+			atarget[n++] = XA_BITMAP;
+		    if ( d->source()->provides("text/plain") )
+			atarget[n++] = XA_STRING;
+
+#ifdef QT_CLIPBOARD_DEBUG
+		    for (int index = 0; index < n; index++) {
+			qDebug("qclipboard_x11.cpp: atom %d: 0x%lx (%s)",
+			       index, atarget[index],
+			       XGetAtomName(dpy, atarget[index]));
 		    }
 
-		    XChangeProperty ( dpy, req->requestor, property,
-				      xa_targets, 32,
-				      PropModeReplace,
-				      (uchar *)data.data(),
-				      data.size()/4 );
+		    qDebug("qclipboard_x11.cpp:%d: after standard, n(%d) atoms(%d)",
+			   __LINE__, n, atoms);
+		    qDebug("qclipboard_x11.cpp:%d: size %d %d",
+			   __LINE__, n * sizeof(long), data.size());
+#endif
+
+		    XChangeProperty ( dpy, req->requestor, property, xa_targets, 32,
+				      PropModeReplace, (uchar *) data.data(), n );
 		    evt.xselection.property = property;
 		} else {
 		    bool already_done = FALSE;
-		    if ( target == XA_STRING ) {
+		    if ( target == XA_STRING) {
 			fmt = "text/plain";
 		    } else if ( target == XA_PIXMAP ) {
 			fmt = "image/ppm";
@@ -562,7 +617,12 @@ bool QClipboard::event( QEvent *e )
 		    }
 		}
 
-		XSendEvent( dpy, req->requestor, False, 0, &evt );
+#if defined(QT_CLIPBOARD_DEBUG)
+		qDebug("qclipboard_x11.cpp: sending SelectionNotify to 0x%lx with property 0x%lx (%s)",
+		       req->requestor, evt.xselection.property, XGetAtomName(dpy, evt.xselection.property));
+#endif
+		
+		XSendEvent( dpy, req->requestor, FALSE, 0, &evt );
 		if ( !nmulti )
 		    break;
 	    }
@@ -618,7 +678,7 @@ QByteArray QClipboardWatcher::encodedData( const char* fmt ) const
     Atom fmtatom = 0;
 
     if ( 0==qstrcmp(fmt,"text/plain") ) {
-	fmtatom = XA_STRING;
+   	fmtatom = XA_STRING;
     } else if ( 0==qstrcmp(fmt,"image/ppm") ) {
 	fmtatom = XA_PIXMAP;
 	QByteArray pmd = getDataInFormat(fmtatom);
@@ -669,7 +729,7 @@ QByteArray QClipboardWatcher::getDataInFormat(Atom fmtatom) const
     XFlush( dpy );
 
     XEvent xevent;
-    if ( !qt_xclb_wait_for_event(dpy,win,SelectionNotify,&xevent,5000) )
+    if ( !qt_xclb_wait_for_event(dpy,win,SelectionNotify,&xevent,1000) )
 	return buf;
 
     Atom   type;
@@ -729,7 +789,7 @@ void QClipboard::setData( QMimeSource* src )
     XSetSelectionOwner( dpy, XA_PRIMARY, win, qt_x_time );
 
     // ### perhaps this should be CHECK_RANGE ?
-#if defined(DEBUG) 
+#if defined(DEBUG)
     if ( XGetSelectionOwner(dpy,XA_PRIMARY) != win ) {
 	qWarning( "QClipboard::setData: Cannot set X11 selection owner" );
 	return;

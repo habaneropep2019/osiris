@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qrect.cpp   2.2.0   edited 2000-08-25 $
+** $Id: qt/src/kernel/qrect.cpp   2.2.1   edited 2000-09-12 $
 **
 ** Implementation of QRect class
 **
@@ -573,7 +573,6 @@ void QRect::setSize( const QSize &s )
 }
 
 /*!
-  \fn bool QRect::contains( const QPoint &p, bool proper ) const
   Returns TRUE if the point \e p is inside or on the edge of the
   rectangle.
 
@@ -581,12 +580,20 @@ void QRect::setSize( const QSize &s )
   inside (not on the edge).
 */
 
+bool QRect::contains( const QPoint &p, bool proper ) const
+{
+    if ( proper )
+	return p.x() > x1 && p.x() < x2 &&
+	       p.y() > y1 && p.y() < y2;
+    else
+	return p.x() >= x1 && p.x() <= x2 &&
+	       p.y() >= y1 && p.y() <= y2;
+}
 
 /*!
   \fn bool QRect::contains( int x, int y, bool proper ) const
   \overload bool QRect::contains( const QPoint &p, bool proper ) const
 */
-
 
 /*!
   Returns TRUE if the rectangle \e r is inside this rectangle.

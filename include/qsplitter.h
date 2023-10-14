@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qsplitter.h   2.2.0   edited 2000-08-25 $
+** $Id: qt/src/widgets/qsplitter.h   2.2.1   edited 2000-08-25 $
 **
 ** Defintion of  QSplitter class
 **

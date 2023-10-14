@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/dialogs/qprintdialog.cpp   2.2.0   edited 2000-08-25 $
+** $Id: qt/src/dialogs/qprintdialog.cpp   2.2.1   edited 2000-09-12 $
 **
 ** Implementation of internal print dialog (X11) used by QPrinter::select().
 **
@@ -906,6 +906,9 @@ QGroupBox * QPrintDialog::setupDestination()
     horiz->addSpacing( 6 );
     d->browse = new QPushButton( tr("Browse..."), g, "browse files" );
     d->browse->setAutoDefault( FALSE );
+#ifdef QT_NO_FILEDIALOG
+    d->browse->setEnabled( FALSE );
+#endif    
     connect( d->browse, SIGNAL(clicked()),
 	     this, SLOT(browseClicked()) );
     horiz->addWidget( d->browse );
@@ -1194,9 +1197,11 @@ void QPrintDialog::setNumCopies( int copies )
 
 void QPrintDialog::browseClicked()
 {
+#ifndef QT_NO_FILEDIALOG
     QString fn = QFileDialog::getSaveFileName( QString::null, tr( "Postscript files (*.ps);;All files (*)" ), this );
     if ( !fn.isNull() )
 	d->fileName->setText( fn );
+#endif
 }
 
 

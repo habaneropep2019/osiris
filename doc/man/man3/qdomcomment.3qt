@@ -1,4 +1,4 @@
-.TH QDomComment 3qt "3 September 2000" "Trolltech AS" \" -*- nroff -*-
+.TH QDomComment 3qt "4 October 2000" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -55,6 +55,8 @@ For further information about the Document Objct Model see http://www.w3.org/TR/
 Constructs an empty comment. To construct a comment with content, use the QDomDocument::createComment() function.
 .SH "QDomComment::QDomComment ( const QDomComment & x )"
 Copy constructor.
+.PP
+The data of the copy is shared: modifying one will also change the other. If you want to make a real copy, use cloneNode() instead.
 .SH "QDomComment::~QDomComment ()"
 Destructor.
 .SH "bool QDomComment::isComment () const \fC[virtual]\fR"
@@ -67,6 +69,9 @@ Returns \fCCommentNode.\fR
 Reimplemented from QDomNode.
 .SH "QDomComment& QDomComment::operator= ( const QDomComment & x )"
 Assignment operator.
+.PP
+The data of the copy is shared: modifying one will also change the other. If
+you want to make a real copy, use cloneNode() instead.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qdomcomment.html
 .SH COPYRIGHT
