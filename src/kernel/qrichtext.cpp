@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qrichtext.cpp   2.2.4   edited 2001-01-31 $
+** $Id: qt/src/kernel/qrichtext.cpp   2.3.0   edited 2001-02-27 $
 **
 ** Implementation of the internal Qt classes dealing with rich text
 **
@@ -171,6 +171,8 @@ QTextImage::QTextImage(const QMap<QString, QString> &attr, const QString& contex
 	    QPixmapInt& pmi = pixmap_map->operator[](imgId);
 	    pm = pmi.pm;
 	    pmi.ref++;
+	    width = pm.width();
+	    height = pm.height();
 	} else {
 	    QImage img;
 	    const QMimeSource* m =
@@ -2093,6 +2095,14 @@ void QRichTextFormatter::right( QPainter* p )
 {
     if ( !pastEnd() && !pastEndOfLine() ) {
 	QString c =  paragraph->text.charAt( current );
+#ifdef _WS_X11_
+	    //### workaround for broken courier fonts on X11
+	int l = c.length();
+	for ( int i = 0; i < l; i++ ) {
+	    if ( c[i] == QChar(0x00a0U) )
+		c[i] = ' ';
+	}
+#endif
 	if ( currentoffset  < int(c.length()) - 1 ) {
 	    QTextCharFormat* fmt = format();
 	    QFontMetrics fm( fmt->font() );
@@ -2113,6 +2123,14 @@ void QRichTextFormatter::left( QPainter* p )
 {
     if ( currentoffset > 0 ) {
 	QString c =  paragraph->text.charAt( current );
+#ifdef _WS_X11_
+	    //### workaround for broken courier fonts on X11
+	int l = c.length();
+	for ( int i = 0; i < l; i++ ) {
+	    if ( c[i] == QChar(0x00a0U) )
+		c[i] = ' ';
+	}
+#endif
 	QTextCharFormat* fmt = format();
 	QFontMetrics fm( fmt->font() );
 	if ( p ) {
@@ -2141,6 +2159,14 @@ void QRichTextFormatter::left( QPainter* p )
 	while ( current <  i - 1 )
 	    (void) rightOneItem( p );
 	QString c =  paragraph->text.charAt( current );
+#ifdef _WS_X11_
+	    //### workaround for broken courier fonts on X11
+	int l = c.length();
+	for ( int i = 0; i < l; i++ ) {
+	    if ( c[i] == QChar(0x00a0U) )
+		c[i] = ' ';
+	}
+#endif
 	if ( c.length() > 1 ) {
 	    currentoffset = c.length() - 1;
 	    QTextCharFormat* fmt = format();
@@ -2204,6 +2230,14 @@ void QRichTextFormatter::gotoNextItem( QPainter* p )
     }
     else {
 	QString c = item->c;
+#ifdef _WS_X11_
+	    //### workaround for broken courier fonts on X11
+	int l = c.length();
+	for ( int i = 0; i < l; i++ ) {
+	    if ( c[i] == QChar(0x00a0U) )
+		c[i] = ' ';
+	}
+#endif
 	QFontMetrics fm( formatinuse->font() );
 	if ( p )
 	    fm = p->fontMetrics();

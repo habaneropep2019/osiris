@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/widgets/widgets.cpp   2.2.4   edited 2000-08-31 $
+** $Id: qt/examples/widgets/widgets.cpp   2.3.0   edited 2001-02-20 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -714,21 +714,21 @@ void WidgetView::dummy()
 
 void WidgetView::selectionChanged()
 {
-    qDebug("selectionChanged");
+    //qDebug("selectionChanged");
 }
 void WidgetView::selectionChanged( QListViewItem* item)
 {
-    qDebug("selectionChanged %p", item );
+    //qDebug("selectionChanged %p", item );
 }
 
 void WidgetView::clicked( QListViewItem* item )
 {
-    qDebug("clicked %p", item );
+    //qDebug("clicked %p", item );
 }
 
 void WidgetView::mySelectionChanged( QListViewItem* item )
 {
-    qDebug("mySelectionChanged %p", item );
+    //qDebug("mySelectionChanged %p", item );
 }
 
 void WidgetView::showProperties()

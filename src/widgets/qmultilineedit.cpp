@@ -1,5 +1,5 @@
 /**********************************************************************
-** $Id: qt/src/widgets/qmultilineedit.cpp   2.2.4   edited 2001-01-29 $
+** $Id: qt/src/widgets/qmultilineedit.cpp   2.3.0   edited 2001-02-27 $
 **
 ** Implementation of QMultiLineEdit widget class
 **
@@ -866,11 +866,19 @@ bool QMultiLineEdit::getMarkedRegion( int *line1, int *col1,
 	*col1 = markAnchorX;
 	*line2 = markDragY;
 	*col2 = markDragX;
+	if ( *line2 > numLines() - 1 ) {
+	    *line2 = numLines() - 1;
+	    *col2 = lineLength( *line2 );
+	}
     } else {
 	*line1 = markDragY;
 	*col1 = markDragX;
 	*line2 = markAnchorY;
 	*col2 = markAnchorX;
+	if ( *line2 > numLines() - 1 ) {
+	    *line2 = numLines() - 1;
+	    *col2 = lineLength( *line2 );
+	}
     }
     return markIsOn;
 }
@@ -2134,6 +2142,9 @@ void QMultiLineEdit::pixelPosToCursorPos(QPoint p, int* x, int* y) const
 			  p.x() - d->lr_marg + xOffset(),
 			  cellWidth() - 2 * d->lr_marg - d->marg_extra,
 			  d->align );
+    QMultiLineEditRow* r = contents->at( *y );
+    if (r && !r->newline && ((unsigned int)*x == r->s.length()) && (*x > 0))
+	--*x;
 }
 
 void QMultiLineEdit::setCursorPixelPosition(QPoint p, bool clear_mark)
@@ -2451,6 +2462,9 @@ int QMultiLineEdit::mapFromView( int xPos, int line )
 				 xPos - d->lr_marg,
 				 cellWidth() - 2 * d->lr_marg - d->marg_extra,
 				 d->align );
+    QMultiLineEditRow* r = contents->at( line );
+    if (r && !r->newline && ((unsigned int)index == r->s.length()) && (index > 0))
+	--index;
     return index;
 }
 

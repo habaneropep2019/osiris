@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qsgistyle.cpp   2.2.4   edited 2000-12-11 $
+** $Id: qt/src/widgets/qsgistyle.cpp   2.3.0   edited 2001-02-06 $
 **
 ** Implementation of Motif-like style class
 **
@@ -232,17 +232,21 @@ QSGIStyle::polish( QWidget* w )
     }
 
     if ( w->inherits("QButton") || w->inherits("QSlider") || w->inherits("QScrollBar") ) {
-	w->installEventFilter( this );
-	w->setMouseTracking( TRUE );
-	if ( w->inherits("QScrollBar") )
-	    w->setBackgroundMode( QWidget::NoBackground );
+        w->installEventFilter( this );
+        w->setMouseTracking( TRUE );
+        if ( w->inherits("QToolButton") )
+            w->setBackgroundMode( QWidget::PaletteBackground );
+        if ( w->inherits("QScrollBar") )
+            w->setBackgroundMode( QWidget::NoBackground );
     } else if ( w->inherits("QMenuBar") ) {
-	((QFrame*) w)->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
-	w->setBackgroundMode( QWidget::PaletteBackground );
+        ((QFrame*) w)->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
+        w->setBackgroundMode( QWidget::PaletteBackground );
     } else if ( w->inherits("QPopupMenu") ) {
-	((QFrame*) w)->setLineWidth( defaultFrameWidth() + 1 );
+        ((QFrame*) w)->setLineWidth( defaultFrameWidth() + 1 );
     } else if ( w->inherits("QToolBar") ) {
-	w->setBackgroundMode( QWidget::PaletteBackground );
+        w->setBackgroundMode( QWidget::PaletteBackground );
+    } else if ( w->inherits("QToolBarSeparator") ) {
+        w->setBackgroundMode( QWidget::PaletteBackground );
     }
 }
 

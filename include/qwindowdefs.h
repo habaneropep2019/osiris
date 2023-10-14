@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qwindowdefs.h   2.2.4   edited 2000-12-12 $
+** $Id: qt/src/kernel/qwindowdefs.h   2.3.0   edited 2001-02-17 $
 **
 ** Definition of general window system dependent functions, types and
 ** constants
@@ -111,7 +111,7 @@ typedef void * MSG;
 #error "define WId and friends to ulong always"
 #endif
 
-#if (defined (_OS_IRIX_) || defined(_OS_OSF_) ) && defined(UINT_MAX) && defined(ULONG_MAX) && (ULONG_MAX > UINT_MAX)
+#if defined(UINT_MAX) && defined(ULONG_MAX) && (ULONG_MAX > UINT_MAX)
 typedef unsigned long  WId;
 typedef unsigned long  HANDLE;
 #else

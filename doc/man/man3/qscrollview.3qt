@@ -1,5 +1,6 @@
-.TH QScrollView 3qt "1 Febrary 2001" "Trolltech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
+'\" t
+.TH QScrollView 3qt "5 March 2001" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2001 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,7 +8,6 @@
 .nh
 .SH NAME
 QScrollView \- Scrolling area with on-demand scrollbars
-.SH SYNOPSIS
 .br
 .PP
 \fC#include <qscrollview.h>\fR
@@ -25,7 +25,7 @@ Inherited by QCanvasView, QIconView, QListBox, QListView, QTable and QTextView.
 .BI "\fB~QScrollView\fR () "
 .br
 .ti -1c
-.BI "enum \fBResizePolicy\fR { Default, Manual, AutoOne }"
+.BI "enum \fBResizePolicy\fR { Default, Manual, AutoOne, AutoOneFit }"
 .br
 .ti -1c
 .BI "virtual void \fBsetResizePolicy\fR ( ResizePolicy ) "
@@ -275,7 +275,25 @@ Inherited by QCanvasView, QIconView, QListBox, QListView, QTable and QTextView.
 .br
 .in -1c
 .SS "Properties"
-<table border=1 cellpadding=3 cellspacing=0> <tr><th>Type<th>Name<th>READ<th>WRITE<th>Options <tr><td>ResizePolicy<td>resizePolicy<td>resizePolicy<td>setResizePolicy<td>&nbsp; <tr><td>ScrollBarMode<td>vScrollBarMode<td>vScrollBarMode<td>setVScrollBarMode<td>&nbsp; <tr><td>ScrollBarMode<td>hScrollBarMode<td>hScrollBarMode<td>setHScrollBarMode<td>&nbsp; <tr><td>int<td>visibleWidth<td>visibleWidth<td>&nbsp;<td>&nbsp; <tr><td>int<td>visibleHeight<td>visibleHeight<td>&nbsp;<td>&nbsp; <tr><td>int<td>contentsWidth<td>contentsWidth<td>&nbsp;<td>&nbsp; <tr><td>int<td>contentsHeight<td>contentsHeight<td>&nbsp;<td>&nbsp; <tr><td>int<td>contentsX<td>contentsX<td>&nbsp;<td>&nbsp; <tr><td>int<td>contentsY<td>contentsY<td>&nbsp;<td>&nbsp; <tr><td>bool<td>dragAutoScroll<td>dragAutoScroll<td>setDragAutoScroll<td>&nbsp; </table>
+.nf
+.TS
+l l l l l
+- - - - -
+l l l l l.
+Type	Name	READ	WRITE	Options
+ResizePolicy	resizePolicy	resizePolicy	setResizePolicy
+ScrollBarMode	vScrollBarMode	vScrollBarMode	setVScrollBarMode
+ScrollBarMode	hScrollBarMode	hScrollBarMode	setHScrollBarMode
+int	visibleWidth	visibleWidth
+int	visibleHeight	visibleHeight
+int	contentsWidth	contentsWidth
+int	contentsHeight	contentsHeight
+int	contentsX	contentsX
+int	contentsY	contentsY
+bool	dragAutoScroll	dragAutoScroll	setDragAutoScroll
+.TE
+.fi
+
 .SH DESCRIPTION
 The QScrollView widget provides a scrolling area with on-demand scrollbars.
 .PP
@@ -286,9 +304,10 @@ To provide content for the widget, inherit from QScrollView and reimplement draw
 To use QScrollView effectively, it is important to understand its widget structure in the three styles of usage: a single large child widget, a large panning area with some widgets, a large panning area with many widgets.
 .IP "\fBOne Big Widget\fR" 1c
 .PP
-<img src=qscrollview-vp2.png>
+.ce 1
+.B "[Image Omitted]"
 .PP
-The first, simplest usage of QScrollView depicated above is appropriate for scrolling areas which are \fInever\fR more than about 4000 pixels in either dimension (this is about the maximum reliable size on X11 servers). In this usage, you just make one large child in the QScrollView. The child should be a child of the viewport() of the scrollview, and be added with addChild():
+The first, simplest usage of QScrollView depicted above is appropriate for scrolling areas which are \fInever\fR more than about 4000 pixels in either dimension (this is about the maximum reliable size on X11 servers). In this usage, you just make one large child in the QScrollView. The child should be a child of the viewport() of the scrollview, and be added with addChild():
 .PP
 .nf
 .br
@@ -315,9 +334,10 @@ You may go on to add arbitrary child widgets to the single child in the scrollvi
 Here, the QScrollView has 4 children - the viewport(), the verticalScrollBar(), the horizontalScrollBar(), and a small cornerWidget(). The viewport() has 1 child, the big QVBox. The QVBox has the three labels as child widgets. When the view is scrolled, the QVBox is moved, and its children move with it as child widgets normally do.
 .IP "\fBVery Big View, some Widgets\fR" 1c
 .PP
-<img src=qscrollview-vp.png>
+.ce 1
+.B "[Image Omitted]"
 .PP
-The second usage of QScrollView depicated above is appropriate when few, if any, widgets are on a very large scrolling area that is potentially larger than 4000 pixels in either dimension. In this usage, you call resizeContents() to set the size of the area, and reimplement drawContents() to paint the contents. You may also add some widgets, by making them children of the viewport() and adding them with addChild() (this is the same as the process for the single large widget in the previous example):
+The second usage of QScrollView depicted above is appropriate when few, if any, widgets are on a very large scrolling area that is potentially larger than 4000 pixels in either dimension. In this usage, you call resizeContents() to set the size of the area, and reimplement drawContents() to paint the contents. You may also add some widgets, by making them children of the viewport() and adding them with addChild() (this is the same as the process for the single large widget in the previous example):
 .PP
 .nf
 .br
@@ -339,9 +359,10 @@ The second usage of QScrollView depicated above is appropriate when few, if any,
 Here, the QScrollView has the same 4 children - the viewport(), the verticalScrollBar(), the horizontalScrollBar(), and a small cornerWidget(). The viewport() has the three labels as child widgets. When the view is scrolled, the scrollview moves the child widgets individually.
 .IP "\fBVery Big View, many Widgets\fR" 1c
 .PP
-<img src=qscrollview-cl.png>
+.ce 1
+.B "[Image Omitted]"
 .PP
-The final usage of QScrollView depicated above is appropriate when many widgets are on a very large scrolling area that is potentially larger than 4000 pixels in either dimension. In this usage, you call resizeContents() to set the size of the area, and reimplement drawContents() to paint the contents. You then call enableClipper(TRUE) and add widgets, again by making them children of the viewport() and adding them with addChild():
+The final usage of QScrollView depicted above is appropriate when many widgets are on a very large scrolling area that is potentially larger than 4000 pixels in either dimension. In this usage, you call resizeContents() to set the size of the area, and reimplement drawContents() to paint the contents. You then call enableClipper(TRUE) and add widgets, again by making them children of the viewport() and adding them with addChild():
 .PP
 .nf
 .br
@@ -382,7 +403,12 @@ A scrolling game widget where the background scrolls as the characters move migh
 .PP
 \fBWarning:\fR WResizeNoErase is currently set by default, i.e. you always have to clear the background manually in scrollview subclasses. This will change in a future version of Qt, and we recommend specifying the flag explicitly.
 .PP
-<img src=qscrollview-m.png> <img src=qscrollview-w.png>
+.ce 1
+.B "[Image Omitted]"
+.PP
+
+.ce 1
+.B "[Image Omitted]"
 .PP
 Examples:
 .(l
@@ -390,13 +416,15 @@ scrollview/scrollview.cpp
 .)l
 .SS "Member Type Documentation"
 .SH "QScrollView::ResizePolicy"
-This enum type is used to control QScrollView's reaction to resize events. There are three possible settings:
+This enum type is used to control QScrollView's reaction to resize events. There are four possible settings:
 .TP
-\fCDefault\fR - QScrollView selects one of the other settings automatically when it has to. At the time of writing, QScrollView changes to \fCManual\fR if you resize the contents with resizeContents(), and to \fCAutoOne\fR if a child is added.
+\fCDefault\fR - QScrollView selects one of the other settings automatically when it has to. In this version of Qt, QScrollView changes to \fCManual\fR if you resize the contents with resizeContents(), and to \fCAutoOne\fR if a child is added.
 .TP
 \fCManual\fR - the view stays the size set by resizeContents().
 .TP
 \fCAutoOne\fR - if there is only child widget, the view stays the size of that widget. Otherwise, the behaviour is undefined.
+.TP
+\fCAutoOneFit\fR - if there is only one child widget the view stays the size of that widget's sizeHint(). If the scrollview is resized bigger than the child's sizeHint(), the child will be resized to fit. If there is more than one child, the behaviour is undefined.
 .IP
 .SH "QScrollView::ScrollBarMode"
 This enum type describes the various modes of QScrollView's scroll bars. The defined modes are: 
@@ -894,9 +922,20 @@ Reimplemented for internal reasons; the API is not affected.
 Reimplemented from QWidget.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qscrollview.html
+.BR http://www.trolltech.com/faq/tech.html
 .SH COPYRIGHT
-Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
+Copyright 1992-2001 Trolltech AS, http://www.trolltech.com.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR
 Generated automatically from the source code.
+.SH BUGS
+If you find a bug in Qt, please report it as described in
+.BR http://doc.trolltech.com/bughowto.html .
+Good bug reports make our job much simpler. Thank you.
+.P
+In case of content or formattting problems with this manual page, please
+report them to
+.BR qt-bugs@trolltech.com .
+Please include the name of the manual page (qscrollview.3qt) and the Qt
+version (2.3.0).

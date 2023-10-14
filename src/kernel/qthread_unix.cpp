@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qthread_unix.cpp   2.2.4   edited 2001-01-21 $
+** $Id: qt/src/kernel/qthread_unix.cpp   2.3.0   edited 2001-02-20 $
 **
 ** QThread class for Unix
 **
@@ -35,14 +35,12 @@
 **
 **********************************************************************/
 
-// What's up here? Please add comments!
-// Is this a way to ask the pre-Single Unix 1998 GNU C library to bring
-// in relevant extensions?
-#define _GNU_SOURCE
-// What's up here? Please add comments!
-// Is this a way to ask for the Single Unix 1998 interface?
-// Isn't _XOPEN_SOURCE=500 a more common way to obtain the same result?
-#define __USE_UNIX98
+#include "qglobal.h"
+
+#if defined(_OS_LINUX_)
+# define _GNU_SOURCE
+# define __USE_UNIX98
+#endif
 
 #include "qthread.h"
 
@@ -427,6 +425,7 @@ void QThread::exit()
   <li> The thread associated with this QThread object has finished
        execution (i.e. when it returns from run() ).  This
        function will return TRUE if the thread has finished.
+       It also returns TRUE if the thread has not been started yet.
   <li> \a time milliseconds has elapsed.  If \a time is ULONG_MAX (default
        argument), then the wait will never timeout (the thread must
        return from run() ).  This function will return FALSE
@@ -495,7 +494,7 @@ bool QThread::running() const
 /*!
   \class QWaitCondition qthread.h
   \brief The QWaitCondition class allows waiting/waking for conditions
-         between threads
+	 between threads
 
   \ingroup environment
 
@@ -855,7 +854,7 @@ int QSemaphore::operator-=(int n)
 int QSemaphore::available() const {
     int ret;
 
-        d->mutex.lock();
+	d->mutex.lock();
     ret = d->max - d->value;
     d->mutex.unlock();
 

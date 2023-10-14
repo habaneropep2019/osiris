@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qclipboard.h   2.2.4   edited 2000-09-20 $
+** $Id: qt/src/kernel/qclipboard.h   2.3.0   edited 2001-01-26 $
 **
 ** Definition of QClipboard class
 **

@@ -22,6 +22,7 @@
 #include "qlist.h"
 #include "qprocess.h"
 
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>
@@ -29,14 +30,15 @@
 
 //#define QPROCESS_DEBUG
 
+
 #if defined(Q_C_CALLBACKS)
 extern "C" {
 #endif
 
 #if defined(_OS_IRIX_) && defined(_CC_GNU_)
-static void qt_C_sigchldHnd();
+    static void qt_C_sigchldHnd();
 #else
-static void qt_C_sigchldHnd( int );
+    static void qt_C_sigchldHnd( int );
 #endif
 
 #if defined(Q_C_CALLBACKS)
@@ -197,7 +199,7 @@ bool QProcess::start()
 	return FALSE;
     }
 #endif
-    
+
     // construct the arguments for exec
     const char** arglist = new const char*[ d->arguments.count() + 2 ];
     arglist[0] = d->command.latin1();

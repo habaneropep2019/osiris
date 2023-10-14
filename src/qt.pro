@@ -2,12 +2,13 @@
 TEMPLATE	= lib
 CONFIG		+= qt warn_on release
 
-unix:CONFIG += x11
+unix:CONFIG += x11 
+#xft internal
 embedded:CONFIG -= x11
 
 TARGET		= qt
 embedded:TARGET	= qte
-VERSION		= 2.2.4
+VERSION		= 2.3.0
 DESTDIR		= ../lib
 DLLDESTDIR	= ../bin
 
@@ -23,6 +24,7 @@ internal:MODULES	+= $$MODULES_ENT
 
 CONFIG		+= $$MODULES
 
+unix:LIBS += -lm
 internal:CONFIG	+= png zlib  # Done differently in external system
 embedded:CONFIG	+= png zlib ft
 win32:CONFIG	+= png zlib
@@ -35,6 +37,10 @@ internal:CONFIG -= opengl
 thread:DEFINES += QT_THREAD_SUPPORT
 
 embedded:CONFIG -= opengl
+
+# X11 font and render extension
+xft:DEFINES += QT_XFT
+xft:X11LIBS += -lXft
 
 # Use line like this for configs specific to your work
 #
@@ -301,6 +307,7 @@ widgets:HEADERS += $$WIDGETS_H/qbuttongroup.h \
 		  $$WIDGETS_H/qheader.h \
 		  $$WIDGETS_H/qhgroupbox.h \
 		  $$WIDGETS_H/qhbox.h \
+		  $$WIDGETS_H/qinterlacestyle.h \
 		  $$WIDGETS_H/qlabel.h \
 		  $$WIDGETS_H/qlcdnumber.h \
 		  $$WIDGETS_H/qlineedit.h \
@@ -375,6 +382,7 @@ kernel:QWSSOURCES += kernel/qapplication_qws.cpp \
 		  kernel/qsoundqss_qws.cpp \
 		  kernel/qclipboard_qws.cpp \
 		  kernel/qcolor_qws.cpp \
+		  kernel/qcopchannel_qws.cpp \
 		  kernel/qcursor_qws.cpp \
 		  kernel/qdirectpainter_qws.cpp \
 		  kernel/qdnd_qws.cpp \
@@ -397,6 +405,7 @@ kernel:QWSSOURCES += kernel/qapplication_qws.cpp \
 		  kernel/qwindowsystem_qws.cpp \
 		  kernel/qkeyboard_qws.cpp \
 		  kernel/qwscursor_qws.cpp \
+		  kernel/qwsdecoration_qws.cpp \
 		  kernel/qwsmouse_qws.cpp \
 		  kernel/qwsmanager_qws.cpp \
 		  kernel/qwsdefaultdecoration_qws.cpp \
@@ -552,6 +561,7 @@ widgets:SOURCES += widgets/qbuttongroup.cpp \
 		  widgets/qheader.cpp \
 		  widgets/qhgroupbox.cpp \
 		  widgets/qhbox.cpp \
+		  widgets/qinterlacestyle.cpp \
 		  widgets/qlabel.cpp \
 		  widgets/qlcdnumber.cpp \
 		  widgets/qlineedit.cpp \
@@ -610,12 +620,15 @@ unix:HEADERS   += $$DIALOGS_H/qprintdialog.h \
 unix:HEADERS   += $$WIDGETS_H/qcompactstyle.h
 embedded:HEADERS   -= $$WIDGETS_H/qcompactstyle.h
 
-embedded:HEADERS += $$KERNEL_H/qfontmanager_qws.h \
+embedded:HEADERS += $$KERNEL_H/qcopchannel_qws.h \
+		  $$KERNEL_H/qfontmanager_qws.h \
 		  $$KERNEL_H/qfontfactorybdf_qws.h \
 		  $$KERNEL_H/qdirectpainter_qws.h \
+		  $$KERNEL_H/qkeyboard_qws.h \
 		  $$KERNEL_H/qsoundqss_qws.h \
 		  $$KERNEL_H/qfontfactoryttf_qws.h \
 		  $$KERNEL_H/qmemorymanager_qws.h \
+		  $$KERNEL_H/qwsdecoration_qws.h \
 		  $$KERNEL_H/qwsmanager_qws.h \
 		  $$KERNEL_H/qwsdefaultdecoration_qws.h \
 		  $$KERNEL_H/qwshydrodecoration_qws.h \

@@ -1,5 +1,6 @@
-.TH QStatusBar 3qt "1 Febrary 2001" "Trolltech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
+'\" t
+.TH QStatusBar 3qt "5 March 2001" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2001 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,7 +8,6 @@
 .nh
 .SH NAME
 QStatusBar \- Horizontal bar suitable for presenting status information
-.SH SYNOPSIS
 .br
 .PP
 \fC#include <qstatusbar.h>\fR
@@ -60,7 +60,16 @@ Inherits QWidget.
 .br
 .in -1c
 .SS "Properties"
-<table border=1 cellpadding=3 cellspacing=0> <tr><th>Type<th>Name<th>READ<th>WRITE<th>Options <tr><td>bool<td>sizeGripEnabled<td>isSizeGripEnabled<td>setSizeGripEnabled<td>&nbsp; </table>
+.nf
+.TS
+l l l l l
+- - - - -
+l l l l l.
+Type	Name	READ	WRITE	Options
+bool	sizeGripEnabled	isSizeGripEnabled	setSizeGripEnabled
+.TE
+.fi
+
 .SH DESCRIPTION
 The QStatusBar class provides a horizontal bar suitable for presenting status information.
 .PP
@@ -99,7 +108,12 @@ To display a \fItemporary\fR message, call message(), perhaps by connecting a su
 .PP
 By default, QStatusBar provides a QSizeGrip in the lower-right corner. You can disable this with setSizeGripEnabled(FALSE);
 .PP
-<img src=qstatusbar-m.png> <img src=qstatusbar-w.png>
+.ce 1
+.B "[Image Omitted]"
+.PP
+
+.ce 1
+.B "[Image Omitted]"
 .PP
 See also QToolBar, QMainWindow, QLabel and GUI Design Handbook: Status Bar.
 .SH MEMBER FUNCTION DOCUMENTATION
@@ -165,9 +179,20 @@ Enables or disables the QSizeGrip in the bottom right of the status bar. By defa
 See also  isSizeGripEnabled().
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qstatusbar.html
+.BR http://www.trolltech.com/faq/tech.html
 .SH COPYRIGHT
-Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
+Copyright 1992-2001 Trolltech AS, http://www.trolltech.com.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR
 Generated automatically from the source code.
+.SH BUGS
+If you find a bug in Qt, please report it as described in
+.BR http://doc.trolltech.com/bughowto.html .
+Good bug reports make our job much simpler. Thank you.
+.P
+In case of content or formattting problems with this manual page, please
+report them to
+.BR qt-bugs@trolltech.com .
+Please include the name of the manual page (qstatusbar.3qt) and the Qt
+version (2.3.0).

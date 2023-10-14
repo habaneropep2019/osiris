@@ -136,6 +136,10 @@ else
 		Edition=ent
 	    else
 		MODULES="$Products "`$MAKE -f src/Makefile.in listpromodules`
+		if [ -n "$EMB" ]
+		then
+		    MODULES="$MODULES network"
+		fi
 	    fi
 	    NOW=`date +%Y%m%d`
 	    if [ "$NOW" -gt "0$ExpiryDate" ]
@@ -236,6 +240,7 @@ LIBPNG=yes
 JPEG=no
 MNG=no
 NAS_SOUND=no
+XFT=auto
 I_FLAGS=
 L_FLAGS=
 R_FLAGS=
@@ -358,6 +363,12 @@ while [ -n "$1" ]; do
 	;;
    -no-g++-exceptions)
 	GPLUSPLUS_EXCEPTIONS=no
+	;;
+   -no-xft)
+	XFT=no
+	;;
+   -xft)
+	XFT=yes
 	;;
    -no-*)
        MODULE=`echo $1 | sed -e "s/-no-//"`;
@@ -940,20 +951,90 @@ then
     done
 fi
 
+# Auto-detect Xft anti-aliased font support for X11
+if [ $XFT = auto -a -z "$EMB" ]
+then
+    XFT=yes
+
+    if [ "$VERBOSE" = "yes" ]; then
+	echo "Xft auto-detection..."
+    fi
+
+    XDIRS=`sed -n -e '/^SYSCONF_LFLAGS_X11[	]*=/ { s/[^=]*=[	 ]*//; s/-L/ /g; p; }' $XCONFIG`
+    LIBDIRS="$XDIRS /usr/lib /lib"
+
+    FOUND_LIB=
+    F=
+    for LIBDIR in $LIBDIRS
+    do
+	FOUND_LIB=`ls $LIBDIR/libXft.* 2>/dev/null`
+	if [ ! -z "$FOUND_LIB" ]
+	then
+	    F=yes
+	    if [ "$VERBOSE" = "yes" ]
+	    then
+		echo "Found Xft lib in $LIBDIR"
+	    fi
+	    break
+	fi
+    done
+
+    if [ -z "$F" ]
+    then
+	XFT=no
+	if [ "$VERBOSE" = "yes" ]
+	then
+	    echo "Could not find Xft lib anywhere in $LIBDIRS"
+	fi
+    fi
+    
+    if [ "$XFT" = "yes" ]
+    then
+	INCS="X11/Xft/Xft.h"
+	XDIRS=`sed -n -e '/^SYSCONF_CXXFLAGS_X11[	]*=/ { s/[^=]*=[	 ]*//; s/-I/ /g; p; }' $XCONFIG`
+	INCDIRS="$XDIRS /usr/include /include"
+
+	for I in $INCS
+	do
+	    F=
+	    for INCDIR in $INCDIRS
+	    do
+		if [ -f $INCDIR/$I ]
+		then
+		    F=yes
+		    if [ "$VERBOSE" = "yes" ]; then
+			echo "Found $I in $INCDIR"
+		    fi
+		    break
+		fi
+	    done
+
+	    if [ -z "$F" ]
+	    then
+		XFT=no
+		if [ "$VERBOSE" = "yes" ]
+		then
+		    echo "Could not find $I anywhere in $INCDIRS"
+		fi
+		break
+	    fi
+	done
+    fi
+
+    if [ "$VERBOSE" = "yes" ]; then
+	if [ "$XFT" != "yes" ]; then
+	    echo "Xft support disabled."
+	else
+	    echo "Xft support enabled."
+	fi
+    fi
+fi
 
 
 # Next, emit a usage message if something failed.
 
 if [ "$HELP" = "yes" ]; then
    [ "x$ERROR" = "xyes" ] && echo
-    if [ "x$THREAD" = "xyes" ]
-    then
-	THY="*"
-	THN=" "
-    else
-	THY=" "
-	THN="*"
-    fi
     if [ "x$SM" = "xno" ]
     then
 	SMY=" "
@@ -999,8 +1080,8 @@ each option:
  $SMN  -no-sm ............. Do not support X Session Management.
  $SMY  -sm ................ Support X Session Management, links in -lSM -lICE.
 
- $THN  -no-thread ......... Do not compile with Threading Support
- $THY  -thread ............ Compile with Threading Support
+ *  -no-thread ......... Do not compile with Threading Support
+    -thread ............ Compile with Threading Support
 
  *  -qt-zlib ........... Use the zlib bundled with Qt.
     -system-zlib ....... Use a zlib from the operating system
@@ -1025,14 +1106,21 @@ each option:
     -no-<module> ....... Disables a module, where module can
                          can be one of: $MODULES_HELP
 
-    -kde ............... Builds the Qt Designer with KDE2 support, so that
-			 KDE2 widgets can be used directly in
+    -kde ............... Builds the Qt Designer with KDE 2 support, so that
+			 KDE 2 widgets can be used directly in
 			 the Qt Designer. \$KDEDIR must be
-			 set to point to a KDE2 installation.
+			 set to point to a KDE 2 installation.
                          See http://www.kde.org
 
     -no-g++-exceptions . Disable exceptions on platforms using the GNU C++
 			 compiler by using the -fno-exceptions flag.
+
+    -no-xft ............ Disable support for Anti-Aliased fonts through the
+			 Xft extension library (XFree86 4.0.2 and newer).
+    -xft ............... Enable support for Anti-Aliased fonts.
+
+			 Xft support is auto-detected, but you may use these
+			 flags to explicitly enable/disable support.
 
     -platform target ... The platform you are building on ($PLATFORM)
     -xplatform target .. The platform when cross-compiling.
@@ -1081,6 +1169,7 @@ QT_MODOBJ=""
 [ "x$MNG" = "xno" ] && QT_CXX="${QT_CXX} -DQT_NO_IMAGEIO_MNG"
 [ "x$NAS_SOUND" = "xyes" ] && QT_CXX="${QT_CXX} -DQT_NAS_SUPPORT"
 [ "x$SM" = "xno" ] && QT_CXX="${QT_CXX} -DQT_NO_SM_SUPPORT"
+[ "x$XFT" = "xyes" ] && QT_CXX="${QT_CXX} -DQT_XFT"
 if [ "x$THREAD" = "xyes" ]
 then
    cat >src-mt.mk <<EOF
@@ -1120,6 +1209,7 @@ then
 fi
 
 [ "x$SM" = "xyes" ] && QT_LIBS="${QT_LIBS} -lSM -lICE"
+[ "x$XFT" = "xyes" ] && QT_LIBS="${QT_LIBS} -lXft"
 if [ -z "$EMB" -o "$SHARED" = no ]
 then
     [ "x$LIBPNG" = "xyes" ] && QT_MODOBJ=$QT_MODOBJ' $(PNG_OBJECTS)'
@@ -1175,7 +1265,7 @@ then
         You may elect to re-run $0 with the -no-g++-exceptions
         option to compile Qt without exceptions.  This is
         completely binary compatible, and existing
-        applications will continue to work (like KDE 2.0).
+        applications will continue to work (like KDE 2).
 
 EOF
     fi
@@ -1216,20 +1306,24 @@ fi
 
 if [ "$VERBOSE" = "yes" ]
 then
-    echo "Compile flags.... $QT_CXX $I_FLAGS"
-    echo "Link flags....... $QT_LIBS"
+    echo "Compile flags...................... $QT_CXX $I_FLAGS"
+    echo "Link flags......................... $QT_LIBS"
 fi
 
-echo "Thread support....... $THREAD"
+echo "Thread support..................... $THREAD"
 if [ "$QCONFIG" = qconfig.h ]
 then
-    echo "GIF support.......... $GIF"
-    echo "MNG support.......... $MNG"
-    echo "JPEG support......... $JPEG"
-    echo "NAS sound support.... $NAS_SOUND"
-    echo "Session management... $SM"
+    echo "GIF support........................ $GIF"
+    echo "MNG support........................ $MNG"
+    echo "JPEG support....................... $JPEG"
+    if [ -z "$EMB" ]
+    then
+	echo "NAS sound support.................. $NAS_SOUND"
+	echo "Session management................. $SM"
+	echo "Xft support (Anti-Aliased Fonts) .. $XFT"
+    fi
 else
-    echo "Configuration........ $QCONFIG"
+    echo "Configuration...................... $QCONFIG"
 fi
 echo
 
@@ -1244,8 +1338,8 @@ then
 	KDE=no
 	echo ""
 	echo "You wanted to compile the Qt Designer with"
-	echo "KDE2 support, but \$KDEDIR does not point"
-	echo "to a valid KDE2 installation. KDE support"
+	echo "KDE 2 support, but \$KDEDIR does not point"
+	echo "to a valid KDE 2 installation. KDE 2 support"
 	echo "has been turned off."
 	echo ""
     fi

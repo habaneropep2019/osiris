@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qpopupmenu.cpp   2.2.4   edited 2000-12-04 $
+** $Id: qt/src/widgets/qpopupmenu.cpp   2.3.0   edited 2001-02-15 $
 **
 ** Implementation of QPopupMenu class
 **
@@ -459,7 +459,7 @@ void QPopupMenu::popup( const QPoint &pos, int indexAtPoint )
     int vGuess = QEffects::DownScroll;
     if ( snapToMouse && ( x + w/2 < mouse.x() ) ||
 	( parentMenu && parentMenu->isPopupMenu &&
-	( x + w/2 < ((QPopupMenu*)parentMenu)->mapToGlobal( ((QPopupMenu*)parentMenu)->pos() ).x() ) ) )
+	( x + w/2 < ((QPopupMenu*)parentMenu)->x() ) ) )
 	hGuess = QEffects::LeftScroll;
     if ( snapToMouse && ( y + h/2 < mouse.y() ) ||
 	( parentMenu && parentMenu->isMenuBar &&
@@ -628,7 +628,7 @@ void QPopupMenu::hidePopups()
 {
     if ( preventAnimation )
 	QTimer::singleShot( 10, this, SLOT(allowAnimation()) );
-    preventAnimation = TRUE;	
+    preventAnimation = TRUE;
 
     QMenuItemListIt it(*mitems);
     register QMenuItem *mi;
@@ -954,7 +954,7 @@ void QPopupMenu::updateAccel( QWidget *parent )
 	int k = mi->key();
 	if ( k ) {
 	    int id = autoaccel->insertItem( k, mi->id() );
-#ifndef QT_NO_WHATSTHIS	    
+#ifndef QT_NO_WHATSTHIS
 	    autoaccel->setWhatsThis( id, mi->whatsThis() );
 #endif
 	}
@@ -1237,7 +1237,7 @@ void QPopupMenu::mouseReleaseEvent( QMouseEvent *e )
 	    bool b = QWhatsThis::inWhatsThisMode();
 #else
 	    const bool b = FALSE;
-#endif	    
+#endif
 	if ( !mi->isEnabled() ) {
 #ifndef QT_NO_WHATSTHIS
 	    if ( b ) {
@@ -1246,7 +1246,7 @@ void QPopupMenu::mouseReleaseEvent( QMouseEvent *e )
 		byeMenuBar();
 		actSig( mi->id(), b);
 	    }
-#endif	    
+#endif
 	} else 	if ( popup ) {
 	    popup->setFirstItemActive();
 	} else {				// normal menu item
@@ -1330,6 +1330,22 @@ void QPopupMenu::mouseMoveEvent( QMouseEvent *e )
 
 void QPopupMenu::keyPressEvent( QKeyEvent *e )
 {
+    if (mouseBtDn && actItem >= 0) {
+	if (e->key() == Key_Shift ||
+	    e->key() == Key_Control ||
+	    e->key() == Key_Alt)
+	    return;
+
+	QMenuItem *mi = mitems->at(actItem);
+	int modifier = (((e->state() & ShiftButton) ? SHIFT : 0) |
+			((e->state() & ControlButton) ? CTRL : 0) |
+			((e->state() & AltButton) ? ALT : 0));
+
+	if (mi)
+	    setAccel(modifier + e->key(), mi->id());  ;
+	return;
+    }
+
     QMenuItem  *mi = 0;
     QPopupMenu *popup;
     int dy = 0;
@@ -1391,8 +1407,10 @@ void QPopupMenu::keyPressEvent( QKeyEvent *e )
 	    hidePopups();
 	    if ( singleSingleShot )
 		singleSingleShot->stop();
-	    popup->setFirstItemActive();
-	    subMenuTimer();
+            // ### The next two lines were switched to fix the problem with the first item of the
+            // submenu not being highlighted...any reason why they should have been the other way??
+            subMenuTimer();
+            popup->setFirstItemActive();
 	    break;
 	} else if ( actItem == -1 && ( parentMenu && !parentMenu->isMenuBar )) {
 	    dy = 1;
@@ -1432,7 +1450,7 @@ void QPopupMenu::keyPressEvent( QKeyEvent *e )
 	    bool b = QWhatsThis::inWhatsThisMode();
 #else
 	    const bool b = FALSE;
-#endif	    
+#endif
 	    if ( mi->isEnabled() || b ) {
 		active_popup_menu = this;
 		actSig( mi->id(), b );
@@ -1454,7 +1472,7 @@ void QPopupMenu::keyPressEvent( QKeyEvent *e )
 	    QWhatsThis::leaveWhatsThisMode( mi->whatsThis(), mapToGlobal( r.bottomLeft()) );
 	}
 	//fall-through!
-#endif	
+#endif
     default:
 	ok_key = FALSE;
 
@@ -1493,7 +1511,7 @@ void QPopupMenu::keyPressEvent( QKeyEvent *e )
 		bool b = QWhatsThis::inWhatsThisMode();
 #else
 		const bool b = FALSE;
-#endif	    
+#endif
 		if ( mi->isEnabled() || b ) {
 		    active_popup_menu = this;
 		    actSig( mi->id(), b );
@@ -2001,7 +2019,7 @@ void QPopupMenu::activateItemAt( int index )
 	    bool b = QWhatsThis::inWhatsThisMode();
 #else
 	    const bool b = FALSE;
-#endif	    
+#endif
 	    if ( !mi->isEnabled() ) {
 #ifndef QT_NO_WHATSTHIS
 		if ( b ) {

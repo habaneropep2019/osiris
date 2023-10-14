@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qstring.cpp   2.2.4   edited 2001-01-16 $
+** $Id: qt/src/tools/qstring.cpp   2.3.0   edited 2001-03-01 $
 **
 ** Implementation of the QString class and related Unicode functions
 **
@@ -11494,23 +11494,70 @@ int QLigature::match(QString & str, unsigned int index)
 
 #endif
 
+
+
+// This function is used by format()
+// This function caters for Non-spacing marks by looking for
+// the next non non-spacing mark character and check its connectivity.
+static inline bool check_left(QString & str, int index) 
+{
+    if  (index < (int)str.length()) {
+	const QChar &ch = str[index];
+	if( ch.category() != QChar::Mark_NonSpacing ) {
+	    // the QChar::Center is used to fix for the Maddah:
+	    // Where it should be considered as Dual.
+	    return  (ch.joining() != QChar::OtherJoining);
+	} else {
+	    if ( (index + 1) < (int)str.length() ) {
+		return check_left(str, index+1);
+	    }
+	}
+    }
+    return FALSE;
+}
+
+
+// This function is used by format()
+// This function caters for Non-spacing marks by looking for
+// the previous non non-spacing mark character and check its connectivity.
+static inline bool check_right(QString & str, int index) 
+{
+    if (index > 0) {
+	index--;
+	const QChar &ch = str[index];
+	if(  ch.category() != QChar::Mark_NonSpacing  ) {
+	    // the QChar::Center is used to fix for the Maddah:
+	    // Where it should be considered as Dual.
+	    QChar::Joining j = ch.joining();
+	    return (j == QChar::Dual) || (j == QChar::Center);
+	} else {
+	    if(index > 0 ) {
+		return check_right(str, index);
+	    }
+	}
+    }
+    return FALSE;
+}
+
 // this function is just used in QString::compose()
 static inline bool format(QChar::Decomposition tag, QString & str,
 			  int index, int len)
 {
     unsigned int l = index + len;
-    unsigned int r = index;
-
+    
     bool left = FALSE, right = FALSE;
 
-    left = ((l < str.length()) &&
-	    ((str[(int)l].joining() == QChar::Dual) ||
-	     (str[(int)l].joining() == QChar::Right)));
-    if (r > 0) {
-	r--;
-	//printf("joining(right) = %d\n", str[(int)r].joining());
-	right = (str[(int)r].joining() == QChar::Dual);
-    }
+    // our ligature is connectable from left :
+    // If its last character is joinable from left
+    // And the character left to it it joinable from right
+    if ( l < str.length() && l > 0 )
+	left = ( str[(int)(l-1)].joining() == QChar::Dual ) && check_left(str, l) ;
+
+    // our ligature is connectable from right :
+    // If its first character is joinable from right
+    // And the character right to it it joinable from left
+    if ( index > 0 )
+	right = ( str[index].joining() == QChar::Dual || str[index].joining() == QChar::Right ) && check_right(str, index);
 
 
     switch (tag) {
@@ -13544,10 +13591,10 @@ QString &QString::insert( uint index, QChar c )	// insert char
 QString &QString::remove( uint index, uint len )
 {
     uint olen = length();
-    if ( index + len >= olen ) {		// range problems
-	if ( index < olen ) {			// index ok
-	    setLength( index );
-	}
+    if ( index >= olen  ) {		
+        // range problems
+    } else if ( index + len >= olen ) {  // index ok
+        setLength( index );
     } else if ( len != 0 ) {
 	real_detach();
 	memmove( d->unicode+index, d->unicode+index+len,

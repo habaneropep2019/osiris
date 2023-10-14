@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qscrollview.cpp   2.2.4   edited 2000-12-13 $
+** $Id: qt/src/widgets/qscrollview.cpp   2.3.0   edited 2001-03-02 $
 **
 ** Implementation of QScrollView class
 **
@@ -53,9 +53,6 @@ const int coord_limit = 4000;
 static const int autoscroll_margin = 16;
 static const int initialScrollTime = 30;
 static const int initialScrollAccel = 5;
-
-static const QScrollView::ResizePolicy StretchOne=(QScrollView::ResizePolicy)4;
-					//Becomes member in 3.0
 
 struct QSVChildRec {
     QSVChildRec(QWidget* c, int xx, int yy) :
@@ -258,26 +255,28 @@ struct QScrollViewData {
 	        if ( s.isValid() )
 		    r->child->resize(s);
 	    }
-	} else if ( policy == StretchOne ) {
+	} else if ( policy == QScrollView::AutoOneFit ) {
 	    QSVChildRec* r = children.first();
 	    if (r) {
 		QSize sh = r->child->sizeHint();
+		sh = sh.boundedTo( r->child->maximumSize() );
 	        sv->resizeContents( sh.width(), sh.height() );
 	    }
 	}
     }
 
     void viewportResized( int w, int h ) {
-	if ( policy == StretchOne ) {
+	if ( policy == QScrollView::AutoOneFit ) {
 	    QSVChildRec* r = children.first();
 	    if (r) {
 		QSize sh = r->child->sizeHint();
+		sh = sh.boundedTo( r->child->maximumSize() );
 		r->child->resize( QMAX(w,sh.width()), QMAX(h,sh.height()) );
 	    }
-	    
+
 	}
     }
-    
+
     QScrollBar	hbar;
     QScrollBar	vbar;
     QWidget	viewport;
@@ -339,7 +338,7 @@ a large panning area with some widgets, a large panning area with many widgets.
 
 <img src=qscrollview-vp2.png>
 
-The first, simplest usage of QScrollView depicated above is
+The first, simplest usage of QScrollView depicted above is
 appropriate for scrolling areas
 which are \e never more than about 4000 pixels in either dimension (this
 is about the maximum reliable size on X11 servers).  In this usage, you
@@ -370,7 +369,7 @@ do.
 
 <img src=qscrollview-vp.png>
 
-The second usage of QScrollView depicated above is appropriate when
+The second usage of QScrollView depicted above is appropriate when
 few, if any, widgets are on a very large scrolling area that is
 potentially larger than 4000 pixels in either dimension. In this
 usage, you call resizeContents() to set the size of the area, and
@@ -397,7 +396,7 @@ the scrollview moves the child widgets individually.
 
 <img src=qscrollview-cl.png>
 
-The final usage of QScrollView depicated above is
+The final usage of QScrollView depicted above is
 appropriate when many widgets are on a very large scrolling area
 that is potentially larger than 4000 pixels in either dimension. In this
 usage, you call resizeContents() to set the size of the area, and reimplement
@@ -483,10 +482,10 @@ flag explicitly.
 /*! \enum QScrollView::ResizePolicy
 
   This enum type is used to control QScrollView's reaction to resize
-  events.  There are three possible settings:<ul>
+  events.  There are four possible settings:<ul>
 
   <li> \c Default - QScrollView selects one of the other settings
-  automatically when it has to.  At the time of writing, QScrollView
+  automatically when it has to.  In this version of Qt, QScrollView
   changes to \c Manual if you resize the contents with
   resizeContents(), and to \c AutoOne if a child is added.
 
@@ -495,6 +494,10 @@ flag explicitly.
   <li> \c AutoOne - if there is only child widget, the view stays
   the size of that widget.  Otherwise, the behaviour is undefined.
 
+  <li> \c AutoOneFit - if there is only one child widget the view stays
+  the size of that widget's sizeHint(). If the scrollview is resized bigger
+  than the child's sizeHint(), the child will be resized to fit.
+  If there is more than one child, the behaviour is undefined.
 
   </ul>
 */
@@ -1208,7 +1211,7 @@ bool QScrollView::eventFilter( QObject *obj, QEvent *e )
     if ( obj == &d->viewport || obj == d->clipped_viewport ) {
 	switch ( e->type() ) {
 
-	/* Forward many events to viewport...() functions */
+	    /* Forward many events to viewport...() functions */
 	case QEvent::Paint:
 	    viewportPaintEvent( (QPaintEvent*)e );
 	    break;
@@ -1233,13 +1236,14 @@ bool QScrollView::eventFilter( QObject *obj, QEvent *e )
 	    break;
 	case QEvent::DragMove: {
 	    if ( d->drag_autoscroll ) {
-		QPoint vp = contentsToViewport( ( (QDragMoveEvent*)e )->pos() );
+		QPoint vp = ((QDragMoveEvent *) e)->pos();
 		QRect inside_margin( autoscroll_margin, autoscroll_margin,
 				     visibleWidth() - autoscroll_margin * 2,
 				     visibleHeight() - autoscroll_margin * 2 );
 		if ( !inside_margin.contains( vp ) ) {
 		    startDragAutoScroll();
-		    ( (QDragMoveEvent*)e )->accept( QRect(0,0,0,0) ); // Keep sending move events
+		    // Keep sending move events
+		    ( (QDragMoveEvent*)e )->accept( QRect(0,0,0,0) );
 		}
 	    }
 	    viewportDragMoveEvent( (QDragMoveEvent*)e );
@@ -2320,7 +2324,7 @@ QSize QScrollView::sizeHint() const
 	{
             QSize cs = r->child->sizeHint();
 	    if ( cs.isValid() )
-        	result += cs;
+        	result += cs.boundedTo( r->child->maximumSize() );
 	    else
         	result += r->child->size();
         }

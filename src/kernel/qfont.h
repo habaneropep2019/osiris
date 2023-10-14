@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qfont.h   2.2.4   edited 2001-01-15 $
+** $Id: qt/src/kernel/qfont.h   2.3.0   edited 2001-02-01 $
 **
 ** Definition of QFont class
 **
@@ -49,7 +49,6 @@ struct QFontDef;
 struct QFontData;
 class QFontInternal;
 class QRenderedFont;
-
 
 class Q_EXPORT QFont					// font class
 {
@@ -223,6 +222,10 @@ private:
     friend class QFontMetrics;
     friend class QFontInfo;
     friend class QPainter;
+#if defined(_WS_X11_) && defined(QT_XFT)
+    friend void * qt_ft_font (const QFont *f);
+#endif
+
 #ifndef QT_NO_DATASTREAM
     friend Q_EXPORT QDataStream &operator<<( QDataStream &, const QFont & );
     friend Q_EXPORT QDataStream &operator>>( QDataStream &, QFont & );

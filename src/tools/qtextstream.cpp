@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qtextstream.cpp   2.2.4   edited 2000-10-25 $
+** $Id: qt/src/tools/qtextstream.cpp   2.3.0   edited 2001-02-08 $
 **
 ** Implementation of QTextStream class
 **
@@ -1266,7 +1266,7 @@ double QTextStream::input_double()
 	c = ts_getc();
     }
 
-#if !defined(_CC_EGG_)
+#if !defined(_CC_EDG_)
     return 0.0;
 #endif
 }

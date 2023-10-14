@@ -290,13 +290,13 @@ QString QHebrewCodec::toUnicode(const char* chars, int len,
     {
 	basicDir = QChar::DirL;
 	c++; // skip directionality hint
-    }
-    if( c[0] == 0xff )
+    } else if( c[0] == 0xff )
     {
 	basicDir = QChar::DirR;
 	c++; // skip directionality hint
     }
-
+    if ( c[0] == '\0' ) return QChar::null;
+    
     for( int i=0; i<len; i++ ) {
 	if ( c[i] > 127 )
 	    r[i] = table[c[i]-128];

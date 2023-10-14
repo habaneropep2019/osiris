@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qclipboard_x11.cpp   2.2.4   edited 2000-10-25 $
+** $Id: qt/src/kernel/qclipboard_x11.cpp   2.3.0   edited 2001-02-19 $
 **
 ** Implementation of QClipboard class for X11
 **
@@ -48,9 +48,9 @@
 #include "qbuffer.h"
 #include "qt_x11.h"
 
+#include <unistd.h>
 #include <sys/time.h>
 #include <sys/types.h>
-#include <unistd.h>
 
 // REVISED: arnt
 

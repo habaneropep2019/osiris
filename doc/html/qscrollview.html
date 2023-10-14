@@ -35,7 +35,7 @@ Inherits <a href="qframe.html">QFrame</a>.
 <ul>
 <li><div class="fn"><a href="#dc5598"><b>QScrollView</b></a> ( QWidget * parent=0, const char * name=0, WFlags f=0 ) </div>
 <li><div class="fn"><a href="#13f41e"><b>~QScrollView</b></a> () </div>
-<li><div class="fn">enum <a href="#ResizePolicy"><b>ResizePolicy</b></a> { Default, Manual, AutoOne }</div>
+<li><div class="fn">enum <a href="#ResizePolicy"><b>ResizePolicy</b></a> { Default, Manual, AutoOne, AutoOneFit }</div>
 <li><div class="fn">virtual void <a href="#fd1206"><b>setResizePolicy</b></a> ( ResizePolicy ) </div>
 <li><div class="fn">ResizePolicy <a href="#367ad3"><b>resizePolicy</b></a> () const</div>
 <li><div class="fn">void <a href="#06c836"><b>removeChild</b></a> ( QWidget * child ) </div>
@@ -161,7 +161,7 @@ a large panning area with some widgets, a large panning area with many widgets.
 <dt><b>One Big Widget</b>
 <dd>
 <p><img src=qscrollview-vp2.png>
-<p>The first, simplest usage of QScrollView depicated above is
+<p>The first, simplest usage of QScrollView depicted above is
 appropriate for scrolling areas
 which are <em>never</em> more than about 4000 pixels in either dimension (this
 is about the maximum reliable size on X11 servers).  In this usage, you
@@ -187,7 +187,7 @@ do.
 <p><dt><b>Very Big View, some Widgets</b>
 <dd>
 <p><img src=qscrollview-vp.png>
-<p>The second usage of QScrollView depicated above is appropriate when
+<p>The second usage of QScrollView depicted above is appropriate when
 few, if any, widgets are on a very large scrolling area that is
 potentially larger than 4000 pixels in either dimension. In this
 usage, you call resizeContents() to set the size of the area, and
@@ -210,7 +210,7 @@ the scrollview moves the child widgets individually.
 <p><dt><b>Very Big View, many Widgets</b>
 <dd>
 <p><img src=qscrollview-cl.png>
-<p>The final usage of QScrollView depicated above is
+<p>The final usage of QScrollView depicted above is
 appropriate when many widgets are on a very large scrolling area
 that is potentially larger than 4000 pixels in either dimension. In this
 usage, you call resizeContents() to set the size of the area, and reimplement
@@ -276,14 +276,18 @@ flag explicitly.
 <hr><h2>Member Type Documentation</h2>
 <h3 class="fn"><a name="ResizePolicy">QScrollView::ResizePolicy</a></h3>
 This enum type is used to control QScrollView's reaction to resize
-events.  There are three possible settings:<ul>
+events.  There are four possible settings:<ul>
 <li> <code>Default</code> - QScrollView selects one of the other settings
-automatically when it has to.  At the time of writing, QScrollView
+automatically when it has to.  In this version of Qt, QScrollView
 changes to <code>Manual</code> if you resize the contents with
 <a href="#e4cb2e">resizeContents</a>(), and to <code>AutoOne</code> if a child is added.
 <li> <code>Manual</code> - the view stays the size set by resizeContents().
 <li> <code>AutoOne</code> - if there is only child widget, the view stays
 the size of that widget.  Otherwise, the behaviour is undefined.
+<li> <code>AutoOneFit</code> - if there is only one child widget the view stays
+the size of that widget's <a href="#f01f2a">sizeHint</a>(). If the scrollview is resized bigger
+than the child's sizeHint(), the child will be resized to fit.
+If there is more than one child, the behaviour is undefined.
 <p></ul>
 <h3 class="fn"><a name="ScrollBarMode">QScrollView::ScrollBarMode</a></h3>
 This enum type describes the various modes of QScrollView's scroll
@@ -757,7 +761,7 @@ events sent to the viewport.
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.2.4"><nobr>
+<input type=hidden name="version" value="2.3.0"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -765,5 +769,5 @@ copyright &copy; 1995-2000
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.4</div>
+<td align="right"><div align="right">Qt version 2.3.0</div>
 </table></div></address></body></html>

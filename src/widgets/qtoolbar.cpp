@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qtoolbar.cpp   2.2.4   edited 2001-01-08 $
+** $Id: qt/src/widgets/qtoolbar.cpp   2.3.0   edited 2001-02-17 $
 **
 ** Implementation of QToolBar class
 **
@@ -348,10 +348,30 @@ QToolBar::~QToolBar()
 
 void QToolBar::addSeparator()
 {
-    QToolBarSeparator *s = new QToolBarSeparator( orientation(), this, "tool bar separator" );
-    s->setStyle( &style() );
+    (void) new QToolBarSeparator( orientation(), this, "tool bar separator" );
 }
 
+/*!\reimp
+*/
+
+void QToolBar::styleChange( QStyle& /*old*/ )
+{
+    QObjectList *childs = queryList( "QWidget" );
+    if ( childs ) {
+        QObject *ob = 0;
+	for ( ob = childs->first(); ob; ob = childs->next() ) {
+            if ( ob->inherits( "QToolButton" ) ) {
+                QToolButton* w = (QToolButton*)ob;
+                w->setStyle( &style() );
+            } else if ( ob->inherits( "QToolBarSeparator" ) ) {
+                QToolBarSeparator* w = (QToolBarSeparator*)ob;
+                w->setStyle( &style() );
+            }
+        }
+    }
+    delete childs;
+}
+    
 
 /*!  Sets this toolbar to organize its content vertically if \a
   newOrientation is \c Vertical and horizontally if \a newOrientation

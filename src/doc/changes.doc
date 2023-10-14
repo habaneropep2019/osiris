@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/doc/changes.doc   2.2.4   edited 2000-10-03 $
+** $Id: qt/doc/changes.doc   2.3.0   edited 2001-02-14 $
 **
 ** Change documentation
 **
@@ -563,3 +563,16 @@ The modules available in Qt 2.2 are:
 */
 
 
+/*! \page changes23.html
+\title Change Notes for Qt 2.3
+
+<h2>New major features in existing classes</h2>
+<ul>
+
+<li>QPopupMenu	- run-time editing of popupmenu accelerators.  Pressing
+		a mouse button on an item in a popup menu and typing an
+		accelerator key causes the menuitem to use that accelerator.
+		
+</ul>
+
+*/

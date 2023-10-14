@@ -1,5 +1,5 @@
 /**********************************************************************
-** $Id: qt/src/widgets/qlabel.cpp   2.2.4   edited 2000-11-06 $
+** $Id: qt/src/widgets/qlabel.cpp   2.3.0   edited 2001-02-20 $
 **
 ** Implementation of QLabel widget class
 **
@@ -176,6 +176,9 @@ QLabel::QLabel( QWidget *buddy,  const QString &text,
     init();
 #ifndef QT_NO_ACCEL
     setBuddy( buddy );
+#else
+    if ( buddy )
+	setAlignment( alignment() | ShowPrefix );
 #endif
     setText( text );
 }

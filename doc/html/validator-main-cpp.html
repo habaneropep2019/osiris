@@ -30,7 +30,7 @@ height="100" src="face.png" alt="Home" border="0">
   <hr>
 
   Header file of the validator: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/validator/motor.h   2.2.4   edited 2000-08-31 $
+** &#36;Id&#58; qt/examples/validator/motor.h   2.3.0   edited 2001-01-26 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -71,7 +71,7 @@ private:
   <hr>
 
   Implementation of the validator: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/validator/motor.cpp   2.2.4   edited 2000-08-31 $
+** &#36;Id&#58; qt/examples/validator/motor.cpp   2.3.0   edited 2001-01-26 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -98,7 +98,7 @@ MotorValidator::~MotorValidator()
     // nothing.  wow. programming qt is easy.
 }
 
-void <a name="42"></a>MotorValidator::setRange( int bottom, int top, int step )
+void <a name="43"></a>MotorValidator::setRange( int bottom, int top, int step )
 {
     b = bottom;
     t = top;
@@ -109,7 +109,7 @@ void <a name="42"></a>MotorValidator::setRange( int bottom, int top, int step )
 // integer in the range b to t which can be described as n*s+b for
 // some integer n.
 
-<a href="qvalidator.html#State">QValidator::State</a> <a name="43"></a>MotorValidator::validate( <a href="qstring.html">QString</a> &amp; motorSize, int &amp; ) const
+<a href="qvalidator.html#State">QValidator::State</a> <a name="44"></a>MotorValidator::validate( <a href="qstring.html">QString</a> &amp; motorSize, int &amp; ) const
 {
     bool ok;
     long int tmp = motorSize.toLong( &amp;ok );
@@ -126,7 +126,7 @@ void <a name="42"></a>MotorValidator::setRange( int bottom, int top, int step )
   <hr>
 
   Header file of the mainwidget: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/validator/vw.h   2.2.4   edited 2000-08-31 $
+** &#36;Id&#58; qt/examples/validator/vw.h   2.3.0   edited 2001-01-26 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -171,7 +171,7 @@ private:
   <hr>
 
   Implementation of the mainwidget: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/validator/vw.cpp   2.2.4   edited 2000-08-31 $
+** &#36;Id&#58; qt/examples/validator/vw.cpp   2.3.0   edited 2001-01-26 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -303,11 +303,11 @@ VW::VW( <a href="qwidget.html">QWidget</a> * parent, const char * name )
 
     // set up connections
     <a href="qobject.html#c2d209">connect</a>( model, SIGNAL(activated(const QString&amp;)),
-             this, SLOT(<a href=#44>modelSelected</a>(const QString&amp;)) );
+             this, SLOT(<a href=#45>modelSelected</a>(const QString&amp;)) );
     <a href="qobject.html#c2d209">connect</a>( motor, SIGNAL(valueChanged(int)),
-             this, SLOT(<a href=#45>motorSelected</a>(int)) );
+             this, SLOT(<a href=#46>motorSelected</a>(int)) );
     <a href="qobject.html#c2d209">connect</a>( year, SIGNAL(valueChanged(int)),
-             this, SLOT(<a href=#46>yearSelected</a>(int)) );
+             this, SLOT(<a href=#47>yearSelected</a>(int)) );
 
     <a href="qobject.html#c2d209">connect</a>( this, SIGNAL(validSelectionMade(const QString&amp;)),
              l, SLOT(setText(const QString&amp;)) );
@@ -318,25 +318,25 @@ VW::~VW()
     // nothing needs to be done.
 }
 
-void <a name="44"></a>VW::modelSelected( const QString&amp; m )
+void <a name="45"></a>VW::modelSelected( const QString&amp; m )
 {
     currentModel = m;
-    <a href=#47>computeSelection</a>();
+    <a href=#48>computeSelection</a>();
 }
 
-void <a name="45"></a>VW::motorSelected( int m )
+void <a name="46"></a>VW::motorSelected( int m )
 {
     currentMotorSize = m;
-    <a href=#47>computeSelection</a>();
+    <a href=#48>computeSelection</a>();
 }
 
-void <a name="46"></a>VW::yearSelected( int y )
+void <a name="47"></a>VW::yearSelected( int y )
 {
     currentYear = y;
-    <a href=#47>computeSelection</a>();
+    <a href=#48>computeSelection</a>();
 }
 
-void <a name="47"></a>VW::computeSelection()
+void <a name="48"></a>VW::computeSelection()
 {
     if ( currentModel.isNull() )
         return; // no model selected yet
@@ -355,7 +355,7 @@ void <a name="47"></a>VW::computeSelection()
 
   Main:
 <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/validator/main.cpp   2.2.4   edited 2000-08-31 $
+** &#36;Id&#58; qt/examples/validator/main.cpp   2.3.0   edited 2001-01-26 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -379,5 +379,5 @@ int main( int argc, char ** argv ) {
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.4</div>
+<td align="right"><div align="right">Qt version 2.3.0</div>
 </table></div></address></body></html>

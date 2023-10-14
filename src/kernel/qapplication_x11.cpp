@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qapplication_x11.cpp   2.2.4   edited 2001-02-01 $
+** $Id: qt/src/kernel/qapplication_x11.cpp   2.3.0   edited 2001-02-27 $
 **
 ** Implementation of X11 startup routines and event handling
 **
@@ -37,10 +37,20 @@
 
 // NOT REVISED
 
-#define select		_qt_hide_select
-#define gettimeofday	_qt_hide_gettimeofday
+#define select          _qt_hide_select
+#define gettimeofday    _qt_hide_gettimeofday
 
 #include "qglobal.h"
+
+// XPG4v2 needed by FD_* macros.
+#ifndef _XOPEN_SOURCE_EXTENDED
+#  define _XOPEN_SOURCE_EXTENDED
+#endif
+
+// XPG5 would be needed to request the BSD b*() and strcasecmp() functions.
+// However we keep XPG4v2 and request them "manually" on every OS so that
+// all this works even when XPG5 is not available. Easier this way for now.
+
 #if defined(_OS_WIN32_)
 #undef select
 #include <windows.h>
@@ -81,7 +91,7 @@
 #include "qthread.h"
 #endif
 
-#if defined(_OS_LINUX_) && defined(DEBUG)
+#if defined(DEBUG) && defined(_OS_LINUX_)
 #include "qfile.h"
 #include <unistd.h>
 #endif
@@ -98,13 +108,25 @@
 // Have <sys/ioctl.h> include <sys/filio.h>.
 #  define BSD_COMP
 #endif
+#if defined(_OS_OSF_)
+#  define _OSF_SOURCE // for FIONREAD on Tru64 4.0f
+#endif
+#if defined(_OS_HPUX_)
+// needed for ioctl() and FIONREAD
+#  define _HPUX_SOURCE
+#endif
 #include <sys/ioctl.h>
 #if defined(_OS_SOLARIS_) || defined(_OS_UNIXWARE7_)
 #  undef BSD_COMP
 #endif
+#if defined(_OS_OSF_)
+#  undef _OSF_SOURCE
+#endif
+#if defined(_OS_HPUX_)
+#  undef _HPUX_SOURCE
+#endif
 
 #if defined(_OS_SCO_)
-#  include <strings.h>
 #  include <sys/socket.h> // for FIONREAD on SCO OpenServer 5.0.x
 #endif
 
@@ -116,10 +138,21 @@ static int qt_thread_pipe[2];
 #endif
 
 
-#include "qt_x11.h"
+#if defined(_OS_LINUX_)
+// This is one way to request strcasecmp().
+// In the GNU C library another way would be to define __USE_BSD.
+#include <strings.h>
+#include <string.h>
+#endif
 
-#ifndef X11R4
-#include <X11/Xlocale.h>
+#if defined(_OS_OSF_)
+// This is one way to request BSD b*() string functions.
+// On Tru64 another way would be to define _OSF_SOURCE.
+#  include <strings.h>
+#endif
+
+#if defined(_OS_SCO_)
+#  include <strings.h>
 #endif
 
 #if defined(_OS_IRIX_)
@@ -128,10 +161,18 @@ static int qt_thread_pipe[2];
 #include <bstring.h>
 #endif
 
-#if defined(_OS_AIX_) || defined(_OS_UNIXWARE7_)
+#if defined(_OS_AIX_) || defined(_OS_UNIXWARE7_) || defined (_OS_HPUX_)
 // Please add comments! Which version of AIX? Why?
+// needed for strcasecmp() on HP-UX 10.xx
 #include <strings.h>
 #endif
+
+#include "qt_x11.h"
+
+#ifndef X11R4
+#include <X11/Xlocale.h>
+#endif
+
 
 #if defined(_OS_AIX_) && defined(_CC_GNU_)
 // Please add comments! Which version of AIX? Why?
@@ -713,6 +754,29 @@ static bool qt_set_desktop_properties()
     QPalette pal;
     QFont font;
     d >> pal >> font;
+
+    // check the palette to see if the disabled foreground and background color
+    // are the same, if they are, we are going to do a hack and set the disabled
+    // foreground color to something sensible - this works around a bug in KDE that
+    // sets the disabled foreground color to the active foregroundcolor
+    QColor actfg(pal.color(QPalette::Active, QColorGroup::Foreground)),
+	disfg(pal.color(QPalette::Disabled, QColorGroup::Foreground));
+    if (actfg == disfg) {
+	int h, s, v;
+	disfg.hsv( &h, &s, &v );
+	if (v > 128)
+	    // dark bg, light fg - need a darker disabled fg
+	    disfg = disfg.dark();
+	else if (disfg != Qt::black)
+	    // light bg, dark fg - need a lighter disabled fg - but only if !black
+	    disfg = disfg.light();
+	else
+	    // black fg - use darkgrey disabled fg
+	    disfg = Qt::darkGray;
+
+	pal.setColor(QPalette::Disabled, QColorGroup::Foreground, disfg);
+    }
+
     if ( pal != *qt_std_pal && pal != QApplication::palette() )
 	QApplication::setPalette( pal, TRUE );
     *qt_std_pal = pal;
@@ -759,6 +823,8 @@ static void qt_set_input_encoding()
 	if( !input_mapper )
 	    input_mapper = QTextCodec::codecForName( "ISO 8859-1" );
     }
+    if ( input_mapper->mibEnum() == 11 ) // 8859-8
+	input_mapper = QTextCodec::codecForName( "ISO 8859-8-I");
     if( data )
 	XFree( (unsigned char *) data );
 
@@ -1126,13 +1192,13 @@ void qt_init_internal( int *argcptr, char **argv, Display *display )
 	    } else if ( arg == "-geometry" ) {
 		if ( ++i < argc )
 		    mwGeometry = argv[i];
-//Ming-Che 10/10
+		//Ming-Che 10/10
 	    } else if ( arg == "-im" ) {
 		if ( ++i < argc )
 		    ximServer = argv[i];
 	    } else if ( arg == "-noxim" ) {
-		    noxim=TRUE;
-//
+		noxim=TRUE;
+		//
 	    } else if ( arg == "-iconic" ) {
 		mwIconic = !mwIconic;
 	    } else if ( arg == "-ncols" ) {   // xv and netscape use this name
@@ -1239,8 +1305,8 @@ void qt_init_internal( int *argcptr, char **argv, Display *display )
 	    vis = find_truecolor_visual( appDpy, &QPaintDevice::x_appdepth,
 					 &QPaintDevice::x_appcells );
 	    QPaintDevice::x_appdefvisual =
-	       (XVisualIDFromVisual(vis) ==
-		XVisualIDFromVisual(DefaultVisual(appDpy,appScreen)));
+		(XVisualIDFromVisual(vis) ==
+		 XVisualIDFromVisual(DefaultVisual(appDpy,appScreen)));
 	    QPaintDevice::x_appvisual = vis;
 	}
 
@@ -1305,12 +1371,12 @@ void qt_init_internal( int *argcptr, char **argv, Display *display )
 		      FocusChangeMask | PropertyChangeMask
 		      );
     }
-// XIM segfaults on Solaris with "C" locale!
-// The idea was that the "en_US" locale is maybe installed on all systems
-// with a "C" locale and could be used as a fallback instead of "C". This
-// is not the case.
-// We'll have to take a XIM / no XIM decision at run-time.
-// Taking a decision at compile-time using NO_XIM is not enough.
+    // XIM segfaults on Solaris with "C" locale!
+    // The idea was that the "en_US" locale is maybe installed on all systems
+    // with a "C" locale and could be used as a fallback instead of "C". This
+    // is not the case.
+    // We'll have to take a XIM / no XIM decision at run-time.
+    // Taking a decision at compile-time using NO_XIM is not enough.
 #if defined (_OS_SOLARIS_) && !defined(NO_XIM)
     const char* locale = ::setlocale( LC_ALL, "" );
     if ( !locale || qstrcmp( locale, "C" ) == 0 ) {
@@ -1327,12 +1393,15 @@ void qt_init_internal( int *argcptr, char **argv, Display *display )
 #if !defined(NO_XIM)
 	qt_xim = 0;
 	QString ximServerName(ximServer);
-	if (ximServer) ximServerName.prepend("@im=");
+	if (ximServer)
+	    ximServerName.prepend("@im=");
+	else
+	    ximServerName = "";
+
 	if ( !XSupportsLocale() )
 	    qWarning("Qt: Locales not supported on X server");
 #ifdef USE_X11R6_XIM
-	else if ( ximServer &&
-		  XSetLocaleModifiers (ximServerName.ascii()) == 0 )
+	else if ( XSetLocaleModifiers (ximServerName.ascii()) == 0 )
 	    qWarning( "Qt: Cannot set locale modifiers: %s",
 		      ximServerName.ascii());
 	else if ( !noxim )
@@ -2173,23 +2242,25 @@ void qPRCreate( const QWidget *widget, Window oldwin )
     w->setWState( Qt::WState_Reparented );	// set reparented flag
 }
 
-void qPRCleanup( QETWidget *widget )
+void qPRCleanup( QWidget *widget )
 {
-    if ( !(wPRmapper && widget->testWState(Qt::WState_Reparented)) )
+    QETWidget *etw = (QETWidget *)widget;
+    if ( !(wPRmapper && etw->testWState(Qt::WState_Reparented)) )
 	return;					// not a reparented widget
     QWidgetIntDictIt it(*wPRmapper);
     QWidget *w;
     while ( (w=it.current()) ) {
-	if ( w == widget ) {			// found widget
-	    widget->clearWState( Qt::WState_Reparented ); // clear flag
-	    wPRmapper->remove( it.currentKey());// old window no longer needed
-	    if ( wPRmapper->count() == 0 ) {	// became empty
+	int key = it.currentKey();
+	++it;
+	if ( w == etw ) {                       // found widget
+	    etw->clearWState( Qt::WState_Reparented ); // clear flag
+	    wPRmapper->remove( key );// old window no longer needed
+ 	    if ( wPRmapper->count() == 0 ) {	// became empty
 		delete wPRmapper;		// then reset alt mapper
 		wPRmapper = 0;
+		return;
 	    }
-	    return;
 	}
-	++it;
     }
 }
 
@@ -4133,7 +4204,51 @@ static void deleteKeyDicts()
     textDict = 0;
 }
 
+static const unsigned short cyrillicKeysymsToUnicode[] = {
+    0x0000, 0x0452, 0x0453, 0x0451, 0x0454, 0x0455, 0x0456, 0x0457,
+    0x0458, 0x0459, 0x045a, 0x045b, 0x045c, 0x0000, 0x045e, 0x045f,
+    0x2116, 0x0402, 0x0403, 0x0401, 0x0404, 0x0405, 0x0406, 0x0407,
+    0x0408, 0x0409, 0x040a, 0x040b, 0x040c, 0x0000, 0x040e, 0x040f,
+    0x044e, 0x0430, 0x0431, 0x0446, 0x0434, 0x0435, 0x0444, 0x0433,
+    0x0445, 0x0438, 0x0439, 0x043a, 0x043b, 0x043c, 0x043d, 0x043e,
+    0x043f, 0x044f, 0x0440, 0x0441, 0x0442, 0x0443, 0x0436, 0x0432,
+    0x044c, 0x044b, 0x0437, 0x0448, 0x044d, 0x0449, 0x0447, 0x044a,
+    0x042e, 0x0410, 0x0411, 0x0426, 0x0414, 0x0415, 0x0424, 0x0413,
+    0x0425, 0x0418, 0x0419, 0x041a, 0x041b, 0x041c, 0x041d, 0x041e,
+    0x041f, 0x042f, 0x0420, 0x0421, 0x0422, 0x0423, 0x0416, 0x0412,
+    0x042c, 0x042b, 0x0417, 0x0428, 0x042d, 0x0429, 0x0427, 0x042a
+};
 
+static const unsigned short greekKeysymsToUnicode[] = {
+    0x0000, 0x0386, 0x0388, 0x0389, 0x038a, 0x03aa, 0x0000, 0x038c,
+    0x038e, 0x03ab, 0x0000, 0x038f, 0x0000, 0x0000, 0x0385, 0x2015,
+    0x0000, 0x03ac, 0x03ad, 0x03ae, 0x03af, 0x03ca, 0x0390, 0x03cc,
+    0x03cd, 0x03cb, 0x03b0, 0x03ce, 0x0000, 0x0000, 0x0000, 0x0000,
+    0x0000, 0x0391, 0x0392, 0x0393, 0x0394, 0x0395, 0x0396, 0x0397,
+    0x0398, 0x0399, 0x039a, 0x039b, 0x039c, 0x039d, 0x039e, 0x039f,
+    0x03a0, 0x03a1, 0x03a3, 0x0000, 0x03a4, 0x03a5, 0x03a6, 0x03a7,
+    0x03a8, 0x03a9, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+    0x0000, 0x03b1, 0x03b2, 0x03b3, 0x03b4, 0x03b5, 0x03b6, 0x03b7,
+    0x03b8, 0x03b9, 0x03ba, 0x03bb, 0x03bc, 0x03bd, 0x03be, 0x03bf,
+    0x03c0, 0x03c1, 0x03c3, 0x03c2, 0x03c4, 0x03c5, 0x03c6, 0x03c7,
+    0x03c8, 0x03c9, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000
+};
+
+// ### add keysym conversion for the missing ranges.
+static QChar keysymToUnicode(unsigned char byte3, unsigned char byte4)
+{
+    if ( byte3 == 0x06 ) {
+	// russian, use lookup table
+	if ( byte4 > 0xa0 )
+	    return QChar( cyrillicKeysymsToUnicode[byte4 - 0xa0] );
+    }
+    if ( byte3 == 0x07 ) {
+	// greek
+	if ( byte4 > 0xa0 )
+	    return QChar( cyrillicKeysymsToUnicode[byte4 - 0xa0] );
+    }
+    return QChar(0x0);
+}
 
 
 bool QETWidget::translateKeyEventInternal( const XEvent *event, int& count,
@@ -4141,7 +4256,9 @@ bool QETWidget::translateKeyEventInternal( const XEvent *event, int& count,
 					   int& state,
 					   char& ascii, int& code )
 {
+    QTextCodec *mapper = input_mapper;
     QCString chars(64);
+    QChar converted;
     KeySym key = 0;
 
     if ( !keyDict ) {
@@ -4195,6 +4312,43 @@ bool QETWidget::translateKeyEventInternal( const XEvent *event, int& count,
 	}
 	if ( key )
 	    keyDict->replace( keycode, (void*)key );
+	if ( count == 0 && key < 0xff00 ) { // all keysyms smaller than that are actally keys that can be mapped to unicode chars
+	    unsigned char byte3 = (unsigned char )(key >> 8);
+	    int mib = -1;
+	    switch( byte3 ) {
+		case 0: // Latin 1
+		case 1: // Latin 2
+		case 2: //latin 3
+		case 3: // latin4
+		    mib = byte3 + 4; break;
+		case 4: // kana
+		    break;
+		case 5: // arabic
+		    mib = 82; break;
+		case 6: // Cyrillic
+		case 7: //greek
+		    mib = -1; // manual conversion
+		    mapper = 0;
+		    converted = keysymToUnicode( byte3, key & 0xff );
+		case 8: // technical, no mapping here at the moment
+		case 9: // Special
+		case 10: // Publishing
+		case 11: // APL
+		    break;
+		case 12: // Hebrew
+		    mib = 85; break;
+		case 13: // Thai
+		    mib = 2259; break;
+		case 14: // Korean, no mapping
+		default:
+		    break;
+	    }
+	    if ( mib != -1 ) {
+		mapper = QTextCodec::codecForMib( mib );
+		chars[0] = (unsigned char) (key & 0xff );
+		count++;
+	    }
+	}
 	if ( count < (int)chars.size()-1 )
 	    chars[count] = '\0';
 	if ( count == 1 ) {
@@ -4225,7 +4379,7 @@ bool QETWidget::translateKeyEventInternal( const XEvent *event, int& count,
     // Qt keycodes between 128 and 255, but should rather use the
     // QKeyEvent::text().
     //
-    if ( key < 128 || key < 256 && (!input_mapper || input_mapper->mibEnum()==4) ) {
+    if ( key < 128 || (key < 256 && (!input_mapper || input_mapper->mibEnum()==4)) ) {
 	code = isprint((int)key) ? toupper((int)key) : 0; // upper-case key, if known
     } else if ( key >= XK_F1 && key <= XK_F35 ) {
 	code = Key_F1 + ((int)key - XK_F1);	// function keys
@@ -4297,8 +4451,10 @@ bool QETWidget::translateKeyEventInternal( const XEvent *event, int& count,
 #endif
 
     // convert chars (8bit) to text (unicode).
-    if ( input_mapper )
-	text = input_mapper->toUnicode(chars,count);
+    if ( mapper )
+	text = mapper->toUnicode(chars,count);
+    else if ( !mapper && converted.unicode() != 0x0 )
+	text = converted;
     else
 	text = chars;
     return TRUE;
@@ -4321,7 +4477,7 @@ bool QETWidget::translateKeyEvent( const XEvent *event, bool grab )
 	return TRUE;
 
     QEvent::Type type = (event->type == XKeyPress) ?
-	QEvent::KeyPress : QEvent::KeyRelease;
+			QEvent::KeyPress : QEvent::KeyRelease;
     bool    autor = FALSE;
     QString text;
 
@@ -4429,7 +4585,13 @@ bool QETWidget::translateKeyEvent( const XEvent *event, bool grab )
 	}
     }
 
-    // process accelerates before popups
+    if (code == 0 && ascii == '\n') {
+	code = Key_Return;
+	ascii = '\r';
+	text = "\r";
+    }
+
+    // process acceleraters before popups
     QKeyEvent e( type, code, ascii, state, text, autor,
 		 QMAX(count, int(text.length())) );
     if ( type == QEvent::KeyPress && !grab ) {

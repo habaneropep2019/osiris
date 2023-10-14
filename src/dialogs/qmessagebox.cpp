@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/dialogs/qmessagebox.cpp   2.2.4   edited 2000-10-05 $
+** $Id: qt/src/dialogs/qmessagebox.cpp   2.3.0   edited 2001-02-20 $
 **
 ** Implementation of QMessageBox class
 **
@@ -653,10 +653,32 @@ void QMessageBox::init( int button0, int button1, int button2 )
 		  "HP-UX and many other versions of Unix with X11.</p>"
 		  "<p>See <tt>http://www.trolltech.com/qt/</tt> for more "
 		  "information.</p>" ).arg( QT_VERSION_STR );
+#ifdef QT_NO_RICHTEXT
+	QString plain;
+	bool on=TRUE;
+	for (int i=0; i<translatedTextAboutQt->length(); i++) {
+	    char ch = translatedTextAboutQt->at(i).latin1();
+	    switch ( ch ) {
+	     case '<': on=FALSE; break;
+	     case '>': on=TRUE; break;
+	     default:
+		if ( on )
+		    plain += translatedTextAboutQt->at(i);
+		else if ( ch == 'p' || ch == '3' )
+		    plain += '\n';
+	    }
+	}
+	*translatedTextAboutQt = plain;
+#endif
     }
     label = new QLabel( this, "text" );
     CHECK_PTR( label );
+
+#ifdef QT_NO_RICHTEXT
+    label->setAlignment( AlignLeft|WordBreak );
+#else
     label->setAlignment( AlignLeft );
+#endif
 
     if ( (button2 && !button1) || (button1 && !button0) ) {
 #if defined(CHECK_RANGE)

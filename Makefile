@@ -48,6 +48,7 @@ clean:
 	cd src/moc; $(MAKE) clean
 	cd src; $(MAKE) clean
 	-rm src/tmp/*.o src/tmp/*.a src/allmoc.cpp
+	-find src/3rdparty -name '*.o' | xargs rm
 	cd tutorial; $(MAKE) clean
 	cd examples; $(MAKE) clean
 	cd tools; $(MAKE) clean

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qpolygonscanner.cpp   2.2.4   edited 2000-11-05 $
+** $Id: qt/src/kernel/qpolygonscanner.cpp   2.3.0   edited 2001-02-26 $
 **
 ** Implementation of QPolygonScanner class
 **
@@ -716,7 +716,24 @@ miInsertionSort(EdgeTableEntry *AET)
     return(changed);
 }
 
+/*! \overload
+ */
 void QPolygonScanner::scan(const QPointArray& pa, bool winding, int index, int npoints)
+{
+    scan( pa, winding, index, npoints, TRUE );
+}
+
+/*!
+  Calls processSpans() for all scanlines of the polygon defined by \a npoints
+  starting at \a index in \a pa.
+
+  If \a winding is TRUE, the Winding algorithm rather than the Odd-Even
+    rule is used.
+
+  If \a stitchable is FALSE, the right and bottom edges of the polygon are
+    included. This causes adjacent polygons to overlap.
+*/
+void QPolygonScanner::scan(const QPointArray& pa, bool winding, int index, int npoints, bool stitchable)
 {
     DDXPointPtr ptsIn = (DDXPointPtr)pa.data();
     ptsIn += index;
@@ -735,6 +752,7 @@ void QPolygonScanner::scan(const QPointArray& pa, bool winding, int index, int n
     EdgeTableEntry *pETEs;          /* Edge Table Entries buff */
     ScanLineListBlock SLLBlock;     /* header for ScanLineList */
     int fixWAET = 0;
+    int stitch = stitchable ? 0 : 1;
 
     if (npoints == -1)
 	npoints = pa.size();
@@ -759,7 +777,7 @@ void QPolygonScanner::scan(const QPointArray& pa, bool winding, int index, int n
         /*
          *  for each scanline
          */
-        for (y = ET.ymin; y < ET.ymax; y++)
+        for (y = ET.ymin; y < ET.ymax+stitch; y++)
         {
             /*
              *  Add a new edge to the active edge table when we
@@ -780,7 +798,7 @@ void QPolygonScanner::scan(const QPointArray& pa, bool winding, int index, int n
             {
                 ptsOut->x = pAET->bres.minor;
 		ptsOut++->y = y;
-                *width++ = pAET->next->bres.minor - pAET->bres.minor;
+                *width++ = pAET->next->bres.minor - pAET->bres.minor + stitch;
                 nPts++;
 
                 /*
@@ -804,7 +822,7 @@ void QPolygonScanner::scan(const QPointArray& pa, bool winding, int index, int n
         /*
          *  for each scanline
          */
-        for (y = ET.ymin; y < ET.ymax; y++)
+        for (y = ET.ymin; y < ET.ymax+stitch; y++)
         {
             /*
              *  Add a new edge to the active edge table when we
@@ -834,7 +852,7 @@ void QPolygonScanner::scan(const QPointArray& pa, bool winding, int index, int n
                 {
                     ptsOut->x = pAET->bres.minor;
 		    ptsOut++->y = y;
-                    *width++ = pAET->nextWETE->bres.minor - pAET->bres.minor;
+                    *width++ = pAET->nextWETE->bres.minor - pAET->bres.minor + stitch;
                     nPts++;
 
                     /*

@@ -110,10 +110,6 @@ main.o: main.cpp \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
-		../../include/qconfig-minimal.h \
-		../../include/qconfig-small.h \
-		../../include/qconfig-medium.h \
-		../../include/qconfig-large.h \
 		../../include/qconfig.h \
 		../../include/qstring.h \
 		../../include/qcstring.h \
@@ -160,10 +156,6 @@ motor.o: motor.cpp \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
-		../../include/qconfig-minimal.h \
-		../../include/qconfig-small.h \
-		../../include/qconfig-medium.h \
-		../../include/qconfig-large.h \
 		../../include/qconfig.h \
 		../../include/qwindowdefs.h \
 		../../include/qstring.h \
@@ -213,10 +205,6 @@ vw.o: vw.cpp \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
-		../../include/qconfig-minimal.h \
-		../../include/qconfig-small.h \
-		../../include/qconfig-medium.h \
-		../../include/qconfig-large.h \
 		../../include/qconfig.h \
 		../../include/qwindowdefs.h \
 		../../include/qstring.h \
@@ -268,10 +256,6 @@ moc_motor.o: moc_motor.cpp \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
-		../../include/qconfig-minimal.h \
-		../../include/qconfig-small.h \
-		../../include/qconfig-medium.h \
-		../../include/qconfig-large.h \
 		../../include/qconfig.h \
 		../../include/qwindowdefs.h \
 		../../include/qstring.h \
@@ -316,10 +300,6 @@ moc_vw.o: moc_vw.cpp \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
-		../../include/qconfig-minimal.h \
-		../../include/qconfig-small.h \
-		../../include/qconfig-medium.h \
-		../../include/qconfig-large.h \
 		../../include/qconfig.h \
 		../../include/qwindowdefs.h \
 		../../include/qstring.h \

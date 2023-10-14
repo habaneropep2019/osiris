@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qpolygonscanner.h   2.2.4   edited 2000-08-25 $
+** $Id: qt/src/kernel/qpolygonscanner.h   2.3.0   edited 2001-02-26 $
 **
 ** Definition of QPolygonScanner class
 **
@@ -47,7 +47,9 @@ class QPoint;
 
 class Q_EXPORT QPolygonScanner {
 public:
+    // BIC: fix for 3.0
     void scan( const QPointArray& pa, bool winding, int index=0, int npoints=-1 );
+    void scan( const QPointArray& pa, bool winding, int index, int npoints, bool stitchable );
     virtual void processSpans( int n, QPoint* point, int* width )=0;
 };
 

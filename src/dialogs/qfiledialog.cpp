@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/dialogs/qfiledialog.cpp   2.2.4   edited 2001-01-31 $
+** $Id: qt/src/dialogs/qfiledialog.cpp   2.3.0   edited 2001-02-18 $
 **
 ** Implementation of QFileDialog class
 **
@@ -77,11 +77,10 @@
 
 #if defined(_OS_UNIX_)
 // getlogin()
-#include <unistd.h>
-
+# include <unistd.h>
 // getpwnam()
-#include <sys/types.h>
-#include <pwd.h>
+# include <sys/types.h>
+# include <pwd.h>
 #endif
 
 // see comment near use of this variable
@@ -3109,9 +3108,13 @@ void QFileDialog::okClicked()
     }
 
     if ( mode() == AnyFile ) {
-        d->currentFileName = d->url + nameEdit->text();
-        accept();
-        return;
+	QUrlInfo f( d->url, nameEdit->text() );
+        if ( !f.isDir() ) {
+	    d->currentFileName = d->url + nameEdit->text();
+	    emit fileSelected( selectedFile() );
+	    accept();
+	    return;
+	}
     }
 
     // If selection is valid, return it, else try
@@ -3213,11 +3216,13 @@ bool QFileDialog::trySetSelection( bool isDir, const QUrlOperator &u, bool updat
 	}
     }
 
-    if ( d->preview && d->preview->isVisible() ) {
-	if ( d->infoPreviewer )
-	    d->infoPreviewer->previewUrl( u );
-	if ( d->contentsPreviewer )
-	    d->contentsPreviewer->previewUrl( u );
+    if ( isDir ) {
+        if ( d->preview && d->preview->isVisible() ) {
+            if ( d->infoPreviewer )
+                d->infoPreviewer->previewUrl( u );
+            if ( d->contentsPreviewer )
+                d->contentsPreviewer->previewUrl( u );
+        }
     }
 
     QString old = d->currentFileName;
@@ -3459,8 +3464,16 @@ void QFileDialog::updateFileNameEdit( QListBoxItem * newItem )
 void QFileDialog::fileNameEditDone()
 {
     QUrlInfo f( d->url, nameEdit->text() );
-    if ( mode() != ExistingFiles )
-	trySetSelection( f.isDir(), QUrlOperator( d->url, nameEdit->text() ), FALSE );
+    if ( mode() != ExistingFiles ) {
+        QUrlOperator u( d->url, nameEdit->text() );
+        trySetSelection( f.isDir(), u, FALSE );
+        if ( d->preview && d->preview->isVisible() ) {
+            if ( d->infoPreviewer )
+                d->infoPreviewer->previewUrl( u );
+            if ( d->contentsPreviewer )
+                d->contentsPreviewer->previewUrl( u );
+        }
+    }
 }
 
 
@@ -4575,11 +4588,19 @@ bool QFileDialog::eventFilter( QObject * o, QEvent * e )
     } else if ( o == nameEdit && e->type() == QEvent::KeyPress ) {
 	if ( ( nameEdit->cursorPosition() == (int)nameEdit->text().length() || nameEdit->hasMarkedText() ) &&
 	     isprint(((QKeyEvent *)e)->ascii()) ) {
+#if defined(_WS_WIN_)
+	    QString nt( nameEdit->text().lower() );
+#else
 	    QString nt( nameEdit->text() );
+#endif
 	    nt.truncate( nameEdit->cursorPosition() );
 	    nt += (char)(((QKeyEvent *)e)->ascii());
 	    QListViewItem * i = files->firstChild();
+#if defined(_WS_WIN_)
+	    while( i && i->text( 0 ).left(nt.length()).lower() != nt )
+#else
 	    while( i && i->text( 0 ).left(nt.length()) != nt )
+#endif
 		i = i->nextSibling();
 	    if ( i ) {
 		nt = i->text( 0 );

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/iconview/qiconview.cpp   2.2.4   edited 2000-12-11 $
+** $Id: qt/src/iconview/qiconview.cpp   2.3.0   edited 2001-03-02 $
 **
 ** Implementation of QIconView widget class
 **
@@ -226,6 +226,7 @@ public:
     bool cleared, dropped, clearing;
     int dragItems;
     QPoint oldDragPos;
+    bool oldDragAcceptAction;
     QIconView::Arrangement arrangement;
     QIconView::ResizeMode resizeMode;
     QSize oldSize;
@@ -398,8 +399,8 @@ void QIconViewItemLineEdit::keyPressEvent( QKeyEvent *e )
 	w = totalWidth();
 	h = totalHeight();
 	QSize s( size() );
-	parentWidget()->resize( w + 6, h + 6 );
-	if ( s != QSize( w, h ) ) {
+	if ( s != QSize( w, h ) && e->key() != Key_Shift && e->key() != Key_Control && e->key() != Key_Alt) {
+	    parentWidget()->resize( w + 6, h + 6 );
 	    item->calcRect( text() );
 	    item->iconView()->moveChild( parentWidget(), item->textRect( FALSE ).x() - 3,
 					 item->textRect( FALSE ).y() - 3 );
@@ -408,9 +409,10 @@ void QIconViewItemLineEdit::keyPressEvent( QKeyEvent *e )
     }
 }
 
-void QIconViewItemLineEdit::focusOutEvent( QFocusEvent * )
+void QIconViewItemLineEdit::focusOutEvent( QFocusEvent *e )
 {
-    item->cancelRenameItem();
+    if ( e->reason() != QFocusEvent::Popup )
+	item->cancelRenameItem();
 }
 
 #ifndef QT_NO_DRAGANDDROP
@@ -3349,9 +3351,10 @@ QIconViewItem* QIconView::findLastVisibleItem( const QRect &r ) const
 void QIconView::clear()
 {
     d->clearing = TRUE;
+    bool block = signalsBlocked();
     blockSignals( TRUE );
     clearSelection();
-    blockSignals( FALSE );
+    blockSignals( block );
     setContentsPos( 0, 0 );
     d->currentItem = 0;
 
@@ -3773,6 +3776,20 @@ bool QIconView::showToolTips() const
 
 void QIconView::contentsMousePressEvent( QMouseEvent *e )
 {
+    if ( d->rubber ) {
+	QPainter p;
+	p.begin( viewport() );
+	p.setRasterOp( NotROP );
+	p.setPen( QPen( color0, 1 ) );
+	p.setBrush( NoBrush );
+
+	drawRubber( &p );
+	d->dragging = FALSE;
+	p.end();
+	delete d->rubber;
+	d->rubber = 0;
+    }
+
     d->dragStartPos = e->pos();
     QIconViewItem *item = findItem( e->pos() );
     d->pressedItem = item;
@@ -4041,6 +4058,7 @@ void QIconView::contentsDragEnterEvent( QDragEnterEvent *e )
     d->tmpCurrentItem = 0;
     initDragEnter( e );
     d->oldDragPos = e->pos();
+    d->oldDragAcceptAction = FALSE;
     drawDragShapes( e->pos() );
     d->dropped = FALSE;
 }
@@ -4051,8 +4069,14 @@ void QIconView::contentsDragEnterEvent( QDragEnterEvent *e )
 
 void QIconView::contentsDragMoveEvent( QDragMoveEvent *e )
 {
-    if ( e->pos() == d->oldDragPos )
+    if ( e->pos() == d->oldDragPos ) {
+	if (d->oldDragAcceptAction)
+	    e->acceptAction();
+	else
+	    e->ignore();
 	return;
+    }
+
     drawDragShapes( d->oldDragPos );
     d->dragging = FALSE;
 
@@ -4067,10 +4091,13 @@ void QIconView::contentsDragMoveEvent( QDragMoveEvent *e )
 	    repaintItem( old );
 	}
 	item->dragEntered();
-	if ( item->acceptDrop( e ) )
+	if ( item->acceptDrop( e ) ) {
+	    d->oldDragAcceptAction = TRUE;
 	    e->acceptAction();
-	else
+	} else {
+	    d->oldDragAcceptAction = FALSE;
 	    e->ignore();
+	}
 
 	d->tmpCurrentItem = item;
 	QPainter p;
@@ -4080,6 +4107,7 @@ void QIconView::contentsDragMoveEvent( QDragMoveEvent *e )
 	p.end();
     } else {
 	e->acceptAction();
+	d->oldDragAcceptAction = TRUE;
 	if ( old ) {
 	    old->dragLeft();
 	    repaintItem( old );
@@ -4553,9 +4581,9 @@ QDragObject *QIconView::dragObject()
     drag->setPixmap( *d->currentItem->pixmap(),
  		     QPoint( d->currentItem->pixmapRect().width() / 2,
 			     d->currentItem->pixmapRect().height() / 2 ) );
-   
-    if ( d->selectionMode == NoSelection ) {  
-	QIconViewItem *item = d->currentItem; 
+
+    if ( d->selectionMode == NoSelection ) {
+	QIconViewItem *item = d->currentItem;
 	drag->append( QIconDragItem(),
 		      QRect( item->pixmapRect( FALSE ).x() - orig.x(),
 			     item->pixmapRect( FALSE ).y() - orig.y(),
@@ -4880,9 +4908,10 @@ void QIconView::findItemByName( const QString &text )
 	setCurrentItem( item );
 	if ( d->selectionMode == Extended ) {
 	    bool changed = FALSE;
+	    bool block = signalsBlocked();
 	    blockSignals( TRUE );
 	    selectAll( FALSE );
-	    blockSignals( FALSE );
+	    blockSignals( block );
 	    if ( !item->selected && item->isSelectable() ) {
 		changed = TRUE;
 		item->selected = TRUE;
@@ -5399,10 +5428,11 @@ void QIconView::movedContents( int, int )
 void QIconView::handleItemChange( QIconViewItem *old, bool shift, bool control )
 {
     if ( d->selectionMode == Single ) {
+	bool block = signalsBlocked();
 	blockSignals( TRUE );
 	if ( old )
 	    old->setSelected( FALSE );
-	blockSignals( FALSE );
+	blockSignals( block );
 	d->currentItem->setSelected( TRUE, TRUE );
     } else if ( d->selectionMode == Extended ) {
 	if ( control ) {

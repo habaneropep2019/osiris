@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/showimg/showimg.h   2.2.4   edited 2000-08-31 $
+** $Id: qt/examples/showimg/showimg.h   2.3.0   edited 2001-02-14 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -37,6 +37,7 @@ private:
     void	scale();
     int		conversion_flags;
     bool	smooth() const;
+    bool	unscaled() const;
     bool	useColorContext() const;
     int		alloc_context;
     bool	convertEvent( QMouseEvent* e, int& x, int& y );
@@ -56,7 +57,7 @@ private:
     QLabel     *status;
     int         si, sp, ac, co, mo, fd, bd, // Menu item ids
 		td, ta, ba, fa, au, ad, dd,
-		ss, cc, t1, t8, t32;
+		ns, us, ss, cc, t1, t8, t32;
     void	updateStatus();
     void	setMenuItemFlags();
     bool 	reconvertImage();

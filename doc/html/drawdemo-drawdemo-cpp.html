@@ -32,7 +32,7 @@ height="100" src="face.png" alt="Home" border="0">
 
   Implementation:
 <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/drawdemo/drawdemo.cpp   2.2.4   edited 2000-08-31 $
+** &#36;Id&#58; qt/examples/drawdemo/drawdemo.cpp   2.3.0   edited 2001-01-26 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -184,7 +184,7 @@ DrawView::DrawView()
     // Create a button group to contain all buttons
     bgroup = new <a href="qbuttongroup.html">QButtonGroup</a>( this );
     bgroup-&gt;<a name="resize"></a><a href="qwidget.html#9ff9d8">resize</a>( 200, 200 );
-    <a name="connect"></a><a href="qobject.html#c2d209">connect</a>( bgroup, SIGNAL(clicked(int)), SLOT(<a name="updateIt"></a><a href="#188">updateIt</a>(int)) );
+    <a name="connect"></a><a href="qobject.html#c2d209">connect</a>( bgroup, SIGNAL(clicked(int)), SLOT(<a name="updateIt"></a><a href="#193">updateIt</a>(int)) );
 
     // Calculate the size for the radio buttons
     int maxwidth = 80;
@@ -215,7 +215,7 @@ DrawView::DrawView()
     print = new <a href="qpushbutton.html">QPushButton</a>( "Print...", bgroup );
     print-&gt;<a name="resize"></a><a href="qpushbutton.html#5f0add">resize</a>( 80, 30 );
     print-&gt;<a name="move"></a><a href="qpushbutton.html#0d7ae4">move</a>( maxwidth/2 - print-&gt;<a name="width"></a><a href="qwidget.html#576663">width</a>()/2, maxindex*30+20 );
-    <a href="qobject.html#c2d209">connect</a>( print, SIGNAL(clicked()), SLOT(<a name="printIt"></a><a href="#190">printIt</a>()) );
+    <a href="qobject.html#c2d209">connect</a>( print, SIGNAL(clicked()), SLOT(<a name="printIt"></a><a href="#195">printIt</a>()) );
 
     bgroup-&gt;<a href="qwidget.html#9ff9d8">resize</a>( maxwidth, print-&gt;<a name="y"></a><a href="qwidget.html#043386">y</a>()+print-&gt;<a name="height"></a><a href="qwidget.html#180786">height</a>()+10 );
 
@@ -236,7 +236,7 @@ DrawView::~DrawView()
 // Called when a radio button is clicked.
 //
 
-void <a name="188"></a>DrawView::updateIt( int index )
+void <a name="193"></a>DrawView::updateIt( int index )
 {
     if ( index &lt; maxindex ) {
         drawindex = index;
@@ -248,7 +248,7 @@ void <a name="188"></a>DrawView::updateIt( int index )
 // Calls the drawing function as specified by the radio buttons.
 //
 
-void <a name="189"></a>DrawView::drawIt( <a href="qpainter.html">QPainter</a> *p )
+void <a name="194"></a>DrawView::drawIt( <a href="qpainter.html">QPainter</a> *p )
 {
     (*ourDrawFunctions[drawindex].f)(p);
 }
@@ -257,12 +257,12 @@ void <a name="189"></a>DrawView::drawIt( <a href="qpainter.html">QPainter</a> *p
 // Called when the print button is clicked.
 //
 
-void <a name="190"></a>DrawView::printIt()
+void <a name="195"></a>DrawView::printIt()
 {
 #ifndef QT_NO_PRINTER
     if ( printer-&gt;<a name="setup"></a><a href="qprinter.html#a36243">setup</a>( this ) ) {
         <a href="qpainter.html">QPainter</a> paint( printer );
-        <a name="drawIt"></a><a href="#189">drawIt</a>( &amp;paint );
+        <a name="drawIt"></a><a href="#194">drawIt</a>( &amp;paint );
     }
 #endif
 }
@@ -271,10 +271,10 @@ void <a name="190"></a>DrawView::printIt()
 // Called when the widget needs to be updated.
 //
 
-void <a name="191"></a>DrawView::paintEvent( <a href="qpaintevent.html">QPaintEvent</a> * )
+void <a name="196"></a>DrawView::paintEvent( <a href="qpaintevent.html">QPaintEvent</a> * )
 {
     <a href="qpainter.html">QPainter</a> paint( this );
-    <a href=#189>drawIt</a>( &amp;paint );
+    <a href=#194>drawIt</a>( &amp;paint );
 }
 
 //
@@ -282,7 +282,7 @@ void <a name="191"></a>DrawView::paintEvent( <a href="qpaintevent.html">QPaintEv
 // Moves the button group to the upper right corner
 // of the widget.
 
-void <a name="192"></a>DrawView::resizeEvent( <a href="qresizeevent.html">QResizeEvent</a> * )
+void <a name="197"></a>DrawView::resizeEvent( <a href="qresizeevent.html">QResizeEvent</a> * )
 {
     bgroup-&gt;<a name="move"></a><a href="qwidget.html#958bbe">move</a>( <a href="qwidget.html#576663">width</a>()-bgroup-&gt;<a href="qwidget.html#576663">width</a>(), 0 );
 }
@@ -305,5 +305,5 @@ int main( int argc, char **argv )
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.4</div>
+<td align="right"><div align="right">Qt version 2.3.0</div>
 </table></div></address></body></html>

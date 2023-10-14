@@ -1,5 +1,5 @@
 /**********************************************************************
-** $Id: qt/src/kernel/qprinter.cpp   2.2.4   edited 2000-08-25 $
+** $Id: qt/src/kernel/qprinter.cpp   2.3.0   edited 2001-02-22 $
 **
 ** Implementation of QPrinter class
 **
@@ -388,7 +388,8 @@ void QPrinter::setCreator( const QString &creator )
   \c QPrinter::Landscape.
 
   The printer driver reads this setting and prints using the specified
-  orientation.
+  orientation.  On Windows however, this setting won't take effect until 
+  the printer dialog is shown (using QPrinter::setup() ).
 
   \sa orientation()
 */

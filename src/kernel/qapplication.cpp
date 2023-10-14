@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qapplication.cpp   2.2.4   edited 2001-01-14 $
+** $Id: qt/src/kernel/qapplication.cpp   2.3.0   edited 2001-02-15 $
 **
 ** Implementation of QApplication class
 **
@@ -133,7 +133,7 @@
 
   </ul>
 
-  The <a href="simple-application.html">Application walk-trough
+  The <a href="simple-application.html">Application walk-through
   example</a> contains a typical complete main() that does the usual
   things with QApplication.
 
@@ -289,6 +289,7 @@ bool	  QApplication::fade_menu	= FALSE;
 bool	  QApplication::animate_combo	= FALSE;
 bool	  QApplication::animate_tooltip	= FALSE;
 bool	  QApplication::fade_tooltip	= FALSE;
+QApplication::Type qt_appType=QApplication::Tty;
 
 #if defined(QT_THREAD_SUPPORT)
 QMutex * QApplication::qt_mutex		= 0;
@@ -580,6 +581,7 @@ QApplication::QApplication( int &argc, char **argv, Type type )
 
 void QApplication::construct( int &argc, char **argv, Type type )
 {
+    qt_appType = type;
     qt_is_gui_used = (type != Tty);
     init_precmdline();
     static char *empty = (char*)"";
@@ -596,6 +598,11 @@ void QApplication::construct( int &argc, char **argv, Type type )
 
     initialize( argc, argv );
 
+}
+
+QApplication::Type QApplication::type() const
+{
+    return qt_appType;
 }
 
 

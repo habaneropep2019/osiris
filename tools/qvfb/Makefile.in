@@ -124,10 +124,6 @@ qvfb.o: qvfb.cpp \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
-		../../include/qconfig-minimal.h \
-		../../include/qconfig-small.h \
-		../../include/qconfig-medium.h \
-		../../include/qconfig-large.h \
 		../../include/qconfig.h \
 		../../include/qstring.h \
 		../../include/qcstring.h \
@@ -214,10 +210,6 @@ qvfbview.o: qvfbview.cpp \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
-		../../include/qconfig-minimal.h \
-		../../include/qconfig-small.h \
-		../../include/qconfig-medium.h \
-		../../include/qconfig-large.h \
 		../../include/qconfig.h \
 		../../include/qstring.h \
 		../../include/qcstring.h \
@@ -277,10 +269,6 @@ qvfbratedlg.o: qvfbratedlg.cpp \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
-		../../include/qconfig-minimal.h \
-		../../include/qconfig-small.h \
-		../../include/qconfig-medium.h \
-		../../include/qconfig-large.h \
 		../../include/qconfig.h \
 		../../include/qwindowdefs.h \
 		../../include/qstring.h \
@@ -332,10 +320,6 @@ main.o: main.cpp \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
-		../../include/qconfig-minimal.h \
-		../../include/qconfig-small.h \
-		../../include/qconfig-medium.h \
-		../../include/qconfig-large.h \
 		../../include/qconfig.h \
 		../../include/qstring.h \
 		../../include/qcstring.h \
@@ -384,10 +368,6 @@ qanimationwriter.o: qanimationwriter.cpp \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
-		../../include/qconfig-minimal.h \
-		../../include/qconfig-small.h \
-		../../include/qconfig-medium.h \
-		../../include/qconfig-large.h \
 		../../include/qconfig.h \
 		../../include/qstring.h \
 		../../include/qcstring.h \
@@ -428,10 +408,6 @@ moc_qvfb.o: moc_qvfb.cpp \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
-		../../include/qconfig-minimal.h \
-		../../include/qconfig-small.h \
-		../../include/qconfig-medium.h \
-		../../include/qconfig-large.h \
 		../../include/qconfig.h \
 		../../include/qstring.h \
 		../../include/qcstring.h \
@@ -474,10 +450,6 @@ moc_qvfbview.o: moc_qvfbview.cpp \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
-		../../include/qconfig-minimal.h \
-		../../include/qconfig-small.h \
-		../../include/qconfig-medium.h \
-		../../include/qconfig-large.h \
 		../../include/qconfig.h \
 		../../include/qstring.h \
 		../../include/qcstring.h \
@@ -526,10 +498,6 @@ moc_qvfbratedlg.o: moc_qvfbratedlg.cpp \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
-		../../include/qconfig-minimal.h \
-		../../include/qconfig-small.h \
-		../../include/qconfig-medium.h \
-		../../include/qconfig-large.h \
 		../../include/qconfig.h \
 		../../include/qstring.h \
 		../../include/qcstring.h \

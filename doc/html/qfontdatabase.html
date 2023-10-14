@@ -39,6 +39,7 @@ Provides information about available fonts.
 <li><div class="fn">bool <a href="#ae12c2"><b>isBitmapScalable</b></a> ( const QString &amp; family, const QString &amp; style = QString::null, const QString &amp; charSet = QString::null ) const</div>
 <li><div class="fn">bool <a href="#72207a"><b>isSmoothlyScalable</b></a> ( const QString &amp; family, const QString &amp; style = QString::null, const QString &amp; charSet = QString::null ) const</div>
 <li><div class="fn">bool <a href="#e01948"><b>isScalable</b></a> ( const QString &amp; family, const QString &amp; style = QString::null, const QString &amp; charSet = QString::null ) const</div>
+<li><div class="fn">bool <a href="#e03ae8"><b>isFixedPitch</b></a> ( const QString &amp; family, const QString &amp; style = QString::null, const QString &amp; charset = QString::null ) const</div>
 <li><div class="fn">QValueList&lt;int&gt; <a href="#14e456"><b>smoothSizes</b></a> ( const QString &amp; family, const QString &amp; style, const QString &amp; charSet = QString::null ) </div>
 <li><div class="fn">bool <a href="#074127"><b>italic</b></a> ( const QString &amp; family, const QString &amp; style, const QString &amp; charSet = QString::null ) const</div>
 <li><div class="fn">bool <a href="#25a4e9"><b>bold</b></a> ( const QString &amp; family, const QString &amp; style, const QString &amp; charSet = QString::null ) const</div>
@@ -87,6 +88,9 @@ a scaleable bitmap font. Scaling a bitmap font produces a bad, often hardly
 readable result, as the pixels of the font are scaled. It's better to scale such
 a font only to the available fixed sizes (which you can get with <a href="#14e456">smoothSizes</a>()).
 <p>See also  <a href="#e01948">isScalable</a>() and <a href="#72207a">isSmoothlyScalable</a>().
+<h3 class="fn">bool <a name="e03ae8"></a>QFontDatabase::isFixedPitch ( const <a href="qstring.html">QString</a> &amp; family, const <a href="qstring.html">QString</a> &amp; style = QString::null, const <a href="qstring.html">QString</a> &amp; charSet = QString::null ) const</h3>
+<p>Returns whether the font which matches <em>family, style</em> and <em>charSet</em> is
+fixed pitch.
 <h3 class="fn">bool <a name="e01948"></a>QFontDatabase::isScalable ( const <a href="qstring.html">QString</a> &amp; family, const <a href="qstring.html">QString</a> &amp; style = QString::null, const <a href="qstring.html">QString</a> &amp; charSet = QString::null ) const</h3>
 <p>Returns TRUE if the font which matches the settings <em>family, style</em> and <em>charSet</em>
 is scaleable.
@@ -129,7 +133,7 @@ which can be used e.g. for displaying in a dialog for the user.
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.2.4"><nobr>
+<input type=hidden name="version" value="2.3.0"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -137,5 +141,5 @@ copyright &copy; 1995-2000
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.4</div>
+<td align="right"><div align="right">Qt version 2.3.0</div>
 </table></div></address></body></html>

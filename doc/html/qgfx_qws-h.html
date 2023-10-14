@@ -30,7 +30,7 @@ remains with Trolltech.
 <hr>
 <pre>
 /****************************************************************************
-** &#36;Id&#58; qt/src/kernel/qgfx_qws.h   2.2.4   edited 2001-01-31 $
+** &#36;Id&#58; qt/src/kernel/qgfx_qws.h   2.3.0   edited 2001-02-15 $
 **
 ** Definition of QGfx (graphics context) class
 **
@@ -231,12 +231,13 @@ public:
     int height() const { return h; }
     int depth() const { return d; }
     virtual int pixmapDepth() const;
+    int pixelType() const { return pixeltype; }
     int linestep() const { return lstep; }
     int deviceWidth() const { return dw; }
     int deviceHeight() const { return dh; }
     uchar * base() const { return data; }
     // Ask for memory from card cache with alignment
-    virtual uchar * cache(int) { return 0; }
+    virtual uchar * cache(int,int) { return 0; }
     virtual void uncache(uchar *) {}
 
     int screenSize() const { return size; }
@@ -245,8 +246,6 @@ public:
     QRgb * clut() { return screenclut; }
     int numCols() { return screencols; }
 
-    virtual bool isTransformed() const;
-    virtual bool isInterlaced() const;
     virtual QSize mapToDevice( const QSize &amp; ) const;
     virtual QSize mapFromDevice( const QSize &amp; ) const;
     virtual QPoint mapToDevice( const QPoint &amp;, const QSize &amp; ) const;
@@ -257,6 +256,10 @@ public:
     virtual QImage mapFromDevice( const QImage &amp; ) const;
     virtual QRegion mapToDevice( const QRegion &amp;, const QSize &amp; ) const;
     virtual QRegion mapFromDevice( const QRegion &amp;, const QSize &amp; ) const;
+    virtual int transformOrientation() const;
+    virtual bool isTransformed() const;
+
+    virtual bool isInterlaced() const;
 
 protected:
 
@@ -282,7 +285,8 @@ protected:
     int lstep;
     int h;
     int d;
-
+    int pixeltype;
+    
     int dw;
     int dh;
 
@@ -352,8 +356,9 @@ public:
 #endif
     virtual void tiledBlt( int,int,int,int )=0;
 
-    enum SourceType { SourcePen, SourceImage };
-
+    enum SourceType { SourcePen, SourceImage, SourceAccel };
+    enum PixelType { NormalPixel, BGRPixel };
+    
     // Setting up source data - can be solid color or pixmap data
     virtual void setSource(const QPaintDevice *)=0;
     virtual void setSource(const QImage *)=0;
@@ -400,6 +405,7 @@ protected:
     bool is_screen_gfx;
 };
 
+
 // This lives in loadable modules
 
 #ifndef QT_LOADABLE_MODULES
@@ -421,5 +427,5 @@ const unsigned char * qt_probe_bus();
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.4</div>
+<td align="right"><div align="right">Qt version 2.3.0</div>
 </table></div></address></body></html>

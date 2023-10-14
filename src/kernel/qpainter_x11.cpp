@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qpainter_x11.cpp   2.2.4   edited 2001-01-23 $
+** $Id: qt/src/kernel/qpainter_x11.cpp   2.3.0   edited 2001-02-26 $
 **
 ** Implementation of QPainter class for X11
 **
@@ -47,6 +47,8 @@
 #include <stdlib.h>
 #include "qt_x11.h"
 #include "qpaintdevicemetrics.h"
+
+#include <netinet/in.h>
 
 // REVISED: arnt
 
@@ -467,6 +469,176 @@ static inline void release_gc( void *ref )
 }
 
 
+
+#ifdef QT_XFT
+int qt_use_xft (void)
+{
+    static int	checked_env=0;
+    static int	use_xft=0;
+
+    if (!checked_env) {
+	if (XftDefaultHasRender(qt_xdisplay())) {
+	    char *e = getenv ("QT_XFT");
+	    if ( e && (*e == '1' ||
+		       *e == 'y' || *e == 'Y' ||
+		       *e == 't' || *e == 'T' ))
+		use_xft = 1;
+	    else
+		use_xft = 0;
+	}
+	checked_env = 1;
+    }
+    return use_xft;
+}
+
+typedef struct _qt_ft_draw {
+    struct _qt_ft_draw	*next;
+    Drawable		draw;
+    Display		*dpy;
+    Visual		*visual;
+    Colormap		cmap;
+    XftDraw		*ftdraw;
+    int			clip_serial;
+    bool		clip_bad;
+} qt_ft_draw;
+
+static qt_ft_draw   *qt_ft_head;
+
+XftDraw *
+qt_lookup_ft_draw (Drawable draw, QPaintDevice *pdev, QRegion *crgn)
+{
+    qt_ft_draw	**prev, *qt_ft;
+
+    for (prev = &qt_ft_head; (qt_ft = *prev); prev = &qt_ft->next)
+	if (qt_ft->draw == draw)
+	{
+	    if (!qt_ft->ftdraw)
+	    {
+		if (qt_ft->visual)
+		    qt_ft->ftdraw = XftDrawCreate (qt_ft->dpy,
+						   qt_ft->draw,
+						   qt_ft->visual,
+						   qt_ft->cmap);
+		else
+		    qt_ft->ftdraw = XftDrawCreateBitmap (qt_ft->dpy,
+							 (Pixmap) qt_ft->draw);
+		if (!qt_ft->ftdraw)
+		{
+		    *prev = qt_ft->next;
+		    free (qt_ft);
+		    return 0;
+		}
+	    }
+
+	    if (prev != &qt_ft_head)
+	    {
+		*prev = qt_ft->next;
+		qt_ft->next = qt_ft_head;
+		qt_ft_head = qt_ft;
+	    }
+	    if (crgn != 0)
+	    {
+		if (pdev == paintEventDevice)
+		{
+		    QRegion rgn;
+		    if (qt_ft->clip_serial < gc_cache_clip_serial ||
+			qt_ft->clip_bad)
+		    {
+			rgn = crgn->intersect (*paintEventClipRegion);
+			XftDrawSetClip (qt_ft->ftdraw, rgn.handle());
+			qt_ft->clip_serial = gc_cache_clip_serial;
+			qt_ft->clip_bad = FALSE;
+		    }
+		}
+		else
+		{
+		    if (qt_ft->clip_serial || qt_ft->clip_bad)
+		    {
+			XftDrawSetClip (qt_ft->ftdraw, crgn->handle());
+			qt_ft->clip_serial = 0;
+			qt_ft->clip_bad = FALSE;
+		    }
+		}
+	    }
+	    else
+	    {
+		if (pdev == paintEventDevice)
+		{
+		    if (qt_ft->clip_serial < gc_cache_clip_serial ||
+			qt_ft->clip_bad)
+		    {
+			XftDrawSetClip (qt_ft->ftdraw,
+					paintEventClipRegion->handle());
+			qt_ft->clip_serial = gc_cache_clip_serial;
+			qt_ft->clip_bad = FALSE;
+		    }
+		}
+		else
+		{
+		    if (qt_ft->clip_serial || qt_ft->clip_bad)
+		    {
+			XftDrawSetClip (qt_ft->ftdraw, 0);
+			qt_ft->clip_serial = 0;
+			qt_ft->clip_bad = FALSE;
+		    }
+		}
+	    }
+	    return qt_ft->ftdraw;
+	}
+    return 0;
+}
+
+int
+qt_create_ft_draw (Display *dpy, Drawable draw, Visual *visual, Colormap cmap)
+{
+    qt_ft_draw	*qt_ft;
+
+    if (!qt_use_xft ())
+	return 1;
+    qt_ft = (qt_ft_draw *) malloc (sizeof (qt_ft_draw));
+    if (!qt_ft)
+	return 0;
+    qt_ft->next = qt_ft_head;
+    qt_ft_head = qt_ft;
+
+    qt_ft->draw = draw;
+    qt_ft->ftdraw = 0;
+    qt_ft->dpy = dpy;
+    qt_ft->visual = visual;
+    qt_ft->cmap = cmap;
+    qt_ft->clip_serial = 0;
+    qt_ft->clip_bad = FALSE;
+
+    return 1;
+}
+
+void
+qt_destroy_ft_draw (Display */*dpy*/, Drawable draw)
+{
+    qt_ft_draw	**prev, *qt_ft;
+
+    for (prev = &qt_ft_head; (qt_ft = *prev); prev = &qt_ft->next)
+	if (qt_ft->draw == draw)
+	{
+	    *prev = qt_ft->next;
+	    if (qt_ft->ftdraw)
+		XftDrawDestroy (qt_ft->ftdraw);
+	    free (qt_ft);
+	    break;
+	}
+}
+
+void
+qt_invalidate_ft_clip (Drawable draw)
+{
+    qt_ft_draw	*qt_ft;
+
+    for (qt_ft = qt_ft_head; qt_ft; qt_ft = qt_ft->next)
+	if (qt_ft->draw == draw)
+	    qt_ft->clip_bad = TRUE;
+}
+#endif
+
 /*****************************************************************************
   QPainter member functions
  *****************************************************************************/
@@ -596,7 +768,7 @@ void QPainter::updateFont()
     if ( penRef )
 	updatePen();				// force a non-cached GC
     HANDLE h = cfont.handle();
-    if ( h ) {
+    if ( h && h != 1 ) {
 	XSetFont( dpy, gc, cfont.handle() );
     }
 }
@@ -936,12 +1108,12 @@ bool QPainter::begin( const QPaintDevice *pd )
 	return FALSE;
     }
 
-    QWidget *copyFrom = 0;
+    const QWidget *copyFrom = 0;
     if ( pdev_dict ) {				// redirected paint device?
 	pdev = pdev_dict->find( (long)pd );
 	if ( pdev ) {
 	    if ( pd->devType() == QInternal::Widget )
-		copyFrom = (QWidget *)pd;	// copy widget settings
+		copyFrom = (const QWidget *)pd;	// copy widget settings
 	} else {
 	    pdev = (QPaintDevice *)pd;
 	}
@@ -1345,6 +1517,9 @@ void QPainter::setClipping( bool enable )
 	    XSetClipMask( dpy, gc_brush, None );
 	}
     }
+#ifdef QT_XFT
+    qt_invalidate_ft_clip (hd);
+#endif
 }
 
 
@@ -1355,7 +1530,6 @@ void QPainter::setClipping( bool enable )
   and an invalid rectangle will clip the painter to an empty rectangle.
 
   \sa QRect::isValid() QRect::normalize()
-
 */
 
 void QPainter::setClipRect( const QRect &r )
@@ -2738,8 +2912,10 @@ void QPainter::drawText( int x, int y, const QString &str, int len )
 		ty = -abbox.y();	// text position - off-by-one?
 		if ( aw == 0 || ah == 0 )
 		    return;
-		double rx = mat1.m11() * (double)w / (double)aw;
-		double ry = mat1.m22() * (double)h / (double)ah;
+// ###		double rx = mat1.m11() * (double)w / (double)aw;
+//		double ry = mat1.m22() * (double)h / (double)ah;
+		double rx = mat1.m11() * cfont.pointSizeFloat() / newSize;
+		double ry = mat1.m22() * cfont.pointSizeFloat() / newSize;
 		mat2 = QWMatrix( rx, 0, 0, ry, 0, 0 );
 	    } else {
 		mat2 = QPixmap::trueMatrix( mat1, w, h );
@@ -2825,7 +3001,12 @@ void QPainter::drawText( int x, int y, const QString &str, int len )
 		XmbDrawImageString( dpy, hd, set, gc, x, y, mapped, len );
 	}
     } else {
-	if ( !mapped.isNull() ) {
+	if ( !mapped.isNull()
+#ifdef QT_XFT
+	     // XFT always uses unicode mappings
+	     && !qt_use_xft()
+#endif
+	    ) {
 	    if ( cfont.charSet() < QFont::Enc16 )
 		if ( bg_mode == TransparentMode )
 		    XDrawString( dpy, hd, gc, x, y, mapped, len );
@@ -2845,12 +3026,59 @@ void QPainter::drawText( int x, int y, const QString &str, int len )
 	    v = v.visual(); // visual ordering
 	    len = v.length();
 #endif
+#ifdef QT_XFT
+	    if (qt_use_xft ())
+	    {
+		XftFont	    *ft;
+		XftDraw	    *draw;
+		XftColor    color;
 
+		ft = (XftFont *)qt_ft_font (&cfont);
+		if (ft && (draw = qt_lookup_ft_draw (hd, pdev,
+						     testf(ClipOn) ? &crgn :
+						     0)))
+		{
+		    unsigned short   *tstr;
+		    unsigned short  *tshort, c;
+		    int i;
+
+		    tshort = new unsigned short[len];
+		    tstr = (unsigned short *) v.unicode();
+		    for (i = 0; i < len; i++)
+		    {
+			c = tstr[i];
+			tshort[i] = htons( c );
+		    }
+		    if ( bg_mode != TransparentMode )
+		    {
+			XGlyphInfo	extents;
+			XftTextExtents16 (dpy, ft, tshort, len, &extents);
+			color.color.red = backgroundColor().red() | backgroundColor().red() << 8;
+			color.color.green = backgroundColor().green() | backgroundColor().green() << 8;
+			color.color.blue = backgroundColor().blue() | backgroundColor().blue() << 8;
+			color.color.alpha = 0xffff;
+			color.pixel = backgroundColor().pixel();
+			XftDrawRect (draw, &color, x, y - ft->ascent,
+				     extents.xOff, ft->ascent + ft->descent);
+		    }
+		    color.color.red = cpen.color().red() | cpen.color().red() << 8;
+		    color.color.green = cpen.color().green() | cpen.color().green() << 8;
+		    color.color.blue = cpen.color().blue() | cpen.color().blue() << 8;
+		    color.color.alpha = 0xffff;
+		    color.pixel = cpen.color().pixel();
+		    XftDrawString16 (draw, &color, ft, x, y, tshort, len);
+		    delete [] tshort;
+		}
+	    }
+	    else
+#endif
+	    {
 	    if ( bg_mode == TransparentMode )
 		XDrawString16( dpy, hd, gc, x, y, (XChar2b*)v.unicode(), len );
 	    else
 		XDrawImageString16( dpy, hd, gc, x, y, (XChar2b*)v.unicode(), len );
 	}
+    }
     }
 
     if ( cfont.underline() || cfont.strikeOut() ) {

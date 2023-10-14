@@ -30,7 +30,7 @@ remains with Trolltech.
 <hr>
 <pre>
 /****************************************************************************
-** &#36;Id&#58; qt/src/kernel/qgfxraster_qws.h   2.2.4   edited 2001-01-31 $
+** &#36;Id&#58; qt/src/kernel/qgfxraster_qws.h   2.3.0   edited 2001-02-26 $
 **
 ** Definition of QGfxRaster (unaccelerated graphics context) class
 **
@@ -78,9 +78,9 @@ remains with Trolltech.
 #include "qregion.h"
 #endif // QT_H
 
+#include &lt;unistd.h&gt;
 #include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
-#include &lt;unistd.h&gt;
 #include &lt;math.h&gt;
 
 class QGfxRasterBase : public QGfx {
@@ -184,9 +184,11 @@ protected:
 
 protected:
     SourceType srctype;
+    PixelType srcpixeltype;
     unsigned char * srcbits;
     unsigned char * const buffer;
 
+    PixelType pixeltype;
     int width;
     int height;
     int xoffs;
@@ -210,7 +212,6 @@ protected:
 
     bool regionClip;
     QRegion widgetrgn;
-    QRegion setrgn;
     QRegion cliprgn;
     QRect clipbounds;
 
@@ -319,5 +320,5 @@ protected:
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.4</div>
+<td align="right"><div align="right">Qt version 2.3.0</div>
 </table></div></address></body></html>

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qpainter.cpp   2.2.4   edited 2001-01-05 $
+** $Id: qt/src/kernel/qpainter.cpp   2.3.0   edited 2001-03-03 $
 **
 ** Implementation of QPainter, QPen and QBrush classes
 **
@@ -2335,9 +2335,11 @@ void qt_format_text( const QFontMetrics& fm, int x, int y, int w, int h,
     int localTabStops = 0;	       		// tab stops
     if ( tabstops )
 	localTabStops = tabstops;
-    else
+    else {
 	localTabStops = fm.width(QChar('x'))*8;       	// default to 8 times x
-
+	if ( localTabStops == 0 )
+	    localTabStops = fm.maxWidth() * 8;
+    }
     QString word;
 
     bool fakeBreak = FALSE;

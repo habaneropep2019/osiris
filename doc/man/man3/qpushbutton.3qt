@@ -1,5 +1,6 @@
-.TH QPushButton 3qt "1 Febrary 2001" "Trolltech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
+'\" t
+.TH QPushButton 3qt "5 March 2001" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2001 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,7 +8,6 @@
 .nh
 .SH NAME
 QPushButton \- Command button
-.SH SYNOPSIS
 .br
 .PP
 \fC#include <qpushbutton.h>\fR
@@ -144,7 +144,20 @@ Inherits QButton.
 .br
 .in -1c
 .SS "Properties"
-<table border=1 cellpadding=3 cellspacing=0> <tr><th>Type<th>Name<th>READ<th>WRITE<th>Options <tr><td>bool<td>autoDefault<td>autoDefault<td>setAutoDefault<td>&nbsp; <tr><td>bool<td>default<td>isDefault<td>setDefault<td>&nbsp; <tr><td>bool<td>menuButton<td>isMenuButton<td>&nbsp;<td>&nbsp; <tr><td>QIconSet<td>iconSet<td>iconSet<td>setIconSet<td>&nbsp; <tr><td>bool<td>flat<td>isFlat<td>setFlat<td>&nbsp; </table>
+.nf
+.TS
+l l l l l
+- - - - -
+l l l l l.
+Type	Name	READ	WRITE	Options
+bool	autoDefault	autoDefault	setAutoDefault
+bool	default	isDefault	setDefault
+bool	menuButton	isMenuButton
+QIconSet	iconSet	iconSet	setIconSet
+bool	flat	isFlat	setFlat
+.TE
+.fi
+
 .SH DESCRIPTION
 The QPushButton widget provides a command button.
 .PP
@@ -189,7 +202,12 @@ A variation of a command button is a menu button. It provides not just one comma
 .PP
 Other classes of buttons are option buttons (see QRadioButton) and check boxes (see QCheckBox).
 .PP
-<img src="qpushbt-m.png"> <img src="qpushbt-w.png">
+.ce 1
+.B "[Image Omitted]"
+.PP
+
+.ce 1
+.B "[Image Omitted]"
 .PP
 In Qt, the QButton class provides most of the modes and other API, and QPushButton provides GUI logic. See QButton for more information about the API.
 .PP
@@ -293,7 +311,7 @@ See also autoDefault() and setDefault().
 .SH "void QPushButton::setDefault ( bool enable ) \fC[virtual]\fR"
 Sets this button to be the current default button of a dialog if \fIenable\fR is TRUE, or to be a normal button if \fIenable\fR is FALSE.
 .PP
-The current default button gets clicked when the user presses the "Enter" key, independently of which widget in the dialog currently has the keyboard input focus. Only one push button can at any time be the default button. This button is then displayed with an additional frame ( depending on the GUI style ).
+The current default button gets clicked when the user presses the" Enter" key, independently of which widget in the dialog currently has the keyboard input focus. Only one push button can at any time be the default button. This button is then displayed with an additional frame ( depending on the GUI style ).
 .PP
 The default button behaviour is only provided in dialogs. Buttons can always be clicked from the keyboard by pressing return or the spacebar when the button has focus.
 .PP
@@ -367,9 +385,20 @@ Reimplemented for internal reasons; the API is not affected.
 Reimplemented from QWidget.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qpushbutton.html
+.BR http://www.trolltech.com/faq/tech.html
 .SH COPYRIGHT
-Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
+Copyright 1992-2001 Trolltech AS, http://www.trolltech.com.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR
 Generated automatically from the source code.
+.SH BUGS
+If you find a bug in Qt, please report it as described in
+.BR http://doc.trolltech.com/bughowto.html .
+Good bug reports make our job much simpler. Thank you.
+.P
+In case of content or formattting problems with this manual page, please
+report them to
+.BR qt-bugs@trolltech.com .
+Please include the name of the manual page (qpushbutton.3qt) and the Qt
+version (2.3.0).

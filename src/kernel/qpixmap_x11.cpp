@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qpixmap_x11.cpp   2.2.4   edited 2000-08-25 $
+** $Id: qt/src/kernel/qpixmap_x11.cpp   2.3.0   edited 2001-01-26 $
 **
 ** Implementation of QPixmap class for X11
 **
@@ -300,6 +300,11 @@ void QPixmap::init( int w, int h, int d, bool bitmap, Optimization optim )
     data->h = h;
     hd = (HANDLE)XCreatePixmap( x11Display(), DefaultRootWindow(x11Display()),
 				w, h, data->d );
+#ifdef QT_XFT
+    qt_create_ft_draw (x11Display (), hd, 
+		       data->d == 1 ? 0 : (Visual *) x11Visual (),
+		       x11Colormap ());
+#endif
 }
 
 
@@ -313,6 +318,9 @@ void QPixmap::deref()
 	if ( data->maskgc )
 	    XFreeGC( x11Display(), (GC)data->maskgc );
 	if ( hd && qApp ) {
+#ifdef QT_XFT
+	    qt_destroy_ft_draw ( x11Display (), hd);
+#endif
 	    XFreePixmap( x11Display(), hd );
 	    hd = 0;
 	}
@@ -1359,9 +1367,16 @@ bool QPixmap::convertFromImage( const QImage &img, int conversion_flags )
 	hd = 0;
     }
     if ( !hd )					// create new pixmap
+    {
 	hd = (HANDLE)XCreatePixmap( x11Display(),
 				    DefaultRootWindow(x11Display()),
 				    w, h, dd );
+#ifdef QT_XFT
+	qt_create_ft_draw (x11Display (), hd,
+			   dd == 1 ? 0 : (Visual *) x11Visual (), 
+			   x11Colormap ());
+#endif
+    }
 
     XPutImage( dpy, hd, qt_xget_readonly_gc(), xi, 0, 0, 0, 0, w, h );
 

@@ -1,5 +1,6 @@
-.TH QColorGroup 3qt "1 Febrary 2001" "Trolltech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
+'\" t
+.TH QColorGroup 3qt "5 March 2001" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2001 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,7 +8,6 @@
 .nh
 .SH NAME
 QColorGroup \- Group of widget colors
-.SH SYNOPSIS
 .br
 .PP
 \fC#include <qpalette.h>\fR
@@ -177,7 +177,10 @@ Finally, there is a special role for text that needs to be drawn where \fCText\f
 .PP
 Note that text colors can be used for other things than just words: text colors are \fIusually\fR used for text, but it's quite common to have lines, icons and so on that belong with a text color logically.
 .PP
-This image shows most of the color roles in use: <img src="palette.png" width="603" height="166" alt="">
+This image shows most of the color roles in use:
+.ce 1
+.B "[Image Omitted]"
+.PP
 .SH MEMBER FUNCTION DOCUMENTATION
 .SH "QColorGroup::QColorGroup ()"
 Constructs a color group with all colors set to black.
@@ -286,9 +289,20 @@ Writes a color group to the stream.
 See also  Format of the QDataStream operators
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qcolorgroup.html
+.BR http://www.trolltech.com/faq/tech.html
 .SH COPYRIGHT
-Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
+Copyright 1992-2001 Trolltech AS, http://www.trolltech.com.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR
 Generated automatically from the source code.
+.SH BUGS
+If you find a bug in Qt, please report it as described in
+.BR http://doc.trolltech.com/bughowto.html .
+Good bug reports make our job much simpler. Thank you.
+.P
+In case of content or formattting problems with this manual page, please
+report them to
+.BR qt-bugs@trolltech.com .
+Please include the name of the manual page (qcolorgroup.3qt) and the Qt
+version (2.3.0).

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/picture/picture.cpp   2.2.4   edited 2000-08-31 $
+** $Id: qt/examples/picture/picture.cpp   2.3.0   edited 2001-02-20 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -8,7 +8,6 @@
 **
 *****************************************************************************/
 
-#include <ctype.h>
 #include <qapplication.h>
 #include <qpainter.h>
 #include <qpicture.h>
@@ -16,6 +15,7 @@
 #include <qwidget.h>
 #include <qmessagebox.h>
 #include <qfile.h>
+#include <ctype.h>
 
 
 void paintCar( QPainter *p )			// paint a car

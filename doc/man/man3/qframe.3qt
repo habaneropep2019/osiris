@@ -1,5 +1,6 @@
-.TH QFrame 3qt "1 Febrary 2001" "Trolltech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
+'\" t
+.TH QFrame 3qt "5 March 2001" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2001 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,7 +8,6 @@
 .nh
 .SH NAME
 QFrame \- The base class of widgets that can have a frame
-.SH SYNOPSIS
 .br
 .PP
 \fC#include <qframe.h>\fR
@@ -104,7 +104,23 @@ Inherited by QGrid, QGroupBox, QHBox, QLCDNumber, QLabel, QMenuBar, QPopupMenu, 
 .br
 .in -1c
 .SS "Properties"
-<table border=1 cellpadding=3 cellspacing=0> <tr><th>Type<th>Name<th>READ<th>WRITE<th>Options <tr><td>int<td>frameWidth<td>frameWidth<td>&nbsp;<td>&nbsp; <tr><td>QRect<td>contentsRect<td>contentsRect<td>&nbsp;<td>&nbsp; <tr><td>Shape<td>frameShape<td>frameShape<td>setFrameShape<td>&nbsp; <tr><td>Shadow<td>frameShadow<td>frameShadow<td>setFrameShadow<td>&nbsp; <tr><td>int<td>lineWidth<td>lineWidth<td>setLineWidth<td>&nbsp; <tr><td>int<td>margin<td>margin<td>setMargin<td>&nbsp; <tr><td>int<td>midLineWidth<td>midLineWidth<td>setMidLineWidth<td>&nbsp; <tr><td>QRect<td>frameRect<td>frameRect<td>setFrameRect<td> DESIGNABLE false </table>
+.nf
+.TS
+l l l l l
+- - - - -
+l l l l l.
+Type	Name	READ	WRITE	Options
+int	frameWidth	frameWidth
+QRect	contentsRect	contentsRect
+Shape	frameShape	frameShape	setFrameShape
+Shadow	frameShadow	frameShadow	setFrameShadow
+int	lineWidth	lineWidth	setLineWidth
+int	margin	margin	setMargin
+int	midLineWidth	midLineWidth	setMidLineWidth
+QRect	frameRect	frameRect	setFrameRect
+.TE
+.fi
+
 .SH DESCRIPTION
 The QFrame class is the base class of widgets that can have a frame.
 .PP
@@ -140,7 +156,8 @@ The margin is the gap between the frame and the contents of the frame.
 .PP
 This table shows the most useful combinations of styles and widths (and some rather useless ones):
 .PP
-<img src=frames.png width=515 height=414 alt="Table of frame styles">
+.ce 1
+.B "[Image Omitted]"
 .PP
 Examples:
 .(l
@@ -420,9 +437,20 @@ See also QWidget::setAutoMask(), drawFrameMask() and drawContentsMask().
 Reimplemented from QWidget.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qframe.html
+.BR http://www.trolltech.com/faq/tech.html
 .SH COPYRIGHT
-Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
+Copyright 1992-2001 Trolltech AS, http://www.trolltech.com.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR
 Generated automatically from the source code.
+.SH BUGS
+If you find a bug in Qt, please report it as described in
+.BR http://doc.trolltech.com/bughowto.html .
+Good bug reports make our job much simpler. Thank you.
+.P
+In case of content or formattting problems with this manual page, please
+report them to
+.BR qt-bugs@trolltech.com .
+Please include the name of the manual page (qframe.3qt) and the Qt
+version (2.3.0).

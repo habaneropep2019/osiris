@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qapplication.h   2.2.4   edited 2000-10-03 $
+** $Id: qt/src/kernel/qapplication.h   2.3.0   edited 2001-02-08 $
 **
 ** Definition of QApplication class
 **
@@ -80,6 +80,8 @@ public:
 
     int		    argc()	const;
     char	  **argv()	const;
+
+    Type type() const;
 
 #ifndef QT_NO_STYLE
     static QStyle  &style();

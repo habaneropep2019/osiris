@@ -107,10 +107,6 @@ main.o: main.cpp \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
-		../../include/qconfig-minimal.h \
-		../../include/qconfig-small.h \
-		../../include/qconfig-medium.h \
-		../../include/qconfig-large.h \
 		../../include/qconfig.h \
 		../../include/qstring.h \
 		../../include/qcstring.h \
@@ -159,10 +155,6 @@ richtext.o: richtext.cpp \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
-		../../include/qconfig-minimal.h \
-		../../include/qconfig-small.h \
-		../../include/qconfig-medium.h \
-		../../include/qconfig-large.h \
 		../../include/qconfig.h \
 		../../include/qstring.h \
 		../../include/qcstring.h \
@@ -224,10 +216,6 @@ moc_richtext.o: moc_richtext.cpp \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
-		../../include/qconfig-minimal.h \
-		../../include/qconfig-small.h \
-		../../include/qconfig-medium.h \
-		../../include/qconfig-large.h \
 		../../include/qconfig.h \
 		../../include/qstring.h \
 		../../include/qcstring.h \

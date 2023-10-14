@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qsplitter.cpp   2.2.4   edited 2000-11-11 $
+** $Id: qt/src/widgets/qsplitter.cpp   2.3.0   edited 2001-03-02 $
 **
 **  Splitter widget
 **
@@ -619,7 +619,9 @@ void QSplitter::getRange( int id, int *min, int *max )
     int i;
     for ( i = 0; i < id; i++ ) {
 	QSplitterLayoutStruct *s = data->list.at(i);
-	if ( s->isSplitter ) {
+	if ( s->wid->isHidden() ) {
+	    //ignore
+	} else if ( s->isSplitter ) {
 	    minB += s->sizer;
 	    maxB += s->sizer;
 	} else {
@@ -629,7 +631,9 @@ void QSplitter::getRange( int id, int *min, int *max )
     }
     for ( i = id; i < n; i++ ) {
 	QSplitterLayoutStruct *s = data->list.at(i);
-	if ( s->isSplitter ) {
+	if ( s->wid->isHidden() ) {
+	    //ignore
+	} else 	if ( s->isSplitter ) {
 	    minA += s->sizer;
 	    maxA += s->sizer;
 	} else {

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/showimg/imagetexteditor.cpp   2.2.4   edited 2000-08-31 $
+** $Id: qt/examples/showimg/imagetexteditor.cpp   2.3.0   edited 2001-02-15 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -81,7 +81,6 @@ void ImageTextEditor::imageChanged()
     text->clear();
     languages->insertItem("<any>");
 
-debug("%d keys\n%d languages",image.textKeys().count(),image.textLanguages().count());
     languages->insertStringList(image.textLanguages());
     keys->insertStringList(image.textKeys());
 
@@ -100,7 +99,7 @@ void ImageTextEditor::updateText()
     newlang->setText(languages->currentText());
     newkey->setText(keys->currentText());
     QString t = image.text(currKey(),currLang());
-debug("Found %s/%s = \"%s\"",currKey().latin1(),currLang().latin1(),t.latin1());
+
     text->setText(t);
 }
 
@@ -139,6 +138,5 @@ void ImageTextEditor::storeText()
 {
     if ( currKey().length() > 0 ) {
 	image.setText(currKey(),currLang(),currText());
-debug("Set %s/%s to \"%s\"",currKey().latin1(),currLang().latin1(),currText().latin1());
     }
 }

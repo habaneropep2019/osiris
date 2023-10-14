@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/doc/indices.doc   2.2.4   edited 2001-01-23 $
+** $Id: qt/doc/indices.doc   2.3.0   edited 2001-02-13 $
 **
 ** Miscellaneous index pages
 **
@@ -34,7 +34,7 @@
 **********************************************************************/
 
 #if defined(DEBUG)
-static char ident[] = "$Id: qt/doc/indices.doc   2.2.4   edited 2001-01-23 $";
+static char ident[] = "$Id: qt/doc/indices.doc   2.3.0   edited 2001-02-13 $";
 #endif
 
 /*! \page index.html
@@ -62,7 +62,8 @@ What´s New
 <ul>
 <li> <a href="aboutqt.html" >About Qt</a>
 <li> <a href="commonproblems.html">Common Problems</a>
-<li> <a href="winsystem.html"> Windowsystem-specific notes</a>
+<li> <a href="http://www.trolltech.com/developer/faq/">FAQs</a>
+<li> <a href="winsystem.html">Windowsystem-specific notes</a>
 <li> <a href="buyhowto.html">How to buy Qt</a>
 </ul>
 </td>

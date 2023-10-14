@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qjpunicode.cpp   2.2.4   edited 2000-12-04 $
+** $Id: qt/src/tools/qjpunicode.cpp   2.3.0   edited 2001-01-26 $
 **
 ** Implementation of QJpUnicodeConv class
 **

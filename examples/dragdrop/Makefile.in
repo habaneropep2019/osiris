@@ -110,10 +110,6 @@ dropsite.o: dropsite.cpp \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
-		../../include/qconfig-minimal.h \
-		../../include/qconfig-small.h \
-		../../include/qconfig-medium.h \
-		../../include/qconfig-large.h \
 		../../include/qconfig.h \
 		../../include/qstring.h \
 		../../include/qcstring.h \
@@ -161,10 +157,6 @@ main.o: main.cpp \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
-		../../include/qconfig-minimal.h \
-		../../include/qconfig-small.h \
-		../../include/qconfig-medium.h \
-		../../include/qconfig-large.h \
 		../../include/qconfig.h \
 		../../include/qstring.h \
 		../../include/qcstring.h \
@@ -222,10 +214,6 @@ secret.o: secret.cpp \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
-		../../include/qconfig-minimal.h \
-		../../include/qconfig-small.h \
-		../../include/qconfig-medium.h \
-		../../include/qconfig-large.h \
 		../../include/qconfig.h \
 		../../include/qwindowdefs.h \
 		../../include/qstring.h \
@@ -274,10 +262,6 @@ moc_dropsite.o: moc_dropsite.cpp \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
-		../../include/qconfig-minimal.h \
-		../../include/qconfig-small.h \
-		../../include/qconfig-medium.h \
-		../../include/qconfig-large.h \
 		../../include/qconfig.h \
 		../../include/qstring.h \
 		../../include/qcstring.h \

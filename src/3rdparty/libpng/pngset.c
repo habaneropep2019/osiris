@@ -1,9 +1,9 @@
 
 /* pngset.c - storage of image information into info struct
  *
- * libpng 1.0.7 - July 1, 2000
+ * libpng 1.0.9 - January 31, 2001
  * For conditions of distribution and use, see copyright notice in png.h
- * Copyright (c) 1998, 1999, 2000 Glenn Randers-Pehrson
+ * Copyright (c) 1998-2001 Glenn Randers-Pehrson
  * (Version 0.96 Copyright (c) 1996, 1997 Andreas Dilger)
  * (Version 0.88 Copyright (c) 1995, 1996 Guy Eric Schalnat, Group 42, Inc.)
  *
@@ -133,12 +133,31 @@ png_set_gAMA_fixed(png_structp png_ptr, png_infop info_ptr, png_fixed_point
 void PNGAPI
 png_set_hIST(png_structp png_ptr, png_infop info_ptr, png_uint_16p hist)
 {
+   int	i;
+
    png_debug1(1, "in %s storage function\n", "hIST");
    if (png_ptr == NULL || info_ptr == NULL)
       return;
+   if (info_ptr->num_palette == 0)
+       png_warning(png_ptr,
+		   "Palette size 0, hIST allocation skipped.");
 
-   info_ptr->hist = hist;
+#ifdef PNG_FREE_ME_SUPPORTED
+   png_free_data(png_ptr, info_ptr, PNG_FREE_HIST, 0);
+#endif
+   png_ptr->hist = (png_uint_16p)png_malloc(png_ptr,
+      (png_uint_32)(info_ptr->num_palette * sizeof (png_uint_16)));
+
+   for (i = 0; i < info_ptr->num_palette; i++)
+       png_ptr->hist[i] = hist[i];
+   info_ptr->hist = png_ptr->hist;
    info_ptr->valid |= PNG_INFO_hIST;
+
+#ifdef PNG_FREE_ME_SUPPORTED
+   info_ptr->free_me |= PNG_FREE_HIST;
+#else
+   png_ptr->flags |= PNG_FLAG_FREE_HIST;
+#endif
 }
 #endif
 
@@ -212,7 +231,7 @@ png_set_pCAL(png_structp png_ptr, png_infop info_ptr,
       return;
 
    length = png_strlen(purpose) + 1;
-   png_debug1(3, "allocating purpose for info (%d bytes)\n", length);
+   png_debug1(3, "allocating purpose for info (%lu bytes)\n", length);
    info_ptr->pcal_purpose = (png_charp)png_malloc(png_ptr, length);
    png_memcpy(info_ptr->pcal_purpose, purpose, (png_size_t)length);
 
@@ -223,7 +242,7 @@ png_set_pCAL(png_structp png_ptr, png_infop info_ptr,
    info_ptr->pcal_nparams = (png_byte)nparams;
 
    length = png_strlen(units) + 1;
-   png_debug1(3, "allocating units for info (%d bytes)\n", length);
+   png_debug1(3, "allocating units for info (%lu bytes)\n", length);
    info_ptr->pcal_units = (png_charp)png_malloc(png_ptr, length);
    png_memcpy(info_ptr->pcal_units, units, (png_size_t)length);
 
@@ -234,7 +253,7 @@ png_set_pCAL(png_structp png_ptr, png_infop info_ptr,
    for (i = 0; i < nparams; i++)
    {
       length = png_strlen(params[i]) + 1;
-      png_debug2(3, "allocating parameter %d for info (%d bytes)\n", i, length);
+      png_debug2(3, "allocating parameter %d for info (%lu bytes)\n", i, length);
       info_ptr->pcal_params[i] = (png_charp)png_malloc(png_ptr, length);
       png_memcpy(info_ptr->pcal_params[i], params[i], (png_size_t)length);
    }
@@ -320,9 +339,26 @@ png_set_PLTE(png_structp png_ptr, png_infop info_ptr,
    if (png_ptr == NULL || info_ptr == NULL)
       return;
 
-   info_ptr->palette = palette;
+   /*
+    * It may not actually be necessary to set png_ptr->palette here;
+    * we do it for backward compatibility with the way the png_handle_tRNS
+    * function used to do the allocation.
+    */
+#ifdef PNG_FREE_ME_SUPPORTED
+   png_free_data(png_ptr, info_ptr, PNG_FREE_PLTE, 0);
+#endif
+   png_ptr->palette = (png_colorp)png_zalloc(png_ptr, (uInt)num_palette,
+      sizeof (png_color));
+   memcpy(png_ptr->palette, palette, num_palette * sizeof (png_color));
+   info_ptr->palette = png_ptr->palette;
+   info_ptr->num_palette = png_ptr->num_palette = (png_uint_16)num_palette;
 
-   info_ptr->num_palette = (png_uint_16)num_palette;
+#ifdef PNG_FREE_ME_SUPPORTED
+   info_ptr->free_me |= PNG_FREE_PLTE;
+#else
+   png_ptr->flags |= PNG_FLAG_FREE_PLTE;
+#endif
+
    info_ptr->valid |= PNG_INFO_PLTE;
 }
 
@@ -556,7 +592,7 @@ png_set_text(png_structp png_ptr, png_infop info_ptr, png_textp text_ptr,
       textp->key = (png_charp)png_malloc(png_ptr,
          (png_uint_32)(key_len + text_length + lang_len + lang_key_len + 4));
       png_debug2(2, "Allocated %d bytes at %x in png_set_text\n",
-         key_len + lang_len + lang_key_len + text_length + 4, textp->key);
+         key_len + lang_len + lang_key_len + text_length + 4, (int)textp->key);
 
       png_memcpy(textp->key, text_ptr[i].key,
          (png_size_t)(key_len));
@@ -631,7 +667,23 @@ png_set_tRNS(png_structp png_ptr, png_infop info_ptr,
       return;
 
    if (trans != NULL)
-      info_ptr->trans = trans;
+   {
+       /*
+	* It may not actually be necessary to set png_ptr->trans here;
+	* we do it for backward compatibility with the way the png_handle_tRNS
+	* function used to do the allocation.
+	*/
+#ifdef PNG_FREE_ME_SUPPORTED
+       png_free_data(png_ptr, info_ptr, PNG_FREE_TRNS, 0);
+#endif
+       png_ptr->trans = info_ptr->trans = png_malloc(png_ptr, num_trans);
+       memcpy(info_ptr->trans, trans, num_trans);
+#ifdef PNG_FREE_ME_SUPPORTED
+       info_ptr->free_me |= PNG_FREE_TRNS;
+#else
+       png_ptr->flags |= PNG_FLAG_FREE_TRNS;
+#endif
+   }
 
    if (trans_values != NULL)
    {
@@ -659,6 +711,7 @@ png_set_sPLT(png_structp png_ptr,
     png_memcpy(np, info_ptr->splt_palettes,
            info_ptr->splt_palettes_num * sizeof(png_sPLT_t));
     png_free(png_ptr, info_ptr->splt_palettes);
+    info_ptr->splt_palettes=NULL;
 
     for (i = 0; i < nentries; i++)
     {
@@ -703,6 +756,7 @@ png_set_unknown_chunks(png_structp png_ptr,
     png_memcpy(np, info_ptr->unknown_chunks,
            info_ptr->unknown_chunks_num * sizeof(png_unknown_chunk));
     png_free(png_ptr, info_ptr->unknown_chunks);
+    info_ptr->unknown_chunks=NULL;
 
     for (i = 0; i < num_unknowns; i++)
     {
@@ -728,7 +782,7 @@ void PNGAPI
 png_set_unknown_chunk_location(png_structp png_ptr, png_infop info_ptr,
    int chunk, int location)
 {
-   if(png_ptr != NULL && info_ptr != NULL && chunk >= 0 && chunk < 
+   if(png_ptr != NULL && info_ptr != NULL && chunk >= 0 && chunk <
          (int)info_ptr->unknown_chunks_num)
       info_ptr->unknown_chunks[chunk].location = (png_byte)location;
 }
@@ -739,10 +793,27 @@ png_set_unknown_chunk_location(png_structp png_ptr, png_infop info_ptr,
 void PNGAPI
 png_permit_empty_plte (png_structp png_ptr, int empty_plte_permitted)
 {
-   png_debug1(1, "in png_permit_empty_plte\n", "");
+   /* This function is deprecated in favor of png_permit_mng_features()
+      and will be removed from libpng-2.0.0 */
+   png_debug(1, "in png_permit_empty_plte, DEPRECATED.\n");
    if (png_ptr == NULL)
       return;
-   png_ptr->empty_plte_permitted=(png_byte)empty_plte_permitted;
+   png_ptr->mng_features_permitted = (png_byte)
+     ((png_ptr->mng_features_permitted & (~(PNG_FLAG_MNG_EMPTY_PLTE))) |
+     ((empty_plte_permitted & PNG_FLAG_MNG_EMPTY_PLTE)));
+}
+#endif
+
+#if defined(PNG_MNG_FEATURES_SUPPORTED)
+png_uint_32 PNGAPI
+png_permit_mng_features (png_structp png_ptr, png_uint_32 mng_features)
+{
+   png_debug(1, "in png_permit_mng_features\n");
+   if (png_ptr == NULL)
+      return (png_uint_32)0;
+   png_ptr->mng_features_permitted =
+     (png_byte)(mng_features & PNG_ALL_MNG_FEATURES);
+   return (png_uint_32)png_ptr->mng_features_permitted;
 }
 #endif
 
@@ -774,6 +845,7 @@ png_set_keep_unknown_chunks(png_structp png_ptr, int keep, png_bytep
     {
        png_memcpy(new_list, png_ptr->chunk_list, 5*old_num_chunks);
        png_free(png_ptr, png_ptr->chunk_list);
+       png_ptr->chunk_list=NULL;
     }
     png_memcpy(new_list+5*old_num_chunks, chunk_list, 5*num_chunks);
     for (p=new_list+5*old_num_chunks+4, i=0; i<num_chunks; i++, p+=5)
@@ -822,6 +894,8 @@ png_set_compression_buffer_size(png_structp png_ptr, png_uint_32 size)
        png_free(png_ptr, png_ptr->zbuf);
     png_ptr->zbuf_size = (png_size_t)size;
     png_ptr->zbuf = (png_bytep)png_malloc(png_ptr, size);
+    if(!png_ptr->zbuf)
+       png_error(png_ptr,"Unable to malloc zbuf");
     png_ptr->zstream.next_out = png_ptr->zbuf;
     png_ptr->zstream.avail_out = (uInt)png_ptr->zbuf_size;
 }
@@ -832,3 +906,4 @@ png_set_invalid(png_structp png_ptr, png_infop info_ptr, int mask)
    if (png_ptr && info_ptr)
       info_ptr->valid &= ~(mask);
 }
+

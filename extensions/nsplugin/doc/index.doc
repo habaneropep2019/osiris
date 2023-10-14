@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/extensions/nsplugin/doc/index.doc   2.2.4   edited 2001-01-02 $
+** $Id: qt/extensions/nsplugin/doc/index.doc   2.3.0   edited 2001-02-23 $
 **
 ** Index page
 **
@@ -8,7 +8,7 @@
 *****************************************************************************/
 
 #if defined(DEBUG)
-static char ident[] = "$Id: qt/extensions/nsplugin/doc/index.doc   2.2.4   edited 2001-01-02 $";
+static char ident[] = "$Id: qt/extensions/nsplugin/doc/index.doc   2.3.0   edited 2001-02-23 $";
 #endif
 
 /*! \page nsplugin.html
@@ -75,7 +75,7 @@ WWW browser supporting the same protocol.
 	section of their browser preferences.
 </ol>
 
-We are working on streamlining the build process for Qt-based Netscape Plugins.
+We are working on streamlining the build process for Qt-based Netscape Plugins.	
 
 <h3>Building under X11</h3>
 
@@ -88,6 +88,8 @@ We are working on streamlining the build process for Qt-based Netscape Plugins.
 <h3>Building under Windows</h3>
 
 <ul>
+ <li>Qt needs to be built as a static library when building Netscape plugins, we are
+     looking into the problem of making it work with Qt as a dynamic library.
  <li>Plugins must be named <tt>np</tt><i>name</i><tt>.dll</tt>,
      or the browser will ignore them.
  <li>The link step must include:

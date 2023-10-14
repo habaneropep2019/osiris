@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/xml/qxml.cpp   2.2.4   edited 2001-01-15 $
+** $Id: qt/src/xml/qxml.cpp   2.3.0   edited 2001-02-18 $
 **
 ** Implementation of QXmlSimpleReader and related classes.
 **
@@ -1666,6 +1666,7 @@ private:
     bool useNamespaces;
     bool useNamespacePrefixes;
     bool reportWhitespaceCharData;
+    bool reportEntities;
 
     // used to build the attribute list
     QXmlAttributes attList;
@@ -1917,6 +1918,7 @@ QXmlSimpleReader::QXmlSimpleReader()
     d->useNamespaces = TRUE;
     d->useNamespacePrefixes = FALSE;
     d->reportWhitespaceCharData = TRUE;
+    d->reportEntities = FALSE;
 }
 
 /*!
@@ -1943,6 +1945,8 @@ bool QXmlSimpleReader::feature( const QString& name, bool *ok ) const
 	return d->useNamespacePrefixes;
     } else if ( name == "http://trolltech.com/xml/features/report-whitespace-only-CharData" ) {
 	return d->reportWhitespaceCharData;
+    } else if ( name == "http://trolltech.com/xml/features/report-start-end-entity" ) {
+	return d->reportEntities;
     } else {
 	qWarning( "Unknown feature " + name );
 	if ( ok != 0 )
@@ -1977,6 +1981,8 @@ void QXmlSimpleReader::setFeature( const QString& name, bool value )
 	d->useNamespacePrefixes = value;
     } else if ( name == "http://trolltech.com/xml/features/report-whitespace-only-CharData" ) {
 	d->reportWhitespaceCharData = value;
+    } else if ( name == "http://trolltech.com/xml/features/report-start-end-entity" ) {
+	d->reportEntities = value;
     } else {
 	qWarning( "Unknown feature " + name );
     }
@@ -2750,6 +2756,18 @@ bool QXmlSimpleReader::parseContent()
 		    stringClear();
 		    parseOk = parseReference( charDataRead, InContent );
 		} else {
+		    if ( d->reportEntities ) {
+			// this is undocumented so far; do this right in Qt 3.0
+			if ( contentHnd ) {
+			    if ( d->reportWhitespaceCharData || !string().simplifyWhiteSpace().isEmpty() ) {
+				if ( !contentHnd->characters( string() ) ) {
+				    d->error = contentHnd->errorString();
+				    goto parseError;
+				}
+			    }
+			}
+			stringClear();
+		    }
 		    bool tmp;
 		    parseOk = parseReference( tmp, InContent );
 		}

@@ -31,7 +31,7 @@ height="100" src="face.png" alt="Home" border="0">
   <hr>
 
   Header file: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/wizard/wizard.h   2.2.4   edited 2000-08-31 $
+** &#36;Id&#58; qt/examples/wizard/wizard.h   2.3.0   edited 2001-01-26 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -81,7 +81,7 @@ protected slots:
   <hr>
 
   Implementation: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/wizard/wizard.cpp   2.2.4   edited 2000-08-31 $
+** &#36;Id&#58; qt/examples/wizard/wizard.cpp   2.3.0   edited 2001-01-26 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -104,14 +104,14 @@ protected slots:
 Wizard::Wizard( <a href="qwidget.html">QWidget</a> *parent, const char *name )
     : <a href="qwizard.html">QWizard</a>( parent, name, TRUE )
 {
-    <a href=#126>setupPage1</a>();
-    <a href=#127>setupPage2</a>();
-    <a href=#128>setupPage3</a>();
+    <a href=#131>setupPage1</a>();
+    <a href=#132>setupPage2</a>();
+    <a href=#133>setupPage3</a>();
 
     key-&gt;setFocus();
 }
 
-void <a name="126"></a>Wizard::setupPage1()
+void <a name="131"></a>Wizard::setupPage1()
 {
     page1 = new <a href="qhbox.html">QHBox</a>( this );
     page1-&gt;setSpacing(8);
@@ -135,7 +135,7 @@ void <a name="126"></a>Wizard::setupPage1()
     key-&gt;setMaxLength( 4 );
     key-&gt;setValidator( new QIntValidator( 9999, 0, key ) );
 
-    <a href="qobject.html#c2d209">connect</a>( key, SIGNAL( textChanged( const QString &amp; ) ), this, SLOT( <a href=#130>keyChanged</a>( const QString &amp; ) ) );
+    <a href="qobject.html#c2d209">connect</a>( key, SIGNAL( textChanged( const QString &amp; ) ), this, SLOT( <a href=#135>keyChanged</a>( const QString &amp; ) ) );
 
     <a href="qwizard.html#73ff8b">addPage</a>( page1, "Personal Key" );
 
@@ -143,7 +143,7 @@ void <a name="126"></a>Wizard::setupPage1()
     <a href="qwizard.html#90375c">setHelpEnabled</a>( page1, FALSE );
 }
 
-void <a name="127"></a>Wizard::setupPage2()
+void <a name="132"></a>Wizard::setupPage2()
 {
     page2 = new <a href="qhbox.html">QHBox</a>( this );
     page2-&gt;setSpacing(8);
@@ -190,15 +190,15 @@ void <a name="127"></a>Wizard::setupPage2()
     phone = new <a href="qlineedit.html">QLineEdit</a>( row4 );
     email = new <a href="qlineedit.html">QLineEdit</a>( row5 );
 
-    <a href="qobject.html#c2d209">connect</a>( firstName, SIGNAL( textChanged( const QString &amp; ) ), this, SLOT( <a href=#131>dataChanged</a>( const QString &amp; ) ) );
-    <a href="qobject.html#c2d209">connect</a>( lastName, SIGNAL( textChanged( const QString &amp; ) ), this, SLOT( <a href=#131>dataChanged</a>( const QString &amp; ) ) );
-    <a href="qobject.html#c2d209">connect</a>( email, SIGNAL( textChanged( const QString &amp; ) ), this, SLOT( <a href=#131>dataChanged</a>( const QString &amp; ) ) );
+    <a href="qobject.html#c2d209">connect</a>( firstName, SIGNAL( textChanged( const QString &amp; ) ), this, SLOT( <a href=#136>dataChanged</a>( const QString &amp; ) ) );
+    <a href="qobject.html#c2d209">connect</a>( lastName, SIGNAL( textChanged( const QString &amp; ) ), this, SLOT( <a href=#136>dataChanged</a>( const QString &amp; ) ) );
+    <a href="qobject.html#c2d209">connect</a>( email, SIGNAL( textChanged( const QString &amp; ) ), this, SLOT( <a href=#136>dataChanged</a>( const QString &amp; ) ) );
 
     <a href="qwizard.html#73ff8b">addPage</a>( page2, "Personal Data" );
     <a href="qwizard.html#90375c">setHelpEnabled</a>( page2, FALSE );
 }
 
-void <a name="128"></a>Wizard::setupPage3()
+void <a name="133"></a>Wizard::setupPage3()
 {
     page3 = new <a href="qhbox.html">QHBox</a>( this );
     page3-&gt;setSpacing(8);
@@ -258,7 +258,7 @@ void <a name="128"></a>Wizard::setupPage3()
     <a href="qwizard.html#90375c">setHelpEnabled</a>( page3, FALSE );
 }
 
-void <a name="129"></a>Wizard::showPage( <a href="qwidget.html">QWidget</a>* page )
+void <a name="134"></a>Wizard::showPage( <a href="qwidget.html">QWidget</a>* page )
 {
     if ( page == page1 ) {
     } else if ( page == page2 ) {
@@ -274,10 +274,10 @@ void <a name="129"></a>Wizard::showPage( <a href="qwidget.html">QWidget</a>* pag
     <a href="qwizard.html#59c39e">QWizard::showPage</a>(page);
 
     if ( page == page1 ) {
-        <a href=#130>keyChanged</a>( key-&gt;text() );
+        <a href=#135>keyChanged</a>( key-&gt;text() );
         key-&gt;setFocus();
     } else if ( page == page2 ) {
-        <a href=#131>dataChanged</a>( firstName-&gt;text() );
+        <a href=#136>dataChanged</a>( firstName-&gt;text() );
         firstName-&gt;setFocus();
     } else if ( page == page3 ) {
         <a href="qwizard.html#0ead5e">finishButton</a>()-&gt;setEnabled( TRUE );
@@ -285,7 +285,7 @@ void <a name="129"></a>Wizard::showPage( <a href="qwidget.html">QWidget</a>* pag
     }
 }
 
-void <a name="130"></a>Wizard::keyChanged( const QString &amp;text )
+void <a name="135"></a>Wizard::keyChanged( const QString &amp;text )
 {
     if ( text.length() == 4 )
         <a href="qwizard.html#ed4fe0">nextButton</a>()-&gt;setEnabled( TRUE );
@@ -293,7 +293,7 @@ void <a name="130"></a>Wizard::keyChanged( const QString &amp;text )
         <a href="qwizard.html#ed4fe0">nextButton</a>()-&gt;setEnabled( FALSE );
 }
 
-void <a name="131"></a>Wizard::dataChanged( const QString &amp; )
+void <a name="136"></a>Wizard::dataChanged( const QString &amp; )
 {
     if ( !firstName-&gt;text().isEmpty() &amp;&amp;
          !lastName-&gt;text().isEmpty() &amp;&amp;
@@ -309,7 +309,7 @@ void <a name="131"></a>Wizard::dataChanged( const QString &amp; )
 
   Main:
 <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/wizard/main.cpp   2.2.4   edited 2000-08-31 $
+** &#36;Id&#58; qt/examples/wizard/main.cpp   2.3.0   edited 2001-01-26 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -333,5 +333,5 @@ int main(int argc,char **argv)
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.4</div>
+<td align="right"><div align="right">Qt version 2.3.0</div>
 </table></div></address></body></html>

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/tools/qembed/qembed.cpp   2.2.4   edited 2000-12-18 $
+** $Id: qt/tools/qembed/qembed.cpp   2.3.0   edited 2001-01-26 $
 **
 ** Utility program for embedding binary data into a C/C++ source code.
 ** It reads a binary file and generates a C array with the binary data.

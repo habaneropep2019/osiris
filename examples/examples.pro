@@ -86,3 +86,4 @@ embedded:SUBDIRS += winmanager \
 
 X11DIRS	    =   biff \
 		desktop
+win32:SUBDIRS += trayicon

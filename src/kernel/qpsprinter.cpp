@@ -1,5 +1,5 @@
 /**********************************************************************
-** $Id: qt/src/kernel/qpsprinter.cpp   2.2.4   edited 2001-01-29 $
+** $Id: qt/src/kernel/qpsprinter.cpp   2.3.0   edited 2001-03-01 $
 **
 ** Implementation of QPSPrinter class
 **
@@ -34,12 +34,43 @@
 ** not clear to you.
 **
 **********************************************************************/
+/*!  
+  \mustquote
+
+  True type font embedding for Qt's post script driver:
+  
+ Copyright 1995, Trinity College Computing Center.
+ Written by David Chappell.
+
+ Permission to use, copy, modify, and distribute this software and its
+ documentation for any purpose and without fee is hereby granted, provided
+ that the above copyright notice appear in all copies and that both that
+ copyright notice and this permission notice appear in supporting
+ documentation.  This software is provided "as is" without express or
+ implied warranty.
+
+ TrueType font support.  These functions allow PPR to generate
+ PostScript fonts from Microsoft compatible TrueType font files.
+
+ The functions in this file do most of the work to convert a
+ TrueType font to a type 3 PostScript font.
+
+ Most of the material in this file is derived from a program called
+ "ttf2ps" which L. S. Ng posted to the usenet news group
+ "comp.sources.postscript".  The author did not provide a copyright
+ notice or indicate any restrictions on use.
+
+ Last revised 11 July 1995.                                                 
+*/       
 
 #include "qpsprinter_p.h"
 
 #ifndef QT_NO_PRINTER
 
+#undef Q_PRINTER_USE_TYPE42
+
 #include "qpainter.h"
+#include "qapplication.h"
 #include "qpaintdevicemetrics.h"
 #include "qimage.h"
 #include "qdatetime.h"
@@ -52,6 +83,7 @@
 #include "qbuffer.h"
 #include "qintdict.h"
 #include "qtextcodec.h"
+#include "qjpunicode.h"
 
 #include <ctype.h>
 #if defined(_OS_WIN32_)
@@ -60,6 +92,22 @@
 #include <unistd.h>
 #endif
 
+#ifdef _WS_X11_
+#include "qt_x11.h"
+#ifdef None
+#undef None
+#endif
+#ifdef GrayScale
+#undef GrayScale
+#endif
+#endif
+
+static bool qt_gen_epsf = TRUE;
+
+void qt_generate_epsf( bool b )
+{
+    qt_gen_epsf = b;
+}
 
 // Note: this is comment-stripped and word-wrapped later.
 // Note: stripHeader() constrains the postscript used in this prolog.
@@ -90,10 +138,7 @@ static const char * const ps_header[] = {
 "/CM {currentmatrix} D",
 "/SM {setmatrix} D",
 "/TR {translate} D",
-"/SRGB {setrgbcolor} D",
-"/SC {aload pop SRGB} D",
-"/GS {gsave} D",
-"/GR {grestore} D",
+"/SC {aload pop setrgbcolor} D",
 "",
 "/BSt 0 d",				// brush style
 "/LWi 1 d",				// line width
@@ -137,14 +182,14 @@ static const char * const ps_header[] = {
 "/QS {",				// stroke command
 "    PSt 0 ne",				// != NO_PEN
 "    { LWi SW",				// set line width
-"      GS",
+"      gsave",
 "      PCol SC",			// set pen color
 "      true GPS 0 setdash S",		// draw line pattern
 "      OMo PSt 1 ne and",		// opaque mode and not solid line?
-"      { GR BkCol SC",
+"      { grestore BkCol SC",
 "	false GPS dup 0 get setdash S",	// fill in opaque pattern
 "      }",
-"      { GR } ifelse",
+"      { grestore } ifelse",
 "    } if",
 "} D",
 "",
@@ -278,7 +323,7 @@ static const char * const ps_header[] = {
 "/defM matrix d",
 "",
 "/BF {",				// brush fill
-"   GS",
+"   gsave",
 "   BSt 1 eq",				// solid brush?
 "   {",
 "     BCol SC"
@@ -342,7 +387,7 @@ static const char * const ps_header[] = {
 "     ",
 "   {",
 "   } if",
-"   GR",
+"   grestore",
 "} D",
 "",
 "",
@@ -439,8 +484,8 @@ static const char * const ps_header[] = {
 "} D",
 "",
 "/CLO {",				// clipping off
-"    GR",				// restore top of page state
-"    GS",				// save it back again
+"    grestore",				// restore top of page state
+"    gsave",				// save it back again
 "    defM SM",				// set coordsys (defensive progr.)
 "} D",
 "",
@@ -530,12 +575,12 @@ static const char * const ps_header[] = {
 "/SV {",				// Save painter state
 "    BSt LWi PSt Cx Cy WFi OMo BCol PCol BkCol",
 "    /nS nS 1 add d",
-"    GS",
+"    gsave",
 "} D",
 "",
 "/RS {",				// Restore painter state
 "    nS 0 gt",
-"    { GR",
+"    { grestore",
 "      /BkCol ED /PCol ED /BCol ED /OMo ED /WFi ED",
 "      /Cy ED /Cx ED /PSt ED /LWi ED /BSt ED",
 "      /nS nS 1 sub d",
@@ -580,17 +625,54 @@ static const char * const ps_header[] = {
 "    concat",
 "} D",
 "",
-"/MF {",				// newname encoding fontname
-"  findfont dup length dict begin",
-"  {",
-"    1 index /FID ne",
-"    {d}{pop pop}ifelse",
+"",
+// this function tries to find a suitable postscript font. We try quite hard not to get courier for a 
+// proportional font. The following takes an array of fonts. The algorithm will take the first one that
+// gives a match (defined as not resulting in a courier font). 
+// each entry in the table is an array of the form [ /Fontname x-stretch slant ]
+// x-strtch can be used to stretch/squeeze the font in x direction. This gives better results when
+// eg substituting helvetica for arial
+// slant is an optional slant. 0 is non slanted, 0.2 is a typical value for a syntetic oblique.
+// encoding can be either an encoding vector of false if the default font encoding is requested.
+"/qtfindfont {",	       		// fntlist
+"  true exch",  			// push a dummy on the stack, 
+"  {", 				// so the loop over the array will leave a font in any case when exiting.
+"    exch pop",			// (dummy | oldfont) fontarray
+"    dup 0 get dup findfont",	       	// get the fontname from the array and load it
+"    dup /FontName get",		// see if the font exists
+"    3 -1 roll eq {",			// see if fontname and the one provided are equal
+"      exit",			  
+"    } {",
+"      pop",
+"    } ifelse",
 "  } forall",
-"  /Encoding ED currentdict end",
+"  exch",				// font fontarray
+"} d",
+"",
+"/qtdefinefont {",			// newname encoding font fontarray 	defines a postscript font
+"  dup",
+"  1 get /fxscale exch def",		// define scale, sland and encoding
+"  2 get /fslant exch def",
+"  exch /fencoding exch def",
+"  [ fxscale 0 fslant 1 0 0 ] makefont",	// transform font accordingly
+"  fencoding false eq {", 		// check if we have an encoding and use it if available
+"  } {",
+"    dup maxlength dict begin",		// copy font
+"    {",
+"      1 index /FID ne",			// don't copy FID, as it's not allowed in PS Level 1
+"      {def}{pop pop}ifelse",
+"    } forall",
+"    /Encoding fencoding def",		// replace encoding
+"    currentdict end",
+"  } ifelse",
 "  definefont pop",
+"} d",
+
+"/MF {",				// newname encoding fontlist
+"  qtfindfont qtdefinefont",
 "} D",
 "",
-"/MSF {",				// newname slant fontname (this is used for fonts where we don't need an encoding)
+"/MSF {",				// newname slant fontname (this is used for asian fonts, where we don't need an encoding)
 "  findfont exch",			// newname font slant
 "  /slant exch d",			// newname font
 "  [ 1 0 slant 1 0 0 ] makefont",
@@ -1743,7 +1825,11 @@ static const struct {
     { QFont::ISO_8859_14, 110 },
     { QFont::ISO_8859_15, 111 },
     { QFont::CP1251, 2251 },
-    { QFont::PT154, 0 },
+	{ QFont::PT154, 0 },
+	{ QFont::Set_Ko, 38 },
+	{ QFont::KSC_5601, 38 },
+	{ QFont::Set_Big5, 2026 },
+	{ QFont::Big5, 2026 },
     // makeFixedStrings() below assumes that this is last
     { QFont::ISO_8859_9, 12 }
 #define unicodevalues_LAST QFont::ISO_8859_9
@@ -1752,7 +1838,337 @@ static const struct {
 #endif
 };
 
+// ---------------------------------------------------------------------
+// postscript font substitution dictionary. We assume every postscript printer has at least 
+// Helvetica, Times, Courier and Symbol
 
+struct psfont {
+    const char *psname;
+    float slant;
+    float xscale;
+};
+
+static const psfont Arial[] = {
+    {"Arial", 0, 84.04 },
+    { "Arial-Italic", 0, 84.04 },
+    { "Arial-Bold", 0, 88.65 },
+    { "Arial-BoldItalic", 0, 88.65 }
+};
+
+static const psfont AvantGarde[] = {
+    { "AvantGarde-Book", 0, 87.43 },
+    { "AvantGarde-BookOblique", 0, 88.09 },
+    { "AvantGarde-Demi", 0, 88.09 },
+    { "AvantGarde-DemiOblique", 0, 87.43 },
+};
+
+static const psfont Bookman [] = {
+    { "Bookman-Light", 0, 93.78 },
+    { "Bookman-LightItalic", 0, 91.42 },
+    { "Bookman-Demi", 0, 99.86 },
+    { "Bookman-DemiItalic", 0, 101.54 } 
+};
+	 
+static const psfont Charter [] = {
+    { "CharterBT-Roman", 0, 84.04 },
+    { "CharterBT-Italic", 0.0, 81.92 },
+    { "CharterBT-Bold", 0, 88.99 },
+    { "CharterBT-BoldItalic", 0.0, 88.20 }
+};
+
+static const psfont Courier [] = {
+    { "Courier", 0, 100. },
+    { "Courier-Oblique", 0, 100. },
+    { "Courier-Bold", 0, 100. },
+    { "Courier-BoldOblique", 0, 100. }
+};
+
+static const psfont Garamond [] = {
+    { "Garamond-Antiqua", 0, 78.13 },
+    { "Garamond-Kursiv", 0, 78.13 },
+    { "Garamond-Halbfett", 0, 78.13 },
+    { "Garamond-KursivHalbfett", 0, 78.13 }
+};
+
+static const psfont GillSans [] = { // ### some estimated value for xstretch
+    { "GillSans", 0, 82 },
+    { "GillSans-Italic", 0, 82 },
+    { "GillSans-Bold", 0, 82 },
+    { "GillSans-BoldItalic", 0, 82 }
+};
+
+static const psfont Helvetica [] = {
+    { "Helvetica", 0, 84.04 },
+    { "Helvetica-Oblique", 0, 84.04 },
+    { "Helvetica-Bold", 0, 88.65 },
+    { "Helvetica-BoldOblique", 0, 88.65 }
+};
+
+static const psfont Letter [] = {
+    { "LetterGothic", 0, 83.32 },
+    { "LetterGothic-Italic", 0, 83.32 },
+    { "LetterGothic-Bold", 0, 83.32 },
+    { "LetterGothic-Bold", 0.2, 83.32 }
+};
+
+static const psfont LucidaSans [] = {
+    { "LucidaSans", 0, 94.36 },
+    { "LucidaSans-Oblique", 0, 94.36 },
+    { "LucidaSans-Demi", 0, 98.10 },
+    { "LucidaSans-DemiOblique", 0, 98.08 }
+};
+
+static const psfont LucidaSansTT [] = {
+    { "LucidaSans-Typewriter", 0, 100.50 },
+    { "LucidaSans-TypewriterOblique", 0, 100.50 },
+    { "LucidaSans-TypewriterBold", 0, 100.50 },
+    { "LucidaSans-TypewriterBoldOblique", 0, 100.50 }
+};
+
+static const psfont LucidaBright [] = {
+    { "LucidaBright", 0, 93.45 },
+    { "LucidaBright-Italic", 0, 91.98 },
+    { "LucidaBright-Demi", 0, 96.22 },
+    { "LucidaBright-DemiItalic", 0, 96.98 }
+};
+
+static const psfont Palatino [] = {
+    { "Palatino-Roman", 0, 82.45 },
+    { "Palatino-Italic", 0, 76.56 },
+    { "Palatino-Bold", 0, 83.49 },
+    { "Palatino-BoldItalic", 0, 81.51 }
+};
+
+static const psfont Symbol [] = {
+    { "Symbol", 0, 82.56 },
+    { "Symbol", 0.2, 82.56 },
+    { "Symbol", 0, 82.56 },
+    { "Symbol", 0.2, 82.56 }
+};
+
+static const psfont Tahoma [] = {
+    { "Tahoma", 0, 83.45 },
+    { "Tahoma", 0.2, 83.45 },
+    { "Tahoma-Bold", 0, 95.59 },
+    { "Tahoma-Bold", 0.2, 95.59 }
+};
+
+static const psfont Times [] = {
+    { "Times-Roman", 0, 82.45 },
+    { "Times-Italic", 0, 82.45 },
+    { "Times-Bold", 0, 82.45 },
+    { "Times-BoldItalic", 0, 82.45 }
+};
+
+static const psfont Verdana [] = {
+    { "Verdana", 0, 96.06 },
+    { "Verdana-Italic", 0, 96.06 },
+    { "Verdana-Bold", 0, 107.12 },
+    { "Verdana-BoldItalic", 0, 107.10 }
+};
+
+static const psfont Utopia [] = { // ###
+    { "Utopia-Regular", 0, 84.70 },
+    { "Utopia-Regular", 0.2, 84.70 },
+    { "Utopia-Bold", 0, 88.01 },
+    { "Utopia-Bold", 0.2, 88.01 }
+};
+
+static const psfont * const SansSerifReplacements[] = {
+    Helvetica, 0
+	};
+static const psfont * const SerifReplacements[] = {
+    Times, 0
+	};
+static const psfont * const FixedReplacements[] = {
+    Courier, 0
+	};
+static const psfont * const TahomaReplacements[] = {
+    Verdana, AvantGarde, Helvetica, 0
+	};
+static const psfont * const VerdanaReplacements[] = {
+    Tahoma, AvantGarde, Helvetica, 0
+	};
+
+static const struct {
+    const char * input; // spaces are stripped in here, and everything lowercase
+    const psfont * ps;
+    const psfont *const * replacements;
+} postscriptFonts [] = {
+    { "arial", Arial, SansSerifReplacements },
+    { "arialmt", Arial, SansSerifReplacements },
+    { "arialunicodems", Arial, SansSerifReplacements },
+    { "avantgarde", AvantGarde, SansSerifReplacements },
+    { "bookman", Bookman, SerifReplacements },
+    { "charter", Charter, SansSerifReplacements },
+    { "bitstreamcharter", Charter, SansSerifReplacements },
+	{ "bitstreamcyberbit", Times, SerifReplacements }, // ###
+    { "courier", Courier, 0 },
+    { "couriernew", Courier, 0 },
+    { "fixed", Courier, 0 },
+    { "garamond", Garamond, SerifReplacements },
+    { "gillsans", GillSans, SansSerifReplacements },
+    { "helvetica", Helvetica, 0 },
+    { "letter", Letter, FixedReplacements },
+    { "lucida", LucidaSans, SansSerifReplacements },
+    { "lucidasans", LucidaSans, SansSerifReplacements },
+    { "lucidabright", LucidaBright, SerifReplacements },
+    { "lucidasanstypewriter", LucidaSansTT, FixedReplacements },
+    { "luciduxsans", LucidaSans, SansSerifReplacements },
+    { "luciduxserif", LucidaBright, SerifReplacements },
+    { "luciduxmono", LucidaSansTT, FixedReplacements },
+    { "palatino", Palatino, SerifReplacements },
+    { "symbol", Symbol, 0 },
+    { "tahoma", Tahoma, TahomaReplacements },
+    { "terminal", Courier, 0 },
+    { "times", Times, 0 },
+    { "timesnewroman", Times, 0 },
+    { "verdana", Verdana, VerdanaReplacements },
+    { "utopia", Utopia, SerifReplacements },
+    { 0, 0, 0 }
+};    
+
+static int getPsFontType( const QFont &f )
+{
+    int weight = f.weight();
+    bool italic = f.italic();
+  
+    int type = 0; // used to look up in the psname array
+  // get the right modification, or build something
+  if ( weight > QFont::Normal && italic )
+      type = 3;
+  else if ( weight > QFont::Normal )
+      type = 2;
+  else if ( italic )
+      type = 1;
+  return type;
+}
+
+static int addPsFontNameExtension( const QFont &f, QString &ps, const psfont *psf = 0 )
+{
+    int type = getPsFontType( f );
+
+  if ( psf ) {
+      ps = QString::fromLatin1( psf[type].psname );
+  } else {
+      switch ( type ) {
+	  case 1:
+	      ps.append( QString::fromLatin1("-Italic") );
+	      break;
+	  case 2:
+	      ps.append( QString::fromLatin1("-Bold") );
+	      break;
+	  case 3:
+	      ps.append( QString::fromLatin1("-BoldItalic") );
+	      break;
+	  case 0:
+	  default:
+	      break;
+      }
+  }
+  return type;
+}
+
+static QString makePSFontName( const QFont &f, int *listpos = 0, int *ftype = 0 )
+{
+  QString ps;
+  int i;
+
+  QString family = f.family();
+  family = family.lower();
+
+
+  // try to make a "good" postscript name
+  ps = family.simplifyWhiteSpace();
+  i = 0;
+  while( (unsigned int)i < ps.length() ) {
+    if ( i == 0 || ps[i-1] == ' ' ) {
+      ps[i] = ps[i].upper();
+      if ( i )
+	ps.remove( i-1, 1 );
+      else
+	i++;
+    } else {
+      i++;
+    }
+  }
+
+  // see if the table has a better name
+  i = 0;
+  while( postscriptFonts[i].input &&
+	 postscriptFonts[i].input != ps )
+    i++;
+  const psfont *psf = postscriptFonts[i].ps;
+
+  int type = addPsFontNameExtension( f, ps, psf );
+  
+  if ( listpos )
+      *listpos = i;
+  if ( ftype )
+      *ftype = type;
+  return ps;
+}
+
+static void appendReplacements( QStringList &list, const psfont * const * replacements, int type, float xscale = 100. )
+{
+    // iterate through the replacement fonts
+    while ( *replacements ) {
+	const psfont *psf = *replacements;
+	QString ps = "[ /" + QString::fromLatin1( psf[type].psname ) + " " + QString::number( xscale / psf[type].xscale ) + " " +
+	     QString::number( psf[type].slant ) + " ]";
+	list.append( ps );
+	++replacements;
+    }
+}
+
+static QStringList makePSFontNameList( const QFont &f, const QString &psname = QString::null, bool useNameForLookup = FALSE )
+{
+    int i;
+    int type;
+    QStringList list;
+    QString ps = psname;
+	
+    if ( !ps.isEmpty() && !useNameForLookup ) {
+	QString best = "[ /" + ps + " 1.0 0.0 ]";
+	list.append( best );
+    }
+
+    ps = makePSFontName( f, &i, &type );
+
+    const psfont *psf = postscriptFonts[i].ps;
+    const psfont * const * replacements = postscriptFonts[i].replacements;
+    float xscale = 100; 
+    if ( psf ) {
+	// xscale for the "right" font is always 1. We scale the replacements...
+	xscale = psf->xscale;
+	ps = "[ /" + QString::fromLatin1( psf[type].psname ) + " 1.0 " +
+	     QString::number( psf[type].slant ) + " ]";
+    } else {
+	ps = "[ /" + ps + " 1.0 0.0 ]";
+	// only add default replacement fonts in case this font was unknown.
+	QFontInfo fi( f );
+	if ( fi.fixedPitch() ) {
+	    replacements = FixedReplacements;
+	} else {
+	    replacements = SansSerifReplacements;
+	    // 100 is courier, but most fonts are not as wide as courier. Using 100
+	    // here would make letters overlap for some fonts. This value is empirical.
+	    xscale = 83; 
+	}
+    }
+    list.append( ps );
+    
+    if ( replacements )
+	appendReplacements( list, replacements, type, xscale);
+    return list;
+}
+
+static void emitPSFontNameList( QTextStream &s, const QString &psname, const QStringList &list )
+{
+    s << "/" << psname << "List [\n";
+    s << list.join("\n  ");
+    s << "\n] d\n";
+}
 
 
 static QString *fixed_ps_header = 0;
@@ -1842,7 +2258,7 @@ static void makeFixedStrings()
     *fixed_ps_header = wordwrap( *fixed_ps_header );
 
     // fonts.
-    font_vectors = new QIntDict<QString>( 17 );
+    font_vectors = new QIntDict<QString>( 59 );
     font_vectors->setAutoDelete( TRUE );
 
     int i = 0;
@@ -1901,17 +2317,20 @@ static void makeFixedStrings()
     } while ( unicodevalues[i++].cs != unicodevalues_LAST );
 }
 
+class QPSPrinterFontPrivate;
 
 struct QPSPrinterPrivate {
     QPSPrinterPrivate( int filedes )
-	: buffer( 0 ), realDevice( 0 ), fd( filedes ), savedImage( 0 ),
+	: buffer( 0 ), realDevice( 0 ), fd( filedes ), fonts(27, FALSE), fontBuffer(0), savedImage( 0 ),
 	  dirtypen( FALSE ), dirtybrush( FALSE ), currentFontCodec( 0 ),
 	  fm( 0 ), textY( 0 )
     {
 	headerFontNames.setAutoDelete( TRUE );
 	pageFontNames.setAutoDelete( TRUE );
+	fonts.setAutoDelete( TRUE );
 	headerEncodings.setAutoDelete( FALSE );
 	pageEncodings.setAutoDelete( FALSE );
+	currentFontFile = 0;
     }
 
     QBuffer * buffer;
@@ -1922,6 +2341,8 @@ struct QPSPrinterPrivate {
     QDict<QString> pageFontNames;
     QIntDict<void> headerEncodings;
     QIntDict<void> pageEncodings;
+    QDict<QPSPrinterFontPrivate> fonts;
+    QPSPrinterFontPrivate *currentFontFile;
     int headerFontNumber;
     int pageFontNumber;
     QBuffer * fontBuffer;
@@ -1935,6 +2356,7 @@ struct QPSPrinterPrivate {
     bool dirtypen;
     bool dirtybrush;
     QTextCodec * currentFontCodec;
+    QString currentFont;
     QFontMetrics * fm;
     int textY;
     QFont currentUsed;
@@ -1963,36 +2385,2637 @@ QPSPrinter::~QPSPrinter()
 }
 
 
-static const struct {
-    const char * input;
-    const char * roman;
-    const char * italic;
-    const char * bold;
-    const char * boldItalic;
-    const char * light;
-    const char * lightItalic;
-} postscriptFontNames[] = {
-    { "arial", "Arial", "Arial-Italic", "Arial-Bold", "Arial-BoldItalic", 0, 0 },
-    { "avantgarde", "AvantGarde-Book", "AvantGarde-BookOblique", "AvantGarde-Demi", "AvantGarde-DemiOblique", 0, 0 },
-    { "charter", "CharterBT-Roman", 0, 0, 0, 0, 0 },
-    { "courier", "Courier", "Courier-Oblique", "Courier-Bold", "Courier-BoldOblique", 0, 0 },
-    { "garamond", "Garamond-Regular", 0, 0, 0, 0, 0 },
-    { "gillsans", "GillSans", 0, 0, 0, 0, 0 },
-    { "helvetica", "Helvetica", "Helvetica-Oblique", "Helvetica-Bold", "Helvetica-BoldOblique", "Helvetica", "Helvetica-Oblique" },
-    { "new century schoolbook", "NewCenturySchlbk-Roman", 0, 0, 0, 0, 0 },
-    { "symbol", "Symbol", "Symbol", "Symbol", "Symbol", "Symbol", "Symbol" },
-    { "tahoma", "Helvetica", "Helvetica-Oblique", "Helvetica-Bold", "Helvetica-BoldOblique", "Helvetica", "Helvetica-Oblique" },
-    { "terminal", "Courier", 0, 0, 0, 0, 0 },
-    { "times", "Times", "Times-Italic", "Times-Bold", "Times-BoldItalic", 0, 0 },
-    { "times new roman", "Times", "Times-Italic", "Times-Bold", "Times-BoldItalic", 0, 0 },
-    { "verdana", "Helvetica", "Helvetica-Oblique", "Helvetica-Bold", "Helvetica-BoldOblique", "Helvetica", "Helvetica-Oblique" },
-    { "utopia", "Utopia-Regular", 0, 0, 0, 0, 0 },
-    { 0, 0, 0, 0, 0, 0, 0 }
+// ========================== FONT FILE CLASSES  ===============
+
+#ifdef _WS_X11_
+// including all of X11/Xlib.h caused parse errors
+// #include <X11/Xlib.h>
+// extern "C" void*  XOpenDisplay(char*);
+// extern "C" char** XGetFontPath(void*, int*);
+// extern "C" void   XCloseDisplay(void*);
+// extern "C" void   XFreeFontPath(char**);
+#endif
+
+class QPSPrinterFontPrivate {
+public:
+    virtual QString postScriptFontName() { return psname; }
+    virtual QString defineFont( QTextStream &stream, QString ps, const QFont &f, int cs, const QString &key, 
+			     QPSPrinterPrivate *d );
+    virtual void download(QTextStream& s) = 0;
+    virtual ~QPSPrinterFontPrivate() {}
+    virtual void drawText( QTextStream &stream, uint spaces, const QPoint &p, 
+			   const QString &text, QPSPrinterPrivate *d, QPainter *paint);
+protected:
+    QString psname;
+    QStringList replacementList;
 };
 
 
-void QPSPrinter::setFont( const QFont & f )
+void QPSPrinterFontPrivate::drawText( QTextStream &stream, uint spaces, const QPoint &p, 
+				 const QString &text, QPSPrinterPrivate *d, QPainter *paint)
 {
+    QCString tmpC;
+#ifndef QT_NO_TEXTCODEC
+    if ( d->currentFontCodec ) {
+	tmpC = d->currentFontCodec->fromUnicode( text );
+    } else 
+#endif
+	tmpC=text.local8Bit();
+    char *tmp = new char[tmpC.length()*2 + 2];
+#if defined(CHECK_NULL)
+    CHECK_PTR( tmp );
+#endif
+    const char* from = (const char*)tmpC;
+
+	// first scan to see whether it'll look good with just ()
+    int parenlevel = 0;
+    bool parensOK = TRUE;
+    while( from && *from ) {
+	if ( *from == '(' )
+	    parenlevel++;
+	else if ( *from == ')' )
+	    parenlevel--;
+	if ( parenlevel < 0 )
+	    parensOK = FALSE;
+	from++;
+    }
+    if ( parenlevel != 0 )
+	parensOK = FALSE;
+
+	// then scan again, outputting the stuff
+    from = (const char *)tmpC;
+    char * to = tmp;
+    while ( from && *from ) {
+	if ( *from == '\\' ||
+	     ( !parensOK && ( *from == '(' || *from == ')' ) ) )
+	    *to++ = '\\'; // escape special chars if necessary
+	*to++ = *from++;
+    }
+    *to = '\0';
+
+    if ( qstrlen( tmp ) > 0 ) {
+	int x = p.x();
+	if ( spaces > 0 )
+	    x += spaces * d->fm->width( ' ' );
+	int y = p.y();
+	if ( y != d->textY || d->textY == 0 )
+	    stream << y << " Y";
+	d->textY = y;
+	int w = d->fm->width( text );
+	stream << "(" << tmp << ")" << w << " " << x;
+	if ( paint->font().underline() )
+	    stream << ' ' << y + d->fm->underlinePos() << " Tl";
+	if ( paint->font().strikeOut() )
+	    stream << ' ' << y + d->fm->strikeOutPos() << " Tl";
+	stream << " T\n";
+    }
+    if ( tmp )
+	delete [] tmp;
+}
+
+
+QString QPSPrinterFontPrivate::defineFont( QTextStream &stream, QString ps, const QFont &f, int cs, const QString &key, 
+				   QPSPrinterPrivate *d )
+{
+    QString key2;
+    key2.sprintf( "%s %d", ps.ascii(), cs );
+    QString *tmp = d->headerFontNames.find( key );
+
+    QString fontEncoding, fontName;
+    fontEncoding.sprintf( " FE%d", cs );
+    if ( d->buffer ) {
+	if ( !d->headerEncodings.find( cs ) ) {
+	    QString * vector = font_vectors->find( cs );
+	    if ( vector ) {
+		d->fontStream << *vector << "\n";
+		d->headerEncodings.insert( cs, (void*)42 );
+	    } else {
+		d->fontStream << "% wanted font encoding "
+			      << cs << "\n";
+	    }
+	}
+	if ( tmp ) {
+	    fontName = *tmp;
+	} else {
+	    fontName.sprintf( "/F%d", ++d->headerFontNumber );
+	    if ( cs != QFont::AnyCharSet )
+		d->fontStream << fontName << fontEncoding << " "
+			      << ps << "List MF\n";
+	    else 
+		d->fontStream << fontName << " false "
+			      << ps << "List MF\n";		
+	    d->headerFontNames.insert( key2, new QString( fontName ) );
+	}
+	++d->headerFontNumber;
+	d->fontStream << "/F" << d->headerFontNumber << " "
+		      << f.pointSize() << fontName << " DF\n";
+	fontName.sprintf( "F%d", d->headerFontNumber );
+	d->headerFontNames.insert( key, new QString( fontName ) );
+    } else {
+	if ( !d->headerEncodings.find( cs ) &&
+	     !d->pageEncodings.find( cs ) ) {
+	    QString * vector = font_vectors->find( cs );
+	    if ( !vector )
+		vector = font_vectors->find( QFont::Latin1 );
+	    stream << *vector << "\n";
+	    d->pageEncodings.insert( cs, (void*)42 );
+	}
+	if ( !tmp )
+	    tmp = d->pageFontNames.find( key );
+	if ( tmp ) {
+	    fontName = *tmp;
+	} else {
+	    fontName.sprintf( "/F%d", ++d->pageFontNumber );
+	    if ( cs != QFont::AnyCharSet )
+		stream << fontName << fontEncoding << " " << ps << "List MF\n";
+	    else
+		stream << fontName << " false " << ps << "List MF\n";
+	    d->pageFontNames.insert( key2, new QString( fontName ) );
+	}
+	++d->pageFontNumber;
+	stream << "/F" << d->pageFontNumber << " "
+	       << f.pointSize() << fontName << " DF\n";
+	fontName.sprintf( "F%d", d->pageFontNumber );
+	d->pageFontNames.insert( key, new QString( fontName ) );
+    }
+    return fontName;
+}
+
+// ================== TTF ====================
+
+
+typedef Q_UINT8  BYTE;
+typedef Q_UINT16 USHORT;
+typedef Q_UINT16 uFWord;
+typedef Q_INT16 SHORT;
+typedef Q_INT16 FWord;
+typedef Q_UINT32   ULONG;  
+typedef Q_INT32  FIXED;
+
+typedef struct {
+  Q_INT16 whole;
+  Q_UINT16 fraction;
+} Fixed; // 16.16 bit fixed-point number
+
+static ULONG getULONG(BYTE *p) 
+{
+  int x;
+  ULONG val=0;    
+  
+  for(x=0; x<4; x++) {
+    val *= 0x100;
+    val += p[x];	
+  }
+  
+  return val;
+} 
+
+static USHORT getUSHORT(BYTE *p)
+{
+  int x;
+  USHORT val=0;    
+  
+  for(x=0; x<2; x++) {
+    val *= 0x100;
+    val += p[x];	
+  }
+  
+  return val;
+} 
+
+static Fixed getFixed(BYTE *s)
+{
+  Fixed val={0,0};
+  
+  val.whole = ((s[0] * 256) + s[1]);
+  val.fraction = ((s[2] * 256) + s[3]);    
+  
+  return val;
+}
+
+static FWord getFWord(BYTE* s)  { return (FWord)  getUSHORT(s); }
+static uFWord getuFWord(BYTE* s) { return (uFWord) getUSHORT(s); }
+static SHORT getSHORT(BYTE* s)  { return (SHORT)  getUSHORT(s); }
+
+static const char * const Apple_CharStrings[]={ 
+  ".notdef",".null","nonmarkingreturn","space","exclam","quotedbl","numbersign", 
+  "dollar","percent","ampersand","quotesingle","parenleft","parenright", 
+  "asterisk","plus", "comma","hyphen","period","slash","zero","one","two",
+  "three","four","five","six","seven","eight","nine","colon","semicolon", 
+  "less","equal","greater","question","at","A","B","C","D","E","F","G","H","I",
+  "J","K", "L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z",
+  "bracketleft","backslash","bracketright","asciicircum","underscore","grave",
+  "a","b","c","d","e","f","g","h","i","j","k", "l","m","n","o","p","q","r","s", 
+  "t","u","v","w","x","y","z","braceleft","bar","braceright","asciitilde",
+  "Adieresis","Aring","Ccedilla","Eacute","Ntilde","Odieresis","Udieresis",
+  "aacute","agrave","acircumflex","adieresis","atilde","aring","ccedilla",
+  "eacute","egrave","ecircumflex","edieresis","iacute","igrave","icircumflex", 
+  "idieresis","ntilde","oacute","ograve","ocircumflex","odieresis","otilde",
+  "uacute","ugrave","ucircumflex","udieresis","dagger","degree","cent",
+  "sterling","section","bullet","paragraph","germandbls","registered",
+  "copyright","trademark","acute","dieresis","notequal","AE","Oslash",
+  "infinity","plusminus","lessequal","greaterequal","yen","mu","partialdiff",
+  "summation","product","pi","integral","ordfeminine","ordmasculine","Omega",
+  "ae","oslash","questiondown","exclamdown","logicalnot","radical","florin", 
+  "approxequal","Delta","guillemotleft","guillemotright","ellipsis",
+  "nobreakspace","Agrave","Atilde","Otilde","OE","oe","endash","emdash",
+  "quotedblleft","quotedblright","quoteleft","quoteright","divide","lozenge",
+  "ydieresis","Ydieresis","fraction","currency","guilsinglleft","guilsinglright",
+  "fi","fl","daggerdbl","periodcentered","quotesinglbase","quotedblbase",
+  "perthousand","Acircumflex","Ecircumflex","Aacute","Edieresis","Egrave",
+  "Iacute","Icircumflex","Idieresis","Igrave","Oacute","Ocircumflex","apple",
+  "Ograve","Uacute","Ucircumflex","Ugrave","dotlessi","circumflex","tilde",
+  "macron","breve","dotaccent","ring","cedilla","hungarumlaut","ogonek","caron",
+  "Lslash","lslash","Scaron","scaron","Zcaron","zcaron","brokenbar","Eth","eth",
+  "Yacute","yacute","Thorn","thorn","minus","multiply","onesuperior",
+  "twosuperior","threesuperior","onehalf","onequarter","threequarters","franc",
+  "Gbreve","gbreve","Idot","Scedilla","scedilla","Cacute","cacute","Ccaron",
+  "ccaron","dmacron","markingspace","capslock","shift","propeller","enter", 
+  "markingtabrtol","markingtabltor","control","markingdeleteltor",
+  "markingdeletertol","option","escape","parbreakltor","parbreakrtol",
+  "newpage","checkmark","linebreakltor","linebreakrtol","markingnobreakspace",
+  "diamond","appleoutline"};
+
+typedef struct {
+  int*    epts_ctr;			/* array of contour endpoints */
+  int     num_pts, num_ctr;		/* number of points, number of coutours */
+  FWord*  xcoor, *ycoor;		/* arrays of x and y coordinates */
+  BYTE*   tt_flags;			/* array of TrueType flags */
+  double* area_ctr;
+  char*   check_ctr;
+  int*    ctrset;  		/* in contour index followed by out contour index */
+} charproc_data;
+
+
+class QPSPrinterFontTTF
+  : public QPSPrinterFontPrivate {
+public:
+  QPSPrinterFontTTF(const QFont &f, QByteArray& data);
+  virtual void    download(QTextStream& s);
+  //  virtual ~QPSPrinterFontTTF();
+private:
+  QByteArray     data;
+  bool    defective; // if we can't process this file
+
+  BYTE*   getTable(const char *);
+  QString glyphName(int glyph);
+  USHORT  unicode_for_glyph(int glyphindex);
+  int   topost(FWord x) { return (int)( ((int)(x) * 1000 + HUPM) / unitsPerEm ); }
+
+#ifdef Q_PRINTER_USE_TYPE42
+  void sfnts_pputBYTE(BYTE n,QTextStream& s, 
+				    int& string_len, int& line_len, bool& in_string);
+  void sfnts_pputUSHORT(USHORT n,QTextStream& s,
+				      int& string_len, int& line_len, bool& in_string);
+  void sfnts_pputULONG(ULONG n,QTextStream& s,
+				     int& string_len, int& line_len, bool& in_string);
+  void sfnts_end_string(QTextStream& s,
+				      int& string_len, int& line_len, bool& in_string);
+  void sfnts_new_table(ULONG length,QTextStream& s,
+				     int& string_len, int& line_len, bool& in_string);
+  void sfnts_glyf_table(ULONG oldoffset, 
+				      ULONG correct_total_length,
+				      QTextStream& s,
+				      int& string_len, int& line_len, bool& in_string);
+  void download_sfnts(QTextStream& s);
+#endif
+      
+  void charproc(int charindex, QTextStream& s);
+  BYTE* charprocFindGlyphData(int charindex);
+  void charprocComposite(BYTE *glyph, QTextStream& s);
+  void charprocLoad(BYTE *glyph, charproc_data* cd);
+
+  int target_type;			/* 42 or 3 */
+  
+  int numTables;			/* number of tables present */
+  QString PostName;			/* Font's PostScript name */
+  QString FullName;			/* Font's full name */
+  QString FamilyName;			/* Font's family name */
+  QString Style;			/* Font's style string */
+  QString Copyright;			/* Font's copyright string */
+  QString Version;			/* Font's version string */
+  QString Trademark;			/* Font's trademark string */
+  int llx,lly,urx,ury;		/* bounding box */
+  
+  Fixed TTVersion;			/* Truetype version number from offset table */
+  Fixed MfrRevision;			/* Revision number of this font */
+  
+  BYTE *offset_table; 		/* Offset table in memory */
+  BYTE *post_table;			/* 'post' table in memory */
+  
+  BYTE *loca_table;			/* 'loca' table in memory */
+  BYTE *glyf_table;			/* 'glyf' table in memory */
+  BYTE *hmtx_table;			/* 'hmtx' table in memory */
+  
+  USHORT numberOfHMetrics;
+  int unitsPerEm;			/* unitsPerEm converted to int */
+  int HUPM;				/* half of above */
+  
+  int numGlyphs;			/* from 'post' table */
+  
+  int indexToLocFormat;		/* short or long offsets */
+
+};
+
+
+#ifdef Q_PRINTER_USE_TYPE42
+#ifndef _OS_OSF_
+extern "C" char* getenv(char*);
+#endif
+#endif
+
+QPSPrinterFontTTF::QPSPrinterFontTTF(const QFont &f, QByteArray& d)
+{
+  data = d;
+  defective = FALSE;
+  
+  BYTE *ptr;
+  
+  target_type = 3;  // will work on any printer 
+  //target_type = 42; // works with gs, faster, better quality
+  
+#ifdef Q_PRINTER_USE_TYPE42
+  char* environment_preference = getenv("QT_TTFTOPS");
+  if (environment_preference) {
+    if (QString(environment_preference) == "42") 
+      target_type = 42;
+    else if (QString(environment_preference) == "3") 
+      target_type = 3;
+    else 
+      qWarning("The value of QT_TTFTOPS must be 42 or 3");
+  }
+#endif
+  offset_table = (unsigned char*) data.data(); /* first 12 bytes */
+    
+  /* Determine how many directory entries there are. */
+  numTables = getUSHORT( offset_table + 4 );
+
+  /* Extract information from the "Offset" table. */
+  TTVersion = getFixed( offset_table );
+    
+  /* Load the "head" table and extract information from it. */
+  ptr = getTable("head");
+  if ( !ptr ) {
+      defective = TRUE;
+      return;
+  }
+  MfrRevision = getFixed( ptr + 4 );		/* font revision number */
+  unitsPerEm = getUSHORT( ptr + 18 );
+  HUPM = unitsPerEm / 2;
+#ifdef DEBUG_TRUETYPE
+  printf("unitsPerEm=%d",(int)unitsPerEm);
+#endif
+  llx = topost( getFWord( ptr + 36 ) );		/* bounding box info */
+  lly = topost( getFWord( ptr + 38 ) );
+  urx = topost( getFWord( ptr + 40 ) );
+  ury = topost( getFWord( ptr + 42 ) );
+  indexToLocFormat = getSHORT( ptr + 50 );	/* size of 'loca' data */
+  if(indexToLocFormat != 0 && indexToLocFormat != 1) {
+    qWarning("TrueType font is unusable because indexToLocFormat != 0");
+    defective = TRUE;
+    return;
+  }
+  if( getSHORT(ptr+52) != 0 ) {
+    qWarning("TrueType font is unusable because glyphDataFormat != 0");
+    defective = TRUE;
+    return;
+  }
+    
+  // === Load information from the "name" table ===
+  
+  /* Set default values to avoid future references to */
+  /* undefined pointers. */
+  
+  psname = FullName = FamilyName = Version = Style = "unknown";
+  Copyright = "No copyright notice";
+  Trademark = "No trademark notice";
+
+  BYTE* table_ptr = getTable("name");		/* pointer to table */
+  if ( !table_ptr ) {
+      defective = TRUE;
+      return;
+  }
+  int numrecords = getUSHORT( table_ptr + 2 );	/* number of names */
+  char* strings = (char *)table_ptr + getUSHORT( table_ptr + 4 ); /* start of string storage */
+    
+  BYTE* ptr2 = table_ptr + 6;
+  for(int x=0; x < numrecords; x++,ptr2+=12) {
+      int platform = getUSHORT(ptr2);
+    //int encoding = getUSHORT(ptr2+2);
+    //int language = getUSHORT(ptr2+4);
+    int nameid   = getUSHORT(ptr2+6);
+    int length   = getUSHORT(ptr2+8);
+    int offset   = getUSHORT(ptr2+10);
+
+    if( platform == 1 && nameid == 0 )
+      Copyright.setLatin1(strings+offset,length);
+
+    if( platform == 1 && nameid == 1 )
+      FamilyName.setLatin1(strings+offset,length);
+
+    if( platform == 1 && nameid == 2 ) 
+      Style.setLatin1(strings+offset,length);
+
+    if( platform == 1 && nameid == 4 ) 
+      FullName.setLatin1(strings+offset,length);
+
+    if( platform == 1 && nameid == 5 )
+      Version.setLatin1(strings+offset,length);
+
+    if( platform == 1 && nameid == 6 )
+      psname.setLatin1(strings+offset,length);
+
+    if( platform == 1 && nameid == 7 ) 
+      Trademark.setLatin1(strings+offset,length);
+
+  }
+
+  //read_cmap(font);
+    
+  /* We need to have the PostScript table around. */
+
+  post_table = getTable("post");
+  if ( !post_table ) {
+      defective = TRUE;
+      return;
+  }
+  Fixed post_format = getFixed( post_table );
+
+  if( post_format.whole != 2 || post_format.fraction != 0 ) {
+    qWarning("TrueType font does not have a format 2.0 'post' table");
+    defective = TRUE;
+  }
+
+  numGlyphs = getUSHORT( post_table + 32 );
+  replacementList = makePSFontNameList( f, psname );
+}
+
+void QPSPrinterFontTTF::download(QTextStream& s)
+{
+    emitPSFontNameList( s, psname, replacementList );
+  if (defective) {
+    s << "% Font ";
+    s << FullName;
+    s << " cannot be downloaded\n";
+    return;
+  }
+
+  // === write header ===
+  int VMMin;
+  int VMMax;
+  
+  s << "%%BeginFont: ";
+  s << FullName;
+  s << "\n";
+  if( target_type == 42 ) {
+    s << "%!PS-TrueTypeFont-"
+      << TTVersion.whole
+      << "."
+      << TTVersion.fraction 
+      << "-"
+      << MfrRevision.whole 
+      << "."
+      << MfrRevision.fraction 
+      << "\n";
+  } else {
+    /* If it is not a Type 42 font, we will use a different format. */
+    s << "%!PS-Adobe-3.0 Resource-Font\n";
+  }	/* See RBIIp 641 */
+
+  if( Copyright != (char*)NULL ) {
+    s << "%%Copyright: ";
+    s << Copyright;
+    s << "\n";
+  }
+
+  if( target_type == 42 )
+    s << "%%Creator: Converted from TrueType to type 42 by Qt using PPR\n";
+  else
+    s << "%%Creator: Converted from TrueType by Qt using PPR\n";
+  
+  /* If VM usage information is available, print it. */
+  if( target_type == 42 )
+    {
+      VMMin = (int)getULONG( post_table + 16 );
+      VMMax = (int)getULONG( post_table + 20 );
+      if( VMMin > 0 && VMMax > 0 )
+	s << "%%VMUsage: " << VMMin << " " << VMMax << "\n";
+    }
+  
+  /* Start the dictionary which will eventually */
+  /* become the font. */
+  if( target_type != 3 ) {
+    s << "15 dict begin\n";
+  }  else {
+    s << "25 dict begin\n";
+    
+    /* Type 3 fonts will need some subroutines here. */
+    s << "/_d{bind def}bind def\n";
+    s << "/_m{moveto}_d\n";
+    s << "/_l{lineto}_d\n";
+    s << "/_cl{closepath eofill}_d\n";
+    s << "/_c{curveto}_d\n";
+    s << "/_sc{7 -1 roll{setcachedevice}{pop pop pop pop pop pop}ifelse}_d\n";
+    s << "/_e{exec}_d\n";
+  }
+  
+  s << "/FontName /";
+  s << psname;
+  s << " def\n";
+  s << "/PaintType 0 def\n";
+  
+  if(target_type == 42)
+    s << "/FontMatrix[1 0 0 1 0 0]def\n";
+  else
+    s << "/FontMatrix[.001 0 0 .001 0 0]def\n";
+  
+  s << "/FontBBox[";
+  s<< llx;
+  s << " ";
+  s<< lly;
+  s << " ";
+  s<< urx;
+  s << " ";
+  s<< ury;
+  s << "]def\n";
+
+  s << "/FontType ";
+  s<< target_type;
+  s << " def\n";
+
+  // === write encoding ===
+  
+  s << "/Encoding StandardEncoding def\n";
+
+  // === write fontinfo dict ===
+
+  /* We create a sub dictionary named "FontInfo" where we */
+  /* store information which though it is not used by the */
+  /* interpreter, is useful to some programs which will */
+  /* be printing with the font. */
+  s << "/FontInfo 10 dict dup begin\n";
+  
+  /* These names come from the TrueType font's "name" table. */
+  s << "/FamilyName (";
+  s << FamilyName;
+  s << ") def\n";
+  
+  s << "/FullName (";
+  s << FullName;
+  s << ") def\n";
+  
+  s << "/Notice (";
+  s << Copyright;
+  s << " ";
+  s << Trademark;
+  s << ") def\n";
+    
+  /* This information is not quite correct. */
+  s << "/Weight (";
+  s << Style;
+  s << ") def\n";
+  
+  /* Some fonts have this as "version". */
+  s << "/Version (";
+  s << Version;
+  s << ") def\n";
+  
+  /* Some information from the "post" table. */
+  Fixed ItalicAngle = getFixed( post_table + 4 );
+  s << "/ItalicAngle ";
+  s << ItalicAngle.whole;
+  s << ".";
+  s << ItalicAngle.fraction;
+  s << " def\n";
+  
+  s << "/isFixedPitch ";
+  s << (getULONG( post_table + 12 ) ? "true" : "false" );
+  s << " def\n";
+  
+  s << "/UnderlinePosition ";
+  s << (int)getFWord( post_table + 8 );
+  s << " def\n";
+  
+  s << "/UnderlineThickness ";
+  s << (int)getFWord( post_table + 10 );
+  s << " def\n";
+  
+  s << "end readonly def\n";    
+
+#ifdef Q_PRINTER_USE_TYPE42
+  /* If we are generating a type 42 font, */
+  /* emmit the sfnts array. */
+  if( target_type == 42 )
+    download_sfnts(s);
+#endif  
+  /* If we are generating a Type 3 font, we will need to */
+  /* have the 'loca' and 'glyf' tables arround while */
+  /* we are generating the CharStrings. */
+  if(target_type == 3)
+    {
+      BYTE *ptr;			/* We need only one value */
+      ptr = getTable("hhea");
+      numberOfHMetrics = getUSHORT(ptr + 34);
+      
+      loca_table = getTable("loca");
+      glyf_table = getTable("glyf");
+      hmtx_table = getTable("hmtx");
+    }
+  
+  // ===  CharStrings array ===
+
+  s << "/CharStrings ";
+  s << numGlyphs;
+  s << " dict dup begin\n";
+  
+  // Emmit one key-value pair for each glyph. 
+  for(int x=0; x < numGlyphs; x++) {
+    if(target_type == 42)	{
+      s << "/";
+      s << glyphName(x);
+      s << " ";
+      s << x;
+      s << " def\n";
+    } else { /* type 3 */
+      s << "/";
+      s << glyphName(x);
+      s << "{";
+      charproc(x,s);
+      s << "}_d\n";	/* "} bind def" */
+    }
+  }
+  
+  s << "end readonly def\n";
+
+  // === trailer ===
+
+  /* If we are generating a type 3 font, we need to provide */
+  /* a BuildGlyph and BuildChar proceedures. */
+  if( target_type == 3 ) {
+    s << "\n";
+    
+    s << "/BuildGlyph\n";
+    s << " {exch begin\n";		/* start font dictionary */
+    s << " CharStrings exch\n";
+    s << " 2 copy known not{pop /.notdef}if\n";
+    s << " true 3 1 roll get exec\n";
+    s << " end}_d\n";
+    
+    s << "\n";
+    
+    /* This proceedure is for compatiblity with */
+    /* level 1 interpreters. */
+    s << "/BuildChar {\n";
+    s << " 1 index /Encoding get exch get\n";
+    s << " 1 index /BuildGlyph get exec\n";
+    s << "}_d\n";    	
+    
+    s << "\n";
+    
+  }
+  
+  /* If we are generating a type 42 font, we need to check to see */
+  /* if this PostScript interpreter understands type 42 fonts.  If */
+  /* it doesn't, we will hope that the Apple TrueType rasterizer */
+  /* has been loaded and we will adjust the font accordingly. */
+  /* I found out how to do this by examining a TrueType font */
+  /* generated by a Macintosh.  That is where the TrueType interpreter */
+  /* setup instructions and part of BuildGlyph came from. */
+  else if( target_type == 42 ) {
+    s << "\n";
+    
+    /* If we have no "resourcestatus" command, or FontType 42 */
+    /* is unknown, leave "true" on the stack. */
+    s << "systemdict/resourcestatus known\n";
+    s << " {42 /FontType resourcestatus\n";
+    s << "   {pop pop false}{true}ifelse}\n";
+    s << " {true}ifelse\n";
+    
+    /* If true, execute code to produce an error message if */
+    /* we can't find Apple's TrueDict in VM. */
+    s << "{/TrueDict where{pop}{(%%[ Error: no TrueType rasterizer ]%%)= flush}ifelse\n";
+    
+    /* Since we are expected to use Apple's TrueDict TrueType */
+    /* reasterizer, change the font type to 3. */    	
+    s << "/FontType 3 def\n";
+    
+    /* Define a string to hold the state of the Apple */
+    /* TrueType interpreter. */
+    s << " /TrueState 271 string def\n";
+    
+    /* It looks like we get information about the resolution */
+    /* of the printer and store it in the TrueState string. */
+    s << " TrueDict begin sfnts save\n";
+    s << " 72 0 matrix defaultmatrix dtransform dup\n";
+    s << " mul exch dup mul add sqrt cvi 0 72 matrix\n";
+    s << " defaultmatrix dtransform dup mul exch dup\n";
+    s << " mul add sqrt cvi 3 -1 roll restore\n";
+    s << " TrueState initer end\n";
+    
+    /* This BuildGlyph procedure will look the name up in the */
+    /* CharStrings array, and then check to see if what it gets */
+    /* is a procedure.  If it is, it executes it, otherwise, it */
+    /* lets the TrueType rasterizer loose on it. */
+    
+    /* When this proceedure is executed the stack contains */
+    /* the font dictionary and the character name.  We */
+    /* exchange arguments and move the dictionary to the */
+    /* dictionary stack. */
+    s << " /BuildGlyph{exch begin\n";
+    /* stack: charname */
+    
+    /* Put two copies of CharStrings on the stack and consume */
+    /* one testing to see if the charname is defined in it, */
+    /* leave the answer on the stack. */
+    s << "  CharStrings dup 2 index known\n";
+    /* stack: charname CharStrings bool */
+    
+    /* Exchange the CharStrings dictionary and the charname, */
+    /* but if the answer was false, replace the character name */
+    /* with ".notdef". */ 
+    s << "    {exch}{exch pop /.notdef}ifelse\n";
+    /* stack: CharStrings charname */
+    
+    /* Get the value from the CharStrings dictionary and see */
+    /* if it is executable. */
+    s << "  get dup xcheck\n";
+    /* stack: CharStrings_entry */
+    
+    /* If is a proceedure.  Execute according to RBIIp 277-278. */
+    s << "    {currentdict systemdict begin begin exec end end}\n";
+    
+    /* Is a TrueType character index, let the rasterizer at it. */
+    s << "    {TrueDict begin /bander load cvlit exch TrueState render end}\n";
+    
+    s << "    ifelse\n";
+    
+    /* Pop the font's dictionary off the stack. */
+    s << " end}bind def\n";
+    
+    /* This is the level 1 compatibility BuildChar procedure. */
+    /* See RBIIp 281. */
+    s << " /BuildChar{\n";
+    s << "  1 index /Encoding get exch get\n";
+    s << "  1 index /BuildGlyph get exec\n";
+    s << " }bind def\n";    	
+    
+    /* Here we close the condition which is true */
+    /* if the printer has no built-in TrueType */
+    /* rasterizer. */
+    s << "}if\n";
+    s << "\n";
+  } /* end of if Type 42 not understood. */
+  
+  s << "FontName currentdict end definefont pop\n";
+  s << "%%EndFont\n";
+}
+
+BYTE* QPSPrinterFontTTF::getTable(const char* name) 
+{
+  BYTE *ptr;
+  int x;
+  
+  /* We must search the table directory. */
+  ptr = offset_table + 12;
+  x=0;
+  while (x != numTables) {
+    if( strncmp((const char *)ptr,name,4) == 0 ) {
+      ULONG offset,length;
+      BYTE *table;
+      
+      offset = getULONG( ptr + 8 );
+      length = getULONG( ptr + 12 );	    
+      
+      table = offset_table + offset;
+      return table;
+    }
+    
+    x++;
+    ptr += 16;
+  }
+
+  return 0;
+}
+
+QString QPSPrinterFontTTF::glyphName(int charindex)
+{
+  USHORT c;
+  if ((c=unicode_for_glyph(charindex)) != 0xffff) {
+    //fprintf(stdout,"glyph %04x char %04x\n",charindex,c);
+    for (int i=0; unicodetoglyph[i].u != 0xffff; i++) {
+      //if (unicodetoglyph[i].u >  c) break;
+      if (unicodetoglyph[i].u == c) {
+	  //qDebug("using name %s for char %04x\n",unicodetoglyph[i].g,c);
+	  return unicodetoglyph[i].g;
+      }
+    }
+  }
+
+  int GlyphIndex = (int)getUSHORT( post_table + 34 + (charindex * 2) );
+  
+  if( GlyphIndex <= 257 ) {		/* If a standard Apple name, */
+      //qDebug("post name for glyph is %s 1\n",Apple_CharStrings[GlyphIndex]);
+    return QString(Apple_CharStrings[GlyphIndex]);
+  } else {			/* Otherwise, use one */
+    				/* of the pascal strings. */
+    GlyphIndex -= 258;
+      
+    /* Set pointer to start of Pascal strings. */
+    char* ptr = (char*)(post_table + 34 + (numGlyphs * 2));
+      
+    int len = (int)*(ptr++);	/* Step thru the strings */
+    while(GlyphIndex--) {	/* until we get to the one */
+      			        /* that we want. */
+      ptr += len;
+      len = (int)*(ptr++);
+    }
+      
+    return QString::fromLatin1(ptr,len);
+  }
+}
+
+USHORT QPSPrinterFontTTF::unicode_for_glyph(int glyphindex)
+{
+  unsigned char* cmap = getTable("cmap");
+  int pos = 0;
+
+  //USHORT version = getUSHORT(cmap + pos); 
+  pos += 2;
+  USHORT nmaps   = getUSHORT(cmap + pos); pos += 2;
+
+  //fprintf(stderr,"cmap version %d (should be 0), %d maps\n",version,nmaps);
+
+  ULONG offset;
+  int i;
+  for (i=0; i<nmaps; i++) {
+    USHORT platform = getUSHORT(cmap+pos); pos+=2;
+    USHORT encoding = getUSHORT(cmap+pos); pos+=2;
+           offset   = getULONG( cmap+pos); pos+=4;
+	   //fprintf(stderr,"[%d] plat %d enc %d\n",i,platform,encoding);
+    if (platform == 3 && encoding == 1) break; // unicode
+  }
+  if (i==nmaps) {
+    //qWarning("Font does not have unicode encoding\n");
+    return 0xffff; // no unicode encoding!
+  }
+
+  //fprintf(stderr,"Doing Unicode encoding\n");
+  
+  pos = offset;
+  USHORT format = getUSHORT(cmap+pos); pos+=2;
+  //fprintf(stderr,"Unicode cmap format %d\n",format);
+  
+  if (format != 4) {
+    //qWarning("Unicode cmap format is not 4");
+    return 0xffff;
+  }
+    
+  pos += 2; // version
+  pos += 2; // length
+  USHORT segcount = getUSHORT(cmap+pos) / 2; pos+=2;
+
+  //fprintf(stderr,"Unicode cmap seg count %d\n",segcount);
+
+  // skip search data
+  pos += 2; 
+  pos += 2; 
+  pos += 2; 
+
+  unsigned char* endcode    = cmap + offset + 14;
+  unsigned char* startcode  = cmap + offset + 16 + 2*segcount;
+  unsigned char* iddelta    = cmap + offset + 16 + 4*segcount;
+  unsigned char* idrangeoff = cmap + offset + 16 + 6*segcount;
+  //unsigned char* glyphid    = cmap + offset + 16 + 8*segcount;
+  for (i=0; i<segcount; i++) {
+    USHORT endcode_i    = getUSHORT(endcode   +2*i);
+    USHORT startcode_i  = getUSHORT(startcode +2*i);
+    USHORT iddelta_i    = getUSHORT(iddelta   +2*i);
+    USHORT idrangeoff_i = getUSHORT(idrangeoff+2*i);
+    
+    //fprintf(stderr,"[%d] %04x-%04x (%d %d)\n",
+    //    i,startcode_i,endcode_i,iddelta_i,idrangeoff_i);
+
+    if (endcode_i == 0xffff) break; // last dummy segment
+
+    if (idrangeoff_i == 0) {
+      for (USHORT c = startcode_i; c <= endcode_i; c++) {
+	USHORT g = c + iddelta_i; // glyph index
+	if (g >= numGlyphs) {
+	  qWarning("incorrect glyph index in cmap");
+	  return 0xffff;
+	}
+	if (g == glyphindex) return c;
+      }
+    } else {
+      for (USHORT c = startcode_i; c <= endcode_i; c++) {
+	USHORT g = getUSHORT(idrangeoff+2*i 
+			     + 2*(c - startcode_i)
+			     + idrangeoff_i);
+	if (g >= numGlyphs) {
+	  qWarning("incorrect glyph index in cmap");
+	  return 0xffff;
+	}
+	if (g == glyphindex) return c;
+      }
+    }
+  }
+  return 0xffff;
+}
+
+
+#ifdef Q_PRINTER_USE_TYPE42
+// ****************** SNFTS ROUTINES *******
+
+/*-------------------------------------------------------------------
+** sfnts routines
+** These routines generate the PostScript "sfnts" array which 
+** contains one or more strings which contain a reduced version
+** of the TrueType font.
+**
+** A number of functions are required to accomplish this rather
+** complicated task. 
+-------------------------------------------------------------------*/
+
+// Write a BYTE as a hexadecimal value as part of the sfnts array.
+
+void QPSPrinterFontTTF::sfnts_pputBYTE(BYTE n,QTextStream& s, 
+				  int& string_len, int& line_len, bool& in_string)
+{
+  static const char hexdigits[]="0123456789ABCDEF";
+  
+  if(!in_string) {
+    s << "<";
+    string_len=0;
+    line_len++;
+    in_string=TRUE;
+  }
+
+  s << hexdigits[ n / 16 ] ;
+  s << hexdigits[ n % 16 ] ;
+  string_len++;
+  line_len+=2;
+
+  if(line_len > 70) {
+    s << "\n";
+    line_len=0;
+  }
+}
+   
+// Write a USHORT as a hexadecimal value as part of the sfnts array.
+
+void QPSPrinterFontTTF::sfnts_pputUSHORT(USHORT n,QTextStream& s,
+				  int& string_len, int& line_len, bool& in_string)
+{
+  sfnts_pputBYTE(n / 256,s, string_len, line_len, in_string);
+  sfnts_pputBYTE(n % 256,s, string_len, line_len, in_string);
+}
+
+
+// Write a ULONG as part of the sfnts array.
+
+void QPSPrinterFontTTF::sfnts_pputULONG(ULONG n,QTextStream& s,
+				  int& string_len, int& line_len, bool& in_string)
+{
+  int x1 = n % 256;   n /= 256;
+  int x2 = n % 256;   n /= 256;
+  int x3 = n % 256;   n /= 256;
+  
+  sfnts_pputBYTE(n,s , string_len, line_len, in_string);
+  sfnts_pputBYTE(x3,s, string_len, line_len, in_string);
+  sfnts_pputBYTE(x2,s, string_len, line_len, in_string);
+  sfnts_pputBYTE(x1,s, string_len, line_len, in_string);
+}
+
+/*
+** This is called whenever it is 
+** necessary to end a string in the sfnts array.
+**
+** (The array must be broken into strings which are
+** no longer than 64K characters.)
+*/
+void QPSPrinterFontTTF::sfnts_end_string(QTextStream& s,
+				    int& string_len, int& line_len, bool& in_string)
+{
+  if(in_string)	{
+    string_len=0;		/* fool sfnts_pputBYTE() */
+    
+    // s << "\n% dummy byte:\n";
+
+    // extra byte for pre-2013 compatibility 
+    sfnts_pputBYTE(0, s, string_len, line_len, in_string);	
+
+    s << ">";
+    line_len++;
+  }
+  
+  in_string=FALSE;
+}
+
+/*
+** This is called at the start of each new table.
+** The argement is the length in bytes of the table
+** which will follow.  If the new table will not fit
+** in the current string, a new one is started.
+*/
+void QPSPrinterFontTTF::sfnts_new_table(ULONG length,QTextStream& s,
+				   int& string_len, int& line_len, bool& in_string)
+{
+  if( (string_len + length) > 65528 )    
+    sfnts_end_string(s, string_len, line_len, in_string);
+}
+
+/*
+** We may have to break up the 'glyf' table.  That is the reason
+** why we provide this special routine to copy it into the sfnts
+** array.
+*/
+void QPSPrinterFontTTF::sfnts_glyf_table(ULONG oldoffset, 
+				    ULONG correct_total_length,
+				    QTextStream& s,
+				    int& string_len, int& line_len, bool& in_string)
+
+{
+  int x;
+  ULONG off;
+  ULONG length;
+  int c;
+  ULONG total=0;		/* running total of bytes written to table */
+  
+  loca_table = getTable("loca");
+
+  int font_off = oldoffset;
+  
+  /* Copy the glyphs one by one */
+  for(x=0; x < numGlyphs; x++) {
+    /* Read the glyph offset from the index-to-location table. */
+    if(indexToLocFormat == 0) {
+      off = getUSHORT( loca_table + (x * 2) );
+      off *= 2;
+      length = getUSHORT( loca_table + ((x+1) * 2) );
+      length *= 2;
+      length -= off;
+    } else {
+      off = getULONG( loca_table + (x * 4) );
+      length = getULONG( loca_table + ((x+1) * 4) );
+      length -= off;
+    }
+      
+    //  fprintf(stderr,"glyph length=%d",(int)length);
+      
+    /* Start new string if necessary. */
+    sfnts_new_table( (int)length, s, string_len, line_len, in_string );
+      
+    /* 
+    ** Make sure the glyph is padded out to a
+    ** two byte boundary.
+    */
+    if( length % 2 ) {
+      qWarning("TrueType font contains a 'glyf' table without 2 byte padding");
+      defective = TRUE;
+      return;
+    }
+      
+    /* Copy the bytes of the glyph. */
+    while( length-- ) {
+      c = offset_table[ font_off ];
+      font_off++;
+	
+      sfnts_pputBYTE(c, s, string_len, line_len, in_string);
+      total++;		/* add to running total */
+    }	    
+  }
+
+  /* Pad out to full length from table directory */
+  while( total < correct_total_length )	{
+    sfnts_pputBYTE(0, s, string_len, line_len, in_string);
+    total++;
+  }
+
+  /* Look for unexplainable descrepancies between sizes */ 
+  if( total != correct_total_length ) {
+    qWarning("QPSPrinterFontTTF::sfnts_glyf_table: total != correct_total_length");
+    defective = TRUE;
+    return;
+  }
+}
+
+/*
+** Here is the routine which ties it all together.
+**
+** Create the array called "sfnts" which 
+** holds the actual TrueType data.
+*/
+
+void QPSPrinterFontTTF::download_sfnts(QTextStream& s)
+{
+  // tables worth including in a type 42 font
+  char *table_names[]= {
+    "cvt ",
+    "fpgm",
+    "glyf",
+    "head",
+    "hhea",
+    "hmtx",
+    "loca",
+    "maxp",
+    "prep"
+  };
+
+  struct {			/* The location of each of */
+    ULONG oldoffset;	/* the above tables. */
+    ULONG newoffset;
+    ULONG length;
+    ULONG checksum;
+  } tables[9];
+    	
+  int c;			/* Input character. */
+  int diff;
+  int count;			/* How many `important' tables did we find? */
+  
+  BYTE* ptr = offset_table + 12; // original table directory
+  ULONG nextoffset=0;
+  count=0;
+    
+  /* 
+  ** Find the tables we want and store there vital
+  ** statistics in tables[].
+  */
+  for(int x=0; x < 9; x++ ) {
+    do {
+      diff = strncmp( (char*)ptr, table_names[x], 4 );
+
+      if( diff > 0 ) {		/* If we are past it. */
+	tables[x].length = 0;
+	diff = 0;		
+      }
+      else if( diff < 0 ) {		/* If we haven't hit it yet. */
+	ptr += 16;
+      }
+      else if( diff == 0 ) {	/* Here it is! */
+	tables[x].newoffset = nextoffset;
+	tables[x].checksum = getULONG( ptr + 4 );
+	tables[x].oldoffset = getULONG( ptr + 8 );
+	tables[x].length = getULONG( ptr + 12 );
+	nextoffset += ( ((tables[x].length + 3) / 4) * 4 );
+	count++;
+	ptr += 16;	    	
+      }
+    } while(diff != 0);
+  } /* end of for loop which passes over the table directory */
+  
+  /* Begin the sfnts array. */
+
+  s << "/sfnts[<";
+
+  bool in_string=TRUE;
+  int  string_len=0;
+  int  line_len=8;
+  
+  /* Generate the offset table header */
+  /* Start by copying the TrueType version number. */
+  ptr = offset_table;
+  for(int x=0; x < 4; x++)
+    sfnts_pputBYTE( *(ptr++) , s, string_len, line_len, in_string );
+  
+  /* Now, generate those silly numTables numbers. */
+  sfnts_pputUSHORT(count,s, string_len, line_len, in_string);		/* number of tables */
+  if( count == 9 ) {
+    sfnts_pputUSHORT(7,s, string_len, line_len, in_string);		/* searchRange */
+    sfnts_pputUSHORT(3,s, string_len, line_len, in_string);		/* entrySelector */
+    sfnts_pputUSHORT(81,s, string_len, line_len, in_string);		/* rangeShift */
+  }    
+  else {
+    qWarning("Fewer than 9 tables selected"); 	
+  }
+  
+  /* Now, emmit the table directory. */
+  for(int x=0; x < 9; x++) {
+    if( tables[x].length == 0 )	/* Skip missing tables */
+      continue;
+      
+    /* Name */
+    sfnts_pputBYTE( table_names[x][0], s, string_len, line_len, in_string);
+    sfnts_pputBYTE( table_names[x][1], s, string_len, line_len, in_string);
+    sfnts_pputBYTE( table_names[x][2], s, string_len, line_len, in_string);
+    sfnts_pputBYTE( table_names[x][3], s, string_len, line_len, in_string);
+    
+    /* Checksum */
+    sfnts_pputULONG( tables[x].checksum, s, string_len, line_len, in_string );
+    
+    /* Offset */
+    sfnts_pputULONG( tables[x].newoffset + 12 + (count * 16), s,
+		     string_len, line_len, in_string );
+    
+    /* Length */
+    sfnts_pputULONG( tables[x].length, s,
+		     string_len, line_len, in_string );
+  }
+  
+  /* Now, send the tables */
+  for(int x=0; x < 9; x++) {
+    if( tables[x].length == 0 )	/* skip tables that aren't there */
+      continue;
+      
+    /* 'glyf' table gets special treatment */
+    if( strcmp(table_names[x],"glyf")==0 ) {
+      sfnts_glyf_table(tables[x].oldoffset,tables[x].length, s,
+		       string_len, line_len, in_string);
+    } else { // other tables should not exceed 64K (not always true; Sivan)
+      if( tables[x].length > 65535 ) {
+	qWarning("TrueType font has a table which is too long");	    
+	defective = TRUE;
+	return;
+      }
+	  
+      /* Start new string if necessary. */
+      sfnts_new_table(tables[x].length, s,
+		      string_len, line_len, in_string);
+	  
+      int font_off = tables[x].oldoffset;
+      /* Copy the bytes of the table. */
+      for( int y=0; y < (int)tables[x].length; y++ ) {
+	c = offset_table[ font_off ];
+	font_off++;
+	      
+	sfnts_pputBYTE(c, s, string_len, line_len, in_string);
+      }	    
+    }
+      
+    /* Padd it out to a four byte boundary. */
+    int y=tables[x].length;
+    while( (y % 4) != 0 ) {
+      sfnts_pputBYTE(0, s, string_len, line_len, in_string);
+      y++;
+    }
+      
+  } /* End of loop for all tables */
+  
+  /* Close the array. */
+  sfnts_end_string(s, string_len, line_len, in_string);    
+  s << "]def\n";
+} 
+#endif
+
+// ****************** Type 3 CharProcs *******
+
+/*
+** This routine is used to break the character
+** procedure up into a number of smaller 
+** procedures.  This is necessary so as not to
+** overflow the stack on certain level 1 interpreters.
+**
+** Prepare to push another item onto the stack,
+** starting a new proceedure if necessary.
+**
+** Not all the stack depth calculations in this routine
+** are perfectly accurate, but they do the job.
+*/
+static int stack_depth = 0;
+static void stack(int num_pts, int newnew, QTextStream& s)
+{
+  if( num_pts > 25 ) {		/* Only do something of we will */
+    				/* have a log of points. */
+    if(stack_depth == 0) {
+      s << "{";
+      stack_depth=1;
+    }
+
+    stack_depth += newnew;		/* Account for what we propose to add */
+
+    if(stack_depth > 100) {
+      s << "}_e{";
+      stack_depth = 3 + newnew;	/* A rough estimate */
+    }
+  }
+}
+
+static void stack_end(QTextStream& s)			/* called at end */
+{
+  if(stack_depth) {
+    s << "}_e";
+    stack_depth=0;
+  }
+}
+
+// postscript drawing commands
+
+static void PSMoveto(FWord x, FWord y, QTextStream& ts) 
+{
+  ts << x;
+  ts << " ";
+  ts << y;
+  ts << " _m\n";
+}
+
+static void PSLineto(FWord x, FWord y, QTextStream& ts) 
+{
+  ts << x;
+  ts << " ";
+  ts << y;
+  ts << " _l\n";
+}
+
+/* Emmit a PostScript "curveto" command. */
+static void PSCurveto(FWord* xcoor, FWord* ycoor,
+		      FWord x, FWord y, int s, int t, QTextStream& ts) 
+{
+  int N, i;
+  double sx[3], sy[3], cx[4], cy[4];
+  
+  N = t-s+2;
+  for(i=0; i<N-1; i++) {
+    sx[0] = i==0?xcoor[s-1]:(xcoor[i+s]+xcoor[i+s-1])/2;
+    sy[0] = i==0?ycoor[s-1]:(ycoor[i+s]+ycoor[i+s-1])/2;
+    sx[1] = xcoor[s+i];
+    sy[1] = ycoor[s+i];
+    sx[2] = i==N-2?x:(xcoor[s+i]+xcoor[s+i+1])/2;
+    sy[2] = i==N-2?y:(ycoor[s+i]+ycoor[s+i+1])/2;
+    cx[3] = sx[2];
+    cy[3] = sy[2];
+    cx[1] = (2*sx[1]+sx[0])/3;
+    cy[1] = (2*sy[1]+sy[0])/3;
+    cx[2] = (sx[2]+2*sx[1])/3;
+    cy[2] = (sy[2]+2*sy[1])/3;
+
+    ts << (int)cx[1];
+    ts << " ";
+    ts << (int)cy[1];
+    ts << " ";
+    ts << (int)cx[2];
+    ts << " ";
+    ts << (int)cy[2];
+    ts << " ";
+    ts << (int)cx[3];
+    ts << " ";
+    ts << (int)cy[3];
+    ts << " _c\n";
+  }
+}
+
+/* The PostScript bounding box. */
+/* Variables to hold the character data. */
+
+//void load_char(struct TTFONT *font, BYTE *glyph);
+//void clear_data();
+
+//void PSMoveto(FWord x, FWord y, QTextStream& ts);
+//void PSLineto(FWord x, FWord y, QTextStream& ts);
+//void PSCurveto(FWord x, FWord y, int s, int t, QTextStream& ts);
+
+//double area(FWord *x, FWord *y, int n);
+//int nextinctr(int co, int ci);
+//int nextoutctr(int co);
+//int nearout(int ci);
+//double intest(int co, int ci);
+#define sqr(x) ((x)*(x))
+
+#define NOMOREINCTR -1
+#define NOMOREOUTCTR -1
+
+/*
+** Find the area of a contour?
+*/
+static double area(FWord *x, FWord *y, int n)
+{ 
+  int i;
+  double sum;
+      
+  sum=x[n-1]*y[0]-y[n-1]*x[0];
+  for (i=0; i<=n-2; i++) sum += x[i]*y[i+1] - y[i]*x[i+1];
+  return sum;
+}   
+
+static int nextoutctr(int /*co*/, charproc_data* cd)
+{
+  int j;
+  
+  for(j=0; j<cd->num_ctr; j++) 
+    if (cd->check_ctr[j]==0 && cd->area_ctr[j] < 0) {
+      cd->check_ctr[j]=1;
+      return j;
+    }
+  
+  return NOMOREOUTCTR;
+} /* end of nextoutctr() */
+
+static int nextinctr(int co, int /*ci*/, charproc_data* cd)
+{
+  int j;
+  
+  for(j=0; j<cd->num_ctr; j++)
+    if (cd->ctrset[2*j+1]==co) 
+      if (cd->check_ctr[ cd->ctrset[2*j] ]==0) {
+	cd->check_ctr[ cd->ctrset[2*j] ]=1;
+	return cd->ctrset[2*j];
+      }
+  
+  return NOMOREINCTR;
+}
+
+static double intest(int co, int ci, charproc_data* cd)
+{
+  int i, j, start, end;
+  double r1, r2, a;
+  FWord xi[3], yi[3];
+  
+  j=start=(co==0)?0:(cd->epts_ctr[co-1]+1);
+  end=cd->epts_ctr[co];
+  i=(ci==0)?0:(cd->epts_ctr[ci-1]+1);
+  xi[0] = cd->xcoor[i];
+  yi[0] = cd->ycoor[i];
+  r1=sqr(cd->xcoor[start] - xi[0]) 
+     + sqr(cd->ycoor[start] - yi[0]);
+  
+  for (i=start; i<=end; i++) {
+    r2 = sqr(cd->xcoor[i] - xi[0])+sqr(cd->ycoor[i] - yi[0]);
+    if (r2 < r1) {
+      r1=r2; j=i;
+    }
+  }
+  xi[1]=cd->xcoor[j-1]; yi[1]=cd->ycoor[j-1];
+  xi[2]=cd->xcoor[j+1]; yi[2]=cd->ycoor[j+1];
+  if (j==start) { xi[1]=cd->xcoor[end]; yi[1]=cd->ycoor[end]; }
+  if (j==end) { xi[2]=cd->xcoor[start]; yi[2]=cd->ycoor[start]; }
+  a=area(xi, yi, 3);
+  
+  return a;
+} /* end of intest() */
+
+/*
+** find the nearest out contour to a specified in contour.
+*/
+static int nearout(int ci, charproc_data* cd)
+{
+  int k = 0;			/* !!! is this right? */
+  int co;
+  double a, a1=0;
+  
+  for (co=0; co < cd->num_ctr; co++) {
+    if(cd->area_ctr[co] < 0) {
+      a=intest(co,ci, cd);
+      if (a<0 && a1==0)	{
+	k=co;
+	a1=a;
+      }
+      if(a<0 && a1!=0 && a>a1) {
+	k=co;
+	a1=a;
+      }
+    }
+  }
+			
+  return k;
+} /* end of nearout() */
+
+
+/*
+** We call this routine to emmit the PostScript code
+** for the character we have loaded with load_char().
+*/
+void PSConvert(QTextStream& s, charproc_data* cd)
+{    
+  int i,j,k,fst,start_offpt;
+  int end_offpt=0;
+  
+  cd->area_ctr = new double[cd->num_ctr];
+  memset(cd->area_ctr, 0, (cd->num_ctr*sizeof(double)));
+
+  cd->check_ctr = new char[cd->num_ctr];
+  memset(cd->check_ctr, 0, (cd->num_ctr*sizeof(char)));
+
+  cd->ctrset = new int[2*(cd->num_ctr)];
+  memset(cd->ctrset, 0, (cd->num_ctr*2*sizeof(int)));
+  
+  cd->check_ctr[0]=1;
+  cd->area_ctr[0]=area(cd->xcoor, cd->ycoor, cd->epts_ctr[0]+1);
+  
+  for (i=1; i<cd->num_ctr; i++) 
+    cd->area_ctr[i]=area(cd->xcoor+cd->epts_ctr[i-1]+1, 
+			 cd->ycoor+cd->epts_ctr[i-1]+1, 
+			 cd->epts_ctr[i]-cd->epts_ctr[i-1]);
+  
+  for (i=0; i<cd->num_ctr; i++) {
+    if (cd->area_ctr[i]>0) {
+      cd->ctrset[2*i]=i; 
+      cd->ctrset[2*i+1]=nearout(i,cd);
+    } else {
+      cd->ctrset[2*i]=-1; 
+      cd->ctrset[2*i+1]=-1;
+    }
+  }
+
+  /* Step thru the coutours. */
+  /* I believe that a contour is a detatched */
+  /* set of curves and lines. */
+  i=j=k=0;
+  while (i < cd->num_ctr ) {
+    fst = j = (k==0) ? 0 : (cd->epts_ctr[k-1]+1);
+    
+    /* Move to the first point on the contour. */
+    stack(cd->num_pts,3,s);
+    PSMoveto(cd->xcoor[j],cd->ycoor[j],s);
+    start_offpt = 0;		/* No off curve points yet. */
+      
+    /* Step thru the remaining points of this contour. */
+    for(j++; j <= cd->epts_ctr[k]; j++) {
+      if (!(cd->tt_flags[j]&1))	{ /* Off curve */
+	if (!start_offpt) 
+	  { start_offpt = end_offpt = j; }
+	else
+	  end_offpt++;
+      } else {			/* On Curve */
+	if (start_offpt) {
+	  stack(cd->num_pts,7,s);
+	  PSCurveto(cd->xcoor,cd->ycoor,
+		    cd->xcoor[j],cd->ycoor[j],
+		    start_offpt,end_offpt,s);
+	  start_offpt = 0;
+	} else {
+	  stack(cd->num_pts,3,s);
+	  PSLineto(cd->xcoor[j], cd->ycoor[j],s);
+	}
+      }
+    }
+      
+    /* Do the final curve or line */
+    /* of this coutour. */
+    if (start_offpt) {
+      stack(cd->num_pts,7,s); 
+      PSCurveto(cd->xcoor,cd->ycoor,
+		cd->xcoor[fst],cd->ycoor[fst],
+		start_offpt,end_offpt,s);
+    } else {
+      stack(cd->num_pts,3,s); 
+      PSLineto(cd->xcoor[fst],cd->ycoor[fst],s);
+    }
+      
+    k=nextinctr(i,k,cd);
+      
+    if (k==NOMOREINCTR)
+      i=k=nextoutctr(i,cd);
+      
+    if (i==NOMOREOUTCTR)
+      break;
+  }
+  
+  /* Now, we can fill the whole thing. */
+  stack(cd->num_pts,1,s);
+  s << "_cl";		/* "closepath eofill" */
+  
+  /* Free our work arrays. */
+  delete cd->area_ctr;
+  delete cd->check_ctr;
+  delete cd->ctrset;
+} 
+
+
+/*
+** Load the simple glyph data pointed to by glyph.
+** The pointer "glyph" should point 10 bytes into
+** the glyph data.
+*/
+void QPSPrinterFontTTF::charprocLoad(BYTE *glyph, charproc_data* cd)
+{
+  int x;
+  BYTE c, ct;
+  
+  /* Read the contour endpoints list. */
+  cd->epts_ctr = new int[cd->num_ctr];
+  //cd->epts_ctr = (int *)myalloc(cd->num_ctr,sizeof(int));
+  for (x = 0; x < cd->num_ctr; x++) {
+    cd->epts_ctr[x] = getUSHORT(glyph);
+    glyph += 2;
+  }
+  
+  /* From the endpoint of the last contour, we can */
+  /* determine the number of points. */
+  cd->num_pts = cd->epts_ctr[cd->num_ctr-1]+1;
+#ifdef DEBUG_TRUETYPE
+  fprintf(stderr,"num_pts=%d",num_pts);
+  fprintf(stderr,"% num_pts=%d\n",num_pts);
+#endif
+
+  /* Skip the instructions. */
+  x = getUSHORT(glyph);
+  glyph += 2;
+  glyph += x;
+
+  /* Allocate space to hold the data. */
+  //cd->tt_flags = (BYTE *)myalloc(num_pts,sizeof(BYTE));
+  //cd->xcoor    = (FWord *)myalloc(num_pts,sizeof(FWord));
+  //cd->ycoor    = (FWord *)myalloc(num_pts,sizeof(FWord));
+  cd->tt_flags = new BYTE[cd->num_pts];
+  cd->xcoor    = new FWord[cd->num_pts];
+  cd->ycoor    = new FWord[cd->num_pts];
+
+  /* Read the flags array, uncompressing it as we go. */
+  /* There is danger of overflow here. */
+  for (x = 0; x < cd->num_pts; ) {
+    cd->tt_flags[x++] = c = *(glyph++);
+    
+    if (c&8) {		/* If next byte is repeat count, */
+      ct = *(glyph++);
+      
+      if( (x + ct) > cd->num_pts ) {
+	qWarning("Fatal Error in TT flags");
+	return;
+      }
+      
+      while (ct--)
+	cd->tt_flags[x++] = c;
+    }
+  }
+
+  /* Read the x coordinates */
+  for (x = 0; x < cd->num_pts; x++) {
+    if (cd->tt_flags[x] & 2) {		/* one byte value with */
+                                        /* external sign */
+      c = *(glyph++);
+      cd->xcoor[x] = (cd->tt_flags[x] & 0x10) ? c : (-1 * (int)c);
+    } else if(cd->tt_flags[x] & 0x10) {	/* repeat last */
+      cd->xcoor[x] = 0;
+    } else {				/* two byte signed value */
+      cd->xcoor[x] = getFWord(glyph);
+      glyph+=2;
+    }
+  }
+
+  /* Read the y coordinates */
+  for(x = 0; x < cd->num_pts; x++) {
+    if (cd->tt_flags[x] & 4) {		/* one byte value with */
+      				        /* external sign */
+      c = *(glyph++);
+      cd->ycoor[x] = (cd->tt_flags[x] & 0x20) ? c : (-1 * (int)c);
+    } else if (cd->tt_flags[x] & 0x20) {	/* repeat last value */
+      cd->ycoor[x] = 0;
+    } else {			/* two byte signed value */
+      cd->ycoor[x] = getUSHORT(glyph);
+      glyph+=2;
+    }
+  }
+
+  /* Convert delta values to absolute values. */
+  for(x = 1; x < cd->num_pts; x++) {
+    cd->xcoor[x] += cd->xcoor[x-1];
+    cd->ycoor[x] += cd->ycoor[x-1];
+  }
+
+  for(x=0; x < cd->num_pts; x++) {
+    cd->xcoor[x] = topost(cd->xcoor[x]);
+    cd->ycoor[x] = topost(cd->ycoor[x]);
+  }
+}
+
+#define ARG_1_AND_2_ARE_WORDS 1
+#define ARGS_ARE_XY_VALUES 2
+#define ROUND_XY_TO_GRID 4
+#define WE_HAVE_A_SCALE 8
+/* RESERVED 16 */
+#define MORE_COMPONENTS 32
+#define WE_HAVE_AN_X_AND_Y_SCALE 64
+#define WE_HAVE_A_TWO_BY_TWO 128
+#define WE_HAVE_INSTRUCTIONS 256
+#define USE_MY_METRICS 512
+
+/*
+** Emmit PostScript code for a composite character.
+*/
+void QPSPrinterFontTTF::charprocComposite(BYTE *glyph, QTextStream& s)
+{
+  USHORT flags;
+  USHORT glyphIndex;
+  int arg1;
+  int arg2;
+  USHORT xscale;
+  USHORT yscale;
+  USHORT scale01;
+  USHORT scale10;
+    
+  /* Once around this loop for each component. */
+  do {
+    flags = getUSHORT(glyph);	/* read the flags word */ 
+    glyph += 2;
+
+    glyphIndex = getUSHORT(glyph);	/* read the glyphindex word */
+    glyph += 2;
+	
+    if(flags & ARG_1_AND_2_ARE_WORDS) {
+                                /* The tt spec. seems to say these are signed. */
+      arg1 = getSHORT(glyph);
+      glyph += 2;
+      arg2 = getSHORT(glyph);
+      glyph += 2;
+    } else {			/* The tt spec. does not clearly indicate */
+    	    			/* whether these values are signed or not. */
+      arg1 = *(glyph++);
+      arg2 = *(glyph++);
+    }
+
+    if(flags & WE_HAVE_A_SCALE) {
+      xscale = yscale = getUSHORT(glyph);
+      glyph += 2;	    
+      scale01 = scale10 = 0;
+    } else if(flags & WE_HAVE_AN_X_AND_Y_SCALE) {
+      xscale = getUSHORT(glyph);
+      glyph += 2;
+      yscale = getUSHORT(glyph);
+      glyph += 2;
+      scale01 = scale10 = 0;
+    } else if(flags & WE_HAVE_A_TWO_BY_TWO) {
+      xscale = getUSHORT(glyph);
+      glyph += 2;
+      scale01 = getUSHORT(glyph);
+      glyph += 2;
+      scale10 = getUSHORT(glyph);
+      glyph += 2;
+      yscale = getUSHORT(glyph);
+      glyph += 2;
+    } else {
+      xscale = yscale = scale01 = scale10 = 0;
+    }
+
+    /* Debugging */
+#ifdef DEBUG_TRUETYPE
+    fprintf(stderr,"% flags=%d, arg1=%d, arg2=%d, xscale=%d, yscale=%d, scale01=%d, scale10=%d\n",
+	    (int)flags,arg1,arg2,(int)xscale,(int)yscale,(int)scale01,(int)scale10);
+#endif
+    
+    /* If we have an (X,Y) shif and it is non-zero, */
+    /* translate the coordinate system. */
+    if( flags & ARGS_ARE_XY_VALUES ) {
+      if( arg1 != 0 || arg2 != 0 ) {
+	s <<"gsave ";
+	s << topost(arg1);
+	s << " ";
+	s << topost(arg2);
+	s << " translate\n";
+	
+	//fprintf(stderr,"gsave %d %d translate\n", topost(arg1), topost(arg2) );
+      }
+    } else {
+      s << "% unimplemented shift, arg1=";
+      s << arg1;
+      s << ", arg2=";
+      s << arg2;
+      s << "\n";
+    }
+
+    /* Invoke the CharStrings procedure to print the component. */
+    s << "false CharStrings /";
+    s << glyphName(glyphIndex);
+    s << " get exec\n";
+
+    //	printf("false CharStrings /%s get exec\n",
+    //ttfont_CharStrings_getname(font,glyphIndex));
+
+    /* If we translated the coordinate system, */
+    /* put it back the way it was. */
+    if( flags & ARGS_ARE_XY_VALUES && (arg1 != 0 || arg2 != 0) )
+      s <<"grestore ";
+  } while(flags & MORE_COMPONENTS);
+}
+
+/*
+** Return a pointer to a specific glyph's data.
+*/
+BYTE* QPSPrinterFontTTF::charprocFindGlyphData(int charindex)
+{
+  ULONG off;
+  ULONG length;
+
+  /* Read the glyph offset from the index to location table. */
+  if(indexToLocFormat == 0) {
+    off = getUSHORT( loca_table + (charindex * 2) );
+    off *= 2;
+    length = getUSHORT( loca_table + ((charindex+1) * 2) );
+    length *= 2;
+    length -= off;
+  } else {
+    off = getULONG( loca_table + (charindex * 4) );
+    length = getULONG( loca_table + ((charindex+1) * 4) );
+    length -= off;
+  }
+
+  if(length > 0)
+    return glyf_table + off;
+  else
+    return (BYTE*)NULL;
+}
+
+void QPSPrinterFontTTF::charproc(int charindex, QTextStream& s)
+{
+  int llx,lly,urx,ury;
+  int advance_width;
+  charproc_data cd;
+
+#ifdef DEBUG_TRUETYPE
+  s << "% tt_type3_charproc for ";
+  s << charindex;
+  s << "\n";
+#endif
+
+  /* Get a pointer to the data. */
+  BYTE* glyph = charprocFindGlyphData( charindex );
+
+  /* If the character is blank, it has no bounding box, */
+  /* otherwise read the bounding box. */
+  if( glyph == (BYTE*)NULL ) {
+    llx=lly=urx=ury=0;	/* A blank char has an all zero BoundingBox */
+    cd.num_ctr=0;		/* Set this for later if()s */
+  } else {
+    /* Read the number of contours. */
+    cd.num_ctr = getSHORT(glyph);
+      
+    /* Read PostScript bounding box. */
+    llx = getFWord(glyph + 2);
+    lly = getFWord(glyph + 4);
+    urx = getFWord(glyph + 6);
+    ury = getFWord(glyph + 8);     
+      
+    /* Advance the pointer. */
+    glyph += 10;
+  }
+  
+  /* If it is a simple character, load its data. */
+  if (cd.num_ctr > 0)
+    charprocLoad(glyph, &cd);
+  else
+    cd.num_pts=0;
+  
+  /* Consult the horizontal metrics table to determine */
+  /* the character width. */
+  if( charindex < numberOfHMetrics )
+    advance_width = getuFWord( hmtx_table + (charindex * 4) );    	
+  else
+    advance_width = getuFWord( hmtx_table + ((numberOfHMetrics-1) * 4) );
+  
+  /* Execute setcachedevice in order to inform the font machinery */
+  /* of the character bounding box and advance width. */
+  stack(cd.num_pts,7,s);
+  s << topost(advance_width);
+  s << " 0 ";
+  s << topost(llx);
+  s << " ";
+  s << topost(lly);
+  s << " ";
+  s << topost(urx);
+  s << " ";
+  s << topost(ury);
+  s << " _sc\n";
+
+  /* If it is a simple glyph, convert it, */
+  /* otherwise, close the stack business. */
+  if( cd.num_ctr > 0 ) {        // simple
+    PSConvert(s,&cd);
+    delete cd.tt_flags;
+    delete cd.xcoor;
+    delete cd.ycoor;
+    delete cd.epts_ctr;
+  } else if( cd.num_ctr < 0 ) { // composite 
+    charprocComposite(glyph,s);
+  }
+  
+  stack_end(s);
+} /* end of tt_type3_charproc() */
+
+
+// ================== PFA ====================
+
+class QPSPrinterFontPFA
+  : public QPSPrinterFontPrivate {
+public:
+  QPSPrinterFontPFA(const QFont &f, QByteArray& data);
+  virtual void    download(QTextStream& s);
+private:
+  QByteArray     data;
+};
+
+QPSPrinterFontPFA::QPSPrinterFontPFA(const QFont &f, QByteArray& d)
+{
+  data = d;
+
+  int pos = 0;
+  char* p = data.data();
+  QString fontname;
+  
+  if (p[ pos ] != '%' || p[ pos+1 ] != '!') { // PFA marker
+    qWarning("invalid pfa file");
+    return;
+  }
+  
+  char* fontnameptr = strstr(p+pos,"/FontName");
+  if (fontnameptr == NULL)
+    return;
+  
+  fontnameptr += strlen("/FontName") + 1;
+  while (*fontnameptr == ' ' || *fontnameptr == '/') fontnameptr++;
+  int l=0;
+  while (fontnameptr[l] != ' ') l++;
+  
+  psname = QString::fromLatin1(fontnameptr,l);
+  replacementList = makePSFontNameList( f, psname );
+}
+
+void QPSPrinterFontPFA::download(QTextStream& s)
+{
+  char* p = data.data();
+
+  emitPSFontNameList( s, psname, replacementList );
+  s << "% Font resource\n";
+  for (int i=0; i < (int)data.size(); i++) s << p[i];
+  s << "% End of font resource\n";
+}
+
+// ================== PFB ====================
+
+class QPSPrinterFontPFB
+  : public QPSPrinterFontPrivate {
+public:
+  QPSPrinterFontPFB(const QFont &f, QByteArray& data);
+  virtual void    download(QTextStream& s);
+private:
+  QByteArray     data;
+};
+
+QPSPrinterFontPFB::QPSPrinterFontPFB(const QFont &f, QByteArray& d)
+{
+  data = d;
+
+  int pos = 0;
+  int len;
+  int typ;
+  unsigned char* p = (unsigned char*) data.data();
+  QString fontname;
+  
+  if (p[ pos ] != 0x80) { // PFB marker
+    qWarning("pfb file does not start with 0x80");
+    return;
+  }
+  pos++;
+  typ = p[ pos ]; // 1=ascii 2=binary 3=done
+  pos++;
+  len = p[ pos ];	    pos++;
+  len |= (p[ pos ] << 8) ; pos++;
+  len |= (p[ pos ] << 16); pos++;
+  len |= (p[ pos ] << 24); pos++;
+  
+  //printf("font block type %d len %d\n",typ,len);
+  
+  char* fontnameptr = strstr((char*)p+pos,"/FontName");
+  if (fontnameptr == NULL)
+    return;
+  
+  fontnameptr += strlen("/FontName") + 1;
+  while (*fontnameptr == ' ' || *fontnameptr == '/') fontnameptr++;
+  int l=0;
+  while (fontnameptr[l] != ' ') l++;
+  
+  psname = QString::fromLatin1(fontnameptr,l);
+  replacementList = makePSFontNameList( f, psname );
+}
+
+void QPSPrinterFontPFB::download(QTextStream& s)
+{
+  unsigned char* p = (unsigned char*) data.data();
+  int pos;
+  int len;
+  int typ;
+  
+  int hexcol = 0;
+  int line_length = 64;
+
+  emitPSFontNameList( s, psname, replacementList );
+  s << "% Font resource\n";
+
+  pos = 0;
+  typ = -1;
+  while (typ != 3) { // not end of file 
+    if (p[ pos ] != 0x80) // PFB marker
+      return; // pfb file does not start with 0x80
+    pos++;
+    typ = p[ pos ]; // 1=ascii 2=binary 3=done
+    pos++;
+  
+    if (typ == 3) break;
+
+    len = p[ pos ];	    pos++;
+    len |= (p[ pos ] << 8) ; pos++;
+    len |= (p[ pos ] << 16); pos++;
+    len |= (p[ pos ] << 24); pos++;
+    
+    //printf("font block type %d len %d\n",typ,len);
+    
+    if (typ==1) {
+      for (int j=0; j<len; j++) {
+	if (hexcol) { s << "\n"; hexcol = 0; }
+	//qWarning(QString::fromLatin1((char*)(p+pos),1));
+	if (p[pos] == '\r' || p[pos] == '\n') {
+	  s << "\n";
+        while (p[pos] == '\r' || p[pos] == '\n') pos++;
+	} else {
+	s << QString::fromLatin1((char*)(p+pos),1);
+	pos++;
+	}
+      }
+    }
+    if (typ==2) {
+      static char *hexchar = "0123456789abcdef";
+      for (int j=0; j<len; j++) {
+	/* trim hexadecimal lines to line_length columns */
+	if (hexcol >= line_length) {
+	  s << "\n";
+	  hexcol = 0;
+	}
+	s << QString::fromLatin1(hexchar+((p[pos] >> 4) & 0xf),1);
+	s << QString::fromLatin1(hexchar+((p[pos]     ) & 0xf),1);
+	pos++;
+	//putc(hexchar[(*p >> 4) & 0xf], ofp);
+	//putc(hexchar[*p & 0xf], ofp);
+	hexcol += 2;
+      }
+
+      //pos += len;
+    }
+  }
+  s << "% End of font resource\n";
+}
+
+// ================== AFontFileNotFound ============
+
+
+
+class QPSPrinterFontNotFound
+  : public QPSPrinterFontPrivate {
+public:
+  QPSPrinterFontNotFound(const QFont& f);
+  virtual void    download(QTextStream& s);
+private:
+  QByteArray     data;
+};
+
+QPSPrinterFontNotFound::QPSPrinterFontNotFound(const QFont& f)
+{
+    psname = makePSFontName( f );
+    replacementList = makePSFontNameList( f );
+}
+
+void QPSPrinterFontNotFound::download(QTextStream& s)
+{
+    emitPSFontNameList( s, psname, replacementList );
+  s << "% No embeddable font for ";
+  s << psname;
+  s << " found\n";
+}
+
+// =================== A font file for asian ============
+
+class QPSPrinterFontAsian
+  : public QPSPrinterFontPrivate {
+public:
+      void download(QTextStream& s);
+      QString defineFont( QTextStream &stream, QString ps, const QFont &f, int cs, const QString &key, 
+			  QPSPrinterPrivate *d ) = 0;
+      QString emitDef( QTextStream &stream, const QString &ps, const QString &latinName, 
+		    const QFont &f, float slant, const QString &key, const QString &key2, QPSPrinterPrivate *d );
+};
+
+void QPSPrinterFontAsian::download(QTextStream& s)
+{
+    emitPSFontNameList( s, psname, replacementList );
+  s << "% Asian postscript font requested. Using ";
+  s << psname << endl;
+}
+
+
+QString QPSPrinterFontAsian::emitDef( QTextStream &stream, const QString &ps, const QString &latinName, 
+				   const QFont &f, float slant, const QString &key, const QString &key2, QPSPrinterPrivate *d)
+{
+    QString fontName;
+    QString lfontName;
+
+    QString *tmp = d->headerFontNames.find( key );
+
+    if ( d->buffer ) {
+	if ( tmp ) {
+	    fontName = *tmp;
+	} else {
+	    lfontName.sprintf( "/F%d ", ++d->headerFontNumber );
+	    d->fontStream << lfontName << " " << slant << "/" << latinName << " MSF\n";
+	    d->headerFontNames.insert( key2, new QString( fontName ) );
+	    fontName.sprintf( "/F%das ", d->headerFontNumber );
+	    d->fontStream << fontName << slant << ps << " MSF\n";
+	    d->headerFontNames.insert( key2, new QString( fontName ) );
+	}
+	++d->headerFontNumber;
+	d->fontStream << "/F" << d->headerFontNumber << " "
+		      << f.pointSize() << lfontName << " DF\n";
+	d->fontStream << "/F" << d->headerFontNumber << "as "
+		      << f.pointSize() << fontName << " DF\n";
+	fontName.sprintf( "F%d", d->headerFontNumber );
+	d->headerFontNames.insert( key, new QString( fontName ) );
+    } else {
+	if ( !tmp )
+	    tmp = d->pageFontNames.find( key );
+	if ( tmp ) {
+	    fontName = *tmp;
+	} else {
+	    lfontName.sprintf( "/F%d ", ++d->pageFontNumber );
+	    stream << lfontName << " " << slant << "/" << latinName << " MSF\n";
+	    d->pageFontNames.insert( key2, new QString( fontName ) );
+	    fontName.sprintf( "/F%das ", d->pageFontNumber );
+	    stream << fontName << slant << ps << " MSF\n";
+	    d->pageFontNames.insert( key2, new QString( fontName ) );
+	}
+	++d->pageFontNumber;
+	stream << "/F" << d->pageFontNumber << " "
+	       << f.pointSize() << lfontName << " DF\n";
+	stream << "/F" << d->pageFontNumber << "as "
+	       << f.pointSize() << fontName << " DF\n";
+	fontName.sprintf( "F%d", d->pageFontNumber );
+	d->pageFontNames.insert( key, new QString( fontName ) );
+    }
+    return fontName;
+
+}
+
+// ----------- Japanese --------------
+
+class QPSPrinterFontJapanese
+  : public QPSPrinterFontAsian {
+public:
+      QPSPrinterFontJapanese(const QFont& f);
+      void drawText( QTextStream &stream, uint spaces, const QPoint &p, 
+		     const QString &text, QPSPrinterPrivate *d, QPainter *paint);
+      QString defineFont( QTextStream &stream, QString ps, const QFont &f, int cs, const QString &key, 
+			  QPSPrinterPrivate *d );
+private:
+    const QJpUnicodeConv *convJP;
+};
+
+QPSPrinterFontJapanese::QPSPrinterFontJapanese(const QFont& f)
+{
+    psname = makePSFontName( f );
+    // now try to convert that to some japanese postscript font in a sensible way.
+    // as we don't support font substitution at the moment, we just use the
+    // two fonts that should be available on any system: Ryumin-Light and GothicBBB-Medium
+    
+    if ( psname.contains( "Helvetica" ) || psname.contains( "Bold" ) )
+	if ( psname.contains("Italic") || psname.contains("Oblique") ) {
+	    psname = "GothicBBB-Oblique";
+	} else {
+	    psname = "GothicBBB";
+	}
+    else
+	if ( psname.contains("Italic") || psname.contains("Oblique") ) {
+	    psname = "Ryumin-Oblique";
+	} else {
+	    psname = "Ryumin";
+	}
+    convJP = 0;
+    replacementList = makePSFontNameList( f );
+}
+
+
+QString QPSPrinterFontJapanese::defineFont( QTextStream &stream, QString ps, const QFont &f, int cs, const QString &key, 
+				       QPSPrinterPrivate *d )
+{
+    QString key2;
+    key2.sprintf( "%s %d", ps.ascii(), cs );
+
+    float slant = 0;
+    QString latinName;
+    // do correct mapping
+    if ( ps == "GothicBBB-Oblique" ) {
+	slant = 0.2;
+	ps = "/GothicBBB-Medium-H";
+	latinName = "Helvetica-Oblique";
+    } else if ( ps == "GothicBBB" ) {
+	ps = "/GothicBBB-Medium-H";
+	latinName = "Helvetica";
+    } else if ( ps == "Ryumin-Oblique" ) {
+	slant = 0.2;
+	ps = "/Ryumin-Light-H";
+	latinName = "Times-Italic";
+    } else if ( ps == "Ryumin" ) {
+	ps = "/Ryumin-Light-H";
+	latinName = "Times-Roman";
+    }
+    return emitDef( stream, ps, latinName, f, slant, key, key2, d );
+}
+
+void QPSPrinterFontJapanese::drawText( QTextStream &stream, uint spaces, const QPoint &p, 
+				  const QString &text, QPSPrinterPrivate *d, QPainter *paint)
+{
+    if ( !convJP )
+	convJP = QJpUnicodeConv::newConverter(JU_Default);
+
+    int x = p.x();
+    if ( spaces > 0 )
+	x += spaces * d->fm->width( ' ' );
+    int y = p.y();
+    if ( y != d->textY || d->textY == 0 )
+	stream << y << " Y";
+    d->textY = y;
+    QString mdf;
+    if ( paint->font().underline() )
+	mdf += " " + QString().setNum( y + d->fm->underlinePos() ) + " Tl";
+    if ( paint->font().strikeOut() )
+	mdf += " " + QString().setNum( y + d->fm->strikeOutPos() ) + " Tl";
+    int code = 0, codeOld = 0;
+    QChar ch;
+    QCString out, oneChar;
+    int l = text.length();
+    for ( int i = 0; i <= l; i++ ) {
+	out += oneChar;
+	oneChar = "";
+	codeOld = code;
+	if ( i < l ) {
+	    ch = text.at(i);
+	    if ( !ch.row() ) {
+		code = 0;
+		if ( ch == '(' || ch == ')' || ch == '\\' )
+		    oneChar += "\\";
+		oneChar += ch.cell();
+	    } else {
+		code = 1;
+		QChar ch = convJP->UnicodeToJisx0208( ch.unicode());
+		if ( ch.isNull() ) {
+		    oneChar += 0x22;
+		    oneChar += 0x22; // open box
+		} else {
+		    char chj = ch.row();
+		    if ( chj == '(' || chj == ')' || chj == '\\' )
+			oneChar += "\\";
+		    oneChar += chj;
+		    chj = ch.cell();
+		    if ( chj == '(' || chj == ')' || chj == '\\' )
+			oneChar += "\\";
+		    oneChar += chj;
+		}
+	    }
+	}
+	if ( !out.isEmpty() && (code != codeOld || i == l) ) {
+	    if ( codeOld == 0 ) {
+		stream << " " << d->currentFont << " F";
+	    } else {
+		stream << " " << d->currentFont << "as F";
+	    }
+	    int w = d->fm->width( out );
+	    stream << "(" << out << ")" << w << " " << x << mdf << " T";
+	    if ( i < l ) {
+		stream << " ";
+	    } else {
+		stream << "\n";
+	    }
+	    x += w;
+	    out = "";
+	}
+    }
+}
+
+// ----------- Korean --------------
+
+// sans serif
+static const psfont SMGothic [] = {
+    { "SMGothic-Medium-KSC-EUC-H", 0, 100. },
+    { "SMGothic-Medium-KSC-EUC-H", 0.2, 100. },
+    { "SMGothic-DemiBold-KSC-EUC-H", 0, 100. },
+    { "SMGothic-DemiBold-KSC-EUC-H", 0.2, 100. }
+};	
+
+// serif
+static const psfont SMMyungjo [] = {
+    { "SMMyungjo-Light-KSC-EUC-H", 0, 100. },
+    { "SMMyungjo-Light-KSC-EUC-H", 0.2, 100. },
+    { "SMMyungjo-Bold-KSC-EUC-H", 0, 100. },
+    { "SMMyungjo-Bold-KSC-EUC-H", 0.2, 100. }
+};	
+    
+static const psfont MKai [] = {
+    { "MingMT-Light-KSC-EUC-H", 0, 100. },
+    { "MingMT-Light-KSC-EUC-H", 0.2, 100. },
+    { "MKai-Medium-KSC-EUC-H", 0, 100. },
+    { "MKai-Medium-KSC-EUC-H", 0.2, 100. },
+};	
+    
+
+static const psfont Munhwa [] = {
+    { "Munhwa-Regular-KSC-EUC-H", 0, 100. },
+    { "Munhwa-Regular-KSC-EUC-H", 0.2, 100. },
+    { "Munhwa-Bold-KSC-EUC-H", 0, 100. },
+    { "Munhwa-Bold-KSC-EUC-H", 0.2, 100. }
+};	
+
+static const psfont * const KoreanReplacements[] = {
+    SMMyungjo, SMGothic, Munhwa, MKai, Helvetica, 0
+	};
+
+class QPSPrinterFontKorean
+  : public QPSPrinterFontAsian {
+public:
+      QPSPrinterFontKorean(const QFont& f);
+      QString defineFont( QTextStream &stream, QString ps, const QFont &f, int cs, const QString &key, 
+			  QPSPrinterPrivate *d );
+};
+
+QPSPrinterFontKorean::QPSPrinterFontKorean(const QFont& f)
+{
+    int type = getPsFontType( f );
+    psname = SMMyungjo[type].psname;
+    appendReplacements( replacementList, KoreanReplacements, type );
+}
+
+
+QString QPSPrinterFontKorean::defineFont( QTextStream &stream, QString ps, const QFont &f, int /*cs*/, const QString &key, 
+				       QPSPrinterPrivate *d )
+{
+    return QPSPrinterFontPrivate::defineFont( stream, ps, f, QFont::AnyCharSet, key, d );
+}
+
+// ----------- traditional chinese ------------
+
+static const psfont MSung [] = {
+    { "MSung-Light-B5-H", 0, 100. },
+    { "MSung-Light-B5-H", 0.2, 100. },
+    { "MSung-Light-B5-H", 0, 100. },
+    { "MSung-Light-B5-H", 0.2, 100. },
+};	
+
+static const psfont MOESung [] = {
+    { "MOESung-Regular-B5-H", 0, 100. },
+    { "MOESung-Regular-B5-H", 0.2, 100. },
+    { "MOESung-Regular-B5-H", 0, 100. },
+    { "MOESung-Regular-B5-H", 0.2, 100. },
+};	
+
+static const psfont * const MSungReplacements[] = {
+    MSung, MOESung, Helvetica, 0
+	};
+
+class QPSPrinterFontTraditionalChinese
+  : public QPSPrinterFontAsian {
+public:
+      QPSPrinterFontTraditionalChinese(const QFont& f);
+      QString defineFont( QTextStream &stream, QString ps, const QFont &f, int cs, const QString &key, 
+			  QPSPrinterPrivate *d );
+};
+
+QPSPrinterFontTraditionalChinese::QPSPrinterFontTraditionalChinese(const QFont& f)
+{
+    int type = getPsFontType( f );
+    psname = MSung[type].psname;
+    appendReplacements( replacementList, MSungReplacements, type );
+}
+
+
+QString QPSPrinterFontTraditionalChinese::defineFont( QTextStream &stream, QString ps, const QFont &f, int /*cs*/, const QString &key, 
+				       QPSPrinterPrivate *d )
+{
+    return QPSPrinterFontPrivate::defineFont( stream, ps, f, QFont::AnyCharSet, key, d );
+}
+
+// ----------- simplified chinese ------------
+
+
+
+static const psfont Simplified [] = {
+    { "MSung-Light-GBK-EUC-H", 0, 100. },
+    { "MSung-Light-GBK-EUC-H", 0.2, 100. },
+    { "MKai-Medium-GBK-EUC-H", 0, 100. },
+    { "MKai-Medium-GBK-EUC-H", 0.2, 100. },
+};	
+
+static const psfont MSungGBK [] = {
+    { "MSung-Light-GBK-EUC-H", 0, 100. },
+    { "MSung-Light-GBK-EUC-H", 0.2, 100. },
+    { "MSung-Light-GBK-EUC-H", 0, 100. },
+    { "MSung-Light-GBK-EUC-H", 0.2, 100. },
+};	
+
+static const psfont FangSong [] = {
+    { "CFangSong-Light-GBK-EUC-H", 0, 100. },
+    { "CFangSong-Light-GBK-EUC-H", 0.2, 100. },
+    { "CFangSong-Light-GBK-EUC-H", 0, 100. },
+    { "CFangSong-Light-GBK-EUC-H", 0.2, 100. },
+};	
+
+static const psfont * const SimplifiedReplacements[] = {
+    Simplified, MSungGBK, FangSong, Helvetica, 0
+	};
+
+class QPSPrinterFontSimplifiedChinese
+  : public QPSPrinterFontAsian {
+public:
+      QPSPrinterFontSimplifiedChinese(const QFont& f);
+      QString defineFont( QTextStream &stream, QString ps, const QFont &f, int cs, const QString &key, 
+			  QPSPrinterPrivate *d );
+};
+
+QPSPrinterFontSimplifiedChinese::QPSPrinterFontSimplifiedChinese(const QFont& f)
+{
+    int type = getPsFontType( f );
+    psname = MSungGBK[type].psname;
+    appendReplacements( replacementList, SimplifiedReplacements, type );
+}
+
+
+QString QPSPrinterFontSimplifiedChinese::defineFont( QTextStream &stream, QString ps, const QFont &f, int /*cs*/, const QString &key, 
+				       QPSPrinterPrivate *d )
+{
+    return QPSPrinterFontPrivate::defineFont( stream, ps, f, QFont::AnyCharSet, key, d );
+}
+
+// ================== QPSPrinterFont ====================
+
+class QPSPrinterFont {
+public:
+  QPSPrinterFont(const QFont& f, QPSPrinterPrivate *priv);
+  ~QPSPrinterFont();
+  QString postScriptFontName()     { return p->postScriptFontName(); }
+    QString defineFont( QTextStream &stream, QString ps, const QFont &f, int cs, const QString &key, 
+			     QPSPrinterPrivate *d )
+    { return p->defineFont( stream, ps, f, cs, key, d ); }
+    void    download(QTextStream& s) { p->download(s); }
+    QPSPrinterFontPrivate *handle() { return p; }
+private:
+  QByteArray       data;
+  QPSPrinterFontPrivate* p;
+};
+
+QPSPrinterFont::~QPSPrinterFont() 
+{
+    // the dict in QFontPrivate does deletion for us.
+    //  delete p;
+}
+  
+
+QPSPrinterFont::QPSPrinterFont(const QFont& f, QPSPrinterPrivate *priv)
+    : p(0)
+{
+    QString fontfilename;
+    QString xfontname;
+    QString fontname;
+
+    // ### implement similar code for QWS and WIN
+#ifdef _WS_X11_
+    int npaths;
+
+    bool xlfd = FALSE;
+    
+    int index = f.rawName().find('-');
+    if (index == 0) { 
+	// this is an XLFD font name 
+	for (int i=0; i < 6; i++) {
+	    index = f.rawName().find('-',index+1);
+	}
+	xfontname = f.rawName().mid(0,index);
+	xlfd = TRUE;
+    } else
+#endif
+	xfontname = makePSFontName( f );
+
+    // ### somehow the font dict doesn't seem to work without this. Don't ask me why...
+    priv->fonts.size();
+    
+    p = priv->fonts.find(xfontname);
+    if ( !p ) {
+	QFont::CharSet cs = f.charSet();
+	// ### the next four lines are a hack to not produce invalid postscript with unicode
+	// fonts. As we currently can't deal with Unicode fonts in Postscript, we convert
+	// to the most common text and assume the current locale. If that fails we use latin1.
+	if ( cs == QFont::Unicode )
+	    cs = QFont::charSetForLocale();
+	if ( cs == QFont::Unicode )
+	    cs = QFont::ISO_8859_1;
+	if ( cs == QFont::Set_Ja || cs == QFont::JIS_X_0208) {
+	    p = new QPSPrinterFontJapanese( f );
+	} else if ( cs == QFont::Set_Ko || cs == QFont::KSC_5601) {
+	    p = new QPSPrinterFontKorean( f );
+	} else if ( cs == QFont::Set_Big5 || cs == QFont::Big5 || cs == QFont::Set_Zh_TW) {
+	    p = new QPSPrinterFontTraditionalChinese( f );
+	} else if ( cs == QFont::Set_GBK || cs == QFont::GB_2312 || cs == QFont::Set_Zh) {
+	    p = new QPSPrinterFontSimplifiedChinese( f );
+	} else {
+	    //qDebug("didnt find font for %s", xfontname.latin1());
+#ifdef _WS_X11_
+#ifdef QT_XFT
+	    if ( qt_use_xft() ) {
+		XftFont *font = (XftFont *) qt_ft_font( &f );
+		char *filename;
+		XftPatternGetString (font->pattern, XFT_FILE, 0, &filename);
+		//qDebug("filename for font is '%s'", filename);
+		if ( filename )
+		    fontfilename = QString::fromLatin1( filename );
+	    } else
+#endif
+	    if ( xlfd ) {
+		char** font_path; 
+		font_path = XGetFontPath( qt_xdisplay(), &npaths);
+		for (int i=0; i<npaths && fontfilename.length()==0; i++) {
+		    if ((font_path[i])[0] != '/') continue; // not a path name, a font server
+		    QString fontmapname;
+		    int num = 0;
+		    // search font.dir and font.scale for the right file
+		    while ( num < 2 ) {
+			if ( num == 0 )
+			    fontmapname.sprintf("%s%s",font_path[i],"/fonts.scale");
+			else
+			    fontmapname.sprintf("%s%s",font_path[i],"/fonts.dir");
+			//qWarning(fontmapname);
+			QFile fontmap(fontmapname);
+			if (fontmap.open(IO_ReadOnly)) {
+			    while (!fontmap.atEnd()) {
+				QString mapping;
+				fontmap.readLine(mapping,256);
+				// fold to lower (since X folds to lowercase)
+				//qWarning(xfontname);
+				//qWarning(mapping);
+				if (mapping.lower().contains(xfontname.lower())) {
+				    index = mapping.find(' ',0);
+				    QString ffn = mapping.mid(0,index);
+				// remove the most common bitmap formats
+				    if( !ffn.contains( ".pcf" ) && !ffn.contains( " .bdf" ) &&
+					!ffn.contains( ".spd" ) && !ffn.contains( ".phont" ) ) {
+					fontfilename = font_path[i] + QString("/") + ffn;
+					if ( QFile::exists(fontfilename) ) {
+					    //qDebug("found font file %s", fontfilename.latin1());
+					    break;
+					} else // unset fontfilename
+					    fontfilename = QString();
+				    }
+				}
+			    }
+			    fontmap.close(); 
+			}
+			num++;
+		    }
+		}
+		XFreeFontPath(font_path);
+	    }
+
+	    // memory mapping would be better here
+	    if (fontfilename.length() > 0) { // maybe there is no file name
+		QFile fontfile(fontfilename);
+		if ( fontfile.exists() ) {
+		    //printf("font name %s size = %d\n",fontfilename.latin1(),fontfile.size());
+		    data = QByteArray( fontfile.size() );
+      
+		    fontfile.open(IO_Raw | IO_ReadOnly);
+		    fontfile.readBlock(data.data(), fontfile.size());
+		    fontfile.close(); 
+		} 		    
+	    }
+  
+
+	    enum { NONE, PFB, PFA, TTF } type = NONE;
+
+	    if (!data.isNull() && data.size() > 0) {
+		unsigned char* d = (unsigned char *)data.data();
+		if (d[0] == 0x80 && d[6] == '%' && d[7] == '!' && d[8] == 'P' && d[9] == 'S' )                
+		    type = PFB;
+		else if (d[0] == '%' && d[1] == '!' && d[2] == 'P' && d[3] == 'S')  
+		    type = PFA;
+		else if (d[0]==0x00 && d[1]==0x01 && d[2]==0x00 && d[3]==0x00) 
+		    type = TTF;
+		else 
+		    type = NONE;
+	    } else
+		type = NONE;
+
+	    //qWarning(xfontname);
+	    switch (type) {
+		case TTF : 
+		    p = new QPSPrinterFontTTF(f, data);
+		    break;
+		case PFB:  
+		    p = new QPSPrinterFontPFB(f, data);
+		    break;
+		case PFA:  
+		    p = new QPSPrinterFontPFA(f, data);   
+		    break;
+		case NONE: 
+		default:   
+		    p=new QPSPrinterFontNotFound( f ); break;
+	    }
+#else	
+	    p = new QPSPrinterFontNotFound( f );
+#endif
+	}
+	//qDebug("inserting %s int dict (%p)", xfontname.latin1(), p);
+	priv->fonts.insert( xfontname, p );
+    } 
+//     else
+// 	qDebug("found font file for %s", xfontname.latin1());
+
+    //qDebug("font dict size=%d", priv->fonts.size());
+}    
+
+	    
+// ================= END OF PS FONT METHODS ============
+
+void QPSPrinter::setFont( const QFont & fnt )
+{
+    QFont f = fnt;
     if ( f.rawMode() ) {
 	QFont fnt( QString::fromLatin1("Helvetica"), 12 );
 	setFont( fnt );
@@ -2002,88 +5025,31 @@ void QPSPrinter::setFont( const QFont & f )
 #if defined(CHECK_RANGE)
 	qWarning( "QPrinter: Cannot set a font with zero point size." );
 #endif
-	return;
+	f.setPointSize(QApplication::font().pointSize());
+	if ( f.pointSize() == 0 )
+	    f.setPointSize( 11 );
     }
 
     if ( !fixed_ps_header )
 	makeFixedStrings();
 
-    QString family = f.family();
-    QString ps;
-    int	 weight = f.weight();
-    bool italic = f.italic();
+    QPSPrinterFont ff( f, d );
+    QString ps = ff.postScriptFontName();
 
-    family = family.lower();
+    QString s = ps;
+    s.append( ' ' );
+    s.prepend( ' ' );
+    if ( !fontsUsed.contains( s ) )
+      if (d->buffer)
+	ff.download(d->fontStream);
 
     int i;
-
-    // try to make a "good" postscript name
-    ps = family.simplifyWhiteSpace();
-    i = 0;
-    while( (unsigned int)i < ps.length() ) {
-	if ( i == 0 || ps[i-1] == ' ' ) {
-	    ps[i] = ps[i].upper();
-	    if ( i )
-		ps.remove( i-1, 1 );
-	    else
-		i++;
-	} else {
-	    i++;
-	}
-    }
-
-    // see if the table has a better name
-    i = 0;
-    while( postscriptFontNames[i].input &&
-	   QString::fromLatin1(postscriptFontNames[i].input) != family )
-	i++;
-    if ( postscriptFontNames[i].roman ) {
-	ps = QString::fromLatin1(postscriptFontNames[i].roman);
-	int p = ps.find( '-' );
-	if ( p > -1 )
-	    ps.truncate( p );
-    }
-
-    // get the right modification, or build something
-    if ( weight >= QFont::Bold && italic ) {
-	if ( postscriptFontNames[i].boldItalic )
-	    ps = QString::fromLatin1(postscriptFontNames[i].boldItalic);
-	else
-	    ps.append( QString::fromLatin1("-BoldItalic") );
-    } else if ( weight >= QFont::Bold ) {
-	if ( postscriptFontNames[i].bold )
-	    ps = QString::fromLatin1(postscriptFontNames[i].bold);
-	else
-	    ps.append( QString::fromLatin1("-Bold") );
-    } else if ( weight >= QFont::DemiBold && italic ) {
-	if ( postscriptFontNames[i].italic )
-	    ps = QString::fromLatin1(postscriptFontNames[i].italic);
-	else
-	    ps.append( QString::fromLatin1("-Italic") );
-    } else if ( weight <= QFont::Light && italic ) {
-	if ( postscriptFontNames[i].lightItalic )
-	    ps = QString::fromLatin1(postscriptFontNames[i].lightItalic);
-	else
-	    ps.append( QString::fromLatin1("-LightItalic") );
-    } else if ( weight <= QFont::Light ) {
-	if ( postscriptFontNames[i].light )
-	    ps = QString::fromLatin1(postscriptFontNames[i].light);
-	else
-	    ps.append( QString::fromLatin1("-Light") );
-    } else if ( italic ) {
-	if ( postscriptFontNames[i].italic )
-	    ps = QString::fromLatin1(postscriptFontNames[i].italic);
-	else
-	    ps.append( QString::fromLatin1("-Italic") );
-    } else {
-	if ( postscriptFontNames[i].roman )
-	    ps = QString::fromLatin1(postscriptFontNames[i].roman);
-	else
-	    ps.append( QString::fromLatin1("-Roman") );
-    }
-
     QString key;
     int cs = (int)f.charSet();
+    if ( cs == QFont::Unicode )
+	cs = QFont::charSetForLocale();
+    if ( cs == QFont::Unicode )
+	cs = QFont::ISO_8859_1;
 
     key.sprintf( "%s %d %d", ps.ascii(), f.pointSize(), cs );
     QString * tmp;
@@ -2096,67 +5062,7 @@ void QPSPrinter::setFont( const QFont & f )
 	fontName = *tmp;
 
     if ( fontName.isEmpty() ) {
-	QString key2;
-	key2.sprintf( "%s %d", ps.ascii(), cs );
-	tmp = d->headerFontNames.find( key );
-
-	QString fontEncoding;
-	fontEncoding.sprintf( " FE%d", cs );
-	if ( d->buffer ) {
-	    if ( !d->headerEncodings.find( cs ) ) {
-		QString * vector = font_vectors->find( cs );
-		if ( vector ) {
-		    d->fontStream << *vector << "\n";
-		    d->headerEncodings.insert( cs, (void*)42 );
-		} else {
-		    d->fontStream << "% wanted font encoding "
-				  << cs << "\n";
-		}
-	    }
-	    if ( tmp ) {
-		fontName = *tmp;
-	    } else {
-		fontName.sprintf( "/F%d", ++d->headerFontNumber );
-		if ( cs != QFont::AnyCharSet ) // anyCharset will use the default cs of the font
-		    d->fontStream << fontName << fontEncoding << "/"
-				  << ps << " MF\n";
-		else
-		    d->fontStream << fontName << " 0 /"
-				  << ps << " MSF\n";
-		d->headerFontNames.insert( key2, new QString( fontName ) );
-	    }
-	    ++d->headerFontNumber;
-	    d->fontStream << "/F" << d->headerFontNumber << " "
-			  << f.pointSize() << fontName << " DF\n";
-	    fontName.sprintf( "F%d", d->headerFontNumber );
-	    d->headerFontNames.insert( key, new QString( fontName ) );
-	} else {
-	    if ( !d->headerEncodings.find( cs ) &&
-		 !d->pageEncodings.find( cs ) ) {
-		QString * vector = font_vectors->find( cs );
-		if ( !vector )
-		    vector = font_vectors->find( QFont::Latin1 );
-		stream << *vector << "\n";
-		d->pageEncodings.insert( cs, (void*)42 );
-	    }
-	    if ( !tmp )
-		tmp = d->pageFontNames.find( key );
-	    if ( tmp ) {
-		fontName = *tmp;
-	    } else {
-		fontName.sprintf( "/F%d", ++d->pageFontNumber );
-		if ( cs != QFont::AnyCharSet )
-		    stream << fontName << fontEncoding << "/" << ps << " MF\n";
-		else
-		    stream << fontName << " 0 /" << ps << " MSF\n";
-		d->pageFontNames.insert( key2, new QString( fontName ) );
-	    }
-	    ++d->pageFontNumber;
-	    stream << "/F" << d->pageFontNumber << " "
-		   << f.pointSize() << fontName << " DF\n";
-	    fontName.sprintf( "F%d", d->pageFontNumber );
-	    d->pageFontNames.insert( key, new QString( fontName ) );
-	}
+	fontName = ff.defineFont( stream, ps, f, cs, key, d );
     }
     stream << fontName << " F\n";
 
@@ -2173,7 +5079,9 @@ void QPSPrinter::setFont( const QFont & f )
 	    codec = QTextCodec::codecForMib( unicodevalues[i++].mib );
     } while( codec == 0 && unicodevalues[i++].cs != unicodevalues_LAST );
 #endif
+    d->currentFont = fontName;
     d->currentFontCodec = codec;
+    d->currentFontFile = ff.handle();
 }
 
 
@@ -2242,12 +5150,11 @@ QByteArray compress( const QImage & image ) {
     QRgb *pixel = new QRgb[size+1];
 
     int i = 0;
-    int x, y;
     if ( image.depth() == 8 ) {
-	for( y=0; y < image.height(); y++ ) {
+	for( int y=0; y < image.height(); y++ ) {
 	    uchar * s = image.scanLine( y );
 	    for( int x=0; x < image.width(); x++ ) {
- 		pixel[i] = image.color( s[x] );
+		pixel[i] = image.color( s[x] );
 		if ( qAlpha( pixel[i] )< 0x40 ) // 25% alpha, convert to white
 		    pixel[i] = qRgb( 0xff, 0xff, 0xff );
 		else
@@ -2256,8 +5163,9 @@ QByteArray compress( const QImage & image ) {
 	    }
 	}
     } else {
-	for( y=0; y < image.height(); y++ ) {
+	for( int y=0; y < image.height(); y++ ) {
 	    QRgb * s = (QRgb*)(image.scanLine( y ));
+	    for( int x=0; x < image.width(); x++ )
 		for( x=0; x < image.width(); x++ ) {
 		    pixel[i] = (*s++);
 		    if ( qAlpha( pixel[i] ) < 0x40 ) // 25% alpha, convert to white -                   
@@ -2274,8 +5182,8 @@ QByteArray compress( const QImage & image ) {
     /* this compression function emits blocks of data, where each
        block is an unquoted series of pixels, or a quote from earlier
        pixels. if the six-letter string "banana" were a six-pixel
-       image, it would be an nquoted "ban" block followed by a 3-pixel
-       quote from -2.  note that the final "a" is then copied from the
+       image, it might be unquoted "ban" followed by a 3-pixel quote
+       from -2.  note that the final "a" is then copied from the
        second "a", which is copied from the first "a" in the same copy
        operation.
 
@@ -2299,18 +5207,10 @@ QByteArray compress( const QImage & image ) {
     int outBit = 0;
     /* we process pixels serially, emitting as necessary/possible. */
     while( index <= size ) {
-	/* bestCandidate is the start of the best known quote area and
-           bestLength its length. */
 	int bestCandidate = None;
 	int bestLength = 0;
-	/* pick up the most recent pixels of the two colours we want,
-           and mark the pixel we're lookin at as being the new most
-           recent pixel in its chain. */
 	i = index % tableSize;
 	int h = pixel[index] % hashSize;
-	/* start and end point to the stard and end of the current
-           candidate are. they may or may not point to something that
-           actually can be quoted. */
 	int start, end;
 	start = end = pastPixel[i] = mostRecentPixel[h];
 	mostRecentPixel[h] = index;
@@ -2320,19 +5220,17 @@ QByteArray compress( const QImage & image ) {
 	if ( start < index - tableSize || index >= size ||
 	     emittedUntil > index)
 	    start = end = None;
-	/* attempts count how much work we've done trying to find
-           something quotable for this pixel. */
 	int attempts = 0;
 	/* scan for suitable quote candidates: not too far back, and
-	   if we've found one that's as big as it can possibly get,
-	   we don't look for more. */
+	   if we've found one that's as big as it can get, don't look
+	   for more */
 	while( start != None && end != None &&
 	       bestLength < maxQuoteLength &&
 	       start >= index - tableSize &&
 	       end >= index - tableSize + bestLength ) {
 	    /* scan backwards, looking for something good enough to
 	       try a (slow) string comparison. we maintain indexes to
-	       the start and the end of the quote candidate here. */
+	       the start and the end of the quote candidate here */
 	    while( start != None && end != None &&
 		   ( pixel[start] != pixel[index] ||
 		     pixel[end] != pixel[index+bestLength] ) ) {
@@ -2340,12 +5238,12 @@ QByteArray compress( const QImage & image ) {
 		    start = None;
 		} else if ( pixel[end] % hashSize ==
 			    pixel[index+bestLength] % hashSize ) {
-		    /* we move the area along the end index' chain. */
+		    /* we move the area along the end index' chain */
 		    end = pastPixel[end%tableSize];
 		    start = end - bestLength;
 		} else if ( pixel[start] % hashSize ==
 			    pixel[index] % hashSize ) {
-		    /* ... or along the start index' chain. */
+		    /* ... or along the start index' chain */
 		    start = pastPixel[start%tableSize];
 		    end = start + bestLength;
 		} else {
@@ -2409,7 +5307,7 @@ QByteArray compress( const QImage & image ) {
 		    if ( length < maxQuoteLength && index + length < size )
 			end = mostRecentPixel[pixel[index+length]%hashSize];
 		} else {
-		    /* and if it isn't, we'll try some more. but we'll
+		    /* and if it ins't, we'll try some more. but we'll
 		       count each string compare extra, since they're
 		       so expensive. */
 		    attempts += 2;
@@ -2433,8 +5331,8 @@ QByteArray compress( const QImage & image ) {
 	    }
 	}
 	/* at this point, bestCandidate is a candidate of bestLength
-	   length, or else it's None. if we have such a candidate, or
-	   we're at the end, we have to emit all unquoted data. */
+	 length, or else it's None. if we have such a candidate, or
+	 we're at the end, we have to emit all unquoted data. */
 	if ( index == size || bestCandidate != None ) {
 	    /* we need a double loop, because there's a maximum length
 	       on the "unquoted data" section. */
@@ -2455,7 +5353,7 @@ QByteArray compress( const QImage & image ) {
 		}
 	    }
 	}
-	/* if we have some quoted data we can output, do it. */
+	/* if we have some quoted data to output, do it. */
 	if ( bestCandidate != None ) {
 	    emitBits( out, outOffset, outBit,
 		      1, 1 );
@@ -2507,7 +5405,6 @@ QByteArray compress( const QImage & image ) {
     delete [] pixel;
     return out;
 }
-
 
 #undef XCOORD
 #undef YCOORD
@@ -2591,8 +5488,10 @@ bool QPSPrinter::cmd( int c , QPainter *paint, QPDevCmdParam *p )
 
 	d->fm = new QFontMetrics( paint->fontMetrics() );
 
-	stream << "%%Page: " << pageCount << ' ' << pageCount << endl
-	       << "QI\n";
+	stream << "%%Page: " << pageCount << " " << pageCount << endl
+	       << "%%BeginPageSetup\n"
+	       << "QI\n"
+	       << "%%EndPageSetup\n";
 	return TRUE;
     }
 
@@ -2605,6 +5504,7 @@ bool QPSPrinter::cmd( int c , QPainter *paint, QPDevCmdParam *p )
 	if ( pageCountAtEnd )
 	    stream << "%%Pages: " << pageCount << "\n%%DocumentFonts: "
 		   << fontsUsed.simplifyWhiteSpace() << '\n';
+	stream << "%%EOF\n";
 	stream.unsetDevice();
 	d->realDevice->close();
 	if ( d->fd >= 0 )
@@ -2751,78 +5651,25 @@ bool QPSPrinter::cmd( int c , QPainter *paint, QPDevCmdParam *p )
 	    stream << "BZ\n";
 	}
 	break;
-    case PdcDrawText2:
-	if ( p[1].str->length() > 0 ) {
-	    QCString tmpC;
-#ifndef QT_NO_TEXTCODEC
-	    if ( d->currentFontCodec )
-		tmpC = d->currentFontCodec->fromUnicode( *p[1].str );
-	    else // #### should use 16-bit stuff here
-#endif
-		tmpC=p[1].str->local8Bit();
-	    uint spaces = 0;
-	    while( spaces < tmpC.length() && tmpC[(int)spaces] == ' ' )
-		spaces++;
-	    if ( spaces )
-		tmpC = tmpC.mid( spaces, tmpC.length() );
-	    while ( tmpC.length() > 0 && isspace(tmpC[(int)tmpC.length()-1]) )
-		tmpC.truncate( tmpC.length()-1 );
-	    char *tmp = new char[tmpC.length()*2 + 2];
-#if defined(CHECK_NULL)
-	    CHECK_PTR( tmp );
-#endif
-	    const char* from = (const char*)tmpC;
-
-	    // first scan to see whether it'll look good with just ()
-	    int parenlevel = 0;
-	    bool parensOK = TRUE;
-	    while( from && *from ) {
-		if ( *from == '(' )
-		    parenlevel++;
-		else if ( *from == ')' )
-		    parenlevel--;
-		if ( parenlevel < 0 )
-		    parensOK = FALSE;
-		from++;
-	    }
-	    if ( parenlevel != 0 )
-		parensOK = FALSE;
-
-	    // then scan again, outputting the stuff
-	    from = (const char *)tmpC;
-	    char * to = tmp;
-	    while ( from && *from ) {
-		if ( *from == '\\' ||
-		     ( !parensOK && ( *from == '(' || *from == ')' ) ) )
-		    *to++ = '\\'; // escape special chars if necessary
-		*to++ = *from++;
-	    }
-	    *to = '\0';
-
-	    if ( qstrlen( tmp ) > 0 ) {
-		if ( d->currentSet != d->currentUsed ) {
-		    d->currentUsed = d->currentSet;
-		    setFont( d->currentSet );
-		}
-		int x = p[0].point->x();
-		if ( spaces > 0 )
-		    x += spaces * d->fm->width( ' ' );
-		int y = p[0].point->y();
-		if ( y != d->textY || d->textY == 0 )
-		    stream << y << " Y";
-		d->textY = y;
-		int w = d->fm->width( tmpC );
-		stream << "(" << tmp << ")" << w << " " << x;
-		if ( paint->font().underline() )
-		    stream << ' ' << y + d->fm->underlinePos() << " Tl";
-		if ( paint->font().strikeOut() )
-		    stream << ' ' << y + d->fm->strikeOutPos() << " Tl";
-		stream << " T\n";
-	    }
-	    if ( tmp )
-		delete [] tmp;
+    case PdcDrawText2: {
+	uint spaces = 0;
+	QString tmp = *p[1].str;
+	while( spaces < tmp.length() && tmp[(int)spaces] == ' ' )
+	    spaces++;
+	if ( spaces )
+	    tmp = tmp.mid( spaces, tmp.length() );
+	while ( tmp.length() > 0 && tmp[(int)tmp.length()-1].isSpace() )
+	    tmp.truncate( tmp.length()-1 );
+	if( tmp.length() == 0 )
+	    break;
+	if ( d->currentSet != d->currentUsed || !d->currentFontFile ) {
+	    d->currentUsed = d->currentSet;
+	    setFont( d->currentSet );
 	}
+	if( d->currentFontFile ) // better not crash in case somethig goes wrong.
+	    d->currentFontFile->drawText( stream, spaces, *p[0].point, tmp, d, paint); 
 	break;
+    }
     case PdcDrawText2Formatted:
 	return FALSE;			// uses QPainter instead
     case PdcDrawPixmap: {
@@ -2905,13 +5752,16 @@ bool QPSPrinter::cmd( int c , QPainter *paint, QPDevCmdParam *p )
     case NewPage:
 	pageCount++;
 	stream << "QP\n%%Page: "
-	       << pageCount << ' ' << pageCount
-	       << "\nQI\n";
+	       << pageCount << ' ' << pageCount << endl
+	       << "%%BeginPageSetup\n"
+	       << "QI\n"
+	       << "%%EndPageSetup\n";
 	dirtyNewPage       = TRUE;
 	d->dirtyClipping   = TRUE;
 	d->firstClipOnPage = TRUE;
 	delete d->savedImage;
 	d->savedImage = 0;
+	d->textY = 0;
 	break;
     case AbortPrinting:
 	break;
@@ -3154,6 +6004,14 @@ static QString stripHeader( const QString & header, const char * data,
 	    used[*tmp] = 0x10000000;
 	    delete tmp;
 	}
+	if ( (tmp = ids.take("qtfindfont")) != 0 ) {
+	    used[*tmp] = 0x10000000;
+	    delete tmp;
+	}
+	if ( (tmp = ids.take("qtdefinefont")) != 0 ) {
+	    used[*tmp] = 0x10000000;
+	    delete tmp;
+	}
     }
 
     char id[10];
@@ -3239,8 +6097,9 @@ void QPSPrinter::emitHeader( bool finished )
     (void)((QFile *)d->realDevice)->open( IO_WriteOnly, d->fd );
     stream.setDevice( d->realDevice );
     stream << "%!PS-Adobe-1.0";
+    QPaintDeviceMetrics m( printer );
     if ( finished && pageCount == 1 && printer->numCopies() == 1 &&
-	 printer->fullPage() ) {
+	 printer->fullPage() && qt_gen_epsf ) {
 	QPaintDeviceMetrics m( printer );
 	if ( !d->boundingBox.isValid() )
 	    d->boundingBox.setRect( 0, 0, m.width(), m.height() );
@@ -3256,6 +6115,18 @@ void QPSPrinter::emitHeader( bool finished )
 		   << m.height() - d->boundingBox.bottom() - 1 << " "
 		   << d->boundingBox.right() + 1 << " "
 		   << m.height() - d->boundingBox.top();
+    } else {
+	int w = m.width();
+	int h = m.height();
+	if ( !printer->fullPage() ) {
+	    w += 2*printer->margins().width();
+	    h += 2*printer->margins().height();
+	}
+	// set a bounding box according to the DSC
+	if ( printer->orientation() == QPrinter::Landscape )	      
+	    stream << "\n%%BoundingBox: 0 0 " << h << " " << w;
+	else
+	    stream << "\n%%BoundingBox: 0 0 " << w << " " << h;
     }
     stream << "\n%%Creator: " << creator;
     if ( !!title )
@@ -3272,7 +6143,7 @@ void QPSPrinter::emitHeader( bool finished )
     else
 	stream << "\n%%Pages: (atend)"
 	       << "\n%%DocumentFonts: (atend)";
-    stream << "\n%%EndComments\n\n";
+    stream << "\n%%EndComments\n";
 
     if ( printer->numCopies() > 1 )
 	stream << "/#copies " << printer->numCopies() << " def\n";
@@ -3286,6 +6157,7 @@ void QPSPrinter::emitHeader( bool finished )
 				 "document. For other use of this prolog,\n"
 				 "% see your licensing agreement for Qt.\n";
 
+    stream << "%%BeginProlog\n";
     if ( finished ) {
 	QString r( stripHeader( *fixed_ps_header,
 				d->buffer->buffer().data(),
@@ -3295,11 +6167,19 @@ void QPSPrinter::emitHeader( bool finished )
     } else {
 	stream << prologLicense << *fixed_ps_header << "\n";
     }
+    stream << "%%EndProlog\n"
+	   << "%%BeginSetup\n";
 
-    if ( !printer->fullPage() )
-	stream << "% lazy-margin hack: QPrinter::setFullPage(FALSE)\n"
-	       << "/pageinit { " << printer->margins().width() << " "
-	       << printer->margins().height() << " translate\n";
+    stream << "/pageinit {\n";
+    if ( !printer->fullPage() ) {
+	stream << "% lazy-margin hack: QPrinter::setFullPage(FALSE)\n";
+	if ( printer->orientation() == QPrinter::Portrait )
+	    stream << printer->margins().width() << " "
+		   << printer->margins().height() << " translate\n";
+	else
+	    stream << printer->margins().height() << " " 
+		   << printer->margins().width() << " translate\n";
+    }
     if ( printer->orientation() == QPrinter::Portrait ) {
 	QPaintDeviceMetrics m( printer );
 	stream << "% " << m.widthMM() << "*" << m.heightMM()
@@ -3308,7 +6188,7 @@ void QPSPrinter::emitHeader( bool finished )
     } else {
 	QPaintDeviceMetrics m( printer );
 	stream << "% " << m.heightMM() << "*" << m.widthMM()
-	       << " mm (landscape)\n/pageinit { 90 rotate 1 -1 scale/defM matrix CM d } d\n";
+	       << " mm (landscape)\n 90 rotate 1 -1 scale/defM matrix CM d } d\n";
     }
 
     if ( d->fontBuffer->buffer().size() ) {
@@ -3320,7 +6200,7 @@ void QPSPrinter::emitHeader( bool finished )
 	stream.writeRawBytes( d->fontBuffer->buffer().data(),
 			      d->fontBuffer->buffer().size() );
     }
-    stream << "%%EndProlog\n";
+    stream << "%%EndSetup\n";
     stream.writeRawBytes( d->buffer->buffer().data(),
 			  d->buffer->buffer().size() );
 
@@ -3366,9 +6246,10 @@ void QPSPrinter::resetDrawingTools( QPainter *paint )
     if (param[0].ival != Qt::TransparentMode )
 	cmd( PdcSetBkMode, paint, param );
 
-    d->currentUsed = d->currentSet;
-    setFont( d->currentSet );
-
+    //d->currentUsed = d->currentSet;
+    //setFont( d->currentSet );
+    d->currentFontFile = 0;
+    
     param[0].brush = &paint->brush();
     if (*param[0].brush != defaultBrush )
 	cmd( PdcSetBrush, paint, param);

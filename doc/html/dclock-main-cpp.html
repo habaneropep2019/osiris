@@ -31,7 +31,7 @@ height="100" src="face.png" alt="Home" border="0">
   <hr>
 
   Header file: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/dclock/dclock.h   2.2.4   edited 2000-08-31 $
+** &#36;Id&#58; qt/examples/dclock/dclock.h   2.3.0   edited 2001-01-26 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -74,7 +74,7 @@ private:                                        // internal data
   <hr>
 
   Implementation: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/dclock/dclock.cpp   2.2.4   edited 2000-08-31 $
+** &#36;Id&#58; qt/examples/dclock/dclock.cpp   2.3.0   edited 2001-01-26 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -96,7 +96,7 @@ DigitalClock::DigitalClock( <a href="qwidget.html">QWidget</a> *parent, const ch
     showingColon = FALSE;
     <a href="qframe.html#c0d758">setFrameStyle</a>( QFrame::Panel | QFrame::Raised );
     <a href="qframe.html#bffeeb">setLineWidth</a>( 2 );                          // set frame line width
-    <a href=#125>showTime</a>();                                 // display the current time
+    <a href=#130>showTime</a>();                                 // display the current time
     normalTimer = startTimer( 500 );            // 1/2 second timer events
     showDateTimer = -1;                         // not showing date
 }
@@ -107,13 +107,13 @@ DigitalClock::DigitalClock( <a href="qwidget.html">QWidget</a> *parent, const ch
 // and another one for switching back from date mode to time mode.
 //
 
-void <a name="121"></a>DigitalClock::timerEvent( <a href="qtimerevent.html">QTimerEvent</a> *e )
+void <a name="126"></a>DigitalClock::timerEvent( <a href="qtimerevent.html">QTimerEvent</a> *e )
 {
     if ( e-&gt;timerId() == showDateTimer )        // stop showing date
-        <a href=#124>stopDate</a>();
+        <a href=#129>stopDate</a>();
     else {                                      // normal timer
         if ( showDateTimer == -1 )              // not showing date
-            <a href=#125>showTime</a>();
+            <a href=#130>showTime</a>();
     }
 }
 
@@ -121,10 +121,10 @@ void <a name="121"></a>DigitalClock::timerEvent( <a href="qtimerevent.html">QTim
 // Enters date mode when the left mouse button is pressed.
 //
 
-void <a name="122"></a>DigitalClock::mousePressEvent( <a href="qmouseevent.html">QMouseEvent</a> *e )
+void <a name="127"></a>DigitalClock::mousePressEvent( <a href="qmouseevent.html">QMouseEvent</a> *e )
 {
     if ( e-&gt;<a href="qmouseevent.html#de3f35">button</a>() == QMouseEvent::LeftButton )               // left button pressed
-        <a href=#123>showDate</a>();
+        <a href=#128>showDate</a>();
 }
 
 //
@@ -132,7 +132,7 @@ void <a name="122"></a>DigitalClock::mousePressEvent( <a href="qmouseevent.html"
 // Fires a timer to stop showing the date.
 //
 
-void <a name="123"></a>DigitalClock::showDate()
+void <a name="128"></a>DigitalClock::showDate()
 {
     if ( showDateTimer != -1 )                  // already showing date
         return;
@@ -147,18 +147,18 @@ void <a name="123"></a>DigitalClock::showDate()
 // Stops showing the date.
 //
 
-void <a name="124"></a>DigitalClock::stopDate()
+void <a name="129"></a>DigitalClock::stopDate()
 {
     <a href="qobject.html#f5e328">killTimer</a>( showDateTimer );
     showDateTimer = -1;
-    <a href=#125>showTime</a>();
+    <a href=#130>showTime</a>();
 }
 
 //
 // Shows the current time in the internal lcd widget.
 //
 
-void <a name="125"></a>DigitalClock::showTime()
+void <a name="130"></a>DigitalClock::showTime()
 {
     showingColon = !showingColon;               // toggle/blink colon
     <a href="qstring.html">QString</a> s = QTime::currentTime().toString().left(5);
@@ -175,7 +175,7 @@ void <a name="125"></a>DigitalClock::showTime()
 
   Main:
 <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/dclock/main.cpp   2.2.4   edited 2000-08-31 $
+** &#36;Id&#58; qt/examples/dclock/main.cpp   2.3.0   edited 2001-01-26 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -200,5 +200,5 @@ int main( int argc, char **argv )
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.4</div>
+<td align="right"><div align="right">Qt version 2.3.0</div>
 </table></div></address></body></html>

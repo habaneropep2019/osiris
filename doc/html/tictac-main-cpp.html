@@ -35,7 +35,7 @@ height="100" src="face.png" alt="Home" border="0">
   <hr>
 
   Header file: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/tictac/tictac.h   2.2.4   edited 2000-08-31 $
+** &#36;Id&#58; qt/examples/tictac/tictac.h   2.3.0   edited 2001-01-26 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -143,7 +143,7 @@ private:
   <hr>
 
   Implementation: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/tictac/tictac.cpp   2.2.4   edited 2000-08-31 $
+** &#36;Id&#58; qt/examples/tictac/tictac.cpp   2.3.0   edited 2001-01-26 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -180,7 +180,7 @@ TicTacButton::TicTacButton( <a href="qwidget.html">QWidget</a> *parent ) : <a hr
 // Paints TicTacButton
 //
 
-void <a name="395"></a>TicTacButton::drawButtonLabel( <a href="qpainter.html">QPainter</a> *p )
+void <a name="400"></a>TicTacButton::drawButtonLabel( <a href="qpainter.html">QPainter</a> *p )
 {
     <a href="qrect.html">QRect</a> r = rect();
     p-&gt;setPen( <a href="qpen.html">QPen</a>( white,2 ) );               // set fat pen
@@ -216,7 +216,7 @@ TicTacGameBoard::TicTacGameBoard( int n, QWidget *parent, const char *name )
         TicTacButton *ttb = new TicTacButton( this );
         ttb-&gt;<a href="qwidget.html#379ca0">setPalette</a>( p );
         ttb-&gt;<a href="qwidget.html#f996ef">setEnabled</a>( FALSE );
-        <a href="qobject.html#c2d209">connect</a>( ttb, SIGNAL(clicked()), SLOT(<a href=#388>buttonClicked</a>()) );
+        <a href="qobject.html#c2d209">connect</a>( ttb, SIGNAL(clicked()), SLOT(<a href=#393>buttonClicked</a>()) );
         grid-&gt;<a href="qgridlayout.html#70abf2">addWidget</a>( ttb, i%3, i/3 );
         buttons-&gt;insert( i, ttb );
         btArray-&gt;at(i) = TicTacButton::Blank;   // initial button type
@@ -232,41 +232,41 @@ TicTacGameBoard::~TicTacGameBoard()
 }
 
 // --------------------------------------------------------------------------
-// <a name="384"></a>TicTacGameBoard::computerStarts( bool v )
+// <a name="389"></a>TicTacGameBoard::computerStarts( bool v )
 //
 // Computer starts if v=TRUE. The human starts by default.
 //
 
-void <a name="384"></a>TicTacGameBoard::computerStarts( bool v )
+void <a name="389"></a>TicTacGameBoard::computerStarts( bool v )
 {
     comp_starts = v;
 }
 
 // --------------------------------------------------------------------------
-// <a name="386"></a>TicTacGameBoard::newGame()
+// <a name="391"></a>TicTacGameBoard::newGame()
 //
 // Clears the game board and prepares for a new game
 //
 
-void <a name="386"></a>TicTacGameBoard::newGame()
+void <a name="391"></a>TicTacGameBoard::newGame()
 {
     st = HumansTurn;
     for ( int i=0; i&lt;nBoard*nBoard; i++ )
         btArray-&gt;at(i) = TicTacButton::Blank;
     if ( comp_starts )
-        <a href=#394>computerMove</a>();
+        <a href=#399>computerMove</a>();
     else
-        <a href=#390>updateButtons</a>();
+        <a href=#395>updateButtons</a>();
 }
 
 // --------------------------------------------------------------------------
-// <a name="388"></a>TicTacGameBoard::buttonClicked()             - SLOT
+// <a name="393"></a>TicTacGameBoard::buttonClicked()             - SLOT
 //
 // This slot is activated when a TicTacButton emits the signal "clicked()",
 // i.e. the user has clicked on a TicTacButton.
 //
 
-void <a name="388"></a>TicTacGameBoard::buttonClicked()
+void <a name="393"></a>TicTacGameBoard::buttonClicked()
 {
     if ( st != HumansTurn )                     // not ready
         return;
@@ -274,9 +274,9 @@ void <a name="388"></a>TicTacGameBoard::buttonClicked()
     TicTacButton *b = buttons-&gt;at(i);           // get piece that was pressed
     if ( b-&gt;type() == TicTacButton::Blank ) {   // empty piece?
         btArray-&gt;at(i) = TicTacButton::Circle;
-        <a href=#390>updateButtons</a>();
+        <a href=#395>updateButtons</a>();
         if ( checkBoard( btArray ) == 0 )       // not a winning move?
-            <a href=#394>computerMove</a>();
+            <a href=#399>computerMove</a>();
         int s = checkBoard( btArray );
         if ( s ) {                              // any winners yet?
             st = s == TicTacButton::Circle ? HumanWon : ComputerWon;
@@ -286,12 +286,12 @@ void <a name="388"></a>TicTacGameBoard::buttonClicked()
 }
 
 // --------------------------------------------------------------------------
-// <a name="390"></a>TicTacGameBoard::updateButtons()
+// <a name="395"></a>TicTacGameBoard::updateButtons()
 //
 // Updates all buttons that have changed state
 //
 
-void <a name="390"></a>TicTacGameBoard::updateButtons()
+void <a name="395"></a>TicTacGameBoard::updateButtons()
 {
     for ( int i=0; i&lt;nBoard*nBoard; i++ ) {
         if ( buttons-&gt;at(i)-&gt;type() != btArray-&gt;at(i) )
@@ -302,7 +302,7 @@ void <a name="390"></a>TicTacGameBoard::updateButtons()
 }
 
 // --------------------------------------------------------------------------
-// <a name="392"></a>TicTacGameBoard::checkBoard()
+// <a name="397"></a>TicTacGameBoard::checkBoard()
 //
 // Checks if one of the players won the game, works for any board size.
 //
@@ -312,7 +312,7 @@ void <a name="390"></a>TicTacGameBoard::updateButtons()
 //  - Zero (0) if there is no winner yet
 //
 
-int <a name="392"></a>TicTacGameBoard::checkBoard( TicTacArray *a )
+int <a name="397"></a>TicTacGameBoard::checkBoard( TicTacArray *a )
 {
     int  t = 0;
     int  row, col;
@@ -366,12 +366,12 @@ int <a name="392"></a>TicTacGameBoard::checkBoard( TicTacArray *a )
 }
 
 // --------------------------------------------------------------------------
-// <a name="394"></a>TicTacGameBoard::computerMove()
+// <a name="399"></a>TicTacGameBoard::computerMove()
 //
 // Puts a piece on the game board. Very, very simple.
 //
 
-void <a name="394"></a>TicTacGameBoard::computerMove()
+void <a name="399"></a>TicTacGameBoard::computerMove()
 {
     int numButtons = nBoard*nBoard;
     int *altv = new int[numButtons];            // buttons alternatives
@@ -408,7 +408,7 @@ void <a name="394"></a>TicTacGameBoard::computerMove()
         }
     }
     *btArray = a;                               // update model
-    <a href=#390>updateButtons</a>();                            // update buttons
+    <a href=#395>updateButtons</a>();                            // update buttons
     delete[] altv;
 }
 
@@ -437,7 +437,7 @@ TicTacToe::TicTacToe( int boardSize, QWidget *parent, const char *name )
     // gameOver() slot
 
     board = new TicTacGameBoard( boardSize, this );
-    <a href="qobject.html#c2d209">connect</a>( board, SIGNAL(finished()), SLOT(<a href=#381>gameOver</a>()) );
+    <a href="qobject.html#c2d209">connect</a>( board, SIGNAL(finished()), SLOT(<a href=#386>gameOver</a>()) );
     l-&gt;<a href="qboxlayout.html#219265">addWidget</a>( board );
 
     // Create a horizontal frame line
@@ -458,7 +458,7 @@ TicTacToe::TicTacToe( int boardSize, QWidget *parent, const char *name )
     // to this right slots.
 
     newGame = new <a href="qpushbutton.html">QPushButton</a>( "Play!", this );
-    <a href="qobject.html#c2d209">connect</a>( newGame, SIGNAL(clicked()), SLOT(<a href=#379>newGameClicked</a>()) );
+    <a href="qobject.html#c2d209">connect</a>( newGame, SIGNAL(clicked()), SLOT(<a href=#384>newGameClicked</a>()) );
     quit = new <a href="qpushbutton.html">QPushButton</a>( "Quit", this );
     <a href="qobject.html#c2d209">connect</a>( quit, SIGNAL(clicked()), qApp, SLOT(quit()) );
     <a href="qhboxlayout.html">QHBoxLayout</a> * b = new <a href="qhboxlayout.html">QHBoxLayout</a>;
@@ -466,39 +466,39 @@ TicTacToe::TicTacToe( int boardSize, QWidget *parent, const char *name )
     b-&gt;<a href="qboxlayout.html#219265">addWidget</a>( newGame );
     b-&gt;<a href="qboxlayout.html#219265">addWidget</a>( quit );
 
-    <a href=#382>newState</a>();
+    <a href=#387>newState</a>();
 }
 
 // --------------------------------------------------------------------------
-// <a name="379"></a>TicTacToe::newGameClicked()                  - SLOT
+// <a name="384"></a>TicTacToe::newGameClicked()                  - SLOT
 //
 // This slot is activated when the new game button is clicked.
 //
 
-void <a name="379"></a>TicTacToe::newGameClicked()
+void <a name="384"></a>TicTacToe::newGameClicked()
 {
     board-&gt;computerStarts( whoStarts-&gt;currentItem() == 0 );
     board-&gt;newGame();
-    <a href=#382>newState</a>();
+    <a href=#387>newState</a>();
 }
 
 // --------------------------------------------------------------------------
-// <a name="381"></a>TicTacToe::gameOver()                        - SLOT
+// <a name="386"></a>TicTacToe::gameOver()                        - SLOT
 //
 // This slot is activated when the TicTacGameBoard emits the signal
 // "finished()", i.e. when a player has won or when it is a draw.
 //
 
-void <a name="381"></a>TicTacToe::gameOver()
+void <a name="386"></a>TicTacToe::gameOver()
 {
-    <a href=#382>newState</a>();                                 // update text box
+    <a href=#387>newState</a>();                                 // update text box
 }
 
 // --------------------------------------------------------------------------
 // Updates the message to reflect a new state.
 //
 
-void <a name="382"></a>TicTacToe::newState()
+void <a name="387"></a>TicTacToe::newState()
 {
     static const char *msg[] = {                // TicTacGameBoard::State texts
         "Click Play to start", "Make your move",
@@ -513,7 +513,7 @@ void <a name="382"></a>TicTacToe::newState()
 
   Main:
 <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/tictac/main.cpp   2.2.4   edited 2000-08-31 $
+** &#36;Id&#58; qt/examples/tictac/main.cpp   2.3.0   edited 2001-01-26 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -545,5 +545,5 @@ int main( int argc, char **argv )
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.4</div>
+<td align="right"><div align="right">Qt version 2.3.0</div>
 </table></div></address></body></html>

@@ -1,5 +1,6 @@
-.TH QScrollBar 3qt "1 Febrary 2001" "Trolltech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
+'\" t
+.TH QScrollBar 3qt "5 March 2001" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2001 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,7 +8,6 @@
 .nh
 .SH NAME
 QScrollBar \- Vertical or horizontal scroll bar
-.SH SYNOPSIS
 .br
 .PP
 \fC#include <qscrollbar.h>\fR
@@ -102,7 +102,23 @@ Inherits QRangeControl and QWidget.
 .br
 .in -1c
 .SS "Properties"
-<table border=1 cellpadding=3 cellspacing=0> <tr><th>Type<th>Name<th>READ<th>WRITE<th>Options <tr><td>int<td>minValue<td>minValue<td>setMinValue<td>&nbsp; <tr><td>int<td>maxValue<td>maxValue<td>setMaxValue<td>&nbsp; <tr><td>int<td>lineStep<td>lineStep<td>setLineStep<td>&nbsp; <tr><td>int<td>pageStep<td>pageStep<td>setPageStep<td>&nbsp; <tr><td>int<td>value<td>value<td>setValue<td>&nbsp; <tr><td>bool<td>tracking<td>tracking<td>setTracking<td>&nbsp; <tr><td>bool<td>draggingSlider<td>draggingSlider<td>&nbsp;<td>&nbsp; <tr><td>Orientation<td>orientation<td>orientation<td>setOrientation<td>&nbsp; </table>
+.nf
+.TS
+l l l l l
+- - - - -
+l l l l l.
+Type	Name	READ	WRITE	Options
+int	minValue	minValue	setMinValue
+int	maxValue	maxValue	setMaxValue
+int	lineStep	lineStep	setLineStep
+int	pageStep	pageStep	setPageStep
+int	value	value	setValue
+bool	tracking	tracking	setTracking
+bool	draggingSlider	draggingSlider
+Orientation	orientation	orientation	setOrientation
+.TE
+.fi
+
 .SH DESCRIPTION
 The QScrollBar widget provides a vertical or horizontal scroll bar.
 .PP
@@ -144,7 +160,12 @@ A scroll bar can be controlled by the keyboard, but it has a default focusPolicy
 .PP
 If you need to add scrollbars to an interface, consider using the QScrollView class which encapsulates the common uses for scrollbars.
 .PP
-<img src=qscrbar-m.png> <img src=qscrbar-w.png>
+.ce 1
+.B "[Image Omitted]"
+.PP
+
+.ce 1
+.B "[Image Omitted]"
 .PP
 See also QSlider, QSpinBox, QScrollView and GUI Design Handbook: Scroll Bar
 .SH MEMBER FUNCTION DOCUMENTATION
@@ -314,9 +335,20 @@ For internal use only.
 Reimplemented from QRangeControl.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qscrollbar.html
+.BR http://www.trolltech.com/faq/tech.html
 .SH COPYRIGHT
-Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
+Copyright 1992-2001 Trolltech AS, http://www.trolltech.com.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR
 Generated automatically from the source code.
+.SH BUGS
+If you find a bug in Qt, please report it as described in
+.BR http://doc.trolltech.com/bughowto.html .
+Good bug reports make our job much simpler. Thank you.
+.P
+In case of content or formattting problems with this manual page, please
+report them to
+.BR qt-bugs@trolltech.com .
+Please include the name of the manual page (qscrollbar.3qt) and the Qt
+version (2.3.0).

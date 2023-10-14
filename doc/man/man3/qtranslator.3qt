@@ -1,5 +1,6 @@
-.TH QTranslator 3qt "1 Febrary 2001" "Trolltech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
+'\" t
+.TH QTranslator 3qt "5 March 2001" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2001 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,7 +8,6 @@
 .nh
 .SH NAME
 QTranslator \- Internationalization support for text output
-.SH SYNOPSIS
 .br
 .PP
 \fC#include <qtranslator.h>\fR
@@ -131,9 +131,9 @@ The \fIcomment\fR - a comment which helps disambiguate different uses of the sam
 .PP
 The minimum is, for each item, just the information that is necessary for findMessage() to return the right text. This may include the source, context and comment, but usually is just a hash value and the translated text.
 .PP
-For example, the "Cancel" in a dialog might have "Anuluj" when the program runs in Polish, in which case the source text would be "Cancel", the context would (normally) be the dialog's class name, there would normally be no comment, and the translated text would be "Anuluj".
+For example, the "Cancel" in a dialog might have "Anuluj" when the program runs in Polish, in which case the source text would be" Cancel", the context would (normally) be the dialog's class name, there would normally be no comment, and the translated text would be" Anuluj".
 .PP
-But it's not always so simple: The Spanish version of a printer dialog with settings for two-sided printing and binding would probably require both "Activado" and "Activada" as translations for "Enabled". In this case, the source text would be "Enabled" in both cases and the context would be the dialog's class name, but the two items would have disambiguating comments such as "two-sided printing" for one and "binding" for the other. The comment enables the translator to choose the appropriate gender for the Spanish version, and Qt to distinguish between translations.
+But it's not always so simple: The Spanish version of a printer dialog with settings for two-sided printing and binding would probably require both "Activado" and "Activada" as translations for" Enabled". In this case, the source text would be "Enabled" in both cases and the context would be the dialog's class name, but the two items would have disambiguating comments such as "two-sided printing" for one and "binding" for the other. The comment enables the translator to choose the appropriate gender for the Spanish version, and Qt to distinguish between translations.
 .PP
 Note that when QTranslator loads a stripped file, most functions do not work. The functions that do work with stripped files are explicitly documented as such.
 .PP
@@ -236,7 +236,7 @@ See also insert().
 .PP
 This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts.
 .PP
-Removes the translation associated to the key ( \fIcontext, sourceText,\fR "" ) from this translator.
+Removes the translation associated to the key ( \fIcontext, sourceText,\fR" " ) from this translator.
 .SH "bool QTranslator::save ( const QString & filename, SaveMode mode = Everything )"
 Saves this message file to \fIfilename,\fR overwriting the previous contents of \fIfilename.\fR If \fImode\fR is \fCEverything\fR (this is the default), all the information is preserved. If \fImode\fR is \fCStripped,\fR all information that is not necessary for findMessage() is stripped away.
 .PP
@@ -259,9 +259,20 @@ You should never need to call this function; it is called by insert() and friend
 See also  squeeze().
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qtranslator.html
+.BR http://www.trolltech.com/faq/tech.html
 .SH COPYRIGHT
-Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
+Copyright 1992-2001 Trolltech AS, http://www.trolltech.com.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR
 Generated automatically from the source code.
+.SH BUGS
+If you find a bug in Qt, please report it as described in
+.BR http://doc.trolltech.com/bughowto.html .
+Good bug reports make our job much simpler. Thank you.
+.P
+In case of content or formattting problems with this manual page, please
+report them to
+.BR qt-bugs@trolltech.com .
+Please include the name of the manual page (qtranslator.3qt) and the Qt
+version (2.3.0).

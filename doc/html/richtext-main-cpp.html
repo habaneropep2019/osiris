@@ -32,7 +32,7 @@ height="100" src="face.png" alt="Home" border="0">
   <hr>
 
   Header file: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/richtext/richtext.h   2.2.4   edited 2000-08-31 $
+** &#36;Id&#58; qt/examples/richtext/richtext.h   2.3.0   edited 2001-01-26 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -74,7 +74,7 @@ protected slots:
   <hr>
 
   Implementation: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/richtext/richtext.cpp   2.2.4   edited 2000-08-31 $
+** &#36;Id&#58; qt/examples/richtext/richtext.cpp   2.3.0   edited 2001-01-26 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -173,13 +173,13 @@ MyRichText::MyRichText( <a href="qwidget.html">QWidget</a> *parent, const char *
     bPrev-&gt;setEnabled( FALSE );
 
     <a href="qobject.html#c2d209">connect</a>( bClose, SIGNAL( clicked() ), qApp, SLOT( quit() ) );
-    <a href="qobject.html#c2d209">connect</a>( bPrev, SIGNAL( clicked() ), this, SLOT( <a href=#313>prev</a>() ) );
-    <a href="qobject.html#c2d209">connect</a>( bNext, SIGNAL( clicked() ), this, SLOT( <a href=#314>next</a>() ) );
+    <a href="qobject.html#c2d209">connect</a>( bPrev, SIGNAL( clicked() ), this, SLOT( <a href=#318>prev</a>() ) );
+    <a href="qobject.html#c2d209">connect</a>( bNext, SIGNAL( clicked() ), this, SLOT( <a href=#319>next</a>() ) );
 
     num = 0;
 }
 
-void <a name="313"></a>MyRichText::prev()
+void <a name="318"></a>MyRichText::prev()
 {
     if ( num &lt;= 0 )
         return;
@@ -194,7 +194,7 @@ void <a name="313"></a>MyRichText::prev()
     bNext-&gt;setEnabled( TRUE );
 }
 
-void <a name="314"></a>MyRichText::next()
+void <a name="319"></a>MyRichText::next()
 {
     if ( !sayings[++num] )
         return;
@@ -213,7 +213,7 @@ void <a name="314"></a>MyRichText::next()
 
   Main:
 <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/richtext/main.cpp   2.2.4   edited 2000-08-31 $
+** &#36;Id&#58; qt/examples/richtext/main.cpp   2.3.0   edited 2001-01-26 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -241,5 +241,5 @@ int main( int argc, char **argv )
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.4</div>
+<td align="right"><div align="right">Qt version 2.3.0</div>
 </table></div></address></body></html>

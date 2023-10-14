@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qtranslator.cpp   2.2.4   edited 2000-10-06 $
+** $Id: qt/src/kernel/qtranslator.cpp   2.3.0   edited 2001-02-18 $
 **
 ** Localization database support.
 **
@@ -43,24 +43,20 @@
 #include "qfileinfo.h"
 
 #if defined(_OS_UNIX_)
-#define QT_USE_MMAP
+# define QT_USE_MMAP
 #endif
 
 #if defined(QT_USE_MMAP)
-
-// for mmap
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <sys/mman.h>
-#include <fcntl.h>
-#include <errno.h>
-
-// for htonl
-#include <netinet/in.h>
-
 // for close
-#include <unistd.h>
-
+# include <unistd.h>
+// for mmap
+# include <sys/types.h>
+# include <sys/stat.h>
+# include <sys/mman.h>
+# include <fcntl.h>
+# include <errno.h>
+// for htonl
+# include <netinet/in.h>
 #else
 // appropriate stuff here
 #endif

@@ -38,7 +38,7 @@ height="100" src="face.png" alt="Home" border="0">
   <hr>
  
   Header file: <pre>/*
-&#36;Id&#58; qt/examples/xml/tagreader-with-features/structureparser.h   2.2.4   edited 2001-01-22 $
+&#36;Id&#58; qt/examples/xml/tagreader-with-features/structureparser.h   2.3.0   edited 2001-01-26 $
 */  
 
 #include &lt;<a href="qxml-h.html">qxml.h</a>&gt;
@@ -67,7 +67,7 @@ private:
   <hr>
  
   Implementation: <pre>/*
-&#36;Id&#58; qt/examples/xml/tagreader-with-features/structureparser.cpp   2.2.4   edited 2001-01-22 $
+&#36;Id&#58; qt/examples/xml/tagreader-with-features/structureparser.cpp   2.3.0   edited 2001-01-26 $
 */
 
 #include "structureparser.h"
@@ -84,12 +84,12 @@ StructureParser::StructureParser( <a href="qlistview.html">QListView</a> * t )
     table-&gt;addColumn( "Namespace" );
 }
 
-bool <a name="335"></a>StructureParser::startDocument()
+bool <a name="340"></a>StructureParser::startDocument()
 {
     return TRUE;
 }
 
-bool <a name="336"></a>StructureParser::startElement( const QString&amp; namespaceURI, const QString&amp; , 
+bool <a name="341"></a>StructureParser::startElement( const QString&amp; namespaceURI, const QString&amp; , 
                                     const QString&amp; qName, 
                                     const QXmlAttributes&amp; attributes)
 {
@@ -114,7 +114,7 @@ bool <a name="336"></a>StructureParser::startElement( const QString&amp; namespa
     return TRUE;
 }
 
-bool <a name="337"></a>StructureParser::endElement( const QString&amp;, const QString&amp;, const QString&amp; )
+bool <a name="342"></a>StructureParser::endElement( const QString&amp;, const QString&amp;, const QString&amp; )
 {
     stack.pop();
     return TRUE;
@@ -126,7 +126,7 @@ bool <a name="337"></a>StructureParser::endElement( const QString&amp;, const QS
  
   Main:
 <pre>/*
-&#36;Id&#58; qt/examples/xml/tagreader-with-features/tagreader.cpp   2.2.4   edited 2001-01-22 $
+&#36;Id&#58; qt/examples/xml/tagreader-with-features/tagreader.cpp   2.3.0   edited 2001-01-26 $
 */
 
 #include "structureparser.h"
@@ -194,5 +194,5 @@ int main( int argc, char **argv )
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.4</div>
+<td align="right"><div align="right">Qt version 2.3.0</div>
 </table></div></address></body></html>

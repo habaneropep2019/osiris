@@ -1,5 +1,6 @@
-.TH QFileDialog 3qt "1 Febrary 2001" "Trolltech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
+'\" t
+.TH QFileDialog 3qt "5 March 2001" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2001 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,7 +8,6 @@
 .nh
 .SH NAME
 QFileDialog \- Dialog widget for inputting file names
-.SH SYNOPSIS
 .br
 .PP
 \fC#include <qfiledialog.h>\fR
@@ -198,7 +198,25 @@ Inherits QDialog.
 .br
 .in -1c
 .SS "Properties"
-<table border=1 cellpadding=3 cellspacing=0> <tr><th>Type<th>Name<th>READ<th>WRITE<th>Options <tr><td>QString<td>selectedFile<td>selectedFile<td>&nbsp;<td>&nbsp; <tr><td>QString<td>selectedFilter<td>selectedFilter<td>&nbsp;<td>&nbsp; <tr><td>QStringList<td>selectedFiles<td>selectedFiles<td>&nbsp;<td>&nbsp; <tr><td>QString<td>dirPath<td>dirPath<td>&nbsp;<td>&nbsp; <tr><td>bool<td>showHiddenFiles<td>showHiddenFiles<td>setShowHiddenFiles<td>&nbsp; <tr><td>Mode<td>mode<td>mode<td>setMode<td>&nbsp; <tr><td>ViewMode<td>viewMode<td>viewMode<td>setViewMode<td>&nbsp; <tr><td>PreviewMode<td>previewMode<td>previewMode<td>setPreviewMode<td>&nbsp; <tr><td>bool<td>infoPreview<td>isInfoPreviewEnabled<td>setInfoPreviewEnabled<td>&nbsp; <tr><td>bool<td>contentsPreview<td>isContentsPreviewEnabled<td>setContentsPreviewEnabled<td>&nbsp; </table>
+.nf
+.TS
+l l l l l
+- - - - -
+l l l l l.
+Type	Name	READ	WRITE	Options
+QString	selectedFile	selectedFile
+QString	selectedFilter	selectedFilter
+QStringList	selectedFiles	selectedFiles
+QString	dirPath	dirPath
+bool	showHiddenFiles	showHiddenFiles	setShowHiddenFiles
+Mode	mode	mode	setMode
+ViewMode	viewMode	viewMode	setViewMode
+PreviewMode	previewMode	previewMode	setPreviewMode
+bool	infoPreview	isInfoPreviewEnabled	setInfoPreviewEnabled
+bool	contentsPreview	isContentsPreviewEnabled	setContentsPreviewEnabled
+.TE
+.fi
+
 .SH DESCRIPTION
 The QFileDialog class provides a dialog widget for inputting file names.
 .PP
@@ -239,7 +257,12 @@ To get the selection the user did then, see selectedFile(), selectedFiles(), sel
 .PP
 For an example about how to use this customization of the QFileDialog, take a look at the qdir example (qt/examples/qdir/qdir.cpp)
 .PP
-<img src=qfiledlg-m.png> <img src=qfiledlg-w.png>
+.ce 1
+.B "[Image Omitted]"
+.PP
+
+.ce 1
+.B "[Image Omitted]"
 .PP
 See also QPrintDialog.
 .PP
@@ -385,7 +408,7 @@ See also getSaveFileName().
 .SH "QString QFileDialog::getOpenFileName ( const QString & startWith = QString::null, const QString & filter = QString::null, QWidget * parent = 0, const char * name = 0 ) \fC[static]\fR"
 This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts.
 .SH "QStringList QFileDialog::getOpenFileNames ( const QString & filter, const QString & dir, QWidget * parent, const char * name, const QString & caption ) \fC[static]\fR"
-Lets the user select N files from a single directory, and returns a list of the selected files. The list may be empty, and the file names are fully qualified (i.e. "/usr/games/quake" or "c:\\\\quake\\\\quake").
+Lets the user select N files from a single directory, and returns a list of the selected files. The list may be empty, and the file names are fully qualified (i.e. "/usr/games/quake" or" c:\\\\quake\\\\quake").
 .PP
 \fIfilter\fR is the default glob pattern (which the user can change). The default is all files. In the filter string multiple filters can be specified separated by either two semicolons next to each other or separated by newlines. To add two filters, one to show all C++ files and one to show all header files, the filter string could look like "C++ Files (*.cpp *.cc *.C *.cxx *.c++);;Header Files (*.h *.hxx *.h++)"
 .PP
@@ -656,9 +679,20 @@ Returns the viewmode of the filedialog.
 See also  setViewMode().
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qfiledialog.html
+.BR http://www.trolltech.com/faq/tech.html
 .SH COPYRIGHT
-Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
+Copyright 1992-2001 Trolltech AS, http://www.trolltech.com.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR
 Generated automatically from the source code.
+.SH BUGS
+If you find a bug in Qt, please report it as described in
+.BR http://doc.trolltech.com/bughowto.html .
+Good bug reports make our job much simpler. Thank you.
+.P
+In case of content or formattting problems with this manual page, please
+report them to
+.BR qt-bugs@trolltech.com .
+Please include the name of the manual page (qfiledialog.3qt) and the Qt
+version (2.3.0).

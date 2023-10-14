@@ -18,11 +18,11 @@
 **
 **********************************************************************/
 
-#include <stdio.h>
-#include <stdlib.h>
-
 #include "qapplication.h"
 #include "qprocess.h"
+
+#include <stdio.h>
+#include <stdlib.h>
 
 
 /*!

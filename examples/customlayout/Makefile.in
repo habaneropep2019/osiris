@@ -112,10 +112,6 @@ border.o: border.cpp \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
-		../../include/qconfig-minimal.h \
-		../../include/qconfig-small.h \
-		../../include/qconfig-medium.h \
-		../../include/qconfig-large.h \
 		../../include/qconfig.h \
 		../../include/qwindowdefs.h \
 		../../include/qstring.h \
@@ -158,10 +154,6 @@ card.o: card.cpp \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
-		../../include/qconfig-minimal.h \
-		../../include/qconfig-small.h \
-		../../include/qconfig-medium.h \
-		../../include/qconfig-large.h \
 		../../include/qconfig.h \
 		../../include/qwindowdefs.h \
 		../../include/qstring.h \
@@ -204,10 +196,6 @@ flow.o: flow.cpp \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
-		../../include/qconfig-minimal.h \
-		../../include/qconfig-small.h \
-		../../include/qconfig-medium.h \
-		../../include/qconfig-large.h \
 		../../include/qconfig.h \
 		../../include/qwindowdefs.h \
 		../../include/qstring.h \
@@ -250,10 +238,6 @@ main.o: main.cpp \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
-		../../include/qconfig-minimal.h \
-		../../include/qconfig-small.h \
-		../../include/qconfig-medium.h \
-		../../include/qconfig-large.h \
 		../../include/qconfig.h \
 		../../include/qwindowdefs.h \
 		../../include/qstring.h \

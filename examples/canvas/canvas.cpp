@@ -528,6 +528,7 @@ void Main::addText()
     i->setText("QCanvasText");
     i->move(rand()%canvas.width(),rand()%canvas.height());
     i->setZ(rand()%256);
+    i->setFont(QFont("helvetica",24));
     i->show();
 }
 

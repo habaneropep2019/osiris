@@ -30,7 +30,7 @@ remains with Trolltech.
 <hr>
 <pre>
 /****************************************************************************
-** &#36;Id&#58; qt/src/kernel/qfontmanager_qws.h   2.2.4   edited 2001-01-31 $
+** &#36;Id&#58; qt/src/kernel/qfontmanager_qws.h   2.3.0   edited 2001-02-02 $
 **
 ** Definition of font rendering infrastructure for Embedded Qt
 **
@@ -153,8 +153,6 @@ public:
     int minRightBearing();
     int maxWidth();
 
-    void save(const QString&amp; filename);  // Obsolete?
-
     virtual bool inFont(QChar ch) const=0;
     virtual QGlyph render(QChar)=0;
 
@@ -176,6 +174,10 @@ public:
         loaded=false;
         p=0;
     }
+
+    QRenderedFont* load(const QFontDef &amp;);
+
+    QFontDef fontDef() const;
 
     QFontFactory *factory;
     QString name;
@@ -202,11 +204,12 @@ public:
 
     // Font definition, type and color
 
-    QRenderedFont * get(const QFontDef &amp;);
+    QDiskFont * get(const QFontDef &amp;);
+
+    static int cmpFontDef(const QFontDef &amp; goal, const QFontDef &amp; choice);
 
     static void initialize();
     static void cleanup();
-
 };
 
 class QFontFactory {
@@ -235,5 +238,5 @@ extern QFontManager * qt_fontmanager;
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.4</div>
+<td align="right"><div align="right">Qt version 2.3.0</div>
 </table></div></address></body></html>

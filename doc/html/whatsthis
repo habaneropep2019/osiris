@@ -30,9 +30,12 @@ Implementation of a NetworkProtocol which works on the local filesystem. | QLoca
 Incremental image decoder for a specific image format. | QImageFormat
 Incremental image decoder for all supported image formats. | QImageDecoder
 Incrementally loads an animation or image, signalling as it progresses. | QMovie
+Keyboard driver/handler for Qt/Embedded | QWSKeyboardHandler
+Look and Feel suitable for interlaced displays | QInterlaceStyle
 Maintains the list of widgets which can take focus. | QFocusData
 More sophisticated Motif-ish look and feel | QMotifPlusStyle
 Motif Look and Feel | QMotifStyle
+Mouse driver/handler for Qt/Embedded | QWSMouseHandler
 Moves data from a DataSink during event processing. | QDataPump
 Platinum Look and Feel | QPlatinumStyle
 Provides conversion between text encodings. | QTextCodec
@@ -45,6 +48,7 @@ Provides for drag-and-drop of a list of URI references. | QUriDrag
 Provides information about available fonts. | QFontDatabase
 Provides nothing and does nothing. | QDropSite
 SGI Look and Feel | QSGIStyle
+Server-specific functionality in Qt/Embedded | QWSServer
 Simple stored-value drag object for arbitrary MIME data. | QStoredDrag
 State-based decoder | QTextDecoder
 State-based encoder | QTextEncoder
@@ -237,6 +241,7 @@ The ValueListIterator widget provides an iterator for QValueList. | QValueListIt
 The ValueStack class is a value based template widget that provides a stack. | QValueStack
 The Vector class is a template collection widget that provides a vector (array). | QVector
 The WMatrix widget specifies 2D transformations of a coordinate system. | QWMatrix
+The WSDecoration widget allows the appearance of the t/Embedded Window Manager to be customized. | QWSDecoration
 The WaitCondition widget allows waiting/waking for conditions between threads | QWaitCondition
 The WhatsThis widget provides a simple description of any widget, e.g. answering the question "what's this?" | QWhatsThis
 The WheelEvent widget contains parameters that describe a wheel event. | QWheelEvent

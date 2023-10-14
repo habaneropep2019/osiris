@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qcolor_x11.cpp   2.2.4   edited 2001-01-29 $
+** $Id: qt/src/kernel/qcolor_x11.cpp   2.3.0   edited 2001-01-30 $
 **
 ** Implementation of QColor class for X11
 **

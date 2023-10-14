@@ -317,7 +317,7 @@ void QTableItem::paint( QPainter *p, const QColorGroup &cg,
 	p->setPen( cg.highlightedText() );
     else
 	p->setPen( cg.text() );
-    p->drawText( x, 0, w - x, h,
+    p->drawText( x + 2, 0, w - x - 4, h,
 		 wordwrap ? (alignment() | WordBreak) : alignment(), txt );
 }
 
@@ -637,7 +637,9 @@ int QTableItem::col() const
 
   If your application stores its data already in a way that allocating
   a QTableItem for each data containing cell seems inappropriate, you
-  can reimplement QTable::paintCell() and draw the contents directly.
+  can reimplement QTable::paintCell() and draw the contents directly. 
+  You should also reimplement QTable::paintCell() if you wish to change
+  the alignment of your items in the QTable.
 
   Unless you reimplement them this approach will however prevent you
   from using functions like setText() etc.  Remember that in this
@@ -1236,6 +1238,9 @@ void QTable::drawContents( QPainter *p, int cx, int cy, int cw, int ch )
   paintCell() to do the custom drawing, or else subclass QTableItem
   and reimplement QTableItem::paint().
 
+  If you want to change the alignment of your items then you will need to 
+  reimplement paintCell().
+
   Reimplementing this function is probably better e.g. for data you
   retrieve from a database and draw at once, while using
   QTableItem::paint() is probably better e.g.  if you wish these data
@@ -1795,6 +1800,11 @@ void QTable::doAutoScroll()
     fixRow( tmpRow, pos.y() );
     fixCol( tmpCol, pos.x() );
 
+    if ( tmpRow < 0 || tmpRow > numRows() - 1 )
+	tmpRow = currentRow();
+    if ( tmpCol < 0 || tmpCol > numCols() - 1 )
+	tmpCol = currentColumn();
+
     ensureCellVisible( tmpRow, tmpCol );
 
     if ( currentSel && selMode != NoSelection ) {
@@ -2277,9 +2287,9 @@ void QTable::updateGeometries()
 	 ts.height() < leftHeader->offset() + leftHeader->height() )
 	verticalScrollBar()->setValue( ts.height() - leftHeader->height() );
 
-    leftHeader->setGeometry( 2, topMargin() + 2,
+    leftHeader->setGeometry( frameWidth(), topMargin() + frameWidth(),
 			     leftMargin(), visibleHeight() );
-    topHeader->setGeometry( leftMargin() + 2, 2,
+    topHeader->setGeometry( leftMargin() + frameWidth(), frameWidth(),
 			    visibleWidth(), topMargin() );
     inUpdateGeometries = FALSE;
 }
@@ -3493,6 +3503,7 @@ void QTableHeader::updateStretches()
 	int pw = width() -
 		 ( sectionPos( count() - 1 ) + sectionSize( count() - 1 ) ) -
 		 1;
+	bool block = signalsBlocked();
 	blockSignals( TRUE );
 	for ( i = 0; i < (int)stretchable.count(); ++i ) {
 	    if ( !stretchable[ i ] )
@@ -3508,7 +3519,7 @@ void QTableHeader::updateStretches()
 		pw = width() - sectionPos( i );
 	    resizeSection( i, QMAX( 20, pw ) );
 	}
-	blockSignals( FALSE );
+	blockSignals( block );
 	table->viewport()->repaint( FALSE );
 	widgetStretchTimer->start( 100, TRUE );
     } else {
@@ -3516,6 +3527,7 @@ void QTableHeader::updateStretches()
 	    return;
 	int i;
 	int ph = height() - ( sectionPos( count() - 1 ) + sectionSize( count() - 1 ) ) - 1;
+	bool block = signalsBlocked();
 	blockSignals( TRUE );
 	for ( i = 0; i < (int)stretchable.count(); ++i ) {
 	    if ( !stretchable[ i ] )
@@ -3530,7 +3542,7 @@ void QTableHeader::updateStretches()
 		ph = height() - sectionPos( i );
 	    resizeSection( i, QMAX( 20, ph ) );
 	}
-	blockSignals( FALSE );
+	blockSignals( block );
 	table->viewport()->repaint( FALSE );
 	widgetStretchTimer->start( 100, TRUE );
     }

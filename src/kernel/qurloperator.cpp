@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qurloperator.cpp   2.2.4   edited 2000-09-14 $
+** $Id: qt/src/kernel/qurloperator.cpp   2.3.0   edited 2001-02-20 $
 **
 ** Implementation of QUrlOperator class
 **
@@ -657,17 +657,11 @@ bool QUrlOperator::isDir( bool *ok )
 
     if ( d->entryMap.contains( "." ) ) {
 	return d->entryMap[ "." ].isDir();
-    } else {
-	// #### can assume that we are a directory?
-	if ( ok )
-	    *ok = FALSE;
-	return TRUE;
     }
-
+    // #### can assume that we are a directory?
     if ( ok )
 	*ok = FALSE;
-
-    return FALSE;
+    return TRUE;
 }
 
 /*!

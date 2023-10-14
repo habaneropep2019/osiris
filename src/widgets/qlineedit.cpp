@@ -1,5 +1,5 @@
 /**********************************************************************
-** $Id: qt/src/widgets/qlineedit.cpp   2.2.4   edited 2000-12-21 $
+** $Id: qt/src/widgets/qlineedit.cpp   2.3.0   edited 2001-02-06 $
 **
 ** Implementation of QLineEdit widget class
 **
@@ -748,7 +748,7 @@ void QLineEdit::paintEvent( QPaintEvent *e )
 
 	p.setPen( g.text() );
 
-	d->cursorRepaintRect.setTop( y + (frame() ? 2 : 0) - fm.ascent() );
+	d->cursorRepaintRect.setTop( y + frameW() - fm.ascent() );
 	d->cursorRepaintRect.setHeight( fm.height() );
 	d->pmDirty = FALSE;
     }
@@ -758,14 +758,14 @@ void QLineEdit::paintEvent( QPaintEvent *e )
     if ( frame() ) {
 	style().drawPanel( &p, 0, 0, width(), height(), colorGroup(),
 			   TRUE, style().defaultFrameWidth() );
-	p.drawPixmap( 2, 2, *d->pm );
+	p.drawPixmap( frameW(), frameW(), *d->pm );
     } else {
 	p.drawPixmap( 0, 0, *d->pm );
     }
 
     if ( hasFocus() ) {
 	d->cursorRepaintRect
-	    = QRect( offset + (frame() ? 2 : 0 ) +
+	    = QRect( offset + frameW() +
 		     fontMetrics().width( displayText().left( cursorPos ) ),
 		     d->cursorRepaintRect.top(),
 		     5, d->cursorRepaintRect.height() );
@@ -971,7 +971,7 @@ void QLineEdit::mouseMoveEvent( QMouseEvent *e )
     if ( !(e->state() & LeftButton) )
 	return;
 
-    int margin = frame() ? 4 : 2;
+    int margin = frame() ? frameW()*2 : 2;
 
     if ( e->pos().x() < margin || e->pos().x() > width() - margin ) {
 	if ( !dragScrolling ) {
@@ -1032,7 +1032,7 @@ void QLineEdit::mouseReleaseEvent( QMouseEvent * e )
     if ( e->button() != LeftButton )
 	return;
 
-    int margin = frame() ? 4 : 2;
+    int margin = frame() ? frameW()*2 : 2;
     if ( !QRect( margin, margin,
 		 width() - 2*margin,
 		 height() - 2*margin ).contains( e->pos() ) )
@@ -1305,7 +1305,7 @@ void QLineEdit::clipboardChanged()
 
 int QLineEdit::lastCharVisible() const
 {
-    int tDispWidth = width() - (frame() ? 8 : 4);
+    int tDispWidth = width() - (frameW()*2 + 4);
     return xPosToCursorPos( tDispWidth );
 }
 
@@ -1323,7 +1323,7 @@ int QLineEdit::maxMark() const
 
 
 
-/*!  Sets the line edit to draw itself inside a two-pixel frame if \a
+/*!  Sets the line edit to draw itself inside a frame if \a
   enable is TRUE, and to draw itself without any frame if \a enable is
   FALSE.
 
@@ -1357,6 +1357,10 @@ bool QLineEdit::frame() const
     return d ? d->frame : TRUE;
 }
 
+int QLineEdit::frameW() const
+{
+    return frame() ? style().defaultFrameWidth() : 0;
+}
 
 /*!  Sets the echo mode of the line edit widget.
 
@@ -1435,10 +1439,10 @@ QSize QLineEdit::sizeHint() const
     int h = fm.height();
     int w = fm.width( 'x' ) * 17; // "some"
     if ( frame() ) {
-	h += 8;
+	h += 4 + frameW()*2;
 	if ( style() == WindowsStyle && h < 26 )
 	    h = 22;
-	return QSize( w + 8, h ).expandedTo( QApplication::globalStrut() );
+	return QSize( w + 4 + frameW()*2, h ).expandedTo( QApplication::globalStrut() );
     } else {
 	return QSize( w + 4, h + 4 ).expandedTo( QApplication::globalStrut() );
     }
@@ -1459,10 +1463,10 @@ QSize QLineEdit::minimumSizeHint() const
     int h = fm.height();
     int w = fm.maxWidth();
     if ( frame() ) {
-	h += 8;
+	h += 4 + frameW()*2;
 	if ( style() == WindowsStyle && h < 26 )
 	    h = 22;
-	return QSize( w + 8, h );
+	return QSize( w + 4 + frameW()*2, h );
     } else {
 	return QSize( w + 4, h + 4 );
     }
@@ -1712,7 +1716,7 @@ void QLineEdit::repaintArea( int from, int to )
     }
 
     QFontMetrics fm = fontMetrics();
-    int x = fm.width( buf.left( a ) ) + offset - 2 + (frame() ? 2 : 0);
+    int x = fm.width( buf.left( a ) ) + offset - 2 + frameW();
     QRect r( x, 0, fm.width( buf.mid( a, b-a ) ) + 5, height() );
     r = r.intersect( rect() );
     if ( !r.isValid() )
@@ -1928,7 +1932,7 @@ int QLineEdit::xPosToCursorPos( int goalx ) const
     int i = 0;
     QFontMetrics fm = fontMetrics();
     QString s = displayText();
-    goalx -= (frame() ? 4 : 2);
+    goalx -= (frameW() + 2);
 
     while( i < (int) s.length() ) {
 	x2 = x1 + fm.width( s[i] );
@@ -1958,7 +1962,7 @@ void QLineEdit::makePixmap() const
     if ( d->pm )
 	return;
 
-    QSize s( frame() ? QSize( width() - 4, height() - 4 ) : size() );
+    QSize s( width() - frameW()*2, height() - frameW()*2 );
     if ( s.width() < 0 )
 	s.setWidth( 0 );
     if ( s.height() < 0 )

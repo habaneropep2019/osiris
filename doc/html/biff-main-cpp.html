@@ -31,7 +31,7 @@ height="100" src="face.png" alt="Home" border="0">
   <hr>
 
   Header file: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/biff/biff.h   2.2.4   edited 2000-08-31 $
+** &#36;Id&#58; qt/examples/biff/biff.h   2.3.0   edited 2001-01-26 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -75,7 +75,7 @@ private:
   biff.cpp implements this custom widget.  Note in particular
   how two images (hasmail_bmp_data and nomail_bmp_data, both from
   bmp.cpp) are included into the executable. <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/biff/biff.cpp   2.2.4   edited 2000-08-31 $
+** &#36;Id&#58; qt/examples/biff/biff.cpp   2.3.0   edited 2001-01-26 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -120,7 +120,7 @@ Biff::Biff( <a href="qwidget.html">QWidget</a> *parent, const char *name )
     lastModified = fi.<a href="qfileinfo.html#901050">lastModified</a>();
 }
 
-void <a name="375"></a>Biff::timerEvent( <a href="qtimerevent.html">QTimerEvent</a> * )
+void <a name="380"></a>Biff::timerEvent( <a href="qtimerevent.html">QTimerEvent</a> * )
 {
     <a href="qfileinfo.html">QFileInfo</a> fi( mailbox );
     bool newState = ( fi.<a href="qfileinfo.html#901050">lastModified</a>() != lastModified &amp;&amp;
@@ -133,7 +133,7 @@ void <a name="375"></a>Biff::timerEvent( <a href="qtimerevent.html">QTimerEvent<
     }
 }
 
-void <a name="376"></a>Biff::paintEvent( <a href="qpaintevent.html">QPaintEvent</a> * )
+void <a name="381"></a>Biff::paintEvent( <a href="qpaintevent.html">QPaintEvent</a> * )
 {
     if ( gotMail )
         <a href="qpaintdevice.html#058006">bitBlt</a>( this, 0, 0, &amp;hasNewMail );
@@ -141,7 +141,7 @@ void <a name="376"></a>Biff::paintEvent( <a href="qpaintevent.html">QPaintEvent<
         <a href="qpaintdevice.html#058006">bitBlt</a>( this, 0, 0, &amp;noNewMail );
 }
 
-void <a name="377"></a>Biff::mousePressEvent( <a href="qmouseevent.html">QMouseEvent</a> * )
+void <a name="382"></a>Biff::mousePressEvent( <a href="qmouseevent.html">QMouseEvent</a> * )
 {
     <a href="qfileinfo.html">QFileInfo</a> fi( mailbox );
     lastModified = fi.<a href="qfileinfo.html#901050">lastModified</a>();
@@ -153,7 +153,7 @@ void <a name="377"></a>Biff::mousePressEvent( <a href="qmouseevent.html">QMouseE
 
   Main:
 <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/biff/main.cpp   2.2.4   edited 2000-08-31 $
+** &#36;Id&#58; qt/examples/biff/main.cpp   2.3.0   edited 2001-01-26 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -177,5 +177,5 @@ int main( int argc, char ** argv )
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.4</div>
+<td align="right"><div align="right">Qt version 2.3.0</div>
 </table></div></address></body></html>

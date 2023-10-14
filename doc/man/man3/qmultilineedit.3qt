@@ -1,5 +1,6 @@
-.TH QMultiLineEdit 3qt "1 Febrary 2001" "Trolltech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
+'\" t
+.TH QMultiLineEdit 3qt "5 March 2001" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2001 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,7 +8,6 @@
 .nh
 .SH NAME
 QMultiLineEdit \- Simple editor for inputting text
-.SH SYNOPSIS
 .br
 .PP
 \fC#include <qmultilineedit.h>\fR
@@ -336,7 +336,35 @@ Inherits QTableView.
 .br
 .in -1c
 .SS "Properties"
-<table border=1 cellpadding=3 cellspacing=0> <tr><th>Type<th>Name<th>READ<th>WRITE<th>Options <tr><td>int<td>numLines<td>numLines<td>&nbsp;<td>&nbsp; <tr><td>bool<td>atBeginning<td>atBeginning<td>&nbsp;<td>&nbsp; <tr><td>bool<td>atEnd<td>atEnd<td>&nbsp;<td>&nbsp; <tr><td>int<td>maxLineWidth<td>maxLineWidth<td>&nbsp;<td>&nbsp; <tr><td>Alignment<td>alignment<td>alignment<td>setAlignment<td>&nbsp; <tr><td>bool<td>edited<td>edited<td>setEdited<td> DESIGNABLE false <tr><td>EchoMode<td>echoMode<td>echoMode<td>setEchoMode<td>&nbsp; <tr><td>int<td>maxLength<td>maxLength<td>setMaxLength<td>&nbsp; <tr><td>int<td>maxLines<td>maxLines<td>setMaxLines<td>&nbsp; <tr><td>int<td>hMargin<td>hMargin<td>setHMargin<td>&nbsp; <tr><td>WordWrap<td>wordWrap<td>wordWrap<td>setWordWrap<td>&nbsp; <tr><td>int<td>wrapColumnOrWidth<td>wrapColumnOrWidth<td>setWrapColumnOrWidth<td>&nbsp; <tr><td>WrapPolicy<td>wrapPolicy<td>wrapPolicy<td>setWrapPolicy<td>&nbsp; <tr><td>bool<td>autoUpdate<td>autoUpdate<td>setAutoUpdate<td> DESIGNABLE false <tr><td>bool<td>undoEnabled<td>isUndoEnabled<td>setUndoEnabled<td>&nbsp; <tr><td>int<td>undoDepth<td>undoDepth<td>setUndoDepth<td>&nbsp; <tr><td>bool<td>readOnly<td>isReadOnly<td>setReadOnly<td>&nbsp; <tr><td>bool<td>overWriteMode<td>isOverwriteMode<td>setOverwriteMode<td>&nbsp; <tr><td>QString<td>text<td>text<td>setText<td>&nbsp; <tr><td>int<td>length<td>length<td>&nbsp;<td>&nbsp; </table>
+.nf
+.TS
+l l l l l
+- - - - -
+l l l l l.
+Type	Name	READ	WRITE	Options
+int	numLines	numLines
+bool	atBeginning	atBeginning
+bool	atEnd	atEnd
+int	maxLineWidth	maxLineWidth
+Alignment	alignment	alignment	setAlignment
+bool	edited	edited	setEdited	DESIGNABLE false
+EchoMode	echoMode	echoMode	setEchoMode
+int	maxLength	maxLength	setMaxLength
+int	maxLines	maxLines	setMaxLines
+int	hMargin	hMargin	setHMargin
+WordWrap	wordWrap	wordWrap	setWordWrap
+int	wrapColumnOrWidth	wrapColumnOrWidth	setWrapColumnOrWidth
+WrapPolicy	wrapPolicy	wrapPolicy	setWrapPolicy
+bool	autoUpdate	autoUpdate	setAutoUpdate	DESIGNABLE false
+bool	undoEnabled	isUndoEnabled	setUndoEnabled
+int	undoDepth	undoDepth	setUndoDepth
+bool	readOnly	isReadOnly	setReadOnly
+bool	overWriteMode	isOverwriteMode	setOverwriteMode
+QString	text	text	setText
+int	length	length
+.TE
+.fi
+
 .SH DESCRIPTION
 The QMultiLineEdit widget is a simple editor for inputting text.
 .PP
@@ -348,7 +376,12 @@ The widget can be used to display text by calling setReadOnly(TRUE)
 .PP
 The default key bindings are described in keyPressEvent(); they cannot be customized except by inheriting the class.
 .PP
-<img src=qmlined-m.png> <img src=qmlined-w.png>
+.ce 1
+.B "[Image Omitted]"
+.PP
+
+.ce 1
+.B "[Image Omitted]"
 .PP
 Examples:
 .(l
@@ -894,9 +927,20 @@ Returns the current word wrap policy.
 See also  setWrapPolicy().
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qmultilineedit.html
+.BR http://www.trolltech.com/faq/tech.html
 .SH COPYRIGHT
-Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
+Copyright 1992-2001 Trolltech AS, http://www.trolltech.com.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR
 Generated automatically from the source code.
+.SH BUGS
+If you find a bug in Qt, please report it as described in
+.BR http://doc.trolltech.com/bughowto.html .
+Good bug reports make our job much simpler. Thank you.
+.P
+In case of content or formattting problems with this manual page, please
+report them to
+.BR qt-bugs@trolltech.com .
+Please include the name of the manual page (qmultilineedit.3qt) and the Qt
+version (2.3.0).

@@ -1,5 +1,6 @@
-.TH QTable 3qt "1 Febrary 2001" "Trolltech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
+'\" t
+.TH QTable 3qt "5 March 2001" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2001 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,9 +8,6 @@
 .nh
 .SH NAME
 QTable \- A flexible and editable table widget
-<h1 align=center>QTable Class Reference
-.br
-<small>[ table module ]</small></h1>
 .br
 .PP
 \fC#include <qtable.h>\fR
@@ -314,7 +312,20 @@ Inherits QScrollView.
 .br
 .in -1c
 .SS "Properties"
-<table border=1 cellpadding=3 cellspacing=0> <tr><th>Type<th>Name<th>READ<th>WRITE<th>Options <tr><td>int<td>numRows<td>numRows<td>setNumRows<td>&nbsp; <tr><td>int<td>numCols<td>numCols<td>setNumCols<td>&nbsp; <tr><td>bool<td>showGrid<td>showGrid<td>setShowGrid<td>&nbsp; <tr><td>bool<td>rowMovingEnabled<td>rowMovingEnabled<td>setRowMovingEnabled<td>&nbsp; <tr><td>bool<td>columnMovingEnabled<td>columnMovingEnabled<td>setColumnMovingEnabled<td>&nbsp; </table>
+.nf
+.TS
+l l l l l
+- - - - -
+l l l l l.
+Type	Name	READ	WRITE	Options
+int	numRows	numRows	setNumRows
+int	numCols	numCols	setNumCols
+bool	showGrid	showGrid	setShowGrid
+bool	rowMovingEnabled	rowMovingEnabled	setRowMovingEnabled
+bool	columnMovingEnabled	columnMovingEnabled	setColumnMovingEnabled
+.TE
+.fi
+
 .SH DESCRIPTION
 A flexible and editable table widget.
 .PP
@@ -340,7 +351,7 @@ It is possible to use QTable without QTableItems. However, as the default implem
 .PP
 In order to draw custom content in a cell you have to implement your own subclass of QTableItem and reimplement the QTableItem::paint() method.
 .PP
-If your application stores its data already in a way that allocating a QTableItem for each data containing cell seems inappropriate, you can reimplement QTable::paintCell() and draw the contents directly.
+If your application stores its data already in a way that allocating a QTableItem for each data containing cell seems inappropriate, you can reimplement QTable::paintCell() and draw the contents directly. You should also reimplement QTable::paintCell() if you wish to change the alignment of your items in the QTable.
 .PP
 Unless you reimplement them this approach will however prevent you from using functions like setText() etc. Remember that in this case, repainting the cells using updateCell() after each change made is necessary. To make sure you don't waste memory, read the documentation of resizeData().
 .SS "Member Type Documentation"
@@ -538,6 +549,8 @@ Paints the cell at the position \fIrow, col\fR on the painter \fIp.\fR The paint
 .PP
 If you want to draw custom cell content you have to reimplement paintCell() to do the custom drawing, or else subclass QTableItem and reimplement QTableItem::paint().
 .PP
+If you want to change the alignment of your items then you will need to reimplement paintCell().
+.PP
 Reimplementing this function is probably better e.g. for data you retrieve from a database and draw at once, while using QTableItem::paint() is probably better e.g. if you wish these data to be stored in a data structure in the table.
 .SH "void QTable::paintEmptyArea ( QPainter * p, int cx, int cy, int cw, int ch ) \fC[virtual protected]\fR"
 This function fills the rectangular \fIcx, cy, cw, ch\fR with the background color. paintEmptyArea() is invoked by drawContents() to erase or fill unused areas.
@@ -691,9 +704,20 @@ This signal is emitted if the user edited the cell row, \fIcol.\fR
 Returns the outer left QHeader.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qtable.html
+.BR http://www.trolltech.com/faq/tech.html
 .SH COPYRIGHT
-Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
+Copyright 1992-2001 Trolltech AS, http://www.trolltech.com.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR
 Generated automatically from the source code.
+.SH BUGS
+If you find a bug in Qt, please report it as described in
+.BR http://doc.trolltech.com/bughowto.html .
+Good bug reports make our job much simpler. Thank you.
+.P
+In case of content or formattting problems with this manual page, please
+report them to
+.BR qt-bugs@trolltech.com .
+Please include the name of the manual page (qtable.3qt) and the Qt
+version (2.3.0).

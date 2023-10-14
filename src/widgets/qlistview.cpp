@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qlistview.cpp   2.2.4   edited 2001-01-25 $
+** $Id: qt/src/widgets/qlistview.cpp   2.3.0   edited 2001-03-01 $
 **
 ** Implementation of QListView widget class
 **
@@ -2300,6 +2300,7 @@ void QListView::insertItem( QListViewItem * i )
 
 void QListView::clear()
 {
+    bool block = signalsBlocked();
     blockSignals( TRUE );
     d->clearing = TRUE;
     clearSelection();
@@ -2318,6 +2319,7 @@ void QListView::clear()
     d->dirtyItemTimer->stop();
 
     d->focusItem = 0;
+    d->selectAnchor = 0;
 
     // if it's down its downness makes no sense, so undown it
     d->buttonDown = FALSE;
@@ -2336,7 +2338,7 @@ void QListView::clear()
     r->is_root = TRUE;
     d->r = r;
     d->r->setSelectable( FALSE );
-    blockSignals( FALSE );
+    blockSignals( block );
     triggerUpdate();
     d->clearing = FALSE;
 }
@@ -3559,11 +3561,13 @@ void QListView::doAutoScroll()
 		// also (de)select the ones in between
 		QListViewItem * b = d->focusItem;
 		bool down = ( itemPos( c ) > itemPos( b ) );
-		while( b && b != c ) {
-		    if ( b->isSelectable() )
-			setSelected( b, d->select );
-		    b = down ? b->itemBelow() : b->itemAbove();
-		}
+                if ( itemAt( QCursor::pos() ) ) {
+                    while( b && b != c ) {
+                        if ( b->isSelectable() )
+                            setSelected( b, d->select );
+                        b = down ? b->itemBelow() : b->itemAbove();
+                    }
+                }
 		if ( c->isSelectable() )
 		    setSelected( c, d->select );
 	    }
@@ -5614,9 +5618,10 @@ void QListView::handleItemChange( QListViewItem *old, bool shift, bool control )
 	    selectRange( d->selectAnchor ? d->selectAnchor : old,
 			 d->focusItem, FALSE, TRUE, d->selectAnchor ? TRUE : FALSE );
 	} else {
+	    bool block = signalsBlocked();
 	    blockSignals( TRUE );
 	    selectAll( FALSE );
-	    blockSignals( FALSE );
+	    blockSignals( block );
 	    setSelected( d->focusItem, TRUE );
 	}
     } else if ( d->selectionMode == Multi ) {

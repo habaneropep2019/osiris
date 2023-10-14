@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/network/qsocketdevice_unix.cpp   2.2.4   edited 2001-01-21 $
+** $Id: qt/src/network/qsocketdevice_unix.cpp   2.3.0   edited 2001-02-20 $
 **
 ** Implementation of QSocketDevice class.
 **
@@ -37,23 +37,37 @@
 
 #include "qsocketdevice.h"
 #ifndef QT_NO_NETWORK
+
+#if defined(_OS_OSF_)
+// ask for XPG4v2 + XNS4
+#  ifndef _XOPEN_SOURCE_EXTENDED
+#    define _XOPEN_SOURCE_EXTENDED
+#  endif
+#endif
+
+#include <unistd.h>
 #include "qwindowdefs.h"
 #include <string.h>
 
 #if defined(_OS_AIX_)
 // Please add comments! Which version of AIX? Why?
 // Adding #defines specifying BSD compatibility ought to be enough.
-#include <strings.h>
-#include <sys/select.h>
+#  include <strings.h>
+#  include <sys/select.h>
 #endif
 
-#if defined(_OS_OSF_) && defined(_XOPEN_SOURCE_EXTENDED)
+#if defined(_OS_OSF_)
+#  include <sys/select.h> // UGH
+#  include <strings.h> // ARGH
+#  define FNDELAY O_NONBLOCK // !!@#!()@
+#  if defined(_XOPEN_SOURCE_EXTENDED)
 // Tru64 redefines accept() to _accept() when XNS4 is specified using
 // _XOPEN_SOURCE_EXTENDED.  Avoid it as it breaks our sources.
-#undef _XOPEN_SOURCE_EXTENDED
+// No! Find another solution! We should be using recent APIs.
+#    undef _XOPEN_SOURCE_EXTENDED
+#  endif
 #endif
 
-#include <unistd.h>
 #include <sys/param.h>
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -137,12 +151,14 @@
 #elif defined(_OS_UNIXWARE7_)
 #define SOCKLEN_T size_t
 #elif defined(_OS_AIX_)
-#ifdef _AIX42
-// AIX 4.2 and better.
-// The AIX 4.3 online documentation says 'size_t' and it worked so far.
-// However this is not at all 64-bit safe and not Unix 98 or even Unix 95
-// compliant. This is only compliant to some bogus POSIX draft. There must
-// be some way to use 'socklen_t' or at least revert to 'int'.
+#ifdef _AIX43
+// AIX 4.3
+// The AIX 4.3 online documentation says 'size_t'. But a user asked IBM
+// and they are reported to have told him the documentation is wrong.
+// In addition 'socklen_t' is needed by many users, so...
+#define SOCKLEN_T socklen_t
+#elif _AIX42
+// AIX 4.2
 #define SOCKLEN_T size_t
 #else
 // AIX 4.1

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qurl.cpp   2.2.4   edited 2001-01-10 $
+** $Id: qt/src/kernel/qurl.cpp   2.3.0   edited 2001-02-05 $
 **
 ** Implementation of QUrl class
 **
@@ -995,8 +995,9 @@ QString QUrl::dirPath() const
 	return QString::null;
     
     QString s = path();
-    s += "/";
-    s = QFileInfo( s ).dirPath();
+    // ### Why add a slash to the path before calling dirPath()??!
+    // s += "/";
+    s = QFileInfo( s ).dirPath( TRUE );
     if ( s[ (int)s.length() - 1 ] != '/' )
 	s += "/";
     return s;

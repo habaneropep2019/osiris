@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/doc/debug.doc   2.2.4   edited 2000-08-25 $
+** $Id: qt/doc/debug.doc   2.3.0   edited 2001-02-18 $
 **
 ** Qt Debugging Techniques
 **
@@ -165,6 +165,7 @@ Example:
   }
 \endcode
 
+<hr>
 <h2>Common bugs</h2>
 
 There is one bug that is so common that it deserves mention here: If

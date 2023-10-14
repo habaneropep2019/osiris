@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qmainwindow.cpp   2.2.4   edited 2000-12-07 $
+** $Id: qt/src/widgets/qmainwindow.cpp   2.3.0   edited 2001-01-26 $
 **
 ** Implementation of QMainWindow class
 **

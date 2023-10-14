@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qfile_unix.cpp   2.2.4   edited 2000-10-20 $
+** $Id: qt/src/tools/qfile_unix.cpp   2.3.0   edited 2001-02-19 $
 **
 ** Implementation of QFileInfo class
 **
@@ -478,7 +478,7 @@ int QFile::readBlock( char *p, uint len )
 	}
 	ungetchBuffer.truncate( l - nread );
     }
-    
+
     if ( nread < (int)len ) {
 	if ( isRaw() ) {				// raw file
 	    nread += READ( fd, p, len-nread );

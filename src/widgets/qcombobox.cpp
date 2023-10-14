@@ -1,5 +1,5 @@
 /**********************************************************************
-** $Id: qt/src/widgets/qcombobox.cpp   2.2.4   edited 2001-01-10 $
+** $Id: qt/src/widgets/qcombobox.cpp   2.3.0   edited 2001-03-02 $
 **
 ** Implementation of QComboBox widget class
 **
@@ -95,10 +95,9 @@
   The two constructors create identical-looking combos in Windows
   style.
 
-  Read-only combo boxes can contain pixmaps as well as texts; the
-  insert() and changeItem() functions are suitably overloaded.  If you
-  try to insert a pixmap in a read-write combo box, QComboBox simply
-  ignores you.  For read-write combo boxes, the function clearEdit()
+  Combo boxes can contain pixmaps as well as texts; the
+  insert() and changeItem() functions are suitably overloaded.  For 
+  read-write combo boxes, the function clearEdit()
   is provided, to clear the displayed string without changing the
   combo box' contents.
 
@@ -703,6 +702,15 @@ void QComboBox::removeItem( int index )
 	}
 	currentChanged();
     }
+    else {
+        if ( !d->ed ) {
+            if (d->current < cnt - 1)
+                setCurrentItem( d->current );
+            else
+                setCurrentItem( d->current - 1 );
+        }
+    }
+
 }
 
 
@@ -806,7 +814,7 @@ void QComboBox::changeItem( const QString &t, int index )
 
 void QComboBox::changeItem( const QPixmap &im, int index )
 {
-    if ( d->ed != 0 || !checkIndex( "changeItem", name(), count(), index ) )
+    if ( !checkIndex( "changeItem", name(), count(), index ) )
 	return;
     if ( d->usingListBox() )
 	d->listBox()->changeItem( im, index );
@@ -818,17 +826,12 @@ void QComboBox::changeItem( const QPixmap &im, int index )
 
 /*!
   Replaces the item at position \e index with a pixmap plus text.
-  If the combo box is writable, the pixmap is ignored.
-
+  
   \sa insertItem()
 */
 
 void QComboBox::changeItem( const QPixmap &im, const QString &t, int index )
 {
-    if ( d->ed != 0 ) {
-	changeItem( t, index );
-	return;
-    }
     if ( !checkIndex( "changeItem", name(), count(), index ) )
 	return;
     if ( d->usingListBox() )
@@ -1345,7 +1348,8 @@ void QComboBox::popup()
 	d->listBox()->viewport()->installEventFilter( this );
 	d->mouseWasInsidePopup = FALSE;
 	d->listBox()->resize( width(),
-			    listHeight( d->listBox(), d->sizeLimit ) + 2 );
+			    listHeight( d->listBox(), d->sizeLimit ) +
+			    d->listBox()->frameWidth() * 2 );
 	QWidget *desktop = QApplication::desktop();
 	int sw = desktop->width();			// screen width
 	int sh = desktop->height();			// screen height
@@ -1367,9 +1371,10 @@ void QComboBox::popup()
 
 	d->listBox()->move( x,y );
 	d->listBox()->raise();
+	bool block = d->listBox()->signalsBlocked();
 	d->listBox()->blockSignals( TRUE );
 	d->listBox()->setCurrentItem( d->listBox()->item( d->current ) );
-	d->listBox()->blockSignals( FALSE );
+	d->listBox()->blockSignals( block );
 	d->listBox()->setAutoScrollBar( TRUE );
 
 #ifndef QT_NO_EFFECTS
@@ -1497,7 +1502,7 @@ bool QComboBox::eventFilter( QObject *object, QEvent *event )
 		    if ( it.length() >= ct.length() ) {
 			it.truncate( ct.length() );
 			int itlen = text( i ).length();
-			if ( (it == ct || it.lower() == ct )
+			if ( ( it.lower() == ct.lower() )
 			    && itlen < foundLength ) {
 			    foundAt = i;
 			    foundLength = text( i ).length();

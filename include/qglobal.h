@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qglobal.h   2.2.4   edited 2001-02-01 $
+** $Id: qt/src/tools/qglobal.h   2.3.0   edited 2001-03-05 $
 **
 ** Global type declarations and definitions
 **
@@ -39,8 +39,8 @@
 #define QGLOBAL_H
 
 
-#define QT_VERSION	224
-#define QT_VERSION_STR	"2.2.4"
+#define QT_VERSION	230
+#define QT_VERSION_STR	"2.3.0"
 
 
 //
@@ -147,7 +147,6 @@
 #endif
 #endif
 
-
 //
 // The compiler, must be one of: (_CC_x_)
 //
@@ -196,6 +195,10 @@
 #endif
 #if __GNUC__ == 2 && __GNUC_MINOR__ >= 95
 #define Q_DELETING_VOID_UNDEFINED
+#endif
+#if __GNUC__ == 2 && __GNUC_MINOR__ == 96
+#define Q_DELETING_VOID_UNDEFINED
+#define Q_FP_CCAST_BROKEN
 #endif
 #if (defined(__arm__) || defined(__ARMEL__)) && !defined(QT_MOC_CPP)
 #define Q_PACKED __attribute__ ((packed))
@@ -267,11 +270,32 @@
 #error "Qt has not been tested with this compiler - talk to qt-bugs@trolltech.com"
 #endif
 
+
+// For non-compilers that still need to parse Qt,
+// like Insure++ and lint-like programs.
+
+#if defined(__INSURE__)
+#if !defined(Q_SPURIOUS_NON_VOID_WARNING)
+#define Q_SPURIOUS_NON_VOID_WARNING
+#endif
+#endif
+
+
 #ifndef Q_PACKED
 #define Q_PACKED
 #endif
 
-// Window system setting
+
+//
+// The window system, must be one of: (_WS_x_)
+//
+//   QWS	- Qt/Embedded
+//   WIN32	- Windows
+//   X11	- X Window System
+//   MAC	- unsupported
+//   PM		- unsupported
+//   WIN16	- unsupported
+//
 
 #if defined(_OS_MAC_)
 #define _WS_MAC_
@@ -607,3 +631,4 @@ Q_EXPORT void qObsolete( const char *message );
 #endif
 
 #endif // QGLOBAL_H
+

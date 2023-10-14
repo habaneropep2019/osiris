@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qtextcodec.cpp   2.2.4   edited 2001-01-23 $
+** $Id: qt/src/tools/qtextcodec.cpp   2.3.0   edited 2001-03-02 $
 **
 ** Implementation of QTextCodec class
 **
@@ -432,9 +432,12 @@ int QWindowsLocalCodec::heuristicContentMatch(const char* chars, int len) const
     int l = t.length();
     QCString mb = fromUnicode(t,l);
     int i=0;
-    while ( i < len )
+    while ( i < len ) {
         if ( chars[i] == mb[i] )
             i++;
+       else
+           break;
+    }
     return i;
 }
 
@@ -560,6 +563,13 @@ QTextCodec* QTextCodec::codecForLocale()
 
     char * lang = qstrdup( getenv("LANG") );
 
+#ifdef _WS_X11_
+    // use LC_CTYPE if LANG is not available, as X11 uses it too, and we otherwise get inconsitencies between
+    // XmbLookupString and the Qt input mapper
+    if ( !lang || lang[0] == 0 ) 
+	lang = qstrdup( getenv("LC_CTYPE") );
+#endif
+    
     char * p = lang ? strchr( lang, '.' ) : 0;
     if ( !p || *p != '.' ) {
         // Some versions of setlocale return encoding, others not.
@@ -584,6 +594,8 @@ QTextCodec* QTextCodec::codecForLocale()
             // Use or codec disagree.
             localeMapper = codecForName( p+1 );
         }
+	if ( localeMapper && localeMapper->mibEnum() == 11 )
+	    localeMapper = codecForName( "ISO 8859-8-I" );
     }
     if ( !localeMapper || !(p && *p == '.') ) {
         // if there is none, we default to 8859-1
@@ -813,7 +825,12 @@ QCString QTextCodec::fromUnicode(const QString& uc) const
 QString QTextCodec::toUnicode(const QByteArray& a, int len) const
 {
     int l = a.size();
-    if( l > 0 && a.data()[l - 1] == '\0' && a.data()[ l - 2 ] == 0 ) l--;
+    // implicit conversions of QCStrings to QByteArrays used to give an additional 0 at the end.
+    // we should however not remove this 0 for utf16 encoded data.
+    if( l > 0 && a.data()[l - 1] == '\0' ) {
+	if ( mibEnum() != 1000 || a.data()[l-2] == 0)
+	    l--;
+    }
     l = QMIN( l, len );
     return toUnicode( a.data(), l );
 }
@@ -824,7 +841,12 @@ QString QTextCodec::toUnicode(const QByteArray& a, int len) const
 QString QTextCodec::toUnicode(const QByteArray& a) const
 {
     int l = a.size();
-    if( l > 0 && a.data()[l - 1] == '\0'  && a.data()[ l - 2 ] == 0 ) l--;
+    // implicit conversions of QCStrings to QByteArrays used to give an additional 0 at the end.
+    // we should however not remove this 0 for utf16 encoded data.
+    if( l > 0 && a.data()[l - 1] == '\0' ) {
+	if ( mibEnum() != 1000 || a.data()[l-2] == 0)
+	    l--;
+    }
     return toUnicode( a.data(), l );
 }
 

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qscrollbar.cpp   2.2.4   edited 2001-01-08 $
+** $Id: qt/src/widgets/qscrollbar.cpp   2.3.0   edited 2001-01-26 $
 **
 ** Implementation of QScrollBar class
 **

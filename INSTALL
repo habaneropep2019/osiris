@@ -8,15 +8,15 @@ where you choose to install Qt.
 1.  Unpack the archive if you have not done so already:
 
 	cd /usr/local
-	gunzip qt-x11-2.2.4.tar.gz	# uncompress the archive
-	tar xf qt-x11-2.2.4.tar	# unpack it
+	gunzip qt-x11-2.3.0.tar.gz	# uncompress the archive
+	tar xf qt-x11-2.3.0.tar	# unpack it
 
-    This creates the directory /usr/local/qt-2.2.4 containing the
+    This creates the directory /usr/local/qt-2.3.0 containing the
     files from the main archive.
 
-    Rename qt-2.2.4 to qt (or make a symlink):
+    Rename qt-2.3.0 to qt (or make a symlink):
 
-	mv qt-2.2.4 qt
+	mv qt-2.3.0 qt
 
     The rest of this file assumes that Qt is installed in /usr/local/qt.
 

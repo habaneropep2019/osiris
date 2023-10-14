@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qfont_x11.cpp   2.2.4   edited 2001-01-28 $
+** $Id: qt/src/kernel/qfont_x11.cpp   2.3.0   edited 2001-03-05 $
 **
 ** Implementation of QFont, QFontMetrics and QFontInfo classes for X11
 **
@@ -56,6 +56,8 @@
 #include <limits.h>
 #include "qt_x11.h"
 #include "qmap.h"
+
+#include <netinet/in.h>
 
 // NOT REVISED
 
@@ -160,6 +162,9 @@ public:
     bool	    dirty() const;
     const char	   *name()  const;
     int		    xResolution() const;
+#ifdef QT_XFT
+    XftFont	    *ftfont() const;
+#endif
     XFontStruct	   *fontStruct() const;
     XFontSet	    fontSet() const;
     const QFontDef *spec()  const;
@@ -173,6 +178,9 @@ private:
     QCString	    n;
     XFontStruct	   *f;
     XFontSet	    set;
+#ifdef QT_XFT
+    XftFont	    *ft;
+#endif
     QFontDef	    s;
     int		    lw;
     int		    xres;
@@ -184,6 +192,10 @@ private:
 inline QFontInternal::QFontInternal( const QString &name )
     : n(name.ascii()), f(0), set(0), cmapper(0)
 {
+    f = 0;
+#ifdef QT_XFT
+    ft = 0;
+#endif
     s.dirty = TRUE;
 }
 
@@ -196,6 +208,13 @@ inline const char *QFontInternal::name() const
 {
     return n;
 }
+
+#ifdef QT_XFT
+inline XftFont *QFontInternal::ftfont() const
+{
+    return ft;
+}
+#endif
 
 inline XFontStruct *QFontInternal::fontStruct() const
 {
@@ -461,13 +480,26 @@ HANDLE QFont::handle() const
     } else {
 	if ( d->fin->fontSet() )
 	    return 0;
-	if ( d->fin->fontStruct()->fid != last )
+	if ( d->fin->fontStruct () && d->fin->fontStruct()->fid != last )
 	    fontCache->find( d->fin->name() );
     }
 
+    if (d->fin->fontStruct())
     last = d->fin->fontStruct()->fid;
+    else
+	last = 1;
     return last;
 }
+
+#ifdef QT_XFT
+void *qt_ft_font (const QFont *f)
+{
+    if (!f->handle())
+	return 0;
+
+    return f->d->fin->ftfont();
+}
+#endif
 
 // ### maybe reorder the CharSet enum and get rid of this crap?
 static QFont::CharSet c8859[] = { QFont::ISO_8859_1,  QFont::ISO_8859_2,
@@ -1089,6 +1121,44 @@ void QFont::initFontInfo() const
     f->computeLineWidth();
 
 
+#ifdef QT_XFT
+    XftFont *ft = d->fin->ft;
+    if ( ft ) {
+	resetFontDef( &f->s );
+	XftPattern *pattern = ft->pattern;
+	char *family;
+	int slant_value;
+	int weight_value;
+	int fixed_pitch;
+	XftPatternGetString (pattern, XFT_FAMILY, 0, &family);
+	XftPatternGetInteger (pattern, XFT_SLANT, 0, &slant_value);
+	XftPatternGetInteger (pattern, XFT_WEIGHT, 0, &weight_value);
+	XftPatternGetInteger (pattern, XFT_SPACING, 0, &fixed_pitch);
+	f->s.family = family;
+	f->s.pointSize = d->req.pointSize; //will fit because Xft fonts are scalable
+	f->s.charSet = QFont::Unicode;
+
+	if (weight_value == XFT_WEIGHT_LIGHT)
+	    weight_value = Light;
+	else if (weight_value == XFT_WEIGHT_DEMIBOLD)
+	    weight_value = DemiBold;
+	else if (weight_value < XFT_WEIGHT_BOLD)
+	    weight_value = Bold;
+	else if ( weight_value == XFT_WEIGHT_BLACK)
+	    weight_value = Black;
+	else
+	    weight_value = Normal;
+	f->s.weight = weight_value;
+	f->s.italic = slant_value != XFT_SLANT_ROMAN ? TRUE : FALSE;
+	f->s.fixedPitch = fixed_pitch != XFT_PROPORTIONAL ? TRUE : FALSE;
+	f->s.underline = d->req.underline;
+	f->s.strikeOut = d->req.strikeOut;
+	f->s.rawMode = FALSE;
+	f->s.dirty = FALSE;
+	return;
+    }
+#endif
+
     if (  d->exactMatch ) {
 	if ( PRIV->needsSet() ) {
 	    QCString locale = setlocale(LC_CTYPE, 0);
@@ -1122,13 +1192,13 @@ void QFont::initFontInfo() const
 		f->cmapper = QTextCodec::codecForLocale();
 #ifndef QT_NO_CODECS
 	} else if ( charSet() == JIS_X_0208 ) {
-	    f->cmapper = new QFontJis0208Codec;
+	    f->cmapper = QTextCodec::codecForName( "JIS_X_0208" );
 	} else if ( charSet() == KSC_5601 ) {
-	    f->cmapper = new QFontKsc5601Codec;
+	    f->cmapper = QTextCodec::codecForName( "KSC_5601" );
 	} else if ( charSet() == GB_2312 ) {
-	    f->cmapper = new QFontGB2312Codec;
+	    f->cmapper = QTextCodec::codecForName( "GB_2312" );
 	} else if ( charSet() == Big5 ) {
-	    f->cmapper = new QFontBig5Codec;
+	    f->cmapper = QTextCodec::codecForName( "Big5" );
 #endif //QT_NO_CODECS
 	} else {
 	    QCString encoding;
@@ -1148,13 +1218,13 @@ void QFont::initFontInfo() const
     if ( fillFontDef( f->name(), &f->s, &encoding ) ) { // valid XLFD?
 #ifndef QT_NO_CODECS
 	if ( encoding.left(9) == "jisx0208." ) {
-	    f->cmapper = new QFontJis0208Codec;
+	    f->cmapper = QTextCodec::codecForName( "JIS_X_0208" );
 	} else if ( encoding.left(8) == "ksc5601." ) {
-	    f->cmapper = new QFontKsc5601Codec;
+	    f->cmapper  = QTextCodec::codecForName( "KSC_5601" );
 	} else if ( encoding.left(7) == "gb2312." ) {
-	    f->cmapper = new QFontGB2312Codec;
+	    f->cmapper = QTextCodec::codecForName( "GB_2312" );
 	} else if ( encoding.left(4) == "big5" ) {
-	    f->cmapper = new QFontBig5Codec;
+	    f->cmapper = QTextCodec::codecForName( "Big5" );
 	} else
 #endif //QT_NO_CODECS
 	    f->cmapper = QTextCodec::codecForName( encoding );
@@ -1253,7 +1323,6 @@ static QCString setLocaleForCharSet(QFont::CharSet charset)
 /*!
   Loads the font.
 */
-
 void QFont::load() const
 {
     if ( !fontCache ) {				// not initialized
@@ -1265,6 +1334,101 @@ void QFont::load() const
     }
 
     QString k = key();
+
+#ifdef QT_XFT
+    if (qt_use_xft())
+    {
+	d->fin = fontCache->find (k);
+	if (!d->fin) {
+	    d->fin = fontDict->find (k);
+	    if (!d->fin) {
+		d->fin = new QFontInternal (k);
+		CHECK_PTR(d->fin);
+		fontDict->insert (k, d->fin);
+	    }
+	}
+	
+	XftFont	    *ft = d->fin->ft;
+	
+	if (!ft)
+	{
+	    const char	*family_value;
+	    const char	*generic_value;
+	    int	weight_value;
+	    int	slant_value;
+	    double	size_value;
+	    int	mono_value;
+
+	    family_value = family();
+	    weight_value = weight ();
+	    if (weight_value == 0)
+		weight_value = XFT_WEIGHT_MEDIUM;
+	    else if (weight_value < (Light + Normal) / 2)
+		weight_value = XFT_WEIGHT_LIGHT;
+	    else if (weight_value < (Normal + DemiBold) / 2)
+		weight_value = XFT_WEIGHT_MEDIUM;
+	    else if (weight_value < (DemiBold + Bold) / 2)
+		weight_value = XFT_WEIGHT_DEMIBOLD;
+	    else if (weight_value < (Bold + Black) / 2)
+		weight_value = XFT_WEIGHT_BOLD;
+	    else
+		weight_value = XFT_WEIGHT_BLACK;
+	    if (italic())
+		slant_value = XFT_SLANT_ITALIC;
+	    else
+		slant_value = XFT_SLANT_ROMAN;
+	    size_value = pointSize();
+	    mono_value = fixedPitch() ? XFT_MONO : XFT_PROPORTIONAL;
+	    
+	    int	family_width, family_height;
+	    if (sscanf (family_value, "%dx%d", 
+			&family_width, &family_height))
+	    {
+		family_value = "mono";
+		size_value = family_height;
+		mono_value = 1;
+	    }
+	    switch (styleHint()) {
+	    case SansSerif:
+	    default:
+		generic_value = "sans";
+		break;
+	    case Serif:
+		generic_value = "serif";
+		break;
+	    case TypeWriter:
+		generic_value = "mono";
+		mono_value = 1;
+		break;
+	    }
+#if 0
+	    printf ("%s,%s-%g:weight-%d:slant-%d\n",
+		    family_value, generic_value, size_value,
+		    weight_value, slant_value);
+#endif
+	    ft = XftFontOpen (QPaintDevice::x11AppDisplay(),
+			      QPaintDevice::x11AppScreen(),
+			      XFT_ENCODING, XftTypeString, "iso10646-1",
+			      XFT_FAMILY, XftTypeString, family_value,
+			      XFT_FAMILY, XftTypeString, generic_value,
+			      XFT_WEIGHT, XftTypeInteger, weight_value,
+			      XFT_SLANT, XftTypeInteger, slant_value,
+			      XFT_SIZE, XftTypeDouble, size_value,
+			      XFT_SPACING, XftTypeInteger, mono_value,
+			      0);
+#if 0
+	    if (ft)
+		XftPatternPrint (ft->pattern);
+#endif
+	    fontCache->insert (k, d->fin, 1);
+	    d->fin->ft = ft;
+	    d->exactMatch = TRUE;
+	    initFontInfo ();
+	}
+	return;
+    }
+#endif
+    
     QXFontName *fn = fontNameDict->find( k );
 
     if ( !fn ) {
@@ -1749,8 +1913,26 @@ bool QFont_Private::fontmapping(const QString& filename)
 		chsetlst = QStringList::split( sep, s );
 	    } else {
 		QStringList familylst;
-		QRegExp sep( "[ =\t]" );
-		familylst = QStringList::split( sep, s );
+		QString ss = s.stripWhiteSpace();
+		int sslen = ss.length();
+		QString fontName;
+		bool quote = FALSE;
+		for( int i = 0; i <= sslen; ++i ) {
+		    if( i < sslen ) {
+			QChar c = ss[i];
+			if( c == '\"' || c == '\'' ) {
+			    quote = !quote;
+			    continue;
+			} else if( quote || (c != ' ' && c != '\t' && c != '=' ) ) {
+			    fontName += c;
+			    continue;
+			}
+		    }
+		    if ( !fontName.isEmpty() ) {
+			familylst << fontName;
+			fontName = "";
+		    }
+		}
 		if ( !chsetlst.isEmpty() && !familylst.isEmpty() ) {
 		    if ( !fontGuessingList )
 			fontGuessingList = new QList<FontGuessingPair>;
@@ -1981,6 +2163,17 @@ const QTextCodec *QFontMetrics::mapper() const
 
 #undef  FS
 #define FS (painter ? (XFontStruct*)fontStruct() : fin->fontStruct())
+
+#undef FT
+#undef FT_TYPE
+#ifdef QT_XFT
+#define FT_TYPE	XftFont
+#define FT (painter ? painter->cfont.handle(), (XftFont *)painter->cfont.d->fin->ftfont() : fin->ftfont())
+#else
+#define FT_TYPE void
+#define FT ((FT_TYPE *) 0)
+#endif
+
 #undef  SET
 #define SET ((XFontSet)fontSet())
 
@@ -2024,6 +2217,12 @@ int QFontMetrics::printerAdjusted(int val) const
 
 int QFontMetrics::ascent() const
 {
+#ifdef QT_XFT
+    XftFont	*ft = FT;
+
+    if (ft)
+	return printerAdjusted(ft->ascent);
+#endif
     XFontStruct *f = FS;
     if ( f )
 	return printerAdjusted(f->max_bounds.ascent);
@@ -2045,6 +2244,12 @@ int QFontMetrics::ascent() const
 
 int QFontMetrics::descent() const
 {
+#ifdef QT_XFT
+    XftFont	*ft = FT;
+
+    if (ft)
+	return printerAdjusted(ft->descent);
+#endif
     XFontStruct *f = FS;
     if ( f )
 	return printerAdjusted(f->max_bounds.descent - 1);
@@ -2100,8 +2305,14 @@ inline bool inFont(const QTextCodec *mapper, XFontStruct *f, QChar ch)
 /*!
   Returns TRUE if \a ch is a valid character in the font.
 */
-bool QFontMetrics::inFont(QChar ch) const
-{
+ bool QFontMetrics::inFont(QChar ch) const
+ {
+#ifdef QT_XFT
+     XftFont *ft = FT;
+    if (ft)
+	return XftGlyphExists (QPaintDevice::x11AppDisplay(), ft,
+			       (unsigned int) ch.unicode());
+#endif
     XFontStruct *f = FS;
     return ::inFont( mapper(), f, ch );
 }
@@ -2161,13 +2372,93 @@ XCharStruct* charStr(const QTextCodec* mapper, XFontStruct *f, QChar ch)
     }
 }
 
+#ifdef QT_XFT
+static 
+XGlyphInfo *glyphStr(const QTextCodec* /*mapper*/, XftFont *ft, QChar ch)
+{
+    unsigned int	ich;
+    static XGlyphInfo	info;
+
+    ich = ch.unicode();
+    XftTextExtents32 (QPaintDevice::x11AppDisplay(),
+		      ft, &ich, 1, &info);
+#if 0
+    if (ich == 32)
+    printf ("glyphStr '%c' x: %d y: %d width: %d height: %d: xoff: %d yoff: %d\n",
+	    (char) ich, info.x, info.y, info.width, info.height,
+	    info.xOff, info.yOff);
+#endif
+    return &info;
+}
+#endif
+
 static void getExt( QString str, int len, XRectangle& ink,
-		    XRectangle& logical, XFontSet set, const QTextCodec* m )
+		    XRectangle& logical, XFontSet set, FT_TYPE *ft,
+		   const QTextCodec* m )
 {
     // Callers to this / this needs to be optimized.
     // Trouble is, too much caching in multiple clients will make the
     //  overall performance suffer.
 
+#ifdef QT_XFT
+    if (ft)
+    {
+	XGlyphInfo	info;
+	unsigned short	*tmp;
+	unsigned short	*u, c;
+	int i;
+
+	tmp = new unsigned short[len];
+#if 0
+	printf ("getExt \"");
+#endif
+	// #####
+	// byteswap
+	u = (unsigned short *) str.unicode ();
+	for (i = 0; i < len; i++)
+	{
+	    c = u[i];
+#if 0
+	    printf ("%c", (char) (c >>8 ));
+#endif
+	    tmp[i] = htons( c );
+	}
+#if 0
+	printf ("\"\n");
+#endif
+	XftTextExtents16 (QPaintDevice::x11AppDisplay(),
+			  ft, tmp, len, &info);
+#if 0
+	if (len == 1 && tmp[0] == ' ')
+	{
+	    printf ("x: %d y: %d width: %d height: %d xoff: %d yoff: %d\n",
+		    info.x, info.y, info.width, info.height, info.xOff,
+		    info.yOff);
+	    printf ("font ascent: %d descent: %d max_advance_width: %d\n",
+		    ft->ascent, ft->descent, ft->max_advance_width);
+	}
+#endif
+	ink.x = -info.x;
+	ink.y = info.height - info.y;
+	ink.width = info.width;
+	ink.height = info.height;
+	logical.x = 0;
+	logical.y = -ft->ascent;
+	logical.width = info.xOff;
+	logical.height = ft->ascent + ft->descent;
+#if 0
+	if (len == 1 && tmp[0] == ' ')
+	{
+	    printf ("ink x: %d y: %d width: %d height: %d\n",
+		    ink.x, ink.y, ink.width, ink.height);
+	    printf ("log x: %d y: %d width: %d height: %d\n",
+		    logical.x, logical.y, logical.width, logical.height);
+	}
+#endif
+	delete [] tmp;
+	return;
+    }
+#endif
     QCString x = m->fromUnicode(str,len);
     XmbTextExtents( set, x, len, &ink, &logical );
 }
@@ -2187,12 +2478,17 @@ static void getExt( QString str, int len, XRectangle& ink,
 */
 int QFontMetrics::leftBearing(QChar ch) const
 {
+#ifdef QT_XFT
+    XftFont	*ft = FT;
+    if (ft)
+	return printerAdjusted(-glyphStr(mapper(),ft,ch)->x);
+#endif
     XFontStruct *f = FS;
     if ( f )
 	return printerAdjusted(charStr(mapper(),f,ch)->lbearing);
 
     XRectangle ink, log;
-    getExt(ch,1,ink,log,SET,mapper());
+    getExt(ch,1,ink,log,SET,FT,mapper());
     return printerAdjusted(LBEARING(ink,log));
 }
 
@@ -2210,13 +2506,28 @@ int QFontMetrics::leftBearing(QChar ch) const
 */
 int QFontMetrics::rightBearing(QChar ch) const
 {
+#ifdef QT_XFT
+    XftFont	*ft = FT;
+    if (ft)
+    {
+	XGlyphInfo  *info = glyphStr(mapper(),ft,ch);
+	int	    bearing;
+
+	bearing = info->xOff - (-info->x + info->width);
+#if 0	
+	printf ("xoff %d x %d width %d bearing %d\n", 
+		info->xOff, info->x, info->width, bearing);
+#endif
+	return printerAdjusted(bearing);
+    }
+#endif
     XFontStruct *f = FS;
     if ( f ) {
 	XCharStruct* cs = charStr(mapper(),f,ch);
 	return printerAdjusted(cs->width - cs->rbearing);
     }
     XRectangle ink, log;
-    getExt(ch,1,ink,log,SET,mapper());
+    getExt(ch,1,ink,log,SET,FT,mapper());
     return printerAdjusted(RBEARING(ink,log));
 }
 
@@ -2231,6 +2542,14 @@ int QFontMetrics::rightBearing(QChar ch) const
 */
 int QFontMetrics::minLeftBearing() const
 {
+#ifdef QT_XFT
+    XftFont	*ft = FT;
+    if (ft)
+    {
+	// ####
+	return 0;
+    }
+#endif
     // Don't need def->lbearing, the FS stores it.
     XFontStruct *f = FS;
     if ( f )
@@ -2251,6 +2570,14 @@ int QFontMetrics::minLeftBearing() const
 */
 int QFontMetrics::minRightBearing() const
 {
+#ifdef QT_XFT
+    XftFont	*ft = FT;
+    if (ft)
+    {
+	// ####
+	return 0;
+    }
+#endif
     // Safely cast away const, as we cache rbearing there.
     QFontDef* def = (QFontDef*)spec();
 
@@ -2291,6 +2618,11 @@ int QFontMetrics::minRightBearing() const
 
 int QFontMetrics::height() const
 {
+#ifdef QT_XFT
+    XftFont	*ft = FT;
+    if (ft)
+	return printerAdjusted(ft->ascent + ft->descent);
+#endif
     XFontStruct *f = FS;
     if ( f )
 	return printerAdjusted(f->max_bounds.ascent + f->max_bounds.descent);
@@ -2308,6 +2640,16 @@ int QFontMetrics::height() const
 
 int QFontMetrics::leading() const
 {
+#ifdef QT_XFT
+    XftFont	*ft = FT;
+    if (ft) {
+	int l = ft->height - (ft->ascent + ft->descent);
+	if (l > 0)
+	    return printerAdjusted(l);
+	else
+	    return 0;
+    }
+#endif
     XFontStruct *f = FS;
     if ( f ) {
 	int l = f->ascent		 + f->descent -
@@ -2334,6 +2676,11 @@ int QFontMetrics::leading() const
 
 int QFontMetrics::lineSpacing() const
 {
+#ifdef QT_XFT
+    XftFont	*ft = FT;
+    if (ft)
+	return ft->height;
+#endif
     return leading() + height();
 }
 
@@ -2360,12 +2707,18 @@ int QFontMetrics::lineSpacing() const
 
 int QFontMetrics::width( QChar ch ) const
 {
+#ifdef QT_XFT
+    XftFont	*ft = FT;
+    if (ft) {
+	return printerAdjusted(glyphStr(mapper(),ft,ch)->xOff);
+    }
+#endif
     XFontStruct *f = FS;
     if ( f ) {
 	return printerAdjusted(charStr(mapper(),f,ch)->width);
     } else {
 	XRectangle ink, log;
-	getExt(ch,1,ink,log,SET,mapper());
+	getExt(ch,1,ink,log,SET,FT,mapper());
 	return printerAdjusted(log.width);
     }
 }
@@ -2387,6 +2740,28 @@ int QFontMetrics::width( const QString &str, int len ) const
 {
     if ( len < 0 )
 	len = str.length();
+#ifdef QT_XFT
+    XftFont	*ft = FT;
+    if (ft) {
+	XGlyphInfo  info;
+	{
+	    unsigned short	tmp[1024];
+	    unsigned short	*u, c;
+	    int			i;
+
+	    // ### why byteswap
+	    u = (unsigned short *) str.unicode ();
+	    for (i = 0; i < len; i++)
+	    {
+		c = u[i];
+		tmp[i] = htons( c );
+	    }
+	    XftTextExtents16 (QPaintDevice::x11AppDisplay(), ft,
+			      tmp, len, &info);
+	}
+	return printerAdjusted(info.xOff);
+    }
+#endif
     XFontStruct *f = FS;
     if ( f ) {
 	const QTextCodec* m = mapper();
@@ -2398,7 +2773,7 @@ int QFontMetrics::width( const QString &str, int len ) const
 						 len ));
     }
     XRectangle ink, log;
-    getExt(str,len,ink,log,SET,mapper());
+    getExt(str,len,ink,log,SET,FT,mapper());
     return printerAdjusted(log.width);
 }
 
@@ -2444,6 +2819,42 @@ QRect QFontMetrics::boundingRect( const QString &str, int len ) const
 	strikeOut = strikeOutFlag();
     }
 
+#ifdef QT_XFT
+    XftFont	*ft = FT;
+    if (ft) {
+	XGlyphInfo  info;
+	{
+	    unsigned short	tmp[1024];
+	    unsigned short	*u, c;
+	    int			i;
+
+	    // ### why byteswap
+	    u = (unsigned short *) str.unicode ();
+	    for (i = 0; i < len; i++)
+	    {
+		c = u[i];
+		tmp[i] = htons( c );
+	    }
+	    XftTextExtents16 (QPaintDevice::x11AppDisplay(), ft,
+			      tmp, len, 
+			      &info);
+	}
+	overall.lbearing = -info.x;
+	overall.rbearing = info.width - info.x;
+	overall.ascent = info.height - info.y;
+	overall.descent = info.y;
+	overall.width = info.xOff;
+#if 0
+	qDebug ("lbearing %d rbearing %d ascent %d descent %d width %d",
+		overall.lbearing,
+		overall.rbearing,
+		overall.ascent,
+		overall.descent,
+		overall.width);
+#endif
+    } else
+#endif
+
     if ( f ) {
 	const QTextCodec *m = mapper();
 	if ( m ) {
@@ -2453,7 +2864,7 @@ QRect QFontMetrics::boundingRect( const QString &str, int len ) const
 	}
     } else {
 	XRectangle ink, log;
-	getExt(str,len,ink,log,SET,mapper());
+	getExt(str,len,ink,log,SET,FT,mapper());
 	overall.lbearing = LBEARING(ink,log);
 	overall.rbearing = ink.width+ink.x; // RBEARING(ink,log);
 	overall.ascent = ASCENT(ink,log);
@@ -2507,6 +2918,11 @@ QRect QFontMetrics::boundingRect( const QString &str, int len ) const
 
 int QFontMetrics::maxWidth() const
 {
+#ifdef QT_XFT
+    XftFont	*ft = FT;
+    if (ft)
+	return printerAdjusted(ft->max_advance_width);
+#endif
     XFontStruct *f = FS;
     if ( f )
 	return printerAdjusted(f->max_bounds.width);
@@ -2540,6 +2956,16 @@ int QFontMetrics::underlinePos() const
 
 int QFontMetrics::strikeOutPos() const
 {
+#ifdef QT_XFT
+    XftFont	*ft = FT;
+    if (ft) {
+	int pos = ft->ascent / 3;
+	if (pos)
+	    return printerAdjusted(pos);
+	else
+	    return 1;
+    }
+#endif
     XFontStruct *f = FS;
     if ( f ) {
 	int pos = f->max_bounds.ascent/3;
@@ -2673,7 +3099,7 @@ static bool fontExists( const QString &fontName )
 void QFontInternal::computeLineWidth()
 {
     char *tokens[fontFields];
-    QCString buffer(name(), 255);		// X font name always <= 255 chars
+    QCString buffer( name(), 255 );		// X font name always <= 255 chars
     if ( !qParseXFontName(buffer, tokens) ) {
 	lw   = 1;                   // name did not conform to X LFD
 	xres = QPaintDevice::x11AppDpiX();

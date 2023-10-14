@@ -1,5 +1,6 @@
-.TH QComboBox 3qt "1 Febrary 2001" "Trolltech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
+'\" t
+.TH QComboBox 3qt "5 March 2001" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2001 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,7 +8,6 @@
 .nh
 .SH NAME
 QComboBox \- Combined button and popup list
-.SH SYNOPSIS
 .br
 .PP
 \fC#include <qcombobox.h>\fR
@@ -186,7 +186,25 @@ Inherits QWidget.
 .br
 .in -1c
 .SS "Properties"
-<table border=1 cellpadding=3 cellspacing=0> <tr><th>Type<th>Name<th>READ<th>WRITE<th>Options <tr><td>bool<td>editable<td>editable<td>setEditable<td>&nbsp; <tr><td>int<td>count<td>count<td>&nbsp;<td>&nbsp; <tr><td>QString<td>currentText<td>currentText<td>&nbsp;<td>&nbsp; <tr><td>int<td>currentItem<td>currentItem<td>setCurrentItem<td>&nbsp; <tr><td>bool<td>autoResize<td>autoResize<td>setAutoResize<td>&nbsp; <tr><td>int<td>sizeLimit<td>sizeLimit<td>setSizeLimit<td>&nbsp; <tr><td>int<td>maxCount<td>maxCount<td>setMaxCount<td>&nbsp; <tr><td>Policy<td>insertionPolicy<td>insertionPolicy<td>setInsertionPolicy<td>&nbsp; <tr><td>bool<td>autoCompletion<td>autoCompletion<td>setAutoCompletion<td>&nbsp; <tr><td>bool<td>duplicatesEnabled<td>duplicatesEnabled<td>setDuplicatesEnabled<td>&nbsp; </table>
+.nf
+.TS
+l l l l l
+- - - - -
+l l l l l.
+Type	Name	READ	WRITE	Options
+bool	editable	editable	setEditable
+int	count	count
+QString	currentText	currentText
+int	currentItem	currentItem	setCurrentItem
+bool	autoResize	autoResize	setAutoResize
+int	sizeLimit	sizeLimit	setSizeLimit
+int	maxCount	maxCount	setMaxCount
+Policy	insertionPolicy	insertionPolicy	setInsertionPolicy
+bool	autoCompletion	autoCompletion	setAutoCompletion
+bool	duplicatesEnabled	duplicatesEnabled	setDuplicatesEnabled
+.TE
+.fi
+
 .SH DESCRIPTION
 The QComboBox widget is a combined button and popup list.
 .PP
@@ -216,7 +234,7 @@ New-style combo boxes use a list box in both Motif and Windows styles, and both 
 .PP
 The two constructors create identical-looking combos in Windows style.
 .PP
-Read-only combo boxes can contain pixmaps as well as texts; the insert() and changeItem() functions are suitably overloaded. If you try to insert a pixmap in a read-write combo box, QComboBox simply ignores you. For read-write combo boxes, the function clearEdit() is provided, to clear the displayed string without changing the combo box' contents.
+Combo boxes can contain pixmaps as well as texts; the insert() and changeItem() functions are suitably overloaded. For read-write combo boxes, the function clearEdit() is provided, to clear the displayed string without changing the combo box' contents.
 .PP
 A combo box emits two signals, activated() and highlighted(), when a new item has been activated (selected) or highlighted (set to current). Both signals exist in two versions, one with a \fCchar*\fR argument and one with an \fCint\fR argument. If the user highlights or activates a pixmap, only the \fCint\fR signals are emitted.
 .PP
@@ -226,13 +244,25 @@ It is possible to constrain the input to an editable combo box using QValidator;
 .PP
 A combo box has a default focusPolicy() of \fCTabFocus,\fR i.e. it will not grab focus if clicked. This differs from both Windows and Motif.
 .PP
-<img src="qcombo1-m.png">(Motif 1, read-only)
+.ce 1
+.B "[Image Omitted]"
+.PP
+(Motif 1, read-only)
 .br
-<img src="qcombo2-m.png">(Motif 2, read-write)
+.ce 1
+.B "[Image Omitted]"
+.PP
+(Motif 2, read-write)
 .br
-<img src="qcombo3-m.png">(Motif 2, read-only)
+.ce 1
+.B "[Image Omitted]"
+.PP
+(Motif 2, read-only)
 .br
-<img src="qcombo1-w.png">(Windows style)
+.ce 1
+.B "[Image Omitted]"
+.PP
+(Windows style)
 .PP
 See also QLineEdit, QListBox, QSpinBox, QRadioButton, QButtonGroup, GUI Design Handbook: Combo Box, and GUI Design Handbook: Drop-Down List Box.
 .PP
@@ -290,7 +320,7 @@ Auto-resizing is disabled by default.
 .PP
 See also setAutoResize().
 .SH "void QComboBox::changeItem ( const QPixmap & im, const QString & t, int index )"
-Replaces the item at position \fIindex\fR with a pixmap plus text. If the combo box is writable, the pixmap is ignored.
+Replaces the item at position \fIindex\fR with a pixmap plus text.
 .PP
 See also insertItem().
 .SH "void QComboBox::changeItem ( const QPixmap & im, int index )"
@@ -546,9 +576,20 @@ Returns the validator which constrains editing for this combo box if there is an
 See also  setValidator(), clearValidator() and QValidator.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qcombobox.html
+.BR http://www.trolltech.com/faq/tech.html
 .SH COPYRIGHT
-Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
+Copyright 1992-2001 Trolltech AS, http://www.trolltech.com.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR
 Generated automatically from the source code.
+.SH BUGS
+If you find a bug in Qt, please report it as described in
+.BR http://doc.trolltech.com/bughowto.html .
+Good bug reports make our job much simpler. Thank you.
+.P
+In case of content or formattting problems with this manual page, please
+report them to
+.BR qt-bugs@trolltech.com .
+Please include the name of the manual page (qcombobox.3qt) and the Qt
+version (2.3.0).

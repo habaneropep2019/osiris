@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qfeatures.h   2.2.4   edited 2001-01-09 $
+** $Id: qt/src/tools/qfeatures.h   2.3.0   edited 2001-02-13 $
 **
 ** Global feature selection
 **
@@ -42,24 +42,13 @@
     ...
 */
 
-// Qt ships with a number of pre-defined configurations. If none suit
-// your needs, define QCONFIG_LOCAL and create a "qconfig-local.h" file.
-//
 // Note that disabling some features will produce a libqt that is not
 // compatible with other libqt builds. Such modifications are only
 // supported on Qt/Embedded where reducing the library size is important
 // and where the application-suite is often a fixed set.
 //
-#if defined(QCONFIG_LOCAL)
-#include <qconfig-local.h>
-#elif defined(QCONFIG_MINIMAL)
-#include <qconfig-minimal.h>
-#elif defined(QCONFIG_SMALL)
-#include <qconfig-small.h>
-#elif defined(QCONFIG_MEDIUM)
-#include <qconfig-medium.h>
-#elif defined(QCONFIG_LARGE)
-#include <qconfig-large.h>
+#if defined(QCONFIG)
+#include "qconfig-" QCONFIG ".h"
 #else // everything...
 #include <qconfig.h>
 #endif
@@ -321,10 +310,10 @@
 # define QT_NO_QWS_MULTIPROCESS
 #endif
 
-#if defined(QT_NO_QWS_MULTIPROCESS) || defined(QT_NO_DATASTREAM)
-    /*!
-      Palmtop Communication Protocol
-    */
+#if defined(QT_NO_DATASTREAM)
+/*!
+  Palmtop Communication Protocol
+*/
 # define QT_NO_COP
 #endif
 
@@ -819,6 +808,10 @@
 	Motif-plus style
     */
 # define QT_NO_STYLE_MOTIFPLUS
+    /*!
+	Interlace style
+    */
+# define QT_NO_STYLE_INTERLACE
 #endif
 
 

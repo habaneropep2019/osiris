@@ -1,5 +1,6 @@
-.TH QIconView 3qt "1 Febrary 2001" "Trolltech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
+'\" t
+.TH QIconView 3qt "5 March 2001" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2001 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,9 +8,6 @@
 .nh
 .SH NAME
 QIconView \- Area with movable labelled icons
-<h1 align=center>QIconView Class Reference
-.br
-<small>[ iconview module ]</small></h1>
 .br
 .PP
 \fC#include <qiconview.h>\fR
@@ -302,7 +300,32 @@ Inherits QScrollView.
 .br
 .in -1c
 .SS "Properties"
-<table border=1 cellpadding=3 cellspacing=0> <tr><th>Type<th>Name<th>READ<th>WRITE<th>Options <tr><td>bool<td>sorting<td>sorting<td>&nbsp;<td>&nbsp; <tr><td>bool<td>sortDirection<td>sortDirection<td>&nbsp;<td>&nbsp; <tr><td>SelectionMode<td>selectionMode<td>selectionMode<td>setSelectionMode<td>&nbsp; <tr><td>int<td>gridX<td>gridX<td>setGridX<td>&nbsp; <tr><td>int<td>gridY<td>gridY<td>setGridY<td>&nbsp; <tr><td>int<td>spacing<td>spacing<td>setSpacing<td>&nbsp; <tr><td>ItemTextPos<td>itemTextPos<td>itemTextPos<td>setItemTextPos<td>&nbsp; <tr><td>QBrush<td>itemTextBackground<td>itemTextBackground<td>setItemTextBackground<td>&nbsp; <tr><td>Arrangement<td>arrangement<td>arrangement<td>setArrangement<td>&nbsp; <tr><td>ResizeMode<td>resizeMode<td>resizeMode<td>setResizeMode<td>&nbsp; <tr><td>int<td>maxItemWidth<td>maxItemWidth<td>setMaxItemWidth<td>&nbsp; <tr><td>int<td>maxItemTextLength<td>maxItemTextLength<td>setMaxItemTextLength<td>&nbsp; <tr><td>bool<td>autoArrange<td>autoArrange<td>setAutoArrange<td>&nbsp; <tr><td>bool<td>itemsMovable<td>itemsMovable<td>setItemsMovable<td>&nbsp; <tr><td>bool<td>wordWrapIconText<td>wordWrapIconText<td>setWordWrapIconText<td>&nbsp; <tr><td>bool<td>showToolTips<td>showToolTips<td>setShowToolTips<td>&nbsp; <tr><td>uint<td>count<td>count<td>&nbsp;<td>&nbsp; </table>
+.nf
+.TS
+l l l l l
+- - - - -
+l l l l l.
+Type	Name	READ	WRITE	Options
+bool	sorting	sorting
+bool	sortDirection	sortDirection
+SelectionMode	selectionMode	selectionMode	setSelectionMode
+int	gridX	gridX	setGridX
+int	gridY	gridY	setGridY
+int	spacing	spacing	setSpacing
+ItemTextPos	itemTextPos	itemTextPos	setItemTextPos
+QBrush	itemTextBackground	itemTextBackground	setItemTextBackground
+Arrangement	arrangement	arrangement	setArrangement
+ResizeMode	resizeMode	resizeMode	setResizeMode
+int	maxItemWidth	maxItemWidth	setMaxItemWidth
+int	maxItemTextLength	maxItemTextLength	setMaxItemTextLength
+bool	autoArrange	autoArrange	setAutoArrange
+bool	itemsMovable	itemsMovable	setItemsMovable
+bool	wordWrapIconText	wordWrapIconText	setWordWrapIconText
+bool	showToolTips	showToolTips	setShowToolTips
+uint	count	count
+.TE
+.fi
+
 .SH DESCRIPTION
 The QIconView class provides an area with movable labelled icons.
 .PP
@@ -361,7 +384,12 @@ For an example implementation of the complex Drag'n'Drop stuff look at the qfile
 .PP
 Finally, see also QIconViewItem::setDragEnabled(), QIconViewItem::setDropEnabled(), QIconViewItem::acceptDrop() and QIconViewItem::dropped()
 .PP
-<img src=qiconview-m.png> <img src=qiconview-w.png>
+.ce 1
+.B "[Image Omitted]"
+.PP
+
+.ce 1
+.B "[Image Omitted]"
 .PP
 Examples:
 .(l
@@ -730,9 +758,20 @@ For internal use only.
 For internal use only.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qiconview.html
+.BR http://www.trolltech.com/faq/tech.html
 .SH COPYRIGHT
-Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
+Copyright 1992-2001 Trolltech AS, http://www.trolltech.com.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR
 Generated automatically from the source code.
+.SH BUGS
+If you find a bug in Qt, please report it as described in
+.BR http://doc.trolltech.com/bughowto.html .
+Good bug reports make our job much simpler. Thank you.
+.P
+In case of content or formattting problems with this manual page, please
+report them to
+.BR qt-bugs@trolltech.com .
+Please include the name of the manual page (qiconview.3qt) and the Qt
+version (2.3.0).

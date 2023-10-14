@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/life/main.cpp   2.2.4   edited 2000-08-31 $
+** $Id: qt/examples/life/main.cpp   2.3.0   edited 2001-02-20 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -8,9 +8,9 @@
 **
 *****************************************************************************/
 
-#include <stdlib.h>
 #include "lifedlg.h"
 #include <qapplication.h>
+#include <stdlib.h>
  
 void usage()
 {

@@ -1,5 +1,6 @@
-.TH QObject 3qt "1 Febrary 2001" "Trolltech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
+'\" t
+.TH QObject 3qt "5 March 2001" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2001 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,14 +8,13 @@
 .nh
 .SH NAME
 QObject \- The base class of all Qt objects
-.SH SYNOPSIS
 .br
 .PP
 \fC#include <qobject.h>\fR
 .PP
 Inherits Qt.
 .PP
-Inherited by QAccel, QAction, QApplication, QAuServer, QCanvas, QClipboard, QCopChannel, QDataPump, QDns, QDnsSocket, QDragManager, QDragObject, QFileIconProvider, QGuardedPtrPrivate, QLayout, QNPInstance, QNetworkOperation, QNetworkProtocol, QSenderObject, QServerSocket, QSessionManager, QSignal, QSignalMapper, QSocket, QSocketNotifier, QSound, QStyle, QStyleSheet, QTimer, QToolTipGroup, QTranslator, QUrlOperator, QValidator and QWidget.
+Inherited by QAccel, QAction, QApplication, QAuServer, QCanvas, QClipboard, QCopChannel, QDataPump, QDns, QDnsSocket, QDragManager, QDragObject, QFileIconProvider, QGuardedPtrPrivate, QLayout, QNPInstance, QNetworkOperation, QNetworkProtocol, QSenderObject, QServerSocket, QSessionManager, QSignal, QSignalMapper, QSocket, QSocketNotifier, QSound, QStyle, QStyleSheet, QTimer, QToolTipGroup, QTranslator, QUrlOperator, QValidator, QWSClient, QWSKeyboardHandler, QWSMouseHandler, QWSServer and QWidget.
 .PP
 .SS "Public Members"
 .in +1c
@@ -219,7 +219,16 @@ Inherited by QAccel, QAction, QApplication, QAuServer, QCanvas, QClipboard, QCop
 .br
 .in -1c
 .SS "Properties"
-<table border=1 cellpadding=3 cellspacing=0> <tr><th>Type<th>Name<th>READ<th>WRITE<th>Options <tr><td>QCString<td>name<td>name<td>setName<td>&nbsp; </table>
+.nf
+.TS
+l l l l l
+- - - - -
+l l l l l.
+Type	Name	READ	WRITE	Options
+QCString	name	name	setName
+.TE
+.fi
+
 .SH DESCRIPTION
 The QObject class is the base class of all Qt objects.
 .PP
@@ -242,7 +251,7 @@ All Qt widgets inherit QObject. The convenience function isWidgetType() returns 
 .SH "QObject::QObject ( QObject * parent=0, const char * name=0 )"
 Constructs an object with the parent object \fIparent\fR and a \fIname.\fR
 .PP
-The parent of an object may be viewed as the object's owner. For instance, a dialog box is the parent of the "ok" and "cancel" buttons inside it.
+The parent of an object may be viewed as the object's owner. For instance, a dialog box is the parent of the" ok" and "cancel" buttons inside it.
 .PP
 The destructor of a parent object destroys all child objects.
 .PP
@@ -901,9 +910,20 @@ Returns 0 if there is no such child.
 .fi
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qobject.html
+.BR http://www.trolltech.com/faq/tech.html
 .SH COPYRIGHT
-Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
+Copyright 1992-2001 Trolltech AS, http://www.trolltech.com.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR
 Generated automatically from the source code.
+.SH BUGS
+If you find a bug in Qt, please report it as described in
+.BR http://doc.trolltech.com/bughowto.html .
+Good bug reports make our job much simpler. Thank you.
+.P
+In case of content or formattting problems with this manual page, please
+report them to
+.BR qt-bugs@trolltech.com .
+Please include the name of the manual page (qobject.3qt) and the Qt
+version (2.3.0).

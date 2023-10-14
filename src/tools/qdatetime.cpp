@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qdatetime.cpp   2.2.4   edited 2000-10-11 $
+** $Id: qt/src/tools/qdatetime.cpp   2.3.0   edited 2001-02-18 $
 **
 ** Implementation of date and time classes
 **
@@ -53,8 +53,8 @@
 #elif defined(_OS_OS2_)
 #include <os2.h>
 #elif defined(_OS_UNIX_)
-#include <sys/time.h>
 #include <unistd.h>
+#include <sys/time.h>
 #undef	gettimeofday
 extern "C" int gettimeofday( struct timeval *, struct timezone * );
 #endif

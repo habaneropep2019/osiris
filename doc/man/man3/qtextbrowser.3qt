@@ -1,5 +1,6 @@
-.TH QTextBrowser 3qt "1 Febrary 2001" "Trolltech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
+'\" t
+.TH QTextBrowser 3qt "5 March 2001" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2001 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,7 +8,6 @@
 .nh
 .SH NAME
 QTextBrowser \- A rich text  browser with simple navigation
-.SH SYNOPSIS
 .br
 .PP
 \fC#include <qtextbrowser.h>\fR
@@ -78,7 +78,16 @@ Inherits QTextView.
 .br
 .in -1c
 .SS "Properties"
-<table border=1 cellpadding=3 cellspacing=0> <tr><th>Type<th>Name<th>READ<th>WRITE<th>Options <tr><td>QString<td>source<td>source<td>setSource<td>&nbsp; </table>
+.nf
+.TS
+l l l l l
+- - - - -
+l l l l l.
+Type	Name	READ	WRITE	Options
+QString	source	source	setSource
+.TE
+.fi
+
 .SH DESCRIPTION
 A rich text browser with simple navigation.
 .PP
@@ -99,7 +108,13 @@ Otherwise, the factory will not be able to resolve the document names.
 .PP
 For simpler richt text use, see QLabel, QTextView or QSimpleRichText.
 .PP
-<img src=qtextbrowser-m.png> <img src=qtextbrowser-w.png>
+.ce 1
+.B "[Image Omitted]"
+.PP
+
+.ce 1
+.B "[Image Omitted]"
+.PP
 .SH MEMBER FUNCTION DOCUMENTATION
 .SH "QTextBrowser::QTextBrowser ( QWidget * parent=0, const char * name=0 )"
 Constructs an empty QTextBrowser.
@@ -163,9 +178,20 @@ Reimplemented from QScrollView.
 Reimplemented from QScrollView.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qtextbrowser.html
+.BR http://www.trolltech.com/faq/tech.html
 .SH COPYRIGHT
-Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
+Copyright 1992-2001 Trolltech AS, http://www.trolltech.com.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR
 Generated automatically from the source code.
+.SH BUGS
+If you find a bug in Qt, please report it as described in
+.BR http://doc.trolltech.com/bughowto.html .
+Good bug reports make our job much simpler. Thank you.
+.P
+In case of content or formattting problems with this manual page, please
+report them to
+.BR qt-bugs@trolltech.com .
+Please include the name of the manual page (qtextbrowser.3qt) and the Qt
+version (2.3.0).

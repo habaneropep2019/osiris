@@ -291,7 +291,7 @@ void CCommands::addSharedSettings( CComPtr<IConfiguration> pConfig )
     const CComBSTR dllDefine("/D QT_DLL");
     const CComBSTR incPath(" /I$(QTDIR)\\include");
     const CComBSTR staticLib("$(QTDIR)\\lib\\qt.lib");
-    const CComBSTR sharedLib("$(QTDIR)\\lib\\qt224.lib $(QTDIR)\\lib\\qtmain.lib");
+    const CComBSTR sharedLib("$(QTDIR)\\lib\\qt230.lib $(QTDIR)\\lib\\qtmain.lib");
     const CComBSTR defLibs( "kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib" );
     const CComBSTR sysLibs( "kernel32.lib user32.lib gdi32.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib imm32.lib wsock32.lib" );
 
@@ -311,7 +311,7 @@ void CCommands::addStaticSettings( CComPtr<IConfiguration> pConfig )
     const CComBSTR dllDefine("/D QT_DLL");
     const CComBSTR incPath(" /I$(QTDIR)\\include");
     const CComBSTR staticLib("$(QTDIR)\\lib\\qt.lib");
-    const CComBSTR sharedLib("$(QTDIR)\\lib\\qt224.lib $(QTDIR)\\lib\\qtmain.lib");
+    const CComBSTR sharedLib("$(QTDIR)\\lib\\qt230.lib $(QTDIR)\\lib\\qtmain.lib");
     const CComBSTR defLibs( "kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib" );
     const CComBSTR sysLibs( "kernel32.lib user32.lib gdi32.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib imm32.lib wsock32.lib" );
 

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/network/qsocketdevice.cpp   2.2.4   edited 2000-09-12 $
+** $Id: qt/src/network/qsocketdevice.cpp   2.3.0   edited 2001-02-16 $
 **
 ** Implementation of QSocketDevice class.
 **
@@ -209,6 +209,7 @@ void QSocketDevice::setSocket( int socket, Type type )
 #endif
     t = type;
     fd = socket;
+    e = NoError;
     setFlags( IO_Sequential );
     setStatus( IO_Ok );
     open( IO_ReadWrite );

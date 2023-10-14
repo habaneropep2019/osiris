@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qtabwidget.cpp   2.2.4   edited 2001-01-15 $
+** $Id: qt/src/widgets/qtabwidget.cpp   2.3.0   edited 2001-03-01 $
 **
 ** Implementation of QTabWidget class
 **
@@ -344,10 +344,11 @@ void QTabWidget::changeTab( QWidget *w, const QString &label)
     d->tabs->layoutTabs();
 
     int ct = d->tabs->currentTab();
+    bool block = d->tabs->signalsBlocked();
     d->tabs->blockSignals( TRUE );
     d->tabs->setCurrentTab( 0 );
     d->tabs->setCurrentTab( ct );
-    d->tabs->blockSignals( FALSE );
+    d->tabs->blockSignals( block );
 
     d->tabs->update();
     setUpLayout();
@@ -372,10 +373,11 @@ void QTabWidget::changeTab( QWidget *w, const QIconSet& iconset, const QString &
     d->tabs->layoutTabs();
 
     int ct = d->tabs->currentTab();
+    bool block = d->tabs->signalsBlocked();
     d->tabs->blockSignals( TRUE );
     d->tabs->setCurrentTab( 0 );
     d->tabs->setCurrentTab( ct );
-    d->tabs->blockSignals( FALSE );
+    d->tabs->blockSignals( block );
 
     d->tabs->update();
     setUpLayout();

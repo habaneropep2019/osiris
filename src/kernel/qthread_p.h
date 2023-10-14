@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qthread_p.h   2.2.4   edited 2000-11-07 $
+** $Id: qt/src/kernel/qthread_p.h   2.3.0   edited 2001-02-21 $
 **
 ** QThread class for Unix
 **
@@ -52,9 +52,8 @@
 // Thread definitions for UNIX platforms
 
 #if defined(_OS_LINUX_)
-// Linux
-#  include <features.h>
-
+#  define _XOPEN_SOURCE 500
+// Linux: couldn't we query macros from <unistd.h> instead of library versions?
 #  if (__GLIBC__ == 2) && (__GLIBC_MINOR__ == 0)
 // Linux with glibc 2.0.x - POSIX 1003.4a thread implementation
 #    define Q_HAS_RECURSIVE_MUTEX
@@ -129,6 +128,15 @@ extern "C" { static void * start_thread(void * t); }
 
 
 #include <thread.h>
+// Function usleep() is in C library but not in header files on Solaris 2.5.1.
+// Not really a surprise, usleep() is specified by XPG4v2 and XPG4v2 is only
+// supported by Solaris 2.6 and better.
+// So we are trying to detect Solaris 2.5.1 using macro _XOPEN_UNIX which is
+// defined by <unistd.h> when XPG4v2 is supported.
+#if !defined(_XOPEN_UNIX)
+typedef unsigned int useconds_t;
+extern "C" int usleep(useconds_t);
+#endif
 
 
 class QMutexPrivate {

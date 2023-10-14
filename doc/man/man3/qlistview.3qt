@@ -1,5 +1,6 @@
-.TH QListView 3qt "1 Febrary 2001" "Trolltech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
+'\" t
+.TH QListView 3qt "5 March 2001" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2001 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,7 +8,6 @@
 .nh
 .SH NAME
 QListView \- Implements a list/tree view
-.SH SYNOPSIS
 .br
 .PP
 \fC#include <qlistview.h>\fR
@@ -282,7 +282,23 @@ Inherits QScrollView.
 .br
 .in -1c
 .SS "Properties"
-<table border=1 cellpadding=3 cellspacing=0> <tr><th>Type<th>Name<th>READ<th>WRITE<th>Options <tr><td>int<td>columns<td>columns<td>&nbsp;<td>&nbsp; <tr><td>bool<td>multiSelection<td>isMultiSelection<td>setMultiSelection<td> DESIGNABLE false <tr><td>SelectionMode<td>selectionMode<td>selectionMode<td>setSelectionMode<td>&nbsp; <tr><td>int<td>childCount<td>childCount<td>&nbsp;<td>&nbsp; <tr><td>bool<td>allColumnsShowFocus<td>allColumnsShowFocus<td>setAllColumnsShowFocus<td>&nbsp; <tr><td>bool<td>showSortIndicator<td>showSortIndicator<td>setShowSortIndicator<td>&nbsp; <tr><td>int<td>itemMargin<td>itemMargin<td>setItemMargin<td>&nbsp; <tr><td>bool<td>rootIsDecorated<td>rootIsDecorated<td>setRootIsDecorated<td>&nbsp; </table>
+.nf
+.TS
+l l l l l
+- - - - -
+l l l l l.
+Type	Name	READ	WRITE	Options
+int	columns	columns
+bool	multiSelection	isMultiSelection	setMultiSelection	DESIGNABLE false
+SelectionMode	selectionMode	selectionMode	setSelectionMode
+int	childCount	childCount
+bool	allColumnsShowFocus	allColumnsShowFocus	setAllColumnsShowFocus
+bool	showSortIndicator	showSortIndicator	setShowSortIndicator
+int	itemMargin	itemMargin	setItemMargin
+bool	rootIsDecorated	rootIsDecorated	setRootIsDecorated
+.TE
+.fi
+
 .SH DESCRIPTION
 The QListView class implements a list/tree view.
 .PP
@@ -320,7 +336,12 @@ In Motif style, QListView deviates fairly strongly from the look and feel of the
 .PP
 \fBWarning:\fR The list view assumes ownership of all list view items and will delete them when it does not need them any more.
 .PP
-<img src=qlistview-m.png> <img src=qlistview-w.png>
+.ce 1
+.B "[Image Omitted]"
+.PP
+
+.ce 1
+.B "[Image Omitted]"
 .PP
 Examples:
 .(l
@@ -785,9 +806,20 @@ Updates the sizes of the viewport, header, scrollbars and so on.
 Don't call this directly; call triggerUpdate() instead.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qlistview.html
+.BR http://www.trolltech.com/faq/tech.html
 .SH COPYRIGHT
-Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
+Copyright 1992-2001 Trolltech AS, http://www.trolltech.com.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR
 Generated automatically from the source code.
+.SH BUGS
+If you find a bug in Qt, please report it as described in
+.BR http://doc.trolltech.com/bughowto.html .
+Good bug reports make our job much simpler. Thank you.
+.P
+In case of content or formattting problems with this manual page, please
+report them to
+.BR qt-bugs@trolltech.com .
+Please include the name of the manual page (qlistview.3qt) and the Qt
+version (2.3.0).

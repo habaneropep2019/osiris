@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qmainwindow.h   2.2.4   edited 2000-10-11 $
+** $Id: qt/src/widgets/qmainwindow.h   2.3.0   edited 2001-01-26 $
 **
 ** Definition of QMainWindow class
 **

@@ -32,7 +32,7 @@ height="100" src="face.png" alt="Home" border="0">
 
   Implementation:
 <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/xform/xform.cpp   2.2.4   edited 2000-08-31 $
+** &#36;Id&#58; qt/examples/xform/xform.cpp   2.3.0   edited 2001-01-26 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -221,7 +221,7 @@ XFormControl::XFormControl( const QFont &amp;initialFont,
     startTimer(20); // start an initial animation
 }
 
-void <a name="144"></a>XFormControl::timerEvent(<a href="qtimerevent.html">QTimerEvent</a>*)
+void <a name="149"></a>XFormControl::timerEvent(<a href="qtimerevent.html">QTimerEvent</a>*)
 {
     int v = magS-&gt;<a name="value"></a><a href="qslider.html#8f52b8">value</a>();
     v = (v+2)+v/10;
@@ -236,22 +236,22 @@ void <a name="144"></a>XFormControl::timerEvent(<a href="qtimerevent.html">QTime
     Called whenever the user has changed one of the matrix parameters
     (i.e. rotate, shear or magnification)
 */
-void <a name="145"></a>XFormControl::newMtx()
+void <a name="150"></a>XFormControl::newMtx()
 {
-    emit newMatrix( <a name="matrix"></a><a href="#147">matrix</a>() );
+    emit newMatrix( <a name="matrix"></a><a href="#152">matrix</a>() );
 }
 
-void <a name="146"></a>XFormControl::newTxt(const QString&amp; s)
+void <a name="151"></a>XFormControl::newTxt(const QString&amp; s)
 {
     emit newText(s);
-    <a name="changeMode"></a><a href="#150">changeMode</a>(Text);
+    <a name="changeMode"></a><a href="#155">changeMode</a>(Text);
 }
 
 /*
     Calculates the matrix appropriate for the current controls,
     and updates the displays.
 */
-<a href="qwmatrix.html">QWMatrix</a> <a name="147"></a>XFormControl::matrix()
+<a href="qwmatrix.html">QWMatrix</a> <a name="152"></a>XFormControl::matrix()
 {
     <a href="qwmatrix.html">QWMatrix</a> m;
     if (mode != Text) {
@@ -280,32 +280,32 @@ void <a name="146"></a>XFormControl::newTxt(const QString&amp; s)
     return m;
 }
 
-void <a name="148"></a>XFormControl::selectFont()
+void <a name="153"></a>XFormControl::selectFont()
 {
     bool ok;
     <a href="qfont.html">QFont</a> f = QFontDialog::getFont( &amp;ok, currentFont );
     if ( ok ) {
         currentFont = f;
-        <a name="fontSelected"></a><a href="#149">fontSelected</a>( f );
+        <a name="fontSelected"></a><a href="#154">fontSelected</a>( f );
     }
 }
 
-void <a name="149"></a>XFormControl::fontSelected( const QFont &amp;font )
+void <a name="154"></a>XFormControl::fontSelected( const QFont &amp;font )
 {
     emit newFont( font );
-    <a href=#150>changeMode</a>(Text);
+    <a href=#155>changeMode</a>(Text);
 }
 
 /*
     Sets the mode - Text, Image, or Picture.
 */
 
-void <a name="150"></a>XFormControl::changeMode(int m)
+void <a name="155"></a>XFormControl::changeMode(int m)
 {
     mode = (Mode)m;
 
     emit newMode( m );
-    <a name="newMtx"></a><a href="#145">newMtx</a>();
+    <a name="newMtx"></a><a href="#150">newMtx</a>();
     if ( mode == Text ) {
         optionals-&gt;<a name="raiseWidget"></a><a href="qwidgetstack.html#271afe">raiseWidget</a>(0);
         rb_txt-&gt;<a href="qradiobutton.html#11e2e3">setChecked</a>(TRUE);
@@ -329,65 +329,65 @@ ShowXForm::ShowXForm( const QFont &amp;initialFont,
     eraseRect = QRect( 0, 0, 0, 0 );
 }
 
-<a href="qsizepolicy.html">QSizePolicy</a> <a name="133"></a>ShowXForm::sizePolicy() const
+<a href="qsizepolicy.html">QSizePolicy</a> <a name="138"></a>ShowXForm::sizePolicy() const
 {
     return QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding );
 }
 
-<a href="qsize.html">QSize</a> <a name="134"></a>ShowXForm::sizeHint() const
+<a href="qsize.html">QSize</a> <a name="139"></a>ShowXForm::sizeHint() const
 {
     return QSize(400,400);
 }
 
-void <a name="135"></a>ShowXForm::paintEvent( <a href="qpaintevent.html">QPaintEvent</a> * )
+void <a name="140"></a>ShowXForm::paintEvent( <a href="qpaintevent.html">QPaintEvent</a> * )
 {
-    <a name="showIt"></a><a href="#143">showIt</a>();
+    <a name="showIt"></a><a href="#148">showIt</a>();
 }
 
-void <a name="136"></a>ShowXForm::resizeEvent( <a href="qresizeevent.html">QResizeEvent</a> * )
+void <a name="141"></a>ShowXForm::resizeEvent( <a href="qresizeevent.html">QResizeEvent</a> * )
 {
     eraseRect = QRect( <a name="width"></a><a href="qwidget.html#576663">width</a>()/2, <a name="height"></a><a href="qwidget.html#180786">height</a>()/2, 0, 0 );
     <a name="repaint"></a><a href="qwidget.html#977d49">repaint</a>(rect());
 }
 
-void <a name="137"></a>ShowXForm::setText( const QString&amp; s )
+void <a name="142"></a>ShowXForm::setText( const QString&amp; s )
 {
     text = s;
-    <a href=#143>showIt</a>();
+    <a href=#148>showIt</a>();
 }
 
-void <a name="138"></a>ShowXForm::setMatrix( <a href="qwmatrix.html">QWMatrix</a> w )
+void <a name="143"></a>ShowXForm::setMatrix( <a href="qwmatrix.html">QWMatrix</a> w )
 {
     mtx = w;
-    <a href=#143>showIt</a>();
+    <a href=#148>showIt</a>();
 }
 
-void <a name="139"></a>ShowXForm::setFont( const QFont &amp;f )
+void <a name="144"></a>ShowXForm::setFont( const QFont &amp;f )
 {
     m = Text;
     <a name="setFont"></a><a href="qwidget.html#26de4b">QWidget::setFont</a>( f );
 }
 
-void <a name="140"></a>ShowXForm::setPixmap( <a href="qpixmap.html">QPixmap</a> pm )
+void <a name="145"></a>ShowXForm::setPixmap( <a href="qpixmap.html">QPixmap</a> pm )
 {
     pix  = pm;
     m    = Image;
-    <a href=#143>showIt</a>();
+    <a href=#148>showIt</a>();
 }
 
-void <a name="141"></a>ShowXForm::setPicture( const QPicture&amp; p )
+void <a name="146"></a>ShowXForm::setPicture( const QPicture&amp; p )
 {
     picture = p;
     m = Picture;
-    <a href=#143>showIt</a>();
+    <a href=#148>showIt</a>();
 }
 
-void <a name="142"></a>ShowXForm::setMode( int mode )
+void <a name="147"></a>ShowXForm::setMode( int mode )
 {
     m = (Mode)mode;
 }
 
-void <a name="143"></a>ShowXForm::showIt()
+void <a name="148"></a>ShowXForm::showIt()
 {
     <a name="QPainter"></a><a href="qpainter.html">QPainter</a> p;
     <a href="qrect.html">QRect</a> r;      // rectangle covering new text/pixmap in virtual coordinates
@@ -476,7 +476,7 @@ private:
     XFormControl *xc;
 };
 
-void <a name="132"></a>XFormCenter::newMode( int m )
+void <a name="137"></a>XFormCenter::newMode( int m )
 {
     static bool first_i = TRUE;
     static bool first_p = TRUE;
@@ -516,9 +516,9 @@ XFormCenter::XFormCenter( <a href="qwidget.html">QWidget</a> *parent, const char
              sx, SLOT(setMatrix(<a href="qwmatrix.html">QWMatrix</a>)) );
     <a href="qobject.html#c2d209">connect</a>( xc, SIGNAL(newFont(const QFont&amp;)), sx,
                  SLOT(<a href="qwidget.html#dde00b">setFont</a>(const QFont&amp;)) );
-    <a href="qobject.html#c2d209">connect</a>( xc, SIGNAL(<a name="newMode"></a><a href="#132">newMode</a>(int)), SLOT(<a href=#132>newMode</a>(int)) );
+    <a href="qobject.html#c2d209">connect</a>( xc, SIGNAL(<a name="newMode"></a><a href="#137">newMode</a>(int)), SLOT(<a href=#137>newMode</a>(int)) );
     sx-&gt;setText( "Troll" );
-    <a href=#132>newMode</a>( Image );
+    <a href=#137>newMode</a>( Image );
     sx-&gt;setMatrix(xc-&gt;matrix());
 }
 
@@ -538,5 +538,5 @@ int main( int argc, char **argv )
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.4</div>
+<td align="right"><div align="right">Qt version 2.3.0</div>
 </table></div></address></body></html>

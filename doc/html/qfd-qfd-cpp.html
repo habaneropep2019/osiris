@@ -30,7 +30,7 @@ height="100" src="face.png" alt="Home" border="0">
   <hr>
 
   Header file: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/qfd/fontdisplayer.h   2.2.4   edited 2000-08-31 $
+** &#36;Id&#58; qt/examples/qfd/fontdisplayer.h   2.3.0   edited 2001-01-26 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -80,7 +80,7 @@ public:
   <hr>
 
   Implementation: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/qfd/fontdisplayer.cpp   2.2.4   edited 2000-08-31 $
+** &#36;Id&#58; qt/examples/qfd/fontdisplayer.cpp   2.3.0   edited 2001-01-26 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -103,21 +103,21 @@ FontRowTable::FontRowTable( <a href="qwidget.html">QWidget</a>* parent, const ch
     <a href="qwidget.html#182f0e">setBackgroundMode</a>(PaletteBase);
     <a href="qframe.html#c0d758">setFrameStyle</a>(Panel|Sunken);
     <a href="qframe.html#ab991e">setMargin</a>(8);
-    <a href=#342>setRow</a>(0);
+    <a href=#347>setRow</a>(0);
 }
 
-<a href="qsize.html">QSize</a> <a name="339"></a>FontRowTable::sizeHint() const
+<a href="qsize.html">QSize</a> <a name="344"></a>FontRowTable::sizeHint() const
 {
     return 16*cellSize()+QSize(2,2)*(<a href="qframe.html#f69ee0">margin</a>()+frameWidth());
 }
 
-<a href="qsize.html">QSize</a> <a name="340"></a>FontRowTable::cellSize() const
+<a href="qsize.html">QSize</a> <a name="345"></a>FontRowTable::cellSize() const
 {
     <a href="qfontmetrics.html">QFontMetrics</a> fm = fontMetrics();
     return QSize( fm.<a href="qfontmetrics.html#d638e2">maxWidth</a>(), fm.<a href="qfontmetrics.html#ebe056">lineSpacing</a>()+1 );
 }
 
-void <a name="341"></a>FontRowTable::paintEvent( <a href="qpaintevent.html">QPaintEvent</a>* e )
+void <a name="346"></a>FontRowTable::paintEvent( <a href="qpaintevent.html">QPaintEvent</a>* e )
 {
     <a href="qframe.html#2e9073">QFrame::paintEvent</a>(e);
     <a href="qpainter.html">QPainter</a> p(this);
@@ -181,7 +181,7 @@ void <a name="341"></a>FontRowTable::paintEvent( <a href="qpaintevent.html">QPai
     }
 }
 
-void <a name="342"></a>FontRowTable::setRow(int r)
+void <a name="347"></a>FontRowTable::setRow(int r)
 {
     row = r;
 
@@ -216,7 +216,7 @@ FontDisplayer::FontDisplayer( <a href="qwidget.html">QWidget</a>* parent, const 
 
   Main:
 <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/qfd/qfd.cpp   2.2.4   edited 2000-08-31 $
+** &#36;Id&#58; qt/examples/qfd/qfd.cpp   2.3.0   edited 2001-01-26 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -252,5 +252,5 @@ int main(int argc, char** argv)
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.4</div>
+<td align="right"><div align="right">Qt version 2.3.0</div>
 </table></div></address></body></html>

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/httpd/httpd.cpp   2.2.4   edited 2000-08-31 $
+** $Id: qt/examples/httpd/httpd.cpp   2.3.0   edited 2001-02-20 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -7,7 +7,6 @@
 ** program may be used, distributed and modified without limitation.
 **
 *****************************************************************************/
-#include <stdlib.h>
 
 #include <qserversocket.h>
 #include <qapplication.h>
@@ -17,6 +16,7 @@
 #include <qlabel.h>
 #include <qtextview.h>
 #include <qpushbutton.h>
+#include <stdlib.h>
 
 
 class HttpDaemon : public QServerSocket

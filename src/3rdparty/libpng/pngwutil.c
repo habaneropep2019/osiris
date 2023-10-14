@@ -1,9 +1,9 @@
 
 /* pngwutil.c - utilities to write a PNG file
  *
- * libpng 1.0.7 - July 1, 2000
+ * libpng 1.0.9 - January 31, 2001
  * For conditions of distribution and use, see copyright notice in png.h
- * Copyright (c) 1998, 1999, 2000 Glenn Randers-Pehrson
+ * Copyright (c) 1998-2001 Glenn Randers-Pehrson
  * (Version 0.96 Copyright (c) 1996, 1997 Andreas Dilger)
  * (Version 0.88 Copyright (c) 1995, 1996 Guy Eric Schalnat, Group 42, Inc.)
  */
@@ -77,7 +77,7 @@ png_write_chunk_start(png_structp png_ptr, png_bytep chunk_name,
    png_uint_32 length)
 {
    png_byte buf[4];
-   png_debug2(0, "Writing %s chunk (%d bytes)\n", chunk_name, length);
+   png_debug2(0, "Writing %s chunk (%lu bytes)\n", chunk_name, length);
 
    /* write the length */
    png_save_uint_32(buf, length);
@@ -131,6 +131,8 @@ png_write_sig(png_structp png_ptr)
    /* write the rest of the 8 byte signature */
    png_write_data(png_ptr, &png_signature[png_ptr->sig_bytes],
       (png_size_t)8 - png_ptr->sig_bytes);
+   if(png_ptr->sig_bytes < 3)
+      png_ptr->mode |= PNG_HAVE_PNG_SIGNATURE;
 }
 
 #if defined(PNG_WRITE_TEXT_SUPPORTED) || defined(PNG_WRITE_iCCP_SUPPORTED)
@@ -172,7 +174,7 @@ png_text_compress(png_structp png_ptr,
 
    if (compression >= PNG_TEXT_COMPRESSION_LAST)
    {
-#if !defined(PNG_NO_STDIO)
+#if !defined(PNG_NO_STDIO) && !defined(_WIN32_WCE)
       char msg[50];
       sprintf(msg, "Unknown compression type %d", compression);
       png_warning(png_ptr, msg);
@@ -339,9 +341,11 @@ png_write_compressed_data_out(png_structp png_ptr, compression_state *comp)
       png_write_chunk_data(png_ptr,(png_bytep)comp->output_ptr[i],
          png_ptr->zbuf_size);
       png_free(png_ptr, comp->output_ptr[i]);
+      comp->output_ptr[i]=NULL;
    }
    if (comp->max_output_ptr != 0)
       png_free(png_ptr, comp->output_ptr);
+      comp->output_ptr=NULL;
    /* write anything left in zbuf */
    if (png_ptr->zstream.avail_out < (png_uint_32)png_ptr->zbuf_size)
       png_write_chunk_data(png_ptr, png_ptr->zbuf,
@@ -417,7 +421,24 @@ png_write_IHDR(png_structp png_ptr, png_uint_32 width, png_uint_32 height,
       compression_type = PNG_COMPRESSION_TYPE_BASE;
    }
 
-   if (filter_type != PNG_FILTER_TYPE_BASE)
+   /* Write filter_method 64 (intrapixel differencing) only if
+    * 1. Libpng was compiled with PNG_MNG_FEATURES_SUPPORTED and
+    * 2. Libpng did not write a PNG signature (this filter_method is only
+    *    used in PNG datastreams that are embedded in MNG datastreams) and
+    * 3. The application called png_permit_mng_features with a mask that
+    *    included PNG_FLAG_MNG_FILTER_64 and
+    * 4. The filter_method is 64 and
+    * 5. The color_type is RGB or RGBA
+    */
+   if (
+#if defined(PNG_MNG_FEATURES_SUPPORTED)
+      !((png_ptr->mng_features_permitted & PNG_FLAG_MNG_FILTER_64) &&
+      ((png_ptr->mode&PNG_HAVE_PNG_SIGNATURE) == 0) &&
+      (color_type == PNG_COLOR_TYPE_RGB || 
+       color_type == PNG_COLOR_TYPE_RGB_ALPHA) &&
+      (filter_type == PNG_INTRAPIXEL_DIFFERENCING)) &&
+#endif
+      filter_type != PNG_FILTER_TYPE_BASE)
    {
       png_warning(png_ptr, "Invalid filter type specified");
       filter_type = PNG_FILTER_TYPE_BASE;
@@ -438,6 +459,7 @@ png_write_IHDR(png_structp png_ptr, png_uint_32 width, png_uint_32 height,
    png_ptr->bit_depth = (png_byte)bit_depth;
    png_ptr->color_type = (png_byte)color_type;
    png_ptr->interlaced = (png_byte)interlace_type;
+   png_ptr->filter_type = (png_byte)filter_type;
    png_ptr->width = width;
    png_ptr->height = height;
 
@@ -512,8 +534,8 @@ png_write_PLTE(png_structp png_ptr, png_colorp palette, png_uint_32 num_pal)
 
    png_debug(1, "in png_write_PLTE\n");
    if ((
-#ifdef PNG_WRITE_EMPTY_PLTE_SUPPORTED
-        !png_ptr->empty_plte_permitted &&
+#if defined(PNG_MNG_FEATURES_SUPPORTED)
+        !(png_ptr->mng_features_permitted & PNG_FLAG_MNG_EMPTY_PLTE) &&
 #endif
         num_pal == 0) || num_pal > 256)
      {
@@ -655,7 +677,7 @@ png_write_iCCP(png_structp png_ptr, png_charp name, int compression_type,
       return;
    }
 
-   if (compression_type)
+   if (compression_type != PNG_COMPRESSION_TYPE_BASE)
       png_warning(png_ptr, "Unknown compression type in iCCP chunk");
 
    if (profile == NULL)
@@ -663,11 +685,12 @@ png_write_iCCP(png_structp png_ptr, png_charp name, int compression_type,
 
    if (profile_len)
        profile_len = png_text_compress(png_ptr, profile, (png_size_t)profile_len,
-          PNG_TEXT_COMPRESSION_zTXt, &comp);
+          PNG_COMPRESSION_TYPE_BASE, &comp);
 
    /* make sure we include the NULL after the name and the compression type */
    png_write_chunk_start(png_ptr, (png_bytep)png_iCCP,
           (png_uint_32)name_len+profile_len+2);
+   new_name[name_len+1]=0x00;
    png_write_chunk_data(png_ptr, (png_bytep)new_name, name_len + 2);
 
    if (profile_len)
@@ -837,8 +860,8 @@ png_write_cHRM(png_structp png_ptr, double white_x, double white_y,
        white_x + white_y > 1.0)
    {
       png_warning(png_ptr, "Invalid cHRM white point specified");
-#if !defined(PNG_NO_STDIO)
-      printf("white_x=%f, white_y=%f\n",white_x, white_y);
+#if !defined(PNG_NO_CONSOLE_IO)
+      fprintf(stderr,"white_x=%f, white_y=%f\n",white_x, white_y);
 #endif
       return;
    }
@@ -900,8 +923,8 @@ png_write_cHRM_fixed(png_structp png_ptr, png_fixed_point white_x,
    if (white_x > 80000L || white_y > 80000L || white_x + white_y > 100000L)
    {
       png_warning(png_ptr, "Invalid fixed cHRM white point specified");
-#if !defined(PNG_NO_STDIO)
-      printf("white_x=%ld, white_y=%ld\n",white_x, white_y);
+#if !defined(PNG_NO_CONSOLE_IO)
+      fprintf(stderr,"white_x=%ld, white_y=%ld\n",white_x, white_y);
 #endif
       return;
    }
@@ -994,9 +1017,9 @@ png_write_bKGD(png_structp png_ptr, png_color_16p back, int color_type)
    if (color_type == PNG_COLOR_TYPE_PALETTE)
    {
       if (
-#ifdef PNG_WRITE_EMPTY_PLTE_SUPPORTED
-          (!png_ptr->empty_plte_permitted ||
-          (png_ptr->empty_plte_permitted && png_ptr->num_palette)) &&
+#if defined(PNG_MNG_FEATURES_SUPPORTED)
+          (png_ptr->num_palette ||
+          (!(png_ptr->mng_features_permitted & PNG_FLAG_MNG_EMPTY_PLTE))) &&
 #endif
          back->index > png_ptr->num_palette)
       {
@@ -1069,32 +1092,33 @@ png_check_keyword(png_structp png_ptr, png_charp key, png_charpp new_key)
    png_size_t key_len;
    png_charp kp, dp;
    int kflag;
+   int kwarn=0;
 
    png_debug(1, "in png_check_keyword\n");
    *new_key = NULL;
 
    if (key == NULL || (key_len = png_strlen(key)) == 0)
    {
-      png_chunk_warning(png_ptr, "zero length keyword");
+      png_warning(png_ptr, "zero length keyword");
       return ((png_size_t)0);
    }
 
    png_debug1(2, "Keyword to be checked is '%s'\n", key);
 
-   *new_key = (png_charp)png_malloc(png_ptr, (png_uint_32)(key_len + 1));
+   *new_key = (png_charp)png_malloc(png_ptr, (png_uint_32)(key_len + 2));
 
    /* Replace non-printing characters with a blank and print a warning */
    for (kp = key, dp = *new_key; *kp != '\0'; kp++, dp++)
    {
       if (*kp < 0x20 || (*kp > 0x7E && (png_byte)*kp < 0xA1))
       {
-#if !defined(PNG_NO_STDIO)
+#if !defined(PNG_NO_STDIO) && !defined(_WIN32_WCE)
          char msg[40];
 
          sprintf(msg, "invalid keyword character 0x%02X", *kp);
-         png_chunk_warning(png_ptr, msg);
+         png_warning(png_ptr, msg);
 #else
-         png_chunk_warning(png_ptr, "invalid character in keyword");
+         png_warning(png_ptr, "invalid character in keyword");
 #endif
          *dp = ' ';
       }
@@ -1109,7 +1133,7 @@ png_check_keyword(png_structp png_ptr, png_charp key, png_charpp new_key)
    kp = *new_key + key_len - 1;
    if (*kp == ' ')
    {
-      png_chunk_warning(png_ptr, "trailing spaces removed from keyword");
+      png_warning(png_ptr, "trailing spaces removed from keyword");
 
       while (*kp == ' ')
       {
@@ -1122,7 +1146,7 @@ png_check_keyword(png_structp png_ptr, png_charp key, png_charpp new_key)
    kp = *new_key;
    if (*kp == ' ')
    {
-      png_chunk_warning(png_ptr, "leading spaces removed from keyword");
+      png_warning(png_ptr, "leading spaces removed from keyword");
 
       while (*kp == ' ')
       {
@@ -1144,6 +1168,7 @@ png_check_keyword(png_structp png_ptr, png_charp key, png_charpp new_key)
       else if (*kp == ' ')
       {
          key_len--;
+         kwarn=1;
       }
       else
       {
@@ -1152,17 +1177,19 @@ png_check_keyword(png_structp png_ptr, png_charp key, png_charpp new_key)
       }
    }
    *dp = '\0';
+   if(kwarn)
+      png_warning(png_ptr, "extra interior spaces removed from keyword");
 
    if (key_len == 0)
    {
       png_free(png_ptr, *new_key);
       *new_key=NULL;
-      png_chunk_warning(png_ptr, "Zero length keyword");
+      png_warning(png_ptr, "Zero length keyword");
    }
 
    if (key_len > 79)
    {
-      png_chunk_warning(png_ptr, "keyword length must be 1 - 79 characters");
+      png_warning(png_ptr, "keyword length must be 1 - 79 characters");
       new_key[79] = '\0';
       key_len = 79;
    }
@@ -1368,7 +1395,7 @@ png_write_oFFs(png_structp png_ptr, png_uint_32 x_offset,
 #endif
 
 #if defined(PNG_WRITE_pCAL_SUPPORTED)
-/* write the pCAL chunk (png-scivis-19970203) */
+/* write the pCAL chunk (described in the PNG extensions document) */
 void /* PRIVATE */
 png_write_pCAL(png_structp png_ptr, png_charp purpose, png_int_32 X0,
    png_int_32 X1, int type, int nparams, png_charp units, png_charpp params)
@@ -1400,7 +1427,7 @@ png_write_pCAL(png_structp png_ptr, png_charp purpose, png_int_32 X0,
    for (i = 0; i < nparams; i++)
    {
       params_len[i] = png_strlen(params[i]) + (i == nparams - 1 ? 0 : 1);
-      png_debug2(3, "pCAL parameter %d length = %d\n", i, params_len[i]);
+      png_debug2(3, "pCAL parameter %d length = %lu\n", i, params_len[i]);
       total_len += (png_size_t)params_len[i];
    }
 
@@ -1441,8 +1468,19 @@ png_write_sCAL(png_structp png_ptr, int unit, double width,double height)
 
    png_debug(1, "in png_write_sCAL\n");
 
+#if defined(_WIN32_WCE)
+/* sprintf() function is not supported on WindowsCE */
+   {
+      wchar_t wc_buf[32];
+      swprintf(wc_buf, TEXT("%12.12e"), width);
+      WideCharToMultiByte(CP_ACP, 0, wc_buf, -1, wbuf, 32, NULL, NULL);
+      swprintf(wc_buf, TEXT("%12.12e"), height);
+      WideCharToMultiByte(CP_ACP, 0, wc_buf, -1, hbuf, 32, NULL, NULL);
+   }
+#else
    sprintf(wbuf, "%12.12e", width);
    sprintf(hbuf, "%12.12e", height);
+#endif
    total_len = 1 + png_strlen(wbuf)+1 + png_strlen(hbuf);
 
    png_debug1(3, "sCAL total length = %d\n", total_len);
@@ -2540,6 +2578,7 @@ png_write_filtered_row(png_structp png_ptr, png_bytep filtered_row)
    png_debug(1, "in png_write_filtered_row\n");
    png_debug1(2, "filter = %d\n", filtered_row[0]);
    /* set up the zlib input buffer */
+
    png_ptr->zstream.next_in = filtered_row;
    png_ptr->zstream.avail_in = (uInt)png_ptr->row_info.rowbytes + 1;
    /* repeat until we have compressed all the data */

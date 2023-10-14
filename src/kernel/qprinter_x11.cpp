@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qprinter_x11.cpp   2.2.4   edited 2000-12-06 $
+** $Id: qt/src/kernel/qprinter_x11.cpp   2.3.0   edited 2001-02-17 $
 **
 ** Implementation of QPrinter class for X11
 **
@@ -174,7 +174,7 @@ bool QPrinter::aborted() const
   user cancelled the operation.
 */
 
-bool QPrinter::setup( QWidget * parent )
+bool QPrinter::setup( QWidget * /*parent*/ )
 {
     return QPrintDialog::getPrinterSetup( this );
 }
@@ -370,7 +370,7 @@ int QPrinter::metric( int m ) const
 			     2920, 2064, 91, 1460, 1032, 729, 516, 363, 258,
 			     181, 127, 461, 297, 312, 595, 1224, 792 };
 
-    static int heights[] = { 842, 729, 791, 1009, 720,
+    static int heights[] = { 842, 729, 792, 1009, 720,
 			     3370, 2384, 1684, 1191, 595, 420, 297, 210, 148,
 			     4127, 2920, 127, 2064, 1460, 1032, 729, 516, 363,
 			     258, 181, 648, 684, 624, 935, 792, 1224 };

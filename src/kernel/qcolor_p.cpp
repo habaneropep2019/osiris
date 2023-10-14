@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qcolor_p.cpp   2.2.4   edited 2000-09-03 $
+** $Id: qt/src/kernel/qcolor_p.cpp   2.3.0   edited 2001-01-26 $
 **
 ** Named color support for non-X platforms.
 ** The color names have been borrowed from X.

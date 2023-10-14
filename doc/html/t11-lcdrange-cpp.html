@@ -43,20 +43,20 @@ LCDRange::LCDRange( <a href="qwidget.html">QWidget</a> *parent, const char *name
     <a href="qwidget.html#22ecbc">setFocusProxy</a>( slider );
 }
 
-int <a name="503"></a>LCDRange::value() const
+int <a name="508"></a>LCDRange::value() const
 {
     return slider-&gt;value();
 }
 
-void <a name="504"></a>LCDRange::setValue( int value )
+void <a name="509"></a>LCDRange::setValue( int value )
 {
     slider-&gt;setValue( value );
 }
 
-void <a name="505"></a>LCDRange::setRange( int minVal, int maxVal )
+void <a name="510"></a>LCDRange::setRange( int minVal, int maxVal )
 {
     if ( minVal &lt; 0 || maxVal &gt; 99 || minVal &gt; maxVal ) {
-      <a href="qapplication.html#7a943f">qWarning</a>( "<a name="505"></a>LCDRange::setRange(%d,%d)\n"
+      <a href="qapplication.html#7a943f">qWarning</a>( "<a name="510"></a>LCDRange::setRange(%d,%d)\n"
                "\tRange must be 0..99\n"
                "\tand minVal must not be greater than maxVal",
                minVal, maxVal );
@@ -70,5 +70,5 @@ void <a name="505"></a>LCDRange::setRange( int minVal, int maxVal )
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.4</div>
+<td align="right"><div align="right">Qt version 2.3.0</div>
 </table></div></address></body></html>

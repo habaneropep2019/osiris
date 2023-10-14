@@ -1,5 +1,6 @@
-.TH QWhatsThis 3qt "1 Febrary 2001" "Trolltech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
+'\" t
+.TH QWhatsThis 3qt "5 March 2001" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2001 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,7 +8,6 @@
 .nh
 .SH NAME
 QWhatsThis \- Simple description of any widget, e.g. answering the question "what's this?"
-.SH SYNOPSIS
 .br
 .PP
 \fC#include <qwhatsthis.h>\fR
@@ -65,7 +65,8 @@ By default, the user will be able to view the text for a widget by pressing Shif
 .PP
 An alternative way to enter \fIWhat's This?\fR mode is to use the ready-made toolbar tool button from QWhatsThis::whatsThisButton(). If you are using QMainWindow, you can also use the QMainWindow::whatsThis() slot to invoke the mode from a menu item.
 .PP
-<img src="whatsthis.png" width="284" height="246">
+.ce 1
+.B "[Image Omitted]"
 .PP
 For more control, you can create a dedicated QWhatsThis object for a special widget. By subclassing and reimplementing QWhatsThis::text() it is possible to have different explanatory texts depending on the position of the mouse click.
 .PP
@@ -128,9 +129,20 @@ Creates a QToolButton pre-configured to enter \fIWhat's This\fR mode when clicke
 .fi
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qwhatsthis.html
+.BR http://www.trolltech.com/faq/tech.html
 .SH COPYRIGHT
-Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
+Copyright 1992-2001 Trolltech AS, http://www.trolltech.com.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR
 Generated automatically from the source code.
+.SH BUGS
+If you find a bug in Qt, please report it as described in
+.BR http://doc.trolltech.com/bughowto.html .
+Good bug reports make our job much simpler. Thank you.
+.P
+In case of content or formattting problems with this manual page, please
+report them to
+.BR qt-bugs@trolltech.com .
+Please include the name of the manual page (qwhatsthis.3qt) and the Qt
+version (2.3.0).

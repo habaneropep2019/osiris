@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qfiledefs_p.h   2.2.4   edited 2000-08-25 $
+** $Id: qt/src/tools/qfiledefs_p.h   2.3.0   edited 2001-02-18 $
 **
 ** Common macros and system include files for QFile, QFileInfo and QDir.
 **
@@ -50,6 +50,8 @@
 //
 //
 
+#ifndef QT_H
+#endif // QT_H
 
 #if defined(_CC_MWERKS_)
 # include <stdlib.h>
@@ -58,17 +60,17 @@
 # include <sys/types.h>
 # include <sys/stat.h>
 #endif
+#if defined(_OS_UNIX_)
+# include <unistd.h>
+# include <dirent.h>
+#endif
 #include <fcntl.h>
 #include <errno.h>
-#if defined(_OS_UNIX_)
-# include <dirent.h>
-# include <unistd.h>
-#endif
 #if defined(_OS_MSDOS_) || defined(_OS_WIN32_) || defined(_OS_OS2_)
 # define _OS_FATFS_
 # if defined(__CYGWIN32__)
-#  include <dirent.h>
 #  include <unistd.h>
+#  include <dirent.h>
 #  if !defined(_OS_UNIX_)
 #   define _OS_UNIX_
 #  endif

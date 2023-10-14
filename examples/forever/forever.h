@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/forever/forever.h   2.2.4   edited 2001-01-03 $
+** $Id: qt/examples/forever/forever.h   2.3.0   edited 2001-01-26 $
 **
 ** Definition of something or other
 **

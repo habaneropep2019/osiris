@@ -344,7 +344,8 @@ copies.
 <p>The orientation can be either <code>QPrinter::Portrait</code> or
 <code>QPrinter::Landscape.</code>
 <p>The printer driver reads this setting and prints using the specified
-orientation.
+orientation.  On Windows however, this setting won't take effect until 
+the printer dialog is shown (using <a href="#a36243">QPrinter::setup</a>() ).
 <p>See also  <a href="#bffe64">orientation</a>().
 <h3 class="fn">void <a name="95d8c7"></a>QPrinter::setOutputFileName ( const <a href="qstring.html">QString</a> &amp; fileName ) <code>[virtual]</code></h3>
 <p>Sets the name of the output file.
@@ -391,7 +392,7 @@ is null by default, meaning to be a little smart, but can be set to
 other values to use a specific printer selection option.
 <p>If the printer selection option is changed while the printer is
 active, the current print job may or may not be affected.
-<h3 class="fn">bool <a name="a36243"></a>QPrinter::setup ( <a href="qwidget.html">QWidget</a> * parent = 0 )</h3>
+<h3 class="fn">bool <a name="a36243"></a>QPrinter::setup ( <a href="qwidget.html">QWidget</a> * = 0 )</h3>
 <p>Opens a printer setup dialog and asks the user to specify what printer
 to use and miscellaneous printer settings.
 <p>Returns TRUE if the user pressed "OK" to print, or FALSE if the
@@ -410,7 +411,7 @@ accordingly.
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.2.4"><nobr>
+<input type=hidden name="version" value="2.3.0"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -418,5 +419,5 @@ copyright &copy; 1995-2000
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.4</div>
+<td align="right"><div align="right">Qt version 2.3.0</div>
 </table></div></address></body></html>

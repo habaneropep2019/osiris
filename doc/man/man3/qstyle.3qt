@@ -1,5 +1,6 @@
-.TH QStyle 3qt "1 Febrary 2001" "Trolltech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
+'\" t
+.TH QStyle 3qt "5 March 2001" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2001 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,7 +8,6 @@
 .nh
 .SH NAME
 QStyle \- Encapsulates common Look and Feel of a GUI
-.SH SYNOPSIS
 .br
 .PP
 \fC#include <qstyle.h>\fR
@@ -299,7 +299,7 @@ Reimplemented in QMotifPlusStyle, QMotifStyle, QWindowsStyle, QSGIStyle, QPlatin
 .SH "QRect QStyle::comboButtonRect ( int x, int y, int w, int h ) \fC[virtual]\fR"
 Returns the rectangle available for contents in a combo box button. Usually this is the entire rectangle without the nifty menu indicator, but it may also be smaller when you think about rounded buttons.
 .PP
-Reimplemented in QSGIStyle, QCommonStyle, QMotifStyle, QPlatinumStyle, QWindowsStyle and QMotifPlusStyle.
+Reimplemented in QInterlaceStyle, QSGIStyle, QCommonStyle, QMotifStyle, QPlatinumStyle, QWindowsStyle and QMotifPlusStyle.
 .SH "int QStyle::defaultFrameWidth () const \fC[virtual]\fR"
 The default frame width, usually 2.
 .PP
@@ -311,13 +311,13 @@ Draws a press-sensitive shape in the style of a bevel button.
 .PP
 See also bevelButtonRect().
 .PP
-Reimplemented in QMotifStyle, QMotifPlusStyle, QPlatinumStyle, QWindowsStyle and QSGIStyle.
+Reimplemented in QMotifStyle, QMotifPlusStyle, QPlatinumStyle, QWindowsStyle, QSGIStyle and QInterlaceStyle.
 .SH "void QStyle::drawButton ( QPainter *, int, int, int, int, const QColorGroup &, bool = FALSE, const QBrush * = 0 ) \fC[virtual]\fR"
 Draws a press-sensitive shape in the style of a full featured push button
 .PP
 See also buttonRect().
 .PP
-Reimplemented in QPlatinumStyle, QWindowsStyle, QMotifPlusStyle, QSGIStyle and QMotifStyle.
+Reimplemented in QPlatinumStyle, QInterlaceStyle, QWindowsStyle, QMotifPlusStyle, QSGIStyle and QMotifStyle.
 .SH "void QStyle::drawButtonMask ( QPainter * p, int x, int y, int w, int h ) \fC[virtual]\fR"
 Draw the mask of a pushbutton. Useful if a rounded pushbuttons needs to be transparent because the style uses a fancy background pixmap.
 .PP
@@ -329,7 +329,7 @@ Reimplemented in QSGIStyle, QWindowsStyle, QMotifStyle and QPlatinumStyle.
 .SH "void QStyle::drawComboButton ( QPainter * p, int x, int y, int w, int h, const QColorGroup & g, bool sunken = FALSE, bool editable = FALSE, bool enabled = TRUE, const QBrush * fill = 0 ) \fC[virtual]\fR"
 Draws a press-sensitive shape in the style of a combo box or menu button.
 .PP
-Reimplemented in QMotifPlusStyle, QPlatinumStyle, QWindowsStyle, QMotifStyle, QCommonStyle and QSGIStyle.
+Reimplemented in QMotifPlusStyle, QInterlaceStyle, QPlatinumStyle, QWindowsStyle, QMotifStyle, QCommonStyle and QSGIStyle.
 .SH "void QStyle::drawComboButtonMask ( QPainter * p, int x, int y, int w, int h ) \fC[virtual]\fR"
 Draw the mask of a combo box button. Useful if a rounded buttons needs to be transparent because the style uses a fancy background pixmap.
 .PP
@@ -337,29 +337,29 @@ Reimplemented in QCommonStyle.
 .SH "void QStyle::drawExclusiveIndicator ( QPainter *, int x, int y, int w, int h, const QColorGroup &, bool on, bool down = FALSE, bool enabled = TRUE ) \fC[virtual]\fR"
 Draws a mark indicating the state of an exclusive choice.
 .PP
-Reimplemented in QSGIStyle, QMotifPlusStyle, QMotifStyle, QPlatinumStyle, QWindowsStyle and QCDEStyle.
+Reimplemented in QSGIStyle, QMotifPlusStyle, QMotifStyle, QPlatinumStyle, QInterlaceStyle, QWindowsStyle and QCDEStyle.
 .SH "void QStyle::drawExclusiveIndicatorMask ( QPainter * p, int x, int y, int w, int h, bool ) \fC[virtual]\fR"
 Draws the mask of a mark indicating the state of an exclusive choice.
 .PP
-Reimplemented in QMotifStyle, QSGIStyle and QWindowsStyle.
+Reimplemented in QMotifStyle, QInterlaceStyle, QSGIStyle and QWindowsStyle.
 .SH "void QStyle::drawFocusRect ( QPainter * p, const QRect & r, const QColorGroup & g, const QColor * = 0, bool atBorder = FALSE ) \fC[virtual]\fR"
 Draws a mark indicating keyboard focus is on \fIr. atBorder\fR indicates whether the focus rectangle is at the border of an item (for example an item in a listbox). Certain styles (Motif style as the most prominent example) might have to shrink the rectangle a bit in that case to ensure that the focus rectangle is visible at all.
 .PP
-Reimplemented in QWindowsStyle and QMotifStyle.
+Reimplemented in QWindowsStyle, QInterlaceStyle and QMotifStyle.
 .SH "void QStyle::drawIndicator ( QPainter *, int, int, int, int, const QColorGroup &, int state, bool = FALSE, bool = TRUE ) \fC[virtual]\fR"
 Draws a mark indicating the state of a choice.
 .PP
-Reimplemented in QCDEStyle, QSGIStyle, QMotifStyle, QPlatinumStyle, QWindowsStyle and QMotifPlusStyle.
+Reimplemented in QCDEStyle, QInterlaceStyle, QSGIStyle, QMotifStyle, QPlatinumStyle, QWindowsStyle and QMotifPlusStyle.
 .SH "void QStyle::drawIndicatorMask ( QPainter * p, int x, int y, int w, int h, int ) \fC[virtual]\fR"
 Draws the mask of a mark indicating the state of a choice.
 .PP
-Reimplemented in QPlatinumStyle and QSGIStyle.
+Reimplemented in QInterlaceStyle, QPlatinumStyle and QSGIStyle.
 .SH "void QStyle::drawItem ( QPainter * p, int x, int y, int w, int h, int flags, const QColorGroup & g, bool enabled, const QPixmap * pixmap, const QString & text, int len=-1, const QColor * penColor = 0 ) \fC[virtual]\fR"
 Draw text or a pixmap in an area.
 .SH "void QStyle::drawPanel ( QPainter * p, int x, int y, int w, int h, const QColorGroup & g, bool sunken=FALSE, int lineWidth = 1, const QBrush * fill = 0 ) \fC[virtual]\fR"
 Draws a panel to separate parts of the visual interface.
 .PP
-Reimplemented in QSGIStyle, QMotifPlusStyle and QWindowsStyle.
+Reimplemented in QSGIStyle, QMotifPlusStyle, QInterlaceStyle and QWindowsStyle.
 .SH "void QStyle::drawPopupMenuItem ( QPainter * p, bool checkable, int maxpmw, int tab, QMenuItem * mi, const QPalette & pal, bool act, bool enabled, int x, int y, int w, int h ) \fC[virtual]\fR"
 Draws the menu item \fImi\fR using the painter \fIp.\fR The painter is preset to the right font. \fImaxpmw\fR is the maximum width of all iconsets within a check column. \fItab\fR specifies the minimum number of pixels necessary to draw all labels of the menu without their accelerators (which are separated by a tab character in the label text). \fIpal\fR is the palette, \fIact\fR and \fIenabled\fR define whether the item is active (i.e. highlighted) or enabled, respectively. Finally, \fIx, y, w\fR and \fIh\fR determine the geometry of the entire item.
 .PP
@@ -375,7 +375,7 @@ Draws a pushbutton. This function will normally call drawButton() with arguments
 .PP
 See also drawPushButtonLabel() and QPushButton::drawButton().
 .PP
-Reimplemented in QSGIStyle, QMotifPlusStyle, QPlatinumStyle, QMotifStyle and QWindowsStyle.
+Reimplemented in QSGIStyle, QMotifPlusStyle, QInterlaceStyle, QPlatinumStyle, QMotifStyle and QWindowsStyle.
 .SH "void QStyle::drawPushButtonLabel ( QPushButton *, QPainter * ) \fC[virtual]\fR"
 Draws the label of a pushbutton. This function will normally call drawItem() with arguments according to the current state of the pushbutton.
 .PP
@@ -383,7 +383,7 @@ In reimplementations of this function, you will find pushButtonContentsRect() us
 .PP
 See also drawPushButton() and QPushButton::drawButtonLabel().
 .PP
-Reimplemented in QPlatinumStyle and QCommonStyle.
+Reimplemented in QPlatinumStyle, QCommonStyle and QInterlaceStyle.
 .SH "void QStyle::drawRect ( QPainter * p, int x, int y, int w, int h, const QColor & c, int lineWidth = 1, const QBrush * fill = 0 ) \fC[virtual]\fR"
 Draws a simple rectangle to separate parts of the visual interface.
 .SH "void QStyle::drawRectStrong ( QPainter * p, int x, int y, int w, int h, const QColorGroup & g, bool sunken=FALSE, int lineWidth = 1, int midLineWidth = 0, const QBrush * fill = 0 ) \fC[virtual]\fR"
@@ -395,7 +395,7 @@ The controls are either ADD_LINE, SUB_LINE, ADD_PAGE, SUB_PAGE, FIRST, LAST, SLI
 .PP
 Controls is a combination of these, activeControl is the control currently pressed down.
 .PP
-Reimplemented in QSGIStyle, QPlatinumStyle, QWindowsStyle, QMotifPlusStyle and QMotifStyle.
+Reimplemented in QSGIStyle, QPlatinumStyle, QWindowsStyle, QInterlaceStyle, QMotifPlusStyle and QMotifStyle.
 .SH "void QStyle::drawSeparator ( QPainter * p, int x1, int y1, int x2, int y2, const QColorGroup & g, bool sunken = TRUE, int lineWidth = 1, int midLineWidth = 0 ) \fC[virtual]\fR"
 Draws a line to separate parts of the visual interface.
 .PP
@@ -403,25 +403,25 @@ Reimplemented in QSGIStyle.
 .SH "void QStyle::drawSlider ( QPainter * p, int x, int y, int w, int h, const QColorGroup & g, Orientation, bool tickAbove, bool tickBelow ) \fC[virtual]\fR"
 Draws a slider.
 .PP
-Reimplemented in QMotifStyle, QPlatinumStyle, QWindowsStyle, QSGIStyle and QMotifPlusStyle.
+Reimplemented in QMotifStyle, QInterlaceStyle, QPlatinumStyle, QWindowsStyle, QSGIStyle and QMotifPlusStyle.
 .SH "void QStyle::drawSliderGroove ( QPainter * p, int x, int y, int w, int h, const QColorGroup & g, QCOORD c, Orientation ) \fC[virtual]\fR"
 Draws a slider groove.
 .PP
-Reimplemented in QMotifPlusStyle, QMotifStyle, QWindowsStyle, QPlatinumStyle and QSGIStyle.
+Reimplemented in QInterlaceStyle, QMotifPlusStyle, QMotifStyle, QWindowsStyle, QPlatinumStyle and QSGIStyle.
 .SH "void QStyle::drawSliderGrooveMask ( QPainter * p, int x, int y, int w, int h, QCOORD c, Orientation ) \fC[virtual]\fR"
 Draws the mask of a slider groove.
 .PP
-Reimplemented in QCommonStyle and QSGIStyle.
+Reimplemented in QCommonStyle, QInterlaceStyle and QSGIStyle.
 .SH "void QStyle::drawSliderMask ( QPainter * p, int x, int y, int w, int h, Orientation, bool, bool ) \fC[virtual]\fR"
 Draws the mask of a slider.
 .PP
-Reimplemented in QWindowsStyle, QSGIStyle, QCommonStyle and QPlatinumStyle.
+Reimplemented in QWindowsStyle, QSGIStyle, QCommonStyle, QPlatinumStyle and QInterlaceStyle.
 .SH "void QStyle::drawSplitter ( QPainter * p, int x, int y, int w, int h, const QColorGroup & g, Orientation orient ) \fC[virtual]\fR"
 Draws a splitter handle in the rectangle described by \fIx, y, w, h\fR using painter \fIp\fR and color group \fIg.\fR The orientation is \fIorient.\fR
 .PP
 See also splitterWidth().
 .PP
-Reimplemented in QWindowsStyle, QSGIStyle and QMotifStyle.
+Reimplemented in QWindowsStyle, QSGIStyle, QMotifStyle and QInterlaceStyle.
 .SH "void QStyle::drawToolBarHandle ( QPainter * p, const QRect & r, Qt::Orientation orientation, bool highlight, const QColorGroup & cg, bool drawBorder = FALSE )"
 Draws the handle for the toolbar using the painter \fIp\fR with the toolbar coordinates \fIr. orientation\fR gives the orientation of the toolbar, and the handle is drawn \fIhighlighted\fR if \fIhighlight\fR is TRUE, else not. \fIcg\fR is the QColorGroup of the toolbar and if \fIdrawBorder\fR is TRUE a border around the handle may be drawn.
 .PP
@@ -441,7 +441,7 @@ See also QToolButton::drawButton().
 .SH "QSize QStyle::exclusiveIndicatorSize () const \fC[virtual]\fR"
 Returns the size of the mark used to indicate exclusive choice.
 .PP
-Reimplemented in QSGIStyle, QWindowsStyle, QMotifPlusStyle, QPlatinumStyle and QMotifStyle.
+Reimplemented in QSGIStyle, QInterlaceStyle, QWindowsStyle, QMotifPlusStyle, QPlatinumStyle and QMotifStyle.
 .SH "int QStyle::extraPopupMenuItemWidth ( bool checkable, int maxpmw, QMenuItem * mi, const QFontMetrics & fm ) \fC[virtual]\fR"
 Returns the extra width of a menu item \fImi,\fR that means all extra pixels besides the space the menu item text requires. \fIcheckable\fR defines, whether the menu has a check column. \fImaxpmw\fR is the maximum width of all iconsets within a check column and \fIfm\fR defines the font metrics used to draw the label. This is particularly useful to calculate a suitable size for a submenu indicator or the column separation, including the tab column used to indicate item accelerators.
 .PP
@@ -455,7 +455,7 @@ Returns an indicator to the additional "feel" component of a style. Current supp
 .SH "QSize QStyle::indicatorSize () const \fC[virtual]\fR"
 Returns the size of the mark used to indicate choice.
 .PP
-Reimplemented in QMotifPlusStyle, QPlatinumStyle, QMotifStyle, QSGIStyle and QWindowsStyle.
+Reimplemented in QMotifPlusStyle, QPlatinumStyle, QMotifStyle, QSGIStyle, QInterlaceStyle and QWindowsStyle.
 .SH "QRect QStyle::itemRect ( QPainter * p, int x, int y, int w, int h, int flags, bool enabled, const QPixmap * pixmap, const QString & text, int len=-1 ) \fC[virtual]\fR"
 Returns the appropriate area within a rectangle in which to draw text or a pixmap.
 .SH "int QStyle::maximumSliderDragDistance () const \fC[virtual]\fR"
@@ -485,7 +485,7 @@ The QWidget::inherits() function may provide enough information to allow class-s
 .PP
 See also unPolish(QWidget*).
 .PP
-Reimplemented in QMotifStyle, QMotifPlusStyle and QSGIStyle.
+Reimplemented in QMotifStyle, QInterlaceStyle, QMotifPlusStyle and QSGIStyle.
 .SH "void QStyle::polishPopupMenu ( QPopupMenu * p ) \fC[virtual]\fR"
 Polishes the popup menu \fIp\fR according to the GUI style. This is usually means setting the mouse tracking ( QPopupMenu::setMouseTracking() ) and whether the menu is checkable by default ( QPopupMenu::setCheckable() ).
 .PP
@@ -509,7 +509,7 @@ In this version of the Qt library, subclasses must call setScrollBarExtent() to 
 .SH "void QStyle::scrollBarMetrics ( const QScrollBar *, int &, int &, int &, int & ) \fC[virtual]\fR"
 Returns the metrics of the passed scrollbar: sliderMin, sliderMax, sliderLength and buttonDim.
 .PP
-Reimplemented in QPlatinumStyle, QMotifStyle, QMotifPlusStyle, QSGIStyle and QWindowsStyle.
+Reimplemented in QPlatinumStyle, QMotifStyle, QMotifPlusStyle, QSGIStyle, QWindowsStyle and QInterlaceStyle.
 .SH "QStyle::ScrollControl QStyle::scrollBarPointOver( const QScrollBar * sb, int sliderStart, const QPoint & p )"
 Returns the scrollbar control under the passed point.
 .SH "void QStyle::setButtonDefaultIndicatorWidth ( int w ) \fC[protected]\fR"
@@ -539,7 +539,7 @@ Returns the width of a splitter handle.
 .PP
 See also drawSplitter().
 .PP
-Reimplemented in QMotifStyle, QSGIStyle and QWindowsStyle.
+Reimplemented in QMotifStyle, QSGIStyle, QWindowsStyle and QInterlaceStyle.
 .SH "int QStyle::toolBarHandleExtend () const"
 \fBThis function is obsolete.\fR It is provided to keep old source working, and will probably be removed in a future version of Qt. We strongly advise against using it in new code.
 .SH "int QStyle::toolBarHandleExtent () const"
@@ -563,12 +563,23 @@ This function is the counterpart to polish. Is is called for every polished widg
 .PP
 See also polish(QWidget*).
 .PP
-Reimplemented in QMotifPlusStyle and QSGIStyle.
+Reimplemented in QMotifPlusStyle, QInterlaceStyle and QSGIStyle.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qstyle.html
+.BR http://www.trolltech.com/faq/tech.html
 .SH COPYRIGHT
-Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
+Copyright 1992-2001 Trolltech AS, http://www.trolltech.com.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR
 Generated automatically from the source code.
+.SH BUGS
+If you find a bug in Qt, please report it as described in
+.BR http://doc.trolltech.com/bughowto.html .
+Good bug reports make our job much simpler. Thank you.
+.P
+In case of content or formattting problems with this manual page, please
+report them to
+.BR qt-bugs@trolltech.com .
+Please include the name of the manual page (qstyle.3qt) and the Qt
+version (2.3.0).

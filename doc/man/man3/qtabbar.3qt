@@ -1,5 +1,6 @@
-.TH QTabBar 3qt "1 Febrary 2001" "Trolltech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
+'\" t
+.TH QTabBar 3qt "5 March 2001" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2001 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,7 +8,6 @@
 .nh
 .SH NAME
 QTabBar \- Tab bar, for use in e.g. tabbed dialogs
-.SH SYNOPSIS
 .br
 .PP
 \fC#include <qtabbar.h>\fR
@@ -99,7 +99,19 @@ Inherits QWidget.
 .br
 .in -1c
 .SS "Properties"
-<table border=1 cellpadding=3 cellspacing=0> <tr><th>Type<th>Name<th>READ<th>WRITE<th>Options <tr><td>Shape<td>shape<td>shape<td>setShape<td>&nbsp; <tr><td>int<td>currentTab<td>currentTab<td>setCurrentTab<td>&nbsp; <tr><td>int<td>count<td>count<td>&nbsp;<td>&nbsp; <tr><td>int<td>keyboardFocusTab<td>keyboardFocusTab<td>&nbsp;<td>&nbsp; </table>
+.nf
+.TS
+l l l l l
+- - - - -
+l l l l l.
+Type	Name	READ	WRITE	Options
+Shape	shape	shape	setShape
+int	currentTab	currentTab	setCurrentTab
+int	count	count
+int	keyboardFocusTab	keyboardFocusTab
+.TE
+.fi
+
 .SH DESCRIPTION
 The QTabBar class provides a tab bar, for use in e.g. tabbed dialogs.
 .PP
@@ -121,7 +133,13 @@ addTab() creates a new tab and adds it to the bar.
 .TP
 selectTab() decides which, if any, tab the user selects with the mouse. 
 .PP
-<img src=qtabbar-m.png> <img src=qtabbar-w.png>
+.ce 1
+.B "[Image Omitted]"
+.PP
+
+.ce 1
+.B "[Image Omitted]"
+.PP
 .SS "Member Type Documentation"
 .SH "QTabBar::Shape"
 This enum type lists the built-in shapes supported by QTabBar:
@@ -267,9 +285,20 @@ Draws the mask for this tab bar.
 Reimplemented from QWidget.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qtabbar.html
+.BR http://www.trolltech.com/faq/tech.html
 .SH COPYRIGHT
-Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
+Copyright 1992-2001 Trolltech AS, http://www.trolltech.com.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR
 Generated automatically from the source code.
+.SH BUGS
+If you find a bug in Qt, please report it as described in
+.BR http://doc.trolltech.com/bughowto.html .
+Good bug reports make our job much simpler. Thank you.
+.P
+In case of content or formattting problems with this manual page, please
+report them to
+.BR qt-bugs@trolltech.com .
+Please include the name of the manual page (qtabbar.3qt) and the Qt
+version (2.3.0).

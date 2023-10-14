@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qrichtext_p.h   2.2.4   edited 2001-01-31 $
+** $Id: qt/src/kernel/qrichtext_p.h   2.3.0   edited 2001-02-13 $
 **
 ** Definition of internal rich text classes
 **
@@ -51,11 +51,8 @@
 //
 //
 
-
+#ifndef QT_H
 #include "qstylesheet.h"
-
-#ifndef QT_NO_RICHTEXT
-
 #include "qstring.h"
 #include "qpixmap.h"
 #include "qmap.h"
@@ -66,7 +63,9 @@
 #include "qfont.h"
 #include "qlist.h"
 #include "qlayout.h"
+#endif // QT_H
 
+#ifndef QT_NO_RICHTEXT
 
 class QTextCustomItem;
 class QTextFormatCollection;

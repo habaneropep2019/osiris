@@ -32,7 +32,7 @@ height="100" src="face.png" alt="Home" border="0">
 
   Implementation:
 <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/picture/picture.cpp   2.2.4   edited 2000-08-31 $
+** &#36;Id&#58; qt/examples/picture/picture.cpp   2.3.0   edited 2001-02-20 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -41,7 +41,6 @@ height="100" src="face.png" alt="Home" border="0">
 **
 *****************************************************************************/
 
-#include &lt;ctype.h&gt;
 #include &lt;<a name="qapplication.h"></a><a href="qapplication-h.html">qapplication.h</a>&gt;
 #include &lt;<a name="qpainter.h"></a><a href="qpainter-h.html">qpainter.h</a>&gt;
 #include &lt;<a name="qpicture.h"></a><a href="qpicture-h.html">qpicture.h</a>&gt;
@@ -49,6 +48,7 @@ height="100" src="face.png" alt="Home" border="0">
 #include &lt;<a name="qwidget.h"></a><a href="qwidget-h.html">qwidget.h</a>&gt;
 #include &lt;<a name="qmessagebox.h"></a><a href="qmessagebox-h.html">qmessagebox.h</a>&gt;
 #include &lt;<a name="qfile.h"></a><a href="qfile-h.html">qfile.h</a>&gt;
+#include &lt;ctype.h&gt;
 
 void paintCar( <a name="QPainter"></a><a href="qpainter.html">QPainter</a> *p )                    // paint a car
 {
@@ -108,7 +108,7 @@ PictureDisplay::~PictureDisplay()
     delete pict;
 }
 
-void <a name="366"></a>PictureDisplay::paintEvent( <a href="qpaintevent.html">QPaintEvent</a> * )
+void <a name="371"></a>PictureDisplay::paintEvent( <a href="qpaintevent.html">QPaintEvent</a> * )
 {
     <a href="qpainter.html">QPainter</a> paint( this );                     // paint widget
     if ( pict )
@@ -117,7 +117,7 @@ void <a name="366"></a>PictureDisplay::paintEvent( <a href="qpaintevent.html">QP
         paint.<a href="qpainter.html#8a59ed">drawText</a>( <a name="rect"></a><a href="qwidget.html#e872e1">rect</a>(), AlignCenter, name );
 }
 
-void <a name="367"></a>PictureDisplay::keyPressEvent( <a href="qkeyevent.html">QKeyEvent</a> *k )
+void <a name="372"></a>PictureDisplay::keyPressEvent( <a href="qkeyevent.html">QKeyEvent</a> *k )
 {
     switch ( tolower(k-&gt;<a name="ascii"></a><a href="qkeyevent.html#c3c00e">ascii</a>()) ) {
         case 'r':                               // reload
@@ -162,5 +162,5 @@ int main( int argc, char **argv )
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.4</div>
+<td align="right"><div align="right">Qt version 2.3.0</div>
 </table></div></address></body></html>

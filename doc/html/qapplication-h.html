@@ -30,7 +30,7 @@ remains with Trolltech.
 <hr>
 <pre>
 /****************************************************************************
-** &#36;Id&#58; qt/src/kernel/qapplication.h   2.2.4   edited 2000-10-03 $
+** &#36;Id&#58; qt/src/kernel/qapplication.h   2.3.0   edited 2001-02-08 $
 **
 ** Definition of QApplication class
 **
@@ -80,7 +80,7 @@ class <a href="qsessionmanager.html">QSessionManager</a>;
 class <a href="qstyle.html">QStyle</a>;
 class <a href="qtranslator.html">QTranslator</a>;
 #if defined(_WS_QWS_)
-class QWSDecoration;
+class <a href="qwsdecoration.html">QWSDecoration</a>;
 #endif
 template &lt;class type&gt; class QList;
 
@@ -111,6 +111,8 @@ public:
 
     int             argc()      const;
     char          **argv()      const;
+
+    Type type() const;
 
 #ifndef QT_NO_STYLE
     static QStyle  &amp;style();
@@ -440,5 +442,5 @@ inline QString  QApplication::translate( const char *, const char *key,
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.4</div>
+<td align="right"><div align="right">Qt version 2.3.0</div>
 </table></div></address></body></html>

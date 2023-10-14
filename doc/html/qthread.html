@@ -152,6 +152,7 @@ calling this will block until one of 2 conditions is met:
 <li> The thread associated with this QThread object has finished
 execution (i.e. when it returns from <a href="#b3cf6a">run</a>() ).  This
 function will return TRUE if the thread has finished.
+It also returns TRUE if the thread has not been started yet.
 <li> <em>time</em> milliseconds has elapsed.  If <em>time</em> is ULONG_MAX (default
 argument), then the wait will never timeout (the thread must
 return from run() ).  This function will return FALSE
@@ -161,7 +162,7 @@ if the wait timed out.
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.2.4"><nobr>
+<input type=hidden name="version" value="2.3.0"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -169,5 +170,5 @@ copyright &copy; 1995-2000
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.4</div>
+<td align="right"><div align="right">Qt version 2.3.0</div>
 </table></div></address></body></html>

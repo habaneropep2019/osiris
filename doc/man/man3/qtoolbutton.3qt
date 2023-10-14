@@ -1,13 +1,13 @@
-.TH QToolButton 3qt "1 Febrary 2001" "Trolltech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
+'\" t
+.TH QToolButton 3qt "5 March 2001" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2001 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
 .ad l
 .nh
 .SH NAME
-QToolButton \- Quick-access button to specific commands or options, usually used inside a QToolBar
-.SH SYNOPSIS
+QToolButton \- Quick-access button to specific commands or options, usually used inside a
 .br
 .PP
 \fC#include <qtoolbutton.h>\fR
@@ -108,7 +108,22 @@ Inherits QButton.
 .br
 .in -1c
 .SS "Properties"
-<table border=1 cellpadding=3 cellspacing=0> <tr><th>Type<th>Name<th>READ<th>WRITE<th>Options <tr><td>QIconSet<td>onIconSet<td>onIconSet<td>setOnIconSet<td>&nbsp; <tr><td>QIconSet<td>offIconSet<td>offIconSet<td>setOffIconSet<td>&nbsp; <tr><td>bool<td>usesBigPixmap<td>usesBigPixmap<td>setUsesBigPixmap<td>&nbsp; <tr><td>bool<td>usesTextLabel<td>usesTextLabel<td>setUsesTextLabel<td>&nbsp; <tr><td>QString<td>textLabel<td>textLabel<td>setTextLabel<td>&nbsp; <tr><td>int<td>popupDelay<td>popupDelay<td>setPopupDelay<td>&nbsp; <tr><td>bool<td>autoRaise<td>autoRaise<td>setAutoRaise<td>&nbsp; </table>
+.nf
+.TS
+l l l l l
+- - - - -
+l l l l l.
+Type	Name	READ	WRITE	Options
+QIconSet	onIconSet	onIconSet	setOnIconSet
+QIconSet	offIconSet	offIconSet	setOffIconSet
+bool	usesBigPixmap	usesBigPixmap	setUsesBigPixmap
+bool	usesTextLabel	usesTextLabel	setUsesTextLabel
+QString	textLabel	textLabel	setTextLabel
+int	popupDelay	popupDelay	setPopupDelay
+bool	autoRaise	autoRaise	setAutoRaise
+.TE
+.fi
+
 .SH DESCRIPTION
 The QToolButton class provides a quick-access button to specific commands or options, usually used inside a QToolBar.
 .PP
@@ -280,9 +295,20 @@ Returns TRUE if this tool button puts a text label below the button pixmap, and 
 See also  setUsesTextLabel(), setTextLabel() and usesBigPixmap().
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qtoolbutton.html
+.BR http://www.trolltech.com/faq/tech.html
 .SH COPYRIGHT
-Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
+Copyright 1992-2001 Trolltech AS, http://www.trolltech.com.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR
 Generated automatically from the source code.
+.SH BUGS
+If you find a bug in Qt, please report it as described in
+.BR http://doc.trolltech.com/bughowto.html .
+Good bug reports make our job much simpler. Thank you.
+.P
+In case of content or formattting problems with this manual page, please
+report them to
+.BR qt-bugs@trolltech.com .
+Please include the name of the manual page (qtoolbutton.3qt) and the Qt
+version (2.3.0).

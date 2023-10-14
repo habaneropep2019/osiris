@@ -1,8 +1,8 @@
 
 /* png.c - location for general purpose libpng functions
  *
- * libpng version 1.0.7 - July 1, 2000
- * Copyright (c) 1998, 1999, 2000 Glenn Randers-Pehrson
+ * libpng version 1.0.9 - January 31, 2001
+ * Copyright (c) 1998-2001 Glenn Randers-Pehrson
  * (Version 0.96 Copyright (c) 1996, 1997 Andreas Dilger)
  * (Version 0.88 Copyright (c) 1995, 1996 Guy Eric Schalnat, Group 42, Inc.)
  *
@@ -10,22 +10,21 @@
 
 #define PNG_INTERNAL
 #define PNG_NO_EXTERN
-#include <assert.h>
 #include "png.h"
 
 /* Generate a compiler error if there is an old png.h in the search path. */
-typedef version_1_0_7 Your_png_h_is_not_version_1_0_7;
+typedef version_1_0_9 Your_png_h_is_not_version_1_0_9;
 
 /* Version information for C files.  This had better match the version
  * string defined in png.h.  */
 
 #ifdef PNG_USE_GLOBAL_ARRAYS
 /* png_libpng_ver was changed to a function in version 1.0.5c */
-char png_libpng_ver[12] = "1.0.7";
+const char png_libpng_ver[18] = "1.0.9";
 
 /* png_sig was changed to a function in version 1.0.5c */
 /* Place to hold the signature string for a PNG file. */
-png_byte FARDATA png_sig[8] = {137, 80, 78, 71, 13, 10, 26, 10};
+const png_byte FARDATA png_sig[8] = {137, 80, 78, 71, 13, 10, 26, 10};
 
 /* Invoke global declarations for constant strings for known chunk types */
 PNG_IHDR;
@@ -53,32 +52,33 @@ PNG_zTXt;
 /* arrays to facilitate easy interlacing - use pass (0 - 6) as index */
 
 /* start of interlace block */
-int FARDATA png_pass_start[] = {0, 4, 0, 2, 0, 1, 0};
+const int FARDATA png_pass_start[] = {0, 4, 0, 2, 0, 1, 0};
 
 /* offset to next interlace block */
-int FARDATA png_pass_inc[] = {8, 8, 4, 4, 2, 2, 1};
+const int FARDATA png_pass_inc[] = {8, 8, 4, 4, 2, 2, 1};
 
 /* start of interlace block in the y direction */
-int FARDATA png_pass_ystart[] = {0, 0, 4, 0, 2, 0, 1};
+const int FARDATA png_pass_ystart[] = {0, 0, 4, 0, 2, 0, 1};
 
 /* offset to next interlace block in the y direction */
-int FARDATA png_pass_yinc[] = {8, 8, 8, 4, 4, 2, 2};
+const int FARDATA png_pass_yinc[] = {8, 8, 8, 4, 4, 2, 2};
 
 /* width of interlace block (used in assembler routines only) */
 #ifdef PNG_HAVE_ASSEMBLER_COMBINE_ROW
-int FARDATA png_pass_width[] = {8, 4, 4, 2, 2, 1, 1};
+const int FARDATA png_pass_width[] = {8, 4, 4, 2, 2, 1, 1};
 #endif
 
 /* Height of interlace block.  This is not currently used - if you need
  * it, uncomment it here and in png.h
-int FARDATA png_pass_height[] = {8, 8, 4, 4, 2, 2, 1};
+const int FARDATA png_pass_height[] = {8, 8, 4, 4, 2, 2, 1};
 */
 
 /* Mask to determine which pixels are valid in a pass */
-int FARDATA png_pass_mask[] = {0x80, 0x08, 0x88, 0x22, 0xaa, 0x55, 0xff};
+const int FARDATA png_pass_mask[] = {0x80, 0x08, 0x88, 0x22, 0xaa, 0x55, 0xff};
 
 /* Mask to determine which pixels to overwrite while displaying */
-int FARDATA png_pass_dsp_mask[] = {0xff, 0x0f, 0xff, 0x33, 0xff, 0x55, 0xff};
+const int FARDATA png_pass_dsp_mask[]
+   = {0xff, 0x0f, 0xff, 0x33, 0xff, 0x55, 0xff};
 
 #endif
 
@@ -141,6 +141,7 @@ png_zalloc(voidpf png_ptr, uInt items, uInt size)
    png_uint_32 num_bytes = (png_uint_32)items * size;
    png_voidp ptr = (png_voidp)png_malloc((png_structp)png_ptr, num_bytes);
 
+#ifndef PNG_NO_ZALLOC_ZERO
    if (num_bytes > (png_uint_32)0x8000L)
    {
       png_memset(ptr, 0, (png_size_t)0x8000L);
@@ -151,6 +152,7 @@ png_zalloc(voidpf png_ptr, uInt items, uInt size)
    {
       png_memset(ptr, 0, (png_size_t)num_bytes);
    }
+#endif
    return ((voidpf)ptr);
 }
 
@@ -362,7 +364,10 @@ if (mask & PNG_FREE_PCAL)
     {
         int i;
         for (i = 0; i < (int)info_ptr->pcal_nparams; i++)
+        {
           png_free(png_ptr, info_ptr->pcal_params[i]);
+          info_ptr->pcal_params[i]=NULL;
+        }
         png_free(png_ptr, info_ptr->pcal_params);
         info_ptr->pcal_params = NULL;
     }
@@ -492,7 +497,10 @@ if (mask & PNG_FREE_ROWS)
     {
        int row;
        for (row = 0; row < (int)info_ptr->height; row++)
+       {
           png_free(png_ptr, info_ptr->row_pointers[row]);
+          info_ptr->row_pointers[row]=NULL;
+       }
        png_free(png_ptr, info_ptr->row_pointers);
        info_ptr->row_pointers=NULL;
     }
@@ -518,11 +526,12 @@ png_info_destroy(png_structp png_ptr, png_infop info_ptr)
    png_debug(1, "in png_info_destroy\n");
 
    png_free_data(png_ptr, info_ptr, PNG_FREE_ALL, -1);
-    
+
 #if defined(PNG_UNKNOWN_CHUNKS_SUPPORTED)
    if (png_ptr->num_chunk_list)
    {
        png_free(png_ptr, png_ptr->chunk_list);
+       png_ptr->chunk_list=NULL;
        png_ptr->num_chunk_list=0;
    }
 #endif
@@ -548,7 +557,7 @@ png_get_io_ptr(png_structp png_ptr)
  * necessarily available.
  */
 void PNGAPI
-png_init_io(png_structp png_ptr, FILE *fp)
+png_init_io(png_structp png_ptr, png_FILE_p fp)
 {
    png_debug(1, "in png_init_io\n");
    png_ptr->io_ptr = (png_voidp)fp;
@@ -572,6 +581,17 @@ png_convert_to_rfc1123(png_structp png_ptr, png_timep ptime)
          sizeof(char)));
    }
 
+#if defined(_WIN32_WCE)
+  {
+     wchar_t time_buf[29];
+     wsprintf(time_buf, TEXT("%d %S %d %02d:%02d:%02d +0000"),
+              ptime->day % 32, short_months[(ptime->month - 1) % 12],
+              ptime->year, ptime->hour % 24, ptime->minute % 60,
+              ptime->second % 61);
+     WideCharToMultiByte(CP_ACP, 0, time_buf, -1, png_ptr->time_buffer, 29,
+        NULL, NULL);
+  }
+#else
 #ifdef USE_FAR_KEYWORD
    {
       char near_time_buf[29];
@@ -588,6 +608,7 @@ png_convert_to_rfc1123(png_structp png_ptr, png_timep ptime)
                ptime->year, ptime->hour % 24, ptime->minute % 60,
                ptime->second % 61);
 #endif
+#endif /* _WIN32_WCE */
    return ((png_charp)png_ptr->time_buffer);
 }
 #endif /* PNG_TIME_RFC1123_SUPPORTED */
@@ -605,11 +626,11 @@ png_charp PNGAPI
 png_get_copyright(png_structp png_ptr)
 {
    if (png_ptr != NULL || png_ptr == NULL)  /* silence compiler warning */
-   return ("\n libpng version 1.0.7 - July 1, 2000\n\
-   Copyright (c) 1998-2000 Glenn Randers-Pehrson\n\
+   return ((png_charp) "\n libpng version 1.0.9 - January 31, 2001\n\
+   Copyright (c) 1998-2001 Glenn Randers-Pehrson\n\
    Copyright (c) 1996, 1997 Andreas Dilger\n\
    Copyright (c) 1995, 1996 Guy Eric Schalnat, Group 42, Inc.\n");
-   return ("");
+   return ((png_charp) "");
 }
 
 /* The following return the library version as a short string in the
@@ -623,8 +644,8 @@ png_get_libpng_ver(png_structp png_ptr)
 {
    /* Version of *.c files used when building libpng */
    if(png_ptr != NULL) /* silence compiler warning about unused png_ptr */
-      return("1.0.7");
-   return("1.0.7");
+      return((png_charp) "1.0.9");
+   return((png_charp) "1.0.9");
 }
 
 png_charp PNGAPI
@@ -632,8 +653,8 @@ png_get_header_ver(png_structp png_ptr)
 {
    /* Version of *.h files used when building libpng */
    if(png_ptr != NULL) /* silence compiler warning about unused png_ptr */
-      return(PNG_LIBPNG_VER_STRING);
-   return(PNG_LIBPNG_VER_STRING);
+      return((png_charp) PNG_LIBPNG_VER_STRING);
+   return((png_charp) PNG_LIBPNG_VER_STRING);
 }
 
 png_charp PNGAPI
@@ -641,8 +662,8 @@ png_get_header_version(png_structp png_ptr)
 {
    /* Returns longer string containing both version and date */
    if(png_ptr != NULL) /* silence compiler warning about unused png_ptr */
-      return(PNG_HEADER_VERSION_STRING);
-   return(PNG_HEADER_VERSION_STRING);
+      return((png_charp) PNG_HEADER_VERSION_STRING);
+   return((png_charp) PNG_HEADER_VERSION_STRING);
 }
 
 #ifdef PNG_HANDLE_AS_UNKNOWN_SUPPORTED
@@ -669,9 +690,22 @@ png_reset_zstream(png_structp png_ptr)
    return (inflateReset(&png_ptr->zstream));
 }
 
+/* This function was added to libpng-1.0.7 */
 png_uint_32 PNGAPI
 png_access_version_number(void)
 {
    /* Version of *.c files used when building libpng */
-   return((png_uint_32) 10007L);
+   return((png_uint_32) 10009L);
 }
+
+
+#if 0 /* delay this until version 1.2.0 */
+/* this function was added to libpng 1.0.9 (porting aid to libpng-1.2.0) */
+#ifndef PNG_ASSEMBLER_CODE_SUPPORTED
+int PNGAPI
+png_mmx_support(void)
+{
+    return -1;
+}
+#endif
+#endif /* 0 */

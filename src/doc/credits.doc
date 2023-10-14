@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/doc/credits.doc   2.2.4   edited 2001-01-26 $
+** $Id: qt/doc/credits.doc   2.3.0   edited 2001-03-01 $
 **
 ** Credits file - all the qt-bugs stuff
 **
@@ -34,7 +34,7 @@
 **********************************************************************/
 
 #if defined(DEBUG)
-static char ident[] = "$Id: qt/doc/credits.doc   2.2.4   edited 2001-01-26 $";
+static char ident[] = "$Id: qt/doc/credits.doc   2.3.0   edited 2001-03-01 $";
 #endif
 
 // the list is up to an including /local/qt/mail/qt-bugs/1715
@@ -106,7 +106,7 @@ Dominik Jergus &lt;djergus <i>at</i> ics.uci.edu&gt;<br>
 Jaromir Dolecek &lt;dolecek <i>at</i> ics.muni.cz&gt;<br>
 Donald A. Seielstad &lt;donald <i>at</i> gromit.scs.uiuc.edu&gt;<br>
 Donna J. Armijo &lt;donna <i>at</i> KachinaTech.COM&gt;<br>
-Douglas Lenz &lt;doug <i>at</i> interaccess.com&gt;<br>
+Douglas Lenz &lt;dlenz <i>at</i> spedsoft.com&gt;<br>
 Pat Dowler &lt;dowler <i>at</i> pt1B1106.FSH.UVic.CA&gt;<br>
 Dean Hall &lt;dwhall <i>at</i> deskstation.com&gt;<br>
 Denis Y. Pershin &lt;dyp <i>at</i> isis.nsu.ru&gt;<br>

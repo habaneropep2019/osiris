@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qwidget_x11.cpp   2.2.4   edited 2001-01-19 $
+** $Id: qt/src/kernel/qwidget_x11.cpp   2.3.0   edited 2001-02-27 $
 **
 ** Implementation of QWidget and QWindow classes for X11
 **
@@ -243,6 +243,9 @@ void QWidget::create( WId window, bool initializeWindow, bool destroyOldWindow)
 	}
 	setWinId( id );				// set widget id/handle + hd
     }
+#ifdef QT_XFT
+    qt_create_ft_draw (x11Display (), id, (Visual *) x11Visual (), x11Colormap());
+#endif
 
     if ( !topLevel ) {
 	if ( !testWFlags(WStyle_Customize) )
@@ -445,6 +448,9 @@ void QWidget::destroy( bool destroyWindow, bool destroySubWindows )
 	    qt_leave_modal( this );
 	else if ( testWFlags(WType_Popup) )
 	    qApp->closePopup( this );
+#ifdef QT_XFT
+	qt_destroy_ft_draw (x11Display (), winid);
+#endif
 	if ( testWFlags(WType_Desktop) ) {
 	    if ( acceptDrops() )
 		qt_dnd_enable( this, FALSE );
@@ -453,6 +459,10 @@ void QWidget::destroy( bool destroyWindow, bool destroySubWindows )
 		qt_XDestroyWindow( this, x11Display(), winid );
 	}
 	setWinId( 0 );
+
+	extern void qPRCleanup( QWidget *widget ); // from qapplication_x11.cpp
+	if ( testWState(WState_Reparented) )
+	    qPRCleanup(this);
     }
 }
 
@@ -1385,7 +1395,7 @@ void QWidget::showWindow()
 		XFree( (char *)h );
 	    topData()->showMode = sm == 1?3:0; // trigger reset to normal state next time
 	}
-	if ( topData()->parentWinId && topData()->parentWinId != qt_xrootwin() ) {
+	if ( topData()->parentWinId && topData()->parentWinId != qt_xrootwin() && !isMinimized() ) {
 	    qt_deferred_map_add( this );
 	    return;
 	}
@@ -2077,10 +2087,10 @@ int QWidget::metric( int m ) const
 		      DisplayHeight(dpy,scr);
 		break;
 	    case QPaintDeviceMetrics::PdmNumColors:
-		val = DisplayCells(dpy,scr);
+		val = x11Cells();
 		break;
 	    case QPaintDeviceMetrics::PdmDepth:
-		val = DisplayPlanes(dpy,scr);
+		val = x11Depth();
 		break;
 	    default:
 		val = 0;

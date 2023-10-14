@@ -1,5 +1,6 @@
-.TH QProgressBar 3qt "1 Febrary 2001" "Trolltech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
+'\" t
+.TH QProgressBar 3qt "5 March 2001" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2001 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,7 +8,6 @@
 .nh
 .SH NAME
 QProgressBar \- Horizontal progress bar
-.SH SYNOPSIS
 .br
 .PP
 \fC#include <qprogressbar.h>\fR
@@ -63,7 +63,19 @@ Inherits QFrame.
 .br
 .in -1c
 .SS "Properties"
-<table border=1 cellpadding=3 cellspacing=0> <tr><th>Type<th>Name<th>READ<th>WRITE<th>Options <tr><td>int<td>totalSteps<td>totalSteps<td>setTotalSteps<td>&nbsp; <tr><td>int<td>progress<td>progress<td>setProgress<td>&nbsp; <tr><td>bool<td>centerIndicator<td>centerIndicator<td>setCenterIndicator<td>&nbsp; <tr><td>bool<td>indicatorFollowsStyle<td>indicatorFollowsStyle<td>setIndicatorFollowsStyle<td>&nbsp; </table>
+.nf
+.TS
+l l l l l
+- - - - -
+l l l l l.
+Type	Name	READ	WRITE	Options
+int	totalSteps	totalSteps	setTotalSteps
+int	progress	progress	setProgress
+bool	centerIndicator	centerIndicator	setCenterIndicator
+bool	indicatorFollowsStyle	indicatorFollowsStyle	setIndicatorFollowsStyle
+.TE
+.fi
+
 .SH DESCRIPTION
 The QProgressBar widget provides a horizontal progress bar.
 .PP
@@ -71,7 +83,12 @@ A progress bar is used to give the user an indication of progress of an operatio
 .PP
 QProgressBar only implements the basic progress display, while QProgressDialog provides a fuller encapsulation.
 .PP
-<img src=qprogbar-m.png> <img src=qprogbar-w.png>
+.ce 1
+.B "[Image Omitted]"
+.PP
+
+.ce 1
+.B "[Image Omitted]"
 .PP
 See also QProgressDialog and GUI Design Handbook: Progress Indicator
 .SH MEMBER FUNCTION DOCUMENTATION
@@ -167,9 +184,20 @@ Returns the total number of steps.
 See also  setTotalSteps().
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qprogressbar.html
+.BR http://www.trolltech.com/faq/tech.html
 .SH COPYRIGHT
-Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
+Copyright 1992-2001 Trolltech AS, http://www.trolltech.com.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR
 Generated automatically from the source code.
+.SH BUGS
+If you find a bug in Qt, please report it as described in
+.BR http://doc.trolltech.com/bughowto.html .
+Good bug reports make our job much simpler. Thank you.
+.P
+In case of content or formattting problems with this manual page, please
+report them to
+.BR qt-bugs@trolltech.com .
+Please include the name of the manual page (qprogressbar.3qt) and the Qt
+version (2.3.0).

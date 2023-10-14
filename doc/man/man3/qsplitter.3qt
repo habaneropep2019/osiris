@@ -1,5 +1,6 @@
-.TH QSplitter 3qt "1 Febrary 2001" "Trolltech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
+'\" t
+.TH QSplitter 3qt "5 March 2001" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2001 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,7 +8,6 @@
 .nh
 .SH NAME
 QSplitter \- Implements a splitter widget
-.SH SYNOPSIS
 .br
 .PP
 \fC#include <qsplitter.h>\fR
@@ -84,7 +84,16 @@ Inherits QFrame.
 .br
 .in -1c
 .SS "Properties"
-<table border=1 cellpadding=3 cellspacing=0> <tr><th>Type<th>Name<th>READ<th>WRITE<th>Options <tr><td>Orientation<td>orientation<td>orientation<td>setOrientation<td>&nbsp; </table>
+.nf
+.TS
+l l l l l
+- - - - -
+l l l l l.
+Type	Name	READ	WRITE	Options
+Orientation	orientation	orientation	setOrientation
+.TE
+.fi
+
 .SH DESCRIPTION
 The QSplitter class implements a splitter widget.
 .PP
@@ -113,7 +122,12 @@ The initial distribution of size between the widgets is determined by the initia
 .PP
 If you hide() a child, its space will be distributed among the other children. When you show() it again, it will be reinstated.
 .PP
-<img src=qsplitter-m.png> <img src=qsplitter-w.png>
+.ce 1
+.B "[Image Omitted]"
+.PP
+
+.ce 1
+.B "[Image Omitted]"
 .PP
 See also QTabBar.
 .PP
@@ -241,9 +255,20 @@ Reimplemented for internal reasons; the API is not affected.
 Reimplemented from QWidget.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qsplitter.html
+.BR http://www.trolltech.com/faq/tech.html
 .SH COPYRIGHT
-Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
+Copyright 1992-2001 Trolltech AS, http://www.trolltech.com.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR
 Generated automatically from the source code.
+.SH BUGS
+If you find a bug in Qt, please report it as described in
+.BR http://doc.trolltech.com/bughowto.html .
+Good bug reports make our job much simpler. Thank you.
+.P
+In case of content or formattting problems with this manual page, please
+report them to
+.BR qt-bugs@trolltech.com .
+Please include the name of the manual page (qsplitter.3qt) and the Qt
+version (2.3.0).

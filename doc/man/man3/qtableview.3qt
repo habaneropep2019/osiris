@@ -1,5 +1,6 @@
-.TH QTableView 3qt "1 Febrary 2001" "Trolltech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
+'\" t
+.TH QTableView 3qt "5 March 2001" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2001 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,7 +8,6 @@
 .nh
 .SH NAME
 QTableView \- This is an abstract base class for implementing tables
-.SH SYNOPSIS
 .br
 .PP
 \fC#include <qtableview.h>\fR
@@ -232,7 +232,12 @@ It is rather unfortunate that we have to use four different coordinate systems, 
 .PP
 Note: The row,column indices are always given in that order, i.e. first the vertical (row), then the horizontal (column). This is the opposite order of all pixel operations, which take first the horizontal (x), then the vertical (y).
 .PP
-<img src=qtablevw-m.png> <img src=qtablevw-w.png>
+.ce 1
+.B "[Image Omitted]"
+.PP
+
+.ce 1
+.B "[Image Omitted]"
 .PP
 \fBWarning:\fR the functions setNumRows(), setNumCols(), setCellHeight(), setCellWidth(), setTableFlags() and clearTableFlags() may cause virtual functions like cellWidth() and cellHeight() to be called, even if autoUpdate() is FALSE. This may cause errors if relevant state variables are not initialized.
 .PP
@@ -626,9 +631,20 @@ See also setYOffset(), xOffset() and topCell().
 For internal use only.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qtableview.html
+.BR http://www.trolltech.com/faq/tech.html
 .SH COPYRIGHT
-Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
+Copyright 1992-2001 Trolltech AS, http://www.trolltech.com.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR
 Generated automatically from the source code.
+.SH BUGS
+If you find a bug in Qt, please report it as described in
+.BR http://doc.trolltech.com/bughowto.html .
+Good bug reports make our job much simpler. Thank you.
+.P
+In case of content or formattting problems with this manual page, please
+report them to
+.BR qt-bugs@trolltech.com .
+Please include the name of the manual page (qtableview.3qt) and the Qt
+version (2.3.0).

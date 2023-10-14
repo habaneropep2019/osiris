@@ -1,5 +1,6 @@
-.TH QPopupMenu 3qt "1 Febrary 2001" "Trolltech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
+'\" t
+.TH QPopupMenu 3qt "5 March 2001" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2001 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,7 +8,6 @@
 .nh
 .SH NAME
 QPopupMenu \- Popup menu widget
-.SH SYNOPSIS
 .br
 .PP
 \fC#include <qpopupmenu.h>\fR
@@ -210,7 +210,16 @@ Inherits QFrame and QMenuData.
 .br
 .in -1c
 .SS "Properties"
-<table border=1 cellpadding=3 cellspacing=0> <tr><th>Type<th>Name<th>READ<th>WRITE<th>Options <tr><td>bool<td>checkable<td>isCheckable<td>setCheckable<td>&nbsp; </table>
+.nf
+.TS
+l l l l l
+- - - - -
+l l l l l.
+Type	Name	READ	WRITE	Options
+bool	checkable	isCheckable	setCheckable
+.TE
+.fi
+
 .SH DESCRIPTION
 The QPopupMenu class provides a popup menu widget.
 .PP
@@ -232,11 +241,16 @@ You can provide What's This? help for single menu items with setWhatsThis(). See
 .PP
 For ultimate flexibility, you can also add entire widgets as items into a popup menu, for example a color selector.
 .PP
-A QPopupMenu can also provide a tear-off menu. A tear-off menu is a "torn off" copy of a menu that lives in a separate window. This makes it possible for the user to "tear off" frequently used menus and position them in a convenient place on the screen. If you want that functionality for a certain menu, insert a tear-off handle with insertTearOffHandle(). When using tear-off menus, keep in mind that the concept isn't typically used on MS-Windows, so users may not be familiar with it. Consider using a QToolBar instead.
+A QPopupMenu can also provide a tear-off menu. A tear-off menu is a" torn off" copy of a menu that lives in a separate window. This makes it possible for the user to "tear off" frequently used menus and position them in a convenient place on the screen. If you want that functionality for a certain menu, insert a tear-off handle with insertTearOffHandle(). When using tear-off menus, keep in mind that the concept isn't typically used on MS-Windows, so users may not be familiar with it. Consider using a QToolBar instead.
 .PP
 menu/menu.cpp is a typical example of QMenuBar and QPopupMenu use.
 .PP
-<img src=qpopmenu-m.png> <img src=qpopmenu-w.png>
+.ce 1
+.B "[Image Omitted]"
+.PP
+
+.ce 1
+.B "[Image Omitted]"
 .PP
 See also QMenuBar and GUI Design Handbook: Menu, Drop-Down and Pop-Up
 .PP
@@ -459,9 +473,20 @@ For internal use only.
 For internal use only.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qpopupmenu.html
+.BR http://www.trolltech.com/faq/tech.html
 .SH COPYRIGHT
-Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
+Copyright 1992-2001 Trolltech AS, http://www.trolltech.com.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR
 Generated automatically from the source code.
+.SH BUGS
+If you find a bug in Qt, please report it as described in
+.BR http://doc.trolltech.com/bughowto.html .
+Good bug reports make our job much simpler. Thank you.
+.P
+In case of content or formattting problems with this manual page, please
+report them to
+.BR qt-bugs@trolltech.com .
+Please include the name of the manual page (qpopupmenu.3qt) and the Qt
+version (2.3.0).

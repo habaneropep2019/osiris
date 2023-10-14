@@ -1,5 +1,6 @@
-.TH QHeader 3qt "1 Febrary 2001" "Trolltech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
+'\" t
+.TH QHeader 3qt "5 March 2001" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2001 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,7 +8,6 @@
 .nh
 .SH NAME
 QHeader \- Table header
-.SH SYNOPSIS
 .br
 .PP
 \fC#include <qheader.h>\fR
@@ -176,7 +176,20 @@ Inherited by QTableHeader.
 .br
 .in -1c
 .SS "Properties"
-<table border=1 cellpadding=3 cellspacing=0> <tr><th>Type<th>Name<th>READ<th>WRITE<th>Options <tr><td>Orientation<td>orientation<td>orientation<td>setOrientation<td>&nbsp; <tr><td>bool<td>tracking<td>tracking<td>setTracking<td>&nbsp; <tr><td>int<td>count<td>count<td>&nbsp;<td>&nbsp; <tr><td>int<td>offset<td>offset<td>setOffset<td>&nbsp; <tr><td>bool<td>moving<td>isMovingEnabled<td>setMovingEnabled<td>&nbsp; </table>
+.nf
+.TS
+l l l l l
+- - - - -
+l l l l l.
+Type	Name	READ	WRITE	Options
+Orientation	orientation	orientation	setOrientation
+bool	tracking	tracking	setTracking
+int	count	count
+int	offset	offset	setOffset
+bool	moving	isMovingEnabled	setMovingEnabled
+.TE
+.fi
+
 .SH DESCRIPTION
 The QHeader class provides a table header.
 .PP
@@ -190,7 +203,12 @@ If you want e.g. to know which section is displayed at e.g. index 3 use mapToSec
 .PP
 So, you can always work with the section numbers as you inserted them without caring about the index at which they are displayed at the moment. Also the API of QHeader works with the section numbers.
 .PP
-<img src=qheader-m.png> <img src=qheader-w.png>
+.ce 1
+.B "[Image Omitted]"
+.PP
+
+.ce 1
+.B "[Image Omitted]"
 .PP
 See also QListView and QTableView.
 .SH MEMBER FUNCTION DOCUMENTATION
@@ -418,9 +436,20 @@ Returns TRUE if tracking is on, FALSE otherwise.
 See also  setTracking().
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qheader.html
+.BR http://www.trolltech.com/faq/tech.html
 .SH COPYRIGHT
-Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
+Copyright 1992-2001 Trolltech AS, http://www.trolltech.com.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR
 Generated automatically from the source code.
+.SH BUGS
+If you find a bug in Qt, please report it as described in
+.BR http://doc.trolltech.com/bughowto.html .
+Good bug reports make our job much simpler. Thank you.
+.P
+In case of content or formattting problems with this manual page, please
+report them to
+.BR qt-bugs@trolltech.com .
+Please include the name of the manual page (qheader.3qt) and the Qt
+version (2.3.0).

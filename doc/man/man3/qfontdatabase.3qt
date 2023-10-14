@@ -1,5 +1,6 @@
-.TH QFontDatabase 3qt "1 Febrary 2001" "Trolltech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
+'\" t
+.TH QFontDatabase 3qt "5 March 2001" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2001 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,7 +8,6 @@
 .nh
 .SH NAME
 QFontDatabase \- Provides information about available fonts
-.SH SYNOPSIS
 .br
 .PP
 \fC#include <qfontdatabase.h>\fR
@@ -40,6 +40,9 @@ QFontDatabase \- Provides information about available fonts
 .br
 .ti -1c
 .BI "bool \fBisScalable\fR ( const QString & " "family" ", const QString & style = QString::null, const QString & charSet = QString::null ) const"
+.br
+.ti -1c
+.BI "bool \fBisFixedPitch\fR ( const QString & " "family" ", const QString & style = QString::null, const QString & charset = QString::null ) const"
 .br
 .ti -1c
 .BI "QValueList<int> \fBsmoothSizes\fR ( const QString & " "family" ", const QString & " "style" ", const QString & charSet = QString::null ) "
@@ -96,6 +99,8 @@ Returns a QFont object which matches the settings of \fIfamily, style, pointsize
 Returns whether the font which matches \fIfamily, style\fR and \fIcharSet\fR is a scaleable bitmap font. Scaling a bitmap font produces a bad, often hardly readable result, as the pixels of the font are scaled. It's better to scale such a font only to the available fixed sizes (which you can get with smoothSizes()).
 .PP
 See also isScalable() and isSmoothlyScalable().
+.SH "bool QFontDatabase::isFixedPitch ( const QString & family, const QString & style = QString::null, const QString & charSet = QString::null ) const"
+Returns whether the font which matches \fIfamily, style\fR and \fIcharSet\fR is fixed pitch.
 .SH "bool QFontDatabase::isScalable ( const QString & family, const QString & style = QString::null, const QString & charSet = QString::null ) const"
 Returns TRUE if the font which matches the settings \fIfamily, style\fR and \fIcharSet\fR is scaleable.
 .PP
@@ -121,7 +126,7 @@ Returns a list of standard fontsizes.
 .PP
 See also smoothSizes() and pointSizes().
 .SH "QString QFontDatabase::styleString ( const QFont & f )"
-Returns a string with describes the style of the font \fIf.\fR This is Something like "Bold Italic".
+Returns a string with describes the style of the font \fIf.\fR This is Something like" Bold Italic".
 .SH "QStringList QFontDatabase::styles ( const QString & family, const QString & charSet = QString::null ) const"
 Retruns all available styles of the font \fIfamily\fR in the char set \fIcharSet.\fR
 .SH "QString QFontDatabase::verboseCharSetName ( const QString & charSetName ) \fC[static]\fR"
@@ -132,9 +137,20 @@ Returns the weight of the font which matches the settings \fIfamily, style\fR an
 See also  italic() and bold().
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qfontdatabase.html
+.BR http://www.trolltech.com/faq/tech.html
 .SH COPYRIGHT
-Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
+Copyright 1992-2001 Trolltech AS, http://www.trolltech.com.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR
 Generated automatically from the source code.
+.SH BUGS
+If you find a bug in Qt, please report it as described in
+.BR http://doc.trolltech.com/bughowto.html .
+Good bug reports make our job much simpler. Thank you.
+.P
+In case of content or formattting problems with this manual page, please
+report them to
+.BR qt-bugs@trolltech.com .
+Please include the name of the manual page (qfontdatabase.3qt) and the Qt
+version (2.3.0).

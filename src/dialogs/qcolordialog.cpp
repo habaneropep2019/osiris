@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/dialogs/qcolordialog.cpp   2.2.4   edited 2000-10-13 $
+** $Id: qt/src/dialogs/qcolordialog.cpp   2.3.0   edited 2001-03-01 $
 **
 ** Implementation of QColorDialog class
 **
@@ -982,9 +982,10 @@ public:
     void setNum( int i ) {
 	QString s;
 	s.setNum(i);
+	bool block = signalsBlocked();
 	blockSignals(TRUE);
 	setText( s );
-	blockSignals(FALSE);
+	blockSignals(block);
     }
     int val() const { return text().toInt(); }
 };

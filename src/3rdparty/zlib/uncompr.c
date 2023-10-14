@@ -3,7 +3,7 @@
  * For conditions of distribution and use, see copyright notice in zlib.h 
  */
 
-/* @(#) $Id: qt/src/3rdparty/zlib/uncompr.c   2.2.4   edited 2000-06-07 $ */
+/* @(#) $Id: qt/src/3rdparty/zlib/uncompr.c   2.3.0   edited 2001-01-26 $ */
 
 #include "zlib.h"
 

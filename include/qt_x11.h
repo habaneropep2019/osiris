@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qt_x11.h   2.2.4   edited 2000-08-25 $
+** $Id: qt/src/kernel/qt_x11.h   2.3.0   edited 2001-02-01 $
 **
 ** Includes X11 system header files.
 **
@@ -72,6 +72,9 @@
 #include <X11/Xos.h>
 #include <X11/Xatom.h>
 
+#ifdef QT_XFT
+#include <X11/Xft/Xft.h>
+#endif
 
 //#define QT_NO_SHAPE
 #ifdef QT_NO_SHAPE
@@ -139,6 +142,14 @@ extern "C" Bool XUnregisterIMInstantiateCallback(
 
 extern "C" char *XSetIMValues( XIM /* im */, ... );
 
+#ifdef QT_XFT
+// These methods are internal. They are likely to change or disappear in the next versions of Qt.
+class QFont;
+void qt_destroy_ft_draw (Display *dpy, Drawable draw);
+int qt_create_ft_draw (Display *dpy, Drawable draw, Visual *visual, Colormap cmap);
+int qt_use_xft (void);
+void *qt_ft_font(const QFont *);
+#endif
 
 #endif
 

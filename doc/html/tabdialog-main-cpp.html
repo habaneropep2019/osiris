@@ -33,7 +33,7 @@ height="100" src="face.png" alt="Home" border="0">
   <hr>
 
   Header file: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/tabdialog/tabdialog.h   2.2.4   edited 2000-08-31 $
+** &#36;Id&#58; qt/examples/tabdialog/tabdialog.h   2.3.0   edited 2001-01-26 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -73,7 +73,7 @@ protected:
   <hr>
 
   Implementation: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/tabdialog/tabdialog.cpp   2.2.4   edited 2000-08-31 $
+** &#36;Id&#58; qt/examples/tabdialog/tabdialog.cpp   2.3.0   edited 2001-01-26 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -103,7 +103,7 @@ TabDialog::TabDialog( <a href="qwidget.html">QWidget</a> *parent, const char *na
     connect( this, SIGNAL( applyButtonPressed() ), qApp, SLOT( quit() ) );
 }
 
-void <a name="300"></a>TabDialog::setupTab1()
+void <a name="305"></a>TabDialog::setupTab1()
 {
     <a href="qvbox.html">QVBox</a> *tab1 = new <a href="qvbox.html">QVBox</a>( this );
     tab1-&gt;<a href="qframe.html#ab991e">setMargin</a>( 5 );
@@ -131,7 +131,7 @@ void <a name="300"></a>TabDialog::setupTab1()
     <a href="qtabdialog.html#41713c">addTab</a>( tab1, "General" );
 }
 
-void <a name="301"></a>TabDialog::setupTab2()
+void <a name="306"></a>TabDialog::setupTab2()
 {
     <a href="qvbox.html">QVBox</a> *tab2 = new <a href="qvbox.html">QVBox</a>( this );
     tab2-&gt;<a href="qframe.html#ab991e">setMargin</a>( 5 );
@@ -163,7 +163,7 @@ void <a name="301"></a>TabDialog::setupTab2()
     <a href="qtabdialog.html#41713c">addTab</a>( tab2, "Permissions" );
 }
 
-void <a name="302"></a>TabDialog::setupTab3()
+void <a name="307"></a>TabDialog::setupTab3()
 {
     <a href="qvbox.html">QVBox</a> *tab3 = new <a href="qvbox.html">QVBox</a>( this );
     tab3-&gt;<a href="qframe.html#ab991e">setMargin</a>( 5 );
@@ -189,7 +189,7 @@ void <a name="302"></a>TabDialog::setupTab3()
 
   Main:
 <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/tabdialog/main.cpp   2.2.4   edited 2000-08-31 $
+** &#36;Id&#58; qt/examples/tabdialog/main.cpp   2.3.0   edited 2001-01-26 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -219,5 +219,5 @@ int main( int argc, char **argv )
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.4</div>
+<td align="right"><div align="right">Qt version 2.3.0</div>
 </table></div></address></body></html>

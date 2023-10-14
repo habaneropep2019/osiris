@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qmotifdnd_x11.cpp   2.2.4   edited 2000-08-25 $
+** $Id: qt/src/kernel/qmotifdnd_x11.cpp   2.3.0   edited 2001-02-20 $
 **
 ** Implementation of Motif Dynamic Drag and Drop class
 **
@@ -62,6 +62,11 @@ in doc/dnd.doc, where the documentation system can see it. */
 /* Adapted by : Matt Koss, koss@napri.sk */
 /* Further adaptions by : Trolltech AS */
 /***********************************************************/
+
+// Tru64 4.0 NEEDS this, so that we get the right defines before including
+// unistd.h below
+#include <qglobal.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -326,7 +331,7 @@ void qt_x11_motifdnd_init()
 
     qt_x11_intern_atom( "XmTRANSFER_SUCCESS", &Dnd_transfer_success );
     qt_x11_intern_atom( "XmTRANSFER_FAILURE", &Dnd_transfer_failure );
-    
+
     char my_dnd_selection_name[30];  // 11-digit number should be enough
     sprintf(my_dnd_selection_name, "_MY_DND_SELECTION_%d", (int)getpid());
     qt_x11_intern_atom( my_dnd_selection_name, &Dnd_selection );

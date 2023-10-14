@@ -1,5 +1,6 @@
-.TH QUrl 3qt "1 Febrary 2001" "Trolltech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
+'\" t
+.TH QUrl 3qt "5 March 2001" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2001 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,7 +8,6 @@
 .nh
 .SH NAME
 QUrl \- Mainly an URL parser and simplifies working with URLs
-.SH SYNOPSIS
 .br
 .PP
 \fC#include <qurl.h>\fR
@@ -170,7 +170,7 @@ Mention that URL has some restrictions regarding the path encoding. URL works in
 .PP
 http://localhost/cgi-bin/test%20me.pl?cmd=Hello%20you
 .PP
-would result in a decoded path "/cgi-bin/test me.pl" and in the encoded query "cmd=Hello%20you". Since path is internally always encoded you may NOT use "%00" in the path while this is ok for the query.
+would result in a decoded path "/cgi-bin/test me.pl" and in the encoded query "cmd=Hello%20you". Since path is internally always encoded you may NOT use" %00" in the path while this is ok for the query.
 .PP
 QUrl is normally used like that:
 .PP
@@ -209,7 +209,7 @@ Constructs an empty URL which, is invalid.
 .SH "QUrl::QUrl ( const QString & url )"
 Constructs and URL using \fIurl\fR and parses this string.
 .PP
-You can pass strings like "/home/qt", in this case the protocol "file" is assumed.
+You can pass strings like "/home/qt", in this case the protocol" file" is assumed.
 .SH "QUrl::QUrl ( const QUrl & url )"
 Copy constructor. Copies the data of \fIurl.\fR
 .SH "QUrl::QUrl ( const QUrl & url, const QString & relUrl, bool checkSlash = FALSE )"
@@ -284,7 +284,7 @@ Returns TRUE if the URL is valid, else FALSE. An URL is e.g. invalid if there wa
 .SH "QUrl& QUrl::operator= ( const QString & url )"
 Assign operator. Parses \fIurl\fR and assigns the resulting data to this class.
 .PP
-You can pass strings like "/home/qt", in this case the protocol "file" is assumed.
+You can pass strings like "/home/qt", in this case the protocol" file" is assumed.
 .SH "QUrl& QUrl::operator= ( const QUrl & url )"
 Assign operator. Assigns the data of \fIurl\fR to this class.
 .SH "bool QUrl::operator== ( const QString & url ) const"
@@ -300,7 +300,7 @@ Returns the path of the URL. If \fIcorrect\fR is TRUE, the path is cleaned (deal
 .SH "int QUrl::port () const"
 Returns the port of the URL.
 .SH "QString QUrl::protocol () const"
-Returns the protocol of the URL. It is something like "file" or "ftp".
+Returns the protocol of the URL. It is something like" file" or "ftp".
 .SH "QString QUrl::query () const"
 Returns the query (encoded) of the URL.
 .SH "QString QUrl::ref () const"
@@ -320,7 +320,7 @@ Sets the path or the URL.
 .SH "void QUrl::setPort ( int port ) \fC[virtual]\fR"
 Sets the port of the URL.
 .SH "void QUrl::setProtocol ( const QString & protocol ) \fC[virtual]\fR"
-Sets the protocol of the URL. This could be e.g. "file", "ftp", or something similar.
+Sets the protocol of the URL. This could be e.g." file", "ftp", or something similar.
 .SH "void QUrl::setQuery ( const QString & txt ) \fC[virtual]\fR"
 Sets the query of the URL. Must be encoded.
 .SH "void QUrl::setRef ( const QString & txt ) \fC[virtual]\fR"
@@ -333,9 +333,20 @@ Composes a string of the URL and returns it. If \fIencodedPath\fR is TRUE, the p
 Returns the username of the URL.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qurl.html
+.BR http://www.trolltech.com/faq/tech.html
 .SH COPYRIGHT
-Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
+Copyright 1992-2001 Trolltech AS, http://www.trolltech.com.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR
 Generated automatically from the source code.
+.SH BUGS
+If you find a bug in Qt, please report it as described in
+.BR http://doc.trolltech.com/bughowto.html .
+Good bug reports make our job much simpler. Thank you.
+.P
+In case of content or formattting problems with this manual page, please
+report them to
+.BR qt-bugs@trolltech.com .
+Please include the name of the manual page (qurl.3qt) and the Qt
+version (2.3.0).

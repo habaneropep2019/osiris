@@ -1,5 +1,5 @@
 /**********************************************************************
-** $Id: qt/src/widgets/qgroupbox.cpp   2.2.4   edited 2001-01-25 $
+** $Id: qt/src/widgets/qgroupbox.cpp   2.3.0   edited 2001-02-08 $
 **
 ** Implementation of QGroupBox widget class
 **
@@ -486,7 +486,9 @@ void QGroupBox::childEvent( QChildEvent *c )
     // Similar to QGrid::childEvent()
     if ( !grid || !c->inserted() || !c->child()->isWidgetType() )
 	return;
-    insertWid( (QWidget*)c->child() );
+    QWidget *child = (QWidget*)c->child();
+    if ( !child->isTopLevel() ) //ignore dialogs etc.
+	insertWid( child );
 }
 
 void QGroupBox::insertWid( QWidget* w )

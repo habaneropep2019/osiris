@@ -31,7 +31,7 @@ height="100" src="face.png" alt="Home" border="0">
   <hr>
 
   Header file: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/lineedits/lineedits.h   2.2.4   edited 2000-08-31 $
+** &#36;Id&#58; qt/examples/lineedits/lineedits.h   2.3.0   edited 2001-01-26 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -73,7 +73,7 @@ protected slots:
   <hr>
 
   Implementation: <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/lineedits/lineedits.cpp   2.2.4   edited 2000-08-31 $
+** &#36;Id&#58; qt/examples/lineedits/lineedits.cpp   2.3.0   edited 2001-01-26 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -120,7 +120,7 @@ LineEdits::LineEdits( <a href="qwidget.html">QWidget</a> *parent, const char *na
     combo1-&gt;insertItem( "No Echo", -1 );
     // ...and connect the activated() SIGNAL with the slotEchoChanged() SLOT to be able
     // to react when an item is selected
-    <a href="qobject.html#c2d209">connect</a>( combo1, SIGNAL( activated( int ) ), this, SLOT( <a href=#193>slotEchoChanged</a>( int ) ) );
+    <a href="qobject.html#c2d209">connect</a>( combo1, SIGNAL( activated( int ) ), this, SLOT( <a href=#198>slotEchoChanged</a>( int ) ) );
 
     // insert the first LineEdit
     lined1 = new <a href="qlineedit.html">QLineEdit</a>( this );
@@ -141,7 +141,7 @@ LineEdits::LineEdits( <a href="qwidget.html">QWidget</a> *parent, const char *na
     combo2-&gt;insertItem( "Integer Validator", -1 );
     combo2-&gt;insertItem( "Double Validator", -1 );
     // ...and again the activated() SIGNAL gets connected with a SLOT
-    <a href="qobject.html#c2d209">connect</a>( combo2, SIGNAL( activated( int ) ), this, SLOT( <a href=#194>slotValidatorChanged</a>( int ) ) );
+    <a href="qobject.html#c2d209">connect</a>( combo2, SIGNAL( activated( int ) ), this, SLOT( <a href=#199>slotValidatorChanged</a>( int ) ) );
 
     // and the second LineEdit
     lined2 = new <a href="qlineedit.html">QLineEdit</a>( this );
@@ -162,7 +162,7 @@ LineEdits::LineEdits( <a href="qwidget.html">QWidget</a> *parent, const char *na
     combo3-&gt;insertItem( "Centered", -1 );
     combo3-&gt;insertItem( "Right", -1 );
     // ...and again the activated() SIGNAL gets connected with a SLOT
-    <a href="qobject.html#c2d209">connect</a>( combo3, SIGNAL( activated( int ) ), this, SLOT( <a href=#195>slotAlignmentChanged</a>( int ) ) );
+    <a href="qobject.html#c2d209">connect</a>( combo3, SIGNAL( activated( int ) ), this, SLOT( <a href=#200>slotAlignmentChanged</a>( int ) ) );
 
     // and the third lineedit
     lined3 = new <a href="qlineedit.html">QLineEdit</a>( this );
@@ -181,7 +181,7 @@ LineEdits::LineEdits( <a href="qwidget.html">QWidget</a> *parent, const char *na
     combo4-&gt;insertItem( "False", -1 );
     combo4-&gt;insertItem( "True", -1 );
     // ...and again the activated() SIGNAL gets connected with a SLOT
-    <a href="qobject.html#c2d209">connect</a>( combo4, SIGNAL( activated( int ) ), this, SLOT( <a href=#196>slotReadOnlyChanged</a>( int ) ) );
+    <a href="qobject.html#c2d209">connect</a>( combo4, SIGNAL( activated( int ) ), this, SLOT( <a href=#201>slotReadOnlyChanged</a>( int ) ) );
 
     // and the last lineedit
     lined4 = new <a href="qlineedit.html">QLineEdit</a>( this );
@@ -199,7 +199,7 @@ LineEdits::LineEdits( <a href="qwidget.html">QWidget</a> *parent, const char *na
  * first LineEdit.
  */
 
-void <a name="193"></a>LineEdits::slotEchoChanged( int i )
+void <a name="198"></a>LineEdits::slotEchoChanged( int i )
 {
     switch ( i ) {
     case 0:
@@ -226,7 +226,7 @@ void <a name="193"></a>LineEdits::slotEchoChanged( int i )
  * ignored and not inserted into the lineedit.
  */
 
-void <a name="194"></a>LineEdits::slotValidatorChanged( int i )
+void <a name="199"></a>LineEdits::slotValidatorChanged( int i )
 {
     switch ( i ) {
     case 0:
@@ -253,7 +253,7 @@ void <a name="194"></a>LineEdits::slotValidatorChanged( int i )
  * third LineEdit.
  */
 
-void <a name="195"></a>LineEdits::slotAlignmentChanged( int i )
+void <a name="200"></a>LineEdits::slotAlignmentChanged( int i )
 {
     switch ( i ) {
     case 0:
@@ -277,7 +277,7 @@ void <a name="195"></a>LineEdits::slotAlignmentChanged( int i )
  * the fourth Combobox.  According to this value, we toggle read-only.
  */
 
-void <a name="196"></a>LineEdits::slotReadOnlyChanged( int i )
+void <a name="201"></a>LineEdits::slotReadOnlyChanged( int i )
 {
     switch ( i ) {
     case 0:
@@ -297,7 +297,7 @@ void <a name="196"></a>LineEdits::slotReadOnlyChanged( int i )
 
   Main:
 <pre>/****************************************************************************
-** &#36;Id&#58; qt/examples/lineedits/main.cpp   2.2.4   edited 2000-08-31 $
+** &#36;Id&#58; qt/examples/lineedits/main.cpp   2.3.0   edited 2001-01-26 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -324,5 +324,5 @@ int main( int argc, char **argv )
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.4</div>
+<td align="right"><div align="right">Qt version 2.3.0</div>
 </table></div></address></body></html>

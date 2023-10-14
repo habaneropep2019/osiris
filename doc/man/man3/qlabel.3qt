@@ -1,5 +1,6 @@
-.TH QLabel 3qt "1 Febrary 2001" "Trolltech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
+'\" t
+.TH QLabel 3qt "5 March 2001" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2001 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,7 +8,6 @@
 .nh
 .SH NAME
 QLabel \- Static information display
-.SH SYNOPSIS
 .br
 .PP
 \fC#include <qlabel.h>\fR
@@ -105,7 +105,21 @@ Inherits QFrame.
 .br
 .in -1c
 .SS "Properties"
-<table border=1 cellpadding=3 cellspacing=0> <tr><th>Type<th>Name<th>READ<th>WRITE<th>Options <tr><td>QString<td>text<td>text<td>setText<td>&nbsp; <tr><td>TextFormat<td>textFormat<td>textFormat<td>setTextFormat<td>&nbsp; <tr><td>QPixmap<td>pixmap<td>pixmap<td>setPixmap<td>&nbsp; <tr><td>bool<td>scaledContents<td>hasScaledContents<td>setScaledContents<td>&nbsp; <tr><td>Alignment<td>alignment<td>alignment<td>setAlignment<td>&nbsp; <tr><td>int<td>indent<td>indent<td>setIndent<td>&nbsp; </table>
+.nf
+.TS
+l l l l l
+- - - - -
+l l l l l.
+Type	Name	READ	WRITE	Options
+QString	text	text	setText
+TextFormat	textFormat	textFormat	setTextFormat
+QPixmap	pixmap	pixmap	setPixmap
+bool	scaledContents	hasScaledContents	setScaledContents
+Alignment	alignment	alignment	setAlignment
+int	indent	indent	setIndent
+.TE
+.fi
+
 .SH DESCRIPTION
 The QLabel widget provides a static information display
 .PP
@@ -151,7 +165,12 @@ A QLabel is often used as a label for another, interactive widget. For this use,
 .PP
 In this example, keyboard focus is transferred to the label's buddy (the QLineEdit) when the user presses \fIAlt-P.\fR You can also use the setBuddy() function to accomplish the same.
 .PP
-<img src=qlabel-m.png> <img src=qlabel-w.png>
+.ce 1
+.B "[Image Omitted]"
+.PP
+
+.ce 1
+.B "[Image Omitted]"
 .PP
 See also QLineEdit, QTextView, QPixmap, QMovie and GUI Design Handbook: Label
 .PP
@@ -400,9 +419,20 @@ Returns the current text format.
 See also  setTextFormat().
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qlabel.html
+.BR http://www.trolltech.com/faq/tech.html
 .SH COPYRIGHT
-Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
+Copyright 1992-2001 Trolltech AS, http://www.trolltech.com.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR
 Generated automatically from the source code.
+.SH BUGS
+If you find a bug in Qt, please report it as described in
+.BR http://doc.trolltech.com/bughowto.html .
+Good bug reports make our job much simpler. Thank you.
+.P
+In case of content or formattting problems with this manual page, please
+report them to
+.BR qt-bugs@trolltech.com .
+Please include the name of the manual page (qlabel.3qt) and the Qt
+version (2.3.0).

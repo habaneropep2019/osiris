@@ -1,5 +1,6 @@
-.TH QProgressDialog 3qt "1 Febrary 2001" "Trolltech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
+'\" t
+.TH QProgressDialog 3qt "5 March 2001" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2001 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,7 +8,6 @@
 .nh
 .SH NAME
 QProgressDialog \- Provides feedback on the progress of a slow operation
-.SH SYNOPSIS
 .br
 .PP
 \fC#include <qprogressdialog.h>\fR
@@ -102,7 +102,21 @@ Inherits QSemiModal.
 .br
 .in -1c
 .SS "Properties"
-<table border=1 cellpadding=3 cellspacing=0> <tr><th>Type<th>Name<th>READ<th>WRITE<th>Options <tr><td>bool<td>wasCancelled<td>wasCancelled<td>&nbsp;<td>&nbsp; <tr><td>int<td>totalSteps<td>totalSteps<td>setTotalSteps<td>&nbsp; <tr><td>int<td>progress<td>progress<td>setProgress<td>&nbsp; <tr><td>bool<td>autoReset<td>autoReset<td>setAutoReset<td>&nbsp; <tr><td>bool<td>autoClose<td>autoClose<td>setAutoClose<td>&nbsp; <tr><td>QString<td>labelText<td>labelText<td>setLabelText<td>&nbsp; </table>
+.nf
+.TS
+l l l l l
+- - - - -
+l l l l l.
+Type	Name	READ	WRITE	Options
+bool	wasCancelled	wasCancelled
+int	totalSteps	totalSteps	setTotalSteps
+int	progress	progress	setProgress
+bool	autoReset	autoReset	setAutoReset
+bool	autoClose	autoClose	setAutoClose
+QString	labelText	labelText	setLabelText
+.TE
+.fi
+
 .SH DESCRIPTION
 Provides feedback on the progress of a slow operation.
 .PP
@@ -110,7 +124,7 @@ A progress dialog is used to give the user an indication of how long an operatio
 .PP
 A potential problem with progress dialogs is that it is difficult to know when to use them, as operations take different amounts of time on different computer hardware. QProgressDialog offers a solution to this problem: it estimates the time the operation will take (based on time for steps), and only shows itself if that estimate is beyond minimumDuration() (4 seconds by default).
 .PP
-Use setTotalSteps() (or the constructor) to set the number of "steps" in the operation and call setProgress() as the operation progresses. The step value can be chosen arbitrarily. It can be eg. the number of files copied, the number of bytes received, or the number of iterations through the main loop of your algorithm. You must call setProgress() with parameter 0 initially, and with parameter totalSteps() at the end.
+Use setTotalSteps() (or the constructor) to set the number of" steps" in the operation and call setProgress() as the operation progresses. The step value can be chosen arbitrarily. It can be eg. the number of files copied, the number of bytes received, or the number of iterations through the main loop of your algorithm. You must call setProgress() with parameter 0 initially, and with parameter totalSteps() at the end.
 .PP
 The dialog will automatically be reset and hidden at the end of the operation, Use setAutoReset() and setAutoClose() to change this behavior.
 .PP
@@ -201,7 +215,12 @@ Example:
 .PP
 In both modes, the progress dialog may be customized by replacing the child widgets with custom widgets, using setLabel(), setBar() and setCancelButton(). The functions setLabelText() and setCancelButtonText() sets the texts shown.
 .PP
-<img src=qprogdlg-m.png> <img src=qprogdlg-w.png>
+.ce 1
+.B "[Image Omitted]"
+.PP
+
+.ce 1
+.B "[Image Omitted]"
 .PP
 See also QDialog, QProgressBar and GUI Design Handbook: Progress Indicator
 .PP
@@ -369,9 +388,20 @@ progress/progress.cpp
 .)l
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qprogressdialog.html
+.BR http://www.trolltech.com/faq/tech.html
 .SH COPYRIGHT
-Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
+Copyright 1992-2001 Trolltech AS, http://www.trolltech.com.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR
 Generated automatically from the source code.
+.SH BUGS
+If you find a bug in Qt, please report it as described in
+.BR http://doc.trolltech.com/bughowto.html .
+Good bug reports make our job much simpler. Thank you.
+.P
+In case of content or formattting problems with this manual page, please
+report them to
+.BR qt-bugs@trolltech.com .
+Please include the name of the manual page (qprogressdialog.3qt) and the Qt
+version (2.3.0).

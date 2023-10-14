@@ -1,5 +1,5 @@
 /**********************************************************************
-** $Id: qt/src/canvas/qcanvas.cpp   2.2.4   edited 2001-01-25 $
+** $Id: qt/src/canvas/qcanvas.cpp   2.3.0   edited 2001-02-24 $
 **
 ** Implementation of QCanvas and associated classes
 **
@@ -1164,7 +1164,7 @@ void QCanvas::removeItemFromChunkContaining(QCanvasItem* g, int x, int y)
   Note that this function is not a reimplementation
   of QWidget::backgroundColor() (QCanvas is not a subclass
   of QWidget), but all QCanvasViews that are viewing the
-  canvas will set their backgrounds to this 
+  canvas will set their backgrounds to this
 
   \sa setBackgroundColor(), backgroundPixmap()
 */
@@ -1891,7 +1891,7 @@ static bool collision_double_dispatch( const QCanvasSprite* s1,
   independently of the foreground and background, so a QCanvasSprite
   is just a image whose API makes it simpler to use animation and a
   hot spot.
-  
+
   QCanvasSprite draws very fast, at the cost of some memory.
 */
 
@@ -2775,7 +2775,7 @@ QCanvasPolygonalItem::QCanvasPolygonalItem(QCanvas* canvas) :
 }
 
 /*!
-  Destruct the QCanvasPolygonalItem.  Derived classes \e must 
+  Destruct the QCanvasPolygonalItem.  Derived classes \e must
   call hide() in their
   destructor, as this destructor cannot call the virtual methods.
 */
@@ -3524,7 +3524,7 @@ QPointArray QCanvasEllipse::areaPoints() const
     QPointArray r;
     r.makeArc(int(x()-w/2.0-1),int(y()-h/2.0-1),w+2,h+3,a1,a2);
     r.resize(r.size()+1);
-    r.setPoint(r.size()-1,x(),y());
+    r.setPoint(r.size()-1,(int)x(),(int)y());
     return r;
 }
 
@@ -3603,11 +3603,8 @@ QRect QCanvasText::boundingRect() const { return brect; }
 
 void QCanvasText::setRect()
 {
-    static QWidget *w=0;
-    if (!w) w = new QWidget;
-    QPainter p(w);
-    p.setFont(fnt);
-    brect = p.boundingRect(QRect(int(x()),int(y()),0,0), flags, txt);
+    QFontMetrics fm(fnt);
+    brect = fm.boundingRect(int(x()), int(y()), 0, 0, flags, txt);
 }
 
 /*!

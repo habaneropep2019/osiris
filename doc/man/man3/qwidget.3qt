@@ -1,5 +1,6 @@
-.TH QWidget 3qt "1 Febrary 2001" "Trolltech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
+'\" t
+.TH QWidget 3qt "5 March 2001" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2001 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,7 +8,6 @@
 .nh
 .SH NAME
 QWidget \- The base class of all user interface objects
-.SH SYNOPSIS
 .br
 .PP
 \fC#include <qwidget.h>\fR
@@ -728,7 +728,72 @@ Inherited by QButton, QComboBox, QDial, QDialog, QFrame, QGLWidget, QHeader, QLi
 .br
 .in -1c
 .SS "Properties"
-<table border=1 cellpadding=3 cellspacing=0> <tr><th>Type<th>Name<th>READ<th>WRITE<th>Options <tr><td>bool<td>isTopLevel<td>isTopLevel<td>&nbsp;<td>&nbsp; <tr><td>bool<td>isModal<td>isModal<td>&nbsp;<td>&nbsp; <tr><td>bool<td>isPopup<td>isPopup<td>&nbsp;<td>&nbsp; <tr><td>bool<td>isDesktop<td>isDesktop<td>&nbsp;<td>&nbsp; <tr><td>bool<td>enabled<td>isEnabled<td>setEnabled<td>&nbsp; <tr><td>QRect<td>geometry<td>geometry<td>setGeometry<td>&nbsp; <tr><td>QRect<td>frameGeometry<td>frameGeometry<td>&nbsp;<td>&nbsp; <tr><td>int<td>x<td>x<td>&nbsp;<td>&nbsp; <tr><td>int<td>y<td>y<td>&nbsp;<td>&nbsp; <tr><td>QPoint<td>pos<td>pos<td>&nbsp;<td>&nbsp; <tr><td>QSize<td>frameSize<td>frameSize<td>&nbsp;<td>&nbsp; <tr><td>QSize<td>size<td>size<td>resize<td> DESIGNABLE false <tr><td>int<td>width<td>width<td>&nbsp;<td>&nbsp; <tr><td>int<td>height<td>height<td>&nbsp;<td>&nbsp; <tr><td>QRect<td>rect<td>rect<td>&nbsp;<td>&nbsp; <tr><td>QRect<td>childrenRect<td>childrenRect<td>&nbsp;<td>&nbsp; <tr><td>QRegion<td>childrenRegion<td>childrenRegion<td>&nbsp;<td>&nbsp; <tr><td>QSizePolicy<td>sizePolicy<td>sizePolicy<td>setSizePolicy<td>&nbsp; <tr><td>QSize<td>minimumSize<td>minimumSize<td>setMinimumSize<td>&nbsp; <tr><td>QSize<td>maximumSize<td>maximumSize<td>setMaximumSize<td>&nbsp; <tr><td>int<td>minimumWidth<td>minimumWidth<td>setMinimumWidth<td> STORED false <tr><td>int<td>minimumHeight<td>minimumHeight<td>setMinimumHeight<td> STORED false <tr><td>int<td>maximumWidth<td>maximumWidth<td>setMaximumWidth<td> STORED false <tr><td>int<td>maximumHeight<td>maximumHeight<td>setMaximumHeight<td> STORED false <tr><td>QSize<td>sizeIncrement<td>sizeIncrement<td>setSizeIncrement<td>&nbsp; <tr><td>QSize<td>baseSize<td>baseSize<td>setBaseSize<td>&nbsp; <tr><td>BackgroundMode<td>backgroundMode<td>backgroundMode<td>setBackgroundMode<td> DESIGNABLE false <tr><td>QColor<td>backgroundColor<td>backgroundColor<td>setBackgroundColor<td> DESIGNABLE false <tr><td>QColor<td>foregroundColor<td>foregroundColor<td>&nbsp;<td>&nbsp; <tr><td>QPixmap<td>backgroundPixmap<td>backgroundPixmap<td>setBackgroundPixmap<td> DESIGNABLE false <tr><td>QColorGroup<td>colorGroup<td>colorGroup<td>&nbsp;<td>&nbsp; <tr><td>QPalette<td>palette<td>palette<td>setPalette<td> RESET unsetPalette <tr><td>bool<td>ownPalette<td>ownPalette<td>&nbsp;<td>&nbsp; <tr><td>QFont<td>font<td>font<td>setFont<td> RESET unsetFont <tr><td>bool<td>ownFont<td>ownFont<td>&nbsp;<td>&nbsp; <tr><td>QCursor<td>cursor<td>cursor<td>setCursor<td> RESET unsetCursor <tr><td>bool<td>ownCursor<td>ownCursor<td>&nbsp;<td>&nbsp; <tr><td>QString<td>caption<td>caption<td>setCaption<td>&nbsp; <tr><td>QPixmap<td>icon<td>icon<td>setIcon<td>&nbsp; <tr><td>QString<td>iconText<td>iconText<td>setIconText<td>&nbsp; <tr><td>bool<td>mouseTracking<td>hasMouseTracking<td>setMouseTracking<td>&nbsp; <tr><td>bool<td>isActiveWindow<td>isActiveWindow<td>&nbsp;<td>&nbsp; <tr><td>bool<td>focusEnabled<td>isFocusEnabled<td>&nbsp;<td>&nbsp; <tr><td>FocusPolicy<td>focusPolicy<td>focusPolicy<td>setFocusPolicy<td>&nbsp; <tr><td>bool<td>focus<td>hasFocus<td>&nbsp;<td>&nbsp; <tr><td>bool<td>updatesEnabled<td>isUpdatesEnabled<td>setUpdatesEnabled<td> DESIGNABLE false <tr><td>bool<td>visible<td>isVisible<td>&nbsp;<td>&nbsp; <tr><td>QRect<td>visibleRect<td>visibleRect<td>&nbsp;<td>&nbsp; <tr><td>bool<td>hidden<td>isHidden<td>&nbsp;<td>&nbsp; <tr><td>bool<td>minimized<td>isMinimized<td>&nbsp;<td>&nbsp; <tr><td>QSize<td>sizeHint<td>sizeHint<td>&nbsp;<td>&nbsp; <tr><td>QSize<td>minimumSizeHint<td>minimumSizeHint<td>&nbsp;<td>&nbsp; <tr><td>QRect<td>microFocusHint<td>microFocusHint<td>&nbsp;<td>&nbsp; <tr><td>bool<td>acceptDrops<td>acceptDrops<td>setAcceptDrops<td>&nbsp; <tr><td>bool<td>autoMask<td>autoMask<td>setAutoMask<td>&nbsp; <tr><td>BackgroundOrigin<td>backgroundOrigin<td>backgroundOrigin<td>setBackgroundOrigin<td>&nbsp; <tr><td>bool<td>customWhatsThis<td>customWhatsThis<td>&nbsp;<td>&nbsp; </table>
+.nf
+.TS
+l l l l l
+- - - - -
+l l l l l.
+Type	Name	READ	WRITE	Options
+bool	isTopLevel	isTopLevel
+bool	isModal	isModal
+bool	isPopup	isPopup
+bool	isDesktop	isDesktop
+bool	enabled	isEnabled	setEnabled
+QRect	geometry	geometry	setGeometry
+QRect	frameGeometry	frameGeometry
+int	x	x
+int	y	y
+QPoint	pos	pos
+QSize	frameSize	frameSize
+QSize	size	size	resize	DESIGNABLE false
+int	width	width
+int	height	height
+QRect	rect	rect
+QRect	childrenRect	childrenRect
+QRegion	childrenRegion	childrenRegion
+QSizePolicy	sizePolicy	sizePolicy	setSizePolicy
+QSize	minimumSize	minimumSize	setMinimumSize
+QSize	maximumSize	maximumSize	setMaximumSize
+int	minimumWidth	minimumWidth	setMinimumWidth	STORED false
+int	minimumHeight	minimumHeight	setMinimumHeight	STORED false
+int	maximumWidth	maximumWidth	setMaximumWidth	STORED false
+int	maximumHeight	maximumHeight	setMaximumHeight	STORED false
+QSize	sizeIncrement	sizeIncrement	setSizeIncrement
+QSize	baseSize	baseSize	setBaseSize
+BackgroundMode	backgroundMode	backgroundMode	setBackgroundMode	DESIGNABLE false
+QColor	backgroundColor	backgroundColor	setBackgroundColor	DESIGNABLE false
+QColor	foregroundColor	foregroundColor
+QPixmap	backgroundPixmap	backgroundPixmap	setBackgroundPixmap	DESIGNABLE false
+QColorGroup	colorGroup	colorGroup
+QPalette	palette	palette	setPalette	RESET unsetPalette
+bool	ownPalette	ownPalette
+QFont	font	font	setFont	RESET unsetFont
+bool	ownFont	ownFont
+QCursor	cursor	cursor	setCursor	RESET unsetCursor
+bool	ownCursor	ownCursor
+QString	caption	caption	setCaption
+QPixmap	icon	icon	setIcon
+QString	iconText	iconText	setIconText
+bool	mouseTracking	hasMouseTracking	setMouseTracking
+bool	isActiveWindow	isActiveWindow
+bool	focusEnabled	isFocusEnabled
+FocusPolicy	focusPolicy	focusPolicy	setFocusPolicy
+bool	focus	hasFocus
+bool	updatesEnabled	isUpdatesEnabled	setUpdatesEnabled	DESIGNABLE false
+bool	visible	isVisible
+QRect	visibleRect	visibleRect
+bool	hidden	isHidden
+bool	minimized	isMinimized
+QSize	sizeHint	sizeHint
+QSize	minimumSizeHint	minimumSizeHint
+QRect	microFocusHint	microFocusHint
+bool	acceptDrops	acceptDrops	setAcceptDrops
+bool	autoMask	autoMask	setAutoMask
+BackgroundOrigin	backgroundOrigin	backgroundOrigin	setBackgroundOrigin
+bool	customWhatsThis	customWhatsThis
+.TE
+.fi
+
 .SH DESCRIPTION
 The QWidget class is the base class of all user interface objects.
 .PP
@@ -1996,7 +2061,7 @@ Sets the widget to be cleared to the fixed color \fIcolor\fR before paintEvent()
 .PP
 Note that using this function is very often a mistake. Here are the most common mistakes:
 .PP
-If you want to set the background color of a widget to one of the "usual" colors, setBackgroundMode() is usually the best function. For example, man widgets that usually use white backgrounds (and black text on it) can use this:
+If you want to set the background color of a widget to one of the" usual" colors, setBackgroundMode() is usually the best function. For example, man widgets that usually use white backgrounds (and black text on it) can use this:
 .PP
 .nf
 .br
@@ -2159,7 +2224,7 @@ Sets this widget's focus proxy to \fIw.\fR If \fIw\fR is 0, this function resets
 .PP
 Some widgets, such as QComboBox, can "have focus," but create a child widget to actually handle the focus. QComboBox, for example, creates a QLineEdit.
 .PP
-setFocusProxy() sets the widget which will actually get focus when "this widget" gets it. If there is a focus proxy, focusPolicy(), setFocusPolicy(), setFocus() and hasFocus() all operate on the focus proxy.
+setFocusProxy() sets the widget which will actually get focus when" this widget" gets it. If there is a focus proxy, focusPolicy(), setFocusPolicy(), setFocus() and hasFocus() all operate on the focus proxy.
 .PP
 See also focusProxy().
 .SH "void QWidget::setFont ( const QFont & font ) \fC[virtual]\fR"
@@ -2543,7 +2608,7 @@ The default implementation updates the widget including its geometry.
 .PP
 See also QApplication::setStyle(), style(), update() and updateGeometry().
 .PP
-Reimplemented in QPopupMenu, QComboBox, QProgressBar, QSlider, QIconView, QMenuBar, QScrollBar, QMainWindow, QSpinBox, QSplitter, QListView, QProgressDialog, QTabWidget, QTabBar, QTabDialog and QScrollView.
+Reimplemented in QPopupMenu, QComboBox, QProgressBar, QSlider, QIconView, QMenuBar, QScrollBar, QMainWindow, QSpinBox, QToolBar, QSplitter, QListView, QProgressDialog, QTabWidget, QTabBar, QTabDialog and QScrollView.
 .SH "bool QWidget::testWFlags ( WFlags f ) const"
 Returns TRUE if any of the widget flags in \fIf\fR are set.
 .PP
@@ -2694,9 +2759,20 @@ For internal use only.
 For internal use only.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qwidget.html
+.BR http://www.trolltech.com/faq/tech.html
 .SH COPYRIGHT
-Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
+Copyright 1992-2001 Trolltech AS, http://www.trolltech.com.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR
 Generated automatically from the source code.
+.SH BUGS
+If you find a bug in Qt, please report it as described in
+.BR http://doc.trolltech.com/bughowto.html .
+Good bug reports make our job much simpler. Thank you.
+.P
+In case of content or formattting problems with this manual page, please
+report them to
+.BR qt-bugs@trolltech.com .
+Please include the name of the manual page (qwidget.3qt) and the Qt
+version (2.3.0).

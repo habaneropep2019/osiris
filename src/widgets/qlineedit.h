@@ -1,5 +1,5 @@
 /**********************************************************************
-** $Id: qt/src/widgets/qlineedit.h   2.2.4   edited 2000-10-11 $
+** $Id: qt/src/widgets/qlineedit.h   2.3.0   edited 2001-02-06 $
 **
 ** Definition of QLineEdit widget class
 **
@@ -181,6 +181,7 @@ private:
     int		lastCharVisible() const;
     int		minMark() const;
     int		maxMark() const;
+    int		frameW() const;
 
     void	init();
 

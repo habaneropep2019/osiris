@@ -1,5 +1,6 @@
-.TH QLCDNumber 3qt "1 Febrary 2001" "Trolltech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
+'\" t
+.TH QLCDNumber 3qt "5 March 2001" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2001 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,7 +8,6 @@
 .nh
 .SH NAME
 QLCDNumber \- Displays a number with LCD-like digits
-.SH SYNOPSIS
 .br
 .PP
 \fC#include <qlcdnumber.h>\fR
@@ -105,7 +105,21 @@ Inherits QFrame.
 .br
 .in -1c
 .SS "Properties"
-<table border=1 cellpadding=3 cellspacing=0> <tr><th>Type<th>Name<th>READ<th>WRITE<th>Options <tr><td>bool<td>smallDecimalPoint<td>smallDecimalPoint<td>setSmallDecimalPoint<td>&nbsp; <tr><td>int<td>numDigits<td>numDigits<td>setNumDigits<td>&nbsp; <tr><td>Mode<td>mode<td>mode<td>setMode<td>&nbsp; <tr><td>SegmentStyle<td>segmentStyle<td>segmentStyle<td>setSegmentStyle<td>&nbsp; <tr><td>double<td>value<td>value<td>display<td>&nbsp; <tr><td>int<td>intValue<td>intValue<td>display<td>&nbsp; </table>
+.nf
+.TS
+l l l l l
+- - - - -
+l l l l l.
+Type	Name	READ	WRITE	Options
+bool	smallDecimalPoint	smallDecimalPoint	setSmallDecimalPoint
+int	numDigits	numDigits	setNumDigits
+Mode	mode	mode	setMode
+SegmentStyle	segmentStyle	segmentStyle	setSegmentStyle
+double	value	value	display
+int	intValue	intValue	display
+.TE
+.fi
+
 .SH DESCRIPTION
 The QLCDNumber widget displays a number with LCD-like digits.
 .PP
@@ -121,7 +135,12 @@ It is not possible to retrieve the contents of a QLCDNumber object. If you need 
 .PP
 Incidentally, QLCDNumber is the very oldest part of Qt, tracing back to a BASIC program on the Sinclair Spectrum.
 .PP
-<img src=qlcdnum-m.png> <img src=qlcdnum-w.png>
+.ce 1
+.B "[Image Omitted]"
+.PP
+
+.ce 1
+.B "[Image Omitted]"
 .PP
 See also QLabel and QFrame.
 .PP
@@ -285,9 +304,20 @@ If display(QString ) was the last called, 0 is returned.
 See also  intValue() and display().
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qlcdnumber.html
+.BR http://www.trolltech.com/faq/tech.html
 .SH COPYRIGHT
-Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
+Copyright 1992-2001 Trolltech AS, http://www.trolltech.com.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR
 Generated automatically from the source code.
+.SH BUGS
+If you find a bug in Qt, please report it as described in
+.BR http://doc.trolltech.com/bughowto.html .
+Good bug reports make our job much simpler. Thank you.
+.P
+In case of content or formattting problems with this manual page, please
+report them to
+.BR qt-bugs@trolltech.com .
+Please include the name of the manual page (qlcdnumber.3qt) and the Qt
+version (2.3.0).

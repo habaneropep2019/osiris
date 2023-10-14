@@ -1,5 +1,6 @@
-.TH QListBox 3qt "1 Febrary 2001" "Trolltech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
+'\" t
+.TH QListBox 3qt "5 March 2001" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2001 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,7 +8,6 @@
 .nh
 .SH NAME
 QListBox \- List of selectable, read-only items
-.SH SYNOPSIS
 .br
 .PP
 \fC#include <qlistbox.h>\fR
@@ -318,7 +318,28 @@ Inherits QScrollView.
 .br
 .in -1c
 .SS "Properties"
-<table border=1 cellpadding=3 cellspacing=0> <tr><th>Type<th>Name<th>READ<th>WRITE<th>Options <tr><td>uint<td>count<td>count<td>&nbsp;<td>&nbsp; <tr><td>int<td>numItemsVisible<td>numItemsVisible<td>&nbsp;<td>&nbsp; <tr><td>int<td>currentItem<td>currentItem<td>setCurrentItem<td> DESIGNABLE false <tr><td>QString<td>currentText<td>currentText<td>&nbsp;<td>&nbsp; <tr><td>int<td>topItem<td>topItem<td>setTopItem<td> DESIGNABLE false <tr><td>SelectionMode<td>selectionMode<td>selectionMode<td>setSelectionMode<td>&nbsp; <tr><td>bool<td>multiSelection<td>isMultiSelection<td>setMultiSelection<td> DESIGNABLE false <tr><td>LayoutMode<td>columnMode<td>columnMode<td>setColumnMode<td>&nbsp; <tr><td>LayoutMode<td>rowMode<td>rowMode<td>setRowMode<td>&nbsp; <tr><td>int<td>numColumns<td>numColumns<td>&nbsp;<td>&nbsp; <tr><td>int<td>numRows<td>numRows<td>&nbsp;<td>&nbsp; <tr><td>bool<td>variableWidth<td>variableWidth<td>setVariableWidth<td>&nbsp; <tr><td>bool<td>variableHeight<td>variableHeight<td>setVariableHeight<td>&nbsp; </table>
+.nf
+.TS
+l l l l l
+- - - - -
+l l l l l.
+Type	Name	READ	WRITE	Options
+uint	count	count
+int	numItemsVisible	numItemsVisible
+int	currentItem	currentItem	setCurrentItem	DESIGNABLE false
+QString	currentText	currentText
+int	topItem	topItem	setTopItem	DESIGNABLE false
+SelectionMode	selectionMode	selectionMode	setSelectionMode
+bool	multiSelection	isMultiSelection	setMultiSelection	DESIGNABLE false
+LayoutMode	columnMode	columnMode	setColumnMode
+LayoutMode	rowMode	rowMode	setRowMode
+int	numColumns	numColumns
+int	numRows	numRows
+bool	variableWidth	variableWidth	setVariableWidth
+bool	variableHeight	variableHeight	setVariableHeight
+.TE
+.fi
+
 .SH DESCRIPTION
 The QListBox widget provides a list of selectable, read-only items.
 .PP
@@ -356,7 +377,12 @@ If you need to insert other types than texts and pixmaps, you must define new cl
 .PP
 \fBWarning:\fR The list box assumes ownership of all list box items and will delete them when it does not need them any more.
 .PP
-<img src=qlistbox-m.png> <img src=qlistbox-w.png>
+.ce 1
+.B "[Image Omitted]"
+.PP
+
+.ce 1
+.B "[Image Omitted]"
 .PP
 See also QListView, QComboBox, QButtonGroup and GUI Design Handbook: List Box (two sections)
 .SS "Member Type Documentation"
@@ -847,9 +873,20 @@ Reimplemented from QScrollView.
 For internal use only.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qlistbox.html
+.BR http://www.trolltech.com/faq/tech.html
 .SH COPYRIGHT
-Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
+Copyright 1992-2001 Trolltech AS, http://www.trolltech.com.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR
 Generated automatically from the source code.
+.SH BUGS
+If you find a bug in Qt, please report it as described in
+.BR http://doc.trolltech.com/bughowto.html .
+Good bug reports make our job much simpler. Thank you.
+.P
+In case of content or formattting problems with this manual page, please
+report them to
+.BR qt-bugs@trolltech.com .
+Please include the name of the manual page (qlistbox.3qt) and the Qt
+version (2.3.0).

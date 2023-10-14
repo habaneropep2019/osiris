@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qimage.cpp   2.2.4   edited 2001-01-31 $
+** $Id: qt/src/kernel/qimage.cpp   2.3.0   edited 2001-03-02 $
 **
 ** Implementation of QImage and QImageIO classes
 **
@@ -2634,8 +2634,8 @@ QImage QImage::mirror(bool horizontal, bool vertical) const
     // 1 bit, 8 bit
     if (depth() == 1 || depth() == 8) {
         for (int sy = 0; sy < h; sy++, dy += dyi) {
-            UINT8* ssl = (UINT8*)(data->bits[sy]);
-            UINT8* dsl = (UINT8*)(result.data->bits[dy]);
+            Q_UINT8* ssl = (Q_UINT8*)(data->bits[sy]);
+            Q_UINT8* dsl = (Q_UINT8*)(result.data->bits[dy]);
             int dx = dxs;
             for (int sx = 0; sx < w; sx++, dx += dxi)
                 dsl[dx] = ssl[sx];
@@ -2646,8 +2646,8 @@ QImage QImage::mirror(bool horizontal, bool vertical) const
     // 16 bit
     else if (depth() == 16) {
         for (int sy = 0; sy < h; sy++, dy += dyi) {
-            UINT16* ssl = (UINT16*)(data->bits[sy]);
-            UINT16* dsl = (UINT16*)(result.data->bits[dy]);
+            Q_UINT16* ssl = (Q_UINT16*)(data->bits[sy]);
+            Q_UINT16* dsl = (Q_UINT16*)(result.data->bits[dy]);
             int dx = dxs;
             for (int sx = 0; sx < w; sx++, dx += dxi)
                 dsl[dx] = ssl[sx];
@@ -2657,8 +2657,8 @@ QImage QImage::mirror(bool horizontal, bool vertical) const
     // 32 bit
     else if (depth() == 32) {
         for (int sy = 0; sy < h; sy++, dy += dyi) {
-            UINT32* ssl = (UINT32*)(data->bits[sy]);
-            UINT32* dsl = (UINT32*)(result.data->bits[dy]);
+            Q_UINT32* ssl = (Q_UINT32*)(data->bits[sy]);
+            Q_UINT32* dsl = (Q_UINT32*)(result.data->bits[dy]);
             int dx = dxs;
             for (int sx = 0; sx < w; sx++, dx += dxi)
                 dsl[dx] = ssl[sx];
@@ -2670,9 +2670,9 @@ QImage QImage::mirror(bool horizontal, bool vertical) const
     if (horizontal && depth() == 1) {
         int shift = width() % 8;
         for (int y = h-1; y >= 0; y--) {
-            UINT8* a0 = (UINT8*)(result.data->bits[y]);
+            Q_UINT8* a0 = (Q_UINT8*)(result.data->bits[y]);
             // Swap bytes
-            UINT8* a = a0+dxs;
+            Q_UINT8* a = a0+dxs;
             while (a >= a0) {
                 *a = bitflip[*a];
                 a--;
@@ -2680,17 +2680,17 @@ QImage QImage::mirror(bool horizontal, bool vertical) const
             // Shift bits if unaligned
             if (shift != 0) {
                 a = a0+dxs;
-                UINT8 c = 0;
+                Q_UINT8 c = 0;
                 if (bitOrder() == QImage::LittleEndian) {
                     while (a >= a0) {
-                        UINT8 nc = *a << shift;
+                        Q_UINT8 nc = *a << shift;
                         *a = (*a >> (8-shift)) | c;
 			--a;
                         c = nc;
                     }
                 } else {
                     while (a >= a0) {
-                        UINT8 nc = *a >> shift;
+                        Q_UINT8 nc = *a >> shift;
                         *a = (*a << (8-shift)) | c;
 			--a;
                         c = nc;
@@ -4402,7 +4402,7 @@ static void write_pbm_image( QImageIO *iio )
     format = format.left(3);			// ignore RAW part
     bool gray = format == "PGM";
 
-    if ( format == "PBM" && image.depth() != 1 ) {
+    if ( format == "PBM" ) {
 	image = image.convertDepth(1);
     } else if ( image.depth() == 1 ) {
 	image = image.convertDepth(8);
@@ -4452,12 +4452,12 @@ static void write_pbm_image( QImageIO *iio )
 		return;
 	    }
 	    QRgb  *color = image.colorTable();
-	    uchar *buf   = new uchar[w*3];
-	    const int channels = gray ? 1 : 3;
+	    uint bpl = w*(gray ? 1 : 3);
+	    uchar *buf   = new uchar[bpl];
 	    for (uint y=0; y<h; y++) {
 		uchar *b = image.scanLine(y);
 		uchar *p = buf;
-		uchar *end = buf+w*3;
+		uchar *end = buf+bpl;
 		if ( gray ) {
 		    while ( p < end ) {
 			uchar g = (uchar)qGray(color[*b++]);
@@ -4471,7 +4471,7 @@ static void write_pbm_image( QImageIO *iio )
 			*p++ = qBlue(rgb);
 		    }
 		}
-		if ( w*channels != (uint)out->writeBlock((char*)buf, w*channels) ) {
+		if ( bpl != (uint)out->writeBlock((char*)buf, bpl) ) {
 		    iio->setStatus(1);
 		    return;
 		}

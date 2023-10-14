@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/doc/envvars.doc   2.2.4   edited 2001-01-30 $
+** $Id: qt/doc/envvars.doc   2.3.0   edited 2001-02-18 $
 **
 ** The environment variables Qt/Embedded takes notice of
 **
@@ -38,10 +38,6 @@
 \title Qt/Embedded environment variables
 
 <p>
-QWS_NO_SMOOTH_FONTS
-Obsolete?
-
-<p>
 QWS_SW_CURSOR
 If defined, always use a software mouse cursor even when using an accelerated
 driver that supports a hardware cursor
@@ -60,10 +56,6 @@ Matrox Millennium), Transformed(for rotated displays), SVGALIB and
 VNC. Transformed displays have a special format - within the specification
 should be a multiple of 90 degrees rotation specified as Rot<x>,
 for instance Transformed:Rot90.
-
-<p>
-QWS_NOACCEL
-Obsolete?
 
 <p>
 QTDIR

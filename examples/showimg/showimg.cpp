@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/showimg/showimg.cpp   2.2.4   edited 2000-10-05 $
+** $Id: qt/examples/showimg/showimg.cpp   2.3.0   edited 2001-02-14 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -94,7 +94,10 @@ ImageViewer::ImageViewer( QWidget *parent, const char *name, int wFlags )
     ad = options->insertItem( "PreferDither" );
     dd = options->insertItem( "AvoidDither" );
     options->insertSeparator();
+    ns = options->insertItem( "No scaling" );
+    us = options->insertItem( "Normal scaling" );
     ss = options->insertItem( "Smooth scaling" );
+    options->insertSeparator();
     cc = options->insertItem( "Use color context" );
     if ( QApplication::colorSpec() == QApplication::ManyColor )
 	options->setItemEnabled( cc, FALSE );
@@ -131,7 +134,7 @@ ImageViewer::~ImageViewer()
 */
 void ImageViewer::doOption(int item)
 {
-    if ( item == ss || item == cc ) {
+    if ( item == cc ) {
 	// Toggle
 	bool newbool = !options->isItemChecked(item);
 	options->setItemChecked(item, newbool);
@@ -143,6 +146,15 @@ void ImageViewer::doOption(int item)
 
     if ( options->isItemChecked( item ) ) return; // They are all radio buttons
 
+    if ( item == ns || item == us || item == ss ) {
+	options->setItemChecked( ns, item == ns );
+	options->setItemChecked( us, item == us );
+	options->setItemChecked( ss, item == ss );
+	reconvertImage();
+	repaint(image.hasAlphaBuffer() || unscaled() );	// show image in widget
+	return;
+    }
+    
     int ocf = conversion_flags;
 
     if ( item == ac ) {
@@ -414,6 +426,11 @@ bool ImageViewer::reconvertImage()
     return success;				// TRUE if loaded OK
 }
 
+bool ImageViewer::unscaled() const
+{
+    return options->isItemChecked(ns);
+}
+
 bool ImageViewer::smooth() const
 {
     return options->isItemChecked(ss);
@@ -436,7 +453,7 @@ void ImageViewer::scale()
     if ( image.isNull() ) return;
 
     QApplication::setOverrideCursor( waitCursor ); // this might take time
-    if ( width() == pm.width() && h == pm.height() )
+    if ( width() == pm.width() && h == pm.height() || unscaled() )
     {						// no need to scale if widget
 	pmScaled = pm;				// size equals pixmap size
     } else {

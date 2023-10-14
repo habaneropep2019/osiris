@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qfontdatabase.h   2.2.4   edited 2000-08-25 $
+** $Id: qt/src/kernel/qfontdatabase.h   2.3.0   edited 2001-02-06 $
 **
 ** Definition of the QFontDatabase class
 **
@@ -84,6 +84,9 @@ public:
     bool  isScalable( const QString &family,
 		      const QString &style   = QString::null,
 		      const QString &charSet = QString::null ) const;
+    bool  isFixedPitch( const QString &family,
+			const QString &style   = QString::null,
+			const QString &charset = QString::null) const;
 
     QValueList<int> smoothSizes( const QString &family,
 				 const QString &style,

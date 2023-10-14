@@ -141,10 +141,9 @@ style, and that popup will happily grow larger than the desktop if
 you put enough data in it.
 <p>The two constructors create identical-looking combos in Windows
 style.
-<p>Read-only combo boxes can contain pixmaps as well as texts; the
-insert() and <a href="#62488f">changeItem</a>() functions are suitably overloaded.  If you
-try to insert a pixmap in a read-write combo box, QComboBox simply
-ignores you.  For read-write combo boxes, the function <a href="#d9cda5">clearEdit</a>()
+<p>Combo boxes can contain pixmaps as well as texts; the
+insert() and <a href="#62488f">changeItem</a>() functions are suitably overloaded.  For 
+read-write combo boxes, the function <a href="#d9cda5">clearEdit</a>()
 is provided, to clear the displayed string without changing the
 combo box' contents.
 <p>A combo box emits two signals, <a href="#b2b3e6">activated</a>() and <a href="#64c14d">highlighted</a>(), when a
@@ -219,7 +218,6 @@ disabled.
 <p>See also  <a href="#163732">setAutoResize</a>().
 <h3 class="fn">void <a name="c07ec0"></a>QComboBox::changeItem ( const <a href="qpixmap.html">QPixmap</a> &amp; im, const <a href="qstring.html">QString</a> &amp; t, int index )</h3>
 <p>Replaces the item at position <em>index</em> with a pixmap plus text.
-If the combo box is writable, the pixmap is ignored.
 <p>See also  <a href="#bd8981">insertItem</a>().
 <h3 class="fn">void <a name="789bf4"></a>QComboBox::changeItem ( const <a href="qpixmap.html">QPixmap</a> &amp; im, int index )</h3>
 <p>Replaces the item at position <em>index</em> with a pixmap, unless the
@@ -458,7 +456,7 @@ box if there is any, or else 0.
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.2.4"><nobr>
+<input type=hidden name="version" value="2.3.0"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -466,5 +464,5 @@ copyright &copy; 1995-2000
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.4</div>
+<td align="right"><div align="right">Qt version 2.3.0</div>
 </table></div></address></body></html>

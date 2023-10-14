@@ -1,13 +1,13 @@
-.TH QScreenCursor 3qt "1 Febrary 2001" "Trolltech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
+'\" t
+.TH QScreenCursor 3qt "5 March 2001" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2001 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
 .ad l
 .nh
 .SH NAME
-QScreenCursor \- Manages the onscreen mouse cursor in Qt/Embedded. It provides an implementation of a software mouse cursor and can be subclassed by hardware drivers which support a hardware mouse cursor. There may only be one QScreenCursor at a time; it is constructed by QScreen or one of its descendants
-.SH SYNOPSIS
+QScreenCursor \- Manages the onscreen mouse cursor in Qt/Embedded. It provides an implementation of a software mouse cursor and can be subclassed by hardware drivers which support a hardware mouse cursor. There may only be one QScreenCursor at a time; it is constructed by
 .br
 .PP
 \fC#include <qgfx_qws.h>\fR
@@ -74,9 +74,20 @@ reimplemented as a null method in hardware cursor drivers. It redraws
 what was under the mouse cursor when the cursor is moved.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qscreencursor.html
+.BR http://www.trolltech.com/faq/tech.html
 .SH COPYRIGHT
-Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
+Copyright 1992-2001 Trolltech AS, http://www.trolltech.com.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR
 Generated automatically from the source code.
+.SH BUGS
+If you find a bug in Qt, please report it as described in
+.BR http://doc.trolltech.com/bughowto.html .
+Good bug reports make our job much simpler. Thank you.
+.P
+In case of content or formattting problems with this manual page, please
+report them to
+.BR qt-bugs@trolltech.com .
+Please include the name of the manual page (qscreencursor.3qt) and the Qt
+version (2.3.0).

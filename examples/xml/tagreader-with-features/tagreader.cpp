@@ -1,5 +1,5 @@
 /*
-$Id: qt/examples/xml/tagreader-with-features/tagreader.cpp   2.2.4   edited 2001-01-22 $
+$Id: qt/examples/xml/tagreader-with-features/tagreader.cpp   2.3.0   edited 2001-01-26 $
 */
 
 #include "structureparser.h"

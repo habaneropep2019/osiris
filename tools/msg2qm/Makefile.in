@@ -101,10 +101,6 @@ msg2qm.o: msg2qm.cpp \
 		../../include/qiodevice.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
-		../../include/qconfig-minimal.h \
-		../../include/qconfig-small.h \
-		../../include/qconfig-medium.h \
-		../../include/qconfig-large.h \
 		../../include/qconfig.h \
 		../../include/qcstring.h \
 		../../include/qarray.h \

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qscrollview.h   2.2.4   edited 2000-10-11 $
+** $Id: qt/src/widgets/qscrollview.h   2.3.0   edited 2001-02-08 $
 **
 ** Definition of QScrollView class
 **
@@ -67,7 +67,7 @@ public:
     QScrollView(QWidget *parent=0, const char *name=0, WFlags f=0);
     ~QScrollView();
 
-    enum ResizePolicy { Default, Manual, AutoOne /*, StretchOne=4*/ };
+    enum ResizePolicy { Default, Manual, AutoOne, AutoOneFit  };
     virtual void setResizePolicy( ResizePolicy );
     ResizePolicy resizePolicy() const;
 

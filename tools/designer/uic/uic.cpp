@@ -19,7 +19,8 @@
 **********************************************************************/
 
 #include "uic.h"
-#include <qapplication.h>
+#include <qsizepolicy.h>
+#include <qpalette.h>
 #include <qfile.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -1059,12 +1060,9 @@ QString Uic::createListBoxItemImpl( const QDomElement &e, const QString &parent 
 	n = n.nextSibling().toElement();
     }
 
-    if ( pix.isEmpty() )
-	return parent + "->insertItem( " + trmacro + "( " + fixString( txt ) + " ) );";
-    else
-	return parent + "->insertItem( " + pix + ", " + trmacro + "( " + fixString( txt ) + " ) );";
-
-    return QString::null;
+    return pix.isEmpty() ?
+      parent + "->insertItem( " + trmacro + "( " + fixString( txt ) + " ) );":
+      parent + "->insertItem( " + pix + ", " + trmacro + "( " + fixString( txt ) + " ) );";
 }
 
 /*!

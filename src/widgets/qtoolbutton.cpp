@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qtoolbutton.cpp   2.2.4   edited 2000-12-14 $
+** $Id: qt/src/widgets/qtoolbutton.cpp   2.3.0   edited 2001-02-02 $
 **
 ** Implementation of QToolButton class
 **
@@ -719,8 +719,11 @@ QIconSet QToolButton::iconSet( bool on ) const
 	return *that->son;
 
     if ( pixmap() && (!that->s || (that->s->pixmap().serialNumber() !=
-				   pixmap()->serialNumber())) )
+	pixmap()->serialNumber())) ) {
+	if ( that->s )
+	    delete that->s;
 	that->s = new QIconSet( *pixmap() );
+    }
 
     if ( that->s )
 	return *that->s;

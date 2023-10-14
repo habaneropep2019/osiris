@@ -36,7 +36,7 @@ int main( int argc, char *argv[] )
 
     int width = 240;
     int height = 320;
-    int depth = 8;
+    int depth = 32;
     bool cursor = TRUE;
     QString displaySpec( ":0" );
 

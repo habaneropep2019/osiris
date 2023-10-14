@@ -1,5 +1,6 @@
-.TH QSlider 3qt "1 Febrary 2001" "Trolltech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
+'\" t
+.TH QSlider 3qt "5 March 2001" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2001 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,7 +8,6 @@
 .nh
 .SH NAME
 QSlider \- Vertical or horizontal slider
-.SH SYNOPSIS
 .br
 .PP
 \fC#include <qslider.h>\fR
@@ -126,7 +126,24 @@ Inherits QRangeControl and QWidget.
 .br
 .in -1c
 .SS "Properties"
-<table border=1 cellpadding=3 cellspacing=0> <tr><th>Type<th>Name<th>READ<th>WRITE<th>Options <tr><td>int<td>minValue<td>minValue<td>setMinValue<td>&nbsp; <tr><td>int<td>maxValue<td>maxValue<td>setMaxValue<td>&nbsp; <tr><td>int<td>lineStep<td>lineStep<td>setLineStep<td>&nbsp; <tr><td>int<td>pageStep<td>pageStep<td>setPageStep<td>&nbsp; <tr><td>int<td>value<td>value<td>setValue<td>&nbsp; <tr><td>bool<td>tracking<td>tracking<td>setTracking<td>&nbsp; <tr><td>Orientation<td>orientation<td>orientation<td>setOrientation<td>&nbsp; <tr><td>TickSetting<td>tickmarks<td>tickmarks<td>setTickmarks<td>&nbsp; <tr><td>int<td>tickInterval<td>tickInterval<td>setTickInterval<td>&nbsp; </table>
+.nf
+.TS
+l l l l l
+- - - - -
+l l l l l.
+Type	Name	READ	WRITE	Options
+int	minValue	minValue	setMinValue
+int	maxValue	maxValue	setMaxValue
+int	lineStep	lineStep	setLineStep
+int	pageStep	pageStep	setPageStep
+int	value	value	setValue
+bool	tracking	tracking	setTracking
+Orientation	orientation	orientation	setOrientation
+TickSetting	tickmarks	tickmarks	setTickmarks
+int	tickInterval	tickInterval	setTickInterval
+.TE
+.fi
+
 .SH DESCRIPTION
 The QSlider widget provides a vertical or horizontal slider.
 .PP
@@ -138,7 +155,12 @@ The main functions offered by the slider itself are tickmark and orientation con
 .PP
 A slider has a default focusPolicy() of \fIWeakWheelFocus,\fR i.e. it accepts focus on Tab and by using the mouse wheel, and a suitable keyboard interface.
 .PP
-<img src=qslider-m.png> <img src=qslider-w.png>
+.ce 1
+.B "[Image Omitted]"
+.PP
+
+.ce 1
+.B "[Image Omitted]"
 .PP
 See also QScrollBar, QSpinBox and GUI Design Handbook: Slider
 .PP
@@ -376,9 +398,20 @@ Reimplemented for internal reasons; the API is not affected.
 Reimplemented from QWidget.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qslider.html
+.BR http://www.trolltech.com/faq/tech.html
 .SH COPYRIGHT
-Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
+Copyright 1992-2001 Trolltech AS, http://www.trolltech.com.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR
 Generated automatically from the source code.
+.SH BUGS
+If you find a bug in Qt, please report it as described in
+.BR http://doc.trolltech.com/bughowto.html .
+Good bug reports make our job much simpler. Thank you.
+.P
+In case of content or formattting problems with this manual page, please
+report them to
+.BR qt-bugs@trolltech.com .
+Please include the name of the manual page (qslider.3qt) and the Qt
+version (2.3.0).

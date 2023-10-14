@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qtabbar.cpp   2.2.4   edited 2000-11-21 $
+** $Id: qt/src/widgets/qtabbar.cpp   2.3.0   edited 2001-02-13 $
 **
 ** Implementation of QTab and QTabBar classes
 **
@@ -913,7 +913,7 @@ void QTabBar::scrollTabs()
     for ( QTab* t = lstatic->first(); t; t = lstatic->next() ) {
 	if ( t->r.left() < 0 && t->r.right() > 0 )
 	    left = t;
-	if ( t->r.left() < d->leftB->x() )
+	if ( t->r.left() < d->leftB->x()+2 )
 	    right = t;
     }
 

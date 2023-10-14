@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/compat/qpushbt.h   2.2.4   edited 2000-08-25 $
+** $Id: qt/src/compat/qpushbt.h   2.3.0   edited 2001-01-26 $
 **
 ** Compatibility file - should only be included by legacy code.
 ** It #includes the file which obsoletes this one.

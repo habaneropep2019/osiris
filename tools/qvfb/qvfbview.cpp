@@ -20,7 +20,7 @@
 #include "qvfbview.h"
 #include "qvfbhdr.h"
 
-#define QTE_PIPE "/tmp/.QtEmbedded-%1"
+#define QTE_PIPE "QtEmbedded-%1"
 
 #include <qapplication.h>
 #include <qimage.h>
@@ -29,6 +29,7 @@
 #include <qwmatrix.h>
 #include "qanimationwriter.h"
 
+#include <stdlib.h>
 #include <unistd.h>
 #include <sys/ipc.h>
 #include <sys/types.h>
@@ -172,7 +173,13 @@ void QVFbView::setRate( int r )
 
 void QVFbView::initLock()
 {
-    QString pipe = QString( QTE_PIPE ).arg( displayid );
+    QString username = "unknown";
+    const char *logname = getenv("LOGNAME");
+    if ( logname )
+	username = logname;
+    QString dataDir = "/tmp/qtembedded-" + username;
+
+    QString pipe = dataDir + "/" + QString( QTE_PIPE ).arg( displayid );
     int semkey = ftok( pipe.latin1(), 'd' );
     lockId = semget( semkey, 0, 0 );
 }
@@ -249,7 +256,8 @@ void QVFbView::timeout()
 
 QImage QVFbView::getBuffer( const QRect &r, int &leading ) const
 {
-    if ( hdr->depth == 16 ) {
+    switch ( hdr->depth ) {
+      case 16: {
 	static unsigned char *imgData = 0;
 	if ( !imgData ) {
 	    int bpl = ((hdr->width*32+31)/32)*4;
@@ -267,7 +275,8 @@ QImage QVFbView::getBuffer( const QRect &r, int &leading ) const
 	}
 	leading = 0;
 	return img;
-    } else if ( hdr->depth == 4 ) {
+      }
+      case 4: {
 	static unsigned char *imgData = 0;
 	if ( !imgData ) {
 	    int bpl = ((hdr->width*8+31)/32)*4;
@@ -294,11 +303,25 @@ QImage QVFbView::getBuffer( const QRect &r, int &leading ) const
 	}
 	leading = 0;
 	return img;
-    } else {
+      }
+      case 32: {
+	leading = r.x();
+	return QImage( data + hdr->dataoffset + r.y() * hdr->linestep,
+		    hdr->width, r.height(), hdr->depth, 0,
+		    0, QImage::LittleEndian );
+      }
+      case 8: {
 	leading = r.x();
 	return QImage( data + hdr->dataoffset + r.y() * hdr->linestep,
 		    hdr->width, r.height(), hdr->depth, hdr->clut,
-		    hdr->depth == 1 ? 0 : 256, QImage::LittleEndian );
+		    256, QImage::LittleEndian );
+      }
+      case 1: {
+	leading = r.x();
+	return QImage( data + hdr->dataoffset + r.y() * hdr->linestep,
+		    hdr->width, r.height(), hdr->depth, hdr->clut,
+		    0, QImage::LittleEndian );
+      }
     }
     return QImage();
 }

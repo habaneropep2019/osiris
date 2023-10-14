@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/network/qhostaddress.h   2.2.4   edited 2000-09-12 $
+** $Id: qt/src/network/qhostaddress.h   2.3.0   edited 2001-01-26 $
 **
 ** Definition of QHostAddress class.
 **

@@ -1,5 +1,6 @@
-.TH QRadioButton 3qt "1 Febrary 2001" "Trolltech AS" \" -*- nroff -*-
-.\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
+'\" t
+.TH QRadioButton 3qt "5 March 2001" "Trolltech AS" \" -*- nroff -*-
+.\" Copyright 1992-2001 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
 .\"
@@ -7,7 +8,6 @@
 .nh
 .SH NAME
 QRadioButton \- Radio button with a text label
-.SH SYNOPSIS
 .br
 .PP
 \fC#include <qradiobutton.h>\fR
@@ -96,11 +96,20 @@ Inherits QButton.
 .br
 .in -1c
 .SS "Properties"
-<table border=1 cellpadding=3 cellspacing=0> <tr><th>Type<th>Name<th>READ<th>WRITE<th>Options <tr><td>bool<td>checked<td>isChecked<td>setChecked<td>&nbsp; </table>
+.nf
+.TS
+l l l l l
+- - - - -
+l l l l l.
+Type	Name	READ	WRITE	Options
+bool	checked	isChecked	setChecked
+.TE
+.fi
+
 .SH DESCRIPTION
 The QRadioButton widget provides a radio button with a text label.
 .PP
-QRadioButton and QCheckBox are both option buttons. That is, they can be switched on (checked) or off (unchecked). The classes differ in how the choices for the user are restricted. Check-boxes define "many of many" choices, while radio buttons provide a "one of many" choice. In a group of radio buttons, only one button at a time can be checked. If the user selects another button, the previously selected button is switched off.
+QRadioButton and QCheckBox are both option buttons. That is, they can be switched on (checked) or off (unchecked). The classes differ in how the choices for the user are restricted. Check-boxes define" many of many" choices, while radio buttons provide a "one of many" choice. In a group of radio buttons, only one button at a time can be checked. If the user selects another button, the previously selected button is switched off.
 .PP
 While it is technically possible to implement radio-behaviour with check boxes and vice versa, it's strongly recommended to stick with the well-known semantics. Otherwise your users would be pretty confused.
 .PP
@@ -108,7 +117,12 @@ The easiest way to implement a "one of many" choice, is to simply stick the radi
 .PP
 Whenver a button is switched on or off, it emits the signal toggled(). Connect to this signal if you want to trigger an action each time the button changes state. Otherwise, use isChecked() to query whether or not a particular button is selected.
 .PP
-<img src=qradiobt-m.png> <img src=qradiobt-w.png>
+.ce 1
+.B "[Image Omitted]"
+.PP
+
+.ce 1
+.B "[Image Omitted]"
 .PP
 See also QPushButton, QToolButton and GUI Design Handbook: Radio Button
 .PP
@@ -174,9 +188,20 @@ Reimplemented for internal reasons; the API is not affected.
 Reimplemented from QWidget.
 .SH "SEE ALSO"
 .BR http://doc.trolltech.com/qradiobutton.html
+.BR http://www.trolltech.com/faq/tech.html
 .SH COPYRIGHT
-Copyright 1992-2000 Trolltech AS, http://www.trolltech.com/.  See the
+Copyright 1992-2001 Trolltech AS, http://www.trolltech.com.  See the
 license file included in the distribution for a complete license
 statement.
 .SH AUTHOR
 Generated automatically from the source code.
+.SH BUGS
+If you find a bug in Qt, please report it as described in
+.BR http://doc.trolltech.com/bughowto.html .
+Good bug reports make our job much simpler. Thank you.
+.P
+In case of content or formattting problems with this manual page, please
+report them to
+.BR qt-bugs@trolltech.com .
+Please include the name of the manual page (qradiobutton.3qt) and the Qt
+version (2.3.0).

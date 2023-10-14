@@ -267,7 +267,7 @@ void read_png(FILE *fp, unsigned int sig_read)  /* file is already open */
     */
    if (color_type & PNG_COLOR_MASK_COLOR)
    {
-      png_uint_32 num_palette;
+      int num_palette;
       png_colorp palette;
 
       /* This reduces the image to the application supplied palette */
@@ -490,8 +490,8 @@ row_callback(png_structp png_ptr, png_bytep new_row,
  * need the row_num and pass, but I'm supplying them because it
  * may make your life easier.
  *
- * For the non-NULL rows of interlaced images, you must call
- * png_progressive_combine_row() passing in the row and the
+ * For the non-NULL rows of interlaced images,te( WState_OwnCursor );
+    QCursor *oc = QApplication::overrideow and the
  * old row.  You can call this function for NULL rows (it will
  * just return) and for non-interlaced images (it just does the
  * memcpy for you) if it will make the code easier.  Thus, you
@@ -603,9 +603,9 @@ void write_png(char *file_name /* , ... other image information ... */)
       PNG_INTERLACE_????, PNG_COMPRESSION_TYPE_BASE, PNG_FILTER_TYPE_BASE);
 
    /* set the palette if there is one.  REQUIRED for indexed-color images */
-   palette = (png_colorp)png_malloc(png_ptr, 256 * sizeof (png_color));
+   palette = (png_colorp)png_malloc(png_ptr, PNG_MAX_PALETTE_LENGTH * sizeof (png_color));
    /* ... set palette colors ... */
-   png_set_PLTE(png_ptr, info_ptr, palette, 256);
+   png_set_PLTE(png_ptr, info_ptr, palette, PNG_MAX_PALETTE_LENGTH);
    /* You must not free palette here, because png_set_PLTE only makes a link to
       the palette that you malloced.  Wait until you are about to destroy
       the png structure. */
@@ -755,11 +755,13 @@ void write_png(char *file_name /* , ... other image information ... */)
       allocated it with malloc() instead of png_malloc(), use free() instead
       of png_free(). */
    png_free(png_ptr, palette);
+   palette=NULL;
 
    /* Similarly, if you png_malloced any data that you passed in with
       png_set_something(), such as a hist or trans array, free it here,
       when you can be sure that libpng is through with it. */
    png_free(png_ptr, trans);
+   trans=NULL;
 
    /* clean up after the write, and free any memory allocated */
    png_destroy_write_struct(&png_ptr, &info_ptr);

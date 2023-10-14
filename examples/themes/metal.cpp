@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/themes/metal.cpp   2.2.4   edited 2000-10-06 $
+** $Id: qt/examples/themes/metal.cpp   2.3.0   edited 2001-02-15 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -25,7 +25,6 @@
 
 
 /////////////////////////////////////////////////////////
-#include "metal.xpm"
 #include "stonedark.xpm"
 #include "stone1.xpm"
 #include "marble.xpm"
@@ -201,53 +200,128 @@ void MetalStyle::unPolish( QWidget* w)
 }
 
 /*!
+  Draw a metallic button, sunken if \a sunken is TRUE, horizontal if 
+  /a horz is TRUE.
+*/
+
+void MetalStyle::drawMetalButton( QPainter *p, int x, int y, int w, int h,
+  bool sunken, bool horz )
+{
+    QColor top1("#878769691515");
+    QColor top2("#C6C6B4B44949");
+    
+    QColor bot2("#70705B5B1414");
+    QColor bot1("56564A4A0E0E"); //first from the bottom
+    
+    QColor highlight("#E8E8DDDD6565");
+    QColor subh1("#CECEBDBD5151");
+    QColor subh2("#BFBFACAC4545");
+    
+    QColor topgrad("#B9B9A5A54040");
+    QColor botgrad("#89896C6C1A1A");
+    
+
+    int x2 = x + w - 1;
+    int y2 = y + h - 1;
+    
+    //frame:
+    
+    p->setPen( top1 );
+    p->drawLine( x, y2, x, y );
+    p->drawLine( x, y, x2-1, y );
+    p->setPen( top2 );
+    p->drawLine( x+1, y2 -1, x+1, y+1 );
+    p->drawLine( x+1, y+1 , x2-2, y+1 );
+
+    p->setPen( bot1 );
+    p->drawLine( x+1, y2, x2, y2 );
+    p->drawLine( x2, y2, x2, y );
+    p->setPen( bot2 );
+    p->drawLine( x+1, y2-1, x2-1, y2-1 );
+    p->drawLine( x2-1, y2-1, x2-1, y+1 );
+
+    // highlight:
+    int i = 0;
+    int x1 = x + 2;
+    int y1 = y + 2;
+    if ( horz ) 
+	x2 = x2 - 2; 
+    else
+	y2 = y2 - 2;
+    // Note that x2/y2 mean something else from this point down...
+
+#define DRAWLINE if (horz) \
+                    p->drawLine( x1, y1+i, x2, y1+i ); \
+		 else \
+                    p->drawLine( x1+i, y1, x1+i, y2 ); \
+                 i++; 
+    
+    if ( !sunken ) {
+	p->setPen( highlight );
+	DRAWLINE;
+	DRAWLINE;
+	p->setPen( subh1 );
+	DRAWLINE;
+	p->setPen( subh2 );
+	DRAWLINE;
+    }
+    // gradient:
+    int ng = (horz ? h : w) - 8; // how many lines for the gradient?
+    
+    int h1, h2, s1, s2, v1, v2;
+    if ( !sunken ) {
+	topgrad.hsv( &h1, &s1, &v1 );
+	botgrad.hsv( &h2, &s2, &v2 );
+    } else {
+	botgrad.hsv( &h1, &s1, &v1 );
+	topgrad.hsv( &h2, &s2, &v2 );
+    }
+    
+    if ( ng > 1 ) {
+	
+	for ( int j =0; j < ng; j++ ) {
+	    p->setPen( QColor( h1 + ((h2-h1)*j)/(ng-1), 
+			       s1 + ((s2-s1)*j)/(ng-1), 
+			       v1 + ((v2-v1)*j)/(ng-1),  QColor::Hsv ) ); 
+	    DRAWLINE;
+	}
+    } else if ( ng == 1 ) {
+	p->setPen( QColor( (h1+h2)/2, (s1+s2)/2, (v1+v2)/2, QColor::Hsv ) ); 
+	DRAWLINE;
+    }
+    if ( sunken ) {
+	p->setPen( subh2 );
+	DRAWLINE;
+	
+	p->setPen( subh1 );
+	DRAWLINE;
+
+	p->setPen( highlight );
+	DRAWLINE;
+	DRAWLINE;
+    }
+    
+}
+
+
+
+/*!
   Reimplementation from QStyle
  */
 void MetalStyle::drawButton( QPainter *p, int x, int y, int w, int h,
 			     const QColorGroup &, bool sunken, const QBrush*)
 {
 
-    static QImage *img1;
-    if ( !img1 ) {
-	img1 = new QImage(metal_xpm);
-    }
-
-    QImage scaledImage = img1->smoothScale( w, h );
-    QPixmap pix;
-    pix.convertFromImage( scaledImage );
-    p->drawPixmap( x, y, pix );
-    QColorGroup g2;
-    g2.setColor( QColorGroup::Light,  white  );
-    g2.setColor( QColorGroup::Dark,  black  );
-    qDrawShadePanel( p, x, y, w, h, g2, sunken, sunken?2:1);
-	
-
-//    static QPixmap* darkpixmap = 0;
-//    if (!pixmap) {
-//	  pixmap = new QPixmap;
-//	  pixmap->convertFromImage(img);
-//	  for (int i=0; i<img.numColors(); i++) {
-//	      QRgb rgb = img.color(i);
-//	      QColor c(rgb);
-//	      rgb = c.dark().rgb();
-//	      img.setColor(i,rgb);
-//	  }
-//	  darkpixmap = new QPixmap;
-//	  darkpixmap->convertFromImage(img);
-//    }
-//    if (!pixmap)
-//	  return;
-//    p->drawPixmap( x, y, *pixmap );
-
+    drawMetalButton( p, x, y, w, h, sunken, TRUE );
 }
 
 /*!
   Reimplementation from QStyle
  */
 void MetalStyle::drawBevelButton( QPainter *p, int x, int y, int w, int h,
-				const QColorGroup &g, bool sunken, const QBrush* fill)
+				const QColorGroup &, bool sunken, const QBrush*)
 {
-    MetalStyle::drawButton(p, x, y, w, h, g, sunken, fill);
+    MetalStyle::drawMetalButton(p, x, y, w, h, sunken, TRUE );
 }
 
 /*!
@@ -284,7 +358,8 @@ void MetalStyle::drawPushButton( QPushButton* btn, QPainter *p)
 	y2 -= 2;
     }
 	
-    drawButton( p, x1, y1, x2-x1+1, y2-y1+1, g, btn->isOn() || btn->isDown(), &fill);
+    drawMetalButton( p, x1, y1, x2-x1+1, y2-y1+1, btn->isOn() || btn->isDown(),
+		     TRUE ); // always horizontal
 	
 
     if ( btn->isMenuButton() ) {
@@ -343,4 +418,97 @@ void MetalStyle::drawPanel( QPainter *p, int x, int y, int w, int h,
     QStyle::drawPanel( p,  x,  y,  w,  h,
 			    g, sunken,
 			    lineWidth, fill );
+}
+
+
+/*!
+  Reimplemented
+*/
+
+void MetalStyle::drawSlider( QPainter *p, int x, int y, int w, int h,
+			     const QColorGroup &, Orientation orient, 
+			     bool /*tickAbove*/, bool /*tickBelow*/ )
+{
+    drawMetalButton( p, x, y, w, h, FALSE, orient != Horizontal );
+}
+
+
+void MetalStyle::drawScrollBarControls( QPainter* p, const QScrollBar* sb,
+					int sliderStart, uint controls,
+					uint activeControl )
+{
+    QWindowsStyle::drawScrollBarControls( p, sb, sliderStart, controls & ~(AddLine|SubLine|Slider),
+					activeControl & ~(AddLine|SubLine|Slider) );
+    bool horz = sb->orientation() == QScrollBar::Horizontal;
+    int b = 2;
+    int w = horz ? sb->height() : sb->width();
+
+    QColorGroup g = sb->colorGroup();
+
+    int sliderMin, sliderMax, sliderLength, buttonDim;
+    scrollBarMetrics( sb, sliderMin, sliderMax, sliderLength, buttonDim );
+
+    if (sliderStart > sliderMax) { // sanity check
+	sliderStart = sliderMax;
+    }
+    bool maxedOut = (sb->maxValue() == sb->minValue());
+
+   
+    if ( controls & AddLine ) {
+	bool sunken = activeControl & AddLine;
+	QRect r( b, b, w-2*b, w-2*b ) ;
+	if ( horz )
+	    r.moveBy( sb->width() - w, 0 );
+	else
+	    r.moveBy( 0, sb->height() - w );
+	
+	drawMetalButton( p, r.x(), r.y(), r.width(), r.height(), 
+			 sunken, !horz );
+	drawArrow(  p, horz ? RightArrow : DownArrow,  sunken, 
+		    r.x(), r.y(), r.width(), r.height(), g, !maxedOut );
+
+    } 
+    if ( controls & SubLine ) {
+	bool sunken = activeControl & SubLine;
+	QRect r( b, b, w-2*b, w-2*b ) ;
+	drawMetalButton( p, r.x(), r.y(), r.width(), r.height(), 
+			 sunken, !horz );
+	drawArrow(  p, horz ? LeftArrow : UpArrow,  sunken, 
+		    r.x(), r.y(), r.width(), r.height(), g, !maxedOut );
+    }
+
+    QRect sliderR;
+    if ( horz ) {
+	sliderR .setRect( sliderStart, b, sliderLength, w-2*b );
+    } else {
+	sliderR .setRect( b, sliderStart, w-2*b, sliderLength );
+    }
+    if ( controls & Slider ) {
+	if ( !maxedOut ) {
+	    drawMetalButton( p, sliderR.x(), sliderR.y(),
+				 sliderR.width(), sliderR.height(),
+				 FALSE, horz ); 
+	}
+    }
+
+}
+
+
+void MetalStyle::drawComboButton( QPainter *p, int x, int y, int w, int h,
+				  const QColorGroup &g, bool sunken,
+				  bool /*editable*/,
+				  bool enabled,
+				  const QBrush *fill)
+{
+    
+     qDrawWinPanel(p, x, y, w, h, g, TRUE,
+		   fill?fill:(enabled?&g.brush( QColorGroup::Base ):
+				      &g.brush( QColorGroup::Background )));
+
+
+     drawMetalButton( p, x+w-2-16, y+2, 16, h-4, sunken, TRUE );
+     
+     drawArrow( p, QStyle::DownArrow, sunken,
+		x+w-2-16+ 2, y+2+ 2, 16- 4, h-4- 4, g, enabled );
+   
 }
