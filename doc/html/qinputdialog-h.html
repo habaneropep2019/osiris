@@ -30,7 +30,7 @@ remains with Trolltech.
 <hr>
 <pre>
 /****************************************************************************
-** &#36;Id&#58; qt/src/dialogs/qinputdialog.h   2.2.2   edited 2000-08-25 $
+** &#36;Id&#58; qt/src/dialogs/qinputdialog.h   2.2.3   edited 2000-12-04 $
 **
 ** Definition of QInputDialog class
 **
@@ -115,7 +115,7 @@ public:
                            int step = 1, bool *ok = 0, QWidget *parent = 0, const char *name = 0 );
     static double getDouble( const QString &amp;caption, const QString &amp;label, double num = 0,
                              double from = -2147483647, double to = 2147483647,
-                             int step = 1, bool *ok = 0, QWidget *parent = 0, const char *name = 0 );
+                             int decimals = 1, bool *ok = 0, QWidget *parent = 0, const char *name = 0 );
     static QString getItem( const QString &amp;caption, const QString &amp;label, const QStringList &amp;list,
                             int current = 0, bool editable = TRUE,
                             bool *ok = 0, QWidget *parent = 0, const char *name = 0 );
@@ -144,5 +144,5 @@ private:        // Disabled copy constructor and operator=
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.2</div>
+<td align="right"><div align="right">Qt version 2.2.3</div>
 </table></div></address></body></html>

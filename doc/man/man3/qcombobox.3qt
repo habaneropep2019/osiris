@@ -1,4 +1,4 @@
-.TH QComboBox 3qt "8 November 2000" "Trolltech AS" \" -*- nroff -*-
+.TH QComboBox 3qt "12 December 2000" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -84,6 +84,9 @@ Inherits QWidget.
 .br
 .ti -1c
 .BI "virtual void setAutoResize ( bool ) \fI(obsolete)\fR"
+.br
+.ti -1c
+.BI "virtual QSizePolicy \fBsizePolicy\fR () const"
 .br
 .ti -1c
 .BI "virtual void \fBsetBackgroundColor\fR ( const QColor & ) "
@@ -430,6 +433,8 @@ Sets this combo box to offer auto-completion while the user is editing if \fIena
 .PP
 The combo box uses the list of items as candidates for completion.
 .PP
+Note: This will only work on editable combo boxes, so make the combo box editable before you call this function or it will not work.
+.PP
 See also autoCompletion() and setEditText().
 .SH "void QComboBox::setAutoResize ( bool enable ) \fC[virtual]\fR"
 \fBThis function is obsolete.\fR It is provided to keep old source working, and will probably be removed in a future version of Qt. We strongly advise against using it in new code.
@@ -522,8 +527,6 @@ Reimplemented from QWidget.
 Returns the current maximum on-screen size of the combo box. The default is ten lines.
 .PP
 See also setSizeLimit(), count() and maxCount().
-.SH "QSizePolicy QComboBox::sizePolicy () const \fC[virtual]\fR"
-Reimplemented for internal reasons; the API is not affected.
 .SH "void QComboBox::styleChange ( QStyle & s ) \fC[virtual protected]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .PP

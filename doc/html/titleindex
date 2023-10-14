@@ -1,4 +1,5 @@
 Food-for-thought Easter Egg | qnetworkegg.html
+QEmbed - File and Image Embedder | qembed.html
 Qt Image IO Extension Library | imageio.html
 Qt Official Easter Egg | easteregg.html
 Qt Official Easter Egg | easteregg2.html
@@ -26,6 +27,7 @@ Qt Toolkit -  Events and Event Filters | eventsandfilters.html
 Qt Toolkit -  Fonts in Qt/Embedded | fonts-qws.html
 Qt Toolkit -  Format of the QDataStream operators | datastreamformat.html
 Qt Toolkit -  Functions removed in  Qt 2.0 | removed20.html
+Qt Toolkit -  GNU General Public License | gpl.html
 Qt Toolkit -  Header File Index | headers.html
 Qt Toolkit -  How to use the Qt SAX2 classes | xml-sax.html
 Qt Toolkit -  How-To Buy Qt | buyhowto.html
@@ -693,8 +695,6 @@ Qt Toolkit - QVector Class | qvector.html
 Qt Toolkit - QVector member list | qvector-members.html
 Qt Toolkit - QWMatrix Class | qwmatrix.html
 Qt Toolkit - QWMatrix member list | qwmatrix-members.html
-Qt Toolkit - QWSDecoration Class | qwsdecoration.html
-Qt Toolkit - QWSDecoration member list | qwsdecoration-members.html
 Qt Toolkit - QWaitCondition Class | qwaitcondition.html
 Qt Toolkit - QWaitCondition member list | qwaitcondition-members.html
 Qt Toolkit - QWhatsThis Class | qwhatsthis.html

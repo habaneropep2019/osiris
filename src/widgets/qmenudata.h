@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qmenudata.h   2.2.2   edited 2000-10-11 $
+** $Id: qt/src/widgets/qmenudata.h   2.2.3   edited 2000-11-30 $
 **
 ** Definition of QMenuData class
 **
@@ -51,6 +51,7 @@
 
 class QPopupMenu;
 class QMenuDataData;
+class QObject;
 
 #if defined(INCLUDE_MENUITEM_DEF)
 

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/opengl/qgl_x11.cpp   2.2.2   edited 2000-11-03 $
+** $Id: qt/src/opengl/qgl_x11.cpp   2.2.3   edited 2000-11-21 $
 **
 ** Implementation of OpenGL classes for Qt
 **
@@ -103,7 +103,8 @@ static Colormap choose_cmap( Display *dpy, XVisualInfo *vi )
     if ( !cmap_dict ) {
 	cmap_dict = new QIntDict<CMapEntry>;
 	const char *v = glXQueryServerString( dpy, vi->screen, GLX_VERSION );
-	mesa_gl = strstr(v,"Mesa") != 0;
+	if ( v )
+	    mesa_gl = strstr(v,"Mesa") != 0;
 	qAddPostRoutine( cleanup_cmaps );
     }
 

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qapplication.cpp   2.2.2   edited 2000-10-11 $
+** $Id: qt/src/kernel/qapplication.cpp   2.2.3   edited 2000-12-08 $
 **
 ** Implementation of QApplication class
 **
@@ -608,11 +608,19 @@ void QApplication::construct( int &argc, char **argv, Type type )
 
 QApplication::QApplication( Display* dpy )
 {
+    static int aargc = 1;
+    static char *aargv[] = { "unknown", 0 };
+
     qt_is_gui_used = TRUE;
     init_precmdline();
     // ... no command line.
     qt_init( dpy );
-    initialize( 0, 0 );
+
+#if defined(QT_THREAD_SUPPORT)
+    qt_mutex = new QMutex(TRUE);
+#endif
+
+    initialize( aargc, aargv );
 }
 
 QApplication::QApplication(Display *dpy, int argc, char **argv)
@@ -620,6 +628,11 @@ QApplication::QApplication(Display *dpy, int argc, char **argv)
     qt_is_gui_used = TRUE;
     init_precmdline();
     qt_init(dpy);
+
+#if defined(QT_THREAD_SUPPORT)
+    qt_mutex = new QMutex(TRUE);
+#endif
+
     initialize(argc, argv);
 }
 
@@ -658,13 +671,6 @@ void QApplication::initialize( int argc, char **argv )
 #endif
     is_app_running = TRUE; // no longer starting up
 
-#ifdef _WS_QWS_
-    // This is in qapplication.cpp in qt/main
-    extern QRect qt_maxWindowRect;
-    if ( qt_is_gui_used )
-	qt_maxWindowRect = qApp->desktop()->rect();
-#endif
-
 #ifndef QT_NO_STYLE
 #if defined(_WS_X11_)
     if ( qt_is_gui_used )
@@ -678,7 +684,7 @@ void QApplication::initialize( int argc, char **argv )
 #elif defined(_WS_X11_) && defined(_OS_IRIX_) && !defined(QT_NO_STYLE_SGI)
 	app_style = new QSGIStyle; // default comment
 #elif defined(_WS_X11_) && !defined(QT_NO_STYLE_MOTIF)
-	app_style = new QMotifStyle; // default style for X Windows
+	app_style = new QMotifStyle; // default style for X11
 #elif defined(_WS_MAC_) && !defined(QT_NO_STYLE_PLATINUM)
 	app_style = new QPlatinumStyle;
 #elif defined(_WS_QWS_) && !defined(QT_NO_STYLE_COMPACT)
@@ -686,7 +692,7 @@ void QApplication::initialize( int argc, char **argv )
 #elif !defined(QT_NO_STYLE_WINDOWS)
 	app_style = new QWindowsStyle; // default style for Windows
 #elif !defined(QT_NO_STYLE_MOTIF)
-	app_style = new QMotifStyle; // default style for X Windows
+	app_style = new QMotifStyle; // default style for X11
 #elif !defined(QT_NO_STYLE_PLATINUM)
 	app_style = new QPlatinumStyle;
 #else
@@ -2345,7 +2351,7 @@ void QApplication::setActiveWindow( QWidget* act )
 	if ( w->topLevelWidget() == old_active || w->topLevelWidget()==active_window ) {
 	    QColorGroup acg = w->palette().active();
 	    QColorGroup icg = w->palette().inactive();
-	    if ( acg != icg && 
+	    if ( acg != icg &&
 		 ( acg.background() != icg.background() ||
 		   acg.base() != icg.base() ||
 		   acg.button() != icg.button() ||
@@ -2613,6 +2619,10 @@ int QApplication::loopLevel() const
 /*! \fn bool QApplication::locked()
   Returns TRUE if the Qt library mutex is locked by a different thread,
   otherwise returns FALSE.
+
+  \e NOTE: Due to differing implementations of recursive mutexes on various
+  platforms, calling this function from the same thread that previous locked
+  the mutex will return undefined results.
 
   \sa lock(), unlock()
 */

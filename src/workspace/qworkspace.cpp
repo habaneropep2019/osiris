@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/workspace/qworkspace.cpp   2.2.2   edited 2000-11-01 $
+** $Id: qt/src/workspace/qworkspace.cpp   2.2.3   edited 2000-11-16 $
 **
 ** Implementation of the QWorkspace class
 **
@@ -1126,7 +1126,7 @@ bool QWorkspace::eventFilter( QObject *o, QEvent * e)
 	    break;
 	d->focus.removeRef( (QWorkspaceChild*)o );
 	if ( d->focus.isEmpty() )
-	    d->active = 0;
+	    activateWindow( 0 );
 	else {
 	    activatePreviousWindow();
 	    QWorkspaceChild* c = d->active;

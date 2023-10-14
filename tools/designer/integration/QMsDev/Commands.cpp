@@ -291,7 +291,7 @@ void CCommands::addSharedSettings( CComPtr<IConfiguration> pConfig )
     const CComBSTR dllDefine("/D QT_DLL");
     const CComBSTR qtInclude("/I \"$(QTDIR)\\include\"");
     const CComBSTR staticLib("$(QTDIR)\\lib\\qt.lib");
-    const CComBSTR sharedLib("$(QTDIR)\\lib\\qt222.lib $(QTDIR)\\lib\\qtmain.lib");
+    const CComBSTR sharedLib("$(QTDIR)\\lib\\qt223.lib $(QTDIR)\\lib\\qtmain.lib");
 
     VERIFY_OK(pConfig->AddToolSettings( compiler, dllDefine, CComVariant(VARIANT_FALSE) ));
     VERIFY_OK(pConfig->AddToolSettings( compiler, qtInclude, CComVariant(VARIANT_FALSE) ));
@@ -307,7 +307,7 @@ void CCommands::addStaticSettings( CComPtr<IConfiguration> pConfig )
     const CComBSTR dllDefine("/D QT_DLL");
     const CComBSTR qtInclude("/I \"$(QTDIR)\\include\"");
     const CComBSTR staticLib("$(QTDIR)\\lib\\qt.lib");
-    const CComBSTR sharedLib("$(QTDIR)\\lib\\qt222.lib $(QTDIR)\\lib\\qtmain.lib");
+    const CComBSTR sharedLib("$(QTDIR)\\lib\\qt223.lib $(QTDIR)\\lib\\qtmain.lib");
 
     VERIFY_OK(pConfig->RemoveToolSettings( compiler, dllDefine, CComVariant(VARIANT_FALSE) ));
     VERIFY_OK(pConfig->AddToolSettings( compiler, qtInclude, CComVariant(VARIANT_FALSE) ));
@@ -416,7 +416,7 @@ void CCommands::addUIC( CComQIPtr<IBuildProject, &IID_IBuildProject> pProject, C
 	CComPtr<IConfiguration> pConfig;
 	VERIFY_OK(pConfigs->Item(Varc, &pConfig));
 	CComBSTR command = uiccommand+"$(InputPath) -o $(InputDir)\\$(InputName).h\n" +
-			   uiccommand+"$(InputPath) -i $(InputDir)\\$(InputName).h -o $(InputDir)\\$(InputName).cpp\n" + 
+			   uiccommand+"$(InputPath) -i $(InputName).h -o $(InputDir)\\$(InputName).cpp\n" + 
 			   moccommand+"$(InputDir)\\$(InputName).h -o $(InputDir)\\moc_$(InputName).cpp";
 	CComBSTR output = "$(InputDir)\\$(InputName).h\n$(InputDir)\\$(InputName).cpp\n$(InputDir)\\moc_$(InputName).cpp";
 	VERIFY_OK(pConfig->AddCustomBuildStepToFile(CComBSTR(uiFile), command, output, CComBSTR("Uic'ing $(InputName).ui ..."), 

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qwidget_x11.cpp   2.2.2   edited 2000-11-06 $
+** $Id: qt/src/kernel/qwidget_x11.cpp   2.2.3   edited 2000-11-14 $
 **
 ** Implementation of QWidget and QWindow classes for X11
 **
@@ -1013,6 +1013,9 @@ void QWidget::setMouseTracking( bool enable )
   mouse when a button is pressed and keeps it until the last button is
   released.
 
+  Beware that only widgets actually shown on the screen may grab the
+  mouse input.
+
   \sa releaseMouse(), grabKeyboard(), releaseKeyboard()
 */
 
@@ -1398,11 +1401,13 @@ void QWidget::hideWindow()
     deactivateWidgetCleanup();
     if ( isTopLevel() ) {
 	qt_deferred_map_take( this );
-	XWithdrawWindow( x11Display(), winId(), x11Screen() );
+	if ( winId() ) // in nsplugin, may be 0
+	    XWithdrawWindow( x11Display(), winId(), x11Screen() );
 	crect.moveTopLeft( fpos );
 	topData()->fsize = crect.size();
     } else {
-	XUnmapWindow( x11Display(), winId() );
+	if ( winId() ) // in nsplugin, may be 0
+	    XUnmapWindow( x11Display(), winId() );
     }
 }
 

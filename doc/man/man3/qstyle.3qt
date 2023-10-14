@@ -1,4 +1,4 @@
-.TH QStyle 3qt "8 November 2000" "Trolltech AS" \" -*- nroff -*-
+.TH QStyle 3qt "12 December 2000" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -303,7 +303,7 @@ Reimplemented in QSGIStyle, QCommonStyle, QMotifStyle, QPlatinumStyle, QWindowsS
 .SH "int QStyle::defaultFrameWidth () const \fC[virtual]\fR"
 The default frame width, usually 2.
 .PP
-Reimplemented in QSGIStyle, QMotifPlusStyle, QCDEStyle and QCommonStyle.
+Reimplemented in QSGIStyle, QMotifPlusStyle and QCDEStyle.
 .SH "void QStyle::drawArrow ( QPainter * p, Qt::ArrowType type, bool down, int x, int y, int w, int h, const QColorGroup & g, bool enabled, const QBrush * fill = 0 ) \fC[virtual]\fR"
 Draws an arrow to indicate direction. Used for example in scrollbars and spin-boxes.
 .SH "void QStyle::drawBevelButton ( QPainter *, int, int, int, int, const QColorGroup &, bool = FALSE, const QBrush * = 0 ) \fC[virtual]\fR"
@@ -329,11 +329,9 @@ Reimplemented in QSGIStyle, QWindowsStyle, QMotifStyle and QPlatinumStyle.
 .SH "void QStyle::drawComboButton ( QPainter * p, int x, int y, int w, int h, const QColorGroup & g, bool sunken = FALSE, bool editable = FALSE, bool enabled = TRUE, const QBrush * fill = 0 ) \fC[virtual]\fR"
 Draws a press-sensitive shape in the style of a combo box or menu button.
 .PP
-Reimplemented in QMotifPlusStyle, QPlatinumStyle, QWindowsStyle, QMotifStyle, QCommonStyle and QSGIStyle.
+Reimplemented in QMotifPlusStyle, QPlatinumStyle, QWindowsStyle, QMotifStyle and QSGIStyle.
 .SH "void QStyle::drawComboButtonMask ( QPainter * p, int x, int y, int w, int h ) \fC[virtual]\fR"
 Draw the mask of a combo box button. Useful if a rounded buttons needs to be transparent because the style uses a fancy background pixmap.
-.PP
-Reimplemented in QCommonStyle.
 .SH "void QStyle::drawExclusiveIndicator ( QPainter *, int x, int y, int w, int h, const QColorGroup &, bool on, bool down = FALSE, bool enabled = TRUE ) \fC[virtual]\fR"
 Draws a mark indicating the state of an exclusive choice.
 .PP
@@ -415,7 +413,7 @@ Reimplemented in QCommonStyle and QSGIStyle.
 .SH "void QStyle::drawSliderMask ( QPainter * p, int x, int y, int w, int h, Orientation, bool, bool ) \fC[virtual]\fR"
 Draws the mask of a slider.
 .PP
-Reimplemented in QWindowsStyle, QSGIStyle, QCommonStyle and QPlatinumStyle.
+Reimplemented in QWindowsStyle, QSGIStyle and QPlatinumStyle.
 .SH "void QStyle::drawSplitter ( QPainter * p, int x, int y, int w, int h, const QColorGroup & g, Orientation orient ) \fC[virtual]\fR"
 Draws a splitter handle in the rectangle described by \fIx, y, w, h\fR using painter \fIp\fR and color group \fIg.\fR The orientation is \fIorient.\fR
 .PP
@@ -449,7 +447,7 @@ Reimplemented in QMotifStyle, QPlatinumStyle and QWindowsStyle.
 .SH "void QStyle::getButtonShift ( int & x, int & y ) \fC[virtual]\fR"
 Some GUI styles shift the contents of a button when the button is down. The default implementation returns 0 for both x and y.
 .PP
-Reimplemented in QWindowsStyle, QPlatinumStyle, QMotifPlusStyle and QCommonStyle.
+Reimplemented in QWindowsStyle, QPlatinumStyle and QMotifPlusStyle.
 .SH "GUIStyle QStyle::guiStyle () const"
 Returns an indicator to the additional "feel" component of a style. Current supported values are Qt::WindowsStyle and Qt::MotifStyle.
 .SH "QSize QStyle::indicatorSize () const \fC[virtual]\fR"
@@ -463,7 +461,7 @@ Some feels require the scrollbar or other sliders to jump back to the original p
 .PP
 This behavior can be customized with this function. The default is -1 (no jump back) while Windows requires 20 (weird jump back).
 .PP
-Reimplemented in QPlatinumStyle, QCommonStyle and QWindowsStyle.
+Reimplemented in QPlatinumStyle and QWindowsStyle.
 .SH "int QStyle::menuButtonIndicatorWidth ( int h )"
 Returns the width of the menu button indicator for a given button height \fIh.\fR
 .SH "void QStyle::polish ( QApplication * ) \fC[virtual]\fR"

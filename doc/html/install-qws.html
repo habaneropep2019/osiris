@@ -52,7 +52,7 @@ to build <i>on</i> Linux/x86 <i>for</i> the Linux/MIPSEL target, you would use:
 </pre>
 <p>
 Only a small number of configurations are predefined, all much the same.
-Configurations files are found in <tt>configs/</tt>.
+Configuration files are found in <tt>configs/</tt>.
 <p>
 <h3> Enable framebuffer support</h3>
 <p>
@@ -68,19 +68,15 @@ Configurations files are found in <tt>configs/</tt>.
 <p>
    For Mach64 and most other cards, use the vesafb driver.
 <p>
-   Note that some cards are only supported in VGA16 mode, this will
-   not work with the current version of Qt/Embedded, since VGA/16 is
-   not yet supported. You may need to upgrade your kernel, or even
-   switch to an experimental kernel.
+   For cards that are not VESA 2.0 compliant, use the VGA16 driver.
 <p>
-   The frame buffer must also be enabled with a boot parameter. See
+   The frame buffer may also need a boot parameter to be enabled. See
    <tt>/usr/src/linux/Documentation/fb</tt> for details.
 <p>
-   The fbset program, which should be included in Linux distributions,
+   The <tt>fbset</tt> program, which is included in most Linux distributions,
    may be used to switch video modes without rebooting the system. The
-   video mode active when the server is started will be used. (8-bit
-   modes are still experimental.) NOTE: fbset does not work with the vesafb
-   driver.
+   video mode active when the server is started will be used.
+   Note: <tt>fbset</tt> does not work with the vesafb driver.
 </p>
 <p>
 <h3> Change permissions</h3>
@@ -98,7 +94,7 @@ Configurations files are found in <tt>configs/</tt>.
    Log into a virtual console and do:
 <p>
 <pre>
-        cd ~/qt-<i>version</i>/
+        cd ~/qt-<i>version</i>/examples/launcher
         ./start-demo
 </pre>
 <p>
@@ -154,5 +150,5 @@ Configurations files are found in <tt>configs/</tt>.
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.2</div>
+<td align="right"><div align="right">Qt version 2.2.3</div>
 </table></div></address></body></html>

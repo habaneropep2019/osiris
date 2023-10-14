@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qtoolbutton.cpp   2.2.2   edited 2000-11-02 $
+** $Id: qt/src/widgets/qtoolbutton.cpp   2.2.3   edited 2000-12-04 $
 **
 ** Implementation of QToolButton class
 **
@@ -264,7 +264,7 @@ QToolButton::QToolButton( const QIconSet& iconSet, const QString &textLabel,
 	else
 	    QToolTip::add( this, textLabel );
     }
-#endif    
+#endif
 }
 
 
@@ -321,10 +321,12 @@ QSize QToolButton::sizeHint() const
 	QPixmap pm = iconSet(TRUE).pixmap(QIconSet::Small, QIconSet::Normal);
 	w = pm.width();
 	h = pm.height();
+#ifndef _WS_QWS_ // shouldn't be on any platform...
 	if ( w < 16 )
 	    w = 16;
 	if ( h < 16 )
 	    h = 16;
+#endif
     }
 
     if ( usesTextLabel() ) {
@@ -777,19 +779,16 @@ void QToolButton::popupTimerDone()
 	bool horizontal = TRUE;
 	bool topLeft = TRUE;
 	if ( parentWidget() && parentWidget()->inherits("QToolBar") ) {
-	    if ( ( (QToolBar*) parentWidget() )->orientation() == Vertical ) {
+	    if ( ( (QToolBar*) parentWidget() )->orientation() == Vertical )
 		horizontal = FALSE;
-		if ( mapToGlobal( rect().center() ).x() >
-		     topLevelWidget()->x() + topLevelWidget()->width()/2 )
-		    topLeft = FALSE;
-	    } else if ( mapToGlobal( rect().center() ).y() >
-			topLevelWidget()->y() + topLevelWidget()->height()/2 )
-		topLeft = FALSE;
 	}
 	if ( horizontal ) {
-	    if ( topLeft )
-		d->popup->exec( mapToGlobal( rect().bottomLeft() ) );
-	    else {
+	    if ( topLeft ) {
+		if ( mapToGlobal( QPoint( 0, rect().bottom() ) ).y() + d->popup->sizeHint().height() <= qApp->desktop()->height() )
+		    d->popup->exec( mapToGlobal( rect().bottomLeft() ) );
+		else
+		    d->popup->exec( mapToGlobal( rect().topLeft() - QPoint( 0, d->popup->sizeHint().height() ) ) );
+	    } else {
 		QSize sz( d->popup->sizeHint() );
 		QPoint p = mapToGlobal( rect().topLeft() );
 		p.ry() -= sz.height();
@@ -797,9 +796,12 @@ void QToolButton::popupTimerDone()
 	    }
 	}
 	else {
-	    if ( topLeft )
-		d->popup->exec( mapToGlobal( rect().topRight() ) );
-	    else {
+	    if ( topLeft ) {
+		if ( mapToGlobal( QPoint( rect().right(), 0 ) ).x() + d->popup->sizeHint().width() <= qApp->desktop()->width() )
+		    d->popup->exec( mapToGlobal( rect().topRight() ) );
+		else
+		    d->popup->exec( mapToGlobal( rect().topLeft() - QPoint( d->popup->sizeHint().width(), 0 ) ) );
+	    } else {
 		QSize sz( d->popup->sizeHint() );
 		QPoint p = mapToGlobal( rect().topLeft() );
 		p.rx() -= sz.width();

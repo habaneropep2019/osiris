@@ -76,7 +76,7 @@ tmake:
 clean:
 	-rm -f $(OBJECTS) $(OBJMOC) $(SRCMOC) $(UICIMPLS) $(UICDECLS)
 	-rm -f *~ core
-	-rm -f tmp/qt.cpp
+	-rm -f allmoc.cpp
 
 ####### Extension Modules
 
@@ -112,7 +112,6 @@ border.o: border.cpp \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
-		../../include/qconfig-qpe.h \
 		../../include/qconfig-minimal.h \
 		../../include/qconfig-small.h \
 		../../include/qconfig-medium.h \
@@ -159,7 +158,6 @@ card.o: card.cpp \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
-		../../include/qconfig-qpe.h \
 		../../include/qconfig-minimal.h \
 		../../include/qconfig-small.h \
 		../../include/qconfig-medium.h \
@@ -206,7 +204,6 @@ flow.o: flow.cpp \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
-		../../include/qconfig-qpe.h \
 		../../include/qconfig-minimal.h \
 		../../include/qconfig-small.h \
 		../../include/qconfig-medium.h \
@@ -253,7 +250,6 @@ main.o: main.cpp \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
-		../../include/qconfig-qpe.h \
 		../../include/qconfig-minimal.h \
 		../../include/qconfig-small.h \
 		../../include/qconfig-medium.h \

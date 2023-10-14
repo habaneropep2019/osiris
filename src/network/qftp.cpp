@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/network/qftp.cpp   2.2.2   edited 2000-09-29 $
+** $Id: qt/src/network/qftp.cpp   2.2.3   edited 2000-11-09 $
 **
 ** Implementation of QFtp class.
 **
@@ -806,10 +806,15 @@ void QFtp::dataReadyRead()
     } break;
     case OpGet: {
 	QByteArray s;
-	s.resize( dataSocket->bytesAvailable() );
-	dataSocket->readBlock( s.data(), dataSocket->bytesAvailable() );
+	int bytesAvailable = dataSocket->bytesAvailable();
+	s.resize( bytesAvailable );
+	int bytesRead = dataSocket->readBlock( s.data(), bytesAvailable );
+	if ( bytesRead <= 0 )
+	    break; // error
+	if ( bytesRead != bytesAvailable )
+	    s.resize( bytesRead );
 	emit data( s, operationInProgress() );
-	getDoneSize += s.size();
+	getDoneSize += bytesRead;
 	emit dataTransferProgress( getDoneSize, getTotalSize, operationInProgress() );
 	// qDebug( "%s", s.data() );
     } break;

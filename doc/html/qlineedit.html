@@ -50,6 +50,7 @@ Inherits <a href="qwidget.html">QWidget</a>.
 <li><div class="fn">const QValidator* <a href="#e137ba"><b>validator</b></a> () const</div>
 <li><div class="fn">virtual QSize <a href="#2dc45e"><b>sizeHint</b></a> () const</div>
 <li><div class="fn">virtual QSize <a href="#6abfdb"><b>minimumSizeHint</b></a> () const</div>
+<li><div class="fn">QSizePolicy <b>sizePolicy</b> () const</div>
 <li><div class="fn">virtual void <a href="#1e7442"><b>setSelection</b></a> ( int, int ) </div>
 <li><div class="fn">virtual void <a href="#8a60bb"><b>setCursorPosition</b></a> ( int ) </div>
 <li><div class="fn">int <a href="#bff9ef"><b>cursorPosition</b></a> () const</div>
@@ -425,9 +426,6 @@ is no input validator (ie. any input is accepted up to <a href="#f73b5f">maxLeng
 <p>Returns a recommended size for the widget.
 <p>The width returned is enough for a few characters, typically 15 to 20.
 <p>Reimplemented from <a href="qwidget.html#290bcd">QWidget.</a>
-<h3 class="fn"><a href="qsizepolicy.html">QSizePolicy</a> <a name="b78cb1"></a>QLineEdit::sizePolicy () const <code>[virtual]</code></h3>
-<p>Reimplemented for internal reasons; the API is not affected.
-<p>Reimplemented from <a href="qwidget.html#2d5d13">QWidget.</a>
 <h3 class="fn"><a href="qstring.html">QString</a> <a name="bc5402"></a>QLineEdit::text () const</h3>
 <p>Returns the text in the line.
 <p>See also  <a href="#b85aa3">setText</a>().
@@ -449,7 +447,7 @@ validator has been set.
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.2.2"><nobr>
+<input type=hidden name="version" value="2.2.3"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -457,5 +455,5 @@ copyright &copy; 1995-2000
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.2</div>
+<td align="right"><div align="right">Qt version 2.2.3</div>
 </table></div></address></body></html>

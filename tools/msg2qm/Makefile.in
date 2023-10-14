@@ -68,7 +68,7 @@ tmake:
 clean:
 	-rm -f $(OBJECTS) $(OBJMOC) $(SRCMOC) $(UICIMPLS) $(UICDECLS)
 	-rm -f *~ core
-	-rm -f tmp/qt.cpp
+	-rm -f allmoc.cpp
 
 ####### Extension Modules
 
@@ -101,7 +101,6 @@ msg2qm.o: msg2qm.cpp \
 		../../include/qiodevice.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
-		../../include/qconfig-qpe.h \
 		../../include/qconfig-minimal.h \
 		../../include/qconfig-small.h \
 		../../include/qconfig-medium.h \

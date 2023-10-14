@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qtextstream.cpp   2.2.2   edited 2000-10-25 $
+** $Id: qt/src/tools/qtextstream.cpp   2.2.3   edited 2000-10-25 $
 **
 ** Implementation of QTextStream class
 **

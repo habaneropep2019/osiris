@@ -1,4 +1,4 @@
-.TH QSpinBox 3qt "8 November 2000" "Trolltech AS" \" -*- nroff -*-
+.TH QSpinBox 3qt "12 December 2000" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -63,6 +63,9 @@ Inherits QFrame and QRangeControl.
 .br
 .ti -1c
 .BI "const QValidator* \fBvalidator\fR () const"
+.br
+.ti -1c
+.BI "QSizePolicy \fBsizePolicy\fR () const"
 .br
 .ti -1c
 .BI "void \fBsetMinValue\fR ( int ) "
@@ -144,7 +147,7 @@ Inherits QFrame and QRangeControl.
 .br
 .in -1c
 .SS "Properties"
-<table border=1 cellpadding=3 cellspacing=0> <tr><th>Type<th>Name<th>READ<th>WRITE<th>Options <tr><td>QString<td>text<td>text<td>&nbsp;<td>&nbsp; <tr><td>QString<td>prefix<td>prefix<td>setPrefix<td>&nbsp; <tr><td>QString<td>suffix<td>suffix<td>setSuffix<td>&nbsp; <tr><td>QString<td>cleanText<td>cleanText<td>&nbsp;<td>&nbsp; <tr><td>QString<td>specialValueText<td>specialValueText<td>setSpecialValueText<td>&nbsp; <tr><td>bool<td>wrapping<td>wrapping<td>setWrapping<td>&nbsp; <tr><td>ButtonSymbols<td>buttonSymbols<td>buttonSymbols<td>setButtonSymbols<td>&nbsp; <tr><td>int<td>minValue<td>minValue<td>setMinValue<td>&nbsp; <tr><td>int<td>maxValue<td>maxValue<td>setMaxValue<td>&nbsp; <tr><td>int<td>lineStep<td>lineStep<td>setLineStep<td>&nbsp; <tr><td>int<td>value<td>value<td>setValue<td>&nbsp; </table>
+<table border=1 cellpadding=3 cellspacing=0> <tr><th>Type<th>Name<th>READ<th>WRITE<th>Options <tr><td>QString<td>text<td>text<td>&nbsp;<td>&nbsp; <tr><td>QString<td>prefix<td>prefix<td>setPrefix<td>&nbsp; <tr><td>QString<td>suffix<td>suffix<td>setSuffix<td>&nbsp; <tr><td>QString<td>cleanText<td>cleanText<td>&nbsp;<td>&nbsp; <tr><td>QString<td>specialValueText<td>specialValueText<td>setSpecialValueText<td>&nbsp; <tr><td>bool<td>wrapping<td>wrapping<td>setWrapping<td>&nbsp; <tr><td>ButtonSymbols<td>buttonSymbols<td>buttonSymbols<td>setButtonSymbols<td>&nbsp; <tr><td>int<td>maxValue<td>maxValue<td>setMaxValue<td>&nbsp; <tr><td>int<td>minValue<td>minValue<td>setMinValue<td>&nbsp; <tr><td>int<td>lineStep<td>lineStep<td>setLineStep<td>&nbsp; <tr><td>int<td>value<td>value<td>setValue<td>&nbsp; </table>
 .SH DESCRIPTION
 The QSpinBox class provides a spin box widget, sometimes called up-down widget, little arrows widget or spin button.
 .PP
@@ -348,10 +351,6 @@ Setting wrapping to TRUE will allow the value to be stepped from the highest val
 .PP
 See also wrapping(), minValue(), maxValue() and setRange().
 .SH "QSize QSpinBox::sizeHint () const \fC[virtual]\fR"
-Reimplemented for internal reasons; the API is not affected.
-.PP
-Reimplemented from QWidget.
-.SH "QSizePolicy QSpinBox::sizePolicy () const \fC[virtual]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .PP
 Reimplemented from QWidget.

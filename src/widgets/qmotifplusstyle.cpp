@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qmotifplusstyle.cpp   2.2.2   edited 2000-10-24 $
+** $Id: qt/src/widgets/qmotifplusstyle.cpp   2.2.3   edited 2000-11-16 $
 **
 ** Implementation of QMotifPlusStyle class
 **
@@ -540,7 +540,12 @@ void QMotifPlusStyle::drawIndicator(QPainter *p, int x, int y ,int w, int h,
     if (state != QButton::Off) fill = g.brush(QColorGroup::Mid);
     else fill = g.brush(QColorGroup::Button);
 
-    drawButton(p, x, y, w, h, g, (state != QButton::Off), &fill);
+    if (state == QButton::NoChange) {
+        qDrawPlainRect(p, x, y, w, h, g.text(), 1, &fill);
+        p->drawLine(x + w - 1, y, x, y + h - 1);
+    } else {
+        drawButton(p, x, y, w, h, g, (state != QButton::Off), &fill);
+    }
 }
 
 

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qobject.cpp   2.2.2   edited 2000-10-23 $
+** $Id: qt/src/kernel/qobject.cpp   2.2.3   edited 2000-12-07 $
 **
 ** Implementation of QObject class
 **
@@ -606,7 +606,7 @@ void QObject::setName( const char *name )
 
   If there isn't any such object, this function returns null.
 
-  If there is more than one, one of them is retured; use queryList()
+  If there is more than one, one of them is returned; use queryList()
   if you need all of them.
 */
 
@@ -993,7 +993,7 @@ const QObjectList *QObject::objectTrees()
 	++it;
 	((QButton*)obj)->setEnabled( FALSE );
     }
-    delete list;			// delete the list, not the objects
+    delete l;				// delete the list, not the objects
   \endcode
 
   \warning Delete the list away as soon you have finished using it.
@@ -1498,6 +1498,10 @@ void QObject::badSuperclassWarning( const char *className,
   If a signal is connected to several slots, the slots are activated
   in arbitrary order when the signal is emitted.
 
+  The function returns TRUE if it successfully connects the signal to
+  the slot.  It will return FALSE when it cannot connect the signal to
+  the slot.
+
   \sa disconnect()
 */
 
@@ -1897,7 +1901,7 @@ QMetaObject* QObject::staticMetaObject()
     m1_t0 v1_0 = &QObject::cleanupEventFilter;
     QMetaData *slot_tbl = new QMetaData[1];
     slot_tbl[0].name = "cleanupEventFilter()";
-    slot_tbl[0].ptr = *((QMember*)&v1_0);
+    slot_tbl[0].ptr = (QMember)v1_0;
 
     //### remove 3.0, replace with slot_tbl[0].access = QMetaData::Private;
     QMetaData::Access *slot_tbl_access = new QMetaData::Access[1];
@@ -1907,7 +1911,7 @@ QMetaObject* QObject::staticMetaObject()
     m2_t0 v2_0 = &QObject::destroyed;
     QMetaData *signal_tbl = new QMetaData[1];
     signal_tbl[0].name = "destroyed()";
-    signal_tbl[0].ptr = *((QMember*)&v2_0);
+    signal_tbl[0].ptr = (QMember)v2_0;
 #ifndef QT_NO_PROPERTIES
     QMetaProperty *props_tbl = new QMetaProperty[1];
     typedef const char*(QObject::*m3_t0)()const;
@@ -1915,8 +1919,8 @@ QMetaObject* QObject::staticMetaObject()
     m3_t0 v3_0 = &QObject::name;
     m3_t1 v3_1 = &QObject::setName;
     props_tbl[0].n = "name";
-    props_tbl[0].get = *((QMember*)&v3_0);
-    props_tbl[0].set = *((QMember*)&v3_1);
+    props_tbl[0].get = (QMember)v3_0;
+    props_tbl[0].set = (QMember)v3_1;
     props_tbl[0].t = "QCString";
     props_tbl[0].enumData = 0;
     props_tbl[0].gspec = QMetaProperty::ConstCharStar;
@@ -1997,11 +2001,7 @@ void QObject::activate_signal( const char *signal )
 	++it;
 	object = c->object();
 	object->sigSender = this;
-#ifdef Q_FP_CCAST_BROKEN	
-	r = reinterpret_cast<RT>(*(c->member()));
-#else	
 	r = (RT)*(c->member());
-#endif	
 	(object->*r)();
     }
 }
@@ -2023,36 +2023,6 @@ void QObject::activate_signal( const char *signal )
 */
 
 
-#ifdef Q_FP_CCAST_BROKEN
-#define ACTIVATE_SIGNAL_WITH_PARAM(FNAME,TYPE)				      \
-void QObject::FNAME( const char *signal, TYPE param )			      \
-{									      \
-    if ( !connections )							      \
-        return;								      \
-    QConnectionList *clist = connections->find( signal );		      \
-    if ( !clist || signalsBlocked() )					      \
-        return;								      \
-    typedef void (QObject::*RT0)();					      \
-    typedef void (QObject::*RT1)( TYPE );				      \
-    RT0 r0;								      \
-    RT1 r1;								      \
-    QConnectionListIt it(*clist);					      \
-    register QConnection *c;						      \
-    register QObject *object;						      \
-    while ( (c=it.current()) ) {					      \
-        ++it;								      \
-        object = c->object();						      \
-        object->sigSender = this;					      \
-        if ( c->numArgs() ) {						      \
-            r1 = reinterpret_cast<RT1>(*(c->member()));			      \
-            (object->*r1)( param );					      \
-        } else {							      \
-            r0 = reinterpret_cast<RT0>(*(c->member()));			      \
-            (object->*r0)();						      \
-        }								      \
-    }									      \
-}
-#else
 #define ACTIVATE_SIGNAL_WITH_PARAM(FNAME,TYPE)				      \
 void QObject::FNAME( const char *signal, TYPE param )			      \
 {									      \
@@ -2081,7 +2051,6 @@ void QObject::FNAME( const char *signal, TYPE param )			      \
 	}								      \
     }									      \
 }
-#endif
 
 // We don't want to duplicate too much text so...
 
@@ -2355,11 +2324,7 @@ bool QObject::setProperty( const char *name, const QVariant& value )
 
     case QVariant::Image:
 	if ( p->sspec == QMetaProperty::Class ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    ProtoImage m = reinterpret_cast<ProtoImage>(p->set);
-#else	    
 	    ProtoImage m = (ProtoImage)p->set;
-#endif	    
 	    (this->*m)( (QImage)(value.toImage()) );
 	    return TRUE;
 	} else if ( p->sspec == QMetaProperty::Reference ) {
@@ -2371,19 +2336,11 @@ bool QObject::setProperty( const char *name, const QVariant& value )
 
     case QVariant::Point:
 	if ( p->sspec == QMetaProperty::Class ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    ProtoPoint m = reinterpret_cast<ProtoPoint>(p->set);
-#else	    
 	    ProtoPoint m = (ProtoPoint)p->set;
-#endif	    
 	    (this->*m)( value.toPoint() );
 	    return TRUE;
 	} else if ( p->sspec == QMetaProperty::Reference ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    RProtoPoint m = reinterpret_cast<RProtoPoint>(p->set);
-#else	    
 	    RProtoPoint m = (RProtoPoint)p->set;
-#endif	    
 	    (this->*m)( value.toPoint() );
 	    return TRUE;
 	}
@@ -2391,19 +2348,11 @@ bool QObject::setProperty( const char *name, const QVariant& value )
 
     case QVariant::StringList:
 	if ( p->sspec == QMetaProperty::Class ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    ProtoStringList m = reinterpret_cast<ProtoStringList>(p->set);
-#else	    
 	    ProtoStringList m = (ProtoStringList)p->set;
-#endif	    
 	    (this->*m)( (QStringList)value.toStringList() );
 	    return TRUE;
 	} else if ( p->sspec == QMetaProperty::Reference ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    RProtoStringList m = reinterpret_cast<RProtoStringList>(p->set);
-#else	    
 	    RProtoStringList m = (RProtoStringList)p->set;
-#endif	    
 	    (this->*m)( value.toStringList() );
 	    return TRUE;
 	}
@@ -2411,19 +2360,11 @@ bool QObject::setProperty( const char *name, const QVariant& value )
 
     case QVariant::String:
 	if ( p->sspec == QMetaProperty::Class ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    ProtoString m = reinterpret_cast<ProtoString>(p->set);
-#else	    
 	    ProtoString m = (ProtoString)p->set;
-#endif	    
 	    (this->*m)( (QString)(value.toString()) );
 	    return TRUE;
 	} else if ( p->sspec == QMetaProperty::Reference ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    RProtoString m = reinterpret_cast<RProtoString>(p->set);
-#else	    
 	    RProtoString m = (RProtoString)p->set;
-#endif	    
 	    (this->*m)( value.toString() );
 	    return TRUE;
 	}
@@ -2431,27 +2372,15 @@ bool QObject::setProperty( const char *name, const QVariant& value )
 
     case QVariant::CString:
 	if ( p->sspec == QMetaProperty::Class ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    ProtoCString m = reinterpret_cast<ProtoCString>(p->set);
-#else	    
 	    ProtoCString m = (ProtoCString)p->set;
-#endif	    
 	    (this->*m)( (QCString)(value.toCString()) );
 	    return TRUE;
 	} else if ( p->sspec == QMetaProperty::Reference ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    RProtoCString m = reinterpret_cast<RProtoCString>(p->set);
-#else	    
 	    RProtoCString m = (RProtoCString)p->set;
-#endif	    
 	    (this->*m)( value.toCString() );
 	    return TRUE;
 	} else if ( p->sspec == QMetaProperty::ConstCharStar ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    ProtoConstCharStar m = reinterpret_cast<ProtoConstCharStar>(p->set);
-#else	    
 	    ProtoConstCharStar m = (ProtoConstCharStar)p->set;
-#endif	    
 	    (this->*m)( value.toCString().data() );
 	    return TRUE;
 	}
@@ -2459,19 +2388,11 @@ bool QObject::setProperty( const char *name, const QVariant& value )
 
     case QVariant::Font:
 	if ( p->sspec == QMetaProperty::Class ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    ProtoFont m = reinterpret_cast<ProtoFont>(p->set);
-#else	    
 	    ProtoFont m = (ProtoFont)p->set;
-#endif	    
 	    (this->*m)( (QFont)(value.toFont()) );
 	    return TRUE;
 	} else if ( p->sspec == QMetaProperty::Reference ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    RProtoFont m = reinterpret_cast<RProtoFont>(p->set);
-#else	    
 	    RProtoFont m = (RProtoFont)p->set;
-#endif	    
 	    (this->*m)( value.toFont() );
 	    return TRUE;
 	}
@@ -2479,19 +2400,11 @@ bool QObject::setProperty( const char *name, const QVariant& value )
 
     case QVariant::Pixmap:
 	if ( p->sspec == QMetaProperty::Class ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    ProtoPixmap m = reinterpret_cast<ProtoPixmap>(p->set);
-#else	    
 	    ProtoPixmap m = (ProtoPixmap)p->set;
-#endif	    
 	    (this->*m)( (QPixmap)(value.toPixmap()) );
 	    return TRUE;
 	} else if ( p->sspec == QMetaProperty::Reference ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    RProtoPixmap m = reinterpret_cast<RProtoPixmap>(p->set);
-#else	    
 	    RProtoPixmap m = (RProtoPixmap)p->set;
-#endif	    
 	    (this->*m)( value.toPixmap() );
 	    return TRUE;
 	}
@@ -2499,19 +2412,11 @@ bool QObject::setProperty( const char *name, const QVariant& value )
 
     case QVariant::Brush:
 	if ( p->sspec == QMetaProperty::Class ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    ProtoBrush m = reinterpret_cast<ProtoBrush>(p->set);
-#else	    
 	    ProtoBrush m = (ProtoBrush)p->set;
-#endif	    
 	    (this->*m)( (QBrush)(value.toBrush()) );
 	    return TRUE;
 	} else if ( p->sspec == QMetaProperty::Reference ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    RProtoBrush m = reinterpret_cast<RProtoBrush>(p->set);
-#else	    
 	    RProtoBrush m = (RProtoBrush)p->set;
-#endif	    
 	    (this->*m)( value.toBrush() );
 	    return TRUE;
 	}
@@ -2519,19 +2424,11 @@ bool QObject::setProperty( const char *name, const QVariant& value )
 
     case QVariant::Rect:
 	if ( p->sspec == QMetaProperty::Class ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    ProtoRect m = reinterpret_cast<ProtoRect>(p->set);
-#else	    
 	    ProtoRect m = (ProtoRect)p->set;
-#endif	    
 	    (this->*m)( value.toRect() );
 	    return TRUE;
 	} else if ( p->sspec == QMetaProperty::Reference ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    RProtoRect m = reinterpret_cast<RProtoRect>(p->set);
-#else	    
 	    RProtoRect m = (RProtoRect)p->set;
-#endif	    
 	    (this->*m)( value.toRect() );
 	    return TRUE;
 	}
@@ -2539,19 +2436,11 @@ bool QObject::setProperty( const char *name, const QVariant& value )
 
     case QVariant::Size:
 	if ( p->sspec == QMetaProperty::Class ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    ProtoSize m = reinterpret_cast<ProtoSize>(p->set);
-#else	    
 	    ProtoSize m = (ProtoSize)p->set;
-#endif	    
 	    (this->*m)( value.toSize() );
 	    return TRUE;
 	} else if ( p->sspec == QMetaProperty::Reference ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    RProtoSize m = reinterpret_cast<RProtoSize>(p->set);
-#else	    
 	    RProtoSize m = (RProtoSize)p->set;
-#endif	    
 	    (this->*m)( value.toSize() );
 	    return TRUE;
 	}
@@ -2559,19 +2448,11 @@ bool QObject::setProperty( const char *name, const QVariant& value )
 
     case QVariant::Color:
 	if ( p->sspec == QMetaProperty::Class ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    ProtoColor m = reinterpret_cast<ProtoColor>(p->set);
-#else	    
 	    ProtoColor m = (ProtoColor)p->set;
-#endif	    
 	    (this->*m)( (QColor)(value.toColor()) );
 	    return TRUE;
 	} else if ( p->sspec == QMetaProperty::Reference ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    RProtoColor m = reinterpret_cast<RProtoColor>(p->set);
-#else	    
 	    RProtoColor m = (RProtoColor)p->set;
-#endif	    
 	    (this->*m)( value.toColor() );
 	    return TRUE;
 	}
@@ -2579,19 +2460,11 @@ bool QObject::setProperty( const char *name, const QVariant& value )
 
     case QVariant::Palette:
 	if ( p->sspec == QMetaProperty::Class ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    ProtoPalette m = reinterpret_cast<ProtoPalette>(p->set);
-#else	    
 	    ProtoPalette m = (ProtoPalette)p->set;
-#endif	    
 	    (this->*m)( (QPalette)(value.toPalette()) );
 	    return TRUE;
 	} else if ( p->sspec == QMetaProperty::Reference ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    RProtoPalette m = reinterpret_cast<RProtoPalette>(p->set);
-#else	    
 	    RProtoPalette m = (RProtoPalette)p->set;
-#endif	    
 	    (this->*m)( value.toPalette() );
 	    return TRUE;
 	}
@@ -2599,19 +2472,11 @@ bool QObject::setProperty( const char *name, const QVariant& value )
 
     case QVariant::ColorGroup:
 	if ( p->sspec == QMetaProperty::Class ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    ProtoColorGroup m = reinterpret_cast<ProtoColorGroup>(p->set);
-#else	    
 	    ProtoColorGroup m = (ProtoColorGroup)p->set;
-#endif	    
 	    (this->*m)( (QColorGroup)(value.toColorGroup()) );
 	    return TRUE;
 	} else if ( p->sspec == QMetaProperty::Reference ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    RProtoColorGroup m = reinterpret_cast<RProtoColorGroup>(p->set);
-#else	    
 	    RProtoColorGroup m = (RProtoColorGroup)p->set;
-#endif	    
 	    (this->*m)( value.toColorGroup() );
 	    return TRUE;
 	}
@@ -2619,19 +2484,11 @@ bool QObject::setProperty( const char *name, const QVariant& value )
 
     case QVariant::Bitmap:
 	if ( p->sspec == QMetaProperty::Class ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    ProtoBitmap m = reinterpret_cast<ProtoBitmap>(p->set);
-#else	    
 	    ProtoBitmap m = (ProtoBitmap)p->set;
-#endif	    
 	    (this->*m)( (QBitmap)(value.toBitmap()) );
 	    return TRUE;
 	} else if ( p->sspec == QMetaProperty::Reference )  {
-#ifdef Q_FP_CCAST_BROKEN	
-	    RProtoBitmap m = reinterpret_cast<RProtoBitmap>(p->set);
-#else	    
 	    RProtoBitmap m = (RProtoBitmap)p->set;
-#endif	    
 	    (this->*m)( value.toBitmap() );
 	    return TRUE;
 	}
@@ -2639,19 +2496,11 @@ bool QObject::setProperty( const char *name, const QVariant& value )
 
     case QVariant::Region:
 	if ( p->sspec == QMetaProperty::Class ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    ProtoRegion m = reinterpret_cast<ProtoRegion>(p->set);
-#else	    
 	    ProtoRegion m = (ProtoRegion)p->set;
-#endif	    
 	    (this->*m)( (QRegion)(value.toRegion()) );
 	    return TRUE;
 	} else if ( p->sspec == QMetaProperty::Reference )  {
-#ifdef Q_FP_CCAST_BROKEN	
-	    RProtoRegion m = reinterpret_cast<RProtoRegion>(p->set);
-#else	    
 	    RProtoRegion m = (RProtoRegion)p->set;
-#endif	    
 	    (this->*m)( value.toRegion() );
 	    return TRUE;
 	}
@@ -2659,19 +2508,11 @@ bool QObject::setProperty( const char *name, const QVariant& value )
 
     case QVariant::PointArray:
 	if ( p->sspec == QMetaProperty::Class ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    ProtoPointArray m = reinterpret_cast<ProtoPointArray>(p->set);
-#else	    
 	    ProtoPointArray m = (ProtoPointArray)p->set;
-#endif	    
 	    (this->*m)( (QPointArray)(value.toPointArray()) );
 	    return TRUE;
 	} else if ( p->sspec == QMetaProperty::Reference )  {
-#ifdef Q_FP_CCAST_BROKEN	
-	    RProtoPointArray m = reinterpret_cast<RProtoPointArray>(p->set);
-#else	    
 	    RProtoPointArray m = (RProtoPointArray)p->set;
-#endif	    
 	    (this->*m)( value.toPointArray() );
 	    return TRUE;
 	}
@@ -2679,19 +2520,11 @@ bool QObject::setProperty( const char *name, const QVariant& value )
 
     case QVariant::Cursor:
 	if ( p->sspec == QMetaProperty::Class ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    ProtoCursor m = reinterpret_cast<ProtoCursor>(p->set);
-#else	    
 	    ProtoCursor m = (ProtoCursor)p->set;
-#endif	    
 	    (this->*m)( (QCursor)(value.toCursor()) );
 	    return TRUE;
 	} else if ( p->sspec == QMetaProperty::Reference )  {
-#ifdef Q_FP_CCAST_BROKEN	
-	    RProtoCursor m = reinterpret_cast<RProtoCursor>(p->set);
-#else	    
 	    RProtoCursor m = (RProtoCursor)p->set;
-#endif	    
 	    (this->*m)( value.toCursor() );
 	    return TRUE;
 	}
@@ -2699,19 +2532,11 @@ bool QObject::setProperty( const char *name, const QVariant& value )
 
     case QVariant::IconSet:
 	if ( p->sspec == QMetaProperty::Class ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    ProtoIconSet m = reinterpret_cast<ProtoIconSet>(p->set);
-#else	    
 	    ProtoIconSet m = (ProtoIconSet)p->set;
-#endif	    
 	    (this->*m)( (QIconSet)(value.toIconSet()) );
 	    return TRUE;
 	} else if ( p->sspec == QMetaProperty::Reference )  {
-#ifdef Q_FP_CCAST_BROKEN	
-	    RProtoIconSet m = reinterpret_cast<RProtoIconSet>(p->set);
-#else	    
 	    RProtoIconSet m = (RProtoIconSet)p->set;
-#endif	    
 	    (this->*m)( value.toIconSet() );
 	    return TRUE;
 	}
@@ -2719,19 +2544,11 @@ bool QObject::setProperty( const char *name, const QVariant& value )
 
     case QVariant::Int:
 	if ( p->sspec == QMetaProperty::Class ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    ProtoInt m = reinterpret_cast<ProtoInt>(p->set);
-#else	    
 	    ProtoInt m = (ProtoInt)p->set;
-#endif	    
 	    (this->*m)( value.toInt() );
 	    return TRUE;
 	} else if ( p->sspec == QMetaProperty::Reference ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    RProtoInt m = reinterpret_cast<RProtoInt>(p->set);
-#else	    
 	    RProtoInt m = (RProtoInt)p->set;
-#endif	    
 	    (this->*m)( value.toInt() );
 	    return TRUE;
 	}
@@ -2739,19 +2556,11 @@ bool QObject::setProperty( const char *name, const QVariant& value )
 
     case QVariant::UInt:
 	if ( p->sspec == QMetaProperty::Class ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    ProtoUInt m = reinterpret_cast<ProtoUInt>(p->set);
-#else	    
 	    ProtoUInt m = (ProtoUInt)p->set;
-#endif	    
 	    (this->*m)( value.toUInt() );
 	    return TRUE;
 	} else if ( p->sspec == QMetaProperty::Reference ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    RProtoUInt m = reinterpret_cast<RProtoUInt>(p->set);
-#else	    
 	    RProtoUInt m = (RProtoUInt)p->set;
-#endif	    
 	    (this->*m)( value.toUInt() );
 	    return TRUE;
 	}
@@ -2759,19 +2568,11 @@ bool QObject::setProperty( const char *name, const QVariant& value )
 
     case QVariant::Double:
 	if ( p->sspec == QMetaProperty::Class ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    ProtoDouble m = reinterpret_cast<ProtoDouble>(p->set);
-#else	    
 	    ProtoDouble m = (ProtoDouble)p->set;
-#endif	    
 	    (this->*m)( value.toDouble() );
 	    return TRUE;
 	} else if ( p->sspec == QMetaProperty::Reference ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    RProtoDouble m = reinterpret_cast<RProtoDouble>(p->set);
-#else	    
 	    RProtoDouble m = (RProtoDouble)p->set;
-#endif	    
 	    (this->*m)( value.toDouble() );
 	    return TRUE;
 	}
@@ -2779,19 +2580,11 @@ bool QObject::setProperty( const char *name, const QVariant& value )
 
     case QVariant::Bool:
 	if ( p->sspec == QMetaProperty::Class ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    ProtoBool m = reinterpret_cast<ProtoBool>(p->set);
-#else	    
 	    ProtoBool m = (ProtoBool)p->set;
-#endif	    
 	    (this->*m)( value.toBool() );
 	    return TRUE;
 	} else if ( p->sspec == QMetaProperty::Reference ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    RProtoBool m = reinterpret_cast<RProtoBool>(p->set);
-#else	    
 	    RProtoBool m = (RProtoBool)p->set;
-#endif	    
 	    (this->*m)( value.toBool() );
 	    return TRUE;
 	}
@@ -2799,19 +2592,11 @@ bool QObject::setProperty( const char *name, const QVariant& value )
 
     case QVariant::List:
 	if ( p->sspec == QMetaProperty::Class ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    ProtoList m = reinterpret_cast<ProtoList>(p->set);
-#else	    
 	    ProtoList m = (ProtoList)p->set;
-#endif	    
 	    (this->*m)( (QValueList<QVariant>)(value.toList()) );
 	    return TRUE;
 	} else if ( p->sspec == QMetaProperty::Reference ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    RProtoList m = reinterpret_cast<RProtoList>(p->set);
-#else	    
 	    RProtoList m = (RProtoList)p->set;
-#endif	    
 	    (this->*m)( value.toList() );
 	    return TRUE;
 	}
@@ -2819,19 +2604,11 @@ bool QObject::setProperty( const char *name, const QVariant& value )
 
     case QVariant::Map:
 	if ( p->sspec == QMetaProperty::Class ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    ProtoMap m = reinterpret_cast<ProtoMap>(p->set);
-#else	    
 	    ProtoMap m = (ProtoMap)p->set;
-#endif	    
 	    (this->*m)( (QMap<QString, QVariant>)(value.toMap()) );
 	    return TRUE;
 	} else if ( p->sspec == QMetaProperty::Reference ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    RProtoMap m = reinterpret_cast<RProtoMap>(p->set);
-#else	    
 	    RProtoMap m = (RProtoMap)p->set;
-#endif	    
 	    (this->*m)( value.toMap() );
 	    return TRUE;
 	}
@@ -2839,19 +2616,11 @@ bool QObject::setProperty( const char *name, const QVariant& value )
 
     case QVariant::SizePolicy:
 	if ( p->sspec == QMetaProperty::Class ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    ProtoSizePolicy m = reinterpret_cast<ProtoSizePolicy>(p->set);
-#else	    
 	    ProtoSizePolicy m = (ProtoSizePolicy)p->set;
-#endif	    
 	    (this->*m)( value.toSizePolicy() );
 	    return TRUE;
 	} else if ( p->sspec == QMetaProperty::Reference ) {
-#ifdef Q_FP_CCAST_BROKEN	
-	    RProtoSizePolicy m = reinterpret_cast<RProtoSizePolicy>(p->set);
-#else	    
 	    RProtoSizePolicy m = (RProtoSizePolicy)p->set;
-#endif	    
 	    (this->*m)( value.toSizePolicy() );
 	    return TRUE;
 	}

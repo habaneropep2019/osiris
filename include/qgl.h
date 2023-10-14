@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/opengl/qgl.h   2.2.2   edited 2000-08-25 $
+** $Id: qt/src/opengl/qgl.h   2.2.3   edited 2000-12-06 $
 **
 ** Definition of OpenGL classes for Qt
 **
@@ -39,15 +39,14 @@
 #define QGL_H
 
 
-#define QGL_VERSION	450
-#define QGL_VERSION_STR	"4.5"
-
-const char *qGLVersion();
-
-
 #ifndef QT_H
 #include <qwidget.h>
 #endif // QT_H
+
+#define QGL_VERSION	450
+#define QGL_VERSION_STR	"4.5"
+
+Q_EXPORT const char *qGLVersion();
 
 #if !(defined(Q_WGL) || defined(Q_GLX))
 #if defined(_OS_WIN32_)
@@ -138,14 +137,17 @@ public:
     static bool		hasOpenGL();
     static bool		hasOpenGLOverlays();
 
-    friend bool		operator==( const QGLFormat&, const QGLFormat& );
-    friend bool		operator!=( const QGLFormat&, const QGLFormat& );
+    friend Q_EXPORT bool operator==( const QGLFormat&, const QGLFormat& );
+    friend Q_EXPORT bool operator!=( const QGLFormat&, const QGLFormat& );
     
 private:
     uint opts;
     int pln;
 };
 
+
+Q_EXPORT bool operator==( const QGLFormat&, const QGLFormat& );
+Q_EXPORT bool operator!=( const QGLFormat&, const QGLFormat& );
 
 
 class Q_EXPORT QGLContext : public QGL

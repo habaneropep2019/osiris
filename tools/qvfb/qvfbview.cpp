@@ -18,8 +18,9 @@
 *****************************************************************************/
 
 #include "qvfbview.h"
-#include <qvfbhdr_qws.h>
-#include <qwscommand_qws.h>	    // for QTE_PIPE
+#include "qvfbhdr.h"
+
+#define QTE_PIPE "/tmp/.QtEmbedded-%1"
 
 #include <qimage.h>
 #include <qbitmap.h>
@@ -40,7 +41,7 @@ QVFbView::QVFbView( int display_id, int w, int h, int d, QWidget *parent,
 		    const char *name, uint flags )
     : QScrollView( parent, name, flags ), lockId(-1)
 {
-    displayId = display_id;
+    displayid = display_id;
     viewport()->setMouseTracking( TRUE );
     viewport()->setFocusPolicy( StrongFocus );
     zoom = 1;
@@ -48,6 +49,7 @@ QVFbView::QVFbView( int display_id, int w, int h, int d, QWidget *parent,
 
     switch ( d ) {
 	case 1:
+	case 4:
 	case 8:
 	case 32:
 	    break;
@@ -125,6 +127,27 @@ QVFbView::~QVFbView()
     unlink( keyboardPipe );
 }
 
+int QVFbView::displayId() const
+{
+    return displayid;
+}
+
+int QVFbView::displayWidth() const
+{
+    return hdr->width;
+}
+
+int QVFbView::displayHeight() const
+{
+    return hdr->height;
+}
+
+int QVFbView::displayDepth() const
+{
+    return hdr->depth;
+}
+
+
 
 void QVFbView::setZoom( double z )
 {
@@ -144,7 +167,7 @@ void QVFbView::setRate( int r )
 
 void QVFbView::initLock()
 {
-    QString pipe = QString( QTE_PIPE ).arg( displayId );
+    QString pipe = QString( QTE_PIPE ).arg( displayid );
     int semkey = ftok( pipe.latin1(), 'd' );
     lockId = semget( semkey, 0, 0 );
 }
@@ -222,6 +245,45 @@ void QVFbView::timeout()
     unlock();
 }
 
+QImage QVFbView::getBuffer( const QRect &r, int &leading )
+{
+    if ( hdr->depth == 1 || hdr->depth >= 8 ) {
+	leading = r.x();
+	return QImage( data + hdr->dataoffset + r.y() * hdr->linestep,
+		    hdr->width, r.height(), hdr->depth, hdr->clut,
+		    hdr->depth == 1 ? 0 : 256, QImage::LittleEndian );
+    } else if ( hdr->depth == 4 ) {
+	static unsigned char *imgData = 0;
+	if ( !imgData ) {
+	    int bpl = ((hdr->width*8+31)/32)*4;
+	    imgData = new unsigned char [ bpl * hdr->height ];
+	}
+	QImage img( imgData, r.width(), r.height(), 8, hdr->clut, 16,
+		    QImage::IgnoreEndian );
+	for ( int row = 0; row < r.height(); row++ ) {
+	    unsigned char *dptr = img.scanLine( row );
+	    unsigned char *sptr = data + hdr->dataoffset + (r.y()+row)*hdr->linestep;
+	    sptr += r.x()/2;
+	    int col = 0;
+	    if ( r.x() & 1 ) {
+		*dptr++ = *sptr++ >> 4;
+		col++;
+	    }
+	    for ( ; col < r.width()-1; col+=2 ) {
+		unsigned char s = *sptr++;
+		*dptr++ = s & 0x0f;
+		*dptr++ = s >> 4;
+	    }
+	    if ( !(r.right() & 1) )
+		*dptr = *sptr & 0x0f;
+	}
+	leading = 0;
+	return img;
+    }
+
+    return QImage();
+}
+
 void QVFbView::drawScreen()
 {
     QPainter p( viewport() );
@@ -243,9 +305,8 @@ void QVFbView::drawScreen()
 	    r.rRight() = QMIN(r.right(),hdr->width-1);
 	    r.rBottom() = QMIN(r.bottom(),hdr->height-1);
 	}
-	QImage img( data + hdr->dataoffset + r.y() * hdr->linestep,
-		    hdr->width, r.height(), hdr->depth, hdr->clut,
-		    hdr->depth == 1 ? 0 : 256, QImage::LittleEndian );
+	int leading;
+	QImage img( getBuffer( r, leading ) );
 	QPixmap pm;
 	if ( zoom == 1 ) {
 	    pm.convertFromImage( img );
@@ -261,7 +322,7 @@ void QVFbView::drawScreen()
 	p.setPen( black );
 	p.setBrush( white );
 	p.drawPixmap( int(r.x()*zoom), int(r.y()*zoom), pm,
-			int(r.x()*zoom), 0, pm.width(), pm.height() );
+			int(leading*zoom), 0, pm.width(), pm.height() );
     } else {
 	unlock();
     }

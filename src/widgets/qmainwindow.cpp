@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qmainwindow.cpp   2.2.2   edited 2000-10-16 $
+** $Id: qt/src/widgets/qmainwindow.cpp   2.2.3   edited 2000-12-07 $
 **
 ** Implementation of QMainWindow class
 **
@@ -1524,6 +1524,7 @@ QStatusBar * QMainWindow::statusBar() const
     }
     delete l;
     ((QMainWindow *)this)->setStatusBar( s );
+    ((QMainWindow *)this)->triggerLayout();
     return s;
 }
 

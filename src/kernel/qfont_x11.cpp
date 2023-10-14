@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qfont_x11.cpp   2.2.2   edited 2000-11-06 $
+** $Id: qt/src/kernel/qfont_x11.cpp   2.2.3   edited 2000-12-11 $
 **
 ** Implementation of QFont, QFontMetrics and QFontInfo classes for X11
 **
@@ -385,6 +385,13 @@ void QFont::initialize()
     fontNameDict = new QFontNameDict( 29 );
     CHECK_PTR( fontNameDict );
     fontNameDict->setAutoDelete( TRUE );
+
+    QString vendorstring(ServerVendor(QPaintDevice::x11AppDisplay()));
+    int vendorrelease = VendorRelease(QPaintDevice::x11AppDisplay());
+
+    if (vendorstring.lower().contains("xfree86") &&
+	vendorrelease < 4000) {
+    }
 }
 
 /*!
@@ -1482,10 +1489,13 @@ int QFont_Private::fontMatchScore( char	 *fontName,	 QCString &buffer,
 	else
 	    exactMatch = FALSE;
     } else {
-	if ( pitch != 'p' )
+	if ( pitch == 'p' )
+	    score |= PitchScore;
+	else
 	    exactMatch = FALSE;
     }
 
+    // ### fix scaled bitmap fonts
     float diff;
     if ( *scalable ) {
 	diff = 9.0;	// choose scalable font over >= 0.9 point difference
@@ -1494,9 +1504,10 @@ int QFont_Private::fontMatchScore( char	 *fontName,	 QCString &buffer,
     } else {
 	int pSize;
 	float percentDiff;
+
 	pSize = ( 2*atoi( tokens[PointSize] )*atoi(tokens[ResolutionY]) +
-		  QPaintDevice::x11AppDpiY())
-		/ (QPaintDevice::x11AppDpiY() * 2); // adjust actual pointsize
+		      QPaintDevice::x11AppDpiY())
+		    / (QPaintDevice::x11AppDpiY() * 2); // adjust actual pointsize
 
 	if ( deciPointSize() != 0 ) {
 	    diff = (float)QABS(pSize - deciPointSize());
@@ -1506,7 +1517,7 @@ int QFont_Private::fontMatchScore( char	 *fontName,	 QCString &buffer,
 	    percentDiff = 100;
 	}
 
-	if ( percentDiff < 20 ) {
+	if ( percentDiff < 10 ) {
 	    score |= SizeScore;
 	    if ( pSize != deciPointSize() ) {
 		exactMatch = FALSE;
@@ -1604,12 +1615,17 @@ QCString QFont_Private::bestMatch( const char *pattern, int *score )
     QCString bestName;
     char *tokens[fontFields];
 
+    //qDebug("requesting font '%s' pixSize=%d pointSize=%d", pattern, pixelSize(), pointSize() );
+    //qDebug("best font: %d '%s'", best.score, best.name);
+    //qDebug("best scalable font: %d '%s'", bestScalable.score, bestScalable.name);
+
     if ( bestScalable.score > best.score ||
 	 bestScalable.score == best.score &&
 	 bestScalable.pointDiff < best.pointDiff ||
 	 bestScalable.score == best.score &&
 	 bestScalable.pointDiff == best.pointDiff &&
 	 bestScalable.weightDiff < best.weightDiff ) {
+	//qDebug("using scalable font");
 	qstrcpy( matchBuffer.data(), bestScalable.name );
 	if ( qParseXFontName( matchBuffer, tokens ) ) {
 	    int resx;
@@ -1646,7 +1662,7 @@ QCString QFont_Private::bestMatch( const char *pattern, int *score )
     bestName = best.name;
 
     XFreeFontNames( xFontNames );
-
+    //qDebug("best font found is '%s'", (const char *)bestName);
     return bestName;
 }
 
@@ -1762,7 +1778,7 @@ QCString QFont_Private::bestMatchFontSetMember( const QString& family,
 		    char s[1024];
 		    sprintf( s, "-*-%s-%s-%s-*-*-*-%d-%d-%d-*-*-%s,",
 				fontGuessingPair->family[i+1].latin1(),
-				wt, slant, size, xdpi, ydpi,
+			     wt, slant, size, xdpi, ydpi,
 				fontGuessingPair->charset[i].latin1() );
 				bestName.append(s);
 		}
@@ -1838,12 +1854,9 @@ QCString QFont_Private::findFont( bool *exact )
 		       "%s"
 		       "-*-*-*-%s-*-*-*-%d-%d-%d-*-*-*-*,"
 		       "-*-*-*-*-*-*-*-%d-%d-%d-*-*-*-*",
-		       foundry.ascii(), familyName.ascii(), wt, slant, size,
-		       xdpi, ydpi,
-		       foundry.ascii(), familyName.ascii(), slant, size
-		       , xdpi, ydpi,
-		       foundry.ascii(), familyName.ascii(), slant2, size,
-		       xdpi, ydpi,
+		       foundry.ascii(), familyName.ascii(), wt, slant, size, xdpi, ydpi,
+		       foundry.ascii(), familyName.ascii(), slant, size, xdpi, ydpi,
+		       foundry.ascii(), familyName.ascii(), slant2, size, xdpi, ydpi,
 		       familyName.ascii(), wt, slant, size, xdpi, ydpi,
 		       familyName.ascii(), slant, size, xdpi, ydpi,
 		       familyName.ascii(), slant2, size, xdpi, ydpi,
@@ -2094,7 +2107,7 @@ static void getExt( QString str, int len, XRectangle& ink,
     // Callers to this / this needs to be optimized.
     // Trouble is, too much caching in multiple clients will make the
     //  overall performance suffer.
-    
+
     QCString x = m->fromUnicode(str,len);
     XmbTextExtents( set, x, len, &ink, &logical );
 }

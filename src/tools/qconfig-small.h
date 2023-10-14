@@ -9,8 +9,8 @@
 
 
 #define QT_NO_ACTION
-#ifndef QT_NO_CODECS
-#define QT_NO_CODECS
+#ifndef QT_NO_CODECS // moc?
+#define QT_NO_TEXTCODEC
 #endif
 #define QT_NO_UNICODETABLES
 #define QT_NO_IMAGEIO_BMP
@@ -28,7 +28,6 @@
 #define QT_NO_SOUND
 #define QT_NO_PROPERTIES
 
-#define QT_NO_QWS_VFB
 #define QT_NO_QWS_GFX_SPEED
 #define QT_NO_NETWORK //??????????????
 #define QT_NO_COLORNAMES
@@ -46,7 +45,6 @@
 #define QT_NO_QWS_SAVEFONTS
 #define QT_NO_STRINGLIST
 #define QT_NO_SESSIONMANAGER
-#define QT_NO_TEXTCODEC
 
 
 #define QT_NO_DIALOG
@@ -78,6 +76,13 @@
 #define QT_NO_STYLE_PLATINUM
 #define QT_NO_PROGRESSBAR
 
+
+#define QT_NO_QWS_AQUA_WM_STYLE
+#define QT_NO_QWS_BEOS_WM_STYLE
+#define QT_NO_QWS_KDE2_WM_STYLE
+#define QT_NO_QWS_KDE_WM_STYLE
+//#define QT_NO_QWS_QPE_WM_STYLE
+#define QT_NO_QWS_WINDOWS_WM_STYLE
 
 
 //other widgets that could be removed:

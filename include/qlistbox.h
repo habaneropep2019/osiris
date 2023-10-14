@@ -1,5 +1,5 @@
 /**********************************************************************
-** $Id: qt/src/widgets/qlistbox.h   2.2.2   edited 2000-09-22 $
+** $Id: qt/src/widgets/qlistbox.h   2.2.3   edited 2000-09-22 $
 **
 ** Definition of QListBox widget class
 **

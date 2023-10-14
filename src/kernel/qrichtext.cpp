@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qrichtext.cpp   2.2.2   edited 2000-11-07 $
+** $Id: qt/src/kernel/qrichtext.cpp   2.2.3   edited 2000-12-07 $
 **
 ** Implementation of the internal Qt classes dealing with rich text
 **
@@ -771,6 +771,7 @@ static void map_insert(QMap<QCString, QChar>* map, const char* str, const QChar&
     map->insert(str,ch);
 }
 
+// static ####################
 QMap<QCString, QChar> *htmlMap()
 {
     if ( !html_map ){
@@ -824,7 +825,10 @@ QChar QRichText::parseHTMLSpecialChar(const QString& doc, int& pos)
     pos++;
 
     if ( s.length() > 1 && s[0] == '#') {
-	return s.mid(1).toInt();
+	int num = s.mid(1).toInt();
+	if ( num == 151 ) // ### hack for designer manual
+	    return '-';
+	return num;
     }
 
     QMap<QCString, QChar>::Iterator it = htmlMap()->find(s);

@@ -1,4 +1,4 @@
-.TH QDomAttr 3qt "8 November 2000" "Trolltech AS" \" -*- nroff -*-
+.TH QDomAttr 3qt "12 December 2000" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -65,13 +65,13 @@ One can use the attributes of an element with code similar to:
 .br
   QDomElement e = ....;
 .br
-  QDomAttribute a = e.attributeNode( "href" );
+  QDomAttr a = e.attributeNode( "href" );
 .br
   cout << a.value() << endl // gives "http://www.trolltech.com"
 .br
   a.setValue( "http://doc.trolltech.com" );
 .br
-  QDomAttribute a2 = e.attributeNode( "href" );
+  QDomAttr a2 = e.attributeNode( "href" );
 .br
   cout << a2.value() << endl // gives "http://doc.trolltech.com"
 .fi

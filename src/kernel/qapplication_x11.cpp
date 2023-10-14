@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qapplication_x11.cpp   2.2.2   edited 2000-11-07 $
+** $Id: qt/src/kernel/qapplication_x11.cpp   2.2.3   edited 2000-12-07 $
 **
 ** Implementation of X11 startup routines and event handling
 **
@@ -103,6 +103,7 @@
 #endif
 
 #if defined(_OS_SCO_)
+#  include <strings.h>
 #  include <sys/socket.h> // for FIONREAD on SCO OpenServer 5.0.x
 #endif
 
@@ -120,7 +121,7 @@ static int qt_thread_pipe[2];
 #include <bstring.h>
 #endif
 
-#if defined(_OS_AIX_)
+#if defined(_OS_AIX_) || defined(_OS_UNIXWARE7_)
 #include <strings.h>
 #endif
 
@@ -542,6 +543,9 @@ bool qt_badwindow()
     return x11_badwindow;
 }
 
+static int (*original_x_errhandler)(Display*dpy,XErrorEvent*);
+static int (*original_xio_errhandler)(Display*dpy);
+
 static int qt_x_errhandler( Display *dpy, XErrorEvent *err )
 {
     if ( err->error_code == BadWindow ) {
@@ -729,7 +733,7 @@ static void qt_set_input_encoding()
 	// XIMs, and since we cannot get a sensible answer about the encoding
 	// from the XIM.
 	input_mapper = QTextCodec::codecForLocale();
-	
+
     } else {
 #if defined(_OS_QNX_)
 	QString str( data );
@@ -1059,8 +1063,8 @@ void qt_init_internal( int *argcptr, char **argv, Display *display )
 
 	// Install default error handlers
 
-	XSetErrorHandler( qt_x_errhandler );
-	XSetIOErrorHandler( qt_xio_errhandler );
+	original_x_errhandler = XSetErrorHandler( qt_x_errhandler );
+	original_xio_errhandler = XSetIOErrorHandler( qt_xio_errhandler );
     } else {
 	// Qt controls everything (default)
 
@@ -1070,8 +1074,8 @@ void qt_init_internal( int *argcptr, char **argv, Display *display )
 
 	// Install default error handlers
 
-	XSetErrorHandler( qt_x_errhandler );
-	XSetIOErrorHandler( qt_xio_errhandler );
+	original_x_errhandler = XSetErrorHandler( qt_x_errhandler );
+	original_xio_errhandler = XSetIOErrorHandler( qt_xio_errhandler );
 
 	// Set application name
 
@@ -1455,6 +1459,10 @@ void qt_cleanup()
     delete sip_list;
     sip_list = 0;
 
+    // Reset the error handlers
+    XSetErrorHandler( original_x_errhandler );
+    XSetIOErrorHandler( original_xio_errhandler );
+
     if ( qt_is_gui_used && !appForeignDpy )
 	XCloseDisplay( appDpy );		// close X display
     appDpy = 0;
@@ -1466,6 +1474,11 @@ void qt_cleanup()
 
     delete activeBeforePopup;
     activeBeforePopup = 0;
+
+#ifdef _OS_UNIX_
+    close(qt_thread_pipe[0]);
+    close(qt_thread_pipe[1]);
+#endif // _OS_UNIX_
 }
 
 
@@ -2710,7 +2723,7 @@ int QApplication::x11ProcessEvent( XEvent* event )
 		    qt_set_x11_resources();
 		else if ( event->xproperty.atom == qt_desktop_properties )
 		    qt_set_desktop_properties();
-	    } 
+	    }
 	} else if ( widget ) { // widget properties
 	    // nothing yet
 	}
@@ -4546,7 +4559,7 @@ bool QETWidget::translateConfigEvent( const XEvent *event )
 
 	if ( isVisible() )
 	    QApplication::syncX();
-	
+
 	XEvent otherEvent;
 	while ( XCheckTypedWindowEvent( x11Display(),winId(),ConfigureNotify,&otherEvent ) ) {
 	    if ( qt_x11EventFilter( &otherEvent ) )

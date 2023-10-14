@@ -102,7 +102,7 @@ tmake:
 clean:
 	-rm -f $(OBJECTS) $(OBJMOC) $(SRCMOC) $(UICIMPLS) $(UICDECLS)
 	-rm -f *~ core
-	-rm -f tmp/qt.cpp
+	-rm -f allmoc.cpp
 
 ####### Extension Modules
 
@@ -136,7 +136,6 @@ mocgen.o: mocgen.cpp \
 		../../include/qcollection.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
-		../../include/qconfig-qpe.h \
 		../../include/qconfig-minimal.h \
 		../../include/qconfig-small.h \
 		../../include/qconfig-medium.h \
@@ -163,7 +162,6 @@ qbuffer.o: ../tools/qbuffer.cpp \
 		../../include/qiodevice.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
-		../../include/qconfig-qpe.h \
 		../../include/qconfig-minimal.h \
 		../../include/qconfig-small.h \
 		../../include/qconfig-medium.h \
@@ -180,7 +178,6 @@ qcollection.o: ../tools/qcollection.cpp \
 		../../include/qcollection.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
-		../../include/qconfig-qpe.h \
 		../../include/qconfig-minimal.h \
 		../../include/qconfig-small.h \
 		../../include/qconfig-medium.h \
@@ -196,7 +193,6 @@ qcstring.o: ../tools/qcstring.cpp \
 		../../include/qshared.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
-		../../include/qconfig-qpe.h \
 		../../include/qconfig-minimal.h \
 		../../include/qconfig-small.h \
 		../../include/qconfig-medium.h \
@@ -212,7 +208,6 @@ qdatastream.o: ../tools/qdatastream.cpp \
 		../../include/qiodevice.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
-		../../include/qconfig-qpe.h \
 		../../include/qconfig-minimal.h \
 		../../include/qconfig-small.h \
 		../../include/qconfig-medium.h \
@@ -235,7 +230,6 @@ qdatetime.o: ../tools/qdatetime.cpp \
 		../../include/qshared.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
-		../../include/qconfig-qpe.h \
 		../../include/qconfig-minimal.h \
 		../../include/qconfig-small.h \
 		../../include/qconfig-medium.h \
@@ -248,7 +242,6 @@ qdatetime.o: ../tools/qdatetime.cpp \
 qfile.o: ../tools/qfile.cpp \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
-		../../include/qconfig-qpe.h \
 		../../include/qconfig-minimal.h \
 		../../include/qconfig-small.h \
 		../../include/qconfig-medium.h \
@@ -269,7 +262,6 @@ qgarray.o: ../tools/qgarray.cpp \
 		../../include/qshared.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
-		../../include/qconfig-qpe.h \
 		../../include/qconfig-minimal.h \
 		../../include/qconfig-small.h \
 		../../include/qconfig-medium.h \
@@ -285,7 +277,6 @@ qgdict.o: ../tools/qgdict.cpp \
 		../../include/qcollection.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
-		../../include/qconfig-qpe.h \
 		../../include/qconfig-minimal.h \
 		../../include/qconfig-small.h \
 		../../include/qconfig-medium.h \
@@ -307,7 +298,6 @@ qglist.o: ../tools/qglist.cpp \
 		../../include/qcollection.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
-		../../include/qconfig-qpe.h \
 		../../include/qconfig-minimal.h \
 		../../include/qconfig-small.h \
 		../../include/qconfig-medium.h \
@@ -326,7 +316,6 @@ qglist.o: ../tools/qglist.cpp \
 qglobal.o: ../tools/qglobal.cpp \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
-		../../include/qconfig-qpe.h \
 		../../include/qconfig-minimal.h \
 		../../include/qconfig-small.h \
 		../../include/qconfig-medium.h \
@@ -347,7 +336,6 @@ qgvector.o: ../tools/qgvector.cpp \
 		../../include/qcollection.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
-		../../include/qconfig-qpe.h \
 		../../include/qconfig-minimal.h \
 		../../include/qconfig-small.h \
 		../../include/qconfig-medium.h \
@@ -367,7 +355,6 @@ qiodevice.o: ../tools/qiodevice.cpp \
 		../../include/qiodevice.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
-		../../include/qconfig-qpe.h \
 		../../include/qconfig-minimal.h \
 		../../include/qconfig-small.h \
 		../../include/qconfig-medium.h \
@@ -388,7 +375,6 @@ qregexp.o: ../tools/qregexp.cpp \
 		../../include/qshared.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
-		../../include/qconfig-qpe.h \
 		../../include/qconfig-minimal.h \
 		../../include/qconfig-small.h \
 		../../include/qconfig-medium.h \
@@ -404,7 +390,6 @@ qstring.o: ../tools/qstring.cpp \
 		../../include/qshared.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
-		../../include/qconfig-qpe.h \
 		../../include/qconfig-minimal.h \
 		../../include/qconfig-small.h \
 		../../include/qconfig-medium.h \
@@ -428,7 +413,6 @@ qtextcodec.o: ../tools/qtextcodec.cpp \
 		../../include/qshared.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
-		../../include/qconfig-qpe.h \
 		../../include/qconfig-minimal.h \
 		../../include/qconfig-small.h \
 		../../include/qconfig-medium.h \
@@ -458,7 +442,6 @@ qtextstream.o: ../tools/qtextstream.cpp \
 		../../include/qiodevice.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
-		../../include/qconfig-qpe.h \
 		../../include/qconfig-minimal.h \
 		../../include/qconfig-small.h \
 		../../include/qconfig-medium.h \
@@ -478,7 +461,6 @@ qtextstream.o: ../tools/qtextstream.cpp \
 qfile_unix.o: ../tools/qfile_unix.cpp \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
-		../../include/qconfig-qpe.h \
 		../../include/qconfig-minimal.h \
 		../../include/qconfig-small.h \
 		../../include/qconfig-medium.h \

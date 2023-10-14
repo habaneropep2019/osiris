@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qmngio.cpp   2.2.2   edited 2000-09-16 $
+** $Id: qt/src/kernel/qmngio.cpp   2.2.3   edited 2000-09-16 $
 **
 ** Implementation of MNG QImage IOHandler
 **

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/extensions/nsplugin/src/qnp.h   2.2.2   edited 2000-08-31 $
+** $Id: qt/extensions/nsplugin/src/qnp.h   2.2.3   edited 2000-08-31 $
 **
 ** Definition of Qt extension classes for Netscape Plugin support.
 **

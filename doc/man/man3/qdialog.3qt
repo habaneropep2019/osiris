@@ -1,4 +1,4 @@
-.TH QDialog 3qt "8 November 2000" "Trolltech AS" \" -*- nroff -*-
+.TH QDialog 3qt "12 December 2000" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -125,11 +125,9 @@ Reimplemented from QWidget.
 .SH "void QDialog::done ( int r ) \fC[virtual protected slot]\fR"
 Hides the (modal) dialog and sets its result code to \fIr.\fR This uses the local event loop to finish and exec() to return \fIr.\fR
 .PP
-If the dialog has the \fCWDestructiveClose\fR flag set, done() also deletes the dialog.
+If the dialog has the \fCWDestructiveClose\fR flag set, done() also deletes the dialog. If the dialog is the applications's main widget, the application quits.
 .PP
-At some future date, this function will probably close the dialog instead of hiding it. It currently calls hide() in order to avoid breaking a large number of programs that reimplement closeEvent().
-.PP
-See also accept() and reject().
+See also accept(), reject(), QApplication::mainWidget() and QApplication::quit().
 .PP
 Reimplemented in QFileDialog.
 .SH "int QDialog::exec ()"

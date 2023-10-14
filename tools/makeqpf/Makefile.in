@@ -29,7 +29,7 @@ OBJECTS =	main.o
 INTERFACES =    
 UICDECLS =      
 UICIMPLS =      
-SRCMOC	=	
+SRCMOC	=	main.moc
 OBJMOC	=	
 
 
@@ -68,7 +68,7 @@ tmake:
 clean:
 	-rm -f $(OBJECTS) $(OBJMOC) $(SRCMOC) $(UICIMPLS) $(UICDECLS)
 	-rm -f *~ core
-	-rm -f tmp/qt.cpp
+	-rm -f allmoc.cpp
 
 ####### Extension Modules
 
@@ -96,6 +96,10 @@ REQUIRES=
 
 ####### Compile
 
-main.o: main.cpp
+main.o: main.cpp \
+		main.moc
+
+main.moc: main.cpp
+	$(MOC) main.cpp -o main.moc
 
 

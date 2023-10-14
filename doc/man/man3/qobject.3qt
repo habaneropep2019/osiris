@@ -1,4 +1,4 @@
-.TH QObject 3qt "8 November 2000" "Trolltech AS" \" -*- nroff -*-
+.TH QObject 3qt "12 December 2000" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -14,7 +14,7 @@ QObject \- The base class of all Qt objects
 .PP
 Inherits Qt.
 .PP
-Inherited by QAccel, QAction, QApplication, QAuServer, QCanvas, QClipboard, QDataPump, QDns, QDnsSocket, QDragManager, QDragObject, QFileIconProvider, QGuardedPtrPrivate, QLayout, QNPInstance, QNetworkOperation, QNetworkProtocol, QSenderObject, QServerSocket, QSessionManager, QSignal, QSignalMapper, QSocket, QSocketNotifier, QSound, QStyle, QStyleSheet, QTimer, QToolTipGroup, QTranslator, QUrlOperator, QValidator, QWSManager and QWidget.
+Inherited by QAccel, QAction, QApplication, QAuServer, QCanvas, QClipboard, QDataPump, QDns, QDnsSocket, QDragManager, QDragObject, QFileIconProvider, QGuardedPtrPrivate, QLayout, QNPInstance, QNetworkOperation, QNetworkProtocol, QSenderObject, QServerSocket, QSessionManager, QSignal, QSignalMapper, QSocket, QSocketNotifier, QSound, QStyle, QStyleSheet, QTimer, QToolTipGroup, QTranslator, QUrlOperator, QValidator and QWidget.
 .PP
 .SS "Public Members"
 .in +1c
@@ -286,7 +286,7 @@ Searches through the children and grandchildren of this object for an object nam
 .PP
 If there isn't any such object, this function returns null.
 .PP
-If there is more than one, one of them is retured; use queryList() if you need all of them.
+If there is more than one, one of them is returned; use queryList() if you need all of them.
 .SH "void QObject::childEvent ( QChildEvent * ) \fC[virtual protected]\fR"
 This event handler can be reimplemented in a subclass to receive child events.
 .PP
@@ -382,6 +382,8 @@ In its constructor, MyWidget creates a private button and connects the clicked()
 A signal can be connected to many slots/signals. Many signals can be connected to one slot.
 .PP
 If a signal is connected to several slots, the slots are activated in arbitrary order when the signal is emitted.
+.PP
+The function returns TRUE if it successfully connects the signal to the slot. It will return FALSE when it cannot connect the signal to the slot.
 .PP
 See also disconnect().
 .PP
@@ -513,7 +515,7 @@ The reimplementation of this virtual function must return TRUE if the event shou
 .PP
 See also installEventFilter().
 .PP
-Reimplemented in QScrollView, QToolBar, QMainWindow, QTabWidget, QFontDialog, QFileDialog, QSpinBox, QLayout, QSGIStyle, QAccel, QListView, QComboBox, QTable, QWorkspace, QMotifPlusStyle, QIconView, QMenuBar and QWizard.
+Reimplemented in QScrollView, QMainWindow, QTabWidget, QFontDialog, QFileDialog, QSpinBox, QLayout, QSGIStyle, QAccel, QListView, QComboBox, QTable, QWorkspace, QMotifPlusStyle, QIconView, QMenuBar and QWizard.
 .SH "bool QObject::highPriority () const"
 Returns TRUE if the object is a high priority object, or FALSE if it is a standard priority object.
 .PP
@@ -735,7 +737,7 @@ This somewhat contrived example disables all the buttons in this window:
 .br
     }
 .br
-    delete list;                        // delete the list, not the objects
+    delete l;                           // delete the list, not the objects
 .fi
 .PP
 \fBWarning:\fR Delete the list away as soon you have finished using it. The list contains pointers that may become invalid at almost any time without notice - as soon as the user closes a window you may have dangling pointers, for example.
@@ -866,7 +868,7 @@ QTimer provides a higher-level interface to the timer functionality, and also mo
 .PP
 See also startTimer(), killTimer(), killTimers() and event().
 .PP
-Reimplemented in QPopupMenu and QMultiLineEdit.
+Reimplemented in QPopupMenu.
 .SH "QString QObject::tr ( const char * text, const char * comment ) \fC[static]\fR"
 Returns a translated version of \fItext\fR in context QObject and and with \fIcomment,\fR or \fItext\fR if there is no appropriate translated version. All QObject subclasses which use the Q_OBJECT macro have a reimplementation of this function which uses the relevant class name as context.
 .PP

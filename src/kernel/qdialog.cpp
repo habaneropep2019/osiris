@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qdialog.cpp   2.2.2   edited 2000-10-15 $
+** $Id: qt/src/kernel/qdialog.cpp   2.2.3   edited 2000-12-10 $
 **
 ** Implementation of QDialog class
 **
@@ -259,28 +259,26 @@ int QDialog::exec()
   uses the local event loop to finish and exec() to return \a r.
 
   If the dialog has the \c WDestructiveClose flag set, done() also
-  deletes the dialog.
+  deletes the dialog. If the dialog is the applications's main widget,
+  the application quits.
 
-  At some future date, this function will probably close the dialog
-  instead of hiding it.  It currently calls hide() in order to avoid
-  breaking a large number of programs that reimplement closeEvent().
-
-  \sa accept(), reject()
+  \sa accept(), reject(), QApplication::mainWidget(), QApplication::quit()
 */
 
 void QDialog::done( int r )
 {
-    // ### change to close() 3.0?
-    // note that close() would call closeEvent() which calls close() and
-    // these recursive calls break programs that don't check the is_closing
-    // flag when overloading close...
     hide();
     setResult( r );
 
-    // evil evil evil, but keeps the WDestructiveClose
-    // semantics. There should not be much of a difference whether the
-    // users types Alt-F4 or Escape. Without that, destructive-close
-    // dialogs were more or less useless without subclassing.
+    // We cannot use close() here, as close() calls closeEvent() calls
+    // reject() calls close().  But we can at least keep the
+    // mainWidget() and WDestructiveClose semantics. There should not
+    // be much of a difference whether the users types Alt-F4 or
+    // Escape. Without that, destructive-close dialogs were more or
+    // less useless without subclassing.
+    if ( qApp->mainWidget() == this )
+	qApp->quit();
+    
     if ( testWFlags(WDestructiveClose) )
 	delete this;
 }
@@ -435,7 +433,7 @@ void QDialog::show()
 	if ( w ) {
 	    // Use mapToGlobal rather than geometry() in case w might
 	    // be embedded in another application
-	    QPoint pp = w->mapToGlobal( QPoint(0,0) ); 
+	    QPoint pp = w->mapToGlobal( QPoint(0,0) );
 	    p = QPoint( pp.x() + w->width()/2,
 			pp.y() + w->height()/ 2 );
 	} else {

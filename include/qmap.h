@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qmap.h   2.2.2   edited 2000-11-02 $
+** $Id: qt/src/tools/qmap.h   2.2.3   edited 2000-11-02 $
 **
 ** Definition of QMap class
 **

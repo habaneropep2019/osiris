@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qjpunicode.cpp   2.2.2   edited 2000-08-28 $
+** $Id: qt/src/tools/qjpunicode.cpp   2.2.3   edited 2000-12-04 $
 **
 ** Implementation of QJpUnicodeConv class
 **
@@ -5654,7 +5654,7 @@ static unsigned short const unicode_to_jisx0208_ff[] = {
 	0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
 };
 
-static unsigned short const *unicode_to_jisx0208_map[0x100] = {
+static unsigned short const * const unicode_to_jisx0208_map[0x100] = {
 	/* 0x00XX - 0x0fXX */
 	unicode_to_jisx0208_00,
 	0, 0,
@@ -10361,7 +10361,7 @@ static unsigned short const unicode_to_jisx0212_ff[] = {
 	0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
 };
 
-static unsigned short const *unicode_to_jisx0212_map[0x100] = {
+static unsigned short const * const unicode_to_jisx0212_map[0x100] = {
 	/* 0x00XX - 0x0fXX */
 	unicode_to_jisx0212_00,
 	unicode_to_jisx0212_01,

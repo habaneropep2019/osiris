@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qhbox.h   2.2.2   edited 2000-10-11 $
+** $Id: qt/src/widgets/qhbox.h   2.2.3   edited 2000-10-11 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **

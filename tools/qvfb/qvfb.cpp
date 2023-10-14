@@ -22,10 +22,13 @@
 #include <qapplication.h>
 #include <qmessagebox.h>
 #include <qfiledialog.h>
+#include <qspinbox.h>
+#include <qradiobutton.h>
 
 #include "qvfb.h"
 #include "qvfbview.h"
 #include "qvfbratedlg.h"
+#include "config.h"
 
 
 static const char * logo[] = {
@@ -106,17 +109,26 @@ QVFb::QVFb( int display_id, int w, int h, int d, QWidget *parent,
 	    const char *name, uint flags )
     : QMainWindow( parent, name, flags )
 {
-    setCaption( QString("Virtual framebuffer %1x%2 %3bpp Display :%4")
-		    .arg(w).arg(h).arg(d).arg(display_id) );
     setIcon(QPixmap(logo));
     rateDlg = 0;
-    view = new QVFbView( display_id, w, h, d, this );
-    setCentralWidget( view );
+    view = 0;
+    init( display_id, w, h, d );
     createMenu();
 }
 
 QVFb::~QVFb()
 {
+}
+
+void QVFb::init( int display_id, int w, int h, int d )
+{
+    setCaption( QString("Virtual framebuffer %1x%2 %3bpp Display :%4")
+		    .arg(w).arg(h).arg(d).arg(display_id) );
+    delete view;
+    view = new QVFbView( display_id, w, h, d, this );
+    setCentralWidget( view );
+    if ( isVisible() )
+	adjustSize();
 }
 
 void QVFb::enableCursor( bool e )
@@ -128,6 +140,8 @@ void QVFb::enableCursor( bool e )
 void QVFb::createMenu()
 {
     QPopupMenu *file = new QPopupMenu( this );
+    file->insertItem( "&Configure...", this, SLOT(configure()), ALT+CTRL+Key_C );
+    file->insertSeparator();
     file->insertItem( "&Save image...", this, SLOT(saveImage()), ALT+CTRL+Key_S );
     file->insertItem( "&Animation...", this, SLOT(toggleAnimation()), ALT+CTRL+Key_A );
     file->insertSeparator();
@@ -236,3 +250,50 @@ void QVFb::about()
 	"as GUI profilers and debuggers."
     );
 }
+
+void QVFb::configure()
+{
+    Config config(this,0,TRUE);
+
+    int w = view->displayWidth();
+    int h = view->displayHeight();
+    config.size_width->setValue(w);
+    config.size_height->setValue(h);
+    config.size_custom->setChecked(TRUE); // unless changed by settings below
+    config.size_240_320->setChecked(w==240&&h==320);
+    config.size_320_240->setChecked(w==320&&h==240);
+    config.size_640_480->setChecked(w==640&&h==480);
+    config.depth_1->setChecked(view->displayDepth()==1);
+    config.depth_4gray->setChecked(view->displayDepth()==4);
+    config.depth_8->setChecked(view->displayDepth()==8);
+    config.depth_16->setChecked(view->displayDepth()==16);
+    config.depth_32->setChecked(view->displayDepth()==32);
+
+    if ( config.exec() ) {
+	int id = view->displayId(); // not settable yet
+	if ( config.size_240_320->isChecked() ) {
+	    w=240; h=320;
+	} else if ( config.size_320_240->isChecked() ) {
+	    w=320; h=240;
+	} else if ( config.size_640_480->isChecked() ) {
+	    w=640; h=480;
+	} else {
+	    w=config.size_width->value();
+	    h=config.size_height->value();
+	}
+	int d;
+	if ( config.depth_1->isChecked() )
+	    d=1;
+	else if ( config.depth_4gray->isChecked() )
+	    d=4;
+	else if ( config.depth_8->isChecked() )
+	    d=8;
+	else if ( config.depth_16->isChecked() )
+	    d=16;
+	else
+	    d=32;
+
+	init( id, w, h, d );
+    }
+}
+

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qsgistyle.cpp   2.2.2   edited 2000-10-12 $
+** $Id: qt/src/widgets/qsgistyle.cpp   2.2.3   edited 2000-12-11 $
 **
 ** Implementation of Motif-like style class
 **
@@ -62,8 +62,6 @@ static const int sgiSepHeight		= 1;	// separator item height
 static const int sgiItemHMargin		= 3;	// menu item hor text margin
 static const int sgiItemVMargin 	= 2;	// menu item ver text margin
 static const int sgiArrowHMargin	= 6;	// arrow horizontal margin
-static const int sgiTabSpacing		= 12;	// space between text and tab
-static const int sgiCheckMarkHMargin	= 2;	// horiz. margins of check mark
 static const int sgiCheckMarkSpace	= 20;
 
 static bool sliderMoving		= FALSE;
@@ -298,6 +296,8 @@ void
 QSGIStyle::drawPanel( QPainter*p, int x, int y, int w, int h, const QColorGroup &g,
 		      bool sunken, int lineWidth, const QBrush* fill )
 {
+    if( w < 0 ) w = 0;
+    if( h < 0 ) h = 0;
     QMotifStyle::drawPanel( p, x, y, w, h, g, sunken, ( w > lineWidth && h > lineWidth ) ? lineWidth : 1, fill );
     if ( lineWidth <= 1 )
 	return;
@@ -1104,7 +1104,7 @@ QSGIStyle::drawPopupPanel( QPainter *p, int x, int y, int w, int h,
 {
     if (lineWidth == 3 && w > 3 && h > 3 )
         drawBevelButton( p, x, y,  w, h, g, FALSE, fill );
-    else 
+    else
 	QMotifStyle::drawPopupPanel( p, x, y, w, h, g, lineWidth, fill );
 }
 
@@ -1356,7 +1356,7 @@ QSGIStyle::eventFilter( QObject* o, QEvent* e )
 
 	    if ( lastWidget && o == lastWidget &&
 		lastWidget->testWState( WState_Created )) {
-		if ( lastWidgetPalette ) {    
+		if ( lastWidgetPalette ) {
 		    lastWidget->setPalette( *lastWidgetPalette );
 		    delete lastWidgetPalette;
 		    lastWidgetPalette = 0;

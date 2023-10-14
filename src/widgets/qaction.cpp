@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qaction.cpp   2.2.2   edited 2000-10-15 $
+** $Id: qt/src/widgets/qaction.cpp   2.2.3   edited 2000-12-08 $
 **
 ** Implementation of QAction class
 **
@@ -142,6 +142,32 @@ QActionPrivate::QActionPrivate()
 
 QActionPrivate::~QActionPrivate()
 {
+    QListIterator<QToolButton> ittb( toolbuttons );
+    QToolButton *tb;
+
+    while ( ( tb = ittb.current() ) ) {
+	++ittb;
+	QWidget* parent = tb->parentWidget();
+	delete tb;
+	if ( parent->inherits( "QToolBar" ) ) {
+	    QToolBar* toolbar = (QToolBar*) parent;
+	    if ( toolbar->queryList( "QToolButton" )->isEmpty() )
+		delete toolbar;
+	}
+    }
+
+    QListIterator<QActionPrivate::MenuItem> itmi( menuitems);
+    QActionPrivate::MenuItem* mi;
+    while ( ( mi = itmi.current() ) ) {
+	++itmi;
+	QPopupMenu* menu = mi->popup;
+	if ( menu->findItem( mi->id ) )
+	    menu->removeItem( mi->id );
+	if ( !menu->count() ) {
+	    delete menu;
+	}
+    }
+
     delete accel;
     delete iconset;
     delete tipGroup;

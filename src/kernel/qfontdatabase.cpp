@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qfontdatabase.cpp   2.2.2   edited 2000-10-06 $
+** $Id: qt/src/kernel/qfontdatabase.cpp   2.2.3   edited 2000-10-06 $
 **
 ** Implementation of font database class.
 **

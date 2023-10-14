@@ -37,6 +37,10 @@
 #include <stdlib.h>
 #include <signal.h>
 
+#if defined(_OS_SCO_) && defined(raise)
+#  undef raise // fix for broken signal.h on SCO OpenServer 5.0.5
+#endif
+
 #if defined(_WS_X11_)
 extern void qt_wait_for_window_manager( QWidget* );
 #endif
@@ -71,7 +75,7 @@ static void signalHandler( int )
 		haveit = haveit || fw->fileName() == arg;
 		if ( haveit )
 		    totop = fw;
-		
+
 		fw = (FormWindow*) l->next();
 	    }
 	    if ( !haveit )
@@ -144,7 +148,7 @@ bool QDesignerApplication::winEventFilter( MSG *msg )
 
 		    fw = (FormWindow*) l->next();
 		}
-		
+
 		if ( !haveit ) {
 		    FlashWindow( MainWindow::self->winId(), TRUE );
 		    MainWindow::self->openFile( arg );
@@ -199,7 +203,7 @@ int main( int argc, char *argv[] )
 #endif
 
     QApplication::setColorSpec( QApplication::ManyColor );
-	
+
 #if defined(HAVE_KDE)
     QDesignerApplication a( argc, argv, "Qt Designer" );
 #else
@@ -230,7 +234,7 @@ int main( int argc, char *argv[] )
 		else
 		    return 0;
 #elif defined(_OS_WIN32_)
-		if ( !GetProcessVersion( pidStr.toUInt() ) ) {		
+		if ( !GetProcessVersion( pidStr.toUInt() ) ) {
 		    creatPid = TRUE;
 		} else {
 			if ( a.winVersion() & Qt::WV_NT_based )

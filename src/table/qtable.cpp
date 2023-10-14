@@ -2418,8 +2418,9 @@ void QTable::setNumRows( int r )
 
     for ( i = 0; i < (int)tmp.size(); ++i ) {
 	QTableItem *it = tmp [ i ];
-	if ( it )
-	    contents.insert( indexOf( it->row(), it->col() ), it );
+	int idx = it ? indexOf( it->row(), it->col() ) : 0;
+	if ( it && (uint)idx < contents.size() )
+	    contents.insert( idx, it );
     }
 
     QRect r2( cellGeometry( numRows() - 1, numCols() - 1 ) );
@@ -2467,8 +2468,9 @@ void QTable::setNumCols( int c )
 
     for ( i = 0; i < (int)tmp.size(); ++i ) {
 	QTableItem *it = tmp[ i ];
-	if ( it )
-	    contents.insert( indexOf( it->row(), it->col() ), it );
+	int idx = it ? indexOf( it->row(), it->col() ) : 0;
+	if ( it && (uint)idx < contents.size() )
+	    contents.insert( idx, it );
     }
 
     QRect r( cellGeometry( numRows() - 1, numCols() - 1 ) );

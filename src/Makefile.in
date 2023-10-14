@@ -17,7 +17,7 @@ UIC	=	$(SYSCONF_UIC)
 DESTDIR = ../lib/
 VER_MAJ = 2
 VER_MIN = 2
-VER_PATCH = 2
+VER_PATCH = 3
 TARGET	= qt$(QT_THREAD_SUFFIX)
 TARGET1 = lib$(TARGET).so.$(VER_MAJ)
 
@@ -70,8 +70,7 @@ FT_OBJECTS = 3rdparty/freetype2/config/unix/ftsystem.o \
 		3rdparty/freetype2/src/psnames/psdriver.o \
 		3rdparty/freetype2/src/sfnt/sfnt.o \
 		3rdparty/freetype2/src/truetype/truetype.o \
-		3rdparty/freetype2/src/type1/type1.o \
-		3rdparty/freetype2/src/type1z/type1z.o
+		3rdparty/freetype2/src/type1/type1.o
 
 
 OBJECTS_tools = tools/qdir_unix.o \
@@ -400,7 +399,7 @@ tmake:
 clean:
 	-rm -f $(OBJECTS) $(OBJMOC) $(SRCMOC) $(UICIMPLS) $(UICDECLS)
 	-rm -f *~ core
-	-rm -f tmp/qt.cpp
+	-rm -f allmoc.cpp
 
 ####### Extension Modules
 
@@ -635,15 +634,12 @@ REQUIRES=
 
 3rdparty/freetype2/src/type1/type1.o: 3rdparty/freetype2/src/type1/type1.c
 
-3rdparty/freetype2/src/type1z/type1z.o: 3rdparty/freetype2/src/type1z/type1z.c
-
 
 
 # Module tools...
 tools/qdir_unix.o: tools/qdir_unix.cpp \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -672,7 +668,6 @@ tools/qdir_unix.o: tools/qdir_unix.cpp \
 tools/qfile_unix.o: tools/qfile_unix.cpp \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -690,7 +685,6 @@ tools/qfile_unix.o: tools/qfile_unix.cpp \
 tools/qfileinfo_unix.o: tools/qfileinfo_unix.cpp \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -723,7 +717,6 @@ tools/qbig5codec.o: tools/qbig5codec.cpp \
 		tools/qshared.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -739,7 +732,6 @@ tools/qbitarray.o: tools/qbitarray.cpp \
 		tools/qshared.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -753,7 +745,6 @@ tools/qbuffer.o: tools/qbuffer.cpp \
 		tools/qiodevice.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -769,7 +760,6 @@ tools/qcollection.o: tools/qcollection.cpp \
 		tools/qcollection.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -784,7 +774,6 @@ tools/qcstring.o: tools/qcstring.cpp \
 		tools/qshared.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -799,7 +788,6 @@ tools/qdatastream.o: tools/qdatastream.cpp \
 		tools/qiodevice.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -821,7 +809,6 @@ tools/qdatetime.o: tools/qdatetime.cpp \
 		tools/qshared.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -833,7 +820,6 @@ tools/qdatetime.o: tools/qdatetime.cpp \
 tools/qdir.o: tools/qdir.cpp \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -869,7 +855,6 @@ tools/qeucjpcodec.o: tools/qeucjpcodec.cpp \
 		tools/qshared.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -887,7 +872,6 @@ tools/qeuckrcodec.o: tools/qeuckrcodec.cpp \
 		tools/qshared.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -897,7 +881,6 @@ tools/qeuckrcodec.o: tools/qeuckrcodec.cpp \
 tools/qfile.o: tools/qfile.cpp \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -915,7 +898,6 @@ tools/qfile.o: tools/qfile.cpp \
 tools/qfileinfo.o: tools/qfileinfo.cpp \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -943,7 +925,6 @@ tools/qgarray.o: tools/qgarray.cpp \
 		tools/qshared.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -963,7 +944,6 @@ tools/qgbkcodec.o: tools/qgbkcodec.cpp \
 		tools/qshared.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -975,7 +955,6 @@ tools/qgcache.o: tools/qgcache.cpp \
 		tools/qcollection.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -996,7 +975,6 @@ tools/qgdict.o: tools/qgdict.cpp \
 		tools/qcollection.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -1017,7 +995,6 @@ tools/qglist.o: tools/qglist.cpp \
 		tools/qcollection.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -1035,7 +1012,6 @@ tools/qglist.o: tools/qglist.cpp \
 tools/qglobal.o: tools/qglobal.cpp \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -1055,7 +1031,6 @@ tools/qgvector.o: tools/qgvector.cpp \
 		tools/qcollection.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -1074,7 +1049,6 @@ tools/qiodevice.o: tools/qiodevice.cpp \
 		tools/qiodevice.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -1095,7 +1069,6 @@ tools/qjiscodec.o: tools/qjiscodec.cpp \
 		tools/qshared.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -1110,7 +1083,6 @@ tools/qjpunicode.o: tools/qjpunicode.cpp \
 		tools/qshared.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -1123,7 +1095,6 @@ tools/qmap.o: tools/qmap.cpp \
 		tools/qshared.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -1145,7 +1116,6 @@ tools/qregexp.o: tools/qregexp.cpp \
 		tools/qshared.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -1162,7 +1132,6 @@ tools/qrtlcodec.o: tools/qrtlcodec.cpp \
 		tools/qshared.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -1179,7 +1148,6 @@ tools/qsjiscodec.o: tools/qsjiscodec.cpp \
 		tools/qshared.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -1195,7 +1163,6 @@ tools/qstring.o: tools/qstring.cpp \
 		tools/qshared.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -1215,7 +1182,6 @@ tools/qstringlist.o: tools/qstringlist.cpp \
 		tools/qshared.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -1244,7 +1210,6 @@ tools/qtextcodec.o: tools/qtextcodec.cpp \
 		tools/qshared.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -1273,7 +1238,6 @@ tools/qtextstream.o: tools/qtextstream.cpp \
 		tools/qiodevice.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -1299,7 +1263,6 @@ tools/qtsciicodec.o: tools/qtsciicodec.cpp \
 		tools/qshared.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -1316,7 +1279,6 @@ tools/qutfcodec.o: tools/qutfcodec.cpp \
 		tools/qshared.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -1330,7 +1292,6 @@ kernel/moc_qabstractlayout.o: kernel/moc_qabstractlayout.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -1375,7 +1336,6 @@ kernel/moc_qaccel.o: kernel/moc_qaccel.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -1410,7 +1370,6 @@ kernel/moc_qapplication.o: kernel/moc_qapplication.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -1458,7 +1417,6 @@ kernel/moc_qasyncio.o: kernel/moc_qasyncio.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -1494,7 +1452,6 @@ kernel/moc_qclipboard.o: kernel/moc_qclipboard.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -1529,7 +1486,6 @@ kernel/moc_qdialog.o: kernel/moc_qdialog.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -1573,7 +1529,6 @@ kernel/moc_qdragobject.o: kernel/moc_qdragobject.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -1612,7 +1567,6 @@ kernel/moc_qguardedptr.o: kernel/moc_qguardedptr.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -1647,7 +1601,6 @@ kernel/moc_qlayout.o: kernel/moc_qlayout.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -1692,7 +1645,6 @@ kernel/moc_qtranslator.o: kernel/moc_qtranslator.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -1733,7 +1685,6 @@ kernel/moc_qnetworkprotocol.o: kernel/moc_qnetworkprotocol.cpp \
 		tools/qshared.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -1772,7 +1723,6 @@ kernel/moc_qsemimodal.o: kernel/moc_qsemimodal.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -1816,7 +1766,6 @@ kernel/moc_qsessionmanager.o: kernel/moc_qsessionmanager.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -1850,7 +1799,6 @@ kernel/moc_qsignalmapper.o: kernel/moc_qsignalmapper.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -1885,7 +1833,6 @@ kernel/moc_qsizegrip.o: kernel/moc_qsizegrip.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -1929,7 +1876,6 @@ kernel/moc_qsocketnotifier.o: kernel/moc_qsocketnotifier.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -1963,7 +1909,6 @@ kernel/moc_qsound.o: kernel/moc_qsound.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -1997,7 +1942,6 @@ kernel/moc_qstyle.o: kernel/moc_qstyle.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -2034,7 +1978,6 @@ kernel/moc_qstylesheet.o: kernel/moc_qstylesheet.cpp \
 		tools/qshared.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -2067,7 +2010,6 @@ kernel/moc_qtimer.o: kernel/moc_qtimer.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -2107,7 +2049,6 @@ kernel/moc_qlocalfs.o: kernel/moc_qlocalfs.cpp \
 		tools/qshared.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -2145,7 +2086,6 @@ kernel/moc_qurloperator.o: kernel/moc_qurloperator.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -2190,7 +2130,6 @@ kernel/moc_qwidget.o: kernel/moc_qwidget.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -2314,7 +2253,6 @@ kernel/qpsprinter.o: kernel/qpsprinter.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -2367,7 +2305,6 @@ kernel/qthread_unix.o: kernel/qthread_unix.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -2417,7 +2354,6 @@ kernel/qapplication_x11.o: kernel/qapplication_x11.cpp \
 		kernel/qapplication_x11.moc \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -2499,7 +2435,6 @@ kernel/qclipboard_x11.o: kernel/qclipboard_x11.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -2557,7 +2492,6 @@ kernel/qcolor_x11.o: kernel/qcolor_x11.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -2608,7 +2542,6 @@ kernel/qcursor_x11.o: kernel/qcursor_x11.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -2662,7 +2595,6 @@ kernel/qdnd_x11.o: kernel/qdnd_x11.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -2720,7 +2652,6 @@ kernel/qmotifdnd_x11.o: kernel/qmotifdnd_x11.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -2768,7 +2699,6 @@ kernel/qfont_x11.o: kernel/qfont_x11.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -2833,7 +2763,6 @@ kernel/qfont_x11.o: kernel/qfont_x11.cpp \
 kernel/qpixmap_x11.o: kernel/qpixmap_x11.cpp \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -2894,7 +2823,6 @@ kernel/qprinter_x11.o: kernel/qprinter_x11.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -2953,7 +2881,6 @@ kernel/qpaintdevice_x11.o: kernel/qpaintdevice_x11.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -3007,7 +2934,6 @@ kernel/qpainter_x11.o: kernel/qpainter_x11.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -3064,7 +2990,6 @@ kernel/qregion_x11.o: kernel/qregion_x11.cpp \
 		tools/qshared.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -3105,7 +3030,6 @@ kernel/qsound_x11.o: kernel/qsound_x11.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -3156,7 +3080,6 @@ kernel/qwidget_x11.o: kernel/qwidget_x11.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -3226,7 +3149,6 @@ kernel/qnpsupport.o: kernel/qnpsupport.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -3274,7 +3196,6 @@ kernel/qwidgetcreate_x11.o: kernel/qwidgetcreate_x11.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -3319,7 +3240,6 @@ kernel/qabstractlayout.o: kernel/qabstractlayout.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -3376,7 +3296,6 @@ kernel/qaccel.o: kernel/qaccel.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -3429,7 +3348,6 @@ kernel/qapplication.o: kernel/qapplication.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -3504,7 +3422,6 @@ kernel/qasyncimageio.o: kernel/qasyncimageio.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -3546,7 +3463,6 @@ kernel/qasyncio.o: kernel/qasyncio.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -3584,7 +3500,6 @@ kernel/qbitmap.o: kernel/qbitmap.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -3617,7 +3532,6 @@ kernel/qclipboard.o: kernel/qclipboard.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -3671,7 +3585,6 @@ kernel/qcolor.o: kernel/qcolor.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -3692,7 +3605,6 @@ kernel/qcolor_p.o: kernel/qcolor_p.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -3711,7 +3623,6 @@ kernel/qconnection.o: kernel/qconnection.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -3746,7 +3657,6 @@ kernel/qcursor.o: kernel/qcursor.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -3782,7 +3692,6 @@ kernel/qdialog.o: kernel/qdialog.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -3847,7 +3756,6 @@ kernel/qdragobject.o: kernel/qdragobject.cpp \
 		tools/qshared.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -3906,7 +3814,6 @@ kernel/qdrawutil.o: kernel/qdrawutil.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -3939,7 +3846,6 @@ kernel/qdropsite.o: kernel/qdropsite.cpp \
 		kernel/qdropsite.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -3986,7 +3892,6 @@ kernel/qevent.o: kernel/qevent.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -4037,7 +3942,6 @@ kernel/qfocusdata.o: kernel/qfocusdata.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -4081,7 +3985,6 @@ kernel/qfont.o: kernel/qfont.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -4138,7 +4041,6 @@ kernel/qfontdatabase.o: kernel/qfontdatabase.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -4197,7 +4099,6 @@ kernel/qguardedptr.o: kernel/qguardedptr.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -4233,7 +4134,6 @@ kernel/qiconset.o: kernel/qiconset.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -4291,7 +4191,6 @@ kernel/qimage.o: kernel/qimage.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -4327,7 +4226,6 @@ kernel/qimage.o: kernel/qimage.cpp \
 
 kernel/qjpegio.o: kernel/qjpegio.cpp \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -4367,7 +4265,6 @@ kernel/qlayout.o: kernel/qlayout.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -4419,7 +4316,6 @@ kernel/qlayoutengine.o: kernel/qlayoutengine.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -4464,7 +4360,6 @@ kernel/qtranslator.o: kernel/qtranslator.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -4521,7 +4416,6 @@ kernel/qmetaobject.o: kernel/qmetaobject.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -4562,7 +4456,6 @@ kernel/qmime.o: kernel/qmime.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -4617,7 +4510,6 @@ kernel/qmime.o: kernel/qmime.cpp \
 
 kernel/qmngio.o: kernel/qmngio.cpp \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -4659,7 +4551,6 @@ kernel/qmovie.o: kernel/qmovie.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -4718,7 +4609,6 @@ kernel/qnetworkprotocol.o: kernel/qnetworkprotocol.cpp \
 		tools/qshared.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -4764,7 +4654,6 @@ kernel/qobject.o: kernel/qobject.cpp \
 		tools/qshared.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -4824,7 +4713,6 @@ kernel/qpainter.o: kernel/qpainter.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -4879,7 +4767,6 @@ kernel/qpalette.o: kernel/qpalette.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -4907,7 +4794,6 @@ kernel/qpaintdevicemetrics.o: kernel/qpaintdevicemetrics.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -4931,7 +4817,6 @@ kernel/qpicture.o: kernel/qpicture.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -4978,7 +4863,6 @@ kernel/qpixmap.o: kernel/qpixmap.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -5038,7 +4922,6 @@ kernel/qpixmapcache.o: kernel/qpixmapcache.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -5072,7 +4955,6 @@ kernel/qpixmapcache.o: kernel/qpixmapcache.cpp \
 
 kernel/qpngio.o: kernel/qpngio.cpp \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -5118,7 +5000,6 @@ kernel/qpointarray.o: kernel/qpointarray.cpp \
 		tools/qshared.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -5143,7 +5024,6 @@ kernel/qpoint.o: kernel/qpoint.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -5162,7 +5042,6 @@ kernel/qpolygonscanner.o: kernel/qpolygonscanner.cpp \
 		kernel/qpolygonscanner.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -5186,7 +5065,6 @@ kernel/qprinter.o: kernel/qprinter.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -5210,7 +5088,6 @@ kernel/qrect.o: kernel/qrect.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -5230,7 +5107,6 @@ kernel/qregion.o: kernel/qregion.cpp \
 		tools/qshared.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -5261,7 +5137,6 @@ kernel/qrichtext.o: kernel/qrichtext.cpp \
 		tools/qshared.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -5326,7 +5201,6 @@ kernel/qsemimodal.o: kernel/qsemimodal.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -5375,7 +5249,6 @@ kernel/qsignal.o: kernel/qsignal.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -5414,7 +5287,6 @@ kernel/qsignalmapper.o: kernel/qsignalmapper.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -5454,7 +5326,6 @@ kernel/qsimplerichtext.o: kernel/qsimplerichtext.cpp \
 		tools/qshared.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -5512,7 +5383,6 @@ kernel/qsize.o: kernel/qsize.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -5534,7 +5404,6 @@ kernel/qsizegrip.o: kernel/qsizegrip.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -5589,7 +5458,6 @@ kernel/qstyle.o: kernel/qstyle.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -5647,7 +5515,6 @@ kernel/qsocketnotifier.o: kernel/qsocketnotifier.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -5681,7 +5548,6 @@ kernel/qsound.o: kernel/qsound.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -5734,7 +5600,6 @@ kernel/qstylesheet.o: kernel/qstylesheet.cpp \
 		tools/qshared.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -5798,7 +5663,6 @@ kernel/qtimer.o: kernel/qtimer.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -5843,7 +5707,6 @@ kernel/qurl.o: kernel/qurl.cpp \
 		tools/qshared.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -5872,7 +5735,6 @@ kernel/qlocalfs.o: kernel/qlocalfs.cpp \
 		tools/qshared.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -5927,7 +5789,6 @@ kernel/qurloperator.o: kernel/qurloperator.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -5994,7 +5855,6 @@ kernel/qurlinfo.o: kernel/qurlinfo.cpp \
 		tools/qshared.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -6035,7 +5895,6 @@ kernel/qwidget.o: kernel/qwidget.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -6096,7 +5955,6 @@ kernel/qwmatrix.o: kernel/qwmatrix.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -6124,7 +5982,6 @@ kernel/qvariant.o: kernel/qvariant.cpp \
 		tools/qshared.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -6170,7 +6027,6 @@ widgets/moc_qbuttongroup.o: widgets/moc_qbuttongroup.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -6215,7 +6071,6 @@ widgets/moc_qbutton.o: widgets/moc_qbutton.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -6261,7 +6116,6 @@ widgets/moc_qcheckbox.o: widgets/moc_qcheckbox.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -6308,7 +6162,6 @@ widgets/moc_qcdestyle.o: widgets/moc_qcdestyle.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -6346,7 +6199,6 @@ widgets/moc_qcombobox.o: widgets/moc_qcombobox.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -6391,7 +6243,6 @@ widgets/moc_qcommonstyle.o: widgets/moc_qcommonstyle.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -6426,7 +6277,6 @@ widgets/moc_qdial.o: widgets/moc_qdial.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -6472,7 +6322,6 @@ widgets/moc_qframe.o: widgets/moc_qframe.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -6518,7 +6367,6 @@ widgets/moc_qgrid.o: widgets/moc_qgrid.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -6564,7 +6412,6 @@ widgets/moc_qgroupbox.o: widgets/moc_qgroupbox.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -6612,7 +6459,6 @@ widgets/moc_qhbuttongroup.o: widgets/moc_qhbuttongroup.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -6657,7 +6503,6 @@ widgets/moc_qheader.o: widgets/moc_qheader.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -6706,7 +6551,6 @@ widgets/moc_qhgroupbox.o: widgets/moc_qhgroupbox.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -6751,7 +6595,6 @@ widgets/moc_qhbox.o: widgets/moc_qhbox.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -6798,7 +6641,6 @@ widgets/moc_qlabel.o: widgets/moc_qlabel.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -6844,7 +6686,6 @@ widgets/moc_qlcdnumber.o: widgets/moc_qlcdnumber.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -6890,7 +6731,6 @@ widgets/moc_qlineedit.o: widgets/moc_qlineedit.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -6937,7 +6777,6 @@ widgets/moc_qlistbox.o: widgets/moc_qlistbox.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -6993,7 +6832,6 @@ widgets/moc_qlistview.o: widgets/moc_qlistview.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -7045,7 +6883,6 @@ widgets/moc_qmainwindow.o: widgets/moc_qmainwindow.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -7092,7 +6929,6 @@ widgets/moc_qmenubar.o: widgets/moc_qmenubar.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -7142,7 +6978,6 @@ widgets/moc_qmotifstyle.o: widgets/moc_qmotifstyle.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -7182,7 +7017,6 @@ widgets/moc_qmotifplusstyle.o: widgets/moc_qmotifplusstyle.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -7222,7 +7056,6 @@ widgets/moc_qmultilineedit.o: widgets/moc_qmultilineedit.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -7269,7 +7102,6 @@ widgets/moc_qplatinumstyle.o: widgets/moc_qplatinumstyle.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -7308,7 +7140,6 @@ widgets/moc_qpopupmenu.o: widgets/moc_qpopupmenu.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -7358,7 +7189,6 @@ widgets/moc_qprogressbar.o: widgets/moc_qprogressbar.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -7404,7 +7234,6 @@ widgets/moc_qpushbutton.o: widgets/moc_qpushbutton.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -7452,7 +7281,6 @@ widgets/moc_qradiobutton.o: widgets/moc_qradiobutton.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -7497,7 +7325,6 @@ widgets/moc_qscrollbar.o: widgets/moc_qscrollbar.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -7549,7 +7376,6 @@ widgets/moc_qscrollview.o: widgets/moc_qscrollview.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -7603,7 +7429,6 @@ widgets/moc_qsgistyle.o: widgets/moc_qsgistyle.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -7642,7 +7467,6 @@ widgets/moc_qslider.o: widgets/moc_qslider.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -7689,7 +7513,6 @@ widgets/moc_qspinbox.o: widgets/moc_qspinbox.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -7736,7 +7559,6 @@ widgets/moc_qsplitter.o: widgets/moc_qsplitter.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -7781,7 +7603,6 @@ widgets/moc_qstatusbar.o: widgets/moc_qstatusbar.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -7826,7 +7647,6 @@ widgets/moc_qtabbar.o: widgets/moc_qtabbar.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -7877,7 +7697,6 @@ widgets/moc_qtabwidget.o: widgets/moc_qtabwidget.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -7925,7 +7744,6 @@ widgets/moc_qtableview.o: widgets/moc_qtableview.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -7970,7 +7788,6 @@ widgets/moc_qtextbrowser.o: widgets/moc_qtextbrowser.cpp \
 		tools/qcollection.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -8026,7 +7843,6 @@ widgets/moc_qtextview.o: widgets/moc_qtextview.cpp \
 		tools/qcollection.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -8081,7 +7897,6 @@ widgets/moc_qtoolbar.o: widgets/moc_qtoolbar.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -8128,7 +7943,6 @@ widgets/moc_qtoolbutton.o: widgets/moc_qtoolbutton.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -8175,7 +7989,6 @@ widgets/moc_qtooltip.o: widgets/moc_qtooltip.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -8220,7 +8033,6 @@ widgets/moc_qvalidator.o: widgets/moc_qvalidator.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -8256,7 +8068,6 @@ widgets/moc_qvbox.o: widgets/moc_qvbox.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -8305,7 +8116,6 @@ widgets/moc_qvbuttongroup.o: widgets/moc_qvbuttongroup.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -8352,7 +8162,6 @@ widgets/moc_qvgroupbox.o: widgets/moc_qvgroupbox.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -8398,7 +8207,6 @@ widgets/moc_qwidgetstack.o: widgets/moc_qwidgetstack.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -8447,7 +8255,6 @@ widgets/moc_qwindowsstyle.o: widgets/moc_qwindowsstyle.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -8481,7 +8288,6 @@ widgets/moc_qaction.o: widgets/moc_qaction.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -8687,7 +8493,6 @@ widgets/qbuttongroup.o: widgets/qbuttongroup.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -8739,7 +8544,6 @@ widgets/qbutton.o: widgets/qbutton.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -8807,7 +8611,6 @@ widgets/qcdestyle.o: widgets/qcdestyle.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -8873,7 +8676,6 @@ widgets/qcheckbox.o: widgets/qcheckbox.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -8932,7 +8734,6 @@ widgets/qcombobox.o: widgets/qcombobox.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -9002,7 +8803,6 @@ widgets/qcommonstyle.o: widgets/qcommonstyle.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -9073,7 +8873,6 @@ widgets/qdial.o: widgets/qdial.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -9129,7 +8928,6 @@ widgets/qframe.o: widgets/qframe.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -9182,7 +8980,6 @@ widgets/qgrid.o: widgets/qgrid.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -9235,7 +9032,6 @@ widgets/qgroupbox.o: widgets/qgroupbox.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -9303,7 +9099,6 @@ widgets/qhbuttongroup.o: widgets/qhbuttongroup.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -9348,7 +9143,6 @@ widgets/qheader.o: widgets/qheader.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -9406,7 +9200,6 @@ widgets/qhgroupbox.o: widgets/qhgroupbox.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -9451,7 +9244,6 @@ widgets/qhbox.o: widgets/qhbox.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -9506,7 +9298,6 @@ widgets/qlabel.o: widgets/qlabel.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -9572,7 +9363,6 @@ widgets/qlcdnumber.o: widgets/qlcdnumber.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -9622,7 +9412,6 @@ widgets/qlineedit.o: widgets/qlineedit.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -9692,7 +9481,6 @@ widgets/qlistbox.o: widgets/qlistbox.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -9755,7 +9543,6 @@ widgets/qlistview.o: widgets/qlistview.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -9825,7 +9612,6 @@ widgets/qmainwindow.o: widgets/qmainwindow.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -9905,7 +9691,6 @@ widgets/qmenubar.o: widgets/qmenubar.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -9968,7 +9753,6 @@ widgets/qmenudata.o: widgets/qmenudata.cpp \
 		widgets/qmenudata.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -10029,7 +9813,6 @@ widgets/qmotifstyle.o: widgets/qmotifstyle.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -10100,7 +9883,6 @@ widgets/qmotifplusstyle.o: widgets/qmotifplusstyle.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -10172,7 +9954,6 @@ widgets/qmultilineedit.o: widgets/qmultilineedit.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -10242,7 +10023,6 @@ widgets/qplatinumstyle.o: widgets/qplatinumstyle.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -10308,7 +10088,6 @@ widgets/qpopupmenu.o: widgets/qpopupmenu.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -10377,7 +10156,6 @@ widgets/qprogressbar.o: widgets/qprogressbar.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -10433,7 +10211,6 @@ widgets/qpushbutton.o: widgets/qpushbutton.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -10489,7 +10266,9 @@ widgets/qpushbutton.o: widgets/qpushbutton.cpp \
 		kernel/qapplication.h \
 		tools/qasciidict.h \
 		kernel/qtranslator.h \
-		tools/qintdict.h
+		tools/qintdict.h \
+		widgets/qtoolbar.h \
+		widgets/qmainwindow.h
 
 widgets/qradiobutton.o: widgets/qradiobutton.cpp \
 		widgets/qradiobutton.h \
@@ -10499,7 +10278,6 @@ widgets/qradiobutton.o: widgets/qradiobutton.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -10558,7 +10336,6 @@ widgets/qrangecontrol.o: widgets/qrangecontrol.cpp \
 		widgets/qrangecontrol.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -10572,7 +10349,6 @@ widgets/qscrollbar.o: widgets/qscrollbar.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -10630,7 +10406,6 @@ widgets/qscrollview.o: widgets/qscrollview.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -10701,7 +10476,6 @@ widgets/qsgistyle.o: widgets/qsgistyle.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -10767,7 +10541,6 @@ widgets/qslider.o: widgets/qslider.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -10827,7 +10600,6 @@ widgets/qspinbox.o: widgets/qspinbox.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -10891,7 +10663,6 @@ widgets/qsplitter.o: widgets/qsplitter.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -10951,7 +10722,6 @@ widgets/qstatusbar.o: widgets/qstatusbar.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -11010,7 +10780,6 @@ widgets/qtabbar.o: widgets/qtabbar.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -11070,7 +10839,6 @@ widgets/qtabwidget.o: widgets/qtabwidget.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -11137,7 +10905,6 @@ widgets/qtableview.o: widgets/qtableview.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -11189,7 +10956,6 @@ widgets/qtextbrowser.o: widgets/qtextbrowser.cpp \
 		tools/qcollection.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -11269,7 +11035,6 @@ widgets/qtextview.o: widgets/qtextview.cpp \
 		tools/qcollection.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -11345,7 +11110,6 @@ widgets/qtoolbar.o: widgets/qtoolbar.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -11420,7 +11184,6 @@ widgets/qtoolbutton.o: widgets/qtoolbutton.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -11489,7 +11252,6 @@ widgets/qtooltip.o: widgets/qtooltip.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -11544,7 +11306,6 @@ widgets/qvalidator.o: widgets/qvalidator.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -11591,7 +11352,6 @@ widgets/qvbox.o: widgets/qvbox.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -11642,7 +11402,6 @@ widgets/qvbuttongroup.o: widgets/qvbuttongroup.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -11689,7 +11448,6 @@ widgets/qvgroupbox.o: widgets/qvgroupbox.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -11734,7 +11492,6 @@ widgets/qwhatsthis.o: widgets/qwhatsthis.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -11802,7 +11559,6 @@ widgets/qwidgetstack.o: widgets/qwidgetstack.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -11862,7 +11618,6 @@ widgets/qwindowsstyle.o: widgets/qwindowsstyle.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -11930,7 +11685,6 @@ widgets/qaction.o: widgets/qaction.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -11991,7 +11745,6 @@ widgets/qeffects.o: widgets/qeffects.cpp \
 		kernel/qnamespace.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -12050,7 +11803,6 @@ dialogs/moc_qcolordialog.o: dialogs/moc_qcolordialog.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -12099,7 +11851,6 @@ dialogs/moc_qfiledialog.o: dialogs/moc_qfiledialog.cpp \
 		tools/qshared.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -12166,7 +11917,6 @@ dialogs/moc_qfontdialog.o: dialogs/moc_qfontdialog.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -12214,7 +11964,6 @@ dialogs/moc_qmessagebox.o: dialogs/moc_qmessagebox.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -12260,7 +12009,6 @@ dialogs/moc_qprogressdialog.o: dialogs/moc_qprogressdialog.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -12313,7 +12061,6 @@ dialogs/moc_qtabdialog.o: dialogs/moc_qtabdialog.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -12361,7 +12108,6 @@ dialogs/moc_qwizard.o: dialogs/moc_qwizard.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -12407,7 +12153,6 @@ dialogs/moc_qinputdialog.o: dialogs/moc_qinputdialog.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -12454,7 +12199,6 @@ dialogs/moc_qprintdialog.o: dialogs/moc_qprintdialog.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -12530,7 +12274,6 @@ dialogs/qprintdialog.o: dialogs/qprintdialog.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -12622,7 +12365,6 @@ dialogs/qcolordialog.o: dialogs/qcolordialog.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -12699,7 +12441,6 @@ dialogs/qfiledialog.o: dialogs/qfiledialog.cpp \
 		tools/qshared.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -12800,7 +12541,6 @@ dialogs/qfontdialog.o: dialogs/qfontdialog.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -12880,7 +12620,6 @@ dialogs/qmessagebox.o: dialogs/qmessagebox.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -12939,7 +12678,6 @@ dialogs/qprogressdialog.o: dialogs/qprogressdialog.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -13005,7 +12743,6 @@ dialogs/qtabdialog.o: dialogs/qtabdialog.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -13076,7 +12813,6 @@ dialogs/qwizard.o: dialogs/qwizard.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -13144,7 +12880,6 @@ dialogs/qinputdialog.o: dialogs/qinputdialog.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -13212,7 +12947,6 @@ iconview/moc_qiconview.o: iconview/moc_qiconview.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -13277,7 +13011,6 @@ iconview/qiconview.o: iconview/qiconview.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -13352,7 +13085,6 @@ workspace/moc_qworkspace.o: workspace/moc_qworkspace.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -13402,7 +13134,6 @@ workspace/qworkspace.o: workspace/qworkspace.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -13480,7 +13211,6 @@ network/moc_qdns.o: network/moc_qdns.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -13519,7 +13249,6 @@ network/moc_qftp.o: network/moc_qftp.cpp \
 		tools/qiodevice.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -13581,7 +13310,6 @@ network/moc_qserversocket.o: network/moc_qserversocket.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -13619,7 +13347,6 @@ network/moc_qsocket.o: network/moc_qsocket.cpp \
 		tools/qiodevice.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -13666,7 +13393,6 @@ network/qdns.o: network/qdns.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -13730,7 +13456,6 @@ network/qftp.o: network/qftp.cpp \
 		tools/qiodevice.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -13798,7 +13523,6 @@ network/qhostaddress.o: network/qhostaddress.cpp \
 		tools/qshared.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -13814,7 +13538,6 @@ network/qnetwork.o: network/qnetwork.cpp \
 		network/qnetwork.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -13880,7 +13603,6 @@ network/qserversocket.o: network/qserversocket.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -13918,7 +13640,6 @@ network/qsocket.o: network/qsocket.cpp \
 		tools/qiodevice.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -13956,7 +13677,6 @@ network/qsocketdevice.o: network/qsocketdevice.cpp \
 		tools/qiodevice.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -13977,7 +13697,6 @@ network/qsocketdevice_unix.o: network/qsocketdevice_unix.cpp \
 		tools/qiodevice.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -14003,7 +13722,6 @@ canvas/moc_qcanvas.o: canvas/moc_qcanvas.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -14062,7 +13780,6 @@ canvas/qcanvas.o: canvas/qcanvas.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -14128,7 +13845,6 @@ table/moc_qtable.o: table/moc_qtable.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -14189,7 +13905,6 @@ table/qtable.o: table/qtable.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -14257,7 +13972,6 @@ xml/qxml.o: xml/qxml.cpp \
 		tools/qiodevice.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -14287,7 +14001,6 @@ xml/qdom.o: xml/qdom.cpp \
 		tools/qshared.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -14331,7 +14044,6 @@ opengl/moc_qgl.o: opengl/moc_qgl.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -14379,7 +14091,6 @@ opengl/qgl.o: opengl/qgl.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \
@@ -14429,7 +14140,6 @@ opengl/qgl_x11.o: opengl/qgl_x11.cpp \
 		kernel/qobjectdefs.h \
 		tools/qglobal.h \
 		tools/qfeatures.h \
-		tools/qconfig-qpe.h \
 		tools/qconfig-minimal.h \
 		tools/qconfig-small.h \
 		tools/qconfig-medium.h \

@@ -1,5 +1,5 @@
 /**********************************************************************
-** $Id: qt/src/widgets/qtableview.cpp   2.2.2   edited 2000-10-11 $
+** $Id: qt/src/widgets/qtableview.cpp   2.2.3   edited 2000-10-11 $
 **
 ** Implementation of QTableView class
 **

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qtabbar.cpp   2.2.2   edited 2000-10-11 $
+** $Id: qt/src/widgets/qtabbar.cpp   2.2.3   edited 2000-11-21 $
 **
 ** Implementation of QTab and QTabBar classes
 **
@@ -602,7 +602,6 @@ void QTabBar::show()
     //  ensures that one tab is selected.
     QTab * t = l->last();
     QWidget::show();
-    updateArrowButtons();
 
     if ( t )
 	emit selected( t->id );

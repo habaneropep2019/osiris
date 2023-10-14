@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qiconset.cpp   2.2.2   edited 2000-10-15 $
+** $Id: qt/src/kernel/qiconset.cpp   2.2.3   edited 2000-11-08 $
 **
 ** Implementation of QIconSet class
 **
@@ -154,7 +154,7 @@ struct QIconSetPrivate: public QShared
   \sa QPixmap QLabel QToolButton QPopupMenu
 	QIconViewItem::setViewMode() QMainWindow::setUsesBigPixmaps()
   <a href="guibooks.html#fowler">GUI Design Handbook: Iconic Label</a>
-  <a href="http://www.microsoft.com/clipgallerylive/icons.asp">Microsoft
+  <a href="http://cgl.microsoft.com/clipgallerylive/cgl30/eula.asp?nInterface=0">Microsoft
   Icon Gallery.</a>
 */
 

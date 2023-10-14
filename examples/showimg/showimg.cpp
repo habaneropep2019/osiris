@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/showimg/showimg.cpp   2.2.2   edited 2000-10-05 $
+** $Id: qt/examples/showimg/showimg.cpp   2.2.3   edited 2000-10-05 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **

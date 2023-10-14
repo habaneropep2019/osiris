@@ -22,7 +22,7 @@ qvfb supports the following command line options:
 
 [-width width]   the width of the virtual framebuffer (default: 240).
 [-height height] the height of the virtual framebuffer (default: 320).
-[-depth depth]   the depth of the virtual framebuffer (8 or 32, default: 8).
+[-depth depth]   the depth of the virtual framebuffer (1,4,8 or 32, default: 8).
 [-nocursor]      do not display the X11 cursor in the framebuffer window.
 [-qwsdisplay]    the Qt/Embedded display ID, e.g. -qwsdisplay :1 (default :0).
 

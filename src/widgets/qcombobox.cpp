@@ -1,5 +1,5 @@
 /**********************************************************************
-** $Id: qt/src/widgets/qcombobox.cpp   2.2.2   edited 2000-10-15 $
+** $Id: qt/src/widgets/qcombobox.cpp   2.2.3   edited 2000-12-07 $
 **
 ** Implementation of QComboBox widget class
 **
@@ -1753,8 +1753,12 @@ void QComboBox::returnPressed()
     }
 
     if ( doInsert ) {
-	if ( count() == d->maxCount )
-	    removeItem( count() - 1 );
+	if ( insertionPolicy() != NoInsertion ) {
+	    int cnt = count();
+	    while ( cnt >= d->maxCount ) {
+		removeItem( --cnt );
+	    }
+	}
 	
 	switch ( insertionPolicy() ) {
 	case AtCurrent:
@@ -1936,12 +1940,15 @@ void QComboBox::setEditText( const QString &newText )
 
   The combo box uses the list of items as candidates for completion.
 
+  Note: This will only work on editable combo boxes, so make the combo
+  box editable before you call this function or it will not work.
+
   \sa autoCompletion() setEditText()
 */
 
 void QComboBox::setAutoCompletion( bool enable )
 {
-    d->useCompletion = enable && (d->ed != 0);
+    d->useCompletion = enable;
     d->completeNow = FALSE;
 }
 

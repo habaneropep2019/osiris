@@ -1,4 +1,4 @@
-.TH QCanvas 3qt "8 November 2000" "Trolltech AS" \" -*- nroff -*-
+.TH QCanvas 3qt "12 December 2000" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -253,7 +253,7 @@ Returns a list of all items in the canvas.
 .SH "QColor QCanvas::backgroundColor () const"
 Returns the color set by setBackgroundColor(). By default, this is white.
 .PP
-Note that this function is not the same as QWidget::backgroundColor(). The difference between them is
+Note that this function is not a reimplementation of QWidget::backgroundColor() (QCanvas is not a subclass of QWidget), but all QCanvasViews that are viewing the canvas will set their backgrounds to this
 .PP
 See also setBackgroundColor() and backgroundPixmap().
 .SH "QPixmap QCanvas::backgroundPixmap () const"
@@ -295,7 +295,7 @@ Changes the size of the QCanvas. This is a slow operation.
 .SH "void QCanvas::resized () \fC[signal]\fR"
 This signal is emitted whenever the canvas is resized. Each QCanvasView connects to this signal to keep the scrollview size correct.
 .SH "void QCanvas::retune ( int chunksze, int mxclusters=100 ) \fC[virtual]\fR"
-Change the efficiency tuning parameters to \fImxclusers\fR clusters, each of size \fIchunksize\fR (square). This is a slow operation if you have many objects on the canvas.
+Change the efficiency tuning parameters to \fImxclusters\fR clusters, each of size \fIchunksze\fR (square). This is a slow operation if you have many objects on the canvas.
 .PP
 Internally, a canvas uses a low-resolution "chunk matrix" to keep track of all the items in the canvas. In Qt 2.2, the default for a 1024x1024 pixel canvas is to have a 64x64 chunk matrix, where each of those chunks collects items in a 16x16 pixel square.
 .PP
@@ -334,8 +334,6 @@ Sets the QCanvas to be composed of \fIh\fR tiles horizontally and \fIv\fR tiles 
 The pixmap \fIp\fR contains the tiles arranged left to right, top to bottom, with tile 0 in the top-left corner, tile 1 to the right of tile 0, and so on.
 .PP
 If the QCanvas is larger than the matrix of tiles, the entire matrix is repeated as necessary to cover the area. If it is smaller, tiles to the right and bottom are not visible.
-.PP
-QCanvas has special optimizations for the case where the tiles are square and the canvas is not larger than (h*tilewidth, v*tileheight).
 .PP
 The width and height of \fIp\fR must be multipless of \fItilewidth\fR and \fItileheight.\fR If they are not, the action of this function is unspecified.
 .SH "void QCanvas::setUpdatePeriod ( int ms ) \fC[virtual]\fR"

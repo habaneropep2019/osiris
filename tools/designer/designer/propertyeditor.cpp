@@ -1802,6 +1802,7 @@ void PropertyCursorItem::setValue()
 PropertyList::PropertyList( PropertyEditor *e )
     : QListView( e ), editor( e )
 {
+    header()->setMovingEnabled( FALSE );
     viewport()->setBackgroundMode( PaletteBackground );
     setResizePolicy( QScrollView::Manual );
     addColumn( tr( "Property" ) );

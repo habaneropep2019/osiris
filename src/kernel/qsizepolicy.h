@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qsizepolicy.h   2.2.2   edited 2000-10-10 $
+** $Id: qt/src/kernel/qsizepolicy.h   2.2.3   edited 2000-10-10 $
 **
 ** Definition of the QSizePolicy class
 **

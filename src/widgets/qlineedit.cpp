@@ -1,5 +1,5 @@
 /**********************************************************************
-** $Id: qt/src/widgets/qlineedit.cpp   2.2.2   edited 2000-10-27 $
+** $Id: qt/src/widgets/qlineedit.cpp   2.2.3   edited 2000-10-27 $
 **
 ** Implementation of QLineEdit widget class
 **

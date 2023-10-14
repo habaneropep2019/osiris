@@ -42,6 +42,7 @@ MultiLineEditor::MultiLineEditor( QWidget *parent, QWidget *editWidget, FormWind
     preview->setWrapPolicy( mlined->wrapPolicy() );
     preview->setText( mlined->text() );
     preview->setFocus();
+    preview->selectAll();
 }
 
 void MultiLineEditor::okClicked()
@@ -67,6 +68,7 @@ TextEditor::TextEditor( QWidget *parent, const QString &text )
     setCaption( tr( "Text" ) );
     preview->setText( text );
     preview->setFocus();
+    preview->selectAll();
 }
 
 QString TextEditor::getText( QWidget *parent, const QString &text )

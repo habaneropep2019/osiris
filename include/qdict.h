@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qdict.h   2.2.2   edited 2000-08-25 $
+** $Id: qt/src/tools/qdict.h   2.2.3   edited 2000-08-25 $
 **
 ** Definition of QDict template class
 **

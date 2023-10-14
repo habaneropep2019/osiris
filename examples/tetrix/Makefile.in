@@ -87,7 +87,7 @@ tmake:
 clean:
 	-rm -f $(OBJECTS) $(OBJMOC) $(SRCMOC) $(UICIMPLS) $(UICDECLS)
 	-rm -f *~ core
-	-rm -f tmp/qt.cpp
+	-rm -f allmoc.cpp
 
 ####### Extension Modules
 
@@ -128,7 +128,6 @@ qdragapp.o: qdragapp.cpp \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
-		../../include/qconfig-qpe.h \
 		../../include/qconfig-minimal.h \
 		../../include/qconfig-small.h \
 		../../include/qconfig-medium.h \
@@ -192,7 +191,6 @@ qtetrix.o: qtetrix.cpp \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
-		../../include/qconfig-qpe.h \
 		../../include/qconfig-minimal.h \
 		../../include/qconfig-small.h \
 		../../include/qconfig-medium.h \
@@ -257,7 +255,6 @@ qtetrixb.o: qtetrixb.cpp \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
-		../../include/qconfig-qpe.h \
 		../../include/qconfig-minimal.h \
 		../../include/qconfig-small.h \
 		../../include/qconfig-medium.h \
@@ -320,7 +317,6 @@ tetrix.o: tetrix.cpp \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
-		../../include/qconfig-qpe.h \
 		../../include/qconfig-minimal.h \
 		../../include/qconfig-small.h \
 		../../include/qconfig-medium.h \
@@ -384,7 +380,6 @@ tpiece.o: tpiece.cpp \
 		../../include/qshared.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
-		../../include/qconfig-qpe.h \
 		../../include/qconfig-minimal.h \
 		../../include/qconfig-small.h \
 		../../include/qconfig-medium.h \
@@ -399,7 +394,6 @@ moc_qdragapp.o: moc_qdragapp.cpp \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
-		../../include/qconfig-qpe.h \
 		../../include/qconfig-minimal.h \
 		../../include/qconfig-small.h \
 		../../include/qconfig-medium.h \
@@ -452,7 +446,6 @@ moc_qtetrix.o: moc_qtetrix.cpp \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
-		../../include/qconfig-qpe.h \
 		../../include/qconfig-minimal.h \
 		../../include/qconfig-small.h \
 		../../include/qconfig-medium.h \
@@ -511,7 +504,6 @@ moc_qtetrixb.o: moc_qtetrixb.cpp \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
-		../../include/qconfig-qpe.h \
 		../../include/qconfig-minimal.h \
 		../../include/qconfig-small.h \
 		../../include/qconfig-medium.h \

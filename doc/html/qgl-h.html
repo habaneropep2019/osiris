@@ -30,7 +30,7 @@ remains with Trolltech.
 <hr>
 <pre>
 /****************************************************************************
-** &#36;Id&#58; qt/src/opengl/qgl.h   2.2.2   edited 2000-08-25 $
+** &#36;Id&#58; qt/src/opengl/qgl.h   2.2.3   edited 2000-12-06 $
 **
 ** Definition of OpenGL classes for Qt
 **
@@ -70,15 +70,14 @@ remains with Trolltech.
 #define QGL_H
 
 
-#define QGL_VERSION     450
-#define QGL_VERSION_STR "4.5"
-
-const char *qGLVersion();
-
-
 #ifndef QT_H
 #include &lt;qwidget.h&gt;
 #endif // QT_H
+
+#define QGL_VERSION     450
+#define QGL_VERSION_STR "4.5"
+
+Q_EXPORT const char *qGLVersion();
 
 #if !(defined(Q_WGL) || defined(Q_GLX))
 #if defined(_OS_WIN32_)
@@ -169,14 +168,17 @@ public:
     static bool         hasOpenGL();
     static bool         hasOpenGLOverlays();
 
-    friend bool         operator==( const QGLFormat&amp;, const QGLFormat&amp; );
-    friend bool         operator!=( const QGLFormat&amp;, const QGLFormat&amp; );
+    friend Q_EXPORT bool operator==( const QGLFormat&amp;, const QGLFormat&amp; );
+    friend Q_EXPORT bool operator!=( const QGLFormat&amp;, const QGLFormat&amp; );
     
 private:
     uint opts;
     int pln;
 };
 
+
+Q_EXPORT bool operator==( const QGLFormat&amp;, const QGLFormat&amp; );
+Q_EXPORT bool operator!=( const QGLFormat&amp;, const QGLFormat&amp; );
 
 
 class Q_EXPORT <a href="qglcontext.html">QGLContext</a> : public <a href="qgl.html">QGL</a>
@@ -481,5 +483,5 @@ inline bool QGLWidget::autoBufferSwap() const
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.2</div>
+<td align="right"><div align="right">Qt version 2.2.3</div>
 </table></div></address></body></html>

@@ -5,7 +5,8 @@ unix:CONFIG += x11
 embedded:CONFIG -= x11
 
 TARGET		= qt
-VERSION		= 2.2.2
+embedded:TARGET	= qte
+VERSION		= 2.2.3
 DESTDIR		= ../lib
 DLLDESTDIR	= ../bin
 
@@ -60,6 +61,14 @@ internal:DEFINES += $$DEFINESI
 win32:DEFINES += QT_NO_IMAGEIO_JPEG
 
 internal:TMAKE_CXXFLAGS_EMBEDDED += -DQT_NO_QWS_VOODOO3 -DQT_NO_QWS_MATROX -DQT_NO_QWS_MACH64
+internal:TMAKE_CXXFLAGS_EMBEDDED += -DQT_NO_QWS_VGA_16 
+#internal:TMAKE_CXXFLAGS_EMBEDDED += -DQT_NO_QWS_VFB
+#internal:TMAKE_CXXFLAGS_EMBEDDED += -DQT_NO_QWS_TRANSFORMED
+internal:TMAKE_CXXFLAGS_EMBEDDED += -DQT_NO_QWS_DEPTH_4 
+internal:TMAKE_CXXFLAGS_EMBEDDED += -DQT_NO_QWS_DEPTH_8 
+#internal:TMAKE_CXXFLAGS_EMBEDDED += -DQT_NO_QWS_DEPTH_16 
+internal:TMAKE_CXXFLAGS_EMBEDDED += -DQT_NO_QWS_DEPTH_24 
+#internal:TMAKE_CXXFLAGS_EMBEDDED += -DQT_NO_QWS_DEPTH_32
 embedded:TMAKE_CXXFLAGS += $$TMAKE_CXXFLAGS_EMBEDDED
 
 win32:LIBS += $$WINLIBS
@@ -387,6 +396,13 @@ kernel:QWSSOURCES += kernel/qapplication_qws.cpp \
 		  kernel/qwscursor_qws.cpp \
 		  kernel/qwsmouse_qws.cpp \
 		  kernel/qwsmanager_qws.cpp \
+		  kernel/qwsdefaultdecoration_qws.cpp \
+		  kernel/qwsaquadecoration_qws.cpp \
+		  kernel/qwsbeosdecoration_qws.cpp \
+		  kernel/qwskdedecoration_qws.cpp \
+		  kernel/qwswindowsdecoration_qws.cpp \
+		  kernel/qwskde2decoration_qws.cpp \
+		  kernel/qwsqpedecoration_qws.cpp \
 		  kernel/qwsproperty_qws.cpp \
 		  kernel/qlock_qws.cpp \
 		  kernel/qwsregionmanager_qws.cpp \
@@ -598,6 +614,13 @@ embedded:HEADERS += $$KERNEL_H/qfontmanager_qws.h \
 		  $$KERNEL_H/qfontfactoryttf_qws.h \
 		  $$KERNEL_H/qmemorymanager_qws.h \
 		  $$KERNEL_H/qwsmanager_qws.h \
+		  $$KERNEL_H/qwsdefaultdecoration_qws.h \
+		  $$KERNEL_H/qwsaquadecoration_qws.h \
+		  $$KERNEL_H/qwsbeosdecoration_qws.h \
+		  $$KERNEL_H/qwskdedecoration_qws.h \
+		  $$KERNEL_H/qwswindowsdecoration_qws.h \
+		  $$KERNEL_H/qwskde2decoration_qws.h \
+		  $$KERNEL_H/qwsqpedecoration_qws.h \
 		  $$KERNEL_H/qgfx_qws.h \
 		  $$KERNEL_H/qgfxraster_qws.h \
 		  $$KERNEL_H/qgfxlinuxfb_qws.h \
@@ -652,16 +675,18 @@ FT_SOURCES =	3rdparty/freetype2/config/unix/ftsystem.c \
 		3rdparty/freetype2/src/psnames/psdriver.c \
 		3rdparty/freetype2/src/sfnt/sfnt.c \
 		3rdparty/freetype2/src/truetype/truetype.c \
-		3rdparty/freetype2/src/type1/type1.c \
-		3rdparty/freetype2/src/type1z/type1z.c
+		3rdparty/freetype2/src/type1/type1.c
 
-png:SOURCES    += $$PNG_SOURCES
-embedded:SOURCES    -= $$PNG_SOURCES
-zlib:SOURCES   += $$ZLIB_SOURCES
-embedded:SOURCES    -= $$ZLIB_SOURCES
-ft:SOURCES   += $$FT_SOURCES
-embedded:SOURCES    -= $$FT_SOURCES
+# Not needed.
+#		3rdparty/freetype2/src/type1z/type1z.c
 
+png:DYNSOURCES    += $$PNG_SOURCES
+zlib:DYNSOURCES   += $$ZLIB_SOURCES
+ft:DYNSOURCES     += $$FT_SOURCES
+
+SOURCES += $$DYNSOURCES
+static:SOURCES -= $$DYNSOURCES
+propagate:SOURCES -= $$DYNSOURCES
 
 xml:HEADERS += $$XML_H/qxml.h $$XML_H/qdom.h
 xml:SOURCES += xml/qxml.cpp xml/qdom.cpp
@@ -707,10 +732,11 @@ network:SOURCES    += $$NETWORK_SOURCES
 embedded:PRECOMPH=kernel/qt.h
 QWSSUBLIBS = freetype
 png:QWSSUBLIBS += png
-mng:QWSSUBLIBS += mng
 zlib:QWSSUBLIBS += z
+mng:QWSSUBLIBS += mng
 jpeg:QWSSUBLIBS += jpeg
-embedded:SUBLIBS = $$QWSSUBLIBS
+embedded:STATICSUBLIBS = $$QWSSUBLIBS
+static:SUBLIBS += $$STATICSUBLIBS
 embedded:MAKELIBz = $(MAKE) -C 3rdparty/zlib -f Makefile$$DASHCROSS; \
 			cp 3rdparty/zlib/libz.a tmp
 embedded:MAKELIBfreetype = $(MAKE) -C 3rdparty/freetype2 CONFIG_MK=config$$DASHCROSS.mk OBJ_DIR=../../tmp \

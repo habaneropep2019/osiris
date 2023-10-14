@@ -1,4 +1,4 @@
-.TH QSplitter 3qt "8 November 2000" "Trolltech AS" \" -*- nroff -*-
+.TH QSplitter 3qt "12 December 2000" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -51,6 +51,9 @@ Inherits QFrame.
 .br
 .ti -1c
 .BI "void \fBrefresh\fR () "
+.br
+.ti -1c
+.BI "QSizePolicy \fBsizePolicy\fR () const"
 .br
 .ti -1c
 .BI "QValueList<int> \fBsizes\fR () const"
@@ -219,11 +222,9 @@ Shows a rubber band at position \fIp.\fR If \fIp\fR is negative, the rubber band
 Sets the size parameters to the values given in \fIlist.\fR If the splitter is horizontal, the values set the sizes from left to right. If it is vertical, the sizes are applied from top to bottom. Extra values in \fIlist\fR are ignored.
 .PP
 If \fIlist\fR contains too few values, the result is undefined but the program will still be well-behaved.
-.SH "QSize QSplitter::sizeHint () const \fC[virtual]\fR"
-Reimplemented for internal reasons; the API is not affected.
 .PP
-Reimplemented from QWidget.
-.SH "QSizePolicy QSplitter::sizePolicy () const \fC[virtual]\fR"
+See also sizes().
+.SH "QSize QSplitter::sizeHint () const \fC[virtual]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .PP
 Reimplemented from QWidget.
@@ -231,6 +232,8 @@ Reimplemented from QWidget.
 Returns a list of the size parameters of all the widgets in this splitter.
 .PP
 Giving the values to setSizes() will give a splitter with the same layout as this one.
+.PP
+See also setSizes().
 .SH "void QSplitter::styleChange ( QStyle & old ) \fC[virtual protected]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .PP

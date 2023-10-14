@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qpngio.cpp   2.2.2   edited 2000-10-14 $
+** $Id: qt/src/kernel/qpngio.cpp   2.2.3   edited 2000-11-23 $
 **
 ** Implementation of PNG QImage IOHandler
 **
@@ -755,7 +755,7 @@ public:
 
 private:
     // Animation-level information
-    enum { MovieStart, FrameStart, Inside } state;
+    enum { MovieStart, FrameStart, Inside, End } state;
     int first_frame;
     int base_offx;
     int base_offy;
@@ -927,20 +927,20 @@ int QPNGFormat::decode(QImage& img, QImageConsumer* cons,
        if (!png_ptr) {
 	  info_ptr = 0;
 	  image = 0;
-	  return 0;
+	  return -1;
        }
 
        info_ptr = png_create_info_struct(png_ptr);
        if (!info_ptr) {
 	  png_destroy_read_struct(&png_ptr, &info_ptr, 0);
 	  image = 0;
-	  return 0;
+	  return -1;
        }
 
        if (setjmp((png_ptr)->jmpbuf)) {
 	  png_destroy_read_struct(&png_ptr, &info_ptr, 0);
 	  image = 0;
-	  return 0;
+	  return -1;
        }
 
        png_set_progressive_read_fn(png_ptr, (void *)this,
@@ -964,7 +964,8 @@ int QPNGFormat::decode(QImage& img, QImageConsumer* cons,
     if (setjmp(png_ptr->jmpbuf)) {
        png_destroy_read_struct(&png_ptr, &info_ptr, 0);
        image = 0;
-       return 0;
+       state = MovieStart;
+       return -1;
     }
     unused_data = 0;
     png_process_data(png_ptr, info_ptr, (png_bytep)buffer, length);

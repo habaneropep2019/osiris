@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/texture/gltexobj.cpp   2.2.2   edited 2000-08-31 $
+** $Id: qt/examples/texture/gltexobj.cpp   2.2.3   edited 2000-11-17 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -173,7 +173,6 @@ GLuint GLTexobj::makeObject( const QImage& tex1, const QImage& tex2 )
     // cylinder
     glTexImage2D( GL_TEXTURE_2D, 0, 3, tex1.width(), tex1.height(), 0,
 		  GL_RGBA, GL_UNSIGNED_BYTE, tex1.bits() );
-    gluQuadricNormals( q, GLU_SMOOTH );
     gluQuadricTexture( q, GL_TRUE );
     gluCylinder(q, 0.6, 0.6, 2.0, 24, 1);
 

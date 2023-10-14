@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/doc/qvfb.doc   2.2.2   edited 2000-08-25 $
+** $Id: qt/doc/qvfb.doc   2.2.3   edited 2000-12-01 $
 **
 ** Qt/Embedded Virtual Framebuffer
 **
@@ -65,7 +65,7 @@ qvfb supports the following command line options:
 <tr><td><tt>-height height</tt></td>
     <td>the height of the virtual framebuffer (default: 320).</td></tr>
 <tr><td><tt>-depth depth</tt></td>
-    <td>the depth of the virtual framebuffer (1, 8 or 32, default: 8).</td></tr>
+    <td>the depth of the virtual framebuffer (1, 4, 8 or 32, default: 8).</td></tr>
 <tr><td><tt>-nocursor</tt></td>
     <td>do not display the X11 cursor in the framebuffer window.</td></tr>
 <tr><td><tt>-qwsdisplay :id</tt></td>

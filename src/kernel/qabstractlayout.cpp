@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qabstractlayout.cpp   2.2.2   edited 2000-10-10 $
+** $Id: qt/src/kernel/qabstractlayout.cpp   2.2.3   edited 2000-11-30 $
 **
 ** Implementation of the abstract layout base class
 **
@@ -331,14 +331,17 @@ static QSize smartMinSize( const QWidgetItem *i )
     if ( w->layout() ) {
 	s = w->layout()->totalMinimumSize();
     } else {
+	QSize sh;
 	if ( w->sizePolicy().mayShrinkHorizontally() )
 	    s.setWidth( w->minimumSizeHint().width() );
-	else
-	    s.setWidth( w->sizeHint().width() );
+	else {
+	    sh = w->sizeHint();
+	    s.setWidth( sh.width() );
+	}
 	if ( w->sizePolicy().mayShrinkVertically() )
 	    s.setHeight( w->minimumSizeHint().height() );
 	else
-	    s.setHeight( w->sizeHint().height() );
+	    s.setHeight( sh.isValid() ? sh.height() : w->sizeHint().height() );
     }
     s = s.boundedTo( w->maximumSize() );
     QSize min = w->minimumSize();

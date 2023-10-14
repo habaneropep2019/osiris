@@ -318,6 +318,8 @@ bool RC2UI::makeDialog()
 	int pointsize;
 	QString fontname;
 	do {
+	    if ( in->eof() )
+		return TRUE;
 	    line = "";
 	    do {
 		line += in->readLine();

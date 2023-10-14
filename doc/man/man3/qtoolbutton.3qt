@@ -1,4 +1,4 @@
-.TH QToolButton 3qt "8 November 2000" "Trolltech AS" \" -*- nroff -*-
+.TH QToolButton 3qt "12 December 2000" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -30,6 +30,9 @@ Inherits QButton.
 .br
 .ti -1c
 .BI "\fB~QToolButton\fR () "
+.br
+.ti -1c
+.BI "QSizePolicy \fBsizePolicy\fR () const"
 .br
 .ti -1c
 .BI "void \fBsetOnIconSet\fR ( const QIconSet & ) "
@@ -249,10 +252,6 @@ Sets this button to draw a text label below the icon if \fIenable\fR is TRUE, an
 .PP
 QToolButton automatically connects this slot to the relevant signal in the QMainWindow in which is resides.
 .SH "QSize QToolButton::sizeHint () const \fC[virtual]\fR"
-Reimplemented for internal reasons; the API is not affected.
-.PP
-Reimplemented from QWidget.
-.SH "QSizePolicy QToolButton::sizePolicy () const \fC[virtual]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .PP
 Reimplemented from QWidget.

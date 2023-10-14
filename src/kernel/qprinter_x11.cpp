@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qprinter_x11.cpp   2.2.2   edited 2000-08-25 $
+** $Id: qt/src/kernel/qprinter_x11.cpp   2.2.3   edited 2000-12-06 $
 **
 ** Implementation of QPrinter class for X11
 **
@@ -176,8 +176,7 @@ bool QPrinter::aborted() const
 
 bool QPrinter::setup( QWidget * parent )
 {
-    QPrintDialog prndlg( this, parent );
-    return prndlg.exec() == QDialog::Accepted;
+    return QPrintDialog::getPrinterSetup( this );
 }
 
 

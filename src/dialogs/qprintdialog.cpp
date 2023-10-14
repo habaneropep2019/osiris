@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/dialogs/qprintdialog.cpp   2.2.2   edited 2000-10-13 $
+** $Id: qt/src/dialogs/qprintdialog.cpp   2.2.3   edited 2000-12-06 $
 **
 ** Implementation of internal print dialog (X11) used by QPrinter::select().
 **
@@ -176,9 +176,9 @@ static void parsePrintcap( QListView * printers )
 		    printerComment = printerDesc.mid( i, j-i );
 		    printerComment = printerComment.simplifyWhiteSpace();
 		}
- 		// look for lprng psuedo all printers entry
- 		i = printerDesc.find( QRegExp( ": *all *=" ) );
- 		if ( i >= 0 )
+		// look for lprng psuedo all printers entry
+		i = printerDesc.find( QRegExp( ": *all *=" ) );
+		if ( i >= 0 )
 		    printerName = "";
 		// look for signs of this being a remote printer
 		i = printerDesc.find(
@@ -913,7 +913,7 @@ QGroupBox * QPrintDialog::setupDestination()
     d->browse->setAutoDefault( FALSE );
 #ifdef QT_NO_FILEDIALOG
     d->browse->setEnabled( FALSE );
-#endif    
+#endif
     connect( d->browse, SIGNAL(clicked()),
 	     this, SLOT(browseClicked()) );
     horiz->addWidget( d->browse );
@@ -1127,9 +1127,10 @@ bool QPrintDialog::getPrinterSetup( QPrinter * p )
 	globalPrintDialog = new QPrintDialog( 0, 0, "global print dialog" );
 	globalPrintDialog->setCaption( QPrintDialog::tr( "Setup Printer" ) );
 	qAddPostRoutine( deleteGlobalPrintDialog );
+	globalPrintDialog->setPrinter( p, TRUE );
+    } else {
+	globalPrintDialog->setPrinter( p, FALSE );
     }
-
-    globalPrintDialog->setPrinter( p );
     bool r = globalPrintDialog->exec() == QDialog::Accepted;
     globalPrintDialog->setPrinter( 0 );
     return r;

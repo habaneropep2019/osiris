@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/doc/qws.doc   2.2.2   edited 2000-10-03 $
+** $Id: qt/doc/qws.doc   2.2.3   edited 2000-12-12 $
 **
 ** Qt/Embedded (Qt on QWS) documentation
 **
@@ -71,7 +71,7 @@ to build <i>on</i> Linux/x86 <i>for</i> the Linux/MIPSEL target, you would use:
 </pre>
 <p>
 Only a small number of configurations are predefined, all much the same.
-Configurations files are found in <tt>configs/</tt>.
+Configuration files are found in <tt>configs/</tt>.
 
 <h3> Enable framebuffer support</h3>
 
@@ -91,23 +91,18 @@ Configurations files are found in <tt>configs/</tt>.
 <p>
    For Mach64 and most other cards, use the vesafb driver.
 
+<p>
+   For cards that are not VESA 2.0 compliant, use the VGA16 driver.
 
 <p>
-   Note that some cards are only supported in VGA16 mode, this will
-   not work with the current version of Qt/Embedded, since VGA/16 is
-   not yet supported. You may need to upgrade your kernel, or even
-   switch to an experimental kernel.
-
-<p>
-   The frame buffer must also be enabled with a boot parameter. See
+   The frame buffer may also need a boot parameter to be enabled. See
    <tt>/usr/src/linux/Documentation/fb</tt> for details.
 
 <p>
-   The fbset program, which should be included in Linux distributions,
+   The <tt>fbset</tt> program, which is included in most Linux distributions,
    may be used to switch video modes without rebooting the system. The
-   video mode active when the server is started will be used. (8-bit
-   modes are still experimental.) NOTE: fbset does not work with the vesafb
-   driver.
+   video mode active when the server is started will be used.
+   Note: <tt>fbset</tt> does not work with the vesafb driver.
 </p>
 
 
@@ -131,7 +126,7 @@ Configurations files are found in <tt>configs/</tt>.
    Log into a virtual console and do:
 
 <pre>
-	cd ~/qt-<i>version</i>/
+	cd ~/qt-<i>version</i>/examples/launcher
    	./start-demo
 </pre>
   
@@ -348,7 +343,7 @@ See QMemoryManager::savePrerenderedFont() for this functionality.
 
 <p>
 The font definition file, naming conventions for font files, and the format
-of QPF files may change in versions of Qt/Embedded after 2.2.1.
+of QPF files may change in versions of Qt/Embedded.
 
 <p>
 When enabled, Qt/Embedded uses the powerful FreeType2 library to implement

@@ -236,7 +236,6 @@ The ValueListIterator widget provides an iterator for QValueList. | QValueListIt
 The ValueStack class is a value based template widget that provides a stack. | QValueStack
 The Vector class is a template collection widget that provides a vector (array). | QVector
 The WMatrix widget specifies 2D transformations of a coordinate system. | QWMatrix
-The WSDecoration widget allows the appearance of the t/Embedded Window Manager to be customized. | QWSDecoration
 The WaitCondition widget allows waiting/waking for conditions between threads | QWaitCondition
 The WhatsThis widget provides a simple description of any widget, e.g. answering the question "what's this?" | QWhatsThis
 The WheelEvent widget contains parameters that describe a wheel event. | QWheelEvent

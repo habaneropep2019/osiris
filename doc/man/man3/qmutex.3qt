@@ -1,4 +1,4 @@
-.TH QMutex 3qt "8 November 2000" "Trolltech AS" \" -*- nroff -*-
+.TH QMutex 3qt "12 December 2000" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -115,7 +115,9 @@ Attempt to lock the mutex. If another thread has locked the mutex then this call
 .PP
 See also unlock().
 .SH "bool QMutex::locked ()"
-Returns TRUE if the mutex is locked by another thread.
+Returns TRUE if the mutex is locked by another thread and FALSE if not.
+.PP
+\fINOTE:\fR Due to differing implementations of recursive mutexes on various platforms, calling this function from the same thread that previous locked the mutex will return undefined results.
 .SH "void QMutex::unlock ()"
 Unlocks the mutex. Attempting to unlock a mutex in a different thread to the one that locked it results in an error. Unlocking a mutex that is not locked results in undefined behaviour (varies between different Operating Systems' thread implementations).
 .PP

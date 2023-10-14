@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/tools/msg2qm/msg2qm.cpp   2.2.2   edited 2000-08-25 $
+** $Id: qt/tools/msg2qm/msg2qm.cpp   2.2.3   edited 2000-08-25 $
 **
 ** This is a utility program for converting findtr msgfiles to
 ** qtranslator message files

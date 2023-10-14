@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qabstractlayout.h   2.2.2   edited 2000-08-25 $
+** $Id: qt/src/kernel/qabstractlayout.h   2.2.3   edited 2000-11-30 $
 **
 ** Definition of the abstract layout base class
 **
@@ -157,6 +157,8 @@ public:
 
     bool hasHeightForWidth() const;
     int heightForWidth( int ) const;
+
+    const QSize &widgetSizeHint() const;
 
 private:
     //QSize cachedSizeHint;

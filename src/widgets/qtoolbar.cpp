@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qtoolbar.cpp   2.2.2   edited 2000-10-13 $
+** $Id: qt/src/widgets/qtoolbar.cpp   2.2.3   edited 2000-12-01 $
 **
 ** Implementation of QToolBar class
 **
@@ -291,7 +291,12 @@ void QToolBar::init()
 
     bl = new QBoxLayout( this, orientation() == Vertical
 			? QBoxLayout::Down : QBoxLayout::LeftToRight,
-			style() == WindowsStyle ? 2 : 1, 0 );
+#ifdef _WS_QWS_
+			1,
+#else
+			style() == WindowsStyle ? 2 : 1,
+#endif
+			0 );
     boxLayout()->setAutoAdd( TRUE );
     if ( !mw || mw->toolBarsMovable() )
 	boxLayout()->addSpacing( 9 );

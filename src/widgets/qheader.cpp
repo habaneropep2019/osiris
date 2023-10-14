@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qheader.cpp   2.2.2   edited 2000-09-29 $
+** $Id: qt/src/widgets/qheader.cpp   2.2.3   edited 2000-09-29 $
 **
 ** Implementation of QHeader widget class (table header)
 **

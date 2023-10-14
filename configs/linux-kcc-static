@@ -10,12 +10,12 @@ SYSCONF_CXXFLAGS_QT	= -I$(QTDIR)/include
 SYSCONF_CXXFLAGS_OPENGL	= -I/usr/X11R6/include
 
 # Compiling YACC output
-SYSCONF_CXXFLAGS_YACC     = --diag_supress 111,177
+SYSCONF_CXXFLAGS_YACC     = --diag_suppress 111,177
 
 # Linking with support libraries
-SYSCONF_RPATH_X11	= -rpath/usr/X11R6/lib
-SYSCONF_RPATH_QT	= -rpath$(QTDIR)/lib
-SYSCONF_RPATH_OPENGL	= -rpath/usr/X11R6/lib
+SYSCONF_RPATH_X11	= 
+SYSCONF_RPATH_QT	= 
+SYSCONF_RPATH_OPENGL	= 
 
 # Linking with support libraries
 # X11

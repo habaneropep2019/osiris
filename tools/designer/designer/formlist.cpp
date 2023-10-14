@@ -90,6 +90,7 @@ FormList::FormList( QWidget *parent, MainWindow *mw )
     : QListView( parent, 0, WStyle_Customize | WStyle_NormalBorder | WStyle_Title |
 		 WStyle_Tool | WStyle_MinMax | WStyle_SysMenu ), mainWindow( mw )
 {
+    header()->setMovingEnabled( FALSE );
     setResizePolicy( QScrollView::Manual );
     setIcon( PixmapChooser::loadPixmap( "logo" ) );
     QPalette p( palette() );

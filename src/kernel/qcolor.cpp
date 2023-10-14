@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qcolor.cpp   2.2.2   edited 2000-08-25 $
+** $Id: qt/src/kernel/qcolor.cpp   2.2.3   edited 2000-12-11 $
 **
 ** Implementation of QColor class
 **
@@ -105,7 +105,7 @@
   255 is far from black as possible. </ul>
 
   Here are some examples: Pure red is H=0, S=255, V=255.  A dark red,
-  moving slightly towards the magenta, could be H=350 (equvalent to
+  moving slightly towards the magenta, could be H=350 (equivalent to
   -10), S=255, V=180.  A grayish light red could have H about 0 (say
   350-359 or 0-10), S about 50-100, and S=255.
 

@@ -7,36 +7,108 @@
 #include <qvbox.h>
 #include <qlabel.h>
 #include <qstringlist.h>
+#include <qlistview.h>
+#include <qmainwindow.h>
+#include <qmessagebox.h>
 #ifdef _WS_QWS_
 #include <qmemorymanager_qws.h>
 #endif
 
 #include <stdlib.h>
 
-class MakeQPF : public QScrollView
+
+class FontViewItem : public QListViewItem {
+    QString family;
+    int pointSize;
+    int weight;
+    bool italic;
+    QFont font;
+
+public:
+    FontViewItem(const QString& f, int pt, int w, bool ital, QListView* parent) :
+	QListViewItem(parent),
+	family(f), pointSize(pt), weight(w), italic(ital)
+    {
+    }
+
+    void renderAndSave()
+    {
+	font = QFont(family,pointSize,weight,italic);
+#ifdef _WS_QWS_
+	memorymanager->savePrerenderedFont((QMemoryManager::FontID)font.handle());
+#endif
+	setHeight(QFontMetrics(font).lineSpacing());
+	repaint();
+    }
+
+    void paintCell( QPainter *p, const QColorGroup & cg,
+                            int column, int width, int alignment )
+    {
+	p->setFont(font);
+	QListViewItem::paintCell(p,cg,column,width,alignment);
+    }
+
+    int width( const QFontMetrics&,
+                       const QListView* lv, int column) const
+    {
+	QFontMetrics fm(font);
+	return QListViewItem::width(fm,lv,column);
+    }
+
+    QString text(int col) const
+    {
+	switch (col) {
+	    case 0:
+		return family;
+	    case 1:
+		return QString::number(pointSize)+"pt";
+	    case 2:
+		if ( weight < QFont::Normal ) {
+		    return "Light";
+		} else if ( weight >= QFont::Black ) {
+		    return "Black";
+		} else if ( weight >= QFont::Bold ) {
+		    return "Bold";
+		} else if ( weight >= QFont::DemiBold ) {
+		    return "DemiBold";
+		} else {
+		    return "Normal";
+		}
+	    case 3:
+		return italic ? "Italic" : "Roman";
+	}
+	return QString::null;
+    }
+};
+
+class MakeQPF : public QMainWindow
 {
-    QVBox *vbox;
+    Q_OBJECT
+    QListView* view;
 public:
     MakeQPF()
     {
-	vbox = new QVBox(this);
-	addChild(vbox);
-	startTimer(0);
+	view = new QListView(this);
+	view->addColumn("Family");
+	view->addColumn("Size");
+	view->addColumn("Weight");
+	view->addColumn("Style");
+	setCentralWidget(view);
+	QString fontdir = QString(getenv("QTDIR")) + "/etc/fonts";
+	readFontDir(fontdir);
+
+	connect(view,SIGNAL(selectionChanged(QListViewItem*)),
+	    this,SLOT(renderAndSave(QListViewItem*)));
     }
 
-    void timerEvent(QTimerEvent*)
+    void readFontDir(const QString& fntd)
     {
-	killTimers();
-	make();
-    }
-
-    void make()
-    {
-	QString fontdir = QString(getenv("QTDIR")) + "/etc/fonts/fontdir";
+	QString fontdir = fntd + "/fontdir";
 	QFile fd(fontdir);
 	if ( !fd.open(IO_ReadOnly) ) {
-	    qWarning("Cannot read %s",fontdir.local8Bit().data());
-	    exit(1);
+	    QMessageBox::warning(this, "Read Error",
+		"<p>Cannot read "+fontdir);
+	    return;
 	}
 	while ( !fd.atEnd() ) {
 	    QString line;
@@ -52,45 +124,45 @@ public:
 			sizes = QStringList::split(',',attr[7]);
 		    for (QStringList::Iterator it = sizes.begin(); it != sizes.end(); ++it) {
 			int pointSize = (*it).toInt()/10;
-			if ( pointSize ) {
-			    QFont f(family,pointSize,weight,italic);
-#ifdef _WS_QWS_
-			    memorymanager->savePrerenderedFont((QMemoryManager::FontID)f.handle());
-#endif
-			    QString fontdesc;
-			    fontdesc = QString::number(pointSize);
-			    fontdesc += "pt ";
-			    fontdesc += family;
-			    if ( weight < QFont::Normal ) {
-				fontdesc += " Light";
-			    } else if ( weight >= QFont::Black ) {
-				fontdesc += " Black";
-			    } else if ( weight >= QFont::Bold ) {
-				fontdesc += " Bold";
-			    } else if ( weight >= QFont::DemiBold ) {
-				fontdesc += " DemiBold";
-			    }
-			    if ( italic )
-				fontdesc += " Italic";
-			    QLabel * l = new QLabel(fontdesc,vbox);
-			    l->setFont(f);
-			    l->show();
-			    qApp->processEvents();
-			}
+			if ( pointSize )
+			    new FontViewItem(
+				family, pointSize, weight, italic, view);
 		    }
 		}
 	    }
 	}
     }
+
+    void renderAndSave(const QString& family)
+    {
+	QListViewItem* c = view->firstChild();
+	while ( c ) {
+	    if ( c->text(0).lower() == family.lower() )
+		renderAndSave(c);
+	    c = c->nextSibling();
+	}
+    }
+
+private slots:
+    void renderAndSave(QListViewItem* i)
+    {
+	((FontViewItem*)i)->renderAndSave();
+    }
 };
 
-int main()
+int main(int argc, char** argv)
 {
-    int argc2 = 2;
-    char* argv2[] = { "makeqpf", "-qws", "-nokeyboard", "-savefonts", 0 };
-    QApplication app(argc2,argv2);
+    QApplication app(argc, argv, QApplication::GuiServer);
     MakeQPF m;
-    app.setMainWidget(&m);
-    m.showMaximized();
-    return app.exec();
+    if ( argc > 1 ) {
+	while (*++argv)
+	    m.renderAndSave(*argv);
+    } else {
+	// Interactive
+	app.setMainWidget(&m);
+	m.show();
+	return app.exec();
+    }
 }
+
+#include "main.moc"

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qpixmap.h   2.2.2   edited 2000-11-07 $
+** $Id: qt/src/kernel/qpixmap.h   2.2.3   edited 2000-11-07 $
 **
 ** Definition of QPixmap class
 **

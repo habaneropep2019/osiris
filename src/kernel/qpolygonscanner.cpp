@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qpolygonscanner.cpp   2.2.2   edited 2000-11-05 $
+** $Id: qt/src/kernel/qpolygonscanner.cpp   2.2.3   edited 2000-11-05 $
 **
 ** Implementation of QPolygonScanner class
 **

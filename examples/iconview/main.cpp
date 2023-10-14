@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/iconview/main.cpp   2.2.2   edited 2000-08-31 $
+** $Id: qt/examples/iconview/main.cpp   2.2.3   edited 2000-12-04 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -34,8 +34,8 @@ public slots:
         const char *str = mime->format( i );
         printf( "    %s\n", str );
         while ( str ) {
-            str = mime->format( ++i );
             printf( "    %s\n", str );
+            str = mime->format( ++i );
         }
     };
     void moved() {

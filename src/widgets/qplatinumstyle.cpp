@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qplatinumstyle.cpp   2.2.2   edited 2000-10-12 $
+** $Id: qt/src/widgets/qplatinumstyle.cpp   2.2.3   edited 2000-10-12 $
 **
 ** Implementation of Platinum-like style class
 **

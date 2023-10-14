@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/iconview/qiconview.cpp   2.2.2   edited 2000-10-15 $
+** $Id: qt/src/iconview/qiconview.cpp   2.2.3   edited 2000-12-11 $
 **
 ** Implementation of QIconView widget class
 **
@@ -3124,11 +3124,11 @@ QIconViewItem *QIconView::findItem( const QPoint &pos ) const
     if ( !d->firstItem )
 	return 0;
 
-    QIconViewPrivate::ItemContainer *c = d->firstContainer;
-    for ( ; c; c = c->n ) {
+    QIconViewPrivate::ItemContainer *c = d->lastContainer;
+    for ( ; c; c = c->p ) {
 	if ( c->rect.contains( pos ) ) {
-	    QIconViewItem *item = c->items.first();
-	    for ( ; item; item = c->items.next() )
+	    QIconViewItem *item = c->items.last();
+	    for ( ; item; item = c->items.prev() )
 		if ( item->contains( pos ) )
 		    return item;
 	}
@@ -3382,6 +3382,7 @@ void QIconView::clear()
     d->tmpCurrentItem = 0;
     d->drawDragShapes = FALSE;
 
+    resizeContents( 0, 0 );
     // maybe we don´t need this update, so delay it
     d->fullRedrawTimer->start( 0, TRUE );
 
@@ -4552,9 +4553,9 @@ QDragObject *QIconView::dragObject()
     drag->setPixmap( *d->currentItem->pixmap(),
  		     QPoint( d->currentItem->pixmapRect().width() / 2,
 			     d->currentItem->pixmapRect().height() / 2 ) );
-
-    if ( d->selectionMode == NoSelection && d->startDragItem ) {
-	QIconViewItem *item = d->startDragItem;
+   
+    if ( d->selectionMode == NoSelection ) {  
+	QIconViewItem *item = d->currentItem; 
 	drag->append( QIconDragItem(),
 		      QRect( item->pixmapRect( FALSE ).x() - orig.x(),
 			     item->pixmapRect( FALSE ).y() - orig.y(),

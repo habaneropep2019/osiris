@@ -1,5 +1,5 @@
 /**********************************************************************
-** $Id: qt/src/kernel/qpsprinter.cpp   2.2.2   edited 2000-11-03 $
+** $Id: qt/src/kernel/qpsprinter.cpp   2.2.3   edited 2000-12-12 $
 **
 ** Implementation of QPSPrinter class
 **
@@ -2381,7 +2381,6 @@ QByteArray compress( const QImage & image ) {
 	if ( bestCandidate != None ) {
 	    emitBits( out, outOffset, outBit,
 		      1, 1 );
-	    int x = 0;
 	    if ( bestLength < 5 ) {
 		emitBits( out, outOffset, outBit,
 			  quoteSize, bestLength - 1 );
@@ -2390,25 +2389,21 @@ QByteArray compress( const QImage & image ) {
 			  quoteSize, 4 );
 		emitBits( out, outOffset, outBit,
 			  4, bestLength - 1 - 4 );
-		x = 4;
 	    } else if ( bestLength - 4 - 16 <= 32 ) {
 		emitBits( out, outOffset, outBit,
 			  quoteSize, 5 );
 		emitBits( out, outOffset, outBit,
 			  5, bestLength - 1 - 4 - 16 );
-		x = 5;
 	    } else if ( bestLength - 4 - 16 - 32 <= 64 ) {
 		emitBits( out, outOffset, outBit,
 			  quoteSize, 6 );
 		emitBits( out, outOffset, outBit,
 			  6, bestLength - 1 - 4 - 16 - 32 );
-		x = 6;
 	    } else /* if ( bestLength - 4 - 16 - 32 - 64 <= 128 ) */ {
 		emitBits( out, outOffset, outBit,
 			  quoteSize, 7 );
 		emitBits( out, outOffset, outBit,
 			  7, bestLength - 1 - 4 - 16 - 32 - 64 );
-		x = 7;
 	    }
 	    emitBits( out, outOffset, outBit,
 		      quoteReach, index - bestCandidate - 1 );
@@ -3047,21 +3042,33 @@ static QString stripHeader( const QString & header, const char * data,
 
     // we know CM, QI and QP are used
     int * tmp;
-    if ( (tmp = ids.take("CM")) != 0 )
+    if ( (tmp = ids.take("CM")) != 0 ) {
 	used[*tmp] = 0x10000000;
-    if ( (tmp = ids.take("QI")) != 0 )
+	delete tmp;
+    }
+    if ( (tmp = ids.take("QI")) != 0 ) {
 	used[*tmp] = 0x10000000;
-    if ( (tmp = ids.take("QP")) != 0 )
+	delete tmp;
+    }
+    if ( (tmp = ids.take("QP")) != 0 ) {
 	used[*tmp] = 0x10000000;
+	delete tmp;
+    }
 
     // we speed this up a little by hand-hacking DF/MF/ND support
     if ( useFonts ) {
-	if ( (tmp = ids.take("DF")) != 0 )
+	if ( (tmp = ids.take("DF")) != 0 ) {
 	    used[*tmp] = 0x10000000;
-	if ( (tmp = ids.take("MF")) != 0 )
+	    delete tmp;
+	}
+	if ( (tmp = ids.take("MF")) != 0 ) {
 	    used[*tmp] = 0x10000000;
-	if ( (tmp = ids.take("ND")) != 0 )
+	    delete tmp;
+	}
+	if ( (tmp = ids.take("ND")) != 0 ) {
 	    used[*tmp] = 0x10000000;
+	    delete tmp;
+	}
     }
 
     char id[10];
@@ -3092,6 +3099,7 @@ static QString stripHeader( const QString & header, const char * data,
 		int * offs = ids.take( id );
 		if ( offs )
 		    used[*offs] = 0x10000000;
+		delete offs;
 	    }
 	    i += j;
 	}

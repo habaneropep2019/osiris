@@ -226,9 +226,9 @@ other than the event thread. For instance:
   qApp-&gt;<a href="qapplication.html#ebc983">unlock</a>();
 </pre>
 <p>
-Calling function in Qt without holding a mutex will generally result
-in unpredictable behavior. Calling a GUI-related function in Qt from a
-different thread requires holding the Qt library mutex.  In this
+Calling a function in Qt without holding a mutex will generally result
+in unpredictable behavior.  Calling a GUI-related function in Qt from
+a different thread requires holding the Qt library mutex.  In this
 context, all functions that may ultimately access any graphics or
 window system resources are GUI-related.  Using container classes,
 strings and I/O classes does not require any mutex if that object is
@@ -266,5 +266,5 @@ QApplication::processEvents() and others.</li>
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.2</div>
+<td align="right"><div align="right">Qt version 2.2.3</div>
 </table></div></address></body></html>

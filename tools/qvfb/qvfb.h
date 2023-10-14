@@ -40,6 +40,8 @@ protected slots:
     void changeRate();
     void about();
 
+    void configure();
+
     void setZoom(double);
     void setZoom1();
     void setZoom2();
@@ -51,7 +53,7 @@ protected:
     void createMenu();
 
 private:
-
+    void init( int display_id, int w, int h, int d );
     QVFbView *view;
     QVFbRateDialog *rateDlg;
     QPopupMenu *viewMenu;

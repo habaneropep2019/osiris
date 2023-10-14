@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/dialogs/qfiledialog.cpp   2.2.2   edited 2000-10-26 $
+** $Id: qt/src/dialogs/qfiledialog.cpp   2.2.3   edited 2000-11-30 $
 **
 ** Implementation of QFileDialog class
 **
@@ -2668,6 +2668,10 @@ void QFileDialog::setFilter( const QString & newFilter )
     if ( index >= 0 )
 	f = f.mid( index+1, len-2 );
     d->url.setNameFilter( f );
+	if ( d->types->count() == 1 )  {
+		d->types->clear();
+		d->types->insertItem( QFileDialog::tr( QString::fromLatin1( newFilter ) ) );
+	}
     rereadDir();
 }
 
@@ -3807,7 +3811,8 @@ QString QFileDialog::getExistingDirectory( const QString & dir,
     if ( u.isLocalFile() ) {
 	if ( !dir_.isEmpty() ) {
 	    QFileInfo f( u.path() );
-	    if ( f.isDir() ) {
+        if ( f.exists() ) 
+        if ( f.isDir() ) {
 		dialog->setDir( dir_ );
 		wd = dir_;
 	    }

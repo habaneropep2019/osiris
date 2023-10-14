@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/statistics/statistics.cpp   2.2.2   edited 2000-08-31 $
+** $Id: qt/examples/statistics/statistics.cpp   2.2.3   edited 2000-12-11 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -16,7 +16,7 @@
 #include <qcombobox.h>
 #include <stdlib.h>
 
-const QString dirs[] = {
+const char* dirs[] = {
     "kernel",
     "tools",
     "widgets",
@@ -26,7 +26,7 @@ const QString dirs[] = {
     "network",
     "opengl",
     "canvas",
-    QString::null
+    0
 };
 
 Table::Table()
@@ -50,13 +50,13 @@ void Table::initTable()
     QStringList all;
     int i = 0;
     QString qtdir = getenv( "QTDIR" );
-    while ( dirs[ i ] != QString::null ) {
+    while ( dirs[ i ] ) {
 	QDir dir( qtdir + "/src/" + dirs[ i ] );
 	QStringList lst = dir.entryList( "*.cpp; *.h" );
 	for ( QStringList::Iterator it = lst.begin(); it != lst.end(); ++it ) {
 	    if ( ( *it ).contains( "moc" ) )
 		continue;
-	    all << dirs[ i ] + "/" + *it;
+	    all << QString( dirs[ i ] ) + "/" + *it;
 	}
 	++i;
     }

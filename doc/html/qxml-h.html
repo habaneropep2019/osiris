@@ -30,7 +30,7 @@ remains with Trolltech.
 <hr>
 <pre>
 /****************************************************************************
-** &#36;Id&#58; qt/src/xml/qxml.h   2.2.2   edited 2000-10-27 $
+** &#36;Id&#58; qt/src/xml/qxml.h   2.2.3   edited 2000-11-22 $
 **
 ** Definition of QXmlSimpleReader and related classes.
 **
@@ -353,7 +353,7 @@ private:
     // used by parseReference() and parsePEReference()
     enum EntityRecognitionContext { InContent, InAttributeValue, InEntityValue, InDTD };
 
-    // private methods
+    // private functions
     void eat_ws();
     void next_eat_ws();
 
@@ -361,6 +361,8 @@ private:
     bool atEnd();
 
     void init( const QXmlInputSource&amp; i );
+
+    bool entityExist( const QString&amp; ) const;
 
     bool parseProlog();
     bool parseElement();
@@ -378,6 +380,7 @@ private:
     bool parseNmtoken();
     bool parseAttribute();
     bool parseReference( bool &amp;charDataRead, EntityRecognitionContext context );
+    bool processReference( bool &amp;charDataRead, EntityRecognitionContext context );
 
     bool parseExternalID( bool allowPublicID = FALSE );
     bool parsePEReference( EntityRecognitionContext context );
@@ -535,7 +538,15 @@ private:
     QXmlDefaultHandlerPrivate *d;
 };
 
+#ifdef _WS_QWS_
+#ifdef QT_XML_CPP
+#define inline
+#else
+#define QT_NO_XML_INLINE
+#endif
+#endif
 
+#ifndef QT_NO_XML_INLINE
 //
 // inlines
 //
@@ -671,6 +682,14 @@ inline void QXmlSimpleReader::refAddC(const QChar&amp; ch)
     }
     refArray[refPos++] = ch;
 }
+#endif
+
+#ifdef _WS_QWS_
+#ifdef QT_XML_CPP
+#undef inline
+#endif
+#endif
+
 #endif //QT_NO_XML
 
 #endif
@@ -679,5 +698,5 @@ inline void QXmlSimpleReader::refAddC(const QChar&amp; ch)
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.2</div>
+<td align="right"><div align="right">Qt version 2.2.3</div>
 </table></div></address></body></html>

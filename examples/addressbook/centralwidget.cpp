@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/addressbook/centralwidget.cpp   2.2.2   edited 2000-08-31 $
+** $Id: qt/examples/addressbook/centralwidget.cpp   2.2.3   edited 2000-12-11 $
 **
 ** Copyright ( C ) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -242,6 +242,8 @@ void ABCentralWidget::selectionChanged()
 
 void ABCentralWidget::itemSelected( QListViewItem *item )
 {
+    if ( !item )
+	return;
     item->setSelected( TRUE );
     item->repaint();
 

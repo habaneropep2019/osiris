@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qfont.cpp   2.2.2   edited 2000-11-04 $
+** $Id: qt/src/kernel/qfont.cpp   2.2.3   edited 2000-11-04 $
 **
 ** Implementation of QFont, QFontMetrics and QFontInfo classes
 **

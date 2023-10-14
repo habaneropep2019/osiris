@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/extensions/xt/src/qxt.cpp   2.2.2   edited 2000-08-31 $
+** $Id: qt/extensions/xt/src/qxt.cpp   2.2.3   edited 2000-12-05 $
 **
 ** Implementation of Qt extension classes for Xt/Motif support.
 **
@@ -270,6 +270,7 @@ static void np_do_timers( void*, void* )
 	int interval = QMIN(tm->tv_sec,INT_MAX/1000)*1000 + tm->tv_usec/1000;
 	np_set_timer( interval );
     }
+    qxtapp->sendPostedEvents();
 }
 
 /*!

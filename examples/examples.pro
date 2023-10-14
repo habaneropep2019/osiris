@@ -80,9 +80,7 @@ table:SUBDIRS +=    statistics \
 		    table
 xml:SUBDIRS +=	    xmlquotes
 
-embedded:SUBDIRS += compact \
-		winmanager \
-		notepad \
+embedded:SUBDIRS += winmanager \
 		kiosk \
 		launcher
 

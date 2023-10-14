@@ -80,7 +80,7 @@ tmake:
 clean:
 	-rm -f $(OBJECTS) $(OBJMOC) $(SRCMOC) $(UICIMPLS) $(UICDECLS)
 	-rm -f *~ core
-	-rm -f tmp/qt.cpp
+	-rm -f allmoc.cpp
 
 ####### Extension Modules
 
@@ -116,7 +116,6 @@ main.o: main.cpp \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
-		../../include/qconfig-qpe.h \
 		../../include/qconfig-minimal.h \
 		../../include/qconfig-small.h \
 		../../include/qconfig-medium.h \
@@ -190,7 +189,6 @@ mainwindow.o: mainwindow.cpp \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
-		../../include/qconfig-qpe.h \
 		../../include/qconfig-minimal.h \
 		../../include/qconfig-small.h \
 		../../include/qconfig-medium.h \
@@ -270,7 +268,6 @@ qfileiconview.o: qfileiconview.cpp \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
-		../../include/qconfig-qpe.h \
 		../../include/qconfig-minimal.h \
 		../../include/qconfig-small.h \
 		../../include/qconfig-medium.h \
@@ -348,7 +345,6 @@ qfileiconview.o: qfileiconview.cpp \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
-		../../include/qconfig-qpe.h \
 		../../include/qconfig-minimal.h \
 		../../include/qconfig-small.h \
 		../../include/qconfig-medium.h \
@@ -419,7 +415,6 @@ moc_mainwindow.o: moc_mainwindow.cpp \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
-		../../include/qconfig-qpe.h \
 		../../include/qconfig-minimal.h \
 		../../include/qconfig-small.h \
 		../../include/qconfig-medium.h \
@@ -466,7 +461,6 @@ moc_qfileiconview.o: moc_qfileiconview.cpp \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
-		../../include/qconfig-qpe.h \
 		../../include/qconfig-minimal.h \
 		../../include/qconfig-small.h \
 		../../include/qconfig-medium.h \
@@ -534,7 +528,6 @@ moc_qfileiconview.o: moc_qfileiconview.cpp \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
-		../../include/qconfig-qpe.h \
 		../../include/qconfig-minimal.h \
 		../../include/qconfig-small.h \
 		../../include/qconfig-medium.h \

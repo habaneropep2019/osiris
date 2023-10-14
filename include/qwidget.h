@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qwidget.h   2.2.2   edited 2000-11-06 $
+** $Id: qt/src/kernel/qwidget.h   2.2.3   edited 2000-11-28 $
 **
 ** Definition of QWidget class
 **
@@ -570,11 +570,13 @@ private:
     mutable bool         paintable_region_dirty;// needs to be recalculated
     mutable QRegion      alloc_region;          // Allocated region
     mutable bool         alloc_region_dirty;    // needs to be recalculated
+    mutable int          overlapping_children;  // Handle overlapping children
 
     int		 alloc_region_index;
     int		 alloc_region_revision;
 
-    void setAllocatedRegionDirty();
+    void updateOverlappingChildren() const;
+    void setChildrenAllocatedDirty();
     bool isAllocatedRegionDirty() const;
     QRegion requestedRegion() const;
     QRegion allocatedRegion() const;

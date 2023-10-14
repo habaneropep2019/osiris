@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qpushbutton.cpp   2.2.2   edited 2000-11-02 $
+** $Id: qt/src/widgets/qpushbutton.cpp   2.2.3   edited 2000-12-11 $
 **
 ** Implementation of QPushButton class
 **
@@ -47,6 +47,7 @@
 #include "qguardedptr.h"
 #include "qptrdict.h" // binary compatibility
 #include "qapplication.h"
+#include "qtoolbar.h"
 
 // NOT REVISED
 /*!
@@ -713,7 +714,40 @@ void QPushButton::popupPressed()
 {
     QPopupMenu* popup = ::d( this )->popup;
     if ( isDown() && popup ) {
-	popup->exec( mapToGlobal( rect().bottomLeft() ) );
+	bool horizontal = TRUE;
+	bool topLeft = TRUE;
+#ifndef QT_NO_TOOLBAR
+	if ( parentWidget() && parentWidget()->inherits("QToolBar") ) {
+	    if ( ( (QToolBar*) parentWidget() )->orientation() == Vertical )
+		horizontal = FALSE;
+	}
+#endif
+	if ( horizontal ) {
+	    if ( topLeft ) {
+		if ( mapToGlobal( QPoint( 0, rect().bottom() ) ).y() + popup->sizeHint().height() <= qApp->desktop()->height() )
+		    popup->exec( mapToGlobal( rect().bottomLeft() ) );
+		else
+		    popup->exec( mapToGlobal( rect().topLeft() - QPoint( 0, popup->sizeHint().height() ) ) );
+	    } else {
+		QSize sz( popup->sizeHint() );
+		QPoint p = mapToGlobal( rect().topLeft() );
+		p.ry() -= sz.height();
+		popup->exec( p );
+	    }
+	}
+	else {
+	    if ( topLeft ) {
+		if ( mapToGlobal( QPoint( rect().right(), 0 ) ).x() + popup->sizeHint().width() <= qApp->desktop()->width() )
+		    popup->exec( mapToGlobal( rect().topRight() ) );
+		else
+		    popup->exec( mapToGlobal( rect().topLeft() - QPoint( popup->sizeHint().width(), 0 ) ) );
+	    } else {
+		QSize sz( popup->sizeHint() );
+		QPoint p = mapToGlobal( rect().topLeft() );
+		p.rx() -= sz.width();
+		popup->exec( p );
+	    }
+	}
 	setDown( FALSE );
     }
 }

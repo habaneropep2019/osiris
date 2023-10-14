@@ -1,5 +1,5 @@
 /**********************************************************************
-** $Id: qt/src/widgets/qmultilineedit.cpp   2.2.2   edited 2000-11-04 $
+** $Id: qt/src/widgets/qmultilineedit.cpp   2.2.3   edited 2000-11-27 $
 **
 ** Implementation of QMultiLineEdit widget class
 **
@@ -3037,7 +3037,8 @@ void QMultiLineEdit::resizeEvent( QResizeEvent *e )
  	d->maxLineWidth = 0; // trigger update
 	updateCellWidth();
     }
-    deselect();
+    if ( isVisible() )
+	deselect();
 }
 
 /*!

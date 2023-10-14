@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qwidget.cpp   2.2.2   edited 2000-10-29 $
+** $Id: qt/src/kernel/qwidget.cpp   2.2.3   edited 2000-12-04 $
 **
 ** Implementation of QWidget class
 **
@@ -584,16 +584,19 @@ results in a borderless window for sure, but also in a window that is
 not managed at all (i.e. for example no keyboard input unless you call
 setActiveWindow() manually )
 
-
 <li> \c WStyle_Title - gives the window a title bar.
 
 <li> \c WStyle_SysMenu - adds a window system menu.
 
-<li> \c WStyle_Minimize - adds a minimize button.
+<li> \c WStyle_Minimize - adds a minimize button.  Note that on Windows
+this has to be combined with WStyle_SysMenu for it to work.
 
-<li> \c WStyle_Maximize - adds a maximize button.
+<li> \c WStyle_Maximize - adds a maximize button.  Note that on Windows
+this has to be combined with WStyle_SysMenu for it to work.
 
-<li> \c WStyle_MinMax - is equal to \c WStyle_Minimize|WStyle_Maximize
+<li> \c WStyle_MinMax - is equal to \c WStyle_Minimize|WStyle_Maximize.  
+Note that on Windows this has to be combined with WStyle_SysMenu for 
+it to work.
 
 <li> \c WStyle_ContextHelp - adds a context help button to dialogs.
 
@@ -766,22 +769,16 @@ QWidget::~QWidget()
 	QApplication::main_widget = 0;
 	if (qApp)
 	    qApp->quit();
-    } else if ( isTopLevel() && !isPopup() ) {
-	    hide();
-	    if ( qApp->receivers(SIGNAL(lastWindowClosed()))
-		 && noMoreToplevels() )
-		emit qApp->lastWindowClosed();
     }
+
     if ( focusWidget() == this )
 	clearFocus();
     if ( QApplication::focus_widget == this )
 	QApplication::focus_widget = 0;
 
-    if ( isTopLevel() && isVisible() && winId() )
+    if ( isTopLevel() && !isHidden() && winId() )
 	hide();
-    // ###shall we really emit lastWindowClosed? here as well?  It's
-    // ###not closed but destroyed....
-
+    
     // A parent widget must destroy all its children before destroying itself
     if ( childObjects ) {			// delete children objects
 	QObjectListIt it(*childObjects);
@@ -1070,7 +1067,7 @@ QWidget *QWidget::find( WId id )
 
 /*!
   \fn void QWidget::setWFlags( WFlags f )
-
+  
   Sets the widget flags \a f.
 
   Widget flags are a combination of Qt::WidgetFlags.
@@ -1080,7 +1077,7 @@ QWidget *QWidget::find( WId id )
 
 /*!
   \fn void QWidget::clearWFlags( WFlags f )
-
+  
   Clears the widget flags \a f.
 
   Widget flags are a combination of Qt::WidgetFlags.

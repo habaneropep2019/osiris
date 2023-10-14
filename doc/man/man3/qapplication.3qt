@@ -1,4 +1,4 @@
-.TH QApplication 3qt "8 November 2000" "Trolltech AS" \" -*- nroff -*-
+.TH QApplication 3qt "12 December 2000" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -791,6 +791,8 @@ Lock the Qt library mutex. If another thread has already locked the mutex, the c
 See also unlock() and locked().
 .SH "bool QApplication::locked ()"
 Returns TRUE if the Qt library mutex is locked by a different thread, otherwise returns FALSE.
+.PP
+\fINOTE:\fR Due to differing implementations of recursive mutexes on various platforms, calling this function from the same thread that previous locked the mutex will return undefined results.
 .PP
 See also lock() and unlock().
 .SH "int QApplication::loopLevel () const"

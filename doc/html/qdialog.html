@@ -122,11 +122,9 @@ here.
 <p>Hides the (modal) dialog and sets its result code to <em>r.</em> This
 uses the local event loop to finish and <a href="#633670">exec</a>() to return <em>r.</em>
 <p>If the dialog has the <code>WDestructiveClose</code> flag set, done() also
-deletes the dialog.
-<p>At some future date, this function will probably close the dialog
-instead of hiding it.  It currently calls <a href="#3d4a8e">hide</a>() in order to avoid
-breaking a large number of programs that reimplement <a href="#3ed102">closeEvent</a>().
-<p>See also  <a href="#6b808e">accept</a>() and <a href="#5185f6">reject</a>().
+deletes the dialog. If the dialog is the applications's main widget,
+the application quits.
+<p>See also  <a href="#6b808e">accept</a>(), <a href="#5185f6">reject</a>(), <a href="qapplication.html#7d0bf0">QApplication::mainWidget</a>() and <a href="qapplication.html#844d3d">QApplication::quit</a>().
 <p>Reimplemented in <a href="qfiledialog.html#7e47f3">QFileDialog</a>.
 <h3 class="fn">int <a name="633670"></a>QDialog::exec ()</h3>
 <p>Starts the (modal) dialog, waits, and returns the result code when
@@ -221,7 +219,7 @@ of a <a href="qpushbutton.html">QPushButton</a>.
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.2.2"><nobr>
+<input type=hidden name="version" value="2.2.3"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -229,5 +227,5 @@ copyright &copy; 1995-2000
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.2</div>
+<td align="right"><div align="right">Qt version 2.2.3</div>
 </table></div></address></body></html>

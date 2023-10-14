@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qmetaobject.cpp   2.2.2   edited 2000-08-25 $
+** $Id: qt/src/kernel/qmetaobject.cpp   2.2.3   edited 2000-11-14 $
 **
 ** Implementation of QMetaObject class
 **
@@ -436,7 +436,7 @@ QMetaData *QMetaObject::new_metadata( int numEntries )
 }
 
 /*!\internal
-  
+
   Binary compatibility workaround, removed in 3.0 ###
  */
 QMetaData::Access *QMetaObject::new_metaaccess( int numEntries )
@@ -445,7 +445,7 @@ QMetaData::Access *QMetaObject::new_metaaccess( int numEntries )
 }
 
 /*!\internal
-  
+
   Binary compatibility workaround, removed in 3.0 ###
  */
 void QMetaObject::set_slot_access( QMetaData::Access* access )
@@ -454,7 +454,7 @@ void QMetaObject::set_slot_access( QMetaData::Access* access )
 }
 
 /*!\internal
-  
+
   Binary compatibility workaround, removed in 3.0 ###
  */
 QMetaData::Access QMetaObject::slot_access(int index, bool super )
@@ -612,7 +612,7 @@ QMetaData *QMetaObject::mdata( int code, int index, bool super ) const
  */
 int QMetaObject::numClassInfo( bool super ) const
 {
-    return d->numClassInfo + (super && superclass)?superclass->numClassInfo(super):0;
+    return d->numClassInfo + ((super && superclass)?superclass->numClassInfo(super):0);
 }
 
 /*!

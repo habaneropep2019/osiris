@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qsmartptr.h   2.2.2   edited 2000-09-23 $
+** $Id: qt/src/tools/qsmartptr.h   2.2.3   edited 2000-09-23 $
 **
 ** Definition of QSmartPtr class
 **

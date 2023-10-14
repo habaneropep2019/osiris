@@ -1,4 +1,4 @@
-.TH QRadioButton 3qt "8 November 2000" "Trolltech AS" \" -*- nroff -*-
+.TH QRadioButton 3qt "12 December 2000" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -27,6 +27,9 @@ Inherits QButton.
 .br
 .ti -1c
 .BI "virtual void \fBsetChecked\fR ( bool check ) "
+.br
+.ti -1c
+.BI "QSizePolicy \fBsizePolicy\fR () const"
 .br
 .in -1c
 .SS "Important Inherited Members"
@@ -95,6 +98,12 @@ Inherits QButton.
 .BI "void \fBstateChanged\fR ( int state ) "
 .br
 .in -1c
+.SS "Protected Members"
+.in +1c
+.ti -1c
+.BI "void \fBfocusInEvent\fR ( QFocusEvent * ) "
+.br
+.in -1c
 .SS "Properties"
 <table border=1 cellpadding=3 cellspacing=0> <tr><th>Type<th>Name<th>READ<th>WRITE<th>Options <tr><td>bool<td>checked<td>isChecked<td>setChecked<td>&nbsp; </table>
 .SH DESCRIPTION
@@ -133,10 +142,6 @@ Reimplemented from QButton.
 Reimplemented for internal reasons; the API is not affected.
 .PP
 Reimplemented from QButton.
-.SH "void QRadioButton::focusInEvent ( QFocusEvent * e ) \fC[virtual protected]\fR"
-Reimplemented for internal reasons; the API is not affected.
-.PP
-Reimplemented from QWidget.
 .SH "bool QRadioButton::hitButton ( const QPoint & pos ) const \fC[virtual protected]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .PP
@@ -161,10 +166,6 @@ Examples:
 xform/xform.cpp drawdemo/drawdemo.cpp
 .)l
 .SH "QSize QRadioButton::sizeHint () const \fC[virtual]\fR"
-Reimplemented for internal reasons; the API is not affected.
-.PP
-Reimplemented from QWidget.
-.SH "QSizePolicy QRadioButton::sizePolicy () const \fC[virtual]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .PP
 Reimplemented from QWidget.

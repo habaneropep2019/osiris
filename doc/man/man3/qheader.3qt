@@ -1,4 +1,4 @@
-.TH QHeader 3qt "8 November 2000" "Trolltech AS" \" -*- nroff -*-
+.TH QHeader 3qt "12 December 2000" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -107,6 +107,9 @@ Inherited by QTableHeader.
 .br
 .ti -1c
 .BI "int \fBoffset\fR () const"
+.br
+.ti -1c
+.BI "QSizePolicy \fBsizePolicy\fR () const"
 .br
 .ti -1c
 .BI "int \fBmapToSection\fR ( int index ) const"
@@ -405,10 +408,6 @@ Reimplemented from QWidget.
 .SH "void QHeader::sizeChange ( int section, int oldSize, int newSize ) \fC[signal]\fR"
 This signal is emitted when the user has changed the size of some of a \fIsection\fR of the header from \fIoldSize\fR to \fInewSize.\fR This signal is typically connected to a slot that repaints the table.
 .SH "QSize QHeader::sizeHint () const \fC[virtual]\fR"
-Reimplemented for internal reasons; the API is not affected.
-.PP
-Reimplemented from QWidget.
-.SH "QSizePolicy QHeader::sizePolicy () const \fC[virtual]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .PP
 Reimplemented from QWidget.

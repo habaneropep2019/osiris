@@ -1,4 +1,4 @@
-.TH QLabel 3qt "8 November 2000" "Trolltech AS" \" -*- nroff -*-
+.TH QLabel 3qt "12 December 2000" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -66,6 +66,9 @@ Inherits QFrame.
 .br
 .ti -1c
 .BI "void \fBsetScaledContents\fR ( bool ) "
+.br
+.ti -1c
+.BI "QSizePolicy \fBsizePolicy\fR () const"
 .br
 .ti -1c
 .BI "virtual void \fBsetBuddy\fR ( QWidget * ) "
@@ -383,10 +386,6 @@ Examples:
 .(l
 layout/layout.cpp
 .)l
-.PP
-Reimplemented from QWidget.
-.SH "QSizePolicy QLabel::sizePolicy () const \fC[virtual]\fR"
-Reimplemented for internal reasons; the API is not affected.
 .PP
 Reimplemented from QWidget.
 .SH "QString QLabel::text () const"

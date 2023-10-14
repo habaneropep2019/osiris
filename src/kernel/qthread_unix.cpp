@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qthread_unix.cpp   2.2.2   edited 2000-10-08 $
+** $Id: qt/src/kernel/qthread_unix.cpp   2.2.3   edited 2000-12-07 $
 **
 ** QThread class for Unix
 **
@@ -169,7 +169,11 @@ void QMutex::unlock()
 
 
 /*!
-  Returns TRUE if the mutex is locked by another thread.
+  Returns TRUE if the mutex is locked by another thread and FALSE if not.
+
+  \e NOTE: Due to differing implementations of recursive mutexes on various
+  platforms, calling this function from the same thread that previous locked
+  the mutex will return undefined results.
 */
 bool QMutex::locked()
 {
@@ -740,7 +744,7 @@ QSemaphore::~QSemaphore()
 int QSemaphore::operator++(int)
 {
     int ret;
-    
+
     d->mutex.lock();
 
     while (d->value >= d->max)
@@ -774,7 +778,7 @@ int QSemaphore::operator--(int)
 
     d->cond.wakeAll();
     d->mutex.unlock();
-    
+
     return ret;
 }
 
@@ -793,7 +797,7 @@ int QSemaphore::operator+=(int n)
 
     while (d->value + n > d->max)
 	d->cond.wait(&(d->mutex));
-    
+
     d->value += n;
 
 #ifdef CHECK_RANGE
@@ -806,7 +810,7 @@ int QSemaphore::operator+=(int n)
     ret = d->value;
 
     d->mutex.unlock();
-    
+
     return ret;
 }
 

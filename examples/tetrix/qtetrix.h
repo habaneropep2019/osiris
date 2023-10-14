@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/tetrix/qtetrix.h   2.2.2   edited 2000-11-06 $
+** $Id: qt/examples/tetrix/qtetrix.h   2.2.3   edited 2000-11-06 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **

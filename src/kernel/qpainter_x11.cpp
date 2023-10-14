@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qpainter_x11.cpp   2.2.2   edited 2000-10-22 $
+** $Id: qt/src/kernel/qpainter_x11.cpp   2.2.3   edited 2000-10-22 $
 **
 ** Implementation of QPainter class for X11
 **

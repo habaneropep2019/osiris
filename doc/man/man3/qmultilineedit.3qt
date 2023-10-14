@@ -1,4 +1,4 @@
-.TH QMultiLineEdit 3qt "8 November 2000" "Trolltech AS" \" -*- nroff -*-
+.TH QMultiLineEdit 3qt "12 December 2000" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -30,6 +30,9 @@ Inherits QTableView.
 .br
 .ti -1c
 .BI "virtual QSize \fBminimumSizeHint\fR () const"
+.br
+.ti -1c
+.BI "QSizePolicy \fBsizePolicy\fR () const"
 .br
 .ti -1c
 .BI "virtual void \fBinsertLine\fR ( const QString & " "s" ", int " "line" " = -1 ) "
@@ -261,6 +264,9 @@ Inherits QTableView.
 .br
 .ti -1c
 .BI "virtual void \fBfocusInEvent\fR ( QFocusEvent * ) "
+.br
+.ti -1c
+.BI "void \fBtimerEvent\fR ( QTimerEvent * ) "
 .br
 .ti -1c
 .BI "bool \fBhasMarkedText\fR () const"
@@ -844,10 +850,6 @@ See also setWordWrap() and wrapPolicy().
 Reimplemented for internal reasons; the API is not affected.
 .PP
 Reimplemented from QWidget.
-.SH "QSizePolicy QMultiLineEdit::sizePolicy () const \fC[virtual]\fR"
-Reimplemented for internal reasons; the API is not affected.
-.PP
-Reimplemented from QWidget.
 .SH "QString QMultiLineEdit::stringShown ( int row ) const \fC[protected]\fR"
 Returns the string shown at line \fIrow,\fR including processing of the echoMode().
 .SH "QString QMultiLineEdit::text () const"
@@ -862,10 +864,6 @@ Returns the text at line number \fIline\fR (possibly the empty string), or a nul
 Returns the width in pixels of the string \fIs.\fR NOTE: only appropriate for whole lines.
 .SH "int QMultiLineEdit::textWidth ( int line ) \fC[protected]\fR"
 Returns the width in pixels of the text at line \fIline.\fR
-.SH "void QMultiLineEdit::timerEvent ( QTimerEvent * ) \fC[virtual protected]\fR"
-Reimplemented for internal reasons; the API is not affected. Present for binary compatibility only!.
-.PP
-Reimplemented from QObject.
 .SH "void QMultiLineEdit::undo () \fC[slot]\fR"
 Undoes the last text operation.
 .SH "void QMultiLineEdit::undoAvailable ( bool yes ) \fC[signal]\fR"

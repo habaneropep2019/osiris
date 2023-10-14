@@ -1,4 +1,4 @@
-.TH QTabWidget 3qt "8 November 2000" "Trolltech AS" \" -*- nroff -*-
+.TH QTabWidget 3qt "12 December 2000" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -99,6 +99,9 @@ Inherits QWidget.
 .br
 .ti -1c
 .BI "void \fBsetMargin\fR ( int ) "
+.br
+.ti -1c
+.BI "QSizePolicy \fBsizePolicy\fR () const"
 .br
 .in -1c
 .SS "Signals"
@@ -290,10 +293,6 @@ Ensures that \fIw\fR is shown. This is useful mainly for accelerators.
 .PP
 See also QTabBar::setCurrentTab().
 .SH "QSize QTabWidget::sizeHint () const \fC[virtual]\fR"
-Reimplemented for internal reasons; the API is not affected.
-.PP
-Reimplemented from QWidget.
-.SH "QSizePolicy QTabWidget::sizePolicy () const \fC[virtual]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .PP
 Reimplemented from QWidget.

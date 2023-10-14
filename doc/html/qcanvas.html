@@ -191,8 +191,10 @@ phase 0.
 <h3 class="fn"><a href="qcolor.html">QColor</a> <a name="5d7f5b"></a>QCanvas::backgroundColor () const</h3>
 <p>Returns the color set by <a href="#5d933f">setBackgroundColor</a>().
 By default, this is white.
-<p>Note that this function is not the same as
-<a href="qwidget.html#370ea4">QWidget::backgroundColor</a>().  The difference between them is
+<p>Note that this function is not a reimplementation
+of <a href="qwidget.html#370ea4">QWidget::backgroundColor</a>() (QCanvas is not a subclass
+of <a href="qwidget.html">QWidget</a>), but all QCanvasViews that are viewing the
+canvas will set their backgrounds to this
 <p>See also  <a href="#5d933f">setBackgroundColor</a>() and <a href="#ea8a24">backgroundPixmap</a>().
 <h3 class="fn"><a href="qpixmap.html">QPixmap</a> <a name="ea8a24"></a>QCanvas::backgroundPixmap () const</h3>
 <p>Returns the pixmap set by <a href="#4f5f53">setBackgroundPixmap</a>().  By default,
@@ -242,8 +244,8 @@ It renders any foreground graphics.
 <p>This signal is emitted whenever the canvas is resized.  Each <a href="qcanvasview.html">QCanvasView</a>
 connects to this signal to keep the scrollview size correct.
 <h3 class="fn">void <a name="a063e7"></a>QCanvas::retune ( int chunksze, int mxclusters=100 ) <code>[virtual]</code></h3>
-<p>Change the efficiency tuning parameters to <em>mxclusers</em> clusters,
-each of size <em>chunksize</em> (square).  This is a slow operation if you
+<p>Change the efficiency tuning parameters to <em>mxclusters</em> clusters,
+each of size <em>chunksze</em> (square).  This is a slow operation if you
 have many objects on the canvas.
 <p>Internally, a canvas uses a low-resolution "chunk matrix" to keep
 track of all the items in the canvas. In Qt 2.2, the default for a
@@ -302,8 +304,6 @@ tile 0, and so on.
 <p>If the QCanvas is larger than the matrix of tiles, the entire matrix
 is repeated as necessary to cover the area.  If it is smaller, tiles
 to the right and bottom are not visible.
-<p>QCanvas has special optimizations for the case where the tiles are
-square and the canvas is not larger than (h*tilewidth, v*tileheight).
 <p>The width and height of <em>p</em> must be multipless of <em>tilewidth</em> and
 <em>tileheight.</em> If they are not, the action of this function is
 unspecified.
@@ -364,7 +364,7 @@ Any previous setting by <a href="#4bee40">setAdvancePeriod</a>() or setUpdatePer
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.2.2"><nobr>
+<input type=hidden name="version" value="2.2.3"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -372,5 +372,5 @@ copyright &copy; 1995-2000
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.2</div>
+<td align="right"><div align="right">Qt version 2.2.3</div>
 </table></div></address></body></html>

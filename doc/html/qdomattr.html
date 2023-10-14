@@ -52,11 +52,11 @@ but two attributes:
 </pre>
 <p>One can use the attributes of an element with code similar to:
 <p><pre>  <a href="qdomelement.html">QDomElement</a> e = ....;
-  QDomAttribute a = e.<a href="qdomelement.html#547880">attributeNode</a>( "href" );
-  cout &lt;&lt; a.value() &lt;&lt; endl // gives "http://www.trolltech.com"
-  a.setValue( "http://doc.trolltech.com" );
-  QDomAttribute a2 = e.<a href="qdomelement.html#547880">attributeNode</a>( "href" );
-  cout &lt;&lt; a2.value() &lt;&lt; endl // gives "http://doc.trolltech.com"
+  <a href="qdomattr.html">QDomAttr</a> a = e.<a href="qdomelement.html#547880">attributeNode</a>( "href" );
+  cout &lt;&lt; a.<a href="#0f6e06">value</a>() &lt;&lt; endl // gives "http://www.trolltech.com"
+  a.<a href="#78fa0c">setValue</a>( "http://doc.trolltech.com" );
+  <a href="qdomattr.html">QDomAttr</a> a2 = e.<a href="qdomelement.html#547880">attributeNode</a>( "href" );
+  cout &lt;&lt; a2.<a href="#0f6e06">value</a>() &lt;&lt; endl // gives "http://doc.trolltech.com"
 </pre>
 <p>This example also shows that changing an attribute received from an element
 changes the attribute of the element. If you do not want to change the
@@ -103,7 +103,7 @@ when the attribute has not been specified.
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.2.2"><nobr>
+<input type=hidden name="version" value="2.2.3"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -111,5 +111,5 @@ copyright &copy; 1995-2000
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.2</div>
+<td align="right"><div align="right">Qt version 2.2.3</div>
 </table></div></address></body></html>

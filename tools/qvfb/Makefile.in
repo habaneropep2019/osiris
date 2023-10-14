@@ -37,16 +37,19 @@ OBJECTS =	qvfb.o \
 		qvfbview.o \
 		qvfbratedlg.o \
 		main.o \
-		qanimationwriter.o
-INTERFACES =    
-UICDECLS =      
-UICIMPLS =      
+		qanimationwriter.o \
+		config.o
+INTERFACES =    config.ui
+UICDECLS =      config.h
+UICIMPLS =      config.cpp
 SRCMOC	=	moc_qvfb.cpp \
 		moc_qvfbview.cpp \
-		moc_qvfbratedlg.cpp
+		moc_qvfbratedlg.cpp \
+		moc_config.cpp
 OBJMOC	=	moc_qvfb.o \
 		moc_qvfbview.o \
-		moc_qvfbratedlg.o
+		moc_qvfbratedlg.o \
+		moc_config.o
 
 
 ####### Implicit rules
@@ -84,7 +87,7 @@ tmake:
 clean:
 	-rm -f $(OBJECTS) $(OBJMOC) $(SRCMOC) $(UICIMPLS) $(UICDECLS)
 	-rm -f *~ core
-	-rm -f tmp/qt.cpp
+	-rm -f allmoc.cpp
 
 ####### Extension Modules
 
@@ -121,7 +124,6 @@ qvfb.o: qvfb.cpp \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
-		../../include/qconfig-qpe.h \
 		../../include/qconfig-minimal.h \
 		../../include/qconfig-small.h \
 		../../include/qconfig-medium.h \
@@ -193,10 +195,14 @@ qvfb.o: qvfb.cpp \
 		../../include/qurlinfo.h \
 		../../include/qdict.h \
 		../../include/qqueue.h \
+		../../include/qspinbox.h \
+		../../include/qradiobutton.h \
+		../../include/qbutton.h \
 		qvfb.h \
 		../../include/qmainwindow.h \
 		qvfbview.h \
-		qvfbratedlg.h
+		qvfbratedlg.h \
+		config.h
 
 qvfbview.o: qvfbview.cpp \
 		qvfbview.h \
@@ -207,7 +213,6 @@ qvfbview.o: qvfbview.cpp \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
-		../../include/qconfig-qpe.h \
 		../../include/qconfig-minimal.h \
 		../../include/qconfig-small.h \
 		../../include/qconfig-medium.h \
@@ -251,6 +256,7 @@ qvfbview.o: qvfbview.cpp \
 		../../include/qpen.h \
 		../../include/qpointarray.h \
 		../../include/qwmatrix.h \
+		../../include/qvfbhdr.h \
 		../../include/qimage.h \
 		../../include/qpixmap.h \
 		../../include/qstrlist.h \
@@ -265,7 +271,6 @@ qvfbratedlg.o: qvfbratedlg.cpp \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
-		../../include/qconfig-qpe.h \
 		../../include/qconfig-minimal.h \
 		../../include/qconfig-small.h \
 		../../include/qconfig-medium.h \
@@ -321,7 +326,6 @@ main.o: main.cpp \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
-		../../include/qconfig-qpe.h \
 		../../include/qconfig-minimal.h \
 		../../include/qconfig-small.h \
 		../../include/qconfig-medium.h \
@@ -374,7 +378,6 @@ qanimationwriter.o: qanimationwriter.cpp \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
-		../../include/qconfig-qpe.h \
 		../../include/qconfig-minimal.h \
 		../../include/qconfig-small.h \
 		../../include/qconfig-medium.h \
@@ -401,6 +404,16 @@ qanimationwriter.o: qanimationwriter.cpp \
 		../../include/qregexp.h \
 		../../include/qfile.h
 
+config.h: config.ui
+	$(UIC) config.ui -o $(INTERFACE_DECL_PATH)/config.h
+
+config.cpp: config.ui
+	$(UIC) config.ui -i config.h -o config.cpp
+
+config.o: config.cpp \
+		config.h \
+		config.ui
+
 moc_qvfb.o: moc_qvfb.cpp \
 		qvfb.h \
 		../../include/qmainwindow.h \
@@ -409,7 +422,6 @@ moc_qvfb.o: moc_qvfb.cpp \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
-		../../include/qconfig-qpe.h \
 		../../include/qconfig-minimal.h \
 		../../include/qconfig-small.h \
 		../../include/qconfig-medium.h \
@@ -456,7 +468,6 @@ moc_qvfbview.o: moc_qvfbview.cpp \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
-		../../include/qconfig-qpe.h \
 		../../include/qconfig-minimal.h \
 		../../include/qconfig-small.h \
 		../../include/qconfig-medium.h \
@@ -509,7 +520,6 @@ moc_qvfbratedlg.o: moc_qvfbratedlg.cpp \
 		../../include/qobjectdefs.h \
 		../../include/qglobal.h \
 		../../include/qfeatures.h \
-		../../include/qconfig-qpe.h \
 		../../include/qconfig-minimal.h \
 		../../include/qconfig-small.h \
 		../../include/qconfig-medium.h \
@@ -547,6 +557,9 @@ moc_qvfbratedlg.o: moc_qvfbratedlg.cpp \
 		../../include/qstyle.h \
 		../../include/qsizepolicy.h
 
+moc_config.o: moc_config.cpp \
+		config.h
+
 moc_qvfb.cpp: qvfb.h
 	$(MOC) qvfb.h -o moc_qvfb.cpp
 
@@ -555,5 +568,8 @@ moc_qvfbview.cpp: qvfbview.h
 
 moc_qvfbratedlg.cpp: qvfbratedlg.h
 	$(MOC) qvfbratedlg.h -o moc_qvfbratedlg.cpp
+
+moc_config.cpp: config.h
+	$(MOC) config.h -o moc_config.cpp
 
 

@@ -49,6 +49,8 @@ static bool toBool( const QString& s )
     return s == "true" || s.toInt() != 0;
 }
 
+// fixString is only used in conjunction with tr(). We need to write out the 
+// string in utf8 and make sure it's converted from utf8 when created.
 static QString fixString( const QString &str )
 {
     QString s( str );
@@ -56,6 +58,19 @@ static QString fixString( const QString &str )
     s = s.replace( QRegExp( "\"" ), "\\\"" );
     s = s.replace( QRegExp( "\n" ), "\\n" );
     s = s.replace( QRegExp( "\r" ), "\\r" );
+
+    bool onlyAscii = TRUE;
+    unsigned int i;
+    for ( i = 0; i < s.length(); i++ ) {
+	if ( s.at(i).unicode() >= 0x80 ) {
+	    onlyAscii = FALSE;
+	    break;
+	}
+    }
+    if ( onlyAscii )
+	s = "\"" + s + "\"";
+    else
+	s = "QString::fromUtf8( \"" + s + "\" )";
     return s;
 }
 
@@ -650,7 +665,7 @@ void Uic::createFormImpl( const QDomElement &e )
 	    if ( tags.contains( n.tagName()  ) ) {
 		QString page = createObjectImpl( n, objClass, "this" );
 		QString label = DomTool::readAttribute( n, "title", "" ).toString();
-		out << indent << "addPage( " << page << ", "<< trmacro << "( \"" << fixString( label ) << "\" ) );" << endl;
+		out << indent << "addPage( " << page << ", "<< trmacro << "( " << fixString( label ) << " ) );" << endl;
 		QVariant def( FALSE, 0 );
 		if ( DomTool::hasAttribute( n, "backEnabled" ) )
 		    out << indent << "setBackEnabled( " << page << ", " << mkBool( DomTool::readAttribute( n, "backEnabled", def).toBool() ) << endl;
@@ -891,26 +906,26 @@ QString Uic::createObjectImpl( const QDomElement &e, const QString& parentClass,
 	return objName;
     objName = getObjectName( e );
 
-    bool isTmpObject = objName.isEmpty();
+    QString definedName = objName;
+    bool isTmpObject = objName.isEmpty() || objClass == "QLayoutWidget";
     if ( isTmpObject ) {
 	if ( objClass[0] == 'Q' )
-	    objName = objClass[1].lower() + objClass.mid(2);
+	    objName = objClass.mid(1);
 	else
 	    objName = objClass.lower();
+	objName.prepend( "private" );
     }
 
     bool isLine = objClass == "Line";
     if ( isLine )
 	objClass = "QFrame";
 
-    // register the object and unify its name
-    if (objClass != "QLayoutWidget" || layout.isEmpty())
-	objName = registerObject( objName );
-
     out << endl;
     if ( objClass == "QLayoutWidget" ) {
 	if ( layout.isEmpty() ) {
-	    out << "    QWidget* " << objName << " = new QWidget( " << parent << ", \"" << objName << "\" );" << endl;
+	    // register the object and unify its name
+	    objName = registerObject( objName );
+	    out << "    QWidget* " << objName << " = new QWidget( " << parent << ", \"" << definedName << "\" );" << endl;
 	} else {
 	    // the layout widget is not necessary, hide it by creating its child in the parent
 	    QString result;
@@ -921,6 +936,8 @@ QString Uic::createObjectImpl( const QDomElement &e, const QString& parentClass,
 	    return result;
 	}
     }   else {
+	// register the object and unify its name
+	objName = registerObject( objName );
 	out << "    ";
 	if ( isTmpObject )
 	    out << objClass << "* ";
@@ -1000,7 +1017,7 @@ QString Uic::createObjectImpl( const QDomElement &e, const QString& parentClass,
 	    if ( tags.contains( n.tagName()  ) ) {
 		QString page = createObjectImpl( n, objClass, objName );
 		QString label = DomTool::readAttribute( n, "title", "" ).toString();
-		out << indent << objName << "->insertTab( " << page << ", " << trmacro << "( \"" << fixString( label ) << "\" ) );" << endl;
+		out << indent << objName << "->insertTab( " << page << ", " << trmacro << "( " << fixString( label ) << " ) );" << endl;
 	    }
 	}
      } else { // standard widgets
@@ -1043,9 +1060,9 @@ QString Uic::createListBoxItemImpl( const QDomElement &e, const QString &parent 
     }
 
     if ( pix.isEmpty() )
-	return parent + "->insertItem( " + trmacro + "( \"" + fixString( txt ) + "\" ) );";
+	return parent + "->insertItem( " + trmacro + "( " + fixString( txt ) + " ) );";
     else
-	return parent + "->insertItem( " + pix + ", " + trmacro + "( \"" + fixString( txt ) + "\" ) );";
+	return parent + "->insertItem( " + pix + ", " + trmacro + "( " + fixString( txt ) + " ) );";
 
     return QString::null;
 }
@@ -1080,8 +1097,8 @@ QString Uic::createIconViewItemImpl( const QDomElement &e, const QString &parent
     }
 
     if ( pix.isEmpty() )
-	return "(void) new QIconViewItem( " + parent + ", " + trmacro + "( \"" + fixString( txt ) + "\" ) );";
-    return "(void) new QIconViewItem( " + parent + ", " + trmacro + "( \"" + fixString( txt ) + "\" ), " + pix + " );";
+	return "(void) new QIconViewItem( " + parent + ", " + trmacro + "( " + fixString( txt ) + " ) );";
+    return "(void) new QIconViewItem( " + parent + ", " + trmacro + "( " + fixString( txt ) + " ), " + pix + " );";
 
 }
 
@@ -1144,7 +1161,7 @@ QString Uic::createListViewItemImpl( const QDomElement &e, const QString &parent
 
     for ( int i = 0; i < (int)textes.count(); ++i ) {
 	if ( !textes[ i ].isEmpty() )
-	    s += indent + item + "->setText( " + QString::number( i ) + ", " + trmacro + "( \"" + fixString( textes[ i ] ) + "\" ) );\n";
+	    s += indent + item + "->setText( " + QString::number( i ) + ", " + trmacro + "( " + fixString( textes[ i ] ) + " ) );\n";
 	if ( !pixmaps[ i ].isEmpty() )
 	    s += indent + item + "->setPixmap( " + QString::number( i ) + ", " + pixmaps[ i ] + " );\n";
     }
@@ -1187,9 +1204,9 @@ QString Uic::createListViewColumnImpl( const QDomElement &e, const QString &pare
     }
 
     QString s;
-    s = indent + parent + "->addColumn( " + trmacro + "( \"" + fixString( txt ) + "\" ) );\n";
+    s = indent + parent + "->addColumn( " + trmacro + "( " + fixString( txt ) + " ) );\n";
     if ( !pix.isEmpty() )
-	s += indent + parent + "->header()->setLabel( " + parent + "->header()->count() - 1, " + pix + ", " + trmacro + "( \"" + fixString( txt ) + "\" ) );\n";
+	s += indent + parent + "->header()->setLabel( " + parent + "->header()->count() - 1, " + pix + ", " + trmacro + "( " + fixString( txt ) + " ) );\n";
     if ( !clickable )
 	s += indent + parent + "->header()->setClickEnabled( FALSE, " + parent + "->header()->count() - 1 );\n";
     if ( !resizeable )
@@ -1460,16 +1477,16 @@ QString Uic::setObjectProperty( const QString& objClass, const QString& obj, con
     } else if ( e.tagName() == "string" ) {
 	if ( prop == "toolTip" ) {
 	    if ( !obj.isEmpty() )
-		out << indent << "QToolTip::add(  " << obj << ", " + trmacro + "( \"" << fixString( e.firstChild().toText().data() ) << "\" ) );" << endl;
+		out << indent << "QToolTip::add(  " << obj << ", " + trmacro + "( " << fixString( e.firstChild().toText().data() ) << " ) );" << endl;
 	    else
-		out << indent << "QToolTip::add(  this, " + trmacro + "( \"" << fixString( e.firstChild().toText().data() ) << "\" ) );" << endl;
+		out << indent << "QToolTip::add(  this, " + trmacro + "( " << fixString( e.firstChild().toText().data() ) << " ) );" << endl;
 	} else if ( prop == "whatsThis" ) {
 	    if ( !obj.isEmpty() )
-		out << indent << "QWhatsThis::add(  " << obj << ", " << trmacro << "( \"" << fixString( e.firstChild().toText().data() ) << "\" ) );" << endl;
+		out << indent << "QWhatsThis::add(  " << obj << ", " << trmacro << "( " << fixString( e.firstChild().toText().data() ) << " ) );" << endl;
 	    else
-		out << indent << "QWhatsThis::add(  this, " << trmacro << "( \"" << fixString( e.firstChild().toText().data() ) << "\" ) );" << endl;
+		out << indent << "QWhatsThis::add(  this, " << trmacro << "( " << fixString( e.firstChild().toText().data() ) << " ) );" << endl;
 	} else {
-	    v = trmacro + "( \"%1\"  )";
+	    v = trmacro + "( %1 )";
 	    v = v.arg( fixString( e.firstChild().toText().data() ) );
 	}
     } else if ( e.tagName() == "cstring" ) {
@@ -2020,7 +2037,8 @@ int main( int argc, char * argv[] )
 	fileOut.open( IO_WriteOnly, stdout );
     }
     QTextStream out( &fileOut );
-
+    out.setEncoding( QTextStream::UnicodeUTF8 );
+    
     QDomDocument doc;
     if ( !doc.setContent( &file ) )
 	qFatal( "uic: Failed to parse %s\n", fileName );

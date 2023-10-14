@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qsound.cpp   2.2.2   edited 2000-08-25 $
+** $Id: qt/src/kernel/qsound.cpp   2.2.3   edited 2000-08-25 $
 **
 ** Implementation of QSound class and QAuServer internal class
 **

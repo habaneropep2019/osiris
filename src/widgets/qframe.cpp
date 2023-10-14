@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qframe.cpp   2.2.2   edited 2000-10-09 $
+** $Id: qt/src/widgets/qframe.cpp   2.2.3   edited 2000-10-09 $
 **
 ** Implementation of QFrame widget class
 **

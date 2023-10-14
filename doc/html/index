@@ -1,3 +1,4 @@
+"         http://www.trolltech.com/company/announce/linguistpre.html" http://www.trolltech.com/company/announce/linguistpre.html
 "         in Netscape's handbook." http://developer.netscape.com/docs/manuals/communicator/plugin/index.htm
 "     Plugin SDK from Netscape" http://home.netscape.com/comprod/development_partners/plugin_api/index.html
 "   hierarchical list of MIME media types" http://www.isi.edu/in-notes/iana/assignments/media-types/
@@ -32,6 +33,7 @@
 "  Organizers" organizers.html
 "  Porting from Qt 1.x to Qt 2.x" porting.html
 "  Qt Object Model" object.html
+"  Signals and Slots" signalsandslots.html
 "  Standard Accelerators" accelerators.html
 "  Standard Dialogs" dialogs.html
 "  Structure Overview" topicals.html
@@ -52,21 +54,23 @@
 " Amazon.com's shipping options" http://www.amazon.com/exec/obidos/subst/help/shipping-policy.html/t
 " Credits" credits.html
 " Foley & Van Dam" http://www.amazon.com/exec/obidos/ASIN/0201848406/trolltech/t
+" GNU General Public License" gpl.html
 " How to report a bug" bughowto.html
 " IANA list of MIME media types" http://www.isi.edu/in-notes/iana/assignments/media-types/
 " Mailing List Information" mailinglists.html
 " OpenGL Programming Guide." http://www.amazon.com/exec/obidos/ASIN/0201604582/trolltech/t
 " Other Licenses used in Qt " licenses.html
 " Pthreads Programming: A POSIX Standard for Better Multiprocessing (O'Reilly Nutshell)" http://www.amazon.com/exec/obidos/ASIN/1565921151/trolltech/t
+" Q Public License" license.html
+" QEmbed - inline files/images" qembed.html
+" QVFb - virtual framebuffer for Qt/Embedded" qvfb-qws.html
 " Qt Designer" designer.html
-" Qt Free Edition License" license.html
 " The Unicode Standard, version 2.0." http://www.amazon.com/exec/obidos/ASIN/0201473459/trolltech/t
 " The Unicode Standard, version 3.0." http://www.amazon.com/exec/obidos/ASIN/0201616335/trolltech/t
 " The home page for the standard" http://www.unicode.org/unicode/standard/standard.html
 " Thread Support in Qt " threads.html
 " Thread Time: The Multithreaded Programming Guide" http://www.amazon.com/exec/obidos/ASIN/0131900676/trolltech/t
 " Threads Primer: A Guide to Multithreaded Programming" http://www.amazon.com/exec/obidos/ASIN/0134436989/trolltech/t
-" Virtual Framebuffer" qvfb-qws.html
 " Win32 Multithreaded Programming" http://www.amazon.com/exec/obidos/ASIN/1565922964/trolltech/t
 " Windowsystem-specific notes" winsystem.html
 " customer service." http://www.amazon.com/exec/obidos/subst/help/desk.html/t
@@ -142,7 +146,8 @@
 "First tutorial" t1.html
 "Format of the QDataStream operators" datastreamformat.html
 "Functions" functions.html
-"GNU General Public License" http://www.gnu.org/copyleft/gpl.html
+"GNU General Public License (GPL)" gpl.html
+"GNU General Public License" gpl.html
 "GUI Design Handbook: Cursors." guibooks.html#fowler
 "GUI Design Handbook: Tool Tip" guibooks.html#fowler
 "Game Over" t13.html
@@ -188,7 +193,7 @@
 "Meta Object Compiler (moc)" moc.html
 "Meta Object Compiler." metaobjects.html
 "Meta Object System" metaobjects.html
-"Microsoft Icon Gallery." http://www.microsoft.com/clipgallerylive/icons.asp
+"Microsoft Icon Gallery." http://cgl.microsoft.com/clipgallerylive/cgl30/eula.asp?nInterface=0
 "Mode" qiconset.html#Mode
 "Namespace" porting.html#Namespace
 "Netcraft's Server Graphs" http://www.netcraft.com/survey/
@@ -405,7 +410,6 @@
 "QApplication::postEvent()" qapplication.html#552386
 "QApplication::processEvents" qapplication.html#5e4efb
 "QApplication::quit" qapplication.html#844d3d
-"QApplication::qwsSetDecoration" qapplication.html#eb76f6
 "QApplication::restoreOverrideCursor" qapplication.html#3b24cd
 "QApplication::saveState" qapplication.html#7bd5f2
 "QApplication::saveState()" qapplication.html#7bd5f2
@@ -1011,7 +1015,6 @@
 "QCheckBox" qcheckbox.html#a300b2
 "QCheckBox" qcheckbox.html#bf08c6
 "QCheckBox" qcheckbox.html#c504d5
-"QCheckBox" qcheckbox.html#dfd0ed
 "QCheckBox" qcheckbox.html#f146fc
 "QCheckBoxes" qcheckbox.html
 "QCheckListItem" qchecklistitem.html
@@ -1022,7 +1025,6 @@
 "QCheckListItem" qchecklistitem.html#3cfc83
 "QCheckListItem" qchecklistitem.html#4b3542
 "QCheckListItem" qchecklistitem.html#6aea76
-"QCheckListItem" qchecklistitem.html#6eae19
 "QCheckListItem" qchecklistitem.html#95e769
 "QCheckListItem" qchecklistitem.html#a3b02e
 "QCheckListItem" qchecklistitem.html#a470cd
@@ -1196,7 +1198,6 @@
 "QComboBox" qcombobox.html#d5a68d
 "QComboBox" qcombobox.html#d9cda5
 "QComboBox" qcombobox.html#db2faa
-"QComboBox" qcombobox.html#dbdb6d
 "QComboBox" qcombobox.html#e99bcc
 "QComboBox" qcombobox.html#ec4f9c
 "QComboBox" qcombobox.html#eecd1b
@@ -1204,16 +1205,10 @@
 "QComboBox" qcombobox.html#f75507
 "QComboBoxes" qcombobox.html
 "QCommonStyle" qcommonstyle.html
-"QCommonStyle" qcommonstyle.html#12020a
 "QCommonStyle" qcommonstyle.html#19554c
-"QCommonStyle" qcommonstyle.html#1e7e35
 "QCommonStyle" qcommonstyle.html#68a66c
-"QCommonStyle" qcommonstyle.html#737715
-"QCommonStyle" qcommonstyle.html#79ded9
 "QCommonStyle" qcommonstyle.html#7eef53
-"QCommonStyle" qcommonstyle.html#86217a
 "QCommonStyle" qcommonstyle.html#8dbad3
-"QCommonStyle" qcommonstyle.html#93d4f1
 "QCommonStyle" qcommonstyle.html#957aa8
 "QCommonStyle" qcommonstyle.html#9faf65
 "QCommonStyle" qcommonstyle.html#a53f94
@@ -2077,7 +2072,6 @@
 "QFrame" qframe.html#3d03c9
 "QFrame" qframe.html#40fc30
 "QFrame" qframe.html#423116
-"QFrame" qframe.html#43e488
 "QFrame" qframe.html#4cbf11
 "QFrame" qframe.html#595a12
 "QFrame" qframe.html#7f77c4
@@ -2502,7 +2496,6 @@
 "QHeader" qheader.html#948fd5
 "QHeader" qheader.html#9983e0
 "QHeader" qheader.html#9d200e
-"QHeader" qheader.html#9df67b
 "QHeader" qheader.html#a5a6ff
 "QHeader" qheader.html#a8b879
 "QHeader" qheader.html#a98e60
@@ -2666,7 +2659,6 @@
 "QIconView" qiconview.html#a23b3b
 "QIconView" qiconview.html#a3bc91
 "QIconView" qiconview.html#a3f9fe
-"QIconView" qiconview.html#a4c733
 "QIconView" qiconview.html#a665fb
 "QIconView" qiconview.html#a90915
 "QIconView" qiconview.html#aa1ca7
@@ -2709,6 +2701,7 @@
 "QIconView" qiconview.html#f86bc8
 "QIconView" qiconview.html#fb21b5
 "QIconView" qiconview.html#fb331e
+"QIconView" qwidget.html#2d5d13
 "QIconView::arrangeItemsInGrid" qiconview.html#0afe2f
 "QIconView::dragObject" qiconview.html#fb21b5
 "QIconView::itemRenamed" qiconview.html#aa1ca7
@@ -3021,7 +3014,6 @@
 "QLCDNumber" qlcdnumber.html#b579af
 "QLCDNumber" qlcdnumber.html#b7f1d1
 "QLCDNumber" qlcdnumber.html#cbca38
-"QLCDNumber" qlcdnumber.html#d03a31
 "QLCDNumber" qlcdnumber.html#e06f23
 "QLCDNumber" qlcdnumber.html#e244b3
 "QLCDNumber" qlcdnumber.html#f09b9b
@@ -3038,7 +3030,6 @@
 "QLabel" qlabel.html#1a8f6a
 "QLabel" qlabel.html#1b6d73
 "QLabel" qlabel.html#1f406e
-"QLabel" qlabel.html#26e1d9
 "QLabel" qlabel.html#2bafbb
 "QLabel" qlabel.html#2fcaa3
 "QLabel" qlabel.html#3cb6e7
@@ -3177,7 +3168,6 @@
 "QLineEdit" qlineedit.html#aa9c46
 "QLineEdit" qlineedit.html#b20580
 "QLineEdit" qlineedit.html#b4fbc5
-"QLineEdit" qlineedit.html#b78cb1
 "QLineEdit" qlineedit.html#b85aa3
 "QLineEdit" qlineedit.html#bc5402
 "QLineEdit" qlineedit.html#bc703f
@@ -3569,7 +3559,6 @@
 "QMainWindow" qmainwindow.html#b667ba
 "QMainWindow" qmainwindow.html#bafbe0
 "QMainWindow" qmainwindow.html#be8549
-"QMainWindow" qmainwindow.html#c1fe7b
 "QMainWindow" qmainwindow.html#cc031a
 "QMainWindow" qmainwindow.html#d76edc
 "QMainWindow" qmainwindow.html#db02bc
@@ -3886,7 +3875,6 @@
 "QMultiLineEdit" qmultilineedit.html#020ea8
 "QMultiLineEdit" qmultilineedit.html#04714a
 "QMultiLineEdit" qmultilineedit.html#063834
-"QMultiLineEdit" qmultilineedit.html#0cf52b
 "QMultiLineEdit" qmultilineedit.html#0fa015
 "QMultiLineEdit" qmultilineedit.html#10d311
 "QMultiLineEdit" qmultilineedit.html#151857
@@ -3926,7 +3914,6 @@
 "QMultiLineEdit" qmultilineedit.html#53d6ef
 "QMultiLineEdit" qmultilineedit.html#55bc61
 "QMultiLineEdit" qmultilineedit.html#5c50df
-"QMultiLineEdit" qmultilineedit.html#5d057c
 "QMultiLineEdit" qmultilineedit.html#5dc29b
 "QMultiLineEdit" qmultilineedit.html#62fa2d
 "QMultiLineEdit" qmultilineedit.html#636f4b
@@ -4610,7 +4597,6 @@
 "QProgressBar" qprogressbar.html#a727ff
 "QProgressBar" qprogressbar.html#b506d8
 "QProgressBar" qprogressbar.html#c2b9c6
-"QProgressBar" qprogressbar.html#f3a295
 "QProgressDialog" qprogressdialog.html
 "QProgressDialog" qprogressdialog.html#02bf59
 "QProgressDialog" qprogressdialog.html#08bd5a
@@ -4690,7 +4676,6 @@
 "QPushButton" qpushbutton.html#c6535e
 "QPushButton" qpushbutton.html#c683eb
 "QPushButton" qpushbutton.html#d91732
-"QPushButton" qpushbutton.html#df0c4a
 "QPushButton" qpushbutton.html#f0bb63
 "QPushButton::drawButton" qpushbutton.html#64b0ff
 "QPushButton::drawButtonLabel" qpushbutton.html#b2ee67
@@ -4711,12 +4696,10 @@
 "QRadioButton" qradiobutton.html
 "QRadioButton" qradiobutton.html#11e2e3
 "QRadioButton" qradiobutton.html#2b9c0b
-"QRadioButton" qradiobutton.html#36f2f6
 "QRadioButton" qradiobutton.html#39d5db
 "QRadioButton" qradiobutton.html#4ac954
 "QRadioButton" qradiobutton.html#5d4561
 "QRadioButton" qradiobutton.html#640abd
-"QRadioButton" qradiobutton.html#9f9275
 "QRadioButton" qradiobutton.html#d66964
 "QRadioButton" qradiobutton.html#f5abe7
 "QRadioButton" qradiobutton.html#fd80dc
@@ -4917,7 +4900,6 @@
 "QScrollBar" qscrollbar.html#cd5bf1
 "QScrollBar" qscrollbar.html#d5e576
 "QScrollBar" qscrollbar.html#d7fb27
-"QScrollBar" qscrollbar.html#d8b2e1
 "QScrollBar" qscrollbar.html#dd7e1a
 "QScrollBar" qscrollbar.html#ddf851
 "QScrollBar" qscrollbar.html#eeb021
@@ -4986,7 +4968,6 @@
 "QScrollView" qscrollview.html#aee5e9
 "QScrollView" qscrollview.html#b6c4fa
 "QScrollView" qscrollview.html#ba9dcd
-"QScrollView" qscrollview.html#bd5724
 "QScrollView" qscrollview.html#c44034
 "QScrollView" qscrollview.html#c67292
 "QScrollView" qscrollview.html#c8c152
@@ -5109,7 +5090,6 @@
 "QSize::isValid" qsize.html#fb07e1
 "QSizeGrip" qsizegrip.html
 "QSizeGrip" qsizegrip.html#29e6b1
-"QSizeGrip" qsizegrip.html#2c314a
 "QSizeGrip" qsizegrip.html#2dd58e
 "QSizeGrip" qsizegrip.html#586c00
 "QSizeGrip" qsizegrip.html#85f4af
@@ -5306,7 +5286,6 @@
 "QSpinBox" qspinbox.html#27ab6c
 "QSpinBox" qspinbox.html#2e7144
 "QSpinBox" qspinbox.html#2fcc30
-"QSpinBox" qspinbox.html#31af00
 "QSpinBox" qspinbox.html#38a1a4
 "QSpinBox" qspinbox.html#3b663d
 "QSpinBox" qspinbox.html#404d3b
@@ -5349,7 +5328,6 @@
 "QSplitter" qsplitter.html#094a88
 "QSplitter" qsplitter.html#1b5e9c
 "QSplitter" qsplitter.html#1d47ef
-"QSplitter" qsplitter.html#1e3476
 "QSplitter" qsplitter.html#1f04bb
 "QSplitter" qsplitter.html#38e391
 "QSplitter" qsplitter.html#3d6f4d
@@ -5648,7 +5626,6 @@
 "QTabBar" qtabbar.html#a5dc66
 "QTabBar" qtabbar.html#b2e7a4
 "QTabBar" qtabbar.html#bf17d7
-"QTabBar" qtabbar.html#c0939d
 "QTabBar" qtabbar.html#cab0cd
 "QTabBar" qtabbar.html#ceb97c
 "QTabBar" qtabbar.html#d02ba9
@@ -5719,7 +5696,6 @@
 "QTabWidget" qtabwidget.html#a6b09e
 "QTabWidget" qtabwidget.html#c49959
 "QTabWidget" qtabwidget.html#c7ec7d
-"QTabWidget" qtabwidget.html#e08477
 "QTabWidget" qtabwidget.html#e45251
 "QTabWidget" qtabwidget.html#edea45
 "QTabWidget" qtabwidget.html#f8372e
@@ -6118,24 +6094,15 @@
 "QToolBar" qtoolbar.html#258409
 "QToolBar" qtoolbar.html#340b00
 "QToolBar" qtoolbar.html#3fc1c2
-"QToolBar" qtoolbar.html#511ffc
-"QToolBar" qtoolbar.html#58c35e
 "QToolBar" qtoolbar.html#63c372
-"QToolBar" qtoolbar.html#680d2d
-"QToolBar" qtoolbar.html#6dbf4a
-"QToolBar" qtoolbar.html#724fed
 "QToolBar" qtoolbar.html#78e9e8
 "QToolBar" qtoolbar.html#802e64
 "QToolBar" qtoolbar.html#8a8db1
 "QToolBar" qtoolbar.html#9140ef
-"QToolBar" qtoolbar.html#ac1281
 "QToolBar" qtoolbar.html#b6e8ef
 "QToolBar" qtoolbar.html#cf1b0e
 "QToolBar" qtoolbar.html#e3e456
-"QToolBar" qtoolbar.html#e62255
-"QToolBar" qtoolbar.html#ea9db3
 "QToolBar" qtoolbar.html#ed3607
-"QToolBar" qtoolbar.html#ed4874
 "QToolBars" qtoolbar.html
 "QToolButton" qtoolbutton.html
 "QToolButton" qtoolbutton.html#014300
@@ -6152,7 +6119,6 @@
 "QToolButton" qtoolbutton.html#794904
 "QToolButton" qtoolbutton.html#7a665b
 "QToolButton" qtoolbutton.html#8d97d3
-"QToolButton" qtoolbutton.html#9072c7
 "QToolButton" qtoolbutton.html#95b947
 "QToolButton" qtoolbutton.html#976caa
 "QToolButton" qtoolbutton.html#9c919a
@@ -6534,15 +6500,6 @@
 "QWMatrix" qwmatrix.html#ed3070
 "QWMatrix::m22" qwmatrix.html#0171e3
 "QWMatrix::map" qwmatrix.html#38577f
-"QWSDecoration" qwsdecoration.html
-"QWSDecoration" qwsdecoration.html#229816
-"QWSDecoration" qwsdecoration.html#43e051
-"QWSDecoration" qwsdecoration.html#503f29
-"QWSDecoration" qwsdecoration.html#52725e
-"QWSDecoration" qwsdecoration.html#6212d1
-"QWSDecoration" qwsdecoration.html#d2e4f6
-"QWSDecoration" qwsdecoration.html#e3e1b0
-"QWSDecoration" qwsdecoration.html#f9a65e
 "QWaitCondition" qwaitcondition.html
 "QWaitCondition" qwaitcondition.html#4f13ff
 "QWaitCondition" qwaitcondition.html#7f241d
@@ -6614,7 +6571,6 @@
 "QWidget" qwidget.html#290bcd
 "QWidget" qwidget.html#298843
 "QWidget" qwidget.html#2bbb02
-"QWidget" qwidget.html#2d5d13
 "QWidget" qwidget.html#2e8476
 "QWidget" qwidget.html#2e958b
 "QWidget" qwidget.html#303f18
@@ -6851,8 +6807,6 @@
 "QWidget::show()" qwidget.html#ccc8f7
 "QWidget::size" qwidget.html#da2102
 "QWidget::sizeHint" qwidget.html#290bcd
-"QWidget::sizePolicy" qwidget.html#2d5d13
-"QWidget::sizePolicy()" qwidget.html#2d5d13
 "QWidget::style" qwidget.html#ea8b00
 "QWidget::update()" qwidget.html#4a97ef
 "QWidget::wheelEvent" qwidget.html#cd6485
@@ -6959,7 +6913,6 @@
 "QWizard" qwizard.html#f4c269
 "QWizard::showPage" qwizard.html#59c39e
 "QWorkspace" qworkspace.html
-"QWorkspace" qworkspace.html#02b4d2
 "QWorkspace" qworkspace.html#0e59d0
 "QWorkspace" qworkspace.html#1abb6e
 "QWorkspace" qworkspace.html#39140d
@@ -7170,7 +7123,6 @@
 "RasterOp" qt.html#RasterOp
 "Reason" qfocusevent.html#Reason
 "RecordType" qdns.html#RecordType
-"Region" qwsdecoration.html#Region
 "RegionType" qregion.html#RegionType
 "RestartHint" qsessionmanager.html#RestartHint
 "Roman Czyborra's page" http://czyborra.com/charsets/
@@ -7862,7 +7814,6 @@
 "close" qsocketdevice.html#767bf4
 "close" qwidget.html#8c97df
 "close" qwidget.html#930c34
-"close" qwsdecoration.html#43e051
 "closeAllWindows" qapplication.html#21300a
 "closeDoc" menu-menu-cpp.html#260
 "closeEvent" qdialog.html#3ed102
@@ -8286,7 +8237,6 @@
 "defaultFont" qfont.html#cf7e3b
 "defaultFormat" qglformat.html#b5c50e
 "defaultFrameWidth" qcdestyle.html#f8e819
-"defaultFrameWidth" qcommonstyle.html#93d4f1
 "defaultFrameWidth" qmotifplusstyle.html#aa0103
 "defaultFrameWidth" qsgistyle.html#94336a
 "defaultFrameWidth" qstyle.html#36cce5
@@ -8515,14 +8465,12 @@
 "drawCheckMark" qstyle.html#2a41fa
 "drawCheckMark" qwindowsstyle.html#839664
 "drawChord" qpainter.html#556bb9
-"drawComboButton" qcommonstyle.html#12020a
 "drawComboButton" qmotifplusstyle.html#08ee15
 "drawComboButton" qmotifstyle.html#54f493
 "drawComboButton" qplatinumstyle.html#2e207e
 "drawComboButton" qsgistyle.html#ea85da
 "drawComboButton" qstyle.html#a34836
 "drawComboButton" qwindowsstyle.html#5a9d21
-"drawComboButtonMask" qcommonstyle.html#1e7e35
 "drawComboButtonMask" qstyle.html#50f933
 "drawContents" qcanvasview.html#19a02e
 "drawContents" qframe.html#99e687
@@ -8642,7 +8590,6 @@
 "drawSliderGrooveMask" qcommonstyle.html#b4a2c2
 "drawSliderGrooveMask" qsgistyle.html#d62763
 "drawSliderGrooveMask" qstyle.html#2f142b
-"drawSliderMask" qcommonstyle.html#79ded9
 "drawSliderMask" qplatinumstyle.html#b85aaf
 "drawSliderMask" qsgistyle.html#81e8a5
 "drawSliderMask" qstyle.html#7bc927
@@ -8863,7 +8810,6 @@
 "eventFilter" qspinbox.html#e69a3c
 "eventFilter" qtable.html#73c113
 "eventFilter" qtabwidget.html#92e551
-"eventFilter" qtoolbar.html#680d2d
 "eventFilter" qwizard.html#0011bd
 "eventFilter" qworkspace.html#8fa936
 "events and event filters" eventsandfilters.html
@@ -9017,7 +8963,6 @@
 "flush" qsocket.html#0baaa3
 "flush" qsocketdevice.html#e4f33b
 "flushX" qapplication.html#000208
-"fnord" http://www.kbuxton.com/discordia/fnord.html
 "focus overview" focus.html
 "focusData" qwidget.html#0772f6
 "focusInEvent" qbutton.html#3d2f3d
@@ -9032,7 +8977,6 @@
 "focusInEvent" qmultilineedit.html#0fa015
 "focusInEvent" qpopupmenu.html#05afec
 "focusInEvent" qpushbutton.html#4596d7
-"focusInEvent" qradiobutton.html#9f9275
 "focusInEvent" qslider.html#b2007d
 "focusInEvent" qtabbar.html#783ed2
 "focusInEvent" qtable.html#19d1c1
@@ -9173,7 +9117,6 @@
 "get" qglist.html#2755d2
 "get" qglistiterator.html#a7b1ab
 "get" qurloperator.html#d566c8
-"getButtonShift" qcommonstyle.html#737715
 "getButtonShift" qmotifplusstyle.html#41f1e8
 "getButtonShift" qplatinumstyle.html#884696
 "getButtonShift" qstyle.html#8c0395
@@ -9758,7 +9701,6 @@
 "isGenerated" qiconset.html#5a1af1
 "isGrayscale" qimage.html#5d4436
 "isHidden" qwidget.html#06a23b
-"isHorizontalStretchable" qtoolbar.html#e62255
 "isInactive" qiodevice.html#c4dff8
 "isInfoPreviewEnabled" qfiledialog.html#8df610
 "isIp4Addr" qhostaddress.html#aff062
@@ -9884,7 +9826,6 @@
 "isValid" qtime.html#27a686
 "isValid" qurl.html#9ff3b5
 "isValid" qvariant.html#83b746
-"isVerticalStretchable" qtoolbar.html#ed4874
 "isVisible" qwidget.html#57d026
 "isVisibleTo" qwidget.html#455e08
 "isVisibleToTLW" qwidget.html#527c5e
@@ -10248,7 +10189,6 @@
 "maxWidth" qfontmetrics.html#d638e2
 "maxXOffset" qtableview.html#01203a
 "maxYOffset" qtableview.html#e3db94
-"maximize" qwsdecoration.html#e3e1b0
 "maximum left" qfontmetrics.html#e0dc16
 "maximumHeight" qwidget.html#595f2d
 "maximumSize" qboxlayout.html#508fb6
@@ -10258,7 +10198,6 @@
 "maximumSize" qspaceritem.html#b066d5
 "maximumSize" qwidget.html#b77871
 "maximumSize" qwidgetitem.html#2adfc3
-"maximumSliderDragDistance" qcommonstyle.html#86217a
 "maximumSliderDragDistance" qplatinumstyle.html#495ca3
 "maximumSliderDragDistance" qstyle.html#c9b46f
 "maximumSliderDragDistance" qwindowsstyle.html#3255b7
@@ -10276,7 +10215,6 @@
 "mdi/main.cpp" mdi-main-cpp.html#exec
 "member" qconnection.html#e6b736
 "memberName" qconnection.html#d2aec8
-"menu" qwsdecoration.html#52725e
 "menu/menu.cpp" menu-menu-cpp.html
 "menu/menu.cpp" menu-menu-cpp.html#QApplication
 "menu/menu.cpp" menu-menu-cpp.html#QFont
@@ -10348,7 +10286,6 @@
 "minValue" qspinbox.html#e37e26
 "minViewX" qtableview.html#9292cc
 "minViewY" qtableview.html#ab64b6
-"minimize" qwsdecoration.html#6212d1
 "minimumDuration" qprogressdialog.html#02bf59
 "minimumHeight" qwidget.html#b9664d
 "minimumSize" qboxlayout.html#1a1e69
@@ -10985,8 +10922,6 @@
 "orientation" qscrollbar.html#b0dd5f
 "orientation" qslider.html#a8339f
 "orientation" qsplitter.html#3d6f4d
-"orientation" qtoolbar.html#724fed
-"orientationChanged" qtoolbar.html#58c35e
 "outputFileName" qprinter.html#6adca8
 "outputFormatList" qimage.html#f4b216
 "outputFormats" qimage.html#643787
@@ -11023,11 +10958,8 @@
 "paint" qlistboxtext.html#585b41
 "paint" qtabbar.html#1c944e
 "paint" qtableitem.html#769073
-"paint" qwsdecoration.html#503f29
 "paintBar" grapher-grapher-cpp.html#104
-"paintBranches" qchecklistitem.html#6eae19
 "paintBranches" qlistviewitem.html#15e007
-"paintButton" qwsdecoration.html#229816
 "paintCell" qchecklistitem.html#95e769
 "paintCell" qlistbox.html#b1a022
 "paintCell" qlistviewitem.html#271528
@@ -11054,7 +10986,6 @@
 "paintEvent" qtabbar.html#e41cbe
 "paintEvent" qtabdialog.html#39dc6f
 "paintEvent" qtableview.html#8264a6
-"paintEvent" qtoolbar.html#ea9db3
 "paintEvent" qwidget.html#ef2069
 "paintFocus" qchecklistitem.html#a470cd
 "paintFocus" qiconviewitem.html#7f8a5c
@@ -11690,7 +11621,6 @@
 "refresh" qfileinfo.html#0d5021
 "refresh" qsplitter.html#04572b
 "region" qpaintevent.html#41a489
-"region" qwsdecoration.html#f9a65e
 "registerDecoderFactory" qimagedecoder.html#be4913
 "registerNetworkProtocol" qnetworkprotocol.html#165cea
 "reject" qdialog.html#5185f6
@@ -11870,7 +11800,6 @@
 "resizeEvent" qlineedit.html#0ea538
 "resizeEvent" qlistbox.html#561759
 "resizeEvent" qlistview.html#593f39
-"resizeEvent" qmainwindow.html#c1fe7b
 "resizeEvent" qmenubar.html#056999
 "resizeEvent" qmessagebox.html#304e1d
 "resizeEvent" qmultilineedit.html#439834
@@ -11889,7 +11818,6 @@
 "resizeEvent" qtableview.html#4c6d85
 "resizeEvent" qtabwidget.html#74c190
 "resizeEvent" qtextview.html#df023b
-"resizeEvent" qtoolbar.html#ac1281
 "resizeEvent" qwidget.html#28c156
 "resizeEvent" qwidgetstack.html#d77a56
 "resizeEvent" qworkspace.html#e59651
@@ -12474,7 +12402,6 @@
 "setHelpEnabled" qwizard.html#90375c
 "setHexMode" qlcdnumber.html#5105c4
 "setHorData" qsizepolicy.html#b5673f
-"setHorizontalStretchable" qtoolbar.html#511ffc
 "setHost" qurl.html#46b05d
 "setHsv" qcolor.html#ad075d
 "setIODevice" qimageio.html#94f05a
@@ -12969,7 +12896,6 @@
 "setVelocity" qcanvasitem.html#86a6b9
 "setVerData" qsizepolicy.html#63a58d
 "setVersion" qdatastream.html#c617c2
-"setVerticalStretchable" qtoolbar.html#6dbf4a
 "setViewMode" qfiledialog.html#b9f368
 "setViewXForm" qpainter.html#758881
 "setViewport" qpainter.html#e86cf5
@@ -13179,30 +13105,8 @@
 "sizeIncrement" qwidget.html#a0cf7d
 "sizeLimit" qcombobox.html#807b9d
 "sizeListBox" qfontdialog.html#784fca
-"sizePolicy" qcheckbox.html#dfd0ed
-"sizePolicy" qcombobox.html#dbdb6d
-"sizePolicy" qframe.html#43e488
-"sizePolicy" qheader.html#9df67b
-"sizePolicy" qiconview.html#a4c733
-"sizePolicy" qlabel.html#26e1d9
-"sizePolicy" qlcdnumber.html#d03a31
-"sizePolicy" qlineedit.html#b78cb1
-"sizePolicy" qmultilineedit.html#5d057c
-"sizePolicy" qprogressbar.html#f3a295
-"sizePolicy" qpushbutton.html#df0c4a
-"sizePolicy" qradiobutton.html#36f2f6
-"sizePolicy" qscrollbar.html#d8b2e1
-"sizePolicy" qscrollview.html#bd5724
-"sizePolicy" qsizegrip.html#2c314a
 "sizePolicy" qslider.html#f103e0
-"sizePolicy" qspinbox.html#31af00
-"sizePolicy" qsplitter.html#1e3476
-"sizePolicy" qtabbar.html#c0939d
-"sizePolicy" qtabwidget.html#e08477
-"sizePolicy" qtoolbutton.html#9072c7
 "sizePolicy" qwidget.html#2d5d13
-"sizePolicy" qworkspace.html#02b4d2
-"sizePolicy()" qwidget.html#2d5d13
 "sizes" qsplitter.html#b7d996
 "sizing types" qsizepolicy.html#SizeType
 "skipWhiteSpace" qtextstream.html#5aa663
@@ -13567,7 +13471,6 @@
 "tilesVertically" qcanvas.html#13d2eb
 "time" qdatetime.html#66067f
 "timeout" qtimer.html#443214
-"timerEvent" qmultilineedit.html#0cf52b
 "timerEvent" qobject.html#cc83af
 "timerEvent" qpopupmenu.html#3ff1d5
 "timerId" qtimerevent.html#64f46c
@@ -14340,7 +14243,6 @@
 "~QValueStack" qvaluestack.html#97caf6
 "~QVariant" qvariant.html#309b48
 "~QVector" qvector.html#223613
-"~QWSDecoration" qwsdecoration.html#61df80
 "~QWaitCondition" qwaitcondition.html#c465fc
 "~QWhatsThis" qwhatsthis.html#be24ee
 "~QWidget" qwidget.html#fd072b

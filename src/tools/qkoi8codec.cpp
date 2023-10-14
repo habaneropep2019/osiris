@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qkoi8codec.cpp   2.2.2   edited 2000-08-25 $
+** $Id: qt/src/tools/qkoi8codec.cpp   2.2.3   edited 2000-08-25 $
 **
 ** Implementation of QKoi8Codec class
 **

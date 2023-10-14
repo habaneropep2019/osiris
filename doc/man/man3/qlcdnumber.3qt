@@ -1,4 +1,4 @@
-.TH QLCDNumber 3qt "8 November 2000" "Trolltech AS" \" -*- nroff -*-
+.TH QLCDNumber 3qt "12 December 2000" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -63,6 +63,9 @@ Inherits QFrame.
 .br
 .ti -1c
 .BI "int \fBintValue\fR () const"
+.br
+.ti -1c
+.BI "QSizePolicy \fBsizePolicy\fR () const"
 .br
 .in -1c
 .SS "Public Slots"
@@ -266,10 +269,6 @@ The inter-digit space is made slightly wider when the decimal point is drawn bet
 .PP
 See also smallDecimalPoint() and setMode().
 .SH "QSize QLCDNumber::sizeHint () const \fC[virtual]\fR"
-Reimplemented for internal reasons; the API is not affected.
-.PP
-Reimplemented from QWidget.
-.SH "QSizePolicy QLCDNumber::sizePolicy () const \fC[virtual]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .PP
 Reimplemented from QWidget.

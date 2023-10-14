@@ -32,6 +32,11 @@ public:
 		const char *name = 0, uint wflags = 0 );
     ~QVFbView();
 
+    int displayId() const;
+    int displayWidth() const;
+    int displayHeight() const;
+    int displayDepth() const;
+
     int rate() { return refreshRate; }
     bool animating() const { return !!animation; }
 
@@ -49,6 +54,7 @@ protected:
     void initLock();
     void lock();
     void unlock();
+    QImage getBuffer( const QRect &r, int &leading );
     void drawScreen();
     void sendMouseData( const QPoint &pos, int buttons );
     void sendKeyboardData( int unicode, int keycode, int modifiers,
@@ -75,7 +81,7 @@ private:
     QString mousePipe;
     QString keyboardPipe;
     QAnimationWriter *animation;
-    int displayId;
+    int displayid;
     double zoom;
 };
 

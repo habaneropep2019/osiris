@@ -7,8 +7,8 @@
 #endif
 #define QT_NO_PALETTE
 #define QT_NO_ACTION
-#ifndef QT_NO_CODECS
-#define QT_NO_CODECS
+#ifndef QT_NO_CODECS // moc?
+#define QT_NO_TEXTCODEC
 #endif
 #define QT_NO_UNICODETABLES
 #define QT_NO_IMAGEIO_BMP
@@ -26,7 +26,6 @@
 #define QT_NO_SOUND
 #define QT_NO_PROPERTIES
 #define QT_NO_QWS_CURSOR
-#define QT_NO_QWS_VFB
 #define QT_NO_QWS_GFX_SPEED
 #define QT_NO_NETWORK
 #define QT_NO_COLORNAMES
@@ -45,7 +44,6 @@
 #define QT_NO_QWS_SAVEFONTS
 #define QT_NO_STRINGLIST
 #define QT_NO_SESSIONMANAGER
-#define QT_NO_TEXTCODEC
 #define QT_NO_QWS_KEYBOARD
 
 #define QT_NO_DIALOG

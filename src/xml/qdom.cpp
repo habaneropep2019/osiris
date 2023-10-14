@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/xml/qdom.cpp   2.2.2   edited 2000-10-16 $
+** $Id: qt/src/xml/qdom.cpp   2.2.3   edited 2000-12-12 $
 **
 ** Implementation of QDomDocument and related classes.
 **
@@ -112,6 +112,13 @@ public:
     bool endCDATA();
     bool startDTD( const QString& name, const QString&, const QString& );
     bool comment( const QString& ch );
+
+    // decl handler
+    bool externalEntityDecl( const QString &name, const QString &publicId, const QString &systemId ) ;
+
+    // DTD handler
+    bool notationDecl( const QString & name, const QString & publicId, const QString & systemId );
+    bool unparsedEntityDecl( const QString &name, const QString &publicId, const QString &systemId, const QString &notationName ) ;
 
 private:
     QXmlLocator* loc;
@@ -2922,10 +2929,10 @@ void QDOM_AttrPrivate::save( QTextStream& s, int ) const
 
   \code
   QDomElement e = ....;
-  QDomAttribute a = e.attributeNode( "href" );
+  QDomAttr a = e.attributeNode( "href" );
   cout << a.value() << endl // gives "http://www.trolltech.com"
   a.setValue( "http://doc.trolltech.com" );
-  QDomAttribute a2 = e.attributeNode( "href" );
+  QDomAttr a2 = e.attributeNode( "href" );
   cout << a2.value() << endl // gives "http://doc.trolltech.com"
   \endcode
 
@@ -4065,11 +4072,11 @@ void QDOM_NotationPrivate::save( QTextStream& s, int ) const
 {
     s << "<!NOTATION " << name << " ";
     if ( !m_pub.isEmpty() )  {
-	s << "PUBLIC " << m_pub;
+	s << "PUBLIC \"" << m_pub << "\"";
 	if ( !m_sys.isEmpty() )
-	    s << " " << m_sys;
+	    s << " \"" << m_sys << "\"";
     }  else {
-	s << "SYSTEM " << m_sys;
+	s << "SYSTEM \"" << m_sys << "\"";
     }
     s << ">";
 }
@@ -4291,9 +4298,11 @@ void QDOM_EntityPrivate::save( QTextStream& s, int ) const
     } else {
 	s << "<!ENTITY " << name << " ";
 	if ( m_pub.isEmpty() )
-	    s << "SYSTEM " << m_sys;
+	    s << "SYSTEM \"" << m_sys << "\"";
 	else
-	    s << "PUBLIC " << m_pub << " " << m_sys;
+	    s << "PUBLIC \"" << m_pub << "\" \"" << m_sys << "\"";
+	if ( !m_notationName.isEmpty() )
+	    s << "NDATA" << m_notationName;
 	s << ">";
     }
 }
@@ -4879,6 +4888,8 @@ bool QDOM_DocumentPrivate::setContent( QXmlInputSource& source )
     reader.setContentHandler( &hnd );
     reader.setErrorHandler( &hnd );
     reader.setLexicalHandler( &hnd );
+    reader.setDeclHandler( &hnd );
+    reader.setDTDHandler( &hnd );
 #if defined(Q_BROKEN_ALPHA) // #### very ugly hack, ws should really be able to get rid of that
     reader.setFeature( "http://xml.org/sax/features/namespaces", TRUE );
 #else
@@ -5609,7 +5620,36 @@ bool QDomHandler::comment( const QString& ch )
     return TRUE;
 }
 
+bool QDomHandler::unparsedEntityDecl( const QString &name, const QString &publicId, const QString &systemId, const QString &notationName )
+{
+    QDOM_EntityPrivate* e = new QDOM_EntityPrivate( doc, 0, name,
+	    publicId, systemId, notationName );
+    doc->doctype()->appendChild( e );
+    return TRUE;
+}
+
+bool QDomHandler::externalEntityDecl( const QString &name, const QString &publicId, const QString &systemId )
+{
+    return unparsedEntityDecl( name, publicId, systemId, QString::null );
+}
+
+bool QDomHandler::notationDecl( const QString & name, const QString & publicId, const QString & systemId )
+{
+    QDOM_NotationPrivate* n = new QDOM_NotationPrivate( doc, 0, name, publicId, systemId );
+    doc->doctype()->appendChild( n );
+    return TRUE;
+}
+
 #if 0
+bool QDomConsumer::entity( const QString& name, const QString& value )
+{
+    QDOM_EntityPrivate* e = new QDOM_EntityPrivate( doc, 0, name, QString::null, QString::null, QString::null );
+    e->value = value;
+    doc->doctype()->appendChild( e );
+
+    return TRUE;
+}
+
 bool QDomConsumer::entityRef( const QString& name )
 {
     if ( node == doc )
@@ -5629,29 +5669,6 @@ bool QDomConsumer::entityRef( const QString& name )
 
     return TRUE;
 }
-
-bool QDomConsumer::entity( const QString& name, const QString& publicId, const QString& systemId, const QString& ndata )
-{
-    QDOM_EntityPrivate* e = new QDOM_EntityPrivate( doc, 0, name, publicId, systemId, ndata );
-    doc->doctype()->appendChild( e );
-    return TRUE;
-}
-
-bool QDomConsumer::entity( const QString& name, const QString& value )
-{
-    QDOM_EntityPrivate* e = new QDOM_EntityPrivate( doc, 0, name, QString::null, QString::null, QString::null );
-    e->value = value;
-    doc->doctype()->appendChild( e );
-
-    return TRUE;
-}
-
-bool QDomConsumer::notation( const QString& name, const QString& publicId, const QString& systemId )
-{
-    QDOM_NotationPrivate* n = new QDOM_NotationPrivate( doc, 0, name, publicId, systemId );
-    doc->doctype()->appendChild( n );
-    return TRUE;
-}
-
 #endif
+
 #endif //QT_NO_DOM

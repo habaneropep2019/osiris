@@ -25,26 +25,20 @@ TARGET1 = lib$(TARGET).so.$(VER_MAJ)
 
 HEADERS =	../../../include/qdom.h \
 		../../../include/qxml.h \
-		qprocess.h \
-		../../../include/qiconview.h
+		qprocess.h
 SOURCES =	../../../src/xml/qdom.cpp \
 		../../../src/xml/qxml.cpp \
 		qprocess.cpp \
-		../../../src/iconview/qiconview.cpp \
 		qprocess_unix.cpp
 OBJECTS =	../../../src/xml/qdom.o \
 		../../../src/xml/qxml.o \
 		qprocess.o \
-		../../../src/iconview/qiconview.o \
 		qprocess_unix.o
 INTERFACES =    
 UICDECLS =      
 UICIMPLS =      
-SRCMOC	=	moc_qprocess.cpp \
-		../../../include/moc_qiconview.cpp \
-		../../../src/iconview/qiconview.moc
-OBJMOC	=	moc_qprocess.o \
-		../../../include/moc_qiconview.o
+SRCMOC	=	moc_qprocess.cpp
+OBJMOC	=	moc_qprocess.o
 
 
 ####### Implicit rules
@@ -82,7 +76,7 @@ tmake:
 clean:
 	-rm -f $(OBJECTS) $(OBJMOC) $(SRCMOC) $(UICIMPLS) $(UICDECLS)
 	-rm -f *~ core
-	-rm -f tmp/qt.cpp
+	-rm -f allmoc.cpp
 
 ####### Extension Modules
 
@@ -120,84 +114,13 @@ REQUIRES=
 qprocess.o: qprocess.cpp \
 		qprocess.h
 
-../../../src/iconview/qiconview.o: ../../../src/iconview/qiconview.cpp \
-		../../../src/iconview/qiconview.moc \
-		../../../src/iconview/qiconview.h
-
 qprocess_unix.o: qprocess_unix.cpp \
 		qprocess.h
 
 moc_qprocess.o: moc_qprocess.cpp \
 		qprocess.h
 
-../../../include/moc_qiconview.o: ../../../include/moc_qiconview.cpp \
-		../../../include/qiconview.h \
-		../../../include/qscrollview.h \
-		../../../include/qframe.h \
-		../../../include/qwidget.h \
-		../../../include/qwindowdefs.h \
-		../../../include/qobjectdefs.h \
-		../../../include/qglobal.h \
-		../../../include/qfeatures.h \
-		../../../include/qconfig-qpe.h \
-		../../../include/qconfig-minimal.h \
-		../../../include/qconfig-small.h \
-		../../../include/qconfig-medium.h \
-		../../../include/qconfig-large.h \
-		../../../include/qconfig.h \
-		../../../include/qstring.h \
-		../../../include/qcstring.h \
-		../../../include/qarray.h \
-		../../../include/qgarray.h \
-		../../../include/qshared.h \
-		../../../include/qnamespace.h \
-		../../../include/qobject.h \
-		../../../include/qevent.h \
-		../../../include/qregion.h \
-		../../../include/qrect.h \
-		../../../include/qsize.h \
-		../../../include/qpoint.h \
-		../../../include/qmime.h \
-		../../../include/qlist.h \
-		../../../include/qglist.h \
-		../../../include/qcollection.h \
-		../../../include/qstringlist.h \
-		../../../include/qvaluelist.h \
-		../../../include/qdatastream.h \
-		../../../include/qiodevice.h \
-		../../../include/qregexp.h \
-		../../../include/qpaintdevice.h \
-		../../../include/qpalette.h \
-		../../../include/qcolor.h \
-		../../../include/qbrush.h \
-		../../../include/qcursor.h \
-		../../../include/qfont.h \
-		../../../include/qfontmetrics.h \
-		../../../include/qfontinfo.h \
-		../../../include/qstyle.h \
-		../../../include/qsizepolicy.h \
-		../../../include/qscrollbar.h \
-		../../../include/qrangecontrol.h \
-		../../../include/qdrawutil.h \
-		../../../include/qpainter.h \
-		../../../include/qpen.h \
-		../../../include/qpointarray.h \
-		../../../include/qwmatrix.h \
-		../../../include/qiconset.h \
-		../../../include/qpixmap.h \
-		../../../include/qdragobject.h \
-		../../../include/qimage.h \
-		../../../include/qstrlist.h \
-		../../../include/qbitmap.h \
-		../../../include/qmodules.h
-
 moc_qprocess.cpp: qprocess.h
 	$(MOC) qprocess.h -o moc_qprocess.cpp
-
-../../../include/moc_qiconview.cpp: ../../../include/qiconview.h
-	$(MOC) ../../../include/qiconview.h -o ../../../include/moc_qiconview.cpp
-
-../../../src/iconview/qiconview.moc: ../../../src/iconview/qiconview.cpp
-	$(MOC) ../../../src/iconview/qiconview.cpp -o ../../../src/iconview/qiconview.moc
 
 

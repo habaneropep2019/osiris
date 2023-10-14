@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/moc/moc.y   2.2.2   edited 2000-10-12 $
+** $Id: qt/src/moc/moc.y   2.2.3   edited 2000-12-11 $
 **
 ** Parser and code generator for meta object compiler
 **
@@ -1884,6 +1884,14 @@ QCString qualifiedSuperclassName()
     }
 }
 
+QCString unQualifiedSuperclassName()
+{
+    int i = superclassName.findRev( "::" );
+    if ( i < 0 )
+	return superclassName;
+    return superclassName.right( superclassName.length() - i - 2 );
+}
+
 const int Slot_Num   = 1;
 const int Signal_Num = 2;
 const int Prop_Num = 3;
@@ -1904,8 +1912,12 @@ void generateFuncs( FuncList *list, char *functype, int num )
 	    }
 	    a = f->args->next();
 	}
-	fprintf( out, "    typedef %s(%s::*m%d_t%d)(%s)%s;\n",
+	fprintf( out, "    typedef %s (%s::*m%d_t%d)(%s)%s;\n",
 		 (const char*)f->type, (const char*)qualifiedClassName(),
+		 num, list->at(),
+		 (const char*)typstr,  (const char*)f->qualifier );
+	fprintf( out, "    typedef %s (QObject::*om%d_t%d)(%s)%s;\n",
+		 (const char*)f->type,
 		 num, list->at(),
 		 (const char*)typstr,  (const char*)f->qualifier );
 	f->type = f->name;
@@ -1913,14 +1925,17 @@ void generateFuncs( FuncList *list, char *functype, int num )
 	f->type += typstr;
 	f->type += ")";
     }
-    for ( f=list->first(); f; f=list->next() )
-	fprintf( out, "    m%d_t%d v%d_%d = Q_AMPERSAND %s::%s;\n",
+    for ( f=list->first(); f; f=list->next() ) {
+	fprintf( out, "    m%d_t%d v%d_%d = &%s::%s;\n",
 		 num, list->at(), num, list->at(),
 		 (const char*)qualifiedClassName(), (const char*)f->name);
+	fprintf( out, "    om%d_t%d ov%d_%d = (om%d_t%d)v%d_%d;\n",
+		 num, list->at(), num, list->at(),
+		 num, list->at(), num, list->at());
+    }
     if ( list->count() ) {
 	fprintf(out,"    QMetaData *%s_tbl = QMetaObject::new_metadata(%d);\n",
 		functype, list->count() );
-
     }
 
     //### remove 3.0
@@ -1937,7 +1952,7 @@ void generateFuncs( FuncList *list, char *functype, int num )
     for ( f=list->first(); f; f=list->next() ) {
 	fprintf( out, "    %s_tbl[%d].name = \"%s\";\n",
 		 functype, list->at(), (const char*)f->type );
-	fprintf( out, "    %s_tbl[%d].ptr = (QMember)v%d_%d;\n",
+	fprintf( out, "    %s_tbl[%d].ptr = (QMember)ov%d_%d;\n",
 		 functype, list->at(), num, list->at() );
 
 /* ### do this in 3.0:
@@ -1968,9 +1983,11 @@ void generateTypedef( Function* f, int num )
     a = f->args->next();
   }
 
-
-  fprintf( out, "    typedef %s(%s::*m%d_t%d)(%s)%s;\n",
+  fprintf( out, "    typedef %s (%s::*m%d_t%d)(%s)%s;\n",
 	   (const char*)f->type, (const char*)className, Prop_Num, num,
+	   (const char*)typstr,  (const char*)f->qualifier );
+  fprintf( out, "    typedef %s (QObject::*om%d_t%d)(%s)%s;\n",
+	   (const char*)f->type, Prop_Num, num,
 	   (const char*)typstr,  (const char*)f->qualifier );
 }
 
@@ -2023,9 +2040,9 @@ int generateEnums()
     int i = 0;
     for ( QListIterator<Enum> it( enums ); it.current(); ++it, ++i ) {
 	fprintf( out, "    enum_tbl[%i].name = \"%s\";\n", i, (const char*)it.current()->name );
-	fprintf( out, "    enum_tbl[%i].count = %i;\n", i, (const char*)it.current()->count() );
-	fprintf( out, "    enum_tbl[%i].items = QMetaObject::new_metaenum_item( %i );\n",
-		 i,(const char*)it.current()->count() );
+	fprintf( out, "    enum_tbl[%i].count = %u;\n", i, it.current()->count() );
+	fprintf( out, "    enum_tbl[%i].items = QMetaObject::new_metaenum_item( %u );\n",
+		 i, it.current()->count() );
 
 	if ( it.current()->set )
 		fprintf( out, "    enum_tbl[%i].set = TRUE;\n", i );
@@ -2390,30 +2407,43 @@ int generateProps()
 	for( QListIterator<Property> it( props ); it.current(); ++it ) {
 	    if ( it.current()->getfunc )
 		generateTypedef( it.current()->getfunc, count );
+	    ++count;
 	    if ( it.current()->setfunc )
-		generateTypedef( it.current()->setfunc, count + 1 );
+		generateTypedef( it.current()->setfunc, count );
+	    ++count;
 	    if ( it.current()->resetfunc )
-		generateTypedef( it.current()->resetfunc, count + 2 );
-	    count += 3;
+		generateTypedef( it.current()->resetfunc, count );
+	    ++count;
 	}
     }
 
-    //
-    // Crazy stuff for crazy compilers
-    //
     {
 	int count = 0;
 	for( QListIterator<Property> it( props ); it.current(); ++it ) {
-	    if ( it.current()->getfunc )
-		fprintf( out, "    m%d_t%d v%d_%d = &%s::%s;\n", Prop_Num, count,
-			 Prop_Num, count, (const char*)className,(const char*)it.current()->getfunc->name);
-	    if ( it.current()->setfunc )
-		fprintf( out, "    m%d_t%d v%d_%d = &%s::%s;\n", Prop_Num, count + 1,
-			 Prop_Num, count + 1, (const char*)className,(const char*)it.current()->setfunc->name);
-	    if ( it.current()->resetfunc )
-		fprintf( out, "    m%d_t%d v%d_%d = &%s::%s;\n", Prop_Num, count + 2,
-			 Prop_Num, count + 2, (const char*)className,(const char*)it.current()->resetfunc->name);
-	    count += 3;
+	    if ( it.current()->getfunc ) {
+		fprintf( out, "    m%d_t%d v%d_%d = &%s::%s;\n",
+			 Prop_Num, count, Prop_Num, count,
+			 (const char*)className, (const char*)it.current()->getfunc->name );
+		fprintf( out, "    om%d_t%d ov%d_%d = (om%d_t%d)v%d_%d;\n",
+			 Prop_Num, count, Prop_Num, count, Prop_Num, count, Prop_Num, count );
+	    }
+	    ++count;
+	    if ( it.current()->setfunc ) {
+		fprintf( out, "    m%d_t%d v%d_%d = &%s::%s;\n",
+			 Prop_Num, count, Prop_Num, count,
+			 (const char*)className, (const char*)it.current()->setfunc->name );
+		fprintf( out, "    om%d_t%d ov%d_%d = (om%d_t%d)v%d_%d;\n",
+			 Prop_Num, count, Prop_Num, count, Prop_Num, count, Prop_Num, count );
+	    }
+	    ++count;
+	    if ( it.current()->resetfunc ) {
+		fprintf( out, "    m%d_t%d v%d_%d = &%s::%s;\n",
+			 Prop_Num, count, Prop_Num, count,
+			 (const char*)className, (const char*)it.current()->resetfunc->name );
+		fprintf( out, "    om%d_t%d ov%d_%d = (om%d_t%d)v%d_%d;\n",
+			 Prop_Num, count, Prop_Num, count, Prop_Num, count, Prop_Num, count );
+	    }
+	    ++count;
 	}
     }
 
@@ -2433,19 +2463,19 @@ int generateProps()
 		     entry, (const char*) it.current()->name );
 
 	    if ( it.current()->getfunc )
-		fprintf( out, "    props_tbl[%d].get = (QMember)v%d_%d;\n",
+		fprintf( out, "    props_tbl[%d].get = (QMember)ov%d_%d;\n",
 			 entry, Prop_Num, count );
 	    else
 		fprintf( out, "    props_tbl[%d].get = 0;\n", entry );
 
 	    if ( it.current()->setfunc )
-		fprintf( out, "    props_tbl[%d].set = (QMember)v%d_%d;\n",
+		fprintf( out, "    props_tbl[%d].set = (QMember)ov%d_%d;\n",
 			 entry, Prop_Num, count + 1 );
 	    else
 		fprintf( out, "    props_tbl[%d].set = 0;\n", entry );
 
 	    if ( it.current()->resetfunc )
-		fprintf( out, "    props_tbl[%d].reset = (QMember)v%d_%d;\n",
+		fprintf( out, "    props_tbl[%d].reset = (QMember)ov%d_%d;\n",
 			 entry, Prop_Num, count + 2 );
 	    else
 		fprintf( out, "    props_tbl[%d].reset = 0;\n", entry );
@@ -2483,10 +2513,12 @@ int generateProps()
 		flags +="QMetaProperty::NotStored|";
 	    else if ( !it.current()->stored.isEmpty() && it.current()->stored != "true" )
 	    {
-		fprintf( out, "    typedef bool(%s::*s3_t%d)()const;\n", (const char*)className, count );
+		fprintf( out, "    typedef bool (%s::*s3_t%d)()const;\n", (const char*)className, count );
+		fprintf( out, "    typedef bool (QObject::*os3_t%d)()const;\n", count );
 		fprintf( out, "    s3_t%d sv3_%d = &%s::%s;\n", count, count, (const char*)className,
 			 (const char*)it.current()->stored );
-		fprintf( out, "    props_tbl[%d].store = *((QMember*)&sv3_%d);\n", entry, count );
+		fprintf( out, "    os3_t%d osv3_%d = (os3_t%d)sv3_%d;\n", count, count, count, count );
+		fprintf( out, "    props_tbl[%d].store = (QMember)osv3_%d;\n", entry, count );
 	    }
 	    // else { Default is TRUE -> do nothing }
 
@@ -2548,7 +2580,7 @@ void generateClass()		      // generate C++ source code for a class
     char *hdr1 = "/****************************************************************************\n"
 		 "** %s meta object code from reading C++ file '%s'\n**\n";
     char *hdr2 = "** Created: %s\n"
-		 "**      by: The Qt MOC ($Id: qt/src/moc/moc.y   2.2.2   edited 2000-10-12 $)\n**\n";
+		 "**      by: The Qt MOC ($Id: qt/src/moc/moc.y   2.2.3   edited 2000-12-11 $)\n**\n";
     char *hdr3 = "** WARNING! All changes made in this file will be lost!\n";
     char *hdr4 = "*****************************************************************************/\n\n";
     int   i;
@@ -2600,11 +2632,6 @@ void generateClass()		      // generate C++ source code for a class
 	fprintf( out, "#include <%sqmetaobject.h>\n", (const char*)qtPath );
 	fprintf( out, "#include <%sqapplication.h>\n", (const char*)qtPath );
 	fprintf( out, "\n" );
-	fprintf( out, "#if defined(Q_SPARCWORKS_FUNCP_BUG)\n" );
-	fprintf( out, "#define Q_AMPERSAND\n" );
-	fprintf( out, "#else\n" );
-	fprintf( out, "#define Q_AMPERSAND &\n" );
-	fprintf( out, "#endif\n" );
 	fprintf( out, "\n\n" );
     } else {
 	fprintf( out, "\n\n" );
@@ -2630,7 +2657,7 @@ void generateClass()		      // generate C++ source code for a class
     fprintf( out, "    if ( metaObj )\n\treturn;\n" );
     fprintf( out, "    if ( qstrcmp(%s::className(), \"%s\") != 0 )\n"
 	          "\tbadSuperclassWarning(\"%s\",\"%s\");\n",
-             (const char*)superclassName, (const char*)qualifiedSuperclassName(),
+             (const char*)unQualifiedSuperclassName(), (const char*)qualifiedSuperclassName(),
              (const char*)qualifiedClassName(), (const char*)qualifiedSuperclassName() );
     fprintf( out, "    (void) staticMetaObject();\n");
     fprintf( out, "}\n\n");
@@ -2845,23 +2872,15 @@ void generateClass()		      // generate C++ source code for a class
 	    fprintf( out, "\tswitch ( c->numArgs() ) {\n" );
 	    for ( i=0; i<=nargs; i++ ) {
 		fprintf( out, "\t    case %d:\n", i );
-		fprintf( out, "#ifdef Q_FP_CCAST_BROKEN\n" );
-		fprintf( out, "\t\tr%d = reinterpret_cast<RT%d>(*(c->member()));\n", i, i );
-		fprintf( out, "#else\n" );
 		fprintf( out, "\t\tr%d = (RT%d)*(c->member());\n", i, i );
-		fprintf( out, "#endif\n" );
 		fprintf( out, "\t\t(object->*r%d)(%s);\n",
 			 i, (const char*)valvec[i] );
 		fprintf( out, "\t\tbreak;\n" );
 	    }
 	    fprintf( out, "\t}\n" );
 	} else {
-	    fprintf( out, "#ifdef Q_FP_CCAST_BROKEN\n" );
-	    fprintf( out, "\tr = reinterpret_cast<RT>(*(c->member()));\n" );
-	    fprintf( out, "#else\n" );
 	    fprintf( out, "\tr = (RT)*(c->member());\n" );
 	    fprintf( out, "\t(object->*r)(%s);\n", (const char*)valstr );
-	    fprintf( out, "#endif\n" );
 	}
 	fprintf( out, "    }\n}\n" );
 	f = signals.next();
@@ -2961,6 +2980,3 @@ void checkIdentifier( const char* ident )
 	++p;
     }
 }
-
-
-

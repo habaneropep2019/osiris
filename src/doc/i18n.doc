@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/doc/i18n.doc   2.2.2   edited 2000-09-17 $
+** $Id: qt/doc/i18n.doc   2.2.3   edited 2000-12-08 $
 **
 ** Explanation of moc and the meta object system
 **
@@ -157,6 +157,13 @@ the following stages:
 	\endcode
 	</p>
  <li><b>Produce translation.</b>
+
+	The following requires the Qt Linguist and it's tools.
+	<tt>lupdate</tt> and <tt>lrelease</tt> are parts of this
+	package.
+	A prerelease version of the Linguist is available from
+	<a href="http://www.trolltech.com/company/announce/linguistpre.html">
+  	http://www.trolltech.com/company/announce/linguistpre.html</a>.
 
 	Once you are using tr() sufficiently, you can start producing
 	translations of the user-visible text in your program.

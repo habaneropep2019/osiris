@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/forever/forever.cpp   2.2.2   edited 2000-11-07 $
+** $Id: qt/examples/forever/forever.cpp   2.2.3   edited 2000-11-07 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **

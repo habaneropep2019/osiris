@@ -48,6 +48,7 @@ Inherits <a href="qframe.html">QFrame</a> and <a href="qrangecontrol.html">QRang
 <li><div class="fn">ButtonSymbols <a href="#c78106"><b>buttonSymbols</b></a> () const</div>
 <li><div class="fn">virtual void <a href="#cdf588"><b>setValidator</b></a> ( const QValidator * v ) </div>
 <li><div class="fn">const QValidator* <a href="#27ab6c"><b>validator</b></a> () const</div>
+<li><div class="fn">QSizePolicy <b>sizePolicy</b> () const</div>
 <li><div class="fn">void <a href="#f997f9"><b>setMinValue</b></a> ( int ) </div>
 <li><div class="fn">void <a href="#a799b5"><b>setMaxValue</b></a> ( int ) </div>
 <li><div class="fn">void <a href="#bf132b"><b>setLineStep</b></a> ( int ) </div>
@@ -93,8 +94,8 @@ Inherits <a href="qframe.html">QFrame</a> and <a href="qrangecontrol.html">QRang
 <tr><td>QString<td>specialValueText<td>specialValueText<td>setSpecialValueText<td>&nbsp;
 <tr><td>bool<td>wrapping<td>wrapping<td>setWrapping<td>&nbsp;
 <tr><td>ButtonSymbols<td>buttonSymbols<td>buttonSymbols<td>setButtonSymbols<td>&nbsp;
-<tr><td>int<td>minValue<td>minValue<td>setMinValue<td>&nbsp;
 <tr><td>int<td>maxValue<td>maxValue<td>setMaxValue<td>&nbsp;
+<tr><td>int<td>minValue<td>minValue<td>setMinValue<td>&nbsp;
 <tr><td>int<td>lineStep<td>lineStep<td>setLineStep<td>&nbsp;
 <tr><td>int<td>value<td>value<td>setValue<td>&nbsp;
 </table>
@@ -317,9 +318,6 @@ turned off.
 <h3 class="fn"><a href="qsize.html">QSize</a> <a name="8171ed"></a>QSpinBox::sizeHint () const <code>[virtual]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
 <p>Reimplemented from <a href="qwidget.html#290bcd">QWidget.</a>
-<h3 class="fn"><a href="qsizepolicy.html">QSizePolicy</a> <a name="31af00"></a>QSpinBox::sizePolicy () const <code>[virtual]</code></h3>
-<p>Reimplemented for internal reasons; the API is not affected.
-<p>Reimplemented from <a href="qwidget.html#2d5d13">QWidget.</a>
 <h3 class="fn"><a href="qstring.html">QString</a> <a name="f0a00b"></a>QSpinBox::specialValueText () const</h3>
 <p>Returns the currently special-value text, or a null string if no
 special-value text is currently set.
@@ -387,7 +385,7 @@ times.
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.2.2"><nobr>
+<input type=hidden name="version" value="2.2.3"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -395,5 +393,5 @@ copyright &copy; 1995-2000
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.2</div>
+<td align="right"><div align="right">Qt version 2.2.3</div>
 </table></div></address></body></html>

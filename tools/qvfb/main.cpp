@@ -26,7 +26,8 @@
 void usage( const char *app )
 {
     printf( "Usage: %s [-width width] [-height height] [-depth depth] "
-	    "[-nocursor] [-qwsdisplay :id]\n", app );
+	    "[-nocursor] [-qwsdisplay :id]\n"
+	    "Supported depths: 1, 4, 8, 32\n", app );
 }
 
 int main( int argc, char *argv[] )

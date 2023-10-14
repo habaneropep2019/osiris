@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qpainter.cpp   2.2.2   edited 2000-11-07 $
+** $Id: qt/src/kernel/qpainter.cpp   2.2.3   edited 2000-11-07 $
 **
 ** Implementation of QPainter, QPen and QBrush classes
 **

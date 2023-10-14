@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/compat/qpntarry.h   2.2.2   edited 2000-08-25 $
+** $Id: qt/src/compat/qpntarry.h   2.2.3   edited 2000-08-25 $
 **
 ** Compatibility file - should only be included by legacy code.
 ** It #includes the file which obsoletes this one.

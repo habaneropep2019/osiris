@@ -1,4 +1,4 @@
-.TH QCheckBox 3qt "8 November 2000" "Trolltech AS" \" -*- nroff -*-
+.TH QCheckBox 3qt "12 December 2000" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -36,6 +36,9 @@ Inherits QButton.
 .br
 .ti -1c
 .BI "bool \fBisTristate\fR () const"
+.br
+.ti -1c
+.BI "QSizePolicy \fBsizePolicy\fR () const"
 .br
 .in -1c
 .SS "Important Inherited Members"
@@ -176,10 +179,6 @@ Use tristate check boxes whenever you need to give the user the option of neithe
 .PP
 See also isTristate(), setNoChange(), stateChanged() and state().
 .SH "QSize QCheckBox::sizeHint () const \fC[virtual]\fR"
-Reimplemented for internal reasons; the API is not affected.
-.PP
-Reimplemented from QWidget.
-.SH "QSizePolicy QCheckBox::sizePolicy () const \fC[virtual]\fR"
 Reimplemented for internal reasons; the API is not affected.
 .PP
 Reimplemented from QWidget.

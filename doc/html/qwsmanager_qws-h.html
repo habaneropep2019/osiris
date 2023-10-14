@@ -30,7 +30,7 @@ remains with Trolltech.
 <hr>
 <pre>
 /****************************************************************************
-** &#36;Id&#58; qt/src/kernel/qwsmanager_qws.h   2.2.2   edited 2000-10-26 $
+** &#36;Id&#58; qt/src/kernel/qwsmanager_qws.h   2.2.3   edited 2000-12-11 $
 **
 ** Definition of QWSManager class. This manages QWS top-level windows.
 **
@@ -60,6 +60,8 @@ remains with Trolltech.
 ** not clear to you.
 **
 **********************************************************************/
+#ifndef __QWS_MANAGER_H__
+#define __QWS_MANAGER_H__
 
 #ifndef QT_H
 #include "qpixmap.h"
@@ -67,17 +69,19 @@ remains with Trolltech.
 #endif // QT_H
 
 #ifndef QT_NO_QWS_MANAGER
+
 class <a href="qpixmap.html">QPixmap</a>;
 class <a href="qwidget.html">QWidget</a>;
 class <a href="qpopupmenu.html">QPopupMenu</a>;
 class <a href="qregion.html">QRegion</a>;
 class <a href="qmouseevent.html">QMouseEvent</a>;
 class QWSButton;
+class QWSManager;
 
 /*
  Implements decoration styles
 */
-class <a href="qwsdecoration.html">QWSDecoration</a>
+class QWSDecoration
 {
 public:
     QWSDecoration() {}
@@ -93,7 +97,7 @@ public:
     virtual void minimize( QWidget * );
     virtual void maximize( QWidget * );
 #ifndef QT_NO_POPUPMENU
-    virtual QPopupMenu *menu(const QWidget *, const QPoint &amp;);
+    virtual QPopupMenu *menu(QWSManager *, const QWidget *, const QPoint &amp;);
 #endif
     virtual void paint(QPainter *, const QWidget *) = 0;
     virtual void paintButton(QPainter *, const QWidget *, Region, int state) = 0;
@@ -108,6 +112,8 @@ public:
     QWSManager(QWidget *);
     ~QWSManager();
 
+    static QWSDecoration *newDefaultDecoration();
+
     QRegion region();
     QWidget *widget() { return managed; }
     void maximize();
@@ -116,6 +122,7 @@ public:
 
 protected slots:
     void menuActivated(int);
+    void styleMenuActivated(int);
 
 protected:
     void handleMove();
@@ -171,25 +178,16 @@ private:
     QWSManager *manager;
 };
 
-class QWSDefaultDecoration : public QWSDecoration
-{
-public:
-    QWSDefaultDecoration();
-    virtual ~QWSDefaultDecoration();
-    
-    virtual QRegion region(const QWidget *, const QRect &amp;rect, Region);
-    virtual void paint(QPainter *, const QWidget *);
-    virtual void paintButton(QPainter *, const QWidget *, Region, int state);
-
-protected:
-    virtual const QPixmap* pixmapFor(const QWidget*, Region, bool, int&amp;, int&amp;);
-};
+// class QWSDefaultDecoration : public QWSDecoration;
+#include "qwsdefaultdecoration_qws.h"
 
 #endif //QT_NO_QWS_MANAGER
+
+#endif //__QWS_MANAGER_H__
 
 </pre>
 <p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.2</div>
+<td align="right"><div align="right">Qt version 2.2.3</div>
 </table></div></address></body></html>

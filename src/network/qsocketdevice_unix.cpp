@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/network/qsocketdevice_unix.cpp   2.2.2   edited 2000-11-03 $
+** $Id: qt/src/network/qsocketdevice_unix.cpp   2.2.3   edited 2000-11-03 $
 **
 ** Implementation of QSocketDevice class.
 **

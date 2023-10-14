@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/kernel/qvariant.cpp   2.2.2   edited 2000-10-09 $
+** $Id: qt/src/kernel/qvariant.cpp   2.2.3   edited 2000-10-09 $
 **
 ** Implementation of QVariant class
 **

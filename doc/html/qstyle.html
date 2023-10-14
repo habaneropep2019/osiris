@@ -172,7 +172,7 @@ buttons.
 <p>Reimplemented in <a href="qsgistyle.html#3bea0b">QSGIStyle</a>, <a href="qcommonstyle.html#9faf65">QCommonStyle</a>, <a href="qmotifstyle.html#a9ec0a">QMotifStyle</a>, <a href="qplatinumstyle.html#ba3d1e">QPlatinumStyle</a>, <a href="qwindowsstyle.html#343747">QWindowsStyle</a> and <a href="qmotifplusstyle.html#99df4d">QMotifPlusStyle</a>.
 <h3 class="fn">int <a name="36cce5"></a>QStyle::defaultFrameWidth () const <code>[virtual]</code></h3>
 <p>The default frame width, usually 2.
-<p>Reimplemented in <a href="qsgistyle.html#94336a">QSGIStyle</a>, <a href="qmotifplusstyle.html#aa0103">QMotifPlusStyle</a>, <a href="qcdestyle.html#f8e819">QCDEStyle</a> and <a href="qcommonstyle.html#93d4f1">QCommonStyle</a>.
+<p>Reimplemented in <a href="qsgistyle.html#94336a">QSGIStyle</a>, <a href="qmotifplusstyle.html#aa0103">QMotifPlusStyle</a> and <a href="qcdestyle.html#f8e819">QCDEStyle</a>.
 <h3 class="fn">void <a name="456f43"></a>QStyle::drawArrow ( <a href="qpainter.html">QPainter</a> * p, Qt::ArrowType type, bool down, int x, int y, int w, int h, const <a href="qcolorgroup.html">QColorGroup</a> &amp; g, bool enabled, const <a href="qbrush.html">QBrush</a> * fill = 0 ) <code>[virtual]</code></h3>
 <p>Draws an arrow to indicate direction. Used for example in scrollbars and spin-boxes.
 <h3 class="fn">void <a name="49015f"></a>QStyle::drawBevelButton ( <a href="qpainter.html">QPainter</a> *, int, int, int, int, const <a href="qcolorgroup.html">QColorGroup</a> &amp;, bool = FALSE, const <a href="qbrush.html">QBrush</a> * = 0 ) <code>[virtual]</code></h3>
@@ -192,12 +192,11 @@ to be transparent because the style uses a fancy background pixmap.
 <p>Reimplemented in <a href="qsgistyle.html#43a4ae">QSGIStyle</a>, <a href="qwindowsstyle.html#839664">QWindowsStyle</a>, <a href="qmotifstyle.html#9c2b08">QMotifStyle</a> and <a href="qplatinumstyle.html#de32d6">QPlatinumStyle</a>.
 <h3 class="fn">void <a name="a34836"></a>QStyle::drawComboButton ( <a href="qpainter.html">QPainter</a> * p, int x, int y, int w, int h, const <a href="qcolorgroup.html">QColorGroup</a> &amp; g, bool sunken = FALSE, bool editable = FALSE, bool enabled = TRUE, const <a href="qbrush.html">QBrush</a> * fill = 0 ) <code>[virtual]</code></h3>
 <p>Draws a press-sensitive shape in the style of a combo box or menu button.
-<p>Reimplemented in <a href="qmotifplusstyle.html#08ee15">QMotifPlusStyle</a>, <a href="qplatinumstyle.html#2e207e">QPlatinumStyle</a>, <a href="qwindowsstyle.html#5a9d21">QWindowsStyle</a>, <a href="qmotifstyle.html#54f493">QMotifStyle</a>, <a href="qcommonstyle.html#12020a">QCommonStyle</a> and <a href="qsgistyle.html#ea85da">QSGIStyle</a>.
+<p>Reimplemented in <a href="qmotifplusstyle.html#08ee15">QMotifPlusStyle</a>, <a href="qplatinumstyle.html#2e207e">QPlatinumStyle</a>, <a href="qwindowsstyle.html#5a9d21">QWindowsStyle</a>, <a href="qmotifstyle.html#54f493">QMotifStyle</a> and <a href="qsgistyle.html#ea85da">QSGIStyle</a>.
 <h3 class="fn">void <a name="50f933"></a>QStyle::drawComboButtonMask ( <a href="qpainter.html">QPainter</a> * p, int x, int y, int w, int h ) <code>[virtual]</code></h3>
 <p>Draw the mask of a combo box button. Useful if a rounded buttons
 needs to be transparent because the style uses a fancy background
 pixmap.
-<p>Reimplemented in <a href="qcommonstyle.html#1e7e35">QCommonStyle</a>.
 <h3 class="fn">void <a name="dc5fc7"></a>QStyle::drawExclusiveIndicator ( <a href="qpainter.html">QPainter</a> *, int x, int y, int w, int h, const <a href="qcolorgroup.html">QColorGroup</a> &amp;, bool on, bool down = FALSE, bool enabled = TRUE ) <code>[virtual]</code></h3>
 <p>Draws a mark indicating the state of an exclusive choice.
 <p>Reimplemented in <a href="qsgistyle.html#562bc8">QSGIStyle</a>, <a href="qmotifplusstyle.html#74db87">QMotifPlusStyle</a>, <a href="qmotifstyle.html#e94888">QMotifStyle</a>, <a href="qplatinumstyle.html#d6dece">QPlatinumStyle</a>, <a href="qwindowsstyle.html#df8053">QWindowsStyle</a> and <a href="qcdestyle.html#608ede">QCDEStyle</a>.
@@ -275,7 +274,7 @@ currently pressed down.
 <p>Reimplemented in <a href="qcommonstyle.html#b4a2c2">QCommonStyle</a> and <a href="qsgistyle.html#d62763">QSGIStyle</a>.
 <h3 class="fn">void <a name="7bc927"></a>QStyle::drawSliderMask ( <a href="qpainter.html">QPainter</a> * p, int x, int y, int w, int h, <a href="qt.html#Orientation">Orientation</a>, bool, bool ) <code>[virtual]</code></h3>
 <p>Draws the mask of a slider.
-<p>Reimplemented in <a href="qwindowsstyle.html#7a19a3">QWindowsStyle</a>, <a href="qsgistyle.html#81e8a5">QSGIStyle</a>, <a href="qcommonstyle.html#79ded9">QCommonStyle</a> and <a href="qplatinumstyle.html#b85aaf">QPlatinumStyle</a>.
+<p>Reimplemented in <a href="qwindowsstyle.html#7a19a3">QWindowsStyle</a>, <a href="qsgistyle.html#81e8a5">QSGIStyle</a> and <a href="qplatinumstyle.html#b85aaf">QPlatinumStyle</a>.
 <h3 class="fn">void <a name="ef0e90"></a>QStyle::drawSplitter ( <a href="qpainter.html">QPainter</a> * p, int x, int y, int w, int h, const <a href="qcolorgroup.html">QColorGroup</a> &amp; g, <a href="qt.html#Orientation">Orientation</a> orient ) <code>[virtual]</code></h3>
 <p>Draws a splitter handle in the rectangle described by <em>x, y, w, h</em> using painter <em>p</em> and color group <em>g.</em> The orientation
 is <em>orient.</em>
@@ -313,7 +312,7 @@ indicate item accelerators.
 <h3 class="fn">void <a name="8c0395"></a>QStyle::getButtonShift ( int &amp; x, int &amp; y ) <code>[virtual]</code></h3>
 <p>Some GUI styles shift the contents of a button when the button is down.
 The default implementation returns 0 for both x and y.
-<p>Reimplemented in <a href="qwindowsstyle.html#d9c952">QWindowsStyle</a>, <a href="qplatinumstyle.html#884696">QPlatinumStyle</a>, <a href="qmotifplusstyle.html#41f1e8">QMotifPlusStyle</a> and <a href="qcommonstyle.html#737715">QCommonStyle</a>.
+<p>Reimplemented in <a href="qwindowsstyle.html#d9c952">QWindowsStyle</a>, <a href="qplatinumstyle.html#884696">QPlatinumStyle</a> and <a href="qmotifplusstyle.html#41f1e8">QMotifPlusStyle</a>.
 <h3 class="fn">GUIStyle <a name="373117"></a>QStyle::guiStyle () const</h3>
 <p>Returns an indicator to the additional "feel" component of a
 style. Current supported values are Qt::WindowsStyle and Qt::MotifStyle.
@@ -329,7 +328,7 @@ the original position when the mouse pointer is too far away while
 dragging.
 <p>This behavior can be customized with this function. The default is -1
 (no jump back) while Windows requires 20 (weird jump back).
-<p>Reimplemented in <a href="qplatinumstyle.html#495ca3">QPlatinumStyle</a>, <a href="qcommonstyle.html#86217a">QCommonStyle</a> and <a href="qwindowsstyle.html#3255b7">QWindowsStyle</a>.
+<p>Reimplemented in <a href="qplatinumstyle.html#495ca3">QPlatinumStyle</a> and <a href="qwindowsstyle.html#3255b7">QWindowsStyle</a>.
 <h3 class="fn">int <a name="74fd1e"></a>QStyle::menuButtonIndicatorWidth ( int h )</h3>
 <p>Returns the width of the menu button indicator for a given button
 height <em>h.</em>
@@ -447,7 +446,7 @@ them again.
 Search the documentation, FAQ, qt-interest archive and more (uses
 <a href="http://www.trolltech.com">www.trolltech.com</a>):<br>
 <form method=post action="http://www.trolltech.com/search.cgi">
-<input type=hidden name="version" value="2.2.2"><nobr>
+<input type=hidden name="version" value="2.2.3"><nobr>
 <input size="50" name="search"><input type=submit value="Search">
 </nobr></form><hr><p>
 This file is part of the <a href="index.html">Qt toolkit</a>,
@@ -455,5 +454,5 @@ copyright &copy; 1995-2000
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
 <td>Copyright © 2000 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
-<td align="right"><div align="right">Qt version 2.2.2</div>
+<td align="right"><div align="right">Qt version 2.2.3</div>
 </table></div></address></body></html>

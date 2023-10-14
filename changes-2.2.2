@@ -64,8 +64,9 @@ QImage:		Increased number of colors when writing XPM files from
 		64^2 to 64^4.
 		Fixed 16-bit pixel().
 
-QImageIO:	MS-Windows only: exported qInitJegIO function.
+QImageIO:	MS-Windows only: exported qInitJpegIO function.
 		Fixed crash with libpng 1.0.8.
+		Fixed huge memory leak with PNG files.
 
 QLCDNumber:	Sensible precision when displaying doubles.
 
@@ -137,7 +138,7 @@ QXmlInputSource:Fix for stream devices that do not support
 *			   Third party					   *
 ****************************************************************************
 
-libpng:		Fixed huge memory leak.
+None
 
 ****************************************************************************
 *               Changes that might affect runtime behavior                 *

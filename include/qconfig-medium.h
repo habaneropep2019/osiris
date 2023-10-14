@@ -1,7 +1,7 @@
 #ifndef QT_H
 #endif // QT_H
-#ifndef QT_NO_CODECS
-#define QT_NO_CODECS
+#ifndef QT_NO_CODECS // moc?
+#define QT_NO_TEXTCODEC
 #endif
 #define QT_NO_UNICODETABLES
 #define QT_NO_IMAGEIO_BMP
@@ -43,7 +43,6 @@
 
 
 #define QT_NO_MIME
-#define QT_NO_QWS_VFB
 //#define QT_NO_NETWORK //??? means single-process only
 
 
@@ -57,7 +56,6 @@
 #define QT_NO_QWS_SAVEFONTS
 
 #define QT_NO_SESSIONMANAGER
-#define QT_NO_TEXTCODEC
 
 
 //#define QT_NO_DIALOG
@@ -102,3 +100,10 @@
 //#define QT_NO_TABDIALOG
 #define QT_NO_WIZARD
 #define QT_NO_EFFECTS
+
+//#define QT_NO_QWS_AQUA_WM_STYLE
+#define QT_NO_QWS_BEOS_WM_STYLE
+#define QT_NO_QWS_KDE2_WM_STYLE
+#define QT_NO_QWS_KDE_WM_STYLE
+//#define QT_NO_QWS_QPE_WM_STYLE
+//#define QT_NO_QWS_WINDOWS_WM_STYLE

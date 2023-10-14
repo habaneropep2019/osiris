@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qlistview.cpp   2.2.2   edited 2000-11-07 $
+** $Id: qt/src/widgets/qlistview.cpp   2.2.3   edited 2000-12-07 $
 **
 ** Implementation of QListView widget class
 **
@@ -630,6 +630,8 @@ void QListViewItem::takeItem( QListViewItem * item )
 
     QListView *lv = listView();
     bool was_selected = FALSE;
+    bool emit_changed = FALSE;
+    QListViewItem *oldCurrent = 0;
     if ( lv && !lv->d->clearing ) {
 
 	if ( lv->d->iterators ) {
@@ -659,6 +661,7 @@ void QListViewItem::takeItem( QListViewItem * item )
 	    }
 	}
 
+	was_selected = item->isSelected();
 	item->setSelected( FALSE );
 
 #if 0
@@ -674,7 +677,6 @@ void QListViewItem::takeItem( QListViewItem * item )
 #endif
 
 	if ( lv->d->focusItem ) {
-	    was_selected = lv->d->focusItem->isSelected();
 	    const QListViewItem * c = lv->d->focusItem;
 	    while( c && c != item )
 		c = c->parentItem;
@@ -685,7 +687,8 @@ void QListViewItem::takeItem( QListViewItem * item )
  		    lv->d->focusItem = item->itemAbove();
 		else
 		    lv->d->focusItem = 0;
-		emit lv->currentChanged( lv->d->focusItem );
+		emit_changed = TRUE;
+		oldCurrent = lv->d->focusItem;
 	    }
 	}
 
@@ -707,6 +710,8 @@ void QListViewItem::takeItem( QListViewItem * item )
     item->maybeTotalHeight = -1;
     item->configured = FALSE;
 
+    if ( emit_changed )
+	emit lv->currentChanged( oldCurrent );
     if ( was_selected )
 	emit lv->selectionChanged();
 }
@@ -1879,6 +1884,7 @@ void QListView::init()
 
     viewport()->setFocusProxy( this );
     viewport()->setFocusPolicy( WheelFocus );
+    viewport()->setBackgroundMode( PaletteBase );
 }
 
 /*!
@@ -2611,10 +2617,6 @@ void QListView::show()
     // Reimplemented to setx the correct background mode and viewed
     // area size.
     if ( !isVisible() ) {
-	QWidget * v = viewport();
-	if ( v )
-	    v->setBackgroundMode( PaletteBase );
-
 	reconfigureItems();
 	updateGeometries();
     }
@@ -5146,15 +5148,16 @@ hierarchy, use takeItem() and insertItem().
 
 void QListViewItem::moveItem( QListViewItem *after )
 {
-    if ( !after )
+    if ( !after || after == this )
 	return;
     if ( parent() != after->parent() ) {
-	parent()->takeItem( this );
-	if ( after->parent() )
-	    after->parent()->insertItem( this );
-	else if ( listView() )
-	    listView()->d->r->insertItem( this );
-	
+	if ( parentItem )
+	    parentItem->takeItem( this );
+	if ( after->parentItem ) {
+	    int tmpLsc = after->parentItem->lsc;
+	    after->parentItem->insertItem( this );
+	    after->parentItem->lsc = tmpLsc;
+	}
     }
     moveToJustAfter( after );
     QListView *lv = listView();

@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/tools/qfile_unix.cpp   2.2.2   edited 2000-10-20 $
+** $Id: qt/src/tools/qfile_unix.cpp   2.2.3   edited 2000-10-20 $
 **
 ** Implementation of QFileInfo class
 **

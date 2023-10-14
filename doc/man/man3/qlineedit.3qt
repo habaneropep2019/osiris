@@ -1,4 +1,4 @@
-.TH QLineEdit 3qt "8 November 2000" "Trolltech AS" \" -*- nroff -*-
+.TH QLineEdit 3qt "12 December 2000" "Trolltech AS" \" -*- nroff -*-
 .\" Copyright 1992-2000 Trolltech AS.  All rights reserved.  See the
 .\" license file included in the distribution for a complete license
 .\" statement.
@@ -69,6 +69,9 @@ Inherits QWidget.
 .br
 .ti -1c
 .BI "virtual QSize \fBminimumSizeHint\fR () const"
+.br
+.ti -1c
+.BI "QSizePolicy \fBsizePolicy\fR () const"
 .br
 .ti -1c
 .BI "virtual void \fBsetSelection\fR ( int, int ) "
@@ -513,10 +516,6 @@ See also validator() and QValidator.
 Returns a recommended size for the widget.
 .PP
 The width returned is enough for a few characters, typically 15 to 20.
-.PP
-Reimplemented from QWidget.
-.SH "QSizePolicy QLineEdit::sizePolicy () const \fC[virtual]\fR"
-Reimplemented for internal reasons; the API is not affected.
 .PP
 Reimplemented from QWidget.
 .SH "QString QLineEdit::text () const"

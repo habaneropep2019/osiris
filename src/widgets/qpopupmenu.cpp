@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/src/widgets/qpopupmenu.cpp   2.2.2   edited 2000-11-02 $
+** $Id: qt/src/widgets/qpopupmenu.cpp   2.2.3   edited 2000-12-04 $
 **
 ** Implementation of QPopupMenu class
 **
@@ -421,6 +421,8 @@ void QPopupMenu::popup( const QPoint &pos, int indexAtPoint )
     QWidget *desktop = QApplication::desktop();
     int sw = desktop->width();			// screen width
     int sh = desktop->height();			// screen height
+    int sx = desktop->x();			// screen pos
+    int sy = desktop->y();
     int x  = pos.x();
     int y  = pos.y();
     if ( indexAtPoint > 0 )			// don't subtract when < 0
@@ -433,20 +435,21 @@ void QPopupMenu::popup( const QPoint &pos, int indexAtPoint )
 	    x = mouse.x()-w;
 	if ( y+h > sh )
 	    y = mouse.y()-h;
-	if ( x < 0 )
+	if ( x < sx )
 	    x = mouse.x();
-	if ( y < 0 )
-	    y = mouse.y();
-    } else {
-	if ( x+w > sw )				// the complete widget must
-	    x = sw - w;				//   be visible
-	if ( y+h > sh )
+	if ( y < sy )
 	    y = sh - h;
-	if ( x < 0 )
-	    x = 0;
-	if ( y < 0 )
-	    y = 0;
     }
+
+    if ( x+w > sw )				// the complete widget must
+	x = sw - w;				//   be visible
+    if ( y+h > sh )
+	y = sh - h;
+    if ( x < sx )
+	x = sx;
+    if ( y < sy )
+	y = sy;
+
     move( x, y );
     motion=0;
     actItem = -1;

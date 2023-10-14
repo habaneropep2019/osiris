@@ -1,5 +1,5 @@
 /****************************************************************************
-** $Id: qt/examples/mdi/main.cpp   2.2.2   edited 2000-09-20 $
+** $Id: qt/examples/mdi/main.cpp   2.2.3   edited 2000-09-20 $
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
