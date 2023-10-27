@@ -60,10 +60,19 @@ fi
 if [ -z $(find /usr/include/X11/Xft -name Xft.h) ]
 	then
 		echo "FATAL: No Xft.h found in /usr/include/X11/Xft or its subdirectories."
-		echo "You may be missing libXext-dev."
+		echo "You may be missing libXft-dev."
 		exit 1
 	else
-		echo "INFO: Found libXext at $(find /usr/include/X11/Xft -name shape.h)"
+		echo "INFO: Found libXft at $(find /usr/include/X11/Xft -name Xft.h)"
+fi
+
+if [ -z $(find /usr/include -name jpeglib.h) ]
+	then
+		echo "FATAL: No jpeglib.h found in /usr/include or its subdirectories."
+		echo "You may be missing libjpeg-dev or libjpeg62-turbo-dev."
+		exit 1
+	else
+		echo "INFO: Found libjpeg at $(find /usr/include -name jpeglib.h)"
 fi
 
 # Check for GGE libraries
@@ -81,7 +90,7 @@ rm $OSIRISDIR/lib/null
 
 # Check for Clang
 
-if [ "$(which clang)" == "/usr/bin/clang" ]
+if [ "$(which clang)" == "/usr/bin/clang" ] || [ "$(which clang)" == "/bin/clang" ]
 then
 	echo "Found clang"
 	echo "Clang support will be enabled."
@@ -281,7 +290,7 @@ VERBOSE=no
 DEBUG=no
 SHARED=yes
 GIF=yes
-OPENGL=auto
+OPENGL=yes
 THREAD=yes
 SM=no
 ZLIB=no
@@ -414,6 +423,9 @@ while [ -n "$1" ]; do
    -xkb)
 	XKB=yes
 	;;
+   -no-opengl)
+    OPENGL=no
+    ;;
    -no-*)
        MODULE=$(echo "$1" | sed -e "s/-no-//");
        if [ -d "src/$MODULE" ]
@@ -1180,6 +1192,8 @@ each option:
 
     -no-g++-exceptions . Disable exceptions on platforms using the GNU C++
 			 compiler by using the -fno-exceptions flag.
+			 
+	-no-opengl ......... Disables using OpenGL, which is enabled by default
 
     -no-xft ............ Disable support for Anti-Aliased fonts through the
 			 Xft extension library (XFree86 4.0.2 and newer).

@@ -13,6 +13,8 @@ Osiris 2.4.1 is a maintenance release. As a reminder, Osiris is a fork of Qt ver
 - Bumped OSIRIS_VER and OSIRIS_VER_STR to reflect new Osiris release 2.4.1
 - Fixed a bug in qtextbrowser that would cause a segfault when forwardStack was empty. This bug was introduced in Qt 2.1.0, with a release date of April 2000. That's a bugfix almost 23 years later!
 - Modified qclipboard_x11 to enable QT_CLIPBOARD_DEBUG macro when configure is run with -debug. This provides some useful output when debugging clipboard issues and removes the need to manually edit a file to uncomment a macro.
+- Added missing header file check in configure for libjpeg
+- Fixed the libXft header file check in configure
 
 #### Osiris 2.4.0
 
