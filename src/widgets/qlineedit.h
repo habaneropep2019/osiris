@@ -47,6 +47,7 @@ class QValidator;
 #ifndef QT_H
 #include "qwidget.h"
 #include "qstring.h"
+#include "qclipboard.h"
 #endif // QT_H
 
 #ifndef QT_NO_LINEEDIT
@@ -109,8 +110,8 @@ public:
 
 #ifndef QT_NO_CLIPBOARD
     void	cut();
-    void	copy() const;
-    void	paste();
+    void	copy(QClipboard::Mode mode = QClipboard::Mode::Clipboard) const;
+    void	paste(QClipboard::Mode mode = QClipboard::Mode::Clipboard);
 #endif
 
     void setAlignment( int flag );

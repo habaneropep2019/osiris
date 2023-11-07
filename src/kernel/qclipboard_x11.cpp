@@ -80,6 +80,8 @@ static QWidget * owner = 0;
 static bool timer_event_clear = FALSE;
 static int clipboard_id = 0;
 
+#define XA_CLIPBOARD ((Atom) 287)
+
 static void cleanup()
 {
     delete owner;
@@ -97,16 +99,15 @@ void setupOwner()
 
 class QClipboardWatcher : public QMimeSource {
 public:
-    QClipboardWatcher();
+    QClipboardWatcher(QClipboard::Mode mode);
     bool empty() const;
     const char* format( int n ) const;
     QByteArray encodedData( const char* fmt ) const;
     QByteArray getDataInFormat(Atom fmtatom) const;
 
     QValueList<const char *> formatList;
+    QClipboard::Mode mode;
 };
-
-
 
 class QClipboardData
 {
@@ -114,16 +115,18 @@ public:
     QClipboardData();
     ~QClipboardData();
 
-    void setSource(QMimeSource* s)
+    void setSource(QMimeSource* s, QClipboard::Mode mode)
     {
-	QMimeSource *s2 = src;
-	src = s;
-
-	delete s2;
+        QMimeSource *s2 = src[mode];
+        src[mode] = s;
+        delete s2;
     }
 
-    QMimeSource* source()
-    { return src; }
+    QMimeSource* source(QClipboard::Mode mode)
+    {
+        return src[mode];
+    }
+
     void addTransferredPixmap(QPixmap pm)
     { /* TODO: queue them */
 	transferred[tindex] = pm;
@@ -135,10 +138,10 @@ public:
 	transferred[1] = QPixmap();
     }
 
-    void clear();
+    void clear(QClipboard::Mode mode);
 
     // private:
-    QMimeSource* src;
+    QMimeSource* src[2];
 
     QPixmap transferred[2];
     int tindex;
@@ -146,21 +149,26 @@ public:
 
 QClipboardData::QClipboardData()
 {
-    src = 0;
+    src[QClipboard::Mode::Clipboard] = 0;
+    src[QClipboard::Mode::Selection] = 0;
     tindex=0;
 }
 
 QClipboardData::~QClipboardData()
 {
-    QMimeSource *s2 = src;
-    src = 0;
+    QMimeSource *s2 = src[QClipboard::Mode::Clipboard];
+    src[QClipboard::Mode::Clipboard] = 0;
+    delete s2;
+
+    s2 = src[QClipboard::Mode::Selection];
+    src[QClipboard::Mode::Selection] = 0;
     delete s2;
 }
 
-void QClipboardData::clear()
+void QClipboardData::clear(QClipboard::Mode mode)
 {
-    QMimeSource *s2 = src;
-    src = 0;
+    QMimeSource *s2 = src[mode];
+    src[mode] = 0;
     delete s2;
 }
 
@@ -192,18 +200,19 @@ static QClipboardData *clipboardData()
   Clears the clipboard contents.
 */
 
-void QClipboard::clear()
+void QClipboard::clear(QClipboard::Mode mode)
 {
-    setText( QString::null );
+    setText( QString::null, mode );
 }
 
 
 #if defined(_WS_X11_)
-bool QClipboard::ownsSelection() const
+bool QClipboard::ownsSelection(Mode mode) const
 {
-    if (owner &&
-	XGetSelectionOwner(owner->x11Display(), XA_PRIMARY) == owner->winId())
-	return TRUE;
+    const Atom selection = (mode == Clipboard) ? XA_CLIPBOARD : XA_PRIMARY;
+
+    if (owner && XGetSelectionOwner(owner->x11Display(), selection) == owner->winId())
+        return TRUE;
 
     return FALSE;
 }
@@ -216,14 +225,21 @@ void QClipboard::clobber()
 
     qRemovePostRoutine(cleanupClipboardData);
 
-    internalCbData->src = 0;
+    internalCbData->src[QClipboard::Mode::Clipboard] = 0;
+    internalCbData->src[QClipboard::Mode::Selection] = 0;
     delete internalCbData;
     internalCbData = 0;
 
-    Window win =  XGetSelectionOwner(owner->x11Display(), XA_PRIMARY);
-
-    if (win == owner->winId())
-	XSetSelectionOwner(owner->x11Display(), XA_PRIMARY, None, qt_x_time);
+    {
+        Window win =  XGetSelectionOwner(owner->x11Display(), XA_CLIPBOARD);
+        if (win == owner->winId())
+            XSetSelectionOwner(owner->x11Display(), XA_CLIPBOARD, None, qt_x_time);
+    }
+    {
+        Window win =  XGetSelectionOwner(owner->x11Display(), XA_PRIMARY);
+        if (win == owner->winId())
+            XSetSelectionOwner(owner->x11Display(), XA_PRIMARY, None, qt_x_time);
+    }
 }
 
 
@@ -466,24 +482,25 @@ void QClipboard::connectNotify( const char * )
 bool QClipboard::event( QEvent *e )
 {
     if (e->type() == QEvent::Timer) {
-	QTimerEvent *te = (QTimerEvent *) e;
+        QTimerEvent *te = (QTimerEvent *) e;
 
-	if (te->timerId() == clipboard_id) {
-	    killTimer(clipboard_id);
-	    clipboard_id = 0;
+        if (te->timerId() == clipboard_id) {
+            killTimer(clipboard_id);
+            clipboard_id = 0;
 
-	    timer_event_clear = TRUE;
-	    clipboardData()->clear();
-	    timer_event_clear = FALSE;
+            timer_event_clear = TRUE;
+            clipboardData()->clear(Clipboard);
+            clipboardData()->clear(Selection);
+            timer_event_clear = FALSE;
 
-	    return TRUE;
-	}
+            return TRUE;
+        }
 
-	return QObject::event( e );
+        return QObject::event( e );
     }
 
     if ( e->type() != QEvent::Clipboard )
-	return QObject::event( e );
+        return QObject::event( e );
 
     XEvent *xevent = (XEvent *)(((QCustomEvent *)e)->data());
     Display *dpy = qt_xdisplay();
@@ -492,27 +509,36 @@ bool QClipboard::event( QEvent *e )
     switch ( xevent->type ) {
 
     case SelectionClear:
+    {
+        XSelectionClearEvent *clear_req = &xevent->xselectionclear;
+
 	// new selection owner
 #if defined(QT_CLIPBOARD_DEBUG)
 	qDebug("qclipboard_x11.cpp: new selection owner 0x%lx",
-	       XGetSelectionOwner(dpy, XA_PRIMARY));
+            XGetSelectionOwner(dpy, XA_CLIPBOARD));
 #endif
 
-	clipboardData()->clear();
-	emit dataChanged();
+        QClipboard::Mode mode = (clear_req->selection == XA_PRIMARY) ? Selection : Clipboard;
+        clipboardData()->clear(mode);
+        emit dataChanged();
 	break;
-
+	}
     case SelectionNotify:
-	// some has delivered data to us
-	clipboardData()->clear();
-	break;
+	{
 
+        XSelectionEvent *notify_req = &xevent->xselection;
+        QClipboard::Mode mode = (notify_req->selection == XA_PRIMARY) ? Selection : Clipboard;
+        clipboardData()->clear(mode);
+    break;
+    }
     case SelectionRequest:
 	{
 	    // someone wants our data
 	    XSelectionRequestEvent *req = &xevent->xselectionrequest;
 
 	    if (req->requestor == owner->winId()) break;
+
+        QClipboard::Mode mode = (req->selection == XA_PRIMARY) ? Selection : Clipboard;
 
 	    XEvent evt;
 	    evt.xselection.type = SelectionNotify;
@@ -534,8 +560,8 @@ bool QClipboard::event( QEvent *e )
 		   XGetAtomName(req->display, req->target));
 #endif
 
-	    if ( !d->source() )
-		d->setSource(new QClipboardWatcher());
+        if ( !d->source(mode) )
+            d->setSource(new QClipboardWatcher(mode), mode);
 
 	    const char* fmt;
 	    QByteArray data;
@@ -573,10 +599,10 @@ bool QClipboard::event( QEvent *e )
 
 		if ( target == xa_targets ) {
 		    int atoms = 0;
-		    while (d->source()->format(atoms)) atoms++;
-		    if (d->source()->provides("image/ppm")) atoms++;
-		    if (d->source()->provides("image/pbm")) atoms++;
-		    if (d->source()->provides("text/plain")) atoms++;
+            while (d->source(mode)->format(atoms)) atoms++;
+            if (d->source(mode)->provides("image/ppm")) atoms++;
+            if (d->source(mode)->provides("image/pbm")) atoms++;
+            if (d->source(mode)->provides("text/plain")) atoms++;
 
 #ifdef QT_CLIPBOARD_DEBUG
 		    qDebug("qclipboard_x11.cpp:%d: %d provided types", __LINE__, atoms);
@@ -588,7 +614,7 @@ bool QClipboard::event( QEvent *e )
 		    long *atarget = (long *) data.data();
 
 		    int n = 0;
-		    while ((fmt=d->source()->format(n)) && n < atoms) {
+            while ((fmt=d->source(mode)->format(n)) && n < atoms) {
 			Atom *dnd = qt_xdnd_str_to_atom(fmt);
 
 			// compiler should handle the Atom to long conversion implicitly
@@ -600,11 +626,11 @@ bool QClipboard::event( QEvent *e )
 			   __LINE__, n, atoms);
 #endif
 
-		    if ( d->source()->provides("image/ppm") )
+            if ( d->source(mode)->provides("image/ppm") )
 			atarget[n++] = XA_PIXMAP;
-		    if ( d->source()->provides("image/pbm") )
+            if ( d->source(mode)->provides("image/pbm") )
 			atarget[n++] = XA_BITMAP;
-		    if ( d->source()->provides("text/plain") )
+            if ( d->source(mode)->provides("text/plain") )
 			atarget[n++] = XA_STRING;
 
 #ifdef QT_CLIPBOARD_DEBUG
@@ -629,7 +655,7 @@ bool QClipboard::event( QEvent *e )
 			fmt = "text/plain";
 		    } else if ( target == XA_PIXMAP ) {
 			fmt = "image/ppm";
-			data = d->source()->encodedData(fmt);
+			data = d->source(mode)->encodedData(fmt);
 			QPixmap pm;
 			pm.loadFromData(data);
 			Pixmap ph = pm.handle();
@@ -643,7 +669,7 @@ bool QClipboard::event( QEvent *e )
 			already_done = TRUE;
 		    } else if ( target == XA_BITMAP ) {
 			fmt = "image/pbm";
-			data = d->source()->encodedData(fmt);
+			data = d->source(mode)->encodedData(fmt);
 			QPixmap pm;
 			QImage img;
 			img.loadFromData(data);
@@ -671,13 +697,13 @@ bool QClipboard::event( QEvent *e )
 			already_done = TRUE;
 		    } else {
 			fmt = qt_xdnd_atom_to_str(target);
-			if ( fmt && !d->source()->provides(fmt) ) {
+			if ( fmt && !d->source(mode)->provides(fmt) ) {
 			    fmt = 0; // Not a MIME type we can produce
 			}
 		    }
 		    if ( fmt ) {
 			if ( !already_done ) {
-			    data = d->source()->encodedData(fmt);
+			    data = d->source(mode)->encodedData(fmt);
 			    XChangeProperty ( dpy, req->requestor, property,
 					      target, 8,
 					      PropModeReplace,
@@ -709,7 +735,8 @@ bool QClipboard::event( QEvent *e )
 
 
 
-QClipboardWatcher::QClipboardWatcher()
+QClipboardWatcher::QClipboardWatcher(QClipboard::Mode mode)
+	: mode(mode)
 {
     setupOwner();
 }
@@ -717,7 +744,8 @@ QClipboardWatcher::QClipboardWatcher()
 bool QClipboardWatcher::empty() const
 {
     Display *dpy   = owner->x11Display();
-    return XGetSelectionOwner(dpy,XA_PRIMARY) == None;
+    const Atom selection = (this->mode == QClipboard::Mode::Clipboard) ? XA_CLIPBOARD : XA_PRIMARY;
+    return XGetSelectionOwner(dpy, selection) == None;
 }
 
 const char* QClipboardWatcher::format( int n ) const
@@ -725,7 +753,7 @@ const char* QClipboardWatcher::format( int n ) const
     if ( empty() )
 	return 0;
 
-        if (! formatList.count()) {
+    if (! formatList.count()) {
 	// get the list of targets from the current clipboard owner - we do this
 	// once so that multiple calls to this function don't require multiple
 	// server round trips...
@@ -803,7 +831,9 @@ QByteArray QClipboardWatcher::getDataInFormat(Atom fmtatom) const
     Window   win   = owner->winId();
     Display *dpy   = owner->x11Display();
 
-    XConvertSelection( dpy, XA_PRIMARY, fmtatom,
+    const Atom selection = (this->mode == QClipboard::Mode::Clipboard) ? XA_CLIPBOARD : XA_PRIMARY;
+
+    XConvertSelection( dpy, selection, fmtatom,
 		       qt_selection_property, win, CurrentTime );
     XFlush( dpy );
 
@@ -831,22 +861,24 @@ QByteArray QClipboardWatcher::getDataInFormat(Atom fmtatom) const
   Returns a reference to a QMimeSource representation of the current
   clipboard data.
 */
-QMimeSource* QClipboard::data() const
+QMimeSource* QClipboard::data(Mode mode) const
 {
     QClipboardData *d = clipboardData();
 
-    if ( ! d->source() && ! timer_event_clear ) {
+    const QMimeSource* source = d->source(mode);
+
+    if ( ! source && ! timer_event_clear ) {
 	QClipboard *that = ((QClipboard *) this);
 
 	if (clipboard_id) {
 	    timer_event_clear = TRUE;
-	    d->clear();
+	    d->clear(mode);
 	    timer_event_clear = FALSE;
 
 	    that->killTimer(clipboard_id);
 	}
 
-	d->setSource(new QClipboardWatcher());
+	d->setSource(new QClipboardWatcher(mode), mode);
 
 	// start a zero timer - we will clear cached data when the timer
 	// times out, which will be the next time we hit the event loop...
@@ -856,7 +888,7 @@ QMimeSource* QClipboard::data() const
 	clipboard_id = that->startTimer(0);
     }
 
-    return d->source();
+    return d->source(mode);
 }
 
 /*!
@@ -871,23 +903,24 @@ QMimeSource* QClipboard::data() const
 
   The setText() and setPixmap() functions are simpler wrappers for this.
 */
-void QClipboard::setData( QMimeSource* src )
+void QClipboard::setData( QMimeSource* src, Mode mode )
 {
     QClipboardData *d = clipboardData();
     setupOwner();
     Window   win   = owner->winId();
     Display *dpy   = owner->x11Display();
+    const Atom selection = (mode == Clipboard) ? XA_CLIPBOARD : XA_PRIMARY;
 
-    d->setSource( src );
+    d->setSource( src, mode );
     emit dataChanged();
 
     // ### 3 round trips per selection change?  this should be optimized...
-    Window prevOwner = XGetSelectionOwner( dpy, XA_PRIMARY );
-    XSetSelectionOwner( dpy, XA_PRIMARY, win, qt_x_time );
+    Window prevOwner = XGetSelectionOwner( dpy, selection );
+    XSetSelectionOwner( dpy, selection, win, qt_x_time );
 
     // ### perhaps this should be CHECK_RANGE ?
 #if defined(DEBUG)
-    if ( XGetSelectionOwner(dpy,XA_PRIMARY) != win ) {
+    if ( XGetSelectionOwner(dpy, selection) != win ) {
 	qWarning( "QClipboard::setData: Cannot set X11 selection owner" );
 	return;
     }

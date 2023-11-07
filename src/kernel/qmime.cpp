@@ -62,21 +62,7 @@
 /*!
   Provided to ensure subclasses destruct correctly.
 */
-QMimeSource::~QMimeSource()
-{
-    if (QApplication::closingDown()) return;
-    
-#ifndef QT_NO_MIMECLIPBOARD
-    if (QApplication::clipboard()->data() == this) {
-#ifdef CHECK_RANGE
-	qWarning("QMimeSource::~QMimeSource: clipboard data deleted!");
-#endif
-#if defined(_WS_X11_)	
-	QApplication::clipboard()->clobber();
-#endif
-    }
-#endif // QT_NO_CLIPBOARD
-}
+QMimeSource::~QMimeSource() {}
 
 /*!
   \fn QByteArray QMimeSource::encodedData(const char*) const
