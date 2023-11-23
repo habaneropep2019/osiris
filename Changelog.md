@@ -16,6 +16,7 @@ Osiris 2.4.1 is a maintenance release. As a reminder, Osiris is a fork of Qt ver
 - Added missing header file check in configure for libjpeg
 - Fixed the libXft header file check in configure
 - Fixed a minor spelling issue for a warning in designer/pixmapchooser
+- Workaround for Designer to fix an issue where it washes out the window when the Composite extension is enabled on X11 displays
 
 #### Osiris 2.4.0
 
