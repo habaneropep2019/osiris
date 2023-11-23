@@ -39,13 +39,7 @@ Since Osiris is based on Qt, it inherits the original licensing scheme. For Qt v
 
 It's important to note that some files may be (or have been) replaced with new or different versions that are not tri-licensed.
 
-#### Licensing of Osiris files
-
-New files and functionality will be licensed under the GPLv2, the modified BSD license (3-clause BSD license), and/or the SADLv2. Backported features from newer versions of Qt will retain their respective licensing.
-
-#### About the Q Public License
-
-The QPL is an open-source free software license. However, it requires modifications to be distributed as patches, or some other separate format from the source code. When Osiris was part of ZFreeKit, I aimed to maintain QPL compatability in case some legacy program was QPL licensed. However, this makes it notoriously difficult to maintain the source base in a modern source version control system as it's not easy to follow changes without having to apply patches first and then go through the clobbered up or non-existent history. Osiris will not maintain a patchset. You can, however, generate one yourself if desired
+Osiris is distributed and modified under the terms of the GNU GPL version 2 (with the exception of some individual files that may be more permissively licensed). As of version 2.4.1, generating a patchset to use the QPL is no longer an option as some files are GPLv2 only.
 
 #### About using Osiris under a Qt commercial license
 
@@ -80,13 +74,15 @@ A lot of ports to other platforms are inherited from the original Qt code. These
 
 #### What about Wayland support?
 
-Osiris does not have any clue about Wayland - it hadn't even been thought of when Qt2.3.2 was mainstream. Limited testing has been done to confirm that applications at least start and display under XWayland. Clipboard functionality is all but guaranteed to **not** work under XWayland, and this isn't a Wayland bug either.
-
-I'd like to eventually get a working native Wayland backend, but it's low on the list right now. I'll gladly accept patches or bug reports however.
+Wayland support is planned, eventually. There is no ETA however. Applications ported to Osiris should work properly under XWayland however, with the exception being window managers. Patches/PRs are welcome.
 
 #### What about Python3 bindings?
 
 None available *yet*, sorry! It's on the to-do list somewhere.
+
+#### A note on clipboard functionality under X11
+
+Getting the clipboard implemented correctly under X11 is ridiculously complicated. Osiris has some partial fixes to improve X11 clipboard functionality over Qt2.3.2, but it's still not perfect. For now, clipboard functionality is still on the to-do list, although it's not top priority unless we get a lot of users needing it for their applications. The reason being that the clipboard will be re-implemented when Wayland support happens, so it's not currently worth spending a lot of time on.
 
 ## Buildling and debugging
 
