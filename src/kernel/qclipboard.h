@@ -55,19 +55,22 @@ private:
     ~QClipboard();
 
 public:
-    void	clear();
+
+    enum Mode { Clipboard, Selection };
+
+    void	clear(Mode mode);
 
 #if defined(_WS_X11_)
-    bool ownsSelection() const;
+    bool ownsSelection(Mode mode) const;
 #endif
     
 #ifndef QT_NO_MIMECLIPBOARD
-    QMimeSource* data() const;
-    void  setData( QMimeSource* );
+    QMimeSource* data(Mode mode = Mode::Clipboard) const;
+    void  setData( QMimeSource*, Mode mode = Mode::Clipboard );
 #endif
-    QString     text()	 const;
-    QString     text(QCString& subtype) const;
-    void	setText( const QString &);
+    QString     text(Mode mode = Mode::Clipboard) const;
+    QString     text(QCString& subtype, Mode mode = Mode::Clipboard) const;
+    void	setText( const QString &, Mode mode = Mode::Clipboard);
 #ifndef QT_NO_MIMECLIPBOARD
     QImage	image() const;
     QPixmap	pixmap() const;

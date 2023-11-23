@@ -51,7 +51,6 @@
 #include "qguardedptr.h"
 #include <ctype.h>
 
-
 struct QLineEditUndoItem
 {
     QLineEditUndoItem(){pos=0;};
@@ -1029,12 +1028,12 @@ void QLineEdit::mouseReleaseEvent( QMouseEvent * e )
 
 #ifndef QT_NO_CLIPBOARD
 #if defined(_WS_X11_)
-    copy();
+    copy(QClipboard::Mode::Selection);
 #endif
 
     if ( !d->readonly && e->button() == MidButton ) {
 #if defined(_WS_X11_)
-	insert( QApplication::clipboard()->text() );
+	insert( QApplication::clipboard()->text(QClipboard::Mode::Selection) );
 #else
 	if ( style() == MotifStyle )
 	    insert( QApplication::clipboard()->text() );
@@ -1186,7 +1185,7 @@ void QLineEdit::newMark( int pos, bool c )
 #ifndef QT_NO_CLIPBOARD
 #if defined(_WS_X11_)
     if ( c )
-	copy();
+	copy(QClipboard::Mode::Selection);
 #endif
 #endif
 }
@@ -1213,7 +1212,7 @@ void QLineEdit::markWord( int pos )
 
 #ifndef QT_NO_CLIPBOARD
 #if defined(_WS_X11_)
-    copy();
+    copy(QClipboard::Mode::Selection);
 #endif
 #endif
 }
@@ -1226,12 +1225,12 @@ void QLineEdit::markWord( int pos )
   \sa cut() paste()
 */
 
-void QLineEdit::copy() const
+void QLineEdit::copy(QClipboard::Mode mode) const
 {
     QString t = markedText();
     if ( !t.isEmpty() && echoMode() == Normal ) {
 	disconnect( QApplication::clipboard(), SIGNAL(dataChanged()), this, 0);
-	QApplication::clipboard()->setText( t );
+	QApplication::clipboard()->setText( t, mode );
 	connect( QApplication::clipboard(), SIGNAL(dataChanged()),
 		 this, SLOT(clipboardChanged()) );
     }
@@ -1247,9 +1246,9 @@ void QLineEdit::copy() const
   \sa copy() cut()
 */
 
-void QLineEdit::paste()
+void QLineEdit::paste(QClipboard::Mode mode)
 {
-    insert( QApplication::clipboard()->text() );
+    insert( QApplication::clipboard()->text(mode) );
 }
 
 /*!

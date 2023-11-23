@@ -42,6 +42,7 @@
 #include "qtableview.h"
 #include "qstring.h"
 #include "qlist.h"
+#include "qclipboard.h"
 #endif // QT_H
 
 #ifndef QT_NO_MULTILINEEDIT
@@ -174,10 +175,10 @@ public slots:
     void       deselect();
     void       selectAll();
 #ifndef QT_NO_CLIPBOARD
-    void       paste();
-    void       pasteSubType(const QCString& subtype);
+    void       paste(QClipboard::Mode mode = QClipboard::Mode::Clipboard);
+    void       pasteSubType(const QCString& subtype, QClipboard::Mode mode = QClipboard::Mode::Clipboard);
     void       copyText() const;
-    void       copy() const;
+    void       copy(QClipboard::Mode mode = QClipboard::Mode::Clipboard) const;
     void       cut();
 #endif
     void       insert( const QString& );
