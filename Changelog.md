@@ -15,6 +15,7 @@ Osiris 2.4.1 is a maintenance release. As a reminder, Osiris is a fork of Qt ver
 - Modified qclipboard_x11 to enable QT_CLIPBOARD_DEBUG macro when configure is run with -debug. This provides some useful output when debugging clipboard issues and removes the need to manually edit a file to uncomment a macro.
 - Added missing header file check in configure for libjpeg
 - Fixed the libXft header file check in configure
+- Fixed a minor spelling issue for a warning in designer/pixmapchooser
 
 #### Osiris 2.4.0
 

@@ -297,7 +297,7 @@ void PixmapView::previewUrl( const QUrl &u )
 	if ( !pix.isNull() )
 	    setPixmap( pix );
     } else {
-	qWarning( "Previewing remot files not supported" );
+	qWarning( "Previewing remote files not supported" );
     }
 }
 
