@@ -2276,12 +2276,12 @@ void QMultiLineEdit::mouseReleaseEvent( QMouseEvent *e )
 #ifndef QT_NO_CLIPBOARD
 #if defined(_WS_X11_)
     else if ( echoMode() == Normal )
-	copy();
+	copy(QClipboard::Mode::Selection);
 #endif
 
     if ( e->button() == MidButton && !readOnly ) {
 #if defined(_WS_X11_)
-	paste();		// Will repaint the cursor line.
+	paste(QClipboard::Mode::Selection);		// Will repaint the cursor line.
 #else
 	if ( style() == MotifStyle )
 	    paste();
@@ -2548,14 +2548,14 @@ void QMultiLineEdit::setBottomCell( int line )
   cursor position.
   Any marked text is first deleted.
 */
-void QMultiLineEdit::pasteSubType(const QCString& subtype)
+void QMultiLineEdit::pasteSubType(const QCString& subtype, QClipboard::Mode mode)
 {
     QCString st = subtype;
     addUndoCmd( new QBeginCommand );
 
     if ( hasMarkedText() )
 	del();
-    QString t = QApplication::clipboard()->text(st);
+    QString t = QApplication::clipboard()->text(st, mode);
     if ( !t.isEmpty() ) {
 	if ( hasMarkedText() )
 	    turnMark( FALSE );
@@ -2585,9 +2585,9 @@ void QMultiLineEdit::pasteSubType(const QCString& subtype)
   Copies plain text from the clipboard onto the current cursor position.
   Any marked text is first deleted.
 */
-void QMultiLineEdit::paste()
+void QMultiLineEdit::paste(QClipboard::Mode mode)
 {
-    pasteSubType("plain");
+    pasteSubType("plain", mode);
 }
 
 #ifndef QT_NO_MIMECLIPBOARD
@@ -2744,7 +2744,7 @@ void QMultiLineEdit::markWord( int posx, int posy )
 #ifndef QT_NO_CLIPBOARD
 #if defined(_WS_X11_)
     if ( echoMode() == Normal )
-	copy();
+        copy(QClipboard::Mode::Selection);
 #endif
 #endif
 }
@@ -2769,7 +2769,7 @@ int QMultiLineEdit::charClass( QChar ch )
   if echoMode() is Normal.
 */
 
-void QMultiLineEdit::copy() const
+void QMultiLineEdit::copy(QClipboard::Mode mode) const
 {
     QString t = markedText();
     if ( !t.isEmpty() && echoMode() == Normal ) {
@@ -2781,7 +2781,7 @@ void QMultiLineEdit::copy() const
 	QRegExp nl("\\n");
 	t.replace( nl, "\r\n" );
 #endif
-	QApplication::clipboard()->setText( t );
+	QApplication::clipboard()->setText( t, mode );
 #if defined(_WS_X11_)
 	connect( QApplication::clipboard(), SIGNAL(dataChanged()),
 		 this, SLOT(clipboardChanged()) );

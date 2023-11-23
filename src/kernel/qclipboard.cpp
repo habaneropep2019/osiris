@@ -141,10 +141,11 @@ QClipboard::~QClipboard()
   \sa setText() data(), QString::operator!()
 */
 
-QString QClipboard::text(QCString& subtype) const
+QString QClipboard::text(QCString& subtype, Mode mode) const
 {
     QString r;
-    QTextDrag::decode( data() ,r, subtype );
+    const QMimeSource* mime_source = data(mode);
+    QTextDrag::decode( mime_source, r, subtype );
     return r;
 }
 
@@ -155,10 +156,10 @@ QString QClipboard::text(QCString& subtype) const
   \sa setText() data(), QString::operator!()
 */
 
-QString QClipboard::text() const
+QString QClipboard::text(Mode mode) const
 {
     QCString subtype = "plain";
-    return text(subtype);
+    return text(subtype, mode);
 }
 
 
@@ -167,9 +168,9 @@ QString QClipboard::text() const
   \sa text() setData()
 */
 
-void QClipboard::setText( const QString &text )
+void QClipboard::setText( const QString &text, Mode mode )
 {
-    setData( new QTextDrag(text) );
+    setData( new QTextDrag(text), mode );
 }
 
 
