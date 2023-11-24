@@ -21,6 +21,8 @@ Osiris 2.4.1 is a maintenance release. As a reminder, Osiris is a fork of Qt ver
 - Updated configure script to clarify some printed license information
 - Removed all other currently unsupported platform configs
 - Added missing header file check in configure for Mesa libGLU
+- Remove registration link and other obsolete items from Designer
+- Update "About Qt" to "About Osiris" in Designer
 
 #### Osiris 2.4.0
 

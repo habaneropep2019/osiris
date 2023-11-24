@@ -926,16 +926,10 @@ void MainWindow::setupHelpActions()
     actionHelpAbout->setWhatsThis( tr("Get information about this product") );
     connect( actionHelpAbout, SIGNAL( activated() ), this, SLOT( helpAbout() ) );
 
-    actionHelpAboutQt = new QAction( tr("About Qt"), QPixmap(), tr("About &Qt..."), 0, this, 0 );
-    actionHelpAboutQt->setStatusTip( tr("Displays information about the Qt Toolkit") );
-    actionHelpAboutQt->setWhatsThis( tr("Get information about the Qt Toolkit") );
+    actionHelpAboutQt = new QAction( tr("About Osiris"), QPixmap(), tr("About &Osiris..."), 0, this, 0 );
+    actionHelpAboutQt->setStatusTip( tr("Displays information about the Osiris Toolkit") );
+    actionHelpAboutQt->setWhatsThis( tr("Get information about the Osiris Toolkit") );
     connect( actionHelpAboutQt, SIGNAL( activated() ), this, SLOT( helpAboutQt() ) );
-#if defined(QT_NON_COMMERCIAL)
-    actionHelpRegister = new QAction( tr("Register Qt"), QPixmap(), tr("&Register Qt..."), 0, this, 0 );
-    actionHelpRegister->setStatusTip( tr("Launches web browser with evaluation form at www.trolltech.com") );
-    actionHelpRegister->setWhatsThis( tr("Register with Trolltech") );
-    connect( actionHelpRegister, SIGNAL( activated() ), this, SLOT( helpRegister() ) );
-#endif
     actionHelpWhatsThis = new QAction( tr("What's This?"), QIconSet( whatsthis_image, whatsthis_image ),
 				       tr("What's This?"), SHIFT + Key_F1, this, 0 );
     actionHelpWhatsThis->setStatusTip( tr("\"What's This?\" context sensitive help") );
