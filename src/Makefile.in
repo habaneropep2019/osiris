@@ -16,9 +16,9 @@ UIC	=	$(SYSCONF_UIC)
 
 DESTDIR = ../lib/
 VER_MAJ = 2
-VER_MIN = 3
-VER_PATCH = 2
-TARGET	= qt$(QT_THREAD_SUFFIX)
+VER_MIN = 4
+VER_PATCH = 1
+TARGET	= osiris$(QT_THREAD_SUFFIX)
 TARGET1 = lib$(TARGET).so.$(VER_MAJ)
 
 ####### Files
